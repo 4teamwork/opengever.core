@@ -1,0 +1,21 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:plone="http://namespaces.plone.org/plone"
+    xmlns:grok="http://namespaces.zope.org/grok"
+    i18n_domain="opengever.dossier">
+
+    <include package="plone.behavior" file="meta.zcml" />
+    
+    <include package="plone.directives.form" file="meta.zcml" />
+    <include package="plone.directives.form" />
+
+    <!--grok:grok package=".behaviors" /-->
+
+    <!-- Dossier -->
+    <plone:behavior
+        title="OpenGever Dossier"
+        description="Adds OpenGever base properties and fields for dossiers"
+        provides=".behaviors.dossier.IDossier"
+        />
+        
+</configure>
