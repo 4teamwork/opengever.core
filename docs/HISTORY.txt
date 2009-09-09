@@ -4,5 +4,7 @@ Changelog
 0.1
 ---
 
-* Initial release
+* [09.09.2009] Issue #15: PloneGov GEVER Light Registraturplan übernehmen [jba]
+  * Properly implemented Title using RecordPosition with a dummy field
+* Implemented content type "RepositoryFolder"
 

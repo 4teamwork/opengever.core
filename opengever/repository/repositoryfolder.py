@@ -10,23 +10,20 @@ from plone.app.dexterity.behaviors import metadata
 from opengever.repository import _
 from opengever.repository.interfaces import IRepositoryFolder
 
-class IRepositoryFolderSchema(form.Schema):
+class IRepositoryFolderSchema(metadata.IDublinCore):
     """ A Repository Folder
     """
 
-    record_pos = schema.Int(
-            title = _(u'Record Position'),
-            required = False,
-    )
-    real_title = schema.TextLine(
+    form.omitted('title')
+    form.order_before(effective_title = '*')
+    effective_title = schema.TextLine(
             title = u'Title',
             required = True
     )
 
-    form.omitted('title')
-    title = schema.TextLine(
-            title = u'_title_',
-            required = False
+    record_pos = schema.Int(
+            title = _(u'Record Position'),
+            required = False,
     )
 
 
@@ -46,7 +43,7 @@ class RepositoryFolder(content.Container):
     implements(IRepositoryFolder)
 
     def Title(self):
-        title = u' %s' % self.real_title
+        title = u' %s' % self.effective_title
         obj = self
         while IRepositoryFolder.providedBy(obj):
             if hasattr(obj, 'record_pos'):
