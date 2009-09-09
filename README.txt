@@ -11,12 +11,17 @@ Diskussion
 * Wo / welche Typen sind in der Rubrik hinzufügbar?
 
 
-
 Notizen
 -------
 
 * RepositoryFolder = Rubrik, Registraturposition
 * Ändern einer Position: Unter-Rubriken werden nicht aktualisiert (Navi, Catalog)
 * Title überschreiben: http://n2.nabble.com/Dexterity-computed-fields-tp3498400ef293351.html
+
+
+To Do
+-----
+
+* INameFromTitle für Rubrik reparieren: contex.title wird verwendet
 
 

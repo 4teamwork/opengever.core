@@ -1,0 +1,122 @@
+# opengever.repository
+# Jonas Baumann <j.baumann@4teamwork.ch>, 2009
+msgid ""
+msgstr ""
+"Project-Id-Version: 1.0\n"
+"POT-Creation-Date: 2009-01-01 10:00+0000\n"
+"PO-Revision-Date: 2009-01-01 10:00+0100\n"
+"Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
+"Language-Team: Jonas Baumann <j.baumann@4teamwork.ch>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"Preferred-Encodings: utf-8 latin1\n"
+"Domain: opengever.repository\n"
+"X-Is-Fallback-For: de-at de-li de-lu de-ch de-de\n"
+
+#. Default: "Classification"
+#: opengever/repository/classification.py
+msgid "fieldset_classification"
+msgstr "Klassifizierung"
+
+#. Default: "Classification"
+#: opengever/repository/classification.py
+msgid "label_classification"
+msgstr "Klassifizierung"
+
+#. Default: ""
+#: opengever/repository/classification.py
+msgid "help_classification"
+msgstr "Schutzgrad / Klassifizierung"
+
+#. Default: "unprotected"
+#: opengever/repository/classification.py
+msgid "unprotected"
+msgstr "Nicht klassifiziert"
+
+#. Default: "confidential"
+#: opengever/repository/classification.py
+msgid "confidential"
+msgstr "Vertraulich"
+
+#. Default: "classified"
+#: opengever/repository/classification.py
+msgid "classified"
+msgstr "Geheim"
+
+#. Default: "Privacy layer"
+#: opengever/repository/classification.py
+msgid "label_privacy_layer"
+msgstr "Datenschutzstufe"
+
+#. Default: ""
+#: opengever/repository/classification.py
+msgid "help_privacy_layer"
+msgstr "Enthält schützenswerten Personendaten"
+
+#. Default "Public Trial"
+#: opengever/repository/classification.py
+msgid "label_public_trial"
+msgstr "Öffentlichkeitsstatus"
+
+#. Default ""
+#: opengever/repository/classification.py
+msgid "help_public_trial"
+msgstr ""
+
+#. Default: "unchecked"
+#: opengever/repository/classification.py
+msgid "unchecked"
+msgstr "Noch nicht geprüft"
+
+#. Default: "public"
+#: opengever/repository/classification.py
+msgid "public"
+msgstr "Öffentlich"
+
+#. Default: "private"
+#: opengever/repository/classification.py
+msgid "private"
+msgstr "Nicht öffentlich"
+
+#. Default "Public trial statement"
+#: opengever/repository/classification.py
+msgid "label_public_trial_statement"
+msgstr "Begründung Öffentlichkeitsstatus"
+
+#. Default "Begrüundung Schutzgrad"
+#: opengever/repository/classification.py
+msgid "help_public_trial_statement"
+msgstr "Begründen Sie den gewählten Öffentlichkeitsstatus"
+
+#. Default "Archival value"
+#: opengever/repository/classification.py
+msgid "label_archival_value"
+msgstr "Archivwürdigkeit"
+
+#. Default "Archival value code"
+#: opengever/repository/classification.py
+msgid "help_archival_value"
+msgstr "Geben Sie dem Archivwert an"
+
+#. Default "Custody period (years)"
+#: opengever/repository/classification.py
+msgid "label_custody_period"
+msgstr "Schutzfrist dauer (Jahre)"
+
+#. Default ""
+#: opengever/repository/classification.py
+msgid "help_custody_period"
+msgstr ""
+
+#. Default "Retention period (years)"
+#: opengever/repository/classification.py
+msgid "label_retention_period"
+msgstr "Aufbewahrungsdauer (Jahre)"
+
+#. Default ""
+#: opengever/repository/classification.py
+msgid "help_retention_period"
+msgstr ""
+

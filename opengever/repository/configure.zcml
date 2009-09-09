@@ -1,7 +1,9 @@
 <configure
     xmlns="http://namespaces.zope.org/zope"
-    xmlns:grok="http://namespaces.zope.org/grok"
     xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+    xmlns:grok="http://namespaces.zope.org/grok"
+    xmlns:i18n="http://namespaces.zope.org/i18n"
+    xmlns:plone="http://namespaces.plone.org/plone"
     i18n_domain="opengever.repository">
 
     <!-- Include configuration for dependencies listed in setup.py -->
@@ -9,6 +11,18 @@
 
     <!-- Grok the package to initialise schema interfaces and content classes -->
     <grok:grok package="." />
+
+    <!-- Register locales translations -->
+    <i18n:registerTranslations directory="locales" />
+
+    <!-- Classification Behavior -->
+    <plone:behavior
+        title="Classification"
+        description="Adds classification fields and functionality"
+        provides=".classification.IClassification"
+        factory=".classification.Classification"
+        for="plone.dexterity.interfaces.IDexterityContent"
+        />
 
     <!-- Register an extension profile to make the product installable -->
     <genericsetup:registerProfile
