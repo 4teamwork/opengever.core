@@ -7,5 +7,6 @@ Changelog
 * [09.09.2009] Issue #15: PloneGov GEVER Light Registraturplan übernehmen [jba]
   * Properly implemented Title using RecordPosition with a dummy field
   * Implemented Classification behavior with fields and localization
+  * Added Doctess for Classification behavior
 * Implemented content type "RepositoryFolder"
 
