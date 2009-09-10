@@ -12,6 +12,9 @@
     <!-- Grok the package to initialise schema interfaces and content classes -->
     <grok:grok package="." />
 
+    <!-- Register locales translations -->
+    <i18n:registerTranslations directory="locales" />
+
     <!-- Register an extension profile to make the product installable -->
     <genericsetup:registerProfile
         name="default"
