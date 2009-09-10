@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 import os
 
-version = '0.1-dev'
+version = open('opengever/document/version.txt').read().strip()
 
 setup(name='opengever.document',
       version=version,
@@ -14,8 +14,8 @@ setup(name='opengever.document',
         "Topic :: Software Development :: Libraries :: Python Modules",
         ],
       keywords='opengever document',
-      author='Jonas Baumann, \xc34teamwork GmbH',
-      author_email='info\xc6@4teamwork.ch',
+      author='Jonas Baumann, 4teamwork GmbH',
+      author_email='info@4teamwork.ch',
       url='https://svn.4teamwork.ch/repos/opengever/opengever.document/',
       license='GPL2',
       packages=find_packages(exclude=['ez_setup']),
