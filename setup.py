@@ -24,6 +24,7 @@ setup(name='opengever.document',
       zip_safe=False,
       install_requires=[
           'setuptools',
+          'plone.app.dexterity',
           # -*- Extra requirements: -*-
       ],
       entry_points="""
