@@ -45,6 +45,6 @@ To Do
 - Wo / welche Typen sind in der Rubrik hinzufügbar?
   - Rubrik, Dossier
   - Wenn Rubrik in Rubrik enthalten, kein Dossier hinzufügbar
-- i18n: Record Position = Aktenzeichen » reference_number
+X i18n: Record Position = Aktenzeichen » reference_number
 
 
