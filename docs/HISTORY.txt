@@ -4,3 +4,6 @@ Changelog
 0.1
 ---
 
+* [10.09.2009] Added dexterity type "Document" [jba]
+* [10.09.2009] Setup with generic setup, locales, etc [jba]
+
