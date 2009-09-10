@@ -11,7 +11,6 @@ a container:
     custody_period
     retention_period
 
-
 When we create a dexterity content type::
 
     >>> from plone.dexterity.fti import DexterityFTI
