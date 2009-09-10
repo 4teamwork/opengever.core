@@ -33,5 +33,4 @@ setup(name='opengever.repository',
       target = plone
       # -*- Entry points: -*-
       """,
-      paster_plugins = ["ZopeSkel"],
       )
