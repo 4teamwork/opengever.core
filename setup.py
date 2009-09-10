@@ -32,12 +32,5 @@ setup(name='opengever.dossier',
       # -*- Entry points: -*-
       [z3c.autoinclude.plugin]
       target = plone
-      
-      [distutils.setup_keywords]
-      paster_plugins = setuptools.dist:assert_string_list
-
-      [egg_info.writers]
-      paster_plugins.txt = setuptools.command.egg_info:write_arg
       """,
-      paster_plugins = ["ZopeSkel"],
       )
