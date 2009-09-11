@@ -19,14 +19,17 @@ To Do
 -----
 
 - INameFromTitle für Rubrik reparieren: contex.title wird verwendet
-- record position: keine duplikate und >0
+- record position:
+    - keine duplikate
+    X >0
+    X i18n: Record Position = Aktenzeichen » reference_number
 - i18n: Geben Sie de>>M<< Archivwert an
 - Klassifizierung:
   - Klassifizierung: Klassifizierung wird mit Acquisition vom Container übernommen und kann noch mehr eingeschränkt werden, nicht aber weniger
   - Datenschutzstufe:
     - [no » yes] erlaubt, [yes » no] nicht erlaubt
     - nicht required, vererbbar
-  - Öffentlichkeitsstatus: etwa gleich wie Datenschutzstufe
+  X Öffentlichkeitsstatus: etwa gleich wie Datenschutzstufe
   - Archivwürdigkeit:
     - (1) Noch nicht bewertet (default)
     - (2) anbieten (weil teilweise archivwürdig?)
@@ -36,15 +39,14 @@ To Do
   - Schutzfrist & Aufbewahrungsdauer:
     - Kann auf tieferer Ebene kleiner sein, nicht aber grösser
     - nicht required, vererbbar
-- Welches ist die erste Position einer Rubrik? 0 oder 1? (momentan 0)
-  - 1
-- Darf die Position bei bestehenden Rubriken geändert werden?
-  - ja
-- Über wiviele Stufen werden die Positionen im Titel angezeigt? (Bund: 9)
-  - Nicht limitiert
+X Welches ist die erste Position einer Rubrik? 0 oder 1? (momentan 0)
+  X 1
+X Darf die Position bei bestehenden Rubriken geändert werden?
+  X ja
+X Über wiviele Stufen werden die Positionen im Titel angezeigt? (Bund: 9)
+  X Nicht limitiert
 - Wo / welche Typen sind in der Rubrik hinzufügbar?
   - Rubrik, Dossier
   - Wenn Rubrik in Rubrik enthalten, kein Dossier hinzufügbar
-X i18n: Record Position = Aktenzeichen » reference_number
 
 

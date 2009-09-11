@@ -10,7 +10,7 @@ from plone.autoform.interfaces import IFormFieldProvider
 from plone.directives import form
 
 from opengever.repository import _
-from opengever.repository.utils import create_restricted_vocabulary
+from opengever.repository import utils
 
 def make_vocabulary(opts):
     terms = [vocabulary.SimpleTerm(o, title=_(o)) for o in opts]
@@ -58,8 +58,7 @@ class IClassification(form.Schema):
     public_trial = schema.Choice(
             title = _(u'label_public_trial', default=u'Public Trial'),
             description = _(u'help_public_trial', default=u''),
-            source = make_vocabulary(PUBLIC_TRIAL_VOCABULARY),
-            default = PUBLIC_TRIAL_UNCHECKED,
+            source = u'classification_public_trial_vocabulary',
     )
 
     public_trial_statement = schema.Text(
@@ -90,8 +89,7 @@ class IClassification(form.Schema):
 
 alsoProvides(IClassification, IFormFieldProvider)
 
-# VALUES
-
+# CLASSIFICATION: Vocabulary and default value
 CLASSIFICATION_UNPROTECTED = u'unprotected'
 CLASSIFICATION_CONFIDENTIAL = u'confidential'
 CLASSIFICATION_CLASSIFIED = u'classified'
@@ -102,15 +100,40 @@ CLASSIFICATION_OPTIONS = (
     (2,         CLASSIFICATION_CONFIDENTIAL),
     (3,         CLASSIFICATION_CLASSIFIED),
 )
-grok.global_utility(create_restricted_vocabulary(IClassification['classification'],
+grok.global_utility(utils.create_restricted_vocabulary(IClassification['classification'],
                                                  CLASSIFICATION_OPTIONS,
                                                  message_factory=_),
                     provides = schema.interfaces.IVocabularyFactory,
                     name = u'classification_classification_vocabulary')
+form.default_value(field=IClassification['classification'])(
+        utils.set_default_with_acquisition(
+                field=IClassification['classification'],
+                default = CLASSIFICATION_CONFIDENTIAL
+        )
+)
 
-@form.default_value(field=IClassification['classification'])
-def classification_default(data):
-    return None
+# PUBLIC: Vocabulary and default value
+PUBLIC_TRIAL_UNCHECKED = u'unchecked'
+PUBLIC_TRIAL_PUBLIC = u'public'
+PUBLIC_TRIAL_PRIVATE = u'private'
+PUBLIC_TRIAL_OPTIONS = (
+    (1,         PUBLIC_TRIAL_UNCHECKED),
+    (2,         PUBLIC_TRIAL_PUBLIC),
+    (3,         PUBLIC_TRIAL_PRIVATE),
+)
+# vocabulary
+grok.global_utility(utils.create_restricted_vocabulary(IClassification['public_trial'],
+                                                 PUBLIC_TRIAL_OPTIONS,
+                                                 message_factory=_),
+                    provides = schema.interfaces.IVocabularyFactory,
+                    name = u'classification_public_trial_vocabulary')
+# default value
+form.default_value(field=IClassification['public_trial'])(
+        utils.set_default_with_acquisition(
+                field=IClassification['public_trial'],
+                default = PUBLIC_TRIAL_UNCHECKED
+        )
+)
 
 
 class Classification(metadata.MetadataBase):

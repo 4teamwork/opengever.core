@@ -1,10 +1,11 @@
 
+from five import grok
 import zope.schema.interfaces
 import zope.schema.vocabulary
-from five import grok
 
-from plone.app.dexterity.behaviors.metadata import MetadataBase
 from Products.CMFCore.interfaces import ISiteRoot
+from plone.app.dexterity.behaviors.metadata import MetadataBase
+from plone.directives import form
 
 def create_restricted_vocabulary(field, options, message_factory=None):
     """
@@ -57,12 +58,12 @@ def create_restricted_vocabulary(field, options, message_factory=None):
                 # we cant get the request...
                 return None
             request = self.context.REQUEST
-            if '/'.join(context.getPhysicalPath()) == request.get('PATH_TRANSLATED', object()):
-                # object is existing
-                obj = context.aq_inner.aq_parent
-            else:
+            if '++add++' in request.get('PATH_TRANSLATED', object()):
                 # object is not yet existing, context is container
                 obj = context
+            else:
+                # object is existing
+                obj = context.aq_inner.aq_parent
             while not ISiteRoot.providedBy(obj):
                 try:
                     if not self.field.get(obj):
@@ -78,4 +79,24 @@ def create_restricted_vocabulary(field, options, message_factory=None):
     GeneratedVocabulary.option_names = option_names
     GeneratedVocabulary._ = message_factory
     return GeneratedVocabulary
+
+
+def set_default_with_acquisition(field, default):
+    """
+    Sets a default value generator which uses the value
+    from the parent object, if existing, otherwise it uses
+    the given default value.
+    """
+    field._acquisition_default = default
+    def default_value_generator(data):
+        obj = data.context
+        # try to get it from context or a parent
+        while not ISiteRoot.providedBy(obj):
+            try:
+                return data.field.get(obj)
+            finally:
+                obj = obj.aq_inner.aq_parent
+        # otherwise use default value
+        return field._acquisition_default
+    return default_value_generator
 
