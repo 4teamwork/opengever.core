@@ -4,9 +4,10 @@ Changelog
 0.1
 ---
 
-* [10.09.2009] Issue #15 PloneGov GEVER Light Registraturplan übernehmen [jba]
+* [10.09.2009] Issue #15 PloneGov GEVER Light Registraturplan übernehmen [jba]
   * Added acquisition restricted vocabulary system, using for classification
   * Added acquisition restricted vocabulary for public_trial
+  * Added acquisition restricted vocabulary for archival_value
 * [09.09.2009] Issue #15: PloneGov GEVER Light Registraturplan übernehmen [jba]
   * Properly implemented Title using RecordPosition with a dummy field
   * Implemented Classification behavior with fields and localization

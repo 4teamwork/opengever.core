@@ -100,6 +100,31 @@ msgstr "Archivwürdigkeit"
 msgid "help_archival_value"
 msgstr "Geben Sie dem Archivwert an"
 
+#. Default ""
+#: opengever/repository/classification.py
+msgid "archival_value : unchecked"
+msgstr "Noch nicht bewertet"
+
+#. Default ""
+#: opengever/repository/classification.py
+msgid "archival_value : prompt"
+msgstr "Anbieten"
+
+#. Default ""
+#: opengever/repository/classification.py
+msgid "archival_value : archival worthy"
+msgstr "Archivwürdig"
+
+#. Default ""
+#: opengever/repository/classification.py
+msgid "archival_value : not archival worthy"
+msgstr "Nicht archivwürdig"
+
+#. Default ""
+#: opengever/repository/classification.py
+msgid "archival_value : archival worthy with sampling"
+msgstr "Sampling"
+
 #. Default "Custody period (years)"
 #: opengever/repository/classification.py
 msgid "label_custody_period"

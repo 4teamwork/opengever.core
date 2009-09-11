@@ -30,12 +30,12 @@ To Do
     - [no » yes] erlaubt, [yes » no] nicht erlaubt
     - nicht required, vererbbar
   X Öffentlichkeitsstatus: etwa gleich wie Datenschutzstufe
-  - Archivwürdigkeit:
-    - (1) Noch nicht bewertet (default)
-    - (2) anbieten (weil teilweise archivwürdig?)
-    - (3) Archivwürdig
-    - (3) Nicht archivwürdig
-    - (3) Sampling
+  X Archivwürdigkeit:
+    X (1) Noch nicht bewertet (default)
+    X (2) anbieten (weil teilweise archivwürdig?)
+    X (3) Archivwürdig
+    X (3) Nicht archivwürdig
+    X (3) Sampling
   - Schutzfrist & Aufbewahrungsdauer:
     - Kann auf tieferer Ebene kleiner sein, nicht aber grösser
     - nicht required, vererbbar

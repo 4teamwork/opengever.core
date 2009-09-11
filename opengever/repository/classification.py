@@ -1,7 +1,6 @@
 
 from zope import schema
 from zope.interface import alsoProvides
-from zope.schema import vocabulary
 
 from five import grok
 
@@ -11,21 +10,6 @@ from plone.directives import form
 
 from opengever.repository import _
 from opengever.repository import utils
-
-def make_vocabulary(opts):
-    terms = [vocabulary.SimpleTerm(o, title=_(o)) for o in opts]
-    return vocabulary.SimpleVocabulary(terms)
-
-
-PUBLIC_TRIAL_UNCHECKED = u'unchecked'
-PUBLIC_TRIAL_PUBLIC = u'public'
-PUBLIC_TRIAL_PRIVATE = u'private'
-PUBLIC_TRIAL_VOCABULARY = (
-    PUBLIC_TRIAL_UNCHECKED,
-    PUBLIC_TRIAL_PUBLIC,
-    PUBLIC_TRIAL_PRIVATE,
-)
-
 
 class IClassification(form.Schema):
 
@@ -68,10 +52,11 @@ class IClassification(form.Schema):
             default = u'',
     )
 
-    archival_value = schema.Int(
+    archival_value = schema.Choice(
             title = _(u'label_archival_value', default=u'Archival value'),
             description = _(u'help_archival_value', default=u'Archival value code'),
-            required = False,
+            source = u'classification_archival_value_vocabulary',
+            required = True,
     )
 
     custody_period = schema.Int(
@@ -121,17 +106,41 @@ PUBLIC_TRIAL_OPTIONS = (
     (2,         PUBLIC_TRIAL_PUBLIC),
     (3,         PUBLIC_TRIAL_PRIVATE),
 )
-# vocabulary
 grok.global_utility(utils.create_restricted_vocabulary(IClassification['public_trial'],
                                                  PUBLIC_TRIAL_OPTIONS,
                                                  message_factory=_),
                     provides = schema.interfaces.IVocabularyFactory,
                     name = u'classification_public_trial_vocabulary')
-# default value
 form.default_value(field=IClassification['public_trial'])(
         utils.set_default_with_acquisition(
                 field=IClassification['public_trial'],
                 default = PUBLIC_TRIAL_UNCHECKED
+        )
+)
+
+
+# ARCHIVAL VALUE: Vocabulary and default value
+ARCHIVAL_VALUE_UNCHECKED = u'archival_value : unchecked'
+ARCHIVAL_VALUE_PROMPT = u'archival_value : prompt'
+ARCHIVAL_VALUE_WORTHY = u'archival_value : archival worthy'
+ARCHIVAL_VALUE_UNWORTHY = u'archival_value : not archival worthy'
+ARCHIVAL_VALUE_SAMPLING  = u'archival_value : archival worthy with sampling'
+ARCHIVAL_VALUE_OPTIONS = (
+    (1,         ARCHIVAL_VALUE_UNCHECKED),
+    (2,         ARCHIVAL_VALUE_PROMPT),
+    (3,         ARCHIVAL_VALUE_WORTHY),
+    (3,         ARCHIVAL_VALUE_UNWORTHY),
+    (3,         ARCHIVAL_VALUE_SAMPLING ),
+)
+grok.global_utility(utils.create_restricted_vocabulary(IClassification['archival_value'],
+                                                 ARCHIVAL_VALUE_OPTIONS,
+                                                 message_factory=_),
+                    provides = schema.interfaces.IVocabularyFactory,
+                    name = u'classification_archival_value_vocabulary')
+form.default_value(field=IClassification['archival_value'])(
+        utils.set_default_with_acquisition(
+                field=IClassification['archival_value'],
+                default = ARCHIVAL_VALUE_UNCHECKED
         )
 )
 

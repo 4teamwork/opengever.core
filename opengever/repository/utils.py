@@ -1,11 +1,8 @@
 
-from five import grok
-import zope.schema.interfaces
 import zope.schema.vocabulary
 
 from Products.CMFCore.interfaces import ISiteRoot
 from plone.app.dexterity.behaviors.metadata import MetadataBase
-from plone.directives import form
 
 def create_restricted_vocabulary(field, options, message_factory=None):
     """
