@@ -3,25 +3,19 @@ from zope import schema
 from zope.interface import alsoProvides
 from zope.schema import vocabulary
 
+from five import grok
+
 from plone.app.dexterity.behaviors import metadata
 from plone.autoform.interfaces import IFormFieldProvider
 from plone.directives import form
 
 from opengever.repository import _
+from opengever.repository.utils import create_restricted_vocabulary
 
 def make_vocabulary(opts):
     terms = [vocabulary.SimpleTerm(o, title=_(o)) for o in opts]
     return vocabulary.SimpleVocabulary(terms)
 
-
-CLASSIFICATION_UNPROTECTED = u'unprotected'
-CLASSIFICATION_CONFIDENTIAL = u'confidential'
-CLASSIFICATION_CLASSIFIED = u'classified'
-CLASSIFICATION_VOCABULARY = (
-    CLASSIFICATION_UNPROTECTED,
-    CLASSIFICATION_CONFIDENTIAL,
-    CLASSIFICATION_CLASSIFIED,
-)
 
 PUBLIC_TRIAL_UNCHECKED = u'unchecked'
 PUBLIC_TRIAL_PUBLIC = u'public'
@@ -52,8 +46,7 @@ class IClassification(form.Schema):
     classification = schema.Choice(
             title = _(u'label_classification', default=u'Classification'),
             description = _(u'help_classification', default=u''),
-            source = make_vocabulary(CLASSIFICATION_VOCABULARY),
-            default = CLASSIFICATION_UNPROTECTED,
+            source = u'classification_classification_vocabulary',
     )
 
     privacy_layer = schema.Bool(
@@ -96,6 +89,28 @@ class IClassification(form.Schema):
 
 
 alsoProvides(IClassification, IFormFieldProvider)
+
+# VALUES
+
+CLASSIFICATION_UNPROTECTED = u'unprotected'
+CLASSIFICATION_CONFIDENTIAL = u'confidential'
+CLASSIFICATION_CLASSIFIED = u'classified'
+CLASSIFICATION_OPTIONS = (
+    # Option-   # Option Name
+    # level     #
+    (1,         CLASSIFICATION_UNPROTECTED),
+    (2,         CLASSIFICATION_CONFIDENTIAL),
+    (3,         CLASSIFICATION_CLASSIFIED),
+)
+grok.global_utility(create_restricted_vocabulary(IClassification['classification'],
+                                                 CLASSIFICATION_OPTIONS,
+                                                 message_factory=_),
+                    provides = schema.interfaces.IVocabularyFactory,
+                    name = u'classification_classification_vocabulary')
+
+@form.default_value(field=IClassification['classification'])
+def classification_default(data):
+    return None
 
 
 class Classification(metadata.MetadataBase):
