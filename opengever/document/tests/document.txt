@@ -1,0 +1,87 @@
+Document Content Type
+=====================
+
+Fields:
+    foreign_reference
+    receipt_date
+    file
+    paper_form
+    preserved_as_paper
+    archival_file
+    thumbnail
+    preview
+
+Get our content type and the schema::
+
+    >>> Doc = self.portal.portal_types.get('opengever.document.document', None)
+    >>> not Doc
+    False
+    >>> schema = Doc.lookupSchema()
+
+Get a Browser and login as admin::
+
+    >>> from Products.Five.testbrowser import Browser
+    >>> browser = Browser()
+    >>> browser.handleErrors = False
+    >>> self.app.acl_users.userFolderAddUser('root', 'secret', ['Manager'], [])
+    >>> browser.addHeader('Authorization', 'Basic root:secret')
+
+Documents should be global addable, so at the plone root we can't add it::
+
+    >>> browser.open("http://nohost/plone/folder_factories")
+    >>> "opengever.document.document" in browser.contents
+    False
+
+But we want to test it, so lets change that, theb we should be able to Documents::
+
+    >>> Doc.global_allow = True
+    >>> browser.open("http://nohost/plone/folder_factories")
+    >>> "opengever.document.document" in browser.contents
+    True
+
+So, we will create some documents and check if they look like we
+expect it...::
+
+    >>> fieldvalues = {
+    ...     'IBasic.title'              : 'MyDocument',
+    ...     'IBasic.description'        : 'Hello World',
+    ...     'foreign_reference'         : 'The Foreign Reference Text',
+    ...     #'receipt_date'              : ,
+    ...     'file'                      : 'Blubb',
+    ...     'paper_form:list'           : True,
+    ...     'preserved_as_paper:list'   : True,
+    ... }
+    >>>
+    >>> browser.open("http://nohost/plone/++add++%s" % Doc.id)
+    >>> for field, value in fieldvalues.items():
+    ...     browser.getControl(name='form.widgets.%s' % field).value = value
+    >>> browser.getControl(name="form.buttons.save").click()
+    >>> object_url = browser.url
+    >>> expected_id = fieldvalues['IBasic.title'].lower()
+    >>> expected_url = 'http://nohost/plone/%s/view' % expected_id
+    >>> object_url==expected_url
+    True
+
+Did it work? Get the object from the ZODB::
+    >>> obj = self.portal.get(expected_id)
+    >>> obj
+    <Item at /plone/mydocument>
+    >>> not obj
+    False
+    >>> obj.portal_type
+    'opengever.document.document'
+    >>> missmatches = 0
+    >>> for field, value in fieldvalues.items():
+    ...     # we need the attribute name, not the input-name of the field
+    ...     name = field.split(':')[0].split('.')[-1]
+    ...     eff_value = getattr(obj, name, None)
+    ...     if eff_value != value:
+    ...         print 'expected value "%s" for field "%s" (%s) but got "%s"' % \
+    ...             (str(value), str(name), str(field), str(eff_value))
+    ...         missmatches += 1
+    ...     missmatches += int(obj.get(name) == value)
+    >>> missmatches
+    0
+
+
+
