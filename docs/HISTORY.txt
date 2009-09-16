@@ -4,6 +4,7 @@ Changelog
 0.1
 ---
 
+* [16.09.2009] Added some translations [jba]
 * [16.09.2009] Fixed Checkbox-Widget problem (use a Widget containing "Field") [jba]
 * [10.09.2009] Changed Boolean-Widgets to Checkbox [jba]
 * [10.09.2009] Added Fields to "Document" type [jba]

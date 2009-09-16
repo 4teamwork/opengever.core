@@ -15,8 +15,95 @@ msgstr ""
 "Domain: opengever.document\n"
 "X-Is-Fallback-For: de-at de-li de-lu de-ch de-de\n"
 
-#. Default: "XXXX"
-#: opengever/document/XXX.py
-msgid "xxXX"
-msgstr "XxxX"
+#. Default: "Document"
+#: opengever/document/profiles/default/types/opengever.document.document.xml
+msgid "document_type_name"
+msgstr "Dokument"
+
+#. Default: "A Document"
+#: opengever/document/profiles/default/types/opengever.document.document.xml
+msgid "document_type_name"
+msgstr "Ein Dokument"
+
+#. Default: "Foreign Reference"
+#: opengever/document/document.py
+msgid "label_foreign_reference"
+msgstr "Fremdzeichen"
+
+#. Default: ""
+#: opengever/document/document.py
+msgid "help_foreign_reference"
+msgstr ""
+
+#. Default: "Date of receipt"
+#: opengever/document/document.py
+msgid "label_receipt_date"
+msgstr "Eingangsdatum"
+
+#. Default: ""
+#: opengever/document/document.py
+msgid "help_receipt_Date"
+msgstr ""
+
+#. Default: "File"
+#: opengever/document/document.py
+msgid "label_file"
+msgstr "Datei"
+
+#. Default: ""
+#: opengever/document/document.py
+msgid "help_file"
+msgstr ""
+
+#. Default: "Paper form"
+#: opengever/document/document.py
+msgid "label_paper_form"
+msgstr "Papierform"
+
+#. Default: "Available in paper form only"
+#: opengever/document/document.py
+msgid "help_paper_form"
+msgstr "Nur in Papierform verfügbar"
+
+#. Default: "Preserved as paper"
+#: opengever/document/document.py
+msgid "label_preserved_as_paper"
+msgstr "In Papierform aufbewahrt"
+
+#. Default: ""
+#: opengever/document/document.py
+msgid "help_preserved_as_paper"
+msgstr ""
+
+#. Default: "Archival File"
+#: opengever/document/document.py
+msgid "label_archival_file"
+msgstr "Archivierte Datei"
+
+#. Default: ""
+#: opengever/document/document.py
+msgid "help_archival_file"
+msgstr ""
+
+#. Default: "Thumbnail"
+#: opengever/document/document.py
+msgid "label_thumbnail"
+msgstr "Kurzbild"
+
+#. Default: ""
+#: opengever/document/document.py
+msgid "help_thumbnail"
+msgstr ""
+
+#. Default: "Preview"
+#: opengever/document/document.py
+msgid "label_preview"
+msgstr "Vorschau"
+
+#. Default: ""
+#: opengever/document/document.py
+msgid "help_preview"
+msgstr ""
+
+
 

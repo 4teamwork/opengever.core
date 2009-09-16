@@ -4,13 +4,13 @@ from z3c.form.browser import checkbox
 
 from plone.directives import form
 
-from opengever.repository import _
+from opengever.document import _
 
 class IDocumentSchema(form.Schema):
     """ Document Schema Interface
     """
 
-    foreign_reference = schema.Text(
+    foreign_reference = schema.TextLine(
             title = _(u'label_foreign_reference', default='Foreign Reference'),
             description = _('help_foreign_reference', default=''),
             required = False,
@@ -36,7 +36,7 @@ class IDocumentSchema(form.Schema):
             required = False,
     )
 
-    form.widget(paper_form=checkbox.SingleCheckBoxFieldWidget)
+    form.widget(preserved_as_paper=checkbox.SingleCheckBoxFieldWidget)
     preserved_as_paper = schema.Bool(
             title = _(u'label_preserved_as_paper', default='Preserved as paper'),
             description = _(u'help_preserved_as_paper', default=''),
