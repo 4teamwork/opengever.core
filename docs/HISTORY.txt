@@ -4,6 +4,8 @@ Changelog
 0.1
 ---
 
+* [16.09.2009] Issue #15 PloneGov GEVER Light Registraturplan übernehmen [jba]
+  * Fixed bug in Restricted-Acquisition-Vocabulary-System and made tests run again (testing previous changes)
 * [10.09.2009] Issue #15 PloneGov GEVER Light Registraturplan übernehmen [jba]
   * Added acquisition restricted vocabulary system, using for classification
   * Added acquisition restricted vocabulary for public_trial

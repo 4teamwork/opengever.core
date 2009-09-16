@@ -13,6 +13,7 @@ a container:
 
 When we create a dexterity content type::
 
+    >>> from opengever.repository import classification
     >>> from plone.dexterity.fti import DexterityFTI
     >>> fti = DexterityFTI('TestingType')
     >>> fti.behaviors = ('opengever.repository.classification.IClassification',)
@@ -40,7 +41,7 @@ We can see this type in the addable types at the root of the site::
     >>> browser.getControl(name="form.widgets.IClassification.privacy_layer:list").value = ['true']
     >>> browser.getControl(name="form.widgets.IClassification.public_trial:list").value = ['public']
     >>> browser.getControl(name="form.widgets.IClassification.public_trial_statement").value = 'My Statement'
-    >>> browser.getControl(name="form.widgets.IClassification.archival_value").value = '55'
+    >>> browser.getControl(name="form.widgets.IClassification.archival_value").value = classification.ARCHIVAL_VALUE_UNCHECKED
     >>> browser.getControl(name="form.widgets.IClassification.custody_period").value = '11'
     >>> browser.getControl(name="form.widgets.IClassification.retention_period").value = '12'
     >>> browser.getControl(name="form.buttons.save").click()
@@ -55,7 +56,6 @@ Get the created object::
 
 Check the values of the created object::
 
-    >>> from opengever.repository import classification
     >>> obj.classification == classification.CLASSIFICATION_CONFIDENTIAL
     True
     >>> obj.privacy_layer
@@ -64,8 +64,8 @@ Check the values of the created object::
     True
     >>> obj.public_trial_statement == 'My Statement'
     True
-    >>> obj.archival_value
-    55
+    >>> obj.archival_value == classification.ARCHIVAL_VALUE_UNCHECKED
+    True
     >>> obj.custody_period
     11
     >>> obj.retention_period

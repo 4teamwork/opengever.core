@@ -59,7 +59,7 @@ def create_restricted_vocabulary(field, options, message_factory=None):
                 # object is not yet existing, context is container
                 obj = context
             else:
-                # object is existing
+                # object is existing, container is parent of context
                 obj = context.aq_inner.aq_parent
             while not ISiteRoot.providedBy(obj):
                 try:
@@ -67,7 +67,10 @@ def create_restricted_vocabulary(field, options, message_factory=None):
                         raise ''
                     return self.field.get(obj)
                 except:
-                    obj = obj.aq_inner.aq_parent
+                    try:
+                        obj = obj.aq_inner.aq_parent
+                    except:
+                        return self.field.default
             return self.field.default
 
     GeneratedVocabulary.field = field
