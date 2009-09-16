@@ -29,20 +29,21 @@ class IDocumentSchema(form.Schema):
             required = False,
     )
 
-    form.widget(paper_form=checkbox.CheckBoxWidget)
+    form.widget(paper_form=checkbox.SingleCheckBoxFieldWidget)
     paper_form = schema.Bool(
             title = _(u'label_paper_form', default='Paper form'),
             description = _(u'help_paper_form', default='Available in paper form only'),
             required = False,
     )
 
-    form.widget(preserved_as_paper=checkbox.CheckBoxWidget)
+    form.widget(paper_form=checkbox.SingleCheckBoxFieldWidget)
     preserved_as_paper = schema.Bool(
             title = _(u'label_preserved_as_paper', default='Preserved as paper'),
             description = _(u'help_preserved_as_paper', default=''),
             required = False,
     )
 
+    form.omitted('archival_file')
     # XXX : use SQLFile
     archival_file = schema.TextLine(
             title = _(u'label_archival_file', default='Archival File'),
@@ -50,6 +51,7 @@ class IDocumentSchema(form.Schema):
             required = False,
     )
 
+    form.omitted('thumbnail')
     # XXX : use SQLFile
     thumbnail = schema.TextLine(
             title = _(u'label_thumbnail', default='Thumbnail'),
@@ -57,6 +59,7 @@ class IDocumentSchema(form.Schema):
             required = False,
     )
 
+    form.omitted('preview')
     preview = schema.Text(
             title = _(u'label_preview', default='Preview'),
             description = _(u'help_preview', default=''),
