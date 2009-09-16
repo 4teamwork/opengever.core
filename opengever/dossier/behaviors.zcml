@@ -9,13 +9,15 @@
     <include package="plone.directives.form" file="meta.zcml" />
     <include package="plone.directives.form" />
 
-    <!--grok:grok package=".behaviors" /-->
+    <!--grok:grok package=".behaviors.dossier" /-->
 
     <!-- Dossier -->
     <plone:behavior
         title="OpenGever Dossier"
         description="Adds OpenGever base properties and fields for dossiers"
         provides=".behaviors.dossier.IDossier"
+        factory="plone.behavior.AnnotationStorage"
+        for="plone.dexterity.interfaces.IDexterityContent"
         />
         
 </configure>
