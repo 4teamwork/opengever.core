@@ -108,7 +108,7 @@ msgstr "Archivwürdigkeit"
 #. Default "Archival value code"
 #: opengever/repository/classification.py
 msgid "help_archival_value"
-msgstr "Geben Sie dem Archivwert an"
+msgstr ""
 
 #. Default ""
 #: opengever/repository/classification.py
