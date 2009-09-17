@@ -34,7 +34,7 @@ class IClassification(form.Schema):
             source = u'classification_classification_vocabulary',
     )
 
-    form.widget(paper_form=checkbox.SingleCheckBoxFieldWidget)
+    form.widget(privacy_layer=checkbox.SingleCheckBoxFieldWidget)
     privacy_layer = schema.Bool(
             title = _(u'label_privacy_layer', default=u'Privacy layer'),
             description = _(u'help_privacy_layer', default=u''),
