@@ -15,6 +15,9 @@ msgstr ""
 "Domain: opengever.repository\n"
 "X-Is-Fallback-For: de-at de-li de-lu de-ch de-de\n"
 
+msgid "RepositoryFolder"
+msgstr "Ordnungsposition"
+
 #. Default: "Classification"
 #: opengever/repository/classification.py
 msgid "fieldset_classification"
