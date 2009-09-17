@@ -6,6 +6,7 @@ Changelog
 
 * [17.09.2009] Issue #15 PloneGov GEVER Light Registraturplan übernehmen [jba]
   * Changed "privacy_layer" to Choice-Widget with acquision and a restricted vocbulary
+  * Implemented Validator for custody- and retention-period fields
 * [16.09.2009] Issue #15 PloneGov GEVER Light Registraturplan übernehmen [jba]
   * Fixed bug in Restricted-Acquisition-Vocabulary-System and made tests run again (testing previous changes)
 * [10.09.2009] Issue #15 PloneGov GEVER Light Registraturplan übernehmen [jba]

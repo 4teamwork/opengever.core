@@ -36,9 +36,9 @@ X i18n: Geben Sie de>>M<< Archivwert an
     X (3) Archivwürdig
     X (3) Nicht archivwürdig
     X (3) Sampling
-  - Schutzfrist & Aufbewahrungsdauer:
-    - Kann auf tieferer Ebene kleiner sein, nicht aber grösser
-    - nicht required, vererbbar
+  X Schutzfrist & Aufbewahrungsdauer:
+    X Kann auf tieferer Ebene kleiner sein, nicht aber grösser
+    X nicht required, vererbbar
 X Welches ist die erste Position einer Rubrik? 0 oder 1? (momentan 0)
   X 1
 X Darf die Position bei bestehenden Rubriken geändert werden?

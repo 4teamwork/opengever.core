@@ -150,18 +150,3 @@ msgstr ""
 msgid "label_retention_period"
 msgstr "Aufbewahrungsdauer (Jahre)"
 
-#. Default "Reference"
-#: opengever/repository/classification.py
-msgid "label_retention_period"
-msgstr "Aktenzeichen"
-
-#. Default ""
-#: opengever/repository/repositoryfolder.py
-msgid "help_reference_number"
-msgstr ""
-
-#. Default ""
-#: opengever/repository/repositoryfolder.py
-msgid "help_reference_number"
-msgstr ""
-

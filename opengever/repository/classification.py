@@ -1,13 +1,16 @@
 
 from zope import schema
 from zope.interface import alsoProvides
+import zope.component
 from z3c.form.browser import checkbox
+from z3c.form import validator
 
 from five import grok
 
 from plone.app.dexterity.behaviors import metadata
 from plone.autoform.interfaces import IFormFieldProvider
 from plone.directives import form
+from Products.CMFCore.interfaces import ISiteRoot
 
 from opengever.repository import _
 from opengever.repository import utils
@@ -165,6 +168,63 @@ form.default_value(field=IClassification['privacy_layer'])(
                 default = PRIVACY_LAYER_NO
         )
 )
+
+# CUSTODY PERIOD / RETENTION PERIOD
+
+class IntLowerEqualThanParentValidator(validator.SimpleFieldValidator):
+
+    def validate(self, value):
+        super(IntLowerEqualThanParentValidator, self).validate(value)
+        # should not be negative
+        if int(value)<0:
+            raise schema.interfaces.TooSmall()
+        # get parent value
+        obj = self.context.aq_inner.aq_parent
+        parent_value = -1
+        while parent_value<0 and not ISiteRoot.providedBy(obj):
+            try:
+                parent_value = int(self.field.get(IClassification(obj)))
+            except AttributeError:
+                pass
+            obj = obj.aq_inner.aq_parent
+        # should not be bigger than parent
+        if int(value)>parent_value:
+            raise schema.interfaces.TooBig()
+
+# custody_period
+class CustodyPeriodValidator(IntLowerEqualThanParentValidator):
+    pass
+validator.WidgetValidatorDiscriminators(
+        CustodyPeriodValidator,
+        field=IClassification['custody_period']
+)
+form.default_value(field=IClassification['custody_period'])(
+        utils.set_default_with_acquisition(
+                field=IClassification['custody_period'],
+                default = PRIVACY_LAYER_NO
+        )
+)
+zope.component.provideAdapter(CustodyPeriodValidator)
+
+
+# retention_period
+class RetentionPeriodValidator(IntLowerEqualThanParentValidator):
+    pass
+validator.WidgetValidatorDiscriminators(
+        RetentionPeriodValidator,
+        field=IClassification['retention_period']
+)
+form.default_value(field=IClassification['retention_period'])(
+        utils.set_default_with_acquisition(
+                field=IClassification['retention_period'],
+                default = PRIVACY_LAYER_NO
+        )
+)
+zope.component.provideAdapter(RetentionPeriodValidator)
+
+
+
+
 
 
 class Classification(metadata.MetadataBase):
