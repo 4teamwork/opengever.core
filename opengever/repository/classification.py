@@ -179,16 +179,24 @@ class IntLowerEqualThanParentValidator(validator.SimpleFieldValidator):
         if int(value)<0:
             raise schema.interfaces.TooSmall()
         # get parent value
-        obj = self.context.aq_inner.aq_parent
+        if '++add++' in self.request.get('PATH_TRANSLATED', object()):
+            obj = self.context
+        else:
+            obj = self.context.aq_inner.aq_parent
         parent_value = -1
         while parent_value<0 and not ISiteRoot.providedBy(obj):
+            cf_obj = zope.component.queryAdapter(obj, IClassification)
+            if cf_obj:
+                try:
+                    parent_value = int(self.field.get(cf_obj))
+                except AttributeError:
+                    pass
             try:
-                parent_value = int(self.field.get(IClassification(obj)))
+                obj = obj.aq_inner.aq_parent
             except AttributeError:
-                pass
-            obj = obj.aq_inner.aq_parent
+                return
         # should not be bigger than parent
-        if int(value)>parent_value:
+        if parent_value>-1 and int(value)>parent_value:
             raise schema.interfaces.TooBig()
 
 # custody_period
@@ -201,7 +209,7 @@ validator.WidgetValidatorDiscriminators(
 form.default_value(field=IClassification['custody_period'])(
         utils.set_default_with_acquisition(
                 field=IClassification['custody_period'],
-                default = PRIVACY_LAYER_NO
+                default = 10
         )
 )
 zope.component.provideAdapter(CustodyPeriodValidator)
@@ -217,11 +225,10 @@ validator.WidgetValidatorDiscriminators(
 form.default_value(field=IClassification['retention_period'])(
         utils.set_default_with_acquisition(
                 field=IClassification['retention_period'],
-                default = PRIVACY_LAYER_NO
+                default = 10
         )
 )
 zope.component.provideAdapter(RetentionPeriodValidator)
-
 
 
 
