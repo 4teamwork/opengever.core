@@ -10,7 +10,7 @@ from plone.app.dexterity.behaviors import metadata
 from opengever.repository import _
 from opengever.repository.interfaces import IRepositoryFolder
 
-class IRepositoryFolderSchema(metadata.IDublinCore):
+class IRepositoryFolderSchema(metadata.IBasic):
     """ A Repository Folder
     """
 
