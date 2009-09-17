@@ -34,11 +34,11 @@ class IClassification(form.Schema):
             source = u'classification_classification_vocabulary',
     )
 
-    form.widget(privacy_layer=checkbox.SingleCheckBoxFieldWidget)
-    privacy_layer = schema.Bool(
+    #form.widget(privacy_layer=checkbox.SingleCheckBoxFieldWidget)
+    privacy_layer = schema.Choice(
             title = _(u'label_privacy_layer', default=u'Privacy layer'),
             description = _(u'help_privacy_layer', default=u''),
-            default = False,
+            source = u'classification_privacy_layer_vocabulary',
     )
 
     public_trial = schema.Choice(
@@ -143,6 +143,26 @@ form.default_value(field=IClassification['archival_value'])(
         utils.set_default_with_acquisition(
                 field=IClassification['archival_value'],
                 default = ARCHIVAL_VALUE_UNCHECKED
+        )
+)
+
+
+# PRIVACY_LAYER: Vocabulary and default value
+PRIVACY_LAYER_NO = u'privacy layer : no'
+PRIVACY_LAYER_YES = u'privacy layer : yes'
+PRIVACY_LAYER_OPTIONS = (
+    (1,         PRIVACY_LAYER_NO),
+    (2,         PRIVACY_LAYER_YES),
+)
+grok.global_utility(utils.create_restricted_vocabulary(IClassification['privacy_layer'],
+                                                       PRIVACY_LAYER_OPTIONS,
+                                                       message_factory=_),
+                    provides = schema.interfaces.IVocabularyFactory,
+                    name = u'classification_privacy_layer_vocabulary')
+form.default_value(field=IClassification['privacy_layer'])(
+        utils.set_default_with_acquisition(
+                field=IClassification['privacy_layer'],
+                default = PRIVACY_LAYER_NO
         )
 )
 

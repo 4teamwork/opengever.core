@@ -53,6 +53,16 @@ msgstr "Datenschutzstufe"
 #. Default: ""
 #: opengever/repository/classification.py
 msgid "help_privacy_layer"
+msgstr ""
+
+#. Default ""
+#: opengever/repository/classification.py
+msgid "privacy layer : no"
+msgstr "Keine Datenschutzstufe"
+
+#. Default: ""
+#: opengever/repository/classification.py
+msgid "privacy layer : yes"
 msgstr "Enthält schützenswerten Personendaten"
 
 #. Default "Public Trial"

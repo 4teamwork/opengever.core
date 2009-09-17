@@ -26,9 +26,9 @@ To Do
 - i18n: Geben Sie de>>M<< Archivwert an
 - Klassifizierung:
   - Klassifizierung: Klassifizierung wird mit Acquisition vom Container übernommen und kann noch mehr eingeschränkt werden, nicht aber weniger
-  - Datenschutzstufe:
-    - [no » yes] erlaubt, [yes » no] nicht erlaubt
-    - nicht required, vererbbar
+  X Datenschutzstufe:
+    X [no » yes] erlaubt, [yes » no] nicht erlaubt
+    X nicht required, vererbbar
   X Öffentlichkeitsstatus: etwa gleich wie Datenschutzstufe
   X Archivwürdigkeit:
     X (1) Noch nicht bewertet (default)

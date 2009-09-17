@@ -94,8 +94,9 @@ def set_default_with_acquisition(field, default):
         while not ISiteRoot.providedBy(obj):
             try:
                 return data.field.get(obj)
-            finally:
-                obj = obj.aq_inner.aq_parent
+            except AttributeError:
+                pass
+            obj = obj.aq_inner.aq_parent
         # otherwise use default value
         return field._acquisition_default
     return default_value_generator
