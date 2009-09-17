@@ -1,6 +1,7 @@
 
 from zope import schema
 from zope.interface import alsoProvides
+from z3c.form.browser import checkbox
 
 from five import grok
 
@@ -33,6 +34,7 @@ class IClassification(form.Schema):
             source = u'classification_classification_vocabulary',
     )
 
+    form.widget(paper_form=checkbox.SingleCheckBoxFieldWidget)
     privacy_layer = schema.Bool(
             title = _(u'label_privacy_layer', default=u'Privacy layer'),
             description = _(u'help_privacy_layer', default=u''),
