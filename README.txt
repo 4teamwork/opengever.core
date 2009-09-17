@@ -23,7 +23,7 @@ To Do
     - keine duplikate
     X >0
     X i18n: Record Position = Aktenzeichen » reference_number
-- i18n: Geben Sie de>>M<< Archivwert an
+X i18n: Geben Sie de>>M<< Archivwert an
 - Klassifizierung:
   - Klassifizierung: Klassifizierung wird mit Acquisition vom Container übernommen und kann noch mehr eingeschränkt werden, nicht aber weniger
   X Datenschutzstufe:
