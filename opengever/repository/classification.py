@@ -25,9 +25,6 @@ class IClassification(form.Schema):
                 u'privacy_layer',
                 u'public_trial',
                 u'public_trial_statement',
-                u'archival_value',
-                u'custody_period',
-                u'retention_period',
         ],
     )
 
@@ -35,6 +32,7 @@ class IClassification(form.Schema):
             title = _(u'label_classification', default=u'Classification'),
             description = _(u'help_classification', default=u''),
             source = u'classification_classification_vocabulary',
+            required = False,
     )
 
     #form.widget(privacy_layer=checkbox.SingleCheckBoxFieldWidget)
@@ -42,12 +40,14 @@ class IClassification(form.Schema):
             title = _(u'label_privacy_layer', default=u'Privacy layer'),
             description = _(u'help_privacy_layer', default=u''),
             source = u'classification_privacy_layer_vocabulary',
+            required = False,
     )
 
     public_trial = schema.Choice(
             title = _(u'label_public_trial', default=u'Public Trial'),
             description = _(u'help_public_trial', default=u''),
             source = u'classification_public_trial_vocabulary',
+            required = False,
     )
 
     public_trial_statement = schema.Text(
@@ -57,23 +57,35 @@ class IClassification(form.Schema):
             default = u'',
     )
 
+    form.fieldset(
+        u'lifecycle',
+        label = _(u'fieldset_lifecycle', default=u'Life Cycle'),
+        fields = [
+                u'archival_value',
+                u'custody_period',
+                u'retention_period',
+        ],
+    )
+            
     archival_value = schema.Choice(
             title = _(u'label_archival_value', default=u'Archival value'),
             description = _(u'help_archival_value', default=u'Archival value code'),
             source = u'classification_archival_value_vocabulary',
-            required = True,
+            required = False,
     )
 
     custody_period = schema.Int(
             title = _(u'label_custody_period', default=u'Custody period (years)'),
             description = _(u'help_custody_period', default=u''),
             default = 10,
+            required = False,
     )
 
     retention_period = schema.Int(
             title = _(u'label_retention_period', u'Retention period (years)'),
             description = _(u'help_retention_period', default=u''),
             default = 10,
+            required = False,
     )
 
 
