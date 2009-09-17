@@ -41,7 +41,7 @@ We can see this type in the addable types at the root of the site::
     >>> browser.getControl(name="form.widgets.IClassification.privacy_layer:list").value = ['true']
     >>> browser.getControl(name="form.widgets.IClassification.public_trial:list").value = ['public']
     >>> browser.getControl(name="form.widgets.IClassification.public_trial_statement").value = 'My Statement'
-    >>> browser.getControl(name="form.widgets.IClassification.archival_value").value = classification.ARCHIVAL_VALUE_UNCHECKED
+    >>> browser.getControl(name="form.widgets.IClassification.archival_value:list").value = [classification.ARCHIVAL_VALUE_UNCHECKED]
     >>> browser.getControl(name="form.widgets.IClassification.custody_period").value = '11'
     >>> browser.getControl(name="form.widgets.IClassification.retention_period").value = '12'
     >>> browser.getControl(name="form.buttons.save").click()
