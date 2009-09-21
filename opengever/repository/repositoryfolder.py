@@ -18,6 +18,16 @@ class IRepositoryFolderSchema(form.Schema):
     """ A Repository Folder
     """
 
+    form.fieldset(
+        u'common',
+        label = _(u'fieldset_common', default=u'Common'),
+        fields = [
+                u'effective_title',
+                u'reference_number',
+                u'description',
+        ],
+    )
+
     #form.omitted('title')
     form.order_before(effective_title = '*')
     effective_title = schema.TextLine(

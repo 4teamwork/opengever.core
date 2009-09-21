@@ -1,19 +1,21 @@
-# opengever.repository
-# Jonas Baumann <j.baumann@4teamwork.ch>, 2009
+# --- PLEASE EDIT THE LINES BELOW CORRECTLY ---
+# SOME DESCRIPTIVE TITLE.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 msgid ""
 msgstr ""
-"Project-Id-Version: 1.0\n"
+"Project-Id-Version: PACKAGE VERSION\n"
 "POT-Creation-Date: 2009-09-21 11:25+0000\n"
-"PO-Revision-Date: 2009-01-01 10:00+0100\n"
-"Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
-"Language-Team: Jonas Baumann <j.baumann@4teamwork.ch>\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=1; plural=0;\n"
+"Plural-Forms: nplurals=1; plural=0\n"
+"Language-Code: en\n"
+"Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: opengever.repository\n"
-"X-Is-Fallback-For: de-at de-li de-lu de-ch de-de\n"
 
 #. Default: "A Repository Folder"
 #: opengever.repository/opengever/repository/profiles/default/types/opengever.repository.repositoryfolder.xml
@@ -23,72 +25,71 @@ msgstr ""
 #. Default: "RepositoryFolder"
 #: opengever.repository/opengever/repository/profiles/default/types/opengever.repository.repositoryfolder.xml
 msgid "RepositoryFolder"
-msgstr "Ordnungsposition"
+msgstr ""
 
 #. Default ""
 #: opengever/repository/classification.py
 msgid "archival_value : archival worthy"
-msgstr "Archivwürdig"
+msgstr ""
 
 #. Default ""
 #: opengever/repository/classification.py
 msgid "archival_value : archival worthy with sampling"
-msgstr "Sampling"
+msgstr ""
 
 #. Default ""
 #: opengever/repository/classification.py
 msgid "archival_value : not archival worthy"
-msgstr "Nicht archivwürdig"
+msgstr ""
 
 #. Default ""
 #: opengever/repository/classification.py
 msgid "archival_value : prompt"
-msgstr "Anbieten"
+msgstr ""
 
 #. Default ""
 #: opengever/repository/classification.py
 msgid "archival_value : unchecked"
-msgstr "Noch nicht bewertet"
+msgstr ""
 
 #. Default: "classified"
 #: opengever/repository/classification.py
 msgid "classified"
-msgstr "Geheim"
+msgstr ""
 
 #. Default: "confidential"
 #: opengever/repository/classification.py
 msgid "confidential"
-msgstr "Vertraulich"
+msgstr ""
 
 #. Default: "A Sibling with the same reference number is existing"
 #: opengever.repository/opengever/repository/repositoryfolder.py:84
 msgid "error_sibling_reference_number_existing"
-msgstr "Eine Ordnungsposition mit dieser Referenznummer existiert bereits auf gleicher höhe"
+msgstr ""
 
 #. Default: "Classification"
 #: opengever.repository/opengever/repository/classification.py:22
 msgid "fieldset_classification"
-msgstr "Klassifizierung"
+msgstr ""
 
 #. Default: "Common"
 #: opengever.repository/opengever/repository/repositoryfolder.py:23
 msgid "fieldset_common"
-msgstr "Allgemein"
+msgstr ""
 
 #. Default: "Life Cycle"
 #: opengever.repository/opengever/repository/classification.py:62
 msgid "fieldset_lifecycle"
-msgstr "Lebenszyklus"
+msgstr ""
 
 #. Default: "Archival value code"
 #: opengever.repository/opengever/repository/classification.py:72
 msgid "help_archival_value"
 msgstr ""
 
-#. Default: ""
 #: opengever.repository/opengever/repository/classification.py:33
 msgid "help_classification"
-msgstr "Schutzgrad / Klassifizierung"
+msgstr ""
 
 #: opengever.repository/opengever/repository/classification.py:79
 msgid "help_custody_period"
@@ -99,7 +100,6 @@ msgstr ""
 msgid "help_description"
 msgstr ""
 
-#. Default: ""
 #: opengever.repository/opengever/repository/classification.py:41
 msgid "help_privacy_layer"
 msgstr ""
@@ -111,7 +111,7 @@ msgstr ""
 #. Default: "BegrÃ¼undung Schutzgrad"
 #: opengever.repository/opengever/repository/classification.py:55
 msgid "help_public_trial_statement"
-msgstr "Begründen Sie den gewählten Öffentlichkeitsstatus"
+msgstr ""
 
 #: opengever.repository/opengever/repository/repositoryfolder.py:40
 msgid "help_reference_number"
@@ -124,76 +124,75 @@ msgstr ""
 #. Default: "Archival value"
 #: opengever.repository/opengever/repository/classification.py:71
 msgid "label_archival_value"
-msgstr "Archivwürdigkeit"
+msgstr ""
 
 #. Default: "Classification"
 #: opengever.repository/opengever/repository/classification.py:32
 msgid "label_classification"
-msgstr "Klassifizierung"
+msgstr ""
 
 #. Default: "Custody period (years)"
 #: opengever.repository/opengever/repository/classification.py:78
 msgid "label_custody_period"
-msgstr "Schutzfrist dauer (Jahre)"
+msgstr ""
 
 #. Default: "Description"
 #: opengever.repository/opengever/repository/repositoryfolder.py:46
 msgid "label_description"
-msgstr "Beschreibung"
+msgstr ""
 
 #. Default: "Privacy layer"
 #: opengever.repository/opengever/repository/classification.py:40
 msgid "label_privacy_layer"
-msgstr "Datenschutzstufe"
+msgstr ""
 
 #. Default: "Public Trial"
 #: opengever.repository/opengever/repository/classification.py:47
 msgid "label_public_trial"
-msgstr "Öffentlichkeitsstatus"
+msgstr ""
 
 #. Default: "Public trial statement"
 #: opengever.repository/opengever/repository/classification.py:54
 msgid "label_public_trial_statement"
-msgstr "Begründung Öffentlichkeitsstatus"
+msgstr ""
 
 #. Default: "Reference"
 #: opengever.repository/opengever/repository/repositoryfolder.py:39
 msgid "label_reference_number"
-msgstr "Referenznummer"
+msgstr ""
 
 #. Default: "Retention period (years)"
 #: opengever.repository/opengever/repository/classification.py:85
 msgid "label_retention_period"
-msgstr "Aufbewahrungsdauer (Jahre)"
+msgstr ""
 
 #. Default ""
 #: opengever/repository/classification.py
 msgid "privacy layer : no"
-msgstr "Keine Datenschutzstufe"
+msgstr ""
 
 #. Default: ""
 #: opengever/repository/classification.py
 msgid "privacy layer : yes"
-msgstr "Enthält schützenswerten Personendaten"
+msgstr ""
 
 #. Default: "private"
 #: opengever/repository/classification.py
 msgid "private"
-msgstr "Nicht öffentlich"
+msgstr ""
 
 #. Default: "public"
 #: opengever/repository/classification.py
 msgid "public"
-msgstr "Öffentlich"
+msgstr ""
 
 #. Default: "unchecked"
 #: opengever/repository/classification.py
 msgid "unchecked"
-msgstr "Noch nicht geprüft"
+msgstr ""
 
 #. Default: "unprotected"
 #: opengever/repository/classification.py
 msgid "unprotected"
-msgstr "Nicht klassifiziert"
-
+msgstr ""
 

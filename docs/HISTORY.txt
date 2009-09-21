@@ -4,6 +4,9 @@ Changelog
 0.1
 ---
 
+* [21.09.2009] Issue #15 PloneGov GEVER Light Registraturplan übernehmen [jba]
+  * Implemented Validator for Repository-Folder field "reference_number"
+  * Improved translations, added .pot-file
 * [17.09.2009] Issue #15 PloneGov GEVER Light Registraturplan übernehmen [jba]
   * Changed "privacy_layer" to Choice-Widget with acquision and a restricted vocbulary
   * Implemented Validator for custody- and retention-period fields
