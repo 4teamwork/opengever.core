@@ -1,6 +1,11 @@
 from Acquisition import aq_inner, aq_parent
 from zope import schema
-from zope.interface import implements
+from zope.interface import implements, invariant, Invalid
+import zope.component
+
+from z3c.form import validator
+from z3c.form import error
+
 from plone.dexterity import content
 from plone.directives import form
 from plone.directives import dexterity
@@ -42,6 +47,37 @@ def reference_number_default_value(data):
                 highest_reference_number = obj.reference_number
     highest_reference_number += 1
     return highest_reference_number
+
+
+class ReferenceNumberValidator(validator.SimpleFieldValidator):
+    """
+    Reference number is uniqe per container (folder).
+    """
+    def validate(self, value):
+        super(ReferenceNumberValidator, self).validate(value)
+        if '++add++' in self.request.get('PATH_TRANSLATED', object()):
+            # context is container
+            siblings = self.context.getFolderContents(full_objects=1)
+        else:
+            parent = self.context.aq_inner.aq_parent
+            siblings = filter(lambda a:a!=self.context, parent.getFolderContents(full_objects=1))
+        sibling_ref_nums = [self.field.get(a) for a in siblings]
+        if value in sibling_ref_nums:
+            raise schema.interfaces.ConstraintNotSatisfied()
+
+validator.WidgetValidatorDiscriminators(
+        ReferenceNumberValidator,
+        field=IRepositoryFolderSchema['reference_number']
+)
+zope.component.provideAdapter(ReferenceNumberValidator)
+zope.component.provideAdapter(error.ErrorViewMessage(
+                _('error_sibling_reference_number_existing', default=u'A Sibling with the same reference number is existing'),
+                error = schema.interfaces.ConstraintNotSatisfied,
+                field = IRepositoryFolderSchema['reference_number'],
+        ),
+        name = 'message'
+)
+
 
 class RepositoryFolder(content.Container):
 
