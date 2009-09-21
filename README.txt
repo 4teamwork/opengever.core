@@ -18,14 +18,16 @@ Notizen
 To Do
 -----
 
-- INameFromTitle für Rubrik reparieren: contex.title wird verwendet
+X INameFromTitle für Rubrik reparieren: contex.title wird verwendet
 - record position:
     - keine duplikate
     X >0
     X i18n: Record Position = Aktenzeichen » reference_number
 X i18n: Geben Sie de>>M<< Archivwert an
 - Klassifizierung:
-  - Klassifizierung: Klassifizierung wird mit Acquisition vom Container übernommen und kann noch mehr eingeschränkt werden, nicht aber weniger
+  - getter mit acquisition
+  - events beim ändern der parents
+  X Klassifizierung: Klassifizierung wird mit Acquisition vom Container übernommen und kann noch mehr eingeschränkt werden, nicht aber weniger
   X Datenschutzstufe:
     X [no » yes] erlaubt, [yes » no] nicht erlaubt
     X nicht required, vererbbar
