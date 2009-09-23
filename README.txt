@@ -19,8 +19,8 @@ To Do
 -----
 
 X INameFromTitle für Rubrik reparieren: contex.title wird verwendet
-- record position:
-    - keine duplikate
+X record position:
+    X keine duplikate
     X >0
     X i18n: Record Position = Aktenzeichen » reference_number
 X i18n: Geben Sie de>>M<< Archivwert an
