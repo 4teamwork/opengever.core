@@ -71,7 +71,12 @@ class ReferenceNumberValidator(validator.SimpleFieldValidator):
         else:
             parent = self.context.aq_inner.aq_parent
             siblings = filter(lambda a:a!=self.context, parent.getFolderContents(full_objects=1))
-        sibling_ref_nums = [self.field.get(a) for a in siblings]
+        sibling_ref_nums = []
+        for sibling in siblings:
+            try:
+                sibling_ref_nums.append(self.field.get(sibling))
+            except AttributeError:
+                pass
         if value in sibling_ref_nums:
             raise schema.interfaces.ConstraintNotSatisfied()
 
