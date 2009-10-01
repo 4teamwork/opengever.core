@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 import os
 
-version = '1.0'
+version = open('opengever/dossier/version.txt').read().strip()
 
 setup(name='opengever.dossier',
       version=version,
