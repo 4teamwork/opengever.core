@@ -106,6 +106,23 @@ class RepositoryFolder(content.Container):
             obj = aq_parent(aq_inner(obj))
         return title
 
+    def allowedContentTypes(self, *args, **kwargs):
+        types = super(RepositoryFolder, self).allowedContentTypes(*args, **kwargs)
+        # check if self contains any similar objects
+        contains_similar_objects = False
+        for id, obj in self.contentItems():
+            if obj.portal_type==self.portal_type:
+                contains_similar_objects = True
+                break
+        # get fti of myself
+        fti = self.portal_types.get(self.portal_type)
+        # filter content types, if required
+        if contains_similar_objects:
+            # only allow same types
+            types = filter(lambda a:a==fti, types)
+        return types
+            
+
 
 class NameFromTitle(grok.Adapter):
     """ An INameFromTitle adapter for namechooser

@@ -4,6 +4,7 @@ Changelog
 0.1
 ---
 
+* Issue #24: Registraturposition: hinzufügbare Typen je nach Inhalt [jba]
 * [21.09.2009] Issue #15 PloneGov GEVER Light Registraturplan übernehmen [jba]
   * Implemented Validator for Repository-Folder field "reference_number"
   * Improved translations, added .pot-file
