@@ -25,6 +25,7 @@ setup(name='opengever.document',
       install_requires=[
           'setuptools',
           'plone.app.dexterity',
+          'opengever.sqlfile',
           # -*- Extra requirements: -*-
       ],
       entry_points="""

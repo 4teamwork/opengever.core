@@ -4,6 +4,7 @@ Changelog
 0.1
 ---
 
+* [02.10.2009] Using opengever.sqlfile now [jba]
 * [16.09.2009] Added some Tests for content type Document [jba]
 * [16.09.2009] Added some translations [jba]
 * [16.09.2009] Fixed Checkbox-Widget problem (use a Widget containing "Field") [jba]

@@ -1,8 +1,11 @@
 
 from zope import schema
+import zope.app.file
 from z3c.form.browser import checkbox
 
 from plone.directives import form
+
+from opengever.sqlfile.field import NamedFile
 
 from opengever.document import _
 
@@ -22,8 +25,7 @@ class IDocumentSchema(form.Schema):
             required = False,
     )
 
-    # XXX : use SQLFile
-    file = schema.TextLine(
+    file = NamedFile(
             title = _(u'label_file', default='File'),
             description = _(u'help_file', default=''),
             required = False,
@@ -44,23 +46,21 @@ class IDocumentSchema(form.Schema):
     )
 
     form.omitted('archival_file')
-    # XXX : use SQLFile
-    archival_file = schema.TextLine(
+    archival_file = NamedFile(
             title = _(u'label_archival_file', default='Archival File'),
             description = _(u'help_archival_file', default=''),
             required = False,
     )
 
     form.omitted('thumbnail')
-    # XXX : use SQLFile
-    thumbnail = schema.TextLine(
+    thumbnail = NamedFile(
             title = _(u'label_thumbnail', default='Thumbnail'),
             description = _(u'help_thumbnail', default=''),
             required = False,
     )
 
     form.omitted('preview')
-    preview = schema.Text(
+    preview = NamedFile(
             title = _(u'label_preview', default='Preview'),
             description = _(u'help_preview', default=''),
             required = False,
