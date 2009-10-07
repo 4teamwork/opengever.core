@@ -1,0 +1,9 @@
+Changelog
+=========
+
+0.1
+---
+
+* created package with paster (basic_namespace)
+* added view "@@journal" which lists the journal
+
