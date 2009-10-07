@@ -6,4 +6,5 @@ Changelog
 
 * created package with paster (basic_namespace)
 * added view "@@journal" which lists the journal
+* added event for modified documents
 
