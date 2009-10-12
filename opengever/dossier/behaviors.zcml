@@ -17,6 +17,7 @@
         description="Adds OpenGever base properties and fields for dossiers"
         provides=".behaviors.dossier.IDossier"
         factory="plone.behavior.AnnotationStorage"
+        marker=".behaviors.dossier.IDossier"
         for="plone.dexterity.interfaces.IDexterityContent"
         />
         
