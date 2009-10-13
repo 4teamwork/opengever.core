@@ -12,6 +12,7 @@
 
         <div class="journal-history"
                 metal:define-macro="journal_history" >
+            <h1 i18n:translate="heading_journal">Journal</h1>
 
             <table class="listing nosort" summary="Journal"
                     i18n:domain="opengever.journal" i18n:attributes="summary summary_journal;">
@@ -26,9 +27,10 @@
                 <metal:block i18n:domain="plone" tal:repeat="item view/data">
                     <tr tal:define="odd repeat/item/odd;
                                     rhComments item/comments|nothing;"
-                            tal:attributes="class python:odd and 'even' or 'odd'">
+                            tal:attributes="class python:odd and 'even' or 'odd'"
+                            tal:condition="item/action/visible">
                         <td class="historyAction"
-                                i18n:translate="" tal:content="item/action">
+                                i18n:translate="" tal:content="item/action/title">
                             action
                         </td>
                         <td class="historyActor" tal:content="item/actor">
