@@ -2,10 +2,14 @@ from opengever.dossier import _
 from plone.autoform.interfaces import IFormFieldProvider
 from plone.directives import form
 from zope import schema
-from zope.interface import alsoProvides
+from zope.interface import Interface, alsoProvides
 #from collective.z3cform.datetimewidget.widget import DateWidget
 from plone.app.dexterity.behaviors.metadata import IBasic
 from plone.z3cform.textlines.textlines import TextLinesFieldWidget
+
+class IDossierMarker(Interface):
+    """ Marker Interface for dossiers.
+    """
 
 class IDossier(IBasic):
     """ Behaviour interface for dossier types providing common properties/fields.

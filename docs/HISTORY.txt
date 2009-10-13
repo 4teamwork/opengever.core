@@ -5,4 +5,5 @@ Changelog
 ---
 
 * Initial release
+* [13.10.2009] Added new marker interface for behavior IDossier since no marker interface is given when using factory [jba]
 
