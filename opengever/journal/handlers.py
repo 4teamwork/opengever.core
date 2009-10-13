@@ -6,6 +6,7 @@ from zope.app.container.interfaces import IObjectAddedEvent
 from zope.lifecycleevent.interfaces import IObjectModifiedEvent
 
 from plone.behaviors.versioning.utils import get_change_note
+from Products.CMFCore.interfaces import IActionSucceededEvent
 
 from ftw.journal.events.events import JournalEntryEvent
 
@@ -65,6 +66,19 @@ def dossier_modified(context, event):
 
 
 
+DOSSIER_STATE_CHANGED = 'Dossier state changed'
+@grok.subscribe(IDossier, IActionSucceededEvent)
+def dossier_state_changed(context, event):
+    newstate = event.workflow.transitions.get(event.action).new_state_id
+    # XXX translations are not working in events -.-
+    title = 'Dossier state changed to %(newstate)s (%(action)s)' % {
+            'newstate' : newstate,
+            'action' : event.action,
+    }
+    journal_entry_factory(context, DOSSIER_STATE_CHANGED, title)
+
+
+
 # ----------------------- DOCUMENT -----------------------
 
 DOCUMENT_ADDED_ACTION = 'Document added'
@@ -95,4 +109,16 @@ def document_modified(context, event):
     title = 'Document modified'
     journal_entry_factory(context, DOCUMENT_MODIIFED_ACTION, title, visible=False)
 
+
+
+DOCUMENT_STATE_CHANGED = 'Document state changed'
+@grok.subscribe(IDocumentSchema, IActionSucceededEvent)
+def document_state_changed(context, event):
+    newstate = event.workflow.transitions.get(event.action).new_state_id
+    # XXX translations are not working in events -.-
+    title = 'Document state changed to %(newstate)s (%(action)s)' % {
+            'newstate' : newstate,
+            'action' : event.action,
+    }
+    journal_entry_factory(context, DOCUMENT_STATE_CHANGED, title)
 
