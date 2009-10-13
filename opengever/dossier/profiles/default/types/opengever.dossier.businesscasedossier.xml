@@ -26,6 +26,7 @@
  <!-- enabled behaviors -->
  <property name="behaviors">
      <element value="plone.app.content.interfaces.INameFromTitle" />
+     <element value="ftw.journal.interfaces.IAnnotationsJournalizable" />
      <element value="opengever.dossier.behaviors.dossier.IDossier" />
      <element value="opengever.repository.classification.IClassification" />
  </property>
