@@ -4,12 +4,13 @@ Changelog
 0.1
 ---
 
-* [02.10.2009] Using opengever.sqlfile now [jba]
+* [10.09.2009] Added Fields to "Document" type [jba]
+* [10.09.2009] Added dexterity type "Document" [jba]
+* [10.09.2009] Changed Boolean-Widgets to Checkbox [jba]
+* [10.09.2009] Setup with generic setup, locales, etc [jba]
 * [16.09.2009] Added some Tests for content type Document [jba]
 * [16.09.2009] Added some translations [jba]
 * [16.09.2009] Fixed Checkbox-Widget problem (use a Widget containing "Field") [jba]
-* [10.09.2009] Changed Boolean-Widgets to Checkbox [jba]
-* [10.09.2009] Added Fields to "Document" type [jba]
-* [10.09.2009] Added dexterity type "Document" [jba]
-* [10.09.2009] Setup with generic setup, locales, etc [jba]
+* [02.10.2009] Using opengever.sqlfile now [jba]
+* [13.10.2009] Added behavior IAnnotationsJournalizable (ftw.journal) to Document [jba]
 
