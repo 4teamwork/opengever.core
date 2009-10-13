@@ -8,4 +8,5 @@ Changelog
 * added view "@@journal" which lists the journal
 * added event for modified documents
 * [13.10.2009] Implemented some event handlers for Dossier and Document [jba]
+* [13.10.2009] Added localization [jba]
 
