@@ -15,5 +15,6 @@ Changelog
 * [13.10.2009] Added behavior IAnnotationsJournalizable (ftw.journal) to Document [jba]
 * [14.10.2009] Added IVersionable behavior for Document [jba]
 * [14.10.2009] Added Actions for Version history and journal [jba]
-* [14.10.2009] Implemented webdave READ support for Document [jba]
+* [14.10.2009] Implemented webdav READ support for Document [jba]
+* [14.10.2009] Implemented webdav WRITE suppor for Document [jba]
 
