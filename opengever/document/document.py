@@ -25,6 +25,7 @@ class IDocumentSchema(form.Schema):
             required = False,
     )
 
+    form.primary('file')
     file = NamedFile(
             title = _(u'label_file', default='File'),
             description = _(u'help_file', default=''),
