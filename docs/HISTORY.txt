@@ -13,4 +13,6 @@ Changelog
 * [16.09.2009] Fixed Checkbox-Widget problem (use a Widget containing "Field") [jba]
 * [02.10.2009] Using opengever.sqlfile now [jba]
 * [13.10.2009] Added behavior IAnnotationsJournalizable (ftw.journal) to Document [jba]
+* [14.10.2009] Added IVersionable behavior for Document [jba]
+* [14.10.2009] Added Actions for Version history and journal [jba]
 
