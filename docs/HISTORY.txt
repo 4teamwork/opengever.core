@@ -7,4 +7,6 @@ Changelog
 * Initial release
 * [13.10.2009] Added new marker interface for behavior IDossier since no marker interface is given when using factory [jba]
 * [13.10.2009] Added behavior IAnnotationsJournalizable (ftw.journal) to Dossier types [jba]
+* [14.10.2009] Added IVersionable behavior for Dossier types [jba]
+* [14.10.2009] Added Actions for Version history and journal [jba]
 
