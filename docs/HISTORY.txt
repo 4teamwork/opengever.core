@@ -4,10 +4,22 @@ Changelog
 0.1
 ---
 
-* created package with paster (basic_namespace)
-* added view "@@journal" which lists the journal
+* Added event handlers and journal notification for workflow tranisitions
+  [13.10.2009, jbaumann]
+
+* Added localization
+  [13.10.2009, jbaumann]
+
+* Implemented some event handlers for Dossier and Document
+  [13.10.2009, jbaumann]
+
 * added event for modified documents
-* [13.10.2009] Implemented some event handlers for Dossier and Document [jba]
-* [13.10.2009] Added localization [jba]
-* [13.10.2009] Added event handlers and journal notification for workflow tranisitions [jba]
+  [07.10.2009, jbaumann]
+
+* added view "@@journal" which lists the journal
+  [07.10.2009, jbaumann]
+
+* created package with paster (basic_namespace)
+  [07.10.2009, jbaumann]
+
 
