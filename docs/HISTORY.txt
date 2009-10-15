@@ -5,20 +5,48 @@ Changelog
 0.2
 ---
 
+* Changed changelog structure
+  [15.10.2009, jbaumann]
+
 0.1
 ---
 
-* [10.09.2009] Added Fields to "Document" type [jba]
-* [10.09.2009] Added dexterity type "Document" [jba]
-* [10.09.2009] Changed Boolean-Widgets to Checkbox [jba]
-* [10.09.2009] Setup with generic setup, locales, etc [jba]
-* [16.09.2009] Added some Tests for content type Document [jba]
-* [16.09.2009] Added some translations [jba]
-* [16.09.2009] Fixed Checkbox-Widget problem (use a Widget containing "Field") [jba]
-* [02.10.2009] Using opengever.sqlfile now [jba]
-* [13.10.2009] Added behavior IAnnotationsJournalizable (ftw.journal) to Document [jba]
-* [14.10.2009] Added IVersionable behavior for Document [jba]
-* [14.10.2009] Added Actions for Version history and journal [jba]
-* [14.10.2009] Implemented webdav READ support for Document [jba]
-* [14.10.2009] Implemented webdav WRITE suppor for Document [jba]
+* Added Fields to "Document" type
+  [10.09.2009, jbaumann]
+
+* Added dexterity type "Document"
+  [10.09.2009, jbaumann]
+
+* Changed Boolean-Widgets to Checkbox
+  [10.09.2009, jbaumann]
+
+* Setup with generic setup, locales, etc
+  [10.09.2009, jbaumann]
+
+* Added some Tests for content type Document
+  [16.09.2009, jbaumann]
+
+* Added some translations
+  [16.09.2009, jbaumann]
+
+* Fixed Checkbox-Widget problem (use a Widget containing "Field")
+  [16.09.2009, jbaumann]
+
+* Using opengever.sqlfile now
+  [02.10.2009, jbaumann]
+
+* Added behavior IAnnotationsJournalizable (ftw.journal) to Document
+  [13.10.2009, jbaumann]
+
+* Added IVersionable behavior for Document
+  [14.10.2009, jbaumann]
+
+* Added Actions for Version history and journal
+  [14.10.2009, jbaumann]
+
+* Implemented webdav READ support for Document
+  [14.10.2009, jbaumann]
+
+* Implemented webdav WRITE suppor for Document
+  [14.10.2009, jbaumann]
 
