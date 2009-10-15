@@ -24,9 +24,10 @@ setup(name='opengever.document',
       zip_safe=False,
       install_requires=[
           'setuptools',
-          'plone.app.dexterity',
+          'ftw.sendmail',
           'opengever.sqlfile',
-          # -*- Extra requirements: -*-
+          'plone.app.dexterity',
+          'stoneagehtml', # required by ftw.sendmail, but there is no dependency in the current release
       ],
       entry_points="""
       # -*- Entry points: -*-
