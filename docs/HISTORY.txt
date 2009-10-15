@@ -4,22 +4,35 @@ Changelog
 0.1
 ---
 
-* Issue #24: Registraturposition: hinzufügbare Typen je nach Inhalt [jba]
-* [21.09.2009] Issue #15 PloneGov GEVER Light Registraturplan übernehmen [jba]
-  * Implemented Validator for Repository-Folder field "reference_number"
-  * Improved translations, added .pot-file
-* [17.09.2009] Issue #15 PloneGov GEVER Light Registraturplan übernehmen [jba]
-  * Changed "privacy_layer" to Choice-Widget with acquision and a restricted vocbulary
-  * Implemented Validator for custody- and retention-period fields
-* [16.09.2009] Issue #15 PloneGov GEVER Light Registraturplan übernehmen [jba]
-  * Fixed bug in Restricted-Acquisition-Vocabulary-System and made tests run again (testing previous changes)
-* [10.09.2009] Issue #15 PloneGov GEVER Light Registraturplan übernehmen [jba]
-  * Added acquisition restricted vocabulary system, using for classification
-  * Added acquisition restricted vocabulary for public_trial
-  * Added acquisition restricted vocabulary for archival_value
-* [09.09.2009] Issue #15: PloneGov GEVER Light Registraturplan übernehmen [jba]
-  * Properly implemented Title using RecordPosition with a dummy field
-  * Implemented Classification behavior with fields and localization
-  * Added Doctess for Classification behavior
 * Implemented content type "RepositoryFolder"
+  [09.09.2009, jbaumann]
+
+* Issue #15: PloneGov GEVER Light Registraturplan übernehmen
+  Properly implemented Title using RecordPosition with a dummy field
+  Implemented Classification behavior with fields and localization
+  Added Doctess for Classification behavior
+  [09.09.2009, jbaumann]
+
+* Issue #15 PloneGov GEVER Light Registraturplan übernehmen
+  Added acquisition restricted vocabulary system, using for classification
+  Added acquisition restricted vocabulary for public_trial
+  Added acquisition restricted vocabulary for archival_value
+  [10.09.2009, jbaumann]
+
+* Issue #15 PloneGov GEVER Light Registraturplan übernehmen
+  Fixed bug in Restricted-Acquisition-Vocabulary-System and made tests run again (testing previous changes)
+  [16.09.2009, jbaumann]
+
+* Issue #15 PloneGov GEVER Light Registraturplan übernehmen
+  Changed "privacy_layer" to Choice-Widget with acquision and a restricted vocbulary
+  Implemented Validator for custody- and retention-period fields
+  [17.09.2009, jbaumann]
+
+* Issue #15 PloneGov GEVER Light Registraturplan übernehmen
+  Implemented Validator for Repository-Folder field "reference_number"
+  Improved translations, added .pot-file
+  [21.09.2009, jbaumann]
+
+* Issue #24: Registraturposition: hinzufügbare Typen je nach Inhalt
+  [21.09.2009, jbaumann]
 
