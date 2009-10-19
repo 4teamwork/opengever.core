@@ -1,52 +1,50 @@
-# opengever.document
-# Jonas Baumann <j.baumann@4teamwork.ch>, 2009
+# --- PLEASE EDIT THE LINES BELOW CORRECTLY ---
+# SOME DESCRIPTIVE TITLE.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 msgid ""
 msgstr ""
-"Project-Id-Version: 1.0\n"
+"Project-Id-Version: PACKAGE VERSION\n"
 "POT-Creation-Date: 2009-10-19 12:54+0000\n"
-"PO-Revision-Date: 2009-01-01 10:00+0100\n"
-"Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
-"Language-Team: Jonas Baumann <j.baumann@4teamwork.ch>\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=1; plural=0;\n"
+"Plural-Forms: nplurals=1; plural=0\n"
+"Language-Code: en\n"
+"Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: opengever.document\n"
-"X-Is-Fallback-For: de-at de-li de-lu de-ch de-de\n"
 
 #. Default: "Send"
 #: opengever.document/opengever/document/mailing.py:184
 msgid "button_send"
-msgstr "Senden"
+msgstr ""
 
 #. Default: "A Document"
 #: opengever.document/opengever/document/profiles/default/types/opengever.document.document.xml
 msgid "document_type_description"
-msgstr "Ein Dokument"
+msgstr ""
 
 #. Default: "Document"
 #: opengever.document/opengever/document/profiles/default/types/opengever.document.document.xml
-#, fuzzy
 msgid "document_type_name"
-msgstr "Dokument"
+msgstr ""
 
 #. Default: "Send as email"
 #: opengever.document/opengever/document/mailing.py:182
 msgid "heading_send_as_email"
-msgstr "Dokumente als E-Mail versenden"
+msgstr ""
 
-#. Default: ""
 #: opengever.document/opengever/document/document.py:52
 msgid "help_archival_file"
 msgstr ""
 
-#. Default: ""
 #: opengever.document/opengever/document/document.py:31
 msgid "help_file"
 msgstr ""
 
-#. Default: ""
 #: opengever.document/opengever/document/document.py:18
 msgid "help_foreign_reference"
 msgstr ""
@@ -58,19 +56,16 @@ msgstr ""
 #. Default: "Available in paper form only"
 #: opengever.document/opengever/document/document.py:38
 msgid "help_paper_form"
-msgstr "Nur in Papierform verfügbar"
+msgstr ""
 
-#. Default: ""
 #: opengever.document/opengever/document/document.py:45
 msgid "help_preserved_as_paper"
 msgstr ""
 
-#. Default: ""
 #: opengever.document/opengever/document/document.py:66
 msgid "help_preview"
 msgstr ""
 
-#. Default: ""
 #: opengever.document/opengever/document/document.py:24
 msgid "help_receipt_Date"
 msgstr ""
@@ -83,7 +78,6 @@ msgstr ""
 msgid "help_subject"
 msgstr ""
 
-#. Default: ""
 #: opengever.document/opengever/document/document.py:59
 msgid "help_thumbnail"
 msgstr ""
@@ -91,61 +85,60 @@ msgstr ""
 #. Default: "Mails sent"
 #: opengever.document/opengever/document/mailing.py:215
 msgid "info_mails_sent"
-msgstr "Die E-Mails wurden versandt"
+msgstr ""
 
 #. Default: "Archival File"
 #: opengever.document/opengever/document/document.py:51
 msgid "label_archival_file"
-msgstr "Archivierte Datei"
+msgstr ""
 
 #. Default: "File"
 #: opengever.document/opengever/document/document.py:30
 msgid "label_file"
-msgstr "Datei"
+msgstr ""
 
 #. Default: "Foreign Reference"
 #: opengever.document/opengever/document/document.py:17
 msgid "label_foreign_reference"
-msgstr "Fremdzeichen"
+msgstr ""
 
 #. Default: "Message"
 #: opengever.document/opengever/document/mailing.py:172
 msgid "label_message"
-msgstr "Nachricht"
+msgstr ""
 
 #. Default: "Paper form"
 #: opengever.document/opengever/document/document.py:37
 msgid "label_paper_form"
-msgstr "Papierform"
+msgstr ""
 
 #. Default: "Preserved as paper"
 #: opengever.document/opengever/document/document.py:44
 msgid "label_preserved_as_paper"
-msgstr "In Papierform aufbewahrt"
+msgstr ""
 
 #. Default: "Preview"
 #: opengever.document/opengever/document/document.py:65
 msgid "label_preview"
-msgstr "Vorschau"
+msgstr ""
 
 #. Default: "Date of receipt"
 #: opengever.document/opengever/document/document.py:23
 msgid "label_receipt_date"
-msgstr "Eingangsdatum"
+msgstr ""
 
 #. Default: "Receivers"
 #: opengever.document/opengever/document/mailing.py:163
 msgid "label_receivers"
-msgstr "Empfänger"
+msgstr ""
 
 #. Default: "Subject"
 #: opengever.document/opengever/document/mailing.py:168
 msgid "label_subject"
-msgstr "Betreff"
+msgstr ""
 
 #. Default: "Thumbnail"
 #: opengever.document/opengever/document/document.py:58
 msgid "label_thumbnail"
-msgstr "Kurzbild"
-
+msgstr ""
 
