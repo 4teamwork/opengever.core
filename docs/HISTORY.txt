@@ -5,6 +5,11 @@ Changelog
 0.2
 ---
 
+* Issue #40: Versand von E-Mails über OpenGever mit Dokument-Attachment
+  Added Support for sending multiple objects as email-attachments
+  The folder_content tab can be used for selecting multiple objects
+  [19.10.2009, jbaumann]
+
 * Changed changelog structure
   [15.10.2009, jbaumann]
 

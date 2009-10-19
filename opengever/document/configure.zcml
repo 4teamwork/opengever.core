@@ -4,6 +4,7 @@
     xmlns:grok="http://namespaces.zope.org/grok"
     xmlns:i18n="http://namespaces.zope.org/i18n"
     xmlns:plone="http://namespaces.plone.org/plone"
+    xmlns:browser="http://namespaces.zope.org/browser"
     i18n_domain="opengever.document">
 
     <!-- Include configuration for dependencies listed in setup.py -->
@@ -23,5 +24,11 @@
         directory="profiles/default"
         provides="Products.GenericSetup.interfaces.EXTENSION"
         />
+
+    <browser:page
+            name="send_documents_as_email"
+            for="plone.dexterity.interfaces.IDexterityContent"
+            class=".mailing.SendAsEmail"
+            permission="zope2.View" />
 
 </configure>

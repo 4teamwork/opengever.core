@@ -18,8 +18,9 @@ class IAttachable(Interface):
 
 
 class IAttachedMailComposer(Interface):
-    """ Marks a adapter used for marking a EMail composer who cares of
-    attachements. The email message is html
+    """ Marks a utility for generating a email containing
+    multiple attachments from file-fields of multiple content
+    type objects.
     """
 
     def __call__(self, message, subject, to_addresses, from_name='',

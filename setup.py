@@ -27,6 +27,7 @@ setup(name='opengever.document',
           'ftw.sendmail',
           'opengever.sqlfile',
           'plone.app.dexterity',
+          'plone.principalsource',
           'stoneagehtml', # required by ftw.sendmail, but there is no dependency in the current release
       ],
       entry_points="""
