@@ -5,6 +5,11 @@ Changelog
 0.2
 ---
 
+* Issue #52: Versionierung bei Dossier ausschalten
+  Disabled versioning for Dossier-types
+  [20.10.2009, jbaumann]
+
+
 0.1
 ---
 
