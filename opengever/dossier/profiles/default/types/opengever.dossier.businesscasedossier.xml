@@ -29,7 +29,6 @@
      <element value="opengever.dossier.behaviors.dossier.IDossier" />
      <element value="opengever.repository.classification.IClassification" />
      <element value="plone.app.content.interfaces.INameFromTitle" />
-     <element value="plone.behaviors.versioning.behaviors.IVersionable" />
  </property>
  
  <!-- View information -->
