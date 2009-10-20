@@ -13,7 +13,7 @@
     <property name="schema">opengever.document.document.IDocumentSchema</property> 
 
     <!-- class used for content items -->
-    <property name="klass">plone.dexterity.content.Item</property>
+    <property name="klass">opengever.document.document.Document</property>
 
     <!-- add permission -->
     <property name="add_permission">cmf.AddPortalContent</property>
