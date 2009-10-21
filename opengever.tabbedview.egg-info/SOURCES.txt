@@ -1,0 +1,13 @@
+README.txt
+setup.cfg
+setup.py
+opengever/__init__.py
+opengever.tabbedview.egg-info/PKG-INFO
+opengever.tabbedview.egg-info/SOURCES.txt
+opengever.tabbedview.egg-info/dependency_links.txt
+opengever.tabbedview.egg-info/entry_points.txt
+opengever.tabbedview.egg-info/namespace_packages.txt
+opengever.tabbedview.egg-info/not-zip-safe
+opengever.tabbedview.egg-info/requires.txt
+opengever.tabbedview.egg-info/top_level.txt
+opengever/tabbedview/__init__.py
