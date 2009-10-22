@@ -29,6 +29,7 @@
      <element value="opengever.dossier.behaviors.dossier.IDossier" />
      <element value="opengever.repository.classification.IClassification" />
      <element value="plone.app.content.interfaces.INameFromTitle" />
+     <element value="opengever.tabbedview.interfaces.ITabbedViewEnabled" />
  </property>
  
  <!-- View information -->
@@ -36,6 +37,7 @@
  <property name="default_view_fallback">False</property>
  <property name="view_methods">
   <element value="view"/>
+  <element value="tabbed_view" />
  </property>
  
  <!-- Method aliases -->
