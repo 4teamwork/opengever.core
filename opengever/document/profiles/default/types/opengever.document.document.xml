@@ -50,20 +50,46 @@
             url_expr="string:${object_url}/edit" visible="True">
         <permission value="Modify portal content"/>
     </action>
+
+    <!-- plone.versioningbehavior, Products.CMFEditions -->
     <action title="Versions" action_id="versions_history_form" category="object"
             url_expr="string:${object_url}/versions_history_form"
             condition_expr="" visible="True">
         <permission value="Modify portal content"/>
     </action>
+
+    <!-- opengever.journal, ftw.journal -->
     <action title="Journal" action_id="journal" category="object"
             url_expr="string:${object_url}/@@journal"
             condition_expr="" visible="True">
         <permission value="View"/>
     </action>
-    <action title="Preview" action_id="preivew" category="object"
+
+    <!-- collective.filepreviewbehavior, Products.ARFilePreview -->
+    <action title="Preview" action_id="preview" category="object"
             url_expr="string:${object_url}/@@file_asdoc"
             condition_expr="" visible="True">
         <permission value="View"/>
+    </action>
+
+    <!-- plone.stagingbehavior, plone.app.iterate -->
+    <action title="Check out" action_id="iterate_checkout" category="object"
+            url_expr="string:${object_url}/@@content-checkout"
+            condition_expr="python:path('object/@@iterate_control').checkout_allowed()"
+            visible="True">
+        <permission value="View" />
+    </action>
+    <action title="Check in" action_id="iterate_checkin" category="object"
+            url_expr="string:${object_url}/@@content-checkin"
+            condition_expr="python:path('object/@@iterate_control').checkin_allowed()"
+            visible="True">
+        <permission value="View" />
+    </action>
+    <action title="Cancel check-out" action_id="iterate_checkout_cancel" category="object"
+            url_expr="string:${object_url}/@@content-cancel-checkout"
+            condition_expr="python:path('object/@@iterate_control').cancel_allowed()"
+            visible="True">
+        <permission value="Modify portal content" />
     </action>
 
 </object>

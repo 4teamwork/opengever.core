@@ -5,6 +5,9 @@ Changelog
 0.2
 ---
 
+* Added misssing actions for staging
+  [23.10.2009, jbaumann]
+
 * Updated behaviors (staging & versioning)
   [23.10.2009, jbaumann]
 
