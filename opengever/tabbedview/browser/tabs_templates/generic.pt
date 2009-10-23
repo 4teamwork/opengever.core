@@ -1,1 +1,9 @@
+<p>Select: 
+    <a href="javascript:arbeitsraum.select_all()" id="select-all">all</a>
+    <a href="javascript:arbeitsraum.select_none()" id="select-none" style="display:none">none</a> 
+</p>
+<p id="select-folder" style="display:none">
+    <a href="javascript:arbeitsraum.select_folder()"><strong class="counter selected">'x'</strong> items selected. 
+    <span class="select-all-text">Select all <strong class="counter total">111112222</strong> in folder </span></a> 
+</p>    
 <div tal:content="structure view/render_listing" />

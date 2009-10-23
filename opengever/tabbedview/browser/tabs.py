@@ -10,9 +10,10 @@ class OpengeverTab(grok.View, BaseListingView):
     
     update = BaseListingView.search
     
-    columns = (('Title','sortable_title',), 
-               ('modified','modified',helper.readable_date), 
-               ('Creator','Creator',helper.readable_author),)    
+    columns = (('', helper.uid_checkbox),
+              ('Title', helper.linked),
+              ('modified', helper.readable_date), 
+              'Creator')
     
 
 class Documents(OpengeverTab):
