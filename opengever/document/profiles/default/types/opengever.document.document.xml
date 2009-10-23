@@ -20,11 +20,12 @@
 
     <!-- enabled behaviors -->
     <property name="behaviors">
+        <element value="collective.filepreviewbehavior.interfaces.IPreviewable" />
         <element value="ftw.journal.interfaces.IAnnotationsJournalizable" />
         <element value="plone.app.content.interfaces.INameFromTitle" />
         <element value="plone.app.dexterity.behaviors.metadata.IBasic" />
-        <element value="plone.behaviors.versioning.behaviors.IVersionable" />
-        <element value="collective.filepreviewbehavior.interfaces.IPreviewable" />
+        <element value="plone.stagingbehavior.interfaces.IStagingSupport" />
+        <element value="plone.versioningbehavior.behaviors.IVersionable" />
     </property>
 
     <!-- View information -->

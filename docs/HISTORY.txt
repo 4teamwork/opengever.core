@@ -5,6 +5,9 @@ Changelog
 0.2
 ---
 
+* Updated behaviors (staging & versioning)
+  [23.10.2009, jbaumann]
+
 * Issue #47: HTML-Preview von Dokumenten
   Enabled collective.filepreviewbehavior (using Products.ARFilePreview) for
   Document.
