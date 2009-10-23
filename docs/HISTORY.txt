@@ -5,6 +5,11 @@ Changelog
 0.2
 ---
 
+* Issue #47: HTML-Preview von Dokumenten
+  Enabled collective.filepreviewbehavior (using Products.ARFilePreview) for
+  Document.
+  [23.10.2009, jbaumann]
+
 * Issue #48: Korrektes Icon bei Office Dokumenten
   [20.10.2009, jbaumann]
 
