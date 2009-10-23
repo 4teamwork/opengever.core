@@ -25,7 +25,7 @@ setup(name='opengever.journal',
       install_requires=[
           'setuptools',
           'ftw.journal',
-          'plone.behaviors.versioning',
+          'plone.versioningbehavior',
           # -*- Extra requirements: -*-
       ],
       entry_points="""

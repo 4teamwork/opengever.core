@@ -5,6 +5,9 @@ Changelog
 0.2
 ---
 
+* Changes (dependency, import) due to renaming of plone.versioningbehavior
+  [23.10.2009, jbaumann]
+
 0.1
 ---
 

@@ -5,7 +5,7 @@ from zope.event import notify
 from zope.app.container.interfaces import IObjectAddedEvent
 from zope.lifecycleevent.interfaces import IObjectModifiedEvent
 
-from plone.behaviors.versioning.utils import get_change_note
+from plone.versioningbehavior.utils import get_change_note
 from Products.CMFCore.interfaces import IActionSucceededEvent
 
 from ftw.journal.events.events import JournalEntryEvent
