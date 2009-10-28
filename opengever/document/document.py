@@ -1,16 +1,21 @@
 
 import logging
 
-from zope import schema
-import zope.app.file
+from Acquisition import aq_inner
+from ZODB.POSException import ConflictError
+from five import grok
 from z3c.form.browser import checkbox
+from zope import schema
 
 from Products.CMFCore.utils import getToolByName
 from Products.MimetypesRegistry.common import MimeTypeException
+from plone.app.dexterity.behaviors.metadata import IBasic
 from plone.dexterity.content import Item
 from plone.directives import form
+from plone.indexer import indexer
 
 from opengever.sqlfile.field import NamedFile
+from plone.namedfile.interfaces import INamedFileField
 
 from opengever.document import _
 
@@ -21,58 +26,58 @@ class IDocumentSchema(form.Schema):
     """
 
     foreign_reference = schema.TextLine(
-            title = _(u'label_foreign_reference', default='Foreign Reference'),
-            description = _('help_foreign_reference', default=''),
-            required = False,
-    )
+        title = _(u'label_foreign_reference', default='Foreign Reference'),
+        description = _('help_foreign_reference', default=''),
+        required = False,
+        )
 
     receipt_date = schema.Date(
-            title = _(u'label_receipt_date', default='Date of receipt'),
-            description = _(u'help_receipt_Date', default=''),
-            required = False,
-    )
+        title = _(u'label_receipt_date', default='Date of receipt'),
+        description = _(u'help_receipt_Date', default=''),
+        required = False,
+        )
 
     form.primary('file')
     file = NamedFile(
-            title = _(u'label_file', default='File'),
-            description = _(u'help_file', default=''),
-            required = False,
-    )
+        title = _(u'label_file', default='File'),
+        description = _(u'help_file', default=''),
+        required = False,
+        )
 
     form.widget(paper_form=checkbox.SingleCheckBoxFieldWidget)
     paper_form = schema.Bool(
-            title = _(u'label_paper_form', default='Paper form'),
-            description = _(u'help_paper_form', default='Available in paper form only'),
-            required = False,
-    )
+        title = _(u'label_paper_form', default='Paper form'),
+        description = _(u'help_paper_form', default='Available in paper form only'),
+        required = False,
+        )
 
     form.widget(preserved_as_paper=checkbox.SingleCheckBoxFieldWidget)
     preserved_as_paper = schema.Bool(
-            title = _(u'label_preserved_as_paper', default='Preserved as paper'),
-            description = _(u'help_preserved_as_paper', default=''),
-            required = False,
-    )
+        title = _(u'label_preserved_as_paper', default='Preserved as paper'),
+        description = _(u'help_preserved_as_paper', default=''),
+        required = False,
+        )
 
     form.omitted('archival_file')
     archival_file = NamedFile(
-            title = _(u'label_archival_file', default='Archival File'),
-            description = _(u'help_archival_file', default=''),
-            required = False,
-    )
+        title = _(u'label_archival_file', default='Archival File'),
+        description = _(u'help_archival_file', default=''),
+        required = False,
+        )
 
     form.omitted('thumbnail')
     thumbnail = NamedFile(
-            title = _(u'label_thumbnail', default='Thumbnail'),
-            description = _(u'help_thumbnail', default=''),
-            required = False,
-    )
+        title = _(u'label_thumbnail', default='Thumbnail'),
+        description = _(u'help_thumbnail', default=''),
+        required = False,
+        )
 
     form.omitted('preview')
     preview = NamedFile(
-            title = _(u'label_preview', default='Preview'),
-            description = _(u'help_preview', default=''),
-            required = False,
-    )
+        title = _(u'label_preview', default='Preview'),
+        description = _(u'help_preview', default=''),
+        required = False,
+        )
 
 
 class Document(Item):
@@ -80,7 +85,7 @@ class Document(Item):
     def getIcon(self, relative_to_portal=0):
         """Calculate the icon using the mime type of the file
         """
-        surrender = lambda :super(Document, self).getIcon(relative_to_portal=relative_to_portal) 
+        surrender = lambda :super(Document, self).getIcon(relative_to_portal=relative_to_portal)
         mtr   = getToolByName(self, 'mimetypes_registry', None)
         utool = getToolByName(self, 'portal_url')
 
@@ -115,3 +120,42 @@ class Document(Item):
         """for ZMI
         """
         return self.getIcon()
+
+
+@indexer(IDocumentSchema)
+def SearchableText( obj ):
+    context = aq_inner( obj )
+    transforms = getToolByName(obj, 'portal_transforms')
+    fields = [
+        schema.getFields( IBasic ).get( 'title' ),
+        schema.getFields( IBasic ).get( 'description' ),
+        schema.getFields( IDocumentSchema ).get('file'),
+        ]
+    searchable = []
+    for field in fields:
+        data = field.get( context )
+        print field, INamedFileField, INamedFileField.providedBy( field )
+        if INamedFileField.providedBy( field ):
+            # we need to convert the file data to string, so we can
+            # index it
+            datastream = ''
+            try:
+                datastream = transforms.convertTo(
+                    "text/plain",
+                    data.data,
+                    mimetype = data.contentType,
+                    filename = data.filename,
+                    )
+            except (ConflictError, KeyboardInterrupt):
+                raise
+            except Exception, e:
+                LOG.error("Error while trying to convert file contents to 'text/plain' "
+                          "in SearchableIndex(document.py): %s" % (e,))
+            data = str(datastream)
+        if isinstance( data, unicode ):
+            data = data.encode( 'utf8' )
+        if data:
+            searchable.append( data )
+    return ' '.join( searchable )
+grok.global_adapter(SearchableText, name='SearchableText')
+
