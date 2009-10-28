@@ -1,24 +1,32 @@
 <?xml version="1.0"?>
-<object name="ftw.task.taskfolder" meta_type="Dexterity FTI"
+<object name="ftw.task.task" meta_type="Dexterity FTI"
    i18n:domain="ftw.task" xmlns:i18n="http://xml.zope.org/namespaces/i18n">
  
  <!-- Basic metadata -->
  <property name="title" i18n:translate="">Task</property>
- <property name="description" i18n:translate="">The Task Description</property>
- <property name="deadline" i18n:translate=""></property>
+ <property name="description" i18n:translate="">Task</property>
+ <property name="content_icon">folder_icon.gif</property>
+ <property name="allow_discussion">False</property>
+ <property name="global_allow">True</property>
+ <property name="filter_content_types">True</property>
+ <property name="allowed_content_types">
+     <element value="ftw.task.task" />
+ </property>
+
 
  <!-- schema interface -->
- <property name="schema">ftw.task.taskfolter.ITaskFolder</property> 
+ <property name="schema">ftw.task.task.ITask</property> 
  
  <!-- class used for content items -->
- <property name="klass">plone.dexterity.content.Item</property>
+ <property name="klass">ftw.task.task.Task</property>
  
  <!-- add permission -->
  <property name="add_permission">cmf.AddPortalContent</property>
  
  <!-- enabled behaviors -->
  <property name="behaviors">
-     <element value="plone.app.content.interfaces.INameFromTitle" />
+     <element value="plone.app.content.interfaces.INameFromTitle" /> 
+     <element value="opengever.tabbedview.interfaces.ITabbedViewEnabled" />
  </property>
  
  <!-- View information -->
@@ -26,6 +34,7 @@
  <property name="default_view_fallback">False</property>
  <property name="view_methods">
   <element value="view"/>
+
  </property>
  
  <!-- Method aliases -->
