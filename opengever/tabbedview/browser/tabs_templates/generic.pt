@@ -4,6 +4,6 @@
 </p>
 <p id="select-folder" style="display:none">
     <a href="javascript:arbeitsraum.select_folder()"><strong class="counter selected">'x'</strong> items selected. 
-    <span class="select-all-text">Select all <strong class="counter total">111112222</strong> in folder </span></a> 
+    <span class="select-all-text">Select all <strong class="counter total" tal:content="view/len_results"></strong> in folder </span></a> 
 </p>    
 <div tal:content="structure view/render_listing" />

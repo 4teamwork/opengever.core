@@ -14,7 +14,10 @@ class OpengeverTab(grok.View, BaseListingView):
               ('Title', helper.linked),
               ('modified', helper.readable_date), 
               'Creator')
-    
+              
+    search_index = 'SearchableText'
+    sort_on = 'sortable_title'
+    sort_order = 'reverse'    
 
 class Documents(OpengeverTab):
     grok.name('tabbedview_view-documents')
