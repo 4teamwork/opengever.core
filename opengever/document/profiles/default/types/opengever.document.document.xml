@@ -26,6 +26,7 @@
         <element value="plone.app.dexterity.behaviors.metadata.IBasic" />
         <element value="plone.stagingbehavior.interfaces.IStagingSupport" />
         <element value="plone.versioningbehavior.behaviors.IVersionable" />
+        <element value="plone.app.dexterity.behaviors.metadata.IOwnership" />
     </property>
 
     <!-- View information -->
