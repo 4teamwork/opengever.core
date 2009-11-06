@@ -8,7 +8,7 @@ class OpengeverTab(grok.View, BaseListingView):
     grok.context(ITabbedView)
     grok.template('generic')
     
-    update = BaseListingView.search
+    update = BaseListingView.update
     
     columns = (('', helper.uid_checkbox),
               ('Title', helper.linked),
