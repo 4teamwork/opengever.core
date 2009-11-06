@@ -5,6 +5,9 @@ Changelog
 0.2
 ---
 
+* Issue #98: Document: Creator fehlt
+  [06.11.2009, jbaumann]
+
 * Issue #65: Volltextsuche für Office Dokumente einbauen
   [28.10.2009, jbaumann]
 
