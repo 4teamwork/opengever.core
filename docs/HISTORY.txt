@@ -6,6 +6,10 @@ Changelog
 ---
 
 * Issue #33: Checkout / Checkin
+  CheckinCheckoutManager implementiert, welcher die Vorgänge kontrolliert
+  [07.11.2009, jbaumann]
+
+* Issue #33: Checkout / Checkin
   Ablauf für Checkout implementiert (action, formular, events)
   Ablauf für Checkin implementiert (action, formular, events)
   Eigentlicher Checkout / in fehlt noch, da plone.stagingbehavior noch nicht fertig

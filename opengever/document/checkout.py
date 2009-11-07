@@ -1,17 +1,16 @@
 
 from five import grok
 from zope.interface import Interface
-from zope.event import notify
 from zope import schema
 from z3c.form import form, field, button
 from z3c.form.interfaces import HIDDEN_MODE
 
-from Products.statusmessages.interfaces import IStatusMessage
 from plone.dexterity.interfaces import IDexterityContent
 from plone.z3cform import layout
+from Products.statusmessages.interfaces import IStatusMessage
 
 from opengever.document import _
-from opengever.document.events import ObjectCheckedOutEvent
+from opengever.document.staging import ICheckinCheckoutManager
 
 
 # ---- CHECKOUT ----
@@ -47,9 +46,8 @@ class CheckoutCommentForm(form.Form):
             return self.request.RESPONSE.redirect(self.redirect_url)
 
     def checkout_object(self, obj, comment):
-        msg = 'Could not checkout %s, implementation missing' % obj.Title()
-        IStatusMessage(self.request).addStatusMessage(msg, type='error')
-        notify(ObjectCheckedOutEvent(obj, comment))
+        manager = ICheckinCheckoutManager(obj)
+        manager.checkout(comment, show_status_message=True)
 
     @property
     def objects(self):

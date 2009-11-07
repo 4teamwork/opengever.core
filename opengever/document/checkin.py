@@ -1,7 +1,6 @@
 
 from five import grok
 from zope.interface import Interface
-from zope.event import notify
 from zope import schema
 from z3c.form import form, field, button
 from z3c.form.interfaces import HIDDEN_MODE
@@ -11,7 +10,7 @@ from plone.dexterity.interfaces import IDexterityContent
 from plone.z3cform import layout
 
 from opengever.document import _
-from opengever.document.events import ObjectCheckedInEvent
+from opengever.document.staging import ICheckinCheckoutManager
 
 
 # ---- CHECKIN ----
@@ -47,9 +46,8 @@ class CheckinCommentForm(form.Form):
             return self.request.RESPONSE.redirect(self.redirect_url)
 
     def checkin_object(self, obj, comment):
-        msg = 'Could not checkin %s, implementation missing' % obj.Title()
-        IStatusMessage(self.request).addStatusMessage(msg, type='error')
-        notify(ObjectCheckedInEvent(obj, comment))
+        manager = ICheckinCheckoutManager(obj)
+        manager.checkin(comment, show_status_message=True)
 
     @property
     def objects(self):
