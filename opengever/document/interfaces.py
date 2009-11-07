@@ -1,5 +1,9 @@
 
 from zope.interface import Interface
+from zope.component.interfaces import IObjectEvent
+from zope import schema
+
+from plone.dexterity.interfaces import IDexterityContent
 
 class IAttachable(Interface):
     """ IAttachable is used as interfaces for a adapter which can create
@@ -41,3 +45,14 @@ class IAttachedMailComposer(Interface):
         """
 
 
+class IObjectCheckedOutEvent(IObjectEvent):
+    """ Event interface for events.ObjectCheckedOutEvent
+    """
+    comment = schema.Text(title=u'journal comment')
+
+
+
+class IObjectCheckedInEvent(IObjectEvent):
+    """ Event interface for events.ObjectCheckedInEvent
+    """
+    comment = schema.Text(title=u'journal comment')

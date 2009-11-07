@@ -5,6 +5,11 @@ Changelog
 0.2
 ---
 
+* Issue #33: Checkout / Checkin
+  Ablauf für Checkout implementiert (action, formular, events)
+  Eigentlicher Checkout fehlt noch, da plone.stagingbehavior noch nicht fertig
+  [07.11.2009, jbaumann]
+
 * Issue #98: Document: Creator fehlt
   [06.11.2009, jbaumann]
 
