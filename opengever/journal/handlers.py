@@ -11,6 +11,7 @@ from Products.CMFCore.interfaces import IActionSucceededEvent
 from ftw.journal.events.events import JournalEntryEvent
 
 from opengever.document.document import IDocumentSchema
+from opengever.document.interfaces import IObjectCheckedInEvent, IObjectCheckedOutEvent
 from opengever.dossier.behaviors.dossier import IDossier 
 
 from opengever.journal import _
@@ -121,4 +122,23 @@ def document_state_changed(context, event):
             'action' : event.action,
     }
     journal_entry_factory(context, DOCUMENT_STATE_CHANGED, title)
+
+
+
+DOCUMENT_CHECKED_OUT = 'Document checked out'
+@grok.subscribe(IDocumentSchema, IObjectCheckedOutEvent)
+def document_checked_out(context, event):
+    user_comment = event.comment
+    title = 'Document checked out'
+    journal_entry_factory(context, DOCUMENT_CHECKED_OUT, title,
+                          comment=user_comment)
+
+
+DOCUMENT_CHECKED_IN = 'Document checked in'
+@grok.subscribe(IDocumentSchema, IObjectCheckedInEvent)
+def document_checked_in(context, event):
+    user_comment = event.comment
+    title = 'Document checked in'
+    journal_entry_factory(context, DOCUMENT_CHECKED_IN, title,
+                          comment=user_comment)
 

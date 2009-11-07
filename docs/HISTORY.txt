@@ -5,6 +5,10 @@ Changelog
 0.2
 ---
 
+* Issue #33: Checkout / Checkin
+  Checkin / checkout events werden im journal notiert
+  [07.11.2009, jbaumann]
+
 * Changes (dependency, import) due to renaming of plone.versioningbehavior
   [23.10.2009, jbaumann]
 
