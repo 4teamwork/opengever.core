@@ -1,9 +1,12 @@
 
+from Acquisition import aq_inner
 from five import grok
 from zope.event import notify
 from zope.interface import Interface
 
 from Products.statusmessages.interfaces import IStatusMessage
+
+from plone.app.iterate.interfaces import ICheckinCheckoutPolicy
 
 from opengever.document.document import IDocumentSchema
 from opengever.document.events import ObjectCheckedOutEvent, ObjectCheckedInEvent
@@ -35,27 +38,42 @@ class CheckinCheckoutManager(grok.Adapter):
 
     @property
     def checkout_allowed(self):
+        if not self.context.restrictedTraverse('iterate_control').checkout_allowed():
+            return False
         # XXX implement me
         return True
 
     @property
     def checkin_allowed(self):
+        if not self.context.restrictedTraverse('iterate_control').checkin_allowed():
+            return False
         # XXX implement me
         return True
 
     def checkout(self, comment='', show_status_message=True):
+        context = aq_inner(self.context)
         if not self.checkout_allowed:
             raise CheckOutNotAllowed
-        # XXX check it out
+        # get the plone.app.iterate containers
+        checkout_view = self.context.restrictedTraverse('content-checkout')
+        containers = list(checkout_view.containers())
+        # choose locator, we use the first one since we expect only one container
+        locator = containers[0]['locator']
+        # check it out
+        policy = ICheckinCheckoutPolicy(context)
+        wc = policy.checkout(locator())
+        # we need to reindex context (eliminate some side effects)
+        context.reindexObject()
         # create status message
         if show_status_message:
-            msg = 'Could not checkout %s: implementation missing' % \
-                self.context.Title()
-            IStatusMessage(self.request).addStatusMessage(msg, type='error')
+            msg = 'Checked out %s' % \
+                context.Title()
+            IStatusMessage(self.request).addStatusMessage(msg, type='info')
         # trigger event
-        notify(ObjectCheckedOutEvent(self.context, comment))
+        notify(ObjectCheckedOutEvent(context, comment))
 
     def checkin(self, comment='', show_status_message=True):
+        context = aq_inner(self.context)
         if not self.checkin_allowed:
             raise CheckInNotAllowed
         # XXX check it in

@@ -93,7 +93,7 @@ class CheckinDocuments(layout.FormWrapper, grok.CodeView):
     """ Checks in one or more documents.
     Is called by a folder_contents action or a tabbed-view action
     """
-    grok.context(IDexterityContent)
+    grok.context(Interface)
     grok.require('zope2.View')
     grok.name('checkin_documents')
     form = CheckinCommentForm

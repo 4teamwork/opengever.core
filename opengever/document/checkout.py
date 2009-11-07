@@ -47,7 +47,7 @@ class CheckoutCommentForm(form.Form):
 
     def checkout_object(self, obj, comment):
         manager = ICheckinCheckoutManager(obj)
-        manager.checkout(comment, show_status_message=True)
+        manager.checkout(comment, show_status_message=False)
 
     @property
     def objects(self):
@@ -93,7 +93,7 @@ class CheckoutDocuments(layout.FormWrapper, grok.CodeView):
     """ Checks out one or more documents.
     Is called by a folder_contents action or a tabbed-view action
     """
-    grok.context(IDexterityContent)
+    grok.context(Interface)
     grok.require('zope2.View')
     grok.name('checkout_documents')
     form = CheckoutCommentForm
