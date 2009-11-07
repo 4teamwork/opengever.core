@@ -3,7 +3,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2009-10-19 12:54+0000\n"
+"POT-Creation-Date: 2009-11-07 17:51+0000\n"
 "PO-Revision-Date: 2009-01-01 10:00+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: Jonas Baumann <j.baumann@4teamwork.ch>\n"
@@ -14,6 +14,31 @@ msgstr ""
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: opengever.document\n"
 "X-Is-Fallback-For: de-at de-li de-lu de-ch de-de\n"
+
+#. Default: "Checkin"
+#: opengever.document/opengever/document/profiles/default/actions.xml
+msgid "Checkin"
+msgstr "Checkin"
+
+#. Default: "Checkout"
+#: opengever.document/opengever/document/profiles/default/actions.xml
+msgid "Checkout"
+msgstr "Checkout"
+
+#. Default: "Send as email"
+#: opengever.document/opengever/document/profiles/default/actions.xml
+msgid "Send as email"
+msgstr "Als E-Mail versenden"
+
+#. Default: "Checkin"
+#: opengever.document/opengever/document/checkin.py:37
+msgid "button_checkin"
+msgstr "Checkin"
+
+#. Default: "Checkout"
+#: opengever.document/opengever/document/checkout.py:37
+msgid "button_checkout"
+msgstr "Checkout"
 
 #. Default: "Send"
 #: opengever.document/opengever/document/mailing.py:184
@@ -31,23 +56,43 @@ msgstr "Ein Dokument"
 msgid "document_type_name"
 msgstr "Dokument"
 
+#. Default: "Checkin Documents"
+#: opengever.document/opengever/document/checkin.py:35
+msgid "heading_checkin_comment_form"
+msgstr "Doukemente einchecken"
+
+#. Default: "Checkout Documents"
+#: opengever.document/opengever/document/checkout.py:35
+msgid "heading_checkout_comment_form"
+msgstr "Dokumente auschecken"
+
 #. Default: "Send as email"
 #: opengever.document/opengever/document/mailing.py:182
 msgid "heading_send_as_email"
 msgstr "Dokumente als E-Mail versenden"
 
 #. Default: ""
-#: opengever.document/opengever/document/document.py:52
+#: opengever.document/opengever/document/document.py:64
 msgid "help_archival_file"
 msgstr ""
 
+#. Default: "Describe, why you checkin the selected documents"
+#: opengever.document/opengever/document/checkin.py:25
+msgid "help_checkin_journal_comment"
+msgstr "Kommentieren Sie, wieso Sie diese Dokumente auschecken"
+
+#. Default: "Describe, why you checkout the selected documents"
+#: opengever.document/opengever/document/checkout.py:25
+msgid "help_checkout_journal_comment"
+msgstr "Was für Änderungen haben Sie an den ausgewählten Dokumenten vorgenommen?"
+
 #. Default: ""
-#: opengever.document/opengever/document/document.py:31
+#: opengever.document/opengever/document/document.py:43
 msgid "help_file"
 msgstr ""
 
 #. Default: ""
-#: opengever.document/opengever/document/document.py:18
+#: opengever.document/opengever/document/document.py:30
 msgid "help_foreign_reference"
 msgstr ""
 
@@ -56,22 +101,22 @@ msgid "help_message"
 msgstr ""
 
 #. Default: "Available in paper form only"
-#: opengever.document/opengever/document/document.py:38
+#: opengever.document/opengever/document/document.py:50
 msgid "help_paper_form"
 msgstr "Nur in Papierform verfügbar"
 
 #. Default: ""
-#: opengever.document/opengever/document/document.py:45
+#: opengever.document/opengever/document/document.py:57
 msgid "help_preserved_as_paper"
 msgstr ""
 
 #. Default: ""
-#: opengever.document/opengever/document/document.py:66
+#: opengever.document/opengever/document/document.py:78
 msgid "help_preview"
 msgstr ""
 
 #. Default: ""
-#: opengever.document/opengever/document/document.py:24
+#: opengever.document/opengever/document/document.py:36
 msgid "help_receipt_Date"
 msgstr ""
 
@@ -84,9 +129,14 @@ msgid "help_subject"
 msgstr ""
 
 #. Default: ""
-#: opengever.document/opengever/document/document.py:59
+#: opengever.document/opengever/document/document.py:71
 msgid "help_thumbnail"
 msgstr ""
+
+#. Default: "Successfully checked out documents"
+#: opengever.document/opengever/document/checkin.py:41
+msgid "info_documents_checked_out"
+msgstr "Dokuemente wurden ausgecheckt"
 
 #. Default: "Mails sent"
 #: opengever.document/opengever/document/mailing.py:215
@@ -94,17 +144,27 @@ msgid "info_mails_sent"
 msgstr "Die E-Mails wurden versandt"
 
 #. Default: "Archival File"
-#: opengever.document/opengever/document/document.py:51
+#: opengever.document/opengever/document/document.py:63
 msgid "label_archival_file"
 msgstr "Archivierte Datei"
 
+#. Default: "Journal Comment"
+#: opengever.document/opengever/document/checkin.py:23
+msgid "label_checkin_journal_comment"
+msgstr "Journal Kommentar"
+
+#. Default: "Journal Comment"
+#: opengever.document/opengever/document/checkout.py:23
+msgid "label_checkout_journal_comment"
+msgstr "Journal Kommentar"
+
 #. Default: "File"
-#: opengever.document/opengever/document/document.py:30
+#: opengever.document/opengever/document/document.py:42
 msgid "label_file"
 msgstr "Datei"
 
 #. Default: "Foreign Reference"
-#: opengever.document/opengever/document/document.py:17
+#: opengever.document/opengever/document/document.py:29
 msgid "label_foreign_reference"
 msgstr "Fremdzeichen"
 
@@ -114,22 +174,22 @@ msgid "label_message"
 msgstr "Nachricht"
 
 #. Default: "Paper form"
-#: opengever.document/opengever/document/document.py:37
+#: opengever.document/opengever/document/document.py:49
 msgid "label_paper_form"
 msgstr "Papierform"
 
 #. Default: "Preserved as paper"
-#: opengever.document/opengever/document/document.py:44
+#: opengever.document/opengever/document/document.py:56
 msgid "label_preserved_as_paper"
 msgstr "In Papierform aufbewahrt"
 
 #. Default: "Preview"
-#: opengever.document/opengever/document/document.py:65
+#: opengever.document/opengever/document/document.py:77
 msgid "label_preview"
 msgstr "Vorschau"
 
 #. Default: "Date of receipt"
-#: opengever.document/opengever/document/document.py:23
+#: opengever.document/opengever/document/document.py:35
 msgid "label_receipt_date"
 msgstr "Eingangsdatum"
 
@@ -144,7 +204,7 @@ msgid "label_subject"
 msgstr "Betreff"
 
 #. Default: "Thumbnail"
-#: opengever.document/opengever/document/document.py:58
+#: opengever.document/opengever/document/document.py:70
 msgid "label_thumbnail"
 msgstr "Kurzbild"
 

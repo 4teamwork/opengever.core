@@ -6,6 +6,10 @@ Changelog
 ---
 
 * Issue #33: Checkout / Checkin
+  Übersetzungen für die Checkin / Checkout formulare hinzugefügt
+  [07.11.2009, jbaumann]
+
+* Issue #33: Checkout / Checkin
   CheckinCheckoutManager implementiert, welcher die Vorgänge kontrolliert
   [07.11.2009, jbaumann]
 
