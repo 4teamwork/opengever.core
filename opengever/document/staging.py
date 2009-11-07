@@ -9,22 +9,25 @@ from Products.statusmessages.interfaces import IStatusMessage
 from plone.app.iterate.interfaces import ICheckinCheckoutPolicy
 
 from opengever.document.document import IDocumentSchema
-from opengever.document.events import ObjectCheckedOutEvent, ObjectCheckedInEvent
+from opengever.document.events import ObjectCheckedOutEvent
+from opengever.document.events import ObjectCheckedInEvent
+from opengever.document.events import ObjectCheckoutCanceledEvent
 
 
 class CheckoutNotAllowed(Exception):
     __doc__ = 'Checkout is not allowed'
 
 
-
 class CheckinNotAllowed(Exception):
     __doc__ = 'Checkin is not allowed'
 
 
+class CancelNotAllowed(Exception):
+    __doc__ = 'Cancel is not allowed'
+
 
 class ICheckinCheckoutManager(Interface):
     pass
-
 
 
 class CheckinCheckoutManager(grok.Adapter):
@@ -46,6 +49,14 @@ class CheckinCheckoutManager(grok.Adapter):
     @property
     def checkin_allowed(self):
         if not self.context.restrictedTraverse('iterate_control').checkin_allowed():
+            return False
+        # XXX implement me
+        return True
+
+    @property
+    def cancel_allowed(self):
+        iterate_control = self.context.restrictedTraverse('iterate_control')
+        if not iterate_control.cancel_allowed():
             return False
         # XXX implement me
         return True
@@ -85,3 +96,9 @@ class CheckinCheckoutManager(grok.Adapter):
         # trigger event
         notify(ObjectCheckedInEvent(self.context, comment))
 
+    def cancel(self):
+        context = aq_inner(self.context)
+        if not self.cancel_allowed:
+            raise CancelNotAllowed
+        # XXX cancel checkout
+        notify(ObjectCheckoutCanceledEvent(context))

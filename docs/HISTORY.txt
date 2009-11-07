@@ -8,6 +8,7 @@ Changelog
 * Issue #33: Checkout / Checkin
   CheckinCheckoutManager implementiert, welcher die Vorgänge kontrolliert
   Checkout implementiert
+  Cancel action implementiert
   [07.11.2009, jbaumann]
 
 * Issue #33: Checkout / Checkin

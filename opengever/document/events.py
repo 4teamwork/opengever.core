@@ -27,3 +27,14 @@ class ObjectCheckedInEvent(ObjectEvent):
         self.object = obj
         self.comment = comment
 
+
+
+class ObjectCheckoutCanceledEvent(ObjectEvent):
+    """ The ObjectCheckoutCanceledEvent is triggered when the editing
+    of a checked out object is canceled and the working copy is destroyed
+    """
+    grok.implements(interfaces.IObjectCheckoutCanceledEvent)
+
+    def __init__(self, obj):
+        self.object = obj
+
