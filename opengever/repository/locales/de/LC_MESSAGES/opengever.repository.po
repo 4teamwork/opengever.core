@@ -34,12 +34,12 @@ msgstr "Titel"
 #. Default: "A Sibling with the same reference number is existing"
 #: opengever.repository/opengever/repository/repositoryfolder.py:89
 msgid "error_sibling_reference_number_existing"
-msgstr "Eine Ordnungsposition mit dieser Referenznummer existiert bereits auf gleicher höhe"
+msgstr "Eine Ordnungsposition mit dieser Referenznummer existiert bereits auf gleicher Stufe"
 
 #. Default: "Classification"
 #: opengever.repository/opengever/repository/classification.py:22
 msgid "fieldset_classification"
-msgstr "Klassifizierung"
+msgstr "Klassifikation"
 
 #. Default: "Common"
 #: opengever.repository/opengever/repository/repositoryfolder.py:23
@@ -54,16 +54,16 @@ msgstr "Lebenszyklus"
 #. Default: "Archival value code"
 #: opengever.repository/opengever/repository/classification.py:72
 msgid "help_archival_value"
-msgstr "Archivierungscode"
+msgstr "Archivwürdigkeit"
 
 #. Default: ""
 #: opengever.repository/opengever/repository/classification.py:33
 msgid "help_classification"
-msgstr "Schutzgrad / Klassifizierung"
+msgstr "Grad, in dem die Unterlagen vor unberechtigter Einsicht geschützt werden müssen"
 
 #: opengever.repository/opengever/repository/classification.py:79
 msgid "help_custody_period"
-msgstr ""
+msgstr "Dauer, während der nach der Archivierung die Dokumente vor öffentlicher Einsichtnahme geschützt sind"
 
 #. Default: "A short summary of the content."
 #: opengever.repository/opengever/repository/repositoryfolder.py:47
@@ -73,24 +73,24 @@ msgstr "Eine kurze Beschreibung des Inhalts."
 #. Default: ""
 #: opengever.repository/opengever/repository/classification.py:41
 msgid "help_privacy_layer"
-msgstr ""
+msgstr "Markierung, die angibt, ob die Unterlagen besonders schützenswerte Personendaten oder Persönlichkeitsprofile gemäss Datenschutzrecht enthalten"
 
 #: opengever.repository/opengever/repository/classification.py:48
 msgid "help_public_trial"
-msgstr ""
+msgstr "Angabe, ob die Unterlagen gemäss Öffentlichkeitsgesetz besonders schützenswert sind oder nicht"
 
 #. Default: "BegrÃ¼undung Schutzgrad"
 #: opengever.repository/opengever/repository/classification.py:55
 msgid "help_public_trial_statement"
-msgstr "Begründen Sie den gewählten Öffentlichkeitsstatus"
+msgstr "Argumente gegen die öffentliche Zugänglichkeit gemäss Öffentlichkeitsgesetz"
 
 #: opengever.repository/opengever/repository/repositoryfolder.py:40
 msgid "help_reference_number"
-msgstr ""
+msgstr "Präfix für das Aktenzeichen von Dossiers, die in dieser Ordnungsposition enthalten sind"
 
 #: opengever.repository/opengever/repository/classification.py:86
 msgid "help_retention_period"
-msgstr ""
+msgstr "Zeitraum zwischen dem jüngsten Dokumentdatum eines in einem Dossier enthaltenen Dokuments und dem Zeitpunkt, an dem dieses für die Geschäftstätigkeit der Verwaltungseinheit nicht mehr benötigt wird"
 
 #. Default: "Archival value"
 #: opengever.repository/opengever/repository/classification.py:71
@@ -100,7 +100,7 @@ msgstr "Archivwürdigkeit"
 #. Default: "Classification"
 #: opengever.repository/opengever/repository/classification.py:32
 msgid "label_classification"
-msgstr "Klassifizierung"
+msgstr "Klassifikation"
 
 #. Default: "Custody period (years)"
 #: opengever.repository/opengever/repository/classification.py:78
@@ -125,12 +125,12 @@ msgstr "Öffentlichkeitsstatus"
 #. Default: "Public trial statement"
 #: opengever.repository/opengever/repository/classification.py:54
 msgid "label_public_trial_statement"
-msgstr "Begründung Öffentlichkeitsstatus"
+msgstr "Begründung für die Aufhebung des Öffentlichkeitsstatus"
 
 #. Default: "Reference"
 #: opengever.repository/opengever/repository/repositoryfolder.py:39
 msgid "label_reference_number"
-msgstr "Referenznummer"
+msgstr "Präfix des Aktenzeichens"
 
 #. Default: "Retention period (years)"
 #: opengever.repository/opengever/repository/classification.py:85
