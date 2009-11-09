@@ -2,7 +2,10 @@
 from five import grok
 from zope.interface import Interface
 
+from Products.statusmessages.interfaces import IStatusMessage
+
 from opengever.document.staging.manager import ICheckinCheckoutManager
+from opengever.document import _
 
 class CancelCheckout(grok.CodeView):
     grok.context(Interface)
@@ -10,9 +13,14 @@ class CancelCheckout(grok.CodeView):
     grok.name('cancel_document_checkouts')
 
     def render(self):
-        for obj in self.objects:
-            manager = ICheckinCheckoutManager(obj)
-            manager.cancel()
+        objects = self.objects
+        if len(objects)>0:
+            for obj in objects:
+                manager = ICheckinCheckoutManager(obj)
+                manager.cancel()
+        else:
+            msg = _(u'You have not selected any documents')
+            IStatusMessage(self.request).addStatusMessage(msg, type='error')
         response = self.request.RESPONSE
         redirect_url = self.request.get('orig_template', None)
         if not redirect_url:
@@ -24,5 +32,5 @@ class CancelCheckout(grok.CodeView):
     @property
     def objects(self):
         lookup = lambda p:self.context.restrictedTraverse(str(p))
-        paths = self.request.get('paths')
+        paths = self.request.get('paths', [])
         return [lookup(p) for p in paths]

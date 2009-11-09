@@ -13,6 +13,7 @@ from opengever.document.document import IDocumentSchema
 from opengever.document.events import ObjectCheckedOutEvent
 from opengever.document.events import ObjectCheckedInEvent
 from opengever.document.events import ObjectCheckoutCanceledEvent
+from opengever.document import _
 
 
 class CheckoutNotAllowed(Exception):
@@ -90,8 +91,8 @@ class CheckinCheckoutManager(grok.Adapter):
             raise CheckOutNotAllowed
         if not self.checkout_allowed:
             if show_status_message:
-                msg = 'Could not checkout %s: not allowed' % \
-                    self.context.Title()
+                msg = _(u'Could not checkout: ${title}, checkout not allowed',
+                        mapping={'title':self.context.Title()})
                 IStatusMessage(self.request).addStatusMessage(msg, type='error')
                 return
             else:
@@ -109,8 +110,8 @@ class CheckinCheckoutManager(grok.Adapter):
         wc.reindexObject()
         # create status message
         if show_status_message:
-            msg = 'Checked out %s' % \
-                context.Title()
+            msg = _(u'Checked out: ${title}',
+                    mapping={'title':self.context.Title()})
             IStatusMessage(self.request).addStatusMessage(msg, type='info')
         # trigger event
         notify(ObjectCheckedOutEvent(context, comment))
@@ -119,8 +120,8 @@ class CheckinCheckoutManager(grok.Adapter):
         context = aq_inner(self.context)
         if not self.checkin_allowed:
             if show_status_message:
-                msg = 'Could not checkin %s: not allowed' % \
-                    self.context.Title()
+                msg = _(u'Could not checkin: ${title}, checkin not allowed',
+                        mapping={'title':self.context.Title()})
                 IStatusMessage(self.request).addStatusMessage(msg, type='error')
                 return
             else:
@@ -131,8 +132,8 @@ class CheckinCheckoutManager(grok.Adapter):
         baseline.reindexObject()
         # create status message
         if show_status_message:
-            msg = 'Checked in %s' % \
-                baseline.Title()
+            msg = _(u'Checked in: ${title}',
+                    mapping={'title':baseline.Title()})
             IStatusMessage(self.request).addStatusMessage(msg, type='info')
         # trigger event
         notify(ObjectCheckedInEvent(baseline, comment))
@@ -141,8 +142,8 @@ class CheckinCheckoutManager(grok.Adapter):
         context = aq_inner(self.context)
         if not self.cancel_allowed:
             if show_status_message:
-                msg = 'Could not cancel checkout %s: not allowed' % \
-                    self.context.Title()
+                msg = _(u'Could not cancel checkin: ${title}, not allowed',
+                        mapping={'title':self.context.Title()})
                 IStatusMessage(self.request).addStatusMessage(msg, type='error')
                 return
             else:
@@ -151,4 +152,8 @@ class CheckinCheckoutManager(grok.Adapter):
         policy = ICheckinCheckoutPolicy(context)
         baseline = policy.cancelCheckout()
         baseline.reindexObject()
+        if show_status_message:
+            msg = _(u'Checkout canceled: ${title}',
+                    mapping={'title':baseline.Title()})
+            IStatusMessage(self.request).addStatusMessage(msg, type='info')
         notify(ObjectCheckoutCanceledEvent(baseline))

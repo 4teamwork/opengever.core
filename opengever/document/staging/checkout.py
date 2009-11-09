@@ -13,6 +13,9 @@ from opengever.document import _
 from opengever.document.staging.manager import ICheckinCheckoutManager
 
 
+class NoItemsSelected(Exception):
+    pass
+
 # ---- CHECKOUT ----
 class ICheckoutCommentFormSchema(Interface):
     """ Form schema for entering a journal comment in checkout procedure
@@ -38,9 +41,6 @@ class CheckoutCommentForm(form.Form):
     def checkout_button_handler(self, action):
         data, errors = self.extractData()
         if len(errors)==0:
-            info = _(u'info_documents_checked_out',
-                     u'Successfully checked out documents')
-            IStatusMessage(self.request).addStatusMessage(info, type='info')
             for obj in self.objects:
                 self.checkout_object(obj, data['comment'])
             return self.request.RESPONSE.redirect(self.redirect_url)
@@ -66,7 +66,7 @@ class CheckoutCommentForm(form.Form):
             return value
         value = self.request.get('paths')
         if not value:
-            raise Exception('No Items selected')
+            raise NoItemsSelected
         return value
 
     @property
@@ -104,6 +104,20 @@ class CheckoutDocuments(layout.FormWrapper, grok.CodeView):
         layout.FormWrapper.__init__(self, context, request)
         grok.CodeView.__init__(self, context, request)
 
-    def render(self, *args, **kwargs):
-        return layout.FormWrapper.__call__(self, *args, **kwargs)
+    def render(self):
+        raise NotImplemented
+
+    def __call__(self):
+        try:
+            return layout.FormWrapper.__call__(self)
+        except NoItemsSelected:
+            msg = _(u'You have not selected any documents')
+            IStatusMessage(self.request).addStatusMessage(msg, type='error')
+            response = self.request.RESPONSE
+            redirect_url = self.request.get('orig_template', None)
+            if not redirect_url:
+                redirect_url = self.request.get('HTTP_REFERER', None)
+            if not redirect_url:
+                redirect_url = '.'
+            return response.redirect(redirect_url)
 
