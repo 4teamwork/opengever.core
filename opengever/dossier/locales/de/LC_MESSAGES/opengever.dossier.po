@@ -19,7 +19,7 @@ msgstr ""
 #: opengever.dossier/opengever/dossier/profiles/default/types/opengever.dossier.businesscasedossier.xml
 #: opengever.dossier/opengever/dossier/profiles/default/types/opengever.dossier.projectdossier.xml
 msgid "A Dossier contains documents"
-msgstr ""
+msgstr "???"
 
 #. Default: "Business Case Dossier"
 #: opengever.dossier/opengever/dossier/profiles/default/types/opengever.dossier.businesscasedossier.xml
@@ -43,39 +43,39 @@ msgstr "Ablage"
 
 #: opengever.dossier/opengever/dossier/behaviors/dossier.py:65
 msgid "help_comments"
-msgstr ""
+msgstr "???"
 
 #: opengever.dossier/opengever/dossier/behaviors/dossier.py:89
 msgid "help_container_id"
-msgstr ""
+msgstr "Code des Behälters, in dem ein Dossier in Papierform abgelegt ist"
 
 #: opengever.dossier/opengever/dossier/behaviors/dossier.py:101
 msgid "help_container_location"
-msgstr ""
+msgstr "Standortangabe des Behälters, in dem ein Dossier in Papierform abgelegt ist"
 
 #: opengever.dossier/opengever/dossier/behaviors/dossier.py:82
 msgid "help_container_type"
-msgstr ""
+msgstr "Art des Behälters, in dem ein Dossier in Papierform abgelegt ist"
 
 #: opengever.dossier/opengever/dossier/behaviors/dossier.py:53
 msgid "help_end"
-msgstr ""
+msgstr "???"
 
 #: opengever.dossier/opengever/dossier/behaviors/dossier.py:33
 msgid "help_keywords"
-msgstr ""
+msgstr "Schlagworte zur Umschreibung eines Dossiers. Nicht zu Verwechseln mit der Ordnungsposition"
 
 #: opengever.dossier/opengever/dossier/behaviors/dossier.py:95
 msgid "help_number_of_containers"
-msgstr ""
+msgstr "Anzahl Behälter, die ein (grosses) Dossier in Papierform enthalten"
 
 #: opengever.dossier/opengever/dossier/behaviors/dossier.py:45
 msgid "help_start"
-msgstr ""
+msgstr "???"
 
 #: opengever.dossier/opengever/dossier/behaviors/dossier.py:59
 msgid "help_volume_number"
-msgstr ""
+msgstr "Nummer eines Bandes, zu welchem mehrere zusammengehörige, papierförmige  Dossiers zusammengefügt worden sind"
 
 #. Default: "Comments"
 #: opengever.dossier/opengever/dossier/behaviors/dossier.py:64
