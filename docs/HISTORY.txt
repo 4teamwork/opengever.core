@@ -5,6 +5,10 @@ Changelog
 0.2
 ---
 
+* Issue #95: EIn Dokument hat drei Datumsfelder: Eingang / Dokument / Ausgang
+  Datum-Felder in Dokument ergänzt und übersetzt.
+  [09.11.2009]
+
 * Issue #33: Checkout / Checkin
   CheckinCheckoutManager implementiert, welcher die Vorgänge kontrolliert
   Checkout implementiert

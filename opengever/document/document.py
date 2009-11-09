@@ -25,16 +25,25 @@ class IDocumentSchema(form.Schema):
     """ Document Schema Interface
     """
 
+    form.fieldset(
+        u'dates',
+        label = _(u'fieldset_dates', u'Dates'),
+        fields = [
+            u'receipt_date',
+            u'delivery_date',
+            ]
+        )
+
     foreign_reference = schema.TextLine(
         title = _(u'label_foreign_reference', default='Foreign Reference'),
         description = _('help_foreign_reference', default=''),
         required = False,
         )
 
-    receipt_date = schema.Date(
-        title = _(u'label_receipt_date', default='Date of receipt'),
-        description = _(u'help_receipt_Date', default=''),
-        required = False,
+    document_date = schema.Date(
+        title = _(u'label_document_date', default='Document Date'),
+        description = _(u'help_document_date', default=''),
+        required = True,
         )
 
     form.primary('file')
@@ -76,6 +85,18 @@ class IDocumentSchema(form.Schema):
     preview = NamedFile(
         title = _(u'label_preview', default='Preview'),
         description = _(u'help_preview', default=''),
+        required = False,
+        )
+
+    receipt_date = schema.Date(
+        title = _(u'label_receipt_date', default='Date of receipt'),
+        description = _(u'help_receipt_date', default=''),
+        required = False,
+        )
+
+    delivery_date = schema.Date(
+        title = _(u'label_delivery_date', default='Date of delivery'),
+        description = _(u'help_delivery_date', default=''),
         required = False,
         )
 
