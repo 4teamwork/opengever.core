@@ -2,68 +2,71 @@
 <object name="opengever.document.document" meta_type="Dexterity FTI"
         i18n:domain="opengever.document" xmlns:i18n="http://xml.zope.org/namespaces/i18n">
 
-    <!-- Basic metadata -->
-    <property name="title" i18n:translate="document_type_name">Document</property>
-    <property name="description" i18n:translate="document_type_description">A Document</property>
-    <property name="content_icon">document_icon.gif</property>
-    <property name="allow_discussion">False</property>
-    <property name="global_allow">False</property>
+  <!-- Basic metadata -->
+  <property name="title" i18n:translate="document_type_name">Document</property>
+  <property name="description" i18n:translate="document_type_description">A Document</property>
+  <property name="content_icon">document_icon.gif</property>
+  <property name="allow_discussion">False</property>
+  <property name="global_allow">False</property>
 
-    <!-- schema interface -->
-    <property name="schema">opengever.document.document.IDocumentSchema</property> 
+  <!-- schema interface -->
+  <property name="schema">opengever.document.document.IDocumentSchema</property>
 
-    <!-- class used for content items -->
-    <property name="klass">opengever.document.document.Document</property>
+  <!-- class used for content items -->
+  <property name="klass">opengever.document.document.Document</property>
 
-    <!-- add permission -->
-    <property name="add_permission">cmf.AddPortalContent</property>
+  <!-- add permission -->
+  <property name="add_permission">cmf.AddPortalContent</property>
 
-    <!-- enabled behaviors -->
-    <property name="behaviors">
-        <element value="ftw.journal.interfaces.IAnnotationsJournalizable" />
-        <element value="plone.app.content.interfaces.INameFromTitle" />
-        <element value="plone.app.dexterity.behaviors.metadata.IBasic" />
-        <element value="plone.app.dexterity.behaviors.metadata.IOwnership" />
-        <element value="plone.stagingbehavior.interfaces.IStagingSupport" />
-        <element value="plone.versioningbehavior.behaviors.IVersionable" />
-        <element value="collective.filepreviewbehavior.interfaces.IPreviewable" />
-    </property>
+  <!-- enabled behaviors -->
+  <property name="behaviors">
+    <element value="ftw.journal.interfaces.IAnnotationsJournalizable" />
+    <element value="plone.app.content.interfaces.INameFromTitle" />
+    <element value="plone.app.dexterity.behaviors.metadata.IBasic" />
+    <element value="plone.app.dexterity.behaviors.metadata.IOwnership" />
+    <element value="plone.stagingbehavior.interfaces.IStagingSupport" />
+    <element value="plone.versioningbehavior.behaviors.IVersionable" />
+    <element value="collective.filepreviewbehavior.interfaces.IPreviewable" />
+  </property>
 
-    <!-- View information -->
-    <property name="default_view">view</property>
-    <property name="default_view_fallback">False</property>
-    <property name="view_methods">
-        <element value="view"/>
-    </property>
+  <!-- View information -->
+  <property name="default_view">view</property>
+  <property name="default_view_fallback">False</property>
+  <property name="view_methods">
+    <element value="view"/>
+  </property>
 
-    <!-- Method aliases -->
-    <alias from="(Default)" to="(selected layout)"/>
-    <alias from="edit" to="@@edit"/>
-    <alias from="sharing" to="@@sharing"/>
-    <alias from="view" to="@@view"/>
+  <!-- Method aliases -->
+  <alias from="(Default)" to="(selected layout)"/>
+  <alias from="edit" to="@@edit"/>
+  <alias from="sharing" to="@@sharing"/>
+  <alias from="view" to="@@view"/>
 
-    <!-- Actions -->
-    <action title="View" action_id="view" category="object" condition_expr=""
-            url_expr="string:${object_url}" visible="True">
-        <permission value="View"/>
-    </action>
-    <action title="Edit" action_id="edit" category="object" condition_expr=""
-            url_expr="string:${object_url}/edit" visible="True">
-        <permission value="Modify portal content"/>
-    </action>
+  <!-- Actions -->
+  <action title="View" action_id="view" category="object" condition_expr=""
+          url_expr="string:${object_url}" visible="True">
+    <permission value="View"/>
+  </action>
+  <action title="Edit" action_id="edit" category="object" condition_expr=""
+          url_expr="string:${object_url}/edit" visible="True">
+    <permission value="Modify portal content"/>
+  </action>
 
-    <!-- opengever.journal, ftw.journal -->
-    <action title="Journal" action_id="journal" category="object"
-            url_expr="string:${object_url}/@@journal"
-            condition_expr="" visible="True">
-        <permission value="View"/>
-    </action>
+  <!-- opengever.journal, ftw.journal -->
+  <action title="Journal" action_id="journal" category="object"
+          url_expr="string:${object_url}/@@journal"
+          condition_expr="" visible="True">
+    <permission value="View"/>
+  </action>
 
-    <!-- collective.filepreviewbehavior, Products.ARFilePreview -->
-    <action title="Preview" action_id="preview" category="object"
-            url_expr="string:${object_url}/@@file_asdoc"
-            condition_expr="" visible="True">
-        <permission value="View"/>
-    </action>
+  <!-- collective.filepreviewbehavior, Products.ARFilePreview -->
+  <action title="Preview" action_id="preview" category="object"
+          url_expr="string:${object_url}/@@file_asdoc"
+          condition_expr="" visible="True">
+    <permission value="View"/>
+  </action>
+
+  <!-- disable some old actions -->
+  <action action_id="versions_history_form" remove="True" category="object" />
 
 </object>
