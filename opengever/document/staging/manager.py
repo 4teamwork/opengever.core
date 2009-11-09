@@ -1,4 +1,5 @@
 
+
 from Acquisition import aq_inner
 from five import grok
 from zope.event import notify
@@ -38,6 +39,27 @@ class CheckinCheckoutManager(grok.Adapter):
     def __init__(self, context):
         self.context = context
         self.request = context.REQUEST
+
+    @property
+    def contains_checkoutable_children(self):
+        for obj in self.context.getFolderContents():
+            if ICheckinCheckoutManager(obj).checkout_allowed:
+                return True
+        return False
+
+    @property
+    def contains_checkinable_children(self):
+        for obj in self.context.getFolderContents():
+            if ICheckinCheckoutManager(obj).checkin_allowed:
+                return True
+        return False
+
+    @property
+    def contains_cancable_children(self):
+        for obj in self.context.getFolderContents():
+            if ICheckinCheckoutManager(obj).cancel_allowed:
+                return True
+        return False
 
     @property
     def checkout_allowed(self):
