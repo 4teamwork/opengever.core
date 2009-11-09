@@ -3,7 +3,11 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
+<<<<<<< .mine
+"POT-Creation-Date: 2009-11-06 09:12+0000\n"
+=======
 "POT-Creation-Date: 2009-11-07 17:51+0000\n"
+>>>>>>> .r30839
 "PO-Revision-Date: 2009-01-01 10:00+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: Jonas Baumann <j.baumann@4teamwork.ch>\n"
@@ -11,6 +15,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"Language-Code: en\n"
+"Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: opengever.document\n"
 "X-Is-Fallback-For: de-at de-li de-lu de-ch de-de\n"
@@ -207,5 +213,4 @@ msgstr "Betreff"
 #: opengever.document/opengever/document/document.py:70
 msgid "label_thumbnail"
 msgstr "Kurzbild"
-
 

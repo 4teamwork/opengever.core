@@ -4,7 +4,11 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
+<<<<<<< .mine
+"POT-Creation-Date: 2009-11-06 09:12+0000\n"
+=======
 "POT-Creation-Date: 2009-11-07 17:51+0000\n"
+>>>>>>> .r30839
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -76,6 +80,9 @@ msgstr ""
 msgid "help_archival_file"
 msgstr ""
 
+<<<<<<< .mine
+#: opengever.document/opengever/document/document.py:43
+=======
 #. Default: "Describe, why you checkin the selected documents"
 #: opengever.document/opengever/document/checkin.py:25
 msgid "help_checkin_journal_comment"
@@ -87,6 +94,7 @@ msgid "help_checkout_journal_comment"
 msgstr ""
 
 #: opengever.document/opengever/document/document.py:43
+>>>>>>> .r30839
 msgid "help_file"
 msgstr ""
 
