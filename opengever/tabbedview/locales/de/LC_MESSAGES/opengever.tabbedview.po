@@ -20,6 +20,9 @@ msgstr "Autor"
 msgid "sortable_title"
 msgstr "Titel"
 
+msgid "Title"
+msgstr "Titel"
+
 msgid "modified"
 msgstr "Änderungsdatum"
 
