@@ -31,7 +31,7 @@ class IRepositoryFolderSchema(form.Schema):
     #form.omitted('title')
     form.order_before(effective_title = '*')
     effective_title = schema.TextLine(
-            title = u'Title',
+            title = _(u'Title'),
             required = True
     )
 

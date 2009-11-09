@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2009-09-21 11:25+0000\n"
+"POT-Creation-Date: 2009-11-06 09:57+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,53 +17,20 @@ msgstr ""
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: opengever.repository\n"
 
-#. Default: "A Repository Folder"
 #: opengever.repository/opengever/repository/profiles/default/types/opengever.repository.repositoryfolder.xml
 msgid "A Repository Folder"
 msgstr ""
 
-#. Default: "RepositoryFolder"
 #: opengever.repository/opengever/repository/profiles/default/types/opengever.repository.repositoryfolder.xml
-msgid "RepositoryFolder"
+msgid "repositoryfolder_label"
 msgstr ""
 
-#. Default ""
-#: opengever/repository/classification.py
-msgid "archival_value : archival worthy"
-msgstr ""
-
-#. Default ""
-#: opengever/repository/classification.py
-msgid "archival_value : archival worthy with sampling"
-msgstr ""
-
-#. Default ""
-#: opengever/repository/classification.py
-msgid "archival_value : not archival worthy"
-msgstr ""
-
-#. Default ""
-#: opengever/repository/classification.py
-msgid "archival_value : prompt"
-msgstr ""
-
-#. Default ""
-#: opengever/repository/classification.py
-msgid "archival_value : unchecked"
-msgstr ""
-
-#. Default: "classified"
-#: opengever/repository/classification.py
-msgid "classified"
-msgstr ""
-
-#. Default: "confidential"
-#: opengever/repository/classification.py
-msgid "confidential"
+#: opengever.repository/opengever/repository/repositoryfolder.py:34
+msgid "Title"
 msgstr ""
 
 #. Default: "A Sibling with the same reference number is existing"
-#: opengever.repository/opengever/repository/repositoryfolder.py:84
+#: opengever.repository/opengever/repository/repositoryfolder.py:89
 msgid "error_sibling_reference_number_existing"
 msgstr ""
 
@@ -164,35 +131,5 @@ msgstr ""
 #. Default: "Retention period (years)"
 #: opengever.repository/opengever/repository/classification.py:85
 msgid "label_retention_period"
-msgstr ""
-
-#. Default ""
-#: opengever/repository/classification.py
-msgid "privacy layer : no"
-msgstr ""
-
-#. Default: ""
-#: opengever/repository/classification.py
-msgid "privacy layer : yes"
-msgstr ""
-
-#. Default: "private"
-#: opengever/repository/classification.py
-msgid "private"
-msgstr ""
-
-#. Default: "public"
-#: opengever/repository/classification.py
-msgid "public"
-msgstr ""
-
-#. Default: "unchecked"
-#: opengever/repository/classification.py
-msgid "unchecked"
-msgstr ""
-
-#. Default: "unprotected"
-#: opengever/repository/classification.py
-msgid "unprotected"
 msgstr ""
 

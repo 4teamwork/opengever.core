@@ -3,7 +3,7 @@
    i18n:domain="opengever.repository" xmlns:i18n="http://xml.zope.org/namespaces/i18n">
  
  <!-- Basic metadata -->
- <property name="title" i18n:translate="">RepositoryFolder</property>
+ <property name="title" i18n:translate="repositoryfolder_label">RepositoryFolder</property>
  <property name="description" i18n:translate="">A Repository Folder</property>
  <property name="content_icon">folder_icon.gif</property>
  <property name="allow_discussion">False</property>

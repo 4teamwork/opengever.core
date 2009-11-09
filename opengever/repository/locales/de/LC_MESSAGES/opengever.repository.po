@@ -3,7 +3,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2009-09-21 11:25+0000\n"
+"POT-Creation-Date: 2009-11-06 09:57+0000\n"
 "PO-Revision-Date: 2009-01-01 10:00+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: Jonas Baumann <j.baumann@4teamwork.ch>\n"
@@ -11,6 +11,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"Language-Code: en\n"
+"Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: opengever.repository\n"
 "X-Is-Fallback-For: de-at de-li de-lu de-ch de-de\n"
@@ -18,50 +20,19 @@ msgstr ""
 #. Default: "A Repository Folder"
 #: opengever.repository/opengever/repository/profiles/default/types/opengever.repository.repositoryfolder.xml
 msgid "A Repository Folder"
-msgstr ""
+msgstr "Eine Ordnungsposition"
 
 #. Default: "RepositoryFolder"
 #: opengever.repository/opengever/repository/profiles/default/types/opengever.repository.repositoryfolder.xml
 msgid "RepositoryFolder"
 msgstr "Ordnungsposition"
 
-#. Default ""
-#: opengever/repository/classification.py
-msgid "archival_value : archival worthy"
-msgstr "Archivwürdig"
-
-#. Default ""
-#: opengever/repository/classification.py
-msgid "archival_value : archival worthy with sampling"
-msgstr "Sampling"
-
-#. Default ""
-#: opengever/repository/classification.py
-msgid "archival_value : not archival worthy"
-msgstr "Nicht archivwürdig"
-
-#. Default ""
-#: opengever/repository/classification.py
-msgid "archival_value : prompt"
-msgstr "Anbieten"
-
-#. Default ""
-#: opengever/repository/classification.py
-msgid "archival_value : unchecked"
-msgstr "Noch nicht bewertet"
-
-#. Default: "classified"
-#: opengever/repository/classification.py
-msgid "classified"
-msgstr "Geheim"
-
-#. Default: "confidential"
-#: opengever/repository/classification.py
-msgid "confidential"
-msgstr "Vertraulich"
+#: opengever.repository/opengever/repository/repositoryfolder.py:34
+msgid "Title"
+msgstr "Titel"
 
 #. Default: "A Sibling with the same reference number is existing"
-#: opengever.repository/opengever/repository/repositoryfolder.py:84
+#: opengever.repository/opengever/repository/repositoryfolder.py:89
 msgid "error_sibling_reference_number_existing"
 msgstr "Eine Ordnungsposition mit dieser Referenznummer existiert bereits auf gleicher höhe"
 
@@ -83,7 +54,7 @@ msgstr "Lebenszyklus"
 #. Default: "Archival value code"
 #: opengever.repository/opengever/repository/classification.py:72
 msgid "help_archival_value"
-msgstr ""
+msgstr "Archivierungscode"
 
 #. Default: ""
 #: opengever.repository/opengever/repository/classification.py:33
@@ -97,7 +68,7 @@ msgstr ""
 #. Default: "A short summary of the content."
 #: opengever.repository/opengever/repository/repositoryfolder.py:47
 msgid "help_description"
-msgstr ""
+msgstr "Eine kurze Beschreibung des Inhalts."
 
 #. Default: ""
 #: opengever.repository/opengever/repository/classification.py:41
@@ -165,35 +136,4 @@ msgstr "Referenznummer"
 #: opengever.repository/opengever/repository/classification.py:85
 msgid "label_retention_period"
 msgstr "Aufbewahrungsdauer (Jahre)"
-
-#. Default ""
-#: opengever/repository/classification.py
-msgid "privacy layer : no"
-msgstr "Keine Datenschutzstufe"
-
-#. Default: ""
-#: opengever/repository/classification.py
-msgid "privacy layer : yes"
-msgstr "Enthält schützenswerten Personendaten"
-
-#. Default: "private"
-#: opengever/repository/classification.py
-msgid "private"
-msgstr "Nicht öffentlich"
-
-#. Default: "public"
-#: opengever/repository/classification.py
-msgid "public"
-msgstr "Öffentlich"
-
-#. Default: "unchecked"
-#: opengever/repository/classification.py
-msgid "unchecked"
-msgstr "Noch nicht geprüft"
-
-#. Default: "unprotected"
-#: opengever/repository/classification.py
-msgid "unprotected"
-msgstr "Nicht klassifiziert"
-
 
