@@ -20,13 +20,13 @@
 
     <!-- enabled behaviors -->
     <property name="behaviors">
-        <element value="collective.filepreviewbehavior.interfaces.IPreviewable" />
         <element value="ftw.journal.interfaces.IAnnotationsJournalizable" />
         <element value="plone.app.content.interfaces.INameFromTitle" />
         <element value="plone.app.dexterity.behaviors.metadata.IBasic" />
+        <element value="plone.app.dexterity.behaviors.metadata.IOwnership" />
         <element value="plone.stagingbehavior.interfaces.IStagingSupport" />
         <element value="plone.versioningbehavior.behaviors.IVersionable" />
-        <element value="plone.app.dexterity.behaviors.metadata.IOwnership" />
+        <element value="collective.filepreviewbehavior.interfaces.IPreviewable" />
     </property>
 
     <!-- View information -->
@@ -64,26 +64,6 @@
             url_expr="string:${object_url}/@@file_asdoc"
             condition_expr="" visible="True">
         <permission value="View"/>
-    </action>
-
-    <!-- plone.stagingbehavior, plone.app.iterate -->
-    <action title="Check out" action_id="iterate_checkout" category="object"
-            url_expr="string:${object_url}/@@content-checkout"
-            condition_expr="python:path('object/@@iterate_control').checkout_allowed()"
-            visible="True">
-        <permission value="View" />
-    </action>
-    <action title="Check in" action_id="iterate_checkin" category="object"
-            url_expr="string:${object_url}/@@content-checkin"
-            condition_expr="python:path('object/@@iterate_control').checkin_allowed()"
-            visible="True">
-        <permission value="View" />
-    </action>
-    <action title="Cancel check-out" action_id="iterate_checkout_cancel" category="object"
-            url_expr="string:${object_url}/@@content-cancel-checkout"
-            condition_expr="python:path('object/@@iterate_control').cancel_allowed()"
-            visible="True">
-        <permission value="Modify portal content" />
     </action>
 
 </object>

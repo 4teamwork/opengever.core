@@ -24,16 +24,16 @@ setup(name='opengever.document',
       zip_safe=False,
       install_requires=[
           'setuptools',
+          'Products.ARFilePreview'
+          'Products.CMFCore',
+          'Products.MimetypesRegistry',
+          'collective.filepreviewbehavior',
           'ftw.sendmail',
           'opengever.sqlfile',
           'plone.app.dexterity',
           'plone.principalsource',
-          'plone.versioningbehavior',
           'plone.stagingbehavior',
-          'collective.filepreviewbehavior',
-          'Products.CMFCore',
-          'Products.MimetypesRegistry',
-          'Products.ARFilePreview'
+          'plone.versioningbehavior',
           'stoneagehtml', # required by ftw.sendmail, but there is no dependency in the current release
       ],
       entry_points="""
