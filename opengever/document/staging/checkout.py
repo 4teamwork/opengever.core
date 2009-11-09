@@ -1,4 +1,4 @@
-q
+
 from five import grok
 from zope.interface import Interface
 from zope import schema
