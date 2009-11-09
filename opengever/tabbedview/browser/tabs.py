@@ -9,8 +9,6 @@ class OpengeverTab(grok.View, BaseListingView):
     grok.context(ITabbedView)
     grok.template('generic')
     
-    table = ViewPageTemplateFile('tabs_templates/table.pt') 
-    
     update = BaseListingView.update
     
     columns = (
