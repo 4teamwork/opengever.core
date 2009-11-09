@@ -18,7 +18,7 @@ msgstr ""
 #. Default: "Cancel"
 #: opengever.document/opengever/document/profiles/default/actions.xml
 msgid "Cancel"
-msgstr ""
+msgstr "Abbrechen"
 
 #. Default: "Checkin"
 #: opengever.document/opengever/document/profiles/default/actions.xml
@@ -69,7 +69,7 @@ msgstr "Daten"
 #. Default: "Checkin Documents"
 #: opengever.document/opengever/document/checkin.py:35
 msgid "heading_checkin_comment_form"
-msgstr "Doukemente einchecken"
+msgstr "Dokumente einchecken"
 
 #. Default: "Checkout Documents"
 #: opengever.document/opengever/document/checkout.py:35
@@ -84,7 +84,7 @@ msgstr "Dokumente als E-Mail versenden"
 #. Default: ""
 #: opengever.document/opengever/document/document.py:73
 msgid "help_archival_file"
-msgstr ""
+msgstr "Archivtaugliche Version der Originaldatei"
 
 #. Default: "Describe, why you checkin the selected documents"
 #: opengever.document/opengever/document/checkin.py:25
@@ -98,25 +98,25 @@ msgstr "Was für Änderungen haben Sie an den ausgewählten Dokumenten vorgenomm
 
 #: opengever.document/opengever/document/document.py:99
 msgid "help_delivery_date"
-msgstr ""
+msgstr "Datum, an dem das Dokument über den Korrespondenzweg versandt worden ist"
 
 #: opengever.document/opengever/document/document.py:45
 msgid "help_document_date"
-msgstr ""
+msgstr "Datum, an dem das Dokument erstellt worden ist"
 
 #. Default: ""
 #: opengever.document/opengever/document/document.py:52
 msgid "help_file"
-msgstr ""
+msgstr "Datei, die zu einem Dossier hinzugefügt wird"
 
 #. Default: ""
 #: opengever.document/opengever/document/document.py:39
 msgid "help_foreign_reference"
-msgstr ""
+msgstr "Referenz auf das entsprechende Dossier des Absenders"
 
 #: opengever.document/opengever/document/mailing.py:173
 msgid "help_message"
-msgstr ""
+msgstr "???"
 
 #. Default: "Available in paper form only"
 #: opengever.document/opengever/document/document.py:59
@@ -126,34 +126,34 @@ msgstr "Nur in Papierform verfügbar"
 #. Default: ""
 #: opengever.document/opengever/document/document.py:66
 msgid "help_preserved_as_paper"
-msgstr ""
+msgstr "In Papierform aufbewahrt"
 
 #. Default: ""
 #: opengever.document/opengever/document/document.py:87
 msgid "help_preview"
-msgstr ""
+msgstr "Online Voransicht des Originaldokuments"
 
 #: opengever.document/opengever/document/document.py:93
 msgid "help_receipt_date"
-msgstr ""
+msgstr "Datum, an dem das Dokument über den Korrespondenzweg angekommen ist"
 
 #: opengever.document/opengever/document/mailing.py:164
 msgid "help_receivers"
-msgstr ""
+msgstr "???"
 
 #: opengever.document/opengever/document/mailing.py:169
 msgid "help_subject"
-msgstr ""
+msgstr "???"
 
 #. Default: ""
 #: opengever.document/opengever/document/document.py:80
 msgid "help_thumbnail"
-msgstr ""
+msgstr "???"
 
 #. Default: "Successfully checked out documents"
 #: opengever.document/opengever/document/checkin.py:41
 msgid "info_documents_checked_out"
-msgstr "Dokuemente wurden ausgecheckt"
+msgstr "Dokumente wurden ausgecheckt"
 
 #. Default: "Mails sent"
 #: opengever.document/opengever/document/mailing.py:215
