@@ -1,3 +1,4 @@
+from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile     
 from ftw.tabbedview.browser.views import BaseListingView
 from ftw.tabbedview.interfaces import ITabbedView
 from five import grok
@@ -8,15 +9,23 @@ class OpengeverTab(grok.View, BaseListingView):
     grok.context(ITabbedView)
     grok.template('generic')
     
+    table = ViewPageTemplateFile('tabs_templates/table.pt') 
+    
     update = BaseListingView.update
     
-    columns = (('', helper.uid_checkbox),
-              ('Title', helper.linked),
+    columns = (
+                ('', helper.draggable),
+               ('', helper.path_checkbox),
+              ('Title','sortable_title', helper.linked),
               ('modified', helper.readable_date), 
               'Creator')
+    
+    @property
+    def view_name(self):
+         return self.__name__.split('tabbedview_view-')[1]
               
-    search_index = 'SearchableText'
-    sort_on = 'sortable_title'
+    search_index = 'SearchableText' #only 'SearchableText' is implemented for now
+    sort_on = 'modified'
     sort_order = 'reverse'    
 
 class Documents(OpengeverTab):
@@ -26,7 +35,7 @@ class Documents(OpengeverTab):
     
 class Dossiers(OpengeverTab):
     grok.name('tabbedview_view-dossiers')
-
+    
     types = ['opengever.dossier.projectdossier', 'opengever.dossier.businesscasedossier',]
 
 

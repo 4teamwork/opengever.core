@@ -11,6 +11,8 @@
     <include file="dependencies.zcml" />
     
     <grok:grok package="." />
+
+    <i18n:registerTranslations directory="locales"/>
     
     <!-- Classification Behavior -->
     <plone:behavior
