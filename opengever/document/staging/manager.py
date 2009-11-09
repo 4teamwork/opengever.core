@@ -84,9 +84,18 @@ class CheckinCheckoutManager(grok.Adapter):
         return True
 
     def checkout(self, comment='', show_status_message=True):
+        comment = comment or ''
         context = aq_inner(self.context)
         if not self.checkout_allowed:
             raise CheckOutNotAllowed
+        if not self.checkout_allowed:
+            if show_status_message:
+                msg = 'Could not checkout %s: not allowed' % \
+                    self.context.Title()
+                IStatusMessage(self.request).addStatusMessage(msg, type='error')
+                return
+            else:
+                raise CheckOutNotAllowed
         # get the plone.app.iterate containers
         checkout_view = self.context.restrictedTraverse('content-checkout')
         containers = list(checkout_view.containers())
@@ -97,6 +106,7 @@ class CheckinCheckoutManager(grok.Adapter):
         wc = policy.checkout(locator())
         # we need to reindex context (eliminate some side effects)
         context.reindexObject()
+        wc.reindexObject()
         # create status message
         if show_status_message:
             msg = 'Checked out %s' % \
@@ -108,19 +118,37 @@ class CheckinCheckoutManager(grok.Adapter):
     def checkin(self, comment='', show_status_message=True):
         context = aq_inner(self.context)
         if not self.checkin_allowed:
-            raise CheckInNotAllowed
-        # XXX check it in
+            if show_status_message:
+                msg = 'Could not checkin %s: not allowed' % \
+                    self.context.Title()
+                IStatusMessage(self.request).addStatusMessage(msg, type='error')
+                return
+            else:
+                raise CheckInNotAllowed
+        # check it in
+        policy = ICheckinCheckoutPolicy(context)
+        baseline = policy.checkin(comment)
+        baseline.reindexObject()
         # create status message
         if show_status_message:
-            msg = 'Could not checkin %s: implementation missing' % \
-                self.context.Title()
-            IStatusMessage(self.request).addStatusMessage(msg, type='error')
+            msg = 'Checked in %s' % \
+                baseline.Title()
+            IStatusMessage(self.request).addStatusMessage(msg, type='info')
         # trigger event
-        notify(ObjectCheckedInEvent(self.context, comment))
+        notify(ObjectCheckedInEvent(baseline, comment))
 
-    def cancel(self):
+    def cancel(self, show_status_message=True):
         context = aq_inner(self.context)
         if not self.cancel_allowed:
-            raise CancelNotAllowed
-        # XXX cancel checkout
-        notify(ObjectCheckoutCanceledEvent(context))
+            if show_status_message:
+                msg = 'Could not cancel checkout %s: not allowed' % \
+                    self.context.Title()
+                IStatusMessage(self.request).addStatusMessage(msg, type='error')
+                return
+            else:
+                raise CancelNotAllowed
+        # cancel checkout
+        policy = ICheckinCheckoutPolicy(context)
+        baseline = policy.cancelCheckout()
+        baseline.reindexObject()
+        notify(ObjectCheckoutCanceledEvent(baseline))

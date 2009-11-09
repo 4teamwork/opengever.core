@@ -13,6 +13,13 @@ class CancelCheckout(grok.CodeView):
         for obj in self.objects:
             manager = ICheckinCheckoutManager(obj)
             manager.cancel()
+        response = self.request.RESPONSE
+        redirect_url = self.request.get('orig_template', None)
+        if not redirect_url:
+            redirect_url = self.request.get('HTTP_REFERER', None)
+        if not redirect_url:
+            redirect_url = '.'
+        return response.redirect(redirect_url)
 
     @property
     def objects(self):

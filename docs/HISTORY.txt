@@ -5,6 +5,13 @@ Changelog
 0.2
 ---
 
+* Issue #33: Checkout / Checkin
+  implemented checkin and revert
+  [09.11.2009, jbaumann]
+
+* Added setuphandler for enable manual versioning for Document
+  [09.11.2009, jbaumann]
+
 * Issue #95: EIn Dokument hat drei Datumsfelder: Eingang / Dokument / Ausgang
   Datum-Felder in Dokument ergänzt und übersetzt.
   [09.11.2009]
