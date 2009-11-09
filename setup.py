@@ -28,9 +28,13 @@ setup(name='opengever.document',
           'opengever.sqlfile',
           'plone.app.dexterity',
           'plone.principalsource',
+          'plone.versioningbehavior',
+          'plone.stagingbehavior',
+          'collective.filepreviewbehavior',
           'Products.CMFCore',
           'Products.MimetypesRegistry',
-          'stoneagehtml', # required by ftw.sendmail, but there is no dependency in the current release
+          'Products.ARFilePreview'
+          'stoneagehtml', # required by ftw.sendmail, but there is no dependency in the current release
       ],
       entry_points="""
       # -*- Entry points: -*-

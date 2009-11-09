@@ -75,7 +75,9 @@ class CheckoutCommentForm(form.Form):
         value = self.request.get(field_name, False)
         if value:
             return value
-        value = self.request.get('HTTP_REFERER')
+        value = self.request.get('orig_template')
+        if not value:
+            value = self.request.get('HTTP_REFERER')
         if not value:
             value = '.'
         return value

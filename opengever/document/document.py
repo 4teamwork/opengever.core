@@ -1,4 +1,5 @@
 
+
 import logging
 
 from Acquisition import aq_inner
@@ -13,6 +14,7 @@ from plone.app.dexterity.behaviors.metadata import IBasic
 from plone.dexterity.content import Item
 from plone.directives import form
 from plone.indexer import indexer
+from plone.app.iterate.interfaces import IWorkingCopy
 
 from opengever.sqlfile.field import NamedFile
 from plone.namedfile.interfaces import INamedFileField
@@ -102,6 +104,12 @@ class IDocumentSchema(form.Schema):
 
 
 class Document(Item):
+
+    def Title(self):
+        title = Item.Title(self)
+        if IWorkingCopy.providedBy(self):
+            return '%s (WorkingCopy)' % title
+        return title
 
     def getIcon(self, relative_to_portal=0):
         """Calculate the icon using the mime type of the file
