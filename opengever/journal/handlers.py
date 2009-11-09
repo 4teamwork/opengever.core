@@ -107,6 +107,13 @@ def document_modified(context, event):
     #        'type' : translated_type(context),
     #})
     # XXX translations are not working in events -.-
+    # XXX dirty
+    try:
+        # if we delete the working copy, we get a aq_based object and don't wann
+        # make a journal entry
+        context.portal_types
+    except AttributeError:
+        return
     title = 'Document modified'
     journal_entry_factory(context, DOCUMENT_MODIIFED_ACTION, title, visible=False)
 
