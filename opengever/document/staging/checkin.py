@@ -5,49 +5,49 @@ from zope import schema
 from z3c.form import form, field, button
 from z3c.form.interfaces import HIDDEN_MODE
 
+from Products.statusmessages.interfaces import IStatusMessage
 from plone.dexterity.interfaces import IDexterityContent
 from plone.z3cform import layout
-from Products.statusmessages.interfaces import IStatusMessage
 
 from opengever.document import _
-from opengever.document.staging import ICheckinCheckoutManager
+from opengever.document.staging.manager import ICheckinCheckoutManager
 
 
-# ---- CHECKOUT ----
-class ICheckoutCommentFormSchema(Interface):
-    """ Form schema for entering a journal comment in checkout procedure
+# ---- CHECKIN ----
+class ICheckinCommentFormSchema(Interface):
+    """ Form schema for entering a journal comment in checkin procedure
     """
     paths = schema.TextLine(title=u'Selected Items') # hidden
     redirect_url = schema.TextLine(title=u'Redirect URL') # hidden
     comment = schema.Text(
-        title=_(u'label_checkout_journal_comment',
+        title=_(u'label_checkin_journal_comment',
                 default=u'Journal Comment'),
-        description=_(u'help_checkout_journal_comment',
-                      default=u'Describe, why you checkout the selected documents'),
-        required=False,
+        description=_(u'help_checkin_journal_comment',
+                      default=u'Describe, why you checkin the selected documents'),
+        required=True,
         )
 
 
 
-class CheckoutCommentForm(form.Form):
-    fields = field.Fields(ICheckoutCommentFormSchema)
+class CheckinCommentForm(form.Form):
+    fields = field.Fields(ICheckinCommentFormSchema)
     ignoreContext = True
-    label = _(u'heading_checkout_comment_form', u'Checkout Documents')
+    label = _(u'heading_checkin_comment_form', u'Checkin Documents')
 
-    @button.buttonAndHandler(_(u'button_checkout', default=u'Checkout'))
-    def checkout_button_handler(self, action):
+    @button.buttonAndHandler(_(u'button_checkin', default=u'Checkin'))
+    def checkin_button_handler(self, action):
         data, errors = self.extractData()
         if len(errors)==0:
             info = _(u'info_documents_checked_out',
                      u'Successfully checked out documents')
             IStatusMessage(self.request).addStatusMessage(info, type='info')
             for obj in self.objects:
-                self.checkout_object(obj, data['comment'])
+                self.checkin_object(obj, data['comment'])
             return self.request.RESPONSE.redirect(self.redirect_url)
 
-    def checkout_object(self, obj, comment):
+    def checkin_object(self, obj, comment):
         manager = ICheckinCheckoutManager(obj)
-        manager.checkout(comment, show_status_message=False)
+        manager.checkin(comment, show_status_message=True)
 
     @property
     def objects(self):
@@ -81,7 +81,7 @@ class CheckoutCommentForm(form.Form):
         return value
 
     def updateWidgets(self):
-        super(CheckoutCommentForm, self).updateWidgets()
+        super(CheckinCommentForm, self).updateWidgets()
         self.widgets['paths'].mode = HIDDEN_MODE
         self.widgets['paths'].value = ';;'.join(self.item_paths)
         self.widgets['redirect_url'].mode = HIDDEN_MODE
@@ -89,14 +89,14 @@ class CheckoutCommentForm(form.Form):
 
 
 
-class CheckoutDocuments(layout.FormWrapper, grok.CodeView):
-    """ Checks out one or more documents.
+class CheckinDocuments(layout.FormWrapper, grok.CodeView):
+    """ Checks in one or more documents.
     Is called by a folder_contents action or a tabbed-view action
     """
     grok.context(Interface)
     grok.require('zope2.View')
-    grok.name('checkout_documents')
-    form = CheckoutCommentForm
+    grok.name('checkin_documents')
+    form = CheckinCommentForm
 
     def __init__(self, context, request):
         layout.FormWrapper.__init__(self, context, request)

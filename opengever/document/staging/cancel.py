@@ -2,7 +2,7 @@
 from five import grok
 from zope.interface import Interface
 
-from opengever.document.staging import ICheckinCheckoutManager
+from opengever.document.staging.manager import ICheckinCheckoutManager
 
 class CancelCheckout(grok.CodeView):
     grok.context(Interface)
