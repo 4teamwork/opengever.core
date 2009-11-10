@@ -1,32 +1,22 @@
 from five import grok
 from zope import schema
 
+from zope.component import queryMultiAdapter, getUtility
 from zope.schema.interfaces import IContextSourceBinder
 from zope.schema.vocabulary import SimpleVocabulary
 from Products.CMFCore.utils import getToolByName
+from zope.publisher.interfaces.browser import IBrowserPage
+from Products.CMFDefault.interfaces import ICMFDefaultSkin
+from plone.dexterity.interfaces import IDexterityFTI
 
-from plone.dexterity.content import Item
+from plone.dexterity.content import Item, Container
 from plone.directives import form, dexterity
 
 from plone.app.textfield import RichText
 from plone.namedfile.field import NamedImage
+from ftw.task import util
 
 from ftw.task import _
-    
-@grok.provider(IContextSourceBinder)
-def possibleResponsibles(context):
-    acl_users = getToolByName(context, 'acl_users')
-    group = acl_users.getGroupById('Administrators')
-    terms = []
-    if group is not None:
-        for member_id in group.getMemberIds():
-            user = acl_users.getUserById(member_id)
-            if user is not None:
-                member_name = user.getProperty('fullname') or member_id
-                terms.append(SimpleVocabulary.createTerm(member_id, str(member_id), member_name))
-
-    return SimpleVocabulary(terms)
-    
 
 class ITask(form.Schema):
     
@@ -56,35 +46,56 @@ class ITask(form.Schema):
     responsible = schema.Choice(
         title=_(u"responsible", default="Responsible"),
         description =_(u"descResponsible", default="select an responsible Manger"),
-        source = possibleResponsibles,
-        required = True,
+        source = util.getManagersVocab,
+        required = False,
     )
     
     expectedStartOfWork = schema.Datetime(
         title =_(u"expectedStartOfWork", default="Start with work"),
-        required = True,
+        required = False,
     )
     
     expectedDuration = schema.Float(
         title = _(u'expectedDuration',default="Expected duration"),
-        required = True,
+        required = False,
     )
 
     expectedCost = schema.Int(
         title = _(u"expectedCost", default="expected cost"),
         description = u'',
-        required = True,
+        required = False,
     )
     
     effectiveDuration = schema.Float(
         title = _(u"effectiveDuration", default="effective duration"),
-        required = True,
+        required = False,
     )
     
     effectiveCost = schema.Int(
-        title=_(u"effectiveCost", default="effective cost")
+        title=_(u"effectiveCost", default="effective cost"),
+        required = False
     )
 
-class Task(Item):
+class Task(Container):
     pass
+
+#class View(grok.View):
+class View(dexterity.DisplayForm):
+    grok.context(ITask)
+    grok.require('zope2.View')
     
+    def getResponseForm(self):
+        import pdb; pdb.set_trace( )
+        fti = getUtility(IDexterityFTI, name='ftw.task.response')
+        adder = queryMultiAdapter((self.context, self.request, fti),
+                              IBrowserPage)
+        return adder.form_instance()
+        
+    def getSubTasks(self):
+        tasks = self.context.getFolderContents(full_objects=True, contentFilter={'portal_type':'ftw.task.task'})
+        return tasks
+    
+    def getResponses(self):
+        responses = self.context.getFolderContents(full_objects=True, contentFilter={'portal_type':'ftw.task.response'})
+        import pdb; pdb.set_trace( )
+        return responses
