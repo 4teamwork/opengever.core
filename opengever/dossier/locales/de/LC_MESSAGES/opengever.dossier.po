@@ -19,7 +19,7 @@ msgstr ""
 #: opengever.dossier/opengever/dossier/profiles/default/types/opengever.dossier.businesscasedossier.xml
 #: opengever.dossier/opengever/dossier/profiles/default/types/opengever.dossier.projectdossier.xml
 msgid "A Dossier contains documents"
-msgstr "???"
+msgstr "Ein Dossier beinhaltet Dokumente"
 
 #. Default: "Business Case Dossier"
 #: opengever.dossier/opengever/dossier/profiles/default/types/opengever.dossier.businesscasedossier.xml
@@ -43,7 +43,7 @@ msgstr "Ablage"
 
 #: opengever.dossier/opengever/dossier/behaviors/dossier.py:65
 msgid "help_comments"
-msgstr "???"
+msgstr ""
 
 #: opengever.dossier/opengever/dossier/behaviors/dossier.py:89
 msgid "help_container_id"
@@ -59,7 +59,7 @@ msgstr "Art des Behälters, in dem ein Dossier in Papierform abgelegt ist"
 
 #: opengever.dossier/opengever/dossier/behaviors/dossier.py:53
 msgid "help_end"
-msgstr "???"
+msgstr ""
 
 #: opengever.dossier/opengever/dossier/behaviors/dossier.py:33
 msgid "help_keywords"
@@ -71,7 +71,7 @@ msgstr "Anzahl Behälter, die ein (grosses) Dossier in Papierform enthalten"
 
 #: opengever.dossier/opengever/dossier/behaviors/dossier.py:45
 msgid "help_start"
-msgstr "???"
+msgstr ""
 
 #: opengever.dossier/opengever/dossier/behaviors/dossier.py:59
 msgid "help_volume_number"
