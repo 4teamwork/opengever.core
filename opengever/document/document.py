@@ -105,6 +105,9 @@ class IDocumentSchema(form.Schema):
 
 class Document(Item):
 
+    # description should always be a string
+    description = u''
+
     def Title(self):
         title = Item.Title(self)
         if IWorkingCopy.providedBy(self):
