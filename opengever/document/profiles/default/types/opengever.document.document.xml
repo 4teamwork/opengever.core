@@ -72,4 +72,23 @@
           condition_expr="" visible="False">
   </action>
 
+  <!-- actions for staging -->
+  <!--
+      <action title="Checkout" action_id="checkout_document" category="object"
+      url_expr="string:${object_url}/@@document-checkout"
+      condition_expr="python:path('object/@@document-staging-control').manager().checkin_allowed" visible="True">
+      <permission value="CMFEditions: Checkout to location"/>
+      </action>
+      <action title="Checkin" action_id="checkin_document" category="object"
+      url_expr="string:${object_url}/@@document-checkin"
+      condition_expr="python:path('object/@@document-staging-control').manager().checkin_allowed" visible="True">
+      <permission value="CMFEditions: Apply version control"/>
+      </action>
+      <action title="Cancel Checkout" action_id="cancel_document_checkout" category="object"
+      url_expr="string:${object_url}/@@document-cancel-checkout"
+      condition_expr="python:path('object/@@document-staging-control').manager().cancel_allowed" visible="True">
+      <permission value="CMFEditions: Apply version control"/>
+      </action>
+  -->
+
 </object>

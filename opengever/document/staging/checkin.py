@@ -1,4 +1,6 @@
 
+import os
+
 from five import grok
 from zope.interface import Interface
 from zope import schema
@@ -11,6 +13,7 @@ from plone.z3cform import layout
 
 from opengever.document import _
 from opengever.document.staging.manager import ICheckinCheckoutManager
+from opengever.document.document import IDocumentSchema
 
 
 class NoItemsSelected(Exception):
@@ -122,3 +125,21 @@ class CheckinDocuments(layout.FormWrapper, grok.CodeView):
                 redirect_url = '.'
             return response.redirect(redirect_url)
 
+
+
+class CheckinSingleDocument(grok.CodeView):
+    grok.context(IDocumentSchema)
+    grok.name('document-checkin')
+
+    def render(self):
+        response = self.request.RESPONSE
+        parent = aq_parent( aq_inner( self.context ) )
+        path = os.path.join(
+            parent.absolute_url(),
+            'checkin_documents',
+            '?paths:list=%s&orig_template=%s%%23documents' % (
+                '/'.join(self.context.getPhysicalPath()),
+                parent.absolute_url()
+                )
+            )
+        return response.redirect(path)

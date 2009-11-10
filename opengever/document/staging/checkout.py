@@ -1,4 +1,7 @@
 
+import os
+
+from Acquisition import aq_inner, aq_parent
 from five import grok
 from zope.interface import Interface
 from zope import schema
@@ -11,6 +14,7 @@ from Products.statusmessages.interfaces import IStatusMessage
 
 from opengever.document import _
 from opengever.document.staging.manager import ICheckinCheckoutManager
+from opengever.document.document import IDocumentSchema
 
 
 class NoItemsSelected(Exception):
@@ -120,4 +124,22 @@ class CheckoutDocuments(layout.FormWrapper, grok.CodeView):
             if not redirect_url:
                 redirect_url = '.'
             return response.redirect(redirect_url)
+
+
+class CheckoutSingleDocument(grok.CodeView):
+    grok.context(IDocumentSchema)
+    grok.name('document-checkout')
+
+    def render(self):
+        response = self.request.RESPONSE
+        parent = aq_parent( aq_inner( self.context ) )
+        path = os.path.join(
+            parent.absolute_url(),
+            'checkout_documents',
+            '?paths:list=%s&orig_template=%s%%23documents' % (
+                '/'.join(self.context.getPhysicalPath()),
+                parent.absolute_url()
+                )
+            )
+        return response.redirect(path)
 
