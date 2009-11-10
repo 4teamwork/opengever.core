@@ -32,3 +32,19 @@ msgstr "Dossiers"
 msgid "documents"
 msgstr "Dokumente"
 
+msgid "tasks"
+msgstr "Aufgaben"
+
+msgid "overview"
+msgstr "Übersicht"
+
+msgid "events"
+msgstr "Termine"
+
+msgid "journal"
+msgstr "Journal"
+
+msgid "sharing"
+msgstr "Beteiligte"
+
+
