@@ -163,6 +163,8 @@ def SearchableText( obj ):
     searchable = []
     for field in fields:
         data = field.get( context )
+        if not data:
+            continue
         if INamedFileField.providedBy( field ):
             # we need to convert the file data to string, so we can
             # index it
