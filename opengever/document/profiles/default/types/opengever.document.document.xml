@@ -67,6 +67,9 @@
   </action>
 
   <!-- disable some old actions -->
-  <action action_id="versions_history_form" remove="True" category="object" />
+  <action title="Versions" action_id="versions_history_form" category="object"
+          url_expr="string:${object_url}/versions_history_form"
+          condition_expr="" visible="False">
+  </action>
 
 </object>
