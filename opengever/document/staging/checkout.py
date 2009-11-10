@@ -47,7 +47,7 @@ class CheckoutCommentForm(form.Form):
 
     def checkout_object(self, obj, comment):
         manager = ICheckinCheckoutManager(obj)
-        manager.checkout(comment, show_status_message=False)
+        manager.checkout(comment, show_status_message=True)
 
     @property
     def objects(self):

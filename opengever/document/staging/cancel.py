@@ -17,7 +17,7 @@ class CancelCheckout(grok.CodeView):
         if len(objects)>0:
             for obj in objects:
                 manager = ICheckinCheckoutManager(obj)
-                manager.cancel()
+                manager.cancel(show_status_message=True)
         else:
             msg = _(u'You have not selected any documents')
             IStatusMessage(self.request).addStatusMessage(msg, type='error')
