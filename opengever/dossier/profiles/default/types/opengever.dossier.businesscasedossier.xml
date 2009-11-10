@@ -68,4 +68,9 @@
        condition_expr="" url_expr="string:#" visible="True">
      <permission value="View"/>
     </action>
+    <action title="Add 10 documents" action_id="createLotsOfDocuments"
+       category="object" condition_expr=""
+       url_expr="string:${object_url}/createLotsOfDocuments" visible="True">
+     <permission value="View"/>
+    </action>    
 </object>
