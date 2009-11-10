@@ -88,8 +88,6 @@ class CheckinCheckoutManager(grok.Adapter):
         comment = comment or ''
         context = aq_inner(self.context)
         if not self.checkout_allowed:
-            raise CheckOutNotAllowed
-        if not self.checkout_allowed:
             if show_status_message:
                 msg = _(u'Could not checkout: ${title}, checkout not allowed',
                         mapping={'title':self.context.Title()})
