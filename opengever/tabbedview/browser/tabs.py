@@ -5,7 +5,7 @@ from five import grok
 from ftw.table import helper
 
 
-class OpengeverTab(grok.View, BaseListingView):
+class OpengeverListingTab(grok.View, BaseListingView):
     grok.context(ITabbedView)
     grok.template('generic')
     
@@ -13,10 +13,11 @@ class OpengeverTab(grok.View, BaseListingView):
     
     columns = (
                 ('', helper.draggable),
-               ('', helper.path_checkbox),
-              ('Title','sortable_title', helper.linked),
-              ('modified', helper.readable_date), 
-              'Creator')
+                ('', helper.path_checkbox),
+                ('Title', 'sortable_title', helper.linked),
+                ('modified', helper.readable_date), 
+                'Creator'
+               )
     
     @property
     def view_name(self):
@@ -26,15 +27,21 @@ class OpengeverTab(grok.View, BaseListingView):
     sort_on = 'modified'
     sort_order = 'reverse'    
 
-class Documents(OpengeverTab):
+class OpengeverTab(grok.View):
+    grok.context(ITabbedView)
+
+class Documents(OpengeverListingTab):
     grok.name('tabbedview_view-documents')
     
     types = ['opengever.document.document',]
     
-class Dossiers(OpengeverTab):
+class Dossiers(OpengeverListingTab):
     grok.name('tabbedview_view-dossiers')
     
     types = ['opengever.dossier.projectdossier', 'opengever.dossier.businesscasedossier',]
 
+# class Overview(OpengeverTab):
+#     grok.name('tabbedview_view-overview')
+#     grok.template('overview')
 
         
