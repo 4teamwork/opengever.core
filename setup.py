@@ -24,7 +24,7 @@ setup(name='opengever.document',
       zip_safe=False,
       install_requires=[
           'setuptools',
-          'Products.ARFilePreview'
+          'Products.ARFilePreview',
           'Products.CMFCore',
           'Products.MimetypesRegistry',
           'collective.filepreviewbehavior',
