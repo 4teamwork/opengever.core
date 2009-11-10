@@ -27,8 +27,8 @@ class OpengeverListingTab(grok.View, BaseListingView):
     sort_on = 'modified'
     sort_order = 'reverse'    
 
-class OpengeverTab(grok.View):
-    grok.context(ITabbedView)
+class OpengeverTab(object):
+    pass
 
 class Documents(OpengeverListingTab):
     grok.name('tabbedview_view-documents')
