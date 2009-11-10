@@ -66,12 +66,18 @@ class CheckinCheckoutManager(grok.Adapter):
     def checkout_allowed(self):
         if not self.context.restrictedTraverse('iterate_control').checkout_allowed():
             return False
+        pw = self.context.portal_workflow
+        if pw.getInfoFor(self.context, 'review_state') != 'draft':
+            return False
         # XXX implement me
         return True
 
     @property
     def checkin_allowed(self):
         if not self.context.restrictedTraverse('iterate_control').checkin_allowed():
+            return False
+        pw = self.context.portal_workflow
+        if pw.getInfoFor(self.context, 'review_state') != 'working_copy':
             return False
         # XXX implement me
         return True
@@ -80,6 +86,9 @@ class CheckinCheckoutManager(grok.Adapter):
     def cancel_allowed(self):
         iterate_control = self.context.restrictedTraverse('iterate_control')
         if not iterate_control.cancel_allowed():
+            return False
+        pw = self.context.portal_workflow
+        if pw.getInfoFor(self.context, 'review_state') != 'working_copy':
             return False
         # XXX implement me
         return True
@@ -103,6 +112,17 @@ class CheckinCheckoutManager(grok.Adapter):
         # check it out
         policy = ICheckinCheckoutPolicy(context)
         wc = policy.checkout(locator())
+        # update workflow states
+        pw = context.portal_workflow
+        pw.doActionFor(context, 'check_out')
+        pw.doActionFor(wc, 'use_as_working_copy')
+        # set the Editor role on working copy
+        current_user = str(wc.portal_membership.getAuthenticatedMember())
+        other_users = filter(lambda user:user != current_user, [user for user, roles in wc.get_local_roles()])
+        wc.manage_delLocalRoles(other_users)
+        wc.manage_setLocalRoles(current_user, ('Editor',))
+        # add local roles block on working copy
+        setattr(wc, '__ac_local_roles_block__', True)
         # we need to reindex context (eliminate some side effects)
         context.reindexObject()
         wc.reindexObject()
@@ -127,6 +147,9 @@ class CheckinCheckoutManager(grok.Adapter):
         # check it in
         policy = ICheckinCheckoutPolicy(context)
         baseline = policy.checkin(comment)
+        # update workflow states
+        pw = context.portal_workflow
+        pw.doActionFor(baseline, 'check_in')
         baseline.reindexObject()
         # create status message
         if show_status_message:
@@ -149,6 +172,7 @@ class CheckinCheckoutManager(grok.Adapter):
         # cancel checkout
         policy = ICheckinCheckoutPolicy(context)
         baseline = policy.cancelCheckout()
+        baseline.portal_workflow.doActionFor(baseline, 'cancel_checkout')
         baseline.reindexObject()
         if show_status_message:
             msg = _(u'Checkout canceled: ${title}',
