@@ -119,12 +119,12 @@ msgstr "Archivtaugliche Version der Originaldatei"
 #. Default: "Describe, why you checkin the selected documents"
 #: opengever.document/opengever/document/staging/checkin.py:29
 msgid "help_checkin_journal_comment"
-msgstr "Kommentieren Sie, wieso Sie diese Dokumente auschecken"
+msgstr "Was für Änderungen haben Sie an den ausgewählten Dokumenten vorgenommen?"
 
 #. Default: "Describe, why you checkout the selected documents"
 #: opengever.document/opengever/document/staging/checkout.py:28
 msgid "help_checkout_journal_comment"
-msgstr "Was für Änderungen haben Sie an den ausgewählten Dokumenten vorgenommen?"
+msgstr "Kommentieren Sie, wieso Sie diese Dokumente auschecken"
 
 #: opengever.document/opengever/document/document.py:101
 msgid "help_delivery_date"
