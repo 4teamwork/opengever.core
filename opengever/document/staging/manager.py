@@ -94,7 +94,7 @@ class CheckinCheckoutManager(grok.Adapter):
                 IStatusMessage(self.request).addStatusMessage(msg, type='error')
                 return
             else:
-                raise CheckoxutNotAllowed
+                raise CheckoutNotAllowed
         # get the plone.app.iterate containers
         checkout_view = self.context.restrictedTraverse('content-checkout')
         containers = list(checkout_view.containers())
