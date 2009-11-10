@@ -60,17 +60,30 @@
             condition_expr="" visible="True">
         <permission value="View"/>
     </action>
-    <action title="Dossiers" action_id="dossiers" category="arbeitsraum-tabs"
+    
+    <!-- Tabbedview tabs-->
+    <action title="Overview" action_id="overview" category="arbeitsraum-tabs"
        condition_expr="" url_expr="string:#" visible="True">
      <permission value="View"/>
-    </action>
+    </action> 
+    <action title="Tasks" action_id="tasks" category="arbeitsraum-tabs"
+       condition_expr="" url_expr="string:#" visible="True">
+     <permission value="View"/>
+    </action>  
     <action title="Documents" action_id="documents" category="arbeitsraum-tabs"
        condition_expr="" url_expr="string:#" visible="True">
      <permission value="View"/>
     </action>
-    <action title="Add 10 documents" action_id="createLotsOfDocuments"
-       category="object" condition_expr=""
-       url_expr="string:${object_url}/createLotsOfDocuments" visible="True">
+    <action title="Events" action_id="events" category="arbeitsraum-tabs"
+       condition_expr="" url_expr="string:#" visible="True">
      <permission value="View"/>
-    </action>    
+    </action> 
+    <action title="Journal" action_id="journal" category="arbeitsraum-tabs"
+       condition_expr="" url_expr="string:#" visible="True">
+     <permission value="View"/>
+    </action>
+    <action title="Sharing" action_id="sharing" category="arbeitsraum-tabs"
+       condition_expr="" url_expr="string:#" visible="True">
+     <permission value="View"/>
+    </action>
 </object>
