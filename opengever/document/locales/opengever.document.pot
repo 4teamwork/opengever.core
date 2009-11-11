@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2009-11-11 07:57+0000\n"
+"POT-Creation-Date: 2009-11-11 14:18+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,10 +16,6 @@ msgstr ""
 "Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: opengever.document\n"
-
-#: opengever.document/opengever/document/profiles/default/types/opengever.document.document.xml
-msgid "A Document"
-msgstr ""
 
 #: opengever.document/opengever/document/profiles/default/actions.xml
 msgid "Cancel"
@@ -81,6 +77,11 @@ msgstr ""
 msgid "button_checkout"
 msgstr ""
 
+#. Default: "Create"
+#: opengever.document/opengever/document/docucomposer.py:52
+msgid "button_create"
+msgstr ""
+
 #. Default: "Send"
 #: opengever.document/opengever/document/mailing.py:184
 msgid "button_send"
@@ -99,6 +100,11 @@ msgstr ""
 #. Default: "Checkout Documents"
 #: opengever.document/opengever/document/staging/checkout.py:42
 msgid "heading_checkout_comment_form"
+msgstr ""
+
+#. Default: "DocuComposer"
+#: opengever.document/opengever/document/docucomposer.py:50
+msgid "heading_docucomposer_wizard_form"
 msgstr ""
 
 #. Default: "Send as email"
@@ -122,6 +128,14 @@ msgstr ""
 
 #: opengever.document/opengever/document/document.py:101
 msgid "help_delivery_date"
+msgstr ""
+
+#: opengever.document/opengever/document/docucomposer.py:41
+msgid "help_docucomposer_filename"
+msgstr ""
+
+#: opengever.document/opengever/document/docucomposer.py:35
+msgid "help_docucomposer_wizard"
 msgstr ""
 
 #: opengever.document/opengever/document/document.py:47
@@ -194,6 +208,11 @@ msgstr ""
 msgid "label_delivery_date"
 msgstr ""
 
+#. Default: "DocuComposer Template"
+#: opengever.document/opengever/document/docucomposer.py:34
+msgid "label_docucomposer_template"
+msgstr ""
+
 #. Default: "Document Date"
 #: opengever.document/opengever/document/document.py:46
 msgid "label_document_date"
@@ -247,5 +266,10 @@ msgstr ""
 #. Default: "Thumbnail"
 #: opengever.document/opengever/document/document.py:81
 msgid "label_thumbnail"
+msgstr ""
+
+#. Default: "Filename"
+#: opengever.document/opengever/document/docucomposer.py:40
+msgid "lable_docucomposer_filename"
 msgstr ""
 

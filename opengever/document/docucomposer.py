@@ -31,7 +31,7 @@ DOCUCOMPOSER_TEMPLATES_VOCABULARY = vocabulary.SimpleVocabulary([
 
 class IDocuComposerWizard(Interface):
     template = schema.Choice(
-        title = _(u'label_docucomposer_wizard', default=u'DocuComposer Template'),
+        title = _(u'label_docucomposer_template', default=u'DocuComposer Template'),
         description = _(u'help_docucomposer_wizard', default=u''),
         vocabulary = DOCUCOMPOSER_TEMPLATES_VOCABULARY,
         required = True

@@ -3,7 +3,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2009-11-11 07:57+0000\n"
+"POT-Creation-Date: 2009-11-11 14:18+0000\n"
 "PO-Revision-Date: 2009-01-01 10:00+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: Jonas Baumann <j.baumann@4teamwork.ch>\n"
@@ -14,10 +14,6 @@ msgstr ""
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: opengever.document\n"
 "X-Is-Fallback-For: de-at de-li de-lu de-ch de-de\n"
-
-#: opengever.document/opengever/document/profiles/default/types/opengever.document.document.xml
-msgid "A Document"
-msgstr ""
 
 #. Default: "Cancel"
 #: opengever.document/opengever/document/profiles/default/actions.xml
@@ -83,6 +79,11 @@ msgstr "Checkin"
 msgid "button_checkout"
 msgstr "Checkout"
 
+#. Default: "Create"
+#: opengever.document/opengever/document/docucomposer.py:52
+msgid "button_create"
+msgstr "Erstellen"
+
 #. Default: "Send"
 #: opengever.document/opengever/document/mailing.py:184
 msgid "button_send"
@@ -102,6 +103,11 @@ msgstr "Dokumente einchecken"
 #: opengever.document/opengever/document/staging/checkout.py:42
 msgid "heading_checkout_comment_form"
 msgstr "Dokumente auschecken"
+
+#. Default: "DocuComposer"
+#: opengever.document/opengever/document/docucomposer.py:50
+msgid "heading_docucomposer_wizard_form"
+msgstr "DocuComposer"
 
 #. Default: "Send as email"
 #: opengever.document/opengever/document/mailing.py:182
@@ -126,6 +132,14 @@ msgstr "Kommentieren Sie, wieso Sie diese Dokumente auschecken"
 #: opengever.document/opengever/document/document.py:101
 msgid "help_delivery_date"
 msgstr "Datum, an dem das Dokument über den Korrespondenzweg versandt worden ist"
+
+#: opengever.document/opengever/document/docucomposer.py:41
+msgid "help_docucomposer_filename"
+msgstr ""
+
+#: opengever.document/opengever/document/docucomposer.py:35
+msgid "help_docucomposer_wizard"
+msgstr ""
 
 #: opengever.document/opengever/document/document.py:47
 msgid "help_document_date"
@@ -202,6 +216,11 @@ msgstr "Journal Kommentar"
 msgid "label_delivery_date"
 msgstr "Ausgangsdatum"
 
+#. Default: "DocuComposer Template"
+#: opengever.document/opengever/document/docucomposer.py:34
+msgid "label_docucomposer_template"
+msgstr "Vorlage"
+
 #. Default: "Document Date"
 #: opengever.document/opengever/document/document.py:46
 msgid "label_document_date"
@@ -256,5 +275,10 @@ msgstr "Betreff"
 #: opengever.document/opengever/document/document.py:81
 msgid "label_thumbnail"
 msgstr "Kurzbild"
+
+#. Default: "Filename"
+#: opengever.document/opengever/document/docucomposer.py:40
+msgid "lable_docucomposer_filename"
+msgstr "Dateiname"
 
 
