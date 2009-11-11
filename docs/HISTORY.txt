@@ -6,6 +6,9 @@ Changelog
 ---
 
 * Issue #36: Dokument: External Editor für Dokument-Datei
+  [11.11.2009, jbaumann]
+
+* Issue #36: Dokument: External Editor für Dokument-Datei
   [11.11.2009, pgross]
 
 * Issue #120: RepositoryFolder übersetzen
