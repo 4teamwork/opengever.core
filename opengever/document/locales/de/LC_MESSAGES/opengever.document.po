@@ -3,7 +3,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2009-11-09 20:07+0000\n"
+"POT-Creation-Date: 2009-11-11 07:57+0000\n"
 "PO-Revision-Date: 2009-01-01 10:00+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: Jonas Baumann <j.baumann@4teamwork.ch>\n"
@@ -15,16 +15,20 @@ msgstr ""
 "Domain: opengever.document\n"
 "X-Is-Fallback-For: de-at de-li de-lu de-ch de-de\n"
 
+#: opengever.document/opengever/document/profiles/default/types/opengever.document.document.xml
+msgid "A Document"
+msgstr ""
+
 #. Default: "Cancel"
 #: opengever.document/opengever/document/profiles/default/actions.xml
 msgid "Cancel"
 msgstr "Zurücksetzen"
 
-#: opengever.document/opengever/document/staging/manager.py:135
+#: opengever.document/opengever/document/staging/manager.py:156
 msgid "Checked in: ${title}"
 msgstr "Dokument eingecheckt: ${title}"
 
-#: opengever.document/opengever/document/staging/manager.py:113
+#: opengever.document/opengever/document/staging/manager.py:131
 msgid "Checked out: ${title}"
 msgstr "Dokument ausgecheckt: ${title}"
 
@@ -38,21 +42,25 @@ msgstr "Einchecken"
 msgid "Checkout"
 msgstr "Auschecken"
 
-#: opengever.document/opengever/document/staging/manager.py:156
+#: opengever.document/opengever/document/staging/manager.py:178
 msgid "Checkout canceled: ${title}"
 msgstr "Zurückgesetzt: ${title}"
 
-#: opengever.document/opengever/document/staging/manager.py:145
+#: opengever.document/opengever/document/staging/manager.py:166
 msgid "Could not cancel checkin: ${title}, not allowed"
 msgstr "Zurücksetzen nicht möglich: ${title}"
 
-#: opengever.document/opengever/document/staging/manager.py:123
+#: opengever.document/opengever/document/staging/manager.py:141
 msgid "Could not checkin: ${title}, checkin not allowed"
 msgstr "Einchecken nicht möglich: ${title}"
 
-#: opengever.document/opengever/document/staging/manager.py:94
+#: opengever.document/opengever/document/staging/manager.py:101
 msgid "Could not checkout: ${title}, checkout not allowed"
 msgstr "Auschecken nicht möglich: ${title}"
+
+#: opengever.document/opengever/document/profiles/default/types/opengever.document.document.xml
+msgid "Document"
+msgstr "Dokument"
 
 #. Default: "Send as email"
 #: opengever.document/opengever/document/profiles/default/actions.xml
@@ -60,18 +68,18 @@ msgid "Send as email"
 msgstr "Als E-Mail versenden"
 
 #: opengever.document/opengever/document/staging/cancel.py:22
-#: opengever.document/opengever/document/staging/checkin.py:115
-#: opengever.document/opengever/document/staging/checkout.py:114
+#: opengever.document/opengever/document/staging/checkin.py:118
+#: opengever.document/opengever/document/staging/checkout.py:118
 msgid "You have not selected any documents"
 msgstr "Sie haben keine Dokumente angewählt."
 
 #. Default: "Checkin"
-#: opengever.document/opengever/document/staging/checkin.py:41
+#: opengever.document/opengever/document/staging/checkin.py:44
 msgid "button_checkin"
 msgstr "Checkin"
 
 #. Default: "Checkout"
-#: opengever.document/opengever/document/staging/checkout.py:40
+#: opengever.document/opengever/document/staging/checkout.py:44
 msgid "button_checkout"
 msgstr "Checkout"
 
@@ -80,29 +88,18 @@ msgstr "Checkout"
 msgid "button_send"
 msgstr "Senden"
 
-#. Default: "A Document"
-#: opengever.document/opengever/document/profiles/default/types/opengever.document.document.xml
-msgid "document_type_description"
-msgstr "Ein Dokument"
-
-#. Default: "Document"
-#: opengever.document/opengever/document/profiles/default/types/opengever.document.document.xml
-#, fuzzy
-msgid "document_type_name"
-msgstr "Dokument"
-
 #. Default: "Dates"
 #: opengever.document/opengever/document/document.py:32
 msgid "fieldset_dates"
 msgstr "Daten"
 
 #. Default: "Checkin Documents"
-#: opengever.document/opengever/document/staging/checkin.py:39
+#: opengever.document/opengever/document/staging/checkin.py:42
 msgid "heading_checkin_comment_form"
 msgstr "Dokumente einchecken"
 
 #. Default: "Checkout Documents"
-#: opengever.document/opengever/document/staging/checkout.py:38
+#: opengever.document/opengever/document/staging/checkout.py:42
 msgid "heading_checkout_comment_form"
 msgstr "Dokumente auschecken"
 
@@ -117,12 +114,12 @@ msgid "help_archival_file"
 msgstr "Archivtaugliche Version der Originaldatei"
 
 #. Default: "Describe, why you checkin the selected documents"
-#: opengever.document/opengever/document/staging/checkin.py:29
+#: opengever.document/opengever/document/staging/checkin.py:32
 msgid "help_checkin_journal_comment"
 msgstr "Was für Änderungen haben Sie an den ausgewählten Dokumenten vorgenommen?"
 
 #. Default: "Describe, why you checkout the selected documents"
-#: opengever.document/opengever/document/staging/checkout.py:28
+#: opengever.document/opengever/document/staging/checkout.py:32
 msgid "help_checkout_journal_comment"
 msgstr "Kommentieren Sie, wieso Sie diese Dokumente auschecken"
 
@@ -146,7 +143,7 @@ msgstr "Referenz auf das entsprechende Dossier des Absenders"
 
 #: opengever.document/opengever/document/mailing.py:173
 msgid "help_message"
-msgstr "???"
+msgstr ""
 
 #. Default: "Available in paper form only"
 #: opengever.document/opengever/document/document.py:61
@@ -169,16 +166,16 @@ msgstr "Datum, an dem das Dokument über den Korrespondenzweg angekommen ist"
 
 #: opengever.document/opengever/document/mailing.py:164
 msgid "help_receivers"
-msgstr "???"
+msgstr ""
 
 #: opengever.document/opengever/document/mailing.py:169
 msgid "help_subject"
-msgstr "???"
+msgstr ""
 
 #. Default: ""
 #: opengever.document/opengever/document/document.py:82
 msgid "help_thumbnail"
-msgstr "???"
+msgstr ""
 
 #. Default: "Mails sent"
 #: opengever.document/opengever/document/mailing.py:215
@@ -191,12 +188,12 @@ msgid "label_archival_file"
 msgstr "Archivierte Datei"
 
 #. Default: "Journal Comment"
-#: opengever.document/opengever/document/staging/checkin.py:27
+#: opengever.document/opengever/document/staging/checkin.py:30
 msgid "label_checkin_journal_comment"
 msgstr "Journal Kommentar"
 
 #. Default: "Journal Comment"
-#: opengever.document/opengever/document/staging/checkout.py:26
+#: opengever.document/opengever/document/staging/checkout.py:30
 msgid "label_checkout_journal_comment"
 msgstr "Journal Kommentar"
 

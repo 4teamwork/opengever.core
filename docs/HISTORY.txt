@@ -5,6 +5,9 @@ Changelog
 0.2
 ---
 
+* Übersetzungen aktualisiert
+  [11.11.2009, jbaumann]
+
 * Issue #33: Checkout / Checkin
   implemented checkin and revert
   [09.11.2009, jbaumann]
