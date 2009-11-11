@@ -1,6 +1,7 @@
 from datetime import datetime
 import re
 
+from AccessControl import SecurityManagement
 from five import grok
 from zope import component
 from zope.interface import Interface
@@ -11,6 +12,7 @@ from z3c.form import form, field, button
 from plone.i18n.normalizer.interfaces import IIDNormalizer
 from plone.dexterity.interfaces import IDexterityContent
 from plone.z3cform import layout
+from Products.CMFCore.utils import getToolByName
 
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.document.document import IDocumentSchema
@@ -96,9 +98,14 @@ class CreateDocumentWithFile(grok.CodeView):
         filename = self.request.get('fileName')
         current_user = self.request.get('userid')
 
+        # CHANGE SECURITY
+        # XXX XXX
+        acl_users = getToolByName(self.context, 'acl_users')
+        user = acl_users.getUser(current_user)
+        SecurityManagement.newSecurityManager(self.request, user)
 
         #current_user = str(context.portal_membership.getAuthenticatedMember())
-        self.context.plone_utils.changeOwnershipOf(self.context, current_user)
+        #self.context.plone_utils.changeOwnershipOf(self.context, current_user)
 
         generated_id = component.getUtility(IIDNormalizer).normalize(title)
         id = generated_id
