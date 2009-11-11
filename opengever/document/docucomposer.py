@@ -111,7 +111,7 @@ class CreateDocumentWithFile(grok.CodeView):
 
         obj = self.context.get(self.context.invokeFactory(type_name="opengever.document.document", id=id, title=title))
 
-        fields = dict(getFieldsInOrder(IDocumentSchema))
+        fields = dict(schema.getFieldsInOrder(IDocumentSchema))
         fileObj = fields['file']._type(data=uploadFile, filename=filename)
         obj.file = fileObj
         obj.document_date = datetime.now()
