@@ -15,6 +15,7 @@ def setupVarious(context):
         portal._importObjectFromFile(context.openDataFile('registraturplan.zexp'))
 
 	# add some default users
+    regtool = portal.portal_registration
 	try:
 	    regtool.addMember("brigitte.schmid", "demo09")
 	    regtool.addMember("olivier.debenat", "demo09")
