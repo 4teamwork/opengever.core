@@ -116,8 +116,11 @@ class CreateDocumentWithFile(grok.CodeView):
         obj.file = fileObj
         obj.document_date = datetime.now()
 
+        manager = ICheckinCheckoutManager(obj)
+        wc = manager.checkout('', show_status_message=False)
+
         portal = self.context.portal_url.getPortalObject()
         xpr = re.compile('href="(.*?)"')
-        html = portal.externalEditLink_(obj)
+        html = portal.externalEditLink_(wc)
         url = xpr.search(html).groups()[0]
         return url

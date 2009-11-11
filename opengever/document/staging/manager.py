@@ -133,6 +133,7 @@ class CheckinCheckoutManager(grok.Adapter):
             IStatusMessage(self.request).addStatusMessage(msg, type='info')
         # trigger event
         notify(ObjectCheckedOutEvent(context, comment))
+        return wc
 
     def checkin(self, comment='', show_status_message=True):
         context = aq_inner(self.context)
@@ -158,6 +159,7 @@ class CheckinCheckoutManager(grok.Adapter):
             IStatusMessage(self.request).addStatusMessage(msg, type='info')
         # trigger event
         notify(ObjectCheckedInEvent(baseline, comment))
+        return baseline
 
     def cancel(self, show_status_message=True):
         context = aq_inner(self.context)
@@ -179,3 +181,4 @@ class CheckinCheckoutManager(grok.Adapter):
                     mapping={'title':baseline.Title()})
             IStatusMessage(self.request).addStatusMessage(msg, type='info')
         notify(ObjectCheckoutCanceledEvent(baseline))
+        return baseline
