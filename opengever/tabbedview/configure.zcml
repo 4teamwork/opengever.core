@@ -6,6 +6,7 @@
     xmlns:cmf="http://namespaces.zope.org/cmf"
     xmlns:plone="http://namespaces.plone.org/plone"
     xmlns:grok="http://namespaces.zope.org/grok"    
+    xmlns:browser="http://namespaces.zope.org/browser"
     i18n_domain="opengever.tabbedview">
 
     <include file="dependencies.zcml" />
@@ -24,6 +25,13 @@
         for="plone.dexterity.interfaces.IDexterityContent"
         />
 
+        	 <browser:page
+         	for="opengever.dossier.behaviors.dossier.IDossierMarker"
+          name="tabbedview_view-sharing"
+          class=".browser.tabs.Sharing"
+         	permission="zope.Public"
+         	/>
+
     <!-- Register the installation GenericSetup extension profile -->
     <genericsetup:registerProfile
       name="default"
@@ -32,6 +40,5 @@
       description="opengever Tabbed View"
       provides="Products.GenericSetup.interfaces.EXTENSION"
       />
-
 
 </configure>

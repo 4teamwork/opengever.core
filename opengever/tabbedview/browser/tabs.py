@@ -166,71 +166,66 @@ class Overview(grok.View, OpengeverTab):
                                         ))
         return results
 
-# From plone.app.workflow.interfaces import ISharingPageRole
-# from zope.component import getUtilitiesFor, getMultiAdapter
-# from plone.app.workflow.browser.sharing import SharingView
-# 
-# class Sharing(grok.CodeView, OpengeverTab, SharingView):
-#     grok.context(IDossierMarker)
-#     grok.name('tabbedview_view-sharing')
-#     
-#     # we want to define the template in configure.zcml
-#     def render(self, *args, **kwargs):
-#         import pdb;pdb.set_trace()
-#         return super(SharingView, self).__call__(*args, **kwargs)
-# 
-# 
-#     def roles(self):
-#         """Get a list of roles that can be managed.
-# 
-#         Returns a list of dicts with keys:
-# 
-#             - id
-#             - title
-#         """
-#         context = aq_inner(self.context)
-#         portal_membership = getToolByName(context, 'portal_membership')
-# 
-#         pairs = []
-#         has_manage_portal = context.portal_membership.checkPermission('ManagePortal', context)
-#         aviable_roles_for_users = [ u'Editor',u'Reader', u'Contributor', u'Reviewer']
-#         for name, utility in getUtilitiesFor(ISharingPageRole):
-#             if not has_manage_portal and name not in aviable_roles_for_users:
-#                 continue
-#             pairs.append(dict(id = name, title = utility.title))
-# 
-#         pairs.sort(key=lambda x: x["id"])
-#         return pairs
-# 
-# 
-#     def role_settings(self):
-#         context = self.context
-#         results = super(InfoView, self).role_settings()
-# 
-#         if not context.portal_membership.checkPermission('ManagePortal', context):
-#             results = [r for r in results if r['type']!='group']
-# 
-#         return results
-# 
-# 
-#     # @memoize
-#     # def roles(self):
-#     #     """Get a list of roles that can be managed.
-#     #     
-#     #     Returns a list of dicts with keys:
-#     #     
-#     #         - id
-#     #         - title
-#     #     """
-#     #     return [
-#     #         {
-#     #             'id'        : 'Reader',
-#     #             'title'     : 'read',
-#     #         },
-#     #         {
-#     #             'id'        : 'Editor',
-#     #             'title'     : 'write',
-#     #         },
-#     #     ]
+from plone.app.workflow.interfaces import ISharingPageRole
+from zope.component import getUtilitiesFor, getMultiAdapter
+from plone.app.workflow.browser.sharing import SharingView
+from Acquisition import aq_inner
+
+class Sharing(SharingView):
+    
+    template = ViewPageTemplateFile('tabs_templates/sharing.pt')
+
+    def roles(self):
+        """Get a list of roles that can be managed.
+
+        Returns a list of dicts with keys:
+
+            - id
+            - title
+        """
+        context = aq_inner(self.context)
+        portal_membership = getToolByName(context, 'portal_membership')
+
+        pairs = []
+        has_manage_portal = context.portal_membership.checkPermission('ManagePortal', context)
+        aviable_roles_for_users = [ u'Editor',u'Reader', u'Contributor', u'Reviewer']
+        for name, utility in getUtilitiesFor(ISharingPageRole):
+            if not has_manage_portal and name not in aviable_roles_for_users:
+                continue
+            pairs.append(dict(id = name, title = utility.title))
+
+        pairs.sort(key=lambda x: x["id"])
+        return pairs
+
+
+    def role_settings(self):
+        context = self.context
+        results = super(Sharing, self).role_settings()
+
+        if not context.portal_membership.checkPermission('ManagePortal', context):
+            results = [r for r in results if r['type']!='group']
+
+        return results
+
+
+    # @memoize
+    # def roles(self):
+    #     """Get a list of roles that can be managed.
+    #     
+    #     Returns a list of dicts with keys:
+    #     
+    #         - id
+    #         - title
+    #     """
+    #     return [
+    #         {
+    #             'id'        : 'Reader',
+    #             'title'     : 'read',
+    #         },
+    #         {
+    #             'id'        : 'Editor',
+    #             'title'     : 'write',
+    #         },
+    #     ]
 
         

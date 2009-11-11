@@ -1,0 +1,49 @@
+<tal:b i18n:domain="plone">
+
+<table metal:define-macro="user-group-sharing" id="user-group-sharing" class="sharing-listing"
+       summary="Current sharing permissions" 
+       tal:define="available_roles view/roles;
+                   num_columns python:len(available_roles) + 1;
+                   role_settings view/role_settings"
+       i18n:attributes="summary summary_assigned_roles;">
+
+      <thead metal:define-macro="user-group-sharing-head" id="user-group-sharing-head">
+          <tr tal:condition="python:len(role_settings) > 0">
+              <th i18n:translate="label_name">User/Group</th>
+              <th class="nosort"
+                  tal:repeat="role available_roles"
+                  tal:content="role/title" />
+          </tr>
+      </thead>
+
+    <tbody metal:define-macro="user-group-sharing-settings" id="user-group-sharing-settings">
+        <tal:entries repeat="entry role_settings">
+            <tr tal:define="is_group python:entry['type'] == 'group';
+                            disabled python:True;
+                            oddrow repeat/entry/odd;"
+                tal:attributes="class python:oddrow and 'odd' or 'even'">
+                <td>
+                    <img tal:condition="is_group" tal:replace="structure context/group.gif" /> 
+                    <img tal:condition="not:is_group" tal:replace="structure context/user.gif" /> 
+                    <a tal:attributes="href string:${context/portal_url}/author/${entry/id}" tal:omit-tag="is_group">
+					<span tal:replace="entry/title" />
+					</a>
+
+                </td>
+                <td class="listingCheckbox"
+                    tal:repeat="role available_roles">
+                    <tal:block define="entry_role python:entry['roles'][role['id']]">
+                        <img tal:condition="python:entry_role == 'global'" tal:replace="structure context/site_icon.gif">
+                        <img tal:condition="python:entry_role == 'acquired'" tal:replace="structure context/confirm_icon.gif">
+                        <tal:block condition="python:entry_role in (True,)">
+                          <img tal:replace="structure context/confirm_icon.gif">
+                        </tal:block>
+                    </tal:block>
+                </td>
+            </tr>
+        </tal:entries>
+    </tbody>
+    
+</table>
+
+</tal:b>
