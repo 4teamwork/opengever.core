@@ -5,6 +5,9 @@ Changelog
 0.2
 ---
 
+* Issue #119: Action "Mit externer Anwendung bearbeiten" nur bei Document anzeigen
+  [11.11.2009, jbaumann]
+
 * Übersetzungen aktualisiert
   [11.11.2009, jbaumann]
 

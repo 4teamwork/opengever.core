@@ -72,6 +72,13 @@
           condition_expr="" visible="False">
   </action>
 
+  <!-- external editor -->
+  <action title="Edit with external application" action_id="extedit" category="object"
+          url_expr="string:$object_url/external_edit"
+          condition_expr="object/externalEditorEnabled" visible="True">
+    <permission value="Modify portal content"/>
+  </action>
+
   <!-- actions for staging -->
   <!--
       <action title="Checkout" action_id="checkout_document" category="object"
