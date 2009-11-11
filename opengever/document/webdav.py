@@ -25,7 +25,16 @@ class DocumentReadFile(filerepresentation.DefaultReadFile, grok.Adapter):
     def _getStream(self):
         """Construct message on demand
         """
-        return self.filefield.open()
+        streaming_supported = False
+        try:
+            self.filefield.open
+            streaming_supported = True
+        except AttributeError:
+            pass
+        if streaming_supported:
+            return self.filefield.open()
+        else:
+            return StringIO(self.filefield.data)
 
     def _getMessage(self):
         raise NotImplemented
@@ -43,7 +52,7 @@ class DocumentReadFile(filerepresentation.DefaultReadFile, grok.Adapter):
         return self.filefield.contentType
 
     def size(self):
-        return self.filefield.size
+        return self.filefield.getSize()
 
 class DocumentWriteFile(filerepresentation.DefaultWriteFile, grok.Adapter):
     grok.implements(IRawWriteFile)
