@@ -4,7 +4,7 @@
 
   <!-- Basic metadata -->
   <property name="title" i18n:translate="">Document</property>
-  <property name="description" i18n:translate="">A Document</property>
+  <property name="description" i18n:translate=""></property>
   <property name="content_icon">document_icon.gif</property>
   <property name="allow_discussion">False</property>
   <property name="global_allow">False</property>

@@ -5,6 +5,9 @@ Changelog
 0.2
 ---
 
+* Issue #120: RepositoryFolder übersetzen
+  [11.11.2009, jbaumann]
+
 * Issue #119: Action "Mit externer Anwendung bearbeiten" nur bei Document anzeigen
   [11.11.2009, jbaumann]
 
