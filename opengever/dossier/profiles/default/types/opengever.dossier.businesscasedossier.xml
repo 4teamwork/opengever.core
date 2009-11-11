@@ -55,11 +55,7 @@
     url_expr="string:${object_url}/edit" visible="True">
   <permission value="Modify portal content"/>
  </action>
-    <action title="Journal" action_id="journal" category="object"
-            url_expr="string:${object_url}/@@journal"
-            condition_expr="" visible="True">
-        <permission value="View"/>
-    </action>
+
     
     <!-- Tabbedview tabs-->
     <action title="Overview" action_id="overview" category="arbeitsraum-tabs"
