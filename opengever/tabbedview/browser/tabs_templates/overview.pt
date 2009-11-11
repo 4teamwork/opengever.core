@@ -1,0 +1,18 @@
+<!--TODO: refactor using viewlets-->
+<tal:block i18n:domain="opengever.tabbedview" tal:define="boxes view/boxes">
+    <div tal:repeat="box boxes" class="box" tal:attributes="id string:${box/id}Box">
+        <h2 i18n:translate="" tal:content="box/id"></h2>
+        <tal:items define="items box/content">
+            <ul tal:condition="items">
+                <li tal:repeat="item items">
+                    <img tal:attributes="src item/getIcon" />
+                    <a href="" tal:attributes="href item/getURL|nothing" tal:omit-tag="not: item/getURL|nothing"><span tal:content="item/Title" /></a>
+                </li>
+                <li class="moreLink">
+                    <a tal:attributes="href string:#${box/id}-tab" i18n:translate="">show all</a>
+                </li>
+            </ul>
+            <span tal:condition="not: items" i18n:translate="no_content" /> 
+        </tal:items>
+    </div>
+</tal:block>
