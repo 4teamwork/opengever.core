@@ -25,6 +25,7 @@ setup(name='opengever.examplecontent',
       zip_safe=False,
       install_requires=[
           'setuptools',
+          'opengever.zugclient'
           # -*- Extra requirements: -*-
       ],
       entry_points="""
