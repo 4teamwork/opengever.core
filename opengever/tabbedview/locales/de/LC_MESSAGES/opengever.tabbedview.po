@@ -56,4 +56,16 @@ msgstr "Keine Inhalte vorhanden"
 msgid "show all"
 msgstr "Alle Anzeigen"
 
+msgid "title"
+msgstr "Titel"
+
+msgid "actor"
+msgstr "Akteur"
+
+msgid "time"
+msgstr "Datum"
+
+msgid "comment"
+msgstr "Kommentar"
+
 
