@@ -29,6 +29,9 @@ msgstr "Änderungsdatum"
 msgid "dossiers"
 msgstr "Dossiers"
 
+msgid "subdossiers"
+msgstr "Subdossiers"
+
 msgid "documents"
 msgstr "Dokumente"
 
@@ -46,5 +49,11 @@ msgstr "Journal"
 
 msgid "sharing"
 msgstr "Beteiligte"
+
+msgid "no_content"
+msgstr "Keine Inhalte vorhanden"
+
+msgid "show all"
+msgstr "Alle Anzeigen"
 
 
