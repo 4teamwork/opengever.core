@@ -1,6 +1,7 @@
 
 import os
 
+from Acquisition import aq_inner, aq_parent
 from five import grok
 from zope.interface import Interface
 from zope import schema
@@ -45,13 +46,17 @@ class CheckinCommentForm(form.Form):
     def checkin_button_handler(self, action):
         data, errors = self.extractData()
         if len(errors)==0:
+            last_baseline = None
             for obj in self.objects:
-                self.checkin_object(obj, data['comment'])
-            return self.request.RESPONSE.redirect(self.redirect_url)
+                last_baseline = self.checkin_object(obj, data['comment'])
+            redirect_url = self.redirect_url
+            if redirect_url=='baseline' and last_baseline:
+                redirect_url = last_baseline.absolute_url()
+            return self.request.RESPONSE.redirect(redirect_url)
 
     def checkin_object(self, obj, comment):
         manager = ICheckinCheckoutManager(obj)
-        manager.checkin(comment, show_status_message=True)
+        return manager.checkin(comment, show_status_message=True)
 
     @property
     def objects(self):
@@ -137,9 +142,8 @@ class CheckinSingleDocument(grok.CodeView):
         path = os.path.join(
             parent.absolute_url(),
             'checkin_documents',
-            '?paths:list=%s&orig_template=%s%%23documents' % (
+            '?paths:list=%s&orig_template=baseline' % (
                 '/'.join(self.context.getPhysicalPath()),
-                parent.absolute_url()
                 )
             )
         return response.redirect(path)

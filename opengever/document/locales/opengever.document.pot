@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2009-11-11 14:18+0000\n"
+"POT-Creation-Date: 2009-11-11 15:39+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,7 +21,7 @@ msgstr ""
 msgid "Cancel"
 msgstr ""
 
-#: opengever.document/opengever/document/staging/manager.py:156
+#: opengever.document/opengever/document/staging/manager.py:157
 msgid "Checked in: ${title}"
 msgstr ""
 
@@ -37,15 +37,15 @@ msgstr ""
 msgid "Checkout"
 msgstr ""
 
-#: opengever.document/opengever/document/staging/manager.py:178
+#: opengever.document/opengever/document/staging/manager.py:180
 msgid "Checkout canceled: ${title}"
 msgstr ""
 
-#: opengever.document/opengever/document/staging/manager.py:166
+#: opengever.document/opengever/document/staging/manager.py:168
 msgid "Could not cancel checkin: ${title}, not allowed"
 msgstr ""
 
-#: opengever.document/opengever/document/staging/manager.py:141
+#: opengever.document/opengever/document/staging/manager.py:142
 msgid "Could not checkin: ${title}, checkin not allowed"
 msgstr ""
 
@@ -61,14 +61,14 @@ msgstr ""
 msgid "Send as email"
 msgstr ""
 
-#: opengever.document/opengever/document/staging/cancel.py:22
-#: opengever.document/opengever/document/staging/checkin.py:118
-#: opengever.document/opengever/document/staging/checkout.py:118
+#: opengever.document/opengever/document/staging/cancel.py:27
+#: opengever.document/opengever/document/staging/checkin.py:123
+#: opengever.document/opengever/document/staging/checkout.py:122
 msgid "You have not selected any documents"
 msgstr ""
 
 #. Default: "Checkin"
-#: opengever.document/opengever/document/staging/checkin.py:44
+#: opengever.document/opengever/document/staging/checkin.py:45
 msgid "button_checkin"
 msgstr ""
 
@@ -93,7 +93,7 @@ msgid "fieldset_dates"
 msgstr ""
 
 #. Default: "Checkin Documents"
-#: opengever.document/opengever/document/staging/checkin.py:42
+#: opengever.document/opengever/document/staging/checkin.py:43
 msgid "heading_checkin_comment_form"
 msgstr ""
 
@@ -117,7 +117,7 @@ msgid "help_archival_file"
 msgstr ""
 
 #. Default: "Describe, why you checkin the selected documents"
-#: opengever.document/opengever/document/staging/checkin.py:32
+#: opengever.document/opengever/document/staging/checkin.py:33
 msgid "help_checkin_journal_comment"
 msgstr ""
 
@@ -194,7 +194,7 @@ msgid "label_archival_file"
 msgstr ""
 
 #. Default: "Journal Comment"
-#: opengever.document/opengever/document/staging/checkin.py:30
+#: opengever.document/opengever/document/staging/checkin.py:31
 msgid "label_checkin_journal_comment"
 msgstr ""
 

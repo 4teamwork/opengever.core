@@ -45,13 +45,17 @@ class CheckoutCommentForm(form.Form):
     def checkout_button_handler(self, action):
         data, errors = self.extractData()
         if len(errors)==0:
+            last_wc = None
             for obj in self.objects:
-                self.checkout_object(obj, data['comment'])
-            return self.request.RESPONSE.redirect(self.redirect_url)
+                last_wc = self.checkout_object(obj, data['comment'])
+            redirect_url = self.redirect_url
+            if redirect_url=='wc' and last_wc:
+                redirect_url = last_wc.absolute_url()
+            return self.request.RESPONSE.redirect(redirect_url)
 
     def checkout_object(self, obj, comment):
         manager = ICheckinCheckoutManager(obj)
-        manager.checkout(comment, show_status_message=True)
+        return manager.checkout(comment, show_status_message=True)
 
     @property
     def objects(self):
@@ -136,9 +140,8 @@ class CheckoutSingleDocument(grok.CodeView):
         path = os.path.join(
             parent.absolute_url(),
             'checkout_documents',
-            '?paths:list=%s&orig_template=%s%%23documents' % (
+            '?paths:list=%s&orig_template=wc' % (
                 '/'.join(self.context.getPhysicalPath()),
-                parent.absolute_url()
                 )
             )
         return response.redirect(path)
