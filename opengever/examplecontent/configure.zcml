@@ -1,0 +1,15 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:five="http://namespaces.zope.org/five"
+    i18n_domain="opengever.examplecontent"
+    xmlns:genericsetup="http://namespaces.zope.org/genericsetup">
+
+    <genericsetup:registerProfile
+        name="default" 
+        title="Example content for opengever" 
+        directory="profiles/default" 
+        description="creates example content in a opengever site" 
+        provides="Products.GenericSetup.interfaces.EXTENSION" 
+    />
+
+</configure>
