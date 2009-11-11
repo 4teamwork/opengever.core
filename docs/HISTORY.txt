@@ -5,6 +5,9 @@ Changelog
 0.2
 ---
 
+* Issue #120: RepositoryFolder übersetzen
+  [11.11.2009, jbaumann]
+
 * Issue #52: Versionierung bei Dossier ausschalten
   Disabled versioning for Dossier-types
   [20.10.2009, jbaumann]
