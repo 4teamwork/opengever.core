@@ -15,6 +15,7 @@ from plone.z3cform import layout
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.document.document import IDocumentSchema
 from opengever.document import _
+from opengever.document.staging.manager import ICheckinCheckoutManager
 
 
 DOCUCOMPOSER_TEMPLATES = {
