@@ -16,7 +16,7 @@ class OpengeverListingTab(grok.View, BaseListingView):
                 ('', helper.path_checkbox),
                 ('Title', 'sortable_title', helper.linked),
                 ('modified', helper.readable_date), 
-                'Creator'
+                ('Creator', helper.readable_author)
                )
     
     @property
