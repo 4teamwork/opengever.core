@@ -61,37 +61,40 @@ from zope.annotation.interfaces import IAnnotations, IAnnotatable
 from ftw.journal.interfaces import IAnnotationsJournalizable, IWorkflowHistoryJournalizable
 from ftw.journal.config import JOURNAL_ENTRIES_ANNOTATIONS_KEY
 from opengever.dossier.behaviors.dossier import IDossierMarker
+from opengever.repository.interfaces import IRepositoryFolder
 from ftw.table.interfaces import ITableGenerator
 from zope.component import queryUtility
 from ftw.table import helper
-         
-class Journal(grok.View, OpengeverTab):
-     grok.context(IDossierMarker)
-     grok.name('tabbedview_view-journal')
-     grok.template('journal')
-     
-     def table(self):
-         generator = queryUtility(ITableGenerator, 'ftw.tablegenerator') 
-         columns = (('title', lambda x,y: x['action']['title']), 
-                    'actor', 
-                    ('time', helper.readable_date),
-                    'comment'
-                    )
-         return generator.generate(reversed(self.data()), columns, css_mapping={'table':'journal-listing'})
-     
-     def data(self):
-         context = self.context
-         history = []
-         
-         if IAnnotationsJournalizable.providedBy(self.context):
-             annotations = IAnnotations(context)
-             return annotations.get(JOURNAL_ENTRIES_ANNOTATIONS_KEY, [])
-         elif IWorkflowHistoryJournalizable.providedBy(self.context):
-             raise NotImplemented
+        
 
+class RepositoryOverview(grok.View, OpengeverTab):
+    grok.context(IRepositoryFolder)
+    grok.name('tabbedview_view-overview')
+    grok.template('overview')
 
+    #TODO: refactor view using viewlets
+    def catalog(self, types):
+        return self.context.portal_catalog(portal_type=types , 
+                                            path=dict(depth=1, 
+                                                      query='/'.join(self.context.getPhysicalPath())
+                                                      ), 
+                                                      sort_on='modified',
+                                                      sort_order='reverse')
 
-class Overview(grok.View, OpengeverTab):
+    def boxes(self):
+        items = [
+              dict(id = 'repostories', content=self.repostories()),
+              dict(id = 'dossiers', content=self.dossiers()),
+        ]
+        return items
+
+    def repostories(self):
+        return self.catalog(['opengever.repository.repositoryfolder',])[:5]
+
+    def dossiers(self):
+        return self.catalog(['opengever.dossier.projectdossier', 'opengever.dossier.businesscasedossier',])[:5]
+
+class DossierOverview(grok.View, OpengeverTab):
     grok.context(IDossierMarker)
     grok.name('tabbedview_view-overview')
     grok.template('overview')
@@ -164,6 +167,31 @@ class Overview(grok.View, OpengeverTab):
                                         getIcon='user.gif'
                                         ))
         return results
+
+
+class Journal(grok.View, OpengeverTab):
+     grok.context(IDossierMarker)
+     grok.name('tabbedview_view-journal')
+     grok.template('journal')
+
+     def table(self):
+         generator = queryUtility(ITableGenerator, 'ftw.tablegenerator') 
+         columns = (('title', lambda x,y: x['action']['title']), 
+                    'actor', 
+                    ('time', helper.readable_date),
+                    'comment'
+                    )
+         return generator.generate(reversed(self.data()), columns, css_mapping={'table':'journal-listing'})
+
+     def data(self):
+         context = self.context
+         history = []
+
+         if IAnnotationsJournalizable.providedBy(self.context):
+             annotations = IAnnotations(context)
+             return annotations.get(JOURNAL_ENTRIES_ANNOTATIONS_KEY, [])
+         elif IWorkflowHistoryJournalizable.providedBy(self.context):
+             raise NotImplemented
 
 from plone.app.workflow.interfaces import ISharingPageRole
 from zope.component import getUtilitiesFor, getMultiAdapter
