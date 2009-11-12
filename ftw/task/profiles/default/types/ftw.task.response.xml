@@ -5,7 +5,7 @@
  <!-- Basic metadata -->
  <property name="title" i18n:translate="">Response</property>
  <property name="description" i18n:translate="">Response</property>
- <property name="content_icon">folder_icon.gif</property>
+ <property name="content_icon">pensil_icon.gif</property>
  <property name="allow_discussion">False</property>
  <property name="global_allow">True</property>
  <property name="filter_content_types">True</property>
@@ -13,7 +13,7 @@
 
 
  <!-- schema interface -->
- <property name="schema">ftw.task.response.IResponse</property> 
+ <property name="schema">ftw.task.response.IResponse</property>
  
  <!-- class used for content items -->
  <property name="klass">plone.dexterity.content.Item</property>
@@ -31,8 +31,6 @@
  <property name="default_view">view</property>
  <property name="default_view_fallback">False</property>
  <property name="view_methods">
-  <element value="view"/>
-
  </property>
  
  <!-- Method aliases -->

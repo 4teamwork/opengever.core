@@ -42,7 +42,6 @@ class IResponse(form.Schema):
 def changeTask(response, event):
     task = response.__parent__
     changes = []
-    import pdb; pdb.set_trace( )
     if response.deadline != None and task.deadline != response.deadline:
         changes.append((_('deadline', default="deadline"), task.deadline.strftime('%d.%m.%Y') , response.deadline.strftime('%d.%m.%Y')))
         task.deadline = response.deadline

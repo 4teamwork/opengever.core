@@ -10,80 +10,72 @@
 <metal:main fill-slot="main">
     <tal:main-macro metal:define-macro="main">
 
-        <div tal:replace="structure provider:plone.abovecontenttitle" />
+    <h1 class="documentFirstHeading" tal:content="context/Title" /> 
 
-        <h1 class="documentFirstHeading" tal:content="context/title" />
-        
-        <div tal:replace="structure provider:plone.belowcontenttitle" />
+    <p class="documentDescription" tal:content="context/Description" />
 
-        <p class="documentDescription" tal:content="context/description" />
-
-        <div tal:replace="structure provider:plone.abovecontentbody" />
-        
-        <div tal:content="structure view/w/title/render" />
-
-        <div tal:content="structure context/text" />
-        
-        
-        
-         <table class="vertical listing issue-info-box">
-            <tr>
-                <th></th>
-            </tr>
-             
-              <tr tal:define="state python:wftool.getInfoFor(here, 'review_state');
-                              state_title python:wtool.getTitleForStateOnType(state,
-                              here.getPortalTypeName());">
-                  <th i18n:translate="poi_label_state">State</th>
-                  <td tal:content="state_title"
-                      i18n:translate="" i18n:domain="plone"
-                      tal:attributes="class string:issue-${state}"/>
-              </tr>
-              <tr tal:condition="here/isUsingReleases">
-                  <th i18n:translate="poi_label_version">Version:</th>
-                  <td>
-                      <span tal:condition="python:here.getRelease() != '(UNASSIGNED)'"
-                            tal:replace="python:releases.getValue(here.getRelease())" />
-                      <div tal:condition="python:here.getRelease() == '(UNASSIGNED)'" class="unassigned-field">
-                          &mdash;
-                      </div>
-                  </td>
-              </tr>
-        </table>
-        
-        
-        
-        
-        <div>Subtasks:</div>
-        <div tal:repeat="item view/getSubTasks">
-            <span tal:content="item/Title">Title</span>
-        </div>
+    <div class="field" tal:repeat="widget view/widgets/values">
+        <tal:block condition="python:widget.__name__ not in ('IBasic.title', 'IBasic.description', 'title', 'description',)">
+            <label tal:content="widget/label" />
+            <br />
+            <div tal:content="structure widget/render" />
+        </tal:block>
+    </div>
     
-        <div>Responses: ...</div>
-        <div class="response-clarification" tal:repeat="item view/getResponses">
-            <!-- Response Info -->
-            <div class="response-info">
-              <span i18n:translate="task_added_by">Added by</span>
-              <span class="contact-user"
-                    tal:content="python:item.creators[0]" />
-              <span i18n:translate="poi_added_on">on</span>
-              <span class="contact-user"
-                    tal:content="python:item.creation_date.strftime('%d.%m.%Y %H:%M')"/>
-            </div>            
-            <span i18n:translate="change">Changes:</span>
-            <tal:cond tal:repeat="change python: item.changes">
-                <span i18n:translate="" tal:content="python: change[0]"></span>
-                <span>: </span>
-                <span i18n:translate="" tal:content="python: change[1]"></span>
-                <span> --> </span>
-                <span i18n:translate="" tal:content="python: change[2]"></span>
+    <fieldset tal:repeat="group view/groups">
+        <legend tal:content="group/label" />
+        <div class="field" tal:repeat="widget group/widgets/values">
+            <label tal:content="widget/label" />
+            <br />
+            <div tal:content="structure widget/render" />
+        </div>
+    </fieldset>
+    
+        <div><h2>Subtasks:</h2></div>
+        <tal:items define="items view/getSubTasks">
+            <ul tal:condition="items">
+                <li tal:repeat="item items">
+                    <img tal:attributes="src item/getIcon" />
+                    <a href="" tal:attributes="href item/getURL|nothing" tal:omit-tag="not: item/getURL|nothing"><span tal:content="item/Title" /></a>
+                </li>
+            </ul>
+            <span tal:condition="not: items" i18n:translate="no_content">No Content</span>
+        </tal:items>
+    
+        <div><h2>Responses:</h2></div>
+        <tal:items define="items view/getResponses">
+            <tal:cond tal:condition="items">
+                <div class="response-clarification" tal:repeat="item items">
+                    <!-- Response Info -->
+                    <div class="response-info">
+                      <span i18n:translate="task_added_by">Added by</span>
+                      <span class="contact-user"
+                            tal:content="python:item.getOwner()" />
+                      <span i18n:translate="poi_added_on">on</span>
+                      <span class="contact-user"
+                            tal:content="python:item.creation_date.strftime('%d.%m.%Y %H:%M')"/>
+                    </div>            
+                    <span i18n:translate="change">Changes:</span>
+                    <tal:cond tal:repeat="change python: item.changes">
+                        <span i18n:translate="" tal:content="python: change[0]"></span>
+                        <span>: </span>
+                        <span i18n:translate="" tal:content="python: change[1]"></span>
+                        <span> --> </span>
+                        <span i18n:translate="" tal:content="python: change[2]"></span>
+                    </tal:cond>
+                    <div tal:content="item/text"></div>
+                    <div class="response-actions">
+                        <a class="context" tal:attributes="href python: item.absolute_url() +'/edit'" href="">Edit</a>
+                        <a class="standalone" tal:attributes="href python: item.absolute_url() + '/delete_confirmation'" href="">Delete</a>
+                    </div>
+                </div>
             </tal:cond>
-            <div tal:content="item/text"></div>
-            <div class="response-actions">
-                <a tal:attributes="href python: item.absolute_url() +'/edit'" href="">Edit</a>
-                <a tal:attributes="href python: item.absolute_url() + '/delete_confirmation'" href="">Delete</a>
-            </div>
-        </div>        
+            <div><span tal:condition="not: items" i18n:translate="no_response">No Responses</span></div>
+        </tal:items>
+
+
+        
+        
         <div tal:content="structure view/getResponseForm">dsfas</div>
         <div class="visualClear"><!----></div>
         <!-- ><div tal:replace="structure provider:task.response.add" /> -->

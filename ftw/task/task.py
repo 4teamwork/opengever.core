@@ -21,31 +21,32 @@ from ftw.task import _
 class ITask(form.Schema):
     
     title = schema.TextLine(
-        title=_(u"title", default=u"Title"),
-        description=_(u"descTitle", default=u"Enter a short, descriptive title for the issue. A good title will make it easier for project managers to identify and respond to the issue."),        
+        title=_(u"label_title", default=u"Title"),
+        description=_('help_title', default=u"Title")
         required = True,    
     )
-    
-    text = schema.Text(
-        title=_(u"text", default=u"Text"),
-        description=_(u"descText", default=u"Enter all your Angaben"),
+    form.primary('text')
+    text = RichText(
+        title=_(u"label_text", default=u"Text"),
+        description=_(u"help_text", default=u""),
         required = True,
     )
 
     deadline = schema.Datetime(
-        title=_(u"deadline", default=u"Deadline"),
-        required = True, 
+        title=_(u"label_deadline", default=u"")
+        title=_(u"description_deadline", default=u"Deadline"),
+        required = True,
     )
     
     priority = schema.Choice(
-        title= _(u"priority", default="Priority"),
-        values = (_(u"critical"), _(u"important"), _(u"medium"), _(u"low")),
+        title= _(u"label_priority", default=""),
+        values = (_(u"label_critical"), _(u"label_important"), _(u"label_medium"), _(u"lebel_low")),
         required =True,
     )
     
     responsible = schema.Choice(
-        title=_(u"responsible", default="Responsible"),
-        description =_(u"descResponsible", default="select an responsible Manger"),
+        title=_(u"label_responsible", default="Responsible"),
+        description =_(u"label_descResponsible", default="select an responsible Manger"),
         source = util.getManagersVocab,
         required = False,
     )
@@ -85,17 +86,15 @@ class View(dexterity.DisplayForm):
     grok.require('zope2.View')
     
     def getResponseForm(self):
-        import pdb; pdb.set_trace( )
         fti = getUtility(IDexterityFTI, name='ftw.task.response')
         adder = queryMultiAdapter((self.context, self.request, fti),
                               IBrowserPage)
         return adder.form_instance()
         
     def getSubTasks(self):
-        tasks = self.context.getFolderContents(full_objects=True, contentFilter={'portal_type':'ftw.task.task'})
+        tasks = self.context.getFolderContents(full_objects=False, contentFilter={'portal_type':'ftw.task.task'})
         return tasks
     
     def getResponses(self):
         responses = self.context.getFolderContents(full_objects=True, contentFilter={'portal_type':'ftw.task.response'})
-        import pdb; pdb.set_trace( )
         return responses
