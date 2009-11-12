@@ -55,6 +55,10 @@
     url_expr="string:${object_url}/edit" visible="True">
   <permission value="Modify portal content"/>
  </action> 
+ <action title="Overview" action_id="overview" category="arbeitsraum-tabs"
+    condition_expr="" url_expr="string:#" visible="True">
+  <permission value="View"/>
+ </action> 
   <action title="Dossiers" action_id="dossiers" category="arbeitsraum-tabs"
      condition_expr="" url_expr="string:#" visible="True">
    <permission value="View"/>
