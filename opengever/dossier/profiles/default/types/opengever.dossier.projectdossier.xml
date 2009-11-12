@@ -82,10 +82,6 @@
           condition_expr="" url_expr="string:#" visible="True">
     <permission value="View"/>
   </action>
-  <action title="Events" action_id="events" category="arbeitsraum-tabs"
-          condition_expr="" url_expr="string:#" visible="True">
-    <permission value="View"/>
-  </action>
   <action title="Journal" action_id="journal" category="arbeitsraum-tabs"
           condition_expr="" url_expr="string:#" visible="True">
     <permission value="View"/>
