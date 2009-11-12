@@ -2,6 +2,7 @@
 
 from Acquisition import aq_inner
 from five import grok
+from zope.component import getAdapter
 from zope.event import notify
 from zope.interface import Interface
 
@@ -40,6 +41,11 @@ class CheckinCheckoutManager(grok.Adapter):
     def __init__(self, context):
         self.context = context
         self.request = context.REQUEST
+
+    @property
+    def locator(self):
+        context = aq_inner( self.context )
+        return getAdapter(context, name='plone.app.iterate.parent')
 
     @property
     def contains_checkoutable_children(self):
@@ -104,11 +110,8 @@ class CheckinCheckoutManager(grok.Adapter):
                 return
             else:
                 raise CheckoutNotAllowed
-        # get the plone.app.iterate containers
-        checkout_view = self.context.restrictedTraverse('content-checkout')
-        containers = list(checkout_view.containers())
-        # choose locator, we use the first one since we expect only one container
-        locator = containers[0]['locator']
+        # get locator
+        locator = getAdapter(context, name='plone.app.iterate.parent')
         # check it out
         policy = ICheckinCheckoutPolicy(context)
         wc = policy.checkout(locator())
