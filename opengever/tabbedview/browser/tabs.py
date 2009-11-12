@@ -103,30 +103,29 @@ class Overview(grok.View, OpengeverTab):
                                                       query='/'.join(self.context.getPhysicalPath())
                                                       ), 
                                                       sort_on='modified',
-                                                      sort_order='reverse')[:5]   
+                                                      sort_order='reverse') 
 
     def boxes(self):
         items = [
                 dict(id = 'subdossiers', content=self.subdossiers()),
                 dict(id = 'tasks', content=self.tasks()),
                 dict(id = 'documents', content=self.documents()),
-                dict(id = 'events', content=self.events()),
                 dict(id = 'journal', content=self.journal()),
                 dict(id = 'sharing', content=self.sharing()),
         ]
         return items
                                                       
     def subdossiers(self):
-        return self.catalog(['opengever.dossier.projectdossier', 'opengever.dossier.businesscasedossier',])
+        return self.catalog(['opengever.dossier.projectdossier', 'opengever.dossier.businesscasedossier',])[:5]  
                                             
     def tasks(self):
-        return self.catalog(['dummy.task', ])
+        return self.catalog(['dummy.task', ])[:5]  
     
     def documents(self): 
-        return self.catalog(['opengever.document.document',] )                                           
+        return self.catalog(['opengever.document.document',] )[:10]                                        
     
     def events(self):
-        return self.catalog(['dummy.event',] )   
+        return self.catalog(['dummy.event',] )[:5]     
                                             
     def journal(self):
         if IAnnotationsJournalizable.providedBy(self.context):
