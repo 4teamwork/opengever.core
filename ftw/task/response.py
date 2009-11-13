@@ -7,35 +7,43 @@ from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone import PloneMessageFactory as PMF
 
 from plone.dexterity.content import Item
+
 from plone.directives import form, dexterity
 from plone.app.vocabularies.workflow import WorkflowTransitionsVocabulary
+from plone.z3cform import layout
+from z3c.form.interfaces import HIDDEN_MODE
 from zope.app.container.interfaces import IObjectAddedEvent, IObjectModifiedEvent
-from ftw.task import util
 
+from opengever.translations.browser.edit import TranslatedEditForm
+
+from ftw.task import util
 from ftw.task import _
 
 class IResponse(form.Schema):
     text =  schema.Text(
-        title = _('response', default="Response"),
+        title = _('label_response', default="Response"),
+        description=_('help_response', default=""),
         required = True,
     )
 
     responsible = schema.Choice(
-        title=_(u"responsible", default="Responsible"),
-        description =_(u"descResponsible", default="select an responsible Manger"),
+        title=_(u"label_responsible_Response", default="Responsible"),
+        description =_(u"help_responsible_response", default=""),
         source= util.getManagersVocab,
         required = False,
     )
 
     deadline = schema.Datetime(
-        title=_(u"deadline", default=u"Deadline"),
+        title=_(u"label_deadline_Response", default=u"Deadline"),
+        description=_(u"help_deadline_response"),
         required = False, 
     )
     
     transition = schema.Choice(
-        title=_("transition", default="transition"),
+        title=_("label_transition", default="Transition"),
+        description=_(u"help_transition", default=""),
         vocabulary=u"plone.app.vocabularies.WorkflowTransitions",
-        required = False,
+        required = True,
     )
 
 @grok.subscribe(IResponse, IObjectAddedEvent)
@@ -48,12 +56,25 @@ def changeTask(response, event):
     if response.responsible != None and task.responsible != response.responsible:
         changes.append((_('responsible', default="responsible"), task.responsible, response.responsible))
         task.responsible = response.responsible
-        
+            
     response.changes = changes
-
+    
 class Response(Item):
     pass
+    
 """
 class View(grok.View):
     grok.context(IResponse)
-    grok.require('zope2.View') """
+    grok.require('zope2.View') 
+"""
+    
+class ResponseEditForm(TranslatedEditForm):
+    def updateWidgets(self):
+        super(ResponseEditForm, self).updateWidgets()
+        names = 'deadline', 'transition', 'responsible'
+        for name in names:
+            if name in  self.widgets.keys():
+                self.widgets[name].mode = HIDDEN_MODE
+                
+ResponseEditView = layout.wrap_form(ResponseEditForm)
+    

@@ -20,6 +20,12 @@
         directory="profiles/default"
         provides="Products.GenericSetup.interfaces.EXTENSION"
         />
-
+        
+    <browser:page
+        for="ftw.task.response.IResponse"
+        name="edit"
+        class=".response.ResponseEditView"
+        permission="cmf.ModifyPortalContent"
+        />
 
 </configure>

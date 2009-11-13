@@ -34,46 +34,51 @@ class ITask(form.Schema):
 
     deadline = schema.Datetime(
         title=_(u"label_deadline", default=u""),
-        description=_(u"description_deadline", default=u"Deadline"),
+        description=_(u"help_deadline", default=u"Deadline"),
         required = True,
     )
     
     priority = schema.Choice(
         title= _(u"label_priority", default=""),
-        values = (_(u"label_critical"), _(u"label_important"), _(u"label_medium"), _(u"lebel_low")),
+        description= _(u"help_priority", default=""),
+        values = (_(u"label_critical", default=u"critical"), _(u"label_important", default=u"important"), _(u"label_medium", default=u"medium"), _(u"lebel_low", default=u"low")),
         required =True,
     )
     
     responsible = schema.Choice(
         title=_(u"label_responsible", default="Responsible"),
-        description =_(u"label_descResponsible", default="select an responsible Manger"),
+        description =_(u"help_responsible", default="select an responsible Manger"),
         source = util.getManagersVocab,
         required = False,
     )
     
     expectedStartOfWork = schema.Datetime(
-        title =_(u"expectedStartOfWork", default="Start with work"),
+        title =_(u"label_expectedStartOfWork", default="Start with work"),
+        description = _(u"help_expectedStartOfWork", default=""),
         required = False,
     )
     
     expectedDuration = schema.Float(
-        title = _(u'expectedDuration',default="Expected duration"),
+        title = _(u"label_expectedDuration",default="Expected duration"),
+        description = _(u"help_expectedDuration", default=""),
         required = False,
     )
 
     expectedCost = schema.Int(
-        title = _(u"expectedCost", default="expected cost"),
-        description = u'',
+        title = _(u"label_expectedCost", default="expected cost"),
+        description = _(u"help_expectedCost", default=""),
         required = False,
     )
     
     effectiveDuration = schema.Float(
-        title = _(u"effectiveDuration", default="effective duration"),
+        title = _(u"label_effectiveDuration", default="effective duration"),
+        description = _(u"help_effectiveDuration", default=""),
         required = False,
     )
     
     effectiveCost = schema.Int(
-        title=_(u"effectiveCost", default="effective cost"),
+        title=_(u"label_effectiveCost", default="effective cost"),
+        description=_(u"help_effectiveCost", default=""),
         required = False
     )
 
