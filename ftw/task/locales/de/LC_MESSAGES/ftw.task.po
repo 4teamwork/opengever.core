@@ -1,0 +1,274 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2009-11-13 14:22+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0\n"
+"Preferred-Encodings: utf-8 latin1\n"
+"Domain: DOMAIN\n"
+
+#: ftw.task/ftw/task/templates/response.pt:27
+msgid "Delete"
+msgstr ""
+
+#: ftw.task/ftw/task/templates/response.pt:17
+msgid "Edit"
+msgstr ""
+
+#: ftw.task/ftw/task/profiles/default/types/ftw.task.response.xml
+msgid "Response"
+msgstr ""
+
+#: ftw.task/ftw/task/profiles/default/types/ftw.task.task.xml
+msgid "Task"
+msgstr ""
+
+#. Default: "Changes:"
+#: ftw.task/ftw/task/task_templates/view.pt:58
+msgid "change"
+msgstr ""
+
+#. Default: "deadline"
+#: ftw.task/ftw/task/response.py:54
+msgid "deadline"
+msgstr ""
+
+#. Default: "Deadline"
+#: ftw.task/ftw/task/task.py:38
+msgid "help_deadline"
+msgstr ""
+
+#: ftw.task/ftw/task/response.py:38
+msgid "help_deadline_response"
+msgstr ""
+
+#: ftw.task/ftw/task/task.py:82
+msgid "help_effectiveCost"
+msgstr ""
+
+#: ftw.task/ftw/task/task.py:76
+msgid "help_effectiveDuration"
+msgstr ""
+
+#: ftw.task/ftw/task/task.py:70
+msgid "help_expectedCost"
+msgstr ""
+
+#: ftw.task/ftw/task/task.py:64
+msgid "help_expectedDuration"
+msgstr ""
+
+#: ftw.task/ftw/task/task.py:58
+msgid "help_expectedStartOfWork"
+msgstr ""
+
+#: ftw.task/ftw/task/task.py:44
+msgid "help_priority"
+msgstr ""
+
+#: ftw.task/ftw/task/response.py:25
+msgid "help_response"
+msgstr ""
+
+#. Default: "select an responsible Manger"
+#: ftw.task/ftw/task/task.py:51
+msgid "help_responsible"
+msgstr ""
+
+#: ftw.task/ftw/task/response.py:31
+msgid "help_responsible_response"
+msgstr ""
+
+#: ftw.task/ftw/task/task.py:32
+msgid "help_text"
+msgstr ""
+
+#. Default: "Title"
+#: ftw.task/ftw/task/task.py:26
+msgid "help_title"
+msgstr ""
+
+#: ftw.task/ftw/task/response.py:44
+msgid "help_transition"
+msgstr ""
+
+#. Default: "critical"
+#: ftw.task/ftw/task/task.py:45
+msgid "label_critical"
+msgstr ""
+
+#: ftw.task/ftw/task/task.py:37
+msgid "label_deadline"
+msgstr ""
+
+#. Default: "Deadline"
+#: ftw.task/ftw/task/response.py:37
+msgid "label_deadline_Response"
+msgstr ""
+
+#. Default: "effective cost"
+#: ftw.task/ftw/task/task.py:81
+msgid "label_effectiveCost"
+msgstr ""
+
+#. Default: "effective duration"
+#: ftw.task/ftw/task/task.py:75
+msgid "label_effectiveDuration"
+msgstr ""
+
+#. Default: "expected cost"
+#: ftw.task/ftw/task/task.py:69
+msgid "label_expectedCost"
+msgstr ""
+
+#. Default: "Expected duration"
+#: ftw.task/ftw/task/task.py:63
+msgid "label_expectedDuration"
+msgstr ""
+
+#. Default: "Start with work"
+#: ftw.task/ftw/task/task.py:57
+msgid "label_expectedStartOfWork"
+msgstr ""
+
+#. Default: "important"
+#: ftw.task/ftw/task/task.py:45
+msgid "label_important"
+msgstr ""
+
+#. Default: "medium"
+#: ftw.task/ftw/task/task.py:45
+msgid "label_medium"
+msgstr ""
+
+#: ftw.task/ftw/task/task.py:43
+msgid "label_priority"
+msgstr ""
+
+#. Default: "Response"
+#: ftw.task/ftw/task/response.py:24
+msgid "label_response"
+msgstr ""
+
+#. Default: "Responsible"
+#: ftw.task/ftw/task/task.py:50
+msgid "label_responsible"
+msgstr ""
+
+#. Default: "Responsible"
+#: ftw.task/ftw/task/response.py:30
+msgid "label_responsible_Response"
+msgstr ""
+
+#. Default: "Text"
+#: ftw.task/ftw/task/task.py:31
+msgid "label_text"
+msgstr ""
+
+#. Default: "Title"
+#: ftw.task/ftw/task/task.py:25
+msgid "label_title"
+msgstr ""
+
+#. Default: "Transition"
+#: ftw.task/ftw/task/response.py:43
+msgid "label_transition"
+msgstr ""
+
+#. Default: "low"
+#: ftw.task/ftw/task/task.py:45
+msgid "lebel_low"
+msgstr ""
+
+#. Default: "If you can, please log in before submitting a reaction."
+#: ftw.task/ftw/task/templates/response.pt:82
+msgid "login_suggestion_response"
+msgstr ""
+
+#. Default: "No responses can be added."
+#: ftw.task/ftw/task/templates/response.pt:74
+msgid "msg_no_responses_can_be_added"
+msgstr ""
+
+#. Default: "No Content"
+#: ftw.task/ftw/task/task_templates/view.pt:42
+msgid "no_content"
+msgstr ""
+
+#. Default: "No Responses"
+#: ftw.task/ftw/task/task_templates/view.pt:73
+msgid "no_response"
+msgstr ""
+
+#. Default: "on"
+#: ftw.task/ftw/task/task_templates/view.pt:54
+msgid "poi_added_on"
+msgstr ""
+
+#. Default: "Change the DeadLine"
+#: ftw.task/ftw/task/templates/response.pt:206
+msgid "response_label_newDeadLine"
+msgstr ""
+
+#. Default: "responsible"
+#: ftw.task/ftw/task/response.py:57
+msgid "responsible"
+msgstr ""
+
+#. Default: "Added by"
+#: ftw.task/ftw/task/task_templates/view.pt:51
+#: ftw.task/ftw/task/templates/response.pt:36
+msgid "task_added_by"
+msgstr ""
+
+#. Default: "on"
+#: ftw.task/ftw/task/templates/response.pt:39
+msgid "task_added_on"
+msgstr ""
+
+#. Default: "Select a change of state in the issue this response is for, if applicable"
+#: ftw.task/ftw/task/templates/response.pt:150
+msgid "task_help_issueTransition"
+msgstr ""
+
+#. Default: "Select the responsible manager for this issue"
+#: ftw.task/ftw/task/templates/response.pt:183
+msgid "task_help_newResponsibleManager"
+msgstr ""
+
+#. Default: "Please enter your response below"
+#: ftw.task/ftw/task/templates/response.pt:106
+msgid "task_help_response"
+msgstr ""
+
+#. Default: "Attached:"
+#: ftw.task/ftw/task/templates/response.pt:59
+msgid "task_label_attachment"
+msgstr ""
+
+#. Default: "Change issue state"
+#: ftw.task/ftw/task/templates/response.pt:145
+msgid "task_label_issueTransition"
+msgstr ""
+
+#. Default: "Change responsible manager"
+#: ftw.task/ftw/task/templates/response.pt:178
+msgid "task_label_newResponsibleManager"
+msgstr ""
+
+#. Default: "Response"
+#: ftw.task/ftw/task/templates/response.pt:103
+msgid "task_label_response"
+msgstr ""
+
+#. Default: "Add response"
+#: ftw.task/ftw/task/templates/response.pt:97
+msgid "title_add_response"
+msgstr ""
+
+
