@@ -22,7 +22,7 @@ class ITask(form.Schema):
     
     title = schema.TextLine(
         title=_(u"label_title", default=u"Title"),
-        description=_('help_title', default=u"Title")
+        description=_('help_title', default=u"Title"),
         required = True,    
     )
     form.primary('text')
@@ -33,8 +33,8 @@ class ITask(form.Schema):
     )
 
     deadline = schema.Datetime(
-        title=_(u"label_deadline", default=u"")
-        title=_(u"description_deadline", default=u"Deadline"),
+        title=_(u"label_deadline", default=u""),
+        description=_(u"description_deadline", default=u"Deadline"),
         required = True,
     )
     
