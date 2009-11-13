@@ -1,8 +1,10 @@
 from five import grok
 from zope import schema
+from Acquisition import aq_parent, aq_inner
 
 from zope.component import queryMultiAdapter, getUtility
 from zope.schema.interfaces import IContextSourceBinder
+from zope.app.container.interfaces import IObjectAddedEvent
 from zope.schema.vocabulary import SimpleVocabulary
 from Products.CMFCore.utils import getToolByName
 from zope.publisher.interfaces.browser import IBrowserPage
@@ -19,7 +21,6 @@ from ftw.task import util
 from ftw.task import _
 
 class ITask(form.Schema):
-    
     title = schema.TextLine(
         title=_(u"label_title", default=u"Title"),
         description=_('help_title', default=u"Title"),
@@ -82,8 +83,14 @@ class ITask(form.Schema):
         required = False
     )
 
+@grok.subscribe(ITask, IObjectAddedEvent)
+def setID(task, event):
+    task._sequence_number = util.create_sequence_number( task )
+    
 class Task(Container):
-    pass
+    @property
+    def sequence_number(self):
+        return self._sequence_number
 
 #class View(grok.View):
 class View(dexterity.DisplayForm):

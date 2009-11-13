@@ -1,5 +1,7 @@
 from five import grok
 
+from zope.annotation.interfaces import IAnnotations
+from persistent.dict import PersistentDict
 from zope.schema.interfaces import IContextSourceBinder
 from zope.schema.vocabulary import SimpleVocabulary
 from Products.CMFCore.utils import getToolByName
@@ -31,4 +33,11 @@ def getTransitionVocab(context):
         transitions.append(dict(value=tdef['id'],
                                 label=tdef['title_or_id'], checked=''))
     return transitions
-    
+
+
+def create_sequence_number( obj, key='task_sequence_number' ):
+    portal = obj.portal_url.getPortalObject()
+    portal_annotations = IAnnotations( portal )
+    sequence_number = int(portal_annotations.get(key, 0)) + 1
+    portal_annotations[key] = sequence_number
+    return sequence_number

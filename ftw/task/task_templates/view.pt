@@ -10,7 +10,7 @@
 <metal:main fill-slot="main">
     <tal:main-macro metal:define-macro="main">
 
-    <h1 class="documentFirstHeading" tal:content="context/Title" /> 
+    <h1 class="documentFirstHeading" tal:content="python: '#' + str(context.sequence_number) + ' ' + context.title"/> 
 
     <p class="documentDescription" tal:content="context/Description" />
 
@@ -76,7 +76,7 @@
 
         
         
-        <div tal:content="structure view/getResponseForm">dsfas</div>
+        <div class="responseForm" tal:content="structure view/getResponseForm">dsfas</div>
         <div class="visualClear"><!----></div>
         <!-- ><div tal:replace="structure provider:task.response.add" /> -->
 

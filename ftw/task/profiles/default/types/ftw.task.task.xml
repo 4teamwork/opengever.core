@@ -19,7 +19,7 @@
  <property name="schema">ftw.task.task.ITask</property> 
  
  <!-- class used for content items -->
- <property name="klass">plone.dexterity.content.Container</property>
+ <property name="klass">ftw.task.task.Task</property>
  
  <!-- add permission -->
  <property name="add_permission">cmf.AddPortalContent</property>

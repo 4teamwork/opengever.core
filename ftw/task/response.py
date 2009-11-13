@@ -1,6 +1,7 @@
 from five import grok
 from zope import schema
 
+from Acquisition import aq_inner, aq_parent
 from zope.schema.interfaces import IContextSourceBinder
 from zope.schema.vocabulary import SimpleVocabulary
 from Products.CMFCore.utils import getToolByName
@@ -12,8 +13,7 @@ from plone.directives import form, dexterity
 from plone.app.vocabularies.workflow import WorkflowTransitionsVocabulary
 from plone.z3cform import layout
 from z3c.form.interfaces import HIDDEN_MODE
-from zope.app.container.interfaces import IObjectAddedEvent, IObjectModifiedEvent
-
+from zope.app.container.interfaces import IObjectAddedEvent
 from opengever.translations.browser.edit import TranslatedEditForm
 
 from ftw.task import util
@@ -62,11 +62,14 @@ def changeTask(response, event):
 class Response(Item):
     pass
     
-"""
 class View(grok.View):
     grok.context(IResponse)
-    grok.require('zope2.View') 
-"""
+    grok.require('zope2.View')
+    
+    def __call__(self):
+        parent = aq_parent(aq_inner(self.context))
+        self.request.RESPONSE.redirect(parent.absolute_url())
+    
     
 class ResponseEditForm(TranslatedEditForm):
     def updateWidgets(self):
