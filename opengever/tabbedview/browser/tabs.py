@@ -189,9 +189,11 @@ class Journal(grok.View, OpengeverTab):
 
          if IAnnotationsJournalizable.providedBy(self.context):
              annotations = IAnnotations(context)
-             return annotations.get(JOURNAL_ENTRIES_ANNOTATIONS_KEY, [])
+             data = annotations.get(JOURNAL_ENTRIES_ANNOTATIONS_KEY, [])
          elif IWorkflowHistoryJournalizable.providedBy(self.context):
              raise NotImplemented
+         return filter(lambda a:a.get('action', 0) and a.get('action').get('visible', 0),
+                       data)
 
 from plone.app.workflow.interfaces import ISharingPageRole
 from zope.component import getUtilitiesFor, getMultiAdapter
