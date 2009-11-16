@@ -111,10 +111,6 @@ class Document(Item):
             return '%s (WorkingCopy)' % title
         return title
 
-    def Description(self):
-        description = Item.Description(self)
-        return description and str(description) or ''
-
     def getIcon(self, relative_to_portal=0):
         """Calculate the icon using the mime type of the file
         """

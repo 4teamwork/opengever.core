@@ -5,6 +5,9 @@ Changelog
 0.2
 ---
 
+* Issue #136: UnicodeEncodeError falls in Description Umlaute erfasst werden
+  [16.11.2009, jbaumann]
+
 * Issue #132: Dokument sollten nicht in den Home Folder ausgecheckt werden
   [12.11.2009, jbaumann]
 
