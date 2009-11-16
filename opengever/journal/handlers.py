@@ -1,9 +1,11 @@
 
 from five import grok
 
-from zope.event import notify 
+from persistent.dict import PersistentDict
+from zope.event import notify
 from zope.app.container.interfaces import IObjectAddedEvent
 from zope.lifecycleevent.interfaces import IObjectModifiedEvent
+from zope.i18nmessageid.message import Message
 
 from plone.versioningbehavior.utils import get_change_note
 from Products.CMFCore.interfaces import IActionSucceededEvent
@@ -12,71 +14,92 @@ from ftw.journal.events.events import JournalEntryEvent
 
 from opengever.document.document import IDocumentSchema
 from opengever.document.interfaces import IObjectCheckedInEvent, IObjectCheckedOutEvent
-from opengever.dossier.behaviors.dossier import IDossier 
+from opengever.dossier.behaviors.dossier import IDossierMarker
+from plone.app.iterate.interfaces import IWorkingCopy
 
 from opengever.journal import _
 
+def propper_string(value):
+    if not value:
+        return ''
+    elif isinstance(value, Message):
+        return value
+    elif isinstance(value, unicode):
+        return value.encode('utf8')
+    else:
+        return str(value)
 
 def journal_entry_factory(context, action, title,
                           visible=True, comment=''):
     comment = comment=='' and get_change_note(context.REQUEST, '') or comment
-    title = isinstance(title, unicode) and title.encode('utf8') or str(title)
-    action = isinstance(action, unicode) and action.encode('utf8') or str(action)
-    comment = isinstance(comment, unicode) and comment.encode('utf8') or str(comment)
+    title = propper_string( title )
+    action = propper_string( action )
+    comment = propper_string( action )
     entry = {
-            'obj' : context,
-            'action' : {
-                    'type' : action,
-                    'title' : title,
-                    'visible' : visible,
-            },
-            'comment' : comment,
-    }
+        'obj' : context,
+        'action' : PersistentDict({
+                'type' : action,
+                'title' : title,
+                'visible' : visible,
+                }),
+        'comment' : comment,
+        }
     notify(JournalEntryEvent(**entry))
 
 def translated_type(context):
     """
     Returns the translated type name of the context
     """
-    return context.portal_types.get(context.portal_type).Title()
+    type_name = context.portal_types.get(context.portal_type).Title()
+    return _(unicode(type_name))
 
 
 # ----------------------- DOSSIER -----------------------
 
 DOSSIER_ADDED_ACTION = 'Dossier added'
-@grok.subscribe(IDossier, IObjectAddedEvent)
+@grok.subscribe(IDossierMarker, IObjectAddedEvent)
 def dossier_added(context, event):
-    #title = _('label_dossier_added', default='${type} added', mapping={
-    #        'type' : translated_type(context),
-    #})
-    # XXX translations are not working in events -.-
-    title = 'Dossier added'
+    title = _(u'label_dossier_added', default=u'Dossier added: ${title}', mapping={
+            'title' : context.title_or_id(),
+            })
     journal_entry_factory(context, DOSSIER_ADDED_ACTION, title)
+    return
 
 
 
 DOSSIER_MODIIFED_ACTION = 'Dossier modified'
-@grok.subscribe(IDossier, IObjectModifiedEvent)
+@grok.subscribe(IDossierMarker, IObjectModifiedEvent)
 def dossier_modified(context, event):
-    #title = _('label_dossier_modified', default='${type} modified', mapping={
-    #        'type' : translated_type(context),
-    #})
-    # XXX translations are not working in events -.-
-    title = 'Dossier modified'
-    journal_entry_factory(context, DOSSIER_ADDED_ACTION, title, visible=False)
+    title = _(u'label_dossier_modified', default=u'Dossier modified')
+    print title
+    # XXX dirty
+    try:
+        # if we delete the working copy, we get a aq_based object and don't wanna
+        # make a journal entry
+        context.portal_types
+    except AttributeError:
+        return
+    journal_entry_factory(context, DOSSIER_MODIIFED_ACTION, title, visible=False)
+    return
 
 
 
 DOSSIER_STATE_CHANGED = 'Dossier state changed'
-@grok.subscribe(IDossier, IActionSucceededEvent)
+@grok.subscribe(IDossierMarker, IActionSucceededEvent)
 def dossier_state_changed(context, event):
+    skip_transactions = [
+        ]
+    if event.action in skip_transactions:
+        return
     newstate = event.workflow.transitions.get(event.action).new_state_id
-    # XXX translations are not working in events -.-
-    title = 'Dossier state changed to %(newstate)s (%(action)s)' % {
+    title = _(u'label_dossier_transition',
+              default = u'Dossier state changed to ${newstate} (${action})',
+              mapping = {
             'newstate' : newstate,
             'action' : event.action,
-    }
+            })
     journal_entry_factory(context, DOSSIER_STATE_CHANGED, title)
+    return
 
 
 
@@ -85,50 +108,53 @@ def dossier_state_changed(context, event):
 DOCUMENT_ADDED_ACTION = 'Document added'
 @grok.subscribe(IDocumentSchema, IObjectAddedEvent)
 def document_added(context, event):
-    #title = _('label_document_added', default='${type} added: ${title}', mapping={
-    #        'type' : translated_type(context),
-    #        'title' : context.title_or_id(),
-    #})
-    # XXX translations are not working in events -.-
-    title = 'Document added: %(title)s' % {
-        'title' : context.title_or_id(),
-    }
+    if IWorkingCopy.providedBy(context):
+        return
+    title = _(u'label_document_added', default=u'Document added: ${title}', mapping={
+            'title' : context.title_or_id(),
+            })
     # journal_entry for document:
     journal_entry_factory(context, DOCUMENT_ADDED_ACTION, title)
     # journal entry for parent (usually dossier)
     journal_entry_factory(context.aq_inner.aq_parent, DOCUMENT_ADDED_ACTION, title)
+    return
 
 
 
 DOCUMENT_MODIIFED_ACTION = 'Document modified'
 @grok.subscribe(IDocumentSchema, IObjectModifiedEvent)
 def document_modified(context, event):
-    #title = _('label_document_modified', default='${type} modified', mapping={
-    #        'type' : translated_type(context),
-    #})
-    # XXX translations are not working in events -.-
+    title = _(u'label_document_modified', default=u'Document modified')
     # XXX dirty
     try:
-        # if we delete the working copy, we get a aq_based object and don't wann
+        # if we delete the working copy, we get a aq_based object and don't wanna
         # make a journal entry
         context.portal_types
     except AttributeError:
         return
-    title = 'Document modified'
     journal_entry_factory(context, DOCUMENT_MODIIFED_ACTION, title, visible=False)
+    return
 
 
 
 DOCUMENT_STATE_CHANGED = 'Document state changed'
 @grok.subscribe(IDocumentSchema, IActionSucceededEvent)
 def document_state_changed(context, event):
+    skip_transactions = [
+        'check_out',
+        'check_in',
+        ]
+    if event.action in skip_transactions:
+        return
     newstate = event.workflow.transitions.get(event.action).new_state_id
-    # XXX translations are not working in events -.-
-    title = 'Document state changed to %(newstate)s (%(action)s)' % {
+    title = _(u'label_document_transition',
+              default = u'Document state changed to ${newstate} (${action})',
+              mapping = {
             'newstate' : newstate,
             'action' : event.action,
-    }
+            })
     journal_entry_factory(context, DOCUMENT_STATE_CHANGED, title)
+    return
 
 
 
@@ -136,16 +162,20 @@ DOCUMENT_CHECKED_OUT = 'Document checked out'
 @grok.subscribe(IDocumentSchema, IObjectCheckedOutEvent)
 def document_checked_out(context, event):
     user_comment = event.comment
-    title = 'Document checked out'
+    title = _(u'label_document_checkout',
+              default = u'Document checked out',)
     journal_entry_factory(context, DOCUMENT_CHECKED_OUT, title,
                           comment=user_comment)
+    return
 
 
 DOCUMENT_CHECKED_IN = 'Document checked in'
 @grok.subscribe(IDocumentSchema, IObjectCheckedInEvent)
 def document_checked_in(context, event):
     user_comment = event.comment
-    title = 'Document checked in'
+    title = _(u'label_document_checkin',
+              default = u'Document checked in',)
     journal_entry_factory(context, DOCUMENT_CHECKED_IN, title,
                           comment=user_comment)
+    return
 

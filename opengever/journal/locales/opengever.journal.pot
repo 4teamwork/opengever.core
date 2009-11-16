@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2009-10-13 09:31+0000\n"
+"POT-Creation-Date: 2009-11-16 14:24+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,6 +20,46 @@ msgstr ""
 #. Default: "Journal"
 #: opengever.journal/opengever/journal/browser_templates/journalhistory.pt:15
 msgid "heading_journal"
+msgstr ""
+
+#. Default: "Document added: ${title}"
+#: opengever.journal/opengever/journal/handlers.py:113
+msgid "label_document_added"
+msgstr ""
+
+#. Default: "Document checked in"
+#: opengever.journal/opengever/journal/handlers.py:176
+msgid "label_document_checkin"
+msgstr ""
+
+#. Default: "Document checked out"
+#: opengever.journal/opengever/journal/handlers.py:165
+msgid "label_document_checkout"
+msgstr ""
+
+#. Default: "Document modified"
+#: opengever.journal/opengever/journal/handlers.py:127
+msgid "label_document_modified"
+msgstr ""
+
+#. Default: "Document state changed to ${newstate} (${action})"
+#: opengever.journal/opengever/journal/handlers.py:150
+msgid "label_document_transition"
+msgstr ""
+
+#. Default: "Dossier added: ${title}"
+#: opengever.journal/opengever/journal/handlers.py:62
+msgid "label_dossier_added"
+msgstr ""
+
+#. Default: "Dossier modified"
+#: opengever.journal/opengever/journal/handlers.py:73
+msgid "label_dossier_modified"
+msgstr ""
+
+#. Default: "Dossier state changed to ${newstate} (${action})"
+#: opengever.journal/opengever/journal/handlers.py:95
+msgid "label_dossier_transition"
 msgstr ""
 
 #. Default: "Journal"

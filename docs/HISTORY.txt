@@ -5,6 +5,10 @@ Changelog
 0.2
 ---
 
+* Issue #135: Journal: Einträge lokalisieren
+  Updated journal event handlers and its translations
+  [16.11.2009, jbaumann]
+
 * Issue #33: Checkout / Checkin
   Checkin / checkout events werden im journal notiert
   [07.11.2009, jbaumann]
