@@ -23,6 +23,8 @@ setup(name='opengever.base',
       zip_safe=False,
       install_requires=[
           'setuptools',
+          'plone.dexterity',
+          'plone.autoform',
           # -*- Extra requirements: -*-
       ],
       entry_points="""
