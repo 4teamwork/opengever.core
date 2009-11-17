@@ -11,6 +11,9 @@
 
     <!-- Grok the package to initialise schema interfaces and content classes -->
     <grok:grok package="." />
+    
+    <!-- include overrides -->
+    <includeOverrides file="overrides.zcml" />
 
     <!-- Register an extension profile to make the product installable -->
     <genericsetup:registerProfile
@@ -27,5 +30,13 @@
         class=".response.ResponseEditView"
         permission="cmf.ModifyPortalContent"
         />
-
+        
+        
+        <adapter
+            for="plone.dexterity.interfaces.IDexterityContainer
+                 opengever.theme.browser.interfaces.IThemeSpecific
+                 plone.dexterity.interfaces.IDexterityItem"
+            provides="zope.publisher.interfaces.browser.IBrowserPage"
+            factory=".response.ResponseAddView"
+            />
 </configure>

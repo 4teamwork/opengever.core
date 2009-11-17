@@ -1,5 +1,6 @@
 from five import grok
 from zope import schema
+import os.path
 
 from Acquisition import aq_inner, aq_parent
 from zope.schema.interfaces import IContextSourceBinder
@@ -12,9 +13,14 @@ from plone.dexterity.content import Item
 from plone.directives import form, dexterity
 from plone.app.vocabularies.workflow import WorkflowTransitionsVocabulary
 from plone.z3cform import layout
+from plone.formwidget.autocomplete import AutocompleteFieldWidget
+
 from z3c.form.interfaces import HIDDEN_MODE
 from zope.app.container.interfaces import IObjectAddedEvent
 from opengever.translations.browser.edit import TranslatedEditForm
+from opengever.translations.browser.add import TranslatedAddForm, TranslatedAddView
+
+
 
 from ftw.task import util
 from ftw.task import _
@@ -26,10 +32,11 @@ class IResponse(form.Schema):
         required = True,
     )
 
+    form.widget(responsible=AutocompleteFieldWidget)
     responsible = schema.Choice(
         title=_(u"label_responsible_Response", default="Responsible"),
         description =_(u"help_responsible_response", default=""),
-        source= util.getManagersVocab,
+        source = util.getManagersVocab,
         required = False,
     )
 
@@ -70,7 +77,7 @@ class View(grok.View):
         parent = aq_parent(aq_inner(self.context))
         self.request.RESPONSE.redirect(parent.absolute_url())
     
-    
+
 class ResponseEditForm(TranslatedEditForm):
     def updateWidgets(self):
         super(ResponseEditForm, self).updateWidgets()
@@ -78,6 +85,18 @@ class ResponseEditForm(TranslatedEditForm):
         for name in names:
             if name in  self.widgets.keys():
                 self.widgets[name].mode = HIDDEN_MODE
-                
 ResponseEditView = layout.wrap_form(ResponseEditForm)
+                
+class ResponseAddForm(TranslatedAddForm):
+    action_postfix = None
+    @property
+    def action(self):
+        """See interfaces.IInputForm"""
+        if self.action_postfix:
+            return os.path.join(self.request.getURL(), self.action_postfix)
+        else:
+            return self.request.getURL()
+
+class ResponseAddView(TranslatedAddView):
+    form = ResponseAddForm
     

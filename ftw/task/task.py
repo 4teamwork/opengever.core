@@ -1,23 +1,31 @@
 from five import grok
 from zope import schema
-from Acquisition import aq_parent, aq_inner
-
+from zope.interface import implements, Interface
+from zope.traversing.interfaces import ITraversable
+from zope.publisher.interfaces.browser import IBrowserRequest, IBrowserPage
 from zope.component import queryMultiAdapter, getUtility
 from zope.schema.interfaces import IContextSourceBinder
-from zope.app.container.interfaces import IObjectAddedEvent
 from zope.schema.vocabulary import SimpleVocabulary
+from zope.app.container.interfaces import IObjectAddedEvent
+
+
+from Acquisition import aq_parent, aq_inner
+from AccessControl import getSecurityManager
 from Products.CMFCore.utils import getToolByName
-from zope.publisher.interfaces.browser import IBrowserPage
 from Products.CMFDefault.interfaces import ICMFDefaultSkin
+
+from plone.formwidget import autocomplete
+from plone.formwidget.autocomplete import AutocompleteFieldWidget
+
+from plone.z3cform.traversal import WidgetTraversal
 from plone.dexterity.interfaces import IDexterityFTI
-
 from plone.dexterity.content import Item, Container
-from plone.directives import form, dexterity
 
+from plone.directives import form, dexterity
 from plone.app.textfield import RichText
 from plone.namedfile.field import NamedImage
-from ftw.task import util
 
+from ftw.task import util
 from ftw.task import _
 
 class ITask(form.Schema):
@@ -45,7 +53,8 @@ class ITask(form.Schema):
         values = (_(u"label_critical", default=u"critical"), _(u"label_important", default=u"important"), _(u"label_medium", default=u"medium"), _(u"lebel_low", default=u"low")),
         required =True,
     )
-    
+
+    form.widget(responsible=AutocompleteFieldWidget)
     responsible = schema.Choice(
         title=_(u"label_responsible", default="Responsible"),
         description =_(u"help_responsible", default="select an responsible Manger"),
@@ -92,8 +101,12 @@ class Task(Container):
     def sequence_number(self):
         return self._sequence_number
 
+
+class ITaskView(Interface):
+    pass
 #class View(grok.View):
 class View(dexterity.DisplayForm):
+    implements(ITaskView)
     grok.context(ITask)
     grok.require('zope2.View')
     
@@ -101,7 +114,10 @@ class View(dexterity.DisplayForm):
         fti = getUtility(IDexterityFTI, name='ftw.task.response')
         adder = queryMultiAdapter((self.context, self.request, fti),
                               IBrowserPage)
-        return adder.form_instance()
+        form = adder.form_instance
+        form.action_postfix = "++add++ftw.task.response/"
+        import pdb; pdb.set_trace( )
+        return form()
         
     def getSubTasks(self):
         tasks = self.context.getFolderContents(full_objects=False, contentFilter={'portal_type':'ftw.task.task'})
@@ -110,3 +126,48 @@ class View(dexterity.DisplayForm):
     def getResponses(self):
         responses = self.context.getFolderContents(full_objects=True, contentFilter={'portal_type':'ftw.task.response'})
         return responses
+
+class TaskWidgetTraversal(WidgetTraversal):
+    implements(ITraversable)
+
+    def __init__(self, context,request = None):
+        self.request = request
+        
+        if not ITask.providedBy(context):
+            context = aq_parent( aq_inner( context ) )
+        fti = getUtility(IDexterityFTI, name='ftw.task.response')
+        adder = queryMultiAdapter((context, self.request, fti),
+                              IBrowserPage)
+
+        self.context = adder    
+        
+grok.global_adapter(TaskWidgetTraversal, ((ITask, IBrowserRequest)), ITraversable, name=u"widget")
+grok.global_adapter(TaskWidgetTraversal, ((ITaskView, IBrowserRequest)), ITraversable, name=u"widget")
+
+
+class TaskAutoCompleteSearch(grok.CodeView, autocomplete.widget.AutocompleteSearch):
+    grok.context(autocomplete.interfaces.IAutocompleteWidget)
+    grok.name("autocomplete-search")
+
+    def __call__(self):
+        return autocomplete.widget.AutocompleteSearch.__call__(self)
+
+    def validate_access(self):
+        content = self.context.form.context
+        super_method = autocomplete.widget.AutocompleteSearch.validate_access
+        if not ITask.providedBy(content):
+            # not on a task
+            return super_method(self)
+        view_name = self.request.getURL().split('/')[-3]
+        if view_name in ['edit', 'add', '@@edit'] or view_name.startswith('++add++'):
+            # edit task itself
+            return super_method(self)
+        # add response to the task
+        view_name = '++add++ftw.task.response'
+        view_instance = content.restrictedTraverse(view_name)
+        getSecurityManager().validate(content, content, view_name, view_instance)
+        
+    def render(self):
+        pass
+    
+    

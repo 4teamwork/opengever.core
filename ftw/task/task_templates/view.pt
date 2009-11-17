@@ -10,15 +10,26 @@
 <metal:main fill-slot="main">
     <tal:main-macro metal:define-macro="main">
 
+    <div tal:replace="structure provider:plone.abovecontenttitle" />
+
     <h1 class="documentFirstHeading" tal:content="python: '#' + str(context.sequence_number) + ' ' + context.title"/> 
+
+    <div tal:replace="structure provider:plone.belowcontenttitle" />
 
     <p class="documentDescription" tal:content="context/Description" />
 
+    <div tal:replace="structure provider:plone.abovecontentbody" />
+
     <div class="field" tal:repeat="widget view/widgets/values">
-        <tal:block condition="python:widget.__name__ not in ('IBasic.title', 'IBasic.description', 'title', 'description',)">
+        <tal:block condition="python:widget.__name__ not in ('IBasic.title', 'IBasic.description', 'title', 'description','responsible')">
             <label tal:content="widget/label" />
             <br />
             <div tal:content="structure widget/render" />
+        </tal:block>
+        <tal:block condition="python:widget.__name__  == 'responsible' ">
+            <label tal:content="widget/label" />
+            <br />
+            <div tal:content="structure python: widget.value[0]" />
         </tal:block>
     </div>
     
@@ -73,15 +84,15 @@
             <div><span tal:condition="not: items" i18n:translate="no_response">No Responses</span></div>
         </tal:items>
 
-
-        
-        
         <div class="responseForm" tal:content="structure view/getResponseForm">dsfas</div>
         <div class="visualClear"><!----></div>
         <!-- ><div tal:replace="structure provider:task.response.add" /> -->
 
         <div class="visualClear"><!----></div>
 
+        <div tal:replace="structure provider:plone.belowcontentbody" />
+        
+        
     </tal:main-macro>
 </metal:main>
 
