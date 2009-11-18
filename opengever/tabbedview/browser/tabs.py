@@ -47,7 +47,7 @@ class SubDossiers(Dossiers):
 class Tasks(OpengeverListingTab):
     grok.name('tabbedview_view-tasks')
 
-    types = ['dummy.task',]
+    types = ['ftw.task.task',]
     
 class Events(OpengeverListingTab):
     grok.name('tabbedview_view-events')
@@ -122,7 +122,7 @@ class DossierOverview(grok.View, OpengeverTab):
         return self.catalog(['opengever.dossier.projectdossier', 'opengever.dossier.businesscasedossier',])[:5]  
                                             
     def tasks(self):
-        return self.catalog(['dummy.task', ])[:5]  
+        return self.catalog(['ftw.task.task', ])[:5]  
     
     def documents(self): 
         return self.catalog(['opengever.document.document',] )[:10]                                        
@@ -189,11 +189,9 @@ class Journal(grok.View, OpengeverTab):
 
          if IAnnotationsJournalizable.providedBy(self.context):
              annotations = IAnnotations(context)
-             data = annotations.get(JOURNAL_ENTRIES_ANNOTATIONS_KEY, [])
+             return annotations.get(JOURNAL_ENTRIES_ANNOTATIONS_KEY, [])
          elif IWorkflowHistoryJournalizable.providedBy(self.context):
              raise NotImplemented
-         return filter(lambda a:a.get('action', 0) and a.get('action').get('visible', 0),
-                       data)
 
 from plone.app.workflow.interfaces import ISharingPageRole
 from zope.component import getUtilitiesFor, getMultiAdapter
@@ -257,4 +255,3 @@ class Sharing(SharingView):
     #         },
     #     ]
 
-        
