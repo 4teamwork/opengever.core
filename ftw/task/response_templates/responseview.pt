@@ -10,7 +10,7 @@
          <div class="response-actions"
               tal:condition="viewlet/can_edit_response|viewlet/can_delete_response">
            <form method="post"
-                 tal:attributes="action string:@@poi_response_edit"
+                 tal:attributes="action string:@@task_response_edit"
                  tal:condition="viewlet/can_edit_response">
              <input type="hidden" name="response_id" tal:attributes="value id" />
              <input class="standalone"
@@ -20,7 +20,7 @@
                     />
            </form>
            <form method="post"
-                 tal:attributes="action string:@@poi_response_delete"
+                 tal:attributes="action string:@@task_response_delete"
                  tal:condition="viewlet/can_delete_response">
              <input type="hidden" name="response_id" tal:attributes="value id" />
              <input class="destructive"
@@ -32,10 +32,10 @@
          </div>
 
          <div class="response-info">
-           <span i18n:translate="poi_added_by">Added by</span>
+           <span i18n:translate="task_added_by">Added by</span>
            <span class="contact-user"
                  tal:content="python: response.creator" />
-           <span i18n:translate="poi_added_on">on</span>
+           <span i18n:translate="task_added_on">on</span>
            <span class="contact-user"
                  tal:content="python:here.toLocalizedTime(response.date, long_format=True)" />
            <div tal:repeat="delta response/changes">

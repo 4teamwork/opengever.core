@@ -482,7 +482,7 @@ class Delete(Base):
     def __call__(self):
         context = aq_inner(self.context)
         status = IStatusMessage(self.request)
-
+        
         if not self.can_delete_response:
             msg = _(u"You are not allowed to delete responses.")
             msg = translate(msg, 'Poi', context=self.request)

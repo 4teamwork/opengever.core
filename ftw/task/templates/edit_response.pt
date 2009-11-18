@@ -1,17 +1,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US"
       lang="en-US"
       metal:use-macro="here/main_template/macros/master"
-      i18n:domain="Poi">
+      i18n:domain="ftw.task">
 
   <head>
     <metal:block
         fill-slot="top_slot"
         tal:define="dummy python:request.set('disable_border',1)" />
-
-    <metal:css fill-slot="css_slot">
-      <style type="text/css" media="all"
-             tal:content="string:@import url($portal_url/poi.css);"></style>
-    </metal:css>
   </head>
 
   <body>
@@ -43,12 +38,12 @@
                i18n:translate="label_return_to_issue">Return to issue.</a>
           </p>
 
-          <form method="post" action="@@poi_response_save"
+          <form method="post" action="@@task_response_save"
                 tal:condition="view/can_edit_response">
 
             <div class="field">
               <label for="response"
-                     i18n:translate="Poi_label_response">Response</label>
+                     i18n:translate="response_label_response">Response</label>
 
               <div class="formHelp" id="response_help"
                    i18n:translate="label_enter_response">Please enter your response below</div>
