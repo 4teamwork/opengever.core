@@ -76,7 +76,7 @@ class IResponse(Interface):
     transition = schema.Choice(
         title=_("label_transition", default="Transition"),
         description=_(u"help_transition", default=""),
-        vocabulary=u"plone.app.vocabularies.WorkflowTransitions",
+        source = util.getTransitionVocab,
         required = False,
         )
         
@@ -268,17 +268,18 @@ class AddForm(form.AddForm):
             #   new_response.type =  'reply'
                    
             #check transition
-            #XXX WORKFLOW CHANGES 
-            if data.get('transition') and data.get('transition') in util.getTransitionVocab:
-                wftool = getToolByName(context, 'portal_workflow')
-                before = wftool.getInfoFor(context, 'review_state')
-                before = wftool.getTitleForStateOnType(before, 'PoiIssue')
-                wftool.doActionFor(context, data.get('transition'))
-                after = wftool.getInfoFor(context, 'review_state')
-                after = wftool.getTitleForStateOnType(after, 'PoiIssue')
-                new_response.add_change('review_state', _(u'Issue state'),
-                                        before, after)
-            
+            if data.get('transition'):
+                wftool = getToolByName(self.context, 'portal_workflow')
+                before = wftool.getInfoFor(self.context, 'review_state')
+                if data.get('transition') != before:
+                    before = wftool.getTitleForStateOnType(before, task.type)
+                    wftool.doActionFor(self.context, data.get('transition'))
+                    after = wftool.getInfoFor(self.context, 'review_state')
+                    after = wftool.getTitleForStateOnType(after, task.type)
+                    new_response.add_change('review_state', _(u'Issue state'),
+                                        before, after)  
+
+            #check other fields
             options = [(task.deadline, data.get('deadline'), 'deadline',  _('deadline')),(task.responsible, data.get('new_responsible'), 'responsible', _('responsible'))]
             for task_field, resp_field, option, title in options:
                 if resp_field and task_field != resp_field:
@@ -318,9 +319,6 @@ class AddFormView(layout.FormWrapper, grok.Viewlet, Base):
 
     def render(self):
         return layout.FormWrapper.render_form(self)
-    
-        
-
      
      
 class Create(Base):

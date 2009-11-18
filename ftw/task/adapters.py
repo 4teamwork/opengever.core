@@ -125,7 +125,6 @@ class Response(Persistent):
         self.type = 'additional'
         self.mimetype = ''
         self.rendered_text = None
-        self.attachment = None
 
     def add_change(self, id, name, before, after):
         """Add a new issue change.
