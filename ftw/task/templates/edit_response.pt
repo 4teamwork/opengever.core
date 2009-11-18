@@ -13,6 +13,17 @@
     <div metal:fill-slot="main">
 
       <div metal:define-macro="body">
+          
+          <div tal:replace="structure provider:plone.abovecontenttitle" />
+
+          <h1 class="documentFirstHeading" tal:content="python: '#' + str(context.sequence_number) + ' ' + context.title"/> 
+
+          <div tal:replace="structure provider:plone.belowcontenttitle" />
+
+          <p class="documentDescription" tal:content="context/Description" />
+
+          <div tal:replace="structure provider:plone.abovecontentbody" />
+
 
         <tal:no_response condition="not:view/response_found">
 
