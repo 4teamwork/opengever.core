@@ -1,4 +1,3 @@
 <object name="portal_types">
  <object name="ftw.task.task" meta_type="Dexterity FTI" />
- <object name="ftw.task.response" meta_type="Dexterity FTI" />
 </object>

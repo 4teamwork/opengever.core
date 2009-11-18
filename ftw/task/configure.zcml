@@ -12,9 +12,6 @@
     <!-- Grok the package to initialise schema interfaces and content classes -->
     <grok:grok package="." />
     
-    <!-- include overrides -->
-    <includeOverrides file="overrides.zcml" />
-
     <!-- Register an extension profile to make the product installable -->
     <genericsetup:registerProfile
         name="default"
@@ -24,19 +21,49 @@
         provides="Products.GenericSetup.interfaces.EXTENSION"
         />
         
-    <browser:page
-        for="ftw.task.response.IResponse"
-        name="edit"
-        class=".response.ResponseEditView"
-        permission="cmf.ModifyPortalContent"
+    <browser:viewletManager
+        name="ftw.task.response.add"
+        provides=".interfaces.IResponseAdder"
+        permission="zope2.View"
+        class=".response.AddForm"
         />
+
+    <browser:page
+       name="create_response"
+       for="ftw.task.task.ITask"
+       permission="zope2.View"
+       class=".response.Create"
+       allowed_interface=".interfaces.ICreateResponse"
+       />
+
+    <browser:page
+       name="task_response_delete"
+       for="ftw.task.task.ITask"
+       permission="zope2.View"
+       class=".response.Delete"
+       />
+
+    <browser:page
+       name="task_response_edit"
+       for="ftw.task.task.ITask"
+       permission="zope2.View"
+       class=".response.Edit"
+       template="templates/edit_response.pt"
+       />
+
+    <browser:page
+       name="task_response_save"
+       for="ftw.task.task.ITask"
+       permission="zope2.View"
+       class=".response.Save"
+       />
+
+    <browser:page
+       name="task_response_attachment"
+       for="ftw.task.task.ITask"
+       permission="zope2.View"
+       class=".response.Download"
+       />
         
-        
-        <adapter
-            for="plone.dexterity.interfaces.IDexterityContainer
-                 opengever.theme.browser.interfaces.IThemeSpecific
-                 plone.dexterity.interfaces.IDexterityItem"
-            provides="zope.publisher.interfaces.browser.IBrowserPage"
-            factory=".response.ResponseAddView"
-            />
+
 </configure>

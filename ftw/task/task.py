@@ -97,10 +97,13 @@ def setID(task, event):
     task._sequence_number = util.create_sequence_number( task )
     
 class Task(Container):
+    implements(ITask)
+    
     @property
     def sequence_number(self):
         return self._sequence_number
-
+        
+        
 
 class ITaskView(Interface):
     pass
@@ -110,15 +113,6 @@ class View(dexterity.DisplayForm):
     grok.context(ITask)
     grok.require('zope2.View')
     
-    def getResponseForm(self):
-        fti = getUtility(IDexterityFTI, name='ftw.task.response')
-        adder = queryMultiAdapter((self.context, self.request, fti),
-                              IBrowserPage)
-        form = adder.form_instance
-        form.action_postfix = "++add++ftw.task.response/"
-        import pdb; pdb.set_trace( )
-        return form()
-        
     def getSubTasks(self):
         tasks = self.context.getFolderContents(full_objects=False, contentFilter={'portal_type':'ftw.task.task'})
         return tasks
@@ -135,7 +129,7 @@ class TaskWidgetTraversal(WidgetTraversal):
         
         if not ITask.providedBy(context):
             context = aq_parent( aq_inner( context ) )
-        fti = getUtility(IDexterityFTI, name='ftw.task.response')
+        fti = getUtility(IDexterityFTI, name='ftw.task.task')
         adder = queryMultiAdapter((context, self.request, fti),
                               IBrowserPage)
 
@@ -163,7 +157,9 @@ class TaskAutoCompleteSearch(grok.CodeView, autocomplete.widget.AutocompleteSear
             # edit task itself
             return super_method(self)
         # add response to the task
-        view_name = '++add++ftw.task.response'
+        # XXX
+        return
+        view_name = '++add++ftw.task.task'
         view_instance = content.restrictedTraverse(view_name)
         getSecurityManager().validate(content, content, view_name, view_instance)
         

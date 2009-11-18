@@ -1,0 +1,100 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US"
+      lang="en-US"
+      metal:use-macro="here/main_template/macros/master"
+      i18n:domain="Poi">
+
+  <head>
+    <metal:block
+        fill-slot="top_slot"
+        tal:define="dummy python:request.set('disable_border',1)" />
+
+    <metal:css fill-slot="css_slot">
+      <style type="text/css" media="all"
+             tal:content="string:@import url($portal_url/poi.css);"></style>
+    </metal:css>
+  </head>
+
+  <body>
+    <div metal:fill-slot="main">
+
+      <div metal:define-macro="body">
+
+        <tal:no_response condition="not:view/response_found">
+
+          <h3 i18n:translate="title_error_no_response">Error: no response found for editing</h3>
+          <p>
+            <a href=""
+               tal:attributes="href context/absolute_url"
+               i18n:translate="label_return_to_issue">Return to issue.</a>
+          </p>
+
+        </tal:no_response>
+
+        <tal:response condition="view/response_found">
+
+          <h3 i18n:translate="title_edit_response">Edit response</h3>
+
+          <p tal:condition="not:view/can_edit_response">
+            <tal:foo i18n:translate="label_edit_response_not_allowed">
+              You are not allowed to edit this response.
+            </tal:foo>
+            <a href=""
+               tal:attributes="href context/absolute_url"
+               i18n:translate="label_return_to_issue">Return to issue.</a>
+          </p>
+
+          <form method="post" action="@@poi_response_save"
+                tal:condition="view/can_edit_response">
+
+            <div class="field">
+              <label for="response"
+                     i18n:translate="Poi_label_response">Response</label>
+
+              <div class="formHelp" id="response_help"
+                   i18n:translate="label_enter_response">Please enter your response below</div>
+              <div>
+
+                <tal:wysiwyg
+                    tal:condition="view/use_wysiwyg">
+                  <tal:comment replace="nothing">
+                    The tal:defines below are here so that both kupu and
+                    FCKeditor work.  Partly it is taken from FCKeditor.
+                  </tal:comment>
+                  <tal:block
+                      define="inputname string:response;
+                              inputvalue view/response/text;
+                              member python:context.portal_membership.getAuthenticatedMember();
+                              editor python:member.getProperty('wysiwyg_editor', 'plone_wysiwyg').lower();
+                              portal_url context/portal_url;
+                              portal context/portal_url/getPortalObject;
+                              here_url context/portal_url;
+                              support python: path('nocall:here/%s_wysiwyg_support|here/%s/wysiwyg_support|here/portal_skins/plone_wysiwyg/wysiwyg_support' % (editor, editor));"
+                      on-error="string:$editor not installed correctly: ${error/value}">
+
+
+                    <metal:block metal:use-macro="support/macros/wysiwygEditorBox" />
+                  </tal:block>
+                </tal:wysiwyg>
+
+                <textarea
+                    tal:condition="not:view/use_wysiwyg"
+                    tal:content="view/response/text"
+                    cols="40" rows="15" name="response" id="response"></textarea>
+
+              </div>
+
+            </div>
+
+            <input type="hidden" name="response_id" tal:attributes="value request/response_id" />
+
+            <div class="formControls">
+              <input class="standalone" value="Submit" type="submit"
+                     i18n:domain="plone" i18n:attributes="value"/>
+            </div>
+          </form>
+        </tal:response>
+      </div>
+    </div>
+
+  </body>
+</html>

@@ -25,7 +25,6 @@ def getManagersVocab(context):
             member_name = member_name + "  " + user.getProperty('email') or member_name
 
             terms.append(SimpleVocabulary.createTerm(user.getId(), str(user.getId()), member_name))
-            
     return UsersVocabulary(terms)
 
 @grok.provider(IContextSourceBinder)

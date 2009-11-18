@@ -1,0 +1,58 @@
+<div class="response-adder"
+     i18n:domain="ftw.task">
+     <tal:responses repeat="response_info viewlet/responses">
+       <div class="response-reply"
+            tal:define="id response_info/id;
+                        response nocall:response_info/response;
+                        html response_info/html;"
+            tal:attributes="class string:response-${response/type}">
+
+         <div class="response-actions"
+              tal:condition="viewlet/can_edit_response|viewlet/can_delete_response">
+           <form method="post"
+                 tal:attributes="action string:@@poi_response_edit"
+                 tal:condition="viewlet/can_edit_response">
+             <input type="hidden" name="response_id" tal:attributes="value id" />
+             <input class="standalone"
+                    type="submit"
+                    i18n:attributes="value"
+                    value="Edit"
+                    />
+           </form>
+           <form method="post"
+                 tal:attributes="action string:@@poi_response_delete"
+                 tal:condition="viewlet/can_delete_response">
+             <input type="hidden" name="response_id" tal:attributes="value id" />
+             <input class="destructive"
+                    type="submit"
+                    i18n:attributes="value"
+                    value="Delete"
+                    />
+           </form>
+         </div>
+
+         <div class="response-info">
+           <span i18n:translate="poi_added_by">Added by</span>
+           <span class="contact-user"
+                 tal:content="python: response.creator" />
+           <span i18n:translate="poi_added_on">on</span>
+           <span class="contact-user"
+                 tal:content="python:here.toLocalizedTime(response.date, long_format=True)" />
+           <div tal:repeat="delta response/changes">
+             <span i18n:translate="" tal:content="string:${delta/name}" />:
+             <span class="issueChange"
+                   i18n:translate=""
+                   i18n:domain="plone"
+                   tal:content="delta/before" />
+             &rarr;
+             <span class="issueChange"
+                   i18n:translate=""
+                   i18n:domain="plone"
+                   tal:content="delta/after" />
+           </div>
+
+         </div>
+         <span tal:replace="structure html" />
+       </div>
+     </tal:responses>
+</div>
