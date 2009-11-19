@@ -46,6 +46,15 @@ class SubDossiers(Dossiers):
 
 class Tasks(OpengeverListingTab):
     grok.name('tabbedview_view-tasks')
+    
+    columns= (
+                ('', helper.draggable),
+                ('', helper.path_checkbox),
+                ('Title', helper.linked),
+                ('deadline', helper.readable_date),
+                ('responsible', helper.readable_author),
+                ('review_state'),
+            )
 
     types = ['ftw.task.task',]
     
@@ -55,7 +64,7 @@ class Events(OpengeverListingTab):
     types = ['dummy.event',]
 
 
-#code below might go to opengover.dossier.. 
+#code below might go to opengover.dossier..     
 
 from zope.annotation.interfaces import IAnnotations, IAnnotatable
 from ftw.journal.interfaces import IAnnotationsJournalizable, IWorkflowHistoryJournalizable
