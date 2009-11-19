@@ -67,6 +67,7 @@ class IDocumentSchema(form.Schema):
         title = _(u'label_preserved_as_paper', default='Preserved as paper'),
         description = _(u'help_preserved_as_paper', default=''),
         required = False,
+        default = True,
         )
 
     form.omitted('archival_file')
