@@ -26,10 +26,10 @@
             <br />
             <div tal:content="structure widget/render" />
         </tal:block>
-        <tal:block condition="python:widget.__name__  == 'responsible' ">
+        <tal:block condition="python:widget.__name__  == 'responsible'">
             <label tal:content="widget/label" />
             <br />
-            <div tal:content="structure python: widget.value[0]" />
+            <div tal:content="structure python: len(widget.value) > 0 and widget.value[0] or '' " />
         </tal:block>
     </div>
     
