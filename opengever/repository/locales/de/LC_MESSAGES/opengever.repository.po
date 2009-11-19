@@ -138,7 +138,7 @@ msgstr "Klassifikation"
 #. Default: "Custody period (years)"
 #: opengever.repository/opengever/repository/classification.py:78
 msgid "label_custody_period"
-msgstr "Schutzfrist dauer (Jahre)"
+msgstr "Archivische Schutzfrist (Jahre)"
 
 #. Default: "Description"
 #: opengever.repository/opengever/repository/repositoryfolder.py:46

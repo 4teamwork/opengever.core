@@ -61,12 +61,19 @@ class IClassification(form.Schema):
         u'lifecycle',
         label = _(u'fieldset_lifecycle', default=u'Life Cycle'),
         fields = [
+                u'retention_period',
                 u'archival_value',
                 u'custody_period',
-                u'retention_period',
         ],
     )
-            
+
+    retention_period = schema.Int(
+            title = _(u'label_retention_period', u'Retention period (years)'),
+            description = _(u'help_retention_period', default=u''),
+            default = 10,
+            required = False,
+    )
+
     archival_value = schema.Choice(
             title = _(u'label_archival_value', default=u'Archival value'),
             description = _(u'help_archival_value', default=u'Archival value code'),
@@ -80,14 +87,6 @@ class IClassification(form.Schema):
             default = 10,
             required = False,
     )
-
-    retention_period = schema.Int(
-            title = _(u'label_retention_period', u'Retention period (years)'),
-            description = _(u'help_retention_period', default=u''),
-            default = 10,
-            required = False,
-    )
-
 
 alsoProvides(IClassification, IFormFieldProvider)
 
