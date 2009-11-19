@@ -27,7 +27,7 @@ from ftw.task import _
 from ftw.task import permissions
 from ftw.task.adapters import IResponseContainer, Response
 from ftw.task.interfaces import IResponseAdder
-from ftw.task.permission import DEFAULT_ISSUE_MIME_TYPE
+from ftw.task.permissions import DEFAULT_ISSUE_MIME_TYPE
 from ftw.task import util
 from ftw.task.task import ITask
 

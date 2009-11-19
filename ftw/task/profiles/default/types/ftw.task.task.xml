@@ -27,6 +27,7 @@
  <property name="behaviors">
      <element value="plone.app.content.interfaces.INameFromTitle" /> 
      <element value="opengever.tabbedview.interfaces.ITabbedViewEnabled" />
+     <element value="plone.app.dexterity.behaviors.related.IRelatedItems" />
  </property>
  
  <!-- View information -->
