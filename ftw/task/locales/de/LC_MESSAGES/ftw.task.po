@@ -207,7 +207,7 @@ msgstr "Priorität"
 #. Default: "Response"
 #: ftw.task/ftw/task/response.py:57
 msgid "label_response"
-msgstr "Antwort"
+msgstr "Antworttext"
 
 #. Default: "Responsible"
 #: ftw.task/ftw/task/task.py:59
@@ -247,7 +247,7 @@ msgstr "niedrig"
 #. Default: "No Content"
 #: ftw.task/ftw/task/task_templates/view.pt:54
 msgid "no_content"
-msgstr "Keine Inhalt"
+msgstr "Kein Inhalt"
 
 #. Default: "Response"
 #: ftw.task/ftw/task/templates/edit_response.pt:56
