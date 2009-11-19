@@ -67,7 +67,7 @@ class IResponse(Interface):
         required = False,
     )
 
-    deadline = schema.Datetime(
+    deadline = schema.Date(
         title=_(u"label_deadline_Response", default=u"Deadline"),
         description=_(u"help_deadline_response"),
         required = False, 

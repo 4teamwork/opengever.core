@@ -41,7 +41,7 @@ class ITask(form.Schema):
         required = True,
     )
 
-    deadline = schema.Datetime(
+    deadline = schema.Date(
         title=_(u"label_deadline", default=u""),
         description=_(u"help_deadline", default=u"Deadline"),
         required = True,
@@ -62,7 +62,7 @@ class ITask(form.Schema):
         required = False,
     )
     
-    expectedStartOfWork = schema.Datetime(
+    expectedStartOfWork = schema.Date(
         title =_(u"label_expectedStartOfWork", default="Start with work"),
         description = _(u"help_expectedStartOfWork", default=""),
         required = False,
