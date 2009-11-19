@@ -5,9 +5,8 @@ from zope.traversing.interfaces import ITraversable
 from zope.publisher.interfaces.browser import IBrowserRequest, IBrowserPage
 from zope.component import queryMultiAdapter, getUtility
 from zope.schema.interfaces import IContextSourceBinder
-from zope.schema.vocabulary import SimpleVocabulary
+from zope.schema.vocabulary import SimpleVocabulary, SimpleTerm
 from zope.app.container.interfaces import IObjectAddedEvent
-
 
 from Acquisition import aq_parent, aq_inner
 from AccessControl import getSecurityManager
@@ -50,7 +49,13 @@ class ITask(form.Schema):
     priority = schema.Choice(
         title= _(u"label_priority", default=""),
         description= _(u"help_priority", default=""),
-        values = (_(u"label_critical", default=u"critical"), _(u"label_important", default=u"important"), _(u"label_medium", default=u"medium"), _(u"lebel_low", default=u"low")),
+        #source = util.getPriorityVocab,
+        vocabulary= SimpleVocabulary((
+            SimpleTerm(u'critical',title=_(u'label_critical', default=u"critical")),
+            SimpleTerm(u'important', title=_(u'label_important', default=u"important")),
+            SimpleTerm(u'medium', title=_(u'label_medium', default=u"medium")),
+            SimpleTerm(u'low', title=_(u'label_low', default=u"low")),
+        )),
         required =True,
     )
 

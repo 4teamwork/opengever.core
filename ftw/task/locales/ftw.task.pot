@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2009-11-19 10:26+0000\n"
+"POT-Creation-Date: 2009-11-19 14:03+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: ftw.task\n"
 
-#: ftw.task/ftw/task/response.py:465
+#: ftw.task/ftw/task/response.py:369
 msgid "Changes saved to response id ${response_id}."
 msgstr ""
 
@@ -33,11 +33,11 @@ msgstr ""
 msgid "Issue state"
 msgstr ""
 
-#: ftw.task/ftw/task/response.py:493
+#: ftw.task/ftw/task/response.py:397
 msgid "No response selected for removal."
 msgstr ""
 
-#: ftw.task/ftw/task/response.py:456
+#: ftw.task/ftw/task/response.py:360
 msgid "No response selected for saving."
 msgstr ""
 
@@ -45,15 +45,11 @@ msgstr ""
 msgid "No response selected."
 msgstr ""
 
-#: ftw.task/ftw/task/response.py:409
-msgid "No response text added and no issue changes made."
-msgstr ""
-
-#: ftw.task/ftw/task/response.py:515
+#: ftw.task/ftw/task/response.py:419
 msgid "Removed response id ${response_id}."
 msgstr ""
 
-#: ftw.task/ftw/task/response.py:508
+#: ftw.task/ftw/task/response.py:412
 msgid "Response id ${response_id} does not exist so it cannot be removed."
 msgstr ""
 
@@ -61,11 +57,7 @@ msgstr ""
 msgid "Response id ${response_id} does not exist."
 msgstr ""
 
-#: ftw.task/ftw/task/response.py:536
-msgid "Response id ${response_id} has no attachment."
-msgstr ""
-
-#: ftw.task/ftw/task/response.py:500
+#: ftw.task/ftw/task/response.py:404
 msgid "Response id ${response_id} is no integer so it cannot be removed."
 msgstr ""
 
@@ -73,27 +65,15 @@ msgstr ""
 msgid "Response id ${response_id} is no integer."
 msgstr ""
 
-#: ftw.task/ftw/task/response.py:370
-msgid "Responsible manager"
-msgstr ""
-
-#: ftw.task/ftw/task/response.py:369
-msgid "Severity"
-msgstr ""
-
-#: ftw.task/ftw/task/response.py:396
-msgid "Target release"
-msgstr ""
-
 #: ftw.task/ftw/task/profiles/default/types/ftw.task.task.xml
 msgid "Task"
 msgstr ""
 
-#: ftw.task/ftw/task/response.py:487
+#: ftw.task/ftw/task/response.py:391
 msgid "You are not allowed to delete responses."
 msgstr ""
 
-#: ftw.task/ftw/task/response.py:450
+#: ftw.task/ftw/task/response.py:354
 msgid "You are not allowed to edit responses."
 msgstr ""
 
@@ -265,7 +245,7 @@ msgstr ""
 
 #. Default: "low"
 #: ftw.task/ftw/task/task.py:53
-msgid "lebel_low"
+msgid "label_low"
 msgstr ""
 
 #. Default: "No Content"

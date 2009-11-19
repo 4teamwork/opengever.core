@@ -3,6 +3,7 @@
     xmlns:five="http://namespaces.zope.org/five"
     xmlns:grok="http://namespaces.zope.org/grok"
     xmlns:browser="http://namespaces.zope.org/browser"
+    xmlns:i18n="http://namespaces.zope.org/i18n"
     xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
     i18n_domain="ftw.task">
 
@@ -20,6 +21,10 @@
         directory="profiles/default"
         provides="Products.GenericSetup.interfaces.EXTENSION"
         />
+
+    <i18n:registerTranslations directory="locales" />
+        
+        
         
     <browser:viewletManager
         name="ftw.task.response.add"
@@ -27,14 +32,6 @@
         permission="zope2.View"
         class=".response.AddForm"
         />
-
-    <browser:page
-       name="create_response"
-       for="ftw.task.task.ITask"
-       permission="zope2.View"
-       class=".response.Create"
-       allowed_interface=".interfaces.ICreateResponse"
-       />
 
     <browser:page
        name="task_response_delete"
@@ -57,13 +54,5 @@
        permission="zope2.View"
        class=".response.Save"
        />
-
-    <browser:page
-       name="task_response_attachment"
-       for="ftw.task.task.ITask"
-       permission="zope2.View"
-       class=".response.Download"
-       />
-        
 
 </configure>
