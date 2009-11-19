@@ -1,0 +1,34 @@
+<dl class="portlet portletTreePortlet"
+    i18n:domain="opengever.portlets.tree">
+
+    <dt class="portletHeader">
+        <span class="portletTopLeft"></span>
+        Header
+        <span class="portletTopRight"></span>
+    </dt>
+
+    <dd class="portletItem odd">
+        <ul id="tree" class="filetree">
+            <div tal:content="structure here/registraturplan/tree/render" /> 
+        </ul>
+        <script>
+            jq(function() {
+
+            	tree = jq("#tree").treeview({
+            		collapsed: true,
+            		animated: "fast",
+            		persist: "cookie",
+            		cookieId: "opengever-treeview"
+            	});
+
+            }) 
+        </script>
+    </dd>
+
+    <dd class="portletFooter">
+        <span class="portletBottomLeft"></span>
+        Footer
+        <span class="portletBottomRight"></span>
+    </dd>
+
+</dl>
