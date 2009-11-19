@@ -7,6 +7,8 @@ from zope import schema
 from zope.formlib import form
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 
+from Acquisition import aq_inner
+
 from opengever.portlets.tree import TreePortletMessageFactory as _
 
 
@@ -53,7 +55,7 @@ class Assignment(base.Assignment):
         """This property is used to give the title of the portlet in the
         "manage portlets" screen.
         """
-        return "Example portlet"
+        return "Tree portlet"
 
 
 class Renderer(base.Renderer):
@@ -65,6 +67,13 @@ class Renderer(base.Renderer):
     """
 
     render = ViewPageTemplateFile('treeportlet.pt')
+    
+    def header(self):
+        current = context = aq_inner(self.context)
+        while current.Type() != 'RepositoryRoot':
+            current = current.aq_parent
+        return current.Title()
+    
 
 
 class AddForm(base.AddForm):

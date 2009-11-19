@@ -3,13 +3,13 @@
 
     <dt class="portletHeader">
         <span class="portletTopLeft"></span>
-        Header
+        <tal:b content="view/header" />
         <span class="portletTopRight"></span>
     </dt>
 
     <dd class="portletItem odd">
         <ul id="tree" class="filetree">
-            <div tal:content="structure here/registraturplan/tree/render" /> 
+            <div tal:content="structure here/tree/render" /> 
         </ul>
         <script>
             jq(function() {
@@ -25,10 +25,9 @@
         </script>
     </dd>
 
-    <dd class="portletFooter">
+    <!--<dd class="portletFooter">
         <span class="portletBottomLeft"></span>
-        Footer
         <span class="portletBottomRight"></span>
-    </dd>
+    </dd> -->
 
 </dl>
