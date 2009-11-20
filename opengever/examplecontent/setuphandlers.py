@@ -16,11 +16,12 @@ class UserGenerator(object):
     def getUserData(self):
         name = unicode(self.names[randint(0, self.names_len - 1)].decode(self.fileencoding).replace("\n", ""))
         surname = unicode(self.surnames[randint(0, self.surnames_len - 1)].decode(self.fileencoding).replace("\n", ""))
+        userid = urlnormalizer.normalize(u"%s.%s" % (name, surname)).replace("-","").replace("..", ".")
         return {"name"    : name,
                 "surname" : surname,
-                "email"    : "vorname.nachname@4teamwork.ch",
+                "email"    : "%s@4teamwork.ch" % (userid),
                 "password": "demo09",
-                "id"      : urlnormalizer.normalize(u"%s.%s" % (name, surname)).replace("-","")}
+                "id"      : userid}
 
 def setupVarious(context):
     # Ordinarily, GenericSetup handlers check for the existence of XML files.
