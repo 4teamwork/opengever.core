@@ -1,0 +1,81 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      lang="en"
+      metal:use-macro="here/main_template/macros/master"
+      i18n:domain="opengever.document">
+<body>
+ <metal:main fill-slot="main"
+	tal:define="toLocalizedTime nocall:context/@@plone/toLocalizedTime">
+    <tal:main-macro metal:define-macro="main"
+        tal:define="toLocalizedTime nocall:context/@@plone/toLocalizedTime">
+		<h1 class="documentFirstHeading" tal:content="context/title_or_id"/>
+		<table>
+			<tr>
+				<th>Dokument</th>
+				<td tal:content="context/title_or_id"></td>
+			</tr>
+			<tr>
+				<th>Dokumentdatum</th>
+				<td tal:content="python:here.toLocalizedTime(str(here.document_date))"></td>
+			</tr>
+			<tr>
+				<th>Ersteller</th>
+				<td tal:content="context/Creator"></td>
+			</tr>
+			<tr>
+				<th>Beschreibung</th>
+				<td tal:define="description context/description">
+					<tal:description condition="description" tal:content="description" />
+					<tal:description condition="python: not description">-</tal:description>
+				</td>
+			</tr>
+			<tr>
+				<th>Fremdzeichen</th>
+				<td tal:define="foregin context/foreign_reference">
+					<tal:description condition="foregin" tal:content="foregin" />
+					<tal:description condition="python: not foregin">-</tal:description>
+				</td>
+			</tr>
+			<tr>
+				<th>Datei</th>
+				<td tal:define="file context/file">
+					<tal:file condition="file" tal:content="context/file/filename" />
+					<tal:file condition="python: not file">keine Datei</tal:file>
+				</td>
+			</tr>
+			<tr>
+				<th>Nur in Papierform verfügbar</th>
+				<td tal:define="paper_form context/paper_form">
+					<tal:paperform condition="paper_form">Ja</tal:paperform>
+					<tal:paperform condition="python: not paper_form">Nein</tal:paperform>
+				</td>
+			</tr>
+			<tr>
+				<th>In Papierform aufbewahrt</th>
+				<td tal:define="preserved_as_paper context/preserved_as_paper">
+					<tal:paperpreserved condition="preserved_as_paper">Ja</tal:paperpreserved>
+					<tal:paperpreserved condition="python: not preserved_as_paper">Nein</tal:paperpreserved>
+				</td>
+			</tr>
+			<tr>
+				<th>Eingangsdatum</th>
+				<td tal:define="receipt context/receipt_date">
+					<tal:receipt condition="receipt" tal:content="python:here.toLocalizedTime(str(receipt))" />
+					<tal:receipt condition="python: not receipt">-</tal:receipt>
+				</td>
+			</tr>
+			<tr>
+				<th>Ausgangsdatum</th>
+				<td tal:define="delivery context/delivery_date">
+					<tal:delivery condition="delivery" tal:content="python:here.toLocalizedTime(str(delivery))" />
+					<tal:delivery condition="python: not delivery">-</tal:delivery>
+				</td>
+			</tr>
+		</table>				
+    </tal:main-macro>
+</metal:main>
+
+</body>
+</html>

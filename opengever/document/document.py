@@ -23,6 +23,8 @@ from opengever.document import _
 
 LOG = logging.getLogger('opengever.document')
 
+from DateTime import DateTime
+
 class IDocumentSchema(form.Schema):
     """ Document Schema Interface
     """
@@ -190,3 +192,6 @@ def SearchableText( obj ):
     return ' '.join( searchable )
 grok.global_adapter(SearchableText, name='SearchableText')
 
+class View(grok.View):
+    grok.context(IDocumentSchema)
+    grok.require("zope2.View")
