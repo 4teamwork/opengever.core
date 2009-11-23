@@ -23,8 +23,6 @@ from opengever.document import _
 
 LOG = logging.getLogger('opengever.document')
 
-from DateTime import DateTime
-
 class IDocumentSchema(form.Schema):
     """ Document Schema Interface
     """
