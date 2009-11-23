@@ -22,7 +22,7 @@
   <property name="behaviors">
     <element value="ftw.journal.interfaces.IAnnotationsJournalizable" />
     <element value="plone.app.content.interfaces.INameFromTitle" />
-    <element value="plone.app.dexterity.behaviors.metadata.IBasic" />
+    <element value="opengever.base.behaviors.IOpenGeverBase"/>
     <element value="plone.app.dexterity.behaviors.metadata.IOwnership" />
     <element value="plone.stagingbehavior.interfaces.IStagingSupport" />
     <element value="plone.versioningbehavior.behaviors.IVersionable" />
