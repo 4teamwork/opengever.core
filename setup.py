@@ -27,6 +27,7 @@ setup(name='opengever.dossier',
           'setuptools',
           'plone.app.dexterity',
           'collective.z3cform.datetimewidget',
+          'collective.z3cform.datepicker',
           # -*- Extra requirements: -*-
       ],
       entry_points="""

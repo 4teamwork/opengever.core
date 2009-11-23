@@ -3,7 +3,7 @@ from plone.autoform.interfaces import IFormFieldProvider
 from plone.directives import form
 from zope import schema
 from zope.interface import Interface, alsoProvides
-#from collective.z3cform.datetimewidget.widget import DateWidget
+from collective.z3cform.datetimewidget import DateWidget
 from plone.app.dexterity.behaviors.metadata import IBasic
 from plone.z3cform.textlines.textlines import TextLinesFieldWidget
 
@@ -38,7 +38,7 @@ class IDossier(form.Schema):
         
 
     #form.widget(start=DateTimePickerFieldWidget)
-    #form.widget(start=DateWidget)
+    form.widget(start='collective.z3cform.datepicker.widget.DatePickerFieldWidget')
     start = schema.Date(
         title=_(u'label_start', default=u'Opening Date'),
         description = _(u'help_start', default=u''), 
@@ -46,7 +46,7 @@ class IDossier(form.Schema):
     )
 
     #form.widget(end=DateTimePickerFieldWidget)
-    #form.widget(end=DateWidget)
+    form.widget(end='collective.z3cform.datetimewidget.DateFieldWidget')
     end = schema.Date(
         title=_(u'label_end', default=u'Closing Date'),
         description = _(u'help_end', default=u''),   
