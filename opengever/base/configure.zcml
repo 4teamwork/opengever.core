@@ -17,8 +17,9 @@
   <plone:behavior
       title="OpenGeverBase"
       description="OpenGever Base behavior"
-      provides=".behaviors.IOpenGeverBase"
+      provides="opengever.base.behaviors.IOpenGeverBase"
       factory=".behaviors.OpenGeverBase"
+      for="plone.dexterity.interfaces.IDexterityContent"
       />
 
 </configure>

@@ -1,36 +1,34 @@
 
 from zope.interface import Interface, alsoProvides, implements
 from zope import schema
+from zope.component import adapts
 
 from plone.app.dexterity.behaviors import metadata
 from plone.directives import form
 
 from opengever.base import _
 
-class IOpenGeverBase(form.Schema):
+class IOpenGeverBase(metadata.IBasic):
     """ IOpengeverBase contains title and description fields
     This is a schema interface, not a marker interface!
     """
-    title = schema.TextLine(
-        title = _(u'label_title', default=u'Title'),
-        required = True
-        )
-        
-    description = schema.Text(
-        title=_(u'label_description', default=u'Description'),
-        description = _(u'help_description', default=u'A short summary of the content.'),
-        required = False,
-        missing_value = u'',
-        )
-    
     form.order_before(description = '*')
     form.order_before(title = '*')
 
 alsoProvides(IOpenGeverBase, form.IFormFieldProvider)
 
+class IOpenGeverBaseMarker(Interface):
+    pass
 
 class OpenGeverBase(metadata.MetadataBase):
-    implements(IOpenGeverBase)
+    #XXX wird nicht ausgeführt
+    def __init__(self, *args, **kwargs):
+        super(OpenGeverBase, self).__init__(*args, **kwargs)
+        self.context.addCreator()
+    
+    #XXX
+    def Title(self):
+        return self.title
 
-    title = metadata.DCFieldProperty(IOpenGeverBase['title'], get_name = 'Title', set_name = 'setTitle')
-    description = metadata.DCFieldProperty(IOpenGeverBase['description'], get_name = 'Description', set_name = 'setDescription')
+    title = metadata.DCFieldProperty(metadata.IBasic['title'], get_name = 'title', set_name = 'setTitle')
+    description = metadata.DCFieldProperty(metadata.IBasic['description'], get_name = 'Description', set_name = 'setDescription')
