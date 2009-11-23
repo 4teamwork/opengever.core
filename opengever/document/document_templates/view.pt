@@ -10,8 +10,13 @@
 	tal:define="toLocalizedTime nocall:context/@@plone/toLocalizedTime">
     <tal:main-macro metal:define-macro="main"
         tal:define="toLocalizedTime nocall:context/@@plone/toLocalizedTime">
+		<div tal:replace="structure provider:plone.abovecontenttitle" />
 		<h1 class="documentFirstHeading" tal:content="context/title_or_id"/>
-		<table>
+		<div tal:replace="structure provider:plone.belowcontenttitle" />
+
+		<div tal:replace="structure provider:plone.abovecontentbody" />
+
+		<table class="listing">
 			<tr>
 				<th>Dokument</th>
 				<td tal:content="context/title_or_id"></td>
@@ -73,7 +78,9 @@
 					<tal:delivery condition="python: not delivery">-</tal:delivery>
 				</td>
 			</tr>
-		</table>				
+		</table>			
+        <div tal:replace="structure provider:plone.belowcontentbody" />
+	
     </tal:main-macro>
 </metal:main>
 
