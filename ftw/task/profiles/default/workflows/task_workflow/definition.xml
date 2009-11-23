@@ -2,12 +2,14 @@
 <dc-workflow workflow_id="task_workflow"
              title="Dossier Workflow [ftw]" description=""
              state_variable="review_state"
-             initial_state="active">
+             initial_state="new">
  <permission>Access contents information</permission>
  <permission>Add portal content</permission>
  <permission>List folder contents</permission>
  <permission>Modify portal content</permission>
  <permission>View</permission>
+ <state state_id="acknowledged" title="">
+ </state>
  <state state_id="active" title="active">
   <exit-transition transition_id="deactivate"/>
   <exit-transition transition_id="resolve"/>
@@ -45,6 +47,9 @@
    <permission-role>Reader</permission-role>
   </permission-map>
  </state>
+ <state state_id="completed" title="">
+  <exit-transition transition_id="reactivate"/>
+ </state>
  <state state_id="inactive" title="inactive">
   <exit-transition transition_id="activate"/>
   <exit-transition transition_id="resolve"/>
@@ -75,6 +80,13 @@
    <permission-role>User</permission-role>
   </permission-map>
  </state>
+ <state state_id="new" title="new">
+  <exit-transition transition_id="to_acknowledge"/>
+  <exit-transition transition_id="to_complete"/>
+ </state>
+ <state state_id="rejected" title="Rejected">
+  <exit-transition transition_id="reactivate"/>
+ </state>
  <state state_id="resolved" title="resolved">
   <exit-transition transition_id="reactivate"/>
   <permission-map name="Access contents information"
@@ -104,6 +116,14 @@
    <permission-role>User</permission-role>
   </permission-map>
  </state>
+ <state state_id="to_acknowledge" title="">
+  <exit-transition transition_id="do_acknowledge"/>
+  <exit-transition transition_id="reject"/>
+ </state>
+ <state state_id="to_complete" title="">
+  <exit-transition transition_id="do_complete"/>
+  <exit-transition transition_id="reject"/>
+ </state>
  <transition transition_id="activate"
              title="Owner activates task" new_state="active"
              trigger="USER" before_script="" after_script="">
@@ -123,14 +143,37 @@
    <guard-role>Owner</guard-role>
   </guard>
  </transition>
- <transition transition_id="reactivate"
-             title="Owner reactivates task"
-             new_state="active" trigger="USER"
+ <transition transition_id="do_acknowledge" title=""
+             new_state="acknowledged" trigger="USER"
              before_script="" after_script="">
+  <action url="%(content_url)s/content_status_modify?workflow_action=do_acknowledge"
+          category="workflow">do_acknowledge</action>
+  <guard>
+  </guard>
+ </transition>
+ <transition transition_id="do_complete" title=""
+             new_state="completed" trigger="USER"
+             before_script="" after_script="">
+  <action url="%(content_url)s/content_status_modify?workflow_action=do_complete"
+          category="workflow">do_complete</action>
+  <guard>
+  </guard>
+ </transition>
+ <transition transition_id="reactivate" title="Reactivate"
+             new_state="new" trigger="USER" before_script=""
+             after_script="">
   <action url="%(content_url)s/content_status_modify?workflow_action=reactivate"
           category="workflow">reactivate</action>
   <guard>
    <guard-role>Owner</guard-role>
+  </guard>
+ </transition>
+ <transition transition_id="reject" title="Reject"
+             new_state="rejected" trigger="USER"
+             before_script="" after_script="">
+  <action url="%(content_url)s/content_status_modify?workflow_action=reject"
+          category="workflow">reject</action>
+  <guard>
   </guard>
  </transition>
  <transition transition_id="resolve"
@@ -141,6 +184,24 @@
           category="workflow">resolve</action>
   <guard>
    <guard-role>Owner</guard-role>
+  </guard>
+ </transition>
+ <transition transition_id="to_acknowledge"
+             title="to_acknowledge"
+             new_state="to_acknowledge" trigger="USER"
+             before_script="" after_script="">
+  <action url="%(content_url)s/content_status_modify?workflow_action=to_acknowledge"
+          category="workflow">to_acknowledge</action>
+  <guard>
+   <guard-role>Owner</guard-role>
+  </guard>
+ </transition>
+ <transition transition_id="to_complete" title=""
+             new_state="to_complete" trigger="USER"
+             before_script="" after_script="">
+  <action url="%(content_url)s/content_status_modify?workflow_action=to_complete"
+          category="workflow">to_complete</action>
+  <guard>
   </guard>
  </transition>
  <worklist worklist_id="reviewer_queue" title="">
