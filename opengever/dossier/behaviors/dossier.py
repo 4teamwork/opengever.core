@@ -11,7 +11,7 @@ class IDossierMarker(Interface):
     """ Marker Interface for dossiers.
     """
 
-class IDossier(IBasic):
+class IDossier(form.Schema):
     """ Behaviour interface for dossier types providing common properties/fields.
     """
 
@@ -19,8 +19,6 @@ class IDossier(IBasic):
         u'common',
         label = _(u'fieldset_common', default=u'Common'),
         fields = [
-                u'title',
-                u'description',
                 u'keywords',
                 u'start',
                 u'end',
@@ -29,9 +27,6 @@ class IDossier(IBasic):
         ],
     )
     
-    form.order_before(description = '*')
-    form.order_before(title = '*')
-
     keywords = schema.Tuple(
         title = _(u'label_keywords', default=u'Keywords'),
         description = _(u'help_keywords', default=u''),
