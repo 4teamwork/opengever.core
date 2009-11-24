@@ -119,10 +119,12 @@
  <state state_id="to_acknowledge" title="">
   <exit-transition transition_id="do_acknowledge"/>
   <exit-transition transition_id="reject"/>
+  <exit-transition transition_id="transfer"/>
  </state>
  <state state_id="to_complete" title="">
   <exit-transition transition_id="do_complete"/>
   <exit-transition transition_id="reject"/>
+  <exit-transition transition_id="transfer"/>
  </state>
  <transition transition_id="activate"
              title="Owner activates task" new_state="active"
@@ -143,15 +145,15 @@
    <guard-role>Owner</guard-role>
   </guard>
  </transition>
- <transition transition_id="do_acknowledge" title=""
-             new_state="acknowledged" trigger="USER"
-             before_script="" after_script="">
+ <transition transition_id="do_acknowledge"
+             title="do_acknowledge" new_state="acknowledged"
+             trigger="USER" before_script="" after_script="">
   <action url="%(content_url)s/content_status_modify?workflow_action=do_acknowledge"
           category="workflow">do_acknowledge</action>
   <guard>
   </guard>
  </transition>
- <transition transition_id="do_complete" title=""
+ <transition transition_id="do_complete" title="do_complete"
              new_state="completed" trigger="USER"
              before_script="" after_script="">
   <action url="%(content_url)s/content_status_modify?workflow_action=do_complete"
@@ -196,11 +198,19 @@
    <guard-role>Owner</guard-role>
   </guard>
  </transition>
- <transition transition_id="to_complete" title=""
+ <transition transition_id="to_complete" title="to_complete"
              new_state="to_complete" trigger="USER"
              before_script="" after_script="">
   <action url="%(content_url)s/content_status_modify?workflow_action=to_complete"
           category="workflow">to_complete</action>
+  <guard>
+  </guard>
+ </transition>
+ <transition transition_id="transfer" title="transfer"
+             new_state="" trigger="USER" before_script=""
+             after_script="">
+  <action url="%(content_url)s/content_status_modify?workflow_action=to_complete"
+          category="workflow">transfer</action>
   <guard>
   </guard>
  </transition>
