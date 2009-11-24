@@ -100,7 +100,7 @@ msgstr "Behältnis-Art"
 #. Default: "Closing Date"
 #: opengever.dossier/opengever/dossier/behaviors/dossier.py:52
 msgid "label_end"
-msgstr "Abschlussdatum"
+msgstr "Ende"
 
 #. Default: "Keywords"
 #: opengever.dossier/opengever/dossier/behaviors/dossier.py:32
@@ -115,7 +115,7 @@ msgstr "Anzahl Behältnisse"
 #. Default: "Opening Date"
 #: opengever.dossier/opengever/dossier/behaviors/dossier.py:44
 msgid "label_start"
-msgstr "Eröffnungsdatum"
+msgstr "Beginn"
 
 #. Default: "Volume Number"
 #: opengever.dossier/opengever/dossier/behaviors/dossier.py:58
