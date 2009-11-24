@@ -32,21 +32,21 @@
 			<tr>
 				<th>Beschreibung</th>
 				<td tal:define="description context/description">
-					<tal:description condition="description" tal:content="description" />
+					<tal:description condition="description" content="description" />
 					<tal:description condition="python: not description">-</tal:description>
 				</td>
 			</tr>
 			<tr>
 				<th>Fremdzeichen</th>
 				<td tal:define="foregin context/foreign_reference">
-					<tal:description condition="foregin" tal:content="foregin" />
+					<tal:description condition="foregin" content="foregin" />
 					<tal:description condition="python: not foregin">-</tal:description>
 				</td>
 			</tr>
 			<tr>
 				<th>Datei</th>
 				<td tal:define="file context/file">
-					<tal:file condition="file" tal:content="context/file/filename" />
+					<a tal:condition="file" tal:attributes="href string:${context/absolute_url}/@@download/file/${context/file/filename}" tal:content="context/file/filename" />
 					<tal:file condition="python: not file">keine Datei</tal:file>
 				</td>
 			</tr>
@@ -67,7 +67,7 @@
 			<tr>
 				<th>Eingangsdatum</th>
 				<td tal:define="receipt context/receipt_date">
-					<tal:receipt condition="receipt" tal:content="python:here.toLocalizedTime(str(receipt))" />
+					<tal:receipt condition="receipt" content="python:here.toLocalizedTime(str(receipt))" />
 					<tal:receipt condition="python: not receipt">-</tal:receipt>
 				</td>
 			</tr>
