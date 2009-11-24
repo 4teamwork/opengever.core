@@ -39,10 +39,16 @@ def setupVarious(context):
 	# add some default users
     regtool = portal.portal_registration
     try:
-        regtool.addMember("brigitte.schmid", "demo09")
-        regtool.addMember("olivier.debenat", "demo09")
-        regtool.addMember("hans.muster", "demo09")
-        regtool.addMember("hugo.boss", "demo09")
+        member = regtool.addMember("brigitte.schmid", "demo09", ('Member',), None, properties={"username": "brigitte.schmid", "email": "brigitte.schmid@allg.zg.ch"})
+        member.setMemberProperties({"fullname":"Brigitte Schmid"})
+        member = regtool.addMember("olivier.debenat", "demo09", ('Member',), None, properties={"username": "olivier.debenat", "email": "olivier.debenath@allg.zg.ch"})
+        member.setMemberProperties({"fullname":"Olivier Debenat"})
+        member = regtool.addMember("hans.muster", "demo09", ('Member',), None, properties={"username": "hans.muster", "email": "hans.muster@4teamwork.ch"})
+        member.setMemberProperties({"fullname":"Hans Muster"})
+        member = regtool.addMember("hugo.boss", "demo09", ('Member',), None, properties={"username": "hugo.boss", "email": "hugo.boss@4teamwork.ch"})
+        member.setMemberProperties({"fullname":"Hugo Boss"})
+        member = regtool.addMember("thomas.schaerli", "demo09", ('Member',), None, properties={"username": "thomas.schaerli", "email": "thomas.schaerli@gmail.com"})
+        member.setMemberProperties({"fullname":"Thomas Schaerli"})
     except ValueError: #users already exist
         pass
 
