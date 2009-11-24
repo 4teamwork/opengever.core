@@ -27,6 +27,7 @@ class OpengeverListingTab(grok.View, BaseListingView):
     search_index = 'SearchableText' #only 'SearchableText' is implemented for now
     sort_on = 'modified'
     sort_order = 'reverse'    
+    
 
 class OpengeverTab(object):
     pass
@@ -35,6 +36,8 @@ class Documents(OpengeverListingTab):
     grok.name('tabbedview_view-documents')
     
     types = ['opengever.document.document',]
+    
+    search_options = {'isWorkingCopy':0} 
     
 class Dossiers(OpengeverListingTab):
     grok.name('tabbedview_view-dossiers')
@@ -118,12 +121,11 @@ class DossierOverview(grok.View, OpengeverTab):
                                                       sort_order='reverse') 
 
     def boxes(self):
-        items = [
-                dict(id = 'subdossiers', content=self.subdossiers()),
+        items = [[dict(id = 'subdossiers', content=self.subdossiers()),
                 dict(id = 'tasks', content=self.tasks()),
-                dict(id = 'documents', content=self.documents()),
                 dict(id = 'journal', content=self.journal()),
-                dict(id = 'sharing', content=self.sharing()),
+                dict(id = 'sharing', content=self.sharing())],
+                [dict(id = 'documents', content=self.documents()),]
         ]
         return items
                                                       
