@@ -1,5 +1,5 @@
 from Products.CMFCore.utils import getToolByName
-from random import randint
+#from random import randint
 from plone.i18n.normalizer import urlnormalizer
 import sys
 
@@ -8,14 +8,18 @@ class UserGenerator(object):
         surnamesfile = context.openDataFile("surnames.csv")
         namesfile = context.openDataFile("names.csv")
         self.fileencoding = "iso-8859-1"
+        self.counter = 0
         self.names, self.surnames = namesfile.readlines(), surnamesfile.readlines()
         self.names_len, self.surnames_len = len(self.names), len(self.surnames)
         surnamesfile.close()
         namesfile.close()
 
     def getUserData(self):
-        name = unicode(self.names[randint(0, self.names_len - 1)].decode(self.fileencoding).replace("\n", ""))
-        surname = unicode(self.surnames[randint(0, self.surnames_len - 1)].decode(self.fileencoding).replace("\n", ""))
+        #name = unicode(self.names[randint(0, self.names_len - 1)].decode(self.fileencoding).replace("\n", ""))
+        #surname = unicode(self.surnames[randint(0, self.surnames_len - 1)].decode(self.fileencoding).replace("\n", ""))
+        self.counter += 1
+        name = unicode(self.names[self.counter].decode(self.fileencoding).replace("\n", ""))
+        surname = unicode(self.surnames[self.counter].decode(self.fileencoding).replace("\n", ""))
         userid = urlnormalizer.normalize(u"%s.%s" % (name, surname)).replace("-","").replace("..", ".")
         return {"name"    : name,
                 "surname" : surname,
