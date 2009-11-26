@@ -44,7 +44,6 @@ Now, create our first repository folder::
     >>> browser.getControl('RepositoryFolder').click()
     >>> browser.getControl('Add').click()
     >>> browser.getControl('Title').value = 'Accounting'
-    >>> browser.getControl('Classification').value = 'unprotected'
     >>> browser.getControl('Save').click()
     >>> browser.url
     'http://nohost/plone/registraturplan/accounting/tabbed_view'
