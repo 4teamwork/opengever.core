@@ -1,20 +1,18 @@
 from Acquisition import aq_inner, aq_parent
-from five import grok
-from z3c.form import validator
-from z3c.form import error
 from zope import schema
 from zope.interface import implements, invariant, Invalid
 import zope.component
 
+from z3c.form import validator
+from z3c.form import error
+
 from plone.dexterity import content
 from plone.directives import form
 from plone.directives import dexterity
-from plone.app.content.interfaces import INameFromTitle
-from plone.app.dexterity.behaviors import metadata
-
 from opengever.repository import _
 from opengever.repository.interfaces import IRepositoryFolder
-
+from plone.app.content.interfaces import INameFromTitle
+from five import grok
 
 class IRepositoryFolderSchema(form.Schema):
     """ A Repository Folder
@@ -49,16 +47,6 @@ class IRepositoryFolderSchema(form.Schema):
         description =  _(u'help_description', default=u'A short summary of the content.'),
         required = False,
         )
-
-    creators = schema.Tuple(
-        title = _( u'label_creators', default=u'Creators' ),
-        description = _( u'help_creators', default=u'' ),
-        value_type = schema.TextLine(),
-        required = False,
-        missing_value = (),
-        )
-    form.omitted('creators')
-
 
 @form.default_value(field=IRepositoryFolderSchema['reference_number'])
 def reference_number_default_value(data):
@@ -109,15 +97,6 @@ zope.component.provideAdapter(error.ErrorViewMessage(
 class RepositoryFolder(content.Container):
 
     implements(IRepositoryFolder)
-
-    creators = metadata.DCFieldProperty( IRepositoryFolderSchema['creators'],
-                                         get_name = 'listCreators',
-                                         set_name = 'setCreators')
-
-    def __init__( self, *args, **kwargs ):
-        content.Container.__init__( self, *args, **kwargs )
-        #self.addCreator()
-
     def Title(self):
         title = u' %s' % self.effective_title
         obj = self
@@ -129,7 +108,7 @@ class RepositoryFolder(content.Container):
 
     def allowedContentTypes(self, *args, **kwargs):
         types = super(RepositoryFolder, self).allowedContentTypes(*args, **kwargs)
-        # check if self contains any similar objects
+        # check if self contains any similar objects
         contains_similar_objects = False
         for id, obj in self.contentItems():
             if obj.portal_type==self.portal_type:
