@@ -1,0 +1,15 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:plone="http://namespaces.plone.org/plone"
+    xmlns:grok="http://namespaces.zope.org/grok"
+    i18n_domain="opengever.base">
+
+  <plone:behavior
+      title="OpenGeverBase"
+      description="OpenGever Base behavior"
+      provides="opengever.base.behaviors.IOpenGeverBase"
+      factory=".base.OpenGeverBase"
+      for="plone.dexterity.interfaces.IDexterityContent"
+      />
+
+</configure>

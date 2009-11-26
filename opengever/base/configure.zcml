@@ -14,12 +14,6 @@
 
   <grok:grok package="." />
 
-  <plone:behavior
-      title="OpenGeverBase"
-      description="OpenGever Base behavior"
-      provides="opengever.base.behaviors.IOpenGeverBase"
-      factory=".behaviors.OpenGeverBase"
-      for="plone.dexterity.interfaces.IDexterityContent"
-      />
+  <include package=".behaviors" />
 
 </configure>
