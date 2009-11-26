@@ -23,6 +23,7 @@ doc_tests = (
     )
 functional_tests = (
     'classification.txt',
+    'repositoryfolder.txt',
     )
 
 def test_suite():

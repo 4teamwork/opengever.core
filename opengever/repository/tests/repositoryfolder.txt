@@ -1,0 +1,75 @@
+Repository Folder
+=================
+
+
+Since the Generic Setup profile was imported, we should have a some FTIs
+registered::
+
+    >>> pt = self.portal.portal_types
+    >>> pt.get('opengever.repository.repositoryfolder', None)
+    <DexterityFTI at ...>
+    >>> pt.get('opengever.repository.repositoryroot', None)
+    <DexterityFTI at ...>
+
+
+For surfing we need a Browser::
+
+    >>> from Products.Five.testbrowser import Browser
+    >>> browser = Browser()
+    >>> browser.handleErrors = False
+    >>> self.app.acl_users.userFolderAddUser('root', 'secret',
+    ...                                      ['Manager'], [])
+    >>> browser.addHeader('Authorization', 'Basic root:secret')
+
+
+So, lets create the repository-root::
+
+    >>> browser.open('http://nohost/plone/folder_factories')
+    >>> 'opengever.repository.repositoryroot' in browser.contents
+    True
+    >>> browser.getControl('RepositoryRoot').click()
+    >>> browser.getControl('Add').click()
+    >>> browser.getControl('Title').value = 'Registraturplan'
+    >>> browser.getControl('Description').value = ''
+    >>> browser.getControl('Save').click()
+    >>> browser.url
+    'http://nohost/plone/registraturplan/view'
+
+
+Now, create our first repository folder::
+
+    >>> browser.open('./folder_factories')
+    >>> 'opengever.repository.repositoryfolder' in browser.contents
+    True
+    >>> browser.getControl('RepositoryFolder').click()
+    >>> browser.getControl('Add').click()
+    >>> browser.getControl('Title').value = 'Accounting'
+    >>> browser.getControl('Classification').value = 'unprotected'
+    >>> browser.getControl('Save').click()
+    >>> browser.url
+    'http://nohost/plone/registraturplan/accounting/tabbed_view'
+
+
+Check some stuff::
+
+    >>> obj = self.portal.get('registraturplan').get('accounting')
+    >>> obj
+    <RepositoryFolder at ...>
+    >>> obj.reference_number
+    1
+    >>> obj.listCreators()
+    ('root',)
+
+
+Add another one::
+
+    >>> browser.open('http://nohost/plone/registraturplan/++add++opengever.repository.repositoryfolder')
+    >>> browser.getControl('Title').value = 'Custody'
+    >>> browser.getControl('Save').click()
+    >>> browser.url
+    'http://nohost/plone/registraturplan/custody/tabbed_view'
+    >>> obj = self.portal.get('registraturplan').get('custody')
+    >>> obj
+    <RepositoryFolder at ...>
+    >>> obj.reference_number
+    2

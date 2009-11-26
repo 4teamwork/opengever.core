@@ -5,6 +5,9 @@ Changelog
 0.2
 ---
 
+* Added some tests for the RepositoryFolder and the RepositoryRoot
+  [26.11.2009, jbaumann]
+
 * Issue #120: RepositoryFolder übersetzen
   [11.11.2009, jbaumann]
 
