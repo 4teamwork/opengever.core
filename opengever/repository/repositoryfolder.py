@@ -22,25 +22,25 @@ class IRepositoryFolderSchema(form.Schema):
         u'common',
         label = _(u'fieldset_common', default=u'Common'),
         fields = [
-                u'effective_title',
-                u'reference_number',
-                u'description',
-        ],
-    )
+            u'effective_title',
+            u'reference_number',
+            u'description',
+            ],
+        )
 
     #form.omitted('title')
     form.order_before(effective_title = '*')
     effective_title = schema.TextLine(
-            title = _(u'Title'),
-            required = True
-    )
+        title = _(u'Title'),
+        required = True
+        )
 
     reference_number = schema.Int(
-            title = _(u'label_reference_number', default=u'Reference'),
-            description = _(u'help_reference_number', default=u''),
-            required = False,
-            min = 1,
-    )
+        title = _(u'label_reference_number', default=u'Reference'),
+        description = _(u'help_reference_number', default=u''),
+        required = False,
+        min = 1,
+        )
 
     description = schema.Text(
         title = _(u'label_description', default=u'Description'),
@@ -81,17 +81,17 @@ class ReferenceNumberValidator(validator.SimpleFieldValidator):
             raise schema.interfaces.ConstraintNotSatisfied()
 
 validator.WidgetValidatorDiscriminators(
-        ReferenceNumberValidator,
-        field=IRepositoryFolderSchema['reference_number']
-)
+    ReferenceNumberValidator,
+    field=IRepositoryFolderSchema['reference_number']
+    )
 zope.component.provideAdapter(ReferenceNumberValidator)
 zope.component.provideAdapter(error.ErrorViewMessage(
-                _('error_sibling_reference_number_existing', default=u'A Sibling with the same reference number is existing'),
-                error = schema.interfaces.ConstraintNotSatisfied,
-                field = IRepositoryFolderSchema['reference_number'],
+        _('error_sibling_reference_number_existing', default=u'A Sibling with the same reference number is existing'),
+        error = schema.interfaces.ConstraintNotSatisfied,
+        field = IRepositoryFolderSchema['reference_number'],
         ),
-        name = 'message'
-)
+                              name = 'message'
+                              )
 
 
 class RepositoryFolder(content.Container):
@@ -121,19 +121,19 @@ class RepositoryFolder(content.Container):
             # only allow same types
             types = filter(lambda a:a==fti, types)
         return types
-            
+
 
 
 class NameFromTitle(grok.Adapter):
     """ An INameFromTitle adapter for namechooser
-        gets the name from effective_title
+    gets the name from effective_title
     """
     grok.implements(INameFromTitle)
     grok.context(IRepositoryFolder)
-    
+
     def __init__(self, context):
         self.context = context
-    
+
     @property
     def title(self):
         return self.context.effective_title
