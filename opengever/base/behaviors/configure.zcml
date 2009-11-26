@@ -12,4 +12,13 @@
       for="plone.dexterity.interfaces.IDexterityContent"
       />
 
+  <plone:behavior
+      title="Creator Aware"
+      description="Remembers the creator in a hidden creators field"
+      provides="opengever.base.behaviors.creator.ICreator"
+      factory=".creator.CreatorAware"
+      marker=".creator.ICreatorAware"
+      for="plone.dexterity.interfaces.IDexterityContent"
+      />
+
 </configure>
