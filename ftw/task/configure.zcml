@@ -21,11 +21,9 @@
         directory="profiles/default"
         provides="Products.GenericSetup.interfaces.EXTENSION"
         />
-
+    
     <i18n:registerTranslations directory="locales" />
-        
-        
-        
+    
     <browser:viewletManager
         name="ftw.task.response.add"
         provides=".interfaces.IResponseAdder"

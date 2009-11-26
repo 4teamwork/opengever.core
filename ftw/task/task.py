@@ -12,6 +12,8 @@ from Acquisition import aq_parent, aq_inner
 from AccessControl import getSecurityManager
 from Products.CMFCore.utils import getToolByName
 from Products.CMFDefault.interfaces import ICMFDefaultSkin
+from datetime import datetime, timedelta
+from z3c.relationfield.relation import RelationValue
 
 from plone.formwidget import autocomplete
 from plone.formwidget.autocomplete import AutocompleteFieldWidget
@@ -22,12 +24,28 @@ from plone.dexterity.content import Item, Container
 
 from plone.directives import form, dexterity
 from plone.app.textfield import RichText
+from plone.app.dexterity.behaviors.related import IRelatedItems
 from plone.namedfile.field import NamedImage
 
 from ftw.task import util
 from ftw.task import _
 
+from opengever.translations.browser import edit, add
+
 class ITask(form.Schema):
+    
+    form.fieldset(
+        u'additional',
+        label = _(u'fieldset_additional', u'Additional'),
+        fields = [
+            u'expectedStartOfWork',
+            u'expectedDuration',
+            u'expectedCost',
+            u'effectiveDuration',
+            u'effectiveCost',
+            ]
+        )
+    
     title = schema.TextLine(
         title=_(u"label_title", default=u"Title"),
         description=_('help_title', default=u"Title"),
@@ -46,19 +64,6 @@ class ITask(form.Schema):
         required = True,
     )
     
-    priority = schema.Choice(
-        title= _(u"label_priority", default=""),
-        description= _(u"help_priority", default=""),
-        #source = util.getPriorityVocab,
-        vocabulary= SimpleVocabulary((
-            SimpleTerm(u'critical',title=_(u'label_critical', default=u"critical")),
-            SimpleTerm(u'important', title=_(u'label_important', default=u"important")),
-            SimpleTerm(u'medium', title=_(u'label_medium', default=u"medium")),
-            SimpleTerm(u'low', title=_(u'label_low', default=u"low")),
-        )),
-        required =True,
-    )
-
     form.widget(responsible=AutocompleteFieldWidget)
     responsible = schema.Choice(
         title=_(u"label_responsible", default="Responsible"),
@@ -107,9 +112,28 @@ class Task(Container):
     @property
     def sequence_number(self):
         return self._sequence_number
-        
-        
 
+@form.default_value(field=ITask['deadline'])
+def deadlineDefaultValue(data):
+    # To get hold of the folder, do: context = data.context
+    return datetime.today() + timedelta(5)
+
+@form.default_value(field=IRelatedItems['relatedItems'])
+def pathsDefaultValue(data):
+#XXX Don't work yet
+    paths = data.request.get('paths', None)
+    from zope.component import getUtility
+    from zope.app.intid.interfaces import IIntIds
+    intids = getUtility( IIntIds )
+    if paths:
+        pathlist = []
+        for item in paths:
+            obj = data.context.restrictedTraverse( item.encode())
+            id = intids.getId(obj)
+            pathlist.append(RelationValue(id))
+        return pathlist
+    return []
+                
 class ITaskView(Interface):
     pass
 #class View(grok.View):
