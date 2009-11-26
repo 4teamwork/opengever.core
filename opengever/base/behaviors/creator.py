@@ -1,12 +1,13 @@
 from zope import schema
 from zope.component import adapts
-from zope.interface import implements, Interface
+from zope.interface import implements, Interface, alsoProvides
 
 from plone.dexterity.interfaces import IDexterityContent
 from plone.directives import form
 from plone.app.dexterity.behaviors import metadata
 
 from opengever.base import _
+
 
 
 class ICreatorAware( Interface ):
@@ -24,6 +25,8 @@ class ICreator( form.Schema ):
         required = False,
         missing_value = (),
         )
+
+alsoProvides( ICreator, form.IFormFieldProvider )
 
 
 class CreatorAware( object ):

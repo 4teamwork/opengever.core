@@ -1,0 +1,60 @@
+Creator Behavior
+================
+
+The Creator behavior sets the creator an content creation.
+It also adds a creators field with listCreators() and setCreators()
+methods. The field is hidden by default.
+
+
+When we create a dexterity content type::
+
+    >>> from opengever.base.behaviors import creator
+    >>> from plone.dexterity.fti import DexterityFTI
+    >>> fti = DexterityFTI('TestingType')
+    >>> fti.behaviors = (
+    ...                  'opengever.base.behaviors.creator.ICreator',
+    ...                  )
+    >>> self.portal.portal_types._setObject('TestingType', fti)
+    'TestingType'
+    >>> schema = fti.lookupSchema()
+
+
+If we access the site as an admin TTW::
+
+    >>> from Products.Five.testbrowser import Browser
+    >>> browser = Browser()
+    >>> browser.handleErrors = True
+    >>> self.app.acl_users.userFolderAddUser('root', 'secret',
+    ...                                      ['Manager'], [])
+    >>> browser.addHeader('Authorization', 'Basic root:secret')
+
+
+We can see this type in the addable types at the root of the site::
+
+    >>> browser.open('http://nohost/plone/folder_factories')
+    >>> 'TestingType' in browser.contents
+    True
+    >>> browser.getControl('TestingType').click()
+    >>> browser.getControl('Add').click()
+    >>> browser.url
+    'http://nohost/plone/++add++TestingType'
+    >>> 'creators' in browser.contents
+    False
+    >>> browser.getControl('Save').click()
+    >>> browser.url
+    'http://nohost/plone/testingtype/view'
+
+
+Get the created object::
+
+    >>> obj = self.portal.testingtype
+    >>> obj
+    <Item at ...>
+    >>> creator.ICreatorAware.providedBy( obj )
+    True
+
+
+There should be a creator::
+
+    >>> obj.listCreators()
+    ('root',)
