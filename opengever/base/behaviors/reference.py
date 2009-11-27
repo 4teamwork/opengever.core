@@ -29,7 +29,7 @@ def reference_number_default_value(data):
                 highest_reference_number = obj.reference_number
     highest_reference_number += 1
     return highest_reference_number
-"""
+
 class ReferenceNumberValidator(validator.SimpleFieldValidator):
 
     def validate(self, value):
@@ -61,7 +61,6 @@ provideAdapter(error.ErrorViewMessage(
         ),
         name = 'message'
 )
-"""
 
 class IReferenceNumberMarker(Interface):
     """
