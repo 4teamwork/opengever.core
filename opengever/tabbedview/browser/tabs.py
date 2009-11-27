@@ -16,7 +16,7 @@ class OpengeverListingTab(grok.View, BaseListingView):
                 ('', helper.path_checkbox),
                 ('Title', 'sortable_title', helper.linked),
                 ('modified', helper.readable_date), 
-                ('Creator', helper.readable_author)
+                ('Creator', helper.readable_author),
                )
     
     @property
@@ -43,6 +43,18 @@ class Dossiers(OpengeverListingTab):
     grok.name('tabbedview_view-dossiers')
     
     types = ['opengever.dossier.projectdossier', 'opengever.dossier.businesscasedossier',]
+    
+    columns = (
+                ('', helper.draggable),
+                ('', helper.path_checkbox),
+                ('reference_number'),
+                ('Title', helper.linked),
+                ('review_state'),
+                ('responsible', helper.readable_author),
+                ('start', helper.readable_date),
+                ('end', helper.readable_date),
+                
+            )
     
 class SubDossiers(Dossiers):
     grok.name('tabbedview_view-subdossiers')
@@ -130,7 +142,7 @@ class DossierOverview(grok.View, OpengeverTab):
         return items
                                                       
     def subdossiers(self):
-        return self.catalog(['opengever.dossier.projectdossier', 'opengever.dossier.businesscasedossier',])[:5]  
+        return self.catalog(['opengever.dossier.projectdossier', 'opengever.dossier.businesscasedossier',])[:5] 
                                             
     def tasks(self):
         return self.catalog(['ftw.task.task', ])[:5]  
