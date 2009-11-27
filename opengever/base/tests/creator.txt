@@ -22,11 +22,13 @@ When we create a dexterity content type::
 If we access the site as an admin TTW::
 
     >>> from Products.Five.testbrowser import Browser
+    >>> from Products.PloneTestCase.setup import portal_owner, default_password
     >>> browser = Browser()
     >>> browser.handleErrors = True
     >>> self.app.acl_users.userFolderAddUser('root', 'secret',
     ...                                      ['Manager'], [])
-    >>> browser.addHeader('Authorization', 'Basic root:secret')
+    >>> browser.addHeader('Authorization', 'Basic root:secret' )
+
 
 
 We can see this type in the addable types at the root of the site::
@@ -40,6 +42,9 @@ We can see this type in the addable types at the root of the site::
     'http://nohost/plone/++add++TestingType'
     >>> 'creators' in browser.contents
     False
+    >>> 'Title' in browser.contents
+    True
+    >>> browser.getControl('Title').value = 'Hallo Hugo'
     >>> browser.getControl('Save').click()
     >>> browser.url
     'http://nohost/plone/testingtype/view'
@@ -58,3 +63,15 @@ There should be a creator::
 
     >>> obj.listCreators()
     ('root',)
+    >>> obj.Creator()
+    'root'
+
+
+We should be able to set the creators list::
+
+    >>> obj.setCreators( ('foo',) )
+    >>> obj.listCreators()
+    ('foo',)
+    >>> obj.addCreator('bar')
+    >>> obj.listCreators()
+    ('foo', 'bar')

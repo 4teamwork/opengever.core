@@ -11,7 +11,7 @@
       factory=".base.OpenGeverBase"
       for="plone.dexterity.interfaces.IDexterityContent"
       />
-      
+
   <plone:behavior
       title="ReferenceNumber"
       description="OpenGever ReferenceNumber Behavior"
@@ -20,12 +20,12 @@
       marker="opengever.base.behaviors.reference.IReferenceNumberMarker"
       for="plone.dexterity.interfaces.IDexterityContent"
       />
-      
+
   <plone:behavior
       title="Creator Aware"
       description="Remembers the creator in a hidden creators field"
       provides="opengever.base.behaviors.creator.ICreator"
-      factory=".creator.CreatorAware"
+      factory="plone.behavior.AnnotationStorage"
       marker=".creator.ICreatorAware"
       for="plone.dexterity.interfaces.IDexterityContent"
       />

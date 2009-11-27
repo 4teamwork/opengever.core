@@ -1,19 +1,17 @@
+from five import grok
 from zope import schema
-from zope.component import adapts
-from zope.interface import implements, Interface, alsoProvides
+from zope.app.container.interfaces import IObjectAddedEvent
+from zope.interface import Interface, alsoProvides
 
-from plone.dexterity.interfaces import IDexterityContent
 from plone.directives import form
-from plone.app.dexterity.behaviors import metadata
 
 from opengever.base import _
-
 
 
 class ICreatorAware( Interface ):
     """ Marker Interface for ICreator behavior
     """
-
+    
 
 class ICreator( form.Schema ):
 
@@ -25,19 +23,10 @@ class ICreator( form.Schema ):
         required = False,
         missing_value = (),
         )
-
+    
 alsoProvides( ICreator, form.IFormFieldProvider )
 
 
-class CreatorAware( object ):
-    adapts( IDexterityContent )
-    implements( ICreatorAware )
-
-    creators = metadata.DCFieldProperty( ICreator['creators'],
-                                         get_name = 'listCreators',
-                                         set_name = 'setCreators' )
-
-    def __init__( self, context ):
-        self.context = context
-        self.context.addCreator()
-
+@grok.subscribe( ICreatorAware, IObjectAddedEvent )
+def add_creator( obj, event ):
+    obj.addCreator()
