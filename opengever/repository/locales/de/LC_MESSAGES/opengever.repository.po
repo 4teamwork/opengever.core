@@ -72,7 +72,7 @@ msgstr "Eine Ordnungsposition mit dieser Referenznummer existiert bereits auf gl
 #. Default: "Classification"
 #: opengever.repository/opengever/repository/classification.py:22
 msgid "fieldset_classification"
-msgstr "Klassifikation"
+msgstr "Sichtbarkeit"
 
 #. Default: "Common"
 #: opengever.repository/opengever/repository/repositoryfolder.py:23
