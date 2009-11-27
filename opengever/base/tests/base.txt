@@ -1,0 +1,84 @@
+OpenGeverBase Behavior
+======================
+
+
+The OpenGeverBase behavior contains title and description fields.
+
+
+When we create a dexterity content type, but we must enshure that we do not
+use the default model source with another title and description for
+excluding ambiguity.
+
+    >>> from opengever.base.behaviors import base
+    >>> from plone.dexterity.fti import DexterityFTI
+    >>> fti = DexterityFTI('OpenGeverBaseFTI')
+    >>> fti.behaviors = (
+    ...                  'opengever.base.behaviors.base.IOpenGeverBase',
+    ...                  )
+    >>> fti.model_source = '''
+    ... <model
+    ...     xmlns="http://namespaces.plone.org/supermodel/schema">
+    ...   <schema>
+    ...   </schema>
+    ... </model>
+    ... '''
+    >>> self.portal.portal_types._setObject('OpenGeverBaseFTI', fti)
+    'OpenGeverBaseFTI'
+    >>> schema = fti.lookupSchema()
+
+
+If we access the site as an admin TTW::
+
+    >>> from Products.Five.testbrowser import Browser
+    >>> browser = Browser()
+    >>> browser.handleErrors = True
+    >>> self.app.acl_users.userFolderAddUser('root', 'secret',
+    ...                                ['Manager','Contributor'], [])
+    >>> browser.addHeader('Authorization', 'Basic root:secret' )
+
+
+
+We can see this type in the addable types at the root of the site::
+
+    >>> browser.open('http://nohost/plone/folder_factories')
+    >>> 'OpenGeverBaseFTI' in browser.contents
+    True
+    >>> browser.getControl('OpenGeverBaseFTI').click()
+    >>> browser.getControl('Add').click()
+    >>> browser.url
+    'http://nohost/plone/++add++OpenGeverBaseFTI'
+    >>> 'Title' in browser.contents
+    True
+    >>> 'Description' in browser.contents
+    True
+    >>> browser.getControl('Title').value = 'Foo'
+    >>> browser.getControl('Description').value = 'Bar'
+    >>> browser.getControl('Save').click()
+    >>> browser.url
+    'http://nohost/plone/opengeverbasefti/view'
+
+
+Get the created object::
+
+    >>> obj = self.portal.opengeverbasefti
+    >>> obj
+    <Item at ...>
+    >>> base.IOpenGeverBaseMarker.providedBy( obj )
+    True
+
+
+Title should be set::
+
+    >>> obj.Title()
+    u'Foo'
+    >>> obj.Description()
+    u'Bar'
+
+
+
+We use the "Common" fieldset, not the "Default" fieldset::
+
+    >>> browser.open('http://nohost/plone/opengeverbasefti/edit')
+    >>> 'Common' in browser.contents
+    True
+

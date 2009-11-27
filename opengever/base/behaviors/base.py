@@ -14,30 +14,26 @@ class IOpenGeverBase(metadata.IBasic):
     """
     form.order_before(description = '*')
     form.order_before(title = '*')
-    
+
     form.fieldset(
         u'common',
         label = _(u'fieldset_common', default=u'Common'),
         fields = [
-                u'title',
-                u'description',
-        ],
-    )
+            u'title',
+            u'description',
+            ],
+        )
 
 alsoProvides(IOpenGeverBase, form.IFormFieldProvider)
 
 class IOpenGeverBaseMarker(Interface):
     pass
 
-class OpenGeverBase(metadata.MetadataBase):
-    #XXX wird nicht ausgeführt
-    def __init__(self, *args, **kwargs):
-        super(OpenGeverBase, self).__init__(*args, **kwargs)
-        self.context.addCreator()
-    
-    #XXX
-    def Title(self):
-        return self.title
+class OpenGeverBase( metadata.MetadataBase ):
 
-    title = metadata.DCFieldProperty(metadata.IBasic['title'], get_name = 'title', set_name = 'setTitle')
-    description = metadata.DCFieldProperty(metadata.IBasic['description'], get_name = 'Description', set_name = 'setDescription')
+    title = metadata.DCFieldProperty( metadata.IBasic['title'],
+                                      get_name = 'title',
+                                      set_name = 'setTitle')
+    description = metadata.DCFieldProperty( metadata.IBasic['description'],
+                                            get_name = 'Description',
+                                            set_name = 'setDescription')

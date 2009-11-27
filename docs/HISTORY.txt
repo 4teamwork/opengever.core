@@ -4,6 +4,10 @@ Changelog
 1.0a1dev (unreleased)
 ---------------------
 
+
+* Issue #163: OpenGeverBase behavior erstellen
+  [27.11.2009, jbaumann]
+
 * Issue #172: listCreators einer Registraturposition liefert Owner des ersten Dossiers
   Added a ICreator behavior
   [27.11.2009, jbaumann]

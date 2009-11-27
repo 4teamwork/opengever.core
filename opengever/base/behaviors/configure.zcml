@@ -9,6 +9,7 @@
       description="OpenGever Base behavior"
       provides="opengever.base.behaviors.base.IOpenGeverBase"
       factory=".base.OpenGeverBase"
+      marker=".base.IOpenGeverBaseMarker"
       for="plone.dexterity.interfaces.IDexterityContent"
       />
 
