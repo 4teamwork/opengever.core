@@ -14,6 +14,15 @@ class IOpenGeverBase(metadata.IBasic):
     """
     form.order_before(description = '*')
     form.order_before(title = '*')
+    
+    form.fieldset(
+        u'common',
+        label = _(u'fieldset_common', default=u'Common'),
+        fields = [
+                u'title',
+                u'description',
+        ],
+    )
 
 alsoProvides(IOpenGeverBase, form.IFormFieldProvider)
 

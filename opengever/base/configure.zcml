@@ -2,7 +2,10 @@
     xmlns="http://namespaces.zope.org/zope"
     xmlns:plone="http://namespaces.plone.org/plone"
     xmlns:grok="http://namespaces.zope.org/grok"
+	xmlns:i18n="http://namespaces.zope.org/i18n"
     i18n_domain="opengever.base">
+
+  <i18n:registerTranslations directory="locales" />
 
   <!-- Include configuration for dependencies listed in setup.py -->
   <includeDependencies package="." />
@@ -15,5 +18,4 @@
   <grok:grok package="." />
 
   <include package=".behaviors" />
-
 </configure>
