@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2009-11-27 07:59+0000\n"
+"POT-Creation-Date: 2009-11-27 11:01+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,17 +17,12 @@ msgstr ""
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: opengever.base\n"
 
-#. Default: "A Sibling with the same reference number is existing"
-#: opengever.base/opengever/base/behaviors/reference.py:61
-msgid "error_sibling_reference_number_existing"
-msgstr ""
-
 #. Default: "Common"
 #: opengever.base/opengever/base/behaviors/base.py:20
 msgid "fieldset_common"
 msgstr ""
 
-#: opengever.base/opengever/base/behaviors/creator.py:23
+#: opengever.base/opengever/base/behaviors/creator.py:21
 msgid "help_creators"
 msgstr ""
 
@@ -36,7 +31,7 @@ msgid "help_reference_number"
 msgstr ""
 
 #. Default: "Creators"
-#: opengever.base/opengever/base/behaviors/creator.py:22
+#: opengever.base/opengever/base/behaviors/creator.py:20
 msgid "label_creators"
 msgstr ""
 
