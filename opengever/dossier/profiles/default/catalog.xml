@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<object name="portal_catalog" meta_type="Dossier Catalog">
+ <index name="reference_number" meta_type="FieldIndex">
+  <indexed_attr value="reference_number"/>
+ </index>
+ <column value="reference_number"/>
+</object>

@@ -27,11 +27,13 @@
   <!-- enabled behaviors -->
   <property name="behaviors">
     <element value="opengever.base.behaviors.base.IOpenGeverBase" />
+    <element value="opengever.base.behaviors.reference.IReferenceNumber" />
     <element value="ftw.journal.interfaces.IAnnotationsJournalizable" />
     <element value="opengever.dossier.behaviors.dossier.IDossier" />
     <element value="opengever.repository.classification.IClassification" />
     <element value="plone.app.content.interfaces.INameFromTitle" />
     <element value="opengever.tabbedview.interfaces.ITabbedViewEnabled" />
+    
   </property>
 
   <!-- View information -->

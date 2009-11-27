@@ -1,11 +1,13 @@
 from opengever.dossier import _
+from ftw.task import util
 from plone.autoform.interfaces import IFormFieldProvider
 from plone.directives import form
 from zope import schema
 from zope.interface import Interface, alsoProvides
-from collective.z3cform.datetimewidget import DateWidget
 from plone.app.dexterity.behaviors.metadata import IBasic
 from plone.z3cform.textlines.textlines import TextLinesFieldWidget
+from plone.formwidget.autocomplete import AutocompleteFieldWidget
+from plone.indexer import indexer
 
 
 class IDossierMarker(Interface):
@@ -24,6 +26,7 @@ class IDossier(form.Schema):
                 u'end',
                 u'volume_number',
                 u'comments',
+                u'responsible',
         ],
     )
     
@@ -66,6 +69,14 @@ class IDossier(form.Schema):
         required=False
     )
     
+    form.widget(responsible=AutocompleteFieldWidget)
+    responsible = schema.Choice(
+        title=_(u"label_responsible", default="Responsible"),
+        description =_(u"help_responsible", default="select an responsible Manger"),
+        source = util.getManagersVocab,
+        required = False,
+    )
+
     form.fieldset(
         u'filing',
         label = _(u'fieldset_filing', default=u'Filing'),
@@ -103,3 +114,28 @@ class IDossier(form.Schema):
     )
         
 alsoProvides(IDossier, IFormFieldProvider)
+
+
+@indexer(IDossierMarker)
+def startIndexer(obj):
+    aobj = IDossier(obj)
+    if aobj.start is None:
+        return None
+    return aobj.start
+grok.global_adapter(startIndexer, name="start")
+
+@indexer(IDossierMarker)
+def endIndexer(obj):
+    aobj = IDossier(obj)
+    if aobj.end is None:
+        return None
+    return aobj.end
+grok.global_adapter(endIndexer, name="end")
+
+@indexer(IDossierMarker)
+def responsibleIndexer(obj):
+    aobj = IDossier(obj)
+    if aobj.responsible is None:
+        return None
+    return aobj.responsible
+grok.global_adapter(responsibleIndexer, name="responsible")
