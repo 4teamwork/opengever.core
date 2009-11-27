@@ -17,8 +17,8 @@
       description="OpenGever ReferenceNumber Behavior"
       provides="opengever.base.behaviors.reference.IReferenceNumber"
       factory="plone.behavior.AnnotationStorage"
-      marker="opengever.base.behaviors.reference.IReferenceNumberMarker"
       for="plone.dexterity.interfaces.IDexterityContent"
+      marker=".reference.IReferenceNumberMarker"
       />
 
   <plone:behavior

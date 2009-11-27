@@ -10,12 +10,12 @@ When we create a dexterity content type::
 
     >>> from opengever.base.behaviors import creator
     >>> from plone.dexterity.fti import DexterityFTI
-    >>> fti = DexterityFTI('TestingType')
+    >>> fti = DexterityFTI('ReferenceFTI')
     >>> fti.behaviors = (
     ...                  'opengever.base.behaviors.creator.ICreator',
     ...                  )
-    >>> self.portal.portal_types._setObject('TestingType', fti)
-    'TestingType'
+    >>> self.portal.portal_types._setObject('ReferenceFTI', fti)
+    'ReferenceFTI'
     >>> schema = fti.lookupSchema()
 
 
@@ -34,12 +34,12 @@ If we access the site as an admin TTW::
 We can see this type in the addable types at the root of the site::
 
     >>> browser.open('http://nohost/plone/folder_factories')
-    >>> 'TestingType' in browser.contents
+    >>> 'ReferenceFTI' in browser.contents
     True
-    >>> browser.getControl('TestingType').click()
+    >>> browser.getControl('ReferenceFTI').click()
     >>> browser.getControl('Add').click()
     >>> browser.url
-    'http://nohost/plone/++add++TestingType'
+    'http://nohost/plone/++add++ReferenceFTI'
     >>> 'creators' in browser.contents
     False
     >>> 'Title' in browser.contents
@@ -47,12 +47,12 @@ We can see this type in the addable types at the root of the site::
     >>> browser.getControl('Title').value = 'Hallo Hugo'
     >>> browser.getControl('Save').click()
     >>> browser.url
-    'http://nohost/plone/testingtype/view'
+    'http://nohost/plone/ReferenceFTI/view'
 
 
 Get the created object::
 
-    >>> obj = self.portal.testingtype
+    >>> obj = self.portal.ReferenceFTI
     >>> obj
     <Item at ...>
     >>> creator.ICreatorAware.providedBy( obj )
