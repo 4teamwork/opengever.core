@@ -25,11 +25,9 @@
 
   <!-- enabled behaviors -->
   <property name="behaviors">
+    <element value="opengever.base.behaviors.creator.ICreator" />
     <element value="opengever.repository.classification.IClassification" />
     <element value="opengever.tabbedview.interfaces.ITabbedViewEnabled" />
-    <!-- <element value="plone.app.dexterity.behaviors.metadata.IDublinCore" /> -->
-    <!--element value="plone.app.content.interfaces.INameFromTitle" /-->
-
   </property>
 
   <!-- View information -->
