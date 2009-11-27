@@ -7,6 +7,7 @@ from collective.z3cform.datetimewidget import DateWidget
 from plone.app.dexterity.behaviors.metadata import IBasic
 from plone.z3cform.textlines.textlines import TextLinesFieldWidget
 
+
 class IDossierMarker(Interface):
     """ Marker Interface for dossiers.
     """
@@ -34,10 +35,11 @@ class IDossier(form.Schema):
         missing_value = (),
         )
     form.widget(keywords = TextLinesFieldWidget)
+
         
 
     #form.widget(start=DateTimePickerFieldWidget)
-    form.widget(start='collective.z3cform.datepicker.widget.DatePickerFieldWidget')
+    #form.widget(start='collective.z3cform.datepicker.widget.DatePickerFieldWidget')
     start = schema.Date(
         title=_(u'label_start', default=u'Opening Date'),
         description = _(u'help_start', default=u''), 
@@ -45,7 +47,7 @@ class IDossier(form.Schema):
     )
 
     #form.widget(end=DateTimePickerFieldWidget)
-    form.widget(end='collective.z3cform.datetimewidget.DateFieldWidget')
+    #form.widget(end='collective.z3cform.datepicker.widget.DatePickerFieldWidget')
     end = schema.Date(
         title=_(u'label_end', default=u'Closing Date'),
         description = _(u'help_end', default=u''),   
