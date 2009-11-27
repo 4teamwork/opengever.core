@@ -8,6 +8,7 @@ from plone.app.dexterity.behaviors.metadata import IBasic
 from plone.z3cform.textlines.textlines import TextLinesFieldWidget
 from plone.formwidget.autocomplete import AutocompleteFieldWidget
 from plone.indexer import indexer
+from five import grok
 
 
 class IDossierMarker(Interface):
