@@ -71,7 +71,7 @@ class IDocumentSchema(form.Schema):
         required = False,
     )
     
-    author = schema.TextLine(
+    document_author = schema.TextLine(
         title=_(u'label_author', default='Author'),
         description=_(u'help_author', default=""),
         required=False,
@@ -132,7 +132,7 @@ class IDocumentSchema(form.Schema):
         required = False,
         )
 
-@form.default_value(field=IDocumentSchema['author'])
+@form.default_value(field=IDocumentSchema['document_author'])
 def deadlineDefaultValue(data):
     # To get hold of the folder, do: context = data.context
     user = data.context.portal_membership.getAuthenticatedMember()
