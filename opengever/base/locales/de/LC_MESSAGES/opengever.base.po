@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2009-11-27 11:01+0000\n"
+"POT-Creation-Date: 2009-11-30 16:39+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -12,27 +12,109 @@ msgstr ""
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: DOMAIN\n"
 
+#. Default: "A Sibling with the same reference number is existing"
+#: opengever.base/opengever/base/behaviors/reference.py:58
+msgid "error_sibling_reference_number_existing"
+msgstr "Eine Ordnungsposition mit dieser Referenznummer existiert bereits auf gleicher Stufe"
+
+#. Default: "Classification"
+#: opengever.base/opengever/base/behaviors/classification.py:22
+msgid "fieldset_classification"
+msgstr "Sichtbarkeit"
+
 #. Default: "Common"
 #: opengever.base/opengever/base/behaviors/base.py:20
 msgid "fieldset_common"
 msgstr "Allgemein"
 
+#. Default: "Life Cycle"
+#: opengever.base/opengever/base/behaviors/classification.py:62
+msgid "fieldset_lifecycle"
+msgstr "Lebenszyklus"
+
+#. Default: "Archival value code"
+#: opengever.base/opengever/base/behaviors/classification.py:79
+msgid "help_archival_value"
+msgstr "Archivwürdigkeit"
+
+#. Default: ""
+#: opengever.base/opengever/base/behaviors/classification.py:33
+msgid "help_classification"
+msgstr "Grad, in dem die Unterlagen vor unberechtigter Einsicht geschützt werden müssen"
+
 #: opengever.base/opengever/base/behaviors/creator.py:21
 msgid "help_creators"
 msgstr ""
 
+#: opengever.base/opengever/base/behaviors/classification.py:86
+msgid "help_custody_period"
+msgstr "Dauer, während der nach der Archivierung die Dokumente vor öffentlicher Einsichtnahme geschützt sind"
+
+#. Default: ""
+#: opengever.base/opengever/base/behaviors/classification.py:41
+msgid "help_privacy_layer"
+msgstr "Markierung, die angibt, ob die Unterlagen besonders schützenswerte Personendaten oder Persönlichkeitsprofile gemäss Datenschutzrecht enthalten"
+
+#: opengever.base/opengever/base/behaviors/classification.py:48
+msgid "help_public_trial"
+msgstr "Angabe, ob die Unterlagen gemäss Öffentlichkeitsgesetz besonders schützenswert sind oder nicht"
+
+#. Default: "BegrÃ¼undung Schutzgrad"
+#: opengever.base/opengever/base/behaviors/classification.py:55
+msgid "help_public_trial_statement"
+msgstr "Argumente gegen die öffentliche Zugänglichkeit gemäss Öffentlichkeitsgesetz"
+
 #: opengever.base/opengever/base/behaviors/reference.py:16
 msgid "help_reference_number"
-msgstr ""
+msgstr "Präfix für das Aktenzeichen von Dossiers, die in dieser Ordnungsposition enthalten sind"
+
+#: opengever.base/opengever/base/behaviors/classification.py:72
+msgid "help_retention_period"
+msgstr "Zeitraum zwischen dem jüngsten Dokumentdatum eines in einem Dossier enthaltenen Dokuments und dem Zeitpunkt, an dem dieses für die Geschäftstätigkeit der Verwaltungseinheit nicht mehr benötigt wird"
+
+#. Default: "Archival value"
+#: opengever.base/opengever/base/behaviors/classification.py:78
+msgid "label_archival_value"
+msgstr "Archivwürdigkeit"
+
+#. Default: "Classification"
+#: opengever.base/opengever/base/behaviors/classification.py:32
+msgid "label_classification"
+msgstr "Klassifikation"
 
 #. Default: "Creators"
 #: opengever.base/opengever/base/behaviors/creator.py:20
 msgid "label_creators"
-msgstr ""
+msgstr "Autoren"
+
+#. Default: "Custody period (years)"
+#: opengever.base/opengever/base/behaviors/classification.py:85
+msgid "label_custody_period"
+msgstr "Archivische Schutzfrist (Jahre)"
+
+#. Default: "Privacy layer"
+#: opengever.base/opengever/base/behaviors/classification.py:40
+msgid "label_privacy_layer"
+msgstr "Datenschutzstufe"
+
+#. Default: "Public Trial"
+#: opengever.base/opengever/base/behaviors/classification.py:47
+msgid "label_public_trial"
+msgstr "Öffentlichkeitsstatus"
+
+#. Default: "Public trial statement"
+#: opengever.base/opengever/base/behaviors/classification.py:54
+msgid "label_public_trial_statement"
+msgstr "Begründung für die Aufhebung des Öffentlichkeitsstatus"
 
 #. Default: "Reference"
 #: opengever.base/opengever/base/behaviors/reference.py:15
 msgid "label_reference_number"
-msgstr "Laufnummer"
+msgstr "Präfix des Aktenzeichens"
+
+#. Default: "Retention period (years)"
+#: opengever.base/opengever/base/behaviors/classification.py:71
+msgid "label_retention_period"
+msgstr "Aufbewahrungsdauer (Jahre)"
 
 
