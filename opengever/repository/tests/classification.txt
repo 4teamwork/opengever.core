@@ -16,7 +16,7 @@ When we create a dexterity content type::
     >>> from opengever.repository import classification
     >>> from plone.dexterity.fti import DexterityFTI
     >>> fti = DexterityFTI('TestingType')
-    >>> fti.behaviors = ('opengever.repository.classification.IClassification',)
+    >>> fti.behaviors = ('opengever.base.behaviors.classification.IClassification',)
     >>> self.portal.portal_types._setObject('TestingType', fti)
     'TestingType'
     >>> schema = fti.lookupSchema()

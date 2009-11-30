@@ -15,15 +15,6 @@
     <!-- Register locales translations -->
     <i18n:registerTranslations directory="locales" />
 
-    <!-- Classification Behavior -->
-    <plone:behavior
-        title="Classification"
-        description="Adds classification fields and functionality"
-        provides=".classification.IClassification"
-        factory=".classification.Classification"
-        for="plone.dexterity.interfaces.IDexterityContent"
-        />
-
     <!-- Register an extension profile to make the product installable -->
     <genericsetup:registerProfile
         name="default"
