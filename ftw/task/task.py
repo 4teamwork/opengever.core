@@ -14,6 +14,8 @@ from Products.CMFCore.utils import getToolByName
 from Products.CMFDefault.interfaces import ICMFDefaultSkin
 from datetime import datetime, timedelta
 from z3c.relationfield.relation import TemporaryRelationValue
+from z3c.relationfield.relation import RelationValue
+
 
 from plone.formwidget import autocomplete
 from plone.formwidget.autocomplete import AutocompleteFieldWidget
@@ -32,8 +34,9 @@ from ftw.task import _
 
 from opengever.translations.browser import edit, add
 
+
 class ITask(form.Schema):
-    
+
     form.fieldset(
         u'additional',
         label = _(u'fieldset_additional', u'Additional'),
@@ -118,19 +121,20 @@ def deadlineDefaultValue(data):
     # To get hold of the folder, do: context = data.context
     return datetime.today() + timedelta(5)
 
-@form.default_value(field=IRelatedItems['relatedItems'])
+#@form.default_value(field=IRelatedItems['relatedItems'])
 def pathsDefaultValue(data):
 #XXX Don't work yet
-    paths = data.request.get('paths', None)
-    from zope.component import getUtility
+    paths = data.request.get('paths', [])
     from zope.app.intid.interfaces import IIntIds
     intids = getUtility( IIntIds )
+    #return paths
     if paths:
         pathlist = []
         for item in paths:
             obj = data.context.restrictedTraverse( item.encode())
             id = intids.getId(obj)
-            pathlist.append(TemporaryRelationValue(id))
+            pathlist.append(RelationValue(id))
+        import pdb; pdb.set_trace()
         return pathlist
     return []
                 
@@ -150,6 +154,25 @@ class View(dexterity.DisplayForm):
         responses = self.context.getFolderContents(full_objects=True, contentFilter={'portal_type':'ftw.task.response'})
         return responses
 
+
+# XXX
+# setting the default value of a RelationField does not work as excepted
+# or we don't know how to set it.
+# thus we use an add form hack by injecting the values into the request.
+class AddForm(dexterity.AddForm):
+    grok.name('ftw.task.task')
+
+    def update(self):
+        #import pdb; pdb.set_trace()
+        paths = self.request.get('paths', [])        
+        if paths:
+            utool = getToolByName(self.context, 'portal_url')
+            portal_path = utool.getPortalPath()
+            # paths have to be relative to the portal
+            paths = [path[len(portal_path):] for path in paths]
+            self.request.set('form.widgets.IRelatedItems.relatedItems', paths)
+        super(AddForm, self).update()
+    
 class TaskWidgetTraversal(WidgetTraversal):
     implements(ITraversable)
 
