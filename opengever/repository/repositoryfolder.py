@@ -13,6 +13,8 @@ from opengever.repository import _
 from opengever.repository.interfaces import IRepositoryFolder
 from plone.app.content.interfaces import INameFromTitle
 from five import grok
+from plone.app.layout.viewlets.interfaces import IBelowContentTitle
+from plone.memoize.instance import memoize
 
 class IRepositoryFolderSchema(form.Schema):
     """ A Repository Folder
@@ -137,3 +139,15 @@ class NameFromTitle(grok.Adapter):
     @property
     def title(self):
         return self.context.effective_title
+
+class Byline(grok.Viewlet):
+    grok.viewletmanager(IBelowContentTitle)
+    grok.context(IRepositoryFolder)
+    grok.name("plone.belowcontenttitle.documentbyline")
+
+    #update = content.DocumentBylineViewlet.update
+
+    @memoize
+    def workflow_state(self):
+        pw = self.context.portal_workflow
+        return pw.getStatusOf(pw.getChainFor(self.context)[0], self.context)['review_state']

@@ -1,0 +1,29 @@
+<div class="documentByLine"
+     id="plone-document-byline"
+     i18n:domain="opengever.theme">
+<!--
+  <span id="lock-icon"
+        tal:define="lock_icon viewlet/locked_icon"
+        tal:condition="lock_icon">
+      <img tal:replace="structure lock_icon" />
+  </span>
+-->
+
+
+    <span i18n:translate="label_workflow_state" class="noborder">
+	  State: 
+	</span>
+	<span tal:content="viewlet/workflow_state" i18n:domain="plone" i18n:translate="" class="documentAuthor"/>
+
+
+  <tal:state>
+	<span i18n:translate="" tal:content="context/privacy_layer" i18n:domain="opengever.repository" class="documentStatus"/>
+  </tal:state>
+
+  <span class="documentModified">
+    <span i18n:domain="opengever.repository" i18n:translate="" class="noborder">
+      Öffentlichkeitsstatus:
+    </span>
+    <span tal:content="context/public_trial" class="documentAuthor"/>
+  </span>
+</div>
