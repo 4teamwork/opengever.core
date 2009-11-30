@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2009-11-10 13:47+0000\n"
+"POT-Creation-Date: 2009-11-30 16:48+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,14 +18,14 @@ msgstr ""
 "Domain: opengever.repository\n"
 
 #: opengever.repository/opengever/repository/profiles/default/types/opengever.repository.repositoryfolder.xml
-msgid "A Repository Folder"
-msgstr ""
-
-#: opengever.repository/opengever/repository/profiles/default/types/opengever.repository.repositoryfolder.xml
 msgid "RepositoryFolder"
 msgstr ""
 
-#: opengever.repository/opengever/repository/repositoryfolder.py:34
+#: opengever.repository/opengever/repository/profiles/default/types/opengever.repository.repositoryroot.xml
+msgid "RepositoryRoot"
+msgstr ""
+
+#: opengever.repository/opengever/repository/repositoryfolder.py:36
 msgid "Title"
 msgstr ""
 
@@ -65,107 +65,37 @@ msgid "confidential"
 msgstr ""
 
 #. Default: "A Sibling with the same reference number is existing"
-#: opengever.repository/opengever/repository/repositoryfolder.py:89
+#: opengever.repository/opengever/repository/repositoryfolder.py:91
 msgid "error_sibling_reference_number_existing"
 msgstr ""
 
-#. Default: "Classification"
-#: opengever.repository/opengever/repository/classification.py:22
-msgid "fieldset_classification"
-msgstr ""
-
 #. Default: "Common"
-#: opengever.repository/opengever/repository/repositoryfolder.py:23
+#: opengever.repository/opengever/repository/repositoryfolder.py:25
 msgid "fieldset_common"
 msgstr ""
 
-#. Default: "Life Cycle"
-#: opengever.repository/opengever/repository/classification.py:62
-msgid "fieldset_lifecycle"
-msgstr ""
-
-#. Default: "Archival value code"
-#: opengever.repository/opengever/repository/classification.py:72
-msgid "help_archival_value"
-msgstr ""
-
-#: opengever.repository/opengever/repository/classification.py:33
-msgid "help_classification"
-msgstr ""
-
-#: opengever.repository/opengever/repository/classification.py:79
-msgid "help_custody_period"
-msgstr ""
-
 #. Default: "A short summary of the content."
-#: opengever.repository/opengever/repository/repositoryfolder.py:47
+#: opengever.repository/opengever/repository/repositoryfolder.py:49
 msgid "help_description"
 msgstr ""
 
-#: opengever.repository/opengever/repository/classification.py:41
-msgid "help_privacy_layer"
-msgstr ""
-
-#: opengever.repository/opengever/repository/classification.py:48
-msgid "help_public_trial"
-msgstr ""
-
-#. Default: "BegrÃ¼undung Schutzgrad"
-#: opengever.repository/opengever/repository/classification.py:55
-msgid "help_public_trial_statement"
-msgstr ""
-
-#: opengever.repository/opengever/repository/repositoryfolder.py:40
+#: opengever.repository/opengever/repository/repositoryfolder.py:42
 msgid "help_reference_number"
 msgstr ""
 
-#: opengever.repository/opengever/repository/classification.py:86
-msgid "help_retention_period"
-msgstr ""
-
-#. Default: "Archival value"
-#: opengever.repository/opengever/repository/classification.py:71
-msgid "label_archival_value"
-msgstr ""
-
-#. Default: "Classification"
-#: opengever.repository/opengever/repository/classification.py:32
-msgid "label_classification"
-msgstr ""
-
-#. Default: "Custody period (years)"
-#: opengever.repository/opengever/repository/classification.py:78
-msgid "label_custody_period"
-msgstr ""
-
 #. Default: "Description"
-#: opengever.repository/opengever/repository/repositoryfolder.py:46
+#: opengever.repository/opengever/repository/repositoryfolder.py:48
 msgid "label_description"
 msgstr ""
 
-#. Default: "Privacy layer"
-#: opengever.repository/opengever/repository/classification.py:40
-msgid "label_privacy_layer"
-msgstr ""
-
-#. Default: "Public Trial"
-#: opengever.repository/opengever/repository/classification.py:47
-msgid "label_public_trial"
-msgstr ""
-
-#. Default: "Public trial statement"
-#: opengever.repository/opengever/repository/classification.py:54
-msgid "label_public_trial_statement"
-msgstr ""
-
 #. Default: "Reference"
-#: opengever.repository/opengever/repository/repositoryfolder.py:39
+#: opengever.repository/opengever/repository/repositoryfolder.py:41
 msgid "label_reference_number"
 msgstr ""
 
-#. Default: "Retention period (years)"
-#: opengever.repository/opengever/repository/classification.py:85
-msgid "label_retention_period"
+#. Default: "State:"
+#: opengever.repository/opengever/repository/repositoryfolder_templates/byline.pt:5
+msgid "label_workflow_state"
 msgstr ""
 
 #. Default ""

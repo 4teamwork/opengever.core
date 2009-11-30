@@ -1,6 +1,6 @@
 <div class="documentByLine"
      id="plone-document-byline"
-     i18n:domain="opengever.theme">
+     i18n:domain="opengever.repository">
 
     <span i18n:translate="label_workflow_state" class="noborder">
 	  State: 
@@ -9,13 +9,13 @@
 
 
   <tal:state>
-	<span i18n:translate="" tal:content="context/privacy_layer" i18n:domain="opengever.repository" class="documentStatus"/>
+	<span i18n:translate="" tal:content="context/privacy_layer" i18n:domain="opengever.base" class="documentStatus"/>
   </tal:state>
 
   <span class="documentModified">
-    <span i18n:domain="opengever.repository" i18n:translate="" class="noborder">
-      Öffentlichkeitsstatus:
+    <span i18n:translate="label_public_trial" i18n:domain="opengever.base" class="noborder">
+      Public Trial
     </span>
-    <span tal:content="context/public_trial" class="documentAuthor"/>
+    <span tal:content="context/public_trial" i18n:translate="" i18n:domain="opengever.base" class="documentAuthor"/>
   </span>
 </div>
