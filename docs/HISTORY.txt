@@ -5,6 +5,9 @@ Changelog
 0.2
 ---
 
+* using opengever.base.behaviors.creator.ICreator behavior
+  [27.11.2009, jbaumann]
+
 * Issue #136: UnicodeEncodeError falls in Description Umlaute erfasst werden
   [16.11.2009, jbaumann]
 
