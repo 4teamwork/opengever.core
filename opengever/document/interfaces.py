@@ -60,3 +60,7 @@ class IObjectCheckedInEvent(IObjectEvent):
 class IObjectCheckoutCanceledEvent(IObjectEvent):
     """ Event interface for events.ObjectCheckoutCanceledEvent
     """
+    
+    
+class IDocumentType(Interface):
+    document_types= schema.List(title=u"Document Type", default=['Antrag', 'Anfrage', 'Bericht', 'Offerte', 'Protokoll', 'Vertrag',])

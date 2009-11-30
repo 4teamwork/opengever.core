@@ -26,6 +26,20 @@
 				<td tal:content="python:here.toLocalizedTime(str(here.document_date))"></td>
 			</tr>
 			<tr>
+			    <th>Dokumenttyp</th>
+				<td tal:define="document_type context/document_type">
+					<tal:description condition="document_type" content="document_type" />
+					<tal:description condition="python: not document_type">-</tal:description>
+				</td>			
+			</tr>
+			<tr>
+			    <th>Autor</th>
+				<td tal:define="author context/author">
+					<tal:description condition="author" content="author" />
+					<tal:description condition="python: not author">-</tal:description>
+				</td>			
+			</tr>
+			<tr>
 				<th>Ersteller</th>
 				<td tal:content="context/Creator"></td>
 			</tr>

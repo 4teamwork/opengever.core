@@ -7,6 +7,9 @@ from ZODB.POSException import ConflictError
 from five import grok
 from z3c.form.browser import checkbox
 from zope import schema
+from zope.schema.vocabulary import SimpleVocabulary
+from zope.schema.interfaces import IContextSourceBinder
+from zope.component import queryUtility
 
 from Products.CMFCore.utils import getToolByName
 from Products.MimetypesRegistry.common import MimeTypeException
@@ -15,13 +18,26 @@ from plone.dexterity.content import Item
 from plone.directives import form
 from plone.indexer import indexer
 from plone.app.iterate.interfaces import IWorkingCopy
+from plone.registry.interfaces import IRegistry
 
 from opengever.sqlfile.field import NamedFile
 from plone.namedfile.interfaces import INamedFileField
 
 from opengever.document import _
+from opengever.document.interfaces import IDocumentType
 
 LOG = logging.getLogger('opengever.document')
+
+@grok.provider(IContextSourceBinder)
+def possibleTypes(context):
+    voc= []
+    terms = []
+    registry = queryUtility(IRegistry)
+    proxy = registry.forInterface(IDocumentType)
+    voc = getattr(proxy, 'document_types')
+    for term in voc:
+        terms.append(SimpleVocabulary.createTerm(term))
+    return SimpleVocabulary(terms)
 
 class IDocumentSchema(form.Schema):
     """ Document Schema Interface
@@ -35,7 +51,7 @@ class IDocumentSchema(form.Schema):
             u'delivery_date',
             ]
         )
-
+        
     foreign_reference = schema.TextLine(
         title = _(u'label_foreign_reference', default='Foreign Reference'),
         description = _('help_foreign_reference', default=''),
@@ -47,7 +63,20 @@ class IDocumentSchema(form.Schema):
         description = _(u'help_document_date', default=''),
         required = True,
         )
-
+        
+    document_type = schema.Choice(
+        title=_(u'label_document_type', default='Document Type'),
+        description=_(u'help_document_type', default=''),
+        source=possibleTypes,
+        required = False,
+    )
+    
+    author = schema.TextLine(
+        title=_(u'label_author', default='Author'),
+        description=_(u'help_author', default=""),
+        required=False,
+    )
+    
     form.primary('file')
     file = NamedFile(
         title = _(u'label_file', default='File'),
@@ -103,7 +132,15 @@ class IDocumentSchema(form.Schema):
         required = False,
         )
 
-
+@form.default_value(field=IDocumentSchema['author'])
+def deadlineDefaultValue(data):
+    # To get hold of the folder, do: context = data.context
+    user = data.context.portal_membership.getAuthenticatedMember()
+    if user.getProperty('fullname'):
+        return user.getProperty('fullname')
+    else:
+        return user.getId()
+        
 class Document(Item):
 
     def Title(self):
@@ -193,3 +230,4 @@ grok.global_adapter(SearchableText, name='SearchableText')
 class View(grok.View):
     grok.context(IDocumentSchema)
     grok.require("zope2.View")
+    

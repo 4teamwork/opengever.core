@@ -1,0 +1,3 @@
+<registry>
+  <records interface="opengever.document.interfaces.IDocumentType" />
+</registry>
