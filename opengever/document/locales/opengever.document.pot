@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2009-11-11 15:39+0000\n"
+"POT-Creation-Date: 2009-11-30 16:41+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,11 +21,11 @@ msgstr ""
 msgid "Cancel"
 msgstr ""
 
-#: opengever.document/opengever/document/staging/manager.py:157
+#: opengever.document/opengever/document/staging/manager.py:160
 msgid "Checked in: ${title}"
 msgstr ""
 
-#: opengever.document/opengever/document/staging/manager.py:131
+#: opengever.document/opengever/document/staging/manager.py:134
 msgid "Checked out: ${title}"
 msgstr ""
 
@@ -37,20 +37,24 @@ msgstr ""
 msgid "Checkout"
 msgstr ""
 
-#: opengever.document/opengever/document/staging/manager.py:180
+#: opengever.document/opengever/document/staging/manager.py:183
 msgid "Checkout canceled: ${title}"
 msgstr ""
 
-#: opengever.document/opengever/document/staging/manager.py:168
+#: opengever.document/opengever/document/staging/manager.py:171
 msgid "Could not cancel checkin: ${title}, not allowed"
 msgstr ""
 
-#: opengever.document/opengever/document/staging/manager.py:142
+#: opengever.document/opengever/document/staging/manager.py:145
 msgid "Could not checkin: ${title}, checkin not allowed"
 msgstr ""
 
-#: opengever.document/opengever/document/staging/manager.py:101
+#: opengever.document/opengever/document/staging/manager.py:107
 msgid "Could not checkout: ${title}, checkout not allowed"
+msgstr ""
+
+#: opengever.document/opengever/document/profiles/default/actions.xml
+msgid "Create Task"
 msgstr ""
 
 #: opengever.document/opengever/document/profiles/default/types/opengever.document.document.xml
@@ -78,7 +82,7 @@ msgid "button_checkout"
 msgstr ""
 
 #. Default: "Create"
-#: opengever.document/opengever/document/docucomposer.py:52
+#: opengever.document/opengever/document/docucomposer.py:55
 msgid "button_create"
 msgstr ""
 
@@ -103,7 +107,7 @@ msgid "heading_checkout_comment_form"
 msgstr ""
 
 #. Default: "DocuComposer"
-#: opengever.document/opengever/document/docucomposer.py:50
+#: opengever.document/opengever/document/docucomposer.py:53
 msgid "heading_docucomposer_wizard_form"
 msgstr ""
 
@@ -112,7 +116,7 @@ msgstr ""
 msgid "heading_send_as_email"
 msgstr ""
 
-#: opengever.document/opengever/document/document.py:75
+#: opengever.document/opengever/document/document.py:76
 msgid "help_archival_file"
 msgstr ""
 
@@ -126,15 +130,15 @@ msgstr ""
 msgid "help_checkout_journal_comment"
 msgstr ""
 
-#: opengever.document/opengever/document/document.py:101
+#: opengever.document/opengever/document/document.py:102
 msgid "help_delivery_date"
 msgstr ""
 
-#: opengever.document/opengever/document/docucomposer.py:41
+#: opengever.document/opengever/document/docucomposer.py:44
 msgid "help_docucomposer_filename"
 msgstr ""
 
-#: opengever.document/opengever/document/docucomposer.py:35
+#: opengever.document/opengever/document/docucomposer.py:38
 msgid "help_docucomposer_wizard"
 msgstr ""
 
@@ -163,11 +167,11 @@ msgstr ""
 msgid "help_preserved_as_paper"
 msgstr ""
 
-#: opengever.document/opengever/document/document.py:89
+#: opengever.document/opengever/document/document.py:90
 msgid "help_preview"
 msgstr ""
 
-#: opengever.document/opengever/document/document.py:95
+#: opengever.document/opengever/document/document.py:96
 msgid "help_receipt_date"
 msgstr ""
 
@@ -179,7 +183,7 @@ msgstr ""
 msgid "help_subject"
 msgstr ""
 
-#: opengever.document/opengever/document/document.py:82
+#: opengever.document/opengever/document/document.py:83
 msgid "help_thumbnail"
 msgstr ""
 
@@ -189,7 +193,7 @@ msgid "info_mails_sent"
 msgstr ""
 
 #. Default: "Archival File"
-#: opengever.document/opengever/document/document.py:74
+#: opengever.document/opengever/document/document.py:75
 msgid "label_archival_file"
 msgstr ""
 
@@ -204,12 +208,12 @@ msgid "label_checkout_journal_comment"
 msgstr ""
 
 #. Default: "Date of delivery"
-#: opengever.document/opengever/document/document.py:100
+#: opengever.document/opengever/document/document.py:101
 msgid "label_delivery_date"
 msgstr ""
 
 #. Default: "DocuComposer Template"
-#: opengever.document/opengever/document/docucomposer.py:34
+#: opengever.document/opengever/document/docucomposer.py:37
 msgid "label_docucomposer_template"
 msgstr ""
 
@@ -244,12 +248,12 @@ msgid "label_preserved_as_paper"
 msgstr ""
 
 #. Default: "Preview"
-#: opengever.document/opengever/document/document.py:88
+#: opengever.document/opengever/document/document.py:89
 msgid "label_preview"
 msgstr ""
 
 #. Default: "Date of receipt"
-#: opengever.document/opengever/document/document.py:94
+#: opengever.document/opengever/document/document.py:95
 msgid "label_receipt_date"
 msgstr ""
 
@@ -264,12 +268,12 @@ msgid "label_subject"
 msgstr ""
 
 #. Default: "Thumbnail"
-#: opengever.document/opengever/document/document.py:81
+#: opengever.document/opengever/document/document.py:82
 msgid "label_thumbnail"
 msgstr ""
 
 #. Default: "Filename"
-#: opengever.document/opengever/document/docucomposer.py:40
+#: opengever.document/opengever/document/docucomposer.py:43
 msgid "lable_docucomposer_filename"
 msgstr ""
 
