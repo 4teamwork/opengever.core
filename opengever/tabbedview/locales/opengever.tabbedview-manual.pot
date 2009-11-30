@@ -1,9 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2009-11-30 17:34+0000\n"
+"POT-Creation-Date: 2009-02-25 13:09+0000\n"
 "PO-Revision-Date: 2009-02-25 14:39+0100\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
@@ -18,32 +17,25 @@ msgstr ""
 msgid "Creator"
 msgstr ""
 
+msgid "sortable_title"
+msgstr ""
+
 msgid "Title"
-msgstr ""
-
-msgid "actor"
-msgstr ""
-
-msgid "comment"
-msgstr ""
-
-msgid "documents"
-msgstr ""
-
-msgid "dossiers"
-msgstr ""
-
-msgid "events"
-msgstr ""
-
-msgid "journal"
 msgstr ""
 
 msgid "modified"
 msgstr ""
 
-#: opengever.tabbedview/opengever/tabbedview/browser/tabs_templates/overview.pt:16
-msgid "no_content"
+msgid "dossiers"
+msgstr ""
+
+msgid "subdossiers"
+msgstr ""
+
+msgid "documents"
+msgstr ""
+
+msgid "tasks"
 msgstr ""
 
 msgid "overview"
@@ -52,25 +44,25 @@ msgstr ""
 msgid "repostories"
 msgstr ""
 
+msgid "events"
+msgstr ""
+
+msgid "journal"
+msgstr ""
+
 msgid "sharing"
 msgstr ""
 
-#: opengever.tabbedview/opengever/tabbedview/browser/tabs_templates/overview.pt:13
-msgid "show all"
+msgid "title"
 msgstr ""
 
-msgid "sortable_title"
-msgstr ""
-
-msgid "subdossiers"
-msgstr ""
-
-msgid "tasks"
+msgid "actor"
 msgstr ""
 
 msgid "time"
 msgstr ""
 
-msgid "title"
+msgid "comment"
 msgstr ""
+
 

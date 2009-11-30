@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2009-11-30 16:49+0000\n"
+"POT-Creation-Date: 2009-11-30 17:34+0000\n"
 "PO-Revision-Date: 2009-02-25 14:39+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -13,12 +13,80 @@ msgstr ""
 "Domain: opengever.tabbedview\n"
 "X-Poedit-Language: German\n"
 
+#. Default: "Ersteller"
+msgid "Creator"
+msgstr "Ersteller"
+
+#. Default: "Titel"
+msgid "Title"
+msgstr "Titel"
+
+#. Default: "Akteur"
+msgid "actor"
+msgstr "Akteur"
+
+#. Default: "Kommentar"
+msgid "comment"
+msgstr "Kommentar"
+
+#. Default: "Dokumente"
+msgid "documents"
+msgstr "Dokumente"
+
+#. Default: "Dossiers"
+msgid "dossiers"
+msgstr "Dossiers"
+
+#. Default: "Termine"
+msgid "events"
+msgstr "Termine"
+
+#. Default: "Journal"
+msgid "journal"
+msgstr "Journal"
+
+#. Default: "Änderungsdatum"
+msgid "modified"
+msgstr "Änderungsdatum"
+
 #: opengever.tabbedview/opengever/tabbedview/browser/tabs_templates/overview.pt:16
 msgid "no_content"
 msgstr "Keine Inhalte vorhanden"
 
+#. Default: "Übersicht"
+msgid "overview"
+msgstr "Übersicht"
+
+#. Default: "Ordnungspositionen"
+msgid "repostories"
+msgstr "Ordnungspositionen"
+
+#. Default: "Beteiligte"
+msgid "sharing"
+msgstr "Beteiligte"
+
 #: opengever.tabbedview/opengever/tabbedview/browser/tabs_templates/overview.pt:13
 msgid "show all"
 msgstr "Alle Anzeigen"
+
+#. Default: "Titel"
+msgid "sortable_title"
+msgstr "Titel"
+
+#. Default: "Subdossiers"
+msgid "subdossiers"
+msgstr "Subdossiers"
+
+#. Default: "Aufgaben"
+msgid "tasks"
+msgstr "Aufgaben"
+
+#. Default: "Datum"
+msgid "time"
+msgstr "Datum"
+
+#. Default: "Titel"
+msgid "title"
+msgstr "Titel"
 
 
