@@ -31,4 +31,14 @@
       for="plone.dexterity.interfaces.IDexterityContent"
       />
 
+  <!-- Classification Behavior -->
+  <plone:behavior
+      title="Classification"
+      description="Adds classification fields and functionality"
+      provides=".classification.IClassification"
+      factory=".classification.Classification"
+      for="plone.dexterity.interfaces.IDexterityContent"
+      />
+
+
 </configure>
