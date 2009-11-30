@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2009-11-19 14:03+0000\n"
+"POT-Creation-Date: 2009-11-30 06:19+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -86,8 +86,13 @@ msgstr ""
 msgid "deadline"
 msgstr ""
 
+#. Default: "Additional"
+#: ftw.task/ftw/task/task.py:39
+msgid "fieldset_additional"
+msgstr ""
+
 #. Default: "Deadline"
-#: ftw.task/ftw/task/task.py:46
+#: ftw.task/ftw/task/task.py:63
 msgid "help_deadline"
 msgstr ""
 
@@ -95,28 +100,24 @@ msgstr ""
 msgid "help_deadline_response"
 msgstr ""
 
-#: ftw.task/ftw/task/task.py:91
+#: ftw.task/ftw/task/task.py:101
 msgid "help_effectiveCost"
 msgstr ""
 
-#: ftw.task/ftw/task/task.py:85
+#: ftw.task/ftw/task/task.py:95
 msgid "help_effectiveDuration"
 msgstr ""
 
-#: ftw.task/ftw/task/task.py:79
+#: ftw.task/ftw/task/task.py:89
 msgid "help_expectedCost"
 msgstr ""
 
-#: ftw.task/ftw/task/task.py:73
+#: ftw.task/ftw/task/task.py:83
 msgid "help_expectedDuration"
 msgstr ""
 
-#: ftw.task/ftw/task/task.py:67
+#: ftw.task/ftw/task/task.py:77
 msgid "help_expectedStartOfWork"
-msgstr ""
-
-#: ftw.task/ftw/task/task.py:52
-msgid "help_priority"
 msgstr ""
 
 #: ftw.task/ftw/task/response.py:58
@@ -124,7 +125,7 @@ msgid "help_response"
 msgstr ""
 
 #. Default: "select an responsible Manger"
-#: ftw.task/ftw/task/task.py:60
+#: ftw.task/ftw/task/task.py:70
 msgid "help_responsible"
 msgstr ""
 
@@ -132,12 +133,12 @@ msgstr ""
 msgid "help_responsible_response"
 msgstr ""
 
-#: ftw.task/ftw/task/task.py:40
+#: ftw.task/ftw/task/task.py:57
 msgid "help_text"
 msgstr ""
 
 #. Default: "Title"
-#: ftw.task/ftw/task/task.py:34
+#: ftw.task/ftw/task/task.py:51
 msgid "help_title"
 msgstr ""
 
@@ -145,12 +146,7 @@ msgstr ""
 msgid "help_transition"
 msgstr ""
 
-#. Default: "critical"
-#: ftw.task/ftw/task/task.py:53
-msgid "label_critical"
-msgstr ""
-
-#: ftw.task/ftw/task/task.py:45
+#: ftw.task/ftw/task/task.py:62
 msgid "label_deadline"
 msgstr ""
 
@@ -165,12 +161,12 @@ msgid "label_edit_response_not_allowed"
 msgstr ""
 
 #. Default: "effective cost"
-#: ftw.task/ftw/task/task.py:90
+#: ftw.task/ftw/task/task.py:100
 msgid "label_effectiveCost"
 msgstr ""
 
 #. Default: "effective duration"
-#: ftw.task/ftw/task/task.py:84
+#: ftw.task/ftw/task/task.py:94
 msgid "label_effectiveDuration"
 msgstr ""
 
@@ -180,32 +176,18 @@ msgid "label_enter_response"
 msgstr ""
 
 #. Default: "expected cost"
-#: ftw.task/ftw/task/task.py:78
+#: ftw.task/ftw/task/task.py:88
 msgid "label_expectedCost"
 msgstr ""
 
 #. Default: "Expected duration"
-#: ftw.task/ftw/task/task.py:72
+#: ftw.task/ftw/task/task.py:82
 msgid "label_expectedDuration"
 msgstr ""
 
 #. Default: "Start with work"
-#: ftw.task/ftw/task/task.py:66
+#: ftw.task/ftw/task/task.py:76
 msgid "label_expectedStartOfWork"
-msgstr ""
-
-#. Default: "important"
-#: ftw.task/ftw/task/task.py:53
-msgid "label_important"
-msgstr ""
-
-#. Default: "medium"
-#: ftw.task/ftw/task/task.py:53
-msgid "label_medium"
-msgstr ""
-
-#: ftw.task/ftw/task/task.py:51
-msgid "label_priority"
 msgstr ""
 
 #. Default: "Response"
@@ -214,7 +196,7 @@ msgid "label_response"
 msgstr ""
 
 #. Default: "Responsible"
-#: ftw.task/ftw/task/task.py:59
+#: ftw.task/ftw/task/task.py:69
 msgid "label_responsible"
 msgstr ""
 
@@ -229,23 +211,18 @@ msgid "label_return_to_issue"
 msgstr ""
 
 #. Default: "Text"
-#: ftw.task/ftw/task/task.py:39
+#: ftw.task/ftw/task/task.py:56
 msgid "label_text"
 msgstr ""
 
 #. Default: "Title"
-#: ftw.task/ftw/task/task.py:33
+#: ftw.task/ftw/task/task.py:50
 msgid "label_title"
 msgstr ""
 
 #. Default: "Transition"
 #: ftw.task/ftw/task/response.py:77
 msgid "label_transition"
-msgstr ""
-
-#. Default: "low"
-#: ftw.task/ftw/task/task.py:53
-msgid "label_low"
 msgstr ""
 
 #. Default: "No Content"
