@@ -235,7 +235,7 @@ class Base(BrowserView):
 class AddForm(form.AddForm):
     fields = field.Fields(IResponse)
     #XXX use AutocompleteFieldWidget
-    #fields['new_responsible'].widgetFactory = AutocompleteFieldWidget
+    fields['new_responsible'].widgetFactory = AutocompleteFieldWidget
     
     @property
     def action(self):
@@ -272,10 +272,10 @@ class AddForm(form.AddForm):
                 wftool = getToolByName(self.context, 'portal_workflow')
                 before = wftool.getInfoFor(self.context, 'review_state')
                 if data.get('transition') != before:
-                    before = wftool.getTitleForStateOnType(before, task.type)
+                    before = wftool.getTitleForStateOnType(before, task.Type())
                     wftool.doActionFor(self.context, data.get('transition'))
                     after = wftool.getInfoFor(self.context, 'review_state')
-                    after = wftool.getTitleForStateOnType(after, task.type)
+                    after = wftool.getTitleForStateOnType(after, task.Type())
                     new_response.add_change('review_state', _(u'Issue state'),
                                         before, after)  
 
@@ -285,7 +285,8 @@ class AddForm(form.AddForm):
                 if resp_field and task_field != resp_field:
                     new_response.add_change(option, title, task_field, resp_field)
                     task.__setattr__(option,resp_field)
-            self.view.folder.add(new_response)
+            container = IResponseContainer(self.context)
+            container.add(new_response)
             self.request.RESPONSE.redirect(self.context.absolute_url())
 
 class BeneathTask(grok.ViewletManager):
@@ -303,6 +304,7 @@ class ResponseView(grok.Viewlet, Base):
         Base.__init__(self,context, request)
     
         
+"""
 class AddFormView(layout.FormWrapper, grok.Viewlet, Base):
     grok.implements(IResponseAdder)
     grok.context(ITask)
@@ -316,6 +318,21 @@ class AddFormView(layout.FormWrapper, grok.Viewlet, Base):
         Base.__init__(self,context, request)
         self.__parent__ = view
         self.form_instance.view = self
+
+    def render(self):
+        return layout.FormWrapper.render_form(self)
+"""
+
+class SingleAddFormView(layout.FormWrapper, grok.CodeView):
+    grok.implements(IResponseAdder)
+    grok.context(ITask)
+    grok.name("addresponse")
+
+    form = AddForm
+
+    def __init__(self, context, request):
+        layout.FormWrapper.__init__(self, context, request)
+        grok.CodeView.__init__(self, context, request)
 
     def render(self):
         return layout.FormWrapper.render_form(self)
@@ -418,6 +435,5 @@ class Delete(Base):
                     self.folder.delete(response_id)
                     msg = _(u"Removed response id ${response_id}.",
                             mapping=dict(response_id=response_id))
-                    msg = translate(msg, 'Poi', context=context)
                     status.addStatusMessage(msg, type='info')
         self.request.response.redirect(context.absolute_url())

@@ -24,13 +24,6 @@
     
     <i18n:registerTranslations directory="locales" />
     
-    <browser:viewletManager
-        name="ftw.task.response.add"
-        provides=".interfaces.IResponseAdder"
-        permission="zope2.View"
-        class=".response.AddForm"
-        />
-
     <browser:page
        name="task_response_delete"
        for="ftw.task.task.ITask"

@@ -13,7 +13,7 @@ from AccessControl import getSecurityManager
 from Products.CMFCore.utils import getToolByName
 from Products.CMFDefault.interfaces import ICMFDefaultSkin
 from datetime import datetime, timedelta
-from z3c.relationfield.relation import RelationValue
+from z3c.relationfield.relation import TemporaryRelationValue
 
 from plone.formwidget import autocomplete
 from plone.formwidget.autocomplete import AutocompleteFieldWidget
@@ -130,7 +130,7 @@ def pathsDefaultValue(data):
         for item in paths:
             obj = data.context.restrictedTraverse( item.encode())
             id = intids.getId(obj)
-            pathlist.append(RelationValue(id))
+            pathlist.append(TemporaryRelationValue(id))
         return pathlist
     return []
                 

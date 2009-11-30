@@ -41,7 +41,11 @@
             <div tal:content="structure widget/render" />
         </div>
     </fieldset>
-
+    
+    <div class>
+        <a class="context" href="edit" i18n:translate="edit_task">edit Task</a>
+        <a class="standalone" href="addresponse" i18n:translate="add_response">add Response</a>
+    </div>
     <div class="visualClear"><!----></div>
         <div><h2 i18n:translate="subtasks">Subtasks:</h2></div>
         <tal:items define="items view/getSubTasks">
@@ -53,11 +57,11 @@
             </ul>
             <span tal:condition="not: items" i18n:translate="no_content">No Content</span>
         </tal:items>
-
-    <div class="visualClear"><!----></div>
+        
+        <div class="visualClear"><!----></div>
         <div><h2 i18n:translate="responses">Responses:</h2></div>
         <div tal:replace="structure provider:ftw.task.beneathTask" />
-    <div class="visualClear"><!----></div>
+        <div class="visualClear"><!----></div>
         <div tal:replace="structure provider:plone.belowcontentbody" />
     <div class="visualClear"><!----></div>
     </tal:main-macro>
