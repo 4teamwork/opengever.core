@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2009-11-30 16:39+0000\n"
+"POT-Creation-Date: 2009-11-30 17:41+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -15,10 +15,45 @@ msgstr ""
 "Language-Code: en\n"
 "Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
-"Domain: opengever.base\n"
+"Domain: opengever.repository\n"
+
+#. Default ""
+#: opengever/repository/classification.py
+msgid "archival_value : archival worthy"
+msgstr ""
+
+#. Default ""
+#: opengever/repository/classification.py
+msgid "archival_value : archival worthy with sampling"
+msgstr ""
+
+#. Default ""
+#: opengever/repository/classification.py
+msgid "archival_value : not archival worthy"
+msgstr ""
+
+#. Default ""
+#: opengever/repository/classification.py
+msgid "archival_value : prompt"
+msgstr ""
+
+#. Default ""
+#: opengever/repository/classification.py
+msgid "archival_value : unchecked"
+msgstr ""
+
+#. Default: "classified"
+#: opengever/repository/classification.py
+msgid "classified"
+msgstr ""
+
+#. Default: "confidential"
+#: opengever/repository/classification.py
+msgid "confidential"
+msgstr ""
 
 #. Default: "A Sibling with the same reference number is existing"
-#: opengever.base/opengever/base/behaviors/reference.py:58
+#: opengever.base/opengever/base/behaviors/reference.py:66
 msgid "error_sibling_reference_number_existing"
 msgstr ""
 
@@ -29,6 +64,7 @@ msgstr ""
 
 #. Default: "Common"
 #: opengever.base/opengever/base/behaviors/base.py:20
+#: opengever.base/opengever/base/behaviors/reference.py:16
 msgid "fieldset_common"
 msgstr ""
 
@@ -67,7 +103,7 @@ msgstr ""
 msgid "help_public_trial_statement"
 msgstr ""
 
-#: opengever.base/opengever/base/behaviors/reference.py:16
+#: opengever.base/opengever/base/behaviors/reference.py:24
 msgid "help_reference_number"
 msgstr ""
 
@@ -111,12 +147,42 @@ msgid "label_public_trial_statement"
 msgstr ""
 
 #. Default: "Reference"
-#: opengever.base/opengever/base/behaviors/reference.py:15
+#: opengever.base/opengever/base/behaviors/reference.py:23
 msgid "label_reference_number"
 msgstr ""
 
 #. Default: "Retention period (years)"
 #: opengever.base/opengever/base/behaviors/classification.py:71
 msgid "label_retention_period"
+msgstr ""
+
+#. Default ""
+#: opengever/repository/classification.py
+msgid "privacy layer : no"
+msgstr ""
+
+#. Default: ""
+#: opengever/repository/classification.py
+msgid "privacy layer : yes"
+msgstr ""
+
+#. Default: "private"
+#: opengever/repository/classification.py
+msgid "private"
+msgstr ""
+
+#. Default: "public"
+#: opengever/repository/classification.py
+msgid "public"
+msgstr ""
+
+#. Default: "unchecked"
+#: opengever/repository/classification.py
+msgid "unchecked"
+msgstr ""
+
+#. Default: "unprotected"
+#: opengever/repository/classification.py
+msgid "unprotected"
 msgstr ""
 

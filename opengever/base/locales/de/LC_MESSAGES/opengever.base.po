@@ -1,19 +1,57 @@
+# opengever.repository
+# Jonas Baumann <j.baumann@4teamwork.ch>, 2009
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2009-11-30 16:39+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"Project-Id-Version: 1.0\n"
+"POT-Creation-Date: 2009-11-30 17:41+0000\n"
+"PO-Revision-Date: 2009-01-01 10:00+0100\n"
+"Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
+"Language-Team: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=1; plural=0\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
 "Preferred-Encodings: utf-8 latin1\n"
-"Domain: DOMAIN\n"
+"Domain: opengever.repository\n"
+"X-Is-Fallback-For: de-at de-li de-lu de-ch de-de\n"
+
+#. Default ""
+#: opengever/repository/classification.py
+msgid "archival_value : archival worthy"
+msgstr "Archivwürdig"
+
+#. Default ""
+#: opengever/repository/classification.py
+msgid "archival_value : archival worthy with sampling"
+msgstr "Sampling"
+
+#. Default ""
+#: opengever/repository/classification.py
+msgid "archival_value : not archival worthy"
+msgstr "Nicht archivwürdig"
+
+#. Default ""
+#: opengever/repository/classification.py
+msgid "archival_value : prompt"
+msgstr "Anbieten"
+
+#. Default ""
+#: opengever/repository/classification.py
+msgid "archival_value : unchecked"
+msgstr "Noch nicht bewertet"
+
+#. Default: "classified"
+#: opengever/repository/classification.py
+msgid "classified"
+msgstr "Geheim"
+
+#. Default: "confidential"
+#: opengever/repository/classification.py
+msgid "confidential"
+msgstr "Vertraulich"
 
 #. Default: "A Sibling with the same reference number is existing"
-#: opengever.base/opengever/base/behaviors/reference.py:58
+#: opengever.base/opengever/base/behaviors/reference.py:66
 msgid "error_sibling_reference_number_existing"
 msgstr "Eine Ordnungsposition mit dieser Referenznummer existiert bereits auf gleicher Stufe"
 
@@ -24,6 +62,7 @@ msgstr "Sichtbarkeit"
 
 #. Default: "Common"
 #: opengever.base/opengever/base/behaviors/base.py:20
+#: opengever.base/opengever/base/behaviors/reference.py:16
 msgid "fieldset_common"
 msgstr "Allgemein"
 
@@ -64,7 +103,7 @@ msgstr "Angabe, ob die Unterlagen gemäss Öffentlichkeitsgesetz besonders schü
 msgid "help_public_trial_statement"
 msgstr "Argumente gegen die öffentliche Zugänglichkeit gemäss Öffentlichkeitsgesetz"
 
-#: opengever.base/opengever/base/behaviors/reference.py:16
+#: opengever.base/opengever/base/behaviors/reference.py:24
 msgid "help_reference_number"
 msgstr "Präfix für das Aktenzeichen von Dossiers, die in dieser Ordnungsposition enthalten sind"
 
@@ -108,7 +147,7 @@ msgid "label_public_trial_statement"
 msgstr "Begründung für die Aufhebung des Öffentlichkeitsstatus"
 
 #. Default: "Reference"
-#: opengever.base/opengever/base/behaviors/reference.py:15
+#: opengever.base/opengever/base/behaviors/reference.py:23
 msgid "label_reference_number"
 msgstr "Präfix des Aktenzeichens"
 
@@ -116,5 +155,35 @@ msgstr "Präfix des Aktenzeichens"
 #: opengever.base/opengever/base/behaviors/classification.py:71
 msgid "label_retention_period"
 msgstr "Aufbewahrungsdauer (Jahre)"
+
+#. Default ""
+#: opengever/repository/classification.py
+msgid "privacy layer : no"
+msgstr "Keine Datenschutzstufe"
+
+#. Default: ""
+#: opengever/repository/classification.py
+msgid "privacy layer : yes"
+msgstr "Enthält schützenswerten Personendaten"
+
+#. Default: "private"
+#: opengever/repository/classification.py
+msgid "private"
+msgstr "Nicht öffentlich"
+
+#. Default: "public"
+#: opengever/repository/classification.py
+msgid "public"
+msgstr "Öffentlich"
+
+#. Default: "unchecked"
+#: opengever/repository/classification.py
+msgid "unchecked"
+msgstr "Noch nicht geprüft"
+
+#. Default: "unprotected"
+#: opengever/repository/classification.py
+msgid "unprotected"
+msgstr "Nicht klassifiziert"
 
 
