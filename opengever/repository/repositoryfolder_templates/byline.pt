@@ -9,13 +9,13 @@
 
 
   <tal:state>
-	<span i18n:translate="" tal:content="context/privacy_layer" i18n:domain="opengever.base" class="documentStatus"/>
+	<span i18n:translate="" tal:content="context/privacy_layer|nothing" i18n:domain="opengever.base" class="documentStatus"/>
   </tal:state>
 
   <span class="documentModified">
     <span i18n:translate="label_public_trial" i18n:domain="opengever.base" class="noborder">
       Public Trial
     </span>
-    <span tal:content="context/public_trial" i18n:translate="" i18n:domain="opengever.base" class="documentAuthor"/>
+    <span tal:content="context/public_trial|nothing" i18n:translate="" i18n:domain="opengever.base" class="documentAuthor"/>
   </span>
 </div>
