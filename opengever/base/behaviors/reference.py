@@ -11,6 +11,14 @@ from opengever.base import _
 
 class IReferenceNumber(form.Schema):
     
+    form.fieldset(
+        u'common',
+        label = _(u'fieldset_common', default=u'Common'),
+        fields = [
+            u'reference_number',
+            ],
+        )
+
     reference_number = schema.Int(
             title = _(u'label_reference_number', default=u'Reference'),
             description = _(u'help_reference_number', default=u''),
