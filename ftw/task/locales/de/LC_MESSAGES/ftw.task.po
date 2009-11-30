@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2009-11-30 06:19+0000\n"
+"POT-Creation-Date: 2009-11-30 16:35+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: DOMAIN\n"
 
-#: ftw.task/ftw/task/response.py:369
+#: ftw.task/ftw/task/response.py:386
 msgid "Changes saved to response id ${response_id}."
 msgstr "Änderungen an der Antwort ${response_id} wurden gespeichert"
 
@@ -28,11 +28,11 @@ msgstr "Bearbeiten"
 msgid "Issue state"
 msgstr "Status"
 
-#: ftw.task/ftw/task/response.py:397
+#: ftw.task/ftw/task/response.py:414
 msgid "No response selected for removal."
 msgstr "Es wurde keine Antwort fürs Löschen selektiert"
 
-#: ftw.task/ftw/task/response.py:360
+#: ftw.task/ftw/task/response.py:377
 msgid "No response selected for saving."
 msgstr "Es wurde keine Antwort fürs Speichern selektiert"
 
@@ -40,11 +40,11 @@ msgstr "Es wurde keine Antwort fürs Speichern selektiert"
 msgid "No response selected."
 msgstr "Kein Antwort selektiert"
 
-#: ftw.task/ftw/task/response.py:419
+#: ftw.task/ftw/task/response.py:436
 msgid "Removed response id ${response_id}."
 msgstr "Antwort ${response_id} gelöscht"
 
-#: ftw.task/ftw/task/response.py:412
+#: ftw.task/ftw/task/response.py:429
 msgid "Response id ${response_id} does not exist so it cannot be removed."
 msgstr "Antowrt ${response_id} existiert nicht und konnte deshalb nicht gelöscht werden"
 
@@ -52,7 +52,7 @@ msgstr "Antowrt ${response_id} existiert nicht und konnte deshalb nicht gelösch
 msgid "Response id ${response_id} does not exist."
 msgstr "Antwort ${response_id} exisitert nicht"
 
-#: ftw.task/ftw/task/response.py:404
+#: ftw.task/ftw/task/response.py:421
 msgid "Response id ${response_id} is no integer so it cannot be removed."
 msgstr "Antwort id ${response_id} ist keine Zahl und konnte deshalb nicht gelöscht werden"
 
@@ -64,11 +64,11 @@ msgstr "Antwort ${response_id} ist keine Zahl"
 msgid "Task"
 msgstr "Aufgabe"
 
-#: ftw.task/ftw/task/response.py:391
+#: ftw.task/ftw/task/response.py:408
 msgid "You are not allowed to delete responses."
 msgstr "Sie haben keine Berechtigung Antworten zu löschen"
 
-#: ftw.task/ftw/task/response.py:354
+#: ftw.task/ftw/task/response.py:371
 msgid "You are not allowed to edit responses."
 msgstr "Sie haben keine Berechtigung Antworten zu editieren"
 
@@ -77,10 +77,20 @@ msgstr "Sie haben keine Berechtigung Antworten zu editieren"
 msgid "add"
 msgstr "Hinzufügen"
 
+#. Default: "add Response"
+#: ftw.task/ftw/task/task_templates/view.pt:47
+msgid "add_response"
+msgstr "Antwort hinzufügen"
+
 #. Default: "deadline"
 #: ftw.task/ftw/task/response.py:283
 msgid "deadline"
 msgstr "Frist"
+
+#. Default: "edit Task"
+#: ftw.task/ftw/task/task_templates/view.pt:46
+msgid "edit_task"
+msgstr "Task bearbeiten"
 
 #. Default: "Additional"
 #: ftw.task/ftw/task/task.py:39
@@ -222,7 +232,7 @@ msgid "label_transition"
 msgstr "Status ändern"
 
 #. Default: "No Content"
-#: ftw.task/ftw/task/task_templates/view.pt:54
+#: ftw.task/ftw/task/task_templates/view.pt:58
 msgid "no_content"
 msgstr "Kein Inhalt"
 
@@ -232,7 +242,7 @@ msgid "response_label_response"
 msgstr "Antowrt"
 
 #. Default: "Responses:"
-#: ftw.task/ftw/task/task_templates/view.pt:58
+#: ftw.task/ftw/task/task_templates/view.pt:62
 msgid "responses"
 msgstr "Antworten:"
 
@@ -242,7 +252,7 @@ msgid "responsible"
 msgstr "Verantwortlicher"
 
 #. Default: "Subtasks:"
-#: ftw.task/ftw/task/task_templates/view.pt:46
+#: ftw.task/ftw/task/task_templates/view.pt:50
 msgid "subtasks"
 msgstr "Unteraufgabe"
 
