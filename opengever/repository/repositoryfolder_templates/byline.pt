@@ -1,14 +1,6 @@
 <div class="documentByLine"
      id="plone-document-byline"
      i18n:domain="opengever.theme">
-<!--
-  <span id="lock-icon"
-        tal:define="lock_icon viewlet/locked_icon"
-        tal:condition="lock_icon">
-      <img tal:replace="structure lock_icon" />
-  </span>
--->
-
 
     <span i18n:translate="label_workflow_state" class="noborder">
 	  State: 
