@@ -5,6 +5,9 @@ Changelog
 ----------------
 
 
+* Issue #188: Spalten in der Dokumentenübersicht Stufe Dossier/Subdossier anpassen
+  [01.12.2009, jbaumann]
+
 * Journal Tab: Hidden entries should not be visible
   [16.11.2009, jbaumann]
 

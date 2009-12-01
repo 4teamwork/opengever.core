@@ -37,7 +37,18 @@ class Documents(OpengeverListingTab):
     
     types = ['opengever.document.document',]
     
-    search_options = {'isWorkingCopy':0} 
+    search_options = {'isWorkingCopy':0}
+
+    columns = (
+        ('', helper.draggable),
+        ('', helper.path_checkbox),
+        ('Title', 'sortable_title', helper.linked),
+        ('document_author', 'document_author'),
+        ('document_date', 'document_date', helper.readable_date),
+        ('receipt_date', 'receipt_date', helper.readable_date),
+        ('delivery_date', 'delivery_date', helper.readable_date),
+        ('checked_out', 'checked_out')
+        )
     
 class Dossiers(OpengeverListingTab):
     grok.name('tabbedview_view-dossiers')

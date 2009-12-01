@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2009-11-30 17:34+0000\n"
+"POT-Creation-Date: 2009-12-01 08:02+0000\n"
 "PO-Revision-Date: 2009-02-25 14:39+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -24,13 +24,28 @@ msgstr ""
 msgid "actor"
 msgstr ""
 
+msgid "checked_out"
+msgstr ""
+
 msgid "comment"
+msgstr ""
+
+msgid "delivery_date"
+msgstr ""
+
+msgid "document_author"
+msgstr ""
+
+msgid "document_date"
 msgstr ""
 
 msgid "documents"
 msgstr ""
 
 msgid "dossiers"
+msgstr ""
+
+msgid "end"
 msgstr ""
 
 msgid "events"
@@ -49,7 +64,19 @@ msgstr ""
 msgid "overview"
 msgstr ""
 
+msgid "receipt_date"
+msgstr ""
+
+msgid "reference_number"
+msgstr ""
+
 msgid "repostories"
+msgstr ""
+
+msgid "responsible"
+msgstr ""
+
+msgid "review_state"
 msgstr ""
 
 msgid "sharing"
@@ -60,6 +87,9 @@ msgid "show all"
 msgstr ""
 
 msgid "sortable_title"
+msgstr ""
+
+msgid "start"
 msgstr ""
 
 msgid "subdossiers"

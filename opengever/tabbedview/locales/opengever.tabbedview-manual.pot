@@ -65,4 +65,32 @@ msgstr ""
 msgid "comment"
 msgstr ""
 
+msgid "reference_number"
+msgstr ""
 
+msgid "review_state"
+msgstr ""
+
+msgid "responsible"
+msgstr ""
+
+msgid "start"
+msgstr ""
+
+msgid "end"
+msgstr ""
+
+msgid "document_author"
+msgstr ""
+
+msgid "document_date"
+msgstr ""
+
+msgid "receipt_date"
+msgstr ""
+
+msgid "delivery_date"
+msgstr ""
+
+msgid "checked_out"
+msgstr ""

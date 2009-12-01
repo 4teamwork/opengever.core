@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2009-11-30 17:34+0000\n"
+"POT-Creation-Date: 2009-12-01 08:02+0000\n"
 "PO-Revision-Date: 2009-02-25 14:39+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -25,9 +25,21 @@ msgstr "Titel"
 msgid "actor"
 msgstr "Akteur"
 
+msgid "checked_out"
+msgstr "Ausgecheckt"
+
 #. Default: "Kommentar"
 msgid "comment"
 msgstr "Kommentar"
+
+msgid "delivery_date"
+msgstr "Ausgangsdatum"
+
+msgid "document_author"
+msgstr "Autor"
+
+msgid "document_date"
+msgstr "Dokumentdatum"
 
 #. Default: "Dokumente"
 msgid "documents"
@@ -36,6 +48,9 @@ msgstr "Dokumente"
 #. Default: "Dossiers"
 msgid "dossiers"
 msgstr "Dossiers"
+
+msgid "end"
+msgstr "Ende"
 
 #. Default: "Termine"
 msgid "events"
@@ -57,9 +72,21 @@ msgstr "Keine Inhalte vorhanden"
 msgid "overview"
 msgstr "Übersicht"
 
+msgid "receipt_date"
+msgstr "Eingangsdatum"
+
+msgid "reference_number"
+msgstr "Ref Nr"
+
 #. Default: "Ordnungspositionen"
 msgid "repostories"
 msgstr "Ordnungspositionen"
+
+msgid "responsible"
+msgstr "Federführend"
+
+msgid "review_state"
+msgstr "Status"
 
 #. Default: "Beteiligte"
 msgid "sharing"
@@ -72,6 +99,9 @@ msgstr "Alle Anzeigen"
 #. Default: "Titel"
 msgid "sortable_title"
 msgstr "Titel"
+
+msgid "start"
+msgstr "Start"
 
 #. Default: "Subdossiers"
 msgid "subdossiers"
