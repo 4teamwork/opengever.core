@@ -42,9 +42,9 @@ class ITask(form.Schema):
         label = _(u'fieldset_common', default=u'Common'),
         fields = [
             u'title',
+            u'responsible',
             u'text',
             u'deadline',
-            u'responsible',
             ],
         )
 
@@ -65,6 +65,15 @@ class ITask(form.Schema):
         description=_('help_title', default=u"Title"),
         required = True,    
     )
+    
+    form.widget(responsible=AutocompleteFieldWidget)
+    responsible = schema.Choice(
+        title=_(u"label_responsible", default="Responsible"),
+        description =_(u"help_responsible", default="select an responsible Manger"),
+        source = util.getManagersVocab,
+        required = False,
+    )
+    
     form.primary('text')
     text = RichText(
         title=_(u"label_text", default=u"Text"),
@@ -77,15 +86,7 @@ class ITask(form.Schema):
         description=_(u"help_deadline", default=u"Deadline"),
         required = True,
     )
-    
-    form.widget(responsible=AutocompleteFieldWidget)
-    responsible = schema.Choice(
-        title=_(u"label_responsible", default="Responsible"),
-        description =_(u"help_responsible", default="select an responsible Manger"),
-        source = util.getManagersVocab,
-        required = False,
-    )
-            
+                
     expectedStartOfWork = schema.Date(
         title =_(u"label_expectedStartOfWork", default="Start with work"),
         description = _(u"help_expectedStartOfWork", default=""),
