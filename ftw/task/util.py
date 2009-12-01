@@ -31,9 +31,8 @@ def getManagersVocab(context):
 def getTransitionVocab(context):
     wftool = getToolByName(context, 'portal_workflow')
     transitions = []
-    
     for tdef in wftool.getTransitionsFor(context):
-        transitions.append(SimpleVocabulary.createTerm(tdef['id'],tdef['id'],tdef['title_or_id']))
+        transitions.append(SimpleVocabulary.createTerm(tdef['id'],tdef['id'],PMF(tdef['id'], default=tdef['title_or_id'])))
     return SimpleVocabulary(transitions)
 
 def create_sequence_number( obj, key='task_sequence_number' ):

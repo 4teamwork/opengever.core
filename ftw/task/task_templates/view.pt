@@ -43,7 +43,6 @@
     </fieldset>
     
     <div class>
-        <a class="context" href="edit" i18n:translate="edit_task">edit Task</a>
         <a class="standalone" href="addresponse" i18n:translate="add_response">add Response</a>
     </div>
     <div class="visualClear"><!----></div>
