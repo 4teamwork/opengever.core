@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<object name="portal_catalog" meta_type="Task Catalog">
+
+  <index name="document_author" meta_type="FieldIndex">
+    <indexed_attr value="document_author"/>
+  </index>
+  <column value="document_author" />
+
+  <index name="document_date" meta_type="DateIndex">
+    <indexed_attr value="document_date"/>
+  </index>
+  <column value="document_date" />
+
+  <index name="receipt_date" meta_type="DateIndex">
+    <indexed_attr value="receipt_date"/>
+  </index>
+  <column value="receipt_date" />
+
+  <index name="delivery_date" meta_type="DateIndex">
+    <indexed_attr value="delivery_date"/>
+  </index>
+  <column value="delivery_date" />
+
+  <index name="checked_out" meta_type="FieldIndex">
+    <indexed_attr value="checked_out"/>
+  </index>
+  <column value="checked_out" />
+
+</object>

@@ -18,6 +18,7 @@ from plone.dexterity.content import Item
 from plone.directives import form, dexterity
 from plone.indexer import indexer
 from plone.app.iterate.interfaces import IWorkingCopy
+from plone.stagingbehavior.relation import StagingRelationValue
 from plone.registry.interfaces import IRegistry
 
 from opengever.sqlfile.field import NamedFile
@@ -189,6 +190,7 @@ class Document(Item):
         return self.getIcon()
 
 
+# INDEX: SearchableText
 @indexer(IDocumentSchema)
 def SearchableText( obj ):
     context = aq_inner( obj )
@@ -226,6 +228,59 @@ def SearchableText( obj ):
             searchable.append( data )
     return ' '.join( searchable )
 grok.global_adapter(SearchableText, name='SearchableText')
+
+
+# INDEX: document_author
+@indexer( IDocumentSchema )
+def document_author( obj ):
+    context = aq_inner( obj )
+    if not context.document_author:
+        return None
+    return context.document_author
+grok.global_adapter( document_author, name='document_author' )
+
+
+# INDEX: document_date
+@indexer( IDocumentSchema )
+def document_date( obj ):
+    context = aq_inner( obj )
+    if not context.document_date:
+        return None
+    return context.document_date
+grok.global_adapter( document_date, name='document_date' )
+
+
+# INDEX: receipt_date
+@indexer( IDocumentSchema )
+def receipt_date( obj ):
+    context = aq_inner( obj )
+    if not context.receipt_date:
+        return None
+    return context.receipt_date
+grok.global_adapter( receipt_date, name='receipt_date' )
+
+
+# INDEX: delivery_date
+@indexer( IDocumentSchema )
+def delivery_date( obj ):
+    context = aq_inner( obj )
+    if not context.delivery_date:
+        return None
+    return context.delivery_date
+grok.global_adapter( delivery_date, name='delivery_date' )
+
+# INDEX: checked_out
+@indexer( IDocumentSchema )
+def checked_out( obj ):
+    context = aq_inner( obj )
+    rels = StagingRelationValue.get_relations_of( context )
+    if len( rels ):
+        rel = rels[0]
+        return rel.to_object.Creator()
+    return '-'
+grok.global_adapter( checked_out, name='checked_out' )
+
+
 
 class View(dexterity.DisplayForm):
     grok.context(IDocumentSchema)
