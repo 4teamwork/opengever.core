@@ -60,6 +60,24 @@ class IDocumentSchema(form.Schema):
     """
 
     form.fieldset(
+        u'common',
+        label = _(u'fieldset_common', u'Dates'),
+        fields = [
+            u'title',
+            u'description',
+            u'foreign_reference',
+            u'document_date',
+            u'document_type',
+            u'document_author',
+            u'file',
+            u'paper_form',
+            u'preserved_as_paper',
+            u'archival_file',
+            u'thumbnail',
+            ]
+        )
+
+    form.fieldset(
         u'dates',
         label = _(u'fieldset_dates', u'Dates'),
         fields = [
@@ -67,7 +85,6 @@ class IDocumentSchema(form.Schema):
             u'delivery_date',
             ]
         )
-
 
     title = schema.TextLine(
         title = _(u'label_title', default=u'Title'),
@@ -91,20 +108,20 @@ class IDocumentSchema(form.Schema):
         description = _(u'help_document_date', default=''),
         required = True,
         )
-        
+
     document_type = schema.Choice(
         title=_(u'label_document_type', default='Document Type'),
         description=_(u'help_document_type', default=''),
         source=possibleTypes,
         required = False,
-    )
-    
+        )
+
     document_author = schema.TextLine(
         title=_(u'label_author', default='Author'),
         description=_(u'help_author', default=""),
         required=False,
-    )
-    
+        )
+
     form.primary('file')
     file = NamedFile(
         title = _(u'label_file', default='File'),
@@ -168,7 +185,7 @@ def deadlineDefaultValue(data):
         return user.getProperty('fullname')
     else:
         return user.getId()
-        
+
 class Document(Item):
 
     def Title(self):
