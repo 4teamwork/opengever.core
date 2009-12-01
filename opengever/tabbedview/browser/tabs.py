@@ -60,7 +60,7 @@ class Dossiers(OpengeverListingTab):
                 ('', helper.path_checkbox),
                 ('reference_number'),
                 ('Title', helper.linked),
-                ('review_state'),
+                ('review_state', 'review_state', helper.translated_string()),
                 ('responsible', helper.readable_author),
                 ('start', helper.readable_date),
                 ('end', helper.readable_date),
