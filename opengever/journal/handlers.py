@@ -92,12 +92,7 @@ def dossier_state_changed(context, event):
     if event.action in skip_transactions:
         return
     newstate = event.workflow.transitions.get(event.action).new_state_id
-    title = _(u'label_dossier_transition',
-              default = u'Dossier state changed to ${newstate} (${action})',
-              mapping = {
-            'newstate' : newstate,
-            'action' : event.action,
-            })
+    title = _( u'Dossier state changed to %s' % newstate )
     journal_entry_factory(context, DOSSIER_STATE_CHANGED, title)
     return
 
@@ -147,12 +142,7 @@ def document_state_changed(context, event):
     if event.action in skip_transactions:
         return
     newstate = event.workflow.transitions.get(event.action).new_state_id
-    title = _(u'label_document_transition',
-              default = u'Document state changed to ${newstate} (${action})',
-              mapping = {
-            'newstate' : newstate,
-            'action' : event.action,
-            })
+    title = _( u'Document state changed to %s' % newstate )
     journal_entry_factory(context, DOCUMENT_STATE_CHANGED, title)
     return
 
