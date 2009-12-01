@@ -3,5 +3,8 @@
  <index name="reference_number" meta_type="FieldIndex">
   <indexed_attr value="reference_number"/>
  </index>
+ <index name="is_subdossier" meta_type="FieldIndex">
+  <indexed_attr value="is_subdossier"/>
+ </index>
  <column value="reference_number"/>
 </object>

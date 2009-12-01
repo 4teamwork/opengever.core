@@ -1,5 +1,5 @@
 from plone.directives import form
-
+from plone.directives import dexterity
 from five import grok
 from plone.app.layout.viewlets.interfaces import IBelowContentTitle
 from plone.memoize.instance import memoize
@@ -10,6 +10,23 @@ from opengever.dossier.behaviors.dossier import IDossier
 class IBusinessCaseDossier(form.Schema):
     """ A business case dossier
     """
+
+
+# class Edit(dexterity.EditForm):
+#     """A standard edit form.
+#     """
+#     grok.context(IBusinessCaseDossier)
+#     
+#     def update(self):
+#         super(Edit, self).update()
+#         #import pdb; pdb.set_trace()
+# 
+#     def updateWidgets(self):
+#         super(Edit, self).updateWidgets()
+#         #self.widgets['title'].mode = 'hidden'
+#         #import pdb; pdb.set_trace()
+#         #self.widgets['IDossier.comments'].rows = 10
+#         #self.widgets['IDossier.comments'].requires = True
 
 class Byline(grok.Viewlet, content.DocumentBylineViewlet):
     grok.viewletmanager(IBelowContentTitle)

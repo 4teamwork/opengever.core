@@ -1,10 +1,10 @@
+from Acquisition import aq_inner, aq_parent
 from opengever.dossier import _
 from ftw.task import util
 from plone.autoform.interfaces import IFormFieldProvider
 from plone.directives import form
 from zope import schema
 from zope.interface import Interface, alsoProvides
-from plone.app.dexterity.behaviors.metadata import IBasic
 from plone.z3cform.textlines.textlines import TextLinesFieldWidget
 from plone.formwidget.autocomplete import AutocompleteFieldWidget
 from plone.indexer import indexer
@@ -116,6 +116,19 @@ class IDossier(form.Schema):
         
 alsoProvides(IDossier, IFormFieldProvider)
 
+# XXX testing widget attributes
+# 
+# import grokcore.component
+# from z3c.form.widget import StaticWidgetAttribute
+# 
+# rows_override = StaticWidgetAttribute(u'blablabla', field=IDossier['comments'])
+# grok.global_adapter(rows_override, name=u"value")
+# labelOverride = StaticWidgetAttribute(u"Override label2", field=IDossier['comments'])
+# grok.global_adapter(labelOverride, name=u"label")
+# #import pdb; pdb.set_trace()
+# testOverride = StaticWidgetAttribute(True, field=IDossier['volume_number'])
+# grok.global_adapter(testOverride, name=u"required")
+
 
 @indexer(IDossierMarker)
 def startIndexer(obj):
@@ -140,3 +153,11 @@ def responsibleIndexer(obj):
         return None
     return aobj.responsible
 grok.global_adapter(responsibleIndexer, name="responsible")
+
+@indexer(IDossierMarker)
+def isSubdossierIndexer(obj):
+    parent = aq_parent(aq_inner(obj))
+    if IDossierMarker.providedBy(parent):
+        return True
+    return False
+grok.global_adapter(isSubdossierIndexer, name="is_subdossier")
