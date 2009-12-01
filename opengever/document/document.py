@@ -20,6 +20,10 @@ from plone.indexer import indexer
 from plone.app.iterate.interfaces import IWorkingCopy
 from plone.stagingbehavior.relation import StagingRelationValue
 from plone.registry.interfaces import IRegistry
+from plone.autoform.interfaces import ORDER_KEY
+from plone.supermodel.interfaces import FIELDSETS_KEY
+from plone.supermodel.model import Fieldset
+from plone.versioningbehavior.behaviors import IVersionable
 
 from opengever.sqlfile.field import NamedFile
 from plone.namedfile.interfaces import INamedFileField
@@ -28,6 +32,12 @@ from opengever.document import _
 from opengever.document.interfaces import IDocumentType
 
 LOG = logging.getLogger('opengever.document')
+
+IVersionable.setTaggedValue( FIELDSETS_KEY, [
+        Fieldset( 'common', fields=[
+                'changeNote',
+                ])
+        ] )
 
 @grok.provider(IContextSourceBinder)
 def possibleTypes(context):
@@ -45,6 +55,24 @@ class IDocumentSchema(form.Schema):
     """
 
     form.fieldset(
+        u'common',
+        label = _(u'fieldset_common', default=u'Common'),
+        fields = [
+            u'title',
+            u'description',
+            u'foreign_reference',
+            u'document_date',
+            u'document_type',
+            u'document_author',
+            u'file',
+            u'paper_form',
+            u'preserved_as_paper',
+            u'archival_file',
+            u'thumbnail',
+            ],
+        )
+
+    form.fieldset(
         u'dates',
         label = _(u'fieldset_dates', u'Dates'),
         fields = [
@@ -52,7 +80,19 @@ class IDocumentSchema(form.Schema):
             u'delivery_date',
             ]
         )
-        
+
+
+    title = schema.TextLine(
+        title = _(u'label_title', default=u'Title'),
+        required = True
+        )
+
+    description = schema.Text(
+        title=_(u'label_description', default=u'Description'),
+        description = _(u'help_description', default=u'A short summary of the content.'),
+        required = False,
+        )
+
     foreign_reference = schema.TextLine(
         title = _(u'label_foreign_reference', default='Foreign Reference'),
         description = _('help_foreign_reference', default=''),
@@ -64,20 +104,20 @@ class IDocumentSchema(form.Schema):
         description = _(u'help_document_date', default=''),
         required = True,
         )
-        
+
     document_type = schema.Choice(
         title=_(u'label_document_type', default='Document Type'),
         description=_(u'help_document_type', default=''),
         source=possibleTypes,
         required = False,
-    )
-    
+        )
+
     document_author = schema.TextLine(
         title=_(u'label_author', default='Author'),
         description=_(u'help_author', default=""),
         required=False,
-    )
-    
+        )
+
     form.primary('file')
     file = NamedFile(
         title = _(u'label_file', default='File'),
@@ -133,6 +173,7 @@ class IDocumentSchema(form.Schema):
         required = False,
         )
 
+
 @form.default_value(field=IDocumentSchema['document_author'])
 def deadlineDefaultValue(data):
     # To get hold of the folder, do: context = data.context
@@ -141,7 +182,7 @@ def deadlineDefaultValue(data):
         return user.getProperty('fullname')
     else:
         return user.getId()
-        
+
 class Document(Item):
 
     def Title(self):
@@ -285,4 +326,4 @@ grok.global_adapter( checked_out, name='checked_out' )
 class View(dexterity.DisplayForm):
     grok.context(IDocumentSchema)
     grok.require("zope2.View")
-    
+

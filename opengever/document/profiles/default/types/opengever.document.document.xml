@@ -22,7 +22,9 @@
   <property name="behaviors">
     <element value="ftw.journal.interfaces.IAnnotationsJournalizable" />
     <element value="plone.app.content.interfaces.INameFromTitle" />
-    <element value="opengever.base.behaviors.base.IOpenGeverBase"/>
+    <!--
+        <element value="opengever.base.behaviors.base.IOpenGeverBase"/>
+    -->
     <element value="opengever.base.behaviors.creator.ICreator" />
     <element value="opengever.base.behaviors.classification.IClassification" />
     <element value="plone.app.dexterity.behaviors.related.IRelatedItems" />

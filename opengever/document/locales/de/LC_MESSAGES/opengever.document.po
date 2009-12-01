@@ -3,7 +3,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2009-11-30 17:37+0000\n"
+"POT-Creation-Date: 2009-12-01 08:50+0000\n"
 "PO-Revision-Date: 2009-01-01 10:00+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: Jonas Baumann <j.baumann@4teamwork.ch>\n"
@@ -84,7 +84,7 @@ msgid "button_checkout"
 msgstr "Checkout"
 
 #. Default: "Create"
-#: opengever.document/opengever/document/docucomposer.py:49
+#: opengever.document/opengever/document/docucomposer.py:55
 msgid "button_create"
 msgstr "Erstellen"
 
@@ -93,8 +93,13 @@ msgstr "Erstellen"
 msgid "button_send"
 msgstr "Senden"
 
+#. Default: "Common"
+#: opengever.document/opengever/document/document.py:59
+msgid "fieldset_common"
+msgstr "Allgemein"
+
 #. Default: "Dates"
-#: opengever.document/opengever/document/document.py:48
+#: opengever.document/opengever/document/document.py:77
 msgid "fieldset_dates"
 msgstr "Daten"
 
@@ -109,7 +114,7 @@ msgid "heading_checkout_comment_form"
 msgstr "Dokumente auschecken"
 
 #. Default: "DocuComposer"
-#: opengever.document/opengever/document/docucomposer.py:46
+#: opengever.document/opengever/document/docucomposer.py:53
 msgid "heading_docucomposer_wizard_form"
 msgstr "DocuComposer"
 
@@ -119,11 +124,11 @@ msgid "heading_send_as_email"
 msgstr "Dokumente als E-Mail versenden"
 
 #. Default: ""
-#: opengever.document/opengever/document/document.py:105
+#: opengever.document/opengever/document/document.py:146
 msgid "help_archival_file"
 msgstr "Archivtaugliche Version der Originaldatei"
 
-#: opengever.document/opengever/document/document.py:76
+#: opengever.document/opengever/document/document.py:117
 msgid "help_author"
 msgstr ""
 
@@ -137,25 +142,38 @@ msgstr "Was für Änderungen haben Sie an den ausgewählten Dokumenten vorgenomm
 msgid "help_checkout_journal_comment"
 msgstr "Kommentieren Sie, wieso Sie diese Dokumente auschecken"
 
-#: opengever.document/opengever/document/document.py:131
+#: opengever.document/opengever/document/document.py:172
 msgid "help_delivery_date"
 msgstr "Datum, an dem das Dokument über den Korrespondenzweg versandt worden ist"
 
-#: opengever.document/opengever/document/document.py:63
+#. Default: "A short summary of the content."
+#: opengever.document/opengever/document/document.py:92
+msgid "help_description"
+msgstr ""
+
+#: opengever.document/opengever/document/docucomposer.py:44
+msgid "help_docucomposer_filename"
+msgstr ""
+
+#: opengever.document/opengever/document/docucomposer.py:38
+msgid "help_docucomposer_wizard"
+msgstr ""
+
+#: opengever.document/opengever/document/document.py:104
 msgid "help_document_date"
 msgstr "Datum, an dem das Dokument erstellt worden ist"
 
-#: opengever.document/opengever/document/document.py:69
+#: opengever.document/opengever/document/document.py:110
 msgid "help_document_type"
 msgstr ""
 
 #. Default: ""
-#: opengever.document/opengever/document/document.py:83
+#: opengever.document/opengever/document/document.py:124
 msgid "help_file"
 msgstr "Datei, die zu einem Dossier hinzugefügt wird"
 
 #. Default: ""
-#: opengever.document/opengever/document/document.py:57
+#: opengever.document/opengever/document/document.py:98
 msgid "help_foreign_reference"
 msgstr "Referenz auf das entsprechende Dossier des Absenders"
 
@@ -164,21 +182,21 @@ msgid "help_message"
 msgstr ""
 
 #. Default: "Available in paper form only"
-#: opengever.document/opengever/document/document.py:90
+#: opengever.document/opengever/document/document.py:131
 msgid "help_paper_form"
 msgstr "Nur in Papierform verfügbar"
 
 #. Default: ""
-#: opengever.document/opengever/document/document.py:97
+#: opengever.document/opengever/document/document.py:138
 msgid "help_preserved_as_paper"
 msgstr "In Papierform aufbewahrt"
 
 #. Default: ""
-#: opengever.document/opengever/document/document.py:119
+#: opengever.document/opengever/document/document.py:160
 msgid "help_preview"
 msgstr "Online Voransicht des Originaldokuments"
 
-#: opengever.document/opengever/document/document.py:125
+#: opengever.document/opengever/document/document.py:166
 msgid "help_receipt_date"
 msgstr "Datum, an dem das Dokument über den Korrespondenzweg angekommen ist"
 
@@ -191,7 +209,7 @@ msgid "help_subject"
 msgstr ""
 
 #. Default: ""
-#: opengever.document/opengever/document/document.py:112
+#: opengever.document/opengever/document/document.py:153
 msgid "help_thumbnail"
 msgstr ""
 
@@ -201,12 +219,12 @@ msgid "info_mails_sent"
 msgstr "Die E-Mails wurden versandt"
 
 #. Default: "Archival File"
-#: opengever.document/opengever/document/document.py:104
+#: opengever.document/opengever/document/document.py:145
 msgid "label_archival_file"
 msgstr "Archivierte Datei"
 
 #. Default: "Author"
-#: opengever.document/opengever/document/document.py:75
+#: opengever.document/opengever/document/document.py:116
 msgid "label_author"
 msgstr "Autor"
 
@@ -221,27 +239,37 @@ msgid "label_checkout_journal_comment"
 msgstr "Journal Kommentar"
 
 #. Default: "Date of delivery"
-#: opengever.document/opengever/document/document.py:130
+#: opengever.document/opengever/document/document.py:171
 msgid "label_delivery_date"
 msgstr "Ausgangsdatum"
 
+#. Default: "Description"
+#: opengever.document/opengever/document/document.py:91
+msgid "label_description"
+msgstr "Beschreibung"
+
+#. Default: "DocuComposer Template"
+#: opengever.document/opengever/document/docucomposer.py:37
+msgid "label_docucomposer_template"
+msgstr "Vorlage"
+
 #. Default: "Document Date"
-#: opengever.document/opengever/document/document.py:62
+#: opengever.document/opengever/document/document.py:103
 msgid "label_document_date"
 msgstr "Dokumentdatum"
 
 #. Default: "Document Type"
-#: opengever.document/opengever/document/document.py:68
+#: opengever.document/opengever/document/document.py:109
 msgid "label_document_type"
 msgstr "Dokumenttyp"
 
 #. Default: "File"
-#: opengever.document/opengever/document/document.py:82
+#: opengever.document/opengever/document/document.py:123
 msgid "label_file"
 msgstr "Datei"
 
 #. Default: "Foreign Reference"
-#: opengever.document/opengever/document/document.py:56
+#: opengever.document/opengever/document/document.py:97
 msgid "label_foreign_reference"
 msgstr "Fremdzeichen"
 
@@ -251,22 +279,22 @@ msgid "label_message"
 msgstr "Nachricht"
 
 #. Default: "Paper form"
-#: opengever.document/opengever/document/document.py:89
+#: opengever.document/opengever/document/document.py:130
 msgid "label_paper_form"
 msgstr "Papierform"
 
 #. Default: "Preserved as paper"
-#: opengever.document/opengever/document/document.py:96
+#: opengever.document/opengever/document/document.py:137
 msgid "label_preserved_as_paper"
 msgstr "In Papierform aufbewahrt"
 
 #. Default: "Preview"
-#: opengever.document/opengever/document/document.py:118
+#: opengever.document/opengever/document/document.py:159
 msgid "label_preview"
 msgstr "Vorschau"
 
 #. Default: "Date of receipt"
-#: opengever.document/opengever/document/document.py:124
+#: opengever.document/opengever/document/document.py:165
 msgid "label_receipt_date"
 msgstr "Eingangsdatum"
 
@@ -281,8 +309,18 @@ msgid "label_subject"
 msgstr "Betreff"
 
 #. Default: "Thumbnail"
-#: opengever.document/opengever/document/document.py:111
+#: opengever.document/opengever/document/document.py:152
 msgid "label_thumbnail"
 msgstr "Kurzbild"
+
+#. Default: "Title"
+#: opengever.document/opengever/document/document.py:86
+msgid "label_title"
+msgstr "Titel"
+
+#. Default: "Filename"
+#: opengever.document/opengever/document/docucomposer.py:43
+msgid "lable_docucomposer_filename"
+msgstr "Dateiname"
 
 
