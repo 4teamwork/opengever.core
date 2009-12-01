@@ -19,7 +19,7 @@
     <!-- Register an extension profile to make the product installable -->
     <genericsetup:registerProfile
         name="default"
-        title="OpenGever Dossier Content Types"
+        title="opengever.dossier"
         description="Provides behavior and content types for dossiers."
         directory="profiles/default"
         provides="Products.GenericSetup.interfaces.EXTENSION"
