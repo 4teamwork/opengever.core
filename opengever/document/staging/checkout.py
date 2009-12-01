@@ -1,4 +1,3 @@
-
 import os
 
 from Acquisition import aq_inner, aq_parent
@@ -16,7 +15,6 @@ from opengever.document import _
 from opengever.document.staging.manager import ICheckinCheckoutManager
 from opengever.document.document import IDocumentSchema
 
-
 class NoItemsSelected(Exception):
     pass
 
@@ -33,7 +31,12 @@ class ICheckoutCommentFormSchema(Interface):
                       default=u'Describe, why you checkout the selected documents'),
         required=False,
         )
-
+        
+    open_extern = schema.Bool(
+        title = _(u'label_open_extern', default='external editor'),
+        description = _(u'help_open_extern', default='open with a external editor'),
+        required = False,
+        )
 
 
 class CheckoutCommentForm(form.Form):
@@ -51,6 +54,8 @@ class CheckoutCommentForm(form.Form):
             redirect_url = self.redirect_url
             if redirect_url=='wc' and last_wc:
                 redirect_url = last_wc.absolute_url()
+            if data['open_extern']:
+                redirect_url += '?externaledit=1'
             return self.request.RESPONSE.redirect(redirect_url)
 
     def checkout_object(self, obj, comment):
@@ -145,4 +150,3 @@ class CheckoutSingleDocument(grok.CodeView):
                 )
             )
         return response.redirect(path)
-
