@@ -66,9 +66,11 @@ class Dossiers(OpengeverListingTab):
                 ('end', helper.readable_date),
                 
             )
+    search_options = {'is_subdossier':False}
     
 class SubDossiers(Dossiers):
     grok.name('tabbedview_view-subdossiers')
+    search_options = {'is_subdossier':True}
 
 class Tasks(OpengeverListingTab):
     grok.name('tabbedview_view-tasks')
