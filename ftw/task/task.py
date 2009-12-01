@@ -105,6 +105,12 @@ class ITask(form.Schema):
         required = False
     )
 
+from plone.supermodel.interfaces import FIELDSETS_KEY
+from plone.autoform.interfaces import ORDER_KEY
+# move relatedItems to default fieldset by removing it from categorization fieldset
+IRelatedItems.setTaggedValue(FIELDSETS_KEY, [])
+IRelatedItems.setTaggedValue(ORDER_KEY, [('relatedItems', 'before', 'text')])
+
 @grok.subscribe(ITask, IObjectAddedEvent)
 def setID(task, event):
     task._sequence_number = util.create_sequence_number( task )
@@ -156,7 +162,7 @@ class View(dexterity.DisplayForm):
 
 
 # XXX
-# setting the default value of a RelationField does not work as excepted
+# setting the default value of a RelationField does not work as expected
 # or we don't know how to set it.
 # thus we use an add form hack by injecting the values into the request.
 class AddForm(dexterity.AddForm):
