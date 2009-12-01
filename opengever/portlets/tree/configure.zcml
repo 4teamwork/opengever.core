@@ -9,7 +9,7 @@
 
     <genericsetup:registerProfile
        name="default"
-       title="Tree portlet"
+       title="opengever.portlets.tree"
        directory="profiles/default"
        description=""
        provides="Products.GenericSetup.interfaces.EXTENSION"
