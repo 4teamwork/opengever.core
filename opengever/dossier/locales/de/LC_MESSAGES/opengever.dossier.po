@@ -119,4 +119,5 @@ msgstr "Beginn"
 msgid "label_volume_number"
 msgstr "Bandnummer"
 
-
+msgid "label_end"
+msgstr "Bis:"

@@ -35,16 +35,16 @@
     <span i18n:translate="box_last_modified" tal:omit-tag="">
       from:
     </span>
-    <span tal:replace="python:viewlet.toLocalizedTime(str(viewlet.start()),long_format=1)">
+    <span tal:replace="python:viewlet.toLocalizedTime(str(viewlet.start()),long_format=0)">
       August 16, 2001 at 23:35:59
     </span>
   </span>
 
   <span class="documentModified" tal:condition="python:viewlet.end()">
-    <span i18n:translate="label_end" tal:omit-tag="">
+    <span i18n:translate="label_end" i18n:domain="opengever.dossier" tal:omit-tag="">
       to:
     </span>
-    <span tal:replace="python:viewlet.toLocalizedTime(str(viewlet.end()),long_format=1)">
+    <span tal:replace="python:viewlet.toLocalizedTime(str(viewlet.end()),long_format=0)">
       August 16, 2001 at 23:35:59
     </span>
   </span>
