@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2009-11-30 16:48+0000\n"
+"POT-Creation-Date: 2009-12-01 10:44+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -27,41 +27,6 @@ msgstr ""
 
 #: opengever.repository/opengever/repository/repositoryfolder.py:36
 msgid "Title"
-msgstr ""
-
-#. Default ""
-#: opengever/repository/classification.py
-msgid "archival_value : archival worthy"
-msgstr ""
-
-#. Default ""
-#: opengever/repository/classification.py
-msgid "archival_value : archival worthy with sampling"
-msgstr ""
-
-#. Default ""
-#: opengever/repository/classification.py
-msgid "archival_value : not archival worthy"
-msgstr ""
-
-#. Default ""
-#: opengever/repository/classification.py
-msgid "archival_value : prompt"
-msgstr ""
-
-#. Default ""
-#: opengever/repository/classification.py
-msgid "archival_value : unchecked"
-msgstr ""
-
-#. Default: "classified"
-#: opengever/repository/classification.py
-msgid "classified"
-msgstr ""
-
-#. Default: "confidential"
-#: opengever/repository/classification.py
-msgid "confidential"
 msgstr ""
 
 #. Default: "A Sibling with the same reference number is existing"
@@ -96,35 +61,5 @@ msgstr ""
 #. Default: "State:"
 #: opengever.repository/opengever/repository/repositoryfolder_templates/byline.pt:5
 msgid "label_workflow_state"
-msgstr ""
-
-#. Default ""
-#: opengever/repository/classification.py
-msgid "privacy layer : no"
-msgstr ""
-
-#. Default: ""
-#: opengever/repository/classification.py
-msgid "privacy layer : yes"
-msgstr ""
-
-#. Default: "private"
-#: opengever/repository/classification.py
-msgid "private"
-msgstr ""
-
-#. Default: "public"
-#: opengever/repository/classification.py
-msgid "public"
-msgstr ""
-
-#. Default: "unchecked"
-#: opengever/repository/classification.py
-msgid "unchecked"
-msgstr ""
-
-#. Default: "unprotected"
-#: opengever/repository/classification.py
-msgid "unprotected"
 msgstr ""
 
