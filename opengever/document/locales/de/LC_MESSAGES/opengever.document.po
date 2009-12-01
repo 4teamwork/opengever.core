@@ -323,4 +323,8 @@ msgstr "Titel"
 msgid "lable_docucomposer_filename"
 msgstr "Dateiname"
 
+msgid "label_open_extern"
+msgstr "Externer Editor"
 
+msgid "help_open_extern"
+msgstr "Die Datei wird nach dem Auschecken in einem externen Editor geöffnet"

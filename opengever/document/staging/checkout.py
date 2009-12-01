@@ -11,6 +11,9 @@ from plone.dexterity.interfaces import IDexterityContent
 from plone.z3cform import layout
 from Products.statusmessages.interfaces import IStatusMessage
 
+from plone.directives.form import widget
+from z3c.form.browser import checkbox
+
 from opengever.document import _
 from opengever.document.staging.manager import ICheckinCheckoutManager
 from opengever.document.document import IDocumentSchema
@@ -31,13 +34,14 @@ class ICheckoutCommentFormSchema(Interface):
                       default=u'Describe, why you checkout the selected documents'),
         required=False,
         )
-        
+    
+    
     open_extern = schema.Bool(
         title = _(u'label_open_extern', default='external editor'),
         description = _(u'help_open_extern', default='open with a external editor'),
         required = False,
         )
-
+    widget(open_extern=checkbox.SingleCheckBoxFieldWidget)
 
 class CheckoutCommentForm(form.Form):
     fields = field.Fields(ICheckoutCommentFormSchema)
