@@ -6,7 +6,7 @@
 
     <genericsetup:registerProfile
         name="default" 
-        title="Example content for opengever" 
+        title="opengever.examplecontent"
         directory="profiles/default" 
         description="creates example content in a opengever site" 
         provides="Products.GenericSetup.interfaces.EXTENSION" 
