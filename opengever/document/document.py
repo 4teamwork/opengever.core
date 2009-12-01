@@ -20,8 +20,12 @@ from plone.indexer import indexer
 from plone.app.iterate.interfaces import IWorkingCopy
 from plone.stagingbehavior.relation import StagingRelationValue
 from plone.registry.interfaces import IRegistry
-
 from plone.app.layout.viewlets.interfaces import IBelowContentTitle
+from plone.autoform.interfaces import ORDER_KEY
+from plone.autoform.interfaces import OMITTED_KEY
+from plone.supermodel.interfaces import FIELDSETS_KEY
+from plone.supermodel.model import Fieldset
+from plone.versioningbehavior.behaviors import IVersionable
 
 from opengever.sqlfile.field import NamedFile
 from plone.namedfile.interfaces import INamedFileField
@@ -30,6 +34,15 @@ from opengever.document import _
 from opengever.document.interfaces import IDocumentType
 
 LOG = logging.getLogger('opengever.document')
+
+IVersionable.setTaggedValue( FIELDSETS_KEY, [
+        Fieldset( 'common', fields=[
+                'changeNote',
+                ])
+        ] )
+IVersionable.setTaggedValue( OMITTED_KEY, {
+        'changeNote' : 'true',
+        } )
 
 @grok.provider(IContextSourceBinder)
 def possibleTypes(context):
@@ -54,7 +67,19 @@ class IDocumentSchema(form.Schema):
             u'delivery_date',
             ]
         )
-        
+
+
+    title = schema.TextLine(
+        title = _(u'label_title', default=u'Title'),
+        required = True
+        )
+
+    description = schema.Text(
+        title=_(u'label_description', default=u'Description'),
+        description = _(u'help_description', default=u''),
+        required = False,
+        )
+
     foreign_reference = schema.TextLine(
         title = _(u'label_foreign_reference', default='Foreign Reference'),
         description = _('help_foreign_reference', default=''),
