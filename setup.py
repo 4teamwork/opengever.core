@@ -35,6 +35,7 @@ setup(name='opengever.document',
           'plone.stagingbehavior',
           'plone.versioningbehavior',
           'stoneagehtml', # required by ftw.sendmail, but there is no dependency in the current release
+          'ftw.datepicker',
       ],
       entry_points="""
       # -*- Entry points: -*-

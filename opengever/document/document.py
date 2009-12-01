@@ -103,6 +103,7 @@ class IDocumentSchema(form.Schema):
         required = False,
         )
 
+    form.widget(document_date='ftw.datepicker.widget.DatePickerFieldWidget')
     document_date = schema.Date(
         title = _(u'label_document_date', default='Document Date'),
         description = _(u'help_document_date', default=''),
