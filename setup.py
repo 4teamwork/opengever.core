@@ -26,8 +26,7 @@ setup(name='opengever.dossier',
       install_requires=[
           'setuptools',
           'plone.app.dexterity',
-          'collective.z3cform.datetimewidget',
-          'collective.z3cform.datepicker',
+          'ftw.datepicker',
           # -*- Extra requirements: -*-
       ],
       entry_points="""

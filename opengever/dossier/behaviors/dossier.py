@@ -41,7 +41,7 @@ class IDossier(form.Schema):
     form.widget(keywords = TextLinesFieldWidget)
 
         
-
+    form.widget(start='ftw.datepicker.widget.DatePickerFieldWidget')
     #form.widget(start=DateTimePickerFieldWidget)
     #form.widget(start='collective.z3cform.datepicker.widget.DatePickerFieldWidget')
     start = schema.Date(
@@ -50,6 +50,7 @@ class IDossier(form.Schema):
         required=False,
     )
 
+    form.widget(end='ftw.datepicker.widget.DatePickerFieldWidget')
     #form.widget(end=DateTimePickerFieldWidget)
     #form.widget(end='collective.z3cform.datepicker.widget.DatePickerFieldWidget')
     end = schema.Date(
