@@ -81,7 +81,7 @@ class Tasks(OpengeverListingTab):
                 ('Title', helper.linked),
                 ('deadline', helper.readable_date),
                 ('responsible', helper.readable_author),
-                ('review_state'),
+                ('review_state', 'review_state', helper.translated_string()),
             )
 
     types = ['ftw.task.task',]
