@@ -18,7 +18,7 @@
     <!-- Register an extension profile to make the product installable -->
     <genericsetup:registerProfile
         name="default"
-        title="OpenGever Repository"
+        title="opengever.repository"
         description="OpenGever Repository"
         directory="profiles/default"
         provides="Products.GenericSetup.interfaces.EXTENSION"
