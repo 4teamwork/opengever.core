@@ -59,7 +59,7 @@ msgstr "Anzahl Behälter, die ein (grosses) Dossier in Papierform enthalten"
 #. Default: "select an responsible Manger"
 #: opengever.dossier/opengever/dossier/behaviors/dossier.py:76
 msgid "help_responsible"
-msgstr ""
+msgstr "Verantwortlicher Manager"
 
 #: opengever.dossier/opengever/dossier/behaviors/dossier.py:49
 msgid "help_start"
