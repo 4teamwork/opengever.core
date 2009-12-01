@@ -94,3 +94,6 @@ msgstr ""
 
 msgid "checked_out"
 msgstr ""
+
+msgid "deadline"
+msgstr ""
