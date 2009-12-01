@@ -19,26 +19,20 @@
     <p class="documentDescription" tal:content="context/Description" />
 
     <div tal:replace="structure provider:plone.abovecontentbody" />
-
-    <div class="field" tal:repeat="widget view/widgets/values">
-        <tal:block condition="python:widget.__name__ not in ('IBasic.title', 'IBasic.description', 'title', 'description','responsible')">
-            <label tal:content="widget/label" />
-            <br />
-            <div tal:content="structure widget/render" />
-        </tal:block>
-        <tal:block condition="python:widget.__name__  == 'responsible'">
-            <label tal:content="widget/label" />
-            <br />
-            <div tal:content="structure python: len(widget.value) > 0 and widget.value[0] or '' " />
-        </tal:block>
-    </div>
     
     <fieldset tal:repeat="group view/groups">
         <legend tal:content="group/label" />
         <div class="field" tal:repeat="widget group/widgets/values">
-            <label tal:content="widget/label" />
-            <br />
-            <div tal:content="structure widget/render" />
+            <tal:block condition="python:widget.__name__ not in ('IBasic.title', 'IBasic.description', 'title', 'description','responsible')">
+                <label tal:content="widget/label" />
+                <br />
+                <div tal:content="structure widget/render" />
+            </tal:block>
+            <tal:block condition="python:widget.__name__  == 'responsible'">
+                <label tal:content="widget/label" />
+                <br />
+                <div tal:content="structure python: len(widget.value) > 0 and widget.value[0] or '' " />
+            </tal:block>
         </div>
     </fieldset>
     
