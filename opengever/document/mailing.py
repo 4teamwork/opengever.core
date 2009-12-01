@@ -217,6 +217,9 @@ class SendAsEmailForm(form.Form):
             # and redirect to default view
             return self.request.RESPONSE.redirect('view')
 
+    @button.buttonAndHandler( _('cancel_back', default=u'Cancel') )
+    def cancel_button_handler( self, action ):
+        return self.request.RESPONSE.redirect('./#documents-tab')
 
     def updateWidgets(self):
         super(SendAsEmailForm, self).updateWidgets()
