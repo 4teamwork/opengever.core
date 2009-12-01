@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2009-11-30 16:42+0000\n"
+"POT-Creation-Date: 2009-12-01 10:52+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -91,8 +91,10 @@ msgstr ""
 msgid "label_container_type"
 msgstr ""
 
-#. Default: "Closing Date"
+#. Default: "to:"
 #: opengever.dossier/opengever/dossier/behaviors/dossier.py:56
+#: opengever.dossier/opengever/dossier/businesscase_templates/byline.pt:44
+#: opengever.dossier/opengever/dossier/project_templates/byline.pt:44
 msgid "label_end"
 msgstr ""
 

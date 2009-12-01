@@ -121,3 +121,6 @@ msgstr "Bandnummer"
 
 msgid "label_end"
 msgstr "Bis:"
+
+msgid "label_by_author"
+msgstr "Von:"
