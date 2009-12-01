@@ -15,7 +15,7 @@ from Products.CMFCore.utils import getToolByName
 from Products.MimetypesRegistry.common import MimeTypeException
 from plone.app.dexterity.behaviors.metadata import IBasic
 from plone.dexterity.content import Item
-from plone.directives import form
+from plone.directives import form, dexterity
 from plone.indexer import indexer
 from plone.app.iterate.interfaces import IWorkingCopy
 from plone.registry.interfaces import IRegistry
@@ -227,7 +227,7 @@ def SearchableText( obj ):
     return ' '.join( searchable )
 grok.global_adapter(SearchableText, name='SearchableText')
 
-class View(grok.View):
+class View(dexterity.DisplayForm):
     grok.context(IDocumentSchema)
     grok.require("zope2.View")
     

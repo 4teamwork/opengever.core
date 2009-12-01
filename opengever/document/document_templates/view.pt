@@ -27,17 +27,15 @@
 			</tr>
 			<tr>
 			    <th>Dokumenttyp</th>
-				<td tal:define="document_type context/document_type">
-					<tal:description condition="document_type" content="document_type" />
-					<tal:description condition="python: not document_type">-</tal:description>
+				<td>
+				    <div tal:replace="structure view/w/document_type/render" />
 				</td>			
 			</tr>
 			<tr>
 			    <th>Autor</th>
-				<td tal:define="author context/document_author">
-					<tal:description condition="author" content="author" />
-					<tal:description condition="python: not author">-</tal:description>
-				</td>			
+				<td>
+				    <div tal:replace="structure view/w/document_author/render" />
+				</td>
 			</tr>
 			<tr>
 				<th>Ersteller</th>
@@ -92,9 +90,15 @@
 					<tal:delivery condition="python: not delivery">-</tal:delivery>
 				</td>
 			</tr>
-		</table>			
+			<tr>
+			    <th>Referenzierte Dokumente</th>
+			    <td>
+			        <div tal:replace="structure view/w/IRelatedItems.relatedItems/render" />
+			    </td>
+			</tr>
+		</table>
+
         <div tal:replace="structure provider:plone.belowcontentbody" />
-	
     </tal:main-macro>
 </metal:main>
 
