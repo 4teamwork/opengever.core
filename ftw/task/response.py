@@ -13,6 +13,7 @@ from Acquisition import aq_inner
 from Products.Five.browser import BrowserView
 from plone.memoize.view import memoize
 from plone.z3cform import layout
+from z3c.form.browser import radio 
 from plone.formwidget.autocomplete import AutocompleteFieldWidget
 
 
@@ -59,7 +60,6 @@ class IResponse(Interface):
         required = True,
     )
 
-    #form.widget(responsible=AutocompleteFieldWidget)
     new_responsible = schema.Choice(
         title=_(u"label_responsible_Response", default="Responsible"),
         description =_(u"help_responsible_response", default=""),
@@ -234,8 +234,8 @@ class Base(BrowserView):
 
 class AddForm(form.AddForm):
     fields = field.Fields(IResponse)
-    #XXX use AutocompleteFieldWidget
     fields['new_responsible'].widgetFactory = AutocompleteFieldWidget
+    fields['transition'].widgetFactory = radio.RadioFieldWidget
     
     @property
     def action(self):

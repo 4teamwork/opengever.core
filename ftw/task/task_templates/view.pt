@@ -23,7 +23,7 @@
     <fieldset tal:repeat="group view/groups">
         <legend tal:content="group/label" />
         <div class="field" tal:repeat="widget group/widgets/values">
-            <tal:block condition="python:widget.__name__ not in ('IBasic.title', 'IBasic.description', 'title', 'description','responsible')">
+            <tal:block condition="python:widget.__name__ not in ('IBasic.title', 'IBasic.description', 'title', 'description','responsible', 'transition',)">
                 <label tal:content="widget/label" />
                 <br />
                 <div tal:content="structure widget/render" />

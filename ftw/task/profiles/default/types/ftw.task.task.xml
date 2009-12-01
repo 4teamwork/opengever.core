@@ -28,6 +28,7 @@
      <element value="plone.app.content.interfaces.INameFromTitle" /> 
      <element value="opengever.tabbedview.interfaces.ITabbedViewEnabled" />
      <element value="plone.app.dexterity.behaviors.related.IRelatedItems" />
+     <element value="ftw.task.behaviors.ITransition"/>
  </property>
  
  <!-- View information -->

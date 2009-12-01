@@ -85,7 +85,7 @@ class ITask(form.Schema):
         source = util.getManagersVocab,
         required = False,
     )
-    
+            
     expectedStartOfWork = schema.Date(
         title =_(u"label_expectedStartOfWork", default="Start with work"),
         description = _(u"help_expectedStartOfWork", default=""),
@@ -156,7 +156,6 @@ def pathsDefaultValue(data):
             obj = data.context.restrictedTraverse( item.encode())
             id = intids.getId(obj)
             pathlist.append(RelationValue(id))
-        import pdb; pdb.set_trace()
         return pathlist
     return []
                 
