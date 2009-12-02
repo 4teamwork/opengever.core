@@ -10,6 +10,7 @@ from zope import schema
 from zope.schema.vocabulary import SimpleVocabulary
 from zope.schema.interfaces import IContextSourceBinder
 from zope.component import queryUtility
+from datetime import datetime
 
 from Products.CMFCore.utils import getToolByName
 from Products.MimetypesRegistry.common import MimeTypeException
@@ -179,6 +180,10 @@ class IDocumentSchema(form.Schema):
         description = _(u'help_delivery_date', default=''),
         required = False,
         )
+
+@form.default_value(field=IDocumentSchema['document_date'])
+def docuementDateDefaulValue(data):
+    return datetime.today()
 
 @form.default_value(field=IDocumentSchema['document_author'])
 def deadlineDefaultValue(data):
