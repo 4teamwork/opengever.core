@@ -6,6 +6,7 @@ from zope.event import notify
 from zope.app.container.interfaces import IObjectAddedEvent
 from zope.lifecycleevent.interfaces import IObjectModifiedEvent
 from zope.i18nmessageid.message import Message
+from zope.i18nmessageid import MessageFactory
 
 from plone.versioningbehavior.utils import get_change_note
 from Products.CMFCore.interfaces import IActionSucceededEvent
@@ -18,6 +19,8 @@ from opengever.dossier.behaviors.dossier import IDossierMarker
 from plone.app.iterate.interfaces import IWorkingCopy
 
 from opengever.journal import _
+
+pmf = MessageFactory('plone')
 
 def propper_string(value):
     if not value:
@@ -92,7 +95,7 @@ def dossier_state_changed(context, event):
     if event.action in skip_transactions:
         return
     newstate = event.workflow.transitions.get(event.action).new_state_id
-    title = _( u'Dossier state changed to %s' % newstate )
+    title = pmf( u'Dossier state changed to %s' % newstate )
     journal_entry_factory(context, DOSSIER_STATE_CHANGED, title)
     return
 
@@ -142,7 +145,7 @@ def document_state_changed(context, event):
     if event.action in skip_transactions:
         return
     newstate = event.workflow.transitions.get(event.action).new_state_id
-    title = _( u'Document state changed to %s' % newstate )
+    title = pmf( u'Document state changed to %s' % newstate )
     journal_entry_factory(context, DOCUMENT_STATE_CHANGED, title)
     return
 
