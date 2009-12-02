@@ -10,7 +10,6 @@ from ftw.task.behaviors import ITransitionMarker
 def do_transition(context, event):
     """ event handler for do a transition while crating a ftw.task object
     """
-    import pdb; pdb.set_trace( )
     annotations = IAnnotations(context.REQUEST)
     value = annotations.get('ftw.task.task')
     if value:

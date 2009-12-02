@@ -59,7 +59,6 @@ class Transition(object):
 
     @setproperty
     def transition(self, value):
-        import pdb; pdb.set_trace( )
         # store the value for later use (see events.py)
         annotation = IAnnotations(self.context.REQUEST)
         annotation['ftw.task.task'] = value
