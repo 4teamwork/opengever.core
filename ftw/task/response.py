@@ -6,7 +6,6 @@ from zope.cachedescriptors.property import Lazy
 from zope import schema
 from five import grok
 
-
 from OFS.Image import File
 from AccessControl import Unauthorized
 from Acquisition import aq_inner
@@ -31,6 +30,7 @@ from ftw.task.interfaces import IResponseAdder
 from ftw.task.permissions import DEFAULT_ISSUE_MIME_TYPE
 from ftw.task import util
 from ftw.task.task import ITask
+from ftw.datepicker.widget import DatePickerFieldWidget
 
 try:
     from plone.i18n.normalizer.interfaces import \
@@ -236,6 +236,7 @@ class AddForm(form.AddForm):
     fields = field.Fields(IResponse)
     fields['new_responsible'].widgetFactory = AutocompleteFieldWidget
     fields['transition'].widgetFactory = radio.RadioFieldWidget
+    fields['deadline'].widgetFactory = DatePickerFieldWidget
     
     @property
     def action(self):
