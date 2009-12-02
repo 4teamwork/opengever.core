@@ -27,6 +27,7 @@ setup(name='ftw.task',
           'setuptools',
           'plone.app.dexterity',
           'rwproperty',
+          'ftw.datepicker',
           # -*- Extra requirements: -*-
       ],
       entry_points="""

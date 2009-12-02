@@ -81,12 +81,14 @@ class ITask(form.Schema):
         required = True,
     )
 
+    form.widget(deadline='ftw.datepicker.widget.DatePickerFieldWidget')
     deadline = schema.Date(
         title=_(u"label_deadline", default=u""),
         description=_(u"help_deadline", default=u"Deadline"),
         required = True,
     )
-                
+
+    form.widget(start='ftw.datepicker.widget.DatePickerFieldWidget')
     expectedStartOfWork = schema.Date(
         title =_(u"label_expectedStartOfWork", default="Start with work"),
         description = _(u"help_expectedStartOfWork", default=""),
