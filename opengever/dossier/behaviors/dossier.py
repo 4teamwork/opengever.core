@@ -9,6 +9,7 @@ from plone.z3cform.textlines.textlines import TextLinesFieldWidget
 from plone.formwidget.autocomplete import AutocompleteFieldWidget
 from plone.indexer import indexer
 from five import grok
+from datetime import datetime
 
 
 class IDossierMarker(Interface):
@@ -130,6 +131,9 @@ alsoProvides(IDossier, IFormFieldProvider)
 # testOverride = StaticWidgetAttribute(True, field=IDossier['volume_number'])
 # grok.global_adapter(testOverride, name=u"required")
 
+@form.default_value(field=IDossier['start'])
+def deadlineDefaultValue(data):
+    return datetime.today()
 
 @indexer(IDossierMarker)
 def startIndexer(obj):
@@ -137,7 +141,7 @@ def startIndexer(obj):
     if aobj.start is None:
         return None
     return aobj.start
-grok.global_adapter(startIndexer, name="start")
+grok.global_adapter(startIndexer, name="start") 
 
 @indexer(IDossierMarker)
 def endIndexer(obj):
