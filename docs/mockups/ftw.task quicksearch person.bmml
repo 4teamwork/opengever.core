@@ -66,18 +66,18 @@
         <text>Abbrechen</text>
       </controlProperties>
     </control>
-    <control controlID="26" controlTypeID="com.balsamiq.mockups::RadioButton" x="62" y="535" w="121" h="24" measuredW="121" measuredH="18" zOrder="12" locked="false" isInGroup="-1">
+    <control controlID="26" controlTypeID="com.balsamiq.mockups::RadioButton" x="62" y="535" w="121" h="24" measuredW="121" measuredH="22" zOrder="12" locked="false" isInGroup="-1">
       <controlProperties>
         <text>zur%20%DCberweisung</text>
       </controlProperties>
     </control>
-    <control controlID="27" controlTypeID="com.balsamiq.mockups::RadioButton" x="194" y="538" w="-1" h="-1" measuredW="97" measuredH="18" zOrder="13" locked="false" isInGroup="-1">
+    <control controlID="27" controlTypeID="com.balsamiq.mockups::RadioButton" x="194" y="538" w="-1" h="-1" measuredW="97" measuredH="22" zOrder="13" locked="false" isInGroup="-1">
       <controlProperties>
         <text>zur%20Kenntnis</text>
         <state>up</state>
       </controlProperties>
     </control>
-    <control controlID="28" controlTypeID="com.balsamiq.mockups::RadioButton" x="324" y="530" w="149" h="33" measuredW="134" measuredH="18" zOrder="14" locked="false" isInGroup="-1">
+    <control controlID="28" controlTypeID="com.balsamiq.mockups::RadioButton" x="324" y="530" w="149" h="33" measuredW="134" measuredH="22" zOrder="14" locked="false" isInGroup="-1">
       <controlProperties>
         <text>zur%20Stellungnahme</text>
         <state>selected</state>
@@ -176,25 +176,25 @@
         <underline>true</underline>
       </controlProperties>
     </control>
-    <control controlID="45" controlTypeID="com.balsamiq.mockups::CheckBox" x="641" y="400" w="-1" h="-1" measuredW="32" measuredH="18" zOrder="31" locked="false" isInGroup="-1">
+    <control controlID="45" controlTypeID="com.balsamiq.mockups::CheckBox" x="641" y="400" w="-1" h="-1" measuredW="32" measuredH="22" zOrder="31" locked="false" isInGroup="-1">
       <controlProperties>
         <text>L</text>
         <state>selected</state>
       </controlProperties>
     </control>
-    <control controlID="46" controlTypeID="com.balsamiq.mockups::CheckBox" x="681" y="400" w="-1" h="-1" measuredW="47" measuredH="18" zOrder="32" locked="false" isInGroup="-1">
+    <control controlID="46" controlTypeID="com.balsamiq.mockups::CheckBox" x="681" y="400" w="-1" h="-1" measuredW="47" measuredH="22" zOrder="32" locked="false" isInGroup="-1">
       <controlProperties>
         <text>L/S</text>
         <state>selected</state>
       </controlProperties>
     </control>
-    <control controlID="47" controlTypeID="com.balsamiq.mockups::CheckBox" x="641" y="436" w="-1" h="-1" measuredW="32" measuredH="18" zOrder="33" locked="false" isInGroup="-1">
+    <control controlID="47" controlTypeID="com.balsamiq.mockups::CheckBox" x="641" y="436" w="-1" h="-1" measuredW="32" measuredH="22" zOrder="33" locked="false" isInGroup="-1">
       <controlProperties>
         <text>L</text>
         <state>selected</state>
       </controlProperties>
     </control>
-    <control controlID="48" controlTypeID="com.balsamiq.mockups::CheckBox" x="681" y="436" w="-1" h="-1" measuredW="47" measuredH="18" zOrder="34" locked="false" isInGroup="-1">
+    <control controlID="48" controlTypeID="com.balsamiq.mockups::CheckBox" x="681" y="436" w="-1" h="-1" measuredW="47" measuredH="22" zOrder="34" locked="false" isInGroup="-1">
       <controlProperties>
         <text>L/S</text>
       </controlProperties>
@@ -212,22 +212,22 @@
         <color>255</color>
       </controlProperties>
     </control>
-    <control controlID="53" controlTypeID="com.balsamiq.mockups::RadioButton" x="194" y="561" w="130" h="25" measuredW="108" measuredH="18" zOrder="37" locked="false" isInGroup="-1">
+    <control controlID="53" controlTypeID="com.balsamiq.mockups::RadioButton" x="194" y="561" w="130" h="25" measuredW="108" measuredH="22" zOrder="37" locked="false" isInGroup="-1">
       <controlProperties>
         <text>zur%20Erledigung</text>
       </controlProperties>
     </control>
-    <control controlID="54" controlTypeID="com.balsamiq.mockups::RadioButton" x="324" y="560" w="130" h="25" measuredW="113" measuredH="18" zOrder="38" locked="false" isInGroup="-1">
+    <control controlID="54" controlTypeID="com.balsamiq.mockups::RadioButton" x="324" y="560" w="130" h="25" measuredW="113" measuredH="22" zOrder="38" locked="false" isInGroup="-1">
       <controlProperties>
         <text>zur%20%DCbernahme</text>
       </controlProperties>
     </control>
-    <control controlID="55" controlTypeID="com.balsamiq.mockups::RadioButton" x="62" y="562" w="130" h="25" measuredW="124" measuredH="18" zOrder="39" locked="false" isInGroup="-1">
+    <control controlID="55" controlTypeID="com.balsamiq.mockups::RadioButton" x="62" y="562" w="130" h="25" measuredW="124" measuredH="22" zOrder="39" locked="false" isInGroup="-1">
       <controlProperties>
         <text>zur%20Genehmigung</text>
       </controlProperties>
     </control>
-    <control controlID="56" controlTypeID="com.balsamiq.mockups::RadioButton" x="480" y="534" w="130" h="25" measuredW="106" measuredH="18" zOrder="40" locked="false" isInGroup="-1">
+    <control controlID="56" controlTypeID="com.balsamiq.mockups::RadioButton" x="480" y="534" w="130" h="25" measuredW="106" measuredH="22" zOrder="40" locked="false" isInGroup="-1">
       <controlProperties>
         <text>zum%20Beschluss</text>
       </controlProperties>
