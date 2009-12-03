@@ -3,7 +3,7 @@ from zope import schema
 from zope.interface import implements, Interface
 from zope.traversing.interfaces import ITraversable
 from zope.publisher.interfaces.browser import IBrowserRequest, IBrowserPage
-from zope.component import queryMultiAdapter, getUtility
+from zope.component import queryMultiAdapter, getUtility, getMultiAdapter
 from zope.app.container.interfaces import IObjectAddedEvent
 
 from Acquisition import aq_parent, aq_inner
@@ -34,6 +34,7 @@ class ITask(form.Schema):
         label = _(u'fieldset_common', default=u'Common'),
         fields = [
             u'title',
+            u'issuer',
             u'responsible',
             u'text',
             u'deadline',
@@ -56,6 +57,11 @@ class ITask(form.Schema):
         title=_(u"label_title", default=u"Title"),
         description=_('help_title', default=u"Title"),
         required = True,    
+    )
+    
+    issuer = schema.TextLine(
+        title =_(u"label_issuer", default=u"Issuer"),
+        description = _('help_issuer', default=u""),
     )
     
     form.widget(responsible=AutocompleteFieldWidget)
@@ -110,6 +116,12 @@ class ITask(form.Schema):
         description=_(u"help_effectiveCost", default=""),
         required = False
     )
+
+@form.default_value(field=ITask['issuer'])
+def default_issuer(data):
+    portal_state = getMultiAdapter((data.context, data.request), name=u"plone_portal_state")
+    member = portal_state.member()
+    return member.getProperty('fullname') or member.getId()
 
 from plone.supermodel.model import Fieldset
 from plone.supermodel.interfaces import FIELDSETS_KEY
