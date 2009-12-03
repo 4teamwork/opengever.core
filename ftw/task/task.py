@@ -4,16 +4,12 @@ from zope.interface import implements, Interface
 from zope.traversing.interfaces import ITraversable
 from zope.publisher.interfaces.browser import IBrowserRequest, IBrowserPage
 from zope.component import queryMultiAdapter, getUtility
-from zope.schema.interfaces import IContextSourceBinder
-from zope.schema.vocabulary import SimpleVocabulary, SimpleTerm
 from zope.app.container.interfaces import IObjectAddedEvent
 
 from Acquisition import aq_parent, aq_inner
 from AccessControl import getSecurityManager
 from Products.CMFCore.utils import getToolByName
-from Products.CMFDefault.interfaces import ICMFDefaultSkin
 from datetime import datetime, timedelta
-from z3c.relationfield.relation import TemporaryRelationValue
 from z3c.relationfield.relation import RelationValue
 
 
@@ -22,17 +18,13 @@ from plone.formwidget.autocomplete import AutocompleteFieldWidget
 
 from plone.z3cform.traversal import WidgetTraversal
 from plone.dexterity.interfaces import IDexterityFTI
-from plone.dexterity.content import Item, Container
+from plone.dexterity.content import Container
 
 from plone.directives import form, dexterity
-from plone.app.textfield import RichText
 from plone.app.dexterity.behaviors.related import IRelatedItems
-from plone.namedfile.field import NamedImage
 
 from ftw.task import util
 from ftw.task import _
-
-from opengever.translations.browser import edit, add
 
 
 class ITask(form.Schema):
@@ -75,7 +67,7 @@ class ITask(form.Schema):
     )
     
     form.primary('text')
-    text = RichText(
+    text = schema.Text(
         title=_(u"label_text", default=u"Text"),
         description=_(u"help_text", default=u""),
         required = True,
