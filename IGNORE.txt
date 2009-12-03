@@ -1,0 +1,5 @@
+# created by: svn propset svn:ignore -F ./IGNORE.TXT .
+
+opengever.trash.egg-info
+build
+dist
