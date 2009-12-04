@@ -10,6 +10,10 @@ from plone.formwidget.autocomplete import AutocompleteFieldWidget
 from plone.indexer import indexer
 from five import grok
 from datetime import datetime
+from zope.interface import invariant, Invalid
+from zope.component import provideAdapter
+from z3c.form import error
+
 
 
 class IDossierMarker(Interface):
@@ -115,8 +119,23 @@ class IDossier(form.Schema):
         description = _(u'help_container_location', default=u''),
         required = False,
     )
-        
+    @invariant
+    def validateStartEnd(data):
+        if data.start is not None and data.end is not None:
+            if data.start > data.end:
+                raise StartBeforeEnd
+
 alsoProvides(IDossier, IFormFieldProvider)
+
+class StartBeforeEnd(Invalid):
+     __doc__ = _(u"The start or end date is invalid")
+# 
+# StartBeforeEndMessage = error.ErrorViewMessage(u"The start date must be before the end date.",error=StartBeforeEnd)
+# provideAdapter(StartBeforeEndMessage,name="message")
+
+#startBeforeEndError = StartBeforeEnd(u'The start date must be before the end date')
+#errorView = error.InvalidErrorViewSnippet(startBeforeEndError, None, None, None, None, None)
+#provideAdapter(errorView)
 
 # XXX testing widget attributes
 # 
