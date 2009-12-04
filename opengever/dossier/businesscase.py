@@ -28,6 +28,12 @@ class IBusinessCaseDossier(form.Schema):
 #         #self.widgets['IDossier.comments'].rows = 10
 #         #self.widgets['IDossier.comments'].requires = True
 
+
+class View(dexterity.DisplayForm):
+    grok.context(IBusinessCaseDossier)
+    grok.require('zope2.View')
+    
+    
 class Byline(grok.Viewlet, content.DocumentBylineViewlet):
     grok.viewletmanager(IBelowContentTitle)
     grok.context(IBusinessCaseDossier)
