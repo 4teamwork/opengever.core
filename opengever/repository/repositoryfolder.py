@@ -1,6 +1,6 @@
 from Acquisition import aq_inner, aq_parent
 from zope import schema
-from zope.interface import implements, invariant, Invalid
+from zope.interface import implements
 import zope.component
 
 from z3c.form import validator
@@ -8,7 +8,6 @@ from z3c.form import error
 
 from plone.dexterity import content
 from plone.directives import form
-from plone.directives import dexterity
 from opengever.repository import _
 from opengever.repository.interfaces import IRepositoryFolder
 from plone.app.content.interfaces import INameFromTitle
