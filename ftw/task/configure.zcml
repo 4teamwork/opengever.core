@@ -55,5 +55,12 @@
        permission="zope2.View"
        class=".response.Save"
        />
+       
+   <browser:page
+      name="task_response_attachment"
+      for="ftw.task.task.ITask"
+      permission="zope2.View"
+      class=".response.Download"
+      />
 
 </configure>

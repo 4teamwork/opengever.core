@@ -6,7 +6,6 @@ from zope.cachedescriptors.property import Lazy
 from zope import schema
 from five import grok
 
-from OFS.Image import File
 from AccessControl import Unauthorized
 from Acquisition import aq_inner
 from Products.Five.browser import BrowserView
@@ -14,15 +13,15 @@ from plone.memoize.view import memoize
 from plone.z3cform import layout
 from z3c.form.browser import radio 
 from plone.formwidget.autocomplete import AutocompleteFieldWidget
-
-
+from OFS.Image import File
+from plone.namedfile.utils import set_headers, stream_data
 from Products.Archetypes.atapi import DisplayList
 from Products.CMFPlone import PloneMessageFactory as PMF
 from Products.CMFCore.utils import getToolByName
 from Products.statusmessages.interfaces import IStatusMessage
 from Products.CMFPlone.utils import safe_unicode
 from Products.Archetypes.utils import contentDispositionHeader
-
+from opengever.sqlfile.field import NamedFile
 from ftw.task import _
 from ftw.task import permissions
 from ftw.task.adapters import IResponseContainer, Response
@@ -80,7 +79,11 @@ class IResponse(Interface):
         required = False,
         )
         
-
+    attachment = NamedFile(
+        title = _(u'label_attachment', default='Attachment'),
+        description = _(u'help_attachment', default=''),
+        required = False,
+    )
 
 def voc2dict(vocab, current=None):
     """Make a dictionary from a vocabulary.
@@ -144,6 +147,7 @@ class Base(BrowserView):
             html = response.rendered_text
             info = dict(id=id,
                         response=response,
+                        attachment=self.attachment_info(id),
                         html=html)
             items.append(info)
         return items
@@ -154,6 +158,44 @@ class Base(BrowserView):
         context = aq_inner(self.context)
         plone = context.restrictedTraverse('@@plone_portal_state')
         return plone.portal_url()
+
+    def attachment_info(self, id):
+        """Get icon and other info for attachment
+
+        Taken partly from Archetypes/skins/archetypes/getBestIcon.py
+        """
+        context = aq_inner(self.context)
+        response = self.folder[id]
+        attachment = response.attachment
+        if attachment is None:
+            return None
+
+        from zExceptions import NotFound
+
+        icon = None
+        mtr = getToolByName(context, 'mimetypes_registry', None)
+        if mtr is None:
+            icon = context.getIcon()
+        lookup = mtr.lookup(attachment.contentType)
+        if lookup:
+            mti = lookup[0]
+            try:
+                context.restrictedTraverse(mti.icon_path)
+                icon = mti.icon_path
+            except (NotFound, KeyError, AttributeError):
+                pass
+        if icon is None:
+            icon = context.getIcon()
+        filename = getattr(attachment, 'filename', 'Unamed File')
+        info = dict(
+            icon = self.portal_url + '/' + icon,
+            url = context.absolute_url() +\
+                '/@@task_response_attachment?response_id=' + str(id),
+            content_type = attachment.contentType,
+            size = pretty_size(attachment._size),
+            filename = filename,
+            )
+        return info
 
     @Lazy
     def memship(self):
@@ -286,6 +328,15 @@ class AddForm(form.AddForm):
                 if resp_field and task_field != resp_field:
                     new_response.add_change(option, title, task_field, resp_field)
                     task.__setattr__(option,resp_field)
+                    
+            # add attachment
+            attachment = data.get('attachment')
+            if attachment:
+                # File(id, title, file)
+                # file_data = File(attachment.filename, attachment.filename, attachment)
+                # new_response.attachment = file_data
+                new_response.attachment = attachment
+                    
             container = IResponseContainer(self.context)
             container.add(new_response)
             self.request.RESPONSE.redirect(self.context.absolute_url())
@@ -438,3 +489,29 @@ class Delete(Base):
                             mapping=dict(response_id=response_id))
                     status.addStatusMessage(msg, type='info')
         self.request.response.redirect(context.absolute_url())
+        
+class Download(Base):
+    """Download the attachment of a response.
+    """
+
+    def __call__(self):
+        context = aq_inner(self.context)
+        request = self.request
+        response_id = self.validate_response_id()
+        file = None
+        if response_id != -1:
+            response = self.folder[response_id]
+            file = response.attachment
+            if file is None:
+                status = IStatusMessage(request)
+                msg = _(u"Response id ${response_id} has no attachment.",
+                        mapping=dict(response_id=response_id))
+                msg = translate(msg, 'ftw.task', context=context)
+                status.addStatusMessage(msg, type='error')
+        if file is None:
+            request.response.redirect(context.absolute_url())
+
+        # From now on file exists.
+        filename = getattr(file, 'filename', 'Unamed File')
+        set_headers(file, self.request.response, filename=filename)
+        return stream_data(file)
