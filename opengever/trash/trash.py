@@ -1,0 +1,87 @@
+from zope.interface import Interface, alsoProvides, noLongerProvides
+from zope.component.interfaces import IObjectEvent, ObjectEvent
+from zope.event import notify
+from plone.indexer import indexer
+from five import grok
+
+
+class ITrashable(Interface):
+    pass
+    
+class ITrashableMarker(Interface):
+    pass
+
+class ITrashed(Interface):
+    """
+    All Objects wich provide that interfaces are "moved to trash" (special delete functionality)
+    """
+    pass
+    
+#Events
+
+class ITrashedEvent(IObjectEvent):
+    pass
+    
+class IUntrashedEvent(IObjectEvent):
+    pass
+    
+class TrashedEvent(ObjectEvent):
+    grok.implements(ITrashedEvent)
+
+class UntrashedEvent(ObjectEvent):
+    grok.implements(IUntrashedEvent)
+
+class Trasher(object):
+    def __init__(self, context):
+        self.context = context
+    
+    def trash(self):
+        #XXX check Permission
+        alsoProvides(self.context, ITrashed)
+        self.context.reindexObject()
+        notify(TrashedEvent(self.context))
+        
+    def untrash(self):
+        #XXX check Permission
+        noLongerProvides(self.context, ITrashed)
+        self.context.reindexObject()
+        notify(UntrashedEvent(self.context))
+        
+@indexer(Interface)
+def trashIndexer(obj): 
+    return ITrashed.providedBy(obj)
+grok.global_adapter(trashIndexer, name="trashed")
+
+class TrashView(grok.CodeView):
+    grok.context(ITrashableMarker)
+    grok.require('zope2.View')
+    grok.name('trashed')
+    
+    def __call__(self):
+        paths = self.request.get('paths')
+        if paths:
+            for item in paths:
+                obj = self.context.restrictedTraverse(item)
+                trasher = ITrashable(obj)
+                trasher.trash()
+        self.request.RESPONSE.redirect(self.context.absolute_url())
+    
+    def render(self):
+        super(DeleteView).render()
+        
+class UntrashView(grok.CodeView):
+    grok.context(ITrashableMarker)
+    grok.require('zope2.View')
+    grok.name('untrashed')
+    
+    def __call__(self):
+        paths = self.request.get('paths')
+        if paths:
+            for item in paths:
+                obj = self.context.restrictedTraverse(item)
+                trasher = ITrashable(obj)
+                trasher.untrash()
+        self.request.RESPONSE.redirect(self.context.absolute_url())
+    
+    def render(self):
+        super(DeleteView).render()
