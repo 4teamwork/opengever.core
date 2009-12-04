@@ -33,7 +33,7 @@
     <element value="opengever.base.behaviors.classification.IClassification" />
     <element value="plone.app.content.interfaces.INameFromTitle" />
     <element value="opengever.tabbedview.interfaces.ITabbedViewEnabled" />
-    
+    <element value="opengever.trash.trash.ITrashable" />
   </property>
 
   <!-- View information -->
@@ -90,5 +90,8 @@
   <action title="Sharing" action_id="sharing" category="arbeitsraum-tabs"
           condition_expr="" url_expr="string:#" visible="True">
     <permission value="View"/>
+  </action>
+  <action title="Trash" action_id="trash" category="arbeitsraum-tabs"
+          condition_expr="" url_expr="string:#" visible="True">
   </action>
 </object>
