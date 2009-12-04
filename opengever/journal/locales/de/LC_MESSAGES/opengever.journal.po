@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2009-11-16 14:24+0000\n"
+"POT-Creation-Date: 2009-12-04 08:41+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -23,12 +23,12 @@ msgid "label_document_added"
 msgstr "Dokument hinzugefügt: ${title}"
 
 #. Default: "Document checked in"
-#: opengever.journal/opengever/journal/handlers.py:176
+#: opengever.journal/opengever/journal/handlers.py:170
 msgid "label_document_checkin"
 msgstr "Dokument eingecheckt"
 
 #. Default: "Document checked out"
-#: opengever.journal/opengever/journal/handlers.py:165
+#: opengever.journal/opengever/journal/handlers.py:159
 msgid "label_document_checkout"
 msgstr "Dokument ausgecheckt"
 
@@ -37,25 +37,25 @@ msgstr "Dokument ausgecheckt"
 msgid "label_document_modified"
 msgstr "Dokument modifiziert"
 
-#. Default: "Document state changed to ${newstate} (${action})"
-#: opengever.journal/opengever/journal/handlers.py:150
-msgid "label_document_transition"
-msgstr "Status des Dokuments geändert in ${newstate} (${action})"
-
 #. Default: "Dossier added: ${title}"
-#: opengever.journal/opengever/journal/handlers.py:62
+#: opengever.journal/opengever/journal/handlers.py:67
 msgid "label_dossier_added"
 msgstr "Dossier hinzugefügt: ${title}"
 
 #. Default: "Dossier modified"
-#: opengever.journal/opengever/journal/handlers.py:73
+#: opengever.journal/opengever/journal/handlers.py:78
 msgid "label_dossier_modified"
 msgstr "Dossier modifiziert"
 
-#. Default: "Dossier state changed to ${newstate} (${action})"
-#: opengever.journal/opengever/journal/handlers.py:95
-msgid "label_dossier_transition"
-msgstr "Status des Dossiers geändert in ${newstate} (${action})"
+#. Default: "Object restore: ${title}"
+#: opengever.journal/opengever/journal/handlers.py:189
+msgid "label_restore"
+msgstr "Objekt wiederhergestellt: ${title}"
+
+#. Default: "Object moved to trash: ${title}"
+#: opengever.journal/opengever/journal/handlers.py:179
+msgid "label_to_trash"
+msgstr "Objekt gelöscht: ${title}"
 
 #. Default: "Journal"
 #: opengever.journal/opengever/journal/browser_templates/journalhistory.pt:17
