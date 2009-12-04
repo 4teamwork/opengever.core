@@ -11,9 +11,6 @@ from plone.indexer import indexer
 from five import grok
 from datetime import datetime
 from zope.interface import invariant, Invalid
-from zope.component import provideAdapter
-from z3c.form import error
-
 
 
 class IDossierMarker(Interface):
