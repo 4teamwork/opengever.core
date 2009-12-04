@@ -31,6 +31,7 @@
     <element value="plone.stagingbehavior.interfaces.IStagingSupport" />
     <element value="plone.versioningbehavior.behaviors.IVersionable" />
     <element value="collective.filepreviewbehavior.interfaces.IPreviewable" />
+    <element value="opengever.trash.trash.ITrashable" />
   </property>
 
   <!-- View information -->
