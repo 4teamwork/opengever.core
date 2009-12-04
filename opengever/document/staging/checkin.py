@@ -32,8 +32,8 @@ class ICheckinCommentFormSchema(Interface):
                 default=u'Journal Comment'),
         description=_(u'help_checkin_journal_comment',
                       default=u'Describe, why you checkin the selected documents'),
-        required=True,
-        )
+        required=False,
+    )
 
 
 
