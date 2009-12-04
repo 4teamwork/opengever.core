@@ -4,7 +4,7 @@ from ftw.tabbedview.browser.views import BaseListingView
 from ftw.tabbedview.interfaces import ITabbedView
 from five import grok
 from ftw.table import helper
-
+from ftw.directoryservice.contact import IContact
 class OpengeverListingTab(grok.View, BaseListingView):
     grok.context(ITabbedView)
     grok.template('generic')
@@ -26,7 +26,7 @@ class OpengeverListingTab(grok.View, BaseListingView):
         
     search_index = 'SearchableText' #only 'SearchableText' is implemented for now
     sort_on = 'modified'
-    sort_order = 'reverse'    
+    sort_order = 'reverse'
     
 
 class OpengeverTab(object):
@@ -137,11 +137,11 @@ class DossierOverview(grok.View, OpengeverTab):
     grok.template('overview')
     
     #TODO: refactor view using viewlets
-    def catalog(self, types):
+    def catalog(self, types, showTrashed=False):
         return self.context.portal_catalog(portal_type=types , 
                                             path=dict(depth=1, 
                                                       query='/'.join(self.context.getPhysicalPath())
-                                                      ), 
+                                                      ),
                                                       sort_on='modified',
                                                       sort_order='reverse') 
 
@@ -161,7 +161,7 @@ class DossierOverview(grok.View, OpengeverTab):
         return self.catalog(['ftw.task.task', ])[:5]  
     
     def documents(self): 
-        return self.catalog(['opengever.document.document',] )[:10]                                        
+        return self.catalog(['opengever.document.document',])[:10]                                        
     
     def events(self):
         return self.catalog(['dummy.event',] )[:5]     
@@ -229,6 +229,19 @@ class Journal(grok.View, OpengeverTab):
          elif IWorkflowHistoryJournalizable.providedBy(self.context):
              raise NotImplemented
 
+class Trash(OpengeverListingTab):
+    grok.name('tabbedview_view-trash')
+
+    types = ['opengever.dossier.dossier', 'opengever.document.document', 'ftw.task.task',]
+    
+    search_options = {'trashed':True}
+
+    columns = (
+        ('', helper.draggable),
+        ('', helper.path_checkbox),
+        ('Title', 'sortable_title', helper.linked),
+        )
+
 from plone.app.workflow.interfaces import ISharingPageRole
 from zope.component import getUtilitiesFor, getMultiAdapter
 from plone.app.workflow.browser.sharing import SharingView
@@ -291,3 +304,26 @@ class Sharing(SharingView):
     #         },
     #     ]
 
+
+#Client Views
+class ContactsView(OpengeverListingTab):
+    grok.name('tabbedview_view-all_contacts')
+    
+    types = ['ftw.directoryservice.contact',]
+
+    columns = (
+        ('', helper.draggable),
+        ('', helper.path_checkbox),
+        ('Title', 'sortable_title', helper.linked),
+    )
+   
+class OrgunitView(OpengeverListingTab):
+    grok.name('tabbedview_view-all_orgunits')
+    
+    types = ['ftw.directoryservice.orgunit']
+
+    columns = (
+         ('', helper.draggable),
+         ('', helper.path_checkbox),
+         ('Title', 'sortable_title', helper.linked),
+    )
