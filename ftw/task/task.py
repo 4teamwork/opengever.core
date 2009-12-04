@@ -55,7 +55,7 @@ class ITask(form.Schema):
     
     title = schema.TextLine(
         title=_(u"label_title", default=u"Title"),
-        description=_('help_title', default=u"Title"),
+        description=_('help_title', default=u""),
         required = True,    
     )
     
@@ -67,7 +67,7 @@ class ITask(form.Schema):
     form.widget(responsible=AutocompleteFieldWidget)
     responsible = schema.Choice(
         title=_(u"label_responsible", default="Responsible"),
-        description =_(u"help_responsible", default="select an responsible Manger"),
+        description =_(u"help_responsible", default=""),
         source = util.getManagersVocab,
         required = False,
     )
