@@ -17,9 +17,11 @@ from opengever.document.document import IDocumentSchema
 from opengever.document.interfaces import IObjectCheckedInEvent, IObjectCheckedOutEvent
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from plone.app.iterate.interfaces import IWorkingCopy
-
+from plone.directives import form
+                               
+from ftw.journal.interfaces import IJournalizable
 from opengever.journal import _
-
+from opengever.trash.trash import ITrashedEvent, IUntrashedEvent 
 pmf = MessageFactory('plone')
 
 def propper_string(value):
@@ -150,7 +152,6 @@ def document_state_changed(context, event):
     return
 
 
-
 DOCUMENT_CHECKED_OUT = 'Document checked out'
 @grok.subscribe(IDocumentSchema, IObjectCheckedOutEvent)
 def document_checked_out(context, event):
@@ -172,3 +173,22 @@ def document_checked_in(context, event):
                           comment=user_comment)
     return
 
+OBJECT_MOVE_TO_TRASH = 'Object moved to trash'
+@grok.subscribe(IJournalizable, ITrashedEvent)
+def document_trashed(context, event):
+    title = _(u'label_to_trash', default = u'Object moved to trash: ${title}', mapping={
+            'title':context.title_or_id(),
+    })
+    journal_entry_factory(context, OBJECT_MOVE_TO_TRASH, title)
+    journal_entry_factory(context.aq_inner.aq_parent, OBJECT_MOVE_TO_TRASH, title)
+    return
+
+OBJECT_RESTORE = 'Object restore'
+@grok.subscribe(IJournalizable, IUntrashedEvent)
+def document_trashed(context, event):
+    title = _(u'label_restore', default = u'Object restore: ${title}', mapping={
+            'title':context.title_or_id(),
+    })
+    journal_entry_factory(context, OBJECT_RESTORE, title)
+    journal_entry_factory(context.aq_inner.aq_parent, OBJECT_RESTORE, title)
+    return
