@@ -2,7 +2,7 @@
 <dc-workflow workflow_id="task_workflow"
              title="Dossier Workflow [ftw]" description=""
              state_variable="review_state"
-             initial_state="new">
+             initial_state="task-state-new">
  <permission>Access contents information</permission>
  <permission>Add portal content</permission>
  <permission>List folder contents</permission>
@@ -10,7 +10,7 @@
  <permission>View</permission>
  <state state_id="task-state-acknowledged" title="">
  </state>
- <state state_id="task-state-active" title="active">
+ <state state_id="task-state-active" title="task-state-active">
   <exit-transition transition_id="task-transition-deactivate"/>
   <exit-transition transition_id="task-transition-resolve"/>
   <permission-map name="Access contents information"
@@ -50,7 +50,7 @@
  <state state_id="task-state-completed" title="">
   <exit-transition transition_id="task-transition-reactivate"/>
  </state>
- <state state_id="task-state-inactive" title="inactive">
+ <state state_id="task-state-inactive" title="task-state-inactive">
   <exit-transition transition_id="task-transition-activate"/>
   <exit-transition transition_id="task-transition-resolve"/>
   <permission-map name="Access contents information"
@@ -80,14 +80,14 @@
    <permission-role>User</permission-role>
   </permission-map>
  </state>
- <state state_id="task-state-new" title="new">
+ <state state_id="task-state-new" title="task-state-new">
   <exit-transition transition_id="task-transition-to_acknowledge"/>
   <exit-transition transition_id="task-transition-to_complete"/>
  </state>
- <state state_id="task-state-rejected" title="Rejected">
+ <state state_id="task-state-rejected" title="task-state-Rejected">
   <exit-transition transition_id="task-transition-reactivate"/>
  </state>
- <state state_id="task-state-resolved" title="resolved">
+ <state state_id="task-state-resolved" title="task-state-resolved">
   <exit-transition transition_id="task-transition-reactivate"/>
   <permission-map name="Access contents information"
                   acquired="False">
@@ -127,90 +127,90 @@
   <exit-transition transition_id="task-transition-transfer"/>
  </state>
  <transition transition_id="task-transition-activate"
-             title="Owner activates task" new_state="active"
+             title="Owner activates task" new_state="task-state-active"
              trigger="USER" before_script="" after_script="">
-  <action url="%(content_url)s/content_status_modify?workflow_action=activate"
-          category="workflow">activate</action>
+  <action url="%(content_url)s/content_status_modify?workflow_action=task-transition-activate"
+          category="workflow">task-transition-activate</action>
   <guard>
    <guard-role>Owner</guard-role>
   </guard>
  </transition>
  <transition transition_id="task-transition-deactivate"
              title="Owner deactivates task"
-             new_state="inactive" trigger="USER"
+             new_state="task-state-inactive" trigger="USER"
              before_script="" after_script="">
-  <action url="%(content_url)s/content_status_modify?workflow_action=deactivate"
-          category="workflow">deactivate</action>
+  <action url="%(content_url)s/content_status_modify?workflow_action=task-transition-deactivate"
+          category="workflow">task-transition-deactivate</action>
   <guard>
    <guard-role>Owner</guard-role>
   </guard>
  </transition>
  <transition transition_id="task-transition-do_acknowledge"
-             title="do_acknowledge" new_state="acknowledged"
+             title="do_acknowledge" new_state="task-state-acknowledged"
              trigger="USER" before_script="" after_script="">
-  <action url="%(content_url)s/content_status_modify?workflow_action=do_acknowledge"
-          category="workflow">do_acknowledge</action>
+  <action url="%(content_url)s/content_status_modify?workflow_action=task-transition-do_acknowledge"
+          category="workflow">task-transitiondo_acknowledge</action>
   <guard>
   </guard>
  </transition>
  <transition transition_id="task-transition-do_complete" title="do_complete"
-             new_state="completed" trigger="USER"
+             new_state="task-state-completed" trigger="USER"
              before_script="" after_script="">
-  <action url="%(content_url)s/content_status_modify?workflow_action=do_complete"
-          category="workflow">do_complete</action>
+  <action url="%(content_url)s/content_status_modify?workflow_action=task-transition-do_complete"
+          category="workflow">task-transition-do_complete</action>
   <guard>
   </guard>
  </transition>
  <transition transition_id="task-transition-reactivate" title="Reactivate"
-             new_state="new" trigger="USER" before_script=""
+             new_state="task-state-new" trigger="USER" before_script=""
              after_script="">
-  <action url="%(content_url)s/content_status_modify?workflow_action=reactivate"
-          category="workflow">reactivate</action>
+  <action url="%(content_url)s/content_status_modify?workflow_action=task-transition-reactivate"
+          category="workflow">task-transition-reactivate</action>
   <guard>
    <guard-role>Owner</guard-role>
   </guard>
  </transition>
  <transition transition_id="task-transition-reject" title="Reject"
-             new_state="rejected" trigger="USER"
+             new_state="task-state-rejected" trigger="USER"
              before_script="" after_script="">
-  <action url="%(content_url)s/content_status_modify?workflow_action=reject"
-          category="workflow">reject</action>
+  <action url="%(content_url)s/content_status_modify?workflow_action=task-transition-reject"
+          category="workflow">task-transition-reject</action>
   <guard>
   </guard>
  </transition>
  <transition transition_id="task-transition-resolve"
              title="Owner resolves task"
-             new_state="resolved" trigger="USER"
+             new_state="task-state-resolved" trigger="USER"
              before_script="" after_script="">
-  <action url="%(content_url)s/content_status_modify?workflow_action=resolve"
-          category="workflow">resolve</action>
+  <action url="%(content_url)s/content_status_modify?workflow_action=task-transition-resolve"
+          category="workflow">task-transition-resolve</action>
   <guard>
    <guard-role>Owner</guard-role>
   </guard>
  </transition>
  <transition transition_id="task-transition-to_acknowledge"
              title="to_acknowledge"
-             new_state="to_acknowledge" trigger="USER"
+             new_state="task-state-to_acknowledge" trigger="USER"
              before_script="" after_script="">
-  <action url="%(content_url)s/content_status_modify?workflow_action=to_acknowledge"
-          category="workflow">to_acknowledge</action>
+  <action url="%(content_url)s/content_status_modify?workflow_action=task-transition-to_acknowledge"
+          category="workflow">task-transition-to_acknowledge</action>
   <guard>
    <guard-role>Owner</guard-role>
   </guard>
  </transition>
  <transition transition_id="task-transition-to_complete" title="to_complete"
-             new_state="to_complete" trigger="USER"
+             new_state="task-state-to_complete" trigger="USER"
              before_script="" after_script="">
-  <action url="%(content_url)s/content_status_modify?workflow_action=to_complete"
-          category="workflow">to_complete</action>
+  <action url="%(content_url)s/content_status_modify?workflow_action=task-transition-to_complete"
+          category="workflow">task-transition-to_complete</action>
   <guard>
   </guard>
  </transition>
  <transition transition_id="task-transition-transfer" title="transfer"
-             new_state="" trigger="USER" before_script=""
+             new_state="task-transition-transfer" trigger="USER" before_script=""
              after_script="">
-  <action url="%(content_url)s/content_status_modify?workflow_action=to_complete"
-          category="workflow">transfer</action>
+  <action url="%(content_url)s/content_status_modify?workflow_action=task-transition-to_complete"
+          category="workflow">task-transition-transfer</action>
   <guard>
   </guard>
  </transition>
