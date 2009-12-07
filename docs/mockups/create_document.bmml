@@ -201,5 +201,14 @@
         <text>Datei%20mit%20neuer%20ersetzen</text>
       </controlProperties>
     </control>
+    <control controlID="115" controlTypeID="com.balsamiq.mockups::RoundButton" x="533" y="136" w="123" h="34" measuredW="32" measuredH="32" zOrder="33" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Kontakte</text>
+        <borderColor>15790322</borderColor>
+        <shape>rectangle</shape>
+        <color>255</color>
+        <size>13</size>
+      </controlProperties>
+    </control>
   </controls>
 </mockup>

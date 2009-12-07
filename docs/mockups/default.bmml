@@ -242,6 +242,15 @@
         <size>13</size>
       </controlProperties>
     </control>
+    <control controlID="98" controlTypeID="com.balsamiq.mockups::RoundButton" x="534" y="136" w="123" h="34" measuredW="32" measuredH="32" zOrder="42" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Kontakte</text>
+        <borderColor>15790322</borderColor>
+        <shape>rectangle</shape>
+        <color>255</color>
+        <size>13</size>
+      </controlProperties>
+    </control>
     <control controlID="93" controlTypeID="com.balsamiq.mockups::RoundButton" x="184" y="137" w="123" h="34" measuredW="32" measuredH="32" zOrder="38" locked="false" isInGroup="-1">
       <controlProperties>
         <text>Registraturplan</text>

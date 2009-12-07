@@ -198,10 +198,12 @@
     </control>
     <control controlID="96" controlTypeID="com.balsamiq.mockups::RoundButton" x="300" y="136" w="123" h="34" measuredW="32" measuredH="32" zOrder="40" locked="false" isInGroup="-1">
       <controlProperties>
-        <text>Eingangskorb</text>
         <borderColor>15790322</borderColor>
         <shape>rectangle</shape>
         <color>255</color>
+        <text>Eingangskorb</text>
+        <href>eingangskorb%26bm%3Beingangskorb.bmml%26bm%3Beingangskorb.bmml%26bm%3Beingangskorb.bmml</href>
+        <map>%3Carea%20shape%3D%22rect%22%20coords%3D%22251%2C127%2C374%2C161%22%20href%3D%22eingangskorb.bmml%22%20alt%3D%22eingangskorb%22%20id%3D%2296%22/%3E</map>
         <size>13</size>
       </controlProperties>
     </control>
@@ -231,6 +233,26 @@
         <text>Verf%FCgung%20vom%2020.9.2009</text>
         <icon>DocEmptyIcon%7Csmall</icon>
         <state>up</state>
+      </controlProperties>
+    </control>
+    <control controlID="97" controlTypeID="com.balsamiq.mockups::RoundButton" x="417" y="136" w="123" h="34" measuredW="32" measuredH="32" zOrder="41" locked="false" isInGroup="-1">
+      <controlProperties>
+        <borderColor>15790322</borderColor>
+        <shape>rectangle</shape>
+        <color>255</color>
+        <text>Aufgaben</text>
+        <href>aufgaben_uebersicht%26bm%3Baufgaben_uebersicht.bmml%26bm%3Baufgaben_uebersicht.bmml%26bm%3Baufgaben_uebersicht.bmml</href>
+        <map>%3Carea%20shape%3D%22rect%22%20coords%3D%22368%2C127%2C491%2C161%22%20href%3D%22aufgaben_uebersicht.bmml%22%20alt%3D%22aufgaben_uebersicht%22%20id%3D%2297%22/%3E</map>
+        <size>13</size>
+      </controlProperties>
+    </control>
+    <control controlID="98" controlTypeID="com.balsamiq.mockups::RoundButton" x="533" y="136" w="123" h="34" measuredW="32" measuredH="32" zOrder="42" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Kontakte</text>
+        <borderColor>15790322</borderColor>
+        <shape>rectangle</shape>
+        <color>255</color>
+        <size>13</size>
       </controlProperties>
     </control>
     <control controlID="93" controlTypeID="com.balsamiq.mockups::RoundButton" x="184" y="137" w="123" h="34" measuredW="32" measuredH="32" zOrder="38" locked="false" isInGroup="-1">
