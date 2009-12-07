@@ -341,7 +341,7 @@ class ContactImportantView(dexterity.DisplayForm, OpengeverTab):
     grok.template('important_contact')
 
     def showAttributes(self):
-        items = ['firstname', 'lastname','directorate', 'department', 'email', 'phone_office', 'phone_fax', 'phone_mobile',]
+        items = ['firstname', 'lastname','email', 'phone_office', 'phone_fax', 'phone_mobile','directorate']
         return items
 
 class ContactAdditionalView(dexterity.DisplayForm, OpengeverTab):

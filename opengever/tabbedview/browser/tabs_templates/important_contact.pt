@@ -1,5 +1,5 @@
 <!--TODO: refactor using viewlets-->
-<tal:block i18n:domain="opengever.tabbedview" tal:define="contact view/getContact">
+<tal:block i18n:domain="opengever.tabbedview">
   <table>
   <tal:rep tal:repeat="attr view/showAttributes">
     <tr>
