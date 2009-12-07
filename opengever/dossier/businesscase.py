@@ -1,4 +1,5 @@
 from plone.directives import form
+from plone.directives import dexterity
 from five import grok
 from plone.app.layout.viewlets.interfaces import IBelowContentTitle
 from plone.memoize.instance import memoize
