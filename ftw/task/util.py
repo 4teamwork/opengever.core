@@ -1,9 +1,7 @@
 from five import grok
 
 from zope.annotation.interfaces import IAnnotations
-from persistent.dict import PersistentDict
 from zope.schema.interfaces import IContextSourceBinder
-from zope.schema.interfaces import IVocabularyFactory
 from zope.schema.vocabulary import SimpleVocabulary
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone import PloneMessageFactory as PMF
