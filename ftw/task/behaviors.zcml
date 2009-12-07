@@ -1,0 +1,21 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:plone="http://namespaces.plone.org/plone"
+    xmlns:grok="http://namespaces.zope.org/grok"
+    i18n_domain="collective.gtags">
+
+    <include package="plone.behavior" file="meta.zcml" />
+    
+    <include package="plone.directives.form" file="meta.zcml" />
+    <include package="plone.directives.form" />
+	
+	<plone:behavior
+        title="Transition"
+        description="Transition Support for ftw.task"
+        provides=".behaviors.ITransition"
+        factory=".behaviors.Transition"
+        marker=".behaviors.ITransitionMarker"
+        for="plone.dexterity.interfaces.IDexterityContent"
+        />
+
+</configure>

@@ -25,15 +25,6 @@
     
     <i18n:registerTranslations directory="locales" />
     
-    <plone:behavior
-        title="Transition"
-        description="Transition Support for ftw.task"
-        provides=".behaviors.ITransition"
-        factory=".behaviors.Transition"
-        marker=".behaviors.ITransitionMarker"
-        for="plone.dexterity.interfaces.IDexterityContent"
-        />
-    
     <browser:page
        name="task_response_delete"
        for="ftw.task.task.ITask"
