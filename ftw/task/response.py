@@ -1,7 +1,8 @@
+import os
 from zope.i18n import translate
 from z3c.form import form, field, button
 from zope.lifecycleevent import modified
-from zope.interface import implements, Interface
+from zope.interface import Interface
 from zope.cachedescriptors.property import Lazy
 from zope import schema
 from five import grok
@@ -13,7 +14,6 @@ from plone.memoize.view import memoize
 from plone.z3cform import layout
 from z3c.form.browser import radio 
 from plone.formwidget.autocomplete import AutocompleteFieldWidget
-from OFS.Image import File
 from plone.namedfile.utils import set_headers, stream_data
 from Products.Archetypes.atapi import DisplayList
 from Products.CMFPlone import PloneMessageFactory as PMF

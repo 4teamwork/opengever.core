@@ -127,11 +127,12 @@ from plone.supermodel.model import Fieldset
 from plone.supermodel.interfaces import FIELDSETS_KEY
 from plone.autoform.interfaces import ORDER_KEY
 # move relatedItems to default fieldset by removing it from categorization fieldset
-IRelatedItems.setTaggedValue( FIELDSETS_KEY, [
-        Fieldset( 'common', fields=[
-                'relatedItems',
-                ])
-        ] )
+IRelatedItems.setTaggedValue(FIELDSETS_KEY, [])
+# IRelatedItems.setTaggedValue( FIELDSETS_KEY, [
+#         Fieldset( 'common', fields=[
+#                 'relatedItems',
+#                 ])
+#         ] )
 IRelatedItems.setTaggedValue(ORDER_KEY, [('relatedItems', 'before', 'text')])
 
 @grok.subscribe(ITask, IObjectAddedEvent)
