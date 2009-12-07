@@ -24,7 +24,7 @@
         />
     
     <i18n:registerTranslations directory="locales" />
-    
+    <include file="behaviors.zcml" />
     <browser:page
        name="task_response_delete"
        for="ftw.task.task.ITask"
