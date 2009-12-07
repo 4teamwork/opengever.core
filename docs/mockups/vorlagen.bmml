@@ -42,13 +42,11 @@
         <text>8.9.2009</text>
       </controlProperties>
     </control>
-    <control controlID="80" controlTypeID="com.balsamiq.mockups::IconLabel" x="104" y="187" w="-1" h="-1" measuredW="307" measuredH="37" zOrder="22" locked="false" isInGroup="-1">
+    <control controlID="16" controlTypeID="com.balsamiq.mockups::Label" x="482" y="332" w="63" h="23" measuredW="58" measuredH="23" zOrder="3" locked="false" isInGroup="-1">
       <controlProperties>
-        <text>Beschwerde%20Hans%20Muster</text>
-        <color>16777215</color>
-        <labelPosition>right</labelPosition>
-        <icon>FolderIcon%7Csmall</icon>
-        <size>24</size>
+        <text>Ersteller</text>
+        <color>1644825</color>
+        <underline>true</underline>
       </controlProperties>
     </control>
     <control controlID="81" controlTypeID="com.balsamiq.mockups::Canvas" x="95" y="183" w="784" h="46" measuredW="100" measuredH="70" zOrder="21" locked="false" isInGroup="-1">
@@ -82,11 +80,13 @@
         <icon>DocEmptyIcon%7Csmall</icon>
       </controlProperties>
     </control>
-    <control controlID="16" controlTypeID="com.balsamiq.mockups::Label" x="482" y="332" w="63" h="23" measuredW="58" measuredH="23" zOrder="3" locked="false" isInGroup="-1">
+    <control controlID="80" controlTypeID="com.balsamiq.mockups::IconLabel" x="104" y="187" w="-1" h="-1" measuredW="307" measuredH="37" zOrder="22" locked="false" isInGroup="-1">
       <controlProperties>
-        <text>Ersteller</text>
-        <color>1644825</color>
-        <underline>true</underline>
+        <text>Beschwerde%20Hans%20Muster</text>
+        <icon>FolderIcon%7Csmall</icon>
+        <size>24</size>
+        <color>16777215</color>
+        <labelPosition>right</labelPosition>
       </controlProperties>
     </control>
     <control controlID="89" controlTypeID="com.balsamiq.mockups::RadioButton" x="112" y="457" w="232" h="23" measuredW="210" measuredH="24" zOrder="27" locked="false" isInGroup="-1">
