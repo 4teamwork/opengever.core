@@ -100,3 +100,18 @@ msgstr ""
 
 msgid "trash"
 msgstr ""
+
+msgid "all_contacts"
+msgstr ""
+
+msgid "all_orgunits"
+msgstr ""
+
+msgid "important_contact"
+msgstr ""
+
+msgid "additional_contact"
+msgstr ""
+
+msgid "orgunit_contact"
+msgstr ""

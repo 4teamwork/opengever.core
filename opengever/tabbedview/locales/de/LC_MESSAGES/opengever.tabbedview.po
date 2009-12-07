@@ -125,4 +125,21 @@ msgstr "Titel"
 msgid "trash"
 msgstr "Papierkorb"
 
+msgid "all_contacts"
+msgstr "Alle Kontakte"
+
+msgid "all_orgunits"
+msgstr "Alle Gremien"
+
+msgid "important_contact"
+msgstr "Allgemein"
+
+msgid "additional_contact"
+msgstr "Zusätzliches"
+
+msgid "orgunit_contact"
+msgstr "Gremien"
+
+
+
 
