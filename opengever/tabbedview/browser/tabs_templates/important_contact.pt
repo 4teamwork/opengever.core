@@ -1,0 +1,11 @@
+<!--TODO: refactor using viewlets-->
+<tal:block i18n:domain="opengever.tabbedview" tal:define="contact view/getContact">
+  <table>
+  <tal:rep tal:repeat="attr view/showAttributes">
+    <tr>
+      <th tal:content="structure python:view.w.get(attr) and view.w.get(attr).label" />
+      <td tal:content="structure python: view.w.get(attr) and view.w.get(attr).render()" />
+    </tr>
+ </tal:rep>
+  </table>
+</tal:block>

@@ -5,6 +5,9 @@ from ftw.tabbedview.interfaces import ITabbedView
 from five import grok
 from ftw.table import helper
 from ftw.directoryservice.contact import IContact
+from ftw.directoryservice.membership import Membership
+from plone.directives import dexterity
+
 class OpengeverListingTab(grok.View, BaseListingView):
     grok.context(ITabbedView)
     grok.template('generic')
@@ -306,6 +309,10 @@ class Sharing(SharingView):
 
 
 #Client Views
+from zope.app.intid.interfaces import IIntIds
+from zope.component import getUtility
+
+
 class ContactsView(OpengeverListingTab):
     grok.name('tabbedview_view-all_contacts')
     
@@ -327,3 +334,31 @@ class OrgunitView(OpengeverListingTab):
          ('', helper.path_checkbox),
          ('Title', 'sortable_title', helper.linked),
     )
+
+class ContactImportantView(dexterity.DisplayForm, OpengeverTab):
+    grok.context(IContact)
+    grok.name('tabbedview_view-important_contact')
+    grok.template('important_contact')
+
+    def showAttributes(self):
+        items = ['firstname', 'lastname','directorate', 'department', 'email', 'phone_office', 'phone_fax', 'phone_mobile',]
+        return items
+
+class ContactAdditionalView(dexterity.DisplayForm, OpengeverTab):
+    grok.context(IContact)
+    grok.name('tabbedview_view-additional_contact')
+    grok.template('additional_contact')
+
+class ContactOrgunitView(dexterity.DisplayForm, OpengeverTab):
+     grok.context(IContact)
+     grok.name('tabbedview_view-orgunit_contact')
+     grok.template('orgunit_contact')
+     
+     def get_units(self):
+         intids = getUtility( IIntIds )
+         contact = self.context()
+         og = []
+         memberships = Membership.get_memberships(contact=self.context)
+         for rel in memberships:
+             og.append(intids.getObject(rel.to_id))
+         return og
