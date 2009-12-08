@@ -1,0 +1,28 @@
+<form name="tabbedview_form"
+      method="post"
+      action="folder_object"
+      tal:attributes="action context/absolute_url"
+      tal:condition="view/contents"
+      >
+      <input type="hidden" name="orig_template" tal:attributes="value string:${here/absolute_url}/#${view/view_name}" />
+    
+    <div class="tabbedview_select">
+        Auswählen: <a href="javascript:arbeitsraum.select_all()">Alle</a>, <a href="javascript:arbeitsraum.select_none()">Keine</a> 
+        <span class="select_folder" style="display:none"> Alle Sichtbaren ausgewählt. <a href="#">Alle im Ordner auswählen</a></span>
+        <div tal:replace="structure view/batching" />
+    </div>
+
+    <div tal:content="structure view/render_listing" />
+    <tal:buttons tal:repeat="button view/buttons">
+      <input class="context"
+             type="submit"
+             name=""
+             value=""
+             i18n:attributes="value"
+             tal:attributes="value button/title; name button/url; class button/cssclass" />
+    </tal:buttons>
+    <input tal:replace="structure context/@@authenticator/authenticator" />
+</form>
+<p tal:condition="not: view/contents">
+   Keine Inhalte vorhanden (in Entwicklung)
+</p>
