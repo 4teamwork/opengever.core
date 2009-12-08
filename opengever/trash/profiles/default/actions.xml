@@ -3,7 +3,7 @@
         xmlns:i18n="http://xml.zope.org/namespaces/i18n">
   <object name="folder_buttons" meta_type="CMF Action Category">
     <object name="trashed" meta_type="CMF Action" i18n:domain="plone">
-        <property name="title" i18n:translate="">trashed</property>
+        <property name="title" i18n:domain="opengever.trash" i18n:translate="">trashed</property>
         <property name="description" i18n:translate=""></property>
         <property name="url_expr">string:./trashed</property>
         <property name="icon_expr"></property>
@@ -14,7 +14,7 @@
      <property name="visible">True</property>
     </object>
     <object name="untrashed" meta_type="CMF Action" i18n:domain="plone">
-        <property name="title" i18n:translate="">untrashed</property>
+        <property name="title" i18n:domain="opengever.trash" i18n:translate="">untrashed</property>
         <property name="description" i18n:translate=""></property>
         <property name="url_expr">string:./untrashed</property>
         <property name="icon_expr"></property>
