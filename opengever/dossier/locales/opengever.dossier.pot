@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2009-12-01 10:52+0000\n"
+"POT-Creation-Date: 2009-12-08 12:26+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -25,101 +25,129 @@ msgstr ""
 msgid "Project Dossier"
 msgstr ""
 
+#: opengever.dossier/opengever/dossier/behaviors/dossier.py:128
+msgid "The start or end date is invalid"
+msgstr ""
+
+#. Default: "from:"
+#: opengever.dossier/opengever/dossier/businesscase_templates/byline.pt:35
+#: opengever.dossier/opengever/dossier/project_templates/byline.pt:35
+msgid "box_last_modified"
+msgstr ""
+
 #. Default: "Filing"
-#: opengever.dossier/opengever/dossier/behaviors/dossier.py:83
+#: opengever.dossier/opengever/dossier/behaviors/dossier.py:86
 msgid "fieldset_filing"
 msgstr ""
 
-#: opengever.dossier/opengever/dossier/behaviors/dossier.py:69
+#: opengever.dossier/opengever/dossier/behaviors/dossier.py:72
 msgid "help_comments"
 msgstr ""
 
-#: opengever.dossier/opengever/dossier/behaviors/dossier.py:101
+#: opengever.dossier/opengever/dossier/behaviors/dossier.py:104
 msgid "help_container_id"
 msgstr ""
 
-#: opengever.dossier/opengever/dossier/behaviors/dossier.py:113
+#: opengever.dossier/opengever/dossier/behaviors/dossier.py:116
 msgid "help_container_location"
 msgstr ""
 
-#: opengever.dossier/opengever/dossier/behaviors/dossier.py:94
+#: opengever.dossier/opengever/dossier/behaviors/dossier.py:97
 msgid "help_container_type"
 msgstr ""
 
-#: opengever.dossier/opengever/dossier/behaviors/dossier.py:57
+#: opengever.dossier/opengever/dossier/behaviors/dossier.py:60
 msgid "help_end"
 msgstr ""
 
-#: opengever.dossier/opengever/dossier/behaviors/dossier.py:36
+#: opengever.dossier/opengever/dossier/behaviors/dossier.py:38
 msgid "help_keywords"
 msgstr ""
 
-#: opengever.dossier/opengever/dossier/behaviors/dossier.py:107
+#: opengever.dossier/opengever/dossier/behaviors/dossier.py:110
 msgid "help_number_of_containers"
 msgstr ""
 
 #. Default: "select an responsible Manger"
-#: opengever.dossier/opengever/dossier/behaviors/dossier.py:76
+#: opengever.dossier/opengever/dossier/behaviors/dossier.py:79
 msgid "help_responsible"
 msgstr ""
 
-#: opengever.dossier/opengever/dossier/behaviors/dossier.py:49
+#: opengever.dossier/opengever/dossier/behaviors/dossier.py:51
 msgid "help_start"
 msgstr ""
 
-#: opengever.dossier/opengever/dossier/behaviors/dossier.py:63
+#: opengever.dossier/opengever/dossier/behaviors/dossier.py:66
 msgid "help_volume_number"
 msgstr ""
 
+#. Default: "by ${author}"
+#: opengever.dossier/opengever/dossier/businesscase_templates/byline.pt:16
+#: opengever.dossier/opengever/dossier/project_templates/byline.pt:16
+msgid "label_by_author"
+msgstr ""
+
 #. Default: "Comments"
-#: opengever.dossier/opengever/dossier/behaviors/dossier.py:68
+#: opengever.dossier/opengever/dossier/behaviors/dossier.py:71
 msgid "label_comments"
 msgstr ""
 
 #. Default: "Container Id"
-#: opengever.dossier/opengever/dossier/behaviors/dossier.py:100
+#: opengever.dossier/opengever/dossier/behaviors/dossier.py:103
 msgid "label_container_id"
 msgstr ""
 
 #. Default: "Container Location"
-#: opengever.dossier/opengever/dossier/behaviors/dossier.py:112
+#: opengever.dossier/opengever/dossier/behaviors/dossier.py:115
 msgid "label_container_location"
 msgstr ""
 
 #. Default: "Container Type"
-#: opengever.dossier/opengever/dossier/behaviors/dossier.py:93
+#: opengever.dossier/opengever/dossier/behaviors/dossier.py:96
 msgid "label_container_type"
 msgstr ""
 
 #. Default: "to:"
-#: opengever.dossier/opengever/dossier/behaviors/dossier.py:56
+#: opengever.dossier/opengever/dossier/behaviors/dossier.py:59
 #: opengever.dossier/opengever/dossier/businesscase_templates/byline.pt:44
 #: opengever.dossier/opengever/dossier/project_templates/byline.pt:44
 msgid "label_end"
 msgstr ""
 
 #. Default: "Keywords"
-#: opengever.dossier/opengever/dossier/behaviors/dossier.py:35
+#: opengever.dossier/opengever/dossier/behaviors/dossier.py:37
 msgid "label_keywords"
 msgstr ""
 
 #. Default: "Number of Containers"
-#: opengever.dossier/opengever/dossier/behaviors/dossier.py:106
+#: opengever.dossier/opengever/dossier/behaviors/dossier.py:109
 msgid "label_number_of_containers"
 msgstr ""
 
 #. Default: "Responsible"
-#: opengever.dossier/opengever/dossier/behaviors/dossier.py:75
+#: opengever.dossier/opengever/dossier/behaviors/dossier.py:78
 msgid "label_responsible"
 msgstr ""
 
 #. Default: "Opening Date"
-#: opengever.dossier/opengever/dossier/behaviors/dossier.py:48
+#: opengever.dossier/opengever/dossier/behaviors/dossier.py:50
 msgid "label_start"
 msgstr ""
 
 #. Default: "Volume Number"
-#: opengever.dossier/opengever/dossier/behaviors/dossier.py:62
+#: opengever.dossier/opengever/dossier/behaviors/dossier.py:65
 msgid "label_volume_number"
+msgstr ""
+
+#. Default: "State:"
+#: opengever.dossier/opengever/dossier/businesscase_templates/byline.pt:28
+#: opengever.dossier/opengever/dossier/project_templates/byline.pt:28
+msgid "label_workflow_state"
+msgstr ""
+
+#. Default: "expired"
+#: opengever.dossier/opengever/dossier/businesscase_templates/byline.pt:53
+#: opengever.dossier/opengever/dossier/project_templates/byline.pt:53
+msgid "time_expired"
 msgstr ""
 

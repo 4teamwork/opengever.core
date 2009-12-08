@@ -5,6 +5,7 @@ from plone.app.layout.viewlets.interfaces import IBelowContentTitle
 from plone.memoize.instance import memoize
 from plone.app.layout.viewlets import content
 from opengever.dossier.behaviors.dossier import IDossier
+from Products.CMFCore.utils import getToolByName
 
 class IBusinessCaseDossier(form.Schema):
     """ A business case dossier
@@ -43,6 +44,11 @@ class Byline(grok.Viewlet, content.DocumentBylineViewlet):
     def start(self):
         dossier = IDossier(self.context)
         return dossier.start
+    
+    def responsible(self):
+        mt=getToolByName(self.context,'portal_membership')
+        dossier = IDossier(self.context)
+        return mt.getMemberById(dossier.responsible)
 
     def end(self):
         dossier = IDossier(self.context)
