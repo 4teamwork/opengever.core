@@ -78,7 +78,7 @@ class IDossier(form.Schema):
         title=_(u"label_responsible", default="Responsible"),
         description =_(u"help_responsible", default="select an responsible Manger"),
         source = util.getManagersVocab,
-        required = False,
+        required = True,
     )
 
     form.fieldset(
