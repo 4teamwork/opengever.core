@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: opengever.dossier 1.0\n"
-"POT-Creation-Date: 2009-12-08 14:14+0000\n"
+"POT-Creation-Date: 2009-12-08 14:32+0000\n"
 "PO-Revision-Date: 2009-09-17 15:21+0000\n"
 "Last-Translator: Thomas Buchberger <t.buchberger@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -101,7 +101,6 @@ msgstr "Behältnis-Art"
 
 #. Default: "Closing Date"
 #: opengever.dossier/opengever/dossier/behaviors/dossier.py:59
-#, fuzzy
 msgid "label_end"
 msgstr "Ende"
 
