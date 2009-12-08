@@ -88,16 +88,6 @@ class IClassification(form.Schema):
             required = False,
     )
 
-
-@form.default_value(field=IClassification['classification'])
-def startDefaultValue(data):
-    par = data.context.aq_inner.aq_parent
-    import pdb; pdb.set_trace( )
-    return
-
-
-
-
 alsoProvides(IClassification, IFormFieldProvider)
 
 # CLASSIFICATION: Vocabulary and default value
