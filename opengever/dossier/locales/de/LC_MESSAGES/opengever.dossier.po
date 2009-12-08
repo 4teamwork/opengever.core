@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: opengever.dossier 1.0\n"
-"POT-Creation-Date: 2009-12-08 12:26+0000\n"
+"POT-Creation-Date: 2009-12-08 14:14+0000\n"
 "PO-Revision-Date: 2009-09-17 15:21+0000\n"
 "Last-Translator: Thomas Buchberger <t.buchberger@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -26,12 +26,6 @@ msgstr "Projektdossier"
 #: opengever.dossier/opengever/dossier/behaviors/dossier.py:128
 msgid "The start or end date is invalid"
 msgstr ""
-
-#. Default: "from:"
-#: opengever.dossier/opengever/dossier/businesscase_templates/byline.pt:35
-#: opengever.dossier/opengever/dossier/project_templates/byline.pt:35
-msgid "box_last_modified"
-msgstr "Von:"
 
 #. Default: "Filing"
 #: opengever.dossier/opengever/dossier/behaviors/dossier.py:86
@@ -105,11 +99,16 @@ msgstr "Behältnis-Standort"
 msgid "label_container_type"
 msgstr "Behältnis-Art"
 
-#. Default: "to:"
+#. Default: "Closing Date"
 #: opengever.dossier/opengever/dossier/behaviors/dossier.py:59
+#, fuzzy
+msgid "label_end"
+msgstr "Ende"
+
+#. Default: "to:"
 #: opengever.dossier/opengever/dossier/businesscase_templates/byline.pt:44
 #: opengever.dossier/opengever/dossier/project_templates/byline.pt:44
-msgid "label_end"
+msgid "label_end_byline"
 msgstr "Bis:"
 
 #. Default: "Keywords"
@@ -130,6 +129,12 @@ msgstr "Federführend"
 #. Default: "Opening Date"
 #: opengever.dossier/opengever/dossier/behaviors/dossier.py:50
 msgid "label_start"
+msgstr "Beginn"
+
+#. Default: "from:"
+#: opengever.dossier/opengever/dossier/businesscase_templates/byline.pt:35
+#: opengever.dossier/opengever/dossier/project_templates/byline.pt:35
+msgid "label_start_byline"
 msgstr "Von:"
 
 #. Default: "Volume Number"

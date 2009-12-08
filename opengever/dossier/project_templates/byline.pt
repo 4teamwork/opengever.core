@@ -32,7 +32,7 @@
   </tal:state>
 
   <span class="documentModified">
-    <span i18n:translate="label_start" tal:omit-tag="">
+    <span i18n:translate="label_start_byline" tal:omit-tag="">
       from:
     </span>
     <span tal:replace="python:viewlet.toLocalizedTime(str(viewlet.start()),long_format=0)">
@@ -41,7 +41,7 @@
   </span>
 
   <span class="documentModified" tal:condition="python:viewlet.end()">
-    <span i18n:translate="label_end" i18n:domain="opengever.dossier" tal:omit-tag="">
+    <span i18n:translate="label_end_byline" i18n:domain="opengever.dossier" tal:omit-tag="">
       to:
     </span>
     <span tal:replace="python:viewlet.toLocalizedTime(str(viewlet.end()),long_format=0)">

@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2009-12-08 12:26+0000\n"
+"POT-Creation-Date: 2009-12-08 14:14+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -27,12 +27,6 @@ msgstr ""
 
 #: opengever.dossier/opengever/dossier/behaviors/dossier.py:128
 msgid "The start or end date is invalid"
-msgstr ""
-
-#. Default: "from:"
-#: opengever.dossier/opengever/dossier/businesscase_templates/byline.pt:35
-#: opengever.dossier/opengever/dossier/project_templates/byline.pt:35
-msgid "box_last_modified"
 msgstr ""
 
 #. Default: "Filing"
@@ -107,11 +101,15 @@ msgstr ""
 msgid "label_container_type"
 msgstr ""
 
-#. Default: "to:"
+#. Default: "Closing Date"
 #: opengever.dossier/opengever/dossier/behaviors/dossier.py:59
+msgid "label_end"
+msgstr ""
+
+#. Default: "to:"
 #: opengever.dossier/opengever/dossier/businesscase_templates/byline.pt:44
 #: opengever.dossier/opengever/dossier/project_templates/byline.pt:44
-msgid "label_end"
+msgid "label_end_byline"
 msgstr ""
 
 #. Default: "Keywords"
@@ -132,6 +130,12 @@ msgstr ""
 #. Default: "Opening Date"
 #: opengever.dossier/opengever/dossier/behaviors/dossier.py:50
 msgid "label_start"
+msgstr ""
+
+#. Default: "from:"
+#: opengever.dossier/opengever/dossier/businesscase_templates/byline.pt:35
+#: opengever.dossier/opengever/dossier/project_templates/byline.pt:35
+msgid "label_start_byline"
 msgstr ""
 
 #. Default: "Volume Number"
