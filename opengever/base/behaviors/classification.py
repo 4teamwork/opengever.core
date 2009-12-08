@@ -88,6 +88,16 @@ class IClassification(form.Schema):
             required = False,
     )
 
+
+@form.default_value(field=IClassification['classification'])
+def startDefaultValue(data):
+    par = data.context.aq_inner.aq_parent
+    import pdb; pdb.set_trace( )
+    return
+
+
+
+
 alsoProvides(IClassification, IFormFieldProvider)
 
 # CLASSIFICATION: Vocabulary and default value
@@ -109,7 +119,7 @@ grok.global_utility(utils.create_restricted_vocabulary(IClassification['classifi
 form.default_value(field=IClassification['classification'])(
         utils.set_default_with_acquisition(
                 field=IClassification['classification'],
-                default = CLASSIFICATION_CONFIDENTIAL
+                default = CLASSIFICATION_UNPROTECTED
         )
 )
 
