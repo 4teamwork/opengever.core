@@ -38,7 +38,7 @@ def setupVarious(context):
     portal = context.getSite()
     
     if not portal.get("registraturplan"):
-        portal._importObjectFromFile(context.openDataFile('registraturplan.zexp'))
+        portal._importObjectFromFile(context.openDataFile('ordnungsposition.zexp'))
 
 	# add some default users
     regtool = portal.portal_registration
