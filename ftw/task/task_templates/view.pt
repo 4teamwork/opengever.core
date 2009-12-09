@@ -39,7 +39,7 @@
           <td tal:content="python: view.context.portal_workflow.getInfoFor(view.context, 'review_state')" />
         <tr>
         <tr>
-          <th i18n:domain="ftw.task" i18n:translate="label_workflow_state">Last change</th>
+          <th i18n:domain="ftw.task" i18n:translate="label_last_modified">Last change</th>
           <td tal:content="python: view.context.modified().strftime('%d.%m.%Y %H:%M')"/>
         </tr>
       <tal:rep tal:define="group python: view.groups[1]">
