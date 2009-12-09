@@ -1,0 +1,6 @@
+# created by: svn propset svn:ignore -F ./IGNORE.txt .
+
+opengever.inbox.egg-info
+build
+dist
+
