@@ -5,7 +5,7 @@
     <object name="trashed" meta_type="CMF Action" i18n:domain="plone">
         <property name="title" i18n:domain="opengever.trash" i18n:translate="">trashed</property>
         <property name="description" i18n:translate=""></property>
-        <property name="url_expr">string:./trashed</property>
+        <property name="url_expr">string:./trashed:method</property>
         <property name="icon_expr"></property>
         <property name="available_expr"></property>
         <property name="permissions">
@@ -16,7 +16,7 @@
     <object name="untrashed" meta_type="CMF Action" i18n:domain="plone">
         <property name="title" i18n:domain="opengever.trash" i18n:translate="">untrashed</property>
         <property name="description" i18n:translate=""></property>
-        <property name="url_expr">string:./untrashed</property>
+        <property name="url_expr">string:./untrashed:method</property>
         <property name="icon_expr"></property>
         <property name="available_expr"></property>
         <property name="permissions">
