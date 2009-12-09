@@ -36,7 +36,7 @@ def getManagersVocab(context):
 def getTransitionVocab(context):
     wftool = getToolByName(context, 'portal_workflow')
     transitions = []
-    if ftw.task.task.ITask.providedBy(context):
+    if ftw.task.task.ITask.providedBy(context) and context.REQUEST.URL.find('++add++ftw.task.task') == -1:
         for tdef in wftool.getTransitionsFor(context):
             transitions.append(SimpleVocabulary.createTerm(tdef['id'],
             tdef['id'],
