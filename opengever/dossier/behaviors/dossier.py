@@ -120,19 +120,13 @@ class IDossier(form.Schema):
     def validateStartEnd(data):
         if data.start is not None and data.end is not None:
             if data.start > data.end:
-                raise StartBeforeEnd
+                raise StartBeforeEnd(_(u"The start date must be before the end date."))
 
 alsoProvides(IDossier, IFormFieldProvider)
 
 class StartBeforeEnd(Invalid):
-     __doc__ = _(u"The start or end date is invalid")
-# 
-# StartBeforeEndMessage = error.ErrorViewMessage(u"The start date must be before the end date.",error=StartBeforeEnd)
-# provideAdapter(StartBeforeEndMessage,name="message")
+    __doc__ = _(u"The start or end date is invalid")
 
-#startBeforeEndError = StartBeforeEnd(u'The start date must be before the end date')
-#errorView = error.InvalidErrorViewSnippet(startBeforeEndError, None, None, None, None, None)
-#provideAdapter(errorView)
 
 # XXX testing widget attributes
 # 
