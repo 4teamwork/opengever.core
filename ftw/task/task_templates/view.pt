@@ -20,21 +20,41 @@
 
     <div tal:replace="structure provider:plone.abovecontentbody" />
     
-    <fieldset tal:repeat="group view/groups">
-        <legend tal:content="group/label" />
-        <div class="field" tal:repeat="widget group/widgets/values">
-            <tal:block condition="python:widget.__name__ not in ('IBasic.title', 'IBasic.description', 'title', 'description','responsible', 'transition',)">
-                <label tal:content="widget/label" />
-                <br />
-                <div tal:content="structure widget/render" />
-            </tal:block>
-            <tal:block condition="python:widget.__name__  == 'responsible'">
-                <label tal:content="widget/label" />
-                <br />
-                <div tal:content="structure python: len(widget.value) > 0 and widget.value[0] or '' " />
-            </tal:block>
-        </div>
-    </fieldset>
+    
+    <table class="listing">
+      <tal:rep tal:define="group python: view.groups[0]">
+        <tr tal:repeat="widget group/widgets/values">
+          <tal:block condition="python:widget.__name__ not in ('IBasic.title', 'IBasic.description', 'title', 'description','responsible', 'ITransition.transition')">
+            <th tal:content="widget/label"></th>
+            <td tal:content="structure widget/render" />
+          </tal:block>
+          <tal:block condition="python:widget.__name__  == 'responsible'">
+              <th tal:content="widget/label"></th>
+              <td tal:content="structure python: len(widget.value) > 0 and widget.value[0] or '' " />
+          </tal:block>
+        </tr>
+      </tal:rep>
+        <tr>
+          <th i18n:domain="ftw.task" i18n:translate="label_workflow_state">State</th>
+          <td tal:content="python: view.context.portal_workflow.getInfoFor(view.context, 'review_state')" />
+        <tr>
+        <tr>
+          <th i18n:domain="ftw.task" i18n:translate="label_workflow_state">Last change</th>
+          <td tal:content="python: view.context.modified().strftime('%d.%m.%Y %H:%M')"/>
+        </tr>
+      <tal:rep tal:define="group python: view.groups[1]">
+        <tr tal:repeat="widget group/widgets/values">
+          <tal:block condition="python:widget.__name__ not in ('IBasic.title', 'IBasic.description', 'title', 'description','responsible', 'ITransition.transition')">
+            <th tal:content="widget/label"></th>
+            <td tal:content="structure widget/render" />
+          </tal:block>
+          <tal:block condition="python:widget.__name__  == 'responsible'">
+              <th tal:content="widget/label"></th>
+              <td tal:content="structure python: len(widget.value) > 0 and widget.value[0] or '' " />
+          </tal:block>
+        </tr>
+      </tal:rep>
+    </table>
     
     <div class>
         <a class="standalone" href="addresponse" i18n:translate="add_response">add Response</a>
