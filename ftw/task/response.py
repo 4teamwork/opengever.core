@@ -1,27 +1,25 @@
 import os
 from zope.i18n import translate
 from z3c.form import form, field, button
+from z3c.form.browser import radio
 from zope.lifecycleevent import modified
 from zope.interface import Interface
 from zope.cachedescriptors.property import Lazy
 from zope import schema
 from five import grok
 
-from AccessControl import Unauthorized
 from Acquisition import aq_inner
 from Products.Five.browser import BrowserView
 from plone.memoize.view import memoize
 from plone.z3cform import layout
-from z3c.form.browser import radio 
 from plone.formwidget.autocomplete import AutocompleteFieldWidget
 from plone.namedfile.utils import set_headers, stream_data
-from Products.Archetypes.atapi import DisplayList
-from Products.CMFPlone import PloneMessageFactory as PMF
+
 from Products.CMFCore.utils import getToolByName
 from Products.statusmessages.interfaces import IStatusMessage
-from Products.CMFPlone.utils import safe_unicode
-from Products.Archetypes.utils import contentDispositionHeader
+
 from opengever.sqlfile.field import NamedFile
+
 from ftw.task import _
 from ftw.task import permissions
 from ftw.task.adapters import IResponseContainer, Response
@@ -52,8 +50,9 @@ def pretty_size(size):
             size = "%d Gb" % gb
     return size
 
+
 class IResponse(Interface):
-    text =  schema.Text(
+    text = schema.Text(
         title = _('label_response', default="Response"),
         description=_('help_response', default=""),
         required = True,
@@ -69,7 +68,7 @@ class IResponse(Interface):
     deadline = schema.Date(
         title=_(u"label_deadline_Response", default=u"Deadline"),
         description=_(u"help_deadline_response", default=""),
-        required = False, 
+        required = False,
     )
 
     transition = schema.Choice(
@@ -78,12 +77,13 @@ class IResponse(Interface):
         source = util.getTransitionVocab,
         required = False,
         )
-        
+
     attachment = NamedFile(
         title = _(u'label_attachment', default='Attachment'),
         description = _(u'help_attachment', default=''),
         required = False,
     )
+
 
 def voc2dict(vocab, current=None):
     """Make a dictionary from a vocabulary.
@@ -279,14 +279,14 @@ class AddForm(form.AddForm):
     fields['new_responsible'].widgetFactory = AutocompleteFieldWidget
     fields['transition'].widgetFactory = radio.RadioFieldWidget
     fields['deadline'].widgetFactory = DatePickerFieldWidget
-    
+
     @property
     def action(self):
         """See interfaces.IInputForm"""
         return os.path.join(self.request.getURL(), '++add++ftw.task.task')
-    
+
     @button.buttonAndHandler(_(u'add', default='Add'),
-                             name='add',)
+                             name='add', )
 
     def handleContinue(self, action):
         data, errors = self.extractData()
@@ -299,17 +299,16 @@ class AddForm(form.AddForm):
             self.status = errorMessage
         else:
             new_response = Response(data.get('text'))
-            #define responseTy              
+            #define responseTyp
             responseCreator = new_response.creator
             task = aq_inner(self.context)
-            
+
             if responseCreator == '(anonymous)':
                 new_response.type = 'additional'
             if responseCreator == task.Creator():
                 new_response.type = 'clarification'
             #if util.getManagersVocab.getTerm(responseCreator):
             #   new_response.type =  'reply'
-                   
             #check transition
             if data.get('transition'):
                 wftool = getToolByName(self.context, 'portal_workflow')
@@ -320,30 +319,42 @@ class AddForm(form.AddForm):
                     after = wftool.getInfoFor(self.context, 'review_state')
                     after = wftool.getTitleForStateOnType(after, task.Type())
                     new_response.add_change('review_state', _(u'Issue state'),
-                                        before, after)  
+                    before, after)
 
             #check other fields
-            options = [(task.deadline, data.get('deadline'), 'deadline',  _('deadline')),(task.responsible, data.get('new_responsible'), 'responsible', _('responsible'))]
+            options = [
+            (task.deadline, data.get('deadline'), 'deadline', _('deadline')),
+            (task.responsible,
+            data.get('new_responsible'),
+            'responsible',
+            _('responsible'))]
+
             for task_field, resp_field, option, title in options:
                 if resp_field and task_field != resp_field:
-                    new_response.add_change(option, title, task_field, resp_field)
-                    task.__setattr__(option,resp_field)
-                    
+                    new_response.add_change(option,
+                    title,
+                    task_field,
+                    resp_field)
+                    task.__setattr__(option, resp_field)
+
             # add attachment
             attachment = data.get('attachment')
             if attachment:
                 # File(id, title, file)
-                # file_data = File(attachment.filename, attachment.filename, attachment)
+                # file_data = File(attachment.filename,
+                # attachment.filename, attachment)
                 # new_response.attachment = file_data
                 new_response.attachment = attachment
-                    
+
             container = IResponseContainer(self.context)
             container.add(new_response)
             self.request.RESPONSE.redirect(self.context.absolute_url())
 
+
 class BeneathTask(grok.ViewletManager):
     grok.context(ITask)
     grok.name('ftw.task.beneathTask')
+
 
 class ResponseView(grok.Viewlet, Base):
     grok.context(ITask)
@@ -352,10 +363,9 @@ class ResponseView(grok.Viewlet, Base):
     grok.order(1)
 
     def __init__(self, context, request, view, manager):
-        grok.Viewlet.__init__(self,context,request,view, manager)
-        Base.__init__(self,context, request)
-    
-        
+        grok.Viewlet.__init__(self, context, request, view, manager)
+        Base.__init__(self, context, request)
+
 """
 class AddFormView(layout.FormWrapper, grok.Viewlet, Base):
     grok.implements(IResponseAdder)
@@ -375,6 +385,7 @@ class AddFormView(layout.FormWrapper, grok.Viewlet, Base):
         return layout.FormWrapper.render_form(self)
 """
 
+
 class SingleAddFormView(layout.FormWrapper, grok.CodeView):
     grok.implements(IResponseAdder)
     grok.context(ITask)
@@ -388,7 +399,7 @@ class SingleAddFormView(layout.FormWrapper, grok.CodeView):
 
     def render(self):
         return layout.FormWrapper.render_form(self)
-     
+
 
 class Edit(Base):
 
@@ -396,7 +407,6 @@ class Edit(Base):
     @memoize
     def response(self):
         form = self.request.form
-        context = aq_inner(self.context)
         response_id = form.get('response_id', None)
         if response_id is None:
             return None
@@ -455,7 +465,7 @@ class Delete(Base):
     def __call__(self):
         context = aq_inner(self.context)
         status = IStatusMessage(self.request)
-        
+
         if not self.can_delete_response:
             msg = _(u"You are not allowed to delete responses.")
             msg = translate(msg, 'Poi', context=self.request)
@@ -489,7 +499,8 @@ class Delete(Base):
                             mapping=dict(response_id=response_id))
                     status.addStatusMessage(msg, type='info')
         self.request.response.redirect(context.absolute_url())
-        
+
+
 class Download(Base):
     """Download the attachment of a response.
     """

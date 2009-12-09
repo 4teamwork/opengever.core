@@ -1,5 +1,4 @@
 
-from five import grok
 from zope import schema
 from zope.component import adapts
 from zope.interface import Interface, implements, alsoProvides
@@ -16,6 +15,7 @@ from z3c.form.browser import radio
 from ftw.task import _
 from ftw.task import util
 
+
 class ITransition(form.Schema):
     """ Behavior for enabling CMFEditions's versioning for dexterity
     content types. Be shure to enable versioning in the plone types
@@ -28,7 +28,7 @@ class ITransition(form.Schema):
         source = util.getTransitionVocab,
         required = False,
     )
-    
+
     form.fieldset(
         u'common',
         label = _(u'fieldset_common', default=u'Common'),
@@ -39,10 +39,11 @@ class ITransition(form.Schema):
 
 alsoProvides(ITransition, IFormFieldProvider)
 
+
 class ITransitionMarker(Interface):
-   """
-   Marker Interface for the IVersionable behavior.
-   """
+    """
+    Marker Interface for the IVersionable behavior.
+    """
 
 
 class Transition(object):

@@ -10,25 +10,21 @@ from Acquisition import aq_parent, aq_inner
 from AccessControl import getSecurityManager
 from Products.CMFCore.utils import getToolByName
 from datetime import datetime, timedelta
-from z3c.relationfield.relation import RelationValue
-
 
 from plone.formwidget import autocomplete
 from plone.formwidget.autocomplete import AutocompleteFieldWidget
-
 from plone.z3cform.traversal import WidgetTraversal
+from plone.app.dexterity.behaviors.related import IRelatedItems
 from plone.dexterity.interfaces import IDexterityFTI
 from plone.dexterity.content import Container
-
 from plone.directives import form, dexterity
-from plone.app.dexterity.behaviors.related import IRelatedItems
 
 from ftw.task import util
 from ftw.task import _
 
 
 class ITask(form.Schema):
-    
+
     form.fieldset(
         u'common',
         label = _(u'fieldset_common', default=u'Common'),
@@ -50,20 +46,20 @@ class ITask(form.Schema):
             u'expectedCost',
             u'effectiveDuration',
             u'effectiveCost',
-            ]
-        )
-    
+        ],
+    )
+
     title = schema.TextLine(
         title=_(u"label_title", default=u"Title"),
         description=_('help_title', default=u""),
-        required = True,    
+        required = True,
     )
-    
+
     issuer = schema.TextLine(
         title =_(u"label_issuer", default=u"Issuer"),
         description = _('help_issuer', default=u""),
     )
-    
+
     form.widget(responsible=AutocompleteFieldWidget)
     responsible = schema.Choice(
         title=_(u"label_responsible", default="Responsible"),
@@ -71,7 +67,7 @@ class ITask(form.Schema):
         source = util.getManagersVocab,
         required = False,
     )
-    
+
     form.primary('text')
     text = schema.Text(
         title=_(u"label_text", default=u"Text"),
@@ -86,16 +82,17 @@ class ITask(form.Schema):
         required = True,
     )
 
-    form.widget(expectedStartOfWork='ftw.datepicker.widget.DatePickerFieldWidget')
+    form.widget(
+    expectedStartOfWork='ftw.datepicker.widget.DatePickerFieldWidget')
     expectedStartOfWork = schema.Date(
         title =_(u"label_expectedStartOfWork", default="Start with work"),
         description = _(u"help_expectedStartOfWork", default=""),
         required = False,
     )
-    
+
     expectedDuration = schema.Float(
-        title = _(u"label_expectedDuration",default="Expected duration"),
-        description = _(u"help_expectedDuration", default=""),
+        title = _(u"label_expectedDuration", default="Expected duration", ),
+        description = _(u"help_expectedDuration", default="", ),
         required = False,
     )
 
@@ -104,29 +101,33 @@ class ITask(form.Schema):
         description = _(u"help_expectedCost", default=""),
         required = False,
     )
-    
+
     effectiveDuration = schema.Float(
         title = _(u"label_effectiveDuration", default="effective duration"),
         description = _(u"help_effectiveDuration", default=""),
         required = False,
     )
-    
+
     effectiveCost = schema.Int(
         title=_(u"label_effectiveCost", default="effective cost"),
         description=_(u"help_effectiveCost", default=""),
-        required = False
+        required = False,
     )
+
 
 @form.default_value(field=ITask['issuer'])
 def default_issuer(data):
-    portal_state = getMultiAdapter((data.context, data.request), name=u"plone_portal_state")
+    portal_state = getMultiAdapter(
+        (data.context, data.request),
+        name=u"plone_portal_state")
     member = portal_state.member()
     return member.getProperty('fullname') or member.getId()
 
-from plone.supermodel.model import Fieldset
+
 from plone.supermodel.interfaces import FIELDSETS_KEY
 from plone.autoform.interfaces import ORDER_KEY
-# move relatedItems to default fieldset by removing it from categorization fieldset
+# move relatedItems to default fieldset
+# by removing it from categorization fieldset
 IRelatedItems.setTaggedValue(FIELDSETS_KEY, [])
 # IRelatedItems.setTaggedValue( FIELDSETS_KEY, [
 #         Fieldset( 'common', fields=[
@@ -135,52 +136,43 @@ IRelatedItems.setTaggedValue(FIELDSETS_KEY, [])
 #         ] )
 IRelatedItems.setTaggedValue(ORDER_KEY, [('relatedItems', 'before', 'text')])
 
+
 @grok.subscribe(ITask, IObjectAddedEvent)
 def setID(task, event):
-    task._sequence_number = util.create_sequence_number( task )
-    
+    task._sequence_number = util.create_sequence_number(task)
+
+
 class Task(Container):
     implements(ITask)
-    
+
     @property
     def sequence_number(self):
         return self._sequence_number
+
 
 @form.default_value(field=ITask['deadline'])
 def deadlineDefaultValue(data):
     # To get hold of the folder, do: context = data.context
     return datetime.today() + timedelta(5)
 
-#@form.default_value(field=IRelatedItems['relatedItems'])
-def pathsDefaultValue(data):
-#XXX Don't work yet
-    paths = data.request.get('paths', [])
-    from zope.app.intid.interfaces import IIntIds
-    intids = getUtility( IIntIds )
-    #return paths
-    if paths:
-        pathlist = []
-        for item in paths:
-            obj = data.context.restrictedTraverse( item.encode())
-            id = intids.getId(obj)
-            pathlist.append(RelationValue(id))
-        return pathlist
-    return []
-                
+
 class ITaskView(Interface):
     pass
-#class View(grok.View):
+
+
 class View(dexterity.DisplayForm):
     implements(ITaskView)
     grok.context(ITask)
     grok.require('zope2.View')
-    
+
     def getSubTasks(self):
-        tasks = self.context.getFolderContents(full_objects=False, contentFilter={'portal_type':'ftw.task.task'})
+        tasks = self.context.getFolderContents(full_objects=False,
+            contentFilter={'portal_type': 'ftw.task.task'})
         return tasks
-    
+
     def getResponses(self):
-        responses = self.context.getFolderContents(full_objects=True, contentFilter={'portal_type':'ftw.task.response'})
+        responses = self.context.getFolderContents(full_objects=True,
+        contentFilter={'portal_type': 'ftw.task.response'})
         return responses
 
 
@@ -188,12 +180,12 @@ class View(dexterity.DisplayForm):
 # setting the default value of a RelationField does not work as expected
 # or we don't know how to set it.
 # thus we use an add form hack by injecting the values into the request.
+
 class AddForm(dexterity.AddForm):
     grok.name('ftw.task.task')
 
     def update(self):
-        #import pdb; pdb.set_trace()
-        paths = self.request.get('paths', [])        
+        paths = self.request.get('paths', [])
         if paths:
             utool = getToolByName(self.context, 'portal_url')
             portal_path = utool.getPortalPath()
@@ -201,23 +193,33 @@ class AddForm(dexterity.AddForm):
             paths = [path[len(portal_path):] for path in paths]
             self.request.set('form.widgets.IRelatedItems.relatedItems', paths)
         super(AddForm, self).update()
-    
+
+
 class TaskWidgetTraversal(WidgetTraversal):
     implements(ITraversable)
 
-    def __init__(self, context,request = None):
+    def __init__(self, context, request = None):
         self.request = request
-        
+
         if not ITask.providedBy(context):
-            context = aq_parent( aq_inner( context ) )
+            context = aq_parent(aq_inner(context))
         fti = getUtility(IDexterityFTI, name='ftw.task.task')
         adder = queryMultiAdapter((context, self.request, fti),
                               IBrowserPage)
 
-        self.context = adder    
-        
-grok.global_adapter(TaskWidgetTraversal, ((ITask, IBrowserRequest)), ITraversable, name=u"widget")
-grok.global_adapter(TaskWidgetTraversal, ((ITaskView, IBrowserRequest)), ITraversable, name=u"widget")
+        self.context = adder
+
+
+grok.global_adapter(TaskWidgetTraversal,
+    ((ITask, IBrowserRequest)),
+    ITraversable,
+    name=u"widget",
+    )
+grok.global_adapter(TaskWidgetTraversal,
+    ((ITaskView, IBrowserRequest)),
+    ITraversable,
+    name=u"widget",
+    )
 
 
 class TaskAutoCompleteSearch(grok.CodeView, autocomplete.widget.AutocompleteSearch):
@@ -242,9 +244,11 @@ class TaskAutoCompleteSearch(grok.CodeView, autocomplete.widget.AutocompleteSear
         return
         view_name = '++add++ftw.task.task'
         view_instance = content.restrictedTraverse(view_name)
-        getSecurityManager().validate(content, content, view_name, view_instance)
-        
+        getSecurityManager().validate(content,
+            content,
+            view_name,
+            view_instance,
+        )
+
     def render(self):
         pass
-    
-    

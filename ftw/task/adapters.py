@@ -1,23 +1,25 @@
 from five import grok
-from zope.interface import implements
-from zope.interface import Attribute
-from zope.interface import Interface
-from zope.component import adapts
 from zope.annotation.interfaces import IAnnotations
-from persistent import Persistent
-from persistent.list import PersistentList
-from ftw.task.task import ITask
-from AccessControl import getSecurityManager
-from DateTime import DateTime
 from zope.app.container.contained import ObjectRemovedEvent
 from zope.app.container.contained import ObjectAddedEvent
 from zope.app.container.interfaces import UnaddableError
 from zope.event import notify
+from zope.interface import implements
+from zope.interface import Attribute
+from zope.interface import Interface
+
+from persistent import Persistent
+from persistent.list import PersistentList
+from AccessControl import getSecurityManager
+from DateTime import DateTime
+
+from ftw.task.task import ITask
 
 
 class IResponseContainer(Interface):
     pass
-    
+
+
 class IResponse(Interface):
 
     text = Attribute("Text of this response")

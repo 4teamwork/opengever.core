@@ -8,8 +8,8 @@
     
     <include package="plone.directives.form" file="meta.zcml" />
     <include package="plone.directives.form" />
-	
-	<plone:behavior
+
+    <plone:behavior
         title="Transition"
         description="Transition Support for ftw.task"
         provides=".behaviors.ITransition"

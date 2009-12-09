@@ -4,6 +4,7 @@ from zope.interface import Attribute
 from zope.viewlet.interfaces import IViewletManager
 from zope.contentprovider.interfaces import ITALNamespaceData
 
+
 class IResponseAdder(IViewletManager):
 
     mimetype = Attribute("Mime type for response.")

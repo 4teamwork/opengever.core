@@ -2,6 +2,7 @@ from five import grok
 from opengever.tabbedview.browser.tabs import OpengeverListingTab
 from ftw.table import helper
 
+
 class MyTasks(OpengeverListingTab):
     grok.name('tabbedview_view-mytasks')
     columns= (
@@ -12,7 +13,8 @@ class MyTasks(OpengeverListingTab):
                 ('responsible', helper.readable_author),
                 ('review_state', 'review_state', helper.translated_string()),
             )
-    types = ['ftw.task.task',]
+    types = ['ftw.task.task', ]
+
 
 class IssuedTasks(OpengeverListingTab):
     grok.name('tabbedview_view-issuedtasks')
@@ -24,5 +26,4 @@ class IssuedTasks(OpengeverListingTab):
                 ('responsible', helper.readable_author),
                 ('review_state', 'review_state', helper.translated_string()),
             )
-    types = ['ftw.task.task',]
-    
+    types = ['ftw.task.task', ]
