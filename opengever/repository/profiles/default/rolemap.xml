@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+
+<rolemap>
+  <permissions>
+    <permission name="opengever.repository: Add repositoryfolder" acquire="True">
+      <role name="Manager"/>
+    </permission>
+    <permission name="opengever.repository: Add repositoryroot" acquire="True">
+      <role name="Manager"/>
+    </permission>
+  </permissions>
+</rolemap>

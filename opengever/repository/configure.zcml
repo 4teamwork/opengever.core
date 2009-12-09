@@ -14,6 +14,9 @@
 
     <!-- Register locales translations -->
     <i18n:registerTranslations directory="locales" />
+    
+    <!-- Include custom permissions -->
+    <include file="permissions.zcml" />
 
     <!-- Register an extension profile to make the product installable -->
     <genericsetup:registerProfile
