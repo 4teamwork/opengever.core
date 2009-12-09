@@ -55,9 +55,12 @@ class ITask(form.Schema):
         required = True,
     )
 
-    issuer = schema.TextLine(
+    form.widget(issuer=AutocompleteFieldWidget)
+    issuer = schema.Choice(
         title =_(u"label_issuer", default=u"Issuer"),
         description = _('help_issuer', default=u""),
+        source = util.getManagersVocab,
+        required = False,
     )
 
     form.widget(responsible=AutocompleteFieldWidget)
@@ -114,14 +117,14 @@ class ITask(form.Schema):
         required = False,
     )
 
-
-@form.default_value(field=ITask['issuer'])
+# XXX doesn't work yet.
+#@form.default_value(field=ITask['issuer'])
 def default_issuer(data):
     portal_state = getMultiAdapter(
         (data.context, data.request),
         name=u"plone_portal_state")
     member = portal_state.member()
-    return member.getProperty('fullname') or member.getId()
+    return member.getId()
 
 
 from plone.supermodel.interfaces import FIELDSETS_KEY
@@ -185,6 +188,7 @@ class AddForm(dexterity.AddForm):
     grok.name('ftw.task.task')
 
     def update(self):
+        # put default value for relatedItems into request
         paths = self.request.get('paths', [])
         if paths:
             utool = getToolByName(self.context, 'portal_url')
@@ -192,6 +196,11 @@ class AddForm(dexterity.AddForm):
             # paths have to be relative to the portal
             paths = [path[len(portal_path):] for path in paths]
             self.request.set('form.widgets.IRelatedItems.relatedItems', paths)
+        # put default value for issuer into request
+        portal_state = getMultiAdapter((self.context, self.request),
+                                        name=u"plone_portal_state")
+        member = portal_state.member()
+        self.request.set('form.widgets.issuer', [member.getId()])
         super(AddForm, self).update()
 
 
