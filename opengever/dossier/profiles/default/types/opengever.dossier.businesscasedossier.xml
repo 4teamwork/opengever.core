@@ -22,8 +22,16 @@
   <property name="klass">plone.dexterity.content.Container</property>
 
   <!-- add permission -->
-  <property name="add_permission">cmf.AddPortalContent</property>
+  <property name="add_permission">opengever.dossier.AddBusinessCaseDossier</property>
 
+  <property name="global_allow">False</property>
+  <property name="filter_content_types">True</property>
+  <property name="allowed_content_types">
+    <element value="opengever.dossier.businesscasedossier" />
+    <element value="opengever.document.document" />
+    <element value="ftw.task.task" />
+  </property>
+  
   <!-- enabled behaviors -->
   <property name="behaviors">
     <element value="opengever.base.behaviors.base.IOpenGeverBase" />

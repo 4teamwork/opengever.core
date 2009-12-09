@@ -27,6 +27,7 @@ setup(name='opengever.dossier',
           'setuptools',
           'plone.app.dexterity',
           'ftw.datepicker',
+          'collective.autopermission',          
           # -*- Extra requirements: -*-
       ],
       entry_points="""
