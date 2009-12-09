@@ -1,5 +1,4 @@
 from Products.CMFCore.utils import getToolByName
-#from random import randint
 from plone.i18n.normalizer import urlnormalizer
 import sys
 
@@ -44,15 +43,15 @@ def setupVarious(context):
     regtool = portal.portal_registration
     try:
         member = regtool.addMember("brigitte.schmid", "demo09", ('Member',), None, properties={"username": "brigitte.schmid", "email": "brigitte.schmid@allg.zg.ch"})
-        member.setMemberProperties({"fullname":"Brigitte Schmid"})
+        member.setMemberProperties({"fullname":"Schmid Brigitte"})
         member = regtool.addMember("olivier.debenath", "demo09", ('Member',), None, properties={"username": "olivier.debenath", "email": "olivier.debenath@allg.zg.ch"})
-        member.setMemberProperties({"fullname":"Olivier Debenath"})
+        member.setMemberProperties({"fullname":"Debenath Olivier"})
         member = regtool.addMember("hans.muster", "demo09", ('Member',), None, properties={"username": "hans.muster", "email": "hans.muster@4teamwork.ch"})
-        member.setMemberProperties({"fullname":"Hans Muster"})
+        member.setMemberProperties({"fullname":"Muster Hans"})
         member = regtool.addMember("hugo.boss", "demo09", ('Member',), None, properties={"username": "hugo.boss", "email": "hugo.boss@4teamwork.ch"})
-        member.setMemberProperties({"fullname":"Hugo Boss"})
+        member.setMemberProperties({"fullname":"Boss Hugo"})
         member = regtool.addMember("thomas.schaerli", "demo09", ('Member',), None, properties={"username": "thomas.schaerli", "email": "thomas.schaerli@gmail.com"})
-        member.setMemberProperties({"fullname":"Thomas Schaerli"})
+        member.setMemberProperties({"fullname":"Schaerli Thomas"})
     except ValueError: #users already exist
         pass
 
@@ -70,7 +69,7 @@ def setupVarious(context):
         print >>sys.stdout, 'Creating user %s' % userdata["id"]
         try:
             member = regtool.addMember(userdata["id"], userdata["password"], ('Member',), None, properties={"username": userdata["id"], "email": userdata["email"]})
-            member.setMemberProperties({"fullname":"%s %s" % (userdata["name"], userdata["surname"])})
+            member.setMemberProperties({"fullname":"%s %s" % (userdata["surname"], userdata["name"])})
         except ValueError: # memberid already exists
             pass
 
