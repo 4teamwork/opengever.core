@@ -5,7 +5,7 @@
 
     <permission
         id="opengever.inbox.AddInbox"
-        title="opengever.înbox: Add Inbox"
+        title="opengever.inbox: Add Inbox"
         />
    
 </configure>
