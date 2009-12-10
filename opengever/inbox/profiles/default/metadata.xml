@@ -4,6 +4,5 @@
         <dependency>profile-opengever.base:default</dependency>
         <dependency>profile-opengever.tabbedview:default</dependency>
         <dependency>profile-opengever.trash:default</dependency>        
-        <dependency>profile-ftw.journal:default</dependency>
     </dependencies>
 </metadata>
