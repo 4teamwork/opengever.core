@@ -246,9 +246,9 @@
         <text>Antwortschreiben</text>
       </controlProperties>
     </control>
-    <control controlID="119" controlTypeID="com.balsamiq.mockups::TabBar" x="362" y="312" w="788" h="470" measuredW="307" measuredH="100" zOrder="9" locked="false" isInGroup="-1">
+    <control controlID="119" controlTypeID="com.balsamiq.mockups::TabBar" x="362" y="312" w="788" h="470" measuredW="361" measuredH="100" zOrder="9" locked="false" isInGroup="-1">
       <controlProperties>
-        <text>%DCbersicht%2C%20Aufgaben%20%284%29%2C%20Journal</text>
+        <text>%DCbersicht%2C%20Aufgaben%20%284%29%2C%20Journal%2C%20Details</text>
         <selectedIndex>0</selectedIndex>
       </controlProperties>
     </control>

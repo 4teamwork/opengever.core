@@ -91,10 +91,10 @@
     <control controlID="89" controlTypeID="com.balsamiq.mockups::IconLabel" x="71" y="85" w="-1" h="-1" measuredW="151" measuredH="37" zOrder="25" locked="false" isInGroup="-1">
       <controlProperties>
         <text>OpenGever</text>
-        <size>24</size>
-        <color>16777215</color>
         <icon>GearIcon%7Csmall</icon>
         <labelPosition>right</labelPosition>
+        <size>24</size>
+        <color>16777215</color>
       </controlProperties>
     </control>
     <control controlID="90" controlTypeID="com.balsamiq.mockups::IconLabel" x="878" y="92" w="-1" h="-1" measuredW="131" measuredH="24" zOrder="28" locked="false" isInGroup="-1">
@@ -190,10 +190,10 @@
     <control controlID="80" controlTypeID="com.balsamiq.mockups::IconLabel" x="93" y="227" w="-1" h="-1" measuredW="134" measuredH="37" zOrder="24" locked="false" isInGroup="-1">
       <controlProperties>
         <text>Aufgaben</text>
-        <icon>CheckMarkIcon%7Csmall</icon>
-        <size>24</size>
         <color>16777215</color>
         <labelPosition>right</labelPosition>
+        <icon>CheckMarkIcon%7Csmall</icon>
+        <size>24</size>
       </controlProperties>
     </control>
     <control controlID="81" controlTypeID="com.balsamiq.mockups::Canvas" x="88" y="223" w="1124" h="46" measuredW="100" measuredH="70" zOrder="23" locked="false" isInGroup="-1">

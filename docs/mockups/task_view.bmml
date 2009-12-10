@@ -43,7 +43,7 @@
         <icon>SquaredPlusIcon%7Csmall</icon>
       </controlProperties>
     </control>
-    <control controlID="28" controlTypeID="com.balsamiq.mockups::RadioButton" x="62" y="521" w="149" h="33" measuredW="134" measuredH="18" zOrder="6" locked="false" isInGroup="-1">
+    <control controlID="28" controlTypeID="com.balsamiq.mockups::RadioButton" x="62" y="521" w="149" h="33" measuredW="134" measuredH="22" zOrder="6" locked="false" isInGroup="-1">
       <controlProperties>
         <text>zur%20Stellungnahme</text>
         <state>selected</state>

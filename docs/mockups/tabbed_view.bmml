@@ -107,10 +107,10 @@
     <control controlID="80" controlTypeID="com.balsamiq.mockups::IconLabel" x="375" y="228" w="-1" h="-1" measuredW="307" measuredH="37" zOrder="27" locked="false" isInGroup="-1">
       <controlProperties>
         <text>Beschwerde%20Hans%20Muster</text>
-        <icon>FolderIcon%7Csmall</icon>
-        <size>24</size>
         <color>16777215</color>
         <labelPosition>right</labelPosition>
+        <icon>FolderIcon%7Csmall</icon>
+        <size>24</size>
       </controlProperties>
     </control>
     <control controlID="81" controlTypeID="com.balsamiq.mockups::Canvas" x="366" y="224" w="784" h="46" measuredW="100" measuredH="70" zOrder="26" locked="false" isInGroup="-1">
@@ -119,9 +119,9 @@
         <color>255</color>
       </controlProperties>
     </control>
-    <control controlID="82" controlTypeID="com.balsamiq.mockups::ComboBox" x="1001" y="292" w="149" h="-1" measuredW="126" measuredH="68" zOrder="28" locked="false" isInGroup="-1">
+    <control controlID="82" controlTypeID="com.balsamiq.mockups::ComboBox" x="1001" y="292" w="149" h="-1" measuredW="126" measuredH="87" zOrder="28" locked="false" isInGroup="-1">
       <controlProperties>
-        <text>Hinzuf%FCgen%0ADokument%0AAufgabe</text>
+        <text>Hinzuf%FCgen%0ADokument%0AAufgabe%0ABeteiligung</text>
         <icon>SquaredPlusIcon%7Csmall</icon>
       </controlProperties>
     </control>
@@ -156,10 +156,10 @@
     <control controlID="89" controlTypeID="com.balsamiq.mockups::IconLabel" x="71" y="85" w="-1" h="-1" measuredW="151" measuredH="37" zOrder="32" locked="false" isInGroup="-1">
       <controlProperties>
         <text>OpenGever</text>
-        <size>24</size>
-        <color>16777215</color>
         <icon>GearIcon%7Csmall</icon>
         <labelPosition>right</labelPosition>
+        <size>24</size>
+        <color>16777215</color>
       </controlProperties>
     </control>
     <control controlID="90" controlTypeID="com.balsamiq.mockups::IconLabel" x="878" y="92" w="-1" h="-1" measuredW="131" measuredH="24" zOrder="35" locked="false" isInGroup="-1">
