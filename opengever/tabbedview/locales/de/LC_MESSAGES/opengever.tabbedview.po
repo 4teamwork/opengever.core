@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2009-12-04 08:58+0000\n"
+"POT-Creation-Date: 2009-12-10 07:29+0000\n"
 "PO-Revision-Date: 2009-02-25 14:39+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -25,8 +25,17 @@ msgstr "Titel"
 msgid "actor"
 msgstr "Akteur"
 
+msgid "additional_contact"
+msgstr "Zusätzliches"
+
+msgid "all_contacts"
+msgstr "Alle Kontakte"
+
+msgid "all_orgunits"
+msgstr "Alle Gremien"
+
 msgid "checked_out"
-msgstr "Ausgecheckt"
+msgstr "in Bearbeitung"
 
 #. Default: "Kommentar"
 msgid "comment"
@@ -59,6 +68,9 @@ msgstr "Ende"
 msgid "events"
 msgstr "Termine"
 
+msgid "important_contact"
+msgstr "Allgemein"
+
 #. Default: "Journal"
 msgid "journal"
 msgstr "Journal"
@@ -70,6 +82,9 @@ msgstr "Änderungsdatum"
 #: opengever.tabbedview/opengever/tabbedview/browser/tabs_templates/overview.pt:16
 msgid "no_content"
 msgstr "Keine Inhalte vorhanden"
+
+msgid "orgunit_contact"
+msgstr "Gremien"
 
 #. Default: "Übersicht"
 msgid "overview"
@@ -124,22 +139,3 @@ msgstr "Titel"
 
 msgid "trash"
 msgstr "Papierkorb"
-
-msgid "all_contacts"
-msgstr "Alle Kontakte"
-
-msgid "all_orgunits"
-msgstr "Alle Gremien"
-
-msgid "important_contact"
-msgstr "Allgemein"
-
-msgid "additional_contact"
-msgstr "Zusätzliches"
-
-msgid "orgunit_contact"
-msgstr "Gremien"
-
-
-
-

@@ -50,7 +50,7 @@ class Documents(OpengeverListingTab):
         ('document_date', 'document_date', helper.readable_date),
         ('receipt_date', 'receipt_date', helper.readable_date),
         ('delivery_date', 'delivery_date', helper.readable_date),
-        ('checked_out', 'checked_out')
+        ('checked_out', 'checked_out', helper.readable_author)
         )
     
 class Dossiers(OpengeverListingTab):

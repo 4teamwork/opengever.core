@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2009-12-04 08:58+0000\n"
+"POT-Creation-Date: 2009-12-10 07:29+0000\n"
 "PO-Revision-Date: 2009-02-25 14:39+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -22,6 +22,15 @@ msgid "Title"
 msgstr ""
 
 msgid "actor"
+msgstr ""
+
+msgid "additional_contact"
+msgstr ""
+
+msgid "all_contacts"
+msgstr ""
+
+msgid "all_orgunits"
 msgstr ""
 
 msgid "checked_out"
@@ -54,6 +63,9 @@ msgstr ""
 msgid "events"
 msgstr ""
 
+msgid "important_contact"
+msgstr ""
+
 msgid "journal"
 msgstr ""
 
@@ -62,6 +74,9 @@ msgstr ""
 
 #: opengever.tabbedview/opengever/tabbedview/browser/tabs_templates/overview.pt:16
 msgid "no_content"
+msgstr ""
+
+msgid "orgunit_contact"
 msgstr ""
 
 msgid "overview"
