@@ -5,6 +5,9 @@ Changelog
 ---------------------
 
 
+* Issue #239: Registraturposition: Fehler bei leerer Eingabe "Aufbewahrungsdauer"
+  [10.12.2009, jbaumann]
+
 * Issue #163: OpenGeverBase behavior erstellen
   [27.11.2009, jbaumann]
 

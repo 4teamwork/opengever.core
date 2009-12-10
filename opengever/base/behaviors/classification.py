@@ -71,7 +71,7 @@ class IClassification(form.Schema):
             title = _(u'label_retention_period', u'Retention period (years)'),
             description = _(u'help_retention_period', default=u''),
             default = 10,
-            required = False,
+            required = True,
     )
 
     archival_value = schema.Choice(
@@ -85,7 +85,7 @@ class IClassification(form.Schema):
             title = _(u'label_custody_period', default=u'Custody period (years)'),
             description = _(u'help_custody_period', default=u''),
             default = 10,
-            required = False,
+            required = True,
     )
 
 alsoProvides(IClassification, IFormFieldProvider)
@@ -186,7 +186,7 @@ class IntLowerEqualThanParentValidator(validator.SimpleFieldValidator):
 
     def validate(self, value):
         super(IntLowerEqualThanParentValidator, self).validate(value)
-        # should not be negative
+        # should not be negative
         if int(value)<0:
             raise schema.interfaces.TooSmall()
         # get parent value
