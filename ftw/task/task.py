@@ -184,7 +184,9 @@ class View(dexterity.DisplayForm):
 # or we don't know how to set it.
 # thus we use an add form hack by injecting the values into the request.
 
-class AddForm(dexterity.AddForm):
+#class AddForm(dexterity.AddForm):
+from opengever.translations.browser.edit import TranslatedEditForm
+class AddForm(TranslatedEditForm):
     grok.name('ftw.task.task')
 
     def update(self):
