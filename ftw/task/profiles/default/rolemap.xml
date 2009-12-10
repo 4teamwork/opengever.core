@@ -1,0 +1,7 @@
+<rolemap>
+  <permissions>
+    <permission name="ftw.task: Add task" acquire="True">
+      <role name="Manager"/>
+    </permission>
+  </permissions>
+</rolemap>

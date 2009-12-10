@@ -28,6 +28,7 @@ setup(name='ftw.task',
           'plone.app.dexterity',
           'rwproperty',
           'ftw.datepicker',
+          'collective.autopermission',          
           # -*- Extra requirements: -*-
       ],
       entry_points="""

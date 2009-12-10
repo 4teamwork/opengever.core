@@ -21,7 +21,7 @@
  <property name="klass">ftw.task.task.Task</property>
  
  <!-- add permission -->
- <property name="add_permission">cmf.AddPortalContent</property>
+ <property name="add_permission">ftw.task.AddTask</property>
  
  <!-- enabled behaviors -->
  <property name="behaviors">
