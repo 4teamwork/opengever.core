@@ -217,7 +217,7 @@ class Journal(grok.View, OpengeverTab):
          generator = queryUtility(ITableGenerator, 'ftw.tablegenerator') 
          columns = (('title', lambda x,y: x['action']['title']), 
                     'actor', 
-                    ('time', helper.readable_date),
+                    ('time', helper.readable_date_time),
                     'comment'
                     )
          return generator.generate(reversed(self.data()), columns, css_mapping={'table':'journal-listing'})
