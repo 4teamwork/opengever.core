@@ -24,7 +24,7 @@
     <table class="listing">
       <tal:rep tal:define="group python: view.groups[0]">
         <tr tal:repeat="widget group/widgets/values">
-          <tal:block condition="python:widget.__name__ not in ('IBasic.title', 'IBasic.description', 'title', 'description','responsible', 'ITransition.transition')">
+          <tal:block condition="python:widget.__name__ not in ('IBasic.title', 'IBasic.description', 'title', 'description','responsible', 'ITransition.transition', 'issuer',)">
             <th tal:content="widget/label"></th>
             <td tal:content="structure widget/render" />
           </tal:block>
