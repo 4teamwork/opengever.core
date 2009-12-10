@@ -16,7 +16,7 @@
   <property name="klass">opengever.document.document.Document</property>
 
   <!-- add permission -->
-  <property name="add_permission">cmf.AddPortalContent</property>
+  <property name="add_permission">opengever.document.AddDocument</property>
 
   <!-- enabled behaviors -->
   <property name="behaviors">

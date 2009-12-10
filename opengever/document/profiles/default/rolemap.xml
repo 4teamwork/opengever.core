@@ -1,0 +1,7 @@
+<rolemap>
+  <permissions>
+    <permission name="opengever.document: Add document" acquire="True">
+      <role name="Manager"/>
+    </permission>
+  </permissions>
+</rolemap>

@@ -13,6 +13,9 @@
     <!-- Grok the package to initialise schema interfaces and content classes -->
     <grok:grok package="." />
 
+    <!-- Include custom permissions -->
+    <include file="permissions.zcml" />
+
     <!-- Register locales translations -->
     <i18n:registerTranslations directory="locales" />
 
