@@ -34,6 +34,9 @@ from plone.namedfile.interfaces import INamedFileField
 from opengever.document import _
 from opengever.document.interfaces import IDocumentType
 
+from plone.memoize.instance import memoize
+from plone.app.layout.viewlets import content
+
 LOG = logging.getLogger('opengever.document')
 
 IVersionable.setTaggedValue( FIELDSETS_KEY, [
@@ -350,3 +353,24 @@ class ForwardViewlet(grok.Viewlet):
         if self.request.get("externaledit",None):
             return '<script language="JavaScript">jq(function(){window.location.href="'+str(self.context.absolute_url())+'/external_edit"})</script>'
         return ''
+
+class Byline(grok.Viewlet, content.DocumentBylineViewlet):
+    grok.viewletmanager(IBelowContentTitle)
+    grok.context(IDocumentSchema)
+    grok.name("plone.belowcontenttitle.documentbyline")
+
+    update = content.DocumentBylineViewlet.update
+    
+    def responsible(self):
+        mt=getToolByName(self.context,'portal_membership')
+        document = IDocumentSchema(self.context)
+        return mt.getMemberById(document.responsible)
+
+    @memoize
+    def workflow_state(self):
+        state = self.context_state.workflow_state()
+        workflows = self.tools.workflow().getWorkflowsFor(self.context.aq_explicit)
+        if workflows:
+            for w in workflows:
+                if w.states.has_key(state):
+                    return w.states[state].title or state
