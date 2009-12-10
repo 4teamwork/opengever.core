@@ -42,6 +42,20 @@ def setupVarious(context):
 	# add some default users
     regtool = portal.portal_registration
     try:
+
+        member = regtool.addMember("lesen", "demo09", ('Member',), None, properties={"username": "lesen", "email": "hugo.boss@4teamwork.ch"})
+        member.setMemberProperties({"fullname":"lesen"})
+        member = regtool.addMember("sachbearbeiter", "demo09", ('Member',), None, properties={"username": "sachbearbeiter", "email": "hugo.boss@4teamwork.ch"})
+        member.setMemberProperties({"fullname":"sachbearbeiter"})
+        member = regtool.addMember("vorsteher", "demo09", ('Member',), None, properties={"username": "vorsteher", "email": "hugo.boss@4teamwork.ch"})
+        member.setMemberProperties({"fullname":"vorsteher"})
+        member = regtool.addMember("sekretariat", "demo09", ('Member',), None, properties={"username": "sekretariat", "email": "hugo.boss@4teamwork.ch"})
+        member.setMemberProperties({"fullname":"sekretariat"})
+        member = regtool.addMember("verwalter", "demo09", ('Member',), None, properties={"username": "verwalter", "email": "hugo.boss@4teamwork.ch"})
+        member.setMemberProperties({"fullname":"verwalter"})
+        member = regtool.addMember("admin", "demo09", ('Member',), None, properties={"username": "admin", "email": "hugo.boss@4teamwork.ch"})
+        member.setMemberProperties({"fullname":"admin"})
+        
         member = regtool.addMember("brigitte.schmid", "demo09", ('Member',), None, properties={"username": "brigitte.schmid", "email": "brigitte.schmid@allg.zg.ch"})
         member.setMemberProperties({"fullname":"Schmid Brigitte"})
         member = regtool.addMember("olivier.debenath", "demo09", ('Member',), None, properties={"username": "olivier.debenath", "email": "olivier.debenath@allg.zg.ch"})
