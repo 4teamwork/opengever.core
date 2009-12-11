@@ -87,7 +87,6 @@ class IClassification(form.Schema):
     retention_period = schema.Int(
             title = _(u'label_retention_period', u'Retention period (years)'),
             description = _(u'help_retention_period', default=u''),
-            default = 10,
             required = True,
     )
 
@@ -219,6 +218,8 @@ class IntLowerEqualThanParentValidator(validator.SimpleFieldValidator):
                     parent_value = int(self.field.get(cf_obj))
                 except AttributeError:
                     pass
+                except TypeError:
+                    parent_value = 0
             try:
                 obj = obj.aq_inner.aq_parent
             except AttributeError:
@@ -237,7 +238,7 @@ validator.WidgetValidatorDiscriminators(
 form.default_value(field=IClassification['custody_period'])(
         utils.set_default_with_acquisition(
                 field=IClassification['custody_period'],
-                default = 10
+                default = '10'
         )
 )
 zope.component.provideAdapter(CustodyPeriodValidator)
@@ -253,7 +254,7 @@ validator.WidgetValidatorDiscriminators(
 form.default_value(field=IClassification['retention_period'])(
         utils.set_default_with_acquisition(
                 field=IClassification['retention_period'],
-                default = '10'
+                default = 10
         )
 )
 zope.component.provideAdapter(RetentionPeriodValidator)
