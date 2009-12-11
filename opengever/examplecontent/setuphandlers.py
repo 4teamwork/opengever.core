@@ -1,4 +1,3 @@
-from Products.CMFCore.utils import getToolByName
 from plone.i18n.normalizer import urlnormalizer
 import sys
 
@@ -35,6 +34,7 @@ def setupVarious(context):
         return
         
     portal = context.getSite()
+    groupstool = portal.portal_groups
     
     if not portal.get("registraturplan"):
         portal._importObjectFromFile(context.openDataFile('ordnungssystem.zexp'))
@@ -66,6 +66,10 @@ def setupVarious(context):
         member.setMemberProperties({"fullname":"Boss Hugo"})
         member = regtool.addMember("thomas.schaerli", "demo09", ('Member',), None, properties={"username": "thomas.schaerli", "email": "thomas.schaerli@gmail.com"})
         member.setMemberProperties({"fullname":"Schaerli Thomas"})
+
+        member = regtool.addMember("admin", "demo09", ('Member', ), None, properties={"username": "admin", "email": "hugo.boss@4teamwork.ch"})
+        member.setMemberProperties({"fullname":"Administrator"})
+
     except ValueError: #users already exist
         pass
 
@@ -74,8 +78,20 @@ def setupVarious(context):
 
     arbeitsplatz = portal.get("arbeitsplatz")
     arbeitsplatz.reindexObject()
-
+    
+    # add a few default groups
+    groupstool.addGroup("Sachbearbeiter")
+    groupstool.getGroupById('Sachbearbeiter').addMember('sachbearbeiter')
+    groupstool.addGroup("Sekretariat")
+    groupstool.getGroupById('Sekretariat').addMember('sekretariat')
+    groupstool.addGroup("Vorsteher")
+    groupstool.getGroupById('Vorsteher').addMember('vorsteher')
+    groupstool.addGroup("Verwalter")
+    groupstool.getGroupById('Verwalter').addMember('verwalter')
+    groupstool.getGroupById('Administrators').addMember('admin')
+    
     ug = UserGenerator(context)
+    group = groupstool.getGroupById('Sachbearbeiter')
     for i in range(500):
         userdata = ug.getUserData()
         newid = userdata["id"]
@@ -84,7 +100,8 @@ def setupVarious(context):
         try:
             member = regtool.addMember(userdata["id"], userdata["password"], ('Member',), None, properties={"username": userdata["id"], "email": userdata["email"]})
             member.setMemberProperties({"fullname":"%s %s" % (userdata["surname"], userdata["name"])})
+            group.addMember(userdata["id"])
         except ValueError: # memberid already exists
             pass
-
+    
         
