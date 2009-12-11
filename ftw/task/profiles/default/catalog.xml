@@ -1,11 +1,5 @@
 <?xml version="1.0"?>
 <object name="portal_catalog" meta_type="Task Catalog">
- <index name="deadline" meta_type="DateIndex">
-  <indexed_attr value="deadline"/>
- </index>
  <column value="deadline"/>
- <index name="responsible" meta_type="FieldIndex">
-  <indexed_attr value="responsible"/>
- </index>
  <column value="responsible"/>
 </object>

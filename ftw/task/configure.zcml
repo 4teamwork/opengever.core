@@ -16,16 +16,9 @@
 
     <!-- Include custom permissions -->
     <include file="permissions.zcml" />
-    
-    <!-- Register an extension profile to make the product installable -->
-    <genericsetup:registerProfile
-        name="default"
-        title="ftw.task"
-        description="the ftw Task"
-        directory="profiles/default"
-        provides="Products.GenericSetup.interfaces.EXTENSION"
-        />
-    
+
+	<include file="profiles.zcml" />
+	
     <i18n:registerTranslations directory="locales" />
     <include file="behaviors.zcml" />
     <browser:page
