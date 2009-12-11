@@ -2,7 +2,7 @@
   <controls>
     <control controlID="64" controlTypeID="com.balsamiq.mockups::StickyNote" x="695" y="497" w="163" h="123" measuredW="109" measuredH="123" zOrder="40" locked="false" isInGroup="-1">
       <controlProperties>
-        <text>Der%20Titel%20der%20Aufgabe%20kann%20automatisch%20generiert%20werden%20aus%20der%20Initialaktion%20%28zur%20Erledigung%3A%202%20Dokumente%20%29</text>
+        <text>Der%20Titel%20der%20Aufgabe%20kann%20automatisch%20generiert%20werden%20aus%20der%20Initialaktion%20%28zur%20Kenntnis%3A%202%20Dokumente%20%29</text>
         <size>9</size>
       </controlProperties>
     </control>
