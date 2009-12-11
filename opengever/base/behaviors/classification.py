@@ -12,8 +12,25 @@ from plone.autoform.interfaces import IFormFieldProvider
 from plone.directives import form
 from Products.CMFCore.interfaces import ISiteRoot
 
+from zope.schema.vocabulary import SimpleVocabulary
+from zope.schema.interfaces import IContextSourceBinder
+from zope.component import queryUtility
+from plone.registry.interfaces import IRegistry
+from opengever.base.interfaces import IBaseCustodyPeriods
+
 from opengever.base import _
 from opengever.base.behaviors import utils
+
+@grok.provider(IContextSourceBinder)
+def custody_periods(context):
+    voc= []
+    terms = []
+    registry = queryUtility(IRegistry)
+    proxy = registry.forInterface(IBaseCustodyPeriods)
+    voc = getattr(proxy, 'custody_periods')
+    for term in voc:
+        terms.append(SimpleVocabulary.createTerm(term))
+    return SimpleVocabulary(terms)
 
 class IClassification(form.Schema):
 
@@ -81,10 +98,10 @@ class IClassification(form.Schema):
             required = False,
     )
 
-    custody_period = schema.Int(
+    custody_period = schema.Choice(
             title = _(u'label_custody_period', default=u'Custody period (years)'),
             description = _(u'help_custody_period', default=u''),
-            default = 10,
+            source = custody_periods,
             required = True,
     )
 
@@ -236,7 +253,7 @@ validator.WidgetValidatorDiscriminators(
 form.default_value(field=IClassification['retention_period'])(
         utils.set_default_with_acquisition(
                 field=IClassification['retention_period'],
-                default = 10
+                default = '10'
         )
 )
 zope.component.provideAdapter(RetentionPeriodValidator)
