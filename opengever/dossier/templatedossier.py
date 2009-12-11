@@ -55,7 +55,6 @@ class TemplateDocumentFormView(grok.View):
                 newdoc.changeOwnership(member)
                 newdoc.creation_date = DateTime()
                 newdoc.document_date = datetime.now()
-                import pdb; pdb.set_trace( )
                 newdoc.creators = (member.getName(), )
                 newdoc.document_author = member.getName()
                 

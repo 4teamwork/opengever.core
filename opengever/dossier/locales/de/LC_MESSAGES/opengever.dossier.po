@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: opengever.dossier 1.0\n"
-"POT-Creation-Date: 2009-12-09 15:46+0000\n"
+"POT-Creation-Date: 2009-12-11 13:59+0000\n"
 "PO-Revision-Date: 2009-09-17 15:21+0000\n"
 "Last-Translator: Thomas Buchberger <t.buchberger@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -23,6 +23,13 @@ msgstr "Geschäftsdossier"
 msgid "Project Dossier"
 msgstr "Projektdossier"
 
+#: opengever.dossier/opengever/dossier/profiles/default/types/opengever.dossier.templatedossier.xml
+msgid "Template Dossier"
+msgstr "Vorlagen Dossier"
+
+msgid "Templates"
+msgstr "Vorlagen"
+
 #: opengever.dossier/opengever/dossier/behaviors/dossier.py:123
 msgid "The start date must be before the end date."
 msgstr "Das Beginn-Datum muss vor dem Ende-Datum liegen."
@@ -30,6 +37,11 @@ msgstr "Das Beginn-Datum muss vor dem Ende-Datum liegen."
 #: opengever.dossier/opengever/dossier/behaviors/dossier.py:128
 msgid "The start or end date is invalid"
 msgstr "Das Beginn- oder Ende-Datum ist ungültig."
+
+#. Default: "create document with template"
+#: opengever.dossier/opengever/dossier/templatedossier.py:29
+msgid "create_document_with_template"
+msgstr "Dokument mit Vorlage erstellen"
 
 #. Default: "Filing"
 #: opengever.dossier/opengever/dossier/behaviors/dossier.py:86
