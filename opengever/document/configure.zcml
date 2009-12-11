@@ -16,17 +16,10 @@
     <!-- Include custom permissions -->
     <include file="permissions.zcml" />
 
+	<include file="profiles.zcml" />
+
     <!-- Register locales translations -->
     <i18n:registerTranslations directory="locales" />
-
-    <!-- Register an extension profile to make the product installable -->
-    <genericsetup:registerProfile
-        name="default"
-        title="opengever.document"
-        description="OpenGever Document Content Type"
-        directory="profiles/default"
-        provides="Products.GenericSetup.interfaces.EXTENSION"
-        />
 
     <browser:page
             name="send_documents_as_email"
