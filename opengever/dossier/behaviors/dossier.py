@@ -12,6 +12,22 @@ from five import grok
 from datetime import datetime
 from zope.interface import invariant, Invalid
 
+from zope.schema.vocabulary import SimpleVocabulary
+from zope.schema.interfaces import IContextSourceBinder
+from zope.component import queryUtility
+from plone.registry.interfaces import IRegistry
+from opengever.dossier.interfaces import IDossierContainerTypes
+
+@grok.provider(IContextSourceBinder)
+def container_types(context):
+    voc= []
+    terms = []
+    registry = queryUtility(IRegistry)
+    proxy = registry.forInterface(IDossierContainerTypes)
+    voc = getattr(proxy, 'container_types')
+    for term in voc:
+        terms.append(SimpleVocabulary.createTerm(term))
+    return SimpleVocabulary(terms)
 
 class IDossierMarker(Interface):
     """ Marker Interface for dossiers.
@@ -95,7 +111,7 @@ class IDossier(form.Schema):
     container_type = schema.Choice(
         title = _(u'label_container_type', default=u'Container Type'),
         description = _(u'help_container_type', default=u''),
-        source = u'classification_classification_vocabulary',
+        source = container_types,
         required = False,
     )
     
