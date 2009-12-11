@@ -1,3 +1,5 @@
+import re
+
 from zope.interface import Interface
 from zope.component import getUtility
 from zope.app.container.interfaces import INameChooser
@@ -11,7 +13,7 @@ from opengever.dossier import _
 
 from ftw.table import helper
 from ftw.table.interfaces import ITableGenerator
-
+from opengever.document.staging.manager import ICheckinCheckoutManager
 
 class ITemplateDossier(Interface):
     pass
@@ -49,20 +51,26 @@ class TemplateDocumentFormView(grok.View):
 
                 # change attributes: id, title, owner, creation_date ect.
                 name = INameChooser(self.context).chooseName(self.title, newdoc)
+                member = self.context.portal_membership.getAuthenticatedMember()
+                import pdb; pdb.set_trace( )
                 self.context.manage_renameObject(newdoc.getId(), name)
                 newdoc.setTitle(self.title)
-                member = self.context.portal_membership.getAuthenticatedMember()
                 newdoc.changeOwnership(member)
                 newdoc.creation_date = DateTime()
                 newdoc.document_date = datetime.now()
-                newdoc.creators = (member.getName(), )
-                newdoc.document_author = member.getName()
-                
+                newdoc.creators = (member.title_or_id(), )
+                newdoc.document_author = member.title_or_id()
                 newdoc.manage_delLocalRoles([u for u, r in newdoc.get_local_roles()])
                 newdoc.manage_setLocalRoles(member.getId(), ('Owner', ))
-
                 if self.edit:
-                    return self.request.RESPONSE.redirect(newdoc.absolute_url())
+                    
+                    manager = ICheckinCheckoutManager(newdoc)
+                    wc = manager.checkout('', show_status_message=False)
+                    portal = self.context.portal_url.getPortalObject()
+                    xpr = re.compile('href="(.*?)"')
+                    html = portal.externalEditLink_(wc)
+                    url = xpr.search(html).groups()[0]
+                    return self.request.RESPONSE.redirect(url)
                 else:
                     return self.request.RESPONSE.redirect(newdoc.absolute_url())
             else:
