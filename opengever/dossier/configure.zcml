@@ -14,18 +14,11 @@
 
     <include file="behaviors.zcml" />
 
+    <include file="profiles.zcml" />
+
     <i18n:registerTranslations directory="locales" />
 
     <!-- Include custom permissions -->
     <include file="permissions.zcml" />
-    
-    <!-- Register an extension profile to make the product installable -->
-    <genericsetup:registerProfile
-        name="default"
-        title="opengever.dossier"
-        description="Provides behavior and content types for dossiers."
-        directory="profiles/default"
-        provides="Products.GenericSetup.interfaces.EXTENSION"
-        />
         
 </configure>
