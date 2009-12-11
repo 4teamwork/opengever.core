@@ -72,6 +72,10 @@
           url_expr="string:${object_url}/docucomposer-wizard" visible="True">
     <permission value="Add portal content"/>
   </action>
+  <action title="Create with template" action_id="document_with_template" category="object" condition_expr=""
+          url_expr="string:${object_url}/document_with_template" visible="True">
+    <permission value="Add portal content"/>
+  </action>
 
 
   <!-- Tabbedview tabs-->
