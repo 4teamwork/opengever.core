@@ -12,5 +12,10 @@
         id="opengever.dossier.AddProjectDossier"
         title="opengever.dossier: Add projectdossier"
         />
+
+    <permission
+        id="opengever.dossier.AddTemplateDossier"
+        title="opengever.dossier: Add templatedossier"
+        />
    
 </configure>

@@ -20,7 +20,7 @@
   <property name="klass">plone.dexterity.content.Container</property>
 
   <!-- add permission -->
-  <property name="add_permission">cmf.AddPortalContent</property>
+  <property name="add_permission">opengever.dossier.AddTemplateDossier</property>
 
   <!-- enabled behaviors -->
   <property name="behaviors">

@@ -8,5 +8,8 @@
     <permission name="opengever.dossier: Add projectdossier" acquire="True">
       <role name="Manager"/>
     </permission>
+    <permission name="opengever.dossier: Add templatedossier" acquire="True">
+      <role name="Manager"/>
+    </permission>
   </permissions>
 </rolemap>

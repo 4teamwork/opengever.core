@@ -52,7 +52,6 @@ class TemplateDocumentFormView(grok.View):
                 # change attributes: id, title, owner, creation_date ect.
                 name = INameChooser(self.context).chooseName(self.title, newdoc)
                 member = self.context.portal_membership.getAuthenticatedMember()
-                import pdb; pdb.set_trace( )
                 self.context.manage_renameObject(newdoc.getId(), name)
                 newdoc.setTitle(self.title)
                 newdoc.changeOwnership(member)
