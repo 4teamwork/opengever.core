@@ -83,12 +83,17 @@
   </permission-map>
  </state>
  <state state_id="task-state-new" title="task-state-new">
+  <exit-transition transition_id="task-transition-request-statement"/>
   <exit-transition transition_id="task-transition-to_acknowledge"/>
   <exit-transition transition_id="task-transition-to_complete"/>
  </state>
  <state state_id="task-state-rejected"
         title="task-state-Rejected">
   <exit-transition transition_id="task-transition-reactivate"/>
+ </state>
+ <state state_id="task-state-request-statement" title="">
+  <exit-transition transition_id="task-transition-deliver-statement"/>
+  <exit-transition transition_id="task-transition-reject"/>
  </state>
  <state state_id="task-state-resolved"
         title="task-state-resolved">
@@ -120,6 +125,8 @@
    <permission-role>User</permission-role>
   </permission-map>
  </state>
+ <state state_id="task-state-statement-delivered" title="">
+ </state>
  <state state_id="task-state-to_acknowledge" title="">
   <exit-transition transition_id="task-transition-do_acknowledge"/>
   <exit-transition transition_id="task-transition-reject"/>
@@ -148,6 +155,15 @@
           category="workflow">task-transition-deactivate</action>
   <guard>
    <guard-role>Owner</guard-role>
+  </guard>
+ </transition>
+ <transition transition_id="task-transition-deliver-statement"
+             title="task-transition-deliver-statement"
+             new_state="task-state-statement-delivered"
+             trigger="USER" before_script="" after_script="">
+  <action url="%(content_url)s/content_status_modify?workflow_action=task-transition-deliver-statement"
+          category="workflow">task-transition-deliver-statement</action>
+  <guard>
   </guard>
  </transition>
  <transition transition_id="task-transition-do_acknowledge"
@@ -184,6 +200,15 @@
              before_script="" after_script="">
   <action url="%(content_url)s/content_status_modify?workflow_action=task-transition-reject"
           category="workflow">task-transition-reject</action>
+  <guard>
+  </guard>
+ </transition>
+ <transition transition_id="task-transition-request-statement"
+             title="task-transition-request-statement"
+             new_state="task-state-request-statement"
+             trigger="USER" before_script="" after_script="">
+  <action url="%(content_url)s/content_status_modify?workflow_action=task-transition-request-statement"
+          category="workflow">task-transition-request-statement</action>
   <guard>
   </guard>
  </transition>
