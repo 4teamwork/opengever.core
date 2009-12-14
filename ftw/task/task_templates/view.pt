@@ -36,7 +36,7 @@
       </tal:rep>
         <tr>
           <th i18n:domain="ftw.task" i18n:translate="label_workflow_state">State</th>
-          <td tal:content="python: view.context.portal_workflow.getInfoFor(view.context, 'review_state')" />
+          <td i18n:translate="" i18n:domain="plone" tal:content="python: view.context.portal_workflow.getInfoFor(view.context, 'review_state')" />
         <tr>
         <tr>
           <th i18n:domain="ftw.task" i18n:translate="label_last_modified">Last change</th>

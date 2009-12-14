@@ -150,7 +150,7 @@ msgstr ""
 #. Default: "select an responsible Manger"
 #: ftw.task/ftw/task/task.py:66
 msgid "help_responsible"
-msgstr ""
+msgstr "Wählen Sie die verantwortliche Person aus"
 
 #: ftw.task/ftw/task/response.py:63
 msgid "help_responsible_response"
@@ -158,12 +158,12 @@ msgstr ""
 
 #: ftw.task/ftw/task/task.py:74
 msgid "help_text"
-msgstr ""
+msgstr "Geben Sie eine detaillierte Arbeitsanweisung oder einen Kommentar ein"
 
 #. Default: "Title"
 #: ftw.task/ftw/task/task.py:54
 msgid "help_title"
-msgstr ""
+msgstr "Geben Sie einen Kurztitel für diese Aufgabe ein. Wenn Sie den Titel weglassen, wird dieser automatisch generiert"
 
 #: ftw.task/ftw/task/behaviors.py:27
 #: ftw.task/ftw/task/response.py:76
@@ -177,7 +177,7 @@ msgstr ""
 
 #: ftw.task/ftw/task/task.py:80
 msgid "label_deadline"
-msgstr "Frist"
+msgstr "Zu erledigen bis"
 
 #. Default: "Deadline"
 #: ftw.task/ftw/task/response.py:69
@@ -252,7 +252,7 @@ msgstr "Zurück zur Aufgabe"
 #. Default: "Text"
 #: ftw.task/ftw/task/task.py:73
 msgid "label_text"
-msgstr "Aufgaben Text"
+msgstr "Kommentar"
 
 #. Default: "Title"
 #: ftw.task/ftw/task/task.py:53
@@ -263,7 +263,7 @@ msgstr "Titel"
 #: ftw.task/ftw/task/behaviors.py:26
 #: ftw.task/ftw/task/response.py:75
 msgid "label_transition"
-msgstr "Status ändern"
+msgstr "Aktion"
 
 #. Default: "State"
 #: ftw.task/ftw/task/task_templates/view.pt:38

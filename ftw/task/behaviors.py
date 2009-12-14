@@ -7,6 +7,7 @@ from zope.annotation.interfaces import IAnnotations
 from plone.autoform.interfaces import IFormFieldProvider
 from plone.dexterity.interfaces import IDexterityContent
 from plone.directives import form
+from Products.CMFCore.utils import getToolByName
 
 from rwproperty import getproperty, setproperty
 
@@ -63,3 +64,7 @@ class Transition(object):
         # store the value for later use (see events.py)
         annotation = IAnnotations(self.context.REQUEST)
         annotation['ftw.task.task'] = value
+        if not self.context.title:
+            ts = getToolByName(self.context, 'translation_service')
+            self.context.id = ts.translate(value)
+            self.context.title = ts.translate(value)

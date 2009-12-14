@@ -21,6 +21,9 @@ from plone.directives import form, dexterity
 
 from ftw.task import util
 from ftw.task import _
+from ftw.task.behaviors import ITransition
+
+from opengever.translations.browser.edit import TranslatedEditForm
 
 
 class ITask(form.Schema):
@@ -29,11 +32,12 @@ class ITask(form.Schema):
         u'common',
         label = _(u'fieldset_common', default=u'Common'),
         fields = [
-            u'title',
+
             u'issuer',
             u'responsible',
-            u'text',
             u'deadline',
+            u'title',
+            u'text',
             ],
         )
 
@@ -47,12 +51,6 @@ class ITask(form.Schema):
             u'effectiveDuration',
             u'effectiveCost',
         ],
-    )
-
-    title = schema.TextLine(
-        title=_(u"label_title", default=u"Title"),
-        description=_('help_title', default=u""),
-        required = True,
     )
 
     form.widget(issuer=AutocompleteFieldWidget)
@@ -71,18 +69,24 @@ class ITask(form.Schema):
         required = False,
     )
 
-    form.primary('text')
-    text = schema.Text(
-        title=_(u"label_text", default=u"Text"),
-        description=_(u"help_text", default=u""),
-        required = True,
-    )
-
     form.widget(deadline='ftw.datepicker.widget.DatePickerFieldWidget')
     deadline = schema.Date(
         title=_(u"label_deadline", default=u""),
         description=_(u"help_deadline", default=u"Deadline"),
         required = True,
+    )
+
+    title = schema.TextLine(
+        title=_(u"label_title", default=u"Title"),
+        description=_('help_title', default=u""),
+        required = False,
+    )
+
+    form.primary('text')
+    text = schema.Text(
+        title=_(u"label_text", default=u"Text"),
+        description=_(u"help_text", default=u""),
+        required = False,
     )
 
     form.widget(
@@ -117,8 +121,12 @@ class ITask(form.Schema):
         required = False,
     )
 
+    form.order_before(transition="responsible")
+
+
 # XXX doesn't work yet.
 #@form.default_value(field=ITask['issuer'])
+
 def default_issuer(data):
     portal_state = getMultiAdapter(
         (data.context, data.request),
@@ -137,7 +145,10 @@ IRelatedItems.setTaggedValue(FIELDSETS_KEY, [])
 #                 'relatedItems',
 #                 ])
 #         ] )
-IRelatedItems.setTaggedValue(ORDER_KEY, [('relatedItems', 'before', 'text')])
+#
+IRelatedItems.setTaggedValue(ORDER_KEY, [('relatedItems', 'after', 'text')])
+ITransition.setTaggedValue(FIELDSETS_KEY, [])
+ITransition.setTaggedValue(ORDER_KEY, [('transition', 'before', 'responsible')])
 
 
 @grok.subscribe(ITask, IObjectAddedEvent)
@@ -185,7 +196,7 @@ class View(dexterity.DisplayForm):
 # thus we use an add form hack by injecting the values into the request.
 
 #class AddForm(dexterity.AddForm):
-from opengever.translations.browser.edit import TranslatedEditForm
+
 class AddForm(TranslatedEditForm):
     grok.name('ftw.task.task')
 
