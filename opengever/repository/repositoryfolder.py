@@ -1,19 +1,22 @@
 from Acquisition import aq_inner, aq_parent
+from five import grok
+from z3c.form import error
+from z3c.form import validator
 from zope import schema
 from zope.interface import implements
 import zope.component
 
-from z3c.form import validator
-from z3c.form import error
-
+from plone.app.content.interfaces import INameFromTitle
+from plone.app.layout.viewlets.interfaces import IBelowContentTitle
 from plone.dexterity import content
 from plone.directives import form
+from plone.memoize.instance import memoize
+from plone.registry.interfaces import IRegistry
+from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
+
 from opengever.repository import _
 from opengever.repository.interfaces import IRepositoryFolder
-from plone.app.content.interfaces import INameFromTitle
-from five import grok
-from plone.app.layout.viewlets.interfaces import IBelowContentTitle
-from plone.memoize.instance import memoize
+from opengever.repository.interfaces import IRepositoryFolderRecords
 
 class IRepositoryFolderSchema(form.Schema):
     """ A Repository Folder
@@ -108,15 +111,44 @@ class RepositoryFolder(content.Container):
         return title
 
     def allowedContentTypes(self, *args, **kwargs):
+        """
+        We have to follow some rules:
+        1. If this RepositoryFolder contains another RF, we should not be
+           able to add other types than RFs.
+        2. If we are reaching the maximum depth of repository folders
+           (Configured in plone.registry), we should not be able to add
+           any more RFs, but then we should be able to add the other configured
+           types in any case.
+
+        If the maximum_repository_depth is set to 0, we do not have a depth limit.
+        """
+        # get the default types
         types = super(RepositoryFolder, self).allowedContentTypes(*args, **kwargs)
-        # check if self contains any similar objects
+        # get fti of myself
+        fti = self.portal_types.get(self.portal_type)
+        # get maximum depth of repository folders
+        registry = zope.component.queryUtility(IRegistry)
+        proxy = registry.forInterface(IRepositoryFolderRecords)
+        maximum_depth = getattr(proxy, 'maximum_repository_depth', 0) # 0 -> no restriction
+        current_depth = 0
+        # if we have a maximum depth, we need to know the current depth
+        if maximum_depth>0:
+            obj = self
+            while IRepositoryFolder.providedBy( obj ):
+                current_depth += 1
+                obj = aq_parent( aq_inner( obj ) )
+                if IPloneSiteRoot.providedBy( obj ):
+                    break
+            if maximum_depth<=current_depth:
+                # depth exceeded
+                # RepositoryFolder not allowed, but any other type
+                return filter( lambda a:a!=fti, types )
+        # check if self contains any similar objects
         contains_similar_objects = False
         for id, obj in self.contentItems():
             if obj.portal_type==self.portal_type:
                 contains_similar_objects = True
                 break
-        # get fti of myself
-        fti = self.portal_types.get(self.portal_type)
         # filter content types, if required
         if contains_similar_objects:
             # only allow same types

@@ -5,6 +5,9 @@ Changelog
 0.2
 ---
 
+* Issue #277: Hinzufügbare Typen einschränken bei Registraturposition
+  [14.12.2009, jbaumann]
+
 * Issue #172: listCreators einer Registraturposition liefert Owner des ersten Dossiers
   [27.11.2009, jbaumann]
 
