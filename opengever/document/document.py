@@ -28,14 +28,24 @@ from plone.supermodel.interfaces import FIELDSETS_KEY
 from plone.supermodel.model import Fieldset
 from plone.versioningbehavior.behaviors import IVersionable
 
+from ftw.table.interfaces import ITableGenerator
+from ftw.table import helper
+
 from opengever.sqlfile.field import NamedFile
 from plone.namedfile.interfaces import INamedFileField
 
 from opengever.document import _
 from opengever.document.interfaces import IDocumentType
+from ftw.journal.interfaces import IAnnotationsJournalizable, IWorkflowHistoryJournalizable
 
 from plone.memoize.instance import memoize
 from plone.app.layout.viewlets import content
+from ftw.journal.config import JOURNAL_ENTRIES_ANNOTATIONS_KEY
+from zope.annotation.interfaces import IAnnotations, IAnnotatable
+
+from plone.directives.dexterity import DisplayForm
+
+from opengever.tabbedview.browser.tabs import OpengeverTab,OpengeverListingTab
 
 LOG = logging.getLogger('opengever.document')
 
@@ -374,3 +384,55 @@ class Byline(grok.Viewlet, content.DocumentBylineViewlet):
             for w in workflows:
                 if w.states.has_key(state):
                     return w.states[state].title or state
+
+class Overview(DisplayForm, OpengeverTab):
+    grok.context(IDocumentSchema)
+    grok.name('tabbedview_view-overview')
+    grok.template('overview')
+    
+    def get_referenced_documents(self):
+        pc = self.context.portal_catalog
+        return pc({'portal_type':'Document',})
+    
+class Preview(DisplayForm, OpengeverTab):
+    grok.context(IDocumentSchema)
+    grok.name('tabbedview_view-preview')
+    grok.template('preview')
+
+class Tasks(OpengeverListingTab):
+    grok.context(IDocumentSchema)
+    grok.name('tabbedview_view-tasks')
+    grok.template('generic')
+    columns= (
+                ('', helper.draggable),
+                ('', helper.path_checkbox),
+                ('Title', helper.linked),
+                ('deadline', helper.readable_date),
+                ('responsible', helper.readable_author),
+                ('review_state', 'review_state', helper.translated_string()),
+            )
+    types = ['ftw.task.task', ]
+    
+class Journal(grok.View, OpengeverTab):
+     grok.context(IDocumentSchema)
+     grok.name('tabbedview_view-journal')
+     grok.template('journal')
+
+     def table(self):
+         generator = queryUtility(ITableGenerator, 'ftw.tablegenerator') 
+         columns = (('title', lambda x,y: x['action']['title']), 
+                    'actor', 
+                    ('time', helper.readable_date_time),
+                    'comment'
+                    )
+         return generator.generate(reversed(self.data()), columns, css_mapping={'table':'journal-listing'})
+
+     def data(self):
+         context = self.context
+         history = []
+
+         if IAnnotationsJournalizable.providedBy(self.context):
+             annotations = IAnnotations(context)
+             return annotations.get(JOURNAL_ENTRIES_ANNOTATIONS_KEY, [])
+         elif IWorkflowHistoryJournalizable.providedBy(self.context):
+             raise NotImplemented

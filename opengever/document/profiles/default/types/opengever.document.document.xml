@@ -26,6 +26,7 @@
         <element value="opengever.base.behaviors.base.IOpenGeverBase"/>
     -->
     <element value="opengever.base.behaviors.creator.ICreator" />
+	<element value="opengever.tabbedview.interfaces.ITabbedViewEnabled" />
     <element value="opengever.base.behaviors.classification.IClassification" />
     <element value="plone.app.dexterity.behaviors.related.IRelatedItems" />
     <element value="plone.stagingbehavior.interfaces.IStagingSupport" />
@@ -35,10 +36,11 @@
   </property>
 
   <!-- View information -->
-  <property name="default_view">view</property>
+  <property name="default_view">tabbed_view</property>
+  <property name="immediate_view">tabbed_view</property>
   <property name="default_view_fallback">False</property>
   <property name="view_methods">
-    <element value="view"/>
+    <element value="tabbed_view"/>
   </property>
 
   <!-- Method aliases -->
@@ -56,6 +58,12 @@
           url_expr="string:${object_url}/edit" visible="True">
     <permission value="Modify portal content"/>
   </action>
+
+  <!-- Tab Actions -->
+  <action title="overview" action_id="overview" category="arbeitsraum-tabs" condition_expr="" url_expr="string:#" visible="True"></action>
+  <action title="preview" action_id="preview" category="arbeitsraum-tabs" condition_expr="" url_expr="string:#" visible="True"></action>
+  <action title="tasks" action_id="tasks" category="arbeitsraum-tabs" condition_expr="" url_expr="string:#" visible="True"></action>
+  <action title="journal" action_id="journal" category="arbeitsraum-tabs" condition_expr="" url_expr="string:#" visible="True"></action>
 
   <!-- opengever.journal, ftw.journal -->
   <action title="Journal" action_id="journal" category="object"

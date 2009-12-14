@@ -1,0 +1,35 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      lang="en"
+      i18n:domain="plone">
+
+<body>
+        <p class="documentDescription">
+            <tal:description replace="here/Description" />
+        </p>
+
+
+        <div tal:replace="structure provider:plone.abovecontentbody" />
+        <p class="file-widget">
+            <tal:file replace="structure view/w/file/render" />
+        </p>
+
+        <fieldset id="preview" tal:condition="context/@@preview_provider/hasPreview">
+            <legend style="font-size:150%">
+                <i18n:block translate="heading_file_contents">
+                    File contents
+                </i18n:block>
+                <span style="font-size:80% !important">
+                    ( <a tal:attributes="href python:context.absolute_url()+'/@@preview_provider'"
+                         i18n:translate="full_screen">Full screen</a> )
+                  </span>
+                </legend>
+                <br/>
+    
+            <div class="collapsibleContent" style="position: relative; overflow: auto; height: 400px;"
+                  tal:content="structure context/@@preview_provider/getPreview" />
+        </fieldset>
+</body>
+</html>

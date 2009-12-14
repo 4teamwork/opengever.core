@@ -1,0 +1,67 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      lang="de"
+      i18n:domain="opengever.document">
+<body>
+	<table class="listingPrevious">
+		<tr>
+			<th i18n:translate="label_document">document</th>
+			<td tal:content="context/title"/>
+		</tr>
+		<tr>
+			<th i18n:translate="label_document_date">document date</th>
+			<td tal:content="structure view/w/document_date/render"/>
+		</tr>
+		<tr>
+			<th i18n:translate="label_document_type">document type</th>
+			<td tal:content="structure view/w/document_type/render"/>
+		</tr>
+		<tr>
+			<th i18n:translate="label_author">author</th>
+			<td tal:content="structure view/w/document_author/render"/>
+		</tr>
+		<tr>
+			<th i18n:translate="label_creator">creator</th>
+			<td tal:content="context/Creator"/>
+		</tr>
+		<tr>
+			<th i18n:translate="label_description">description</th>
+			<td tal:content="structure view/w/description/render"/>
+		</tr>
+		<tr>
+			<th i18n:translate="label_foreign_reference">foreign reference</th>
+			<td tal:content="structure view/w/foreign_reference/render"/>
+		</tr>
+		<tr>
+			<th i18n:translate="label_file">file</th>
+			<td>
+				<a tal:attributes="href string:${context/absolute_url}/@@download/file/${context/file/filename}" tal:content="structure view/w/file/render"/>
+			</td>
+		</tr>
+		<tr>
+			<th i18n:translate="help_paper_form">paper form</th>
+			<td tal:condition="context/paper_form" i18n:translate="label_yes">yes</td>
+			<td tal:condition="not:context/paper_form" i18n:translate="label_no">no</td>
+		</tr>
+		<tr>
+			<th i18n:translate="label_preserved_as_paper">preserved as paper</th>
+			<td tal:condition="context/preserved_as_paper" i18n:translate="label_yes">yes</td>
+			<td tal:condition="not:context/preserved_as_paper" i18n:translate="label_no">no</td>
+		</tr>
+		<tr>
+			<th i18n:translate="label_receipt_date">reciept date</th>
+			<td tal:content="structure view/w/receipt_date/render"/>
+		</tr>
+		<tr>
+			<th i18n:translate="label_delivery_date">delivery date</th>
+			<td tal:content="structure view/w/delivery_date/render"/>
+		</tr>
+		<tr>
+			<th i18n:translate="referenced_documents">referenced documents</th>
+			<td tal:content="structure view/w/IRelatedItems.relatedItems/render"/>
+		</tr>
+	</table>
+</body>
+</html>
