@@ -23,6 +23,9 @@
 
   <include package="collective.monkeypatcher" />
 
+  <!-- Include custom permissions -->
+  <include file="permissions.zcml" />
+
   <grok:grok package="." />
 
   <monkey:patch

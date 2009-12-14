@@ -1,0 +1,10 @@
+<rolemap>
+  <permissions>
+    <permission name="opengever.trash: Trash document" acquire="True">
+      <role name="Manager"/>
+    </permission>
+    <permission name="opengever.trash: Untrash document" acquire="True">
+      <role name="Manager"/>
+    </permission>    
+  </permissions>
+</rolemap>
