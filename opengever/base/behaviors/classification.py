@@ -2,7 +2,6 @@
 from zope import schema
 from zope.interface import alsoProvides
 import zope.component
-from z3c.form.browser import checkbox
 from z3c.form import validator
 
 from five import grok
@@ -49,7 +48,7 @@ class IClassification(form.Schema):
             title = _(u'label_classification', default=u'Classification'),
             description = _(u'help_classification', default=u''),
             source = u'classification_classification_vocabulary',
-            required = False,
+            required = True,
     )
 
     #form.widget(privacy_layer=checkbox.SingleCheckBoxFieldWidget)
@@ -57,14 +56,14 @@ class IClassification(form.Schema):
             title = _(u'label_privacy_layer', default=u'Privacy layer'),
             description = _(u'help_privacy_layer', default=u''),
             source = u'classification_privacy_layer_vocabulary',
-            required = False,
+            required = True,
     )
 
     public_trial = schema.Choice(
             title = _(u'label_public_trial', default=u'Public Trial'),
             description = _(u'help_public_trial', default=u''),
             source = u'classification_public_trial_vocabulary',
-            required = False,
+            required = True,
     )
 
     public_trial_statement = schema.Text(
@@ -94,7 +93,7 @@ class IClassification(form.Schema):
             title = _(u'label_archival_value', default=u'Archival value'),
             description = _(u'help_archival_value', default=u'Archival value code'),
             source = u'classification_archival_value_vocabulary',
-            required = False,
+            required = True,
     )
 
     custody_period = schema.Choice(
@@ -251,6 +250,7 @@ validator.WidgetValidatorDiscriminators(
         RetentionPeriodValidator,
         field=IClassification['retention_period']
 )
+
 form.default_value(field=IClassification['retention_period'])(
         utils.set_default_with_acquisition(
                 field=IClassification['retention_period'],
@@ -258,9 +258,6 @@ form.default_value(field=IClassification['retention_period'])(
         )
 )
 zope.component.provideAdapter(RetentionPeriodValidator)
-
-
-
 
 
 class Classification(metadata.MetadataBase):
