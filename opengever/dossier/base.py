@@ -50,7 +50,7 @@ class DefaultConstrainTypeDecider( grok.MultiAdapter ):
 
     CONSTRAIN_CONFIGURATION = {
         'opengever.dossier.businesscasedossier' : {
-            'opengever.dossier.businesscasedossier' : 3,
+            'opengever.dossier.businesscasedossier' : 2,
             'opengever.dossier.projectdossier' : 1,
             },
         'opengever.dossier.projectdossier' : {
