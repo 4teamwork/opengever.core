@@ -21,9 +21,8 @@ from plone.directives import form, dexterity
 
 from ftw.task import util
 from ftw.task import _
-from ftw.task.behaviors import ITransition
 
-from opengever.translations.browser.edit import TranslatedEditForm
+from opengever.translations.browser.add import TranslatedAddForm
 
 
 class ITask(form.Schema):
@@ -121,7 +120,7 @@ class ITask(form.Schema):
         required = False,
     )
 
-    form.order_before(**{'ITransition.transition':"responsible"})
+    form.order_before(**{'ITransition.transition': "responsible"})
 
 
 # XXX doesn't work yet.
@@ -149,7 +148,6 @@ IRelatedItems.setTaggedValue(FIELDSETS_KEY, [])
 IRelatedItems.setTaggedValue(ORDER_KEY, [('relatedItems', 'after', 'text')])
 #ITransition.setTaggedValue(FIELDSETS_KEY, [])
 #ITransition.setTaggedValue(ORDER_KEY, [('transition', 'before', 'responsible')])
-
 
 @grok.subscribe(ITask, IObjectAddedEvent)
 def setID(task, event):
@@ -197,7 +195,7 @@ class View(dexterity.DisplayForm):
 
 #class AddForm(dexterity.AddForm):
 
-class AddForm(TranslatedEditForm):
+class AddForm(TranslatedAddForm):
     grok.name('ftw.task.task')
 
     def update(self):
