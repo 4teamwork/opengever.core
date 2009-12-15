@@ -36,7 +36,7 @@ def setupVarious(context):
     portal = context.getSite()
     groupstool = portal.portal_groups
     
-    if not portal.get("registraturplan"):
+    if not portal.get("ordnungssystem"):
         portal._importObjectFromFile(context.openDataFile('ordnungssystem.zexp'))
 
 	# add some default users
