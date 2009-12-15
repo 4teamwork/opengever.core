@@ -65,20 +65,6 @@
   <action title="tasks" action_id="tasks" category="arbeitsraum-tabs" condition_expr="" url_expr="string:#" visible="True"></action>
   <action title="journal" action_id="journal" category="arbeitsraum-tabs" condition_expr="" url_expr="string:#" visible="True"></action>
 
-  <!-- opengever.journal, ftw.journal -->
-  <action title="Journal" action_id="journal" category="object"
-          url_expr="string:${object_url}/@@journal"
-          condition_expr="" visible="True">
-    <permission value="View"/>
-  </action>
-
-  <!-- collective.filepreviewbehavior, Products.ARFilePreview -->
-  <action title="Preview" action_id="preview" category="object"
-          url_expr="string:${object_url}/@@file_asdoc"
-          condition_expr="" visible="True">
-    <permission value="View"/>
-  </action>
-
   <!-- disable some old actions -->
   <action title="Versions" action_id="versions_history_form" category="object"
           url_expr="string:${object_url}/versions_history_form"
