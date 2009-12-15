@@ -1,15 +1,16 @@
 
 from Acquisition import aq_inner, aq_parent
 from five import grok
-from zope.component import queryMultiAdapter
+from zope.component import queryMultiAdapter, queryUtility
 from zope.interface import Interface
 
+from plone.registry.interfaces import IRegistry
 from plone.dexterity.content import Container
 from plone.dexterity.interfaces import IDexterityFTI
 from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
 from Products.CMFDefault.interfaces import ICMFDefaultSkin
 
-from opengever.dossier.interfaces import IConstrainTypeDecider
+from opengever.dossier.interfaces import IConstrainTypeDecider, IDossierContainerTypes
 from opengever.dossier.behaviors.dossier import IDossierMarker
 
 class DossierContainer( Container ):
@@ -40,8 +41,23 @@ class DossierContainer( Container ):
             return True
         # filter
         return filter( filter_type, types )
+        
+    def show_subdossier(self):
+        
 
-
+        registry = queryUtility(IRegistry)
+        reg_proxy = registry.forInterface(IDossierContainerTypes)
+        depth = 0
+        obj = self
+        while IDossierMarker.providedBy( obj ):
+            depth += 1
+            obj = aq_parent( aq_inner( obj ) )
+            if IPloneSiteRoot.providedBy( obj ):
+                break
+        if depth > getattr(reg_proxy, 'maximum_dossier_depth', 100):
+            return False
+        else:
+            return True
 
 class DefaultConstrainTypeDecider( grok.MultiAdapter ):
     grok.provides( IConstrainTypeDecider )

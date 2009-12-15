@@ -15,6 +15,7 @@ from ftw.table import helper
 from ftw.table.interfaces import ITableGenerator
 from opengever.document.staging.manager import ICheckinCheckoutManager
 
+
 class ITemplateDossier(Interface):
     pass
 
@@ -62,7 +63,7 @@ class TemplateDocumentFormView(grok.View):
                 newdoc.manage_delLocalRoles([u for u, r in newdoc.get_local_roles()])
                 newdoc.manage_setLocalRoles(member.getId(), ('Owner', ))
                 if self.edit:
-                    
+
                     manager = ICheckinCheckoutManager(newdoc)
                     wc = manager.checkout('', show_status_message=False)
                     portal = self.context.portal_url.getPortalObject()

@@ -6,7 +6,11 @@ from zope.interface import Interface
 class IDossierContainerTypes(Interface):
     """A type for collaborative spaces."""
     
-    container_types = schema.List(title=u"container_types", default=[u'Ordner',u'Schachtel',])
+    container_types = schema.List(title=u"container_types",
+                                    default=['Ordner', 'Schachtel', ])
+
+    maximum_dossier_depth = schema.Int(title=u'Maximum Dossier Depth',
+                                          default=1)
 
 
 class IConstrainTypeDecider(Interface):
@@ -23,10 +27,10 @@ class IConstrainTypeDecider(Interface):
     no such an adapter, the more general adapter without a name is used.
     """
 
-    def __init__( self, context, request, fti ):
+    def __init__(self, context, request, fti):
         pass
 
-    def addable( self, depth ):
+    def addable(self, depth):
         """ Returns True, if a object of type *fti* can be created in the
         current *context*, depending on the *depth*
         """

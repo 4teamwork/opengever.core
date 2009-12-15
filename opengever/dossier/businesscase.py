@@ -5,6 +5,7 @@ from plone.app.layout.viewlets.interfaces import IBelowContentTitle
 from plone.memoize.instance import memoize
 from plone.app.layout.viewlets import content
 from opengever.dossier.behaviors.dossier import IDossier
+from opengever.dossier.base import DossierContainer
 from Products.CMFCore.utils import getToolByName
 
 class IBusinessCaseDossier(form.Schema):
