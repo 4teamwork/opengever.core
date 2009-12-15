@@ -35,9 +35,27 @@ def setupVarious(context):
         
     portal = context.getSite()
     groupstool = portal.portal_groups
+
+    if not portal.get("arbeitsplatz"):
+        portal._importObjectFromFile(context.openDataFile('arbeitsplatz.zexp'))
     
     if not portal.get("ordnungssystem"):
         portal._importObjectFromFile(context.openDataFile('ordnungssystem.zexp'))
+
+    if not portal.get("eingangskorb"):
+        portal._importObjectFromFile(context.openDataFile('eingangskorb.zexp'))
+
+    if not portal.get("aufgaben"):
+        portal._importObjectFromFile(context.openDataFile('aufgaben.zexp'))
+
+    if not portal.get("journal"):
+        portal._importObjectFromFile(context.openDataFile('journal.zexp'))
+
+    if not portal.get("kontakte"):
+        portal._importObjectFromFile(context.openDataFile('kontakte.zexp'))
+
+    if not portal.get("vorlagen"):
+        portal._importObjectFromFile(context.openDataFile('vorlagen.zexp'))
 
 	# add some default users
     regtool = portal.portal_registration

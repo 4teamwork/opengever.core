@@ -12,7 +12,7 @@
    <property name="url_expr">string:${object_url}/arbeitsplatz</property>
    <property name="icon_expr"></property>
    <property name="permissions">
-    <element value="Modify portal content"/>
+    <element value="View"/>
    </property>
    <property name="visible">True</property>
   </object>
@@ -23,7 +23,7 @@
    <property name="url_expr">string:${object_url}/ordnungssystem</property>
    <property name="icon_expr"></property>
    <property name="permissions">
-    <element value="Modify portal content"/>
+    <element value="View"/>
    </property>
    <property name="visible">True</property>
   </object>
@@ -34,7 +34,7 @@
    <property name="url_expr">string:${object_url}/eingangskorb</property>
    <property name="icon_expr"></property>
    <property name="permissions">
-    <element value="Modify portal content"/>
+    <element value="View"/>
    </property>
    <property name="visible">True</property>
   </object>
@@ -45,7 +45,7 @@
    <property name="url_expr">string:${object_url}/aufgaben</property>
    <property name="icon_expr"></property>
    <property name="permissions">
-    <element value="Modify portal content"/>
+    <element value="View"/>
    </property>
    <property name="visible">True</property>
   </object>
@@ -56,7 +56,7 @@
    <property name="url_expr">string:${object_url}/journal</property>
    <property name="icon_expr"></property>
    <property name="permissions">
-    <element value="Modify portal content"/>
+    <element value="View"/>
    </property>
    <property name="visible">True</property>
   </object>
@@ -67,7 +67,7 @@
    <property name="url_expr">string:${object_url}/kontakte</property>
    <property name="icon_expr"></property>
    <property name="permissions">
-    <element value="Modify portal content"/>
+    <element value="View"/>
    </property>
    <property name="visible">True</property>
   </object>
