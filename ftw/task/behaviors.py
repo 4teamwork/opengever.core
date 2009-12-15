@@ -30,13 +30,13 @@ class ITransition(form.Schema):
         required = False,
     )
 
-    form.fieldset(
-        u'common',
-        label = _(u'fieldset_common', default=u'Common'),
-        fields = [
-            u'transition',
-            ],
-        )
+    # form.fieldset(
+    #     u'common',
+    #     label = _(u'fieldset_common', default=u'Common'),
+    #     fields = [
+    #         u'transition',
+    #         ],
+    #     )
 
 alsoProvides(ITransition, IFormFieldProvider)
 

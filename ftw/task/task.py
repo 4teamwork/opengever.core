@@ -121,7 +121,7 @@ class ITask(form.Schema):
         required = False,
     )
 
-    form.order_before(transition="responsible")
+    form.order_before(**{'ITransition.transition':"responsible"})
 
 
 # XXX doesn't work yet.
@@ -147,8 +147,8 @@ IRelatedItems.setTaggedValue(FIELDSETS_KEY, [])
 #         ] )
 #
 IRelatedItems.setTaggedValue(ORDER_KEY, [('relatedItems', 'after', 'text')])
-ITransition.setTaggedValue(FIELDSETS_KEY, [])
-ITransition.setTaggedValue(ORDER_KEY, [('transition', 'before', 'responsible')])
+#ITransition.setTaggedValue(FIELDSETS_KEY, [])
+#ITransition.setTaggedValue(ORDER_KEY, [('transition', 'before', 'responsible')])
 
 
 @grok.subscribe(ITask, IObjectAddedEvent)
