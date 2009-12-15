@@ -6,7 +6,7 @@ from zope.interface import Interface
 class IDossierContainerTypes(Interface):
     """A type for collaborative spaces."""
     
-    container_types = schema.List(title=u"container_types", default=['Ordner','Schachtel',])
+    container_types = schema.List(title=u"container_types", default=[u'Ordner',u'Schachtel',])
 
 
 class IConstrainTypeDecider(Interface):
