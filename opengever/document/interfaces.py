@@ -63,4 +63,4 @@ class IObjectCheckoutCanceledEvent(IObjectEvent):
     
     
 class IDocumentType(Interface):
-    document_types= schema.List(title=u"Document Type", default=['Antrag', 'Anfrage', 'Bericht', 'Offerte', 'Protokoll', 'Vertrag',])
+    document_types= schema.List(title=u"Document Type", default=[u'Antrag', u'Anfrage', u'Bericht', u'Offerte', u'Protokoll', u'Vertrag',])
