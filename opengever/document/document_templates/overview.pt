@@ -37,7 +37,8 @@
 		<tr>
 			<th i18n:translate="label_file">file</th>
 			<td>
-				<a tal:attributes="href string:${context/absolute_url}/@@download/file/${context/file/filename}" tal:content="structure view/w/file/render"/>
+                <a tal:condition="context/file" tal:attributes="href string:${context/absolute_url}/@@download/file/${context/file/filename}" tal:content="structure view/w/file/render"/>
+                <span tal:condition="not:context/file">-</span>
 			</td>
 		</tr>
 		<tr>
