@@ -28,7 +28,7 @@ from plone.memoize.instance import memoize
 from ftw.task import util
 from ftw.task import _
 
-from opengever.base.sequence import ISequenceNumber
+from opengever.base.interfaces import ISequenceNumber
 from opengever.translations.browser.add import TranslatedAddForm
 
 
