@@ -88,7 +88,7 @@
   <exit-transition transition_id="task-transition-to_complete"/>
  </state>
  <state state_id="task-state-rejected"
-        title="task-state-Rejected">
+        title="task-state-rejected">
   <exit-transition transition_id="task-transition-reactivate"/>
  </state>
  <state state_id="task-state-request-statement" title="">
