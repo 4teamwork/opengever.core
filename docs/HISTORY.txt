@@ -6,6 +6,10 @@ Changelog
 
 
 * Issue #296: Nummerierungskonzept umsetzen
+  IReferenceNumber zum generieren von Aktenzeichen implementiert
+  [16.12.2009, jbaumann]
+
+* Issue #296: Nummerierungskonzept umsetzen
   ISequenceNumber utility implementiert
   [16.12.2009, jbaumann]
 
