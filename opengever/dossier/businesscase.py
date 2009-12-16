@@ -9,8 +9,7 @@ from plone.directives import dexterity
 from plone.memoize.instance import memoize
 from zope.intid.interfaces import IIntIds
 
-from opengever.base.sequence import ISequenceNumber
-from opengever.base.reference import IReferenceNumber
+from opengever.base.interfaces import IReferenceNumber, ISequenceNumber
 
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.base import DossierContainer
