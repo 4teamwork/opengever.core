@@ -5,6 +5,10 @@ Changelog
 ---------------------
 
 
+* Issue #296: Nummerierungskonzept umsetzen
+  ISequenceNumber utility implementiert
+  [16.12.2009, jbaumann]
+
 * Issue #239: Registraturposition: Fehler bei leerer Eingabe "Aufbewahrungsdauer"
   [10.12.2009, jbaumann]
 
