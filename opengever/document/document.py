@@ -46,8 +46,7 @@ from zope.annotation.interfaces import IAnnotations, IAnnotatable
 from plone.directives.dexterity import DisplayForm
 
 from opengever.tabbedview.browser.tabs import OpengeverTab,OpengeverListingTab
-from opengever.base.sequence import ISequenceNumber
-from opengever.base.reference import IReferenceNumber
+from opengever.base.interfaces import IReferenceNumber, ISequenceNumber
 
 LOG = logging.getLogger('opengever.document')
 
