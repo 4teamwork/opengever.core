@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2009-12-14 10:47+0000\n"
+"POT-Creation-Date: 2009-12-16 13:08+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -97,12 +97,12 @@ msgid "cancel_back"
 msgstr ""
 
 #. Default: "Dates"
-#: opengever.document/opengever/document/document.py:76
+#: opengever.document/opengever/document/document.py:79
 msgid "fieldset_common"
 msgstr ""
 
 #. Default: "Dates"
-#: opengever.document/opengever/document/document.py:94
+#: opengever.document/opengever/document/document.py:97
 msgid "fieldset_dates"
 msgstr ""
 
@@ -126,11 +126,11 @@ msgstr ""
 msgid "heading_send_as_email"
 msgstr ""
 
-#: opengever.document/opengever/document/document.py:163
+#: opengever.document/opengever/document/document.py:166
 msgid "help_archival_file"
 msgstr ""
 
-#: opengever.document/opengever/document/document.py:134
+#: opengever.document/opengever/document/document.py:137
 msgid "help_author"
 msgstr ""
 
@@ -144,11 +144,11 @@ msgstr ""
 msgid "help_checkout_journal_comment"
 msgstr ""
 
-#: opengever.document/opengever/document/document.py:191
+#: opengever.document/opengever/document/document.py:194
 msgid "help_delivery_date"
 msgstr ""
 
-#: opengever.document/opengever/document/document.py:108
+#: opengever.document/opengever/document/document.py:111
 msgid "help_description"
 msgstr ""
 
@@ -160,19 +160,19 @@ msgstr ""
 msgid "help_docucomposer_wizard"
 msgstr ""
 
-#: opengever.document/opengever/document/document.py:121
+#: opengever.document/opengever/document/document.py:124
 msgid "help_document_date"
 msgstr ""
 
-#: opengever.document/opengever/document/document.py:127
+#: opengever.document/opengever/document/document.py:130
 msgid "help_document_type"
 msgstr ""
 
-#: opengever.document/opengever/document/document.py:141
+#: opengever.document/opengever/document/document.py:144
 msgid "help_file"
 msgstr ""
 
-#: opengever.document/opengever/document/document.py:114
+#: opengever.document/opengever/document/document.py:117
 msgid "help_foreign_reference"
 msgstr ""
 
@@ -186,20 +186,20 @@ msgid "help_open_extern"
 msgstr ""
 
 #. Default: "paper form"
-#: opengever.document/opengever/document/document.py:148
-#: opengever.document/opengever/document/document_templates/overview.pt:46
+#: opengever.document/opengever/document/document.py:151
+#: opengever.document/opengever/document/document_templates/overview.pt:45
 msgid "help_paper_form"
 msgstr ""
 
-#: opengever.document/opengever/document/document.py:155
+#: opengever.document/opengever/document/document.py:158
 msgid "help_preserved_as_paper"
 msgstr ""
 
-#: opengever.document/opengever/document/document.py:177
+#: opengever.document/opengever/document/document.py:180
 msgid "help_preview"
 msgstr ""
 
-#: opengever.document/opengever/document/document.py:184
+#: opengever.document/opengever/document/document.py:187
 msgid "help_receipt_date"
 msgstr ""
 
@@ -211,7 +211,7 @@ msgstr ""
 msgid "help_subject"
 msgstr ""
 
-#: opengever.document/opengever/document/document.py:170
+#: opengever.document/opengever/document/document.py:173
 msgid "help_thumbnail"
 msgstr ""
 
@@ -221,12 +221,12 @@ msgid "info_mails_sent"
 msgstr ""
 
 #. Default: "Archival File"
-#: opengever.document/opengever/document/document.py:162
+#: opengever.document/opengever/document/document.py:165
 msgid "label_archival_file"
 msgstr ""
 
 #. Default: "author"
-#: opengever.document/opengever/document/document.py:133
+#: opengever.document/opengever/document/document.py:136
 #: opengever.document/opengever/document/document_templates/overview.pt:22
 msgid "label_author"
 msgstr ""
@@ -252,13 +252,13 @@ msgid "label_creator"
 msgstr ""
 
 #. Default: "delivery date"
-#: opengever.document/opengever/document/document.py:190
-#: opengever.document/opengever/document/document_templates/overview.pt:61
+#: opengever.document/opengever/document/document.py:193
+#: opengever.document/opengever/document/document_templates/overview.pt:59
 msgid "label_delivery_date"
 msgstr ""
 
 #. Default: "description"
-#: opengever.document/opengever/document/document.py:107
+#: opengever.document/opengever/document/document.py:110
 #: opengever.document/opengever/document/document_templates/overview.pt:30
 msgid "label_description"
 msgstr ""
@@ -274,25 +274,25 @@ msgid "label_document"
 msgstr ""
 
 #. Default: "document date"
-#: opengever.document/opengever/document/document.py:120
+#: opengever.document/opengever/document/document.py:123
 #: opengever.document/opengever/document/document_templates/overview.pt:14
 msgid "label_document_date"
 msgstr ""
 
 #. Default: "document type"
-#: opengever.document/opengever/document/document.py:126
+#: opengever.document/opengever/document/document.py:129
 #: opengever.document/opengever/document/document_templates/overview.pt:18
 msgid "label_document_type"
 msgstr ""
 
 #. Default: "file"
-#: opengever.document/opengever/document/document.py:140
-#: opengever.document/opengever/document/document_templates/overview.pt:39
+#: opengever.document/opengever/document/document.py:143
+#: opengever.document/opengever/document/document_templates/overview.pt:38
 msgid "label_file"
 msgstr ""
 
 #. Default: "foreign reference"
-#: opengever.document/opengever/document/document.py:113
+#: opengever.document/opengever/document/document.py:116
 #: opengever.document/opengever/document/document_templates/overview.pt:34
 msgid "label_foreign_reference"
 msgstr ""
@@ -303,7 +303,7 @@ msgid "label_message"
 msgstr ""
 
 #. Default: "no"
-#: opengever.document/opengever/document/document_templates/overview.pt:48
+#: opengever.document/opengever/document/document_templates/overview.pt:47
 msgid "label_no"
 msgstr ""
 
@@ -313,30 +313,35 @@ msgid "label_open_extern"
 msgstr ""
 
 #. Default: "Paper form"
-#: opengever.document/opengever/document/document.py:147
+#: opengever.document/opengever/document/document.py:150
 msgid "label_paper_form"
 msgstr ""
 
 #. Default: "preserved as paper"
-#: opengever.document/opengever/document/document.py:154
-#: opengever.document/opengever/document/document_templates/overview.pt:51
+#: opengever.document/opengever/document/document.py:157
+#: opengever.document/opengever/document/document_templates/overview.pt:50
 msgid "label_preserved_as_paper"
 msgstr ""
 
 #. Default: "Preview"
-#: opengever.document/opengever/document/document.py:176
+#: opengever.document/opengever/document/document.py:179
 msgid "label_preview"
 msgstr ""
 
 #. Default: "reciept date"
-#: opengever.document/opengever/document/document.py:183
-#: opengever.document/opengever/document/document_templates/overview.pt:56
+#: opengever.document/opengever/document/document.py:186
+#: opengever.document/opengever/document/document_templates/overview.pt:55
 msgid "label_receipt_date"
 msgstr ""
 
 #. Default: "Receivers"
 #: opengever.document/opengever/document/mailing.py:163
 msgid "label_receivers"
+msgstr ""
+
+#. Default: "Sequence Number:"
+#: opengever.document/opengever/document/document_templates/byline.pt:48
+msgid "label_sequence_number"
 msgstr ""
 
 #. Default: "from"
@@ -350,12 +355,12 @@ msgid "label_subject"
 msgstr ""
 
 #. Default: "Thumbnail"
-#: opengever.document/opengever/document/document.py:169
+#: opengever.document/opengever/document/document.py:172
 msgid "label_thumbnail"
 msgstr ""
 
 #. Default: "Title"
-#: opengever.document/opengever/document/document.py:102
+#: opengever.document/opengever/document/document.py:105
 msgid "label_title"
 msgstr ""
 
@@ -365,7 +370,7 @@ msgid "label_workflow_state"
 msgstr ""
 
 #. Default: "yes"
-#: opengever.document/opengever/document/document_templates/overview.pt:47
+#: opengever.document/opengever/document/document_templates/overview.pt:46
 msgid "label_yes"
 msgstr ""
 
@@ -375,7 +380,7 @@ msgid "lable_docucomposer_filename"
 msgstr ""
 
 #. Default: "referenced documents"
-#: opengever.document/opengever/document/document_templates/overview.pt:66
+#: opengever.document/opengever/document/document_templates/overview.pt:63
 msgid "referenced_documents"
 msgstr ""
 

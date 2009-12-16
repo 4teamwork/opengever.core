@@ -5,6 +5,10 @@ Changelog
 0.2
 ---
 
+* Issue #296: Nummerierungskonzept umsetzen
+  Laufnummer in Byline eingebaut
+  [16.12.2009, jbaumann]
+
 * Issue #187: Dossier-Tabs (Erfassungs- und Bearbeitungsmodus) anpassen
   [01.12.2009, jbaumann]
 

@@ -44,5 +44,14 @@
           i18n:translate="time_expired" tal:omit-tag="">expired</span>
   </tal:expired>
 
+  <span class="sequenceNumber" tal:condition="viewlet/sequence_number">
+    <span i18n:translate="label_sequence_number"
+          tal:omit-tag="">
+      Sequence Number:
+    </span>
+    <span tal:replace="viewlet/sequence_number">
+      14
+    </span>
+  </span>
 
 </div>
