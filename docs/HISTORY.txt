@@ -5,6 +5,11 @@ Changelog
 0.2
 ---
 
+* Issue #273: Dossier: Reiter Dokumente, Spalte "Ausgecheckt"
+  checked_out index korrigiert: nun wird der User verwendet, der das Dokument
+  auscheckt
+  [16.12.2009, jbaumann]
+
 * Issue #296: Nummerierungskonzept umsetzen
   Aktenzeichen in Byline anzeigen
   [16.12.2009, jbaumann]

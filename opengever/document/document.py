@@ -342,7 +342,7 @@ def checked_out( obj ):
     rels = StagingRelationValue.get_relations_of( context )
     if len( rels ):
         rel = rels[0]
-        return rel.to_object.Creator()
+        return rel.creator
     return '-'
 grok.global_adapter( checked_out, name='checked_out' )
 
