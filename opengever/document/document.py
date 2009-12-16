@@ -9,7 +9,7 @@ from z3c.form.browser import checkbox
 from zope import schema
 from zope.schema.vocabulary import SimpleVocabulary
 from zope.schema.interfaces import IContextSourceBinder
-from zope.component import queryUtility, getUtility
+from zope.component import queryUtility, getUtility, getAdapter
 from datetime import datetime
 
 from Products.CMFCore.utils import getToolByName
@@ -47,6 +47,7 @@ from plone.directives.dexterity import DisplayForm
 
 from opengever.tabbedview.browser.tabs import OpengeverTab,OpengeverListingTab
 from opengever.base.sequence import ISequenceNumber
+from opengever.base.reference import IReferenceNumber
 
 LOG = logging.getLogger('opengever.document')
 
@@ -390,6 +391,11 @@ class Byline(grok.Viewlet, content.DocumentBylineViewlet):
     def sequence_number(self):
         seqNumb = getUtility(ISequenceNumber)
         return seqNumb.get_number(self.context)
+
+    @memoize
+    def reference_number(self):
+        refNumb = getAdapter(self.context, IReferenceNumber)
+        return refNumb.get_number()
 
 
 class Overview(DisplayForm, OpengeverTab):
