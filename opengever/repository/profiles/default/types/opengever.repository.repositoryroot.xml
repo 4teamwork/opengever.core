@@ -14,7 +14,7 @@
   </property>
 
   <!-- schema interface -->
-  <property name="schema"></property>
+  <property name="schema">opengever.repository.repositoryroot.IRepositoryRoot</property>
 
   <!-- class used for content items -->
   <property name="klass">plone.dexterity.content.Container</property>
@@ -25,6 +25,7 @@
   <!-- enabled behaviors -->
   <property name="behaviors">
     <element value="plone.app.content.interfaces.INameFromTitle" />
+    <element value="plone.app.dexterity.behaviors.metadata.IBasic" />
     <element value="opengever.tabbedview.interfaces.ITabbedViewEnabled" />
   </property>
 
