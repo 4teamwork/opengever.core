@@ -1,5 +1,6 @@
 from five import grok
 from zope import schema
+from zope.component import getUtility
 from zope.interface import implements, Interface
 from zope.traversing.interfaces import ITraversable
 from zope.publisher.interfaces.browser import IBrowserRequest, IBrowserPage
@@ -13,6 +14,8 @@ from Products.CMFCore.utils import getToolByName
 from datetime import datetime, timedelta
 from rwproperty import getproperty, setproperty
 
+from plone.app.layout.viewlets import content
+from plone.app.layout.viewlets.interfaces import IBelowContentTitle
 from plone.formwidget import autocomplete
 from plone.formwidget.autocomplete import AutocompleteFieldWidget
 from plone.z3cform.traversal import WidgetTraversal
@@ -20,10 +23,12 @@ from plone.app.dexterity.behaviors.related import IRelatedItems
 from plone.dexterity.interfaces import IDexterityFTI
 from plone.dexterity.content import Container
 from plone.directives import form, dexterity
+from plone.memoize.instance import memoize
 
 from ftw.task import util
 from ftw.task import _
 
+from opengever.base.sequence import ISequenceNumber
 from opengever.translations.browser.add import TranslatedAddForm
 
 
@@ -286,3 +291,26 @@ class TaskAutoCompleteSearch(grok.CodeView, autocomplete.widget.AutocompleteSear
 
     def render(self):
         pass
+
+
+class Byline(grok.Viewlet, content.DocumentBylineViewlet):
+    grok.viewletmanager(IBelowContentTitle)
+    grok.context(ITask)
+    grok.name('plone.belowcontenttitle.documentbyline')
+
+    update = content.DocumentBylineViewlet.update
+
+    @memoize
+    def workflow_state(self):
+        state = self.context_state.workflow_state()
+        workflows = self.tools.workflow().getWorkflowsFor(self.context.aq_explicit)
+        if workflows:
+            for w in workflows:
+                if w.states.has_key(state):
+                    return w.states[state].title or state
+
+    @memoize
+    def sequence_number(self):
+        seqNumb = getUtility(ISequenceNumber)
+        return seqNumb.get_number(self.context)
+
