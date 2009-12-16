@@ -8,8 +8,8 @@
     <control controlID="1" controlTypeID="com.balsamiq.mockups::TabBar" x="352" y="336" w="798" h="432" measuredW="523" measuredH="100" zOrder="1" locked="false" isInGroup="-1">
       <controlProperties>
         <text>%DCbersicht%2C%20Subdossiers%2C%20Dokumente%2C%20Aufgaben%2C%20Journal%2C%20Beteiligung</text>
-        <hrefs>%2C%2C%2C%2C%2C</hrefs>
         <selectedIndex>2</selectedIndex>
+        <hrefs>%2C%2C%2C%2C%2C</hrefs>
       </controlProperties>
     </control>
     <control controlID="66" controlTypeID="com.balsamiq.mockups::Label" x="757" y="506" w="121" h="23" measuredW="81" measuredH="23" zOrder="17" locked="false" isInGroup="-1">
@@ -107,8 +107,8 @@
     <control controlID="80" controlTypeID="com.balsamiq.mockups::IconLabel" x="375" y="228" w="-1" h="-1" measuredW="307" measuredH="37" zOrder="27" locked="false" isInGroup="-1">
       <controlProperties>
         <text>Beschwerde%20Hans%20Muster</text>
-        <color>16777215</color>
         <labelPosition>right</labelPosition>
+        <color>16777215</color>
         <icon>FolderIcon%7Csmall</icon>
         <size>24</size>
       </controlProperties>
@@ -156,8 +156,8 @@
     <control controlID="89" controlTypeID="com.balsamiq.mockups::IconLabel" x="71" y="85" w="-1" h="-1" measuredW="151" measuredH="37" zOrder="32" locked="false" isInGroup="-1">
       <controlProperties>
         <text>OpenGever</text>
-        <icon>GearIcon%7Csmall</icon>
         <labelPosition>right</labelPosition>
+        <icon>GearIcon%7Csmall</icon>
         <size>24</size>
         <color>16777215</color>
       </controlProperties>
@@ -198,13 +198,13 @@
     </control>
     <control controlID="96" controlTypeID="com.balsamiq.mockups::RoundButton" x="300" y="136" w="123" h="34" measuredW="32" measuredH="32" zOrder="40" locked="false" isInGroup="-1">
       <controlProperties>
-        <borderColor>15790322</borderColor>
         <shape>rectangle</shape>
+        <borderColor>15790322</borderColor>
         <color>255</color>
         <text>Eingangskorb</text>
         <href>eingangskorb%26bm%3Beingangskorb.bmml%26bm%3Beingangskorb.bmml%26bm%3Beingangskorb.bmml</href>
-        <map>%3Carea%20shape%3D%22rect%22%20coords%3D%22251%2C127%2C374%2C161%22%20href%3D%22eingangskorb.bmml%22%20alt%3D%22eingangskorb%22%20id%3D%2296%22/%3E</map>
         <size>13</size>
+        <map>%3Carea%20shape%3D%22rect%22%20coords%3D%22251%2C127%2C374%2C161%22%20href%3D%22eingangskorb.bmml%22%20alt%3D%22eingangskorb%22%20id%3D%2296%22/%3E</map>
       </controlProperties>
     </control>
     <control controlID="41" controlTypeID="com.balsamiq.mockups::Button" x="375" y="638" w="-1" h="-1" measuredW="48" measuredH="28" zOrder="11" locked="false" isInGroup="-1">
@@ -222,8 +222,8 @@
     <control controlID="92" controlTypeID="com.balsamiq.mockups::RoundButton" x="88" y="137" w="102" h="32" measuredW="32" measuredH="32" zOrder="37" locked="false" isInGroup="-1">
       <controlProperties>
         <text>Arbeitsplatz</text>
-        <borderColor>15790322</borderColor>
         <shape>rectangle</shape>
+        <borderColor>15790322</borderColor>
         <color>255</color>
         <size>13</size>
       </controlProperties>
@@ -237,20 +237,20 @@
     </control>
     <control controlID="97" controlTypeID="com.balsamiq.mockups::RoundButton" x="417" y="136" w="123" h="34" measuredW="32" measuredH="32" zOrder="41" locked="false" isInGroup="-1">
       <controlProperties>
-        <borderColor>15790322</borderColor>
         <shape>rectangle</shape>
+        <borderColor>15790322</borderColor>
         <color>255</color>
         <text>Aufgaben</text>
         <href>aufgaben_uebersicht%26bm%3Baufgaben_uebersicht.bmml%26bm%3Baufgaben_uebersicht.bmml%26bm%3Baufgaben_uebersicht.bmml</href>
-        <map>%3Carea%20shape%3D%22rect%22%20coords%3D%22368%2C127%2C491%2C161%22%20href%3D%22aufgaben_uebersicht.bmml%22%20alt%3D%22aufgaben_uebersicht%22%20id%3D%2297%22/%3E</map>
         <size>13</size>
+        <map>%3Carea%20shape%3D%22rect%22%20coords%3D%22368%2C127%2C491%2C161%22%20href%3D%22aufgaben_uebersicht.bmml%22%20alt%3D%22aufgaben_uebersicht%22%20id%3D%2297%22/%3E</map>
       </controlProperties>
     </control>
     <control controlID="98" controlTypeID="com.balsamiq.mockups::RoundButton" x="533" y="136" w="123" h="34" measuredW="32" measuredH="32" zOrder="42" locked="false" isInGroup="-1">
       <controlProperties>
         <text>Kontakte</text>
-        <borderColor>15790322</borderColor>
         <shape>rectangle</shape>
+        <borderColor>15790322</borderColor>
         <color>255</color>
         <size>13</size>
       </controlProperties>
@@ -258,8 +258,8 @@
     <control controlID="93" controlTypeID="com.balsamiq.mockups::RoundButton" x="184" y="137" w="123" h="34" measuredW="32" measuredH="32" zOrder="38" locked="false" isInGroup="-1">
       <controlProperties>
         <text>Registraturplan</text>
-        <borderColor>15790322</borderColor>
         <shape>rectangle</shape>
+        <borderColor>15790322</borderColor>
         <color>255</color>
         <size>13</size>
       </controlProperties>
