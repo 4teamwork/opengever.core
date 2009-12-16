@@ -6,7 +6,7 @@
   <span id="lock-icon"
         tal:define="lock_icon viewlet/locked_icon"
         tal:condition="lock_icon">
-      <img tal:replace="structure lock_icon" />
+    <img tal:replace="structure lock_icon" />
   </span>
 
   <tal:name tal:condition="context/document_author">
@@ -26,12 +26,12 @@
 
   <tal:state>
     <span i18n:translate="label_workflow_state" class="documentStatus">
-	  State: 
-	</span>
-	<span tal:content="viewlet/workflow_state" i18n:translate="" i18n:domain="plone" class="documentAuthor" />
+      State:
+    </span>
+    <span tal:content="viewlet/workflow_state" i18n:translate="" i18n:domain="plone" class="documentAuthor" />
   </tal:state>
   <span class="documentModified" tal:condition="context/document_date">
-	<span i18n:translate="label_start_byline" tal:omit-tag="">
+    <span i18n:translate="label_start_byline" tal:omit-tag="">
       from
     </span>
     <span tal:replace="python:viewlet.toLocalizedTime(str(here.document_date),long_format=0)">
