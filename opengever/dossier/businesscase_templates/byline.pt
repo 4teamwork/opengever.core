@@ -64,4 +64,11 @@
     </span>
   </span>
 
+  <span class="emailAddress" tal:condition="viewlet/email">
+    <span i18n:translate="label_email_address"
+          i18n:domain="opengever.dossier" tal:omit-tag="">
+      E-Mail:
+    </span>
+    <a href="#" tal:content="viewlet/email" tal:attributes="href string:mailto:${viewlet/email}"/>
+  </span>
 </div>

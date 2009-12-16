@@ -7,6 +7,7 @@ from plone.app.layout.viewlets.interfaces import IBelowContentTitle
 from plone.directives import form
 from plone.directives import dexterity
 from plone.memoize.instance import memoize
+from zope.intid.interfaces import IIntIds
 
 from opengever.base.sequence import ISequenceNumber
 
@@ -73,3 +74,10 @@ class Byline(grok.Viewlet, content.DocumentBylineViewlet):
     def sequence_number(self):
         seqNumb = getUtility(ISequenceNumber)
         return seqNumb.get_number(self.context)
+
+    # TODO: should be more generic ;-)
+    #       use sequence_number instead of intid
+    def email(self):
+        id_util = getUtility(IIntIds)
+        intid = id_util.queryId(self.context)
+        return '%s@opengever.4teamwork.ch' % intid
