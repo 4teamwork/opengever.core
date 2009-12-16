@@ -59,7 +59,7 @@ class ITask(form.Schema):
         title =_(u"label_issuer", default=u"Issuer"),
         description = _('help_issuer', default=u""),
         source = util.getManagersVocab,
-        required = False,
+        required = True,
     )
 
     form.widget(responsible=AutocompleteFieldWidget)
@@ -67,7 +67,7 @@ class ITask(form.Schema):
         title=_(u"label_responsible", default="Responsible"),
         description =_(u"help_responsible", default=""),
         source = util.getManagersVocab,
-        required = False,
+        required = True,
     )
 
     form.widget(deadline='ftw.datepicker.widget.DatePickerFieldWidget')

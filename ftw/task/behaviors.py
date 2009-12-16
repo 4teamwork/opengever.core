@@ -27,7 +27,7 @@ class ITransition(form.Schema):
         title=_("label_transition", default="Transition"),
         description=_(u"help_transition", default=""),
         source = util.getTransitionVocab,
-        required = False,
+        required = True,
     )
 
     # form.fieldset(

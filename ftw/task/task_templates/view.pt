@@ -12,7 +12,7 @@
 
     <div tal:replace="structure provider:plone.abovecontenttitle" />
 
-    <h1 class="documentFirstHeading" tal:content="python: context.title"/> 
+    <h1 class="documentFirstHeading" tal:content="python: context.title"/>
 
     <div tal:replace="structure provider:plone.belowcontenttitle" />
 
