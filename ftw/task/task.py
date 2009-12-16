@@ -5,11 +5,13 @@ from zope.traversing.interfaces import ITraversable
 from zope.publisher.interfaces.browser import IBrowserRequest, IBrowserPage
 from zope.component import queryMultiAdapter, getUtility, getMultiAdapter
 from zope.app.container.interfaces import IObjectAddedEvent
+from zope.annotation.interfaces import IAnnotations
 
 from Acquisition import aq_parent, aq_inner
 from AccessControl import getSecurityManager
 from Products.CMFCore.utils import getToolByName
 from datetime import datetime, timedelta
+from rwproperty import getproperty, setproperty
 
 from plone.formwidget import autocomplete
 from plone.formwidget.autocomplete import AutocompleteFieldWidget
@@ -157,6 +159,18 @@ def setID(task, event):
 class Task(Container):
     implements(ITask)
 
+    def __init__(self, *args, **kwargs):
+        self._title = ''
+        super(Task, self).__init__(*args, **kwargs)
+
+    @getproperty
+    def title(self):
+        return self._title
+        
+    @setproperty
+    def title(self, value):
+        if value:
+            self._title = value
     @property
     def sequence_number(self):
         return self._sequence_number
