@@ -64,6 +64,16 @@
     </span>
   </span>
 
+  <span class="referenceNumber" tal:condition="viewlet/reference_number">
+    <span i18n:translate="label_reference_number"
+          tal:omit-tag="">
+      Reference Number:
+    </span>
+    <span tal:replace="viewlet/reference_number">
+      14
+    </span>
+  </span>
+
   <span class="emailAddress" tal:condition="viewlet/email">
     <span i18n:translate="label_email_address"
           i18n:domain="opengever.dossier" tal:omit-tag="">

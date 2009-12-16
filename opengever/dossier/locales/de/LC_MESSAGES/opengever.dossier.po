@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: opengever.dossier 1.0\n"
-"POT-Creation-Date: 2009-12-16 12:57+0000\n"
+"POT-Creation-Date: 2009-12-16 15:16+0000\n"
 "PO-Revision-Date: 2009-09-17 15:21+0000\n"
 "Last-Translator: Thomas Buchberger <t.buchberger@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -115,6 +115,11 @@ msgstr "Behältnis-Standort"
 msgid "label_container_type"
 msgstr "Behältnis-Art"
 
+#. Default: "E-Mail:"
+#: opengever.dossier/opengever/dossier/businesscase_templates/byline.pt:78
+msgid "label_email_address"
+msgstr ""
+
 #. Default: "Closing Date"
 #: opengever.dossier/opengever/dossier/behaviors/dossier.py:75
 msgid "label_end"
@@ -135,6 +140,11 @@ msgstr "Schlagworte"
 #: opengever.dossier/opengever/dossier/behaviors/dossier.py:125
 msgid "label_number_of_containers"
 msgstr "Anzahl Behältnisse"
+
+#. Default: "Reference Number:"
+#: opengever.dossier/opengever/dossier/businesscase_templates/byline.pt:68
+msgid "label_reference_number"
+msgstr "Aktenzeichen:"
 
 #. Default: "Responsible"
 #: opengever.dossier/opengever/dossier/behaviors/dossier.py:94

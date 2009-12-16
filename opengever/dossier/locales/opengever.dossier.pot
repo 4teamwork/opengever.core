@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2009-12-16 12:57+0000\n"
+"POT-Creation-Date: 2009-12-16 15:16+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -117,6 +117,11 @@ msgstr ""
 msgid "label_container_type"
 msgstr ""
 
+#. Default: "E-Mail:"
+#: opengever.dossier/opengever/dossier/businesscase_templates/byline.pt:78
+msgid "label_email_address"
+msgstr ""
+
 #. Default: "Closing Date"
 #: opengever.dossier/opengever/dossier/behaviors/dossier.py:75
 msgid "label_end"
@@ -136,6 +141,11 @@ msgstr ""
 #. Default: "Number of Containers"
 #: opengever.dossier/opengever/dossier/behaviors/dossier.py:125
 msgid "label_number_of_containers"
+msgstr ""
+
+#. Default: "Reference Number:"
+#: opengever.dossier/opengever/dossier/businesscase_templates/byline.pt:68
+msgid "label_reference_number"
 msgstr ""
 
 #. Default: "Responsible"
