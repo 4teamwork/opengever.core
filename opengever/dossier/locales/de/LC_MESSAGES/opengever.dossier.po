@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: opengever.dossier 1.0\n"
-"POT-Creation-Date: 2009-12-16 15:16+0000\n"
+"POT-Creation-Date: 2009-12-16 15:20+0000\n"
 "PO-Revision-Date: 2009-09-17 15:21+0000\n"
 "Last-Translator: Thomas Buchberger <t.buchberger@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -177,6 +177,22 @@ msgstr "Bandnummer"
 #: opengever.dossier/opengever/dossier/project_templates/byline.pt:28
 msgid "label_workflow_state"
 msgstr "Status:"
+
+#: opengever.dossier/opengever/dossier/resolve.py:66
+msgid "no end date are entered"
+msgstr "Es wurde kein End-Datum eingegeben"
+
+#: opengever.dossier/opengever/dossier/resolve.py:41
+msgid "not all documents are checked in"
+msgstr "Es sind nicht alle Dokumente eingeckeckt"
+
+#: opengever.dossier/opengever/dossier/resolve.py:27
+msgid "not all documents are stored in a subdossier"
+msgstr "Es sind nicht alle Dokumente in einem Subdossiers abgelegt"
+
+#: opengever.dossier/opengever/dossier/resolve.py:61
+msgid "not all task are closed"
+msgstr "Es sind nicht alle Aufgaben sind erledigt"
 
 #. Default: "expired"
 #: opengever.dossier/opengever/dossier/businesscase_templates/byline.pt:53

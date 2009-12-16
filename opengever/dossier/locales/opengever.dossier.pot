@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2009-12-16 15:16+0000\n"
+"POT-Creation-Date: 2009-12-16 15:20+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -178,6 +178,22 @@ msgstr ""
 #: opengever.dossier/opengever/dossier/businesscase_templates/byline.pt:28
 #: opengever.dossier/opengever/dossier/project_templates/byline.pt:28
 msgid "label_workflow_state"
+msgstr ""
+
+#: opengever.dossier/opengever/dossier/resolve.py:66
+msgid "no end date are entered"
+msgstr ""
+
+#: opengever.dossier/opengever/dossier/resolve.py:41
+msgid "not all documents are checked in"
+msgstr ""
+
+#: opengever.dossier/opengever/dossier/resolve.py:27
+msgid "not all documents are stored in a subdossier"
+msgstr ""
+
+#: opengever.dossier/opengever/dossier/resolve.py:61
+msgid "not all task are closed"
 msgstr ""
 
 #. Default: "expired"
