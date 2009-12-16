@@ -8,33 +8,13 @@ from plone.dexterity.interfaces import IDexterityContent
 from plone.registry.interfaces import IRegistry
 
 from opengever.base.interfaces import IBaseClientID
+from opengever.base.interfaces import IReferenceNumber
 from opengever.base.sequence import ISequenceNumber
 from opengever.repository.repositoryfolder import IRepositoryFolderSchema
 from opengever.repository.repositoryroot import IRepositoryRoot
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.document.document import IDocumentSchema
 import opengever.base.behaviors.reference
-
-
-class IReferenceNumber(Interface):
-    """ The reference number adapter is able to generate a full reference
-    number including all parent reference-prefixes.
-    Examples:
-
-    GD 2.3 / 4.5 / 123
-    * GD : client specific short name
-    * 2 : reference_number prefix of first RepositoryFolder
-    * 3 : reference_number prefix of second RepositoryFolder
-    * / : Seperator between RFs and Dossiers
-    * 4 : reference_number prefix of first dossier
-    * 5 : reference_number prefix of second dossier
-    * / : Seperator between Dossiers and Document
-    * 123 : sequence_number of Document
-    """
-
-    def get_number(self):
-        """ Returns the reference number of the context
-        """
 
 
 class BasicReferenceNumber(grok.Adapter):

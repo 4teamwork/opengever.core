@@ -9,18 +9,10 @@ from Products.Transience.Transience import Increaser
 from plone.dexterity.interfaces import IDexterityContent
 
 from opengever.dossier.behaviors.dossier import IDossierMarker
+from opengever.base.interfaces import ISequenceNumber
+from opengever.base.interfaces import ISequenceNumberGenerator
 
 SEQUENCE_NUMBER_ANNOTATION_KEY = 'ISequenceNumber.sequence_number'
-
-
-class ISequenceNumber(Interface):
-    """  The sequence number utility provides a getNumber(obj) method
-    which returns a unique number for each object.
-    """
-
-    def get_number(self, obj):
-        """ Returns the sequence number for the given *obj*
-        """
 
 
 class SequenceNumber(grok.GlobalUtility):
@@ -37,16 +29,6 @@ class SequenceNumber(grok.GlobalUtility):
             ann[SEQUENCE_NUMBER_ANNOTATION_KEY] = value
         return ann.get(SEQUENCE_NUMBER_ANNOTATION_KEY)
     
- 
-class ISequenceNumberGenerator(Interface):
-    """ The sequence number generator adapter generates a new sequence number
-    for the adapted object
-    """
-
-    def generate(self):
-        """ Returns a new sequence number for the adapted object
-        """
-
  
 class DefaultSequenceNumberGenerator(grok.Adapter):
     """ Provides a default sequence number generator. The portal_type of the object
