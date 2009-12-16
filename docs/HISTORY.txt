@@ -5,6 +5,10 @@ Changelog
 0.2
 ---
 
+* Issue #296: Nummerierungskonzept umsetzen
+  Laufnummer in Byline des Geschäftsdossier eingebaut
+  [16.12.2009, jbaumann]
+
 * Issue #275: Hinzufügbare Typen einschränken bei Geschäftsdossier
   [14.12.2009, jbaumann]
 

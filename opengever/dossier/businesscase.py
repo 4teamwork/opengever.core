@@ -1,12 +1,17 @@
+from five import grok
+from zope.component import getUtility
+
+from Products.CMFCore.utils import getToolByName
+from plone.app.layout.viewlets import content
+from plone.app.layout.viewlets.interfaces import IBelowContentTitle
 from plone.directives import form
 from plone.directives import dexterity
-from five import grok
-from plone.app.layout.viewlets.interfaces import IBelowContentTitle
 from plone.memoize.instance import memoize
-from plone.app.layout.viewlets import content
+
+from opengever.base.sequence import ISequenceNumber
+
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.base import DossierContainer
-from Products.CMFCore.utils import getToolByName
 
 class IBusinessCaseDossier(form.Schema):
     """ A business case dossier
@@ -63,3 +68,8 @@ class Byline(grok.Viewlet, content.DocumentBylineViewlet):
             for w in workflows:
                 if w.states.has_key(state):
                     return w.states[state].title or state
+
+    @memoize
+    def sequence_number(self):
+        seqNumb = getUtility(ISequenceNumber)
+        return seqNumb.get_number(self.context)

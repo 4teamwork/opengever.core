@@ -6,7 +6,7 @@
   <span id="lock-icon"
         tal:define="lock_icon viewlet/locked_icon"
         tal:condition="lock_icon">
-      <img tal:replace="structure lock_icon" />
+    <img tal:replace="structure lock_icon" />
   </span>
 
   <tal:name tal:condition="viewlet/responsible">
@@ -26,9 +26,9 @@
 
   <tal:state>
     <span i18n:translate="label_workflow_state" class="documentStatus">
-	  State: 
-	</span>
-	<span tal:content="viewlet/workflow_state" i18n:translate="" i18n:domain="plone" class="documentAuthor" />
+      State:
+    </span>
+    <span tal:content="viewlet/workflow_state" i18n:translate="" i18n:domain="plone" class="documentAuthor" />
   </tal:state>
 
   <span class="documentModified">
@@ -54,5 +54,14 @@
           i18n:translate="time_expired" tal:omit-tag="">expired</span>
   </tal:expired>
 
+  <span class="sequenceNumber" tal:condition="viewlet/sequence_number">
+    <span i18n:translate="label_sequence_number"
+          i18n:domain="opengever.dossier" tal:omit-tag="">
+      Sequence Number:
+    </span>
+    <span tal:replace="viewlet/sequence_number">
+      14
+    </span>
+  </span>
 
 </div>
