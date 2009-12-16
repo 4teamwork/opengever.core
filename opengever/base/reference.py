@@ -9,7 +9,7 @@ from plone.registry.interfaces import IRegistry
 
 from opengever.base.interfaces import IBaseClientID
 from opengever.base.interfaces import IReferenceNumber
-from opengever.base.sequence import ISequenceNumber
+from opengever.base.interfaces import ISequenceNumber
 from opengever.repository.repositoryfolder import IRepositoryFolderSchema
 from opengever.repository.repositoryroot import IRepositoryRoot
 from opengever.dossier.behaviors.dossier import IDossierMarker
