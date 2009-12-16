@@ -183,7 +183,7 @@ class DossierOverview(grok.View, OpengeverTab):
         elif IWorkflowHistoryJournalizable.providedBy(self.context):
             raise NotImplemented
         
-        edict = [dict(Title=entry['action']['title'], getIcon='bullet_icon.gif ') for entry in reversed(entries)]
+        edict = [dict(Title=entry['action']['title'], getIcon=None) for entry in reversed(entries)]
         return edict
     
     def sharing(self):
