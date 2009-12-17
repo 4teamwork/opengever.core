@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: opengever.dossier 1.0\n"
-"POT-Creation-Date: 2009-12-16 15:20+0000\n"
+"POT-Creation-Date: 2009-12-17 10:11+0000\n"
 "PO-Revision-Date: 2009-09-17 15:21+0000\n"
 "Last-Translator: Thomas Buchberger <t.buchberger@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -38,6 +38,11 @@ msgstr "Das Beginn-Datum muss vor dem Ende-Datum liegen."
 msgid "The start or end date is invalid"
 msgstr "Das Beginn- oder Ende-Datum ist ungültig."
 
+#. Default: "Archive"
+#: opengever.dossier/opengever/dossier/archive.py:53
+msgid "button_archive"
+msgstr "Archivieren"
+
 #. Default: "create document with template"
 #: opengever.dossier/opengever/dossier/templatedossier.py:32
 msgid "create_document_with_template"
@@ -47,6 +52,21 @@ msgstr "Dokument mit Vorlage erstellen"
 #: opengever.dossier/opengever/dossier/behaviors/dossier.py:102
 msgid "fieldset_filing"
 msgstr "Ablage"
+
+#. Default: "filing prefix"
+#: opengever.dossier/opengever/dossier/archive.py:38
+msgid "filing_prefix"
+msgstr "Ablage Präfix"
+
+#. Default: "filing Year"
+#: opengever.dossier/opengever/dossier/archive.py:44
+msgid "filing_year"
+msgstr "Ablage Jahr"
+
+#. Default: "Archive Dossier"
+#: opengever.dossier/opengever/dossier/archive.py:51
+msgid "heading_archive_form"
+msgstr "Dossier ablegen"
 
 #: opengever.dossier/opengever/dossier/behaviors/dossier.py:88
 msgid "help_comments"
@@ -116,7 +136,7 @@ msgid "label_container_type"
 msgstr "Behältnis-Art"
 
 #. Default: "E-Mail:"
-#: opengever.dossier/opengever/dossier/businesscase_templates/byline.pt:78
+#: opengever.dossier/opengever/dossier/businesscase_templates/byline.pt:88
 msgid "label_email_address"
 msgstr ""
 
@@ -130,6 +150,11 @@ msgstr "Ende"
 #: opengever.dossier/opengever/dossier/project_templates/byline.pt:44
 msgid "label_end_byline"
 msgstr "Ende:"
+
+#. Default: "Filing Number:"
+#: opengever.dossier/opengever/dossier/businesscase_templates/byline.pt:78
+msgid "label_filing_no"
+msgstr "Ablagenummer:"
 
 #. Default: "Keywords"
 #: opengever.dossier/opengever/dossier/behaviors/dossier.py:53

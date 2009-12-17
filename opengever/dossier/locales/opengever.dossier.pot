@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2009-12-16 15:20+0000\n"
+"POT-Creation-Date: 2009-12-17 10:11+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -40,6 +40,11 @@ msgstr ""
 msgid "The start or end date is invalid"
 msgstr ""
 
+#. Default: "Archive"
+#: opengever.dossier/opengever/dossier/archive.py:53
+msgid "button_archive"
+msgstr ""
+
 #. Default: "create document with template"
 #: opengever.dossier/opengever/dossier/templatedossier.py:32
 msgid "create_document_with_template"
@@ -48,6 +53,21 @@ msgstr ""
 #. Default: "Filing"
 #: opengever.dossier/opengever/dossier/behaviors/dossier.py:102
 msgid "fieldset_filing"
+msgstr ""
+
+#. Default: "filing prefix"
+#: opengever.dossier/opengever/dossier/archive.py:38
+msgid "filing_prefix"
+msgstr ""
+
+#. Default: "filing Year"
+#: opengever.dossier/opengever/dossier/archive.py:44
+msgid "filing_year"
+msgstr ""
+
+#. Default: "Archive Dossier"
+#: opengever.dossier/opengever/dossier/archive.py:51
+msgid "heading_archive_form"
 msgstr ""
 
 #: opengever.dossier/opengever/dossier/behaviors/dossier.py:88
@@ -118,7 +138,7 @@ msgid "label_container_type"
 msgstr ""
 
 #. Default: "E-Mail:"
-#: opengever.dossier/opengever/dossier/businesscase_templates/byline.pt:78
+#: opengever.dossier/opengever/dossier/businesscase_templates/byline.pt:88
 msgid "label_email_address"
 msgstr ""
 
@@ -131,6 +151,11 @@ msgstr ""
 #: opengever.dossier/opengever/dossier/businesscase_templates/byline.pt:44
 #: opengever.dossier/opengever/dossier/project_templates/byline.pt:44
 msgid "label_end_byline"
+msgstr ""
+
+#. Default: "Filing Number:"
+#: opengever.dossier/opengever/dossier/businesscase_templates/byline.pt:78
+msgid "label_filing_no"
 msgstr ""
 
 #. Default: "Keywords"
