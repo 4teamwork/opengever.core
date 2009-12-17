@@ -73,7 +73,17 @@
       14
     </span>
   </span>
-
+  
+  <span class="filing_no" tal:condition="viewlet/get_filing_no">
+    <span i18n:translate="label_filing_no"
+          tal:omit-tag="">
+      Filing Number:
+    </span>
+    <span tal:replace="viewlet/get_filing_no">
+      14
+    </span>
+  </span>
+  
   <span class="emailAddress" tal:condition="viewlet/email">
     <span i18n:translate="label_email_address"
           i18n:domain="opengever.dossier" tal:omit-tag="">

@@ -11,7 +11,7 @@ from zope.intid.interfaces import IIntIds
 
 from opengever.base.interfaces import IReferenceNumber, ISequenceNumber
 
-from opengever.dossier.behaviors.dossier import IDossier
+from opengever.dossier.behaviors.dossier import IDossier, IDossierMarker
 from opengever.dossier.base import DossierContainer
 
 class IBusinessCaseDossier(form.Schema):
@@ -79,6 +79,10 @@ class Byline(grok.Viewlet, content.DocumentBylineViewlet):
     def reference_number(self):
         refNumb = getAdapter(self.context, IReferenceNumber)
         return refNumb.get_number()
+    
+    def get_filing_no(self):
+        dossier = IDossierMarker(self.context)
+        return getattr(dossier, 'filing_no', None)
 
     # TODO: should be more generic ;-)
     #       use sequence_number instead of intid

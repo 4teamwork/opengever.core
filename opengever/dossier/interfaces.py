@@ -12,6 +12,9 @@ class IDossierContainerTypes(Interface):
     maximum_dossier_depth = schema.Int(title=u'Maximum Dossier Depth',
                                           default=1)
 
+    type_prefixes = schema.List(title=u"type_prefixes",
+                                default=['Regierungsrat', 'Staatsarchiv', 'Blubb'])
+
 
 class IConstrainTypeDecider(Interface):
     """ Adapter interface

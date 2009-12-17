@@ -192,7 +192,7 @@ msgstr "Es sind nicht alle Dokumente in einem Subdossiers abgelegt"
 
 #: opengever.dossier/opengever/dossier/resolve.py:61
 msgid "not all task are closed"
-msgstr "Es sind nicht alle Aufgaben sind erledigt"
+msgstr "Es sind nicht alle Aufgaben erledigt"
 
 #. Default: "expired"
 #: opengever.dossier/opengever/dossier/businesscase_templates/byline.pt:53
