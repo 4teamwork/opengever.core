@@ -195,6 +195,8 @@ class IDocumentSchema(form.Schema):
         required = False,
         )
 
+    form.order_after(**{'IRelatedItems.relatedItems': 'file'})
+
 @form.default_value(field=IDocumentSchema['document_date'])
 def docuementDateDefaulValue(data):
     return datetime.today()
