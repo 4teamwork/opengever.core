@@ -1,5 +1,6 @@
 from five import grok
 from Products.statusmessages.interfaces import IStatusMessage
+from Acquisition import aq_inner, aq_parent
 
 from opengever.dossier.behaviors.dossier import IDossierMarker, IDossier
 from opengever.dossier import _
@@ -11,6 +12,10 @@ class resolve(grok.CodeView):
     grok.require('zope2.View')
 
     def render(self):
+        parent = aq_parent(aq_inner(self.context))
+        if IDossierMarker.providedBy(parent):
+            self.request.RESPONSE.redirect(self.context.absolute_url() + '/content_status_modify?workflow_action=dossier-transition-resolve')
+        
         errors = False
         status = IStatusMessage(self.request)
 
@@ -68,4 +73,4 @@ class resolve(grok.CodeView):
         if errors:
             self.request.RESPONSE.redirect(self.context.absolute_url())
         else:
-            self.request.RESPONSE.redirect(self.context.absolute_url() + '/content_status_modify?workflow_action=dossier-transition-resolve')
+            self.request.RESPONSE.redirect(self.context.absolute_url() + '/transition-archive')

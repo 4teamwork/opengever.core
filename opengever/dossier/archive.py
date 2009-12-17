@@ -99,7 +99,7 @@ class ArchiveForm(form.Form):
                 dossier.filing_no = filing_no + "." + str(counter)
                 counter += 1
             
-            return self.request.RESPONSE.redirect(self.context.absolute_url() + '/content_status_modify?workflow_action=dossier-transition-archive')
+            return self.request.RESPONSE.redirect(self.context.absolute_url() + '/content_status_modify?workflow_action=dossier-transition-resolve')
 
 
 class ArchiveFormView(layout.FormWrapper, grok.CodeView):
@@ -120,5 +120,5 @@ class ArchiveFormView(layout.FormWrapper, grok.CodeView):
     def __call__(self, *args, **kwargs):
         parent = aq_parent(aq_inner(self.context))
         if IDossierMarker.providedBy(parent):
-            self.request.RESPONSE.redirect(self.context.absolute_url() + '/content_status_modify?workflow_action=dossier-transition-archive')
+            self.request.RESPONSE.redirect(self.context.absolute_url() + '/content_status_modify?workflow_action=dossier-transition-resolve')
         return layout.FormWrapper.__call__(self, *args, **kwargs)
