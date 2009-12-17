@@ -1,12 +1,12 @@
 <mockup version="1.0" skin="sketch" measuredW="1072" measuredH="888" mockupW="999" mockupH="847">
   <controls>
-    <control controlID="0" controlTypeID="com.balsamiq.mockups::BrowserWindow" x="63" y="31" w="999" h="847" measuredW="450" measuredH="400" zOrder="0" locked="false" isInGroup="-1">
+    <control controlID="0" controlTypeID="com.balsamiq.mockups::BrowserWindow" x="63" y="31" w="999" h="847" measuredW="450" measuredH="400" zOrder="0" locked="true" isInGroup="-1">
       <controlProperties>
         <text>OpenGever%0Ahttp%3A//www.opengever.ch</text>
         <verticalScrollbar>false</verticalScrollbar>
       </controlProperties>
     </control>
-    <control controlID="129" controlTypeID="__group__" x="70" y="99" w="-1" h="-1" measuredW="992" measuredH="94" zOrder="22" locked="false" isInGroup="-1">
+    <control controlID="129" controlTypeID="__group__" x="70" y="99" w="-1" h="-1" measuredW="992" measuredH="94" zOrder="15" locked="false" isInGroup="-1">
       <groupChildrenDescriptors>
         <control controlID="88" controlTypeID="com.balsamiq.mockups::Canvas" x="0" y="0" w="992" h="94" measuredW="100" measuredH="70" zOrder="0" locked="false" isInGroup="129">
           <controlProperties>
@@ -54,24 +54,44 @@
         </control>
       </groupChildrenDescriptors>
     </control>
-    <control controlID="98" controlTypeID="com.balsamiq.mockups::Label" x="380" y="674" w="-1" h="-1" measuredW="72" measuredH="23" zOrder="6" locked="false" isInGroup="-1">
+    <control controlID="98" controlTypeID="com.balsamiq.mockups::Label" x="380" y="614" w="-1" h="-1" measuredW="72" measuredH="23" zOrder="6" locked="false" isInGroup="-1">
       <controlProperties>
         <text>Kommentar</text>
       </controlProperties>
     </control>
-    <control controlID="102" controlTypeID="com.balsamiq.mockups::TextArea" x="380" y="705" w="657" h="71" measuredW="200" measuredH="140" zOrder="7" locked="false" isInGroup="-1">
+    <control controlID="131" controlTypeID="com.balsamiq.mockups::CheckBox" x="380" y="533" w="-1" h="-1" measuredW="81" measuredH="22" zOrder="17" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Architekt</text>
+        <state>selected</state>
+      </controlProperties>
+    </control>
+    <control controlID="132" controlTypeID="com.balsamiq.mockups::CheckBox" x="380" y="555" w="-1" h="-1" measuredW="71" measuredH="22" zOrder="18" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Berater</text>
+      </controlProperties>
+    </control>
+    <control controlID="133" controlTypeID="com.balsamiq.mockups::CheckBox" x="380" y="577" w="-1" h="-1" measuredW="75" measuredH="22" zOrder="19" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Beteiligt</text>
+      </controlProperties>
+    </control>
+    <control controlID="102" controlTypeID="com.balsamiq.mockups::TextArea" x="380" y="637" w="657" h="71" measuredW="200" measuredH="140" zOrder="7" locked="false" isInGroup="-1">
       <controlProperties>
         <text>Mitwirkung%20am%20Dossier...</text>
       </controlProperties>
     </control>
-    <control controlID="85" controlTypeID="com.balsamiq.mockups::Tree" x="78" y="248" w="260" h="291" measuredW="300" measuredH="291" zOrder="3" locked="false" isInGroup="-1">
+    <control controlID="135" controlTypeID="com.balsamiq.mockups::Icon" x="461" y="491" w="-1" h="-1" measuredW="16" measuredH="16" zOrder="21" locked="false" isInGroup="-1">
       <controlProperties>
-        <text>_%201.%20Stufe%0A%5B-%5D%202.%20Verwaltung%0A%20_%202.1%20KFA%20Administration%0A%20_%202.2%20KFA%20Rechenschaftsberichte%0A%5B+%5D%203.%20Rechnungswesen%0A%5B+%5D%204.%20KFA%20Personal%0A%5B+%5D%205.%20Forstdienst%20extern%0A%5B+%5D%206.%20Staatswald%0A%5B+%5D%207.%20Kantonale%20Planung%0A%5B+%5D%208.%20Waldpolitische%20Beziehungen%0A%5B+%5D%209.%20Umfeld%20Zuger%20Wald</text>
+        <borderStyle>none</borderStyle>
+        <icon>DotIcon%7Cxsmall</icon>
+        <color>16711680</color>
       </controlProperties>
     </control>
-    <control controlID="86" controlTypeID="com.balsamiq.mockups::Label" x="78" y="222" w="-1" h="-1" measuredW="99" measuredH="23" zOrder="4" locked="false" isInGroup="-1">
+    <control controlID="136" controlTypeID="com.balsamiq.mockups::Icon" x="579" y="318" w="-1" h="-1" measuredW="16" measuredH="16" zOrder="22" locked="false" isInGroup="-1">
       <controlProperties>
-        <text>Registraturplan</text>
+        <borderStyle>none</borderStyle>
+        <icon>DotIcon%7Cxsmall</icon>
+        <color>16711680</color>
       </controlProperties>
     </control>
     <control controlID="97" controlTypeID="com.balsamiq.mockups::IconLabel" x="389" y="250" w="-1" h="-1" measuredW="259" measuredH="37" zOrder="5" locked="false" isInGroup="-1">
@@ -83,24 +103,28 @@
         <color>16777215</color>
       </controlProperties>
     </control>
-    <control controlID="121" controlTypeID="com.balsamiq.mockups::List" x="633" y="512" w="107" h="93" measuredW="100" measuredH="126" zOrder="16" locked="false" isInGroup="-1">
+    <control controlID="130" controlTypeID="com.balsamiq.mockups::CheckBox" x="380" y="511" w="-1" h="-1" measuredW="79" measuredH="22" zOrder="16" locked="false" isInGroup="-1">
       <controlProperties>
-        <text>Beteiligt</text>
-        <selectedIndex>0</selectedIndex>
+        <text>Sch%E4tzer</text>
       </controlProperties>
     </control>
-    <control controlID="107" controlTypeID="com.balsamiq.mockups::Label" x="380" y="488" w="90" h="23" measuredW="70" measuredH="23" zOrder="8" locked="false" isInGroup="-1">
+    <control controlID="107" controlTypeID="com.balsamiq.mockups::Label" x="380" y="488" w="90" h="23" measuredW="84" measuredH="23" zOrder="8" locked="false" isInGroup="-1">
       <controlProperties>
-        <text>Beteiligung</text>
+        <text>Beteiligungen</text>
         <bold>true</bold>
       </controlProperties>
     </control>
-    <control controlID="111" controlTypeID="com.balsamiq.mockups::Button" x="381" y="797" w="82" h="-1" measuredW="82" measuredH="28" zOrder="9" locked="false" isInGroup="-1">
+    <control controlID="134" controlTypeID="com.balsamiq.mockups::StickyNote" x="539" y="495" w="347" h="123" measuredW="109" measuredH="123" zOrder="20" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Beteiligungen%20%28Strings%29%20werden%20in%20der%20plone.registry%20pro%20Mandant%20definiert.</text>
+      </controlProperties>
+    </control>
+    <control controlID="111" controlTypeID="com.balsamiq.mockups::Button" x="380" y="723" w="82" h="-1" measuredW="82" measuredH="28" zOrder="9" locked="false" isInGroup="-1">
       <controlProperties>
         <text>Speichern</text>
       </controlProperties>
     </control>
-    <control controlID="112" controlTypeID="com.balsamiq.mockups::Button" x="478" y="797" w="86" h="-1" measuredW="86" measuredH="28" zOrder="10" locked="false" isInGroup="-1">
+    <control controlID="112" controlTypeID="com.balsamiq.mockups::Button" x="477" y="723" w="86" h="-1" measuredW="86" measuredH="28" zOrder="10" locked="false" isInGroup="-1">
       <controlProperties>
         <text>Abbrechen</text>
       </controlProperties>
@@ -113,9 +137,32 @@
     <control controlID="116" controlTypeID="com.balsamiq.mockups::List" x="407" y="384" w="319" h="76" measuredW="100" measuredH="126" zOrder="11" locked="false" isInGroup="-1">
       <controlProperties>
         <text>Hans%20Muster%2C%20Staatskanzlei%20%28hans.muster@zg.ch%29%0APeter%20Muster%2C%20AIO%20%28peter.muster@zg.ch%29%0ASilvia%20Muster%2C%20Zuger%20Polizei%20%28silvia.muster@zg.ch%29%0A...</text>
-        <selectedIndex>1</selectedIndex>
         <verticalScrollbar>false</verticalScrollbar>
         <rowHeight>20</rowHeight>
+        <selectedIndex>1</selectedIndex>
+      </controlProperties>
+    </control>
+    <control controlID="85" controlTypeID="com.balsamiq.mockups::Tree" x="78" y="248" w="260" h="291" measuredW="300" measuredH="291" zOrder="3" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>_%201.%20Stufe%0A%5B-%5D%202.%20Verwaltung%0A%20_%202.1%20KFA%20Administration%0A%20_%202.2%20KFA%20Rechenschaftsberichte%0A%5B+%5D%203.%20Rechnungswesen%0A%5B+%5D%204.%20KFA%20Personal%0A%5B+%5D%205.%20Forstdienst%20extern%0A%5B+%5D%206.%20Staatswald%0A%5B+%5D%207.%20Kantonale%20Planung%0A%5B+%5D%208.%20Waldpolitische%20Beziehungen%0A%5B+%5D%209.%20Umfeld%20Zuger%20Wald</text>
+      </controlProperties>
+    </control>
+    <control controlID="86" controlTypeID="com.balsamiq.mockups::Label" x="78" y="222" w="-1" h="-1" measuredW="99" measuredH="23" zOrder="4" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Registraturplan</text>
+      </controlProperties>
+    </control>
+    <control controlID="119" controlTypeID="com.balsamiq.mockups::Paragraph" x="380" y="338" w="346" h="22" measuredW="200" measuredH="140" zOrder="14" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>W%E4hlen%20Sie%20die%20verantwortliche%20Person%20oder%20Organisationseinheit%20aus</text>
+        <size>10</size>
+        <bold>false</bold>
+      </controlProperties>
+    </control>
+    <control controlID="81" controlTypeID="com.balsamiq.mockups::Canvas" x="380" y="246" w="657" h="46" measuredW="100" measuredH="70" zOrder="2" locked="false" isInGroup="-1">
+      <controlProperties>
+        <borderStyle>none</borderStyle>
+        <color>255</color>
       </controlProperties>
     </control>
     <control controlID="117" controlTypeID="com.balsamiq.mockups::TextInput" x="380" y="360" w="317" h="-1" measuredW="126" measuredH="27" zOrder="12" locked="false" isInGroup="-1">
@@ -126,55 +173,6 @@
     <control controlID="118" controlTypeID="com.balsamiq.mockups::Label" x="380" y="315" w="215" h="23" measuredW="201" measuredH="23" zOrder="13" locked="false" isInGroup="-1">
       <controlProperties>
         <text>Person%20oder%20Organisationseinheit</text>
-      </controlProperties>
-    </control>
-    <control controlID="119" controlTypeID="com.balsamiq.mockups::Paragraph" x="380" y="338" w="306" h="22" measuredW="200" measuredH="140" zOrder="14" locked="false" isInGroup="-1">
-      <controlProperties>
-        <text>W%E4hlen%20Sie%20die%20verantwortliche%20Person%20aus</text>
-        <size>10</size>
-        <bold>false</bold>
-      </controlProperties>
-    </control>
-    <control controlID="120" controlTypeID="com.balsamiq.mockups::List" x="380" y="511" w="124" h="94" measuredW="100" measuredH="126" zOrder="15" locked="false" isInGroup="-1">
-      <controlProperties>
-        <text>Beteiligt%0AStellvertretung</text>
-      </controlProperties>
-    </control>
-    <control controlID="81" controlTypeID="com.balsamiq.mockups::Canvas" x="380" y="246" w="657" h="46" measuredW="100" measuredH="70" zOrder="2" locked="false" isInGroup="-1">
-      <controlProperties>
-        <borderStyle>none</borderStyle>
-        <color>255</color>
-      </controlProperties>
-    </control>
-    <control controlID="122" controlTypeID="com.balsamiq.mockups::TextInput" x="531" y="624" w="92" h="-1" measuredW="78" measuredH="27" zOrder="17" locked="false" isInGroup="-1">
-      <controlProperties>
-        <text>Teilnehmer</text>
-      </controlProperties>
-    </control>
-    <control controlID="123" controlTypeID="com.balsamiq.mockups::Label" x="431" y="625" w="99" h="23" measuredW="94" measuredH="23" zOrder="18" locked="false" isInGroup="-1">
-      <controlProperties>
-        <text>Neues%20Element</text>
-        <bold>true</bold>
-      </controlProperties>
-    </control>
-    <control controlID="124" controlTypeID="com.balsamiq.mockups::Button" x="633" y="624" w="-1" h="-1" measuredW="211" measuredH="32" zOrder="19" locked="false" isInGroup="-1">
-      <controlProperties>
-        <text>Neues%20Element%20hinzuf%FCgen</text>
-        <icon>UpArrowIcon%7Csmall</icon>
-      </controlProperties>
-    </control>
-    <control controlID="125" controlTypeID="com.balsamiq.mockups::IconLabel" x="518" y="526" w="-1" h="-1" measuredW="99" measuredH="24" zOrder="20" locked="false" isInGroup="-1">
-      <controlProperties>
-        <text>Hinzuf%FCgen</text>
-        <labelPosition>right</labelPosition>
-        <icon>ForwardIcon%7Csmall</icon>
-      </controlProperties>
-    </control>
-    <control controlID="126" controlTypeID="com.balsamiq.mockups::IconLabel" x="518" y="565" w="-1" h="-1" measuredW="92" measuredH="24" zOrder="21" locked="false" isInGroup="-1">
-      <controlProperties>
-        <text>Entfernen</text>
-        <labelPosition>right</labelPosition>
-        <icon>RewindIcon%7Csmall</icon>
       </controlProperties>
     </control>
   </controls>

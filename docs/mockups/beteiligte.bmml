@@ -1,0 +1,185 @@
+<mockup version="1.0" skin="sketch" measuredW="1074" measuredH="889" mockupW="999" mockupH="847">
+  <controls>
+    <control controlID="64" controlTypeID="com.balsamiq.mockups::CheckBox" x="379" y="479" w="360" h="18" measuredW="119" measuredH="24" zOrder="11" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Hans%20Meier</text>
+        <state>selected</state>
+        <icon>ContactIcon%7Csmall</icon>
+      </controlProperties>
+    </control>
+    <control controlID="1" controlTypeID="com.balsamiq.mockups::TabBar" x="362" y="415" w="692" h="410" measuredW="515" measuredH="100" zOrder="1" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>%DCbersicht%2C%20Subdossiers%2C%20Dokumente%2C%20Aufgaben%2C%20Journal%2C%20Beteiligte</text>
+        <selectedIndex>5</selectedIndex>
+        <hrefs>%2C%2C%2C%2C%2C</hrefs>
+      </controlProperties>
+    </control>
+    <control controlID="99" controlTypeID="com.balsamiq.mockups::BrowserWindow" x="65" y="32" w="999" h="847" measuredW="450" measuredH="400" zOrder="0" locked="true" isInGroup="-1">
+      <controlProperties>
+        <text>OpenGever%0Ahttp%3A//www.opengever.ch</text>
+        <verticalScrollbar>false</verticalScrollbar>
+      </controlProperties>
+    </control>
+    <control controlID="4" controlTypeID="com.balsamiq.mockups::Button" x="665" y="320" w="-1" h="-1" measuredW="88" measuredH="28" zOrder="2" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Bearbeiten</text>
+      </controlProperties>
+    </control>
+    <control controlID="5" controlTypeID="com.balsamiq.mockups::ComboBox" x="757" y="323" w="-1" h="-1" measuredW="137" measuredH="50" zOrder="3" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Weitere%20Aktionen%0ABeteiligen</text>
+        <href>create_beteiligung%26bm%3Bcreate_beteiligung.bmml%26bm%3Bcreate_beteiligung.bmml%26bm%3Bcreate_beteiligung.bmml</href>
+        <map>%3Carea%20shape%3D%22rect%22%20coords%3D%22692%2C291%2C829%2C341%22%20href%3D%22create_beteiligung.bmml%22%20alt%3D%22create_beteiligung%22%20id%3D%225%22/%3E</map>
+      </controlProperties>
+    </control>
+    <control controlID="102" controlTypeID="com.balsamiq.mockups::Label" x="87" y="231" w="-1" h="-1" measuredW="99" measuredH="23" zOrder="22" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Registraturplan</text>
+      </controlProperties>
+    </control>
+    <control controlID="72" controlTypeID="com.balsamiq.mockups::CheckBox" x="379" y="511" w="360" h="21" measuredW="222" measuredH="24" zOrder="13" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Architekturb%FCro%20von%20Giessen</text>
+        <state>up</state>
+        <icon>ContactsIcon%7Csmall</icon>
+      </controlProperties>
+    </control>
+    <control controlID="9" controlTypeID="com.balsamiq.mockups::BreadCrumbs" x="362" y="202" w="-1" h="-1" measuredW="444" measuredH="23" zOrder="4" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Startseite%2C%20Registraturplan%2C%202.%20Verwaltung%2C%202.1%20KFA%20Administration</text>
+      </controlProperties>
+    </control>
+    <control controlID="57" controlTypeID="com.balsamiq.mockups::Label" x="751" y="477" w="121" h="23" measuredW="55" measuredH="23" zOrder="10" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Beteiligt</text>
+      </controlProperties>
+    </control>
+    <control controlID="68" controlTypeID="com.balsamiq.mockups::Label" x="751" y="509" w="158" h="23" measuredW="123" measuredH="23" zOrder="12" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Architekt%2C%20Sch%E4tzer</text>
+      </controlProperties>
+    </control>
+    <control controlID="77" controlTypeID="com.balsamiq.mockups::CheckBox" x="379" y="549" w="360" h="21" measuredW="153" measuredH="24" zOrder="15" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>FDP%20Sektion%20Zug</text>
+        <state>up</state>
+        <icon>ContactsIcon%7Csmall</icon>
+      </controlProperties>
+    </control>
+    <control controlID="16" controlTypeID="com.balsamiq.mockups::Label" x="749" y="452" w="63" h="23" measuredW="41" measuredH="23" zOrder="6" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Rollen</text>
+        <color>1644825</color>
+        <underline>true</underline>
+      </controlProperties>
+    </control>
+    <control controlID="41" controlTypeID="com.balsamiq.mockups::Button" x="371" y="717" w="-1" h="-1" measuredW="71" measuredH="28" zOrder="9" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>L%F6schen</text>
+      </controlProperties>
+    </control>
+    <control controlID="82" controlTypeID="com.balsamiq.mockups::ComboBox" x="898" y="323" w="149" h="-1" measuredW="126" measuredH="24" zOrder="18" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Hinzuf%FCgen</text>
+        <icon>SquaredPlusIcon%7Csmall</icon>
+      </controlProperties>
+    </control>
+    <control controlID="12" controlTypeID="com.balsamiq.mockups::Label" x="429" y="454" w="256" h="23" measuredW="68" measuredH="23" zOrder="5" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Beteiligter</text>
+        <color>1644825</color>
+        <underline>true</underline>
+      </controlProperties>
+    </control>
+    <control controlID="100" controlTypeID="__group__" x="72" y="100" w="-1" h="-1" measuredW="992" measuredH="94" zOrder="20" locked="false" isInGroup="-1">
+      <groupChildrenDescriptors>
+        <control controlID="88" controlTypeID="com.balsamiq.mockups::Canvas" x="0" y="0" w="992" h="94" measuredW="100" measuredH="70" zOrder="0" locked="false" isInGroup="129">
+          <controlProperties>
+            <borderStyle>none</borderStyle>
+            <color>255</color>
+          </controlProperties>
+        </control>
+        <control controlID="89" controlTypeID="com.balsamiq.mockups::IconLabel" x="15" y="8" w="151" h="-1" measuredW="151" measuredH="37" zOrder="1" locked="false" isInGroup="129">
+          <controlProperties>
+            <text>OpenGever</text>
+            <size>24</size>
+            <color>16777215</color>
+            <labelPosition>right</labelPosition>
+            <icon>GearIcon%7Csmall</icon>
+          </controlProperties>
+        </control>
+        <control controlID="35" controlTypeID="com.balsamiq.mockups::SearchBox" x="782" y="48" w="195" h="-1" measuredW="89" measuredH="25" zOrder="2" locked="false" isInGroup="129">
+          <controlProperties>
+            <text>Suche</text>
+          </controlProperties>
+        </control>
+        <control controlID="37" controlTypeID="com.balsamiq.mockups::ComboBox" x="784" y="14" w="98" h="-1" measuredW="98" measuredH="23" zOrder="3" locked="false" isInGroup="129">
+          <controlProperties>
+            <text>Mein%20Konto</text>
+          </controlProperties>
+        </control>
+        <control controlID="90" controlTypeID="com.balsamiq.mockups::IconLabel" x="643" y="14" w="131" h="-1" measuredW="131" measuredH="24" zOrder="4" locked="false" isInGroup="129">
+          <controlProperties>
+            <text>Stefanie%20Muster</text>
+            <labelPosition>right</labelPosition>
+            <icon>ContactIcon%7Csmall</icon>
+            <color>15790322</color>
+          </controlProperties>
+        </control>
+        <control controlID="36" controlTypeID="com.balsamiq.mockups::ComboBox" x="890" y="14" w="87" h="-1" measuredW="87" measuredH="23" zOrder="5" locked="false" isInGroup="129">
+          <controlProperties>
+            <text>Favoriten</text>
+          </controlProperties>
+        </control>
+        <control controlID="128" controlTypeID="com.balsamiq.mockups::ButtonBar" x="19" y="63" w="-1" h="-1" measuredW="587" measuredH="29" zOrder="6" locked="false" isInGroup="129">
+          <controlProperties>
+            <text>Arbeitsplatz%2C%20Ordnungssystem%2C%20Eingangskorb%2C%20Aufgaben%2C%20Journal%2C%20Kontakte</text>
+            <selectedIndex>1</selectedIndex>
+          </controlProperties>
+        </control>
+      </groupChildrenDescriptors>
+    </control>
+    <control controlID="101" controlTypeID="com.balsamiq.mockups::Tree" x="87" y="257" w="260" h="291" measuredW="300" measuredH="291" zOrder="21" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>_%201.%20Stufe%0A%5B-%5D%202.%20Verwaltung%0A%20_%202.1%20KFA%20Administration%0A%20_%202.2%20KFA%20Rechenschaftsberichte%0A%5B+%5D%203.%20Rechnungswesen%0A%5B+%5D%204.%20KFA%20Personal%0A%5B+%5D%205.%20Forstdienst%20extern%0A%5B+%5D%206.%20Staatswald%0A%5B+%5D%207.%20Kantonale%20Planung%0A%5B+%5D%208.%20Waldpolitische%20Beziehungen%0A%5B+%5D%209.%20Umfeld%20Zuger%20Wald</text>
+      </controlProperties>
+    </control>
+    <control controlID="80" controlTypeID="com.balsamiq.mockups::IconLabel" x="371" y="261" w="-1" h="-1" measuredW="307" measuredH="37" zOrder="17" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Beschwerde%20Hans%20Muster</text>
+        <size>24</size>
+        <color>16777215</color>
+        <labelPosition>right</labelPosition>
+        <icon>FolderIcon%7Csmall</icon>
+      </controlProperties>
+    </control>
+    <control controlID="81" controlTypeID="com.balsamiq.mockups::Canvas" x="362" y="257" w="687" h="46" measuredW="100" measuredH="70" zOrder="16" locked="false" isInGroup="-1">
+      <controlProperties>
+        <borderStyle>none</borderStyle>
+        <color>255</color>
+      </controlProperties>
+    </control>
+    <control controlID="73" controlTypeID="com.balsamiq.mockups::Label" x="751" y="547" w="143" h="23" measuredW="137" measuredH="23" zOrder="14" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Sponsor%2C%20Projektleiter</text>
+      </controlProperties>
+    </control>
+    <control controlID="84" controlTypeID="com.balsamiq.mockups::Button" x="586" y="320" w="-1" h="-1" measuredW="76" measuredH="28" zOrder="19" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Vorlagen</text>
+        <href>vorlagen%26bm%3Bvorlagen.bmml%26bm%3Bvorlagen.bmml%26bm%3Bvorlagen.bmml</href>
+        <map>%3Carea%20shape%3D%22rect%22%20coords%3D%22521%2C288%2C597%2C316%22%20href%3D%22vorlagen.bmml%22%20alt%3D%22vorlagen%22%20id%3D%2284%22/%3E</map>
+      </controlProperties>
+    </control>
+    <control controlID="29" controlTypeID="com.balsamiq.mockups::SearchBox" x="362" y="322" w="183" h="-1" measuredW="87" measuredH="25" zOrder="7" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Filter</text>
+      </controlProperties>
+    </control>
+    <control controlID="31" controlTypeID="com.balsamiq.mockups::CheckBox" x="379" y="456" w="-1" h="-1" measuredW="25" measuredH="22" zOrder="8" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text/>
+      </controlProperties>
+    </control>
+  </controls>
+</mockup>
