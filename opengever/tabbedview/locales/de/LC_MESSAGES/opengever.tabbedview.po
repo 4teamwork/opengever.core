@@ -116,7 +116,7 @@ msgstr "Beteiligte"
 
 #: opengever.tabbedview/opengever/tabbedview/browser/tabs_templates/overview.pt:13
 msgid "show all"
-msgstr "Alle Anzeigen"
+msgstr "Alle anzeigen"
 
 #. Default: "Titel"
 msgid "sortable_title"
