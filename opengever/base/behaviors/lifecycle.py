@@ -105,7 +105,6 @@ form.default_value(field=ILifeCycle['archival_value'])(
 class IntLowerEqualThanParentValidator(validator.SimpleFieldValidator):
 
     def validate(self, value):
-        import pdb; pdb.set_trace( )
         super(IntLowerEqualThanParentValidator, self).validate(value)
         # should not be negative
         if int(value)<0:
