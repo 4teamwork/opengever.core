@@ -8,6 +8,7 @@ from ftw.table import helper
 from ftw.directoryservice.contact import IContact
 from ftw.directoryservice.membership import Membership
 from plone.directives import dexterity
+from opengever.tabbedview import _
 
 class OpengeverListingTab(grok.View, BaseListingView):
     grok.context(ITabbedView)
@@ -101,7 +102,7 @@ class Events(OpengeverListingTab):
 from zope.annotation.interfaces import IAnnotations, IAnnotatable
 from ftw.journal.interfaces import IAnnotationsJournalizable, IWorkflowHistoryJournalizable
 from ftw.journal.config import JOURNAL_ENTRIES_ANNOTATIONS_KEY
-from opengever.dossier.behaviors.dossier import IDossierMarker
+from opengever.dossier.behaviors.dossier import IDossierMarker, IDossier
 from opengever.dossier.behaviors.participation import IParticipationAwareMarker
 from opengever.dossier.behaviors.participation import IParticipationAware
 from opengever.repository.interfaces import IRepositoryFolder
@@ -264,6 +265,8 @@ class Participants(OpengeverListingTab):
     grok.context(IParticipationAwareMarker)
 
     def base64_oid_checkbox(item, value):
+        if not getattr(item, '_p_oid', False):
+            return ''
         oid = base64.encodestring(item._p_oid)
         attrs = {
             'type' : 'checkbox',
@@ -295,6 +298,13 @@ class Participants(OpengeverListingTab):
         phandler = IParticipationAware(self.context)
         results = list(phandler.get_participations())
 
+        dossier_adpt = IDossier(self.context)
+        responsible_name = _(u'label_responsible', 'Responsible')
+        results.append({'contact' : dossier_adpt.responsible,
+                        'roles' : responsible_name,
+                        'role_list' : responsible_name,
+                        })
+
         # XXX implement searching
         #if self.request.has_key('searchable_text'):
         #    searchable_text = self.request.get('searchable_text', None)
@@ -306,8 +316,8 @@ class Participants(OpengeverListingTab):
         if self.sort_on.startswith('header-'):
             self.sort_on = self.sort_on.split('header-')[1]
         if self.sort_on:
-            sorter = lambda a,b:cmp(getattr(a, self.sort_on),
-                                    getattr(b, self.sort_on))
+            sorter = lambda a,b:cmp(getattr(a, self.sort_on, ''),
+                                    getattr(b, self.sort_on, ''))
             results.sort(sorter)
 
         if self.sort_order=='reverse':
