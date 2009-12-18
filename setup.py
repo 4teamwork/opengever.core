@@ -29,6 +29,7 @@ setup(name='opengever.dossier',
           'ftw.datepicker',
           'collective.autopermission',
           'opengever.base',
+          'rwproperty',
           # -*- Extra requirements: -*-
       ],
       entry_points="""
