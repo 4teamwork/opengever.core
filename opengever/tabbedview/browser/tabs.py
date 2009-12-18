@@ -1,5 +1,5 @@
-from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile 
-from Products.CMFCore.utils import getToolByName    
+from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
+from Products.CMFCore.utils import getToolByName
 from ftw.tabbedview.browser.views import BaseListingView
 from ftw.tabbedview.interfaces import ITabbedView
 from five import grok
@@ -11,26 +11,26 @@ from plone.directives import dexterity
 class OpengeverListingTab(grok.View, BaseListingView):
     grok.context(ITabbedView)
     grok.template('generic')
-    
+
     update = BaseListingView.update
-    
+
     columns = (
-                ('', helper.draggable),
-                ('', helper.path_checkbox),
-                ('Title', 'sortable_title', helper.linked),
-                ('modified', helper.readable_date), 
-                ('Creator', helper.readable_author),
-               )
-    
+        ('', helper.draggable),
+        ('', helper.path_checkbox),
+        ('Title', 'sortable_title', helper.linked),
+        ('modified', helper.readable_date),
+        ('Creator', helper.readable_author),
+        )
+
     @property
     def view_name(self):
         return self.__name__.split('tabbedview_view-')[1]
-        
-        
+
+
     search_index = 'SearchableText' #only 'SearchableText' is implemented for now
     sort_on = 'modified'
     sort_order = 'reverse'
-    
+
 
 class OpengeverTab(object):
     pass
@@ -39,7 +39,7 @@ class Documents(OpengeverListingTab):
     grok.name('tabbedview_view-documents')
     
     types = ['opengever.document.document', 'ftw.mail.mail']
-    
+
     search_options = {'isWorkingCopy':0}
 
     columns = (
@@ -52,50 +52,50 @@ class Documents(OpengeverListingTab):
         ('delivery_date', 'delivery_date', helper.readable_date),
         ('checked_out', 'checked_out', helper.readable_author)
         )
-    
+
 class Dossiers(OpengeverListingTab):
     grok.name('tabbedview_view-dossiers')
-    
+
     types = ['opengever.dossier.projectdossier', 'opengever.dossier.businesscasedossier',]
-    
+
     columns = (
-                ('', helper.draggable),
-                ('', helper.path_checkbox),
-                ('reference_number'),
-                ('Title', helper.linked),
-                ('review_state', 'review_state', helper.translated_string()),
-                ('responsible', helper.readable_author),
-                ('start', helper.readable_date),
-                ('end', helper.readable_date),
-                
-            )
+        ('', helper.draggable),
+        ('', helper.path_checkbox),
+        ('reference_number'),
+        ('Title', helper.linked),
+        ('review_state', 'review_state', helper.translated_string()),
+        ('responsible', helper.readable_author),
+        ('start', helper.readable_date),
+        ('end', helper.readable_date),
+
+        )
     search_options = {'is_subdossier':False}
-    
+
 class SubDossiers(Dossiers):
     grok.name('tabbedview_view-subdossiers')
     search_options = {'is_subdossier':True}
 
 class Tasks(OpengeverListingTab):
     grok.name('tabbedview_view-tasks')
-    
+
     columns= (
-                ('', helper.draggable),
-                ('', helper.path_checkbox),
-                ('Title', helper.linked),
-                ('deadline', helper.readable_date),
-                ('responsible', helper.readable_author),
-                ('review_state', 'review_state', helper.translated_string()),
-            )
+        ('', helper.draggable),
+        ('', helper.path_checkbox),
+        ('Title', helper.linked),
+        ('deadline', helper.readable_date),
+        ('responsible', helper.readable_author),
+        ('review_state', 'review_state', helper.translated_string()),
+        )
 
     types = ['ftw.task.task',]
-    
+
 class Events(OpengeverListingTab):
     grok.name('tabbedview_view-events')
 
     types = ['dummy.event',]
 
 
-#code below might go to opengover.dossier..     
+#code below might go to opengover.dossier..
 
 from zope.annotation.interfaces import IAnnotations, IAnnotatable
 from ftw.journal.interfaces import IAnnotationsJournalizable, IWorkflowHistoryJournalizable
@@ -105,7 +105,7 @@ from opengever.repository.interfaces import IRepositoryFolder
 from ftw.table.interfaces import ITableGenerator
 from zope.component import queryUtility
 from ftw.table import helper
-        
+
 
 class RepositoryOverview(grok.View, OpengeverTab):
     grok.context(IRepositoryFolder)
@@ -114,18 +114,18 @@ class RepositoryOverview(grok.View, OpengeverTab):
 
     #TODO: refactor view using viewlets
     def catalog(self, types):
-        return self.context.portal_catalog(portal_type=types , 
-                                            path=dict(depth=1, 
-                                                      query='/'.join(self.context.getPhysicalPath())
-                                                      ), 
-                                                      sort_on='modified',
-                                                      sort_order='reverse')
+        return self.context.portal_catalog(portal_type=types ,
+                                           path=dict(depth=1,
+                                                     query='/'.join(self.context.getPhysicalPath())
+                                                     ),
+                                           sort_on='modified',
+                                           sort_order='reverse')
 
     def boxes(self):
         items = [
-              dict(id = 'repostories', content=self.repostories()),
-              dict(id = 'dossiers', content=self.dossiers()),
-        ]
+            dict(id = 'repostories', content=self.repostories()),
+            dict(id = 'dossiers', content=self.dossiers()),
+            ]
         return items
 
     def repostories(self):
@@ -138,54 +138,54 @@ class DossierOverview(grok.View, OpengeverTab):
     grok.context(IDossierMarker)
     grok.name('tabbedview_view-overview')
     grok.template('overview')
-    
+
     #TODO: refactor view using viewlets
     def catalog(self, types, showTrashed=False):
-        return self.context.portal_catalog(portal_type=types , 
-                                            path=dict(depth=1, 
-                                                      query='/'.join(self.context.getPhysicalPath())
-                                                      ),
-                                                      sort_on='modified',
-                                                      sort_order='reverse') 
+        return self.context.portal_catalog(portal_type=types ,
+                                           path=dict(depth=1,
+                                                     query='/'.join(self.context.getPhysicalPath())
+                                                     ),
+                                           sort_on='modified',
+                                           sort_order='reverse')
 
     def boxes(self):
         if not self.context.show_subdossier():
             items = [[dict(id = 'tasks', content=self.tasks()),
-                    dict(id = 'journal', content=self.journal()),
-                    dict(id = 'sharing', content=self.sharing())],
-                    [dict(id = 'documents', content=self.documents()),]
-            ]
+                      dict(id = 'journal', content=self.journal()),
+                      dict(id = 'sharing', content=self.sharing())],
+                     [dict(id = 'documents', content=self.documents()),]
+                     ]
         else:
             items = [[dict(id = 'subdossiers', content=self.subdossiers()),
-                    dict(id = 'tasks', content=self.tasks()),
-                    dict(id = 'journal', content=self.journal()),
-                    dict(id = 'sharing', content=self.sharing())],
-                    [dict(id = 'documents', content=self.documents()),]
-            ]
+                      dict(id = 'tasks', content=self.tasks()),
+                      dict(id = 'journal', content=self.journal()),
+                      dict(id = 'sharing', content=self.sharing())],
+                     [dict(id = 'documents', content=self.documents()),]
+                     ]
         return items
-                                                      
+
     def subdossiers(self):
-        return self.catalog(['opengever.dossier.projectdossier', 'opengever.dossier.businesscasedossier',])[:5] 
-                                            
+        return self.catalog(['opengever.dossier.projectdossier', 'opengever.dossier.businesscasedossier',])[:5]
+
     def tasks(self):
-        return self.catalog(['ftw.task.task', ])[:5]  
-    
-    def documents(self): 
-        return self.catalog(['opengever.document.document',])[:10]                                        
-    
+        return self.catalog(['ftw.task.task', ])[:5]
+
+    def documents(self):
+        return self.catalog(['opengever.document.document',])[:10]
+
     def events(self):
-        return self.catalog(['dummy.event',] )[:5]     
-                                            
+        return self.catalog(['dummy.event',] )[:5]
+
     def journal(self):
         if IAnnotationsJournalizable.providedBy(self.context):
             annotations = IAnnotations(self.context)
             entries = annotations.get(JOURNAL_ENTRIES_ANNOTATIONS_KEY, [])[:5]
         elif IWorkflowHistoryJournalizable.providedBy(self.context):
             raise NotImplemented
-        
+
         edict = [dict(Title=entry['action']['title'], getIcon=None) for entry in reversed(entries)]
         return edict
-    
+
     def sharing(self):
         # TODO: move to util
         role = 'Reader'
@@ -193,7 +193,7 @@ class DossierOverview(grok.View, OpengeverTab):
         context = self.context
         pas_tool = getToolByName(context, 'acl_users')
         utils_tool = getToolByName(context, 'plone_utils')
-        
+
         inherited_and_local_roles = utils_tool.getInheritedLocalRoles(context) + pas_tool.getLocalRolesForDisplay(context)
 
         for user_id_and_roles in inherited_and_local_roles:
@@ -202,48 +202,48 @@ class DossierOverview(grok.View, OpengeverTab):
                     user = pas_tool.getUserById(user_id_and_roles[0])
                     if user:
                         results.append(dict(
-                                        Title = '%s (%s)' % (user.getProperty('fullname', ''), user.getId()), 
-                                        getIcon='user.gif'
-                                        ))
+                                Title = '%s (%s)' % (user.getProperty('fullname', ''), user.getId()),
+                                getIcon='user.gif'
+                                ))
             if user_id_and_roles[2] == 'group':
                 if role in user_id_and_roles[1]:
                     for user in pas_tool.getGroupById(user_id_and_roles[0]).getGroupMembers():
                         results.append(dict(
-                                        Title = '%s (%s)' % (user.getProperty('fullname', ''), user.getId()), 
-                                        getIcon='user.gif'
-                                        ))
+                                Title = '%s (%s)' % (user.getProperty('fullname', ''), user.getId()),
+                                getIcon='user.gif'
+                                ))
         return results
 
 
 class Journal(grok.View, OpengeverTab):
-     grok.context(IDossierMarker)
-     grok.name('tabbedview_view-journal')
-     grok.template('journal')
+    grok.context(IDossierMarker)
+    grok.name('tabbedview_view-journal')
+    grok.template('journal')
 
-     def table(self):
-         generator = queryUtility(ITableGenerator, 'ftw.tablegenerator') 
-         columns = (('title', lambda x,y: x['action']['title']), 
-                    'actor', 
-                    ('time', helper.readable_date_time),
-                    'comment'
-                    )
-         return generator.generate(reversed(self.data()), columns, css_mapping={'table':'journal-listing'})
+    def table(self):
+        generator = queryUtility(ITableGenerator, 'ftw.tablegenerator')
+        columns = (('title', lambda x,y: x['action']['title']),
+                   'actor',
+                   ('time', helper.readable_date_time),
+                   'comment'
+                   )
+        return generator.generate(reversed(self.data()), columns, css_mapping={'table':'journal-listing'})
 
-     def data(self):
-         context = self.context
-         history = []
+    def data(self):
+        context = self.context
+        history = []
 
-         if IAnnotationsJournalizable.providedBy(self.context):
-             annotations = IAnnotations(context)
-             return annotations.get(JOURNAL_ENTRIES_ANNOTATIONS_KEY, [])
-         elif IWorkflowHistoryJournalizable.providedBy(self.context):
-             raise NotImplemented
+        if IAnnotationsJournalizable.providedBy(self.context):
+            annotations = IAnnotations(context)
+            return annotations.get(JOURNAL_ENTRIES_ANNOTATIONS_KEY, [])
+        elif IWorkflowHistoryJournalizable.providedBy(self.context):
+            raise NotImplemented
 
 class Trash(OpengeverListingTab):
     grok.name('tabbedview_view-trash')
 
     types = ['opengever.dossier.dossier', 'opengever.document.document', 'ftw.task.task',]
-    
+
     search_options = {'trashed':True}
 
     columns = (
@@ -252,13 +252,14 @@ class Trash(OpengeverListingTab):
         ('Title', 'sortable_title', helper.linked),
         )
 
+
 from plone.app.workflow.interfaces import ISharingPageRole
 from zope.component import getUtilitiesFor, getMultiAdapter
 from plone.app.workflow.browser.sharing import SharingView
 from Acquisition import aq_inner
 
 class Sharing(SharingView):
-    
+
     template = ViewPageTemplateFile('tabs_templates/sharing.pt')
 
     def roles(self):
@@ -266,8 +267,8 @@ class Sharing(SharingView):
 
         Returns a list of dicts with keys:
 
-            - id
-            - title
+        - id
+        - title
         """
         context = aq_inner(self.context)
         portal_membership = getToolByName(context, 'portal_membership')
@@ -297,9 +298,9 @@ class Sharing(SharingView):
     # @memoize
     # def roles(self):
     #     """Get a list of roles that can be managed.
-    #     
+    #
     #     Returns a list of dicts with keys:
-    #     
+    #
     #         - id
     #         - title
     #     """
@@ -322,25 +323,25 @@ from zope.component import getUtility
 
 class ContactsView(OpengeverListingTab):
     grok.name('tabbedview_view-all_contacts')
-    
+
     types = ['ftw.directoryservice.contact',]
 
     columns = (
         ('', helper.draggable),
         ('', helper.path_checkbox),
         ('Title', 'sortable_title', helper.linked),
-    )
-   
+        )
+
 class OrgunitView(OpengeverListingTab):
     grok.name('tabbedview_view-all_orgunits')
-    
+
     types = ['ftw.directoryservice.orgunit']
 
     columns = (
-         ('', helper.draggable),
-         ('', helper.path_checkbox),
-         ('Title', 'sortable_title', helper.linked),
-    )
+        ('', helper.draggable),
+        ('', helper.path_checkbox),
+        ('Title', 'sortable_title', helper.linked),
+        )
 
 class ContactImportantView(dexterity.DisplayForm, OpengeverTab):
     grok.context(IContact)
@@ -357,14 +358,14 @@ class ContactAdditionalView(dexterity.DisplayForm, OpengeverTab):
     grok.template('additional_contact')
 
 class ContactOrgunitView(dexterity.DisplayForm, OpengeverTab):
-     grok.context(IContact)
-     grok.name('tabbedview_view-orgunit_contact')
-     grok.template('orgunit_contact')
-     
-     def get_units(self):
-         intids = getUtility( IIntIds )
-         og = []
-         memberships = Membership.get_memberships(contact=self.context)
-         for rel in memberships:
-             og.append(intids.getObject(rel.to_id))
-         return og
+    grok.context(IContact)
+    grok.name('tabbedview_view-orgunit_contact')
+    grok.template('orgunit_contact')
+
+    def get_units(self):
+        intids = getUtility( IIntIds )
+        og = []
+        memberships = Membership.get_memberships(contact=self.context)
+        for rel in memberships:
+            og.append(intids.getObject(rel.to_id))
+            return og
