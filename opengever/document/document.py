@@ -22,6 +22,7 @@ from plone.app.iterate.interfaces import IWorkingCopy
 from plone.stagingbehavior.relation import StagingRelationValue
 from plone.registry.interfaces import IRegistry
 from plone.app.layout.viewlets.interfaces import IBelowContentTitle
+from plone.app.layout.viewlets.interfaces import IBelowContentBody
 from plone.autoform.interfaces import ORDER_KEY
 from plone.autoform.interfaces import OMITTED_KEY
 from plone.supermodel.interfaces import FIELDSETS_KEY
@@ -450,3 +451,32 @@ class Journal(grok.View, OpengeverTab):
             return annotations.get(JOURNAL_ENTRIES_ANNOTATIONS_KEY, [])
         elif IWorkflowHistoryJournalizable.providedBy(self.context):
             raise NotImplemented
+
+
+class DocumentContentHistoryViewlet(grok.Viewlet,
+                                     content.ContentHistoryViewlet):
+    """ Custom version of content history viewlet for documents
+    """
+    grok.name('plone.belowcontentbody.contenthistory')
+    grok.context(IDocumentSchema)
+    grok.viewletmanager(IBelowContentBody)
+    grok.require('zope2.View')
+
+    update = content.ContentHistoryViewlet.update
+
+ 
+class DownloadFileVersion(grok.CodeView):
+    grok.context(IDocumentSchema)
+    grok.name('download_file_version')
+
+    def render(self):
+        version_id = self.request.get('version_id')
+        pr = self.context.portal_repository
+        old_obj = pr.retrieve(self.context, version_id).object
+        old_file = old_obj.file
+        response = self.request.RESPONSE
+        response.setHeader('Content-Type', old_file.contentType)
+        response.setHeader('Content-Length', old_file.getSize())
+        response.setHeader('Content-Disposition',
+                           'attachment;filename="%s"' % old_file.filename)
+        return old_file.data

@@ -5,6 +5,9 @@ Changelog
 0.2
 ---
 
+* Issue #306: Darstellung "Historie" bei Dokument aufräumen
+  [18.12.2009, jbaumann]
+
 * Issue #273: Dossier: Reiter Dokumente, Spalte "Ausgecheckt"
   checked_out index korrigiert: nun wird der User verwendet, der das Dokument
   auscheckt
