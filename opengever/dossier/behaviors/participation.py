@@ -25,6 +25,8 @@ from opengever.dossier.interfaces import IDossierParticipants
 _marker = object()
 
 
+# ------ behavior ------
+
 class IParticipationAware(Interface):
     """ Participation behavior interface. Types using this behaviors
     are able to have participations.
@@ -47,7 +49,8 @@ class ParticipationHandler(object):
         self.annotations = IAnnotations(self.context)
 
     def create_participation(self, *args, **kwargs):
-        return Participation(*args, **kwargs)
+        p = Participation(*args, **kwargs)
+        return p
 
     def get_participations(self):
         return self.annotations.get(self.annotation_key,
@@ -75,7 +78,10 @@ class ParticipationHandler(object):
         lst = self.get_participations()
         lst.remove(value)
         self.set_participations(lst)
+        del value
 
+
+# -------- model --------
 
 class IParticipation(form.Schema):
     """ Participation Form schema
@@ -103,6 +109,9 @@ class IParticipation(form.Schema):
         required = False,
         )
 
+
+
+# ------- vocabularies --------
 
 class ContactVocabulary(SimpleVocabulary):
     grok.implements(IQuerySource)
@@ -151,6 +160,8 @@ grok.global_utility(RolesVocabularyFactory,
                     name=u'opengever.dossier.participation.roles')
 
 
+# --------- model class --------
+
 class Participation(Persistent):
     """ A participation represents a relation between a contact and
     a dossier. The choosen contact can have one or more roles in this
@@ -162,6 +173,7 @@ class Participation(Persistent):
         self.contact = contact
         self.roles = roles
         self.comment = comment
+        notify(zope.lifecycleevent.ObjectCreatedEvent(self))
 
     @setproperty
     def roles(self, value):
@@ -182,6 +194,8 @@ class Participation(Persistent):
     def has_key(self, key):
         return hasattr(self, key)
 
+
+#  -------- add form -------
 
 class ParticipationAddForm(z3c.form.form.Form):
     fields = z3c.form.field.Fields(IParticipation)
@@ -222,6 +236,8 @@ class ParticipationAddFormView(grok.CodeView, layout.FormWrapper):
 
     render = layout.FormWrapper.__call__
 
+
+# ------- delete view -------
  
 class DeleteParticipants(grok.CodeView):
     grok.context(IParticipationAwareMarker)
