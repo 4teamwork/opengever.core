@@ -10,6 +10,7 @@ from zope.schema.vocabulary import SimpleVocabulary
 from zope.interface import Interface, implements
 import z3c.form
 
+from Products.statusmessages.interfaces import IStatusMessage
 from plone.directives import form
 from plone.formwidget.autocomplete import AutocompleteFieldWidget
 from plone.z3cform import layout
@@ -96,8 +97,14 @@ class ContactVocabularyFactory(object):
 
     def __call__(self, context):
         terms = []
-        terms.append(SimpleVocabulary.createTerm('foo',
-                                                 str('foo'), 'Foo'))
+        for user in context.acl_users.getUsers():
+            member_name = user.getProperty('fullname') or user.getName()
+            email = user.getProperty('email', None)
+            if email:
+                member_name += ' ' + str(email)
+            terms.append(SimpleVocabulary.createTerm(user.getId(),
+                                                     str(user.getId()),
+                                                     member_name))
         return ContactVocabulary(terms)
 
 grok.global_utility(ContactVocabularyFactory,
@@ -159,7 +166,19 @@ class ParticipationAddForm(z3c.form.form.Form):
 
     @z3c.form.button.buttonAndHandler(_(u'button_add', default=u'Add'))
     def handle_add(self, action):
-        pass
+        data, errors = self.extractData()
+        if not errors:
+            # XXX fix "Could not adapt" !?
+            # phandler = IParticipationAware(self.context)
+            phandler = ParticipationHandler(self.context)
+            phandler.create_participation(**data)
+            status = IStatusMessage(self.request)
+            msg = _(u'info_participation_create',
+                    u'Participation created')
+            status.addStatusMessage(msg, type='info')
+            return self.request.RESPONSE.redirect(
+                self.context.absolute_url())
+            
 
 
 class ParticipationAddFormView(grok.CodeView, layout.FormWrapper):
