@@ -1,3 +1,5 @@
+import base64
+
 from five import grok
 from persistent import Persistent
 from persistent.list import PersistentList
@@ -212,3 +214,27 @@ class ParticipationAddFormView(grok.CodeView, layout.FormWrapper):
         layout.FormWrapper.__init__(self, *args, **kwargs)
 
     render = layout.FormWrapper.__call__
+
+ 
+class DeleteParticipants(grok.CodeView):
+    grok.context(IParticipationAwareMarker)
+    grok.name('delete_participants')
+    
+    def render(self):
+        phandler = IParticipationAware(self.context)
+        for a in self.request.get('oids'):
+            oid = base64.decodestring(a)
+            obj = self.context._p_jar[oid]
+            phandler.remove_participation(obj)
+        status = IStatusMessage(self.request)
+        msg = _(u'info_removed_participations',
+                'Removed participations')
+        status.addStatusMessage(msg, type='info')
+        return self.request.RESPONSE.redirect(self.redirect_url)
+
+    @property
+    def redirect_url(self):
+        value = self.request.get('orig_template')
+        if not value:
+            value = './#participants-tab'
+        return value
