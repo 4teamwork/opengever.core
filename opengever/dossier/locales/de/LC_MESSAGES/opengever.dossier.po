@@ -13,10 +13,18 @@ msgstr ""
 "Domain: opengever.dossier\n"
 "X-Is-Fallback-For: de-at de-li de-lu de-ch de-de\n"
 
+#: opengever.dossier/opengever/dossier/profiles/default/actions.xml
+msgid "Add Participant"
+msgstr "Neue Beteiligung"
+
 #. Default: "Business Case Dossier"
 #: opengever.dossier/opengever/dossier/profiles/default/types/opengever.dossier.businesscasedossier.xml
 msgid "Business Case Dossier"
 msgstr "Geschäftsdossier"
+
+#: opengever.dossier/opengever/dossier/profiles/default/actions.xml
+msgid "Delete"
+msgstr "Beteiligung löschen"
 
 #. Default: "Project Dossier"
 #: opengever.dossier/opengever/dossier/profiles/default/types/opengever.dossier.projectdossier.xml
@@ -43,6 +51,16 @@ msgstr "Das Beginn- oder Ende-Datum ist ungültig."
 msgid "button_archive"
 msgstr "Archivieren"
 
+#. Default: "Add"
+#: opengever.dossier/opengever/dossier/behaviors/participation.py:229
+msgid "button_add"
+msgstr "Erstellen"
+
+#. Default: "Cancel"
+#: opengever.dossier/opengever/dossier/behaviors/participation.py:243
+msgid "button_cancel"
+msgstr "Abbrechen"
+
 #. Default: "create document with template"
 #: opengever.dossier/opengever/dossier/templatedossier.py:32
 msgid "create_document_with_template"
@@ -68,9 +86,17 @@ msgstr "Ablage Jahr"
 msgid "heading_archive_form"
 msgstr "Dossier ablegen"
 
+#: opengever.dossier/opengever/dossier/behaviors/participation.py:131
+msgid "help_comment"
+msgstr ""
+
 #: opengever.dossier/opengever/dossier/behaviors/dossier.py:88
 msgid "help_comments"
 msgstr ""
+
+#: opengever.dossier/opengever/dossier/behaviors/participation.py:115
+msgid "help_contact"
+msgstr "Wählen Sie die verantwortliche Person oder Organisationseinheit aus"
 
 #: opengever.dossier/opengever/dossier/behaviors/dossier.py:120
 msgid "help_container_id"
@@ -101,6 +127,10 @@ msgstr "Anzahl Behälter, die ein (grosses) Dossier in Papierform enthalten"
 msgid "help_responsible"
 msgstr "Verantwortlicher Manager"
 
+#: opengever.dossier/opengever/dossier/behaviors/participation.py:122
+msgid "help_roles"
+msgstr ""
+
 #: opengever.dossier/opengever/dossier/behaviors/dossier.py:67
 msgid "help_start"
 msgstr ""
@@ -109,16 +139,36 @@ msgstr ""
 msgid "help_volume_number"
 msgstr "Nummer eines Bandes, zu welchem mehrere zusammengehörige, papierförmige  Dossiers zusammengefügt worden sind"
 
+#. Default: "Participation created"
+#: opengever.dossier/opengever/dossier/behaviors/participation.py:237
+msgid "info_participation_create"
+msgstr "Die Beteiligung wurde gespeichert."
+
+#. Default: "Removed participations"
+#: opengever.dossier/opengever/dossier/behaviors/participation.py:276
+msgid "info_removed_participations"
+msgstr "Die Beteiligungen wurde entfernt."
+
 #. Default: "by ${author}"
 #: opengever.dossier/opengever/dossier/businesscase_templates/byline.pt:16
 #: opengever.dossier/opengever/dossier/project_templates/byline.pt:16
 msgid "label_by_author"
 msgstr "Federführend: ${author}"
 
+#. Default: "Comment"
+#: opengever.dossier/opengever/dossier/behaviors/participation.py:130
+msgid "label_comment"
+msgstr "Kommentar"
+
 #. Default: "Comments"
 #: opengever.dossier/opengever/dossier/behaviors/dossier.py:87
 msgid "label_comments"
 msgstr "Kommentar"
+
+#. Default: "Contact"
+#: opengever.dossier/opengever/dossier/behaviors/participation.py:114
+msgid "label_contact"
+msgstr "Person oder Organisationseinheit"
 
 #. Default: "Container Id"
 #: opengever.dossier/opengever/dossier/behaviors/dossier.py:119
@@ -166,6 +216,21 @@ msgstr "Schlagworte"
 msgid "label_number_of_containers"
 msgstr "Anzahl Behältnisse"
 
+#. Default: "Participant added: ${contact} with roles ${roles}"
+#: opengever.dossier/opengever/dossier/behaviors/participation.py:74
+msgid "label_participant_added"
+msgstr "Beteiligung hinzugefügt für ${contact} als ${roles}"
+
+#. Default: "Participant removed: ${contact}"
+#: opengever.dossier/opengever/dossier/behaviors/participation.py:95
+msgid "label_participant_removed"
+msgstr "Beteiligung von ${contact} entfernt"
+
+#. Default: "Participation"
+#: opengever.dossier/opengever/dossier/behaviors/participation.py:225
+msgid "label_participation"
+msgstr "Beteiligung"
+
 #. Default: "Reference Number:"
 #: opengever.dossier/opengever/dossier/businesscase_templates/byline.pt:68
 msgid "label_reference_number"
@@ -175,6 +240,11 @@ msgstr "Aktenzeichen:"
 #: opengever.dossier/opengever/dossier/behaviors/dossier.py:94
 msgid "label_responsible"
 msgstr "Federführend"
+
+#. Default: "Roles"
+#: opengever.dossier/opengever/dossier/behaviors/participation.py:121
+msgid "label_roles"
+msgstr "Rollen"
 
 #. Default: "Sequence Number:"
 #: opengever.dossier/opengever/dossier/businesscase_templates/byline.pt:58

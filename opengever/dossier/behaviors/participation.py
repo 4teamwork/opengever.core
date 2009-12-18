@@ -196,7 +196,6 @@ class Participation(Persistent):
         self.contact = contact
         self.roles = roles
         self.comment = comment
-        notify(zope.lifecycleevent.ObjectCreatedEvent(self))
 
     @setproperty
     def roles(self, value):

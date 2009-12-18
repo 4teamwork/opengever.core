@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2009-12-17 10:11+0000\n"
+"POT-Creation-Date: 2009-12-18 16:49+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,8 +17,16 @@ msgstr ""
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: opengever.dossier\n"
 
+#: opengever.dossier/opengever/dossier/profiles/default/actions.xml
+msgid "Add Participant"
+msgstr ""
+
 #: opengever.dossier/opengever/dossier/profiles/default/types/opengever.dossier.businesscasedossier.xml
 msgid "Business Case Dossier"
+msgstr ""
+
+#: opengever.dossier/opengever/dossier/profiles/default/actions.xml
+msgid "Delete"
 msgstr ""
 
 #: opengever.dossier/opengever/dossier/profiles/default/types/opengever.dossier.projectdossier.xml
@@ -40,9 +48,19 @@ msgstr ""
 msgid "The start or end date is invalid"
 msgstr ""
 
+#. Default: "Add"
+#: opengever.dossier/opengever/dossier/behaviors/participation.py:229
+msgid "button_add"
+msgstr ""
+
 #. Default: "Archive"
 #: opengever.dossier/opengever/dossier/archive.py:53
 msgid "button_archive"
+msgstr ""
+
+#. Default: "Cancel"
+#: opengever.dossier/opengever/dossier/behaviors/participation.py:243
+msgid "button_cancel"
 msgstr ""
 
 #. Default: "create document with template"
@@ -70,8 +88,16 @@ msgstr ""
 msgid "heading_archive_form"
 msgstr ""
 
+#: opengever.dossier/opengever/dossier/behaviors/participation.py:131
+msgid "help_comment"
+msgstr ""
+
 #: opengever.dossier/opengever/dossier/behaviors/dossier.py:88
 msgid "help_comments"
+msgstr ""
+
+#: opengever.dossier/opengever/dossier/behaviors/participation.py:115
+msgid "help_contact"
 msgstr ""
 
 #: opengever.dossier/opengever/dossier/behaviors/dossier.py:120
@@ -103,6 +129,10 @@ msgstr ""
 msgid "help_responsible"
 msgstr ""
 
+#: opengever.dossier/opengever/dossier/behaviors/participation.py:122
+msgid "help_roles"
+msgstr ""
+
 #: opengever.dossier/opengever/dossier/behaviors/dossier.py:67
 msgid "help_start"
 msgstr ""
@@ -111,15 +141,35 @@ msgstr ""
 msgid "help_volume_number"
 msgstr ""
 
+#. Default: "Participation created"
+#: opengever.dossier/opengever/dossier/behaviors/participation.py:237
+msgid "info_participation_create"
+msgstr ""
+
+#. Default: "Removed participations"
+#: opengever.dossier/opengever/dossier/behaviors/participation.py:276
+msgid "info_removed_participations"
+msgstr ""
+
 #. Default: "by ${author}"
 #: opengever.dossier/opengever/dossier/businesscase_templates/byline.pt:16
 #: opengever.dossier/opengever/dossier/project_templates/byline.pt:16
 msgid "label_by_author"
 msgstr ""
 
+#. Default: "Comment"
+#: opengever.dossier/opengever/dossier/behaviors/participation.py:130
+msgid "label_comment"
+msgstr ""
+
 #. Default: "Comments"
 #: opengever.dossier/opengever/dossier/behaviors/dossier.py:87
 msgid "label_comments"
+msgstr ""
+
+#. Default: "Contact"
+#: opengever.dossier/opengever/dossier/behaviors/participation.py:114
+msgid "label_contact"
 msgstr ""
 
 #. Default: "Container Id"
@@ -168,6 +218,21 @@ msgstr ""
 msgid "label_number_of_containers"
 msgstr ""
 
+#. Default: "Participant added: ${contact} with roles ${roles}"
+#: opengever.dossier/opengever/dossier/behaviors/participation.py:74
+msgid "label_participant_added"
+msgstr ""
+
+#. Default: "Participant removed: ${contact}"
+#: opengever.dossier/opengever/dossier/behaviors/participation.py:95
+msgid "label_participant_removed"
+msgstr ""
+
+#. Default: "Participation"
+#: opengever.dossier/opengever/dossier/behaviors/participation.py:225
+msgid "label_participation"
+msgstr ""
+
 #. Default: "Reference Number:"
 #: opengever.dossier/opengever/dossier/businesscase_templates/byline.pt:68
 msgid "label_reference_number"
@@ -176,6 +241,11 @@ msgstr ""
 #. Default: "Responsible"
 #: opengever.dossier/opengever/dossier/behaviors/dossier.py:94
 msgid "label_responsible"
+msgstr ""
+
+#. Default: "Roles"
+#: opengever.dossier/opengever/dossier/behaviors/participation.py:121
+msgid "label_roles"
 msgstr ""
 
 #. Default: "Sequence Number:"
