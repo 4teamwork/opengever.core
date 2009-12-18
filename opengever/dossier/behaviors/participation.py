@@ -39,22 +39,37 @@ class ParticipationHandler(object):
 
     def __init__(self, context):
         self.context = context
+        self.annotations = IAnnotations(self.context)
 
     def create_participation(self, *args, **kwargs):
         return Participation(*args, **kwargs)
 
-    def add_participation(self, participation):
-        if not IParticipation.providedBy(participation):
-            raise ValueError('Excpected participation to provide IParticipation')
-        ann = IAnnotations(self.context)
-        if getattr(ann, self.annotation_key, _marker)==_marker:
-            ann[self.annotation_key] = PersistentList()
-        ann[self.annotation_key].append(participation)
+    def get_participations(self):
+        return self.annotations.get(self.annotation_key,
+                                    PersistentList())
 
-    def list_participation(self, participation):
-        if getattr(ann, self.annotation_key, _marker)==_marker:
-            ann[self.annotation_key] = PersistentList()
-        return ann[self.annotation_key]
+    def set_participations(self, value):
+        if not isinstance(value, PersistentList):
+            raise TypeError('Excpected PersistentList instance')
+        self.annotations[self.annotation_key] = value
+
+    def append_participiation(self, value):
+        if not IParticipation.providedBy(value):
+            raise TypeError('Excpected IParticipation object')
+        if not self.has_participation(value):
+            lst = self.get_participations()
+            lst.append(value)
+            self.set_participations(lst)
+
+    def has_participation(self, value):
+        return value in self.get_participations()
+
+    def remove_participation(self, value, quiet=True):
+        if not quiet and not self.has_participation(value):
+            raise ValueError('Participation not in list')
+        lst = self.get_participations()
+        lst.remove(value)
+        self.set_participations(lst)
 
 
 class IParticipation(form.Schema):
@@ -157,6 +172,13 @@ class Participation(Persistent):
     def roles(self):
         return self._roles
 
+    @property
+    def role_list(self):
+        return ', '.join(self.roles)
+
+    def has_key(self, key):
+        return hasattr(self, key)
+
 
 class ParticipationAddForm(z3c.form.form.Form):
     fields = z3c.form.field.Fields(IParticipation)
@@ -168,17 +190,16 @@ class ParticipationAddForm(z3c.form.form.Form):
     def handle_add(self, action):
         data, errors = self.extractData()
         if not errors:
-            # XXX fix "Could not adapt" !?
-            # phandler = IParticipationAware(self.context)
-            phandler = ParticipationHandler(self.context)
-            phandler.create_participation(**data)
+            phandler = IParticipationAware(self.context)
+            part = phandler.create_participation(**data)
+            phandler.append_participiation(part)
             status = IStatusMessage(self.request)
             msg = _(u'info_participation_create',
                     u'Participation created')
             status.addStatusMessage(msg, type='info')
             return self.request.RESPONSE.redirect(
                 self.context.absolute_url())
-            
+
 
 
 class ParticipationAddFormView(grok.CodeView, layout.FormWrapper):
