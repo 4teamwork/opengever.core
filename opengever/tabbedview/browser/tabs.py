@@ -276,9 +276,13 @@ class Participants(OpengeverListingTab):
                                          for k, v in attrs.items()])
         return html
 
+    def icon_helper(item, value):
+        return '<img src="user.gif" alt="" title="" border="0" />'
+
     sort_on = 'contact'
     columns = (
         ('', base64_oid_checkbox,),
+        ('', icon_helper,),
         ('contact', 'contact',),
         ('role_list', 'roles',)
         )
@@ -300,10 +304,10 @@ class Participants(OpengeverListingTab):
         #        results = filter(filter_condition, results)
 
         if self.sort_on.startswith('header-'):
-            sort_on = self.sort_on = self.sort_on.split('header-')[1]
+            self.sort_on = self.sort_on.split('header-')[1]
         if self.sort_on:
-            sorter = lambda a,b:cmp(getattr(a, sort_on),
-                                    geattr(b, sort_on))
+            sorter = lambda a,b:cmp(getattr(a, self.sort_on),
+                                    getattr(b, self.sort_on))
             results.sort(sorter)
 
         if self.sort_order=='reverse':
