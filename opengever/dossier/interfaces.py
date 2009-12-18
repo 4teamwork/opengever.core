@@ -50,12 +50,3 @@ class IDossierParticipants(Interface):
             'Schlusszeichnung',
             'Kenntnisnahme',
             ])
-
-
-class IParticipationObjectCreated(IObjectEvent):
-    """ Participation object created
-    """
-
-class IParticipationObjectDeleted(IObjectEvent):
-    """ Participation object deleted
-    """

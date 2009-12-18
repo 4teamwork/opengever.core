@@ -23,6 +23,8 @@ from opengever.dossier import _
 from opengever.dossier.interfaces import IDossierParticipants
 
 _marker = object()
+PARTICIPANT_ADDED = 'Participant added'
+PARTICIPANT_REMOVED = 'Participant removed'
 
 
 # ------ behavior ------
@@ -68,6 +70,17 @@ class ParticipationHandler(object):
             lst = self.get_participations()
             lst.append(value)
             self.set_participations(lst)
+            # journal entry
+            title = _(u'label_participant_added',
+                      default=u'Participant added: ${contact} with roles ${roles}',
+                      mapping={
+                    'contact' : value.contact,
+                    'roles' : value.role_list,
+                    })
+            # need to import here because of import loop
+            from opengever.journal.handlers import journal_entry_factory
+            journal_entry_factory(self.context, PARTICIPANT_ADDED,
+                                  title, comment=value.comment)
 
     def has_participation(self, value):
         return value in self.get_participations()
@@ -78,6 +91,16 @@ class ParticipationHandler(object):
         lst = self.get_participations()
         lst.remove(value)
         self.set_participations(lst)
+        # journal entry
+        title = _(u'label_participant_removed',
+                  default=u'Participant removed: ${contact}',
+                  mapping={
+                'contact' : value.contact,
+                })
+        # need to import here because of import loop
+        from opengever.journal.handlers import journal_entry_factory
+        journal_entry_factory(self.context, PARTICIPANT_REMOVED,
+                              title)
         del value
 
 
