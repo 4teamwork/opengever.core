@@ -98,6 +98,10 @@
           condition_expr="" url_expr="string:#" visible="True">
     <permission value="View"/>
   </action>
+  <action title="Participants" action_id="participants" category="arbeitsraum-tabs"
+          condition_expr="" url_expr="string:#" visible="True">
+    <permission value="View"/>
+  </action>
   <action title="Trash" action_id="trash" category="arbeitsraum-tabs"
           condition_expr="" url_expr="string:#" visible="True">
   </action>
