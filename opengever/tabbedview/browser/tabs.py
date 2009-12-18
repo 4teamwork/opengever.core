@@ -38,7 +38,7 @@ class OpengeverTab(object):
 class Documents(OpengeverListingTab):
     grok.name('tabbedview_view-documents')
     
-    types = ['opengever.document.document',]
+    types = ['opengever.document.document', 'ftw.mail.mail']
     
     search_options = {'isWorkingCopy':0}
 
