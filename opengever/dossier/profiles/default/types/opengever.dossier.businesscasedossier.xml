@@ -95,7 +95,8 @@
     <permission value="View"/>
   </action>
   <action title="Sharing" action_id="sharing" category="arbeitsraum-tabs"
-          condition_expr="" url_expr="string:#" visible="True">
+          condition_expr="" url_expr="string:#"
+          visible="False">
     <permission value="View"/>
   </action>
   <action title="Participants" action_id="participants" category="arbeitsraum-tabs"
