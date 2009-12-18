@@ -5,12 +5,12 @@ from zope.interface import Interface
 
 class IDossierContainerTypes(Interface):
     """A type for collaborative spaces."""
-    
+
     container_types = schema.List(title=u"container_types",
-                                    default=['Ordner', 'Schachtel', ])
+                                  default=['Ordner', 'Schachtel', ])
 
     maximum_dossier_depth = schema.Int(title=u'Maximum Dossier Depth',
-                                          default=1)
+                                       default=1)
 
     type_prefixes = schema.List(title=u"type_prefixes",
                                 default=['Regierungsrat', 'Staatsarchiv', 'Blubb'])
@@ -38,3 +38,5 @@ class IConstrainTypeDecider(Interface):
         current *context*, depending on the *depth*
         """
         pass
+
+
