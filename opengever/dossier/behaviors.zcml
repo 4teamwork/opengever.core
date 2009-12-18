@@ -21,4 +21,15 @@
       for="plone.dexterity.interfaces.IDexterityContent"
       />
 
+  <!-- ParticipationAware -->
+  <plone:behavior
+      title="OpenGever Participation Aware"
+      description="Enables participation support"
+      provides=".behaviors.participation.IParticipationAware"
+      factory=".behaviors.participation.ParticipationHandler"
+      marker=".behaviors.participation.IParticipationAwareMarker"
+      for="plone.dexterity.interfaces.IDexterityContent"
+      />
+
+
 </configure>

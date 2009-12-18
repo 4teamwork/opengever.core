@@ -5,6 +5,10 @@ Changelog
 0.2
 ---
 
+* Issue #263: Beteiligung in einem Dossier
+  Formular für Beteiligungen hinzugefügt
+  [18.12.2009, jbaumann]
+
 * Issue #296: Nummerierungskonzept umsetzen
   Aktenzeichen in byline
   [16.12.2009, jbaumann]
