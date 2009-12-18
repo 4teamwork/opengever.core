@@ -7,6 +7,7 @@ from rwproperty import getproperty, setproperty
 from z3c.formwidget.query.interfaces import IQuerySource
 from zope import schema
 from zope.annotation.interfaces import IAnnotations
+from zope.component import getUtility
 from zope.schema.interfaces import IVocabularyFactory
 from zope.schema.vocabulary import SimpleVocabulary
 from zope.interface import Interface, implements
@@ -15,9 +16,11 @@ import z3c.form
 from Products.statusmessages.interfaces import IStatusMessage
 from plone.directives import form
 from plone.formwidget.autocomplete import AutocompleteFieldWidget
+from plone.registry.interfaces import IRegistry
 from plone.z3cform import layout
 
 from opengever.dossier import _
+from opengever.dossier.interfaces import IDossierParticipants
 
 _marker = object()
 
@@ -133,11 +136,9 @@ class RolesVocabularyFactory(object):
 
     @property
     def roles(self):
-        return [
-            'Mitwirkung',
-            'Schlusszeichnung',
-            'Kenntnisnahme',
-            ]
+        registry = getUtility(IRegistry)
+        proxy = registry.forInterface(IDossierParticipants)
+        return getattr(proxy, 'roles', ())
 
     def __call__(self, context):
         terms = []
