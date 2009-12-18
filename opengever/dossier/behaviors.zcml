@@ -4,21 +4,21 @@
     xmlns:grok="http://namespaces.zope.org/grok"
     i18n_domain="opengever.dossier">
 
-    <include package="plone.behavior" file="meta.zcml" />
-    
-    <include package="plone.directives.form" file="meta.zcml" />
-    <include package="plone.directives.form" />
+  <include package="plone.behavior" file="meta.zcml" />
 
-    <!--grok:grok package=".behaviors.dossier" /-->
+  <include package="plone.directives.form" file="meta.zcml" />
+  <include package="plone.directives.form" />
 
-    <!-- Dossier -->
-    <plone:behavior
-        title="OpenGever Dossier"
-        description="Adds OpenGever base properties and fields for dossiers"
-        provides=".behaviors.dossier.IDossier"
-        factory="plone.behavior.AnnotationStorage"
-        marker=".behaviors.dossier.IDossierMarker"
-        for="plone.dexterity.interfaces.IDexterityContent"
-        />
-        
+  <!--grok:grok package=".behaviors.dossier" /-->
+
+  <!-- Dossier -->
+  <plone:behavior
+      title="OpenGever Dossier"
+      description="Adds OpenGever base properties and fields for dossiers"
+      provides=".behaviors.dossier.IDossier"
+      factory="plone.behavior.AnnotationStorage"
+      marker=".behaviors.dossier.IDossierMarker"
+      for="plone.dexterity.interfaces.IDexterityContent"
+      />
+
 </configure>
