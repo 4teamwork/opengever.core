@@ -40,3 +40,12 @@ class IConstrainTypeDecider(Interface):
         pass
 
 
+class IDossierParticipants(Interface):
+    """ Participants configuration (plone.registry)
+    """
+    roles = schema.List(title=u'Roles',
+                        default=[
+            'Mitwirkung',
+            'Schlusszeichnung',
+            'Kenntnisnahme',
+            ])
