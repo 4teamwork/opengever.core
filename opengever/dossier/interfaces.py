@@ -1,5 +1,6 @@
 from zope import schema
 from zope.interface import Interface
+from zope.component.interfaces import IObjectEvent
 
 # -*- extra stuff goes here -*-
 
@@ -49,3 +50,12 @@ class IDossierParticipants(Interface):
             'Schlusszeichnung',
             'Kenntnisnahme',
             ])
+
+
+class IParticipationObjectCreated(IObjectEvent):
+    """ Participation object created
+    """
+
+class IParticipationObjectDeleted(IObjectEvent):
+    """ Participation object deleted
+    """
