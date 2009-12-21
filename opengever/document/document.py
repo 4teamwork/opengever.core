@@ -28,6 +28,7 @@ from plone.autoform.interfaces import OMITTED_KEY
 from plone.supermodel.interfaces import FIELDSETS_KEY
 from plone.supermodel.model import Fieldset
 from plone.versioningbehavior.behaviors import IVersionable
+from plone.z3cform.textlines.textlines import TextLinesFieldWidget
 
 from ftw.table.interfaces import ITableGenerator
 from ftw.table import helper
@@ -81,6 +82,7 @@ class IDocumentSchema(form.Schema):
         fields = [
             u'title',
             u'description',
+            u'keywords',
             u'foreign_reference',
             u'document_date',
             u'document_type',
@@ -112,6 +114,15 @@ class IDocumentSchema(form.Schema):
         description = _(u'help_description', default=u''),
         required = False,
         )
+
+    keywords = schema.Tuple(
+        title = _(u'label_keywords', default=u'Keywords'),
+        description = _(u'help_keywords', default=u''),
+        value_type = schema.TextLine(),
+        required = False,
+        missing_value = (),
+        )
+    form.widget(keywords = TextLinesFieldWidget)
 
     foreign_reference = schema.TextLine(
         title = _(u'label_foreign_reference', default='Foreign Reference'),
@@ -267,6 +278,7 @@ def SearchableText( obj ):
     fields = [
         schema.getFields( IBasic ).get( 'title' ),
         schema.getFields( IBasic ).get( 'description' ),
+        schema.getFields( IDocumentSchema).get('keywords'),
         schema.getFields( IDocumentSchema ).get('file'),
         ]
     searchable = []
@@ -291,11 +303,14 @@ def SearchableText( obj ):
                 LOG.error("Error while trying to convert file contents to 'text/plain' "
                           "in SearchableIndex(document.py): %s" % (e,))
             data = str(datastream)
-        if isinstance( data, unicode ):
-            data = data.encode( 'utf8' )
+        if isinstance(data, unicode):
+            data = data.encode('utf8')
+        if isinstance(data, tuple) or isinstance(data, list):
+            data = " ".join([str(a) for a in data])
         if data:
-            searchable.append( data )
-    return ' '.join( searchable )
+            searchable.append(data)
+    return ' '.join(searchable)
+    
 grok.global_adapter(SearchableText, name='SearchableText')
 
 
