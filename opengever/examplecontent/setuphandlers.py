@@ -1,5 +1,9 @@
+import random
 from plone.i18n.normalizer import urlnormalizer
 import sys
+from plone.dexterity.utils import createContentInContainer
+from ftw.directoryservice.membership import Membership
+from Products.CMFCore.utils import getToolByName
 
 class UserGenerator(object):
     def __init__(self, context):
@@ -38,6 +42,7 @@ def setupVarious(context):
 
     if not portal.get("arbeitsplatz"):
         portal._importObjectFromFile(context.openDataFile('arbeitsplatz.zexp'))
+        portal.get("arbeitsplatz").reindexObject()
     
     if not portal.get("ordnungssystem"):
         portal._importObjectFromFile(context.openDataFile('ordnungssystem.zexp'))
@@ -57,10 +62,32 @@ def setupVarious(context):
     if not portal.get("vorlagen"):
         portal._importObjectFromFile(context.openDataFile('vorlagen.zexp'))
 
+    orgunitfile = context.openDataFile("orgunits.csv")
+    exists = True
+    # add some default orgunits
+    catalog = getToolByName(portal, 'portal_catalog')
+    if not catalog({
+                'path':"/".join(portal.get("kontakte").getPhysicalPath()),
+                'portal_type':'ftw.directoryservice.orgunit',
+                'Title':orgunitfile.readline()
+                }):
+        exists = False
+    orgunitfile.seek(0)
+    if not exists:
+        for orgunit in orgunitfile.readlines():
+            createContentInContainer(portal.get("kontakte"), 'ftw.directoryservice.orgunit', checkConstraints=True, title=orgunit.strip())
+            print >>sys.stdout, 'Creating orgunit %s' % orgunit.strip()
+        
+    orgunits = []
+    query = {}
+    query['path'] = "/".join(portal.get("kontakte").getPhysicalPath())
+    query['portal_type'] = 'ftw.directoryservice.orgunit'
+    for orgunit in catalog(query):
+        orgunits.append(orgunit.getObject())
+
 	# add some default users
     regtool = portal.portal_registration
     try:
-
         member = regtool.addMember("lesen", "demo09", ('Member',), None, properties={"username": "lesen", "email": "hugo.boss@4teamwork.ch"})
         member.setMemberProperties({"fullname":"lesen"})
         member = regtool.addMember("sachbearbeiter", "demo09", ('Member',), None, properties={"username": "sachbearbeiter", "email": "hugo.boss@4teamwork.ch"})
@@ -87,15 +114,8 @@ def setupVarious(context):
 
         member = regtool.addMember("admin", "demo09", ('Member', ), None, properties={"username": "admin", "email": "hugo.boss@4teamwork.ch"})
         member.setMemberProperties({"fullname":"Administrator"})
-
-    except ValueError: #users already exist
+    except ValueError:
         pass
-
-    if not portal.get("arbeitsplatz"):
-        portal.invokeFactory("Folder", "arbeitsplatz", title=u"Arbeitsplatz")
-
-    arbeitsplatz = portal.get("arbeitsplatz")
-    arbeitsplatz.reindexObject()
     
     # add a few default groups
     groupstool.addGroup("Sachbearbeiter")
@@ -113,13 +133,16 @@ def setupVarious(context):
     for i in range(500):
         userdata = ug.getUserData()
         newid = userdata["id"]
-        
-        print >>sys.stdout, 'Creating user %s' % userdata["id"]
-        try:
-            member = regtool.addMember(userdata["id"], userdata["password"], ('Member',), None, properties={"username": userdata["id"], "email": userdata["email"]})
-            member.setMemberProperties({"fullname":"%s %s" % (userdata["surname"], userdata["name"])})
-            group.addMember(userdata["id"])
-        except ValueError: # memberid already exists
-            pass
-    
-        
+        if not exists:
+            contact = createContentInContainer(portal.get("kontakte"), 'ftw.directoryservice.contact', checkConstraints=True, lastname=userdata["name"], firstname=userdata["surname"], userid=userdata["id"])
+            # create membership
+            rand = random.randrange(0,len(orgunits))
+            Membership.create_membership(contact=contact,orgunit=orgunits[rand])
+            print >>sys.stdout, 'Creating contact %s' % newid
+            if i < 250:
+                try:
+                    member = regtool.addMember(userdata["id"], userdata["password"], ('Member',), None, properties={"username": userdata["id"], "email": userdata["email"]})
+                    member.setMemberProperties({"fullname":"%s %s" % (userdata["surname"], userdata["name"])})
+                    group.addMember(userdata["id"])
+                except ValueError:
+                    pass
