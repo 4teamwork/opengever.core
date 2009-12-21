@@ -1,54 +1,35 @@
-from datetime import datetime
-import re
-
-from AccessControl import SecurityManagement
-from five import grok
-from zope import component
 from zope.interface import Interface
 from zope import schema
 from zope.schema import vocabulary
+
+from AccessControl import SecurityManagement
+from five import grok
 from z3c.form import form, field, button
-
-from plone.i18n.normalizer.interfaces import IIDNormalizer
-from plone.dexterity.interfaces import IDexterityContent
+from persistent.dict import PersistentDict
 from plone.z3cform import layout
-from Products.CMFCore.utils import getToolByName
+from plone.dexterity.utils import createContentInContainer
 
-from opengever.dossier.behaviors.dossier import IDossier
-from opengever.document.document import IDocumentSchema
 from opengever.document import _
-from opengever.document.staging.manager import ICheckinCheckoutManager
-
+from opengever.document.persistence import DCQueue
+from opengever.document.document import IDocumentSchema
 
 DOCUCOMPOSER_TEMPLATES = {
-    '2798' : 'Aktennotiz',
-    '1159' : 'Bericht A4',
-    '1150' : 'Einladung',
-    '3541' : 'Checklisten',
+    '2798': 'Aktennotiz',
+    '1159': 'Bericht A4',
+    '1150': 'Einladung',
+    '3541': 'Checklisten',
     }
 DOCUCOMPOSER_TEMPLATES_VOCABULARY = vocabulary.SimpleVocabulary([
         vocabulary.SimpleTerm(k, title=v)
         for k, v
-        in DOCUCOMPOSER_TEMPLATES.items()
-        ])
-
-class IDocuComposerWizard(Interface):
-    template = schema.Choice(
-        title = _(u'label_docucomposer_template', default=u'DocuComposer Template'),
-        description = _(u'help_docucomposer_wizard', default=u''),
-        vocabulary = DOCUCOMPOSER_TEMPLATES_VOCABULARY,
-        required = True
-        )
-    filename = schema.TextLine(
-        title = _(u'lable_docucomposer_filename', default=u'Filename'),
-        description = _(u'help_docucomposer_filename', default=u''),
-        required = True,
-        )
-
+        in DOCUCOMPOSER_TEMPLATES.items()])
 
 
 class DocuComposerWizardForm(form.Form):
-    fields = field.Fields(IDocuComposerWizard)
+    #fields = field.Fields(IDocumentSchema)
+    #fields = field.Fields(IOpenGeverBase)
+    fields = field.Fields(IDocumentSchema)
+
     ignoreContext = True
     label = _(u'heading_docucomposer_wizard_form', default=u'DocuComposer')
 
@@ -56,19 +37,19 @@ class DocuComposerWizardForm(form.Form):
     def create_button_handler(self, action):
         data, errors = self.extractData()
         if len(errors)==0:
-            current_user = str(self.context.portal_membership.getAuthenticatedMember())
-            filename = data['filename']
-            if not filename.endswith('.doc'):
-                filename += '.doc'
-            filename = component.getUtility(IIDNormalizer).normalize(filename)
-            url = 'docucomposer:url=%s&id=%s&filename=%s&owner=%s' % (
-                self.context.absolute_url(),
-                data['template'],
-                filename,
-                current_user,
-                )
-            return self.request.RESPONSE.redirect(url)
+            data.__setitem__('owner', self.context.portal_membership.getAuthenticatedMember())
+            data.__setitem__('context', self.context)
+            queue = DCQueue(self.context)
+            persData = PersistentDict(data)
+            token = queue.appendDCDoc(persData)
 
+            url = 'docucomposer:url=%s&token=%s' % (
+                self.context.portal_url(),
+                token,
+            )
+            print token
+            print url
+            return self.request.RESPONSE.redirect(url)
 
 
 class DocuComposerWizardView(layout.FormWrapper, grok.CodeView):
@@ -85,50 +66,37 @@ class DocuComposerWizardView(layout.FormWrapper, grok.CodeView):
         return layout.FormWrapper.__call__(self)
 
 
-
 class CreateDocumentWithFile(grok.CodeView):
-    grok.context(IDexterityContent)
+    from Products.CMFPlone.interfaces import IPloneSiteRoot
+    grok.context(IPloneSiteRoot)
     grok.name("create_document_with_file")
     grok.require("zope2.View")
 
     def render(self):
-
-        title = self.request.get('title')
+        token = self.request.get('token')
         uploadFile = self.request.get('file')
-        filename = self.request.get('fileName')
-        current_user = self.request.get('userid')
+        filename = self.request.get('filename')
 
-        # CHANGE SECURITY
-        # XXX XXX
-        acl_users = getToolByName(self.context, 'acl_users')
-        user = acl_users.getUser(current_user)
-        SecurityManagement.newSecurityManager(self.request, user)
+        queue = DCQueue(self.context)
+        dcDict = queue.getDCDocs()
+        data = dcDict.get(token, dcDict)
 
-        #current_user = str(context.portal_membership.getAuthenticatedMember())
-        #self.context.plone_utils.changeOwnershipOf(self.context, current_user)
+        if data:
+            data = data.data
+            user = data['owner']
+            SecurityManagement.newSecurityManager(self.request, user)
 
-        generated_id = component.getUtility(IIDNormalizer).normalize(title)
-        id = generated_id
-        counter = 1
-        while 1:
-            if self.context.get(id):
-                id = generated_id + '-' + str(counter)
-                counter += 1
-            else:
-                break
+            dossier = data['context']
 
-        obj = self.context.get(self.context.invokeFactory(type_name="opengever.document.document", id=id, title=title))
+            new_doc = createContentInContainer(dossier, 'opengever.document.document', title= data['title'])
 
-        fields = dict(schema.getFieldsInOrder(IDocumentSchema))
-        fileObj = fields['file']._type(data=uploadFile, filename=filename)
-        obj.file = fileObj
-        obj.document_date = datetime.now()
+            for key in data.keys():
+                new_doc.__setattr__(key, data[key])
 
-        manager = ICheckinCheckoutManager(obj)
-        wc = manager.checkout('', show_status_message=False)
+            fields = dict(schema.getFieldsInOrder(IDocumentSchema))
+            fileObj = fields['file']._type(data=uploadFile, filename=filename)
+            new_doc.file = fileObj
 
-        portal = self.context.portal_url.getPortalObject()
-        xpr = re.compile('href="(.*?)"')
-        html = portal.externalEditLink_(wc)
-        url = xpr.search(html).groups()[0]
-        return url
+            url = new_doc.absolute_url()
+
+            return url
