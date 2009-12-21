@@ -65,6 +65,9 @@ msgstr ""
 msgid "comment"
 msgstr ""
 
+msgid "comments"
+msgstr ""
+
 msgid "reference_number"
 msgstr ""
 
@@ -124,3 +127,7 @@ msgstr ""
 
 msgid "role_list"
 msgstr ""
+
+msgid "participants"
+msgstr ""
+

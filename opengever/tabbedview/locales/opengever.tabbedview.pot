@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2009-12-18 16:04+0000\n"
+"POT-Creation-Date: 2009-12-21 10:12+0000\n"
 "PO-Revision-Date: 2009-02-25 14:39+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -37,6 +37,9 @@ msgid "checked_out"
 msgstr ""
 
 msgid "comment"
+msgstr ""
+
+msgid "comments"
 msgstr ""
 
 msgid "contact"
@@ -88,6 +91,9 @@ msgid "orgunit_contact"
 msgstr ""
 
 msgid "overview"
+msgstr ""
+
+msgid "participants"
 msgstr ""
 
 msgid "preview"
