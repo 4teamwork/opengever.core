@@ -1,22 +1,32 @@
+import logging
+
+from five import grok
+from datetime import datetime
 from Acquisition import aq_inner, aq_parent
 from opengever.dossier import _
 from ftw.task import util
+from Products.CMFCore.utils import getToolByName
+from ZODB.POSException import ConflictError
+
 from plone.autoform.interfaces import IFormFieldProvider
 from plone.directives import form
-from zope import schema
-from zope.interface import Interface, alsoProvides
 from plone.z3cform.textlines.textlines import TextLinesFieldWidget
 from plone.formwidget.autocomplete import AutocompleteFieldWidget
 from plone.indexer import indexer
-from five import grok
-from datetime import datetime
-from zope.interface import invariant, Invalid
+from plone.namedfile.interfaces import INamedFileField
+from plone.registry.interfaces import IRegistry
+from plone.app.dexterity.behaviors.metadata import IBasic
 
+from zope.interface import invariant, Invalid
 from zope.schema.vocabulary import SimpleVocabulary
 from zope.schema.interfaces import IContextSourceBinder
+from zope import schema
+from zope.interface import Interface, alsoProvides
 from zope.component import queryUtility
-from plone.registry.interfaces import IRegistry
+
 from opengever.dossier.interfaces import IDossierContainerTypes
+
+LOG = logging.getLogger('opengever.dossier')
 
 @grok.provider(IContextSourceBinder)
 def container_types(context):
@@ -192,3 +202,48 @@ def isSubdossierIndexer(obj):
         return True
     return False
 grok.global_adapter(isSubdossierIndexer, name="is_subdossier")
+
+# INDEX: SearchableText
+@indexer(IDossierMarker)
+def SearchableText(obj):
+    context = aq_inner(obj)
+    transforms = getToolByName(obj, 'portal_transforms')
+    fields = [
+        schema.getFields(IBasic).get('title'),
+        schema.getFields(IBasic).get('description'),
+        schema.getFields(IDossier).get('keywords'),
+        ]
+    searchable = []
+    for field in fields:
+        try:
+            data = field.get(context)
+        except AttributeError:
+            data = field.get(field.interface(context))
+#        import pdb; pdb.set_trace()
+        if not data:
+            continue
+        if INamedFileField.providedBy(field):
+            # we need to convert the file data to string, so we can
+            # index it
+            datastream = ''
+            try:
+                datastream = transforms.convertTo(
+                    "text/plain",
+                    data.data,
+                    mimetype = data.contentType,
+                    filename = data.filename,
+                    )
+            except (ConflictError, KeyboardInterrupt):
+                raise
+            except Exception, e:
+                LOG.error("Error while trying to convert file contents to 'text/plain' "
+                          "in SearchableIndex(dossier.py): %s" % (e,))
+            data = str(datastream)
+        if isinstance(data, unicode):
+            data = data.encode('utf8')
+        if isinstance(data, tuple) or isinstance(data, list):
+            data = " ".join([str(a) for a in data])
+        if data:
+            searchable.append(data)
+    return ' '.join(searchable)
+grok.global_adapter(SearchableText, name='SearchableText')
