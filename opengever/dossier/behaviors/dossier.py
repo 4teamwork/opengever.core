@@ -43,7 +43,6 @@ class IDossier(form.Schema):
                 u'keywords',
                 u'start',
                 u'end',
-                u'volume_number',
                 u'comments',
                 u'responsible',
         ],
@@ -103,6 +102,7 @@ class IDossier(form.Schema):
         fields = [
                 u'container_type',
                 u'container_id',
+                u'volume_number',
                 u'number_of_containers',
                 u'container_location',
         ],
