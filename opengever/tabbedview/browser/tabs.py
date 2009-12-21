@@ -229,7 +229,7 @@ class Journal(grok.View, OpengeverTab):
         columns = (('title', lambda x,y: x['action']['title']),
                    'actor',
                    ('time', helper.readable_date_time),
-                   'comment'
+                   'comments'
                    )
         return generator.generate(reversed(self.data()), columns, css_mapping={'table':'journal-listing'})
 
