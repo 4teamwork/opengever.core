@@ -235,15 +235,15 @@ class ParticipationAddForm(z3c.form.form.Form):
             msg = _(u'info_participation_create',
                     u'Participation created')
             status.addStatusMessage(msg, type='info')
-            return self.request.RESPONSE.redirect(
-                self.context.absolute_url())
+            return self._redirect_to_participants_tab()
 
-    @z3c.form.button.buttonAndHandler(_(u'button_cancel',
-                                        default=u'Cancel'))
+    @z3c.form.button.buttonAndHandler(_(u'button_cancel', default=u'Cancel'))
     def handle_cancel(self, action):
+        return self._redirect_to_participants_tab()
+
+    def _redirect_to_participants_tab(self):
         url = self.context.absolute_url() + '/#participants-tab'
         return self.request.RESPONSE.redirect(url)
-
 
 
 class ParticipationAddFormView(grok.CodeView, layout.FormWrapper):
