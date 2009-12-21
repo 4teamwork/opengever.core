@@ -39,7 +39,7 @@ def journal_entry_factory(context, action, title,
     comment = comment=='' and get_change_note(context.REQUEST, '') or comment
     title = propper_string( title )
     action = propper_string( action )
-    comment = propper_string( action )
+    comment = propper_string( comment )
     entry = {
         'obj' : context,
         'action' : PersistentDict({
