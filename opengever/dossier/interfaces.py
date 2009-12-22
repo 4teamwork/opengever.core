@@ -8,8 +8,8 @@ class IDossierContainerTypes(Interface):
     """A type for collaborative spaces."""
 
     container_types = schema.List(title=u"container_types",
-                                  default=['Ordner',
-                                           'Schachtel',
+                                  default=[u'Ordner',
+                                           u'Schachtel',
                                            ],
                                   value_type=schema.TextLine())
 
@@ -17,9 +17,9 @@ class IDossierContainerTypes(Interface):
                                        default=1)
 
     type_prefixes = schema.List(title=u"type_prefixes",
-                                default=['Regierungsrat',
-                                         'Staatsarchiv',
-                                         'Blubb'],
+                                default=[u'Regierungsrat',
+                                         u'Staatsarchiv',
+                                         u'Blubb'],
                                 value_type=schema.TextLine())
 
 
@@ -51,8 +51,8 @@ class IDossierParticipants(Interface):
     """ Participants configuration (plone.registry)
     """
     roles = schema.List(title=u'Roles',
-                        default=['Mitwirkung',
-                                 'Schlusszeichnung',
-                                 'Kenntnisnahme',
+                        default=[u'Mitwirkung',
+                                 u'Schlusszeichnung',
+                                 u'Kenntnisnahme',
                                  ],
                         value_type=schema.TextLine())
