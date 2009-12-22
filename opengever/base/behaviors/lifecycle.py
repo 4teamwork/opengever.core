@@ -20,6 +20,7 @@ from zope.schema.interfaces import IContextSourceBinder
 from zope.component import queryUtility
 from plone.registry.interfaces import IRegistry
 from opengever.base.interfaces import IBaseCustodyPeriods
+from opengever.base.interfaces import IRetentionPeriodRegister
 
 
 @grok.provider(IContextSourceBinder)
@@ -51,9 +52,10 @@ class ILifeCycle(form.Schema):
             ],
         )
 
-    retention_period = schema.Int(
+    retention_period = schema.Choice(
         title = _(u'label_retention_period', u'Retention period (years)'),
         description = _(u'help_retention_period', default=u''),
+        source = u'lifecycle_retention_period_vocabulary',
         required = True,
         )
 
@@ -73,6 +75,23 @@ class ILifeCycle(form.Schema):
 
 
 alsoProvides(ILifeCycle, IFormFieldProvider)
+
+# RETENTION PERIOD: Vocabulary and default value
+def _get_retention_period_options(vocabulary):
+    registry = zope.component.getUtility(IRegistry)
+    proxy = registry.forInterface(IRetentionPeriodRegister)
+    options = []
+    for num in getattr(proxy, 'retention_period'):
+        num = int(num)
+        options.append((num, num))
+    return options
+grok.global_utility(utils.create_restricted_vocabulary(
+        ILifeCycle['retention_period'],
+        _get_retention_period_options,
+        message_factory=_),
+                    provides=schema.interfaces.IVocabularyFactory,
+                    name=u'lifecycle_retention_period_vocabulary')
+
 
 # ARCHIVAL VALUE: Vocabulary and default value
 ARCHIVAL_VALUE_UNCHECKED = u'archival_value : unchecked'

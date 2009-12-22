@@ -7,6 +7,16 @@ class IBaseCustodyPeriods(Interface):
     custody_periods = schema.List(title=u"custody period", default=[u'0', u'10', u'30', u'100', u'150',])
 
 
+class IRetentionPeriodRegister(Interface):
+    """ plone.registry register for retention_period
+    """
+    retention_period = schema.List(title=u'retention period',
+                                   default=[u'5',
+                                            u'10',
+                                            u'15',
+                                            u'20',
+                                            u'25'])
+
 class IBaseClientID(Interface):
     client_id = schema.TextLine(title=u"client id", default=u"OG")
 

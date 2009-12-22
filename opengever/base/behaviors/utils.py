@@ -23,10 +23,26 @@ def create_restricted_vocabulary(field, options, message_factory=None):
     if the parent object has a "raw" option set, then only detailed
     options or the selected raw option are allowed to be selected.
     """
-    option_level_mapping = [list(a) for a in options[:]]
-    option_level_mapping = dict([a for a in option_level_mapping if not a.reverse()])
-    option_names = [a[1] for a in options]
     class GeneratedVocabulary(object):
+
+        @property
+        def option_level_mapping(self):
+            option_level_mapping = [list(a) for a in self.options[:]]
+            option_level_mapping = dict([a for a in option_level_mapping
+                                         if not a.reverse()])
+            return option_level_mapping
+
+        @property
+        def option_names(self):
+            return [a[1] for a in self.options]
+
+        @property
+        def options(self):
+            if callable(self._options):
+                return self._options()
+            else:
+                return self._options
+
         def __call__(self, context):
             self.context = context
             # decide, whats allowed
@@ -69,15 +85,19 @@ def create_restricted_vocabulary(field, options, message_factory=None):
                     try:
                         interface_ = self.field.interface
                     except AttributeError:
-                        obj = obj.aq_inner.aq_parent
+                        pass
                     else:
-                        return self.field.get(interface_(obj))
+                        try:
+                            adpt = interface_(obj)
+                        except TypeError: # could not adapt
+                            pass
+                        else:
+                            return self.field.get(adpt)
+                obj = obj.aq_inner.aq_parent
             return self.field.default
 
     GeneratedVocabulary.field = field
-    GeneratedVocabulary.options = options
-    GeneratedVocabulary.option_level_mapping = option_level_mapping
-    GeneratedVocabulary.option_names = option_names
+    GeneratedVocabulary._options = options
     GeneratedVocabulary._ = message_factory
     return GeneratedVocabulary
 
@@ -101,7 +121,12 @@ def set_default_with_acquisition(field, default):
                 except AttributeError:
                     pass
                 else:
-                    return data.field.get(interface_(obj))
+                    try:
+                        adpt = interface_(obj)
+                    except TypeError: # could not adapt
+                        pass
+                    else:
+                        return data.field.get(adpt)
             obj = aq_parent(aq_inner(obj))
         # otherwise use default value
         return field._acquisition_default
