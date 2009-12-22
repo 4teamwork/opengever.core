@@ -11,8 +11,8 @@ class IAttachable(Interface):
     """
 
     def __call__(self, encode_base64=True,
-               default_mimeType='application/octet-stream',
-               default_filename=None):
+                 default_mimeType='application/octet-stream',
+                 default_filename=None):
         """ Creates a list of MIMEBase objects (for each attachable field)
         @param encode_base64 (True)
         @param default_mimeType ('application/octet-stream')
@@ -39,9 +39,9 @@ class IAttachedMailComposer(Interface):
         @param stylesheet       css for html message
         @param replyto_address  reply-to address
         @param attachable_objects
-                                list of objects which can possibly be used
-                                as attachments (if the have a IAttachable
-                                adapter)
+        list of objects which can possibly be used
+        as attachments (if the have a IAttachable
+        adapter)
         """
 
 
@@ -60,7 +60,15 @@ class IObjectCheckedInEvent(IObjectEvent):
 class IObjectCheckoutCanceledEvent(IObjectEvent):
     """ Event interface for events.ObjectCheckoutCanceledEvent
     """
-    
-    
+
+
 class IDocumentType(Interface):
-    document_types= schema.List(title=u"Document Type", default=[u'Antrag', u'Anfrage', u'Bericht', u'Offerte', u'Protokoll', u'Vertrag',])
+    document_types = schema.List(title=u"Document Type",
+                                 default=[u'Antrag',
+                                          u'Anfrage',
+                                          u'Bericht',
+                                          u'Offerte',
+                                          u'Protokoll',
+                                          u'Vertrag',
+                                          ],
+                                 value_type=schema.TextLine)
