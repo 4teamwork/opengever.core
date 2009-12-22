@@ -4,7 +4,15 @@ from zope.interface import Interface
 # -*- extra stuff goes here -*-
 
 class IBaseCustodyPeriods(Interface):
-    custody_periods = schema.List(title=u"custody period", default=[u'0', u'10', u'30', u'100', u'150',])
+    custody_periods = schema.List(title=u"custody period",
+                                  default=[u'0',
+                                           u'10',
+                                           u'30',
+                                           u'100',
+                                           u'150',
+                                           ],
+                                  value_type=schema.TextLine(),
+                                  )
 
 
 class IRetentionPeriodRegister(Interface):
@@ -15,7 +23,10 @@ class IRetentionPeriodRegister(Interface):
                                             u'10',
                                             u'15',
                                             u'20',
-                                            u'25'])
+                                            u'25'],
+                                   value_type=schema.TextLine(),
+                                   )
+
 
 class IBaseClientID(Interface):
     client_id = schema.TextLine(title=u"client id", default=u"OG")
