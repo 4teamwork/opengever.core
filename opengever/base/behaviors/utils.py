@@ -1,4 +1,5 @@
 
+from Acquisition import aq_inner, aq_parent
 import zope.schema.vocabulary
 
 from Products.CMFCore.interfaces import ISiteRoot
@@ -8,13 +9,13 @@ def create_restricted_vocabulary(field, options, message_factory=None):
     """
     Creates a restricted vocabulary.
     Expects a options list which looks as follows:
-        options = (
-            (0,     u'none'),
-            (1,     u'raw_option_one'),
-            (1,     u'raw_option_two'),
-            (2,     u'detailed_option_one'),
-            (2,     u'detailed_option_two'),
-        )
+    options = (
+    (0,     u'none'),
+    (1,     u'raw_option_one'),
+    (1,     u'raw_option_two'),
+    (2,     u'detailed_option_one'),
+    (2,     u'detailed_option_two'),
+    )
 
     Use the string as internationalization message-id.
 
@@ -63,14 +64,14 @@ def create_restricted_vocabulary(field, options, message_factory=None):
                 obj = context.aq_inner.aq_parent
             while not ISiteRoot.providedBy(obj):
                 try:
-                    if not self.field.get(obj):
-                        raise ''
                     return self.field.get(obj)
-                except:
+                except AttributeError:
                     try:
+                        interface_ = self.field.interface
+                    except AttributeError:
                         obj = obj.aq_inner.aq_parent
-                    except:
-                        return self.field.default
+                    else:
+                        return self.field.get(interface_(obj))
             return self.field.default
 
     GeneratedVocabulary.field = field
@@ -95,8 +96,13 @@ def set_default_with_acquisition(field, default):
             try:
                 return data.field.get(obj)
             except AttributeError:
-                pass
-            obj = obj.aq_inner.aq_parent
+                try:
+                    interface_ = data.field.interface
+                except AttributeError:
+                    pass
+                else:
+                    return data.field.get(interface_(obj))
+            obj = aq_parent(aq_inner(obj))
         # otherwise use default value
         return field._acquisition_default
     return default_value_generator
