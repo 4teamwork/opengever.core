@@ -24,7 +24,7 @@ from opengever.base.interfaces import IBaseCustodyPeriods
 
 @grok.provider(IContextSourceBinder)
 def custody_periods(context):
-    voc= []
+    voc = []
     terms = []
     registry = queryUtility(IRegistry)
     proxy = registry.forInterface(IBaseCustodyPeriods)
@@ -45,32 +45,32 @@ class ILifeCycle(form.Schema):
         u'lifecycle',
         label = _(u'fieldset_lifecycle', default=u'Life Cycle'),
         fields = [
-                u'retention_period',
-                u'archival_value',
-                u'custody_period',
-        ],
-    )
+            u'retention_period',
+            u'archival_value',
+            u'custody_period',
+            ],
+        )
 
     retention_period = schema.Int(
-            title = _(u'label_retention_period', u'Retention period (years)'),
-            description = _(u'help_retention_period', default=u''),
-            required = True,
-    )
+        title = _(u'label_retention_period', u'Retention period (years)'),
+        description = _(u'help_retention_period', default=u''),
+        required = True,
+        )
 
     archival_value = schema.Choice(
-            title = _(u'label_archival_value', default=u'Archival value'),
-            description = _(u'help_archival_value', default=u'Archival value code'),
-            source = u'lifecycle_archival_value_vocabulary',
-            required = True,
-    )
+        title = _(u'label_archival_value', default=u'Archival value'),
+        description = _(u'help_archival_value', default=u'Archival value code'),
+        source = u'lifecycle_archival_value_vocabulary',
+        required = True,
+        )
 
     custody_period = schema.Choice(
-            title = _(u'label_custody_period', default=u'Custody period (years)'),
-            description = _(u'help_custody_period', default=u''),
-            source = custody_periods,
-            required = True,
-    )
-    
+        title = _(u'label_custody_period', default=u'Custody period (years)'),
+        description = _(u'help_custody_period', default=u''),
+        source = custody_periods,
+        required = True,
+        )
+
 
 alsoProvides(ILifeCycle, IFormFieldProvider)
 
@@ -86,18 +86,18 @@ ARCHIVAL_VALUE_OPTIONS = (
     (3,         ARCHIVAL_VALUE_WORTHY),
     (3,         ARCHIVAL_VALUE_UNWORTHY),
     (3,         ARCHIVAL_VALUE_SAMPLING ),
-)
+    )
 grok.global_utility(utils.create_restricted_vocabulary(ILifeCycle['archival_value'],
-                                                 ARCHIVAL_VALUE_OPTIONS,
-                                                 message_factory=_),
+                                                       ARCHIVAL_VALUE_OPTIONS,
+                                                       message_factory=_),
                     provides = schema.interfaces.IVocabularyFactory,
                     name = u'lifecycle_archival_value_vocabulary')
 form.default_value(field=ILifeCycle['archival_value'])(
-        utils.set_default_with_acquisition(
-                field=ILifeCycle['archival_value'],
-                default = ARCHIVAL_VALUE_UNCHECKED
+    utils.set_default_with_acquisition(
+        field=ILifeCycle['archival_value'],
+        default = ARCHIVAL_VALUE_UNCHECKED
         )
-)
+    )
 
 
 # CUSTODY PERIOD / RETENTION PERIOD
@@ -137,15 +137,15 @@ class IntLowerEqualThanParentValidator(validator.SimpleFieldValidator):
 class CustodyPeriodValidator(IntLowerEqualThanParentValidator):
     pass
 validator.WidgetValidatorDiscriminators(
-        CustodyPeriodValidator,
-        field=ILifeCycle['custody_period']
-)
+    CustodyPeriodValidator,
+    field=ILifeCycle['custody_period']
+    )
 form.default_value(field=ILifeCycle['custody_period'])(
-        utils.set_default_with_acquisition(
-                field=ILifeCycle['custody_period'],
-                default = '10'
+    utils.set_default_with_acquisition(
+        field=ILifeCycle['custody_period'],
+        default = '10'
         )
-)
+    )
 zope.component.provideAdapter(CustodyPeriodValidator)
 
 
@@ -153,14 +153,14 @@ zope.component.provideAdapter(CustodyPeriodValidator)
 class RetentionPeriodValidator(IntLowerEqualThanParentValidator):
     pass
 validator.WidgetValidatorDiscriminators(
-        RetentionPeriodValidator,
-        field=ILifeCycle['retention_period']
-)
+    RetentionPeriodValidator,
+    field=ILifeCycle['retention_period']
+    )
 
 form.default_value(field=ILifeCycle['retention_period'])(
-        utils.set_default_with_acquisition(
-                field=ILifeCycle['retention_period'],
-                default = 10
+    utils.set_default_with_acquisition(
+        field=ILifeCycle['retention_period'],
+        default = 10
         )
-)
+    )
 zope.component.provideAdapter(RetentionPeriodValidator)
