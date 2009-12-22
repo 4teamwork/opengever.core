@@ -41,12 +41,12 @@
       />
 
   <plone:behavior
-    title="LifeCycle"
-    description="Adds lifecycle fields and functionality"
-    provides=".lifecycle.ILifeCycle"
-    factory="plone.behavior.AnnotationStorage"
-    marker=".lifecycle.ILifeCycleMarker"
-    for="plone.dexterity.interfaces.IDexterityContent"
-    />
-    
+      title="LifeCycle"
+      description="Adds lifecycle fields and functionality"
+      provides=".lifecycle.ILifeCycle"
+      factory="plone.behavior.AnnotationStorage"
+      marker=".lifecycle.ILifeCycleMarker"
+      for="plone.dexterity.interfaces.IDexterityContent"
+      />
+
 </configure>
