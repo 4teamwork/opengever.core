@@ -12,6 +12,7 @@
     <include file="dependencies.zcml" />
     
     <grok:grok package="." />
+	<include package=".browser" />
 
     <i18n:registerTranslations directory="locales"/>
     
