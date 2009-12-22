@@ -35,7 +35,12 @@ class OpengeverListingTab(grok.View, BaseListingView):
 
 
 class OpengeverTab(object):
-    pass
+    show_searchform = False
+    def get_css_classes(self):
+        if self.show_searchform:
+            return ['searchform-visible']
+        else:
+            return ['searchform-hidden']
 
 class Documents(OpengeverListingTab):
     grok.name('tabbedview_view-documents')
