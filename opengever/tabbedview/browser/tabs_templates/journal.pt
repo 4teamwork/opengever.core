@@ -1,2 +1,1 @@
-<a href="http://www.google.ch" title="das ist ein test" class="rollover-description">google</a>
 <div tal:replace="structure view/table" />
