@@ -71,4 +71,4 @@ class IDocumentType(Interface):
                                           u'Protokoll',
                                           u'Vertrag',
                                           ],
-                                 value_type=schema.TextLine)
+                                 value_type=schema.TextLine())
