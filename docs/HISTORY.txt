@@ -5,6 +5,10 @@ Changelog
 0.2
 ---
 
+* Issue #178: Fehlende Metadaten auf Stufe "Ordnungsposition"
+  Neue Felder Felder hinzugefügt und Verhalten der durch Vererbung
+  eingeschränkten Felder verbessert (retention_period, custody_period)
+
 * Issue #277: Hinzufügbare Typen einschränken bei Registraturposition
   [14.12.2009, jbaumann]
 

@@ -29,6 +29,11 @@ class IRepositoryFolderSchema(form.Schema):
             u'effective_title',
             u'reference_number',
             u'description',
+            u'valid_from',
+            u'valid_until',
+            u'location',
+            u'referenced_activity',
+            u'former_reference',
             ],
         )
 
@@ -51,6 +56,39 @@ class IRepositoryFolderSchema(form.Schema):
         description =  _(u'help_description', default=u'A short summary of the content.'),
         required = False,
         )
+
+    form.widget(valid_from='ftw.datepicker.widget.DatePickerFieldWidget')
+    valid_from = schema.Date(
+        title = _(u'label_valid_from', default=u'Valid from'),
+        description = _(u'help_valid_from', default=u''),
+        required = False,
+        )
+
+    form.widget(valid_until='ftw.datepicker.widget.DatePickerFieldWidget')
+    valid_until = schema.Date(
+        title = _(u'label_valid_until', default=u'Valid until'),
+        description = _(u'help_valid_until', default=u''),
+        required = False,
+        )
+
+    location = schema.TextLine(
+         title = _(u'label_location', default=u'Location'),
+         description = _(u'help_location', default=u''),
+         required = False,
+         )
+
+    referenced_activity = schema.TextLine(
+         title = _(u'label_referenced_activity', default=u'Referenced activity'),
+         description = _(u'help_referenced_activity', default=u''),
+         required = False,
+         )
+
+    former_reference = schema.TextLine(
+         title = _(u'label_former_reference', default=u'Former reference'),
+         description = _(u'help_former_reference', default=u''),
+         required = False,
+         )
+
 
 @form.default_value(field=IRepositoryFolderSchema['reference_number'])
 def reference_number_default_value(data):
@@ -114,11 +152,11 @@ class RepositoryFolder(content.Container):
         """
         We have to follow some rules:
         1. If this RepositoryFolder contains another RF, we should not be
-           able to add other types than RFs.
+        able to add other types than RFs.
         2. If we are reaching the maximum depth of repository folders
-           (Configured in plone.registry), we should not be able to add
-           any more RFs, but then we should be able to add the other configured
-           types in any case.
+        (Configured in plone.registry), we should not be able to add
+        any more RFs, but then we should be able to add the other configured
+        types in any case.
 
         If the maximum_repository_depth is set to 0, we do not have a depth limit.
         """

@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2009-12-01 10:44+0000\n"
+"POT-Creation-Date: 2009-12-22 07:47+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -25,37 +25,82 @@ msgstr ""
 msgid "RepositoryRoot"
 msgstr ""
 
-#: opengever.repository/opengever/repository/repositoryfolder.py:36
+#: opengever.repository/opengever/repository/repositoryfolder.py:38
 msgid "Title"
 msgstr ""
 
 #. Default: "A Sibling with the same reference number is existing"
-#: opengever.repository/opengever/repository/repositoryfolder.py:91
+#: opengever.repository/opengever/repository/repositoryfolder.py:124
 msgid "error_sibling_reference_number_existing"
 msgstr ""
 
 #. Default: "Common"
-#: opengever.repository/opengever/repository/repositoryfolder.py:25
+#: opengever.repository/opengever/repository/repositoryfolder.py:27
 msgid "fieldset_common"
 msgstr ""
 
 #. Default: "A short summary of the content."
-#: opengever.repository/opengever/repository/repositoryfolder.py:49
+#: opengever.repository/opengever/repository/repositoryfolder.py:51
 msgid "help_description"
 msgstr ""
 
-#: opengever.repository/opengever/repository/repositoryfolder.py:42
+#: opengever.repository/opengever/repository/repositoryfolder.py:81
+msgid "help_former_reference"
+msgstr ""
+
+#: opengever.repository/opengever/repository/repositoryfolder.py:69
+msgid "help_location"
+msgstr ""
+
+#: opengever.repository/opengever/repository/repositoryfolder.py:44
 msgid "help_reference_number"
 msgstr ""
 
+#: opengever.repository/opengever/repository/repositoryfolder.py:75
+msgid "help_referenced_activity"
+msgstr ""
+
+#: opengever.repository/opengever/repository/repositoryfolder.py:57
+msgid "help_valid_from"
+msgstr ""
+
+#: opengever.repository/opengever/repository/repositoryfolder.py:63
+msgid "help_valid_until"
+msgstr ""
+
 #. Default: "Description"
-#: opengever.repository/opengever/repository/repositoryfolder.py:48
+#: opengever.repository/opengever/repository/repositoryfolder.py:50
 msgid "label_description"
 msgstr ""
 
+#. Default: "Former reference"
+#: opengever.repository/opengever/repository/repositoryfolder.py:80
+msgid "label_former_reference"
+msgstr ""
+
+#. Default: "Location"
+#: opengever.repository/opengever/repository/repositoryfolder.py:68
+msgid "label_location"
+msgstr ""
+
 #. Default: "Reference"
-#: opengever.repository/opengever/repository/repositoryfolder.py:41
+#: opengever.repository/opengever/repository/repositoryfolder.py:43
 msgid "label_reference_number"
+msgstr ""
+
+#. Default: "Referenced activity"
+#: opengever.repository/opengever/repository/repositoryfolder.py:74
+msgid "label_referenced_activity"
+msgstr ""
+
+#. Default: "Valid from"
+#: opengever.repository/opengever/repository/repositoryfolder.py:56
+msgid "label_valid_from"
+msgstr ""
+
+#. Default: "Valid until"
+#: opengever.repository/opengever/repository/repositoryfolder.py:62
+msgid "label_valid_until"
 msgstr ""
 
 #. Default: "State:"
