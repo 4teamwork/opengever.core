@@ -5,6 +5,9 @@ Changelog
 ---------------------
 
 
+* Issue #292: PloneRegistry: Listen können nicht bearbeitet werden
+  TextLinesFieldWidget als standard-widget für List-Felder vom Typ TextLine konfiguriert
+
 * Issue #296: Nummerierungskonzept umsetzen
   IReferenceNumber zum generieren von Aktenzeichen implementiert
   [16.12.2009, jbaumann]
