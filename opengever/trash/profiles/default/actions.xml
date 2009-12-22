@@ -7,7 +7,7 @@
         <property name="description" i18n:translate=""></property>
         <property name="url_expr">string:./trashed:method</property>
         <property name="icon_expr"></property>
-        <property name="available_expr"></property>
+        <property name="available_expr">python:checkPermission("opengever.trash: Trash content" , here.aq_parent.aq_inner)</property>
         <property name="permissions">
             <element value="opengever.trash: Trash content"/>
         </property>
@@ -18,7 +18,7 @@
         <property name="description" i18n:translate=""></property>
         <property name="url_expr">string:./untrashed:method</property>
         <property name="icon_expr"></property>
-        <property name="available_expr"></property>
+        <property name="available_expr">python:checkPermission("opengever.trash: Untrash content" , here.aq_parent.aq_inner)</property>
         <property name="permissions">
             <element value="opengever.trash: Untrash content"/>
         </property>

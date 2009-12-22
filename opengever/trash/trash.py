@@ -3,7 +3,9 @@ from zope.component.interfaces import IObjectEvent, ObjectEvent
 from zope.event import notify
 from plone.indexer import indexer
 from five import grok
-
+from Acquisition import aq_inner, aq_parent
+from AccessControl import Unauthorized
+from Products.CMFCore.utils import _checkPermission
 
 class ITrashable(Interface):
     pass
@@ -34,15 +36,20 @@ class UntrashedEvent(ObjectEvent):
 class Trasher(object):
     def __init__(self, context):
         self.context = context
-    
+
     def trash(self):
-        #XXX check Permission
+        folder = aq_parent(aq_inner(self.context))
+        if not _checkPermission('opengever.trash.TrashContent', folder):
+            raise Unauthorized()
         alsoProvides(self.context, ITrashed)
         self.context.reindexObject()
         notify(TrashedEvent(self.context))
-        
+    
     def untrash(self):
         #XXX check Permission
+        folder = aq_parent(aq_inner(self.context))
+        if not _checkPermission('opengever.trash.TrashContent', folder):
+            raise Unauthorized()
         noLongerProvides(self.context, ITrashed)
         self.context.reindexObject()
         notify(UntrashedEvent(self.context))
@@ -54,7 +61,7 @@ grok.global_adapter(trashIndexer, name="trashed")
 
 class TrashView(grok.CodeView):
     grok.context(ITrashableMarker)
-    grok.require('zope2.View')
+    grok.require('opengever.trash.TrashContent')
     grok.name('trashed')
     
     def __call__(self):
@@ -67,11 +74,11 @@ class TrashView(grok.CodeView):
         self.request.RESPONSE.redirect(self.context.absolute_url())
     
     def render(self):
-        super(DeleteView).render()
+        super(TrashView).render()
         
 class UntrashView(grok.CodeView):
     grok.context(ITrashableMarker)
-    grok.require('zope2.View')
+    grok.require('opengever.trash.UntrashContent')
     grok.name('untrashed')
     
     def __call__(self):
@@ -84,4 +91,4 @@ class UntrashView(grok.CodeView):
         self.request.RESPONSE.redirect(self.context.absolute_url())
     
     def render(self):
-        super(DeleteView).render()
+        super(UntrashView).render()
