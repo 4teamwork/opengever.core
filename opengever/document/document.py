@@ -447,7 +447,6 @@ class Journal(grok.View, OpengeverTab):
     grok.context(IDocumentSchema)
     grok.name('tabbedview_view-journal')
     grok.template('journal')
-
     def table(self):
         generator = queryUtility(ITableGenerator, 'ftw.tablegenerator')
         columns = (('title', lambda x,y: x['action']['title']),
