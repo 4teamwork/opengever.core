@@ -60,6 +60,23 @@ class Documents(OpengeverListingTab):
         ('checked_out', 'checked_out', helper.readable_author)
         )
 
+    enabled_actions = ['cut',
+                       'copy',
+                       'rename',
+                       'paste',
+                       'send_as_email',
+                       'checkout',
+                       'checkin',
+                       'cancel',
+                       'create_task',
+                       'trashed',
+                       ]
+
+    major_actions = ['checkout',
+                     'checkin',
+                     'create_task',
+                     ]
+
 class Dossiers(OpengeverListingTab):
     grok.name('tabbedview_view-dossiers')
 
@@ -77,6 +94,16 @@ class Dossiers(OpengeverListingTab):
 
         )
     search_options = {'is_subdossier':False}
+
+    enabled_actions = ['change_state',
+                       'cut',
+                       'copy',
+                       'paste',
+                       ]
+
+    major_actions = ['change_state',
+                     ]
+
 
 class SubDossiers(Dossiers):
     grok.name('tabbedview_view-subdossiers')
@@ -261,6 +288,9 @@ class Trash(OpengeverListingTab):
         ('Title', 'sortable_title', helper.linked),
         )
 
+    enabled_actions = ['untrashed',
+                       ]
+
 
 class Participants(OpengeverListingTab):
     """ Participants listing tab for dossiers using the
@@ -330,6 +360,8 @@ class Participants(OpengeverListingTab):
 
         self.contents = results
         self.len_results = len(self.contents)
+
+    enabled_actions = ['delete_participants']
 
 
 from plone.app.workflow.interfaces import ISharingPageRole

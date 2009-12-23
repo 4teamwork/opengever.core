@@ -1,3 +1,4 @@
+
 <form name="tabbedview_form"
       method="post"
       action="folder_object"
@@ -13,15 +14,32 @@
   </div>
 
   <div tal:content="structure view/render_listing" />
-  <tal:buttons tal:repeat="button view/buttons">
-    <input class="context"
-           type="submit"
-           name=""
-           value=""
-           i18n:attributes="value"
-           tal:attributes="value button/title; name button/url; class button/cssclass" />
-  </tal:buttons>
-  <input tal:replace="structure context/@@authenticator/authenticator" />
+
+  <div class="tabbedview-action-menu">
+    <ul class="buttons major-buttons sf-menu">
+      <tal:major_buttons tal:repeat="button view/major_buttons">
+        <li><a href="#"
+               tal:attributes="class string:${button/cssclass} listing-button major-button;
+                               href button/url;"
+               tal:content="button/title" /></li>
+      </tal:major_buttons>
+      <li tal:condition="view/minor_buttons" class="more-menu">
+        <a href="#" i18n:translate="button_more_actions"
+           class="context more-button">More actions</a>
+        <ul class="minor-buttons ">
+          <tal:minor_buttons tal:repeat="button view/minor_buttons">
+            <li><a href="#"
+                   tal:define="cssclass button/cssclass;
+                               cssclass string:${cssclass} listing-button minor-button;"
+                   tal:attributes="class cssclass;
+                                   href button/url"
+                   tal:content="button/title" /></li>
+          </tal:minor_buttons>
+        </ul>
+      </li>
+    </ul>
+  </div>
+
 </form>
 <p tal:condition="not: view/contents">
   Keine Inhalte vorhanden

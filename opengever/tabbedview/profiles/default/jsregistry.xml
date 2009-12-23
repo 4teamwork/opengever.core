@@ -2,6 +2,12 @@
 <object name="portal_javascripts" meta_type="JavaScripts Registry"
         autogroup="False">
   <javascript cacheable="True" compression="safe" cookable="True" enabled="on"
+              expression="" id="++resource++opengever.tabbedview-resources/hoverIntent.js"
+              inline="False"/>
+  <javascript cacheable="True" compression="safe" cookable="True" enabled="on"
+              expression="" id="++resource++opengever.tabbedview-resources/superfish.js"
+              inline="False"/>
+  <javascript cacheable="True" compression="safe" cookable="True" enabled="on"
               expression="" id="++resource++opengever.tabbedview-resources/jquery.tooltip.min.js"
               inline="False"/>
   <javascript cacheable="True" compression="safe" cookable="True" enabled="on"
