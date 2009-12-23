@@ -44,7 +44,7 @@ class OpengeverTab(object):
 
 class Documents(OpengeverListingTab):
     grok.name('tabbedview_view-documents')
-    
+
     types = ['opengever.document.document', 'ftw.mail.mail']
 
     search_options = {'isWorkingCopy':0}
@@ -281,7 +281,7 @@ class Participants(OpengeverListingTab):
             'value' : oid,
             }
         html = '<input %s />' % ' '.join(['%s="%s"' % (k, v)
-                                         for k, v in attrs.items()])
+                                          for k, v in attrs.items()])
         return html
 
     def icon_helper(item, value):
