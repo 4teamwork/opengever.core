@@ -47,7 +47,7 @@ from zope.annotation.interfaces import IAnnotations, IAnnotatable
 
 from plone.directives.dexterity import DisplayForm
 
-from opengever.tabbedview.browser.tabs import OpengeverTab,OpengeverListingTab
+from opengever.tabbedview.browser.tabs import OpengeverTab, OpengeverListingTab
 from opengever.base.interfaces import IReferenceNumber, ISequenceNumber
 
 LOG = logging.getLogger('opengever.document')
@@ -282,6 +282,14 @@ def SearchableText( obj ):
         schema.getFields( IDocumentSchema ).get('file'),
         ]
     searchable = []
+    
+    #Reference Number
+    ref_number = IReferenceNumber(obj).get_number()
+    searchable.append(ref_number)
+    #Sequence Number
+    seq_number = str(getUtility(ISequenceNumber).get_number(obj))
+    searchable.append(seq_number)
+    
     for field in fields:
         data = field.get( context )
         if not data:
@@ -494,3 +502,4 @@ class DownloadFileVersion(grok.CodeView):
         response.setHeader('Content-Disposition',
                            'attachment;filename="%s"' % old_file.filename)
         return old_file.data
+ 

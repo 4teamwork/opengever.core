@@ -9,15 +9,10 @@ from z3c.form import form, field, button
 from persistent.dict import PersistentDict
 from plone.z3cform import layout
 from plone.dexterity.utils import createContentInContainer
-from plone.dexterity.browser.base import DexterityExtensibleForm
-from plone.directives.form import AddForm
-from plone.autoform.view import WidgetsView
-from plone.autoform.base import AutoFields
 
 from opengever.document import _
 from opengever.document.persistence import DCQueue
 from opengever.document.document import IDocumentSchema
-from opengever.base.behaviors.classification import IClassification
 
 DOCUCOMPOSER_TEMPLATES = {
     '2798': 'Aktennotiz',
@@ -53,9 +48,9 @@ class DocuComposerWizardForm(form.Form):
             )
             print token
             print url
-            
+
             queue.clearUp()
-            
+
             return self.request.RESPONSE.redirect(url)
 
 
@@ -96,6 +91,7 @@ class CreateDocumentWithFile(grok.CodeView):
             dossier = data['context']
 
             new_doc = createContentInContainer(dossier, 'opengever.document.document', title= data['title'])
+            new_doc.REQUEST = self.context.REQUEST
 
             for key in data.keys():
                 new_doc.__setattr__(key, data[key])
