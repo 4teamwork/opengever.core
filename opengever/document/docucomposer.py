@@ -4,14 +4,20 @@ from zope.schema import vocabulary
 
 from AccessControl import SecurityManagement
 from five import grok
+from datetime import datetime
 from z3c.form import form, field, button
 from persistent.dict import PersistentDict
 from plone.z3cform import layout
 from plone.dexterity.utils import createContentInContainer
+from plone.dexterity.browser.base import DexterityExtensibleForm
+from plone.directives.form import AddForm
+from plone.autoform.view import WidgetsView
+from plone.autoform.base import AutoFields
 
 from opengever.document import _
 from opengever.document.persistence import DCQueue
 from opengever.document.document import IDocumentSchema
+from opengever.base.behaviors.classification import IClassification
 
 DOCUCOMPOSER_TEMPLATES = {
     '2798': 'Aktennotiz',
@@ -26,10 +32,7 @@ DOCUCOMPOSER_TEMPLATES_VOCABULARY = vocabulary.SimpleVocabulary([
 
 
 class DocuComposerWizardForm(form.Form):
-    #fields = field.Fields(IDocumentSchema)
-    #fields = field.Fields(IOpenGeverBase)
     fields = field.Fields(IDocumentSchema)
-
     ignoreContext = True
     label = _(u'heading_docucomposer_wizard_form', default=u'DocuComposer')
 
@@ -39,6 +42,7 @@ class DocuComposerWizardForm(form.Form):
         if len(errors)==0:
             data.__setitem__('owner', self.context.portal_membership.getAuthenticatedMember())
             data.__setitem__('context', self.context)
+            data.__setitem__('creation_date', datetime.now())
             queue = DCQueue(self.context)
             persData = PersistentDict(data)
             token = queue.appendDCDoc(persData)
@@ -49,6 +53,9 @@ class DocuComposerWizardForm(form.Form):
             )
             print token
             print url
+            
+            queue.clearUp()
+            
             return self.request.RESPONSE.redirect(url)
 
 

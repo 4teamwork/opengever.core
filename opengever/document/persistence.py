@@ -39,7 +39,7 @@ class DCQueue(grok.adapter):
 
     def removeDCDoc(self, key):
         dict = self.getDCDocs()
-        dict.__delitem__(self, key)
+        dict.__delitem__(key)
         self._setDCDocs(dict)
 
     def _setDCDoc(self, dcdict):
@@ -50,6 +50,11 @@ class DCQueue(grok.adapter):
     def getDCDocs(self):
         return self.annotation.get(self.key, PersistentDict())
 
-    def clearUP(self):
-        # XXX TODO
+    def clearUp(self):
+        dc_dict = self.getDCDocs()
+        data = dc_dict.data
+        for item in data:
+            dict = data[item]
+            if dict['creation_date'] < (datetime.now() - timedelta(1)):
+                self.removeDCDoc(item)
         pass
