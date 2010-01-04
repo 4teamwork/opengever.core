@@ -5,6 +5,9 @@ Changelog
 ----------------
 
 
+* Issue #322: TabbedView: Übersetzung "more actions"
+  [04.01.2010, jbaumann]
+
 * Issue #284: Tabbed_view: Buttons unterhalb einer Tabelle müssen pro "View" angezeigt werden können
   [23.12.2009, jbaumann]
 
