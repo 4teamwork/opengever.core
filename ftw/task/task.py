@@ -38,7 +38,6 @@ class ITask(form.Schema):
         u'common',
         label = _(u'fieldset_common', default=u'Common'),
         fields = [
-
             u'issuer',
             u'responsible',
             u'deadline',
@@ -56,8 +55,8 @@ class ITask(form.Schema):
             u'expectedCost',
             u'effectiveDuration',
             u'effectiveCost',
-        ],
-    )
+            ],
+        )
 
     form.widget(issuer=AutocompleteFieldWidget)
     issuer = schema.Choice(
@@ -65,7 +64,7 @@ class ITask(form.Schema):
         description = _('help_issuer', default=u""),
         source = util.getManagersVocab,
         required = True,
-    )
+        )
 
     form.widget(responsible=AutocompleteFieldWidget)
     responsible = schema.Choice(
@@ -73,59 +72,59 @@ class ITask(form.Schema):
         description =_(u"help_responsible", default=""),
         source = util.getManagersVocab,
         required = True,
-    )
+        )
 
     form.widget(deadline='ftw.datepicker.widget.DatePickerFieldWidget')
     deadline = schema.Date(
         title=_(u"label_deadline", default=u""),
         description=_(u"help_deadline", default=u"Deadline"),
         required = True,
-    )
+        )
 
     title = schema.TextLine(
         title=_(u"label_title", default=u"Title"),
         description=_('help_title', default=u""),
         required = False,
-    )
+        )
 
     form.primary('text')
     text = schema.Text(
         title=_(u"label_text", default=u"Text"),
         description=_(u"help_text", default=u""),
         required = False,
-    )
+        )
 
     form.widget(
-    expectedStartOfWork='ftw.datepicker.widget.DatePickerFieldWidget')
+        expectedStartOfWork='ftw.datepicker.widget.DatePickerFieldWidget')
     expectedStartOfWork = schema.Date(
         title =_(u"label_expectedStartOfWork", default="Start with work"),
         description = _(u"help_expectedStartOfWork", default=""),
         required = False,
-    )
+        )
 
     expectedDuration = schema.Float(
         title = _(u"label_expectedDuration", default="Expected duration", ),
         description = _(u"help_expectedDuration", default="", ),
         required = False,
-    )
+        )
 
     expectedCost = schema.Int(
         title = _(u"label_expectedCost", default="expected cost"),
         description = _(u"help_expectedCost", default=""),
         required = False,
-    )
+        )
 
     effectiveDuration = schema.Float(
         title = _(u"label_effectiveDuration", default="effective duration"),
         description = _(u"help_effectiveDuration", default=""),
         required = False,
-    )
+        )
 
     effectiveCost = schema.Int(
         title=_(u"label_effectiveCost", default="effective cost"),
         description=_(u"help_effectiveCost", default=""),
         required = False,
-    )
+        )
 
     form.order_before(**{'ITransition.transition': "responsible"})
 
@@ -171,7 +170,7 @@ class Task(Container):
     @getproperty
     def title(self):
         return self._title
-        
+
     @setproperty
     def title(self, value):
         if value:
@@ -198,12 +197,12 @@ class View(dexterity.DisplayForm):
 
     def getSubTasks(self):
         tasks = self.context.getFolderContents(full_objects=False,
-            contentFilter={'portal_type': 'ftw.task.task'})
+                                               contentFilter={'portal_type': 'ftw.task.task'})
         return tasks
 
     def getResponses(self):
         responses = self.context.getFolderContents(full_objects=True,
-        contentFilter={'portal_type': 'ftw.task.response'})
+                                                   contentFilter={'portal_type': 'ftw.task.response'})
         return responses
 
 
@@ -228,7 +227,7 @@ class AddForm(TranslatedAddForm):
             self.request.set('form.widgets.IRelatedItems.relatedItems', paths)
         # put default value for issuer into request
         portal_state = getMultiAdapter((self.context, self.request),
-                                        name=u"plone_portal_state")
+                                       name=u"plone_portal_state")
         member = portal_state.member()
         self.request.set('form.widgets.issuer', [member.getId()])
         super(AddForm, self).update()
@@ -244,21 +243,21 @@ class TaskWidgetTraversal(WidgetTraversal):
             context = aq_parent(aq_inner(context))
         fti = getUtility(IDexterityFTI, name='ftw.task.task')
         adder = queryMultiAdapter((context, self.request, fti),
-                              IBrowserPage)
+                                  IBrowserPage)
 
         self.context = adder
 
 
 grok.global_adapter(TaskWidgetTraversal,
-    ((ITask, IBrowserRequest)),
-    ITraversable,
-    name=u"widget",
-    )
+                    ((ITask, IBrowserRequest)),
+                    ITraversable,
+                    name=u"widget",
+                    )
 grok.global_adapter(TaskWidgetTraversal,
-    ((ITaskView, IBrowserRequest)),
-    ITraversable,
-    name=u"widget",
-    )
+                    ((ITaskView, IBrowserRequest)),
+                    ITraversable,
+                    name=u"widget",
+                    )
 
 
 class TaskAutoCompleteSearch(grok.CodeView, autocomplete.widget.AutocompleteSearch):
@@ -281,13 +280,13 @@ class TaskAutoCompleteSearch(grok.CodeView, autocomplete.widget.AutocompleteSear
         # add response to the task
         # XXX
         return
-        view_name = '++add++ftw.task.task'
-        view_instance = content.restrictedTraverse(view_name)
-        getSecurityManager().validate(content,
-            content,
-            view_name,
-            view_instance,
-        )
+    view_name = '++add++ftw.task.task'
+    view_instance = content.restrictedTraverse(view_name)
+    getSecurityManager().validate(content,
+                                  content,
+                                  view_name,
+                                  view_instance,
+                                  )
 
     def render(self):
         pass
