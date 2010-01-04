@@ -403,4 +403,7 @@ msgstr "Referenzierte Dokumente"
 msgid "time_expired"
 msgstr "abgelaufen"
 
+msgid "label_keywords"
+msgstr "Schlagworte"
+
 
