@@ -58,7 +58,7 @@ def setupVarious(context):
 
     if not portal.get("kontakte"):
         portal._importObjectFromFile(context.openDataFile('kontakte.zexp'))
-
+        
     if not portal.get("vorlagen"):
         portal._importObjectFromFile(context.openDataFile('vorlagen.zexp'))
 
@@ -73,18 +73,13 @@ def setupVarious(context):
                 }):
         exists = False
     orgunitfile.seek(0)
+    orgunits = []
     if not exists:
         for orgunit in orgunitfile.readlines():
-            createContentInContainer(portal.get("kontakte"), 'ftw.directoryservice.orgunit', checkConstraints=True, title=orgunit.strip())
+            obj = createContentInContainer(portal.get("kontakte"), 'ftw.directoryservice.orgunit', checkConstraints=True, title=orgunit.strip())
+            orgunits.append(obj)
             print >>sys.stdout, 'Creating orgunit %s' % orgunit.strip()
         
-    orgunits = []
-    query = {}
-    query['path'] = "/".join(portal.get("kontakte").getPhysicalPath())
-    query['portal_type'] = 'ftw.directoryservice.orgunit'
-    for orgunit in catalog(query):
-        orgunits.append(orgunit.getObject())
-
 	# add some default users
     regtool = portal.portal_registration
     try:
