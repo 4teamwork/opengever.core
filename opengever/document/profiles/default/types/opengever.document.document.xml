@@ -26,7 +26,7 @@
         <element value="opengever.base.behaviors.base.IOpenGeverBase"/>
     -->
     <element value="opengever.base.behaviors.creator.ICreator" />
-	<element value="opengever.tabbedview.interfaces.ITabbedViewEnabled" />
+    <element value="opengever.tabbedview.interfaces.ITabbedViewEnabled" />
     <element value="opengever.base.behaviors.classification.IClassification" />
     <element value="plone.app.dexterity.behaviors.related.IRelatedItems" />
     <element value="plone.stagingbehavior.interfaces.IStagingSupport" />
