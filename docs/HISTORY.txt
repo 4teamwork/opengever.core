@@ -1,8 +1,8 @@
 Changelog
 =========
 
-1.0a1dev (unreleased)
----------------------
+1.0a1
+-----
 
 
 * Issue #340: Aktenzeichen Dossiers und Subdossiers: Zähler zählt nicht über 2
