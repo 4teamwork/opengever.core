@@ -103,9 +103,11 @@ def _get_retention_period_options(vocabulary):
     registry = zope.component.getUtility(IRegistry)
     proxy = registry.forInterface(IRetentionPeriodRegister)
     options = []
-    for num in getattr(proxy, 'retention_period'):
+    nums = getattr(proxy, 'retention_period')
+    for i, num in enumerate(nums):
         num = int(num)
-        options.append((num, num))
+        pos = int(nums[-i-1])
+        options.append((pos, num))
     return options
 grok.global_utility(utils.create_restricted_vocabulary(
         ILifeCycle['retention_period'],
@@ -139,9 +141,11 @@ def _get_custody_period_options(context):
     registry = zope.component.getUtility(IRegistry)
     proxy = registry.forInterface(IBaseCustodyPeriods)
     options = []
-    for num in getattr(proxy, 'custody_periods'):
+    nums = getattr(proxy, 'custody_periods')
+    for i, num in enumerate(nums):
         num = int(num)
-        options.append((num, num))
+        pos = int(nums[-i-1])
+        options.append((pos, num))
     return options
 grok.global_utility(utils.create_restricted_vocabulary(
         ILifeCycle['custody_period'],

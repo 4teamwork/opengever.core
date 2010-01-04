@@ -5,6 +5,9 @@ Changelog
 ---------------------
 
 
+* Issue #321: Lifecycle behavior: Vocabulary liefert falsche Werte
+  [04.01.2010, jbaumann]
+
 * Issue #292: PloneRegistry: Listen können nicht bearbeitet werden
   TextLinesFieldWidget als standard-widget für List-Felder vom Typ TextLine konfiguriert
 
