@@ -280,6 +280,11 @@ msgstr "Kein Inhalt"
 msgid "poi_label_attachment"
 msgstr ""
 
+#. Default: "related items:"
+#: ftw.task/ftw/task/response_templates/responseview.pt:59
+msgid "poi_label_relateditems"
+msgstr "Verweise:"
+
 #. Default: "Response"
 #: ftw.task/ftw/task/templates/edit_response.pt:56
 msgid "response_label_response"

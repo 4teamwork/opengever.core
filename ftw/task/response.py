@@ -6,6 +6,8 @@ from zope.lifecycleevent import modified
 from zope.interface import Interface
 from zope.cachedescriptors.property import Lazy
 from zope import schema
+from zope.component import getUtility
+from zope.intid.interfaces import IIntIds
 from five import grok
 
 from Acquisition import aq_inner
@@ -19,6 +21,10 @@ from Products.CMFCore.utils import getToolByName
 from Products.statusmessages.interfaces import IStatusMessage
 
 from opengever.sqlfile.field import NamedFile
+
+from z3c.relationfield.schema import RelationChoice, RelationList
+from z3c.relationfield.relation import RelationValue
+from plone.formwidget.contenttree import ObjPathSourceBinder
 
 from ftw.task import _
 from ftw.task import permissions
@@ -83,6 +89,14 @@ class IResponse(Interface):
         description = _(u'help_attachment', default=''),
         required = False,
     )
+    
+    relatedItems = RelationList(
+        title=_(u'label_related_items', default=u'Related Items'),
+        default=[],
+        value_type=RelationChoice(title=u"Related",
+                      source=ObjPathSourceBinder()),
+        required=False,
+    )
 
 
 def voc2dict(vocab, current=None):
@@ -136,6 +150,8 @@ class Base(BrowserView):
             if response.rendered_text is None:
                 if response.mimetype == 'text/html':
                     html = response.text
+                elif response.text == None:
+                    html = ""
                 else:
                     html = trans.convertTo('text/html',
                                            response.text,
@@ -148,6 +164,7 @@ class Base(BrowserView):
             info = dict(id=id,
                         response=response,
                         attachment=self.attachment_info(id),
+                        relatedItems=getattr(response,"relatedItems",()),
                         html=html)
             items.append(info)
         return items
@@ -345,6 +362,14 @@ class AddForm(form.AddForm):
                 # attachment.filename, attachment)
                 # new_response.attachment = file_data
                 new_response.attachment = attachment
+
+            # relatedItems
+            new_response.relatedItems = []
+            relatedItems = data.get('relatedItems')
+            intids = getUtility(IIntIds)
+            for item in relatedItems:
+                to_id = intids.getId(item)
+                new_response.relatedItems.append(RelationValue(to_id))
 
             container = IResponseContainer(self.context)
             container.add(new_response)
