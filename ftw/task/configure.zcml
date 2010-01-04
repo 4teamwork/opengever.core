@@ -17,8 +17,11 @@
     <!-- Include custom permissions -->
     <include file="permissions.zcml" />
 
-	<include file="profiles.zcml" />
-	
+    <include file="profiles.zcml" />
+    
+    <!-- content rules actions -->
+    <include package=".actions" />    
+    
     <i18n:registerTranslations directory="locales" />
     <include file="behaviors.zcml" />
     <browser:page

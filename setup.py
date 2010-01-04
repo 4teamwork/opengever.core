@@ -26,6 +26,7 @@ setup(name='ftw.task',
       install_requires=[
           'setuptools',
           'plone.app.dexterity',
+          'plone.app.contentrules',
           'rwproperty',
           'ftw.datepicker',
           'collective.autopermission',
