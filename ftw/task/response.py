@@ -55,7 +55,7 @@ class IResponse(Interface):
     text = schema.Text(
         title = _('label_response', default="Response"),
         description=_('help_response', default=""),
-        required = True,
+        required = False,
     )
 
     new_responsible = schema.Choice(
