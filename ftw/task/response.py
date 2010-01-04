@@ -62,20 +62,20 @@ class IResponse(Interface):
         title = _('label_response', default="Response"),
         description=_('help_response', default=""),
         required = False,
-    )
+        )
 
     new_responsible = schema.Choice(
         title=_(u"label_responsible_Response", default="Responsible"),
         description =_(u"help_responsible_response", default=""),
         source = util.getManagersVocab,
         required = False,
-    )
+        )
 
     deadline = schema.Date(
         title=_(u"label_deadline_Response", default=u"Deadline"),
         description=_(u"help_deadline_response", default=""),
         required = False,
-    )
+        )
 
     transition = schema.Choice(
         title=_("label_transition", default="Transition"),
@@ -88,15 +88,15 @@ class IResponse(Interface):
         title = _(u'label_attachment', default='Attachment'),
         description = _(u'help_attachment', default=''),
         required = False,
-    )
-    
+        )
+        
     relatedItems = RelationList(
         title=_(u'label_related_items', default=u'Related Items'),
         default=[],
         value_type=RelationChoice(title=u"Related",
                       source=ObjPathSourceBinder()),
         required=False,
-    )
+        )
 
 
 def voc2dict(vocab, current=None):
@@ -336,22 +336,22 @@ class AddForm(form.AddForm):
                     after = wftool.getInfoFor(self.context, 'review_state')
                     after = wftool.getTitleForStateOnType(after, task.Type())
                     new_response.add_change('review_state', _(u'Issue state'),
-                    before, after)
+                                            before, after)
 
             #check other fields
             options = [
-            (task.deadline, data.get('deadline'), 'deadline', _('deadline')),
-            (task.responsible,
-            data.get('new_responsible'),
-            'responsible',
-            _('responsible'))]
+                (task.deadline, data.get('deadline'), 'deadline', _('deadline')),
+                (task.responsible,
+                 data.get('new_responsible'),
+                 'responsible',
+                 _('responsible'))]
 
             for task_field, resp_field, option, title in options:
                 if resp_field and task_field != resp_field:
                     new_response.add_change(option,
-                    title,
-                    task_field,
-                    resp_field)
+                                            title,
+                                            task_field,
+                                            resp_field)
                     task.__setattr__(option, resp_field)
 
             # add attachment
@@ -393,9 +393,9 @@ class ResponseView(grok.Viewlet, Base):
 
 """
 class AddFormView(layout.FormWrapper, grok.Viewlet, Base):
-    grok.implements(IResponseAdder)
-    grok.context(ITask)
-    grok.name("ftw.task.response.addForm")
+grok.implements(IResponseAdder)
+grok.context(ITask)
+grok.name("ftw.task.response.addForm")
     grok.viewletmanager(BeneathTask)
     grok.order(2)
     form = AddForm
@@ -471,7 +471,7 @@ class Save(Base):
                 # Remove cached rendered response.
                 response.rendered_text = None
                 msg = _(u"Changes saved to response id ${response_id}.",
-                      mapping=dict(response_id=response_id))
+                        mapping=dict(response_id=response_id))
                 msg = translate(msg, 'Poi', context=self.request)
                 status.addStatusMessage(msg, type='info')
                 # Fire event.  We put the context in the descriptions
