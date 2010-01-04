@@ -5,6 +5,11 @@ Changelog
 0.2
 ---
 
+* Issue #340: Aktenzeichen Dossiers und Subdossiers: Zähler zählt nicht über 2
+  Die Ordnungsposition braucht nun auch das IReferenceNumber behavior, wie auch
+  das Dossier. Die Validierung und der Default-Wert funktioniert nun Typ-übergreifend.
+  [04.01.2010, jbaumann]
+  
 * Issue #178: Fehlende Metadaten auf Stufe "Ordnungsposition"
   Neue Felder Felder hinzugefügt und Verhalten der durch Vererbung
   eingeschränkten Felder verbessert (retention_period, custody_period)
