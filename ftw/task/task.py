@@ -279,14 +279,15 @@ class TaskAutoCompleteSearch(grok.CodeView, autocomplete.widget.AutocompleteSear
             return super_method(self)
         # add response to the task
         # XXX
-        return
-    view_name = '++add++ftw.task.task'
-    view_instance = content.restrictedTraverse(view_name)
-    getSecurityManager().validate(content,
-                                  content,
-                                  view_name,
-                                  view_instance,
-                                  )
+        if 1:
+            return
+        view_name = '++add++ftw.task.task'
+        view_instance = content.restrictedTraverse(view_name)
+        getSecurityManager().validate(content,
+                                      content,
+                                      view_name,
+                                      view_instance,
+                                      )
 
     def render(self):
         pass
