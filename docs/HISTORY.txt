@@ -5,6 +5,9 @@ Changelog
 ---------------------
 
 
+* Issue #340: Aktenzeichen Dossiers und Subdossiers: Zähler zählt nicht über 2
+  [04.01.2010, jbaumann]
+  
 * Issue #321: Lifecycle behavior: Vocabulary liefert falsche Werte
   [04.01.2010, jbaumann]
 

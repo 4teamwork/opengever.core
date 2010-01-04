@@ -53,7 +53,7 @@ msgstr "Vertraulich"
 #. Default: "A Sibling with the same reference number is existing"
 #: opengever.base/opengever/base/behaviors/reference.py:66
 msgid "error_sibling_reference_number_existing"
-msgstr "Eine Ordnungsposition mit dieser Referenznummer existiert bereits auf gleicher Stufe"
+msgstr "Ein Objekt mit dieser Referenznummer existiert bereits auf gleicher Stufe"
 
 #. Default: "Classification"
 #: opengever.base/opengever/base/behaviors/classification.py:22
