@@ -1,10 +1,14 @@
 Changelog
 =========
 
-1.0 - Unreleased
-----------------
+1.0
+---
 
 
+* Issue #329: Aufgabe: Neues Feld "Erledigungsdatum" beim Erledigen.
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/329
+  [04.01.2010, jbaumann]
+  
 * Issue #296: Nummerierungskonzept umsetzen
   [16.12.2009, jbaumann]
 

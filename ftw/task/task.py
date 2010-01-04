@@ -41,6 +41,7 @@ class ITask(form.Schema):
             u'issuer',
             u'responsible',
             u'deadline',
+            u'date_of_completion',
             u'title',
             u'text',
             ],
@@ -76,9 +77,16 @@ class ITask(form.Schema):
 
     form.widget(deadline='ftw.datepicker.widget.DatePickerFieldWidget')
     deadline = schema.Date(
-        title=_(u"label_deadline", default=u""),
-        description=_(u"help_deadline", default=u"Deadline"),
+        title=_(u"label_deadline", default=u"Deadline"),
+        description=_(u"help_deadline", default=u""),
         required = True,
+        )
+
+    form.widget(date_of_completion='ftw.datepicker.widget.DatePickerFieldWidget')
+    date_of_completion = schema.Date(
+        title=_(u"label_date_of_completion", default=u"Date of completion"),
+        description=_(u"help_date_of_completion", default=u""),
+        required = False,
         )
 
     title = schema.TextLine(

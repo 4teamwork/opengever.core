@@ -77,6 +77,12 @@ class IResponse(Interface):
         required = False,
         )
 
+    date_of_completion = schema.Date(
+        title=_(u"label_date_of_completion", default=u"Date of completion"),
+        description=_(u"help_date_of_completion", default=u""),
+        required = False,
+        )
+
     transition = schema.Choice(
         title=_("label_transition", default="Transition"),
         description=_(u"help_transition", default=""),
@@ -296,6 +302,7 @@ class AddForm(form.AddForm):
     fields['new_responsible'].widgetFactory = AutocompleteFieldWidget
     fields['transition'].widgetFactory = radio.RadioFieldWidget
     fields['deadline'].widgetFactory = DatePickerFieldWidget
+    fields['date_of_completion'].widgetFactory = DatePickerFieldWidget
 
     @property
     def action(self):
@@ -341,6 +348,8 @@ class AddForm(form.AddForm):
             #check other fields
             options = [
                 (task.deadline, data.get('deadline'), 'deadline', _('deadline')),
+                (task.date_of_completion, data.get('date_of_completion'),
+                 'date_of_completion', _('date_of_completion')),
                 (task.responsible,
                  data.get('new_responsible'),
                  'responsible',
