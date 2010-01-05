@@ -383,6 +383,12 @@ class AddForm(form.AddForm):
             container = IResponseContainer(self.context)
             container.add(new_response)
             self.request.RESPONSE.redirect(self.context.absolute_url())
+       
+    @button.buttonAndHandler(_(u'cancel', default='Cancel'),
+                            name='cancel', )     
+
+    def handleCancel(self, action):
+        return self.request.RESPONSE.redirect('.')
 
 
 class BeneathTask(grok.ViewletManager):
