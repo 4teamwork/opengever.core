@@ -26,6 +26,9 @@ from zope.component import queryUtility
 
 from opengever.dossier.interfaces import IDossierContainerTypes
 
+from z3c.relationfield.schema import RelationChoice, RelationList
+from plone.formwidget.contenttree import ObjPathSourceBinder
+
 LOG = logging.getLogger('opengever.dossier')
 
 @grok.provider(IContextSourceBinder)
@@ -55,6 +58,7 @@ class IDossier(form.Schema):
                 u'end',
                 u'comments',
                 u'responsible',
+                u'relatedDossier',
         ],
     )
     
@@ -142,6 +146,15 @@ class IDossier(form.Schema):
         description = _(u'help_container_location', default=u''),
         required = False,
     )
+    
+    relatedDossier = RelationList(
+        title=_(u'label_related_dossier', default=u'Related Dossier'),
+        default=[],
+        value_type=RelationChoice(title=u"Related",
+                   source=ObjPathSourceBinder(navigation_tree_query={'object_provides' : ('opengever.dossier.behaviors.dossier.IDossierMarker',),})),
+        required=False,
+        )
+            
     @invariant
     def validateStartEnd(data):
         if data.start is not None and data.end is not None:
@@ -149,6 +162,7 @@ class IDossier(form.Schema):
                 raise StartBeforeEnd(_(u"The start date must be before the end date."))
 
 alsoProvides(IDossier, IFormFieldProvider)
+
 
 class StartBeforeEnd(Invalid):
     __doc__ = _(u"The start or end date is invalid")
