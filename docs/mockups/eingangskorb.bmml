@@ -3,8 +3,8 @@
     <control controlID="64" controlTypeID="com.balsamiq.mockups::CheckBox" x="105" y="400" w="360" h="18" measuredW="234" measuredH="24" zOrder="14" locked="false" isInGroup="-1">
       <controlProperties>
         <text>Beschwerde%20duch%20Hans%20Muster</text>
-        <icon>DocEmptyIcon%7Csmall</icon>
         <state>selected</state>
+        <icon>DocEmptyIcon%7Csmall</icon>
       </controlProperties>
     </control>
     <control controlID="1" controlTypeID="com.balsamiq.mockups::TabBar" x="96" y="336" w="947" h="432" measuredW="373" measuredH="100" zOrder="1" locked="false" isInGroup="-1">
@@ -37,8 +37,8 @@
     <control controlID="72" controlTypeID="com.balsamiq.mockups::CheckBox" x="105" y="432" w="360" h="21" measuredW="206" measuredH="24" zOrder="19" locked="false" isInGroup="-1">
       <controlProperties>
         <text>Verf%FCgung%20vom%2020.9.2009</text>
-        <icon>DocEmptyIcon%7Csmall</icon>
         <state>up</state>
+        <icon>DocEmptyIcon%7Csmall</icon>
       </controlProperties>
     </control>
     <control controlID="9" controlTypeID="com.balsamiq.mockups::BreadCrumbs" x="96" y="208" w="-1" h="-1" measuredW="165" measuredH="23" zOrder="5" locked="false" isInGroup="-1">
@@ -61,8 +61,8 @@
     <control controlID="77" controlTypeID="com.balsamiq.mockups::CheckBox" x="105" y="470" w="360" h="21" measuredW="245" measuredH="24" zOrder="22" locked="false" isInGroup="-1">
       <controlProperties>
         <text>Antwortschreiben%20vom%2012.9.2009</text>
-        <icon>DocEmptyIcon%7Csmall</icon>
         <state>up</state>
+        <icon>DocEmptyIcon%7Csmall</icon>
       </controlProperties>
     </control>
     <control controlID="70" controlTypeID="com.balsamiq.mockups::Label" x="600" y="429" w="68" h="23" measuredW="64" measuredH="23" zOrder="18" locked="false" isInGroup="-1">
@@ -198,7 +198,7 @@
         </control>
       </groupChildrenDescriptors>
     </control>
-    <control controlID="42" controlTypeID="com.balsamiq.mockups::Button" x="117" y="637" w="-1" h="-1" measuredW="132" measuredH="28" zOrder="11" locked="false" isInGroup="-1">
+    <control controlID="42" controlTypeID="com.balsamiq.mockups::Button" x="121" y="637" w="-1" h="-1" measuredW="132" measuredH="28" zOrder="11" locked="false" isInGroup="-1">
       <controlProperties>
         <text>Aufgabe%20erstellen</text>
         <href>intern_weiterleiten%26bm%3Bintern_weiterleiten.bmml%26bm%3Bintern_weiterleiten.bmml%26bm%3Bintern_weiterleiten.bmml</href>

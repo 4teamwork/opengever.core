@@ -1,15 +1,20 @@
 <mockup version="1.0" skin="sketch" measuredW="1094" measuredH="1083" mockupW="999" mockupH="1021">
   <controls>
+    <control controlID="179" controlTypeID="com.balsamiq.mockups::Label" x="807" y="518" w="63" h="23" measuredW="58" measuredH="23" zOrder="3" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Ersteller</text>
+        <color>1644825</color>
+        <underline>true</underline>
+      </controlProperties>
+    </control>
     <control controlID="129" controlTypeID="com.balsamiq.mockups::ComboBox" x="945" y="334" w="-1" h="-1" measuredW="120" measuredH="23" zOrder="49" locked="false" isInGroup="-1">
       <controlProperties>
         <text>Datei%20Aktionen</text>
       </controlProperties>
     </control>
-    <control controlID="113" controlTypeID="com.balsamiq.mockups::IconLabel" x="631" y="629" w="307" h="-1" measuredW="307" measuredH="24" zOrder="18" locked="false" isInGroup="-1">
+    <control controlID="177" controlTypeID="com.balsamiq.mockups::BreadCrumbs" x="381" y="228" w="-1" h="-1" measuredW="444" measuredH="23" zOrder="1" locked="false" isInGroup="-1">
       <controlProperties>
-        <text>Best%E4tigung%20f%FCr%20Bestellung%20vom%2022.1.2009.doc</text>
-        <labelPosition>right</labelPosition>
-        <icon>DocEmptyIcon%7Csmall</icon>
+        <text>Startseite%2C%20Registraturplan%2C%202.%20Verwaltung%2C%202.1%20KFA%20Administration</text>
       </controlProperties>
     </control>
     <control controlID="131" controlTypeID="com.balsamiq.mockups::Label" x="631" y="499" w="-1" h="-1" measuredW="63" measuredH="23" zOrder="31" locked="false" isInGroup="-1">
@@ -98,15 +103,11 @@
         <text>_%201.%20Stufe%0A%5B-%5D%202.%20Verwaltung%0A%20_%202.1%20KFA%20Administration%0A%20_%202.2%20KFA%20Rechenschaftsberichte%0A%5B+%5D%203.%20Rechnungswesen%0A%5B+%5D%204.%20KFA%20Personal%0A%5B+%5D%205.%20Forstdienst%20extern%0A%5B+%5D%206.%20Staatswald%0A%5B+%5D%207.%20Kantonale%20Planung%0A%5B+%5D%208.%20Waldpolitische%20Beziehungen%0A%5B+%5D%209.%20Umfeld%20Zuger%20Wald</text>
       </controlProperties>
     </control>
-    <control controlID="99" controlTypeID="com.balsamiq.mockups::Label" x="413" y="596" w="86" h="23" measuredW="86" measuredH="23" zOrder="13" locked="false" isInGroup="-1">
+    <control controlID="178" controlTypeID="com.balsamiq.mockups::Label" x="487" y="520" w="256" h="23" measuredW="32" measuredH="23" zOrder="2" locked="false" isInGroup="-1">
       <controlProperties>
-        <text>Fremdzeichen</text>
-        <bold>true</bold>
-      </controlProperties>
-    </control>
-    <control controlID="114" controlTypeID="com.balsamiq.mockups::Label" x="631" y="414" w="-1" h="-1" measuredW="257" measuredH="23" zOrder="19" locked="false" isInGroup="-1">
-      <controlProperties>
-        <text>Best%E4tigung%20f%FCr%20Bestellung%20vom%2022.1.2009</text>
+        <text>Titel</text>
+        <color>1644825</color>
+        <underline>true</underline>
       </controlProperties>
     </control>
     <control controlID="115" controlTypeID="com.balsamiq.mockups::Paragraph" x="631" y="555" w="200" h="55" measuredW="200" measuredH="140" zOrder="20" locked="false" isInGroup="-1">
@@ -125,10 +126,10 @@
         <control controlID="89" controlTypeID="com.balsamiq.mockups::IconLabel" x="15" y="8" w="151" h="-1" measuredW="151" measuredH="37" zOrder="1" locked="false" isInGroup="129">
           <controlProperties>
             <text>OpenGever</text>
-            <size>24</size>
-            <color>16777215</color>
             <labelPosition>right</labelPosition>
             <icon>GearIcon%7Csmall</icon>
+            <size>24</size>
+            <color>16777215</color>
           </controlProperties>
         </control>
         <control controlID="35" controlTypeID="com.balsamiq.mockups::SearchBox" x="782" y="48" w="195" h="-1" measuredW="89" measuredH="25" zOrder="2" locked="false" isInGroup="129">
@@ -162,12 +163,6 @@
         </control>
       </groupChildrenDescriptors>
     </control>
-    <control controlID="107" controlTypeID="com.balsamiq.mockups::Label" x="413" y="471" w="90" h="23" measuredW="84" measuredH="23" zOrder="16" locked="false" isInGroup="-1">
-      <controlProperties>
-        <text>Dokumenttyp</text>
-        <bold>true</bold>
-      </controlProperties>
-    </control>
     <control controlID="158" controlTypeID="com.balsamiq.mockups::Label" x="656" y="955" w="137" h="21" measuredW="45" measuredH="23" zOrder="41" locked="false" isInGroup="-1">
       <controlProperties>
         <text>Status</text>
@@ -184,10 +179,10 @@
     <control controlID="97" controlTypeID="com.balsamiq.mockups::IconLabel" x="395" y="279" w="-1" h="-1" measuredW="489" measuredH="37" zOrder="11" locked="false" isInGroup="-1">
       <controlProperties>
         <text>Best%E4tigung%20f%FCr%20Bestellung%20vom%2022.1.2009</text>
-        <size>24</size>
-        <icon>DocEmptyIcon%7Csmall</icon>
         <labelPosition>right</labelPosition>
         <color>16777215</color>
+        <size>24</size>
+        <icon>DocEmptyIcon%7Csmall</icon>
       </controlProperties>
     </control>
     <control controlID="98" controlTypeID="com.balsamiq.mockups::Label" x="413" y="413" w="-1" h="-1" measuredW="64" measuredH="23" zOrder="12" locked="false" isInGroup="-1">
@@ -195,9 +190,15 @@
         <text>Dokument</text>
       </controlProperties>
     </control>
-    <control controlID="163" controlTypeID="com.balsamiq.mockups::SubTitle" x="107" y="916" w="-1" h="-1" measuredW="107" measuredH="37" zOrder="42" locked="false" isInGroup="-1">
+    <control controlID="99" controlTypeID="com.balsamiq.mockups::Label" x="413" y="596" w="86" h="23" measuredW="86" measuredH="23" zOrder="13" locked="false" isInGroup="-1">
       <controlProperties>
-        <text>Aufgaben</text>
+        <text>Fremdzeichen</text>
+        <bold>true</bold>
+      </controlProperties>
+    </control>
+    <control controlID="126" controlTypeID="com.balsamiq.mockups::Label" x="413" y="790" w="-1" h="-1" measuredW="160" measuredH="23" zOrder="29" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Referenzierte%20Dokumente</text>
       </controlProperties>
     </control>
     <control controlID="101" controlTypeID="com.balsamiq.mockups::Label" x="413" y="555" w="97" h="23" measuredW="76" measuredH="23" zOrder="14" locked="false" isInGroup="-1">
@@ -320,23 +321,22 @@
         <bold>true</bold>
       </controlProperties>
     </control>
-    <control controlID="177" controlTypeID="com.balsamiq.mockups::BreadCrumbs" x="381" y="228" w="-1" h="-1" measuredW="444" measuredH="23" zOrder="1" locked="false" isInGroup="-1">
+    <control controlID="113" controlTypeID="com.balsamiq.mockups::IconLabel" x="631" y="629" w="307" h="-1" measuredW="307" measuredH="24" zOrder="18" locked="false" isInGroup="-1">
       <controlProperties>
-        <text>Startseite%2C%20Registraturplan%2C%202.%20Verwaltung%2C%202.1%20KFA%20Administration</text>
+        <text>Best%E4tigung%20f%FCr%20Bestellung%20vom%2022.1.2009.doc</text>
+        <labelPosition>right</labelPosition>
+        <icon>DocEmptyIcon%7Csmall</icon>
       </controlProperties>
     </control>
-    <control controlID="178" controlTypeID="com.balsamiq.mockups::Label" x="487" y="520" w="256" h="23" measuredW="32" measuredH="23" zOrder="2" locked="false" isInGroup="-1">
+    <control controlID="114" controlTypeID="com.balsamiq.mockups::Label" x="631" y="414" w="-1" h="-1" measuredW="257" measuredH="23" zOrder="19" locked="false" isInGroup="-1">
       <controlProperties>
-        <text>Titel</text>
-        <color>1644825</color>
-        <underline>true</underline>
+        <text>Best%E4tigung%20f%FCr%20Bestellung%20vom%2022.1.2009</text>
       </controlProperties>
     </control>
-    <control controlID="179" controlTypeID="com.balsamiq.mockups::Label" x="807" y="518" w="63" h="23" measuredW="58" measuredH="23" zOrder="3" locked="false" isInGroup="-1">
+    <control controlID="107" controlTypeID="com.balsamiq.mockups::Label" x="413" y="471" w="90" h="23" measuredW="84" measuredH="23" zOrder="16" locked="false" isInGroup="-1">
       <controlProperties>
-        <text>Ersteller</text>
-        <color>1644825</color>
-        <underline>true</underline>
+        <text>Dokumenttyp</text>
+        <bold>true</bold>
       </controlProperties>
     </control>
     <control controlID="116" controlTypeID="com.balsamiq.mockups::Label" x="631" y="595" w="-1" h="-1" measuredW="18" measuredH="23" zOrder="21" locked="false" isInGroup="-1">
@@ -392,9 +392,9 @@
         <text>Ausgangsdatum</text>
       </controlProperties>
     </control>
-    <control controlID="126" controlTypeID="com.balsamiq.mockups::Label" x="413" y="790" w="-1" h="-1" measuredW="160" measuredH="23" zOrder="29" locked="false" isInGroup="-1">
+    <control controlID="163" controlTypeID="com.balsamiq.mockups::SubTitle" x="107" y="916" w="-1" h="-1" measuredW="107" measuredH="37" zOrder="42" locked="false" isInGroup="-1">
       <controlProperties>
-        <text>Referenzierte%20Dokumente</text>
+        <text>Aufgaben</text>
       </controlProperties>
     </control>
     <control controlID="127" controlTypeID="com.balsamiq.mockups::Button" x="668" y="332" w="-1" h="-1" measuredW="92" measuredH="28" zOrder="30" locked="false" isInGroup="-1">

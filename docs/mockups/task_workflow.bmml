@@ -43,8 +43,8 @@
       <controlProperties>
         <text/>
         <direction>top</direction>
-        <curvature>1</curvature>
         <leftArrow>true</leftArrow>
+        <curvature>1</curvature>
         <rightArrow>false</rightArrow>
       </controlProperties>
     </control>
@@ -58,8 +58,8 @@
       <controlProperties>
         <text/>
         <direction>bottom</direction>
-        <curvature>1</curvature>
         <leftArrow>true</leftArrow>
+        <curvature>1</curvature>
         <rightArrow>false</rightArrow>
       </controlProperties>
     </control>
@@ -67,8 +67,8 @@
       <controlProperties>
         <text/>
         <direction>bottom</direction>
-        <curvature>1</curvature>
         <leftArrow>true</leftArrow>
+        <curvature>1</curvature>
         <rightArrow>false</rightArrow>
       </controlProperties>
     </control>
@@ -90,16 +90,16 @@
       <controlProperties>
         <text/>
         <direction>bottom</direction>
-        <curvature>0</curvature>
         <leftArrow>true</leftArrow>
+        <curvature>0</curvature>
         <rightArrow>false</rightArrow>
       </controlProperties>
     </control>
     <control controlID="85" controlTypeID="com.balsamiq.mockups::Arrow" x="213" y="113" w="237" h="12" measuredW="150" measuredH="100" zOrder="13" locked="false" isInGroup="-1">
       <controlProperties>
         <text/>
-        <curvature>0</curvature>
         <leftArrow>false</leftArrow>
+        <curvature>0</curvature>
       </controlProperties>
     </control>
     <control controlID="87" controlTypeID="com.balsamiq.mockups::RoundButton" x="604" y="184" w="151" h="32" measuredW="32" measuredH="32" zOrder="14" locked="false" isInGroup="-1">
@@ -120,8 +120,8 @@
       <controlProperties>
         <text/>
         <direction>bottom</direction>
-        <curvature>-1</curvature>
         <leftArrow>false</leftArrow>
+        <curvature>-1</curvature>
       </controlProperties>
     </control>
     <control controlID="92" controlTypeID="com.balsamiq.mockups::Button" x="266" y="105" w="-1" h="-1" measuredW="96" measuredH="28" zOrder="17" locked="false" isInGroup="-1">

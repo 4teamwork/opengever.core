@@ -110,6 +110,13 @@
         <size>12</size>
       </controlProperties>
     </control>
+    <control controlID="80" controlTypeID="com.balsamiq.mockups::RoundButton" x="492" y="336" w="98" h="32" measuredW="32" measuredH="32" zOrder="14" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>erledigt</text>
+        <shape>roundRect</shape>
+        <color>32832</color>
+      </controlProperties>
+    </control>
     <control controlID="81" controlTypeID="com.balsamiq.mockups::Arrow" x="537" y="232" w="10" h="100" measuredW="150" measuredH="100" zOrder="15" locked="false" isInGroup="-1">
       <controlProperties>
         <text/>
@@ -117,20 +124,6 @@
         <direction>top</direction>
         <curvature>0</curvature>
         <rightArrow>true</rightArrow>
-      </controlProperties>
-    </control>
-    <control controlID="86" controlTypeID="com.balsamiq.mockups::RoundButton" x="103" y="128" w="180" h="32" measuredW="32" measuredH="32" zOrder="19" locked="false" isInGroup="-1">
-      <controlProperties>
-        <text>zur%FCckgewiesen</text>
-        <shape>roundRect</shape>
-        <color>16711680</color>
-      </controlProperties>
-    </control>
-    <control controlID="80" controlTypeID="com.balsamiq.mockups::RoundButton" x="492" y="336" w="98" h="32" measuredW="32" measuredH="32" zOrder="14" locked="false" isInGroup="-1">
-      <controlProperties>
-        <text>erledigt</text>
-        <shape>roundRect</shape>
-        <color>32832</color>
       </controlProperties>
     </control>
     <control controlID="82" controlTypeID="com.balsamiq.mockups::RoundButton" x="466" y="262" w="156" h="24" measuredW="32" measuredH="32" zOrder="16" locked="false" isInGroup="-1">
@@ -158,6 +151,13 @@
         <shape>rectangle</shape>
         <color>16777062</color>
         <size>12</size>
+      </controlProperties>
+    </control>
+    <control controlID="86" controlTypeID="com.balsamiq.mockups::RoundButton" x="103" y="128" w="180" h="32" measuredW="32" measuredH="32" zOrder="19" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>zur%FCckgewiesen</text>
+        <shape>roundRect</shape>
+        <color>16711680</color>
       </controlProperties>
     </control>
   </controls>

@@ -35,8 +35,8 @@
     <control controlID="64" controlTypeID="com.balsamiq.mockups::CheckBox" x="383" y="400" w="360" h="18" measuredW="234" measuredH="24" zOrder="15" locked="false" isInGroup="-1">
       <controlProperties>
         <text>Beschwerde%20duch%20Hans%20Muster</text>
-        <icon>DocEmptyIcon%7Csmall</icon>
         <state>selected</state>
+        <icon>DocEmptyIcon%7Csmall</icon>
       </controlProperties>
     </control>
     <control controlID="9" controlTypeID="com.balsamiq.mockups::BreadCrumbs" x="366" y="189" w="-1" h="-1" measuredW="444" measuredH="23" zOrder="5" locked="false" isInGroup="-1">
@@ -59,8 +59,8 @@
     <control controlID="77" controlTypeID="com.balsamiq.mockups::CheckBox" x="383" y="470" w="360" h="21" measuredW="245" measuredH="24" zOrder="24" locked="false" isInGroup="-1">
       <controlProperties>
         <text>Antwortschreiben%20vom%2012.9.2009</text>
-        <icon>DocEmptyIcon%7Csmall</icon>
         <state>up</state>
+        <icon>DocEmptyIcon%7Csmall</icon>
       </controlProperties>
     </control>
     <control controlID="70" controlTypeID="com.balsamiq.mockups::Label" x="878" y="429" w="68" h="23" measuredW="64" measuredH="23" zOrder="20" locked="false" isInGroup="-1">
@@ -107,10 +107,10 @@
     <control controlID="80" controlTypeID="com.balsamiq.mockups::IconLabel" x="375" y="228" w="-1" h="-1" measuredW="307" measuredH="37" zOrder="27" locked="false" isInGroup="-1">
       <controlProperties>
         <text>Beschwerde%20Hans%20Muster</text>
-        <labelPosition>right</labelPosition>
-        <color>16777215</color>
         <icon>FolderIcon%7Csmall</icon>
         <size>24</size>
+        <labelPosition>right</labelPosition>
+        <color>16777215</color>
       </controlProperties>
     </control>
     <control controlID="81" controlTypeID="com.balsamiq.mockups::Canvas" x="366" y="224" w="784" h="46" measuredW="100" measuredH="70" zOrder="26" locked="false" isInGroup="-1">
@@ -156,10 +156,10 @@
     <control controlID="89" controlTypeID="com.balsamiq.mockups::IconLabel" x="71" y="85" w="-1" h="-1" measuredW="151" measuredH="37" zOrder="32" locked="false" isInGroup="-1">
       <controlProperties>
         <text>OpenGever</text>
-        <labelPosition>right</labelPosition>
-        <icon>GearIcon%7Csmall</icon>
         <size>24</size>
         <color>16777215</color>
+        <labelPosition>right</labelPosition>
+        <icon>GearIcon%7Csmall</icon>
       </controlProperties>
     </control>
     <control controlID="90" controlTypeID="com.balsamiq.mockups::IconLabel" x="878" y="92" w="-1" h="-1" measuredW="131" measuredH="24" zOrder="35" locked="false" isInGroup="-1">
@@ -198,13 +198,13 @@
     </control>
     <control controlID="96" controlTypeID="com.balsamiq.mockups::RoundButton" x="300" y="136" w="123" h="34" measuredW="32" measuredH="32" zOrder="40" locked="false" isInGroup="-1">
       <controlProperties>
-        <shape>rectangle</shape>
-        <borderColor>15790322</borderColor>
-        <color>255</color>
-        <text>Eingangskorb</text>
         <href>eingangskorb%26bm%3Beingangskorb.bmml%26bm%3Beingangskorb.bmml%26bm%3Beingangskorb.bmml</href>
         <size>13</size>
+        <borderColor>15790322</borderColor>
+        <text>Eingangskorb</text>
         <map>%3Carea%20shape%3D%22rect%22%20coords%3D%22251%2C127%2C374%2C161%22%20href%3D%22eingangskorb.bmml%22%20alt%3D%22eingangskorb%22%20id%3D%2296%22/%3E</map>
+        <shape>rectangle</shape>
+        <color>255</color>
       </controlProperties>
     </control>
     <control controlID="41" controlTypeID="com.balsamiq.mockups::Button" x="375" y="638" w="-1" h="-1" measuredW="48" measuredH="28" zOrder="11" locked="false" isInGroup="-1">
@@ -222,46 +222,46 @@
     <control controlID="92" controlTypeID="com.balsamiq.mockups::RoundButton" x="88" y="137" w="102" h="32" measuredW="32" measuredH="32" zOrder="37" locked="false" isInGroup="-1">
       <controlProperties>
         <text>Arbeitsplatz</text>
-        <shape>rectangle</shape>
-        <borderColor>15790322</borderColor>
         <color>255</color>
         <size>13</size>
+        <shape>rectangle</shape>
+        <borderColor>15790322</borderColor>
       </controlProperties>
     </control>
     <control controlID="72" controlTypeID="com.balsamiq.mockups::CheckBox" x="383" y="432" w="360" h="21" measuredW="206" measuredH="24" zOrder="21" locked="false" isInGroup="-1">
       <controlProperties>
         <text>Verf%FCgung%20vom%2020.9.2009</text>
-        <icon>DocEmptyIcon%7Csmall</icon>
         <state>up</state>
+        <icon>DocEmptyIcon%7Csmall</icon>
       </controlProperties>
     </control>
     <control controlID="97" controlTypeID="com.balsamiq.mockups::RoundButton" x="417" y="136" w="123" h="34" measuredW="32" measuredH="32" zOrder="41" locked="false" isInGroup="-1">
       <controlProperties>
-        <shape>rectangle</shape>
-        <borderColor>15790322</borderColor>
-        <color>255</color>
-        <text>Aufgaben</text>
         <href>aufgaben_uebersicht%26bm%3Baufgaben_uebersicht.bmml%26bm%3Baufgaben_uebersicht.bmml%26bm%3Baufgaben_uebersicht.bmml</href>
         <size>13</size>
+        <borderColor>15790322</borderColor>
+        <text>Aufgaben</text>
         <map>%3Carea%20shape%3D%22rect%22%20coords%3D%22368%2C127%2C491%2C161%22%20href%3D%22aufgaben_uebersicht.bmml%22%20alt%3D%22aufgaben_uebersicht%22%20id%3D%2297%22/%3E</map>
+        <shape>rectangle</shape>
+        <color>255</color>
       </controlProperties>
     </control>
     <control controlID="98" controlTypeID="com.balsamiq.mockups::RoundButton" x="533" y="136" w="123" h="34" measuredW="32" measuredH="32" zOrder="42" locked="false" isInGroup="-1">
       <controlProperties>
         <text>Kontakte</text>
-        <shape>rectangle</shape>
-        <borderColor>15790322</borderColor>
         <color>255</color>
         <size>13</size>
+        <shape>rectangle</shape>
+        <borderColor>15790322</borderColor>
       </controlProperties>
     </control>
     <control controlID="93" controlTypeID="com.balsamiq.mockups::RoundButton" x="184" y="137" w="123" h="34" measuredW="32" measuredH="32" zOrder="38" locked="false" isInGroup="-1">
       <controlProperties>
         <text>Registraturplan</text>
-        <shape>rectangle</shape>
-        <borderColor>15790322</borderColor>
         <color>255</color>
         <size>13</size>
+        <shape>rectangle</shape>
+        <borderColor>15790322</borderColor>
       </controlProperties>
     </control>
     <control controlID="57" controlTypeID="com.balsamiq.mockups::Label" x="755" y="398" w="121" h="23" measuredW="91" measuredH="23" zOrder="13" locked="false" isInGroup="-1">

@@ -3,8 +3,8 @@
     <control controlID="64" controlTypeID="com.balsamiq.mockups::CheckBox" x="379" y="479" w="360" h="18" measuredW="234" measuredH="24" zOrder="15" locked="false" isInGroup="-1">
       <controlProperties>
         <text>Beschwerde%20duch%20Hans%20Muster</text>
-        <icon>DocEmptyIcon%7Csmall</icon>
         <state>selected</state>
+        <icon>DocEmptyIcon%7Csmall</icon>
       </controlProperties>
     </control>
     <control controlID="1" controlTypeID="com.balsamiq.mockups::TabBar" x="362" y="415" w="692" h="410" measuredW="523" measuredH="100" zOrder="1" locked="false" isInGroup="-1">
@@ -37,8 +37,8 @@
     <control controlID="72" controlTypeID="com.balsamiq.mockups::CheckBox" x="379" y="511" w="360" h="21" measuredW="206" measuredH="24" zOrder="20" locked="false" isInGroup="-1">
       <controlProperties>
         <text>Verf%FCgung%20vom%2020.9.2009</text>
-        <icon>DocEmptyIcon%7Csmall</icon>
         <state>up</state>
+        <icon>DocEmptyIcon%7Csmall</icon>
       </controlProperties>
     </control>
     <control controlID="9" controlTypeID="com.balsamiq.mockups::BreadCrumbs" x="362" y="202" w="-1" h="-1" measuredW="444" measuredH="23" zOrder="5" locked="false" isInGroup="-1">
@@ -61,8 +61,8 @@
     <control controlID="77" controlTypeID="com.balsamiq.mockups::CheckBox" x="379" y="549" w="360" h="21" measuredW="245" measuredH="24" zOrder="23" locked="false" isInGroup="-1">
       <controlProperties>
         <text>Antwortschreiben%20vom%2012.9.2009</text>
-        <icon>DocEmptyIcon%7Csmall</icon>
         <state>up</state>
+        <icon>DocEmptyIcon%7Csmall</icon>
       </controlProperties>
     </control>
     <control controlID="70" controlTypeID="com.balsamiq.mockups::Label" x="874" y="508" w="68" h="23" measuredW="64" measuredH="23" zOrder="19" locked="false" isInGroup="-1">
