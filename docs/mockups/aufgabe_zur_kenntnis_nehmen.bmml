@@ -1,6 +1,6 @@
-<mockup version="1.0" skin="sketch" measuredW="935" measuredH="517" mockupW="869" mockupH="454">
+<mockup version="1.0" skin="sketch" measuredW="683" measuredH="517" mockupW="617" mockupH="454">
   <controls>
-    <control controlID="64" controlTypeID="com.balsamiq.mockups::StickyNote" x="708" y="114" w="163" h="123" measuredW="109" measuredH="123" zOrder="20" locked="false" isInGroup="-1">
+    <control controlID="64" controlTypeID="com.balsamiq.mockups::StickyNote" x="459" y="99" w="163" h="123" measuredW="109" measuredH="123" zOrder="20" locked="false" isInGroup="-1">
       <controlProperties>
         <text>Der%20Titel%20der%20Aufgabe%20kann%20automatisch%20generiert%20werden%20aus%20der%20Initialaktion%20%28zur%20Kenntnis%3A%202%20Dokumente%20%29</text>
         <size>9</size>
@@ -78,7 +78,7 @@
         <color>16777215</color>
       </controlProperties>
     </control>
-    <control controlID="52" controlTypeID="com.balsamiq.mockups::Canvas" x="62" y="53" w="863" h="46" measuredW="100" measuredH="70" zOrder="17" locked="false" isInGroup="-1">
+    <control controlID="52" controlTypeID="com.balsamiq.mockups::Canvas" x="62" y="53" w="611" h="46" measuredW="100" measuredH="70" zOrder="17" locked="false" isInGroup="-1">
       <controlProperties>
         <borderStyle>none</borderStyle>
         <color>255</color>
