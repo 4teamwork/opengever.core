@@ -2,9 +2,12 @@ Changelog
 =========
 
 
-0.2
----
+1.0a1
+-----
 
+* updated metadata / changed target release to 1.0a1
+  [05.01.2010, jbaumann]
+  
 * Issue #340: Aktenzeichen Dossiers und Subdossiers: Zähler zählt nicht über 2
   Die Ordnungsposition braucht nun auch das IReferenceNumber behavior, wie auch
   das Dossier. Die Validierung und der Default-Wert funktioniert nun Typ-übergreifend.
