@@ -1,5 +1,7 @@
 <?xml version="1.0"?>
 <object name="portal_catalog" meta_type="Task Catalog">
- <column value="deadline"/>
- <column value="responsible"/>
+  <column value="deadline" />
+  <column value="date_of_completion" />
+  <column value="responsible" />
+  <column value="issuer" />
 </object>

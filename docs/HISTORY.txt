@@ -5,6 +5,11 @@ Changelog
 ---
 
 
+* Issue #332: Aufgabenübersicht, Stufe Dossier: Spalten anpassen
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/332/view
+  Added Task-indexes: date_of_completion and issuer
+  [05.01.2010, jbaumann]
+  
 * Issue #329: Aufgabe: Neues Feld "Erledigungsdatum" beim Erledigen.
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/329
   [04.01.2010, jbaumann]

@@ -30,7 +30,9 @@ def add_catalog_indexes(context, logger=None):
     indexes = catalog.indexes()
     # Specify the indexes you want, with ('index_name', 'index_type')
     wanted = (('deadline', 'DateIndex'),
+              ('date_of_completion', 'DateIndex'),
               ('responsible', 'FieldIndex'),
+              ('issuer', 'FieldIndex'),
               )
     indexables = []
     for name, meta_type in wanted:
