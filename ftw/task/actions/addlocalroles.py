@@ -49,12 +49,12 @@ class AddLocalRolesActionExecutor(object):
 
     def __call__(self):
         obj = self.event.object
-        
         if ITask.providedBy(obj):
             user_id = obj.responsible
             roles = self.element.role_names
             for item in obj.relatedItems:
                 item.to_object.manage_setLocalRoles(user_id, list(roles))
+                item.to_object.reindexObjectSecurity()
         
         return True
 
