@@ -10,7 +10,7 @@
                  tal:condition="item/getIcon" />
             <a href="" tal:attributes="href item/getURL|nothing" tal:omit-tag="not: item/getURL|nothing"><span tal:content="item/Title" /></a>
           </li>
-          <li class="moreLink" tal:condition="python:box['id'] != 'relateddossiers'">
+          <li class="moreLink">
             <a tal:attributes="href string:#${box/id}-tab" i18n:translate="">show all</a>
           </li>
         </ul>

@@ -211,17 +211,15 @@ class DossierOverview(grok.View, OpengeverTab):
         if not self.context.show_subdossier():
             items = [[dict(id = 'tasks', content=self.tasks()),
                       dict(id = 'journal', content=self.journal()),
-                      dict(id = 'sharing', content=self.sharing()),
-                     [dict(id = 'documents', content=self.documents()),
-                      dict(id = 'relateddossiers', content=self.related_dossiers())],]
+                      dict(id = 'sharing', content=self.sharing())],
+                     [dict(id = 'documents', content=self.documents()),]
                      ]
         else:
             items = [[dict(id = 'subdossiers', content=self.subdossiers()),
                       dict(id = 'tasks', content=self.tasks()),
                       dict(id = 'journal', content=self.journal()),
                       dict(id = 'sharing', content=self.sharing())],
-                     [dict(id = 'documents', content=self.documents()),
-                      dict(id = 'relateddossiers', content=self.related_dossiers()),]
+                     [dict(id = 'documents', content=self.documents()),]
                      ]
         return items
 
