@@ -1,3 +1,4 @@
+from Acquisition import aq_parent
 from OFS.SimpleItem import SimpleItem
 from zope.interface import implements, Interface
 from zope.component import adapts
@@ -14,11 +15,20 @@ class IAddLocalRolesAction(Interface):
     
     This is also used to create add and edit forms, below.
     """
+    object_roles = schema.Set(title=_(u"Object Roles"),
+        description=_(u"The local roles to add."),
+        required=True,
+        value_type=schema.Choice(vocabulary="plone.app.vocabularies.Roles"))
 
-    role_names = schema.Set(title=_(u"Roles"),
-                            description=_(u"The local roles to add."),
-                            required=True,
-                            value_type=schema.Choice(vocabulary="plone.app.vocabularies.Roles"))
+    related_items_roles = schema.Set(title=_(u"Related Items Roles"),
+        description=_(u"The local roles to add."),
+        required=True,
+        value_type=schema.Choice(vocabulary="plone.app.vocabularies.Roles"))
+
+    parent_roles = schema.Set(title=_(u"Parent Roles"),
+        description=_(u"The local roles to add."),
+        required=True,
+        value_type=schema.Choice(vocabulary="plone.app.vocabularies.Roles"))
 
 
 class AddLocalRolesAction(SimpleItem):
@@ -26,12 +36,19 @@ class AddLocalRolesAction(SimpleItem):
     """
     implements(IAddLocalRolesAction, IRuleElementData)
 
-    role_names = []
+    object_roles = []
+    related_items_roles = []
+    parent_roles = []
     element = "ftw.task.actions.AddLocalRoles"
 
     @property
     def summary(self):
-        return _(u"Add local roles: ${names}", mapping=dict(names=", ".join(self.role_names)))
+        return _(u"Add local roles for object: ${object_roles}, "\
+                  "related items: ${related_items_roles}, "\
+                  "parent: ${parent_roles}",
+                  mapping=dict(object_roles=", ".join(self.object_roles),
+                               related_items_roles=", ".join(self.related_items_roles),
+                               parent_roles=", ".join(self.parent_roles)))
 
 
 class AddLocalRolesActionExecutor(object):
@@ -51,10 +68,26 @@ class AddLocalRolesActionExecutor(object):
         obj = self.event.object
         if ITask.providedBy(obj):
             user_id = obj.responsible
-            roles = self.element.role_names
-            for item in obj.relatedItems:
-                item.to_object.manage_setLocalRoles(user_id, list(roles))
-                item.to_object.reindexObjectSecurity()
+            
+            # set object roles
+            roles = self.element.object_roles
+            if roles:
+                obj.manage_setLocalRoles(user_id, list(roles))
+                obj.reindexObjectSecurity()
+            
+            # set related items roles
+            roles = self.element.related_items_roles
+            if roles:
+                for item in obj.relatedItems:
+                    item.to_object.manage_setLocalRoles(user_id, list(roles))
+                    item.to_object.reindexObjectSecurity()
+            
+            # set parent roles
+            roles = self.element.parent_roles
+            if roles:
+                parent = aq_parent(obj)
+                parent.manage_setLocalRoles(user_id, list(self.element.parent_roles))
+                parent.reindexObjectSecurity()
         
         return True
 
