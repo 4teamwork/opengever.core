@@ -1,0 +1,2 @@
+recursive-include opengever *
+global-exclude *pyc
