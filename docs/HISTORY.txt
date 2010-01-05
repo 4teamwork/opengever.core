@@ -1,7 +1,11 @@
 Changelog
 =========
 
-0.1 (xxxx-xx-xx)
-----------------
 
+1.0a1
+-----
+
+* updated metadata / changed target release to 1.0a1
+  [05.01.2010, jbaumann]
+  
 * Initial release
