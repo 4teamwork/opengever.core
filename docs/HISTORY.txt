@@ -2,9 +2,12 @@ Changelog
 =========
 
 
-0.2
----
+1.0a1
+-----
 
+* Updated setup.py, changed target release to 1.0a1
+  [05.01.2010, jbaumann]
+  
 * Issue #135: Journal: Einträge lokalisieren
   Updated journal event handlers and its translations
   [16.11.2009, jbaumann]
