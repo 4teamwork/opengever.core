@@ -1,7 +1,11 @@
 Changelog
 =========
 
-1.0dev (unreleased)
--------------------
 
-- Initial release
+1.0a1
+-----
+
+* Updated setup.py, changed target release to 1.0a1
+  [05.01.2010, jbaumann]
+  
+* Initial release
