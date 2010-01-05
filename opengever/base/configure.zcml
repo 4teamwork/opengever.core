@@ -26,6 +26,8 @@
   <include package="plone.directives.form" file="meta.zcml" />
   <include package="plone.directives.form" />
 
+  <include package="plone.formwidget.namedfile" />
+
   <grok:grok package="." />
 
   <include package=".behaviors" />

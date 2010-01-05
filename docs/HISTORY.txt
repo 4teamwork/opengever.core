@@ -5,6 +5,11 @@ Changelog
 -----
 
 
+* Issue #111: Dokumente mit Umlauten im Filenamen können nicht hinaufgeladen werden
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/111
+  Added some monkey patches for enabling support of umlauts in filenames.
+  [05.01.2010, jbaumann]
+  
 * Issue #340: Aktenzeichen Dossiers und Subdossiers: Zähler zählt nicht über 2
   [04.01.2010, jbaumann]
   
