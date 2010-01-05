@@ -1,4 +1,4 @@
-<mockup version="1.0" skin="sketch" measuredW="881" measuredH="378" mockupW="768" mockupH="297">
+<mockup version="1.0" skin="sketch" measuredW="835" measuredH="378" mockupW="722" mockupH="297">
   <controls>
     <control controlID="66" controlTypeID="com.balsamiq.mockups::Arrow" x="356" y="94" w="104" h="100" measuredW="150" measuredH="100" zOrder="0" locked="false" isInGroup="-1">
       <controlProperties>
@@ -40,14 +40,14 @@
     </control>
     <control controlID="71" controlTypeID="com.balsamiq.mockups::RoundButton" x="645" y="200" w="180" h="32" measuredW="32" measuredH="32" zOrder="5" locked="false" isInGroup="-1">
       <controlProperties>
-        <text>zur%20Stellungnahme</text>
+        <text>zur%20%DCberweisung</text>
         <shape>roundRect</shape>
         <color>16744448</color>
       </controlProperties>
     </control>
-    <control controlID="72" controlTypeID="com.balsamiq.mockups::RoundButton" x="645" y="336" w="226" h="32" measuredW="32" measuredH="32" zOrder="6" locked="false" isInGroup="-1">
+    <control controlID="72" controlTypeID="com.balsamiq.mockups::RoundButton" x="689" y="336" w="132" h="32" measuredW="32" measuredH="32" zOrder="6" locked="false" isInGroup="-1">
       <controlProperties>
-        <text>Stellungnahme%20abgeliefert</text>
+        <text>%FCberwiesen</text>
         <shape>roundRect</shape>
         <color>32832</color>
       </controlProperties>
@@ -78,7 +78,7 @@
     </control>
     <control controlID="76" controlTypeID="com.balsamiq.mockups::RoundButton" x="590" y="124" w="136" h="24" measuredW="32" measuredH="32" zOrder="10" locked="false" isInGroup="-1">
       <controlProperties>
-        <text>zur%20Stellungnahme</text>
+        <text>zur%20%DCberweisung</text>
         <borderColor>15132390</borderColor>
         <shape>rectangle</shape>
         <color>16777062</color>
@@ -146,7 +146,7 @@
     </control>
     <control controlID="85" controlTypeID="com.balsamiq.mockups::RoundButton" x="669" y="262" w="156" h="24" measuredW="32" measuredH="32" zOrder="18" locked="false" isInGroup="-1">
       <controlProperties>
-        <text>Stellungnahme%20liefern</text>
+        <text>%DCberweisung%20akzeptiert</text>
         <borderColor>15132390</borderColor>
         <shape>rectangle</shape>
         <color>16777062</color>

@@ -12,19 +12,24 @@
         <state>selected</state>
       </controlProperties>
     </control>
-    <control controlID="41" controlTypeID="com.balsamiq.mockups::Label" x="64" y="114" w="58" h="30" measuredW="42" measuredH="23" zOrder="4" locked="false" isInGroup="-1">
+    <control controlID="67" controlTypeID="com.balsamiq.mockups::CheckBox" x="56" y="314" w="-1" h="-1" measuredW="149" measuredH="22" zOrder="10" locked="false" isInGroup="-1">
       <controlProperties>
-        <text>Aktion</text>
-      </controlProperties>
-    </control>
-    <control controlID="67" controlTypeID="com.balsamiq.mockups::CheckBox" x="56" y="314" w="-1" h="-1" measuredW="115" measuredH="22" zOrder="10" locked="false" isInGroup="-1">
-      <controlProperties>
-        <text>Kopie%20erstellen</text>
+        <text>Aktenkopie%20erstellen</text>
       </controlProperties>
     </control>
     <control controlID="68" controlTypeID="com.balsamiq.mockups::StickyNote" x="331" y="336" w="494" h="204" measuredW="109" measuredH="123" zOrder="11" locked="false" isInGroup="-1">
       <controlProperties>
         <text>Beim%20Speichern%20muss%20die%20aktuelle%20Aufgabe%20als%20%22zur%20Kenntnis%20genommen%22%20/%20%22erledigt%22%20markiert%20werden%20%28Workflow-Zustand%29.%20%0AZus%E4tzlich%20kann%20auf%20Wunsch%20eine%20Kopie%20der%20Aufgabe/Dokumente%20in%20ein%20anderes%20Dossier%20angefertigt%20werden.%0A%20%0ATechnisch%3A%20Die%20Rolle%20%22Reader%22%20wird%20auf%20der%20Aufgabe%20sowie%20den%20verkn%FCpften%20Dokumenten%20f%FCr%20den%20User%20%22Responsible%22%20entfernt.</text>
+      </controlProperties>
+    </control>
+    <control controlID="41" controlTypeID="com.balsamiq.mockups::Label" x="64" y="114" w="58" h="30" measuredW="42" measuredH="23" zOrder="4" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Aktion</text>
+      </controlProperties>
+    </control>
+    <control controlID="16" controlTypeID="com.balsamiq.mockups::Label" x="58" y="189" w="-1" h="-1" measuredW="72" measuredH="23" zOrder="0" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Kommentar</text>
       </controlProperties>
     </control>
     <control controlID="17" controlTypeID="com.balsamiq.mockups::TextArea" x="57" y="222" w="616" h="81" measuredW="200" measuredH="140" zOrder="1" locked="false" isInGroup="-1">
@@ -56,11 +61,6 @@
     <control controlID="22" controlTypeID="com.balsamiq.mockups::Button" x="151" y="351" w="-1" h="-1" measuredW="86" measuredH="28" zOrder="3" locked="false" isInGroup="-1">
       <controlProperties>
         <text>Abbrechen</text>
-      </controlProperties>
-    </control>
-    <control controlID="16" controlTypeID="com.balsamiq.mockups::Label" x="58" y="189" w="-1" h="-1" measuredW="72" measuredH="23" zOrder="0" locked="false" isInGroup="-1">
-      <controlProperties>
-        <text>Kommentar</text>
       </controlProperties>
     </control>
     <control controlID="63" controlTypeID="com.balsamiq.mockups::Paragraph" x="57" y="204" w="551" h="22" measuredW="200" measuredH="140" zOrder="7" locked="false" isInGroup="-1">

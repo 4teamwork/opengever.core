@@ -21,9 +21,9 @@
         <text>%DCbergang%20%22Aufgabe%20aktualisieren%22%0ABeim%20Speichern%20bleibt%20die%20Aufgabe%20im%20Zustand%20%22in%20Bearbeitung%22.%0A%20%0A%DCbergang%20%22Aufgabe%20erledigen%0ABeim%20Speichern%20wechselt%20die%20Aufgabe%20in%20den%20Zustand%20%22erledigt%22.%20Die%20Rolle%20%22Editor%22%20wird%20auf%20der%20Aufgabe%20sowie%20den%20verkn%FCpften%20Dokumenten%20f%FCr%20den%20bisherigen%20User%20%22Responsible%22%20entfernt.%20Ausserdem%20wird%20auf%20dem%20Dossier%2C%20das%20die%20Aufgabe%20enth%E4lt%2C%20die%20Rolle%20%22Contributor%22%20f%FCr%20den%20User%20%22Responsible%22%20entfernt.%20%0A%20%0AIst%20dies%20erforderlich%3F%20Das%20Feld%20%22Responsible%22%20wechselt%20zur%FCck%20zum%20Auftraggeber%3F/Ersteller%20der%20Aufgabe%3F.</text>
       </controlProperties>
     </control>
-    <control controlID="68" controlTypeID="com.balsamiq.mockups::CheckBox" x="62" y="320" w="115" h="22" measuredW="115" measuredH="22" zOrder="11" locked="false" isInGroup="-1">
+    <control controlID="68" controlTypeID="com.balsamiq.mockups::CheckBox" x="62" y="320" w="163" h="22" measuredW="149" measuredH="22" zOrder="11" locked="false" isInGroup="-1">
       <controlProperties>
-        <text>Kopie%20erstellen</text>
+        <text>Aktenkopie%20erstellen</text>
         <state>up</state>
       </controlProperties>
     </control>
