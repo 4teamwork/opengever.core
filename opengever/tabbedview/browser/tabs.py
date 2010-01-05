@@ -211,15 +211,17 @@ class DossierOverview(grok.View, OpengeverTab):
         if not self.context.show_subdossier():
             items = [[dict(id = 'tasks', content=self.tasks()),
                       dict(id = 'journal', content=self.journal()),
-                      dict(id = 'sharing', content=self.sharing())],
-                     [dict(id = 'documents', content=self.documents()),]
+                      dict(id = 'sharing', content=self.sharing()),
+                     [dict(id = 'documents', content=self.documents()),
+                      dict(id = 'relateddossiers', content=self.related_dossiers())],]
                      ]
         else:
             items = [[dict(id = 'subdossiers', content=self.subdossiers()),
                       dict(id = 'tasks', content=self.tasks()),
                       dict(id = 'journal', content=self.journal()),
                       dict(id = 'sharing', content=self.sharing())],
-                     [dict(id = 'documents', content=self.documents()),]
+                     [dict(id = 'documents', content=self.documents()),
+                      dict(id = 'relateddossiers', content=self.related_dossiers()),]
                      ]
         return items
 
@@ -272,7 +274,24 @@ class DossierOverview(grok.View, OpengeverTab):
                                 getIcon='user.gif'
                                 ))
         return results
+    
+    def related_dossiers(self):
+        results = []
+        for item in IDossier(self.context).relatedDossier:
+            results.append(self.object_to_brain(item.to_object))
+        return results
 
+    def object_to_brain(self, object):
+        brains = self.context.portal_catalog({
+            'path':{
+                'query':'/'.join(object.getPhysicalPath()),
+                'depth':0,
+            },
+        })
+        if len(brains)>0:
+            return brains[0]
+        else:
+            return None
 
 class Journal(grok.View, OpengeverTab):
     grok.context(IDossierMarker)

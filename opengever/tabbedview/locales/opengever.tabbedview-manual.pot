@@ -53,6 +53,9 @@ msgstr ""
 msgid "sharing"
 msgstr ""
 
+msgid "relateddossiers"
+msgstr ""
+
 msgid "title"
 msgstr ""
 
