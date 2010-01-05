@@ -19,7 +19,7 @@
     </control>
     <control controlID="68" controlTypeID="com.balsamiq.mockups::StickyNote" x="331" y="336" w="494" h="204" measuredW="109" measuredH="123" zOrder="11" locked="false" isInGroup="-1">
       <controlProperties>
-        <text>Beim%20Speichern%20muss%20die%20aktuelle%20Aufgabe%20als%20%22zur%20Kenntnis%20genommen%22%20/%20%22erledigt%22%20markiert%20werden%20%28Workflow-Zustand%29.%20%0AZus%E4tzlich%20kann%20auf%20Wunsch%20eine%20Kopie%20der%20Aufgabe/Dokumente%20in%20ein%20anderes%20Dossier%20angefertigt%20werden.%0A%20%0ATechnisch%3A%20Die%20Rolle%20%22Reader%22%20wird%20auf%20der%20Aufgabe%20sowie%20den%20verkn%FCpften%20Dokumenten%20f%FCr%20den%20User%20%22Responsible%22%20entfernt.</text>
+        <text>Beim%20Speichern%20muss%20die%20aktuelle%20Aufgabe%20als%20%22zur%20Kenntnis%20genommen%22%20/%20%22erledigt%22%20markiert%20werden%20%28Workflow-Zustand%29.%20%0AZus%E4tzlich%20kann%20auf%20Wunsch%20eine%20Kopie%20der%20Aufgabe/Dokumente%20in%20ein%20anderes%20Dossier%20angefertigt%20werden.%0A%20%0ATechnisch%3A%20Die%20Rolle%20%22Reader%22%20wird%20auf%20der%20Aufgabe%20sowie%20den%20verkn%FCpften%20Dokumenten%20f%FCr%20den%20User%20%22Responsible%22%20entfernt.%0A%3F%3F%3F</text>
       </controlProperties>
     </control>
     <control controlID="41" controlTypeID="com.balsamiq.mockups::Label" x="64" y="114" w="58" h="30" measuredW="42" measuredH="23" zOrder="4" locked="false" isInGroup="-1">
