@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 import os
 
-version = open('opengever/portelts/tree/version.txt').read().strip()
+version = open('opengever/portlets/tree/version.txt').read().strip()
 maintainer = 'Victor Baumann'
 
 setup(name='opengever.portlets.tree',
