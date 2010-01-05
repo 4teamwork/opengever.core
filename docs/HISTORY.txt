@@ -1,10 +1,14 @@
 Changelog
 =========
 
-0.1 - Unreleased
-----------------
+0.1
+---
 
 
+* Issue #332: Aufgabenübersicht, Stufe Dossier: Spalten anpassen
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/332/view
+  [05.01.2010, jbaumann]
+  
 * Issue #322: TabbedView: Übersetzung "more actions"
   [04.01.2010, jbaumann]
 

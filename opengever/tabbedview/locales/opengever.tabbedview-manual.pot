@@ -131,3 +131,8 @@ msgstr ""
 msgid "participants"
 msgstr ""
 
+msgid "issuer"
+msgstr ""
+
+msgid "date_of_completion"
+msgstr ""
