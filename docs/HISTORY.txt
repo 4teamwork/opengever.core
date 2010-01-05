@@ -2,9 +2,12 @@ Changelog
 =========
 
 
-0.2
----
+1.0a1
+-----
 
+* Target release changed to 1.0a1
+  [05.01.2010, jbaumann]
+  
 * Issue #306: Darstellung "Historie" bei Dokument aufräumen
   [18.12.2009, jbaumann]
 
