@@ -208,11 +208,6 @@ class View(dexterity.DisplayForm):
                                                contentFilter={'portal_type': 'ftw.task.task'})
         return tasks
 
-    def getResponses(self):
-        responses = self.context.getFolderContents(full_objects=True,
-                                                   contentFilter={'portal_type': 'ftw.task.response'})
-        return responses
-
 
 # XXX
 # setting the default value of a RelationField does not work as expected
