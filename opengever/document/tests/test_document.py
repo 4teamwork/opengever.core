@@ -34,5 +34,12 @@ class TestDocumentIntegration(PloneTestCase):
         new_object = createObject(factory)
         self.failUnless(IDocumentSchema.providedBy(new_object))
         
+    def test_view(self):
+        self.folder.invokeFactory('opengever.document.document', 'document1')
+        d1 = self.folder['document1']
+        d1.keywords=()
+        view = d1.restrictedTraverse('@@view')
+        self.failUnless(view())
+
 def test_suite():
     return unittest.defaultTestLoader.loadTestsFromName(__name__)
