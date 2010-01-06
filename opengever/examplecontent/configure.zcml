@@ -4,12 +4,12 @@
     i18n_domain="opengever.examplecontent"
     xmlns:genericsetup="http://namespaces.zope.org/genericsetup">
 
-    <genericsetup:registerProfile
-        name="default" 
-        title="opengever.examplecontent"
-        directory="profiles/default" 
-        description="creates example content in a opengever site" 
-        provides="Products.GenericSetup.interfaces.EXTENSION" 
-    />
+  <genericsetup:registerProfile
+      name="default"
+      title="opengever.examplecontent"
+      directory="profiles/default"
+      description="creates example content in a opengever site"
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      />
 
 </configure>
