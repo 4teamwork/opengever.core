@@ -31,6 +31,7 @@ setup(name='ftw.task',
           'ftw.datepicker',
           'collective.autopermission',
           'opengever.base',
+          'collective.testcaselayer',
           # -*- Extra requirements: -*-
       ],
       entry_points="""
