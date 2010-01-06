@@ -5,9 +5,17 @@
     xmlns:genericsetup="http://namespaces.zope.org/genericsetup">
 
   <genericsetup:registerProfile
-      name="default"
-      title="opengever.examplecontent"
+      name="developer"
+      title="opengever.examplecontent : Developer"
       directory="profiles/default"
+      description="creates example content in a opengever site"
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      />
+
+  <genericsetup:registerProfile
+      name="ogds"
+      title="opengever.examplecontent : OGDS"
+      directory="profiles/ogds"
       description="creates example content in a opengever site"
       provides="Products.GenericSetup.interfaces.EXTENSION"
       />
