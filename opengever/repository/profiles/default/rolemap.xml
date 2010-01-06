@@ -4,9 +4,13 @@
   <permissions>
     <permission name="opengever.repository: Add repositoryfolder" acquire="True">
       <role name="Manager"/>
+      <role name="Owner"/>
+      <role name="Contributor"/>
     </permission>
     <permission name="opengever.repository: Add repositoryroot" acquire="True">
       <role name="Manager"/>
+      <role name="Owner"/>
+      <role name="Contributor"/>
     </permission>
   </permissions>
 </rolemap>

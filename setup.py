@@ -30,6 +30,7 @@ setup(name='opengever.repository',
         'setuptools',
         'plone.app.dexterity',
         'collective.autopermission',
+        'collective.testcaselayer',
         # -*- Extra requirements: -*-
         ],
       entry_points="""
