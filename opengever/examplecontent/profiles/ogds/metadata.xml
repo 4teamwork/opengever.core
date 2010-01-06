@@ -3,6 +3,6 @@
   <version>1</version>
   <dependencies>
       <dependency>profile-opengever.zugclient:default</dependency>
-      <dependency>profile-ftw.directoryservice:default</dependency>
+      <dependency>profile-opengever.octopus.cortex:default</dependency>
   </dependencies>
 </metadata>
