@@ -2,6 +2,8 @@
   <permissions>
     <permission name="opengever.document: Add document" acquire="True">
       <role name="Manager"/>
+      <role name="Owner"/>
+      <role name="Contributor"/>
     </permission>
   </permissions>
 </rolemap>
