@@ -1,0 +1,141 @@
+<?xml version="1.0"?>
+<dc-workflow workflow_id="opengever_task_workflow"
+             title="Workflow for opengever tasks"
+             description="" state_variable="review_state"
+             initial_state="task-state-new">
+ <permission>Access contents information</permission>
+ <permission>Add portal content</permission>
+ <permission>List folder contents</permission>
+ <permission>Manage properties</permission>
+ <permission>Modify portal content</permission>
+ <permission>View</permission>
+ <permission>ftw.task: Add task</permission>
+ <state state_id="task-state-cancelled" title="">
+ </state>
+ <state state_id="task-state-in-progress" title="">
+  <exit-transition transition_id="task-transition-open-cancelled"/>
+  <exit-transition transition_id="task-transition-open-resolved"/>
+ </state>
+ <state state_id="task-state-new" title="">
+  <exit-transition transition_id="task-transition-new-open"/>
+ </state>
+ <state state_id="task-state-open" title="">
+  <exit-transition transition_id="task-transition-open-cancelled"/>
+  <exit-transition transition_id="task-transition-open-rejected"/>
+  <exit-transition transition_id="task-transition-open-resolved"/>
+ </state>
+ <state state_id="task-state-rejected" title="">
+  <exit-transition transition_id="task-transition-rejected-open"/>
+ </state>
+ <state state_id="task-state-resolved" title="">
+  <exit-transition transition_id="task-transition-resolved-open"/>
+ </state>
+ <transition transition_id="task-transition-new-open"
+             title="task-transition-new-open"
+             new_state="task-state-open" trigger="USER"
+             before_script="" after_script="">
+  <action url="" category="workflow">task-transition-new-open</action>
+  <guard>
+  </guard>
+ </transition>
+ <transition transition_id="task-transition-open-cancelled"
+             title="task-transition-open-cancelled"
+             new_state="task-state-cancelled" trigger="USER"
+             before_script="" after_script="">
+  <action url="" category="workflow">task-transition-open-cancelled</action>
+  <guard>
+  </guard>
+ </transition>
+ <transition transition_id="task-transition-open-rejected"
+             title="task-transition-open-rejected"
+             new_state="task-state-rejected" trigger="USER"
+             before_script="" after_script="">
+  <action url="" category="workflow">task-transition-open-rejected</action>
+  <guard>
+  </guard>
+ </transition>
+ <transition transition_id="task-transition-open-resolved"
+             title="task-transition-open-resolved"
+             new_state="task-state-resolved" trigger="USER"
+             before_script="" after_script="">
+  <action url="" category="workflow">task-transition-open-resolved</action>
+  <guard>
+  </guard>
+ </transition>
+ <transition transition_id="task-transition-rejected-open"
+             title="task-transition-rejected-open"
+             new_state="task-state-open" trigger="USER"
+             before_script="" after_script="">
+  <action url="" category="workflow">task-transition-rejected-open</action>
+  <guard>
+  </guard>
+ </transition>
+ <transition transition_id="task-transition-resolved-open"
+             title="task-transition-resolved-open"
+             new_state="task-state-open" trigger="USER"
+             before_script="" after_script="">
+  <action url="" category="workflow">task-transition-resolved-open</action>
+  <guard>
+  </guard>
+ </transition>
+ <worklist worklist_id="reviewer_queue" title="">
+  <description>Reviewer tasks</description>
+  <action url="%(portal_url)s/search?review_state=pending"
+          category="global">Pending (%(count)d)</action>
+  <guard>
+   <guard-permission>Review portal content</guard-permission>
+  </guard>
+  <match name="review_state" values="pending"/>
+ </worklist>
+ <variable variable_id="action" for_catalog="False"
+           for_status="True" update_always="True">
+  <description>The last transition</description>
+  <default>
+   
+   <expression>transition/getId|nothing</expression>
+  </default>
+  <guard>
+  </guard>
+ </variable>
+ <variable variable_id="actor" for_catalog="False"
+           for_status="True" update_always="True">
+  <description>The ID of the user who performed the last transition</description>
+  <default>
+   
+   <expression>user/getId</expression>
+  </default>
+  <guard>
+  </guard>
+ </variable>
+ <variable variable_id="comments" for_catalog="False"
+           for_status="True" update_always="True">
+  <description>Comments about the last transition</description>
+  <default>
+   
+   <expression>python:state_change.kwargs.get('comment', '')</expression>
+  </default>
+  <guard>
+  </guard>
+ </variable>
+ <variable variable_id="review_history" for_catalog="False"
+           for_status="False" update_always="False">
+  <description>Provides access to workflow history</description>
+  <default>
+   
+   <expression>state_change/getHistory</expression>
+  </default>
+  <guard>
+   <guard-permission>View</guard-permission>
+  </guard>
+ </variable>
+ <variable variable_id="time" for_catalog="False"
+           for_status="True" update_always="True">
+  <description>Time of the last transition</description>
+  <default>
+   
+   <expression>state_change/getDateTime</expression>
+  </default>
+  <guard>
+  </guard>
+ </variable>
+</dc-workflow>
