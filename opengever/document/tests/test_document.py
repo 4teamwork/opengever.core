@@ -15,7 +15,6 @@ class TestDocumentIntegration(PloneTestCase):
     layer = Layer
     
     def test_adding(self):
-        self.setRoles(('Manager',))
         self.folder.invokeFactory('opengever.document.document', 'document1')
         d1 = self.folder['document1']
         self.failUnless(IDocumentSchema.providedBy(d1))    
