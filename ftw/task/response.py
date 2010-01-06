@@ -334,16 +334,6 @@ class AddForm(form.AddForm):
             #if util.getManagersVocab.getTerm(responseCreator):
             #   new_response.type =  'reply'
             #check transition
-            if data.get('transition'):
-                wftool = getToolByName(self.context, 'portal_workflow')
-                before = wftool.getInfoFor(self.context, 'review_state')
-                if data.get('transition') != before:
-                    before = wftool.getTitleForStateOnType(before, task.Type())
-                    wftool.doActionFor(self.context, data.get('transition'))
-                    after = wftool.getInfoFor(self.context, 'review_state')
-                    after = wftool.getTitleForStateOnType(after, task.Type())
-                    new_response.add_change('review_state', _(u'Issue state'),
-                                            before, after)
 
             #check other fields
             options = [
@@ -379,6 +369,18 @@ class AddForm(form.AddForm):
             for item in relatedItems:
                 to_id = intids.getId(item)
                 new_response.relatedItems.append(RelationValue(to_id))
+
+            # change workflow state of task
+            if data.get('transition'):
+                wftool = getToolByName(self.context, 'portal_workflow')
+                before = wftool.getInfoFor(self.context, 'review_state')
+                if data.get('transition') != before:
+                    before = wftool.getTitleForStateOnType(before, task.Type())
+                    wftool.doActionFor(self.context, data.get('transition'))
+                    after = wftool.getInfoFor(self.context, 'review_state')
+                    after = wftool.getTitleForStateOnType(after, task.Type())
+                    new_response.add_change('review_state', _(u'Issue state'),
+                                            before, after)
 
             container = IResponseContainer(self.context)
             container.add(new_response)
