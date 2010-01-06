@@ -41,6 +41,7 @@ setup(name='opengever.document',
         'stoneagehtml', # required by ftw.sendmail, but there is no dependency in the current release
         'ftw.datepicker',
         'collective.autopermission',
+        'collective.testcaselayer',
         ],
       entry_points="""
       # -*- Entry points: -*-
