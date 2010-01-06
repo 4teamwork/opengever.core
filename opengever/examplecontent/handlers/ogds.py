@@ -29,7 +29,7 @@ class SetupVarious(object):
         type = 'ftw.directoryservice.contact'
         self.contacts = []
         gen = ContactGenerator(self.setup)
-        contact_data = list(gen.list_contact_data())[:50]
+        contact_data = list(gen.list_contact_data())
         contacts_per_client = len(contact_data) / len(self.clients)
         for c, client in enumerate(self.clients):
             start = c * contacts_per_client
