@@ -29,7 +29,8 @@ setup(name='opengever.examplecontent',
       zip_safe=False,
       install_requires=[
         'setuptools',
-        'opengever.zugclient'
+        'opengever.zugclient',
+        'opengever.octopus.cortex',
         # -*- Extra requirements: -*-
         ],
       entry_points="""
