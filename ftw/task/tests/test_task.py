@@ -6,9 +6,11 @@ from zope.component import queryUtility
 from plone.dexterity.interfaces import IDexterityFTI
 
 from Products.PloneTestCase.ptc import PloneTestCase
-from ftw.task.tests.layer import Layer
 
+from ftw.task.tests.layer import Layer
 from ftw.task.task import ITask
+from ftw.task.adapters import IResponseContainer
+from ftw.task.response import Response
 
 class TestTaskIntegration(PloneTestCase):
     
@@ -33,6 +35,23 @@ class TestTaskIntegration(PloneTestCase):
         factory = fti.factory
         new_object = createObject(factory)
         self.failUnless(ITask.providedBy(new_object))
+
+    def test_view(self):
+        self.folder.invokeFactory('ftw.task.task', 'task1')
+        t1 = self.folder['task1']
+        view = t1.restrictedTraverse('@@view')
+        self.failUnless(len(view.getSubTasks())==0)
+        t1.invokeFactory('ftw.task.task','task2')
+        t2 = t1['task2']
+        self.failUnless(view.getSubTasks()[0].getObject()==t2)
+
+    def test_addresponse(self):
+        self.folder.invokeFactory('ftw.task.task', 'task1')
+        t1 = self.folder['task1']
+        res = Response("")
+        container = IResponseContainer(t1)
+        container.add(res)
+        self.failUnless(res in container)
 
 def test_suite():
     return unittest.defaultTestLoader.loadTestsFromName(__name__)
