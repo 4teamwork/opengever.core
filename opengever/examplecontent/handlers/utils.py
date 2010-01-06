@@ -20,6 +20,10 @@ def update_object(obj, **kw):
             fields[name] = field
     for k, v in kw.items():
         if k in fields.keys():
+            if v.lower()=='true':
+                v = True
+            elif v.lower()=='false':
+                v = False
             fields[k].set(fields[k].interface(obj), v)
         else:
             print '*** WARNING: field %s not found for object' % k, obj
