@@ -15,3 +15,6 @@ def setupVarious(setup):
         handler = handler.strip()
     if handler in HANDLERS.keys():
         return HANDLERS[handler](setup)
+    else:
+        raise Exception(('Could not find handler for examplecontent setup step',
+                        handler))
