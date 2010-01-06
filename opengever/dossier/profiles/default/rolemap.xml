@@ -4,12 +4,18 @@
   <permissions>
     <permission name="opengever.dossier: Add businesscasedossier" acquire="True">
       <role name="Manager"/>
+      <role name="Owner"/>
+      <role name="Contributor"/>
     </permission>
     <permission name="opengever.dossier: Add projectdossier" acquire="True">
       <role name="Manager"/>
+      <role name="Owner"/>
+      <role name="Contributor"/>
     </permission>
     <permission name="opengever.dossier: Add templatedossier" acquire="True">
       <role name="Manager"/>
+      <role name="Owner"/>
+      <role name="Contributor"/>
     </permission>
   </permissions>
 </rolemap>

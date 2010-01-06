@@ -33,6 +33,7 @@ setup(name='opengever.dossier',
         'collective.autopermission',
         'opengever.base',
         'rwproperty',
+        'collective.testcaselayer'
         # -*- Extra requirements: -*-
         ],
       entry_points="""
