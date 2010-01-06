@@ -4,7 +4,7 @@ from zope.component import queryUtility
 from ftw.table import helper
 
 
-def task_responsible(context):
+def authenticated_member(context):
     return context.portal_membership.getAuthenticatedMember().getId()
     
 def linked(item, value):
@@ -32,7 +32,7 @@ class MyTasks(OpengeverSolrListingTab):
             )
     types = ['ftw.task.task', ]
     
-    search_options = {'responsible': task_responsible}
+    search_options = {'responsible': authenticated_member}
 
 
 class IssuedTasks(OpengeverSolrListingTab):
@@ -40,9 +40,12 @@ class IssuedTasks(OpengeverSolrListingTab):
     columns= (
                 ('', helper.draggable),
                 ('', helper.path_checkbox),
-                ('Title', helper.linked),
+                ('Title', linked),
                 ('deadline', helper.readable_date),
-                ('responsible', helper.readable_author),
+                'responsible', 
                 ('review_state', 'review_state', helper.translated_string()),
             )
-    types = ['ftw.task.task', ]
+    
+    def build_query(self):
+        aid = authenticated_member(self.context)
+        return 'portal_type:ftw.task.task AND Creator:%s AND ! responsible:%s' % (aid, aid)
