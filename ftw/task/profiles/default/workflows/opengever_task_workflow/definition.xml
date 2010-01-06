@@ -2,7 +2,7 @@
 <dc-workflow workflow_id="opengever_task_workflow"
              title="Workflow for opengever tasks"
              description="" state_variable="review_state"
-             initial_state="task-state-new">
+             initial_state="task-state-open">
  <permission>Access contents information</permission>
  <permission>Add portal content</permission>
  <permission>List folder contents</permission>
@@ -13,14 +13,14 @@
  <state state_id="task-state-cancelled" title="">
  </state>
  <state state_id="task-state-in-progress" title="">
-  <exit-transition transition_id="task-transition-open-cancelled"/>
-  <exit-transition transition_id="task-transition-open-resolved"/>
+  <exit-transition transition_id="task-transition-in-progress-resolved"/>
  </state>
  <state state_id="task-state-new" title="">
   <exit-transition transition_id="task-transition-new-open"/>
  </state>
  <state state_id="task-state-open" title="">
   <exit-transition transition_id="task-transition-open-cancelled"/>
+  <exit-transition transition_id="task-transition-open-in-progress"/>
   <exit-transition transition_id="task-transition-open-rejected"/>
   <exit-transition transition_id="task-transition-open-resolved"/>
  </state>
@@ -30,6 +30,14 @@
  <state state_id="task-state-resolved" title="">
   <exit-transition transition_id="task-transition-resolved-open"/>
  </state>
+ <transition transition_id="task-transition-in-progress-resolved"
+             title="task-transition-in-progress-resolved"
+             new_state="task-state-resolved" trigger="USER"
+             before_script="" after_script="">
+  <action url="" category="workflow">task-transition-in-progress-resolved</action>
+  <guard>
+  </guard>
+ </transition>
  <transition transition_id="task-transition-new-open"
              title="task-transition-new-open"
              new_state="task-state-open" trigger="USER"
@@ -43,6 +51,14 @@
              new_state="task-state-cancelled" trigger="USER"
              before_script="" after_script="">
   <action url="" category="workflow">task-transition-open-cancelled</action>
+  <guard>
+  </guard>
+ </transition>
+ <transition transition_id="task-transition-open-in-progress"
+             title="task-transition-open-in-progress"
+             new_state="task-state-in-progress"
+             trigger="USER" before_script="" after_script="">
+  <action url="" category="workflow">task-transition-open-in-progress</action>
   <guard>
   </guard>
  </transition>
