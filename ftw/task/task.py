@@ -74,6 +74,7 @@ class ITask(form.Schema):
         required = True,
         )
 
+    form.widget(task_type='z3c.form.browser.radio.RadioFieldWidget')
     task_type = schema.Choice(
         title =_(u'label_task_type', default=u'Task Type'),
         description = _('help_task_type', default=u''), 
@@ -198,17 +199,18 @@ class Task(Container):
     def sequence_number(self):
         return self._sequence_number
         
+    @property
     def task_type_category(self):
         registry = getUtility(IRegistry)
         reg_proxy = registry.forInterface(ITaskSettings)
         if self.task_type in reg_proxy.task_types_uni_ref:
-            return 'uni_ref'
+            return u'uni_ref'
         elif self.task_type in reg_proxy.task_types_uni_val:
-            return 'uni_val'
+            return u'uni_val'
         elif self.task_type in reg_proxy.task_types_bi_ref:
-            return 'bi_ref'
+            return u'bi_ref'
         elif self.task_type in reg_proxy.task_types_bi_val:
-            return 'bi_val'
+            return u'bi_val'
         return None
 
 
