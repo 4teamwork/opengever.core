@@ -1,8 +1,10 @@
 from zope.interface import Interface
 from zope.interface import directlyProvides
 from zope.interface import Attribute
+from zope import schema
 from zope.viewlet.interfaces import IViewletManager
 from zope.contentprovider.interfaces import ITALNamespaceData
+from plone.registry import field
 
 
 class IResponseAdder(IViewletManager):
@@ -31,3 +33,15 @@ directlyProvides(IResponseAdder, ITALNamespaceData)
 
 class ICreateResponse(Interface):
     pass
+
+class ITaskSettings(Interface):
+
+    instructions = schema.Dict(
+        title = u'Instructions Vocabulary',
+        description = u'',
+        default = {u'Zur Kenntnisnahme': u'unidirektional',
+                   u'Zur direkten Erledigung': u'unidirektional',
+                   u'Zur Stellungnahme': u'bidirektional',},
+        key_type = field.TextLine(title=u"Name"),
+        value_type = field.TextLine(title=u"Typ"),
+    )
