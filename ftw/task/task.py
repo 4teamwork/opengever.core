@@ -4,7 +4,7 @@ from zope.component import getUtility
 from zope.interface import implements, Interface
 from zope.traversing.interfaces import ITraversable
 from zope.publisher.interfaces.browser import IBrowserRequest, IBrowserPage
-from zope.component import queryMultiAdapter, getUtility, getMultiAdapter
+from zope.component import queryMultiAdapter, getMultiAdapter
 from zope.app.container.interfaces import IObjectAddedEvent
 from zope.annotation.interfaces import IAnnotations
 
@@ -13,7 +13,8 @@ from AccessControl import getSecurityManager
 from Products.CMFCore.utils import getToolByName
 from datetime import datetime, timedelta
 from rwproperty import getproperty, setproperty
-
+from plone.registry.interfaces import IRegistry
+from ftw.task.interfaces import ITaskSettings
 from plone.app.layout.viewlets import content
 from plone.app.layout.viewlets.interfaces import IBelowContentTitle
 from plone.formwidget import autocomplete
@@ -39,6 +40,7 @@ class ITask(form.Schema):
         label = _(u'fieldset_common', default=u'Common'),
         fields = [
             u'issuer',
+            u'task_type',
             u'responsible',
             u'deadline',
             u'date_of_completion',
@@ -67,6 +69,16 @@ class ITask(form.Schema):
         required = True,
         )
 
+    task_type = schema.Choice(
+        title =_(u'label_task_type', default=u'Task Type'),
+        description = _('help_task_type', default=u''), 
+        required = True,
+        readonly = False,
+        default = None,
+        missing_value = None,
+        source = util.getTaskTypeVocabulary,
+    )
+    
     form.widget(responsible=AutocompleteFieldWidget)
     responsible = schema.Choice(
         title=_(u"label_responsible", default="Responsible"),
@@ -187,6 +199,19 @@ class Task(Container):
     @property
     def sequence_number(self):
         return self._sequence_number
+        
+    def task_type_category(self):
+        registry = getUtility(IRegistry)
+        reg_proxy = registry.forInterface(ITaskSettings)
+        if self.task_type in reg_proxy.task_types_uni_ref:
+            return 'uni_ref'
+        elif self.task_type in reg_proxy.task_types_uni_val:
+            return 'uni_val'
+        elif self.task_type in reg_proxy.task_types_bi_ref:
+            return 'bi_ref'
+        elif self.task_type in reg_proxy.task_types_bi_val:
+            return 'bi_val'
+        return None
 
 
 @form.default_value(field=ITask['deadline'])

@@ -1,11 +1,15 @@
 from five import grok
 
 from zope.annotation.interfaces import IAnnotations
-from zope.schema.interfaces import IContextSourceBinder
+from zope.schema.interfaces import IContextSourceBinder, ISource
 from zope.schema.vocabulary import SimpleVocabulary
 
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone import PloneMessageFactory as PMF
+
+from zope.component import getUtility
+from plone.registry.interfaces import IRegistry
+from ftw.task.interfaces import ITaskSettings
 
 import ftw.task
 
@@ -60,3 +64,14 @@ def create_sequence_number(obj, key='task_sequence_number'):
     sequence_number = int(portal_annotations.get(key, 0)) + 1
     portal_annotations[key] = sequence_number
     return sequence_number
+
+@grok.provider(IContextSourceBinder)
+def getTaskTypeVocabulary(context):
+    registry = getUtility(IRegistry)
+    reg_proxy = registry.forInterface(ITaskSettings)
+    types = reg_proxy.task_types_uni_ref + reg_proxy.task_types_uni_val +\
+            reg_proxy.task_types_bi_ref + reg_proxy.task_types_bi_val
+    terms = []
+    for task_type in types:
+        terms.append(SimpleVocabulary.createTerm(task_type, task_type, task_type))
+    return SimpleVocabulary(terms)

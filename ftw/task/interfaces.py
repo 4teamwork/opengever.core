@@ -36,12 +36,34 @@ class ICreateResponse(Interface):
 
 class ITaskSettings(Interface):
 
-    instructions = schema.Dict(
-        title = u'Instructions Vocabulary',
+    task_types_uni_ref = schema.List(
+        title = u'Task Types Unidirectional by Reference',
         description = u'',
-        default = {u'Zur Kenntnisnahme': u'unidirektional',
-                   u'Zur direkten Erledigung': u'unidirektional',
-                   u'Zur Stellungnahme': u'bidirektional',},
-        key_type = field.TextLine(title=u"Name"),
-        value_type = field.TextLine(title=u"Typ"),
+        default = [u'Zur Kenntnisnahme',],
+        value_type = field.TextLine(title=u"Name"),
     )
+
+    task_types_uni_val = schema.List(
+        title = u'Unidirectional by Value',
+        description = u'',
+        default = [u'Zur direkten Erledigung',],
+        value_type = field.TextLine(title=u"Name"),
+    )
+        
+    task_types_bi_ref = schema.List(
+        title = u'Bidirectional by Reference',
+        description = u'',
+        default = [u'Zur Stellungnahme',
+                   u'Zur Genehmigung',
+                   u'Zur Pruefung/Korrektur',
+                   u'Zum Bericht/Antrag',],
+        value_type = field.TextLine(title=u"Name"),    
+    )
+
+    task_types_bi_val = schema.List(
+        title = u'Bidirectional by Value',
+        description = u'',
+        default = [],
+        value_type = field.TextLine(title=u"Name"),
+    )    
+
