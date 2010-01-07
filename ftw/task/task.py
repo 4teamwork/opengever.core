@@ -181,6 +181,7 @@ class Task(Container):
 
     @setproperty
     def title(self, value):
+        self.id = "task-%s" % getUtility(ISequenceNumber).get_number(self)
         if value:
             self._title = value
     @property
