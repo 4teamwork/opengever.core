@@ -39,11 +39,17 @@ class TestAddLocalRolesAction(TestCase):
         adding = getMultiAdapter((rule, self.portal.REQUEST), name='+action')
         addview = getMultiAdapter((adding, self.portal.REQUEST), name=element.addview)
         
-        addview.createAndAdd(data={'role_names': set(['Reader'])})
+        addview.createAndAdd(data={
+            'object_roles': set(['Reader']),
+            'related_items_roles': set(['Reader']),
+            'parent_roles': set(['Contributor']),
+        })
         
         e = rule.actions[0]
         self.failUnless(isinstance(e, AddLocalRolesAction))
-        self.assertEquals(set(['Reader']), e.role_names)
+        self.assertEquals(set(['Reader']), e.object_roles)
+        self.assertEquals(set(['Reader']), e.related_items_roles)
+        self.assertEquals(set(['Contributor']), e.parent_roles)
     
     def testInvokeEditView(self): 
         element = getUtility(IRuleAction, name='ftw.task.actions.AddLocalRoles')
