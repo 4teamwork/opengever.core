@@ -3,9 +3,9 @@
     <control controlID="66" controlTypeID="com.balsamiq.mockups::Arrow" x="356" y="94" w="104" h="100" measuredW="150" measuredH="100" zOrder="0" locked="false" isInGroup="-1">
       <controlProperties>
         <text/>
-        <leftArrow>true</leftArrow>
         <direction>bottom</direction>
         <curvature>1</curvature>
+        <leftArrow>true</leftArrow>
         <rightArrow>false</rightArrow>
       </controlProperties>
     </control>
@@ -18,8 +18,8 @@
     <control controlID="68" controlTypeID="com.balsamiq.mockups::RoundButton" x="341" y="124" w="101" h="24" measuredW="32" measuredH="32" zOrder="2" locked="false" isInGroup="-1">
       <controlProperties>
         <text>zur%20Kenntnis</text>
-        <borderColor>15132390</borderColor>
         <shape>rectangle</shape>
+        <borderColor>15132390</borderColor>
         <color>16777062</color>
         <size>12</size>
       </controlProperties>
@@ -55,17 +55,17 @@
     <control controlID="73" controlTypeID="com.balsamiq.mockups::Arrow" x="484" y="103" w="32" h="91" measuredW="150" measuredH="100" zOrder="7" locked="false" isInGroup="-1">
       <controlProperties>
         <text/>
-        <leftArrow>false</leftArrow>
         <direction>top</direction>
         <curvature>0</curvature>
+        <leftArrow>false</leftArrow>
         <rightArrow>true</rightArrow>
       </controlProperties>
     </control>
     <control controlID="74" controlTypeID="com.balsamiq.mockups::RoundButton" x="466" y="124" w="101" h="24" measuredW="32" measuredH="32" zOrder="8" locked="false" isInGroup="-1">
       <controlProperties>
         <text>zur%20Erledigung</text>
-        <borderColor>15132390</borderColor>
         <shape>rectangle</shape>
+        <borderColor>15132390</borderColor>
         <color>16777062</color>
         <size>12</size>
       </controlProperties>
@@ -79,8 +79,8 @@
     <control controlID="76" controlTypeID="com.balsamiq.mockups::RoundButton" x="590" y="124" w="136" h="24" measuredW="32" measuredH="32" zOrder="10" locked="false" isInGroup="-1">
       <controlProperties>
         <text>zur%20%DCberweisung</text>
-        <borderColor>15132390</borderColor>
         <shape>rectangle</shape>
+        <borderColor>15132390</borderColor>
         <color>16777062</color>
         <size>12</size>
       </controlProperties>
@@ -95,17 +95,17 @@
     <control controlID="78" controlTypeID="com.balsamiq.mockups::Arrow" x="354" y="230" w="10" h="100" measuredW="150" measuredH="100" zOrder="12" locked="false" isInGroup="-1">
       <controlProperties>
         <text/>
-        <leftArrow>false</leftArrow>
         <direction>top</direction>
         <curvature>0</curvature>
+        <leftArrow>false</leftArrow>
         <rightArrow>true</rightArrow>
       </controlProperties>
     </control>
     <control controlID="79" controlTypeID="com.balsamiq.mockups::RoundButton" x="283" y="260" w="156" h="24" measuredW="32" measuredH="32" zOrder="13" locked="false" isInGroup="-1">
       <controlProperties>
         <text>zur%20Kenntnis%20genommen</text>
-        <borderColor>15132390</borderColor>
         <shape>rectangle</shape>
+        <borderColor>15132390</borderColor>
         <color>16777062</color>
         <size>12</size>
       </controlProperties>
@@ -120,17 +120,17 @@
     <control controlID="81" controlTypeID="com.balsamiq.mockups::Arrow" x="537" y="232" w="10" h="100" measuredW="150" measuredH="100" zOrder="15" locked="false" isInGroup="-1">
       <controlProperties>
         <text/>
-        <leftArrow>false</leftArrow>
         <direction>top</direction>
         <curvature>0</curvature>
+        <leftArrow>false</leftArrow>
         <rightArrow>true</rightArrow>
       </controlProperties>
     </control>
     <control controlID="82" controlTypeID="com.balsamiq.mockups::RoundButton" x="466" y="262" w="156" h="24" measuredW="32" measuredH="32" zOrder="16" locked="false" isInGroup="-1">
       <controlProperties>
         <text>als%20erledigt%20markieren</text>
-        <borderColor>15132390</borderColor>
         <shape>rectangle</shape>
+        <borderColor>15132390</borderColor>
         <color>16777062</color>
         <size>12</size>
       </controlProperties>
@@ -138,17 +138,17 @@
     <control controlID="84" controlTypeID="com.balsamiq.mockups::Arrow" x="740" y="232" w="10" h="100" measuredW="150" measuredH="100" zOrder="17" locked="false" isInGroup="-1">
       <controlProperties>
         <text/>
-        <leftArrow>false</leftArrow>
         <direction>top</direction>
         <curvature>0</curvature>
+        <leftArrow>false</leftArrow>
         <rightArrow>true</rightArrow>
       </controlProperties>
     </control>
     <control controlID="85" controlTypeID="com.balsamiq.mockups::RoundButton" x="669" y="262" w="156" h="24" measuredW="32" measuredH="32" zOrder="18" locked="false" isInGroup="-1">
       <controlProperties>
         <text>%DCberweisung%20akzeptiert</text>
-        <borderColor>15132390</borderColor>
         <shape>rectangle</shape>
+        <borderColor>15132390</borderColor>
         <color>16777062</color>
         <size>12</size>
       </controlProperties>
@@ -158,6 +158,12 @@
         <text>zur%FCckgewiesen</text>
         <shape>roundRect</shape>
         <color>16711680</color>
+      </controlProperties>
+    </control>
+    <control controlID="87" controlTypeID="com.balsamiq.mockups::StickyNote" x="186" y="98" w="329" h="201" measuredW="109" measuredH="123" zOrder="20" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>ACHTUNG%3A%20Nicht%20mehr%20aktuell%21</text>
+        <size>20</size>
       </controlProperties>
     </control>
   </controls>

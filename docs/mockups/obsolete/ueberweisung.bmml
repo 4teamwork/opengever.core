@@ -19,6 +19,12 @@
         <rowHeight>20</rowHeight>
       </controlProperties>
     </control>
+    <control controlID="68" controlTypeID="com.balsamiq.mockups::StickyNote" x="206" y="118" w="329" h="201" measuredW="109" measuredH="123" zOrder="30" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>ACHTUNG%3A%20Nicht%20mehr%20aktuell%21</text>
+        <size>20</size>
+      </controlProperties>
+    </control>
     <control controlID="8" controlTypeID="com.balsamiq.mockups::TextInput" x="63" y="297" w="317" h="-1" measuredW="126" measuredH="27" zOrder="1" locked="false" isInGroup="-1">
       <controlProperties>
         <text>Peter%20Muster%2C%20AIO</text>
@@ -48,8 +54,8 @@
     <control controlID="21" controlTypeID="com.balsamiq.mockups::Button" x="63" y="704" w="-1" h="-1" measuredW="82" measuredH="29" zOrder="5" locked="false" isInGroup="-1">
       <controlProperties>
         <text>Speichern</text>
-        <href>task_view%26bm%3Btask_view.bmml%26bm%3Btask_view.bmml%26bm%3Btask_view.bmml</href>
         <state>selected</state>
+        <href>task_view%26bm%3Btask_view.bmml%26bm%3Btask_view.bmml%26bm%3Btask_view.bmml</href>
         <map>%3Carea%20shape%3D%22rect%22%20coords%3D%221%2C651%2C83%2C680%22%20href%3D%22task_view.bmml%22%20alt%3D%22task_view%22%20id%3D%2221%22/%3E</map>
       </controlProperties>
     </control>
