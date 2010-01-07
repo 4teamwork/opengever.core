@@ -34,14 +34,14 @@
          </div>
 
          <div class="response-info">
-           <span i18n:translate="task_added_by">Added by</span>
+           <span i18n:translate="task_added_by" class="label">Added by</span>
            <span class="contact-user"
                  tal:content="python: response.creator" />
            <span i18n:translate="task_added_on">on</span>
            <span class="contact-user"
                  tal:content="python:here.toLocalizedTime(response.date, long_format=True)" />
            <div tal:repeat="delta response/changes">
-             <span i18n:translate="" tal:content="string:${delta/name}" />:
+             <span i18n:translate="" tal:content="string:${delta/name}:" class="label"/>
              <span class="issueChange"
                    i18n:translate=""
                    i18n:domain="plone"
@@ -57,7 +57,7 @@
          <span tal:replace="structure html" />
          
          <div class="issue-attachment" tal:condition="attachment">
-           <div class="issue-attachment-label" i18n:translate="poi_label_attachment">Attached:</div>
+           <span class="label" i18n:translate="poi_label_attachment">Attached:</span>
            <img tal:attributes="src attachment/icon" />
            <a tal:attributes="href attachment/url"
               tal:content="attachment/filename" />
@@ -68,7 +68,7 @@
            </span>
          </div>
 		<div class="issue-attachment" tal:condition="relatedItems">
-			<div class="issue-attachment-label" i18n:translate="poi_label_relateditems">related items:</div>
+			<span class="label" i18n:translate="poi_label_relateditems">related items:</span>
 			<ul>
 		   		<li tal:repeat="items relatedItems">
 					<a tal:define="item nocall:items/to_object" tal:attributes="href item/absolute_url" tal:content="item/Title" />
