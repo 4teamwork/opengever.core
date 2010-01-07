@@ -102,7 +102,7 @@ def create_restricted_vocabulary(field, options, message_factory=None):
     return GeneratedVocabulary
 
 
-def set_default_with_acquisition(field, default):
+def set_default_with_acquisition(field, default=None):
     """
     Sets a default value generator which uses the value
     from the parent object, if existing, otherwise it uses
@@ -129,6 +129,10 @@ def set_default_with_acquisition(field, default):
                         return data.field.get(adpt)
             obj = aq_parent(aq_inner(obj))
         # otherwise use default value
-        return field._acquisition_default
+        if field._acquisition_default:
+            return field._acquisition_default
+        else:
+            # use first value
+            return tuple(data.widget.terms)[0].value
     return default_value_generator
 
