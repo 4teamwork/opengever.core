@@ -31,7 +31,6 @@ from ftw.task import _
 from opengever.base.interfaces import ISequenceNumber
 from opengever.translations.browser.add import TranslatedAddForm
 
-from opengever.octopus.tentacle.contacts import VocabularyFactorySourceBinder
 
 class ITask(form.Schema):
 
@@ -64,7 +63,7 @@ class ITask(form.Schema):
     issuer = schema.Choice(
         title =_(u"label_issuer", default=u"Issuer"),
         description = _('help_issuer', default=u""),
-        vocabulary = u'opengever.octopus.tentacle.contacts.ContactsVocabularyFactory',
+        source = util.getManagersVocab,
         required = True,
         )
 
@@ -72,7 +71,7 @@ class ITask(form.Schema):
     responsible = schema.Choice(
         title=_(u"label_responsible", default="Responsible"),
         description =_(u"help_responsible", default=""),
-        vocabulary = u'opengever.octopus.tentacle.contacts.UsersVocabularyFactory',
+        source = util.getManagersVocab,
         required = True,
         )
 
