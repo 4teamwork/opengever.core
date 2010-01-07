@@ -30,6 +30,8 @@ from plone.supermodel.model import Fieldset
 from plone.versioningbehavior.behaviors import IVersionable
 from plone.z3cform.textlines.textlines import TextLinesFieldWidget
 
+from zope.lifecycleevent.interfaces import IObjectCreatedEvent
+
 from ftw.table.interfaces import ITableGenerator
 from ftw.table import helper
 
@@ -372,7 +374,10 @@ def checked_out( obj ):
     return '-'
 grok.global_adapter( checked_out, name='checked_out' )
 
-
+@grok.subscribe(IDocumentSchema, IObjectCreatedEvent)
+def setID(document, event):
+    import pdb; pdb.set_trace( )
+    document.id = "document-%s" % getUtility(ISequenceNumber).get_number(document)
 
 class View(dexterity.DisplayForm):
     grok.context(IDocumentSchema)
@@ -502,4 +507,4 @@ class DownloadFileVersion(grok.CodeView):
         response.setHeader('Content-Disposition',
                            'attachment;filename="%s"' % old_file.filename)
         return old_file.data
- 
+
