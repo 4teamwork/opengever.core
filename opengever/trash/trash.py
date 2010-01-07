@@ -39,7 +39,7 @@ class Trasher(object):
 
     def trash(self):
         folder = aq_parent(aq_inner(self.context))
-        if not _checkPermission('opengever.trash.TrashContent', folder):
+        if not _checkPermission('opengever.trash: Trash content', folder):
             raise Unauthorized()
         alsoProvides(self.context, ITrashed)
         self.context.reindexObject()
@@ -48,7 +48,7 @@ class Trasher(object):
     def untrash(self):
         #XXX check Permission
         folder = aq_parent(aq_inner(self.context))
-        if not _checkPermission('opengever.trash.TrashContent', folder):
+        if not _checkPermission('opengever.trash: Trash content', folder):
             raise Unauthorized()
         noLongerProvides(self.context, ITrashed)
         self.context.reindexObject()
