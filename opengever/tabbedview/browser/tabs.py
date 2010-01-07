@@ -146,6 +146,10 @@ class Tasks(OpengeverListingTab):
 
     types = ['ftw.task.task',]
 
+    enabled_actions = [
+        'change_state',
+        ]
+
 class Events(OpengeverListingTab):
     grok.name('tabbedview_view-events')
 

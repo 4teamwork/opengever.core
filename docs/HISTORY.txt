@@ -5,6 +5,9 @@ Changelog
 1.0a1
 -----
 
+* Tasks Tab: limited enabled actions to change_state action
+  [07.01.2010, jbaumann]
+  
 * Issue #332: Aufgabenübersicht, Stufe Dossier: Spalten anpassen
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/332/view
   [05.01.2010, jbaumann]
