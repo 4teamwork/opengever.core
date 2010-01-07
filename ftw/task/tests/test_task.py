@@ -53,6 +53,5 @@ class TestTaskIntegration(PloneTestCase):
         container.add(res)
         self.failUnless(res in container)
 
-        
 def test_suite():
     return unittest.defaultTestLoader.loadTestsFromName(__name__)

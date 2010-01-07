@@ -6,11 +6,15 @@ from zope.traversing.interfaces import ITraversable
 from zope.publisher.interfaces.browser import IBrowserRequest, IBrowserPage
 from zope.component import queryMultiAdapter, getMultiAdapter
 from zope.app.container.interfaces import IObjectAddedEvent
+from zope.lifecycleevent.interfaces import IObjectCreatedEvent
 from zope.annotation.interfaces import IAnnotations
+from zope.component import queryUtility
 
 from Acquisition import aq_parent, aq_inner
 from AccessControl import getSecurityManager
+
 from Products.CMFCore.utils import getToolByName
+
 from datetime import datetime, timedelta
 from rwproperty import getproperty, setproperty
 from plone.registry.interfaces import IRegistry
@@ -25,9 +29,11 @@ from plone.dexterity.interfaces import IDexterityFTI
 from plone.dexterity.content import Container
 from plone.directives import form, dexterity
 from plone.memoize.instance import memoize
+from plone.registry.interfaces import IRegistry
 
 from ftw.task import util
 from ftw.task import _
+from ftw.task.interfaces import ITaskSettings
 
 from opengever.base.interfaces import ISequenceNumber
 from opengever.translations.browser.add import TranslatedAddForm
@@ -44,7 +50,6 @@ class ITask(form.Schema):
             u'responsible',
             u'deadline',
             u'date_of_completion',
-            u'title',
             u'text',
             ],
         )
@@ -101,12 +106,6 @@ class ITask(form.Schema):
         required = False,
         )
 
-    title = schema.TextLine(
-        title=_(u"label_title", default=u"Title"),
-        description=_('help_title', default=u""),
-        required = False,
-        )
-
     form.primary('text')
     text = schema.Text(
         title=_(u"label_text", default=u"Text"),
@@ -148,7 +147,6 @@ class ITask(form.Schema):
 
     form.order_before(**{'ITransition.transition': "responsible"})
 
-
 # XXX doesn't work yet.
 #@form.default_value(field=ITask['issuer'])
 
@@ -175,27 +173,27 @@ IRelatedItems.setTaggedValue(ORDER_KEY, [('relatedItems', 'after', 'text')])
 #ITransition.setTaggedValue(FIELDSETS_KEY, [])
 #ITransition.setTaggedValue(ORDER_KEY, [('transition', 'before', 'responsible')])
 
-@grok.subscribe(ITask, IObjectAddedEvent)
+@grok.subscribe(ITask, IObjectCreatedEvent)
 def setID(task, event):
-    task._sequence_number = util.create_sequence_number(task)
+    task.id = "task-%s" % getUtility(ISequenceNumber).get_number(task)
+    nr = getUtility(ISequenceNumber).get_number(task)
+    task._sequence_number = nr
 
 
 class Task(Container):
     implements(ITask)
 
     def __init__(self, *args, **kwargs):
-        self._title = ''
         super(Task, self).__init__(*args, **kwargs)
+        
+    
+    def Title(self):
+        registry = queryUtility(IRegistry)
+        proxy = registry.forInterface(ITaskSettings)
+        crop_length = int(getattr(proxy,'crop_length',20))
+        text = self.restrictedTraverse('@@plone').cropText(str(self.text),crop_length)
+        return "%s# %s: %s" % (getUtility(ISequenceNumber).get_number(self),self.task_type,text)
 
-    @getproperty
-    def title(self):
-        return self._title
-
-    @setproperty
-    def title(self, value):
-        self.id = "task-%s" % getUtility(ISequenceNumber).get_number(self)
-        if value:
-            self._title = value
     @property
     def sequence_number(self):
         return self._sequence_number

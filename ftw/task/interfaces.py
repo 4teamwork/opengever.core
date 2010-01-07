@@ -42,6 +42,8 @@ class ITaskSettings(Interface):
         default = [u'Zur Kenntnisnahme',],
         value_type = field.TextLine(title=u"Name"),
     )
+    
+    crop_length = schema.Int(title=u"Crop length", default=20)
 
     task_types_uni_val = schema.List(
         title = u'Unidirectional by Value',
@@ -65,5 +67,4 @@ class ITaskSettings(Interface):
         description = u'',
         default = [],
         value_type = field.TextLine(title=u"Name"),
-    )    
-
+    )
