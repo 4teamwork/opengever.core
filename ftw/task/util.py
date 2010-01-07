@@ -18,7 +18,6 @@ class UsersVocabulary(SimpleVocabulary):
 
 @grok.provider(IContextSourceBinder)
 def getManagersVocab(context):
-
     acl_users = getToolByName(context, 'acl_users')
     terms = []
     if acl_users is not None:
