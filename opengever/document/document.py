@@ -376,7 +376,6 @@ grok.global_adapter( checked_out, name='checked_out' )
 
 @grok.subscribe(IDocumentSchema, IObjectCreatedEvent)
 def setID(document, event):
-    import pdb; pdb.set_trace( )
     document.id = "document-%s" % getUtility(ISequenceNumber).get_number(document)
 
 class View(dexterity.DisplayForm):
