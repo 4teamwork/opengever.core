@@ -2,6 +2,7 @@
 from opengever.examplecontent.handlers import developer
 from opengever.examplecontent.handlers import ogds
 from opengever.examplecontent.handlers import tree_portlet
+from opengever.examplecontent.handlers import pas_create_users
 
 from opengever.examplecontent.utils import GenericContentCreator
 
@@ -9,6 +10,7 @@ HANDLERS = {
     'developer' : developer.setupVarious,
     'ogds' : ogds.SetupVarious(),
     'tree_portlet' : tree_portlet.SetupVarious(),
+    'pas_create_users' : pas_create_users.SetupVarious(),
     }
 
 def setupVarious(setup):
