@@ -193,7 +193,7 @@ class Task(Container):
         proxy = registry.forInterface(ITaskSettings)
         crop_length = int(getattr(proxy,'crop_length',20))
         text = self.restrictedTraverse('@@plone').cropText(str(self.text),crop_length)
-        return "%s# %s: %s" % (getUtility(ISequenceNumber).get_number(self),self.task_type,text)
+        return "#%s %s: %s" % (getUtility(ISequenceNumber).get_number(self),self.task_type,text)
 
     @property
     def sequence_number(self):
