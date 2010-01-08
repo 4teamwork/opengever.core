@@ -29,6 +29,8 @@ setup(name='opengever.repository',
       install_requires=[
         'setuptools',
         'plone.app.dexterity',
+        'plone.app.registry',
+        'opengever.base',
         'collective.autopermission',
         'collective.testcaselayer',
         # -*- Extra requirements: -*-
