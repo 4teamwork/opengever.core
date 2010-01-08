@@ -13,7 +13,6 @@
     <element value="opengever.dossier.businesscasedossier" />
     <element value="opengever.document.document" />
     <element value="ftw.task.task" />
-    <element value="ftw.mail.mail"/>
   </property>
 
   <!-- schema interface -->
