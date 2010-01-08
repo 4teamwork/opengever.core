@@ -126,13 +126,18 @@ def set_default_with_acquisition(field, default=None):
                     except TypeError: # could not adapt
                         pass
                     else:
-                        return data.field.get(adpt)
+                        value = data.field.get(adpt)
+                        if value is not None:
+                            return value
             obj = aq_parent(aq_inner(obj))
         # otherwise use default value
         if field._acquisition_default:
             return field._acquisition_default
         else:
             # use first value
-            return tuple(data.widget.terms)[0].value
+            try:
+                return tuple(data.widget.terms)[0].value
+            except AttributeError:
+                return None
     return default_value_generator
 

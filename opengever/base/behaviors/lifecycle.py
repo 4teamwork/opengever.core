@@ -117,9 +117,10 @@ grok.global_utility(utils.create_restricted_vocabulary(
                     name=u'lifecycle_retention_period_vocabulary')
 
 # Default value
-form.default_value(field=ILifeCycle['custody_period'])(
+form.default_value(field=ILifeCycle['retention_period'])(
     utils.set_default_with_acquisition(
-        field=ILifeCycle['custody_period'],
+        field=ILifeCycle['retention_period'],
+        default=5,
         )
     )
 
@@ -154,9 +155,10 @@ grok.global_utility(utils.create_restricted_vocabulary(
                     name=u'lifecycle_custody_period_vocabulary')
 
 # Default value
-form.default_value(field=ILifeCycle['retention_period'])(
+form.default_value(field=ILifeCycle['custody_period'])(
     utils.set_default_with_acquisition(
-        field=ILifeCycle['retention_period'],
+        field=ILifeCycle['custody_period'],
+        default=10,
         )
     )
 

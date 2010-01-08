@@ -31,7 +31,12 @@ alsoProvides(IReferenceNumber, form.IFormFieldProvider)
 @form.default_value(field=IReferenceNumber['reference_number'])
 def reference_number_default_value(data):
     highest_reference_number = 0
-    for obj in data.context.listFolderContents():
+    parent = None
+    if '++add++' in data.context.REQUEST.get('PATH_TRANSLATED', object()):
+        parent = data.context
+    else:
+        parent = data.context.aq_inner.aq_parent
+    for obj in parent.listFolderContents():
         if IReferenceNumberMarker.providedBy(obj):
             num = IReferenceNumber(obj).reference_number
             if num > highest_reference_number:
