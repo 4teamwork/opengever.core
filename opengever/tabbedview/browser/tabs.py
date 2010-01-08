@@ -159,12 +159,13 @@ class Events(OpengeverListingTab):
 #code below might go to opengover.dossier..
 
 from zope.annotation.interfaces import IAnnotations, IAnnotatable
-from ftw.journal.interfaces import IAnnotationsJournalizable, IWorkflowHistoryJournalizable
+from ftw.journal.interfaces import IAnnotationsJournalizable, IWorkflowHistoryJournalizable, IJournalizable
 from ftw.journal.config import JOURNAL_ENTRIES_ANNOTATIONS_KEY
 from opengever.dossier.behaviors.dossier import IDossierMarker, IDossier
 from opengever.dossier.behaviors.participation import IParticipationAwareMarker
 from opengever.dossier.behaviors.participation import IParticipationAware
 from opengever.repository.interfaces import IRepositoryFolder
+from opengever.inbox.inbox import IInbox
 from ftw.table.interfaces import ITableGenerator
 from zope.component import queryUtility
 from ftw.table import helper
@@ -295,8 +296,24 @@ class DossierOverview(grok.View, OpengeverTab):
         else:
             return None
 
+
+class InboxOverview(DossierOverview):
+    grok.context(IInbox)
+    grok.name('tabbedview_view-overview')
+    grok.template('overview')
+
+    def boxes(self):
+        
+        items = [[dict(id = 'tasks', content=self.tasks()),
+                  dict(id = 'journal', content=self.journal()),
+                  dict(id = 'sharing', content=self.sharing())],
+                 [dict(id = 'documents', content=self.documents()),]
+                 ]
+        return items
+
+
 class Journal(grok.View, OpengeverTab):
-    grok.context(IDossierMarker)
+    grok.context(IJournalizable)
     grok.name('tabbedview_view-journal')
     grok.template('journal')
 
