@@ -1,0 +1,77 @@
+<?xml version="1.0"?>
+<object name="portal_actions" meta_type="Plone Actions Tool"
+   xmlns:i18n="http://xml.zope.org/namespaces/i18n">
+
+ <!-- *** OBJECT *** -->
+ <object name="portal_tabs" meta_type="CMF Action Category">
+  <property name="title"></property>
+
+  <object name="arbeitsplatz" meta_type="CMF Action">
+   <property name="title">Arbeitsplatz</property>
+   <property name="description"></property>
+   <property name="url_expr">string:${globals_view/navigationRootUrl}/arbeitsplatz</property>
+   <property name="icon_expr"></property>
+   <property name="permissions">
+    <element value="View"/>
+   </property>
+   <property name="visible">True</property>
+  </object>
+
+  <object name="ordnungssystem" meta_type="CMF Action">
+   <property name="title">Ordnungssystem</property>
+   <property name="description"></property>
+   <property name="url_expr">string:${globals_view/navigationRootUrl}/ordnungssystem</property>
+   <property name="icon_expr"></property>
+   <property name="permissions">
+    <element value="View"/>
+   </property>
+   <property name="visible">True</property>
+  </object>
+
+  <object name="eingangskorb" meta_type="CMF Action">
+   <property name="title">Eingangskorb</property>
+   <property name="description"></property>
+   <property name="url_expr">string:${globals_view/navigationRootUrl}/eingangskorb</property>
+   <property name="icon_expr"></property>
+   <property name="permissions">
+    <element value="View"/>
+   </property>
+   <property name="visible">True</property>
+  </object>
+
+  <object name="aufgaben" meta_type="CMF Action">
+   <property name="title">Aufgaben</property>
+   <property name="description"></property>
+   <property name="url_expr">string:${globals_view/navigationRootUrl}/aufgaben</property>
+   <property name="icon_expr"></property>
+   <property name="permissions">
+    <element value="View"/>
+   </property>
+   <property name="visible">True</property>
+  </object>
+
+  <object name="journal" meta_type="CMF Action">
+   <property name="title">Journal</property>
+   <property name="description"></property>
+   <property name="url_expr">string:${globals_view/navigationRootUrl}/journal</property>
+   <property name="icon_expr"></property>
+   <property name="permissions">
+    <element value="View"/>
+   </property>
+   <property name="visible">True</property>
+  </object>
+
+  <object name="kontakte" meta_type="CMF Action">
+   <property name="title">Kontakte</property>
+   <property name="description"></property>
+   <property name="url_expr">string:${globals_view/navigationRootUrl}/kontakte</property>
+   <property name="icon_expr"></property>
+   <property name="permissions">
+    <element value="View"/>
+   </property>
+   <property name="visible">True</property>
+  </object>
+
+
+ </object>
+</object>
