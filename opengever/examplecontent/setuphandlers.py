@@ -1,21 +1,23 @@
 
 from opengever.examplecontent.handlers import developer
 from opengever.examplecontent.handlers import ogds
+from opengever.examplecontent.handlers import tree_portlet
 
 from opengever.examplecontent.utils import GenericContentCreator
 
 HANDLERS = {
     'developer' : developer.setupVarious,
     'ogds' : ogds.SetupVarious(),
+    'tree_portlet' : tree_portlet.SetupVarious(),
     }
 
 def setupVarious(setup):
+    SetupHandler(setup)()
     handler = setup.readDataFile('opengever.examplecontent_various.txt')
     if isinstance(handler, str):
         handler = handler.strip()
         if handler in HANDLERS.keys():
-            return HANDLERS[handler](setup)
-    SetupHandler(setup)()
+            HANDLERS[handler](setup)
 
 AUTOCREATE_SOURCE_FILES = [
     'taskoverview.csv',
