@@ -51,7 +51,7 @@ class resolve(grok.CodeView):
                                 path=dict(depth=2,
                                     query='/'.join(self.context.getPhysicalPath()),
                                 ),
-                                review_state = ('task-state-statement-delivered', 'task-state-completed', 'task-state-rejected', 'acknowledged'),
+                                review_state = ('task-state-resolved', 'task-state-cancelled', 'task-state-rejected'),
         )
 
         tasks = self.context.portal_catalog(
