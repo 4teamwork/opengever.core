@@ -1,7 +1,15 @@
 <?xml version="1.0"?>
 <metadata>
-  <version>1</version>
+  <version>2</version>
   <dependencies>
-      <dependency>profile-opengever.examplecontent:handler</dependency>
+      <dependency>profile-opengever.zugclient:default</dependency>
+      <dependency>profile-opengever.octopus.cortex:default</dependency>
+      <dependency>profile-opengever.examplecontent:min-client-basic</dependency>
+      <dependency>profile-opengever.examplecontent:min-client-repo-arp</dependency>
+      <dependency>profile-opengever.examplecontent:min-client-templates</dependency>
+      <dependency>profile-opengever.examplecontent:min-ogds-clients</dependency>
+      <dependency>profile-opengever.examplecontent:min-ogds-users-groups</dependency>
+      <dependency>profile-opengever.examplecontent:min-pas-users-groups</dependency>
+      <dependency>profile-opengever.examplecontent:min-ogds-contacts-orgunits</dependency>
   </dependencies>
 </metadata>

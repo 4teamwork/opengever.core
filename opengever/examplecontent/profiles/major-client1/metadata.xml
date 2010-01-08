@@ -6,5 +6,6 @@
       <dependency>profile-opengever.examplecontent:min-client-basic</dependency>
       <dependency>profile-opengever.examplecontent:min-client-repo-arp</dependency>
       <dependency>profile-opengever.examplecontent:min-client-templates</dependency>
+      <dependency>profile-opengever.examplecontent:pas-users-groups</dependency>
   </dependencies>
 </metadata>
