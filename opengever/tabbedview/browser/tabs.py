@@ -234,7 +234,7 @@ class DossierOverview(grok.View, OpengeverTab):
         return self.catalog(['ftw.task.task', ])[:5]
 
     def documents(self):
-        return self.catalog(['opengever.document.document',])[:10]
+        return self.catalog(['opengever.document.document','ftw.mail.mail',])[:10]
 
     def events(self):
         return self.catalog(['dummy.event',] )[:5]
