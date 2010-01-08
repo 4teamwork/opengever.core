@@ -2,6 +2,8 @@
 from opengever.examplecontent.handlers import developer
 from opengever.examplecontent.handlers import ogds
 
+from opengever.examplecontent.utils import GenericContentCreator
+
 HANDLERS = {
     'developer' : developer.setupVarious,
     'ogds' : ogds.SetupVarious(),
@@ -9,6 +11,7 @@ HANDLERS = {
 
 def setupVarious(setup):
     handler = setup.readDataFile('opengever.examplecontent_various.txt')
+    print 'AA', handler
     if not isinstance(handler, str):
         return
     else:
@@ -16,5 +19,22 @@ def setupVarious(setup):
     if handler in HANDLERS.keys():
         return HANDLERS[handler](setup)
     else:
-        raise Exception(('Could not find handler for examplecontent setup step',
-                        handler))
+        return SetupHandler(setup)(handler)
+
+AUTOCREATE_SOURCE_FILES = [
+    'taskoverview.csv',
+    ]
+
+
+class SetupHandler(object):
+
+    def __init__(self, setup):
+        self.setup = setup
+        self.portal = self.setup.getSite()
+        self.openDataFile = self.setup.openDataFile
+
+    def __call__(self, filecontent):
+        import pdb; pdb.set_trace()
+        for filename in AUTOCREATE_SOURCE_FILES:
+            if self.openDataFile(filename):
+                GenericContentCreator(self.setup).create_from_csv(filename)
