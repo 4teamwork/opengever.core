@@ -6,7 +6,7 @@
 
   <genericsetup:registerProfile
       name="developer"
-      title="opengever.examplecontent : Developer"
+      title="opengever.examplecontent : Developer OLD (use portal_setup)"
       directory="profiles/default"
       description="creates example content in a opengever site"
       provides="Products.GenericSetup.interfaces.EXTENSION"

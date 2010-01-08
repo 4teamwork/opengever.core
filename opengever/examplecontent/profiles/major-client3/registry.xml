@@ -1,0 +1,10 @@
+<registry>
+  <record interface="opengever.octopus.tentacle.interfaces.ITentacleRegistry"
+          field="cid">
+    <value>m3</value>
+  </record>
+  <record interface="opengever.octopus.tentacle.interfaces.ITentacleRegistry"
+          field="cortex_url">
+    <value>http://localhost:8080/OGDS</value>
+  </record>
+</registry>
