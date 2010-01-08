@@ -15,6 +15,11 @@ DIRECT_ATTRIBUTES = (
     'title',
     'Title',
     'effective_title',
+    'firstname',
+    'lastname',
+    )
+META_ATTRIBUTES = (
+    'location',
     )
 
 class GenericContentCreator(object):
@@ -32,12 +37,16 @@ class GenericContentCreator(object):
         data_rows = self._get_objects_data(stream)
         print '* IMPORT %s FROM %s' % (len(data_rows), filename)
         for data in data_rows:
+            use_location = self.fieldnames[0]=='location'
             pathish_title = data.get(self.fieldnames[0])
             data[self.fieldnames[0]] = pathish_title.split('/')[-1].strip()
             obj = self.get_object_by_pathish_title(pathish_title)
-            if obj:
+            if obj and not use_location:
                 continue
-            if len(pathish_title.split('/')) == 1:
+            elif obj and use_location:
+                container = obj
+                obj = None
+            elif len(pathish_title.split('/')) == 1:
                 container = self.portal
             else:
                 container_title = '/'.join(pathish_title.split('/')[:-1])
@@ -124,6 +133,8 @@ class GenericContentCreator(object):
             for name, field in getFieldsInOrder(schemata):
                 fields[name] = field
         for k, v in kw.items():
+            if k in META_ATTRIBUTES:
+                continue
             field = fields[k]
             if k in fields.keys():
                 if v.lower()=='true':
