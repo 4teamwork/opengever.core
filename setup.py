@@ -29,11 +29,13 @@ setup(name='opengever.dossier',
       install_requires=[
         'setuptools',
         'plone.app.dexterity',
+        'plone.app.registry',
         'ftw.datepicker',
         'collective.autopermission',
         'opengever.base',
         'rwproperty',
-        'collective.testcaselayer'
+        'collective.testcaselayer',
+        ''
         # -*- Extra requirements: -*-
         ],
       entry_points="""
