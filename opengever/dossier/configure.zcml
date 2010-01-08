@@ -12,6 +12,8 @@
     <!-- Grok the package to initialise schema interfaces and content classes -->
     <grok:grok package="." />
 
+	<include package=".latex" />
+
     <include file="behaviors.zcml" />
 
     <include file="profiles.zcml" />

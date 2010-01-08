@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: opengever.dossier 1.0\n"
-"POT-Creation-Date: 2010-01-05 10:26+0000\n"
+"POT-Creation-Date: 2010-01-08 15:22+0000\n"
 "PO-Revision-Date: 2009-09-17 15:21+0000\n"
 "Last-Translator: Thomas Buchberger <t.buchberger@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -21,6 +21,10 @@ msgstr "Neue Beteiligung"
 #: opengever.dossier/opengever/dossier/profiles/default/types/opengever.dossier.businesscasedossier.xml
 msgid "Business Case Dossier"
 msgstr "Geschäftsdossier"
+
+#: opengever.dossier/opengever/dossier/profiles/default/actions.xml
+msgid "Cover (PDF)"
+msgstr "Deckblatt (PDF)"
 
 #: opengever.dossier/opengever/dossier/profiles/default/actions.xml
 msgid "Delete"

@@ -1,5 +1,6 @@
 from five import grok
 from zope.component import getUtility, getAdapter
+from zope.intid.interfaces import IIntIds
 
 from Products.CMFCore.utils import getToolByName
 from plone.app.layout.viewlets import content
@@ -7,12 +8,9 @@ from plone.app.layout.viewlets.interfaces import IBelowContentTitle
 from plone.directives import form
 from plone.directives import dexterity
 from plone.memoize.instance import memoize
-from zope.intid.interfaces import IIntIds
 
 from opengever.base.interfaces import IReferenceNumber, ISequenceNumber
-
 from opengever.dossier.behaviors.dossier import IDossier, IDossierMarker
-from opengever.dossier.base import DossierContainer
 
 class IBusinessCaseDossier(form.Schema):
     """ A business case dossier
