@@ -16,7 +16,10 @@ class SetupVarious(object):
         file = self.openDataFile('users.csv')
         users = self._get_objects_data(file)
         regtool = self.portal.portal_registration
+        acl_users = self.portal.acl_users
         for user in users:
+            if acl_users.getUserById(user['userid']):
+                continue
             member = regtool.addMember(
                 user['userid'],
                 password,
@@ -59,10 +62,14 @@ class SetupVarious(object):
                       for m in members]
         assigned_members = []
         for gname,gmembs in groups.items():
+            if groupstool.getGroupById(gname):
+                continue
             groupstool.addGroup(gname)
             for mem in gmembs:
                 groupstool.getGroupById(gname).addMember(mem)
                 assigned_members.append(mem)
+        if groupstool.getGroupById(default):
+            return
         groupstool.addGroup(default)
         for mem in member_ids:
             if mem not in assigned_members:
