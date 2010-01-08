@@ -1,9 +1,9 @@
 Changelog
 =========
 
+
 1.0
 ---
-
 
 * Issue #332: Aufgabenübersicht, Stufe Dossier: Spalten anpassen
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/332/view

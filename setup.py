@@ -1,12 +1,14 @@
 from setuptools import setup, find_packages
 import os
 
-version = '1.0'
+version = open('ftw/task/version.txt').read().strip()
+maintainer = 'Philippe Gross'
 
 setup(name='ftw.task',
       version=version,
-      description="the ftw task object",
-      long_description=open("README.txt").read() + "\n" +
+      description="the ftw task object" + \
+          ' (Maintainer: %s)' % maintainer,
+      long_description=open("README.txt").read() + "\n" + \
                        open(os.path.join("docs", "HISTORY.txt")).read(),
       # Get more strings from http://www.python.org/pypi?%3Aaction=list_classifiers
       classifiers=[
@@ -15,10 +17,10 @@ setup(name='ftw.task',
         "Topic :: Software Development :: Libraries :: Python Modules",
         ],
       keywords='',
-      author='phgross',
-      author_email='philippe.gross@4teamwork.ch',
-      url='www.4teamwork.ch',
-      license='GPL',
+      author='%s, 4teamwork GmbH' % maintainer,
+      author_email='mailto:info@4teamwork.ch',
+      url='http://psc.4teamwork.ch/4teamwork/ftw/ftw.task',
+      license='GPL2',
       packages=find_packages(exclude=['ez_setup']),
       namespace_packages=['ftw'],
       include_package_data=True,
