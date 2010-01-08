@@ -24,7 +24,7 @@ AUTOCREATE_SOURCE_FILES = [
     'taskoverview.csv',
     'reposystem.csv',
     'regplan.csv',
-    ]
+    ] + ['content%i.csv' % i for i in range(20)]
 
 
 class SetupHandler(object):
