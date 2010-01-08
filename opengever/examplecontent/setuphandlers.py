@@ -11,7 +11,6 @@ HANDLERS = {
 
 def setupVarious(setup):
     handler = setup.readDataFile('opengever.examplecontent_various.txt')
-    print 'AA', handler
     if not isinstance(handler, str):
         return
     else:
@@ -23,6 +22,8 @@ def setupVarious(setup):
 
 AUTOCREATE_SOURCE_FILES = [
     'taskoverview.csv',
+    'reposystem.csv',
+    'regplan.csv',
     ]
 
 
@@ -34,7 +35,6 @@ class SetupHandler(object):
         self.openDataFile = self.setup.openDataFile
 
     def __call__(self, filecontent):
-        import pdb; pdb.set_trace()
         for filename in AUTOCREATE_SOURCE_FILES:
             if self.openDataFile(filename):
                 GenericContentCreator(self.setup).create_from_csv(filename)

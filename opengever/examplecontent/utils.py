@@ -24,12 +24,8 @@ class GenericContentCreator(object):
         data_rows = self._get_objects_data(stream)
         print '* IMPORT %s FROM %s' % (len(data_rows), filename)
         for data in data_rows:
-            pathish_title = data.get('title', None)
-            if not pathish_title:
-                pathish_title = data.get('Title')
-                data['Title'] = pathish_title.split('/')[-1].strip()
-            else:
-                data['title'] = pathish_title.split('/')[-1].strip()
+            pathish_title = data.get(self.fieldnames[0])
+            data[self.fieldnames[0]] = pathish_title.split('/')[-1].strip()
             obj = self.get_object_by_pathish_title(pathish_title)
             if obj:
                 continue
@@ -38,6 +34,8 @@ class GenericContentCreator(object):
             else:
                 container_title = '/'.join(pathish_title.split('/')[:-1])
                 container = self.get_object_by_pathish_title(container_title)
+                if not container:
+                    print 'Could not find object', container_title
             # create the object
             obj = self._create_object(container, portal_type,
                                            checkConstraints=checkConstraints, **data)
@@ -51,7 +49,9 @@ class GenericContentCreator(object):
         next_title = parts[0].strip()
         for id in container.objectIds():
             obj = container.get(id)
-            title = getattr(obj, 'title', None)
+            title = getattr(obj, self.fieldnames[0],
+                            getattr(obj, 'title',
+                                    getattr(obj, 'Title', None)))
             if not title:
                 continue
             if isinstance(title, str) or isinstance(title, unicode):
@@ -68,7 +68,9 @@ class GenericContentCreator(object):
         pos = csv_stream.tell()
         dialect = csv.Sniffer().sniff(csv_stream.read(1024))
         csv_stream.seek(pos)
-        rows = list(csv.DictReader(csv_stream, dialect=dialect))
+        reader = csv.DictReader(csv_stream, dialect=dialect)
+        rows = list(reader)
+        self.fieldnames = reader.fieldnames
         # we need to convert the values to unicode
         for row in rows:
             for key, value in row.items():
@@ -120,3 +122,6 @@ class GenericContentCreator(object):
                 fields[k].set(fields[k].interface(obj), v)
             else:
                 print '*** WARNING: field %s not found for object' % k, obj
+        for name, field in fields.items():
+            if name not in kw.keys():
+                pass
