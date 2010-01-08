@@ -1,0 +1,26 @@
+% --------------------------------------------------------
+% HEAD COMMANDS
+% --------------------------------------------------------
+
+\newboolean{logo}
+\setboolean{logo}{true}
+
+% Zeilenabstand um 35% vergroessert
+\linespread{1.35}
+
+\titlespacing{\section}{0pt}{-8mm}{*0}
+\titlespacing{\subsection}{0pt}{*0}{*0}
+\titlespacing{\subsubsection}{0pt}{*0}{*0}\renewcommand\arraystretch{1.5}
+
+
+% OVERWRITE
+% pagestyle "myheadings" contains zug logo
+\fancypagestyle{myheadings}{
+    \fancyhf{}
+    \iflogo
+        \begin{textblock}{100mm\TPHorizModule}(5mm\TPHorizModule, 0mm\TPVertModule)
+            \includegraphics{logo_sw}
+        \end{textblock}
+}
+
+% --------------------------------------------------------
