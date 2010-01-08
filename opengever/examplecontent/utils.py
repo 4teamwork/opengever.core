@@ -1,13 +1,21 @@
 import csv
 
-from zope.component import getUtility, queryUtility
+from z3c.form.interfaces import IValue, IFieldWidget
+from zope.component import getUtility, queryUtility, queryMultiAdapter
 from zope.component import createObject
 from zope.schema import getFieldsInOrder
 
 from plone.dexterity.interfaces import IDexterityFTI
 from plone.dexterity import utils
+from plone.namedfile.interfaces import INamedFileField
 
 tolist = lambda f:lambda *a,**k:list(f(*a,**k))
+
+DIRECT_ATTRIBUTES = (
+    'title',
+    'Title',
+    'effective_title',
+    )
 
 class GenericContentCreator(object):
 
@@ -38,7 +46,7 @@ class GenericContentCreator(object):
                     print 'Could not find object', container_title
             # create the object
             obj = self._create_object(container, portal_type,
-                                           checkConstraints=checkConstraints, **data)
+                                      checkConstraints=checkConstraints, **data)
             print '** created', obj
             yield obj
 
@@ -92,10 +100,12 @@ class GenericContentCreator(object):
     def _create_object(self, container, type, checkConstraints=True, **kw):
         fti = queryUtility(IDexterityFTI, name=type)
         if fti:
+            filtered_kw = dict(filter(lambda a:a[0] in DIRECT_ATTRIBUTES,
+                                      kw.items()))
             # Dexterity
             obj = utils.createContentInContainer(container, type,
                                                  checkConstraints=checkConstraints,
-                                                 **kw)
+                                                 **filtered_kw)
             self._update_dexterity_object(obj, **kw)
             obj.reindexObject()
             return obj
@@ -114,14 +124,41 @@ class GenericContentCreator(object):
             for name, field in getFieldsInOrder(schemata):
                 fields[name] = field
         for k, v in kw.items():
+            field = fields[k]
             if k in fields.keys():
                 if v.lower()=='true':
                     v = True
                 elif v.lower()=='false':
                     v = False
-                fields[k].set(fields[k].interface(obj), v)
+                if INamedFileField.providedBy(field) and v:
+                    source = self.openDataFile(v.strip())
+                    if source:
+                        filename = v.strip().split('/')[-1]
+                        file_ = field._type(data=source.read(), filename=filename)
+                        field.set(field.interface(obj), file_)
+                        continue
+                field.set(field.interface(obj), v)
             else:
                 print '*** WARNING: field %s not found for object' % k, obj
         for name, field in fields.items():
             if name not in kw.keys():
-                pass
+                # get default value
+                default = queryMultiAdapter((
+                        obj,
+                        None, # request
+                        None, # form
+                        field,
+                        None, # Widget
+                        ), IValue, name='default')
+                if default!=None:
+                    default = default.get()
+                if default==None:
+                    default = getattr(field, 'default', None)
+                if default==None:
+                    try:
+                        # dispairing attempt to get a valid value....
+                        default = field._type()
+                    except:
+                        pass
+                if default!=None:
+                    field.set(field.interface(obj), default)
