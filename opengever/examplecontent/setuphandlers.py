@@ -11,14 +11,11 @@ HANDLERS = {
 
 def setupVarious(setup):
     handler = setup.readDataFile('opengever.examplecontent_various.txt')
-    if not isinstance(handler, str):
-        return
-    else:
+    if isinstance(handler, str):
         handler = handler.strip()
-    if handler in HANDLERS.keys():
-        return HANDLERS[handler](setup)
-    else:
-        return SetupHandler(setup)(handler)
+        if handler in HANDLERS.keys():
+            return HANDLERS[handler](setup)
+    SetupHandler(setup)()
 
 AUTOCREATE_SOURCE_FILES = [
     'taskoverview.csv',
@@ -34,7 +31,7 @@ class SetupHandler(object):
         self.portal = self.setup.getSite()
         self.openDataFile = self.setup.openDataFile
 
-    def __call__(self, filecontent):
+    def __call__(self):
         for filename in AUTOCREATE_SOURCE_FILES:
             if self.openDataFile(filename):
                 GenericContentCreator(self.setup).create_from_csv(filename)
