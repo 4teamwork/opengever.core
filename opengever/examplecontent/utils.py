@@ -145,7 +145,7 @@ class GenericContentCreator(object):
                 # get default value
                 default = queryMultiAdapter((
                         obj,
-                        None, # request
+                        obj.REQUEST, # request
                         None, # form
                         field,
                         None, # Widget
@@ -160,5 +160,6 @@ class GenericContentCreator(object):
                         default = field._type()
                     except:
                         pass
-                if default!=None:
-                    field.set(field.interface(obj), default)
+                if default==None:
+                    print '     could not find default for field', name, field
+                field.set(field.interface(obj), default)
