@@ -439,9 +439,6 @@ class SingleAddFormView(layout.FormWrapper, grok.CodeView):
         layout.FormWrapper.__init__(self, context, request)
         grok.CodeView.__init__(self, context, request)
 
-    def render(self):
-        return layout.FormWrapper.render_form(self)
-
 
 class Edit(Base):
 
