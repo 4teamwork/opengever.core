@@ -1,0 +1,7 @@
+"location";"user_or_group";"roles"
+;"og_mandant3_users";"Member"
+"Ordnungssystem";"og_mandant3_administrators";"Administrator"
+"Ordnungssystem";"og_mandant3_sachbearbeiter";"Reader, Contributor"
+"Ordnungssystem";"og_mandant3_sekretariat";"Reader, Contributor"
+"Ordnungssystem";"og_mandant3_verwalter";"Reader, Contributor, Manager"
+"Ordnungssystem";"og_mandant3_vorsteher";"Reader, Contributor"
