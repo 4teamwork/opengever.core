@@ -49,8 +49,8 @@ class TemplateDocumentFormView(grok.View):
                 clibboard = aq_parent(aq_inner(doc)).manage_copyObjects([doc.getId()])
                 result = self.context.manage_pasteObjects(clibboard)
                 newdoc = self.context.get(result[0].get('new_id'))
-
                 # change attributes: id, title, owner, creation_date ect.
+                getUtility(ISequenceNumber).remove_number(newdoc)
                 name = "document-%s" % getUtility(ISequenceNumber).get_number(newdoc)
                 member = self.context.portal_membership.getAuthenticatedMember()
                 self.context.manage_renameObject(newdoc.getId(), name)
