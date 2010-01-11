@@ -5,5 +5,10 @@ Changelog
 1.0a1
 -----
 
+* Issue #353: Example-Content setup profiles aufsplitten
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/353
+  Changed users csv: added "groups" column. Reimplemented pas importer.
+  [11.01.2010, jbaumann]
+  
 * Initial release
 
