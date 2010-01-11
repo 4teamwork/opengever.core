@@ -70,7 +70,8 @@ class RepositoryFolderReferenceNumber(BasicReferenceNumber):
 
     def get_number(self):
         # get local number prefix
-        num = self.context.reference_number
+        num = opengever.base.behaviors.reference.IReferenceNumber(
+            self.context).reference_number
         num = num and str(num) or ''
         # get the parent number
         parent_num = self.get_parent_number()
