@@ -5,6 +5,10 @@ Changelog
 1.0a2
 -----
 
+* Issue #373: Ordnungssystem: Nummerierung wird nicht mehr angezeigt
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/373/
+  [11.01.2010, jbaumann]
+  
 
 1.0a1
 -----

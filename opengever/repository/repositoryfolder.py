@@ -14,6 +14,8 @@ from plone.memoize.instance import memoize
 from plone.registry.interfaces import IRegistry
 from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
 
+from opengever.base.behaviors.reference import IReferenceNumber
+from opengever.base.behaviors.reference import IReferenceNumberMarker
 from opengever.repository import _
 from opengever.repository.interfaces import IRepositoryFolder
 from opengever.repository.interfaces import IRepositoryFolderRecords
@@ -89,8 +91,9 @@ class RepositoryFolder(content.Container):
         title = u' %s' % self.effective_title
         obj = self
         while IRepositoryFolder.providedBy(obj):
-            if hasattr(obj, 'reference_number'):
-                title = unicode(obj.reference_number) + '.' + title
+            if IReferenceNumberMarker.providedBy(obj):
+                rfnr = IReferenceNumber(obj).reference_number
+                title = unicode(rfnr) + '.' + title
             obj = aq_parent(aq_inner(obj))
         return title
 
