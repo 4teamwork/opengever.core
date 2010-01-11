@@ -56,14 +56,14 @@
 
   <genericsetup:registerProfile
       name="major-client2"
-      title="opengever.examplecontent.major-client1 : Client 2"
+      title="opengever.examplecontent.major-client2 : Client 2"
       directory="profiles/major-client2"
       provides="Products.GenericSetup.interfaces.EXTENSION"
       />
 
   <genericsetup:registerProfile
       name="major-client3"
-      title="opengever.examplecontent.major-client1 : Client 3"
+      title="opengever.examplecontent.major-client3 : Client 3"
       directory="profiles/major-client3"
       provides="Products.GenericSetup.interfaces.EXTENSION"
       />
