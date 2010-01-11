@@ -105,7 +105,7 @@ class Dossiers(OpengeverListingTab):
     columns = (
         ('', helper.draggable),
         ('', helper.path_checkbox),
-        ('reference_number'),
+        ('reference'),
         ('Title', helper.linked),
         ('review_state', 'review_state', helper.translated_string()),
         ('responsible', helper.readable_author),
