@@ -4,4 +4,8 @@
         <indexed_attr value="breadcrumb_titles"/>
     </index>
     <column value="breadcrumb_titles"/>
+	<index name="reference" meta_type="FieldIndex">
+		<indexed_attr value="reference"/>
+	</index>
+	<column value="reference"/>
 </object>
