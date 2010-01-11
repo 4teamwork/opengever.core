@@ -3,9 +3,9 @@
   <version>1</version>
   <dependencies>
       <dependency>profile-opengever.zugclient:default</dependency>
-      <dependency>profile-opengever.examplecontent:min-client-basic</dependency>
-      <dependency>profile-opengever.examplecontent:min-client-repo-arp</dependency>
-      <dependency>profile-opengever.examplecontent:min-client-templates</dependency>
-      <dependency>profile-opengever.examplecontent:min-pas-users-groups</dependency>
+      <dependency>profile-opengever.examplecontent:minor-client-basic</dependency>
+      <dependency>profile-opengever.examplecontent:minor-client-repo-arp</dependency>
+      <dependency>profile-opengever.examplecontent:minor-client-templates</dependency>
+      <dependency>profile-opengever.examplecontent:minor-pas-users-groups</dependency>
   </dependencies>
 </metadata>

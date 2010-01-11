@@ -72,51 +72,51 @@
   <!-- MINOR PROFILES -->
 
   <genericsetup:registerProfile
-      name="min-client-basic"
-      title="opengever.examplecontent.min-client-basic"
-      directory="profiles/min-client-basic"
+      name="minor-client-basic"
+      title="opengever.examplecontent.minor-client-basic"
+      directory="profiles/minor-client-basic"
       provides="Products.GenericSetup.interfaces.EXTENSION"
       />
 
   <genericsetup:registerProfile
-      name="min-client-templates"
-      title="opengever.examplecontent.min-client-templates"
-      directory="profiles/min-client-templates"
+      name="minor-client-templates"
+      title="opengever.examplecontent.minor-client-templates"
+      directory="profiles/minor-client-templates"
       provides="Products.GenericSetup.interfaces.EXTENSION"
       />
 
   <genericsetup:registerProfile
-      name="min-client-repo-arp"
-      title="opengever.examplecontent.min-client-repo-arp"
-      directory="profiles/min-client-repo-arp"
+      name="minor-client-repo-arp"
+      title="opengever.examplecontent.minor-client-repo-arp"
+      directory="profiles/minor-client-repo-arp"
       provides="Products.GenericSetup.interfaces.EXTENSION"
       />
 
   <genericsetup:registerProfile
-      name="min-pas-users-groups"
-      title="opengever.examplecontent.min-pas-users-groups"
-      directory="profiles/min-pas-users-groups"
+      name="minor-pas-users-groups"
+      title="opengever.examplecontent.minor-pas-users-groups"
+      directory="profiles/minor-pas-users-groups"
       provides="Products.GenericSetup.interfaces.EXTENSION"
       />
 
   <genericsetup:registerProfile
-      name="min-ogds-users-groups"
-      title="opengever.examplecontent.min-ogds-users-groups"
-      directory="profiles/min-ogds-users-groups"
+      name="minor-ogds-users-groups"
+      title="opengever.examplecontent.minor-ogds-users-groups"
+      directory="profiles/minor-ogds-users-groups"
       provides="Products.GenericSetup.interfaces.EXTENSION"
       />
 
   <genericsetup:registerProfile
-      name="min-ogds-contacts-orgunits"
-      title="opengever.examplecontent.min-ogds-contacts-orgunits"
-      directory="profiles/min-ogds-contacts-orgunits"
+      name="minor-ogds-contacts-orgunits"
+      title="opengever.examplecontent.minor-ogds-contacts-orgunits"
+      directory="profiles/minor-ogds-contacts-orgunits"
       provides="Products.GenericSetup.interfaces.EXTENSION"
       />
 
   <genericsetup:registerProfile
-      name="min-ogds-clients"
-      title="opengever.examplecontent.min-ogds-clients"
-      directory="profiles/min-ogds-clients"
+      name="minor-ogds-clients"
+      title="opengever.examplecontent.minor-ogds-clients"
+      directory="profiles/minor-ogds-clients"
       provides="Products.GenericSetup.interfaces.EXTENSION"
       />
 
