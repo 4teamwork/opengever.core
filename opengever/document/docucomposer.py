@@ -6,9 +6,11 @@ from AccessControl import SecurityManagement
 from five import grok
 from datetime import datetime
 from z3c.form import form, field, button
+
 from persistent.dict import PersistentDict
 from plone.z3cform import layout
 from plone.dexterity.utils import createContentInContainer
+from plone.dexterity.browser.base import DexterityExtensibleForm
 
 from opengever.document import _
 from opengever.document.persistence import DCQueue
@@ -26,8 +28,9 @@ DOCUCOMPOSER_TEMPLATES_VOCABULARY = vocabulary.SimpleVocabulary([
         in DOCUCOMPOSER_TEMPLATES.items()])
 
 
-class DocuComposerWizardForm(form.Form):
-    fields = field.Fields(IDocumentSchema)
+class DocuComposerWizardForm(DexterityExtensibleForm, form.AddForm):
+    portal_type='opengever.document.document'
+    #fields = field.Fields(IDocumentSchema)
     ignoreContext = True
     label = _(u'heading_docucomposer_wizard_form', default=u'DocuComposer')
 
@@ -63,9 +66,6 @@ class DocuComposerWizardView(layout.FormWrapper, grok.CodeView):
     def __init__(self, context, request):
         layout.FormWrapper.__init__(self, context, request)
         grok.CodeView.__init__(self, context, request)
-
-    def render(self):
-        return layout.FormWrapper.__call__(self)
 
 
 class CreateDocumentWithFile(grok.CodeView):

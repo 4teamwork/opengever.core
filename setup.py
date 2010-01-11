@@ -43,6 +43,7 @@ setup(name='opengever.document',
         'ftw.datepicker',
         'collective.autopermission',
         'collective.testcaselayer',
+        'plone.keyring',
         ],
       entry_points="""
       # -*- Entry points: -*-
