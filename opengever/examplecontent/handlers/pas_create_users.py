@@ -60,24 +60,37 @@ class SetupVarious(object):
             return
         entries = self._get_objects_data(file)
         for entry in entries:
-            obj = self.get_object_by_pathish_title(entry['location'])
-            if not obj:
-                print '** could not find obj at', entry['location']
-                continue
+            if not entry['location'] or len(entry['location'])==0:
+                global_role = True
+            else:
+                global_role = False
+                obj = self.get_object_by_pathish_title(entry['location'])
+                if not obj:
+                    print '** could not find obj at', entry['location']
+                    continue
             group = groupstool.getGroupById(entry['user_or_group'])
             user = acl_users.getUserById(entry['user_or_group'])
             if not group and not user:
                 print '** could not find group/user', entry['user_or_group']
                 continue
             roles = [r.strip() for r in entry['roles'].split(',')]
-            obj.manage_setLocalRoles(entry['user_or_group'], roles)
-            print 'Set roles at', obj, ':', roles, 'for', entry['user_or_group']
+            if global_role:
+                acl_users.portal_role_manager.assignRolesToPrincipal(roles,
+                                                                     entry['user_or_group'])
+                print 'Assigned', entry['user_or_group'], 'to roles', roles
+            else:
+                obj.manage_setLocalRoles(entry['user_or_group'], roles)
+                print 'Set local roles at', obj, ':', roles, 'for', entry['user_or_group']
 
     def get_object_by_pathish_title(self, title, container=None, title_attribute='title'):
         if not container:
             container = self.portal
+        if not title:
+            return container
         parts = title.split('/')
         next_title = parts[0].strip()
+        if not next_title:
+            return container
         for id in container.objectIds():
             obj = container.get(id)
             title = getattr(obj, title_attribute,
