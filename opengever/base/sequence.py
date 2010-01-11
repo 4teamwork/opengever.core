@@ -29,6 +29,10 @@ class SequenceNumber(grok.GlobalUtility):
             ann[SEQUENCE_NUMBER_ANNOTATION_KEY] = value
         return ann.get(SEQUENCE_NUMBER_ANNOTATION_KEY)
     
+    def remove_number(self, obj):
+        ann = IAnnotations(obj)
+        if SEQUENCE_NUMBER_ANNOTATION_KEY in ann.keys():
+            del ann[SEQUENCE_NUMBER_ANNOTATION_KEY]
  
 class DefaultSequenceNumberGenerator(grok.Adapter):
     """ Provides a default sequence number generator. The portal_type of the object
