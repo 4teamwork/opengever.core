@@ -186,14 +186,20 @@ class Task(Container):
 
     def __init__(self, *args, **kwargs):
         super(Task, self).__init__(*args, **kwargs)
-        
-    
+
     def Title(self):
         registry = queryUtility(IRegistry)
         proxy = registry.forInterface(ITaskSettings)
-        crop_length = int(getattr(proxy,'crop_length',20))
-        text = self.restrictedTraverse('@@plone').cropText(str(self.text),crop_length)
-        return "#%s %s: %s" % (getUtility(ISequenceNumber).get_number(self),self.task_type,text)
+        title = "#%s %s"% (getUtility(ISequenceNumber).get_number(self),self.task_type)
+        relatedItems = getattr(self,'relatedItems',[])
+        if len(relatedItems) == 1:
+            title += " (%s)" % self.relatedItems[0].to_object.title
+        elif len(relatedItems) > 1:
+            title += " (%i Dokumente)" % len(self.relatedItems)
+        if self.text:
+            crop_length = int(getattr(proxy,'crop_length',20))
+            title += ": %s" % self.restrictedTraverse('@@plone').cropText(str(self.text),crop_length)
+        return title
 
     @property
     def sequence_number(self):
