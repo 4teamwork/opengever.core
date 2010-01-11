@@ -35,7 +35,7 @@ setup(name='opengever.dossier',
         'opengever.base',
         'rwproperty',
         'collective.testcaselayer',
-        'plonegov.pdflatex',
+        'plonegov.pdflatex>=0.2.6',
         ''
         # -*- Extra requirements: -*-
         ],
