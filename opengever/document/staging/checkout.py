@@ -121,9 +121,6 @@ class CheckoutDocuments(layout.FormWrapper, grok.CodeView):
         layout.FormWrapper.__init__(self, context, request)
         grok.CodeView.__init__(self, context, request)
 
-    def render(self):
-        raise NotImplemented
-
     def __call__(self):
         try:
             return layout.FormWrapper.__call__(self)
