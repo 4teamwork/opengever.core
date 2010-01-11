@@ -3,7 +3,7 @@ import csv
 class SetupVarious(object):
     
     def __call__(self, setup):
-        self.fileencoding = 'iso-8859-1'
+        self.fileencoding = 'utf8'
         self.setup = setup
         self.portal = self.setup.getSite()
         self.openDataFile = self.setup.openDataFile
@@ -88,7 +88,7 @@ class SetupVarious(object):
         for row in rows:
             for key, value in row.items():
                 if isinstance(value, str):
-                    row[key] = unicode(value.decode(self.fileencoding))
+                    row[key] = unicode(value.decode(self.fileencoding)).encode('utf8')
         if len(rows)>0 and rows[0].has_key(''):
             for row in rows:
                 if row.has_key(''):
