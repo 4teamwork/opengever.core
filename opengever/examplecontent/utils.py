@@ -52,7 +52,8 @@ class GenericContentCreator(object):
     @tolist
     def create_from_csv(self, filename, checkConstraints=True):
         stream = self.openDataFile(filename)
-        portal_type = stream.readline().strip()
+        portal_type = stream.readline().replace(';','').replace('""','') \
+            .replace(',','').strip()
         data_rows = self._get_objects_data(stream)
         print '* IMPORT %s FROM %s' % (len(data_rows), filename)
         for data in data_rows:
