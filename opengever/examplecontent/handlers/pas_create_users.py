@@ -8,10 +8,17 @@ class SetupVarious(object):
         self.portal = self.setup.getSite()
         self.openDataFile = self.setup.openDataFile
         self.create_users()
+        self.set_roles()
+
+    def active(self, setup):
+        return setup.openDataFile('users.csv') and True or \
+            setup.openDataFile('roles.csv') and True
 
     def create_users(self):
         password = 'demo09'
         file = self.openDataFile('users.csv')
+        if not file:
+            return
         users = self._get_objects_data(file)
         regtool = self.portal.portal_registration
         acl_users = self.portal.acl_users
@@ -31,17 +38,63 @@ class SetupVarious(object):
                 )
             member.setMemberProperties({
                     'fullname' : '%s %s' % (
-                        user['firstname'],
                         user['lastname'],
+                        user['firstname'],
                         )
                     })
             # groups are comma-seperated
             for gid in user['groups'].split(','):
+                gid = gid.strip()
                 if not groupstool.getGroupById(gid):
                     groupstool.addGroup(gid)
                     print '** created group', gid
                 groupstool.getGroupById(gid).addMember(user['userid'])
             print '** created user', user['userid']
+
+    def set_roles(self):
+        print '* setting roles (roles.csv)'
+        file = self.openDataFile('roles.csv')
+        groupstool = self.portal.portal_groups
+        acl_users = self.portal.acl_users
+        if not file:
+            return
+        entries = self._get_objects_data(file)
+        for entry in entries:
+            obj = self.get_object_by_pathish_title(entry['location'])
+            if not obj:
+                print '** could not find obj at', entry['location']
+                continue
+            group = groupstool.getGroupById(entry['user_or_group'])
+            user = acl_users.getUserById(entry['user_or_group'])
+            if not group and not user:
+                print '** could not find group/user', entry['user_or_group']
+                continue
+            roles = [r.strip() for r in entry['roles'].split(',')]
+            obj.manage_setLocalRoles(entry['user_or_group'], roles)
+            print 'Set roles at', obj, ':', roles, 'for', entry['user_or_group']
+
+    def get_object_by_pathish_title(self, title, container=None, title_attribute='title'):
+        if not container:
+            container = self.portal
+        parts = title.split('/')
+        next_title = parts[0].strip()
+        for id in container.objectIds():
+            obj = container.get(id)
+            title = getattr(obj, title_attribute,
+                            getattr(obj, 'title',
+                                    getattr(obj, 'Title', None)))
+            if not title:
+                continue
+            if isinstance(title, str) or isinstance(title, unicode):
+                title = title.strip()
+            if title==next_title:
+                if len(parts)==1:
+                    return obj
+                else:
+                    return self.get_object_by_pathish_title('/'.join(parts[1:]),
+                                                            container=obj,
+                                                            title_attribute=title_attribute)
+        return None
 
     def _get_objects_data(self, csv_stream):
         pos = csv_stream.tell()

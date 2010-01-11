@@ -10,6 +10,9 @@ HANDLERS = {
     'developer' : developer.setupVarious,
     'ogds' : ogds.SetupVarious(),
     'tree_portlet' : tree_portlet.SetupVarious(),
+    }
+
+DYNAMIC_HANDLERS = {
     'pas_create_users' : pas_create_users.SetupVarious(),
     }
 
@@ -20,6 +23,9 @@ def setupVarious(setup):
         handler = handler.strip()
         if handler in HANDLERS.keys():
             HANDLERS[handler](setup)
+    for name, handler in DYNAMIC_HANDLERS.items():
+        if handler.active(setup):
+            handler(setup)
 
 AUTOCREATE_SOURCE_FILES = [
     'taskoverview.csv',
