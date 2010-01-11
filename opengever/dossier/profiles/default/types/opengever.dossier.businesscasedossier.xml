@@ -106,4 +106,18 @@
   <action title="Trash" action_id="trash" category="arbeitsraum-tabs"
           condition_expr="" url_expr="string:#" visible="True">
   </action>
+  <action title="Cover (PDF)" action_id="export_pdf" category="object_buttons"
+     condition_expr="" url_expr="string:${object_url}/export_pdf"
+     visible="True">
+   <permission value="View"/>
+  </action>
+  <action title="Add Participant" action_id="add_participant"
+     category="object_buttons" condition_expr=""
+     url_expr="string:${object_url}/@@add-participation" visible="True">
+   <permission value="Modify portal content"/>
+  </action>
+  <action title="Properties" action_id="properties" category="object_buttons"
+     condition_expr="" url_expr="string:./view" visible="True">
+   <permission value="View"/>
+  </action>
 </object>

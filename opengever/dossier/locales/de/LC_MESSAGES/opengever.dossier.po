@@ -13,18 +13,11 @@ msgstr ""
 "Domain: opengever.dossier\n"
 "X-Is-Fallback-For: de-at de-li de-lu de-ch de-de\n"
 
-#: opengever.dossier/opengever/dossier/profiles/default/actions.xml
-msgid "Add Participant"
-msgstr "Neue Beteiligung"
 
 #. Default: "Business Case Dossier"
 #: opengever.dossier/opengever/dossier/profiles/default/types/opengever.dossier.businesscasedossier.xml
 msgid "Business Case Dossier"
 msgstr "Geschäftsdossier"
-
-#: opengever.dossier/opengever/dossier/profiles/default/actions.xml
-msgid "Cover (PDF)"
-msgstr "Deckblatt (PDF)"
 
 #: opengever.dossier/opengever/dossier/profiles/default/actions.xml
 msgid "Delete"
