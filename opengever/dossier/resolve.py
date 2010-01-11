@@ -27,9 +27,18 @@ class resolve(grok.CodeView):
                                                   ),
                                                   sort_on='modified',
                                                   sort_order='reverse')
+        # there are subdossiers
+        subdossiers = self.context.portal_catalog(
+                                            portal_type="opengever.dossier.businesscasedossier",
+                                            path=dict(depth=1,
+                                                      query='/'.join(self.context.getPhysicalPath()),
+                                                      ),
+                                            is_subdossier=True,
+                                                 )
         if docs.__len__() > 0:
-            errors = True
-            status.addStatusMessage(_("not all documents are stored in a subdossier"), type="error")
+            if subdossiers.__len__() > 0:
+                errors = True
+                status.addStatusMessage(_("not all documents are stored in a subdossier"), type="error")
 
         # all document are checked in
         docs = self.context.portal_catalog(

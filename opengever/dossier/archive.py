@@ -114,9 +114,6 @@ class ArchiveFormView(layout.FormWrapper, grok.CodeView):
         layout.FormWrapper.__init__(self, context, request)
         grok.CodeView.__init__(self, context, request)
 
-    def render(self):
-        raise NotImplemented
-
     def __call__(self, *args, **kwargs):
         parent = aq_parent(aq_inner(self.context))
         if IDossierMarker.providedBy(parent):
