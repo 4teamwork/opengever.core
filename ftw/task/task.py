@@ -49,7 +49,6 @@ class ITask(form.Schema):
             u'task_type',
             u'responsible',
             u'deadline',
-            u'date_of_completion',
             u'text',
             ],
         )
@@ -63,6 +62,7 @@ class ITask(form.Schema):
             u'expectedCost',
             u'effectiveDuration',
             u'effectiveCost',
+            u'date_of_completion',
             ],
         )
 

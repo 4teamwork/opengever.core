@@ -65,14 +65,14 @@ class IResponse(Interface):
         )
 
     new_responsible = schema.Choice(
-        title=_(u"label_responsible_Response", default="Responsible"),
-        description =_(u"help_responsible_response", default=""),
+        title=_(u"label_responsible_Response", default="New responsible"),
+        description =_(u"help_new_responsible_response", default=""),
         source = util.getManagersVocab,
         required = False,
         )
 
     deadline = schema.Date(
-        title=_(u"label_deadline_Response", default=u"Deadline"),
+        title=_(u"label_deadline_Response", default=u"New deadline"),
         description=_(u"help_deadline_response", default=""),
         required = False,
         )

@@ -166,7 +166,7 @@ msgstr "Tragen sie ein Datum ein, bis wann die Aufgabe erledigt werden muss"
 
 #: ftw.task/ftw/task/response.py:76
 msgid "help_deadline_response"
-msgstr ""
+msgstr "Tragen sie ein neues Datum ein, bis wann die Aufgabe erledigt werden muss"
 
 #: ftw.task/ftw/task/task.py:145
 msgid "help_effectiveCost"
@@ -203,7 +203,7 @@ msgstr "Wählen Sie die verantwortliche Person aus"
 
 #: ftw.task/ftw/task/response.py:69
 msgid "help_responsible_response"
-msgstr ""
+msgstr "Wählen Sie die neu verantwortliche Person aus"
 
 #: ftw.task/ftw/task/task.py:80
 msgid "help_task_type"
@@ -237,7 +237,7 @@ msgstr "Zu erledigen bis"
 #. Default: "Deadline"
 #: ftw.task/ftw/task/response.py:75
 msgid "label_deadline_Response"
-msgstr "Frist"
+msgstr "Neue Frist"
 
 #. Default: "You are not allowed to edit this response."
 #: ftw.task/ftw/task/templates/edit_response.pt:44
@@ -302,7 +302,7 @@ msgstr "Verantwortlicher"
 #. Default: "Responsible"
 #: ftw.task/ftw/task/response.py:68
 msgid "label_responsible_Response"
-msgstr "Verantwortlicher"
+msgstr "Neue verantwortliche Person"
 
 #. Default: "Return to issue."
 #: ftw.task/ftw/task/templates/edit_response.pt:32
