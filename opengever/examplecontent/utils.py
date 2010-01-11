@@ -22,9 +22,28 @@ META_ATTRIBUTES = (
     'location',
     )
 
+def aggressive_decode(value, encoding='utf-8'):
+    if isinstance(value, unicode):
+        return value
+    other_encodings = filter(lambda e:e is not encoding, [
+            'utf8',
+            'iso-8859-1',
+            'latin1',
+            ])
+    encodings = [encoding] + other_encodings
+    if not isinstance(value, str):
+        value = str(value)
+    for enc in encodings:
+        try:
+            return value.decode(enc)
+        except UnicodeDecodeError:
+            pass
+    raise
+
+
 class GenericContentCreator(object):
 
-    def __init__(self, setup, fileencoding='iso-8859-1'):
+    def __init__(self, setup, fileencoding='utf-8'):
         self.setup = setup
         self.portal = self.setup.getSite()
         self.openDataFile = self.setup.openDataFile
@@ -92,7 +111,7 @@ class GenericContentCreator(object):
         for row in rows:
             for key, value in row.items():
                 if isinstance(value, str):
-                    row[key] = unicode(value.decode(self.fileencoding))
+                    row[key] = aggressive_decode(value, self.fileencoding)
         if len(rows)>0 and rows[0].has_key(''):
             for row in rows:
                 if row.has_key(''):
