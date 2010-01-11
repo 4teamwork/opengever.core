@@ -32,6 +32,7 @@ class DCQueue(grok.adapter):
 
         # token erstellen
         token = getUtility(IKeyManager).secret()
+        token = token.encode('hex')
 
         dcdict.__setitem__(token, dcAttr)
         self._setDCDoc(dcdict)
