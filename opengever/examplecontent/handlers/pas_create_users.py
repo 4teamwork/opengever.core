@@ -29,7 +29,7 @@ class SetupVarious(object):
             member = regtool.addMember(
                 user['userid'],
                 password,
-                ('Member',),
+                (),
                 None,
                 properties={
                     'username' : user['userid'],
@@ -81,6 +81,9 @@ class SetupVarious(object):
             else:
                 obj.manage_setLocalRoles(entry['user_or_group'], roles)
                 print 'Set local roles at', obj, ':', roles, 'for', entry['user_or_group']
+        # catalog
+        print '** update catalog'
+        self.portal.portal_catalog.manage_catalogReindex()
 
     def get_object_by_pathish_title(self, title, container=None, title_attribute='title'):
         if not container:
