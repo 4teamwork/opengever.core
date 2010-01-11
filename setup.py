@@ -28,6 +28,7 @@ setup(name='opengever.inbox',
       zip_safe=False,
       install_requires=[
         'setuptools',
+        'collective.testcaselayer',
         # -*- Extra requirements: -*-
         ],
       entry_points="""

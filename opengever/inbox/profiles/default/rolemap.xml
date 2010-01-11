@@ -3,6 +3,8 @@
   <permissions>
     <permission name="opengever.inbox: Add Inbox" acquire="True">
       <role name="Manager"/>
+      <role name="Owner"/>
+      <role name="Contributor"/>
     </permission>
   </permissions>
 </rolemap>
