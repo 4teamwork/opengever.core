@@ -2,7 +2,6 @@ import re
 
 from zope.interface import Interface
 from zope.component import getUtility
-from zope.app.container.interfaces import INameChooser
 from five import grok
 from Acquisition import aq_inner, aq_parent
 from Products.CMFCore.utils import getToolByName
@@ -10,6 +9,7 @@ from datetime import datetime
 from DateTime import DateTime
 
 from opengever.dossier import _
+from opengever.base.interfaces import ISequenceNumber
 
 from ftw.table import helper
 from ftw.table.interfaces import ITableGenerator
@@ -51,7 +51,7 @@ class TemplateDocumentFormView(grok.View):
                 newdoc = self.context.get(result[0].get('new_id'))
 
                 # change attributes: id, title, owner, creation_date ect.
-                name = INameChooser(self.context).chooseName(self.title, newdoc)
+                name = "document-%s" % getUtility(ISequenceNumber).get_number(newdoc)
                 member = self.context.portal_membership.getAuthenticatedMember()
                 self.context.manage_renameObject(newdoc.getId(), name)
                 newdoc.setTitle(self.title)
