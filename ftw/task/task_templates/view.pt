@@ -56,9 +56,6 @@
           </tal:rep>
         </table>
 
-        <div class>
-          <a class="standalone" href="addresponse" i18n:translate="add_response">add Response</a>
-        </div>
         <div class="visualClear"><!----></div>
         <div><h2 i18n:translate="subtasks">Subtasks:</h2></div>
         <tal:items define="items view/getSubTasks">
