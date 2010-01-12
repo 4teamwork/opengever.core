@@ -5,7 +5,7 @@ from zope.schema import vocabulary
 from AccessControl import SecurityManagement
 from five import grok
 from DateTime import DateTime
-from z3c.form import form, field, button
+from z3c.form import form, field, button, interfaces
 
 from persistent.dict import PersistentDict
 from plone.z3cform import layout
@@ -30,9 +30,17 @@ DOCUCOMPOSER_TEMPLATES_VOCABULARY = vocabulary.SimpleVocabulary([
 
 class DocuComposerWizardForm(DexterityExtensibleForm, form.AddForm):
     portal_type='opengever.document.document'
-    #fields = field.Fields(IDocumentSchema)
     ignoreContext = True
     label = _(u'heading_docucomposer_wizard_form', default=u'DocuComposer')
+    
+    def updateWidgets(self, *args, **kwargs):
+        import pdb; pdb.set_trace( )
+        super(DocuComposerWizardForm, self).updateWidgets(*args, **kwargs)
+        filefields = filter(lambda a:not not a, [g.fields.get('file', None) for g in self.groups])
+        if len(filefields)>0:
+            filefields[0].mode = interfaces.HIDDEN_MODE
+        # fil = self.schema['file']
+        # fil.readonly = True
 
     @button.buttonAndHandler(_(u'button_create', default='Create'))
     def create_button_handler(self, action):
@@ -40,7 +48,6 @@ class DocuComposerWizardForm(DexterityExtensibleForm, form.AddForm):
         if len(errors)==0:
             data.__setitem__('owner', self.context.portal_membership.getAuthenticatedMember())
             data.__setitem__('context', self.context)
-            import pdb; pdb.set_trace( )
             data.__setitem__('creation_date', DateTime())
             queue = DCQueue(self.context)
             persData = PersistentDict(data)
@@ -63,7 +70,7 @@ class DocuComposerWizardView(layout.FormWrapper, grok.CodeView):
     grok.require('zope2.View')
     grok.name('docucomposer-wizard')
     form = DocuComposerWizardForm
-
+    
     def __init__(self, context, request):
         layout.FormWrapper.__init__(self, context, request)
         grok.CodeView.__init__(self, context, request)
