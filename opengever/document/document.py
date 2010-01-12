@@ -31,8 +31,9 @@ from plone.supermodel.interfaces import FIELDSETS_KEY
 from plone.supermodel.model import Fieldset
 from plone.versioningbehavior.behaviors import IVersionable
 from plone.z3cform.textlines.textlines import TextLinesFieldWidget
+from plone.i18n.normalizer.interfaces import IIDNormalizer
 
-from zope.lifecycleevent.interfaces import IObjectCreatedEvent
+from zope.lifecycleevent.interfaces import IObjectCreatedEvent, IObjectModifiedEvent
 
 from ftw.table.interfaces import ITableGenerator
 from ftw.table import helper
@@ -397,9 +398,17 @@ def setID(document, event):
 
 @grok.subscribe(IDocumentSchema, IObjectCreatedEvent)
 def setImageName(document, event):
-    doc_file = document.file
-    filename = doc_file.filename
-    doc_file.filename = document.title + filename[filename.rfind('.'):]
+    if document.file:
+        filename = document.file.filename
+        normalize = getUtility(IIDNormalizer).normalize
+        document.file.filename = normalize(document.title) + filename[filename.rfind('.'):]
+
+
+@grok.subscribe(IDocumentSchema, IObjectModifiedEvent)
+def checkImageName(document, event):
+    if document.file:
+        if document.file.filename[:document.file.filename.rfind('.')] != document.title:
+            setImageName(document, event)
 
 
 class View(dexterity.DisplayForm):
