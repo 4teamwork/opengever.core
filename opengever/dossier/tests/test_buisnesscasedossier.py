@@ -10,7 +10,7 @@ from opengever.dossier.tests.layer import Layer
 
 from opengever.dossier.businesscase import IBusinessCaseDossier
 
-class TestBuisnessCaseDossierIntegration(PloneTestCase):
+class TestBusinessCaseDossierIntegration(PloneTestCase):
     
     layer = Layer
     
