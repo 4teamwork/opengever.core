@@ -21,6 +21,7 @@
         description="generates an email adress for a dossier"
         provides=".behaviors.IMailInAddress"
         factory=".behaviors.MailInAddress"
+		marker=".behaviors.IMailInAddressMarker"
         />
 
 
