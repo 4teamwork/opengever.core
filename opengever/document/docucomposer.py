@@ -43,7 +43,7 @@ class DocuComposerWizardForm(DexterityExtensibleForm, form.AddForm):
     def create_button_handler(self, action):
         data, errors = self.extractData()
         if len(errors)==0:
-            data.__setitem__('owner', self.context.portal_membership.getAuthenticatedMember())
+            data.__setitem__('owner', self.context.portal_membership.getAuthenticatedMember().getId())
             data.__setitem__('context', self.context)
             data.__setitem__('creation_date', DateTime())
             queue = DCQueue(self.context)
@@ -90,7 +90,12 @@ class CreateDocumentWithFile(grok.CodeView):
 
         if data:
             data = data.data
-            user = data['owner']
+            userid = data['owner']
+            
+            uf = self.context.acl_users
+            user = uf.getUserById(userid)
+            if not hasattr(user, 'aq_base'):
+                user = user.__of__(uf)
             SecurityManagement.newSecurityManager(self.request, user)
 
             dossier = data['context']
