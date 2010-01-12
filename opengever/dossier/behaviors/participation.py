@@ -246,16 +246,14 @@ class ParticipationAddForm(z3c.form.form.Form):
         return self.request.RESPONSE.redirect(url)
 
 
-class ParticipationAddFormView(grok.CodeView, layout.FormWrapper):
+class ParticipationAddFormView(layout.FormWrapper, grok.CodeView):
     grok.context(IParticipationAwareMarker)
     grok.name('add-participation')
     form = ParticipationAddForm
 
     def __init__(self, *args, **kwargs):
-        grok.CodeView.__init__(self, *args, **kwargs)
         layout.FormWrapper.__init__(self, *args, **kwargs)
-
-    render = layout.FormWrapper.__call__
+        grok.CodeView.__init__(self, *args, **kwargs)
 
 
 # ------- delete view -------
