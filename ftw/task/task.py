@@ -1,5 +1,6 @@
 from five import grok
 from zope import schema
+from zope.app.intid.interfaces import IIntIds
 from zope.component import getUtility
 from zope.interface import implements, Interface
 from zope.traversing.interfaces import ITraversable
@@ -9,6 +10,9 @@ from zope.app.container.interfaces import IObjectAddedEvent
 from zope.lifecycleevent.interfaces import IObjectCreatedEvent
 from zope.annotation.interfaces import IAnnotations
 from zope.component import queryUtility
+from zc.relation.interfaces import ICatalog
+
+from five import grok
 
 from Acquisition import aq_parent, aq_inner
 from AccessControl import getSecurityManager
@@ -23,6 +27,7 @@ from plone.app.layout.viewlets import content
 from plone.app.layout.viewlets.interfaces import IBelowContentTitle
 from plone.formwidget import autocomplete
 from plone.formwidget.autocomplete import AutocompleteFieldWidget
+from plone.indexer import indexer
 from plone.z3cform.traversal import WidgetTraversal
 from plone.app.dexterity.behaviors.related import IRelatedItems
 from plone.dexterity.interfaces import IDexterityFTI
@@ -349,3 +354,18 @@ class Byline(grok.Viewlet, content.DocumentBylineViewlet):
         seqNumb = getUtility(ISequenceNumber)
         return seqNumb.get_number(self.context)
 
+
+
+
+@indexer(ITask)
+def related_items( obj ):
+    catalog = getUtility( ICatalog )
+    intids = getUtility( IIntIds )
+    obj_id = intids.getId( obj )
+    results = []
+    relations = catalog.findRelations({'from_attribute': 'relatedItems'})
+    for rel in relations:
+        results.append(rel.to_id)
+    return results
+    
+grok.global_adapter(related_items, name='related_items')
