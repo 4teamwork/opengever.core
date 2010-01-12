@@ -1,4 +1,3 @@
-import md5
 from zope.annotation.interfaces import IAnnotations
 from zope.interface import Interface
 from zope.component import getUtility
@@ -6,7 +5,7 @@ from zope.component import getUtility
 from five import grok
 from persistent.dict import PersistentDict
 from Products.CMFPlone.interfaces import IPloneSiteRoot
-from datetime import datetime, timedelta
+from DateTime import DateTime
 from plone.keyring.interfaces import IKeyManager
 
 from Acquisition import aq_inner
@@ -56,6 +55,6 @@ class DCQueue(grok.adapter):
         data = dc_dict.data
         for item in data:
             dict = data[item]
-            if dict['creation_date'] < (datetime.now() - timedelta(1)):
+            if dict['creation_date'] < (DateTime() -1):
                 self.removeDCDoc(item)
         pass
