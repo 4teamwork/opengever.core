@@ -37,6 +37,11 @@ setup(name='ftw.task',
           'collective.testcaselayer',
           # -*- Extra requirements: -*-
       ],
+      extras_require = dict(
+        test = [
+            'lxml >= 2.1.1',
+        ],
+      ),
       entry_points="""
       [z3c.autoinclude.plugin]
       target = plone

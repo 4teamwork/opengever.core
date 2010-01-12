@@ -54,6 +54,7 @@ class TestTaskIntegration(PloneTestCase):
         container = IResponseContainer(t1)
         container.add(res)
         self.failUnless(res in container)
+
     def test_task_type_category(self):
         self.folder.invokeFactory('ftw.task.task', 'task1')
         t1 = self.folder['task1']
