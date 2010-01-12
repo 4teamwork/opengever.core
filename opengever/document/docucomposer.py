@@ -40,7 +40,8 @@ class DocuComposerWizardForm(DexterityExtensibleForm, form.AddForm):
         if len(errors)==0:
             data.__setitem__('owner', self.context.portal_membership.getAuthenticatedMember())
             data.__setitem__('context', self.context)
-            data.__setitem__('creation_date', DateTime.now())
+            import pdb; pdb.set_trace( )
+            data.__setitem__('creation_date', DateTime())
             queue = DCQueue(self.context)
             persData = PersistentDict(data)
             token = queue.appendDCDoc(persData)
