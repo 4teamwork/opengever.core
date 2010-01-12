@@ -540,4 +540,4 @@ class ContactOrgunitView(dexterity.DisplayForm, OpengeverTab):
         memberships = Membership.get_memberships(contact=self.context)
         for rel in memberships:
             og.append(intids.getObject(rel.to_id))
-            return og
+        return og
