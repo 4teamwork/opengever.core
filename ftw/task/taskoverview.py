@@ -48,4 +48,4 @@ class IssuedTasks(OpengeverSolrListingTab):
     
     def build_query(self):
         aid = authenticated_member(self.context)
-        return 'portal_type:ftw.task.task AND Creator:%s AND ! responsible:%s' % (aid, aid)
+        return 'portal_type:ftw.task.task AND issuer:%s AND ! responsible:%s' % (aid, aid)
