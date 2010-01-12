@@ -378,6 +378,13 @@ grok.global_adapter( checked_out, name='checked_out' )
 def setID(document, event):
     document.id = "document-%s" % getUtility(ISequenceNumber).get_number(document)
 
+@grok.subscribe(IDocumentSchema, IObjectCreatedEvent)
+def setImageName(document, event):
+    doc_file = document.file
+    filename = doc_file.filename
+    doc_file.filename = document.title + filename[filename.rfind('.'):]
+
+
 class View(dexterity.DisplayForm):
     grok.context(IDocumentSchema)
     grok.require("zope2.View")
