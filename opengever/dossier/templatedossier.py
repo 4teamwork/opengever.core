@@ -3,7 +3,7 @@ import re
 from zope.annotation.interfaces import IAnnotations
 from zope.interface import Interface
 from zope.component import getUtility
-from zope.app.container.contained import ObjectAddedEvent
+from zope.app.container.contained import ObjectAddedEvent, ObjectModifiedEvent
 from zope.event import notify
 
 from five import grok
@@ -70,6 +70,8 @@ class TemplateDocumentFormView(grok.View):
                 newdoc.document_author = member.title_or_id()
                 newdoc.manage_delLocalRoles([u for u, r in newdoc.get_local_roles()])
                 newdoc.manage_setLocalRoles(member.getId(), ('Owner', ))
+                event = ObjectModifiedEvent(newdoc)
+                notify(event)
                 if self.edit:
 
                     manager = ICheckinCheckoutManager(newdoc)
