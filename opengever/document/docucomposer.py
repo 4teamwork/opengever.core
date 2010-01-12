@@ -4,7 +4,7 @@ from zope.schema import vocabulary
 
 from AccessControl import SecurityManagement
 from five import grok
-from datetime import datetime
+from DateTime import DateTime
 from z3c.form import form, field, button
 
 from persistent.dict import PersistentDict
@@ -40,7 +40,7 @@ class DocuComposerWizardForm(DexterityExtensibleForm, form.AddForm):
         if len(errors)==0:
             data.__setitem__('owner', self.context.portal_membership.getAuthenticatedMember())
             data.__setitem__('context', self.context)
-            data.__setitem__('creation_date', datetime.now())
+            data.__setitem__('creation_date', DateTime.now())
             queue = DCQueue(self.context)
             persData = PersistentDict(data)
             token = queue.appendDCDoc(persData)
