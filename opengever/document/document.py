@@ -10,6 +10,8 @@ from zope import schema
 from zope.schema.vocabulary import SimpleVocabulary
 from zope.schema.interfaces import IContextSourceBinder
 from zope.component import queryUtility, getUtility, getAdapter
+from zc.relation.interfaces import ICatalog
+from zope.app.intid.interfaces import IIntIds
 from datetime import datetime
 
 from Products.CMFCore.utils import getToolByName
@@ -49,7 +51,7 @@ from zope.annotation.interfaces import IAnnotations, IAnnotatable
 
 from plone.directives.dexterity import DisplayForm
 
-from opengever.tabbedview.browser.tabs import OpengeverTab, OpengeverListingTab
+from opengever.tabbedview.browser.tabs import OpengeverTab, OpengeverListingTab, OpengeverSolrListingTab
 from opengever.base.interfaces import IReferenceNumber, ISequenceNumber
 
 LOG = logging.getLogger('opengever.document')
@@ -272,6 +274,21 @@ class Document(Item):
         return self.getIcon()
 
 
+@indexer(IDocumentSchema)
+def related_items( obj ):
+    catalog = getUtility( ICatalog )
+    intids = getUtility( IIntIds )
+    obj_id = intids.getId( obj )
+    results = []
+    relations = catalog.findRelations({'to_id' : obj_id, 'from_attribute': 'relatedItems'})
+    for rel in relations:
+        results.append(rel.from_id)
+    return results
+    
+    
+grok.global_adapter(related_items, name='related_items')
+
+
 # INDEX: SearchableText
 @indexer(IDocumentSchema)
 def SearchableText( obj ):
@@ -448,19 +465,24 @@ class Preview(DisplayForm, OpengeverTab):
     grok.name('tabbedview_view-preview')
     grok.template('preview')
 
-class Tasks(OpengeverListingTab):
+class Tasks(OpengeverSolrListingTab):
     grok.context(IDocumentSchema)
     grok.name('tabbedview_view-tasks')
     grok.template('generic')
     columns= (
         ('', helper.draggable),
         ('', helper.path_checkbox),
-        ('Title', helper.linked),
+        ('Title', helper.solr_linked),
         ('deadline', helper.readable_date),
-        ('responsible', helper.readable_author),
+        'responsible',
         ('review_state', 'review_state', helper.translated_string()),
         )
-    types = ['ftw.task.task', ]
+        
+    def build_query(self):
+        intids = getUtility( IIntIds )
+        obj_id = intids.getId( self.context )
+        return 'portal_type:ftw.task.task AND related_items:%s' % obj_id 
+        
 
 class Journal(grok.View, OpengeverTab):
     grok.context(IDocumentSchema)

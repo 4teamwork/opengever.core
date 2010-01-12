@@ -1,4 +1,3 @@
-<!--
 <form name="tabbedview_form"
       method="post"
       action="folder_object"
@@ -10,7 +9,7 @@
     <div class="tabbedview_select">
         Auswählen: <a href="javascript:arbeitsraum.select_all()">Alle</a>, <a href="javascript:arbeitsraum.select_none()">Keine</a> 
         <span class="select_folder" style="display:none"> Alle Sichtbaren ausgewählt. <a href="#">Alle im Ordner auswählen</a></span>
-        <div tal:replace="structure view/batching" />
+        <!--<div tal:replace="structure view/batching" />-->
     </div>
 
     <div tal:content="structure view/render_listing" />
@@ -27,5 +26,3 @@
 <p tal:condition="not: view/contents">
    Keine Inhalte vorhanden
 </p>
--->
-(noch in Bearbeitung)
