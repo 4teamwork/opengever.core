@@ -3,7 +3,7 @@ from plone.registry.interfaces import IRegistry
 from zope.component import getUtility
 from zope.component import queryUtility
 from zope.app.intid.interfaces import IIntIds
-from opengever.mail.behaviors import IMailSettings
+from opengever.mail.interfaces import IMailSettings
 
 class IMailInAddress(Interface):
     def get_email_address(self):
@@ -13,7 +13,7 @@ class IMailInAddress(Interface):
 class IMailInAddressMarker(Interface):
     pass
 
-class IMailInAddress(Interface):
+class MailInAddress(Interface):
     def get_email_address(self):
         id_util = getUtility(IIntIds)
         intid = id_util.queryId(self.context)
