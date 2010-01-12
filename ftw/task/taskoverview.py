@@ -32,7 +32,7 @@ class MyTasks(OpengeverSolrListingTab):
             )
     types = ['ftw.task.task', ]
     
-    search_options = {'responsible': authenticated_member}
+    search_options = {'responsible': authenticated_member, 'review_state':'task-state-open'}
 
 
 class IssuedTasks(OpengeverSolrListingTab):
