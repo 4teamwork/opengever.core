@@ -34,13 +34,10 @@ class DocuComposerWizardForm(DexterityExtensibleForm, form.AddForm):
     label = _(u'heading_docucomposer_wizard_form', default=u'DocuComposer')
     
     def updateWidgets(self, *args, **kwargs):
-        import pdb; pdb.set_trace( )
         super(DocuComposerWizardForm, self).updateWidgets(*args, **kwargs)
         filefields = filter(lambda a:not not a, [g.fields.get('file', None) for g in self.groups])
         if len(filefields)>0:
             filefields[0].mode = interfaces.HIDDEN_MODE
-        # fil = self.schema['file']
-        # fil.readonly = True
 
     @button.buttonAndHandler(_(u'button_create', default='Create'))
     def create_button_handler(self, action):
