@@ -47,8 +47,7 @@ class DocuComposerWizardForm(DexterityExtensibleForm, form.AddForm):
             data.__setitem__('context', self.context)
             data.__setitem__('creation_date', DateTime())
             queue = DCQueue(self.context)
-            persData = PersistentDict(data)
-            token = queue.appendDCDoc(persData)
+            token = queue.appendDCDoc(data)
 
             url = 'docucomposer:url=%s&token=%s' % (
                 self.context.portal_url(),

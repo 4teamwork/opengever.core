@@ -25,15 +25,15 @@ class DCQueue(grok.adapter):
         self.key = "opengever.docucomposer.document"
 
     def appendDCDoc(self, dcAttr):
-        if not isinstance(dcAttr, PersistentDict):
-            raise TypeError()
         dcdict = self.getDCDocs()
-
+        
+        persdata = PersistentDict(dcAttr)
+        
         # token erstellen
         token = getUtility(IKeyManager).secret()
         token = token.encode('hex')
 
-        dcdict.__setitem__(token, dcAttr)
+        dcdict.__setitem__(token, persdata)
         self._setDCDoc(dcdict)
         return token
 
