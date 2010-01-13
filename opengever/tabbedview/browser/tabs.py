@@ -135,9 +135,9 @@ class Tasks(OpengeverListingTab):
     columns= (
         ('', helper.draggable),
         ('', helper.path_checkbox),
+        ('review_state', 'review_state', helper.translated_string()),
         ('Title', helper.linked),
         ('deadline', helper.readable_date),
-        ('review_state', 'review_state', helper.translated_string()),
         ('date_of_completion', helper.readable_date), # erledigt am
         ('responsible', helper.readable_author),
         ('issuer', helper.readable_author), # zugewiesen von
