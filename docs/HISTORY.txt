@@ -5,6 +5,10 @@ Changelog
 1.0a2
 -----
 
+* Issue #282: Kontakte-Webservice für OGDS
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/282
+  [13.01.2010, jbaumann]
+  
 * Fixed participants add form, which didn't work with dexterity 1.0a3
   [12.01.2010, jbaumann]
   

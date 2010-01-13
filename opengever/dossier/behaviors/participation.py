@@ -112,7 +112,7 @@ class IParticipation(form.Schema):
     contact = schema.Choice(
         title = _(u'label_contact', default=u'Contact'),
         description = _(u'help_contact', default=u''),
-        vocabulary = u'opengever.dossier.participation.contacts',
+        vocabulary = u'opengever.octopus.tentacle.contacts.ContactsVocabularyFactory',
         required = True,
         )
 
