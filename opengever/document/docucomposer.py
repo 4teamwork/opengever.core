@@ -43,9 +43,9 @@ class DocuComposerWizardForm(DexterityExtensibleForm, form.AddForm):
     def create_button_handler(self, action):
         data, errors = self.extractData()
         if len(errors)==0:
-            data.__setitem__('owner', self.context.portal_membership.getAuthenticatedMember().getId())
-            data.__setitem__('context', self.context)
-            data.__setitem__('creation_date', DateTime())
+            data['owner'] = self.context.portal_membership.getAuthenticatedMember().getId()
+            data['context'] = self.context
+            data['creation_date'] = DateTime()
             queue = DCQueue(self.context)
             token = queue.appendDCDoc(data)
 
@@ -55,6 +55,8 @@ class DocuComposerWizardForm(DexterityExtensibleForm, form.AddForm):
             )
             print token
             print url
+
+            import pdb; pdb.set_trace( )
 
             queue.clearUp()
 
@@ -101,9 +103,15 @@ class CreateDocumentWithFile(grok.CodeView):
 
             new_doc = createContentInContainer(dossier, 'opengever.document.document', title= data['title'])
             new_doc.REQUEST = self.context.REQUEST
+            
+            #remove unused attributes in the data dict
+            data.pop('owner')
+            data.pop('creation_date')
+            data.pop('context')
+            
 
             for key in data.keys():
-                new_doc.__setattr__(key, data[key])
+                setattr(new_doc, key, data[key])
 
             fields = dict(schema.getFieldsInOrder(IDocumentSchema))
             fileObj = fields['file']._type(data=uploadFile, filename=filename)
