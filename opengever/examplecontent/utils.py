@@ -4,6 +4,7 @@ from z3c.form.interfaces import IValue, IFieldWidget
 from zope.component import getUtility, queryUtility, queryMultiAdapter
 from zope.component import createObject
 from zope.schema import getFieldsInOrder
+from zope.schema.interfaces import IList
 
 from plone.dexterity.interfaces import IDexterityFTI
 from plone.dexterity import utils
@@ -161,6 +162,9 @@ class GenericContentCreator(object):
                     v = True
                 elif v.lower()=='false':
                     v = False
+                if IList.providedBy(field):
+                    v = filter(lambda p:not not p,
+                               [p.strip() for p in v.split(',')])
                 if INamedFileField.providedBy(field) and v:
                     source = self.openDataFile(v.strip())
                     if source:

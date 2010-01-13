@@ -5,6 +5,12 @@ Changelog
 1.0a1
 -----
 
+* Issue #386: @@home-View erstellen
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/386/
+  Content creator: support for List-fields
+  minor-ogds-clients GS-profile: added default values for new fields
+  [13.01.2010, jbaumann]
+  
 * Issue #353: Example-Content setup profiles aufsplitten
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/353
   Changed users csv: added "groups" column. Reimplemented pas importer.

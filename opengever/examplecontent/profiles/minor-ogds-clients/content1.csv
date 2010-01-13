@@ -1,6 +1,6 @@
 ftw.directoryservice.client
-title;enabled;cid;ip_address;site_url
-GDS;0;;;
-Mandant 1;true;m1;127.0.0.1;http://localhost:8080/mandant1
-Mandant 2;true;m2;127.0.0.1;http://localhost:8080/mandant2
-Mandant 3;true;m3;127.0.0.1;http://localhost:8080/mandant3
+title;enabled;cid;ip_address;site_url;public_url;groups
+GDS;0;;;;;
+Mandant 1;true;m1;127.0.0.1;http://localhost:8080/mandant1;http://localhost:8080/mandant1;og_mandant1_users
+Mandant 2;true;m2;127.0.0.1;http://localhost:8080/mandant2;http://localhost:8080/mandant2;og_mandant2_users
+Mandant 3;true;m3;127.0.0.1;http://localhost:8080/mandant3;http://localhost:8080/mandant3;og_mandant3_users
