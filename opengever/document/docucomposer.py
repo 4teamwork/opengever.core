@@ -56,8 +56,6 @@ class DocuComposerWizardForm(DexterityExtensibleForm, form.AddForm):
             print token
             print url
 
-            import pdb; pdb.set_trace( )
-
             queue.clearUp()
 
             return self.request.RESPONSE.redirect(url)
@@ -102,7 +100,6 @@ class CreateDocumentWithFile(grok.CodeView):
             dossier = data['context']
 
             new_doc = createContentInContainer(dossier, 'opengever.document.document', title= data['title'])
-            new_doc.REQUEST = self.context.REQUEST
             
             #remove unused attributes in the data dict
             data.pop('owner')
@@ -110,13 +107,15 @@ class CreateDocumentWithFile(grok.CodeView):
             data.pop('context')
             
 
-            for key in data.keys():
-                setattr(new_doc, key, data[key])
-
+            # for key in data.keys():
+            #                 setattr(new_doc, key, data[key])
+            
             fields = dict(schema.getFieldsInOrder(IDocumentSchema))
             fileObj = fields['file']._type(data=uploadFile, filename=filename)
             new_doc.file = fileObj
 
-            url = new_doc.absolute_url()
+            # Fix:  we get again the document, because the request of the return from createContentInContainer are wrong
+            doc = self.context.restrictedTraverse('/'.join(new_doc.getPhysicalPath()))
+            url = doc.absolute_url()
 
             return url
