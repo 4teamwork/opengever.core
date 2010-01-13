@@ -120,4 +120,11 @@
       provides="Products.GenericSetup.interfaces.EXTENSION"
       />
 
+    <genericsetup:registerProfile
+        name="minor-ogds-ldap"
+        title="opengever.examplecontent.minor-ogds-ldap"
+        directory="profiles/minor-ogds-ldap"
+        provides="Products.GenericSetup.interfaces.EXTENSION"
+        />
+
 </configure>

@@ -3,6 +3,7 @@ from opengever.examplecontent.handlers import developer
 from opengever.examplecontent.handlers import ogds
 from opengever.examplecontent.handlers import tree_portlet
 from opengever.examplecontent.handlers import pas_create_users
+from opengever.examplecontent.handlers import importer
 
 from opengever.examplecontent.utils import GenericContentCreator
 
@@ -14,6 +15,7 @@ HANDLERS = {
 
 DYNAMIC_HANDLERS = {
     'pas_create_users' : pas_create_users.SetupVarious(),
+    'importer' : importer.LDAP_Importer(),
     }
 
 def setupVarious(setup):
