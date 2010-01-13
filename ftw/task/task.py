@@ -75,7 +75,7 @@ class ITask(form.Schema):
     issuer = schema.Choice(
         title =_(u"label_issuer", default=u"Issuer"),
         description = _('help_issuer', default=u""),
-        source = util.getManagersVocab,
+        vocabulary = 'opengever.octopus.tentacle.contacts.ContactsVocabularyFactory',
         required = True,
         )
 
@@ -94,7 +94,7 @@ class ITask(form.Schema):
     responsible = schema.Choice(
         title=_(u"label_responsible", default="Responsible"),
         description =_(u"help_responsible", default=""),
-        source = util.getManagersVocab,
+        vocabulary = 'opengever.octopus.tentacle.contacts.UsersVocabularyFactory',
         required = True,
         )
 
