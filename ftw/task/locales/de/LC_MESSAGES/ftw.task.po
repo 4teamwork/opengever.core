@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2010-01-08 06:42+0000\n"
+"POT-Creation-Date: 2010-01-13 16:46+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -24,7 +24,7 @@ msgstr ""
 msgid "Add local roles to all related items for the 'responsible' user."
 msgstr ""
 
-#: ftw.task/ftw/task/response.py:490
+#: ftw.task/ftw/task/response.py:487
 msgid "Changes saved to response id ${response_id}."
 msgstr "Änderungen an der Antwort ${response_id} wurden gespeichert"
 
@@ -48,11 +48,11 @@ msgstr ""
 msgid "Issue state"
 msgstr "Status"
 
-#: ftw.task/ftw/task/response.py:518
+#: ftw.task/ftw/task/response.py:515
 msgid "No response selected for removal."
 msgstr "Es wurde keine Antwort fürs Löschen selektiert"
 
-#: ftw.task/ftw/task/response.py:481
+#: ftw.task/ftw/task/response.py:478
 msgid "No response selected for saving."
 msgstr "Es wurde keine Antwort fürs Speichern selektiert"
 
@@ -72,11 +72,11 @@ msgstr ""
 msgid "Related Items Roles"
 msgstr ""
 
-#: ftw.task/ftw/task/response.py:540
+#: ftw.task/ftw/task/response.py:537
 msgid "Removed response id ${response_id}."
 msgstr "Antwort ${response_id} gelöscht"
 
-#: ftw.task/ftw/task/response.py:533
+#: ftw.task/ftw/task/response.py:530
 msgid "Response id ${response_id} does not exist so it cannot be removed."
 msgstr "Antowrt ${response_id} existiert nicht und konnte deshalb nicht gelöscht werden"
 
@@ -84,11 +84,11 @@ msgstr "Antowrt ${response_id} existiert nicht und konnte deshalb nicht gelösch
 msgid "Response id ${response_id} does not exist."
 msgstr "Antwort ${response_id} exisitert nicht"
 
-#: ftw.task/ftw/task/response.py:560
+#: ftw.task/ftw/task/response.py:557
 msgid "Response id ${response_id} has no attachment."
 msgstr "Antwort ${response_id} hat kein attachment"
 
-#: ftw.task/ftw/task/response.py:525
+#: ftw.task/ftw/task/response.py:522
 msgid "Response id ${response_id} is no integer so it cannot be removed."
 msgstr "Antwort id ${response_id} ist keine Zahl und konnte deshalb nicht gelöscht werden"
 
@@ -101,6 +101,7 @@ msgid "Task"
 msgstr "Aufgabe"
 
 #: ftw.task/ftw/task/profiles/default/types/ftw.task.taskoverview.xml
+#: ftw.task/ftw/task/profiles/default/types/ftw.task.taskoverview_solr.xml
 msgid "Taskoverview"
 msgstr "Auftragsübersicht"
 
@@ -108,11 +109,11 @@ msgstr "Auftragsübersicht"
 msgid "The local roles to add."
 msgstr ""
 
-#: ftw.task/ftw/task/response.py:512
+#: ftw.task/ftw/task/response.py:509
 msgid "You are not allowed to delete responses."
 msgstr "Sie haben keine Berechtigung Antworten zu löschen"
 
-#: ftw.task/ftw/task/response.py:475
+#: ftw.task/ftw/task/response.py:472
 msgid "You are not allowed to edit responses."
 msgstr "Sie haben keine Berechtigung Antworten zu editieren"
 
@@ -120,11 +121,6 @@ msgstr "Sie haben keine Berechtigung Antworten zu editieren"
 #: ftw.task/ftw/task/response.py:312
 msgid "add"
 msgstr "Hinzufügen"
-
-#. Default: "add Response"
-#: ftw.task/ftw/task/task_templates/view.pt:60
-msgid "add_response"
-msgstr "Antwort hinzufügen"
 
 #. Default: "Cancel"
 #: ftw.task/ftw/task/response.py:389
@@ -141,12 +137,12 @@ msgid "deadline"
 msgstr "Frist"
 
 #. Default: "Additional"
-#: ftw.task/ftw/task/task.py:59
+#: ftw.task/ftw/task/task.py:63
 msgid "fieldset_additional"
 msgstr "Erweitert"
 
 #. Default: "Common"
-#: ftw.task/ftw/task/task.py:46
+#: ftw.task/ftw/task/task.py:51
 msgid "fieldset_common"
 msgstr "Allgemein"
 
@@ -155,12 +151,12 @@ msgid "help_attachment"
 msgstr ""
 
 #: ftw.task/ftw/task/response.py:82
-#: ftw.task/ftw/task/task.py:106
+#: ftw.task/ftw/task/task.py:115
 msgid "help_date_of_completion"
 msgstr ""
 
 #. Default: "Deadline"
-#: ftw.task/ftw/task/task.py:99
+#: ftw.task/ftw/task/task.py:108
 msgid "help_deadline"
 msgstr "Tragen sie ein Datum ein, bis wann die Aufgabe erledigt werden muss"
 
@@ -168,28 +164,32 @@ msgstr "Tragen sie ein Datum ein, bis wann die Aufgabe erledigt werden muss"
 msgid "help_deadline_response"
 msgstr "Tragen sie ein neues Datum ein, bis wann die Aufgabe erledigt werden muss"
 
-#: ftw.task/ftw/task/task.py:145
+#: ftw.task/ftw/task/task.py:154
 msgid "help_effectiveCost"
 msgstr ""
 
-#: ftw.task/ftw/task/task.py:139
+#: ftw.task/ftw/task/task.py:148
 msgid "help_effectiveDuration"
 msgstr ""
 
-#: ftw.task/ftw/task/task.py:133
+#: ftw.task/ftw/task/task.py:142
 msgid "help_expectedCost"
 msgstr ""
 
-#: ftw.task/ftw/task/task.py:127
+#: ftw.task/ftw/task/task.py:136
 msgid "help_expectedDuration"
 msgstr ""
 
-#: ftw.task/ftw/task/task.py:121
+#: ftw.task/ftw/task/task.py:130
 msgid "help_expectedStartOfWork"
 msgstr ""
 
-#: ftw.task/ftw/task/task.py:72
+#: ftw.task/ftw/task/task.py:77
 msgid "help_issuer"
+msgstr ""
+
+#: ftw.task/ftw/task/response.py:69
+msgid "help_new_responsible_response"
 msgstr ""
 
 #: ftw.task/ftw/task/response.py:63
@@ -197,19 +197,15 @@ msgid "help_response"
 msgstr ""
 
 #. Default: "select an responsible Manger"
-#: ftw.task/ftw/task/task.py:91
+#: ftw.task/ftw/task/task.py:98
 msgid "help_responsible"
 msgstr "Wählen Sie die verantwortliche Person aus"
 
-#: ftw.task/ftw/task/response.py:69
-msgid "help_responsible_response"
-msgstr "Wählen Sie die neu verantwortliche Person aus"
-
-#: ftw.task/ftw/task/task.py:80
+#: ftw.task/ftw/task/task.py:87
 msgid "help_task_type"
 msgstr ""
 
-#: ftw.task/ftw/task/task.py:113
+#: ftw.task/ftw/task/task.py:122
 msgid "help_text"
 msgstr "Geben Sie eine detaillierte Arbeitsanweisung oder einen Kommentar ein"
 
@@ -218,6 +214,12 @@ msgstr "Geben Sie eine detaillierte Arbeitsanweisung oder einen Kommentar ein"
 msgid "help_transition"
 msgstr ""
 
+msgid "issuedtasks"
+msgstr "Erteilte Aufgaben"
+
+msgid "issuedtasks_solr"
+msgstr "Erteilte Aufgaben"
+
 #. Default: "Attachment"
 #: ftw.task/ftw/task/response.py:94
 msgid "label_attachment"
@@ -225,17 +227,18 @@ msgstr "Anhang"
 
 #. Default: "Date of completion"
 #: ftw.task/ftw/task/response.py:81
-#: ftw.task/ftw/task/task.py:105
+#: ftw.task/ftw/task/task.py:114
 msgid "label_date_of_completion"
 msgstr "Erledigungsdatum"
 
 #. Default: "Deadline"
-#: ftw.task/ftw/task/task.py:98
+#: ftw.task/ftw/task/task.py:107
 msgid "label_deadline"
 msgstr "Zu erledigen bis"
 
-#. Default: "Deadline"
+#. Default: "New deadline"
 #: ftw.task/ftw/task/response.py:75
+#, fuzzy
 msgid "label_deadline_Response"
 msgstr "Neue Frist"
 
@@ -245,12 +248,12 @@ msgid "label_edit_response_not_allowed"
 msgstr "Sie sind nicht berechtigt diese Antwort zu löschen"
 
 #. Default: "effective cost"
-#: ftw.task/ftw/task/task.py:144
+#: ftw.task/ftw/task/task.py:153
 msgid "label_effectiveCost"
 msgstr "Effektive Kosten"
 
 #. Default: "effective duration"
-#: ftw.task/ftw/task/task.py:138
+#: ftw.task/ftw/task/task.py:147
 msgid "label_effectiveDuration"
 msgstr "Effektive Dauer"
 
@@ -260,22 +263,22 @@ msgid "label_enter_response"
 msgstr "Bitte tragen sie ihre Antwort unten ein"
 
 #. Default: "expected cost"
-#: ftw.task/ftw/task/task.py:132
+#: ftw.task/ftw/task/task.py:141
 msgid "label_expectedCost"
 msgstr "Geschätzte Kosten"
 
 #. Default: "Expected duration"
-#: ftw.task/ftw/task/task.py:126
+#: ftw.task/ftw/task/task.py:135
 msgid "label_expectedDuration"
 msgstr "Geschätzte Dauer"
 
 #. Default: "Start with work"
-#: ftw.task/ftw/task/task.py:120
+#: ftw.task/ftw/task/task.py:129
 msgid "label_expectedStartOfWork"
 msgstr "Beginn der Arbeit"
 
 #. Default: "Issuer"
-#: ftw.task/ftw/task/task.py:71
+#: ftw.task/ftw/task/task.py:76
 msgid "label_issuer"
 msgstr "Auftraggeber"
 
@@ -295,12 +298,13 @@ msgid "label_response"
 msgstr "Antworttext"
 
 #. Default: "Responsible"
-#: ftw.task/ftw/task/task.py:90
+#: ftw.task/ftw/task/task.py:97
 msgid "label_responsible"
 msgstr "Verantwortlicher"
 
-#. Default: "Responsible"
+#. Default: "New responsible"
 #: ftw.task/ftw/task/response.py:68
+#, fuzzy
 msgid "label_responsible_Response"
 msgstr "Neue verantwortliche Person"
 
@@ -310,12 +314,12 @@ msgid "label_return_to_issue"
 msgstr "Zurück zur Aufgabe"
 
 #. Default: "Task Type"
-#: ftw.task/ftw/task/task.py:79
+#: ftw.task/ftw/task/task.py:86
 msgid "label_task_type"
 msgstr "Aufgabentyp"
 
 #. Default: "Text"
-#: ftw.task/ftw/task/task.py:112
+#: ftw.task/ftw/task/task.py:121
 msgid "label_text"
 msgstr "Kommentar"
 
@@ -330,8 +334,14 @@ msgstr "Aktion"
 msgid "label_workflow_state"
 msgstr "Status"
 
+msgid "mytasks"
+msgstr "Meine Aufgaben"
+
+msgid "mytasks_solr"
+msgstr "Meine Aufgaben"
+
 #. Default: "No Content"
-#: ftw.task/ftw/task/task_templates/view.pt:71
+#: ftw.task/ftw/task/task_templates/view.pt:68
 msgid "no_content"
 msgstr "Kein Inhalt"
 
@@ -351,7 +361,7 @@ msgid "response_label_response"
 msgstr "Antowrt"
 
 #. Default: "Responses:"
-#: ftw.task/ftw/task/task_templates/view.pt:75
+#: ftw.task/ftw/task/task_templates/view.pt:72
 msgid "responses"
 msgstr "Antworten:"
 
@@ -361,7 +371,7 @@ msgid "responsible"
 msgstr "Verantwortlicher"
 
 #. Default: "Subtasks:"
-#: ftw.task/ftw/task/task_templates/view.pt:63
+#: ftw.task/ftw/task/task_templates/view.pt:60
 msgid "subtasks"
 msgstr "Unteraufgabe"
 

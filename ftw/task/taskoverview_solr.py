@@ -1,6 +1,6 @@
 from five import grok
-from Products.CMFCore.utils import getToolByName
-from opengever.tabbedview.browser.tabs import OpengeverListingTab
+from opengever.tabbedview.browser.tabs import OpengeverListingTab, OpengeverSolrListingTab
+from zope.component import queryUtility
 from ftw.table import helper
 
 
@@ -20,8 +20,8 @@ def linked(item, value):
     return wrapper
     
 
-class MyTasks(OpengeverListingTab):
-    grok.name('tabbedview_view-mytasks')
+class MyTasks(OpengeverSolrListingTab):
+    grok.name('tabbedview_view-mytasks_solr')
     columns= (
                 ('', helper.draggable),
                 ('', helper.path_checkbox),
@@ -34,14 +34,9 @@ class MyTasks(OpengeverListingTab):
     
     search_options = {'responsible': authenticated_member, 'review_state':'task-state-open'}
 
-    def search(self, kwargs):
 
-        catalog = getToolByName(self.context,'portal_catalog')
-        self.contents = catalog(**kwargs)
-        self.len_results = len(self.contents)
-
-class IssuedTasks(OpengeverListingTab):
-    grok.name('tabbedview_view-issuedtasks')
+class IssuedTasks(OpengeverSolrListingTab):
+    grok.name('tabbedview_view-issuedtasks_solr')
     columns= (
                 ('', helper.draggable),
                 ('', helper.path_checkbox),
@@ -50,12 +45,7 @@ class IssuedTasks(OpengeverListingTab):
                 'responsible', 
                 ('review_state', 'review_state', helper.translated_string()),
             )
-
-    types = ['ftw.task.task', ]
-
-    search_options = {'issuer': authenticated_member, 'review_state':'task-state-open'}
-        
-    def search(self, kwargs):
-        catalog = getToolByName(self.context,'portal_catalog')
-        self.contents = catalog(**kwargs)
-        self.len_results = len(self.contents)
+    
+    def build_query(self):
+        aid = authenticated_member(self.context)
+        return 'portal_type:ftw.task.task AND issuer:%s AND ! responsible:%s' % (aid, aid)
