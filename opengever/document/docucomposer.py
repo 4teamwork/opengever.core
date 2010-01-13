@@ -103,12 +103,10 @@ class CreateDocumentWithFile(grok.CodeView):
             
             #remove unused attributes in the data dict
             data.pop('owner')
-            data.pop('creation_date')
             data.pop('context')
             
-
-            # for key in data.keys():
-            #                 setattr(new_doc, key, data[key])
+            for key in data.keys():
+                setattr(new_doc, key, data[key])
             
             fields = dict(schema.getFieldsInOrder(IDocumentSchema))
             fileObj = fields['file']._type(data=uploadFile, filename=filename)
