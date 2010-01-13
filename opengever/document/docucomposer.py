@@ -99,15 +99,12 @@ class CreateDocumentWithFile(grok.CodeView):
 
             dossier = data['context']
 
-            new_doc = createContentInContainer(dossier, 'opengever.document.document', title= data['title'])
-            
             #remove unused attributes in the data dict
             data.pop('owner')
             data.pop('context')
-            
-            for key in data.keys():
-                setattr(new_doc, key, data[key])
-            
+
+            new_doc = createContentInContainer(dossier, 'opengever.document.document', **data)
+
             fields = dict(schema.getFieldsInOrder(IDocumentSchema))
             fileObj = fields['file']._type(data=uploadFile, filename=filename)
             new_doc.file = fileObj
