@@ -9,7 +9,7 @@
   <object name="arbeitsplatz" meta_type="CMF Action">
    <property name="title">Arbeitsplatz</property>
    <property name="description"></property>
-   <property name="url_expr">string:${globals_view/navigationRootUrl}/arbeitsplatz</property>
+   <property name="url_expr">string:${globals_view/navigationRootUrl}/@@home?p=arbeitsplatz</property>
    <property name="icon_expr"></property>
    <property name="permissions">
     <element value="View"/>
@@ -20,7 +20,7 @@
   <object name="ordnungssystem" meta_type="CMF Action">
    <property name="title">Ordnungssystem</property>
    <property name="description"></property>
-   <property name="url_expr">string:${globals_view/navigationRootUrl}/ordnungssystem</property>
+   <property name="url_expr">string:${globals_view/navigationRootUrl}/@@home?p=ordnungssystem</property>
    <property name="icon_expr"></property>
    <property name="permissions">
     <element value="View"/>
@@ -31,7 +31,7 @@
   <object name="eingangskorb" meta_type="CMF Action">
    <property name="title">Eingangskorb</property>
    <property name="description"></property>
-   <property name="url_expr">string:${globals_view/navigationRootUrl}/eingangskorb</property>
+   <property name="url_expr">string:${globals_view/navigationRootUrl}/@@home?p=eingangskorb</property>
    <property name="icon_expr"></property>
    <property name="permissions">
     <element value="View"/>
@@ -42,7 +42,7 @@
   <object name="aufgaben" meta_type="CMF Action">
    <property name="title">Aufgaben</property>
    <property name="description"></property>
-   <property name="url_expr">string:${globals_view/navigationRootUrl}/aufgaben</property>
+   <property name="url_expr">string:${globals_view/navigationRootUrl}/@@home?p=aufgaben</property>
    <property name="icon_expr"></property>
    <property name="permissions">
     <element value="View"/>
@@ -53,7 +53,7 @@
   <object name="journal" meta_type="CMF Action">
    <property name="title">Journal</property>
    <property name="description"></property>
-   <property name="url_expr">string:${globals_view/navigationRootUrl}/journal</property>
+   <property name="url_expr">string:${globals_view/navigationRootUrl}/@@home?p=journal</property>
    <property name="icon_expr"></property>
    <property name="permissions">
     <element value="View"/>
