@@ -1,0 +1,5 @@
+<registry>
+  <record name="opengever.octopus.tentacle.interfaces.ITentacleRegistry.cortex_url">
+    <value>disabled-and-will-not-work</value>
+  </record>
+</registry>
