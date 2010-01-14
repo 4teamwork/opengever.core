@@ -23,13 +23,16 @@ def linked(item, value):
 class MyTasks(OpengeverSolrListingTab):
     grok.name('tabbedview_view-mytasks_solr')
     columns= (
-                ('', helper.draggable),
-                ('', helper.path_checkbox),
-                ('Title', linked),
-                ('deadline', helper.readable_date),
-                'responsible',
-                ('review_state', 'review_state', helper.translated_string()),
-            )
+        ('', helper.draggable),
+        ('', helper.path_checkbox),
+        ('review_state', 'review_state', helper.translated_string()),
+        ('Title', helper.linked),
+        ('deadline', helper.readable_date),
+        ('date_of_completion', helper.readable_date), # erledigt am
+        ('responsible', helper.readable_author),
+        ('issuer', helper.readable_author), # zugewiesen von
+        ('modified', helper.readable_date)# zugewiesem am
+        )
     types = ['ftw.task.task', ]
     
     search_options = {'responsible': authenticated_member, 'review_state':'task-state-open'}
@@ -38,13 +41,16 @@ class MyTasks(OpengeverSolrListingTab):
 class IssuedTasks(OpengeverSolrListingTab):
     grok.name('tabbedview_view-issuedtasks_solr')
     columns= (
-                ('', helper.draggable),
-                ('', helper.path_checkbox),
-                ('Title', linked),
-                ('deadline', helper.readable_date),
-                'responsible', 
-                ('review_state', 'review_state', helper.translated_string()),
-            )
+        ('', helper.draggable),
+        ('', helper.path_checkbox),
+        ('review_state', 'review_state', helper.translated_string()),
+        ('Title', helper.linked),
+        ('deadline', helper.readable_date),
+        ('date_of_completion', helper.readable_date), # erledigt am
+        ('responsible', helper.readable_author),
+        ('issuer', helper.readable_author), # zugewiesen von
+        ('modified', helper.readable_date)# zugewiesem am
+        )
     
     def build_query(self):
         aid = authenticated_member(self.context)
