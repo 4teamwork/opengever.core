@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2010-01-13 16:46+0000\n"
+"POT-Creation-Date: 2010-01-14 07:39+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -214,12 +214,6 @@ msgstr "Geben Sie eine detaillierte Arbeitsanweisung oder einen Kommentar ein"
 msgid "help_transition"
 msgstr ""
 
-msgid "issuedtasks"
-msgstr "Erteilte Aufgaben"
-
-msgid "issuedtasks_solr"
-msgstr "Erteilte Aufgaben"
-
 #. Default: "Attachment"
 #: ftw.task/ftw/task/response.py:94
 msgid "label_attachment"
@@ -333,12 +327,6 @@ msgstr "Aktion"
 #: ftw.task/ftw/task/task_templates/view.pt:38
 msgid "label_workflow_state"
 msgstr "Status"
-
-msgid "mytasks"
-msgstr "Meine Aufgaben"
-
-msgid "mytasks_solr"
-msgstr "Meine Aufgaben"
 
 #. Default: "No Content"
 #: ftw.task/ftw/task/task_templates/view.pt:68

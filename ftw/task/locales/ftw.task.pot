@@ -1,10 +1,13 @@
+# --- PLEASE EDIT THE LINES BELOW CORRECTLY ---
+# SOME DESCRIPTIVE TITLE.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 msgid ""
 msgstr ""
-"Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2010-01-13 16:46+0000\n"
-"PO-Revision-Date: 2009-02-25 14:39+0100\n"
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2010-01-14 07:39+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: 4teamwork <info@4teamwork.ch>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -13,7 +16,6 @@ msgstr ""
 "Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: ftw.task\n"
-"X-Poedit-Language: German\n"
 
 #: ftw.task/ftw/task/actions/addlocalroles.py:98
 msgid "Add Local Roles Action"
@@ -214,12 +216,6 @@ msgstr ""
 msgid "help_transition"
 msgstr ""
 
-msgid "issuedtasks"
-msgstr ""
-
-msgid "issuedtasks_solr"
-msgstr ""
-
 #. Default: "Attachment"
 #: ftw.task/ftw/task/response.py:94
 msgid "label_attachment"
@@ -330,12 +326,6 @@ msgstr ""
 #. Default: "State"
 #: ftw.task/ftw/task/task_templates/view.pt:38
 msgid "label_workflow_state"
-msgstr ""
-
-msgid "mytasks"
-msgstr ""
-
-msgid "mytasks_solr"
 msgstr ""
 
 #. Default: "No Content"
