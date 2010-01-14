@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2010-01-11 08:07+0000\n"
+"POT-Creation-Date: 2010-01-14 07:39+0000\n"
 "PO-Revision-Date: 2009-02-25 14:39+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -85,6 +85,12 @@ msgstr "Termine"
 msgid "important_contact"
 msgstr "Allgemein"
 
+msgid "issuedtasks"
+msgstr "Erteilte Aufgaben"
+
+msgid "issuedtasks_solr"
+msgstr "Erteilte Aufgaben"
+
 msgid "issuer"
 msgstr "Zugewiesen von"
 
@@ -100,6 +106,12 @@ msgstr "Federführend"
 #. Default: "Änderungsdatum"
 msgid "modified"
 msgstr "Änderungsdatum"
+
+msgid "mytasks"
+msgstr "Meine Aufgaben"
+
+msgid "mytasks_solr"
+msgstr "Meine Aufgaben"
 
 #: opengever.tabbedview/opengever/tabbedview/browser/tabs_templates/overview.pt:17
 msgid "no_content"
