@@ -24,5 +24,12 @@
 		marker=".behaviors.IMailInAddressMarker"
         />
 
+	<genericsetup:registerProfile
+        name="default" 
+        title="opengever.mail"
+        directory="profiles/default" 
+        description="opengever mail"
+        provides="Products.GenericSetup.interfaces.EXTENSION" 
+    	/>
 
 </configure>

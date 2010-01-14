@@ -1,3 +1,4 @@
+from five import grok
 from zope.interface import Interface
 from plone.registry.interfaces import IRegistry
 from zope.component import getUtility
@@ -13,7 +14,12 @@ class IMailInAddress(Interface):
 class IMailInAddressMarker(Interface):
     pass
 
-class MailInAddress(Interface):
+class MailInAddress(object):
+    grok.provides(IMailInAddress)
+
+    def __init__(self, context):
+        self.context = context
+
     def get_email_address(self):
         id_util = getUtility(IIntIds)
         intid = id_util.queryId(self.context)
