@@ -5,7 +5,7 @@ from zope.component import adapts
 from zope.formlib import form
 from zope import schema
 from plone.contentrules.rule.interfaces import IExecutable, IRuleElementData
-from plone.app.contentrules.browser.formhelper import AddForm, EditForm 
+from plone.app.contentrules.browser.formhelper import AddForm, EditForm
 from ftw.task.task import ITask
 from ftw.task import _
 
@@ -78,7 +78,8 @@ class AddLocalRolesActionExecutor(object):
             # set related items roles
             roles = self.element.related_items_roles
             if roles:
-                for item in obj.relatedItems:
+                related_items = getattr(obj, 'relatedItems', [])
+                for item in related_items:
                     item.to_object.manage_setLocalRoles(user_id, list(roles))
                     item.to_object.reindexObjectSecurity()
             
