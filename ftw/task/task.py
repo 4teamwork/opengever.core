@@ -75,9 +75,7 @@ class ITask(form.Schema):
     issuer = schema.Choice(
         title =_(u"label_issuer", default=u"Issuer"),
         description = _('help_issuer', default=u""),
-        source = util.getManagersVocab,
-        # XXX not work yet
-        # #vocabulary = 'opengever.octopus.tentacle.contacts.ContactsVocabularyFactory',
+        vocabulary = 'opengever.octopus.tentacle.contacts.ContactsVocabularyFactory',
         required = True,
         )
 
@@ -96,9 +94,7 @@ class ITask(form.Schema):
     responsible = schema.Choice(
         title=_(u"label_responsible", default="Responsible"),
         description =_(u"help_responsible", default=""),
-        # XXX not work yet
-        # vocabulary = 'opengever.octopus.tentacle.contacts.UsersVocabularyFactory',
-        source = util.getManagersVocab,
+        vocabulary = 'opengever.octopus.tentacle.contacts.UsersVocabularyFactory',
         required = True,
         )
 
@@ -273,7 +269,8 @@ class AddForm(TranslatedAddForm):
         portal_state = getMultiAdapter((self.context, self.request),
                                        name=u"plone_portal_state")
         member = portal_state.member()
-        self.request.set('form.widgets.issuer', [member.getId()])
+        if not self.request.get('form.widgets.issuer', None):
+            self.request.set('form.widgets.issuer', [member.getId()])
         super(AddForm, self).update()
 
 
