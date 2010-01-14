@@ -139,7 +139,9 @@ class Tasks(OpengeverListingTab):
         ('Title', helper.linked),
         ('deadline', helper.readable_date),
         ('date_of_completion', helper.readable_date), # erledigt am
-        ('responsible', helper.readable_author),
+        {'column' : 'responsible', 
+        'column_title' : _(u'label_responsible_task', 'Responsible'),  
+        'transform' : helper.readable_author},
         ('issuer', helper.readable_author), # zugewiesen von
         ('modified', helper.readable_date)# zugewiesem am
         )

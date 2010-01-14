@@ -103,6 +103,9 @@ msgstr "Journal"
 msgid "label_responsible"
 msgstr "Federführend"
 
+msgid "label_responsible_task"
+msgstr "Verantwortlich"
+
 #. Default: "Änderungsdatum"
 msgid "modified"
 msgstr "Änderungsdatum"
