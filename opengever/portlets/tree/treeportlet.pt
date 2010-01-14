@@ -11,17 +11,16 @@
         <ul id="tree" class="filetree">
             <div tal:content="structure here/tree/render" /> 
         </ul>
-        <script>
+        <script type="text/javascript">
             jq(function() {
-
-            	tree = jq("#tree").treeview({
+            	var tree = jq("#tree").treeview({
             		collapsed: true,
             		animated: "fast",
             		persist: "cookie",
             		cookieId: "opengever-treeview"
             	});
 
-            }) 
+            });
         </script>
     </dd>
 
