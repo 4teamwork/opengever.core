@@ -1,6 +1,5 @@
 from five import grok
 from zope.component import getUtility, getAdapter
-from zope.intid.interfaces import IIntIds
 
 from Products.CMFCore.utils import getToolByName
 from plone.app.layout.viewlets import content
@@ -11,6 +10,7 @@ from plone.memoize.instance import memoize
 
 from opengever.base.interfaces import IReferenceNumber, ISequenceNumber
 from opengever.dossier.behaviors.dossier import IDossier, IDossierMarker
+from opengever.mail.behaviors import IMailInAddressMarker,IMailInAddress
 
 class IBusinessCaseDossier(form.Schema):
     """ A business case dossier
@@ -85,6 +85,5 @@ class Byline(grok.Viewlet, content.DocumentBylineViewlet):
     # TODO: should be more generic ;-)
     #       use sequence_number instead of intid
     def email(self):
-        id_util = getUtility(IIntIds)
-        intid = id_util.queryId(self.context)
-        return '%s@opengever.4teamwork.ch' % intid
+        if IMailInAddressMarker.providedBy(self.context):
+            return IMailInAddress(self.context).get_email_address()
