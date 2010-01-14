@@ -516,7 +516,6 @@ class Tasks(OpengeverListingTab):
     search_options = {'related_items': related_document}
 
     def search(self, kwargs):
-        import pdb; pdb.set_trace( )
         catalog = getToolByName(self.context,'portal_catalog')
         self.contents = catalog(**kwargs)
         self.len_results = len(self.contents)
