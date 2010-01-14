@@ -501,7 +501,9 @@ class ContactsView(OpengeverListingTab):
     columns = (
         ('', helper.draggable),
         ('', helper.path_checkbox),
-        ('Title', 'sortable_title', helper.linked),
+        ('Title', helper.linked),
+        ('email'),
+        ('phone_office'),
         )
 
 class OrgunitView(OpengeverListingTab):
