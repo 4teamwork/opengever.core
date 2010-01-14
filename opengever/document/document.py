@@ -76,6 +76,10 @@ def possibleTypes(context):
     for term in voc:
         terms.append(SimpleVocabulary.createTerm(term))
     return SimpleVocabulary(terms)
+    
+def related_document(context):
+    intids = getUtility( IIntIds )
+    return intids.getId( context )
 
 class IDocumentSchema(form.Schema):
     """ Document Schema Interface
@@ -474,7 +478,27 @@ class Preview(DisplayForm, OpengeverTab):
     grok.name('tabbedview_view-preview')
     grok.template('preview')
 
-class Tasks(OpengeverSolrListingTab):
+#XXX TEMPORARY REPLACED WITH A NON SOLR TAB
+#class Tasks(OpengeverSolrListingTab):
+#     grok.context(IDocumentSchema)
+#     grok.name('tabbedview_view-tasks')
+#     grok.template('generic')
+#     columns= (
+#         ('', helper.draggable),
+#         ('', helper.path_checkbox),
+#         ('Title', helper.solr_linked),
+#         ('deadline', helper.readable_date),
+#         'responsible',
+#         ('review_state', 'review_state', helper.translated_string()),
+#         )
+#         
+#     def build_query(self):
+#         intids = getUtility( IIntIds )
+#         obj_id = intids.getId( self.context )
+#         return 'portal_type:ftw.task.task AND related_items:%s' % obj_id
+
+
+class Tasks(OpengeverListingTab):
     grok.context(IDocumentSchema)
     grok.name('tabbedview_view-tasks')
     grok.template('generic')
@@ -486,12 +510,17 @@ class Tasks(OpengeverSolrListingTab):
         'responsible',
         ('review_state', 'review_state', helper.translated_string()),
         )
-        
-    def build_query(self):
-        intids = getUtility( IIntIds )
-        obj_id = intids.getId( self.context )
-        return 'portal_type:ftw.task.task AND related_items:%s' % obj_id 
-        
+
+    types = ['ftw.task.task', ]
+
+    search_options = {'related_items': related_document}
+
+    def search(self, kwargs):
+        import pdb; pdb.set_trace( )
+        catalog = getToolByName(self.context,'portal_catalog')
+        self.contents = catalog(**kwargs)
+        self.len_results = len(self.contents)
+
 
 class Journal(grok.View, OpengeverTab):
     grok.context(IDocumentSchema)
