@@ -21,7 +21,7 @@
           <li><a href="#"
                  tal:attributes="class string:${button/cssclass} listing-button major-button;
                                  href button/url;"
-                 tal:content="structure string:${button/title} &#9660;" /></li>
+                 tal:content="button/title" /></li>
         </tal:major_buttons>
         <li tal:condition="view/minor_buttons" class="more-menu">
           <a href="#" i18n:translate="button_more_actions"
