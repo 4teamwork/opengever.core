@@ -1,9 +1,12 @@
 
 from Acquisition import aq_inner, aq_parent
 import zope.schema.vocabulary
+from zope.component import getMultiAdapter
 
 from Products.CMFCore.interfaces import ISiteRoot
 from plone.app.dexterity.behaviors.metadata import MetadataBase
+from z3c.form.interfaces import IValue
+from z3c.form.value import ComputedValue
 
 def create_restricted_vocabulary(field, options, message_factory=None):
     """
@@ -114,21 +117,18 @@ def set_default_with_acquisition(field, default=None):
         # try to get it from context or a parent
         while not ISiteRoot.providedBy(obj):
             try:
-                return data.field.get(obj)
+                interface_ = data.field.interface
             except AttributeError:
+                pass
+            else:
                 try:
-                    interface_ = data.field.interface
-                except AttributeError:
+                    adpt = interface_(obj)
+                except TypeError: # could not adapt
                     pass
                 else:
-                    try:
-                        adpt = interface_(obj)
-                    except TypeError: # could not adapt
-                        pass
-                    else:
-                        value = data.field.get(adpt)
-                        if value is not None:
-                            return value
+                    value = data.field.get(adpt)
+                    if value is not None:
+                        return value
             obj = aq_parent(aq_inner(obj))
         # otherwise use default value
         if field._acquisition_default:
@@ -141,3 +141,46 @@ def set_default_with_acquisition(field, default=None):
                 return None
     return default_value_generator
 
+
+def overrides_child(folder, event, aq_fields, marker):
+    interface = aq_fields[0].interface
+    check_fields=[]
+    change_fields=[]
+
+    # set changed fields
+    for life_event in event.descriptions:
+        for attr in life_event.attributes:
+            change_fields.append(attr)
+
+    # set check_fields
+    for field in aq_fields:
+        field_name = interface.__name__ + '.' + field.__name__
+        if field_name in change_fields:
+            check_fields.append(field.__name__)
+
+    if check_fields != []:
+        children = folder.portal_catalog(
+            path={ 'depth':2, 
+                    'query':'/'.join(folder.getPhysicalPath())
+            }, 
+            object_provides= (marker.__identifier__,)
+        )
+
+        for child in children:
+            obj = child.getObject()
+            #queryMultiAdapter((obj, obj.REQUEST, None, 'IClassification.clasification', None), IValue)
+            #g_voc = getUtility(IVocabularyFactory, field.vocabularyName())
+            for field  in check_fields:
+                schema_field = interface.get(field)
+                voc = schema_field.bind(obj).source
+                if schema_field.get(schema_field.interface(obj)) not in voc:
+                    default = getMultiAdapter((
+                            obj.aq_inner.aq_parent,
+                            obj.REQUEST, #request
+                            None, #form
+                            schema_field,
+                            None, #Widget
+                            ), IValue, name='default')
+                    if isinstance(default, ComputedValue):
+                        default = default.get()
+                    setattr(schema_field.interface(obj), field, default)

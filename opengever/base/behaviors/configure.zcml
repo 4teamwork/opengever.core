@@ -37,6 +37,7 @@
       description="Adds classification fields and functionality"
       provides=".classification.IClassification"
       factory=".classification.Classification"
+      marker=".classification.IClassificationMarker"
       for="plone.dexterity.interfaces.IDexterityContent"
       />
 

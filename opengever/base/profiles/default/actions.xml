@@ -70,7 +70,7 @@
         <object name="properties" meta_type="CMF Action" i18n:domain="plone">
          <property name="title" i18n:translate="">Properties</property>
          <property name="description" i18n:translate=""></property>
-         <property name="url_expr">string:./view</property>
+         <property name="url_expr">string:${object_url}/view</property>
          <property name="icon_expr"></property>
          <property name="available_expr"></property>
          <property name="permissions">

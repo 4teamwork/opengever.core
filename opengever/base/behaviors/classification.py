@@ -1,8 +1,6 @@
-
 from zope import schema
-from zope.interface import alsoProvides
-import zope.component
-
+from zope.interface import alsoProvides, Interface
+from zope.lifecycleevent.interfaces import IObjectModifiedEvent
 
 from five import grok
 
@@ -60,6 +58,15 @@ class IClassification(form.Schema):
 
 alsoProvides(IClassification, IFormFieldProvider)
 
+class IClassificationMarker(Interface):
+    pass
+
+
+@grok.subscribe(IClassificationMarker, IObjectModifiedEvent)
+def validate_children(folder, event):
+    aq_fields = [IClassification['classification'], IClassification['public_trial'], IClassification['privacy_layer']]
+
+    utils.overrides_child(folder, event, aq_fields, IClassificationMarker)
 
 # CLASSIFICATION: Vocabulary and default value
 CLASSIFICATION_UNPROTECTED = u'unprotected'

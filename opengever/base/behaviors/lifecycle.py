@@ -1,11 +1,11 @@
 from zope import schema
 from zope.interface import alsoProvides, Interface
+from zope.lifecycleevent.interfaces import IObjectModifiedEvent
 import zope.component
 from z3c.form import validator
 
 from five import grok
 
-from plone.app.dexterity.behaviors import metadata
 from plone.autoform.interfaces import IFormFieldProvider
 from plone.directives import form
 from Products.CMFCore.interfaces import ISiteRoot
@@ -13,11 +13,6 @@ from Products.CMFCore.interfaces import ISiteRoot
 from opengever.base import _
 from opengever.base.behaviors import utils
 
-
-
-from zope.schema.vocabulary import SimpleVocabulary
-from zope.schema.interfaces import IContextSourceBinder
-from zope.component import queryUtility
 from plone.registry.interfaces import IRegistry
 from opengever.base.interfaces import IBaseCustodyPeriods
 from opengever.base.interfaces import IRetentionPeriodRegister
@@ -63,6 +58,12 @@ class ILifeCycle(form.Schema):
 
 
 alsoProvides(ILifeCycle, IFormFieldProvider)
+
+@grok.subscribe(ILifeCycleMarker, IObjectModifiedEvent)
+def validate_children(folder, event):
+    aq_fields = [ILifeCycle['retention_period'], ILifeCycle['archival_value'], ILifeCycle['custody_period']]
+
+    utils.overrides_child(folder, event, aq_fields, ILifeCycleMarker)
 
 # CUSTODY PERIOD / RETENTION PERIOD
 
