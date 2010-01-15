@@ -168,8 +168,6 @@ def overrides_child(folder, event, aq_fields, marker):
 
         for child in children:
             obj = child.getObject()
-            #queryMultiAdapter((obj, obj.REQUEST, None, 'IClassification.clasification', None), IValue)
-            #g_voc = getUtility(IVocabularyFactory, field.vocabularyName())
             for field  in check_fields:
                 schema_field = interface.get(field)
                 voc = schema_field.bind(obj).source
