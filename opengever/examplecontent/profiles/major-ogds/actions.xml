@@ -28,17 +28,6 @@
    <property name="visible">True</property>
   </object>
 
-  <object name="eingangskorb" meta_type="CMF Action">
-   <property name="title">Eingangskorb</property>
-   <property name="description"></property>
-   <property name="url_expr">string:${globals_view/navigationRootUrl}/@@home?p=eingangskorb</property>
-   <property name="icon_expr"></property>
-   <property name="permissions">
-    <element value="View"/>
-   </property>
-   <property name="visible">True</property>
-  </object>
-
   <object name="aufgaben" meta_type="CMF Action">
    <property name="title">Aufgaben</property>
    <property name="description"></property>
@@ -64,7 +53,7 @@
   <object name="kontakte" meta_type="CMF Action">
    <property name="title">Kontakte</property>
    <property name="description"></property>
-   <property name="url_expr">string:${globals_view/navigationRootUrl}/@@ogds?p=gds</property>
+   <property name="url_expr">string:${globals_view/navigationRootUrl}/gds</property>
    <property name="icon_expr"></property>
    <property name="permissions">
     <element value="View"/>
