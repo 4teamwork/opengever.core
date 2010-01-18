@@ -2,7 +2,6 @@ def search_patch(scope, original, replacement):
     orimethod = getattr(scope, original)
     def newSearchResult(self, REQUEST=None, **kw):
         kw = kw.copy()
-        #import pdb; pdb.set_trace( )
         if 'trashed' not in kw.keys():
             kw['trashed'] = [False, None]
         return orimethod(self, REQUEST, **kw)
