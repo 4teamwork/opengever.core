@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2010-01-14 07:39+0000\n"
+"POT-Creation-Date: 2010-01-18 15:03+0000\n"
 "PO-Revision-Date: 2009-02-25 14:39+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -33,7 +33,7 @@ msgstr ""
 msgid "all_orgunits"
 msgstr ""
 
-#. Default: "More actions"
+#. Default: "More actions &#9660;"
 #: opengever.tabbedview/opengever/tabbedview/browser/tabs_templates/generic.pt:27
 msgid "button_more_actions"
 msgstr ""
@@ -71,6 +71,9 @@ msgstr ""
 msgid "dossiers"
 msgstr ""
 
+msgid "email"
+msgstr ""
+
 msgid "end"
 msgstr ""
 
@@ -93,8 +96,13 @@ msgid "journal"
 msgstr ""
 
 #. Default: "Responsible"
-#: opengever.tabbedview/opengever/tabbedview/browser/tabs.py:398
+#: opengever.tabbedview/opengever/tabbedview/browser/tabs.py:400
 msgid "label_responsible"
+msgstr ""
+
+#. Default: "Responsible"
+#: opengever.tabbedview/opengever/tabbedview/browser/tabs.py:143
+msgid "label_responsible_task"
 msgstr ""
 
 msgid "modified"
@@ -117,6 +125,9 @@ msgid "overview"
 msgstr ""
 
 msgid "participants"
+msgstr ""
+
+msgid "phone_office"
 msgstr ""
 
 msgid "preview"

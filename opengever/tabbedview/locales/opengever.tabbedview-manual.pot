@@ -155,4 +155,9 @@ msgstr ""
 msgid "mytasks_solr"
 msgstr ""
 
+msgid "email"
+msgstr ""
+
+msgid "phone_office"
+msgstr ""
 
