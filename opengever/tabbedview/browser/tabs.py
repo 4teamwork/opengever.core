@@ -106,7 +106,7 @@ class Dossiers(OpengeverListingTab):
         ('', helper.draggable),
         ('', helper.path_checkbox),
         ('reference'),
-        ('Title', helper.linked),
+        ('Title', 'sortable_title', helper.linked),
         ('review_state', 'review_state', helper.translated_string()),
         ('responsible', helper.readable_author),
         ('start', helper.readable_date),
@@ -136,7 +136,7 @@ class Tasks(OpengeverListingTab):
         ('', helper.draggable),
         ('', helper.path_checkbox),
         ('review_state', 'review_state', helper.translated_string()),
-        ('Title', helper.linked),
+        ('Title', 'sortable_title', helper.linked),
         ('deadline', helper.readable_date),
         ('date_of_completion', helper.readable_date), # erledigt am
         {'column' : 'responsible', 
@@ -503,7 +503,7 @@ class ContactsView(OpengeverListingTab):
     columns = (
         ('', helper.draggable),
         ('', helper.path_checkbox),
-        ('Title', helper.linked),
+        ('Title', 'sortable_title', helper.linked),
         ('email'),
         ('phone_office'),
         )
