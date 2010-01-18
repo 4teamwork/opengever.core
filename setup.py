@@ -36,6 +36,4 @@ setup(name='opengever.inbox',
       [z3c.autoinclude.plugin]
       target = opengever
       """,
-      setup_requires=["PasteScript"],
-      paster_plugins = ["ZopeSkel"],
       )
