@@ -1,0 +1,48 @@
+<tal:translation i18n:domain="opengever.tabbedview">
+  <form name="tabbedview_form"
+        method="post"
+        action="folder_object"
+        tal:attributes="action context/absolute_url"
+        tal:condition="view/contents"
+        >
+    <input type="hidden" name="orig_template" tal:attributes="value string:${here/absolute_url}/#${view/view_name}" />
+
+    <div class="tabbedview_select">
+      Auswählen: <a href="javascript:arbeitsraum.select_all()">Alle</a>, <a href="javascript:arbeitsraum.select_none()">Keine</a>
+      <span class="select_folder" style="display:none"> Alle Sichtbaren ausgewählt. <a href="#">Alle im Ordner auswählen</a></span>
+      <!--<div tal:replace="structure view/batching" />-->
+    </div>
+
+    <div tal:content="structure view/render_listing" />
+
+    <div class="tabbedview-action-menu">
+      <ul class="buttons major-buttons sf-menu">
+        <tal:major_buttons tal:repeat="button view/major_buttons">
+          <li><a href="#"
+                 tal:attributes="class string:${button/cssclass} listing-button major-button;
+                                 href button/url;"
+                 tal:content="button/title" /></li>
+        </tal:major_buttons>
+        <li tal:condition="view/minor_buttons" class="more-menu">
+          <a href="#" i18n:translate="button_more_actions"
+             class="context more-button">More actions &#9660;</a>
+          <ul class="minor-buttons ">
+            <tal:minor_buttons tal:repeat="button view/minor_buttons">
+              <li><a href="#"
+                     tal:define="cssclass button/cssclass;
+                                 cssclass string:${cssclass} listing-button minor-button;"
+                     tal:attributes="class cssclass;
+                                     href button/url"
+                     tal:content="button/title" />
+              </li>
+            </tal:minor_buttons>
+          </ul>
+        </li>
+      </ul>
+    </div>
+
+  </form>
+  <p tal:condition="not: view/contents">
+    Keine Inhalte vorhanden
+  </p>
+</tal:translation>

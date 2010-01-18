@@ -29,7 +29,9 @@ setup(name='opengever.base',
       install_requires=[
         'setuptools',
         'plone.dexterity',
+        'opengever.tabbedview',
         'plone.autoform',
+        'collective.testcaselayer',
         # -*- Extra requirements: -*-
         ],
       entry_points="""
