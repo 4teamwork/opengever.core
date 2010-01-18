@@ -13,7 +13,7 @@ a container:
 
 When we create a dexterity content type::
 
-    >>> from opengever.repository import classification
+    >>> from opengever.base.behaviors import classification
     >>> from plone.dexterity.fti import DexterityFTI
     >>> fti = DexterityFTI('ClassificationFTI')
     >>> fti.behaviors = ('opengever.base.behaviors.classification.IClassification',)
@@ -32,7 +32,7 @@ If we access the site as an admin TTW::
 We can see this type in the addable types at the root of the site::
 
     >>> browser.open("http://nohost/plone/folder_factories")
-    >>> "ClassificationFTI" in browser.contents
+    >>> 'ClassificationFTI' in browser.contents
     True
     >>> browser.getControl("ClassificationFTI").click()
     >>> browser.getControl("Add").click()
