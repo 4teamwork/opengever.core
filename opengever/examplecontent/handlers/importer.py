@@ -21,7 +21,6 @@ class LDAP_Importer(object):
         return setup.openDataFile('kanton.ldif.gz') and True
 
     def import_users(self):
-        import pdb; pdb.set_trace( )
         gfile = self.openDataFile('kanton.ldif.gz')
         parser = OpenGeverLDIF(gzip.open(gfile.name), sys.stdout, self.gds)
         parser.parse()
