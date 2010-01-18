@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: opengever.dossier 1.0\n"
-"POT-Creation-Date: 2010-01-08 15:22+0000\n"
+"POT-Creation-Date: 2010-01-18 09:23+0000\n"
 "PO-Revision-Date: 2009-09-17 15:21+0000\n"
 "Last-Translator: Thomas Buchberger <t.buchberger@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -12,7 +12,6 @@ msgstr ""
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: opengever.dossier\n"
 "X-Is-Fallback-For: de-at de-li de-lu de-ch de-de\n"
-
 
 #. Default: "Business Case Dossier"
 #: opengever.dossier/opengever/dossier/profiles/default/types/opengever.dossier.businesscasedossier.xml
@@ -32,6 +31,8 @@ msgstr "Projektdossier"
 msgid "Template Dossier"
 msgstr "Vorlagen Dossier"
 
+#. Default: "expired"
+#: opengever.dossier/opengever/dossier/templatedossier_templates/template_form.pt:23
 msgid "Templates"
 msgstr "Vorlagen"
 
@@ -59,7 +60,7 @@ msgid "button_cancel"
 msgstr "Abbrechen"
 
 #. Default: "create document with template"
-#: opengever.dossier/opengever/dossier/templatedossier.py:32
+#: opengever.dossier/opengever/dossier/templatedossier.py:36
 msgid "create_document_with_template"
 msgstr "Dokument mit Vorlage erstellen"
 
@@ -142,7 +143,7 @@ msgid "info_participation_create"
 msgstr "Die Beteiligung wurde gespeichert."
 
 #. Default: "Removed participations"
-#: opengever.dossier/opengever/dossier/behaviors/participation.py:274
+#: opengever.dossier/opengever/dossier/behaviors/participation.py:272
 msgid "info_removed_participations"
 msgstr "Die Beteiligungen wurde entfernt."
 
@@ -181,6 +182,11 @@ msgstr "Behältnis-Standort"
 #: opengever.dossier/opengever/dossier/behaviors/dossier.py:126
 msgid "label_container_type"
 msgstr "Behältnis-Art"
+
+#. Default: "Edit after creation"
+#: opengever.dossier/opengever/dossier/templatedossier_templates/template_form.pt:59
+msgid "label_edit_after_creation"
+msgstr "Nach dem hinzufügen bearbeiten"
 
 #. Default: "E-Mail:"
 #: opengever.dossier/opengever/dossier/businesscase_templates/byline.pt:88
@@ -264,6 +270,16 @@ msgstr "Beginn"
 msgid "label_start_byline"
 msgstr "Beginn:"
 
+#. Default: "Template"
+#: opengever.dossier/opengever/dossier/templatedossier_templates/template_form.pt:26
+msgid "label_template"
+msgstr "Vorlage"
+
+#. Default: "Title"
+#: opengever.dossier/opengever/dossier/templatedossier_templates/template_form.pt:35
+msgid "label_title"
+msgstr "Titel"
+
 #. Default: "Volume Number"
 #: opengever.dossier/opengever/dossier/behaviors/dossier.py:94
 msgid "label_volume_number"
@@ -275,21 +291,25 @@ msgstr "Bandnummer"
 msgid "label_workflow_state"
 msgstr "Status:"
 
-#: opengever.dossier/opengever/dossier/resolve.py:71
+#: opengever.dossier/opengever/dossier/resolve.py:80
 msgid "no end date are entered"
 msgstr "Es wurde kein End-Datum eingegeben"
 
-#: opengever.dossier/opengever/dossier/resolve.py:46
+#: opengever.dossier/opengever/dossier/resolve.py:55
 msgid "not all documents are checked in"
 msgstr "Es sind nicht alle Dokumente eingeckeckt"
 
-#: opengever.dossier/opengever/dossier/resolve.py:32
+#: opengever.dossier/opengever/dossier/resolve.py:41
 msgid "not all documents are stored in a subdossier"
 msgstr "Es sind nicht alle Dokumente in einem Subdossiers abgelegt"
 
-#: opengever.dossier/opengever/dossier/resolve.py:66
+#: opengever.dossier/opengever/dossier/resolve.py:75
 msgid "not all task are closed"
 msgstr "Es sind nicht alle Aufgaben erledigt"
+
+#: opengever.dossier/opengever/dossier/templatedossier_templates/template_form.pt:28
+msgid "required"
+msgstr "erforderlich"
 
 #. Default: "expired"
 #: opengever.dossier/opengever/dossier/businesscase_templates/byline.pt:53
