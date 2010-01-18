@@ -24,12 +24,10 @@ class IBusinessCaseDossier(form.Schema):
 #
 #     def update(self):
 #         super(Edit, self).update()
-#         #import pdb; pdb.set_trace()
 #
 #     def updateWidgets(self):
 #         super(Edit, self).updateWidgets()
 #         #self.widgets['title'].mode = 'hidden'
-#         #import pdb; pdb.set_trace()
 #         #self.widgets['IDossier.comments'].rows = 10
 #         #self.widgets['IDossier.comments'].requires = True
 

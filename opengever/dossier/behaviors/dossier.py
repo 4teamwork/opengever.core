@@ -177,7 +177,6 @@ class StartBeforeEnd(Invalid):
 # grok.global_adapter(rows_override, name=u"value")
 # labelOverride = StaticWidgetAttribute(u"Override label2", field=IDossier['comments'])
 # grok.global_adapter(labelOverride, name=u"label")
-# #import pdb; pdb.set_trace()
 # testOverride = StaticWidgetAttribute(True, field=IDossier['volume_number'])
 # grok.global_adapter(testOverride, name=u"required")
 
@@ -233,7 +232,6 @@ def SearchableText(obj):
             data = field.get(context)
         except AttributeError:
             data = field.get(field.interface(context))
-#        import pdb; pdb.set_trace()
         if not data:
             continue
         if INamedFileField.providedBy(field):
