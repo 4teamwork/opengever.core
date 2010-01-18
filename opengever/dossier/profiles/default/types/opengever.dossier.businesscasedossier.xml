@@ -68,9 +68,9 @@
           url_expr="string:${object_url}/docucomposer-wizard" visible="True">
     <permission value="Add portal content"/>
   </action>
-  <action title="Templates" action_id="document_with_template" category="object" condition_expr=""
+  <action title="document_with_template" i18n:domain="opengever.dossier" action_id="document_with_template" category="factory" condition_expr=""
           url_expr="string:${object_url}/document_with_template" visible="True">
-    <permission value="Add portal content"/>
+    <permission value="View"/>
   </action>
 
 
@@ -121,4 +121,5 @@
      condition_expr="" url_expr="string:${object_url}/view" visible="True">
    <permission value="View"/>
   </action>
+  
 </object>
