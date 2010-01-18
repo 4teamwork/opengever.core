@@ -70,7 +70,7 @@
   </action>
   <action title="document_with_template" i18n:domain="opengever.dossier" action_id="document_with_template" category="folder_factories" condition_expr=""
           url_expr="string:${object_url}/document_with_template" visible="True">
-    <permission value="View"/>
+    <permission value="Add portal content"/>
   </action>
 
 
