@@ -35,6 +35,6 @@ setup(name='opengever.mail',
       # -*- Entry points: -*-
 
       [z3c.autoinclude.plugin]
-      target = plone
+      target = opengever
       """,
       )
