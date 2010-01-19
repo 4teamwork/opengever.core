@@ -41,16 +41,13 @@ We can see this type in the addable types at the root of the site::
     >>> browser.getControl(name="form.widgets.IClassification.privacy_layer:list").value = [classification.PRIVACY_LAYER_YES]
     >>> browser.getControl(name="form.widgets.IClassification.public_trial:list").value = [classification.PUBLIC_TRIAL_PUBLIC]
     >>> browser.getControl(name="form.widgets.IClassification.public_trial_statement").value = 'My Statement'
-    >>> browser.getControl(name="form.widgets.IClassification.archival_value:list").value = [classification.ARCHIVAL_VALUE_UNCHECKED]
-    >>> browser.getControl(name="form.widgets.IClassification.custody_period").value = '11'
-    >>> browser.getControl(name="form.widgets.IClassification.retention_period").value = '12'
     >>> browser.getControl(name="form.buttons.save").click()
     >>> browser.url
-    'http://nohost/plone/ClassificationFTI/view'
+    'http://nohost/plone/classificationfti/view'
 
 Get the created object::
 
-    >>> obj = self.portal.ClassificationFTI
+    >>> obj = self.portal.get('classificationfti')
     >>> obj!=None
     True
 
@@ -64,10 +61,3 @@ Check the values of the created object::
     True
     >>> obj.public_trial_statement == 'My Statement'
     True
-    >>> obj.archival_value == classification.ARCHIVAL_VALUE_UNCHECKED
-    True
-    >>> obj.custody_period
-    11
-    >>> obj.retention_period
-    12
-

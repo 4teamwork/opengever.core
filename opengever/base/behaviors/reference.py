@@ -32,7 +32,8 @@ alsoProvides(IReferenceNumber, form.IFormFieldProvider)
 def reference_number_default_value(data):
     highest_reference_number = 0
     parent = None
-    if '++add++' in data.context.REQUEST.get('PATH_TRANSLATED', object()):
+    #XXX CHANGED FROM PATH_TRANSLATED TO PATH_INFO because the test don't work
+    if '++add++' in data.context.REQUEST.get('PATH_INFO', object()):
         parent = data.context
     else:
         parent = data.context.aq_inner.aq_parent
@@ -48,7 +49,8 @@ class ReferenceNumberValidator(validator.SimpleFieldValidator):
 
     def validate(self, value):
         super(ReferenceNumberValidator, self).validate(value)
-        if '++add++' in self.request.get('PATH_TRANSLATED', object()):
+        #XXX CHANGED FROM PATH_TRANSLATED TO PATH_INFO because the test don't work
+        if '++add++' in self.request.get('PATH_INFO', object()):
             # context is container
             siblings = self.context.getFolderContents(full_objects=1)
         else:

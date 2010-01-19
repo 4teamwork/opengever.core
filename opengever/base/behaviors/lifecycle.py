@@ -75,7 +75,8 @@ class IntLowerEqualThanParentValidator(validator.SimpleFieldValidator):
         if int(value)<0:
             raise schema.interfaces.TooSmall()
         # get parent value
-        if '++add++' in self.request.get('PATH_TRANSLATED', object()):
+        #XXX CHANGED FROM PATH_TRANSLATED TO PATH_INFO because the test don't work
+        if '++add++' in self.request.get('PATH_INFO', object()):
             obj = self.context
         else:
             obj = self.context.aq_inner.aq_parent

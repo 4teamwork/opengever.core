@@ -56,6 +56,7 @@ class IRepositoryRoot(BasicReferenceNumber):
     grok.context(IRepositoryRoot)
 
     def get_number(self):
+        import pdb; pdb.set_trace( )
         parent_num = self.get_parent_number()
         if parent_num:
             return str(parent_num) + ' '

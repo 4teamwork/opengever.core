@@ -47,12 +47,12 @@ We can see this type in the addable types at the root of the site::
     >>> browser.getControl('Title').value = 'Hallo Hugo'
     >>> browser.getControl('Save').click()
     >>> browser.url
-    'http://nohost/plone/ReferenceFTI/view'
+    'http://nohost/plone/referencefti/view'
 
 
 Get the created object::
 
-    >>> obj = self.portal.ReferenceFTI
+    >>> obj = self.portal.get('referencefti')
     >>> obj
     <Item at ...>
     >>> creator.ICreatorAware.providedBy( obj )
