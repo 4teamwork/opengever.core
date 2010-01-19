@@ -13,14 +13,22 @@ from plone.namedfile.interfaces import INamedFileField
 tolist = lambda f:lambda *a,**k:list(f(*a,**k))
 
 DIRECT_ATTRIBUTES = (
+    # Direct attributes are passed to createContentInContainer and used to instate the
+    # object. For keywords like title and id, but should not be used for normal behavior
+    # fields, since they may not bestored at the object itself but on a persistent adapter
+    # of the object
     'title',
     'Title',
     'effective_title',
     'firstname',
     'lastname',
+    'id',
     )
 META_ATTRIBUTES = (
+    # Thes attributes are not field-values and are not set within the
+    # _update_dexterity_object method (which fails if the field does not exist).
     'location',
+    'id',
     )
 
 def aggressive_decode(value, encoding='utf-8'):
@@ -43,6 +51,11 @@ def aggressive_decode(value, encoding='utf-8'):
 
 
 class GenericContentCreator(object):
+    """
+    Column name postfixes:
+
+    field:unique : field should be unique per container
+    """
 
     def __init__(self, setup, fileencoding='utf-8'):
         self.setup = setup
@@ -57,8 +70,12 @@ class GenericContentCreator(object):
             .replace(',','').strip()
         data_rows = self._get_objects_data(stream)
         print '* IMPORT %s FROM %s' % (len(data_rows), filename)
-        for data in data_rows:
+        for ori_data in data_rows:
             use_location = self.fieldnames[0]=='location'
+            data = {}
+            for key, value in ori_data.items():
+                key = key.split(':')[0].strip()
+                data[key] = value
             pathish_title = data.get(self.fieldnames[0])
             data[self.fieldnames[0]] = pathish_title.split('/')[-1].strip()
             obj = self.get_object_by_pathish_title(pathish_title)
@@ -74,11 +91,31 @@ class GenericContentCreator(object):
                 container = self.get_object_by_pathish_title(container_title)
                 if not container:
                     print 'Could not find object', container_title
+                    continue
             # create the object
-            obj = self._create_object(container, portal_type,
-                                      checkConstraints=checkConstraints, **data)
-            print '** created', obj
-            yield obj
+            if not self._find_object(container, portal_type, **ori_data):
+                obj = self._create_object(container, portal_type,
+                                          checkConstraints=checkConstraints, **data)
+                print '** created', obj
+                yield obj
+
+    def _find_object(self, container, portal_type, **ori_data):
+        childs_of_same_type = [container.get(id) for id in container.objectIds()
+                               if container.get(id).portal_type==portal_type]
+        unique_data = dict([(k.split(':')[0].strip() ,v)
+                            for k, v in ori_data.items()
+                            if k.endswith(':unique')])
+        for obj in childs_of_same_type:
+            fields = self._get_all_fields_of(obj)
+            for key, value in unique_data.items():
+                try:
+                    field = fields[key]
+                except AttributeError:
+                    continue
+                repr = field.interface(obj)
+                if field.get(repr) == value:
+                    return obj
+        return None
 
     def get_object_by_pathish_title(self, title, container=None):
         if not container:

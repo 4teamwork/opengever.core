@@ -30,6 +30,7 @@ class LDAP_Importer(object):
 
 class OpenGeverLDIF(LDIFParser):
     def __init__(self, input, output, folder):
+        self.create_members = False
         LDIFParser.__init__(self, input)
         self.writer = LDIFWriter(output)
         self.folder = folder
@@ -75,9 +76,11 @@ class OpenGeverLDIF(LDIFParser):
                                 id=entry.get('zgXAmtAbk')[0],
                                 title=entry.get('zgXAmt')[0].decode('utf8'),
                                 )
-                            Membership.create_membership( new_contact, self.folder.get(new_og), type="department")
+                            if self.create_members:
+                                Membership.create_membership( new_contact, self.folder.get(new_og), type="department")
                         else:
-                            Membership.create_membership( new_contact, self.folder.get(entry.get('zgXAmtAbk')[0]), type="department")
+                            if self.create_members:
+                                Membership.create_membership( new_contact, self.folder.get(entry.get('zgXAmtAbk')[0]), type="department")
                 except:
                     print entry
 
