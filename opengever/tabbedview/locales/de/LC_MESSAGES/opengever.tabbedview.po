@@ -36,7 +36,6 @@ msgstr "Alle Gremien"
 
 #. Default: "More actions &#9660;"
 #: opengever.tabbedview/opengever/tabbedview/browser/tabs_templates/generic.pt:27
-#, fuzzy
 msgid "button_more_actions"
 msgstr "Weitere Aktionen"
 
