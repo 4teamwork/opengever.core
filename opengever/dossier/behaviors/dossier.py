@@ -53,15 +53,15 @@ class IDossier(form.Schema):
     form.fieldset(
         u'common',
         fields = [
-                u'keywords',
-                u'start',
-                u'end',
-                u'comments',
-                u'responsible',
-                u'relatedDossier',
-        ],
-    )
-    
+            u'keywords',
+            u'start',
+            u'end',
+            u'comments',
+            u'responsible',
+            u'relatedDossier',
+            ],
+        )
+
     keywords = schema.Tuple(
         title = _(u'label_keywords', default=u'Keywords'),
         description = _(u'help_keywords', default=u''),
@@ -71,90 +71,90 @@ class IDossier(form.Schema):
         )
     form.widget(keywords = TextLinesFieldWidget)
 
-        
+
     form.widget(start='ftw.datepicker.widget.DatePickerFieldWidget')
     #form.widget(start=DateTimePickerFieldWidget)
     #form.widget(start='collective.z3cform.datepicker.widget.DatePickerFieldWidget')
     start = schema.Date(
         title=_(u'label_start', default=u'Opening Date'),
-        description = _(u'help_start', default=u''), 
+        description = _(u'help_start', default=u''),
         required=False,
-    )
+        )
 
     form.widget(end='ftw.datepicker.widget.DatePickerFieldWidget')
     #form.widget(end=DateTimePickerFieldWidget)
     #form.widget(end='collective.z3cform.datepicker.widget.DatePickerFieldWidget')
     end = schema.Date(
         title=_(u'label_end', default=u'Closing Date'),
-        description = _(u'help_end', default=u''),   
+        description = _(u'help_end', default=u''),
         required=False,
-    )
-    
+        )
+
     volume_number = schema.TextLine(
         title = _(u'label_volume_number', default=u'Volume Number'),
         description = _(u'help_volume_number', default=u''),
         required=False,
-    )
-        
+        )
+
     comments = schema.Text(
         title=_(u'label_comments', default=u'Comments'),
-        description = _(u'help_comments', default=u''),    
+        description = _(u'help_comments', default=u''),
         required=False
-    )
-    
+        )
+
     form.widget(responsible=AutocompleteFieldWidget)
     responsible = schema.Choice(
         title=_(u"label_responsible", default="Responsible"),
         description =_(u"help_responsible", default="select an responsible Manger"),
         source = util.getManagersVocab,
         required = True,
-    )
+        )
 
     form.fieldset(
         u'filing',
         label = _(u'fieldset_filing', default=u'Filing'),
         fields = [
-                u'container_type',
-                u'container_id',
-                u'volume_number',
-                u'number_of_containers',
-                u'container_location',
-        ],
-    )
+            u'container_type',
+            u'container_id',
+            u'volume_number',
+            u'number_of_containers',
+            u'container_location',
+            ],
+        )
 
     container_type = schema.Choice(
         title = _(u'label_container_type', default=u'Container Type'),
         description = _(u'help_container_type', default=u''),
         source = container_types,
         required = False,
-    )
-    
+        )
+
     container_id = schema.TextLine(
         title = _(u'label_container_id', default=u'Container Id'),
         description = _(u'help_container_id', default=u''),
         required = False,
-    )
-    
+        )
+
     number_of_containers = schema.Int(
         title = _(u'label_number_of_containers', default=u'Number of Containers'),
         description = _(u'help_number_of_containers', default=u''),
         required = False,
-    )        
+        )
 
     container_location = schema.TextLine(
         title = _(u'label_container_location', default=u'Container Location'),
         description = _(u'help_container_location', default=u''),
         required = False,
-    )
-    
+        )
+
     relatedDossier = RelationList(
         title=_(u'label_related_dossier', default=u'Related Dossier'),
         default=[],
         value_type=RelationChoice(title=u"Related",
-                   source=ObjPathSourceBinder(navigation_tree_query={'object_provides' : ('opengever.dossier.behaviors.dossier.IDossierMarker',),})),
+                                  source=ObjPathSourceBinder(navigation_tree_query={'object_provides' : ('opengever.dossier.behaviors.dossier.IDossierMarker',),})),
         required=False,
         )
-            
+
     @invariant
     def validateStartEnd(data):
         if data.start is not None and data.end is not None:
@@ -169,10 +169,10 @@ class StartBeforeEnd(Invalid):
 
 
 # XXX testing widget attributes
-# 
+#
 # import grokcore.component
 # from z3c.form.widget import StaticWidgetAttribute
-# 
+#
 # rows_override = StaticWidgetAttribute(u'blablabla', field=IDossier['comments'])
 # grok.global_adapter(rows_override, name=u"value")
 # labelOverride = StaticWidgetAttribute(u"Override label2", field=IDossier['comments'])
@@ -190,7 +190,7 @@ def startIndexer(obj):
     if aobj.start is None:
         return None
     return aobj.start
-grok.global_adapter(startIndexer, name="start") 
+grok.global_adapter(startIndexer, name="start")
 
 @indexer(IDossierMarker)
 def endIndexer(obj):
