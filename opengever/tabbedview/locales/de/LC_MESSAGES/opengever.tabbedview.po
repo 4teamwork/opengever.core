@@ -37,7 +37,7 @@ msgstr "Alle Gremien"
 #. Default: "More actions &#9660;"
 #: opengever.tabbedview/opengever/tabbedview/browser/tabs_templates/generic.pt:27
 msgid "button_more_actions"
-msgstr "Weitere Aktionen"
+msgstr "Weitere Aktionen &#9660;"
 
 msgid "checked_out"
 msgstr "in Bearbeitung"
