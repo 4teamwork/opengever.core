@@ -1,6 +1,9 @@
 from zope.interface import Interface
 from zope import schema
 from zope.schema import vocabulary
+from zope.app.intid.interfaces import IIntIds
+
+from zope.component import getUtility
 
 from AccessControl import SecurityManagement
 from five import grok
@@ -43,7 +46,8 @@ class DocuComposerWizardForm(DexterityExtensibleForm, form.AddForm):
         data, errors = self.extractData()
         if len(errors)==0:
             data['owner'] = self.context.portal_membership.getAuthenticatedMember().getId()
-            data['context'] = self.context
+            intids = getUtility( IIntIds )
+            data['intid'] = intids.getId( self.context )
             data['creation_date'] = DateTime()
             queue = DCQueue(self.context)
             token = queue.appendDCDoc(data)
@@ -106,11 +110,13 @@ class CreateDocumentWithFile(grok.CodeView):
                 user = user.__of__(uf)
             SecurityManagement.newSecurityManager(self.request, user)
 
-            dossier = data['context']
+            intids = getUtility( IIntIds )
+
+            dossier = intids.getObject(data['intid'])
 
             #remove unused attributes in the data dict
             data.pop('owner')
-            data.pop('context')
+            data.pop('intid')
 
             new_doc = createContentInContainer(dossier, 'opengever.document.document', **data)
 

@@ -1,7 +1,8 @@
 import unittest
 
 from zope.component import createObject
-from zope.component import queryUtility
+from zope.component import queryUtility, getUtility
+from zope.app.intid.interfaces import IIntIds
 
 from plone.dexterity.interfaces import IDexterityFTI
 
@@ -21,11 +22,13 @@ class TestDocucomposer(PloneTestCase):
     layer = Layer
     
     def test_create_document_with_file(self):
-        
+
         queue = DCQueue(self.portal)
         user = getSecurityManager().getUser()
+
+        intids = getUtility( IIntIds )
         
-        data = PersistentDict({'title':'Test Document', 'owner': user.getId(), 'context':self.folder, 'creation_date':DateTime(), 'IRelatedItems.relatedItems': [], 'IClassification.public_trial_statement': None, 'receipt_date': None, 'foreign_reference': None, 'description': u'fasdf', 'document_author': u'zopemaster', 'IClassification.public_trial': u'unchecked', 'delivery_date': None, 'IClassification.privacy_layer': u'privacy layer : no', 'IClassification.classification': u'unprotected', 'paper_form': False, 'file': None, 'keywords': (), 'document_type': None, 'preserved_as_paper': True, 'document_date': datetime.now()})
+        data = PersistentDict({'title':'Test Document', 'owner': user.getId(), 'intid':intids.getId( self.folder ), 'creation_date':DateTime(), 'IRelatedItems.relatedItems': [], 'IClassification.public_trial_statement': None, 'receipt_date': None, 'foreign_reference': None, 'description': u'fasdf', 'document_author': u'zopemaster', 'IClassification.public_trial': u'unchecked', 'delivery_date': None, 'IClassification.privacy_layer': u'privacy layer : no', 'IClassification.classification': u'unprotected', 'paper_form': False, 'file': None, 'keywords': (), 'document_type': None, 'preserved_as_paper': True, 'document_date': datetime.now()})
         
         token = queue.appendDCDoc(data)
         

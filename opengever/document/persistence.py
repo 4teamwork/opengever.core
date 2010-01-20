@@ -40,7 +40,7 @@ class DCQueue(grok.adapter):
     def removeDCDoc(self, key):
         dict = self.getDCDocs()
         dict.__delitem__(key)
-        self._setDCDocs(dict)
+        self._setDCDoc(dict)
 
     def _setDCDoc(self, dcdict):
         if not isinstance(dcdict, PersistentDict):
