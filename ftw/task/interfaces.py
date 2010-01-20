@@ -4,7 +4,6 @@ from zope.interface import Attribute
 from zope import schema
 from zope.viewlet.interfaces import IViewletManager
 from zope.contentprovider.interfaces import ITALNamespaceData
-from plone.registry import field
 
 
 class IResponseAdder(IViewletManager):
@@ -40,7 +39,7 @@ class ITaskSettings(Interface):
         title = u'Task Types Unidirectional by Reference',
         description = u'',
         default = [u'Zur Kenntnisnahme',],
-        value_type = field.TextLine(title=u"Name"),
+        value_type = schema.TextLine(title=u"Name"),
     )
     
     crop_length = schema.Int(title=u"Crop length", default=20)
@@ -49,7 +48,7 @@ class ITaskSettings(Interface):
         title = u'Unidirectional by Value',
         description = u'',
         default = [u'Zur direkten Erledigung',],
-        value_type = field.TextLine(title=u"Name"),
+        value_type = schema.TextLine(title=u"Name"),
     )
         
     task_types_bi_ref = schema.List(
@@ -59,12 +58,11 @@ class ITaskSettings(Interface):
                    u'Zur Genehmigung',
                    u'Zur Pruefung/Korrektur',
                    u'Zum Bericht/Antrag',],
-        value_type = field.TextLine(title=u"Name"),    
+        value_type = schema.TextLine(title=u"Name"),
     )
 
     task_types_bi_val = schema.List(
         title = u'Bidirectional by Value',
         description = u'',
-        default = [],
-        value_type = field.TextLine(title=u"Name"),
+        value_type = schema.TextLine(),
     )
