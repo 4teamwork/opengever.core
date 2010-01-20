@@ -7,6 +7,7 @@ from opengever.dossier import _
 from ftw.task import util
 from Products.CMFCore.utils import getToolByName
 from ZODB.POSException import ConflictError
+from zope.app.container.interfaces import IObjectMovedEvent
 
 from plone.autoform.interfaces import IFormFieldProvider
 from plone.directives import form
@@ -22,9 +23,10 @@ from zope.schema.vocabulary import SimpleVocabulary
 from zope.schema.interfaces import IContextSourceBinder
 from zope import schema
 from zope.interface import Interface, alsoProvides
-from zope.component import queryUtility
+from zope.component import queryUtility, getAdapter
 
 from opengever.dossier.interfaces import IDossierContainerTypes
+from opengever.base.interfaces import IReferenceNumber
 
 from z3c.relationfield.schema import RelationChoice, RelationList
 from plone.formwidget.contenttree import ObjPathSourceBinder
@@ -155,6 +157,12 @@ class IDossier(form.Schema):
         required=False,
         )
 
+    former_reference_number = schema.TextLine(
+        title = _(u'label_former_reference_number', default=u'Reference Number'),
+        description = _(u'help_former_reference_number', default=u''),
+        required = False,
+        )
+
     @invariant
     def validateStartEnd(data):
         if data.start is not None and data.end is not None:
@@ -249,7 +257,7 @@ def SearchableText(obj):
                 raise
             except Exception, e:
                 LOG.error("Error while trying to convert file contents to 'text/plain' "
-                          "in SearchableIndex(dossier.py): %s" % (e,))
+                          "in SearchablceIndex(dossier.py): %s" % (e,))
             data = str(datastream)
         if isinstance(data, unicode):
             data = data.encode('utf8')
@@ -259,3 +267,17 @@ def SearchableText(obj):
             searchable.append(data)
     return ' '.join(searchable)
 grok.global_adapter(SearchableText, name='SearchableText')
+
+@grok.subscribe(IDossierMarker, IObjectMovedEvent)
+def set_former_reference_after_moving(obj, event):
+    if not event.oldParent:
+        # object was just created
+        return
+    # we need to reconstruct the reference number
+    new_obj_rn = getAdapter(obj, IReferenceNumber).get_number()
+    new_par_rn = getAdapter(event.newParent, IReferenceNumber).get_number()
+    old_par_rn = getAdapter(event.oldParent, IReferenceNumber).get_number()
+    old_obj_rn = old_par_rn + new_obj_rn[len(new_par_rn):]
+    repr = IDossier(obj)
+    IDossier['former_reference_number'].set(repr, old_obj_rn)
+
