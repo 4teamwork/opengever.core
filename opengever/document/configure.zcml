@@ -13,6 +13,11 @@
     <!-- Grok the package to initialise schema interfaces and content classes -->
     <grok:grok package="." />
 
+    <browser:resourceDirectory 
+        name="opengever.document"
+        directory="static"
+    /> 
+
     <!-- Include custom permissions -->
     <include file="permissions.zcml" />
 

@@ -5,9 +5,8 @@ from zope.schema import vocabulary
 from AccessControl import SecurityManagement
 from five import grok
 from DateTime import DateTime
-from z3c.form import form, field, button, interfaces
+from z3c.form import form, button, interfaces
 
-from persistent.dict import PersistentDict
 from plone.z3cform import layout
 from plone.dexterity.utils import createContentInContainer
 from plone.dexterity.browser.base import DexterityExtensibleForm
@@ -49,17 +48,12 @@ class DocuComposerWizardForm(DexterityExtensibleForm, form.AddForm):
             queue = DCQueue(self.context)
             token = queue.appendDCDoc(data)
 
-            url = 'docucomposer:url=%s&token=%s' % (
-                self.context.portal_url(),
-                token,
-            )
             print token
-            print url
-
+            
             queue.clearUp()
-
-            return self.request.RESPONSE.redirect(url)
-
+            
+            return self.request.RESPONSE.redirect('docucomposer-start?token=%s' % token)
+            
 
 class DocuComposerWizardView(layout.FormWrapper, grok.CodeView):
     grok.context(Interface)
@@ -72,6 +66,21 @@ class DocuComposerWizardView(layout.FormWrapper, grok.CodeView):
         grok.CodeView.__init__(self, context, request)
 
 
+class StartDCLauncher(grok.CodeView):
+    grok.context(Interface)
+    grok.require('zope2.View')
+    grok.name('docucomposer-start')
+    
+    def url(self):
+        if self.request.get('token'):
+            url = 'docucomposer:url=%s&token=%s' % (
+                self.context.portal_url(),
+                self.request.get('token'),
+            )
+            return url
+        return None
+
+    
 class CreateDocumentWithFile(grok.CodeView):
     from Products.CMFPlone.interfaces import IPloneSiteRoot
     grok.context(IPloneSiteRoot)
@@ -113,4 +122,7 @@ class CreateDocumentWithFile(grok.CodeView):
             doc = self.context.restrictedTraverse('/'.join(new_doc.getPhysicalPath()))
             url = doc.absolute_url()
 
+            #remove 
+            queue.removeDCDoc(token)
+            
             return url
