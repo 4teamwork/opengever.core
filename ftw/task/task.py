@@ -355,7 +355,10 @@ class Byline(grok.Viewlet, content.DocumentBylineViewlet):
         seqNumb = getUtility(ISequenceNumber)
         return seqNumb.get_number(self.context)
 
-
+    def responsible(self):
+        mt=getToolByName(self.context,'portal_membership')
+        task = ITask(self.context)
+        return mt.getMemberById(task.responsible)
 
 
 @indexer(ITask)
