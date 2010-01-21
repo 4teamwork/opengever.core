@@ -64,5 +64,6 @@ class ITaskSettings(Interface):
     task_types_bi_val = schema.List(
         title = u'Bidirectional by Value',
         description = u'',
-        value_type = schema.TextLine(),
+        default = [],
+        value_type = schema.TextLine(title=u'Name'),
     )
