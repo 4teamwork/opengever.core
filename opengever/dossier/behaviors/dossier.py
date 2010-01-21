@@ -270,8 +270,8 @@ grok.global_adapter(SearchableText, name='SearchableText')
 
 @grok.subscribe(IDossierMarker, IObjectMovedEvent)
 def set_former_reference_after_moving(obj, event):
-    if not event.oldParent:
-        # object was just created
+    if not event.oldParent or not event.newParent:
+        # object was just created or deleted
         return
     # we need to reconstruct the reference number
     new_obj_rn = getAdapter(obj, IReferenceNumber).get_number()
