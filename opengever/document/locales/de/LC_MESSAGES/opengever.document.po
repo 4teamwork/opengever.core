@@ -244,7 +244,7 @@ msgstr "Autor"
 #. Default: "by ${author}"
 #: opengever.document/opengever/document/document_templates/byline.pt:16
 msgid "label_by_author"
-msgstr "Federführend: ${author}"
+msgstr "Autor: ${author}"
 
 #. Default: "Journal Comment"
 #: opengever.document/opengever/document/staging/checkin.py:31

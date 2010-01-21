@@ -13,13 +13,12 @@
     <span class="documentAuthor"
           i18n:translate="label_by_author">
       by
-      <a href="#"
-         tal:attributes="href string:${context/@@plone_portal_state/navigation_root_url}/author/${context/document_author}"
-         tal:content="context/document_author"
-         tal:omit-tag="not:context/document_author"
+      <tal:autor
+         content="context/document_author"
+         omit-tag="not:context/document_author"
          i18n:name="author">
         Bob Dobalina
-      </a>
+      </tal:autor>
 
     </span>
   </tal:name>

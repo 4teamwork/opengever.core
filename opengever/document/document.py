@@ -573,3 +573,52 @@ class DownloadFileVersion(grok.CodeView):
                            'attachment;filename="%s"' % old_file.filename)
         return old_file.data
 
+class Byline(grok.Viewlet, content.DocumentBylineViewlet):
+    grok.viewletmanager(IBelowContentTitle)
+    grok.context(IDocumentSchema)
+    grok.name("plone.belowcontenttitle.documentbyline")
+
+    update = content.DocumentBylineViewlet.update
+
+    def start(self):
+        document = IDocumentSchema(self.context)
+        return document.start
+
+    def responsible(self):
+        mt=getToolByName(self.context,'portal_membership')
+        document = IDocumentSchema(self.context)
+        return mt.getMemberById(document.responsible)
+
+    def end(self):
+        document = IDocumentSchema(self.context)
+        return document.end
+
+    @memoize
+    def workflow_state(self):
+        state = self.context_state.workflow_state()
+        workflows = self.tools.workflow().getWorkflowsFor(self.context.aq_explicit)
+        if workflows:
+            for w in workflows:
+                if w.states.has_key(state):
+                    return w.states[state].title or state
+
+    @memoize
+    def sequence_number(self):
+        seqNumb = getUtility(ISequenceNumber)
+        return seqNumb.get_number(self.context)
+
+    @memoize
+    def reference_number(self):
+        refNumb = getAdapter(self.context, IReferenceNumber)
+        return refNumb.get_number()
+
+    def get_filing_no(self):
+        document = IDocumentSchema(self.context)
+        return getattr(document, 'filing_no', None)
+
+    # TODO: should be more generic ;-)
+    #       use sequence_number instead of intid
+    def email(self):
+        if IMailInAddressMarker.providedBy(self.context):
+            return IMailInAddress(self.context).get_email_address()
+
