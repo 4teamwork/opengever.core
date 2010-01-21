@@ -40,6 +40,7 @@ class ITaskSettings(Interface):
         description = u'',
         default = [u'Zur Kenntnisnahme',],
         value_type = schema.TextLine(title=u"Name"),
+        required = False,
     )
     
     crop_length = schema.Int(title=u"Crop length", default=20)
@@ -49,6 +50,7 @@ class ITaskSettings(Interface):
         description = u'',
         default = [u'Zur direkten Erledigung',],
         value_type = schema.TextLine(title=u"Name"),
+        required = False,
     )
         
     task_types_bi_ref = schema.List(
@@ -59,6 +61,7 @@ class ITaskSettings(Interface):
                    u'Zur Pruefung/Korrektur',
                    u'Zum Bericht/Antrag',],
         value_type = schema.TextLine(title=u"Name"),
+        required = False,
     )
 
     task_types_bi_val = schema.List(
@@ -66,4 +69,5 @@ class ITaskSettings(Interface):
         description = u'',
         default = [],
         value_type = schema.TextLine(title=u'Name'),
+        required = False,
     )
