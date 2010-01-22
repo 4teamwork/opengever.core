@@ -1,21 +1,19 @@
 from five import grok
 from plone.directives import dexterity
+from Acquisition import aq_inner, aq_parent
 
 from opengever.dossier.behaviors.dossier import IDossierMarker, IDossier
 from Products.CMFCore.utils import getToolByName
 from opengever.dossier.latex.dossierlayout import DossierLayout
 
+from zope.component import getUtility, getAdapter
+from opengever.base.interfaces import IReferenceNumber, ISequenceNumber
+from zope.component import queryUtility
+from plone.registry.interfaces import IRegistry
+from opengever.base.interfaces import IBaseClientID
 from plone.autoform.base import AutoFields
 
 from plonegov.pdflatex.browser.converter import LatexCTConverter
-
-class DossierView(dexterity.DisplayForm):
-    grok.context(IDossierMarker)
-    grok.require('zope2.View')
-    def responsible(self):
-        mt=getToolByName(self.context,'portal_membership')
-        dossier = IDossier(self.context)
-        return mt.getMemberById(dossier.responsible).getProperty('fullname',dossier.responsible)
         
 class ExportPDFView(grok.CodeView):
     grok.context(IDossierMarker)
@@ -63,11 +61,43 @@ class DossierLatexConverter(LatexCTConverter,grok.CodeView,AutoFields):
     def getOwnerMember(self):
         creator_id = self.context.Creator()
         return self.context.portal_membership.getMemberById(creator_id)
+        
+    def responsible(self):
+        mt=getToolByName(self.context,'portal_membership')
+        dossier = IDossier(self.context)
+        return mt.getMemberById(dossier.responsible)
 
     def __call__(self, context, view):
+        parent = aq_parent(aq_inner(context))
+        repositoryfolder = parent.portal_type=='opengever.repository.repositoryfolder' and parent.Title() or aq_parent(parent).Title()
+
+        start = self.context.toLocalizedTime(str(IDossier(context).start))
+        end = self.context.toLocalizedTime(str(IDossier(context).end))
+        start = start==None and '-' or start
+        end = end==None and '-' or end
+        registry = queryUtility(IRegistry)
+        proxy = registry.forInterface(IBaseClientID)
+        filling_no = getattr(IDossierMarker(context), 'filing_no', None)
+
         self.view = view
-        latex = '\\section*{%s}\n' % self.context.Title()
-        latex = latex.encode('utf8')
-        table = context.restrictedTraverse("@@dossierview")()
-        latex += self.view.convert(table)
+        latex = '\\linespread {1.5}\n'
+        latex += '\\thispagestyle{empty}\n'
+        latex += '\\noindent\n'
+        latex += '\\small %s \\newline\n' % self.view.convert(proxy.client_id)
+        latex += '\\noindent\n'
+        latex += '\\includegraphics{strich} \\newline\n'
+        latex += '\\scriptsize Aktenzeichen: %s\\hspace{0.15cm}|' % self.view.convert(getAdapter(self.context, IReferenceNumber).get_number())
+        if filling_no:
+            latex += '\\hspace{0.15cm}Ablagenummer: %s\\hspace{0.15cm}|' % self.view.convert(filling_no)
+        latex += '\\hspace{0.15cm}Laufnummer: %s\n' % self.view.convert(str(getUtility(ISequenceNumber).get_number(self.context)))
+        latex += '\\noindent\n'
+        latex += '\\vspace{1.5cm} \\newline\n'
+        latex += '\\scriptsize %s\n' % self.view.convert(repositoryfolder)
+        latex += '\\vspace{0.3cm} \\newline\n'
+        latex += '\\small \\textbf{%s}. %s \\newline\n' %(self.view.convert(context.Title()),self.view.convert(context.Description()))
+        latex += '\\vspace{0.3cm} \\newline\n'
+        latex += '\\scriptsize %s: %s\n' % (self.view.convert('Federf&uuml;hrung'),self.view.convert(self.responsible().getProperty('fullname')))
+        latex += '\\vspace{0.15cm} \\newline\n'
+        latex += 'Beginn: %s\\hspace{0.15cm}|\\hspace{0.15cm}\n' % self.view.convert(start)
+        latex += 'Abschluss: %s\\hspace{0.15cm} \\newline\n' % self.view.convert(end)
         return latex

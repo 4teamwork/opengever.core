@@ -17,43 +17,24 @@ class DossierLayout(object):
 
     def setDocumentClass(self):
         self.view.setLatexProperty('document_class', 'article')
-        self.view.setLatexProperty('document_config', 'a4paper,10pt,parskip=half')
+        self.view.setLatexProperty('document_config', 'a4paper,11pt')
         # register logo image
-        image = self.getResourceFileData('logo_sw.pdf')
-        self.view.addImage(uid='logo_sw', image=image)
+        image = self.getResourceFileData('strich.png')
+        self.view.addImage(uid='strich', image=image)
 
-    def registerPackages(self):
+    def registerPackages(self):    
+        self.view.registerPackage('inputenc','utf8')
+        self.view.registerPackage('fontenc','T1')
+        self.view.registerPackage('textcomp')
+        self.view.registerPackage('arial')
+        self.view.registerPackage('geometry', 'left=5cm,right=5cm,top=15cm,bottom=4cm')
         self.view.registerPackage('graphicx')
-        self.view.registerPackage('helvet')
-        self.view.registerPackage('wrapfig')
-        self.view.registerPackage('longtable')
-        self.view.registerPackage('titlesec', 'compact')
-        self.view.registerPackage('geometry', 'left=35mm,right=10mm,top=55mm,bottom=30.5mm')
-        self.view.registerPackage('fancyhdr')
-        self.view.registerPackage('paralist', 'neveradjust')
-        self.view.registerPackage('textpos', 'absolute, overlay')
-        self.view.registerPackage('ifthen')
 
     def appendHeadCommands(self):
-        member = self.getOwnerMember()
-        self.view.appendHeaderCommand(r'\newcommand{\Autor}{%s}' % r'')
-        self.view.appendHeaderCommand(r'\newcommand{\Titel}{%s}' %
-            self.context.pretty_title_or_id().encode('utf8'))
-        self.view.appendHeaderCommand(r'\newcommand{\CreatorDirektion}{%s}' %
-                        self.view.convert(member and member.getProperty('direktion', '-') or '-'))
-        self.view.appendHeaderCommand(r'\newcommand{\CreatorAmt}{%s}' %
-                        self.view.convert(member and member.getProperty('amt', '-') or '-'))
-        # and embed local head_commands.tex (overwrites the bibliothek-one partially)
-        head_commands = self.getResourceFileData('head_commands.tex')
-        self.view.appendHeaderCommand(head_commands)
+        self.view.appendHeaderCommand(r'\newcommand{\familydefault}{ua1}')
 
     def appendAboveBodyCommands(self):
-        self.view.appendToProperty('latex_above_body', r'\thispagestyle{myheadings}')
+        pass
 
     def appendBeneathBodyCommands(self):
         pass
-        #self.view.appendToProperty('latex_beneath_body', r'')
-
-    def getOwnerMember(self):
-        creator_id = self.context.Creator()
-        return self.context.portal_membership.getMemberById(creator_id)
