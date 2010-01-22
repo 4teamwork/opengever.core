@@ -78,6 +78,7 @@ class DossierLatexConverter(LatexCTConverter,grok.CodeView,AutoFields):
         registry = queryUtility(IRegistry)
         proxy = registry.forInterface(IBaseClientID)
         filling_no = getattr(IDossierMarker(context), 'filing_no', None)
+        fillingNumber = ""
 
         self.view = view
         latex = '\\linespread {1.5}\n'
@@ -88,7 +89,8 @@ class DossierLatexConverter(LatexCTConverter,grok.CodeView,AutoFields):
         latex += '\\includegraphics{strich} \\newline\n'
         latex += '\\scriptsize Aktenzeichen: %s\\hspace{0.15cm}|' % self.view.convert(getAdapter(self.context, IReferenceNumber).get_number())
         if filling_no:
-            latex += '\\hspace{0.15cm}Ablagenummer: %s\\hspace{0.15cm}|' % self.view.convert(filling_no)
+            fillingNumber = self.view.convert(filling_no)
+        latex += '\\hspace{0.15cm}Ablagenummer: %s\\hspace{0.15cm}|' % fillingNumber
         latex += '\\hspace{0.15cm}Laufnummer: %s\n' % self.view.convert(str(getUtility(ISequenceNumber).get_number(self.context)))
         latex += '\\noindent\n'
         latex += '\\vspace{1.5cm} \\newline\n'
