@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: opengever.dossier 1.0\n"
-"POT-Creation-Date: 2010-01-18 09:23+0000\n"
+"POT-Creation-Date: 2010-01-22 07:48+0000\n"
 "PO-Revision-Date: 2009-09-17 15:21+0000\n"
 "Last-Translator: Thomas Buchberger <t.buchberger@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -32,17 +32,21 @@ msgid "Template Dossier"
 msgstr "Vorlagen Dossier"
 
 #. Default: "expired"
-#: opengever.dossier/opengever/dossier/templatedossier_templates/template_form.pt:23
 msgid "Templates"
 msgstr "Vorlagen"
 
-#: opengever.dossier/opengever/dossier/behaviors/dossier.py:162
+#: opengever.dossier/opengever/dossier/behaviors/dossier.py:170
 msgid "The start date must be before the end date."
 msgstr "Das Beginn-Datum muss vor dem Ende-Datum liegen."
 
-#: opengever.dossier/opengever/dossier/behaviors/dossier.py:168
+#: opengever.dossier/opengever/dossier/behaviors/dossier.py:176
 msgid "The start or end date is invalid"
 msgstr "Das Beginn- oder Ende-Datum ist ungültig."
+
+#. Default: "last modified"
+#: opengever.dossier/opengever/dossier/templatedossier_templates/byline.pt:35
+msgid "box_last_modified"
+msgstr "Von:"
 
 #. Default: "Add"
 #: opengever.dossier/opengever/dossier/behaviors/participation.py:227
@@ -60,12 +64,12 @@ msgid "button_cancel"
 msgstr "Abbrechen"
 
 #. Default: "create document with template"
-#: opengever.dossier/opengever/dossier/templatedossier.py:36
+#: opengever.dossier/opengever/dossier/templatedossier.py:40
 msgid "create_document_with_template"
 msgstr "Dokument mit Vorlage erstellen"
 
 #. Default: "Filing"
-#: opengever.dossier/opengever/dossier/behaviors/dossier.py:115
+#: opengever.dossier/opengever/dossier/behaviors/dossier.py:117
 msgid "fieldset_filing"
 msgstr "Ablage"
 
@@ -88,7 +92,7 @@ msgstr "Dossier ablegen"
 msgid "help_comment"
 msgstr ""
 
-#: opengever.dossier/opengever/dossier/behaviors/dossier.py:101
+#: opengever.dossier/opengever/dossier/behaviors/dossier.py:103
 msgid "help_comments"
 msgstr ""
 
@@ -96,32 +100,36 @@ msgstr ""
 msgid "help_contact"
 msgstr "Wählen Sie die verantwortliche Person oder Organisationseinheit aus"
 
-#: opengever.dossier/opengever/dossier/behaviors/dossier.py:134
+#: opengever.dossier/opengever/dossier/behaviors/dossier.py:136
 msgid "help_container_id"
 msgstr "Code des Behälters, in dem ein Dossier in Papierform abgelegt ist"
 
-#: opengever.dossier/opengever/dossier/behaviors/dossier.py:146
+#: opengever.dossier/opengever/dossier/behaviors/dossier.py:148
 msgid "help_container_location"
 msgstr "Standortangabe des Behälters, in dem ein Dossier in Papierform abgelegt ist"
 
-#: opengever.dossier/opengever/dossier/behaviors/dossier.py:127
+#: opengever.dossier/opengever/dossier/behaviors/dossier.py:129
 msgid "help_container_type"
 msgstr "Art des Behälters, in dem ein Dossier in Papierform abgelegt ist"
 
-#: opengever.dossier/opengever/dossier/behaviors/dossier.py:89
+#: opengever.dossier/opengever/dossier/behaviors/dossier.py:91
 msgid "help_end"
 msgstr ""
 
-#: opengever.dossier/opengever/dossier/behaviors/dossier.py:67
+#: opengever.dossier/opengever/dossier/behaviors/dossier.py:162
+msgid "help_former_reference_number"
+msgstr ""
+
+#: opengever.dossier/opengever/dossier/behaviors/dossier.py:69
 msgid "help_keywords"
 msgstr "Schlagworte zur Umschreibung eines Dossiers. Nicht zu Verwechseln mit der Ordnungsposition"
 
-#: opengever.dossier/opengever/dossier/behaviors/dossier.py:140
+#: opengever.dossier/opengever/dossier/behaviors/dossier.py:142
 msgid "help_number_of_containers"
 msgstr "Anzahl Behälter, die ein (grosses) Dossier in Papierform enthalten"
 
 #. Default: "select an responsible Manger"
-#: opengever.dossier/opengever/dossier/behaviors/dossier.py:108
+#: opengever.dossier/opengever/dossier/behaviors/dossier.py:110
 msgid "help_responsible"
 msgstr "Verantwortlicher Manager"
 
@@ -129,11 +137,11 @@ msgstr "Verantwortlicher Manager"
 msgid "help_roles"
 msgstr ""
 
-#: opengever.dossier/opengever/dossier/behaviors/dossier.py:80
+#: opengever.dossier/opengever/dossier/behaviors/dossier.py:82
 msgid "help_start"
 msgstr ""
 
-#: opengever.dossier/opengever/dossier/behaviors/dossier.py:95
+#: opengever.dossier/opengever/dossier/behaviors/dossier.py:97
 msgid "help_volume_number"
 msgstr "Nummer eines Bandes, zu welchem mehrere zusammengehörige, papierförmige  Dossiers zusammengefügt worden sind"
 
@@ -150,6 +158,7 @@ msgstr "Die Beteiligungen wurde entfernt."
 #. Default: "by ${author}"
 #: opengever.dossier/opengever/dossier/businesscase_templates/byline.pt:16
 #: opengever.dossier/opengever/dossier/project_templates/byline.pt:16
+#: opengever.dossier/opengever/dossier/templatedossier_templates/byline.pt:16
 msgid "label_by_author"
 msgstr "Federführend: ${author}"
 
@@ -159,7 +168,7 @@ msgid "label_comment"
 msgstr "Kommentar"
 
 #. Default: "Comments"
-#: opengever.dossier/opengever/dossier/behaviors/dossier.py:100
+#: opengever.dossier/opengever/dossier/behaviors/dossier.py:102
 msgid "label_comments"
 msgstr "Kommentar"
 
@@ -169,22 +178,22 @@ msgid "label_contact"
 msgstr "Person oder Organisationseinheit"
 
 #. Default: "Container Id"
-#: opengever.dossier/opengever/dossier/behaviors/dossier.py:133
+#: opengever.dossier/opengever/dossier/behaviors/dossier.py:135
 msgid "label_container_id"
 msgstr "Behältnis-Code"
 
 #. Default: "Container Location"
-#: opengever.dossier/opengever/dossier/behaviors/dossier.py:145
+#: opengever.dossier/opengever/dossier/behaviors/dossier.py:147
 msgid "label_container_location"
 msgstr "Behältnis-Standort"
 
 #. Default: "Container Type"
-#: opengever.dossier/opengever/dossier/behaviors/dossier.py:126
+#: opengever.dossier/opengever/dossier/behaviors/dossier.py:128
 msgid "label_container_type"
 msgstr "Behältnis-Art"
 
 #. Default: "Edit after creation"
-#: opengever.dossier/opengever/dossier/templatedossier_templates/template_form.pt:59
+#: opengever.dossier/opengever/dossier/templatedossier_templates/template_form.pt:58
 msgid "label_edit_after_creation"
 msgstr "Nach dem hinzufügen bearbeiten"
 
@@ -194,7 +203,7 @@ msgid "label_email_address"
 msgstr ""
 
 #. Default: "Closing Date"
-#: opengever.dossier/opengever/dossier/behaviors/dossier.py:88
+#: opengever.dossier/opengever/dossier/behaviors/dossier.py:90
 msgid "label_end"
 msgstr "Ende"
 
@@ -209,13 +218,18 @@ msgstr "Ende:"
 msgid "label_filing_no"
 msgstr "Ablagenummer:"
 
+#. Default: "Reference Number"
+#: opengever.dossier/opengever/dossier/behaviors/dossier.py:161
+msgid "label_former_reference_number"
+msgstr ""
+
 #. Default: "Keywords"
-#: opengever.dossier/opengever/dossier/behaviors/dossier.py:66
+#: opengever.dossier/opengever/dossier/behaviors/dossier.py:68
 msgid "label_keywords"
 msgstr "Schlagworte"
 
 #. Default: "Number of Containers"
-#: opengever.dossier/opengever/dossier/behaviors/dossier.py:139
+#: opengever.dossier/opengever/dossier/behaviors/dossier.py:141
 msgid "label_number_of_containers"
 msgstr "Anzahl Behältnisse"
 
@@ -240,12 +254,12 @@ msgid "label_reference_number"
 msgstr "Aktenzeichen:"
 
 #. Default: "Related Dossier"
-#: opengever.dossier/opengever/dossier/behaviors/dossier.py:151
+#: opengever.dossier/opengever/dossier/behaviors/dossier.py:153
 msgid "label_related_dossier"
 msgstr "Verwandte Dossiers"
 
 #. Default: "Responsible"
-#: opengever.dossier/opengever/dossier/behaviors/dossier.py:107
+#: opengever.dossier/opengever/dossier/behaviors/dossier.py:109
 msgid "label_responsible"
 msgstr "Federführend"
 
@@ -260,7 +274,7 @@ msgid "label_sequence_number"
 msgstr "Laufnummer:"
 
 #. Default: "Opening Date"
-#: opengever.dossier/opengever/dossier/behaviors/dossier.py:79
+#: opengever.dossier/opengever/dossier/behaviors/dossier.py:81
 msgid "label_start"
 msgstr "Beginn"
 
@@ -271,23 +285,24 @@ msgid "label_start_byline"
 msgstr "Beginn:"
 
 #. Default: "Template"
-#: opengever.dossier/opengever/dossier/templatedossier_templates/template_form.pt:26
+#: opengever.dossier/opengever/dossier/templatedossier_templates/template_form.pt:25
 msgid "label_template"
 msgstr "Vorlage"
 
 #. Default: "Title"
-#: opengever.dossier/opengever/dossier/templatedossier_templates/template_form.pt:35
+#: opengever.dossier/opengever/dossier/templatedossier_templates/template_form.pt:34
 msgid "label_title"
 msgstr "Titel"
 
 #. Default: "Volume Number"
-#: opengever.dossier/opengever/dossier/behaviors/dossier.py:94
+#: opengever.dossier/opengever/dossier/behaviors/dossier.py:96
 msgid "label_volume_number"
 msgstr "Bandnummer"
 
 #. Default: "State:"
 #: opengever.dossier/opengever/dossier/businesscase_templates/byline.pt:28
 #: opengever.dossier/opengever/dossier/project_templates/byline.pt:28
+#: opengever.dossier/opengever/dossier/templatedossier_templates/byline.pt:28
 msgid "label_workflow_state"
 msgstr "Status:"
 
@@ -307,13 +322,14 @@ msgstr "Es sind nicht alle Dokumente in einem Subdossiers abgelegt"
 msgid "not all task are closed"
 msgstr "Es sind nicht alle Aufgaben erledigt"
 
-#: opengever.dossier/opengever/dossier/templatedossier_templates/template_form.pt:28
+#: opengever.dossier/opengever/dossier/templatedossier_templates/template_form.pt:27
 msgid "required"
 msgstr "erforderlich"
 
 #. Default: "expired"
 #: opengever.dossier/opengever/dossier/businesscase_templates/byline.pt:53
 #: opengever.dossier/opengever/dossier/project_templates/byline.pt:53
+#: opengever.dossier/opengever/dossier/templatedossier_templates/byline.pt:44
 msgid "time_expired"
 msgstr ""
 

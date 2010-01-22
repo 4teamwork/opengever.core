@@ -15,6 +15,10 @@ from DateTime import DateTime
 from opengever.dossier import _
 from opengever.base.interfaces import ISequenceNumber
 
+from plone.app.layout.viewlets import content
+from plone.memoize.instance import memoize
+from plone.app.layout.viewlets.interfaces import IBelowContentTitle
+
 from ftw.table import helper
 from ftw.table.interfaces import ITableGenerator
 from opengever.document.staging.manager import ICheckinCheckoutManager
@@ -123,3 +127,20 @@ class TemplateFolder(grok.GlobalUtility):
         if brain:
             return brain.getPath()
         return None
+        
+class Byline(grok.Viewlet, content.DocumentBylineViewlet):
+    grok.viewletmanager(IBelowContentTitle)
+    grok.context(ITemplateDossier)
+    grok.name("plone.belowcontenttitle.documentbyline")
+
+    update = content.DocumentBylineViewlet.update
+
+    @memoize
+    def workflow_state(self):
+        context = aq_inner(self.context)
+        state = self.context_state.workflow_state()
+        workflows = self.tools.workflow().getWorkflowsFor(self.context.aq_explicit)
+        if workflows:
+            for w in workflows:
+                if w.states.has_key(state):
+                    return w.states[state].title or state
