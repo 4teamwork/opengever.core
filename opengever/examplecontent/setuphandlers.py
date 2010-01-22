@@ -5,6 +5,7 @@ from opengever.examplecontent.handlers import tree_portlet
 from opengever.examplecontent.handlers import pas_create_users
 from opengever.examplecontent.handlers import importer
 from opengever.examplecontent.handlers import ogds_navi_portlet
+from opengever.examplecontent.handlers import journal
 
 from opengever.examplecontent.utils import GenericContentCreator
 
@@ -13,6 +14,7 @@ HANDLERS = {
     'ogds' : ogds.SetupVarious(),
     'tree_portlet' : tree_portlet.SetupVarious(),
     'ogds_navi_portlet' : ogds_navi_portlet.SetupVarious(),
+    'journal':journal.SetupVarious(),
     }
 
 DYNAMIC_HANDLERS = {

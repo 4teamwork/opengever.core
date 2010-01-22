@@ -2,7 +2,6 @@
 <metadata>
   <version>1</version>
   <dependencies>
-      <dependency>profile-opengever.examplecontent:handler</dependency>
       <dependency>profile-opengever.examplecontent:major-client-journal</dependency>
   </dependencies>
 </metadata>

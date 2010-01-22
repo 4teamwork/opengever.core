@@ -127,4 +127,11 @@
         provides="Products.GenericSetup.interfaces.EXTENSION"
         />
 
+    <genericsetup:registerProfile
+        name="major-client-journal"
+        title="opengever.examplecontent.major-client-journal"
+        directory="profiles/major-client-journal"
+        provides="Products.GenericSetup.interfaces.EXTENSION"
+        />
+
 </configure>
