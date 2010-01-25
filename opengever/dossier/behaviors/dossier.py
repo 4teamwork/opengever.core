@@ -108,7 +108,8 @@ class IDossier(form.Schema):
     responsible = schema.Choice(
         title=_(u"label_responsible", default="Responsible"),
         description =_(u"help_responsible", default="select an responsible Manger"),
-        source = util.getManagersVocab,
+        #source = util.getManagersVocab,
+        vocabulary = 'opengever.octopus.tentacle.contacts.LocalUsersVocabularyFactory',
         required = True,
         )
 
