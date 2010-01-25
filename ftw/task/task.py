@@ -42,6 +42,7 @@ from ftw.task.interfaces import ITaskSettings
 
 from opengever.base.interfaces import ISequenceNumber
 from opengever.translations.browser.add import TranslatedAddForm
+from opengever.octopus.tentacle.interfaces import IContactInformation
 
 
 class ITask(form.Schema):
@@ -355,10 +356,10 @@ class Byline(grok.Viewlet, content.DocumentBylineViewlet):
         seqNumb = getUtility(ISequenceNumber)
         return seqNumb.get_number(self.context)
 
-    def responsible(self):
-        mt=getToolByName(self.context,'portal_membership')
+    def responsible_link(self):
+        info = getUtility(IContactInformation)
         task = ITask(self.context)
-        return mt.getMemberById(task.responsible)
+        return info.render_link(task.responsible)
 
 
 @indexer(ITask)

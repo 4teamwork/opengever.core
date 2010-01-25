@@ -67,7 +67,8 @@ class IResponse(Interface):
     new_responsible = schema.Choice(
         title=_(u"label_responsible_Response", default="New responsible"),
         description =_(u"help_new_responsible_response", default=""),
-        source = util.getManagersVocab,
+        #source = util.getManagersVocab,
+        vocabulary = 'opengever.octopus.tentacle.contacts.UsersVocabularyFactory',
         required = False,
         )
 

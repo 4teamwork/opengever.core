@@ -14,14 +14,12 @@
           i18n:domain="ftw.task"
           i18n:translate="label_by_author">
       by
-      <a href="#"
-         tal:attributes="href string:${context/@@plone_portal_state/navigation_root_url}/author/${context/responsible}"
-         tal:content="python:viewlet.responsible().getProperty('fullname')"
-         tal:omit-tag="not:viewlet/responsible"
+      <tal:responsible
+         i18n:name="author"
          i18n:domain="ftw.task"
-         i18n:name="author">
-        Bob Dobalina
-      </a>
+         >
+        <tal:link replace="structure viewlet/responsible_link" />
+      </tal:responsible>
 
     </span>
   </tal:name>
