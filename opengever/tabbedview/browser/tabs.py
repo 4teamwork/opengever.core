@@ -500,6 +500,9 @@ class ContactsView(OpengeverListingTab):
 
     types = ['ftw.directoryservice.contact',]
 
+    sort_on = 'sortable_title'
+    sort_order='asc'
+    
     columns = (
         ('', helper.draggable),
         ('', helper.path_checkbox),
@@ -512,6 +515,9 @@ class OrgunitView(OpengeverListingTab):
     grok.name('tabbedview_view-all_orgunits')
 
     types = ['ftw.directoryservice.orgunit']
+
+    sort_on = 'sortable_title'
+    sort_order='asc'
 
     columns = (
         ('', helper.draggable),
