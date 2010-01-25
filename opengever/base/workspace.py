@@ -4,7 +4,7 @@ from opengever.tabbedview.browser.tabs import OpengeverTab, OpengeverListingTab
 from ftw.table import helper
 from opengever.tabbedview.browser.tabs import OpengeverSolrListingTab
 from opengever.base import MessageFactory as _
-
+from opengever.tabbedview.helper import readable_ogds_author
 
 def authenticated_member(context):
     return context.portal_membership.getAuthenticatedMember().getId()
@@ -54,7 +54,7 @@ class WorkspaceDocuments(OpengeverSolrListingTab):
         ('document_date', 'document_date', ),#helper.readable_date),
         ('receipt_date', 'receipt_date', ),#helper.readable_date),
         ('delivery_date', 'delivery_date', ),#helper.readable_date),
-        ('checked_out', 'checked_out', helper.readable_author)
+        ('checked_out', 'checked_out', readable_ogds_author)
         )
     types = ['opengever.document.document', ]
     search_options = {'Creator': authenticated_member,}
