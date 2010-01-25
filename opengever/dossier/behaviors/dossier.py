@@ -61,6 +61,7 @@ class IDossier(form.Schema):
             u'comments',
             u'responsible',
             u'relatedDossier',
+            u'former_reference_number',
             ],
         )
 
