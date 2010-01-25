@@ -1,7 +1,6 @@
 from five import grok
 from zope.component import getUtility, getAdapter
 
-from Products.CMFCore.utils import getToolByName
 from plone.app.layout.viewlets import content
 from plone.app.layout.viewlets.interfaces import IBelowContentTitle
 from plone.directives import form
@@ -11,6 +10,7 @@ from plone.memoize.instance import memoize
 from opengever.base.interfaces import IReferenceNumber, ISequenceNumber
 from opengever.dossier.behaviors.dossier import IDossier, IDossierMarker
 from opengever.mail.behaviors import IMailInAddressMarker,IMailInAddress
+from opengever.octopus.tentacle.interfaces import IContactInformation
 
 class IBusinessCaseDossier(form.Schema):
     """ A business case dossier
@@ -49,9 +49,9 @@ class Byline(grok.Viewlet, content.DocumentBylineViewlet):
         return dossier.start
 
     def responsible(self):
-        mt=getToolByName(self.context,'portal_membership')
+        info = getUtility(IContactInformation)
         dossier = IDossier(self.context)
-        return mt.getMemberById(dossier.responsible)
+        return info.render_link(dossier.responsible)
 
     def end(self):
         dossier = IDossier(self.context)
