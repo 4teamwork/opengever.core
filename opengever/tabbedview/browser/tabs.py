@@ -9,6 +9,7 @@ from ftw.directoryservice.contact import IContact
 from ftw.directoryservice.membership import Membership
 from plone.directives import dexterity
 from opengever.tabbedview import _
+from opengever.tabbedview.helper import readable_ogds_author
 
 class OpengeverListingTab(grok.View, BaseListingView):
     grok.context(ITabbedView)
@@ -21,7 +22,7 @@ class OpengeverListingTab(grok.View, BaseListingView):
         ('', helper.path_checkbox),
         ('Title', 'sortable_title', helper.linked),
         ('modified', helper.readable_date),
-        ('Creator', helper.readable_author),
+        ('Creator', readable_ogds_author),
         )
 
     @property
@@ -45,7 +46,7 @@ class OpengeverSolrListingTab(grok.View, SolrListingView):
                 ('', helper.path_checkbox),
                 ('Title', 'sortable_title', helper.linked),
                 ('modified', helper.readable_date), 
-                ('Creator', helper.readable_author),
+                ('Creator', readable_ogds_author),
                )
     
 
@@ -77,7 +78,7 @@ class Documents(OpengeverListingTab):
         ('document_date', 'document_date', helper.readable_date),
         ('receipt_date', 'receipt_date', helper.readable_date),
         ('delivery_date', 'delivery_date', helper.readable_date),
-        ('checked_out', 'checked_out', helper.readable_author)
+        ('checked_out', 'checked_out', readable_ogds_author)
         )
 
     enabled_actions = ['cut',
@@ -108,7 +109,7 @@ class Dossiers(OpengeverListingTab):
         ('reference'),
         ('Title', 'sortable_title', helper.linked),
         ('review_state', 'review_state', helper.translated_string()),
-        ('responsible', helper.readable_author),
+        ('responsible', readable_ogds_author),
         ('start', helper.readable_date),
         ('end', helper.readable_date),
 
@@ -141,8 +142,8 @@ class Tasks(OpengeverListingTab):
         ('date_of_completion', helper.readable_date), # erledigt am
         {'column' : 'responsible', 
         'column_title' : _(u'label_responsible_task', 'Responsible'),  
-        'transform' : helper.readable_author},
-        ('issuer', helper.readable_author), # zugewiesen von
+        'transform' : readable_ogds_author},
+        ('issuer', readable_ogds_author), # zugewiesen von
         ('modified', helper.readable_date)# zugewiesem am
         )
 
