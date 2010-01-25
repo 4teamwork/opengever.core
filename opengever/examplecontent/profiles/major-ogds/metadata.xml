@@ -7,6 +7,5 @@
       <dependency>profile-opengever.examplecontent:minor-ogds-clients</dependency>
       <dependency>profile-opengever.examplecontent:minor-ogds-users-groups</dependency>
       <dependency>profile-opengever.examplecontent:minor-pas-users-groups</dependency>
-      <dependency>profile-opengever.examplecontent:minor-ogds-contacts-orgunits</dependency>
   </dependencies>
 </metadata>
