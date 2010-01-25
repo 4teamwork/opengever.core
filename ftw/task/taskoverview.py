@@ -2,6 +2,7 @@ from five import grok
 from Products.CMFCore.utils import getToolByName
 from opengever.tabbedview.browser.tabs import OpengeverListingTab
 from ftw.table import helper
+from opengever.tabbedview.helper import readable_ogds_author
 
 
 def authenticated_member(context):
@@ -29,8 +30,8 @@ class MyTasks(OpengeverListingTab):
         ('Title', helper.linked),
         ('deadline', helper.readable_date),
         ('date_of_completion', helper.readable_date), # erledigt am
-        ('responsible', helper.readable_author),
-        ('issuer', helper.readable_author), # zugewiesen von
+        ('responsible', readable_ogds_author),
+        ('issuer', readable_ogds_author), # zugewiesen von
         ('modified', helper.readable_date)# zugewiesem am
         )
     types = ['ftw.task.task', ]
@@ -52,8 +53,8 @@ class IssuedTasks(OpengeverListingTab):
         ('Title', helper.linked),
         ('deadline', helper.readable_date),
         ('date_of_completion', helper.readable_date), # erledigt am
-        ('responsible', helper.readable_author),
-        ('issuer', helper.readable_author), # zugewiesen von
+        ('responsible', readable_ogds_author),
+        ('issuer', readable_ogds_author), # zugewiesen von
         ('modified', helper.readable_date)# zugewiesem am
         )
 
