@@ -2,6 +2,7 @@ from five import grok
 from opengever.tabbedview.browser.tabs import OpengeverListingTab, OpengeverSolrListingTab
 from zope.component import queryUtility
 from ftw.table import helper
+from opengever.tabbedview import helper as opengever_helper
 
 
 def authenticated_member(context):
@@ -29,8 +30,8 @@ class MyTasks(OpengeverSolrListingTab):
         ('Title', helper.solr_linked),
         ('deadline', helper.readable_date),
         ('date_of_completion', helper.readable_date), # erledigt am
-        'responsible',
-        'issuer', # zugewiesen von
+        ('responsible', opengever_helper.readable_ogds_author),
+        ('issuer', opengever_helper.readable_ogds_author), # zugewiesen von
         ('modified', helper.readable_date)# zugewiesem am
         )
     types = ['ftw.task.task', ]
@@ -48,8 +49,8 @@ class IssuedTasks(OpengeverSolrListingTab):
         ('Title', helper.solr_linked),
         ('deadline', helper.readable_date),
         ('date_of_completion', helper.readable_date), # erledigt am
-        'responsible',
-        'issuer', # zugewiesen von
+        ('responsible', opengever_helper.readable_ogds_author),
+        ('issuer', opengever_helper.readable_ogds_author), # zugewiesen von
         ('modified', helper.readable_date)# zugewiesem am
         )
     
