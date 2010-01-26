@@ -246,6 +246,11 @@ class View(dexterity.DisplayForm):
                                                contentFilter={'portal_type': 'ftw.task.task'})
         return tasks
 
+    def responsible_link(self):
+        info = getUtility(IContactInformation)
+        task = ITask(self.context)
+        return info.render_link(task.responsible)
+
 
 # XXX
 # setting the default value of a RelationField does not work as expected

@@ -30,7 +30,7 @@
               </tal:block>
               <tal:block condition="python:widget.__name__  == 'responsible'">
                 <th tal:content="widget/label"></th>
-                <td tal:content="structure python: len(widget.value) > 0 and widget.value[0] or '' " />
+                <td tal:content="structure view/responsible_link" />
               </tal:block>
             </tr>
           </tal:rep>
