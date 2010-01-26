@@ -7,6 +7,7 @@ from zope.event import notify
 from zope.interface import implements
 from zope.interface import Attribute
 from zope.interface import Interface
+from zope.component import getUtility
 
 from persistent import Persistent
 from persistent.list import PersistentList
@@ -14,6 +15,7 @@ from AccessControl import getSecurityManager
 from DateTime import DateTime
 
 from ftw.task.task import ITask
+from opengever.octopus.tentacle.interfaces import IContactInformation
 
 
 class IResponseContainer(Interface):
@@ -140,6 +142,10 @@ class Response(Persistent):
             before = before,
             after = after)
         self.changes.append(delta)
+        
+    def creator_link(self):
+        info = getUtility(IContactInformation)
+        return info.render_link(self.creator)
 
 
 class EmptyExporter(object):

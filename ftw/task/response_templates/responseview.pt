@@ -35,7 +35,7 @@
          <div class="response-info">
            <span i18n:translate="task_added_by" class="label">Added by</span>
            <span class="contact-user"
-                 tal:content="python: response.creator" />
+                 tal:content="structure response/creator_link" />
            <span i18n:translate="task_added_on">on</span>
            <span class="contact-user"
                  tal:content="python:here.toLocalizedTime(response.date, long_format=True)" />
