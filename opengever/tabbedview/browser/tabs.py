@@ -1,6 +1,7 @@
 import base64
 from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
 from Products.CMFCore.utils import getToolByName
+from Products.PluginIndexes.DateIndex.DateIndex import DateIndex
 from ftw.tabbedview.browser.views import BaseListingView, SolrListingView
 from ftw.tabbedview.interfaces import ITabbedView
 from five import grok
@@ -10,6 +11,20 @@ from ftw.directoryservice.membership import Membership
 from plone.directives import dexterity
 from opengever.tabbedview import _
 from opengever.tabbedview.helper import readable_ogds_author
+
+
+def datetime_compare(x, y):
+    return cmp(getattr(x, datetime_compare.index), getattr(y, datetime_compare.index))
+#XXX really ugly. Will be overwritten in datetime_sort  
+datetime_compare.index = 'modified'
+
+def custom_sort(list_, index, dir_):
+
+    datetime_compare.index = index
+    reverse = 0
+    if dir_ == 'reverse':
+        reverse = 1
+    return sorted(list_, cmp=datetime_compare, reverse=reverse)
 
 class OpengeverListingTab(grok.View, BaseListingView):
     grok.context(ITabbedView)
@@ -24,6 +39,9 @@ class OpengeverListingTab(grok.View, BaseListingView):
         ('modified', helper.readable_date),
         ('Creator', readable_ogds_author),
         )
+        
+        
+    custom_sort_indexes = {'Products.PluginIndexes.DateIndex.DateIndex': custom_sort}
 
     @property
     def view_name(self):
