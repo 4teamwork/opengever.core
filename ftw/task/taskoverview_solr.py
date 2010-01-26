@@ -26,7 +26,7 @@ class MyTasks(OpengeverSolrListingTab):
         ('', helper.draggable),
         ('', helper.path_checkbox),
         ('review_state', 'review_state', helper.translated_string()),
-        ('Title', helper.linked),
+        ('Title', helper.solr_linked),
         ('deadline', helper.readable_date),
         ('date_of_completion', helper.readable_date), # erledigt am
         ('responsible', helper.readable_author),
@@ -44,7 +44,7 @@ class IssuedTasks(OpengeverSolrListingTab):
         ('', helper.draggable),
         ('', helper.path_checkbox),
         ('review_state', 'review_state', helper.translated_string()),
-        ('Title', helper.linked),
+        ('Title', helper.solr_linked),
         ('deadline', helper.readable_date),
         ('date_of_completion', helper.readable_date), # erledigt am
         ('responsible', helper.readable_author),
