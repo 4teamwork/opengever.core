@@ -24,7 +24,7 @@
 		</tr>
 		<tr>
 			<th i18n:translate="label_creator">creator</th>
-			<td tal:content="context/Creator"/>
+			<td tal:content="structure view/creator_link"/>
 		</tr>
 		<tr>
 			<th i18n:translate="label_description">description</th>

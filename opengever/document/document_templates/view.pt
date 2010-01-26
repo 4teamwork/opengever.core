@@ -39,7 +39,7 @@
 			</tr>
 			<tr>
 				<th>Ersteller</th>
-				<td tal:content="context/Creator"></td>
+				<td tal:content="structure view/creator_link"></td>
 			</tr>
 			<tr>
 				<th>Beschreibung</th>

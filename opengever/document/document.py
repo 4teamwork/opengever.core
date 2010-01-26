@@ -54,6 +54,7 @@ from plone.directives.dexterity import DisplayForm
 
 from opengever.tabbedview.browser.tabs import OpengeverTab, OpengeverListingTab, OpengeverSolrListingTab
 from opengever.base.interfaces import IReferenceNumber, ISequenceNumber
+from opengever.octopus.tentacle.interfaces import IContactInformation
 
 LOG = logging.getLogger('opengever.document')
 
@@ -419,6 +420,10 @@ class View(dexterity.DisplayForm):
     grok.context(IDocumentSchema)
     grok.require("zope2.View")
 
+    def creator_link(self):
+        info = getUtility(IContactInformation)
+        return info.render_link(self.context.Creator())
+        
 class ForwardViewlet(grok.Viewlet):
     """Display the message subject
     """
@@ -472,6 +477,11 @@ class Overview(DisplayForm, OpengeverTab):
     def get_referenced_documents(self):
         pc = self.context.portal_catalog
         return pc({'portal_type':'Document',})
+
+    def creator_link(self):
+        info = getUtility(IContactInformation)
+        return info.render_link(self.context.Creator())
+
 
 class Preview(DisplayForm, OpengeverTab):
     grok.context(IDocumentSchema)
