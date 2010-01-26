@@ -65,13 +65,13 @@ class IResponse(Interface):
         required = False,
         )
 
-    new_responsible = schema.Choice(
-        title=_(u"label_responsible_Response", default="New responsible"),
-        description =_(u"help_new_responsible_response", default=""),
-        #source = util.getManagersVocab,
-        vocabulary = 'opengever.octopus.tentacle.contacts.UsersVocabularyFactory',
-        required = False,
-        )
+#    new_responsible = schema.Choice(
+#        title=_(u"label_responsible_Response", default="New responsible"),
+#        description =_(u"help_new_responsible_response", default=""),
+#        #source = util.getManagersVocab,
+#        vocabulary = 'opengever.octopus.tentacle.contacts.UsersVocabularyFactory',
+#        required = False,
+#        )
 
     deadline = schema.Date(
         title=_(u"label_deadline_Response", default=u"New deadline"),
@@ -98,13 +98,13 @@ class IResponse(Interface):
         required = False,
         )
         
-    relatedItems = RelationList(
-        title=_(u'label_related_items', default=u'Related Items'),
-        default=[],
-        value_type=RelationChoice(title=u"Related",
-                      source=ObjPathSourceBinder()),
-        required=False,
-        )
+#    relatedItems = RelationList(
+#        title=_(u'label_related_items', default=u'Related Items'),
+#        default=[],
+#        value_type=RelationChoice(title=u"Related",
+#                      source=ObjPathSourceBinder()),
+#        required=False,
+#        )
 
 
 def voc2dict(vocab, current=None):
@@ -172,7 +172,7 @@ class Base(BrowserView):
             info = dict(id=id,
                         response=response,
                         attachment=self.attachment_info(id),
-                        relatedItems=getattr(response,"relatedItems",()),
+#                        relatedItems=getattr(response,"relatedItems",()),
                         html=html)
             items.append(info)
         return items
@@ -301,7 +301,7 @@ class Base(BrowserView):
 
 class AddForm(form.AddForm, AutoExtensibleForm):
     fields = field.Fields(IResponse)
-    fields['new_responsible'].widgetFactory = AutocompleteFieldWidget
+#    fields['new_responsible'].widgetFactory = AutocompleteFieldWidget
     fields['transition'].widgetFactory = radio.RadioFieldWidget
     fields['deadline'].widgetFactory = DatePickerFieldWidget
     fields['date_of_completion'].widgetFactory = DatePickerFieldWidget
@@ -342,10 +342,11 @@ class AddForm(form.AddForm, AutoExtensibleForm):
                 (task.deadline, data.get('deadline'), 'deadline', _('deadline')),
                 (task.date_of_completion, data.get('date_of_completion'),
                  'date_of_completion', _('date_of_completion')),
-                (task.responsible,
-                 data.get('new_responsible'),
-                 'responsible',
-                 _('responsible'))]
+#                (task.responsible,
+#                 data.get('new_responsible'),
+#                 'responsible',
+#                 _('responsible'))
+                 ]
 
             for task_field, resp_field, option, title in options:
                 if resp_field and task_field != resp_field:
@@ -365,12 +366,12 @@ class AddForm(form.AddForm, AutoExtensibleForm):
                 new_response.attachment = attachment
 
             # relatedItems
-            new_response.relatedItems = []
-            relatedItems = data.get('relatedItems')
-            intids = getUtility(IIntIds)
-            for item in relatedItems:
-                to_id = intids.getId(item)
-                new_response.relatedItems.append(RelationValue(to_id))
+#            new_response.relatedItems = []
+#            relatedItems = data.get('relatedItems')
+#            intids = getUtility(IIntIds)
+#            for item in relatedItems:
+#                to_id = intids.getId(item)
+#                new_response.relatedItems.append(RelationValue(to_id))
 
             # change workflow state of task
             if data.get('transition'):
