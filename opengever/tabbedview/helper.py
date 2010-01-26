@@ -18,4 +18,4 @@ def readable_ogds_author(item, author):
     if IPropertiedUser.providedBy(author) or IMemberData.providedBy(author):
         author = author.getId()
     info = getUtility(IContactInformation)
-    return info.render_link(author)
+    return info.render_link(str(author))
