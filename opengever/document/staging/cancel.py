@@ -36,9 +36,21 @@ class CancelCheckout(grok.CodeView):
             redirect_url = last_baseline.absolute_url()
         return response.redirect(redirect_url)
 
+
     @property
     def objects(self):
-        lookup = lambda p:self.context.restrictedTraverse(str(p))
+        """ Returns a list of the objects selected in folder contents or
+        tabbed view
+        """
+        catalog = self.context.portal_catalog
+        def lookup(path):
+            query = {
+                'path' : {
+                    'query' : path,
+                    'depth' : 0,
+                    }
+                }
+            return catalog(query)[0].getObject()
         paths = self.request.get('paths', [])
         return [lookup(p) for p in paths]
 
