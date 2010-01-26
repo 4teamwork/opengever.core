@@ -29,13 +29,14 @@ class MyTasks(OpengeverSolrListingTab):
         ('Title', helper.solr_linked),
         ('deadline', helper.readable_date),
         ('date_of_completion', helper.readable_date), # erledigt am
-        ('responsible', helper.readable_author),
-        ('issuer', helper.readable_author), # zugewiesen von
+        'responsible',
+        'issuer', # zugewiesen von
         ('modified', helper.readable_date)# zugewiesem am
         )
     types = ['ftw.task.task', ]
     
     search_options = {'responsible': authenticated_member, 'review_state':'task-state-open'}
+    
 
 
 class IssuedTasks(OpengeverSolrListingTab):
@@ -47,8 +48,8 @@ class IssuedTasks(OpengeverSolrListingTab):
         ('Title', helper.solr_linked),
         ('deadline', helper.readable_date),
         ('date_of_completion', helper.readable_date), # erledigt am
-        ('responsible', helper.readable_author),
-        ('issuer', helper.readable_author), # zugewiesen von
+        'responsible',
+        'issuer', # zugewiesen von
         ('modified', helper.readable_date)# zugewiesem am
         )
     
