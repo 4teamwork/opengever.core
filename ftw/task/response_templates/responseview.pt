@@ -5,7 +5,6 @@
             tal:define="id response_info/id;
                         response nocall:response_info/response;
                         attachment nocall:response_info/attachment;
-                        relatedItems nocall:response_info/relatedItems;
                         html response_info/html;"
             tal:attributes="class string:response-${response/type}">
 
@@ -67,15 +66,6 @@
              <tal:size content="attachment/size" />
            </span>
          </div>
-		<div class="issue-attachment" tal:condition="relatedItems">
-			<span class="label" i18n:translate="poi_label_relateditems">related items:</span>
-			<ul>
-		   		<li tal:repeat="items relatedItems">
-					<a tal:define="item nocall:items/to_object" tal:attributes="href item/absolute_url" tal:content="item/Title" />
-				</li>
-			</ul>
-		</div>
-
        </div>
      </tal:responses>
 </div>
