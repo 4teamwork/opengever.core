@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: opengever.dossier 1.0\n"
-"POT-Creation-Date: 2010-01-25 16:38+0000\n"
+"POT-Creation-Date: 2010-01-26 13:25+0000\n"
 "PO-Revision-Date: 2009-09-17 15:21+0000\n"
 "Last-Translator: Thomas Buchberger <t.buchberger@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -21,6 +21,10 @@ msgstr "Geschäftsdossier"
 #: opengever.dossier/opengever/dossier/profiles/default/actions.xml
 msgid "Delete"
 msgstr "Beteiligung löschen"
+
+#: opengever.dossier/opengever/dossier/templatedossier.py:104
+msgid "Not found the templatedossier"
+msgstr "Es sind keine Vorlagen vorhanden"
 
 #. Default: "Project Dossier"
 #: opengever.dossier/opengever/dossier/profiles/default/types/opengever.dossier.projectdossier.xml
@@ -64,7 +68,7 @@ msgid "button_cancel"
 msgstr "Abbrechen"
 
 #. Default: "create document with template"
-#: opengever.dossier/opengever/dossier/templatedossier.py:40
+#: opengever.dossier/opengever/dossier/templatedossier.py:41
 msgid "create_document_with_template"
 msgstr "Dokument mit Vorlage erstellen"
 
@@ -156,7 +160,7 @@ msgid "info_removed_participations"
 msgstr "Die Beteiligungen wurde entfernt."
 
 #. Default: "by ${author}"
-#: opengever.dossier/opengever/dossier/businesscase_templates/byline.pt:16
+#: opengever.dossier/opengever/dossier/businesscase_templates/byline.pt:17
 #: opengever.dossier/opengever/dossier/project_templates/byline.pt:16
 #: opengever.dossier/opengever/dossier/templatedossier_templates/byline.pt:16
 msgid "label_by_author"

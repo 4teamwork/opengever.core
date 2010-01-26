@@ -8,6 +8,7 @@ from zope.event import notify
 
 from five import grok
 from Acquisition import aq_inner, aq_parent
+from Products.statusmessages.interfaces import IStatusMessage
 from Products.CMFCore.utils import getToolByName
 from datetime import datetime
 from DateTime import DateTime
@@ -95,15 +96,19 @@ class TemplateDocumentFormView(grok.View):
 
         elif self.request.get('form.buttons.cancel'):
             return self.request.RESPONSE.redirect(self.context.absolute_url())
-
-        return super(TemplateDocumentFormView, self).__call__()
+        else:
+            templateUtil = getUtility(ITemplateUtility, 'opengever.templatedossier')
+            self.templatedossier = templateUtil.templateFolder(self.context)
+            if self.templatedossier is None:
+                status = IStatusMessage(self.request)
+                status.addStatusMessage(_("Not found the templatedossier"), type="error")
+                return self.context.request.RESPONSE.redirect(self.context.absolute_url())
+            return super(TemplateDocumentFormView, self).__call__()
 
     def templates(self):
         generator = getUtility(ITableGenerator, 'ftw.tablegenerator')
-        templateUtil = getUtility(ITemplateUtility, 'opengever.templatedossier')
-        templatedossier = templateUtil.templateFolder(self.context)
         catalog = getToolByName(self.context, 'portal_catalog')
-        templates = catalog(path=dict(depth=1, query=templatedossier), type="opengever.document.document")
+        templates = catalog(path=dict(depth=1, query=self.templatedossier), type="opengever.document.document")
         generator = getUtility(ITableGenerator, 'ftw.tablegenerator')
 
         columns = (
@@ -123,9 +128,11 @@ class TemplateFolder(grok.GlobalUtility):
 
     def templateFolder(self, context):
         catalog = getToolByName(context, 'portal_catalog')
-        brain = catalog(portal_type="opengever.dossier.templatedossier")[0]
-        if brain:
-            return brain.getPath()
+        result = catalog(portal_type="opengever.dossier.templatedossier")
+        if result:
+            brain = result[0]
+            if brain:
+                return brain.getPath()
         return None
         
 class Byline(grok.Viewlet, content.DocumentBylineViewlet):
