@@ -16,6 +16,7 @@ from plone.memoize.view import memoize
 from plone.z3cform import layout
 from plone.formwidget.autocomplete import AutocompleteFieldWidget
 from plone.namedfile.utils import set_headers, stream_data
+from plone.autoform.form import AutoExtensibleForm
 
 from Products.CMFCore.utils import getToolByName
 from Products.statusmessages.interfaces import IStatusMessage
@@ -298,7 +299,7 @@ class Base(BrowserView):
             permissions.UploadAttachment, context)
 
 
-class AddForm(form.AddForm):
+class AddForm(form.AddForm, AutoExtensibleForm):
     fields = field.Fields(IResponse)
     fields['new_responsible'].widgetFactory = AutocompleteFieldWidget
     fields['transition'].widgetFactory = radio.RadioFieldWidget
