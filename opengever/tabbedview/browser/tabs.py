@@ -62,7 +62,7 @@ class OpengeverSolrListingTab(grok.View, SolrListingView):
     columns = (
                 ('', helper.draggable),
                 ('', helper.path_checkbox),
-                ('Title', 'sortable_title', helper.linked),
+                ('Title', 'sortable_title', helper.solr_linked),
                 ('modified', helper.readable_date), 
                 ('Creator', readable_ogds_author),
                )
