@@ -204,7 +204,10 @@ class Task(Container):
             title += " (%i Dokumente)" % len(self.relatedItems)
         if self.text:
             crop_length = int(getattr(proxy,'crop_length',20))
-            title += ": %s" % self.restrictedTraverse('@@plone').cropText(str(self.text),crop_length)
+            text = self.text.encode('utf8')
+            text = self.restrictedTraverse('@@plone').cropText(text,crop_length)
+            text = text.decode('utf8')
+            title += ": %s" % text
         return title
 
     @property
