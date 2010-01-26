@@ -94,7 +94,7 @@ class TemplateDocumentFormView(grok.View):
                     self.errors['title'] = True
 
         elif self.request.get('form.buttons.cancel'):
-            return self.request.REQUEST.redirect(self.context.absolute_url())
+            return self.request.RESPONSE.redirect(self.context.absolute_url())
 
         return super(TemplateDocumentFormView, self).__call__()
 
