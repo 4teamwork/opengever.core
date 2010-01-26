@@ -63,7 +63,15 @@ class CheckinCommentForm(form.Form):
         """ Returns a list of the objects selected in folder contents or
         tabbed view
         """
-        lookup = lambda p:self.context.restrictedTraverse(str(p))
+        catalog = self.context.portal_catalog
+        def lookup(path):
+            query = {
+                'path' : {
+                    'query' : path,
+                    'depth' : 0,
+                    }
+                }
+            return catalog(query)[0].getObject()
         return [lookup(p) for p in self.item_paths]
 
     @property
