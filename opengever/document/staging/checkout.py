@@ -3,6 +3,7 @@ import os
 from Acquisition import aq_inner, aq_parent
 from five import grok
 from zope.interface import Interface
+from zope.component import getUtility
 from zope import schema
 from z3c.form import form, field, button
 from z3c.form.interfaces import HIDDEN_MODE
@@ -10,6 +11,8 @@ from z3c.form.interfaces import HIDDEN_MODE
 from plone.dexterity.interfaces import IDexterityContent
 from plone.z3cform import layout
 from Products.statusmessages.interfaces import IStatusMessage
+from Products.CMFCore.interfaces._content import ISiteRoot
+
 
 from plone.directives.form import widget
 from z3c.form.browser import checkbox
@@ -34,8 +37,8 @@ class ICheckoutCommentFormSchema(Interface):
                       default=u'Describe, why you checkout the selected documents'),
         required=False,
         )
-    
-    
+
+
     open_extern = schema.Bool(
         title = _(u'label_open_extern', default='external editor'),
         description = _(u'help_open_extern', default='open with a external editor'),
@@ -71,7 +74,15 @@ class CheckoutCommentForm(form.Form):
         """ Returns a list of the objects selected in folder contents or
         tabbed view
         """
-        lookup = lambda p:self.context.restrictedTraverse(str(p))
+        catalog = self.context.portal_catalog
+        def lookup(path):
+            query = {
+                'path' : {
+                    'query' : path,
+                    'depth' : 0,
+                    }
+                }
+            return catalog(query)[0].getObject()
         return [lookup(p) for p in self.item_paths]
 
     @property
