@@ -23,6 +23,7 @@ from plone.app.layout.viewlets.interfaces import IBelowContentTitle
 from ftw.table import helper
 from ftw.table.interfaces import ITableGenerator
 from opengever.document.staging.manager import ICheckinCheckoutManager
+from opengever.tabbedview.helper import linked
 
 
 class ITemplateDossier(Interface):
@@ -114,7 +115,7 @@ class TemplateDocumentFormView(grok.View):
         columns = (
             (''),
             ('', helper.path_radiobutton),
-            ('Title', 'sortable_title', helper.linked),
+            ('Title', 'sortable_title', linked),
             ('Creator', 'document_author'),
             ('modified', helper.readable_date),
             )
