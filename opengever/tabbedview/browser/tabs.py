@@ -10,7 +10,7 @@ from ftw.directoryservice.contact import IContact
 from ftw.directoryservice.membership import Membership
 from plone.directives import dexterity
 from opengever.tabbedview import _
-from opengever.tabbedview.helper import readable_ogds_author
+from opengever.tabbedview.helper import readable_ogds_author, linked
 
 
 def datetime_compare(x, y):
@@ -35,7 +35,7 @@ class OpengeverListingTab(grok.View, BaseListingView):
     columns = (
         ('', helper.draggable),
         ('', helper.path_checkbox),
-        ('Title', 'sortable_title', helper.linked),
+        ('Title', 'sortable_title', linked),
         ('modified', helper.readable_date),
         ('Creator', readable_ogds_author),
         )
@@ -91,7 +91,7 @@ class Documents(OpengeverListingTab):
     columns = (
         ('', helper.draggable),
         ('', helper.path_checkbox),
-        ('Title', 'sortable_title', helper.linked),
+        ('Title', 'sortable_title', linked),
         ('document_author', 'document_author'),
         ('document_date', 'document_date', helper.readable_date),
         ('receipt_date', 'receipt_date', helper.readable_date),
@@ -125,7 +125,7 @@ class Dossiers(OpengeverListingTab):
         ('', helper.draggable),
         ('', helper.path_checkbox),
         ('reference'),
-        ('Title', 'sortable_title', helper.linked),
+        ('Title', 'sortable_title', linked),
         ('review_state', 'review_state', helper.translated_string()),
         ('responsible', readable_ogds_author),
         ('start', helper.readable_date),
@@ -155,7 +155,7 @@ class Tasks(OpengeverListingTab):
         ('', helper.draggable),
         ('', helper.path_checkbox),
         ('review_state', 'review_state', helper.translated_string()),
-        ('Title', 'sortable_title', helper.linked),
+        ('Title', 'sortable_title', linked),
         ('deadline', helper.readable_date),
         ('date_of_completion', helper.readable_date), # erledigt am
         {'column' : 'responsible', 
@@ -367,7 +367,7 @@ class Trash(OpengeverListingTab):
     columns = (
         ('', helper.draggable),
         ('', helper.path_checkbox),
-        ('Title', 'sortable_title', helper.linked),
+        ('Title', 'sortable_title', linked),
         )
 
     enabled_actions = ['untrashed',
@@ -525,7 +525,7 @@ class ContactsView(OpengeverListingTab):
     columns = (
         ('', helper.draggable),
         ('', helper.path_checkbox),
-        ('Title', 'sortable_title', helper.linked),
+        ('Title', 'sortable_title', linked),
         ('email'),
         ('phone_office'),
         )
@@ -541,7 +541,7 @@ class OrgunitView(OpengeverListingTab):
     columns = (
         ('', helper.draggable),
         ('', helper.path_checkbox),
-        ('Title', 'sortable_title', helper.linked),
+        ('Title', 'sortable_title', linked),
         )
 
 class ContactImportantView(dexterity.DisplayForm, OpengeverTab):
