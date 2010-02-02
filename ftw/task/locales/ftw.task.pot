@@ -397,3 +397,8 @@ msgstr ""
 msgid "title_error_no_response"
 msgstr ""
 
+#. Default: "Responsible"
+#: ftw.task/ftw/task/taskoverview.py:34
+msgid "label_responsible_task"
+msgstr ""
+

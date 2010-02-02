@@ -398,4 +398,8 @@ msgstr "Antwort bearbeiten"
 msgid "title_error_no_response"
 msgstr "Fehler: keine Antworten zum editieren gefunden"
 
+#. Default: "Responsible"
+#: ftw.task/ftw/task/taskoverview.py:34
+msgid "label_responsible_task"
+msgstr "Verantwortlich"
 

@@ -3,7 +3,8 @@ from opengever.tabbedview.browser.tabs import OpengeverListingTab, OpengeverSolr
 from zope.component import queryUtility
 from ftw.table import helper
 from opengever.tabbedview import helper as opengever_helper
-
+from opengever.tabbedview.helper import readable_ogds_author
+from ftw.task import _
 
 def authenticated_member(context):
     return context.portal_membership.getAuthenticatedMember().getId()
@@ -30,7 +31,9 @@ class MyTasks(OpengeverSolrListingTab):
         ('Title', helper.solr_linked),
         ('deadline', helper.readable_date),
         ('date_of_completion', helper.readable_date), # erledigt am
-        ('responsible', opengever_helper.readable_ogds_author),
+        {'column' : 'responsible', 
+        'column_title' : _(u'label_responsible_task', 'Responsible'),  
+        'transform' : readable_ogds_author},
         ('issuer', opengever_helper.readable_ogds_author), # zugewiesen von
         ('modified', helper.readable_date)# zugewiesem am
         )
@@ -48,7 +51,9 @@ class IssuedTasks(OpengeverSolrListingTab):
         ('Title', helper.solr_linked),
         ('deadline', helper.readable_date),
         ('date_of_completion', helper.readable_date), # erledigt am
-        ('responsible', opengever_helper.readable_ogds_author),
+        {'column' : 'responsible', 
+        'column_title' : _(u'label_responsible_task', 'Responsible'),  
+        'transform' : readable_ogds_author},
         ('issuer', opengever_helper.readable_ogds_author), # zugewiesen von
         ('modified', helper.readable_date)# zugewiesem am
         )

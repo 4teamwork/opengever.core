@@ -4,6 +4,7 @@ from opengever.tabbedview.browser.tabs import OpengeverListingTab
 from ftw.table import helper
 from opengever.tabbedview.helper import readable_ogds_author
 
+from ftw.task import _
 
 def authenticated_member(context):
     return context.portal_membership.getAuthenticatedMember().getId()
@@ -19,7 +20,6 @@ def linked(item, value):
     link = u'<a href="%s" >%s%s</a>' % (url_method(), img, value) 
     wrapper = u'<span class="linkWrapper">%s</span>' % link
     return wrapper
-    
 
 class MyTasks(OpengeverListingTab):
     grok.name('tabbedview_view-mytasks')
@@ -30,7 +30,9 @@ class MyTasks(OpengeverListingTab):
         ('Title', helper.linked),
         ('deadline', helper.readable_date),
         ('date_of_completion', helper.readable_date), # erledigt am
-        ('responsible', readable_ogds_author),
+        {'column' : 'responsible', 
+        'column_title' : _(u'label_responsible_task', 'Responsible'),  
+        'transform' : readable_ogds_author},
         ('issuer', readable_ogds_author), # zugewiesen von
         ('modified', helper.readable_date)# zugewiesem am
         )
@@ -53,7 +55,9 @@ class IssuedTasks(OpengeverListingTab):
         ('Title', helper.linked),
         ('deadline', helper.readable_date),
         ('date_of_completion', helper.readable_date), # erledigt am
-        ('responsible', readable_ogds_author),
+        {'column' : 'responsible', 
+        'column_title' : _(u'label_responsible_task', 'Responsible'),  
+        'transform' : readable_ogds_author},
         ('issuer', readable_ogds_author), # zugewiesen von
         ('modified', helper.readable_date)# zugewiesem am
         )
