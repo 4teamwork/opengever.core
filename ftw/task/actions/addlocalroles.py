@@ -72,7 +72,9 @@ class AddLocalRolesActionExecutor(object):
             # set object roles
             roles = self.element.object_roles
             if roles:
-                obj.manage_setLocalRoles(user_id, list(roles))
+                current_roles = dict(obj.get_local_roles()).get(user_id, ())
+                new_roles = list(set(list(roles) + list(current_roles)))
+                obj.manage_setLocalRoles(user_id, new_roles)
                 obj.reindexObjectSecurity()
             
             # set related items roles
@@ -80,14 +82,18 @@ class AddLocalRolesActionExecutor(object):
             if roles:
                 related_items = getattr(obj, 'relatedItems', [])
                 for item in related_items:
-                    item.to_object.manage_setLocalRoles(user_id, list(roles))
+                    current_roles = dict(item.to_object.get_local_roles()).get(user_id, ())
+                    new_roles = list(set(list(roles) + list(current_roles)))
+                    item.to_object.manage_setLocalRoles(user_id, new_roles)
                     item.to_object.reindexObjectSecurity()
             
             # set parent roles
             roles = self.element.parent_roles
             if roles:
                 parent = aq_parent(obj)
-                parent.manage_setLocalRoles(user_id, list(self.element.parent_roles))
+                current_roles = dict(parent.get_local_roles()).get(user_id, ())
+                new_roles = list(set(list(roles) + list(current_roles)))
+                parent.manage_setLocalRoles(user_id, new_roles)
                 parent.reindexObjectSecurity()
         
         return True

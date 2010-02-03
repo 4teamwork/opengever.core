@@ -5,6 +5,9 @@ Changelog
 1.0a5
 -----
 
+* AddlLocalRoles-Action: fixed bug which removed the creator role some times
+  [03.02.2010, jbaumann]
+  
 * Task view: added issuer
   [03.02.2010, jbaumann]
   
