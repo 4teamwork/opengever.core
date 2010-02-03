@@ -225,7 +225,7 @@ msgstr "Ablagenummer:"
 #. Default: "Reference Number"
 #: opengever.dossier/opengever/dossier/behaviors/dossier.py:163
 msgid "label_former_reference_number"
-msgstr "Referenz Nummer"
+msgstr "Früheres Aktenzeichen"
 
 #. Default: "Keywords"
 #: opengever.dossier/opengever/dossier/behaviors/dossier.py:69
