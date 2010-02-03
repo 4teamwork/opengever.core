@@ -32,6 +32,10 @@
                 <th tal:content="widget/label"></th>
                 <td tal:content="structure view/responsible_link" />
               </tal:block>
+              <tal:block condition="python:widget.__name__  == 'issuer'">
+                <th tal:content="widget/label"></th>
+                <td tal:content="structure view/issuer_link" />
+              </tal:block>
             </tr>
           </tal:rep>
           <tr>

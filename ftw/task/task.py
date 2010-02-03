@@ -254,6 +254,11 @@ class View(dexterity.DisplayForm):
         task = ITask(self.context)
         return info.render_link(task.responsible)
 
+    def issuer_link(self):
+        info = getUtility(IContactInformation)
+        task = ITask(self.context)
+        return info.render_link(task.issuer)
+
 
 # XXX
 # setting the default value of a RelationField does not work as expected
