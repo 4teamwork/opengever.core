@@ -1,0 +1,204 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: 1.0\n"
+"POT-Creation-Date: 2010-01-18 15:03+0000\n"
+"PO-Revision-Date: 2009-02-25 14:39+0100\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: 4teamwork <info@4teamwork.ch>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0\n"
+"Preferred-Encodings: utf-8 latin1\n"
+"Domain: opengever.tabbedview\n"
+"X-Poedit-Language: German\n"
+
+#. Default: "Ersteller"
+msgid "Creator"
+msgstr "Ersteller"
+
+#. Default: "Titel"
+msgid "Title"
+msgstr "Titel"
+
+#. Default: "Akteur"
+msgid "actor"
+msgstr "Akteur"
+
+msgid "additional_contact"
+msgstr "Zusätzliches"
+
+msgid "all_contacts"
+msgstr "Alle Kontakte"
+
+msgid "all_orgunits"
+msgstr "Alle Gremien"
+
+#. Default: "More actions &#9660;"
+#: opengever.tabbedview/opengever/tabbedview/browser/tabs_templates/generic.pt:27
+msgid "button_more_actions"
+msgstr "Weitere Aktionen &#9660;"
+
+msgid "checked_out"
+msgstr "in Bearbeitung"
+
+#. Default: "Kommentar"
+msgid "comment"
+msgstr "Kommentar"
+
+msgid "comments"
+msgstr "Kommentar"
+
+msgid "contact"
+msgstr "Beteiligter"
+
+msgid "date_of_completion"
+msgstr "Erledigt am"
+
+msgid "deadline"
+msgstr "Frist"
+
+msgid "delivery_date"
+msgstr "Ausgangsdatum"
+
+msgid "document_author"
+msgstr "Autor"
+
+msgid "document_date"
+msgstr "Dokumentdatum"
+
+#. Default: "Dokumente"
+msgid "documents"
+msgstr "Dokumente"
+
+#. Default: "Dossiers"
+msgid "dossiers"
+msgstr "Dossiers"
+
+msgid "email"
+msgstr "E-Mail"
+
+msgid "end"
+msgstr "Ende"
+
+#. Default: "Termine"
+msgid "events"
+msgstr "Termine"
+
+msgid "important_contact"
+msgstr "Allgemein"
+
+msgid "issuedtasks"
+msgstr "Erteilte Aufgaben"
+
+msgid "issuedtasks_solr"
+msgstr "Erteilte Aufgaben"
+
+msgid "issuer"
+msgstr "Zugewiesen von"
+
+#. Default: "Journal"
+msgid "journal"
+msgstr "Journal"
+
+#. Default: "Responsible"
+#: opengever.tabbedview/opengever/tabbedview/browser/tabs.py:400
+msgid "label_responsible"
+msgstr "Federführend"
+
+#. Default: "Responsible"
+#: opengever.tabbedview/opengever/tabbedview/browser/tabs.py:143
+msgid "label_responsible_task"
+msgstr "Verantwortlich"
+
+#. Default: "Änderungsdatum"
+msgid "modified"
+msgstr "Änderungsdatum"
+
+msgid "mytasks"
+msgstr "Meine Aufgaben"
+
+msgid "mytasks_solr"
+msgstr "Meine Aufgaben"
+
+#: opengever.tabbedview/opengever/tabbedview/browser/tabs_templates/overview.pt:17
+msgid "no_content"
+msgstr "Keine Inhalte vorhanden"
+
+msgid "orgunit_contact"
+msgstr "Gremien"
+
+#. Default: "Übersicht"
+msgid "overview"
+msgstr "Übersicht"
+
+msgid "participants"
+msgstr "Beteiligte"
+
+msgid "phone_office"
+msgstr "Telefon Nummer"
+
+#. Default: "Vorschau"
+msgid "preview"
+msgstr "Vorschau"
+
+msgid "receipt_date"
+msgstr "Eingangsdatum"
+
+msgid "reference"
+msgstr "Aktenzeichen"
+
+msgid "reference_number"
+msgstr "Ref Nr"
+
+msgid "relateddossiers"
+msgstr "Verwandte Dossiers"
+
+#. Default: "Ordnungspositionen"
+msgid "repostories"
+msgstr "Ordnungspositionen"
+
+msgid "responsible"
+msgstr "Federführend"
+
+msgid "review_state"
+msgstr "Status"
+
+msgid "role_list"
+msgstr "Rollen"
+
+#. Default: "Beteiligte"
+msgid "sharing"
+msgstr "Beteiligte"
+
+#: opengever.tabbedview/opengever/tabbedview/browser/tabs_templates/overview.pt:14
+msgid "show all"
+msgstr "Alle anzeigen"
+
+#. Default: "Titel"
+msgid "sortable_title"
+msgstr "Titel"
+
+msgid "start"
+msgstr "Beginn"
+
+#. Default: "Subdossiers"
+msgid "subdossiers"
+msgstr "Subdossiers"
+
+#. Default: "Aufgaben"
+msgid "tasks"
+msgstr "Aufgaben"
+
+#. Default: "Datum"
+msgid "time"
+msgstr "Datum"
+
+#. Default: "Titel"
+msgid "title"
+msgstr "Titel"
+
+msgid "trash"
+msgstr "Papierkorb"
+
+

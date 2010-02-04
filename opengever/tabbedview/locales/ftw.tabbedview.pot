@@ -1,0 +1,187 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: 1.0\n"
+"POT-Creation-Date: 2010-01-18 15:03+0000\n"
+"PO-Revision-Date: 2009-02-25 14:39+0100\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: 4teamwork <info@4teamwork.ch>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0\n"
+"Language-Code: en\n"
+"Language-Name: English\n"
+"Preferred-Encodings: utf-8 latin1\n"
+"Domain: opengever.tabbedview\n"
+"X-Poedit-Language: German\n"
+
+msgid "Creator"
+msgstr ""
+
+msgid "Title"
+msgstr ""
+
+msgid "actor"
+msgstr ""
+
+msgid "additional_contact"
+msgstr ""
+
+msgid "all_contacts"
+msgstr ""
+
+msgid "all_orgunits"
+msgstr ""
+
+#. Default: "More actions &#9660;"
+#: opengever.tabbedview/opengever/tabbedview/browser/tabs_templates/generic.pt:27
+msgid "button_more_actions"
+msgstr ""
+
+msgid "checked_out"
+msgstr ""
+
+msgid "comment"
+msgstr ""
+
+msgid "comments"
+msgstr ""
+
+msgid "contact"
+msgstr ""
+
+msgid "date_of_completion"
+msgstr ""
+
+msgid "deadline"
+msgstr ""
+
+msgid "delivery_date"
+msgstr ""
+
+msgid "document_author"
+msgstr ""
+
+msgid "document_date"
+msgstr ""
+
+msgid "documents"
+msgstr ""
+
+msgid "dossiers"
+msgstr ""
+
+msgid "email"
+msgstr ""
+
+msgid "end"
+msgstr ""
+
+msgid "events"
+msgstr ""
+
+msgid "important_contact"
+msgstr ""
+
+msgid "issuedtasks"
+msgstr ""
+
+msgid "issuedtasks_solr"
+msgstr ""
+
+msgid "issuer"
+msgstr ""
+
+msgid "journal"
+msgstr ""
+
+#. Default: "Responsible"
+#: opengever.tabbedview/opengever/tabbedview/browser/tabs.py:400
+msgid "label_responsible"
+msgstr ""
+
+#. Default: "Responsible"
+#: opengever.tabbedview/opengever/tabbedview/browser/tabs.py:143
+msgid "label_responsible_task"
+msgstr ""
+
+msgid "modified"
+msgstr ""
+
+msgid "mytasks"
+msgstr ""
+
+msgid "mytasks_solr"
+msgstr ""
+
+#: opengever.tabbedview/opengever/tabbedview/browser/tabs_templates/overview.pt:17
+msgid "no_content"
+msgstr ""
+
+msgid "orgunit_contact"
+msgstr ""
+
+msgid "overview"
+msgstr ""
+
+msgid "participants"
+msgstr ""
+
+msgid "phone_office"
+msgstr ""
+
+msgid "preview"
+msgstr ""
+
+msgid "receipt_date"
+msgstr ""
+
+msgid "reference"
+msgstr ""
+
+msgid "reference_number"
+msgstr ""
+
+msgid "relateddossiers"
+msgstr ""
+
+msgid "repostories"
+msgstr ""
+
+msgid "responsible"
+msgstr ""
+
+msgid "review_state"
+msgstr ""
+
+msgid "role_list"
+msgstr ""
+
+msgid "sharing"
+msgstr ""
+
+#: opengever.tabbedview/opengever/tabbedview/browser/tabs_templates/overview.pt:14
+msgid "show all"
+msgstr ""
+
+msgid "sortable_title"
+msgstr ""
+
+msgid "start"
+msgstr ""
+
+msgid "subdossiers"
+msgstr ""
+
+msgid "tasks"
+msgstr ""
+
+msgid "time"
+msgstr ""
+
+msgid "title"
+msgstr ""
+
+msgid "trash"
+msgstr ""
+
