@@ -164,7 +164,7 @@ msgstr "Keine Datenschutzstufe"
 #. Default: ""
 #: opengever/repository/classification.py
 msgid "privacy layer : yes"
-msgstr "Enthält schützenswerten Personendaten"
+msgstr "Enthält schützenswerte Personendaten"
 
 #. Default: "private"
 #: opengever/repository/classification.py
