@@ -403,7 +403,7 @@ class Participants(OpengeverListingTab):
     columns = (
         ('', base64_oid_checkbox,),
         ('', icon_helper,),
-        ('contact', 'contact',),
+        ('contact', 'contact', readable_ogds_author),
         ('role_list', 'roles',)
         )
 
