@@ -23,7 +23,7 @@
       <property name="icon_expr"></property>
       <property name="available_expr"></property>
       <property name="permissions">
-        <element value="View"/>
+          <element value="iterate : Check out content"/>
       </property>
       <property name="visible">True</property>
     </object>
@@ -35,7 +35,7 @@
       <property name="icon_expr"></property>
       <property name="available_expr"></property>
       <property name="permissions">
-        <element value="View"/>
+        <element value="iterate : Check in content"/>
       </property>
       <property name="visible">True</property>
     </object>
@@ -47,7 +47,7 @@
         <property name="icon_expr"></property>
         <property name="available_expr"></property>
         <property name="permissions">
-          <element value="View"/>
+          <element value="ftw.task: Add task"/>
         </property>
         <property name="visible">True</property>
     </object>
