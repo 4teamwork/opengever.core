@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2010-01-18 15:03+0000\n"
+"POT-Creation-Date: 2010-02-08 08:32+0000\n"
 "PO-Revision-Date: 2009-02-25 14:39+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -51,6 +51,9 @@ msgstr "Kommentar"
 
 msgid "contact"
 msgstr "Beteiligter"
+
+msgid "created"
+msgstr "Erstellt am"
 
 msgid "date_of_completion"
 msgstr "Erledigt am"
@@ -102,12 +105,12 @@ msgid "journal"
 msgstr "Journal"
 
 #. Default: "Responsible"
-#: opengever.tabbedview/opengever/tabbedview/browser/tabs.py:400
+#: opengever.tabbedview/opengever/tabbedview/browser/tabs.py:419
 msgid "label_responsible"
 msgstr "Federführend"
 
 #. Default: "Responsible"
-#: opengever.tabbedview/opengever/tabbedview/browser/tabs.py:143
+#: opengever.tabbedview/opengever/tabbedview/browser/tabs.py:162
 msgid "label_responsible_task"
 msgstr "Verantwortlich"
 

@@ -161,3 +161,5 @@ msgstr ""
 msgid "phone_office"
 msgstr ""
 
+msgid "created"
+msgstr ""
