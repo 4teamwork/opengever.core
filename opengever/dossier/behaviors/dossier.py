@@ -27,6 +27,7 @@ from zope.component import queryUtility, getAdapter
 
 from opengever.dossier.interfaces import IDossierContainerTypes
 from opengever.base.interfaces import IReferenceNumber
+from opengever.base.behaviors import reference
 
 from z3c.relationfield.schema import RelationChoice, RelationList
 from plone.formwidget.contenttree import ObjPathSourceBinder
@@ -282,4 +283,19 @@ def set_former_reference_after_moving(obj, event):
     old_obj_rn = old_par_rn + new_obj_rn[len(new_par_rn):]
     repr = IDossier(obj)
     IDossier['former_reference_number'].set(repr, old_obj_rn)
+    
+    from z3c.form.interfaces import IValue
+    from zope.component import queryMultiAdapter
+    
+    
+    default = queryMultiAdapter((
+        obj,
+        obj.REQUEST, # request
+        None, # form
+        reference.IReferenceNumber.get('reference_number'),
+        None, # Widget
+        ), IValue, name='default')
+    if default!=None:
+        default = default.get()
+        reference.IReferenceNumber.get('reference_number').set(reference.IReferenceNumber(obj), default)
 
