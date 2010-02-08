@@ -157,12 +157,12 @@ class Tasks(OpengeverListingTab):
         ('review_state', 'review_state', helper.translated_string()),
         ('Title', 'sortable_title', linked),
         ('deadline', helper.readable_date),
-        ('created', helper.readable_date), # erstellt am
+        ('date_of_completion', helper.readable_date), # erledigt am
         {'column' : 'responsible', 
         'column_title' : _(u'label_responsible_task', 'Responsible'),  
         'transform' : readable_ogds_author},
         ('issuer', readable_ogds_author), # zugewiesen von
-        ('modified', helper.readable_date)# zugewiesem am
+        ('created', helper.readable_date)# erstellt am
         )
 
     types = ['ftw.task.task',]
