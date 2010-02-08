@@ -18,6 +18,7 @@ from zope.app.publication.interfaces import IFileContent
 from zope.interface import Interface
 from zope.sendmail.interfaces import IMailer
 
+from z3c.form.browser.checkbox import CheckBoxFieldWidget
 from z3c.form import form, field, button
 from z3c.form import interfaces
 
@@ -35,7 +36,6 @@ from ftw.sendmail.interfaces import IEMailComposer
 
 from opengever.document.interfaces import IAttachable, IAttachedMailComposer
 from opengever.document import _
-
 
 class FileAttachmentGenerator(grok.Adapter):
     """ FileAttachmentGenerator's render() method generates a list of MIMEBase
@@ -160,9 +160,9 @@ class AttachedMailComposer(grok.GlobalUtility):
 
 class ISendAsEmailFormSchema(Interface):
     attachments = schema.TextLine(title=u'attachments') # hidden
-    receivers = schema.Choice(title=_(u'label_receivers', default=u'Receivers'),
+    receivers = schema.List(title=_(u'label_receivers', default=u'Receivers'),
                               description=_(u'help_receivers', default=u''),
-                              vocabulary=u'plone.principalsource.Users',
+                              value_type=schema.Choice(vocabulary=u'plone.principalsource.Users',),
                               required=True,
     )
     subject = schema.TextLine(title=_(u'label_subject', default=u'Subject'),
@@ -174,13 +174,13 @@ class ISendAsEmailFormSchema(Interface):
                           required=True,
     )
 
-
-
 class SendAsEmailForm(form.Form):
     fields = field.Fields(ISendAsEmailFormSchema)
     ignoreContext = True
     label = _(u'heading_send_as_email', u'Send as email')
-
+    
+    fields['receivers'].widgetFactory = CheckBoxFieldWidget
+    
     @button.buttonAndHandler(_(u'button_send', default=u'Send'))
     def send_button_handler(self, action):
         data, errors = self.extractData()
@@ -191,7 +191,7 @@ class SendAsEmailForm(form.Form):
             mailer = component.getUtility(IMailer, 'plone.smtp')
             mailer.update_settings()
             # prepare data
-            receivers = [ data['receivers'], ]
+            receivers = data['receivers']
             to_addresses = self.get_formatted_user_addreses(receivers)
             sender_name = self.authenticated_member.getProperty('fullname')
             sender_email = self.authenticated_member.getProperty('email')
@@ -215,13 +215,13 @@ class SendAsEmailForm(form.Form):
             info = _(u'info_mails_sent', 'Mails sent')
             IStatusMessage(self.request).addStatusMessage(info, type='info')
             # and redirect to default view
-            return self.request.RESPONSE.redirect('view')
+            return self.request.RESPONSE.redirect('./#documents-tab')
 
     @button.buttonAndHandler( _('cancel_back', default=u'Cancel') )
     def cancel_button_handler( self, action ):
         return self.request.RESPONSE.redirect('./#documents-tab')
 
-    def updateWidgets(self):
+    def updateWidgets(self):    
         super(SendAsEmailForm, self).updateWidgets()
         self.widgets['attachments'].mode = interfaces.HIDDEN_MODE
         # set attachments field
@@ -258,6 +258,7 @@ class SendAsEmailForm(form.Form):
             data.append( (get('fullname'), get('email')) )
         return data
 
-SendAsEmail = layout.wrap_form(SendAsEmailForm)
-
-
+class SendAsEmail(layout.FormWrapper):
+    form = SendAsEmailForm
+    def get_attachments(self):
+        return self.form_instance.attachments

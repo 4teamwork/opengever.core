@@ -30,6 +30,7 @@
             name="send_documents_as_email"
             for="plone.dexterity.interfaces.IDexterityContent"
             class=".mailing.SendAsEmail"
+            template="document_templates/sendasemail.pt"
             permission="zope2.View" />
 
 </configure>
