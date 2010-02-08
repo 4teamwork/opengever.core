@@ -53,8 +53,10 @@ from zope.annotation.interfaces import IAnnotations, IAnnotatable
 from plone.directives.dexterity import DisplayForm
 
 from opengever.tabbedview.browser.tabs import OpengeverTab, OpengeverListingTab, OpengeverSolrListingTab
+from opengever.tabbedview.helper import readable_ogds_author, linked
 from opengever.base.interfaces import IReferenceNumber, ISequenceNumber
 from opengever.octopus.tentacle.interfaces import IContactInformation
+
 
 LOG = logging.getLogger('opengever.document')
 
@@ -508,10 +510,15 @@ class Tasks(OpengeverListingTab):
     columns= (
         ('', helper.draggable),
         ('', helper.path_checkbox),
-        ('Title', helper.solr_linked),
-        ('deadline', helper.readable_date),
-        'responsible',
         ('review_state', 'review_state', helper.translated_string()),
+        ('Title', 'sortable_title', linked),
+        ('deadline', helper.readable_date),
+        ('date_of_completion', helper.readable_date), # erledigt am
+        {'column' : 'responsible', 
+        'column_title' : _(u'label_responsible_task', 'Responsible'),  
+        'transform' : readable_ogds_author},
+        ('issuer', readable_ogds_author), # zugewiesen von
+        ('created', helper.readable_date)# erstellt am
         )
 
     types = ['ftw.task.task', ]
