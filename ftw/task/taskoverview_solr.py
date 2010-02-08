@@ -35,7 +35,7 @@ class MyTasks(OpengeverSolrListingTab):
         'column_title' : _(u'label_responsible_task', 'Responsible'),  
         'transform' : readable_ogds_author},
         ('issuer', opengever_helper.readable_ogds_author), # zugewiesen von
-        ('modified', helper.readable_date)# zugewiesem am
+        ('created', helper.readable_date)# erstellt am
         )
     types = ['ftw.task.task', ]
     
@@ -55,7 +55,7 @@ class IssuedTasks(OpengeverSolrListingTab):
         'column_title' : _(u'label_responsible_task', 'Responsible'),  
         'transform' : readable_ogds_author},
         ('issuer', opengever_helper.readable_ogds_author), # zugewiesen von
-        ('modified', helper.readable_date)# zugewiesem am
+        ('created', helper.readable_date)# erstellt am
         )
     
     def build_query(self):
