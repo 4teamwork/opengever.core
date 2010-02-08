@@ -54,6 +54,7 @@ from plone.directives.dexterity import DisplayForm
 
 from opengever.tabbedview.browser.tabs import OpengeverTab, OpengeverListingTab, OpengeverSolrListingTab
 from opengever.tabbedview.helper import readable_ogds_author, linked
+from opengever.tabbedview import _ as tvmf
 from opengever.base.interfaces import IReferenceNumber, ISequenceNumber
 from opengever.octopus.tentacle.interfaces import IContactInformation
 
@@ -515,7 +516,7 @@ class Tasks(OpengeverListingTab):
         ('deadline', helper.readable_date),
         ('date_of_completion', helper.readable_date), # erledigt am
         {'column' : 'responsible', 
-        'column_title' : _(u'label_responsible_task', 'Responsible'),  
+        'column_title' : tvmf(u'label_responsible_task', 'Responsible'),  
         'transform' : readable_ogds_author},
         ('issuer', readable_ogds_author), # zugewiesen von
         ('created', helper.readable_date)# erstellt am
