@@ -38,7 +38,7 @@ class MyTasks(OpengeverListingTab):
         )
     types = ['ftw.task.task', ]
 
-    search_options = {'responsible': authenticated_member, 'review_state':'task-state-open'}
+    search_options = {'responsible': authenticated_member}
 
     def search(self, kwargs):
 
@@ -64,7 +64,7 @@ class IssuedTasks(OpengeverListingTab):
 
     types = ['ftw.task.task', ]
 
-    search_options = {'issuer': authenticated_member, 'review_state':'task-state-open'}
+    search_options = {'issuer': authenticated_member}
         
     def search(self, kwargs):
         catalog = getToolByName(self.context,'portal_catalog')
