@@ -95,6 +95,8 @@ class IDocumentSchema(form.Schema):
             u'keywords',
             u'foreign_reference',
             u'document_date',
+            u'receipt_date',
+            u'delivery_date',
             u'document_type',
             u'document_author',
             u'file',
@@ -102,15 +104,6 @@ class IDocumentSchema(form.Schema):
             u'preserved_as_paper',
             u'archival_file',
             u'thumbnail',
-            ]
-        )
-
-    form.fieldset(
-        u'dates',
-        label = _(u'fieldset_dates', u'Dates'),
-        fields = [
-            u'receipt_date',
-            u'delivery_date',
             ]
         )
 
