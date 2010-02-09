@@ -49,4 +49,7 @@
  <action title="issued tasks" action_id="issuedtasks_solr" category="arbeitsraum-tabs"
          condition_expr="" url_expr="string:#" visible="True">
  </action>
+ <action title="assigned tasks" action_id="assignedtasks_solr" category="arbeitsraum-tabs"
+         condition_expr="python: object.portal_membership.getAuthenticatedMember().allowed(object, ('Administrator',))" url_expr="string:#" visible="True">
+ </action>
 </object>

@@ -4,6 +4,7 @@ from zope.component import queryUtility
 from ftw.table import helper
 from opengever.tabbedview import helper as opengever_helper
 from opengever.tabbedview.helper import readable_ogds_author
+from opengever.octopus.tentacle.contacts import ContactInformation
 from ftw.task import _
 
 def authenticated_member(context):
@@ -65,3 +66,29 @@ class IssuedTasks(OpengeverSolrListingTab):
     def build_query(self):
         aid = authenticated_member(self.context)
         return 'portal_type:ftw.task.task AND issuer:%s AND ! responsible:%s' % (aid, aid)
+
+        
+class AssignedTasks(OpengeverSolrListingTab):
+    grok.name('tabbedview_view-assignedtasks_solr')
+    columns= (
+        ('', helper.draggable),
+        ('', helper.path_checkbox),
+        ('review_state', 'review_state', helper.translated_string()),
+        ('Title', helper.solr_linked),
+        {'column' : 'task_type', 
+        'column_title' : _(u'label_task_type', 'Task Type')},
+        ('deadline', helper.readable_date),
+        ('date_of_completion', helper.readable_date), # erledigt am
+        {'column' : 'responsible', 
+        'column_title' : _(u'label_responsible_task', 'Responsible'),  
+        'transform' : readable_ogds_author},
+        ('issuer', opengever_helper.readable_ogds_author), # zugewiesen von
+        ('created', helper.readable_date)# erstellt am
+        )
+
+    def build_query(self):
+        users = ContactInformation().list_local_users()
+        temp = ''
+        for user in users:
+            temp += '%s OR ' % user
+        return 'portal_type:ftw.task.task AND responsible:(%s)' % (temp[:-3])
