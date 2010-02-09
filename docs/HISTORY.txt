@@ -4,12 +4,20 @@ Changelog
 
 1.0a5
 -----
+* Issue #396: Aufgabenübersicht: Spalte Typ einfügen
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/396/
+  Added Task-indexes: task_type
+  [03.02.2010, pgross]
 
 * AddlLocalRoles-Action: fixed bug which removed the creator role some times
   [03.02.2010, jbaumann]
   
 * Task view: added issuer
   [03.02.2010, jbaumann]
+
+* INSTALLATION:
+  * reindex global_solr and portal_catalog
+
   
 
 1.0a4
