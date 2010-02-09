@@ -33,6 +33,7 @@ def add_catalog_indexes(context, logger=None):
               ('date_of_completion', 'DateIndex'),
               ('responsible', 'FieldIndex'),
               ('issuer', 'FieldIndex'),
+              ('task_type', 'FieldIndex'),
               )
     indexables = []
     for name, meta_type in wanted:

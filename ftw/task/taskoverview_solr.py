@@ -29,9 +29,11 @@ class MyTasks(OpengeverSolrListingTab):
         ('', helper.path_checkbox),
         ('review_state', 'review_state', helper.translated_string()),
         ('Title', helper.solr_linked),
+        {'column' : 'task_type', 
+        'column_title' : _(u'label_task_type', 'Task Type')},
         ('deadline', helper.readable_date),
         ('date_of_completion', helper.readable_date), # erledigt am
-        {'column' : 'responsible', 
+        {'column' : 'responsible',
         'column_title' : _(u'label_responsible_task', 'Responsible'),  
         'transform' : readable_ogds_author},
         ('issuer', opengever_helper.readable_ogds_author), # zugewiesen von
@@ -49,6 +51,8 @@ class IssuedTasks(OpengeverSolrListingTab):
         ('', helper.path_checkbox),
         ('review_state', 'review_state', helper.translated_string()),
         ('Title', helper.solr_linked),
+        {'column' : 'task_type', 
+        'column_title' : _(u'label_task_type', 'Task Type')},
         ('deadline', helper.readable_date),
         ('date_of_completion', helper.readable_date), # erledigt am
         {'column' : 'responsible', 

@@ -28,6 +28,8 @@ class MyTasks(OpengeverListingTab):
         ('', helper.path_checkbox),
         ('review_state', 'review_state', helper.translated_string()),
         ('Title', helper.linked),
+        {'column' : 'task_type', 
+        'column_title' : _(u'label_task_type', 'Task Type')},
         ('deadline', helper.readable_date),
         ('created', helper.readable_date), # erstellt am
         {'column' : 'responsible', 
@@ -53,6 +55,8 @@ class IssuedTasks(OpengeverListingTab):
         ('', helper.path_checkbox),
         ('review_state', 'review_state', helper.translated_string()),
         ('Title', helper.linked),
+        {'column' : 'task_type', 
+        'column_title' : _(u'label_task_type', 'Task type')},
         ('deadline', helper.readable_date),
         ('date_of_completion', helper.readable_date), # erledigt am
         {'column' : 'responsible', 
