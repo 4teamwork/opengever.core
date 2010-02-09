@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2010-01-21 07:55+0000\n"
+"POT-Creation-Date: 2010-02-09 14:28+0000\n"
 "PO-Revision-Date: 2009-02-25 14:39+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Domain: ftw.task\n"
 "X-Poedit-Language: German\n"
 
-#: ftw.task/ftw/task/actions/addlocalroles.py:99
+#: ftw.task/ftw/task/actions/addlocalroles.py:105
 msgid "Add Local Roles Action"
 msgstr ""
 
@@ -23,43 +23,43 @@ msgstr ""
 msgid "Add local roles for object: ${object_roles}, related items: ${related_items_roles}, parent: ${parent_roles}"
 msgstr ""
 
-#: ftw.task/ftw/task/actions/addlocalroles.py:100
+#: ftw.task/ftw/task/actions/addlocalroles.py:106
 msgid "Add local roles to all related items for the 'responsible' user."
 msgstr ""
 
-#: ftw.task/ftw/task/response.py:487
+#: ftw.task/ftw/task/response.py:490
 msgid "Changes saved to response id ${response_id}."
 msgstr ""
 
-#: ftw.task/ftw/task/actions/addlocalroles.py:101
+#: ftw.task/ftw/task/actions/addlocalroles.py:107
 msgid "Configure element"
 msgstr ""
 
-#: ftw.task/ftw/task/response_templates/responseview.pt:28
+#: ftw.task/ftw/task/response_templates/responseview.pt:27
 msgid "Delete"
 msgstr ""
 
-#: ftw.task/ftw/task/response_templates/responseview.pt:18
+#: ftw.task/ftw/task/response_templates/responseview.pt:17
 msgid "Edit"
 msgstr ""
 
-#: ftw.task/ftw/task/actions/addlocalroles.py:113
+#: ftw.task/ftw/task/actions/addlocalroles.py:119
 msgid "Edit Local Roles Action"
 msgstr ""
 
-#: ftw.task/ftw/task/response.py:382
+#: ftw.task/ftw/task/response.py:385
 msgid "Issue state"
 msgstr ""
 
-#: ftw.task/ftw/task/response.py:515
+#: ftw.task/ftw/task/response.py:518
 msgid "No response selected for removal."
 msgstr ""
 
-#: ftw.task/ftw/task/response.py:478
+#: ftw.task/ftw/task/response.py:481
 msgid "No response selected for saving."
 msgstr ""
 
-#: ftw.task/ftw/task/response.py:251
+#: ftw.task/ftw/task/response.py:253
 msgid "No response selected."
 msgstr ""
 
@@ -75,27 +75,27 @@ msgstr ""
 msgid "Related Items Roles"
 msgstr ""
 
-#: ftw.task/ftw/task/response.py:537
+#: ftw.task/ftw/task/response.py:540
 msgid "Removed response id ${response_id}."
 msgstr ""
 
-#: ftw.task/ftw/task/response.py:530
+#: ftw.task/ftw/task/response.py:533
 msgid "Response id ${response_id} does not exist so it cannot be removed."
 msgstr ""
 
-#: ftw.task/ftw/task/response.py:265
+#: ftw.task/ftw/task/response.py:267
 msgid "Response id ${response_id} does not exist."
 msgstr ""
 
-#: ftw.task/ftw/task/response.py:557
+#: ftw.task/ftw/task/response.py:560
 msgid "Response id ${response_id} has no attachment."
 msgstr ""
 
-#: ftw.task/ftw/task/response.py:522
+#: ftw.task/ftw/task/response.py:525
 msgid "Response id ${response_id} is no integer so it cannot be removed."
 msgstr ""
 
-#: ftw.task/ftw/task/response.py:259
+#: ftw.task/ftw/task/response.py:261
 msgid "Response id ${response_id} is no integer."
 msgstr ""
 
@@ -112,105 +112,105 @@ msgstr ""
 msgid "The local roles to add."
 msgstr ""
 
-#: ftw.task/ftw/task/response.py:509
+#: ftw.task/ftw/task/response.py:512
 msgid "You are not allowed to delete responses."
 msgstr ""
 
-#: ftw.task/ftw/task/response.py:472
+#: ftw.task/ftw/task/response.py:475
 msgid "You are not allowed to edit responses."
 msgstr ""
 
 #. Default: "Add"
-#: ftw.task/ftw/task/response.py:312
+#: ftw.task/ftw/task/response.py:314
 msgid "add"
 msgstr ""
 
 #. Default: "Cancel"
-#: ftw.task/ftw/task/response.py:389
+#: ftw.task/ftw/task/response.py:392
 msgid "cancel"
 msgstr ""
 
-#: ftw.task/ftw/task/response.py:342
+#: ftw.task/ftw/task/response.py:344
 msgid "date_of_completion"
 msgstr ""
 
-#: ftw.task/ftw/task/response.py:340
+#: ftw.task/ftw/task/response.py:342
 msgid "deadline"
 msgstr ""
 
 #. Default: "Additional"
-#: ftw.task/ftw/task/task.py:63
+#: ftw.task/ftw/task/task.py:66
 msgid "fieldset_additional"
 msgstr ""
 
 #. Default: "Common"
-#: ftw.task/ftw/task/task.py:51
+#: ftw.task/ftw/task/task.py:53
 msgid "fieldset_common"
 msgstr ""
 
-#: ftw.task/ftw/task/response.py:95
+#: ftw.task/ftw/task/response.py:97
 msgid "help_attachment"
 msgstr ""
 
-#: ftw.task/ftw/task/response.py:82
-#: ftw.task/ftw/task/task.py:111
+#: ftw.task/ftw/task/response.py:84
+#: ftw.task/ftw/task/task.py:121
 msgid "help_date_of_completion"
 msgstr ""
 
-#: ftw.task/ftw/task/task.py:104
+#: ftw.task/ftw/task/task.py:114
 msgid "help_deadline"
 msgstr ""
 
-#: ftw.task/ftw/task/response.py:76
+#: ftw.task/ftw/task/response.py:78
 msgid "help_deadline_response"
 msgstr ""
 
-#: ftw.task/ftw/task/task.py:150
+#: ftw.task/ftw/task/task.py:160
 msgid "help_effectiveCost"
 msgstr ""
 
-#: ftw.task/ftw/task/task.py:144
+#: ftw.task/ftw/task/task.py:154
 msgid "help_effectiveDuration"
 msgstr ""
 
-#: ftw.task/ftw/task/task.py:138
+#: ftw.task/ftw/task/task.py:148
 msgid "help_expectedCost"
 msgstr ""
 
-#: ftw.task/ftw/task/task.py:132
+#: ftw.task/ftw/task/task.py:142
 msgid "help_expectedDuration"
 msgstr ""
 
-#: ftw.task/ftw/task/task.py:126
+#: ftw.task/ftw/task/task.py:136
 msgid "help_expectedStartOfWork"
 msgstr ""
 
-#: ftw.task/ftw/task/task.py:77
+#: ftw.task/ftw/task/task.py:87
 msgid "help_issuer"
 msgstr ""
 
-#: ftw.task/ftw/task/response.py:69
-msgid "help_new_responsible_response"
-msgstr ""
-
-#: ftw.task/ftw/task/response.py:63
+#: ftw.task/ftw/task/response.py:64
 msgid "help_response"
 msgstr ""
 
-#: ftw.task/ftw/task/task.py:96
+#: ftw.task/ftw/task/task.py:106
 msgid "help_responsible"
 msgstr ""
 
-#: ftw.task/ftw/task/task.py:85
+#: ftw.task/ftw/task/task.py:95
 msgid "help_task_type"
 msgstr ""
 
-#: ftw.task/ftw/task/task.py:118
+#: ftw.task/ftw/task/task.py:128
 msgid "help_text"
 msgstr ""
 
+#: ftw.task/ftw/task/task.py:80
+msgid "help_title"
+msgstr ""
+
 #: ftw.task/ftw/task/behaviors.py:28
-#: ftw.task/ftw/task/response.py:88
+#: ftw.task/ftw/task/response.py:90
 msgid "help_transition"
 msgstr ""
 
@@ -221,7 +221,7 @@ msgid "issuedtasks_solr"
 msgstr ""
 
 #. Default: "Attachment"
-#: ftw.task/ftw/task/response.py:94
+#: ftw.task/ftw/task/response.py:96
 msgid "label_attachment"
 msgstr ""
 
@@ -231,18 +231,18 @@ msgid "label_by_author"
 msgstr ""
 
 #. Default: "Date of completion"
-#: ftw.task/ftw/task/response.py:81
-#: ftw.task/ftw/task/task.py:110
+#: ftw.task/ftw/task/response.py:83
+#: ftw.task/ftw/task/task.py:120
 msgid "label_date_of_completion"
 msgstr ""
 
 #. Default: "Deadline"
-#: ftw.task/ftw/task/task.py:103
+#: ftw.task/ftw/task/task.py:113
 msgid "label_deadline"
 msgstr ""
 
 #. Default: "New deadline"
-#: ftw.task/ftw/task/response.py:75
+#: ftw.task/ftw/task/response.py:77
 msgid "label_deadline_Response"
 msgstr ""
 
@@ -252,12 +252,12 @@ msgid "label_edit_response_not_allowed"
 msgstr ""
 
 #. Default: "effective cost"
-#: ftw.task/ftw/task/task.py:149
+#: ftw.task/ftw/task/task.py:159
 msgid "label_effectiveCost"
 msgstr ""
 
 #. Default: "effective duration"
-#: ftw.task/ftw/task/task.py:143
+#: ftw.task/ftw/task/task.py:153
 msgid "label_effectiveDuration"
 msgstr ""
 
@@ -267,48 +267,44 @@ msgid "label_enter_response"
 msgstr ""
 
 #. Default: "expected cost"
-#: ftw.task/ftw/task/task.py:137
+#: ftw.task/ftw/task/task.py:147
 msgid "label_expectedCost"
 msgstr ""
 
 #. Default: "Expected duration"
-#: ftw.task/ftw/task/task.py:131
+#: ftw.task/ftw/task/task.py:141
 msgid "label_expectedDuration"
 msgstr ""
 
 #. Default: "Start with work"
-#: ftw.task/ftw/task/task.py:125
+#: ftw.task/ftw/task/task.py:135
 msgid "label_expectedStartOfWork"
 msgstr ""
 
 #. Default: "Issuer"
-#: ftw.task/ftw/task/task.py:76
+#: ftw.task/ftw/task/task.py:86
 msgid "label_issuer"
 msgstr ""
 
 #. Default: "Last change"
-#: ftw.task/ftw/task/task_templates/view.pt:42
+#: ftw.task/ftw/task/task_templates/view.pt:46
 msgid "label_last_modified"
 msgstr ""
 
-#. Default: "Related Items"
-#: ftw.task/ftw/task/response.py:100
-msgid "label_related_items"
-msgstr ""
-
 #. Default: "Response"
-#: ftw.task/ftw/task/response.py:62
+#: ftw.task/ftw/task/response.py:63
 msgid "label_response"
 msgstr ""
 
 #. Default: "Responsible"
-#: ftw.task/ftw/task/task.py:95
+#: ftw.task/ftw/task/task.py:105
 msgid "label_responsible"
 msgstr ""
 
-#. Default: "New responsible"
-#: ftw.task/ftw/task/response.py:68
-msgid "label_responsible_Response"
+#. Default: "Responsible"
+#: ftw.task/ftw/task/taskoverview.py:36
+#: ftw.task/ftw/task/taskoverview_solr.py:38
+msgid "label_responsible_task"
 msgstr ""
 
 #. Default: "Return to issue."
@@ -317,23 +313,30 @@ msgid "label_return_to_issue"
 msgstr ""
 
 #. Default: "Task Type"
-#: ftw.task/ftw/task/task.py:84
+#: ftw.task/ftw/task/task.py:94
+#: ftw.task/ftw/task/taskoverview.py:32
+#: ftw.task/ftw/task/taskoverview_solr.py:34
 msgid "label_task_type"
 msgstr ""
 
 #. Default: "Text"
-#: ftw.task/ftw/task/task.py:117
+#: ftw.task/ftw/task/task.py:127
 msgid "label_text"
+msgstr ""
+
+#. Default: "Title"
+#: ftw.task/ftw/task/task.py:79
+msgid "label_title"
 msgstr ""
 
 #. Default: "Transition"
 #: ftw.task/ftw/task/behaviors.py:27
-#: ftw.task/ftw/task/response.py:87
+#: ftw.task/ftw/task/response.py:89
 msgid "label_transition"
 msgstr ""
 
 #. Default: "State"
-#: ftw.task/ftw/task/task_templates/view.pt:38
+#: ftw.task/ftw/task/task_templates/view.pt:42
 msgid "label_workflow_state"
 msgstr ""
 
@@ -344,18 +347,13 @@ msgid "mytasks_solr"
 msgstr ""
 
 #. Default: "No Content"
-#: ftw.task/ftw/task/task_templates/view.pt:68
+#: ftw.task/ftw/task/task_templates/view.pt:72
 msgid "no_content"
 msgstr ""
 
 #. Default: "Attached:"
-#: ftw.task/ftw/task/response_templates/responseview.pt:60
+#: ftw.task/ftw/task/response_templates/responseview.pt:59
 msgid "poi_label_attachment"
-msgstr ""
-
-#. Default: "related items:"
-#: ftw.task/ftw/task/response_templates/responseview.pt:71
-msgid "poi_label_relateditems"
 msgstr ""
 
 #. Default: "Response"
@@ -364,26 +362,22 @@ msgid "response_label_response"
 msgstr ""
 
 #. Default: "Responses:"
-#: ftw.task/ftw/task/task_templates/view.pt:72
+#: ftw.task/ftw/task/task_templates/view.pt:76
 msgid "responses"
 msgstr ""
 
-#: ftw.task/ftw/task/response.py:346
-msgid "responsible"
-msgstr ""
-
 #. Default: "Subtasks:"
-#: ftw.task/ftw/task/task_templates/view.pt:60
+#: ftw.task/ftw/task/task_templates/view.pt:64
 msgid "subtasks"
 msgstr ""
 
 #. Default: "Added by"
-#: ftw.task/ftw/task/response_templates/responseview.pt:37
+#: ftw.task/ftw/task/response_templates/responseview.pt:36
 msgid "task_added_by"
 msgstr ""
 
 #. Default: "on"
-#: ftw.task/ftw/task/response_templates/responseview.pt:40
+#: ftw.task/ftw/task/response_templates/responseview.pt:39
 msgid "task_added_on"
 msgstr ""
 
@@ -395,10 +389,5 @@ msgstr ""
 #. Default: "Error: no response found for editing"
 #: ftw.task/ftw/task/templates/edit_response.pt:30
 msgid "title_error_no_response"
-msgstr ""
-
-#. Default: "Responsible"
-#: ftw.task/ftw/task/taskoverview.py:34
-msgid "label_responsible_task"
 msgstr ""
 

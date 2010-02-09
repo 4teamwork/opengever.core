@@ -51,6 +51,7 @@ class ITask(form.Schema):
         u'common',
         label = _(u'fieldset_common', default=u'Common'),
         fields = [
+            u'title',
             u'issuer',
             u'task_type',
             u'responsible',
@@ -71,6 +72,13 @@ class ITask(form.Schema):
             u'date_of_completion',
             ],
         )
+
+
+    title = schema.TextLine(
+        title=_(u"label_title", default=u"Title"),
+        description=_('help_title', default=u""),
+        required = True,
+    )
 
     form.widget(issuer=AutocompleteFieldWidget)
     issuer = schema.Choice(
@@ -154,7 +162,7 @@ class ITask(form.Schema):
 
     form.order_before(**{'ITransition.transition': "responsible"})
 
-# XXX doesn't work yet.
+# # XXX doesn't work yet.
 #@form.default_value(field=ITask['issuer'])
 
 def default_issuer(data):
@@ -170,13 +178,17 @@ from plone.autoform.interfaces import ORDER_KEY
 # move relatedItems to default fieldset
 # by removing it from categorization fieldset
 IRelatedItems.setTaggedValue(FIELDSETS_KEY, [])
-# IRelatedItems.setTaggedValue( FIELDSETS_KEY, [
+
+# # # IRelatedItems.setTaggedValue( FIELDSETS_KEY, [
 #         Fieldset( 'common', fields=[
 #                 'relatedItems',
 #                 ])
 #         ] )
 #
+
 IRelatedItems.setTaggedValue(ORDER_KEY, [('relatedItems', 'after', 'text')])
+
+
 #ITransition.setTaggedValue(FIELDSETS_KEY, [])
 #ITransition.setTaggedValue(ORDER_KEY, [('transition', 'before', 'responsible')])
 
@@ -193,22 +205,23 @@ class Task(Container):
     def __init__(self, *args, **kwargs):
         super(Task, self).__init__(*args, **kwargs)
 
-    def Title(self):
-        registry = queryUtility(IRegistry)
-        proxy = registry.forInterface(ITaskSettings)
-        title = "#%s %s"% (getUtility(ISequenceNumber).get_number(self),self.task_type)
-        relatedItems = getattr(self,'relatedItems',[])
-        if len(relatedItems) == 1:
-            title += " (%s)" % self.relatedItems[0].to_object.title
-        elif len(relatedItems) > 1:
-            title += " (%i Dokumente)" % len(self.relatedItems)
-        if self.text:
-            crop_length = int(getattr(proxy,'crop_length',20))
-            text = self.text.encode('utf8')
-            text = self.restrictedTraverse('@@plone').cropText(text,crop_length)
-            text = text.decode('utf8')
-            title += ": %s" % text
-        return title
+    # REMOVED UNCOMMENT unused title function
+    # def Title(self):
+    #     registry = queryUtility(IRegistry)
+    #     proxy = registry.forInterface(ITaskSettings)
+    #     title = "#%s %s"% (getUtility(ISequenceNumber).get_number(self),self.task_type)
+    #     relatedItems = getattr(self,'relatedItems',[])
+    #     if len(relatedItems) == 1:
+    #         title += " (%s)" % self.relatedItems[0].to_object.title
+    #     elif len(relatedItems) > 1:
+    #         title += " (%i Dokumente)" % len(self.relatedItems)
+    #     if self.text:
+    #         crop_length = int(getattr(proxy,'crop_length',20))
+    #         text = self.text.encode('utf8')
+    #         text = self.restrictedTraverse('@@plone').cropText(text,crop_length)
+    #         text = text.decode('utf8')
+    #         title += ": %s" % text
+    #     return title
 
     @property
     def sequence_number(self):
