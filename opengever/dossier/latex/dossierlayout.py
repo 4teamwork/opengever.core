@@ -26,12 +26,11 @@ class DossierLayout(object):
         self.view.registerPackage('inputenc','utf8')
         self.view.registerPackage('fontenc','T1')
         self.view.registerPackage('textcomp')
-        self.view.registerPackage('arial')
         self.view.registerPackage('geometry', 'left=5cm,right=5cm,top=15cm,bottom=4cm')
         self.view.registerPackage('graphicx')
 
     def appendHeadCommands(self):
-        self.view.appendHeaderCommand(r'\newcommand{\familydefault}{ua1}')
+        self.view.appendHeaderCommand(r'\renewcommand{\familydefault}{ma1}')
 
     def appendAboveBodyCommands(self):
         pass

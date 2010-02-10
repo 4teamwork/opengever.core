@@ -5,6 +5,9 @@ Changelog
 1.0a4
 -----
 
+* Do not use windows fonts in LaTeX
+  [10.02.2010, jbaumann]
+  
 * Deckblatt PDF: Responsible mit ContactInformation utility generieren
   [10.02.2010, jbaumann]
   
