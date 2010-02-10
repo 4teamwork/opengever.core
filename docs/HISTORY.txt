@@ -5,6 +5,9 @@ Changelog
 1.0a4
 -----
 
+* Deckblatt PDF: Responsible mit ContactInformation utility generieren
+  [10.02.2010, jbaumann]
+  
 * Übersetzungen angepasst für Feld "former_reference"
   [03.02.2010, jbaumann]
   

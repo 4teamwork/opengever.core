@@ -5,6 +5,7 @@ from Acquisition import aq_inner, aq_parent
 from opengever.dossier.behaviors.dossier import IDossierMarker, IDossier
 from Products.CMFCore.utils import getToolByName
 from opengever.dossier.latex.dossierlayout import DossierLayout
+from opengever.octopus.tentacle.interfaces import IContactInformation
 
 from zope.component import getUtility, getAdapter
 from opengever.base.interfaces import IReferenceNumber, ISequenceNumber
@@ -65,7 +66,7 @@ class DossierLatexConverter(LatexCTConverter,grok.CodeView,AutoFields):
     def responsible(self):
         mt=getToolByName(self.context,'portal_membership')
         dossier = IDossier(self.context)
-        return mt.getMemberById(dossier.responsible)
+        return dossier.responsible
 
     def __call__(self, context, view):
         parent = aq_parent(aq_inner(context))
@@ -98,7 +99,10 @@ class DossierLatexConverter(LatexCTConverter,grok.CodeView,AutoFields):
         latex += '\\vspace{0.3cm} \\newline\n'
         latex += '\\small \\textbf{%s}. %s \\newline\n' %(self.view.convert(context.Title()),self.view.convert(context.Description()))
         latex += '\\vspace{0.3cm} \\newline\n'
-        latex += '\\scriptsize %s: %s\n' % (self.view.convert('Federf&uuml;hrung'),self.view.convert(self.responsible().getProperty('fullname')))
+        cinfo = getUtility(IContactInformation)
+        responsible_name = cinfo.describe(self.responsible())
+        latex += '\\scriptsize %s: %s\n' % (self.view.convert('Federf&uuml;hrung'),
+                                            self.view.convert(responsible_name))
         latex += '\\vspace{0.15cm} \\newline\n'
         latex += 'Beginn: %s\\hspace{0.15cm}|\\hspace{0.15cm}\n' % self.view.convert(start)
         latex += 'Abschluss: %s\\hspace{0.15cm} \\newline\n' % self.view.convert(end)
