@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2010-02-18 13:30+0000\n"
+"POT-Creation-Date: 2010-02-18 14:29+0000\n"
 "PO-Revision-Date: 2009-02-25 14:39+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -284,6 +284,9 @@ msgstr ""
 #. Default: "Start with work"
 #: ftw.task/ftw/task/task.py:134
 msgid "label_expectedStartOfWork"
+msgstr ""
+
+msgid "label_issued_date"
 msgstr ""
 
 #. Default: "Issuer"

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2010-02-18 13:30+0000\n"
+"POT-Creation-Date: 2010-02-18 14:29+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -286,6 +286,9 @@ msgstr "Geschätzte Dauer"
 msgid "label_expectedStartOfWork"
 msgstr "Beginn der Arbeit"
 
+msgid "label_issued_date"
+msgstr "Zugewiesen am"
+
 #. Default: "Issuer"
 #: ftw.task/ftw/task/task.py:85
 msgid "label_issuer"
@@ -322,7 +325,7 @@ msgstr "Zurück zur Aufgabe"
 #: ftw.task/ftw/task/taskoverview.py:32
 #: ftw.task/ftw/task/taskoverview_solr.py:34
 msgid "label_task_type"
-msgstr "Aufgabentyp"
+msgstr "Auftragstyp"
 
 #. Default: "Text"
 #: ftw.task/ftw/task/task.py:126
