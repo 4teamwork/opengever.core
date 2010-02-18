@@ -61,6 +61,17 @@
         </table>
 
         <div class="visualClear"><!----></div>
+        
+        <div><h2 i18n:translate="containing_task">Containing Tasks:</h2></div>
+        <tal:items define="items view/getContainingTask">
+          <ul tal:condition="items">
+            <li tal:repeat="item items">
+              <img tal:attributes="src item/getIcon" />
+              <a href="" tal:attributes="href item/absolute_url|nothing" tal:omit-tag="not: item/absolute_url|nothing"><span tal:content="item/Title" /></a>
+            </li>
+          </ul>
+          <span tal:condition="not: items" i18n:translate="no_content">No Content</span>
+        </tal:items>
         <div><h2 i18n:translate="subtasks">Subtasks:</h2></div>
         <tal:items define="items view/getSubTasks">
           <ul tal:condition="items">

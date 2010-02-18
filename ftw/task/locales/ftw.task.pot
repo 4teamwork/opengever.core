@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2010-02-09 14:28+0000\n"
+"POT-Creation-Date: 2010-02-18 13:30+0000\n"
 "PO-Revision-Date: 2009-02-25 14:39+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -130,6 +130,11 @@ msgstr ""
 msgid "cancel"
 msgstr ""
 
+#. Default: "Containing Tasks:"
+#: ftw.task/ftw/task/task_templates/view.pt:65
+msgid "containing_task"
+msgstr ""
+
 #: ftw.task/ftw/task/response.py:344
 msgid "date_of_completion"
 msgstr ""
@@ -139,12 +144,12 @@ msgid "deadline"
 msgstr ""
 
 #. Default: "Additional"
-#: ftw.task/ftw/task/task.py:66
+#: ftw.task/ftw/task/task.py:65
 msgid "fieldset_additional"
 msgstr ""
 
 #. Default: "Common"
-#: ftw.task/ftw/task/task.py:53
+#: ftw.task/ftw/task/task.py:52
 msgid "fieldset_common"
 msgstr ""
 
@@ -153,11 +158,11 @@ msgid "help_attachment"
 msgstr ""
 
 #: ftw.task/ftw/task/response.py:84
-#: ftw.task/ftw/task/task.py:121
+#: ftw.task/ftw/task/task.py:120
 msgid "help_date_of_completion"
 msgstr ""
 
-#: ftw.task/ftw/task/task.py:114
+#: ftw.task/ftw/task/task.py:113
 msgid "help_deadline"
 msgstr ""
 
@@ -165,27 +170,27 @@ msgstr ""
 msgid "help_deadline_response"
 msgstr ""
 
-#: ftw.task/ftw/task/task.py:160
+#: ftw.task/ftw/task/task.py:159
 msgid "help_effectiveCost"
 msgstr ""
 
-#: ftw.task/ftw/task/task.py:154
+#: ftw.task/ftw/task/task.py:153
 msgid "help_effectiveDuration"
 msgstr ""
 
-#: ftw.task/ftw/task/task.py:148
+#: ftw.task/ftw/task/task.py:147
 msgid "help_expectedCost"
 msgstr ""
 
-#: ftw.task/ftw/task/task.py:142
+#: ftw.task/ftw/task/task.py:141
 msgid "help_expectedDuration"
 msgstr ""
 
-#: ftw.task/ftw/task/task.py:136
+#: ftw.task/ftw/task/task.py:135
 msgid "help_expectedStartOfWork"
 msgstr ""
 
-#: ftw.task/ftw/task/task.py:87
+#: ftw.task/ftw/task/task.py:86
 msgid "help_issuer"
 msgstr ""
 
@@ -193,19 +198,19 @@ msgstr ""
 msgid "help_response"
 msgstr ""
 
-#: ftw.task/ftw/task/task.py:106
+#: ftw.task/ftw/task/task.py:105
 msgid "help_responsible"
 msgstr ""
 
-#: ftw.task/ftw/task/task.py:95
+#: ftw.task/ftw/task/task.py:94
 msgid "help_task_type"
 msgstr ""
 
-#: ftw.task/ftw/task/task.py:128
+#: ftw.task/ftw/task/task.py:127
 msgid "help_text"
 msgstr ""
 
-#: ftw.task/ftw/task/task.py:80
+#: ftw.task/ftw/task/task.py:79
 msgid "help_title"
 msgstr ""
 
@@ -232,12 +237,12 @@ msgstr ""
 
 #. Default: "Date of completion"
 #: ftw.task/ftw/task/response.py:83
-#: ftw.task/ftw/task/task.py:120
+#: ftw.task/ftw/task/task.py:119
 msgid "label_date_of_completion"
 msgstr ""
 
 #. Default: "Deadline"
-#: ftw.task/ftw/task/task.py:113
+#: ftw.task/ftw/task/task.py:112
 msgid "label_deadline"
 msgstr ""
 
@@ -252,12 +257,12 @@ msgid "label_edit_response_not_allowed"
 msgstr ""
 
 #. Default: "effective cost"
-#: ftw.task/ftw/task/task.py:159
+#: ftw.task/ftw/task/task.py:158
 msgid "label_effectiveCost"
 msgstr ""
 
 #. Default: "effective duration"
-#: ftw.task/ftw/task/task.py:153
+#: ftw.task/ftw/task/task.py:152
 msgid "label_effectiveDuration"
 msgstr ""
 
@@ -267,22 +272,22 @@ msgid "label_enter_response"
 msgstr ""
 
 #. Default: "expected cost"
-#: ftw.task/ftw/task/task.py:147
+#: ftw.task/ftw/task/task.py:146
 msgid "label_expectedCost"
 msgstr ""
 
 #. Default: "Expected duration"
-#: ftw.task/ftw/task/task.py:141
+#: ftw.task/ftw/task/task.py:140
 msgid "label_expectedDuration"
 msgstr ""
 
 #. Default: "Start with work"
-#: ftw.task/ftw/task/task.py:135
+#: ftw.task/ftw/task/task.py:134
 msgid "label_expectedStartOfWork"
 msgstr ""
 
 #. Default: "Issuer"
-#: ftw.task/ftw/task/task.py:86
+#: ftw.task/ftw/task/task.py:85
 msgid "label_issuer"
 msgstr ""
 
@@ -297,7 +302,7 @@ msgid "label_response"
 msgstr ""
 
 #. Default: "Responsible"
-#: ftw.task/ftw/task/task.py:105
+#: ftw.task/ftw/task/task.py:104
 msgid "label_responsible"
 msgstr ""
 
@@ -313,19 +318,19 @@ msgid "label_return_to_issue"
 msgstr ""
 
 #. Default: "Task Type"
-#: ftw.task/ftw/task/task.py:94
+#: ftw.task/ftw/task/task.py:93
 #: ftw.task/ftw/task/taskoverview.py:32
 #: ftw.task/ftw/task/taskoverview_solr.py:34
 msgid "label_task_type"
 msgstr ""
 
 #. Default: "Text"
-#: ftw.task/ftw/task/task.py:127
+#: ftw.task/ftw/task/task.py:126
 msgid "label_text"
 msgstr ""
 
 #. Default: "Title"
-#: ftw.task/ftw/task/task.py:79
+#: ftw.task/ftw/task/task.py:78
 msgid "label_title"
 msgstr ""
 
@@ -347,7 +352,7 @@ msgid "mytasks_solr"
 msgstr ""
 
 #. Default: "No Content"
-#: ftw.task/ftw/task/task_templates/view.pt:72
+#: ftw.task/ftw/task/task_templates/view.pt:73
 msgid "no_content"
 msgstr ""
 
@@ -362,12 +367,12 @@ msgid "response_label_response"
 msgstr ""
 
 #. Default: "Responses:"
-#: ftw.task/ftw/task/task_templates/view.pt:76
+#: ftw.task/ftw/task/task_templates/view.pt:87
 msgid "responses"
 msgstr ""
 
 #. Default: "Subtasks:"
-#: ftw.task/ftw/task/task_templates/view.pt:64
+#: ftw.task/ftw/task/task_templates/view.pt:75
 msgid "subtasks"
 msgstr ""
 

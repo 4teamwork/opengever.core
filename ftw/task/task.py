@@ -262,6 +262,12 @@ class View(dexterity.DisplayForm):
                                                contentFilter={'portal_type': 'ftw.task.task'})
         return tasks
 
+    def getContainingTask(self):
+        parent = aq_parent(aq_inner(self.context))
+        if parent.portal_type == self.context.portal_type:
+            return [parent,]
+        return None
+    
     def responsible_link(self):
         info = getUtility(IContactInformation)
         task = ITask(self.context)
