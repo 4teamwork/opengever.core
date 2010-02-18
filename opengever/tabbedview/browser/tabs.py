@@ -11,6 +11,7 @@ from ftw.directoryservice.membership import Membership
 from plone.directives import dexterity
 from opengever.tabbedview import _
 from opengever.tabbedview.helper import readable_ogds_author, linked
+from ftw.task import _ as taskmsg
 
 
 def datetime_compare(x, y):
@@ -156,13 +157,17 @@ class Tasks(OpengeverListingTab):
         ('', helper.path_checkbox),
         ('review_state', 'review_state', helper.translated_string()),
         ('Title', 'sortable_title', linked),
+        {'column' : 'task_type', 
+        'column_title' : taskmsg(u'label_task_type', 'Task Type')},
         ('deadline', helper.readable_date),
         ('date_of_completion', helper.readable_date), # erledigt am
         {'column' : 'responsible', 
-        'column_title' : _(u'label_responsible_task', 'Responsible'),  
+        'column_title' : taskmsg(u'label_responsible_task', 'Responsible'),  
         'transform' : readable_ogds_author},
         ('issuer', readable_ogds_author), # zugewiesen von
-        ('created', helper.readable_date)# erstellt am
+        {'column' : 'created', 
+        'column_title' : taskmsg(u'label_issued_date', 'issued at'),
+        'transform': helper.readable_date },
         )
 
     types = ['ftw.task.task',]
