@@ -516,7 +516,7 @@ class Tasks(OpengeverListingTab):
         ('Title', 'sortable_title', linked),
         {'column' : 'task_type', 
         'column_title' : taskmsg(u'label_task_type', 'Task Type')},
-        ('deadline', helper.readable_date),<p></p>
+        ('deadline', helper.readable_date),
         ('date_of_completion', helper.readable_date), # erledigt am
         {'column' : 'responsible', 
         'column_title' : taskmsg(u'label_responsible_task', 'Responsible'),  
