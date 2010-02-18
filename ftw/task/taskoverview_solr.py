@@ -29,17 +29,20 @@ class MyTasks(OpengeverSolrListingTab):
         ('', helper.draggable),
         ('', helper.path_checkbox),
         ('review_state', 'review_state', helper.translated_string()),
-        ('Title', helper.solr_linked),
+        ('Title', 'sortable_title', linked),
         {'column' : 'task_type', 
         'column_title' : _(u'label_task_type', 'Task Type')},
         ('deadline', helper.readable_date),
         ('date_of_completion', helper.readable_date), # erledigt am
-        {'column' : 'responsible',
+        {'column' : 'responsible', 
         'column_title' : _(u'label_responsible_task', 'Responsible'),  
         'transform' : readable_ogds_author},
-        ('issuer', opengever_helper.readable_ogds_author), # zugewiesen von
-        ('created', helper.readable_date)# erstellt am
+        ('issuer', readable_ogds_author), # zugewiesen von
+        {'column' : 'created', 
+        'column_title' : _(u'label_issued_date', 'issued at'),
+        'transform': helper.readable_date },
         )
+
     types = ['ftw.task.task', ]
     
     search_options = {'responsible': authenticated_member}
@@ -51,7 +54,7 @@ class IssuedTasks(OpengeverSolrListingTab):
         ('', helper.draggable),
         ('', helper.path_checkbox),
         ('review_state', 'review_state', helper.translated_string()),
-        ('Title', helper.solr_linked),
+        ('Title', 'sortable_title', linked),
         {'column' : 'task_type', 
         'column_title' : _(u'label_task_type', 'Task Type')},
         ('deadline', helper.readable_date),
@@ -59,8 +62,10 @@ class IssuedTasks(OpengeverSolrListingTab):
         {'column' : 'responsible', 
         'column_title' : _(u'label_responsible_task', 'Responsible'),  
         'transform' : readable_ogds_author},
-        ('issuer', opengever_helper.readable_ogds_author), # zugewiesen von
-        ('created', helper.readable_date)# erstellt am
+        ('issuer', readable_ogds_author), # zugewiesen von
+        {'column' : 'created', 
+        'column_title' : _(u'label_issued_date', 'issued at'),
+        'transform': helper.readable_date },
         )
     
     def build_query(self):
@@ -74,7 +79,7 @@ class AssignedTasks(OpengeverSolrListingTab):
         ('', helper.draggable),
         ('', helper.path_checkbox),
         ('review_state', 'review_state', helper.translated_string()),
-        ('Title', helper.solr_linked),
+        ('Title', 'sortable_title', linked),
         {'column' : 'task_type', 
         'column_title' : _(u'label_task_type', 'Task Type')},
         ('deadline', helper.readable_date),
@@ -82,8 +87,10 @@ class AssignedTasks(OpengeverSolrListingTab):
         {'column' : 'responsible', 
         'column_title' : _(u'label_responsible_task', 'Responsible'),  
         'transform' : readable_ogds_author},
-        ('issuer', opengever_helper.readable_ogds_author), # zugewiesen von
-        ('created', helper.readable_date)# erstellt am
+        ('issuer', readable_ogds_author), # zugewiesen von
+        {'column' : 'created', 
+        'column_title' : _(u'label_issued_date', 'issued at'),
+        'transform': helper.readable_date },
         )
 
     def build_query(self):
