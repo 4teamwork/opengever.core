@@ -88,7 +88,7 @@ class TemplateDocumentFormView(grok.View):
                     url = xpr.search(html).groups()[0]
                     return self.request.RESPONSE.redirect(url)
                 else:
-                    return self.request.RESPONSE.redirect(newdoc.absolute_url())
+                    return self.request.RESPONSE.redirect(self.context.absolute_url()+'#documents-tab')
             else:
                 if path == None:
                     self.errors['paths'] = True

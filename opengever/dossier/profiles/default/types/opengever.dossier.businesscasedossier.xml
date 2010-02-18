@@ -117,9 +117,4 @@
      visible="True">
    <permission value="View"/>
   </action>
-  <action title="Properties" action_id="properties" category="object_buttons"
-     condition_expr="" url_expr="string:${object_url}/view" visible="True">
-   <permission value="View"/>
-  </action>
-  
 </object>
