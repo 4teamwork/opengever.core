@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2010-02-18 14:29+0000\n"
+"POT-Creation-Date: 2010-02-19 08:58+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -24,7 +24,7 @@ msgstr ""
 msgid "Add local roles to all related items for the 'responsible' user."
 msgstr ""
 
-#: ftw.task/ftw/task/response.py:490
+#: ftw.task/ftw/task/response.py:491
 msgid "Changes saved to response id ${response_id}."
 msgstr "Änderungen an der Antwort ${response_id} wurden gespeichert"
 
@@ -44,19 +44,19 @@ msgstr "Bearbeiten"
 msgid "Edit Local Roles Action"
 msgstr ""
 
-#: ftw.task/ftw/task/response.py:385
+#: ftw.task/ftw/task/response.py:386
 msgid "Issue state"
 msgstr "Status"
 
-#: ftw.task/ftw/task/response.py:518
+#: ftw.task/ftw/task/response.py:519
 msgid "No response selected for removal."
 msgstr "Es wurde keine Antwort fürs Löschen selektiert"
 
-#: ftw.task/ftw/task/response.py:481
+#: ftw.task/ftw/task/response.py:482
 msgid "No response selected for saving."
 msgstr "Es wurde keine Antwort fürs Speichern selektiert"
 
-#: ftw.task/ftw/task/response.py:253
+#: ftw.task/ftw/task/response.py:254
 msgid "No response selected."
 msgstr "Kein Antwort selektiert"
 
@@ -72,27 +72,23 @@ msgstr ""
 msgid "Related Items Roles"
 msgstr ""
 
-#: ftw.task/ftw/task/response.py:540
+#: ftw.task/ftw/task/response.py:541
 msgid "Removed response id ${response_id}."
 msgstr "Antwort ${response_id} gelöscht"
 
-#: ftw.task/ftw/task/response.py:533
+#: ftw.task/ftw/task/response.py:534
 msgid "Response id ${response_id} does not exist so it cannot be removed."
 msgstr "Antowrt ${response_id} existiert nicht und konnte deshalb nicht gelöscht werden"
 
-#: ftw.task/ftw/task/response.py:267
+#: ftw.task/ftw/task/response.py:268
 msgid "Response id ${response_id} does not exist."
 msgstr "Antwort ${response_id} exisitert nicht"
 
-#: ftw.task/ftw/task/response.py:560
-msgid "Response id ${response_id} has no attachment."
-msgstr "Antwort ${response_id} hat kein attachment"
-
-#: ftw.task/ftw/task/response.py:525
+#: ftw.task/ftw/task/response.py:526
 msgid "Response id ${response_id} is no integer so it cannot be removed."
 msgstr "Antwort id ${response_id} ist keine Zahl und konnte deshalb nicht gelöscht werden"
 
-#: ftw.task/ftw/task/response.py:261
+#: ftw.task/ftw/task/response.py:262
 msgid "Response id ${response_id} is no integer."
 msgstr "Antwort ${response_id} ist keine Zahl"
 
@@ -109,21 +105,21 @@ msgstr "Auftragsübersicht"
 msgid "The local roles to add."
 msgstr ""
 
-#: ftw.task/ftw/task/response.py:512
+#: ftw.task/ftw/task/response.py:513
 msgid "You are not allowed to delete responses."
 msgstr "Sie haben keine Berechtigung Antworten zu löschen"
 
-#: ftw.task/ftw/task/response.py:475
+#: ftw.task/ftw/task/response.py:476
 msgid "You are not allowed to edit responses."
 msgstr "Sie haben keine Berechtigung Antworten zu editieren"
 
 #. Default: "Add"
-#: ftw.task/ftw/task/response.py:314
+#: ftw.task/ftw/task/response.py:315
 msgid "add"
 msgstr "Hinzufügen"
 
 #. Default: "Cancel"
-#: ftw.task/ftw/task/response.py:392
+#: ftw.task/ftw/task/response.py:393
 msgid "cancel"
 msgstr "Abbrechen"
 
@@ -132,14 +128,19 @@ msgstr "Abbrechen"
 msgid "containing_task"
 msgstr "Übergeordnete Aufgabe"
 
-#: ftw.task/ftw/task/response.py:344
+#: ftw.task/ftw/task/response.py:345
 msgid "date_of_completion"
 msgstr "Erledigungsdatum"
 
 #. Default: "deadline"
-#: ftw.task/ftw/task/response.py:342
+#: ftw.task/ftw/task/response.py:343
 msgid "deadline"
 msgstr "Frist"
+
+#. Default: "Documents:"
+#: ftw.task/ftw/task/task_templates/view.pt:87
+msgid "documents"
+msgstr "Dokumente"
 
 #. Default: "Additional"
 #: ftw.task/ftw/task/task.py:65
@@ -150,10 +151,6 @@ msgstr "Erweitert"
 #: ftw.task/ftw/task/task.py:52
 msgid "fieldset_common"
 msgstr "Allgemein"
-
-#: ftw.task/ftw/task/response.py:97
-msgid "help_attachment"
-msgstr ""
 
 #: ftw.task/ftw/task/response.py:84
 #: ftw.task/ftw/task/task.py:120
@@ -225,11 +222,6 @@ msgstr ""
 msgid "issuedtasks_solr"
 msgstr ""
 
-#. Default: "Attachment"
-#: ftw.task/ftw/task/response.py:96
-msgid "label_attachment"
-msgstr "Anhang"
-
 #. Default: "by ${author}"
 #: ftw.task/ftw/task/task_templates/byline.pt:17
 msgid "label_by_author"
@@ -286,6 +278,9 @@ msgstr "Geschätzte Dauer"
 msgid "label_expectedStartOfWork"
 msgstr "Beginn der Arbeit"
 
+#. Default: "issued at"
+#: ftw.task/ftw/task/taskoverview.py:40
+#: ftw.task/ftw/task/taskoverview_solr.py:42
 msgid "label_issued_date"
 msgstr "Zugewiesen am"
 
@@ -370,12 +365,12 @@ msgid "response_label_response"
 msgstr "Antowrt"
 
 #. Default: "Responses:"
-#: ftw.task/ftw/task/task_templates/view.pt:87
+#: ftw.task/ftw/task/task_templates/view.pt:99
 msgid "responses"
 msgstr "Antworten:"
 
 #. Default: "Subtasks:"
-#: ftw.task/ftw/task/task_templates/view.pt:75
+#: ftw.task/ftw/task/task_templates/view.pt:76
 msgid "subtasks"
 msgstr "Unteraufgabe"
 

@@ -268,6 +268,11 @@ class View(dexterity.DisplayForm):
             return [parent,]
         return None
     
+    def getSubDocuments(self):
+        docs = self.context.getFolderContents(full_objects=False,
+                                               contentFilter={'portal_type': 'opengever.document.document'})
+        return docs
+    
     def responsible_link(self):
         info = getUtility(IContactInformation)
         task = ITask(self.context)

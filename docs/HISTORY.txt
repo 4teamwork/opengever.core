@@ -4,6 +4,12 @@ Changelog
 
 1.0a5
 -----
+
+* Issue #397 Aufgabe: Wie kann ein der Antwort beigefügtes Dokument in die Dokumentliste transferiert werden?
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/397/
+  removed field attachment in the response, add opengever.document to the addable_types of tasks, added the paragraph "documents" to the task view
+  [19.02.2010, pgross]
+
 * Issue #396: Aufgabenübersicht: Spalte Typ einfügen
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/396/
   Added Task-indexes: task_type

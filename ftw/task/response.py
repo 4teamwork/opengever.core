@@ -92,11 +92,6 @@ class IResponse(Interface):
         required = False,
         )
 
-    attachment = NamedFile(
-        title = _(u'label_attachment', default='Attachment'),
-        description = _(u'help_attachment', default=''),
-        required = False,
-        )
         
 #    relatedItems = RelationList(
 #        title=_(u'label_related_items', default=u'Related Items'),
@@ -171,7 +166,6 @@ class Base(BrowserView):
             html = response.rendered_text
             info = dict(id=id,
                         response=response,
-                        attachment=self.attachment_info(id),
 #                        relatedItems=getattr(response,"relatedItems",()),
                         html=html)
             items.append(info)
@@ -183,44 +177,6 @@ class Base(BrowserView):
         context = aq_inner(self.context)
         plone = context.restrictedTraverse('@@plone_portal_state')
         return plone.portal_url()
-
-    def attachment_info(self, id):
-        """Get icon and other info for attachment
-
-        Taken partly from Archetypes/skins/archetypes/getBestIcon.py
-        """
-        context = aq_inner(self.context)
-        response = self.folder[id]
-        attachment = response.attachment
-        if attachment is None:
-            return None
-
-        from zExceptions import NotFound
-
-        icon = None
-        mtr = getToolByName(context, 'mimetypes_registry', None)
-        if mtr is None:
-            icon = context.getIcon()
-        lookup = mtr.lookup(attachment.contentType)
-        if lookup:
-            mti = lookup[0]
-            try:
-                context.restrictedTraverse(mti.icon_path)
-                icon = mti.icon_path
-            except (NotFound, KeyError, AttributeError):
-                pass
-        if icon is None:
-            icon = context.getIcon()
-        filename = getattr(attachment, 'filename', 'Unamed File')
-        info = dict(
-            icon = self.portal_url + '/' + icon,
-            url = context.absolute_url() +\
-                '/@@task_response_attachment?response_id=' + str(id),
-            content_type = attachment.contentType,
-            size = pretty_size(attachment._size),
-            filename = filename,
-            )
-        return info
 
     @Lazy
     def memship(self):
@@ -289,15 +245,6 @@ class Base(BrowserView):
         context = aq_inner(self.context)
         return context.getResponsibleManager()
 
-    @property
-    @memoize
-    def upload_allowed(self):
-        """Is the user allowed to upload on attachment?
-        """
-        context = aq_inner(self.context)
-        return self.memship.checkPermission(
-            permissions.UploadAttachment, context)
-
 
 class AddForm(form.AddForm, AutoExtensibleForm):
     fields = field.Fields(IResponse)
@@ -355,15 +302,6 @@ class AddForm(form.AddForm, AutoExtensibleForm):
                                             task_field,
                                             resp_field)
                     task.__setattr__(option, resp_field)
-
-            # add attachment
-            attachment = data.get('attachment')
-            if attachment:
-                # File(id, title, file)
-                # file_data = File(attachment.filename,
-                # attachment.filename, attachment)
-                # new_response.attachment = file_data
-                new_response.attachment = attachment
 
             # relatedItems
 #            new_response.relatedItems = []
@@ -542,29 +480,3 @@ class Delete(Base):
                     status.addStatusMessage(msg, type='info')
         self.request.response.redirect(context.absolute_url())
 
-
-class Download(Base):
-    """Download the attachment of a response.
-    """
-
-    def __call__(self):
-        context = aq_inner(self.context)
-        request = self.request
-        response_id = self.validate_response_id()
-        file = None
-        if response_id != -1:
-            response = self.folder[response_id]
-            file = response.attachment
-            if file is None:
-                status = IStatusMessage(request)
-                msg = _(u"Response id ${response_id} has no attachment.",
-                        mapping=dict(response_id=response_id))
-                msg = translate(msg, 'ftw.task', context=context)
-                status.addStatusMessage(msg, type='error')
-        if file is None:
-            request.response.redirect(context.absolute_url())
-
-        # From now on file exists.
-        filename = getattr(file, 'filename', 'Unamed File')
-        set_headers(file, self.request.response, filename=filename)
-        return stream_data(file)
