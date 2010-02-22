@@ -193,12 +193,16 @@ class GenericContentCreator(object):
         for k, v in kw.items():
             if k in META_ATTRIBUTES:
                 continue
-            field = fields[k]
             if k in fields.keys():
+                field = fields[k]
                 if v.lower()=='true':
                     v = True
                 elif v.lower()=='false':
                     v = False
+                try:
+                    v = int(v)
+                except ValueError:
+                    pass
                 if IList.providedBy(field):
                     v = filter(lambda p:not not p,
                                [p.strip() for p in v.split(',')])

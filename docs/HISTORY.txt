@@ -5,6 +5,10 @@ Changelog
 1.0a3
 -----
 
+* Issue #457 Ordnungsposition: Werte unter dem Reiter "Lebenszyklus" den Vorgaben des csv anpassen
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/457
+  [22.02.2010, jbaumann]
+  
 
 1.0a2
 -----
