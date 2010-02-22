@@ -36,12 +36,12 @@ setup(name='opengever.dossier',
         'rwproperty',
         'collective.testcaselayer',
         'plonegov.pdflatex>=0.2.6',
-        ''
+        'opengever.mail',
         # -*- Extra requirements: -*-
         ],
       entry_points="""
       # -*- Entry points: -*-
       [z3c.autoinclude.plugin]
-      target = opengever
+      target = plone
       """,
       )
