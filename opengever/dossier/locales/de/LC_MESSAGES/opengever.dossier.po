@@ -352,11 +352,11 @@ msgstr "erforderlich"
 
 #: opengever.dossier/opengever/dossier/archive.py:49
 msgid "resolve and set a new filing no"
-msgstr "Abschliessen und Ablagenummer neu setzen"
+msgstr "Abschliessen und Ablagenummer neu vergeben"
 
 #: opengever.dossier/opengever/dossier/archive.py:45
 msgid "resolve and set filing no"
-msgstr "Abschliessen und Ablagenummer setzen"
+msgstr "Abschliessen und Ablagenummer vergeben"
 
 #: opengever.dossier/opengever/dossier/archive.py:48
 msgid "resolve and take the existing filing no"
@@ -364,7 +364,7 @@ msgstr "Abschliessen und die existierende Ablagenummer verwenden"
 
 #: opengever.dossier/opengever/dossier/archive.py:52
 msgid "set a filing no"
-msgstr "Ablagenummer setzen"
+msgstr "Ablagenummer vergeben"
 
 #: opengever.dossier/opengever/dossier/archive.py:161
 msgid "the filling number was already set"

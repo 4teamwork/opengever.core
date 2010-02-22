@@ -9,6 +9,8 @@ from Acquisition import aq_inner, aq_parent
 from persistent.dict import PersistentDict
 from five import grok
 from z3c.form import form, button, field
+from z3c.form.interfaces import INPUT_MODE
+from z3c.form.browser import radio
 from Products.CMFCore.interfaces import ISiteRoot
 from Products.Transience.Transience import Increaser
 from Products.statusmessages.interfaces import IStatusMessage
@@ -75,12 +77,16 @@ class IArchiveFormSchema(Interface):
 class ArchiveForm(form.Form):
     fields = field.Fields(IArchiveFormSchema)
     ignoreContext = True
+    fields['filing_action'].widgetFactory[INPUT_MODE] = radio.RadioFieldWidget
     label = _(u'heading_archive_form', u'Archive Dossier')
 
     @button.buttonAndHandler(_(u'button_archive', default=u'Archive'))
     def archive(self, action):
         data, errors = self.extractData()
-        action = data['filing_action']
+        try:
+            action = data['filing_action']
+        except KeyError:
+            return
         if action == 0 or action == 2:
             if len(errors)>0:
                 return
