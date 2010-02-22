@@ -41,6 +41,16 @@ setup(name='opengever.document',
         'plone.versioningbehavior',
         'stoneagehtml', # required by ftw.sendmail, but there is no dependency in the current release
         'ftw.datepicker',
+        'ftw.directoryservice',
+        'ftw.table',
+        'ftw.journal',
+        'ftw.task',
+        'opengever.dossier',
+        'opengever.tabbedview',
+        'opengever.repository',
+        'opengever.inbox',
+        'opengever.octopus.tentacle',
+        'opengever.translations',
         'collective.autopermission',
         'collective.testcaselayer',
         'plone.keyring',
@@ -48,6 +58,6 @@ setup(name='opengever.document',
       entry_points="""
       # -*- Entry points: -*-
       [z3c.autoinclude.plugin]
-      target = opengever
+      target = plone
       """,
       )
