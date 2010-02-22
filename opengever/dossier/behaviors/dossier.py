@@ -156,9 +156,7 @@ class IDossier(form.Schema):
         title=_(u'label_related_dossier', default=u'Related Dossier'),
         default=[],
         value_type=RelationChoice(title=u"Related",
-                                  source=ObjPathSourceBinder()),
-                                  # XXX NOT WORK, ONLY SHOW THE Current branch 
-                                  # source=ObjPathSourceBinder({'portal_type':'opengever.dossier.businesscasedossier', 'depth':-1})),
+                                  source = ObjPathSourceBinder(portal_type='opengever.dossier.businesscasedossier')),
         required=False,
         )
 
