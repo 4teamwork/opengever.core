@@ -117,4 +117,8 @@
      visible="True">
    <permission value="View"/>
   </action>
+  <action title="Give Filling Number" action_id="filing_nr" category="object_buttons"
+     condition_expr="python: object.portal_workflow.getInfoFor(object, 'review_state', None) == 'dossier-state-resolved' and getattr( object, 'filing_no', None) == None" url_expr="string:${object_url}/transition-archive" visible="True">
+   <permission value="View"/>
+  </action>
 </object>

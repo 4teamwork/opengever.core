@@ -11,6 +11,7 @@ from five import grok
 from z3c.form import form, button, field
 from Products.CMFCore.interfaces import ISiteRoot
 from Products.Transience.Transience import Increaser
+from Products.statusmessages.interfaces import IStatusMessage
 
 from plone.z3cform import layout
 from plone.registry.interfaces import IRegistry
@@ -32,6 +33,26 @@ def get_filing_prefixes(context):
     return SimpleVocabulary(filing_prefixes)
 
 
+@grok.provider(IContextSourceBinder)
+def get_filing_actions(context):
+
+    review_state = context.portal_workflow.getInfoFor(context, 'review_state', None)
+    filing_no = getattr(IDossierMarker(context), 'filing_no', None)
+    
+    values = []
+    if review_state != 'dossier-state-resolved':
+        if not filing_no:
+            values.append(SimpleVocabulary.createTerm(0,_('resolve and set filing no'), _('resolve and set filing no')))
+            values.append(SimpleVocabulary.createTerm(1,_('only resolve, set filing no later'), _('only resolve, set filing no later')))
+        else:
+            values.append(SimpleVocabulary.createTerm(1,_('resolve and take the existing filing no'), _('resolve and take the existing filing no')))
+            values.append(SimpleVocabulary.createTerm(0,_('resolve and set a new filing no'), _('resolve and set a new filing no')))
+    else:
+        if not filing_no:
+            values.append(SimpleVocabulary.createTerm(2,_('set a filing no'), _('set a filing no')))
+            
+    return SimpleVocabulary(values)
+
 class IArchiveFormSchema(Interface):
 
     filing_prefix = schema.Choice(
@@ -44,7 +65,13 @@ class IArchiveFormSchema(Interface):
         title = _(u'filing_year', default="filing Year"),
         required = True,
     )
-        
+    
+    filing_action = schema.Choice(
+        title = _(u'filling_action', default="Action"),
+        required = True,
+        source = get_filing_actions,
+    )
+
 class ArchiveForm(form.Form):
     fields = field.Fields(IArchiveFormSchema)
     ignoreContext = True
@@ -53,53 +80,66 @@ class ArchiveForm(form.Form):
     @button.buttonAndHandler(_(u'button_archive', default=u'Archive'))
     def archive(self, action):
         data, errors = self.extractData()
-        if len(errors)==0:
-            FILING_NO_KEY = "filing_no"
+        action = data['filing_action']
+        if action == 0 or action == 2:
+            if len(errors)>0:
+                return
+            else:
+                FILING_NO_KEY = "filing_no"
 
-            filing_year = str(data.get('filing_year')) 
-            filing_prefix = data.get('filing_prefix')
+                filing_year = str(data.get('filing_year')) 
+                filing_prefix = data.get('filing_prefix')
 
-            # filing_sequence
-            key = filing_prefix + "-" + filing_year
-            portal = getUtility(ISiteRoot)
-            ann = IAnnotations(portal)
-            if FILING_NO_KEY not in ann.keys():
-                ann[FILING_NO_KEY] = PersistentDict()
-            map = ann.get(FILING_NO_KEY)
-            if key not in map:
-                map[key] = Increaser(0)
-            # increase
-            inc = map[key]
-            inc.set(inc()+1)
-            map[key] = inc
-            filing_sequence = inc()
+                # filing_sequence
+                key = filing_prefix + "-" + filing_year
+                portal = getUtility(ISiteRoot)
+                ann = IAnnotations(portal)
+                if FILING_NO_KEY not in ann.keys():
+                    ann[FILING_NO_KEY] = PersistentDict()
+                map = ann.get(FILING_NO_KEY)
+                if key not in map:
+                    map[key] = Increaser(0)
+                # increase
+                inc = map[key]
+                inc.set(inc()+1)
+                map[key] = inc
+                filing_sequence = inc()
 
-            # filing_client
-            registry = getUtility(IRegistry)
-            proxy = registry.forInterface(IBaseClientID)
-            filing_client = getattr(proxy, 'client_id')
-            
-            # filing_no
-    
-            filing_no = filing_client + "-" + filing_prefix + "-" + filing_year + "-" + str(filing_sequence)
-            self.context.filing_no = filing_no
-            
-            subdossiers = self.context.portal_catalog(
-                                    portal_type="opengever.dossier.businesscasedossier",
-                                    path=dict(depth=1,
-                                        query='/'.join(self.context.getPhysicalPath()),
-                                    ),
-                                    sort_on='modified',
-                                    sort_order='reverse',
-            )
-            
-            counter = 1
-            for dossier in subdossiers:
-                dossier = dossier.getObject()
-                dossier.filing_no = filing_no + "." + str(counter)
-                counter += 1
-            
-            return self.request.RESPONSE.redirect(self.context.absolute_url() + '/content_status_modify?workflow_action=dossier-transition-resolve')
+                # filing_client
+                registry = getUtility(IRegistry)
+                proxy = registry.forInterface(IBaseClientID)
+                filing_client = getattr(proxy, 'client_id')
+
+                # filing_no
+
+                filing_no = filing_client + "-" + filing_prefix + "-" + filing_year + "-" + str(filing_sequence)
+                self.context.filing_no = filing_no
+
+                subdossiers = self.context.portal_catalog(
+                                        portal_type="opengever.dossier.businesscasedossier",
+                                        path=dict(depth=1,
+                                            query='/'.join(self.context.getPhysicalPath()),
+                                        ),
+                                        sort_on='modified',
+                                        sort_order='reverse',
+                )
+
+                counter = 1
+                for dossier in subdossiers:
+                    dossier = dossier.getObject()
+                    dossier.filing_no = filing_no + "." + str(counter)
+                    counter += 1
+
+        if action == 0 or action == 1:
+            self.request.RESPONSE.redirect(self.context.absolute_url() + '/content_status_modify?workflow_action=dossier-transition-resolve')
+        elif action == 2:
+            status = IStatusMessage(self.request)
+            status.addStatusMessage(_("the filling number was set"), type="info")
+            return self.request.RESPONSE.redirect(self.context.absolute_url())
+        else:
+            status = IStatusMessage(self.request)
+            status.addStatusMessage(_("The dossier was already resolved"), type="warning")
+            return self.request.RESPONSE.redirect(self.context.absolute_url())
 
 
 class ArchiveFormView(layout.FormWrapper, grok.CodeView):
@@ -109,13 +149,17 @@ class ArchiveFormView(layout.FormWrapper, grok.CodeView):
     form = ArchiveForm
     
     #label = _(u'heading_archive_form', u'Archive Dossier')
-    
     def __init__(self, context, request):
         layout.FormWrapper.__init__(self, context, request)
         grok.CodeView.__init__(self, context, request)
 
     def __call__(self, *args, **kwargs):
         parent = aq_parent(aq_inner(self.context))
+        review_state = self.context.portal_workflow.getInfoFor(self.context, 'review_state', None)
+        if review_state == 'dossier-state-resolved' and getattr(IDossierMarker(self.context), 'filing_no', None):
+            status = IStatusMessage(self.request)
+            status.addStatusMessage(_("the filling number was already set"), type="warning")
+            self.request.RESPONSE.redirect(self.context.absolute_url())
         if IDossierMarker.providedBy(parent):
             self.request.RESPONSE.redirect(self.context.absolute_url() + '/content_status_modify?workflow_action=dossier-transition-resolve')
         return layout.FormWrapper.__call__(self, *args, **kwargs)

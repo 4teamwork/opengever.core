@@ -74,10 +74,23 @@ class resolve(grok.CodeView):
             errors = True
             status.addStatusMessage(_("not all task are closed"), type="error")
 
-        # an end-date are entered
+        # an end-date are entered 
         if not IDossier(self.context).end:
             errors = True
             status.addStatusMessage(_("no end date are entered"), type="error")
+        else:
+            subdossiers = self.context.portal_catalog(
+                                                portal_type="opengever.dossier.businesscasedossier",
+                                                path=dict(depth=1,
+                                                          query='/'.join(self.context.getPhysicalPath()),
+                                                          ),
+                                                   )
+            end = IDossier(self.context).end
+            for dossier in subdossiers:
+                if dossier.end and end < dossier.end:
+                   errors = True
+                   status.addStatusMessage(_("The End date of the current dossier is smaller than the end date of a subdossier"), type="error")
+                   break
 
         if errors:
             self.request.RESPONSE.redirect(self.context.absolute_url())

@@ -19,3 +19,6 @@ msgstr ""
 
 msgid "Templates"
 msgstr ""
+
+msgid "filing_nr"
+msgstr ""
