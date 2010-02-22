@@ -102,7 +102,6 @@ class Documents(OpengeverListingTab):
 
     enabled_actions = ['cut',
                        'copy',
-                       'rename',
                        'paste',
                        'send_as_email',
                        'checkout',
