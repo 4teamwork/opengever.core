@@ -35,13 +35,16 @@ def reference_number_default_value(data):
     #XXX CHANGED FROM PATH_TRANSLATED TO PATH_INFO because the test don't work
     if '++add++' in data.context.REQUEST.get('PATH_INFO', object()):
         parent = data.context
+        context = None
     else:
         parent = data.context.aq_inner.aq_parent
+        context = data.context
     for obj in parent.listFolderContents():
         if IReferenceNumberMarker.providedBy(obj):
-            num = IReferenceNumber(obj).reference_number
-            if num > highest_reference_number:
-                highest_reference_number = num
+            if obj!=context:
+                num = IReferenceNumber(obj).reference_number
+                if num > highest_reference_number:
+                    highest_reference_number = num
     highest_reference_number += 1
     return highest_reference_number
 
