@@ -364,7 +364,7 @@ class Journal(grok.View, OpengeverTab):
 class Trash(OpengeverListingTab):
     grok.name('tabbedview_view-trash')
 
-    types = ['opengever.dossier.dossier', 'opengever.document.document', 'ftw.task.task',]
+    types = ['opengever.dossier.dossier', 'opengever.document.document', 'ftw.task.task', 'ftw.mail.mail', ]
 
     search_options = {'trashed':True}
 
