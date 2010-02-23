@@ -5,6 +5,10 @@ Changelog
 1.0a4
 -----
 
+* Issue #479 Dokumentenübersicht auf Stufe Dossier: "In Bearbeitung bei Brugger Sylvia"
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/479
+  [23.02.2010, jbaumann]
+  
 * Participants tab: show particpants readable (with fullname and email)
   [04.02.2010, jbaumann]
   
