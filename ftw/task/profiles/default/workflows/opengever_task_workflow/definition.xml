@@ -219,7 +219,7 @@
              title="task-transition-in-progress-resolved"
              new_state="task-state-resolved" trigger="USER"
              before_script="" after_script="">
-  <action url="" category="workflow">task-transition-in-progress-resolved</action>
+  <action url="%(content_url)s/addresponse?form.widgets.transition=task-transition-in-progress-resolved" category="workflow">task-transition-in-progress-resolved</action>
   <guard>
   </guard>
  </transition>
@@ -235,7 +235,7 @@
              title="task-transition-open-cancelled"
              new_state="task-state-cancelled" trigger="USER"
              before_script="" after_script="">
-  <action url="" category="workflow">task-transition-open-cancelled</action>
+  <action url="%(content_url)s/addresponse?form.widgets.transition=task-transition-open-cancelled" category="workflow">task-transition-open-cancelled</action>
   <guard>
   </guard>
  </transition>
@@ -243,7 +243,7 @@
              title="task-transition-open-in-progress"
              new_state="task-state-in-progress"
              trigger="USER" before_script="" after_script="">
-  <action url="" category="workflow">task-transition-open-in-progress</action>
+  <action url="%(content_url)s/addresponse?form.widgets.transition=task-transition-open-in-progress" category="workflow">task-transition-open-in-progress</action>
   <guard>
    <guard-expression>python:here.task_type_category == 'bi_ref'</guard-expression>
   </guard>
@@ -252,7 +252,7 @@
              title="task-transition-open-rejected"
              new_state="task-state-rejected" trigger="USER"
              before_script="" after_script="">
-  <action url="" category="workflow">task-transition-open-rejected</action>
+  <action url="%(content_url)s/addresponse?form.widgets.transition=task-transition-open-rejected" category="workflow">task-transition-open-rejected</action>
   <guard>
   </guard>
  </transition>
@@ -276,7 +276,7 @@
              title="task-transition-resolved-open"
              new_state="task-state-open" trigger="USER"
              before_script="" after_script="">
-  <action url="" category="workflow">task-transition-resolved-open</action>
+  <action url="%(content_url)s/addresponse?form.widgets.transition=task-transition-resolved-open" category="workflow">task-transition-resolved-open</action>
   <guard>
   </guard>
  </transition>

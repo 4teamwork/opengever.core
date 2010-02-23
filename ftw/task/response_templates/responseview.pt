@@ -4,7 +4,6 @@
        <div class="response-reply"
             tal:define="id response_info/id;
                         response nocall:response_info/response;
-                        attachment nocall:response_info/attachment;
                         html response_info/html;"
             tal:attributes="class string:response-${response/type}">
 
@@ -55,17 +54,7 @@
          </div>
          <span tal:replace="structure html" />
          
-         <div class="issue-attachment" tal:condition="attachment">
-           <span class="label" i18n:translate="poi_label_attachment">Attached:</span>
-           <img tal:attributes="src attachment/icon" />
-           <a tal:attributes="href attachment/url"
-              tal:content="attachment/filename" />
-           <span class="discreet">
-             &mdash;
-             <tal:type content="attachment/content_type" />,
-             <tal:size content="attachment/size" />
-           </span>
-         </div>
+
        </div>
      </tal:responses>
 </div>
