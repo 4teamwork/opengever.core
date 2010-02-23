@@ -5,6 +5,11 @@ Changelog
 1.0a5
 -----
 
+* Issue #447 Zentrale Aufgabenübersicht = Übersicht über die Aufgaben aller Sachbearbeiter eines Mandanten und noch nicht zugewiesene Aufgaben
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/447/
+  added a tab assignedIssues, added some change for correct sorting in the taskoverview_solr
+  [23.02.2010, pgross]
+
 * Issue #397 Aufgabe: Wie kann ein der Antwort beigefügtes Dokument in die Dokumentliste transferiert werden?
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/397/
   removed field attachment in the response, add opengever.document to the addable_types of tasks, added the paragraph "documents" to the task view
