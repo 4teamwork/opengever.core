@@ -1,4 +1,5 @@
 import re
+import urllib
 
 from zope.annotation.interfaces import IAnnotations
 from zope.interface import Interface
@@ -79,14 +80,17 @@ class TemplateDocumentFormView(grok.View):
                 event = ObjectModifiedEvent(newdoc)
                 notify(event)
                 if self.edit:
-
                     manager = ICheckinCheckoutManager(newdoc)
                     wc = manager.checkout('', show_status_message=False)
                     portal = self.context.portal_url.getPortalObject()
                     xpr = re.compile('href="(.*?)"')
                     html = portal.externalEditLink_(wc)
                     url = xpr.search(html).groups()[0]
-                    return self.request.RESPONSE.redirect(url)
+                    
+                    get = urllib.urlencode({'redirectTo':url})
+                    
+                    redirect_url = '%s?%s' % (self.context.absolute_url(), get)
+                    return self.request.RESPONSE.redirect(redirect_url)
                 else:
                     return self.request.RESPONSE.redirect(self.context.absolute_url()+'#documents-tab')
             else:
