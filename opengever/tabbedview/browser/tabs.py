@@ -447,7 +447,8 @@ class Participants(OpengeverListingTab):
         self.contents = results
         self.len_results = len(self.contents)
 
-    enabled_actions = ['delete_participants']
+    enabled_actions = ['delete_participants',
+                       'add_participant']
 
 
 from plone.app.workflow.interfaces import ISharingPageRole
