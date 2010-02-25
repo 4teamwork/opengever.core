@@ -15,7 +15,16 @@ from ftw.task import _ as taskmsg
 
 
 def datetime_compare(x, y):
-    return cmp(getattr(x, datetime_compare.index), getattr(y, datetime_compare.index))
+    a = getattr(x, datetime_compare.index, None)
+    b = getattr(y, datetime_compare.index, None)
+    if a is None and b is None:
+        return 0
+    elif a is None:
+        return -1
+    elif b is None:
+        return 1
+    else:
+        return cmp(a, b)
 #XXX really ugly. Will be overwritten in datetime_sort  
 datetime_compare.index = 'modified'
 
