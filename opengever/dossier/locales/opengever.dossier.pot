@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2010-02-22 10:35+0000\n"
+"POT-Creation-Date: 2010-02-25 10:48+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,6 +17,10 @@ msgstr ""
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: opengever.dossier\n"
 
+#: opengever.dossier/opengever/dossier/profiles/default/actions.xml
+msgid "Add Participant"
+msgstr ""
+
 #: opengever.dossier/opengever/dossier/profiles/default/types/opengever.dossier.businesscasedossier.xml
 msgid "Business Case Dossier"
 msgstr ""
@@ -25,7 +29,7 @@ msgstr ""
 msgid "Delete"
 msgstr ""
 
-#: opengever.dossier/opengever/dossier/templatedossier.py:105
+#: opengever.dossier/opengever/dossier/templatedossier.py:109
 msgid "Not found the templatedossier"
 msgstr ""
 
@@ -44,15 +48,15 @@ msgstr ""
 msgid "The End date of the current dossier is smaller than the end date of a subdossier"
 msgstr ""
 
-#: opengever.dossier/opengever/dossier/archive.py:141
+#: opengever.dossier/opengever/dossier/archive.py:147
 msgid "The dossier was already resolved"
 msgstr ""
 
-#: opengever.dossier/opengever/dossier/behaviors/dossier.py:175
+#: opengever.dossier/opengever/dossier/behaviors/dossier.py:173
 msgid "The start date must be before the end date."
 msgstr ""
 
-#: opengever.dossier/opengever/dossier/behaviors/dossier.py:181
+#: opengever.dossier/opengever/dossier/behaviors/dossier.py:179
 msgid "The start or end date is invalid"
 msgstr ""
 
@@ -67,7 +71,7 @@ msgid "button_add"
 msgstr ""
 
 #. Default: "Archive"
-#: opengever.dossier/opengever/dossier/archive.py:80
+#: opengever.dossier/opengever/dossier/archive.py:83
 msgid "button_archive"
 msgstr ""
 
@@ -77,7 +81,7 @@ msgid "button_cancel"
 msgstr ""
 
 #. Default: "create document with template"
-#: opengever.dossier/opengever/dossier/templatedossier.py:42
+#: opengever.dossier/opengever/dossier/templatedossier.py:43
 msgid "create_document_with_template"
 msgstr ""
 
@@ -90,22 +94,22 @@ msgid "filing_nr"
 msgstr ""
 
 #. Default: "filing prefix"
-#: opengever.dossier/opengever/dossier/archive.py:59
+#: opengever.dossier/opengever/dossier/archive.py:61
 msgid "filing_prefix"
 msgstr ""
 
 #. Default: "filing Year"
-#: opengever.dossier/opengever/dossier/archive.py:65
+#: opengever.dossier/opengever/dossier/archive.py:67
 msgid "filing_year"
 msgstr ""
 
 #. Default: "Action"
-#: opengever.dossier/opengever/dossier/archive.py:70
+#: opengever.dossier/opengever/dossier/archive.py:72
 msgid "filling_action"
 msgstr ""
 
 #. Default: "Archive Dossier"
-#: opengever.dossier/opengever/dossier/archive.py:78
+#: opengever.dossier/opengever/dossier/archive.py:81
 msgid "heading_archive_form"
 msgstr ""
 
@@ -137,7 +141,7 @@ msgstr ""
 msgid "help_end"
 msgstr ""
 
-#: opengever.dossier/opengever/dossier/behaviors/dossier.py:167
+#: opengever.dossier/opengever/dossier/behaviors/dossier.py:165
 msgid "help_former_reference_number"
 msgstr ""
 
@@ -240,7 +244,7 @@ msgid "label_filing_no"
 msgstr ""
 
 #. Default: "Reference Number"
-#: opengever.dossier/opengever/dossier/behaviors/dossier.py:166
+#: opengever.dossier/opengever/dossier/behaviors/dossier.py:164
 msgid "label_former_reference_number"
 msgstr ""
 
@@ -343,7 +347,7 @@ msgstr ""
 msgid "not all task are closed"
 msgstr ""
 
-#: opengever.dossier/opengever/dossier/archive.py:46
+#: opengever.dossier/opengever/dossier/archive.py:48
 msgid "only resolve, set filing no later"
 msgstr ""
 
@@ -351,27 +355,27 @@ msgstr ""
 msgid "required"
 msgstr ""
 
-#: opengever.dossier/opengever/dossier/archive.py:49
+#: opengever.dossier/opengever/dossier/archive.py:51
 msgid "resolve and set a new filing no"
 msgstr ""
 
-#: opengever.dossier/opengever/dossier/archive.py:45
+#: opengever.dossier/opengever/dossier/archive.py:47
 msgid "resolve and set filing no"
 msgstr ""
 
-#: opengever.dossier/opengever/dossier/archive.py:48
+#: opengever.dossier/opengever/dossier/archive.py:50
 msgid "resolve and take the existing filing no"
 msgstr ""
 
-#: opengever.dossier/opengever/dossier/archive.py:52
+#: opengever.dossier/opengever/dossier/archive.py:54
 msgid "set a filing no"
 msgstr ""
 
-#: opengever.dossier/opengever/dossier/archive.py:161
+#: opengever.dossier/opengever/dossier/archive.py:167
 msgid "the filling number was already set"
 msgstr ""
 
-#: opengever.dossier/opengever/dossier/archive.py:137
+#: opengever.dossier/opengever/dossier/archive.py:143
 msgid "the filling number was set"
 msgstr ""
 

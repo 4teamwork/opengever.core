@@ -5,6 +5,10 @@ Changelog
 1.0a4
 -----
 
+* Issue #480 Beteiligung am Dossier hinzufügen sollte auch in "Aktionsleiste" möglich sein nicht nur über das Menü "Aktionen"
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/480
+  [25.02.2010, jbaumann]
+  
 * Do not use windows fonts in LaTeX
   [10.02.2010, jbaumann]
   
