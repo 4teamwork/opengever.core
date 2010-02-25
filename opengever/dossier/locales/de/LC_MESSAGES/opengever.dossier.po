@@ -28,7 +28,7 @@ msgstr "Beteiligung löschen"
 
 #: opengever.dossier/opengever/dossier/templatedossier.py:109
 msgid "Not found the templatedossier"
-msgstr "Es sind keine Vorlagen vorhanden"
+msgstr "Es sind keine Vorlagen vorhanden."
 
 #. Default: "Project Dossier"
 #: opengever.dossier/opengever/dossier/profiles/default/types/opengever.dossier.projectdossier.xml
@@ -37,7 +37,7 @@ msgstr "Projektdossier"
 
 #: opengever.dossier/opengever/dossier/profiles/default/types/opengever.dossier.templatedossier.xml
 msgid "Template Dossier"
-msgstr "Vorlagen Dossier"
+msgstr "Vorlagendossier"
 
 #. Default: "expired"
 msgid "Templates"
@@ -146,7 +146,7 @@ msgstr ""
 
 #: opengever.dossier/opengever/dossier/behaviors/dossier.py:71
 msgid "help_keywords"
-msgstr "Schlagworte zur Umschreibung eines Dossiers. Nicht zu Verwechseln mit der Ordnungsposition"
+msgstr "Schlagworte zur Umschreibung eines Dossiers. Nicht zu verwechseln mit der Ordnungsposition"
 
 #: opengever.dossier/opengever/dossier/behaviors/dossier.py:145
 msgid "help_number_of_containers"
@@ -167,7 +167,7 @@ msgstr ""
 
 #: opengever.dossier/opengever/dossier/behaviors/dossier.py:99
 msgid "help_volume_number"
-msgstr "Nummer eines Bandes, zu welchem mehrere zusammengehörige, papierförmige  Dossiers zusammengefügt worden sind"
+msgstr "Nummer eines Bandes, zu welchem mehrere zusammengehörige, papierförmige Dossiers zusammengefügt worden sind"
 
 #. Default: "Participation created"
 #: opengever.dossier/opengever/dossier/behaviors/participation.py:235
@@ -219,7 +219,7 @@ msgstr "Behältnis-Art"
 #. Default: "Edit after creation"
 #: opengever.dossier/opengever/dossier/templatedossier_templates/template_form.pt:58
 msgid "label_edit_after_creation"
-msgstr "Nach dem hinzufügen bearbeiten"
+msgstr "Nach dem Hinzufügen bearbeiten"
 
 #. Default: "E-Mail:"
 #: opengever.dossier/opengever/dossier/businesscase_templates/byline.pt:88
@@ -332,11 +332,11 @@ msgstr "Status:"
 
 #: opengever.dossier/opengever/dossier/resolve.py:80
 msgid "no end date are entered"
-msgstr "Es wurde kein End-Datum eingegeben"
+msgstr "Es wurde kein Enddatum angegeben"
 
 #: opengever.dossier/opengever/dossier/resolve.py:55
 msgid "not all documents are checked in"
-msgstr "Es sind nicht alle Dokumente eingeckeckt"
+msgstr "Es sind nicht alle Dokumente eingecheckt"
 
 #: opengever.dossier/opengever/dossier/resolve.py:41
 msgid "not all documents are stored in a subdossier"
