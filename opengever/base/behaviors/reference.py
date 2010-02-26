@@ -1,13 +1,16 @@
 from zope.interface import Interface, alsoProvides, implements
 from zope import schema
 from zope.component import adapts, provideAdapter
+from five import grok
 
 from plone.app.dexterity.behaviors import metadata
 from plone.directives import form
+from plone.indexer import indexer
 
 from z3c.form import validator, error
 
 from opengever.base import _
+from opengever.base.interfaces import IReferenceNumber as IReferenceNumberAdapter
 
 class IReferenceNumber(form.Schema):
 
@@ -89,3 +92,8 @@ class IReferenceNumberMarker(Interface):
     """
     Marker Interface for the ReferenceNumber Behavior
     """
+
+@indexer(IReferenceNumberMarker)
+def reference_number(obj):
+    return IReferenceNumberAdapter(obj).get_number()
+grok.global_adapter(reference_number, name='reference_number')
