@@ -5,6 +5,10 @@ Changelog
 1.0a4
 -----
 
+* Issue #445 Kopieren von an Aufgaben angehängten Dokumenten ("Überweisung", Beteiligung)
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/445
+  [01.03.2010, jbaumann]
+  
 * Issue #480 Beteiligung am Dossier hinzufügen sollte auch in "Aktionsleiste" möglich sein nicht nur über das Menü "Aktionen"
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/480
   [25.02.2010, jbaumann]
