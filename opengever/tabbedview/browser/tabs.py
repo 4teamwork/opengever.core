@@ -118,6 +118,7 @@ class Documents(OpengeverListingTab):
                        'cancel',
                        'create_task',
                        'trashed',
+                       'copy_documents_to_remote_client',
                        ]
 
     major_actions = ['checkout',
