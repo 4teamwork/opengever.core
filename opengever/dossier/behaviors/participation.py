@@ -249,6 +249,7 @@ class ParticipationAddForm(z3c.form.form.Form):
 class ParticipationAddFormView(layout.FormWrapper, grok.CodeView):
     grok.context(IParticipationAwareMarker)
     grok.name('add-participation')
+    grok.require('cmf.AddPortalContent')
     form = ParticipationAddForm
 
     def __init__(self, *args, **kwargs):
@@ -260,6 +261,7 @@ class ParticipationAddFormView(layout.FormWrapper, grok.CodeView):
  
 class DeleteParticipants(grok.CodeView):
     grok.context(IParticipationAwareMarker)
+    grok.require('cmf.ModifyPortalContent')
     grok.name('delete_participants')
     
     def render(self):
