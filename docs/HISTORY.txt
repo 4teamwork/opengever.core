@@ -8,6 +8,7 @@ Changelog
 * Issue #483 Spaltensortierung bei der Dossierübersicht auf Stufe Ordnungssystem
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/483/
   Vergleichen von nicht gesetzten Daten optimiert.
+  Sortierung von OGDS kontakten korrigiert
   [25.02.2010, jbaumann]
 
 * Issue #480 Beteiligung am Dossier hinzufügen sollte auch in "Aktionsleiste" möglich sein nicht nur über das Menü "Aktionen"

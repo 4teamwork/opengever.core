@@ -1,7 +1,7 @@
 import base64
+from Products.PluginIndexes.DateIndex.DateIndex import DateIndex
 from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
 from Products.CMFCore.utils import getToolByName
-from Products.PluginIndexes.DateIndex.DateIndex import DateIndex
 from ftw.tabbedview.browser.views import BaseListingView, SolrListingView
 from ftw.tabbedview.interfaces import ITabbedView
 from five import grok
@@ -9,6 +9,7 @@ from ftw.table import helper
 from ftw.directoryservice.contact import IContact
 from ftw.directoryservice.membership import Membership
 from plone.directives import dexterity
+from opengever.octopus.tentacle.interfaces import IContactInformation
 from opengever.tabbedview import _
 from opengever.tabbedview.helper import readable_ogds_author, linked
 from ftw.task import _ as taskmsg
@@ -52,6 +53,22 @@ class OpengeverListingTab(grok.View, BaseListingView):
 
 
     custom_sort_indexes = {'Products.PluginIndexes.DateIndex.DateIndex': custom_sort}
+
+    def _custom_sort_method(self, contents, sort_on, sort_order):
+        if BaseListingView._custom_sort_method is not None:
+            contents = BaseListingView._custom_sort_method(self, contents, sort_on,
+                                                           sort_order)
+        if sort_on in ('responsible','Creator', 'checked_out', 'issuer', 'contact'):
+            info = getUtility(IContactInformation)
+            def _sorter(a, b):
+                av = (info.describe(getattr(a, sort_on, '')) or '').lower()
+                bv = (info.describe(getattr(b, sort_on, '')) or '').lower()
+                return cmp(av, bv)
+            contents = list(contents)
+            contents.sort(_sorter)
+            if sort_order!='asc':
+                contents.reverse()
+        return contents
 
     @property
     def view_name(self):
