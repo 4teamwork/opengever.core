@@ -409,6 +409,8 @@ def related_items( obj ):
     for rel in relations:
         results.append(rel.to_id)
     return results
+grok.global_adapter(related_items, name='related_items')
+
 
 @indexer(ITask)
 def date_of_completion(obj):
@@ -416,6 +418,5 @@ def date_of_completion(obj):
     if obj.date_of_completion is None:
         return datetime(1970, 1, 1)
     return obj.date_of_completion
+grok.global_adapter(date_of_completion, name='date_of_completion')
 
-
-grok.global_adapter(related_items, name='related_items')
