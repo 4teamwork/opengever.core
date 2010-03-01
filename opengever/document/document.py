@@ -225,7 +225,7 @@ def deadlineDefaultValue(data):
     # To get hold of the folder, do: context = data.context
     user = data.context.portal_membership.getAuthenticatedMember()
     if user.getProperty('fullname'):
-        return user.getProperty('fullname')
+        return user.getProperty('fullname').decode('utf8')
     else:
         return user.getId()
 
