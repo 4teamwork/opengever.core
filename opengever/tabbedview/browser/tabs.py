@@ -25,7 +25,7 @@ def datetime_compare(x, y):
         return 1
     else:
         return cmp(a, b)
-#XXX really ugly. Will be overwritten in datetime_sort  
+#XXX really ugly. Will be overwritten in datetime_sort
 datetime_compare.index = 'modified'
 
 def custom_sort(list_, index, dir_):
@@ -49,8 +49,8 @@ class OpengeverListingTab(grok.View, BaseListingView):
         ('modified', helper.readable_date),
         ('Creator', readable_ogds_author),
         )
-        
-        
+
+
     custom_sort_indexes = {'Products.PluginIndexes.DateIndex.DateIndex': custom_sort}
 
     @property
@@ -65,18 +65,18 @@ class OpengeverListingTab(grok.View, BaseListingView):
 
 class OpengeverSolrListingTab(grok.View, SolrListingView):
     grok.context(ITabbedView)
-    grok.template('generic')  
-      
-    update = SolrListingView.update    
+    grok.template('generic')
+
+    update = SolrListingView.update
 
     columns = (
-                ('', helper.draggable),
-                ('', helper.path_checkbox),
-                ('Title', 'sortable_title', helper.solr_linked),
-                ('modified', helper.readable_date), 
-                ('Creator', readable_ogds_author),
-               )
-    
+        ('', helper.draggable),
+        ('', helper.path_checkbox),
+        ('Title', 'sortable_title', helper.solr_linked),
+        ('modified', helper.readable_date),
+        ('Creator', readable_ogds_author),
+        )
+
 
     @property
     def view_name(self):
@@ -166,17 +166,17 @@ class Tasks(OpengeverListingTab):
         ('', helper.path_checkbox),
         ('review_state', 'review_state', helper.translated_string()),
         ('Title', 'sortable_title', linked),
-        {'column' : 'task_type', 
-        'column_title' : taskmsg(u'label_task_type', 'Task Type')},
+        {'column' : 'task_type',
+         'column_title' : taskmsg(u'label_task_type', 'Task Type')},
         ('deadline', helper.readable_date),
         ('date_of_completion', helper.readable_date), # erledigt am
-        {'column' : 'responsible', 
-        'column_title' : taskmsg(u'label_responsible_task', 'Responsible'),  
-        'transform' : readable_ogds_author},
+        {'column' : 'responsible',
+         'column_title' : taskmsg(u'label_responsible_task', 'Responsible'),
+         'transform' : readable_ogds_author},
         ('issuer', readable_ogds_author), # zugewiesen von
-        {'column' : 'created', 
-        'column_title' : taskmsg(u'label_issued_date', 'issued at'),
-        'transform': helper.readable_date },
+        {'column' : 'created',
+         'column_title' : taskmsg(u'label_issued_date', 'issued at'),
+         'transform': helper.readable_date },
         )
 
     types = ['ftw.task.task',]
@@ -312,7 +312,7 @@ class DossierOverview(grok.View, OpengeverTab):
                                 getIcon='user.gif'
                                 ))
         return results
-    
+
     def related_dossiers(self):
         results = []
         for item in IDossier(self.context).relatedDossier:
@@ -321,11 +321,11 @@ class DossierOverview(grok.View, OpengeverTab):
 
     def object_to_brain(self, object):
         brains = self.context.portal_catalog({
-            'path':{
-                'query':'/'.join(object.getPhysicalPath()),
-                'depth':0,
-            },
-        })
+                'path':{
+                    'query':'/'.join(object.getPhysicalPath()),
+                    'depth':0,
+                    },
+                })
         if len(brains)>0:
             return brains[0]
         else:
@@ -338,7 +338,7 @@ class InboxOverview(DossierOverview):
     grok.template('overview')
 
     def boxes(self):
-        
+
         items = [[dict(id = 'tasks', content=self.tasks()),
                   dict(id = 'journal', content=self.journal()),
                   dict(id = 'sharing', content=self.sharing())],
@@ -536,7 +536,7 @@ class ContactsView(OpengeverListingTab):
 
     sort_on = 'sortable_title'
     sort_order='asc'
-    
+
     columns = (
         ('', helper.draggable),
         ('', helper.path_checkbox),
