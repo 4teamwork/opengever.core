@@ -409,5 +409,13 @@ def related_items( obj ):
     for rel in relations:
         results.append(rel.to_id)
     return results
-    
+
+@indexer(ITask)
+def date_of_completion(obj):
+    # handle 'None' dates. we always need a date for indexing.
+    if obj.date_of_completion is None:
+        return datetime(1970, 1, 1)
+    return obj.date_of_completion
+
+
 grok.global_adapter(related_items, name='related_items')
