@@ -16,6 +16,7 @@ from datetime import datetime
 
 from Products.CMFCore.utils import getToolByName
 from Products.MimetypesRegistry.common import MimeTypeException
+from Products.ARFilePreview.interfaces import IPreviewable
 from plone.app.dexterity.behaviors.metadata import IBasic
 from plone.dexterity.content import Item
 from plone.directives import form, dexterity
@@ -33,6 +34,7 @@ from plone.versioningbehavior.behaviors import IVersionable
 from plone.z3cform.textlines.textlines import TextLinesFieldWidget
 from plone.i18n.normalizer.interfaces import IIDNormalizer
 
+from zope.annotation.interfaces import IAnnotations
 from zope.lifecycleevent.interfaces import IObjectCreatedEvent, IObjectModifiedEvent
 
 from ftw.table.interfaces import ITableGenerator
@@ -231,6 +233,9 @@ def deadlineDefaultValue(data):
 
 class Document(Item):
 
+    # disable file preview creation when modifying or creating document
+    buildPreview = False
+
     def Title(self):
         title = Item.Title(self)
         if IWorkingCopy.providedBy(self):
@@ -275,6 +280,7 @@ class Document(Item):
         """for ZMI
         """
         return self.getIcon()
+
 
 
 @indexer(IDocumentSchema)
@@ -485,6 +491,10 @@ class Preview(DisplayForm, OpengeverTab):
     grok.name('tabbedview_view-preview')
     grok.template('preview')
 
+    def __call__(self):
+        IPreviewable(self.context).buildAndStorePreview()
+        return DisplayForm.__call__(self)
+        
 #XXX TEMPORARY REPLACED WITH A NON SOLR TAB
 #class Tasks(OpengeverSolrListingTab):
 #     grok.context(IDocumentSchema)

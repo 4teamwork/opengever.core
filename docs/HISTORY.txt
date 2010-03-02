@@ -5,6 +5,10 @@ Changelog
 1.0a5
 -----
 
+* Issue #491 Optimierungsmöglichkeiten für File Preview
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/491
+  [02.03.2010, jbaumann]
+  
 
 1.0a4
 -----
