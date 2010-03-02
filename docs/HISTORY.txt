@@ -5,6 +5,10 @@ Changelog
 1.0a4
 -----
 
+* Issue #436 Workflow Erstellen eines Dokuments ab Vorlagen
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/436
+  [02.02.2010, phgross]
+
 * Issue #486 Beteiligung hinzufügen und Beteiligung löschen darf nur möglich sein, wenn das Dossier in Bearbeitung ist
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/486
   [01.03.2010, jbaumann]
