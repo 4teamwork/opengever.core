@@ -89,7 +89,7 @@ class TemplateDocumentFormView(grok.View):
                     
                     get = urllib.urlencode({'redirectTo':url})
                     
-3                    redirect_url = '%s?%s#documents_overview' % (self.context.absolute_url(), get)
+                    redirect_url = '%s?%s#documents_overview' % (self.context.absolute_url(), get)
                     return self.request.RESPONSE.redirect(redirect_url)
                 else:
                     return self.request.RESPONSE.redirect(self.context.absolute_url()+'#documents_overview')
