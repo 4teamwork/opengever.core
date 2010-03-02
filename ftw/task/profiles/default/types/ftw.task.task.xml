@@ -55,7 +55,7 @@
     url_expr="string:${object_url}/edit" visible="True">
   <permission value="Modify portal content"/>
  </action>
- <action title="Add response" action_id="addresponse" category="object"
+ <action title="Add response" action_id="addresponse" category="folder_factories"
     condition_expr="" url_expr="string:${object_url}/addresponse"
     visible="True">
   <permission value="Add portal content"/>

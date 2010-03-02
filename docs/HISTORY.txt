@@ -5,6 +5,10 @@ Changelog
 1.0a5
 -----
 
+* Issue #468 Optimierung der inhaltlichen Usability von Aufgaben
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/468/
+  [23.02.2010, pgross]
+
 * Issue #447 Zentrale Aufgabenübersicht = Übersicht über die Aufgaben aller Sachbearbeiter eines Mandanten und noch nicht zugewiesene Aufgaben
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/447/
   added a tab assignedIssues, added some change for correct sorting in the taskoverview_solr
