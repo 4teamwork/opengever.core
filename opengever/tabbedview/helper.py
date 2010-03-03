@@ -5,7 +5,7 @@ from Products.PluggableAuthService.interfaces.authservice import IPropertiedUser
 from Products.CMFCore.interfaces._tools import IMemberData
 
 from opengever.octopus.tentacle.interfaces import IContactInformation
-
+from DateTime import DateTime
 
 def author_cache_key(m, i, author):
     if IPropertiedUser.providedBy(author) or IMemberData.providedBy(author):
@@ -35,3 +35,11 @@ def linked(item, value):
     link = u'<a class="rollover-breadcrumb" href="%s" title="%s">%s%s</a>' % (url_method()," &gt; ".join(i['Title'] for i in item.breadcrumb_titles), img, value) 
     wrapper = u'<span class="linkWrapper">%s</span>' % link
     return wrapper
+
+def readable_date_set_invisibles(item, date):
+    if not date or str(date) == '1970/01/01':
+        return u''
+    strftimestring = '%d.%m.%Y'
+    if date == None:
+        return None
+    return date.strftime(strftimestring)
