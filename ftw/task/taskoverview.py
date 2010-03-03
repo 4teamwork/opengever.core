@@ -2,7 +2,7 @@ from five import grok
 from Products.CMFCore.utils import getToolByName
 from opengever.tabbedview.browser.tabs import OpengeverListingTab
 from ftw.table import helper
-from opengever.tabbedview.helper import readable_ogds_author
+from opengever.tabbedview.helper import readable_ogds_author, readable_date_set_invisibles
 
 from ftw.task import _
 
@@ -31,7 +31,7 @@ class MyTasks(OpengeverListingTab):
         {'column' : 'task_type', 
         'column_title' : _(u'label_task_type', 'Task Type')},
         ('deadline', helper.readable_date),
-        ('date_of_completion', helper.readable_date), # erledigt am
+        ('date_of_completion', readable_date_set_invisibles), # erledigt am
         {'column' : 'responsible', 
         'column_title' : _(u'label_responsible_task', 'Responsible'),  
         'transform' : readable_ogds_author},
@@ -61,7 +61,7 @@ class IssuedTasks(OpengeverListingTab):
         {'column' : 'task_type', 
         'column_title' : _(u'label_task_type', 'Task Type')},
         ('deadline', helper.readable_date),
-        ('date_of_completion', helper.readable_date), # erledigt am
+        ('date_of_completion', readable_date_set_invisibles), # erledigt am
         {'column' : 'responsible', 
         'column_title' : _(u'label_responsible_task', 'Responsible'),  
         'transform' : readable_ogds_author},

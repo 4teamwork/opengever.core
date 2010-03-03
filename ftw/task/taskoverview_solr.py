@@ -33,7 +33,7 @@ class MyTasks(OpengeverSolrListingTab):
         {'column' : 'task_type', 
         'column_title' : _(u'label_task_type', 'Task Type')},
         ('deadline', helper.readable_date),
-        ('date_of_completion', helper.readable_date), # erledigt am
+        ('date_of_completion', opengever_helper.readable_date_set_invisibles), # erledigt am
         {'column' : 'responsible', 
         'column_title' : _(u'label_responsible_task', 'Responsible'),  
         'transform' : readable_ogds_author},
@@ -58,7 +58,7 @@ class IssuedTasks(OpengeverSolrListingTab):
         {'column' : 'task_type', 
         'column_title' : _(u'label_task_type', 'Task Type')},
         ('deadline', helper.readable_date),
-        ('date_of_completion', helper.readable_date), #erledigt am
+        ('date_of_completion', opengever_helper.readable_date_set_invisibles), #erledigt am
         {'column' : 'responsible', 
         'column_title' : _(u'label_responsible_task', 'Responsible'),  
         'transform' : readable_ogds_author},
@@ -83,7 +83,7 @@ class AssignedTasks(OpengeverSolrListingTab):
         {'column' : 'task_type', 
         'column_title' : _(u'label_task_type', 'Task Type')},
         ('deadline', helper.readable_date),
-        ('date_of_completion', helper.readable_date), # erledigt am
+        ('date_of_completion', opengever_helper.readable_date_set_invisibles), # erledigt am
         {'column' : 'responsible', 
         'column_title' : _(u'label_responsible_task', 'Responsible'),  
         'transform' : readable_ogds_author},
