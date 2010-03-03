@@ -21,5 +21,7 @@ class CheckoutTestLayer(collective.testcaselayer.ptc.BasePTCLayer):
         self.addProfile('opengever.dossier:default')
         self.addProfile('opengever.document:default')
         self.addProfile('opengever.document:tests')
+        import opengever.base
+        zcml.load_config('configure.zcml', opengever.base)
 
 CLayer = CheckoutTestLayer([collective.testcaselayer.ptc.ptc_layer])

@@ -38,7 +38,7 @@ class TestCheckout(PloneTestCase):
         foo.invokeFactory('opengever.document.document', 'bar')
         bar = foo['bar']
         baz = bar._getCopy(foo)
-
+        self.failIf(baz.__parent__ is not None)
         self.failUnless(bar.aq_self.__parent__ == foo)
 
               
