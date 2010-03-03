@@ -5,6 +5,10 @@ Changelog
 1.0a5
 -----
 
+* Issue #435 Darstellung bei ausgechecktem Dokument (Working Copy)
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/435
+  [03.03.2010, jbaumann]
+  
 * Issue #491 Optimierungsmöglichkeiten für File Preview
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/491
   [02.03.2010, jbaumann]

@@ -239,7 +239,7 @@ class Document(Item):
     def Title(self):
         title = Item.Title(self)
         if IWorkingCopy.providedBy(self):
-            return '%s (WorkingCopy)' % title
+            return '%s (Arbeitskopie)' % title
         return title
 
     def getIcon(self, relative_to_portal=0):
