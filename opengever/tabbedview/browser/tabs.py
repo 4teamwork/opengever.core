@@ -11,7 +11,7 @@ from ftw.directoryservice.membership import Membership
 from plone.directives import dexterity
 from opengever.octopus.tentacle.interfaces import IContactInformation
 from opengever.tabbedview import _
-from opengever.tabbedview.helper import readable_ogds_author, linked
+from opengever.tabbedview.helper import readable_ogds_author, linked, readable_date_set_invisibles
 from ftw.task import _ as taskmsg
 
 
@@ -186,7 +186,7 @@ class Tasks(OpengeverListingTab):
         {'column' : 'task_type',
          'column_title' : taskmsg(u'label_task_type', 'Task Type')},
         ('deadline', helper.readable_date),
-        ('date_of_completion', helper.readable_date), # erledigt am
+        ('date_of_completion', readable_date_set_invisibles), # erledigt am
         {'column' : 'responsible',
          'column_title' : taskmsg(u'label_responsible_task', 'Responsible'),
          'transform' : readable_ogds_author},

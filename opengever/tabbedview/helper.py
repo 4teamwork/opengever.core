@@ -37,7 +37,7 @@ def linked(item, value):
     return wrapper
 
 def readable_date_set_invisibles(item, date):
-    if not date or str(date) == '1970/01/01':
+    if not date or str(date) == '1970/01/01' or str(date) == '1970-01-01 00:00:00':
         return u''
     strftimestring = '%d.%m.%Y'
     if date == None:
