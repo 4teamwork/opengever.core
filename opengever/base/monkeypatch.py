@@ -67,3 +67,50 @@ setattr(widget.NamedFileWidget,
         'filename_encoded',
         Foo.filename_encoded)
 print '* [opengever.base] Monkey patched plone.formwidget.namedfile.widget.NameFileWidget.filename_encoded'
+
+# --------
+
+# XXX remove after problem is solved in dexterity
+def patched_getCopy(self, container):
+    """ _getCopy: patched method removes the __parent__ of the object before copying it.
+    This was done due to a bug in dexterity / plone.folder, which results in multiplying
+    every object in the site when copy/pasting any object.
+    Discussion:
+    http://groups.google.com/group/dexterity-development/t/7ca5b06acbc600e7
+    """
+    # Commit a subtransaction to:
+    # 1) Make sure the data about to be exported is current
+    # 2) Ensure self._p_jar and container._p_jar are set even if
+    # either one is a new object
+
+    # remove parent pointer
+    uw_obj = self.aq_self
+    parent = None
+    if hasattr(uw_obj, '__parent__'):
+        parent = self.__parent__
+        self.__parent__ = None
+
+    transaction.savepoint(optimistic=True)
+
+    if self._p_jar is None:
+        raise CopyError, (
+            'Object "%s" needs to be in the database to be copied' %
+            `self`)
+    if container._p_jar is None:
+        raise CopyError, (
+            'Container "%s" needs to be in the database' %
+            `container`)
+
+    # Ask an object for a new copy of itself.
+    f=tempfile.TemporaryFile()
+    self._p_jar.exportFile(self._p_oid,f)
+    f.seek(0)
+    ob=container._p_jar.importFile(f)
+    f.close()
+
+    # # restore parentpointer
+    if parent:
+        self.__parent__ = parent
+
+    return ob
+

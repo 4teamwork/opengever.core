@@ -5,6 +5,11 @@ Changelog
 1.0a4
 -----
 
+* Issue #431 Checkouts auf allgdblx09 mit Oracle-Storage dauern EWIG
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/431
+  Added _getCopy patch, which removes __parent__ pointer before copying it.
+  [03.03.2010, jbaumann]
+
 * Added missing reference_number indexer
   [26.02.2010, jbaumann]
   

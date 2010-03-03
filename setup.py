@@ -32,6 +32,7 @@ setup(name='opengever.base',
         'opengever.tabbedview',
         'plone.autoform',
         'collective.testcaselayer',
+        'collective.monkeypatcher',
         # -*- Extra requirements: -*-
         ],
       entry_points="""

@@ -4,6 +4,7 @@
     xmlns:grok="http://namespaces.zope.org/grok"
     xmlns:i18n="http://namespaces.zope.org/i18n"
     xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+    xmlns:monkey="http://namespaces.plone.org/monkey"
     i18n_domain="opengever.base">
 
   <i18n:registerTranslations directory="locales" />
@@ -31,5 +32,17 @@
   <grok:grok package="." />
 
   <include package=".behaviors" />
+
+
+  <!-- Monkey Patches -->
+  <include package="collective.monkeypatcher" />
+
+  <monkey:patch
+      description="Zope Export gets bloated by parent objects: http://groups.google.com/group/dexterity-development/t/7ca5b06acbc600e7"
+      class="plone.dexterity.content.DexterityContent"
+      original="_getCopy"
+      replacement=".monkeypatch.patched_getCopy"
+      ignoreOriginal="true"
+      />
 
 </configure>
