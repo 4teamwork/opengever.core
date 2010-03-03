@@ -10,3 +10,16 @@ class IntegrationTestLayer(collective.testcaselayer.ptc.BasePTCLayer):
         self.addProfile('opengever.document:default')
 
 Layer = IntegrationTestLayer([collective.testcaselayer.ptc.ptc_layer])
+
+class CheckoutTestLayer(collective.testcaselayer.ptc.BasePTCLayer):
+
+    def afterSetUp(self):
+        from Products.Five import zcml
+        import opengever.document
+        zcml.load_config('tests.zcml', opengever.document)
+        # Install the opengever.document product
+        self.addProfile('opengever.dossier:default')
+        self.addProfile('opengever.document:default')
+        self.addProfile('opengever.document:tests')
+
+CLayer = CheckoutTestLayer([collective.testcaselayer.ptc.ptc_layer])
