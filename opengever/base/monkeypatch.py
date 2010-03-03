@@ -70,6 +70,10 @@ print '* [opengever.base] Monkey patched plone.formwidget.namedfile.widget.NameF
 
 # --------
 
+import tempfile
+import transaction
+from OFS.CopySupport import CopyError
+
 # XXX remove after problem is solved in dexterity
 def patched_getCopy(self, container):
     """ _getCopy: patched method removes the __parent__ of the object before copying it.
@@ -77,6 +81,7 @@ def patched_getCopy(self, container):
     every object in the site when copy/pasting any object.
     Discussion:
     http://groups.google.com/group/dexterity-development/t/7ca5b06acbc600e7
+    Original: OFS.CopySupport.CopySource
     """
     # Commit a subtransaction to:
     # 1) Make sure the data about to be exported is current
