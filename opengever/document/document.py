@@ -55,7 +55,7 @@ from zope.annotation.interfaces import IAnnotations, IAnnotatable
 from plone.directives.dexterity import DisplayForm
 
 from opengever.tabbedview.browser.tabs import OpengeverTab, OpengeverListingTab, OpengeverSolrListingTab
-from opengever.tabbedview.helper import readable_ogds_author, linked
+from opengever.tabbedview.helper import readable_ogds_author, linked, readable_date_set_invisibles
 from opengever.tabbedview import _ as tvmf
 from opengever.base.interfaces import IReferenceNumber, ISequenceNumber
 from opengever.octopus.tentacle.interfaces import IContactInformation
@@ -527,7 +527,7 @@ class Tasks(OpengeverListingTab):
         {'column' : 'task_type', 
         'column_title' : taskmsg(u'label_task_type', 'Task Type')},
         ('deadline', helper.readable_date),
-        ('date_of_completion', helper.readable_date), # erledigt am
+        ('date_of_completion', readable_date_set_invisibles), # erledigt am
         {'column' : 'responsible', 
         'column_title' : taskmsg(u'label_responsible_task', 'Responsible'),  
         'transform' : readable_ogds_author},
