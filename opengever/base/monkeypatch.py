@@ -2,11 +2,11 @@
 Filename with umlauts are not supported yet, so we need to patch that.
 Therefore we need to patch:
 * Products.Five.browser.decode.processInputs
-  Filenames of FileUpload objects should be converted to unicode as well
+Filenames of FileUpload objects should be converted to unicode as well
 * plone.formwidget.namedfile.widget.filename_encoded
-  Urllib has a problem with filename, which is now unicode and not utf8
-  any more. So we need to convert it back to utf8 for urllib.
-  patched for: plone.formwidget.namedfile == 1.0b2
+Urllib has a problem with filename, which is now unicode and not utf8
+any more. So we need to convert it back to utf8 for urllib.
+patched for: plone.formwidget.namedfile == 1.0b2
 
 For further details see:
 * https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/111
