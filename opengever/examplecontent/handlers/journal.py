@@ -14,7 +14,7 @@ class SetupVarious(object):
 
     def addJournal(self, p, out):
         if p.get('journal', None):
-            p.manage_delObjects(('journal', ))
+            return None
         
         newid = p.invokeFactory(id='journal', title='Journal', type_name='Topic')
         journal = p[newid]
