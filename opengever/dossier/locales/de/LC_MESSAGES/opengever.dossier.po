@@ -72,7 +72,7 @@ msgstr "Erstellen"
 #. Default: "Archive"
 #: opengever.dossier/opengever/dossier/archive.py:83
 msgid "button_archive"
-msgstr "Archivieren"
+msgstr "Speichern"
 
 #. Default: "Cancel"
 #: opengever.dossier/opengever/dossier/behaviors/participation.py:240

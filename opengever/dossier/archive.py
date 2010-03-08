@@ -147,6 +147,9 @@ class ArchiveForm(form.Form):
             status.addStatusMessage(_("The dossier was already resolved"), type="warning")
             return self.request.RESPONSE.redirect(self.context.absolute_url())
 
+    @button.buttonAndHandler(_(u'button_cancel', default=u'Cancel'))
+    def cancel(self, action):
+        return self.request.RESPONSE.redirect(self.context.absolute_url())
 
 class ArchiveFormView(layout.FormWrapper, grok.CodeView):
     grok.context(IDossierMarker)
