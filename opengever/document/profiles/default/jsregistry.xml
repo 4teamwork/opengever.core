@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
 <object name="portal_javascripts" meta_type="JavaScripts Registry">
  <javascript cacheable="True" compression="safe" cookable="True"
-    enabled="1" expression="" id="++resource++opengever.document/startredirect.js"/>
+    enabled="1" expression="" id="++resource++opengever.document/startredirect.js"
+    insert-after="++resource++opengever.tabbedview-resources/tabbedview.js" />
 </object>
