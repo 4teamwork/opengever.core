@@ -13,6 +13,8 @@ class SetupVarious(object):
         logger.info("created journal")
 
     def addJournal(self, p, out):
+        if p.get('journal', None):
+            p.manage_delObjects(('journal', ))
         
         newid = p.invokeFactory(id='journal', title='Journal', type_name='Topic')
         journal = p[newid]

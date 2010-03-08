@@ -5,6 +5,9 @@ Changelog
 1.0a3
 -----
 
+* Fixed bug when running opengever.examplecontent's GS profile "journal" multiple times
+  [08.03.2010, jbaumann]
+  
 * Issue #457 Ordnungsposition: Werte unter dem Reiter "Lebenszyklus" den Vorgaben des csv anpassen
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/457
   [22.02.2010, jbaumann]
