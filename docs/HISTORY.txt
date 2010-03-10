@@ -5,6 +5,10 @@ Changelog
 1.0a5
 -----
 
+* Issue #493 Abgleich zwischen den Mandanten (rr / ds / amt)
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/493
+  added new index assigned_client, for better query in the assigned-tasks tab in the taskoverview
+
 * Issue #468 Optimierung der inhaltlichen Usability von Aufgaben
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/468/
   [23.02.2010, pgross]

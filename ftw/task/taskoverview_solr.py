@@ -1,10 +1,11 @@
 from five import grok
 from opengever.tabbedview.browser.tabs import OpengeverListingTab, OpengeverSolrListingTab
-from zope.component import queryUtility
+from zope.component import queryUtility, getUtility
 from ftw.table import helper
 from opengever.tabbedview import helper as opengever_helper
 from opengever.tabbedview.helper import readable_ogds_author
 from opengever.octopus.tentacle.contacts import ContactInformation
+from opengever.octopus.tentacle.interfaces import ITentacleConfig
 from ftw.task import _
 
 def authenticated_member(context):
@@ -94,8 +95,7 @@ class AssignedTasks(OpengeverSolrListingTab):
         )
 
     def build_query(self):
-        users = ContactInformation().list_local_users()
-        temp = ''
-        for user in users:
-            temp += '%s OR ' % user
-        return 'portal_type:ftw.task.task AND responsible:(%s)' % (temp[:-3])
+        member = authenticated_member(self.context)
+        conf = getUtility(ITentacleConfig)
+        client_id = conf.cid
+        return 'portal_type:ftw.task.task AND assigned_client:(%s)' % client_id

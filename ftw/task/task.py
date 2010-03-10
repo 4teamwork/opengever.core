@@ -420,3 +420,12 @@ def date_of_completion(obj):
     return obj.date_of_completion
 grok.global_adapter(date_of_completion, name='date_of_completion')
 
+
+@indexer(ITask)
+def assigned_client(obj):
+    #set the client_id of the home mandant of the respectively responsible user
+    if obj.responsible is not None:
+        info = getUtility(IContactInformation)
+        user = info.get_user_by_id(obj.responsible)
+        return user.get('client', None)
+grok.global_adapter(assigned_client, name='assigned_client')

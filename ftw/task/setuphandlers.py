@@ -34,6 +34,7 @@ def add_catalog_indexes(context, logger=None):
               ('responsible', 'FieldIndex'),
               ('issuer', 'FieldIndex'),
               ('task_type', 'FieldIndex'),
+              ('assigned_client', "KeywordIndex"),
               )
     indexables = []
     for name, meta_type in wanted:
