@@ -1,4 +1,5 @@
 import base64
+import re
 from Products.PluginIndexes.DateIndex.DateIndex import DateIndex
 from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
 from Products.CMFCore.utils import getToolByName
@@ -58,7 +59,29 @@ class OpengeverListingTab(grok.View, BaseListingView):
         if BaseListingView._custom_sort_method is not None:
             contents = BaseListingView._custom_sort_method(self, contents, sort_on,
                                                            sort_order)
-        if sort_on in ('responsible','Creator', 'checked_out', 'issuer', 'contact'):
+        if sort_on=='reference':
+            splitter = re.compile('[/\., ]')
+            def _sortable_data(brain):
+                """ Converts the "reference" into a tuple containing integers, which are
+                converted well. Sorting "10" and "2" as strings results in wrong order..
+                """
+                value = getattr(brain, sort_on, '')
+                if not isinstance(value, str)  and not isinstance(value, unicode):
+                    return value
+                parts = []
+                for part in splitter.split(value):
+                    part = part.strip()
+                    try:
+                        part = int(part)
+                    except ValueError:
+                        pass
+                    parts.append(part)
+                return parts
+            contents = list(contents)
+            contents.sort(lambda a,b:cmp(_sortable_data(a), _sortable_data(b)))
+            if sort_order!='asc':
+                contents.reverse()
+        elif sort_on in ('responsible', 'Creator', 'checked_out', 'issuer', 'contact'):
             info = getUtility(IContactInformation)
             def _sorter(a, b):
                 av = (info.describe(getattr(a, sort_on, '')) or '').lower()

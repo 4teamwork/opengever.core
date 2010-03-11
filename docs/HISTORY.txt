@@ -6,6 +6,9 @@ Changelog
 -----
 
 * Issue #483 Spaltensortierung bei der Dossierübersicht auf Stufe Ordnungssystem
+  [11.03.2010, jbaumann]
+  
+* Issue #483 Spaltensortierung bei der Dossierübersicht auf Stufe Ordnungssystem
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/483/
   Vergleichen von nicht gesetzten Daten optimiert.
   Sortierung von OGDS kontakten korrigiert
