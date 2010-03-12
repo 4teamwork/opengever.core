@@ -269,8 +269,17 @@ class View(dexterity.DisplayForm):
         return None
     
     def getSubDocuments(self):
-        docs = self.context.getFolderContents(full_objects=False,
+        brains = self.context.getFolderContents(full_objects=False,
                                                contentFilter={'portal_type': 'opengever.document.document'})
+
+        docs = []
+        for doc in brains:
+            docs.append(doc)
+
+        for rel in self.context.relatedItems:
+            docs.append(rel.to_object)
+
+        docs.sort(lambda x, y: cmp(x.Title(), x.Title()))
         return docs
     
     def responsible_link(self):
