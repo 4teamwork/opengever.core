@@ -73,7 +73,7 @@ class CopyDocumentsToRemoteClientForm(z3c.form.form.Form):
             trans = getUtility(ITransporter)
             for obj in self.objects:
                 trans.transport(obj, cid, target)
-            redirect_to = os.path.join(client.get('site_url'), target, '#documents-tab')
+            redirect_to = os.path.join(client.get('public_url'), target, '#documents-tab')
             return self.request.RESPONSE.redirect(redirect_to)
 
     def updateWidgets(self):
