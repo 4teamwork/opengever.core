@@ -24,7 +24,7 @@
         <table class="listing task-listing">
           <tal:rep tal:define="group python: view.groups[0]">
             <tr tal:repeat="widget group/widgets/values">
-              <tal:block condition="python:widget.__name__ not in ('IBasic.title', 'IBasic.description', 'title', 'description','responsible', 'ITransition.transition', 'issuer',)">
+              <tal:block condition="python:widget.__name__ not in ('IBasic.title', 'IBasic.description', 'title', 'description','responsible', 'ITransition.transition', 'issuer', 'IRelatedItems.relatedItems')">
                 <th tal:content="widget/label"></th>
                 <td tal:content="structure widget/render" />
               </tal:block>
@@ -90,6 +90,9 @@
             <li tal:repeat="item items">
               <img tal:attributes="src item/getIcon" />
               <a href="" tal:attributes="href item/getURL|nothing" tal:omit-tag="not: item/getURL|nothing"><span tal:content="item/Title" /></a>
+            </li>
+            <li tal:repeat="item python:view.w['IRelatedItems.relatedItems'].items">
+                <a href="" tal:attributes="href item/value|nothing" tal:omit-tag="not: item/value|nothing"><span tal:content="item/label" /></a>
             </li>
           </ul>
           <span tal:condition="not: items" i18n:translate="no_content">No Content</span>
