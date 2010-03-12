@@ -5,6 +5,10 @@ Changelog
 1.0a4
 -----
 
+* Using new vocabulary factory for transporter:
+  opengever.octopus.tentacle.vocabulary.OpenHomeDossiersVocabularyFactory
+  [12.03.2010, jbaumann]
+  
 * Issue #436 Workflow Erstellen eines Dokuments ab Vorlagen
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/436
   [02.02.2010, phgross]

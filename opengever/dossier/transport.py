@@ -1,22 +1,18 @@
-import os
-
-import z3c.form
-from five import grok
-from plone.directives import form
-from plone.z3cform import layout
-from zope.component import getAdapter, getUtility
-from zope import schema
-from zope.schema.vocabulary import SimpleVocabulary
-from zope.schema.interfaces import IVocabularyFactory
-from z3c.form.interfaces import HIDDEN_MODE
 from Products.statusmessages.interfaces import IStatusMessage
-
-from opengever.octopus.tentacle.interfaces import ITentacleCommunicator
-from opengever.octopus.tentacle.interfaces import ITentacleConfig
-from opengever.octopus.tentacle.interfaces import ICortexCommunicator
-from opengever.octopus.tentacle.interfaces import ITransporter
+from five import grok
 from opengever.dossier import _
 from opengever.dossier.behaviors.dossier import IDossierMarker
+from opengever.octopus.tentacle.interfaces import ICortexCommunicator
+from opengever.octopus.tentacle.interfaces import ITentacleConfig
+from opengever.octopus.tentacle.interfaces import ITransporter
+from plone.directives import form
+from plone.z3cform import layout
+from z3c.form.interfaces import HIDDEN_MODE
+from zope import schema
+from zope.component import getUtility
+import os
+import z3c.form
+
 
 class NoItemsSelected(Exception):
     pass
@@ -29,32 +25,9 @@ class IChooseDossierSchema(form.Schema):
     target_dossier = schema.Choice(
         title = _(u'label_target_dossier', default=u'Target Dossier'),
         description = _(u'help_target_dossier', default=u''),
-        vocabulary = u'opengever.dossier.transport.TargetDossierVocabularyFactory',
+        vocabulary=u'opengever.octopus.tentacle.vocabulary.OpenHomeDossiersVocabularyFactory',
         required = True,
         )
-
-
-class TargetDossierVocabularyFactory(grok.GlobalUtility):
-    """ Provides a vocabulary of open dossiers on my home client
-    """
-    grok.provides(IVocabularyFactory)
-    grok.name('opengever.dossier.transport.TargetDossierVocabularyFactory')
-
-    def __call__(self, context):
-        terms = []
-        cc = getUtility(ICortexCommunicator)
-        tc = getAdapter(context, ITentacleCommunicator)
-        client = cc.get_home_client(context)
-        if client and client.get('cid', None):
-            for dossier in tc.open_dossiers(client.get('cid')):
-                key = dossier['path']
-                value = '%s: %s' % (dossier['reference_number'],
-                                    dossier['title'])
-                terms.append(SimpleVocabulary.createTerm(key,
-                                                         key,
-                                                         value))
-        terms.sort(lambda a,b:cmp(a.title, b.title))
-        return SimpleVocabulary(terms)
 
 
 class CopyDocumentsToRemoteClientForm(z3c.form.form.Form):
