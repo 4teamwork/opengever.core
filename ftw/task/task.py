@@ -274,12 +274,11 @@ class View(dexterity.DisplayForm):
 
         docs = []
         for doc in brains:
-            docs.append(doc)
+            docs.append(doc.getObject())
 
         for rel in self.context.relatedItems:
             docs.append(rel.to_object)
-
-        docs.sort(lambda x, y: cmp(x.Title(), x.Title()))
+        docs.sort(lambda x, y: cmp(x.Title(), y.Title()))
         return docs
     
     def responsible_link(self):
