@@ -19,11 +19,12 @@ def setup_versioning(context):
         'opengever.document.document',
         ]
     pr = getToolByName(portal, 'portal_repository')
+    versionable_types = list(pr.getVersionableContentTypes())
     for type in types:
-        pr._versionable_content_types.append(type)
-        pr._version_policy_mapping[type] = [
-            'version_on_revert',
-            ]
+        if type not in versionable_types:
+            versionable_types.append(type)
+        pr.addPolicyForContentType(type, 'version_on_revert')
+    pr.setVersionableContentTypes(versionable_types)
 
 
 def add_catalog_indexes(context, logger=None):
