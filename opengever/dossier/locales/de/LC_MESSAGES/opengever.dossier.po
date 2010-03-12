@@ -24,7 +24,7 @@ msgstr "Geschäftsdossier"
 
 #: opengever.dossier/opengever/dossier/profiles/default/actions.xml
 msgid "Copy documents to remote client"
-msgstr ""
+msgstr "In eigenes Dossier kopieren"
 
 #: opengever.dossier/opengever/dossier/profiles/default/actions.xml
 msgid "Delete"
