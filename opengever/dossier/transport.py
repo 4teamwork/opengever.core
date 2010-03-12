@@ -9,8 +9,10 @@ from zope import schema
 from zope.schema.vocabulary import SimpleVocabulary
 from zope.schema.interfaces import IVocabularyFactory
 from z3c.form.interfaces import HIDDEN_MODE
+from Products.statusmessages.interfaces import IStatusMessage
 
 from opengever.octopus.tentacle.interfaces import ITentacleCommunicator
+from opengever.octopus.tentacle.interfaces import ITentacleConfig
 from opengever.octopus.tentacle.interfaces import ICortexCommunicator
 from opengever.octopus.tentacle.interfaces import ITransporter
 from opengever.dossier import _
@@ -117,4 +119,16 @@ class CopyDocumentsToRemoteClientView(layout.FormWrapper, grok.CodeView):
         layout.FormWrapper.__init__(self, *args, **kwargs)
         grok.CodeView.__init__(self, *args, **kwargs)
 
-    __call__ = layout.FormWrapper.__call__
+    def __call__(self):
+        communicator = getUtility(ICortexCommunicator)
+        config = getUtility(ITentacleConfig)
+        home_client_cid = communicator.get_home_client(self.context).get('cid', object())
+        if config.cid == home_client_cid:
+            msg = _(u'error_copy_not_supported_at_home_client',
+                    default=u'This action is not supported on your home client. Use copy and paste.')
+            IStatusMessage(self.request).addStatusMessage(msg, type='error')
+            return self.request.RESPONSE.redirect(self.request.get('HTTP_REFERER',
+                                                                  './') + '#documents-tab')
+        else:
+            return layout.FormWrapper.__call__(self)
+

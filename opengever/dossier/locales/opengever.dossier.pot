@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2010-02-25 10:48+0000\n"
+"POT-Creation-Date: 2010-03-11 16:42+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -60,6 +60,11 @@ msgstr ""
 msgid "The start or end date is invalid"
 msgstr ""
 
+#. Default: "Copy documents to remote client"
+#: opengever.dossier/opengever/dossier/profiles/default/actions.xml
+msgid "action_copy_to_remote_client"
+msgstr ""
+
 #. Default: "last modified"
 #: opengever.dossier/opengever/dossier/templatedossier_templates/byline.pt:35
 msgid "box_last_modified"
@@ -80,9 +85,19 @@ msgstr ""
 msgid "button_cancel"
 msgstr ""
 
+#. Default: "Copy"
+#: opengever.dossier/opengever/dossier/transport.py:65
+msgid "button_copy"
+msgstr ""
+
 #. Default: "create document with template"
 #: opengever.dossier/opengever/dossier/templatedossier.py:43
 msgid "create_document_with_template"
+msgstr ""
+
+#. Default: "This action is not supported on your home client. Use copy and paste."
+#: opengever.dossier/opengever/dossier/transport.py:127
+msgid "error_copy_not_supported_at_home_client"
 msgstr ""
 
 #. Default: "Filing"
@@ -166,6 +181,10 @@ msgstr ""
 msgid "help_start"
 msgstr ""
 
+#: opengever.dossier/opengever/dossier/transport.py:31
+msgid "help_target_dossier"
+msgstr ""
+
 #: opengever.dossier/opengever/dossier/behaviors/dossier.py:99
 msgid "help_volume_number"
 msgstr ""
@@ -176,7 +195,7 @@ msgid "info_participation_create"
 msgstr ""
 
 #. Default: "Removed participations"
-#: opengever.dossier/opengever/dossier/behaviors/participation.py:272
+#: opengever.dossier/opengever/dossier/behaviors/participation.py:274
 msgid "info_removed_participations"
 msgstr ""
 
@@ -185,6 +204,10 @@ msgstr ""
 #: opengever.dossier/opengever/dossier/project_templates/byline.pt:16
 #: opengever.dossier/opengever/dossier/templatedossier_templates/byline.pt:16
 msgid "label_by_author"
+msgstr ""
+
+#: opengever.dossier/opengever/dossier/transport.py:62
+msgid "label_choose_target_dossier"
 msgstr ""
 
 #. Default: "Comment"
@@ -307,6 +330,11 @@ msgstr ""
 #: opengever.dossier/opengever/dossier/businesscase_templates/byline.pt:35
 #: opengever.dossier/opengever/dossier/project_templates/byline.pt:35
 msgid "label_start_byline"
+msgstr ""
+
+#. Default: "Target Dossier"
+#: opengever.dossier/opengever/dossier/transport.py:30
+msgid "label_target_dossier"
 msgstr ""
 
 #. Default: "Template"

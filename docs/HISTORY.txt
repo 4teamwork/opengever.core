@@ -10,6 +10,8 @@ Changelog
   [02.02.2010, phgross]
 
 * Issue #486 Beteiligung hinzufügen und Beteiligung löschen darf nur möglich sein, wenn das Dossier in Bearbeitung ist
+  Auf eigenem Mandanten nicht möglich
+  Übersetzungen hinzugefügt
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/486
   [01.03.2010, jbaumann]
   

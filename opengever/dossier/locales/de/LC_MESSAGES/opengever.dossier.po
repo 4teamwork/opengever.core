@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: opengever.dossier 1.0\n"
-"POT-Creation-Date: 2010-02-25 10:48+0000\n"
+"POT-Creation-Date: 2010-03-11 16:42+0000\n"
 "PO-Revision-Date: 2009-09-17 15:21+0000\n"
 "Last-Translator: Thomas Buchberger <t.buchberger@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -59,6 +59,11 @@ msgstr "Das Beginn-Datum muss vor dem Ende-Datum liegen."
 msgid "The start or end date is invalid"
 msgstr "Das Beginn- oder Ende-Datum ist ungültig."
 
+#. Default: "Copy documents to remote client"
+#: opengever.dossier/opengever/dossier/profiles/default/actions.xml
+msgid "action_copy_to_remote_client"
+msgstr "In eigenes Dossier kopieren"
+
 #. Default: "last modified"
 #: opengever.dossier/opengever/dossier/templatedossier_templates/byline.pt:35
 msgid "box_last_modified"
@@ -79,10 +84,20 @@ msgstr "Speichern"
 msgid "button_cancel"
 msgstr "Abbrechen"
 
+#. Default: "Copy"
+#: opengever.dossier/opengever/dossier/transport.py:65
+msgid "button_copy"
+msgstr "Kopieren"
+
 #. Default: "create document with template"
 #: opengever.dossier/opengever/dossier/templatedossier.py:43
 msgid "create_document_with_template"
 msgstr "Dokument mit Vorlage erstellen"
+
+#. Default: "This action is not supported on your home client. Use copy and paste."
+#: opengever.dossier/opengever/dossier/transport.py:127
+msgid "error_copy_not_supported_at_home_client"
+msgstr "Diese Aktion ist auf ihrem Heimmandanten nicht möglich. Benützen Sie Kopieren und Einfügen."
 
 #. Default: "Filing"
 #: opengever.dossier/opengever/dossier/behaviors/dossier.py:120
@@ -165,6 +180,10 @@ msgstr ""
 msgid "help_start"
 msgstr ""
 
+#: opengever.dossier/opengever/dossier/transport.py:31
+msgid "help_target_dossier"
+msgstr "Wählen Sie ein Dossier auf dem eigenen Mandanten aus"
+
 #: opengever.dossier/opengever/dossier/behaviors/dossier.py:99
 msgid "help_volume_number"
 msgstr "Nummer eines Bandes, zu welchem mehrere zusammengehörige, papierförmige Dossiers zusammengefügt worden sind"
@@ -175,7 +194,7 @@ msgid "info_participation_create"
 msgstr "Die Beteiligung wurde gespeichert."
 
 #. Default: "Removed participations"
-#: opengever.dossier/opengever/dossier/behaviors/participation.py:272
+#: opengever.dossier/opengever/dossier/behaviors/participation.py:274
 msgid "info_removed_participations"
 msgstr "Die Beteiligungen wurde entfernt."
 
@@ -185,6 +204,10 @@ msgstr "Die Beteiligungen wurde entfernt."
 #: opengever.dossier/opengever/dossier/templatedossier_templates/byline.pt:16
 msgid "label_by_author"
 msgstr "Federführend: ${author}"
+
+#: opengever.dossier/opengever/dossier/transport.py:62
+msgid "label_choose_target_dossier"
+msgstr "Dokumente in Heimmandant kopieren"
 
 #. Default: "Comment"
 #: opengever.dossier/opengever/dossier/behaviors/participation.py:129
@@ -307,6 +330,11 @@ msgstr "Beginn"
 #: opengever.dossier/opengever/dossier/project_templates/byline.pt:35
 msgid "label_start_byline"
 msgstr "Beginn:"
+
+#. Default: "Target Dossier"
+#: opengever.dossier/opengever/dossier/transport.py:30
+msgid "label_target_dossier"
+msgstr "Ziel-Dossier"
 
 #. Default: "Template"
 #: opengever.dossier/opengever/dossier/templatedossier_templates/template_form.pt:25
