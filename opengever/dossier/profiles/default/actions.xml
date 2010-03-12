@@ -32,7 +32,7 @@
     </object>
 
     <object name="copy_documents_to_remote_client" meta_type="CMF Action">
-      <property name="title" i18n:translate="action_copy_to_remote_client">Copy documents to remote client</property>
+      <property name="title" i18n:translate="">Copy documents to remote client</property>
       <property name="description" i18n:translate=""></property>
       <property name="url_expr">string:@@copy-documents-to-remote-client:method</property>
       <property name="icon_expr"></property>

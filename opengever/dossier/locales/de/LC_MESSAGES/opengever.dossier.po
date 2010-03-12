@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: opengever.dossier 1.0\n"
-"POT-Creation-Date: 2010-03-11 16:42+0000\n"
+"POT-Creation-Date: 2010-03-12 07:35+0000\n"
 "PO-Revision-Date: 2009-09-17 15:21+0000\n"
 "Last-Translator: Thomas Buchberger <t.buchberger@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -21,6 +21,10 @@ msgstr "Beteiligung hinzufügen"
 #: opengever.dossier/opengever/dossier/profiles/default/types/opengever.dossier.businesscasedossier.xml
 msgid "Business Case Dossier"
 msgstr "Geschäftsdossier"
+
+#: opengever.dossier/opengever/dossier/profiles/default/actions.xml
+msgid "Copy documents to remote client"
+msgstr ""
 
 #: opengever.dossier/opengever/dossier/profiles/default/actions.xml
 msgid "Delete"
@@ -58,11 +62,6 @@ msgstr "Das Beginn-Datum muss vor dem Ende-Datum liegen."
 #: opengever.dossier/opengever/dossier/behaviors/dossier.py:179
 msgid "The start or end date is invalid"
 msgstr "Das Beginn- oder Ende-Datum ist ungültig."
-
-#. Default: "Copy documents to remote client"
-#: opengever.dossier/opengever/dossier/profiles/default/actions.xml
-msgid "action_copy_to_remote_client"
-msgstr "In eigenes Dossier kopieren"
 
 #. Default: "last modified"
 #: opengever.dossier/opengever/dossier/templatedossier_templates/byline.pt:35

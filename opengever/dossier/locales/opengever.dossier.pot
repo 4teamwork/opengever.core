@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2010-03-11 16:42+0000\n"
+"POT-Creation-Date: 2010-03-12 07:35+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -23,6 +23,10 @@ msgstr ""
 
 #: opengever.dossier/opengever/dossier/profiles/default/types/opengever.dossier.businesscasedossier.xml
 msgid "Business Case Dossier"
+msgstr ""
+
+#: opengever.dossier/opengever/dossier/profiles/default/actions.xml
+msgid "Copy documents to remote client"
 msgstr ""
 
 #: opengever.dossier/opengever/dossier/profiles/default/actions.xml
@@ -58,11 +62,6 @@ msgstr ""
 
 #: opengever.dossier/opengever/dossier/behaviors/dossier.py:179
 msgid "The start or end date is invalid"
-msgstr ""
-
-#. Default: "Copy documents to remote client"
-#: opengever.dossier/opengever/dossier/profiles/default/actions.xml
-msgid "action_copy_to_remote_client"
 msgstr ""
 
 #. Default: "last modified"
