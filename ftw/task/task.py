@@ -276,8 +276,11 @@ class View(dexterity.DisplayForm):
         for doc in brains:
             docs.append(doc.getObject())
 
-        for rel in self.context.relatedItems:
-            docs.append(rel.to_object)
+        relatedItems = getattr(self.context, 'relatedItems', None)
+        if relatedItems:
+            for rel in self.context.relatedItems:
+                docs.append(rel.to_object)
+
         docs.sort(lambda x, y: cmp(x.Title(), y.Title()))
         return docs
     

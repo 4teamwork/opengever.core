@@ -5,6 +5,9 @@ Changelog
 1.0a5
 -----
 
+* Fixed related items bug
+  [15.03.2010, jbaumann]
+  
 * Removed unused import which caused import error
   [15.03.2010, jbaumann]
   
