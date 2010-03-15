@@ -5,7 +5,6 @@ from any context of a foreign client into a existing task.
 
 from Acquisition import aq_inner
 from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
-from collective.z3cform.wizard import wizard
 from five import grok
 from ftw.task import _
 from ftw.task.task import ITask

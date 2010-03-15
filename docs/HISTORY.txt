@@ -5,6 +5,9 @@ Changelog
 1.0a5
 -----
 
+* Removed unused import which caused import error
+  [15.03.2010, jbaumann]
+  
 * Issue #469 Aufgaben und Beilagen
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/469
   [15.03.2010, jbaumann]
