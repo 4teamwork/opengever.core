@@ -45,7 +45,7 @@ class CopyDocumentsToRemoteClientForm(z3c.form.form.Form):
             cid = client.get('cid')
             trans = getUtility(ITransporter)
             for obj in self.objects:
-                trans.transport(obj, cid, target)
+                trans.transport_to(obj, cid, target)
             redirect_to = os.path.join(client.get('public_url'), target, '#documents-tab')
             return self.request.RESPONSE.redirect(redirect_to)
 

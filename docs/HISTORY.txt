@@ -5,6 +5,9 @@ Changelog
 1.0a4
 -----
 
+* Transporter was refactored: use new method `transport_to()`
+  [15.03.2010, jbaumann]
+  
 * Using new vocabulary factory for transporter:
   opengever.octopus.tentacle.vocabulary.OpenHomeDossiersVocabularyFactory
   [12.03.2010, jbaumann]
