@@ -6,7 +6,7 @@ The behavior set the default value to the next possible sequence number.
 
 When we create a dexterity content type::
 
-    >>> from opengever.base.behaviors import creator
+    >>> from opengever.base.behaviors import reference
     >>> from plone.dexterity.fti import DexterityFTI
     >>> fti = DexterityFTI('ReferenceFTI')
     >>> fti.behaviors = (
@@ -50,8 +50,10 @@ checked the saved obj ::
     >>> obj
     <Item at ...>
     >>> from opengever.base.reference import PlatformReferenceNumber
-XXX TODO:    >>>PlatformReferenceNumber(obj).get_number()
-XXX    1
+    >>> PlatformReferenceNumber(obj).get_number()
+    1
+    >>> reference.IReferenceNumberMarker.providedBy(obj)
+    True
     
 Add a second Type in this folder::
     >>> browser.open('http://nohost/plone/folder_factories')
@@ -63,8 +65,8 @@ Add a second Type in this folder::
     'http://nohost/plone/++add++ReferenceFTI'
     >>> 'reference_number' in browser.contents
     True
-XXX    >>> browser.getControl(name='form.widgets.IReferenceNumber.reference_number').value
-XXX    '2' 
+    >>> browser.getControl(name='form.widgets.IReferenceNumber.reference_number').value
+    '2' 
     >>> browser.getControl(name='form.widgets.IReferenceNumber.reference_number').value = '1'
     >>> browser.getControl('Save').click()
     >>> browser.url
