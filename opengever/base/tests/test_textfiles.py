@@ -8,14 +8,12 @@ from Products.PloneTestCase import PloneTestCase as ptc
 from Products.PloneTestCase.layer import onsetup
 
 import plone.app.dexterity
-import plone.behavior
 import opengever.base
 
 @onsetup
 def setup_product():
     zcml.load_config('meta.zcml', plone.app.dexterity)
     zcml.load_config('configure.zcml', plone.app.dexterity)
-    zcml.load_config('configure.zcml', plone.behavior)
     zcml.load_config('configure.zcml', opengever.base)
 
 setup_product()

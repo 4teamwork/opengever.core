@@ -33,6 +33,7 @@ setup(name='opengever.base',
         'plone.autoform',
         'collective.testcaselayer',
         'collective.monkeypatcher',
+        'plone.registry',
         # -*- Extra requirements: -*-
         ],
       entry_points="""

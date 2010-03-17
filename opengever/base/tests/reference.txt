@@ -14,6 +14,11 @@ When we create a dexterity content type::
     ...                  )
     >>> self.portal.portal_types._setObject('ReferenceFTI', fti)
     'ReferenceFTI'
+    >>> from plone.dexterity.interfaces import IDexterityFTI
+    >>> from zope.component import provideUtility
+    >>> provideUtility(fti, IDexterityFTI, name=u'ReferenceFTI')
+    >>> from plone.dexterity.schema import SCHEMA_CACHE
+    >>> SCHEMA_CACHE.clear()
     >>> schema = fti.lookupSchema()
 
 
@@ -49,11 +54,13 @@ checked the saved obj ::
     >>> obj = self.portal.get('referencefti')
     >>> obj
     <Item at ...>
-    >>> from opengever.base.reference import PlatformReferenceNumber
-    >>> PlatformReferenceNumber(obj).get_number()
-    1
+    >>> from zope.component import getAdapter
+    >>> from opengever.base.interfaces import IReferenceNumber
     >>> reference.IReferenceNumberMarker.providedBy(obj)
     True
+    >>> refnum = getAdapter(obj, IReferenceNumber)
+    >>> refnum.get_number()
+    1
     
 Add a second Type in this folder::
     >>> browser.open('http://nohost/plone/folder_factories')
