@@ -5,6 +5,10 @@ Changelog
 1.0a4
 -----
 
+* Issue #5 Abklärung, ob Präfix des Aktenzeichens auch ein Buchstabe sein kann
+  https://extranet.4teamwork.ch/projects/testphase-rms-ais-der-ssgi-2010/tracker-sprint-ssgi-2010/5
+  [17.03.2010, jbaumann]
+  
 * Issue #431 Checkouts auf allgdblx09 mit Oracle-Storage dauern EWIG
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/431
   Added _getCopy patch, which removes __parent__ pointer before copying it.
