@@ -1,3 +1,4 @@
+import re
 from zope.interface import Interface, alsoProvides, implements
 from zope import schema
 from zope.component import adapts, provideAdapter
@@ -22,18 +23,17 @@ class IReferenceNumber(form.Schema):
             ],
         )
 
-    reference_number = schema.Int(
+    reference_number = schema.TextLine(
         title = _(u'label_reference_number', default=u'Reference'),
         description = _(u'help_reference_number', default=u''),
         required = False,
-        min = 1,
         )
 
 alsoProvides(IReferenceNumber, form.IFormFieldProvider)
 
 @form.default_value(field=IReferenceNumber['reference_number'])
 def reference_number_default_value(data):
-    highest_reference_number = 0
+    val = 0
     parent = None
     #XXX CHANGED FROM PATH_TRANSLATED TO PATH_INFO because the test don't work
     if '++add++' in data.context.REQUEST.get('PATH_INFO', object()):
@@ -46,10 +46,33 @@ def reference_number_default_value(data):
         if IReferenceNumberMarker.providedBy(obj):
             if obj!=context:
                 num = IReferenceNumber(obj).reference_number
-                if num > highest_reference_number:
-                    highest_reference_number = num
-    highest_reference_number += 1
-    return highest_reference_number
+                if num > val:
+                    val = num
+    # then increase by one, if possible:
+    # if its a number, we increase the whole number
+    try:
+        val = str(int(val) + 1)
+    except (ValueError, TypeError):
+        pass
+    else:
+        return val
+    # .. otherwise try to increment the last numeric part
+    xpr = re.compile('\d+')
+    matches = tuple(xpr.finditer(val))
+    if len(matches)>0:
+        span = matches[-1].span()
+        subvalue = val[span[0]:span[1]]
+        try:
+            subvalue = int(subvalue)
+        except (ValueError, TypeError):
+            pass
+        else:
+            subvalue += 1
+            subvalue = str(subvalue)
+            val = val[:span[0]] + subvalue + val[span[1]:]
+            return val
+    # ... if we have no number, we can't do anything..
+    return ''
 
 class ReferenceNumberValidator(validator.SimpleFieldValidator):
 
