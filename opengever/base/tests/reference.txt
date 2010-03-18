@@ -1,5 +1,5 @@
 Reference Behavior
-================
+==================
 
 The reference number Behavior show a integer field (reference Number), the reference number field.
 The behavior set the default value to the next possible sequence number.
@@ -45,7 +45,7 @@ We can see this type in the addable types at the root of the site::
     True
     >>> browser.getControl(name='form.widgets.IReferenceNumber.reference_number').value
     '1'
-    >>> browser.getControl('Title').value = 'Hallo Hugo'
+    >>> browser.getControl('Title').value = 'Hugo'
     >>> browser.getControl('Save').click()
     >>> browser.url
     'http://nohost/plone/referencefti/view'
@@ -54,13 +54,8 @@ checked the saved obj ::
     >>> obj = self.portal.get('referencefti')
     >>> obj
     <Item at ...>
-    >>> from zope.component import getAdapter
-    >>> from opengever.base.interfaces import IReferenceNumber
     >>> reference.IReferenceNumberMarker.providedBy(obj)
     True
-    >>> refnum = getAdapter(obj, IReferenceNumber)
-    >>> refnum.get_number()
-    1
     
 Add a second Type in this folder::
     >>> browser.open('http://nohost/plone/folder_factories')
@@ -72,9 +67,50 @@ Add a second Type in this folder::
     'http://nohost/plone/++add++ReferenceFTI'
     >>> 'reference_number' in browser.contents
     True
-    >>> browser.getControl(name='form.widgets.IReferenceNumber.reference_number').value
-    '2' 
-    >>> browser.getControl(name='form.widgets.IReferenceNumber.reference_number').value = '1'
+    >>> browser.getControl('Title').value = 'Hans'
+    >>> browser.getControl('Reference').value
+    '2'
+
+We should not be able to use a already used value::
+    >>> browser.getControl('Reference').value = '1'
     >>> browser.getControl('Save').click()
     >>> browser.url
     'http://nohost/plone/++add++ReferenceFTI'
+
+Ok, lets use a free one::
+    >>> browser.getControl('Reference').value = '2'
+    >>> browser.getControl('Save').click()
+    >>> browser.url
+    'http://nohost/plone/referencefti-1/view'
+
+It should be possbile to use alpha-numeric references::
+    >>> browser.open('http://nohost/plone/++add++ReferenceFTI')
+    >>> browser.getControl('Reference').value
+    '2'
+    >>> browser.getControl('Reference').value = 'a1x10'
+    >>> browser.getControl('Title').value = 'Peter'
+    >>> browser.getControl('Save').click()
+    >>> browser.url
+    'http://nohost/plone/referencefti-2/view'
+
+The default value generator should be able to increase number greater than 9::
+    >>> browser.open('http://nohost/plone/++add++ReferenceFTI')
+    >>> browser.getControl('Reference').value
+    'a1x11'
+    >>> browser.getControl('Title').value = 'Fritz'
+    >>> browser.getControl('Save').click()
+    >>> browser.url
+    'http://nohost/plone/referencefti-3/view'
+
+Check the reference numbers of the objects::
+    >>> for obj in self.portal.objectValues():
+    ...     if reference.IReferenceNumberMarker.providedBy(obj):
+    ...         num = reference.IReferenceNumber(obj).reference_number
+    ...         print (obj.Title(), num)
+    (u'Hugo', u'1')
+    (u'Hans', u'2')
+    (u'Peter', u'a1x10')
+    (u'Fritz', u'a1x11')
+
+
+

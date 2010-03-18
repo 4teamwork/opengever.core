@@ -5,6 +5,9 @@ Changelog
 1.0a4
 -----
 
+* Reference number behavior: improved tests
+  [17.03.2010, jbaumann]
+  
 * Issue #5 Abklärung, ob Präfix des Aktenzeichens auch ein Buchstabe sein kann
   https://extranet.4teamwork.ch/projects/testphase-rms-ais-der-ssgi-2010/tracker-sprint-ssgi-2010/5
   [17.03.2010, jbaumann]
