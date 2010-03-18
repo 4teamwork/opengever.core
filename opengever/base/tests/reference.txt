@@ -4,9 +4,22 @@ Reference Behavior
 The reference number Behavior show a integer field (reference Number), the reference number field.
 The behavior set the default value to the next possible sequence number.
 
+    >>> from opengever.base.behaviors import reference
+
+Since plone tests sucks, we need to re-register the reference number validator again -.-
+
+    >>> from zope.component import getMultiAdapter, provideAdapter
+    >>> from z3c.form.interfaces import IValidator
+    >>> getMultiAdapter((self.portal, None, None,
+    ...                  reference.IReferenceNumber['reference_number'], None), IValidator)
+    <SimpleFieldValidator for IReferenceNumber['reference_number']>
+    >>> provideAdapter(reference.ReferenceNumberValidator)
+    >>> getMultiAdapter((self.portal, None, None,
+    ...                  reference.IReferenceNumber['reference_number'], None), IValidator)
+    <ReferenceNumberValidator for IReferenceNumber['reference_number']>
+
 When we create a dexterity content type::
 
-    >>> from opengever.base.behaviors import reference
     >>> from plone.dexterity.fti import DexterityFTI
     >>> fti = DexterityFTI('ReferenceFTI')
     >>> fti.behaviors = (
@@ -86,7 +99,7 @@ Ok, lets use a free one::
 It should be possbile to use alpha-numeric references::
     >>> browser.open('http://nohost/plone/++add++ReferenceFTI')
     >>> browser.getControl('Reference').value
-    '2'
+    '3'
     >>> browser.getControl('Reference').value = 'a1x10'
     >>> browser.getControl('Title').value = 'Peter'
     >>> browser.getControl('Save').click()

@@ -5,6 +5,9 @@ Changelog
 1.0a4
 -----
 
+* Fixed validator problems in test
+  [18.03.2010, jbaumann]
+  
 * Reference number behavior: improved tests
   [17.03.2010, jbaumann]
   
