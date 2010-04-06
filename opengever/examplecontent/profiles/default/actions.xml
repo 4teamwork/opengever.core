@@ -55,6 +55,7 @@
    <property name="description"></property>
    <property name="url_expr">string:${globals_view/navigationRootUrl}/journal</property>
    <property name="icon_expr"></property>
+   <property name="available_expr">here/@@access-inbox-allowed</property>
    <property name="permissions">
     <element value="View"/>
    </property>
