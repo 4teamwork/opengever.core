@@ -72,3 +72,10 @@ class IDocumentType(Interface):
                                           u'Vertrag',
                                           ],
                                  value_type=schema.TextLine())
+
+
+class IDocuComposer(Interface):
+    dc_original_path = schema.TextLine(title=u'dc_original_path')
+
+    dc_rewrited_path = schema.TextLine(title=u'dc_rewrited_path')
+    

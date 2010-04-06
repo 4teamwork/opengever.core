@@ -3,7 +3,7 @@ from zope import schema
 from zope.schema import vocabulary
 from zope.app.intid.interfaces import IIntIds
 
-from zope.component import getUtility
+from zope.component import getUtility, queryUtility
 
 from AccessControl import SecurityManagement
 from five import grok
@@ -13,10 +13,12 @@ from z3c.form import form, button, interfaces
 from plone.z3cform import layout
 from plone.dexterity.utils import createContentInContainer
 from plone.dexterity.browser.base import DexterityExtensibleForm
+from plone.registry.interfaces import IRegistry
 
 from opengever.document import _
 from opengever.document.persistence import DCQueue
 from opengever.document.document import IDocumentSchema
+from opengever.document.interfaces import IDocuComposer
 
 DOCUCOMPOSER_TEMPLATES = {
     '2798': 'Aktennotiz',
@@ -77,8 +79,15 @@ class StartDCLauncher(grok.CodeView):
     
     def url(self):
         if self.request.get('token'):
+            portal_url = self.context.portal_url()
+            registry = queryUtility(IRegistry)
+            reg_proxy = registry.forInterface(IDocuComposer)
+
+            if reg_proxy.dc_original_path and reg_proxy.dc_rewrited_path :
+                portal_url = portal_url.replace(reg_proxy.dc_original_path, reg_proxy.dc_rewrited_path)
+            
             url = 'docucomposer:url=%s&token=%s' % (
-                self.context.portal_url(),
+                portal_url,
                 self.request.get('token'),
             )
             return url

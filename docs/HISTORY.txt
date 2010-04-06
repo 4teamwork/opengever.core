@@ -5,6 +5,11 @@ Changelog
 1.0a5
 -----
 
+* Issue #506 DocuComposer: falsche Url
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/506/
+  added rewriting functionality in the docucomposer process (look dc_original_path and dc_rewrite_path in the Registry), 
+  [06.04.2010, phgross]
+
 * Issue #435 Darstellung bei ausgechecktem Dokument (Working Copy)
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/435
   [03.03.2010, jbaumann]
