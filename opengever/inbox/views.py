@@ -7,7 +7,12 @@ class AccessInboxAllowed(grok.CodeView):
 
     def render(self):
         portal = self.context.portal_url.getPortalObject()
-        journal = portal.journal
+        eingangskorb = portal.eingangskorb
         member = self.context.portal_membership.getAuthenticatedMember()
-        return member.checkPermission('View', journal)
+        try:
+            member.checkPermission
+        except:
+            return False
+        else:
+            return member.checkPermission('View', eingangskorb)
     
