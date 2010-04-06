@@ -5,6 +5,11 @@ Changelog
 1.0a4
 -----
 
+* Issue #511 Anwendungskomponente "Kontakte": Mögliche Inhalte
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/511
+  Name der Kontakte werden nun angezeigt.
+  [06.04.2010, jbaumann]
+  
 * Issue #483 Spaltensortierung bei der Dossierübersicht auf Stufe Ordnungssystem
   [11.03.2010, jbaumann]
   

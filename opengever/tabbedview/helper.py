@@ -19,10 +19,10 @@ def readable_ogds_author(item, author):
         author = author.getId()
     info = getUtility(IContactInformation)
     author = str(author)
-    if info.is_user(author):
-        return info.render_link(author)
+    if info.is_user(author) or info.is_contact(author):
+        return info.describe(author)
     else:
-        return '-'
+        return author
 
 def linked(item, value):
     url_method = lambda: '#'
