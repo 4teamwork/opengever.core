@@ -5,6 +5,10 @@ Changelog
 1.0a3
 -----
 
+* Issue #514 Reiter "Eingangskorb" darf nur angezeigt werden, wenn der angemeldete Benutzer auf den Eingangskorb zugreifen kann
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/514/
+  [06.04.2010, jbaumann]
+  
 * Fixed bug when running opengever.examplecontent's GS profile "journal" multiple times
   [08.03.2010, jbaumann]
   
