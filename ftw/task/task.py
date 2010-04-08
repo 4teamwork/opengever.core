@@ -423,7 +423,7 @@ def related_items( obj ):
 grok.global_adapter(related_items, name='related_items')
 
 
-@indexer(ITask)ad
+@indexer(ITask)
 def date_of_completion(obj):
     # handle 'None' dates. we always need a date for indexing.
     if obj.date_of_completion is None:
