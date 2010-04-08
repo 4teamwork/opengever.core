@@ -259,7 +259,7 @@
  <transition transition_id="task-transition-open-resolved"
              title="task-transition-open-resolved"
              new_state="task-state-resolved" trigger="USER"
-             before_script="" after_script="">
+             before_script="" after_script="before_open_resolved">
   <action url="" category="workflow">task-transition-open-resolved</action>
   <guard>
   </guard>
@@ -340,4 +340,7 @@
   <guard>
   </guard>
  </variable>
+ <script script_id="before_open_resolved" type="Script (Python)"
+         filename="workflows/opengever_task_workflow/scripts/before_open_resolved.py"
+         module="" function=""/>
 </dc-workflow>

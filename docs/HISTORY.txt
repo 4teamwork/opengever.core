@@ -7,6 +7,10 @@ Changelog
 
 * Issue #505 Weiterleiten einer Aufgabe aus Eingangskorb Mandant 3 nach Mandant 1 geht nicht
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/505
+  [08.04.2010, jbaumann]
+  
+* Issue #505 Weiterleiten einer Aufgabe aus Eingangskorb Mandant 3 nach Mandant 1 geht nicht
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/505
   Switched to new vocabulary: enables to select client inbox group
   [08.04.2010, jbaumann]
   
