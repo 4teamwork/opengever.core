@@ -1,8 +1,23 @@
-from plone.directives import form
-from plone.directives import dexterity
 from five import grok
-from Products.CMFCore.utils import getToolByName
+from opengever.inbox import _
+from plone.directives import dexterity
+from plone.directives import form
+from zope import schema
 
 class IInbox(form.Schema):
     """ Inbox for OpenGever
     """
+
+    form.fieldset(
+        u'common',
+        label = _(u'fieldset_common', default=u'Common'),
+        fields = [
+            u'inbox_group',
+            ],
+        )
+
+    inbox_group = schema.TextLine(
+         title = _(u'label_inbox_group', default=u'Inbox Group'),
+         description = _(u'help_inbox_group', default=u''),
+         required = False,
+         )

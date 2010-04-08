@@ -5,6 +5,11 @@ Changelog
 1.0a3
 -----
 
+* Issue #505 Weiterleiten einer Aufgabe aus Eingangskorb Mandant 3 nach Mandant 1 geht nicht
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/505
+  Inbox schema: added field for configuring inbox-group
+  [08.04.2010, jbaumann]
+  
 * Issue #514 Reiter "Eingangskorb" darf nur angezeigt werden, wenn der angemeldete Benutzer auf den Eingangskorb zugreifen kann
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/514
   [06.04.2010, jbaumann]
