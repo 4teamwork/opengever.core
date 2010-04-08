@@ -42,7 +42,7 @@ from ftw.task.interfaces import ITaskSettings
 
 from opengever.base.interfaces import ISequenceNumber
 from opengever.translations.browser.add import TranslatedAddForm
-from opengever.octopus.tentacle.interfaces import IContactInformation
+from opengever.octopus.tentacle.interfaces import IContactInformation, ITentacleConfig
 
 
 class ITask(form.Schema):
@@ -423,7 +423,7 @@ def related_items( obj ):
 grok.global_adapter(related_items, name='related_items')
 
 
-@indexer(ITask)
+@indexer(ITask)ad
 def date_of_completion(obj):
     # handle 'None' dates. we always need a date for indexing.
     if obj.date_of_completion is None:
@@ -440,3 +440,10 @@ def assigned_client(obj):
         user = info.get_user_by_id(obj.responsible)
         return user.get('client', None)
 grok.global_adapter(assigned_client, name='assigned_client')
+
+
+@indexer(ITask)
+def client_id(obj):
+    return getUtility(ITentacleConfig).cid
+grok.global_adapter(client_id, name='client_id')
+    
