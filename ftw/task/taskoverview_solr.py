@@ -6,20 +6,24 @@ from opengever.tabbedview import helper as opengever_helper
 from opengever.tabbedview.helper import readable_ogds_author
 from opengever.octopus.tentacle.contacts import ContactInformation
 from opengever.octopus.tentacle.interfaces import ITentacleConfig
+from opengever.globalsolr.utils import getFlairUrl
+from collective.solr.interfaces import IFlare
 from ftw.task import _
 
 def authenticated_member(context):
     return context.portal_membership.getAuthenticatedMember().getId()
     
 def linked(item, value):
-    url_method = lambda: '#'
+    url = '#'
     #item = hasattr(item, 'aq_explicit') and item.aq_explicit or item
-    if hasattr(item, 'getURL'):
-        url_method = item.getURL
+    if IFlare.providedBy(item):
+        url = getFlairUrl(item)
+    elif hasattr(item, 'getURL'):
+        url = item.getURL()
     elif hasattr(item, 'absolute_url'):
-        url_method = item.absolute_url
+        url = item.absolute_url()
     img = u'<img src="%s"/>' % (item.getIcon)
-    link = u'<a href="%s" >%s%s</a>' % (url_method(), img, value) 
+    link = u'<a href="%s" >%s%s</a>' % (url, img, value)
     wrapper = u'<span class="linkWrapper">%s</span>' % link
     return wrapper
     
