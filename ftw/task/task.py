@@ -103,7 +103,7 @@ class ITask(form.Schema):
     responsible = schema.Choice(
         title=_(u"label_responsible", default="Responsible"),
         description =_(u"help_responsible", default=""),
-        vocabulary = 'opengever.octopus.tentacle.contacts.UsersVocabularyFactory',
+        vocabulary = 'opengever.octopus.tentacle.context.UsersAndClientsVocabularyFactory',
         required = True,
         )
 
