@@ -6,26 +6,11 @@ from opengever.tabbedview import helper as opengever_helper
 from opengever.tabbedview.helper import readable_ogds_author
 from opengever.octopus.tentacle.contacts import ContactInformation
 from opengever.octopus.tentacle.interfaces import ITentacleConfig
-from opengever.globalsolr.utils import getFlairUrl
-from collective.solr.interfaces import IFlare
+
 from ftw.task import _
 
 def authenticated_member(context):
     return context.portal_membership.getAuthenticatedMember().getId()
-    
-def linked(item, value):
-    url = '#'
-    #item = hasattr(item, 'aq_explicit') and item.aq_explicit or item
-    if IFlare.providedBy(item):
-        url = getFlairUrl(item)
-    elif hasattr(item, 'getURL'):
-        url = item.getURL()
-    elif hasattr(item, 'absolute_url'):
-        url = item.absolute_url()
-    img = u'<img src="%s"/>' % (item.getIcon)
-    link = u'<a href="%s" >%s%s</a>' % (url, img, value)
-    wrapper = u'<span class="linkWrapper">%s</span>' % link
-    return wrapper
     
 
 class MyTasks(OpengeverSolrListingTab):
@@ -34,7 +19,7 @@ class MyTasks(OpengeverSolrListingTab):
         ('', helper.draggable),
         ('', helper.path_checkbox),
         ('review_state', 'review_state', helper.translated_string()),
-        ('Title', linked),
+        ('Title', helper.solr_linked),
         {'column' : 'task_type', 
         'column_title' : _(u'label_task_type', 'Task Type')},
         ('deadline', helper.readable_date),
@@ -59,7 +44,7 @@ class IssuedTasks(OpengeverSolrListingTab):
         ('', helper.draggable),
         ('', helper.path_checkbox),
         ('review_state', 'review_state', helper.translated_string()),
-        ('Title', linked),
+        ('Title', helper.solr_linked),
         {'column' : 'task_type', 
         'column_title' : _(u'label_task_type', 'Task Type')},
         ('deadline', helper.readable_date),
@@ -84,7 +69,7 @@ class AssignedTasks(OpengeverSolrListingTab):
         ('', helper.draggable),
         ('', helper.path_checkbox),
         ('review_state', 'review_state', helper.translated_string()),
-        ('Title', linked),
+        ('Title', helper.solr_linked),
         {'column' : 'task_type', 
         'column_title' : _(u'label_task_type', 'Task Type')},
         ('deadline', helper.readable_date),
