@@ -27,6 +27,10 @@ class CopyRelatedDocumentsToInbox(grok.CodeView):
         self.copy_documents()
         return
 
+    def render(self):
+        # make grok happy
+        pass
+
     def should_be_copied(self):
         home_client = self.comm.get_home_client(self.context)
         member = self.context.portal_membership.getAuthenticatedMember()
