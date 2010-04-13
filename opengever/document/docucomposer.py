@@ -19,6 +19,7 @@ from opengever.document import _
 from opengever.document.persistence import DCQueue
 from opengever.document.document import IDocumentSchema
 from opengever.document.interfaces import IDocuComposer
+from opengever.octopus.tentacle.interfaces import ICortexCommunicator, ITentacleConfig
 
 DOCUCOMPOSER_TEMPLATES = {
     '2798': 'Aktennotiz',
@@ -80,12 +81,11 @@ class StartDCLauncher(grok.CodeView):
     def url(self):
         if self.request.get('token'):
             portal_url = self.context.portal_url()
-            registry = queryUtility(IRegistry)
-            reg_proxy = registry.forInterface(IDocuComposer)
-
-            if reg_proxy.dc_original_path and reg_proxy.dc_rewrited_path :
-                portal_url = portal_url.replace(reg_proxy.dc_original_path, reg_proxy.dc_rewrited_path)
-            
+            # registry = queryUtility(IRegistry)
+            # reg_proxy = registry.forInterface(IDocuComposer)
+            # 
+            # if reg_proxy.dc_original_path and reg_proxy.dc_rewrited_path :
+            #     portal_url = portal_url.replace(reg_proxy.dc_original_path, reg_proxy.dc_rewrited_path)
             url = 'docucomposer:url=%s&token=%s' % (
                 portal_url,
                 self.request.get('token'),
@@ -135,9 +135,21 @@ class CreateDocumentWithFile(grok.CodeView):
 
             # Fix:  we get again the document, because the request of the return from createContentInContainer are wrong
             doc = self.context.restrictedTraverse('/'.join(new_doc.getPhysicalPath()))
-            url = doc.absolute_url()
-
-            #remove 
+            
+            #we have to rewrite the absolute_url with the public url from the client
+            doc_abs_path = '/'.join(doc.getPhysicalPath())
+            portal_abs_path = '/'.join(doc.portal_url.getPortalObject().getPhysicalPath())
+            if not doc_abs_path.startswith(portal_abs_path):
+                raise Exception('Document path is not within portal path')
+            doc_rel_path = doc_abs_path[len(portal_abs_path):]
+            
+            cid = getUtility(ITentacleConfig).cid
+            cc = getUtility(ICortexCommunicator)
+            client = cc.tentacle_info_by_cid(cid) 
+            
+            url = client['public_url'] + doc_rel_path
+            
+            #remove
             queue.removeDCDoc(token)
             
             return url
