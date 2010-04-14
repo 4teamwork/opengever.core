@@ -281,7 +281,7 @@ class DossierOverview(grok.View, OpengeverTab):
     #TODO: refactor view using viewlets
     def catalog(self, types, showTrashed=False):
         return self.context.portal_catalog(portal_type=types ,
-                                           path=dict(depth=1,
+                                           path=dict(depth=2,
                                                      query='/'.join(self.context.getPhysicalPath())
                                                      ),
                                            sort_on='modified',
