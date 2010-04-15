@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2010-03-15 10:11+0000\n"
+"POT-Creation-Date: 2010-04-15 17:47+0000\n"
 "PO-Revision-Date: 2009-02-25 14:39+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -27,7 +27,7 @@ msgstr ""
 msgid "Add local roles to all related items for the 'responsible' user."
 msgstr ""
 
-#: ftw.task/ftw/task/response.py:428
+#: ftw.task/ftw/task/response.py:431
 msgid "Changes saved to response id ${response_id}."
 msgstr ""
 
@@ -51,15 +51,15 @@ msgstr ""
 msgid "Issue state"
 msgstr ""
 
-#: ftw.task/ftw/task/response.py:456
+#: ftw.task/ftw/task/response.py:459
 msgid "No response selected for removal."
 msgstr ""
 
-#: ftw.task/ftw/task/response.py:419
+#: ftw.task/ftw/task/response.py:422
 msgid "No response selected for saving."
 msgstr ""
 
-#: ftw.task/ftw/task/response.py:209
+#: ftw.task/ftw/task/response.py:210
 msgid "No response selected."
 msgstr ""
 
@@ -75,23 +75,23 @@ msgstr ""
 msgid "Related Items Roles"
 msgstr ""
 
-#: ftw.task/ftw/task/response.py:478
+#: ftw.task/ftw/task/response.py:481
 msgid "Removed response id ${response_id}."
 msgstr ""
 
-#: ftw.task/ftw/task/response.py:471
+#: ftw.task/ftw/task/response.py:474
 msgid "Response id ${response_id} does not exist so it cannot be removed."
 msgstr ""
 
-#: ftw.task/ftw/task/response.py:223
+#: ftw.task/ftw/task/response.py:224
 msgid "Response id ${response_id} does not exist."
 msgstr ""
 
-#: ftw.task/ftw/task/response.py:463
+#: ftw.task/ftw/task/response.py:466
 msgid "Response id ${response_id} is no integer so it cannot be removed."
 msgstr ""
 
-#: ftw.task/ftw/task/response.py:217
+#: ftw.task/ftw/task/response.py:218
 msgid "Response id ${response_id} is no integer."
 msgstr ""
 
@@ -108,41 +108,41 @@ msgstr ""
 msgid "The local roles to add."
 msgstr ""
 
-#: ftw.task/ftw/task/response.py:450
+#: ftw.task/ftw/task/response.py:453
 msgid "You are not allowed to delete responses."
 msgstr ""
 
-#: ftw.task/ftw/task/response.py:413
+#: ftw.task/ftw/task/response.py:416
 msgid "You are not allowed to edit responses."
 msgstr ""
 
 #. Default: "Add"
-#: ftw.task/ftw/task/response.py:261
+#: ftw.task/ftw/task/response.py:262
 msgid "add"
 msgstr ""
 
 #. Default: "Attach"
-#: ftw.task/ftw/task/attachdocument.py:126
+#: ftw.task/ftw/task/attachdocument.py:125
 msgid "button_attach"
 msgstr ""
 
 #. Default: "Back"
-#: ftw.task/ftw/task/attachdocument.py:120
+#: ftw.task/ftw/task/attachdocument.py:119
 msgid "button_back"
 msgstr ""
 
 #. Default: "Cancel"
-#: ftw.task/ftw/task/attachdocument.py:50
+#: ftw.task/ftw/task/attachdocument.py:49
 msgid "button_cancel"
 msgstr ""
 
 #. Default: "Continue"
-#: ftw.task/ftw/task/attachdocument.py:54
+#: ftw.task/ftw/task/attachdocument.py:53
 msgid "button_continue"
 msgstr ""
 
 #. Default: "Cancel"
-#: ftw.task/ftw/task/response.py:330
+#: ftw.task/ftw/task/response.py:333
 msgid "cancel"
 msgstr ""
 
@@ -151,11 +151,11 @@ msgstr ""
 msgid "containing_task"
 msgstr ""
 
-#: ftw.task/ftw/task/response.py:291
+#: ftw.task/ftw/task/response.py:292
 msgid "date_of_completion"
 msgstr ""
 
-#: ftw.task/ftw/task/response.py:289
+#: ftw.task/ftw/task/response.py:290
 msgid "deadline"
 msgstr ""
 
@@ -174,7 +174,7 @@ msgstr ""
 msgid "fieldset_common"
 msgstr ""
 
-#: ftw.task/ftw/task/response.py:84
+#: ftw.task/ftw/task/response.py:85
 #: ftw.task/ftw/task/task.py:120
 msgid "help_date_of_completion"
 msgstr ""
@@ -183,7 +183,7 @@ msgstr ""
 msgid "help_deadline"
 msgstr ""
 
-#: ftw.task/ftw/task/response.py:78
+#: ftw.task/ftw/task/response.py:79
 msgid "help_deadline_response"
 msgstr ""
 
@@ -211,7 +211,11 @@ msgstr ""
 msgid "help_issuer"
 msgstr ""
 
-#: ftw.task/ftw/task/response.py:64
+#: ftw.task/ftw/task/response.py:71
+msgid "help_new_responsible_response"
+msgstr ""
+
+#: ftw.task/ftw/task/response.py:65
 msgid "help_response"
 msgstr ""
 
@@ -220,12 +224,12 @@ msgid "help_responsible"
 msgstr ""
 
 #. Default: "Select a document"
-#: ftw.task/ftw/task/attachdocument.py:85
+#: ftw.task/ftw/task/attachdocument.py:84
 msgid "help_source_document"
 msgstr ""
 
 #. Default: "Select a source dossier"
-#: ftw.task/ftw/task/attachdocument.py:39
+#: ftw.task/ftw/task/attachdocument.py:38
 msgid "help_source_dossier"
 msgstr ""
 
@@ -242,7 +246,7 @@ msgid "help_title"
 msgstr ""
 
 #: ftw.task/ftw/task/behaviors.py:28
-#: ftw.task/ftw/task/response.py:90
+#: ftw.task/ftw/task/response.py:91
 msgid "help_transition"
 msgstr ""
 
@@ -258,7 +262,7 @@ msgid "label_by_author"
 msgstr ""
 
 #. Default: "Date of completion"
-#: ftw.task/ftw/task/response.py:83
+#: ftw.task/ftw/task/response.py:84
 #: ftw.task/ftw/task/task.py:119
 msgid "label_date_of_completion"
 msgstr ""
@@ -269,7 +273,7 @@ msgid "label_deadline"
 msgstr ""
 
 #. Default: "New deadline"
-#: ftw.task/ftw/task/response.py:77
+#: ftw.task/ftw/task/response.py:78
 msgid "label_deadline_Response"
 msgstr ""
 
@@ -310,7 +314,7 @@ msgstr ""
 
 #. Default: "issued at"
 #: ftw.task/ftw/task/taskoverview.py:40
-#: ftw.task/ftw/task/taskoverview_solr.py:42
+#: ftw.task/ftw/task/taskoverview_solr.py:32
 msgid "label_issued_date"
 msgstr ""
 
@@ -325,7 +329,7 @@ msgid "label_last_modified"
 msgstr ""
 
 #. Default: "Response"
-#: ftw.task/ftw/task/response.py:63
+#: ftw.task/ftw/task/response.py:64
 msgid "label_response"
 msgstr ""
 
@@ -334,9 +338,14 @@ msgstr ""
 msgid "label_responsible"
 msgstr ""
 
+#. Default: "New responsible"
+#: ftw.task/ftw/task/response.py:70
+msgid "label_responsible_Response"
+msgstr ""
+
 #. Default: "Responsible"
 #: ftw.task/ftw/task/taskoverview.py:36
-#: ftw.task/ftw/task/taskoverview_solr.py:38
+#: ftw.task/ftw/task/taskoverview_solr.py:28
 msgid "label_responsible_task"
 msgstr ""
 
@@ -346,19 +355,19 @@ msgid "label_return_to_issue"
 msgstr ""
 
 #. Default: "Document"
-#: ftw.task/ftw/task/attachdocument.py:84
+#: ftw.task/ftw/task/attachdocument.py:83
 msgid "label_source_document"
 msgstr ""
 
 #. Default: "Dossier"
-#: ftw.task/ftw/task/attachdocument.py:38
+#: ftw.task/ftw/task/attachdocument.py:37
 msgid "label_source_dossier"
 msgstr ""
 
 #. Default: "Task Type"
 #: ftw.task/ftw/task/task.py:93
 #: ftw.task/ftw/task/taskoverview.py:32
-#: ftw.task/ftw/task/taskoverview_solr.py:34
+#: ftw.task/ftw/task/taskoverview_solr.py:24
 msgid "label_task_type"
 msgstr ""
 
@@ -374,7 +383,7 @@ msgstr ""
 
 #. Default: "Transition"
 #: ftw.task/ftw/task/behaviors.py:27
-#: ftw.task/ftw/task/response.py:89
+#: ftw.task/ftw/task/response.py:90
 msgid "label_transition"
 msgstr ""
 
@@ -400,8 +409,12 @@ msgid "response_label_response"
 msgstr ""
 
 #. Default: "Responses:"
-#: ftw.task/ftw/task/task_templates/view.pt:99
+#: ftw.task/ftw/task/task_templates/view.pt:102
 msgid "responses"
+msgstr ""
+
+#: ftw.task/ftw/task/response.py:295
+msgid "responsible"
 msgstr ""
 
 #. Default: "Subtasks:"
@@ -420,7 +433,7 @@ msgid "task_added_on"
 msgstr ""
 
 #. Default: "Attach document"
-#: ftw.task/ftw/task/attachdocument.py:47
+#: ftw.task/ftw/task/attachdocument.py:46
 msgid "title_attach_document_form"
 msgstr ""
 
