@@ -2,10 +2,11 @@ import os
 from zope.i18n import translate
 from z3c.form import form, field, button
 from z3c.form.browser import radio
-from zope.lifecycleevent import modified
+from zope.lifecycleevent import modified, ObjectModifiedEvent
 from zope.interface import Interface
 from zope.cachedescriptors.property import Lazy
 from zope import schema
+from zope.event import notify
 from zope.component import getUtility
 from zope.intid.interfaces import IIntIds
 from five import grok
@@ -65,13 +66,13 @@ class IResponse(Interface):
         required = False,
         )
 
-#    new_responsible = schema.Choice(
-#        title=_(u"label_responsible_Response", default="New responsible"),
-#        description =_(u"help_new_responsible_response", default=""),
-#        #source = util.getManagersVocab,
-#        vocabulary = 'opengever.octopus.tentacle.contacts.UsersVocabularyFactory',
-#        required = False,
-#        )
+    new_responsible = schema.Choice(
+        title=_(u"label_responsible_Response", default="New responsible"),
+        description =_(u"help_new_responsible_response", default=""),
+        #source = util.getManagersVocab,
+        vocabulary = 'opengever.octopus.tentacle.contacts.UsersVocabularyFactory',
+        required = False,
+        )
 
     deadline = schema.Date(
         title=_(u"label_deadline_Response", default=u"New deadline"),
@@ -248,7 +249,7 @@ class Base(BrowserView):
 
 class AddForm(form.AddForm, AutoExtensibleForm):
     fields = field.Fields(IResponse)
-#    fields['new_responsible'].widgetFactory = AutocompleteFieldWidget
+    fields['new_responsible'].widgetFactory = AutocompleteFieldWidget
     fields['transition'].widgetFactory = radio.RadioFieldWidget
     fields['deadline'].widgetFactory = DatePickerFieldWidget
     fields['date_of_completion'].widgetFactory = DatePickerFieldWidget
@@ -289,10 +290,9 @@ class AddForm(form.AddForm, AutoExtensibleForm):
                 (task.deadline, data.get('deadline'), 'deadline', _('deadline')),
                 (task.date_of_completion, data.get('date_of_completion'),
                  'date_of_completion', _('date_of_completion')),
-#                (task.responsible,
-#                 data.get('new_responsible'),
-#                 'responsible',
-#                 _('responsible'))
+               (task.responsible,
+                data.get('new_responsible'),
+                'responsible', _('responsible'))
                  ]
 
             for task_field, resp_field, option, title in options:
@@ -325,6 +325,9 @@ class AddForm(form.AddForm, AutoExtensibleForm):
 
             container = IResponseContainer(self.context)
             container.add(new_response)
+            
+            notify(ObjectModifiedEvent(self.context))
+            
             self.request.RESPONSE.redirect(self.context.absolute_url())
        
     @button.buttonAndHandler(_(u'cancel', default='Cancel'),

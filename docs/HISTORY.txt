@@ -5,6 +5,10 @@ Changelog
 1.0a5
 -----
 
+* Issue #423 Autocomplete Widget funktioniert in der Response nicht
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/423/
+  [15.04.2010]
+
 * Issue #505 Weiterleiten einer Aufgabe aus Eingangskorb Mandant 3 nach Mandant 1 geht nicht
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/505
   [08.04.2010, jbaumann]

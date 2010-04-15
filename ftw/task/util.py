@@ -1,5 +1,5 @@
 from five import grok
-
+import AccessControl
 from zope.annotation.interfaces import IAnnotations
 from zope.schema.interfaces import IContextSourceBinder, ISource
 from zope.schema.vocabulary import SimpleVocabulary
@@ -38,6 +38,8 @@ def getManagersVocab(context):
 
 @grok.provider(IContextSourceBinder)
 def getTransitionVocab(context):
+    if AccessControl.getSecurityManager().getUser() == AccessControl.SpecialUsers.nobody:
+        return SimpleVocabulary([])
     wftool = getToolByName(context, 'portal_workflow')
     transitions = []
     if ftw.task.task.ITask.providedBy(context) and context.REQUEST.URL.find('++add++ftw.task.task') == -1:
