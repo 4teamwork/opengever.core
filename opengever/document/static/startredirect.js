@@ -7,10 +7,10 @@ startRedirect = function(){
         }
         location.href = unescape(temp);
     }
-    arbeitsraum.view_container.unbind('reload', startRedirect);
+    tabbedview.view_container.unbind('reload', startRedirect);
 } 
 
 jq(function(){
     $ = jq;
-    arbeitsraum.view_container.bind('reload', startRedirect);
+    tabbedview.view_container.bind('reload', startRedirect);
 });
