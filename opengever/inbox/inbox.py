@@ -31,7 +31,7 @@ class AssignedTasks(OpengeverSolrListingTab):
          ('', helper.draggable),
          ('', helper.path_checkbox),
          ('review_state', 'review_state', helper.translated_string()),
-         ('Title', helper.solr_linked),
+         ('Title', opengever_helper.solr_linked),
          {'column' : 'task_type', 
          'column_title' : _(u'label_task_type', 'Task Type')},
          ('deadline', helper.readable_date),
