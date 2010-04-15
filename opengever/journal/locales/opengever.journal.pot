@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2009-12-04 08:41+0000\n"
+"POT-Creation-Date: 2010-04-15 13:17+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -23,42 +23,52 @@ msgid "heading_journal"
 msgstr ""
 
 #. Default: "Document added: ${title}"
-#: opengever.journal/opengever/journal/handlers.py:113
+#: opengever.journal/opengever/journal/handlers.py:114
 msgid "label_document_added"
 msgstr ""
 
 #. Default: "Document checked in"
-#: opengever.journal/opengever/journal/handlers.py:170
+#: opengever.journal/opengever/journal/handlers.py:171
 msgid "label_document_checkin"
 msgstr ""
 
 #. Default: "Document checked out"
-#: opengever.journal/opengever/journal/handlers.py:159
+#: opengever.journal/opengever/journal/handlers.py:160
 msgid "label_document_checkout"
 msgstr ""
 
 #. Default: "Document modified"
-#: opengever.journal/opengever/journal/handlers.py:127
+#: opengever.journal/opengever/journal/handlers.py:128
 msgid "label_document_modified"
 msgstr ""
 
 #. Default: "Dossier added: ${title}"
-#: opengever.journal/opengever/journal/handlers.py:67
+#: opengever.journal/opengever/journal/handlers.py:68
 msgid "label_dossier_added"
 msgstr ""
 
 #. Default: "Dossier modified"
-#: opengever.journal/opengever/journal/handlers.py:78
+#: opengever.journal/opengever/journal/handlers.py:79
 msgid "label_dossier_modified"
 msgstr ""
 
 #. Default: "Object restore: ${title}"
-#: opengever.journal/opengever/journal/handlers.py:189
+#: opengever.journal/opengever/journal/handlers.py:222
 msgid "label_restore"
 msgstr ""
 
+#. Default: "Task added: ${title}"
+#: opengever.journal/opengever/journal/handlers.py:185
+msgid "label_task_added"
+msgstr ""
+
+#. Default: "Task modified"
+#: opengever.journal/opengever/journal/handlers.py:197
+msgid "label_task_modified"
+msgstr ""
+
 #. Default: "Object moved to trash: ${title}"
-#: opengever.journal/opengever/journal/handlers.py:179
+#: opengever.journal/opengever/journal/handlers.py:212
 msgid "label_to_trash"
 msgstr ""
 

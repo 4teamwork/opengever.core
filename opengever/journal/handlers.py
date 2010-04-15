@@ -12,6 +12,7 @@ from plone.versioningbehavior.utils import get_change_note
 from Products.CMFCore.interfaces import IActionSucceededEvent
 
 from ftw.journal.events.events import JournalEntryEvent
+from ftw.task.task import ITask
 
 from opengever.document.document import IDocumentSchema
 from opengever.document.interfaces import IObjectCheckedInEvent, IObjectCheckedOutEvent
@@ -172,6 +173,38 @@ def document_checked_in(context, event):
     journal_entry_factory(context, DOCUMENT_CHECKED_IN, title,
                           comment=user_comment)
     return
+
+
+# ----------------------- TASK -----------------------
+
+TASK_ADDED_EVENT = 'Task added'
+@grok.subscribe(ITask, IObjectAddedEvent)
+def task_added(context, event):
+    if IWorkingCopy.providedBy(context):
+        return
+    title = _(u'label_task_added', default=u'Task added: ${title}', mapping={
+            'title' : context.title_or_id(),
+            })
+    # journal_entry for task:
+    journal_entry_factory(context, TASK_ADDED_EVENT, title)
+    # journal entry for parent (usually dossier)
+    journal_entry_factory(context.aq_inner.aq_parent, TASK_ADDED_EVENT, title)
+    return
+
+TASK_MODIIFED_ACTION = 'Task modified'
+@grok.subscribe(ITask, IObjectModifiedEvent)
+def document_modified(context, event):
+    title = _(u'label_task_modified', default=u'Task modified')
+    # XXX dirty
+    try:
+        # if we delete the working copy, we get a aq_based object and don't wanna
+        # make a journal entry
+        context.portal_types
+    except AttributeError:
+        return
+    journal_entry_factory(context, TASK_MODIIFED_ACTION, title, visible=False)
+    return
+
 
 OBJECT_MOVE_TO_TRASH = 'Object moved to trash'
 @grok.subscribe(IJournalizable, ITrashedEvent)
