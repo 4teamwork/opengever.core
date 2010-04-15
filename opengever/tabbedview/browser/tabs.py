@@ -279,9 +279,9 @@ class DossierOverview(grok.View, OpengeverTab):
     grok.template('overview')
 
     #TODO: refactor view using viewlets
-    def catalog(self, types, showTrashed=False):
+    def catalog(self, types, showTrashed=False, depth=2):
         return self.context.portal_catalog(portal_type=types ,
-                                           path=dict(depth=2,
+                                           path=dict(depth=depth,
                                                      query='/'.join(self.context.getPhysicalPath())
                                                      ),
                                            sort_on='modified',
@@ -304,7 +304,7 @@ class DossierOverview(grok.View, OpengeverTab):
         return items
 
     def subdossiers(self):
-        return self.catalog(['opengever.dossier.projectdossier', 'opengever.dossier.businesscasedossier',])[:5]
+        return self.catalog(['opengever.dossier.projectdossier', 'opengever.dossier.businesscasedossier',], depth=1)[:5]
 
     def tasks(self):
         return self.catalog(['ftw.task.task', ])[:5]
