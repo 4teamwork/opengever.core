@@ -6,6 +6,9 @@ from Products.CMFCore.interfaces._tools import IMemberData
 
 from opengever.octopus.tentacle.interfaces import IContactInformation
 from DateTime import DateTime
+from opengever.globalsolr.utils import getFlairUrl
+from collective.solr.interfaces import IFlare
+
 
 def author_cache_key(m, i, author):
     if IPropertiedUser.providedBy(author) or IMemberData.providedBy(author):
@@ -43,3 +46,18 @@ def readable_date_set_invisibles(item, date):
     if date == None:
         return None
     return date.strftime(strftimestring)
+
+
+def solr_linked(item, value):
+    url = '#'
+    #item = hasattr(item, 'aq_explicit') and item.aq_explicit or item
+    if IFlare.providedBy(item):
+        url = getFlairUrl(item)
+    elif hasattr(item, 'getURL'):
+        url = item.getURL()
+    elif hasattr(item, 'absolute_url'):
+        url = item.absolute_url()
+    img = u'<img src="%s"/>' % (item.getIcon)
+    link = u'<a href="%s" >%s%s</a>' % (url, img, value)
+    wrapper = u'<span class="linkWrapper">%s</span>' % link
+    return wrapper

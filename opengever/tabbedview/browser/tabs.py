@@ -12,7 +12,7 @@ from ftw.directoryservice.membership import Membership
 from plone.directives import dexterity
 from opengever.octopus.tentacle.interfaces import IContactInformation
 from opengever.tabbedview import _
-from opengever.tabbedview.helper import readable_ogds_author, linked, readable_date_set_invisibles
+from opengever.tabbedview.helper import readable_ogds_author, linked, readable_date_set_invisibles, solr_linked
 from ftw.task import _ as taskmsg
 
 
@@ -112,7 +112,7 @@ class OpengeverSolrListingTab(grok.View, SolrListingView):
     columns = (
         ('', helper.draggable),
         ('', helper.path_checkbox),
-        ('Title', 'sortable_title', helper.solr_linked),
+        ('Title', 'sortable_title', solr_linked),
         ('modified', helper.readable_date),
         ('Creator', readable_ogds_author),
         )
