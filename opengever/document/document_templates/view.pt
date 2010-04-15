@@ -17,6 +17,10 @@
 		<div tal:replace="structure provider:plone.abovecontentbody" />
 
 		<table class="listing">
+		    <colgroup>
+		        <col width="200">
+		        <col width="200">
+		    </colgroup>
 			<tr>
 				<th>Dokument</th>
 				<td tal:content="context/title_or_id"></td>
@@ -94,6 +98,31 @@
 			    <th>Referenzierte Dokumente</th>
 			    <td>
 			        <div tal:replace="structure view/w/IRelatedItems.relatedItems/render" />
+			    </td>
+			</tr>
+			<tr i18n:domain="opengever.base">
+			    <th i18n:translate="label_classification">classification</th>
+			    <td>
+			        <div i18n:translate="" tal:content="context/classification" />
+			    </td>
+			</tr>
+			<tr i18n:domain="opengever.base">
+			    <th i18n:translate="label_privacy_layer">privacy_layer</th>
+			    <td>
+			        <div i18n:translate="" tal:content="context/privacy_layer" />
+			    </td>
+			</tr>
+			<tr i18n:domain="opengever.base">
+			    <th i18n:translate="label_public_trial">public_trial</th>
+			    <td>
+			        <div i18n:translate="" tal:content="context/public_trial" />
+			    </td>
+			</tr>
+			<tr i18n:domain="opengever.base">
+			    <th i18n:translate="label_public_trial_statement">public_trial_statement</th>
+			    <td>
+			        <tal:statement tal:condition="context/public_trial_statement" tal:content="context/public_trial_statement" />
+			        <tal:statement tal:condition="not:context/public_trial_statement">-</tal:statement>
 			    </td>
 			</tr>
 		</table>
