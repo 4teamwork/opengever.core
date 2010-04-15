@@ -4,7 +4,7 @@ from plone.directives import form
 from ftw.table import helper
 from opengever.tabbedview import helper as opengever_helper
 from opengever.tabbedview.helper import readable_ogds_author
-from opengever.tabbedview.browser.tabs import OpengeverSolrListingTab
+from opengever.tabbedview.browser.tabs import OpengeverSolrListingTab, Tasks
 from zope import schema
 
 class IInbox(form.Schema):
@@ -24,6 +24,9 @@ class IInbox(form.Schema):
          description = _(u'help_inbox_group', default=u''),
          required = False,
          )
+
+class GivenTasks(Tasks):
+    grok.name('tabbedview_view-given_tasks')
 
 class AssignedTasks(OpengeverSolrListingTab):
     grok.name('tabbedview_view-assigned_tasks')
