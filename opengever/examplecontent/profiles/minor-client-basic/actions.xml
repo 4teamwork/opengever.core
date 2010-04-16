@@ -72,6 +72,17 @@
    </property>
    <property name="visible">True</property>
   </object>
+  
+  <object name="gds" meta_type="CMF Action">
+   <property name="title">GDS</property>
+   <property name="description"></property>
+   <property name="url_expr">string:${globals_view/navigationRootUrl}/@@ogds</property>
+   <property name="icon_expr"></property>
+   <property name="permissions">
+    <element value="View"/>
+   </property>
+   <property name="visible">True</property>
+  </object>
 
  </object>
 </object>
