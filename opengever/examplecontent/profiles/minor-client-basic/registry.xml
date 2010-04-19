@@ -1,0 +1,5 @@
+<registry>
+    <record name="opengever.octopus.tentacle.interfaces.ITentacleRegistry.public_cortex_url">
+        <value>http://localhost:8080/OGDS</value>
+    </record>
+</registry>
