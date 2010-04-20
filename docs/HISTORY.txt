@@ -5,6 +5,10 @@ Changelog
 1.0a5
 -----
 
+* Issue #518 "Änderungen anzeigen" muss bei einem ausgecheckten Dokument ausgeblendet werden (führt zu Fehlermeldung)
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/518/
+  [20.04.2010, jinfanger]
+
 * Issue #506 DocuComposer: falsche Url
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/506/
   added rewriting functionality in the docucomposer process (look dc_original_path and dc_rewrite_path in the Registry), 

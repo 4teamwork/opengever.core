@@ -7,6 +7,7 @@
     xmlns:browser="http://namespaces.zope.org/browser"
     i18n_domain="opengever.document">
 
+    
     <!-- Include configuration for dependencies listed in setup.py -->
     <includeDependencies package="." />
 
