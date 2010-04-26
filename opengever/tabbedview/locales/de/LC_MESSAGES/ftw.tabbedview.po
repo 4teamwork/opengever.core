@@ -32,7 +32,7 @@ msgid "all_contacts"
 msgstr "Alle Kontakte"
 
 msgid "all_orgunits"
-msgstr "Alle Gremien"
+msgstr "Alle Gruppen"
 
 #. Default: "More actions &#9660;"
 #: opengever.tabbedview/opengever/tabbedview/browser/tabs_templates/generic.pt:27
