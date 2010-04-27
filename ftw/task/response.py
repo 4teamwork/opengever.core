@@ -16,47 +16,22 @@ from Products.Five.browser import BrowserView
 from plone.memoize.view import memoize
 from plone.z3cform import layout
 from plone.formwidget.autocomplete import AutocompleteFieldWidget
-from plone.namedfile.utils import set_headers, stream_data
 from plone.autoform.form import AutoExtensibleForm
 
 from Products.CMFCore.utils import getToolByName
 from Products.statusmessages.interfaces import IStatusMessage
-
-from opengever.sqlfile.field import NamedFile
 
 from z3c.relationfield.schema import RelationChoice, RelationList
 from z3c.relationfield.relation import RelationValue
 from plone.formwidget.contenttree import ObjPathSourceBinder
 
 from ftw.task import _
-from ftw.task import permissions
 from ftw.task.adapters import IResponseContainer, Response
 from ftw.task.interfaces import IResponseAdder
 from ftw.task.permissions import DEFAULT_ISSUE_MIME_TYPE
 from ftw.task import util
 from ftw.task.task import ITask
 from ftw.datepicker.widget import DatePickerFieldWidget
-
-try:
-    from plone.i18n.normalizer.interfaces import \
-        IUserPreferredFileNameNormalizer
-    FILE_NORMALIZER = True
-except ImportError:
-    FILE_NORMALIZER = False
-
-
-def pretty_size(size):
-    if size <= 0:
-        return "0 Kb"
-    kb = size / 1024
-    size = "%d Kb" % kb
-    if kb > 999:
-        mb = kb / 1024
-        size = "%d Mb" % mb
-        if mb > 999:
-            gb = mb / 1024
-            size = "%d Gb" % gb
-    return size
 
 
 class IResponse(Interface):
@@ -93,14 +68,13 @@ class IResponse(Interface):
         required = False,
         )
 
-        
-#    relatedItems = RelationList(
-#        title=_(u'label_related_items', default=u'Related Items'),
-#        default=[],
-#        value_type=RelationChoice(title=u"Related",
-#                      source=ObjPathSourceBinder()),
-#        required=False,
-#        )
+    relatedItems = RelationList(
+        title=_(u'label_related_items', default=u'Related Items'),
+        default=[],
+        value_type=RelationChoice(title=u"Related",
+                      source=ObjPathSourceBinder()),
+        required=False,
+        )
 
 
 def voc2dict(vocab, current=None):
@@ -118,7 +92,7 @@ def voc2dict(vocab, current=None):
     >>> voc2dict(vocab, current='c')
     [{'checked': '', 'value': 'a', 'label': 'The letter A'},
     {'checked': '', 'value': 'b', 'label': 'The letter B'}]
-    >>> voc2dict(vocab, current='b')
+    >>> voc2dicts(vocab, current='b')
     [{'checked': '', 'value': 'a', 'label': 'The letter A'},
     {'checked': 'checked', 'value': 'b', 'label': 'The letter B'}]
 
@@ -303,13 +277,17 @@ class AddForm(form.AddForm, AutoExtensibleForm):
                                             resp_field)
                     task.__setattr__(option, resp_field)
 
-            # relatedItems
-#            new_response.relatedItems = []
-#            relatedItems = data.get('relatedItems')
-#            intids = getUtility(IIntIds)
-#            for item in relatedItems:
-#                to_id = intids.getId(item)
-#                new_response.relatedItems.append(RelationValue(to_id))
+
+            # save relatedItems on task 
+            relatedItems = data.get('relatedItems')
+            intids = getUtility(IIntIds)
+            for item in relatedItems:
+                to_id = intids.getId(item)
+                if task.get('relatedItems'):
+                    task.relatedItems.append(RelationValue(to_id))
+                else:
+                    setattr(task, 'relatedItems', [RelationValue(to_id)])
+                new_response.add_change('relatedItems', _('label_related_items'), '', item.Title())
 
             # change workflow state of task
             if data.get('transition'):
