@@ -18,12 +18,12 @@ from opengever.document.document import IDocumentSchema
 from opengever.document.interfaces import IObjectCheckedInEvent, IObjectCheckedOutEvent
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from plone.app.iterate.interfaces import IWorkingCopy
-from plone.directives import form
-                               
+
 from ftw.journal.interfaces import IJournalizable
 from opengever.journal import _
-from opengever.trash.trash import ITrashedEvent, IUntrashedEvent 
+from opengever.trash.trash import ITrashedEvent, IUntrashedEvent
 pmf = MessageFactory('plone')
+
 
 def propper_string(value):
     if not value:
@@ -35,22 +35,24 @@ def propper_string(value):
     else:
         return str(value)
 
+
 def journal_entry_factory(context, action, title,
                           visible=True, comment=''):
     comment = comment=='' and get_change_note(context.REQUEST, '') or comment
-    title = propper_string( title )
-    action = propper_string( action )
-    comment = propper_string( comment )
+    title = propper_string(title)
+    action = propper_string(action)
+    comment = propper_string(comment)
     entry = {
-        'obj' : context,
-        'action' : PersistentDict({
-                'type' : action,
-                'title' : title,
-                'visible' : visible,
+        'obj': context,
+        'action': PersistentDict({
+                'type': action,
+                'title': title,
+                'visible': visible,
                 }),
-        'comment' : comment,
+        'comment': comment,
         }
     notify(JournalEntryEvent(**entry))
+
 
 def translated_type(context):
     """
@@ -63,14 +65,15 @@ def translated_type(context):
 # ----------------------- DOSSIER -----------------------
 
 DOSSIER_ADDED_ACTION = 'Dossier added'
+
+
 @grok.subscribe(IDossierMarker, IObjectAddedEvent)
 def dossier_added(context, event):
     title = _(u'label_dossier_added', default=u'Dossier added: ${title}', mapping={
-            'title' : context.title_or_id(),
+            'title': context.title_or_id(),
             })
     journal_entry_factory(context, DOSSIER_ADDED_ACTION, title)
     return
-
 
 
 DOSSIER_MODIIFED_ACTION = 'Dossier modified'
@@ -134,6 +137,7 @@ def document_modified(context, event):
     except AttributeError:
         return
     journal_entry_factory(context, DOCUMENT_MODIIFED_ACTION, title, visible=False)
+    journal_entry_factory(context.aq_inner.aq_parent, DOCUMENT_MODIIFED_ACTION, title)
     return
 
 
@@ -193,7 +197,7 @@ def task_added(context, event):
 
 TASK_MODIIFED_ACTION = 'Task modified'
 @grok.subscribe(ITask, IObjectModifiedEvent)
-def document_modified(context, event):
+def task_modified(context, event):
     title = _(u'label_task_modified', default=u'Task modified')
     # XXX dirty
     try:
@@ -203,6 +207,7 @@ def document_modified(context, event):
     except AttributeError:
         return
     journal_entry_factory(context, TASK_MODIIFED_ACTION, title, visible=False)
+    journal_entry_factory(context.aq_inner.aq_parent, TASK_MODIIFED_ACTION, title)
     return
 
 
@@ -218,7 +223,7 @@ def document_trashed(context, event):
 
 OBJECT_RESTORE = 'Object restore'
 @grok.subscribe(IJournalizable, IUntrashedEvent)
-def document_trashed(context, event):
+def document_untrashed(context, event):
     title = _(u'label_restore', default = u'Object restore: ${title}', mapping={
             'title':context.title_or_id(),
     })
