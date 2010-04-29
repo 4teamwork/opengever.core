@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2010-04-15 17:47+0000\n"
+"POT-Creation-Date: 2010-04-29 08:51+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -24,7 +24,7 @@ msgstr ""
 msgid "Add local roles to all related items for the 'responsible' user."
 msgstr ""
 
-#: ftw.task/ftw/task/response.py:431
+#: ftw.task/ftw/task/response.py:409
 msgid "Changes saved to response id ${response_id}."
 msgstr "Änderungen an der Antwort ${response_id} wurden gespeichert"
 
@@ -44,19 +44,19 @@ msgstr "Bearbeiten"
 msgid "Edit Local Roles Action"
 msgstr ""
 
-#: ftw.task/ftw/task/response.py:323
+#: ftw.task/ftw/task/response.py:301
 msgid "Issue state"
 msgstr "Status"
 
-#: ftw.task/ftw/task/response.py:459
+#: ftw.task/ftw/task/response.py:437
 msgid "No response selected for removal."
 msgstr "Es wurde keine Antwort fürs Löschen selektiert"
 
-#: ftw.task/ftw/task/response.py:422
+#: ftw.task/ftw/task/response.py:400
 msgid "No response selected for saving."
 msgstr "Es wurde keine Antwort fürs Speichern selektiert"
 
-#: ftw.task/ftw/task/response.py:210
+#: ftw.task/ftw/task/response.py:184
 msgid "No response selected."
 msgstr "Kein Antwort selektiert"
 
@@ -72,23 +72,23 @@ msgstr ""
 msgid "Related Items Roles"
 msgstr ""
 
-#: ftw.task/ftw/task/response.py:481
+#: ftw.task/ftw/task/response.py:459
 msgid "Removed response id ${response_id}."
 msgstr "Antwort ${response_id} gelöscht"
 
-#: ftw.task/ftw/task/response.py:474
+#: ftw.task/ftw/task/response.py:452
 msgid "Response id ${response_id} does not exist so it cannot be removed."
 msgstr "Antowrt ${response_id} existiert nicht und konnte deshalb nicht gelöscht werden"
 
-#: ftw.task/ftw/task/response.py:224
+#: ftw.task/ftw/task/response.py:198
 msgid "Response id ${response_id} does not exist."
 msgstr "Antwort ${response_id} exisitert nicht"
 
-#: ftw.task/ftw/task/response.py:466
+#: ftw.task/ftw/task/response.py:444
 msgid "Response id ${response_id} is no integer so it cannot be removed."
 msgstr "Antwort id ${response_id} ist keine Zahl und konnte deshalb nicht gelöscht werden"
 
-#: ftw.task/ftw/task/response.py:218
+#: ftw.task/ftw/task/response.py:192
 msgid "Response id ${response_id} is no integer."
 msgstr "Antwort ${response_id} ist keine Zahl"
 
@@ -105,16 +105,16 @@ msgstr "Auftragsübersicht"
 msgid "The local roles to add."
 msgstr ""
 
-#: ftw.task/ftw/task/response.py:453
+#: ftw.task/ftw/task/response.py:431
 msgid "You are not allowed to delete responses."
 msgstr "Sie haben keine Berechtigung Antworten zu löschen"
 
-#: ftw.task/ftw/task/response.py:416
+#: ftw.task/ftw/task/response.py:394
 msgid "You are not allowed to edit responses."
 msgstr "Sie haben keine Berechtigung Antworten zu editieren"
 
 #. Default: "Add"
-#: ftw.task/ftw/task/response.py:262
+#: ftw.task/ftw/task/response.py:236
 msgid "add"
 msgstr "Hinzufügen"
 
@@ -139,7 +139,7 @@ msgid "button_continue"
 msgstr "Weiter"
 
 #. Default: "Cancel"
-#: ftw.task/ftw/task/response.py:333
+#: ftw.task/ftw/task/response.py:311
 msgid "cancel"
 msgstr "Abbrechen"
 
@@ -148,12 +148,12 @@ msgstr "Abbrechen"
 msgid "containing_task"
 msgstr "Übergeordnete Aufgabe"
 
-#: ftw.task/ftw/task/response.py:292
+#: ftw.task/ftw/task/response.py:266
 msgid "date_of_completion"
 msgstr "Erledigungsdatum"
 
 #. Default: "deadline"
-#: ftw.task/ftw/task/response.py:290
+#: ftw.task/ftw/task/response.py:264
 msgid "deadline"
 msgstr "Frist"
 
@@ -172,7 +172,7 @@ msgstr "Erweitert"
 msgid "fieldset_common"
 msgstr "Allgemein"
 
-#: ftw.task/ftw/task/response.py:85
+#: ftw.task/ftw/task/response.py:60
 #: ftw.task/ftw/task/task.py:120
 msgid "help_date_of_completion"
 msgstr ""
@@ -182,7 +182,7 @@ msgstr ""
 msgid "help_deadline"
 msgstr "Tragen sie ein Datum ein, bis wann die Aufgabe erledigt werden muss"
 
-#: ftw.task/ftw/task/response.py:79
+#: ftw.task/ftw/task/response.py:54
 msgid "help_deadline_response"
 msgstr "Tragen sie ein neues Datum ein, bis wann die Aufgabe erledigt werden muss"
 
@@ -210,11 +210,11 @@ msgstr ""
 msgid "help_issuer"
 msgstr ""
 
-#: ftw.task/ftw/task/response.py:71
+#: ftw.task/ftw/task/response.py:46
 msgid "help_new_responsible_response"
 msgstr ""
 
-#: ftw.task/ftw/task/response.py:65
+#: ftw.task/ftw/task/response.py:40
 msgid "help_response"
 msgstr ""
 
@@ -246,7 +246,7 @@ msgid "help_title"
 msgstr ""
 
 #: ftw.task/ftw/task/behaviors.py:28
-#: ftw.task/ftw/task/response.py:91
+#: ftw.task/ftw/task/response.py:66
 msgid "help_transition"
 msgstr ""
 
@@ -262,7 +262,7 @@ msgid "label_by_author"
 msgstr "Verantwortlich: ${author}"
 
 #. Default: "Date of completion"
-#: ftw.task/ftw/task/response.py:84
+#: ftw.task/ftw/task/response.py:59
 #: ftw.task/ftw/task/task.py:119
 msgid "label_date_of_completion"
 msgstr "Erledigungsdatum"
@@ -273,7 +273,7 @@ msgid "label_deadline"
 msgstr "Zu erledigen bis"
 
 #. Default: "New deadline"
-#: ftw.task/ftw/task/response.py:78
+#: ftw.task/ftw/task/response.py:53
 msgid "label_deadline_Response"
 msgstr "Neue Frist"
 
@@ -328,8 +328,13 @@ msgstr "Auftraggeber"
 msgid "label_last_modified"
 msgstr "Letze Änderung"
 
+#. Default: "Related Items"
+#: ftw.task/ftw/task/response.py:72
+msgid "label_related_items"
+msgstr "Verweise"
+
 #. Default: "Response"
-#: ftw.task/ftw/task/response.py:64
+#: ftw.task/ftw/task/response.py:39
 msgid "label_response"
 msgstr "Antworttext"
 
@@ -339,7 +344,7 @@ msgid "label_responsible"
 msgstr "Verantwortlicher"
 
 #. Default: "New responsible"
-#: ftw.task/ftw/task/response.py:70
+#: ftw.task/ftw/task/response.py:45
 msgid "label_responsible_Response"
 msgstr "Neuer Verantwortlicher"
 
@@ -383,7 +388,7 @@ msgstr "Titel"
 
 #. Default: "Transition"
 #: ftw.task/ftw/task/behaviors.py:27
-#: ftw.task/ftw/task/response.py:90
+#: ftw.task/ftw/task/response.py:65
 msgid "label_transition"
 msgstr "Aktion"
 
@@ -413,7 +418,7 @@ msgstr "Antowrt"
 msgid "responses"
 msgstr "Antworten:"
 
-#: ftw.task/ftw/task/response.py:295
+#: ftw.task/ftw/task/response.py:269
 msgid "responsible"
 msgstr "Verantwortlicher"
 

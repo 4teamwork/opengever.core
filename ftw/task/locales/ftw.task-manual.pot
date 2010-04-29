@@ -26,5 +26,5 @@ msgstr ""
 msgid "issuedtasks_solr"
 msgstr ""
 
-msgid "label_issued_date"
+msgid "label_related_items"
 msgstr ""
