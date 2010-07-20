@@ -5,6 +5,9 @@ Changelog
 1.0a3
 -----
 
+* Changed configuration for develeopment profile according to deadlock bugfix
+  [20.07.2010, jbaumann]
+
 * Issue #505 Weiterleiten einer Aufgabe aus Eingangskorb Mandant 3 nach Mandant 1 geht nicht
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/505
   Added new field value inbox_group to inbox in generic setup
