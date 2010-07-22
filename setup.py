@@ -30,7 +30,7 @@ setup(name='opengever.tabbedview',
       install_requires=[
           'setuptools',
           'ftw.tabbedview',
-          'collective.jqhistory'
+          #'collective.jqhistory'
           # -*- Extra requirements: -*-
       ],
       entry_points="""
