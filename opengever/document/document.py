@@ -16,7 +16,7 @@ from datetime import datetime
 
 from Products.CMFCore.utils import getToolByName
 from Products.MimetypesRegistry.common import MimeTypeException
-from Products.ARFilePreview.interfaces import IPreviewable
+#from Products.ARFilePreview.interfaces import IPreviewable
 from plone.app.dexterity.behaviors.metadata import IBasic
 from plone.dexterity.content import Item
 from plone.directives import form, dexterity
@@ -486,14 +486,15 @@ class Overview(DisplayForm, OpengeverTab):
         return info.render_link(self.context.Creator())
 
 
-class Preview(DisplayForm, OpengeverTab):
-    grok.context(IDocumentSchema)
-    grok.name('tabbedview_view-preview')
-    grok.template('preview')
-
-    def __call__(self):
-        IPreviewable(self.context).buildAndStorePreview()
-        return DisplayForm.__call__(self)
+# TODO: Remove/replace preview tab
+# class Preview(DisplayForm, OpengeverTab):
+#     grok.context(IDocumentSchema)
+#     grok.name('tabbedview_view-preview')
+#     grok.template('preview')
+# 
+#     def __call__(self):
+#         IPreviewable(self.context).buildAndStorePreview()
+#         return DisplayForm.__call__(self)
         
 #XXX TEMPORARY REPLACED WITH A NON SOLR TAB
 #class Tasks(OpengeverSolrListingTab):
