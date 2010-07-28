@@ -1,9 +1,8 @@
 import base64
 import re
-from Products.PluginIndexes.DateIndex.DateIndex import DateIndex
 from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
 from Products.CMFCore.utils import getToolByName
-from ftw.tabbedview.browser.views import BaseListingView, SolrListingView
+from ftw.tabbedview.browser.listing import BaseListingView, ListingView
 from ftw.tabbedview.interfaces import ITabbedView
 from five import grok
 from ftw.table import helper
@@ -14,6 +13,12 @@ from opengever.octopus.tentacle.interfaces import IContactInformation
 from opengever.tabbedview import _
 from opengever.tabbedview.helper import readable_ogds_author, linked, readable_date_set_invisibles, solr_linked
 from ftw.task import _ as taskmsg
+
+try:
+    from opengever.globalsolr.interfaces import ISearch
+    from collective.solr.flare import PloneFlare
+except ImportError:
+    pass
 
 
 def datetime_compare(x, y):
@@ -101,6 +106,41 @@ class OpengeverListingTab(grok.View, BaseListingView):
     search_index = 'SearchableText' #only 'SearchableText' is implemented for now
     sort_on = 'modified'
     sort_order = 'reverse'
+
+class SolrListingView(ListingView):
+
+    sort_on = ''
+
+    def build_query(self):
+        return self.search_util.buildQuery(**self._search_options)
+
+    def update(self):
+        self.search_util = queryUtility(ISearch)
+        if not self.search_options.has_key('portal_type') and len(self.types):
+            self.search_options.update({'portal_type':self.types[0]}) 
+
+        self.search()
+
+    def search(self, kwargs={}):
+
+        parameters = {}
+        self.sort_on = self.request.get('sort_on', self.sort_on)
+        self.sort_order = self.request.get('sort_order', self.sort_order)
+
+        parameters['sort'] = self.sort_on
+        if self.sort_on:
+            if self.sort_on.startswith('header-'):
+                self.sort_on = self.sort_on.split('header-')[1]
+                parameters['sort'] = self.sort_on
+
+            if self.sort_order == 'reverse':
+                parameters['sort'] = '%s desc' % parameters['sort']
+            else:
+                parameters['sort'] = '%s asc' % parameters['sort']
+
+        query = self.build_query()
+        flares = self.search_util(query, **parameters)
+        self.contents = [PloneFlare(f) for f in flares]
 
 
 class OpengeverSolrListingTab(grok.View, SolrListingView):
@@ -233,7 +273,7 @@ class Events(OpengeverListingTab):
 
 #code below might go to opengover.dossier..
 
-from zope.annotation.interfaces import IAnnotations, IAnnotatable
+from zope.annotation.interfaces import IAnnotations
 from ftw.journal.interfaces import IAnnotationsJournalizable, IWorkflowHistoryJournalizable, IJournalizable
 from ftw.journal.config import JOURNAL_ENTRIES_ANNOTATIONS_KEY
 from opengever.dossier.behaviors.dossier import IDossierMarker, IDossier
@@ -502,7 +542,7 @@ class Participants(OpengeverListingTab):
 
 
 from plone.app.workflow.interfaces import ISharingPageRole
-from zope.component import getUtilitiesFor, getMultiAdapter
+from zope.component import getUtilitiesFor
 from plone.app.workflow.browser.sharing import SharingView
 from Acquisition import aq_inner
 
