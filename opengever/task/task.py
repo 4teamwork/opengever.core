@@ -160,7 +160,8 @@ class ITask(form.Schema):
         required = False,
         )
 
-    form.order_before(**{'ITransition.transition': "responsible"})
+    # TODO: doesn't work with Plone 4
+    #form.order_before(**{'ITransition.transition': "responsible"})
 
 # # XXX doesn't work yet.
 #@form.default_value(field=ITask['issuer'])
