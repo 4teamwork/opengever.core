@@ -1,5 +1,0 @@
-# created by: svn propset svn:ignore -F ./IGNORE.TXT .
-
-ftw.task.egg-info
-build
-dist
