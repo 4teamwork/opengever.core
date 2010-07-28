@@ -7,12 +7,12 @@
   <conditions>
    <condition type="plone.conditions.PortalType">
     <property name="check_types">
-     <element>ftw.task.task</element>
+     <element>opengever.task.task</element>
     </property>
    </condition>
   </conditions>
   <actions>
-   <action type="ftw.task.actions.AddLocalRoles">
+   <action type="opengever.task.actions.AddLocalRoles">
     <property name="related_items_roles">
      <element>Editor</element>
     </property>
@@ -37,12 +37,12 @@
   <conditions>
    <condition type="plone.conditions.PortalType">
     <property name="check_types">
-     <element>ftw.task.task</element>
+     <element>opengever.task.task</element>
     </property>
    </condition>
   </conditions>
   <actions>
-   <action type="ftw.task.actions.AddLocalRoles">
+   <action type="opengever.task.actions.AddLocalRoles">
     <property name="related_items_roles">
      <element>Editor</element>
     </property>
