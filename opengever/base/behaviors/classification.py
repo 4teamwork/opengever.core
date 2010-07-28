@@ -50,7 +50,7 @@ class IClassification(form.Schema):
 
     public_trial_statement = schema.Text(
             title = _(u'label_public_trial_statement', default=u'Public trial statement'),
-            description = _(u'help_public_trial_statement', default=u'Begrüundung Schutzgrad'),
+            description = _(u'help_public_trial_statement', default=u''),
             required = False,
             default = u'',
     )
