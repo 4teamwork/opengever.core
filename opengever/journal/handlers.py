@@ -12,7 +12,7 @@ from plone.versioningbehavior.utils import get_change_note
 from Products.CMFCore.interfaces import IActionSucceededEvent
 
 from ftw.journal.events.events import JournalEntryEvent
-from ftw.task.task import ITask
+from opengever.task.task import ITask
 
 from opengever.document.document import IDocumentSchema
 from opengever.document.interfaces import IObjectCheckedInEvent, IObjectCheckedOutEvent
