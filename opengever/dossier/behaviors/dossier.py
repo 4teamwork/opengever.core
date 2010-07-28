@@ -4,7 +4,7 @@ from five import grok
 from datetime import datetime
 from Acquisition import aq_inner, aq_parent
 from opengever.dossier import _
-from ftw.task import util
+from opengever.task import util
 from Products.CMFCore.utils import getToolByName
 from ZODB.POSException import ConflictError
 from zope.app.container.interfaces import IObjectMovedEvent

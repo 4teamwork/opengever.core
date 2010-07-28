@@ -56,7 +56,7 @@ class resolve(grok.CodeView):
 
         #all tasks are closed
         tasks_closed = self.context.portal_catalog(
-                                portal_type="ftw.task.task",
+                                portal_type="opengever.task.task",
                                 path=dict(depth=2,
                                     query='/'.join(self.context.getPhysicalPath()),
                                 ),
@@ -64,7 +64,7 @@ class resolve(grok.CodeView):
         )
 
         tasks = self.context.portal_catalog(
-                                portal_type="ftw.task.task",
+                                portal_type="opengever.task.task",
                                 path=dict(depth=2,
                                     query='/'.join(self.context.getPhysicalPath()),
                                 ),

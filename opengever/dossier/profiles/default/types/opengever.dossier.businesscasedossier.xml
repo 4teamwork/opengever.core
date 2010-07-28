@@ -12,7 +12,7 @@
   <property name="allowed_content_types">
     <element value="opengever.dossier.businesscasedossier" />
     <element value="opengever.document.document" />
-    <element value="ftw.task.task" />
+    <element value="opengever.task.task" />
     <element value="ftw.mail.mail"/>
   </property>
 
