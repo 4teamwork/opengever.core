@@ -12,7 +12,7 @@ from plone.directives import dexterity
 from opengever.octopus.tentacle.interfaces import IContactInformation
 from opengever.tabbedview import _
 from opengever.tabbedview.helper import readable_ogds_author, linked, readable_date_set_invisibles, solr_linked
-from ftw.task import _ as taskmsg
+from opengever.task import _ as taskmsg
 
 try:
     from opengever.globalsolr.interfaces import ISearch
@@ -259,7 +259,7 @@ class Tasks(OpengeverListingTab):
          'transform': helper.readable_date },
         )
 
-    types = ['ftw.task.task',]
+    types = ['opengever.task.task',]
 
     enabled_actions = [
         'change_state',
@@ -347,7 +347,7 @@ class DossierOverview(grok.View, OpengeverTab):
         return self.catalog(['opengever.dossier.projectdossier', 'opengever.dossier.businesscasedossier',], depth=1)[:5]
 
     def tasks(self):
-        return self.catalog(['ftw.task.task', ])[:5]
+        return self.catalog(['opengever.task.task', ])[:5]
 
     def documents(self):
         return self.catalog(['opengever.document.document','ftw.mail.mail',])[:10]
@@ -454,7 +454,7 @@ class Journal(grok.View, OpengeverTab):
 class Trash(OpengeverListingTab):
     grok.name('tabbedview_view-trash')
 
-    types = ['opengever.dossier.dossier', 'opengever.document.document', 'ftw.task.task', 'ftw.mail.mail', ]
+    types = ['opengever.dossier.dossier', 'opengever.document.document', 'opengever.task.task', 'ftw.mail.mail', ]
 
     search_options = {'trashed':True}
 
