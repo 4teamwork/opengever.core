@@ -28,7 +28,7 @@ from plone.app.layout.viewlets.interfaces import IBelowContentTitle
 from plone.formwidget import autocomplete
 from plone.formwidget.autocomplete import AutocompleteFieldWidget
 from plone.indexer import indexer
-from plone.z3cform.traversal import WidgetTraversal
+from plone.z3cform.traversal import FormWidgetTraversal
 from plone.app.dexterity.behaviors.related import IRelatedItems
 from plone.dexterity.interfaces import IDexterityFTI
 from plone.dexterity.content import Container
@@ -323,7 +323,7 @@ class AddForm(TranslatedAddForm):
         super(AddForm, self).update()
 
 
-class TaskWidgetTraversal(WidgetTraversal):
+class TaskWidgetTraversal(FormWidgetTraversal):
     implements(ITraversable)
 
     def __init__(self, context, request = None):
