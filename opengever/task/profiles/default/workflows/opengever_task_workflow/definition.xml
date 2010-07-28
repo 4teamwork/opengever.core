@@ -9,7 +9,7 @@
  <permission>Manage properties</permission>
  <permission>Modify portal content</permission>
  <permission>View</permission>
- <permission>ftw.task: Add task</permission>
+ <permission>opengever.task: Add task</permission>
  <state state_id="task-state-cancelled" title="">
   <permission-map name="Access contents information"
                   acquired="False">
@@ -43,7 +43,7 @@
    <permission-role>Manager</permission-role>
    <permission-role>Owner</permission-role>
   </permission-map>
-  <permission-map name="ftw.task: Add task" acquired="False">
+  <permission-map name="opengever.task: Add task" acquired="False">
    <permission-role>Editor</permission-role>
    <permission-role>Manager</permission-role>
    <permission-role>Owner</permission-role>
@@ -83,7 +83,7 @@
    <permission-role>Manager</permission-role>
    <permission-role>Owner</permission-role>
   </permission-map>
-  <permission-map name="ftw.task: Add task" acquired="False">
+  <permission-map name="opengever.task: Add task" acquired="False">
    <permission-role>Editor</permission-role>
    <permission-role>Manager</permission-role>
    <permission-role>Owner</permission-role>
@@ -129,7 +129,7 @@
    <permission-role>Manager</permission-role>
    <permission-role>Owner</permission-role>
   </permission-map>
-  <permission-map name="ftw.task: Add task" acquired="False">
+  <permission-map name="opengever.task: Add task" acquired="False">
    <permission-role>Editor</permission-role>
    <permission-role>Manager</permission-role>
    <permission-role>Owner</permission-role>
@@ -169,7 +169,7 @@
    <permission-role>Manager</permission-role>
    <permission-role>Owner</permission-role>
   </permission-map>
-  <permission-map name="ftw.task: Add task" acquired="False">
+  <permission-map name="opengever.task: Add task" acquired="False">
    <permission-role>Editor</permission-role>
    <permission-role>Manager</permission-role>
    <permission-role>Owner</permission-role>
@@ -209,7 +209,7 @@
    <permission-role>Manager</permission-role>
    <permission-role>Owner</permission-role>
   </permission-map>
-  <permission-map name="ftw.task: Add task" acquired="False">
+  <permission-map name="opengever.task: Add task" acquired="False">
    <permission-role>Editor</permission-role>
    <permission-role>Manager</permission-role>
    <permission-role>Owner</permission-role>

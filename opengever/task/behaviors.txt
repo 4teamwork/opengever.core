@@ -1,22 +1,22 @@
 Behaviors
 =========
 
-This package provides a behavior called `ftw.task.task.ITask`.
+This package provides a behavior called `opengever.task.task.ITask`.
 This adds fields required by any task.
 
 Test setup
 ----------
 
-Before we can run these tests, we need to load the ftw.task
+Before we can run these tests, we need to load the opengever.task
 configuration. This will configure the behavior.
 
     >>> configuration = """\
     ... <configure
     ...      xmlns="http://namespaces.zope.org/zope"
-    ...      i18n_domain="ftw.task">
+    ...      i18n_domain="opengever.task">
     ...      
     ...     <include package="Products.Five" file="meta.zcml" />
-    ...     <include package="ftw.task" file="behaviors.zcml" />
+    ...     <include package="opengever.task" file="behaviors.zcml" />
     ... </configure>
     ... """
 
@@ -31,7 +31,7 @@ IBehaviorAssignable adapter to mark the behavior as enabled.
     >>> from plone.dexterity.content import Container
 
     >>> from plone.behavior.interfaces import IBehaviorAssignable
-	>>> from ftw.task.behaviors import ITransition
+	>>> from opengever.task.behaviors import ITransition
     >>> from zope.component import adapts
     >>> from zope.interface import implements
     >>> class TestingAssignable(object):
@@ -61,9 +61,9 @@ is loaded.
 
     >>> from zope.component import getUtility
     >>> from plone.behavior.interfaces import IBehavior
-    >>> task_behavior = getUtility(IBehavior, name='ftw.task.behaviors.ITransition')
+    >>> task_behavior = getUtility(IBehavior, name='opengever.task.behaviors.ITransition')
     >>> task_behavior.interface
-    <InterfaceClass ftw.task.behaviors.ITransition>
+    <InterfaceClass opengever.task.behaviors.ITransition>
 
 We also expect this behavior to be a form field provider. Let's verify that.
 

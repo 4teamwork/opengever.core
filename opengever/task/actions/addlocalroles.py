@@ -6,8 +6,8 @@ from zope.formlib import form
 from zope import schema
 from plone.contentrules.rule.interfaces import IExecutable, IRuleElementData
 from plone.app.contentrules.browser.formhelper import AddForm, EditForm
-from ftw.task.task import ITask
-from ftw.task import _
+from opengever.task.task import ITask
+from opengever.task import _
 
 
 class IAddLocalRolesAction(Interface):
@@ -39,7 +39,7 @@ class AddLocalRolesAction(SimpleItem):
     object_roles = []
     related_items_roles = []
     parent_roles = []
-    element = "ftw.task.actions.AddLocalRoles"
+    element = "opengever.task.actions.AddLocalRoles"
 
     @property
     def summary(self):

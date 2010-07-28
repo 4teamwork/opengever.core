@@ -12,25 +12,25 @@
 
      <browser:page 
        for="plone.app.contentrules.browser.interfaces.IRuleActionAdding"
-       name="ftw.task.actions.AddLocalRoles"
+       name="opengever.task.actions.AddLocalRoles"
        class=".addlocalroles.AddLocalRolesAddForm"
        permission="cmf.ManagePortal"
        />
 
      <browser:page 
-       for="ftw.task.actions.addlocalroles.IAddLocalRolesAction"
+       for="opengever.task.actions.addlocalroles.IAddLocalRolesAction"
        name="edit"
        class=".addlocalroles.AddLocalRolesEditForm"
        permission="cmf.ManagePortal"
        />
 
      <plone:ruleAction
-         name="ftw.task.actions.AddLocalRoles"
+         name="opengever.task.actions.AddLocalRoles"
          title="Add local roles"
          description="Add local roles for the responsible user"
          for="*"
          event="zope.component.interfaces.IObjectEvent"
-         addview="ftw.task.actions.AddLocalRoles"
+         addview="opengever.task.actions.AddLocalRoles"
          editview="edit"
          schema=".addlocalroles.IAddLocalRolesAction"
          factory=".addlocalroles.AddLocalRolesAction"

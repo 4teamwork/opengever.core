@@ -1,7 +1,7 @@
 import logging
 from Products.CMFCore.utils import getToolByName
 # The profile id of your package:
-PROFILE_ID = 'profile-ftw.task:default'
+PROFILE_ID = 'profile-opengever.task:default'
 
 
 def add_catalog_indexes(context, logger=None):
@@ -16,7 +16,7 @@ def add_catalog_indexes(context, logger=None):
     """
     if logger is None:
         # Called as upgrade step: define our own logger.
-        logger = logging.getLogger('ftw.task')
+        logger = logging.getLogger('opengever.task')
 
     # Run the catalog.xml step as that may have defined new metadata
     # columns.  We could instead add <depends name="catalog"/> to
@@ -50,8 +50,8 @@ def add_catalog_indexes(context, logger=None):
 def import_various(context):
     """Import step for configuration that is not handled in xml files.
     """
-    if context.readDataFile('ftw.task_indexes.txt') is None:
+    if context.readDataFile('opengever.task_indexes.txt') is None:
         return
-    logger = context.getLogger('ftw.task')
+    logger = context.getLogger('opengever.task')
     site = context.getSite()
     add_catalog_indexes(site, logger)

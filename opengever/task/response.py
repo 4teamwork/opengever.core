@@ -25,12 +25,12 @@ from z3c.relationfield.schema import RelationChoice, RelationList
 from z3c.relationfield.relation import RelationValue
 from plone.formwidget.contenttree import ObjPathSourceBinder
 
-from ftw.task import _
-from ftw.task.adapters import IResponseContainer, Response
-from ftw.task.interfaces import IResponseAdder
-from ftw.task.permissions import DEFAULT_ISSUE_MIME_TYPE
-from ftw.task import util
-from ftw.task.task import ITask
+from opengever.task import _
+from opengever.task.adapters import IResponseContainer, Response
+from opengever.task.interfaces import IResponseAdder
+from opengever.task.permissions import DEFAULT_ISSUE_MIME_TYPE
+from opengever.task import util
+from opengever.task.task import ITask
 from ftw.datepicker.widget import DatePickerFieldWidget
 
 
@@ -231,7 +231,7 @@ class AddForm(form.AddForm, AutoExtensibleForm):
     @property
     def action(self):
         """See interfaces.IInputForm"""
-        return os.path.join(self.request.getURL(), '++add++ftw.task.task')
+        return os.path.join(self.request.getURL(), '++add++opengever.task.task')
 
     @button.buttonAndHandler(_(u'add', default='Add'),
                              name='add', )
@@ -317,12 +317,12 @@ class AddForm(form.AddForm, AutoExtensibleForm):
 
 class BeneathTask(grok.ViewletManager):
     grok.context(ITask)
-    grok.name('ftw.task.beneathTask')
+    grok.name('opengever.task.beneathTask')
 
 
 class ResponseView(grok.Viewlet, Base):
     grok.context(ITask)
-    grok.name("ftw.task.response.view")
+    grok.name("opengever.task.response.view")
     grok.viewletmanager(BeneathTask)
     grok.order(1)
 
@@ -334,7 +334,7 @@ class ResponseView(grok.Viewlet, Base):
 class AddFormView(layout.FormWrapper, grok.Viewlet, Base):
 grok.implements(IResponseAdder)
 grok.context(ITask)
-grok.name("ftw.task.response.addForm")
+grok.name("opengever.task.response.addForm")
 grok.viewletmanager(BeneathTask)
 grok.order(2)
 form = AddForm

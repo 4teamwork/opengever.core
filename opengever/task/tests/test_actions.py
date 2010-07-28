@@ -7,12 +7,12 @@ from plone.contentrules.engine.interfaces import IRuleStorage
 from plone.contentrules.rule.interfaces import IRuleAction
 from plone.contentrules.rule.interfaces import IExecutable
 from plone.app.contentrules.rule import Rule
-from ftw.task.tests.layer import Layer
+from opengever.task.tests.layer import Layer
 from AccessControl import getSecurityManager
 from zope.app.intid.interfaces import IIntIds
 from z3c.relationfield import RelationValue
 
-from ftw.task.actions.addlocalroles import AddLocalRolesAction, AddLocalRolesEditForm
+from opengever.task.actions.addlocalroles import AddLocalRolesAction, AddLocalRolesEditForm
 
 class DummyEvent(object):
     implements(IObjectEvent)
@@ -28,18 +28,18 @@ class TestAddLocalRolesAction(PloneTestCase):
         self.setRoles(('Manager',))
         #self.folder.invokeFactory('Folder', 'f1')
         #self.folder.f1.invokeFactory('Document', 'd1')
-        #self.folder.invokeFactory('ftw.task.task', 't1')
+        #self.folder.invokeFactory('opengever.task.task', 't1')
         #self.folder.t1.setRelatedItems(self.folder.f1.d2)
 
     def testRegistered(self): 
-        element = getUtility(IRuleAction, name='ftw.task.actions.AddLocalRoles')
-        self.assertEquals('ftw.task.actions.AddLocalRoles', element.addview)
+        element = getUtility(IRuleAction, name='opengever.task.actions.AddLocalRoles')
+        self.assertEquals('opengever.task.actions.AddLocalRoles', element.addview)
         self.assertEquals('edit', element.editview)
         self.assertEquals(None, element.for_)
         self.assertEquals(IObjectEvent, element.event)
 
     def testInvokeAddView(self): 
-        element = getUtility(IRuleAction, name='ftw.task.actions.AddLocalRoles')
+        element = getUtility(IRuleAction, name='opengever.task.actions.AddLocalRoles')
         storage = getUtility(IRuleStorage)
         storage[u'foo'] = Rule()
         rule = self.portal.restrictedTraverse('++rule++foo')
@@ -60,13 +60,13 @@ class TestAddLocalRolesAction(PloneTestCase):
         self.assertEquals(set(['Contributor']), e.parent_roles)
     
     def testInvokeEditView(self): 
-        element = getUtility(IRuleAction, name='ftw.task.actions.AddLocalRoles')
+        element = getUtility(IRuleAction, name='opengever.task.actions.AddLocalRoles')
         e = AddLocalRolesAction()
         editview = getMultiAdapter((e, self.folder.REQUEST), name=element.editview)
         self.failUnless(isinstance(editview, AddLocalRolesEditForm))
     
     def testExecute(self):
-        self.folder.invokeFactory('ftw.task.task', 't1')
+        self.folder.invokeFactory('opengever.task.task', 't1')
         self.folder.t1.responsible = 'testuser'
         e = AddLocalRolesAction()
         e.object_roles = set(['Reader'])
@@ -76,7 +76,7 @@ class TestAddLocalRolesAction(PloneTestCase):
         self.assertEquals(('Reader',), local_roles.get('testuser'))
         
     def test_related_items_roles(self):
-        self.folder.invokeFactory('ftw.task.task', 't1')
+        self.folder.invokeFactory('opengever.task.task', 't1')
         self.folder.t1.responsible = 'testuser'
         e = AddLocalRolesAction()
         e.related_items_roles = set(['Reader'])
@@ -92,7 +92,7 @@ class TestAddLocalRolesAction(PloneTestCase):
         self.assertEquals(('Reader',), local_roles.get('testuser'))        
         
     def test_parent_roles(self):
-        self.folder.invokeFactory('ftw.task.task', 't1')
+        self.folder.invokeFactory('opengever.task.task', 't1')
         self.folder.t1.responsible = 'testuser'
         e = AddLocalRolesAction()
         e.parent_roles = set(['Contributor'])

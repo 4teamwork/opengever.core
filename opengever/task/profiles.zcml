@@ -5,7 +5,7 @@
   <!-- Register the installation GenericSetup extension profile -->
   <genericsetup:registerProfile
       name="default"
-      title="ftw.task"
+      title="opengever.task"
       directory="profiles/default"
       description=""
       provides="Products.GenericSetup.interfaces.EXTENSION"
@@ -13,9 +13,9 @@
 
   <!-- Register the import step -->
   <genericsetup:importStep
-      name="ftw.task"
-      title="ftw.task catalog indexes"
+      name="opengever.task"
+      title="opengever.task catalog indexes"
       description=""
-      handler="ftw.task.setuphandlers.import_various" />
+      handler="opengever.task.setuphandlers.import_various" />
 
 </configure>

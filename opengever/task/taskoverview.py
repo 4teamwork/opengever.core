@@ -4,7 +4,7 @@ from opengever.tabbedview.browser.tabs import OpengeverListingTab
 from ftw.table import helper
 from opengever.tabbedview.helper import readable_ogds_author, readable_date_set_invisibles
 
-from ftw.task import _
+from opengever.task import _
 
 def authenticated_member(context):
     return context.portal_membership.getAuthenticatedMember().getId()
@@ -41,7 +41,7 @@ class MyTasks(OpengeverListingTab):
         'transform': helper.readable_date },
         )
 
-    types = ['ftw.task.task', ]
+    types = ['opengever.task.task', ]
 
     search_options = {'responsible': authenticated_member}
 
@@ -72,7 +72,7 @@ class IssuedTasks(OpengeverListingTab):
         )
 
 
-    types = ['ftw.task.task', ]
+    types = ['opengever.task.task', ]
 
     search_options = {'issuer': authenticated_member}
         

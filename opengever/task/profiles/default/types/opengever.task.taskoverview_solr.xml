@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
-<object name="ftw.task.taskoverview" meta_type="Dexterity FTI"
-   i18n:domain="ftw.task" xmlns:i18n="http://xml.zope.org/namespaces/i18n">
+<object name="opengever.task.taskoverview" meta_type="Dexterity FTI"
+   i18n:domain="opengever.task" xmlns:i18n="http://xml.zope.org/namespaces/i18n">
  
  <!-- Basic metadata -->
  <property name="title" i18n:translate="">Taskoverview</property>
@@ -43,10 +43,13 @@
  <alias from="view" to="@@view"/>
  
  <!-- Actions -->
- <action title="my tasks" action_id="mytasks" category="arbeitsraum-tabs"
+ <action title="my tasks" action_id="mytasks_solr" category="arbeitsraum-tabs"
          condition_expr="" url_expr="string:#" visible="True">
  </action>
- <action title="issued tasks" action_id="issuedtasks" category="arbeitsraum-tabs"
+ <action title="issued tasks" action_id="issuedtasks_solr" category="arbeitsraum-tabs"
          condition_expr="" url_expr="string:#" visible="True">
+ </action>
+ <action title="assigned tasks" action_id="assignedtasks_solr" category="arbeitsraum-tabs"
+         condition_expr="python: object.portal_membership.getAuthenticatedMember().allowed(object, ('Administrator',))" url_expr="string:#" visible="True">
  </action>
 </object>

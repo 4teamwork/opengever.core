@@ -7,7 +7,7 @@
   <default>
    <bound-workflow workflow_id="simple_publication_workflow"/>
   </default>
-  <type type_id="ftw.task.task">
+  <type type_id="opengever.task.task">
    <bound-workflow workflow_id="opengever_task_workflow"/>
   </type>
  </bindings>

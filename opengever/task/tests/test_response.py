@@ -6,8 +6,8 @@ from Products.PloneTestCase.ptc import PloneTestCase
 from z3c.form import testing
 from zope.annotation.interfaces import IAttributeAnnotatable
 
-from ftw.task.tests.layer import Layer
-from ftw.task.response import Base
+from opengever.task.tests.layer import Layer
+from opengever.task.response import Base
 
 class TestResponse(PloneTestCase):
     
@@ -16,7 +16,7 @@ class TestResponse(PloneTestCase):
     def afterSetUp(self):
         # Set up z3c.form defaults
         testing.setupFormDefaults()
-        self.folder.invokeFactory('ftw.task.task', 'task')
+        self.folder.invokeFactory('opengever.task.task', 'task')
 
     def test_base_view(self):
         view = Base(self.folder.task, testing.TestRequest())

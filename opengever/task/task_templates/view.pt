@@ -4,7 +4,7 @@
       xmlns:i18n="http://xml.zope.org/namespaces/i18n"
       lang="en"
       metal:use-macro="context/main_template/macros/master"
-      i18n:domain="ftw.task">
+      i18n:domain="opengever.task">
   <body>
 
     <metal:main fill-slot="main">
@@ -39,11 +39,11 @@
             </tr>
           </tal:rep>
           <tr>
-            <th i18n:domain="ftw.task" i18n:translate="label_workflow_state">State</th>
+            <th i18n:domain="opengever.task" i18n:translate="label_workflow_state">State</th>
             <td i18n:translate="" i18n:domain="plone" tal:content="python: view.context.portal_workflow.getInfoFor(view.context, 'review_state')" />
           <tr>
           <tr>
-            <th i18n:domain="ftw.task" i18n:translate="label_last_modified">Last change</th>
+            <th i18n:domain="opengever.task" i18n:translate="label_last_modified">Last change</th>
             <td tal:content="python: view.context.modified().strftime('%d.%m.%Y %H:%M')"/>
           </tr>
           <tal:rep tal:define="group python: view.groups[1]">
@@ -100,7 +100,7 @@
 
         <div class="visualClear"><!----></div>
         <div><h2 i18n:translate="responses">Responses:</h2></div>
-        <div tal:replace="structure provider:ftw.task.beneathTask" />
+        <div tal:replace="structure provider:opengever.task.beneathTask" />
         <div class="visualClear"><!----></div>
         <div tal:replace="structure provider:plone.belowcontentbody" />
         <div class="visualClear"><!----></div>

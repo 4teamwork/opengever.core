@@ -1,11 +1,11 @@
 <configure
     xmlns="http://namespaces.zope.org/zope"
 
-    i18n_domain="ftw.task">
+    i18n_domain="opengever.task">
 
     <permission
-        id="ftw.task.AddTask"
-        title="ftw.task: Add task"
+        id="opengever.task.AddTask"
+        title="opengever.task: Add task"
         />
    
 </configure>

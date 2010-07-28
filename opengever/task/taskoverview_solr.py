@@ -7,7 +7,7 @@ from opengever.tabbedview.helper import readable_ogds_author
 from opengever.octopus.tentacle.contacts import ContactInformation
 from opengever.octopus.tentacle.interfaces import ITentacleConfig
 
-from ftw.task import _
+from opengever.task import _
 
 def authenticated_member(context):
     return context.portal_membership.getAuthenticatedMember().getId()
@@ -33,7 +33,7 @@ class MyTasks(OpengeverSolrListingTab):
         'transform': helper.readable_date },
         )
 
-    types = ['ftw.task.task', ]
+    types = ['opengever.task.task', ]
     
     search_options = {'responsible': authenticated_member}
 
@@ -60,7 +60,7 @@ class IssuedTasks(OpengeverSolrListingTab):
     
     def build_query(self):
         aid = authenticated_member(self.context)
-        return 'portal_type:ftw.task.task AND issuer:%s AND ! responsible:%s' % (aid, aid)
+        return 'portal_type:opengever.task.task AND issuer:%s AND ! responsible:%s' % (aid, aid)
 
         
 class AssignedTasks(OpengeverSolrListingTab):
@@ -87,4 +87,4 @@ class AssignedTasks(OpengeverSolrListingTab):
         member = authenticated_member(self.context)
         conf = getUtility(ITentacleConfig)
         client_id = conf.cid
-        return 'portal_type:ftw.task.task AND assigned_client:(%s)' % client_id
+        return 'portal_type:opengever.task.task AND assigned_client:(%s)' % client_id

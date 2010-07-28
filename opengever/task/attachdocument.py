@@ -6,8 +6,8 @@ from any context of a foreign client into a existing task.
 from Acquisition import aq_inner
 from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
 from five import grok
-from ftw.task import _
-from ftw.task.task import ITask
+from opengever.task import _
+from opengever.task.task import ITask
 from opengever.octopus.tentacle.interfaces import ICortexCommunicator
 from opengever.octopus.tentacle.interfaces import ITentacleCommunicator
 from plone.directives import form

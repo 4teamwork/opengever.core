@@ -11,7 +11,7 @@
 
     <plone:behavior
         title="Transition"
-        description="Transition Support for ftw.task"
+        description="Transition Support for opengever.task"
         provides=".behaviors.ITransition"
         factory=".behaviors.Transition"
         marker=".behaviors.ITransitionMarker"

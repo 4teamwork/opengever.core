@@ -1,12 +1,12 @@
 from setuptools import setup, find_packages
 import os
 
-version = open('ftw/task/version.txt').read().strip()
+version = open('opengever/task/version.txt').read().strip()
 maintainer = 'Philippe Gross'
 
-setup(name='ftw.task',
+setup(name='opengever.task',
       version=version,
-      description="the ftw task object" + \
+      description="the opengever task object" + \
           ' (Maintainer: %s)' % maintainer,
       long_description=open("README.txt").read() + "\n" + \
                        open(os.path.join("docs", "HISTORY.txt")).read(),
@@ -19,10 +19,10 @@ setup(name='ftw.task',
       keywords='',
       author='%s, 4teamwork GmbH' % maintainer,
       author_email='mailto:info@4teamwork.ch',
-      url='http://psc.4teamwork.ch/4teamwork/ftw/ftw.task',
+      url='http://psc.4teamwork.ch/4teamwork/opengever/opengever.task',
       license='GPL2',
       packages=find_packages(exclude=['ez_setup']),
-      namespace_packages=['ftw'],
+      namespace_packages=['opengever'],
       include_package_data=True,
       zip_safe=False,
       install_requires=[

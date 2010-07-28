@@ -12,241 +12,241 @@ msgstr ""
 "Language-Code: en\n"
 "Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
-"Domain: ftw.task\n"
+"Domain: opengever.task\n"
 "X-Poedit-Language: German\n"
 
-#: ftw.task/ftw/task/actions/addlocalroles.py:105
+#: opengever.task/opengever/task/actions/addlocalroles.py:105
 msgid "Add Local Roles Action"
 msgstr ""
 
-#: ftw.task/ftw/task/actions/addlocalroles.py:46
+#: opengever.task/opengever/task/actions/addlocalroles.py:46
 msgid "Add local roles for object: ${object_roles}, related items: ${related_items_roles}, parent: ${parent_roles}"
 msgstr ""
 
-#: ftw.task/ftw/task/actions/addlocalroles.py:106
+#: opengever.task/opengever/task/actions/addlocalroles.py:106
 msgid "Add local roles to all related items for the 'responsible' user."
 msgstr ""
 
-#: ftw.task/ftw/task/response.py:409
+#: opengever.task/opengever/task/response.py:409
 msgid "Changes saved to response id ${response_id}."
 msgstr ""
 
-#: ftw.task/ftw/task/actions/addlocalroles.py:107
+#: opengever.task/opengever/task/actions/addlocalroles.py:107
 msgid "Configure element"
 msgstr ""
 
-#: ftw.task/ftw/task/response_templates/responseview.pt:26
+#: opengever.task/opengever/task/response_templates/responseview.pt:26
 msgid "Delete"
 msgstr ""
 
-#: ftw.task/ftw/task/response_templates/responseview.pt:16
+#: opengever.task/opengever/task/response_templates/responseview.pt:16
 msgid "Edit"
 msgstr ""
 
-#: ftw.task/ftw/task/actions/addlocalroles.py:119
+#: opengever.task/opengever/task/actions/addlocalroles.py:119
 msgid "Edit Local Roles Action"
 msgstr ""
 
-#: ftw.task/ftw/task/response.py:301
+#: opengever.task/opengever/task/response.py:301
 msgid "Issue state"
 msgstr ""
 
-#: ftw.task/ftw/task/response.py:437
+#: opengever.task/opengever/task/response.py:437
 msgid "No response selected for removal."
 msgstr ""
 
-#: ftw.task/ftw/task/response.py:400
+#: opengever.task/opengever/task/response.py:400
 msgid "No response selected for saving."
 msgstr ""
 
-#: ftw.task/ftw/task/response.py:184
+#: opengever.task/opengever/task/response.py:184
 msgid "No response selected."
 msgstr ""
 
-#: ftw.task/ftw/task/actions/addlocalroles.py:18
+#: opengever.task/opengever/task/actions/addlocalroles.py:18
 msgid "Object Roles"
 msgstr ""
 
-#: ftw.task/ftw/task/actions/addlocalroles.py:28
+#: opengever.task/opengever/task/actions/addlocalroles.py:28
 msgid "Parent Roles"
 msgstr ""
 
-#: ftw.task/ftw/task/actions/addlocalroles.py:23
+#: opengever.task/opengever/task/actions/addlocalroles.py:23
 msgid "Related Items Roles"
 msgstr ""
 
-#: ftw.task/ftw/task/response.py:459
+#: opengever.task/opengever/task/response.py:459
 msgid "Removed response id ${response_id}."
 msgstr ""
 
-#: ftw.task/ftw/task/response.py:452
+#: opengever.task/opengever/task/response.py:452
 msgid "Response id ${response_id} does not exist so it cannot be removed."
 msgstr ""
 
-#: ftw.task/ftw/task/response.py:198
+#: opengever.task/opengever/task/response.py:198
 msgid "Response id ${response_id} does not exist."
 msgstr ""
 
-#: ftw.task/ftw/task/response.py:444
+#: opengever.task/opengever/task/response.py:444
 msgid "Response id ${response_id} is no integer so it cannot be removed."
 msgstr ""
 
-#: ftw.task/ftw/task/response.py:192
+#: opengever.task/opengever/task/response.py:192
 msgid "Response id ${response_id} is no integer."
 msgstr ""
 
-#: ftw.task/ftw/task/profiles/default/types/ftw.task.task.xml
+#: opengever.task/opengever/task/profiles/default/types/ftw.task.task.xml
 msgid "Task"
 msgstr ""
 
-#: ftw.task/ftw/task/profiles/default/types/ftw.task.taskoverview.xml
-#: ftw.task/ftw/task/profiles/default/types/ftw.task.taskoverview_solr.xml
+#: opengever.task/opengever/task/profiles/default/types/ftw.task.taskoverview.xml
+#: opengever.task/opengever/task/profiles/default/types/ftw.task.taskoverview_solr.xml
 msgid "Taskoverview"
 msgstr ""
 
-#: ftw.task/ftw/task/actions/addlocalroles.py:19
+#: opengever.task/opengever/task/actions/addlocalroles.py:19
 msgid "The local roles to add."
 msgstr ""
 
-#: ftw.task/ftw/task/response.py:431
+#: opengever.task/opengever/task/response.py:431
 msgid "You are not allowed to delete responses."
 msgstr ""
 
-#: ftw.task/ftw/task/response.py:394
+#: opengever.task/opengever/task/response.py:394
 msgid "You are not allowed to edit responses."
 msgstr ""
 
 #. Default: "Add"
-#: ftw.task/ftw/task/response.py:236
+#: opengever.task/opengever/task/response.py:236
 msgid "add"
 msgstr ""
 
 #. Default: "Attach"
-#: ftw.task/ftw/task/attachdocument.py:125
+#: opengever.task/opengever/task/attachdocument.py:125
 msgid "button_attach"
 msgstr ""
 
 #. Default: "Back"
-#: ftw.task/ftw/task/attachdocument.py:119
+#: opengever.task/opengever/task/attachdocument.py:119
 msgid "button_back"
 msgstr ""
 
 #. Default: "Cancel"
-#: ftw.task/ftw/task/attachdocument.py:49
+#: opengever.task/opengever/task/attachdocument.py:49
 msgid "button_cancel"
 msgstr ""
 
 #. Default: "Continue"
-#: ftw.task/ftw/task/attachdocument.py:53
+#: opengever.task/opengever/task/attachdocument.py:53
 msgid "button_continue"
 msgstr ""
 
 #. Default: "Cancel"
-#: ftw.task/ftw/task/response.py:311
+#: opengever.task/opengever/task/response.py:311
 msgid "cancel"
 msgstr ""
 
 #. Default: "Containing Tasks:"
-#: ftw.task/ftw/task/task_templates/view.pt:65
+#: opengever.task/opengever/task/task_templates/view.pt:65
 msgid "containing_task"
 msgstr ""
 
-#: ftw.task/ftw/task/response.py:266
+#: opengever.task/opengever/task/response.py:266
 msgid "date_of_completion"
 msgstr ""
 
-#: ftw.task/ftw/task/response.py:264
+#: opengever.task/opengever/task/response.py:264
 msgid "deadline"
 msgstr ""
 
 #. Default: "Documents:"
-#: ftw.task/ftw/task/task_templates/view.pt:87
+#: opengever.task/opengever/task/task_templates/view.pt:87
 msgid "documents"
 msgstr ""
 
 #. Default: "Additional"
-#: ftw.task/ftw/task/task.py:65
+#: opengever.task/opengever/task/task.py:65
 msgid "fieldset_additional"
 msgstr ""
 
 #. Default: "Common"
-#: ftw.task/ftw/task/task.py:52
+#: opengever.task/opengever/task/task.py:52
 msgid "fieldset_common"
 msgstr ""
 
-#: ftw.task/ftw/task/response.py:60
-#: ftw.task/ftw/task/task.py:120
+#: opengever.task/opengever/task/response.py:60
+#: opengever.task/opengever/task/task.py:120
 msgid "help_date_of_completion"
 msgstr ""
 
-#: ftw.task/ftw/task/task.py:113
+#: opengever.task/opengever/task/task.py:113
 msgid "help_deadline"
 msgstr ""
 
-#: ftw.task/ftw/task/response.py:54
+#: opengever.task/opengever/task/response.py:54
 msgid "help_deadline_response"
 msgstr ""
 
-#: ftw.task/ftw/task/task.py:159
+#: opengever.task/opengever/task/task.py:159
 msgid "help_effectiveCost"
 msgstr ""
 
-#: ftw.task/ftw/task/task.py:153
+#: opengever.task/opengever/task/task.py:153
 msgid "help_effectiveDuration"
 msgstr ""
 
-#: ftw.task/ftw/task/task.py:147
+#: opengever.task/opengever/task/task.py:147
 msgid "help_expectedCost"
 msgstr ""
 
-#: ftw.task/ftw/task/task.py:141
+#: opengever.task/opengever/task/task.py:141
 msgid "help_expectedDuration"
 msgstr ""
 
-#: ftw.task/ftw/task/task.py:135
+#: opengever.task/opengever/task/task.py:135
 msgid "help_expectedStartOfWork"
 msgstr ""
 
-#: ftw.task/ftw/task/task.py:86
+#: opengever.task/opengever/task/task.py:86
 msgid "help_issuer"
 msgstr ""
 
-#: ftw.task/ftw/task/response.py:46
+#: opengever.task/opengever/task/response.py:46
 msgid "help_new_responsible_response"
 msgstr ""
 
-#: ftw.task/ftw/task/response.py:40
+#: opengever.task/opengever/task/response.py:40
 msgid "help_response"
 msgstr ""
 
-#: ftw.task/ftw/task/task.py:105
+#: opengever.task/opengever/task/task.py:105
 msgid "help_responsible"
 msgstr ""
 
 #. Default: "Select a document"
-#: ftw.task/ftw/task/attachdocument.py:84
+#: opengever.task/opengever/task/attachdocument.py:84
 msgid "help_source_document"
 msgstr ""
 
 #. Default: "Select a source dossier"
-#: ftw.task/ftw/task/attachdocument.py:38
+#: opengever.task/opengever/task/attachdocument.py:38
 msgid "help_source_dossier"
 msgstr ""
 
-#: ftw.task/ftw/task/task.py:94
+#: opengever.task/opengever/task/task.py:94
 msgid "help_task_type"
 msgstr ""
 
-#: ftw.task/ftw/task/task.py:127
+#: opengever.task/opengever/task/task.py:127
 msgid "help_text"
 msgstr ""
 
-#: ftw.task/ftw/task/task.py:79
+#: opengever.task/opengever/task/task.py:79
 msgid "help_title"
 msgstr ""
 
-#: ftw.task/ftw/task/behaviors.py:28
-#: ftw.task/ftw/task/response.py:66
+#: opengever.task/opengever/task/behaviors.py:28
+#: opengever.task/opengever/task/response.py:66
 msgid "help_transition"
 msgstr ""
 
@@ -257,143 +257,143 @@ msgid "issuedtasks_solr"
 msgstr ""
 
 #. Default: "by ${author}"
-#: ftw.task/ftw/task/task_templates/byline.pt:17
+#: opengever.task/opengever/task/task_templates/byline.pt:17
 msgid "label_by_author"
 msgstr ""
 
 #. Default: "Date of completion"
-#: ftw.task/ftw/task/response.py:59
-#: ftw.task/ftw/task/task.py:119
+#: opengever.task/opengever/task/response.py:59
+#: opengever.task/opengever/task/task.py:119
 msgid "label_date_of_completion"
 msgstr ""
 
 #. Default: "Deadline"
-#: ftw.task/ftw/task/task.py:112
+#: opengever.task/opengever/task/task.py:112
 msgid "label_deadline"
 msgstr ""
 
 #. Default: "New deadline"
-#: ftw.task/ftw/task/response.py:53
+#: opengever.task/opengever/task/response.py:53
 msgid "label_deadline_Response"
 msgstr ""
 
 #. Default: "You are not allowed to edit this response."
-#: ftw.task/ftw/task/templates/edit_response.pt:44
+#: opengever.task/opengever/task/templates/edit_response.pt:44
 msgid "label_edit_response_not_allowed"
 msgstr ""
 
 #. Default: "effective cost"
-#: ftw.task/ftw/task/task.py:158
+#: opengever.task/opengever/task/task.py:158
 msgid "label_effectiveCost"
 msgstr ""
 
 #. Default: "effective duration"
-#: ftw.task/ftw/task/task.py:152
+#: opengever.task/opengever/task/task.py:152
 msgid "label_effectiveDuration"
 msgstr ""
 
 #. Default: "Please enter your response below"
-#: ftw.task/ftw/task/templates/edit_response.pt:59
+#: opengever.task/opengever/task/templates/edit_response.pt:59
 msgid "label_enter_response"
 msgstr ""
 
 #. Default: "expected cost"
-#: ftw.task/ftw/task/task.py:146
+#: opengever.task/opengever/task/task.py:146
 msgid "label_expectedCost"
 msgstr ""
 
 #. Default: "Expected duration"
-#: ftw.task/ftw/task/task.py:140
+#: opengever.task/opengever/task/task.py:140
 msgid "label_expectedDuration"
 msgstr ""
 
 #. Default: "Start with work"
-#: ftw.task/ftw/task/task.py:134
+#: opengever.task/opengever/task/task.py:134
 msgid "label_expectedStartOfWork"
 msgstr ""
 
 #. Default: "issued at"
-#: ftw.task/ftw/task/taskoverview.py:40
-#: ftw.task/ftw/task/taskoverview_solr.py:32
+#: opengever.task/opengever/task/taskoverview.py:40
+#: opengever.task/opengever/task/taskoverview_solr.py:32
 msgid "label_issued_date"
 msgstr ""
 
 #. Default: "Issuer"
-#: ftw.task/ftw/task/task.py:85
+#: opengever.task/opengever/task/task.py:85
 msgid "label_issuer"
 msgstr ""
 
 #. Default: "Last change"
-#: ftw.task/ftw/task/task_templates/view.pt:46
+#: opengever.task/opengever/task/task_templates/view.pt:46
 msgid "label_last_modified"
 msgstr ""
 
 #. Default: "Related Items"
-#: ftw.task/ftw/task/response.py:72
+#: opengever.task/opengever/task/response.py:72
 msgid "label_related_items"
 msgstr ""
 
 #. Default: "Response"
-#: ftw.task/ftw/task/response.py:39
+#: opengever.task/opengever/task/response.py:39
 msgid "label_response"
 msgstr ""
 
 #. Default: "Responsible"
-#: ftw.task/ftw/task/task.py:104
+#: opengever.task/opengever/task/task.py:104
 msgid "label_responsible"
 msgstr ""
 
 #. Default: "New responsible"
-#: ftw.task/ftw/task/response.py:45
+#: opengever.task/opengever/task/response.py:45
 msgid "label_responsible_Response"
 msgstr ""
 
 #. Default: "Responsible"
-#: ftw.task/ftw/task/taskoverview.py:36
-#: ftw.task/ftw/task/taskoverview_solr.py:28
+#: opengever.task/opengever/task/taskoverview.py:36
+#: opengever.task/opengever/task/taskoverview_solr.py:28
 msgid "label_responsible_task"
 msgstr ""
 
 #. Default: "Return to issue."
-#: ftw.task/ftw/task/templates/edit_response.pt:32
+#: opengever.task/opengever/task/templates/edit_response.pt:32
 msgid "label_return_to_issue"
 msgstr ""
 
 #. Default: "Document"
-#: ftw.task/ftw/task/attachdocument.py:83
+#: opengever.task/opengever/task/attachdocument.py:83
 msgid "label_source_document"
 msgstr ""
 
 #. Default: "Dossier"
-#: ftw.task/ftw/task/attachdocument.py:37
+#: opengever.task/opengever/task/attachdocument.py:37
 msgid "label_source_dossier"
 msgstr ""
 
 #. Default: "Task Type"
-#: ftw.task/ftw/task/task.py:93
-#: ftw.task/ftw/task/taskoverview.py:32
-#: ftw.task/ftw/task/taskoverview_solr.py:24
+#: opengever.task/opengever/task/task.py:93
+#: opengever.task/opengever/task/taskoverview.py:32
+#: opengever.task/opengever/task/taskoverview_solr.py:24
 msgid "label_task_type"
 msgstr ""
 
 #. Default: "Text"
-#: ftw.task/ftw/task/task.py:126
+#: opengever.task/opengever/task/task.py:126
 msgid "label_text"
 msgstr ""
 
 #. Default: "Title"
-#: ftw.task/ftw/task/task.py:78
+#: opengever.task/opengever/task/task.py:78
 msgid "label_title"
 msgstr ""
 
 #. Default: "Transition"
-#: ftw.task/ftw/task/behaviors.py:27
-#: ftw.task/ftw/task/response.py:65
+#: opengever.task/opengever/task/behaviors.py:27
+#: opengever.task/opengever/task/response.py:65
 msgid "label_transition"
 msgstr ""
 
 #. Default: "State"
-#: ftw.task/ftw/task/task_templates/view.pt:42
+#: opengever.task/opengever/task/task_templates/view.pt:42
 msgid "label_workflow_state"
 msgstr ""
 
@@ -404,51 +404,51 @@ msgid "mytasks_solr"
 msgstr ""
 
 #. Default: "No Content"
-#: ftw.task/ftw/task/task_templates/view.pt:73
+#: opengever.task/opengever/task/task_templates/view.pt:73
 msgid "no_content"
 msgstr ""
 
 #. Default: "Response"
-#: ftw.task/ftw/task/templates/edit_response.pt:56
+#: opengever.task/opengever/task/templates/edit_response.pt:56
 msgid "response_label_response"
 msgstr ""
 
 #. Default: "Responses:"
-#: ftw.task/ftw/task/task_templates/view.pt:102
+#: opengever.task/opengever/task/task_templates/view.pt:102
 msgid "responses"
 msgstr ""
 
-#: ftw.task/ftw/task/response.py:269
+#: opengever.task/opengever/task/response.py:269
 msgid "responsible"
 msgstr ""
 
 #. Default: "Subtasks:"
-#: ftw.task/ftw/task/task_templates/view.pt:76
+#: opengever.task/opengever/task/task_templates/view.pt:76
 msgid "subtasks"
 msgstr ""
 
 #. Default: "Added by"
-#: ftw.task/ftw/task/response_templates/responseview.pt:35
+#: opengever.task/opengever/task/response_templates/responseview.pt:35
 msgid "task_added_by"
 msgstr ""
 
 #. Default: "on"
-#: ftw.task/ftw/task/response_templates/responseview.pt:38
+#: opengever.task/opengever/task/response_templates/responseview.pt:38
 msgid "task_added_on"
 msgstr ""
 
 #. Default: "Attach document"
-#: ftw.task/ftw/task/attachdocument.py:46
+#: opengever.task/opengever/task/attachdocument.py:46
 msgid "title_attach_document_form"
 msgstr ""
 
 #. Default: "Edit response"
-#: ftw.task/ftw/task/templates/edit_response.pt:41
+#: opengever.task/opengever/task/templates/edit_response.pt:41
 msgid "title_edit_response"
 msgstr ""
 
 #. Default: "Error: no response found for editing"
-#: ftw.task/ftw/task/templates/edit_response.pt:30
+#: opengever.task/opengever/task/templates/edit_response.pt:30
 msgid "title_error_no_response"
 msgstr ""
 

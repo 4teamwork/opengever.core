@@ -1,4 +1,4 @@
 <?xml version="1.0"?>
 <registry>
-  <records interface="ftw.task.interfaces.ITaskSettings" />
+  <records interface="opengever.task.interfaces.ITaskSettings" />
 </registry>

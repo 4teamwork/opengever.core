@@ -7,10 +7,10 @@ from Products.PloneTestCase.layer import onsetup
 @onsetup
 def setupPackage():
     fiveconfigure.debug_mode = True
-    import ftw.task
-    zcml.load_config('configure.zcml', ftw.task)
+    import opengever.task
+    zcml.load_config('configure.zcml', opengever.task)
     fiveconfigure.debug_mode = False
-    #ztc.installPackage('ftw.task')
+    #ztc.installPackage('opengever.task')
 
 setupPackage()
 PloneTestCase.setupPloneSite()

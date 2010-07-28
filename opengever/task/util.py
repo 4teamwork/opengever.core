@@ -9,9 +9,9 @@ from Products.CMFPlone import PloneMessageFactory as PMF
 
 from zope.component import getUtility
 from plone.registry.interfaces import IRegistry
-from ftw.task.interfaces import ITaskSettings
+from opengever.task.interfaces import ITaskSettings
 
-import ftw.task
+import opengever.task
 
 
 class UsersVocabulary(SimpleVocabulary):
@@ -42,7 +42,7 @@ def getTransitionVocab(context):
         return SimpleVocabulary([])
     wftool = getToolByName(context, 'portal_workflow')
     transitions = []
-    if ftw.task.task.ITask.providedBy(context) and context.REQUEST.URL.find('++add++ftw.task.task') == -1:
+    if opengever.task.task.ITask.providedBy(context) and context.REQUEST.URL.find('++add++opengever.task.task') == -1:
         for tdef in wftool.getTransitionsFor(context):
             transitions.append(SimpleVocabulary.createTerm(tdef['id'],
             tdef['id'],
@@ -50,7 +50,7 @@ def getTransitionVocab(context):
             default=tdef['title_or_id'])))
         return SimpleVocabulary(transitions)
     else:
-        wf = wftool.get(wftool.getChainForPortalType('ftw.task.task')[0])
+        wf = wftool.get(wftool.getChainForPortalType('opengever.task.task')[0])
         state = wf.states.get(wf.initial_state)
         for tid in state.transitions:
             tdef= wf.transitions.get(tid, None)

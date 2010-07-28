@@ -14,7 +14,7 @@ from persistent.list import PersistentList
 from AccessControl import getSecurityManager
 from DateTime import DateTime
 
-from ftw.task.task import ITask
+from opengever.task.task import ITask
 from opengever.octopus.tentacle.interfaces import IContactInformation
 
 

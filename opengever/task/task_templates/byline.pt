@@ -11,12 +11,12 @@
 
   <tal:name tal:condition="context/responsible">
     <span class="documentAuthor"
-          i18n:domain="ftw.task"
+          i18n:domain="opengever.task"
           i18n:translate="label_by_author">
       by
       <tal:responsible
          i18n:name="author"
-         i18n:domain="ftw.task"
+         i18n:domain="opengever.task"
          >
         <tal:link replace="structure viewlet/responsible_link" />
       </tal:responsible>

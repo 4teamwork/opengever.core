@@ -1,3 +1,3 @@
 from zope.i18nmessageid import MessageFactory
 
-_ = MessageFactory("ftw.task")
+_ = MessageFactory("opengever.task")

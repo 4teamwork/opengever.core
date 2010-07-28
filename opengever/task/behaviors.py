@@ -13,8 +13,8 @@ from rwproperty import getproperty, setproperty
 
 from z3c.form.browser import radio
 
-from ftw.task import _
-from ftw.task import util
+from opengever.task import _
+from opengever.task import util
 
 
 class ITransition(form.Schema):
@@ -63,7 +63,7 @@ class Transition(object):
     def transition(self, value):
         # store the value for later use (see events.py)
         annotation = IAnnotations(self.context.REQUEST)
-        annotation['ftw.task.task'] = value
+        annotation['opengever.task.task'] = value
         if not self.context.title:
             ts = getToolByName(self.context, 'translation_service')
             self.context.id = ts.translate(value)

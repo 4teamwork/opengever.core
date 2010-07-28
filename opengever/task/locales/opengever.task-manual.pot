@@ -11,7 +11,7 @@ msgstr ""
 "Language-Code: en\n"
 "Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
-"Domain: ftw.task\n"
+"Domain: opengever.task\n"
 "X-Poedit-Language: German\n"
 
 msgid "mytasks"

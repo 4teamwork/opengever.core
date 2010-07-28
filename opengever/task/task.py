@@ -22,7 +22,7 @@ from Products.CMFCore.utils import getToolByName
 from datetime import datetime, timedelta
 from rwproperty import getproperty, setproperty
 from plone.registry.interfaces import IRegistry
-from ftw.task.interfaces import ITaskSettings
+from opengever.task.interfaces import ITaskSettings
 from plone.app.layout.viewlets import content
 from plone.app.layout.viewlets.interfaces import IBelowContentTitle
 from plone.formwidget import autocomplete
@@ -36,9 +36,9 @@ from plone.directives import form, dexterity
 from plone.memoize.instance import memoize
 from plone.registry.interfaces import IRegistry
 
-from ftw.task import util
-from ftw.task import _
-from ftw.task.interfaces import ITaskSettings
+from opengever.task import util
+from opengever.task import _
+from opengever.task.interfaces import ITaskSettings
 
 from opengever.base.interfaces import ISequenceNumber
 from opengever.translations.browser.add import TranslatedAddForm
@@ -259,7 +259,7 @@ class View(dexterity.DisplayForm):
 
     def getSubTasks(self):
         tasks = self.context.getFolderContents(full_objects=False,
-                                               contentFilter={'portal_type': 'ftw.task.task'})
+                                               contentFilter={'portal_type': 'opengever.task.task'})
         return tasks
 
     def getContainingTask(self):
@@ -303,7 +303,7 @@ class View(dexterity.DisplayForm):
 #class AddForm(dexterity.AddForm):
 
 class AddForm(TranslatedAddForm):
-    grok.name('ftw.task.task')
+    grok.name('opengever.task.task')
 
     def update(self):
         # put default value for relatedItems into request
@@ -331,7 +331,7 @@ class TaskWidgetTraversal(WidgetTraversal):
 
         if not ITask.providedBy(context):
             context = aq_parent(aq_inner(context))
-        fti = getUtility(IDexterityFTI, name='ftw.task.task')
+        fti = getUtility(IDexterityFTI, name='opengever.task.task')
         adder = queryMultiAdapter((context, self.request, fti),
                                   IBrowserPage)
 
@@ -371,7 +371,7 @@ class TaskAutoCompleteSearch(grok.CodeView, autocomplete.widget.AutocompleteSear
         # XXX
         if 1:
             return
-        view_name = '++add++ftw.task.task'
+        view_name = '++add++opengever.task.task'
         view_instance = content.restrictedTraverse(view_name)
         getSecurityManager().validate(content,
                                       content,

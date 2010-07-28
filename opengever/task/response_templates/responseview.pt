@@ -1,5 +1,5 @@
 <div class="response-adder"
-     i18n:domain="ftw.task">
+     i18n:domain="opengever.task">
      <tal:responses repeat="response_info viewlet/responses">
        <div class="response-reply"
             tal:define="id response_info/id;
