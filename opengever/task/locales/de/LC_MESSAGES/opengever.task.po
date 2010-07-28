@@ -92,12 +92,12 @@ msgstr "Antwort id ${response_id} ist keine Zahl und konnte deshalb nicht gelös
 msgid "Response id ${response_id} is no integer."
 msgstr "Antwort ${response_id} ist keine Zahl"
 
-#: opengever.task/opengever/task/profiles/default/types/ftw.task.task.xml
+#: opengever.task/opengever/task/profiles/default/types/opengever.task.task.xml
 msgid "Task"
 msgstr "Aufgabe"
 
-#: opengever.task/opengever/task/profiles/default/types/ftw.task.taskoverview.xml
-#: opengever.task/opengever/task/profiles/default/types/ftw.task.taskoverview_solr.xml
+#: opengever.task/opengever/task/profiles/default/types/opengever.task.taskoverview.xml
+#: opengever.task/opengever/task/profiles/default/types/opengever.task.taskoverview_solr.xml
 msgid "Taskoverview"
 msgstr "Auftragsübersicht"
 

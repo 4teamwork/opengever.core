@@ -95,12 +95,12 @@ msgstr ""
 msgid "Response id ${response_id} is no integer."
 msgstr ""
 
-#: opengever.task/opengever/task/profiles/default/types/ftw.task.task.xml
+#: opengever.task/opengever/task/profiles/default/types/opengever.task.task.xml
 msgid "Task"
 msgstr ""
 
-#: opengever.task/opengever/task/profiles/default/types/ftw.task.taskoverview.xml
-#: opengever.task/opengever/task/profiles/default/types/ftw.task.taskoverview_solr.xml
+#: opengever.task/opengever/task/profiles/default/types/opengever.task.taskoverview.xml
+#: opengever.task/opengever/task/profiles/default/types/opengever.task.taskoverview_solr.xml
 msgid "Taskoverview"
 msgstr ""
 

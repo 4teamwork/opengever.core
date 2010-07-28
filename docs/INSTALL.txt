@@ -1,31 +1,31 @@
-ftw.task Installation
+opengever.task Installation
 ---------------------
 
-To install ftw.task into the global Python environment (or a workingenv),
+To install opengever.task into the global Python environment (or a workingenv),
 using a traditional Zope 2 instance, you can do this:
 
 * When you're reading this you have probably already run 
-  ``easy_install ftw.task``. Find out how to install setuptools
+  ``easy_install opengever.task``. Find out how to install setuptools
   (and EasyInstall) here:
   http://peak.telecommunity.com/DevCenter/EasyInstall
 
-* Create a file called ``ftw.task-configure.zcml`` in the
+* Create a file called ``opengever.task-configure.zcml`` in the
   ``/path/to/instance/etc/package-includes`` directory.  The file
   should only contain this::
 
-    <include package="ftw.task" />
+    <include package="opengever.task" />
 
 
 Alternatively, if you are using zc.buildout and the plone.recipe.zope2instance
 recipe to manage your project, you can do this:
 
-* Add ``ftw.task`` to the list of eggs to install, e.g.:
+* Add ``opengever.task`` to the list of eggs to install, e.g.:
 
     [buildout]
     ...
     eggs =
         ...
-        ftw.task
+        opengever.task
        
 * Tell the plone.recipe.zope2instance recipe to install a ZCML slug:
 
@@ -33,7 +33,7 @@ recipe to manage your project, you can do this:
     recipe = plone.recipe.zope2instance
     ...
     zcml =
-        ftw.task
+        opengever.task
       
 * Re-run buildout, e.g. with:
 
