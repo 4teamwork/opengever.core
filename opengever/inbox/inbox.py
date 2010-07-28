@@ -50,4 +50,4 @@ class AssignedTasks(OpengeverSolrListingTab):
 
     def build_query(self):
          group = self.context.inbox_group
-         return 'portal_type:ftw.task.task AND responsible:(%s)' % group
+         return 'portal_type:opengever.task.task AND responsible:(%s)' % group

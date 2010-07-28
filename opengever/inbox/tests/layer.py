@@ -6,7 +6,7 @@ ptc.setupPloneSite()
 class IntegrationTestLayer(collective.testcaselayer.ptc.BasePTCLayer):
 
     def afterSetUp(self):
-        # Install the ftw.task product
+        # Install the opengever.task product
         self.addProfile('opengever.inbox:default')
 
 Layer = IntegrationTestLayer([collective.testcaselayer.ptc.ptc_layer])
