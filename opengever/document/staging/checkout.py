@@ -15,6 +15,7 @@ from Products.CMFCore.interfaces._content import ISiteRoot
 
 
 from plone.directives.form import widget
+from plone.directives import form as dform
 from z3c.form.browser import checkbox
 
 from opengever.document import _
@@ -25,7 +26,7 @@ class NoItemsSelected(Exception):
     pass
 
 # ---- CHECKOUT ----
-class ICheckoutCommentFormSchema(Interface):
+class ICheckoutCommentFormSchema(dform.Schema):
     """ Form schema for entering a journal comment in checkout procedure
     """
     paths = schema.TextLine(title=u'Selected Items') # hidden
