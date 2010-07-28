@@ -15,6 +15,7 @@ from opengever.document.document import IDocumentSchema
 
 class DocumentReadFile(filerepresentation.DefaultReadFile, grok.Adapter):
     grok.implements(IRawReadFile)
+    grok.provides(IRawReadFile)
     grok.context(IDocumentSchema)
 
     @property
