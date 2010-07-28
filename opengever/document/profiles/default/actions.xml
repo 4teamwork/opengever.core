@@ -43,11 +43,11 @@
     <object name="create_task" meta_type="CMF Action" i18n:domain="opengever.document">
         <property name="title" i18n:translate="">Create Task</property>
         <property name="description" i18n:translate=""></property>
-        <property name="url_expr">string:++add++ftw.task.task:method</property>
+        <property name="url_expr">string:++add++opengever.task.task:method</property>
         <property name="icon_expr"></property>
         <property name="available_expr"></property>
         <property name="permissions">
-          <element value="ftw.task: Add task"/>
+          <element value="opengever.task: Add task"/>
         </property>
         <property name="visible">True</property>
     </object>

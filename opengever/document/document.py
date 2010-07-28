@@ -60,7 +60,7 @@ from opengever.tabbedview import _ as tvmf
 from opengever.base.interfaces import IReferenceNumber, ISequenceNumber
 from opengever.octopus.tentacle.interfaces import IContactInformation
 
-from ftw.task import _ as taskmsg
+from opengever.task import _ as taskmsg
 
 LOG = logging.getLogger('opengever.document')
 
@@ -513,7 +513,7 @@ class Overview(DisplayForm, OpengeverTab):
 #     def build_query(self):
 #         intids = getUtility( IIntIds )
 #         obj_id = intids.getId( self.context )
-#         return 'portal_type:ftw.task.task AND related_items:%s' % obj_id
+#         return 'portal_type:opengever.task.task AND related_items:%s' % obj_id
 
 
 class Tasks(OpengeverListingTab):
@@ -538,7 +538,7 @@ class Tasks(OpengeverListingTab):
         'transform': helper.readable_date },
         )
 
-    types = ['ftw.task.task', ]
+    types = ['opengever.task.task', ]
 
     search_options = {'related_items': related_document}
 
