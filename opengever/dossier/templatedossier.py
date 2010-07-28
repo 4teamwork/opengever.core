@@ -4,7 +4,7 @@ import urllib
 from zope.annotation.interfaces import IAnnotations
 from zope.interface import Interface
 from zope.component import getUtility
-from zope.app.container.contained import ObjectAddedEvent, ObjectModifiedEvent
+from zope.lifecycleevent import ObjectAddedEvent, ObjectModifiedEvent
 from zope.event import notify
 
 from five import grok
