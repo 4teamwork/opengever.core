@@ -1,0 +1,14 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+    i18n_domain="opengever.policy.base">
+
+    <genericsetup:registerProfile
+        name="default"
+        title="opengever.policy.base"
+        directory="profiles/default"
+        description="A policy product which turns a vanilla plone site into an OpenGever client."
+        provides="Products.GenericSetup.interfaces.EXTENSION"
+    />
+
+</configure>
