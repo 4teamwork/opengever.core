@@ -17,8 +17,8 @@
     <dependency>profile-opengever.trash:default</dependency>
     <dependency>profile-opengever.mail:default</dependency>
     <dependency>profile-opengever.octopus.tentacle:default</dependency>
-    <dependency>profile-ftw.dashboard.dragndrop:default</dependency>
-    <!--dependency>profile-ftw.dashboard.portlets.favourites:default</dependency>
+    <!--dependency>profile-ftw.dashboard.dragndrop:default</dependency>
+    <dependency>profile-ftw.dashboard.portlets.favourites:default</dependency>
     <dependency>profile-ftw.dashboard.portlets.postit:default</dependency>
     <dependency>profile-ftw.dashboard.portlets.recentlymodified:default</dependency-->
     <dependency>profile-ftw.directoryservice:default</dependency>
