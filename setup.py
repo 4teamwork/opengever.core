@@ -28,11 +28,12 @@ setup(name='opengever.portlets.tree',
       zip_safe=False,
       install_requires=[
         'setuptools',
+        'ftw.treeview',
         # -*- Extra requirements: -*-
         ],
       entry_points="""
       # -*- Entry points: -*-
       [z3c.autoinclude.plugin]
-      target = opengever
+      target = plone
       """,
       )
