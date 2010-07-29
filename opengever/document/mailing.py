@@ -31,8 +31,8 @@ from plone.namedfile.interfaces import INamedFile
 from plone.rfc822.interfaces import IPrimaryField
 from plone.z3cform import layout
 
-from ftw.sendmail.composer import HTMLComposer
-from ftw.sendmail.interfaces import IEMailComposer
+# TODO: integrate html mail composer without ftw.sendmail
+#from ftw.sendmail.composer import HTMLComposer
 
 from opengever.document.interfaces import IAttachable, IAttachedMailComposer
 from opengever.document import _
@@ -154,7 +154,11 @@ class AttachedMailComposer(grok.GlobalUtility):
     def compose_html_mail(self, render_args={}, *args, **kwargs):
         """ Composes a HTML Mail with IEMailComposer utility
         """
-        return HTMLComposer(*args, **kwargs).render(**render_args)
+        # TODO: integrate html mail composer
+        # removed HTMLComposer because ftw.sendmail is not compatible with
+        # plone 4
+        return '<html><body>dummy</body></html>'
+        #return HTMLComposer(*args, **kwargs).render(**render_args)
 
 
 
