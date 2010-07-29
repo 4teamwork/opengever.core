@@ -1,5 +1,0 @@
-# created by: svn propset svn:ignore -F ./IGNORE.TXT .
-
-opengever.portlets.tree.egg-info
-build
-dist
