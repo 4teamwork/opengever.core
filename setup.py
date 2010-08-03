@@ -33,9 +33,6 @@ setup(name='opengever.base',
         'plone.indexer',
         'plone.formwidget.namedfile',
         'plone.app.dexterity',
-        'opengever.repository',
-        'opengever.dossier',
-        'opengever.document',
         'ftw.table',
         'Products.PloneTestCase',
         'Products.CMFCore',
@@ -51,6 +48,6 @@ setup(name='opengever.base',
       entry_points="""
       # -*- Entry points: -*-
       [z3c.autoinclude.plugin]
-      target = opengever
+      target = plone
       """,
       )
