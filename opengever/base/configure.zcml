@@ -33,16 +33,4 @@
 
   <include package=".behaviors" />
 
-
-  <!-- Monkey Patches -->
-  <include package="collective.monkeypatcher" />
-
-  <monkey:patch
-      description="Zope Export gets bloated by parent objects: http://groups.google.com/group/dexterity-development/t/7ca5b06acbc600e7"
-      class="plone.dexterity.content.DexterityContent"
-      original="_getCopy"
-      replacement=".monkeypatch.patched_getCopy"
-      ignoreOriginal="true"
-      />
-
 </configure>
