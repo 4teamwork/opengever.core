@@ -1,14 +1,11 @@
 from five import grok
 from persistent.dict import PersistentDict
-from zope.annotation.interfaces import IAnnotations
-from zope.component import getUtility, getAdapter
-from zope.interface import Interface
-
+from plone.dexterity.interfaces import IDexterityContent
 from Products.CMFCore.interfaces import ISiteRoot
 from Products.Transience.Transience import Increaser
-from plone.dexterity.interfaces import IDexterityContent
+from zope.annotation.interfaces import IAnnotations
+from zope.component import getUtility, getAdapter
 
-from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.base.interfaces import ISequenceNumber
 from opengever.base.interfaces import ISequenceNumberGenerator
 
@@ -65,11 +62,3 @@ class DefaultSequenceNumberGenerator(grok.Adapter):
         map[key] = inc
         return inc()
 
- 
-class DossierSequenceNumberGenerator(DefaultSequenceNumberGenerator):
-    """ All dossier-types should use the same range/key of sequence numbers.
-    """
-    grok.provides(ISequenceNumberGenerator)
-    grok.context(IDossierMarker)
-
-    key = 'DossierSequenceNumberGenerator'
