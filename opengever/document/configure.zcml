@@ -23,6 +23,8 @@
     <include file="permissions.zcml" />
 
 	<include file="profiles.zcml" />
+	
+	<include package=".viewlets" />
 
     <!-- Register locales translations -->
     <i18n:registerTranslations directory="locales" />

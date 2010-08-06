@@ -1,0 +1,54 @@
+<div xmlns="http://www.w3.org/1999/xhtml"
+     xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+     xmlns:tal="http://xml.zope.org/namespaces/tal"
+     class="contentHistory"
+     id="content-history"
+     i18n:domain="plone"
+     tal:define="history view/fullHistory;"
+     tal:condition="history">
+  <dl id="history" class="collapsible collapsedOnLoad">
+    <dt class="collapsibleHeader" i18n:translate="label_history">History</dt>
+    <dd class="collapsibleContent">
+      <table class="version_history listing">
+        <thead>
+          <th>Aktion</th>
+          <th>Aktor</th>
+          <th>Datum</th>
+          <th>Kommentar</th>
+          <th></th>
+        </thead>
+        <tbody>
+          <tal:block repeat="item history">
+            <tr tal:define="isVersion python:item['type']=='versioning';">
+              <td tal:define="action item/transition_title;
+                              action python:action and action.replace('Edit', 'Edited') or action"
+                  tal:content="action" i18n:translate="" />
+              <td tal:define="actor item/actor;
+                              actor_name python:actor and actor.get('fullname','username') or item['actorid'];
+                              actor_home item/actor_home;">
+                <a href=""
+                   tal:condition="actor_home"
+                   tal:attributes="href actor_home"
+                   tal:content="actor_name"> runyaga </a>
+                <span tal:condition="not: actor_home"
+                      tal:replace="actor_name"/>
+              </td>
+              <td tal:define="effective item/effective_date|nothing;
+                              effectiveDate python:effective and context.toLocalizedTime(item['effective_date'],long_format=True)"
+                  tal:content="python:context.toLocalizedTime(item['time'],long_format=True)" />
+              <td tal:content="item/comments|nothing" />
+              <td tal:condition="isVersion">
+                <a href=""
+                   class="standalone"
+                   tal:attributes="href string:${here/absolute_url}/download_file_version?version_id=${item/version_id}">Download</a>
+                <a href=""
+                   class="standalone"
+                   tal:attributes="href string:${item/revert_url}?version_id=${item/version_id}&amp;submit=1">Zur&uuml;cksetzen</a>
+              </td>
+            </tr>
+          </tal:block>
+        </tbody>
+      </table>
+    </dd>
+  </dl>
+</div>

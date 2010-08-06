@@ -62,6 +62,7 @@ setup(name='opengever.document',
         'opengever.translations',
         'collective.autopermission',
         'plone.keyring',
+        'opengever.mail',
         ],
       entry_points="""
       # -*- Entry points: -*-

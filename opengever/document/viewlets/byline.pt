@@ -1,10 +1,10 @@
 <div class="documentByLine"
      id="plone-document-byline"
      i18n:domain="opengever.document"
-     tal:condition="viewlet/show">
+     tal:condition="view/show">
 
   <span id="lock-icon"
-        tal:define="lock_icon viewlet/locked_icon"
+        tal:define="lock_icon view/locked_icon"
         tal:condition="lock_icon">
     <img tal:replace="structure lock_icon" />
   </span>
@@ -27,38 +27,38 @@
     <span i18n:translate="label_workflow_state" class="documentStatus">
       State:
     </span>
-    <span tal:content="viewlet/workflow_state" i18n:translate="" i18n:domain="plone" class="documentAuthor" />
+    <span tal:content="view/workflow_state" i18n:translate="" i18n:domain="plone" class="documentAuthor" />
   </tal:state>
   <span class="documentModified" tal:condition="context/document_date">
     <span i18n:translate="label_start_byline" tal:omit-tag="">
       from
     </span>
-    <span tal:replace="python:viewlet.toLocalizedTime(str(here.document_date),long_format=0)">
+    <span tal:replace="python:view.toLocalizedTime(str(here.document_date),long_format=0)">
       August 16, 2001 at 23:35:59
     </span>
   </span>
 
-  <tal:expired tal:condition="viewlet/isExpired">
+  <tal:expired tal:condition="view/isExpired">
     <span class="state-expired"
           i18n:translate="time_expired" tal:omit-tag="">expired</span>
   </tal:expired>
 
-  <span class="sequenceNumber" tal:condition="viewlet/sequence_number">
+  <span class="sequenceNumber" tal:condition="view/sequence_number">
     <span i18n:translate="label_sequence_number"
           tal:omit-tag="">
       Sequence Number:
     </span>
-    <span tal:replace="viewlet/sequence_number">
+    <span tal:replace="view/sequence_number">
       14
     </span>
   </span>
 
-  <span class="referenceNumber" tal:condition="viewlet/reference_number">
+  <span class="referenceNumber" tal:condition="view/reference_number">
     <span i18n:translate="label_reference_number"
           tal:omit-tag="">
       Reference Number:
     </span>
-    <span tal:replace="viewlet/reference_number">
+    <span tal:replace="view/reference_number">
       14
     </span>
   </span>
