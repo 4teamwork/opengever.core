@@ -5,6 +5,14 @@ Changelog
 1.0a4
 -----
 
+* Issue #581 Zusätzliches Feld: Zum Feld Archivwürdigkeit ein Kommentarfeld hinzufügen
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/581
+  [06.08.2010, jinfanfer]
+
+* Issue #580 Zusätzliches Feld: Zum Feld Aufbewahrungsdauer ein Kommentarfeld hinzufügen
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/580
+  [06.08.2010, jinfanfer]
+
 * Fixed validator problems in test
   [18.03.2010, jbaumann]
   
