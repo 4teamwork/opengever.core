@@ -17,10 +17,6 @@ from DateTime import DateTime
 from opengever.dossier import _
 from opengever.base.interfaces import ISequenceNumber
 
-from plone.app.layout.viewlets import content
-from plone.memoize.instance import memoize
-from plone.app.layout.viewlets.interfaces import IBelowContentTitle
-
 from ftw.table import helper
 from ftw.table.interfaces import ITableGenerator
 from opengever.document.staging.manager import ICheckinCheckoutManager
