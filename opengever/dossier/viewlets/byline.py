@@ -8,8 +8,20 @@ from opengever.dossier.behaviors.dossier import IDossier, IDossierMarker
 from opengever.mail.behaviors import IMailInAddressMarker, IMailInAddress
 from opengever.octopus.tentacle.interfaces import IContactInformation
 
-
 class Byline(content.DocumentBylineViewlet):
+    update = content.DocumentBylineViewlet.update
+
+    @memoize
+    def workflow_state(self):
+        state = self.context_state.workflow_state()
+        workflows = self.context.portal_workflow.getWorkflowsFor(self.context.aq_explicit)
+        if workflows:
+            for w in workflows:
+                if w.states.has_key(state):
+                    return w.states[state].title or state
+
+
+class BusinessCaseByline(Byline):
     """ Specific DocumentByLine, for the Businesscasedossier Type"""
 
     update = content.DocumentBylineViewlet.update
@@ -26,16 +38,6 @@ class Byline(content.DocumentBylineViewlet):
     def end(self):
         dossier = IDossier(self.context)
         return dossier.end
-
-    @memoize
-    def workflow_state(self):
-        state = self.context_state.workflow_state()
-        workflows = self.tools.workflow().getWorkflowsFor(
-            self.context.aq_explicit)
-        if workflows:
-            for w in workflows:
-                if state in w.states:
-                    return w.states[state].title or state
 
     @memoize
     def sequence_number(self):
@@ -56,3 +58,13 @@ class Byline(content.DocumentBylineViewlet):
     def email(self):
         if IMailInAddressMarker.providedBy(self.context):
             return IMailInAddress(self.context).get_email_address()
+
+    @memoize
+    def workflow_state(self):
+        state = self.context_state.workflow_state()
+        workflows = self.context.portal_workflow.getWorkflowsFor(self.context.aq_explicit)
+        if workflows:
+            for w in workflows:
+                if w.states.has_key(state):
+                    return w.states[state].title or state
+

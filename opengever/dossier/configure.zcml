@@ -13,6 +13,8 @@
     <grok:grok package="." />
 
 	<include package=".latex" />
+	
+	<include package=".viewlets" />
 
     <include file="behaviors.zcml" />
 
