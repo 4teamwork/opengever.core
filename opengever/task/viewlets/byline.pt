@@ -1,15 +1,15 @@
 <div class="documentByLine"
      id="plone-document-byline"
      i18n:domain="opengever.theme"
-     tal:condition="viewlet/show">
+     tal:condition="view/show">
 
   <span id="lock-icon"
-        tal:define="lock_icon viewlet/locked_icon"
+        tal:define="lock_icon view/locked_icon"
         tal:condition="lock_icon">
     <img tal:replace="structure lock_icon" />
   </span>
 
-  <tal:name tal:condition="context/responsible">
+  <tal:name tal:condition="here/responsible">
     <span class="documentAuthor"
           i18n:domain="opengever.task"
           i18n:translate="label_by_author">
@@ -18,7 +18,7 @@
          i18n:name="author"
          i18n:domain="opengever.task"
          >
-        <tal:link replace="structure viewlet/responsible_link" />
+        <tal:link replace="structure view/responsible_link" />
       </tal:responsible>
 
     </span>
@@ -28,29 +28,29 @@
     <span i18n:translate="label_workflow_state" class="documentStatus">
       State:
     </span>
-    <span tal:content="viewlet/workflow_state" i18n:translate="" i18n:domain="plone" class="documentAuthor" />
+    <span tal:content="view/workflow_state" i18n:translate="" i18n:domain="plone" class="documentAuthor" />
   </tal:state>
 
   <span class="documentModified">
     <span i18n:translate="box_last_modified" tal:omit-tag="">
       last modified
     </span>
-    <span tal:replace="python:viewlet.toLocalizedTime(here.ModificationDate(),long_format=1)">
+    <span tal:replace="python:view.toLocalizedTime(here.ModificationDate(),long_format=1)">
       August 16, 2001 at 23:35:59
     </span>
   </span>
 
-  <tal:expired tal:condition="viewlet/isExpired">
+  <tal:expired tal:condition="view/isExpired">
     <span class="state-expired"
           i18n:translate="time_expired" tal:omit-tag="">expired</span>
   </tal:expired>
 
-  <span class="sequenceNumber" tal:condition="viewlet/sequence_number">
+  <span class="sequenceNumber" tal:condition="view/sequence_number">
     <span i18n:translate="label_sequence_number"
           i18n:domain="opengever.dossier" tal:omit-tag="">
       Sequence Number:
     </span>
-    <span tal:replace="viewlet/sequence_number">
+    <span tal:replace="view/sequence_number">
       14
     </span>
   </span>
