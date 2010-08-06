@@ -9,7 +9,7 @@ from z3c.form.browser import checkbox
 from zope import schema
 from zope.schema.vocabulary import SimpleVocabulary
 from zope.schema.interfaces import IContextSourceBinder
-from zope.component import queryUtility, getUtility, getAdapter
+from zope.component import queryUtility, getUtility
 from zc.relation.interfaces import ICatalog
 from zope.app.intid.interfaces import IIntIds
 from datetime import datetime
@@ -25,9 +25,6 @@ from plone.app.iterate.interfaces import IWorkingCopy
 from plone.stagingbehavior.relation import StagingRelationValue
 from plone.registry.interfaces import IRegistry
 from plone.app.layout.viewlets.interfaces import IBelowContentTitle
-from plone.app.layout.viewlets.interfaces import IBelowContentBody
-from plone.autoform.interfaces import ORDER_KEY
-from plone.autoform.interfaces import OMITTED_KEY
 from plone.supermodel.interfaces import FIELDSETS_KEY
 from plone.supermodel.model import Fieldset
 from plone.versioningbehavior.behaviors import IVersionable
@@ -47,16 +44,12 @@ from opengever.document import _
 from opengever.document.interfaces import IDocumentType
 from ftw.journal.interfaces import IAnnotationsJournalizable, IWorkflowHistoryJournalizable
 
-from plone.memoize.instance import memoize
-from plone.app.layout.viewlets import content
 from ftw.journal.config import JOURNAL_ENTRIES_ANNOTATIONS_KEY
-from zope.annotation.interfaces import IAnnotations, IAnnotatable
 
 from plone.directives.dexterity import DisplayForm
 
-from opengever.tabbedview.browser.tabs import OpengeverTab, OpengeverListingTab, OpengeverSolrListingTab
+from opengever.tabbedview.browser.tabs import OpengeverTab, OpengeverListingTab
 from opengever.tabbedview.helper import readable_ogds_author, linked, readable_date_set_invisibles
-from opengever.tabbedview import _ as tvmf
 from opengever.base.interfaces import IReferenceNumber, ISequenceNumber
 from opengever.octopus.tentacle.interfaces import IContactInformation
 
@@ -64,14 +57,19 @@ from opengever.task import _ as taskmsg
 
 LOG = logging.getLogger('opengever.document')
 
+# move and omit the changeNote,
+# because it's not possible to make a new version when you editing a file
 IVersionable.setTaggedValue( FIELDSETS_KEY, [
         Fieldset( 'common', fields=[
                 'changeNote',
                 ])
         ] )
-IVersionable.setTaggedValue( OMITTED_KEY, {
-        'changeNote' : 'true',
-        } )
+
+# TODO: Not Work in plone 4 and the dexterity b2 release
+# possibly it can be solved with plone.directives
+# IVersionable.setTaggedValue( OMITTED_KEY, {
+#         'changeNote' : 'true',
+#         } )
 
 @grok.provider(IContextSourceBinder)
 def possibleTypes(context):
@@ -83,7 +81,7 @@ def possibleTypes(context):
     for term in voc:
         terms.append(SimpleVocabulary.createTerm(term))
     return SimpleVocabulary(terms)
-    
+
 def related_document(context):
     intids = getUtility( IIntIds )
     return intids.getId( context )
@@ -257,7 +255,6 @@ class Document(Item):
 
         # get icon by content type
         contenttype       = field.contentType
-        contenttype_major = contenttype and contenttype.split('/')[0] or ''
         mimetypeitem = None
         try:
             mimetypeitem = mtr.lookup(contenttype)
@@ -294,8 +291,8 @@ def related_items( obj ):
     for rel in relations:
         results.append(rel.from_id)
     return results
-    
-    
+
+
 grok.global_adapter(related_items, name='related_items')
 
 
@@ -311,14 +308,14 @@ def SearchableText( obj ):
         schema.getFields( IDocumentSchema ).get('file'),
         ]
     searchable = []
-    
+
     #Reference Number
     ref_number = IReferenceNumber(obj).get_number()
     searchable.append(ref_number)
     #Sequence Number
     seq_number = str(getUtility(ISequenceNumber).get_number(obj))
     searchable.append(seq_number)
-    
+
     for field in fields:
         data = field.get( context )
         if not data:
@@ -347,7 +344,7 @@ def SearchableText( obj ):
         if data:
             searchable.append(data)
     return ' '.join(searchable)
-    
+
 grok.global_adapter(SearchableText, name='SearchableText')
 
 
@@ -427,7 +424,7 @@ class View(dexterity.DisplayForm):
     def creator_link(self):
         info = getUtility(IContactInformation)
         return info.render_link(self.context.Creator())
-        
+
 class ForwardViewlet(grok.Viewlet):
     """Display the message subject
     """
@@ -461,11 +458,11 @@ class Overview(DisplayForm, OpengeverTab):
 #     grok.context(IDocumentSchema)
 #     grok.name('tabbedview_view-preview')
 #     grok.template('preview')
-# 
+#
 #     def __call__(self):
 #         IPreviewable(self.context).buildAndStorePreview()
 #         return DisplayForm.__call__(self)
-        
+
 #XXX TEMPORARY REPLACED WITH A NON SOLR TAB
 #class Tasks(OpengeverSolrListingTab):
 #     grok.context(IDocumentSchema)
@@ -479,7 +476,7 @@ class Overview(DisplayForm, OpengeverTab):
 #         'responsible',
 #         ('review_state', 'review_state', helper.translated_string()),
 #         )
-#         
+#
 #     def build_query(self):
 #         intids = getUtility( IIntIds )
 #         obj_id = intids.getId( self.context )
@@ -495,15 +492,15 @@ class Tasks(OpengeverListingTab):
         ('', helper.path_checkbox),
         ('review_state', 'review_state', helper.translated_string()),
         ('Title', 'sortable_title', linked),
-        {'column' : 'task_type', 
+        {'column' : 'task_type',
         'column_title' : taskmsg(u'label_task_type', 'Task Type')},
         ('deadline', helper.readable_date),
         ('date_of_completion', readable_date_set_invisibles), # erledigt am
-        {'column' : 'responsible', 
-        'column_title' : taskmsg(u'label_responsible_task', 'Responsible'),  
+        {'column' : 'responsible',
+        'column_title' : taskmsg(u'label_responsible_task', 'Responsible'),
         'transform' : readable_ogds_author},
         ('issuer', readable_ogds_author), # zugewiesen von
-        {'column' : 'created', 
+        {'column' : 'created',
         'column_title' : taskmsg(u'label_issued_date', 'issued at'),
         'transform': helper.readable_date },
         )
@@ -533,7 +530,6 @@ class Journal(grok.View, OpengeverTab):
 
     def data(self):
         context = self.context
-        history = []
 
         if IAnnotationsJournalizable.providedBy(self.context):
             annotations = IAnnotations(context)
@@ -542,18 +538,6 @@ class Journal(grok.View, OpengeverTab):
             raise NotImplemented
 
 
-# class DocumentContentHistoryViewlet(grok.Viewlet,
-#                                      content.ContentHistoryViewlet):
-#     """ Custom version of content history viewlet for documents
-#     """
-#     grok.name('plone.belowcontentbody.contenthistory')
-#     grok.context(IDocumentSchema)
-#     grok.viewletmanager(IBelowContentBody)
-#     grok.require('zope2.View')
-# 
-#     update = content.ContentHistoryViewlet.update
-
- 
 class DownloadFileVersion(grok.CodeView):
     grok.context(IDocumentSchema)
     grok.name('download_file_version')
@@ -569,5 +553,3 @@ class DownloadFileVersion(grok.CodeView):
         response.setHeader('Content-Disposition',
                            'attachment;filename="%s"' % old_file.filename)
         return old_file.data
-
-
