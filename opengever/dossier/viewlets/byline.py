@@ -8,16 +8,18 @@ from opengever.dossier.behaviors.dossier import IDossier, IDossierMarker
 from opengever.mail.behaviors import IMailInAddressMarker, IMailInAddress
 from opengever.octopus.tentacle.interfaces import IContactInformation
 
+
 class Byline(content.DocumentBylineViewlet):
     update = content.DocumentBylineViewlet.update
 
     @memoize
     def workflow_state(self):
         state = self.context_state.workflow_state()
-        workflows = self.context.portal_workflow.getWorkflowsFor(self.context.aq_explicit)
+        workflows = self.context.portal_workflow.getWorkflowsFor(
+            self.context.aq_explicit)
         if workflows:
             for w in workflows:
-                if w.states.has_key(state):
+                if state in w.states:
                     return w.states[state].title or state
 
 
@@ -62,9 +64,9 @@ class BusinessCaseByline(Byline):
     @memoize
     def workflow_state(self):
         state = self.context_state.workflow_state()
-        workflows = self.context.portal_workflow.getWorkflowsFor(self.context.aq_explicit)
+        workflows = self.context.portal_workflow.getWorkflowsFor(
+            self.context.aq_explicit)
         if workflows:
             for w in workflows:
-                if w.states.has_key(state):
+                if state in w.states:
                     return w.states[state].title or state
-
