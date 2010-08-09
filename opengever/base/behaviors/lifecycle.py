@@ -30,7 +30,9 @@ class ILifeCycle(form.Schema):
         label = _(u'fieldset_lifecycle', default=u'Life Cycle'),
         fields = [
             u'retention_period',
-            u'archival_value',
+            u'retention_period_annotation',
+            u'archival_value',    
+            u'archival_value_annotation',
             u'custody_period',
             ],
         )
@@ -42,11 +44,23 @@ class ILifeCycle(form.Schema):
         required = True,
         )
 
+    retention_period_annotation = schema.Text(
+        title=_(u'label_retention_period_annotation', default=u'retentionPeriodAnnotation'),
+        description = _(u'help_retention_period_annotation', default=u''),
+        required=False
+        )
+
     archival_value = schema.Choice(
         title = _(u'label_archival_value', default=u'Archival value'),
         description = _(u'help_archival_value', default=u'Archival value code'),
         source = u'lifecycle_archival_value_vocabulary',
         required = True,
+        )
+
+    archival_value_annotation = schema.Text(
+        title=_(u'label_archival_value_annotation', default=u'archivalValueAnnotation'),
+        description = _(u'help_archival_value_annotation', default=u''),
+        required=False
         )
 
     custody_period = schema.Choice(

@@ -3,7 +3,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2009-12-01 10:45+0000\n"
+"POT-Creation-Date: 2010-08-06 05:49+0000\n"
 "PO-Revision-Date: 2009-01-01 10:00+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: Jonas Baumann <j.baumann@4teamwork.ch>\n"
@@ -51,110 +51,128 @@ msgid "confidential"
 msgstr "Vertraulich"
 
 #. Default: "A Sibling with the same reference number is existing"
-#: opengever.base/opengever/base/behaviors/reference.py:66
+#: ./opengever/base/behaviors/reference.py:106
 msgid "error_sibling_reference_number_existing"
 msgstr "Ein Objekt mit dieser Referenznummer existiert bereits auf gleicher Stufe"
 
 #. Default: "Classification"
-#: opengever.base/opengever/base/behaviors/classification.py:22
+#: ./opengever/base/behaviors/classification.py:20
 msgid "fieldset_classification"
 msgstr "Sichtbarkeit"
 
 #. Default: "Common"
-#: opengever.base/opengever/base/behaviors/base.py:20
-#: opengever.base/opengever/base/behaviors/reference.py:16
+#: ./opengever/base/behaviors/base.py:20
+#: ./opengever/base/behaviors/reference.py:20
 msgid "fieldset_common"
 msgstr "Allgemein"
 
 #. Default: "Life Cycle"
-#: opengever.base/opengever/base/behaviors/classification.py:62
+#: ./opengever/base/behaviors/lifecycle.py:30
 msgid "fieldset_lifecycle"
 msgstr "Lebenszyklus"
 
 #. Default: "Archival value code"
-#: opengever.base/opengever/base/behaviors/classification.py:79
+#: ./opengever/base/behaviors/lifecycle.py:55
 msgid "help_archival_value"
 msgstr "Archivwürdigkeit"
 
+#: ./opengever/base/behaviors/lifecycle.py:62
+msgid "help_archival_value_annotation"
+msgstr ""
+
 #. Default: ""
-#: opengever.base/opengever/base/behaviors/classification.py:33
+#: ./opengever/base/behaviors/classification.py:31
 msgid "help_classification"
 msgstr "Grad, in dem die Unterlagen vor unberechtigter Einsicht geschützt werden müssen"
 
-#: opengever.base/opengever/base/behaviors/creator.py:21
+#: ./opengever/base/behaviors/creator.py:21
 msgid "help_creators"
 msgstr ""
 
-#: opengever.base/opengever/base/behaviors/classification.py:86
+#: ./opengever/base/behaviors/lifecycle.py:68
 msgid "help_custody_period"
 msgstr "Dauer, während der nach der Archivierung die Dokumente vor öffentlicher Einsichtnahme geschützt sind"
 
 #. Default: ""
-#: opengever.base/opengever/base/behaviors/classification.py:41
+#: ./opengever/base/behaviors/classification.py:39
 msgid "help_privacy_layer"
 msgstr "Markierung, die angibt, ob die Unterlagen besonders schützenswerte Personendaten oder Persönlichkeitsprofile gemäss Datenschutzrecht enthalten"
 
-#: opengever.base/opengever/base/behaviors/classification.py:48
+#: ./opengever/base/behaviors/classification.py:46
 msgid "help_public_trial"
 msgstr "Angabe, ob die Unterlagen gemäss Öffentlichkeitsgesetz besonders schützenswert sind oder nicht"
 
 #. Default: "BegrÃ¼undung Schutzgrad"
-#: opengever.base/opengever/base/behaviors/classification.py:55
+#: ./opengever/base/behaviors/classification.py:53
 msgid "help_public_trial_statement"
 msgstr "Argumente gegen die öffentliche Zugänglichkeit gemäss Öffentlichkeitsgesetz"
 
-#: opengever.base/opengever/base/behaviors/reference.py:24
+#: ./opengever/base/behaviors/reference.py:28
 msgid "help_reference_number"
 msgstr "Präfix für das Aktenzeichen von Dossiers, die in dieser Ordnungsposition enthalten sind"
 
-#: opengever.base/opengever/base/behaviors/classification.py:72
+#: ./opengever/base/behaviors/lifecycle.py:42
 msgid "help_retention_period"
 msgstr "Zeitraum zwischen dem jüngsten Dokumentdatum eines in einem Dossier enthaltenen Dokuments und dem Zeitpunkt, an dem dieses für die Geschäftstätigkeit der Verwaltungseinheit nicht mehr benötigt wird"
 
+#: ./opengever/base/behaviors/lifecycle.py:49
+msgid "help_retention_period_annotation"
+msgstr ""
+
 #. Default: "Archival value"
-#: opengever.base/opengever/base/behaviors/classification.py:78
+#: ./opengever/base/behaviors/lifecycle.py:54
 msgid "label_archival_value"
 msgstr "Archivwürdigkeit"
 
+#. Default: "archivalValueAnnotation"
+#: ./opengever/base/behaviors/lifecycle.py:61
+msgid "label_archival_value_annotation"
+msgstr "Kommentar zur Archivwürdigkeit"
+
 #. Default: "Classification"
-#: opengever.base/opengever/base/behaviors/classification.py:32
+#: ./opengever/base/behaviors/classification.py:30
 msgid "label_classification"
 msgstr "Klassifikation"
 
 #. Default: "Creators"
-#: opengever.base/opengever/base/behaviors/creator.py:20
+#: ./opengever/base/behaviors/creator.py:20
 msgid "label_creators"
 msgstr "Autoren"
 
 #. Default: "Custody period (years)"
-#: opengever.base/opengever/base/behaviors/classification.py:85
+#: ./opengever/base/behaviors/lifecycle.py:67
 msgid "label_custody_period"
 msgstr "Archivische Schutzfrist (Jahre)"
 
 #. Default: "Privacy layer"
-#: opengever.base/opengever/base/behaviors/classification.py:40
+#: ./opengever/base/behaviors/classification.py:38
 msgid "label_privacy_layer"
 msgstr "Datenschutzstufe"
 
 #. Default: "Public Trial"
-#: opengever.base/opengever/base/behaviors/classification.py:47
+#: ./opengever/base/behaviors/classification.py:45
 msgid "label_public_trial"
 msgstr "Öffentlichkeitsstatus:"
 
 #. Default: "Public trial statement"
-#: opengever.base/opengever/base/behaviors/classification.py:54
+#: ./opengever/base/behaviors/classification.py:52
 msgid "label_public_trial_statement"
 msgstr "Begründung für die Aufhebung des Öffentlichkeitsstatus"
 
 #. Default: "Reference"
-#: opengever.base/opengever/base/behaviors/reference.py:23
+#: ./opengever/base/behaviors/reference.py:27
 msgid "label_reference_number"
 msgstr "Präfix des Aktenzeichens"
 
 #. Default: "Retention period (years)"
-#: opengever.base/opengever/base/behaviors/classification.py:71
+#: ./opengever/base/behaviors/lifecycle.py:41
 msgid "label_retention_period"
 msgstr "Aufbewahrungsdauer (Jahre)"
+
+#. Default: "retentionPeriodAnnotation"
+#: ./opengever/base/behaviors/lifecycle.py:48
+msgid "label_retention_period_annotation"
+msgstr "Kommentar zur Aufbewahrungsdauer"
 
 #. Default ""
 #: opengever/repository/classification.py

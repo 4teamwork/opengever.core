@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2009-12-01 10:45+0000\n"
+"POT-Creation-Date: 2010-08-06 05:49+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -53,107 +53,124 @@ msgid "confidential"
 msgstr ""
 
 #. Default: "A Sibling with the same reference number is existing"
-#: opengever.base/opengever/base/behaviors/reference.py:66
+#: ./opengever/base/behaviors/reference.py:106
 msgid "error_sibling_reference_number_existing"
 msgstr ""
 
 #. Default: "Classification"
-#: opengever.base/opengever/base/behaviors/classification.py:22
+#: ./opengever/base/behaviors/classification.py:20
 msgid "fieldset_classification"
 msgstr ""
 
 #. Default: "Common"
-#: opengever.base/opengever/base/behaviors/base.py:20
-#: opengever.base/opengever/base/behaviors/reference.py:16
+#: ./opengever/base/behaviors/base.py:20
+#: ./opengever/base/behaviors/reference.py:20
 msgid "fieldset_common"
 msgstr ""
 
 #. Default: "Life Cycle"
-#: opengever.base/opengever/base/behaviors/classification.py:62
+#: ./opengever/base/behaviors/lifecycle.py:30
 msgid "fieldset_lifecycle"
 msgstr ""
 
 #. Default: "Archival value code"
-#: opengever.base/opengever/base/behaviors/classification.py:79
+#: ./opengever/base/behaviors/lifecycle.py:55
 msgid "help_archival_value"
 msgstr ""
 
-#: opengever.base/opengever/base/behaviors/classification.py:33
+#: ./opengever/base/behaviors/lifecycle.py:62
+msgid "help_archival_value_annotation"
+msgstr ""
+
+#: ./opengever/base/behaviors/classification.py:31
 msgid "help_classification"
 msgstr ""
 
-#: opengever.base/opengever/base/behaviors/creator.py:21
+#: ./opengever/base/behaviors/creator.py:21
 msgid "help_creators"
 msgstr ""
 
-#: opengever.base/opengever/base/behaviors/classification.py:86
+#: ./opengever/base/behaviors/lifecycle.py:68
 msgid "help_custody_period"
 msgstr ""
 
-#: opengever.base/opengever/base/behaviors/classification.py:41
+#: ./opengever/base/behaviors/classification.py:39
 msgid "help_privacy_layer"
 msgstr ""
 
-#: opengever.base/opengever/base/behaviors/classification.py:48
+#: ./opengever/base/behaviors/classification.py:46
 msgid "help_public_trial"
 msgstr ""
 
-#. Default: "BegrÃ¼undung Schutzgrad"
-#: opengever.base/opengever/base/behaviors/classification.py:55
+#: ./opengever/base/behaviors/classification.py:53
 msgid "help_public_trial_statement"
 msgstr ""
 
-#: opengever.base/opengever/base/behaviors/reference.py:24
+#: ./opengever/base/behaviors/reference.py:28
 msgid "help_reference_number"
 msgstr ""
 
-#: opengever.base/opengever/base/behaviors/classification.py:72
+#: ./opengever/base/behaviors/lifecycle.py:42
 msgid "help_retention_period"
 msgstr ""
 
+#: ./opengever/base/behaviors/lifecycle.py:49
+msgid "help_retention_period_annotation"
+msgstr ""
+
 #. Default: "Archival value"
-#: opengever.base/opengever/base/behaviors/classification.py:78
+#: ./opengever/base/behaviors/lifecycle.py:54
 msgid "label_archival_value"
 msgstr ""
 
+#. Default: "archivalValueAnnotation"
+#: ./opengever/base/behaviors/lifecycle.py:61
+msgid "label_archival_value_annotation"
+msgstr ""
+
 #. Default: "Classification"
-#: opengever.base/opengever/base/behaviors/classification.py:32
+#: ./opengever/base/behaviors/classification.py:30
 msgid "label_classification"
 msgstr ""
 
 #. Default: "Creators"
-#: opengever.base/opengever/base/behaviors/creator.py:20
+#: ./opengever/base/behaviors/creator.py:20
 msgid "label_creators"
 msgstr ""
 
 #. Default: "Custody period (years)"
-#: opengever.base/opengever/base/behaviors/classification.py:85
+#: ./opengever/base/behaviors/lifecycle.py:67
 msgid "label_custody_period"
 msgstr ""
 
 #. Default: "Privacy layer"
-#: opengever.base/opengever/base/behaviors/classification.py:40
+#: ./opengever/base/behaviors/classification.py:38
 msgid "label_privacy_layer"
 msgstr ""
 
 #. Default: "Public Trial"
-#: opengever.base/opengever/base/behaviors/classification.py:47
+#: ./opengever/base/behaviors/classification.py:45
 msgid "label_public_trial"
 msgstr ""
 
 #. Default: "Public trial statement"
-#: opengever.base/opengever/base/behaviors/classification.py:54
+#: ./opengever/base/behaviors/classification.py:52
 msgid "label_public_trial_statement"
 msgstr ""
 
 #. Default: "Reference"
-#: opengever.base/opengever/base/behaviors/reference.py:23
+#: ./opengever/base/behaviors/reference.py:27
 msgid "label_reference_number"
 msgstr ""
 
 #. Default: "Retention period (years)"
-#: opengever.base/opengever/base/behaviors/classification.py:71
+#: ./opengever/base/behaviors/lifecycle.py:41
 msgid "label_retention_period"
+msgstr ""
+
+#. Default: "retentionPeriodAnnotation"
+#: ./opengever/base/behaviors/lifecycle.py:48
+msgid "label_retention_period_annotation"
 msgstr ""
 
 #. Default ""
