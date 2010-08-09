@@ -43,13 +43,13 @@
  <alias from="view" to="@@view"/>
  
  <!-- Actions -->
- <action title="my tasks" action_id="mytasks_solr" category="arbeitsraum-tabs"
+ <action title="my tasks" action_id="mytasks_solr" category="tabbedview-tabs"
          condition_expr="" url_expr="string:#" visible="True">
  </action>
- <action title="issued tasks" action_id="issuedtasks_solr" category="arbeitsraum-tabs"
+ <action title="issued tasks" action_id="issuedtasks_solr" category="tabbedview-tabs"
          condition_expr="" url_expr="string:#" visible="True">
  </action>
- <action title="assigned tasks" action_id="assignedtasks_solr" category="arbeitsraum-tabs"
+ <action title="assigned tasks" action_id="assignedtasks_solr" category="tabbedview-tabs"
          condition_expr="python: object.portal_membership.getAuthenticatedMember().allowed(object, ('Administrator',))" url_expr="string:#" visible="True">
  </action>
 </object>

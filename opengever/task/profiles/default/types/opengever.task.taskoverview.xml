@@ -43,10 +43,10 @@
  <alias from="view" to="@@view"/>
  
  <!-- Actions -->
- <action title="my tasks" action_id="mytasks" category="arbeitsraum-tabs"
+ <action title="my tasks" action_id="mytasks" category="tabbedview-tabs"
          condition_expr="" url_expr="string:#" visible="True">
  </action>
- <action title="issued tasks" action_id="issuedtasks" category="arbeitsraum-tabs"
+ <action title="issued tasks" action_id="issuedtasks" category="tabbedview-tabs"
          condition_expr="" url_expr="string:#" visible="True">
  </action>
 </object>
