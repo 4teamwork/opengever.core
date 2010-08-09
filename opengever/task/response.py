@@ -141,9 +141,11 @@ class Base(BrowserView):
             html = response.rendered_text
             info = dict(id=id,
                         response=response,
-#                        relatedItems=getattr(response,"relatedItems",()),
+                        #relatedItems=getattr(response,"relatedItems",()),
                         html=html)
             items.append(info)
+            # reverse the items, so that the latest one is above
+            items.reverse()
         return items
 
     @property
@@ -231,7 +233,8 @@ class AddForm(form.AddForm, AutoExtensibleForm):
     @property
     def action(self):
         """See interfaces.IInputForm"""
-        return os.path.join(self.request.getURL(), '++add++opengever.task.task')
+        return os.path.join(self.request.getURL(),
+            '++add++opengever.task.task')
 
     @button.buttonAndHandler(_(u'add', default='Add'),
                              name='add', )
@@ -261,13 +264,13 @@ class AddForm(form.AddForm, AutoExtensibleForm):
 
             #check other fields
             options = [
-                (task.deadline, data.get('deadline'), 'deadline', _('deadline')),
+                (task.deadline, data.get('deadline'), 'deadline',
+                    _('deadline')),
                 (task.date_of_completion, data.get('date_of_completion'),
                  'date_of_completion', _('date_of_completion')),
                (task.responsible,
                 data.get('new_responsible'),
-                'responsible', _('responsible'))
-                 ]
+                'responsible', _('responsible'))]
 
             for task_field, resp_field, option, title in options:
                 if resp_field and task_field != resp_field:
@@ -278,7 +281,7 @@ class AddForm(form.AddForm, AutoExtensibleForm):
                     task.__setattr__(option, resp_field)
 
 
-            # save relatedItems on task 
+            # save relatedItems on task
             relatedItems = data.get('relatedItems')
             intids = getUtility(IIntIds)
             for item in relatedItems:
@@ -287,7 +290,8 @@ class AddForm(form.AddForm, AutoExtensibleForm):
                     task.relatedItems.append(RelationValue(to_id))
                 else:
                     setattr(task, 'relatedItems', [RelationValue(to_id)])
-                new_response.add_change('relatedItems', _('label_related_items'), '', item.Title())
+                new_response.add_change('relatedItems',
+                    _('label_related_items'), '', item.Title())
 
             # change workflow state of task
             if data.get('transition'):
@@ -303,13 +307,13 @@ class AddForm(form.AddForm, AutoExtensibleForm):
 
             container = IResponseContainer(self.context)
             container.add(new_response)
-            
+
             notify(ObjectModifiedEvent(self.context))
-            
+
             self.request.RESPONSE.redirect(self.context.absolute_url())
-       
+
     @button.buttonAndHandler(_(u'cancel', default='Cancel'),
-                            name='cancel', )     
+                            name='cancel', )
 
     def handleCancel(self, action):
         return self.request.RESPONSE.redirect('.')
@@ -460,4 +464,3 @@ class Delete(Base):
                             mapping=dict(response_id=response_id))
                     status.addStatusMessage(msg, type='info')
         self.request.response.redirect(context.absolute_url())
-

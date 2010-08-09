@@ -5,6 +5,10 @@ Changelog
 1.0a5
 -----
 
+* Issue #563 Aufgabe: Anordnung der Antworten
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/563
+  [09.08.2010, phgross]
+
 * Issue #566 Aufgabe auf Status abgeschlossen setzen
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/566/
   [09.08.2010, phgross]
