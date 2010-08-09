@@ -10,20 +10,16 @@ from opengever.task import util
 from opengever.task.interfaces import ITaskSettings
 from opengever.translations.browser.add import TranslatedAddForm
 from plone.app.dexterity.behaviors.related import IRelatedItems
-from plone.app.layout.viewlets import content
-from plone.app.layout.viewlets.interfaces import IBelowContentTitle
 from plone.dexterity.content import Container
 from plone.dexterity.interfaces import IDexterityFTI
 from plone.directives import form, dexterity
 from plone.formwidget import autocomplete
 from plone.formwidget.autocomplete import AutocompleteFieldWidget
 from plone.indexer import indexer
-from plone.memoize.instance import memoize
 from plone.registry.interfaces import IRegistry
 from plone.z3cform.traversal import FormWidgetTraversal
 from zc.relation.interfaces import ICatalog
 from zope import schema
-from zope.app.intid.interfaces import IIntIds
 from zope.component import getUtility
 from zope.component import queryMultiAdapter, getMultiAdapter
 from zope.interface import implements, Interface
@@ -78,7 +74,7 @@ class ITask(form.Schema):
     form.widget(task_type='z3c.form.browser.radio.RadioFieldWidget')
     task_type = schema.Choice(
         title =_(u'label_task_type', default=u'Task Type'),
-        description = _('help_task_type', default=u''), 
+        description = _('help_task_type', default=u''),
         required = True,
         readonly = False,
         default = None,
@@ -210,11 +206,10 @@ class Task(Container):
     #         text = text.decode('utf8')
     #         title += ": %s" % text
     #     return title
-
     @property
     def sequence_number(self):
         return self._sequence_number
-        
+
     @property
     def task_type_category(self):
         registry = getUtility(IRegistry)
@@ -253,9 +248,9 @@ class View(dexterity.DisplayForm):
     def getContainingTask(self):
         parent = aq_parent(aq_inner(self.context))
         if parent.portal_type == self.context.portal_type:
-            return [parent,]
+            return [parent, ]
         return None
-    
+
     def getSubDocuments(self):
         brains = self.context.getFolderContents(full_objects=False,
                                                contentFilter={'portal_type': 'opengever.document.document'})
@@ -271,7 +266,7 @@ class View(dexterity.DisplayForm):
 
         docs.sort(lambda x, y: cmp(x.Title(), y.Title()))
         return docs
-    
+
     def responsible_link(self):
         info = getUtility(IContactInformation)
         task = ITask(self.context)
@@ -371,40 +366,11 @@ class TaskAutoCompleteSearch(grok.CodeView, autocomplete.widget.AutocompleteSear
         pass
 
 
-class Byline(grok.Viewlet, content.DocumentBylineViewlet):
-    grok.viewletmanager(IBelowContentTitle)
-    grok.context(ITask)
-    grok.name('plone.belowcontenttitle.documentbyline')
-
-    update = content.DocumentBylineViewlet.update
-
-    @memoize
-    def workflow_state(self):
-        state = self.context_state.workflow_state()
-        workflows = self.tools.workflow().getWorkflowsFor(self.context.aq_explicit)
-        if workflows:
-            for w in workflows:
-                if w.states.has_key(state):
-                    return w.states[state].title or state
-
-    @memoize
-    def sequence_number(self):
-        seqNumb = getUtility(ISequenceNumber)
-        return seqNumb.get_number(self.context)
-
-    def responsible_link(self):
-        info = getUtility(IContactInformation)
-        task = ITask(self.context)
-        return info.render_link(task.responsible)
-
-
 @indexer(ITask)
-def related_items( obj ):
+def related_items(obj):
     # FIXME this indexer seems to return ALL relatedItems and
     # does not use the `obj`..
-    catalog = getUtility( ICatalog )
-    intids = getUtility( IIntIds )
-    obj_id = intids.getId( obj )
+    catalog = getUtility(ICatalog)
     results = []
     relations = catalog.findRelations({'from_attribute': 'relatedItems'})
     for rel in relations:
@@ -436,4 +402,3 @@ grok.global_adapter(assigned_client, name='assigned_client')
 def client_id(obj):
     return getUtility(ITentacleConfig).cid
 grok.global_adapter(client_id, name='client_id')
-    
