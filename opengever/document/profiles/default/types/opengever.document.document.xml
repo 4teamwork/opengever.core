@@ -59,10 +59,10 @@
   </action>
 
   <!-- Tab Actions -->
-  <action title="overview" action_id="overview" category="arbeitsraum-tabs" condition_expr="" url_expr="string:#" visible="True"></action>
-  <action title="preview" action_id="preview" category="arbeitsraum-tabs" condition_expr="" url_expr="string:#" visible="True"></action>
-  <action title="tasks" action_id="tasks" category="arbeitsraum-tabs" condition_expr="" url_expr="string:#" visible="True"></action>
-  <action title="journal" action_id="journal" category="arbeitsraum-tabs" condition_expr="" url_expr="string:#" visible="True"></action>
+  <action title="overview" action_id="overview" category="tabbedview-tabs" condition_expr="" url_expr="string:#" visible="True"></action>
+  <action title="preview" action_id="preview" category="tabbedview-tabs" condition_expr="" url_expr="string:#" visible="True"></action>
+  <action title="tasks" action_id="tasks" category="tabbedview-tabs" condition_expr="" url_expr="string:#" visible="True"></action>
+  <action title="journal" action_id="journal" category="tabbedview-tabs" condition_expr="" url_expr="string:#" visible="True"></action>
 
   <!-- disable some old actions -->
   <action title="Versions" action_id="versions_history_form" category="object"
