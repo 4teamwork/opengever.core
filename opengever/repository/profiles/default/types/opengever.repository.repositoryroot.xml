@@ -53,7 +53,7 @@
           url_expr="string:${object_url}/edit" visible="True">
     <permission value="Modify portal content"/>
   </action>
-  <action title="Dossiers" action_id="dossiers" category="arbeitsraum-tabs"
+  <action title="Dossiers" action_id="dossiers" category="tabbedview-tabs"
           condition_expr="" url_expr="string:#" visible="True">
     <permission value="View"/>
   </action>
