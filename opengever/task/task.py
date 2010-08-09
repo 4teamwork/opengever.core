@@ -1,37 +1,31 @@
-from five import grok
-from zope import schema
-from zope.component import getUtility
-from zope.interface import implements, Interface
-from zope.traversing.interfaces import ITraversable
-from zope.publisher.interfaces.browser import IBrowserRequest, IBrowserPage
-from zope.component import queryMultiAdapter, getMultiAdapter
-from zope.lifecycleevent.interfaces import IObjectCreatedEvent
-from zc.relation.interfaces import ICatalog
-
-from Acquisition import aq_parent, aq_inner
 from AccessControl import getSecurityManager
-
+from Acquisition import aq_parent, aq_inner
 from Products.CMFCore.utils import getToolByName
-
 from datetime import datetime, timedelta
-from plone.registry.interfaces import IRegistry
+from five import grok
+from opengever.base.interfaces import ISequenceNumber
+from opengever.octopus.tentacle.interfaces import IContactInformation, ITentacleConfig
+from opengever.task import _
+from opengever.task import util
 from opengever.task.interfaces import ITaskSettings
+from opengever.translations.browser.add import TranslatedAddForm
+from plone.app.dexterity.behaviors.related import IRelatedItems
+from plone.dexterity.content import Container
+from plone.dexterity.interfaces import IDexterityFTI
+from plone.directives import form, dexterity
 from plone.formwidget import autocomplete
 from plone.formwidget.autocomplete import AutocompleteFieldWidget
 from plone.indexer import indexer
+from plone.registry.interfaces import IRegistry
 from plone.z3cform.traversal import FormWidgetTraversal
-from plone.app.dexterity.behaviors.related import IRelatedItems
-from plone.dexterity.interfaces import IDexterityFTI
-from plone.dexterity.content import Container
-from plone.directives import form, dexterity
-
-from opengever.task import util
-from opengever.task import _
-
-from opengever.base.interfaces import ISequenceNumber
-from opengever.translations.browser.add import TranslatedAddForm
-from opengever.octopus.tentacle.interfaces import IContactInformation, \
-    ITentacleConfig
+from zc.relation.interfaces import ICatalog
+from zope import schema
+from zope.component import getUtility
+from zope.component import queryMultiAdapter, getMultiAdapter
+from zope.interface import implements, Interface
+from zope.lifecycleevent.interfaces import IObjectCreatedEvent
+from zope.publisher.interfaces.browser import IBrowserRequest, IBrowserPage
+from zope.traversing.interfaces import ITraversable
 
 
 class ITask(form.Schema):
@@ -374,6 +368,8 @@ class TaskAutoCompleteSearch(grok.CodeView, autocomplete.widget.AutocompleteSear
 
 @indexer(ITask)
 def related_items(obj):
+    # FIXME this indexer seems to return ALL relatedItems and
+    # does not use the `obj`..
     catalog = getUtility(ICatalog)
     results = []
     relations = catalog.findRelations({'from_attribute': 'relatedItems'})
