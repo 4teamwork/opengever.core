@@ -218,7 +218,7 @@
  <transition transition_id="task-transition-in-progress-resolved"
              title="task-transition-in-progress-resolved"
              new_state="task-state-resolved" trigger="USER"
-             before_script="" after_script="">
+             before_script="" after_script="before_open_resolved">
   <action url="%(content_url)s/addresponse?form.widgets.transition=task-transition-in-progress-resolved" category="workflow">task-transition-in-progress-resolved</action>
   <guard>
   </guard>
@@ -260,7 +260,7 @@
              title="task-transition-open-resolved"
              new_state="task-state-resolved" trigger="USER"
              before_script="" after_script="before_open_resolved">
-  <action url="" category="workflow">task-transition-open-resolved</action>
+  <action url="%(content_url)s/addresponse?form.widgets.transition=task-transition-open-resolved" category="workflow">task-transition-open-resolved</action>
   <guard>
   </guard>
  </transition>

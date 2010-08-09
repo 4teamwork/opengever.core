@@ -35,7 +35,7 @@ class CopyRelatedDocumentsToInbox(grok.CodeView):
         home_client = self.comm.get_home_client(self.context)
         member = self.context.portal_membership.getAuthenticatedMember()
         # only copy if we are not on our home-client
-        if self.tc.cid==home_client['cid']:
+        if not home_client or self.tc.cid==home_client['cid']:
             return False
         # the task type category should be uni_val
         if self.context.task_type_category!=u'uni_val':
