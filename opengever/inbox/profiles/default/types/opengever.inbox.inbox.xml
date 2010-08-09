@@ -59,27 +59,27 @@
   </action>
 
   <!-- Tabbedview tabs-->
-  <action title="Overview" action_id="overview" category="arbeitsraum-tabs"
+  <action title="Overview" action_id="overview" category="tabbedview-tabs"
           condition_expr="" url_expr="string:#" visible="True">
     <permission value="View"/>
   </action>
-  <action title="Documents" action_id="documents" category="arbeitsraum-tabs"
+  <action title="Documents" action_id="documents" category="tabbedview-tabs"
           condition_expr="" url_expr="string:#" visible="True">
     <permission value="View"/>
   </action>
-  <action title="Tasks" action_id="given_tasks" category="arbeitsraum-tabs"
+  <action title="Tasks" action_id="given_tasks" category="tabbedview-tabs"
           condition_expr="" url_expr="string:#" visible="True">
     <permission value="View"/>
   </action>
-  <action title="Assigned Tasks" action_id="assigned_tasks" category="arbeitsraum-tabs"
+  <action title="Assigned Tasks" action_id="assigned_tasks" category="tabbedview-tabs"
           condition_expr="" url_expr="string:#" visible="True">
     <permission value="View"/>
   </action>
-  <action title="Journal" action_id="journal" category="arbeitsraum-tabs"
+  <action title="Journal" action_id="journal" category="tabbedview-tabs"
           condition_expr="" url_expr="string:#" visible="True">
     <permission value="View"/>
   </action>
-  <action title="Trash" action_id="trash" category="arbeitsraum-tabs"
+  <action title="Trash" action_id="trash" category="tabbedview-tabs"
           condition_expr="" url_expr="string:#" visible="True">
   </action>
 </object>
