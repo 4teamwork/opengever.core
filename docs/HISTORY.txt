@@ -5,6 +5,9 @@ Changelog
 1.0a5
 -----
 
+* Moved tentacle-documents-of-dossier-json from opengever.octopus.tentacle
+  [11.08.2010, jbaumann]
+
 * Issue #518 "Änderungen anzeigen" muss bei einem ausgecheckten Dokument ausgeblendet werden (führt zu Fehlermeldung)
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/518/
   [20.04.2010, jinfanger]
