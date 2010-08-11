@@ -5,6 +5,9 @@ Changelog
 1.0a3
 -----
 
+* Moved tentacle-inbox-group-json from opengever.octopus.tentacle
+  [11.08.2010, jbaumann]
+
 * Issue #505 Weiterleiten einer Aufgabe aus Eingangskorb Mandant 3 nach Mandant 1 geht nicht
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/505
   Inbox schema: added field for configuring inbox-group
