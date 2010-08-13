@@ -49,10 +49,10 @@
     <div class="widget z3cformInlineValidation horizontal">
     <span class="option">
     <tal:cond tal:condition="view/edit">
-      <input type="checkbox" class="single-checkbox-widget bool-field" name="form.widgets.edit_form:list" id="form-widgets-edit_form-0" originalvalue="selected" checked />
+      <input type="checkbox" class="single-checkbox-widget bool-field" name="form.widgets.edit_form:list" id="form-widgets-edit_form-0" originalvalue="selected" />
     </tal:cond>
     <tal:cond tal:condition="not: view/edit">
-      <input type="checkbox" class="single-checkbox-widget bool-field" name="form.widgets.edit_form:list" id="form-widgets-edit_form-0" originalvalue="selected" />
+      <input type="checkbox" class="single-checkbox-widget bool-field" name="form.widgets.edit_form:list" id="form-widgets-edit_form-0" originalvalue="selected" checked="checked" />
     </tal:cond>
     <label for="form-widgets-edit_form-0">
     <span class="label" i18n:translate="label_edit_after_creation">Edit after creation</span>
