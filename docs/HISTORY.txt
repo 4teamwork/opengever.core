@@ -5,6 +5,9 @@ Changelog
 1.0a4
 -----
 
+* Moved tentacle-open-dossiers-json from opengever.octopus.tentacle
+  [11.08.2010, jbaumann]
+
 * Transporter was refactored: use new method `transport_to()`
   [15.03.2010, jbaumann]
   
