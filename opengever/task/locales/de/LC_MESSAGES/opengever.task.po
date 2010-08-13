@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2010-04-29 08:51+0000\n"
+"POT-Creation-Date: 2010-08-13 06:54+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -12,241 +12,245 @@ msgstr ""
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: opengever.task\n"
 
-#: opengever.task/opengever/task/actions/addlocalroles.py:105
+#: ./opengever/task/actions/addlocalroles.py:105
 msgid "Add Local Roles Action"
 msgstr "Berechtigungen hinzufügen"
 
-#: opengever.task/opengever/task/actions/addlocalroles.py:46
+#: ./opengever/task/actions/addlocalroles.py:46
 msgid "Add local roles for object: ${object_roles}, related items: ${related_items_roles}, parent: ${parent_roles}"
 msgstr ""
 
-#: opengever.task/opengever/task/actions/addlocalroles.py:106
+#: ./opengever/task/actions/addlocalroles.py:106
 msgid "Add local roles to all related items for the 'responsible' user."
 msgstr ""
 
-#: opengever.task/opengever/task/response.py:409
+#: ./opengever/task/response.py:413
 msgid "Changes saved to response id ${response_id}."
 msgstr "Änderungen an der Antwort ${response_id} wurden gespeichert"
 
-#: opengever.task/opengever/task/actions/addlocalroles.py:107
+#: ./opengever/task/actions/addlocalroles.py:107
 msgid "Configure element"
 msgstr ""
 
-#: opengever.task/opengever/task/response_templates/responseview.pt:26
+#: ./opengever/task/response_templates/responseview.pt:26
 msgid "Delete"
 msgstr "Löschen"
 
-#: opengever.task/opengever/task/response_templates/responseview.pt:16
+#: ./opengever/task/response_templates/responseview.pt:16
 msgid "Edit"
 msgstr "Bearbeiten"
 
-#: opengever.task/opengever/task/actions/addlocalroles.py:119
+#: ./opengever/task/actions/addlocalroles.py:119
 msgid "Edit Local Roles Action"
 msgstr ""
 
-#: opengever.task/opengever/task/response.py:301
+#: ./opengever/task/response.py:305
 msgid "Issue state"
 msgstr "Status"
 
-#: opengever.task/opengever/task/response.py:437
+#: ./opengever/task/response.py:441
 msgid "No response selected for removal."
 msgstr "Es wurde keine Antwort fürs Löschen selektiert"
 
-#: opengever.task/opengever/task/response.py:400
+#: ./opengever/task/response.py:404
 msgid "No response selected for saving."
 msgstr "Es wurde keine Antwort fürs Speichern selektiert"
 
-#: opengever.task/opengever/task/response.py:184
+#: ./opengever/task/response.py:186
 msgid "No response selected."
 msgstr "Kein Antwort selektiert"
 
-#: opengever.task/opengever/task/actions/addlocalroles.py:18
+#: ./opengever/task/actions/addlocalroles.py:18
 msgid "Object Roles"
 msgstr ""
 
-#: opengever.task/opengever/task/actions/addlocalroles.py:28
+#: ./opengever/task/actions/addlocalroles.py:28
 msgid "Parent Roles"
 msgstr ""
 
-#: opengever.task/opengever/task/actions/addlocalroles.py:23
+#: ./opengever/task/actions/addlocalroles.py:23
 msgid "Related Items Roles"
 msgstr ""
 
-#: opengever.task/opengever/task/response.py:459
+#: ./opengever/task/response.py:463
 msgid "Removed response id ${response_id}."
 msgstr "Antwort ${response_id} gelöscht"
 
-#: opengever.task/opengever/task/response.py:452
+#: ./opengever/task/response.py:456
 msgid "Response id ${response_id} does not exist so it cannot be removed."
 msgstr "Antowrt ${response_id} existiert nicht und konnte deshalb nicht gelöscht werden"
 
-#: opengever.task/opengever/task/response.py:198
+#: ./opengever/task/response.py:200
 msgid "Response id ${response_id} does not exist."
 msgstr "Antwort ${response_id} exisitert nicht"
 
-#: opengever.task/opengever/task/response.py:444
+#: ./opengever/task/response.py:448
 msgid "Response id ${response_id} is no integer so it cannot be removed."
 msgstr "Antwort id ${response_id} ist keine Zahl und konnte deshalb nicht gelöscht werden"
 
-#: opengever.task/opengever/task/response.py:192
+#: ./opengever/task/response.py:194
 msgid "Response id ${response_id} is no integer."
 msgstr "Antwort ${response_id} ist keine Zahl"
 
-#: opengever.task/opengever/task/profiles/default/types/opengever.task.task.xml
+#: ./opengever/task/profiles/default/types/opengever.task.task.xml
 msgid "Task"
 msgstr "Aufgabe"
 
-#: opengever.task/opengever/task/profiles/default/types/opengever.task.taskoverview.xml
-#: opengever.task/opengever/task/profiles/default/types/opengever.task.taskoverview_solr.xml
+#: ./opengever/task/profiles/default/types/opengever.task.taskoverview.xml
+#: ./opengever/task/profiles/default/types/opengever.task.taskoverview_solr.xml
 msgid "Taskoverview"
 msgstr "Auftragsübersicht"
 
-#: opengever.task/opengever/task/actions/addlocalroles.py:19
+#: ./opengever/task/actions/addlocalroles.py:19
 msgid "The local roles to add."
 msgstr ""
 
-#: opengever.task/opengever/task/response.py:431
+#: ./opengever/task/response.py:435
 msgid "You are not allowed to delete responses."
 msgstr "Sie haben keine Berechtigung Antworten zu löschen"
 
-#: opengever.task/opengever/task/response.py:394
+#: ./opengever/task/response.py:398
 msgid "You are not allowed to edit responses."
 msgstr "Sie haben keine Berechtigung Antworten zu editieren"
 
 #. Default: "Add"
-#: opengever.task/opengever/task/response.py:236
+#: ./opengever/task/response.py:239
 msgid "add"
 msgstr "Hinzufügen"
 
 #. Default: "Attach"
-#: opengever.task/opengever/task/attachdocument.py:125
+#: ./opengever/task/attachdocument.py:125
 msgid "button_attach"
 msgstr "Anhängen"
 
 #. Default: "Back"
-#: opengever.task/opengever/task/attachdocument.py:119
+#: ./opengever/task/attachdocument.py:119
 msgid "button_back"
 msgstr "Zurück"
 
 #. Default: "Cancel"
-#: opengever.task/opengever/task/attachdocument.py:49
+#: ./opengever/task/attachdocument.py:49
 msgid "button_cancel"
 msgstr "Abbrechen"
 
 #. Default: "Continue"
-#: opengever.task/opengever/task/attachdocument.py:53
+#: ./opengever/task/attachdocument.py:53
 msgid "button_continue"
 msgstr "Weiter"
 
 #. Default: "Cancel"
-#: opengever.task/opengever/task/response.py:311
+#: ./opengever/task/response.py:315
 msgid "cancel"
 msgstr "Abbrechen"
 
 #. Default: "Containing Tasks:"
-#: opengever.task/opengever/task/task_templates/view.pt:65
+#: ./opengever/task/task_templates/view.pt:65
 msgid "containing_task"
 msgstr "Übergeordnete Aufgabe"
 
-#: opengever.task/opengever/task/response.py:266
+#: ./opengever/task/response.py:270
 msgid "date_of_completion"
 msgstr "Erledigungsdatum"
 
 #. Default: "deadline"
-#: opengever.task/opengever/task/response.py:264
+#: ./opengever/task/response.py:268
 msgid "deadline"
 msgstr "Frist"
 
 #. Default: "Documents:"
-#: opengever.task/opengever/task/task_templates/view.pt:87
+#: ./opengever/task/task_templates/view.pt:87
 msgid "documents"
 msgstr "Dokumente"
 
 #. Default: "Additional"
-#: opengever.task/opengever/task/task.py:65
+#: ./opengever/task/task.py:48
 msgid "fieldset_additional"
 msgstr "Erweitert"
 
 #. Default: "Common"
-#: opengever.task/opengever/task/task.py:52
+#: ./opengever/task/task.py:35
 msgid "fieldset_common"
 msgstr "Allgemein"
 
-#: opengever.task/opengever/task/response.py:60
-#: opengever.task/opengever/task/task.py:120
+#: ./opengever/task/response.py:60
+#: ./opengever/task/task.py:103
 msgid "help_date_of_completion"
 msgstr ""
 
 #. Default: "Deadline"
-#: opengever.task/opengever/task/task.py:113
+#: ./opengever/task/task.py:96
 msgid "help_deadline"
 msgstr "Tragen sie ein Datum ein, bis wann die Aufgabe erledigt werden muss"
 
-#: opengever.task/opengever/task/response.py:54
+#: ./opengever/task/response.py:54
 msgid "help_deadline_response"
 msgstr "Tragen sie ein neues Datum ein, bis wann die Aufgabe erledigt werden muss"
 
-#: opengever.task/opengever/task/task.py:159
+#. Default: "Coast in CHF"
+#: ./opengever/task/task.py:142
 msgid "help_effectiveCost"
-msgstr ""
+msgstr "Kosten in CHF"
 
-#: opengever.task/opengever/task/task.py:153
+#. Default: "Duration in h"
+#: ./opengever/task/task.py:136
 msgid "help_effectiveDuration"
-msgstr ""
+msgstr "Dauer in h"
 
-#: opengever.task/opengever/task/task.py:147
+#. Default: "Coast in CHF"
+#: ./opengever/task/task.py:130
 msgid "help_expectedCost"
-msgstr ""
+msgstr "Kosten in CHF"
 
-#: opengever.task/opengever/task/task.py:141
+#. Default: "Duration in h"
+#: ./opengever/task/task.py:124
 msgid "help_expectedDuration"
-msgstr ""
+msgstr "Dauer in h"
 
-#: opengever.task/opengever/task/task.py:135
+#: ./opengever/task/task.py:118
 msgid "help_expectedStartOfWork"
 msgstr ""
 
-#: opengever.task/opengever/task/task.py:86
+#: ./opengever/task/task.py:69
 msgid "help_issuer"
 msgstr ""
 
-#: opengever.task/opengever/task/response.py:46
+#: ./opengever/task/response.py:46
 msgid "help_new_responsible_response"
 msgstr ""
 
-#: opengever.task/opengever/task/response.py:40
+#: ./opengever/task/response.py:40
 msgid "help_response"
 msgstr ""
 
 #. Default: "select an responsible Manger"
-#: opengever.task/opengever/task/task.py:105
+#: ./opengever/task/task.py:88
 msgid "help_responsible"
 msgstr "Wählen Sie die verantwortliche Person aus"
 
 #. Default: "Select a document"
-#: opengever.task/opengever/task/attachdocument.py:84
+#: ./opengever/task/attachdocument.py:84
 msgid "help_source_document"
 msgstr "Wählen Sie ein Dokument aus dem vorgängig gewählten Dossier"
 
 #. Default: "Select a source dossier"
-#: opengever.task/opengever/task/attachdocument.py:38
+#: ./opengever/task/attachdocument.py:38
 msgid "help_source_dossier"
 msgstr "Wählen Sie ein Dossier von ihrem Mandanten"
 
-#: opengever.task/opengever/task/task.py:94
+#: ./opengever/task/task.py:77
 msgid "help_task_type"
 msgstr ""
 
-#: opengever.task/opengever/task/task.py:127
+#: ./opengever/task/task.py:110
 msgid "help_text"
 msgstr "Geben Sie eine detaillierte Arbeitsanweisung oder einen Kommentar ein"
 
-#: opengever.task/opengever/task/task.py:79
+#: ./opengever/task/task.py:62
 msgid "help_title"
 msgstr ""
 
-#: opengever.task/opengever/task/behaviors.py:28
-#: opengever.task/opengever/task/response.py:66
+#: ./opengever/task/behaviors.py:28
+#: ./opengever/task/response.py:66
 msgid "help_transition"
 msgstr ""
 
@@ -257,143 +261,143 @@ msgid "issuedtasks_solr"
 msgstr ""
 
 #. Default: "by ${author}"
-#: opengever.task/opengever/task/task_templates/byline.pt:17
+#: ./opengever/task/viewlets/byline.pt:17
 msgid "label_by_author"
 msgstr "Verantwortlich: ${author}"
 
 #. Default: "Date of completion"
-#: opengever.task/opengever/task/response.py:59
-#: opengever.task/opengever/task/task.py:119
+#: ./opengever/task/response.py:59
+#: ./opengever/task/task.py:102
 msgid "label_date_of_completion"
 msgstr "Erledigungsdatum"
 
 #. Default: "Deadline"
-#: opengever.task/opengever/task/task.py:112
+#: ./opengever/task/task.py:95
 msgid "label_deadline"
 msgstr "Zu erledigen bis"
 
 #. Default: "New deadline"
-#: opengever.task/opengever/task/response.py:53
+#: ./opengever/task/response.py:53
 msgid "label_deadline_Response"
 msgstr "Neue Frist"
 
 #. Default: "You are not allowed to edit this response."
-#: opengever.task/opengever/task/templates/edit_response.pt:44
+#: ./opengever/task/templates/edit_response.pt:44
 msgid "label_edit_response_not_allowed"
 msgstr "Sie sind nicht berechtigt diese Antwort zu löschen"
 
 #. Default: "effective cost"
-#: opengever.task/opengever/task/task.py:158
+#: ./opengever/task/task.py:141
 msgid "label_effectiveCost"
 msgstr "Effektive Kosten"
 
 #. Default: "effective duration"
-#: opengever.task/opengever/task/task.py:152
+#: ./opengever/task/task.py:135
 msgid "label_effectiveDuration"
 msgstr "Effektive Dauer"
 
 #. Default: "Please enter your response below"
-#: opengever.task/opengever/task/templates/edit_response.pt:59
+#: ./opengever/task/templates/edit_response.pt:59
 msgid "label_enter_response"
 msgstr "Bitte tragen sie ihre Antwort unten ein"
 
 #. Default: "expected cost"
-#: opengever.task/opengever/task/task.py:146
+#: ./opengever/task/task.py:129
 msgid "label_expectedCost"
 msgstr "Geschätzte Kosten"
 
 #. Default: "Expected duration"
-#: opengever.task/opengever/task/task.py:140
+#: ./opengever/task/task.py:123
 msgid "label_expectedDuration"
 msgstr "Geschätzte Dauer"
 
 #. Default: "Start with work"
-#: opengever.task/opengever/task/task.py:134
+#: ./opengever/task/task.py:117
 msgid "label_expectedStartOfWork"
 msgstr "Beginn der Arbeit"
 
 #. Default: "issued at"
-#: opengever.task/opengever/task/taskoverview.py:40
-#: opengever.task/opengever/task/taskoverview_solr.py:32
+#: ./opengever/task/taskoverview.py:40
+#: ./opengever/task/taskoverview_solr.py:32
 msgid "label_issued_date"
 msgstr "Zugewiesen am"
 
 #. Default: "Issuer"
-#: opengever.task/opengever/task/task.py:85
+#: ./opengever/task/task.py:68
 msgid "label_issuer"
 msgstr "Auftraggeber"
 
 #. Default: "Last change"
-#: opengever.task/opengever/task/task_templates/view.pt:46
+#: ./opengever/task/task_templates/view.pt:46
 msgid "label_last_modified"
 msgstr "Letze Änderung"
 
 #. Default: "Related Items"
-#: opengever.task/opengever/task/response.py:72
+#: ./opengever/task/response.py:72
 msgid "label_related_items"
 msgstr "Verweise"
 
 #. Default: "Response"
-#: opengever.task/opengever/task/response.py:39
+#: ./opengever/task/response.py:39
 msgid "label_response"
 msgstr "Antworttext"
 
 #. Default: "Responsible"
-#: opengever.task/opengever/task/task.py:104
+#: ./opengever/task/task.py:87
 msgid "label_responsible"
 msgstr "Verantwortlicher"
 
 #. Default: "New responsible"
-#: opengever.task/opengever/task/response.py:45
+#: ./opengever/task/response.py:45
 msgid "label_responsible_Response"
 msgstr "Neuer Verantwortlicher"
 
 #. Default: "Responsible"
-#: opengever.task/opengever/task/taskoverview.py:36
-#: opengever.task/opengever/task/taskoverview_solr.py:28
+#: ./opengever/task/taskoverview.py:36
+#: ./opengever/task/taskoverview_solr.py:28
 msgid "label_responsible_task"
 msgstr "Verantwortlich"
 
 #. Default: "Return to issue."
-#: opengever.task/opengever/task/templates/edit_response.pt:32
+#: ./opengever/task/templates/edit_response.pt:32
 msgid "label_return_to_issue"
 msgstr "Zurück zur Aufgabe"
 
 #. Default: "Document"
-#: opengever.task/opengever/task/attachdocument.py:83
+#: ./opengever/task/attachdocument.py:83
 msgid "label_source_document"
 msgstr "Dokument"
 
 #. Default: "Dossier"
-#: opengever.task/opengever/task/attachdocument.py:37
+#: ./opengever/task/attachdocument.py:37
 msgid "label_source_dossier"
 msgstr "Dossier"
 
 #. Default: "Task Type"
-#: opengever.task/opengever/task/task.py:93
-#: opengever.task/opengever/task/taskoverview.py:32
-#: opengever.task/opengever/task/taskoverview_solr.py:24
+#: ./opengever/task/task.py:76
+#: ./opengever/task/taskoverview.py:32
+#: ./opengever/task/taskoverview_solr.py:24
 msgid "label_task_type"
 msgstr "Auftragstyp"
 
 #. Default: "Text"
-#: opengever.task/opengever/task/task.py:126
+#: ./opengever/task/task.py:109
 msgid "label_text"
 msgstr "Kommentar"
 
 #. Default: "Title"
-#: opengever.task/opengever/task/task.py:78
+#: ./opengever/task/task.py:61
 msgid "label_title"
 msgstr "Titel"
 
 #. Default: "Transition"
-#: opengever.task/opengever/task/behaviors.py:27
-#: opengever.task/opengever/task/response.py:65
+#: ./opengever/task/behaviors.py:27
+#: ./opengever/task/response.py:65
 msgid "label_transition"
 msgstr "Aktion"
 
 #. Default: "State"
-#: opengever.task/opengever/task/task_templates/view.pt:42
+#: ./opengever/task/task_templates/view.pt:42
 msgid "label_workflow_state"
 msgstr "Status"
 
@@ -404,51 +408,51 @@ msgid "mytasks_solr"
 msgstr ""
 
 #. Default: "No Content"
-#: opengever.task/opengever/task/task_templates/view.pt:73
+#: ./opengever/task/task_templates/view.pt:73
 msgid "no_content"
 msgstr "Kein Inhalt"
 
 #. Default: "Response"
-#: opengever.task/opengever/task/templates/edit_response.pt:56
+#: ./opengever/task/templates/edit_response.pt:56
 msgid "response_label_response"
 msgstr "Antowrt"
 
 #. Default: "Responses:"
-#: opengever.task/opengever/task/task_templates/view.pt:102
+#: ./opengever/task/task_templates/view.pt:102
 msgid "responses"
 msgstr "Antworten:"
 
-#: opengever.task/opengever/task/response.py:269
+#: ./opengever/task/response.py:273
 msgid "responsible"
 msgstr "Verantwortlicher"
 
 #. Default: "Subtasks:"
-#: opengever.task/opengever/task/task_templates/view.pt:76
+#: ./opengever/task/task_templates/view.pt:76
 msgid "subtasks"
 msgstr "Unteraufgabe"
 
 #. Default: "Added by"
-#: opengever.task/opengever/task/response_templates/responseview.pt:35
+#: ./opengever/task/response_templates/responseview.pt:35
 msgid "task_added_by"
 msgstr "Hinzugefügt von"
 
 #. Default: "on"
-#: opengever.task/opengever/task/response_templates/responseview.pt:38
+#: ./opengever/task/response_templates/responseview.pt:38
 msgid "task_added_on"
 msgstr "am"
 
 #. Default: "Attach document"
-#: opengever.task/opengever/task/attachdocument.py:46
+#: ./opengever/task/attachdocument.py:46
 msgid "title_attach_document_form"
 msgstr "Dokument aus Heimmandant anhängen"
 
 #. Default: "Edit response"
-#: opengever.task/opengever/task/templates/edit_response.pt:41
+#: ./opengever/task/templates/edit_response.pt:41
 msgid "title_edit_response"
 msgstr "Antwort bearbeiten"
 
 #. Default: "Error: no response found for editing"
-#: opengever.task/opengever/task/templates/edit_response.pt:30
+#: ./opengever/task/templates/edit_response.pt:30
 msgid "title_error_no_response"
 msgstr "Fehler: keine Antworten zum editieren gefunden"
 

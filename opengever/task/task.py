@@ -121,25 +121,25 @@ class ITask(form.Schema):
 
     expectedDuration = schema.Float(
         title = _(u"label_expectedDuration", default="Expected duration", ),
-        description = _(u"help_expectedDuration", default="", ),
+        description = _(u"help_expectedDuration", default="Duration in h"),
         required = False,
         )
 
     expectedCost = schema.Int(
         title = _(u"label_expectedCost", default="expected cost"),
-        description = _(u"help_expectedCost", default=""),
+        description = _(u"help_expectedCost", default="Coast in CHF"),
         required = False,
         )
 
     effectiveDuration = schema.Float(
         title = _(u"label_effectiveDuration", default="effective duration"),
-        description = _(u"help_effectiveDuration", default=""),
+        description = _(u"help_effectiveDuration", default="Duration in h"),
         required = False,
         )
 
     effectiveCost = schema.Int(
         title=_(u"label_effectiveCost", default="effective cost"),
-        description=_(u"help_effectiveCost", default=""),
+        description=_(u"help_effectiveCost", default="Coast in CHF"),
         required = False,
         )
 

@@ -291,7 +291,7 @@ class AddForm(form.AddForm, AutoExtensibleForm):
                 else:
                     setattr(task, 'relatedItems', [RelationValue(to_id)])
                 new_response.add_change('relatedItems',
-                    _('label_related_items'), '', item.Title())
+                    _('label_related_items', default="Related Items"), '', item.Title())
 
             # change workflow state of task
             if data.get('transition'):
