@@ -5,7 +5,7 @@ startRedirect = function(){
         if (temp.search('&') != -1){
             temp = temp.substr(0, temp.search('&'));
         }
-        location.href = unescape(temp);
+        location.href = portal_url+unescape(temp);
     }
     jq('.tabbedview_view').unbind('reload', startRedirect);
 } 
