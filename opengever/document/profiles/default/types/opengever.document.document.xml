@@ -30,7 +30,7 @@
     <element value="plone.app.dexterity.behaviors.related.IRelatedItems" />
     <element value="plone.stagingbehavior.interfaces.IStagingSupport" />
     <element value="plone.versioningbehavior.behaviors.IVersionable" />
-    <element value="collective.filepreviewbehavior.interfaces.IPreviewable" />
+    <!-- <element value="collective.filepreviewbehavior.interfaces.IPreviewable" /> -->
     <element value="opengever.trash.trash.ITrashable" />
   </property>
 
@@ -60,7 +60,8 @@
 
   <!-- Tab Actions -->
   <action title="overview" action_id="overview" category="tabbedview-tabs" condition_expr="" url_expr="string:#" visible="True"></action>
-  <action title="preview" action_id="preview" category="tabbedview-tabs" condition_expr="" url_expr="string:#" visible="True"></action>
+  <!-- # TODO: Remove/replace preview tab -->
+  <!-- <action title="preview" action_id="preview" category="tabbedview-tabs" condition_expr="" url_expr="string:#" visible="True"></action> -->
   <action title="tasks" action_id="tasks" category="tabbedview-tabs" condition_expr="" url_expr="string:#" visible="True"></action>
   <action title="journal" action_id="journal" category="tabbedview-tabs" condition_expr="" url_expr="string:#" visible="True"></action>
 

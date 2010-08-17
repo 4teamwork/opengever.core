@@ -7,10 +7,10 @@ startRedirect = function(){
         }
         location.href = unescape(temp);
     }
-    tabbedview.view_container.unbind('reload', startRedirect);
+    jq('.tabbedview_view').unbind('reload', startRedirect);
 } 
 
 jq(function(){
     $ = jq;
-    tabbedview.view_container.bind('reload', startRedirect);
+    jq('.tabbedview_view').bind('reload', startRedirect);
 });

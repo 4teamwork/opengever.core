@@ -4,6 +4,10 @@ import os
 version = open('opengever/document/version.txt').read().strip()
 maintainer = 'Jonas Baumann'
 
+tests_require = [
+    'collective.testcaselayer',
+]
+
 setup(name='opengever.document',
       version=version,
       description="OpenGever Document content type (Maintainer: %s)" % maintainer,
@@ -43,7 +47,6 @@ setup(name='opengever.document',
         'setuptools',
         #'Products.ARFilePreview',
         #'collective.filepreviewbehavior',
-        'opengever.sqlfile',
         'plone.app.dexterity',
         'plone.app.registry',
         'plone.principalsource',
@@ -64,6 +67,10 @@ setup(name='opengever.document',
         'plone.keyring',
         'opengever.mail',
         ],
+
+        tests_require=tests_require,
+        extras_require=dict(tests=tests_require),
+
       entry_points="""
       # -*- Entry points: -*-
       [z3c.autoinclude.plugin]
