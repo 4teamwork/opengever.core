@@ -63,13 +63,13 @@
           condition_expr="" visible="True">
     <permission value="View"/>
   </action>
-  <action title="Docu Composer" action_id="docu_composer" category="object" condition_expr=""
+  <action title="document_with_docucomposer"  i18n:domain="opengever.dossier" action_id="document_with_docucomposer" category="folder_factories" condition_expr=""
           url_expr="string:${object_url}/docucomposer-wizard" visible="True">
     <permission value="Add portal content"/>
   </action>
 
   <!-- Tabbedview tabs-->
-  <action title="Templates" action_id="documents" category="arbeitsraum-tabs"
+  <action title="Templates" action_id="documents" category="tabbedview-tabs"
           condition_expr="" url_expr="string:#" visible="True">
     <permission value="View"/>
   </action>
