@@ -32,6 +32,10 @@ class ITemplateUtility(Interface):
 
 
 class TemplateDocumentFormView(grok.View):
+    """ Show the "Document with Tempalte"-Form
+        A Form wich show all static templates.
+    """
+
     grok.context(Interface)
     grok.require('zope2.View')
     grok.name('document_with_template')
@@ -53,14 +57,16 @@ class TemplateDocumentFormView(grok.View):
             if path and self.title:
                 #create document
                 doc = self.context.restrictedTraverse(path)
-                clibboard = aq_parent(aq_inner(doc)).manage_copyObjects([doc.getId()])
+                clibboard = aq_parent(aq_inner(doc)).manage_copyObjects(
+                    [doc.getId()])
                 result = self.context.manage_pasteObjects(clibboard)
                 newdoc = self.context.get(result[0].get('new_id'))
                 annotations = IAnnotations(newdoc)
                 for a in list(annotations.keys()):
                     del annotations[a]
                 # change attributes: id, title, owner, creation_date ect.
-                name = "document-%s" % getUtility(ISequenceNumber).get_number(newdoc)
+                name = "document-%s" % getUtility(ISequenceNumber).get_number(
+                    newdoc)
                 member = self.context.portal_membership.getAuthenticatedMember()
                 self.context.manage_renameObject(newdoc.getId(), name)
                 event = ObjectAddedEvent(newdoc, newParent=self.context, newName=newdoc.getId())
@@ -75,16 +81,20 @@ class TemplateDocumentFormView(grok.View):
                 newdoc.manage_setLocalRoles(member.getId(), ('Owner', ))
                 event = ObjectModifiedEvent(newdoc)
                 notify(event)
+                # check if the direct-edit-mode is selected
                 if self.edit:
+                    # redirect to the parent Dossier of the new document 
+                    # and set the redirectTo parameter, which start the 
+                    # zem-file download. See startredirect.js
                     manager = ICheckinCheckoutManager(newdoc)
                     wc = manager.checkout('', show_status_message=False)
                     portal = self.context.portal_url.getPortalObject()
                     xpr = re.compile('href="(.*?)"')
                     html = portal.externalEditLink_(wc)
                     url = xpr.search(html).groups()[0]
-                    
+                    url = url.replace(portal.absolute_url(),'')
                     get = urllib.urlencode({'redirectTo':url})
-                    
+
                     redirect_url = '%s?%s#documents_overview' % (self.context.absolute_url(), get)
                     return self.request.RESPONSE.redirect(redirect_url)
                 else:

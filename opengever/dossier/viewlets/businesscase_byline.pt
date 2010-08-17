@@ -1,7 +1,8 @@
 <div class="documentByLine"
      id="plone-document-byline"
      i18n:domain="opengever.dossier"
-     tal:condition="view/show">
+     tal:condition="view/show"
+     tal:define="toLocalizedTime nocall:context/@@plone/toLocalizedTime;">
 
   <span id="lock-icon"
         tal:define="lock_icon view/locked_icon"
@@ -35,7 +36,7 @@
     <span i18n:translate="label_start_byline" tal:omit-tag="">
       from:
     </span>
-    <span tal:replace="python:view.toLocalizedTime(str(view.start()),long_format=0)">
+    <span tal:replace="python:toLocalizedTime(str(view.start()),long_format=0)">
       August 16, 2001 at 23:35:59
     </span>
   </span>
@@ -44,7 +45,7 @@
     <span i18n:translate="label_end_byline" i18n:domain="opengever.dossier" tal:omit-tag="">
       to:
     </span>
-    <span tal:replace="python:here.toLocalizedTime(str(here.end()),long_format=0)">
+    <span tal:replace="python:toLocalizedTime(str(view.end()),long_format=0)">
       August 16, 2001 at 23:35:59
     </span>
   </span>
