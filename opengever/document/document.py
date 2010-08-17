@@ -37,7 +37,7 @@ from zope.lifecycleevent.interfaces import IObjectCreatedEvent, IObjectModifiedE
 from ftw.table.interfaces import ITableGenerator
 from ftw.table import helper
 
-from opengever.sqlfile.field import NamedFile
+from plone.namedfile.field import NamedFile
 from plone.namedfile.interfaces import INamedFileField
 
 from opengever.document import _
