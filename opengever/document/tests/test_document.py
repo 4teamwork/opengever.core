@@ -42,7 +42,7 @@ class TestDocumentIntegration(PloneTestCase):
         field = IDocumentSchema['file']
         monk_file = NamedFile('bla bla', filename='test.txt')
         field.set(d1, monk_file)
-        self.assertEquals(field.get(d1).data == 'bla bla')
+        self.assertTrue(field.get(d1).data == 'bla bla')
 
     # def test_view(self):
     #     self.folder.invokeFactory('opengever.document.document', 'document1')
