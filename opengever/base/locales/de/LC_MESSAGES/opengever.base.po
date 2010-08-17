@@ -3,7 +3,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2010-08-06 05:49+0000\n"
+"POT-Creation-Date: 2010-08-17 07:40+0000\n"
 "PO-Revision-Date: 2009-01-01 10:00+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: Jonas Baumann <j.baumann@4teamwork.ch>\n"
@@ -72,11 +72,11 @@ msgid "fieldset_lifecycle"
 msgstr "Lebenszyklus"
 
 #. Default: "Archival value code"
-#: ./opengever/base/behaviors/lifecycle.py:55
+#: ./opengever/base/behaviors/lifecycle.py:57
 msgid "help_archival_value"
 msgstr "Archivwürdigkeit"
 
-#: ./opengever/base/behaviors/lifecycle.py:62
+#: ./opengever/base/behaviors/lifecycle.py:64
 msgid "help_archival_value_annotation"
 msgstr ""
 
@@ -89,9 +89,17 @@ msgstr "Grad, in dem die Unterlagen vor unberechtigter Einsicht geschützt werde
 msgid "help_creators"
 msgstr ""
 
-#: ./opengever/base/behaviors/lifecycle.py:68
+#: ./opengever/base/behaviors/lifecycle.py:70
 msgid "help_custody_period"
 msgstr "Dauer, während der nach der Archivierung die Dokumente vor öffentlicher Einsichtnahme geschützt sind"
+
+#: ./opengever/base/behaviors/lifecycle.py:77
+msgid "help_dateofcassation"
+msgstr ""
+
+#: ./opengever/base/behaviors/lifecycle.py:83
+msgid "help_dateofsubmission"
+msgstr ""
 
 #. Default: ""
 #: ./opengever/base/behaviors/classification.py:39
@@ -111,21 +119,21 @@ msgstr "Argumente gegen die öffentliche Zugänglichkeit gemäss Öffentlichkeit
 msgid "help_reference_number"
 msgstr "Präfix für das Aktenzeichen von Dossiers, die in dieser Ordnungsposition enthalten sind"
 
-#: ./opengever/base/behaviors/lifecycle.py:42
+#: ./opengever/base/behaviors/lifecycle.py:44
 msgid "help_retention_period"
 msgstr "Zeitraum zwischen dem jüngsten Dokumentdatum eines in einem Dossier enthaltenen Dokuments und dem Zeitpunkt, an dem dieses für die Geschäftstätigkeit der Verwaltungseinheit nicht mehr benötigt wird"
 
-#: ./opengever/base/behaviors/lifecycle.py:49
+#: ./opengever/base/behaviors/lifecycle.py:51
 msgid "help_retention_period_annotation"
 msgstr ""
 
 #. Default: "Archival value"
-#: ./opengever/base/behaviors/lifecycle.py:54
+#: ./opengever/base/behaviors/lifecycle.py:56
 msgid "label_archival_value"
 msgstr "Archivwürdigkeit"
 
 #. Default: "archivalValueAnnotation"
-#: ./opengever/base/behaviors/lifecycle.py:61
+#: ./opengever/base/behaviors/lifecycle.py:63
 msgid "label_archival_value_annotation"
 msgstr "Kommentar zur Archivwürdigkeit"
 
@@ -140,9 +148,19 @@ msgid "label_creators"
 msgstr "Autoren"
 
 #. Default: "Custody period (years)"
-#: ./opengever/base/behaviors/lifecycle.py:67
+#: ./opengever/base/behaviors/lifecycle.py:69
 msgid "label_custody_period"
 msgstr "Archivische Schutzfrist (Jahre)"
+
+#. Default: "Date of cassation"
+#: ./opengever/base/behaviors/lifecycle.py:76
+msgid "label_dateofcassation"
+msgstr "Kassationsdatum"
+
+#. Default: "Date of submission"
+#: ./opengever/base/behaviors/lifecycle.py:82
+msgid "label_dateofsubmission"
+msgstr "Anbietezeitpunkt"
 
 #. Default: "Privacy layer"
 #: ./opengever/base/behaviors/classification.py:38
@@ -165,12 +183,12 @@ msgid "label_reference_number"
 msgstr "Präfix des Aktenzeichens"
 
 #. Default: "Retention period (years)"
-#: ./opengever/base/behaviors/lifecycle.py:41
+#: ./opengever/base/behaviors/lifecycle.py:43
 msgid "label_retention_period"
 msgstr "Aufbewahrungsdauer (Jahre)"
 
 #. Default: "retentionPeriodAnnotation"
-#: ./opengever/base/behaviors/lifecycle.py:48
+#: ./opengever/base/behaviors/lifecycle.py:50
 msgid "label_retention_period_annotation"
 msgstr "Kommentar zur Aufbewahrungsdauer"
 

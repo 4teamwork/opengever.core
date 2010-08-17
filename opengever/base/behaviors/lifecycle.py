@@ -34,6 +34,8 @@ class ILifeCycle(form.Schema):
             u'archival_value',    
             u'archival_value_annotation',
             u'custody_period',
+            u'date_of_cassation',
+            u'date_of_submission',
             ],
         )
 
@@ -70,6 +72,17 @@ class ILifeCycle(form.Schema):
         required = True,
         )
 
+    date_of_cassation = schema.Date(
+        title = _(u'label_dateofcassation', default=u'Date of cassation'),
+        description = _(u'help_dateofcassation', default=u''),
+        required = False,
+        )
+
+    date_of_submission = schema.Date(
+        title = _(u'label_dateofsubmission', default=u'Date of submission'),
+        description = _(u'help_dateofsubmission', default=u''),
+        required = False,
+        )
 
 alsoProvides(ILifeCycle, IFormFieldProvider)
 
