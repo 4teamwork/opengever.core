@@ -352,6 +352,13 @@ class DossierOverview(grok.View, OpengeverTab):
         return self.catalog(['opengever.task.task', ])[:5]
 
     def documents(self):
+        documents = self.catalog(['opengever.document.document','ftw.mail.mail',])[:10]
+        return [{
+            'Title': document.Title,
+            'getURL': document.getURL,
+            'alt': self.context.toLocalizedTime(document.modified, long_format=1),
+            'getIcon': 'document_icon.gif',
+        } for document in documents]
         return self.catalog(['opengever.document.document','ftw.mail.mail',])[:10]
 
     def events(self):
@@ -368,32 +375,49 @@ class DossierOverview(grok.View, OpengeverTab):
         return edict
 
     def sharing(self):
-        # TODO: move to util
-        role = 'Reader'
-        results = []
-        context = self.context
-        pas_tool = getToolByName(context, 'acl_users')
-        utils_tool = getToolByName(context, 'plone_utils')
-
-        inherited_and_local_roles = utils_tool.getInheritedLocalRoles(context) + pas_tool.getLocalRolesForDisplay(context)
-
-        for user_id_and_roles in inherited_and_local_roles:
-            if user_id_and_roles[2] == 'user':
-                if role in user_id_and_roles[1]:
-                    user = pas_tool.getUserById(user_id_and_roles[0])
-                    if user:
-                        results.append(dict(
-                                Title = '%s (%s)' % (user.getProperty('fullname', ''), user.getId()),
-                                getIcon='user.gif'
-                                ))
-            if user_id_and_roles[2] == 'group':
-                if role in user_id_and_roles[1]:
-                    for user in pas_tool.getGroupById(user_id_and_roles[0]).getGroupMembers():
-                        results.append(dict(
-                                Title = '%s (%s)' % (user.getProperty('fullname', ''), user.getId()),
-                                getIcon='user.gif'
-                                ))
-        return results
+        phandler = IParticipationAware(self.context)
+        results = list(phandler.get_participations())
+        
+        dossier_adpt = IDossier(self.context)
+        responsible_name = _(u'label_responsible', 'Responsible')
+        results.append({'contact' : dossier_adpt.responsible,
+                        'roles' : responsible_name,
+                        'role_list' : responsible_name,
+                        })
+        return [{
+            'Title':xx['contact'],
+            'getIcon':'user.gif',
+            }
+            for xx in results
+        ]
+        
+#        # TODO: move to util
+#        role = 'Reader'
+#        results = []
+#        context = self.context
+#        pas_tool = getToolByName(context, 'acl_users')
+#        utils_tool = getToolByName(context, 'plone_utils')
+#
+#        inherited_and_local_roles = utils_tool.getInheritedLocalRoles(context) + pas_tool.getLocalRolesForDisplay(context)
+#
+#        for user_id_and_roles in inherited_and_local_roles:
+#            if user_id_and_roles[2] == 'user':
+#                if role in user_id_and_roles[1]:
+#                    user = pas_tool.getUserById(user_id_and_roles[0])
+#                    if user:
+#                        results.append(dict(
+#                                Title = '%s (%s)' % (user.getProperty('fullname', ''), user.getId()),
+#                                getIcon='user.gif'
+#                                ))
+#            if user_id_and_roles[2] == 'group':
+#                if role in user_id_and_roles[1]:
+#                    for user in pas_tool.getGroupById(user_id_and_roles[0]).getGroupMembers():
+#                        results.append(dict(
+#                                Title = '%s (%s)' % (user.getProperty('fullname', ''), user.getId()),
+#                                getIcon='user.gif'
+#                                ))
+#        import pdb; pdb.set_trace( )
+#        return results
 
     def related_dossiers(self):
         results = []
