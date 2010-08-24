@@ -263,6 +263,8 @@ class Tasks(OpengeverListingTab):
 
     enabled_actions = [
         'change_state',
+        'cut',
+        'paste',
         ]
 
 class Events(OpengeverListingTab):
