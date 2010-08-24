@@ -5,6 +5,10 @@ Changelog
 1.0a4
 -----
 
+* Issue #543 Metadaten diverser Inhaltstypen bereinigen
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/543/
+  [17.08.2010, jinfanfer]
+
 * Issue #581 Zusätzliches Feld: Zum Feld Archivwürdigkeit ein Kommentarfeld hinzufügen
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/581
   [06.08.2010, jinfanfer]

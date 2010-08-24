@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2010-08-06 05:49+0000\n"
+"POT-Creation-Date: 2010-08-17 07:40+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -74,11 +74,11 @@ msgid "fieldset_lifecycle"
 msgstr ""
 
 #. Default: "Archival value code"
-#: ./opengever/base/behaviors/lifecycle.py:55
+#: ./opengever/base/behaviors/lifecycle.py:57
 msgid "help_archival_value"
 msgstr ""
 
-#: ./opengever/base/behaviors/lifecycle.py:62
+#: ./opengever/base/behaviors/lifecycle.py:64
 msgid "help_archival_value_annotation"
 msgstr ""
 
@@ -90,8 +90,16 @@ msgstr ""
 msgid "help_creators"
 msgstr ""
 
-#: ./opengever/base/behaviors/lifecycle.py:68
+#: ./opengever/base/behaviors/lifecycle.py:70
 msgid "help_custody_period"
+msgstr ""
+
+#: ./opengever/base/behaviors/lifecycle.py:77
+msgid "help_dateofcassation"
+msgstr ""
+
+#: ./opengever/base/behaviors/lifecycle.py:83
+msgid "help_dateofsubmission"
 msgstr ""
 
 #: ./opengever/base/behaviors/classification.py:39
@@ -110,21 +118,21 @@ msgstr ""
 msgid "help_reference_number"
 msgstr ""
 
-#: ./opengever/base/behaviors/lifecycle.py:42
+#: ./opengever/base/behaviors/lifecycle.py:44
 msgid "help_retention_period"
 msgstr ""
 
-#: ./opengever/base/behaviors/lifecycle.py:49
+#: ./opengever/base/behaviors/lifecycle.py:51
 msgid "help_retention_period_annotation"
 msgstr ""
 
 #. Default: "Archival value"
-#: ./opengever/base/behaviors/lifecycle.py:54
+#: ./opengever/base/behaviors/lifecycle.py:56
 msgid "label_archival_value"
 msgstr ""
 
 #. Default: "archivalValueAnnotation"
-#: ./opengever/base/behaviors/lifecycle.py:61
+#: ./opengever/base/behaviors/lifecycle.py:63
 msgid "label_archival_value_annotation"
 msgstr ""
 
@@ -139,8 +147,18 @@ msgid "label_creators"
 msgstr ""
 
 #. Default: "Custody period (years)"
-#: ./opengever/base/behaviors/lifecycle.py:67
+#: ./opengever/base/behaviors/lifecycle.py:69
 msgid "label_custody_period"
+msgstr ""
+
+#. Default: "Date of cassation"
+#: ./opengever/base/behaviors/lifecycle.py:76
+msgid "label_dateofcassation"
+msgstr ""
+
+#. Default: "Date of submission"
+#: ./opengever/base/behaviors/lifecycle.py:82
+msgid "label_dateofsubmission"
 msgstr ""
 
 #. Default: "Privacy layer"
@@ -164,12 +182,12 @@ msgid "label_reference_number"
 msgstr ""
 
 #. Default: "Retention period (years)"
-#: ./opengever/base/behaviors/lifecycle.py:41
+#: ./opengever/base/behaviors/lifecycle.py:43
 msgid "label_retention_period"
 msgstr ""
 
 #. Default: "retentionPeriodAnnotation"
-#: ./opengever/base/behaviors/lifecycle.py:48
+#: ./opengever/base/behaviors/lifecycle.py:50
 msgid "label_retention_period_annotation"
 msgstr ""
 
