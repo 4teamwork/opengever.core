@@ -22,6 +22,7 @@ class TaskByline(content.DocumentBylineViewlet):
             for w in workflows:
                 if state in w.states:
                     return w.states[state].title or state
+
     @memoize
     def sequence_number(self):
         seqNumb = getUtility(ISequenceNumber)
