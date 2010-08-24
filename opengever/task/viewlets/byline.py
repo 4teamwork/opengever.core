@@ -2,8 +2,9 @@ from zope.component import getUtility
 
 from plone.app.layout.viewlets import content
 from plone.memoize.instance import memoize
+from plone.registry.interfaces import IRegistry
 
-from opengever.base.interfaces import ISequenceNumber
+from opengever.base.interfaces import ISequenceNumber, IBaseClientID
 from opengever.octopus.tentacle.interfaces import IContactInformation
 from opengever.task.task import ITask
 
@@ -30,3 +31,9 @@ class TaskByline(content.DocumentBylineViewlet):
         info = getUtility(IContactInformation)
         task = ITask(self.context)
         return info.render_link(task.responsible)
+
+    def client_id(self):
+        # filing_client
+        registry = getUtility(IRegistry)
+        proxy = registry.forInterface(IBaseClientID)
+        return getattr(proxy, 'client_id')

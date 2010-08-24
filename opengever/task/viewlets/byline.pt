@@ -50,7 +50,7 @@
           i18n:domain="opengever.dossier" tal:omit-tag="">
       Sequence Number:
     </span>
-    <span tal:replace="view/sequence_number">
+    <span tal:replace="python: '%s %s' % (view.client_id(), view.sequence_number())">
       14
     </span>
   </span>
