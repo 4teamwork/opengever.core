@@ -1,5 +1,5 @@
 jq(function() {
-  tabbedview.view_container.bind('reload', function() {
+  jq('.tabbedview_view').bind('reload', function() {
     /* update breadcrumb tooltips */
     jq('a.rollover-breadcrumb').tooltip({
       showURL: false,
