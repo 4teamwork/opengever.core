@@ -30,6 +30,7 @@ setup(name='opengever.tabbedview',
       install_requires=[
           'setuptools',
           'ftw.tabbedview',
+          'opengever.globalsolr',
           #'collective.jqhistory'
           # -*- Extra requirements: -*-
       ],
