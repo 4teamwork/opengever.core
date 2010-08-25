@@ -208,6 +208,7 @@ class Task(Container):
     #     return title
     @property
     def sequence_number(self):
+        import pdb; pdb.set_trace( )
         return self._sequence_number
 
     @property
@@ -400,5 +401,13 @@ grok.global_adapter(assigned_client, name='assigned_client')
 
 @indexer(ITask)
 def client_id(obj):
+    """ Indexer for the client_id of the client, wich was the task stored on"""
     return getUtility(ITentacleConfig).cid
 grok.global_adapter(client_id, name='client_id')
+
+
+@indexer(ITask)
+def sequence_number(obj):
+    """ Indexer for the sequence_number """
+    return obj._sequence_number
+grok.global_adapter(sequence_number, name='sequence_number')
