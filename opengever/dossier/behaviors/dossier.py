@@ -22,11 +22,12 @@ from zope.schema.vocabulary import SimpleVocabulary
 from zope.schema.interfaces import IContextSourceBinder
 from zope import schema
 from zope.interface import Interface, alsoProvides
-from zope.component import queryUtility, getAdapter
+from zope.component import queryUtility, getAdapter, getUtility
 
 from opengever.dossier.interfaces import IDossierContainerTypes
-from opengever.base.interfaces import IReferenceNumber
+from opengever.base.interfaces import IReferenceNumber, ISequenceNumber
 from opengever.base.behaviors import reference
+from opengever.octopus.tentacle.interfaces import IContactInformation
 
 from z3c.relationfield.schema import RelationChoice, RelationList
 from plone.formwidget.contenttree import ObjPathSourceBinder
@@ -267,7 +268,27 @@ def SearchableText(obj):
             data = " ".join([str(a) for a in data])
         if data:
             searchable.append(data)
+    # append some other attributes to the searchableText index
+    # reference_number
+    refNumb = getAdapter(obj, IReferenceNumber)
+    searchable.append(refNumb.get_number())
+
+    # sequence_number
+    seqNumb = getUtility(ISequenceNumber)
+    searchable.append(str(seqNumb.get_number(obj)))
+
+    #responsible
+    info = getUtility(IContactInformation)
+    dossier = IDossier(obj)
+    userid = obj.portal_membership.getMemberById(dossier.responsible).getId()
+    searchable.append(info.describe(userid))
+
+    #filling_no
+    dossier = IDossierMarker(obj)
+    if getattr(dossier, 'filing_no', None):
+        searchable.append(str(getattr(dossier, 'filing_no', None)))
     return ' '.join(searchable)
+
 grok.global_adapter(SearchableText, name='SearchableText')
 
 @grok.subscribe(IDossierMarker, IObjectMovedEvent)
