@@ -315,6 +315,8 @@ def SearchableText( obj ):
     #Sequence Number
     seq_number = str(getUtility(ISequenceNumber).get_number(obj))
     searchable.append(seq_number)
+    #document_author
+    searchable.append(obj.document_author.encode('utf8'))
 
     for field in fields:
         data = field.get( context )
