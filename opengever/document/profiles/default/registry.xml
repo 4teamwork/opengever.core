@@ -1,4 +1,5 @@
 <registry>
   <records interface="opengever.document.interfaces.IDocumentType" />
   <records interface="opengever.document.interfaces.IDocuComposer" />
+  <records interface="opengever.document.interfaces.ISendDocumentConf" />
 </registry>

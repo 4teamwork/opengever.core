@@ -78,4 +78,12 @@ class IDocuComposer(Interface):
     dc_original_path = schema.TextLine(title=u'dc_original_path')
 
     dc_rewrited_path = schema.TextLine(title=u'dc_rewrited_path')
+
+
+class ISendDocumentConf(Interface):
+    max_size = schema.Int(
+        title=u'max_size',
+        description=u'Maximal Size (MB) of the Attachment',
+        default=5,
+    )
     
