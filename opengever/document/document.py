@@ -398,10 +398,10 @@ def checked_out( obj ):
     return '-'
 grok.global_adapter( checked_out, name='checked_out' )
 
-@grok.subscribe(IDocumentSchema, IObjectCreatedEvent)
-def setID(document, event):
-    document.id = "document-%s" % getUtility(ISequenceNumber).get_number(document)
-
+# @grok.subscribe(IDocumentSchema, IObjectCreatedEvent)
+# def setID(document, event):
+#     document.id = "document-%s" % getUtility(ISequenceNumber).get_number(document)
+# 
 @grok.subscribe(IDocumentSchema, IObjectCreatedEvent)
 def setImageName(document, event):
     if document.file:
@@ -503,6 +503,7 @@ class Tasks(OpengeverListingTab):
         {'column' : 'created',
         'column_title' : taskmsg(u'label_issued_date', 'issued at'),
         'transform': helper.readable_date },
+        ('client_id', 'client_id'),
         )
 
     types = ['opengever.task.task', ]
