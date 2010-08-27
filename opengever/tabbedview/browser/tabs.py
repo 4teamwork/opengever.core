@@ -198,10 +198,12 @@ class Documents(OpengeverListingTab):
                        'cancel',
                        'create_task',
                        'trashed',
+                       'send_documents',
                        'copy_documents_to_remote_client',
                        ]
 
-    major_actions = ['checkout',
+    major_actions = ['send_documents',
+                     'checkout',
                      'checkin',
                      'create_task',
                      ]
@@ -257,6 +259,10 @@ class Tasks(OpengeverListingTab):
         {'column' : 'created',
          'column_title' : taskmsg(u'label_issued_date', 'issued at'),
          'transform': helper.readable_date },
+         {'column' : 'client_id',
+          'column_title':taskmsg('client_id', 'Client'),},
+         {'column' : 'sequence_number',
+          'column_title' : taskmsg(u'sequence_number', "Sequence Number"),},
         )
 
     types = ['opengever.task.task',]
