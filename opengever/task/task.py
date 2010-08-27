@@ -208,7 +208,6 @@ class Task(Container):
     #     return title
     @property
     def sequence_number(self):
-        import pdb; pdb.set_trace( )
         return self._sequence_number
 
     @property
@@ -411,3 +410,42 @@ def sequence_number(obj):
     """ Indexer for the sequence_number """
     return obj._sequence_number
 grok.global_adapter(sequence_number, name='sequence_number')
+
+
+@indexer(ITask)
+def SearchableText(obj):
+    """searchableText indexer."""
+
+    context = aq_inner(obj)
+    fields = [
+        schema.getFields(ITask).get('title'),
+        schema.getFields(ITask).get('description'),
+        ]
+    searchable = []
+    for field in fields:
+        try:
+            data = field.get(context)
+        except AttributeError:
+            data = field.get(field.interface(context))
+        if not data:
+            continue
+        if isinstance(data, unicode):
+            data = data.encode('utf8')
+        if isinstance(data, tuple) or isinstance(data, list):
+            data = " ".join([str(a) for a in data])
+        if data:
+            searchable.append(data)
+    # append some other attributes to the searchableText index
+    # sequence_number
+    seqNumb = getUtility(ISequenceNumber)
+    searchable.append(str(seqNumb.get_number(obj)))
+
+    #responsible
+    info = getUtility(IContactInformation)
+    task = ITask(obj)
+    userid = obj.portal_membership.getMemberById(task.responsible).getId()
+    searchable.append(info.describe(userid))
+    
+    return ' '.join(searchable)
+
+grok.global_adapter(SearchableText, name='SearchableText')
