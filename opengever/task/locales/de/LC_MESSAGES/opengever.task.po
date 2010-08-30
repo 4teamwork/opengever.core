@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2010-08-13 06:54+0000\n"
+"POT-Creation-Date: 2010-08-30 06:27+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -30,7 +30,7 @@ msgstr "Änderungen an der Antwort ${response_id} wurden gespeichert"
 
 #: ./opengever/task/actions/addlocalroles.py:107
 msgid "Configure element"
-msgstr ""
+msgstr "Element konfigurieren"
 
 #: ./opengever/task/response_templates/responseview.pt:26
 msgid "Delete"
@@ -62,7 +62,7 @@ msgstr "Kein Antwort selektiert"
 
 #: ./opengever/task/actions/addlocalroles.py:18
 msgid "Object Roles"
-msgstr ""
+msgstr "Objekt Rollen"
 
 #: ./opengever/task/actions/addlocalroles.py:28
 msgid "Parent Roles"
@@ -143,6 +143,12 @@ msgstr "Weiter"
 msgid "cancel"
 msgstr "Abbrechen"
 
+#. Default: "Client"
+#: ./opengever/task/taskoverview.py:48
+#: ./opengever/task/taskoverview_solr.py:36
+msgid "client_id"
+msgstr "Kunde"
+
 #. Default: "Containing Tasks:"
 #: ./opengever/task/task_templates/view.pt:65
 msgid "containing_task"
@@ -175,8 +181,7 @@ msgstr "Allgemein"
 #: ./opengever/task/response.py:60
 #: ./opengever/task/task.py:103
 msgid "help_date_of_completion"
-msgstr ""
-
+msgstr "Das Datum an dem die Aufgabe beendet wurde"
 #. Default: "Deadline"
 #: ./opengever/task/task.py:96
 msgid "help_deadline"
@@ -239,7 +244,7 @@ msgstr "Wählen Sie ein Dossier von ihrem Mandanten"
 
 #: ./opengever/task/task.py:77
 msgid "help_task_type"
-msgstr ""
+msgstr "Wählen sie den Tasktyp"
 
 #: ./opengever/task/task.py:110
 msgid "help_text"
@@ -247,7 +252,7 @@ msgstr "Geben Sie eine detaillierte Arbeitsanweisung oder einen Kommentar ein"
 
 #: ./opengever/task/task.py:62
 msgid "help_title"
-msgstr ""
+msgstr "Der Name der Aufgabe"
 
 #: ./opengever/task/behaviors.py:28
 #: ./opengever/task/response.py:66
@@ -255,10 +260,10 @@ msgid "help_transition"
 msgstr ""
 
 msgid "issuedtasks"
-msgstr ""
+msgstr "In Auftrag gegebene Aufgaben"
 
 msgid "issuedtasks_solr"
-msgstr ""
+msgstr "In Auftrag gegebene Aufgaben"
 
 #. Default: "by ${author}"
 #: ./opengever/task/viewlets/byline.pt:17
@@ -317,8 +322,8 @@ msgid "label_expectedStartOfWork"
 msgstr "Beginn der Arbeit"
 
 #. Default: "issued at"
-#: ./opengever/task/taskoverview.py:40
-#: ./opengever/task/taskoverview_solr.py:32
+#: ./opengever/task/taskoverview.py:45
+#: ./opengever/task/taskoverview_solr.py:33
 msgid "label_issued_date"
 msgstr "Zugewiesen am"
 
@@ -353,8 +358,8 @@ msgid "label_responsible_Response"
 msgstr "Neuer Verantwortlicher"
 
 #. Default: "Responsible"
-#: ./opengever/task/taskoverview.py:36
-#: ./opengever/task/taskoverview_solr.py:28
+#: ./opengever/task/taskoverview.py:41
+#: ./opengever/task/taskoverview_solr.py:29
 msgid "label_responsible_task"
 msgstr "Verantwortlich"
 
@@ -375,7 +380,7 @@ msgstr "Dossier"
 
 #. Default: "Task Type"
 #: ./opengever/task/task.py:76
-#: ./opengever/task/taskoverview.py:32
+#: ./opengever/task/taskoverview.py:37
 #: ./opengever/task/taskoverview_solr.py:24
 msgid "label_task_type"
 msgstr "Auftragstyp"
@@ -402,10 +407,9 @@ msgid "label_workflow_state"
 msgstr "Status"
 
 msgid "mytasks"
-msgstr ""
-
+msgstr "Meine Aufgaben"
 msgid "mytasks_solr"
-msgstr ""
+msgstr "Meine Aufgaben"
 
 #. Default: "No Content"
 #: ./opengever/task/task_templates/view.pt:73
@@ -425,6 +429,12 @@ msgstr "Antworten:"
 #: ./opengever/task/response.py:273
 msgid "responsible"
 msgstr "Verantwortlicher"
+
+#. Default: "Sequence Number"
+#: ./opengever/task/taskoverview.py:50
+#: ./opengever/task/taskoverview_solr.py:38
+msgid "sequence_number"
+msgstr "Sequenznummer"
 
 #. Default: "Subtasks:"
 #: ./opengever/task/task_templates/view.pt:76

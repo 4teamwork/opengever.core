@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2010-08-13 06:54+0000\n"
+"POT-Creation-Date: 2010-08-30 06:27+0000\n"
 "PO-Revision-Date: 2009-02-25 14:39+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -144,6 +144,12 @@ msgstr ""
 #. Default: "Cancel"
 #: ./opengever/task/response.py:315
 msgid "cancel"
+msgstr ""
+
+#. Default: "Client"
+#: ./opengever/task/taskoverview.py:48
+#: ./opengever/task/taskoverview_solr.py:36
+msgid "client_id"
 msgstr ""
 
 #. Default: "Containing Tasks:"
@@ -317,8 +323,8 @@ msgid "label_expectedStartOfWork"
 msgstr ""
 
 #. Default: "issued at"
-#: ./opengever/task/taskoverview.py:40
-#: ./opengever/task/taskoverview_solr.py:32
+#: ./opengever/task/taskoverview.py:45
+#: ./opengever/task/taskoverview_solr.py:33
 msgid "label_issued_date"
 msgstr ""
 
@@ -353,8 +359,8 @@ msgid "label_responsible_Response"
 msgstr ""
 
 #. Default: "Responsible"
-#: ./opengever/task/taskoverview.py:36
-#: ./opengever/task/taskoverview_solr.py:28
+#: ./opengever/task/taskoverview.py:41
+#: ./opengever/task/taskoverview_solr.py:29
 msgid "label_responsible_task"
 msgstr ""
 
@@ -375,7 +381,7 @@ msgstr ""
 
 #. Default: "Task Type"
 #: ./opengever/task/task.py:76
-#: ./opengever/task/taskoverview.py:32
+#: ./opengever/task/taskoverview.py:37
 #: ./opengever/task/taskoverview_solr.py:24
 msgid "label_task_type"
 msgstr ""
@@ -424,6 +430,12 @@ msgstr ""
 
 #: ./opengever/task/response.py:273
 msgid "responsible"
+msgstr ""
+
+#. Default: "Sequence Number"
+#: ./opengever/task/taskoverview.py:50
+#: ./opengever/task/taskoverview_solr.py:38
+msgid "sequence_number"
 msgstr ""
 
 #. Default: "Subtasks:"
