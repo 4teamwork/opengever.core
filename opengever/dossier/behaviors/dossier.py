@@ -156,7 +156,11 @@ class IDossier(form.Schema):
         title=_(u'label_related_dossier', default=u'Related Dossier'),
         default=[],
         value_type=RelationChoice(title=u"Related",
-                                  source = ObjPathSourceBinder(portal_type='opengever.dossier.businesscasedossier')),
+            source=ObjPathSourceBinder(
+                navigation_tree_query=
+                    {'portal_type': 'opengever.dossier.businesscasedossier', },
+                portal_type="opengever.dossier.businesscasedossier", ),
+        ),
         required=False,
         )
 
