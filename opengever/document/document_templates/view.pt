@@ -97,7 +97,7 @@
 			<tr>
 			    <th>Referenzierte Dokumente</th>
 			    <td>
-			        <div tal:replace="structure view/w/IRelatedItems.relatedItems/render" />
+			        <div tal:replace="structure view/w/IRelatedDocuments.relatedItems/render" />
 			    </td>
 			</tr>
 			<tr i18n:domain="opengever.base">

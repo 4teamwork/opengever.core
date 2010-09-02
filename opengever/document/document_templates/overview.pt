@@ -61,7 +61,7 @@
 		</tr>
 		<tr>
 			<th i18n:translate="referenced_documents">referenced documents</th>
-			<td tal:content="structure view/w/IRelatedItems.relatedItems/render"/>
+			<td tal:content="structure view/w/IRelatedDocuments.relatedItems/render"/>
 		</tr>
 	</table>
 </body>
