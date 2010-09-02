@@ -34,6 +34,7 @@ from plone.formwidget.contenttree import ObjPathSourceBinder
 
 LOG = logging.getLogger('opengever.dossier')
 
+
 @grok.provider(IContextSourceBinder)
 def container_types(context):
     voc= []
@@ -157,8 +158,6 @@ class IDossier(form.Schema):
         default=[],
         value_type=RelationChoice(title=u"Related",
             source=ObjPathSourceBinder(
-                navigation_tree_query=
-                    {'portal_type': 'opengever.dossier.businesscasedossier', },
                 portal_type="opengever.dossier.businesscasedossier", ),
         ),
         required=False,
