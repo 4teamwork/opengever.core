@@ -4,12 +4,13 @@ from Products.CMFCore.utils import getToolByName
 from datetime import datetime, timedelta
 from five import grok
 from opengever.base.interfaces import ISequenceNumber
-from opengever.octopus.tentacle.interfaces import IContactInformation, ITentacleConfig
+from opengever.octopus.tentacle.interfaces import IContactInformation, \
+    ITentacleConfig
 from opengever.task import _
 from opengever.task import util
 from opengever.task.interfaces import ITaskSettings
+from opengever.task.source import DossierPathSourceBinder
 from opengever.translations.browser.add import TranslatedAddForm
-from plone.app.dexterity.behaviors.related import IRelatedItems
 from plone.dexterity.content import Container
 from plone.dexterity.interfaces import IDexterityFTI
 from plone.directives import form, dexterity
@@ -19,6 +20,7 @@ from plone.indexer import indexer
 from plone.registry.interfaces import IRegistry
 from plone.z3cform.traversal import FormWidgetTraversal
 from zc.relation.interfaces import ICatalog
+from z3c.relationfield.schema import RelationChoice, RelationList
 from zope import schema
 from zope.component import getUtility
 from zope.component import queryMultiAdapter, getMultiAdapter
@@ -40,6 +42,7 @@ class ITask(form.Schema):
             u'responsible',
             u'deadline',
             u'text',
+            u'relatedItems',
             ],
         )
 
@@ -97,7 +100,8 @@ class ITask(form.Schema):
         required = True,
         )
 
-    form.widget(date_of_completion='ftw.datepicker.widget.DatePickerFieldWidget')
+    form.widget(
+        date_of_completion='ftw.datepicker.widget.DatePickerFieldWidget')
     date_of_completion = schema.Date(
         title=_(u"label_date_of_completion", default=u"Date of completion"),
         description=_(u"help_date_of_completion", default=u""),
@@ -109,6 +113,18 @@ class ITask(form.Schema):
         title=_(u"label_text", default=u"Text"),
         description=_(u"help_text", default=u""),
         required = False,
+        )
+
+    relatedItems = RelationList(
+        title=_(u'label_related_items', default=u'Related Items'),
+        default=[],
+        value_type=RelationChoice(title=u"Related",
+            source=DossierPathSourceBinder(
+                navigation_tree_query=
+                    {'portal_type': 'opengever.document.document', },
+                portal_type="opengever.document.document", ),
+        ),
+        required=False,
         )
 
     form.widget(
@@ -157,25 +173,6 @@ def default_issuer(data):
     return member.getId()
 
 
-from plone.supermodel.interfaces import FIELDSETS_KEY
-from plone.autoform.interfaces import ORDER_KEY
-# move relatedItems to default fieldset
-# by removing it from categorization fieldset
-IRelatedItems.setTaggedValue(FIELDSETS_KEY, [])
-
-# # # IRelatedItems.setTaggedValue( FIELDSETS_KEY, [
-#         Fieldset( 'common', fields=[
-#                 'relatedItems',
-#                 ])
-#         ] )
-#
-
-IRelatedItems.setTaggedValue(ORDER_KEY, [('relatedItems', 'after', 'text')])
-
-
-#ITransition.setTaggedValue(FIELDSETS_KEY, [])
-#ITransition.setTaggedValue(ORDER_KEY, [('transition', 'before', 'responsible')])
-
 @grok.subscribe(ITask, IObjectCreatedEvent)
 def setID(task, event):
     task.id = "task-%s" % getUtility(ISequenceNumber).get_number(task)
@@ -193,7 +190,8 @@ class Task(Container):
     # def Title(self):
     #     registry = queryUtility(IRegistry)
     #     proxy = registry.forInterface(ITaskSettings)
-    #     title = "#%s %s"% (getUtility(ISequenceNumber).get_number(self),self.task_type)
+    #     title = "#%s %s"% (
+    #   getUtility(ISequenceNumber).get_number(self),self.task_type)
     #     relatedItems = getattr(self,'relatedItems',[])
     #     if len(relatedItems) == 1:
     #         title += " (%s)" % self.relatedItems[0].to_object.title
@@ -202,7 +200,8 @@ class Task(Container):
     #     if self.text:
     #         crop_length = int(getattr(proxy,'crop_length',20))
     #         text = self.text.encode('utf8')
-    #         text = self.restrictedTraverse('@@plone').cropText(text,crop_length)
+    #         text = self.restrictedTraverse('@@plone').cropText(
+    #   text,crop_length)
     #         text = text.decode('utf8')
     #         title += ": %s" % text
     #     return title
@@ -241,8 +240,9 @@ class View(dexterity.DisplayForm):
     grok.require('zope2.View')
 
     def getSubTasks(self):
-        tasks = self.context.getFolderContents(full_objects=False,
-                                               contentFilter={'portal_type': 'opengever.task.task'})
+        tasks = self.context.getFolderContents(
+            full_objects=False,
+            contentFilter={'portal_type': 'opengever.task.task'})
         return tasks
 
     def getContainingTask(self):
@@ -252,8 +252,9 @@ class View(dexterity.DisplayForm):
         return None
 
     def getSubDocuments(self):
-        brains = self.context.getFolderContents(full_objects=False,
-                                               contentFilter={'portal_type': 'opengever.document.document'})
+        brains = self.context.getFolderContents(
+            full_objects=False,
+            contentFilter={'portal_type': 'opengever.document.document'})
 
         docs = []
         for doc in brains:
@@ -296,7 +297,7 @@ class AddForm(TranslatedAddForm):
             portal_path = utool.getPortalPath()
             # paths have to be relative to the portal
             paths = [path[len(portal_path):] for path in paths]
-            self.request.set('form.widgets.IRelatedItems.relatedItems', paths)
+            self.request.set('form.widgets.relatedItems', paths)
         # put default value for issuer into request
         portal_state = getMultiAdapter((self.context, self.request),
                                        name=u"plone_portal_state")
@@ -333,7 +334,8 @@ grok.global_adapter(TaskWidgetTraversal,
                     )
 
 
-class TaskAutoCompleteSearch(grok.CodeView, autocomplete.widget.AutocompleteSearch):
+class TaskAutoCompleteSearch(grok.CodeView,
+                                    autocomplete.widget.AutocompleteSearch):
     grok.context(autocomplete.interfaces.IAutocompleteWidget)
     grok.name("autocomplete-search")
 
@@ -347,7 +349,8 @@ class TaskAutoCompleteSearch(grok.CodeView, autocomplete.widget.AutocompleteSear
             # not on a task
             return super_method(self)
         view_name = self.request.getURL().split('/')[-3]
-        if view_name in ['edit', 'add', '@@edit'] or view_name.startswith('++add++'):
+        if view_name in ['edit', 'add', '@@edit'] or \
+                                            view_name.startswith('++add++'):
             # edit task itself
             return super_method(self)
         # add response to the task
@@ -445,7 +448,7 @@ def SearchableText(obj):
     task = ITask(obj)
     userid = obj.portal_membership.getMemberById(task.responsible).getId()
     searchable.append(info.describe(userid))
-    
+
     return ' '.join(searchable)
 
 grok.global_adapter(SearchableText, name='SearchableText')

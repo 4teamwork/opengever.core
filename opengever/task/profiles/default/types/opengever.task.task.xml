@@ -28,7 +28,6 @@
   <!-- enabled behaviors -->
   <property name="behaviors">
     <element value="opengever.tabbedview.interfaces.ITabbedViewEnabled" />
-    <element value="plone.app.dexterity.behaviors.related.IRelatedItems" />
     <element value="opengever.trash.trash.ITrashable" />
   </property>
 

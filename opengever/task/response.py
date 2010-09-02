@@ -23,7 +23,6 @@ from Products.statusmessages.interfaces import IStatusMessage
 
 from z3c.relationfield.schema import RelationChoice, RelationList
 from z3c.relationfield.relation import RelationValue
-from plone.formwidget.contenttree import ObjPathSourceBinder
 
 from opengever.task import _
 from opengever.task.adapters import IResponseContainer, Response
@@ -31,6 +30,7 @@ from opengever.task.interfaces import IResponseAdder
 from opengever.task.permissions import DEFAULT_ISSUE_MIME_TYPE
 from opengever.task import util
 from opengever.task.task import ITask
+from opengever.task.source import DossierPathSourceBinder
 from ftw.datepicker.widget import DatePickerFieldWidget
 
 
@@ -72,7 +72,11 @@ class IResponse(Interface):
         title=_(u'label_related_items', default=u'Related Items'),
         default=[],
         value_type=RelationChoice(title=u"Related",
-                      source=ObjPathSourceBinder()),
+            source=DossierPathSourceBinder(
+                navigation_tree_query=
+                    {'portal_type': 'opengever.document.document', },
+                portal_type="opengever.document.document", ),
+        ),
         required=False,
         )
 
@@ -291,7 +295,9 @@ class AddForm(form.AddForm, AutoExtensibleForm):
                 else:
                     setattr(task, 'relatedItems', [RelationValue(to_id)])
                 new_response.add_change('relatedItems',
-                    _('label_related_items', default="Related Items"), '', item.Title())
+                    _('label_related_items', default="Related Items"),
+                    '',
+                    item.Title())
 
             # change workflow state of task
             if data.get('transition'):
