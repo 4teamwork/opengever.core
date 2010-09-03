@@ -230,6 +230,13 @@ def isSubdossierIndexer(obj):
     return False
 grok.global_adapter(isSubdossierIndexer, name="is_subdossier")
 
+@indexer(IDossierMarker)
+def filing_no(obj):
+    """filing nubmer indexer"""
+
+    return getattr(obj, 'filing_no', None)
+grok.global_adapter(filing_no, name="filing_no")
+
 # INDEX: SearchableText
 @indexer(IDossierMarker)
 def SearchableText(obj):
