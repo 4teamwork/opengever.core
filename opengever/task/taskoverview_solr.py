@@ -36,10 +36,6 @@ class TaskSolrListing(OpengeverSolrListingTab):
          'column_title': _('client_id', 'Client')},
         {'column': 'sequence_number',
          'column_title': _(u'sequence_number', "Sequence Number")},
-         {'column': 'client_id',
-          'column_title': _('client_id', 'Client')},
-         {'column': 'sequence_number',
-          'column_title': _(u'sequence_number', "Sequence Number")},
          )
 
     types = ['opengever.task.task', ]
