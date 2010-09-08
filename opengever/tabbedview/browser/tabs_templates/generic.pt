@@ -16,7 +16,7 @@
 
         <div tal:content="structure view/render_listing" />
     </tal:cond>
-    
+
     <p tal:condition="not: view/contents">
         Keine Inhalte vorhanden
     </p>
@@ -30,8 +30,8 @@
                  tal:content="button/title" /></li>
         </tal:major_buttons>
         <li tal:condition="view/minor_buttons" class="more-menu">
-          <a href="#" i18n:translate="button_more_actions"
-             class="context more-button">More actions &#9660;</a>
+          <span i18n:translate="button_more_actions"
+             class="context more-button">More actions &#9660;</span>
           <ul class="minor-buttons ">
             <tal:minor_buttons tal:repeat="button view/minor_buttons">
               <li><a href="#"
