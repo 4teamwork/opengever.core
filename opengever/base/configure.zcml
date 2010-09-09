@@ -32,5 +32,6 @@
   <grok:grok package="." />
 
   <include package=".behaviors" />
+  <include package=".browser" />
 
 </configure>
