@@ -5,6 +5,10 @@ Changelog
 1.0a5
 -----
 
+* Issue #577 Aktenzeichen beim Dokumenten-Header korrigieren
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/577/
+  [09.09.2010, jbaumann]
+
 * Issue #563 Aufgabe: Anordnung der Antworten
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/563
   [09.08.2010, phgross]
