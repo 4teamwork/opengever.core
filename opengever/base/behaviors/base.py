@@ -1,20 +1,16 @@
 
-from zope.interface import Interface, alsoProvides, implements
+from zope.interface import Interface, alsoProvides
 from zope import schema
-from zope.component import adapts
 
 from plone.app.dexterity.behaviors import metadata
 from plone.directives import form
 
 from opengever.base import _
 
-class IOpenGeverBase(metadata.IBasic):
+class IOpenGeverBase(form.Schema):
     """ IOpengeverBase contains title and description fields
     This is a schema interface, not a marker interface!
     """
-    form.order_before(description = '*')
-    form.order_before(title = '*')
-
     form.fieldset(
         u'common',
         label = _(u'fieldset_common', default=u'Common'),
@@ -23,6 +19,18 @@ class IOpenGeverBase(metadata.IBasic):
             u'description',
             ],
         )
+
+    title = schema.TextLine(
+        title = _(u'label_title', default=u'Title'),
+        required = True
+        )
+
+    description = schema.Text(
+        title=_(u'label_description', default=u'Description'),
+        description = _(u'help_description', default=u''),
+        required = False,
+        )
+
 
 alsoProvides(IOpenGeverBase, form.IFormFieldProvider)
 
