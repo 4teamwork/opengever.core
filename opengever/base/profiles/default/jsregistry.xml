@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<object name="portal_javascripts" meta_type="Javascripts Registry">
+ <javascript 
+     cacheable="True"
+     compression="safe"
+     cookable="True"
+     enabled="1"
+     id="++resource++opengever.base.resources/sharing.js" />
+</object>
+<!--
+    expression="python:here.portal_type=='File'"
+-->

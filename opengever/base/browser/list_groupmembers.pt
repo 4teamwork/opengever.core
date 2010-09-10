@@ -1,0 +1,11 @@
+<div class="member_overview" tal:condition="view/members">
+    <h1>Benutzer der Gruppe &quot;<span tal:content="view/group_name" />&quot;</h1>
+    <ul class="member_listing">
+        <li tal:repeat="member view/members">
+            <a tal:attributes="href python:'/'.join(member.getPhysicalPath())">
+                <img tal:attributes="src string:${here/portal_url}/user.gif" alt="" />
+                <span tal:content="python:member.getProperty('fullname', member.id)" ></span>
+            </a>
+        </li>
+    </ul>
+</div>
