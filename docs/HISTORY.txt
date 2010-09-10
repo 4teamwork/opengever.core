@@ -5,6 +5,9 @@ Changelog
 1.0a5
 -----
 
+* Renamed MailContactsVocabularyFactory according to changes in `opengever.octopus.tentacle`
+  [10.09.2010, jbaumann]
+
 * Issue #527 Versionsnummer von Dokumenten
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/527
   [09.09.2010, jbaumann]

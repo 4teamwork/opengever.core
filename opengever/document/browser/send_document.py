@@ -47,8 +47,8 @@ class ISendDocumentSchema(Interface):
     intern_receiver = schema.Tuple(
         title=_('intern_receiver', default="Intern receiver"),
         value_type=schema.Choice(title=_(u"mails"),
-        source = 'opengever.octopus.tentacle.contacts.\
-                  MailContactsVocabularyFactory'),
+                                 source = 'opengever.octopus.tentacle.'
+                                 'contacts.MailContactsVocabularyFactory'),
         required=False,
         missing_value=(), # important!
     )
