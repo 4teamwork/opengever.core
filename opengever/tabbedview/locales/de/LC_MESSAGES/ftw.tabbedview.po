@@ -201,4 +201,6 @@ msgstr "Titel"
 msgid "trash"
 msgstr "Papierkorb"
 
+msgid "dossieroverview"
+msgstr "Dossiers
 
