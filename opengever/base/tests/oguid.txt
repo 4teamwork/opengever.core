@@ -85,4 +85,4 @@ The `get_object()` method should not fail:
 We should be able to get a solr flair representation:
 
     >>> oguids.get_flair(oguid)
-    Peter
+    <FakeFlair(1): test_user_1_ <Folder>>
