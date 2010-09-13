@@ -25,6 +25,8 @@ setup(name='opengever.mail',
       include_package_data=True,
       zip_safe=False,
       install_requires=[
+        'plone.registry',
+        'ftw.mail',
         'setuptools',
         'Plone',
         'plone.app.dexterity',
