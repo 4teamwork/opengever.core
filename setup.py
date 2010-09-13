@@ -34,6 +34,7 @@ setup(name='opengever.task',
           'ftw.datepicker',
           'collective.autopermission',
           'opengever.base',
+          'opengever.translations',
           'collective.testcaselayer',
           # -*- Extra requirements: -*-
       ],
