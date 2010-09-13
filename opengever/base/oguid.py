@@ -1,4 +1,5 @@
 from five import grok
+from opengever.globalsolr.interfaces import ISearch
 from opengever.base.interfaces import IOGUid
 from opengever.octopus.tentacle.interfaces import ITentacleConfig
 from zope.component import getUtility
@@ -38,3 +39,14 @@ class OGUidProvider(grok.GlobalUtility):
             return None
         else:
             return intids.getObject(int(iid))
+
+    def get_flair(self, oguid):
+        """Returns the flair of this ``oguid``.
+        """
+        solr_util = getUtility(ISearch)
+        cid, iid = oguid.split(':', 1)
+        solr_response = solr_util({'client_id': cid, 'intid': iid})
+        if len(solr_response) > 0:
+            return solr_response[0]
+        else:
+            return None

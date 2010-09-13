@@ -91,3 +91,7 @@ class IOGUid(Interface):
         """Returns the object with the `oguid`, if it exists on the current
         client. Otherwise it returns `None`.
         """
+
+    def get_flair(self, oguid):
+        """Returns the flair of this ``oguid``.
+        """

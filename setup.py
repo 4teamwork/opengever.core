@@ -42,6 +42,7 @@ setup(name='opengever.base',
         'plone.dexterity',
         'opengever.tabbedview',
         'opengever.octopus.tentacle',
+        'opengever.globalsolr',
         'plone.autoform',
         'plone.registry',
         # -*- Extra requirements: -*-
