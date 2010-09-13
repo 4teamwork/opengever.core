@@ -4,6 +4,11 @@ import os
 version = open('opengever/base/version.txt').read().strip()
 maintainer = 'Jonas Baumann'
 
+tests_require = [
+    'collective.testcaselayer',
+    'Products.PloneTestCase',
+    ]
+
 setup(name='opengever.base',
       version=version,
       description="Base package for OpenGever (Maintainer: %s)" % maintainer,
@@ -30,21 +35,18 @@ setup(name='opengever.base',
       install_requires=[
         'z3c.form',
         'plone.z3cform',
-        'plone.indexer',
         'plone.formwidget.namedfile',
         'plone.app.dexterity',
         'ftw.table',
-        'Products.PloneTestCase',
-        'Products.CMFCore',
         'setuptools',
         'plone.dexterity',
         'opengever.tabbedview',
         'plone.autoform',
-        'collective.testcaselayer',
-        'collective.monkeypatcher',
         'plone.registry',
         # -*- Extra requirements: -*-
         ],
+      tests_require=tests_require,
+      extras_require=dict(tests=tests_require),
       entry_points="""
       # -*- Entry points: -*-
       [z3c.autoinclude.plugin]
