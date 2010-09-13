@@ -4,8 +4,7 @@ from Products.CMFCore.utils import getToolByName
 from datetime import datetime, timedelta
 from five import grok
 from opengever.base.interfaces import ISequenceNumber
-from opengever.octopus.tentacle.interfaces import IContactInformation, \
-    ITentacleConfig
+from opengever.octopus.tentacle.interfaces import IContactInformation
 from opengever.task import _
 from opengever.task import util
 from opengever.task.interfaces import ITaskSettings
@@ -158,6 +157,12 @@ class ITask(form.Schema):
         description=_(u"help_effectiveCost", default="Coast in CHF"),
         required = False,
         )
+
+    form.omitted('predecessor')
+    predecessor = schema.TextLine(
+        title=_(u'label_predecessor', default=u'Predecessor'),
+        description=_(u'help_predecessor', default=u''),
+        required=False)
 
     # TODO: doesn't work with Plone 4
     #form.order_before(**{'ITransition.transition': "responsible"})
@@ -399,13 +404,6 @@ def assigned_client(obj):
         user = info.get_user_by_id(obj.responsible)
         return user.get('client', None)
 grok.global_adapter(assigned_client, name='assigned_client')
-
-
-@indexer(ITask)
-def client_id(obj):
-    """ Indexer for the client_id of the client, wich was the task stored on"""
-    return getUtility(ITentacleConfig).cid
-grok.global_adapter(client_id, name='client_id')
 
 
 @indexer(ITask)

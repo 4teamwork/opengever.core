@@ -71,3 +71,23 @@ class ITaskSettings(Interface):
         value_type = schema.TextLine(title=u'Name'),
         required = False,
     )
+
+
+class ISuccessorTaskController(Interface):
+    """The successor task controller manages predecessor and successor
+    references between tasks.
+    """
+
+    def get_predecessor(self, default=None):
+        """Returns the predecessor of the adapted object or ``None`` if it
+        has none or if the predecessor does not exist anymore. The
+        predecessor is returned as solr flair.
+        """
+
+    def set_predecessor(self, oguid):
+        """Sets the predecessor on the adapted object to ``oguid``.
+        """
+
+    def get_successors(self):
+        """Returns all successors of the adapted context as solr flair objects.
+        """
