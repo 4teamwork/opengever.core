@@ -1,9 +1,7 @@
 <?xml version="1.0"?>
 <metadata>
-  <version>0.1</version>
+  <version>2</version>
   <dependencies>
 	    <dependency>profile-ftw.tabbedview:default</dependency>
-	    <!--dependency>profile-collective.jqhistory:default</dependency-->
-	    <dependency>profile-opengever.tabbedview:default</dependency>
   </dependencies>
 </metadata>
