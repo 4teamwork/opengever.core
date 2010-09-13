@@ -4,84 +4,85 @@ OpenGever uniqe ID utility
 
 The Opengever unique ID behavior utility a uniqueID.
 
-    >>> from zope.component import getUtility
     >>> from opengever.base.interfaces import IOGUid
     >>> from plone.registry.interfaces import IRegistry
+    >>> from zope.component import getUtility
+    >>> from zope.intid.interfaces import IIntIds
 
 
 We need to set the client ID:
 
     >>> registry = getUtility(IRegistry)
-    >>> registry['opengever.octopus.tentacle.interfaces.ITentacleRegistry.cid'] = u'm1'
+    >>> CLIENT_ID = u'm1'
+    >>> registry['opengever.octopus.tentacle.interfaces.' + \
+    ...     'ITentacleRegistry.cid'] = CLIENT_ID
 
 
 Get the utility:
 
-    >>> provider = getUtility(IOGUid)
+    >>> global oguids
+    >>> oguids = getUtility(IOGUid)
+    >>> global intids
+    >>> intids = getUtility(IIntIds)
 
 
 Get the ID of the folder:
 
-    >>> oguid = provider.get_id(self.folder)
+    >>> oguid = oguids.get_id(self.folder)
     >>> print oguid
     m1:...
 
 
 Every call with the same object gives the same ID:
 
-    >>> oguid == provider.get_id(self.folder)
+    >>> oguid == oguids.get_id(self.folder)
     True
 
 
 The object is on the current client:
 
-    >>> provider.is_on_current_client(oguid)
+    >>> oguids.is_on_current_client(oguid)
     True
-    >>> provider.is_on_current_client('another-client:123123')
+    >>> oguids.is_on_current_client('another-client:123123')
     False
 
 
 We should also be able to get the object:
 
-    >>> provider.get_object(oguid) == self.folder
+    >>> oguids.get_object(oguid) == self.folder
     True
-
 
 Mock solr:
 
-    >>> from zope.interface import implements
-    >>> from opengever.globalsolr.interfaces import ISearch
-    >>> from zope.component import provideUtility
+    >>> from opengever.globalsolr.tests.mock_solr import provide_solr_mock
+    >>> fake_solr = provide_solr_mock()
 
-    >>> class FakeFlair(object):
-    ...     
-    ...     def __init__(self, cid, iid):
-    ...         self.cid = cid
-    ...         self.iid = iid
-    ...         
-    ...     def __str__(self):
-    ...         return '<FakeFlair %s : %s>' % (self.cid, self.iid)
-    ...     
-    ...     __repr__ = __str__
-    ...     __unicode__ = __str__
+    >>> def solr_filterer(obj, query, **parameters):
+    ...     q_cid = query.get('client_id', None)
+    ...     q_intid = query.get('intid', None)
+    ...     q_predecessor = query.get('predecessor', None)
+    ...     if q_predecessor and q_predecessor == getattr(obj,
+    ...             'predecessor', None):
+    ...         return True
+    ...     elif q_cid and q_intid and q_cid == CLIENT_ID and \
+    ...             int(q_intid) == intids.getId(obj):
+    ...         return True
+    ...     else:
+    ...         return False
 
-    >>> class MockTaskSearch(object):
-    ...     implements(ISearch)
-    ...     
-    ...     def search(self, query, **parameters):
-    ...         return [FakeFlair(query.get('client_id'), query.get('intid'))]
-    ...     
-    ...     __call__ = search
 
-    >>> provideUtility(MockTaskSearch())
+Register the plone folder in the solr mocker:
+
+    >>> fake_solr.register(self.folder, solr_filterer)
+
 
 The `get_object()` method should not fail:
 
-    >>> print provider.get_object('another-client:123123')
+    >>> print oguids.get_object('another-client:123123')
     None
 
 
 We should be able to get a solr flair representation:
 
-    >>> provider.get_flair(oguid)
-    <FakeFlair m1 : ...>
+    >>> oguids.get_flair(oguid)
+    Peter
