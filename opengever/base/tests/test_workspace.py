@@ -39,6 +39,8 @@ class TestWorkspaceIntegration(PloneTestCase):
         w1 = self.folder['ws1']
         w1.keywords=()
         view = w1.restrictedTraverse('@@tabbed_view')
+        # collective.js.jqueryui compatibility:
+        self.portal.REQUEST.LANGUAGE = 'de'
         self.failUnless(view())
 
 def test_suite():
