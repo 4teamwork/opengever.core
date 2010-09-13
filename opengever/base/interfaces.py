@@ -62,6 +62,7 @@ class ISequenceNumber(Interface):
         """ Returns the sequence number for the given *obj*
         """
 
+
 class ISequenceNumberGenerator(Interface):
     """ The sequence number generator adapter generates a new sequence number
     for the adapted object
@@ -69,4 +70,24 @@ class ISequenceNumberGenerator(Interface):
 
     def generate(self):
         """ Returns a new sequence number for the adapted object
+        """
+
+
+class IOGUid(Interface):
+    """Interface for the OGUid utility which generates client comprehensive
+    unique ids based on the client ID and the zope.intid.
+    """
+
+    def get_id(self, context):
+        """Returns the oguid of `context`.
+        """
+
+    def is_on_current_client(self, oguid):
+        """Returns `True` if the object with this `oguid` is stored on the
+        current client, otherwise `False`.
+        """
+
+    def get_object(self, oguid):
+        """Returns the object with the `oguid`, if it exists on the current
+        client. Otherwise it returns `None`.
         """

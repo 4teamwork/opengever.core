@@ -1,0 +1,52 @@
+OpenGever uniqe ID utility
+==========================
+
+
+The Opengever unique ID behavior utility a uniqueID.
+
+    >>> from zope.component import getUtility
+    >>> from opengever.base.interfaces import IOGUid
+    >>> from plone.registry.interfaces import IRegistry
+
+
+We need to set the client ID:
+
+    >>> registry = getUtility(IRegistry)
+    >>> registry['opengever.octopus.tentacle.interfaces.ITentacleRegistry.cid'] = u'm1'
+
+
+Get the utility:
+
+    >>> provider = getUtility(IOGUid)
+
+
+Get the ID of the folder:
+
+    >>> oguid = provider.get_id(self.folder)
+    >>> print oguid
+    m1:...
+
+
+Every call with the same object gives the same ID:
+
+    >>> oguid == provider.get_id(self.folder)
+    True
+
+
+The object is on the current client:
+
+    >>> provider.is_on_current_client(oguid)
+    True
+    >>> provider.is_on_current_client('another-client:123123')
+    False
+
+
+We should also be able to get the object:
+
+    >>> provider.get_object(oguid) == self.folder
+    True
+
+The `get_object()` method should not fail:
+
+    >>> print provider.get_object('another-client:123123')
+    None
