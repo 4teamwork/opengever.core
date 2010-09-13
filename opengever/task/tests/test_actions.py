@@ -66,37 +66,37 @@ class TestAddLocalRolesAction(PloneTestCase):
         self.failUnless(isinstance(editview, AddLocalRolesEditForm))
     
     def testExecute(self):
-        self.folder.invokeFactory('opengever.task.task', 't1')
-        self.folder.t1.responsible = 'testuser'
+        self.folder.invokeFactory('opengever.task.task', 'task-1')
+        self.folder.get('task-1').responsible = 'testuser'
         e = AddLocalRolesAction()
         e.object_roles = set(['Reader'])
-        ex = getMultiAdapter((self.folder, e, DummyEvent(self.folder.t1)), IExecutable)
+        ex = getMultiAdapter((self.folder, e, DummyEvent(self.folder.get('task-1'))), IExecutable)
         self.assertEquals(True, ex())
-        local_roles = dict(self.folder.t1.get_local_roles())
+        local_roles = dict(self.folder.get('task-1').get_local_roles())
         self.assertEquals(('Reader',), local_roles.get('testuser'))
         
     def test_related_items_roles(self):
-        self.folder.invokeFactory('opengever.task.task', 't1')
-        self.folder.t1.responsible = 'testuser'
+        self.folder.invokeFactory('opengever.task.task', 'task-1')
+        self.folder.get('task-1').responsible = 'testuser'
         e = AddLocalRolesAction()
         e.related_items_roles = set(['Reader'])
-        ex = getMultiAdapter((self.folder, e, DummyEvent(self.folder.t1)), IExecutable)
+        ex = getMultiAdapter((self.folder, e, DummyEvent(self.folder.get('task-1'))), IExecutable)
         # test with no related items
         self.assertEquals(True, ex())
         # add a related item
-        self.folder.invokeFactory('Document', 'd1')
+        self.folder.invokeFactory('Document', 'document-1')
         intids = getUtility(IIntIds)
-        self.folder.t1.relatedItems = [RelationValue(intids.getId(self.folder.d1)),]
+        self.folder.get('task-1').relatedItems = [RelationValue(intids.getId(self.folder.get('document-1'))),]
         ex()
-        local_roles = dict(self.folder.d1.get_local_roles())
+        local_roles = dict(self.folder.get('document-1').get_local_roles())
         self.assertEquals(('Reader',), local_roles.get('testuser'))        
         
     def test_parent_roles(self):
-        self.folder.invokeFactory('opengever.task.task', 't1')
-        self.folder.t1.responsible = 'testuser'
+        self.folder.invokeFactory('opengever.task.task', 'task-1')
+        self.folder.get('task-1').responsible = 'testuser'
         e = AddLocalRolesAction()
         e.parent_roles = set(['Contributor'])
-        ex = getMultiAdapter((self.folder, e, DummyEvent(self.folder.t1)), IExecutable)
+        ex = getMultiAdapter((self.folder, e, DummyEvent(self.folder.get('task-1'))), IExecutable)
         self.assertEquals(True, ex())
         local_roles = dict(self.folder.get_local_roles())
         self.assertEquals(('Contributor',), local_roles.get('testuser'))

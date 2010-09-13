@@ -19,8 +19,8 @@ class TestTaskIntegration(PloneTestCase):
     layer = Layer
     
     def test_adding(self):
-        self.folder.invokeFactory('opengever.task.task', 'task1')
-        t1 = self.folder['task1']
+        self.folder.invokeFactory('opengever.task.task', 'task-1')
+        t1 = self.folder['task-1']
         self.failUnless(ITask.providedBy(t1))
 
     def test_fti(self):
@@ -39,25 +39,25 @@ class TestTaskIntegration(PloneTestCase):
         self.failUnless(ITask.providedBy(new_object))
 
     def test_view(self):
-        self.folder.invokeFactory('opengever.task.task', 'task1')
-        t1 = self.folder['task1']
+        self.folder.invokeFactory('opengever.task.task', 'task-1')
+        t1 = self.folder['task-1']
         view = t1.restrictedTraverse('@@view')
         self.failUnless(len(view.getSubTasks())==0)
-        t1.invokeFactory('opengever.task.task','task2')
-        t2 = t1['task2']
+        t1.invokeFactory('opengever.task.task','task-2')
+        t2 = t1['task-2']
         self.failUnless(view.getSubTasks()[0].getObject()==t2)
 
     def test_addresponse(self):
-        self.folder.invokeFactory('opengever.task.task', 'task1')
-        t1 = self.folder['task1']
+        self.folder.invokeFactory('opengever.task.task', 'task-1')
+        t1 = self.folder['task-1']
         res = Response("")
         container = IResponseContainer(t1)
         container.add(res)
         self.failUnless(res in container)
 
     def test_task_type_category(self):
-        self.folder.invokeFactory('opengever.task.task', 'task1')
-        t1 = self.folder['task1']
+        self.folder.invokeFactory('opengever.task.task', 'task-1')
+        t1 = self.folder['task-1']
         registry = getUtility(IRegistry)
         registry['opengever.task.interfaces.ITaskSettings.task_types_uni_ref'] = [u'Uni Ref 1',]
         t1.task_type = u'Uni Ref 1'

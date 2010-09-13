@@ -4,12 +4,18 @@ import os
 version = open('opengever/task/version.txt').read().strip()
 maintainer = 'Philippe Gross'
 
+tests_require = [
+    'lxml >= 2.1.1',
+    'collective.testcaselayer',
+    'z3c.form [tests]'
+    ]
+
 setup(name='opengever.task',
       version=version,
       description="the opengever task object" + \
           ' (Maintainer: %s)' % maintainer,
       long_description=open("README.txt").read() + "\n" + \
-                       open(os.path.join("docs", "HISTORY.txt")).read(),
+          open(os.path.join("docs", "HISTORY.txt")).read(),
       # Get more strings from http://www.python.org/pypi?%3Aaction=list_classifiers
       classifiers=[
         "Framework :: Plone",
@@ -26,23 +32,19 @@ setup(name='opengever.task',
       include_package_data=True,
       zip_safe=False,
       install_requires=[
-          'setuptools',
-          'plone.app.dexterity',
-          'plone.app.contentrules',
-          'plone.app.registry',
-          'rwproperty',
-          'ftw.datepicker',
-          'collective.autopermission',
-          'opengever.base',
-          'opengever.translations',
-          'collective.testcaselayer',
-          # -*- Extra requirements: -*-
-      ],
-      extras_require = dict(
-        test = [
-            'lxml >= 2.1.1',
+        'setuptools',
+        'plone.app.dexterity',
+        'plone.app.contentrules',
+        'plone.app.registry',
+        'rwproperty',
+        'ftw.datepicker',
+        'collective.autopermission',
+        'opengever.base',
+        'opengever.translations',
+        # -*- Extra requirements: -*-
         ],
-      ),
+      tests_require=tests_require,
+      extras_require = dict(test=tests_require),
       entry_points="""
       [z3c.autoinclude.plugin]
       target = plone
