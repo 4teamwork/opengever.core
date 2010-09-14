@@ -5,6 +5,10 @@ Changelog
 1.0a4
 -----
 
+* Issue #642 GUI, 2. Teil: Oeffnen von Aufgaben auf fremden Mandanten in neuem Fenster
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/642/
+  [14.09.2010, phgross]
+
 * Issue #511 Anwendungskomponente "Kontakte": Mögliche Inhalte
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/511
   Name der Kontakte werden nun angezeigt.

@@ -5,7 +5,7 @@ from Products.PluggableAuthService.interfaces.authservice import IPropertiedUser
 from Products.CMFCore.interfaces._tools import IMemberData
 
 from opengever.octopus.tentacle.interfaces import IContactInformation
-from DateTime import DateTime
+from opengever.octopus.tentacle.interfaces import ITentacleConfig
 from opengever.globalsolr.utils import getFlairUrl
 from collective.solr.interfaces import IFlare
 
@@ -58,6 +58,14 @@ def solr_linked(item, value):
     elif hasattr(item, 'absolute_url'):
         url = item.absolute_url()
     img = u'<img src="%s"/>' % (item.getIcon)
-    link = u'<a href="%s" >%s%s</a>' % (url, img, value)
+
+    # check if the task is on our home client
+    config = getUtility(ITentacleConfig)
+    
+    if config.cid != item.client_id:
+        link = u'<a target="_blank" href="%s" >%s%s</a>' % (url, img, value)
+    else:
+        link = u'<a href="%s" >%s%s</a>' % (url, img, value)
+    
     wrapper = u'<span class="linkWrapper">%s</span>' % link
     return wrapper
