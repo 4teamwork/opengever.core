@@ -47,8 +47,7 @@ class ISendDocumentSchema(Interface):
     intern_receiver = schema.Tuple(
         title=_('intern_receiver', default="Intern receiver"),
         value_type=schema.Choice(title=_(u"mails"),
-        source = 'opengever.octopus.tentacle.contacts.\
-                  MailContactsVocabularyFactory'),
+        source = 'opengever.octopus.tentacle.contacts.MailContactsVocabularyFactory'),
         required=False,
         missing_value=(), # important!
     )
@@ -73,7 +72,7 @@ class ISendDocumentSchema(Interface):
     @invariant
     def validateHasEmail(data):
         """ check if minium one e-mail-address is given."""
-        if len(data.intern_receiver) == 0 and data.extern_receiver:
+        if len(data.intern_receiver) == 0 and not data.extern_receiver:
             raise NoMail(_(u'You have to select a intern \
                             or enter a extern mail-addres'))
 
@@ -187,7 +186,7 @@ class SendDocumentFormView(layout.FormWrapper, grok.CodeView):
     """
 
     grok.context(IDossierMarker)
-    grok.name('send-documents')
+    grok.name('send_documents')
     grok.require('zope2.View')
     form = SendDocumentForm
 
