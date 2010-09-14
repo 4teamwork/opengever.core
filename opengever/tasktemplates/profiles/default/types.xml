@@ -1,0 +1,4 @@
+<object name="portal_types">
+ <object name="opengever.tasktemplates.tasktemplate" meta_type="Dexterity FTI" />
+ <object name="opengever.tasktemplates.tasktemplatefolder" meta_type="Dexterity FTI" />
+</object>
