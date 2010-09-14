@@ -7,7 +7,8 @@ maintainer = 'Philippe Gross'
 tests_require = [
     'lxml >= 2.1.1',
     'collective.testcaselayer',
-    'z3c.form [tests]'
+    'z3c.form [test]',
+    'opengever.octopus.tentacle',
     ]
 
 setup(name='opengever.task',
@@ -44,7 +45,7 @@ setup(name='opengever.task',
         # -*- Extra requirements: -*-
         ],
       tests_require=tests_require,
-      extras_require = dict(test=tests_require),
+      extras_require = dict(tests=tests_require),
       entry_points="""
       [z3c.autoinclude.plugin]
       target = plone

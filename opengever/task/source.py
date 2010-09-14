@@ -1,5 +1,6 @@
 from plone.formwidget.contenttree import ObjPathSourceBinder
 from Acquisition import aq_inner, aq_parent
+from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
 
 
 class DossierPathSourceBinder(ObjPathSourceBinder):
@@ -9,11 +10,14 @@ class DossierPathSourceBinder(ObjPathSourceBinder):
 
     def __call__(self, context):
         """ gets main-dossier path and put it to the navigation_tree_query """
-        current = context = aq_inner(context)
-        while aq_parent(current).Type() != 'RepositoryFolder':
-            current = aq_parent(current)
-        self.navigation_tree_query['path'] = '/'.join(
-            current.getPhysicalPath())
+        dossier_path = ''
+        parent = context
+        while not IPloneSiteRoot.providedBy(parent) and \
+                parent.Type() != 'RepositoryFolder':
+            dossier_path = '/'.join(parent.getPhysicalPath())
+            parent = aq_parent(aq_inner(parent))
+
+        self.navigation_tree_query['path'] = dossier_path
         return self.path_source(
             context,
             selectable_filter=self.selectable_filter,
