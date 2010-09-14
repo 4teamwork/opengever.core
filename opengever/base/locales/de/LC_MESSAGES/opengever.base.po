@@ -17,27 +17,27 @@ msgstr ""
 
 #. Default ""
 #: opengever/repository/classification.py
-msgid "archival_value : archival worthy"
+msgid "archival worthy"
 msgstr "Archivwürdig"
 
 #. Default ""
 #: opengever/repository/classification.py
-msgid "archival_value : archival worthy with sampling"
+msgid "archival worthy with sampling"
 msgstr "Sampling"
 
 #. Default ""
 #: opengever/repository/classification.py
-msgid "archival_value : not archival worthy"
+msgid "not archival worthy"
 msgstr "Nicht archivwürdig"
 
 #. Default ""
 #: opengever/repository/classification.py
-msgid "archival_value : prompt"
+msgid "prompt"
 msgstr "Anbieten"
 
 #. Default ""
 #: opengever/repository/classification.py
-msgid "archival_value : unchecked"
+msgid "unchecked"
 msgstr "Noch nicht bewertet"
 
 #. Default: "classified"
@@ -194,12 +194,12 @@ msgstr "Kommentar zur Aufbewahrungsdauer"
 
 #. Default ""
 #: opengever/repository/classification.py
-msgid "privacy layer : no"
+msgid "privacy_layer_no"
 msgstr "Keine Datenschutzstufe"
 
 #. Default: ""
 #: opengever/repository/classification.py
-msgid "privacy layer : yes"
+msgid "privacy_layer_yes"
 msgstr "Enthält schützenswerte Personendaten"
 
 #. Default: "private"

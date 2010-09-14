@@ -43,7 +43,7 @@ class ILifeCycle(form.Schema):
         title = _(u'label_retention_period', u'Retention period (years)'),
         description = _(u'help_retention_period', default=u''),
         source = u'lifecycle_retention_period_vocabulary',
-        required = True,
+        required = True,mate bin
         )
 
     retention_period_annotation = schema.Text(
@@ -203,11 +203,11 @@ zope.component.provideAdapter(RetentionPeriodValidator)
 
 
 # ARCHIVAL VALUE: Vocabulary and default value
-ARCHIVAL_VALUE_UNCHECKED = u'archival_value : unchecked'
-ARCHIVAL_VALUE_PROMPT = u'archival_value : prompt'
-ARCHIVAL_VALUE_WORTHY = u'archival_value : archival worthy'
-ARCHIVAL_VALUE_UNWORTHY = u'archival_value : not archival worthy'
-ARCHIVAL_VALUE_SAMPLING  = u'archival_value : archival worthy with sampling'
+ARCHIVAL_VALUE_UNCHECKED = u'unchecked'
+ARCHIVAL_VALUE_PROMPT = u'prompt'
+ARCHIVAL_VALUE_WORTHY = u'archival worthy'
+ARCHIVAL_VALUE_UNWORTHY = u'not archival worthy'
+ARCHIVAL_VALUE_SAMPLING  = u'archival worthy with sampling'
 ARCHIVAL_VALUE_OPTIONS = (
     (1,         ARCHIVAL_VALUE_UNCHECKED),
     (2,         ARCHIVAL_VALUE_PROMPT),

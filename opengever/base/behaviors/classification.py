@@ -114,8 +114,8 @@ form.default_value(field=IClassification['public_trial'])(
 
 
 # PRIVACY_LAYER: Vocabulary and default value
-PRIVACY_LAYER_NO = u'privacy layer : no'
-PRIVACY_LAYER_YES = u'privacy layer : yes'
+PRIVACY_LAYER_NO = u'privacy_layer_no'
+PRIVACY_LAYER_YES = u'privacy_layer_yes'
 PRIVACY_LAYER_OPTIONS = (
     (1,         PRIVACY_LAYER_NO),
     (2,         PRIVACY_LAYER_YES),
