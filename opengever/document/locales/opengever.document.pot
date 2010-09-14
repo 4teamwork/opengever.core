@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2010-02-08 08:46+0000\n"
+"POT-Creation-Date: 2010-09-10 13:35+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,385 +17,446 @@ msgstr ""
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: opengever.document\n"
 
-#: opengever.document/opengever/document/profiles/default/actions.xml
+#: ./opengever/document/profiles/default/actions.xml
 msgid "Cancel"
 msgstr ""
 
-#: opengever.document/opengever/document/staging/manager.py:160
+#: ./opengever/document/staging/manager.py:160
 msgid "Checked in: ${title}"
 msgstr ""
 
-#: opengever.document/opengever/document/staging/manager.py:134
+#: ./opengever/document/staging/manager.py:134
 msgid "Checked out: ${title}"
 msgstr ""
 
-#: opengever.document/opengever/document/profiles/default/actions.xml
+#: ./opengever/document/profiles/default/actions.xml
 msgid "Checkin"
 msgstr ""
 
-#: opengever.document/opengever/document/profiles/default/actions.xml
+#: ./opengever/document/profiles/default/actions.xml
 msgid "Checkout"
 msgstr ""
 
-#: opengever.document/opengever/document/staging/manager.py:183
+#: ./opengever/document/staging/manager.py:183
 msgid "Checkout canceled: ${title}"
 msgstr ""
 
-#: opengever.document/opengever/document/staging/manager.py:171
+#: ./opengever/document/staging/manager.py:171
 msgid "Could not cancel checkin: ${title}, not allowed"
 msgstr ""
 
-#: opengever.document/opengever/document/staging/manager.py:145
+#: ./opengever/document/staging/manager.py:145
 msgid "Could not checkin: ${title}, checkin not allowed"
 msgstr ""
 
-#: opengever.document/opengever/document/staging/manager.py:107
+#: ./opengever/document/staging/manager.py:107
 msgid "Could not checkout: ${title}, checkout not allowed"
 msgstr ""
 
-#: opengever.document/opengever/document/profiles/default/actions.xml
+#: ./opengever/document/profiles/default/actions.xml
 msgid "Create Task"
 msgstr ""
 
-#: opengever.document/opengever/document/profiles/default/types/opengever.document.document.xml
+#: ./opengever/document/profiles/default/types/opengever.document.document.xml
 msgid "Document"
 msgstr ""
 
-#: opengever.document/opengever/document/profiles/default/actions.xml
+#: ./opengever/document/profiles/default/types/opengever.document.documentoverview.xml
+msgid "Documentoverview"
+msgstr ""
+
+#: ./opengever/document/browser/send_document.py:34
+msgid "No Mail Address"
+msgstr ""
+
+#: ./opengever/document/profiles/default/actions.xml
+msgid "Send Documents"
+msgstr ""
+
+#: ./opengever/document/profiles/default/actions.xml
 msgid "Send as email"
 msgstr ""
 
-#: opengever.document/opengever/document/staging/cancel.py:27
-#: opengever.document/opengever/document/staging/checkin.py:128
-#: opengever.document/opengever/document/staging/checkout.py:139
+#: ./opengever/document/validators.py:18
+msgid "The Files you selected are bigger than the maximal Size"
+msgstr ""
+
+#: ./opengever/document/staging/cancel.py:27
+#: ./opengever/document/staging/checkin.py:128
+#: ./opengever/document/staging/checkout.py:140
 msgid "You have not selected any documents"
 msgstr ""
 
-#: opengever.document/opengever/document/document_templates/sendasemail.pt:13
+#: ./opengever/document/browser/send_document.py:77
+msgid "You have to select a intern                             or enter a extern mail-addres"
+msgstr ""
+
+#: ./opengever/document/document_templates/sendasemail.pt:14
 msgid "attachments"
 msgstr ""
 
 #. Default: "Checkin"
-#: opengever.document/opengever/document/staging/checkin.py:45
+#: ./opengever/document/staging/checkin.py:45
 msgid "button_checkin"
 msgstr ""
 
 #. Default: "Checkout"
-#: opengever.document/opengever/document/staging/checkout.py:54
+#: ./opengever/document/staging/checkout.py:55
 msgid "button_checkout"
 msgstr ""
 
 #. Default: "Create"
-#: opengever.document/opengever/document/docucomposer.py:44
+#: ./opengever/document/docucomposer.py:47
 msgid "button_create"
 msgstr ""
 
 #. Default: "Send"
-#: opengever.document/opengever/document/mailing.py:181
+#: ./opengever/document/browser/send_document.py:123
+#: ./opengever/document/mailing.py:188
 msgid "button_send"
 msgstr ""
 
 #. Default: "Cancel"
-#: opengever.document/opengever/document/mailing.py:217
+#: ./opengever/document/browser/send_document.py:157
+#: ./opengever/document/mailing.py:224
 msgid "cancel_back"
 msgstr ""
 
-#. Default: "Dates"
-#: opengever.document/opengever/document/document.py:91
+#. Default: "Extern receiver"
+#: ./opengever/document/browser/send_document.py:57
+msgid "extern_receiver"
+msgstr ""
+
+#. Default: "Common"
+#: ./opengever/document/behaviors.py:25
+#: ./opengever/document/document.py:95
 msgid "fieldset_common"
 msgstr ""
 
 #. Default: "Checkin Documents"
-#: opengever.document/opengever/document/staging/checkin.py:43
+#: ./opengever/document/staging/checkin.py:43
 msgid "heading_checkin_comment_form"
 msgstr ""
 
 #. Default: "Checkout Documents"
-#: opengever.document/opengever/document/staging/checkout.py:52
+#: ./opengever/document/staging/checkout.py:53
 msgid "heading_checkout_comment_form"
 msgstr ""
 
 #. Default: "DocuComposer"
-#: opengever.document/opengever/document/docucomposer.py:36
+#: ./opengever/document/docucomposer.py:39
 msgid "heading_docucomposer_wizard_form"
 msgstr ""
 
 #. Default: "Send as email"
-#: opengever.document/opengever/document/mailing.py:179
+#: ./opengever/document/mailing.py:184
 msgid "heading_send_as_email"
 msgstr ""
 
-#: opengever.document/opengever/document/document.py:181
+#: ./opengever/document/document.py:185
 msgid "help_archival_file"
 msgstr ""
 
-#: opengever.document/opengever/document/document.py:152
+#: ./opengever/document/document.py:156
 msgid "help_author"
 msgstr ""
 
 #. Default: "Describe, why you checkin the selected documents"
-#: opengever.document/opengever/document/staging/checkin.py:33
+#: ./opengever/document/staging/checkin.py:33
 msgid "help_checkin_journal_comment"
 msgstr ""
 
 #. Default: "Describe, why you checkout the selected documents"
-#: opengever.document/opengever/document/staging/checkout.py:36
+#: ./opengever/document/staging/checkout.py:37
 msgid "help_checkout_journal_comment"
 msgstr ""
 
-#: opengever.document/opengever/document/document.py:209
+#: ./opengever/document/document.py:213
 msgid "help_delivery_date"
 msgstr ""
 
-#: opengever.document/opengever/document/document.py:117
+#: ./opengever/document/document.py:121
 msgid "help_description"
 msgstr ""
 
-#: opengever.document/opengever/document/document.py:139
+#: ./opengever/document/document.py:143
 msgid "help_document_date"
 msgstr ""
 
-#: opengever.document/opengever/document/document.py:145
+#: ./opengever/document/document.py:149
 msgid "help_document_type"
 msgstr ""
 
-#: opengever.document/opengever/document/document.py:159
+#: ./opengever/document/document.py:163
 msgid "help_file"
 msgstr ""
 
-#: opengever.document/opengever/document/document.py:132
+#: ./opengever/document/document.py:136
 msgid "help_foreign_reference"
 msgstr ""
 
-#: opengever.document/opengever/document/document.py:123
+#: ./opengever/document/document.py:127
 msgid "help_keywords"
 msgstr ""
 
-#: opengever.document/opengever/document/mailing.py:172
+#: ./opengever/document/browser/send_document.py:69
+#: ./opengever/document/mailing.py:177
 msgid "help_message"
 msgstr ""
 
 #. Default: "open with a external editor"
-#: opengever.document/opengever/document/staging/checkout.py:44
+#: ./opengever/document/staging/checkout.py:45
 msgid "help_open_extern"
 msgstr ""
 
 #. Default: "paper form"
-#: opengever.document/opengever/document/document.py:166
-#: opengever.document/opengever/document/document_templates/overview.pt:45
+#: ./opengever/document/document.py:170
+#: ./opengever/document/document_templates/overview.pt:45
 msgid "help_paper_form"
 msgstr ""
 
-#: opengever.document/opengever/document/document.py:173
+#: ./opengever/document/document.py:177
 msgid "help_preserved_as_paper"
 msgstr ""
 
-#: opengever.document/opengever/document/document.py:195
+#: ./opengever/document/document.py:199
 msgid "help_preview"
 msgstr ""
 
-#: opengever.document/opengever/document/document.py:202
+#: ./opengever/document/document.py:206
 msgid "help_receipt_date"
 msgstr ""
 
-#: opengever.document/opengever/document/mailing.py:163
+#: ./opengever/document/mailing.py:168
 msgid "help_receivers"
 msgstr ""
 
 #. Default: "the docucomposer should start now automaticly, otherwise start it manually with the link below. Wenn the docucomposer started correctly, You can close this window."
-#: opengever.document/opengever/document/docucomposer_templates/startdclauncher.pt:25
+#: ./opengever/document/docucomposer_templates/startdclauncher.pt:25
 msgid "help_start_dc"
 msgstr ""
 
-#: opengever.document/opengever/document/mailing.py:168
+#: ./opengever/document/browser/send_document.py:64
+#: ./opengever/document/mailing.py:173
 msgid "help_subject"
 msgstr ""
 
-#: opengever.document/opengever/document/document.py:188
+#: ./opengever/document/document.py:192
 msgid "help_thumbnail"
 msgstr ""
 
 #. Default: "Mails sent"
-#: opengever.document/opengever/document/mailing.py:212
+#: ./opengever/document/browser/send_document.py:152
+#: ./opengever/document/mailing.py:219
 msgid "info_mails_sent"
 msgstr ""
 
+#. Default: "Intern receiver"
+#: ./opengever/document/browser/send_document.py:48
+msgid "intern_receiver"
+msgstr ""
+
 #. Default: "Archival File"
-#: opengever.document/opengever/document/document.py:180
+#: ./opengever/document/document.py:184
 msgid "label_archival_file"
 msgstr ""
 
 #. Default: "author"
-#: opengever.document/opengever/document/document.py:151
-#: opengever.document/opengever/document/document_templates/overview.pt:22
+#: ./opengever/document/document.py:155
+#: ./opengever/document/document_templates/overview.pt:22
 msgid "label_author"
 msgstr ""
 
 #. Default: "by ${author}"
-#: opengever.document/opengever/document/document_templates/byline.pt:16
+#: ./opengever/document/viewlets/byline.pt:16
 msgid "label_by_author"
 msgstr ""
 
 #. Default: "Journal Comment"
-#: opengever.document/opengever/document/staging/checkin.py:31
+#: ./opengever/document/staging/checkin.py:31
 msgid "label_checkin_journal_comment"
 msgstr ""
 
 #. Default: "Journal Comment"
-#: opengever.document/opengever/document/staging/checkout.py:34
+#: ./opengever/document/staging/checkout.py:35
 msgid "label_checkout_journal_comment"
 msgstr ""
 
 #. Default: "creator"
-#: opengever.document/opengever/document/document_templates/overview.pt:26
+#: ./opengever/document/document_templates/overview.pt:26
 msgid "label_creator"
 msgstr ""
 
 #. Default: "delivery date"
-#: opengever.document/opengever/document/document.py:208
-#: opengever.document/opengever/document/document_templates/overview.pt:59
+#: ./opengever/document/document.py:212
+#: ./opengever/document/document_templates/overview.pt:59
 msgid "label_delivery_date"
 msgstr ""
 
 #. Default: "description"
-#: opengever.document/opengever/document/document.py:116
-#: opengever.document/opengever/document/document_templates/overview.pt:30
+#: ./opengever/document/document.py:120
+#: ./opengever/document/document_templates/overview.pt:30
 msgid "label_description"
 msgstr ""
 
 #. Default: "document"
-#: opengever.document/opengever/document/document_templates/overview.pt:10
+#: ./opengever/document/document_templates/overview.pt:10
 msgid "label_document"
 msgstr ""
 
 #. Default: "document date"
-#: opengever.document/opengever/document/document.py:138
-#: opengever.document/opengever/document/document_templates/overview.pt:14
+#: ./opengever/document/document.py:142
+#: ./opengever/document/document_templates/overview.pt:14
 msgid "label_document_date"
 msgstr ""
 
 #. Default: "document type"
-#: opengever.document/opengever/document/document.py:144
-#: opengever.document/opengever/document/document_templates/overview.pt:18
+#: ./opengever/document/document.py:148
+#: ./opengever/document/document_templates/overview.pt:18
 msgid "label_document_type"
 msgstr ""
 
+#. Default: "Documents"
+#: ./opengever/document/browser/send_document.py:41
+msgid "label_documents"
+msgstr ""
+
 #. Default: "file"
-#: opengever.document/opengever/document/document.py:158
-#: opengever.document/opengever/document/document_templates/overview.pt:38
+#: ./opengever/document/document.py:162
+#: ./opengever/document/document_templates/overview.pt:38
 msgid "label_file"
 msgstr ""
 
 #. Default: "foreign reference"
-#: opengever.document/opengever/document/document.py:131
-#: opengever.document/opengever/document/document_templates/overview.pt:34
+#: ./opengever/document/document.py:135
+#: ./opengever/document/document_templates/overview.pt:34
 msgid "label_foreign_reference"
 msgstr ""
 
 #. Default: "Keywords"
-#: opengever.document/opengever/document/document.py:122
+#: ./opengever/document/document.py:126
 msgid "label_keywords"
 msgstr ""
 
 #. Default: "Message"
-#: opengever.document/opengever/document/mailing.py:171
+#: ./opengever/document/browser/send_document.py:68
+#: ./opengever/document/mailing.py:176
 msgid "label_message"
 msgstr ""
 
 #. Default: "no"
-#: opengever.document/opengever/document/document_templates/overview.pt:47
+#: ./opengever/document/document_templates/overview.pt:47
 msgid "label_no"
 msgstr ""
 
 #. Default: "external editor"
-#: opengever.document/opengever/document/staging/checkout.py:43
+#: ./opengever/document/staging/checkout.py:44
 msgid "label_open_extern"
 msgstr ""
 
 #. Default: "Paper form"
-#: opengever.document/opengever/document/document.py:165
+#: ./opengever/document/document.py:169
 msgid "label_paper_form"
 msgstr ""
 
 #. Default: "preserved as paper"
-#: opengever.document/opengever/document/document.py:172
-#: opengever.document/opengever/document/document_templates/overview.pt:50
+#: ./opengever/document/document.py:176
+#: ./opengever/document/document_templates/overview.pt:50
 msgid "label_preserved_as_paper"
 msgstr ""
 
 #. Default: "Preview"
-#: opengever.document/opengever/document/document.py:194
+#: ./opengever/document/document.py:198
 msgid "label_preview"
 msgstr ""
 
 #. Default: "reciept date"
-#: opengever.document/opengever/document/document.py:201
-#: opengever.document/opengever/document/document_templates/overview.pt:55
+#: ./opengever/document/document.py:205
+#: ./opengever/document/document_templates/overview.pt:55
 msgid "label_receipt_date"
 msgstr ""
 
 #. Default: "Receivers"
-#: opengever.document/opengever/document/mailing.py:162
+#: ./opengever/document/mailing.py:167
 msgid "label_receivers"
 msgstr ""
 
 #. Default: "Reference Number:"
-#: opengever.document/opengever/document/document_templates/byline.pt:57
+#: ./opengever/document/viewlets/byline.pt:57
 msgid "label_reference_number"
 msgstr ""
 
+#. Default: "Related Documents"
+#: ./opengever/document/behaviors.py:14
+msgid "label_related_documents"
+msgstr ""
+
+#. Default: "send Docuemnts with email"
+#: ./opengever/document/browser/send_document.py:101
+msgid "label_send_document_mail"
+msgstr ""
+
 #. Default: "Sequence Number:"
-#: opengever.document/opengever/document/document_templates/byline.pt:47
+#: ./opengever/document/viewlets/byline.pt:47
 msgid "label_sequence_number"
 msgstr ""
 
 #. Default: "from"
-#: opengever.document/opengever/document/document_templates/byline.pt:33
+#: ./opengever/document/viewlets/byline.pt:33
 msgid "label_start_byline"
 msgstr ""
 
 #. Default: "start dc_launcher"
-#: opengever.document/opengever/document/docucomposer_templates/startdclauncher.pt:30
+#: ./opengever/document/docucomposer_templates/startdclauncher.pt:30
 msgid "label_start_dc"
 msgstr ""
 
 #. Default: "Subject"
-#: opengever.document/opengever/document/mailing.py:167
+#: ./opengever/document/browser/send_document.py:63
+#: ./opengever/document/mailing.py:172
 msgid "label_subject"
 msgstr ""
 
 #. Default: "Thumbnail"
-#: opengever.document/opengever/document/document.py:187
+#: ./opengever/document/document.py:191
 msgid "label_thumbnail"
 msgstr ""
 
 #. Default: "Title"
-#: opengever.document/opengever/document/document.py:111
+#: ./opengever/document/document.py:115
 msgid "label_title"
 msgstr ""
 
 #. Default: "State:"
-#: opengever.document/opengever/document/document_templates/byline.pt:27
+#: ./opengever/document/viewlets/byline.pt:27
 msgid "label_workflow_state"
 msgstr ""
 
 #. Default: "yes"
-#: opengever.document/opengever/document/document_templates/overview.pt:46
+#: ./opengever/document/document_templates/overview.pt:46
 msgid "label_yes"
 msgstr ""
 
+#: ./opengever/document/browser/send_document.py:49
+msgid "mails"
+msgstr ""
+
+#: ./opengever/document/browser/send_document.py:58
+msgid "receiver"
+msgstr ""
+
 #. Default: "referenced documents"
-#: opengever.document/opengever/document/document_templates/overview.pt:63
+#: ./opengever/document/document_templates/overview.pt:63
 msgid "referenced_documents"
 msgstr ""
 
 #. Default: "expired"
-#: opengever.document/opengever/document/document_templates/byline.pt:42
+#: ./opengever/document/viewlets/byline.pt:42
 msgid "time_expired"
 msgstr ""
 
 #. Default: "Start DocuComposer"
-#: opengever.document/opengever/document/docucomposer_templates/startdclauncher.pt:23
+#: ./opengever/document/docucomposer_templates/startdclauncher.pt:23
 msgid "title_start_dc"
 msgstr ""
 

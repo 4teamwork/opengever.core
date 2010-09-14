@@ -2,7 +2,6 @@
      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
      xmlns:tal="http://xml.zope.org/namespaces/tal"
      class="contentHistory"
-     id="content-history"
      i18n:domain="plone"
      tal:define="history view/fullHistory;"
      tal:condition="history">
@@ -11,6 +10,7 @@
     <dd class="collapsibleContent">
       <table class="version_history listing">
         <thead>
+          <th>Version</th>
           <th>Aktion</th>
           <th>Aktor</th>
           <th>Datum</th>
@@ -20,6 +20,7 @@
         <tbody>
           <tal:block repeat="item history">
             <tr tal:define="isVersion python:item['type']=='versioning';">
+              <td tal:content="item/version_id|nothing" />
               <td tal:define="action item/transition_title;
                               action python:action and action.replace('Edit', 'Edited') or action"
                   tal:content="action" i18n:translate="" />
