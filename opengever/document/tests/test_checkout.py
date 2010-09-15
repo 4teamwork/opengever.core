@@ -32,15 +32,6 @@ class TestCheckout(PloneTestCase):
         self.failUnless('bar' in exp.getvalue())
         self.failIf('foo' in exp.getvalue())
 
-    def test_copy_parent(self):
-        self.folder.invokeFactory('opengever.dossier.businesscasedossier', 'foo')
-        foo = self.folder['foo']
-        foo.invokeFactory('opengever.document.document', 'bar')
-        bar = foo['bar']
-        baz = bar._getCopy(foo)
-        self.failIf(baz.__parent__ is not None)
-        self.failUnless(bar.aq_self.__parent__ == foo)
-
               
 
     def test_document_export_doesnt_include_parent(self):
