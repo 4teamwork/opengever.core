@@ -43,7 +43,7 @@ class ILifeCycle(form.Schema):
         title = _(u'label_retention_period', u'Retention period (years)'),
         description = _(u'help_retention_period', default=u''),
         source = u'lifecycle_retention_period_vocabulary',
-        required = True,mate bin
+        required = True,
         )
 
     retention_period_annotation = schema.Text(
