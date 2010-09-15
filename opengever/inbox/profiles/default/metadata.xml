@@ -3,6 +3,7 @@
     <dependencies>
         <dependency>profile-opengever.base:default</dependency>
         <dependency>profile-opengever.tabbedview:default</dependency>
-        <dependency>profile-opengever.trash:default</dependency>        
+        <dependency>profile-opengever.trash:default</dependency>
+        <dependency>profile-opengever.dossier:default</dependency>
     </dependencies>
 </metadata>

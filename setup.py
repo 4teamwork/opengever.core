@@ -30,6 +30,8 @@ setup(name='opengever.inbox',
       install_requires=[
         'setuptools',
         'collective.testcaselayer',
+        'opengever.dossier',
+        'opengever.tabbedview',
         # -*- Extra requirements: -*-
         ],
       entry_points="""
