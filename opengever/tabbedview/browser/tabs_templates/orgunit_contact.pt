@@ -1,7 +1,0 @@
-<tal:block i18n:domain="opengever.tabbedview">
-  <ul>
-  <tal:rep tal:repeat="unit view/get_units">
-    <li><a href="" tal:content="unit/title" tal:attributes="href python:unit.absolute_url()" /></li>
-  </tal:rep>
-  </ul>
-</tal:block>
