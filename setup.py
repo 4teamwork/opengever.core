@@ -29,8 +29,6 @@ setup(name='opengever.tabbedview',
       include_package_data=True,
       zip_safe=False,
       install_requires=[
-        'opengever.task',
-        'opengever.repository',
         'opengever.octopus.tentacle',
         'ftw.table',
         'ftw.journal',
