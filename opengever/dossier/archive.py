@@ -1,6 +1,5 @@
-from zope.interface import Interface
 from zope import schema
-from zope.schema.vocabulary import SimpleVocabulary, SimpleTerm
+from zope.schema.vocabulary import SimpleVocabulary
 from zope.schema.interfaces import IContextSourceBinder
 from zope.annotation.interfaces import IAnnotations
 from zope.component import getUtility
@@ -8,31 +7,21 @@ from zope.component import getUtility
 from Acquisition import aq_inner, aq_parent
 from persistent.dict import PersistentDict
 from five import grok
-from z3c.form import form, button, field
+from z3c.form import button, field
 from z3c.form.interfaces import INPUT_MODE
 from z3c.form.browser import radio
 from Products.CMFCore.interfaces import ISiteRoot
 from Products.Transience.Transience import Increaser
 from Products.statusmessages.interfaces import IStatusMessage
+from ftw.datepicker.widget import DatePickerFieldWidget
 
-from plone.z3cform import layout
 from plone.registry.interfaces import IRegistry
-
+from plone.directives import form as directives_form
 
 from opengever.dossier import _
-from opengever.dossier.base import IDossierContainerTypes
-from opengever.dossier.behaviors.dossier import IDossierMarker
+from opengever.dossier.behaviors.dossier import IDossierMarker,\
+    get_filing_prefixes, IDossier
 from opengever.base.interfaces import IBaseClientID
-
-
-@grok.provider(IContextSourceBinder)
-def get_filing_prefixes(context):
-    registry = getUtility(IRegistry)
-    proxy = registry.forInterface(IDossierContainerTypes)
-    prefixes = getattr(proxy, 'type_prefixes')
-    filing_prefixes = [SimpleTerm (value, value, value) for value in prefixes]
-
-    return SimpleVocabulary(filing_prefixes)
 
 
 @grok.provider(IContextSourceBinder)
@@ -55,14 +44,20 @@ def get_filing_actions(context):
             
     return SimpleVocabulary(values)
 
-class IArchiveFormSchema(Interface):
+class IArchiveFormSchema(directives_form.Schema):
 
     filing_prefix = schema.Choice(
-            title = _(u'filing_prefix', default="filing prefix"),
-            source = get_filing_prefixes,
-            required = True,
+        title = _(u'filing_prefix', default="filing prefix"),
+        source = get_filing_prefixes,
+        required = True,
     )
-    
+
+    dossier_enddate = schema.Date(
+        title=_(u'label_end', default=u'Closing Date'),
+        description = _(u'help_end', default=u''),
+        required=True,
+    )
+
     filing_year = schema.Int(
         title = _(u'filing_year', default="filing Year"),
         required = True,
@@ -74,11 +69,80 @@ class IArchiveFormSchema(Interface):
         source = get_filing_actions,
     )
 
-class ArchiveForm(form.Form):
+
+@directives_form.default_value(field=IArchiveFormSchema['filing_prefix'])
+def filing_prefix_default_value(data):
+    prefix = IDossier(data.context).filing_prefix
+    if prefix:
+        return prefix.encode('utf-8')
+    return ""
+
+@directives_form.default_value(field=IArchiveFormSchema['filing_year'])
+def filing_year_default_value(data):
+    documents = data.context.portal_catalog(
+        path=dict(
+            query='/'.join(data.context.getPhysicalPath()),
+        ),
+        portal_type= ['opengever.document.document'],
+        sort_on= 'document_date',
+        sort_order='reverse',
+    )
+    if len(documents) == 0:
+        return None
+    else:
+        return documents[0].getObject().document_date.year
+
+@directives_form.default_value(field=IArchiveFormSchema['dossier_enddate'])
+def dossier_date_default_value(data):
+    dossier_end = IDossier(data.context).end
+    documents = data.context.portal_catalog(
+        path=dict(
+            query='/'.join(data.context.getPhysicalPath()),
+        ),
+        portal_type= ['opengever.document.document'],
+        sort_on= 'document_date',
+        sort_order='reverse',
+    )
+
+    if len(documents) != 0:
+        if dossier_end == None or dossier_end > documents[0].document_date:
+            return documents[0].document_date
+    return dossier_end
+
+
+class ArchiveForm(directives_form.Form):
+    grok.context(IDossierMarker)
+    grok.name('transition-archive')
+    grok.require('zope2.View')
+
     fields = field.Fields(IArchiveFormSchema)
     ignoreContext = True
     fields['filing_action'].widgetFactory[INPUT_MODE] = radio.RadioFieldWidget
+    fields['dossier_enddate'].widgetFactory = DatePickerFieldWidget 
     label = _(u'heading_archive_form', u'Archive Dossier')
+
+
+    def __call__(self):
+        """ check if the filing number already exist,
+        and redirect to the workflow_action if the context are a subdossier
+        """
+        parent = aq_parent(aq_inner(self.context))
+        review_state = self.context.portal_workflow.getInfoFor(
+            self.context, 'review_state', None)
+
+        if review_state == 'dossier-state-resolved' and \
+                getattr(IDossierMarker(self.context), 'filing_no', None):
+            status = IStatusMessage(self.request)
+            status.addStatusMessage(
+                _("the filling number was already set"),
+                 type="warning")
+            return self.request.RESPONSE.redirect(self.context.absolute_url())
+
+        if IDossierMarker.providedBy(parent):
+            return self.request.RESPONSE.redirect(
+                self.context.absolute_url() + \
+                '/content_status_modify?workflow_action=dossier-transition-resolve')
+        return super(ArchiveForm, self).__call__()
 
     @button.buttonAndHandler(_(u'button_archive', default=u'Archive'))
     def archive(self, action):
@@ -117,10 +181,13 @@ class ArchiveForm(form.Form):
                 filing_client = getattr(proxy, 'client_id')
 
                 # filing_no
-
                 filing_no = filing_client + "-" + filing_prefix + "-" + filing_year + "-" + str(filing_sequence)
                 self.context.filing_no = filing_no
+                
+                # set the dossier end date
+                IDossier(self.context).end = data.get('end')
 
+                # create filing number for all subdossiers
                 subdossiers = self.context.portal_catalog(
                                         portal_type="opengever.dossier.businesscasedossier",
                                         path=dict(depth=1,
@@ -150,25 +217,3 @@ class ArchiveForm(form.Form):
     @button.buttonAndHandler(_(u'button_cancel', default=u'Cancel'))
     def cancel(self, action):
         return self.request.RESPONSE.redirect(self.context.absolute_url())
-
-class ArchiveFormView(layout.FormWrapper, grok.CodeView):
-    grok.context(IDossierMarker)
-    grok.name('transition-archive')
-    grok.require('zope2.View')
-    form = ArchiveForm
-    
-    #label = _(u'heading_archive_form', u'Archive Dossier')
-    def __init__(self, context, request):
-        layout.FormWrapper.__init__(self, context, request)
-        grok.CodeView.__init__(self, context, request)
-
-    def __call__(self, *args, **kwargs):
-        parent = aq_parent(aq_inner(self.context))
-        review_state = self.context.portal_workflow.getInfoFor(self.context, 'review_state', None)
-        if review_state == 'dossier-state-resolved' and getattr(IDossierMarker(self.context), 'filing_no', None):
-            status = IStatusMessage(self.request)
-            status.addStatusMessage(_("the filling number was already set"), type="warning")
-            self.request.RESPONSE.redirect(self.context.absolute_url())
-        if IDossierMarker.providedBy(parent):
-            self.request.RESPONSE.redirect(self.context.absolute_url() + '/content_status_modify?workflow_action=dossier-transition-resolve')
-        return layout.FormWrapper.__call__(self, *args, **kwargs)

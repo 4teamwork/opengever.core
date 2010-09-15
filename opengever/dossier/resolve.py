@@ -2,7 +2,7 @@ from five import grok
 from Products.statusmessages.interfaces import IStatusMessage
 from Acquisition import aq_inner, aq_parent
 
-from opengever.dossier.behaviors.dossier import IDossierMarker, IDossier
+from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier import _
 
 
@@ -15,84 +15,93 @@ class resolve(grok.CodeView):
         parent = aq_parent(aq_inner(self.context))
         if IDossierMarker.providedBy(parent):
             self.request.RESPONSE.redirect(self.context.absolute_url() + '/content_status_modify?workflow_action=dossier-transition-resolve')
-        
+
         errors = False
         status = IStatusMessage(self.request)
 
-        # all documents are in subdossier
-        docs = self.context.portal_catalog(
-                                        portal_type="opengever.document.document",
-                                        path=dict(depth=1,
-                                                  query='/'.join(self.context.getPhysicalPath()),
-                                                  ),
-                                                  sort_on='modified',
-                                                  sort_order='reverse')
-        # there are subdossiers
-        subdossiers = self.context.portal_catalog(
-                                            portal_type="opengever.dossier.businesscasedossier",
-                                            path=dict(depth=1,
-                                                      query='/'.join(self.context.getPhysicalPath()),
-                                                      ),
-                                            is_subdossier=True,
-                                                 )
-        if docs.__len__() > 0:
-            if subdossiers.__len__() > 0:
-                errors = True
-                status.addStatusMessage(_("not all documents are stored in a subdossier"), type="error")
+        if self.is_all_supplied():
+            errors = True
+            status.addStatusMessage(_("not all documents and tasks are stored in a subdossier"), type="error")
 
-        # all document are checked in
-        docs = self.context.portal_catalog(
-                                portal_type="opengever.document.document",
-                                path=dict(depth=2,
-                                    query='/'.join(self.context.getPhysicalPath()),
-                                ),
-                                review_state = 'checked_out',
-                                sort_on='modified',
-                                sort_order='reverse')
-
-        if docs.__len__() > 0:
+        if self.is_all_checked_in():
             errors = True
             status.addStatusMessage(_("not all documents are checked in"), type="error")
 
-        #all tasks are closed
-        tasks_closed = self.context.portal_catalog(
-                                portal_type="opengever.task.task",
-                                path=dict(depth=2,
-                                    query='/'.join(self.context.getPhysicalPath()),
-                                ),
-                                review_state = ('task-state-resolved', 'task-state-cancelled', 'task-state-rejected'),
-        )
-
-        tasks = self.context.portal_catalog(
-                                portal_type="opengever.task.task",
-                                path=dict(depth=2,
-                                    query='/'.join(self.context.getPhysicalPath()),
-                                ),
-        )
-
-        if tasks_closed.__len__() != tasks.__len__():
+        if self.is_all_closed():
             errors = True
             status.addStatusMessage(_("not all task are closed"), type="error")
-
-        # an end-date are entered 
-        if not IDossier(self.context).end:
-            errors = True
-            status.addStatusMessage(_("no end date are entered"), type="error")
-        else:
-            subdossiers = self.context.portal_catalog(
-                                                portal_type="opengever.dossier.businesscasedossier",
-                                                path=dict(depth=1,
-                                                          query='/'.join(self.context.getPhysicalPath()),
-                                                          ),
-                                                   )
-            end = IDossier(self.context).end
-            for dossier in subdossiers:
-                if dossier.end and end < dossier.end:
-                   errors = True
-                   status.addStatusMessage(_("The End date of the current dossier is smaller than the end date of a subdossier"), type="error")
-                   break
 
         if errors:
             self.request.RESPONSE.redirect(self.context.absolute_url())
         else:
             self.request.RESPONSE.redirect(self.context.absolute_url() + '/transition-archive')
+
+    def is_all_supplied(self):
+        """Check if all task and all documents are supplied in a subdossier
+        
+        if there have subdossiers 
+        
+        """
+        subddosiers = self.context.portal_catalog(
+            path=dict(query='/'.join(self.context.getPhysicalPath()),
+            ),
+            object_provides='opengever.dossier.behaviors.dossier.IDossierMarker',
+        )
+
+        if len(subddosiers) > 0:
+            results = self.context.getFolderContents({
+                'portal_type':['opengever.task.task', 
+                    'opengever.document.document']
+                }
+            )
+
+            if len(results) > 0:
+                return False
+
+        return True
+
+    def is_all_closed(self):
+        """ Check if all the task are closed 
+        
+        closed: - resolved
+                - cancelled
+                - rejected
+
+        """
+
+        tasks_closed = self.context.portal_catalog(
+            portal_type="opengever.task.task",
+            path=dict(query='/'.join(self.context.getPhysicalPath()),
+            ),
+            review_state = ('task-state-resolved',
+                'task-state-cancelled', 'task-state-rejected'),
+        )
+
+        tasks = self.context.portal_catalog(
+            portal_type="opengever.task.task",
+            path=dict(depth=2,
+                query='/'.join(self.context.getPhysicalPath()),
+            ),
+        )
+        
+        if len(tasks_closed) < len(tasks):
+            return False
+        else:
+            return True
+
+    def is_all_checked_in(self):
+        """ check if all documents in this path are checked in """
+        
+        # all document are checked in
+        docs = self.context.portal_catalog(
+            portal_type="opengever.document.document",
+            path=dict(depth=2,
+                query='/'.join(self.context.getPhysicalPath()),
+            ),
+            review_state = 'checked_out',
+        )
+        
+        if len(docs) == 0:
+            return True
+        else:
+            return False

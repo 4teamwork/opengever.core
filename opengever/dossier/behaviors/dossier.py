@@ -18,7 +18,7 @@ from plone.registry.interfaces import IRegistry
 from plone.app.dexterity.behaviors.metadata import IBasic
 
 from zope.interface import invariant, Invalid
-from zope.schema.vocabulary import SimpleVocabulary
+from zope.schema.vocabulary import SimpleVocabulary, SimpleTerm
 from zope.schema.interfaces import IContextSourceBinder
 from zope import schema
 from zope.interface import Interface, alsoProvides
@@ -33,6 +33,16 @@ from z3c.relationfield.schema import RelationChoice, RelationList
 from plone.formwidget.contenttree import ObjPathSourceBinder
 
 LOG = logging.getLogger('opengever.dossier')
+
+
+@grok.provider(IContextSourceBinder)
+def get_filing_prefixes(context):
+    registry = getUtility(IRegistry)
+    proxy = registry.forInterface(IDossierContainerTypes)
+    prefixes = getattr(proxy, 'type_prefixes')
+    filing_prefixes = [SimpleTerm (value, value, value) for value in prefixes]
+
+    return SimpleVocabulary(filing_prefixes)
 
 
 @grok.provider(IContextSourceBinder)
@@ -120,6 +130,7 @@ class IDossier(form.Schema):
         u'filing',
         label = _(u'fieldset_filing', default=u'Filing'),
         fields = [
+            u'filing_prefix',
             u'container_type',
             u'container_id',
             u'volume_number',
@@ -127,6 +138,12 @@ class IDossier(form.Schema):
             u'container_location',
             ],
         )
+
+    filing_prefix = schema.Choice(
+        title = _(u'filing_prefix', default="filing prefix"),
+        source = get_filing_prefixes,
+        required = False,
+    )
 
     container_type = schema.Choice(
         title = _(u'label_container_type', default=u'Container Type'),
