@@ -1,59 +1,51 @@
-
-
-import logging
-
+#from Products.ARFilePreview.interfaces import IPreviewable
 from Acquisition import aq_inner
-from ZODB.POSException import ConflictError
-from five import grok
-from z3c.form.browser import checkbox
-from zope import schema
-from zope.schema.vocabulary import SimpleVocabulary
-from zope.schema.interfaces import IContextSourceBinder
-from zope.component import queryUtility, getUtility
-from zc.relation.interfaces import ICatalog
-from zope.app.intid.interfaces import IIntIds
-from datetime import datetime
-
 from Products.CMFCore.utils import getToolByName
 from Products.MimetypesRegistry.common import MimeTypeException
-#from Products.ARFilePreview.interfaces import IPreviewable
+from ZODB.POSException import ConflictError
+from datetime import datetime
+from five import grok
+from ftw.journal.config import JOURNAL_ENTRIES_ANNOTATIONS_KEY
+from ftw.journal.interfaces import IAnnotationsJournalizable
+from ftw.journal.interfaces import IWorkflowHistoryJournalizable
+from ftw.table import helper
+from ftw.table.interfaces import ITableGenerator
+from opengever.base.interfaces import IReferenceNumber, ISequenceNumber
+from opengever.document import _
+from opengever.document.interfaces import IDocumentType
+from opengever.octopus.tentacle.interfaces import IContactInformation
+from opengever.tabbedview.browser.tabs import OpengeverTab, OpengeverListingTab
+from opengever.tabbedview.helper import readable_ogds_author, linked
+from opengever.tabbedview.helper import readable_date_set_invisibles
+from opengever.task import _ as taskmsg
 from plone.app.dexterity.behaviors.metadata import IBasic
+from plone.app.iterate.interfaces import IWorkingCopy
+from plone.app.layout.viewlets.interfaces import IBelowContentTitle
 from plone.dexterity.content import Item
 from plone.directives import form, dexterity
+from plone.directives.dexterity import DisplayForm
+from plone.i18n.normalizer.interfaces import IIDNormalizer
 from plone.indexer import indexer
-from plone.app.iterate.interfaces import IWorkingCopy
-from plone.stagingbehavior.relation import StagingRelationValue
+from plone.namedfile.field import NamedFile
+from plone.namedfile.interfaces import INamedFileField
 from plone.registry.interfaces import IRegistry
-from plone.app.layout.viewlets.interfaces import IBelowContentTitle
+from plone.stagingbehavior.relation import StagingRelationValue
 from plone.supermodel.interfaces import FIELDSETS_KEY
 from plone.supermodel.model import Fieldset
 from plone.versioningbehavior.behaviors import IVersionable
 from plone.z3cform.textlines.textlines import TextLinesFieldWidget
-from plone.i18n.normalizer.interfaces import IIDNormalizer
-
+from z3c.form.browser import checkbox
+from zc.relation.interfaces import ICatalog
+from zope import schema
 from zope.annotation.interfaces import IAnnotations
-from zope.lifecycleevent.interfaces import IObjectCreatedEvent, IObjectModifiedEvent
+from zope.app.intid.interfaces import IIntIds
+from zope.component import queryUtility, getUtility
+from zope.lifecycleevent.interfaces import IObjectCreatedEvent
+from zope.lifecycleevent.interfaces import IObjectModifiedEvent
+from zope.schema.interfaces import IContextSourceBinder
+from zope.schema.vocabulary import SimpleVocabulary
+import logging
 
-from ftw.table.interfaces import ITableGenerator
-from ftw.table import helper
-
-from plone.namedfile.field import NamedFile
-from plone.namedfile.interfaces import INamedFileField
-
-from opengever.document import _
-from opengever.document.interfaces import IDocumentType
-from ftw.journal.interfaces import IAnnotationsJournalizable, IWorkflowHistoryJournalizable
-
-from ftw.journal.config import JOURNAL_ENTRIES_ANNOTATIONS_KEY
-
-from plone.directives.dexterity import DisplayForm
-
-from opengever.tabbedview.browser.tabs import OpengeverTab, OpengeverListingTab
-from opengever.tabbedview.helper import readable_ogds_author, linked, readable_date_set_invisibles
-from opengever.base.interfaces import IReferenceNumber, ISequenceNumber
-from opengever.octopus.tentacle.interfaces import IContactInformation
-
-from opengever.task import _ as taskmsg
 
 LOG = logging.getLogger('opengever.document')
 
@@ -71,6 +63,7 @@ IVersionable.setTaggedValue( FIELDSETS_KEY, [
 #         'changeNote' : 'true',
 #         } )
 
+
 @grok.provider(IContextSourceBinder)
 def possibleTypes(context):
     voc= []
@@ -82,9 +75,11 @@ def possibleTypes(context):
         terms.append(SimpleVocabulary.createTerm(term))
     return SimpleVocabulary(terms)
 
+
 def related_document(context):
     intids = getUtility( IIntIds )
     return intids.getId( context )
+
 
 class IDocumentSchema(form.Schema):
     """ Document Schema Interface
@@ -404,7 +399,7 @@ grok.global_adapter( checked_out, name='checked_out' )
 # @grok.subscribe(IDocumentSchema, IObjectCreatedEvent)
 # def setID(document, event):
 #     document.id = "document-%s" % getUtility(ISequenceNumber).get_number(document)
-# 
+#
 @grok.subscribe(IDocumentSchema, IObjectCreatedEvent)
 def setImageName(document, event):
     if document.file:
@@ -496,16 +491,16 @@ class Tasks(OpengeverListingTab):
         ('review_state', 'review_state', helper.translated_string()),
         ('Title', 'sortable_title', linked),
         {'column' : 'task_type',
-        'column_title' : taskmsg(u'label_task_type', 'Task Type')},
+         'column_title' : taskmsg(u'label_task_type', 'Task Type')},
         ('deadline', helper.readable_date),
         ('date_of_completion', readable_date_set_invisibles), # erledigt am
         {'column' : 'responsible',
-        'column_title' : taskmsg(u'label_responsible_task', 'Responsible'),
-        'transform' : readable_ogds_author},
+         'column_title' : taskmsg(u'label_responsible_task', 'Responsible'),
+         'transform' : readable_ogds_author},
         ('issuer', readable_ogds_author), # zugewiesen von
         {'column' : 'created',
-        'column_title' : taskmsg(u'label_issued_date', 'issued at'),
-        'transform': helper.readable_date },
+         'column_title' : taskmsg(u'label_issued_date', 'issued at'),
+         'transform': helper.readable_date },
         ('client_id', 'client_id'),
         )
 
