@@ -1,21 +1,30 @@
+import datetime
 from zope.component import getMultiAdapter
 from zope.component import provideUtility
-from zope.interface import alsoProvides, implements
+from zope.interface import alsoProvides, implements, directlyProvides
 
 from Products.PloneTestCase.ptc import PloneTestCase
 
 from z3c.form import testing
 from zope.annotation.interfaces import IAttributeAnnotatable
 
+#XXX: recursive imports between inbox and tabs
+from opengever.tabbedview.browser import tabs
+
 from opengever.octopus.tentacle import contact_info
+from opengever.octopus.tentacle.communicator import CortexCommunicator
 
 from opengever.task.tests.layer import Layer
+from opengever.task.adapters import IResponseContainer, Response
 from opengever.task.response import Base
+
 
 class MockedContactInformation(contact_info.ContactInformation):
     implements(contact_info.IContactInformation)
+
     def _refresh_users(self, force=False):
         pass
+
 
 class TestResponse(PloneTestCase):
     
@@ -42,3 +51,29 @@ class TestResponse(PloneTestCase):
                                 name=u'addresponse').__of__(task1)
         view.update()
         self.failUnless('form.buttons.add' in view.render())
+
+    def test_asdf(self):
+        # XXX: providing utilites sucks, so we monky patch -.-
+        CortexCommunicator.list_tentacles = lambda s: []
+        task = self.folder.get('task-1')
+
+        new_response = Response('')
+        form = {
+            'transition:list': 'task-transition-open-resolved',
+            'form.widgets.transition-empty-marker': '1',
+            'form.widgets.relatedItems-empty-marker': '1',
+            'LANGUAGE': 'de',
+            'form.buttons.add': 'Hinzufuegen',
+            'form.widgets.new_responsible:list': '--NOVALUE--',
+            'form.widgets.new_responsible-empty-marker': '1',
+        }
+        self.app.REQUEST.form = form
+        self.app.REQUEST.form.update()
+        addform = task.unrestrictedTraverse('addresponse')
+        setattr(addform.form, 'extractData', lambda a: [{
+            'transition':'task-transition-open-resolved',
+            'relatedItems': [],
+            }, None])
+        addform()
+        self.failUnless(
+            task.date_of_completion == datetime.datetime.now().date())

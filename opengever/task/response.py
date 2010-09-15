@@ -1,4 +1,5 @@
 import os
+import datetime
 from zope.i18n import translate
 from z3c.form import form, field, button
 from z3c.form.browser import radio
@@ -232,7 +233,7 @@ class AddForm(form.AddForm, AutoExtensibleForm):
     fields['new_responsible'].widgetFactory = AutocompleteFieldWidget
     fields['transition'].widgetFactory = radio.RadioFieldWidget
     fields['deadline'].widgetFactory = DatePickerFieldWidget
-    fields['date_of_completion'].widgetFactory = DatePickerFieldWidget
+    fields = fields.omit('date_of_completion')
 
     @property
     def action(self):
@@ -265,12 +266,17 @@ class AddForm(form.AddForm, AutoExtensibleForm):
             #if util.getManagersVocab.getTerm(responseCreator):
             #   new_response.type =  'reply'
             #check transition
+            if data.get('transition', None) == 'task-transition-open-resolved':
+                completion_date = datetime.datetime.now().date()
+            else:
+                completion_date = None
+            cc = completion_date
 
             #check other fields
             options = [
                 (task.deadline, data.get('deadline'), 'deadline',
                     _('deadline')),
-                (task.date_of_completion, data.get('date_of_completion'),
+                (task.date_of_completion, completion_date,
                  'date_of_completion', _('date_of_completion')),
                (task.responsible,
                 data.get('new_responsible'),
