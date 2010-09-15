@@ -3,7 +3,7 @@ from DateTime import DateTime
 from Products.PloneTestCase.ptc import PloneTestCase
 from datetime import datetime
 from opengever.document.persistence import DCQueue
-from opengever.document.tests.layer import Layer
+from opengever.document.tests.layer import CLayer
 from persistent.dict import PersistentDict
 from zope.app.intid.interfaces import IIntIds
 from zope.component import getMultiAdapter
@@ -14,7 +14,7 @@ import unittest
 
 class TestDocucomposer(PloneTestCase):
 
-    layer = Layer
+    layer = CLayer
 
     def test_create_document_with_file(self):
 
