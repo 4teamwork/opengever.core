@@ -19,15 +19,15 @@ class resolve(grok.CodeView):
         errors = False
         status = IStatusMessage(self.request)
 
-        if self.is_all_supplied():
+        if not self.is_all_supplied():
             errors = True
             status.addStatusMessage(_("not all documents and tasks are stored in a subdossier"), type="error")
 
-        if self.is_all_checked_in():
+        if not self.is_all_checked_in():
             errors = True
             status.addStatusMessage(_("not all documents are checked in"), type="error")
 
-        if self.is_all_closed():
+        if not self.is_all_closed():
             errors = True
             status.addStatusMessage(_("not all task are closed"), type="error")
 
@@ -42,10 +42,9 @@ class resolve(grok.CodeView):
         if there have subdossiers 
         
         """
-        subddosiers = self.context.portal_catalog(
-            path=dict(query='/'.join(self.context.getPhysicalPath()),
-            ),
-            object_provides='opengever.dossier.behaviors.dossier.IDossierMarker',
+        subddosiers = self.context.getFolderContents(
+            {'object_provides':
+                'opengever.dossier.behaviors.dossier.IDossierMarker',}
         )
 
         if len(subddosiers) > 0:
