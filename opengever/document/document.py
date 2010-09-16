@@ -15,8 +15,8 @@ from opengever.document import _
 from opengever.document.interfaces import IDocumentType
 from opengever.octopus.tentacle.interfaces import IContactInformation
 from opengever.tabbedview.browser.tabs import OpengeverTab, OpengeverListingTab
-from opengever.tabbedview.helper import readable_ogds_author, linked
 from opengever.tabbedview.helper import readable_date_set_invisibles
+from opengever.tabbedview.helper import readable_ogds_author, linked
 from opengever.task import _ as taskmsg
 from plone.app.dexterity.behaviors.metadata import IBasic
 from plone.app.iterate.interfaces import IWorkingCopy
@@ -40,6 +40,7 @@ from zope import schema
 from zope.annotation.interfaces import IAnnotations
 from zope.app.intid.interfaces import IIntIds
 from zope.component import queryUtility, getUtility
+from zope.interface import invariant, Invalid
 from zope.lifecycleevent.interfaces import IObjectCreatedEvent
 from zope.lifecycleevent.interfaces import IObjectModifiedEvent
 from zope.schema.interfaces import IContextSourceBinder
@@ -108,8 +109,7 @@ class IDocumentSchema(form.Schema):
 
     title = schema.TextLine(
         title = _(u'label_title', default=u'Title'),
-        required = True
-        )
+        required=False)
 
     description = schema.Text(
         title=_(u'label_description', default=u'Description'),
@@ -208,6 +208,14 @@ class IDocumentSchema(form.Schema):
         description = _(u'help_delivery_date', default=''),
         required = False,
         )
+
+    @invariant
+    def title_or_file_required(data):
+        if not data.title and not data.file:
+            raise Invalid(_(u'error_title_or_file_required',
+                            default=u'Either the title or the file is '
+                            'required.'))
+
 
     # TODO: doesn't work with Plone 4
     #form.order_after(**{'IRelatedItems.relatedItems': 'file'})
@@ -396,23 +404,27 @@ def checked_out( obj ):
     return '-'
 grok.global_adapter( checked_out, name='checked_out' )
 
-# @grok.subscribe(IDocumentSchema, IObjectCreatedEvent)
-# def setID(document, event):
-#     document.id = "document-%s" % getUtility(ISequenceNumber).get_number(document)
-#
+
 @grok.subscribe(IDocumentSchema, IObjectCreatedEvent)
-def setImageName(document, event):
-    if document.file:
-        filename = document.file.filename
-        normalize = getUtility(IIDNormalizer).normalize
-        document.file.filename = normalize(document.title) + filename[filename.rfind('.'):]
-
-
 @grok.subscribe(IDocumentSchema, IObjectModifiedEvent)
-def checkImageName(document, event):
-    if document.file:
-        if document.file.filename[:document.file.filename.rfind('.')] != document.title:
-            setImageName(document, event)
+def sync_title_and_filename_handler(doc, event):
+    """Syncs the document and the filename (#586):
+    o If there is no title but a file, use the filename (without extension) as
+    title.
+    o If there is a title and a file, use the normalized title as filename
+    """
+    normalize_method = getUtility(IIDNormalizer).normalize
+
+    if not doc.title and doc.file:
+        # use the filename without extension as title
+        filename = doc.file.filename
+        doc.title = filename[:filename.rfind('.')]
+
+    elif doc.title and doc.file:
+        # use the title as filename
+        filename = doc.file.filename
+        doc.file.filename = normalize_method(doc.title) + \
+            filename[filename.rfind('.'):]
 
 
 class View(dexterity.DisplayForm):

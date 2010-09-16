@@ -5,6 +5,10 @@ Changelog
 1.0a5
 -----
 
+* Issue #586 Fakultative Uebernahme des Dateinamens beim Hochladen einer Datei
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/586
+  [16.09.2010, jbaumann]
+
 * Renamed MailContactsVocabularyFactory according to changes in `opengever.octopus.tentacle`
   [10.09.2010, jbaumann]
 
