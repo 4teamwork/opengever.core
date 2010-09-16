@@ -1,0 +1,32 @@
+In this text we check the rules for resolve a Dossier
+For this we use some Dossiers and also two fake portal_types (ftw.task.task and opengever.document.document).
+First we create this fake portal_types
+>>> self.folder.invokeFactory('opengever.dossier.businesscasedossier', 'dossier')
+'dossier'
+>>> dossier = self.folder.get('dossier')
+>>> dossier.invokeFactory('opengever.dossier.businesscasedossier', 'subdossier')
+
+
+>>> from plone.dexterity.fti import DexterityFTI
+>>> fti = DexterityFTI('opengever.document.document')
+>>> fti.behaviors = ('plone.app.dexterity.behaviors.metadata.IDublinCore',)
+>>> self.portal.portal_types._setObject('opengever.document.document', fti)
+'opengever.document.docuement'
+>>> dossier.invokeFactory('opengever.document.document', 'd1')
+'d1'
+
+So then we create a Dossier, and some content objects, we used for the test
+>>> fti = DexterityFTI('opengever.task.task')
+>>> self.portal.portal_types._setObject('opengever.task.task', fti)
+>>> dossier.invokeFactory('opengever.task.task', 't1')
+'t1'
+
+Check all documents are in a subdossier, when a subdossier exists
+>>> resolve = dossier.unrestrictedTraverse('transition-resolve')
+>>> resolve.is_all_supplied()
+False
+
+Move the document in the subdossier
+>>> import pdb; pdb.set_trace( )
+>>> resolve.is_all_supplied()
+True
