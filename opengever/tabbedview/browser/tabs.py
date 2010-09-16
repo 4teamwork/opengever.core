@@ -18,8 +18,7 @@ from ftw.table import helper
 from opengever.octopus.tentacle.interfaces import IContactInformation
 from opengever.tabbedview.helper import readable_ogds_author, linked,\
     readable_date_set_invisibles, solr_linked
-from opengever.task import _ as taskmsg
-
+from opengever.tabbedview import _
 
 try:
     from opengever.globalsolr.interfaces import ISearch
@@ -283,20 +282,20 @@ class Tasks(OpengeverListingTab):
         ('review_state', 'review_state', helper.translated_string()),
         ('Title', 'sortable_title', linked),
         {'column': 'task_type',
-         'column_title': taskmsg(u'label_task_type', 'Task Type')},
+         'column_title': _(u'label_task_type', 'Task Type')},
         ('deadline', helper.readable_date),
         ('date_of_completion', readable_date_set_invisibles), # erledigt am
         {'column': 'responsible',
-         'column_title': taskmsg(u'label_responsible_task', 'Responsible'),
+         'column_title': _(u'label_responsible_task', 'Responsible'),
          'transform': readable_ogds_author},
         ('issuer', readable_ogds_author), # zugewiesen von
         {'column': 'created',
-         'column_title': taskmsg(u'label_issued_date', 'issued at'),
+         'column_title': _(u'label_issued_date', 'issued at'),
          'transform': helper.readable_date},
          {'column': 'client_id',
-          'column_title': taskmsg('client_id', 'Client'), },
+          'column_title': _('client_id', 'Client'), },
          {'column': 'sequence_number',
-          'column_title': taskmsg(u'sequence_number', "Sequence Number"), },
+          'column_title': _(u'sequence_number', "Sequence Number"), },
         )
 
     types = ['opengever.task.task', ]
