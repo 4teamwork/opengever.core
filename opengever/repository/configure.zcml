@@ -18,6 +18,8 @@
     <!-- Include custom permissions -->
     <include file="permissions.zcml" />
 
+    <include package=".behaviors" />
+
     <!-- Register an extension profile to make the product installable -->
     <genericsetup:registerProfile
         name="default"

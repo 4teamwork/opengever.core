@@ -1,10 +1,12 @@
 from Acquisition import aq_inner, aq_parent
+from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
 from five import grok
-from z3c.form import error
-from z3c.form import validator
+
 from zope import schema
-from zope.interface import implements
 import zope.component
+from zope.interface import implements
+from zope.lifecycleevent.interfaces import IObjectModifiedEvent
+from zope.app.container.interfaces import IObjectAddedEvent
 
 from plone.app.content.interfaces import INameFromTitle
 from plone.app.layout.viewlets.interfaces import IBelowContentTitle
@@ -12,13 +14,14 @@ from plone.dexterity import content
 from plone.directives import form
 from plone.memoize.instance import memoize
 from plone.registry.interfaces import IRegistry
-from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
 
-from opengever.base.behaviors.reference import IReferenceNumber
-from opengever.base.behaviors.reference import IReferenceNumberMarker
 from opengever.repository import _
 from opengever.repository.interfaces import IRepositoryFolder
+from opengever.repository.behaviors.referenceprefix import \
+    IReferenceNumberPrefix, IReferenceNumberPrefixMarker
 from opengever.repository.interfaces import IRepositoryFolderRecords
+from opengever.base.interfaces import IReferenceNumberPrefix as PrefixAdapter
+
 
 class IRepositoryFolderSchema(form.Schema):
     """ A Repository Folder
@@ -42,12 +45,14 @@ class IRepositoryFolderSchema(form.Schema):
     form.order_before(effective_title = '*')
     effective_title = schema.TextLine(
         title = _(u'Title'),
-        required = True
+        required = True,
         )
 
     description = schema.Text(
         title = _(u'label_description', default=u'Description'),
-        description =  _(u'help_description', default=u'A short summary of the content.'),
+        description = _(
+            u'help_description',
+            default=u'A short summary of the content.'),
         required = False,
         )
 
@@ -72,7 +77,9 @@ class IRepositoryFolderSchema(form.Schema):
          )
 
     referenced_activity = schema.TextLine(
-         title = _(u'label_referenced_activity', default=u'Referenced activity'),
+         title = _(
+            u'label_referenced_activity',
+            default=u'Referenced activity'),
          description = _(u'help_referenced_activity', default=u''),
          required = False,
          )
@@ -87,12 +94,13 @@ class IRepositoryFolderSchema(form.Schema):
 class RepositoryFolder(content.Container):
 
     implements(IRepositoryFolder)
+
     def Title(self):
         title = u' %s' % self.effective_title
         obj = self
         while IRepositoryFolder.providedBy(obj):
-            if IReferenceNumberMarker.providedBy(obj):
-                rfnr = IReferenceNumber(obj).reference_number
+            if IReferenceNumberPrefixMarker.providedBy(obj):
+                rfnr = IReferenceNumberPrefix(obj).reference_number_prefix
                 title = unicode(rfnr) + '.' + title
             obj = aq_parent(aq_inner(obj))
         return title
@@ -105,31 +113,32 @@ class RepositoryFolder(content.Container):
         2. If we are reaching the maximum depth of repository folders
         (Configured in plone.registry), we should not be able to add
         any more RFs, but then we should be able to add the other configured
-        types in any case.
-
-        If the maximum_repository_depth is set to 0, we do not have a depth limit.
+        types in any case. If the maximum_repository_depth is set to 0,
+        we do not have a depth limit.
         """
         # get the default types
-        types = super(RepositoryFolder, self).allowedContentTypes(*args, **kwargs)
+        types = super(
+            RepositoryFolder, self).allowedContentTypes(*args, **kwargs)
         # get fti of myself
         fti = self.portal_types.get(self.portal_type)
         # get maximum depth of repository folders
         registry = zope.component.queryUtility(IRegistry)
         proxy = registry.forInterface(IRepositoryFolderRecords)
-        maximum_depth = getattr(proxy, 'maximum_repository_depth', 0) # 0 -> no restriction
+        # 0 -> no restriction
+        maximum_depth = getattr(proxy, 'maximum_repository_depth', 0)
         current_depth = 0
         # if we have a maximum depth, we need to know the current depth
         if maximum_depth>0:
             obj = self
-            while IRepositoryFolder.providedBy( obj ):
+            while IRepositoryFolder.providedBy(obj):
                 current_depth += 1
-                obj = aq_parent( aq_inner( obj ) )
-                if IPloneSiteRoot.providedBy( obj ):
+                obj = aq_parent(aq_inner(obj))
+                if IPloneSiteRoot.providedBy(obj):
                     break
             if maximum_depth<=current_depth:
                 # depth exceeded
                 # RepositoryFolder not allowed, but any other type
-                return filter( lambda a:a!=fti, types )
+                return filter(lambda a: a!= fti, types)
         # check if self contains any similar objects
         contains_similar_objects = False
         for id, obj in self.contentItems():
@@ -139,9 +148,16 @@ class RepositoryFolder(content.Container):
         # filter content types, if required
         if contains_similar_objects:
             # only allow same types
-            types = filter(lambda a:a==fti, types)
+            types = filter(lambda a: a== fti, types)
         return types
 
+
+@grok.subscribe(IRepositoryFolder, IObjectAddedEvent)
+@grok.subscribe(IRepositoryFolder, IObjectModifiedEvent)
+def saveReferenceNumberPrefix(obj, event):
+    parent= aq_parent(aq_inner(obj))
+    PrefixAdapter(parent).set_number(
+        obj, IReferenceNumberPrefix(obj).reference_number_prefix)
 
 
 class NameFromTitle(grok.Adapter):
@@ -158,14 +174,15 @@ class NameFromTitle(grok.Adapter):
     def title(self):
         return self.context.effective_title
 
+
 class Byline(grok.Viewlet):
     grok.viewletmanager(IBelowContentTitle)
     grok.context(IRepositoryFolder)
     grok.name("plone.belowcontenttitle.documentbyline")
 
     #update = content.DocumentBylineViewlet.update
-
     @memoize
     def workflow_state(self):
         pw = self.context.portal_workflow
-        return pw.getStatusOf(pw.getChainFor(self.context)[0], self.context)['review_state']
+        return pw.getStatusOf(
+            pw.getChainFor(self.context)[0], self.context)['review_state']

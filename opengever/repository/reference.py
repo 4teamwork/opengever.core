@@ -4,7 +4,8 @@ from opengever.base.interfaces import IReferenceNumber
 from opengever.base.reference import BasicReferenceNumber
 from opengever.repository.repositoryfolder import IRepositoryFolderSchema
 from opengever.repository.repositoryroot import IRepositoryRoot
-import opengever.base.behaviors.reference
+from opengever.repository.behaviors.referenceprefix \
+    import IReferenceNumberPrefix
 
 
 class RepositoryRootNumber(BasicReferenceNumber):
@@ -21,7 +22,7 @@ class RepositoryRootNumber(BasicReferenceNumber):
             return str(parent_num) + ' '
         return ''
 
- 
+
 class RepositoryFolderReferenceNumber(BasicReferenceNumber):
     """ Reference number for repository folder
     """
@@ -30,8 +31,7 @@ class RepositoryFolderReferenceNumber(BasicReferenceNumber):
 
     def get_number(self):
         # get local number prefix
-        num = opengever.base.behaviors.reference.IReferenceNumber(
-            self.context).reference_number
+        num = IReferenceNumberPrefix(self.context).reference_number_prefix
         num = num and str(num) or ''
         # get the parent number
         parent_num = self.get_parent_number()
