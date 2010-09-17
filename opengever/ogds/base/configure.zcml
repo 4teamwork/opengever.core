@@ -6,16 +6,16 @@
     xmlns:plone="http://namespaces.plone.org/plone"
     i18n_domain="opengever.ogds.base">
 
-  <includeDependencies package="." />
+    <includeDependencies package="." />
 
-  <grok:grok package="." />
+    <grok:grok package="." />
 
-  <genericsetup:registerProfile
-      name="default"
-      title="opengever.ogds.base"
-      description="OpenGever directory service base profile"
-      directory="profiles/default"
-      provides="Products.GenericSetup.interfaces.EXTENSION"
-      />
+    <genericsetup:registerProfile
+        name="default"
+        title="opengever.ogds.base"
+        description="OpenGever directory service base profile"
+        directory="profiles/default"
+        provides="Products.GenericSetup.interfaces.EXTENSION"
+        />
 
 </configure>

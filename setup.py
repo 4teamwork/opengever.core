@@ -31,6 +31,7 @@ setup(name='opengever.ogds.base',
       zip_safe=False,
       install_requires=[
         'setuptools',
+        'SQLAlchemy',
         # -*- Extra requirements: -*-
         ],
       entry_points="""
