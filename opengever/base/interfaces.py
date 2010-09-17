@@ -32,6 +32,10 @@ class IBaseClientID(Interface):
     client_id = schema.TextLine(title=u"client id", default=u"OG")
 
 
+class IReferenceNumberPrefix(Interface):
+    """ The Reference Number Prefix Adapter Interface """
+
+
 class IReferenceNumber(Interface):
     """ The reference number adapter is able to generate a full reference
     number including all parent reference-prefixes.
