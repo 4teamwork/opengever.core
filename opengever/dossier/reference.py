@@ -1,6 +1,6 @@
 from Acquisition import aq_parent, aq_inner
 from five import grok
-from opengever.base.interfaces import IReferenceNumber
+from opengever.base.interfaces import IReferenceNumber, IReferenceNumberPrefix
 from opengever.base.reference import BasicReferenceNumber
 from opengever.dossier.behaviors.dossier import IDossierMarker
 import opengever.base.behaviors.reference
@@ -14,8 +14,8 @@ class DossierReferenceNumber(BasicReferenceNumber):
 
     def get_number(self):
         # get local number prefix
-        num = opengever.base.behaviors.reference.IReferenceNumber(
-            self.context).reference_number
+        num = IReferenceNumberPrefix(
+            aq_parent(aq_inner(self.context))).get_number(self.context)
         num = num and str(num) or ''
         # get the parent number
         parent_num = self.get_parent_number()

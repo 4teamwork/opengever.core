@@ -25,6 +25,7 @@ from zope.interface import Interface, alsoProvides
 from zope.component import queryUtility, getAdapter, getUtility
 
 from opengever.dossier.interfaces import IDossierContainerTypes
+from opengever.dossier.widget import referenceNumberWidgetFactory
 from opengever.base.interfaces import IReferenceNumber, ISequenceNumber
 from opengever.base.behaviors import reference
 from opengever.octopus.tentacle.interfaces import IContactInformation
@@ -40,7 +41,7 @@ def get_filing_prefixes(context):
     registry = getUtility(IRegistry)
     proxy = registry.forInterface(IDossierContainerTypes)
     prefixes = getattr(proxy, 'type_prefixes')
-    filing_prefixes = [SimpleTerm (value, value, value) for value in prefixes]
+    filing_prefixes = [SimpleTerm(value, value, value) for value in prefixes]
 
     return SimpleVocabulary(filing_prefixes)
 
@@ -56,12 +57,15 @@ def container_types(context):
         terms.append(SimpleVocabulary.createTerm(term))
     return SimpleVocabulary(terms)
 
+
 class IDossierMarker(Interface):
     """ Marker Interface for dossiers.
     """
 
+
 class IDossier(form.Schema):
-    """ Behaviour interface for dossier types providing common properties/fields.
+    """ Behaviour interface for dossier types providing
+    common properties/fields.
     """
 
     form.fieldset(
@@ -77,6 +81,8 @@ class IDossier(form.Schema):
             ],
         )
 
+    # form.omitted('reference_number_prefix')
+
     keywords = schema.Tuple(
         title = _(u'label_keywords', default=u'Keywords'),
         description = _(u'help_keywords', default=u''),
@@ -88,8 +94,6 @@ class IDossier(form.Schema):
 
 
     form.widget(start='ftw.datepicker.widget.DatePickerFieldWidget')
-    #form.widget(start=DateTimePickerFieldWidget)
-    #form.widget(start='collective.z3cform.datepicker.widget.DatePickerFieldWidget')
     start = schema.Date(
         title=_(u'label_start', default=u'Opening Date'),
         description = _(u'help_start', default=u''),
@@ -97,8 +101,6 @@ class IDossier(form.Schema):
         )
 
     form.widget(end='ftw.datepicker.widget.DatePickerFieldWidget')
-    #form.widget(end=DateTimePickerFieldWidget)
-    #form.widget(end='collective.z3cform.datepicker.widget.DatePickerFieldWidget')
     end = schema.Date(
         title=_(u'label_end', default=u'Closing Date'),
         description = _(u'help_end', default=u''),
@@ -114,13 +116,14 @@ class IDossier(form.Schema):
     comments = schema.Text(
         title=_(u'label_comments', default=u'Comments'),
         description = _(u'help_comments', default=u''),
-        required=False
+        required=False,
         )
 
     form.widget(responsible=AutocompleteFieldWidget)
     responsible = schema.Choice(
         title=_(u"label_responsible", default="Responsible"),
-        description =_(u"help_responsible", default="select an responsible Manger"),
+        description =_(
+            u"help_responsible", default="select an responsible Manger"),
         #source = util.getManagersVocab,
         vocabulary = 'opengever.octopus.tentacle.contacts.LocalUsersVocabularyFactory',
         required = True,
@@ -136,6 +139,8 @@ class IDossier(form.Schema):
             u'volume_number',
             u'number_of_containers',
             u'container_location',
+            u'reference_number',
+            u'former_reference_number',
             ],
         )
 
@@ -159,7 +164,9 @@ class IDossier(form.Schema):
         )
 
     number_of_containers = schema.Int(
-        title = _(u'label_number_of_containers', default=u'Number of Containers'),
+        title = _(
+            u'label_number_of_containers',
+            default=u'Number of Containers'),
         description = _(u'help_number_of_containers', default=u''),
         required = False,
         )
@@ -180,9 +187,18 @@ class IDossier(form.Schema):
         required=False,
         )
 
+    form.mode(former_reference_number='display')
     former_reference_number = schema.TextLine(
-        title = _(u'label_former_reference_number', default=u'Reference Number'),
+        title = _(u'label_former_reference_number',
+            default=u'Reference Number'),
         description = _(u'help_former_reference_number', default=u''),
+        required = False,
+        )
+
+    form.widget(reference_number=referenceNumberWidgetFactory)
+    reference_number= schema.TextLine(
+        title = _(u'label_reference_number', default=u'Reference Number'),
+        description = _(u'help_reference_number ', default=u''),
         required = False,
         )
 
@@ -190,7 +206,8 @@ class IDossier(form.Schema):
     def validateStartEnd(data):
         if data.start is not None and data.end is not None:
             if data.start > data.end:
-                raise StartBeforeEnd(_(u"The start date must be before the end date."))
+                raise StartBeforeEnd(
+                    _(u"The start date must be before the end date."))
 
 alsoProvides(IDossier, IFormFieldProvider)
 
@@ -199,21 +216,10 @@ class StartBeforeEnd(Invalid):
     __doc__ = _(u"The start or end date is invalid")
 
 
-# XXX testing widget attributes
-#
-# import grokcore.component
-# from z3c.form.widget import StaticWidgetAttribute
-#
-# rows_override = StaticWidgetAttribute(u'blablabla', field=IDossier['comments'])
-# grok.global_adapter(rows_override, name=u"value")
-# labelOverride = StaticWidgetAttribute(u"Override label2", field=IDossier['comments'])
-# grok.global_adapter(labelOverride, name=u"label")
-# testOverride = StaticWidgetAttribute(True, field=IDossier['volume_number'])
-# grok.global_adapter(testOverride, name=u"required")
-
 @form.default_value(field=IDossier['start'])
 def deadlineDefaultValue(data):
     return datetime.today()
+
 
 @indexer(IDossierMarker)
 def startIndexer(obj):
@@ -223,6 +229,7 @@ def startIndexer(obj):
     return aobj.start
 grok.global_adapter(startIndexer, name="start")
 
+
 @indexer(IDossierMarker)
 def endIndexer(obj):
     aobj = IDossier(obj)
@@ -230,6 +237,7 @@ def endIndexer(obj):
         return None
     return aobj.end
 grok.global_adapter(endIndexer, name="end")
+
 
 @indexer(IDossierMarker)
 def responsibleIndexer(obj):
@@ -239,6 +247,7 @@ def responsibleIndexer(obj):
     return aobj.responsible
 grok.global_adapter(responsibleIndexer, name="responsible")
 
+
 @indexer(IDossierMarker)
 def isSubdossierIndexer(obj):
     parent = aq_parent(aq_inner(obj))
@@ -247,6 +256,7 @@ def isSubdossierIndexer(obj):
     return False
 grok.global_adapter(isSubdossierIndexer, name="is_subdossier")
 
+
 @indexer(IDossierMarker)
 def filing_no(obj):
     """filing nubmer indexer"""
@@ -254,9 +264,10 @@ def filing_no(obj):
     return getattr(obj, 'filing_no', None)
 grok.global_adapter(filing_no, name="filing_no")
 
-# INDEX: SearchableText
+
 @indexer(IDossierMarker)
 def SearchableText(obj):
+    """searchableText indexer"""
     context = aq_inner(obj)
     transforms = getToolByName(obj, 'portal_transforms')
     fields = [
@@ -286,8 +297,9 @@ def SearchableText(obj):
             except (ConflictError, KeyboardInterrupt):
                 raise
             except Exception, e:
-                LOG.error("Error while trying to convert file contents to 'text/plain' "
-                          "in SearchablceIndex(dossier.py): %s" % (e,))
+                LOG.error("Error while trying to convert file contents "
+                          "to 'text/plain' "
+                          "in SearchablceIndex(dossier.py): %s" % (e, ))
             data = str(datastream)
         if isinstance(data, unicode):
             data = data.encode('utf8')
@@ -318,6 +330,7 @@ def SearchableText(obj):
 
 grok.global_adapter(SearchableText, name='SearchableText')
 
+
 @grok.subscribe(IDossierMarker, IObjectMovedEvent)
 def set_former_reference_after_moving(obj, event):
     if not event.oldParent or not event.newParent:
@@ -330,11 +343,11 @@ def set_former_reference_after_moving(obj, event):
     old_obj_rn = old_par_rn + new_obj_rn[len(new_par_rn):]
     repr = IDossier(obj)
     IDossier['former_reference_number'].set(repr, old_obj_rn)
-    
+
     from z3c.form.interfaces import IValue
     from zope.component import queryMultiAdapter
-    
-    
+
+
     default = queryMultiAdapter((
         obj,
         obj.REQUEST, # request
@@ -344,5 +357,5 @@ def set_former_reference_after_moving(obj, event):
         ), IValue, name='default')
     if default!=None:
         default = default.get()
-        reference.IReferenceNumber.get('reference_number').set(reference.IReferenceNumber(obj), default)
-
+        reference.IReferenceNumber.get('reference_number').set(
+            reference.IReferenceNumber(obj), default)

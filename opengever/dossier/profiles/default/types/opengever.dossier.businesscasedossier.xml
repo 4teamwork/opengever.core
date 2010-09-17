@@ -28,7 +28,6 @@
   <!-- enabled behaviors -->
   <property name="behaviors">
     <element value="opengever.base.behaviors.base.IOpenGeverBase" />
-    <element value="opengever.base.behaviors.reference.IReferenceNumber" />
     <element value="ftw.journal.interfaces.IAnnotationsJournalizable" />
     <element value="opengever.dossier.behaviors.dossier.IDossier" />
     <element value="opengever.dossier.behaviors.participation.IParticipationAware" />
