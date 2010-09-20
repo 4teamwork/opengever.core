@@ -4,6 +4,11 @@ import os
 version = open('opengever/portlets/tree/version.txt').read().strip()
 maintainer = 'Victor Baumann'
 
+tests_require = (
+    'zope.testing',
+    'collective.testcaselayer',
+   )
+
 setup(name='opengever.portlets.tree',
       version=version,
       description="(Maintainer: %s)" % maintainer,
@@ -31,6 +36,8 @@ setup(name='opengever.portlets.tree',
         'ftw.treeview',
         # -*- Extra requirements: -*-
         ],
+      tests_require=tests_require,
+      extras_require=dict(tests=tests_require),
       entry_points="""
       # -*- Entry points: -*-
       [z3c.autoinclude.plugin]
