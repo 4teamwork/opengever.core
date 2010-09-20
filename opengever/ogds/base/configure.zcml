@@ -6,6 +6,7 @@
     xmlns:plone="http://namespaces.plone.org/plone"
     i18n_domain="opengever.ogds.base">
 
+    <include package="z3c.autoinclude" file="meta.zcml" />
     <includeDependencies package="." />
 
     <grok:grok package="." />
@@ -17,5 +18,12 @@
         directory="profiles/default"
         provides="Products.GenericSetup.interfaces.EXTENSION"
         />
+
+    <!-- Register the import step -->
+    <genericsetup:importStep
+        name="opengever.ogds.base"
+        title="opengever.ogds.base special import handlers"
+        description=""
+        handler="ftw.task.setuphandlers.import_various" />
 
 </configure>

@@ -1,0 +1,16 @@
+<configure xmlns="http://namespaces.zope.org/zope"
+           xmlns:db="http://namespaces.zope.org/db"
+           xmlns:grok="http://namespaces.zope.org/grok"
+           package="opengever.ogds.base">
+
+    <include package="z3c.autoinclude" file="meta.zcml" />
+    <includeDependencies package="." />
+
+    <include package="z3c.saconfig" file="meta.zcml" />
+    <db:engine name="ogds"
+               url="sqlite:///:memory:" />
+    <db:session name="opengever.ogds" engine="ogds" />
+
+    <grok:grok package="." />
+
+</configure>

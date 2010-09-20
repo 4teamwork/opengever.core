@@ -1,0 +1,25 @@
+Imports:
+
+    >>> from opengever.ogds.base.interfaces import IContactInformation
+    >>> from opengever.ogds.base.model.user import User
+    >>> from opengever.ogds.base.utils import create_session
+    >>> from zope.component import getUtility
+    >>> import transaction
+
+
+Lets create some users:
+
+    >>> session = create_session()
+
+    >>> u1 = User('hugo.boss')
+    >>> session.add(u1)
+    >>> u2 = User('peter.muster')
+    >>> session.add(u2)
+    >>> transaction.commit()
+
+
+Now we get the contact information utility and make some requests:
+
+    >>> info = getUtility(IContactInformation)
+    >>> info.list_users().all()
+    [<User hugo.boss>, <User peter.muster>]

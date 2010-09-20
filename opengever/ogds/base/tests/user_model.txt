@@ -5,7 +5,6 @@ Create a user
     >>> user
     <User hugo.boss>
     >>> session.add(user)
-    >>> session.commit()
 
 Get the user
 

@@ -1,11 +1,17 @@
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, String, Text, Boolean
+from zope.interface import implements
+from opengever.ogds.base.interfaces import IUser
+
 
 Base = declarative_base()
+
 
 class User(Base):
     """User model
     """
+
+    implements(IUser)
 
     __tablename__ = 'users'
 

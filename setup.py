@@ -36,6 +36,8 @@ setup(name='opengever.ogds.base',
       install_requires=[
         'setuptools',
         'SQLAlchemy',
+        'five.grok',
+        'z3c.saconfig',
         # -*- Extra requirements: -*-
         ],
       tests_require=tests_require,

@@ -5,7 +5,6 @@ Create a client
     >>> client
     <Client client1>
     >>> session.add(client)
-    >>> session.commit()
 
 Get the client
 
