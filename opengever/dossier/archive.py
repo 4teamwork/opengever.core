@@ -3,7 +3,7 @@ from zope.schema.vocabulary import SimpleVocabulary
 from zope.schema.interfaces import IContextSourceBinder
 from zope.annotation.interfaces import IAnnotations
 from zope.component import getUtility
-
+from zope.interface import invariant, Invalid
 from Acquisition import aq_inner, aq_parent
 from persistent.dict import PersistentDict
 from five import grok
@@ -22,6 +22,11 @@ from opengever.dossier import _
 from opengever.dossier.behaviors.dossier import IDossierMarker,\
     get_filing_prefixes, IDossier
 from opengever.base.interfaces import IBaseClientID
+
+
+class MissingValue(Invalid):
+    """ The Missing value was defined Exception."""
+    __doc__ = _(u"Not all required fields are filled")
 
 
 @grok.provider(IContextSourceBinder)
@@ -44,12 +49,13 @@ def get_filing_actions(context):
             
     return SimpleVocabulary(values)
 
+
 class IArchiveFormSchema(directives_form.Schema):
 
     filing_prefix = schema.Choice(
         title = _(u'filing_prefix', default="filing prefix"),
         source = get_filing_prefixes,
-        required = True,
+        required=False,
     )
 
     dossier_enddate = schema.Date(
@@ -60,14 +66,22 @@ class IArchiveFormSchema(directives_form.Schema):
 
     filing_year = schema.Int(
         title = _(u'filing_year', default="filing Year"),
-        required = True,
+        required=False,
     )
     
     filing_action = schema.Choice(
-        title = _(u'filling_action', default="Action"),
-        required = True,
+        title = _(u'filing_action', default="Action"),
         source = get_filing_actions,
+        required = True,
     )
+
+    @invariant
+    def validateStartEnd(data):
+        if (data.filing_action == 0 or data.filing_action == 2) and \
+            (data.filing_prefix is None or data.filing_year is None):
+            raise Invalid(
+                _(u"When the Action give filing number is selected, \
+                    all fields are required."))
 
 
 @directives_form.default_value(field=IArchiveFormSchema['filing_prefix'])
