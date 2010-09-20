@@ -4,6 +4,10 @@ import os
 version = open('opengever/inbox/version.txt').read().strip()
 maintainer = 'Thomas Buchberger'
 
+tests_require = [
+    'collective.testcaselayer',
+    ]
+
 setup(name='opengever.inbox',
       version=version,
       description="Inbox for OpenGever (Maintainer: %s)"  % maintainer,
@@ -34,6 +38,8 @@ setup(name='opengever.inbox',
         'opengever.tabbedview',
         # -*- Extra requirements: -*-
         ],
+      tests_require=tests_require,
+      extras_require = dict(tests=tests_require),
       entry_points="""
       # -*- Entry points: -*-
       [z3c.autoinclude.plugin]
