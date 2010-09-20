@@ -26,13 +26,6 @@
         for="plone.dexterity.interfaces.IDexterityContent"
         />
 
-        	 <browser:page
-         	for="opengever.dossier.behaviors.dossier.IDossierMarker"
-          name="tabbedview_view-sharing"
-          class=".browser.tabs.Sharing"
-         	permission="zope.Public"
-         	/>
-
     <!-- Register the installation GenericSetup extension profile -->
     <genericsetup:registerProfile
       name="default"
