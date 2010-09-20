@@ -27,7 +27,7 @@ from zope.component import queryUtility, getAdapter, getUtility
 from opengever.dossier.interfaces import IDossierContainerTypes
 from opengever.dossier.widget import referenceNumberWidgetFactory
 from opengever.base.interfaces import IReferenceNumber, ISequenceNumber
-from opengever.base.behaviors import reference
+#from opengever.base.behaviors import reference
 from opengever.octopus.tentacle.interfaces import IContactInformation
 
 from z3c.relationfield.schema import RelationChoice, RelationList
@@ -346,16 +346,15 @@ def set_former_reference_after_moving(obj, event):
 
     from z3c.form.interfaces import IValue
     from zope.component import queryMultiAdapter
-
-
+    
     default = queryMultiAdapter((
         obj,
         obj.REQUEST, # request
         None, # form
-        reference.IReferenceNumber.get('reference_number'),
+        IReferenceNumber.get('reference_number'),
         None, # Widget
         ), IValue, name='default')
     if default!=None:
         default = default.get()
-        reference.IReferenceNumber.get('reference_number').set(
-            reference.IReferenceNumber(obj), default)
+        IReferenceNumber.get('reference_number').set(
+            IReferenceNumber(obj), default)
