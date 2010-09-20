@@ -1,0 +1,13 @@
+Create a client
+
+    >>> from opengever.ogds.base.model.client import Client
+    >>> client = Client('client1')
+    >>> client
+    <Client client1>
+    >>> session.add(client)
+    >>> session.commit()
+
+Get the client
+
+    >>> session.query(Client).one()
+    <Client client1>

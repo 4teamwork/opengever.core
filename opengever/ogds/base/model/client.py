@@ -14,3 +14,9 @@ class Client(Base):
     site_url = Column(String(50))
     public_url = Column(String(50))
     group = Column(String(20))
+
+    def __init__(self, client_id):
+        self.client_id = client_id
+
+    def __repr__(self):
+        return '<Client %s>' % self.client_id

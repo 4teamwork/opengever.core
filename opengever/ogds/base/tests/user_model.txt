@@ -1,0 +1,13 @@
+Create a user
+
+    >>> from opengever.ogds.base.model.user import User
+    >>> user = User('hugo.boss')
+    >>> user
+    <User hugo.boss>
+    >>> session.add(user)
+    >>> session.commit()
+
+Get the user
+
+    >>> session.query(User).one()
+    <User hugo.boss>

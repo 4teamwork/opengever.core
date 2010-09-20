@@ -34,3 +34,9 @@ class User(Base):
     city = Column(String(100))
 
     country = Column(String(20))
+
+    def __init__(self, userid):
+        self.userid = userid
+
+    def __repr__(self):
+        return '<User %s>' % self.userid
