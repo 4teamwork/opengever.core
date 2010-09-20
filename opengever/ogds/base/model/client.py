@@ -16,15 +16,20 @@ class Client(Base):
     __tablename__ = 'clients'
 
     client_id = Column(String(10), primary_key=True)
-    enabled = Column(Boolean())
+    title = Column(String(30))
+    enabled = Column(Boolean(), default=True)
     ip_address = Column(String(15))
     site_url = Column(String(50))
     public_url = Column(String(50))
     group = Column(String(20))
     inbox_group = Column(String(20))
 
-    def __init__(self, client_id):
+    def __init__(self, client_id, **kwargs):
         self.client_id = client_id
+        for key, value in kwargs.items():
+            # provoke a AttributeError
+            getattr(self, key)
+            setattr(self, key, value)
 
     def __repr__(self):
         return '<Client %s>' % self.client_id

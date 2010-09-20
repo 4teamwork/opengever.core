@@ -2,6 +2,7 @@ Imports:
 
     >>> from opengever.ogds.base.interfaces import IContactInformation
     >>> from opengever.ogds.base.model.user import User
+    >>> from opengever.ogds.base.model.client import Client
     >>> from opengever.ogds.base.utils import create_session
     >>> from zope.component import getUtility
     >>> import transaction
@@ -18,8 +19,68 @@ Lets create some users:
     >>> transaction.commit()
 
 
-Now we get the contact information utility and make some requests:
+And we also need some clients:
+
+    >>> c1 = Client('client1', title='Client 1')
+    >>> c1.ip_address = '127.0.0.1'
+    >>> c1.site_url = 'http://nohost/client1'
+    >>> c1.public_url = 'http://nohost/client1'
+    >>> c1.group = 'client1_users'
+    >>> c1.group = 'client1_inbox_users'
+    >>> session.add(c1)
+
+    >>> c2 = Client('client2', title='Client 2')
+    >>> c2.ip_address = '127.0.0.1'
+    >>> c2.site_url = 'http://nohost/client2'
+    >>> c2.public_url = 'http://nohost/client2'
+    >>> c2.group = 'client2_users'
+    >>> c2.group = 'client2_inbox_users'
+    >>> session.add(c2)
+
+    >>> c3 = Client('client3', title='Client 3')
+    >>> c3.enabled = False
+    >>> c3.ip_address = '127.0.0.1'
+    >>> c3.site_url = 'http://nohost/client3'
+    >>> c3.public_url = 'http://nohost/client3'
+    >>> c3.group = 'client3_users'
+    >>> c3.group = 'client3_inbox_users'
+    >>> session.add(c3)
+
+    >>> transaction.commit()
+
+
+Get the contact information utlity:
 
     >>> info = getUtility(IContactInformation)
-    >>> info.list_users().all()
+
+
+User tests:
+
+    >>> info.list_users()
     [<User hugo.boss>, <User peter.muster>]
+    >>> info.is_user('hugo.boss')
+    True
+    >>> info.is_contact('hugo.boss')
+    False
+    >>> info.is_inbox('hugo.boss')
+    False
+    >>> info.get_user('hugo.boss')
+    <User hugo.boss>
+    >>> print info.get_user('someone.unknown')
+    None
+    >>> info.get_user('inbox:client1')
+    Traceback (most recent call last):
+    ...
+    ValueError: principal inbox:client1 is not a user
+
+
+Inboxes tests:
+
+    >>> tuple(info.list_inboxes())
+    ((u'inbox:client1', u'Inbox: Client 1'), (u'inbox:client2', u'Inbox: Client 2'))
+    >>> info.is_inbox(u'inbox:client1')
+    True
+    >>> info.is_user(u'inbox:client1')
+    False
+    >>> info.is_contact(u'inbox:client1')
+    False
