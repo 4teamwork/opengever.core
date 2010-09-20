@@ -71,13 +71,13 @@ class ILifeCycle(form.Schema):
         source = u'lifecycle_custody_period_vocabulary',
         required = True,
         )
-
+    form.widget(date_of_cassation='ftw.datepicker.widget.DatePickerFieldWidget')
     date_of_cassation = schema.Date(
         title = _(u'label_dateofcassation', default=u'Date of cassation'),
         description = _(u'help_dateofcassation', default=u''),
         required = False,
         )
-
+    form.widget(date_of_submission='ftw.datepicker.widget.DatePickerFieldWidget')
     date_of_submission = schema.Date(
         title = _(u'label_dateofsubmission', default=u'Date of submission'),
         description = _(u'help_dateofsubmission', default=u''),
