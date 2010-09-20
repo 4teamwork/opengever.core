@@ -204,6 +204,11 @@ class ArchiveForm(directives_form.Form):
                     counter += 1
 
         if action == 0 or action == 1:
+            data, errors = self.extractData()
+            if data.get('dossier_enddate') == None:
+                status = IStatusMessage(self.request)
+                status.addStatusMessage(_("The End that is required, also if only closing is selected"), type="error")
+                return 
             self.request.RESPONSE.redirect(self.context.absolute_url() + '/content_status_modify?workflow_action=dossier-transition-resolve')
         elif action == 2:
             status = IStatusMessage(self.request)
