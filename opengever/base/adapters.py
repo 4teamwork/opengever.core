@@ -56,6 +56,9 @@ class ReferenceNumberPrefixAdpater(grok.Adapter):
         return 1
 
     def get_number(self, obj):
+        """return the reference number for the object,
+        if no number is registred for this obj, we generate a new one.
+        """
         intids = getUtility(IIntIds)
         intid = intids.getId(obj)
         if intid in self.__mapping:
@@ -64,7 +67,9 @@ class ReferenceNumberPrefixAdpater(grok.Adapter):
             return self.set_number(obj)
 
     def set_number(self, obj, number=None):
-        """ """
+        """Store the number in the Annotations, 
+        If number is None, we get the standard value
+        """
         intids = getUtility(IIntIds)
         intid = intids.getId(obj)
 
