@@ -22,7 +22,7 @@ ptc.setupPloneSite(extension_profiles=['plone.app.dexterity:default',
 doc_tests = (
     )
 functional_tests = (
-    'classification.txt',
+    'referenceprefix.txt',
     'repositoryfolder.txt',
     )
 

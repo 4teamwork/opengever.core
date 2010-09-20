@@ -4,6 +4,11 @@ import os
 version = open('opengever/repository/version.txt').read().strip()
 maintainer = 'Jonas Baumann'
 
+tests_require = [
+    'collective.testcaselayer',
+    'Products.PloneTestCase',
+    ]
+
 setup(name='opengever.repository',
       version=version,
       description="OpenGever Repository (Maintainer: %s)" % maintainer,
@@ -35,6 +40,8 @@ setup(name='opengever.repository',
         'collective.testcaselayer',
         # -*- Extra requirements: -*-
         ],
+      tests_require=tests_require,
+      extras_require=dict(tests=tests_require),
       entry_points="""
       # -*- Entry points: -*-
       [z3c.autoinclude.plugin]

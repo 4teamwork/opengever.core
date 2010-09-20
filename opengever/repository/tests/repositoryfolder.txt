@@ -33,7 +33,7 @@ So, lets create the repository-root::
     >>> browser.getControl('Description').value = ''
     >>> browser.getControl('Save').click()
     >>> browser.url
-    'http://nohost/plone/registraturplan/view'
+    'http://nohost/plone/registraturplan/tabbed_view'
 
 
 Now, create our first repository folder::
@@ -50,12 +50,12 @@ Now, create our first repository folder::
 
 
 Check some stuff::
-
+    >>> from opengever.repository.behaviors.referenceprefix import IReferenceNumberPrefix
     >>> obj = self.portal.get('registraturplan').get('accounting')
     >>> obj
     <RepositoryFolder at ...>
-    >>> obj.reference_number
-    1
+    >>> IReferenceNumberPrefix(obj).reference_number_prefix
+    u'1'
     >>> obj.listCreators()
     ('root',)
 
@@ -70,5 +70,5 @@ Add another one::
     >>> obj = self.portal.get('registraturplan').get('custody')
     >>> obj
     <RepositoryFolder at ...>
-    >>> obj.reference_number
-    2
+    >>> IReferenceNumberPrefix(obj).reference_number_prefix
+    u'2'

@@ -1,7 +1,11 @@
 from Acquisition import aq_parent, aq_inner
+from five import grok
+
 from zope.interface import Interface, alsoProvides
 from zope import schema
 from zope.component import provideAdapter
+from zope.lifecycleevent.interfaces import IObjectModifiedEvent
+from zope.app.container.interfaces import IObjectAddedEvent
 
 from plone.directives import form
 from z3c.form import validator, error
@@ -34,7 +38,6 @@ alsoProvides(IReferenceNumberPrefix, form.IFormFieldProvider)
 @form.default_value(
     field=IReferenceNumberPrefix['reference_number_prefix'])
 def reference_number_default_value(data):
-
     return PrefixAdapter(data.context).get_next_number()
 
 
@@ -73,3 +76,14 @@ class IReferenceNumberPrefixMarker(Interface):
     """
     Marker Interface for the ReferenceNumber-Prefix Behavior
     """
+
+
+@grok.subscribe(IReferenceNumberPrefixMarker, IObjectAddedEvent)
+@grok.subscribe(IReferenceNumberPrefixMarker, IObjectModifiedEvent)
+def saveReferenceNumberPrefix(obj, event):
+    if IObjectAddedEvent.providedBy(event):
+        parent= aq_parent(aq_inner(obj))
+    else:
+        parent = obj
+    PrefixAdapter(parent).set_number(
+        obj, IReferenceNumberPrefix(obj).reference_number_prefix)

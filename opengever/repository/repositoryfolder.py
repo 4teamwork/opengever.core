@@ -5,9 +5,6 @@ from five import grok
 from zope import schema
 import zope.component
 from zope.interface import implements
-from zope.lifecycleevent.interfaces import IObjectModifiedEvent
-from zope.app.container.interfaces import IObjectAddedEvent
-
 from plone.app.content.interfaces import INameFromTitle
 from plone.app.layout.viewlets.interfaces import IBelowContentTitle
 from plone.dexterity import content
@@ -20,7 +17,6 @@ from opengever.repository.interfaces import IRepositoryFolder
 from opengever.repository.behaviors.referenceprefix import \
     IReferenceNumberPrefix, IReferenceNumberPrefixMarker
 from opengever.repository.interfaces import IRepositoryFolderRecords
-from opengever.base.interfaces import IReferenceNumberPrefix as PrefixAdapter
 
 
 class IRepositoryFolderSchema(form.Schema):
@@ -150,14 +146,6 @@ class RepositoryFolder(content.Container):
             # only allow same types
             types = filter(lambda a: a== fti, types)
         return types
-
-
-@grok.subscribe(IRepositoryFolder, IObjectAddedEvent)
-@grok.subscribe(IRepositoryFolder, IObjectModifiedEvent)
-def saveReferenceNumberPrefix(obj, event):
-    parent= aq_parent(aq_inner(obj))
-    PrefixAdapter(parent).set_number(
-        obj, IReferenceNumberPrefix(obj).reference_number_prefix)
 
 
 class NameFromTitle(grok.Adapter):
