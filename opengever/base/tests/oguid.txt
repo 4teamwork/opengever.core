@@ -14,8 +14,8 @@ We need to set the client ID:
 
     >>> registry = getUtility(IRegistry)
     >>> CLIENT_ID = u'm1'
-    >>> registry['opengever.octopus.tentacle.interfaces.' + \
-    ...     'ITentacleRegistry.cid'] = CLIENT_ID
+    >>> registry['opengever.ogds.base.interfaces.' + \
+    ...     'IClientConfiguration.client_id'] = CLIENT_ID
 
 
 Get the utility:
