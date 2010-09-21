@@ -1,7 +1,0 @@
-"location";"user_or_group";"roles"
-;"og_mandant1_users";"Member"
-;"og_mandant1_administrators";"Manager"
-"Ordnungssystem";"og_mandant1_sachbearbeiter";"Reader, Contributor"
-"Ordnungssystem";"og_mandant1_sekretariat";"Reader, Contributor"
-"Ordnungssystem";"og_mandant1_verwalter";"Reader, Contributor, Administrator"
-"Ordnungssystem";"og_mandant1_vorsteher";"Reader, Contributor"

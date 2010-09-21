@@ -1,8 +1,0 @@
-<?xml version="1.0"?>
-<metadata>
-  <version>3</version>
-  <dependencies>
-      <dependency>profile-opengever.examplecontent:major-client1</dependency>
-      <dependency>profile-opengever.examplecontent:major-ogds</dependency>
-  </dependencies>
-</metadata>

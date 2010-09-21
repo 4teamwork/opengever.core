@@ -1,5 +1,0 @@
-<registry>
-  <record name="opengever.octopus.tentacle.interfaces.ITentacleRegistry.cortex_url">
-    <value>THIS</value>
-  </record>
-</registry>

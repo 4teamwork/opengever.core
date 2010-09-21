@@ -1,7 +1,0 @@
-"location";"user_or_group";"roles"
-"GDS";"og_mandant1_users";"Reader"
-"GDS";"og_mandant2_users";"Reader"
-"GDS";"og_mandant3_users";"Reader"
-"Mandant 1";"og_mandant1_users";"Reader, Contributor"
-"Mandant 2";"og_mandant2_users";"Reader, Contributor"
-"Mandant 3";"og_mandant3_users";"Reader, Contributor"
