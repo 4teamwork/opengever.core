@@ -2,7 +2,7 @@ from five import grok
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.ogds.base.model.client import Client
 from opengever.ogds.base.model.user import User
-from opengever.ogds.base.utils import create_session
+from opengever.ogds.base.utils import create_session, get_current_client
 from zope.app.component.hooks import getSite
 
 
@@ -49,6 +49,8 @@ class ContactInformation(grok.GlobalUtility):
     def list_assigned_users(self):
         """Lists all users assigned to this client.
         """
+
+        group = get_current_client().group
 
 
     def get_user(self, principal):

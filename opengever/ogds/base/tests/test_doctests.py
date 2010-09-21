@@ -1,8 +1,7 @@
-from opengever.ogds.base.setuphandlers import create_sql_tables, MODELS
-from opengever.ogds.base.utils import create_session
-from zope.configuration import xmlconfig
 import doctest
+from plone.testing import layered
 import unittest2 as unittest
+from opengever.ogds.base.testing import OPENGEVER_OGDS_BASE_FIXTURE
 
 
 OPTIONFLAGS = (doctest.NORMALIZE_WHITESPACE|
@@ -17,27 +16,12 @@ TESTFILES = (
     )
 
 
-def setUp(test):
-    # Load test.zcml
-    import opengever.ogds.base
-    xmlconfig.file('test.zcml', opengever.ogds.base)
-    # setup the sql tables
-    create_sql_tables()
-    # provide a session
-    test.globs['session'] = create_session()
-
-
-def tearDown(test):
-    session = create_session()
-    for model in MODELS:
-        getattr(model, 'metadata').drop_all(session.bind)
-
 
 def test_suite():
     suite = unittest.TestSuite()
     for testfile in TESTFILES:
-        suite.addTest(doctest.DocFileSuite(
-                testfile,
-                setUp=setUp, tearDown=tearDown,
-                optionflags=OPTIONFLAGS))
+        suite.addTest(layered(doctest.DocFileSuite(
+                    testfile,
+                    optionflags=OPTIONFLAGS),
+                              layer=OPENGEVER_OGDS_BASE_FIXTURE))
     return suite
