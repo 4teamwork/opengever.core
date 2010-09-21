@@ -13,7 +13,7 @@ from ftw.table.interfaces import ITableGenerator
 from opengever.base.interfaces import IReferenceNumber, ISequenceNumber
 from opengever.document import _
 from opengever.document.interfaces import IDocumentType
-from opengever.octopus.tentacle.interfaces import IContactInformation
+from opengever.ogds.base.interfaces import IContactInformation
 from opengever.tabbedview.browser.tabs import OpengeverTab, OpengeverListingTab
 from opengever.tabbedview.helper import readable_date_set_invisibles
 from opengever.tabbedview.helper import readable_ogds_author, linked

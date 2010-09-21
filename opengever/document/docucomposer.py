@@ -4,7 +4,8 @@ from five import grok
 from opengever.document import _
 from opengever.document.document import IDocumentSchema
 from opengever.document.persistence import DCQueue
-from opengever.octopus.tentacle.interfaces import ICortexCommunicator, ITentacleConfig
+from opengever.ogds.base.utils import get_current_client
+from opengever.ogds.base.interfaces import IContactInformation
 from plone.dexterity.browser.base import DexterityExtensibleForm
 from plone.dexterity.utils import createContentInContainer
 from plone.z3cform import layout
@@ -148,11 +149,9 @@ class CreateDocumentWithFile(grok.CodeView):
                 raise Exception('Document path is not within portal path')
             doc_rel_path = doc_abs_path[len(portal_abs_path):]
 
-            cid = getUtility(ITentacleConfig).cid
-            cc = getUtility(ICortexCommunicator)
-            client = cc.tentacle_info_by_cid(cid)
+            client = get_current_client()
 
-            url = client['public_url'] + doc_rel_path
+            url = client.public_url + doc_rel_path
 
             #remove
             queue.removeDCDoc(token)

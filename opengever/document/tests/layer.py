@@ -1,5 +1,7 @@
 from Products.PloneTestCase import ptc
-from opengever.octopus.tentacle.communicator import CortexCommunicator
+from opengever.ogds.base.setuphandlers import create_sql_tables, MODELS
+from opengever.ogds.base.utils import create_session
+from opengever.ogds.base.model.client import Client
 from plone.registry.interfaces import IRegistry
 from zope.component import getUtility
 import collective.testcaselayer.ptc
@@ -21,38 +23,36 @@ class CheckoutTestLayer(collective.testcaselayer.ptc.BasePTCLayer):
         from Products.Five import zcml
         import opengever.document
         zcml.load_config('tests.zcml', opengever.document)
+        import opengever.ogds.base
+        zcml.load_config('test.zcml', opengever.ogds.base)
         # Install the opengever.document product
         self.addProfile('opengever.dossier:default')
-        self.addProfile('opengever.octopus.tentacle:default')
+        self.addProfile('opengever.ogds.base:default')
         self.addProfile('opengever.document:default')
         self.addProfile('opengever.document:tests')
         import opengever.base
         zcml.load_config('configure.zcml', opengever.base)
         # fix registry
         registry = getUtility(IRegistry)
-        registry['opengever.octopus.tentacle.interfaces.'
-                 'ITentacleRegistry.cid'] = u'm1'
+        registry['opengever.ogds.base.interfaces.'
+                 'IClientConfiguration.client_id'] = u'm1'
 
-        # mock tentacle communicator
-        CortexCommunicator.__ori_list_tentacles = \
-            CortexCommunicator.list_tentacles
-        CortexCommunicator.list_tentacles = lambda s: [
-            {u'cid': u'm1',
-             u'title': u'Mandant 1',
-             u'enabled': True,
-             u'public_url': 'http://nohost/plone',
-             u'site_url': 'http://nohost/plone',
-             u'ip_address': u'127.0.0.1',
-             u'groups': []}]
+        # create a client for testing
+        create_sql_tables()
+        client = Client(u'm1',
+                        title=u'Mandant 1',
+                        enabled=True,
+                        public_url=u'http://nohost/plone',
+                        site_url=u'http://nohost/plone',
+                        ip_address=u'127.0.0.1')
+        session = create_session()
+        session.add(client)
 
     def beforeTearDown(self):
-        # unmock tentacle communicator
-        CortexCommunicator.list_tentacles = \
-            CortexCommunicator.__ori_list_tentacles
-        try:
-            delattr(CortexCommunicator, '__ori_list_tentacles')
-        except AttributeError:
-            pass
+        # drop sql stuff
+        session = create_session()
+        for model in MODELS:
+            getattr(model, 'metadata').drop_all(session.bind)
 
 
 CLayer = CheckoutTestLayer([collective.testcaselayer.ptc.ptc_layer])
