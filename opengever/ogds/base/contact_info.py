@@ -107,12 +107,14 @@ class ContactInformation(grok.GlobalUtility):
         return principal.startswith('inbox:')
 
     def list_inboxes(self):
-        """Returns a set of inboxes.
+        """Returns a set of inboxes of all enabled clients.
         """
 
         clients = self._clients_query()
         active_clients = clients.filter_by(enabled=True)
         for client in active_clients:
+            if not client.enabled:
+                continue
             principal = u'inbox:%s' % client.client_id
             yield (principal,
                    self.describe(principal))
@@ -138,7 +140,7 @@ class ContactInformation(grok.GlobalUtility):
 
     # general principal methods
 
-    def describe(self, principal, with_email=False):
+    def describe(self, principal, with_email=False, with_email2=False):
         """Represent a user / contact / inbox / ... as string. This usually
         returns the fullname or another label / title.
         """
@@ -152,6 +154,8 @@ class ContactInformation(grok.GlobalUtility):
             name = ' '.join((contact.lastname, contact.firstname))
             if with_email and contact.email:
                 name = '%s (%s)' % (name, contact.email)
+            elif with_email2 and contact.email2:
+                name = '%s (%s)' % (name, contact.email2)
             return name
 
         elif self.is_user(principal):
@@ -159,7 +163,41 @@ class ContactInformation(grok.GlobalUtility):
             name = ' '.join((user.lastname, user.firstname))
             if with_email and user.email:
                 name = '%s (%s)' % (name, user.email)
+            elif with_email2 and user.email2:
+                name = '%s (%s)' % (name, user.email2)
             return name
+
+        else:
+            raise ValueError('Unknown principal type: %s' % str(principal))
+
+    def get_email(self, principal):
+        """Returns the email address of a `principal`.
+        """
+
+        if self.is_inbox(principal):
+            return None
+
+        elif self.is_contact(principal):
+            return self.get_contact(principal).contact.email
+
+        elif self.is_user(principal):
+            return self.get_user(principal).email
+
+        else:
+            raise ValueError('Unknown principal type: %s' % str(principal))
+
+    def get_email2(self, principal):
+        """Returns the second email address of a `principal`.
+        """
+
+        if self.is_inbox(principal):
+            return None
+
+        elif self.is_contact(principal):
+            return self.get_contact(principal).contact.email2
+
+        elif self.is_user(principal):
+            return self.get_user(principal).email2
 
         else:
             raise ValueError('Unknown principal type: %s' % str(principal))
