@@ -3,7 +3,6 @@ from five import grok
 from opengever.base.interfaces import IReferenceNumber, IReferenceNumberPrefix
 from opengever.base.reference import BasicReferenceNumber
 from opengever.dossier.behaviors.dossier import IDossierMarker
-import opengever.base.behaviors.reference
 
 
 class DossierReferenceNumber(BasicReferenceNumber):
