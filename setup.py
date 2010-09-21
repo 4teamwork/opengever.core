@@ -28,9 +28,12 @@ setup(name='opengever.examplecontent',
       include_package_data=True,
       zip_safe=False,
       install_requires=[
-        'setuptools',
-        'opengever.zugclient',
-        'opengever.octopus.cortex',
+          'setuptools',
+          'plone.app.transmogrifier',
+          'collective.transmogrifier',
+          'transmogrify.sqlalchemy',
+          'transmogrify.dexterity',
+          'collective.blueprint.usersandgroups',
         # -*- Extra requirements: -*-
         ],
       entry_points="""

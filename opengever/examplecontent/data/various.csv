@@ -1,0 +1,4 @@
+_path,_type,inbox_group,title,responsible
+/eingangskorb,opengever.inbox.inbox,og_mandant1_eingangskorb,Eingangskorb
+/aufgaben,opengever.task.taskoverview_solr,,Aufgaben
+/vorlagen,opengever.dossier.templatedossier,,Vorlagen,hugo.boss

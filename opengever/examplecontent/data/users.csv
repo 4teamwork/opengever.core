@@ -1,0 +1,10 @@
+name,email,_username,_password,id,_root_roles,_local_roles
+Administrator,demo@4teamwork.ch,admin,admin10,admin
+Boss Hugo,demo@4teamwork.ch,hugo.boss,admin10,hugo.boss
+Lesen,demo@4teamwork.ch,lesen",admin10,lesen
+Mandant Eins,demo@4teamwork.ch,mandant1,admin10,mandant1
+Muster Hans,hans.muster@4teamwork.ch,hans.muster,admin10,hans.muster
+Sachbearbeiter Eins,demo@4teamwork.ch,sachbearbeiter,admin10,sachbearbeiter
+Sekretariat Eins,demo@4teamwork.ch,sekretariat,admin10,sekretariat
+Verwalter Eins,demo@4teamwork.ch,verwalter",admin10,verwalter
+Vorsteher Eins,demo@4teamwork.ch,vorsteher",admin10,vorsteher

@@ -1,137 +1,41 @@
 <configure
     xmlns="http://namespaces.zope.org/zope"
     xmlns:five="http://namespaces.zope.org/five"
-    i18n_domain="opengever.examplecontent"
-    xmlns:genericsetup="http://namespaces.zope.org/genericsetup">
+    xmlns:transmogrifier="http://namespaces.plone.org/transmogrifier"
+    xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+    i18n_domain="opengever.examplecontent">
+
+  <!-- Include configuration for dependencies listed in setup.py -->
+  <include package="z3c.autoinclude" file="meta.zcml" />
+  <includeDependencies package="." />
 
   <genericsetup:registerProfile
       name="developer"
-      title="opengever.examplecontent__old__developer : use portal_setup"
+      title="opengever.examplecontent: Developer"
       directory="profiles/default"
-      description="creates example content in a opengever site"
+      description="create example content for developing "
       provides="Products.GenericSetup.interfaces.EXTENSION"
       />
-
-  <genericsetup:registerProfile
-      name="ogds"
-      title="opengever.examplecontent__old__ogds"
-      directory="profiles/ogds"
-      description="creates example content in a opengever site"
-      provides="Products.GenericSetup.interfaces.EXTENSION"
+      
+  <transmogrifier:registerConfig
+      name="opengever.examplecontent.repository"
+      title="Opengever ExampleContent Repositorysystem Import"
+      description="Pipeline configuration for Opengever Examplecontent import"
+      configuration="cfgs/repository.cfg"
       />
 
-  
-  <!-- setup handler -->
-
-  <genericsetup:registerProfile
-      name="handler"
-      title="opengever.examplecontent.handler"
-      directory="profiles/handler"
-      provides="Products.GenericSetup.interfaces.EXTENSION"
+  <transmogrifier:registerConfig
+      name="opengever.examplecontent.various"
+      title="Opengever ExampleContent various Import"
+      description="Pipeline configuration for Opengever Examplecontent import"
+      configuration="cfgs/various.cfg"
       />
 
-
-  <!-- MAJOR PROFILES -->
-
-  <genericsetup:registerProfile
-      name="major-ogds"
-      title="opengever.examplecontent.major-ogds : OGDS"
-      directory="profiles/major-ogds"
-      provides="Products.GenericSetup.interfaces.EXTENSION"
+  <transmogrifier:registerConfig
+      name="opengever.examplecontent.users"
+      title="Opengever ExampleContent Users Import"
+      description="Pipeline configuration for Opengever Examplecontent import"
+      configuration="cfgs/users.cfg"
       />
-
-  <genericsetup:registerProfile
-      name="major-developer"
-      title="opengever.examplecontent.major-developer : DEVELOPER"
-      directory="profiles/major-developer"
-      provides="Products.GenericSetup.interfaces.EXTENSION"
-      />
-
-  <genericsetup:registerProfile
-      name="major-client1"
-      title="opengever.examplecontent.major-client1 : Client 1"
-      directory="profiles/major-client1"
-      provides="Products.GenericSetup.interfaces.EXTENSION"
-      />
-
-  <genericsetup:registerProfile
-      name="major-client2"
-      title="opengever.examplecontent.major-client2 : Client 2"
-      directory="profiles/major-client2"
-      provides="Products.GenericSetup.interfaces.EXTENSION"
-      />
-
-  <genericsetup:registerProfile
-      name="major-client3"
-      title="opengever.examplecontent.major-client3 : Client 3"
-      directory="profiles/major-client3"
-      provides="Products.GenericSetup.interfaces.EXTENSION"
-      />
-
-
-  <!-- MINOR PROFILES -->
-
-  <genericsetup:registerProfile
-      name="minor-client-basic"
-      title="opengever.examplecontent.minor-client-basic"
-      directory="profiles/minor-client-basic"
-      provides="Products.GenericSetup.interfaces.EXTENSION"
-      />
-
-  <genericsetup:registerProfile
-      name="minor-client-templates"
-      title="opengever.examplecontent.minor-client-templates"
-      directory="profiles/minor-client-templates"
-      provides="Products.GenericSetup.interfaces.EXTENSION"
-      />
-
-  <genericsetup:registerProfile
-      name="minor-client-repo-arp"
-      title="opengever.examplecontent.minor-client-repo-arp"
-      directory="profiles/minor-client-repo-arp"
-      provides="Products.GenericSetup.interfaces.EXTENSION"
-      />
-
-  <genericsetup:registerProfile
-      name="minor-pas-users-groups"
-      title="opengever.examplecontent.minor-pas-users-groups"
-      directory="profiles/minor-pas-users-groups"
-      provides="Products.GenericSetup.interfaces.EXTENSION"
-      />
-
-  <genericsetup:registerProfile
-      name="minor-ogds-users-groups"
-      title="opengever.examplecontent.minor-ogds-users-groups"
-      directory="profiles/minor-ogds-users-groups"
-      provides="Products.GenericSetup.interfaces.EXTENSION"
-      />
-
-  <genericsetup:registerProfile
-      name="minor-ogds-contacts-orgunits"
-      title="opengever.examplecontent.minor-ogds-contacts-orgunits"
-      directory="profiles/minor-ogds-contacts-orgunits"
-      provides="Products.GenericSetup.interfaces.EXTENSION"
-      />
-
-  <genericsetup:registerProfile
-      name="minor-ogds-clients"
-      title="opengever.examplecontent.minor-ogds-clients"
-      directory="profiles/minor-ogds-clients"
-      provides="Products.GenericSetup.interfaces.EXTENSION"
-      />
-
-    <genericsetup:registerProfile
-        name="minor-ogds-ldap"
-        title="opengever.examplecontent.minor-ogds-ldap"
-        directory="profiles/minor-ogds-ldap"
-        provides="Products.GenericSetup.interfaces.EXTENSION"
-        />
-
-    <genericsetup:registerProfile
-        name="major-client-journal"
-        title="opengever.examplecontent.major-client-journal"
-        directory="profiles/major-client-journal"
-        provides="Products.GenericSetup.interfaces.EXTENSION"
-        />
 
 </configure>
