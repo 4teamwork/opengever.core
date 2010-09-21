@@ -19,11 +19,25 @@
         provides="Products.GenericSetup.interfaces.EXTENSION"
         />
 
-    <!-- Register the import step -->
+    <genericsetup:registerProfile
+        name="example"
+        title="opengever.ogds.base : example users / clients"
+        description="OpenGever directory service : create example users and clients"
+        directory="profiles/example"
+        provides="Products.GenericSetup.interfaces.EXTENSION"
+        />
+
+    <!-- Register the import steps -->
     <genericsetup:importStep
         name="opengever.ogds.base"
         title="opengever.ogds.base special import handlers"
         description=""
-        handler="ftw.task.setuphandlers.import_various" />
+        handler="opengever.ogds.base.setuphandlers.import_various" />
+
+    <genericsetup:importStep
+        name="opengever.ogds.base : example"
+        title="opengever.ogds.base create example users and clients"
+        description=""
+        handler="opengever.ogds.base.setuphandlers.create_example" />
 
 </configure>

@@ -4,6 +4,7 @@ from opengever.ogds.base.model.client import Client
 from opengever.ogds.base.model.user import User
 from opengever.ogds.base.utils import create_session, get_current_client
 from zope.app.component.hooks import getSite
+from Products.CMFCore.utils import getToolByName
 
 
 class ContactInformation(grok.GlobalUtility):
@@ -50,8 +51,12 @@ class ContactInformation(grok.GlobalUtility):
         """Lists all users assigned to this client.
         """
 
-        group = get_current_client().group
+        groupid = get_current_client().group
+        acl_users = getToolByName(getSite(), 'acl_users')
+        group = acl_users.getGroupById(groupid.encode('utf-8'))
 
+        for member in group.getAllGroupMembers():
+            yield self.get_user(member.getId())
 
     def get_user(self, principal):
         """Returns the user with the userid `principal`.
@@ -174,8 +179,23 @@ class ContactInformation(grok.GlobalUtility):
         elif self.is_user(principal):
             user = self.get_user(principal)
             portal = getSite()
-            return '/'.join(portal.portal_url(), 'not-implemented')
+            return '/'.join(portal.portal_url(), '@@user_details',
+                            user.userid)
 
+    def render_link(self, principal):
+        """Render a link to the `principal`
+        """
+
+        if not principal or len(principal) == 0:
+            return None
+
+        url = self.get_profile_url(principal)
+        if not url:
+            return self.describe(principal)
+
+        return '<a href="%s">%s</a>' % (
+            url,
+            self.describe(principal))
 
     # internal methods
 

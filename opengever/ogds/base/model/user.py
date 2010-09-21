@@ -41,8 +41,12 @@ class User(Base):
 
     country = Column(String(20))
 
-    def __init__(self, userid):
+    def __init__(self, userid, **kwargs):
         self.userid = userid
+        for key, value in kwargs.items():
+            # provoke a AttributeError
+            getattr(self, key)
+            setattr(self, key, value)
 
     def __repr__(self):
         return '<User %s>' % self.userid
