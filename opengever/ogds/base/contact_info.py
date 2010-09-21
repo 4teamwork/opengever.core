@@ -46,6 +46,11 @@ class ContactInformation(grok.GlobalUtility):
 
         return self._users_query().all()
 
+    def list_assigned_users(self):
+        """Lists all users assigned to this client.
+        """
+
+
     def get_user(self, principal):
         """Returns the user with the userid `principal`.
         """

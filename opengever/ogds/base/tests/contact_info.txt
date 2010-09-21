@@ -3,7 +3,7 @@ Imports:
     >>> from opengever.ogds.base.interfaces import IContactInformation
     >>> from opengever.ogds.base.model.user import User
     >>> from opengever.ogds.base.model.client import Client
-    >>> from opengever.ogds.base.utils import create_session
+    >>> from opengever.ogds.base.utils import create_session, get_current_client
     >>> from zope.component import getUtility
     >>> import transaction
 
@@ -82,6 +82,10 @@ User tests:
     u'Boss Hugo (hugo@boss.local)'
 
 
+Contacts tests:
+
+
+
 Inboxes tests:
 
     >>> tuple(info.list_inboxes())
@@ -97,3 +101,9 @@ Inboxes tests:
 
     >>> info.describe(u'inbox:client1')
     u'Inbox: Client 1'
+
+
+Various lists:
+
+#     >>> info.list_assigned_users()
+#     [peter]
