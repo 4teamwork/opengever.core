@@ -1,25 +1,20 @@
-from zope.interface import Interface
-from zope import schema
-from zope.schema import vocabulary
-from zope.app.intid.interfaces import IIntIds
-
-from zope.component import getUtility, queryUtility
-
 from AccessControl import SecurityManagement
-from five import grok
 from DateTime import DateTime
-from z3c.form import form, button, interfaces
-
-from plone.z3cform import layout
-from plone.dexterity.utils import createContentInContainer
-from plone.dexterity.browser.base import DexterityExtensibleForm
-from plone.registry.interfaces import IRegistry
-
+from five import grok
 from opengever.document import _
-from opengever.document.persistence import DCQueue
 from opengever.document.document import IDocumentSchema
-from opengever.document.interfaces import IDocuComposer
+from opengever.document.persistence import DCQueue
 from opengever.octopus.tentacle.interfaces import ICortexCommunicator, ITentacleConfig
+from plone.dexterity.browser.base import DexterityExtensibleForm
+from plone.dexterity.utils import createContentInContainer
+from plone.z3cform import layout
+from z3c.form import form, button, interfaces
+from zope import schema
+from zope.app.intid.interfaces import IIntIds
+from zope.component import getUtility
+from zope.interface import Interface
+from zope.schema import vocabulary
+
 
 DOCUCOMPOSER_TEMPLATES = {
     '2798': 'Aktennotiz',
@@ -27,6 +22,8 @@ DOCUCOMPOSER_TEMPLATES = {
     '1150': 'Einladung',
     '3541': 'Checklisten',
     }
+
+
 DOCUCOMPOSER_TEMPLATES_VOCABULARY = vocabulary.SimpleVocabulary([
         vocabulary.SimpleTerm(k, title=v)
         for k, v
@@ -37,10 +34,11 @@ class DocuComposerWizardForm(DexterityExtensibleForm, form.AddForm):
     portal_type='opengever.document.document'
     ignoreContext = True
     label = _(u'heading_docucomposer_wizard_form', default=u'DocuComposer')
-    
+
     def updateWidgets(self, *args, **kwargs):
         super(DocuComposerWizardForm, self).updateWidgets(*args, **kwargs)
-        filefields = filter(lambda a:not not a, [g.fields.get('file', None) for g in self.groups])
+        filefields = filter(lambda a:not not a, [g.fields.get('file', None)
+                                                 for g in self.groups])
         if len(filefields)>0:
             filefields[0].mode = interfaces.HIDDEN_MODE
 
@@ -56,18 +54,19 @@ class DocuComposerWizardForm(DexterityExtensibleForm, form.AddForm):
             token = queue.appendDCDoc(data)
 
             print token
-            
+
             queue.clearUp()
-            
-            return self.request.RESPONSE.redirect('docucomposer-start?token=%s' % token)
-            
+
+            return self.request.RESPONSE.redirect(
+                'docucomposer-start?token=%s' % token)
+
 
 class DocuComposerWizardView(layout.FormWrapper, grok.CodeView):
     grok.context(Interface)
     grok.require('zope2.View')
     grok.name('docucomposer-wizard')
     form = DocuComposerWizardForm
-    
+
     def __init__(self, context, request):
         layout.FormWrapper.__init__(self, context, request)
         grok.CodeView.__init__(self, context, request)
@@ -77,13 +76,13 @@ class StartDCLauncher(grok.CodeView):
     grok.context(Interface)
     grok.require('zope2.View')
     grok.name('docucomposer-start')
-    
+
     def url(self):
         if self.request.get('token'):
             portal_url = self.context.portal_url()
             # registry = queryUtility(IRegistry)
             # reg_proxy = registry.forInterface(IDocuComposer)
-            # 
+            #
             # if reg_proxy.dc_original_path and reg_proxy.dc_rewrited_path :
             #     portal_url = portal_url.replace(reg_proxy.dc_original_path, reg_proxy.dc_rewrited_path)
             url = 'docucomposer:url=%s&token=%s' % (
@@ -93,7 +92,7 @@ class StartDCLauncher(grok.CodeView):
             return url
         return None
 
-    
+
 class CreateDocumentWithFile(grok.CodeView):
     from Products.CMFPlone.interfaces import IPloneSiteRoot
     grok.context(IPloneSiteRoot)
@@ -112,7 +111,7 @@ class CreateDocumentWithFile(grok.CodeView):
         if data:
             data = data.data
             userid = data['owner']
-            
+
             uf = self.context.acl_users
             user = uf.getUserById(userid)
             if not hasattr(user, 'aq_base'):
@@ -127,29 +126,35 @@ class CreateDocumentWithFile(grok.CodeView):
             data.pop('owner')
             data.pop('intid')
 
-            new_doc = createContentInContainer(dossier, 'opengever.document.document', **data)
+            new_doc = createContentInContainer(dossier,
+                                               'opengever.document.document',
+                                               **data)
 
             fields = dict(schema.getFieldsInOrder(IDocumentSchema))
             fileObj = fields['file']._type(data=uploadFile, filename=filename)
             new_doc.file = fileObj
 
-            # Fix:  we get again the document, because the request of the return from createContentInContainer are wrong
-            doc = self.context.restrictedTraverse('/'.join(new_doc.getPhysicalPath()))
-            
-            #we have to rewrite the absolute_url with the public url from the client
+            # Fix:  we get again the document, because the request of the
+            # return from createContentInContainer are wrong
+            doc = self.context.restrictedTraverse('/'.join(
+                    new_doc.getPhysicalPath()))
+
+            #we have to rewrite the absolute_url with the public url from
+            # the client
             doc_abs_path = '/'.join(doc.getPhysicalPath())
-            portal_abs_path = '/'.join(doc.portal_url.getPortalObject().getPhysicalPath())
+            portal_abs_path = '/'.join(
+                doc.portal_url.getPortalObject().getPhysicalPath())
             if not doc_abs_path.startswith(portal_abs_path):
                 raise Exception('Document path is not within portal path')
             doc_rel_path = doc_abs_path[len(portal_abs_path):]
-            
+
             cid = getUtility(ITentacleConfig).cid
             cc = getUtility(ICortexCommunicator)
-            client = cc.tentacle_info_by_cid(cid) 
-            
+            client = cc.tentacle_info_by_cid(cid)
+
             url = client['public_url'] + doc_rel_path
-            
+
             #remove
             queue.removeDCDoc(token)
-            
+
             return url
