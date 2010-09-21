@@ -28,7 +28,7 @@ from opengever.dossier.interfaces import IDossierContainerTypes
 from opengever.dossier.widget import referenceNumberWidgetFactory
 from opengever.base.interfaces import IReferenceNumber, ISequenceNumber
 #from opengever.base.behaviors import reference
-from opengever.octopus.tentacle.interfaces import IContactInformation
+from opengever.ogds.base.interfaces import IContactInformation
 from opengever.translations.browser.add import TranslatedAddForm
 
 from z3c.relationfield.schema import RelationChoice, RelationList
@@ -126,7 +126,7 @@ class IDossier(form.Schema):
         description =_(
             u"help_responsible", default="select an responsible Manger"),
         #source = util.getManagersVocab,
-        vocabulary = 'opengever.octopus.tentacle.contacts.LocalUsersVocabularyFactory',
+        vocabulary='opengever.ogds.base.AssignedUsersVocabulary',
         required = True,
         )
 
@@ -347,8 +347,7 @@ def SearchableText(obj):
     #responsible
     info = getUtility(IContactInformation)
     dossier = IDossier(obj)
-    userid = obj.portal_membership.getMemberById(dossier.responsible).getId()
-    searchable.append(info.describe(userid))
+    searchable.append(info.describe(dossier.responsible))
 
     #filling_no
     dossier = IDossierMarker(obj)

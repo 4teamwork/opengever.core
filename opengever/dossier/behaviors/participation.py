@@ -112,7 +112,7 @@ class IParticipation(form.Schema):
     contact = schema.Choice(
         title = _(u'label_contact', default=u'Contact'),
         description = _(u'help_contact', default=u''),
-        vocabulary = u'opengever.octopus.tentacle.contacts.ContactsVocabularyFactory',
+        vocabulary = u'opengever.ogds.base.ContactsVocabulary',
         required = True,
         )
 
@@ -258,12 +258,12 @@ class ParticipationAddFormView(layout.FormWrapper, grok.CodeView):
 
 
 # ------- delete view -------
- 
+
 class DeleteParticipants(grok.CodeView):
     grok.context(IParticipationAwareMarker)
     grok.require('cmf.ModifyPortalContent')
     grok.name('delete_participants')
-    
+
     def render(self):
         phandler = IParticipationAware(self.context)
         for a in self.request.get('oids'):
