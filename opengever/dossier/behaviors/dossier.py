@@ -29,6 +29,7 @@ from opengever.dossier.widget import referenceNumberWidgetFactory
 from opengever.base.interfaces import IReferenceNumber, ISequenceNumber
 #from opengever.base.behaviors import reference
 from opengever.octopus.tentacle.interfaces import IContactInformation
+from opengever.translations.browser.add import TranslatedAddForm
 
 from z3c.relationfield.schema import RelationChoice, RelationList
 from plone.formwidget.contenttree import ObjPathSourceBinder
@@ -212,6 +213,22 @@ class IDossier(form.Schema):
 alsoProvides(IDossier, IFormFieldProvider)
 
 
+class AddForm(TranslatedAddForm):
+    grok.name('opengever.dossier.businesscasedossier')
+
+    def update(self):
+        """adds responsible to the request"""
+        responsible = ''
+        if self.context.portal_type == 'opengever.dossier.businesscasedossier':
+            tmp_dossier = IDossier(self.context)
+            if tmp_dossier:
+                responsible = tmp_dossier.responsible
+        responsible = responsible and responsible or ''
+        if not self.request.get('form.widgets.IDossier.responsible', None):
+            self.request.set('form.widgets.IDossier.responsible', [responsible])
+        super(AddForm, self).update()
+
+
 class StartBeforeEnd(Invalid):
     __doc__ = _(u"The start or end date is invalid")
 
@@ -219,6 +236,16 @@ class StartBeforeEnd(Invalid):
 @form.default_value(field=IDossier['start'])
 def deadlineDefaultValue(data):
     return datetime.today()
+# TODO: Doesn't work yet
+
+
+#@form.default_value(field=IDossier['responsible'])
+def responsibleDefaultValue(data):
+    if data.context.portal_type == 'opengever.dossier.businesscasedossier':
+        tmp_dossier = IDossier(data.context)
+        if tmp_dossier:
+            return tmp_dossier.responsible
+    return ''
 
 
 @indexer(IDossierMarker)
@@ -346,7 +373,7 @@ def set_former_reference_after_moving(obj, event):
 
     from z3c.form.interfaces import IValue
     from zope.component import queryMultiAdapter
-    
+
     default = queryMultiAdapter((
         obj,
         obj.REQUEST, # request
