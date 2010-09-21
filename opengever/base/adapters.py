@@ -6,13 +6,13 @@ from persistent.dict import PersistentDict
 
 from zope.app.intid.interfaces import IIntIds
 
-from plone.dexterity.interfaces import IDexterityContent
+from Products.CMFCore.interfaces._content import IFolderish
 from opengever.base.interfaces import IReferenceNumberPrefix
 
 
 class ReferenceNumberPrefixAdpater(grok.Adapter):
     grok.provides(IReferenceNumberPrefix)
-    grok.context(IDexterityContent)
+    grok.context(IFolderish)
     ANNO_KEY = 'reference_numbers'
 
     def __init__(self, context):
