@@ -19,12 +19,19 @@ def get_current_client():
     """Returns the current client.
     """
 
-    registry = getUtility(IRegistry)
-    proxy = registry.forInterface(IClientConfiguration)
-
     session = create_session()
-    clients = session.query(Client).filter_by(client_id=proxy.client_id).all()
+    client_id = get_client_id()
+
+    clients = session.query(Client).filter_by(client_id=client_id).all()
     if len(clients) == 0:
         raise ValueError('Current client not found')
     else:
         return clients[0]
+
+def get_client_id():
+    """Returns the client_id of the current client.
+    """
+
+    registry = getUtility(IRegistry)
+    proxy = registry.forInterface(IClientConfiguration)
+    return proxy.client_id
