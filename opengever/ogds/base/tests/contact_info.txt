@@ -52,6 +52,12 @@ And we also need some clients:
     >>> transaction.commit()
 
 
+Get the current client:
+
+    >>> get_current_client()
+    <Client client1>
+
+
 Get the contact information utlity:
 
     >>> info = getUtility(IContactInformation)

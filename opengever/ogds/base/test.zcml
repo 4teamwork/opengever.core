@@ -6,11 +6,16 @@
     <include package="z3c.autoinclude" file="meta.zcml" />
     <includeDependencies package="." />
 
+    <!-- additional dependencies -->
+    <include package="plone.app.registry" />
+
+    <!-- lets grok -->
+    <grok:grok package="." />
+
+    <!-- configure a temporary testing DB -->
     <include package="z3c.saconfig" file="meta.zcml" />
     <db:engine name="ogds"
                url="sqlite:///:memory:" />
     <db:session name="opengever.ogds" engine="ogds" />
-
-    <grok:grok package="." />
 
 </configure>
