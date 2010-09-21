@@ -13,6 +13,9 @@ Lets create some users:
     >>> session = create_session()
 
     >>> u1 = User('hugo.boss')
+    >>> u1.firstname = 'Hugo'
+    >>> u1.lastname = 'Boss'
+    >>> u1.email = 'hugo@boss.local'
     >>> session.add(u1)
     >>> u2 = User('peter.muster')
     >>> session.add(u2)
@@ -66,12 +69,17 @@ User tests:
     False
     >>> info.get_user('hugo.boss')
     <User hugo.boss>
+
     >>> print info.get_user('someone.unknown')
     None
     >>> info.get_user('inbox:client1')
     Traceback (most recent call last):
     ...
     ValueError: principal inbox:client1 is not a user
+    >>> info.describe('hugo.boss')
+    u'Boss Hugo'
+    >>> info.describe('hugo.boss', with_email=True)
+    u'Boss Hugo (hugo@boss.local)'
 
 
 Inboxes tests:
@@ -84,3 +92,8 @@ Inboxes tests:
     False
     >>> info.is_contact(u'inbox:client1')
     False
+    >>> info.get_client_of_inbox(u'inbox:client1')
+    <Client client1>
+
+    >>> info.describe(u'inbox:client1')
+    u'Inbox: Client 1'

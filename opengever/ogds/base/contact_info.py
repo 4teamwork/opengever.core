@@ -1,8 +1,9 @@
-from opengever.ogds.base.utils import create_session
-from opengever.ogds.base.model.user import User
-from opengever.ogds.base.model.client import Client
 from five import grok
 from opengever.ogds.base.interfaces import IContactInformation
+from opengever.ogds.base.model.client import Client
+from opengever.ogds.base.model.user import User
+from opengever.ogds.base.utils import create_session
+from zope.app.component.hooks import getSite
 
 
 class ContactInformation(grok.GlobalUtility):
@@ -70,6 +71,21 @@ class ContactInformation(grok.GlobalUtility):
 
         return principal.startswith('contact:')
 
+    def list_contacts(self):
+        # XXX NotImplemented
+        raise NotImplemented
+
+    def get_contact(self, principal):
+        """Returns the contact object of this principal.
+        """
+
+        if not self.is_contact(principal):
+            raise ValueError('Principal %s is not a contact' % str(principal))
+
+        # XXX NotImplemented
+        raise NotImplemented
+
+
     # INBOXES
 
     def is_inbox(self, principal):
@@ -79,11 +95,80 @@ class ContactInformation(grok.GlobalUtility):
         return principal.startswith('inbox:')
 
     def list_inboxes(self):
+        """Returns a set of inboxes.
+        """
+
         clients = self._clients_query()
         active_clients = clients.filter_by(enabled=True)
         for client in active_clients:
-            yield (u'inbox:%s' % client.client_id,
-                   u'Inbox: %s' % client.title)
+            principal = u'inbox:%s' % client.client_id
+            yield (principal,
+                   self.describe(principal))
+
+    def get_client_of_inbox(self, principal):
+        """Returns the client object of the `principal`.
+        """
+
+        if not self.is_inbox(principal):
+            raise ValueError('Principal %s is not a inbox' % (str(principal)))
+
+        client_id = principal.split(':', 1)[1]
+
+        clients = self._clients_query().filter_by(client_id=client_id).all()
+        if len(clients) == 0:
+            return None
+        elif len(clients) > 1:
+            raise ValueError('Found %i clients with client_id, %s ' % (
+                    len(clients), client_id) + 'expected only one' )
+        else:
+            return clients[0]
+
+
+    # general principal methods
+
+    def describe(self, principal, with_email=False):
+        """Represent a user / contact / inbox / ... as string. This usually
+        returns the fullname or another label / title.
+        """
+
+        if self.is_inbox(principal):
+            client = self.get_client_of_inbox(principal)
+            return u'Inbox: %s' % client.title
+
+        elif self.is_contact(principal):
+            contact = self.get_contact(principal)
+            name = ' '.join((contact.lastname, contact.firstname))
+            if with_email and contact.email:
+                name = '%s (%s)' % (name, contact.email)
+            return name
+
+        elif self.is_user(principal):
+            user = self.get_user(principal)
+            name = ' '.join((user.lastname, user.firstname))
+            if with_email and user.email:
+                name = '%s (%s)' % (name, user.email)
+            return name
+
+        else:
+            raise ValueError('Unknown principal type: %s' % str(principal))
+
+    def get_profile_url(self, principal):
+        """Returns the profile url of this `principal`.
+        """
+
+        if self.is_inbox(principal):
+            client = self.get_client_of_inbox(principal)
+            return '/'.join((client.public_url, 'inbox'))
+
+        elif self.is_contact(principal):
+            contact = self.get_contact(principal)
+            return contact.absolute_url()
+
+        elif self.is_user(principal):
+            user = self.get_user(principal)
+            portal = getSite()
+            return '/'.join(portal.portal_url(), 'not-implemented')
+
 
     # internal methods
 
