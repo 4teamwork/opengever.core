@@ -112,7 +112,7 @@ class IParticipation(form.Schema):
     contact = schema.Choice(
         title = _(u'label_contact', default=u'Contact'),
         description = _(u'help_contact', default=u''),
-        vocabulary = u'opengever.ogds.base.ContactsVocabulary',
+        vocabulary=u'opengever.ogds.base.ContactsVocabulary',
         required = True,
         )
 

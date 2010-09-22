@@ -26,7 +26,7 @@ from opengever.document import _
 from opengever.dossier.validators import DocumentSizeValidator, \
     AddressValidator
 from opengever.dossier.behaviors.dossier import IDossierMarker
-from opengever.octopus.tentacle.interfaces import IContactInformation
+from opengever.ogds.base.interfaces import IContactInformation
 
 
 class NoMail(Invalid):
@@ -47,7 +47,7 @@ class ISendDocumentSchema(Interface):
     intern_receiver = schema.Tuple(
         title=_('intern_receiver', default="Intern receiver"),
         value_type=schema.Choice(title=_(u"mails"),
-        source = 'opengever.octopus.tentacle.contacts.MailContactsVocabularyFactory'),
+        source=u'opengever.ogds.base.EmailContactsAndUsersVocabulary'),
         required=False,
         missing_value=(), # important!
     )
@@ -137,7 +137,7 @@ class SendDocumentForm(form.Form):
             msg = self.create_mail(data.get('message'), data.get('documents'))
             msg['Subject'] = Header(data.get('subject'), 'iso-8859-1')
             msg['From'] = Header(u'%s <%s>' % (
-                    contact_info.get_fullname(userid),
+                    contact_info.describe(userid),
                     contact_info.get_email(userid)),
                 'iso-8859-1')
 

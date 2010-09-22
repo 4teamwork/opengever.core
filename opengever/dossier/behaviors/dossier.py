@@ -126,7 +126,7 @@ class IDossier(form.Schema):
         description =_(
             u"help_responsible", default="select an responsible Manger"),
         #source = util.getManagersVocab,
-        vocabulary='opengever.ogds.base.AssignedUsersVocabulary',
+        vocabulary=u'opengever.ogds.base.AssignedUsersVocabulary',
         required = True,
         )
 

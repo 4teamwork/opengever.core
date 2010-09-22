@@ -6,7 +6,7 @@ from plone.memoize.instance import memoize
 from opengever.base.interfaces import IReferenceNumber, ISequenceNumber
 from opengever.dossier.behaviors.dossier import IDossier, IDossierMarker
 from opengever.mail.behaviors import IMailInAddressMarker, IMailInAddress
-from opengever.octopus.tentacle.interfaces import IContactInformation
+from opengever.ogds.base.interfaces import IContactInformation
 
 
 class Byline(content.DocumentBylineViewlet):

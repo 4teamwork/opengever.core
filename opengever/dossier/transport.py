@@ -2,9 +2,8 @@ from Products.statusmessages.interfaces import IStatusMessage
 from five import grok
 from opengever.dossier import _
 from opengever.dossier.behaviors.dossier import IDossierMarker
-from opengever.octopus.tentacle.interfaces import ICortexCommunicator
-from opengever.octopus.tentacle.interfaces import ITentacleConfig
-from opengever.octopus.tentacle.interfaces import ITransporter
+from opengever.ogds.base.interfaces import ITransporter
+from opengever.ogds.base.utils import get_current_client
 from plone.directives import form
 from plone.z3cform import layout
 from z3c.form.interfaces import HIDDEN_MODE
@@ -12,6 +11,7 @@ from zope import schema
 from zope.component import getUtility
 import os
 import z3c.form
+from opengever.ogds.base.interfaces import IContactInformation
 
 
 class NoItemsSelected(Exception):
@@ -25,7 +25,7 @@ class IChooseDossierSchema(form.Schema):
     target_dossier = schema.Choice(
         title = _(u'label_target_dossier', default=u'Target Dossier'),
         description = _(u'help_target_dossier', default=u''),
-        vocabulary=u'opengever.octopus.tentacle.vocabulary.OpenHomeDossiersVocabularyFactory',
+        vocabulary=u'opengever.ogds.base.HomeDossiersVocabulary',
         required = True,
         )
 
@@ -39,14 +39,25 @@ class CopyDocumentsToRemoteClientForm(z3c.form.form.Form):
     def handle_copy(self, action):
         data, errors = self.extractData()
         if len(errors)==0:
+
+            # XXX: implement multiple clients support with additional
+            # wizard view
+            IStatusMessage(self.request).addStatusMessage(
+                'DEBUG NOTICE: No multiple clients support implemented yet!',
+                type='warning')
+
+            info = getUtility(IContactInformation)
+            home_clients = info.get_assigned_clients()
+            # XXX
+            client = home_clients[0]
+
             target = data.get('target_dossier')[1:]
-            cc = getUtility(ICortexCommunicator)
-            client = cc.get_home_client(self.context)
-            cid = client.get('cid')
+            cid = client.client_id
             trans = getUtility(ITransporter)
             for obj in self.objects:
                 trans.transport_to(obj, cid, target)
-            redirect_to = os.path.join(client.get('public_url'), target, '#documents-tab')
+            redirect_to = os.path.join(client.get('public_url'),
+                                       target, '#documents-tab')
             return self.request.RESPONSE.redirect(redirect_to)
 
     def updateWidgets(self):
@@ -93,15 +104,24 @@ class CopyDocumentsToRemoteClientView(layout.FormWrapper, grok.CodeView):
         grok.CodeView.__init__(self, *args, **kwargs)
 
     def __call__(self):
-        communicator = getUtility(ICortexCommunicator)
-        config = getUtility(ITentacleConfig)
-        home_client_cid = communicator.get_home_client(self.context).get('cid', object())
-        if config.cid == home_client_cid:
+        # XXX: implement multiple clients support with additional
+        # wizard view
+        IStatusMessage(self.request).addStatusMessage(
+            'DEBUG NOTICE: No multiple clients support implemented yet!',
+            type='warning')
+
+        info = getUtility(IContactInformation)
+        home_clients = info.get_assigned_clients()
+        # XXX
+        client = home_clients[0]
+
+        home_client_cid = client.client_id
+        if get_current_client() == home_client_cid:
             msg = _(u'error_copy_not_supported_at_home_client',
-                    default=u'This action is not supported on your home client. Use copy and paste.')
+                    default=u'This action is not supported on your home '
+                    'client. Use copy and paste.')
             IStatusMessage(self.request).addStatusMessage(msg, type='error')
-            return self.request.RESPONSE.redirect(self.request.get('HTTP_REFERER',
-                                                                  './') + '#documents-tab')
+            return self.request.RESPONSE.redirect(
+                self.request.get('HTTP_REFERER', './') + '#documents-tab')
         else:
             return layout.FormWrapper.__call__(self)
-

@@ -5,7 +5,7 @@ from Acquisition import aq_inner, aq_parent
 from opengever.dossier.behaviors.dossier import IDossierMarker, IDossier
 from Products.CMFCore.utils import getToolByName
 from opengever.dossier.latex.dossierlayout import DossierLayout
-from opengever.octopus.tentacle.interfaces import IContactInformation
+from opengever.ogds.base.interfaces import IContactInformation
 
 from zope.component import getUtility, getAdapter
 from opengever.base.interfaces import IReferenceNumber, ISequenceNumber
@@ -15,7 +15,7 @@ from opengever.base.interfaces import IBaseClientID
 from plone.autoform.base import AutoFields
 
 from plonegov.pdflatex.browser.converter import LatexCTConverter
-        
+
 class ExportPDFView(grok.CodeView):
     grok.context(IDossierMarker)
     grok.name('export_pdf')
@@ -62,7 +62,7 @@ class DossierLatexConverter(LatexCTConverter,grok.CodeView,AutoFields):
     def getOwnerMember(self):
         creator_id = self.context.Creator()
         return self.context.portal_membership.getMemberById(creator_id)
-        
+
     def responsible(self):
         mt=getToolByName(self.context,'portal_membership')
         dossier = IDossier(self.context)
