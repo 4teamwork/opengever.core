@@ -1,4 +1,7 @@
-_path,_type,inbox_group,title,responsible
+_path,_type,inbox_group,title,responsible,
 /eingangskorb,opengever.inbox.inbox,og_mandant1_eingangskorb,Eingangskorb
 /aufgaben,opengever.task.taskoverview_solr,,Aufgaben
 /vorlagen,opengever.dossier.templatedossier,,Vorlagen,hugo.boss
+/ordnungssystem/rechnungswesen/belege/hugos-dossier,opengever.dossier.businesscasedossier,,Hugo's Dossier,bond
+/ordnungssystem/rechnungswesen/belege/hugos-dossier/subdossier,opengever.dossier.businesscasedossier,,Unterteilung in ein Subdossier,bond
+/ordnungssystem/rechnungswesen/belege/hugos-dossier/opengever.document.document,opengever.document.document,,Ein kleines Testdocument, bond

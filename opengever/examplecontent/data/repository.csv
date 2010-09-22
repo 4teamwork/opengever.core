@@ -1,5 +1,5 @@
 _path,_type,reference_number_prefix,effective_title,description,classification,privacy_layer,public_trial,retention_period,archival_value,custody_period,valid_from,valid_until,referenced_activity,location
-/ordnungssystem,opengever.repository.repositoryroot,,,,,,,,,,,,,
+/ordnungssystem,opengever.repository.repositoryroot,,Ordnungssystem,,,,,,,,,,,
 /ordnungssystem/organisation,opengever.repository.repositoryfolder,1,Organisation,,unprotected,privacy_layer_no,private,10,prompt,30,09.11.2010,,,
 /ordnungssystem/organisation/allgemeines,opengever.repository.repositoryfolder,1,Allgemeines,,unprotected,privacy_layer_no,private,10,prompt,30,,,,
 /ordnungssystem/organisation/berichterstattung,opengever.repository.repositoryfolder,2,Berichterstattung,,unprotected,privacy_layer_no,private,10,archival worthy,30,,,,
