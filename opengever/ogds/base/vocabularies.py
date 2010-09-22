@@ -1,8 +1,3 @@
-"""
-Provides access to the ftw.directoryservice installed on the OGDS side (which
-has a opengever.octopus.cortex installed).
-"""
-
 from Products.statusmessages.interfaces import IStatusMessage
 from five import grok
 from opengever.ogds.base.interfaces import IClientCommunicator
