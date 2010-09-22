@@ -84,8 +84,10 @@ class ContactInformation(grok.GlobalUtility):
         return principal.startswith('contact:')
 
     def list_contacts(self):
-        # XXX NotImplemented
-        raise NotImplemented
+        """Returns a catalog result set of contact brains.
+        """
+        catalog = getToolByName(getSite(), 'portal_catalog')
+        return catalog(portal_type='ftw.directoryservice.contact')
 
     def get_contact(self, principal):
         """Returns the contact object of this principal.
@@ -94,8 +96,16 @@ class ContactInformation(grok.GlobalUtility):
         if not self.is_contact(principal):
             raise ValueError('Principal %s is not a contact' % str(principal))
 
-        # XXX NotImplemented
-        raise NotImplemented
+        catalog = getToolByName(getSite(), 'portal_catalog')
+        contacts = catalog(portal_type='ftw.directoryservice.contact',
+                           contactid=principal)
+        if len(contacts) == 0:
+            return None
+        elif len(contacts) > 1:
+            raise ValueError('Found %i contacts with principal %s' % (
+                    len(contacts), principal))
+        else:
+            return contacts[0]
 
 
     # INBOXES
@@ -265,7 +275,7 @@ class ContactInformation(grok.GlobalUtility):
 
         elif self.is_contact(principal):
             contact = self.get_contact(principal)
-            return contact.absolute_url()
+            return contact.getURL()
 
         elif self.is_user(principal):
             portal = getSite()

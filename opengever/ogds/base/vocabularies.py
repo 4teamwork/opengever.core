@@ -77,8 +77,8 @@ class ContactsVocabularyFactory(grok.GlobalUtility):
     def key_value_provider(self):
         info = getUtility(IContactInformation)
         for contact in info.list_contacts():
-            yield (contact.getPrincipal(),
-                   info.describe(contact.getPrincipal()))
+            yield (contact.contactid,
+                   info.describe(contact.contactid))
 
 
 class ContactsAndUsersVocabularyFactory(grok.GlobalUtility):
@@ -98,8 +98,8 @@ class ContactsAndUsersVocabularyFactory(grok.GlobalUtility):
             yield (user.userid,
                    info.describe(user.userid))
         for contact in info.list_contacts():
-            yield (contact.getPrincipal(),
-                   info.describe(contact.getPrincipal()))
+            yield (contact.contactid,
+                   info.describe(contact.contactid))
 
 
 class EmailContactsAndUsersVocabularyFactory(grok.GlobalUtility):
@@ -124,7 +124,7 @@ class EmailContactsAndUsersVocabularyFactory(grok.GlobalUtility):
 
         info = getUtility(IContactInformation)
         ids = [user.userid for user in self.list_users()]
-        ids.extend([contact.getPrincipal() for contact
+        ids.extend([contact.contactid for contact
                     in self.list_contacts()])
 
         for userid in ids:
