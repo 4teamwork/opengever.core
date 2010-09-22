@@ -4,8 +4,8 @@ from plone.memoize import ram
 from Products.PluggableAuthService.interfaces.authservice import IPropertiedUser
 from Products.CMFCore.interfaces._tools import IMemberData
 
-from opengever.octopus.tentacle.interfaces import IContactInformation
-from opengever.octopus.tentacle.interfaces import ITentacleConfig
+from opengever.ogds.base.interfaces import IContactInformation
+from opengever.ogds.base.utils import get_client_id
 from opengever.globalsolr.utils import getFlairUrl
 from collective.solr.interfaces import IFlare
 
@@ -35,7 +35,7 @@ def linked(item, value):
     elif hasattr(item, 'absolute_url'):
         url_method = item.absolute_url
     img = u'<img src="%s/%s"/>' % (item.portal_url(), item.getIcon)
-    link = u'<a class="rollover-breadcrumb" href="%s" title="%s">%s%s</a>' % (url_method()," &gt; ".join(i['Title'] for i in item.breadcrumb_titles), img, value) 
+    link = u'<a class="rollover-breadcrumb" href="%s" title="%s">%s%s</a>' % (url_method()," &gt; ".join(i['Title'] for i in item.breadcrumb_titles), img, value)
     wrapper = u'<span class="linkWrapper">%s</span>' % link
     return wrapper
 
@@ -60,12 +60,10 @@ def solr_linked(item, value):
     img = u'<img src="%s"/>' % (item.getIcon)
 
     # check if the task is on our home client
-    config = getUtility(ITentacleConfig)
-    
-    if config.cid != item.client_id:
+    if get_client_id() != item.client_id:
         link = u'<a target="_blank" href="%s" >%s%s</a>' % (url, img, value)
     else:
         link = u'<a href="%s" >%s%s</a>' % (url, img, value)
-    
+
     wrapper = u'<span class="linkWrapper">%s</span>' % link
     return wrapper

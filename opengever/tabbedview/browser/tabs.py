@@ -15,7 +15,7 @@ from ftw.journal.interfaces import IAnnotationsJournalizable, \
 from ftw.journal.config import JOURNAL_ENTRIES_ANNOTATIONS_KEY
 from ftw.table.interfaces import ITableGenerator
 from ftw.table import helper
-from opengever.octopus.tentacle.interfaces import IContactInformation
+from opengever.ogds.base.interfaces import IContactInformation
 from opengever.tabbedview.helper import readable_ogds_author, linked,\
     readable_date_set_invisibles, solr_linked
 from opengever.tabbedview import _
