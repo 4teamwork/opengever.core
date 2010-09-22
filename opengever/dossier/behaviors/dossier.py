@@ -332,7 +332,7 @@ def SearchableText(obj):
         if isinstance(data, unicode):
             data = data.encode('utf8')
         if isinstance(data, tuple) or isinstance(data, list):
-            data = " ".join([str(a) for a in data])
+            data = " ".join([isinstance(a, unicode) and a.encode('utf-8') or a for a in data])
         if data:
             searchable.append(data)
     # append some other attributes to the searchableText index
