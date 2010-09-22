@@ -4,7 +4,7 @@
   <dependencies>
     <dependency>profile-opengever.globalsolr:default</dependency>
     <dependency>profile-ftw.mail:default</dependency>
-    <dependency>profile-opengever.base:default</dependency>    
+    <dependency>profile-opengever.base:default</dependency>
     <dependency>profile-opengever.document:default</dependency>
     <dependency>profile-opengever.dossier:default</dependency>
     <dependency>profile-opengever.repository:default</dependency>
@@ -16,7 +16,7 @@
     <dependency>profile-opengever.portlets.tree:default</dependency>
     <dependency>profile-opengever.trash:default</dependency>
     <dependency>profile-opengever.mail:default</dependency>
-    <dependency>profile-opengever.octopus.tentacle:default</dependency>
+    <dependency>profile-opengever.ogds.base:default</dependency>
     <!--dependency>profile-ftw.dashboard.dragndrop:default</dependency>
     <dependency>profile-ftw.dashboard.portlets.favourites:default</dependency>
     <dependency>profile-ftw.dashboard.portlets.postit:default</dependency>
