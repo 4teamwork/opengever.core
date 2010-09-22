@@ -201,12 +201,24 @@ class ContactInformation(grok.GlobalUtility):
 
         elif self.is_user(principal):
             user = self.get_user(principal)
-            name = ' '.join((user.lastname, user.firstname))
-            if with_email and user.email:
-                name = '%s (%s)' % (name, user.email)
-            elif with_email2 and user.email2:
-                name = '%s (%s)' % (name, user.email2)
-            return name
+            if user:
+                name = ' '.join((user.lastname, user.firstname))
+                if with_email and user.email:
+                    name = '%s (%s)' % (name, user.email)
+                elif with_email2 and user.email2:
+                    name = '%s (%s)' % (name, user.email2)
+                return name
+            else:
+                # fallback for acl_users
+                portal = getSite()
+                portal_membership = getToolByName(portal, 'portal_membership')
+                member = portal_membership.getMemberById(principal)
+                name = member.getProperty('fullname', principal)
+                email = member.getProperty('email', None)
+                if with_email and email:
+                    name = '%s (%s)' % (name, email)
+                return name
+
 
         else:
             raise ValueError('Unknown principal type: %s' % str(principal))
@@ -256,10 +268,15 @@ class ContactInformation(grok.GlobalUtility):
             return contact.absolute_url()
 
         elif self.is_user(principal):
-            user = self.get_user(principal)
             portal = getSite()
-            return '/'.join((portal.portal_url(), '@@user_details',
-                             user.userid))
+            user = self.get_user(principal)
+            if user:
+                return '/'.join((portal.portal_url(), '@@user_details',
+                                 user.userid))
+            else:
+                # fallback with acl_users folder
+                portal_membership = getToolByName(portal, 'portal_membership')
+                return portal_membership.getMemberById(principal).getHomeUrl()
 
     def render_link(self, principal):
         """Render a link to the `principal`
