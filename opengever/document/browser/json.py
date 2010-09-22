@@ -2,7 +2,7 @@ from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
 from Products.CMFPlone.utils import safe_unicode
 from five import grok
 from opengever.document.document import IDocumentSchema
-import simplejson
+import json
 
 
 class DocumentsOfDossierAsJSONView(grok.CodeView):
@@ -28,4 +28,4 @@ class DocumentsOfDossierAsJSONView(grok.CodeView):
                     'title': str(safe_unicode(brain.Title).encode('utf8')),
                     'review_state': str(brain.review_state),
                     })
-        return simplejson.dumps(data)
+        return json.dumps(data)
