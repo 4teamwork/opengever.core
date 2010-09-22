@@ -8,8 +8,8 @@ from plone.registry.interfaces import IRegistry
 from z3c.saconfig import named_scoped_session
 from zope.app.component.hooks import getSite
 from zope.component import getUtility
+import json
 import os.path
-import simplejson
 import urllib
 import urllib2
 
@@ -47,23 +47,25 @@ def get_client_id():
     return proxy.client_id
 
 
-def remote_json_request(target_client_id, viewname, data={}, headers={}):
+def remote_json_request(target_client_id, viewname, path='',
+                        data={}, headers={}):
     """ Sends a request to a json-action on a remote zope instance,
     decodes the response with json and returns it.
 
     :target_client_id: remote client id
     :viewname: name of the view to call on the target
+    :path: context path relative to site root
     :data: dict of additional data to send
     :headers: dict of additional headers to send
     """
 
-    response = remote_request(target_client_id, viewname, data=data,
-                              headers=headers)
+    response = remote_request(target_client_id, viewname, path=path,
+                              data=data, headers=headers)
     data = response.read()
-    return simplejson.loads(data)
+    return json.loads(data)
 
 
-def remote_request(target_client_id, viewname, data={}, headers={}):
+def remote_request(target_client_id, viewname, path='', data={}, headers={}):
     """ Sends a request to another zope instance
     Returns a response stream
 
@@ -73,6 +75,7 @@ def remote_request(target_client_id, viewname, data={}, headers={}):
 
     :target_client_id: remote client id
     :viewname: name of the view to call on the target
+    :path: context path relative to site root
     :data: dict of additional data to send
     :headers: dict of additional headers to send
     """
@@ -91,7 +94,10 @@ def remote_request(target_client_id, viewname, data={}, headers={}):
     if request.URL.startswith(target.site_url) or \
             request.URL.startswith(target.public_url):
         # do not connect to the site itself but do a restrictedTraverse
-        view = site.restrictedTraverse(viewname)
+        if path:
+            view = site.restrictedTraverse(os.path.join(path, viewname))
+        else:
+            view = site.restrictedTraverse(viewname)
         data = view()
         return StringIO(data)
 
@@ -110,7 +116,10 @@ def remote_request(target_client_id, viewname, data={}, headers={}):
     opener = urllib2.build_opener(handler)
 
     viewname = viewname.startswith('@@') and viewname or '@@%s' % viewname
-    url = os.path.join(target.site_url, viewname)
+    if path:
+        url = os.path.join(target.site_url, path, viewname)
+    else:
+        url = os.path.join(target.site_url, viewname)
 
     request = urllib2.Request(url,
                               urllib.urlencode(data),
