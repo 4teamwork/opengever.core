@@ -8,7 +8,6 @@ tests_require = [
     'lxml >= 2.1.1',
     'collective.testcaselayer',
     'z3c.form [test]',
-    'opengever.octopus.tentacle',
     ]
 
 setup(name='opengever.task',
@@ -42,6 +41,7 @@ setup(name='opengever.task',
         'collective.autopermission',
         'opengever.base',
         'opengever.translations',
+        'opengever.ogds.base',
         # -*- Extra requirements: -*-
         ],
       tests_require=tests_require,

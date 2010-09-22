@@ -15,7 +15,7 @@ from AccessControl import getSecurityManager
 from DateTime import DateTime
 
 from opengever.task.task import ITask
-from opengever.octopus.tentacle.interfaces import IContactInformation
+from opengever.ogds.base.interfaces import IContactInformation
 
 
 class IResponseContainer(Interface):
@@ -140,7 +140,7 @@ class Response(Persistent):
             before = before,
             after = after)
         self.changes.append(delta)
-        
+
     def creator_link(self):
         info = getUtility(IContactInformation)
         return info.render_link(self.creator)

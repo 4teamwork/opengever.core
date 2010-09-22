@@ -1,10 +1,9 @@
 from five import grok
 from opengever.tabbedview.browser.tabs import OpengeverSolrListingTab
-from zope.component import getUtility
 from ftw.table import helper
 from opengever.tabbedview import helper as opengever_helper
 from opengever.tabbedview.helper import readable_ogds_author
-from opengever.octopus.tentacle.interfaces import ITentacleConfig
+from opengever.ogds.base.utils import get_client_id
 
 from opengever.task import _
 
@@ -60,7 +59,6 @@ class AssignedTasks(OpengeverSolrListingTab):
     grok.name('tabbedview_view-assignedtasks_solr')
 
     def build_query(self):
-        conf = getUtility(ITentacleConfig)
-        client_id = conf.cid
+        client_id = get_client_id()
         return 'portal_type:opengever.task.task AND assigned_client:(%s)' % (
             client_id)

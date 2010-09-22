@@ -14,8 +14,8 @@ We need the client id to be configured properly:
 
     >>> registry = getUtility(IRegistry)
     >>> CLIENT_ID = u'm1'
-    >>> registry['opengever.octopus.tentacle.interfaces.' + \
-    ...     'ITentacleRegistry.cid'] = CLIENT_ID
+    >>> registry['opengever.ogds.base.interfaces.' + \
+    ...     'IClientConfiguration.cid'] = CLIENT_ID
 
 We use the oguids for relations:
 

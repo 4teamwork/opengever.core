@@ -11,8 +11,7 @@ from zope.annotation.interfaces import IAttributeAnnotatable
 #XXX: recursive imports between inbox and tabs
 from opengever.tabbedview.browser import tabs
 
-from opengever.octopus.tentacle import contact_info
-from opengever.octopus.tentacle.communicator import CortexCommunicator
+from opengever.ogds.base import contact_info
 
 from opengever.task.tests.layer import Layer
 from opengever.task.adapters import IResponseContainer, Response
@@ -27,9 +26,9 @@ class MockedContactInformation(contact_info.ContactInformation):
 
 
 class TestResponse(PloneTestCase):
-    
+
     layer = Layer
-    
+
     def afterSetUp(self):
         # Set up z3c.form defaults
         testing.setupFormDefaults()
@@ -53,8 +52,6 @@ class TestResponse(PloneTestCase):
         self.failUnless('form.buttons.add' in view.render())
 
     def test_asdf(self):
-        # XXX: providing utilites sucks, so we monky patch -.-
-        CortexCommunicator.list_tentacles = lambda s: []
         task = self.folder.get('task-1')
 
         new_response = Response('')

@@ -5,7 +5,7 @@ from plone.memoize.instance import memoize
 from plone.registry.interfaces import IRegistry
 
 from opengever.base.interfaces import ISequenceNumber, IBaseClientID
-from opengever.octopus.tentacle.interfaces import IContactInformation
+from opengever.ogds.base.interfaces import IContactInformation
 from opengever.task.task import ITask
 
 

@@ -1,8 +1,8 @@
 from five import grok
-from opengever.octopus.tentacle.interfaces import IContactInformation
-from opengever.octopus.tentacle.interfaces import ICortexCommunicator
-from opengever.octopus.tentacle.interfaces import ITentacleConfig
-from opengever.octopus.tentacle.interfaces import ITransporter
+from opengever.ogds.base.interfaces import IContactInformation
+from opengever.ogds.base.utils import get_client_id
+# from opengever.octopus.tentacle.interfaces import ITentacleConfig
+# from opengever.octopus.tentacle.interfaces import ITransporter
 from zope.component import getUtility
 from zope.interface import Interface
 import os.path
@@ -16,10 +16,19 @@ class CopyRelatedDocumentsToInbox(grok.CodeView):
         self.scripts = self.context
         self.event = event
         self.context = event.object
+
+        from Products.statusmessages.interfaces import IStatusMessage
+        # XXX: implement multiple clients support with additional
+        # wizard view
+        IStatusMessage(self.request).addStatusMessage(
+            'DEBUG NOTICE: No multiple clients support implemented yet!',
+            type='warning')
+
+        if 1:
+            raise Exception('DEBUG: Make it multiple home client capable')
+
         # we need some utilities
-        self.comm = getUtility(ICortexCommunicator)
         self.tc = getUtility(ITentacleConfig)
-        self.contacts = getUtility(IContactInformation)
         self.transporter = getUtility(ITransporter)
         # check if we need to copy
         if not self.should_be_copied():
@@ -32,21 +41,27 @@ class CopyRelatedDocumentsToInbox(grok.CodeView):
         pass
 
     def should_be_copied(self):
-        home_client = self.comm.get_home_client(self.context)
-        member = self.context.portal_membership.getAuthenticatedMember()
-        # only copy if we are not on our home-client
-        if not home_client or self.tc.cid==home_client['cid']:
+        info = getUtility(IContactInformation)
+        home_clients = info.get_assigned_clients()
+        current_client_id = get_client_id()
+        # if we have no home clients, we cannot copy
+        if not home_clients:
             return False
+        # only copy if we are not on one of our home-clients
+        for client in home_clients:
+            if client.client_id == current_client_id:
+                return False
         # the task type category should be uni_val
-        if self.context.task_type_category!=u'uni_val':
+        if self.context.task_type_category != u'uni_val':
             return False
         # we should be able to write to our home-client inbox. that means the current
         # user should be in the main group (which must have privileges)
+        # XXXX continue fixes here
         home_inbox_group = self.comm.get_client_inbox_group(home_client['cid'])
         if home_inbox_group not in member.getGroups():
             return False
         # the responsible should be a inbox principal
-        if not self.contacts.is_inbox_principal(self.context.responsible):
+        if not info.is_inbox(self.context.responsible):
             return False
         return True
 

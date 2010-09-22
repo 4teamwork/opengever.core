@@ -46,7 +46,7 @@ class IResponse(Interface):
         title=_(u"label_responsible_Response", default="New responsible"),
         description =_(u"help_new_responsible_response", default=""),
         #source = util.getManagersVocab,
-        vocabulary = 'opengever.octopus.tentacle.contacts.UsersVocabularyFactory',
+        vocabulary=u'opengever.ogds.base.UsersVocabulary',
         required = False,
         )
 
