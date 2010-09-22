@@ -1,7 +1,7 @@
 from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
 from five import grok
 from opengever.inbox.inbox import IInbox
-import simplejson
+import json
 
 
 class InboxGroupAsJSONView(grok.CodeView):
@@ -13,4 +13,4 @@ class InboxGroupAsJSONView(grok.CodeView):
         portal = self.context.portal_url.getPortalObject()
         inbox = portal.get('eingangskorb')
         repr = IInbox(inbox)
-        return simplejson.dumps(getattr(repr, 'inbox_group'))
+        return json.dumps(getattr(repr, 'inbox_group'))
