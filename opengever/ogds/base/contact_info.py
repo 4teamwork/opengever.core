@@ -138,6 +138,47 @@ class ContactInformation(grok.GlobalUtility):
             return clients[0]
 
 
+    # CLIENTS
+
+    def get_clients(self):
+        """Returns a list of all clients.
+        """
+
+        return self._clients_query().all()
+
+    def get_client_by_id(self, client_id):
+        """Returns a client identified by `client_id`.
+        """
+
+        clients = self._clients_query().filter_by(client_id=client_id).all()
+        if len(clients) == 0:
+            return None
+        elif len(clients) > 1:
+            raise ValueError('Found %i clients with client_id, %s ' % (
+                    len(clients), client_id) + 'expected only one' )
+        else:
+            return clients[0]
+
+    def get_assigned_clients(self, userid=None):
+        """Returns all assigned clients (home clients).
+        """
+
+        acl_users = getToolByName(getSite(), 'acl_users')
+
+        if not userid:
+            member = getToolByName(
+                getSite(),
+                'portal_membership').getAuthenticatedMember()
+            userid = member.getId()
+
+        clients = self.get_clients()
+        for client in clients:
+            groupid = client.group.encode('utf-8')
+            group = acl_users.getGroupById(groupid)
+            if userid in group.getMemberIds():
+                yield client
+
+
     # general principal methods
 
     def describe(self, principal, with_email=False, with_email2=False):

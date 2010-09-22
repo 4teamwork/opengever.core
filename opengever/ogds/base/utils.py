@@ -1,8 +1,17 @@
-from plone.registry.interfaces import IRegistry
-from zope.component import getUtility
-from z3c.saconfig import named_scoped_session
-from opengever.ogds.base.model.client import Client
+from Products.CMFCore.utils import getToolByName
+from StringIO import StringIO
+from opengever.ogds.base.exceptions import ClientNotFound
 from opengever.ogds.base.interfaces import IClientConfiguration
+from opengever.ogds.base.interfaces import IContactInformation
+from opengever.ogds.base.model.client import Client
+from plone.registry.interfaces import IRegistry
+from z3c.saconfig import named_scoped_session
+from zope.app.component.hooks import getSite
+from zope.component import getUtility
+import os.path
+import simplejson
+import urllib
+import urllib2
 
 
 Session = named_scoped_session('opengever.ogds')
@@ -28,6 +37,7 @@ def get_current_client():
     else:
         return clients[0]
 
+
 def get_client_id():
     """Returns the client_id of the current client.
     """
@@ -35,3 +45,74 @@ def get_client_id():
     registry = getUtility(IRegistry)
     proxy = registry.forInterface(IClientConfiguration)
     return proxy.client_id
+
+
+def remote_json_request(target_client_id, viewname, data={}, headers={}):
+    """ Sends a request to a json-action on a remote zope instance,
+    decodes the response with json and returns it.
+
+    :target_client_id: remote client id
+    :viewname: name of the view to call on the target
+    :data: dict of additional data to send
+    :headers: dict of additional headers to send
+    """
+
+    response = remote_request(target_client_id, viewname, data=data,
+                              headers=headers)
+    data = response.read()
+    return simplejson.loads(data)
+
+
+def remote_request(target_client_id, viewname, data={}, headers={}):
+    """ Sends a request to another zope instance
+    Returns a response stream
+
+    Authentication:
+    In the request there is a attribute '__cortex_ac' which is set to the
+    username of the current user.
+
+    :target_client_id: remote client id
+    :viewname: name of the view to call on the target
+    :data: dict of additional data to send
+    :headers: dict of additional headers to send
+    """
+
+    if isinstance(viewname, unicode):
+        viewname = viewname.encode('utf-8')
+
+    site = getSite()
+    request = site.REQUEST
+    info = getUtility(IContactInformation)
+    target = info.get_client_by_id(target_client_id)
+
+    if not target:
+        raise ClientNotFound()
+
+    if request.URL.startswith(target.site_url) or \
+            request.URL.startswith(target.public_url):
+        # do not connect to the site itself but do a restrictedTraverse
+        view = site.restrictedTraverse(viewname)
+        data = view()
+        return StringIO(data)
+
+    headers = headers.copy()
+    data = data.copy()
+
+    mtool = getToolByName(site, 'portal_membership')
+    member = mtool.getAuthenticatedMember()
+
+    key = 'X-OGDS-AC'
+    if key not in headers.keys() and member:
+        headers[key] = member.getId()
+
+    headers['X-OGDS-CID'] = get_client_id()
+    handler = urllib2.ProxyHandler({})
+    opener = urllib2.build_opener(handler)
+
+    viewname = viewname.startswith('@@') and viewname or '@@%s' % viewname
+    url = os.path.join(target.site_url, viewname)
+
+    request = urllib2.Request(url,
+                              urllib.urlencode(data),
+                              headers)
+    return opener.open(request)

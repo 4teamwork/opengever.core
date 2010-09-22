@@ -22,3 +22,8 @@ class IClientConfiguration(Interface):
 class IContactInformation(Interface):
     """Contact information utility interface.
     """
+
+
+class IClientCommunicator(Interface):
+    """Utility interface for the client communicator.
+    """
