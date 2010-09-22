@@ -19,7 +19,7 @@ class ITaskTemplate(form.Schema):
     issuer = schema.Choice(
         title =_(u"label_issuer", default=u"Issuer"),
         description = _('help_issuer', default=u""),
-        vocabulary = 'opengever.octopus.tentacle.contacts.ContactsVocabularyFactory',
+        vocabulary=u'opengever.ogds.base.ContactsVocabulary',
         required = True,
         )
 
@@ -33,34 +33,34 @@ class ITaskTemplate(form.Schema):
         missing_value = None,
         source = util.getTaskTypeVocabulary,
     )
-    
+
     form.widget(responsible=AutocompleteFieldWidget)
     responsible = schema.Choice(
         title=_(u"label_responsible", default="Responsible"),
         description =_(u"help_responsible", default=""),
-        vocabulary = 'opengever.octopus.tentacle.context.UsersAndClientsVocabularyFactory',
+        vocabulary=u'opengever.ogds.base.UsersAndInboxesVocabulary',
         required = True,
-        )   
-        
+        )
+
     deadline = schema.Int(
         title=_(u"label_deadline", default=u"Deadline in Days"),
         description=_('help_deadline', default=u""),
         required = True,
-    ) 
-    
+    )
+
     form.primary('text')
     text = schema.Text(
         title=_(u"label_text", default=u"Text"),
         description=_(u"help_text", default=u""),
         required = False,
-        )   
-        
+        )
+
     form.widget(preselected=checkbox.SingleCheckBoxFieldWidget)
     preselected = schema.Bool(
         title = _(u'label_preselected', default='Preselect'),
         description = _(u'help_preselected', default=''),
         required = False,
-        ) 
-    
+        )
+
 class TaskTemplate(Item):
     implements(ITaskTemplate)
