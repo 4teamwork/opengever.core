@@ -258,8 +258,8 @@ class ContactInformation(grok.GlobalUtility):
         elif self.is_user(principal):
             user = self.get_user(principal)
             portal = getSite()
-            return '/'.join(portal.portal_url(), '@@user_details',
-                            user.userid)
+            return '/'.join((portal.portal_url(), '@@user_details',
+                             user.userid))
 
     def render_link(self, principal):
         """Render a link to the `principal`
