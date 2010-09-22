@@ -15,7 +15,7 @@ class User(Base):
 
     __tablename__ = 'users'
 
-    userid = Column(String(10), primary_key=True)
+    userid = Column(String(30), primary_key=True)
     active = Column(Boolean, default=True)
     firstname = Column(String(50))
     lastname = Column(String(50))
