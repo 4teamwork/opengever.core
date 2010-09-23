@@ -8,6 +8,7 @@ from plone.registry.interfaces import IRegistry
 from z3c.saconfig import named_scoped_session
 from zope.app.component.hooks import getSite
 from zope.component import getUtility
+from zope.globalrequest import getRequest
 import json
 import os.path
 import urllib
@@ -84,7 +85,7 @@ def remote_request(target_client_id, viewname, path='', data={}, headers={}):
         viewname = viewname.encode('utf-8')
 
     site = getSite()
-    request = site.REQUEST
+    request = getRequest()
     info = getUtility(IContactInformation)
     target = info.get_client_by_id(target_client_id)
 

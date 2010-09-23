@@ -1,10 +1,10 @@
-from Products.statusmessages.interfaces import IStatusMessage
 from five import grok
 from opengever.ogds.base.interfaces import IClientCommunicator
 from opengever.ogds.base.interfaces import IContactInformation
+from opengever.ogds.base.utils import get_current_client
 from opengever.ogds.base.vocabulary import ContactsVocabulary
-from zope.app.component.hooks import getSite
 from zope.component import getUtility
+from zope.globalrequest import getRequest
 from zope.schema.interfaces import IVocabularyFactory
 from zope.schema.vocabulary import SimpleVocabulary
 
@@ -135,6 +135,36 @@ class EmailContactsAndUsersVocabularyFactory(grok.GlobalUtility):
                       info.describe(userid, with_email2=True))
 
 
+class AssignedClientsVocabularyFactory(grok.GlobalUtility):
+    """Vocabulary of all assigned clients (=home clients) of the
+    current user. The current client is not included!
+    """
+
+    grok.provides(IVocabularyFactory)
+    grok.name('opengever.ogds.base.AssignedClientsVocabulary')
+
+
+    def __call__(self, context):
+        vocab = ContactsVocabulary.create_with_provider(
+            self.key_value_provider)
+        return vocab
+
+    def key_value_provider(self):
+        """yield the items
+
+        key = mail-address
+        value = Fullname [address], eg. Hugo Boss [hugo@boss.ch]
+        """
+
+        info = getUtility(IContactInformation)
+        current_client_id = get_current_client().client_id
+
+        for client in info.get_assigned_clients():
+            if current_client_id != client.client_id:
+                yield (client.client_id,
+                       client.title)
+
+
 class HomeDossiersVocabularyFactory(grok.GlobalUtility):
     """Vocabulary of all open dossiers on users home client.
     """
@@ -143,21 +173,22 @@ class HomeDossiersVocabularyFactory(grok.GlobalUtility):
     grok.name('opengever.ogds.base.HomeDossiersVocabulary')
 
     def __call__(self, context):
-        if isinstance(context, dict):
-            # collective.z3cform.wizard support
-            context = getSite()
+        request = getRequest()
         terms = []
 
         info = getUtility(IContactInformation)
         comm = getUtility(IClientCommunicator)
         home_clients = info.get_assigned_clients()
 
-        # XXX: implement multiple clients support with additional
-        # wizard view
-        IStatusMessage(context.REQUEST).addStatusMessage(
-            'DEBUG NOTICE: No multiple clients support implemented yet!',
-            type='warning')
-        client = home_clients[0]
+        client_id = request.get(
+            'client', request.get('form.widgets.client'))
+        if type(client_id) in (list, tuple, set):
+            client_id = client_id[0]
+        client = info.get_client_by_id(client_id)
+
+        if client not in home_clients:
+            raise ValueError('Expected %s to be a ' % client_id + \
+                                 'assigned client of the current user.')
 
         if client:
             for dossier in comm.get_open_dossiers(client.client_id):
@@ -180,22 +211,32 @@ class DocumentInSelectedDossierVocabularyFactory(grok.GlobalUtility):
     """
     grok.provides(IVocabularyFactory)
     grok.name('opengever.ogds.base.DocumentInSelectedDossierVocabulary')
-    dossier_request_key = 'dossier_path'
 
     def __call__(self, context):
-        dossier_path = context.REQUEST.get(self.dossier_request_key, None)
+        request = getRequest()
         terms = []
+
 
         info = getUtility(IContactInformation)
         comm = getUtility(IClientCommunicator)
         home_clients = info.get_assigned_clients()
 
-        # XXX: implement multiple clients support with additional
-        # wizard view
-        IStatusMessage(context.REQUEST).addStatusMessage(
-            'DEBUG NOTICE: No multiple clients support implemented yet!',
-            type='warning')
-        client = home_clients[0]
+        # get client
+        client_id = request.get(
+            'client', request.get('form.widgets.client'))
+        if type(client_id) in (list, tuple, set):
+            client_id = client_id[0]
+        client = info.get_client_by_id(client_id)
+
+        if client not in home_clients:
+            raise ValueError('Expected %s to be a ' % client_id + \
+                                 'assigned client of the current user.')
+
+        # get dossier path
+        dossier_path = request.get(
+            'dossier_path', request.get('form.widgets.source_dossier'))
+        if type(dossier_path) in (list, tuple, set):
+            dossier_path = dossier_path[0]
 
         if dossier_path:
             cid = client.client_id

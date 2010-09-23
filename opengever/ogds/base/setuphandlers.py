@@ -1,6 +1,9 @@
-from opengever.ogds.base.utils import create_session
-from opengever.ogds.base.model.user import User
+from Products.PluggableAuthService.interfaces import plugins
 from opengever.ogds.base.model.client import Client
+from opengever.ogds.base.model.user import User
+from opengever.ogds.base.utils import create_session
+from zope.interface import alsoProvides
+
 
 MODELS = [User, Client]
 
@@ -79,6 +82,34 @@ def create_example(portal_setup):
                             'inbox_group': 'og_mandant2_inbox'})
 
 
+def setup_pas_plugins(setup):
+    """Install the PAS authentication plugins for verifying requests between
+    clients.
+    """
+
+    portal = setup.getSite()
+    if setup.readDataFile('opengever.ogds.base.pasplugins.txt') is None:
+        return
+
+    acl_users = portal.acl_users
+    external_methods = {
+        'extractCredentials': {
+            'attrs': {
+                'title': 'extractCredentials',
+                'module': 'opengever.ogds.base.plugins',
+                'function': 'extract_user'},
+            'interface': plugins.IExtractionPlugin},
+        'authenticateCredentials': {
+            'attrs': {
+                'title': 'authenticateCredentials',
+                'module': 'opengever.ogds.base.plugins',
+                'function': 'authenticate_credentials'},
+            'interface' : plugins.IAuthenticationPlugin}
+        }
+    setup_scriptable_plugin(acl_users, 'octopus_tentacle_plugin',
+                            external_methods)
+
+
 def _create_example_user(session, site, userid, properties, groups):
     acl_users = site.acl_users
     password = 'demo09'
@@ -105,3 +136,32 @@ def _create_example_client(session, client_id, properties):
     if len(session.query(Client).filter_by(client_id=client_id).all()) == 0:
         client = Client(client_id, **properties)
         session.add(client)
+
+def setup_scriptable_plugin(acl_users, plugin_id, external_methods):
+    """Registers a scriptable plugin to the pas.
+    """
+    # --- register a PAS plugin
+    if not acl_users.get(plugin_id, None):
+        pas = acl_users.manage_addProduct['PluggableAuthService']
+        pas.addScriptablePlugin(plugin_id)
+    # --- register external methods
+    plug = acl_users.get(plugin_id)
+    em_factory = plug.manage_addProduct['ExternalMethod']
+    activate_interfaces = []
+    for em_id, em in external_methods.items():
+        if not plug.get(em_id):
+            # add the external method
+            em_factory.manage_addExternalMethod(em_id, **em['attrs'])
+        # provide the interface
+        alsoProvides(plug, em['interface'])
+        # activate the interface
+        activate_interfaces.append(em['interface'].__name__)
+    # activateInterfaces is destructive, so be careful, we dont wanna
+    # disactivate interfaces which are currently active
+    active_interfaces = []
+    for info in plug.plugins.listPluginTypeInfo():
+        if info['interface'].providedBy(plug):
+            enabled = plug.plugins.listPlugins(info['interface'])
+            if plug.getId() in [k for k,v in enabled]:
+                active_interfaces.append(info['interface'].__name__)
+    plug.manage_activateInterfaces(active_interfaces + activate_interfaces)

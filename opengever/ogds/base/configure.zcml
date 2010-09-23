@@ -40,4 +40,10 @@
         description=""
         handler="opengever.ogds.base.setuphandlers.create_example" />
 
+    <genericsetup:importStep
+        name="opengever.ogds.base : pas plugins"
+        title="opengever.ogds.base setup pas plugins"
+        description=""
+        handler="opengever.ogds.base.setuphandlers.setup_pas_plugins" />
+
 </configure>
