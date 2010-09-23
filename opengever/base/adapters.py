@@ -1,13 +1,12 @@
-import re
-from five import grok
-from zope.annotation.interfaces import IAnnotations
-from zope.component import getUtility
-from persistent.dict import PersistentDict
-
-from zope.app.intid.interfaces import IIntIds
-
+from Acquisition import aq_base
 from Products.CMFCore.interfaces._content import IFolderish
+from five import grok
 from opengever.base.interfaces import IReferenceNumberPrefix
+from persistent.dict import PersistentDict
+from zope.annotation.interfaces import IAnnotations
+from zope.app.intid.interfaces import IIntIds
+from zope.component import getUtility
+import re
 
 
 class ReferenceNumberPrefixAdpater(grok.Adapter):
@@ -60,18 +59,18 @@ class ReferenceNumberPrefixAdpater(grok.Adapter):
         if no number is registred for this obj, we generate a new one.
         """
         intids = getUtility(IIntIds)
-        intid = intids.getId(obj)
+        intid = intids.getId(aq_base(obj))
         if intid in self.__mapping:
             return self.__mapping.get(intid)
         else:
             return self.set_number(obj)
 
     def set_number(self, obj, number=None):
-        """Store the number in the Annotations, 
+        """Store the number in the Annotations,
         If number is None, we get the standard value
         """
         intids = getUtility(IIntIds)
-        intid = intids.getId(obj)
+        intid = intids.getId(aq_base(obj))
 
         if not number:
             number = self.get_next_number()
