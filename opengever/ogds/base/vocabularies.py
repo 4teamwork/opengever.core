@@ -208,7 +208,6 @@ class DocumentInSelectedDossierVocabularyFactory(grok.GlobalUtility):
     """ Provides a vocabulary containing all documents within the previously
     selected dossier. Expects the context to be a dict containing the path
     to the dossier under the key 'source_dossier'
-    see collective.z3cform.wizard for more details
     """
     grok.provides(IVocabularyFactory)
     grok.name('opengever.ogds.base.DocumentInSelectedDossierVocabulary')
