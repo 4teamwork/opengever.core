@@ -123,9 +123,9 @@ class EmailContactsAndUsersVocabularyFactory(grok.GlobalUtility):
         """
 
         info = getUtility(IContactInformation)
-        ids = [user.userid for user in self.list_users()]
+        ids = [user.userid for user in info.list_users()]
         ids.extend([contact.contactid for contact
-                    in self.list_contacts()])
+                    in info.list_contacts()])
 
         for userid in ids:
             yield(info.get_email(userid),
