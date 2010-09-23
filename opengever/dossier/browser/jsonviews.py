@@ -7,7 +7,7 @@ import json
 
 class OpenDossiersAsJSONView(grok.CodeView):
     grok.context(IPloneSiteRoot)
-    grok.name('tentacle-open-dossiers-json')
+    grok.name('list-open-dossiers-json')
 
     def render(self):
         data = []
