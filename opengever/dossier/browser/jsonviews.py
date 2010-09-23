@@ -15,9 +15,13 @@ class OpenDossiersAsJSONView(grok.CodeView):
             object_provides=IDossierMarker.__identifier__,
             review_state='dossier-state-active',
             )
+
+        portal_path = '/'.join(self.context.getPhysicalPath())
+
         for brain in brains:
+            path = brain.getPath()[len(portal_path) + 1:]
             data.append({
-                    'path': str(brain.getPath()),
+                    'path': path,
                     'url': str(brain.getURL()),
                     'title': str(safe_unicode(
                             brain.Title).encode('utf8')),
