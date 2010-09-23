@@ -167,6 +167,7 @@ class AssignedClientsVocabularyFactory(grok.GlobalUtility):
 
 class HomeDossiersVocabularyFactory(grok.GlobalUtility):
     """Vocabulary of all open dossiers on users home client.
+    Key is the path of dossier relative to its plone site on the remote client.
     """
 
     grok.provides(IVocabularyFactory)

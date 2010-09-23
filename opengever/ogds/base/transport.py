@@ -35,9 +35,6 @@ class Transporter(grok.GlobalUtility):
         """ Copies a *object* to another client (*target_cid*).
         """
 
-        container_path = container_path.startswith('/') and \
-            container_path[1:] or container_path
-
         jsondata = json.dumps(self._extract_data(obj))
 
         request_data = {
@@ -50,11 +47,8 @@ class Transporter(grok.GlobalUtility):
     def transport_from(self, container, source_cid, path):
         """ Copies the object under *path* from client with *source_cid* into
         the local folder *container*
+        *path* is the relative path of the object to its plone site root.
         """
-
-        # remove beginning slashes from path
-        if path[0]=='/':
-            path = path[1:]
 
         data = remote_json_request(source_cid,
                                    '@@transporter-extract-object-json',
