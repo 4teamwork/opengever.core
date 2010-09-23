@@ -3,6 +3,7 @@ from Products.CMFPlone.utils import safe_unicode
 from five import grok
 from opengever.document.document import IDocumentSchema
 import json
+import os.path
 
 
 class DocumentsOfDossierAsJSONView(grok.CodeView):
@@ -14,16 +15,17 @@ class DocumentsOfDossierAsJSONView(grok.CodeView):
     grok.name('tentacle-documents-of-dossier-json')
 
     def render(self):
-        # absolute path to dossier on this client:
-        dossier = self.request.get('dossier')
+        site_path = '/'.join(self.context.getPhysicalPath())
+        dossier = os.path.join(site_path, self.request.get('dossier'))
         data = []
         brains = self.context.portal_catalog(
             path=str(dossier),
             object_provides=IDocumentSchema.__identifier__,
             )
+        print dossier
         for brain in brains:
             data.append({
-                    'path': str(brain.getPath()),
+                    'path': str(brain.getPath())[len(site_path) + 1:],
                     'url': str(brain.getURL()),
                     'title': str(safe_unicode(brain.Title).encode('utf8')),
                     'review_state': str(brain.review_state),
