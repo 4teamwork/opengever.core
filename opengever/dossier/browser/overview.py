@@ -1,14 +1,14 @@
 from five import grok
-from opengever.tabbedview.browser.tabs import OpengeverTab
-from opengever.dossier.behaviors.dossier import IDossierMarker, IDossier
-from opengever.dossier import _
-
-from zope.annotation.interfaces import IAnnotations
-from ftw.journal.interfaces import IAnnotationsJournalizable,\
-    IWorkflowHistoryJournalizable
 from ftw.journal.config import JOURNAL_ENTRIES_ANNOTATIONS_KEY
-
+from ftw.journal.interfaces import IAnnotationsJournalizable
+from ftw.journal.interfaces import IWorkflowHistoryJournalizable
+from opengever.dossier import _
+from opengever.dossier.behaviors.dossier import IDossierMarker, IDossier
 from opengever.dossier.behaviors.participation import IParticipationAware
+from opengever.tabbedview.browser.tabs import OpengeverTab
+from opengever.ogds.base.interfaces import IContactInformation
+from zope.component import getUtility
+from zope.annotation.interfaces import IAnnotations
 
 
 class DossierOverview(grok.View, OpengeverTab):
@@ -85,8 +85,12 @@ class DossierOverview(grok.View, OpengeverTab):
                         'roles': responsible_name,
                         'role_list': responsible_name,
                         })
+
+        info = getUtility(IContactInformation)
+
         return [{
-            'Title':xx['contact'],
+            'Title': info.describe(xx['contact']),
+            'getURL': info.get_profile_url(xx['contact']),
             'getIcon':'user.gif',
             }
             for xx in results]
