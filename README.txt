@@ -239,7 +239,8 @@ The OGDS-relevant vocabularies are storied in `opengever.ogds.base.vocabularies`
 :opengever.ogds.base.UsersVocabulary: Vocabulary of all users with a valid login.
 
 :opengever.ogds.base.UsersAndInboxesVocabulary: Vocabulary of all users and all
-inboxes of enabled clients.
+inboxes of a specific client. The client is defined in the request either with
+key "client" or with key "form.widgets.responsible_client".
 
 :opengever.ogds.base.AssignedUsersVocabulary: Vocabulary of all users assigned
 to the current client.
@@ -250,6 +251,9 @@ to the current client.
 
 :opengever.ogds.base.EmailContactsAndUsersVocabulary: Vocabulary containing all
 users and contacts with each e-mail address they have.
+
+:opengever.ogds.base.ClientsVocabulary: Vocabulary of all enabled clients (including
+ the current one).
 
 :opengever.ogds.base.AssignedClientsVocabulary: Vocabulary of all assigned
 clients (=home clients) of the current user. The current client is not included!

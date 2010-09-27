@@ -27,24 +27,48 @@ class UsersVocabularyFactory(grok.GlobalUtility):
 
 
 class UsersAndInboxesVocabularyFactory(grok.GlobalUtility):
-    """Vocabulary of all users and all inboxes of enabled clients.
+    """Vocabulary of all users and all inboxes of a specific client. The client
+    is defined in the request either with key "client" or with key
+    "form.widgets.responsible_client".
     """
 
     grok.provides(IVocabularyFactory)
     grok.name('opengever.ogds.base.UsersAndInboxesVocabulary')
 
     def __call__(self, context):
+        self.context = context
         return ContactsVocabulary.create_with_provider(self.key_value_provider)
 
     def key_value_provider(self):
+        client_id = self.get_client()
         info = getUtility(IContactInformation)
-        # all users
-        for user in info.list_users():
-            yield (user.userid,
-                   info.describe(user.userid))
-        # all inboxes
-        for key, label in info.list_inboxes():
-            yield (key, label)
+        if client_id and info.get_client_by_id(client_id):
+            # all users
+            for user in info.list_assigned_users(client_id=client_id):
+                yield (user.userid,
+                       info.describe(user.userid))
+            # client inbox
+            principal = u'inbox:%s' % client_id
+            yield (principal, info.describe(principal))
+
+    def get_client(self):
+        """Tries to get the client from the request. If no client is found None
+        is returned.
+        """
+
+        request = getRequest()
+        client_id = request.get('client',
+                                request.get('form.widgets.responsible_client',
+                                            getattr(self.context,
+                                                    'responsible_client',
+                                                    None)))
+
+        if not client_id:
+            return None
+        elif type(client_id) in (list, tuple, set):
+            return client_id[0]
+        else:
+            return client_id
 
 
 class AssignedUsersVocabularyFactory(grok.GlobalUtility):
@@ -135,14 +159,12 @@ class EmailContactsAndUsersVocabularyFactory(grok.GlobalUtility):
                       info.describe(userid, with_email2=True))
 
 
-class AssignedClientsVocabularyFactory(grok.GlobalUtility):
-    """Vocabulary of all assigned clients (=home clients) of the
-    current user. The current client is not included!
+class ClientsVocabularyFactory(grok.GlobalUtility):
+    """Vocabulary of all enabled clients (including the current one).
     """
 
     grok.provides(IVocabularyFactory)
-    grok.name('opengever.ogds.base.AssignedClientsVocabulary')
-
+    grok.name('opengever.ogds.base.ClientsVocabulary')
 
     def __call__(self, context):
         vocab = ContactsVocabulary.create_with_provider(
@@ -152,8 +174,35 @@ class AssignedClientsVocabularyFactory(grok.GlobalUtility):
     def key_value_provider(self):
         """yield the items
 
-        key = mail-address
-        value = Fullname [address], eg. Hugo Boss [hugo@boss.ch]
+        key = client id
+        value = client title
+        """
+
+        info = getUtility(IContactInformation)
+
+        for client in info.get_clients():
+            yield (client.client_id,
+                   client.title)
+
+
+class AssignedClientsVocabularyFactory(grok.GlobalUtility):
+    """Vocabulary of all assigned clients (=home clients) of the
+    current user. The current client is not included!
+    """
+
+    grok.provides(IVocabularyFactory)
+    grok.name('opengever.ogds.base.AssignedClientsVocabulary')
+
+    def __call__(self, context):
+        vocab = ContactsVocabulary.create_with_provider(
+            self.key_value_provider)
+        return vocab
+
+    def key_value_provider(self):
+        """yield the items
+
+        key = client id
+        value = client title
         """
 
         info = getUtility(IContactInformation)

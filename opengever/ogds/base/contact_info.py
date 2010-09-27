@@ -47,11 +47,19 @@ class ContactInformation(grok.GlobalUtility):
 
         return self._users_query().all()
 
-    def list_assigned_users(self):
-        """Lists all users assigned to this client.
+    def list_assigned_users(self, client_id=None):
+        """Lists all users assigned to a client.
         """
 
-        groupid = get_current_client().group
+        if not client_id:
+            client = get_current_client()
+        else:
+            client = self.get_client_by_id(client_id)
+
+        if not client:
+            raise ValueError('Could not find client "%s"' % str(client_id))
+
+        groupid = client.group
         acl_users = getToolByName(getSite(), 'acl_users')
         group = acl_users.getGroupById(groupid.encode('utf-8'))
 
@@ -123,8 +131,6 @@ class ContactInformation(grok.GlobalUtility):
         clients = self._clients_query()
         active_clients = clients.filter_by(enabled=True)
         for client in active_clients:
-            if not client.enabled:
-                continue
             principal = u'inbox:%s' % client.client_id
             yield (principal,
                    self.describe(principal))
@@ -151,16 +157,17 @@ class ContactInformation(grok.GlobalUtility):
     # CLIENTS
 
     def get_clients(self):
-        """Returns a list of all clients.
+        """Returns a list of all enabled clients.
         """
 
-        return self._clients_query().all()
+        return self._clients_query().filter_by(enabled=True).all()
 
     def get_client_by_id(self, client_id):
         """Returns a client identified by `client_id`.
         """
 
-        clients = self._clients_query().filter_by(client_id=client_id).all()
+        clients = self._clients_query().filter_by(client_id=client_id,
+                                                  enabled=True).all()
         if len(clients) == 0:
             return None
         elif len(clients) > 1:
