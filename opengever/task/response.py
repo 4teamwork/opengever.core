@@ -42,11 +42,18 @@ class IResponse(Interface):
         required = False,
         )
 
-    new_responsible = schema.Choice(
+    responsible_client = schema.Choice(
+        title=_(u'label_resonsible_client',
+                default=u'Responsible Client'),
+        description=_(u'help_responsible_client',
+                      default=u''),
+        vocabulary='opengever.ogds.base.ClientsVocabulary',
+        required=True)
+
+    responsible = schema.Choice(
         title=_(u"label_responsible_Response", default="New responsible"),
         description =_(u"help_new_responsible_response", default=""),
-        #source = util.getManagersVocab,
-        vocabulary=u'opengever.ogds.base.UsersVocabulary',
+        vocabulary=u'opengever.ogds.base.UsersAndInboxesVocabulary',
         required = False,
         )
 
@@ -230,7 +237,7 @@ class Base(BrowserView):
 
 class AddForm(form.AddForm, AutoExtensibleForm):
     fields = field.Fields(IResponse)
-    fields['new_responsible'].widgetFactory = AutocompleteFieldWidget
+    fields['responsible'].widgetFactory = AutocompleteFieldWidget
     fields['transition'].widgetFactory = radio.RadioFieldWidget
     fields['deadline'].widgetFactory = DatePickerFieldWidget
     fields = fields.omit('date_of_completion')
@@ -270,17 +277,13 @@ class AddForm(form.AddForm, AutoExtensibleForm):
                 completion_date = datetime.datetime.now().date()
             else:
                 completion_date = None
-            cc = completion_date
 
             #check other fields
             options = [
                 (task.deadline, data.get('deadline'), 'deadline',
                     _('deadline')),
                 (task.date_of_completion, completion_date,
-                 'date_of_completion', _('date_of_completion')),
-               (task.responsible,
-                data.get('new_responsible'),
-                'responsible', _('responsible'))]
+                 'date_of_completion', _('date_of_completion'))]
 
             for task_field, resp_field, option, title in options:
                 if resp_field and task_field != resp_field:
@@ -290,6 +293,16 @@ class AddForm(form.AddForm, AutoExtensibleForm):
                                             resp_field)
                     task.__setattr__(option, resp_field)
 
+            # change the responsible
+            responsible = data.get('responsible')
+            responsible_client = data.get('responsible_client')
+            if responsible and responsible != task.responsible:
+                new_response.add_change('responsible',
+                                        _('responsible'),
+                                        task.responsible,
+                                        responsible)
+                task.responsible = responsible
+                task.responsible_client = responsible_client
 
             # save relatedItems on task
             relatedItems = data.get('relatedItems')

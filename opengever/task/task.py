@@ -5,6 +5,7 @@ from datetime import datetime, timedelta
 from five import grok
 from opengever.base.interfaces import ISequenceNumber
 from opengever.ogds.base.interfaces import IContactInformation
+from opengever.ogds.base.utils import get_client_id
 from opengever.task import _
 from opengever.task import util
 from opengever.task.interfaces import ITaskSettings
@@ -18,8 +19,8 @@ from plone.formwidget.autocomplete import AutocompleteFieldWidget
 from plone.indexer import indexer
 from plone.registry.interfaces import IRegistry
 from plone.z3cform.traversal import FormWidgetTraversal
-from zc.relation.interfaces import ICatalog
 from z3c.relationfield.schema import RelationChoice, RelationList
+from zc.relation.interfaces import ICatalog
 from zope import schema
 from zope.component import getUtility
 from zope.component import queryMultiAdapter, getMultiAdapter
@@ -38,6 +39,7 @@ class ITask(form.Schema):
             u'title',
             u'issuer',
             u'task_type',
+            u'responsible_client',
             u'responsible',
             u'deadline',
             u'text',
@@ -83,6 +85,14 @@ class ITask(form.Schema):
         missing_value = None,
         source = util.getTaskTypeVocabulary,
     )
+
+    responsible_client = schema.Choice(
+        title=_(u'label_resonsible_client',
+                default=u'Responsible Client'),
+        description=_(u'help_responsible_client',
+                      default=u''),
+        vocabulary='opengever.ogds.base.ClientsVocabulary',
+        required=True)
 
     form.widget(responsible=AutocompleteFieldWidget)
     responsible = schema.Choice(
@@ -234,6 +244,9 @@ def deadlineDefaultValue(data):
     # To get hold of the folder, do: context = data.context
     return datetime.today() + timedelta(5)
 
+@form.default_value(field=ITask['responsible_client'])
+def responsible_client_default_value(data):
+    return get_client_id()
 
 class ITaskView(Interface):
     pass

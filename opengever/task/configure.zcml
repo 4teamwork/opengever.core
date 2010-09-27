@@ -14,38 +14,40 @@
     <!-- Grok the package to initialise schema interfaces and content classes -->
     <grok:grok package="." />
 
+    <include package=".browser" />
+
     <!-- Include custom permissions -->
     <include file="permissions.zcml" />
 
     <include file="profiles.zcml" />
-    
+
     <!-- content rules actions -->
     <include package=".actions" />
-    
+
     <include package=".viewlets" />
-    
+
     <i18n:registerTranslations directory="locales" />
     <include file="behaviors.zcml" />
     <browser:page
-       name="task_response_delete"
-       for="opengever.task.task.ITask"
-       permission="zope2.View"
-       class=".response.Delete"
-       />
+        name="task_response_delete"
+        for="opengever.task.task.ITask"
+        permission="zope2.View"
+        class=".response.Delete"
+        />
 
     <browser:page
-       name="task_response_edit"
-       for="opengever.task.task.ITask"
-       permission="zope2.View"
-       class=".response.Edit"
-       template="templates/edit_response.pt"
-       />
+        name="task_response_edit"
+        for="opengever.task.task.ITask"
+        permission="zope2.View"
+        class=".response.Edit"
+        template="templates/edit_response.pt"
+        />
 
     <browser:page
-       name="task_response_save"
-       for="opengever.task.task.ITask"
-       permission="zope2.View"
-       class=".response.Save"
-       />
+        name="task_response_save"
+        for="opengever.task.task.ITask"
+        permission="zope2.View"
+        class=".response.Save"
+        />
 
 </configure>
