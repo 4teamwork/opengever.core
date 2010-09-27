@@ -65,7 +65,7 @@ class ITask(form.Schema):
         title=_(u"label_title", default=u"Title"),
         description=_('help_title', default=u""),
         required = True,
-    )
+        )
 
     form.widget(issuer=AutocompleteFieldWidget)
     issuer = schema.Choice(
@@ -84,7 +84,7 @@ class ITask(form.Schema):
         default = None,
         missing_value = None,
         source = util.getTaskTypeVocabulary,
-    )
+        )
 
     responsible_client = schema.Choice(
         title=_(u'label_resonsible_client',
@@ -128,11 +128,11 @@ class ITask(form.Schema):
         title=_(u'label_related_items', default=u'Related Items'),
         default=[],
         value_type=RelationChoice(title=u"Related",
-            source=DossierPathSourceBinder(
+                                  source=DossierPathSourceBinder(
                 navigation_tree_query=
-                    {'portal_type': 'opengever.document.document', },
+                {'portal_type': 'opengever.document.document', },
                 portal_type="opengever.document.document", ),
-        ),
+                                  ),
         required=False,
         )
 
@@ -353,7 +353,7 @@ grok.global_adapter(TaskWidgetTraversal,
 
 
 class TaskAutoCompleteSearch(grok.CodeView,
-                                    autocomplete.widget.AutocompleteSearch):
+                             autocomplete.widget.AutocompleteSearch):
     grok.context(autocomplete.interfaces.IAutocompleteWidget)
     grok.name("autocomplete-search")
 
@@ -368,7 +368,7 @@ class TaskAutoCompleteSearch(grok.CodeView,
             return super_method(self)
         view_name = self.request.getURL().split('/')[-3]
         if view_name in ['edit', 'add', '@@edit'] or \
-                                            view_name.startswith('++add++'):
+                view_name.startswith('++add++'):
             # edit task itself
             return super_method(self)
         # add response to the task
@@ -411,14 +411,15 @@ grok.global_adapter(date_of_completion, name='date_of_completion')
 
 @indexer(ITask)
 def assigned_client(obj):
-    #set the client_id of the home mandant of the respectively responsible user
-    if obj.responsible is not None:
-        print 'XXXX, assigned_client will not be indexed, since it may '+\
-            'be ambiguous'
+    """Indexes the client of the responsible. Since the he may be assigned
+    to multiple clients, we need to use the client which was selected in the
+    task.
+    """
+
+    if not obj.responsible or not obj.responsible_client:
         return ''
-#         info = getUtility(IContactInformation)
-#         user = info.get_user_by_id(obj.responsible)
-#         return user.get('client', None)
+    else:
+        return obj.responsible_client
 grok.global_adapter(assigned_client, name='assigned_client')
 
 
