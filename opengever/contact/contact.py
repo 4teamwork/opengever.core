@@ -18,7 +18,6 @@ from ftw.directoryservice.contact import IContact
 from ftw.directoryservice.membership import Membership
 
 
-
 class IContact(form.Schema):
     """ A contact
     """
@@ -35,31 +34,23 @@ class IContact(form.Schema):
         required = True
         )
 
-    # Direktion
-    directorate = schema.TextLine(
-        title = _(u'label_directorate', default=u'Directorate'),
-        description = _(u'help_directorate', default=u''),
-        required = False
-        )
-
-    directorate_abbr = schema.TextLine(
-        title = _(u'label_directorate_abbr', default=u'Directorate Abbr.'),
-        description = _(u'help_directorate_abbr', default=u''),
-        required = False
-        )
-
-    # Amt
+    company = schema.TextLine(
+        title = _(u'label_company', default=u"Company"),
+        description = _(u'help_company', default=u''),
+        required = False,
+    )
+    
+    function = schema.TextLine(
+        title = _(u'lable_function', default=u'Function'),
+        description = _(u'help_function', default=u''),
+        required = False,
+    )
+    
     department = schema.TextLine(
         title = _(u'label_department', default=u'Department'),
         description = _(u'help_department', default=u''),
         required = False
-        )
-
-    department_abbr = schema.TextLine(
-        title = _(u'label_department_abbr', default=u'Department Abbr.'),
-        description = _(u'help_department_abbr', default=u''),
-        required = False
-        )
+    )
 
     email = schema.TextLine(
         title = _(u'label_email', default=u'Email'),

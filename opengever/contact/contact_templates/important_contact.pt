@@ -1,5 +1,5 @@
 <!--TODO: refactor using viewlets-->
-<tal:block i18n:domain="opengever.tabbedview">
+<tal:block i18n:domain="opengever.contact">
   <fieldset>
       <div class="field" tal:repeat="attr view/showAttributes">
           <label tal:content="structure python:view.w.get(attr) and view.w.get(attr).label" />
