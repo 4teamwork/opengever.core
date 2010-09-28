@@ -1,0 +1,9 @@
+<configure xmlns="http://namespaces.zope.org/zope"
+           xmlns:db="http://namespaces.zope.org/db">
+
+    <!-- configure a temporary testing DB -->
+    <db:engine name="ogds"
+               url="sqlite:///:memory:" />
+    <db:session name="opengever.ogds" engine="ogds" />
+
+</configure>

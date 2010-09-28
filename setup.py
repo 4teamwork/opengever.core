@@ -39,6 +39,7 @@ setup(name='opengever.ogds.base',
         'five.grok',
         'five.globalrequest',
         'z3c.saconfig',
+        'plone.app.registry',
         # -*- Extra requirements: -*-
         ],
       tests_require=tests_require,

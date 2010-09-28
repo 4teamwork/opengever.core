@@ -19,9 +19,7 @@ TESTFILES = (
 
 def test_suite():
     suite = unittest.TestSuite()
-    for testfile in TESTFILES:
-        suite.addTest(layered(doctest.DocFileSuite(
-                    testfile,
-                    optionflags=OPTIONFLAGS),
-                              layer=OPENGEVER_OGDS_BASE_TESTING))
+    suite.addTests([layered(doctest.DocFileSuite(filename),
+                    layer=OPENGEVER_OGDS_BASE_TESTING)
+                    for filename in TESTFILES])
     return suite
