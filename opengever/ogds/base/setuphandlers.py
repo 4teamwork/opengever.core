@@ -121,7 +121,7 @@ def _create_example_user(session, site, userid, properties, groups):
     # user should be in the given groups
     for groupid in groups:
         # does the group exist?
-        group = acl_users.getGroupById(groupid)
+        group = acl_users.source_groups.getGroupById(groupid)
         if not group:
             acl_users.source_groups.addGroup(groupid)
             group = acl_users.source_groups.getGroupById(groupid)

@@ -1,13 +1,13 @@
-from plone.app.testing import IntegrationTesting
+from opengever.ogds.base.interfaces import IClientConfiguration
 from opengever.ogds.base.setuphandlers import create_sql_tables, MODELS
 from opengever.ogds.base.utils import create_session
+from plone.app.testing import IntegrationTesting
 from plone.app.testing import PLONE_FIXTURE
-from plone.app.testing import applyProfile
 from plone.app.testing import PloneSandboxLayer
-from zope.configuration import xmlconfig
-from zope.component import getUtility
-from opengever.ogds.base.interfaces import IClientConfiguration
+from plone.app.testing import applyProfile
 from plone.registry.interfaces import IRegistry
+from zope.component import getUtility
+from zope.configuration import xmlconfig
 
 
 class BaseLayer(PloneSandboxLayer):
@@ -33,6 +33,8 @@ class BaseLayer(PloneSandboxLayer):
         registry = getUtility(IRegistry, context=portal)
         client = registry.forInterface(IClientConfiguration)
         client.client_id = u'client1'
+        # portal workaround
+        self.portal = portal
 
     def testSetUp(self):
         # setup the sql tables
@@ -42,6 +44,7 @@ class BaseLayer(PloneSandboxLayer):
         session = create_session()
         for model in MODELS:
             getattr(model, 'metadata').drop_all(session.bind)
+        # we may have created custom users and
 
 
 OPENGEVER_OGDS_BASE_FIXTURE = BaseLayer()

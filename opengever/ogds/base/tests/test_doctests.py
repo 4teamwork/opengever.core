@@ -13,13 +13,15 @@ TESTFILES = (
     'user_model.txt',
     'client_model.txt',
     'contact_info.txt',
+    'vocabularies.txt',
     )
 
 
 
 def test_suite():
     suite = unittest.TestSuite()
-    suite.addTests([layered(doctest.DocFileSuite(filename),
+    suite.addTests([layered(doctest.DocFileSuite(filename,
+                                                 optionflags=OPTIONFLAGS),
                     layer=OPENGEVER_OGDS_BASE_TESTING)
                     for filename in TESTFILES])
     return suite
