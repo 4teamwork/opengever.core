@@ -234,7 +234,7 @@
  <transition transition_id="task-transition-in-progress-resolved"
              title="task-transition-in-progress-resolved"
              new_state="task-state-resolved" trigger="USER"
-             before_script="" after_script="before_open_resolved">
+             before_script="" after_script="">
   <action url="%(content_url)s/addresponse?form.widgets.transition=task-transition-in-progress-resolved" category="workflow">task-transition-in-progress-resolved</action>
   <guard>
   </guard>
@@ -275,7 +275,7 @@
  <transition transition_id="task-transition-open-resolved"
              title="task-transition-open-resolved"
              new_state="task-state-resolved" trigger="USER"
-             before_script="" after_script="before_open_resolved">
+             before_script="" after_script="">
   <action url="%(content_url)s/addresponse?form.widgets.transition=task-transition-open-resolved" category="workflow">task-transition-open-resolved</action>
   <guard>
   </guard>
@@ -309,7 +309,7 @@
            for_status="True" update_always="True">
   <description>The last transition</description>
   <default>
-   
+
    <expression>transition/getId|nothing</expression>
   </default>
   <guard>
@@ -319,7 +319,7 @@
            for_status="True" update_always="True">
   <description>The ID of the user who performed the last transition</description>
   <default>
-   
+
    <expression>user/getId</expression>
   </default>
   <guard>
@@ -329,7 +329,7 @@
            for_status="True" update_always="True">
   <description>Comments about the last transition</description>
   <default>
-   
+
    <expression>python:state_change.kwargs.get('comment', '')</expression>
   </default>
   <guard>
@@ -339,7 +339,7 @@
            for_status="False" update_always="False">
   <description>Provides access to workflow history</description>
   <default>
-   
+
    <expression>state_change/getHistory</expression>
   </default>
   <guard>
@@ -350,13 +350,10 @@
            for_status="True" update_always="True">
   <description>Time of the last transition</description>
   <default>
-   
+
    <expression>state_change/getDateTime</expression>
   </default>
   <guard>
   </guard>
  </variable>
- <script script_id="before_open_resolved" type="Script (Python)"
-         filename="workflows/opengever_task_workflow/scripts/before_open_resolved.py"
-         module="" function=""/>
 </dc-workflow>

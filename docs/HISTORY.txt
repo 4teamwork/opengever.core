@@ -5,6 +5,13 @@ Changelog
 1.0a5
 -----
 
+* Issue #657 CopyRelatedDocumentsToInbox korrigieren
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/657
+  Re-impleted copy-related-documents-to-inbox views with a additional form for
+  selecting the target client, since it's now possible to have multiple assigned
+  clients per user.
+  [28.09.2010, jbaumann]
+
 * Issue #639 Mandantenuebergreifende Referenzen
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/639/
   [13.09.2010, jbaumann]
@@ -28,18 +35,18 @@ Changelog
 * Issue #505 Weiterleiten einer Aufgabe aus Eingangskorb Mandant 3 nach Mandant 1 geht nicht
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/505
   [08.04.2010, jbaumann]
-  
+
 * Issue #505 Weiterleiten einer Aufgabe aus Eingangskorb Mandant 3 nach Mandant 1 geht nicht
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/505
   Switched to new vocabulary: enables to select client inbox group
   [08.04.2010, jbaumann]
-  
+
 * Fixed related items bug
   [15.03.2010, jbaumann]
-  
+
 * Removed unused import which caused import error
   [15.03.2010, jbaumann]
-  
+
 * Issue #469 Aufgaben und Beilagen
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/469
   [15.03.2010, jbaumann]
@@ -48,7 +55,7 @@ Changelog
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/493
   added new index assigned_client, for better query in the assigned-tasks tab in the taskoverview
   [12.03.2010, pgross]
-  
+
 * Issue #468 Optimierung der inhaltlichen Usability von Aufgaben
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/468/
   [23.02.2010, pgross]
@@ -70,21 +77,21 @@ Changelog
 
 * AddlLocalRoles-Action: fixed bug which removed the creator role some times
   [03.02.2010, jbaumann]
-  
+
 * Task view: added issuer
   [03.02.2010, jbaumann]
 
 * INSTALLATION:
   * reindex global_solr and portal_catalog
 
-  
+
 
 1.0a4
 -----
 
 * Fixed InvalidObjectReference problem when importing GS profile multiple times.
   [20.01.2010, jbaumann]
-  
+
 
 1.0a3
 -----
@@ -96,7 +103,7 @@ Changelog
 * Issue #282: Kontakte-Webservice für OGDS
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/282
   [13.01.2010, jbaumann]
-  
+
 
 1.0
 ---
@@ -105,11 +112,11 @@ Changelog
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/332/view
   Added Task-indexes: date_of_completion and issuer
   [05.01.2010, jbaumann]
-  
+
 * Issue #329: Aufgabe: Neues Feld "Erledigungsdatum" beim Erledigen.
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/329
   [04.01.2010, jbaumann]
-  
+
 * Issue #296: Nummerierungskonzept umsetzen
   [16.12.2009, jbaumann]
 

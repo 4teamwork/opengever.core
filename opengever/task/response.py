@@ -80,11 +80,11 @@ class IResponse(Interface):
         title=_(u'label_related_items', default=u'Related Items'),
         default=[],
         value_type=RelationChoice(title=u"Related",
-            source=DossierPathSourceBinder(
+                                  source=DossierPathSourceBinder(
                 navigation_tree_query=
-                    {'portal_type': 'opengever.document.document', },
+                {'portal_type': 'opengever.document.document', },
                 portal_type="opengever.document.document", ),
-        ),
+                                  ),
         required=False,
         )
 
@@ -246,7 +246,7 @@ class AddForm(form.AddForm, AutoExtensibleForm):
     def action(self):
         """See interfaces.IInputForm"""
         return os.path.join(self.request.getURL(),
-            '++add++opengever.task.task')
+                            '++add++opengever.task.task')
 
     @button.buttonAndHandler(_(u'add', default='Add'),
                              name='add', )
@@ -281,7 +281,7 @@ class AddForm(form.AddForm, AutoExtensibleForm):
             #check other fields
             options = [
                 (task.deadline, data.get('deadline'), 'deadline',
-                    _('deadline')),
+                 _('deadline')),
                 (task.date_of_completion, completion_date,
                  'date_of_completion', _('date_of_completion'))]
 
@@ -314,9 +314,9 @@ class AddForm(form.AddForm, AutoExtensibleForm):
                 else:
                     setattr(task, 'relatedItems', [RelationValue(to_id)])
                 new_response.add_change('relatedItems',
-                    _('label_related_items', default="Related Items"),
-                    '',
-                    item.Title())
+                                        _('label_related_items', default="Related Items"),
+                                        '',
+                                        item.Title())
 
             # change workflow state of task
             if data.get('transition'):
@@ -335,10 +335,17 @@ class AddForm(form.AddForm, AutoExtensibleForm):
 
             notify(ObjectModifiedEvent(self.context))
 
-            self.request.RESPONSE.redirect(self.context.absolute_url())
+            copy_related_documents_view = self.context.restrictedTraverse(
+                '@@copy-related-documents-to-inbox')
+            if copy_related_documents_view.available():
+                url = os.path.join(self.context.absolute_url(),
+                                   '@@copy-related-documents-to-inbox')
+            else:
+                url = self.context.absolute_url()
+            self.request.RESPONSE.redirect(url)
 
     @button.buttonAndHandler(_(u'cancel', default='Cancel'),
-                            name='cancel', )
+                             name='cancel', )
 
     def handleCancel(self, action):
         return self.request.RESPONSE.redirect('.')

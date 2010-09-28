@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2010-09-27 10:03+0000\n"
-"PO-Revision-Date: 2010-09-27 12:06+0200\n"
+"POT-Creation-Date: 2010-09-28 08:51+0000\n"
+"PO-Revision-Date: 2010-09-28 10:56+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -18,13 +18,13 @@ msgstr "Berechtigungen hinzufügen"
 
 #: ./opengever/task/actions/addlocalroles.py:46
 msgid "Add local roles for object: ${object_roles}, related items: ${related_items_roles}, parent: ${parent_roles}"
-msgstr ""
+msgstr "Rollen auf Objekt setzen: ${object_roles}, related items: ${related_items_roles}, parent: ${parent_roles}"
 
 #: ./opengever/task/actions/addlocalroles.py:106
 msgid "Add local roles to all related items for the 'responsible' user."
-msgstr ""
+msgstr "Lokale Rollen auf allen related-items für den Verantwortlichen Benutzer setzen."
 
-#: ./opengever/task/response.py:438
+#: ./opengever/task/response.py:445
 msgid "Changes saved to response id ${response_id}."
 msgstr "Änderungen an der Antwort ${response_id} wurden gespeichert"
 
@@ -48,11 +48,11 @@ msgstr ""
 msgid "Issue state"
 msgstr "Status"
 
-#: ./opengever/task/response.py:466
+#: ./opengever/task/response.py:473
 msgid "No response selected for removal."
 msgstr "Es wurde keine Antwort fürs Löschen selektiert"
 
-#: ./opengever/task/response.py:429
+#: ./opengever/task/response.py:436
 msgid "No response selected for saving."
 msgstr "Es wurde keine Antwort fürs Speichern selektiert"
 
@@ -72,11 +72,11 @@ msgstr ""
 msgid "Related Items Roles"
 msgstr ""
 
-#: ./opengever/task/response.py:488
+#: ./opengever/task/response.py:495
 msgid "Removed response id ${response_id}."
 msgstr "Antwort ${response_id} gelöscht"
 
-#: ./opengever/task/response.py:481
+#: ./opengever/task/response.py:488
 msgid "Response id ${response_id} does not exist so it cannot be removed."
 msgstr "Antowrt ${response_id} existiert nicht und konnte deshalb nicht gelöscht werden"
 
@@ -84,7 +84,7 @@ msgstr "Antowrt ${response_id} existiert nicht und konnte deshalb nicht gelösch
 msgid "Response id ${response_id} does not exist."
 msgstr "Antwort ${response_id} exisitert nicht"
 
-#: ./opengever/task/response.py:473
+#: ./opengever/task/response.py:480
 msgid "Response id ${response_id} is no integer so it cannot be removed."
 msgstr "Antwort id ${response_id} ist keine Zahl und konnte deshalb nicht gelöscht werden"
 
@@ -105,11 +105,11 @@ msgstr "Auftragsübersicht"
 msgid "The local roles to add."
 msgstr ""
 
-#: ./opengever/task/response.py:460
+#: ./opengever/task/response.py:467
 msgid "You are not allowed to delete responses."
 msgstr "Sie haben keine Berechtigung Antworten zu löschen"
 
-#: ./opengever/task/response.py:423
+#: ./opengever/task/response.py:430
 msgid "You are not allowed to edit responses."
 msgstr "Sie haben keine Berechtigung Antworten zu editieren"
 
@@ -133,8 +133,13 @@ msgstr "Abbrechen"
 msgid "button_continue"
 msgstr "Weiter"
 
+#. Default: "Copy"
+#: ./opengever/task/views.py:78
+msgid "button_copy"
+msgstr "Kopieren"
+
 #. Default: "Cancel"
-#: ./opengever/task/response.py:340
+#: ./opengever/task/response.py:347
 msgid "cancel"
 msgstr "Abbrechen"
 
@@ -163,6 +168,11 @@ msgstr "Frist"
 msgid "documents"
 msgstr "Dokumente"
 
+#. Default: "It's not possible to copy related documents."
+#: ./opengever/task/views.py:82
+msgid "error_copying_related_documents_not_possible"
+msgstr "Es ist nicht möglich, die verknüpften Dokumente zu kopieren."
+
 #. Default: "Additional"
 #: ./opengever/task/task.py:52
 msgid "fieldset_additional"
@@ -172,6 +182,10 @@ msgstr "Erweitert"
 #: ./opengever/task/task.py:37
 msgid "fieldset_common"
 msgstr "Allgemein"
+
+#: ./opengever/task/views.py:59
+msgid "help_copy_documents"
+msgstr ""
 
 #: ./opengever/task/response.py:68
 #: ./opengever/task/task.py:116
@@ -251,6 +265,10 @@ msgstr "Wählen Sie ein Dokument aus dem vorgängig gewählten Dossier"
 msgid "help_source_dossier"
 msgstr "Wählen Sie ein Dossier von ihrem Mandanten"
 
+#: ./opengever/task/views.py:66
+msgid "help_target_client"
+msgstr ""
+
 #: ./opengever/task/task.py:81
 msgid "help_task_type"
 msgstr "Wählen sie den Tasktyp"
@@ -268,6 +286,11 @@ msgstr "Der Name der Aufgabe"
 msgid "help_transition"
 msgstr ""
 
+#. Default: "All related documents were copied to the inbox of the client ${client}."
+#: ./opengever/task/views.py:90
+msgid "info_copied_related_documents"
+msgstr "Die mit dieser Aufgabe verknüpften Dokumente wurden in den Eingangskorb des Mandanten ${client} kopiert."
+
 msgid "issuedtasks"
 msgstr "In Auftrag gegebene Aufgaben"
 
@@ -278,6 +301,11 @@ msgstr "In Auftrag gegebene Aufgaben"
 #: ./opengever/task/viewlets/byline.pt:17
 msgid "label_by_author"
 msgstr "Verantwortlich: ${author}"
+
+#. Default: "Copy related documents to inbox of target client"
+#: ./opengever/task/views.py:57
+msgid "label_copy_documents"
+msgstr "Mit der Aufgabe verknüpfte Dokumente in den Eingangskorb des Ziel-Mandanten kopieren."
 
 #. Default: "Date of completion"
 #: ./opengever/task/response.py:67
@@ -404,6 +432,11 @@ msgstr "Dokument"
 msgid "label_source_dossier"
 msgstr "Dossier"
 
+#. Default: "Target client"
+#: ./opengever/task/views.py:64
+msgid "label_target_client"
+msgstr "Ziel-Mandant"
+
 #. Default: "Task Type"
 #: ./opengever/task/task.py:80
 #: ./opengever/task/taskoverview.py:37
@@ -482,6 +515,11 @@ msgstr "am"
 #: ./opengever/task/attachdocument.py:42
 msgid "title_attach_document_form"
 msgstr "Dokument aus Heimmandant anhängen"
+
+#. Default: "Copy related documents"
+#: ./opengever/task/views.py:74
+msgid "title_copy_releated_documents"
+msgstr "Verknüpfte Dokumente kopieren"
 
 #. Default: "Edit response"
 #: ./opengever/task/templates/edit_response.pt:41
