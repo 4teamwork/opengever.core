@@ -1,58 +1,73 @@
-Imports:
+Imports / globals:
 
+    >>> from Products.CMFCore.utils import getToolByName
     >>> from opengever.ogds.base.interfaces import IContactInformation
-    >>> from opengever.ogds.base.model.user import User
     >>> from opengever.ogds.base.model.client import Client
+    >>> from opengever.ogds.base.model.user import User
     >>> from opengever.ogds.base.utils import create_session, get_current_client
+    >>> from opengever.ogds.base.setuphandlers import _create_example_user
+    >>> from opengever.ogds.base.setuphandlers import _create_example_client
     >>> from zope.component import getUtility
     >>> import transaction
 
+    >>> app = layer.get('app')
+    >>> portal = layer.get('portal')
 
 Lets create some users:
 
     >>> session = create_session()
 
-    >>> u1 = User('hugo.boss')
-    >>> u1.firstname = 'Hugo'
-    >>> u1.lastname = 'Boss'
-    >>> u1.email = 'hugo@boss.local'
-    >>> session.add(u1)
-    >>> u2 = User('peter.muster')
-    >>> session.add(u2)
+    >>> _create_example_user(session, portal,
+    ...                      'hugo.boss',
+    ...                      {'firstname': 'Hugo',
+    ...                       'lastname': 'Boss',
+    ...                       'email': 'hugo@boss.local',
+    ...                       'email2': 'hugo@private.ch'},
+    ...                      ('client1_users',
+    ...                       'client1_inbox_users'))
+
+    >>> _create_example_user(session, portal,
+    ...                      'peter.muster',
+    ...                      {'firstname': 'Peter',
+    ...                       'lastname': 'Muster'},
+    ...                      ('client2_users',
+    ...                       'client2_inbox_users'))
+
     >>> transaction.commit()
 
 
 And we also need some clients:
 
-    >>> c1 = Client('client1', title='Client 1')
-    >>> c1.ip_address = '127.0.0.1'
-    >>> c1.site_url = 'http://nohost/client1'
-    >>> c1.public_url = 'http://nohost/client1'
-    >>> c1.group = 'client1_users'
-    >>> c1.group = 'client1_inbox_users'
-    >>> session.add(c1)
 
-    >>> c2 = Client('client2', title='Client 2')
-    >>> c2.ip_address = '127.0.0.1'
-    >>> c2.site_url = 'http://nohost/client2'
-    >>> c2.public_url = 'http://nohost/client2'
-    >>> c2.group = 'client2_users'
-    >>> c2.group = 'client2_inbox_users'
-    >>> session.add(c2)
+    >>> _create_example_client(session, 'client1',
+    ...                       {'title': 'Client 1',
+    ...                        'ip_address': '127.0.0.1',
+    ...                        'site_url': 'http://nohost/client1',
+    ...                        'public_url': 'http://nohost/client1',
+    ...                        'group': 'client1_users',
+    ...                        'inbox_group': 'client1_inbox_users'})
 
-    >>> c3 = Client('client3', title='Client 3')
-    >>> c3.enabled = False
-    >>> c3.ip_address = '127.0.0.1'
-    >>> c3.site_url = 'http://nohost/client3'
-    >>> c3.public_url = 'http://nohost/client3'
-    >>> c3.group = 'client3_users'
-    >>> c3.group = 'client3_inbox_users'
-    >>> session.add(c3)
+    >>> _create_example_client(session, 'client2',
+    ...                       {'title': 'Client 2',
+    ...                        'ip_address': '127.0.0.1',
+    ...                        'site_url': 'http://nohost/client2',
+    ...                        'public_url': 'http://nohost/client2',
+    ...                        'group': 'client2_users',
+    ...                        'inbox_group': 'client2_inbox_users'})
+
+    >>> _create_example_client(session, 'client3',
+    ...                       {'title': 'Client 3',
+    ...                        'enabled': False,
+    ...                        'ip_address': '127.0.0.1',
+    ...                        'site_url': 'http://nohost/client3',
+    ...                        'public_url': 'http://nohost/client3',
+    ...                        'group': 'client3_users',
+    ...                        'inbox_group': 'client3_inbox_users'})
 
     >>> transaction.commit()
 
 
-Get the current client:
+Get the current client (see layer testing.py):
 
     >>> get_current_client()
     <Client client1>
@@ -87,6 +102,16 @@ User tests:
     >>> info.describe('hugo.boss', with_email=True)
     u'Boss Hugo (hugo@boss.local)'
 
+    >>> info.get_email('hugo.boss')
+    u'hugo@boss.local'
+    >>> info.get_email2('hugo.boss')
+    u'hugo@private.ch'
+
+    >>> info.get_profile_url('hugo.boss')
+    u'http://nohost/plone/@@user_details/hugo.boss'
+
+    >>> info.render_link('hugo.boss')
+    u'<a href="http://nohost/plone/@@user_details/hugo.boss">Boss Hugo</a>'
 
 Contacts tests:
 
@@ -111,5 +136,21 @@ Inboxes tests:
 
 Various lists:
 
-#     >>> info.list_assigned_users()
-#     [peter]
+    >>> list(info.list_assigned_users())
+    [<User hugo.boss>]
+
+    >>> list(info.list_assigned_users(client_id='client2'))
+    [<User peter.muster>]
+
+    >>> list(info.get_clients())
+    [<Client client1>, <Client client2>]
+
+    >>> info.get_client_by_id('client1')
+    <Client client1>
+
+    >>> print info.get_client_by_id('client3')
+    None
+
+    >>> print info.get_client_by_id('unknown client')
+    None
+
