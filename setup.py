@@ -6,6 +6,7 @@ maintainer = 'Jonas Baumann'
 
 tests_require = [
     'plone.app.testing',
+    'opengever.contact',
     ]
 
 setup(name='opengever.ogds.base',
@@ -36,10 +37,10 @@ setup(name='opengever.ogds.base',
       install_requires=[
         'setuptools',
         'SQLAlchemy',
-        'five.grok',
         'five.globalrequest',
-        'z3c.saconfig',
+        'five.grok',
         'plone.app.registry',
+        'z3c.saconfig',
         # -*- Extra requirements: -*-
         ],
       tests_require=tests_require,
