@@ -116,7 +116,10 @@ class ReceiveObject(grok.CodeView):
     def render( self ):
         transporter = getUtility(ITransporter)
         container = self.context
-        return transporter.receive(container, self.request)
+        obj = transporter.receive(container, self.request)
+        portal = self.context.portal_url.getPortalObject()
+        portal_path = '/'.join(portal.getPhysicalPath())
+        return '/'.join(obj.getPhysicalPath())[len(portal_path):]
 
 
 class ExtractObject(grok.CodeView):
