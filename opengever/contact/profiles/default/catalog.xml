@@ -6,6 +6,7 @@
 
     <column value="contactid" />
     <column value="email" />
+    <column value="email2" />
     <column value="firstname" />
     <column value="lastname" />
 
