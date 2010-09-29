@@ -1,11 +1,6 @@
 from five import grok
-from Products.CMFCore.utils import getToolByName
 from opengever.tabbedview.browser.tabs import OpengeverListingTab
 from ftw.table import helper
-from opengever.tabbedview.helper import readable_ogds_author, \
-    readable_date_set_invisibles
-
-from opengever.task import _
 
 
 def authenticated_member(context):

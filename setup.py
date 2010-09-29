@@ -22,7 +22,7 @@ setup(name='opengever.contact',
     author='%s, 4teamwork GmbH' % maintainer,
     author_email='mailto:info@4teamwork.ch',
     maintainer=maintainer,
-    url='http://psc.4teamwork.ch/4teamwork/kunden/opengever/opengever.document/',
+    url='http://psc.4teamwork.ch/4teamwork/kunden/opengever/opengever-contact/',
     license='GPL2',
     packages=find_packages(exclude=['ez_setup']),
     namespace_packages=['opengever'],
@@ -30,6 +30,7 @@ setup(name='opengever.contact',
     zip_safe=False,
     install_requires=[
       'setuptools',
+      'opengever.tabbedview',
       # -*- Extra requirements: -*-
     ],
 
