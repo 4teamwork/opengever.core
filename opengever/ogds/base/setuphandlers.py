@@ -151,7 +151,6 @@ def setup_scriptable_plugin(acl_users, plugin_id, external_methods):
     for em_id, em in external_methods.items():
         if not plug.get(em_id):
             # add the external method
-            import pdb; pdb.set_trace()
             em_factory.manage_addExternalMethod(em_id, **em['attrs'])
         # provide the interface
         alsoProvides(plug, em['interface'])
