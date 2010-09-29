@@ -95,7 +95,7 @@ class ContactInformation(grok.GlobalUtility):
         """Returns a catalog result set of contact brains.
         """
         catalog = getToolByName(getSite(), 'portal_catalog')
-        return catalog(portal_type='ftw.directoryservice.contact')
+        return catalog(portal_type='opengever.contact.contact')
 
     def get_contact(self, principal):
         """Returns the contact object of this principal.
@@ -105,7 +105,7 @@ class ContactInformation(grok.GlobalUtility):
             raise ValueError('Principal %s is not a contact' % str(principal))
 
         catalog = getToolByName(getSite(), 'portal_catalog')
-        contacts = catalog(portal_type='ftw.directoryservice.contact',
+        contacts = catalog(portal_type='opengever.contact.contact',
                            contactid=principal)
         if len(contacts) == 0:
             return None

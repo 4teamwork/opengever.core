@@ -4,10 +4,11 @@ Imports / globals:
     >>> from opengever.ogds.base.interfaces import IContactInformation
     >>> from opengever.ogds.base.model.client import Client
     >>> from opengever.ogds.base.model.user import User
+    >>> from opengever.ogds.base.setuphandlers import _create_example_client
+    >>> from opengever.ogds.base.setuphandlers import _create_example_user
+    >>> from opengever.ogds.base.testing import create_contacts
     >>> from opengever.ogds.base.utils import create_session, get_current_client
     >>> from opengever.ogds.base.utils import get_client_id
-    >>> from opengever.ogds.base.setuphandlers import _create_example_user
-    >>> from opengever.ogds.base.setuphandlers import _create_example_client
     >>> from zope.component import getUtility
 
     >>> app = layer.get('app')
@@ -64,6 +65,13 @@ And we also need some clients:
     ...                        'inbox_group': 'client3_inbox_users'})
 
 
+Create some local contacts:
+
+    >>> create_contacts(portal)
+    >>> len(portal.contacts.objectIds())
+    3
+
+
 Get the current client (see layer testing.py):
 
     >>> get_client_id()
@@ -116,7 +124,26 @@ User tests:
 
 Contacts tests:
 
-XXX
+    >>> contacts = info.list_contacts()
+    >>> contacts
+    [<Products.ZCatalog.Catalog.mybrains object at ...>, <Products.ZCatalog.Catalog.mybrains object at ...>, <Products.ZCatalog.Catalog.mybrains object at ...>]
+
+    >>> contacts[0].contactid
+    'contact:kaufmann-sandra'
+
+    >>> info.is_contact('contact:kaufmann-sandra')
+    True
+
+    >>> sandra = info.get_contact('contact:kaufmann-sandra')
+    >>> sandra
+    <Products.ZCatalog.Catalog.mybrains object at ...>
+
+    >>> sandra.firstname
+    'Sandra'
+    >>> sandra.lastname
+    'Kaufmann'
+    >>> sandra.email
+    'sandra.kaufmann@test.ch'
 
 
 Inboxes tests:

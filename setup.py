@@ -7,6 +7,7 @@ maintainer = 'Jonas Baumann'
 tests_require = [
     'plone.app.testing',
     'opengever.contact',
+    'plone.app.dexterity',
     ]
 
 setup(name='opengever.ogds.base',
