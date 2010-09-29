@@ -31,7 +31,7 @@ class IChooseClientSchema(form.Schema):
                 default=u'Client'),
         description=_(u'help_source_client',
                       default=u''),
-        vocabulary=u'opengever.ogds.base.AssignedClientsVocabulary',
+        vocabulary=u'opengever.ogds.base.OtherAssignedClientsVocabulary',
         required=True)
 
 
