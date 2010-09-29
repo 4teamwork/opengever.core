@@ -185,6 +185,33 @@ class ClientsVocabularyFactory(grok.GlobalUtility):
                    client.title)
 
 
+class AssignedClientsVocabularyFactory(grok.GlobalUtility):
+    """Vocabulary of all assigned clients (=home clients) of the
+    current user, including the current client.
+    """
+
+    grok.provides(IVocabularyFactory)
+    grok.name('opengever.ogds.base.AssignedClientsVocabulary')
+
+    def __call__(self, context):
+        vocab = ContactsVocabulary.create_with_provider(
+            self.key_value_provider)
+        return vocab
+
+    def key_value_provider(self):
+        """yield the items
+
+        key = client id
+        value = client title
+        """
+
+        info = getUtility(IContactInformation)
+
+        for client in info.get_assigned_clients():
+            yield (client.client_id,
+                   client.title)
+
+
 class OtherAssignedClientsVocabularyFactory(grok.GlobalUtility):
     """Vocabulary of all assigned clients (=home clients) of the
     current user. The current client is not included!
