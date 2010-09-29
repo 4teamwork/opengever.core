@@ -7,21 +7,29 @@
     xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
     i18n_domain="opengever.contact">
 
-  <!-- Include configuration for dependencies listed in setup.py -->
-  <includeDependencies package="." />
+    <!-- Include configuration for dependencies listed in setup.py -->
+    <includeDependencies package="." />
 
-  <!-- Grok the package to initialise schema interfaces and content classes -->
-  <grok:grok package="." />
+    <!-- Grok the package to initialise schema interfaces and content classes -->
+    <grok:grok package="." />
 
-  <i18n:registerTranslations directory="locales" />
+    <i18n:registerTranslations directory="locales" />
 
-  <!-- Register an extension profile to make the product installable -->
-  <genericsetup:registerProfile
-      name="default"
-      title="opengever.contact"
-      description="Opengever contact installation"
-      directory="profiles/default"
-      provides="Products.GenericSetup.interfaces.EXTENSION"
-      />
+    <!-- Register an extension profile to make the product installable -->
+    <genericsetup:registerProfile
+        name="default"
+        title="opengever.contact"
+        description="Opengever contact installation"
+        directory="profiles/default"
+        provides="Products.GenericSetup.interfaces.EXTENSION"
+        />
+
+    <!-- Register the import step -->
+    <genericsetup:importStep
+        name="opengever.contact"
+        title="opengever.contact special import handlers"
+        description=""
+        handler="opengever.contact.setuphandlers.import_various" />
+
 
 </configure>

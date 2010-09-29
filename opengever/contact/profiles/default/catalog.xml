@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<object name="portal_catalog" meta_type="Plone Catalog Tool">
+
+    <!-- Add indexes here on penalty of death or worse.
+         See INDEXES in config.py instead. -->
+
+    <column value="contactid" />
+    <column value="email" />
+    <column value="firstname" />
+    <column value="lastname" />
+
+</object>

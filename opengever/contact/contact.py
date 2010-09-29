@@ -142,11 +142,7 @@ class IContact(form.Schema):
 class Contact(Item):
 
     def contactid(self):
-        parent = aq_parent(aq_inner(self))
-        return 'contact:%s@%s' % (
-            self.id,
-            parent and parent.id or '-',
-        )
+        return 'contact:%s' % self.id
 
     @property
     def title(self):
