@@ -284,13 +284,77 @@ current user. The current client is not included!
 
 
 
+Dossiers and documents vocabularies
+===================================
+
+For the dossiers and documents vocabularies below we need to mock the communicator
+because we don't want to set up another plone site to test that.
+
+    >>> from opengever.ogds.base import communication
+    >>> from zope.interface import implements
+
+    >>> class ClientCommunicatorMockUtility(communication.ClientCommunicator):
+    ...     implements(communication.IClientCommunicator)
+    ...     #
+    ...     def get_open_dossiers(self, target_client_id):
+    ...         return [{'url': 'http://nohost/client2/op1/op2/dossier1',
+    ...                  'path': 'op1/op2/dossier1',
+    ...                  'title': 'Dossier 1',
+    ...                  'workflow_state': 'dossier-state-active',
+    ...                  'reference_number': 'OG 1.2 / 1'},
+    ...                 {'url': 'http://nohost/client2/op1/op2/dossier2',
+    ...                  'path': 'op1/op2/dossier2',
+    ...                  'title': 'Dossier 2',
+    ...                  'workflow_state': 'dossier-state-active',
+    ...                  'reference_number': 'OG 1.2 / 2'}]
+    ...     #
+    ...     def get_documents_of_dossier(self, target_client_id, dossier_path):
+    ...         dossier_url = 'http://nohost/client2/' + dossier_path
+    ...         return [{'path': dossier_path + '/document-1',
+    ...                  'url': dossier_url + '/document-1',
+    ...                  'title': 'First Document',
+    ...                  'review_state': 'draft'},
+    ...                 {'path': dossier_path + '/document-2',
+    ...                  'url': dossier_url + '/document-2',
+    ...                  'title': 'Second Document',
+    ...                  'review_state': 'draft'}]
+
+    >>> from zope.component import provideUtility
+    >>> provideUtility(ClientCommunicatorMockUtility())
+
+
+The tests below must be run by a user who is not assigned to the
+current client (client1) but to another client (client2):
+
+    >>> logout()
+    >>> login(portal, 'peter.muster')
+
 Home dossiers vocabulary
 ------------------------
 
-XXX
+    >>> request.set('client', 'client2')
+    >>> setRequest(request)
+    >>> fact = getUtility(IVocabularyFactory,
+    ...                   name='opengever.ogds.base.HomeDossiersVocabulary')
+    >>> voc = fact(portal)
+    >>> fterms(list(voc))
+    ['<Term op1/op2/dossier1:OG 1.2 / 1: Dossier 1>', '<Term op1/op2/dossier2:OG 1.2 / 2: Dossier 2>']
+
+    >>> request.set('client', None)
 
 
 Documents in selected dossier vocabulary
 ----------------------------------------
 
-XXX
+    >>> request.set('client', 'client2')
+    >>> request.set('dossier_path', 'op1/op2/dossier2')
+    >>> setRequest(request)
+    >>> fact = getUtility(IVocabularyFactory,
+    ...                   name='opengever.ogds.base.DocumentInSelectedDossierVocabulary')
+    >>> voc = fact(portal)
+    >>> fterms(list(voc))
+    ['<Term op1/op2/dossier2/document-1:First Document>', '<Term op1/op2/dossier2/document-2:Second Document>']
+
+    >>> request.set('client', None)
+    >>> request.set('dossier_path', None)
+
