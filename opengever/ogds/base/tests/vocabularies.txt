@@ -258,14 +258,14 @@ Vocabulary of all enabled clients (including the current one).
 
 
 
-Assigned clients vocabulary
----------------------------
+Other Assigned clients vocabulary
+---------------------------------
 
 Vocabulary of all assigned clients (=home clients) of the
 current user. The current client is not included!
 
     >>> fact = getUtility(IVocabularyFactory,
-    ...                   name='opengever.ogds.base.AssignedClientsVocabulary')
+    ...                   name='opengever.ogds.base.OtherAssignedClientsVocabulary')
     >>> voc = fact(portal)
     >>> fterms(list(voc))
     []
@@ -274,7 +274,7 @@ current user. The current client is not included!
     >>> login(portal, 'peter.muster')
 
     >>> fact = getUtility(IVocabularyFactory,
-    ...                   name='opengever.ogds.base.AssignedClientsVocabulary')
+    ...                   name='opengever.ogds.base.OtherAssignedClientsVocabulary')
     >>> voc = fact(portal)
     >>> fterms(list(voc))
     [u'<Term client2:Client 2>']

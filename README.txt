@@ -255,7 +255,7 @@ users and contacts with each e-mail address they have.
 :opengever.ogds.base.ClientsVocabulary: Vocabulary of all enabled clients (including
  the current one).
 
-:opengever.ogds.base.AssignedClientsVocabulary: Vocabulary of all assigned
+:opengever.ogds.base.OtherAssignedClientsVocabulary: Vocabulary of all assigned
 clients (=home clients) of the current user. The current client is not included!
 
 :opengever.ogds.base.HomeDossiersVocabulary: Vocabulary of all open dossiers on

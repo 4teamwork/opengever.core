@@ -185,13 +185,13 @@ class ClientsVocabularyFactory(grok.GlobalUtility):
                    client.title)
 
 
-class AssignedClientsVocabularyFactory(grok.GlobalUtility):
+class OtherAssignedClientsVocabularyFactory(grok.GlobalUtility):
     """Vocabulary of all assigned clients (=home clients) of the
     current user. The current client is not included!
     """
 
     grok.provides(IVocabularyFactory)
-    grok.name('opengever.ogds.base.AssignedClientsVocabulary')
+    grok.name('opengever.ogds.base.OtherAssignedClientsVocabulary')
 
     def __call__(self, context):
         vocab = ContactsVocabulary.create_with_provider(
@@ -212,6 +212,7 @@ class AssignedClientsVocabularyFactory(grok.GlobalUtility):
             if current_client_id != client.client_id:
                 yield (client.client_id,
                        client.title)
+
 
 
 class HomeDossiersVocabularyFactory(grok.GlobalUtility):
