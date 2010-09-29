@@ -251,8 +251,17 @@ class HomeDossiersVocabularyFactory(grok.GlobalUtility):
     grok.name('opengever.ogds.base.HomeDossiersVocabulary')
 
     def __call__(self, context):
+        vocab = ContactsVocabulary.create_with_provider(
+            self.key_value_provider)
+        return vocab
+
+    def key_value_provider(self):
+        """yield home dossiers
+        key: relative path on home client
+        value: "%(reference_number): %(title)"
+        """
+
         request = getRequest()
-        terms = []
 
         info = getUtility(IContactInformation)
         comm = getUtility(IClientCommunicator)
@@ -264,21 +273,15 @@ class HomeDossiersVocabularyFactory(grok.GlobalUtility):
             client_id = client_id[0]
         client = info.get_client_by_id(client_id)
 
-        if client not in home_clients:
+        if client and client not in home_clients:
             raise ValueError('Expected %s to be a ' % client_id + \
                                  'assigned client of the current user.')
 
-        if client:
+        elif client:
             for dossier in comm.get_open_dossiers(client.client_id):
-                key = dossier['path']
-                value = '%s: %s' % (dossier['reference_number'],
-                                    dossier['title'])
-                terms.append(SimpleVocabulary.createTerm(key,
-                                                         key,
-                                                         value))
-        # XXX: remove sorting as soon as autocomplete widget is used
-        terms.sort(lambda a,b:cmp(a.title, b.title))
-        return SimpleVocabulary(terms)
+                yield (dossier['path'],
+                       '%s: %s' % (dossier['reference_number'],
+                                   dossier['title']))
 
 
 class DocumentInSelectedDossierVocabularyFactory(grok.GlobalUtility):

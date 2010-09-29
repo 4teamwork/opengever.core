@@ -365,7 +365,7 @@ Home dossiers vocabulary
     ...                   name='opengever.ogds.base.HomeDossiersVocabulary')
     >>> voc = fact(portal)
     >>> fterms(list(voc))
-    ['<Term op1/op2/dossier1:OG 1.2 / 1: Dossier 1>', '<Term op1/op2/dossier2:OG 1.2 / 2: Dossier 2>']
+    [u'<Term op1/op2/dossier1:OG 1.2 / 1: Dossier 1>', u'<Term op1/op2/dossier2:OG 1.2 / 2: Dossier 2>']
 
     >>> request.set('client', None)
 
