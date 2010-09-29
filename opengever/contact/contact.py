@@ -13,9 +13,6 @@ from opengever.contact import _
 from plone.directives import dexterity
 
 from opengever.tabbedview.browser.tabs import OpengeverTab
-from ftw.table import helper
-from ftw.directoryservice.contact import IContact
-from ftw.directoryservice.membership import Membership
 
 
 class IContact(form.Schema):
@@ -39,13 +36,13 @@ class IContact(form.Schema):
         description = _(u'help_company', default=u''),
         required = False,
     )
-    
+
     function = schema.TextLine(
         title = _(u'lable_function', default=u'Function'),
         description = _(u'help_function', default=u''),
         required = False,
     )
-    
+
     department = schema.TextLine(
         title = _(u'label_department', default=u'Department'),
         description = _(u'help_department', default=u''),
@@ -165,7 +162,7 @@ class Contact(Item):
         """ Dummy action (is called while creating object)
         """
         pass
-        
+
 
 @indexer(IContact)
 def contactid(obj):
