@@ -7,6 +7,7 @@ from zope.component import getUtility
 from zope.globalrequest import getRequest
 from zope.schema.interfaces import IVocabularyFactory
 from zope.schema.vocabulary import SimpleVocabulary
+import AccessControl
 
 
 class UsersVocabularyFactory(grok.GlobalUtility):
@@ -261,11 +262,17 @@ class HomeDossiersVocabularyFactory(grok.GlobalUtility):
         value: "%(reference_number): %(title)"
         """
 
+        # if we are not logged in we are in the traversal and should not
+        # do anything...
+        user = AccessControl.getSecurityManager().getUser()
+        if user == AccessControl.SpecialUsers.nobody:
+            return
+
         request = getRequest()
 
         info = getUtility(IContactInformation)
         comm = getUtility(IClientCommunicator)
-        home_clients = info.get_assigned_clients()
+        home_clients = tuple(info.get_assigned_clients())
 
         client_id = request.get(
             'client', request.get('form.widgets.client'))

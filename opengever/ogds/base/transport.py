@@ -7,6 +7,8 @@ from opengever.ogds.base.utils import remote_request, remote_json_request
 from plone.dexterity.interfaces import IDexterityFTI, IDexterityContent
 from plone.dexterity.utils import createContentInContainer, iterSchemata
 from plone.namedfile.interfaces import INamedFileField
+from z3c.relationfield.interfaces import IRelation, IRelationChoice
+from z3c.relationfield.interfaces import IRelationList
 from zope import schema
 from zope.component import getAdapters, queryAdapter, getAdapter
 from zope.component import getUtility
@@ -119,7 +121,7 @@ class ReceiveObject(grok.CodeView):
         obj = transporter.receive(container, self.request)
         portal = self.context.portal_url.getPortalObject()
         portal_path = '/'.join(portal.getPhysicalPath())
-        return '/'.join(obj.getPhysicalPath())[len(portal_path):]
+        return '/'.join(obj.getPhysicalPath())[len(portal_path) + 1:]
 
 
 class ExtractObject(grok.CodeView):
@@ -223,6 +225,19 @@ class DexterityFieldDataCollector(grok.Adapter):
                     'filename' : value.filename,
                     'data' : base64.encodestring( value.data ),
                     }
+
+        elif self._provided_by_one_of(field, (
+                IRelation,
+                IRelationChoice,
+                IRelationList,)):
+            # Remove all relations since we cannot guarantee anyway the they
+            # are on the target. Relations have to be rebuilt by to tool which
+            # uses the transporter - if required.
+            if self._provided_by_one_of(field, (IRelation, IRelationChoice)):
+                return None
+            elif self._provided_by_one_of(field, (IRelationList,)):
+                return []
+
         return value
 
     def unpack(self, name, field, value):
@@ -255,3 +270,4 @@ class DexterityFieldDataCollector(grok.Adapter):
             if ifc.providedBy(obj):
                 return True
         return False
+
