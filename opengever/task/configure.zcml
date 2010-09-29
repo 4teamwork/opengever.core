@@ -11,13 +11,13 @@
     <!-- Include configuration for dependencies listed in setup.py -->
     <includeDependencies package="." />
 
+    <!-- Include custom permissions -->
+    <include file="permissions.zcml" />
+
     <!-- Grok the package to initialise schema interfaces and content classes -->
     <grok:grok package="." />
 
     <include package=".browser" />
-
-    <!-- Include custom permissions -->
-    <include file="permissions.zcml" />
 
     <include file="profiles.zcml" />
 

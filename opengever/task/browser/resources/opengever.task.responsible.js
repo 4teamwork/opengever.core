@@ -1,12 +1,25 @@
 jq(window).load(function() {
+    /* When the responsible client is updated we need to extend the autocomplete
+       search URL of the responsible widget with the client ID. We also do this
+       intially. */
+
+    /* for add / edit task and add / edit reponse: */
     $('#form-widgets-responsible_client').change(function(event) {
-        /* When the responsible client is updated we need to extend the autocomplete
-           search URL of the responsible widget with the client ID. We also do this
-           intially. */
-        $('#form-widgets-responsible-widgets-query').autocomplete(
-            'option', 'source',
-            $(document).context.URL.concat(
-                '/++widget++responsible/@@autocomplete-search?client='.concat(
-                    $(this).find('option:selected').attr('value'))));
+        var url = $('#form-widgets-responsible-widgets-query').autocomplete(
+            'option', 'source').split('?')[0].concat('?client=').concat(
+                $(this).find('option:selected').attr('value'));
+
+        $('#form-widgets-responsible-widgets-query').autocomplete('option',
+                                                                  'source', url);
     }).change();
+
+    /* for creating a successor task: */
+    $('#form-widgets-client').change(function(event) {
+        var url = $('#form-widgets-dossier-widgets-query').autocomplete(
+            'option', 'source').split('?')[0].concat('?client=').concat(
+                $(this).find('option:selected').attr('value'));
+        $('#form-widgets-dossier-widgets-query').autocomplete('option',
+                                                              'source', url);
+    }).change();
+
 });

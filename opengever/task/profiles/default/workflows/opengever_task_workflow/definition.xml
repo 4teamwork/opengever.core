@@ -1,8 +1,5 @@
 <?xml version="1.0"?>
-<dc-workflow workflow_id="opengever_task_workflow"
-             title="Workflow for opengever tasks"
-             description="" state_variable="review_state"
-             initial_state="task-state-open">
+<dc-workflow workflow_id="opengever_task_workflow" title="Workflow for opengever tasks" description="" state_variable="review_state" initial_state="task-state-open" manager_bypass="False">
  <permission>Access contents information</permission>
  <permission>Add portal content</permission>
  <permission>List folder contents</permission>
@@ -12,8 +9,7 @@
  <permission>opengever.task: Add task</permission>
  <permission>opengever.task: Edit task</permission>
  <state state_id="task-state-cancelled" title="">
-  <permission-map name="Access contents information"
-                  acquired="False">
+  <permission-map name="Access contents information" acquired="False">
    <permission-role>Editor</permission-role>
    <permission-role>Manager</permission-role>
    <permission-role>Owner</permission-role>
@@ -23,8 +19,7 @@
    <permission-role>Manager</permission-role>
    <permission-role>Owner</permission-role>
   </permission-map>
-  <permission-map name="List folder contents"
-                  acquired="False">
+  <permission-map name="List folder contents" acquired="False">
    <permission-role>Editor</permission-role>
    <permission-role>Manager</permission-role>
    <permission-role>Owner</permission-role>
@@ -34,8 +29,7 @@
    <permission-role>Manager</permission-role>
    <permission-role>Owner</permission-role>
   </permission-map>
-  <permission-map name="Modify portal content"
-                  acquired="False">
+  <permission-map name="Modify portal content" acquired="False">
    <permission-role>Manager</permission-role>
    <permission-role>Owner</permission-role>
   </permission-map>
@@ -55,8 +49,7 @@
  </state>
  <state state_id="task-state-in-progress" title="">
   <exit-transition transition_id="task-transition-in-progress-resolved"/>
-  <permission-map name="Access contents information"
-                  acquired="False">
+  <permission-map name="Access contents information" acquired="False">
    <permission-role>Editor</permission-role>
    <permission-role>Manager</permission-role>
    <permission-role>Owner</permission-role>
@@ -66,8 +59,7 @@
    <permission-role>Manager</permission-role>
    <permission-role>Owner</permission-role>
   </permission-map>
-  <permission-map name="List folder contents"
-                  acquired="False">
+  <permission-map name="List folder contents" acquired="False">
    <permission-role>Editor</permission-role>
    <permission-role>Manager</permission-role>
    <permission-role>Owner</permission-role>
@@ -77,8 +69,7 @@
    <permission-role>Manager</permission-role>
    <permission-role>Owner</permission-role>
   </permission-map>
-  <permission-map name="Modify portal content"
-                  acquired="False">
+  <permission-map name="Modify portal content" acquired="False">
    <permission-role>Manager</permission-role>
    <permission-role>Owner</permission-role>
   </permission-map>
@@ -99,13 +90,35 @@
  <state state_id="task-state-new" title="">
   <exit-transition transition_id="task-transition-new-open"/>
  </state>
+ <state state_id="task-state-new-successor" title="">
+  <permission-map name="Access contents information" acquired="True">
+   <permission-role>Contributor</permission-role>
+  </permission-map>
+  <permission-map name="Add portal content" acquired="True">
+  </permission-map>
+  <permission-map name="List folder contents" acquired="True">
+  </permission-map>
+  <permission-map name="Manage properties" acquired="True">
+  </permission-map>
+  <permission-map name="Modify portal content" acquired="True">
+   <permission-role>Contributor</permission-role>
+  </permission-map>
+  <permission-map name="View" acquired="True">
+   <permission-role>Contributor</permission-role>
+  </permission-map>
+  <permission-map name="opengever.task: Add task" acquired="True">
+   <permission-role>Contributor</permission-role>
+  </permission-map>
+  <permission-map name="opengever.task: Edit task" acquired="True">
+   <permission-role>Contributor</permission-role>
+  </permission-map>
+ </state>
  <state state_id="task-state-open" title="">
   <exit-transition transition_id="task-transition-open-cancelled"/>
   <exit-transition transition_id="task-transition-open-in-progress"/>
   <exit-transition transition_id="task-transition-open-rejected"/>
   <exit-transition transition_id="task-transition-open-resolved"/>
-  <permission-map name="Access contents information"
-                  acquired="False">
+  <permission-map name="Access contents information" acquired="False">
    <permission-role>Editor</permission-role>
    <permission-role>Manager</permission-role>
    <permission-role>Owner</permission-role>
@@ -115,8 +128,7 @@
    <permission-role>Manager</permission-role>
    <permission-role>Owner</permission-role>
   </permission-map>
-  <permission-map name="List folder contents"
-                  acquired="False">
+  <permission-map name="List folder contents" acquired="False">
    <permission-role>Editor</permission-role>
    <permission-role>Manager</permission-role>
    <permission-role>Owner</permission-role>
@@ -126,8 +138,7 @@
    <permission-role>Manager</permission-role>
    <permission-role>Owner</permission-role>
   </permission-map>
-  <permission-map name="Modify portal content"
-                  acquired="False">
+  <permission-map name="Modify portal content" acquired="False">
    <permission-role>Manager</permission-role>
    <permission-role>Owner</permission-role>
   </permission-map>
@@ -147,8 +158,7 @@
  </state>
  <state state_id="task-state-rejected" title="">
   <exit-transition transition_id="task-transition-rejected-open"/>
-  <permission-map name="Access contents information"
-                  acquired="False">
+  <permission-map name="Access contents information" acquired="False">
    <permission-role>Editor</permission-role>
    <permission-role>Manager</permission-role>
    <permission-role>Owner</permission-role>
@@ -158,8 +168,7 @@
    <permission-role>Manager</permission-role>
    <permission-role>Owner</permission-role>
   </permission-map>
-  <permission-map name="List folder contents"
-                  acquired="False">
+  <permission-map name="List folder contents" acquired="False">
    <permission-role>Editor</permission-role>
    <permission-role>Manager</permission-role>
    <permission-role>Owner</permission-role>
@@ -169,8 +178,7 @@
    <permission-role>Manager</permission-role>
    <permission-role>Owner</permission-role>
   </permission-map>
-  <permission-map name="Modify portal content"
-                  acquired="False">
+  <permission-map name="Modify portal content" acquired="False">
    <permission-role>Manager</permission-role>
    <permission-role>Owner</permission-role>
   </permission-map>
@@ -190,8 +198,7 @@
  </state>
  <state state_id="task-state-resolved" title="">
   <exit-transition transition_id="task-transition-resolved-open"/>
-  <permission-map name="Access contents information"
-                  acquired="False">
+  <permission-map name="Access contents information" acquired="False">
    <permission-role>Editor</permission-role>
    <permission-role>Manager</permission-role>
    <permission-role>Owner</permission-role>
@@ -201,8 +208,7 @@
    <permission-role>Manager</permission-role>
    <permission-role>Owner</permission-role>
   </permission-map>
-  <permission-map name="List folder contents"
-                  acquired="False">
+  <permission-map name="List folder contents" acquired="False">
    <permission-role>Editor</permission-role>
    <permission-role>Manager</permission-role>
    <permission-role>Owner</permission-role>
@@ -212,8 +218,7 @@
    <permission-role>Manager</permission-role>
    <permission-role>Owner</permission-role>
   </permission-map>
-  <permission-map name="Modify portal content"
-                  acquired="False">
+  <permission-map name="Modify portal content" acquired="False">
    <permission-role>Manager</permission-role>
    <permission-role>Owner</permission-role>
   </permission-map>
@@ -231,126 +236,96 @@
    <permission-role>Manager</permission-role>
   </permission-map>
  </state>
- <transition transition_id="task-transition-in-progress-resolved"
-             title="task-transition-in-progress-resolved"
-             new_state="task-state-resolved" trigger="USER"
-             before_script="" after_script="">
-  <action url="%(content_url)s/addresponse?form.widgets.transition=task-transition-in-progress-resolved" category="workflow">task-transition-in-progress-resolved</action>
+ <transition transition_id="task-transition-in-progress-resolved" title="task-transition-in-progress-resolved" new_state="task-state-resolved" trigger="USER" before_script="" after_script="">
+  <action url="%(content_url)s/addresponse?form.widgets.transition=task-transition-in-progress-resolved" category="workflow" icon="">task-transition-in-progress-resolved</action>
   <guard>
   </guard>
  </transition>
- <transition transition_id="task-transition-new-open"
-             title="task-transition-new-open"
-             new_state="task-state-open" trigger="USER"
-             before_script="" after_script="">
-  <action url="" category="workflow">task-transition-new-open</action>
+ <transition transition_id="task-transition-new-open" title="task-transition-new-open" new_state="task-state-open" trigger="USER" before_script="" after_script="">
+  <action url="" category="workflow" icon="">task-transition-new-open</action>
   <guard>
   </guard>
  </transition>
- <transition transition_id="task-transition-open-cancelled"
-             title="task-transition-open-cancelled"
-             new_state="task-state-cancelled" trigger="USER"
-             before_script="" after_script="">
-  <action url="%(content_url)s/addresponse?form.widgets.transition=task-transition-open-cancelled" category="workflow">task-transition-open-cancelled</action>
+ <transition transition_id="task-transition-open-cancelled" title="task-transition-open-cancelled" new_state="task-state-cancelled" trigger="USER" before_script="" after_script="">
+  <action url="%(content_url)s/addresponse?form.widgets.transition=task-transition-open-cancelled" category="workflow" icon="">task-transition-open-cancelled</action>
   <guard>
   </guard>
  </transition>
- <transition transition_id="task-transition-open-in-progress"
-             title="task-transition-open-in-progress"
-             new_state="task-state-in-progress"
-             trigger="USER" before_script="" after_script="">
-  <action url="%(content_url)s/addresponse?form.widgets.transition=task-transition-open-in-progress" category="workflow">task-transition-open-in-progress</action>
+ <transition transition_id="task-transition-open-in-progress" title="task-transition-open-in-progress" new_state="task-state-in-progress" trigger="USER" before_script="" after_script="">
+  <action url="%(content_url)s/addresponse?form.widgets.transition=task-transition-open-in-progress" category="workflow" icon="">task-transition-open-in-progress</action>
   <guard>
    <guard-expression>python:here.task_type_category == 'bi_ref'</guard-expression>
   </guard>
  </transition>
- <transition transition_id="task-transition-open-rejected"
-             title="task-transition-open-rejected"
-             new_state="task-state-rejected" trigger="USER"
-             before_script="" after_script="">
-  <action url="%(content_url)s/addresponse?form.widgets.transition=task-transition-open-rejected" category="workflow">task-transition-open-rejected</action>
+ <transition transition_id="task-transition-open-rejected" title="task-transition-open-rejected" new_state="task-state-rejected" trigger="USER" before_script="" after_script="">
+  <action url="%(content_url)s/addresponse?form.widgets.transition=task-transition-open-rejected" category="workflow" icon="">task-transition-open-rejected</action>
   <guard>
   </guard>
  </transition>
- <transition transition_id="task-transition-open-resolved"
-             title="task-transition-open-resolved"
-             new_state="task-state-resolved" trigger="USER"
-             before_script="" after_script="">
-  <action url="%(content_url)s/addresponse?form.widgets.transition=task-transition-open-resolved" category="workflow">task-transition-open-resolved</action>
+ <transition transition_id="task-transition-open-resolved" title="task-transition-open-resolved" new_state="task-state-resolved" trigger="USER" before_script="" after_script="">
+  <action url="%(content_url)s/addresponse?form.widgets.transition=task-transition-open-resolved" category="workflow" icon="">task-transition-open-resolved</action>
   <guard>
   </guard>
  </transition>
- <transition transition_id="task-transition-rejected-open"
-             title="task-transition-rejected-open"
-             new_state="task-state-open" trigger="USER"
-             before_script="" after_script="">
-  <action url="" category="workflow">task-transition-rejected-open</action>
+ <transition transition_id="task-transition-rejected-open" title="task-transition-rejected-open" new_state="task-state-open" trigger="USER" before_script="" after_script="">
+  <action url="" category="workflow" icon="">task-transition-rejected-open</action>
   <guard>
   </guard>
  </transition>
- <transition transition_id="task-transition-resolved-open"
-             title="task-transition-resolved-open"
-             new_state="task-state-open" trigger="USER"
-             before_script="" after_script="">
-  <action url="%(content_url)s/addresponse?form.widgets.transition=task-transition-resolved-open" category="workflow">task-transition-resolved-open</action>
+ <transition transition_id="task-transition-resolved-open" title="task-transition-resolved-open" new_state="task-state-open" trigger="USER" before_script="" after_script="">
+  <action url="%(content_url)s/addresponse?form.widgets.transition=task-transition-resolved-open" category="workflow" icon="">task-transition-resolved-open</action>
   <guard>
   </guard>
  </transition>
  <worklist worklist_id="reviewer_queue" title="">
   <description>Reviewer tasks</description>
-  <action url="%(portal_url)s/search?review_state=pending"
-          category="global">Pending (%(count)d)</action>
+  <action url="%(portal_url)s/search?review_state=pending" category="global" icon="">Pending (%(count)d)</action>
   <guard>
    <guard-permission>Review portal content</guard-permission>
   </guard>
   <match name="review_state" values="pending"/>
  </worklist>
- <variable variable_id="action" for_catalog="False"
-           for_status="True" update_always="True">
+ <variable variable_id="action" for_catalog="False" for_status="True" update_always="True">
   <description>The last transition</description>
   <default>
-
+   
    <expression>transition/getId|nothing</expression>
   </default>
   <guard>
   </guard>
  </variable>
- <variable variable_id="actor" for_catalog="False"
-           for_status="True" update_always="True">
+ <variable variable_id="actor" for_catalog="False" for_status="True" update_always="True">
   <description>The ID of the user who performed the last transition</description>
   <default>
-
+   
    <expression>user/getId</expression>
   </default>
   <guard>
   </guard>
  </variable>
- <variable variable_id="comments" for_catalog="False"
-           for_status="True" update_always="True">
+ <variable variable_id="comments" for_catalog="False" for_status="True" update_always="True">
   <description>Comments about the last transition</description>
   <default>
-
+   
    <expression>python:state_change.kwargs.get('comment', '')</expression>
   </default>
   <guard>
   </guard>
  </variable>
- <variable variable_id="review_history" for_catalog="False"
-           for_status="False" update_always="False">
+ <variable variable_id="review_history" for_catalog="False" for_status="False" update_always="False">
   <description>Provides access to workflow history</description>
   <default>
-
+   
    <expression>state_change/getHistory</expression>
   </default>
   <guard>
    <guard-permission>View</guard-permission>
   </guard>
  </variable>
- <variable variable_id="time" for_catalog="False"
-           for_status="True" update_always="True">
+ <variable variable_id="time" for_catalog="False" for_status="True" update_always="True">
   <description>Time of the last transition</description>
   <default>
-
+   
    <expression>state_change/getDateTime</expression>
   </default>
   <guard>

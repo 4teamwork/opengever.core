@@ -5,6 +5,10 @@ Changelog
 1.0a5
 -----
 
+* Issue #644 Wizard fuer automatisches Kopieren von Dokumenten in neue Aufgabe
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/644/
+  [29.09.2010, jbaumann]
+
 * Issue #657 CopyRelatedDocumentsToInbox korrigieren
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/657
   Re-impleted copy-related-documents-to-inbox views with a additional form for

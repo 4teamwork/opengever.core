@@ -69,5 +69,10 @@
         <permission value="Add portal content"/>
     </action>
 
+    <action title="Create successor task" action_id="create_successor" category="object_buttons"
+            condition_expr="" url_expr="string:${object_url}/@@create-successor-task"
+            visible="True">
+        <permission value="View"/>
+    </action>
 
 </object>
