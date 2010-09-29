@@ -76,8 +76,8 @@ def create_example(portal_setup):
     _create_example_client(session, 'mandant2',
                            {'title': 'Mandant 2',
                             'ip_address': '127.0.0.1',
-                            'site_url': 'http://localhost:8080/mandant2',
-                            'public_url': 'http://localhost:8080/mandant2',
+                            'site_url': 'http://127.0.0.1:8080/mandant2',
+                            'public_url': 'http://127.0.0.1:8080/mandant2',
                             'group': 'og_mandant2_users',
                             'inbox_group': 'og_mandant2_inbox'})
 
