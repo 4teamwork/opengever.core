@@ -51,18 +51,22 @@
           url_expr="string:${object_url}" visible="False">
     <permission value="View"/>
   </action>
+
   <action title="Edit" action_id="edit" category="object" condition_expr=""
           url_expr="string:${object_url}/edit" visible="True">
     <permission value="Modify portal content"/>
   </action>
+
   <action title="Add response" action_id="addresponse" category="folder_factories"
           condition_expr="" url_expr="string:${object_url}/addresponse"
           visible="True">
     <permission value="Add portal content"/>
   </action>
+
   <action title="Attach remote document"
           action_id="attach_remote_document" category="folder_factories" condition_expr=""
           url_expr="string:${object_url}/choose_source_client" visible="True">
     <permission value="Add portal content"/>
   </action>
+
 </object>
