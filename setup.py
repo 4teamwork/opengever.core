@@ -31,6 +31,9 @@ setup(name='opengever.contact',
       include_package_data=True,
       zip_safe=False,
       install_requires=[
+        'plone.namedfile',
+        'plone.dexterity',
+        'ftw.table',
         'setuptools',
         'opengever.tabbedview',
         # -*- Extra requirements: -*-
