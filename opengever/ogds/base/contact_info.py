@@ -250,7 +250,7 @@ class ContactInformation(grok.GlobalUtility):
             return None
 
         elif self.is_contact(principal):
-            return self.get_contact(principal).contact.email
+            return self.get_contact(principal).email
 
         elif self.is_user(principal):
             return self.get_user(principal).email
@@ -266,7 +266,7 @@ class ContactInformation(grok.GlobalUtility):
             return None
 
         elif self.is_contact(principal):
-            return self.get_contact(principal).contact.email2
+            return self.get_contact(principal).email2
 
         elif self.is_user(principal):
             return self.get_user(principal).email2

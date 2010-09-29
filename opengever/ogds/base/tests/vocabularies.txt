@@ -5,13 +5,14 @@ Imports:
 
     >>> from opengever.ogds.base.setuphandlers import _create_example_client
     >>> from opengever.ogds.base.setuphandlers import _create_example_user
+    >>> from opengever.ogds.base.testing import create_contacts
     >>> from opengever.ogds.base.utils import create_session
     >>> from opengever.ogds.base.vocabulary import ContactsVocabulary
     >>> from zope.component import getUtility
+    >>> from zope.globalrequest import setRequest
     >>> from zope.schema.interfaces import IVocabularyFactory
     >>> from zope.schema.vocabulary import SimpleTerm
     >>> import types
-    >>> from zope.globalrequest import setRequest
 
 Helper method for printing terms:
 
@@ -136,6 +137,12 @@ Clients:
     ...                        'inbox_group': 'client3_inbox_users'})
 
 
+Lets set up some contacts:
+
+    >>> create_contacts(portal)
+    >>> len(portal.contacts.objectIds())
+    3
+
 
 The current client is client1. Now let's login as hugo.boss for the tests.
 
@@ -204,7 +211,11 @@ Contacts vocabulary
 
 Vocabulary of contacts.
 
-XXX
+    >>> fact = getUtility(IVocabularyFactory,
+    ...                   name='opengever.ogds.base.ContactsVocabulary')
+    >>> voc = fact(portal)
+    >>> fterms(list(voc))
+    [u'<Term contact:kaufmann-sandra:Kaufmann Sandra>', u'<Term contact:kappeli-elisabeth:K\xe4ppeli Elisabeth>', u'<Term contact:wermuth-roger:Wermuth Roger>']
 
 
 
@@ -213,8 +224,11 @@ Contacts and users vocabulary
 
 Vocabulary of contacts and users.
 
-XXX
-
+    >>> fact = getUtility(IVocabularyFactory,
+    ...                   name='opengever.ogds.base.ContactsAndUsersVocabulary')
+    >>> voc = fact(portal)
+    >>> fterms(list(voc))
+    [u'<Term hugo.boss:Boss Hugo>', u'<Term peter.muster:Muster Peter>', u'<Term hanspeter.linder:Linder Hans-Peter>', u'<Term contact:kaufmann-sandra:Kaufmann Sandra>', u'<Term contact:kappeli-elisabeth:K\xe4ppeli Elisabeth>', u'<Term contact:wermuth-roger:Wermuth Roger>']
 
 
 Email contacts and users vocabulary
@@ -223,7 +237,11 @@ Email contacts and users vocabulary
 Vocabulary containing all users and contacts with each e-mail
 address they have.
 
-XXX
+    >>> fact = getUtility(IVocabularyFactory,
+    ...                   name='opengever.ogds.base.EmailContactsAndUsersVocabulary')
+    >>> voc = fact(portal)
+    >>> fterms(list(voc))
+    [u'<Term hugo@boss.local:Boss Hugo (hugo@boss.local)>', u'<Term hugo@private.ch:Boss Hugo (hugo@private.ch)>', u'<Term None:Muster Peter>', u'<Term sandra.kaufmann@test.ch:Kaufmann Sandra (sandra.kaufmann@test.ch)>', u'<Term elisabeth.kaeppeli@test.ch:K\xe4ppeli Elisabeth (elisabeth.kaeppeli@test.ch)>', u'<Term roger.wermuth@test.ch:Wermuth Roger (roger.wermuth@test.ch)>']
 
 
 
