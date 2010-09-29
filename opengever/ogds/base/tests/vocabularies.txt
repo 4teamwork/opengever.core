@@ -250,4 +250,29 @@ current user. The current client is not included!
     ...                   name='opengever.ogds.base.AssignedClientsVocabulary')
     >>> voc = fact(portal)
     >>> fterms(list(voc))
-    [u'<Term client1:Client 1>']
+    []
+
+    >>> logout()
+    >>> login(portal, 'peter.muster')
+
+    >>> fact = getUtility(IVocabularyFactory,
+    ...                   name='opengever.ogds.base.AssignedClientsVocabulary')
+    >>> voc = fact(portal)
+    >>> fterms(list(voc))
+    [u'<Term client2:Client 2>']
+
+    >>> logout()
+    >>> login(portal, 'hugo.boss')
+
+
+
+Home dossiers vocabulary
+------------------------
+
+XXX
+
+
+Documents in selected dossier vocabulary
+----------------------------------------
+
+XXX
