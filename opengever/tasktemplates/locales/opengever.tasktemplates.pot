@@ -1,0 +1,86 @@
+# --- PLEASE EDIT THE LINES BELOW CORRECTLY ---
+# SOME DESCRIPTIVE TITLE.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2010-09-30 12:33+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0\n"
+"Language-Code: en\n"
+"Language-Name: English\n"
+"Preferred-Encodings: utf-8 latin1\n"
+"Domain: opengever.tasktemplates\n"
+
+#: ./opengever/tasktemplates/profiles/default/types/opengever.tasktemplates.tasktemplate.xml
+msgid "TaskTemplate"
+msgstr ""
+
+#: ./opengever/tasktemplates/content/tasktemplate.py:47
+msgid "help_deadline"
+msgstr ""
+
+#: ./opengever/tasktemplates/content/tasktemplate.py:21
+msgid "help_issuer"
+msgstr ""
+
+#: ./opengever/tasktemplates/content/tasktemplate.py:61
+msgid "help_preselected"
+msgstr ""
+
+#: ./opengever/tasktemplates/content/tasktemplate.py:40
+msgid "help_responsible"
+msgstr ""
+
+#: ./opengever/tasktemplates/content/tasktemplate.py:29
+msgid "help_task_type"
+msgstr ""
+
+#: ./opengever/tasktemplates/content/tasktemplate.py:54
+msgid "help_text"
+msgstr ""
+
+#: ./opengever/tasktemplates/content/tasktemplate.py:14
+msgid "help_title"
+msgstr ""
+
+#. Default: "Deadline in Days"
+#: ./opengever/tasktemplates/content/tasktemplate.py:46
+msgid "label_deadline"
+msgstr ""
+
+#. Default: "Issuer"
+#: ./opengever/tasktemplates/content/tasktemplate.py:20
+msgid "label_issuer"
+msgstr ""
+
+#. Default: "Preselect"
+#: ./opengever/tasktemplates/content/tasktemplate.py:60
+msgid "label_preselected"
+msgstr ""
+
+#. Default: "Responsible"
+#: ./opengever/tasktemplates/content/tasktemplate.py:39
+msgid "label_responsible"
+msgstr ""
+
+#. Default: "Task Type"
+#: ./opengever/tasktemplates/content/tasktemplate.py:28
+msgid "label_task_type"
+msgstr ""
+
+#. Default: "Text"
+#: ./opengever/tasktemplates/content/tasktemplate.py:53
+msgid "label_text"
+msgstr ""
+
+#. Default: "Title"
+#: ./opengever/tasktemplates/content/tasktemplate.py:13
+msgid "label_title"
+msgstr ""
+
