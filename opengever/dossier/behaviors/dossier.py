@@ -23,11 +23,12 @@ from zope.schema.interfaces import IContextSourceBinder
 from zope import schema
 from zope.interface import Interface, alsoProvides
 from zope.component import queryUtility, getAdapter, getUtility
+from zope.app.container.interfaces import IObjectAddedEvent
 
 from opengever.dossier.interfaces import IDossierContainerTypes
 from opengever.dossier.widget import referenceNumberWidgetFactory
 from opengever.base.interfaces import IReferenceNumber, ISequenceNumber
-#from opengever.base.behaviors import reference
+from opengever.base.interfaces import IReferenceNumberPrefix
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.translations.browser.add import TranslatedAddForm
 
@@ -329,8 +330,6 @@ def SearchableText(obj):
                           "to 'text/plain' "
                           "in SearchablceIndex(dossier.py): %s" % (e, ))
             data = str(datastream)
-        if isinstance(data, unicode):
-            data = data.encode('utf8')
         if isinstance(data, tuple) or isinstance(data, list):
             data = " ".join([isinstance(a, unicode) and a.encode('utf-8') or a for a in data])
         if data:
@@ -353,7 +352,7 @@ def SearchableText(obj):
     dossier = IDossierMarker(obj)
     if getattr(dossier, 'filing_no', None):
         searchable.append(str(getattr(dossier, 'filing_no', None)))
-    return ' '.join(searchable)
+    return ' '.join(searchable).encode('utf-8')
 
 grok.global_adapter(SearchableText, name='SearchableText')
 
@@ -385,3 +384,11 @@ def set_former_reference_after_moving(obj, event):
         default = default.get()
         IReferenceNumber.get('reference_number').set(
             IReferenceNumber(obj), default)
+
+
+@grok.subscribe(IDossierMarker, IObjectAddedEvent)
+def saveReferenceNumberPrefix(obj, event):
+    parent= aq_parent(aq_inner(obj))
+    prefix_adapter = IReferenceNumberPrefix(parent)
+    if not prefix_adapter.get_number(obj):
+        prefix_adapter.set_number(obj)
