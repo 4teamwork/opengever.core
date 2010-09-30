@@ -10,9 +10,6 @@ from zope.component import provideUtility
 from zope.interface import alsoProvides, implements
 import datetime
 
-#XXX: recursive imports between inbox and tabs
-from opengever.tabbedview.browser import tabs
-
 
 class MockedContactInformation(contact_info.ContactInformation):
     implements(contact_info.IContactInformation)
@@ -52,6 +49,8 @@ class TestResponse(PloneTestCase):
         task = self.folder.get('task-1')
 
         new_response = Response('')
+        self.assertNotEqual(new_response, None)
+
         form = {
             'transition:list': 'task-transition-open-resolved',
             'form.widgets.transition-empty-marker': '1',
