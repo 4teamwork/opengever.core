@@ -19,7 +19,7 @@ class ITaskTemplate(form.Schema):
     issuer = schema.Choice(
         title =_(u"label_issuer", default=u"Issuer"),
         description = _('help_issuer', default=u""),
-        vocabulary=u'opengever.ogds.base.ContactsVocabulary',
+        vocabulary=u'opengever.ogds.base.ContactsAndUsersVocabulary',
         required = True,
         )
 
@@ -33,6 +33,14 @@ class ITaskTemplate(form.Schema):
         missing_value = None,
         source = util.getTaskTypeVocabulary,
     )
+    
+    responsible_client = schema.Choice(
+        title=_(u'label_resonsible_client',
+                default=u'Responsible Client'),
+        description=_(u'help_responsible_client',
+                      default=u''),
+        vocabulary='opengever.ogds.base.ClientsVocabulary',
+        required=True)
 
     form.widget(responsible=AutocompleteFieldWidget)
     responsible = schema.Choice(

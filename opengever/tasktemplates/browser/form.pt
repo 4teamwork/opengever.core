@@ -6,8 +6,48 @@
       metal:use-macro="context/main_template/macros/master"
       i18n:domain="opengever.tasktemplates">
 
-  <head>
-  </head>
+      <head metal:fill-slot="javascript_head_slot">
+              <script type="text/javascript">
+              jq(function(){
+
+                  $('#form-controls').toggle();
+
+                  //test global overwrite
+                  $.fn.ftwtable.defaults.onBeforeLoad = function(){
+                      console.log('custom onBeforeLoad');
+                  }
+
+                  // initialize table
+                  var table = $('#template_chooser').ftwtable({
+                       'url' : '@@add-tasktemplate/listing',
+                       'storage': true,
+                       'onLoad': function(t,s,r){
+                           console.log('custom onLoad');
+                       }
+                  });
+
+                 // wizard navigation
+                 $('#tasktemplateNavigation').click(function(e){
+                     var step = e.target.href.split('#')[1];
+                     table.ftwtable('param', 'show', step);
+                     table.ftwtable('reload');
+                     $('#form-controls').toggle();
+                 });
+
+                  $('input[name=paths:list]', table).live('click', function(e){
+                    if(e.target.type=='radio'){
+                        console.log(123);
+                        table.ftwtable('param', 'path', e.target.value);
+                        table.ftwtable('param', 'show', 'tasks');
+                        table.ftwtable('reload');
+                        $('#form-controls').toggle();  
+                    }
+                  });
+
+
+              });
+               </script>
+      </head>
   <body>
         <div metal:fill-slot="main">
              <div tal:replace="structure provider:plone.abovecontenttitle" />
