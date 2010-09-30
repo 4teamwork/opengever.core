@@ -1,0 +1,33 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      lang="en"
+      metal:use-macro="context/main_template/macros/master"
+      i18n:domain="opengever.tasktemplates">
+
+  <head>
+  </head>
+  <body>
+        <div metal:fill-slot="main">
+             <div tal:replace="structure provider:plone.abovecontenttitle" />
+             <h1 class="documentFirstHeading">add tasktemplate</h1>
+             <form action="add-tasktemplate/create" method="post">
+                 <ul class="wizard" id="tasktemplateNavigation">
+                     <li><a href="add-tasktemplate#templates">choose template</a></li>
+                     <li><a href="add-tasktemplate#tasks">select tasks</a></li>
+                 </ul>
+                 <div id="template_chooser"><!--iefix--></div>
+                 <div id="template_chooser_debug"><!--iefix--></div>
+             
+                 <div id="form-controls">
+                     <input type="submit" name="save" value="save"/>
+                     <input type="submit" name="abort" value="abort"/>
+                 </div>
+             </form>
+            
+        <div tal:replace="structure provider:plone.belowcontentbody" />
+        </div>
+    </body>
+</html>
+    

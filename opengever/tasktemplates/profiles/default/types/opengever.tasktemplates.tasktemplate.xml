@@ -51,4 +51,5 @@
           url_expr="string:${object_url}/edit" visible="True">
     <permission value="Modify portal content"/>
   </action>
+  
 </object>
