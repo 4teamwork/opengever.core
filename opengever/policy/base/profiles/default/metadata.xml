@@ -21,7 +21,6 @@
     <dependency>profile-ftw.dashboard.portlets.favourites:default</dependency>
     <dependency>profile-ftw.dashboard.portlets.postit:default</dependency>
     <dependency>profile-ftw.dashboard.portlets.recentlymodified:default</dependency-->
-    <dependency>profile-ftw.directoryservice:default</dependency>
     <dependency>profile-opengever.theme:default</dependency>
   </dependencies>
 </metadata>
