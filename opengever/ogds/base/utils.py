@@ -15,7 +15,7 @@ import urllib
 import urllib2
 
 
-Session = named_scoped_session('opengever.ogds')
+Session = named_scoped_session('opengever')
 
 
 def create_session():
