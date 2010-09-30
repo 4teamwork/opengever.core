@@ -3,6 +3,8 @@ from opengever.ogds.base.model.client import Client
 from opengever.ogds.base.model.user import User
 from opengever.ogds.base.utils import create_session
 from zope.interface import alsoProvides
+from z3c.saconfig.interfaces import IScopedSession
+from zope.component import queryUtility
 
 
 MODELS = [User, Client]
@@ -16,7 +18,8 @@ def import_various(context):
     if context.readDataFile('opengever.ogds.base.setuphandlers.txt') is None:
         return
 
-    create_sql_tables()
+    if queryUtility(IScopedSession, 'opengever'):
+        create_sql_tables()
 
 
 def create_sql_tables():
