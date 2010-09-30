@@ -1,0 +1,20 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+    i18n_domain="opengever.globalindex">
+
+    <include package="z3c.autoinclude" file="meta.zcml" />
+    <includeDependencies package="." />
+
+    <genericsetup:registerProfile
+        name="default"
+        title="opengever.globalindex"
+        directory="profiles/default"
+        description="Installs the opengever.globalindex package"
+        provides="Products.GenericSetup.interfaces.EXTENSION"
+     />
+     
+     <include package=".handlers" />
+
+
+</configure>

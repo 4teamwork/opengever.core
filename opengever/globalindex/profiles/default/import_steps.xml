@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<import-steps>
+  <import-step id="opengever.globalindex" version="1"
+               handler="opengever.globalindex.setuphandlers.create_tables"
+               title="Install and create opengever.globalindex tables">
+  </import-step>
+</import-steps>
