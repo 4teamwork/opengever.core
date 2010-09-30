@@ -45,15 +45,15 @@ class ReferenceNumberPrefixValidator(validator.SimpleFieldValidator):
 
     def validate(self, value):
         # setting parent, for that we check if there are a Add- or a Editform
+        super(ReferenceNumberPrefixValidator, self).validate(value)
         if IAddForm.providedBy(self.view.parentForm):
-            parent = self.context
+            if not PrefixAdapter(self.context).is_valid_number(value):
+                raise schema.interfaces.ConstraintNotSatisfied()
         else:
             parent = aq_parent(aq_inner(self.context))
+            if not PrefixAdapter(parent).is_valid_number(value, self.context):
+                raise schema.interfaces.ConstraintNotSatisfied()
 
-        super(ReferenceNumberPrefixValidator, self).validate(value)
-
-        if not PrefixAdapter(parent).is_valid_number(value):
-            raise schema.interfaces.ConstraintNotSatisfied()
 
 validator.WidgetValidatorDiscriminators(
     ReferenceNumberPrefixValidator,
@@ -77,13 +77,10 @@ class IReferenceNumberPrefixMarker(Interface):
     Marker Interface for the ReferenceNumber-Prefix Behavior
     """
 
-
 @grok.subscribe(IReferenceNumberPrefixMarker, IObjectAddedEvent)
 @grok.subscribe(IReferenceNumberPrefixMarker, IObjectModifiedEvent)
 def saveReferenceNumberPrefix(obj, event):
-    if IObjectAddedEvent.providedBy(event):
-        parent= aq_parent(aq_inner(obj))
-    else:
-        parent = obj
+    parent= aq_parent(aq_inner(obj))
+    
     PrefixAdapter(parent).set_number(
         obj, IReferenceNumberPrefix(obj).reference_number_prefix)
