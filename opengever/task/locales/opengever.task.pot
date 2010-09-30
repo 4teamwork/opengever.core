@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2010-09-28 08:51+0000\n"
+"POT-Creation-Date: 2010-09-30 13:21+0000\n"
 "PO-Revision-Date: 2009-02-25 14:39+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -133,11 +133,12 @@ msgstr ""
 
 #. Default: "Continue"
 #: ./opengever/task/attachdocument.py:49
+#: ./opengever/task/browser/successor.py:57
 msgid "button_continue"
 msgstr ""
 
 #. Default: "Copy"
-#: ./opengever/task/views.py:78
+#: ./opengever/task/browser/copy_related_documents.py:78
 msgid "button_copy"
 msgstr ""
 
@@ -171,7 +172,7 @@ msgid "documents"
 msgstr ""
 
 #. Default: "It's not possible to copy related documents."
-#: ./opengever/task/views.py:82
+#: ./opengever/task/browser/copy_related_documents.py:82
 msgid "error_copying_related_documents_not_possible"
 msgstr ""
 
@@ -185,7 +186,7 @@ msgstr ""
 msgid "fieldset_common"
 msgstr ""
 
-#: ./opengever/task/views.py:59
+#: ./opengever/task/browser/copy_related_documents.py:59
 msgid "help_copy_documents"
 msgstr ""
 
@@ -265,7 +266,17 @@ msgstr ""
 msgid "help_source_dossier"
 msgstr ""
 
-#: ./opengever/task/views.py:66
+#. Default: "Choose on which client to create the successor task."
+#: ./opengever/task/browser/successor.py:31
+msgid "help_successor_target_client"
+msgstr ""
+
+#. Default: "Select the target dossier on the client selected above."
+#: ./opengever/task/browser/successor.py:39
+msgid "help_successor_target_dossier"
+msgstr ""
+
+#: ./opengever/task/browser/copy_related_documents.py:66
 msgid "help_target_client"
 msgstr ""
 
@@ -287,7 +298,7 @@ msgid "help_transition"
 msgstr ""
 
 #. Default: "All related documents were copied to the inbox of the client ${client}."
-#: ./opengever/task/views.py:90
+#: ./opengever/task/browser/copy_related_documents.py:90
 msgid "info_copied_related_documents"
 msgstr ""
 
@@ -303,7 +314,7 @@ msgid "label_by_author"
 msgstr ""
 
 #. Default: "Copy related documents to inbox of target client"
-#: ./opengever/task/views.py:57
+#: ./opengever/task/browser/copy_related_documents.py:57
 msgid "label_copy_documents"
 msgstr ""
 
@@ -432,8 +443,18 @@ msgstr ""
 msgid "label_source_dossier"
 msgstr ""
 
+#. Default: "Target Dossier"
+#: ./opengever/task/browser/successor.py:38
+msgid "label_successor_target_dossier"
+msgstr ""
+
+#. Default: "Target client for successor task"
+#: ./opengever/task/browser/successor.py:29
+msgid "label_sucessor_target_client"
+msgstr ""
+
 #. Default: "Target client"
-#: ./opengever/task/views.py:64
+#: ./opengever/task/browser/copy_related_documents.py:64
 msgid "label_target_client"
 msgstr ""
 
@@ -517,8 +538,13 @@ msgid "title_attach_document_form"
 msgstr ""
 
 #. Default: "Copy related documents"
-#: ./opengever/task/views.py:74
+#: ./opengever/task/browser/copy_related_documents.py:74
 msgid "title_copy_releated_documents"
+msgstr ""
+
+#. Default: "Create successor task"
+#: ./opengever/task/browser/successor.py:54
+msgid "title_create_successor_task"
 msgstr ""
 
 #. Default: "Edit response"

@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2010-09-28 08:51+0000\n"
-"PO-Revision-Date: 2010-09-28 10:56+0200\n"
+"POT-Creation-Date: 2010-09-30 13:21+0000\n"
+"PO-Revision-Date: 2010-09-30 15:24+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -130,11 +130,12 @@ msgstr "Abbrechen"
 
 #. Default: "Continue"
 #: ./opengever/task/attachdocument.py:49
+#: ./opengever/task/browser/successor.py:57
 msgid "button_continue"
 msgstr "Weiter"
 
 #. Default: "Copy"
-#: ./opengever/task/views.py:78
+#: ./opengever/task/browser/copy_related_documents.py:78
 msgid "button_copy"
 msgstr "Kopieren"
 
@@ -169,7 +170,7 @@ msgid "documents"
 msgstr "Dokumente"
 
 #. Default: "It's not possible to copy related documents."
-#: ./opengever/task/views.py:82
+#: ./opengever/task/browser/copy_related_documents.py:82
 msgid "error_copying_related_documents_not_possible"
 msgstr "Es ist nicht möglich, die verknüpften Dokumente zu kopieren."
 
@@ -183,7 +184,7 @@ msgstr "Erweitert"
 msgid "fieldset_common"
 msgstr "Allgemein"
 
-#: ./opengever/task/views.py:59
+#: ./opengever/task/browser/copy_related_documents.py:59
 msgid "help_copy_documents"
 msgstr ""
 
@@ -265,7 +266,17 @@ msgstr "Wählen Sie ein Dokument aus dem vorgängig gewählten Dossier"
 msgid "help_source_dossier"
 msgstr "Wählen Sie ein Dossier von ihrem Mandanten"
 
-#: ./opengever/task/views.py:66
+#. Default: "Choose on which client to create the successor task."
+#: ./opengever/task/browser/successor.py:31
+msgid "help_successor_target_client"
+msgstr "Wählen Sie den Mandanten aus, auf welchem die Folgeaufgabe erstellt werden soll."
+
+#. Default: "Select the target dossier on the client selected above."
+#: ./opengever/task/browser/successor.py:39
+msgid "help_successor_target_dossier"
+msgstr "Wählen Sie das Dossier auf dem oben gewählten Mandanten aus, in welchem die Folgeaufgabe erstellt werden soll."
+
+#: ./opengever/task/browser/copy_related_documents.py:66
 msgid "help_target_client"
 msgstr ""
 
@@ -287,7 +298,7 @@ msgid "help_transition"
 msgstr ""
 
 #. Default: "All related documents were copied to the inbox of the client ${client}."
-#: ./opengever/task/views.py:90
+#: ./opengever/task/browser/copy_related_documents.py:90
 msgid "info_copied_related_documents"
 msgstr "Die mit dieser Aufgabe verknüpften Dokumente wurden in den Eingangskorb des Mandanten ${client} kopiert."
 
@@ -303,7 +314,7 @@ msgid "label_by_author"
 msgstr "Verantwortlich: ${author}"
 
 #. Default: "Copy related documents to inbox of target client"
-#: ./opengever/task/views.py:57
+#: ./opengever/task/browser/copy_related_documents.py:57
 msgid "label_copy_documents"
 msgstr "Mit der Aufgabe verknüpfte Dokumente in den Eingangskorb des Ziel-Mandanten kopieren."
 
@@ -432,8 +443,18 @@ msgstr "Dokument"
 msgid "label_source_dossier"
 msgstr "Dossier"
 
+#. Default: "Target Dossier"
+#: ./opengever/task/browser/successor.py:38
+msgid "label_successor_target_dossier"
+msgstr "Ziel-Dossier"
+
+#. Default: "Target client for successor task"
+#: ./opengever/task/browser/successor.py:29
+msgid "label_sucessor_target_client"
+msgstr "Ziel-Mandant"
+
 #. Default: "Target client"
-#: ./opengever/task/views.py:64
+#: ./opengever/task/browser/copy_related_documents.py:64
 msgid "label_target_client"
 msgstr "Ziel-Mandant"
 
@@ -517,9 +538,14 @@ msgid "title_attach_document_form"
 msgstr "Dokument aus Heimmandant anhängen"
 
 #. Default: "Copy related documents"
-#: ./opengever/task/views.py:74
+#: ./opengever/task/browser/copy_related_documents.py:74
 msgid "title_copy_releated_documents"
 msgstr "Verknüpfte Dokumente kopieren"
+
+#. Default: "Create successor task"
+#: ./opengever/task/browser/successor.py:54
+msgid "title_create_successor_task"
+msgstr "Folgeaufgabe erstellen"
 
 #. Default: "Edit response"
 #: ./opengever/task/templates/edit_response.pt:41
