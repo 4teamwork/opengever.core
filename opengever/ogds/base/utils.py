@@ -83,23 +83,40 @@ def remote_request(target_client_id, viewname, path='', data={}, headers={}):
 
     if isinstance(viewname, unicode):
         viewname = viewname.encode('utf-8')
+    if isinstance(path, unicode):
+        path = path.encode('utf-8')
 
     site = getSite()
-    request = getRequest()
     info = getUtility(IContactInformation)
     target = info.get_client_by_id(target_client_id)
 
     if not target:
         raise ClientNotFound()
 
-    if request.URL.startswith(target.site_url) or \
-            request.URL.startswith(target.public_url):
+    if get_current_client() == target:
         # do not connect to the site itself but do a restrictedTraverse
+        request = getRequest()
+
+        # we need to back up the request data and set them new for the
+        # view which is called with the same request (restrictedTraverse)
+        ori_form = request.form
+        ori_other = request.other
+        request.form = data
+        request.other = ori_other.copy()
+        for key in ori_form.keys():
+            if key in request.other:
+                del request.other[key]
+
         if path:
             view = site.restrictedTraverse(os.path.join(path, viewname))
         else:
             view = site.restrictedTraverse(viewname)
         data = view()
+
+        # restore the request
+        request.form = ori_form
+        request.other = ori_other
+
         return StringIO(data)
 
     headers = headers.copy()

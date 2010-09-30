@@ -5,14 +5,17 @@ from opengever.ogds.base.interfaces import IObjectCreator
 from opengever.ogds.base.interfaces import ITransporter
 from opengever.ogds.base.utils import remote_request, remote_json_request
 from plone.dexterity.interfaces import IDexterityFTI, IDexterityContent
-from plone.dexterity.utils import createContentInContainer, iterSchemata
+from plone.dexterity.utils import iterSchemata
+from plone.dexterity.utils import createContent, addContentToContainer
 from plone.namedfile.interfaces import INamedFileField
 from z3c.relationfield.interfaces import IRelation, IRelationChoice
 from z3c.relationfield.interfaces import IRelationList
 from zope import schema
 from zope.component import getAdapters, queryAdapter, getAdapter
 from zope.component import getUtility
+from zope.event import notify
 from zope.interface import Interface
+from zope.lifecycleevent import ObjectCreatedEvent
 import DateTime
 import base64
 import datetime
@@ -158,11 +161,15 @@ class DexterityObjectCreator(grok.Adapter):
             }
 
     def create(self, container, data):
-        return createContentInContainer(container=container,
-                                        portal_type=data['portal_type'],
-                                        checkConstraints=True,
-                                        id=data['title'],
-                                        title=data['title'])
+        obj = createContent(data['portal_type'],
+                            id=data['title'],
+                            title=data['title'])
+        notify(ObjectCreatedEvent(obj))
+        obj = addContentToContainer(container,
+                                    obj,
+                                    checkConstraints=True)
+        obj.reindexObject()
+        return obj
 
 
 class DexterityFieldDataCollector(grok.Adapter):
