@@ -1,13 +1,14 @@
 Opengever development installation
 ==================================
 
-Die folgende Installationsanleitung beschreibt die Installation einer Mehr-Mandanten Installation von Opengever mit OGDS. 
+Die folgende Installationsanleitung beschreibt die Installation einer Mehr-Mandanten Installation von Opengever mit OGDS.
 
 Einrichten SQL(OGDS)
 --------------------
 Das neue OGDS funktioniert mit einer SQL-Anbindung und kann folgendermassen installiert werden:
 
-Installation des Buildouts aus git  gitolite@git.4teamwork.ch:opengever/buildout 
+Installation des Buildouts aus git  gitolite@git.4teamwork.ch:opengever/buildout
+Im buildout.cfg muss in instance1 ein DB-egg hinzugefügt werden (opengever.sqliteconfig oder opengever.mysqlconfig)
 Lokales MySQL Installieren (aus homebrew, ports oder selbst herunterladen, je nach Geschmack)
 Das Einrichten der Datenbank und des Users kann über das SQL-Script gemacht werden:
 
