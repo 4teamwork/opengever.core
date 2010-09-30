@@ -15,6 +15,13 @@ import urllib
 import urllib2
 
 
+EXPECTED_ENCODINGS = (
+    'utf8',
+    'iso-8859-1',
+    'latin1',
+    )
+
+
 Session = named_scoped_session('opengever')
 
 
@@ -143,3 +150,93 @@ def remote_request(target_client_id, viewname, path='', data={}, headers={}):
                               urllib.urlencode(data),
                               headers)
     return opener.open(request)
+
+
+def decode_for_json(value, additional_encodings=[]):
+    """ Json does not handle encodings, so we need to convert any strings in
+    unicode in a way which allows to convert it back on the receiver.
+    """
+
+    if additional_encodings:
+        encodings = list(EXPECTED_ENCODINGS) + list(additional_encodings)
+    else:
+        encodings = EXPECTED_ENCODINGS
+
+    # unicode
+    if isinstance(value, unicode):
+        return u'unicode:' + value
+
+    # encoded strings
+    elif isinstance(value, str):
+        for enc in encodings:
+            try:
+                return unicode(enc) + u':' + value.decode(enc)
+            except UnicodeDecodeError:
+                pass
+        raise
+
+    # lists, tuples, sets
+    elif type(value) in (list, tuple, set):
+        nval = []
+        for sval in value:
+            nval.append(decode_for_json(sval))
+        if isinstance(value, tuple):
+            return tuple(nval)
+        if isinstance(value, set):
+            return set(nval)
+        return nval
+
+    # dicts
+    elif isinstance(value, dict):
+        nval = {}
+        for key, sval in value.items():
+            key = decode_for_json(key)
+            sval = decode_for_json(sval)
+            nval[key] = sval
+        return nval
+
+    # others
+    else:
+        return value
+
+
+def encode_after_json(value):
+    """ Is the opposite of decode_for_json
+    """
+
+    # there should not be any encoded strings
+    if isinstance(value, str):
+        value = unicode(value)
+
+    # unicode
+    if isinstance(value, unicode):
+        encoding, nval = unicode(value).split(':', 1)
+        if encoding == u'unicode':
+            return nval
+        else:
+            return nval.encode(encoding)
+
+    # lists, tuples, sets
+    elif type(value) in (list, tuple, set):
+        nval = []
+        for sval in value:
+            nval.append(encode_after_json(sval))
+        if isinstance(value, tuple):
+            return tuple(nval)
+        elif isinstance(value, set):
+            return set(nval)
+        else:
+            return nval
+
+    # dicts
+    elif isinstance(value, dict):
+        nval = {}
+        for key, sval in value.items():
+            key = encode_after_json(key)
+            sval = encode_after_json(sval)
+            nval[key] = sval
+        return nval
+
+    # other types
+    else:
+        return value

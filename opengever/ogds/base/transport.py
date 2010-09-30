@@ -4,9 +4,10 @@ from opengever.ogds.base.interfaces import IDataCollector
 from opengever.ogds.base.interfaces import IObjectCreator
 from opengever.ogds.base.interfaces import ITransporter
 from opengever.ogds.base.utils import remote_request, remote_json_request
+from opengever.ogds.base.utils import decode_for_json, encode_after_json
 from plone.dexterity.interfaces import IDexterityFTI, IDexterityContent
-from plone.dexterity.utils import iterSchemata
 from plone.dexterity.utils import createContent, addContentToContainer
+from plone.dexterity.utils import iterSchemata
 from plone.namedfile.interfaces import INamedFileField
 from z3c.relationfield.interfaces import IRelation, IRelationChoice
 from z3c.relationfield.interfaces import IRelationList
@@ -58,6 +59,7 @@ class Transporter(grok.GlobalUtility):
         data = remote_json_request(source_cid,
                                    '@@transporter-extract-object-json',
                                    path=path)
+        data = encode_after_json(data)
 
         obj = self._create_object(container, data)
         return obj
@@ -65,6 +67,7 @@ class Transporter(grok.GlobalUtility):
     def receive(self, container, request):
         jsondata = request.get(REQUEST_KEY)
         data = json.loads(jsondata)
+        data = encode_after_json(data)
         obj = self._create_object(container, data)
         return obj
 
@@ -84,6 +87,7 @@ class Transporter(grok.GlobalUtility):
         collectors = getAdapters((obj,), IDataCollector)
         for name, collector in collectors:
             data[name] = collector.extract()
+        data = decode_for_json(data)
         return data
 
     def _create_object(self, container, data):

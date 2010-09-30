@@ -14,6 +14,7 @@ TESTFILES = (
     'client_model.txt',
     'contact_info.txt',
     'vocabularies.txt',
+    'transport.txt',
     )
 
 
