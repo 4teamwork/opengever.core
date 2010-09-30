@@ -80,7 +80,6 @@ DOSSIER_MODIIFED_ACTION = 'Dossier modified'
 @grok.subscribe(IDossierMarker, IObjectModifiedEvent)
 def dossier_modified(context, event):
     title = _(u'label_dossier_modified', default=u'Dossier modified')
-    print title
     # XXX dirty
     try:
         # if we delete the working copy, we get a aq_based object and don't wanna
