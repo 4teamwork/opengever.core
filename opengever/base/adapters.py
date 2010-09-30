@@ -10,24 +10,40 @@ import re
 
 
 class ReferenceNumberPrefixAdpater(grok.Adapter):
+    """This Adapter handles the whole Reference number prefix assignment"""
+
+
     grok.provides(IReferenceNumberPrefix)
     grok.context(IFolderish)
-    ANNO_KEY = 'reference_numbers'
+
+    # a mapping numbers : intids - never deleted
+    CHILD_REF_KEY = 'reference_numbers'
+
+    # a mapping intid : reference_number
+    REF_KEY = 'reference_prefix'
 
     def __init__(self, context):
         self.context = context
         annotations = IAnnotations(self.context)
-        self.__mapping = annotations.get(self.ANNO_KEY, None)
-        if self.__mapping is None:
-            self.__mapping = PersistentDict()
-            annotations[self.ANNO_KEY] = self.__mapping
+        
+        #child mapping
+        self.child_mapping = annotations.get(self.CHILD_REF_KEY, None)
+        if self.child_mapping is None:
+            self.child_mapping = PersistentDict()
+            annotations[self.CHILD_REF_KEY] = self.child_mapping
+
+        #reference prefix
+        self.reference_mapping = annotations.get(self.REF_KEY, None)
+        if self.reference_mapping is None:
+            self.reference_mapping = PersistentDict()
+            annotations[self.REF_KEY] = self.reference_mapping
 
     def get_next_number(self):
         """ return the next possible reference number for object
         at the actual context
         """
-        if self.__mapping.values():
-            lastnumber = max(self.__mapping.values())
+        if self.child_mapping.keys():
+            lastnumber = max(self.child_mapping.keys())
 
             # then increase by one, if possible:
             # if its a number, we increase the whole number
@@ -60,10 +76,9 @@ class ReferenceNumberPrefixAdpater(grok.Adapter):
         """
         intids = getUtility(IIntIds)
         intid = intids.getId(aq_base(obj))
-        if intid in self.__mapping:
-            return self.__mapping.get(intid)
-        else:
-            return self.set_number(obj)
+        if intid in self.reference_mapping:
+            return self.reference_mapping.get(intid)
+        return None
 
     def set_number(self, obj, number=None):
         """Store the number in the Annotations,
@@ -75,13 +90,22 @@ class ReferenceNumberPrefixAdpater(grok.Adapter):
         if not number:
             number = self.get_next_number()
 
-        self.__mapping[intid] = number
+        self.reference_mapping[intid] = number
+        self.child_mapping[number] = intid
 
         return number
 
-    def is_valid_number(self, number):
+    def is_valid_number(self, number, obj=None):
         """ check the given reference number for the given context """
-        if number not in self.__mapping.values():
+        if number not in self.child_mapping.keys():
             return True
+
+        elif obj != None:
+            # check if the given object has the given number ever
+            intids = getUtility(IIntIds)
+            intid = intids.getId(aq_base(obj))
+
+            if self.child_mapping[number] == intid:
+                return True
 
         return False

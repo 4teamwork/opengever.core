@@ -3,10 +3,11 @@ ReferenceNumber Prefix Adapter
 Do some imports, and standard configuration:
     >>> from opengever.base.behaviors import base
     >>> from plone.dexterity.fti import DexterityFTI
+    >>> from plone.dexterity.content import Item, Container
     >>> from opengever.base.interfaces import IReferenceNumberPrefix
 
     >>> self.setRoles('Manager')
-    >>> fti = DexterityFTI('OpenGeverBaseFTI')
+    >>> fti = DexterityFTI('OpenGeverBaseFTI', klass="plone.dexterity.content.Container", global_allow=True, allowed_content_types=['OpenGeverBaseFTI'])
     >>> self.portal.portal_types._setObject('OpenGeverBaseFTI', fti)
     'OpenGeverBaseFTI'
     >>> self.portal.invokeFactory('OpenGeverBaseFTI', 'f1')
@@ -23,7 +24,7 @@ Create Folder, and items and get the referenceNumberPrefixAdapter:
     >>> item2 = f1.get('Item2')
 
 Check the numbering concept, starting by 1:
-    >>> adapter.get_next_number() 
+    >>> adapter.get_next_number()
     1
     >>> item1 = f1.get('Item1')
     >>> adapter.set_number(item1)
@@ -34,6 +35,7 @@ Check the numbering concept, starting by 1:
     2
 
 The next number generator should be able to increase number greater than 9:
+It also give allways the next number from the highest one, and not use all numbers
     >>> adapter.set_number(item2, '9')
     '9'
     >>> adapter.get_next_number()
