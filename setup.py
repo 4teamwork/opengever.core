@@ -24,6 +24,8 @@ setup(name='opengever.policy.base',
       install_requires=[
           'setuptools',
           'ftw.mail',
+          'collective.js.jstorage',
+          'collective.js.extjs',
           'opengever.base',
           'opengever.document',
           'opengever.dossier',
