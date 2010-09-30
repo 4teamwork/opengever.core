@@ -31,6 +31,7 @@ class TestResponse(PloneTestCase):
         # mock tentacle
         provideUtility(MockedContactInformation())
         # create task for testing
+        self.portal.portal_types.get('opengever.task.task').global_allow = True
         self.folder.invokeFactory('opengever.task.task', 'task-1')
 
     def test_base_view(self):
