@@ -33,12 +33,6 @@ class TestRepositoryFolderIntegration(PloneTestCase):
         factory = fti.factory
         new_object = createObject(factory)
         self.failUnless(IRepositoryFolderSchema.providedBy(new_object))
-    
-    def test_view(self):
-        self.folder.invokeFactory('opengever.repository.repositoryfolder', 'repository1')
-        r1 = self.folder['repository1']
-        view = r1.restrictedTraverse('@@view')
-        self.failUnless(view())
-        
+
 def test_suite():
     return unittest.defaultTestLoader.loadTestsFromName(__name__)
