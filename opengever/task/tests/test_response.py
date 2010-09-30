@@ -1,21 +1,17 @@
-import datetime
-from zope.component import getMultiAdapter
-from zope.component import provideUtility
-from zope.interface import alsoProvides, implements, directlyProvides
-
 from Products.PloneTestCase.ptc import PloneTestCase
-
+from opengever.ogds.base import contact_info
+from opengever.task.adapters import Response
+from opengever.task.response import Base
+from opengever.task.tests.layer import Layer
 from z3c.form import testing
 from zope.annotation.interfaces import IAttributeAnnotatable
+from zope.component import getMultiAdapter
+from zope.component import provideUtility
+from zope.interface import alsoProvides, implements
+import datetime
 
 #XXX: recursive imports between inbox and tabs
 from opengever.tabbedview.browser import tabs
-
-from opengever.ogds.base import contact_info
-
-from opengever.task.tests.layer import Layer
-from opengever.task.adapters import IResponseContainer, Response
-from opengever.task.response import Base
 
 
 class MockedContactInformation(contact_info.ContactInformation):
