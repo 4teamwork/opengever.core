@@ -1,8 +1,10 @@
+from Products.CMFCore.utils import getToolByName
 from five import grok
 from opengever.ogds.base.interfaces import IClientCommunicator
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.ogds.base.utils import get_current_client
 from opengever.ogds.base.vocabulary import ContactsVocabulary
+from zope.app.component.hooks import getSite, setSite
 from zope.component import getUtility
 from zope.globalrequest import getRequest
 from zope.schema.interfaces import IVocabularyFactory
@@ -252,6 +254,7 @@ class HomeDossiersVocabularyFactory(grok.GlobalUtility):
     grok.name('opengever.ogds.base.HomeDossiersVocabulary')
 
     def __call__(self, context):
+        self.context = context
         vocab = ContactsVocabulary.create_with_provider(
             self.key_value_provider)
         return vocab
@@ -285,7 +288,19 @@ class HomeDossiersVocabularyFactory(grok.GlobalUtility):
                                  'assigned client of the current user.')
 
         elif client:
-            for dossier in comm.get_open_dossiers(client.client_id):
+            # kss validation overrides getSite() hook with a bad object
+            # but we need getSite to work properly, so we fix it.
+            site = getSite()
+            if site.__class__.__name__ == 'Z3CFormValidation':
+                fixed_site = getToolByName(self.context,
+                                           'portal_url').getPortalObject()
+                setSite(fixed_site)
+                dossiers = comm.get_open_dossiers(client.client_id)
+                setSite(site)
+            else:
+                dossiers = comm.get_open_dossiers(client.client_id)
+
+            for dossier in dossiers:
                 yield (dossier['path'],
                        '%s: %s' % (dossier['reference_number'],
                                    dossier['title']))
