@@ -5,8 +5,8 @@
     <include package="opengever.contact" />
 
     <!-- configure a temporary testing DB -->
-    <db:engine name="ogds"
+    <db:engine name="opengever.db"
                url="sqlite:///:memory:" />
-    <db:session name="opengever.ogds" engine="ogds" />
+    <db:session name="opengever" engine="opengever.db" />
 
 </configure>

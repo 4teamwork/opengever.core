@@ -25,12 +25,13 @@ use in development environment, where no Oracle installation is available:
 
 ..
     <configure xmlns:db="http://namespaces.zope.org/db">
-        <db:engine name="ogds" url="mysql://opengever:opengever@localhost/opengever?charset=utf8" />
-        <db:session name="opengever.ogds" engine="ogds" />
+        <db:engine name="opengever.db" url="mysql://opengever:opengever@localhost/opengever?charset=utf8" />
+        <db:session name="opengever" engine="opengever.db" />
     </configure>
 
-`opengever.ogds.base` just tries to use the named session with the name "ogds". It
-also possible to create sqlite memory stored databases for testing purposes.
+`opengever.ogds.base` just tries to use the named session with the name
+"opengever". It also possible to create sqlite memory stored databases for
+testing purposes.
 
 
 Clients
