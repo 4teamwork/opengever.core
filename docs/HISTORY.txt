@@ -5,6 +5,9 @@ Changelog
 1.0a4
 -----
 
+* Workflow for dossiers moved to opengever.dossier. 
+  [01.10.2010, phabegger]
+
 * Updated missing and wrong German translations.
   [01.10.2010, phabegger]
 
