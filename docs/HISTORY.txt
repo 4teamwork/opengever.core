@@ -5,6 +5,9 @@ Changelog
 1.0a3
 -----
 
+* Updated byline viewlet to Plone 4 (workflow_state).
+  [01.10.2010, phabegger]
+
 * Workflow for repository folders/roots moved to opengever.repository. Removed 
   references to opengever.task workflow as it was moved to the resp. package, too.
   [01.10.2010, phabegger]
