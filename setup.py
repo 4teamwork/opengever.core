@@ -9,7 +9,7 @@ setup(name='opengever.tasktemplates',
       description="" + \
           ' (Maintainer: %s)' % maintainer,
       long_description=open("README.txt").read() + "\n" + \
-                       open(os.path.join("docs", "HISTORY.txt")).read(),
+          open(os.path.join("docs", "HISTORY.txt")).read(),
       # Get more strings from
       # http://pypi.python.org/pypi?%3Aaction=list_classifiers
       classifiers=[
@@ -20,7 +20,7 @@ setup(name='opengever.tasktemplates',
         "Topic :: Software Development :: Libraries :: Python Modules",
         ],
       keywords='opengever task templates',
-      author='Victor Baumann',
+      author='%s, 4teamwork GmbH',
       author_email='mailto:info@4teamwork.ch',
       maintainer=maintainer,
       url='http://psc.4teamwork.ch/4teamwork/kunden/opengever/' + \
@@ -31,9 +31,9 @@ setup(name='opengever.tasktemplates',
       include_package_data=True,
       zip_safe=False,
       install_requires=[
-          'setuptools',
-          # -*- Extra requirements: -*-
-      ],
+        'setuptools',
+        # -*- Extra requirements: -*-
+        ],
       entry_points="""
       # -*- Entry points: -*-
       [z3c.autoinclude.plugin]
