@@ -5,6 +5,9 @@ Changelog
 1.0a4
 -----
 
+* Renamed sharing tab to participants tab.
+  [01.10.2010, phabegger]
+
 * Removed journal box in overview template of dossiers and subdossiers
   [01.10.2010, phabegger]
 
