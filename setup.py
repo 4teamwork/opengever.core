@@ -22,6 +22,7 @@ setup(name='opengever.tasktemplates',
       keywords='opengever task templates',
       author='Victor Baumann',
       author_email='mailto:info@4teamwork.ch',
+      maintainer=maintainer,
       url='http://psc.4teamwork.ch/4teamwork/kunden/opengever/' + \
           'opengever-tasktemplates',
       license='GPL2',
