@@ -22,3 +22,15 @@ msgstr ""
 
 msgid "filing_nr"
 msgstr ""
+
+msgid "subdossiers"
+msgstr ""
+
+msgid "tasks"
+msgstr ""
+
+msgid "documents"
+msgstr ""
+
+msgid "sharing"
+msgstr ""
