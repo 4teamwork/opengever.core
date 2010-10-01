@@ -1,7 +1,7 @@
 _path,_type,inbox_group,title,responsible,
 /eingangskorb,opengever.inbox.inbox,og_mandant1_eingangskorb,Eingangskorb
-/vorlagen,opengever.dossier.templatedossier,,Vorlagen,peter.muster
+/vorlagen,opengever.dossier.templatedossier,,Vorlagen,franz.michel
 /kontakte,opengever.contact.contactfolder,,Kontakte,
-/ordnungssystem/rechnungswesen/belege/hugos-dossier,opengever.dossier.businesscasedossier,,Hugo's Dossier,peter.muster
-/ordnungssystem/rechnungswesen/belege/hugos-dossier/subdossier,opengever.dossier.businesscasedossier,,Unterteilung in ein Subdossier,peter.muster
+/ordnungssystem/rechnungswesen/belege/hugos-dossier,opengever.dossier.businesscasedossier,,Hugo's Dossier,franz.michel
+/ordnungssystem/rechnungswesen/belege/hugos-dossier/subdossier,opengever.dossier.businesscasedossier,,Unterteilung in ein Subdossier,franz.michel
 /ordnungssystem/rechnungswesen/belege/hugos-dossier/opengever.document.document,opengever.document.document,,Ein kleines Testdocument, peter.muster
