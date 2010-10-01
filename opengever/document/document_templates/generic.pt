@@ -20,15 +20,16 @@
     <p tal:condition="not: view/contents">
        Keine Inhalte vorhanden
     </p>
-    
-    
-    <tal:buttons tal:repeat="button view/buttons">
-      <input class="context"
-             type="submit"
-             name=""
-             value=""
-             i18n:attributes="value"
-             tal:attributes="value button/title; name button/url; class button/cssclass" />
-    </tal:buttons>
+
+    <div id="tabbedview-menu" class="tabbedview-action-menu contentActions">
+        <ul class="tabbedview-action-list">
+            <tal:major_buttons tal:repeat="button view/buttons">
+                <li>
+                    <a class="actionicon" href="#" tal:attributes="href button/url;" tal:content="button/title" />
+                </li>
+            </tal:major_buttons>
+        </ul>
+    </div>
+
     <input tal:replace="structure context/@@authenticator/authenticator" />
 </form>
