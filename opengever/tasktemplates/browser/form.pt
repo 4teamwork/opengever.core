@@ -15,14 +15,21 @@
                   //test global overwrite
                   $.fn.ftwtable.defaults.onBeforeLoad = function(){
                       console.log('custom onBeforeLoad');
-                  }
+                  };
 
                   // initialize table
                   var table = $('#template_chooser').ftwtable({
                        'url' : '@@add-tasktemplate/listing',
                        'storage': true,
                        'onLoad': function(t,s,r){
-                           console.log('custom onLoad');
+                           $('table',table).attr('id', 'the-table');
+                           $('table',table).css('width', '100%');
+                           var grid = new Ext.ux.grid.TableGrid("the-table", {
+                                       stripeRows: true,
+                                       remoteSort:true
+                                   });
+                           grid.render();
+                           table.fadeIn('fast');
                        }
                   });
 
@@ -44,7 +51,6 @@
                     }
                   });
 
-
               });
                </script>
       </head>
@@ -58,7 +64,6 @@
                      <li><a href="add-tasktemplate#tasks">select tasks</a></li>
                  </ul>
                  <div id="template_chooser"><!--iefix--></div>
-                 <div id="template_chooser_debug"><!--iefix--></div>
              
                  <div id="form-controls">
                      <input type="submit" name="save" value="save"/>

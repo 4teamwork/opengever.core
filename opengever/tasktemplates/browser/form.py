@@ -30,7 +30,7 @@ class AddForm(BrowserView):
     
     steps = {
         'templates': {
-            'columns' : (('', helper.path_radiobutton), 'Title', 'created'),
+            'columns' : (('', helper.path_radiobutton), 'Title' ,'created'),
             'types': ('TaskTemplateFolder',)
         },
         'tasks': {
@@ -47,6 +47,7 @@ class AddForm(BrowserView):
         return generator.generate(templates,
                                   self.steps[show]['columns'],
                                   sortable = True,
+                                  output='json'
                                   )
                                   
     def create(self, paths):
