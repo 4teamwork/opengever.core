@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2010-09-30 13:21+0000\n"
-"PO-Revision-Date: 2010-09-30 15:24+0200\n"
+"POT-Creation-Date: 2010-10-01 07:16+0000\n"
+"PO-Revision-Date: 2010-10-01 09:17+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -119,17 +119,17 @@ msgid "add"
 msgstr "Hinzufügen"
 
 #. Default: "Attach"
-#: ./opengever/task/attachdocument.py:158
+#: ./opengever/task/attachdocument.py:172
 msgid "button_attach"
 msgstr "Anhängen"
 
 #. Default: "Cancel"
-#: ./opengever/task/attachdocument.py:45
+#: ./opengever/task/attachdocument.py:47
 msgid "button_cancel"
 msgstr "Abbrechen"
 
 #. Default: "Continue"
-#: ./opengever/task/attachdocument.py:49
+#: ./opengever/task/attachdocument.py:51
 #: ./opengever/task/browser/successor.py:57
 msgid "button_continue"
 msgstr "Weiter"
@@ -252,17 +252,17 @@ msgstr "Wählen Sie die verantwortliche Person aus, die dem oben gewählten Mand
 msgid "help_responsible_client"
 msgstr "Wählen Sie zuerst den Mandant des Verantwortlichen, anschliessend den Verantwortlichen."
 
-#: ./opengever/task/attachdocument.py:34
+#: ./opengever/task/attachdocument.py:36
 msgid "help_source_client"
 msgstr ""
 
 #. Default: "Select a document"
-#: ./opengever/task/attachdocument.py:137
+#: ./opengever/task/attachdocument.py:151
 msgid "help_source_document"
 msgstr "Wählen Sie ein Dokument aus dem vorgängig gewählten Dossier"
 
 #. Default: "Select a source dossier"
-#: ./opengever/task/attachdocument.py:82
+#: ./opengever/task/attachdocument.py:96
 msgid "help_source_dossier"
 msgstr "Wählen Sie ein Dossier von ihrem Mandanten"
 
@@ -429,17 +429,17 @@ msgid "label_return_to_issue"
 msgstr "Zurück zur Aufgabe"
 
 #. Default: "Client"
-#: ./opengever/task/attachdocument.py:32
+#: ./opengever/task/attachdocument.py:34
 msgid "label_source_client"
 msgstr "Mandant"
 
 #. Default: "Document"
-#: ./opengever/task/attachdocument.py:136
+#: ./opengever/task/attachdocument.py:150
 msgid "label_source_document"
 msgstr "Dokument"
 
 #. Default: "Dossier"
-#: ./opengever/task/attachdocument.py:81
+#: ./opengever/task/attachdocument.py:95
 msgid "label_source_dossier"
 msgstr "Dossier"
 
@@ -533,7 +533,7 @@ msgid "task_added_on"
 msgstr "am"
 
 #. Default: "Attach document"
-#: ./opengever/task/attachdocument.py:42
+#: ./opengever/task/attachdocument.py:44
 msgid "title_attach_document_form"
 msgstr "Dokument aus Heimmandant anhängen"
 
@@ -556,5 +556,10 @@ msgstr "Antwort bearbeiten"
 #: ./opengever/task/templates/edit_response.pt:30
 msgid "title_error_no_response"
 msgstr "Fehler: keine Antworten zum editieren gefunden"
+
+#. Default: "You are not assigned to another home client from where you could copy a document."
+#: ./opengever/task/attachdocument.py:77
+msgid "warning_attach_document_no_other_home_client"
+msgstr "Sie sind keinem anderen Mandanten zugewiesen. Sie können von nirgendwo Dokumente kopieren."
 
 

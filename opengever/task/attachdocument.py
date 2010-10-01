@@ -3,6 +3,7 @@ The transporter module defines functionality for adding a document
 from any context of a foreign client into a existing task.
 """
 
+from Products.statusmessages.interfaces import IStatusMessage
 from five import grok
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.ogds.base.interfaces import ITransporter
@@ -13,6 +14,7 @@ from plone.z3cform import layout
 from z3c.form.interfaces import HIDDEN_MODE
 from zope import schema
 from zope.component import getUtility
+from zope.schema.interfaces import IVocabularyFactory
 import urllib
 import z3c.form
 
@@ -66,7 +68,19 @@ class ChooseClientView(layout.FormWrapper, grok.CodeView):
         layout.FormWrapper.__init__(self, *args, **kwargs)
         grok.CodeView.__init__(self, *args, **kwargs)
 
-    __call__ = layout.FormWrapper.__call__
+    def __call__(self):
+        factory = getUtility(
+            IVocabularyFactory,
+            name='opengever.ogds.base.OtherAssignedClientsVocabulary')
+        if not len(factory(self.context)):
+            # if there is no client in the vocabulary we cannot continue
+            msg = _(u'warning_attach_document_no_other_home_client',
+                    default=u'You are not assigned to another home client '
+                    'from where you could copy a document.')
+            IStatusMessage(self.request).addStatusMessage(msg, type='warning')
+            return self.request.RESPONSE.redirect(self.context.absolute_url())
+        else:
+            return layout.FormWrapper.__call__(self)
 
 
 

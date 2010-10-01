@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2010-09-30 13:21+0000\n"
+"POT-Creation-Date: 2010-10-01 07:16+0000\n"
 "PO-Revision-Date: 2009-02-25 14:39+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -122,17 +122,17 @@ msgid "add"
 msgstr ""
 
 #. Default: "Attach"
-#: ./opengever/task/attachdocument.py:158
+#: ./opengever/task/attachdocument.py:172
 msgid "button_attach"
 msgstr ""
 
 #. Default: "Cancel"
-#: ./opengever/task/attachdocument.py:45
+#: ./opengever/task/attachdocument.py:47
 msgid "button_cancel"
 msgstr ""
 
 #. Default: "Continue"
-#: ./opengever/task/attachdocument.py:49
+#: ./opengever/task/attachdocument.py:51
 #: ./opengever/task/browser/successor.py:57
 msgid "button_continue"
 msgstr ""
@@ -252,17 +252,17 @@ msgstr ""
 msgid "help_responsible_client"
 msgstr ""
 
-#: ./opengever/task/attachdocument.py:34
+#: ./opengever/task/attachdocument.py:36
 msgid "help_source_client"
 msgstr ""
 
 #. Default: "Select a document"
-#: ./opengever/task/attachdocument.py:137
+#: ./opengever/task/attachdocument.py:151
 msgid "help_source_document"
 msgstr ""
 
 #. Default: "Select a source dossier"
-#: ./opengever/task/attachdocument.py:82
+#: ./opengever/task/attachdocument.py:96
 msgid "help_source_dossier"
 msgstr ""
 
@@ -429,17 +429,17 @@ msgid "label_return_to_issue"
 msgstr ""
 
 #. Default: "Client"
-#: ./opengever/task/attachdocument.py:32
+#: ./opengever/task/attachdocument.py:34
 msgid "label_source_client"
 msgstr ""
 
 #. Default: "Document"
-#: ./opengever/task/attachdocument.py:136
+#: ./opengever/task/attachdocument.py:150
 msgid "label_source_document"
 msgstr ""
 
 #. Default: "Dossier"
-#: ./opengever/task/attachdocument.py:81
+#: ./opengever/task/attachdocument.py:95
 msgid "label_source_dossier"
 msgstr ""
 
@@ -533,7 +533,7 @@ msgid "task_added_on"
 msgstr ""
 
 #. Default: "Attach document"
-#: ./opengever/task/attachdocument.py:42
+#: ./opengever/task/attachdocument.py:44
 msgid "title_attach_document_form"
 msgstr ""
 
@@ -555,5 +555,10 @@ msgstr ""
 #. Default: "Error: no response found for editing"
 #: ./opengever/task/templates/edit_response.pt:30
 msgid "title_error_no_response"
+msgstr ""
+
+#. Default: "You are not assigned to another home client from where you could copy a document."
+#: ./opengever/task/attachdocument.py:77
+msgid "warning_attach_document_no_other_home_client"
 msgstr ""
 
