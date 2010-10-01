@@ -171,6 +171,5 @@ class Byline(grok.Viewlet):
     #update = content.DocumentBylineViewlet.update
     @memoize
     def workflow_state(self):
-        pw = self.context.portal_workflow
-        return pw.getStatusOf(
-            pw.getChainFor(self.context)[0], self.context)['review_state']
+        context_state = self.context.restrictedTraverse("@@plone_context_state")
+        return context_state.workflow_state()
