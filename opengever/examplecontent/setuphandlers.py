@@ -10,8 +10,8 @@ def start_import(context):
     transmogrifier(u'opengever.examplecontent.various')
     transaction.commit()
 
-    transmogrifier(u'opengever.examplecontent.users')
-    transaction.commit()
+    # transmogrifier(u'opengever.examplecontent.users')
+    # transaction.commit()
 
 def settings(context):
     # exclude items from the navigation we not used 
