@@ -39,6 +39,8 @@ setup(name='opengever.tasktemplates',
         'opengever.tabbedview',
         'opengever.ogds.base',
         'opengever.dossier',
+        'five.grok',
+        'plone.directives.form',
         'ftw.table',
         'setuptools',
         # -*- Extra requirements: -*-
