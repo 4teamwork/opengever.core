@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2010-10-01 09:56+0000\n"
+"POT-Creation-Date: 2010-10-01 10:10+0000\n"
 "PO-Revision-Date: 2009-02-25 14:39+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -109,10 +109,20 @@ msgstr "Zugewiesen von"
 msgid "journal"
 msgstr "Journal"
 
+#. Default: "Actor"
+#: ./opengever/tabbedview/browser/tabs.py:346
+msgid "label_actor"
+msgstr "Akteur"
+
 #. Default: "Checked out by"
 #: ./opengever/tabbedview/browser/tabs.py:221
 msgid "label_checked_out"
 msgstr "Ausgecheckt von"
+
+#. Default: "Comments"
+#: ./opengever/tabbedview/browser/tabs.py:352
+msgid "label_comments"
+msgstr "Kommentar"
 
 #. Default: "Date of Completion"
 #: ./opengever/tabbedview/browser/tabs.py:302
@@ -173,6 +183,16 @@ msgstr "Verantwortlich"
 #: ./opengever/tabbedview/browser/tabs.py:297
 msgid "label_task_type"
 msgstr "Aufgabentyp"
+
+#. Default: "Time"
+#: ./opengever/tabbedview/browser/tabs.py:349
+msgid "label_time"
+msgstr "Zeit"
+
+#. Default: "Title"
+#: ./opengever/tabbedview/browser/tabs.py:343
+msgid "label_title"
+msgstr "Titel"
 
 #. Default: "Änderungsdatum"
 msgid "modified"

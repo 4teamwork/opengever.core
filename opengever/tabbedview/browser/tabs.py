@@ -339,10 +339,17 @@ class Journal(grok.View, OpengeverTab):
 
     def table(self):
         generator = queryUtility(ITableGenerator, 'ftw.tablegenerator')
-        columns = (('title', lambda x, y: x['action']['title']),
-                   'actor',
-                   ('time', helper.readable_date_time),
-                   'comments',
+        columns = ({'column': 'title',
+                    'column_title': _(u'label_title', 'Title'),
+                    'transform': lambda x, y: x['action']['title']},
+                   {'column': 'actor',
+                   'column_title': _(u'label_actor', default=u'Actor'),
+                   },
+                   {'column': 'time',
+                    'column_title': _(u'label_time', default=u'Time'),
+                    'transform': helper.readable_date_time},
+                   {'column': 'comments',
+                    'column_title': _(u'label_comments', default=u'Comments'),},
                    )
         return generator.generate(
             reversed(self.data()),
