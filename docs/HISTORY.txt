@@ -5,6 +5,9 @@ Changelog
 1.0a4
 -----
 
+* Updated missing and wrong German translations.
+  [01.10.2010, phabegger]
+
 * Renamed sharing tab to participants tab.
   [01.10.2010, phabegger]
 
