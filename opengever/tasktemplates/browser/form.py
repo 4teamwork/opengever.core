@@ -30,11 +30,11 @@ class AddForm(BrowserView):
     
     steps = {
         'templates': {
-            'columns' : (('', helper.path_radiobutton), 'Title' ,'created'),
+            'columns' : (('', helper.path_radiobutton), 'Title' ,('created', helper.readable_date)),
             'types': ('TaskTemplateFolder',)
         },
         'tasks': {
-            'columns' : (('', path_checkbox), 'Title', 'created'),
+            'columns' : (('', helper.path_radiobutton), 'Title', 'created'),
             'types': ('TaskTemplate',)
         }
     }

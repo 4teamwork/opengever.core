@@ -22,24 +22,8 @@
                        'url' : '@@add-tasktemplate/listing',
                        'storage': true,
                        'onLoad': function(t,s,r){
-                           $('table',table).attr('id', 'the-table');
-                           $('table',table).css('width', '100%');
-                           var grid = new Ext.ux.grid.TableGrid("the-table", {
-                                       stripeRows: true,
-                                       remoteSort:true
-                                   });
-                           grid.render();
-                           table.fadeIn('fast');
                        }
                   });
-
-                 // wizard navigation
-                 $('#tasktemplateNavigation').click(function(e){
-                     var step = e.target.href.split('#')[1];
-                     table.ftwtable('param', 'show', step);
-                     table.ftwtable('reload');
-                     $('#form-controls').toggle();
-                 });
 
                   $('input[name=paths:list]', table).live('click', function(e){
                     if(e.target.type=='radio'){
