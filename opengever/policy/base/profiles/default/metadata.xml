@@ -24,5 +24,6 @@
     <dependency>profile-ftw.dashboard.portlets.recentlymodified:default</dependency-->
     <dependency>profile-opengever.theme:default</dependency>
     <dependency>profile-collective.js.jstorage:default</dependency>
+    <dependency>profile-collective.js.extjs:default</dependency>
   </dependencies>
 </metadata>
