@@ -1,6 +1,3 @@
-import base64
-
-import z3c.form
 from Products.statusmessages.interfaces import IStatusMessage
 from five import grok
 from opengever.dossier import _
@@ -12,13 +9,14 @@ from plone.formwidget.autocomplete import AutocompleteFieldWidget
 from plone.registry.interfaces import IRegistry
 from plone.z3cform import layout
 from rwproperty import getproperty, setproperty
-from z3c.formwidget.query.interfaces import IQuerySource
 from zope import schema
 from zope.annotation.interfaces import IAnnotations
 from zope.component import getUtility
 from zope.interface import Interface, implements
 from zope.schema.interfaces import IVocabularyFactory
 from zope.schema.vocabulary import SimpleVocabulary
+import base64
+import z3c.form
 
 
 _marker = object()
@@ -71,7 +69,8 @@ class ParticipationHandler(object):
             self.set_participations(lst)
             # journal entry
             title = _(u'label_participant_added',
-                      default=u'Participant added: ${contact} with roles ${roles}',
+                      default=u'Participant added: ${contact} with '
+                      'roles ${roles}',
                       mapping={
                     'contact' : value.contact,
                     'roles' : value.role_list,
@@ -112,7 +111,7 @@ class IParticipation(form.Schema):
     contact = schema.Choice(
         title = _(u'label_contact', default=u'Contact'),
         description = _(u'help_contact', default=u''),
-        vocabulary=u'opengever.ogds.base.ContactsVocabulary',
+        vocabulary=u'opengever.ogds.base.ContactsAndUsersVocabulary',
         required = True,
         )
 
@@ -134,33 +133,6 @@ class IParticipation(form.Schema):
 
 
 # ------- vocabularies --------
-
-class ContactVocabulary(SimpleVocabulary):
-    grok.implements(IQuerySource)
-
-    def search(self, query_string):
-        return [v for v in self
-                if query_string.lower() in v.value.lower()]
-
-
-class ContactVocabularyFactory(object):
-    grok.implements(IVocabularyFactory)
-
-    def __call__(self, context):
-        terms = []
-        for user in context.acl_users.getUsers():
-            member_name = user.getProperty('fullname') or user.getName()
-            email = user.getProperty('email', None)
-            if email:
-                member_name += ' ' + str(email)
-            terms.append(SimpleVocabulary.createTerm(user.getId(),
-                                                     str(user.getId()),
-                                                     member_name))
-        return ContactVocabulary(terms)
-
-grok.global_utility(ContactVocabularyFactory,
-                    name=u'opengever.dossier.participation.contacts')
-
 
 class RolesVocabularyFactory(object):
     grok.implements(IVocabularyFactory)
@@ -242,7 +214,7 @@ class ParticipationAddForm(z3c.form.form.Form):
         return self._redirect_to_participants_tab()
 
     def _redirect_to_participants_tab(self):
-        url = self.context.absolute_url() + '/#participants-tab'
+        url = self.context.absolute_url() + '/#participants'
         return self.request.RESPONSE.redirect(url)
 
 
@@ -280,5 +252,5 @@ class DeleteParticipants(grok.CodeView):
     def redirect_url(self):
         value = self.request.get('orig_template')
         if not value:
-            value = './#participants-tab'
+            value = './#participants'
         return value

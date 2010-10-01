@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2010-10-01 07:33+0000\n"
+"POT-Creation-Date: 2010-10-01 07:57+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -94,7 +94,7 @@ msgid "box_last_modified"
 msgstr ""
 
 #. Default: "Add"
-#: ./opengever/dossier/behaviors/participation.py:227
+#: ./opengever/dossier/behaviors/participation.py:199
 msgid "button_add"
 msgstr ""
 
@@ -105,7 +105,7 @@ msgstr ""
 
 #. Default: "Cancel"
 #: ./opengever/dossier/archive.py:236
-#: ./opengever/dossier/behaviors/participation.py:240
+#: ./opengever/dossier/behaviors/participation.py:212
 #: ./opengever/dossier/transport.py:45
 msgid "button_cancel"
 msgstr ""
@@ -169,7 +169,7 @@ msgstr ""
 msgid "heading_archive_form"
 msgstr ""
 
-#: ./opengever/dossier/behaviors/participation.py:130
+#: ./opengever/dossier/behaviors/participation.py:129
 msgid "help_comment"
 msgstr ""
 
@@ -177,7 +177,7 @@ msgstr ""
 msgid "help_comments"
 msgstr ""
 
-#: ./opengever/dossier/behaviors/participation.py:114
+#: ./opengever/dossier/behaviors/participation.py:113
 msgid "help_contact"
 msgstr ""
 
@@ -223,7 +223,7 @@ msgstr ""
 msgid "help_responsible"
 msgstr ""
 
-#: ./opengever/dossier/behaviors/participation.py:121
+#: ./opengever/dossier/behaviors/participation.py:120
 msgid "help_roles"
 msgstr ""
 
@@ -253,12 +253,12 @@ msgid "info_mails_sent"
 msgstr ""
 
 #. Default: "Participation created"
-#: ./opengever/dossier/behaviors/participation.py:235
+#: ./opengever/dossier/behaviors/participation.py:207
 msgid "info_participation_create"
 msgstr ""
 
 #. Default: "Removed participations"
-#: ./opengever/dossier/behaviors/participation.py:274
+#: ./opengever/dossier/behaviors/participation.py:246
 msgid "info_removed_participations"
 msgstr ""
 
@@ -279,7 +279,7 @@ msgid "label_choose_target_dossier"
 msgstr ""
 
 #. Default: "Comment"
-#: ./opengever/dossier/behaviors/participation.py:129
+#: ./opengever/dossier/behaviors/participation.py:128
 msgid "label_comment"
 msgstr ""
 
@@ -289,7 +289,7 @@ msgid "label_comments"
 msgstr ""
 
 #. Default: "Contact"
-#: ./opengever/dossier/behaviors/participation.py:113
+#: ./opengever/dossier/behaviors/participation.py:112
 msgid "label_contact"
 msgstr ""
 
@@ -366,17 +366,17 @@ msgid "label_number_of_containers"
 msgstr ""
 
 #. Default: "Participant added: ${contact} with roles ${roles}"
-#: ./opengever/dossier/behaviors/participation.py:73
+#: ./opengever/dossier/behaviors/participation.py:71
 msgid "label_participant_added"
 msgstr ""
 
 #. Default: "Participant removed: ${contact}"
-#: ./opengever/dossier/behaviors/participation.py:94
+#: ./opengever/dossier/behaviors/participation.py:93
 msgid "label_participant_removed"
 msgstr ""
 
 #. Default: "Participation"
-#: ./opengever/dossier/behaviors/participation.py:223
+#: ./opengever/dossier/behaviors/participation.py:195
 msgid "label_participation"
 msgstr ""
 
@@ -404,7 +404,7 @@ msgid "label_responsible_task"
 msgstr ""
 
 #. Default: "Roles"
-#: ./opengever/dossier/behaviors/participation.py:120
+#: ./opengever/dossier/behaviors/participation.py:119
 msgid "label_roles"
 msgstr ""
 
