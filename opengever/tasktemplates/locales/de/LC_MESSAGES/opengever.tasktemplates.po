@@ -1,110 +1,106 @@
-# --- PLEASE EDIT THE LINES BELOW CORRECTLY ---
-# SOME DESCRIPTIVE TITLE.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "POT-Creation-Date: 2010-10-01 09:24+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
+"PO-Revision-Date: 2010-10-01 11:42+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0\n"
-"Language-Code: en\n"
-"Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
-"Domain: opengever.tasktemplates\n"
+"Domain: DOMAIN\n"
 
 #: ./opengever/tasktemplates/profiles/default/types/opengever.tasktemplates.tasktemplate.xml
 msgid "TaskTemplate"
-msgstr ""
+msgstr "Aufgabenvorlage"
 
 #. Default: "Interactive users"
 #: ./opengever/tasktemplates/vocabularies.py:46
 msgid "client_interactive_users"
-msgstr ""
+msgstr "Interaktiver Benutzer"
 
 #: ./opengever/tasktemplates/content/tasktemplate.py:55
 msgid "help_deadline"
-msgstr ""
+msgstr "Frist in Tagen ab Startdatum der Aufgabe."
 
 #: ./opengever/tasktemplates/content/tasktemplate.py:21
 msgid "help_issuer"
-msgstr ""
+msgstr "Wählen Sie einen Auftraggeber aus. Sie können auch die interaktiven Benutzer \"Federführender\" oder \"Sachbearbeiter\" auswählen."
 
 #: ./opengever/tasktemplates/content/tasktemplate.py:69
 msgid "help_preselected"
-msgstr ""
+msgstr "Diese Vorlage gehört zur Standardauswahl des Standardablaufs."
 
 #: ./opengever/tasktemplates/content/tasktemplate.py:48
 msgid "help_responsible"
-msgstr ""
+msgstr "Wählen Sie den Verantwortlichen aus. Wenn Sie im Feld \"Mandanten des Verantwortlichen\" die Option \"Interaktiver Benutzer\" auswählen, können Sie in diesem Feld auch \"Federführender\" oder \"Sachbearbeiter\" auswählen."
 
 #: ./opengever/tasktemplates/content/tasktemplate.py:40
 msgid "help_responsible_client"
-msgstr ""
+msgstr "Wählen Sie den Mandanten des Verantwortlichen aus oder wählen Sie \"Interaktiver Benutzer\"."
 
 #: ./opengever/tasktemplates/content/tasktemplate.py:29
 msgid "help_task_type"
-msgstr ""
+msgstr "Wählen Sie den Typ der Aufgabe aus."
 
 #: ./opengever/tasktemplates/content/tasktemplate.py:62
 msgid "help_text"
-msgstr ""
+msgstr "Geben Sie eine detaillierte Arbeitsanweisung oder einen Kommentar ein."
 
 #: ./opengever/tasktemplates/content/tasktemplate.py:14
 msgid "help_title"
-msgstr ""
+msgstr "Der Name der Aufgabe."
 
 #. Default: "Current user"
 #: ./opengever/tasktemplates/vocabularies.py:15
 msgid "interactive_user_current_user"
-msgstr ""
+msgstr "Sachbearbeiter"
 
 #. Default: "Responsible"
 #: ./opengever/tasktemplates/vocabularies.py:12
 msgid "interactive_user_responsible"
-msgstr ""
+msgstr "Federführender"
 
 #. Default: "Deadline in Days"
 #: ./opengever/tasktemplates/content/tasktemplate.py:54
 msgid "label_deadline"
-msgstr ""
+msgstr "Frist in Tagen"
 
 #. Default: "Issuer"
 #: ./opengever/tasktemplates/content/tasktemplate.py:20
 msgid "label_issuer"
-msgstr ""
+msgstr "Auftraggeber"
 
 #. Default: "Preselect"
 #: ./opengever/tasktemplates/content/tasktemplate.py:68
 msgid "label_preselected"
-msgstr ""
+msgstr "Vorselektiert"
 
 #. Default: "Responsible Client"
 #: ./opengever/tasktemplates/content/tasktemplate.py:38
 msgid "label_resonsible_client"
-msgstr ""
+msgstr "Mandant des Verantwortlichen"
 
 #. Default: "Responsible"
 #: ./opengever/tasktemplates/content/tasktemplate.py:47
 msgid "label_responsible"
-msgstr ""
+msgstr "Verantwortlicher"
 
 #. Default: "Task Type"
 #: ./opengever/tasktemplates/content/tasktemplate.py:28
 msgid "label_task_type"
-msgstr ""
+msgstr "Aufgabentyp"
 
 #. Default: "Text"
 #: ./opengever/tasktemplates/content/tasktemplate.py:61
 msgid "label_text"
-msgstr ""
+msgstr "Kommentar"
 
 #. Default: "Title"
 #: ./opengever/tasktemplates/content/tasktemplate.py:13
 msgid "label_title"
-msgstr ""
+msgstr "Titel"
+
 
