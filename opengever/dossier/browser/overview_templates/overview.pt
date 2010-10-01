@@ -11,7 +11,7 @@
             <a href="" class="rollover-breadcrumb" tal:attributes="href item/getURL|nothing; title item/alt|nothing" tal:omit-tag="not: item/getURL|nothing"><span tal:content="item/Title" /></a>
           </li>
           <li class="moreLink">
-            <a tal:attributes="href string:#${box/id}-tab" i18n:translate="">show all</a>
+            <a tal:attributes="href string:#${box/id}" i18n:translate="">show all</a>
           </li>
         </ul>
         <span tal:condition="not: items" i18n:translate="no_content" />
