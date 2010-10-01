@@ -117,7 +117,7 @@ msgstr "Akteur"
 #. Default: "Checked out by"
 #: ./opengever/tabbedview/browser/tabs.py:221
 msgid "label_checked_out"
-msgstr "Ausgecheckt von"
+msgstr "In Bearbeitung"
 
 #. Default: "Comments"
 #: ./opengever/tabbedview/browser/tabs.py:352
@@ -282,5 +282,4 @@ msgstr "Titel"
 
 msgid "trash"
 msgstr "Papierkorb"
-
 
