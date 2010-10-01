@@ -5,6 +5,9 @@ Changelog
 1.0a4
 -----
 
+* Removed journal box in overview template of dossiers and subdossiers
+  [01.10.2010, phabegger]
+
 * Moved tentacle-open-dossiers-json from opengever.octopus.tentacle
   [11.08.2010, jbaumann]
 

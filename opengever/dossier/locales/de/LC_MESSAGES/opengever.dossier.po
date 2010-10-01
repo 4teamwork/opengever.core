@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: opengever.dossier 1.0\n"
-"POT-Creation-Date: 2010-10-01 08:15+0000\n"
+"POT-Creation-Date: 2010-10-01 08:39+0000\n"
 "PO-Revision-Date: 2009-09-17 15:21+0000\n"
 "Last-Translator: Thomas Buchberger <t.buchberger@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -36,11 +36,11 @@ msgstr "Dossierübersicht"
 
 #: ./opengever/dossier/browser/send_document.py:34
 msgid "No Mail Address"
-msgstr "kein Mail Adresse"
+msgstr ""
 
 #: ./opengever/dossier/archive.py:29
 msgid "Not all required fields are filled"
-msgstr "Es sind nicht alle benötigten Felder ausgefüllt"
+msgstr ""
 
 #: ./opengever/dossier/templatedossier.py:115
 msgid "Not found the templatedossier"
@@ -65,7 +65,7 @@ msgstr "Das Enddatum wird auch bei der Aktion 'nur abschliessen' benötigt"
 
 #: ./opengever/dossier/validators.py:18
 msgid "The Files you selected are bigger than the maximal Size"
-msgstr "Die ausgewählten Dokumente sind grösser als die max. zugelassene Grösse"
+msgstr ""
 
 #: ./opengever/dossier/archive.py:233
 msgid "The dossier was already resolved"
@@ -85,7 +85,7 @@ msgstr "Wenn die Aktion 'Ablagenummer vergeben' selektiert ist, werden alle Feld
 
 #: ./opengever/dossier/browser/send_document.py:76
 msgid "You have to select a intern                             or enter a extern mail-addres"
-msgstr "Sie haben keine E-Mail Adresse angegeben, bitte wählen sie eine interne E-Mail Adresse oder geben sie eine externe an."
+msgstr ""
 
 #. Default: "last modified"
 #: ./opengever/dossier/viewlets/templatedossier_byline.pt:35
@@ -93,7 +93,7 @@ msgid "box_last_modified"
 msgstr "Von:"
 
 #. Default: "Add"
-#: ./opengever/dossier/behaviors/participation.py:227
+#: ./opengever/dossier/behaviors/participation.py:199
 msgid "button_add"
 msgstr "Erstellen"
 
@@ -104,18 +104,18 @@ msgstr "Speichern"
 
 #. Default: "Cancel"
 #: ./opengever/dossier/archive.py:236
-#: ./opengever/dossier/behaviors/participation.py:240
-#: ./opengever/dossier/transport.py:43
+#: ./opengever/dossier/behaviors/participation.py:212
+#: ./opengever/dossier/transport.py:45
 msgid "button_cancel"
 msgstr "Abbrechen"
 
 #. Default: "Continue"
-#: ./opengever/dossier/transport.py:47
+#: ./opengever/dossier/transport.py:49
 msgid "button_continue"
-msgstr "Weiter"
+msgstr ""
 
 #. Default: "Copy"
-#: ./opengever/dossier/transport.py:111
+#: ./opengever/dossier/transport.py:125
 msgid "button_copy"
 msgstr "Kopieren"
 
@@ -171,7 +171,7 @@ msgstr "Ablage Jahr"
 msgid "heading_archive_form"
 msgstr "Dossier ablegen"
 
-#: ./opengever/dossier/behaviors/participation.py:130
+#: ./opengever/dossier/behaviors/participation.py:129
 msgid "help_comment"
 msgstr ""
 
@@ -179,9 +179,9 @@ msgstr ""
 msgid "help_comments"
 msgstr ""
 
-#: ./opengever/dossier/behaviors/participation.py:114
+#: ./opengever/dossier/behaviors/participation.py:113
 msgid "help_contact"
-msgstr "Wählen Sie die verantwortliche Person oder Organisationseinheit aus"
+msgstr "Wählen Sie einen Benutzer oder einen Kontakt aus."
 
 #: ./opengever/dossier/behaviors/dossier.py:164
 msgid "help_container_id"
@@ -225,11 +225,11 @@ msgstr ""
 msgid "help_responsible"
 msgstr "Verantwortlicher Manager"
 
-#: ./opengever/dossier/behaviors/participation.py:121
+#: ./opengever/dossier/behaviors/participation.py:120
 msgid "help_roles"
 msgstr ""
 
-#: ./opengever/dossier/transport.py:32
+#: ./opengever/dossier/transport.py:34
 msgid "help_source_client"
 msgstr ""
 
@@ -241,7 +241,7 @@ msgstr ""
 msgid "help_subject"
 msgstr ""
 
-#: ./opengever/dossier/transport.py:100
+#: ./opengever/dossier/transport.py:114
 msgid "help_target_dossier"
 msgstr "Wählen Sie ein Dossier auf dem eigenen Mandanten aus"
 
@@ -255,12 +255,12 @@ msgid "info_mails_sent"
 msgstr "Mails wurden versendet."
 
 #. Default: "Participation created"
-#: ./opengever/dossier/behaviors/participation.py:235
+#: ./opengever/dossier/behaviors/participation.py:207
 msgid "info_participation_create"
 msgstr "Die Beteiligung wurde gespeichert."
 
 #. Default: "Removed participations"
-#: ./opengever/dossier/behaviors/participation.py:274
+#: ./opengever/dossier/behaviors/participation.py:246
 msgid "info_removed_participations"
 msgstr "Die Beteiligungen wurde entfernt."
 
@@ -276,12 +276,12 @@ msgstr "Interner Empfänger"
 msgid "label_by_author"
 msgstr "Federführend: ${author}"
 
-#: ./opengever/dossier/transport.py:108
+#: ./opengever/dossier/transport.py:122
 msgid "label_choose_target_dossier"
 msgstr "Dokumente in Heimmandant kopieren"
 
 #. Default: "Comment"
-#: ./opengever/dossier/behaviors/participation.py:129
+#: ./opengever/dossier/behaviors/participation.py:128
 msgid "label_comment"
 msgstr "Kommentar"
 
@@ -291,9 +291,9 @@ msgid "label_comments"
 msgstr "Kommentar"
 
 #. Default: "Contact"
-#: ./opengever/dossier/behaviors/participation.py:113
+#: ./opengever/dossier/behaviors/participation.py:112
 msgid "label_contact"
-msgstr "Person oder Organisationseinheit"
+msgstr "Person"
 
 #. Default: "Container Id"
 #: ./opengever/dossier/behaviors/dossier.py:163
@@ -368,17 +368,17 @@ msgid "label_number_of_containers"
 msgstr "Anzahl Behältnisse"
 
 #. Default: "Participant added: ${contact} with roles ${roles}"
-#: ./opengever/dossier/behaviors/participation.py:73
+#: ./opengever/dossier/behaviors/participation.py:71
 msgid "label_participant_added"
 msgstr "Beteiligung hinzugefügt für ${contact} als ${roles}"
 
 #. Default: "Participant removed: ${contact}"
-#: ./opengever/dossier/behaviors/participation.py:94
+#: ./opengever/dossier/behaviors/participation.py:93
 msgid "label_participant_removed"
 msgstr "Beteiligung von ${contact} entfernt"
 
 #. Default: "Participation"
-#: ./opengever/dossier/behaviors/participation.py:223
+#: ./opengever/dossier/behaviors/participation.py:195
 msgid "label_participation"
 msgstr "Beteiligung"
 
@@ -395,7 +395,7 @@ msgstr "Verwandte Dossiers"
 
 #. Default: "Responsible"
 #: ./opengever/dossier/behaviors/dossier.py:126
-#: ./opengever/dossier/browser/overview.py:66
+#: ./opengever/dossier/browser/overview.py:81
 #: ./opengever/dossier/browser/participants.py:53
 msgid "label_responsible"
 msgstr "Federführend"
@@ -406,7 +406,7 @@ msgid "label_responsible_task"
 msgstr "Verantwortlich"
 
 #. Default: "Roles"
-#: ./opengever/dossier/behaviors/participation.py:120
+#: ./opengever/dossier/behaviors/participation.py:119
 msgid "label_roles"
 msgstr "Rollen"
 
@@ -421,7 +421,7 @@ msgid "label_sequence_number"
 msgstr "Laufnummer:"
 
 #. Default: "Client"
-#: ./opengever/dossier/transport.py:30
+#: ./opengever/dossier/transport.py:32
 msgid "label_source_client"
 msgstr "Ziel-Mandant"
 
@@ -442,7 +442,7 @@ msgid "label_subject"
 msgstr "Betreff"
 
 #. Default: "Target Dossier"
-#: ./opengever/dossier/transport.py:99
+#: ./opengever/dossier/transport.py:113
 msgid "label_target_dossier"
 msgstr "Ziel-Dossier"
 
@@ -474,7 +474,7 @@ msgstr "Mails"
 
 #: ./opengever/dossier/browser/overview_templates/overview.pt:17
 msgid "no_content"
-msgstr "kein Inhalt"
+msgstr ""
 
 #: ./opengever/dossier/resolve.py:24
 msgid "not all documents and tasks are stored in a subdossier"
@@ -545,8 +545,13 @@ msgid "time_expired"
 msgstr "abgelaufen"
 
 #. Default: "Attach document"
-#: ./opengever/dossier/transport.py:40
+#: ./opengever/dossier/transport.py:42
 msgid "title_attach_document_form"
-msgstr "Dokumente anhängen"
+msgstr ""
+
+#. Default: "You are not assigned to another client where you could copy the documents to."
+#: ./opengever/dossier/transport.py:93
+msgid "warning_copy_to_remote_no_client"
+msgstr "Sie können die Dokumente nicht an einen anderen Mandanten senden, da Sie nur dem aktuellen Mandanten zugeordnet sind."
 
 
