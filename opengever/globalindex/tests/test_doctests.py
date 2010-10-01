@@ -35,4 +35,9 @@ def test_suite():
             setUp=setUp, tearDown=tearDown,
             optionflags=OPTIONFLAGS),
 
+        doctest.DocFileSuite(
+            'query.txt',
+            setUp=setUp, tearDown=tearDown,
+            optionflags=OPTIONFLAGS),
+
     ])
