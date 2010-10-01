@@ -20,7 +20,7 @@ setup(name='opengever.tasktemplates',
         "Topic :: Software Development :: Libraries :: Python Modules",
         ],
       keywords='opengever task templates',
-      author='%s, 4teamwork GmbH',
+      author='%s, 4teamwork GmbH' % maintainer,
       author_email='mailto:info@4teamwork.ch',
       maintainer=maintainer,
       url='http://psc.4teamwork.ch/4teamwork/kunden/opengever/' + \
