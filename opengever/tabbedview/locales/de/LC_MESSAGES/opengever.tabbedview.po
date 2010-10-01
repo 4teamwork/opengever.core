@@ -152,7 +152,7 @@ msgstr "Dokument Datum"
 #. Default: "issued at"
 #: ./opengever/tabbedview/browser/tabs.py:311
 msgid "label_issued_date"
-msgstr "in Auftrag am"
+msgstr "Startdatum"
 
 #. Default: "Issuer"
 #: ./opengever/tabbedview/browser/tabs.py:308
