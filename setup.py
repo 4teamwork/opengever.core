@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 import os
 
-version = '1.0'
+version = open('opengever/tasktemplates/version.txt').read().strip()
 maintainer = 'Victor Baumann'
 
 setup(name='opengever.tasktemplates',
