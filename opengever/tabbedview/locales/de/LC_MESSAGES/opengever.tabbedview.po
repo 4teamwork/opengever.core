@@ -142,12 +142,12 @@ msgstr "Ablaufdatum"
 #. Default: "Document Author"
 #: ./opengever/tabbedview/browser/tabs.py:210
 msgid "label_document_author"
-msgstr "Dokument Author"
+msgstr "Autor"
 
 #. Default: "Document Date"
 #: ./opengever/tabbedview/browser/tabs.py:212
 msgid "label_document_date"
-msgstr "Dokument Datum"
+msgstr "Dokumentdatum"
 
 #. Default: "issued at"
 #: ./opengever/tabbedview/browser/tabs.py:311
@@ -162,7 +162,7 @@ msgstr "Auftraggeber"
 #. Default: "Receipt Date"
 #: ./opengever/tabbedview/browser/tabs.py:215
 msgid "label_receipt_date"
-msgstr "Annahme Datum"
+msgstr "Annahmedatum"
 
 #. Default: "Reference Number"
 #: ./opengever/tabbedview/browser/tabs.py:258
