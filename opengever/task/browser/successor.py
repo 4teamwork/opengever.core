@@ -125,9 +125,7 @@ class CleanupSuccessor(grok.CodeView):
     grok.context(ITask)
     grok.name('cleanup-successor-task')
 
-    # XXX fix the permission
-    grok.require('zope2.View')
-#     grok.require('opengever.task.EditTask')
+    grok.require('cmf.ModifyPortalContent')
 
     def render(self):
         self.set_predecessor()

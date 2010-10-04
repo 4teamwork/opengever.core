@@ -24,7 +24,6 @@
 
     <!-- add permission -->
     <property name="add_permission">opengever.task.AddTask</property>
-    <property name="add_permission">opengever.task.EditTask</property>
 
     <!-- enabled behaviors -->
     <property name="behaviors">
