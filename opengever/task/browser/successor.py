@@ -6,6 +6,7 @@ from opengever.ogds.base.interfaces import ITransporter
 from opengever.ogds.base.utils import remote_request
 from opengever.task import _
 from opengever.task.interfaces import ISuccessorTaskController
+from opengever.task.interfaces import ISuccessorTaskController
 from opengever.task.task import ITask
 from plone.directives import form
 from plone.formwidget.autocomplete import AutocompleteFieldWidget
@@ -58,7 +59,7 @@ class SuccessorTaskForm(Form):
         data, errors = self.extractData()
         if not errors:
             trans = getUtility(ITransporter)
-            oguids = getUtility(IOGUid)
+            successor_controller = ISuccessorTaskController(self.context)
             info = getUtility(IContactInformation)
 
             # transport task
@@ -70,7 +71,7 @@ class SuccessorTaskForm(Form):
             response = remote_request(
                 data['client'], '@@cleanup-successor-task',
                 path=target_task_path,
-                data={'oguid': oguids.get_id(self.context)})
+                data={'oguid': successor_controller.get_oguid()})
 
             if response.read().strip() != 'ok':
                 raise Exception('Cleaning up the successor task failed on the'
@@ -125,7 +126,7 @@ class CleanupSuccessor(grok.CodeView):
     grok.context(ITask)
     grok.name('cleanup-successor-task')
 
-    grok.require('cmf.ModifyPortalContent')
+    grok.require('zope2.View')
 
     def render(self):
         self.set_predecessor()
@@ -155,6 +156,10 @@ class CleanupSuccessor(grok.CodeView):
                                                     'actor': current_user_id,
                                                     'time': DateTime(),
                                                     'comments': comment,})
+
+            wfs = {wf_id: wtool.getWorkflowById(wf_id)}
+            wtool._recursiveUpdateRoleMappings(self.context, wfs)
+            self.context.reindexObjectSecurity()
 
     def remove_responsible(self):
         """Remove the responsible. This solves a problem with the
@@ -202,4 +207,6 @@ def change_successor_state_after_edit(task, event):
                                             'actor': current_user_id,
                                             'time': DateTime(),
                                             'comments': comment,})
-            task.reindexObject()
+            wfs = {wf_id: wtool.getWorkflowById(wf_id)}
+            wtool._recursiveUpdateRoleMappings(task, wfs)
+            task.reindexObjectSecurity()
