@@ -28,11 +28,10 @@ Check all documents and tasks are in a subdossier, when a subdossier exists
     >>> subdossier = dossier.get('subdossier')
     >>> resolve.is_all_supplied()
     False
-    
+
 Remove items in the dossier and add some items in to the sudossier
     >>> dossier.manage_delObjects(ids=['t1', 'd1'])
     >>> subdossier.invokeFactory('opengever.task.task', 't1')
     't1'
-    >>> import pdb; pdb.set_trace( )
     >>> resolve.is_all_supplied()
     True
