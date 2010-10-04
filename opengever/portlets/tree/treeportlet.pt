@@ -9,7 +9,7 @@
 
     <dd class="portletItem odd">
         <ul id="tree" class="filetree">
-            <div tal:content="structure here/tree/render" /> 
+            <div tal:content="structure python: here.unrestrictedTraverse('tree').render()" /> 
         </ul>
         <script type="text/javascript">
             jq(function() {

@@ -1,4 +1,5 @@
 from zope.interface import implements
+from zope import schema
 
 from plone.portlets.interfaces import IPortletDataProvider
 from plone.app.portlets.portlets import base
@@ -22,9 +23,10 @@ class ITreePortlet(IPortletDataProvider):
     # empty interface - see also notes around the add form and edit form
     # below.
 
-    # some_field = schema.TextLine(title=_(u"Some field"),
-    #                              description=_(u"A field to use"),
-    #                              required=True)
+    root_path = schema.TextLine(
+        title=u"Root Path",
+        description=u"the path to the repositoryroot",
+        required=True)
 
 
 class Assignment(base.Assignment):
@@ -44,8 +46,9 @@ class Assignment(base.Assignment):
     # def __init__(self, some_field=u""):
     #    self.some_field = some_field
 
-    def __init__(self):
-        pass
+    def __init__(self, root_path):
+        self.root_path = root_path
+
 
     @property
     def title(self):
@@ -53,7 +56,6 @@ class Assignment(base.Assignment):
         "manage portlets" screen.
         """
         return "Tree portlet"
-
 
 class Renderer(base.Renderer):
     """Portlet renderer.
@@ -75,8 +77,9 @@ class Renderer(base.Renderer):
             while current.Type() != 'RepositoryRoot':
                 current = current.aq_parent
         return current.Title()
-    
 
+    def root_path(self):
+        return getattr(self.data,'root_path', None)
 
 class AddForm(base.AddForm):
     """Portlet add form.
