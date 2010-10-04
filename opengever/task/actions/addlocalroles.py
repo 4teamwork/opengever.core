@@ -12,7 +12,7 @@ from opengever.task import _
 
 class IAddLocalRolesAction(Interface):
     """Interface for the configurable aspects of a local roles add action.
-    
+
     This is also used to create add and edit forms, below.
     """
     object_roles = schema.Set(title=_(u"Object Roles"),
@@ -53,12 +53,12 @@ class AddLocalRolesAction(SimpleItem):
 
 class AddLocalRolesActionExecutor(object):
     """The executor for this action.
-    
+
     This is registered as an adapter in configure.zcml
     """
     implements(IExecutable)
     adapts(Interface, IAddLocalRolesAction, Interface)
-         
+
     def __init__(self, context, element, event):
         self.context = context
         self.element = element
@@ -66,9 +66,9 @@ class AddLocalRolesActionExecutor(object):
 
     def __call__(self):
         obj = self.event.object
-        if ITask.providedBy(obj):
+        if ITask.providedBy(obj) and obj.responsible:
             user_id = obj.responsible
-            
+
             # set object roles
             roles = self.element.object_roles
             if roles:
@@ -76,7 +76,7 @@ class AddLocalRolesActionExecutor(object):
                 new_roles = list(set(list(roles) + list(current_roles)))
                 obj.manage_setLocalRoles(user_id, new_roles)
                 obj.reindexObjectSecurity()
-            
+
             # set related items roles
             roles = self.element.related_items_roles
             if roles:
@@ -86,7 +86,7 @@ class AddLocalRolesActionExecutor(object):
                     new_roles = list(set(list(roles) + list(current_roles)))
                     item.to_object.manage_setLocalRoles(user_id, new_roles)
                     item.to_object.reindexObjectSecurity()
-            
+
             # set parent roles
             roles = self.element.parent_roles
             if roles:
@@ -95,7 +95,7 @@ class AddLocalRolesActionExecutor(object):
                 new_roles = list(set(list(roles) + list(current_roles)))
                 parent.manage_setLocalRoles(user_id, new_roles)
                 parent.reindexObjectSecurity()
-        
+
         return True
 
 class AddLocalRolesAddForm(AddForm):
@@ -105,7 +105,7 @@ class AddLocalRolesAddForm(AddForm):
     label = _(u"Add Local Roles Action")
     description = _(u"Add local roles to all related items for the 'responsible' user.")
     form_name = _(u"Configure element")
-    
+
     def create(self, data):
         a = AddLocalRolesAction()
         form.applyChanges(a, self.form_fields, data)
