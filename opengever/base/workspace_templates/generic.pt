@@ -20,30 +20,33 @@
       Keine Inhalte vorhanden
     </p>
 
-    <div class="tabbedview-action-menu">
-      <ul class="buttons major-buttons sf-menu">
-        <tal:major_buttons tal:repeat="button view/major_buttons">
-          <li><a href="#"
-                 tal:attributes="class string:${button/cssclass} listing-button major-button;
-                                 href button/url;"
-                 tal:content="button/title" /></li>
-        </tal:major_buttons>
-        <li tal:condition="view/minor_buttons" class="more-menu">
-          <a href="#" i18n:translate="button_more_actions"
-             class="context more-button">More actions &#9660;</a>
-          <ul class="minor-buttons ">
-            <tal:minor_buttons tal:repeat="button view/minor_buttons">
-              <li><a href="#"
-                     tal:define="cssclass button/cssclass;
-                                 cssclass string:${cssclass} listing-button minor-button;"
-                     tal:attributes="class cssclass;
-                                     href button/url"
-                     tal:content="button/title" />
-              </li>
-            </tal:minor_buttons>
-          </ul>
-        </li>
-      </ul>
+    <div id="tabbedview-menu" class="tabbedview-action-menu contentActions">
+        <ul class="tabbedview-action-list">
+            <tal:major_buttons tal:repeat="button view/major_buttons">
+                <li>
+                    <a class="actionicon" href="#" tal:attributes="href button/url;" tal:content="button/title" />
+                </li>
+            </tal:major_buttons>
+            <li>
+                <dl id="plone-contentmenu-tabbedview-actions" class="actionMenu deactivated">
+                  <dt class="actionMenuHeader label-">
+                    <a href="">
+                      <span i18n:translate="button_more_actions" 
+                        class="arrowDownAlternative">More actions &#9660;</span>
+                    </a>
+                  </dt>
+                  <dd class="actionMenuContent">
+                      <ul>
+                          <tal:minor_buttons tal:repeat="button view/minor_buttons">
+                              <li>
+                                  <a class="actionicon" href="#" tal:attributes="href button/url;" tal:content="button/title" />
+                              </li>
+                          </tal:minor_buttons>
+                      </ul>
+                  </dd>
+                </dl>
+            </li>
+        </ul>
     </div>
 
   </form>
