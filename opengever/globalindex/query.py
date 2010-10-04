@@ -8,26 +8,23 @@ class TaskQuery(object):
     """A global utility for querying opengever tasks.
     """
     implements(ITaskQuery)
-    
-    def __init__(self):
-        self.session = Session()
-    
+
     def get_task(self, int_id, client_id):
         """Returns the task identified by the given int_id and client_id.
         """
         try:
-            task = self.session.query(Task).filter(Task.client_id==client_id).filter(
+            task = Session().query(Task).filter(Task.client_id==client_id).filter(
                 Task.int_id==int_id).one()
         except NoResultFound:
             task = None
         return task
-    
+
     def get_tasks_for_responsible(self, responsible):
         """Returns all tasks assigned to the given responsible.
         """
-        return self.session.query(Task).filter(Task.responsible==responsible).all()
-    
+        return Session().query(Task).filter(Task.responsible==responsible).all()
+
     def get_tasks_for_issuer(self, issuer):
         """Returns all tasks issued by the given issuer.
         """
-        return self.session.query(Task).filter(Task.issuer==issuer).all()
+        return Session().query(Task).filter(Task.issuer==issuer).all()

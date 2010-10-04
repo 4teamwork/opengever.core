@@ -19,7 +19,7 @@ def index_task(obj, event):
     except NoResultFound:
         task = Task(int_id, client_id)
         session.add(task)
-    
+
     task.title = obj.title
     url_tool = obj.unrestrictedTraverse('@@plone_tools').url()
     task.physical_path = '/'.join(url_tool.getRelativeContentPath(obj))
@@ -27,5 +27,15 @@ def index_task(obj, event):
     task.icon = obj.getIcon()
     task.responsible = obj.responsible
     task.issuer = obj.issuer
-    
+
+    # index the predecessor
+    if obj.predecessor:
+        pred_client_id, pred_init_id = obj.predecessor.split(':', 1)
+        predecessor = session.query(Task).filter_by(client_id=pred_client_id,
+                                                    int_id=pred_init_id).one()
+    else:
+        predecessor = None
+
+    task.predecessor = predecessor
+
     #task = Task(obj.)
