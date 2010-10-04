@@ -14,7 +14,7 @@ from opengever.ogds.base.interfaces import IContactInformation
 from plone.dexterity.utils import createContent, addContentToContainer
 from zope.component import queryUtility, getUtility
 from zope.event import notify
-from zope.lifecycleevent import ObjectCreatedEvent
+from zope.lifecycleevent import ObjectCreatedEvent, ObjectAddedEvent
 
 
 def path_checkbox(item, value):
@@ -95,6 +95,7 @@ class AddForm(BrowserView):
             task = addContentToContainer(self.context,
                                          task,
                                          checkConstraints=True)
+            notify(ObjectAddedEvent(task))
             task.reindexObject()
 
         IStatusMessage(self.request).addStatusMessage("tasks created",
