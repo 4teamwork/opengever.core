@@ -61,7 +61,7 @@ class TaskTab(OpengeverListingTab):
 class MyTasks(TaskTab):
     """ Listing of all Task of the authenticated Member """
 
-    grok.name('tabbedview_view-mytasks')
+    grok.name('tabbedview_view-mytasks1')
 
     search_options = {'responsible': authenticated_member}
 
@@ -69,6 +69,6 @@ class MyTasks(TaskTab):
 class IssuedTasks(TaskTab):
     """ List all Tasks wich the authenticated Member issued """
 
-    grok.name('tabbedview_view-issuedtasks')
+    grok.name('tabbedview_view-issuedtasks1')
 
     search_options = {'issuer': authenticated_member}
