@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: opengever.dossier 1.0\n"
-"POT-Creation-Date: 2010-10-01 08:39+0000\n"
+"POT-Creation-Date: 2010-10-01 10:22+0000\n"
 "PO-Revision-Date: 2009-09-17 15:21+0000\n"
 "Last-Translator: Thomas Buchberger <t.buchberger@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -133,6 +133,9 @@ msgstr "Abbrechen"
 #: ./opengever/dossier/templatedossier.py:43
 msgid "create_document_with_template"
 msgstr "Dokument mit Vorlage erstellen"
+
+msgid "document_with_docucomposer"
+msgstr ""
 
 msgid "documents"
 msgstr "Dokumente"

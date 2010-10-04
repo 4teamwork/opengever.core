@@ -34,3 +34,6 @@ msgstr ""
 
 msgid "sharing"
 msgstr ""
+
+msgid "document_with_docucomposer"
+msgstr ""

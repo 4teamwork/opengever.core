@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2010-10-01 08:39+0000\n"
+"POT-Creation-Date: 2010-10-01 10:22+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -133,6 +133,9 @@ msgstr ""
 #. Default: "create document with template"
 #: ./opengever/dossier/templatedossier.py:43
 msgid "create_document_with_template"
+msgstr ""
+
+msgid "document_with_docucomposer"
 msgstr ""
 
 msgid "documents"
