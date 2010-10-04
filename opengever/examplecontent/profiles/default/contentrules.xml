@@ -1,0 +1,77 @@
+<?xml version="1.0"?>
+<contentrules>
+
+    <rule name="rule-1" title="Add local roles for responsible of a task"
+          description="" enabled="True"
+          event="zope.lifecycleevent.interfaces.IObjectAddedEvent"
+          stop-after="False">
+
+        <conditions>
+            <condition type="plone.conditions.PortalType">
+                <property name="check_types">
+                    <element>opengever.task.task</element>
+                </property>
+            </condition>
+        </conditions>
+
+        <actions>
+            <action type="opengever.task.actions.AddLocalRoles">
+                <property name="related_items_roles">
+                    <element>Editor</element>
+                </property>
+                <property name="parent_roles">
+                    <element>Contributor</element>
+                </property>
+                <property name="object_roles">
+                    <element>Editor</element>
+                </property>
+            </action>
+        </actions>
+
+    </rule>
+
+
+    <rule name="rule-2" title="Add local roles for responsible of a task"
+          description="" enabled="True"
+          event="zope.lifecycleevent.interfaces.IObjectModifiedEvent"
+          stop-after="False">
+
+        <conditions>
+            <condition type="plone.conditions.PortalType">
+                <property name="check_types">
+                    <element>opengever.task.task</element>
+                </property>
+            </condition>
+        </conditions>
+
+        <actions>
+            <action type="opengever.task.actions.AddLocalRoles">
+                <property name="related_items_roles">
+                    <element>Editor</element>
+                </property>
+                <property name="parent_roles">
+                    <element>Contributor</element>
+                </property>
+                <property name="object_roles">
+                    <element>Editor</element>
+                </property>
+            </action>
+        </actions>
+
+    </rule>
+
+
+
+    <assignment name="rule-1" bubbles="False" enabled="True"
+                location="/eingangskorb"/>
+
+    <assignment name="rule-2" bubbles="False" enabled="True"
+                location="/eingangskorb"/>
+
+    <assignment name="rule-1" bubbles="False" enabled="True"
+                location="/ordnungssystem"/>
+
+    <assignment name="rule-2" bubbles="False" enabled="True"
+                location="/ordnungssystem"/>
+
+</contentrules>
