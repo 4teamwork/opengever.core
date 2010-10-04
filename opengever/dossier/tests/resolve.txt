@@ -8,14 +8,19 @@ First we create this fake portal_types
     >>> from plone.dexterity.fti import DexterityFTI
     >>> fti = DexterityFTI('opengever.document.document')
     >>> fti.behaviors = ('plone.app.dexterity.behaviors.metadata.IDublinCore',)
+    >>> if 'opengever.document.document' in self.portal.portal_types.objectIds():
+    ...     self.portal.portal_types.manage_delObjects(['opengever.document.document'])
     >>> self.portal.portal_types._setObject('opengever.document.document', fti)
-    'opengever.document.docuement'
+    'opengever.document.document'
     >>> dossier.invokeFactory('opengever.document.document', 'd1')
     'd1'
 
 So then we create a Dossier, and some content objects, we used for the test
     >>> fti = DexterityFTI('opengever.task.task')
+    >>> if 'opengever.task.task' in self.portal.portal_types.objectIds():
+    ...     self.portal.portal_types.manage_delObjects(['opengever.task.task'])
     >>> self.portal.portal_types._setObject('opengever.task.task', fti)
+    'opengever.task.task'
     >>> dossier.invokeFactory('opengever.task.task', 't1')
     't1'
 
