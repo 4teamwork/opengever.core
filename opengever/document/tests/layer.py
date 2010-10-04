@@ -24,7 +24,7 @@ class CheckoutTestLayer(collective.testcaselayer.ptc.BasePTCLayer):
         import opengever.document
         zcml.load_config('tests.zcml', opengever.document)
         import opengever.ogds.base
-        zcml.load_config('test.zcml', opengever.ogds.base)
+        zcml.load_config('tests.zcml', opengever.ogds.base)
         # Install the opengever.document product
         self.addProfile('opengever.dossier:default')
         self.addProfile('opengever.ogds.base:default')
