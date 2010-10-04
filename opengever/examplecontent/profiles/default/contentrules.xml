@@ -62,16 +62,16 @@
 
 
 
-    <assignment name="rule-1" bubbles="False" enabled="True"
+    <assignment name="rule-1" bubbles="True" enabled="True"
                 location="/eingangskorb"/>
 
-    <assignment name="rule-2" bubbles="False" enabled="True"
+    <assignment name="rule-2" bubbles="True" enabled="True"
                 location="/eingangskorb"/>
 
-    <assignment name="rule-1" bubbles="False" enabled="True"
+    <assignment name="rule-1" bubbles="True" enabled="True"
                 location="/ordnungssystem"/>
 
-    <assignment name="rule-2" bubbles="False" enabled="True"
+    <assignment name="rule-2" bubbles="True" enabled="True"
                 location="/ordnungssystem"/>
 
 </contentrules>
