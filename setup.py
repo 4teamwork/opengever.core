@@ -30,6 +30,7 @@ setup(name='opengever.examplecontent',
       install_requires=[
           'setuptools',
           'plone.app.transmogrifier',
+          'opengever.ogds.base',
           'collective.transmogrifier',
           'transmogrify.sqlalchemy',
           'transmogrify.dexterity',
