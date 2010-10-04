@@ -42,6 +42,7 @@ setup(name='opengever.task',
         'opengever.base',
         'opengever.translations',
         'opengever.ogds.base',
+        'opengever.globalindex',
         # -*- Extra requirements: -*-
         ],
       tests_require=tests_require,

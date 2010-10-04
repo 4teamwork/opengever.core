@@ -1,7 +1,6 @@
 from DateTime import DateTime
 from Products.CMFPlone.utils import getToolByName
 from five import grok
-from opengever.base.interfaces import IOGUid
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.ogds.base.interfaces import ITransporter
 from opengever.ogds.base.utils import remote_request

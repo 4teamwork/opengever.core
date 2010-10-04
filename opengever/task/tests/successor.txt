@@ -4,73 +4,75 @@ Successor Task Controller
 The successor task controller manages predecessor and successor references
 between tasks.
 
-    >>> from opengever.base.interfaces import IOGUid
     >>> from opengever.task.interfaces import ISuccessorTaskController
     >>> from plone.registry.interfaces import IRegistry
     >>> from zope.component import getUtility
     >>> from zope.intid.interfaces import IIntIds
+    >>> from plone.dexterity.utils import createContent, addContentToContainer
+    >>> from zope.event import notify
+    >>> from opengever.ogds.base.interfaces import IClientConfiguration
+    >>> from zope.lifecycleevent import ObjectCreatedEvent, ObjectAddedEvent
+    >>> from opengever.ogds.base.utils import get_client_id
 
 We need the client id to be configured properly:
 
-    >>> registry = getUtility(IRegistry)
     >>> CLIENT_ID = u'm1'
-    >>> registry['opengever.ogds.base.interfaces.' + \
-    ...     'IClientConfiguration.cid'] = CLIENT_ID
+    >>> registry = getUtility(IRegistry, context=self.portal)
+    >>> registry.registerInterface(IClientConfiguration)
+    >>> registry.forInterface(IClientConfiguration).client_id = CLIENT_ID
+
+    >>> get_client_id()
+    u'm1'
 
 We use the oguids for relations:
 
-    >>> global oguids
-    >>> oguids = getUtility(IOGUid)
     >>> global intids
     >>> intids = getUtility(IIntIds)
 
-We need to mock solr:
-
-    >>> from opengever.globalsolr.tests.mock_solr import provide_solr_mock
-    >>> fake_solr = provide_solr_mock()
-
-    >>> def solr_filterer(obj, query, **parameters):
-    ...     q_cid = query.get('client_id', None)
-    ...     q_intid = query.get('intid', None)
-    ...     q_predecessor = query.get('predecessor', None)
-    ...     if q_predecessor and q_predecessor == getattr(obj,
-    ...             'predecessor', None):
-    ...         return True
-    ...     elif q_cid and q_intid and q_cid == CLIENT_ID and \
-    ...             int(q_intid) == intids.getId(obj):
-    ...         return True
-    ...     else:
-    ...         return False
-
 Let's create some tasks:
 
-    >>> self.folder.invokeFactory('opengever.task.task', 'task-1')
-    'task-1'
-    >>> t1 = self.folder.get('task-1')
-    >>> fake_solr.register(t1, solr_filterer)
-    >>> self.folder.invokeFactory('opengever.task.task', 'task-2')
-    'task-2'
-    >>> t2 = self.folder.get('task-2')
-    >>> fake_solr.register(t2, solr_filterer)
+    >>> t1 = createContent('opengever.task.task', title='Task one')
+    >>> notify(ObjectCreatedEvent(t1))
+    >>> t1 = addContentToContainer(self.folder,
+    ...                            t1,
+    ...                            checkConstraints=False)
+    >>> notify(ObjectAddedEvent(t1))
+
+    >>> t2 = createContent('opengever.task.task', title='Task two')
+    >>> notify(ObjectCreatedEvent(t2))
+    >>> t2 = addContentToContainer(self.folder,
+    ...                            t2,
+    ...                            checkConstraints=False)
+    >>> notify(ObjectAddedEvent(t2))
+
 
 T1 is a successor of t2:
 
-    >>> t1_oguid = oguids.get_id(t1)
-    >>> t1_oguid
+    >>> c1 = ISuccessorTaskController(t1)
+    >>> c2 = ISuccessorTaskController(t2)
+
+    >>> c1.get_oguid()
     u'm1:...'
-    >>> ISuccessorTaskController(t2).set_predecessor(t1_oguid)
+
+    >>> c2.get_oguid()
+    u'm1:...'
+
+    >>> c2.set_predecessor(c1.get_oguid())
     True
 
-    >>> ISuccessorTaskController(t2).get_predecessor()
-    <FakeFlair(1): task-1 <opengever.task.task>>
+    >>> c2.get_predecessor()
+    <Task ...@m1>
 
-    >>> ISuccessorTaskController(t1).get_successors()
-    [<FakeFlair(2): task-2 <opengever.task.task>>]
+    >>> c1.get_successors()
+    [<Task ...@m1>]
 
 
-We should be able to try to set a bad predecessor, but it should not fail.
 
-    >>> ISuccessorTaskController(t1).set_predecessor(u'mX:1')
+We should be able to try to set a bad predecessor. It should raise an
+exception but return False.
+
+    >>> c1.set_predecessor('mX:1')
     False
-    >>> print ISuccessorTaskController(t1).get_predecessor()
+
+    >>> print c1.get_predecessor()
     None

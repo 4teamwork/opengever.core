@@ -12,6 +12,23 @@ import opengever.task
 
 @onsetup
 def setup_product():
+
+    from opengever.globalindex import Session
+    from opengever.globalindex.model import Base
+    from z3c.saconfig import EngineFactory
+    from z3c.saconfig import GloballyScopedSession
+    from z3c.saconfig.interfaces import IEngineFactory
+    from z3c.saconfig.interfaces import IScopedSession
+    from zope.component import provideUtility
+
+    engine_factory = EngineFactory('sqlite:///:memory:')
+    provideUtility(engine_factory, provides=IEngineFactory,
+                   name=u'opengever_db')
+    scoped_session = GloballyScopedSession(engine=u'opengever_db')
+    provideUtility(scoped_session, provides=IScopedSession, name=u'opengever')
+
+    Base.metadata.create_all(Session().bind)
+
     zcml.load_config('meta.zcml', plone.app.dexterity)
     zcml.load_config('configure.zcml', plone.app.dexterity)
     zcml.load_config('configure.zcml', opengever.task)
