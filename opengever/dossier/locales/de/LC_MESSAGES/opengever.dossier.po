@@ -473,15 +473,15 @@ msgstr "Status:"
 
 #: ./opengever/dossier/browser/send_document.py:49
 msgid "mails"
-msgstr "Mails"
+msgstr "E-Mails"
 
 #: ./opengever/dossier/browser/overview_templates/overview.pt:17
 msgid "no_content"
-msgstr ""
+msgstr "Keine Inhalte"
 
 #: ./opengever/dossier/resolve.py:24
 msgid "not all documents and tasks are stored in a subdossier"
-msgstr "Es sind nicht alle Dokumente und Aufgaben in einem Subdossier versorgt."
+msgstr "Es sind nicht alle Dokumente und Aufgaben in Subdossiers abgelegt."
 
 #: ./opengever/dossier/resolve.py:28
 msgid "not all documents are checked in"
@@ -519,22 +519,22 @@ msgstr "Abschliessen und die existierende Ablagenummer verwenden"
 msgid "set a filing no"
 msgstr "Ablagenummer vergeben"
 
-msgid "sharing"
+msgid "participants"
 msgstr "Beteiligungen"
 
 #: ./opengever/dossier/browser/overview_templates/overview.pt:14
 msgid "show all"
-msgstr "Alles anzeigen"
+msgstr "Alle anzeigen"
 
 msgid "subdossiers"
-msgstr "Subdossier"
+msgstr "Subdossiers"
 
 msgid "tasks"
 msgstr "Aufgaben"
 
 #: ./opengever/dossier/archive.py:151
 msgid "the filling number was already set"
-msgstr "Die Ablagenmmer wurde bereits vergeben"
+msgstr "Die Ablagenummer wurde bereits vergeben"
 
 #: ./opengever/dossier/archive.py:229
 msgid "the filling number was set"
