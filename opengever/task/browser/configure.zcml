@@ -7,4 +7,19 @@
         name="opengever.task.responsible.js"
         file="resources/opengever.task.responsible.js" />
 
+    <browser:page
+        for="Products.CMFCore.interfaces.ISiteRoot"
+        name="task-overview1"
+        class=".globaltasks.GlobalTaskOverview"
+        permission="zope2.View"
+        allowed_attributes="listing select_all"
+    />
+
+    <browser:page
+        for="Products.CMFCore.interfaces.ISiteRoot"
+        name="tabbedview_view-mytasks"
+        class=".globaltasks.MyTasks"
+        permission="zope2.View"
+    />
+
 </configure>
