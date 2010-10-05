@@ -8,6 +8,7 @@ from opengever.ogds.base.interfaces import IContactInformation
 from opengever.ogds.base.utils import get_client_id
 from opengever.task import _
 from opengever.task import util
+from opengever.task.interfaces import ISuccessorTaskController
 from opengever.task.interfaces import ITaskSettings
 from opengever.task.source import DossierPathSourceBinder
 from opengever.translations.browser.add import TranslatedAddForm
@@ -295,6 +296,14 @@ class View(dexterity.DisplayForm):
         info = getUtility(IContactInformation)
         task = ITask(self.context)
         return info.render_link(task.issuer)
+
+    def getPredecessorTask(self):
+        controller = ISuccessorTaskController(self.context)
+        return controller.get_predecessor()
+
+    def getSuccessorTasks(self):
+        controller = ISuccessorTaskController(self.context)
+        return controller.get_successors()
 
 
 # XXX
