@@ -22,4 +22,18 @@
         permission="zope2.View"
     />
 
+    <browser:page
+        for="Products.CMFCore.interfaces.ISiteRoot"
+        name="tabbedview_view-issuedtasks"
+        class=".globaltasks.IssuedTasks"
+        permission="zope2.View"
+    />
+
+    <browser:page
+        for="Products.CMFCore.interfaces.ISiteRoot"
+        name="tabbedview_view-assignedtasks"
+        class=".globaltasks.AssignedTasks"
+        permission="zope2.View"
+    />
+
 </configure>
