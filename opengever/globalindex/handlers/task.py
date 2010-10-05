@@ -30,6 +30,14 @@ def index_task(obj, event):
     task.icon = obj.getIcon()
     task.responsible = obj.responsible
     task.issuer = obj.issuer
+    task.deadline = obj.deadline
+    task.completed = obj.date_of_completion
+    task.modified = obj.modified()
+
+    task.task_type = obj.task_type
+    task.sequence_number = obj.sequence_number
+
+    task.assigned_client = obj.responsible_client
 
     # index the predecessor
     if obj.predecessor:

@@ -25,6 +25,9 @@ class Task(Base):
     responsible = Column(String(32), index=True)
     issuer = Column(String(32), index=True)
 
+    task_type = Column(String(50), index=True)
+    sequence_number = Column(String(10), index=True)
+
     created = Column(DateTime, default=functions.now())
     modified = Column(DateTime)
     deadline = Column(DateTime)
