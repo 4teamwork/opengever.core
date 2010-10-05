@@ -1,6 +1,3 @@
-<tal:comment replace="nothing">
-<!-- REMOVE this template when bachting for solr tabbed view gets fixed!-->
-</tal:comment>
 <form name="tabbedview_form"
       method="post"
       action="folder_object"
