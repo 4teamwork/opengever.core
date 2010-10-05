@@ -1,11 +1,13 @@
 from five import grok
 from opengever.inbox import _
 from plone.directives import form
-from ftw.table import helper
-from opengever.tabbedview import helper as opengever_helper
-from opengever.tabbedview.helper import readable_ogds_author
-from opengever.tabbedview.browser.tabs import OpengeverSolrListingTab, Tasks
+from opengever.tabbedview.browser.tabs import Tasks
+from opengever.task.browser.globaltasks import TaskBaseListing
+from opengever.ogds.base.utils import get_client_id
+from opengever.globalindex.interfaces import ITaskQuery
 from zope import schema
+from zope.component import getUtility
+
 
 class IInbox(form.Schema):
     """ Inbox for OpenGever
@@ -25,29 +27,16 @@ class IInbox(form.Schema):
          required = False,
          )
 
+
 class GivenTasks(Tasks):
     grok.name('tabbedview_view-given_tasks')
 
-class AssignedTasks(OpengeverSolrListingTab):
-    grok.name('tabbedview_view-assigned_tasks')
-    columns= (
-         ('', helper.draggable),
-         ('', helper.path_checkbox),
-         ('review_state', 'review_state', helper.translated_string()),
-         ('Title', opengever_helper.solr_linked),
-         {'column' : 'task_type', 
-         'column_title' : _(u'label_task_type', 'Task Type')},
-         ('deadline', helper.readable_date),
-         ('date_of_completion', opengever_helper.readable_date_set_invisibles), # erledigt am
-         {'column' : 'responsible', 
-         'column_title' : _(u'label_responsible_task', 'Responsible'),  
-         'transform' : readable_ogds_author},
-         ('issuer', readable_ogds_author), # zugewiesen von
-         {'column' : 'created', 
-         'column_title' : _(u'label_issued_date', 'issued at'),
-         'transform': helper.readable_date },
-         )
 
-    def build_query(self):
-         group = self.context.inbox_group
-         return 'portal_type:opengever.task.task AND responsible:(%s)' % group
+class AssignedTasks(TaskBaseListing):
+
+    def search(self):
+        query_util = getUtility(ITaskQuery)
+        
+        self.contents = query_util.get_tasks_for_responsible(
+            'inbox:%s' % get_client_id(), self.sort_on, self.sort_order)
+        self.len_results = len(self.contents)

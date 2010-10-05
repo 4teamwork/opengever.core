@@ -36,6 +36,9 @@ setup(name='opengever.inbox',
         'collective.testcaselayer',
         'opengever.dossier',
         'opengever.tabbedview',
+        'opengever.task',
+        'opengever.globalindex',
+        
         # -*- Extra requirements: -*-
         ],
       tests_require=tests_require,
