@@ -87,20 +87,15 @@
         <tal:items define="item view/getPredecessorTask"
                    condition="item">
           <div><h2 i18n:translate="predecessor">Predecessor Task:</h2></div>
-          <div>
-            <img tal:attributes="src item/icon" />
-            <span tal:content="item/title" />
-          </div>
+          <div tal:content="structure python:view.render_indexed_task(item)" />
         </tal:items>
 
         <tal:items define="items view/getSuccessorTasks"
                    condition="items">
           <div><h2 i18n:translate="successors">Successor Tasks:</h2></div>
           <ul tal:condition="items">
-            <li tal:repeat="item items">
-              <img tal:attributes="src item/icon" />
-              <span tal:content="item/title" />
-            </li>
+            <li tal:repeat="item items"
+                tal:content="structure python:view.render_indexed_task(item)" />
           </ul>
         </tal:items>
 
