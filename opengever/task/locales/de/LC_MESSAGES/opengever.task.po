@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2010-10-05 13:01+0000\n"
-"PO-Revision-Date: 2010-10-05 15:03+0200\n"
+"POT-Creation-Date: 2010-10-05 12:22+0000\n"
+"PO-Revision-Date: 2010-10-01 09:17+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -106,7 +106,7 @@ msgid "The local roles to add."
 msgstr ""
 
 #. Default: "Title"
-#: ./opengever/task/browser/globaltasks.py:28
+#: ./opengever/task/browser/globaltasks.py:50
 msgid "Title"
 msgstr "Titel"
 
@@ -161,6 +161,7 @@ msgstr "Kunde"
 msgid "containing_task"
 msgstr "Übergeordnete Aufgabe"
 
+#: ./opengever/task/browser/globaltasks.py:58
 #: ./opengever/task/response.py:286
 msgid "date_of_completion"
 msgstr "Erledigungsdatum"
@@ -331,7 +332,8 @@ msgid "label_date_of_completion"
 msgstr "Erledigungsdatum"
 
 #. Default: "Deadline"
-#: ./opengever/task/task.py:108
+#: ./opengever/task/browser/globaltasks.py:55
+#: ./opengever/task/task.py:107
 msgid "label_deadline"
 msgstr "Zu erledigen bis"
 
@@ -528,7 +530,7 @@ msgstr "Verantwortlicher"
 #: ./opengever/task/taskoverview.py:50
 #: ./opengever/task/taskoverview_solr.py:37
 msgid "sequence_number"
-msgstr "Sequenznummer"
+msgstr "Laufnummer"
 
 #. Default: "Subtasks:"
 #: ./opengever/task/task_templates/view.pt:78

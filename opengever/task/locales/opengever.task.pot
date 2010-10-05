@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2010-10-05 13:01+0000\n"
+"POT-Creation-Date: 2010-10-05 12:22+0000\n"
 "PO-Revision-Date: 2009-02-25 14:39+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -109,7 +109,7 @@ msgid "The local roles to add."
 msgstr ""
 
 #. Default: "Title"
-#: ./opengever/task/browser/globaltasks.py:28
+#: ./opengever/task/browser/globaltasks.py:50
 msgid "Title"
 msgstr ""
 
@@ -164,6 +164,7 @@ msgstr ""
 msgid "containing_task"
 msgstr ""
 
+#: ./opengever/task/browser/globaltasks.py:58
 #: ./opengever/task/response.py:286
 msgid "date_of_completion"
 msgstr ""
@@ -331,7 +332,8 @@ msgid "label_date_of_completion"
 msgstr ""
 
 #. Default: "Deadline"
-#: ./opengever/task/task.py:108
+#: ./opengever/task/browser/globaltasks.py:55
+#: ./opengever/task/task.py:107
 msgid "label_deadline"
 msgstr ""
 

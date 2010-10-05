@@ -5,6 +5,9 @@ Changelog
 1.0a5
 -----
 
+* Replace the taskoverview and the taskoverview_solr with the global_index taskoverview
+  [05.10.2010, phgross]
+
 * Issue #644 Wizard fuer automatisches Kopieren von Dokumenten in neue Aufgabe
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/644/
   [29.09.2010, jbaumann]
