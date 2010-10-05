@@ -19,9 +19,3 @@ msgstr ""
 
 msgid "issuedtasks"
 msgstr ""
-
-msgid "mytasks_solr"
-msgstr ""
-
-msgid "issuedtasks_solr"
-msgstr ""

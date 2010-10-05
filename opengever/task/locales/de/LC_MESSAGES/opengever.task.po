@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2010-10-05 09:45+0000\n"
+"POT-Creation-Date: 2010-10-05 12:22+0000\n"
 "PO-Revision-Date: 2010-10-01 09:17+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -130,7 +130,7 @@ msgstr "Abbrechen"
 
 #. Default: "Continue"
 #: ./opengever/task/attachdocument.py:51
-#: ./opengever/task/browser/successor.py:56
+#: ./opengever/task/browser/successor.py:57
 msgid "button_continue"
 msgstr "Weiter"
 
@@ -267,12 +267,12 @@ msgid "help_source_dossier"
 msgstr "Wählen Sie ein Dossier von ihrem Mandanten"
 
 #. Default: "Choose on which client to create the successor task."
-#: ./opengever/task/browser/successor.py:30
+#: ./opengever/task/browser/successor.py:31
 msgid "help_successor_target_client"
 msgstr "Wählen Sie den Mandanten aus, auf welchem die Folgeaufgabe erstellt werden soll."
 
 #. Default: "Select the target dossier on the client selected above."
-#: ./opengever/task/browser/successor.py:38
+#: ./opengever/task/browser/successor.py:39
 msgid "help_successor_target_dossier"
 msgstr "Wählen Sie das Dossier auf dem oben gewählten Mandanten aus, in welchem die Folgeaufgabe erstellt werden soll."
 
@@ -303,9 +303,6 @@ msgid "info_copied_related_documents"
 msgstr "Die mit dieser Aufgabe verknüpften Dokumente wurden in den Eingangskorb des Mandanten ${client} kopiert."
 
 msgid "issuedtasks"
-msgstr "In Auftrag gegebene Aufgaben"
-
-msgid "issuedtasks_solr"
 msgstr "In Auftrag gegebene Aufgaben"
 
 #. Default: "by ${author}"
@@ -443,12 +440,12 @@ msgid "label_source_dossier"
 msgstr "Dossier"
 
 #. Default: "Target Dossier"
-#: ./opengever/task/browser/successor.py:37
+#: ./opengever/task/browser/successor.py:38
 msgid "label_successor_target_dossier"
 msgstr "Ziel-Dossier"
 
 #. Default: "Target client for successor task"
-#: ./opengever/task/browser/successor.py:28
+#: ./opengever/task/browser/successor.py:29
 msgid "label_sucessor_target_client"
 msgstr "Ziel-Mandant"
 
@@ -485,9 +482,6 @@ msgid "label_workflow_state"
 msgstr "Status"
 
 msgid "mytasks"
-msgstr "Meine Aufgaben"
-
-msgid "mytasks_solr"
 msgstr "Meine Aufgaben"
 
 #. Default: "No Content"
@@ -540,7 +534,7 @@ msgid "title_copy_releated_documents"
 msgstr "Verknüpfte Dokumente kopieren"
 
 #. Default: "Create successor task"
-#: ./opengever/task/browser/successor.py:53
+#: ./opengever/task/browser/successor.py:54
 msgid "title_create_successor_task"
 msgstr "Folgeaufgabe erstellen"
 

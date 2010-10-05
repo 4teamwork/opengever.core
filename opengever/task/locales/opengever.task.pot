@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2010-10-05 09:45+0000\n"
+"POT-Creation-Date: 2010-10-05 12:22+0000\n"
 "PO-Revision-Date: 2009-02-25 14:39+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -133,7 +133,7 @@ msgstr ""
 
 #. Default: "Continue"
 #: ./opengever/task/attachdocument.py:51
-#: ./opengever/task/browser/successor.py:56
+#: ./opengever/task/browser/successor.py:57
 msgid "button_continue"
 msgstr ""
 
@@ -267,12 +267,12 @@ msgid "help_source_dossier"
 msgstr ""
 
 #. Default: "Choose on which client to create the successor task."
-#: ./opengever/task/browser/successor.py:30
+#: ./opengever/task/browser/successor.py:31
 msgid "help_successor_target_client"
 msgstr ""
 
 #. Default: "Select the target dossier on the client selected above."
-#: ./opengever/task/browser/successor.py:38
+#: ./opengever/task/browser/successor.py:39
 msgid "help_successor_target_dossier"
 msgstr ""
 
@@ -303,9 +303,6 @@ msgid "info_copied_related_documents"
 msgstr ""
 
 msgid "issuedtasks"
-msgstr ""
-
-msgid "issuedtasks_solr"
 msgstr ""
 
 #. Default: "by ${author}"
@@ -443,12 +440,12 @@ msgid "label_source_dossier"
 msgstr ""
 
 #. Default: "Target Dossier"
-#: ./opengever/task/browser/successor.py:37
+#: ./opengever/task/browser/successor.py:38
 msgid "label_successor_target_dossier"
 msgstr ""
 
 #. Default: "Target client for successor task"
-#: ./opengever/task/browser/successor.py:28
+#: ./opengever/task/browser/successor.py:29
 msgid "label_sucessor_target_client"
 msgstr ""
 
@@ -485,9 +482,6 @@ msgid "label_workflow_state"
 msgstr ""
 
 msgid "mytasks"
-msgstr ""
-
-msgid "mytasks_solr"
 msgstr ""
 
 #. Default: "No Content"
@@ -540,7 +534,7 @@ msgid "title_copy_releated_documents"
 msgstr ""
 
 #. Default: "Create successor task"
-#: ./opengever/task/browser/successor.py:53
+#: ./opengever/task/browser/successor.py:54
 msgid "title_create_successor_task"
 msgstr ""
 
