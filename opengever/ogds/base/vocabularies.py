@@ -10,7 +10,7 @@ from zope.globalrequest import getRequest
 from zope.schema.interfaces import IVocabularyFactory
 from zope.schema.vocabulary import SimpleVocabulary
 import AccessControl
-
+from collective.hiddentermsvocabulary import wrap_vocabulary
 
 class UsersVocabularyFactory(grok.GlobalUtility):
     """ Vocabulary of all users with a valid login.
@@ -112,16 +112,24 @@ class ContactsAndUsersVocabularyFactory(grok.GlobalUtility):
     """Vocabulary of contacts and users.
     """
 
+    hidden_terms = []
     grok.provides(IVocabularyFactory)
     grok.name('opengever.ogds.base.ContactsAndUsersVocabulary')
 
     def __call__(self, context):
-        return ContactsVocabulary.create_with_provider(self.key_value_provider)
+        vocab = wrap_vocabulary(
+                ContactsVocabulary.create_with_provider(
+                    self.key_value_provider))(context)
+        vocab.hidden_terms = self.hidden_terms
+        return vocab
 
     def key_value_provider(self):
+        self.hidden_terms = []
         info = getUtility(IContactInformation)
         # users
         for user in info.list_users():
+            if not user.active:
+                self.hidden_terms.append(user.userid)
             yield (user.userid,
                    info.describe(user.userid))
         for contact in info.list_contacts():
