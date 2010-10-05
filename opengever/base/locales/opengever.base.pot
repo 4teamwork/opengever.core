@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2010-08-17 07:40+0000\n"
+"POT-Creation-Date: 2010-10-05 14:23+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,6 +17,14 @@ msgstr ""
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: opengever.repository\n"
 
+#: ./opengever/base/browser/sharing.py:87
+msgid "Changes saved."
+msgstr ""
+
+#: ./opengever/base/browser/sharing.py:228
+msgid "Logged-in users"
+msgstr ""
+
 #. Default ""
 #: opengever/repository/classification.py
 msgid "archival worthy"
@@ -25,21 +33,6 @@ msgstr ""
 #. Default ""
 #: opengever/repository/classification.py
 msgid "archival worthy with sampling"
-msgstr ""
-
-#. Default ""
-#: opengever/repository/classification.py
-msgid "not archival worthy"
-msgstr ""
-
-#. Default ""
-#: opengever/repository/classification.py
-msgid "prompt"
-msgstr ""
-
-#. Default ""
-#: opengever/repository/classification.py
-msgid "unchecked"
 msgstr ""
 
 #. Default: "classified"
@@ -52,19 +45,13 @@ msgstr ""
 msgid "confidential"
 msgstr ""
 
-#. Default: "A Sibling with the same reference number is existing"
-#: ./opengever/base/behaviors/reference.py:106
-msgid "error_sibling_reference_number_existing"
-msgstr ""
-
 #. Default: "Classification"
 #: ./opengever/base/behaviors/classification.py:20
 msgid "fieldset_classification"
 msgstr ""
 
 #. Default: "Common"
-#: ./opengever/base/behaviors/base.py:20
-#: ./opengever/base/behaviors/reference.py:20
+#: ./opengever/base/behaviors/base.py:16
 msgid "fieldset_common"
 msgstr ""
 
@@ -102,6 +89,10 @@ msgstr ""
 msgid "help_dateofsubmission"
 msgstr ""
 
+#: ./opengever/base/behaviors/base.py:30
+msgid "help_description"
+msgstr ""
+
 #: ./opengever/base/behaviors/classification.py:39
 msgid "help_privacy_layer"
 msgstr ""
@@ -112,10 +103,6 @@ msgstr ""
 
 #: ./opengever/base/behaviors/classification.py:53
 msgid "help_public_trial_statement"
-msgstr ""
-
-#: ./opengever/base/behaviors/reference.py:28
-msgid "help_reference_number"
 msgstr ""
 
 #: ./opengever/base/behaviors/lifecycle.py:44
@@ -161,6 +148,11 @@ msgstr ""
 msgid "label_dateofsubmission"
 msgstr ""
 
+#. Default: "Description"
+#: ./opengever/base/behaviors/base.py:29
+msgid "label_description"
+msgstr ""
+
 #. Default: "Privacy layer"
 #: ./opengever/base/behaviors/classification.py:38
 msgid "label_privacy_layer"
@@ -176,11 +168,6 @@ msgstr ""
 msgid "label_public_trial_statement"
 msgstr ""
 
-#. Default: "Reference"
-#: ./opengever/base/behaviors/reference.py:27
-msgid "label_reference_number"
-msgstr ""
-
 #. Default: "Retention period (years)"
 #: ./opengever/base/behaviors/lifecycle.py:43
 msgid "label_retention_period"
@@ -189,6 +176,16 @@ msgstr ""
 #. Default: "retentionPeriodAnnotation"
 #: ./opengever/base/behaviors/lifecycle.py:50
 msgid "label_retention_period_annotation"
+msgstr ""
+
+#. Default: "Title"
+#: ./opengever/base/behaviors/base.py:24
+msgid "label_title"
+msgstr ""
+
+#. Default ""
+#: opengever/repository/classification.py
+msgid "not archival worthy"
 msgstr ""
 
 #. Default ""
@@ -206,12 +203,21 @@ msgstr ""
 msgid "private"
 msgstr ""
 
+#. Default ""
+#: opengever/repository/classification.py
+msgid "prompt"
+msgstr ""
+
 #. Default: "public"
 #: opengever/repository/classification.py
 msgid "public"
 msgstr ""
 
-#. Default: "unchecked"
+#: ./opengever/base/browser/personal_overview.py:34
+msgid "responsible"
+msgstr ""
+
+#. Default ""
 #: opengever/repository/classification.py
 msgid "unchecked"
 msgstr ""

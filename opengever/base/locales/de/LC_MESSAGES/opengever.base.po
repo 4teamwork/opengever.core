@@ -3,7 +3,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2010-08-17 07:40+0000\n"
+"POT-Creation-Date: 2010-10-05 14:23+0000\n"
 "PO-Revision-Date: 2009-01-01 10:00+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: Jonas Baumann <j.baumann@4teamwork.ch>\n"
@@ -15,6 +15,14 @@ msgstr ""
 "Domain: opengever.repository\n"
 "X-Is-Fallback-For: de-at de-li de-lu de-ch de-de\n"
 
+#: ./opengever/base/browser/sharing.py:87
+msgid "Changes saved."
+msgstr "Änderungen gespeichert"
+
+#: ./opengever/base/browser/sharing.py:228
+msgid "Logged-in users"
+msgstr "Angemeldete Benutzer"
+
 #. Default ""
 #: opengever/repository/classification.py
 msgid "archival worthy"
@@ -24,21 +32,6 @@ msgstr "Archivwürdig"
 #: opengever/repository/classification.py
 msgid "archival worthy with sampling"
 msgstr "Sampling"
-
-#. Default ""
-#: opengever/repository/classification.py
-msgid "not archival worthy"
-msgstr "Nicht archivwürdig"
-
-#. Default ""
-#: opengever/repository/classification.py
-msgid "prompt"
-msgstr "Anbieten"
-
-#. Default ""
-#: opengever/repository/classification.py
-msgid "unchecked"
-msgstr "Noch nicht bewertet"
 
 #. Default: "classified"
 #: opengever/repository/classification.py
@@ -50,19 +43,13 @@ msgstr "Geheim"
 msgid "confidential"
 msgstr "Vertraulich"
 
-#. Default: "A Sibling with the same reference number is existing"
-#: ./opengever/base/behaviors/reference.py:106
-msgid "error_sibling_reference_number_existing"
-msgstr "Ein Objekt mit dieser Referenznummer existiert bereits auf gleicher Stufe"
-
 #. Default: "Classification"
 #: ./opengever/base/behaviors/classification.py:20
 msgid "fieldset_classification"
 msgstr "Sichtbarkeit"
 
 #. Default: "Common"
-#: ./opengever/base/behaviors/base.py:20
-#: ./opengever/base/behaviors/reference.py:20
+#: ./opengever/base/behaviors/base.py:16
 msgid "fieldset_common"
 msgstr "Allgemein"
 
@@ -101,6 +88,10 @@ msgstr ""
 msgid "help_dateofsubmission"
 msgstr ""
 
+#: ./opengever/base/behaviors/base.py:30
+msgid "help_description"
+msgstr ""
+
 #. Default: ""
 #: ./opengever/base/behaviors/classification.py:39
 msgid "help_privacy_layer"
@@ -114,10 +105,6 @@ msgstr "Angabe, ob die Unterlagen gemäss Öffentlichkeitsgesetz besonders schü
 #: ./opengever/base/behaviors/classification.py:53
 msgid "help_public_trial_statement"
 msgstr "Argumente gegen die öffentliche Zugänglichkeit gemäss Öffentlichkeitsgesetz"
-
-#: ./opengever/base/behaviors/reference.py:28
-msgid "help_reference_number"
-msgstr "Präfix für das Aktenzeichen von Dossiers, die in dieser Ordnungsposition enthalten sind"
 
 #: ./opengever/base/behaviors/lifecycle.py:44
 msgid "help_retention_period"
@@ -162,6 +149,11 @@ msgstr "Kassationsdatum"
 msgid "label_dateofsubmission"
 msgstr "Anbietezeitpunkt"
 
+#. Default: "Description"
+#: ./opengever/base/behaviors/base.py:29
+msgid "label_description"
+msgstr "Beschreibung"
+
 #. Default: "Privacy layer"
 #: ./opengever/base/behaviors/classification.py:38
 msgid "label_privacy_layer"
@@ -177,11 +169,6 @@ msgstr "Öffentlichkeitsstatus:"
 msgid "label_public_trial_statement"
 msgstr "Begründung für die Aufhebung des Öffentlichkeitsstatus"
 
-#. Default: "Reference"
-#: ./opengever/base/behaviors/reference.py:27
-msgid "label_reference_number"
-msgstr "Präfix des Aktenzeichens"
-
 #. Default: "Retention period (years)"
 #: ./opengever/base/behaviors/lifecycle.py:43
 msgid "label_retention_period"
@@ -191,6 +178,16 @@ msgstr "Aufbewahrungsdauer (Jahre)"
 #: ./opengever/base/behaviors/lifecycle.py:50
 msgid "label_retention_period_annotation"
 msgstr "Kommentar zur Aufbewahrungsdauer"
+
+#. Default: "Title"
+#: ./opengever/base/behaviors/base.py:24
+msgid "label_title"
+msgstr "Titel"
+
+#. Default ""
+#: opengever/repository/classification.py
+msgid "not archival worthy"
+msgstr "Nicht archivwürdig"
 
 #. Default ""
 #: opengever/repository/classification.py
@@ -207,12 +204,22 @@ msgstr "Enthält schützenswerte Personendaten"
 msgid "private"
 msgstr "Nicht öffentlich"
 
+#. Default ""
+#: opengever/repository/classification.py
+msgid "prompt"
+msgstr "Anbieten"
+
 #. Default: "public"
 #: opengever/repository/classification.py
 msgid "public"
 msgstr "Öffentlich"
 
+#: ./opengever/base/browser/personal_overview.py:34
+msgid "responsible"
+msgstr "Verantwortlich"
+
 #. Default: "unchecked"
+#. Default ""
 #: opengever/repository/classification.py
 msgid "unchecked"
 msgstr "Noch nicht geprüft"
