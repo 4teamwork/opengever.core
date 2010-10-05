@@ -515,7 +515,7 @@ msgstr "Verantwortlicher"
 #: ./opengever/task/taskoverview.py:50
 #: ./opengever/task/taskoverview_solr.py:37
 msgid "sequence_number"
-msgstr "Sequenznummer"
+msgstr "Laufnummer"
 
 #. Default: "Subtasks:"
 #: ./opengever/task/task_templates/view.pt:76
