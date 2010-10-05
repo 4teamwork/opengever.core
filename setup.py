@@ -42,7 +42,7 @@ setup(name='opengever.ogds.base',
         'five.grok',
         'plone.app.registry',
         'z3c.saconfig',
-        # -*- Extra requirements: -*-
+        'collective.hiddentermsvocabulary',
         ],
       tests_require=tests_require,
       extras_require=dict(tests=tests_require),
