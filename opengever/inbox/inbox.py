@@ -36,7 +36,6 @@ class AssignedTasks(TaskBaseListing):
 
     def search(self):
         query_util = getUtility(ITaskQuery)
-        
         self.contents = query_util.get_tasks_for_responsible(
             'inbox:%s' % get_client_id(), self.sort_on, self.sort_order)
         self.len_results = len(self.contents)
