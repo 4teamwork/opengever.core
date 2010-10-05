@@ -1,6 +1,7 @@
 from opengever.globalindex import Session
 from opengever.globalindex.model.task import Task
 from opengever.ogds.base.utils import get_client_id
+from opengever.task.task import assigned_client
 from zope.component import getUtility
 from zope.intid.interfaces import IIntIds
 from sqlalchemy.orm.exc import NoResultFound
@@ -27,7 +28,14 @@ def index_task(obj, event):
     task.icon = obj.getIcon()
     task.responsible = obj.responsible
     task.issuer = obj.issuer
+    task.deadline = obj.deadline
+    task.completed = obj.date_of_completion
+    task.modified = obj.modified()
 
+    task.task_type = obj.task_type
+    task.sequence_number = obj.sequence_number
+
+    task.assigned_client = obj.responsible_client
     # index the predecessor
     if obj.predecessor:
         pred_client_id, pred_init_id = obj.predecessor.split(':', 1)
@@ -38,4 +46,3 @@ def index_task(obj, event):
 
     task.predecessor = predecessor
 
-    #task = Task(obj.)
