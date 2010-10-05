@@ -1,8 +1,11 @@
-from sqlalchemy import Column, Integer, String, Boolean, DateTime, ForeignKey, UniqueConstraint
+from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, UniqueConstraint
+from sqlalchemy.orm import relation
+from sqlalchemy.ext.associationproxy import association_proxy
 from sqlalchemy.schema import Sequence
 from sqlalchemy.orm import relationship, backref
 from sqlalchemy.sql import functions
 from opengever.globalindex.model import Base
+
 
 
 class Task(Base):
@@ -21,17 +24,21 @@ class Task(Base):
 
     responsible = Column(String(32), index=True)
     issuer = Column(String(32), index=True)
-    
+
     created = Column(DateTime, default=functions.now())
     modified = Column(DateTime)
     deadline = Column(DateTime)
     completed = Column(DateTime)
-    
+
     assigned_client = Column(String(20), index=True)
 
     predecessor_id = Column(Integer, ForeignKey('tasks.id'))
     successors = relationship("Task", backref=backref('predecessor',
-        remote_side=task_id))
+                                                      remote_side=task_id))
+
+    _principals = relation('TaskPrincipal', backref='task',
+                     cascade='all, delete-orphan')
+    principals = association_proxy('_principals', 'principal')
 
     def __init__(self, int_id, client_id):
         self.client_id = client_id
@@ -39,3 +46,17 @@ class Task(Base):
 
     def __repr__(self):
         return "<Task %s@%s>" % (self.int_id, self.client_id)
+
+
+class TaskPrincipal(Base):
+    __tablename__ = 'task_principals'
+
+    principal = Column(String(32), primary_key=True)
+    task_id = Column(Integer, ForeignKey('tasks.id'),
+                     primary_key=True)
+
+    def __init__(self, principal):
+        self.principal = principal
+
+    def __repr__(self):
+        return "<TaskPrincipal %s for %s>" % (self.principal, str(self.task))

@@ -36,4 +36,3 @@ Fetch a task by int_id and client_id.
 
     >>> session.query(Task).filter(Task.client_id=='m1').filter(Task.int_id==1).one()
     <Task 1@m1>
-

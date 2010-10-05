@@ -21,7 +21,7 @@ def setUp(test):
     Base.metadata.create_all(session.bind)
 
     test.globs['session'] = session
-    
+
 def tearDown(test):
     #test.globs['session'].remove()
     pass
@@ -37,6 +37,11 @@ def test_suite():
 
         doctest.DocFileSuite(
             'query.txt',
+            setUp=setUp, tearDown=tearDown,
+            optionflags=OPTIONFLAGS),
+
+        doctest.DocFileSuite(
+            'task_principals.txt',
             setUp=setUp, tearDown=tearDown,
             optionflags=OPTIONFLAGS),
 
