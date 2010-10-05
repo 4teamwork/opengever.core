@@ -2,7 +2,7 @@
 <metadata>
   <version>1</version>
   <dependencies>
-    <dependency>profile-opengever.globalsolr:default</dependency>
+    <dependency>profile-opengever.globalindex:default</dependency>
     <dependency>profile-ftw.mail:default</dependency>
     <dependency>profile-opengever.base:default</dependency>
     <dependency>profile-opengever.document:default</dependency>
