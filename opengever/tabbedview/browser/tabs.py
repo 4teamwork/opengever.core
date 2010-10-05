@@ -8,7 +8,7 @@ from zope.annotation.interfaces import IAnnotations
 from plone.app.workflow.interfaces import ISharingPageRole
 from plone.app.workflow.browser.sharing import SharingView
 
-from ftw.tabbedview.browser.listing import BaseListingView, ListingView
+from ftw.tabbedview.browser.listing import BaseListingView
 from ftw.tabbedview.interfaces import ITabbedView
 from ftw.journal.interfaces import IAnnotationsJournalizable, \
     IWorkflowHistoryJournalizable, IJournalizable
@@ -17,14 +17,8 @@ from ftw.table.interfaces import ITableGenerator
 from ftw.table import helper
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.tabbedview.helper import readable_ogds_author, linked,\
-    readable_date_set_invisibles, solr_linked
+    readable_date_set_invisibles
 from opengever.tabbedview import _
-
-try:
-    from opengever.globalsolr.interfaces import ISearch
-    from collective.solr.flare import PloneFlare
-except ImportError:
-    pass
 
 
 def datetime_compare(x, y):
@@ -127,62 +121,6 @@ class OpengeverListingTab(grok.View, BaseListingView):
     search_index = 'SearchableText'
     sort_on = 'modified'
     sort_order = 'reverse'
-
-
-class SolrListingView(ListingView):
-
-    sort_on = ''
-
-    def build_query(self):
-        return self.search_util.buildQuery(**self._search_options)
-
-    def update(self):
-        self.search_util = queryUtility(ISearch)
-
-        if not 'portal_type' in self.search_options and len(self.types):
-            self.search_options.update({'portal_type': self.types[0]})
-
-        self.search()
-
-    def search(self, kwargs={}):
-
-        parameters = {}
-        self.sort_on = self.request.get('sort_on', self.sort_on)
-        self.sort_order = self.request.get('sort_order', self.sort_order)
-
-        parameters['sort'] = self.sort_on
-        if self.sort_on:
-            if self.sort_on.startswith('header-'):
-                self.sort_on = self.sort_on.split('header-')[1]
-                parameters['sort'] = self.sort_on
-
-            if self.sort_order == 'reverse':
-                parameters['sort'] = '%s desc' % parameters['sort']
-            else:
-                parameters['sort'] = '%s asc' % parameters['sort']
-
-        query = self.build_query()
-        flares = self.search_util(query, **parameters)
-        self.contents = [PloneFlare(f) for f in flares]
-
-
-class OpengeverSolrListingTab(grok.View, SolrListingView):
-    grok.context(ITabbedView)
-    grok.template('generic')
-
-    update = SolrListingView.update
-
-    columns = (
-        ('', helper.draggable),
-        ('', helper.path_checkbox),
-        ('Title', 'sortable_title', solr_linked),
-        ('modified', helper.readable_date),
-        ('Creator', readable_ogds_author),
-        )
-
-    @property
-    def view_name(self):
-        return self.__name__.split('tabbedview_view-')[1]
 
 
 class OpengeverTab(object):

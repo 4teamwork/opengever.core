@@ -146,13 +146,7 @@ msgstr ""
 msgid "issuedtasks"
 msgstr ""
 
-msgid "issuedtasks_solr"
-msgstr ""
-
 msgid "mytasks"
-msgstr ""
-
-msgid "mytasks_solr"
 msgstr ""
 
 msgid "email"

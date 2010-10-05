@@ -5,6 +5,9 @@ Changelog
 1.0a4
 -----
 
+* Removed all dependencies to opengever.solr and collective.solr. We don't use solr animore.
+  [05.10.2009, phgross]
+
 * Issue #642 GUI, 2. Teil: Oeffnen von Aufgaben auf fremden Mandanten in neuem Fenster
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/642/
   [14.09.2010, phgross]

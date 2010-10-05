@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2010-10-01 10:10+0000\n"
+"POT-Creation-Date: 2010-10-05 10:15+0000\n"
 "PO-Revision-Date: 2009-02-25 14:39+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -34,7 +34,7 @@ msgid "all_orgunits"
 msgstr ""
 
 #. Default: "More actions &#9660;"
-#: ./opengever/tabbedview/browser/tabs_templates/generic.pt:33
+#: ./opengever/tabbedview/browser/tabs_templates/generic.pt:35
 msgid "button_more_actions"
 msgstr ""
 
@@ -42,7 +42,7 @@ msgid "checked_out"
 msgstr ""
 
 #. Default: "Client"
-#: ./opengever/tabbedview/browser/tabs.py:314
+#: ./opengever/tabbedview/browser/tabs.py:252
 msgid "client_id"
 msgstr ""
 
@@ -94,9 +94,6 @@ msgstr ""
 msgid "issuedtasks"
 msgstr ""
 
-msgid "issuedtasks_solr"
-msgstr ""
-
 msgid "issuer"
 msgstr ""
 
@@ -104,87 +101,87 @@ msgid "journal"
 msgstr ""
 
 #. Default: "Actor"
-#: ./opengever/tabbedview/browser/tabs.py:346
+#: ./opengever/tabbedview/browser/tabs.py:284
 msgid "label_actor"
 msgstr ""
 
 #. Default: "Checked out by"
-#: ./opengever/tabbedview/browser/tabs.py:221
+#: ./opengever/tabbedview/browser/tabs.py:159
 msgid "label_checked_out"
 msgstr ""
 
 #. Default: "Comments"
-#: ./opengever/tabbedview/browser/tabs.py:352
+#: ./opengever/tabbedview/browser/tabs.py:290
 msgid "label_comments"
 msgstr ""
 
 #. Default: "Date of Completion"
-#: ./opengever/tabbedview/browser/tabs.py:302
+#: ./opengever/tabbedview/browser/tabs.py:240
 msgid "label_date_of_completion"
 msgstr ""
 
 #. Default: "Deadline"
-#: ./opengever/tabbedview/browser/tabs.py:299
+#: ./opengever/tabbedview/browser/tabs.py:237
 msgid "label_deadline"
 msgstr ""
 
 #. Default: "Delivery Date"
-#: ./opengever/tabbedview/browser/tabs.py:218
+#: ./opengever/tabbedview/browser/tabs.py:156
 msgid "label_delivery_date"
 msgstr ""
 
 #. Default: "Document Author"
-#: ./opengever/tabbedview/browser/tabs.py:210
+#: ./opengever/tabbedview/browser/tabs.py:148
 msgid "label_document_author"
 msgstr ""
 
 #. Default: "Document Date"
-#: ./opengever/tabbedview/browser/tabs.py:212
+#: ./opengever/tabbedview/browser/tabs.py:150
 msgid "label_document_date"
 msgstr ""
 
 #. Default: "issued at"
-#: ./opengever/tabbedview/browser/tabs.py:311
+#: ./opengever/tabbedview/browser/tabs.py:249
 msgid "label_issued_date"
 msgstr ""
 
 #. Default: "Issuer"
-#: ./opengever/tabbedview/browser/tabs.py:308
+#: ./opengever/tabbedview/browser/tabs.py:246
 msgid "label_issuer"
 msgstr ""
 
 #. Default: "Receipt Date"
-#: ./opengever/tabbedview/browser/tabs.py:215
+#: ./opengever/tabbedview/browser/tabs.py:153
 msgid "label_receipt_date"
 msgstr ""
 
 #. Default: "Reference Number"
-#: ./opengever/tabbedview/browser/tabs.py:258
+#: ./opengever/tabbedview/browser/tabs.py:196
 msgid "label_reference"
 msgstr ""
 
 #. Default: "Responsible"
-#: ./opengever/tabbedview/browser/tabs.py:262
+#: ./opengever/tabbedview/browser/tabs.py:200
 msgid "label_responsible"
 msgstr ""
 
 #. Default: "Responsible"
-#: ./opengever/tabbedview/browser/tabs.py:305
+#: ./opengever/tabbedview/browser/tabs.py:243
 msgid "label_responsible_task"
 msgstr ""
 
 #. Default: "Task Type"
-#: ./opengever/tabbedview/browser/tabs.py:297
+#: ./opengever/tabbedview/browser/tabs.py:235
 msgid "label_task_type"
 msgstr ""
 
 #. Default: "Time"
-#: ./opengever/tabbedview/browser/tabs.py:349
+#: ./opengever/tabbedview/browser/tabs.py:287
 msgid "label_time"
 msgstr ""
 
 #. Default: "Title"
-#: ./opengever/tabbedview/browser/tabs.py:343
+#: ./opengever/tabbedview/browser/tabs.py:281
 msgid "label_title"
 msgstr ""
 
@@ -192,9 +189,6 @@ msgid "modified"
 msgstr ""
 
 msgid "mytasks"
-msgstr ""
-
-msgid "mytasks_solr"
 msgstr ""
 
 msgid "orgunit_contact"
@@ -237,7 +231,7 @@ msgid "role_list"
 msgstr ""
 
 #. Default: "Sequence Number"
-#: ./opengever/tabbedview/browser/tabs.py:316
+#: ./opengever/tabbedview/browser/tabs.py:254
 msgid "sequence_number"
 msgstr ""
 

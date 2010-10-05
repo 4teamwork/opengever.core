@@ -32,10 +32,8 @@ setup(name='opengever.tabbedview',
         'opengever.ogds.base',
         'ftw.table',
         'ftw.journal',
-        'collective.solr',
         'setuptools',
         'ftw.tabbedview',
-        'opengever.globalsolr',
         'plone.app.dexterity',
           #'collective.jqhistory'
           # -*- Extra requirements: -*-
