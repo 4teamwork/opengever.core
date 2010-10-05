@@ -1,4 +1,7 @@
+from Products.CMFCore.permissions import View
 from opengever.globalindex import Session
+from AccessControl.PermissionRole import rolesForPermissionOn
+from Products.CMFCore.utils import _mergedLocalRoles
 from opengever.globalindex.model.task import Task
 from opengever.ogds.base.utils import get_client_id
 from zope.component import getUtility
@@ -38,4 +41,14 @@ def index_task(obj, event):
 
     task.predecessor = predecessor
 
-    #task = Task(obj.)
+    # index the principal which have View permission. This is according to the
+    # allowedRolesAndUsers index but it does not car of global roles.
+    allowed_roles = rolesForPermissionOn(View, obj)
+    principals = []
+    for principal, roles in _mergedLocalRoles(obj).items():
+        for role in roles:
+            if role in allowed_roles:
+                principals.append(principal.decode('utf-8'))
+                break
+
+    task.principals = principals
