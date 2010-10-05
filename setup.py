@@ -43,6 +43,7 @@ setup(name='opengever.task',
         'opengever.translations',
         'opengever.ogds.base',
         'opengever.globalindex',
+        'five.globalrequest',
         # -*- Extra requirements: -*-
         ],
       tests_require=tests_require,

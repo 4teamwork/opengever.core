@@ -7,7 +7,6 @@
  <permission>Modify portal content</permission>
  <permission>View</permission>
  <permission>opengever.task: Add task</permission>
- <permission>opengever.task: Edit task</permission>
  <state state_id="task-state-cancelled" title="">
   <permission-map name="Access contents information" acquired="False">
    <permission-role>Editor</permission-role>
@@ -30,8 +29,6 @@
    <permission-role>Owner</permission-role>
   </permission-map>
   <permission-map name="Modify portal content" acquired="False">
-   <permission-role>Manager</permission-role>
-   <permission-role>Owner</permission-role>
   </permission-map>
   <permission-map name="View" acquired="False">
    <permission-role>Editor</permission-role>
@@ -42,9 +39,6 @@
    <permission-role>Editor</permission-role>
    <permission-role>Manager</permission-role>
    <permission-role>Owner</permission-role>
-  </permission-map>
-  <permission-map name="opengever.task: Edit task" acquired="False">
-   <permission-role>Manager</permission-role>
   </permission-map>
  </state>
  <state state_id="task-state-in-progress" title="">
@@ -70,8 +64,6 @@
    <permission-role>Owner</permission-role>
   </permission-map>
   <permission-map name="Modify portal content" acquired="False">
-   <permission-role>Manager</permission-role>
-   <permission-role>Owner</permission-role>
   </permission-map>
   <permission-map name="View" acquired="False">
    <permission-role>Editor</permission-role>
@@ -83,16 +75,10 @@
    <permission-role>Manager</permission-role>
    <permission-role>Owner</permission-role>
   </permission-map>
-  <permission-map name="opengever.task: Edit task" acquired="False">
-   <permission-role>Manager</permission-role>
-  </permission-map>
  </state>
  <state state_id="task-state-new" title="">
   <exit-transition transition_id="task-transition-new-open"/>
- </state>
- <state state_id="task-state-new-successor" title="">
   <permission-map name="Access contents information" acquired="True">
-   <permission-role>Contributor</permission-role>
   </permission-map>
   <permission-map name="Add portal content" acquired="True">
   </permission-map>
@@ -100,17 +86,32 @@
   </permission-map>
   <permission-map name="Manage properties" acquired="True">
   </permission-map>
-  <permission-map name="Modify portal content" acquired="True">
-   <permission-role>Contributor</permission-role>
+  <permission-map name="Modify portal content" acquired="False">
   </permission-map>
   <permission-map name="View" acquired="True">
-   <permission-role>Contributor</permission-role>
   </permission-map>
   <permission-map name="opengever.task: Add task" acquired="True">
-   <permission-role>Contributor</permission-role>
   </permission-map>
-  <permission-map name="opengever.task: Edit task" acquired="True">
-   <permission-role>Contributor</permission-role>
+ </state>
+ <state state_id="task-state-new-successor" title="">
+  <permission-map name="Access contents information" acquired="False">
+   <permission-role>Owner</permission-role>
+  </permission-map>
+  <permission-map name="Add portal content" acquired="False">
+  </permission-map>
+  <permission-map name="List folder contents" acquired="False">
+   <permission-role>Owner</permission-role>
+  </permission-map>
+  <permission-map name="Manage properties" acquired="False">
+   <permission-role>Owner</permission-role>
+  </permission-map>
+  <permission-map name="Modify portal content" acquired="False">
+   <permission-role>Owner</permission-role>
+  </permission-map>
+  <permission-map name="View" acquired="False">
+   <permission-role>Owner</permission-role>
+  </permission-map>
+  <permission-map name="opengever.task: Add task" acquired="False">
   </permission-map>
  </state>
  <state state_id="task-state-open" title="">
@@ -139,8 +140,6 @@
    <permission-role>Owner</permission-role>
   </permission-map>
   <permission-map name="Modify portal content" acquired="False">
-   <permission-role>Manager</permission-role>
-   <permission-role>Owner</permission-role>
   </permission-map>
   <permission-map name="View" acquired="False">
    <permission-role>Editor</permission-role>
@@ -151,9 +150,6 @@
    <permission-role>Editor</permission-role>
    <permission-role>Manager</permission-role>
    <permission-role>Owner</permission-role>
-  </permission-map>
-  <permission-map name="opengever.task: Edit task" acquired="False">
-   <permission-role>Manager</permission-role>
   </permission-map>
  </state>
  <state state_id="task-state-rejected" title="">
@@ -179,8 +175,6 @@
    <permission-role>Owner</permission-role>
   </permission-map>
   <permission-map name="Modify portal content" acquired="False">
-   <permission-role>Manager</permission-role>
-   <permission-role>Owner</permission-role>
   </permission-map>
   <permission-map name="View" acquired="False">
    <permission-role>Editor</permission-role>
@@ -191,9 +185,6 @@
    <permission-role>Editor</permission-role>
    <permission-role>Manager</permission-role>
    <permission-role>Owner</permission-role>
-  </permission-map>
-  <permission-map name="opengever.task: Edit task" acquired="False">
-   <permission-role>Manager</permission-role>
   </permission-map>
  </state>
  <state state_id="task-state-resolved" title="">
@@ -219,8 +210,6 @@
    <permission-role>Owner</permission-role>
   </permission-map>
   <permission-map name="Modify portal content" acquired="False">
-   <permission-role>Manager</permission-role>
-   <permission-role>Owner</permission-role>
   </permission-map>
   <permission-map name="View" acquired="False">
    <permission-role>Editor</permission-role>
@@ -231,9 +220,6 @@
    <permission-role>Editor</permission-role>
    <permission-role>Manager</permission-role>
    <permission-role>Owner</permission-role>
-  </permission-map>
-  <permission-map name="opengever.task: Edit task" acquired="False">
-   <permission-role>Manager</permission-role>
   </permission-map>
  </state>
  <transition transition_id="task-transition-in-progress-resolved" title="task-transition-in-progress-resolved" new_state="task-state-resolved" trigger="USER" before_script="" after_script="">
@@ -288,7 +274,7 @@
  <variable variable_id="action" for_catalog="False" for_status="True" update_always="True">
   <description>The last transition</description>
   <default>
-   
+
    <expression>transition/getId|nothing</expression>
   </default>
   <guard>
@@ -297,7 +283,7 @@
  <variable variable_id="actor" for_catalog="False" for_status="True" update_always="True">
   <description>The ID of the user who performed the last transition</description>
   <default>
-   
+
    <expression>user/getId</expression>
   </default>
   <guard>
@@ -306,7 +292,7 @@
  <variable variable_id="comments" for_catalog="False" for_status="True" update_always="True">
   <description>Comments about the last transition</description>
   <default>
-   
+
    <expression>python:state_change.kwargs.get('comment', '')</expression>
   </default>
   <guard>
@@ -315,7 +301,7 @@
  <variable variable_id="review_history" for_catalog="False" for_status="False" update_always="False">
   <description>Provides access to workflow history</description>
   <default>
-   
+
    <expression>state_change/getHistory</expression>
   </default>
   <guard>
@@ -325,7 +311,7 @@
  <variable variable_id="time" for_catalog="False" for_status="True" update_always="True">
   <description>Time of the last transition</description>
   <default>
-   
+
    <expression>state_change/getDateTime</expression>
   </default>
   <guard>
