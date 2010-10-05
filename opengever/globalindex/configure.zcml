@@ -12,11 +12,18 @@
         directory="profiles/default"
         description="Installs the opengever.globalindex package"
         provides="Products.GenericSetup.interfaces.EXTENSION"
-     />
-     
-     <include package=".handlers" />
-     
-     <utility factory=".query.TaskQuery" />
+        />
+
+    <genericsetup:importStep
+        name="opengever.globalindex : create sql tables"
+        title="Install and create opengever.globalindex tables"
+        description=""
+        handler="opengever.globalindex.setuphandlers.create_tables"
+        />
+
+    <include package=".handlers" />
+
+    <utility factory=".query.TaskQuery" />
 
 
 </configure>
