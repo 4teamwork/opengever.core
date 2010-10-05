@@ -13,9 +13,15 @@ def globalindex_path_checkbox(item, value):
     return '<input type="checkbox" class="noborder" name="paths:list" id="%s" value="%s" alt="Select %s" title="Select %s">' % (item.task_id, item.physical_path,  item.title, item.title)
 
 def globalindex_linked(context):
+    """A helper method wich show the titel as a link.
+    When the task is not on the actual client it open it in a new window."""
+    actual_client = get_client_id()
     def get_linked(item, value):
         img = u'<img src="%s/%s"/>' % (context.portal_url(), item.icon)
-        link = u'<a class="rollover-breadcrumb" href="%s" title="%s">%s%s</a>' % (item.physical_path,item.title, img, value)
+        if actual_client == item.client_id:
+            link = u'<a class="rollover-breadcrumb" href="%s" title="%s">%s%s</a>' % (item.physical_path,item.title, img, value)
+        else:
+            link = u'<a class="rollover-breadcrumb" target="_blank" href="%s" title="%s">%s%s</a>' % (item.physical_path,item.title, img, value)
         # " &gt; ".join(item['Title'] for i in item.breadcrumb_titles)
         item.physical_path
         wrapper = u'<span class="linkWrapper">%s</span>' % link
@@ -116,5 +122,6 @@ class AssignedTasks(TaskBaseListing):
     """
     def search(self):
         query_util = getUtility(ITaskQuery)
-        self.contents = query_util.get_task_for_assigned_client(get_client_id(), self.sort_on, self.sort_order)
+        self.contents = query_util.get_task_for_assigned_client(
+        (), self.sort_on, self.sort_order)
         self.len_results = len(self.contents)
