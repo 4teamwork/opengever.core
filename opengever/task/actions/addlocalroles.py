@@ -1,13 +1,15 @@
 from Acquisition import aq_parent
 from OFS.SimpleItem import SimpleItem
-from zope.interface import implements, Interface
-from zope.component import adapts
-from zope.formlib import form
-from zope import schema
-from plone.contentrules.rule.interfaces import IExecutable, IRuleElementData
-from plone.app.contentrules.browser.formhelper import AddForm, EditForm
-from opengever.task.task import ITask
 from opengever.task import _
+from opengever.task.task import ITask
+from plone.app.contentrules.browser.formhelper import AddForm, EditForm
+from plone.contentrules.rule.interfaces import IExecutable, IRuleElementData
+from zope import schema
+from zope.component import adapts
+from zope.event import notify
+from zope.formlib import form
+from zope.interface import implements, Interface
+from zope.lifecycleevent import ObjectModifiedEvent
 
 
 class IAddLocalRolesAction(Interface):
@@ -76,6 +78,7 @@ class AddLocalRolesActionExecutor(object):
                 new_roles = list(set(list(roles) + list(current_roles)))
                 obj.manage_setLocalRoles(user_id, new_roles)
                 obj.reindexObjectSecurity()
+                notify(ObjectModifiedEvent(obj))
 
             # set related items roles
             roles = self.element.related_items_roles
@@ -86,6 +89,7 @@ class AddLocalRolesActionExecutor(object):
                     new_roles = list(set(list(roles) + list(current_roles)))
                     item.to_object.manage_setLocalRoles(user_id, new_roles)
                     item.to_object.reindexObjectSecurity()
+                    notify(ObjectModifiedEvent(item.to_object))
 
             # set parent roles
             roles = self.element.parent_roles
@@ -95,6 +99,7 @@ class AddLocalRolesActionExecutor(object):
                 new_roles = list(set(list(roles) + list(current_roles)))
                 parent.manage_setLocalRoles(user_id, new_roles)
                 parent.reindexObjectSecurity()
+                notify(ObjectModifiedEvent(parent))
 
         return True
 

@@ -8,6 +8,7 @@ from opengever.ogds.base.interfaces import IContactInformation
 from opengever.ogds.base.utils import get_client_id
 from opengever.task import _
 from opengever.task import util
+from opengever.task.interfaces import ISuccessorTaskController
 from opengever.task.interfaces import ITaskSettings
 from opengever.task.source import DossierPathSourceBinder
 from opengever.translations.browser.add import TranslatedAddForm
@@ -22,7 +23,7 @@ from plone.z3cform.traversal import FormWidgetTraversal
 from z3c.relationfield.schema import RelationChoice, RelationList
 from zc.relation.interfaces import ICatalog
 from zope import schema
-from zope.component import getUtility
+from zope.component import getUtility, queryUtility
 from zope.component import queryMultiAdapter, getMultiAdapter
 from zope.interface import implements, Interface
 from zope.lifecycleevent.interfaces import IObjectCreatedEvent
@@ -295,6 +296,64 @@ class View(dexterity.DisplayForm):
         info = getUtility(IContactInformation)
         task = ITask(self.context)
         return info.render_link(task.issuer)
+
+    def getPredecessorTask(self):
+        controller = ISuccessorTaskController(self.context)
+        return controller.get_predecessor()
+
+    def getSuccessorTasks(self):
+        controller = ISuccessorTaskController(self.context)
+        return controller.get_successors()
+
+    def render_indexed_task(self, item):
+        """Renders a indexed task item (globalindex sqlalchemy object) either
+        with a link to the effective task (if the user has access) or just with
+        the title.
+        """
+
+        # render icon image
+        if item.icon:
+            image = '<img src="%s" /> ' % item.icon
+        else:
+            image = ''
+
+        # get the contact information utlity and the client
+        info = queryUtility(IContactInformation)
+        if info:
+            client = info.get_client_by_id(item.client_id)
+        if not info or not client:
+            return '%s<span>%s</span>' % (image, item.title)
+
+        # has the user access to the target task?
+        has_access = False
+        mtool = getToolByName(self.context, 'portal_membership')
+        member = mtool.getAuthenticatedMember()
+
+        if member:
+            principals = set(member.getGroups() + [member.getId()])
+            allowed_principals = set(item.principals)
+            has_access = len(principals & allowed_principals) > 0
+
+        # is the target on a different client? we need to make a popup if
+        # it is...
+        if item.client_id != get_client_id():
+            link_target = ' target="_blank"'
+        else:
+            link_target = ''
+
+        # embed the client
+        client_html = ' <span class="discreet">(%s)</span>' % client.title
+
+        # render the full link if he has acccess
+        inner_html = ''.join((image, item.title, client_html))
+        if has_access:
+            return '<a href="%s"%s>%s</a>' % (
+                client.public_url + '/' + item.physical_path,
+                link_target,
+                inner_html)
+        else:
+            return inner_html
+
 
 
 # XXX
