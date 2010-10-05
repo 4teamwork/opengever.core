@@ -25,6 +25,3 @@ msgstr ""
 
 msgid "issuedtasks_solr"
 msgstr ""
-
-msgid "label_related_items"
-msgstr ""

@@ -1,5 +1,3 @@
 <object name="portal_types">
  <object name="opengever.task.task" meta_type="Dexterity FTI" />
- <object name="opengever.task.taskoverview" meta_type="Dexterity FTI" />
- <object name="opengever.task.taskoverview_solr" meta_type="Dexterity FTI"/>
 </object>

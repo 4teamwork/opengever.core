@@ -55,7 +55,7 @@ class TaskBaseListing(BaseListingView):
              'column_title': _(u'label_deadline', 'Deadline'),
              'transform': helper.readable_date},
             {'column': 'completed',
-             'column_title': _(u'date_of_completion', 'Date of Completion'),
+             'column_title': _(u'date_of_completion'),
              'transform': readable_date_set_invisibles },
             {'column': 'responsible',
             'column_title': _(u'label_responsible_task', 'Responsible'),
