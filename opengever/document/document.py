@@ -435,6 +435,11 @@ class View(dexterity.DisplayForm):
         info = getUtility(IContactInformation)
         return info.render_link(self.context.Creator())
 
+    def author_link(self):
+        info = getUtility(IContactInformation)
+        return info.render_link(self.context.document_author)
+
+
 class ForwardViewlet(grok.Viewlet):
     """Display the message subject
     """
