@@ -21,7 +21,10 @@ class Redirector(grok.Adapter):
 
     def __init__(self, request):
         self.request = request
-        self.session = request.SESSION
+        try:
+            self.session = request.SESSION
+        except AttributeError:
+            self.session = {}
 
     def redirect(self, url, target='_blank'):
         """Redirects the user to a `url` which is opened in a window called
