@@ -1,0 +1,24 @@
+<tal:translation i18n:domain="opengever.tabbedview">
+  <form name="tabbedview_form"
+        method="post"
+        action="folder_object"
+        tal:attributes="action context/absolute_url"
+        >
+
+    <input type="hidden" name="orig_template" tal:attributes="value string:${here/absolute_url}/#${view/view_name}" />
+
+    <tal:cond tal:condition="view/contents">
+      <div class="tabbedview_select">
+        <div tal:replace="structure view/batching" />
+      </div>
+
+      <div tal:content="structure view/render_listing" />
+    </tal:cond>
+
+    <p tal:condition="not: view/contents">
+      Keine Inhalte vorhanden
+    </p>
+
+  </form>
+
+</tal:translation>
