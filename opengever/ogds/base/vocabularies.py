@@ -19,12 +19,20 @@ class UsersVocabularyFactory(grok.GlobalUtility):
     grok.provides(IVocabularyFactory)
     grok.name('opengever.ogds.base.UsersVocabulary')
 
+    hidden_terms = []
+
     def __call__(self, context):
-        return ContactsVocabulary.create_with_provider(self.key_value_provider)
+        vocab = wrap_vocabulary(
+                ContactsVocabulary.create_with_provider(
+                    self.key_value_provider))(context)
+        vocab.hidden_terms = self.hidden_terms
+        return vocab
 
     def key_value_provider(self):
         info = getUtility(IContactInformation)
         for user in info.list_users():
+            if not user.active:
+                self.hidden_terms.append(user.userid)
             yield (user.userid,
                    info.describe(user.userid))
 
@@ -38,9 +46,15 @@ class UsersAndInboxesVocabularyFactory(grok.GlobalUtility):
     grok.provides(IVocabularyFactory)
     grok.name('opengever.ogds.base.UsersAndInboxesVocabulary')
 
+    hidden_terms = []
+
     def __call__(self, context):
         self.context = context
-        return ContactsVocabulary.create_with_provider(self.key_value_provider)
+        vocab = wrap_vocabulary(
+                ContactsVocabulary.create_with_provider(
+                    self.key_value_provider))(context)
+        vocab.hidden_terms = self.hidden_terms
+        return vocab
 
     def key_value_provider(self):
         client_id = self.get_client()
@@ -48,6 +62,8 @@ class UsersAndInboxesVocabularyFactory(grok.GlobalUtility):
         if client_id and info.get_client_by_id(client_id):
             # all users
             for user in info.list_assigned_users(client_id=client_id):
+                if not user.active:
+                    self.hidden_terms.append(user.userid)
                 yield (user.userid,
                        info.describe(user.userid))
             # client inbox
@@ -81,12 +97,20 @@ class AssignedUsersVocabularyFactory(grok.GlobalUtility):
     grok.provides(IVocabularyFactory)
     grok.name('opengever.ogds.base.AssignedUsersVocabulary')
 
+    hidden_terms = []
+
     def __call__(self, context):
-        return ContactsVocabulary.create_with_provider(self.key_value_provider)
+        vocab = wrap_vocabulary(
+                ContactsVocabulary.create_with_provider(
+                    self.key_value_provider))(context)
+        vocab.hidden_terms = self.hidden_terms
+        return vocab
 
     def key_value_provider(self):
         info = getUtility(IContactInformation)
         for user in info.list_assigned_users():
+            if not user.active:
+                self.hidden_terms.append(user.userid)
             yield (user.userid,
                    info.describe(user.userid))
 
@@ -112,9 +136,10 @@ class ContactsAndUsersVocabularyFactory(grok.GlobalUtility):
     """Vocabulary of contacts and users.
     """
 
-    hidden_terms = []
     grok.provides(IVocabularyFactory)
     grok.name('opengever.ogds.base.ContactsAndUsersVocabulary')
+
+    hidden_terms = []
 
     def __call__(self, context):
         vocab = wrap_vocabulary(
@@ -145,9 +170,13 @@ class EmailContactsAndUsersVocabularyFactory(grok.GlobalUtility):
     grok.provides(IVocabularyFactory)
     grok.name('opengever.ogds.base.EmailContactsAndUsersVocabulary')
 
+    hidden_terms = []
+
     def __call__(self, context):
-        vocab = ContactsVocabulary.create_with_provider(
-            self.key_value_provider)
+        vocab = wrap_vocabulary(
+                ContactsVocabulary.create_with_provider(
+                    self.key_value_provider))(context)
+        vocab.hidden_terms = self.hidden_terms
         return vocab
 
     def key_value_provider(self):
@@ -158,16 +187,24 @@ class EmailContactsAndUsersVocabularyFactory(grok.GlobalUtility):
         """
 
         info = getUtility(IContactInformation)
-        ids = [user.userid for user in info.list_users()]
-        ids.extend([contact.contactid for contact
+        ids = [(user.userid, user.active) for user in info.list_users()]
+        ids.extend([(contact.contactid, True) for contact
                     in info.list_contacts()])
 
-        for userid in ids:
-            yield(info.get_email(userid),
-                  info.describe(userid, with_email=True))
-            if info.get_email2(userid) != None:
-                yield(info.get_email2(userid),
-                      info.describe(userid, with_email2=True))
+        for userid, active in ids:
+            email = info.get_email(userid)
+            if email != None:
+                if not active:
+                    self.hidden_terms.append(email)
+                yield(email,
+                      info.describe(userid, with_email=True))
+
+                email2 = info.get_email2(userid)
+                if email2 != None:
+                    if not active:
+                        self.hidden_terms.append(email2)
+                    yield(email2,
+                          info.describe(userid, with_email2=True))
 
 
 class ClientsVocabularyFactory(grok.GlobalUtility):
