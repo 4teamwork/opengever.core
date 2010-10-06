@@ -1,12 +1,13 @@
-from Products.CMFCore.permissions import View
-from opengever.globalindex import Session
 from AccessControl.PermissionRole import rolesForPermissionOn
+from Products.CMFCore.permissions import View
 from Products.CMFCore.utils import _mergedLocalRoles
+from datetime import datetime
+from opengever.globalindex import Session
 from opengever.globalindex.model.task import Task
 from opengever.ogds.base.utils import get_client_id
+from sqlalchemy.orm.exc import NoResultFound
 from zope.component import getUtility
 from zope.intid.interfaces import IIntIds
-from sqlalchemy.orm.exc import NoResultFound
 
 
 def index_task(obj, event):
@@ -30,9 +31,9 @@ def index_task(obj, event):
     task.icon = obj.getIcon()
     task.responsible = obj.responsible
     task.issuer = obj.issuer
-    task.deadline = obj.deadline
-    task.completed = obj.date_of_completion
-    task.modified = obj.modified()
+    task.deadline = datetime(obj.deadline)
+    task.completed = datetime(obj.date_of_completion)
+    task.modified = datetime(obj.modified())
 
     task.task_type = obj.task_type
     task.sequence_number = obj.sequence_number
