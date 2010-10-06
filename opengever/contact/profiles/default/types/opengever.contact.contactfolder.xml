@@ -47,4 +47,9 @@
     <action title="contacts" action_id="contacts" category="tabbedview-tabs"
             condition_expr="" url_expr="string:#" visible="True">
     </action>
+
+    <action title="users" action_id="users" category="tabbedview-tabs"
+            condition_expr="" url_expr="string:#" visible="True">
+    </action>
+
 </object>
