@@ -24,20 +24,6 @@
         allowed_attributes="listing select_all"
         />
 
-    <browser:page
-        for="*"
-        name="tabbedview_view-mydocuments"
-        class=".personal_overview.MyDocuments"
-        permission="zope2.View"
-    />
-
-    <browser:page
-        for="*"
-        name="tabbedview_view-mydossiers"
-        class=".personal_overview.MyDossiers"
-        permission="zope2.View"
-    />
-
     <browser:resourceDirectory
         name="opengever.base.resources"
         directory="resources"
