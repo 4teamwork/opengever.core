@@ -75,3 +75,20 @@ class ISequenceNumberGenerator(Interface):
     def generate(self):
         """ Returns a new sequence number for the adapted object
         """
+
+
+class IRedirector(Interface):
+    """An adapter for the BrowserRequest to redirect a user after loading the
+    next page to a specific URL which is opened in another window / tab with
+    the name "target".
+    """
+
+    def redirect(url, target='_blank'):
+        """Redirects the user to a `url` which is opened in a window called
+        `target` after loading the next page.
+        """
+
+    def get_redirects(remove=True):
+        """Returns a list of dicts containing the redirect informations. If
+        `remove` is set to `True` (default) the redirect infos are deleted.
+        """
