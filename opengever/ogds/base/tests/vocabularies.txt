@@ -109,6 +109,19 @@ Users:
     ...                       'client2_inbox_users',
     ...                       'client1_users'))
 
+Example of hidden users (``Robin Hood`` is everywhere but visible nowhere).
+
+    >>> _create_example_user(session, portal,
+    ...                      'robin.hood',
+    ...                      {'firstname': 'Robin',
+    ...                       'lastname': 'Hood',
+    ...                       'email': 'robin@hood.tld',
+    ...                       'active': '0'},
+    ...                      ('client1_users',
+    ...                       'client1_inbox_users',
+    ...                       'client2_users',
+    ...                       'client2_inbox_users'))
+
 Clients:
 
     >>> _create_example_client(session, 'client1',
@@ -164,7 +177,12 @@ List all active users.
     >>> fterms(list(voc))
     [u'<Term hugo.boss:Boss Hugo>', u'<Term peter.muster:Muster Peter>', u'<Term hanspeter.linder:Linder Hans-Peter>']
 
+Hidden users are always accessible with ``getTerm`` or ``getTermByToken``, but
+not visible in when listing vocabulary or searching it. And keep in mind
+``Robin Hood`` is always there.
 
+    >>> voc.getTerm('robin.hood').title
+    u'Hood Robin'
 
 Users and inboxes vocabulary
 ----------------------------
@@ -241,7 +259,7 @@ address they have.
     ...                   name='opengever.ogds.base.EmailContactsAndUsersVocabulary')
     >>> voc = fact(portal)
     >>> fterms(list(voc))
-    [u'<Term hugo@boss.local:Boss Hugo (hugo@boss.local)>', u'<Term hugo@private.ch:Boss Hugo (hugo@private.ch)>', u'<Term None:Muster Peter>', u'<Term sandra.kaufmann@test.ch:Kaufmann Sandra (sandra.kaufmann@test.ch)>', u'<Term elisabeth.kaeppeli@test.ch:K\xe4ppeli Elisabeth (elisabeth.kaeppeli@test.ch)>', u'<Term roger.wermuth@test.ch:Wermuth Roger (roger.wermuth@test.ch)>']
+    [u'<Term hugo@boss.local:Boss Hugo (hugo@boss.local)>', u'<Term hugo@private.ch:Boss Hugo (hugo@private.ch)>', u'<Term sandra.kaufmann@test.ch:Kaufmann Sandra (sandra.kaufmann@test.ch)>', u'<Term elisabeth.kaeppeli@test.ch:K\xe4ppeli Elisabeth (elisabeth.kaeppeli@test.ch)>', u'<Term roger.wermuth@test.ch:Wermuth Roger (roger.wermuth@test.ch)>']
 
 
 
