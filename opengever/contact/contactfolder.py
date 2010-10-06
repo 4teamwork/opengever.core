@@ -37,5 +37,3 @@ class Contacts(OpengeverListingTab):
 
     sort_on = 'sortable_title'
     sort_order='asc'
-
-
