@@ -1,24 +1,16 @@
-
-import os
-
 from Acquisition import aq_inner, aq_parent
+from Products.statusmessages.interfaces import IStatusMessage
 from five import grok
-from zope.interface import Interface
-from zope import schema
+from opengever.document import _
+from opengever.document.document import IDocumentSchema
+from opengever.document.exceptions import NoItemsSelected
+from opengever.document.staging.manager import ICheckinCheckoutManager
+from plone.z3cform import layout
 from z3c.form import form, field, button
 from z3c.form.interfaces import HIDDEN_MODE
-
-from Products.statusmessages.interfaces import IStatusMessage
-from plone.dexterity.interfaces import IDexterityContent
-from plone.z3cform import layout
-
-from opengever.document import _
-from opengever.document.staging.manager import ICheckinCheckoutManager
-from opengever.document.document import IDocumentSchema
-
-
-class NoItemsSelected(Exception):
-    pass
+from zope import schema
+from zope.interface import Interface
+import os
 
 
 # ---- CHECKIN ----

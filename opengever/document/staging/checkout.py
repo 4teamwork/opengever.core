@@ -1,29 +1,20 @@
+from Acquisition import aq_inner, aq_parent
+from Products.statusmessages.interfaces import IStatusMessage
+from five import grok
+from opengever.document import _
+from opengever.document.document import IDocumentSchema
+from opengever.document.exceptions import NoItemsSelected
+from opengever.document.staging.manager import ICheckinCheckoutManager
+from plone.directives import form as dform
+from plone.directives.form import widget
+from plone.z3cform import layout
+from z3c.form import form, field, button
+from z3c.form.browser import checkbox
+from z3c.form.interfaces import HIDDEN_MODE
+from zope import schema
+from zope.interface import Interface
 import os
 
-from Acquisition import aq_inner, aq_parent
-from five import grok
-from zope.interface import Interface
-from zope.component import getUtility
-from zope import schema
-from z3c.form import form, field, button
-from z3c.form.interfaces import HIDDEN_MODE
-
-from plone.dexterity.interfaces import IDexterityContent
-from plone.z3cform import layout
-from Products.statusmessages.interfaces import IStatusMessage
-from Products.CMFCore.interfaces._content import ISiteRoot
-
-
-from plone.directives.form import widget
-from plone.directives import form as dform
-from z3c.form.browser import checkbox
-
-from opengever.document import _
-from opengever.document.staging.manager import ICheckinCheckoutManager
-from opengever.document.document import IDocumentSchema
-
-class NoItemsSelected(Exception):
-    pass
 
 # ---- CHECKOUT ----
 class ICheckoutCommentFormSchema(dform.Schema):
@@ -95,7 +86,7 @@ class CheckoutCommentForm(form.Form):
             return value
         value = self.request.get('paths')
         if not value:
-            raise NoItemsSelected
+            raise NoItemsSelected()
         return value
 
     @property
