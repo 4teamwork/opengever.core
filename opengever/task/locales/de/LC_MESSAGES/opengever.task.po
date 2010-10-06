@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2010-10-05 12:22+0000\n"
-"PO-Revision-Date: 2010-10-01 09:17+0200\n"
+"POT-Creation-Date: 2010-10-06 07:07+0000\n"
+"PO-Revision-Date: 2010-10-06 09:09+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -42,7 +42,7 @@ msgstr "Bearbeiten"
 
 #: ./opengever/task/actions/addlocalroles.py:124
 msgid "Edit Local Roles Action"
-msgstr ""
+msgstr "Lokale rollen bearbeiten"
 
 #: ./opengever/task/response.py:330
 msgid "Issue state"
@@ -66,11 +66,11 @@ msgstr "Objekt Rollen"
 
 #: ./opengever/task/actions/addlocalroles.py:30
 msgid "Parent Roles"
-msgstr ""
+msgstr "Rollen auf Parent"
 
 #: ./opengever/task/actions/addlocalroles.py:25
 msgid "Related Items Roles"
-msgstr ""
+msgstr "Rollen auf related Items"
 
 #: ./opengever/task/response.py:495
 msgid "Removed response id ${response_id}."
@@ -96,17 +96,12 @@ msgstr "Antwort ${response_id} ist keine Zahl"
 msgid "Task"
 msgstr "Aufgabe"
 
-#: ./opengever/task/profiles/default/types/opengever.task.taskoverview.xml
-#: ./opengever/task/profiles/default/types/opengever.task.taskoverview_solr.xml
-msgid "Taskoverview"
-msgstr "Auftragsübersicht"
-
 #: ./opengever/task/actions/addlocalroles.py:21
 msgid "The local roles to add."
-msgstr ""
+msgstr "Die lokalen Rollen"
 
 #. Default: "Title"
-#: ./opengever/task/browser/globaltasks.py:50
+#: ./opengever/task/browser/globaltasks.py:56
 msgid "Title"
 msgstr "Titel"
 
@@ -135,7 +130,7 @@ msgstr "Abbrechen"
 
 #. Default: "Continue"
 #: ./opengever/task/attachdocument.py:51
-#: ./opengever/task/browser/successor.py:57
+#: ./opengever/task/browser/successor.py:58
 msgid "button_continue"
 msgstr "Weiter"
 
@@ -150,9 +145,7 @@ msgid "cancel"
 msgstr "Abbrechen"
 
 #. Default: "Client"
-#: ./opengever/task/browser/globaltasks.py:45
-#: ./opengever/task/taskoverview.py:48
-#: ./opengever/task/taskoverview_solr.py:35
+#: ./opengever/task/browser/globaltasks.py:74
 msgid "client_id"
 msgstr "Kunde"
 
@@ -161,7 +154,7 @@ msgstr "Kunde"
 msgid "containing_task"
 msgstr "Übergeordnete Aufgabe"
 
-#: ./opengever/task/browser/globaltasks.py:58
+#: ./opengever/task/browser/globaltasks.py:64
 #: ./opengever/task/response.py:286
 msgid "date_of_completion"
 msgstr "Erledigungsdatum"
@@ -274,12 +267,12 @@ msgid "help_source_dossier"
 msgstr "Wählen Sie ein Dossier von ihrem Mandanten"
 
 #. Default: "Choose on which client to create the successor task."
-#: ./opengever/task/browser/successor.py:31
+#: ./opengever/task/browser/successor.py:32
 msgid "help_successor_target_client"
 msgstr "Wählen Sie den Mandanten aus, auf welchem die Folgeaufgabe erstellt werden soll."
 
 #. Default: "Select the target dossier on the client selected above."
-#: ./opengever/task/browser/successor.py:39
+#: ./opengever/task/browser/successor.py:40
 msgid "help_successor_target_dossier"
 msgstr "Wählen Sie das Dossier auf dem oben gewählten Mandanten aus, in welchem die Folgeaufgabe erstellt werden soll."
 
@@ -309,10 +302,12 @@ msgstr ""
 msgid "info_copied_related_documents"
 msgstr "Die mit dieser Aufgabe verknüpften Dokumente wurden in den Eingangskorb des Mandanten ${client} kopiert."
 
-msgid "issuedtasks"
-msgstr "In Auftrag gegebene Aufgaben"
+#. Default: "The successor task was created."
+#: ./opengever/task/browser/successor.py:94
+msgid "info_created_successor_task"
+msgstr "Die Folgeaufgabe wurde erstellt."
 
-msgid "issuedtasks_solr"
+msgid "issuedtasks"
 msgstr "In Auftrag gegebene Aufgaben"
 
 #. Default: "by ${author}"
@@ -332,8 +327,8 @@ msgid "label_date_of_completion"
 msgstr "Erledigungsdatum"
 
 #. Default: "Deadline"
-#: ./opengever/task/browser/globaltasks.py:55
-#: ./opengever/task/task.py:107
+#: ./opengever/task/browser/globaltasks.py:61
+#: ./opengever/task/task.py:108
 msgid "label_deadline"
 msgstr "Zu erledigen bis"
 
@@ -378,9 +373,7 @@ msgid "label_expectedStartOfWork"
 msgstr "Beginn der Arbeit"
 
 #. Default: "issued at"
-#: ./opengever/task/browser/globaltasks.py:42
-#: ./opengever/task/taskoverview.py:45
-#: ./opengever/task/taskoverview_solr.py:32
+#: ./opengever/task/browser/globaltasks.py:71
 msgid "label_issued_date"
 msgstr "Zugewiesen am"
 
@@ -427,9 +420,7 @@ msgid "label_responsible_Response"
 msgstr "Neuer Verantwortlicher"
 
 #. Default: "Responsible"
-#: ./opengever/task/browser/globaltasks.py:38
-#: ./opengever/task/taskoverview.py:41
-#: ./opengever/task/taskoverview_solr.py:28
+#: ./opengever/task/browser/globaltasks.py:67
 msgid "label_responsible_task"
 msgstr "Verantwortlich"
 
@@ -454,12 +445,12 @@ msgid "label_source_dossier"
 msgstr "Dossier"
 
 #. Default: "Target Dossier"
-#: ./opengever/task/browser/successor.py:38
+#: ./opengever/task/browser/successor.py:39
 msgid "label_successor_target_dossier"
 msgstr "Ziel-Dossier"
 
 #. Default: "Target client for successor task"
-#: ./opengever/task/browser/successor.py:29
+#: ./opengever/task/browser/successor.py:30
 msgid "label_sucessor_target_client"
 msgstr "Ziel-Mandant"
 
@@ -469,9 +460,8 @@ msgid "label_target_client"
 msgstr "Ziel-Mandant"
 
 #. Default: "Task Type"
+#: ./opengever/task/browser/globaltasks.py:59
 #: ./opengever/task/task.py:81
-#: ./opengever/task/taskoverview.py:37
-#: ./opengever/task/taskoverview_solr.py:23
 msgid "label_task_type"
 msgstr "Auftragstyp"
 
@@ -499,9 +489,6 @@ msgstr "Status"
 msgid "mytasks"
 msgstr "Meine Aufgaben"
 
-msgid "mytasks_solr"
-msgstr "Meine Aufgaben"
-
 #. Default: "No Content"
 #: ./opengever/task/task_templates/view.pt:113
 msgid "no_content"
@@ -527,8 +514,7 @@ msgid "responsible"
 msgstr "Verantwortlicher"
 
 #. Default: "Sequence Number"
-#: ./opengever/task/taskoverview.py:50
-#: ./opengever/task/taskoverview_solr.py:37
+#: ./opengever/task/browser/globaltasks.py:76
 msgid "sequence_number"
 msgstr "Laufnummer"
 
@@ -563,7 +549,7 @@ msgid "title_copy_releated_documents"
 msgstr "Verknüpfte Dokumente kopieren"
 
 #. Default: "Create successor task"
-#: ./opengever/task/browser/successor.py:54
+#: ./opengever/task/browser/successor.py:55
 msgid "title_create_successor_task"
 msgstr "Folgeaufgabe erstellen"
 

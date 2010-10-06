@@ -1,11 +1,12 @@
 from DateTime import DateTime
 from Products.CMFPlone.utils import getToolByName
+from Products.statusmessages.interfaces import IStatusMessage
 from five import grok
+from opengever.base.interfaces import IRedirector
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.ogds.base.interfaces import ITransporter
 from opengever.ogds.base.utils import remote_request
 from opengever.task import _
-from opengever.task.interfaces import ISuccessorTaskController
 from opengever.task.interfaces import ISuccessorTaskController
 from opengever.task.task import ITask
 from plone.directives import form
@@ -81,11 +82,19 @@ class SuccessorTaskForm(Form):
             for doc in self.get_documents():
                 trans.transport_to(doc, data['client'], target_task_path)
 
-            # redirect to target
+            # redirect to target in new window
             client = info.get_client_by_id(data['client'])
             target_url = os.path.join(client.public_url, target_task_path,
                                       '@@edit')
-            return self.request.RESPONSE.redirect(target_url)
+            redirector = IRedirector(self.request)
+            redirector.redirect(target_url, target='_blank')
+
+            # add status message and redirect current window back to task
+            IStatusMessage(self.request).addStatusMessage(
+                _(u'info_created_successor_task',
+                  u'The successor task was created.'), type='info')
+
+            return self.request.RESPONSE.redirect(self.context.absolute_url())
 
 
     def get_documents(self):
