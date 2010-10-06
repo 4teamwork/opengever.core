@@ -24,6 +24,8 @@ def settings(context):
     context.get('Members').setExcludeFromNav(True)
     context.get('Members').reindexObject()
 
+    # set default layout
+    context.get('aufgaben').setLayout('task-overview1')
     # set default page
     context.default_page = 'ordnungssystem'
 
