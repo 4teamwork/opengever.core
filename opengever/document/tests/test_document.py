@@ -54,8 +54,8 @@ class TestDocumentIntegration(PloneTestCase):
         history = pa.getHistoryMetadata(doc1)
 
         self.assertEquals(
-                history.getLength(doc1),
-                1)
+                len(pa.getHistoryMetadata(doc1)),
+                0)
 
         manager1 = ICheckinCheckoutManager(doc1)
         copy_of_doc1 = manager1.checkout('first checkout')
@@ -67,7 +67,7 @@ class TestDocumentIntegration(PloneTestCase):
                 pw.getInfoFor(copy_of_doc1, 'review_state'),
                 'working_copy')
         self.assertEquals(
-                history.getLength(doc1),
+                len(pa.getHistoryMetadata(doc1)),
                 1)
 
         manager2 = ICheckinCheckoutManager(copy_of_doc1)
@@ -77,15 +77,20 @@ class TestDocumentIntegration(PloneTestCase):
                 doc1,
                 doc1_)
         self.assertEquals(
-                history.getLength(doc1),
+                len(pa.getHistoryMetadata(doc1)),
                 2)
 
         copy2_of_doc1 = manager1.checkout('second checkout')
         manager3 = ICheckinCheckoutManager(copy2_of_doc1)
+
+        self.assertEquals(
+                len(pa.getHistoryMetadata(doc1)),
+                2)
+
         manager3.checkin('second checkin')
 
         self.assertEquals(
-                history.getLength(doc1),
+                len(pa.getHistoryMetadata(doc1)),
                 3)
 
 
