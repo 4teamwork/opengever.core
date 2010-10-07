@@ -22,6 +22,7 @@ class UsersVocabularyFactory(grok.GlobalUtility):
     hidden_terms = []
 
     def __call__(self, context):
+        self.context = context
         vocab = wrap_vocabulary(
                 ContactsVocabulary.create_with_provider(
                     self.key_value_provider))(context)
@@ -100,6 +101,7 @@ class AssignedUsersVocabularyFactory(grok.GlobalUtility):
     hidden_terms = []
 
     def __call__(self, context):
+        self.context = context
         vocab = wrap_vocabulary(
                 ContactsVocabulary.create_with_provider(
                     self.key_value_provider))(context)
@@ -123,6 +125,7 @@ class ContactsVocabularyFactory(grok.GlobalUtility):
     grok.name('opengever.ogds.base.ContactsVocabulary')
 
     def __call__(self, context):
+        self.context = context
         return ContactsVocabulary.create_with_provider(self.key_value_provider)
 
     def key_value_provider(self):
@@ -142,6 +145,7 @@ class ContactsAndUsersVocabularyFactory(grok.GlobalUtility):
     hidden_terms = []
 
     def __call__(self, context):
+        self.context = context
         vocab = wrap_vocabulary(
                 ContactsVocabulary.create_with_provider(
                     self.key_value_provider))(context)
@@ -173,6 +177,7 @@ class EmailContactsAndUsersVocabularyFactory(grok.GlobalUtility):
     hidden_terms = []
 
     def __call__(self, context):
+        self.context = context
         vocab = wrap_vocabulary(
                 ContactsVocabulary.create_with_provider(
                     self.key_value_provider))(context)
@@ -215,6 +220,7 @@ class ClientsVocabularyFactory(grok.GlobalUtility):
     grok.name('opengever.ogds.base.ClientsVocabulary')
 
     def __call__(self, context):
+        self.context = context
         vocab = ContactsVocabulary.create_with_provider(
             self.key_value_provider)
         return vocab
@@ -242,6 +248,7 @@ class AssignedClientsVocabularyFactory(grok.GlobalUtility):
     grok.name('opengever.ogds.base.AssignedClientsVocabulary')
 
     def __call__(self, context):
+        self.context = context
         vocab = ContactsVocabulary.create_with_provider(
             self.key_value_provider)
         return vocab
@@ -269,6 +276,7 @@ class OtherAssignedClientsVocabularyFactory(grok.GlobalUtility):
     grok.name('opengever.ogds.base.OtherAssignedClientsVocabulary')
 
     def __call__(self, context):
+        self.context = context
         vocab = ContactsVocabulary.create_with_provider(
             self.key_value_provider)
         return vocab
@@ -360,6 +368,7 @@ class DocumentInSelectedDossierVocabularyFactory(grok.GlobalUtility):
     grok.name('opengever.ogds.base.DocumentInSelectedDossierVocabulary')
 
     def __call__(self, context):
+        self.context = context
         request = getRequest()
         terms = []
 
