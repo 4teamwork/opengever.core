@@ -31,9 +31,20 @@ def index_task(obj, event):
     task.icon = obj.getIcon()
     task.responsible = obj.responsible
     task.issuer = obj.issuer
-    task.deadline = datetime(obj.deadline)
-    task.completed = datetime(obj.date_of_completion)
-    task.modified = datetime(obj.modified())
+
+    # we need to have python datetime objects for make it work with sqlite etc.
+    try:
+        task.deadline = datetime(obj.deadline)
+    except TypeError:
+        pass
+    try:
+        task.completed = datetime(obj.date_of_completion)
+    except TypeError:
+        pass
+    try:
+        task.modified = datetime(obj.modified())
+    except TypeError:
+        pass
 
     task.task_type = obj.task_type
     task.sequence_number = obj.sequence_number
