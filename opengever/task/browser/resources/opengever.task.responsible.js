@@ -5,21 +5,28 @@ jq(window).load(function() {
 
     /* for add / edit task and add / edit reponse: */
     $('#form-widgets-responsible_client').change(function(event) {
-        var url = $('#form-widgets-responsible-widgets-query').autocomplete(
-            'option', 'source').split('?')[0].concat('?client=').concat(
-                $(this).find('option:selected').attr('value'));
-
-        $('#form-widgets-responsible-widgets-query').autocomplete('option',
-                                                                  'source', url);
+        var url = $('#form-widgets-responsible-widgets-query')
+                .autocomplete('option', 'source').split('?')[0]
+                .concat('?client=')
+                .concat($(this).find('option:selected').attr('value'));
+        $('#form-widgets-responsible-widgets-query')
+                .autocomplete('option', 'source', url)
+                .focus();
+        $('#form-widgets-responsible-input-fields')
+                .find('span').remove();
     }).change();
 
     /* for creating a successor task: */
     $('#form-widgets-client').change(function(event) {
-        var url = $('#form-widgets-dossier-widgets-query').autocomplete(
-            'option', 'source').split('?')[0].concat('?client=').concat(
-                $(this).find('option:selected').attr('value'));
-        $('#form-widgets-dossier-widgets-query').autocomplete('option',
-                                                              'source', url);
+        var url = $('#form-widgets-dossier-widgets-query')
+                .autocomplete('option', 'source').split('?')[0]
+                .concat('?client=')
+                .concat($(this).find('option:selected').attr('value'));
+        $('#form-widgets-dossier-widgets-query')
+                .autocomplete('option', 'source', url)
+                .focus();
+        $('#form-widgets-dossier-input-fields')
+                .find('span').remove();
     }).change();
 
 });
