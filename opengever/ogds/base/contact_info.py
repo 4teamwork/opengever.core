@@ -290,7 +290,7 @@ class ContactInformation(grok.GlobalUtility):
             portal = getSite()
             user = self.get_user(principal)
             if user:
-                return '/'.join((portal.portal_url(), '@@user_details',
+                return '/'.join((portal.portal_url(), '@@user-details',
                                  user.userid))
             else:
                 # fallback with acl_users folder
