@@ -9,6 +9,8 @@
   <include package="z3c.autoinclude" file="meta.zcml" />
   <includeDependencies package="." />
 
+  <include package=".browser" />
+
   <genericsetup:registerProfile
       name="developer"
       title="opengever.examplecontent: Developer"
@@ -16,7 +18,7 @@
       description="create example content for developing "
       provides="Products.GenericSetup.interfaces.EXTENSION"
       />
-      
+
   <transmogrifier:registerConfig
       name="opengever.examplecontent.repository"
       title="Opengever ExampleContent Repositorysystem Import"
