@@ -1,8 +1,19 @@
-from Products.CMFPlone.utils import getToolByName
 from Products.CMFPlone.browser.admin import AddPloneSite
+from Products.CMFPlone.utils import getToolByName
 from opengever.ogds.base.interfaces import IClientConfiguration
+from opengever.ogds.base.utils import create_session
 from plone.registry.interfaces import IRegistry
 from zope.component import getUtility
+import opengever.globalindex.model
+import opengever.ogds.base.model
+
+
+SQL_BASES = (
+    opengever.ogds.base.model.client.Base,
+    opengever.ogds.base.model.user.Base,
+    opengever.globalindex.model.Base,
+    )
+
 
 
 class AddOpengeverClient(AddPloneSite):
@@ -17,20 +28,28 @@ class AddOpengeverClient(AddPloneSite):
     # these profiles will be installed automatically after setting
     # the client id
     additional_opengever_profiles = (
-        'opengever.examplecontent:developer',
         'opengever.ogds.base:example',
+        'opengever.examplecontent:developer',
         )
 
     default_clients = (('mandant1', 'Mandant 1'),
                ('mandant2', 'Mandant 2'))
 
     def __call__(self):
-        data = AddPloneSite.__call__(self)
-
         form = self.request.form
         submitted = form.get('form.submitted', False)
+
         if submitted:
-            # the form was submitted, the plone site is set up and ready
+            # drop sql tables
+            if form.get('drop_sql_tables'):
+                session = create_session()
+                for base in SQL_BASES:
+                    getattr(base, 'metadata').drop_all(session.bind)
+
+        # create the plone site with default method or render the template
+        data = AddPloneSite.__call__(self)
+
+        if submitted:
             site_id = form.get('site_id', 'Plone')
             site = self.context.get(site_id)
 
@@ -69,3 +88,10 @@ class AddOpengeverClient(AddPloneSite):
                 'value': client_id,
                 'label': '%s%s (%s)' % (used, title, client_id),
                 'selected': selected}
+
+    def default_drop_sql_tables(self):
+        """Decide whether to select the checkbox by default.
+        """
+
+        client_ids = [c[0] for c in self.default_clients]
+        return not set(self.context.objectIds()) & set(client_ids)

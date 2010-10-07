@@ -66,6 +66,27 @@
                       advanced request/advanced|nothing;">
 
       <div class="field">
+        <label for="drop_sql_tables" i18n:translate="">
+          Drop SQL tables
+        </label>
+
+        <div class="formHelp" i18n:translate="">
+          Drop all SQL tables. This should be done when reinstalling all
+          clients. Data such as users, clients and task indexes will be
+          lost!
+        </div>
+
+        <input type="checkbox" name="drop_sql_tables" id="drop_sql_tables"
+               tal:attributes="checked view/default_drop_sql_tables" />
+
+        <span i18n:translate="">
+          Should all SQL tables in the currently configured database
+          be removed?
+        </span>
+
+      </div>
+
+      <div class="field">
         <label for="client_id" i18n:translate="">
           Client ID
         </label>
@@ -109,8 +130,8 @@
 
         <div class="formHelp" />
 
-        <input type="checkbox" name="developer:boolean" checked="checked
-                                                                 " />
+        <input type="checkbox" name="developer:boolean" checked="checked"
+               id="developer" />
 
         <span i18n:translate="">
           Setup a developer installation with example content?
