@@ -3,7 +3,7 @@ from opengever.ogds.base import _
 from opengever.ogds.base.model.user import User
 from opengever.ogds.base.interfaces import IContactInformation
 from zope.component import getUtility
-from sqlalchemy import asc, desc
+from sqlalchemy import asc, desc, or_
 from five import grok
 
 
@@ -65,6 +65,14 @@ class UsersListing(OpengeverListingTab):
         # only display active users
         query = query.filter_by(active=True)
 
+        # search / filter
+        search_term = kwargs.get('SearchableText')
+        if search_term:
+            # do not use the catalogs default wildcards
+            if search_term.endswith('*'):
+                search_term = search_term[:-1]
+            query = self._advanced_search_query(query, search_term)
+
         # sorting
         sort_on = kwargs.get('sort_on', UsersListing.sort_on)
         sort_order = kwargs.get('sort_order', UsersListing.sort_order)
@@ -94,3 +102,36 @@ class UsersListing(OpengeverListingTab):
             list(xrange(full_length - start - result_length))
 
         self.len_results = len(self.contents)
+
+    def _advanced_search_query(self, query, search_term):
+        """Extend the given sql query object with the filters for searching
+        for the search_term in all visible columns.
+        When searching for multiple words the are splitted up and search
+        seperately (otherwise a search like "Boss Hugo" would have no results
+        because firstname and lastname are stored in seperate columns.)
+        """
+
+        model = User
+
+        # first lets lookup what fields (= sql columns) we have
+        fields = []
+        for column in self.columns:
+            colname = column['column']
+
+            if colname == 'fullname':
+                fields.append(model.firstname)
+                fields.append(model.lastname)
+
+            else:
+                field = getattr(model, colname, None)
+                if field:
+                    fields.append(field)
+
+        # lets split up the search term into words, extend them with the
+        # default wildcards and then search for every word seperately
+        for word in search_term.strip().split(' '):
+            term = '%%%s%%' % word
+
+            query = query.filter(or_(*[field.like(term) for field in fields]))
+
+        return query
