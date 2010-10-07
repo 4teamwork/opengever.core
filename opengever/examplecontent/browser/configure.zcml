@@ -10,4 +10,9 @@
       template="addsite.pt"
       />
 
+  <browser:resource
+      file="opengever-logo.png"
+      name="opengever-logo.png"
+      />
+
 </configure>
