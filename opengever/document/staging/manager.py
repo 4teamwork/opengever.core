@@ -154,7 +154,7 @@ class CheckinCheckoutManager(grok.Adapter):
         # update workflow states
         pw = context.portal_workflow
         pw.doActionFor(baseline, 'check_in')
-        baseline.reindexObject()
+        baseline.reindexObjectSecurity()
         # create status message
         if show_status_message:
             msg = _(u'Checked in: ${title}',
