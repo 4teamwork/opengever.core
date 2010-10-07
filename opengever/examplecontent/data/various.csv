@@ -1,8 +1,12 @@
-_path,_type,inbox_group,title,responsible,
+_path,_type,inbox_group,title,responsible,responsible_client,issuer,deadline
 /eingangskorb,opengever.inbox.inbox,og_mandant1_eingangskorb,Eingangskorb
 /vorlagen,opengever.dossier.templatedossier,,Vorlagen,franz.michel
-/kontakte,opengever.contact.contactfolder,,Kontakte,
+/kontakte,opengever.contact.contactfolder,,Kontakte
 /ordnungssystem/rechnungswesen/belege/hugos-dossier,opengever.dossier.businesscasedossier,,Hugo's Dossier,franz.michel
 /ordnungssystem/rechnungswesen/belege/hugos-dossier/subdossier,opengever.dossier.businesscasedossier,,Unterteilung in ein Subdossier,franz.michel
 /ordnungssystem/rechnungswesen/belege/hugos-dossier/opengever.document.document,opengever.document.document,,Ein kleines Testdocument, peter.muster
-/aufgaben,Folder,,Aufgaben,,
+/aufgaben,Folder,,Aufgaben
+/vorlagen/beispiel-standardablauf,opengever.tasktemplates.tasktemplatefolder,,Beispiel Standardablauf
+/vorlagen/beispiel-standardablauf/tt1,opengever.tasktemplates.tasktemplate,,Aufgabe eins,interactive_users,responsible,responsible,4
+/vorlagen/beispiel-standardablauf/tt2,opengever.tasktemplates.tasktemplate,,Aufgabe zwei,interactive_users,responsible,current_user,4
+/vorlagen/beispiel-standardablauf/tt3,opengever.tasktemplates.tasktemplate,,Aufgabe drei,interactive_users,current_user,current_user,4

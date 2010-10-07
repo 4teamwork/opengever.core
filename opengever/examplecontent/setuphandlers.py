@@ -16,13 +16,15 @@ def start_import(context):
     # transaction.commit()
 
 def settings(context):
+    # remove stuff we dont want
+    default_remove_ids = ('news', 'events', 'front-page')
+    ids_to_remove = list(set(default_remove_ids) & set(context.objectIds()))
+    context.manage_delObjects(ids_to_remove)
+
     # exclude items from the navigation we not used
-    context.get('news').setExcludeFromNav(True)
-    context.get('news').reindexObject()
-    context.get('events').setExcludeFromNav(True)
-    context.get('events').reindexObject()
-    context.get('Members').setExcludeFromNav(True)
-    context.get('Members').reindexObject()
+    if context.get('Members'):
+        context.get('Members').setExcludeFromNav(True)
+        context.get('Members').reindexObject()
 
     # set default layout
     context.get('aufgaben').setLayout('task-overview1')
