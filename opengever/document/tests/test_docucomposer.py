@@ -52,7 +52,7 @@ class TestDocucomposer(PloneTestCase):
                                name=u'create_document_with_file')
 
         url = view.render()
-        doc = self.folder['opengever.document.document']
+        doc = self.folder['document-1']
         self.assertEquals(url, doc.absolute_url())
 
 

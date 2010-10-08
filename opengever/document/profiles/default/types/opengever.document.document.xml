@@ -30,6 +30,7 @@
     <element value="opengever.document.behaviors.IRelatedDocuments" />
     <element value="plone.stagingbehavior.interfaces.IStagingSupport" />
     <element value="plone.versioningbehavior.behaviors.IVersionable" />
+    <element value="opengever.document.behaviors.IDocumentNameFromTitle" />
     <!-- <element value="collective.filepreviewbehavior.interfaces.IPreviewable" /> -->
     <element value="opengever.trash.trash.ITrashable" />
   </property>

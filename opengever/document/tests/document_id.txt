@@ -1,0 +1,40 @@
+The document ID needs to be in following format:
+"document-{sequence number}"
+
+
+    >>> from plone.dexterity.utils import createContentInContainer
+    >>> from opengever.base.interfaces import ISequenceNumber
+    >>> from zope.component import getUtility
+    >>> from plone.app.testing import TEST_USER_NAME, setRoles
+
+
+Create a user folder for testing in
+    >>> portal = layer['portal']
+    >>> setRoles(portal, TEST_USER_NAME, ['Manager'])
+    >>> portal.invokeFactory('Folder', 'test-folder')
+    'test-folder'
+    >>> setRoles(portal, TEST_USER_NAME, ['Member'])
+    >>> folder = portal['test-folder']
+    >>> folder
+    <ATFolder at /plone/test-folder>
+
+Create a document:
+
+    >>> doc1 = createContentInContainer(folder, 'opengever.document.document')
+    >>> doc1
+    peter
+    >>> doc1.id
+    'document-1'
+    >>> getUtility(ISequenceNumber).get_number(doc1)
+    1
+
+Create another document:
+
+    >>> doc2 = createContentInContainer(folder, 'opengever.document.document')
+    >>> doc2
+    hans
+    >>> doc2.id
+    'document-2'
+    >>> getUtility(ISequenceNumber).get_number(doc2)
+    2
+

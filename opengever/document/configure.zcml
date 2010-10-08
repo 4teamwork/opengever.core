@@ -7,34 +7,34 @@
     xmlns:browser="http://namespaces.zope.org/browser"
     i18n_domain="opengever.document">
 
-    
+
     <!-- Include configuration for dependencies listed in setup.py -->
     <includeDependencies package="." />
 
     <!-- Grok the package to initialise schema interfaces and content classes -->
     <grok:grok package="." />
 
-    <browser:resourceDirectory 
+    <browser:resourceDirectory
         name="opengever.document"
         directory="static"
-    /> 
+        />
 
     <!-- Include custom permissions -->
     <include file="permissions.zcml" />
 
-	<include file="profiles.zcml" />
-	
-	<include package=".viewlets" />
+    <include file="profiles.zcml" />
+
+    <include package=".viewlets" />
 
     <!-- Register locales translations -->
     <i18n:registerTranslations directory="locales" />
 
     <browser:page
-            name="send_documents_as_email"
-            for="plone.dexterity.interfaces.IDexterityContent"
-            class=".mailing.SendAsEmail"
-            template="document_templates/sendasemail.pt"
-            permission="zope2.View" />
+        name="send_documents_as_email"
+        for="plone.dexterity.interfaces.IDexterityContent"
+        class=".mailing.SendAsEmail"
+        template="document_templates/sendasemail.pt"
+        permission="zope2.View" />
 
     <!-- Related doucments (marker) -->
     <plone:behavior
@@ -42,6 +42,15 @@
         description="Adds the ability to assign related documents"
         provides=".behaviors.IRelatedDocuments"
         factory="plone.behavior.AnnotationStorage"
+        for="opengever.document.document.IDocumentSchema"
+        />
+
+    <!-- name from title beahvior -->
+    <plone:behavior
+        title="document name from title"
+        description=""
+        provides="opengever.document.behaviors.IDocumentNameFromTitle"
+        factory=".behaviors.DocumentNameFromTitle"
         for="opengever.document.document.IDocumentSchema"
         />
 
