@@ -2,6 +2,7 @@ from AccessControl.PermissionRole import rolesForPermissionOn
 from Products.CMFCore.permissions import View
 from Products.CMFCore.utils import _mergedLocalRoles
 from datetime import datetime
+from opengever.base.interfaces import ISequenceNumber
 from opengever.globalindex import Session
 from opengever.globalindex.model.task import Task
 from opengever.ogds.base.utils import get_client_id
@@ -47,7 +48,7 @@ def index_task(obj, event):
         pass
 
     task.task_type = obj.task_type
-    task.sequence_number = obj.sequence_number
+    task.sequence_number = getUtility(ISequenceNumber).get_number(obj)
 
     task.assigned_client = obj.responsible_client
 
