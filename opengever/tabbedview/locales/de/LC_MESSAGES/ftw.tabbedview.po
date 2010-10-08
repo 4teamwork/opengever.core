@@ -91,9 +91,6 @@ msgstr "Allgemein"
 msgid "issuedtasks"
 msgstr "Erteilte Aufgaben"
 
-msgid "issuedtasks_solr"
-msgstr "Erteilte Aufgaben"
-
 msgid "issuer"
 msgstr "Zugewiesen von"
 
@@ -116,9 +113,6 @@ msgid "modified"
 msgstr "Änderungsdatum"
 
 msgid "mytasks"
-msgstr "Meine Aufgaben"
-
-msgid "mytasks_solr"
 msgstr "Meine Aufgaben"
 
 #: opengever.tabbedview/opengever/tabbedview/browser/tabs_templates/overview.pt:17
