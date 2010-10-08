@@ -292,16 +292,6 @@ grok.global_adapter(filing_no, name="filing_no")
 
 
 @indexer(IDossierMarker)
-def reference_number(obj):
-    try:
-        refNumb = getAdapter(obj, IReferenceNumber)
-    except ComponentLookupError:
-        return ''
-    else:
-        return refNumb.get_number()
-
-
-@indexer(IDossierMarker)
 def SearchableText(obj):
     """searchableText indexer"""
     context = aq_inner(obj)

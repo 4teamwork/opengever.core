@@ -26,6 +26,6 @@ class OpenDossiersAsJSONView(grok.CodeView):
                     'title': str(safe_unicode(
                             brain.Title).encode('utf8')),
                     'review_state': str(brain.review_state),
-                    'reference_number': str(brain.reference_number),
+                    'reference_number': str(brain.reference),
                     })
         return json.dumps(data)
