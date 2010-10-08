@@ -189,13 +189,6 @@ def default_issuer(data):
     return member.getId()
 
 
-@grok.subscribe(ITask, IObjectCreatedEvent)
-def setID(task, event):
-    task.id = "task-%s" % getUtility(ISequenceNumber).get_number(task)
-    nr = getUtility(ISequenceNumber).get_number(task)
-    task._sequence_number = nr
-
-
 class Task(Container):
     implements(ITask)
 

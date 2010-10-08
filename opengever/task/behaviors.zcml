@@ -5,7 +5,7 @@
     i18n_domain="collective.gtags">
 
     <include package="plone.behavior" file="meta.zcml" />
-    
+
     <include package="plone.directives.form" file="meta.zcml" />
     <include package="plone.directives.form" />
 
@@ -16,6 +16,15 @@
         factory=".behaviors.Transition"
         marker=".behaviors.ITransitionMarker"
         for="plone.dexterity.interfaces.IDexterityContent"
+        />
+
+    <!-- name from title beahvior -->
+    <plone:behavior
+        title="task name from title"
+        description=""
+        provides="opengever.task.behaviors.ITaskNameFromTitle"
+        factory=".behaviors.TaskNameFromTitle"
+        for="opengever.task.task.ITask"
         />
 
 </configure>
