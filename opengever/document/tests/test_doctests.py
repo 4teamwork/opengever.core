@@ -1,24 +1,44 @@
+from Products.PloneTestCase import ptc
+from Testing import ZopeTestCase
+from opengever.document.tests import layer
 import doctest
-from plone.testing import layered
-import unittest2 as unittest
-from opengever.document.testing import OPENGEVER_DOCUMENT_INTEGRATION_TESTING
+import unittest
 
 
-OPTIONFLAGS = (doctest.NORMALIZE_WHITESPACE|
-               doctest.ELLIPSIS|
-               doctest.REPORT_NDIFF)
+MODULENAMES = ()
 
 
 TESTFILES = (
-#     'document_id.txt',
+    'document_id.txt',
     )
 
 
+OPTIONFLAGS = (doctest.NORMALIZE_WHITESPACE |
+               doctest.ELLIPSIS |
+               doctest.REPORT_NDIFF)
+
 
 def test_suite():
+
     suite = unittest.TestSuite()
-    suite.addTests([layered(doctest.DocFileSuite(filename,
-                                                 optionflags=OPTIONFLAGS),
-                            layer=OPENGEVER_DOCUMENT_INTEGRATION_TESTING)
-                    for filename in TESTFILES])
+
+    for testfile in TESTFILES:
+        fdfs = ZopeTestCase.FunctionalDocFileSuite(
+            testfile,
+            optionflags=OPTIONFLAGS,
+            test_class=ptc.FunctionalTestCase,)
+        fdfs.layer = layer.IntegrationTestLayer
+        suite.addTest(fdfs)
+
+    for module in MODULENAMES:
+        fdts = ZopeTestCase.FunctionalDocTestSuite(
+            module,
+            optionflags=OPTIONFLAGS,
+            test_class=ptc.FunctionalTestCase)
+        fdts.layer = layer.layer
+        suite.addTest(fdts)
+
     return suite
+
+if __name__ == '__main__':
+    unittest.main(defaultTest='test_suite')

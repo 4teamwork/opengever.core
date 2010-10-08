@@ -7,22 +7,11 @@ The document ID needs to be in following format:
     >>> from zope.component import getUtility
     >>> from plone.app.testing import TEST_USER_NAME, setRoles
 
-
-Create a user folder for testing in
-    >>> portal = layer['portal']
-    >>> setRoles(portal, TEST_USER_NAME, ['Manager'])
-    >>> portal.invokeFactory('Folder', 'test-folder')
-    'test-folder'
-    >>> setRoles(portal, TEST_USER_NAME, ['Member'])
-    >>> folder = portal['test-folder']
-    >>> folder
-    <ATFolder at /plone/test-folder>
-
 Create a document:
 
     >>> doc1 = createContentInContainer(folder, 'opengever.document.document')
     >>> doc1
-    peter
+    <Document at /plone/Members/test_user_1_/document-1>
     >>> doc1.id
     'document-1'
     >>> getUtility(ISequenceNumber).get_number(doc1)
@@ -32,7 +21,7 @@ Create another document:
 
     >>> doc2 = createContentInContainer(folder, 'opengever.document.document')
     >>> doc2
-    hans
+    <Document at /plone/Members/test_user_1_/document-2>
     >>> doc2.id
     'document-2'
     >>> getUtility(ISequenceNumber).get_number(doc2)
