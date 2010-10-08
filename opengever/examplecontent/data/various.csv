@@ -2,9 +2,9 @@ _path,_type,inbox_group,title,responsible,responsible_client,issuer,deadline
 /eingangskorb,opengever.inbox.inbox,og_mandant1_eingangskorb,Eingangskorb
 /vorlagen,opengever.dossier.templatedossier,,Vorlagen,franz.michel
 /kontakte,opengever.contact.contactfolder,,Kontakte
-/ordnungssystem/rechnungswesen/belege/hugos-dossier,opengever.dossier.businesscasedossier,,Hugo's Dossier,franz.michel
-/ordnungssystem/rechnungswesen/belege/hugos-dossier/subdossier,opengever.dossier.businesscasedossier,,Unterteilung in ein Subdossier,franz.michel
-/ordnungssystem/rechnungswesen/belege/hugos-dossier/opengever.document.document,opengever.document.document,,Ein kleines Testdocument, peter.muster
+/ordnungssystem/rechnungswesen/belege/dossier-1,opengever.dossier.businesscasedossier,,Hugo's Dossier,franz.michel
+/ordnungssystem/rechnungswesen/belege/dossier-1/dossier-2,opengever.dossier.businesscasedossier,,Unterteilung in ein Subdossier,franz.michel
+/ordnungssystem/rechnungswesen/belege/dossier-1/document-1,opengever.document.document,,Ein kleines Testdocument,
 /aufgaben,Folder,,Aufgaben
 /vorlagen/beispiel-standardablauf,opengever.tasktemplates.tasktemplatefolder,,Beispiel Standardablauf
 /vorlagen/beispiel-standardablauf/tt1,opengever.tasktemplates.tasktemplate,,Aufgabe eins,interactive_users,responsible,responsible,4
