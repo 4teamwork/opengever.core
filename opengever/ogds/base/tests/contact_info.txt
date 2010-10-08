@@ -116,10 +116,10 @@ User tests:
     u'hugo@private.ch'
 
     >>> info.get_profile_url('hugo.boss')
-    u'http://nohost/plone/@@user_details/hugo.boss'
+    u'http://nohost/plone/@@user-details/hugo.boss'
 
     >>> info.render_link('hugo.boss')
-    u'<a href="http://nohost/plone/@@user_details/hugo.boss">Boss Hugo</a>'
+    u'<a href="http://nohost/plone/@@user-details/hugo.boss">Boss Hugo</a>'
 
 
 Contacts tests:
