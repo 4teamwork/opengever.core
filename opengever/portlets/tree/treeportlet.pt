@@ -8,20 +8,9 @@
     </dt>
 
     <dd class="portletItem odd">
-        <ul id="tree" class="filetree">
-            <div tal:content="structure python: here.unrestrictedTraverse('tree').render()" /> 
+        <ul class="filetree">
+            <div tal:content="structure python: here.unrestrictedTraverse('tree').render(view.root_path())" /> 
         </ul>
-        <script type="text/javascript">
-            jq(function() {
-            	var tree = jq("#tree").treeview({
-            		collapsed: true,
-            		animated: "fast",
-            		persist: "cookie",
-            		cookieId: "opengever-treeview"
-            	});
-
-            });
-        </script>
     </dd>
 
     <!--<dd class="portletFooter">

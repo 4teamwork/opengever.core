@@ -26,7 +26,7 @@ class ITreePortlet(IPortletDataProvider):
     root_path = schema.TextLine(
         title=u"Root Path",
         description=u"the path to the repositoryroot",
-        required=True)
+        required=False)
 
 
 class Assignment(base.Assignment):
