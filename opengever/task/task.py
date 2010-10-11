@@ -515,6 +515,6 @@ def SearchableText(obj):
     userid = obj.portal_membership.getMemberById(task.responsible).getId()
     searchable.append(info.describe(userid))
 
-    return ' '.join(searchable)
+    return ' '.join(searchable).encode('utf-8')
 
 grok.global_adapter(SearchableText, name='SearchableText')
