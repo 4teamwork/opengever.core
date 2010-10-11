@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vdex xmlns="http://www.imsglobal.org/xsd/imsvdex_v1p0"
+      orderSignificant="false" language="en">
+    <vocabIdentifier>opengever.task.bidirectional_by_reference</vocabIdentifier>
+
+    <term>
+        <termIdentifier>comment</termIdentifier>
+        <caption>
+            <langstring language="en">To comment</langstring>
+            <langstring language="de">Zur Stellungnahme</langstring>
+        </caption>
+    </term>
+    <term>
+        <termIdentifier>approval</termIdentifier>
+        <caption>
+            <langstring language="en">For approval</langstring>
+            <langstring language="de">Zur Genehmigung</langstring>
+        </caption>
+    </term>
+    <term>
+        <termIdentifier>correction</termIdentifier>
+        <caption>
+            <langstring language="en">For confirmation / correction</langstring>
+            <langstring language="de">Zur Prüfung / Korrektur</langstring>
+        </caption>
+    </term>
+    <term>
+        <termIdentifier>report</termIdentifier>
+        <caption>
+            <langstring language="en">To report / request</langstring>
+            <langstring language="de">Zum Bericht / Antrag</langstring>
+        </caption>
+    </term>
+
+</vdex>

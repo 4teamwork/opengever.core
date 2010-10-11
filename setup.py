@@ -44,7 +44,7 @@ setup(name='opengever.task',
         'opengever.ogds.base',
         'opengever.globalindex',
         'five.globalrequest',
-        # -*- Extra requirements: -*-
+        'collective.vdexvocabulary',
         ],
       tests_require=tests_require,
       extras_require = dict(tests=tests_require),

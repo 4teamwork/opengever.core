@@ -221,14 +221,14 @@ class Task(Container):
     def task_type_category(self):
         registry = getUtility(IRegistry)
         reg_proxy = registry.forInterface(ITaskSettings)
-        if self.task_type in reg_proxy.task_types_uni_ref:
-            return u'uni_ref'
-        elif self.task_type in reg_proxy.task_types_uni_val:
-            return u'uni_val'
-        elif self.task_type in reg_proxy.task_types_bi_ref:
-            return u'bi_ref'
-        elif self.task_type in reg_proxy.task_types_bi_val:
-            return u'bi_val'
+        if self.task_type in reg_proxy.unidirectional_by_reference:
+            return u'unidirectional_by_reference'
+        elif self.task_type in reg_proxy.unidirectional_by_value:
+            return u'unidirectional_by_value'
+        elif self.task_type in reg_proxy.bidirectional_by_reference:
+            return u'bidirectional_by_reference'
+        elif self.task_type in reg_proxy.bidirectional_by_value:
+            return u'bidirectional_by_value'
         return None
 
 

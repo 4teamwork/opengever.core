@@ -35,40 +35,45 @@ class ICreateResponse(Interface):
 
 class ITaskSettings(Interface):
 
-    task_types_uni_ref = schema.List(
-        title = u'Task Types Unidirectional by Reference',
-        description = u'',
-        default = [u'Zur Kenntnisnahme',],
-        value_type = schema.TextLine(title=u"Name"),
-        required = False,
-    )
-    
     crop_length = schema.Int(title=u"Crop length", default=20)
 
-    task_types_uni_val = schema.List(
-        title = u'Unidirectional by Value',
+    unidirectional_by_reference = schema.List(
+        title = u'Task Types Unidirectional by Reference',
         description = u'',
-        default = [u'Zur direkten Erledigung',],
-        value_type = schema.TextLine(title=u"Name"),
-        required = False,
-    )
-        
-    task_types_bi_ref = schema.List(
-        title = u'Bidirectional by Reference',
-        description = u'',
-        default = [u'Zur Stellungnahme',
-                   u'Zur Genehmigung',
-                   u'Zur Pruefung/Korrektur',
-                   u'Zum Bericht/Antrag',],
-        value_type = schema.TextLine(title=u"Name"),
+        value_type=schema.Choice(
+            title=u"Name",
+            vocabulary=u'opengever.task.unidirectional_by_reference',
+        ),
         required = False,
     )
 
-    task_types_bi_val = schema.List(
+    unidirectional_by_value = schema.List(
+        title = u'Unidirectional by Value',
+        description = u'',
+        value_type=schema.Choice(
+            title=u"Name",
+            vocabulary=u'opengever.task.unidirectional_by_value',
+        ),
+        required = False,
+    )
+
+    bidirectional_by_reference = schema.List(
+        title = u'Bidirectional by Reference',
+        description = u'',
+        value_type=schema.Choice(
+            title=u"Name",
+            vocabulary=u'opengever.task.bidirectional_by_reference',
+        ),
+        required = False,
+    )
+
+    bidirectional_by_value = schema.List(
         title = u'Bidirectional by Value',
         description = u'',
-        default = [],
-        value_type = schema.TextLine(title=u'Name'),
+        value_type=schema.Choice(
+            title=u"Name",
+            vocabulary=u'opengever.task.bidirectional_by_value',
+        ),
         required = False,
     )
 

@@ -9,6 +9,7 @@ from Products.CMFPlone import PloneMessageFactory as PMF
 
 from zope.component import getUtility
 from plone.registry.interfaces import IRegistry
+from collective.elephantvocabulary import wrap_vocabulary
 from opengever.task.interfaces import ITaskSettings
 
 import opengever.task
@@ -67,13 +68,18 @@ def create_sequence_number(obj, key='task_sequence_number'):
     portal_annotations[key] = sequence_number
     return sequence_number
 
+
 @grok.provider(IContextSourceBinder)
 def getTaskTypeVocabulary(context):
-    registry = getUtility(IRegistry)
-    reg_proxy = registry.forInterface(ITaskSettings)
-    types = reg_proxy.task_types_uni_ref + reg_proxy.task_types_uni_val +\
-            reg_proxy.task_types_bi_ref + reg_proxy.task_types_bi_val
     terms = []
-    for task_type in types:
-        terms.append(SimpleVocabulary.createTerm(task_type, task_type, task_type))
+    for task_type in ['unidirectional_by_reference',
+                      'unidirectional_by_value',
+                      'bidirectional_by_reference',
+                      'bidirectional_by_value']:
+        for term in wrap_vocabulary('opengever.task.'+task_type,
+                visible_terms_from_registry=\
+                    'opengever.task.interfaces.ITaskSettings.' + \
+                        task_type)(context):
+            terms.append(term)
     return SimpleVocabulary(terms)
+
