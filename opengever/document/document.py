@@ -349,7 +349,7 @@ def SearchableText( obj ):
             data = " ".join([str(a) for a in data])
         if data:
             searchable.append(data)
-    return ' '.join(searchable)
+    return ' '.join(searchable).encode('utf-8')
 
 grok.global_adapter(SearchableText, name='SearchableText')
 
