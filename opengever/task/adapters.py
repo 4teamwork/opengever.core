@@ -1,21 +1,21 @@
-from five import grok
-from zope.annotation.interfaces import IAnnotations
-from zope.app.container.contained import ObjectRemovedEvent
-from zope.app.container.contained import ObjectAddedEvent
-from zope.app.container.interfaces import UnaddableError
-from zope.event import notify
-from zope.interface import implements
-from zope.interface import Attribute
-from zope.interface import Interface
-from zope.component import getUtility
-
-from persistent import Persistent
-from persistent.list import PersistentList
 from AccessControl import getSecurityManager
 from DateTime import DateTime
-
-from opengever.task.task import ITask
+from five import grok
+from ftw.contentmenu.interfaces import IContentmenuPostFactoryMenu
 from opengever.ogds.base.interfaces import IContactInformation
+from opengever.task.task import ITask
+from opengever.task import _
+from persistent import Persistent
+from persistent.list import PersistentList
+from zope.annotation.interfaces import IAnnotations
+from zope.app.container.contained import ObjectAddedEvent
+from zope.app.container.contained import ObjectRemovedEvent
+from zope.app.container.interfaces import UnaddableError
+from zope.component import getUtility
+from zope.event import notify
+from zope.interface import Attribute
+from zope.interface import Interface
+from zope.interface import implements
 
 
 class IResponseContainer(Interface):
@@ -153,3 +153,26 @@ class EmptyExporter(object):
 
     def export(self, export_context, subdir, root=False):
         return
+
+
+class TaskPostFactoryMenu(grok.MultiAdapter):
+    """If a task is added to another task, it is called subtask. So we need
+    to change the name of the task in the add-menu if we are in a task.
+    """
+
+    grok.adapts(ITask, Interface)
+    grok.implements(IContentmenuPostFactoryMenu)
+
+    def __init__(self, context, request):
+        self.context = context
+        self.request = request
+
+    def __call__(self, factories):
+        if not ITask.providedBy(self.context):
+            # use default
+            return factories
+
+        for factory in factories:
+            if factory['title'] == u'Task':
+                factory['title'] = _(u'Subtask')
+        return factories
