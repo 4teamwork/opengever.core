@@ -16,7 +16,7 @@ from plone.dexterity.content import Container
 from plone.dexterity.interfaces import IDexterityFTI
 from plone.directives import form, dexterity
 from plone.formwidget import autocomplete
-from plone.formwidget.autocomplete import AutocompleteFieldWidget
+from opengever.ogds.base.autocomplete_widget import AutocompleteFieldWidget
 from plone.indexer import indexer
 from plone.registry.interfaces import IRegistry
 from plone.z3cform.traversal import FormWidgetTraversal
