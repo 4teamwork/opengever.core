@@ -11,7 +11,7 @@ from zope.app.container.interfaces import IObjectMovedEvent
 from plone.autoform.interfaces import IFormFieldProvider
 from plone.directives import form
 from plone.z3cform.textlines.textlines import TextLinesFieldWidget
-from plone.formwidget.autocomplete import AutocompleteFieldWidget
+from opengever.ogds.base.autocomplete_widget import AutocompleteFieldWidget
 from plone.indexer import indexer
 from plone.namedfile.interfaces import INamedFileField
 from plone.registry.interfaces import IRegistry
