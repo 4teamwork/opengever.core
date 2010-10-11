@@ -26,7 +26,6 @@ from zope import schema
 from zope.component import getUtility, queryUtility
 from zope.component import queryMultiAdapter, getMultiAdapter
 from zope.interface import implements, Interface
-from zope.lifecycleevent.interfaces import IObjectCreatedEvent
 from zope.publisher.interfaces.browser import IBrowserRequest, IBrowserPage
 from zope.traversing.interfaces import ITraversable
 
