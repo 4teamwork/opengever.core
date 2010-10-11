@@ -24,8 +24,10 @@ class AutocompleteSelectionWidget(widget.AutocompleteSelectionWidget):
             assert ISource.providedBy(source)
 
             # custom
-            if IElephantVocabulary.providedBy(source):
-                value = getattr(self.field.interface(self.context), self.field.__name__)
+            if IElephantVocabulary.providedBy(source) and \
+                    self.field.interface.providedBy(self.context):
+                value = getattr(self.field.interface(self.context),
+                                self.field.__name__)
                 if value and value not in source.vocab:
                     contact_info = getUtility(IContactInformation)
                     term = source.vocab.createTerm(value, value,
