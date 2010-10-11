@@ -29,6 +29,7 @@
     <property name="behaviors">
         <element value="opengever.tabbedview.interfaces.ITabbedViewEnabled" />
         <element value="opengever.trash.trash.ITrashable" />
+        <element value="opengever.task.behaviors.ITaskNameFromTitle" />
     </property>
 
     <!-- View information -->
