@@ -79,7 +79,6 @@ class IDossier(form.Schema):
             u'comments',
             u'responsible',
             u'relatedDossier',
-            u'former_reference_number',
             ],
         )
 
@@ -370,21 +369,12 @@ def set_former_reference_after_moving(obj, event):
     repr = IDossier(obj)
     IDossier['former_reference_number'].set(repr, old_obj_rn)
 
-    from z3c.form.interfaces import IValue
-    from zope.component import queryMultiAdapter
+    # setting the new number
+    parent= aq_parent(aq_inner(obj))
+    prefix_adapter = IReferenceNumberPrefix(parent)
+    prefix_adapter.set_number(obj)
 
-    default = queryMultiAdapter((
-        obj,
-        obj.REQUEST, # request
-        None, # form
-        IReferenceNumber.get('reference_number'),
-        None, # Widget
-        ), IValue, name='default')
-    if default!=None:
-        default = default.get()
-        IReferenceNumber.get('reference_number').set(
-            IReferenceNumber(obj), default)
-
+    obj.reindexObject(idxs=['reference'])
 
 @grok.subscribe(IDossierMarker, IObjectAddedEvent)
 def saveReferenceNumberPrefix(obj, event):
@@ -392,3 +382,4 @@ def saveReferenceNumberPrefix(obj, event):
     prefix_adapter = IReferenceNumberPrefix(parent)
     if not prefix_adapter.get_number(obj):
         prefix_adapter.set_number(obj)
+    obj.reindexObject(idxs=['reference'])
