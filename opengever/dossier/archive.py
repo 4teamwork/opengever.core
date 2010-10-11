@@ -199,7 +199,7 @@ class ArchiveForm(directives_form.Form):
                 self.context.filing_no = filing_no
                 
                 # set the dossier end date
-                IDossier(self.context).end = data.get('end')
+                IDossier(self.context).end = data.get('dossier_enddate')
 
                 # create filing number for all subdossiers
                 subdossiers = self.context.portal_catalog(
