@@ -13,7 +13,6 @@ from opengever.translations.browser.add import TranslatedAddForm
 from plone.app.dexterity.behaviors.metadata import IBasic
 from plone.autoform.interfaces import IFormFieldProvider
 from plone.directives import form
-from plone.z3cform.textlines.textlines import TextLinesFieldWidget
 from opengever.ogds.base.autocomplete_widget import AutocompleteFieldWidget
 from plone.formwidget.contenttree import ObjPathSourceBinder
 from plone.indexer import indexer
@@ -25,7 +24,6 @@ from zope import schema
 from zope.app.container.interfaces import IObjectAddedEvent
 from zope.app.container.interfaces import IObjectMovedEvent
 from zope.component import queryUtility, getAdapter, getUtility
-from zope.component.interfaces import ComponentLookupError
 from zope.interface import Interface, alsoProvides
 from zope.interface import invariant, Invalid
 from zope.schema.interfaces import IContextSourceBinder
