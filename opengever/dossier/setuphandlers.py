@@ -29,8 +29,7 @@ def add_catalog_indexes(context, logger=None):
     catalog = getToolByName(context, 'portal_catalog')
     indexes = catalog.indexes()
     # Specify the indexes you want, with ('index_name', 'index_type')
-    wanted = (('reference_number','FieldIndex'),
-              ('is_subdossier','FieldIndex'),
+    wanted = (('is_subdossier','FieldIndex'),
               ('filing_no','FieldIndex'),
               )
     indexables = []
