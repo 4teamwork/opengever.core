@@ -31,5 +31,13 @@
       for="plone.dexterity.interfaces.IDexterityContent"
       />
 
+    <!-- name from title beahvior -->
+    <plone:behavior
+        title="dossier name from title"
+        description=""
+        provides=".behaviors.dossiernamefromtitle.IDossierNameFromTitle"
+        factory=".behaviors.dossiernamefromtitle.DossierNameFromTitle"
+        for="opengever.dossier.behaviors.dossier.IDossierMarker"
+        />
 
 </configure>

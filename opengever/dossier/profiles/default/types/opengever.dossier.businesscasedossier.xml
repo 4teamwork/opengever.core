@@ -24,7 +24,7 @@
 
   <!-- add permission -->
   <property name="add_permission">opengever.dossier.AddBusinessCaseDossier</property>
-  
+
   <!-- enabled behaviors -->
   <property name="behaviors">
     <element value="opengever.base.behaviors.base.IOpenGeverBase" />
@@ -37,6 +37,7 @@
     <element value="plone.app.content.interfaces.INameFromTitle" />
     <element value="opengever.tabbedview.interfaces.ITabbedViewEnabled" />
     <element value="opengever.trash.trash.ITrashable" />
+    <element value="opengever.dossier.behaviors.dossiernamefromtitle.IDossierNameFromTitle" />
   </property>
 
   <!-- View information -->

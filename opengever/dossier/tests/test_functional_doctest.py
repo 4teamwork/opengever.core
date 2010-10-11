@@ -10,6 +10,7 @@ MODULENAMES = ()
 
 TESTFILES = (
     'resolve.txt',
+    'dossier_ids.txt',
     )
 
 

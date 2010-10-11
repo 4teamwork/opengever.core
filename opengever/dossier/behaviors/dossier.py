@@ -1,39 +1,37 @@
-import logging
-
-from five import grok
-from datetime import datetime
 from Acquisition import aq_inner, aq_parent
-from opengever.dossier import _
 from Products.CMFCore.utils import getToolByName
 from ZODB.POSException import ConflictError
-from zope.app.container.interfaces import IObjectMovedEvent
-
+from datetime import datetime
+from five import grok
+from opengever.base.interfaces import IReferenceNumber, ISequenceNumber
+from opengever.base.interfaces import IReferenceNumberPrefix
+from opengever.dossier import _
+from opengever.dossier.interfaces import IDossierContainerTypes
+from opengever.dossier.widget import referenceNumberWidgetFactory
+from opengever.ogds.base.interfaces import IContactInformation
+from opengever.translations.browser.add import TranslatedAddForm
+from plone.app.dexterity.behaviors.metadata import IBasic
 from plone.autoform.interfaces import IFormFieldProvider
 from plone.directives import form
 from plone.z3cform.textlines.textlines import TextLinesFieldWidget
 from opengever.ogds.base.autocomplete_widget import AutocompleteFieldWidget
+from plone.formwidget.contenttree import ObjPathSourceBinder
 from plone.indexer import indexer
 from plone.namedfile.interfaces import INamedFileField
 from plone.registry.interfaces import IRegistry
-from plone.app.dexterity.behaviors.metadata import IBasic
-
-from zope.interface import invariant, Invalid
-from zope.schema.vocabulary import SimpleVocabulary, SimpleTerm
-from zope.schema.interfaces import IContextSourceBinder
-from zope import schema
-from zope.interface import Interface, alsoProvides
-from zope.component import queryUtility, getAdapter, getUtility
-from zope.app.container.interfaces import IObjectAddedEvent
-
-from opengever.dossier.interfaces import IDossierContainerTypes
-from opengever.dossier.widget import referenceNumberWidgetFactory
-from opengever.base.interfaces import IReferenceNumber, ISequenceNumber
-from opengever.base.interfaces import IReferenceNumberPrefix
-from opengever.ogds.base.interfaces import IContactInformation
-from opengever.translations.browser.add import TranslatedAddForm
-
+from plone.z3cform.textlines.textlines import TextLinesFieldWidget
 from z3c.relationfield.schema import RelationChoice, RelationList
-from plone.formwidget.contenttree import ObjPathSourceBinder
+from zope import schema
+from zope.app.container.interfaces import IObjectAddedEvent
+from zope.app.container.interfaces import IObjectMovedEvent
+from zope.component import queryUtility, getAdapter, getUtility
+from zope.component.interfaces import ComponentLookupError
+from zope.interface import Interface, alsoProvides
+from zope.interface import invariant, Invalid
+from zope.schema.interfaces import IContextSourceBinder
+from zope.schema.vocabulary import SimpleVocabulary, SimpleTerm
+import logging
+
 
 LOG = logging.getLogger('opengever.dossier')
 
