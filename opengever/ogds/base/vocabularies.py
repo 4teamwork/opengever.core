@@ -12,6 +12,7 @@ from zope.schema.vocabulary import SimpleVocabulary
 import AccessControl
 from collective.elephantvocabulary import wrap_vocabulary
 
+
 class UsersVocabularyFactory(grok.GlobalUtility):
     """ Vocabulary of all users with a valid login.
     """
@@ -37,7 +38,7 @@ class UsersVocabularyFactory(grok.GlobalUtility):
             yield (user.userid,
                    info.describe(user.userid))
 
-# TODO in task
+
 class UsersAndInboxesVocabularyFactory(grok.GlobalUtility):
     """Vocabulary of all users and all inboxes of a specific client. The client
     is defined in the request either with key "client" or with key
@@ -91,7 +92,6 @@ class UsersAndInboxesVocabularyFactory(grok.GlobalUtility):
             return client_id
 
 
-# TODO in dossier
 class AssignedUsersVocabularyFactory(grok.GlobalUtility):
     """Vocabulary of all users assigned to the current client.
     """

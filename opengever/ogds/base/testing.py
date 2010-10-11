@@ -9,6 +9,7 @@ from plone.dexterity import utils
 from plone.registry.interfaces import IRegistry
 from zope.component import getUtility
 from zope.configuration import xmlconfig
+from opengever.globalindex import model as task_model
 
 
 
@@ -60,11 +61,15 @@ class BaseLayer(PloneSandboxLayer):
                        context=configurationContext)
         xmlconfig.file('tests.zcml', opengever.ogds.base,
                        context=configurationContext)
+        import opengever.task
+        xmlconfig.file('configure.zcml', opengever.task,
+                       context=configurationContext)
 
     def setUpPloneSite(self, portal):
         # Install into Plone site using portal_setup
         applyProfile(portal, 'plone.app.registry:default')
         applyProfile(portal, 'opengever.contact:default')
+        applyProfile(portal, 'opengever.task:default')
         applyProfile(portal, 'opengever.ogds.base:default')
         # configure client ID
         registry = getUtility(IRegistry, context=portal)
@@ -76,11 +81,14 @@ class BaseLayer(PloneSandboxLayer):
     def testSetUp(self):
         # setup the sql tables
         create_sql_tables()
+        session = create_session()
+        task_model.Base.metadata.create_all(session.bind)
 
     def testTearDown(test):
         session = create_session()
         for model in MODELS:
             getattr(model, 'metadata').drop_all(session.bind)
+        getattr(task_model.Base, 'metadata').drop_all(session.bind)
         # we may have created custom users and
 
 
