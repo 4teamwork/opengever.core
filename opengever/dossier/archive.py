@@ -17,10 +17,11 @@ from ftw.datepicker.widget import DatePickerFieldWidget
 
 from plone.registry.interfaces import IRegistry
 from plone.directives import form as directives_form
+from collective.elephantvocabulary import wrap_vocabulary
 
 from opengever.dossier import _
-from opengever.dossier.behaviors.dossier import IDossierMarker,\
-    get_filing_prefixes, IDossier
+from opengever.dossier.behaviors.dossier import IDossierMarker
+from opengever.dossier.behaviors.dossier import IDossier
 from opengever.base.interfaces import IBaseClientID
 
 
@@ -34,7 +35,7 @@ def get_filing_actions(context):
 
     review_state = context.portal_workflow.getInfoFor(context, 'review_state', None)
     filing_no = getattr(IDossierMarker(context), 'filing_no', None)
-    
+
     values = []
     if review_state != 'dossier-state-resolved':
         if not filing_no:
@@ -46,7 +47,7 @@ def get_filing_actions(context):
     else:
         if not filing_no:
             values.append(SimpleVocabulary.createTerm(2,_('set a filing no'), _('set a filing no')))
-            
+
     return SimpleVocabulary(values)
 
 
@@ -54,7 +55,9 @@ class IArchiveFormSchema(directives_form.Schema):
 
     filing_prefix = schema.Choice(
         title = _(u'filing_prefix', default="filing prefix"),
-        source = get_filing_prefixes,
+        source = wrap_vocabulary('opengever.dossier.type_prefixes',
+                    visible_terms_from_registry="opengever.dossier" + \
+                        ".interfaces.IDossierContainerTypes.type_prefixes"),
         required=False,
     )
 
@@ -68,7 +71,7 @@ class IArchiveFormSchema(directives_form.Schema):
         title = _(u'filing_year', default="filing Year"),
         required=False,
     )
-    
+
     filing_action = schema.Choice(
         title = _(u'filing_action', default="Action"),
         source = get_filing_actions,
@@ -132,7 +135,7 @@ class ArchiveForm(directives_form.Form):
     fields = field.Fields(IArchiveFormSchema)
     ignoreContext = True
     fields['filing_action'].widgetFactory[INPUT_MODE] = radio.RadioFieldWidget
-    fields['dossier_enddate'].widgetFactory = DatePickerFieldWidget 
+    fields['dossier_enddate'].widgetFactory = DatePickerFieldWidget
     label = _(u'heading_archive_form', u'Archive Dossier')
 
 
@@ -171,7 +174,7 @@ class ArchiveForm(directives_form.Form):
             else:
                 FILING_NO_KEY = "filing_no"
 
-                filing_year = str(data.get('filing_year')) 
+                filing_year = str(data.get('filing_year'))
                 filing_prefix = data.get('filing_prefix')
 
                 # filing_sequence
@@ -197,7 +200,7 @@ class ArchiveForm(directives_form.Form):
                 # filing_no
                 filing_no = filing_client + "-" + filing_prefix + "-" + filing_year + "-" + str(filing_sequence)
                 self.context.filing_no = filing_no
-                
+
                 # set the dossier end date
                 IDossier(self.context).end = data.get('dossier_enddate')
 
@@ -222,7 +225,7 @@ class ArchiveForm(directives_form.Form):
             if data.get('dossier_enddate') == None:
                 status = IStatusMessage(self.request)
                 status.addStatusMessage(_("The End that is required, also if only closing is selected"), type="error")
-                return 
+                return
             self.request.RESPONSE.redirect(self.context.absolute_url() + '/content_status_modify?workflow_action=dossier-transition-resolve')
         elif action == 2:
             status = IStatusMessage(self.request)

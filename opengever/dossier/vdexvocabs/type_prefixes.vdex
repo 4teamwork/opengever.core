@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vdex xmlns="http://www.imsglobal.org/xsd/imsvdex_v1p0"
+      orderSignificant="false" language="en">
+    <vocabIdentifier>opengever.dossier.type_prefixes</vocabIdentifier>
+
+    <term>
+        <termIdentifier>government</termIdentifier>
+        <caption>
+            <langstring language="en">Government</langstring>
+            <langstring language="de">Regierungsrat</langstring>
+        </caption>
+    </term>
+    <term>
+        <termIdentifier>state-archives</termIdentifier>
+        <caption>
+            <langstring language="en">State Archives</langstring>
+            <langstring language="de">Staatsarchiv</langstring>
+        </caption>
+    </term>
+
+</vdex>

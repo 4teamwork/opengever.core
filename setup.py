@@ -58,7 +58,7 @@ setup(name='opengever.dossier',
         'rwproperty',
         'plonegov.pdflatex>=0.2.6',
         'opengever.mail',
-        # -*- Extra requirements: -*-
+        'collective.vdexvocabulary',
         ],
       tests_require=tests_require,
       extras_require=dict(tests=tests_require),

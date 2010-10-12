@@ -28,32 +28,11 @@ from zope.interface import Interface, alsoProvides
 from zope.interface import invariant, Invalid
 from zope.schema.interfaces import IContextSourceBinder
 from zope.schema.vocabulary import SimpleVocabulary, SimpleTerm
+from collective.elephantvocabulary import wrap_vocabulary
 import logging
 
 
 LOG = logging.getLogger('opengever.dossier')
-
-
-@grok.provider(IContextSourceBinder)
-def get_filing_prefixes(context):
-    registry = getUtility(IRegistry)
-    proxy = registry.forInterface(IDossierContainerTypes)
-    prefixes = getattr(proxy, 'type_prefixes')
-    filing_prefixes = [SimpleTerm(value, value, value) for value in prefixes]
-
-    return SimpleVocabulary(filing_prefixes)
-
-
-@grok.provider(IContextSourceBinder)
-def container_types(context):
-    voc= []
-    terms = []
-    registry = queryUtility(IRegistry)
-    proxy = registry.forInterface(IDossierContainerTypes)
-    voc = getattr(proxy, 'container_types')
-    for term in voc:
-        terms.append(SimpleVocabulary.createTerm(term))
-    return SimpleVocabulary(terms)
 
 
 class IDossierMarker(Interface):
@@ -143,14 +122,18 @@ class IDossier(form.Schema):
 
     filing_prefix = schema.Choice(
         title = _(u'filing_prefix', default="filing prefix"),
-        source = get_filing_prefixes,
+        source = wrap_vocabulary('opengever.dossier.type_prefixes',
+                    visible_terms_from_registry="opengever.dossier" + \
+                        '.interfaces.IDossierContainerTypes.type_prefixes'),
         required = False,
     )
 
     container_type = schema.Choice(
         title = _(u'label_container_type', default=u'Container Type'),
         description = _(u'help_container_type', default=u''),
-        source = container_types,
+        source = wrap_vocabulary('opengever.dossier.type_prefixes',
+                    visible_terms_from_registry="opengever.dossier" + \
+                        '.interfaces.IDossierContainerTypes.container_types'),
         required = False,
         )
 

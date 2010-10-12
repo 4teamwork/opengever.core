@@ -1,26 +1,29 @@
 from zope import schema
 from zope.interface import Interface
-from zope.component.interfaces import IObjectEvent
-
-# -*- extra stuff goes here -*-
 
 class IDossierContainerTypes(Interface):
     """A type for collaborative spaces."""
 
-    container_types = schema.List(title=u"container_types",
-                                  default=[u'Ordner',
-                                           u'Schachtel',
-                                           ],
-                                  value_type=schema.TextLine())
+    container_types = schema.List(
+        title=u"container_types",
+        value_type=schema.Choice(
+            title=u"Name",
+            vocabulary=u'opengever.dossier.container_types',
+        ),
+    )
 
-    maximum_dossier_depth = schema.Int(title=u'Maximum Dossier Depth',
-                                       default=1)
+    maximum_dossier_depth = schema.Int(
+        title=u'Maximum Dossier Depth',
+        default=1
+    )
 
-    type_prefixes = schema.List(title=u"type_prefixes",
-                                default=[u'Regierungsrat',
-                                         u'Staatsarchiv',
-                                         u'Blubb'],
-                                value_type=schema.TextLine())
+    type_prefixes = schema.List(
+        title=u"type_prefixes",
+        value_type=schema.Choice(
+            title=u"Name",
+            vocabulary=u'opengever.dossier.type_prefixes',
+        ),
+    )
 
 
 class IConstrainTypeDecider(Interface):
@@ -50,9 +53,11 @@ class IConstrainTypeDecider(Interface):
 class IDossierParticipants(Interface):
     """ Participants configuration (plone.registry)
     """
-    roles = schema.List(title=u'Roles',
-                        default=[u'Mitwirkung',
-                                 u'Schlusszeichnung',
-                                 u'Kenntnisnahme',
-                                 ],
-                        value_type=schema.TextLine())
+
+    roles = schema.List(
+        title=u'Roles',
+        value_type=schema.Choice(
+            title=u"Name",
+            vocabulary=u'opengever.dossier.participation_roles',
+        ),
+    )

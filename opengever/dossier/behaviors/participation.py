@@ -15,6 +15,7 @@ from zope.component import getUtility
 from zope.interface import Interface, implements
 from zope.schema.interfaces import IVocabularyFactory
 from zope.schema.vocabulary import SimpleVocabulary
+from collective.elephantvocabulary import wrap_vocabulary
 import base64
 import z3c.form
 
@@ -119,7 +120,10 @@ class IParticipation(form.Schema):
         title = _(u'label_roles', default=u'Roles'),
         description = _(u'help_roles', default=u''),
         value_type = schema.Choice(
-            vocabulary = u'opengever.dossier.participation.roles',
+            source = wrap_vocabulary(
+                'opengever.dossier.participation_roles',
+                visible_terms_from_registry='opengever.dossier' + \
+                    '.interfaces.IDossierParticipants.roles'),
             ),
         required = False,
         )
@@ -132,26 +136,6 @@ class IParticipation(form.Schema):
 
 
 
-# ------- vocabularies --------
-
-class RolesVocabularyFactory(object):
-    grok.implements(IVocabularyFactory)
-
-    @property
-    def roles(self):
-        registry = getUtility(IRegistry)
-        proxy = registry.forInterface(IDossierParticipants)
-        return getattr(proxy, 'roles', ())
-
-    def __call__(self, context):
-        terms = []
-        for role in self.roles:
-            role = str(role)
-            terms.append(SimpleVocabulary.createTerm(role, role, role))
-        return SimpleVocabulary(terms)
-
-grok.global_utility(RolesVocabularyFactory,
-                    name=u'opengever.dossier.participation.roles')
 
 
 # --------- model class --------
