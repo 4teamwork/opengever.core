@@ -1,0 +1,12 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:transmogrifier="http://namespaces.plone.org/transmogrifier">
+    
+    <transmogrifier:registerConfig
+        name="opengever.ogds.base.user-import"
+        title="opengever.ogds.base.user-import"
+        description="Pipeline configuration for the Opengever LDAP user import"
+        configuration="user_import.cfg"
+        />
+
+</configure>
