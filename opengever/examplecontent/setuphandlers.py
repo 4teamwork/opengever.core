@@ -1,6 +1,7 @@
 from Products.CMFCore.utils import getToolByName
 from collective.transmogrifier.transmogrifier import Transmogrifier
 from opengever.ogds.base.utils import get_current_client
+from opengever.portlets.tree import treeportlet
 import transaction
 
 def start_import(context):
@@ -28,9 +29,20 @@ def settings(context):
 
     # set default layout
     context.get('aufgaben').setLayout('task-overview1')
-    # set default page
-    context.default_page = 'ordnungssystem'
+    
+    # replace unused navigation portlet with the tree portlet
+    from zope.component import getUtility
+    from zope.component import getMultiAdapter
+    from plone.portlets.interfaces import IPortletManager
+    from plone.portlets.interfaces import IPortletAssignmentMapping
 
+    column = getUtility(IPortletManager, name=u'plone.leftcolumn', context=context)
+    manager = getMultiAdapter((context, column,), IPortletAssignmentMapping)
+    if 'navigation' in manager.keys():
+        del manager[u'navigation']
+
+    if 'opengever-portlets-tree-TreePortlet' not in manager.keys():
+        manager['opengever-portlets-tree-TreePortlet'] = treeportlet.Assignment(root_path='ordnungssystem')
 
 def set_permissions(portal):
     # sets the permissions to the groups configuration in the client
@@ -54,7 +66,6 @@ def setupVarious(setup):
 
     if setup.readDataFile('opengever.examplecontent.txt') is None:
         pass
-
 
     site = setup.getSite()
     start_import(site)
