@@ -45,6 +45,7 @@ from zope.lifecycleevent.interfaces import IObjectCreatedEvent
 from zope.lifecycleevent.interfaces import IObjectModifiedEvent
 from zope.schema.interfaces import IContextSourceBinder
 from zope.schema.vocabulary import SimpleVocabulary
+from collective.elephantvocabulary import wrap_vocabulary
 import logging
 
 
@@ -63,18 +64,6 @@ IVersionable.setTaggedValue( FIELDSETS_KEY, [
 # IVersionable.setTaggedValue( OMITTED_KEY, {
 #         'changeNote' : 'true',
 #         } )
-
-
-@grok.provider(IContextSourceBinder)
-def possibleTypes(context):
-    voc= []
-    terms = []
-    registry = queryUtility(IRegistry)
-    proxy = registry.forInterface(IDocumentType)
-    voc = getattr(proxy, 'document_types')
-    for term in voc:
-        terms.append(SimpleVocabulary.createTerm(term))
-    return SimpleVocabulary(terms)
 
 
 def related_document(context):
@@ -142,7 +131,9 @@ class IDocumentSchema(form.Schema):
     document_type = schema.Choice(
         title=_(u'label_document_type', default='Document Type'),
         description=_(u'help_document_type', default=''),
-        source=possibleTypes,
+        source=wrap_vocabulary('opengever.document.document_types',
+                    visible_terms_from_registry='opengever.document' + \
+                            '.interfaces.IDocumentType.document_types'),
         required = False,
         )
 

@@ -14,6 +14,9 @@
     <!-- Grok the package to initialise schema interfaces and content classes -->
     <grok:grok package="." />
 
+    <!-- vdex vocabularies folder -->
+    <vdex:vocabulary directory="vdexvocabs" />
+
     <browser:resourceDirectory
         name="opengever.document"
         directory="static"

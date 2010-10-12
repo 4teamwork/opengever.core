@@ -63,15 +63,13 @@ class IObjectCheckoutCanceledEvent(IObjectEvent):
 
 
 class IDocumentType(Interface):
-    document_types = schema.List(title=u"Document Type",
-                                 default=[u'Antrag',
-                                          u'Anfrage',
-                                          u'Bericht',
-                                          u'Offerte',
-                                          u'Protokoll',
-                                          u'Vertrag',
-                                          ],
-                                 value_type=schema.TextLine())
+    document_types = schema.List(
+        title=u"Document Type",
+        value_type=schema.Choice(
+            title=u"Name",
+            vocabulary=u'opengever.document.document_types',
+        ),
+    )
 
 
 class IDocuComposer(Interface):
@@ -86,4 +84,4 @@ class ISendDocumentConf(Interface):
         description=u'Maximal Size (MB) of the Attachment',
         default=5,
     )
-    
+
