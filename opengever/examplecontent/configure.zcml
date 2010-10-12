@@ -19,6 +19,14 @@
       provides="Products.GenericSetup.interfaces.EXTENSION"
       />
 
+  <genericsetup:registerProfile
+      name="4teamwork-ldap"
+      title="opengever.examplecontent: 4teamwork LDAP"
+      directory="profiles/4teamwork-ldap"
+      description="4teamwork LDAP configuration"
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      />
+
   <transmogrifier:registerConfig
       name="opengever.examplecontent.repository"
       title="Opengever ExampleContent Repositorysystem Import"
