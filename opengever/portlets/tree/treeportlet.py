@@ -7,6 +7,8 @@ from plone.app.portlets.portlets import base
 from zope.formlib import form
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 
+from Products.CMFCore.utils import getToolByName
+
 from Acquisition import aq_inner
 
 
@@ -71,9 +73,11 @@ class Renderer(base.Renderer):
         current = aq_inner(self.context)
         # Don't travsere to top-level application obj if TreePortlet
         # was added to the Plone Site Root
-        if current.Type() == 'Plone Site':
+        if self.root_path() != None:
+            portal_url = getToolByName(self.context, 'portal_url')
+            current = portal_url.getPortalObject().restrictedTraverse(self.root_path().encode('utf-8'))
+        elif current.Type() != 'Plone Site':
             return current.Title()
-        else:  
             while current.Type() != 'RepositoryRoot':
                 current = current.aq_parent
         return current.Title()
