@@ -64,6 +64,7 @@ setup(name='opengever.document',
         'collective.autopermission',
         'plone.keyring',
         'opengever.mail',
+        'collective.vdexvocabulary',
         ],
 
         tests_require=tests_require,
