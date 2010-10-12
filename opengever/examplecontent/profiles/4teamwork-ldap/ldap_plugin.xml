@@ -1,18 +1,22 @@
 <?xml version="1.0"  ?>
 <ldapplugins>
-    
-        <ldapplugin title="4teamwork LDAP" id="ldap" meta_type="LDAP Multi Plugin" update="False">
-            
+
+        <ldapplugin title="4teamwork LDAP" id="ldap" meta_type="Plone LDAP plugin" update="False">
+
             <interface value="IAuthenticationPlugin"/>
             <interface value="ICredentialsResetPlugin"/>
             <interface value="IGroupEnumerationPlugin"/>
+            <interface value="IGroupIntrospection"/>
+            <interface value="IGroupManagement"/>
             <interface value="IGroupsPlugin"/>
             <interface value="IPropertiesPlugin"/>
             <interface value="IRoleEnumerationPlugin"/>
             <interface value="IRolesPlugin"/>
+            <interface value="IUserAdderPlugin"/>
             <interface value="IUserEnumerationPlugin"/>
+            <interface value="IUserManagement"/>
             <plugin_property id="prefix" type="string" mode="w" value=""/>
-            <plugin_property id="title" type="string" mode="wd" value="4teamwork LDAP"/> 
+            <plugin_property id="title" type="string" mode="wd" value="4teamwork LDAP"/>
             <property id="_login_attr" type="str">
                 <item value="uid"/>
             </property>
@@ -66,33 +70,33 @@
                 <item value="Member"/>
             </property>
             <schema>
-                <attr id="uid">
-                    <item id="public_name" value=""/>
-                    <item id="binary" value="False"/>
-                    <item id="ldap_name" value="uid"/>
-                    <item id="friendly_name" value="User id"/>
-                    <item id="multivalued" value="False"/>                
-                </attr>
                 <attr id="mail">
                     <item id="public_name" value="email"/>
                     <item id="binary" value="False"/>
                     <item id="ldap_name" value="mail"/>
                     <item id="friendly_name" value="Email address"/>
-                    <item id="multivalued" value="False"/>                
+                    <item id="multivalued" value="False"/>
                 </attr>
                 <attr id="cn">
                     <item id="public_name" value="fullname"/>
                     <item id="binary" value="False"/>
                     <item id="ldap_name" value="cn"/>
                     <item id="friendly_name" value="Canonical Name"/>
-                    <item id="multivalued" value="False"/>                
+                    <item id="multivalued" value="False"/>
                 </attr>
                 <attr id="sn">
                     <item id="public_name" value=""/>
                     <item id="binary" value="False"/>
                     <item id="ldap_name" value="sn"/>
                     <item id="friendly_name" value="Last Name"/>
-                    <item id="multivalued" value="False"/>                
+                    <item id="multivalued" value="False"/>
+                </attr>
+                <attr id="uid">
+                    <item id="public_name" value=""/>
+                    <item id="binary" value="False"/>
+                    <item id="ldap_name" value="uid"/>
+                    <item id="friendly_name" value="User id"/>
+                    <item id="multivalued" value="False"/>
                 </attr>
             </schema>
             <server update="False" delete="False">
@@ -103,5 +107,5 @@
                 <item id="conn_timeout" value="5" type="int"/>
             </server>
         </ldapplugin>
-    
+
 </ldapplugins>
