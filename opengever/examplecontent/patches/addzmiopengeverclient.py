@@ -8,7 +8,7 @@ ADD_PLONE_SITE_HTML = '''
         style="text-align: right; margin-top:0.5em; margin-bottom:0em;"
         target="_top">
     <input type="hidden" name="site_id" value="Plone" />
-    <input type="submit" value="Add opengever client" />
+    <input type="submit" value="Install Opengever" />
   </form>
 </dtml-if>
 '''

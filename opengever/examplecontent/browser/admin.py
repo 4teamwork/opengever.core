@@ -1,5 +1,10 @@
 from Products.CMFPlone.browser.admin import AddPloneSite
+from opengever.ogds.base.model.client import Client
+from Products.CMFPlone.factory import _DEFAULT_PROFILE
+from zope.publisher.browser import BrowserView
+from Products.CMFPlone.factory import addPloneSite
 from Products.CMFPlone.utils import getToolByName
+from datetime import datetime
 from opengever.ogds.base.interfaces import IClientConfiguration
 from opengever.ogds.base.utils import create_session
 from plone.registry.interfaces import IRegistry
@@ -15,27 +20,29 @@ SQL_BASES = (
     )
 
 
+# these profiles will be installed automatically
+EXTENSION_PROFILES = (
+    'plonetheme.classic:default',
+    'plonetheme.sunburst:default',
+    'opengever.policy.base:default',
+    )
+
+
+# these profiles will be installed automatically after setting
+# the client id
+ADDITIONAL_PROFILES = (
+    'opengever.examplecontent:developer',
+    )
+
 
 class AddOpengeverClient(AddPloneSite):
 
-    # these profiles will be installed automatically
-    default_extension_profiles = (
-        'plonetheme.classic:default',
-        'plonetheme.sunburst:default',
-        'opengever.policy.base:default',
-        )
-
-    # these profiles will be installed automatically after setting
-    # the client id
-    additional_opengever_profiles = (
-        'opengever.ogds.base:example',
-        'opengever.examplecontent:developer',
-        )
-
-    default_clients = (('mandant1', 'Mandant 1'),
-               ('mandant2', 'Mandant 2'))
+    default_extension_profiles = EXTENSION_PROFILES
 
     def __call__(self):
+        return self.index()
+
+    def foo(self):
         form = self.request.form
         submitted = form.get('form.submitted', False)
 
@@ -71,27 +78,72 @@ class AddOpengeverClient(AddPloneSite):
 
         return data
 
-    def clients(self):
-        yielded_selected = False
-        for client_id, title in self.default_clients:
-            selected = False
-            if not yielded_selected:
-                if client_id not in self.context.objectIds():
-                    selected = True
-                    yielded_selected = True
-
-            used = ''
-            if client_id in self.context.objectIds():
-                used = '[ALREADY INSTALLED]: '
-
-            yield {
-                'value': client_id,
-                'label': '%s%s (%s)' % (used, title, client_id),
-                'selected': selected}
-
-    def default_drop_sql_tables(self):
-        """Decide whether to select the checkbox by default.
+    def javascript_src_url(self):
+        """returns the url to the javascript. This makes it possible to
+        change the URL in debug mode.
         """
 
-        client_ids = [c[0] for c in self.default_clients]
-        return not set(self.context.objectIds()) & set(client_ids)
+        base_url = '/++resource++addclient.js'
+        if 1:
+            return base_url + '?x=' + str(datetime.now())
+        else:
+            base_url
+
+    def server_port(self):
+        return self.request.get('SERVER_PORT')
+
+
+class CreateOpengeverClient(BrowserView):
+
+    def __call__(self):
+        form = self.request.form
+        session = create_session()
+
+
+        # drop sql tables
+        if form.get('drop_sql_tables'):
+            self.drop_sql_tables(session)
+
+        # create plone site
+        site = addPloneSite(
+            self.context,
+            form['client_id'],
+            title=form['title'],
+            profile_id=_DEFAULT_PROFILE,
+            extension_ids=EXTENSION_PROFILES,
+            setup_content=False,
+            default_language=form['lang'],
+            )
+
+        # register the client in the ogds
+        client = Client(form['client_id'],
+                        title=form['title'],
+                        ip_address=form['ip_address'],
+                        site_url=form['site_url'],
+                        public_url=form['public_url'],
+                        group=form['group'],
+                        inbox_group=form['inbox_group'])
+        session.add(client)
+
+
+        # set the client id in the registry
+        registry = getUtility(IRegistry)
+        proxy = registry.forInterface(IClientConfiguration)
+        proxy.client_id = form['client_id'].decode('utf-8')
+
+        # import the defaul generic setup profiles if needed
+        if form.get('example', False):
+            stool = getToolByName(site, 'portal_setup')
+            for profile in ADDITIONAL_PROFILES:
+                stool.runAllImportStepsFromProfile('profile-%s' % profile)
+
+        # set the site title
+        site.manage_changeProperties(title=form['title'])
+
+        return 'ok'
+
+    def drop_sql_tables(self, session):
+        """Drops sql tables, usually when creating the first client
+        """
+        for base in SQL_BASES:
+            getattr(base, 'metadata').drop_all(session.bind)
