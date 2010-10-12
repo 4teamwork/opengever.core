@@ -154,6 +154,20 @@
           </select>
         </div>
 
+        <div class="field">
+          <label for="ldap" i18n:translate="">LDAP configuration profile</label>
+
+          <div class="formHelp"></div>
+
+          <select name="ldap">
+            <option value="" i18n:translate="">- skip LDAP -</option>
+            <option value="opengever.examplecontent:4teamwork-ldap"
+                    selected="selected">
+              4teamwork LDAP
+            </option>
+          </select>
+        </div>
+
       </fieldset>
 
 

@@ -99,7 +99,6 @@ class CreateOpengeverClient(BrowserView):
         form = self.request.form
         session = create_session()
 
-
         # drop sql tables
         if form.get('drop_sql_tables'):
             self.drop_sql_tables(session)
@@ -132,10 +131,14 @@ class CreateOpengeverClient(BrowserView):
         proxy.client_id = form['client_id'].decode('utf-8')
 
         # import the defaul generic setup profiles if needed
+        stool = getToolByName(site, 'portal_setup')
         if form.get('example', False):
-            stool = getToolByName(site, 'portal_setup')
             for profile in ADDITIONAL_PROFILES:
                 stool.runAllImportStepsFromProfile('profile-%s' % profile)
+
+        # ldap ?
+        if form.get('ldap', False):
+            stool.runAllImportStepsFromProfile('profile-%s' % form.get('ldap'))
 
         # set the site title
         site.manage_changeProperties(title=form['title'])

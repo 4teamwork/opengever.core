@@ -120,6 +120,7 @@ $(function($) {
         // defaults
         var example = $('input[name=developer:boolean]').attr('checked');
         var lang = $('[name=default_language]').val();
+        var ldap = $('[name=ldap]').val();
 
         // hide config fieldset
         $('fieldset.config').hide();
@@ -131,6 +132,7 @@ $(function($) {
                 var data = {};
                 data['example'] = example ? true : false;
                 data['lang'] = lang;
+                data['ldap'] = ldap;
                 client.find('input').each(function() {
                     if($(this).attr('name')) {
                         var key = $(this).attr('name').split('.')[1].split(':')[0];
