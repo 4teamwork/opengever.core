@@ -109,9 +109,19 @@ class CreateOpengeverClient(BrowserView):
         # ldap ?
         if form.get('ldap', False):
             stool.runAllImportStepsFromProfile('profile-%s' % form.get('ldap'))
+            # disable source_groups when using ldap
+            acl_users = getToolByName(site, 'acl_users')
+            plugins = acl_users.plugins
+            for ptype in plugins.listPluginTypeInfo():
+                try:
+                    plugins.deactivatePlugin(ptype['interface'],
+                                             'source_groups')
+                except KeyError:
+                    pass
 
         # set the site title
         site.manage_changeProperties(title=form['title'])
+
 
         return 'ok'
 
