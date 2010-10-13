@@ -9,7 +9,7 @@
             title="Add task from template"
             category="folder_factories"
             url_expr="string:${object_url}/add-tasktemplate"
-            condition_expr="">
+            icon_expr="string:${object_url}/icon_objekt_prozess.gif">
         <permission value="Add portal content"/>
     </action>
 

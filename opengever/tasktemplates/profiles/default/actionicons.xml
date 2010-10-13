@@ -1,9 +1,0 @@
-<?xml version="1.0"?>
-<action-icons>
-
-    <action-icon category="folder_factories"
-                 action_id="add_tasktemplate"
-                 title="Add task from template" priority="0"
-                 icon_expr="icon_objekt_prozess.gif"/>
-
-</action-icons>
