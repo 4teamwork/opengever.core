@@ -57,7 +57,8 @@
                 <item value="False"/>
             </property>
             <property id="_user_objclasses" type="list">
-                <item value="top"/>
+                <item value="inetOrgPerson"/>
+                <item value="organizationalPerson"/>
                 <item value="person"/>
             </property>
             <property id="_extra_user_filter" type="str">
