@@ -57,20 +57,41 @@
     <alias from="view" to="@@view"/>
 
     <!-- Actions -->
-    <action title="View" action_id="view" category="object" condition_expr=""
-            url_expr="string:${object_url}" visible="False">
+    <action action_id="view"
+            visible="False"
+            title="View"
+            category="object"
+            url_expr="string:${object_url}"
+            condition_expr="">
         <permission value="View"/>
     </action>
-    <action title="Edit" action_id="edit" category="object" condition_expr=""
-            url_expr="string:${object_url}/edit" visible="True">
+
+    <action action_id="edit"
+            visible="True"
+            title="Edit"
+            category="object"
+            url_expr="string:${object_url}/edit"
+            condition_expr="">
         <permission value="Modify portal content"/>
     </action>
-    <action title="document_with_docucomposer" i18n:domain="opengever.dossier" action_id="document_with_docucomposer" category="folder_factories" condition_expr=""
-            url_expr="string:${object_url}/docucomposer-wizard" visible="True">
+
+    <action action_id="document_with_docucomposer"
+            visible="True"
+            title="document_with_docucomposer"
+            category="folder_factories"
+            url_expr="string:${object_url}/docucomposer-wizard"
+            condition_expr=""
+            i18n:domain="opengever.dossier">
         <permission value="Add portal content"/>
     </action>
-    <action title="document_with_template" i18n:domain="opengever.dossier" action_id="document_with_template" category="folder_factories" condition_expr=""
-            url_expr="string:${object_url}/document_with_template" visible="True">
+
+    <action action_id="document_with_template"
+            visible="True"
+            title="document_with_template"
+            category="folder_factories"
+            url_expr="string:${object_url}/document_with_template"
+            condition_expr=""
+            i18n:domain="opengever.dossier">
         <permission value="Add portal content"/>
     </action>
 
