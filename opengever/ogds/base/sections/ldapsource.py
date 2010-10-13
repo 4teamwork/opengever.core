@@ -32,6 +32,8 @@ class LDAPSourceSection(object):
                 break
             temp = {}
             for k, v in data[0][1].items():
+                if isinstance(v, list):
+                    v = v[0]
                 if self.mapping.get(k, None):
                     temp[self.mapping[k]] = v
                 else:
