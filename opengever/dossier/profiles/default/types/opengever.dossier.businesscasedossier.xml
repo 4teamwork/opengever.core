@@ -77,9 +77,10 @@
 
     <action action_id="document_with_docucomposer"
             visible="True"
-            title="document_with_docucomposer"
+            title="Document with docucomposer"
             category="folder_factories"
             url_expr="string:${object_url}/docucomposer-wizard"
+            icon_expr="string:${object_url}/document_icon.gif"
             condition_expr=""
             i18n:domain="opengever.dossier">
         <permission value="Add portal content"/>
@@ -90,6 +91,7 @@
             title="document_with_template"
             category="folder_factories"
             url_expr="string:${object_url}/document_with_template"
+            icon_expr="string:${object_url}/document_icon.gif"
             condition_expr=""
             i18n:domain="opengever.dossier">
         <permission value="Add portal content"/>
