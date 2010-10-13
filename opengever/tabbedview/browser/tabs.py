@@ -138,24 +138,25 @@ class Documents(OpengeverListingTab):
 
     types = ['opengever.document.document', 'ftw.mail.mail']
 
-    search_options = {'isWorkingCopy': 0}
+    search_options = {'isWorkingCopy': 0,
+                      'trashed': False}
 
     columns = (
         ('', helper.draggable),
         ('', helper.path_checkbox),
         ('Title', 'sortable_title', linked),
-        {'column':'document_author', 
+        {'column':'document_author',
          'column_title':_('label_document_author', default="Document Author"),},
-        {'column':'document_date', 
+        {'column':'document_date',
          'column_title':_('label_document_date', default="Document Date"),
          'transform':helper.readable_date},
-        {'column':'receipt_date', 
+        {'column':'receipt_date',
          'column_title':_('label_receipt_date', default="Receipt Date"),
          'transform':helper.readable_date},
-        {'column':'delivery_date', 
+        {'column':'delivery_date',
          'column_title':_('label_delivery_date', default="Delivery Date"),
         'transform':helper.readable_date},
-        {'column':'checked_out', 
+        {'column':'checked_out',
          'column_title':_('label_checked_out', default="Checked out by"),
         'transform':readable_ogds_author},
         )
@@ -196,7 +197,7 @@ class Dossiers(OpengeverListingTab):
          'column_title': _(u'label_reference', default=u'Reference Number')},
         ('Title', 'sortable_title', linked),
         ('review_state', 'review_state', helper.translated_string()),
-        {'column':'responsible', 
+        {'column':'responsible',
          'column_title':_(u'label_responsible', default=u"Responsible"),
          'transform':readable_ogds_author},
         ('start', helper.readable_date),
