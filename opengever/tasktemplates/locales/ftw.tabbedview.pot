@@ -15,11 +15,11 @@ msgstr ""
 "Language-Code: en\n"
 "Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
-"Domain: opengever.tasktemplates\n"
+"Domain: ftw.tabbedview\n"
 
 
-msgid "Task Templates"
+msgid "tasktemplates"
 msgstr ""
 
-msgid "Tasktemplate Folders"
+msgid "tasktemplatefolders"
 msgstr ""

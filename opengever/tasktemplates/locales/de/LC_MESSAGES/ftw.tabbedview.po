@@ -12,10 +12,10 @@ msgstr ""
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: DOMAIN\n"
 
-msgid "Task Templates"
+msgid "tasktemplates"
 msgstr "Vorlagen"
 
-msgid "Tasktemplate Folders"
+msgid "tasktemplatefolders"
 msgstr "Standardabläufe"
 
 
