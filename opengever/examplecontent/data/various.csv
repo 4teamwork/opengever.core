@@ -7,6 +7,6 @@ _path,_type,inbox_group,title,responsible,responsible_client,issuer,deadline
 /ordnungssystem/rechnungswesen/belege/dossier-1/document-1,opengever.document.document,,Ein kleines Testdocument,
 /aufgaben,Folder,,Aufgaben
 /vorlagen/beispiel-standardablauf,opengever.tasktemplates.tasktemplatefolder,,Beispiel Standardablauf
-/vorlagen/beispiel-standardablauf/tt1,opengever.tasktemplates.tasktemplate,,Aufgabe eins,interactive_users,responsible,responsible,4
-/vorlagen/beispiel-standardablauf/tt2,opengever.tasktemplates.tasktemplate,,Aufgabe zwei,interactive_users,responsible,current_user,4
-/vorlagen/beispiel-standardablauf/tt3,opengever.tasktemplates.tasktemplate,,Aufgabe drei,interactive_users,current_user,current_user,4
+/vorlagen/beispiel-standardablauf/tt1,opengever.tasktemplates.tasktemplate,,Aufgabe eins,responsible,interactive_users,responsible,4
+/vorlagen/beispiel-standardablauf/tt2,opengever.tasktemplates.tasktemplate,,Aufgabe zwei,responsible,interactive_users,current_user,4
+/vorlagen/beispiel-standardablauf/tt3,opengever.tasktemplates.tasktemplate,,Aufgabe drei,current_user,interactive_users,current_user,4
