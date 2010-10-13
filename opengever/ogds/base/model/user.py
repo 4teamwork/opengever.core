@@ -41,6 +41,8 @@ class User(Base):
 
     country = Column(String(20))
 
+    import_stamp = Column(String(26))
+
     def __init__(self, userid, **kwargs):
         self.userid = userid
         for key, value in kwargs.items():

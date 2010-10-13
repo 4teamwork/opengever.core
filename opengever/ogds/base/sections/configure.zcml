@@ -2,7 +2,10 @@
 
     <utility
         component=".ldapsource.LDAPSourceSection"
-        name="opengever.ldapsource"
+        name="opengever.ogds.base.sections.ldapsource"
         />
-
+    <utility
+        component=".inactiveuser.InactiveUserSection"
+        name="opengever.ogds.base.sections.inactiveuser"
+        />
 </configure>
