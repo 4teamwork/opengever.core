@@ -42,42 +42,6 @@ class AddOpengeverClient(AddPloneSite):
     def __call__(self):
         return self.index()
 
-    def foo(self):
-        form = self.request.form
-        submitted = form.get('form.submitted', False)
-
-        if submitted:
-            # drop sql tables
-            if form.get('drop_sql_tables'):
-                session = create_session()
-                for base in SQL_BASES:
-                    getattr(base, 'metadata').drop_all(session.bind)
-
-        # create the plone site with default method or render the template
-        data = AddPloneSite.__call__(self)
-
-        if submitted:
-            site_id = form.get('site_id', 'Plone')
-            site = self.context.get(site_id)
-
-            # set the client id in the registry
-            registry = getUtility(IRegistry)
-            proxy = registry.forInterface(IClientConfiguration)
-            proxy.client_id = site_id.decode('utf-8')
-
-            # import the defaul generic setup profiles if needed
-            if form.get('developer', False):
-                stool = getToolByName(site, 'portal_setup')
-                for profile in self.additional_opengever_profiles:
-                    stool.runAllImportStepsFromProfile('profile-%s' % profile)
-
-            # set the site title
-            title = [c[1] for c in self.default_clients
-                     if c[0] == site_id][0]
-            site.manage_changeProperties(title=title)
-
-        return data
-
     def javascript_src_url(self):
         """returns the url to the javascript. This makes it possible to
         change the URL in debug mode.
@@ -111,10 +75,15 @@ class CreateOpengeverClient(BrowserView):
             profile_id=_DEFAULT_PROFILE,
             extension_ids=EXTENSION_PROFILES,
             setup_content=False,
-            default_language=form['lang'],
+            default_language=form['default_language'],
             )
 
         # register the client in the ogds
+        # is the client already configured? -> delete it
+        clients = session.query(Client).filter_by(client_id=form['client_id']).all()
+        if clients:
+            session.delete(clients[0])
+
         client = Client(form['client_id'],
                         title=form['title'],
                         ip_address=form['ip_address'],

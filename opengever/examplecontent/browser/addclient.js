@@ -119,6 +119,7 @@ $(function($) {
 
         // defaults
         var example = $('input[name=developer:boolean]').attr('checked');
+        var purge = $('input[name=purge:boolean]').attr('checked');
         var lang = $('[name=default_language]').val();
         var ldap = $('[name=ldap]').val();
 
@@ -131,7 +132,7 @@ $(function($) {
             if(client.length > 0) {
                 var data = {};
                 data['example'] = example ? true : false;
-                data['lang'] = lang;
+                data['default_language'] = lang;
                 data['ldap'] = ldap;
                 client.find('input').each(function() {
                     if($(this).attr('name')) {
@@ -141,7 +142,7 @@ $(function($) {
                 });
                 console.info(data);
 
-                if(data['index'] == 1) {
+                if(data['index'] == 1 && purge) {
                     data['drop_sql_tables'] = true;
                 }
 

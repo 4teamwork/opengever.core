@@ -87,7 +87,7 @@
     </div>
 
 
-    <h1 i18n:translate="">Create a Opengever client</h1>
+    <h1 i18n:translate="">Create an Opengever client</h1>
 
     <a href="/manage_main">Manage</a>
 
@@ -131,6 +131,22 @@
 
           <span i18n:translate="">
             Setup a developer installation with example content?
+          </span>
+        </div>
+
+        <div class="field">
+          <label for="purge" i18n:translate="">
+            Purge SQL Database
+          </label>
+
+          <div class="formHelp"></div>
+
+          <input type="checkbox" name="purge:boolean" checked="checked"
+                 id="purge" />
+
+          <span i18n:translate="">
+            Should the SQL data be deleted before installing the clients?
+            (Overrides the config of the clients to create in both cases)
           </span>
         </div>
 
