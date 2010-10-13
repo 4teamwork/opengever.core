@@ -1,0 +1,8 @@
+<configure xmlns="http://namespaces.zope.org/zope">
+
+    <utility
+        component=".ldapsource.LDAPSourceSection"
+        name="opengever.ldapsource"
+        />
+
+</configure>
