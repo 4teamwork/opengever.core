@@ -44,7 +44,7 @@
     <alias from="view" to="@@view"/>
 
     <!-- Actions -->
-    <action title="task templates" action_id="tasktemplates" category="tabbedview-tabs"
+    <action title="Task Templates" action_id="tasktemplates" category="tabbedview-tabs"
             condition_expr="" url_expr="string:#" visible="True">
     </action>
 </object>
