@@ -64,7 +64,9 @@ class ContactInformation(grok.GlobalUtility):
         group = acl_users.getGroupById(groupid.encode('utf-8'))
 
         for member in group.getAllGroupMembers():
-            yield self.get_user(member.getId())
+            user = self.get_user(member.getId())
+            if user:
+                yield user
 
     def get_user(self, principal):
         """Returns the user with the userid `principal`.
