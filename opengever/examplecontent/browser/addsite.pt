@@ -151,6 +151,21 @@
         </div>
 
         <div class="field">
+          <label for="import_users" i18n:translate="">
+            Import LDAP-users into OGDS (requires mysql!)
+          </label>
+
+          <div class="formHelp"></div>
+
+          <input type="checkbox" name="import_users:boolean" checked="checked"
+                 id="import_users" />
+
+          <span i18n:translate="">
+            Import users from LDAP into mySQL (databse: opengever)?
+          </span>
+        </div>
+
+        <div class="field">
           <label for="default_language" i18n:translate="">Language</label>
 
           <div class="formHelp" i18n:translate="">

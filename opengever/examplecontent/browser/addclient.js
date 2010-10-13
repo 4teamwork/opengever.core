@@ -122,6 +122,7 @@ $(function($) {
         var purge = $('input[name=purge:boolean]').attr('checked');
         var lang = $('[name=default_language]').val();
         var ldap = $('[name=ldap]').val();
+        var import_users = $('[name=import_users:boolean]').val();
 
         // hide config fieldset
         $('fieldset.config').hide();
@@ -140,10 +141,13 @@ $(function($) {
                         data[key] = $(this).val();
                     }
                 });
-                console.info(data);
 
                 if(data['index'] == 1 && purge) {
                     data['drop_sql_tables'] = true;
+                }
+
+                if(data['index'] == 1 && import_users) {
+                    data['import_users'] = import_users;
                 }
 
                 $('<img src="/++resource++addclient-spinner.gif" class="spinner" />')

@@ -1,4 +1,5 @@
 from Products.CMFPlone.browser.admin import AddPloneSite
+from opengever.ogds.base.ldap_import import sync_ldap
 from opengever.ogds.base.model.client import Client
 from Products.CMFPlone.factory import _DEFAULT_PROFILE
 from zope.publisher.browser import BrowserView
@@ -126,6 +127,14 @@ class CreateOpengeverClient(BrowserView):
                                          'recursive_groups')
             except KeyError:
                 pass
+
+        if form.get('import_users'):
+            print '===== SYNC LDAP ===='
+            class Object(object): pass
+            options = Object()
+            options.config = u'opengever.ogds.base.user-import'
+            options.site_root = '/' + form['client_id']
+            sync_ldap.run_import(self.context, options)
 
         # set the site title
         site.manage_changeProperties(title=form['title'])
