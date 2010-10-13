@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2010-10-01 09:24+0000\n"
-"PO-Revision-Date: 2010-10-01 11:42+0200\n"
+"POT-Creation-Date: 2010-10-13 12:09+0000\n"
+"PO-Revision-Date: 2010-10-13 14:09+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -16,8 +16,12 @@ msgstr ""
 msgid "TaskTemplate"
 msgstr "Aufgabenvorlage"
 
+#: ./opengever/tasktemplates/profiles/default/types/opengever.tasktemplates.tasktemplatefolder.xml
+msgid "TaskTemplateFolder"
+msgstr "Standardablauf"
+
 #. Default: "Interactive users"
-#: ./opengever/tasktemplates/vocabularies.py:46
+#: ./opengever/tasktemplates/vocabularies.py:49
 msgid "client_interactive_users"
 msgstr "Interaktiver Benutzer"
 
@@ -54,16 +58,17 @@ msgid "help_title"
 msgstr "Der Name der Aufgabe."
 
 #. Default: "Current user"
-#: ./opengever/tasktemplates/vocabularies.py:15
+#: ./opengever/tasktemplates/vocabularies.py:17
 msgid "interactive_user_current_user"
 msgstr "Sachbearbeiter"
 
 #. Default: "Responsible"
-#: ./opengever/tasktemplates/vocabularies.py:12
+#: ./opengever/tasktemplates/vocabularies.py:13
 msgid "interactive_user_responsible"
 msgstr "Federführender"
 
 #. Default: "Deadline in Days"
+#: ./opengever/tasktemplates/browser/tasktemplates.py:26
 #: ./opengever/tasktemplates/content/tasktemplate.py:54
 msgid "label_deadline"
 msgstr "Frist in Tagen"
