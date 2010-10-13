@@ -30,7 +30,7 @@
         <element value="opengever.tabbedview.interfaces.ITabbedViewEnabled" />
         <element value="opengever.trash.trash.ITrashable" />
         <element value="opengever.task.behaviors.ITaskNameFromTitle" />
-        <element value="opengever.base.behaviors.sequence.ISequenceNumberMarker" />
+        <element value="opengever.base.behaviors.sequence.ISequenceNumberBehavior" />
     </property>
 
     <!-- View information -->
