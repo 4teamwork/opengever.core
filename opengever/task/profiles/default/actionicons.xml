@@ -1,7 +1,0 @@
-<action-icons>
-  <action-icon category="folder_factories"
-               action_id="attach_remote_document"
-               title="Attach remote document" priority="0"
-               icon_expr="document_icon.gif"/>
-
-</action-icons>
