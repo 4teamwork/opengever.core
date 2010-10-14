@@ -39,7 +39,7 @@ class ContactInformation(grok.GlobalUtility):
         """Returns true, if `principal` is a userid.
         """
 
-        return ':' not in principal
+        return principal and ':' not in principal
 
     def list_users(self):
         """Returns a sql-alchemy query set containing all users.
@@ -90,7 +90,7 @@ class ContactInformation(grok.GlobalUtility):
         """Return true, if `principal` is a contact.
         """
 
-        return principal.startswith('contact:')
+        return principal and principal.startswith('contact:')
 
     def list_contacts(self):
         """Returns a catalog result set of contact brains.
@@ -123,7 +123,7 @@ class ContactInformation(grok.GlobalUtility):
         """Returns true, if `principal` is a inbox.
         """
 
-        return principal.startswith('inbox:')
+        return principal and principal.startswith('inbox:')
 
     def list_inboxes(self):
         """Returns a set of inboxes of all enabled clients.
@@ -203,6 +203,9 @@ class ContactInformation(grok.GlobalUtility):
         """Represent a user / contact / inbox / ... as string. This usually
         returns the fullname or another label / title.
         """
+
+        if not principal:
+            return ''
 
         if self.is_inbox(principal):
             client = self.get_client_of_inbox(principal)
