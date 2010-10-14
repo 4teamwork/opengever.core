@@ -24,10 +24,17 @@ class AutocompleteSelectionWidget(widget.AutocompleteSelectionWidget):
             assert ISource.providedBy(source)
 
             # custom
-            if IElephantVocabulary.providedBy(source) and \
-                    self.field.interface.providedBy(self.context):
-                value = getattr(self.field.interface(self.context),
-                                self.field.__name__)
+            if IElephantVocabulary.providedBy(source):
+                try:
+                    # If we cannot adapt the behavior or schema interface,
+                    # the context is wrong (e.g. we are one add form on the
+                    # parent). So we skip adding the current value. 
+                    storage = self.field.interface(self.context)
+                except TypeError:
+                    value = None
+                else:
+                    value = getattr(storage, self.field.__name__)
+
                 if value and value not in source.vocab:
                     contact_info = getUtility(IContactInformation)
                     term = source.vocab.createTerm(value, value,
