@@ -104,15 +104,12 @@ class ITask(form.Schema):
         required = True,
         )
 
-    form.widget(deadline='ftw.datepicker.widget.DatePickerFieldWidget')
     deadline = schema.Date(
         title=_(u"label_deadline", default=u"Deadline"),
         description=_(u"help_deadline", default=u""),
         required = True,
         )
 
-    form.widget(
-        date_of_completion='ftw.datepicker.widget.DatePickerFieldWidget')
     date_of_completion = schema.Date(
         title=_(u"label_date_of_completion", default=u"Date of completion"),
         description=_(u"help_date_of_completion", default=u""),
@@ -138,8 +135,6 @@ class ITask(form.Schema):
         required=False,
         )
 
-    form.widget(
-        expectedStartOfWork='ftw.datepicker.widget.DatePickerFieldWidget')
     expectedStartOfWork = schema.Date(
         title =_(u"label_expectedStartOfWork", default="Start with work"),
         description = _(u"help_expectedStartOfWork", default=""),
