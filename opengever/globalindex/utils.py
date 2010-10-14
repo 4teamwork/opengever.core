@@ -5,7 +5,7 @@ from zope.app.component.hooks import getSite
 from zope.component import queryUtility
 
 
-def indexed_task_link(item):
+def indexed_task_link(item, display_client=False):
     """Renders a indexed task item (globalindex sqlalchemy object) either
     with a link to the effective task (if the user has access) or just with
     the title.
@@ -41,8 +41,11 @@ def indexed_task_link(item):
     else:
         link_target = ''
 
-        # embed the client
-    client_html = ' <span class="discreet">(%s)</span>' % client.title
+    # embed the client
+    if display_client:
+        client_html = ' <span class="discreet">(%s)</span>' % client.title
+    else:
+        client_html = ''
 
     # render the full link if he has acccess
     inner_html = ''.join((image, item.title, client_html))
