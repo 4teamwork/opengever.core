@@ -32,7 +32,6 @@ from opengever.task.permissions import DEFAULT_ISSUE_MIME_TYPE
 from opengever.task import util
 from opengever.task.task import ITask
 from opengever.task.source import DossierPathSourceBinder
-from ftw.datepicker.widget import DatePickerFieldWidget
 
 
 class IResponse(Interface):
@@ -239,7 +238,6 @@ class AddForm(form.AddForm, AutoExtensibleForm):
     fields = field.Fields(IResponse)
     fields['responsible'].widgetFactory = AutocompleteFieldWidget
     fields['transition'].widgetFactory = radio.RadioFieldWidget
-    fields['deadline'].widgetFactory = DatePickerFieldWidget
     fields = fields.omit('date_of_completion')
 
     @property
