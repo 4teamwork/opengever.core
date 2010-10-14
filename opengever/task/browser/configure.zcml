@@ -7,33 +7,4 @@
         name="opengever.task.responsible.js"
         file="resources/opengever.task.responsible.js" />
 
-    <browser:page
-        for="*"
-        name="task-overview1"
-        class=".globaltasks.GlobalTaskOverview"
-        permission="zope2.View"
-        allowed_attributes="listing select_all"
-    />
-
-    <browser:page
-        for="*"
-        name="tabbedview_view-mytasks"
-        class=".globaltasks.MyTasks"
-        permission="zope2.View"
-    />
-
-    <browser:page
-        for="*"
-        name="tabbedview_view-issuedtasks"
-        class=".globaltasks.IssuedTasks"
-        permission="zope2.View"
-    />
-
-    <browser:page
-        for="*"
-        name="tabbedview_view-assignedtasks"
-        class=".globaltasks.AssignedTasks"
-        permission="zope2.View"
-    />
-
 </configure>

@@ -27,24 +27,6 @@ def globalindex_linked(context):
         wrapper = u'<span class="linkWrapper">%s</span>' % link
         return wrapper
     return get_linked
-    
-class GlobalTaskOverview(TabbedView):
-    """The task overview view.
-    The tab assignedTask can only view Administrators """
-
-    def get_tabs(self):
-        if self.context.portal_membership.getAuthenticatedMember().allowed(
-            self.context, ('Administrator',)):
-            return (
-                {'id': 'mytasks', 'icon': None, 'url': '#', 'class': None},
-                {'id': 'issuedtasks', 'icon': None, 'url': '#', 'class': None},
-                {'id': 'assignedtasks', 'icon': None, 'url': '#', 'class': None},
-            )
-        else:
-            return (
-                {'id': 'mytasks', 'icon': None, 'url': '#', 'class': None},
-                {'id': 'issuedtasks', 'icon': None, 'url': '#', 'class': None},
-            )
 
 class TaskBaseListing(BaseListingView):
 
@@ -93,35 +75,4 @@ class TaskBaseListing(BaseListingView):
         self.search()
 
 
-class MyTasks(TaskBaseListing):
-    """A listing view,
-    wich show all task where the actual user is the responsible.
-    """
 
-    def search(self):
-        portal_state = self.context.unrestrictedTraverse('@@plone_portal_state')
-        userid = portal_state.member().getId()
-        query_util = getUtility(ITaskQuery)
-        self.contents = query_util.get_tasks_for_responsible(userid, self.sort_on, self.sort_order)
-        self.len_results = len(self.contents)
-
-class IssuedTasks(TaskBaseListing):
-    """A listing view, which show all task issued by the actual user
-    """
-
-    def search(self):
-        portal_state = self.context.unrestrictedTraverse('@@plone_portal_state')
-        userid = portal_state.member().getId()
-        query_util = getUtility(ITaskQuery)
-        self.contents = query_util.get_tasks_for_issuer(userid, self.sort_on, self.sort_order)
-        self.len_results = len(self.contents)
-
-
-class AssignedTasks(TaskBaseListing):
-    """
-    """
-    def search(self):
-        query_util = getUtility(ITaskQuery)
-        self.contents = query_util.get_task_for_assigned_client(
-        (), self.sort_on, self.sort_order)
-        self.len_results = len(self.contents)
