@@ -121,7 +121,6 @@ class IDocumentSchema(form.Schema):
         required = False,
         )
 
-    form.widget(document_date='ftw.datepicker.widget.DatePickerFieldWidget')
     document_date = schema.Date(
         title = _(u'label_document_date', default='Document Date'),
         description = _(u'help_document_date', default=''),
@@ -186,14 +185,12 @@ class IDocumentSchema(form.Schema):
         required = False,
         )
 
-    form.widget(receipt_date='ftw.datepicker.widget.DatePickerFieldWidget')
     receipt_date = schema.Date(
         title = _(u'label_receipt_date', default='Date of receipt'),
         description = _(u'help_receipt_date', default=''),
         required = False,
         )
 
-    form.widget(delivery_date='ftw.datepicker.widget.DatePickerFieldWidget')
     delivery_date = schema.Date(
         title = _(u'label_delivery_date', default='Date of delivery'),
         description = _(u'help_delivery_date', default=''),
