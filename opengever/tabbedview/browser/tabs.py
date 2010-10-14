@@ -1,7 +1,6 @@
 import re
 from five import grok
 from Acquisition import aq_inner
-import datetime
 
 from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
 from zope.component import getUtility, queryUtility, getUtilitiesFor
