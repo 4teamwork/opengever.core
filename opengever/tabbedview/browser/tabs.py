@@ -1,6 +1,7 @@
 import re
 from five import grok
 from Acquisition import aq_inner
+import datetime
 
 from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
 from zope.component import getUtility, queryUtility, getUtilitiesFor
@@ -30,8 +31,11 @@ def datetime_compare(x, y):
         return -1
     elif b is None:
         return 1
-    else:
-        return cmp(a, b)
+
+    # we are not able to compare datetime and date objects. So
+    # let's just use strings.
+    return cmp(str(a), str(b))
+
 
 # #XXX really ugly. Will be overwritten in datetime_sort
 datetime_compare.index = 'modified'
