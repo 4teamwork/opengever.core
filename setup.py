@@ -35,6 +35,8 @@ setup(name='opengever.tabbedview',
         'setuptools',
         'ftw.tabbedview',
         'plone.app.dexterity',
+        'opengever.globalindex',
+        'opengever.task',
           #'collective.jqhistory'
           # -*- Extra requirements: -*-
       ],
