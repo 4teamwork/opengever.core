@@ -1,6 +1,7 @@
 from five import grok
 from ftw.tabbedview.browser.tabbed import TabbedView
 from opengever.tabbedview.browser.tabs import Documents, Dossiers
+from zope.interface import Interface
 
 
 def authenticated_member(context):
@@ -16,12 +17,13 @@ class PersonalOverview(TabbedView):
         return (
             {'id': 'mydossiers', 'icon': None, 'url': '#', 'class': None},
             {'id': 'mydocuments', 'icon': None, 'url': '#', 'class': None},
-        )
+            )
 
 
 class MyDossiers(Dossiers):
     grok.name('tabbedview_view-mydossiers')
     grok.require('zope2.View')
+    grok.context(Interface)
 
     types = ['opengever.dossier.businesscasedossier',
              'opengever.dossier.projectdossier',]
@@ -36,6 +38,7 @@ class MyDossiers(Dossiers):
 class MyDocuments(Documents):
     grok.name('tabbedview_view-mydocuments')
     grok.require('zope2.View')
+    grok.context(Interface)
 
     search_options = {'Creator': authenticated_member,}
 
