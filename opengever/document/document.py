@@ -306,9 +306,9 @@ def SearchableText( obj ):
     context = aq_inner( obj )
     transforms = getToolByName(obj, 'portal_transforms')
     fields = [
-        schema.getFields( IBasic ).get( 'title' ),
-        schema.getFields( IBasic ).get( 'description' ),
-        schema.getFields( IDocumentSchema).get('keywords'),
+        schema.getFields( IBasic ).get( 'title' ).encode('utf-8'),
+        schema.getFields( IBasic ).get( 'description' ).encode('utf-8'),
+        schema.getFields( IDocumentSchema).get('keywords').encode('utf-8'),
         schema.getFields( IDocumentSchema ).get('file'),
         ]
     searchable = []
