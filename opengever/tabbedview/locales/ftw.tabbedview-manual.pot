@@ -143,9 +143,6 @@ msgstr ""
 msgid "date_of_completion"
 msgstr ""
 
-msgid "issuedtasks"
-msgstr ""
-
 msgid "mytasks"
 msgstr ""
 
