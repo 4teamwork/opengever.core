@@ -1,4 +1,5 @@
 from AccessControl import getSecurityManager
+from zope.schema.vocabulary import getVocabularyRegistry
 from Acquisition import aq_parent, aq_inner
 from Products.CMFCore.utils import getToolByName
 from datetime import datetime, timedelta
@@ -219,16 +220,14 @@ class Task(Container):
 
     @property
     def task_type_category(self):
-        registry = getUtility(IRegistry)
-        reg_proxy = registry.forInterface(ITaskSettings)
-        if self.task_type in reg_proxy.unidirectional_by_reference:
-            return u'unidirectional_by_reference'
-        elif self.task_type in reg_proxy.unidirectional_by_value:
-            return u'unidirectional_by_value'
-        elif self.task_type in reg_proxy.bidirectional_by_reference:
-            return u'bidirectional_by_reference'
-        elif self.task_type in reg_proxy.bidirectional_by_value:
-            return u'bidirectional_by_value'
+        for category in ['unidirectional_by_reference',
+                         'unidirectional_by_value',
+                         'bidirectional_by_reference',
+                         'bidirectional_by_value']:
+            voc = getVocabularyRegistry().get(
+                self, 'opengever.task.' + category)
+            if self.task_type in voc:
+                return category
         return None
 
 
