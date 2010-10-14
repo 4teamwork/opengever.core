@@ -52,14 +52,12 @@ class IRepositoryFolderSchema(form.Schema):
         required = False,
         )
 
-    form.widget(valid_from='ftw.datepicker.widget.DatePickerFieldWidget')
     valid_from = schema.Date(
         title = _(u'label_valid_from', default=u'Valid from'),
         description = _(u'help_valid_from', default=u''),
         required = False,
         )
 
-    form.widget(valid_until='ftw.datepicker.widget.DatePickerFieldWidget')
     valid_until = schema.Date(
         title = _(u'label_valid_until', default=u'Valid until'),
         description = _(u'help_valid_until', default=u''),
