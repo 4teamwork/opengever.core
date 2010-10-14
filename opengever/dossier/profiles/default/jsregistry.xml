@@ -1,8 +1,0 @@
-<?xml version="1.0"?>
-<object name="portal_javascripts" meta_type="JavaScripts Registry">
-
-    <javascript enabled="True" id="++resource++plone.app.jquerytools.dateinput.js"
-                />
-
-</object>
-
