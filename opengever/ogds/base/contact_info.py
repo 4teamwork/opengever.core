@@ -210,7 +210,15 @@ class ContactInformation(grok.GlobalUtility):
 
         elif self.is_contact(principal):
             contact = self.get_contact(principal)
-            name = ' '.join((contact.lastname, contact.firstname))
+            if contact.lastname and contact.firstname:
+                name = ' '.join((contact.lastname, contact.firstname))
+            elif contact.lastname:
+                name = contact.lastname
+            elif contact.firstname:
+                name = contact.firstname
+            else:
+                name = contact.userid
+
             if with_email and contact.email:
                 name = '%s (%s)' % (name, contact.email)
             elif with_email2 and contact.email2:
@@ -220,7 +228,15 @@ class ContactInformation(grok.GlobalUtility):
         elif self.is_user(principal):
             user = self.get_user(principal)
             if user:
-                name = ' '.join((user.lastname, user.firstname))
+                if user.lastname and user.firstname:
+                    name = ' '.join((user.lastname, user.firstname))
+                elif user.lastname:
+                    name = user.lastname
+                elif user.firstname:
+                    name = user.firstname
+                else:
+                    name = user.userid
+
                 if with_email and user.email:
                     name = '%s (%s)' % (name, user.email)
                 elif with_email2 and user.email2:
@@ -238,7 +254,6 @@ class ContactInformation(grok.GlobalUtility):
                 if with_email and email:
                     name = '%s (%s)' % (name, email)
                 return name
-
 
         else:
             raise ValueError('Unknown principal type: %s' % str(principal))
