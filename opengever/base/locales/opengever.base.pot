@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2010-10-05 14:23+0000\n"
+"POT-Creation-Date: 2010-10-14 16:30+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -81,11 +81,11 @@ msgstr ""
 msgid "help_custody_period"
 msgstr ""
 
-#: ./opengever/base/behaviors/lifecycle.py:77
+#: ./opengever/base/behaviors/lifecycle.py:76
 msgid "help_dateofcassation"
 msgstr ""
 
-#: ./opengever/base/behaviors/lifecycle.py:83
+#: ./opengever/base/behaviors/lifecycle.py:81
 msgid "help_dateofsubmission"
 msgstr ""
 
@@ -139,12 +139,12 @@ msgid "label_custody_period"
 msgstr ""
 
 #. Default: "Date of cassation"
-#: ./opengever/base/behaviors/lifecycle.py:76
+#: ./opengever/base/behaviors/lifecycle.py:75
 msgid "label_dateofcassation"
 msgstr ""
 
 #. Default: "Date of submission"
-#: ./opengever/base/behaviors/lifecycle.py:82
+#: ./opengever/base/behaviors/lifecycle.py:80
 msgid "label_dateofsubmission"
 msgstr ""
 
@@ -211,10 +211,6 @@ msgstr ""
 #. Default: "public"
 #: opengever/repository/classification.py
 msgid "public"
-msgstr ""
-
-#: ./opengever/base/browser/personal_overview.py:34
-msgid "responsible"
 msgstr ""
 
 #. Default ""
