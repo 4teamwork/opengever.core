@@ -15,13 +15,6 @@
 
   <i18n:registerTranslations directory="locales" />
 
-  <browser:page
-      for="opengever.inbox.inbox.IInbox"
-      name="tabbedview_view-assigned_tasks"
-      class=".inbox.AssignedTasks"
-      permission="zope2.View"
-  />
-
 
   <!-- Include custom permissions -->
   <include file="permissions.zcml" />
