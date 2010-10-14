@@ -28,7 +28,7 @@ class UsersListing(OpengeverListingTab):
     grok.template('users')
 
     sort_on = 'fullname'
-    sort_order = 'reverse'
+    sort_order = ''
 
     enabled_actions = []
     major_actions = []
@@ -119,8 +119,8 @@ class UsersListing(OpengeverListingTab):
             colname = column['column']
 
             if colname == 'fullname':
-                fields.append(model.firstname)
                 fields.append(model.lastname)
+                fields.append(model.firstname)
 
             else:
                 field = getattr(model, colname, None)
