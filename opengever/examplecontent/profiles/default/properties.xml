@@ -6,5 +6,4 @@
               type="string">Opengever Administration</property>
     <property name="validate_email" type="boolean">True</property>
     <property name="email_charset" type="string">utf-8</property>
-    <property name="layout" type="string">dashboard</property>
 </site>
