@@ -5,7 +5,7 @@
                 enabled="True" id="++resource++opengever.task.responsible.js" inline="False"
                 insert-after="++resource++plone.formwidget.autocomplete/jquery.autocomplete.min.js"
                 />
-    <javascript enabled="False" id="++resource++plone.app.jquerytools.dateinput.js"
+    <javascript enabled="True" id="++resource++plone.app.jquerytools.dateinput.js"
                 />
 
 </object>
