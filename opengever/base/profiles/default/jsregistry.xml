@@ -4,7 +4,5 @@
     <javascript cacheable="True" compression="safe" cookable="True" expression=""
                 enabled="True" id="++resource++opengever.base.resources/sharing.js.js" inline="False"
                 />
-    <javascript enabled="True" id="++resource++plone.app.jquerytools.dateinput.js"
-                />
 
 </object>
