@@ -69,14 +69,12 @@ class IDossier(form.Schema):
     form.widget(keywords = TextLinesFieldWidget)
 
 
-    form.widget(start='ftw.datepicker.widget.DatePickerFieldWidget')
     start = schema.Date(
         title=_(u'label_start', default=u'Opening Date'),
         description = _(u'help_start', default=u''),
         required=False,
         )
 
-    form.widget(end='ftw.datepicker.widget.DatePickerFieldWidget')
     end = schema.Date(
         title=_(u'label_end', default=u'Closing Date'),
         description = _(u'help_end', default=u''),

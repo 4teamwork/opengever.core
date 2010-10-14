@@ -13,7 +13,6 @@ from z3c.form.browser import radio
 from Products.CMFCore.interfaces import ISiteRoot
 from Products.Transience.Transience import Increaser
 from Products.statusmessages.interfaces import IStatusMessage
-from ftw.datepicker.widget import DatePickerFieldWidget
 
 from plone.registry.interfaces import IRegistry
 from plone.directives import form as directives_form
@@ -135,7 +134,6 @@ class ArchiveForm(directives_form.Form):
     fields = field.Fields(IArchiveFormSchema)
     ignoreContext = True
     fields['filing_action'].widgetFactory[INPUT_MODE] = radio.RadioFieldWidget
-    fields['dossier_enddate'].widgetFactory = DatePickerFieldWidget
     label = _(u'heading_archive_form', u'Archive Dossier')
 
 
