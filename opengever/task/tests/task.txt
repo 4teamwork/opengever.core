@@ -1,0 +1,29 @@
+Task
+====
+This test checks the resolve rules of a task.
+
+    >>> from plone.dexterity.utils import createContentInContainer
+    >>> from opengever.base.interfaces import ISequenceNumber
+    >>> from zope.component import getUtility
+    >>> from plone.app.testing import TEST_USER_NAME, setRoles
+    >>> setRoles(self.portal, TEST_USER_NAME, ['Reviewer'])
+
+Create a Task:
+
+    >>> task1 = createContentInContainer(folder, 'opengever.task.task')
+    >>> task1
+    <Task ...>
+
+    >>> task2 = createContentInContainer(task1, 'opengever.task.task')
+    >>> wft = task1.portal_workflow
+    >>> wf = wft.get(wft.getChainFor(task1)[0])
+    >>> import pdb; pdb.set_trace( )
+    >>> transitions = [t.get('id') for t in wft.getTransitionsFor(task1)]
+    >>> 'task-transition-open-resolved' not in transitions
+    True
+
+So now we resolve the subtask and after the task resolving should also be work 
+    >>> wft.doActionFor(task2, 'task-transition-open-resolved')
+    >>> wft.doActionFor(task1, 'task-transition-open-resolved')
+    >>> wft.getInfoFor(task1, 'review_state')
+    'task-state-resolved'

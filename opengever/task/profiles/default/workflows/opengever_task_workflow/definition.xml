@@ -228,6 +228,7 @@
  <transition transition_id="task-transition-in-progress-resolved" title="task-transition-in-progress-resolved" new_state="task-state-resolved" trigger="USER" before_script="" after_script="">
   <action url="%(content_url)s/addresponse?form.widgets.transition=task-transition-in-progress-resolved" category="workflow" icon="">task-transition-in-progress-resolved</action>
   <guard>
+      <guard-expression>python: here.restrictedTraverse('resolve_check')()</guard-expression>
   </guard>
  </transition>
  <transition transition_id="task-transition-new-open" title="task-transition-new-open" new_state="task-state-open" trigger="USER" before_script="" after_script="">
@@ -254,6 +255,7 @@
  <transition transition_id="task-transition-open-resolved" title="task-transition-open-resolved" new_state="task-state-resolved" trigger="USER" before_script="" after_script="">
   <action url="%(content_url)s/addresponse?form.widgets.transition=task-transition-open-resolved" category="workflow" icon="">task-transition-open-resolved</action>
   <guard>
+      <guard-expression>python: here.restrictedTraverse('resolve_check')()</guard-expression>
   </guard>
  </transition>
  <transition transition_id="task-transition-rejected-open" title="task-transition-rejected-open" new_state="task-state-open" trigger="USER" before_script="" after_script="">
