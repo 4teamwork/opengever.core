@@ -29,7 +29,7 @@ def settings(context):
 
     # set default layout
     context.get('aufgaben').setLayout('task-overview1')
-    
+
     # replace unused navigation portlet with the tree portlet
     from zope.component import getUtility
     from zope.component import getMultiAdapter
@@ -65,7 +65,7 @@ def set_permissions(portal):
 def setupVarious(setup):
 
     if setup.readDataFile('opengever.examplecontent.txt') is None:
-        pass
+        return
 
     site = setup.getSite()
     start_import(site)
