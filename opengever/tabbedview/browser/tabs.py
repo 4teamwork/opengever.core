@@ -138,8 +138,7 @@ class Documents(OpengeverListingTab):
 
     types = ['opengever.document.document', 'ftw.mail.mail']
 
-    search_options = {'isWorkingCopy': 0,
-                      'trashed': False}
+    search_options = {'isWorkingCopy': 0,}
 
     columns = (
         ('', helper.draggable),
