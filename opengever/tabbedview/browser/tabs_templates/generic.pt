@@ -28,7 +28,7 @@
                     <a class="actionicon" href="#" tal:attributes="href button/url;" tal:content="button/title" />
                 </li>
             </tal:major_buttons>
-            <li>
+            <li tal:condition="view/minor_buttons">
                 <dl id="plone-contentmenu-tabbedview-actions" class="actionMenu deactivated">
                   <dt class="actionMenuHeader label-">
                     <a href="">
