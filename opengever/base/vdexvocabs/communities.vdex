@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vdex xmlns="http://www.imsglobal.org/xsd/imsvdex_v1p0"
+      orderSignificant="false" language="en">
+
+    <vocabIdentifier>opengever.base.communities</vocabIdentifier>
+
+    <term>
+        <termIdentifier>Ausserkantonal</termIdentifier>
+        <caption>
+            <langstring language="de">Ausserkantonal</langstring>
+        </caption>
+    </term>
+
+    <term>
+        <termIdentifier>Baar</termIdentifier>
+        <caption>
+            <langstring language="de">Baar</langstring>
+        </caption>
+    </term>
+
+    <term>
+        <termIdentifier>Cham</termIdentifier>
+        <caption>
+            <langstring language="de">Cham</langstring>
+        </caption>
+    </term>
+
+    <term>
+        <termIdentifier>Hünenberg</termIdentifier>
+        <caption>
+            <langstring language="de">Hünenberg</langstring>
+        </caption>
+    </term>
+
+    <term>
+        <termIdentifier>Kanton Zug</termIdentifier>
+        <caption>
+            <langstring language="de">Kanton Zug</langstring>
+        </caption>
+    </term>
+
+    <term>
+        <termIdentifier>Menzingen</termIdentifier>
+        <caption>
+            <langstring language="de">Menzingen</langstring>
+        </caption>
+    </term>
+
+    <term>
+        <termIdentifier>Neuheim</termIdentifier>
+        <caption>
+            <langstring language="de">Neuheim</langstring>
+        </caption>
+    </term>
+
+    <term>
+        <termIdentifier>Oberägeri</termIdentifier>
+        <caption>
+            <langstring language="de">Oberägeri</langstring>
+        </caption>
+    </term>
+
+    <term>
+        <termIdentifier>Risch</termIdentifier>
+        <caption>
+            <langstring language="de">Risch</langstring>
+        </caption>
+    </term>
+
+    <term>
+        <termIdentifier>Steinhausen</termIdentifier>
+        <caption>
+            <langstring language="de">Steinhausen</langstring>
+        </caption>
+    </term>
+
+    <term>
+        <termIdentifier>Unterägeri</termIdentifier>
+        <caption>
+            <langstring language="de">Unterägeri</langstring>
+        </caption>
+    </term>
+
+    <term>
+        <termIdentifier>Walchwil</termIdentifier>
+        <caption>
+            <langstring language="de">Walchwil</langstring>
+        </caption>
+    </term>
+
+    <term>
+        <termIdentifier>Zug</termIdentifier>
+        <caption>
+            <langstring language="de">Zug</langstring>
+        </caption>
+    </term>
+
+</vdex>

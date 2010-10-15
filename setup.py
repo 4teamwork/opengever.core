@@ -43,6 +43,7 @@ setup(name='opengever.base',
         'opengever.ogds.base',
         'plone.autoform',
         'plone.registry',
+        'collective.vdexvocabulary',
         # -*- Extra requirements: -*-
         ],
       tests_require=tests_require,
