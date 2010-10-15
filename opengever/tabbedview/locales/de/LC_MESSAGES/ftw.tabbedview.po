@@ -88,9 +88,6 @@ msgstr "Termine"
 msgid "important_contact"
 msgstr "Allgemein"
 
-msgid "issuedtasks"
-msgstr "Erteilte Aufgaben"
-
 msgid "issuer"
 msgstr "Zugewiesen von"
 

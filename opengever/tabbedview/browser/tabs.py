@@ -30,8 +30,11 @@ def datetime_compare(x, y):
         return -1
     elif b is None:
         return 1
-    else:
-        return cmp(a, b)
+
+    # we are not able to compare datetime and date objects. So
+    # let's just use strings.
+    return cmp(str(a), str(b))
+
 
 # #XXX really ugly. Will be overwritten in datetime_sort
 datetime_compare.index = 'modified'
@@ -145,7 +148,8 @@ class Documents(OpengeverListingTab):
         ('', helper.path_checkbox),
         ('Title', 'sortable_title', linked),
         {'column':'document_author',
-         'column_title':_('label_document_author', default="Document Author"),},
+         'column_title':_('label_document_author', default="Document Author"),
+         'transform': readable_ogds_author},
         {'column':'document_date',
          'column_title':_('label_document_date', default="Document Date"),
          'transform':helper.readable_date},
