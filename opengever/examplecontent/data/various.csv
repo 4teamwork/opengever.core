@@ -5,7 +5,6 @@ _path,_type,inbox_group,title,responsible,responsible_client,issuer,deadline,tas
 /ordnungssystem/rechnungswesen/belege/dossier-1,opengever.dossier.businesscasedossier,,Hugo's Dossier,franz.michel
 /ordnungssystem/rechnungswesen/belege/dossier-1/dossier-2,opengever.dossier.businesscasedossier,,Unterteilung in ein Subdossier,franz.michel
 /ordnungssystem/rechnungswesen/belege/dossier-1/document-1,opengever.document.document,,Ein kleines Testdocument,
-/aufgaben,Folder,,Aufgaben
 /vorlagen/beispiel-standardablauf,opengever.tasktemplates.tasktemplatefolder,,Beispiel Standardablauf
 /vorlagen/beispiel-standardablauf/tt1,opengever.tasktemplates.tasktemplate,,Aufgabe eins,responsible,interactive_users,responsible,4,report
 /vorlagen/beispiel-standardablauf/tt2,opengever.tasktemplates.tasktemplate,,Aufgabe zwei,responsible,interactive_users,current_user,4,direct-execution
