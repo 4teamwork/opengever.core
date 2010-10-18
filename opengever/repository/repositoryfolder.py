@@ -65,24 +65,35 @@ class IRepositoryFolderSchema(form.Schema):
         )
 
     location = schema.TextLine(
-         title = _(u'label_location', default=u'Location'),
-         description = _(u'help_location', default=u''),
-         required = False,
-         )
+        title = _(u'label_location', default=u'Location'),
+        description = _(u'help_location', default=u''),
+        required = False,
+        )
 
     referenced_activity = schema.TextLine(
-         title = _(
+        title = _(
             u'label_referenced_activity',
             default=u'Referenced activity'),
-         description = _(u'help_referenced_activity', default=u''),
-         required = False,
-         )
+        description = _(u'help_referenced_activity', default=u''),
+        required = False,
+        )
 
     former_reference = schema.TextLine(
-         title = _(u'label_former_reference', default=u'Former reference'),
-         description = _(u'help_former_reference', default=u''),
-         required = False,
-         )
+        title = _(u'label_former_reference', default=u'Former reference'),
+        description = _(u'help_former_reference', default=u''),
+        required = False,
+        )
+
+    addable_dossier_types = schema.List(
+        title=_(u'label_addable_dossier_types',
+                default=u'Addable dossier types'),
+        description=_(u'help_addable_dossier_types',
+                      default=u'Select all additional dossier types which '
+                      'should be addable in this repository folder.'),
+        value_type=schema.Choice(vocabulary=u'opengever.repository.'
+                                 u'RestrictedAddableDossiersVocabulary'),
+        required=False)
+
 
 
 class RepositoryFolder(content.Container):
@@ -139,10 +150,35 @@ class RepositoryFolder(content.Container):
             if obj.portal_type==self.portal_type:
                 contains_similar_objects = True
                 break
+
         # filter content types, if required
         if contains_similar_objects:
             # only allow same types
             types = filter(lambda a: a== fti, types)
+
+        # finally: remove not enabled resticted content types
+        marker_behavior = 'opengever.dossier.behaviors.restricteddossier.' + \
+            'IRestrictedDossier'
+
+        allowed = self.addable_dossier_types \
+            and self.addable_dossier_types or []
+
+        def _filterer(fti):
+            if fti.id in allowed:
+                # fti is enabled in repository folder
+                return True
+
+            elif getattr(fti, 'behaviors') \
+                    and marker_behavior in fti.behaviors:
+                # fti has marker interface and is not enabled
+                return False
+
+            else:
+                # normal type - we don't care
+                return True
+
+        types = filter(_filterer, types)
+
         return types
 
 
