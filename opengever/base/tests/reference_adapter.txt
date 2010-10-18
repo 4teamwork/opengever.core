@@ -7,7 +7,7 @@ Do some imports, and standard configuration:
     >>> from opengever.base.interfaces import IReferenceNumberPrefix
 
     >>> self.setRoles('Manager')
-    >>> fti = DexterityFTI('OpenGeverBaseFTI', klass="plone.dexterity.content.Container", global_allow=True, allowed_content_types=['OpenGeverBaseFTI'])
+    >>> fti = DexterityFTI('OpenGeverBaseFTI', klass="plone.dexterity.content.Container", global_allow=True, allowed_content_types=['OpenGeverBaseFTI'],)
     >>> self.portal.portal_types._setObject('OpenGeverBaseFTI', fti)
     'OpenGeverBaseFTI'
     >>> self.portal.invokeFactory('OpenGeverBaseFTI', 'f1')
