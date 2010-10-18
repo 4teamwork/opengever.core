@@ -20,7 +20,7 @@
         for="*"
         name="personal_overview"
         class=".personal_overview.PersonalOverview"
-        permission="zope2.View"
+        permission="cmf.SetOwnProperties"
         allowed_attributes="listing select_all"
         />
 
