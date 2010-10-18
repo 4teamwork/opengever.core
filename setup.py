@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 import os
 
-version = '1.0'
+version = open('opengever/latex/version.txt').read().strip()
 maintainer = 'Jonas Baumann'
 
 setup(name='opengever.latex',
