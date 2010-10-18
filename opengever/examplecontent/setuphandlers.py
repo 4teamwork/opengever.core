@@ -12,6 +12,9 @@ def start_import(context):
 
     transmogrifier(u'opengever.examplecontent.various')
     transaction.commit()
+    
+    transmogrifier(u'opengever.examplecontent.templates')
+    transaction.commit()
 
     # transmogrifier(u'opengever.examplecontent.users')
     # transaction.commit()
@@ -63,11 +66,10 @@ def set_permissions(portal):
 
 
 def setupVarious(setup):
-
+    site = setup.getSite()
+    start_import(site)
     if setup.readDataFile('opengever.examplecontent.txt') is None:
         return
 
-    site = setup.getSite()
-    start_import(site)
     settings(site)
     set_permissions(site)

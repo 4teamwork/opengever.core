@@ -1,0 +1,5 @@
+_path,_type,title,file
+/vorlagen/document,opengever.document.document,Leeres Word-Dokument,opengever.examplecontent:data/templates/neu.doc
+/vorlagen/document,opengever.document.document,Leere Excel-Tabelle,opengever.examplecontent:data/templates/neu.xls
+/vorlagen/document,opengever.document.document,Leere Powerpoint Präsentation,opengever.examplecontent:data/templates/neu.ppt
+/vorlagen/document,opengever.document.document,Powerpoint Präsentation CD,opengever.examplecontent:data/templates/vorlage.ppt

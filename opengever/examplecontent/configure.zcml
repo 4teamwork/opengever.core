@@ -48,4 +48,17 @@
       configuration="cfgs/users.cfg"
       />
 
+  <transmogrifier:registerConfig
+      name="opengever.examplecontent.templates"
+      title="Opengever ExampleContent Users Import"
+      description="Pipeline configuration for Opengever Examplecontent import"
+      configuration="cfgs/templates.cfg"
+      />
+
+  <utility
+      component=".filesection.NamedFileCreatorSection"
+      name="opengever.examplecontent.filesection.namedfilecreator"
+      />
+
+
 </configure>
