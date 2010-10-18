@@ -17,6 +17,7 @@ class TestPortlet(TestCase):
 
     def afterSetUp(self):
         self.setRoles(('Manager', ))
+        self.portal.invokeFactory('Folder', id='f1')
 
     def test_portlet_type_registered(self):
         portlet = getUtility(
@@ -27,7 +28,7 @@ class TestPortlet(TestCase):
 
     def test_interfaces(self):
         # TODO: Pass any keyword arguments to the Assignment constructor
-        portlet = treeportlet.Assignment()
+        portlet = treeportlet.Assignment('f1')
         self.failUnless(IPortletAssignment.providedBy(portlet))
         self.failUnless(IPortletDataProvider.providedBy(portlet.data))
 
@@ -45,18 +46,17 @@ class TestPortlet(TestCase):
         # form.
         # Note: if the portlet has a NullAddForm, simply call
         # addview() instead of the next line.
-        addview.createAndAdd(data={})
+        addview.createAndAdd(data={'root_path':'f1',})
 
         self.assertEquals(len(mapping), 1)
-        self.failUnless(isinstance(mapping.values()[0],
-                                   treeportlet.Assignment))
+        self.failUnless(isinstance(mapping.values()[0], treeportlet.Assignment))
 
     def test_invoke_edit_view(self):
         # NOTE: This test can be removed if the portlet has no edit form
         mapping = PortletAssignmentMapping()
         request = self.folder.REQUEST
 
-        mapping['foo'] = treeportlet.Assignment()
+        mapping['foo'] = treeportlet.Assignment('f1')
         editview = getMultiAdapter((mapping['foo'], request), name='edit')
         self.failUnless(isinstance(editview, treeportlet.EditForm))
 
@@ -68,7 +68,7 @@ class TestPortlet(TestCase):
                              context=self.portal)
 
         # TODO: Pass any keyword arguments to the Assignment constructor
-        assignment = treeportlet.Assignment()
+        assignment = treeportlet.Assignment('f1')
 
         renderer = getMultiAdapter(
             (context, request, view, manager, assignment), IPortletRenderer)
@@ -79,6 +79,7 @@ class TestRenderer(TestCase):
 
     def afterSetUp(self):
         self.setRoles(('Manager', ))
+        self.portal.invokeFactory('Folder', id='f1')
 
     def renderer(self, context=None, request=None, view=None, manager=None,
                  assignment=None):
@@ -90,14 +91,14 @@ class TestRenderer(TestCase):
 
         # TODO: Pass any default keyword arguments to the Assignment
         # constructor.
-        assignment = assignment or treeportlet.Assignment()
+        assignment = assignment or treeportlet.Assignment('f1')
         return getMultiAdapter((context, request, view, manager, assignment),
                                IPortletRenderer)
 
     def test_render(self):
         # TODO: Pass any keyword arguments to the Assignment constructor.
         r = self.renderer(context=self.portal,
-                          assignment=treeportlet.Assignment())
+                          assignment=treeportlet.Assignment('f1'))
         r = r.__of__(self.folder)
         r.update()
         output = r.render()

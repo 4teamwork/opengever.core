@@ -80,7 +80,7 @@ class Renderer(base.Renderer):
             return current.Title()
             while current.Type() != 'RepositoryRoot':
                 current = current.aq_parent
-        return current.Title()
+        return aq_inner(self.context).Title()
 
     def root_path(self):
         return getattr(self.data,'root_path', None)
