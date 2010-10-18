@@ -20,3 +20,14 @@ msgstr ""
 msgid "Add task from template"
 msgstr ""
 
+msgid "tasktemplate_activ"
+msgstr ""
+
+msgid "tasktemplate_inactiv"
+msgstr ""
+
+msgid "tasktemplates-transition-activ-inactiv"
+msgstr ""
+
+msgid "tasktemplates-transition-inactiv-activ"
+msgstr ""

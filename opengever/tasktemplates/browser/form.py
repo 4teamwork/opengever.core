@@ -41,18 +41,20 @@ class AddForm(BrowserView):
     steps = {
         'templates': {
             'columns' : (('', helper.path_radiobutton), 'Title' ,('created', helper.readable_date)),
-            'types': ('TaskTemplateFolder',)
+            'types': ('TaskTemplateFolder',),
+            'states': ('tasktemplate-state-activ',),
             },
         'tasks': {
             'columns' : (('', helper.path_radiobutton), 'Title', 'created'),
-            'types': ('TaskTemplate',)
+            'types': ('TaskTemplate',),
+            'states':'*',
             }
         }
 
     def listing(self, show='templates'):
         """returns a listing of either TaskTemplateFolders or TaskTemplates"""
 
-        templates = self.context.portal_catalog(Type=self.steps[show]['types'])
+        templates = self.context.portal_catalog(Type=self.steps[show]['types'], review_state=self.steps[show]['states'])
         generator = queryUtility(ITableGenerator, 'ftw.tablegenerator')
         return generator.generate(templates,
                                   self.steps[show]['columns'],
