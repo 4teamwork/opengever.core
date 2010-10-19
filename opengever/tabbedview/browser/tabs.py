@@ -214,6 +214,7 @@ class Dossiers(OpengeverListingTab):
                        'cut',
                        'copy',
                        'paste',
+                       'pdf_dossierlisting',
                        ]
 
     major_actions = ['change_state',
