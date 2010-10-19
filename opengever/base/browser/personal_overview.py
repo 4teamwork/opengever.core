@@ -72,9 +72,8 @@ class MyDossiers(Dossiers):
 
     search_options = {'responsible': authenticated_member,}
 
-    enabled_actions = []
-    major_actions = []
-    columns = remove_control_columns(Dossiers.columns)
+    enabled_actions = ['pdf_dossierlisting']
+    major_actions = ['pdf_dossierlisting']
 
     @property
     def view_name(self):
