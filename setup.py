@@ -35,6 +35,7 @@ setup(name='opengever.latex',
         'opengever.ogds.base',
         'opengever.base',
         'opengever.repository',
+        'opengever.task',
         # -*- Extra requirements: -*-
         ],
       entry_points="""

@@ -4,6 +4,13 @@
     i18n_domain="opengever.latex">
 
     <browser:view
+        for="opengever.dossier.behaviors.dossier.IDossierMarker"
+        name="pdf-dossier-details"
+        class=".dossierdetails.DossierDetailsPDF"
+        permission="zope2.View"
+        />
+
+    <browser:view
         for="*"
         name="pdf-dossier-listing"
         class=".dossierlisting.DossierListingPDF"
