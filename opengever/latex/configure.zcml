@@ -12,6 +12,12 @@
     <include package="z3c.autoinclude" file="meta.zcml" />
     <includeDependencies package="." />
 
+    <!-- grok -->
+    <grok:grok package="." />
+
+    <include package=".views" />
+    <include package=".layouts" />
+
     <!-- generic setup -->
     <!--     <genericsetup:registerProfile -->
     <!--         name="default" -->
@@ -20,8 +26,5 @@
     <!--         directory="profiles/default" -->
     <!--         provides="Products.GenericSetup.interfaces.EXTENSION" -->
     <!--         /> -->
-
-    <!-- grok -->
-    <grok:grok package="." />
 
 </configure>

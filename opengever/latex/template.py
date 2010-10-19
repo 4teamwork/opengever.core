@@ -1,10 +1,12 @@
-from zope.app.pagetemplate.viewpagetemplatefile import PageTemplateFile
+from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
 
 
-class LatexTemplateFile(PageTemplateFile):
+class LatexTemplateFile(ViewPageTemplateFile):
     """Latex template file.
     """
 
     def __call__(self, instance, **keywords):
-        data = self._read_file()
-        return data % keywords
+        text, type_ = self._read_file()
+        if isinstance(text, unicode):
+            text = text.encode('utf-8')
+        return text % keywords
