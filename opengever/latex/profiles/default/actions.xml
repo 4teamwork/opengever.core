@@ -19,6 +19,19 @@
             <property name="visible">True</property>
         </object>
 
+        <object name="pdf_taskslisting" meta_type="CMF Action"
+                i18n:domain="opengever.latex">
+            <property name="title" i18n:translate="">Print selection (PDF)</property>
+            <property name="description" i18n:translate=""></property>
+            <property name="url_expr">string:pdf-tasks-listing:method</property>
+            <property name="icon_expr"></property>
+            <property name="available_expr"></property>
+            <property name="permissions">
+                <element value="View"/>
+            </property>
+            <property name="visible">True</property>
+        </object>
+
 
     </object>
 
