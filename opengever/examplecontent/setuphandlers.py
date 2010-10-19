@@ -69,10 +69,9 @@ def set_permissions(portal):
 
 
 def setupVarious(setup):
-    site = setup.getSite()
-    start_import(site)
     if setup.readDataFile('opengever.examplecontent.txt') is None:
         return
-
+    site = setup.getSite()
+    start_import(site)
     settings(site)
     set_permissions(site)
