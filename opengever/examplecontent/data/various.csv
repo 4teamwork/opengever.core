@@ -1,7 +1,7 @@
 _path,_type,inbox_group,title,responsible,responsible_client,issuer,deadline,task_type,transitions
 /eingangskorb,opengever.inbox.inbox,og_mandant1_eingangskorb,Eingangskorb,
 /vorlagen,opengever.dossier.templatedossier,,Vorlagen,franz.michel,
-/kontakte,opengever.contact.contactfolder,,Kontakte,
+/kontakte,opengever.contact.contactfolder,,Kontakte,,,,,,publish
 /ordnungssystem/rechnungswesen/belege/dossier-1,opengever.dossier.businesscasedossier,,Hugo's Dossier,franz.michel,
 /ordnungssystem/rechnungswesen/belege/dossier-1/dossier-2,opengever.dossier.businesscasedossier,,Unterteilung in ein Subdossier,franz.michel,
 /ordnungssystem/rechnungswesen/belege/dossier-1/document-1,opengever.document.document,,Ein kleines Testdocument,,
