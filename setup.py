@@ -33,6 +33,8 @@ setup(name='opengever.latex',
         'setuptools',
         'plonegov.pdflatex',
         'opengever.ogds.base',
+        'opengever.base',
+        'opengever.repository',
         # -*- Extra requirements: -*-
         ],
       entry_points="""
