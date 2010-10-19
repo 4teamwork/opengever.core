@@ -16,6 +16,9 @@ def start_import(context):
     transmogrifier(u'opengever.examplecontent.templates')
     transaction.commit()
 
+    transmogrifier(u'opengever.examplecontent.contacts')
+    transaction.commit()
+
     # transmogrifier(u'opengever.examplecontent.users')
     # transaction.commit()
 
