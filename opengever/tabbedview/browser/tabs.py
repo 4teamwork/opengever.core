@@ -265,6 +265,7 @@ class Tasks(OpengeverListingTab):
         'change_state',
         'cut',
         'paste',
+        'pdf_taskslisting',
         ]
 
 
