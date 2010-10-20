@@ -48,7 +48,7 @@ setup(name='opengever.ogds.base',
         'opengever.konsulmigration',
         # FIXME: probably this dependency shouldn't be here
         'simplejson',
-        'ftw.dictstorage[sqlalchemy]',
+        'ftw.dictstorage [sqlalchemy]',
         ],
       tests_require=tests_require,
       extras_require=dict(tests=tests_require),
