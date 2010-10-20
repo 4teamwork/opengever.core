@@ -2,6 +2,6 @@
 <metadata>
   <version>2</version>
   <dependencies>
-	    <dependency>profile-ftw.tabbedview:default</dependency>
+	    <dependency>profile-ftw.tabbedview:jqueryui</dependency>
   </dependencies>
 </metadata>
