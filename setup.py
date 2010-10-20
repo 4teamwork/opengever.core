@@ -30,6 +30,13 @@ setup(name='opengever.latex',
       include_package_data=True,
       zip_safe=False,
       install_requires=[
+        'plonegov.pdflatex',
+        'opengever.task',
+        'opengever.repository',
+        'opengever.ogds.base',
+        'opengever.dossier',
+        'opengever.base',
+        'ftw.table',
         'setuptools',
         # -*- Extra requirements: -*-
         ],
