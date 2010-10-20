@@ -10,8 +10,6 @@
             <interface value="IGroupManagement"/>
             <interface value="IGroupsPlugin"/>
             <interface value="IPropertiesPlugin"/>
-            <interface value="IRoleEnumerationPlugin"/>
-            <interface value="IRolesPlugin"/>
             <interface value="IUserAdderPlugin"/>
             <interface value="IUserEnumerationPlugin"/>
             <interface value="IUserManagement"/>
