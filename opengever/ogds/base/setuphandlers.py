@@ -6,8 +6,8 @@ from zope.interface import alsoProvides
 from z3c.saconfig.interfaces import IScopedSession
 from zope.component import queryUtility
 
-
-MODELS = [User, Client]
+from ftw.dictstorage.saconfig import DictStorageModel
+MODELS = [User, Client, DictStorageModel]
 
 
 def import_various(context):
