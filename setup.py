@@ -43,6 +43,7 @@ setup(name='opengever.policy.base',
           'opengever.trash',
           'opengever.workflows',
           'opengever.contact',
+          'opengever.latex',
       ],
       entry_points="""
       # -*- Entry points: -*-
