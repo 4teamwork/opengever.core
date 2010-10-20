@@ -33,9 +33,6 @@ def settings(context):
         context.get('Members').setExcludeFromNav(True)
         context.get('Members').reindexObject()
 
-    # set default layout
-    context.get('aufgaben').setLayout('task-overview1')
-
     # replace unused navigation portlet with the tree portlet
     from zope.component import getUtility
     from zope.component import getMultiAdapter
