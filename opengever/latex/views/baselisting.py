@@ -44,3 +44,11 @@ class BasePDFListing(AsPDFView):
                                        'depth': 0}})
             assert len(brains) == 1
             yield brains[0]
+
+    def _prepare_table_row(self, *cells):
+        """Converts every cell in `cells` into LaTeX and merges them
+        to a LaTeX row.
+        """
+
+        return '%s%s' % (' & '.join([self.convert(cell) for cell in cells]),
+                         '\\\\ \\hline\n')

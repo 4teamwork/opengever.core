@@ -1,13 +1,9 @@
-from Acquisition import aq_inner, aq_parent
-from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
-from opengever.base.interfaces import IReferenceNumber
-from opengever.base.interfaces import ISequenceNumber
-from opengever.dossier.behaviors.dossier import IDossier
+from Products.CMFCore.utils import getToolByName
+from ftw.table import helper
 from opengever.latex.template import LatexTemplateFile
+from opengever.latex.views.baselisting import BasePDFListing
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.ogds.base.utils import get_current_client
-from opengever.repository.interfaces import IRepositoryFolder
-from opengever.latex.views.baselisting import BasePDFListing
 from zope.component import getUtility
 
 
@@ -25,52 +21,44 @@ class DossierListingPDF(BasePDFListing):
     def get_listing_rows(self):
         """Returns the listing rows rendered in latex.
         """
-        data = []
 
-        sequence_number = getUtility(ISequenceNumber)
-        client = get_current_client()
+        data = []
         info = getUtility(IContactInformation)
+        client = get_current_client()
 
         for brain in self.get_selected_brains():
-            obj = brain.getObject()
-            dossier = IDossier(obj)
-            ref = IReferenceNumber(obj)
-            obj_state = obj.restrictedTraverse('@@plone_context_state')
+            data.append(self._prepare_table_row(
+                    str(brain.sequence_number),
+                    str(brain.reference),
+                    str(self.get_repository_title(brain)),
+                    str(brain.Title),
+                    '%s / %s' % (client.title,
+                                 info.describe(brain.responsible)),
+                    self.context.translate(brain.review_state,
+                                           domain='plone'),
+                    helper.readable_date(brain, brain.start),
+                    ))
 
-            # walk the breadcrumbs up and search for a repository folder
-            repository_folder = obj
-            while not IRepositoryFolder.providedBy(repository_folder):
-                repository_folder = aq_parent(aq_inner(repository_folder))
-                if IPloneSiteRoot.providedBy(repository_folder):
-                    repository_folder = None
-                    break
+        return ''.join(data)
 
-            # readable responsible
-            responsible = '%s / %s' % (
-                client.title,
-                info.describe(dossier.responsible))
+    def get_repository_title(self, brain):
+        """Searches the title of the first parental repository folder of the
+        brain.
+        """
 
-            # calculate start
-            if dossier.start:
-                start = dossier.start.strftime('%d.%m.%Y')
+        rf_marker = 'opengever.repository.interfaces.IRepositoryFolder'
 
-            # html 2 latex
-            data.append(' & '.join((
-                        str(sequence_number.get_number(obj)),
-                        ref.get_number(),
-                        repository_folder and repository_folder.Title() or '',
-                        obj.Title(),
-                        responsible,
-                        self.context.translate(obj_state.workflow_state(),
-                                               domain='plone'),
-                        start,
-                        )))
+        path = brain.getPath().split('/')[:-1]
+        portal = getToolByName(self.context, 'portal_url').getPortalObject()
+        portal_path = '/'.join(portal.getPhysicalPath())
+        catalog = getToolByName(self.context, 'portal_catalog')
 
-        if len(data):
-            # we want a \\ and \hline after EVERY line, so lets add a empty
-            # entry
-            data.append('')
+        while path and '/'.join(path) != portal_path:
+            brains = catalog({'path': {'query': '/'.join(path),
+                                       'depth': 0},
+                              'object_provides': rf_marker})
 
-        return '\\\\ \\hline\n'.join(data)
+            if len(brains):
+                return brains[0].Title
 
-
+        return ''
