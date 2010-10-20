@@ -6,7 +6,7 @@ from zope.interface import alsoProvides
 from z3c.saconfig.interfaces import IScopedSession
 from zope.component import queryUtility
 
-from ftw.dictstorage.saconfig import DictStorageModel
+from ftw.dictstorage.sql import DictStorageModel
 from z3c.saconfig import named_scoped_session
 
 
