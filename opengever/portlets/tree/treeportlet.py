@@ -10,7 +10,7 @@ from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from Products.CMFCore.utils import getToolByName
 
 from Acquisition import aq_inner
-
+from AccessControl.unauthorized import Unauthorized
 
 class ITreePortlet(IPortletDataProvider):
     """A portlet
@@ -51,7 +51,6 @@ class Assignment(base.Assignment):
     def __init__(self, root_path):
         self.root_path = root_path
 
-
     @property
     def title(self):
         """This property is used to give the title of the portlet in the
@@ -70,11 +69,13 @@ class Renderer(base.Renderer):
     render = ViewPageTemplateFile('treeportlet.pt')
     
     def header(self):
+        import pdb; pdb.set_trace( )
         current = aq_inner(self.context)
         # Don't travsere to top-level application obj if TreePortlet
         # was added to the Plone Site Root
         if self.root_path() != None:
             portal_url = getToolByName(self.context, 'portal_url')
+            
             current = portal_url.getPortalObject().restrictedTraverse(self.root_path().encode('utf-8'))
         elif current.Type() != 'Plone Site':
             return current.Title()
@@ -84,6 +85,19 @@ class Renderer(base.Renderer):
 
     def root_path(self):
         return getattr(self.data,'root_path', None)
+        
+    @property
+    def available(self):
+        if self.root_path() != None:
+            portal_url = getToolByName(self.context, 'portal_url')
+            try:
+                portal_url.getPortalObject().restrictedTraverse(self.root_path().encode('utf-8'))
+            except KeyError:
+                return False
+            except Unauthorized:
+                return False
+        return True
+
 
 class AddForm(base.AddForm):
     """Portlet add form.
