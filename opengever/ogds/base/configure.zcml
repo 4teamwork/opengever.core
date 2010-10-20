@@ -15,6 +15,17 @@
 
     <i18n:registerTranslations directory="locales" />
 
+    <adapter
+        factory=".setuphandlers.OpenGeverSessionName"
+        provides="ftw.dictstorage.interfaces.IConfig"
+        for="ftw.dictstorage.interfaces.ISQLAlchemy"
+        />
+
+    <class class="ftw.treeview.view.TreeView">
+        <implements interface="ftw.dictstorage.interfaces.ISQLAlchemy" />
+    </class>
+
+
     <genericsetup:registerProfile
         name="default"
         title="opengever.ogds.base"

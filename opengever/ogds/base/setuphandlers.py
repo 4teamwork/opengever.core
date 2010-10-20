@@ -7,6 +7,13 @@ from z3c.saconfig.interfaces import IScopedSession
 from zope.component import queryUtility
 
 from ftw.dictstorage.saconfig import DictStorageModel
+from z3c.saconfig import named_scoped_session
+
+
+def OpenGeverSessionName(object):
+    return named_scoped_session('opengever')
+
+
 MODELS = [User, Client, DictStorageModel]
 
 
