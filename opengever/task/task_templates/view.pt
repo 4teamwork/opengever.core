@@ -24,15 +24,18 @@
         <table class="listing task-listing">
           <tal:rep tal:define="group python: view.groups[0]">
             <tr tal:repeat="widget group/widgets/values">
-              <tal:block condition="python:widget.__name__ not in ('IBasic.title', 'IBasic.description', 'title', 'description','responsible', 'ITransition.transition', 'issuer', 'relatedItems')">
-                <th tal:content="widget/label"></th>
+            <span tal:define="index repeat/widget/index"/>
+            
+              <tal:block condition="python: widget.__name__ not in ('IBasic.title', 'IBasic.description', 'title', 'description','responsible', 'ITransition.transition', 'issuer', 'relatedItems') and widget.value">
+
+                <th tal:content="widget/label" ></th>
                 <td tal:content="structure widget/render" />
               </tal:block>
-              <tal:block condition="python:widget.__name__  == 'responsible'">
+              <tal:block condition="python:widget.__name__  == 'responsible' and widget.value">
                 <th tal:content="widget/label"></th>
                 <td tal:content="structure view/responsible_link" />
               </tal:block>
-              <tal:block condition="python:widget.__name__  == 'issuer'">
+              <tal:block condition="python:widget.__name__  == 'issuer' and widget.value">
                 <th tal:content="widget/label"></th>
                 <td tal:content="structure view/issuer_link" />
               </tal:block>
@@ -48,11 +51,12 @@
           </tr>
           <tal:rep tal:define="group python: view.groups[1]">
             <tr tal:repeat="widget group/widgets/values">
-              <tal:block condition="python:widget.__name__ not in ('IBasic.title', 'IBasic.description', 'title', 'description','responsible', 'ITransition.transition')">
+              <tal:block condition="python:widget.__name__ not in ('IBasic.title', 'IBasic.description', 'title', 'description','responsible', 'ITransition.transition') and widget.value and widget.value != ('', '', '')">
                 <th tal:content="widget/label"></th>
                 <td tal:content="structure widget/render" />
+                <span tal:content="python: widget.value"/>
               </tal:block>
-              <tal:block condition="python:widget.__name__  == 'responsible'">
+              <tal:block condition="python:widget.__name__  == 'responsible'and widget.value">
                 <th tal:content="widget/label"></th>
                 <td tal:content="structure python: len(widget.value) > 0 and widget.value[0] or '' " />
               </tal:block>
@@ -64,7 +68,7 @@
 
         <tal:items define="items view/getContainingTask"
                    condition="items">
-          <div><h2 i18n:translate="containing_task">Containing Tasks:</h2></div>
+          <div tal:condition="items"><h2 i18n:translate="containing_task">Containing Tasks:</h2></div>
           <ul tal:condition="items">
             <li tal:repeat="item items">
               <img tal:attributes="src item/getIcon" />
@@ -75,7 +79,7 @@
 
         <tal:items define="items view/getSubTasks"
                    condition="items">
-          <div><h2 i18n:translate="subtasks">Subtasks:</h2></div>
+          <div tal:condition="items"><h2 i18n:translate="subtasks">Subtasks:</h2></div>
           <ul tal:condition="items">
             <li tal:repeat="item items">
               <img tal:attributes="src item/getIcon" />
@@ -86,7 +90,7 @@
 
         <tal:items define="item view/getPredecessorTask"
                    condition="item">
-          <div><h2 i18n:translate="predecessor">Predecessor Task:</h2></div>
+          <div tal:condition="items"><h2 i18n:translate="predecessor">Predecessor Task:</h2></div>
           <div tal:content="structure python:view.render_indexed_task(item)" />
         </tal:items>
 
@@ -98,10 +102,9 @@
                 tal:content="structure python:view.render_indexed_task(item)" />
           </ul>
         </tal:items>
-
-        <div><h2 i18n:translate="documents">Documents:</h2></div>
         <tal:items define="items view/getSubDocuments">
-          <ul tal:condition="items">
+        <div tal:condition="items"><h2 i18n:translate="documents">Documents:</h2></div>
+         <ul tal:condition="items">
             <li tal:repeat="item items">
               <img tal:attributes="src item/getIcon" />
               <a href="" tal:attributes="href item/absolute_url|nothing" tal:omit-tag="not: item/absolute_url|nothing"><span tal:content="item/Title" /></a>
@@ -110,11 +113,10 @@
                  <a href="" tal:attributes="href item/value|nothing" tal:omit-tag="not: item/value|nothing"><span tal:content="item/label" /></a>
                  </li> -->
           </ul>
-          <span tal:condition="not: items" i18n:translate="no_content">No Content</span>
+          <!-- <span tal:condition="not: items" i18n:translate="no_content">No Content</span> -->
         </tal:items>
 
         <div class="visualClear"><!----></div>
-        <div><h2 i18n:translate="responses">Responses:</h2></div>
         <div tal:replace="structure provider:opengever.task.beneathTask" />
         <div class="visualClear"><!----></div>
         <div tal:replace="structure provider:plone.belowcontentbody" />

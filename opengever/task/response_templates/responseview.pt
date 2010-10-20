@@ -1,12 +1,12 @@
 <div class="response-adder"
      i18n:domain="opengever.task">
+     <h2 tal:condition="viewlet/responses" i18n:translate="responses">Responses:</h2>
      <tal:responses repeat="response_info viewlet/responses">
        <div class="response-reply"
             tal:define="id response_info/id;
                         response nocall:response_info/response;
                         html response_info/html;"
             tal:attributes="class string:response-${response/type}">
-
          <div class="response-actions"
               tal:condition="viewlet/can_edit_response|viewlet/can_delete_response">
            <form method="post"
