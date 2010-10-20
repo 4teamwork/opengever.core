@@ -69,7 +69,6 @@ class Renderer(base.Renderer):
     render = ViewPageTemplateFile('treeportlet.pt')
     
     def header(self):
-        import pdb; pdb.set_trace( )
         current = aq_inner(self.context)
         # Don't travsere to top-level application obj if TreePortlet
         # was added to the Plone Site Root
