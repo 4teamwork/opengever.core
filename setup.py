@@ -34,7 +34,7 @@ setup(name='opengever.examplecontent',
           'collective.transmogrifier',
           'transmogrify.sqlalchemy',
           'transmogrify.dexterity',
-          'collective.genericsetup.ldap',
+          'vs.genericsetup.ldap',
           'Products.PloneLDAP',
           'collective.blueprint.usersandgroups',
         # -*- Extra requirements: -*-
