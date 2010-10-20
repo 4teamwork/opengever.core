@@ -1,6 +1,6 @@
-from plonegov.pdflatex.browser.aspdf import AsPDFView
 from Products.CMFCore.utils import getToolByName
 from opengever.latex.layouts.zug_default import ZugDefaultLayout
+from plonegov.pdflatex.browser.aspdf import AsPDFView
 
 
 class BasePDFListing(AsPDFView):

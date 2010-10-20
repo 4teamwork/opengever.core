@@ -1,16 +1,16 @@
-from Products.CMFCore.utils import getToolByName
-from opengever.dossier.behaviors.dossier import IDossier
-from opengever.ogds.base.utils import get_current_client
-from opengever.repository.interfaces import IRepositoryFolder
-from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
 from Acquisition import aq_inner, aq_parent
-from opengever.base.interfaces import ISequenceNumber
-from opengever.base.interfaces import IReferenceNumber
+from Products.CMFCore.utils import getToolByName
+from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
 from ftw.table import helper
-from opengever.task.helper import task_type_helper
+from opengever.base.interfaces import IReferenceNumber
+from opengever.base.interfaces import ISequenceNumber
+from opengever.dossier.behaviors.dossier import IDossier
 from opengever.latex.template import LatexTemplateFile
 from opengever.latex.views.baselisting import BasePDFListing
 from opengever.ogds.base.interfaces import IContactInformation
+from opengever.ogds.base.utils import get_current_client
+from opengever.repository.interfaces import IRepositoryFolder
+from opengever.task.helper import task_type_helper
 from zope.component import getUtility
 
 
@@ -70,13 +70,6 @@ class DossierDetailsPDF(BasePDFListing):
         return dict([(key, self.convert(value))
                      for key, value in data.items()])
 
-    def _prepare_table_row(self, *cells):
-        """Converts every cell in `cells` into LaTeX and merges them
-        to a LaTeX row.
-        """
-
-        return ' & '.join([self.convert(cell) for cell in cells])
-
     def get_tasks_latex(self):
         """Returns the latex containing all tasks which are within
         this dossier - or an empty string if there are none.
@@ -110,7 +103,7 @@ class DossierDetailsPDF(BasePDFListing):
                     helper.readable_date(brain, brain.deadline),
                     ))
 
-        return self.tasks(rows='\\\\ \\hline\n'.join(rows))
+        return self.tasks(rows=''.join(rows))
 
     def get_documents_latex(self):
         """Returns the latex containing all documents which are within
@@ -138,7 +131,7 @@ class DossierDetailsPDF(BasePDFListing):
                     helper.readable_date(brain, brain.document_date),
                     ))
 
-        return self.documents(rows='\\\\ \\hline\n'.join(rows))
+        return self.documents(rows=''.join(rows))
 
     def get_subdossiers_latex(self):
         """Returns the latex containing all subdossiers which are within
@@ -177,4 +170,4 @@ class DossierDetailsPDF(BasePDFListing):
                     helper.readable_date(brain, brain.start),
                     ))
 
-        return self.subdossiers(rows='\\\\ \\hline\n'.join(rows))
+        return self.subdossiers(rows=''.join(rows))

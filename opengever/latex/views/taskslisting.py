@@ -1,11 +1,9 @@
-from Acquisition import aq_inner, aq_parent
-from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
-from opengever.base.interfaces import IReferenceNumber
-from opengever.base.interfaces import ISequenceNumber
+from Products.CMFCore.utils import getToolByName
+from ftw.table import helper
 from opengever.latex.template import LatexTemplateFile
-from opengever.ogds.base.utils import get_current_client
-from opengever.repository.interfaces import IRepositoryFolder
 from opengever.latex.views.baselisting import BasePDFListing
+from opengever.ogds.base.interfaces import IContactInformation
+from opengever.ogds.base.utils import get_current_client
 from zope.component import getUtility
 
 
@@ -21,39 +19,42 @@ class TasksListingPDF(BasePDFListing):
     def get_listing_rows(self):
         """Returns the listing rows rendered in latex.
         """
-        data = []
 
-        sequence_number = getUtility(ISequenceNumber)
+        data = []
+        info = getUtility(IContactInformation)
         client = get_current_client()
 
         for brain in self.get_selected_brains():
-            obj = brain.getObject()
-            ref = IReferenceNumber(obj)
+            data.append(self._prepare_table_row(
+                    str(brain.sequence_number),
+                    helper.readable_date(brain, brain.deadline),
+                    str(brain.Title),
+                    '%s / %s' % (client.title,
+                                 info.describe(brain.issuer)),
+                    str(self.get_dossier_sequence_number(brain)),
+                    str(brain.reference),
+                    ))
 
-            # walk the breadcrumbs up and search for a repository folder
-            dossier = obj
-            while not IRepositoryFolder.providedBy(dossier):
-                dossier = aq_parent(aq_inner(dossier))
-                if IPloneSiteRoot.providedBy(dossier):
-                    dossier = None
-                    break
+        return ''.join(data)
 
-            # calculate start
-            if obj.deadline:
-                deadline = obj.deadline.strftime('%d.%m.%Y')
+    def get_dossier_sequence_number(self, brain):
+        """Searches the first parental dossier relative to the `brain`
+        (breadcrumbs like) and returns its sequence number.
+        """
 
-            # html 2 latex
-            data.append(' & '.join((
-                        str(sequence_number.get_number(obj)),
-                        deadline,
-                        obj.Title(),
-                        client.title,
-                        str(sequence_number.get_number(dossier)),
-                        ref.get_number())))
+        dossier_marker = 'opengever.dossier.behaviors.dossier.IDossierMarker'
 
-        if len(data):
-            # we want a \\ and \hline after EVERY line, so lets add a empty
-            # entry
-            data.append('')
+        path = brain.getPath().split('/')[:-1]
+        portal = getToolByName(self.context, 'portal_url').getPortalObject()
+        portal_path = '/'.join(portal.getPhysicalPath())
+        catalog = getToolByName(self.context, 'portal_catalog')
 
-        return '\\\\ \\hline\n'.join(data)
+        while path and '/'.join(path) != portal_path:
+            brains = catalog({'path': {'query': '/'.join(path),
+                                       'depth': 0},
+                              'object_provides': dossier_marker})
+
+            if len(brains):
+                return brains[0].sequence_number
+
+        return ''
