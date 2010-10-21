@@ -8,6 +8,7 @@ from Products.statusmessages.interfaces import IStatusMessage
 from datetime import datetime, timedelta
 from ftw.table import helper
 from ftw.table.interfaces import ITableGenerator
+from ftw.table.column import Column
 from opengever.dossier.behaviors.dossier import IDossierMarker, IDossier
 from opengever.ogds.base.utils import get_current_client
 from opengever.ogds.base.interfaces import IContactInformation
@@ -40,14 +41,32 @@ class AddForm(BrowserView):
 
     steps = {
         'templates': {
-            'columns' : (('', helper.path_radiobutton), 'Title' ,('created', helper.readable_date)),
+            #'columns' : (('', helper.path_radiobutton), 'Title' ,('created', helper.readable_date)),
+            'columns' : (
+                            Column(hideable = False,
+                                   resizeable = False,
+                                   sortable = False,
+                                   width = '10',
+                                   transform = helper.path_radiobutton
+                                   ),
+                            Column(id = 'title',
+                                   header = 'Title',
+                                   data_index = 'sortable_title',
+                                   auto_expand_column = True,
+                                   transform = helper.linked
+                                   ),
+                            Column(id = 'created',
+                                   header = 'Created',
+                                   transform = helper.readable_date)
+            ),
             'types': ('TaskTemplateFolder',),
             'states': ('tasktemplate-state-activ',),
             },
         'tasks': {
-            'columns' : (('', helper.path_radiobutton), 'Title', 'created'),
+            'columns' : (('', helper.path_radiobutton), 'Title', ('created', helper.readable_date)),
             'types': ('TaskTemplate',),
             'states':'*',
+
             }
         }
 
@@ -56,6 +75,7 @@ class AddForm(BrowserView):
 
         templates = self.context.portal_catalog(Type=self.steps[show]['types'], review_state=self.steps[show]['states'])
         generator = queryUtility(ITableGenerator, 'ftw.tablegenerator')
+        import pdb; pdb.set_trace( )
         return generator.generate(templates,
                                   self.steps[show]['columns'],
                                   sortable = True,

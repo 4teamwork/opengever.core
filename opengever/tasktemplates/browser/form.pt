@@ -20,14 +20,10 @@
                   // initialize table
                   var table = $('#template_chooser').ftwtable({
                        'url' : '@@add-tasktemplate/listing',
-                       'storage': true,
-                       'onLoad': function(t,s,r){
-                       }
                   });
 
                   $('input[name=paths:list]', table).live('click', function(e){
                     if(e.target.type=='radio'){
-                        console.log(123);
                         table.ftwtable('param', 'path', e.target.value);
                         table.ftwtable('param', 'show', 'tasks');
                         table.ftwtable('reload');
