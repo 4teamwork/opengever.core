@@ -239,10 +239,10 @@ class ContactInformation(grok.GlobalUtility):
             else:
                 name = contact.userid
 
-            if with_email and contact.email:
-                name = '%s (%s)' % (name, contact.email)
-            elif with_email2 and contact.email2:
+            if with_email2 and contact.email2:
                 name = '%s (%s)' % (name, contact.email2)
+            else:
+                name = '%s (%s)' % (name, contact.email)
             return name
 
         elif self.is_user(principal):
@@ -258,10 +258,13 @@ class ContactInformation(grok.GlobalUtility):
                     name = user.userid
 
                 if with_email and user.email:
-                    name = '%s (%s)' % (name, user.email)
+                    name = '%s (%s, %s)' % (name, user.userid, user.email)
                 elif with_email2 and user.email2:
-                    name = '%s (%s)' % (name, user.email2)
+                    name = '%s (%s, %s)' % (name, user.userid, user.email2)
+                else:
+                    name = '%s (%s)' % (name, user.userid)
                 return name
+
             else:
                 # fallback for acl_users
                 portal = getSite()
@@ -272,7 +275,9 @@ class ContactInformation(grok.GlobalUtility):
                 name = member.getProperty('fullname', principal)
                 email = member.getProperty('email', None)
                 if with_email and email:
-                    name = '%s (%s)' % (name, email)
+                    name = '%s (%s, %s)' % (name, principal, email)
+                else:
+                    name = '%s (%s)' % (name, principal)
                 return name
 
         else:
