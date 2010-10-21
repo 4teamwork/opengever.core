@@ -3,8 +3,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2009-12-22 07:47+0000\n"
-"PO-Revision-Date: 2009-01-01 10:00+0100\n"
+"POT-Creation-Date: 2010-10-21 14:42+0000\n"
+"PO-Revision-Date: 2010-10-21 16:46+0200\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "MIME-Version: 1.0\n"
@@ -16,94 +16,105 @@ msgstr ""
 "X-Is-Fallback-For: de-at de-li de-lu de-ch de-de\n"
 
 #. Default: "RepositoryFolder"
-#: opengever.repository/opengever/repository/profiles/default/types/opengever.repository.repositoryfolder.xml
+#: ./opengever/repository/profiles/default/types/opengever.repository.repositoryfolder.xml
 msgid "RepositoryFolder"
 msgstr "Ordnungsposition"
 
-#: opengever.repository/opengever/repository/profiles/default/types/opengever.repository.repositoryroot.xml
+#: ./opengever/repository/profiles/default/types/opengever.repository.repositoryroot.xml
 msgid "RepositoryRoot"
 msgstr "Ordnungssystem"
 
-#: opengever.repository/opengever/repository/repositoryfolder.py:38
+#: ./opengever/repository/repositoryfolder.py:43
 msgid "Title"
 msgstr "Titel"
 
 #. Default: "A Sibling with the same reference number is existing"
-#: opengever.repository/opengever/repository/repositoryfolder.py:124
+#: ./opengever/repository/behaviors/referenceprefix.py:66
 msgid "error_sibling_reference_number_existing"
 msgstr "Eine Ordnungsposition mit dieser Referenznummer existiert bereits auf gleicher Stufe"
 
 #. Default: "Common"
-#: opengever.repository/opengever/repository/repositoryfolder.py:27
+#: ./opengever/repository/behaviors/referenceprefix.py:21
+#: ./opengever/repository/repositoryfolder.py:28
 msgid "fieldset_common"
 msgstr "Allgemein"
 
+#. Default: "Select all additional dossier types which should be addable in this repository folder."
+#: ./opengever/repository/repositoryfolder.py:90
+msgid "help_addable_dossier_types"
+msgstr "Wählen Sie die Spezialdossiers aus, die in dieser Ordnungsposition erlaubt sind."
+
 #. Default: "A short summary of the content."
-#: opengever.repository/opengever/repository/repositoryfolder.py:51
+#: ./opengever/repository/repositoryfolder.py:49
 msgid "help_description"
 msgstr "Eine kurze Beschreibung des Inhalts."
 
-#: opengever.repository/opengever/repository/repositoryfolder.py:81
+#: ./opengever/repository/repositoryfolder.py:83
 msgid "help_former_reference"
 msgstr ""
 
-#: opengever.repository/opengever/repository/repositoryfolder.py:69
+#: ./opengever/repository/repositoryfolder.py:69
 msgid "help_location"
 msgstr ""
 
-#: opengever.repository/opengever/repository/repositoryfolder.py:44
-msgid "help_reference_number"
-msgstr "Präfix für das Aktenzeichen von Dossiers, die in dieser Ordnungsposition enthalten sind"
+#: ./opengever/repository/behaviors/referenceprefix.py:31
+msgid "help_reference_number_prefix"
+msgstr ""
 
-#: opengever.repository/opengever/repository/repositoryfolder.py:75
+#: ./opengever/repository/repositoryfolder.py:77
 msgid "help_referenced_activity"
 msgstr ""
 
-#: opengever.repository/opengever/repository/repositoryfolder.py:57
+#: ./opengever/repository/repositoryfolder.py:57
 msgid "help_valid_from"
 msgstr ""
 
-#: opengever.repository/opengever/repository/repositoryfolder.py:63
+#: ./opengever/repository/repositoryfolder.py:63
 msgid "help_valid_until"
 msgstr ""
 
+#. Default: "Addable dossier types"
+#: ./opengever/repository/repositoryfolder.py:88
+msgid "label_addable_dossier_types"
+msgstr "Erlaubte Spezialdossiers"
+
 #. Default: "Description"
-#: opengever.repository/opengever/repository/repositoryfolder.py:50
+#: ./opengever/repository/repositoryfolder.py:48
 msgid "label_description"
 msgstr "Beschreibung"
 
 #. Default: "Former reference"
-#: opengever.repository/opengever/repository/repositoryfolder.py:80
+#: ./opengever/repository/repositoryfolder.py:82
 msgid "label_former_reference"
 msgstr "Früheres Zeichen"
 
 #. Default: "Location"
-#: opengever.repository/opengever/repository/repositoryfolder.py:68
+#: ./opengever/repository/repositoryfolder.py:68
 msgid "label_location"
 msgstr "Standort"
 
-#. Default: "Reference"
-#: opengever.repository/opengever/repository/repositoryfolder.py:43
-msgid "label_reference_number"
+#. Default: "Reference Prefix"
+#: ./opengever/repository/behaviors/referenceprefix.py:28
+msgid "label_reference_number_prefix"
 msgstr "Präfix des Aktenzeichens"
 
 #. Default: "Referenced activity"
-#: opengever.repository/opengever/repository/repositoryfolder.py:74
+#: ./opengever/repository/repositoryfolder.py:74
 msgid "label_referenced_activity"
 msgstr "Leistung"
 
 #. Default: "Valid from"
-#: opengever.repository/opengever/repository/repositoryfolder.py:56
+#: ./opengever/repository/repositoryfolder.py:56
 msgid "label_valid_from"
 msgstr "Gültig ab"
 
 #. Default: "Valid until"
-#: opengever.repository/opengever/repository/repositoryfolder.py:62
+#: ./opengever/repository/repositoryfolder.py:62
 msgid "label_valid_until"
 msgstr "Gültig bis"
 
 #. Default: "State:"
-#: opengever.repository/opengever/repository/repositoryfolder_templates/byline.pt:5
+#: ./opengever/repository/repositoryfolder_templates/byline.pt:5
 msgid "label_workflow_state"
 msgstr "Status:"
 
