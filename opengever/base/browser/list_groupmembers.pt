@@ -7,9 +7,7 @@
     <ul class="member_listing" tal:condition="view/members">
         <li tal:repeat="member view/members">
             <img tal:attributes="src string:${here/portal_url}/user.gif" alt="" />
-            <a tal:attributes="href python:'/'.join(member.getPhysicalPath())">
-                <span tal:content="python:member.getProperty('fullname', '') or member.id" ></span>
-            </a>
+            <span tal:content="structure member" />
         </li>
     </ul>
     <p tal:condition="not: view/members" i18n:translate="">
