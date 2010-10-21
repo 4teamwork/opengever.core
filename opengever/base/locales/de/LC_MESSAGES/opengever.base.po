@@ -3,7 +3,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2010-10-14 16:30+0000\n"
+"POT-Creation-Date: 2010-10-21 15:25+0000\n"
 "PO-Revision-Date: 2009-01-01 10:00+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: Jonas Baumann <j.baumann@4teamwork.ch>\n"
@@ -22,6 +22,14 @@ msgstr "Änderungen gespeichert"
 #: ./opengever/base/browser/sharing.py:228
 msgid "Logged-in users"
 msgstr "Angemeldete Benutzer"
+
+#: ./opengever/base/browser/list_groupmembers.pt:15
+msgid "There are no members in this group."
+msgstr "In dieser Gruppe befinden sich keine Benutzer."
+
+#: ./opengever/base/browser/list_groupmembers.pt:3
+msgid "Users of group:"
+msgstr "Benutzer der Gruppe"
 
 #. Default ""
 #: opengever/repository/classification.py
@@ -114,6 +122,11 @@ msgstr "Zeitraum zwischen dem jüngsten Dokumentdatum eines in einem Dossier ent
 msgid "help_retention_period_annotation"
 msgstr ""
 
+#. Default: "Select the terms from the communities vocabulary which should not be selectable any more."
+#: ./opengever/base/interfaces.py:104
+msgid "help_vocabulary_disabled_communities"
+msgstr ""
+
 #. Default: "Archival value"
 #: ./opengever/base/behaviors/lifecycle.py:56
 msgid "label_archival_value"
@@ -183,6 +196,11 @@ msgstr "Kommentar zur Aufbewahrungsdauer"
 #: ./opengever/base/behaviors/base.py:24
 msgid "label_title"
 msgstr "Titel"
+
+#. Default: "Vocabulary: disabled communities"
+#: ./opengever/base/interfaces.py:102
+msgid "label_vocabulary_disabled_communities"
+msgstr ""
 
 #. Default ""
 #: opengever/repository/classification.py

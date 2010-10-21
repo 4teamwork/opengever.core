@@ -1,5 +1,8 @@
-<div class="member_overview">
-    <h1>Benutzer der Gruppe &quot;<span tal:content="view/group_name" />&quot;</h1>
+<div class="member_overview" i18n:domain="opengever.base">
+    <h1>
+        <span i18n:translate="">Users of group:</span>
+        &quot;<span tal:content="view/group_name" />&quot;
+    </h1>
     <br />
     <ul class="member_listing" tal:condition="view/members">
         <li tal:repeat="member view/members">
@@ -9,7 +12,7 @@
             </a>
         </li>
     </ul>
-    <p tal:condition="not: view/members">
-        Diese Gruppe beinhaltet keine Benutzer,
+    <p tal:condition="not: view/members" i18n:translate="">
+        There are no members in this group.
     </p>
 </div>
