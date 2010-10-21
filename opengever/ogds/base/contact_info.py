@@ -1,10 +1,11 @@
+from Products.CMFCore.utils import getToolByName
+from Products.ZCatalog.ZCatalog import ZCatalog
 from five import grok
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.ogds.base.model.client import Client
 from opengever.ogds.base.model.user import User
 from opengever.ogds.base.utils import create_session, get_current_client
 from zope.app.component.hooks import getSite
-from Products.CMFCore.utils import getToolByName
 
 
 class ContactInformation(grok.GlobalUtility):
@@ -96,9 +97,14 @@ class ContactInformation(grok.GlobalUtility):
         """Returns a catalog result set of contact brains.
         """
         catalog = getToolByName(getSite(), 'portal_catalog')
-        return catalog(portal_type='opengever.contact.contact')
+        query = {'portal_type': 'opengever.contact.contact'}
+        # make catalog query without checking security (allowedRolesAndUsers)
+        # since the contacts are not visible for foreign users but should be
+        # in the vocabulary anyway...
+        brains = ZCatalog.searchResults(catalog, **query)
+        return brains
 
-    def get_contact(self, principal):
+    def get_contact(self, principal, check_permissions=False):
         """Returns the contact object of this principal.
         """
 
@@ -106,8 +112,17 @@ class ContactInformation(grok.GlobalUtility):
             raise ValueError('Principal %s is not a contact' % str(principal))
 
         catalog = getToolByName(getSite(), 'portal_catalog')
-        contacts = catalog(portal_type='opengever.contact.contact',
-                           contactid=principal)
+        query = {'portal_type': 'opengever.contact.contact',
+                 'contactid': principal}
+
+        if not check_permissions:
+            # usually foreign users may not have access to the contacts, but we
+            # want to be able to print the name etc. in this case too. So we need
+            # to use ZCatalog for ignoring the allowedRolesAndUsers index.
+            contacts = ZCatalog.searchResults(catalog, **query)
+        else:
+            contacts = catalog.searchResults(**query)
+
         if len(contacts) == 0:
             return None
         elif len(contacts) > 1:
@@ -213,7 +228,9 @@ class ContactInformation(grok.GlobalUtility):
 
         elif self.is_contact(principal):
             contact = self.get_contact(principal)
-            if contact.lastname and contact.firstname:
+            if not contact:
+                return principal
+            elif contact.lastname and contact.firstname:
                 name = ' '.join((contact.lastname, contact.firstname))
             elif contact.lastname:
                 name = contact.lastname
@@ -302,8 +319,11 @@ class ContactInformation(grok.GlobalUtility):
             return '/'.join((client.public_url, 'inbox'))
 
         elif self.is_contact(principal):
-            contact = self.get_contact(principal)
-            return contact.getURL()
+            contact = self.get_contact(principal, check_permissions=True)
+            if contact:
+                return contact.getURL()
+            else:
+                return None
 
         elif self.is_user(principal):
             portal = getSite()
