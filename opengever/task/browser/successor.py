@@ -5,7 +5,7 @@ from five import grok
 from opengever.base.interfaces import IRedirector
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.ogds.base.interfaces import ITransporter
-from opengever.ogds.base.utils import remote_request
+from opengever.ogds.base.utils import remote_request, get_client_id
 from opengever.task import _
 from opengever.task.interfaces import ISuccessorTaskController
 from opengever.task.task import ITask
@@ -86,15 +86,29 @@ class SuccessorTaskForm(Form):
             client = info.get_client_by_id(data['client'])
             target_url = os.path.join(client.public_url, target_task_path,
                                       '@@edit')
-            redirector = IRedirector(self.request)
-            redirector.redirect(target_url, target='_blank')
 
-            # add status message and redirect current window back to task
-            IStatusMessage(self.request).addStatusMessage(
-                _(u'info_created_successor_task',
-                  u'The successor task was created.'), type='info')
+            if get_client_id() != data['client']:
+                # foreign client (open in popup)
+                redirector = IRedirector(self.request)
+                redirector.redirect(target_url, target='_blank')
 
-            return self.request.RESPONSE.redirect(self.context.absolute_url())
+                # add status message and redirect current window back to task
+                IStatusMessage(self.request).addStatusMessage(
+                    _(u'info_created_successor_task',
+                      u'The successor task was created.'), type='info')
+
+                return self.request.RESPONSE.redirect(
+                    self.context.absolute_url())
+
+            else:
+                # not foreign client (regular redirect)
+                # add status message and redirect current window back to task
+                IStatusMessage(self.request).addStatusMessage(
+                    _(u'info_created_successor_task',
+                      u'The successor task was created.'), type='info')
+
+                return self.request.RESPONSE.redirect(target_url)
+
 
 
     def get_documents(self):
