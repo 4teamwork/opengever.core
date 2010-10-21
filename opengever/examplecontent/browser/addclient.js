@@ -86,7 +86,7 @@ $(function($) {
 
         // inbox group
         client.find('input[name=clients.inbox_group:records]')
-            .val('og_'.concat(cid).concat('_inbox'));
+            .val('og_'.concat(cid).concat('_eingangskorb'));
     }
 
     $('#clients_config').html('');
