@@ -23,7 +23,7 @@ setup(name='opengever.globalindex',
       zip_safe=False,
       install_requires=[
           'setuptools',
-          # -*- Extra requirements: -*-
+          'z3c.saconfig',
       ],
       entry_points="""
       # -*- Entry points: -*-
