@@ -97,52 +97,68 @@
         <permission value="Add portal content"/>
     </action>
 
+    <action action_id="add_participant"
+            visible="True"
+            title="Add Participant"
+            category="folder_factories"
+            url_expr="string:${object_url}/@@add-participation"
+            icon_expr="string:${portal_url}/icon_objekt_kontakt.gif"
+            condition_expr=""
+            i18n:domain="opengever.dossier">
+        <permission value="Add portal content"/>
+    </action>
+
 
     <!-- Tabbedview tabs-->
     <action i18n:domain="opengever.dossier" title="Overview" action_id="overview" category="tabbedview-tabs"
             condition_expr="" url_expr="string:#" visible="True">
         <permission value="View"/>
     </action>
+
     <action i18n:domain="opengever.dossier" title="Subdossiers" action_id="subdossiers" category="tabbedview-tabs"
             condition_expr="object/show_subdossier" url_expr="string:#" visible="True">
         <permission value="View"/>
     </action>
+
     <action i18n:domain="opengever.dossier" title="Documents" action_id="documents" category="tabbedview-tabs"
             condition_expr="" url_expr="string:#" visible="True">
         <permission value="View"/>
     </action>
+
     <action i18n:domain="opengever.dossier" title="Tasks" action_id="tasks" category="tabbedview-tabs"
             condition_expr="" url_expr="string:#" visible="True">
         <permission value="View"/>
     </action>
+
     <action i18n:domain="opengever.dossier" title="Journal" action_id="journal" category="tabbedview-tabs"
             condition_expr="" url_expr="string:#" visible="True">
         <permission value="View"/>
     </action>
+
     <action i18n:domain="opengever.dossier" title="Sharing" action_id="sharing" category="tabbedview-tabs"
             condition_expr="" url_expr="string:#"
             visible="False">
         <permission value="View"/>
     </action>
+
     <action i18n:domain="opengever.dossier" title="Participants" action_id="participants" category="tabbedview-tabs"
             condition_expr="" url_expr="string:#" visible="True">
         <permission value="View"/>
     </action>
+
     <action i18n:domain="opengever.dossier" title="Trash" action_id="trash" category="tabbedview-tabs"
             condition_expr="" url_expr="string:#" visible="True">
     </action>
-    <action i18n:domain="opengever.dossier" title="Add Participant" action_id="add_participant"
-            category="object_buttons" condition_expr=""
-            url_expr="string:${object_url}/@@add-participation" visible="True">
-        <permission value="Modify portal content"/>
-    </action>
+
     <action i18n:domain="opengever.dossier" title="Cover (PDF)" action_id="export_pdf" category="object_buttons"
             condition_expr="" url_expr="string:${object_url}/export_pdf"
             visible="True">
         <permission value="View"/>
     </action>
+
     <action i18n:domain="opengever.dossier" title="Give Filling Number" action_id="filing_nr" category="object_buttons"
             condition_expr="python: object.portal_workflow.getInfoFor(object, 'review_state', None) == 'dossier-state-resolved' and getattr( object, 'filing_no', None) == None" url_expr="string:${object_url}/transition-archive" visible="True">
         <permission value="View"/>
     </action>
+
 </object>
