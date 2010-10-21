@@ -1,4 +1,5 @@
 from Products.CMFPlone.browser.admin import AddPloneSite
+from Products.PluggableAuthService.interfaces.plugins import IPropertiesPlugin
 from opengever.ogds.base.ldap_import import sync_ldap
 from opengever.ogds.base.model.client import Client
 from Products.CMFPlone.factory import _DEFAULT_PROFILE
@@ -107,11 +108,13 @@ class CreateOpengeverClient(BrowserView):
             for profile in ADDITIONAL_PROFILES:
                 stool.runAllImportStepsFromProfile('profile-%s' % profile)
 
-        # ldap ?
-        acl_users = getToolByName(site, 'acl_users')
-        plugins = acl_users.plugins
+        # ldap
         if form.get('ldap', False):
             stool.runAllImportStepsFromProfile('profile-%s' % form.get('ldap'))
+
+            acl_users = getToolByName(site, 'acl_users')
+            plugins = acl_users.plugins
+
             # disable source_groups when using ldap
             for ptype in plugins.listPluginTypeInfo():
                 try:
@@ -120,13 +123,18 @@ class CreateOpengeverClient(BrowserView):
                 except KeyError:
                     pass
 
-        # deactivate recursive groups
-        for ptype in plugins.listPluginTypeInfo():
-            try:
-                plugins.deactivatePlugin(ptype['interface'],
-                                         'recursive_groups')
-            except KeyError:
-                pass
+            # deactivate recursive groups
+            for ptype in plugins.listPluginTypeInfo():
+                try:
+                    plugins.deactivatePlugin(ptype['interface'],
+                                             'recursive_groups')
+                except KeyError:
+                    pass
+
+            # move ldap up
+            plugins.movePluginsUp(IPropertiesPlugin, ('ldap',))
+            plugins.movePluginsUp(IPropertiesPlugin, ('ldap',))
+            plugins.movePluginsUp(IPropertiesPlugin, ('ldap',))
 
         if form.get('import_users'):
             print '===== SYNC LDAP ===='
