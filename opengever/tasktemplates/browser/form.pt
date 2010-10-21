@@ -14,7 +14,6 @@
 
                   //test global overwrite
                   $.fn.ftwtable.defaults.onBeforeLoad = function(){
-                      console.log('custom onBeforeLoad');
                   };
 
                   // initialize table

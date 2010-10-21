@@ -17,6 +17,36 @@ from zope.component import queryUtility, getUtility
 from zope.event import notify
 from zope.lifecycleevent import ObjectCreatedEvent, ObjectAddedEvent
 
+meta_data = {}
+meta_data['templates'] = {
+    'root': 'rows',
+    'totalProperty': 'totalCount',
+    'fields': [
+        {'name': 'path_radiobutton', 'type': 'string' ,'hideable' : False},
+        {'name': 'created', 'type': 'string'},
+        {'name': 'Title', 'type': 'string'}
+    ],
+    'columns': [
+        {'id':'path_radiobutton', 'width': 30, 'menuDisabled':True, 'sortable': False, 'dataIndex': 'path_radiobutton', 'hideable' : False},
+        {'id':'Title','header': 'Title', 'sortable': True, 'dataIndex': 'Title'},
+        {'id':'created','header': 'Created', 'width': 160, 'sortable': True, 'dataIndex': 'created'}
+    ],
+}
+
+meta_data['tasks'] = {
+    'root': 'rows',
+    'totalProperty': 'totalCount',
+    'fields': [
+        {'name': 'path_checkbox', 'type': 'string'},
+        {'name': 'created', 'type': 'string'},
+        {'name': 'Title', 'type': 'string'}
+    ],
+    'columns': [
+        {'id':'path_checkbox','header': '', 'width': 30,'sortable': False, 'hideable':False, 'menuDisabled':True, 'dataIndex': 'path_checkbox'},
+        {'id':'Title','header': 'Title', 'sortable': True, 'dataIndex': 'Title'},
+        {'id':'created','header': 'Created', 'width': 160, 'sortable': True, 'dataIndex': 'created'}
+    ],
+}
 
 def path_checkbox(item, value):
     preselected = item.getObject().preselected
@@ -41,29 +71,29 @@ class AddForm(BrowserView):
 
     steps = {
         'templates': {
-            #'columns' : (('', helper.path_radiobutton), 'Title' ,('created', helper.readable_date)),
-            'columns' : (
-                            Column(hideable = False,
-                                   resizeable = False,
-                                   sortable = False,
-                                   width = '10',
-                                   transform = helper.path_radiobutton
-                                   ),
-                            Column(id = 'title',
-                                   header = 'Title',
-                                   data_index = 'sortable_title',
-                                   auto_expand_column = True,
-                                   transform = helper.linked
-                                   ),
-                            Column(id = 'created',
-                                   header = 'Created',
-                                   transform = helper.readable_date)
-            ),
+            'columns' : (('', helper.path_radiobutton), 'Title' ,('created', helper.readable_date)),
+            # 'columns' : (
+            #                  Column(hideable = False,
+            #                         resizeable = False,
+            #                         sortable = False,
+            #                         width = '10',
+            #                         transform = helper.path_radiobutton
+            #                         ),
+            #                  Column(id = 'title',
+            #                         header = 'Title',
+            #                         data_index = 'sortable_title',
+            #                         auto_expand_column = True,
+            #                         transform = helper.linked
+            #                         ),
+            #                  Column(id = 'created',
+            #                         header = 'Created',
+            #                         transform = helper.readable_date)
+            #  ),
             'types': ('TaskTemplateFolder',),
             'states': ('tasktemplate-state-activ',),
             },
         'tasks': {
-            'columns' : (('', helper.path_radiobutton), 'Title', ('created', helper.readable_date)),
+            'columns' : (('', path_checkbox), 'Title', ('created', helper.readable_date)),
             'types': ('TaskTemplate',),
             'states':'*',
 
@@ -72,14 +102,22 @@ class AddForm(BrowserView):
 
     def listing(self, show='templates'):
         """returns a listing of either TaskTemplateFolders or TaskTemplates"""
-
-        templates = self.context.portal_catalog(Type=self.steps[show]['types'], review_state=self.steps[show]['states'])
+        sort_on = self.request.get('sort', 'Title')
+        sort_on = {'Title':'sortable_title'}.get(sort_on, sort_on)
+        sort_order = self.request.get('dir', 'ASC')
+        sort_order = {'ASC': 'ascending', 'DESC':'descending'}.get(sort_order)
+        templates = self.context.portal_catalog(
+                        Type=self.steps[show]['types'],
+                        sort_on = sort_on,
+                        sort_order = sort_order
+                        
+        )
         generator = queryUtility(ITableGenerator, 'ftw.tablegenerator')
-        import pdb; pdb.set_trace( )
         return generator.generate(templates,
                                   self.steps[show]['columns'],
                                   sortable = True,
-                                  output='json'
+                                  output='json',
+                                  meta_data = meta_data[show]
                                   )
 
     def create(self, paths):
