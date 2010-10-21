@@ -11,5 +11,8 @@ class ListGroupMembers(BrowserView):
         groups_tool = self.context.portal_groups
         group = groups_tool.getGroupById(group_id)
         self.group_name = group.title or group.id
-        self.members = group.getAllGroupMembers()
+        members = [(member.fullname or member.id, member) 
+                   for member in group.getAllGroupMembers()]
+        members.sort()
+        self.members = [member[1] for member in members]
         return self.template()

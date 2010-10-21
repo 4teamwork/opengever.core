@@ -1,11 +1,15 @@
-<div class="member_overview" tal:condition="view/members">
+<div class="member_overview">
     <h1>Benutzer der Gruppe &quot;<span tal:content="view/group_name" />&quot;</h1>
-    <ul class="member_listing">
+    <br />
+    <ul class="member_listing" tal:condition="view/members">
         <li tal:repeat="member view/members">
+            <img tal:attributes="src string:${here/portal_url}/user.gif" alt="" />
             <a tal:attributes="href python:'/'.join(member.getPhysicalPath())">
-                <img tal:attributes="src string:${here/portal_url}/user.gif" alt="" />
-                <span tal:content="python:member.getProperty('fullname', member.id)" ></span>
+                <span tal:content="python:member.getProperty('fullname', '') or member.id" ></span>
             </a>
         </li>
     </ul>
+    <p tal:condition="not: view/members">
+        Diese Gruppe beinhaltet keine Benutzer,
+    </p>
 </div>
