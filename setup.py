@@ -44,6 +44,7 @@ setup(name='opengever.base',
         'opengever.ogds.base',
         'plone.autoform',
         'plone.registry',
+        'collective.elephantvocabulary',
         'collective.vdexvocabulary',
         # -*- Extra requirements: -*-
         ],
