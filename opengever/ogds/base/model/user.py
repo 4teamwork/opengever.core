@@ -20,9 +20,9 @@ class User(Base):
     firstname = Column(String(50))
     lastname = Column(String(50))
 
-    directorate = Column(String(30))
+    directorate = Column(String(50))
     directorate_abbr = Column(String(10))
-    department = Column(String(30))
+    department = Column(String(50))
     department_abbr = Column(String(10))
 
     email = Column(String(50))
@@ -34,8 +34,8 @@ class User(Base):
 
     salutation = Column(String(30))
     description = Column(Text())
-    address1 = Column(String(30))
-    address2 = Column(String(30))
+    address1 = Column(String(100))
+    address2 = Column(String(100))
     zip_code = Column(String(10))
     city = Column(String(100))
 
