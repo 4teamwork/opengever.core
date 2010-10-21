@@ -37,7 +37,7 @@ class PersonalOverview(TabbedView):
     """The personal overview view show all documents and dossier
     where the actual user is the responsible.
     """
-
+    
     default_tabs = [
             {'id': 'mytasks', 'icon': None, 'url': '#', 'class': None},
             {'id': 'mydossiers', 'icon': None, 'url': '#', 'class': None},
@@ -53,8 +53,15 @@ class PersonalOverview(TabbedView):
     def get_tabs(self):
         mtool = getToolByName(self.context, 'portal_membership')
         member = mtool.getAuthenticatedMember()
-        is_admin = member and member.allowed(self.context,
-                                             ('Administrator',))
+        inbox_path = '%s/eingangskorb' % self.context.portal_url.getPortalPath()
+        try:
+            inbox = self.context.unrestrictedTraverse(inbox_path)
+        except KeyError:
+            is_admin = False
+
+        if inbox:
+            is_admin = member and member.allowed(inbox,
+                                             ('View',))
 
         if is_admin:
             return self.default_tabs + self.admin_tabs
