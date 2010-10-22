@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: opengever.dossier 1.0\n"
-"POT-Creation-Date: 2010-10-20 15:31+0000\n"
+"POT-Creation-Date: 2010-10-22 06:58+0000\n"
 "PO-Revision-Date: 2009-09-17 15:21+0000\n"
 "Last-Translator: Thomas Buchberger <t.buchberger@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -132,7 +132,7 @@ msgstr "Abbrechen"
 #. Default: "Contact"
 #: ./opengever/dossier/browser/participants.py:41
 msgid "contact"
-msgstr "Kontakt"
+msgstr "Beteiligte"
 
 #. Default: "create document with template"
 #: ./opengever/dossier/templatedossier.py:43
@@ -505,6 +505,9 @@ msgstr "Es sind nicht alle Aufgaben erledigt"
 #: ./opengever/dossier/archive.py:42
 msgid "only resolve, set filing no later"
 msgstr "Nur abschliessen (Ablagenummer kann später vergeben werden)"
+
+msgid "participants"
+msgstr "Beteiligte Personen"
 
 #: ./opengever/dossier/browser/send_document.py:57
 msgid "receiver"
