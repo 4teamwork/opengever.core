@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: opengever.dossier 1.0\n"
-"POT-Creation-Date: 2010-10-21 09:59+0000\n"
-"PO-Revision-Date: 2010-10-21 12:06+0200\n"
+"POT-Creation-Date: 2010-10-22 10:37+0000\n"
+"PO-Revision-Date: 2010-10-22 12:37+0200\n"
 "Last-Translator: Thomas Buchberger <t.buchberger@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
 "MIME-Version: 1.0\n"
@@ -83,7 +83,7 @@ msgstr "Das Beginn- oder Ende-Datum ist ungültig."
 msgid "When the Action give filing number is selected,                     all fields are required."
 msgstr "Wenn die Aktion 'Ablagenummer vergeben' selektiert ist, werden alle Felder benötigt"
 
-#: ./opengever/dossier/browser/send_document.py:79
+#: ./opengever/dossier/browser/send_document.py:81
 msgid "You have to select a intern                             or enter a extern mail-addres"
 msgstr "Wählen Sie mindestens eine interne oder eine externe E-Mail Adresse."
 
@@ -120,19 +120,24 @@ msgid "button_copy"
 msgstr "Kopieren"
 
 #. Default: "Send"
-#: ./opengever/dossier/browser/send_document.py:125
+#: ./opengever/dossier/browser/send_document.py:127
 msgid "button_send"
 msgstr "Senden"
 
 #. Default: "Cancel"
-#: ./opengever/dossier/browser/send_document.py:159
+#: ./opengever/dossier/browser/send_document.py:161
 msgid "cancel_back"
 msgstr "Abbrechen"
 
 #. Default: "Contact"
 #: ./opengever/dossier/browser/participants.py:41
-msgid "contact"
-msgstr "Beteiligte"
+msgid "column_contact"
+msgstr "Kontakt"
+
+#. Default: "role_list"
+#: ./opengever/dossier/browser/participants.py:42
+msgid "column_rolelist"
+msgstr "Rolle"
 
 #. Default: "create document with template"
 #: ./opengever/dossier/templatedossier.py:43
@@ -146,7 +151,7 @@ msgid "documents"
 msgstr "Dokumente"
 
 #. Default: "Extern receiver"
-#: ./opengever/dossier/browser/send_document.py:57
+#: ./opengever/dossier/browser/send_document.py:50
 msgid "extern_receiver"
 msgstr "Externer Empfänger"
 
@@ -209,7 +214,7 @@ msgid "help_end"
 msgstr ""
 
 #. Default: "email addresses of the receivers. Enter manually the addresses, one per each line."
-#: ./opengever/dossier/browser/send_document.py:58
+#: ./opengever/dossier/browser/send_document.py:51
 msgid "help_extern_receiver"
 msgstr "E-Mail Adressen der externen Empfänger manuell eintragen. Pro Zeile eine Adresse eingeben."
 
@@ -218,7 +223,7 @@ msgid "help_former_reference_number"
 msgstr ""
 
 #. Default: "Live Search: search for users and contacts"
-#: ./opengever/dossier/browser/send_document.py:49
+#: ./opengever/dossier/browser/send_document.py:42
 msgid "help_intern_receiver"
 msgstr "Live Search: Nachname/Vorname der internen Mitarbeiter oder Kontakte eingeben. Mehrauswahl möglich."
 
@@ -226,7 +231,7 @@ msgstr "Live Search: Nachname/Vorname der internen Mitarbeiter oder Kontakte ein
 msgid "help_keywords"
 msgstr "Schlagworte zur Umschreibung eines Dossiers. Nicht zu verwechseln mit der Ordnungsposition"
 
-#: ./opengever/dossier/browser/send_document.py:71
+#: ./opengever/dossier/browser/send_document.py:65
 msgid "help_message"
 msgstr ""
 
@@ -255,7 +260,7 @@ msgstr ""
 msgid "help_start"
 msgstr ""
 
-#: ./opengever/dossier/browser/send_document.py:66
+#: ./opengever/dossier/browser/send_document.py:59
 msgid "help_subject"
 msgstr ""
 
@@ -268,7 +273,7 @@ msgid "help_volume_number"
 msgstr "Nummer eines Bandes, zu welchem mehrere zusammengehörige, papierförmige Dossiers zusammengefügt worden sind"
 
 #. Default: "Mails sent"
-#: ./opengever/dossier/browser/send_document.py:154
+#: ./opengever/dossier/browser/send_document.py:156
 msgid "info_mails_sent"
 msgstr "Mails wurden versendet."
 
@@ -283,7 +288,7 @@ msgid "info_removed_participations"
 msgstr "Die Beteiligungen wurde entfernt."
 
 #. Default: "Intern receiver"
-#: ./opengever/dossier/browser/send_document.py:48
+#: ./opengever/dossier/browser/send_document.py:41
 msgid "intern_receiver"
 msgstr "Interne Empfänger"
 
@@ -329,7 +334,7 @@ msgid "label_container_type"
 msgstr "Behältnis-Art"
 
 #. Default: "Documents"
-#: ./opengever/dossier/browser/send_document.py:41
+#: ./opengever/dossier/browser/send_document.py:70
 msgid "label_documents"
 msgstr "Anhang"
 
@@ -371,7 +376,7 @@ msgid "label_keywords"
 msgstr "Schlagworte"
 
 #. Default: "Message"
-#: ./opengever/dossier/browser/send_document.py:70
+#: ./opengever/dossier/browser/send_document.py:64
 msgid "label_message"
 msgstr "Mitteilung"
 
@@ -400,9 +405,10 @@ msgstr "Beteiligung von ${contact} entfernt"
 msgid "label_participation"
 msgstr "Beteiligung"
 
-#. Default: "Reference Number:"
+#. Default: "Reference Number"
 #: ./opengever/dossier/behaviors/dossier.py:178
 #: ./opengever/dossier/viewlets/businesscase_byline.pt:69
+#, fuzzy
 msgid "label_reference_number"
 msgstr "Aktenzeichen:"
 
@@ -423,18 +429,13 @@ msgstr "Federführend"
 msgid "label_responsible_task"
 msgstr "Verantwortlich"
 
-#. Default: "role_list"
-#: ./opengever/dossier/browser/participants.py:42
-msgid "label_rolelist"
-msgstr "Art der Beteiligungen"
-
 #. Default: "Roles"
 #: ./opengever/dossier/behaviors/participation.py:120
 msgid "label_roles"
 msgstr "Rollen"
 
 #. Default: "send Docuemnts with email"
-#: ./opengever/dossier/browser/send_document.py:103
+#: ./opengever/dossier/browser/send_document.py:105
 msgid "label_send_document_mail"
 msgstr "Dokumente per E-Mail versenden"
 
@@ -460,7 +461,7 @@ msgid "label_start_byline"
 msgstr "Beginn:"
 
 #. Default: "Subject"
-#: ./opengever/dossier/browser/send_document.py:65
+#: ./opengever/dossier/browser/send_document.py:58
 msgid "label_subject"
 msgstr "Betreff"
 
@@ -491,7 +492,7 @@ msgstr "Bandnummer"
 msgid "label_workflow_state"
 msgstr "Status:"
 
-#: ./opengever/dossier/browser/send_document.py:50
+#: ./opengever/dossier/browser/send_document.py:43
 msgid "mails"
 msgstr "E-Mails"
 
@@ -515,11 +516,10 @@ msgstr "Es sind nicht alle Aufgaben erledigt"
 msgid "only resolve, set filing no later"
 msgstr "Nur abschliessen (Ablagenummer kann später vergeben werden)"
 
-#: ./opengever/dossier/browser/send_document.py:60
 msgid "participants"
 msgstr "Beteiligte Personen"
 
-#: ./opengever/dossier/browser/send_document.py:57
+#: ./opengever/dossier/browser/send_document.py:53
 msgid "receiver"
 msgstr "Empfänger"
 
