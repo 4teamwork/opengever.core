@@ -173,6 +173,8 @@ class SendDocumentForm(form.Form):
 
         # iterate over document list and attach the file to the mail
         for doc in docs:
+            if not doc.file:
+                continue
             docfile = doc.file
             part = MIMEBase('application', docfile.contentType)
             part.set_payload(docfile.data)
