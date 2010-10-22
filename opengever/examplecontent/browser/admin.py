@@ -1,16 +1,17 @@
 from Products.CMFPlone.browser.admin import AddPloneSite
-from Products.PluggableAuthService.interfaces.plugins import IPropertiesPlugin
-from opengever.ogds.base.ldap_import import sync_ldap
-from opengever.ogds.base.model.client import Client
 from Products.CMFPlone.factory import _DEFAULT_PROFILE
-from zope.publisher.browser import BrowserView
 from Products.CMFPlone.factory import addPloneSite
 from Products.CMFPlone.utils import getToolByName
+from Products.PluggableAuthService.interfaces.plugins import IPropertiesPlugin
 from datetime import datetime
+from opengever.mail.interfaces import IMailSettings
 from opengever.ogds.base.interfaces import IClientConfiguration
+from opengever.ogds.base.ldap_import import sync_ldap
+from opengever.ogds.base.model.client import Client
 from opengever.ogds.base.utils import create_session
 from plone.registry.interfaces import IRegistry
 from zope.component import getUtility
+from zope.publisher.browser import BrowserView
 import opengever.globalindex.model
 import opengever.ogds.base.model
 
@@ -57,6 +58,10 @@ class AddOpengeverClient(AddPloneSite):
 
     def server_port(self):
         return self.request.get('SERVER_PORT')
+
+    def get_default_mail_domain(self):
+        return self.request.get('SERVER_NAME')
+
 
 
 class CreateOpengeverClient(BrowserView):
@@ -147,6 +152,10 @@ class CreateOpengeverClient(BrowserView):
         # set the site title
         site.manage_changeProperties(title=form['title'])
 
+        # set the client id in the registry
+        registry = getUtility(IRegistry)
+        proxy = registry.forInterface(IMailSettings)
+        proxy.mail_domain = form['mail_domain'].decode('utf-8')
 
         return 'ok'
 

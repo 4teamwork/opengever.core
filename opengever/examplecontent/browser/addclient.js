@@ -87,6 +87,15 @@ $(function($) {
         // inbox group
         client.find('input[name=clients.inbox_group:records]')
             .val('og_'.concat(cid).concat('_eingangskorb'));
+
+        // mail domain
+        if(location.hostname == 'localhost') {
+            client.find('input[name=clients.mail_domain:records]')
+                .val('localhost');
+        } else {
+            client.find('input[name=clients.mail_domain:records]')
+                .val(cid.concat('.').concat(location.hostname));
+        }
     }
 
     $('#clients_config').html('');
@@ -129,7 +138,7 @@ $(function($) {
 
         // submit the clients
         function send_next_client() {
-            var client = $('#clients_config .client_config:visible:first')
+            var client = $('#clients_config .client_config:visible:first');
             if(client.length > 0) {
                 var data = {};
                 data['example'] = example ? true : false;
