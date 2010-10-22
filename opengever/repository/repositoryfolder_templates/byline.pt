@@ -2,14 +2,14 @@
      id="plone-document-byline"
      i18n:domain="opengever.repository">
 
-    <span i18n:translate="label_workflow_state" class="noborder">
-	  State: 
-	</span>
-	<span tal:content="viewlet/workflow_state" i18n:domain="plone" i18n:translate="" class="documentAuthor"/>
+  <span i18n:translate="label_workflow_state" class="noborder">
+    State:
+  </span>
+  <span tal:content="viewlet/workflow_state" i18n:domain="plone" i18n:translate="" class="documentAuthor"/>
 
 
   <tal:state>
-	<span i18n:translate="" tal:content="context/privacy_layer|nothing" i18n:domain="opengever.base" class="documentStatus"/>
+    <span i18n:translate="" tal:content="context/privacy_layer|nothing" i18n:domain="opengever.base" class="documentStatus"/>
   </tal:state>
 
   <span class="documentModified">
