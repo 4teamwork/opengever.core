@@ -137,7 +137,7 @@
 
     <action i18n:domain="opengever.dossier" title="Sharing" action_id="sharing" category="tabbedview-tabs"
             condition_expr="" url_expr="string:#"
-            visible="False">
+            visible="True">
         <permission value="View"/>
     </action>
 

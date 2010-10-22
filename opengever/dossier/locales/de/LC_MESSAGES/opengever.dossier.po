@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: opengever.dossier 1.0\n"
-"POT-Creation-Date: 2010-10-22 15:00+0000\n"
+"POT-Creation-Date: 2010-10-22 13:40+0000\n"
 "PO-Revision-Date: 2010-10-21 12:06+0200\n"
 "Last-Translator: Thomas Buchberger <t.buchberger@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -135,8 +135,13 @@ msgstr "Abbrechen"
 
 #. Default: "Contact"
 #: ./opengever/dossier/browser/participants.py:41
-msgid "contact"
-msgstr "Beteiligte"
+msgid "column_contact"
+msgstr "Kontakt"
+
+#. Default: "role_list"
+#: ./opengever/dossier/browser/participants.py:42
+msgid "column_rolelist"
+msgstr "Rolle"
 
 #. Default: "create document with template"
 #: ./opengever/dossier/templatedossier.py:43
@@ -428,19 +433,12 @@ msgstr "Federführend"
 msgid "label_responsible_task"
 msgstr "Verantwortlich"
 
-#. Default: "role_list"
-#: ./opengever/dossier/browser/participants.py:42
-msgid "label_rolelist"
-msgstr "Art der Beteiligungen"
-
 #. Default: "Roles"
 #: ./opengever/dossier/behaviors/participation.py:120
 msgid "label_roles"
 msgstr "Rollen"
 
 #. Default: "send Docuemnts with email"
-#: ./opengever/dossier/browser/send_document.py:105
-msgid "label_send_document_mail"
 msgstr "Dokumente per E-Mail versenden"
 
 #. Default: "Sequence Number:"
@@ -521,7 +519,7 @@ msgid "only resolve, set filing no later"
 msgstr "Nur abschliessen (Ablagenummer kann später vergeben werden)"
 
 msgid "participants"
-msgstr "Beteiligte Personen"
+msgstr "Beteiligte"
 
 #: ./opengever/dossier/browser/send_document.py:53
 msgid "receiver"

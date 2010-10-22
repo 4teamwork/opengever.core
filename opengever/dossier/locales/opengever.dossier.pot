@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2010-10-22 15:00+0000\n"
+"POT-Creation-Date: 2010-10-22 10:47+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -136,7 +136,12 @@ msgstr ""
 
 #. Default: "Contact"
 #: ./opengever/dossier/browser/participants.py:41
-msgid "contact"
+msgid "column_contact"
+msgstr ""
+
+#. Default: "role_list"
+#: ./opengever/dossier/browser/participants.py:42
+msgid "column_rolelist"
 msgstr ""
 
 #. Default: "create document with template"
@@ -428,17 +433,12 @@ msgstr ""
 msgid "label_responsible_task"
 msgstr ""
 
-#. Default: "role_list"
-#: ./opengever/dossier/browser/participants.py:42
-msgid "label_rolelist"
-msgstr ""
-
 #. Default: "Roles"
 #: ./opengever/dossier/behaviors/participation.py:120
 msgid "label_roles"
 msgstr ""
 
-#. Default: "send Docuemnts with email"
+#. Default: "send Documents with email"
 #: ./opengever/dossier/browser/send_document.py:105
 msgid "label_send_document_mail"
 msgstr ""
