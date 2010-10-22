@@ -157,3 +157,7 @@ msgstr ""
 
 msgid "documentoverview"
 msgstr ""
+
+msgid "sharing"
+msgstr ""
+

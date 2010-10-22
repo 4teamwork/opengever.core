@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "POT-Creation-Date: 2010-01-18 15:03+0000\n"
-"PO-Revision-Date: 2009-02-25 14:39+0100\n"
+"PO-Revision-Date: 2010-10-22 12:19+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
 "MIME-Version: 1.0\n"
@@ -160,7 +160,7 @@ msgstr "Rollen"
 
 #. Default: "Beteiligte"
 msgid "sharing"
-msgstr "Beteiligte"
+msgstr "Info"
 
 #: opengever.tabbedview/opengever/tabbedview/browser/tabs_templates/overview.pt:14
 msgid "show all"
@@ -192,6 +192,4 @@ msgstr "Titel"
 msgid "trash"
 msgstr "Papierkorb"
 
-msgid "dossieroverview"
-msgstr "Dossiers
 

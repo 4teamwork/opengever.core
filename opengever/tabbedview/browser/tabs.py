@@ -1,4 +1,5 @@
 from Acquisition import aq_inner
+from zope.interface import Interface
 from five import grok
 from ftw.journal.config import JOURNAL_ENTRIES_ANNOTATIONS_KEY
 from ftw.journal.interfaces import IAnnotationsJournalizable
@@ -15,7 +16,6 @@ from opengever.tabbedview.helper import readable_ogds_author, linked
 from plone.app.workflow.browser.sharing import SharingView
 from plone.app.workflow.interfaces import ISharingPageRole
 from zope.annotation.interfaces import IAnnotations
-from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
 from zope.component import getUtility, queryUtility, getUtilitiesFor
 import re
 
@@ -327,9 +327,12 @@ class Trash(OpengeverListingTab):
     enabled_actions = ['untrashed', ]
 
 
-class Sharing(SharingView):
+class Sharing(grok.View, SharingView):
 
-    template = ViewPageTemplateFile('tabs_templates/sharing.pt')
+    grok.name('tabbedview_view-sharing')
+    grok.require('zope2.View')
+    grok.template('sharing')
+    grok.context(Interface)
 
     def roles(self):
         """Get a list of roles that can be managed.
