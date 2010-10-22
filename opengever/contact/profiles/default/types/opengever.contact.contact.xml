@@ -18,7 +18,7 @@
     <property name="klass">opengever.contact.contact.Contact</property>
 
     <!-- add permission -->
-    <property name="add_permission">cmf.AddPortalContent</property>
+    <property name="add_permission">opengever.contact.AddContact</property>
 
     <!-- enabled behaviors -->
     <property name="behaviors">
