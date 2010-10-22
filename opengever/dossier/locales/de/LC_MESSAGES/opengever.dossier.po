@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: opengever.dossier 1.0\n"
-"POT-Creation-Date: 2010-10-22 10:37+0000\n"
-"PO-Revision-Date: 2010-10-22 12:37+0200\n"
+"POT-Creation-Date: 2010-10-22 10:47+0000\n"
+"PO-Revision-Date: 2010-10-22 12:48+0200\n"
 "Last-Translator: Thomas Buchberger <t.buchberger@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
 "MIME-Version: 1.0\n"
@@ -517,7 +517,7 @@ msgid "only resolve, set filing no later"
 msgstr "Nur abschliessen (Ablagenummer kann später vergeben werden)"
 
 msgid "participants"
-msgstr "Beteiligte Personen"
+msgstr "Beteiligte"
 
 #: ./opengever/dossier/browser/send_document.py:53
 msgid "receiver"
