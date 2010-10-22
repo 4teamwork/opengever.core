@@ -4,7 +4,11 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
+<<<<<<< HEAD
 "POT-Creation-Date: 2010-10-22 12:36+0000\n"
+=======
+"POT-Creation-Date: 2010-10-21 08:08+0000\n"
+>>>>>>> f9be9f9ecef675ab84aad00274a46ff1a7573130
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -75,6 +79,11 @@ msgstr ""
 msgid "You have not selected any documents"
 msgstr ""
 
+
+#: ./opengever/document/document.py:532
+msgid "actor"
+msgstr ""
+
 #: ./opengever/document/document_templates/sendasemail.pt:14
 msgid "attachments"
 msgstr ""
@@ -102,6 +111,11 @@ msgstr ""
 #. Default: "Cancel"
 #: ./opengever/document/mailing.py:224
 msgid "cancel_back"
+msgstr ""
+
+
+#: ./opengever/document/document.py:537
+msgid "comment"
 msgstr ""
 
 #. Default: "Either the title or the file is required."
@@ -296,6 +310,7 @@ msgstr ""
 msgid "label_file"
 msgstr ""
 
+
 #. Default: "Foreign Reference"
 #: ./opengever/document/document.py:119
 #: ./opengever/document/document_templates/overview.pt:34
@@ -404,9 +419,17 @@ msgstr ""
 msgid "referenced_documents"
 msgstr ""
 
+#: ./opengever/document/document.py:534
+msgid "time"
+msgstr ""
+
 #. Default: "expired"
 #: ./opengever/document/viewlets/byline.pt:42
 msgid "time_expired"
+msgstr ""
+
+#: ./opengever/document/document.py:529
+msgid "title"
 msgstr ""
 
 #. Default: "Start DocuComposer"

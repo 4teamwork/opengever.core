@@ -393,6 +393,9 @@ def checked_out( obj ):
 grok.global_adapter( checked_out, name='checked_out' )
 
 
+
+
+
 @grok.subscribe(IDocumentSchema, IObjectCreatedEvent)
 @grok.subscribe(IDocumentSchema, IObjectModifiedEvent)
 def sync_title_and_filename_handler(doc, event):
@@ -456,15 +459,11 @@ class Overview(DisplayForm, OpengeverTab):
         return info.render_link(self.context.Creator())
 
 
-# TODO: Remove/replace preview tab
 # class Preview(DisplayForm, OpengeverTab):
 #     grok.context(IDocumentSchema)
 #     grok.name('tabbedview_view-preview')
 #     grok.template('preview')
-#
-#     def __call__(self):
-#         IPreviewable(self.context).buildAndStorePreview()
-#         return DisplayForm.__call__(self)
+
 
 #XXX TEMPORARY REPLACED WITH A NON SOLR TAB
 #class Tasks(OpengeverSolrListingTab):
@@ -525,11 +524,17 @@ class Journal(grok.View, OpengeverTab):
     grok.template('journal')
     def table(self):
         generator = queryUtility(ITableGenerator, 'ftw.tablegenerator')
-        columns = (('title', lambda x,y: x['action']['title']),
-                   'actor',
-                   ('time', helper.readable_date_time),
-                   'comment'
-                   )
+        columns = (
+            {'column':'title',
+            'column_title':_('title'),
+            'transform': lambda x,y: x['action']['title'],},
+            {'column':'actor',
+            'column_title':_('actor'),},
+            {'column':'time',
+             'column_title':_('time'),
+             'transform':helper.readable_date_time},
+            {'column':'comment',
+             'column_title':_('comment')})
         return generator.generate(reversed(self.data()), columns, css_mapping={'table':'journal-listing'})
 
     def data(self):

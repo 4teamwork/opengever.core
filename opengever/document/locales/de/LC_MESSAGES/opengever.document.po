@@ -77,6 +77,11 @@ msgstr "Als E-Mail versenden"
 msgid "You have not selected any documents"
 msgstr "Sie haben keine Dokumente angewählt."
 
+#: ./opengever/document/document.py:532
+msgid "actor"
+msgstr "Akteur"
+
+>>>>>>> f9be9f9ecef675ab84aad00274a46ff1a7573130
 #: ./opengever/document/document_templates/sendasemail.pt:14
 msgid "attachments"
 msgstr "Anhänge"
@@ -106,15 +111,18 @@ msgstr "Senden"
 msgid "cancel_back"
 msgstr "Abbrechen"
 
+#: ./opengever/document/document.py:537
+msgid "comment"
+msgstr "Kommentar"
+
 #. Default: "Either the title or the file is required."
 #: ./opengever/document/document.py:203
 msgid "error_title_or_file_required"
-msgstr ""
+msgstr "Ein Titel oder ein File muss angegeben werden."
 
 #. Default: "Common"
 #: ./opengever/document/behaviors.py:29
 #: ./opengever/document/document.py:80
-#, fuzzy
 msgid "fieldset_common"
 msgstr "Allgemein"
 
@@ -197,10 +205,9 @@ msgstr ""
 msgid "help_open_extern"
 msgstr "Die Datei wird nach dem Auschecken in einem externen Editor geöffnet"
 
-#. Default: "Available in paper form only"
+#. Default: "paper form"
 #: ./opengever/document/document.py:155
 #: ./opengever/document/document_templates/overview.pt:45
-#, fuzzy
 msgid "help_paper_form"
 msgstr "Nur in Papierform verfügbar"
 
@@ -292,7 +299,7 @@ msgstr "Dokument"
 #. Default: "Document Date"
 #: ./opengever/document/document.py:125
 #: ./opengever/document/document_templates/overview.pt:14
-#, fuzzy
+
 msgid "label_document_date"
 msgstr "Dokumentdatum"
 
@@ -311,7 +318,7 @@ msgstr "Datei"
 #. Default: "Foreign Reference"
 #: ./opengever/document/document.py:119
 #: ./opengever/document/document_templates/overview.pt:34
-#, fuzzy
+
 msgid "label_foreign_reference"
 msgstr "Fremdzeichen"
 
@@ -417,10 +424,18 @@ msgstr "Ja"
 msgid "referenced_documents"
 msgstr "Referenzierte Dokumente"
 
+#: ./opengever/document/document.py:534
+msgid "time"
+msgstr "Datum und Zeit"
+
 #. Default: "expired"
 #: ./opengever/document/viewlets/byline.pt:42
 msgid "time_expired"
 msgstr "abgelaufen"
+
+#: ./opengever/document/document.py:529
+msgid "title"
+msgstr "Titel"
 
 #. Default: "Start DocuComposer"
 #: ./opengever/document/docucomposer_templates/startdclauncher.pt:23
