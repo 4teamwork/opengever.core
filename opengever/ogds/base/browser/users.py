@@ -7,9 +7,17 @@ from sqlalchemy import asc, desc, or_
 from five import grok
 
 
-def fullname_helper(item, value):
+def linked_value_helper(item, value):
+    """Helper for linking the value with the user profile.
+    """
+
     info = getUtility(IContactInformation)
-    return info.render_link(item.userid)
+    url = info.get_profile_url(getattr(item, 'userid', None))
+
+    if url:
+        return '<a href="%s">%s</a>' % (url, value)
+    else:
+        return value
 
 
 def email_helper(item, value):
@@ -27,21 +35,27 @@ class UsersListing(OpengeverListingTab):
     grok.name('tabbedview_view-users')
     grok.template('users')
 
-    sort_on = 'fullname'
+    sort_on = 'lastname'
     sort_order = ''
 
     enabled_actions = []
     major_actions = []
 
     columns = (
-        {'column': 'fullname',
-         'column_title': _(u'label_userstab_fullname',
-                           default=u'Fullname'),
-         'transform': fullname_helper},
+        {'column': 'lastname',
+         'column_title': _(u'label_userstab_lastname',
+                           default=u'Lastname'),
+         'transform': linked_value_helper},
+
+        {'column': 'firstname',
+         'column_title': _(u'label_userstab_firstname',
+                           default=u'Firstname'),
+         'transform': linked_value_helper},
 
         {'column': 'userid',
          'column_title': _(u'label_userstab_userid',
-                           default=u'Userid')},
+                           default=u'Userid'),
+         'transform': linked_value_helper},
 
         {'column': 'email',
          'column_title': _(u'label_userstab_email',
@@ -81,13 +95,9 @@ class UsersListing(OpengeverListingTab):
         else:
             order = asc
 
-        if sort_on == 'fullname':
-            query = query.order_by(order(User.lastname))
-            query = query.order_by(order(User.firstname))
-        else:
-            field = getattr(User, sort_on, None)
-            if field:
-                query = query.order_by(order(field))
+        field = getattr(User, sort_on, None)
+        if field:
+            query = query.order_by(order(field))
 
         full_length = query.count()
 
@@ -118,14 +128,9 @@ class UsersListing(OpengeverListingTab):
         for column in self.columns:
             colname = column['column']
 
-            if colname == 'fullname':
-                fields.append(model.lastname)
-                fields.append(model.firstname)
-
-            else:
-                field = getattr(model, colname, None)
-                if field:
-                    fields.append(field)
+            field = getattr(model, colname, None)
+            if field:
+                fields.append(field)
 
         # lets split up the search term into words, extend them with the
         # default wildcards and then search for every word seperately

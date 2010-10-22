@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2010-10-07 08:29+0000\n"
-"PO-Revision-Date: 2010-10-07 10:31+0200\n"
+"POT-Creation-Date: 2010-10-22 12:35+0000\n"
+"PO-Revision-Date: 2010-10-22 14:36+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -88,22 +88,27 @@ msgid "label_url"
 msgstr "Homepage"
 
 #. Default: "Email"
-#: ./opengever/ogds/base/browser/users.py:47
+#: ./opengever/ogds/base/browser/users.py:61
 msgid "label_userstab_email"
 msgstr "E-Mail"
 
-#. Default: "Fullname"
-#: ./opengever/ogds/base/browser/users.py:38
-msgid "label_userstab_fullname"
-msgstr "Name"
+#. Default: "Firstname"
+#: ./opengever/ogds/base/browser/users.py:51
+msgid "label_userstab_firstname"
+msgstr "Vorname"
+
+#. Default: "Lastname"
+#: ./opengever/ogds/base/browser/users.py:46
+msgid "label_userstab_lastname"
+msgstr "Nachname"
 
 #. Default: "Office Phone"
-#: ./opengever/ogds/base/browser/users.py:52
+#: ./opengever/ogds/base/browser/users.py:66
 msgid "label_userstab_phone_office"
 msgstr "Telefon"
 
 #. Default: "Userid"
-#: ./opengever/ogds/base/browser/users.py:43
+#: ./opengever/ogds/base/browser/users.py:56
 msgid "label_userstab_userid"
 msgstr "Benutzer ID"
 
