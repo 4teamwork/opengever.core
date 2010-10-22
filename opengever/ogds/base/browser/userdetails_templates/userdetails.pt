@@ -72,17 +72,21 @@
 
           <tr tal:condition="user/email">
             <th i18n:translate="label_email">Email:</th>
-            <td tal:content="user/email"></td>
+            <td><a tal:content="user/email"
+                   tal:attributes="href string:mailto:${user/email}" /></td>
           </tr>
 
           <tr tal:condition="user/email2">
             <th i18n:translate="label_email2">Email 2:</th>
-            <td tal:content="user/email2"></td>
+            <td><a tal:content="user/email2"
+                   tal:attributes="href string:mailto:${user/email2}" /></td>
           </tr>
 
           <tr tal:condition="user/url">
             <th i18n:translate="label_url">URL:</th>
-            <td tal:content="user/url"></td>
+            <td><a tal:content="user/url"
+                   tal:attributes="href user/url"
+                   target="_blank" /></td>
           </tr>
 
           <tr tal:condition="user/phone_office">
