@@ -19,6 +19,12 @@ def start_import(context):
     transmogrifier(u'opengever.examplecontent.contacts')
     transaction.commit()
 
+    if '1' in context.getId():
+        transmogrifier(u'opengever.examplecontent.local_roles_m1')
+    else:
+        transmogrifier(u'opengever.examplecontent.local_roles_m2')
+    transaction.commit()
+
     # transmogrifier(u'opengever.examplecontent.users')
     # transaction.commit()
 
@@ -66,8 +72,8 @@ def set_permissions(portal):
 
 
 def setupVarious(setup):
-    if setup.readDataFile('opengever.examplecontent.txt') is None:
-        return
+    # if setup.readDataFile('opengever.examplecontent.txt') is None:
+    #     return
     site = setup.getSite()
     start_import(site)
     settings(site)

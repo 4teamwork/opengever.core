@@ -62,10 +62,30 @@
       configuration="cfgs/contacts.cfg"
       />
 
+  <transmogrifier:registerConfig
+      name="opengever.examplecontent.local_roles_m1"
+      title="Opengever ExampleContent local roles import and setter"
+      description="Opengever ExampleContent local roles import and setter"
+      configuration="cfgs/local_roles_m1.cfg"
+      />
+
+  <transmogrifier:registerConfig
+      name="opengever.examplecontent.local_roles_m2"
+      title="Opengever ExampleContent local roles import and setter"
+      description="Opengever ExampleContent local roles import and setter"
+      configuration="cfgs/local_roles_m2.cfg"
+      />
+
+  <!-- sections -->
+
   <utility
       component=".filesection.NamedFileCreatorSection"
       name="opengever.examplecontent.filesection.namedfilecreator"
       />
 
+  <utility
+      component=".jsonsource.JSONSourceSection"
+      name="opengever.examplecontent.jsonsource.jsonsourcesection"
+      />
 
 </configure>

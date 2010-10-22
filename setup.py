@@ -30,6 +30,7 @@ setup(name='opengever.examplecontent',
       install_requires=[
           'setuptools',
           'plone.app.transmogrifier',
+          'collective.blueprint.jsonmigrator',
           'opengever.ogds.base',
           'collective.transmogrifier',
           'transmogrify.sqlalchemy',

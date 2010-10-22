@@ -1,0 +1,45 @@
+[{
+    "_ac_local_roles": {
+        "og_mandant2_users": [
+            "Reader", 
+            "Editor", 
+            "Contributor"
+        ], 
+        "og_mandant2_sekretariat": [
+            "Administrator", 
+            "Reviewer"
+        ]
+    },
+    "_path": "/ordnungssystem"
+}, 
+{
+    "_ac_local_roles": {
+        "og_mandant2_eingangskorb": [
+            "Reader",
+            "Editor",
+            "Contributor"
+        ]
+    }, 
+    "_path": "/eingangskorb"
+},
+{
+    "_ac_local_roles": {
+        "og_mandant2_users": [
+            "Reader", 
+            "Editor", 
+            "Contributor"
+        ]
+    }, 
+    "_path": "/vorlagen"
+}, 
+{
+    "_ac_local_roles": {
+        "og_mandant2_users": [
+            "Reader", 
+            "Editor", 
+            "Contributor"
+        ]
+    }, 
+    "_path": "/k"
+}
+]
