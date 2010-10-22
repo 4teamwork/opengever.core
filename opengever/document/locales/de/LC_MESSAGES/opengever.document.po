@@ -79,7 +79,7 @@ msgstr "Sie haben keine Dokumente angewählt."
 
 #: ./opengever/document/document.py:532
 msgid "actor"
-msgstr "Aktor"
+msgstr "Akteur"
 
 #: ./opengever/document/document_templates/sendasemail.pt:14
 msgid "attachments"
