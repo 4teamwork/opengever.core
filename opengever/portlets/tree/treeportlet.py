@@ -76,6 +76,7 @@ class Renderer(base.Renderer):
             portal_url = getToolByName(self.context, 'portal_url')
             
             current = portal_url.getPortalObject().restrictedTraverse(self.root_path().encode('utf-8'))
+            return aq_inner(current).Title()
         elif current.Type() != 'Plone Site':
             return current.Title()
             while current.Type() != 'RepositoryRoot':
