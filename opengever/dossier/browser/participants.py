@@ -34,12 +34,12 @@ class Participants(OpengeverListingTab):
     def icon_helper(item, value):
         return '<img src="user.gif" alt="" title="" border="0" />'
 
-    sort_on = 'contact'
+    sort_on = 'Contact'
     columns = (
         ('', base64_oid_checkbox, ),
         ('', icon_helper, ),
-        ('contact', 'contact', readable_ogds_author),
-        ('role_list', 'roles', ))
+        (_(u'contact',u'Contact'), 'contact', readable_ogds_author),
+        (_(u'label_rolelist',u'role_list'), 'roles', ))
 
     def update(self):
         self.pagesize = 20

@@ -129,6 +129,11 @@ msgstr "Senden"
 msgid "cancel_back"
 msgstr "Abbrechen"
 
+#. Default: "Contact"
+#: ./opengever/dossier/browser/participants.py:41
+msgid "contact"
+msgstr "Beteiligte"
+
 #. Default: "create document with template"
 #: ./opengever/dossier/templatedossier.py:43
 msgid "create_document_with_template"
@@ -418,6 +423,11 @@ msgstr "Federführend"
 msgid "label_responsible_task"
 msgstr "Verantwortlich"
 
+#. Default: "role_list"
+#: ./opengever/dossier/browser/participants.py:42
+msgid "label_rolelist"
+msgstr "Art der Beteiligungen"
+
 #. Default: "Roles"
 #: ./opengever/dossier/behaviors/participation.py:120
 msgid "label_roles"
@@ -506,6 +516,10 @@ msgid "only resolve, set filing no later"
 msgstr "Nur abschliessen (Ablagenummer kann später vergeben werden)"
 
 #: ./opengever/dossier/browser/send_document.py:60
+msgid "participants"
+msgstr "Beteiligte Personen"
+
+#: ./opengever/dossier/browser/send_document.py:57
 msgid "receiver"
 msgstr "Empfänger"
 
@@ -530,7 +544,7 @@ msgid "set a filing no"
 msgstr "Ablagenummer vergeben"
 
 msgid "sharing"
-msgstr ""
+msgstr "Beteiligungen"
 
 #: ./opengever/dossier/browser/overview_templates/overview.pt:14
 msgid "show all"
@@ -560,7 +574,7 @@ msgstr "abgelaufen"
 #. Default: "Attach document"
 #: ./opengever/dossier/transport.py:42
 msgid "title_attach_document_form"
-msgstr ""
+msgstr "Dokument anfügen"
 
 #. Default: "You are not assigned to another client where you could copy the documents to."
 #: ./opengever/dossier/transport.py:93

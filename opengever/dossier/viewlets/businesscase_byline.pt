@@ -68,7 +68,7 @@
   <span class="referenceNumber" tal:condition="view/reference_number">
     <span i18n:translate="label_reference_number"
           tal:omit-tag="">
-      Reference Number:
+      Reference Number
     </span>
     <span tal:replace="view/reference_number">
       14

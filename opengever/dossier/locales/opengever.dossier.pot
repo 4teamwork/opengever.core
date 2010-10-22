@@ -130,6 +130,11 @@ msgstr ""
 msgid "cancel_back"
 msgstr ""
 
+#. Default: "Contact"
+#: ./opengever/dossier/browser/participants.py:41
+msgid "contact"
+msgstr ""
+
 #. Default: "create document with template"
 #: ./opengever/dossier/templatedossier.py:43
 msgid "create_document_with_template"
@@ -414,6 +419,11 @@ msgstr ""
 msgid "label_responsible_task"
 msgstr ""
 
+#. Default: "role_list"
+#: ./opengever/dossier/browser/participants.py:42
+msgid "label_rolelist"
+msgstr ""
+
 #. Default: "Roles"
 #: ./opengever/dossier/behaviors/participation.py:120
 msgid "label_roles"
@@ -502,6 +512,10 @@ msgid "only resolve, set filing no later"
 msgstr ""
 
 #: ./opengever/dossier/browser/send_document.py:60
+msgid "participants"
+msgstr ""
+
+#: ./opengever/dossier/browser/send_document.py:57
 msgid "receiver"
 msgstr ""
 
