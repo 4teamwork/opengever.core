@@ -1,4 +1,3 @@
-from Acquisition import aq_inner, aq_parent
 from five import grok
 
 from zope import schema
@@ -18,6 +17,61 @@ from opengever.tabbedview.browser.tabs import OpengeverTab
 class IContact(form.Schema):
     """ A contact
     """
+    form.fieldset(
+        u'personal',
+        label = _(u'personal', default=u'Personal Stuff'),
+        fields = [
+            u'salutation',
+            u'firstname',
+            u'lastname',
+            u'description',
+            u'picture',
+            u'company',
+            u'function',
+            u'department',
+        ]
+    )
+
+    form.fieldset(
+        u'internet',
+        label = _(u'internet', default=u'Internet'),
+        fields= [
+            u'email',
+            u'email2',
+            u'url',
+        ]
+    )
+
+    form.fieldset(
+        u'telefon',
+        label= _(u'telefon', default=u"Telefon"),
+        fields= [
+            u'phone_office',
+            u'phone_fax',
+            u'phone_mobile',
+            u'phone_home',
+        ]
+    )
+
+    form.fieldset(
+        u'address',
+        label= _(u'address', default=u'Address'),
+        fields= [
+            u'address1',
+            u'address2',
+            u'zip_code',
+            u'city',
+            u'country',
+        ]
+    )
+    # fieldset adresse
+    # the rest
+
+    salutation = schema.TextLine(
+        title = _(u'label_salutation', default=u'Salutation'),
+        description = _(u'help_salutation', default=u''),
+        required = False
+        )
 
     lastname = schema.TextLine(
         title = _(u'label_lastname', default=u'Lastname'),
@@ -91,11 +145,6 @@ class IContact(form.Schema):
         required = False
         )
 
-    salutation = schema.TextLine(
-        title = _(u'label_salutation', default=u'Salutation'),
-        description = _(u'help_salutation', default=u''),
-        required = False
-        )
 
     picture = NamedImage(
         title=_(u'label_picture', default='Picture'),

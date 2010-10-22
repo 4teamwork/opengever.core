@@ -10,6 +10,9 @@
     <!-- Include configuration for dependencies listed in setup.py -->
     <includeDependencies package="." />
 
+    <!-- Include custom permissions -->
+    <include file="permissions.zcml" />
+
     <!-- Grok the package to initialise schema interfaces and content classes -->
     <grok:grok package="." />
 
@@ -30,6 +33,5 @@
         title="opengever.contact special import handlers"
         description=""
         handler="opengever.contact.setuphandlers.import_various" />
-
 
 </configure>

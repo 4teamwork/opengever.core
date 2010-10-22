@@ -1,0 +1,16 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+
+    i18n_domain="opengever.dossier">
+
+    <permission
+        id="opengever.contact.AddContact"
+        title="opengever.contact: Add contact"
+        />
+
+    <permission
+        id="opengever.contact.AddContactFolder"
+        title="opengever.contact: Add contactfolder"
+        />
+
+</configure>

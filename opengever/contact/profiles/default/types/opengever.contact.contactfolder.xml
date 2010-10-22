@@ -6,7 +6,7 @@
     <!-- Basic metadata -->
     <property name="title" i18n:translate="">ContactFolder</property>
     <property name="description" i18n:translate="">Contact Folder </property>
-    <property name="content_icon">icon_objekt_ordner</property>
+    <property name="content_icon">icon_objekt_ordner.gif</property>
     <property name="allow_discussion">False</property>
     <property name="global_allow">True</property>
     <property name="filter_content_types">True</property>
@@ -21,7 +21,7 @@
     <property name="klass">plone.dexterity.content.Container</property>
 
     <!-- add permission -->
-    <property name="add_permission">cmf.AddPortalContent</property>
+    <property name="add_permission">opengever.contact.AddContactFolder</property>
 
     <!-- enabled behaviors -->
     <property name="behaviors">
