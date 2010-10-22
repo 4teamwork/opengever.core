@@ -3,8 +3,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2010-10-21 15:25+0000\n"
-"PO-Revision-Date: 2009-01-01 10:00+0100\n"
+"POT-Creation-Date: 2010-10-22 10:33+0000\n"
+"PO-Revision-Date: 2010-10-22 12:33+0200\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "MIME-Version: 1.0\n"
@@ -23,7 +23,11 @@ msgstr "Änderungen gespeichert"
 msgid "Logged-in users"
 msgstr "Angemeldete Benutzer"
 
-#: ./opengever/base/browser/list_groupmembers.pt:15
+#: ./opengever/base/profiles/default/actions.xml
+msgid "Properties"
+msgstr "Eigenschaften anzeigen"
+
+#: ./opengever/base/browser/list_groupmembers.pt:13
 msgid "There are no members in this group."
 msgstr "In dieser Gruppe befinden sich keine Benutzer."
 

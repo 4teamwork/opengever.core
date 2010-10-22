@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2010-10-21 15:25+0000\n"
+"POT-Creation-Date: 2010-10-22 10:33+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -25,7 +25,11 @@ msgstr ""
 msgid "Logged-in users"
 msgstr ""
 
-#: ./opengever/base/browser/list_groupmembers.pt:15
+#: ./opengever/base/profiles/default/actions.xml
+msgid "Properties"
+msgstr ""
+
+#: ./opengever/base/browser/list_groupmembers.pt:13
 msgid "There are no members in this group."
 msgstr ""
 
