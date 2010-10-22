@@ -37,3 +37,6 @@ msgstr ""
 
 msgid "document_with_docucomposer"
 msgstr ""
+
+msgid "participants"
+msgstr ""
