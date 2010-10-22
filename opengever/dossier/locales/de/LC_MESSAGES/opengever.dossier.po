@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: opengever.dossier 1.0\n"
-"POT-Creation-Date: 2010-10-22 06:58+0000\n"
-"PO-Revision-Date: 2009-09-17 15:21+0000\n"
+"POT-Creation-Date: 2010-10-21 09:59+0000\n"
+"PO-Revision-Date: 2010-10-21 12:06+0200\n"
 "Last-Translator: Thomas Buchberger <t.buchberger@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
 "MIME-Version: 1.0\n"
@@ -36,11 +36,11 @@ msgstr "Dossierübersicht"
 
 #: ./opengever/dossier/browser/send_document.py:34
 msgid "No Mail Address"
-msgstr "Keine Mail-Adresse"
+msgstr "Keine E-Mail Adresse"
 
 #: ./opengever/dossier/archive.py:29
 msgid "Not all required fields are filled"
-msgstr "Nicht alle benötigten Felder wurden ausgefüllt"
+msgstr "Nicht alle benötigten Felder wurden ausgefüllt."
 
 #: ./opengever/dossier/templatedossier.py:115
 msgid "Not found the templatedossier"
@@ -65,7 +65,7 @@ msgstr "Das Enddatum wird auch bei der Aktion 'nur abschliessen' benötigt"
 
 #: ./opengever/dossier/validators.py:18
 msgid "The Files you selected are bigger than the maximal Size"
-msgstr "Die ausgewählten Dateien sind grösser als die Maximalgrösse"
+msgstr "Die Grösse der ausgewählten Dateien überschreiten die Maximalgrösse."
 
 #: ./opengever/dossier/archive.py:234
 msgid "The dossier was already resolved"
@@ -85,7 +85,7 @@ msgstr "Wenn die Aktion 'Ablagenummer vergeben' selektiert ist, werden alle Feld
 
 #: ./opengever/dossier/browser/send_document.py:76
 msgid "You have to select a intern                             or enter a extern mail-addres"
-msgstr ""
+msgstr "Wählen Sie mindestens eine interne oder eine externe E-Mail Adresse."
 
 #. Default: "last modified"
 #: ./opengever/dossier/viewlets/templatedossier_byline.pt:35
@@ -112,7 +112,7 @@ msgstr "Abbrechen"
 #. Default: "Continue"
 #: ./opengever/dossier/transport.py:49
 msgid "button_continue"
-msgstr ""
+msgstr "Weiter"
 
 #. Default: "Copy"
 #: ./opengever/dossier/transport.py:125
@@ -140,7 +140,7 @@ msgid "create_document_with_template"
 msgstr "Dokument mit Vorlage erstellen"
 
 msgid "document_with_docucomposer"
-msgstr ""
+msgstr "Dokument mit Docucomposer"
 
 msgid "documents"
 msgstr "Dokumente"
@@ -390,10 +390,9 @@ msgstr "Beteiligung von ${contact} entfernt"
 msgid "label_participation"
 msgstr "Beteiligung"
 
-#. Default: "Reference Number"
+#. Default: "Reference Number:"
 #: ./opengever/dossier/behaviors/dossier.py:178
 #: ./opengever/dossier/viewlets/businesscase_byline.pt:69
-#, fuzzy
 msgid "label_reference_number"
 msgstr "Aktenzeichen:"
 
