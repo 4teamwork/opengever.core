@@ -35,7 +35,8 @@ class DocumentSizeValidator(validator.SimpleFieldValidator):
             total = 0
 
             for doc in value:
-                total += doc.file.getSize()
+                if doc.file:
+                    total += doc.file.getSize()
             if total > (reg_proxy.max_size * 1000000):
                 raise ToBigFiles()
         else:

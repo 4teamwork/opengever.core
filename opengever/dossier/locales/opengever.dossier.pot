@@ -84,7 +84,7 @@ msgstr ""
 msgid "When the Action give filing number is selected,                     all fields are required."
 msgstr ""
 
-#: ./opengever/dossier/browser/send_document.py:76
+#: ./opengever/dossier/browser/send_document.py:79
 msgid "You have to select a intern                             or enter a extern mail-addres"
 msgstr ""
 
@@ -121,12 +121,12 @@ msgid "button_copy"
 msgstr ""
 
 #. Default: "Send"
-#: ./opengever/dossier/browser/send_document.py:122
+#: ./opengever/dossier/browser/send_document.py:125
 msgid "button_send"
 msgstr ""
 
 #. Default: "Cancel"
-#: ./opengever/dossier/browser/send_document.py:156
+#: ./opengever/dossier/browser/send_document.py:159
 msgid "cancel_back"
 msgstr ""
 
@@ -147,7 +147,7 @@ msgid "documents"
 msgstr ""
 
 #. Default: "Extern receiver"
-#: ./opengever/dossier/browser/send_document.py:56
+#: ./opengever/dossier/browser/send_document.py:57
 msgid "extern_receiver"
 msgstr ""
 
@@ -213,11 +213,16 @@ msgstr ""
 msgid "help_former_reference_number"
 msgstr ""
 
+#. Default: "Live Search: search for users and contacts"
+#: ./opengever/dossier/browser/send_document.py:49
+msgid "help_intern_receiver"
+msgstr ""
+
 #: ./opengever/dossier/behaviors/dossier.py:64
 msgid "help_keywords"
 msgstr ""
 
-#: ./opengever/dossier/browser/send_document.py:68
+#: ./opengever/dossier/browser/send_document.py:71
 msgid "help_message"
 msgstr ""
 
@@ -246,7 +251,7 @@ msgstr ""
 msgid "help_start"
 msgstr ""
 
-#: ./opengever/dossier/browser/send_document.py:63
+#: ./opengever/dossier/browser/send_document.py:66
 msgid "help_subject"
 msgstr ""
 
@@ -259,7 +264,7 @@ msgid "help_volume_number"
 msgstr ""
 
 #. Default: "Mails sent"
-#: ./opengever/dossier/browser/send_document.py:151
+#: ./opengever/dossier/browser/send_document.py:154
 msgid "info_mails_sent"
 msgstr ""
 
@@ -362,7 +367,7 @@ msgid "label_keywords"
 msgstr ""
 
 #. Default: "Message"
-#: ./opengever/dossier/browser/send_document.py:67
+#: ./opengever/dossier/browser/send_document.py:70
 msgid "label_message"
 msgstr ""
 
@@ -425,7 +430,7 @@ msgid "label_roles"
 msgstr ""
 
 #. Default: "send Docuemnts with email"
-#: ./opengever/dossier/browser/send_document.py:100
+#: ./opengever/dossier/browser/send_document.py:103
 msgid "label_send_document_mail"
 msgstr ""
 
@@ -451,7 +456,7 @@ msgid "label_start_byline"
 msgstr ""
 
 #. Default: "Subject"
-#: ./opengever/dossier/browser/send_document.py:62
+#: ./opengever/dossier/browser/send_document.py:65
 msgid "label_subject"
 msgstr ""
 
@@ -482,7 +487,7 @@ msgstr ""
 msgid "label_workflow_state"
 msgstr ""
 
-#: ./opengever/dossier/browser/send_document.py:49
+#: ./opengever/dossier/browser/send_document.py:50
 msgid "mails"
 msgstr ""
 
@@ -506,6 +511,7 @@ msgstr ""
 msgid "only resolve, set filing no later"
 msgstr ""
 
+#: ./opengever/dossier/browser/send_document.py:60
 msgid "participants"
 msgstr ""
 

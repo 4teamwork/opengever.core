@@ -22,7 +22,7 @@ from z3c.form import form, button, field, validator
 from z3c.form.interfaces import INPUT_MODE
 
 
-from opengever.document import _
+from opengever.dossier import _
 from opengever.dossier.validators import DocumentSizeValidator, \
     AddressValidator
 from opengever.dossier.behaviors.dossier import IDossierMarker
@@ -37,15 +37,9 @@ class NoMail(Invalid):
 class ISendDocumentSchema(Interface):
     """ The Send Document Form Schema."""
 
-    documents = RelationList(
-        title=_('label_documents', default="Documents"),
-        default=[],
-        value_type=RelationChoice(title=u"documents",
-            source = ObjPathSourceBinder()),
-        required=True,
-    )
     intern_receiver = schema.Tuple(
         title=_('intern_receiver', default="Intern receiver"),
+        description=_('help_intern_receiver', default="Live Search: search for users and contacts"),
         value_type=schema.Choice(title=_(u"mails"),
         source=u'opengever.ogds.base.EmailContactsAndUsersVocabulary'),
         required=False,
@@ -54,6 +48,8 @@ class ISendDocumentSchema(Interface):
 
     extern_receiver = schema.List(
         title=_('extern_receiver', default="Extern receiver"),
+        description=_('help_extern_receiver',
+            default="email addresses of the receivers. Enter manually the addresses, one per each line."),
         value_type=schema.TextLine(title=_('receiver'), ),
         required=False,
     )
@@ -63,9 +59,18 @@ class ISendDocumentSchema(Interface):
         description=_(u'help_subject', default=u''),
         required=True,
     )
+
     message = schema.Text(
         title=_(u'label_message', default=u'Message'),
         description=_(u'help_message', default=u''),
+        required=True,
+    )
+
+    documents = RelationList(
+        title=_('label_documents', default="Documents"),
+        default=[],
+        value_type=RelationChoice(title=u"documents",
+            source = ObjPathSourceBinder()),
         required=True,
     )
 
