@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: opengever.dossier 1.0\n"
-"POT-Creation-Date: 2010-10-21 09:59+0000\n"
+"POT-Creation-Date: 2010-10-22 13:40+0000\n"
 "PO-Revision-Date: 2010-10-21 12:06+0200\n"
 "Last-Translator: Thomas Buchberger <t.buchberger@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -390,9 +390,10 @@ msgstr "Beteiligung von ${contact} entfernt"
 msgid "label_participation"
 msgstr "Beteiligung"
 
-#. Default: "Reference Number:"
+#. Default: "Reference Number"
 #: ./opengever/dossier/behaviors/dossier.py:178
 #: ./opengever/dossier/viewlets/businesscase_byline.pt:69
+#, fuzzy
 msgid "label_reference_number"
 msgstr "Aktenzeichen:"
 
@@ -423,7 +424,7 @@ msgstr "Art der Beteiligungen"
 msgid "label_roles"
 msgstr "Rollen"
 
-#. Default: "send Docuemnts with email"
+#. Default: "send Documents with email"
 #: ./opengever/dossier/browser/send_document.py:100
 msgid "label_send_document_mail"
 msgstr "Dokumente per E-Mail versenden"

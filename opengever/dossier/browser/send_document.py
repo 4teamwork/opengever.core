@@ -22,7 +22,7 @@ from z3c.form import form, button, field, validator
 from z3c.form.interfaces import INPUT_MODE
 
 
-from opengever.document import _
+from opengever.dossier import _
 from opengever.dossier.validators import DocumentSizeValidator, \
     AddressValidator
 from opengever.dossier.behaviors.dossier import IDossierMarker
@@ -38,14 +38,14 @@ class ISendDocumentSchema(Interface):
     """ The Send Document Form Schema."""
 
     documents = RelationList(
-        title=_('label_documents', default="Documents"),
+        title=_(u'label_documents', default="Documents"),
         default=[],
         value_type=RelationChoice(title=u"documents",
             source = ObjPathSourceBinder()),
         required=True,
     )
     intern_receiver = schema.Tuple(
-        title=_('intern_receiver', default="Intern receiver"),
+        title=_(u'intern_receiver', default="Intern receiver"),
         value_type=schema.Choice(title=_(u"mails"),
         source=u'opengever.ogds.base.EmailContactsAndUsersVocabulary'),
         required=False,
@@ -53,7 +53,7 @@ class ISendDocumentSchema(Interface):
     )
 
     extern_receiver = schema.List(
-        title=_('extern_receiver', default="Extern receiver"),
+        title=_(u'extern_receiver', default="Extern receiver"),
         value_type=schema.TextLine(title=_('receiver'), ),
         required=False,
     )
@@ -97,7 +97,7 @@ class SendDocumentForm(form.Form):
 
     fields = field.Fields(ISendDocumentSchema)
     ignoreContext = True
-    label = _('label_send_document_mail', default="send Docuemnts with email")
+    label = _('label_send_document_mail', default="send Documents with email")
 
     fields['extern_receiver'].widgetFactory[INPUT_MODE] \
         = TextLinesFieldWidget

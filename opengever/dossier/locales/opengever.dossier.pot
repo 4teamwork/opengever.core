@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2010-10-21 09:59+0000\n"
+"POT-Creation-Date: 2010-10-22 13:40+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -391,7 +391,7 @@ msgstr ""
 msgid "label_participation"
 msgstr ""
 
-#. Default: "Reference Number:"
+#. Default: "Reference Number"
 #: ./opengever/dossier/behaviors/dossier.py:178
 #: ./opengever/dossier/viewlets/businesscase_byline.pt:69
 msgid "label_reference_number"
@@ -424,7 +424,7 @@ msgstr ""
 msgid "label_roles"
 msgstr ""
 
-#. Default: "send Docuemnts with email"
+#. Default: "send Documents with email"
 #: ./opengever/dossier/browser/send_document.py:100
 msgid "label_send_document_mail"
 msgstr ""
