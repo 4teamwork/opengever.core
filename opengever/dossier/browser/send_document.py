@@ -37,9 +37,17 @@ class NoMail(Invalid):
 class ISendDocumentSchema(Interface):
     """ The Send Document Form Schema."""
 
+    documents = RelationList(
+        title=_(u'label_documents', default="Documents"),
+        default=[],
+        value_type=RelationChoice(title=u"documents",
+            source = ObjPathSourceBinder()),
+        required=True,
+    )
     intern_receiver = schema.Tuple(
         title=_('intern_receiver', default="Intern receiver"),
         description=_('help_intern_receiver', default="Live Search: search for users and contacts"),
+
         value_type=schema.Choice(title=_(u"mails"),
         source=u'opengever.ogds.base.EmailContactsAndUsersVocabulary'),
         required=False,
@@ -102,7 +110,7 @@ class SendDocumentForm(form.Form):
 
     fields = field.Fields(ISendDocumentSchema)
     ignoreContext = True
-    label = _('label_send_document_mail', default="send Docuemnts with email")
+    label = _('label_send_document_mail', default="send Documents with email")
 
     fields['extern_receiver'].widgetFactory[INPUT_MODE] \
         = TextLinesFieldWidget
