@@ -1,24 +1,23 @@
-import re
-from five import grok
 from Acquisition import aq_inner
-
-from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
-from zope.component import getUtility, queryUtility, getUtilitiesFor
-from zope.annotation.interfaces import IAnnotations
-from plone.app.workflow.interfaces import ISharingPageRole
-from plone.app.workflow.browser.sharing import SharingView
-
+from five import grok
+from ftw.journal.config import JOURNAL_ENTRIES_ANNOTATIONS_KEY
+from ftw.journal.interfaces import IAnnotationsJournalizable
+from ftw.journal.interfaces import IJournalizable
+from ftw.journal.interfaces import IWorkflowHistoryJournalizable
 from ftw.tabbedview.browser.listing import BaseListingView
 from ftw.tabbedview.interfaces import ITabbedView
-from ftw.journal.interfaces import IAnnotationsJournalizable, \
-    IWorkflowHistoryJournalizable, IJournalizable
-from ftw.journal.config import JOURNAL_ENTRIES_ANNOTATIONS_KEY
-from ftw.table.interfaces import ITableGenerator
 from ftw.table import helper
+from ftw.table.interfaces import ITableGenerator
 from opengever.ogds.base.interfaces import IContactInformation
-from opengever.tabbedview.helper import readable_ogds_author, linked,\
-    readable_date_set_invisibles
 from opengever.tabbedview import _
+from opengever.tabbedview.helper import readable_date_set_invisibles
+from opengever.tabbedview.helper import readable_ogds_author, linked
+from plone.app.workflow.browser.sharing import SharingView
+from plone.app.workflow.interfaces import ISharingPageRole
+from zope.annotation.interfaces import IAnnotations
+from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
+from zope.component import getUtility, queryUtility, getUtilitiesFor
+import re
 
 
 def datetime_compare(x, y):
