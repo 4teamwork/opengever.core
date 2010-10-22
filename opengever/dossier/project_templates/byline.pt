@@ -6,7 +6,7 @@
   <span id="lock-icon"
         tal:define="lock_icon viewlet/locked_icon"
         tal:condition="lock_icon">
-      <img tal:replace="structure lock_icon" />
+    <img tal:replace="structure lock_icon" />
   </span>
 
   <tal:name tal:condition="viewlet/responsible">
@@ -25,10 +25,10 @@
   </tal:name>
 
   <tal:state>
-    <span i18n:translate="label_workflow_state" class="documentStatus">
-	  State: 
-	</span>
-	<span tal:content="viewlet/workflow_state" i18n:translate="" i18n:domain="plone" class="documentAuthor" />
+    <span i18n:translate="label_workflow_state" class="documentStatus" class="noborder">
+      State:
+    </span>
+    <span tal:content="viewlet/workflow_state" i18n:translate="" i18n:domain="plone" />
   </tal:state>
 
   <span class="documentModified">
