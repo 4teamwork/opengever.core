@@ -38,8 +38,8 @@ class Participants(OpengeverListingTab):
     columns = (
         ('', base64_oid_checkbox, ),
         ('', icon_helper, ),
-        (_(u'contact',u'Contact'), 'contact', readable_ogds_author),
-        (_(u'label_rolelist',u'role_list'), 'roles', ))
+        (_(u'column_contact', u'Contact'), 'contact', readable_ogds_author),
+        (_(u'column_rolelist',u'role_list'), 'roles', ))
 
     def update(self):
         self.pagesize = 20
