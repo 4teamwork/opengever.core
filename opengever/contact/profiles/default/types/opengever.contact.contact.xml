@@ -28,8 +28,8 @@
     </property>
 
     <!-- View information -->
-    <property name="immediate_view">tabbed_view</property>
-    <property name="default_view">tabbed_view</property>
+    <property name="immediate_view">view</property>
+    <property name="default_view">view</property>
     <property name="default_view_fallback">False</property>
     <property name="view_methods">
         <element value="view"/>
