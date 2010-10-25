@@ -8,7 +8,7 @@
  <permission>View</permission>
  <permission>opengever.contact: Add contact</permission>
  <permission>Sharing page: Delegate roles</permission>
- <state state_id="contactfolder-state-active" title="">
+ <state state_id="contactfolder-state-active" title="Active">
   <permission-map name="Access contents information" acquired="False">
    <permission-role>Manager</permission-role>
    <permission-role>Reader</permission-role>
