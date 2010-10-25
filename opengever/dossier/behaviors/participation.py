@@ -1,21 +1,16 @@
 from Products.statusmessages.interfaces import IStatusMessage
+from collective.elephantvocabulary import wrap_vocabulary
 from five import grok
 from opengever.dossier import _
-from opengever.dossier.interfaces import IDossierParticipants
 from persistent import Persistent
 from persistent.list import PersistentList
 from plone.directives import form
 from plone.formwidget.autocomplete import AutocompleteFieldWidget
-from plone.registry.interfaces import IRegistry
 from plone.z3cform import layout
 from rwproperty import getproperty, setproperty
 from zope import schema
 from zope.annotation.interfaces import IAnnotations
-from zope.component import getUtility
 from zope.interface import Interface, implements
-from zope.schema.interfaces import IVocabularyFactory
-from zope.schema.vocabulary import SimpleVocabulary
-from collective.elephantvocabulary import wrap_vocabulary
 import base64
 import z3c.form
 
