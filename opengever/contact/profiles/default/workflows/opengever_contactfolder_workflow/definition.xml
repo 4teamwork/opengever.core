@@ -1,10 +1,12 @@
 <?xml version="1.0"?>
-<dc-workflow workflow_id="opengever_contact_workflow" title="Contact Workflow" description="" state_variable="state" initial_state="contact-state-active" manager_bypass="False">
+<dc-workflow workflow_id="opengever_contactfolder_workflow" title="Contactfolder Workflow" description="" state_variable="state" initial_state="contact-state-active" manager_bypass="False">
  <permission>Access contents information</permission>
+ <permission>Add portal content</permission>
  <permission>Delete objects</permission>
  <permission>List folder contents</permission>
  <permission>Modify portal content</permission>
  <permission>View</permission>
+ <permission>opengever.contact: Add contact</permission>
  <state state_id="contact-state-active" title="">
   <permission-map name="Access contents information" acquired="False">
    <permission-role>Manager</permission-role>
@@ -22,9 +24,7 @@
    <permission-role>Reader</permission-role>
   </permission-map>
   <permission-map name="Modify portal content" acquired="False">
-   <permission-role>Editor</permission-role>
    <permission-role>Manager</permission-role>
-   <permission-role>Owner</permission-role>
   </permission-map>
   <permission-map name="View" acquired="False">
    <permission-role>Manager</permission-role>
