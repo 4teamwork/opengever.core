@@ -30,13 +30,26 @@ def linked(item, value):
         url_method = item.getURL
     elif hasattr(item, 'absolute_url'):
         url_method = item.absolute_url
-    img = u'<img src="%s/%s"/>' % (item.portal_url(), item.getIcon)
-    link = u'<a class="rollover-breadcrumb" href="%s" title="%s">%s%s</a>' % (url_method()," &gt; ".join(i['Title'] for i in item.breadcrumb_titles), img, value)
-    wrapper = u'<span class="linkWrapper">%s</span>' % link
+    img = '<img src="%s/%s"/>' % (item.portal_url(),
+                                  item.getIcon.encode('utf-8'))
+
+    breadcrumb_titles = []
+    for elem in item.breadcrumb_titles:
+        if isinstance(elem.get('Title'), unicode):
+            breadcrumb_titles.append(elem.get('Title').encode('utf-8'))
+        else:
+            breadcrumb_titles.append(elem.get('Title'))
+
+    link = '<a class="rollover-breadcrumb" href="%s" title="%s">%s%s</a>' % (
+        url_method(),
+        " &gt; ".join(t for t in breadcrumb_titles),
+        img, value)
+    wrapper = '<span class="linkWrapper">%s</span>' % link
     return wrapper
 
 def readable_date_set_invisibles(item, date):
-    if not date or str(date) == '1970/01/01' or str(date) == '1970-01-01 00:00:00':
+    if not date or str(date) == '1970/01/01' \
+            or str(date) == '1970-01-01 00:00:00':
         return u''
     strftimestring = '%d.%m.%Y'
     if date == None:
