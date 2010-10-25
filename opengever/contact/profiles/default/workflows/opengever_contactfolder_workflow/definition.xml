@@ -7,6 +7,7 @@
  <permission>Modify portal content</permission>
  <permission>View</permission>
  <permission>opengever.contact: Add contact</permission>
+ <permission>Sharing page: Delegate roles</permission>
  <state state_id="contactfolder-state-active" title="">
   <permission-map name="Access contents information" acquired="False">
    <permission-role>Manager</permission-role>
@@ -24,6 +25,9 @@
    <permission-role>Reader</permission-role>
   </permission-map>
   <permission-map name="Modify portal content" acquired="False">
+   <permission-role>Manager</permission-role>
+  </permission-map>
+  <permission-map name="Sharing page: Delegate roles" acquired="False">
    <permission-role>Manager</permission-role>
   </permission-map>
   <permission-map name="View" acquired="False">
