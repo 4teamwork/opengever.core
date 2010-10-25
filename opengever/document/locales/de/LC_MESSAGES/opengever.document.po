@@ -3,7 +3,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2010-10-21 08:08+0000\n"
+"POT-Creation-Date: 2010-10-25 12:33+0000\n"
 "PO-Revision-Date: 2009-01-01 10:00+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: Jonas Baumann <j.baumann@4teamwork.ch>\n"
@@ -122,7 +122,6 @@ msgstr "Ein Titel oder ein File muss angegeben werden."
 #. Default: "Common"
 #: ./opengever/document/behaviors.py:29
 #: ./opengever/document/document.py:80
-#, fuzzy
 msgid "fieldset_common"
 msgstr "Allgemein"
 
