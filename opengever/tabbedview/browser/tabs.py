@@ -53,7 +53,14 @@ class OpengeverListingTab(grok.View, BaseListingView):
     grok.context(ITabbedView)
     grok.template('generic')
 
-    update = BaseListingView.update
+    #update = BaseListingView.update
+    # 
+    def __call__(self, *args, **kwargs):
+        self.update()
+        if self.ext:
+            return self.render_listing()
+        else:
+            return super(OpengeverListingTab, self).__call__(*args, **kwargs)
 
     columns = (
         ('', helper.draggable),
@@ -63,6 +70,11 @@ class OpengeverListingTab(grok.View, BaseListingView):
         ('Creator', readable_ogds_author),
         )
 
+    def update(self):
+        self.contents = [{},]
+        if 'ext' in self.request:
+            self.ext = True
+            BaseListingView.update(self)
 
     custom_sort_indexes = {
         'Products.PluginIndexes.DateIndex.DateIndex': custom_sort}
