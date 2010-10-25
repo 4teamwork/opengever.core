@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2010-10-18 09:14+0000\n"
+"POT-Creation-Date: 2010-10-25 09:32+0000\n"
 "PO-Revision-Date: 2010-10-13 14:09+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -12,6 +12,9 @@ msgstr ""
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: DOMAIN\n"
 
+msgid "Description"
+msgstr "Beschreibung"
+
 #: ./opengever/tasktemplates/profiles/default/types/opengever.tasktemplates.tasktemplate.xml
 msgid "TaskTemplate"
 msgstr "Aufgabenvorlage"
@@ -19,6 +22,13 @@ msgstr "Aufgabenvorlage"
 #: ./opengever/tasktemplates/profiles/default/types/opengever.tasktemplates.tasktemplatefolder.xml
 msgid "TaskTemplateFolder"
 msgstr "Standardablauf"
+
+msgid "Title"
+msgstr "Titel"
+
+#: ./opengever/tasktemplates/browser/form.pt:39
+msgid "add tasktemplate"
+msgstr "Aufgabenvorlage hinzufügen"
 
 #. Default: "Interactive users"
 #: ./opengever/tasktemplates/vocabularies.py:49

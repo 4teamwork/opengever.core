@@ -27,6 +27,7 @@
     <property name="behaviors">
         <element value="plone.app.content.interfaces.INameFromTitle" />
         <element value="opengever.tabbedview.interfaces.ITabbedViewEnabled" />
+        <element value="opengever.base.behaviors.base.IOpenGeverBase" />
     </property>
 
     <!-- View information -->
@@ -36,7 +37,7 @@
     <property name="view_methods">
         <element value="tabbed_view"/>
     </property>
-
+    <property name="schema">opengever.tasktemplates.content.templatefoldersschema.ITaskTemplateFolderSchema</property>
     <!-- Method aliases -->
     <alias from="(Default)" to="(selected layout)"/>
     <alias from="edit" to="@@edit"/>

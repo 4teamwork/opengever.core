@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2010-09-30 13:26+0000\n"
+"POT-Creation-Date: 2010-10-18 09:14+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -15,22 +15,10 @@ msgstr ""
 "Language-Code: en\n"
 "Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
-"Domain: plone\n"
+"Domain: opengever.tasktemplates\n"
 
-msgid "Add task from template"
+msgid "Title"
 msgstr ""
 
-msgid "tasktemplate_activ"
-msgstr ""
-
-msgid "tasktemplate_inactiv"
-msgstr ""
-
-msgid "tasktemplates-transition-activ-inactiv"
-msgstr ""
-
-msgid "tasktemplates-transition-inactiv-activ"
-msgstr ""
-
-msgid "Add TaskTemplateFolder"
+msgid "Description"
 msgstr ""

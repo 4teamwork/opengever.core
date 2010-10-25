@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2010-10-18 09:14+0000\n"
+"POT-Creation-Date: 2010-10-25 10:01+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,12 +17,22 @@ msgstr ""
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: opengever.tasktemplates\n"
 
+msgid "Description"
+msgstr ""
+
 #: ./opengever/tasktemplates/profiles/default/types/opengever.tasktemplates.tasktemplate.xml
 msgid "TaskTemplate"
 msgstr ""
 
 #: ./opengever/tasktemplates/profiles/default/types/opengever.tasktemplates.tasktemplatefolder.xml
 msgid "TaskTemplateFolder"
+msgstr ""
+
+msgid "Title"
+msgstr ""
+
+#: ./opengever/tasktemplates/browser/form.pt:39
+msgid "add tasktemplate"
 msgstr ""
 
 #. Default: "Interactive users"

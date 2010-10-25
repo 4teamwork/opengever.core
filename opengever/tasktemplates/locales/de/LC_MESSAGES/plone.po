@@ -12,6 +12,9 @@ msgstr ""
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: DOMAIN\n"
 
+msgid "Add TaskTemplateFolder"
+msgstr "Standardablauf hinzufügen"
+
 msgid "Add task from template"
 msgstr "Standardablauf auslösen"
 

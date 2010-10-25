@@ -36,7 +36,7 @@
   <body>
         <div metal:fill-slot="main">
              <div tal:replace="structure provider:plone.abovecontenttitle" />
-             <h1 class="documentFirstHeading">add tasktemplate</h1>
+             <h1 class="documentFirstHeading" i18n:translate="">add tasktemplate</h1>
              <form action="add-tasktemplate/create" method="post">
                  <ul class="wizard" id="tasktemplateNavigation">
                      <li><a href="add-tasktemplate#templates">choose template</a></li>
