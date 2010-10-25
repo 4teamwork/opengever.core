@@ -9,6 +9,7 @@
  <permission>View</permission>
  <permission>opengever.dossier: Add businesscasedossier</permission>
  <permission>opengever.repository: Add repositoryfolder</permission>
+ <permission>Sharing page: Delegate roles</permission>
  <state state_id="repositoryfolder-state-active" title="repositoryfolder-state-active">
   <exit-transition transition_id="repositoryfolder-transition-inactivate"/>
   <permission-map name="Access contents information" acquired="False">
@@ -40,6 +41,9 @@
   </permission-map>
   <permission-map name="Modify portal content" acquired="False">
    <permission-role>Administrator</permission-role>
+   <permission-role>Manager</permission-role>
+  </permission-map>
+  <permission-map name="Sharing page: Delegate roles" acquired="False">
    <permission-role>Manager</permission-role>
   </permission-map>
   <permission-map name="View" acquired="False">
@@ -86,6 +90,9 @@
   </permission-map>
   <permission-map name="Modify portal content" acquired="False">
    <permission-role>Administrator</permission-role>
+   <permission-role>Manager</permission-role>
+  </permission-map>
+  <permission-map name="Sharing page: Delegate roles" acquired="False">
    <permission-role>Manager</permission-role>
   </permission-map>
   <permission-map name="View" acquired="False">
