@@ -3,12 +3,13 @@ from ftw.journal.config import JOURNAL_ENTRIES_ANNOTATIONS_KEY
 from ftw.journal.interfaces import IAnnotationsJournalizable
 from ftw.journal.interfaces import IWorkflowHistoryJournalizable
 from opengever.dossier import _
+from opengever.dossier import _ as _dossier
 from opengever.dossier.behaviors.dossier import IDossierMarker, IDossier
 from opengever.dossier.behaviors.participation import IParticipationAware
-from opengever.tabbedview.browser.tabs import OpengeverTab
 from opengever.ogds.base.interfaces import IContactInformation
-from zope.component import getUtility
+from opengever.tabbedview.browser.tabs import OpengeverTab
 from zope.annotation.interfaces import IAnnotations
+from zope.component import getUtility
 
 
 class DossierOverview(grok.View, OpengeverTab):
@@ -74,21 +75,27 @@ class DossierOverview(grok.View, OpengeverTab):
         return edict
 
     def sharing(self):
+
+        # get the participants
         phandler = IParticipationAware(self.context)
         results = list(phandler.get_participations())
 
+        # also append the responsible
+        class ResponsibleParticipant(object): pass
+
+        responsible = ResponsibleParticipant()
+        responsible.roles = _dossier(u'label_responsible', 'Responsible')
+        responsible.role_list = responsible.roles
+
         dossier_adpt = IDossier(self.context)
-        responsible_name = _(u'label_responsible', 'Responsible')
-        results.append({'contact': dossier_adpt.responsible,
-                        'roles': responsible_name,
-                        'role_list': responsible_name,
-                        })
+        responsible.contact = dossier_adpt.responsible
+        results.append(responsible)
 
         info = getUtility(IContactInformation)
 
         return [{
-            'Title': info.describe(xx['contact']),
-            'getURL': info.get_profile_url(xx['contact']),
+            'Title': info.describe(xx.contact),
+            'getURL': info.get_profile_url(xx.contact),
             'getIcon':'user.gif',
             }
             for xx in results]

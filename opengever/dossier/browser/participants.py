@@ -33,8 +33,9 @@ def role_list_helper(item, value):
     """
 
     if isinstance(value, Message):
-        # already translated...
-        return value
+        # translate the message
+        site = getSite()
+        return site.translate(value)
 
     elif sum([int(isinstance(value, t)) for t in (str, unicode)]):
         # is it a string or unicode or a subtype of them?
