@@ -4,11 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-<<<<<<< HEAD
-"POT-Creation-Date: 2010-10-22 13:40+0000\n"
-=======
 "POT-Creation-Date: 2010-10-22 10:47+0000\n"
->>>>>>> 9f95c890120048ca6f25c38f14875396ad6b5801
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -74,6 +70,10 @@ msgstr ""
 
 #: ./opengever/dossier/archive.py:234
 msgid "The dossier was already resolved"
+msgstr ""
+
+#: ./opengever/dossier/validators.py:26
+msgid "The selected file(s) have no files included."
 msgstr ""
 
 #: ./opengever/dossier/behaviors/dossier.py:188
@@ -438,13 +438,8 @@ msgstr ""
 msgid "label_roles"
 msgstr ""
 
-<<<<<<< HEAD
 #. Default: "send Documents with email"
-#: ./opengever/dossier/browser/send_document.py:100
-=======
-#. Default: "send Docuemnts with email"
 #: ./opengever/dossier/browser/send_document.py:105
->>>>>>> 9f95c890120048ca6f25c38f14875396ad6b5801
 msgid "label_send_document_mail"
 msgstr ""
 

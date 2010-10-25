@@ -71,6 +71,10 @@ msgstr "Die Grösse der ausgewählten Dateien überschreiten die Maximalgrösse.
 msgid "The dossier was already resolved"
 msgstr "Das Dossier ist bereits abgeschlossen"
 
+#: ./opengever/dossier/validators.py:26
+msgid "The selected file(s) have no files included."
+msgstr "Die gewählten Dokumente enthalten keine Datei die angehängt werden könnte."
+
 #: ./opengever/dossier/behaviors/dossier.py:188
 msgid "The start date must be before the end date."
 msgstr "Das Beginn-Datum muss vor dem Ende-Datum liegen."
@@ -408,6 +412,7 @@ msgstr "Beteiligung"
 #. Default: "Reference Number"
 #: ./opengever/dossier/behaviors/dossier.py:178
 #: ./opengever/dossier/viewlets/businesscase_byline.pt:69
+#, fuzzy
 msgid "label_reference_number"
 msgstr "Aktenzeichen:"
 
@@ -433,9 +438,7 @@ msgstr "Verantwortlich"
 msgid "label_roles"
 msgstr "Rollen"
 
-#. Default: "send Documents with email"
-#: ./opengever/dossier/browser/send_document.py:100
-msgid "label_send_document_mail"
+#. Default: "send Docuemnts with email"
 msgstr "Dokumente per E-Mail versenden"
 
 #. Default: "Sequence Number:"
