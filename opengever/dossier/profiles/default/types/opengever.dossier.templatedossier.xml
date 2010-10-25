@@ -58,11 +58,6 @@
             url_expr="string:${object_url}/edit" visible="True">
         <permission value="Modify portal content"/>
     </action>
-    <action title="Journal" action_id="journal" category="object"
-            url_expr="string:${object_url}/@@journal"
-            condition_expr="" visible="True">
-        <permission value="View"/>
-    </action>
     <action title="document_with_docucomposer"  i18n:domain="opengever.dossier" action_id="document_with_docucomposer" category="folder_factories" condition_expr=""
             url_expr="string:${object_url}/docucomposer-wizard" visible="True">
         <permission value="Add portal content"/>
