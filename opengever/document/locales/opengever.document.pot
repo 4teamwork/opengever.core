@@ -75,6 +75,7 @@ msgstr ""
 msgid "You have not selected any documents"
 msgstr ""
 
+
 #: ./opengever/document/document.py:532
 msgid "actor"
 msgstr ""
@@ -107,6 +108,7 @@ msgstr ""
 #: ./opengever/document/mailing.py:224
 msgid "cancel_back"
 msgstr ""
+
 
 #: ./opengever/document/document.py:537
 msgid "comment"
@@ -198,7 +200,7 @@ msgstr ""
 msgid "help_open_extern"
 msgstr ""
 
-#. Default: "paper form"
+#. Default: "Available in paper form only"
 #: ./opengever/document/document.py:155
 #: ./opengever/document/document_templates/overview.pt:45
 msgid "help_paper_form"
@@ -286,7 +288,7 @@ msgstr ""
 msgid "label_document"
 msgstr ""
 
-#. Default: "document date"
+#. Default: "Document Date"
 #: ./opengever/document/document.py:125
 #: ./opengever/document/document_templates/overview.pt:14
 msgid "label_document_date"
@@ -304,7 +306,8 @@ msgstr ""
 msgid "label_file"
 msgstr ""
 
-#. Default: "foreign reference"
+
+#. Default: "Foreign Reference"
 #: ./opengever/document/document.py:119
 #: ./opengever/document/document_templates/overview.pt:34
 msgid "label_foreign_reference"

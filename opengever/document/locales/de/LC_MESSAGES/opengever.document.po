@@ -3,7 +3,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2010-10-25 12:33+0000\n"
+"POT-Creation-Date: 2010-10-22 12:36+0000\n"
 "PO-Revision-Date: 2009-01-01 10:00+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: Jonas Baumann <j.baumann@4teamwork.ch>\n"
@@ -295,9 +295,10 @@ msgstr "Beschreibung"
 msgid "label_document"
 msgstr "Dokument"
 
-#. Default: "document date"
+#. Default: "Document Date"
 #: ./opengever/document/document.py:125
 #: ./opengever/document/document_templates/overview.pt:14
+
 msgid "label_document_date"
 msgstr "Dokumentdatum"
 
@@ -313,9 +314,10 @@ msgstr "Dokumenttyp"
 msgid "label_file"
 msgstr "Datei"
 
-#. Default: "foreign reference"
+#. Default: "Foreign Reference"
 #: ./opengever/document/document.py:119
 #: ./opengever/document/document_templates/overview.pt:34
+
 msgid "label_foreign_reference"
 msgstr "Fremdzeichen"
 
