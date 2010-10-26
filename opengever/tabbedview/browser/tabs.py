@@ -342,14 +342,11 @@ class Sharing(grok.View, SharingView):
         - id
         - title
         """
-        context = aq_inner(self.context)
         pairs = []
-        has_manage_portal = context.portal_membership.checkPermission(
-            'ManagePortal', context)
         aviable_roles_for_users = [
             u'Editor', u'Reader', u'Contributor', u'Reviewer', ]
         for name, utility in getUtilitiesFor(ISharingPageRole):
-            if not has_manage_portal and name not in aviable_roles_for_users:
+            if name not in aviable_roles_for_users:
                 continue
             pairs.append(dict(id = name, title = utility.title))
 
@@ -358,11 +355,6 @@ class Sharing(grok.View, SharingView):
 
     def role_settings(self):
 
-        context = self.context
         results = super(Sharing, self).role_settings()
-
-        if not context.portal_membership.checkPermission(
-            'ManagePortal', context):
-            results = [r for r in results if r['type']!='group']
 
         return results
