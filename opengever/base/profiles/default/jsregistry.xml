@@ -2,7 +2,10 @@
 <object name="portal_javascripts" meta_type="JavaScripts Registry">
 
     <javascript cacheable="True" compression="safe" cookable="True" expression=""
-                enabled="True" id="++resource++opengever.base.resources/sharing.js" inline="False"
-                />
+        enabled="True" id="++resource++opengever.base.resources/sharing.js" inline="False"
+    />
+    <javascript cacheable="True" compression="safe" cookable="True" expression=""
+        enabled="True" id="++resource++opengever.base.resources/advanced_search.js" inline="False"
+    />
 
 </object>
