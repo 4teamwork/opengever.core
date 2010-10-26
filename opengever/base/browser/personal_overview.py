@@ -37,7 +37,7 @@ class PersonalOverview(TabbedView):
     """The personal overview view show all documents and dossier
     where the actual user is the responsible.
     """
-    
+
     default_tabs = [
             {'id': 'mytasks', 'icon': None, 'url': '#', 'class': None},
             {'id': 'mydossiers', 'icon': None, 'url': '#', 'class': None},
@@ -53,15 +53,17 @@ class PersonalOverview(TabbedView):
     def get_tabs(self):
         mtool = getToolByName(self.context, 'portal_membership')
         member = mtool.getAuthenticatedMember()
-        inbox_path = '%s/eingangskorb' % self.context.portal_url.getPortalPath()
+        inbox_path = '%s/eingangskorb' % \
+            self.context.portal_url.getPortalPath()
+
         try:
             inbox = self.context.unrestrictedTraverse(inbox_path)
         except KeyError:
             is_admin = False
 
         if inbox:
-            is_admin = member and member.allowed(inbox,
-                                             ('View',))
+            roles = member.getRolesInContext(inbox)
+            is_admin = roles and 'Administrator' in roles
 
         if is_admin:
             return self.default_tabs + self.admin_tabs
@@ -118,6 +120,8 @@ class MyTasks(GlobalTaskListingMixin, OpengeverListingTab):
     grok.require('zope2.View')
     grok.context(Interface)
 
+    enabled_actions = major_actions = ['pdf_taskslisting']
+
     def get_base_query(self):
         """Returns the base search query (sqlalchemy)
         """
@@ -140,9 +144,7 @@ class IssuedTasks(Tasks):
     grok.require('zope2.View')
     grok.context(Interface)
 
-    enabled_actions = []
-    major_actions = []
-    columns = remove_control_columns(Dossiers.columns)
+    enabled_actions = major_actions = ['pdf_taskslisting']
 
     search_options = {'issuer': authenticated_member,}
 
@@ -155,6 +157,8 @@ class AllTasks(MyTasks, OpengeverListingTab):
     grok.name('tabbedview_view-alltasks')
     grok.require('zope2.View')
     grok.context(Interface)
+
+    enabled_actions = major_actions = ['pdf_taskslisting']
 
     def get_base_query(self):
         """Returns the base search query (sqlalchemy)
@@ -173,6 +177,4 @@ class AllIssuedTasks(Tasks):
     grok.require('zope2.View')
     grok.context(Interface)
 
-    enabled_actions = []
-    major_actions = []
-    columns = remove_control_columns(Dossiers.columns)
+    enabled_actions = major_actions = ['pdf_taskslisting']
