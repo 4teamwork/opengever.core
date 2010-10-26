@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2010-10-14 16:30+0000\n"
+"POT-Creation-Date: 2010-10-26 05:47+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -25,6 +25,11 @@ msgstr ""
 msgid "Logged-in users"
 msgstr ""
 
+#. Default: "advanced search"
+#: ./opengever/base/browser/advanced_search.py:266
+msgid "advanced_search"
+msgstr ""
+
 #. Default ""
 #: opengever/repository/classification.py
 msgid "archival worthy"
@@ -35,6 +40,11 @@ msgstr ""
 msgid "archival worthy with sampling"
 msgstr ""
 
+#. Default: "Search"
+#: ./opengever/base/browser/advanced_search.py:296
+msgid "button_search"
+msgstr ""
+
 #. Default: "classified"
 #: opengever/repository/classification.py
 msgid "classified"
@@ -43,6 +53,14 @@ msgstr ""
 #. Default: "confidential"
 #: opengever/repository/classification.py
 msgid "confidential"
+msgstr ""
+
+#: ./opengever/base/browser/advanced_search.py:46
+msgid "document"
+msgstr ""
+
+#: ./opengever/base/browser/advanced_search.py:34
+msgid "dossier"
 msgstr ""
 
 #. Default: "Classification"
@@ -69,8 +87,16 @@ msgstr ""
 msgid "help_archival_value_annotation"
 msgstr ""
 
+#: ./opengever/base/browser/advanced_search.py:213
+msgid "help_checked_out"
+msgstr ""
+
 #: ./opengever/base/behaviors/classification.py:31
 msgid "help_classification"
+msgstr ""
+
+#: ./opengever/base/browser/advanced_search.py:205
+msgid "help_creator"
 msgstr ""
 
 #: ./opengever/base/behaviors/creator.py:21
@@ -89,8 +115,52 @@ msgstr ""
 msgid "help_dateofsubmission"
 msgstr ""
 
+#: ./opengever/base/browser/advanced_search.py:249
+msgid "help_deadline"
+msgstr ""
+
+#: ./opengever/base/browser/advanced_search.py:175
+msgid "help_delivery_date"
+msgstr ""
+
+#: ./opengever/base/browser/advanced_search.py:181
+msgid "help_delivery_date_2"
+msgstr ""
+
 #: ./opengever/base/behaviors/base.py:30
 msgid "help_description"
+msgstr ""
+
+#: ./opengever/base/browser/advanced_search.py:199
+msgid "help_document_author"
+msgstr ""
+
+#: ./opengever/base/browser/advanced_search.py:187
+msgid "help_document_date"
+msgstr ""
+
+#: ./opengever/base/browser/advanced_search.py:193
+msgid "help_document_date_2"
+msgstr ""
+
+#: ./opengever/base/browser/advanced_search.py:115
+msgid "help_end"
+msgstr ""
+
+#: ./opengever/base/browser/advanced_search.py:121
+msgid "help_end_2"
+msgstr ""
+
+#: ./opengever/base/browser/advanced_search.py:139
+msgid "help_filing_number"
+msgstr ""
+
+#: ./opengever/base/browser/advanced_search.py:228
+msgid "help_issuer"
+msgstr ""
+
+#: ./opengever/base/browser/advanced_search.py:95
+msgid "help_portal_type"
 msgstr ""
 
 #: ./opengever/base/behaviors/classification.py:39
@@ -105,12 +175,52 @@ msgstr ""
 msgid "help_public_trial_statement"
 msgstr ""
 
+#: ./opengever/base/browser/advanced_search.py:163
+msgid "help_receipt_date"
+msgstr ""
+
+#: ./opengever/base/browser/advanced_search.py:169
+msgid "help_receipt_date_2"
+msgstr ""
+
+#: ./opengever/base/browser/advanced_search.py:127
+msgid "help_reference_number"
+msgstr ""
+
+#: ./opengever/base/browser/advanced_search.py:146
+msgid "help_responsible"
+msgstr ""
+
 #: ./opengever/base/behaviors/lifecycle.py:44
 msgid "help_retention_period"
 msgstr ""
 
 #: ./opengever/base/behaviors/lifecycle.py:51
 msgid "help_retention_period_annotation"
+msgstr ""
+
+#: ./opengever/base/browser/advanced_search.py:153
+msgid "help_review_state"
+msgstr ""
+
+#: ./opengever/base/browser/advanced_search.py:89
+msgid "help_searchable_text"
+msgstr ""
+
+#: ./opengever/base/browser/advanced_search.py:133
+msgid "help_sequence_number"
+msgstr ""
+
+#: ./opengever/base/browser/advanced_search.py:103
+msgid "help_start"
+msgstr ""
+
+#: ./opengever/base/browser/advanced_search.py:255
+msgid "help_tasktyp"
+msgstr ""
+
+#: ./opengever/base/browser/advanced_search.py:220
+msgid "help_trashed"
 msgstr ""
 
 #. Default: "Archival value"
@@ -123,9 +233,19 @@ msgstr ""
 msgid "label_archival_value_annotation"
 msgstr ""
 
+#. Default: "Checked out by"
+#: ./opengever/base/browser/advanced_search.py:212
+msgid "label_checked_out"
+msgstr ""
+
 #. Default: "Classification"
 #: ./opengever/base/behaviors/classification.py:30
 msgid "label_classification"
+msgstr ""
+
+#. Default: "Creator"
+#: ./opengever/base/browser/advanced_search.py:204
+msgid "label_creator"
 msgstr ""
 
 #. Default: "Creators"
@@ -148,9 +268,65 @@ msgstr ""
 msgid "label_dateofsubmission"
 msgstr ""
 
+#. Default: "Deadline"
+#: ./opengever/base/browser/advanced_search.py:242
+msgid "label_deadline"
+msgstr ""
+
+#: ./opengever/base/browser/advanced_search.py:248
+msgid "label_deadline_2"
+msgstr ""
+
+#. Default: "delivery date"
+#: ./opengever/base/browser/advanced_search.py:174
+msgid "label_delivery_date"
+msgstr ""
+
+#: ./opengever/base/browser/advanced_search.py:180
+msgid "label_delivery_date_2"
+msgstr ""
+
 #. Default: "Description"
 #: ./opengever/base/behaviors/base.py:29
 msgid "label_description"
+msgstr ""
+
+#. Default: "Document author"
+#: ./opengever/base/browser/advanced_search.py:198
+msgid "label_document_author"
+msgstr ""
+
+#. Default: "Document Date"
+#: ./opengever/base/browser/advanced_search.py:186
+msgid "label_document_date"
+msgstr ""
+
+#: ./opengever/base/browser/advanced_search.py:192
+msgid "label_document_date_2"
+msgstr ""
+
+#. Default: "End date"
+#: ./opengever/base/browser/advanced_search.py:114
+msgid "label_end"
+msgstr ""
+
+#: ./opengever/base/browser/advanced_search.py:120
+msgid "label_end_2"
+msgstr ""
+
+#. Default: "Filing number"
+#: ./opengever/base/browser/advanced_search.py:138
+msgid "label_filing_number"
+msgstr ""
+
+#. Default: "Issuer"
+#: ./opengever/base/browser/advanced_search.py:227
+msgid "label_issuer"
+msgstr ""
+
+#. Default: "Type"
+#: ./opengever/base/browser/advanced_search.py:94
+msgid "label_portal_type"
 msgstr ""
 
 #. Default: "Privacy layer"
@@ -168,6 +344,30 @@ msgstr ""
 msgid "label_public_trial_statement"
 msgstr ""
 
+#. Default: "Receipt date"
+#: ./opengever/base/browser/advanced_search.py:162
+msgid "label_receipt_date"
+msgstr ""
+
+#: ./opengever/base/browser/advanced_search.py:168
+msgid "label_receipt_date_2"
+msgstr ""
+
+#. Default: "Reference number"
+#: ./opengever/base/browser/advanced_search.py:126
+msgid "label_reference_number"
+msgstr ""
+
+#. Default: "Responsible"
+#: ./opengever/base/browser/advanced_search.py:145
+msgid "label_reponsible"
+msgstr ""
+
+#. Default: "Responsible"
+#: ./opengever/base/browser/advanced_search.py:235
+msgid "label_responsible"
+msgstr ""
+
 #. Default: "Retention period (years)"
 #: ./opengever/base/behaviors/lifecycle.py:43
 msgid "label_retention_period"
@@ -178,9 +378,38 @@ msgstr ""
 msgid "label_retention_period_annotation"
 msgstr ""
 
+#. Default: "State"
+#: ./opengever/base/browser/advanced_search.py:152
+msgid "label_review_state"
+msgstr ""
+
+#. Default: "Text"
+#: ./opengever/base/browser/advanced_search.py:88
+msgid "label_searchable_text"
+msgstr ""
+
+#. Default: "Sequence number"
+#: ./opengever/base/browser/advanced_search.py:132
+msgid "label_sequence_number"
+msgstr ""
+
+#. Default: "Start date"
+#: ./opengever/base/browser/advanced_search.py:102
+msgid "label_start"
+msgstr ""
+
+#: ./opengever/base/browser/advanced_search.py:254
+msgid "label_tasktype"
+msgstr ""
+
 #. Default: "Title"
 #: ./opengever/base/behaviors/base.py:24
 msgid "label_title"
+msgstr ""
+
+#. Default: "Also search in the bin"
+#: ./opengever/base/browser/advanced_search.py:219
+msgid "label_trashed"
 msgstr ""
 
 #. Default ""
@@ -211,6 +440,10 @@ msgstr ""
 #. Default: "public"
 #: opengever/repository/classification.py
 msgid "public"
+msgstr ""
+
+#: ./opengever/base/browser/advanced_search.py:40
+msgid "task"
 msgstr ""
 
 #. Default ""

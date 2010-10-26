@@ -3,7 +3,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2010-10-14 16:30+0000\n"
+"POT-Creation-Date: 2010-10-26 05:47+0000\n"
 "PO-Revision-Date: 2009-01-01 10:00+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: Jonas Baumann <j.baumann@4teamwork.ch>\n"
@@ -23,6 +23,11 @@ msgstr "Änderungen gespeichert"
 msgid "Logged-in users"
 msgstr "Angemeldete Benutzer"
 
+#. Default: "advanced search"
+#: ./opengever/base/browser/advanced_search.py:266
+msgid "advanced_search"
+msgstr "Erweiterte Suche"
+
 #. Default ""
 #: opengever/repository/classification.py
 msgid "archival worthy"
@@ -33,6 +38,11 @@ msgstr "Archivwürdig"
 msgid "archival worthy with sampling"
 msgstr "Sampling"
 
+#. Default: "Search"
+#: ./opengever/base/browser/advanced_search.py:296
+msgid "button_search"
+msgstr "Suchen"
+
 #. Default: "classified"
 #: opengever/repository/classification.py
 msgid "classified"
@@ -42,6 +52,14 @@ msgstr "Geheim"
 #: opengever/repository/classification.py
 msgid "confidential"
 msgstr "Vertraulich"
+
+#: ./opengever/base/browser/advanced_search.py:46
+msgid "document"
+msgstr "Dokument"
+
+#: ./opengever/base/browser/advanced_search.py:34
+msgid "dossier"
+msgstr "Dossier"
 
 #. Default: "Classification"
 #: ./opengever/base/behaviors/classification.py:20
@@ -67,10 +85,18 @@ msgstr "Archivwürdigkeit"
 msgid "help_archival_value_annotation"
 msgstr ""
 
+#: ./opengever/base/browser/advanced_search.py:213
+msgid "help_checked_out"
+msgstr ""
+
 #. Default: ""
 #: ./opengever/base/behaviors/classification.py:31
 msgid "help_classification"
 msgstr "Grad, in dem die Unterlagen vor unberechtigter Einsicht geschützt werden müssen"
+
+#: ./opengever/base/browser/advanced_search.py:205
+msgid "help_creator"
+msgstr ""
 
 #: ./opengever/base/behaviors/creator.py:21
 msgid "help_creators"
@@ -88,9 +114,53 @@ msgstr ""
 msgid "help_dateofsubmission"
 msgstr ""
 
+#: ./opengever/base/browser/advanced_search.py:249
+msgid "help_deadline"
+msgstr "Geben sie eine Datumsbereich der Frist ein."
+
+#: ./opengever/base/browser/advanced_search.py:175
+msgid "help_delivery_date"
+msgstr ""
+
+#: ./opengever/base/browser/advanced_search.py:181
+msgid "help_delivery_date_2"
+msgstr ""
+
 #: ./opengever/base/behaviors/base.py:30
 msgid "help_description"
 msgstr ""
+
+#: ./opengever/base/browser/advanced_search.py:199
+msgid "help_document_author"
+msgstr ""
+
+#: ./opengever/base/browser/advanced_search.py:187
+msgid "help_document_date"
+msgstr ""
+
+#: ./opengever/base/browser/advanced_search.py:193
+msgid "help_document_date_2"
+msgstr ""
+
+#: ./opengever/base/browser/advanced_search.py:115
+msgid "help_end"
+msgstr "Zeitbereich für Enddatum auswählen"
+
+#: ./opengever/base/browser/advanced_search.py:121
+msgid "help_end_2"
+msgstr ""
+
+#: ./opengever/base/browser/advanced_search.py:139
+msgid "help_filing_number"
+msgstr "Geben sie die vollständige Ablagenummer an."
+
+#: ./opengever/base/browser/advanced_search.py:228
+msgid "help_issuer"
+msgstr "Auftraggeber auswählen"
+
+#: ./opengever/base/browser/advanced_search.py:95
+msgid "help_portal_type"
+msgstr "Wählen sie den Objekttyp aus."
 
 #. Default: ""
 #: ./opengever/base/behaviors/classification.py:39
@@ -106,12 +176,52 @@ msgstr "Angabe, ob die Unterlagen gemäss Öffentlichkeitsgesetz besonders schü
 msgid "help_public_trial_statement"
 msgstr "Argumente gegen die öffentliche Zugänglichkeit gemäss Öffentlichkeitsgesetz"
 
+#: ./opengever/base/browser/advanced_search.py:163
+msgid "help_receipt_date"
+msgstr ""
+
+#: ./opengever/base/browser/advanced_search.py:169
+msgid "help_receipt_date_2"
+msgstr ""
+
+#: ./opengever/base/browser/advanced_search.py:127
+msgid "help_reference_number"
+msgstr "Genaues Aktenzeichen angeben (z.B: OG 2.4 / 1 / 3)"
+
+#: ./opengever/base/browser/advanced_search.py:146
+msgid "help_responsible"
+msgstr ""
+
 #: ./opengever/base/behaviors/lifecycle.py:44
 msgid "help_retention_period"
 msgstr "Zeitraum zwischen dem jüngsten Dokumentdatum eines in einem Dossier enthaltenen Dokuments und dem Zeitpunkt, an dem dieses für die Geschäftstätigkeit der Verwaltungseinheit nicht mehr benötigt wird"
 
 #: ./opengever/base/behaviors/lifecycle.py:51
 msgid "help_retention_period_annotation"
+msgstr ""
+
+#: ./opengever/base/browser/advanced_search.py:153
+msgid "help_review_state"
+msgstr ""
+
+#: ./opengever/base/browser/advanced_search.py:89
+msgid "help_searchable_text"
+msgstr "Suchbegriffe eingeben."
+
+#: ./opengever/base/browser/advanced_search.py:133
+msgid "help_sequence_number"
+msgstr "Genaue Laufnummer eingeben."
+
+#: ./opengever/base/browser/advanced_search.py:103
+msgid "help_start"
+msgstr "Zeitbereich für Startdatum auswählen"
+
+#: ./opengever/base/browser/advanced_search.py:255
+msgid "help_tasktyp"
+msgstr ""
+
+#: ./opengever/base/browser/advanced_search.py:220
+msgid "help_trashed"
 msgstr ""
 
 #. Default: "Archival value"
@@ -124,10 +234,20 @@ msgstr "Archivwürdigkeit"
 msgid "label_archival_value_annotation"
 msgstr "Kommentar zur Archivwürdigkeit"
 
+#. Default: "Checked out by"
+#: ./opengever/base/browser/advanced_search.py:212
+msgid "label_checked_out"
+msgstr "Ausgecheckt von"
+
 #. Default: "Classification"
 #: ./opengever/base/behaviors/classification.py:30
 msgid "label_classification"
 msgstr "Klassifikation"
+
+#. Default: "Creator"
+#: ./opengever/base/browser/advanced_search.py:204
+msgid "label_creator"
+msgstr "Ersteller"
 
 #. Default: "Creators"
 #: ./opengever/base/behaviors/creator.py:20
@@ -149,10 +269,66 @@ msgstr "Kassationsdatum"
 msgid "label_dateofsubmission"
 msgstr "Anbietezeitpunkt"
 
+#. Default: "Deadline"
+#: ./opengever/base/browser/advanced_search.py:242
+msgid "label_deadline"
+msgstr "Frist"
+
+#: ./opengever/base/browser/advanced_search.py:248
+msgid "label_deadline_2"
+msgstr ""
+
+#. Default: "delivery date"
+#: ./opengever/base/browser/advanced_search.py:174
+msgid "label_delivery_date"
+msgstr "Ausgangsdatum"
+
+#: ./opengever/base/browser/advanced_search.py:180
+msgid "label_delivery_date_2"
+msgstr ""
+
 #. Default: "Description"
 #: ./opengever/base/behaviors/base.py:29
 msgid "label_description"
 msgstr "Beschreibung"
+
+#. Default: "Document author"
+#: ./opengever/base/browser/advanced_search.py:198
+msgid "label_document_author"
+msgstr "Dokument Autor"
+
+#. Default: "Document Date"
+#: ./opengever/base/browser/advanced_search.py:186
+msgid "label_document_date"
+msgstr "Dokumentdatum"
+
+#: ./opengever/base/browser/advanced_search.py:192
+msgid "label_document_date_2"
+msgstr ""
+
+#. Default: "End date"
+#: ./opengever/base/browser/advanced_search.py:114
+msgid "label_end"
+msgstr "Enddatum"
+
+#: ./opengever/base/browser/advanced_search.py:120
+msgid "label_end_2"
+msgstr ""
+
+#. Default: "Filing number"
+#: ./opengever/base/browser/advanced_search.py:138
+msgid "label_filing_number"
+msgstr "Ablagenummer"
+
+#. Default: "Issuer"
+#: ./opengever/base/browser/advanced_search.py:227
+msgid "label_issuer"
+msgstr "Auftraggeber"
+
+#. Default: "Type"
+#: ./opengever/base/browser/advanced_search.py:94
+msgid "label_portal_type"
+msgstr "Objekttyp"
 
 #. Default: "Privacy layer"
 #: ./opengever/base/behaviors/classification.py:38
@@ -169,6 +345,30 @@ msgstr "Öffentlichkeitsstatus:"
 msgid "label_public_trial_statement"
 msgstr "Begründung für die Aufhebung des Öffentlichkeitsstatus"
 
+#. Default: "Receipt date"
+#: ./opengever/base/browser/advanced_search.py:162
+msgid "label_receipt_date"
+msgstr "Eingangsdatum"
+
+#: ./opengever/base/browser/advanced_search.py:168
+msgid "label_receipt_date_2"
+msgstr ""
+
+#. Default: "Reference number"
+#: ./opengever/base/browser/advanced_search.py:126
+msgid "label_reference_number"
+msgstr "Artikelnummer"
+
+#. Default: "Responsible"
+#: ./opengever/base/browser/advanced_search.py:145
+msgid "label_reponsible"
+msgstr "Verantwortlich"
+
+#. Default: "Responsible"
+#: ./opengever/base/browser/advanced_search.py:235
+msgid "label_responsible"
+msgstr "Verantwortlich"
+
 #. Default: "Retention period (years)"
 #: ./opengever/base/behaviors/lifecycle.py:43
 msgid "label_retention_period"
@@ -179,10 +379,39 @@ msgstr "Aufbewahrungsdauer (Jahre)"
 msgid "label_retention_period_annotation"
 msgstr "Kommentar zur Aufbewahrungsdauer"
 
+#. Default: "State"
+#: ./opengever/base/browser/advanced_search.py:152
+msgid "label_review_state"
+msgstr "Status"
+
+#. Default: "Text"
+#: ./opengever/base/browser/advanced_search.py:88
+msgid "label_searchable_text"
+msgstr "Suchtext"
+
+#. Default: "Sequence number"
+#: ./opengever/base/browser/advanced_search.py:132
+msgid "label_sequence_number"
+msgstr "Laufnummer"
+
+#. Default: "Start date"
+#: ./opengever/base/browser/advanced_search.py:102
+msgid "label_start"
+msgstr "Startdatum"
+
+#: ./opengever/base/browser/advanced_search.py:254
+msgid "label_tasktype"
+msgstr "Tasktyp"
+
 #. Default: "Title"
 #: ./opengever/base/behaviors/base.py:24
 msgid "label_title"
 msgstr "Titel"
+
+#. Default: "Also search in the bin"
+#: ./opengever/base/browser/advanced_search.py:219
+msgid "label_trashed"
+msgstr "Papierkorb auch durchsuchen"
 
 #. Default ""
 #: opengever/repository/classification.py
@@ -213,6 +442,10 @@ msgstr "Anbieten"
 #: opengever/repository/classification.py
 msgid "public"
 msgstr "Öffentlich"
+
+#: ./opengever/base/browser/advanced_search.py:40
+msgid "task"
+msgstr "Aufgabe"
 
 #. Default: "unchecked"
 #. Default ""
