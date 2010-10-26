@@ -53,28 +53,9 @@ def settings(context):
     if 'opengever-portlets-tree-TreePortlet' not in manager.keys():
         manager['opengever-portlets-tree-TreePortlet'] = treeportlet.Assignment(root_path='ordnungssystem')
 
-def set_permissions(portal):
-    # sets the permissions to the groups configuration in the client
-    client = get_current_client()
-    permissions = (
-        ('/ordnungssystem', client.group, ('Contributor', 'Reader')),
-        ('/eingangskorb', client.inbox_group,
-         ('Contributor', 'Editor', 'Reader')))
-
-    for path, principal, roles in permissions:
-        if path.startswith('/'):
-            path = path[1:]
-        obj = portal.restrictedTraverse(path)
-        obj.manage_setLocalRoles(principal, roles)
-
-    wftool = getToolByName(portal, 'portal_workflow')
-    wftool.updateRoleMappings(portal)
-
-
 def setupVarious(setup):
     # if setup.readDataFile('opengever.examplecontent.txt') is None:
     #     return
     site = setup.getSite()
     start_import(site)
     settings(site)
-    set_permissions(site)

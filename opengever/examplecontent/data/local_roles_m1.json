@@ -4,6 +4,7 @@
             "Reader", 
             "Editor", 
             "Contributor"
+
         ], 
         "og_mandant1_sekretariat": [
             "Administrator", 
@@ -11,7 +12,7 @@
         ]
     },
     "_path": "/ordnungssystem"
-}, 
+},
 {
     "_ac_local_roles": {
         "og_mandant1_eingangskorb": [
