@@ -339,7 +339,10 @@ class ContactInformation(grok.GlobalUtility):
             else:
                 # fallback with acl_users folder
                 portal_membership = getToolByName(portal, 'portal_membership')
-                return portal_membership.getMemberById(principal).getHomeUrl()
+                member = portal_membership.getMemberById(principal)
+                if member:
+                    return portal_membership.getMemberById(principal).getHomeUrl()
+            return None
 
     def render_link(self, principal):
         """Render a link to the `principal`
