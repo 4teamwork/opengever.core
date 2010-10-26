@@ -389,7 +389,7 @@ msgstr "Auftraggeber"
 #. Default: "Last change"
 #: ./opengever/task/task_templates/view.pt:46
 msgid "label_last_modified"
-msgstr "Letze Änderung"
+msgstr "Letzte Änderung"
 
 #. Default: "Predecessor"
 #: ./opengever/task/task.py:173
