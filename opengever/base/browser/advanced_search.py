@@ -294,21 +294,25 @@ class AdvancedSearchForm(directives_form.Form):
             for name in v:
                 if self.widgets.get(name, None):
                     self.widgets.get(name, None).addClass(k)
-                else:
-                    print name
+
     @button.buttonAndHandler(_(u'button_search', default=u'Search'))
     def search(self, action):
         data, errors = self.extractData()
         if not errors:
             # create Parameters and url
-            params = '/search?searchableText=%s&portal_type=%s' % (data.get('searchableText'), data.get('portal_type'))
+            params = '/search?searchableText=%s&portal_type=%s' % (
+                    data.get('searchableText'), data.get('portal_type'))
             for field in FIELD_MAPPING.get(
                     data.get('portal_type').replace('.','-')):
                 if data.get(field, None):
                     if isinstance(data.get(field), date):
                         if '1' in field:
-                            params = '%s&%s_usage=range:minmax' % (params, field[:-2])
-                        params = '%s&%s:list=%s' % (params, field[:-2], data.get(field).strftime('%m/%d/%y'))
+                            params = '%s&%s_usage=range:minmax' % (
+                                params, field[:-2])
+                        params = '%s&%s:list=%s' % (
+                            params, 
+                            field[:-2], 
+                            data.get(field).strftime('%m/%d/%y'))
 
                     elif isinstance(data.get(field), list):
                         for value in data.get(field):
