@@ -340,7 +340,7 @@ msgstr "Behältnis-Art"
 #. Default: "Documents"
 #: ./opengever/dossier/browser/send_document.py:70
 msgid "label_documents"
-msgstr "Anhang"
+msgstr "Anhänge"
 
 #. Default: "Edit after creation"
 #: ./opengever/dossier/templatedossier_templates/template_form.pt:58
