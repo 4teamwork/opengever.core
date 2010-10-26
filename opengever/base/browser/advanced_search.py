@@ -1,10 +1,10 @@
 from five import grok
 from Products.CMFCore.utils import getToolByName
-from Products.CMFCore.interfaces import ISiteRoot
 from Products.CMFPlone import PloneMessageFactory as PMF
 from zope import schema
 from zope.schema.interfaces import IContextSourceBinder
 from zope.schema.vocabulary import SimpleVocabulary
+from zope.interfaces import Interface
 from z3c.form import button, field
 from z3c.form.interfaces import INPUT_MODE
 from z3c.form.browser import radio, checkbox
@@ -259,7 +259,7 @@ class IAdvancedSearch(directives_form.Schema):
 
 
 class AdvancedSearchForm(directives_form.Form):
-    grok.context(ISiteRoot)
+    grok.context(Interface)
     grok.name('advanced_search')
     grok.require('zope2.View')
     
