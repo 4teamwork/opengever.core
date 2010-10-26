@@ -412,7 +412,6 @@ msgstr "Beteiligung"
 #. Default: "Reference Number"
 #: ./opengever/dossier/behaviors/dossier.py:178
 #: ./opengever/dossier/viewlets/businesscase_byline.pt:69
-#, fuzzy
 msgid "label_reference_number"
 msgstr "Aktenzeichen:"
 
@@ -582,5 +581,6 @@ msgstr "Dokument anfügen"
 #: ./opengever/dossier/transport.py:93
 msgid "warning_copy_to_remote_no_client"
 msgstr "Sie können die Dokumente nicht an einen anderen Mandanten senden, da Sie nur dem aktuellen Mandanten zugeordnet sind."
+
 
 
