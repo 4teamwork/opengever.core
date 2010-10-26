@@ -4,7 +4,7 @@ from Products.CMFPlone import PloneMessageFactory as PMF
 from zope import schema
 from zope.schema.interfaces import IContextSourceBinder
 from zope.schema.vocabulary import SimpleVocabulary
-from zope.interfaces import Interface
+from zope.interface import Interface
 from z3c.form import button, field
 from z3c.form.interfaces import INPUT_MODE
 from z3c.form.browser import radio, checkbox
