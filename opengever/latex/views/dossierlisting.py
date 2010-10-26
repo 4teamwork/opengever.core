@@ -26,7 +26,7 @@ class DossierListingPDF(BasePDFListing):
         info = getUtility(IContactInformation)
         client = get_current_client()
 
-        for brain in self.get_selected_brains():
+        for brain in self.get_selected_data():
             data.append(self._prepare_table_row(
                     str(brain.sequence_number),
                     str(brain.reference),

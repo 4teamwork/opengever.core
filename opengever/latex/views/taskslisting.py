@@ -24,27 +24,40 @@ class TasksListingPDF(BasePDFListing):
         info = getUtility(IContactInformation)
         client = get_current_client()
 
-        for brain in self.get_selected_brains():
+        # item may be brain or sqlalchemy task representation (globalindex)
+        for item in self.get_selected_data():
             data.append(self._prepare_table_row(
-                    str(brain.sequence_number),
-                    helper.readable_date(brain, brain.deadline),
-                    str(brain.Title),
+                    str(item.sequence_number),
+                    helper.readable_date(item, item.deadline),
+                    str(getattr(item, 'Title', getattr(item, 'title', ''))),
                     '%s / %s' % (client.title,
-                                 info.describe(brain.issuer)),
-                    str(self.get_dossier_sequence_number(brain)),
-                    str(brain.reference),
+                                 info.describe(item.issuer)),
+                    str(self.get_dossier_sequence_number(item)),
+                    str(getattr(item, 'reference',
+                                getattr(item, 'reference_number', ''))),
                     ))
 
         return ''.join(data)
 
-    def get_dossier_sequence_number(self, brain):
-        """Searches the first parental dossier relative to the `brain`
+    def get_dossier_sequence_number(self, item):
+        """Searches the first parental dossier relative to the task
         (breadcrumbs like) and returns its sequence number.
+
+        A item my be the brain of the task or the sqlalchemy task
+        representation.
         """
 
         dossier_marker = 'opengever.dossier.behaviors.dossier.IDossierMarker'
 
-        path = brain.getPath().split('/')[:-1]
+        try:
+            # brain?
+            path = item.getPath()
+        except AttributeError:
+            # sqlalchemy ! -> the information is stored on the item already
+            return item.dossier_sequence_number
+        else:
+            path = path.split('/')[:-1]
+
         portal = getToolByName(self.context, 'portal_url').getPortalObject()
         portal_path = '/'.join(portal.getPhysicalPath())
         catalog = getToolByName(self.context, 'portal_catalog')

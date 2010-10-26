@@ -1,6 +1,8 @@
 from Products.CMFCore.utils import getToolByName
+from opengever.globalindex.interfaces import ITaskQuery
 from opengever.latex.layouts.zug_default import ZugDefaultLayout
 from plonegov.pdflatex.browser.aspdf import AsPDFView
+from zope.component import getUtility
 
 
 class BasePDFListing(AsPDFView):
@@ -33,17 +35,45 @@ class BasePDFListing(AsPDFView):
         """
         return self.template()
 
-    def get_selected_brains(self):
-        """Returns all brains which were selected in the tabbed view.
+    def get_selected_data(self):
+        """Returns either a set of brains or a set of SQLAlchemy objects -
+        depending on the (tabbed-) view where the tasks were selected.
+        If there is a "path:list" in the request, we use the catalog and
+        if there is a "task_id:list", we use SQLAlchemy.
         """
 
-        catalog = getToolByName(self.context, 'portal_catalog')
+        paths = self.request.get('paths', None)
+        ids = self.request.get('task_ids', [])
 
-        for path in self.request.get('paths', []):
-            brains = catalog({'path': {'query': path,
+        if paths:
+            catalog = getToolByName(self.context, 'portal_catalog')
+
+            for path in self.request.get('paths', []):
+                brains = catalog({'path': {'query': path,
                                        'depth': 0}})
-            assert len(brains) == 1
-            yield brains[0]
+                assert len(brains) == 1, "Could not find task at %s" % path
+                yield brains[0]
+
+        elif ids:
+            query = getUtility(ITaskQuery)
+
+            # we need to sort the result by our ids list, because the
+            # sql query result is not sorted...
+            # create a mapping:
+            mapping = {}
+            for task in query.get_tasks(ids):
+                mapping[str(task.task_id)] = task
+
+            # get the task from the mapping
+            for id in ids:
+                task = mapping.get(str(id))
+                if task:
+                    yield task
+
+        else:
+            # empty generator
+            pass
+
 
     def _prepare_table_row(self, *cells):
         """Converts every cell in `cells` into LaTeX and merges them
