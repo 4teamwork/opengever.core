@@ -25,7 +25,7 @@
           <tal:rep tal:define="group python: view.groups[0]">
             <tr tal:repeat="widget group/widgets/values">
             <span tal:define="index repeat/widget/index"/>
-            
+
               <tal:block condition="python: widget.__name__ not in ('IBasic.title', 'IBasic.description', 'title', 'description','responsible', 'ITransition.transition', 'issuer', 'relatedItems') and widget.value">
 
                 <th tal:content="widget/label" ></th>
@@ -90,7 +90,7 @@
 
         <tal:items define="item view/getPredecessorTask"
                    condition="item">
-          <div tal:condition="items"><h2 i18n:translate="predecessor">Predecessor Task:</h2></div>
+          <div tal:condition="item"><h2 i18n:translate="predecessor">Predecessor Task:</h2></div>
           <div tal:content="structure python:view.render_indexed_task(item)" />
         </tal:items>
 
