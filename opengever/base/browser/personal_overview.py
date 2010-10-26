@@ -101,7 +101,7 @@ class MyDocuments(Documents):
 
     enabled_actions = []
     major_actions = []
-    columns = remove_control_columns(Dossiers.columns)
+    columns = remove_control_columns(Documents.columns)
 
     @property
     def view_name(self):
