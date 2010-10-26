@@ -240,15 +240,8 @@ class AddForm(form.AddForm, AutoExtensibleForm):
     fields['transition'].widgetFactory = radio.RadioFieldWidget
     fields = fields.omit('date_of_completion')
 
-    @property
-    def action(self):
-        """See interfaces.IInputForm"""
-        return os.path.join(self.request.getURL(),
-                            '++add++opengever.task.task')
-
     @button.buttonAndHandler(_(u'add', default='Add'),
                              name='add', )
-
     def handleContinue(self, action):
         data, errors = self.extractData()
         if errors:
