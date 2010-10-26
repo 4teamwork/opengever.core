@@ -5,6 +5,10 @@ Changelog
 1.0a4
 -----
 
+* fixed permission check on inbox for displaying additional tabs in personal overview
+  enabled pdf_taskslisting action and made items selectable
+  [26.10.2010, jbaumann]
+
 * Issue #541 Darstellung der Mitglieder einer Gruppe, die auf einem OpenGever Inhaltstyp zugelassen ist
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/541
   order user by name
@@ -24,14 +28,14 @@ Changelog
 
 * Fixed validator problems in test
   [18.03.2010, jbaumann]
-  
+
 * Reference number behavior: improved tests
   [17.03.2010, jbaumann]
-  
+
 * Issue #5 Abklärung, ob Präfix des Aktenzeichens auch ein Buchstabe sein kann
   https://extranet.4teamwork.ch/projects/testphase-rms-ais-der-ssgi-2010/tracker-sprint-ssgi-2010/5
   [17.03.2010, jbaumann]
-  
+
 * Issue #431 Checkouts auf allgdblx09 mit Oracle-Storage dauern EWIG
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/431
   Added _getCopy patch, which removes __parent__ pointer before copying it.
@@ -39,11 +43,11 @@ Changelog
 
 * Added missing reference_number indexer
   [26.02.2010, jbaumann]
-  
+
 * Issue #409 Verschieben eines Dossiers von einer Ordnungsposition unter eine andere
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/409/
   [22.02.2010, jbaumann]
-  
+
 
 1.0a3
 -----
@@ -60,10 +64,10 @@ Changelog
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/111
   Added some monkey patches for enabling support of umlauts in filenames.
   [05.01.2010, jbaumann]
-  
+
 * Issue #340: Aktenzeichen Dossiers und Subdossiers: Zähler zählt nicht über 2
   [04.01.2010, jbaumann]
-  
+
 * Issue #321: Lifecycle behavior: Vocabulary liefert falsche Werte
   [04.01.2010, jbaumann]
 
