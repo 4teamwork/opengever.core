@@ -17,7 +17,6 @@ Create a Task:
     >>> task2 = createContentInContainer(task1, 'opengever.task.task')
     >>> wft = task1.portal_workflow
     >>> wf = wft.get(wft.getChainFor(task1)[0])
-    >>> import pdb; pdb.set_trace( )
     >>> transitions = [t.get('id') for t in wft.getTransitionsFor(task1)]
     >>> 'task-transition-open-resolved' not in transitions
     True
