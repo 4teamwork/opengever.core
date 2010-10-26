@@ -1,7 +1,7 @@
+from opengever.base import _
 from zope import schema
 from zope.interface import Interface
 
-# -*- extra stuff goes here -*-
 
 class IBaseCustodyPeriods(Interface):
     custody_periods = schema.List(title=u"custody period",
@@ -92,3 +92,18 @@ class IRedirector(Interface):
         """Returns a list of dicts containing the redirect informations. If
         `remove` is set to `True` (default) the redirect infos are deleted.
         """
+
+
+class IBaseSettings(Interface):
+    """Base settings
+    """
+
+    vocabulary_disabled_communities = schema.List(
+         title=_(u'label_vocabulary_disabled_communities',
+                 default=u'Vocabulary: disabled communities'),
+         description=_(u'help_vocabulary_disabled_communities',
+                       default=u'Select the terms from the communities '
+                       'vocabulary which should not be selectable any more.'),
+         value_type=schema.Choice(
+            vocabulary=u'opengever.base.communities'),
+         required=False)

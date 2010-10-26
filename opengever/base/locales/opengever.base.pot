@@ -28,6 +28,17 @@ msgstr ""
 #. Default: "advanced search"
 #: ./opengever/base/browser/advanced_search.py:266
 msgid "advanced_search"
+
+#: ./opengever/base/profiles/default/actions.xml
+msgid "Properties"
+msgstr ""
+
+#: ./opengever/base/browser/list_groupmembers.pt:13
+msgid "There are no members in this group."
+msgstr ""
+
+#: ./opengever/base/browser/list_groupmembers.pt:3
+msgid "Users of group:"
 msgstr ""
 
 #. Default ""
@@ -219,8 +230,9 @@ msgstr ""
 msgid "help_tasktyp"
 msgstr ""
 
-#: ./opengever/base/browser/advanced_search.py:220
-msgid "help_trashed"
+#. Default: "Select the terms from the communities vocabulary which should not be selectable any more."
+#: ./opengever/base/interfaces.py:104
+msgid "help_vocabulary_disabled_communities"
 msgstr ""
 
 #. Default: "Archival value"
@@ -410,6 +422,10 @@ msgstr ""
 #. Default: "Also search in the bin"
 #: ./opengever/base/browser/advanced_search.py:219
 msgid "label_trashed"
+
+#. Default: "Vocabulary: disabled communities"
+#: ./opengever/base/interfaces.py:102
+msgid "label_vocabulary_disabled_communities"
 msgstr ""
 
 #. Default ""

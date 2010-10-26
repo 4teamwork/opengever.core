@@ -28,6 +28,18 @@ msgstr "Angemeldete Benutzer"
 msgid "advanced_search"
 msgstr "Erweiterte Suche"
 
+#: ./opengever/base/profiles/default/actions.xml
+msgid "Properties"
+msgstr "Eigenschaften anzeigen"
+
+#: ./opengever/base/browser/list_groupmembers.pt:13
+msgid "There are no members in this group."
+msgstr "In dieser Gruppe befinden sich keine Benutzer."
+
+#: ./opengever/base/browser/list_groupmembers.pt:3
+msgid "Users of group:"
+msgstr "Benutzer der Gruppe"
+
 #. Default ""
 #: opengever/repository/classification.py
 msgid "archival worthy"
@@ -200,6 +212,7 @@ msgstr "Zeitraum zwischen dem jüngsten Dokumentdatum eines in einem Dossier ent
 msgid "help_retention_period_annotation"
 msgstr ""
 
+
 #: ./opengever/base/browser/advanced_search.py:153
 msgid "help_review_state"
 msgstr ""
@@ -222,6 +235,11 @@ msgstr ""
 
 #: ./opengever/base/browser/advanced_search.py:220
 msgid "help_trashed"
+msgstr ""
+
+#. Default: "Select the terms from the communities vocabulary which should not be selectable any more."
+#: ./opengever/base/interfaces.py:104
+msgid "help_vocabulary_disabled_communities"
 msgstr ""
 
 #. Default: "Archival value"
@@ -412,6 +430,11 @@ msgstr "Titel"
 #: ./opengever/base/browser/advanced_search.py:219
 msgid "label_trashed"
 msgstr "Papierkorb auch durchsuchen"
+
+#. Default: "Vocabulary: disabled communities"
+#: ./opengever/base/interfaces.py:102
+msgid "label_vocabulary_disabled_communities"
+msgstr ""
 
 #. Default ""
 #: opengever/repository/classification.py

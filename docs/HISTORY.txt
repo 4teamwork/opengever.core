@@ -5,6 +5,11 @@ Changelog
 1.0a4
 -----
 
+* Issue #541 Darstellung der Mitglieder einer Gruppe, die auf einem OpenGever Inhaltstyp zugelassen ist
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/541
+  order user by name
+  [21.10.2010, jinfanfer]
+
 * Issue #543 Metadaten diverser Inhaltstypen bereinigen
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/543/
   [17.08.2010, jinfanfer]

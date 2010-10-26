@@ -75,7 +75,7 @@
             <property name="visible">False</property>
         </object>
 
-        <object name="properties" meta_type="CMF Action" i18n:domain="plone">
+        <object name="properties" meta_type="CMF Action" i18n:domain="opengever.base">
             <property name="title" i18n:translate="">Properties</property>
             <property name="description" i18n:translate=""></property>
             <property name="url_expr">string:${object_url}/view</property>
