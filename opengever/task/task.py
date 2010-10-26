@@ -3,6 +3,7 @@ from opengever.globalindex.utils import indexed_task_link
 from zope.schema.vocabulary import getVocabularyRegistry
 from Acquisition import aq_parent, aq_inner
 from Products.CMFCore.utils import getToolByName
+from Products.CMFCore.interfaces import IActionSucceededEvent
 from datetime import datetime, timedelta
 from five import grok
 from opengever.base.interfaces import ISequenceNumber
@@ -11,7 +12,6 @@ from opengever.ogds.base.utils import get_client_id
 from opengever.task import _
 from opengever.task import util
 from opengever.task.interfaces import ISuccessorTaskController
-from opengever.task.interfaces import ITaskSettings
 from opengever.task.source import DossierPathSourceBinder
 from opengever.translations.browser.add import TranslatedAddForm
 from plone.dexterity.content import Container
@@ -20,12 +20,11 @@ from plone.directives import form, dexterity
 from plone.formwidget import autocomplete
 from opengever.ogds.base.autocomplete_widget import AutocompleteFieldWidget
 from plone.indexer import indexer
-from plone.registry.interfaces import IRegistry
 from plone.z3cform.traversal import FormWidgetTraversal
 from z3c.relationfield.schema import RelationChoice, RelationList
 from zc.relation.interfaces import ICatalog
 from zope import schema
-from zope.component import getUtility, queryUtility
+from zope.component import getUtility
 from zope.component import queryMultiAdapter, getMultiAdapter
 from zope.interface import implements, Interface
 from zope.publisher.interfaces.browser import IBrowserRequest, IBrowserPage
@@ -232,9 +231,11 @@ def deadlineDefaultValue(data):
     # To get hold of the folder, do: context = data.context
     return datetime.today() + timedelta(5)
 
+
 @form.default_value(field=ITask['responsible_client'])
 def responsible_client_default_value(data):
     return get_client_id()
+
 
 class ITaskView(Interface):
     pass
@@ -467,3 +468,10 @@ def SearchableText(obj):
     return ' '.join(searchable).encode('utf-8')
 
 grok.global_adapter(SearchableText, name='SearchableText')
+
+@grok.subscribe(ITask, IActionSucceededEvent)
+def set_dates(task, event):
+    if event.action == 'task-transition-open-in-progress':
+        task.expectedStartOfWork = datetime.now()
+    elif event.action == 'task-transition-in-progress-resolved':
+        task.date_of_completion = datetime.now()
