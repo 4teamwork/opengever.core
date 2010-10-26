@@ -55,7 +55,7 @@ class DossierOverview(grok.View, OpengeverTab):
             'getURL': document.getURL,
             'alt': self.context.toLocalizedTime(
                     document.modified, long_format=1),
-            'getIcon': 'document_icon.gif',
+            'getIcon': document.getIcon,
         } for document in documents]
         return self.catalog(
             ['opengever.document.document', 'ftw.mail.mail'])[:10]
