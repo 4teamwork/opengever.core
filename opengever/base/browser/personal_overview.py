@@ -39,9 +39,9 @@ class PersonalOverview(TabbedView):
     """
 
     default_tabs = [
-            {'id': 'mytasks', 'icon': None, 'url': '#', 'class': None},
             {'id': 'mydossiers', 'icon': None, 'url': '#', 'class': None},
             {'id': 'mydocuments', 'icon': None, 'url': '#', 'class': None},
+            {'id': 'mytasks', 'icon': None, 'url': '#', 'class': None},
             {'id': 'issuedtasks', 'icon': None, 'url': '#', 'class': None},
             ]
 
