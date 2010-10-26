@@ -7,7 +7,25 @@ from opengever.tabbedview.helper import readable_date_set_invisibles
 from opengever.tabbedview.helper import readable_ogds_author
 from opengever.task.helper import task_type_helper
 from sqlalchemy import or_
+from zope.app.pagetemplate import ViewPageTemplateFile
 
+
+
+def task_id_checkbox_helper(item, value):
+    """ Checkbox helper based on tasks id attribute
+    """
+
+    attrs = {
+        'type': 'checkbox',
+        'class': 'noborder selectable',
+        'name': 'task_ids:list',
+        'id': item.task_id,
+        'value': item.task_id,
+        'title': 'Select %s' % item.title,
+        }
+
+    return '<input %s />' % ' '.join(['%s="%s"' % (k, v)
+                                      for k, v in attrs.items()])
 
 
 class GlobalTaskListingMixin(object):
@@ -35,7 +53,11 @@ class GlobalTaskListingMixin(object):
     enabled_actions = []
     major_actions = []
 
+    select_all_template = ViewPageTemplateFile('select_all_globaltasks.pt')
+
     columns = (
+
+        ('', task_id_checkbox_helper),
 
         {'column': 'review_state',
          'column_title': _(u'column_review_state', default=u'Review state'),
@@ -101,17 +123,7 @@ class GlobalTaskListingMixin(object):
                 search_term = search_term[:-1]
             query = self._advanced_search_query(query, search_term)
 
-        full_length = query.count()
-
-        # respect batching
-        start = self.pagesize * (self.pagenumber - 1)
-        query = query.offset(start)
-        query = query.limit(self.pagesize)
-
-        result_length = query.count()
-
-        self.contents = list(xrange(start)) + query.all() + \
-            list(xrange(full_length - start - result_length))
+        self.contents = query.all()
 
         self.len_results = len(self.contents)
 
