@@ -175,21 +175,26 @@ class SendDocumentForm(form.Form):
         msg = MIMEMultipart()
         msg['Date'] = formatdate(localtime=True)
 
-        if not isinstance(text, unicode):
-            text = text.decode('utf8')
-        msg.attach(MIMEText(text, 'plain', 'iso-8859-1'))
-
         # iterate over document list and attach the file to the mail
+        docs_links = u'Dokumente:\r\n'
         for doc in docs:
             if not doc.file:
+                docs_links = '%s\r\n - %s (%s)' % (docs_links, doc.title, doc.absolute_url())
                 continue
             docfile = doc.file
+            docs_links = '%s\r\n - %s (siehe Anhang)' % (docs_links, doc.title)
             part = MIMEBase('application', docfile.contentType)
             part.set_payload(docfile.data)
             Encoders.encode_base64(part)
             part.add_header('Content-Disposition', 'attachment; filename="%s"'
                        % docfile.filename)
             msg.attach(part)
+
+        text = '%s\r\n\r\n%s' % (text, docs_links)
+        if not isinstance(text, unicode):
+            text = text.decode('utf8')
+        msg.attach(MIMEText(text, 'plain', 'iso-8859-1'))
+
         return msg
 
 
