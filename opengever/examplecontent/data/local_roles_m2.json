@@ -6,8 +6,12 @@
             "Contributor"
         ], 
         "og_mandant2_sekretariat": [
-            "Administrator", 
             "Reviewer"
+        ],
+        "og_mandant2_adminstratoren": [
+            "Editor",
+            "Contributor",
+            "Administrator"
         ]
     },
     "_path": "/ordnungssystem"

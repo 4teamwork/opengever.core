@@ -7,9 +7,14 @@
 
         ], 
         "og_mandant1_sekretariat": [
-            "Administrator", 
             "Reviewer"
+        ],
+        "og_mandant1_adminstratoren": [
+            "Editor",
+            "Contributor",
+            "Administrator"
         ]
+        
     },
     "_path": "/ordnungssystem"
 },
