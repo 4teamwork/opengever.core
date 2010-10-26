@@ -27,8 +27,22 @@
               <tal:rep tal:define="field python: group">
                 <tr tal:repeat="widget field/widgets/values">
                     <tal:cond tal:condition="widget/value">
-                        <th tal:content="widget/label" ></th>
-                        <td tal:content="structure widget/render" />
+                        <tal:widget tal:condition="python: widget.name not in ['form.widgets.email', 'form.widgets.email2', 'form.widgets.url']">
+                            <th tal:content="widget/label" ></th>
+                            <td tal:content="structure widget/render" />
+                        </tal:widget>
+                        <tal:widget tal:condition="python: widget.name in ['form.widgets.email', 'form.widgets.email2']">
+                            <th tal:content="widget/label" ></th>
+                            <td>
+                                <a tal:attributes="href string: mailto:${widget/value}" tal:content="structure widget/render" /> 
+                            </td>
+                        </tal:widget>
+                        <tal:widget tal:condition="python: widget.name == 'form.widgets.url'">
+                            <th tal:content="widget/label" ></th>
+                            <td>
+                                <a tal:attributes="href widget/value" tal:content="structure widget/render" />
+                            </td>
+                        </tal:widget>
                     </tal:cond>
                 </tr>
               </tal:rep>
