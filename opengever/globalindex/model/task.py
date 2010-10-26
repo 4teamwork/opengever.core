@@ -26,7 +26,9 @@ class Task(Base):
     issuer = Column(String(32), index=True)
 
     task_type = Column(String(50), index=True)
+    reference_number = Column(String(100))
     sequence_number = Column(String(10), index=True)
+    dossier_sequence_number = Column(String(10))
 
     created = Column(DateTime, default=functions.now())
     modified = Column(DateTime)
@@ -49,6 +51,10 @@ class Task(Base):
 
     def __repr__(self):
         return "<Task %s@%s>" % (self.int_id, self.client_id)
+
+    @property
+    def id(self):
+        return self.task_id
 
 
 class TaskPrincipal(Base):

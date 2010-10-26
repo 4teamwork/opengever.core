@@ -20,6 +20,11 @@ class TaskQuery(object):
             task = None
         return task
 
+    def get_tasks(self, task_ids):
+        """Returns a set of tasks whos task_ids are listed in `task_ids`.
+        """
+        return Session().query(Task).filter(Task.task_id.in_(task_ids)).all()
+
     def _get_tasks_for_responsible_query(self, responsible, sort_on='modified',
                                          sort_order='reverse'):
         """Returns a sqlalchemy query of all tasks assigned to the given

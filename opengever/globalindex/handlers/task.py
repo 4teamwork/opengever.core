@@ -1,7 +1,8 @@
 from AccessControl.PermissionRole import rolesForPermissionOn
 from Products.CMFCore.permissions import View
-from Products.CMFCore.utils import _mergedLocalRoles
+from Products.CMFCore.utils import _mergedLocalRoles, getToolByName
 from datetime import datetime
+from opengever.base.interfaces import IReferenceNumber
 from opengever.base.interfaces import ISequenceNumber
 from opengever.globalindex import Session
 from opengever.globalindex.model.task import Task
@@ -9,6 +10,30 @@ from opengever.ogds.base.utils import get_client_id
 from sqlalchemy.orm.exc import NoResultFound
 from zope.component import getUtility
 from zope.intid.interfaces import IIntIds
+
+
+def get_dossier_sequence_number(task):
+    """Searches the first parental dossier relative to the task
+    (breadcrumbs like) and returns its sequence number.
+    """
+
+    dossier_marker = 'opengever.dossier.behaviors.dossier.IDossierMarker'
+
+    path = task.getPhysicalPath()[:-1]
+
+    portal = getToolByName(task, 'portal_url').getPortalObject()
+    portal_path = '/'.join(portal.getPhysicalPath())
+    catalog = getToolByName(task, 'portal_catalog')
+
+    while path and '/'.join(path) != portal_path:
+        brains = catalog({'path': {'query': '/'.join(path),
+                                   'depth': 0},
+                          'object_provides': dossier_marker})
+
+        if len(brains):
+            return brains[0].sequence_number
+
+    return ''
 
 
 def index_task(obj, event):
@@ -49,6 +74,11 @@ def index_task(obj, event):
 
     task.task_type = obj.task_type
     task.sequence_number = getUtility(ISequenceNumber).get_number(obj)
+    task.reference_number = IReferenceNumber(obj).get_number()
+
+    # the dossier_sequence_number index is required for generating lists
+    # of tasks as PDFs (LaTeX) as defined by the customer.
+    task.dossier_sequence_number = get_dossier_sequence_number(obj)
 
     task.assigned_client = obj.responsible_client
 
