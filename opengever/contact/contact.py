@@ -113,7 +113,7 @@ class IContact(form.Schema):
         required = False
         )
 
-    url = schema.TextLine(
+    url = schema.URI(
         title = _(u'label_url', default=u'Url'),
         description = _(u'help_url', default=u''),
         required = False
