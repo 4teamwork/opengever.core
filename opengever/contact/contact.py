@@ -11,8 +11,6 @@ from opengever.contact import _
 
 from plone.directives import dexterity
 
-from opengever.tabbedview.browser.tabs import OpengeverTab
-
 
 class IContact(form.Schema):
     """ A contact
@@ -215,24 +213,8 @@ def contactid(obj):
 grok.global_adapter(contactid, name='contactid')
 
 
-class ContactImportantView(dexterity.DisplayForm, OpengeverTab):
+class View(dexterity.DisplayForm):
     grok.context(IContact)
-    grok.name('tabbedview_view-important_contact')
-    grok.template('important_contact')
+    grok.require('zope2.View')
 
-    def showAttributes(self):
-        items = ['firstname',
-                 'lastname',
-                 'email',
-                 'phone_office',
-                 'phone_fax',
-                 'phone_mobile',
-                 'directorate']
-        return items
-
-
-class ContactAdditionalView(dexterity.DisplayForm, OpengeverTab):
-    grok.context(IContact)
-    grok.name('tabbedview_view-additional_contact')
-    grok.template('additional_contact')
 

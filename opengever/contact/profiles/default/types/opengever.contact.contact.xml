@@ -24,7 +24,6 @@
     <property name="behaviors">
         <element value="plone.app.content.interfaces.INameFromTitle" />
         <element value="opengever.base.behaviors.creator.ICreator" />
-        <element value="opengever.tabbedview.interfaces.ITabbedViewEnabled" />
     </property>
 
     <!-- View information -->
@@ -33,7 +32,6 @@
     <property name="default_view_fallback">False</property>
     <property name="view_methods">
         <element value="view"/>
-        <element value="tabbed_view"/>
     </property>
 
     <!-- Method aliases -->
@@ -50,14 +48,5 @@
     <action title="Edit" action_id="edit" category="object" condition_expr=""
             url_expr="string:${object_url}/edit" visible="True">
         <permission value="Modify portal content"/>
-    </action>
-
-    <action title="Important" action_id="important_contact" category="tabbedview-tabs"
-            condition_expr="" url_expr="string:#" visible="True">
-        <permission value="View"/>
-    </action>
-    <action title="Additional" action_id="additional_contact" category="tabbedview-tabs"
-            condition_expr="" url_expr="string:#" visible="True">
-        <permission value="View"/>
     </action>
 </object>
