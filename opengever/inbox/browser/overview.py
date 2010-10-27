@@ -11,7 +11,6 @@ class InboxOverview(DossierOverview):
 
         #TODO: implements the sharing box n ot work yet
         # dict(id = 'sharing', content=self.sharing())],
-        items = [[dict(id = 'tasks', content=self.tasks()),
-                  dict(id = 'journal', content=self.journal()), ],
+        items = [[dict(id = 'tasks', content=self.tasks()),],
                  [dict(id = 'documents', content=self.documents()), ]]
         return items
