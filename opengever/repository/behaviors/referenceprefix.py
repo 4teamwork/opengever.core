@@ -10,7 +10,7 @@ from zope.app.container.interfaces import IObjectAddedEvent
 from plone.directives import form
 from z3c.form import validator, error
 from z3c.form.interfaces import IAddForm
-from opengever.base import _
+from opengever.repository import _
 from opengever.base.interfaces import IReferenceNumberPrefix as PrefixAdapter
 
 
