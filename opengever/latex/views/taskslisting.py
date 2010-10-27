@@ -69,5 +69,7 @@ class TasksListingPDF(BasePDFListing):
 
             if len(brains):
                 return brains[0].sequence_number
+            else:
+                path = path[:-1]
 
         return ''

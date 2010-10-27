@@ -60,5 +60,7 @@ class DossierListingPDF(BasePDFListing):
 
             if len(brains):
                 return brains[0].Title
+            else:
+                path = path[:-1]
 
         return ''
