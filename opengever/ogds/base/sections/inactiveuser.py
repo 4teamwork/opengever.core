@@ -8,7 +8,9 @@ from zope.interface import classProvides, implements
 from zope.annotation import IAnnotations
 from collective.transmogrifier.interfaces import ISectionBlueprint
 from collective.transmogrifier.interfaces import ISection
+from z3c.saconfig import named_scoped_session
 
+Session = named_scoped_session("opengever")
 
 SQLSOURCE_KEY = 'opengever.konsulmigration.sqlinsertersection'
 
@@ -24,8 +26,10 @@ class InactiveUserSection(object):
         self.logger = logging.getLogger(options['blueprint'])
         self.context = transmogrifier.context
 
+        # Get the dsn from our named session
+        dsn = str(Session.bind.url)
         # Allow for connection reuse along a pipeline
-        dsn = options['dsn']
+        #dsn = options['dsn']
         conns = IAnnotations(transmogrifier).setdefault(SQLSOURCE_KEY, {})
         if dsn in conns:
             self.connection = conns[dsn]
