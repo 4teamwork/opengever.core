@@ -13,6 +13,7 @@ from opengever.ogds.base.interfaces import IContactInformation
 from opengever.tabbedview import _
 from opengever.tabbedview.helper import readable_date_set_invisibles
 from opengever.tabbedview.helper import readable_ogds_author, linked
+from opengever.task.helper import task_type_helper
 from plone.app.workflow.browser.sharing import SharingView
 from plone.app.workflow.interfaces import ISharingPageRole
 from zope.annotation.interfaces import IAnnotations
@@ -237,7 +238,8 @@ class Tasks(OpengeverListingTab):
         ('review_state', 'review_state', helper.translated_string()),
         ('Title', 'sortable_title', linked),
         {'column': 'task_type',
-         'column_title': _(u'label_task_type', 'Task Type')},
+         'column_title': _(u'label_task_type', 'Task Type'),
+         'transform': task_type_helper},
         {'column': 'deadline',
          'column_title': _(u'label_deadline', 'Deadline'),
          'transform': helper.readable_date},
