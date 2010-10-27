@@ -29,7 +29,7 @@ class DossierListingPDF(BasePDFListing):
         for brain in self.get_selected_data():
             data.append(self._prepare_table_row(
                     str(brain.sequence_number),
-                    str(brain.reference),
+                    getattr(brain, 'filing_no', None) or '',
                     str(self.get_repository_title(brain)),
                     str(brain.Title),
                     '%s / %s' % (client.title,

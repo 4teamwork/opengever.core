@@ -65,7 +65,7 @@ class DossierDetailsPDF(BasePDFListing):
                                                       domain='plone')
 
         data['responsible'] = ' '.join(
-            (str(client.title), info.describe(dossier.responsible)))
+            (str(client.title), '/', info.describe(dossier.responsible)))
 
         data['start'] = helper.readable_date(self.context, dossier.start)
         data['end'] = helper.readable_date(self.context, dossier.end)
@@ -202,7 +202,7 @@ class DossierDetailsPDF(BasePDFListing):
 
             rows.append(self._prepare_table_row(
                     str(brain.sequence_number),
-                    str(brain.reference),
+                    getattr(brain, 'filing_no', None) or '',
                     str(brain.Title),
                     info.describe(brain.responsible),
                     self.context.translate(brain.review_state,
