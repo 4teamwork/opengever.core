@@ -212,7 +212,6 @@ msgstr "Die Datei wird nach dem Auschecken in einem externen Editor geöffnet"
 #. Default: "Available in paper form only"
 #: ./opengever/document/document.py:151
 #: ./opengever/document/document_templates/overview.pt:45
-#, fuzzy
 msgid "help_paper_form"
 msgstr "Nur in Papierform verfügbar"
 
@@ -261,7 +260,6 @@ msgstr "Archivierte Datei"
 #. Default: "Author"
 #: ./opengever/document/document.py:136
 #: ./opengever/document/document_templates/overview.pt:22
-#, fuzzy
 msgid "label_author"
 msgstr "Autor"
 
@@ -288,14 +286,14 @@ msgstr "Ersteller"
 #. Default: "Date of delivery"
 #: ./opengever/document/document.py:191
 #: ./opengever/document/document_templates/overview.pt:59
-#, fuzzy
+
 msgid "label_delivery_date"
 msgstr "Ausgangsdatum"
 
 #. Default: "Description"
 #: ./opengever/document/document.py:100
 #: ./opengever/document/document_templates/overview.pt:30
-#, fuzzy
+
 msgid "label_description"
 msgstr "Beschreibung"
 
@@ -313,14 +311,14 @@ msgstr "Dokumentdatum"
 #. Default: "Document Type"
 #: ./opengever/document/document.py:127
 #: ./opengever/document/document_templates/overview.pt:18
-#, fuzzy
+
 msgid "label_document_type"
 msgstr "Dokumenttyp"
 
 #. Default: "File"
 #: ./opengever/document/document.py:143
 #: ./opengever/document/document_templates/overview.pt:38
-#, fuzzy
+
 msgid "label_file"
 msgstr "Datei"
 
@@ -358,7 +356,6 @@ msgstr "Papierform"
 #. Default: "Preserved as paper"
 #: ./opengever/document/document.py:157
 #: ./opengever/document/document_templates/overview.pt:50
-#, fuzzy
 msgid "label_preserved_as_paper"
 msgstr "In Papierform aufbewahrt"
 
@@ -370,7 +367,6 @@ msgstr "Vorschau"
 #. Default: "Date of receipt"
 #: ./opengever/document/document.py:185
 #: ./opengever/document/document_templates/overview.pt:55
-#, fuzzy
 msgid "label_receipt_date"
 msgstr "Eingangsdatum"
 
