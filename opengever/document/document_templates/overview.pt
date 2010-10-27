@@ -15,11 +15,11 @@
 			<td tal:content="structure view/w/document_date/render"/>
 		</tr>
 		<tr tal:condition="python: view.w['document_type'].value">
-			<th i18n:translate="label_document_type">document type</th>
+			<th i18n:translate="label_document_type">Document Type</th>
 			<td tal:content="structure view/w/document_type/render"/>
 		</tr>
 		<tr tal:condition="python: view.w['document_author'].value">
-			<th i18n:translate="label_author">author</th>
+			<th i18n:translate="label_author">Author</th>
 			<td tal:content="structure view/w/document_author/render"/>
 		</tr>
 		<tr tal:condition="python: view.creator_link()">
@@ -27,7 +27,7 @@
 			<td tal:content="structure view/creator_link"/>
 		</tr>
 		<tr tal:condition="python: view.w['description'].value">
-			<th i18n:translate="label_description">description</th>
+			<th i18n:translate="label_description">Description</th>
 			<td tal:content="structure view/w/description/render"/>
 		</tr>
 		<tr tal:condition="python: view.w['foreign_reference'].value">
@@ -35,7 +35,7 @@
 			<td tal:content="structure view/w/foreign_reference/render"/>
 		</tr>
 		<tr tal:condition="context/file">
-			<th i18n:translate="label_file">file</th>
+			<th i18n:translate="label_file">File</th>
 			<td>
                 <a tal:condition="context/file" tal:attributes="href string:${context/absolute_url}/@@download/file/${context/file/filename}" tal:content="structure view/w/file/render"/>
                 <span tal:condition="not:context/file">-</span>
@@ -47,16 +47,16 @@
 			<td tal:condition="not:context/paper_form" i18n:translate="label_no">no</td>
 		</tr>
 		<tr>
-			<th i18n:translate="label_preserved_as_paper">preserved as paper</th>
+			<th i18n:translate="label_preserved_as_paper">Preserved as paper</th>
 			<td tal:condition="context/preserved_as_paper" i18n:translate="label_yes">yes</td>
 			<td tal:condition="not:context/preserved_as_paper" i18n:translate="label_no">no</td>
 		</tr>
 		<tr tal:condition="python: view.w['receipt_date'].value != ('', '', '')">
-			<th i18n:translate="label_receipt_date">reciept date</th>
+			<th i18n:translate="label_receipt_date">Date of receipt</th>
 			<td tal:content="structure view/w/receipt_date/render"/>
 		</tr>
 		<tr tal:condition="python: view.w['delivery_date'].value != ('', '', '') ">
-			<th i18n:translate="label_delivery_date">delivery date</th>
+			<th i18n:translate="label_delivery_date">Date of delivery</th>
 			<td tal:content="structure view/w/delivery_date/render"/>
 		</tr>
 		<tr tal:condition="python: view.w['IRelatedDocuments.relatedItems'].value">

@@ -12,7 +12,6 @@ from ftw.table import helper
 from ftw.table.interfaces import ITableGenerator
 from opengever.base.interfaces import IReferenceNumber, ISequenceNumber
 from opengever.document import _
-from opengever.document.interfaces import IDocumentType
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.tabbedview.browser.tabs import OpengeverTab, OpengeverListingTab
 from opengever.tabbedview.helper import readable_date_set_invisibles
@@ -28,7 +27,6 @@ from plone.i18n.normalizer.interfaces import IIDNormalizer
 from plone.indexer import indexer
 from plone.namedfile.field import NamedFile
 from plone.namedfile.interfaces import INamedFileField
-from plone.registry.interfaces import IRegistry
 from plone.stagingbehavior.relation import StagingRelationValue
 from plone.supermodel.interfaces import FIELDSETS_KEY
 from plone.supermodel.model import Fieldset
@@ -43,8 +41,6 @@ from zope.component import queryUtility, getUtility
 from zope.interface import invariant, Invalid
 from zope.lifecycleevent.interfaces import IObjectCreatedEvent
 from zope.lifecycleevent.interfaces import IObjectModifiedEvent
-from zope.schema.interfaces import IContextSourceBinder
-from zope.schema.vocabulary import SimpleVocabulary
 from collective.elephantvocabulary import wrap_vocabulary
 import logging
 
@@ -77,7 +73,7 @@ class IDocumentSchema(form.Schema):
 
     form.fieldset(
         u'common',
-        label = _(u'fieldset_common', u'Dates'),
+        label = _(u'fieldset_common', u'Common'),
         fields = [
             u'title',
             u'description',
@@ -204,6 +200,17 @@ class IDocumentSchema(form.Schema):
                             default=u'Either the title or the file is '
                             'required.'))
 
+    @invariant
+    def file_or_paper_form(data):
+        """ Small validator who check:
+            paper_form xor file
+        """
+
+        if not (bool(data.paper_form == None) ^ bool(data.file == None)):
+            raise Invalid(
+                _(u'error_paperform_xor_file',
+                default=u"You select a file and said is only in paper_form,\
+                please correct it."))
 
     # TODO: doesn't work with Plone 4
     #form.order_after(**{'IRelatedItems.relatedItems': 'file'})
