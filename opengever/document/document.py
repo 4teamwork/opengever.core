@@ -205,8 +205,7 @@ class IDocumentSchema(form.Schema):
         """ Small validator who check:
             paper_form xor file
         """
-
-        if not (bool(data.paper_form == None) ^ bool(data.file == None)):
+        if not (data.paper_form ^ bool(data.file)):
             raise Invalid(
                 _(u'error_paperform_xor_file',
                 default=u"You select a file and said is only in paper_form,\
