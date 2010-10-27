@@ -63,16 +63,6 @@ class DossierOverview(grok.View, OpengeverTab):
     def events(self):
         return self.catalog(['dummy.event', ])[:5]
 
-    def journal(self):
-        if IAnnotationsJournalizable.providedBy(self.context):
-            annotations = IAnnotations(self.context)
-            entries = annotations.get(JOURNAL_ENTRIES_ANNOTATIONS_KEY, [])[:5]
-        elif IWorkflowHistoryJournalizable.providedBy(self.context):
-            raise NotImplemented
-
-        edict = [dict(Title=entry['action']['title'], getIcon=None)
-            for entry in reversed(entries)]
-        return edict
 
     def sharing(self):
 
