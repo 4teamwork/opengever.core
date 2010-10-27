@@ -18,11 +18,11 @@ msgstr "Standardablauf hinzufügen"
 msgid "Add task from template"
 msgstr "Standardablauf auslösen"
 
-msgid "tasktemplate_activ"
+msgid "tasktemplate-state-activ"
 msgstr "Aktiv"
 
-msgid "tasktemplate_inactiv"
-msgstr "inaktiv"
+msgid "tasktemplate-state-inactiv"
+msgstr "Inaktiv"
 
 msgid "tasktemplates-transition-activ-inactiv"
 msgstr "deaktivieren"
