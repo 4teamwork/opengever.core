@@ -20,14 +20,6 @@ class ToBigFiles(schema.interfaces.ValidationError):
     )
 
 
-class NoFileData(schema.interfaces.ValidationError):
-    """ The No File Data Exception. """
-    
-    __doc__= _(
-        u"The selected file(s) have no files included."
-    )
-
-
 class DocumentSizeValidator(validator.SimpleFieldValidator):
     """ Check if the Total size of the documents isn't bigger than the 
 
@@ -40,15 +32,11 @@ class DocumentSizeValidator(validator.SimpleFieldValidator):
             registry = queryUtility(IRegistry)
             reg_proxy = registry.forInterface(ISendDocumentConf)
             total = 0
-            has_file = False
             for doc in value:
                 if doc.file:
-                    has_file = True
                     total += doc.file.getSize()
             if total > (reg_proxy.max_size * 1000000):
                 raise ToBigFiles()
-            elif not has_file:
-                raise NoFileData()
         else:
             raise schema.interfaces.RequiredMissing()
 

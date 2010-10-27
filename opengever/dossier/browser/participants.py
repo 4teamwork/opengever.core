@@ -7,6 +7,50 @@ from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.behaviors.participation import IParticipationAwareMarker
 from opengever.dossier.behaviors.participation import IParticipationAware
 from opengever.dossier import _
+from zope.schema.vocabulary import getVocabularyRegistry
+from zope.app.component.hooks import getSite
+from zope.i18nmessageid.message import Message
+from plone.memoize import ram
+from persistent.list import PersistentList
+
+
+@ram.cache(lambda method, role: role)
+def translate_participation_role(role):
+    site = getSite()
+    vr = getVocabularyRegistry()
+    vocab = vr.get(site, 'opengever.dossier.participation_roles')
+
+    try:
+        term = vocab.getTerm(role)
+    except LookupError:
+        return role
+    else:
+        return term.title
+
+
+def role_list_helper(item, value):
+    """ Format list of roles.
+    """
+
+    if isinstance(value, Message):
+        # translate the message
+        site = getSite()
+        return site.translate(value)
+
+    elif sum([int(isinstance(value, t)) for t in (str, unicode)]):
+        # is it a string or unicode or a subtype of them?
+        return translate_participation_role(value)
+
+    elif sum([int(isinstance(value, t)) for t in (list, tuple, set,
+                                                  PersistentList)]):
+        # if it's a list, lets iterate over it
+        translated_values = []
+        for role in value:
+            translated_values.append(translate_participation_role(role))
+        return ', '.join(translated_values)
+
+    else:
+        return value
 
 
 class Participants(OpengeverListingTab):
@@ -35,11 +79,21 @@ class Participants(OpengeverListingTab):
         return '<img src="user.gif" alt="" title="" border="0" />'
 
     sort_on = 'Contact'
+
     columns = (
+
         ('', base64_oid_checkbox, ),
         ('', icon_helper, ),
-        (_(u'column_contact', u'Contact'), 'contact', readable_ogds_author),
-        (_(u'column_rolelist',u'role_list'), 'roles', ))
+
+        {'column': 'contact',
+         'column_title': _(u'column_contact', u'Contact'),
+         'transform': readable_ogds_author},
+
+        {'column': 'roles',
+         'column_title': _(u'column_rolelist', u'role_list'),
+         'transform': role_list_helper},
+
+        )
 
     def update(self):
         self.pagesize = 20
@@ -61,15 +115,15 @@ class Participants(OpengeverListingTab):
         #    searchable_text = self.request.get('searchable_text', None)
         #    if len(searchable_text):
         #        searchable_text = searchable_text.endswith('*')\
-        #            and searchable_text[:-1] or searchable_text
-        #        filter_condition = lambda p:searchable_text in p.Title()
-        #        results = filter(filter_condition, results)
+            #            and searchable_text[:-1] or searchable_text
+            #        filter_condition = lambda p:searchable_text in p.Title()
+            #        results = filter(filter_condition, results)
 
         if self.sort_on.startswith('header-'):
             self.sort_on = self.sort_on.split('header-')[1]
         if self.sort_on:
             sorter = lambda a, b: cmp(getattr(a, self.sort_on, ''),
-                                    getattr(b, self.sort_on, ''))
+                                      getattr(b, self.sort_on, ''))
             results.sort(sorter)
 
         if self.sort_order=='reverse':

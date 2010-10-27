@@ -1,69 +1,23 @@
 <?xml version="1.0"?>
-<dc-workflow workflow_id="opengever_repository_workflow" title="Repository Folder Workflow" description="" state_variable="review_state" initial_state="repositoryfolder-state-active" manager_bypass="False">
+<dc-workflow workflow_id="opengever_dossier_workflow" title="Dossier Workflow" description="" state_variable="review_state" initial_state="dossier-state-active" manager_bypass="False">
  <permission>Access contents information</permission>
  <permission>Add portal content</permission>
- <permission>Change portal events</permission>
- <permission>Copy or Move</permission>
  <permission>List folder contents</permission>
+ <permission>Manage properties</permission>
  <permission>Modify portal content</permission>
+ <permission>Review portal content</permission>
  <permission>View</permission>
+ <permission>ftw.mail: Add Inbound Mail</permission>
+ <permission>ftw.mail: Add Mail</permission>
+ <permission>opengever.document: Add document</permission>
  <permission>opengever.dossier: Add businesscasedossier</permission>
- <permission>opengever.repository: Add repositoryfolder</permission>
- <state state_id="repositoryfolder-state-active" title="repositoryfolder-state-active">
-  <exit-transition transition_id="repositoryfolder-transition-inactivate"/>
+ <permission>opengever.task: Add task</permission>
+ <permission>opengever.trash: Trash content</permission>
+ <permission>opengever.trash: Untrash content</permission>
+ <state state_id="dossier-state-active" title="dossier-state-active">
+  <exit-transition transition_id="dossier-transition-deactivate"/>
+  <exit-transition transition_id="dossier-transition-resolve"/>
   <permission-map name="Access contents information" acquired="False">
-   <permission-role>Administrator</permission-role>
-   <permission-role>Contributor</permission-role>
-   <permission-role>Manager</permission-role>
-   <permission-role>Owner</permission-role>
-   <permission-role>Reader</permission-role>
-  </permission-map>
-  <permission-map name="Add portal content" acquired="False">
-   <permission-role>Contributor</permission-role>
-   <permission-role>Manager</permission-role>
-   <permission-role>Owner</permission-role>
-  </permission-map>
-  <permission-map name="Change portal events" acquired="False">
-  </permission-map>
-  <permission-map name="Copy or Move" acquired="False">
-   <permission-role>Administrator</permission-role>
-   <permission-role>Editor</permission-role>
-   <permission-role>Manager</permission-role>
-   <permission-role>Owner</permission-role>
-  </permission-map>
-  <permission-map name="List folder contents" acquired="False">
-   <permission-role>Administrator</permission-role>
-   <permission-role>Contributor</permission-role>
-   <permission-role>Manager</permission-role>
-   <permission-role>Owner</permission-role>
-   <permission-role>Reader</permission-role>
-  </permission-map>
-  <permission-map name="Modify portal content" acquired="False">
-   <permission-role>Administrator</permission-role>
-   <permission-role>Manager</permission-role>
-  </permission-map>
-  <permission-map name="View" acquired="False">
-   <permission-role>Administrator</permission-role>
-   <permission-role>Contributor</permission-role>
-   <permission-role>Manager</permission-role>
-   <permission-role>Owner</permission-role>
-   <permission-role>Reader</permission-role>
-  </permission-map>
-  <permission-map name="opengever.dossier: Add businesscasedossier" acquired="False">
-   <permission-role>Contributor</permission-role>
-   <permission-role>Editor</permission-role>
-   <permission-role>Manager</permission-role>
-   <permission-role>Owner</permission-role>
-  </permission-map>
-  <permission-map name="opengever.repository: Add repositoryfolder" acquired="False">
-   <permission-role>Administrator</permission-role>
-   <permission-role>Manager</permission-role>
-  </permission-map>
- </state>
- <state state_id="repositoryfolder-state-inactive" title="repositoryfolder-state-inactive">
-  <exit-transition transition_id="repositoryfolder-transition-activate"/>
-  <permission-map name="Access contents information" acquired="False">
-   <permission-role>Administrator</permission-role>
    <permission-role>Contributor</permission-role>
    <permission-role>Editor</permission-role>
    <permission-role>Manager</permission-role>
@@ -71,10 +25,136 @@
    <permission-role>Reader</permission-role>
   </permission-map>
   <permission-map name="Add portal content" acquired="False">
+   <permission-role>Contributor</permission-role>
+   <permission-role>Editor</permission-role>
+   <permission-role>Manager</permission-role>
+   <permission-role>Owner</permission-role>
   </permission-map>
-  <permission-map name="Change portal events" acquired="False">
+  <permission-map name="List folder contents" acquired="False">
+   <permission-role>Contributor</permission-role>
+   <permission-role>Editor</permission-role>
+   <permission-role>Manager</permission-role>
+   <permission-role>Owner</permission-role>
+   <permission-role>Reader</permission-role>
   </permission-map>
-  <permission-map name="Copy or Move" acquired="True">
+  <permission-map name="Manage properties" acquired="False">
+   <permission-role>Contributor</permission-role>
+   <permission-role>Editor</permission-role>
+   <permission-role>Manager</permission-role>
+   <permission-role>Owner</permission-role>
+   <permission-role>Reader</permission-role>
+  </permission-map>
+  <permission-map name="Modify portal content" acquired="False">
+   <permission-role>Editor</permission-role>
+   <permission-role>Manager</permission-role>
+   <permission-role>Owner</permission-role>
+  </permission-map>
+  <permission-map name="Review portal content" acquired="True">
+  </permission-map>
+  <permission-map name="View" acquired="False">
+   <permission-role>Contributor</permission-role>
+   <permission-role>Editor</permission-role>
+   <permission-role>Manager</permission-role>
+   <permission-role>Owner</permission-role>
+   <permission-role>Reader</permission-role>
+  </permission-map>
+  <permission-map name="ftw.mail: Add Inbound Mail" acquired="False">
+   <permission-role>Contributor</permission-role>
+   <permission-role>Editor</permission-role>
+   <permission-role>Manager</permission-role>
+   <permission-role>Owner</permission-role>
+  </permission-map>
+  <permission-map name="ftw.mail: Add Mail" acquired="False">
+  </permission-map>
+  <permission-map name="opengever.document: Add document" acquired="False">
+   <permission-role>Contributor</permission-role>
+   <permission-role>Editor</permission-role>
+   <permission-role>Manager</permission-role>
+   <permission-role>Owner</permission-role>
+  </permission-map>
+  <permission-map name="opengever.dossier: Add businesscasedossier" acquired="False">
+   <permission-role>Contributor</permission-role>
+   <permission-role>Editor</permission-role>
+   <permission-role>Manager</permission-role>
+   <permission-role>Owner</permission-role>
+  </permission-map>
+  <permission-map name="opengever.task: Add task" acquired="False">
+   <permission-role>Contributor</permission-role>
+   <permission-role>Editor</permission-role>
+   <permission-role>Manager</permission-role>
+   <permission-role>Owner</permission-role>
+  </permission-map>
+  <permission-map name="opengever.trash: Trash content" acquired="False">
+   <permission-role>Contributor</permission-role>
+   <permission-role>Editor</permission-role>
+   <permission-role>Manager</permission-role>
+   <permission-role>Owner</permission-role>
+  </permission-map>
+  <permission-map name="opengever.trash: Untrash content" acquired="False">
+   <permission-role>Contributor</permission-role>
+   <permission-role>Editor</permission-role>
+   <permission-role>Manager</permission-role>
+   <permission-role>Owner</permission-role>
+  </permission-map>
+ </state>
+ <state state_id="dossier-state-inactive" title="dossier-state-inactive">
+  <exit-transition transition_id="dossier-transition-activate"/>
+  <permission-map name="Access contents information" acquired="False">
+   <permission-role>Editor</permission-role>
+   <permission-role>Manager</permission-role>
+   <permission-role>Owner</permission-role>
+   <permission-role>Reader</permission-role>
+  </permission-map>
+  <permission-map name="Add portal content" acquired="False">
+  </permission-map>
+  <permission-map name="List folder contents" acquired="False">
+   <permission-role>Editor</permission-role>
+   <permission-role>Manager</permission-role>
+   <permission-role>Owner</permission-role>
+   <permission-role>Reader</permission-role>
+  </permission-map>
+  <permission-map name="Manage properties" acquired="False">
+   <permission-role>Editor</permission-role>
+   <permission-role>Manager</permission-role>
+   <permission-role>Owner</permission-role>
+   <permission-role>Reader</permission-role>
+  </permission-map>
+  <permission-map name="Modify portal content" acquired="False">
+  </permission-map>
+  <permission-map name="Review portal content" acquired="True">
+  </permission-map>
+  <permission-map name="View" acquired="False">
+   <permission-role>Editor</permission-role>
+   <permission-role>Manager</permission-role>
+   <permission-role>Owner</permission-role>
+   <permission-role>Reader</permission-role>
+  </permission-map>
+  <permission-map name="ftw.mail: Add Inbound Mail" acquired="False">
+  </permission-map>
+  <permission-map name="ftw.mail: Add Mail" acquired="False">
+  </permission-map>
+  <permission-map name="opengever.document: Add document" acquired="False">
+  </permission-map>
+  <permission-map name="opengever.dossier: Add businesscasedossier" acquired="False">
+  </permission-map>
+  <permission-map name="opengever.task: Add task" acquired="False">
+  </permission-map>
+  <permission-map name="opengever.trash: Trash content" acquired="False">
+  </permission-map>
+  <permission-map name="opengever.trash: Untrash content" acquired="False">
+  </permission-map>
+ </state>
+ <state state_id="dossier-state-resolved" title="dossier-state-resolved">
+  <exit-transition transition_id="dossier-transition-reactivate"/>
+  <permission-map name="Access contents information" acquired="False">
+   <permission-role>Administrator</permission-role>
+   <permission-role>Contributor</permission-role>
+   <permission-role>Editor</permission-role>
+   <permission-role>Manager</permission-role>
+   <permission-role>Owner</permission-role>
+   <permission-role>Reader</permission-role>
+  </permission-map>
+  <permission-map name="Add portal content" acquired="False">
   </permission-map>
   <permission-map name="List folder contents" acquired="False">
    <permission-role>Administrator</permission-role>
@@ -84,9 +164,19 @@
    <permission-role>Owner</permission-role>
    <permission-role>Reader</permission-role>
   </permission-map>
-  <permission-map name="Modify portal content" acquired="False">
+  <permission-map name="Manage properties" acquired="False">
    <permission-role>Administrator</permission-role>
+   <permission-role>Contributor</permission-role>
+   <permission-role>Editor</permission-role>
    <permission-role>Manager</permission-role>
+   <permission-role>Owner</permission-role>
+   <permission-role>Reader</permission-role>
+  </permission-map>
+  <permission-map name="Modify portal content" acquired="False">
+  </permission-map>
+  <permission-map name="Review portal content" acquired="True">
+   <permission-role>Administrator</permission-role>
+   <permission-role>Owner</permission-role>
   </permission-map>
   <permission-map name="View" acquired="False">
    <permission-role>Administrator</permission-role>
@@ -96,27 +186,56 @@
    <permission-role>Owner</permission-role>
    <permission-role>Reader</permission-role>
   </permission-map>
+  <permission-map name="ftw.mail: Add Inbound Mail" acquired="False">
+  </permission-map>
+  <permission-map name="ftw.mail: Add Mail" acquired="False">
+  </permission-map>
+  <permission-map name="opengever.document: Add document" acquired="False">
+  </permission-map>
   <permission-map name="opengever.dossier: Add businesscasedossier" acquired="False">
   </permission-map>
-  <permission-map name="opengever.repository: Add repositoryfolder" acquired="False">
-   <permission-role>Administrator</permission-role>
-   <permission-role>Manager</permission-role>
+  <permission-map name="opengever.task: Add task" acquired="False">
+  </permission-map>
+  <permission-map name="opengever.trash: Trash content" acquired="False">
+  </permission-map>
+  <permission-map name="opengever.trash: Untrash content" acquired="False">
   </permission-map>
  </state>
- <transition transition_id="repositoryfolder-transition-activate" title="Activate repository folder" new_state="repositoryfolder-state-active" trigger="USER" before_script="" after_script="">
-  <action url="%(content_url)s/content_status_modify?workflow_action=repositoryfolder-transition-activate" category="workflow" icon="">repositoryfolder-transition-activate</action>
+ <transition transition_id="dossier-transition-activate" title="Owner activates dossier" new_state="dossier-state-active" trigger="USER" before_script="" after_script="">
+  <action url="%(content_url)s/content_status_modify?workflow_action=dossier-transition-activate" category="workflow" icon="">dossier-transition-activate</action>
   <guard>
-   <guard-permission>Modify portal content</guard-permission>
+   <guard-role>Manager</guard-role>
   </guard>
  </transition>
- <transition transition_id="repositoryfolder-transition-inactivate" title="Inactivate repository folder" new_state="repositoryfolder-state-inactive" trigger="USER" before_script="" after_script="">
-  <action url="%(content_url)s/content_status_modify?workflow_action=repositoryfolder-transition-inactivate" category="workflow" icon="">repositoryfolder-transition-inactivate</action>
+ <transition transition_id="dossier-transition-deactivate" title="Owner deactivates dossier" new_state="dossier-state-inactive" trigger="USER" before_script="" after_script="">
+  <action url="%(content_url)s/content_status_modify?workflow_action=dossier-transition-deactivate" category="workflow" icon="">dossier-transition-deactivate</action>
   <guard>
-   <guard-permission>Modify portal content</guard-permission>
+   <guard-role>Owner</guard-role>
   </guard>
  </transition>
+ <transition transition_id="dossier-transition-reactivate" title="Owner reactivates dossier" new_state="dossier-state-active" trigger="USER" before_script="" after_script="">
+  <action url="%(content_url)s/content_status_modify?workflow_action=dossier-transition-reactivate" category="workflow" icon="">dossier-transition-reactivate</action>
+  <guard>
+   <guard-role>Owner</guard-role>
+   <guard-role>Administrator</guard-role>
+  </guard>
+ </transition>
+ <transition transition_id="dossier-transition-resolve" title="Owner resolves dossier" new_state="dossier-state-resolved" trigger="USER" before_script="" after_script="">
+  <action url="%(content_url)s/transition-resolve" category="workflow" icon="">dossier-transition-resolve</action>
+  <guard>
+   <guard-role>Owner</guard-role>
+  </guard>
+ </transition>
+ <worklist worklist_id="reviewer_queue" title="">
+  <description>Reviewer tasks</description>
+  <action url="%(portal_url)s/search?review_state=pending" category="global" icon="">Pending (%(count)d)</action>
+  <guard>
+   <guard-permission>Review portal content</guard-permission>
+  </guard>
+  <match name="review_state" values="pending"/>
+ </worklist>
  <variable variable_id="action" for_catalog="False" for_status="True" update_always="True">
-  <description>Previous transition</description>
+  <description>The last transition</description>
   <default>
    
    <expression>transition/getId|nothing</expression>
@@ -125,16 +244,16 @@
   </guard>
  </variable>
  <variable variable_id="actor" for_catalog="False" for_status="True" update_always="True">
-  <description>The ID of the user who performed the previous transition</description>
+  <description>The ID of the user who performed the last transition</description>
   <default>
    
-   <expression>user/getUserName</expression>
+   <expression>user/getId</expression>
   </default>
   <guard>
   </guard>
  </variable>
  <variable variable_id="comments" for_catalog="False" for_status="True" update_always="True">
-  <description>Comment about the last transition</description>
+  <description>Comments about the last transition</description>
   <default>
    
    <expression>python:state_change.kwargs.get('comment', '')</expression>
@@ -149,12 +268,11 @@
    <expression>state_change/getHistory</expression>
   </default>
   <guard>
-   <guard-permission>Request review</guard-permission>
-   <guard-permission>Review portal content</guard-permission>
+   <guard-permission>View</guard-permission>
   </guard>
  </variable>
  <variable variable_id="time" for_catalog="False" for_status="True" update_always="True">
-  <description>When the previous transition was performed</description>
+  <description>Time of the last transition</description>
   <default>
    
    <expression>state_change/getDateTime</expression>
