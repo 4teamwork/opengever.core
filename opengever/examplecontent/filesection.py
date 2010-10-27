@@ -15,13 +15,14 @@ class NamedFileCreatorSection(object):
         self.previous = previous
         self.context = transmogrifier.context
         self.field = options.get('field')
+        self.key = options.get('key')
         self.pathkey = defaultMatcher(options, 'path-key', name, 'path')
         self.typekey = defaultMatcher(options, 'type-key', name, 'type',
                                       ('portal_type', 'Type'))
 
     def __iter__(self):
         for item in self.previous:
-            filename = resolvePackageReferenceOrFile(item['file'])
+            filename = resolvePackageReferenceOrFile(item[self.key])
             file_ = open(filename, 'r')
             
             keys = item.keys()
@@ -43,3 +44,4 @@ class NamedFileCreatorSection(object):
             field = getFields(schema)[self.field]
             fileobj = field._type(file_, filename=file_.name[file_.name.rfind('/')+1:])
             field.set(field.interface(obj), fileobj)
+            yield item
