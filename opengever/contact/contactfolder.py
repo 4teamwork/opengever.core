@@ -1,7 +1,7 @@
 from five import grok
 from opengever.tabbedview.browser.tabs import OpengeverListingTab
 from ftw.table import helper
-
+from opengever.contact import _
 
 def authenticated_member(context):
     return context.portal_membership.getAuthenticatedMember().getId()
@@ -30,9 +30,18 @@ class Contacts(OpengeverListingTab):
     columns = (
         ('', helper.draggable),
         ('', helper.path_checkbox),
-        ('Title', 'sortable_title', linked),
-        ('email'),
-        ('phone_office'),
+        {'column':'sortable_title',
+         'column_title':_('name', default='Name'),
+         'transform':linked},
+         {'column':'email',
+          'column_title':_('label_email', default="email")
+          },
+          {'column':'phone_office',
+            'column_title':_('label_phone_office', default='Phone office')
+          },
+          
+        # (_('label_email', default="email")),
+        # (_('label_phone_office', default='phone office'),
         )
 
     sort_on = 'sortable_title'
