@@ -6,7 +6,6 @@ from five import grok
 from opengever.base.interfaces import IReferenceNumber, ISequenceNumber
 from opengever.base.interfaces import IReferenceNumberPrefix
 from opengever.dossier import _
-from opengever.dossier.interfaces import IDossierContainerTypes
 from opengever.dossier.widget import referenceNumberWidgetFactory
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.translations.browser.add import TranslatedAddForm
@@ -17,21 +16,16 @@ from opengever.ogds.base.autocomplete_widget import AutocompleteFieldWidget
 from plone.formwidget.contenttree import ObjPathSourceBinder
 from plone.indexer import indexer
 from plone.namedfile.interfaces import INamedFileField
-from plone.registry.interfaces import IRegistry
 from plone.z3cform.textlines.textlines import TextLinesFieldWidget
 from z3c.relationfield.schema import RelationChoice, RelationList
 from zope import schema
 from zope.app.container.interfaces import IObjectAddedEvent
 from zope.app.container.interfaces import IObjectMovedEvent
-from zope.component import queryUtility, getAdapter, getUtility
+from zope.component import getAdapter, getUtility
 from zope.interface import Interface, alsoProvides
 from zope.interface import invariant, Invalid
-from zope.schema.interfaces import IContextSourceBinder
-from zope.schema.vocabulary import SimpleVocabulary, SimpleTerm
 from collective.elephantvocabulary import wrap_vocabulary
 import logging
-
-
 LOG = logging.getLogger('opengever.dossier')
 
 
