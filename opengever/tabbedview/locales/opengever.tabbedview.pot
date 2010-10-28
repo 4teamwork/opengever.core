@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2010-10-28 10:42+0000\n"
+"POT-Creation-Date: 2010-10-28 10:50+0000\n"
 "PO-Revision-Date: 2009-02-25 14:39+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -42,7 +42,7 @@ msgid "checked_out"
 msgstr ""
 
 #. Default: "Client"
-#: ./opengever/tabbedview/browser/tabs.py:285
+#: ./opengever/tabbedview/browser/tabs.py:318
 msgid "client_id"
 msgstr ""
 
@@ -141,94 +141,114 @@ msgid "journal"
 msgstr ""
 
 #. Default: "Actor"
-#: ./opengever/tabbedview/browser/tabs.py:319
+#: ./opengever/tabbedview/browser/tabs.py:352
 msgid "label_actor"
 msgstr ""
 
 #. Default: "Checked out by"
-#: ./opengever/tabbedview/browser/tabs.py:175
+#: ./opengever/tabbedview/browser/tabs.py:194
 msgid "label_checked_out"
 msgstr ""
 
 #. Default: "Comments"
-#: ./opengever/tabbedview/browser/tabs.py:325
+#: ./opengever/tabbedview/browser/tabs.py:358
 msgid "label_comments"
 msgstr ""
 
+#. Default: "Creator"
+#: ./opengever/tabbedview/browser/tabs.py:79
+msgid "label_creator"
+msgstr ""
+
 #. Default: "Date of Completion"
-#: ./opengever/tabbedview/browser/tabs.py:269
+#: ./opengever/tabbedview/browser/tabs.py:302
 msgid "label_date_of_completion"
 msgstr ""
 
 #. Default: "Deadline"
-#: ./opengever/tabbedview/browser/tabs.py:265
+#: ./opengever/tabbedview/browser/tabs.py:298
 msgid "label_deadline"
 msgstr ""
 
 #. Default: "Delivery Date"
-#: ./opengever/tabbedview/browser/tabs.py:172
+#: ./opengever/tabbedview/browser/tabs.py:190
 msgid "label_delivery_date"
 msgstr ""
 
 #. Default: "Document Author"
-#: ./opengever/tabbedview/browser/tabs.py:163
+#: ./opengever/tabbedview/browser/tabs.py:178
 msgid "label_document_author"
 msgstr ""
 
 #. Default: "Document Date"
-#: ./opengever/tabbedview/browser/tabs.py:166
+#: ./opengever/tabbedview/browser/tabs.py:182
 msgid "label_document_date"
 msgstr ""
 
 #. Default: "Responsible"
-#: ./opengever/tabbedview/browser/tabs.py:216
+#: ./opengever/tabbedview/browser/tabs.py:244
 msgid "label_dossier_responsible"
 msgstr ""
 
+#. Default: "End"
+#: ./opengever/tabbedview/browser/tabs.py:253
+msgid "label_end"
+msgstr ""
+
 #. Default: "issued at"
-#: ./opengever/tabbedview/browser/tabs.py:281
+#: ./opengever/tabbedview/browser/tabs.py:314
 msgid "label_issued_date"
 msgstr ""
 
 #. Default: "Issuer"
-#: ./opengever/tabbedview/browser/tabs.py:277
+#: ./opengever/tabbedview/browser/tabs.py:310
 #: ./opengever/tabbedview/browser/tasklisting.py:85
 msgid "label_issuer"
 msgstr ""
 
+#. Default: "Modified"
+#: ./opengever/tabbedview/browser/tabs.py:75
+msgid "label_modified"
+msgstr ""
+
 #. Default: "Receipt Date"
-#: ./opengever/tabbedview/browser/tabs.py:169
+#: ./opengever/tabbedview/browser/tabs.py:186
 msgid "label_receipt_date"
 msgstr ""
 
 #. Default: "Reference Number"
-#: ./opengever/tabbedview/browser/tabs.py:212
+#: ./opengever/tabbedview/browser/tabs.py:232
 msgid "label_reference"
 msgstr ""
 
 #. Default: "Responsible"
-#: ./opengever/tabbedview/browser/tabs.py:273
+#: ./opengever/tabbedview/browser/tabs.py:306
 #: ./opengever/tabbedview/browser/tasklisting.py:81
 msgid "label_responsible_task"
 msgstr ""
 
 #. Default: "Review state"
-#: ./opengever/tabbedview/browser/tabs.py:252
+#: ./opengever/tabbedview/browser/tabs.py:240
 msgid "label_review_state"
 msgstr ""
 
+#. Default: "Start"
+#: ./opengever/tabbedview/browser/tabs.py:249
+msgid "label_start"
+msgstr ""
+
 #. Default: "Task Type"
-#: ./opengever/tabbedview/browser/tabs.py:261
+#: ./opengever/tabbedview/browser/tabs.py:294
 msgid "label_task_type"
 msgstr ""
 
 #. Default: "Time"
-#: ./opengever/tabbedview/browser/tabs.py:322
+#: ./opengever/tabbedview/browser/tabs.py:355
 msgid "label_time"
 msgstr ""
 
 #. Default: "Title"
-#: ./opengever/tabbedview/browser/tabs.py:256
+#: ./opengever/tabbedview/browser/tabs.py:70
 msgid "label_title"
 msgstr ""
 
@@ -278,7 +298,7 @@ msgid "role_list"
 msgstr ""
 
 #. Default: "Sequence Number"
-#: ./opengever/tabbedview/browser/tabs.py:288
+#: ./opengever/tabbedview/browser/tabs.py:321
 msgid "sequence_number"
 msgstr ""
 

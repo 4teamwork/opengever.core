@@ -65,9 +65,19 @@ class OpengeverListingTab(grok.View, BaseListingView):
     columns = (
         ('', helper.draggable),
         ('', helper.path_checkbox),
-        ('Title', 'sortable_title', linked),
-        ('modified', helper.readable_date),
-        ('Creator', readable_ogds_author),
+
+        {'column': 'Title',
+         'column_title': _(u'label_title', default=u'Title'),
+         'sort_index' : 'sortable_title',
+         'transform': linked},
+
+        {'column': 'modified',
+         'column_title': _(u'label_modified', default=u'Modified'),
+         'transform': helper.readable_date},
+
+        {'column': 'Creator',
+         'column_title': _(u'label_creator', default=u'Creator'),
+         'transform': readable_ogds_author},
         )
 
     def update(self):
@@ -158,19 +168,28 @@ class Documents(OpengeverListingTab):
     columns = (
         ('', helper.draggable),
         ('', helper.path_checkbox),
-        ('Title', 'sortable_title', linked),
+
+        {'column': 'Title',
+         'column_title': _(u'label_title', default=u'Title'),
+         'sort_index' : 'sortable_title',
+         'transform': linked},
+
         {'column':'document_author',
          'column_title':_('label_document_author', default="Document Author"),
          'transform': readable_ogds_author},
+
         {'column':'document_date',
          'column_title':_('label_document_date', default="Document Date"),
          'transform':helper.readable_date},
+
         {'column':'receipt_date',
          'column_title':_('label_receipt_date', default="Receipt Date"),
          'transform':helper.readable_date},
+
         {'column':'delivery_date',
          'column_title':_('label_delivery_date', default="Delivery Date"),
          'transform':helper.readable_date},
+
         {'column':'checked_out',
          'column_title':_('label_checked_out', default="Checked out by"),
          'transform':readable_ogds_author},
@@ -208,17 +227,31 @@ class Dossiers(OpengeverListingTab):
     columns = (
         ('', helper.draggable),
         ('', helper.path_checkbox),
+
         {'column': 'reference',
          'column_title': _(u'label_reference', default=u'Reference Number')},
-        ('Title', 'sortable_title', linked),
-        ('review_state', 'review_state', helper.translated_string()),
+
+        {'column': 'Title',
+         'column_title': _(u'label_title', default=u'Title'),
+         'sort_index' : 'sortable_title',
+         'transform': linked},
+
+        {'column': 'review_state',
+         'column_title': _(u'label_review_state', default=u'Review state'),
+         'transform': helper.translated_string('plone')},
+
         {'column':'responsible',
          'column_title':_(u'label_dossier_responsible',
                           default=u"Responsible"),
          'transform':readable_ogds_author},
-        ('start', helper.readable_date),
-        ('end', helper.readable_date),
 
+        {'column': 'start',
+         'column_title': _(u'label_start', default=u'Start'),
+         'transform': helper.readable_date},
+
+        {'column': 'end',
+         'column_title': _(u'label_end', default=u'End'),
+         'transform': helper.readable_date},
         )
 
     search_options = {'is_subdossier': False}
@@ -350,7 +383,11 @@ class Trash(OpengeverListingTab):
     columns = (
         ('', helper.draggable),
         ('', helper.path_checkbox),
-        ('Title', 'sortable_title', linked),
+
+        {'column': 'Title',
+         'column_title': _(u'label_title', default=u'Title'),
+         'sort_index' : 'sortable_title',
+         'transform': linked},
         )
 
     enabled_actions = ['untrashed', ]
