@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <object name="opengever.dossier.projectdossier" meta_type="Dexterity FTI"
-        i18n:domain="opengever.tasktemplates" xmlns:i18n="http://xml.zope.org/namespaces/i18n">
+    xmlns:i18n="http://xml.zope.org/namespaces/i18n">
 
 
     <!-- Actions -->
@@ -10,7 +10,8 @@
             title="Add task from template"
             category="folder_factories"
             url_expr="string:${object_url}/add-tasktemplate"
-            icon_expr="string:${object_url}/icon_objekt_prozess.gif">
+            icon_expr="string:${object_url}/icon_objekt_prozess.gif"
+            i18n:domain="opengever.tasktemplates">
         <permission value="Add portal content"/>
     </action>
 
