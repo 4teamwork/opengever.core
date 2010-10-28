@@ -54,7 +54,7 @@ class OpengeverListingTab(grok.View, BaseListingView):
     grok.template('generic')
 
     #update = BaseListingView.update
-    # 
+    #
     def __call__(self, *args, **kwargs):
         self.update()
         if self.ext:
@@ -114,7 +114,7 @@ class OpengeverListingTab(grok.View, BaseListingView):
                 contents.reverse()
 
         elif sort_on in ('responsible',
-            'Creator', 'checked_out', 'issuer', 'contact'):
+                         'Creator', 'checked_out', 'issuer', 'contact'):
             info = getUtility(IContactInformation)
 
             def _sorter(a, b):
@@ -170,10 +170,10 @@ class Documents(OpengeverListingTab):
          'transform':helper.readable_date},
         {'column':'delivery_date',
          'column_title':_('label_delivery_date', default="Delivery Date"),
-        'transform':helper.readable_date},
+         'transform':helper.readable_date},
         {'column':'checked_out',
          'column_title':_('label_checked_out', default="Checked out by"),
-        'transform':readable_ogds_author},
+         'transform':readable_ogds_author},
         )
 
     enabled_actions = ['cut',
@@ -247,30 +247,45 @@ class Tasks(OpengeverListingTab):
     columns= (
         ('', helper.draggable),
         ('', helper.path_checkbox),
-        ('review_state', 'review_state', helper.translated_string()),
-        ('Title', 'sortable_title', linked),
+
+        {'column': 'review_state',
+         'column_title': _(u'label_review_state', default=u'Review state'),
+         'transform': helper.translated_string('plone')},
+
+        {'column': 'Title',
+         'column_title': _(u'label_title', default=u'Title'),
+         'sort_index' : 'sortable_title',
+         'transform': linked},
+
         {'column': 'task_type',
          'column_title': _(u'label_task_type', 'Task Type'),
          'transform': task_type_helper},
+
         {'column': 'deadline',
          'column_title': _(u'label_deadline', 'Deadline'),
          'transform': helper.readable_date},
+
         {'column': 'date_of_completion',
          'column_title': _(u'label_date_of_completion', 'Date of Completion'),
          'transform': readable_date_set_invisibles},
+
         {'column': 'responsible',
          'column_title': _(u'label_responsible_task', 'Responsible'),
          'transform': readable_ogds_author},
-         {'column': 'issuer',
-          'column_title': _(u'label_issuer', 'Issuer'),
-          'transform': readable_ogds_author},
+
+        {'column': 'issuer',
+         'column_title': _(u'label_issuer', 'Issuer'),
+         'transform': readable_ogds_author},
+
         {'column': 'created',
          'column_title': _(u'label_issued_date', 'issued at'),
          'transform': helper.readable_date},
-         {'column': 'client_id',
-          'column_title': _('client_id', 'Client'), },
-         {'column': 'sequence_number',
-          'column_title': _(u'sequence_number', "Sequence Number"), },
+
+        {'column': 'client_id',
+         'column_title': _('client_id', 'Client'), },
+
+        {'column': 'sequence_number',
+         'column_title': _(u'sequence_number', "Sequence Number"), },
         )
 
     types = ['opengever.task.task', ]
@@ -301,8 +316,8 @@ class Journal(grok.View, OpengeverTab):
                     'column_title': _(u'label_title', 'Title'),
                     'transform': lambda x, y: x['action']['title']},
                    {'column': 'actor',
-                   'column_title': _(u'label_actor', default=u'Actor'),
-                   },
+                    'column_title': _(u'label_actor', default=u'Actor'),
+                    },
                    {'column': 'time',
                     'column_title': _(u'label_time', default=u'Time'),
                     'transform': helper.readable_date_time},
@@ -311,7 +326,7 @@ class Journal(grok.View, OpengeverTab):
                    )
         return generator.generate(
             reversed(self.data()),
-                columns, css_mapping={'table': 'journal-listing'})
+            columns, css_mapping={'table': 'journal-listing'})
 
     def data(self):
         context = self.context
