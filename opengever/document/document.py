@@ -220,13 +220,14 @@ def documentDateDefaultValue(data):
     return datetime.today()
 
 @form.default_value(field=IDocumentSchema['document_author'])
-def deadlineDefaultValue(data):
-    # To get hold of the folder, do: context = data.context
+def document_author_default_value(data):
     user = data.context.portal_membership.getAuthenticatedMember()
-    if user.getProperty('fullname'):
-        return user.getProperty('fullname').decode('utf8')
+    info = getUtility(IContactInformation)
+    user = user.getId()
+    if info.is_user(user) or info.is_contact(user):
+        return info.describe(user)
     else:
-        return user.getId()
+        return user
 
 class Document(Item):
 
