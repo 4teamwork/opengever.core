@@ -157,6 +157,7 @@ class GlobalTaskTableSource(grok.MultiAdapter, BaseTableSource):
                     # its not dict
                     continue
 
+
                 # do not support dates
                 if column.get('transform') == helper.readable_date:
                     continue
