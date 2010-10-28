@@ -150,8 +150,12 @@ class GlobalTaskTableSource(grok.MultiAdapter, BaseTableSource):
 
             # first lets lookup what fields (= sql columns) we have
             fields = []
-            for column in self.columns:
-                colname = column['column']
+            for column in self.config.columns:
+                try:
+                    colname = column['column']
+                except TypeError:
+                    # its not dict
+                    continue
 
                 # do not support dates
                 if column.get('transform') == helper.readable_date:
