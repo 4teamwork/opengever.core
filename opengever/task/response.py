@@ -16,7 +16,6 @@ from Acquisition import aq_inner
 from Products.Five.browser import BrowserView
 from plone.memoize.view import memoize
 from plone.z3cform import layout
-from plone.formwidget.autocomplete import AutocompleteFieldWidget
 from plone.autoform.form import AutoExtensibleForm
 
 from Products.CMFCore.utils import getToolByName
@@ -38,27 +37,6 @@ class IResponse(Interface):
     text = schema.Text(
         title = _('label_response', default="Response"),
         description=_('help_response', default=""),
-        required = False,
-        )
-
-    responsible_client = schema.Choice(
-        title=_(u'label_resonsible_client',
-                default=u'Responsible Client'),
-        description=_(u'help_responsible_client',
-                      default=u''),
-        vocabulary='opengever.ogds.base.ClientsVocabulary',
-        required=True)
-
-    responsible = schema.Choice(
-        title=_(u"label_responsible_Response", default="New responsible"),
-        description =_(u"help_new_responsible_response", default=""),
-        vocabulary=u'opengever.ogds.base.UsersAndInboxesVocabulary',
-        required = False,
-        )
-
-    deadline = schema.Date(
-        title=_(u"label_deadline_Response", default=u"New deadline"),
-        description=_(u"help_deadline_response", default=""),
         required = False,
         )
 
@@ -236,7 +214,6 @@ class Base(BrowserView):
 
 class AddForm(form.AddForm, AutoExtensibleForm):
     fields = field.Fields(IResponse)
-    fields['responsible'].widgetFactory = AutocompleteFieldWidget
     fields['transition'].widgetFactory = radio.RadioFieldWidget
     fields = fields.omit('date_of_completion')
 
@@ -271,8 +248,8 @@ class AddForm(form.AddForm, AutoExtensibleForm):
 
             #check other fields
             options = [
-                (task.deadline, data.get('deadline'), 'deadline',
-                 _('deadline')),
+                # (task.deadline, data.get('deadline'), 'deadline',
+                #  _('deadline')),
                 (task.date_of_completion, completion_date,
                  'date_of_completion', _('date_of_completion'))]
 
@@ -283,17 +260,6 @@ class AddForm(form.AddForm, AutoExtensibleForm):
                                             task_field,
                                             resp_field)
                     task.__setattr__(option, resp_field)
-
-            # change the responsible
-            responsible = data.get('responsible')
-            responsible_client = data.get('responsible_client')
-            if responsible and responsible != task.responsible:
-                new_response.add_change('responsible',
-                                        _('responsible'),
-                                        task.responsible,
-                                        responsible)
-                task.responsible = responsible
-                task.responsible_client = responsible_client
 
             # save relatedItems on task
             relatedItems = data.get('relatedItems')
