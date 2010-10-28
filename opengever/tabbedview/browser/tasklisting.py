@@ -1,34 +1,29 @@
+from sqlalchemy.sql.expression import asc, desc
+from sqlalchemy.orm.query import Query
+from ftw.table.basesource import BaseTableSourceConfig, BaseTableSource
+from ftw.table.interfaces import ITableSource, ITableSourceConfig
+from zope.interface import implements, Interface
 from ftw.table import helper
+from five import grok
 from opengever.base.browser.helper import client_title_helper
 from opengever.globalindex.model.task import Task
 from opengever.globalindex.utils import indexed_task_link_helper
 from opengever.tabbedview import _
 from opengever.tabbedview.helper import readable_date_set_invisibles
 from opengever.tabbedview.helper import readable_ogds_author
+from opengever.tabbedview.helper import task_id_checkbox_helper
 from opengever.task.helper import task_type_helper
 from sqlalchemy import or_
 from zope.app.pagetemplate import ViewPageTemplateFile
 
 
-
-def task_id_checkbox_helper(item, value):
-    """ Checkbox helper based on tasks id attribute
+class IGlobalTaskTableSourceConfig(ITableSourceConfig):
+    """Marker interface for table source configurations using the
+    `opengever.globalindex` as source.
     """
 
-    attrs = {
-        'type': 'checkbox',
-        'class': 'noborder selectable',
-        'name': 'task_ids:list',
-        'id': item.task_id,
-        'value': item.task_id,
-        'title': 'Select %s' % item.title,
-        }
 
-    return '<input %s />' % ' '.join(['%s="%s"' % (k, v)
-                                      for k, v in attrs.items()])
-
-
-class GlobalTaskListingMixin(object):
+class GlobalTaskListingMixin(BaseTableSourceConfig):
     """A tabbed view mixing which brings support for listing tasks from
     the SQL (globally over all clients).
 
@@ -47,8 +42,10 @@ class GlobalTaskListingMixin(object):
     ...         return query_util._get_some_tasks_query()
     """
 
+    implements(IGlobalTaskTableSourceConfig)
+
     sort_on = 'modified'
-    sort_order = 'reverse'
+    sort_reverse = False
 
     enabled_actions = []
     major_actions = []
@@ -108,58 +105,117 @@ class GlobalTaskListingMixin(object):
         """
         raise NotImplemented
 
-    def search(self, kwargs):
-        """Override search method using SQLAlchemy queries from contact
-        information utility.
+
+class GlobalTaskTableSource(grok.MultiAdapter, BaseTableSource):
+    """Base table source adapter.
+    """
+
+    grok.implements(ITableSource)
+    grok.adapts(IGlobalTaskTableSourceConfig, Interface)
+
+    def validate_base_query(self, query):
+        """Validates and fixes the base query. Returns the query object.
+        It may raise e.g. a `ValueError` when something's wrong.
         """
 
-        query = self.get_base_query()
+        if not isinstance(query, Query):
+            raise ValueError('Expected query to be a sqlalchemy query '
+                             'object.')
 
-        # search / filter
-        search_term = kwargs.get('SearchableText')
-        if search_term:
-            # do not use the catalogs default wildcards
-            if search_term.endswith('*'):
-                search_term = search_term[:-1]
-            query = self._advanced_search_query(query, search_term)
+        return query
 
-        self.contents = query.all()
-
-        self.len_results = len(self.contents)
-
-    def _advanced_search_query(self, query, search_term):
-        """Extend the given sql query object with the filters for searching
-        for the search_term in all visible columns.
-        When searching for multiple words the are splitted up and search
-        seperately (otherwise a search like "Boss Hugo" would have no results
-        because firstname and lastname are stored in seperate columns.)
+    def extend_query_with_ordering(self, query):
+        """Extends the given `query` with ordering information and returns
+        the new query.
         """
 
-        model = Task
+        if self.config.sort_on:
+            order_f = self.config.sort_reverse and desc or asc
 
-        # first lets lookup what fields (= sql columns) we have
-        fields = []
-        for column in self.columns:
-            colname = column['column']
+            query = query.order_by(order_f(self.config.sort_on))
 
-            # do not support dates
-            if column.get('transform') == helper.readable_date:
-                continue
+        return query
 
-            if colname == 'fullname':
-                fields.append(model.firstname)
-                fields.append(model.lastname)
+    def extend_query_with_textfilter(self, query, text):
+        """Extends the given `query` with text filters. This is only done when
+        config's `filter_text` is set.
+        """
 
-            else:
+        if len(text):
+            # remove trailing asterisk
+            if text.endswith('*'):
+                text = text[:-1]
+
+            model = Task
+
+            # first lets lookup what fields (= sql columns) we have
+            fields = []
+            for column in self.columns:
+                colname = column['column']
+
+                # do not support dates
+                if column.get('transform') == helper.readable_date:
+                    continue
+
                 field = getattr(model, colname, None)
                 if field:
                     fields.append(field)
 
-        # lets split up the search term into words, extend them with the
-        # default wildcards and then search for every word seperately
-        for word in search_term.strip().split(' '):
-            term = '%%%s%%' % word
+            # lets split up the search term into words, extend them with
+            # the default wildcards and then search for every word
+            # seperately
+            for word in text.strip().split(' '):
+                term = '%%%s%%' % word
 
-            query = query.filter(or_(*[field.like(term) for field in fields]))
+                query = query.filter(or_(*[field.like(term)
+                                           for field in fields]))
 
         return query
+
+    def extend_query_with_batching(self, query):
+        """Extends the given `query` with batching filters and returns the
+        new query. This method is only called when batching is enabled in
+        the source config with the `batching_enabled` attribute.
+        """
+
+        if not self.config.batching_enabled:
+            # batching is disabled
+            return query
+
+        if not self.config.lazy:
+            # do not batch since we are not lazy
+            return query
+
+        # we need to know how many records we would have without batching
+        self.full_length = query.count()
+
+        # now add batching
+        pagesize = self.config.batching_pagesize
+        current_page = self.config.batching_current_page
+        start = pagesize * (current_page - 1)
+
+        query = query.offset(start)
+        query = query.limit(pagesize)
+
+        return query
+
+    def search_results(self, query):
+        """Executes the query and returns a tuple of `results`.
+        """
+
+        # not lazy
+        if not self.config.lazy or not self.config.batching_enabled:
+            return query.all()
+
+        page_results = query.all()
+
+        pagesize = self.config.batching_pagesize
+        current_page = self.config.batching_current_page
+        start = pagesize * (current_page - 1)
+
+        results = list(xrange(start)) + \
+            page_results + \
+            list(xrange(self.full_length - start - len(page_results)))
+
+        return results
+
