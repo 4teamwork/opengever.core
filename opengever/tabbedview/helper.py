@@ -1,10 +1,26 @@
-from zope.component import getUtility
-from plone.memoize import ram
-
-from Products.PluggableAuthService.interfaces.authservice import IPropertiedUser
 from Products.CMFCore.interfaces._tools import IMemberData
-
+from Products.PluggableAuthService.interfaces.authservice import IPropertiedUser
 from opengever.ogds.base.interfaces import IContactInformation
+from plone.memoize import ram
+from zope.component import getUtility
+
+
+def task_id_checkbox_helper(item, value):
+    """ Checkbox helper based on tasks id attribute
+    """
+
+    attrs = {
+        'type': 'checkbox',
+        'class': 'noborder selectable',
+        'name': 'task_ids:list',
+        'id': item.task_id,
+        'value': item.task_id,
+        'title': 'Select %s' % item.title,
+        }
+
+    return '<input %s />' % ' '.join(['%s="%s"' % (k, v)
+                                      for k, v in attrs.items()])
+
 
 def author_cache_key(m, i, author):
     if IPropertiedUser.providedBy(author) or IMemberData.providedBy(author):
