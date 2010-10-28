@@ -38,5 +38,8 @@
 
     <include package=".behaviors" />
     <include package=".browser" />
+    
+    override the navtree strategy adapter
+    <adapter factory=".navtree.OpengeverNavtreeStrategy" />
 
 </configure>
