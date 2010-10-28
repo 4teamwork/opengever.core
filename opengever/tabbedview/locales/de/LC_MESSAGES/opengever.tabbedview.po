@@ -174,7 +174,7 @@ msgstr "Zu erledigen bis"
 #. Default: "Delivery Date"
 #: ./opengever/tabbedview/browser/tabs.py:160
 msgid "label_delivery_date"
-msgstr "Ablaufdatum"
+msgstr "Ausgangsdatum"
 
 #. Default: "Document Author"
 #: ./opengever/tabbedview/browser/tabs.py:151
@@ -205,7 +205,7 @@ msgstr "Auftraggeber"
 #. Default: "Receipt Date"
 #: ./opengever/tabbedview/browser/tabs.py:157
 msgid "label_receipt_date"
-msgstr "Annahmedatum"
+msgstr "Eingangsdatum"
 
 #. Default: "Reference Number"
 #: ./opengever/tabbedview/browser/tabs.py:200
