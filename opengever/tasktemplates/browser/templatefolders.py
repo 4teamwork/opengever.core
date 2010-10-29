@@ -1,10 +1,10 @@
 from ftw.table import helper
 from opengever.tabbedview.helper import linked
-from opengever.tabbedview.browser.tabs import OpengeverListingTab
+from opengever.tabbedview.browser.tabs import OpengeverCatalogListingTab
 from five import grok
 
 
-class TaskTemplateFoldersTab(OpengeverListingTab):
+class TaskTemplateFoldersTab(OpengeverCatalogListingTab):
     """Tab for listing all task template folders on the template dossier.
     """
 
