@@ -11,6 +11,7 @@ from ftw.tabbedview.browser.listing import ListingView
 from opengever.tabbedview.browser.tabs import OpengeverTab
 from opengever.ogds.base.model.user import User
 from opengever.ogds.base.interfaces import IContactInformation
+from opengever.tabbedview.helper import email_helper
 from zope.component import getUtility
 from plone.dexterity.interfaces import IDexterityContainer
 
@@ -27,13 +28,6 @@ def linked_value_helper(item, value):
         return '<a href="%s">%s</a>' % (url, value)
     else:
         return value
-
-
-def email_helper(item, value):
-    if value:
-        return '<a href="mailto:%s">%s</a>' % (value, value)
-    else:
-        return ''
 
 
 class IUsersListingTableSourceConfig(ITableSourceConfig):
