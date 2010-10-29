@@ -1,7 +1,11 @@
 from five import grok
-from opengever.tabbedview.browser.tabs import OpengeverListingTab
+from opengever.tabbedview.browser.tabs import OpengeverCatalogListingTab
+from opengever.tabbedview.browser.tabs import OpengeverTab
 from ftw.table import helper
+from ftw.table.catalog_source import default_custom_sort
 from opengever.contact import _
+from plone.dexterity.interfaces import IDexterityContainer
+
 
 def authenticated_member(context):
     return context.portal_membership.getAuthenticatedMember().getId()
@@ -20,29 +24,39 @@ def linked(item, value):
     return wrapper
 
 
-class Contacts(OpengeverListingTab):
+class Contacts(OpengeverCatalogListingTab):
     """ Listing of all Task of the authenticated Member """
 
     grok.name('tabbedview_view-contacts')
+    grok.context(IDexterityContainer)
 
     types = ['opengever.contact.contact', ]
 
     columns = (
         ('', helper.draggable),
         ('', helper.path_checkbox),
-        {'column':'sortable_title',
+
+        {'column':'Title',
          'column_title':_('name', default='Name'),
+         'sort_index' : 'sortable_title',
          'transform':linked},
-         {'column':'email',
-          'column_title':_('label_email', default="email")
-          },
-          {'column':'phone_office',
-            'column_title':_('label_phone_office', default='Phone office')
-          },
-          
-        # (_('label_email', default="email")),
-        # (_('label_phone_office', default='phone office'),
+
+        {'column':'email',
+         'column_title':_('label_email', default="email")},
+
+        {'column':'phone_office',
+         'column_title':_('label_phone_office', default='Phone office')},
         )
 
     sort_on = 'sortable_title'
     sort_order='asc'
+
+    def custom_sort(self, results, sort_on, sort_reverse):
+
+        if sort_on in ('email', 'phone_office'):
+            # we have not sort index, so sort manually
+
+            return default_custom_sort(results, sort_on, sort_reverse)
+
+        else:
+            return OpengeverTab.custom_sort(self, results, sort_on, sort_reverse)
