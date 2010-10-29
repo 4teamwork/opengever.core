@@ -64,15 +64,18 @@ def icon_helper(item, value):
 
 def base64_oid_checkbox_helper(item, value):
     if not getattr(item, '_p_oid', False):
-        return ''
-    oid = base64.encodestring(item._p_oid).strip()
-    attrs = {
-        'type': 'checkbox',
-        'class': 'noborder',
-        'name': 'oids:list',
-        'id': 'item-%s' % oid,
-        'value': oid,
-        }
+        attrs = {'type': 'checkbox',
+                 'disabled': 'disabled',
+                 'class': 'noborder'}
+    else:
+        oid = base64.encodestring(item._p_oid).strip()
+        attrs = {
+            'type': 'checkbox',
+            'class': 'noborder selectable',
+            'name': 'oids:list',
+            'id': 'item-%s' % oid,
+            'value': oid,
+            }
     html = '<input %s />' % ' '.join(['%s="%s"' % (k, v)
                                       for k, v in attrs.items()])
     return html
