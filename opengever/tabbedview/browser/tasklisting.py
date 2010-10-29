@@ -1,6 +1,6 @@
 from sqlalchemy.sql.expression import asc, desc
 from sqlalchemy.orm.query import Query
-from ftw.table.basesource import BaseTableSourceConfig, BaseTableSource
+from ftw.table.basesource import BaseTableSource
 from ftw.table.interfaces import ITableSource, ITableSourceConfig
 from zope.interface import implements, Interface
 from ftw.table import helper
@@ -15,6 +15,9 @@ from opengever.tabbedview.helper import task_id_checkbox_helper
 from opengever.task.helper import task_type_helper
 from sqlalchemy import or_
 from zope.app.pagetemplate import ViewPageTemplateFile
+from ftw.tabbedview.browser.listing import ListingView
+from opengever.tabbedview.browser.tabs import OpengeverTab
+from ftw.journal.interfaces import IJournalizable
 
 
 class IGlobalTaskTableSourceConfig(ITableSourceConfig):
@@ -23,26 +26,17 @@ class IGlobalTaskTableSourceConfig(ITableSourceConfig):
     """
 
 
-class GlobalTaskListingMixin(BaseTableSourceConfig):
+class GlobalTaskListingTab(grok.CodeView, OpengeverTab,
+                           ListingView):
     """A tabbed view mixing which brings support for listing tasks from
     the SQL (globally over all clients).
 
     There is support for searching, batching and ordering.
-
-    Usage:
-    Create tab-class subclassing this class and the OpengeverListingTab:
-
-    >>> from opengever.globalindex.interfaces import ITaskQuery
-    >>> class MyTaskListing(GlobalTaskListingMixin, OpengeverListingTab):
-    ...     grok.name('tabbedview_view-globaltasks')
-    ...     grok.require('Permission')
-    ...
-    ...     def get_base_query(self):
-    ...         query_util = getUtility(ITaskQuery)
-    ...         return query_util._get_some_tasks_query()
     """
 
     implements(IGlobalTaskTableSourceConfig)
+
+    grok.context(IJournalizable)
 
     sort_on = 'modified'
     sort_reverse = False
@@ -99,11 +93,9 @@ class GlobalTaskListingMixin(BaseTableSourceConfig):
 
         )
 
-    def get_base_query(self):
-        """This method must be implement. It has to return a SQLAlchemy
-        query object on Task. See the ITaskQuery for further details.
-        """
-        raise NotImplemented
+    __call__ = ListingView.__call__
+    update = ListingView.update
+    render = __call__
 
 
 class GlobalTaskTableSource(grok.MultiAdapter, BaseTableSource):
