@@ -328,39 +328,6 @@ class Tasks(OpengeverCatalogListingTab):
         ]
 
 
-class Journal(grok.View, OpengeverTab):
-
-    grok.context(IJournalizable)
-    grok.name('tabbedview_view-journal')
-    grok.template('journal')
-
-    def table(self):
-        generator = queryUtility(ITableGenerator, 'ftw.tablegenerator')
-        columns = ({'column': 'title',
-                    'column_title': _(u'label_title', 'Title'),
-                    'transform': lambda x, y: x['action']['title']},
-                   {'column': 'actor',
-                    'column_title': _(u'label_actor', default=u'Actor'),
-                    },
-                   {'column': 'time',
-                    'column_title': _(u'label_time', default=u'Time'),
-                    'transform': helper.readable_date_time},
-                   {'column': 'comments',
-                    'column_title': _(u'label_comments', default=u'Comments'),},
-                   )
-        return generator.generate(
-            reversed(self.data()),
-            columns, css_mapping={'table': 'journal-listing'})
-
-    def data(self):
-        context = self.context
-        if IAnnotationsJournalizable.providedBy(self.context):
-            annotations = IAnnotations(context)
-            return annotations.get(JOURNAL_ENTRIES_ANNOTATIONS_KEY, [])
-        elif IWorkflowHistoryJournalizable.providedBy(self.context):
-            raise NotImplemented
-
-
 class Trash(OpengeverCatalogListingTab):
     grok.name('tabbedview_view-trash')
 
