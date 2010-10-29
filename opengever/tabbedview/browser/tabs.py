@@ -1,15 +1,14 @@
-from Acquisition import aq_inner
 from zope.interface import Interface
+from zope.app.pagetemplate import ViewPageTemplateFile
 from five import grok
 from ftw.journal.config import JOURNAL_ENTRIES_ANNOTATIONS_KEY
 from ftw.journal.interfaces import IAnnotationsJournalizable
 from ftw.journal.interfaces import IJournalizable
 from ftw.journal.interfaces import IWorkflowHistoryJournalizable
-from ftw.tabbedview.browser.listing import BaseListingView
+from ftw.tabbedview.browser.listing import BaseListingView, CatalogListingView
 from ftw.tabbedview.interfaces import ITabbedView
 from ftw.table import helper
 from ftw.table.interfaces import ITableGenerator
-from opengever.ogds.base.interfaces import IContactInformation
 from opengever.tabbedview import _
 from opengever.tabbedview.helper import readable_date_set_invisibles
 from opengever.tabbedview.helper import readable_ogds_author, linked
@@ -17,36 +16,121 @@ from opengever.task.helper import task_type_helper
 from plone.app.workflow.browser.sharing import SharingView
 from plone.app.workflow.interfaces import ISharingPageRole
 from zope.annotation.interfaces import IAnnotations
-from zope.component import getUtility, queryUtility, getUtilitiesFor
-import re
+from zope.component import queryUtility, getUtilitiesFor
 
 
-def datetime_compare(x, y):
-    a = getattr(x, datetime_compare.index, None)
-    b = getattr(y, datetime_compare.index, None)
-    if a is None and b is None:
-        return 0
-    elif a is None:
-        return -1
-    elif b is None:
-        return 1
 
-    # we are not able to compare datetime and date objects. So
-    # let's just use strings.
-    return cmp(str(a), str(b))
+
+# XXX : DISABLED we need to have a better solution for that
+
+# def datetime_compare(x, y):
+#     a = getattr(x, datetime_compare.index, None)
+#     b = getattr(y, datetime_compare.index, None)
+#     if a is None and b is None:
+#         return 0
+#     elif a is None:
+#         return -1
+#     elif b is None:
+#         return 1
+
+#     # we are not able to compare datetime and date objects. So
+#     # let's just use strings.
+#     return cmp(str(a), str(b))
+
+
+# def custom_sort(list_, index, dir_):
+
+#     datetime_compare.index = index
+#     reverse = 0
+#     if dir_ == 'reverse':
+#         reverse = 1
+#     return sorted(list_, cmp=datetime_compare, reverse=reverse)
+
+#     def _custom_sort_method(self, contents, sort_on, sort_order):
+
+#         if BaseListingView._custom_sort_method is not None:
+#             contents = BaseListingView._custom_sort_method(
+#                 self, contents, sort_on, sort_order)
+
+#         if sort_on=='reference':
+#             splitter = re.compile('[/\., ]')
+
+#             def _sortable_data(brain):
+#                 """ Converts the "reference" into a tuple containing integers,
+#                 which are converted well. Sorting "10" and "2" as strings
+#                 results in wrong order..
+#                 """
+
+#                 value = getattr(brain, sort_on, '')
+#                 if not isinstance(value, str) and not isinstance(
+#                     value, unicode):
+#                     return value
+#                 parts = []
+#                 for part in splitter.split(value):
+#                     part = part.strip()
+#                     try:
+#                         part = int(part)
+#                     except ValueError:
+#                         pass
+#                     parts.append(part)
+#                 return parts
+#             contents = list(contents)
+#             contents.sort(
+#                 lambda a, b: cmp(_sortable_data(a), _sortable_data(b)))
+#             if sort_order!='asc':
+#                 contents.reverse()
+
+#         elif sort_on in ('responsible',
+#                          'Creator', 'checked_out', 'issuer', 'contact'):
+#             info = getUtility(IContactInformation)
+
+#             def _sorter(a, b):
+#                 av = (info.describe(getattr(a, sort_on, '')) or '').lower()
+#                 bv = (info.describe(getattr(b, sort_on, '')) or '').lower()
+#                 return cmp(av, bv)
+
+#             contents = list(contents)
+#             contents.sort(_sorter)
+#             if sort_order!='asc':
+#                 contents.reverse()
+#         return contents
 
 
 # #XXX really ugly. Will be overwritten in datetime_sort
-datetime_compare.index = 'modified'
+# datetime_compare.index = 'modified'
 
 
-def custom_sort(list_, index, dir_):
+class OpengeverTab(object):
+    show_searchform = False
 
-    datetime_compare.index = index
-    reverse = 0
-    if dir_ == 'reverse':
-        reverse = 1
-    return sorted(list_, cmp=datetime_compare, reverse=reverse)
+    template = ViewPageTemplateFile('tabs_templates/generic.pt')
+
+    def get_css_classes(self):
+        if self.show_searchform:
+            return ['searchform-visible']
+        else:
+            return ['searchform-hidden']
+
+    # XXX : will be moved to registry later...
+    extjs_enabled = True
+
+
+class OpengeverCatalogListingTab(grok.CodeView, OpengeverTab,
+                                 CatalogListingView):
+    """Base view for catalog listing tabs.
+    """
+
+    grok.context(ITabbedView)
+
+    columns = ()
+
+    search_index = 'SearchableText'
+    sort_on = 'modified'
+    sort_order = 'reverse'
+
+    __call__ = CatalogListingView.__call__
+    update = CatalogListingView.update
+    render = __call__
 
 
 class OpengeverListingTab(grok.View, BaseListingView):
@@ -86,58 +170,6 @@ class OpengeverListingTab(grok.View, BaseListingView):
             self.ext = True
             BaseListingView.update(self)
 
-    custom_sort_indexes = {
-        'Products.PluginIndexes.DateIndex.DateIndex': custom_sort}
-
-    def _custom_sort_method(self, contents, sort_on, sort_order):
-
-        if BaseListingView._custom_sort_method is not None:
-            contents = BaseListingView._custom_sort_method(
-                self, contents, sort_on, sort_order)
-
-        if sort_on=='reference':
-            splitter = re.compile('[/\., ]')
-
-            def _sortable_data(brain):
-                """ Converts the "reference" into a tuple containing integers,
-                which are converted well. Sorting "10" and "2" as strings
-                results in wrong order..
-                """
-
-                value = getattr(brain, sort_on, '')
-                if not isinstance(value, str) and not isinstance(
-                    value, unicode):
-                    return value
-                parts = []
-                for part in splitter.split(value):
-                    part = part.strip()
-                    try:
-                        part = int(part)
-                    except ValueError:
-                        pass
-                    parts.append(part)
-                return parts
-            contents = list(contents)
-            contents.sort(
-                lambda a, b: cmp(_sortable_data(a), _sortable_data(b)))
-            if sort_order!='asc':
-                contents.reverse()
-
-        elif sort_on in ('responsible',
-                         'Creator', 'checked_out', 'issuer', 'contact'):
-            info = getUtility(IContactInformation)
-
-            def _sorter(a, b):
-                av = (info.describe(getattr(a, sort_on, '')) or '').lower()
-                bv = (info.describe(getattr(b, sort_on, '')) or '').lower()
-                return cmp(av, bv)
-
-            contents = list(contents)
-            contents.sort(_sorter)
-            if sort_order!='asc':
-                contents.reverse()
-        return contents
-
     @property
     def view_name(self):
         return self.__name__.split('tabbedview_view-')[1]
@@ -148,17 +180,10 @@ class OpengeverListingTab(grok.View, BaseListingView):
     sort_order = 'reverse'
 
 
-class OpengeverTab(object):
-    show_searchform = False
+class Documents(OpengeverCatalogListingTab):
+    """List all documents recursively. Working copies are not listed.
+    """
 
-    def get_css_classes(self):
-        if self.show_searchform:
-            return ['searchform-visible']
-        else:
-            return ['searchform-hidden']
-
-
-class Documents(OpengeverListingTab):
     grok.name('tabbedview_view-documents')
 
     types = ['opengever.document.document', 'ftw.mail.mail']
@@ -215,7 +240,7 @@ class Documents(OpengeverListingTab):
                      ]
 
 
-class Dossiers(OpengeverListingTab):
+class Dossiers(OpengeverCatalogListingTab):
 
     grok.name('tabbedview_view-dossiers')
 
@@ -273,7 +298,7 @@ class SubDossiers(Dossiers):
     search_options = {'is_subdossier': True}
 
 
-class Tasks(OpengeverListingTab):
+class Tasks(OpengeverCatalogListingTab):
 
     grok.name('tabbedview_view-tasks')
 
@@ -331,12 +356,6 @@ class Tasks(OpengeverListingTab):
         ]
 
 
-class Events(OpengeverListingTab):
-    grok.name('tabbedview_view-events')
-
-    types = ['dummy.event', ]
-
-
 class Journal(grok.View, OpengeverTab):
 
     grok.context(IJournalizable)
@@ -370,7 +389,7 @@ class Journal(grok.View, OpengeverTab):
             raise NotImplemented
 
 
-class Trash(OpengeverListingTab):
+class Trash(OpengeverCatalogListingTab):
     grok.name('tabbedview_view-trash')
 
     types = ['opengever.dossier.dossier',
