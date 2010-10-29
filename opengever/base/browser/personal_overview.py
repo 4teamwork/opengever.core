@@ -5,8 +5,7 @@ from ftw.tabbedview.browser.tabbed import TabbedView
 from opengever.globalindex.interfaces import ITaskQuery
 from opengever.ogds.base.utils import get_client_id
 from opengever.tabbedview.browser.tabs import Documents, Dossiers, Tasks
-from opengever.tabbedview.browser.tabs import OpengeverListingTab
-from opengever.tabbedview.browser.tasklisting import GlobalTaskListingMixin
+from opengever.tabbedview.browser.tasklisting import GlobalTaskListingTab
 from zope.component import getUtility
 from zope.interface import Interface
 
@@ -108,7 +107,7 @@ class MyDocuments(Documents):
         return self.__name__.split('tabbedview_view-')[1]
 
 
-class MyTasks(GlobalTaskListingMixin, OpengeverListingTab):
+class MyTasks(GlobalTaskListingTab):
     """A listing view,
     wich show all task where the actual user is the responsible.
 
@@ -149,7 +148,7 @@ class IssuedTasks(Tasks):
     search_options = {'issuer': authenticated_member,}
 
 
-class AllTasks(MyTasks, OpengeverListingTab):
+class AllTasks(MyTasks):
     """Lists all tasks assigned to this clients.
     Bases on MyTasks
     """
