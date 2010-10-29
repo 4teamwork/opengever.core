@@ -1,4 +1,6 @@
 from zope.interface import Interface
+import re
+from opengever.ogds.base.interfaces import IContactInformation
 from zope.app.pagetemplate import ViewPageTemplateFile
 from five import grok
 from ftw.journal.config import JOURNAL_ENTRIES_ANNOTATIONS_KEY
@@ -16,88 +18,7 @@ from opengever.task.helper import task_type_helper
 from plone.app.workflow.browser.sharing import SharingView
 from plone.app.workflow.interfaces import ISharingPageRole
 from zope.annotation.interfaces import IAnnotations
-from zope.component import queryUtility, getUtilitiesFor
-
-
-
-
-# XXX : DISABLED we need to have a better solution for that
-
-# def datetime_compare(x, y):
-#     a = getattr(x, datetime_compare.index, None)
-#     b = getattr(y, datetime_compare.index, None)
-#     if a is None and b is None:
-#         return 0
-#     elif a is None:
-#         return -1
-#     elif b is None:
-#         return 1
-
-#     # we are not able to compare datetime and date objects. So
-#     # let's just use strings.
-#     return cmp(str(a), str(b))
-
-
-# def custom_sort(list_, index, dir_):
-
-#     datetime_compare.index = index
-#     reverse = 0
-#     if dir_ == 'reverse':
-#         reverse = 1
-#     return sorted(list_, cmp=datetime_compare, reverse=reverse)
-
-#     def _custom_sort_method(self, contents, sort_on, sort_order):
-
-#         if BaseListingView._custom_sort_method is not None:
-#             contents = BaseListingView._custom_sort_method(
-#                 self, contents, sort_on, sort_order)
-
-#         if sort_on=='reference':
-#             splitter = re.compile('[/\., ]')
-
-#             def _sortable_data(brain):
-#                 """ Converts the "reference" into a tuple containing integers,
-#                 which are converted well. Sorting "10" and "2" as strings
-#                 results in wrong order..
-#                 """
-
-#                 value = getattr(brain, sort_on, '')
-#                 if not isinstance(value, str) and not isinstance(
-#                     value, unicode):
-#                     return value
-#                 parts = []
-#                 for part in splitter.split(value):
-#                     part = part.strip()
-#                     try:
-#                         part = int(part)
-#                     except ValueError:
-#                         pass
-#                     parts.append(part)
-#                 return parts
-#             contents = list(contents)
-#             contents.sort(
-#                 lambda a, b: cmp(_sortable_data(a), _sortable_data(b)))
-#             if sort_order!='asc':
-#                 contents.reverse()
-
-#         elif sort_on in ('responsible',
-#                          'Creator', 'checked_out', 'issuer', 'contact'):
-#             info = getUtility(IContactInformation)
-
-#             def _sorter(a, b):
-#                 av = (info.describe(getattr(a, sort_on, '')) or '').lower()
-#                 bv = (info.describe(getattr(b, sort_on, '')) or '').lower()
-#                 return cmp(av, bv)
-
-#             contents = list(contents)
-#             contents.sort(_sorter)
-#             if sort_order!='asc':
-#                 contents.reverse()
-#         return contents
-
-
-# #XXX really ugly. Will be overwritten in datetime_sort
-# datetime_compare.index = 'modified'
+from zope.component import queryUtility, getUtilitiesFor, getUtility
 
 
 class OpengeverTab(object):
@@ -113,6 +34,57 @@ class OpengeverTab(object):
 
     # XXX : will be moved to registry later...
     extjs_enabled = True
+
+    def custom_sort(self, results, sort_on, sort_reverse):
+        """We need to handle some sorting for special columns, which are
+        not sortable in the catalog...
+        """
+
+        if getattr(self, '_custom_sort_method', None) is not None:
+            results = self._custom_sort_method(results, sort_on, sort_reverse)
+
+        elif sort_on=='reference':
+            splitter = re.compile('[/\., ]')
+
+            def _sortable_data(brain):
+                """ Converts the "reference" into a tuple containing integers,
+                which are converted well. Sorting "10" and "2" as strings
+                results in wrong order..
+                """
+
+                value = getattr(brain, sort_on, '')
+                if not isinstance(value, str) and not isinstance(
+                    value, unicode):
+                    return value
+                parts = []
+                for part in splitter.split(value):
+                    part = part.strip()
+                    try:
+                        part = int(part)
+                    except ValueError:
+                        pass
+                    parts.append(part)
+                return parts
+            results = list(results)
+            results.sort(
+                lambda a, b: cmp(_sortable_data(a), _sortable_data(b)))
+            if sort_reverse:
+                results.reverse()
+
+        elif sort_on in ('responsible',
+                         'Creator', 'checked_out', 'issuer', 'contact'):
+            info = getUtility(IContactInformation)
+
+            def _sorter(a, b):
+                av = (info.describe(getattr(a, sort_on, '')) or '').lower()
+                bv = (info.describe(getattr(b, sort_on, '')) or '').lower()
+                return cmp(av, bv)
+
+            results = list(results)
+            results.sort(_sorter)
+            if sort_reverse:
+                results.reverse()
+        return results
 
 
 class OpengeverCatalogListingTab(grok.CodeView, OpengeverTab,
