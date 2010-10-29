@@ -216,8 +216,14 @@ class DeleteParticipants(grok.CodeView):
     grok.name('delete_participants')
 
     def render(self):
+        oids = self.request.get('oids')
+        if not oids:
+            msg = _(u'warning_no_participants_selected',
+                    default=u'You didn\'t select any participants.')
+            IStatusMessage(self.request).addStatusMessage(msg, type='warning')
+            return self.request.RESPONSE.redirect(self.redirect_url)
         phandler = IParticipationAware(self.context)
-        for a in self.request.get('oids'):
+        for a in oids:
             oid = base64.decodestring(a)
             obj = self.context._p_jar[oid]
             phandler.remove_participation(obj)
