@@ -1,25 +1,19 @@
-#from Products.ARFilePreview.interfaces import IPreviewable
 from Acquisition import aq_inner
 from Products.CMFCore.utils import getToolByName
 from Products.MimetypesRegistry.common import MimeTypeException
 from ZODB.POSException import ConflictError
+from collective.elephantvocabulary import wrap_vocabulary
 from datetime import datetime
 from five import grok
-from ftw.journal.config import JOURNAL_ENTRIES_ANNOTATIONS_KEY
-from ftw.journal.interfaces import IAnnotationsJournalizable
-from ftw.journal.interfaces import IWorkflowHistoryJournalizable
-from ftw.table import helper
-from ftw.table.interfaces import ITableGenerator
 from opengever.base.interfaces import IReferenceNumber, ISequenceNumber
 from opengever.document import _
 from opengever.ogds.base.interfaces import IContactInformation
-from opengever.tabbedview.browser.tabs import OpengeverTab, OpengeverListingTab
-from opengever.tabbedview.helper import readable_date_set_invisibles
-from opengever.tabbedview.helper import readable_ogds_author, linked
-from opengever.task import _ as taskmsg
+from opengever.tabbedview.browser.tabs import OpengeverTab
+from opengever.tabbedview.browser.tabs import Tasks
 from plone.app.dexterity.behaviors.metadata import IBasic
 from plone.app.iterate.interfaces import IWorkingCopy
 from plone.app.layout.viewlets.interfaces import IBelowContentTitle
+from plone.autoform.interfaces import OMITTED_KEY
 from plone.dexterity.content import Item
 from plone.directives import form, dexterity
 from plone.directives.dexterity import DisplayForm
@@ -29,20 +23,17 @@ from plone.namedfile.field import NamedFile
 from plone.namedfile.interfaces import INamedFileField
 from plone.stagingbehavior.relation import StagingRelationValue
 from plone.supermodel.interfaces import FIELDSETS_KEY
-from plone.autoform.interfaces import OMITTED_KEY
 from plone.supermodel.model import Fieldset
 from plone.versioningbehavior.behaviors import IVersionable
 from plone.z3cform.textlines.textlines import TextLinesFieldWidget
 from z3c.form.browser import checkbox
 from zc.relation.interfaces import ICatalog
 from zope import schema
-from zope.annotation.interfaces import IAnnotations
 from zope.app.intid.interfaces import IIntIds
-from zope.component import queryUtility, getUtility
+from zope.component import getUtility
 from zope.interface import invariant, Invalid, Interface
 from zope.lifecycleevent.interfaces import IObjectCreatedEvent
 from zope.lifecycleevent.interfaces import IObjectModifiedEvent
-from collective.elephantvocabulary import wrap_vocabulary
 import logging
 
 
@@ -476,92 +467,11 @@ class Overview(DisplayForm, OpengeverTab):
         return info.render_link(self.context.Creator())
 
 
-# class Preview(DisplayForm, OpengeverTab):
-#     grok.context(IDocumentSchema)
-#     grok.name('tabbedview_view-preview')
-#     grok.template('preview')
-
-
-#XXX TEMPORARY REPLACED WITH A NON SOLR TAB
-#class Tasks(OpengeverSolrListingTab):
-#     grok.context(IDocumentSchema)
-#     grok.name('tabbedview_view-tasks')
-#     grok.template('generic')
-#     columns= (
-#         ('', helper.draggable),
-#         ('', helper.path_checkbox),
-#         ('Title', helper.solr_linked),
-#         ('deadline', helper.readable_date),
-#         'responsible',
-#         ('review_state', 'review_state', helper.translated_string()),
-#         )
-#
-#     def build_query(self):
-#         intids = getUtility( IIntIds )
-#         obj_id = intids.getId( self.context )
-#         return 'portal_type:opengever.task.task AND related_items:%s' % obj_id
-
-
-class Tasks(OpengeverListingTab):
+class RelatedTasks(Tasks):
     grok.context(IDocumentSchema)
     grok.name('tabbedview_view-tasks')
-    grok.template('generic')
-    columns= (
-        ('', helper.draggable),
-        ('', helper.path_checkbox),
-        ('review_state', 'review_state', helper.translated_string()),
-        ('Title', 'sortable_title', linked),
-        {'column' : 'task_type',
-         'column_title' : taskmsg(u'label_task_type', 'Task Type')},
-        ('deadline', helper.readable_date),
-        ('date_of_completion', readable_date_set_invisibles), # erledigt am
-        {'column' : 'responsible',
-         'column_title' : taskmsg(u'label_responsible_task', 'Responsible'),
-         'transform' : readable_ogds_author},
-        ('issuer', readable_ogds_author), # zugewiesen von
-        {'column' : 'created',
-         'column_title' : taskmsg(u'label_issued_date', 'issued at'),
-         'transform': helper.readable_date },
-        ('client_id', 'client_id'),
-        )
-
-    types = ['opengever.task.task', ]
 
     search_options = {'related_items': related_document}
-
-    def search(self, kwargs):
-        catalog = getToolByName(self.context,'portal_catalog')
-        self.contents = catalog(**kwargs)
-        self.len_results = len(self.contents)
-
-
-class Journal(grok.View, OpengeverTab):
-    grok.context(IDocumentSchema)
-    grok.name('tabbedview_view-journal')
-    grok.template('journal')
-    def table(self):
-        generator = queryUtility(ITableGenerator, 'ftw.tablegenerator')
-        columns = (
-            {'column':'title',
-            'column_title':_('title'),
-            'transform': lambda x,y: x['action']['title'],},
-            {'column':'actor',
-            'column_title':_('actor'),},
-            {'column':'time',
-             'column_title':_('time'),
-             'transform':helper.readable_date_time},
-            {'column':'comment',
-             'column_title':_('comment')})
-        return generator.generate(reversed(self.data()), columns, css_mapping={'table':'journal-listing'})
-
-    def data(self):
-        context = self.context
-
-        if IAnnotationsJournalizable.providedBy(self.context):
-            annotations = IAnnotations(context)
-            return annotations.get(JOURNAL_ENTRIES_ANNOTATIONS_KEY, [])
-        elif IWorkflowHistoryJournalizable.providedBy(self.context):
-            raise NotImplemented
 
 
 class DownloadFileVersion(grok.CodeView):
