@@ -110,7 +110,7 @@ class SendDocumentForm(form.Form):
 
     fields = field.Fields(ISendDocumentSchema)
     ignoreContext = True
-    label = _('label_send_document_mail', default="send Documents with email")
+    label = _('heading_send_as_email', default="Send as email")
 
     fields['extern_receiver'].widgetFactory[INPUT_MODE] \
         = TextLinesFieldWidget
