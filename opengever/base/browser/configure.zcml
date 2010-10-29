@@ -13,7 +13,7 @@
         name="list_groupmembers"
         for="*"
         class=".list_groupmembers.ListGroupMembers"
-        permission="plone.DelegateRoles"
+        permission="zope2.View"
         />
 
     <browser:page
