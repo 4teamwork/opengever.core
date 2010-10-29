@@ -39,6 +39,17 @@ def readable_ogds_author(item, author):
     else:
         return author
 
+@ram.cache(author_cache_key)
+def linked_ogds_author(item, author):
+    if IPropertiedUser.providedBy(author) or IMemberData.providedBy(author):
+        author = author.getId()
+    info = getUtility(IContactInformation)
+    author = str(author)
+    if info.is_user(author) or info.is_contact(author):
+        return info.render_link(author)
+    else:
+        return author
+
 def linked(item, value):
     url_method = lambda: '#'
     #item = hasattr(item, 'aq_explicit') and item.aq_explicit or item
