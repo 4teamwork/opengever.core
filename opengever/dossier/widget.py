@@ -24,8 +24,8 @@ class ReferenceNumberWidget(widget.HTMLTextInputWidget, Widget):
         if IAddForm.providedBy(self.form.parentForm):
             self.value = _(
                 u'label_no_reference_number',
-                default="Reference Number would be generated \
-                by creating the content")
+                default="Reference Number will be generated \
+                after content creation")
         else:
             self.value = IReferenceNumber(self.context).get_number()
 
