@@ -14,6 +14,6 @@
     <span i18n:translate="label_public_trial" i18n:domain="opengever.base" class="noborder">
       Public Trial
     </span>
-    <span tal:content="context/public_trial|nothing" i18n:translate="" i18n:domain="opengever.base"/>
+    <span class="noborder" tal:content="context/public_trial|nothing" i18n:translate="" i18n:domain="opengever.base"/>
   </span>
 </div>
