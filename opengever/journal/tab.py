@@ -4,40 +4,14 @@ from copy import deepcopy
 from ftw.table.basesource import BaseTableSource
 from ftw.table.interfaces import ITableSourceConfig, ITableSource
 from opengever.dossier import _
-from opengever.dossier.behaviors.dossier import IDossier
-from opengever.dossier.behaviors.participation import IParticipationAware
-from opengever.dossier.behaviors.participation import IParticipationAwareMarker
 from opengever.tabbedview.browser.tabs import OpengeverTab
-from opengever.tabbedview.helper import readable_ogds_author
-from persistent.list import PersistentList
-from plone.memoize import ram
-from zope.app.component.hooks import getSite
-from zope.app.pagetemplate import ViewPageTemplateFile
-from zope.i18nmessageid.message import Message
 from zope.interface import implements, Interface
-from zope.schema.vocabulary import getVocabularyRegistry
-import base64
-from zope.interface import Interface
-import re
-from opengever.ogds.base.interfaces import IContactInformation
-from zope.app.pagetemplate import ViewPageTemplateFile
-from five import grok
 from ftw.journal.config import JOURNAL_ENTRIES_ANNOTATIONS_KEY
 from ftw.journal.interfaces import IAnnotationsJournalizable
 from ftw.journal.interfaces import IJournalizable
 from ftw.journal.interfaces import IWorkflowHistoryJournalizable
-from ftw.tabbedview.browser.listing import BaseListingView, CatalogListingView
-from ftw.tabbedview.interfaces import ITabbedView
 from ftw.table import helper
-from ftw.table.interfaces import ITableGenerator
-from opengever.tabbedview import _
-from opengever.tabbedview.helper import readable_date_set_invisibles
-from opengever.tabbedview.helper import readable_ogds_author, linked
-from opengever.task.helper import task_type_helper
-from plone.app.workflow.browser.sharing import SharingView
-from plone.app.workflow.interfaces import ISharingPageRole
 from zope.annotation.interfaces import IAnnotations
-from zope.component import queryUtility, getUtilitiesFor, getUtility
 
 
 def title_helper(item, value):
