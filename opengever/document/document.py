@@ -206,10 +206,16 @@ class IDocumentSchema(form.Schema):
             paper_form xor file
         """
         if not (data.paper_form ^ bool(data.file)):
-            raise Invalid(
-                _(u'error_paperform_xor_file',
-                default=u"You select a file and said is only in paper_form,\
-                please correct it."))
+            if data.paper_form:
+                raise Invalid(
+                    _(u'error_paperform_and_file',
+                    default=u"You select a file and said is only in paper_form,\
+                    please correct it."))
+            else:
+                raise Invalid(
+                    _(u'error_no_paperform_and_no_file',
+                    default=u"You don't select a file and also the 'only in paper_form' isn't selected,\
+                    please correct it."))
 
     # TODO: doesn't work with Plone 4
     #form.order_after(**{'IRelatedItems.relatedItems': 'file'})
@@ -301,10 +307,10 @@ def SearchableText( obj ):
     context = aq_inner( obj )
     transforms = getToolByName(obj, 'portal_transforms')
     fields = [
-        schema.getFields( IBasic ).get( 'title' ).encode('utf-8'),
-        schema.getFields( IBasic ).get( 'description' ).encode('utf-8'),
-        schema.getFields( IDocumentSchema).get('keywords').encode('utf-8'),
-        schema.getFields( IDocumentSchema ).get('file'),
+        schema.getFields(IBasic).get('title'),
+        schema.getFields(IBasic).get('description'),
+        schema.getFields(IDocumentSchema).get('keywords'),
+        schema.getFields(IDocumentSchema).get('file'),
         ]
     searchable = []
 
@@ -338,13 +344,13 @@ def SearchableText( obj ):
                 LOG.error("Error while trying to convert file contents to 'text/plain' "
                           "in SearchableIndex(document.py): %s" % (e,))
             data = str(datastream)
-        if isinstance(data, unicode):
+        elif isinstance(data, tuple) or isinstance(data, list):
+            data = " ".join([isinstance(a, unicode) and a.encode('utf-8') or a for a in data])
+        elif isinstance(data, unicode):
             data = data.encode('utf8')
-        if isinstance(data, tuple) or isinstance(data, list):
-            data = " ".join([str(a) for a in data])
         if data:
             searchable.append(data)
-    return ' '.join(searchable).encode('utf-8')
+    return ' '.join(searchable)
 
 grok.global_adapter(SearchableText, name='SearchableText')
 

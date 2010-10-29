@@ -3,7 +3,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2010-10-27 13:44+0000\n"
+"POT-Creation-Date: 2010-10-29 07:42+0000\n"
 "PO-Revision-Date: 2009-01-01 10:00+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: Jonas Baumann <j.baumann@4teamwork.ch>\n"
@@ -77,7 +77,7 @@ msgstr "Als E-Mail versenden"
 msgid "You have not selected any documents"
 msgstr "Sie haben keine Dokumente angewählt."
 
-#: ./opengever/document/document.py:539
+#: ./opengever/document/document.py:545
 msgid "actor"
 msgstr "Akteur"
 
@@ -110,14 +110,19 @@ msgstr "Senden"
 msgid "cancel_back"
 msgstr "Abbrechen"
 
-#: ./opengever/document/document.py:544
+#: ./opengever/document/document.py:550
 msgid "comment"
 msgstr "Kommentar"
 
-#. Default: "You select a file and said is only in paper_form,                please correct it."
+#. Default: "You don't select a file and also the 'only in paper_form' isn't selected,                    please correct it."
+#: ./opengever/document/document.py:216
+msgid "error_no_paperform_and_no_file"
+msgstr "Sie haben weder eine Datei, noch die Eigenschaft 'nur in Papierform verfügbar' ausgewählt, bitte korrigieren Sie die Einstellung."
+
+#. Default: "You select a file and said is only in paper_form,                    please correct it."
 #: ./opengever/document/document.py:211
-msgid "error_paperform_xor_file"
-msgstr "Sie haben sowohl eine File wie auch die Option 'nur in Papierform verfügbar' ausgewählt, bitte korrigieren sie diese Einstellung"
+msgid "error_paperform_and_file"
+msgstr "Sie haben sowohl eine Datei wie auch die Eigenschaft 'nur in Papierform verfügbar' ausgewählt, bitte korrigieren Sie die Einstellung."
 
 #. Default: "Either the title or the file is required."
 #: ./opengever/document/document.py:199
@@ -286,14 +291,12 @@ msgstr "Ersteller"
 #. Default: "Date of delivery"
 #: ./opengever/document/document.py:191
 #: ./opengever/document/document_templates/overview.pt:59
-
 msgid "label_delivery_date"
 msgstr "Ausgangsdatum"
 
 #. Default: "Description"
 #: ./opengever/document/document.py:100
 #: ./opengever/document/document_templates/overview.pt:30
-
 msgid "label_description"
 msgstr "Beschreibung"
 
@@ -311,14 +314,12 @@ msgstr "Dokumentdatum"
 #. Default: "Document Type"
 #: ./opengever/document/document.py:127
 #: ./opengever/document/document_templates/overview.pt:18
-
 msgid "label_document_type"
 msgstr "Dokumenttyp"
 
 #. Default: "File"
 #: ./opengever/document/document.py:143
 #: ./opengever/document/document_templates/overview.pt:38
-
 msgid "label_file"
 msgstr "Datei"
 
@@ -430,7 +431,7 @@ msgstr "Ja"
 msgid "referenced_documents"
 msgstr "Referenzierte Dokumente"
 
-#: ./opengever/document/document.py:541
+#: ./opengever/document/document.py:547
 msgid "time"
 msgstr "Datum und Zeit"
 
@@ -439,7 +440,7 @@ msgstr "Datum und Zeit"
 msgid "time_expired"
 msgstr "abgelaufen"
 
-#: ./opengever/document/document.py:536
+#: ./opengever/document/document.py:542
 msgid "title"
 msgstr "Titel"
 

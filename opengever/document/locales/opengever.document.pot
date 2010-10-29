@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2010-10-27 13:44+0000\n"
+"POT-Creation-Date: 2010-10-29 07:42+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -75,7 +75,7 @@ msgstr ""
 msgid "You have not selected any documents"
 msgstr ""
 
-#: ./opengever/document/document.py:539
+#: ./opengever/document/document.py:545
 msgid "actor"
 msgstr ""
 
@@ -108,13 +108,18 @@ msgstr ""
 msgid "cancel_back"
 msgstr ""
 
-#: ./opengever/document/document.py:544
+#: ./opengever/document/document.py:550
 msgid "comment"
 msgstr ""
 
-#. Default: "You select a file and said is only in paper_form,                please correct it."
+#. Default: "You don't select a file and also the 'only in paper_form' isn't selected,                    please correct it."
+#: ./opengever/document/document.py:216
+msgid "error_no_paperform_and_no_file"
+msgstr ""
+
+#. Default: "You select a file and said is only in paper_form,                    please correct it."
 #: ./opengever/document/document.py:211
-msgid "error_paperform_xor_file"
+msgid "error_paperform_and_file"
 msgstr ""
 
 #. Default: "Either the title or the file is required."
@@ -417,7 +422,7 @@ msgstr ""
 msgid "referenced_documents"
 msgstr ""
 
-#: ./opengever/document/document.py:541
+#: ./opengever/document/document.py:547
 msgid "time"
 msgstr ""
 
@@ -426,7 +431,7 @@ msgstr ""
 msgid "time_expired"
 msgstr ""
 
-#: ./opengever/document/document.py:536
+#: ./opengever/document/document.py:542
 msgid "title"
 msgstr ""
 
