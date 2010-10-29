@@ -20,4 +20,6 @@ jq(function() {
             })).submit();
         });
     });
+
+    initializeMenus();
 });
