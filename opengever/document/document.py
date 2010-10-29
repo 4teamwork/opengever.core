@@ -206,10 +206,16 @@ class IDocumentSchema(form.Schema):
             paper_form xor file
         """
         if not (data.paper_form ^ bool(data.file)):
-            raise Invalid(
-                _(u'error_paperform_xor_file',
-                default=u"You select a file and said is only in paper_form,\
-                please correct it."))
+            if data.paper_form:
+                raise Invalid(
+                    _(u'error_paperform_and_file',
+                    default=u"You select a file and said is only in paper_form,\
+                    please correct it."))
+            else:
+                raise Invalid(
+                    _(u'error_no_paperform_and_no_file',
+                    default=u"You don't select a file and also the 'only in paper_form' isn't selected,\
+                    please correct it."))
 
     # TODO: doesn't work with Plone 4
     #form.order_after(**{'IRelatedItems.relatedItems': 'file'})
