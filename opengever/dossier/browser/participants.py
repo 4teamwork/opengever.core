@@ -8,6 +8,7 @@ from opengever.dossier.behaviors.participation import IParticipationAware
 from opengever.dossier.behaviors.participation import IParticipationAwareMarker
 from opengever.tabbedview.browser.tabs import OpengeverTab
 from opengever.tabbedview.helper import readable_ogds_author
+from opengever.tabbedview.helper import linked_ogds_author
 from persistent.list import PersistentList
 from plone.memoize import ram
 from zope.app.component.hooks import getSite
@@ -103,7 +104,7 @@ class Participants(grok.CodeView, OpengeverTab, ListingView):
 
         {'column': 'contact',
          'column_title': _(u'column_contact', u'Contact'),
-         'transform': readable_ogds_author},
+         'transform': linked_ogds_author},
 
         {'column': 'roles',
          'column_title': _(u'column_rolelist', u'role_list'),
