@@ -19,3 +19,42 @@ msgstr ""
 
 msgid "Document with docucomposer"
 msgstr ""
+
+msgid "Dossier state changed to dossier-state-active"
+msgstr ""
+
+msgid "Dossier state changed to dossier-state-archived"
+msgstr ""
+
+msgid "Dossier state changed to dossier-state-inactive"
+msgstr ""
+
+msgid "Dossier state changed to dossier-state-resolved"
+msgstr ""
+
+msgid "dossier-state-active"
+msgstr ""
+
+msgid "dossier-state-inactive"
+msgstr ""
+
+msgid "dossier-state-resolved"
+msgstr ""
+
+msgid "dossier-state-archived"
+msgstr ""
+
+msgid "dossier-transition-activate"
+msgstr ""
+
+msgid "dossier-transition-deactivate"
+msgstr ""
+
+msgid "dossier-transition-reactivate"
+msgstr ""
+
+msgid "dossier-transition-archive"
+msgstr ""
+
+msgid "dossier-transition-resolve"
+msgstr ""
