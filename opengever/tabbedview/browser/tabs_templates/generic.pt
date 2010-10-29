@@ -9,8 +9,8 @@
 
     <tal:cond tal:condition="view/contents">
         <div class="tabbedview_select">
-          Auswählen: <a href="javascript:tabbedview.select_all()">Alle</a>, <a href="javascript:tabbedview.select_none()">Keine</a>
-          <span class="select_folder" style="display:none"> Alle Sichtbaren ausgewählt. <a href="#">Alle im Ordner auswählen</a></span>
+          <span i18n:translate="">Choose:</span> <a href="javascript:tabbedview.select_all()" i18n:translate="">all</a>, <a href="javascript:tabbedview.select_none()" i18n:translate="">None</a>
+          <span class="select_folder" style="display:none" i18n:translate=""> All visible entries chosen <a href="#" i18n:translate="">Show all in this Folder</a></span>
           <!--<div tal:replace="structure view/batching" />-->
         </div>
 
