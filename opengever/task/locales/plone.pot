@@ -41,3 +41,26 @@ msgstr ""
 msgid "task-state-resolved"
 msgstr ""
 
+msgid "task-transition-new-open"
+msgstr ""
+
+msgid "task-transition-open-cancelled"
+msgstr ""
+
+msgid "task-transition-open-in-progress"
+msgstr ""
+
+msgid "task-transition-open-rejected"
+msgstr ""
+
+msgid "task-transition-open-resolved"
+msgstr ""
+
+msgid "task-transition-rejected-open"
+msgstr ""
+
+msgid "task-transition-resolved-open"
+msgstr ""
+
+msgid "task-transition-in-progress-resolved"
+msgstr ""

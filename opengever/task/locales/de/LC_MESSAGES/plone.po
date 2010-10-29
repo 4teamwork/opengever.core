@@ -16,24 +16,48 @@ msgid "Create successor task"
 msgstr "Folgeaufgabe erstellen"
 
 msgid "task-state-cancelled"
-msgstr ""
+msgstr "Abgebrochen"
 
 msgid "task-state-in-progress"
-msgstr ""
+msgstr "In Arbeit"
 
 msgid "task-state-new"
-msgstr ""
+msgstr "Neu"
 
 msgid "task-state-new-successor"
-msgstr ""
+msgstr "Folgeaufgabe wird Erstellt"
 
 msgid "task-state-open"
-msgstr ""
+msgstr "Offen"
 
 msgid "task-state-rejected"
-msgstr ""
+msgstr "Abgelehnt"
 
 msgid "task-state-resolved"
-msgstr ""
+msgstr "Abgeschlossen"
+
+msgid "task-transition-in-progress-resolved"
+msgstr "Abschliessen"
+
+msgid "task-transition-new-open"
+msgstr "Offen"
+
+msgid "task-transition-open-cancelled"
+msgstr "Abbrechen"
+
+msgid "task-transition-open-in-progress"
+msgstr "Mit der Arbeit beginnen"
+
+msgid "task-transition-open-rejected"
+msgstr "Ablehnen"
+
+msgid "task-transition-open-resolved"
+msgstr "Erledigen"
+
+msgid "task-transition-rejected-open"
+msgstr "wieder eröffnen"
+
+msgid "task-transition-resolved-open"
+msgstr "wieder eröffnen"
 
 
