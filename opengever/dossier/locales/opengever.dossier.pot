@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2010-10-29 12:41+0000\n"
+"POT-Creation-Date: 2010-10-29 14:46+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -35,10 +35,6 @@ msgstr ""
 
 #: ./opengever/dossier/profiles/default/actions.xml
 msgid "Delete"
-msgstr ""
-
-#: ./opengever/dossier/profiles/default/types/opengever.dossier.dossieroverview.xml
-msgid "Dossieroverview"
 msgstr ""
 
 #: ./opengever/dossier/browser/send_document.py:34
@@ -135,12 +131,12 @@ msgid "cancel_back"
 msgstr ""
 
 #. Default: "Contact"
-#: ./opengever/dossier/browser/participants.py:89
+#: ./opengever/dossier/browser/participants.py:109
 msgid "column_contact"
 msgstr ""
 
 #. Default: "role_list"
-#: ./opengever/dossier/browser/participants.py:93
+#: ./opengever/dossier/browser/participants.py:113
 msgid "column_rolelist"
 msgstr ""
 
@@ -293,7 +289,7 @@ msgid "info_participation_create"
 msgstr ""
 
 #. Default: "Removed participations"
-#: ./opengever/dossier/behaviors/participation.py:225
+#: ./opengever/dossier/behaviors/participation.py:231
 msgid "info_removed_participations"
 msgstr ""
 
@@ -428,13 +424,8 @@ msgstr ""
 
 #. Default: "Responsible"
 #: ./opengever/dossier/behaviors/dossier.py:92
-#: ./opengever/dossier/browser/participants.py:107
+#: ./opengever/dossier/browser/participants.py:153
 msgid "label_responsible"
-msgstr ""
-
-#. Default: "Responsible"
-#: ./opengever/dossier/dossieroverview.py:36
-msgid "label_responsible_task"
 msgstr ""
 
 #. Default: "Roles"
@@ -582,5 +573,10 @@ msgstr ""
 #. Default: "You are not assigned to another client where you could copy the documents to."
 #: ./opengever/dossier/transport.py:93
 msgid "warning_copy_to_remote_no_client"
+msgstr ""
+
+#. Default: "You didn't select any participants."
+#: ./opengever/dossier/behaviors/participation.py:221
+msgid "warning_no_participants_selected"
 msgstr ""
 

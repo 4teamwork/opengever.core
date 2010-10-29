@@ -2,6 +2,5 @@
     <object name="opengever.dossier.projectdossier" meta_type="Dexterity FTI" />
     <object name="opengever.dossier.businesscasedossier" meta_type="Dexterity FTI" />
     <object name="opengever.dossier.templatedossier" meta_type="Dexterity FTI" />
-    <object name="opengever.dossier.dossieroverview" meta_type="Dexterity FTI" />
     <!--object name="opengever.base.subjectdossier" meta_type="Dexterity FTI" /-->
 </object>
