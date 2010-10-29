@@ -301,10 +301,10 @@ def SearchableText( obj ):
     context = aq_inner( obj )
     transforms = getToolByName(obj, 'portal_transforms')
     fields = [
-        schema.getFields( IBasic ).get( 'title' ).encode('utf-8'),
-        schema.getFields( IBasic ).get( 'description' ).encode('utf-8'),
-        schema.getFields( IDocumentSchema).get('keywords').encode('utf-8'),
-        schema.getFields( IDocumentSchema ).get('file'),
+        schema.getFields(IBasic).get('title'),
+        schema.getFields(IBasic).get('description'),
+        schema.getFields(IDocumentSchema).get('keywords'),
+        schema.getFields(IDocumentSchema).get('file'),
         ]
     searchable = []
 
@@ -338,13 +338,13 @@ def SearchableText( obj ):
                 LOG.error("Error while trying to convert file contents to 'text/plain' "
                           "in SearchableIndex(document.py): %s" % (e,))
             data = str(datastream)
-        if isinstance(data, unicode):
+        elif isinstance(data, tuple) or isinstance(data, list):
+            data = " ".join([isinstance(a, unicode) and a.encode('utf-8') or a for a in data])
+        elif isinstance(data, unicode):
             data = data.encode('utf8')
-        if isinstance(data, tuple) or isinstance(data, list):
-            data = " ".join([str(a) for a in data])
         if data:
             searchable.append(data)
-    return ' '.join(searchable).encode('utf-8')
+    return ' '.join(searchable)
 
 grok.global_adapter(SearchableText, name='SearchableText')
 
