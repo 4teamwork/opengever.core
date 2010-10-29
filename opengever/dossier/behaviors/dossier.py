@@ -91,7 +91,7 @@ class IDossier(form.Schema):
     responsible = schema.Choice(
         title=_(u"label_responsible", default="Responsible"),
         description =_(
-            u"help_responsible", default="select an responsible Manger"),
+            u"help_responsible", default="Select the responsible manager"),
         #source = util.getManagersVocab,
         vocabulary=u'opengever.ogds.base.AssignedUsersVocabulary',
         required = True,
