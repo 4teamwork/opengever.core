@@ -1,6 +1,7 @@
 from five import grok
 from opengever.tabbedview.browser.tabs import OpengeverCatalogListingTab
 from opengever.tabbedview.browser.tabs import OpengeverTab
+from opengever.tabbedview.helper import email_helper
 from ftw.table import helper
 from ftw.table.catalog_source import default_custom_sort
 from opengever.contact import _
@@ -40,12 +41,13 @@ class Contacts(OpengeverCatalogListingTab):
          'column_title':_('name', default='Name'),
          'sort_index' : 'sortable_title',
          'transform':linked},
-
-        {'column':'email',
-         'column_title':_('label_email', default="email")},
-
-        {'column':'phone_office',
-         'column_title':_('label_phone_office', default='Phone office')},
+         {'column':'email',
+          'column_title':_('label_email', default="email"),
+          'transform': email_helper,
+          },
+          {'column':'phone_office',
+            'column_title':_('label_phone_office', default='Phone office')
+          },
         )
 
     sort_on = 'sortable_title'
