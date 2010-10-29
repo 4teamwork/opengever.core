@@ -81,3 +81,9 @@ def readable_date_set_invisibles(item, date):
     if date == None:
         return None
     return date.strftime(strftimestring)
+
+def email_helper(item, value):
+    if value:
+        return '<a href="mailto:%s">%s</a>' % (value, value)
+    else:
+        return ''
