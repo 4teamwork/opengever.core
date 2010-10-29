@@ -1,0 +1,27 @@
+<div>
+  <div id="above_visibles">
+    <div class="hidden_items">
+      <tal:repeat tal:repeat="item options/beneath">
+        <tal:selectable tal:condition="not:item/locked|nothing"
+                        tal:define="value python:view.create_id(item)">
+          <input type="hidden" name="oids:list"
+                 tal:attributes="value value"
+                 tal:condition="value" />
+        </tal:selectable>
+      </tal:repeat>
+    </div>
+  </div>
+
+  <div id="beneath_visibles">
+    <div class="hidden_items">
+      <tal:repeat tal:repeat="item options/beneath">
+        <tal:selectable tal:condition="not:item/locked|nothing"
+                        tal:define="value python:view.create_id(item)">
+          <input type="hidden" name="oids:list"
+                 tal:attributes="value value"
+                 tal:condition="value" />
+        </tal:selectable>
+      </tal:repeat>
+    </div>
+  </div>
+</div>
