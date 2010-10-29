@@ -383,7 +383,7 @@ msgstr "Aktenzeichen"
 #. Default: "Related Documents"
 #: ./opengever/document/behaviors.py:18
 msgid "label_related_documents"
-msgstr ""
+msgstr "Verwandte Dokumente"
 
 #. Default: "Sequence Number:"
 #: ./opengever/document/viewlets/byline.pt:47
