@@ -59,7 +59,10 @@ class DossierListingPDF(BasePDFListing):
                               'object_provides': rf_marker})
 
             if len(brains):
-                return brains[0].Title
+                title = brains[0].Title
+                if isinstance(title, unicode):
+                    title = title.encode('utf-8')
+                return title
             else:
                 path = path[:-1]
 
