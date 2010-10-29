@@ -28,7 +28,7 @@ from zope.component import queryMultiAdapter, getMultiAdapter
 from zope.interface import implements, Interface
 from zope.publisher.interfaces.browser import IBrowserRequest, IBrowserPage
 from zope.traversing.interfaces import ITraversable
-from plone.dexterity.browser.add import DefaultAddForm
+
 
 class ITask(form.Schema):
 
@@ -304,7 +304,7 @@ class View(dexterity.DisplayForm):
 
 #class AddForm(dexterity.AddForm):
 
-class AddForm(DefaultAddForm):
+class AddForm(dexterity.AddForm):
     grok.name('opengever.task.task')
 
     def update(self):
@@ -467,6 +467,7 @@ def SearchableText(obj):
     return ' '.join(searchable).encode('utf-8')
 
 grok.global_adapter(SearchableText, name='SearchableText')
+
 
 @grok.subscribe(ITask, IActionSucceededEvent)
 def set_dates(task, event):
