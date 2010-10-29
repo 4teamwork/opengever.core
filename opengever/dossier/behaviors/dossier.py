@@ -302,6 +302,8 @@ def SearchableText(obj):
             data = str(datastream)
         if isinstance(data, tuple) or isinstance(data, list):
             data = " ".join([isinstance(a, unicode) and a.encode('utf-8') or a for a in data])
+        elif isinstance(data, unicode):
+            data = data.encode('utf-8')
         if data:
             searchable.append(data)
     # append some other attributes to the searchableText index
@@ -316,13 +318,14 @@ def SearchableText(obj):
     #responsible
     info = getUtility(IContactInformation)
     dossier = IDossier(obj)
-    searchable.append(info.describe(dossier.responsible))
+    searchable.append(info.describe(dossier.responsible).encode('utf-8'))
 
     #filling_no
     dossier = IDossierMarker(obj)
     if getattr(dossier, 'filing_no', None):
-        searchable.append(str(getattr(dossier, 'filing_no', None)))
-    return ' '.join(searchable).encode('utf-8')
+        searchable.append(str(getattr(dossier, 'filing_no', None)).encode('utf-8'))
+
+    return ' '.join(searchable)
 
 grok.global_adapter(SearchableText, name='SearchableText')
 
