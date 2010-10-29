@@ -473,6 +473,13 @@ class RelatedTasks(Tasks):
 
     search_options = {'related_items': related_document}
 
+    def update_config(self):
+        Tasks.update_config(self)
+
+        # do not search on this context, search on site
+        self.filter_path = None
+
+
 
 class DownloadFileVersion(grok.CodeView):
     grok.context(IDocumentSchema)
