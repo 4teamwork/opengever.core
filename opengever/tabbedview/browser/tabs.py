@@ -1,24 +1,18 @@
-from zope.interface import Interface
-import re
-from opengever.ogds.base.interfaces import IContactInformation
-from zope.app.pagetemplate import ViewPageTemplateFile
 from five import grok
-from ftw.journal.config import JOURNAL_ENTRIES_ANNOTATIONS_KEY
-from ftw.journal.interfaces import IAnnotationsJournalizable
-from ftw.journal.interfaces import IJournalizable
-from ftw.journal.interfaces import IWorkflowHistoryJournalizable
-from ftw.tabbedview.browser.listing import BaseListingView, CatalogListingView
+from ftw.tabbedview.browser.listing import CatalogListingView
 from ftw.tabbedview.interfaces import ITabbedView
 from ftw.table import helper
-from ftw.table.interfaces import ITableGenerator
+from opengever.ogds.base.interfaces import IContactInformation
 from opengever.tabbedview import _
 from opengever.tabbedview.helper import readable_date_set_invisibles
 from opengever.tabbedview.helper import readable_ogds_author, linked
 from opengever.task.helper import task_type_helper
 from plone.app.workflow.browser.sharing import SharingView
 from plone.app.workflow.interfaces import ISharingPageRole
-from zope.annotation.interfaces import IAnnotations
-from zope.component import queryUtility, getUtilitiesFor, getUtility
+from zope.app.pagetemplate import ViewPageTemplateFile
+from zope.component import getUtilitiesFor, getUtility
+from zope.interface import Interface
+import re
 
 
 class OpengeverTab(object):
@@ -104,52 +98,6 @@ class OpengeverCatalogListingTab(grok.CodeView, OpengeverTab,
     update = CatalogListingView.update
     render = __call__
 
-
-class OpengeverListingTab(grok.View, BaseListingView):
-    grok.context(ITabbedView)
-    grok.template('generic')
-
-    #update = BaseListingView.update
-    #
-    def __call__(self, *args, **kwargs):
-        self.update()
-        if self.ext:
-            return self.render_listing()
-        else:
-            return super(OpengeverListingTab, self).__call__(*args, **kwargs)
-
-    columns = (
-        ('', helper.draggable),
-        ('', helper.path_checkbox),
-
-        {'column': 'Title',
-         'column_title': _(u'label_title', default=u'Title'),
-         'sort_index' : 'sortable_title',
-         'transform': linked},
-
-        {'column': 'modified',
-         'column_title': _(u'label_modified', default=u'Modified'),
-         'transform': helper.readable_date},
-
-        {'column': 'Creator',
-         'column_title': _(u'label_creator', default=u'Creator'),
-         'transform': readable_ogds_author},
-        )
-
-    def update(self):
-        self.contents = [{},]
-        if 'ext' in self.request:
-            self.ext = True
-            BaseListingView.update(self)
-
-    @property
-    def view_name(self):
-        return self.__name__.split('tabbedview_view-')[1]
-
-    #only 'SearchableText' is implemented for now
-    search_index = 'SearchableText'
-    sort_on = 'modified'
-    sort_order = 'reverse'
 
 
 class Documents(OpengeverCatalogListingTab):
