@@ -74,7 +74,7 @@ class ParticipationHandler(object):
             # need to import here because of import loop
             from opengever.journal.handlers import journal_entry_factory
             journal_entry_factory(self.context, PARTICIPANT_ADDED,
-                                  title, comment=value.comment)
+                                  title)
 
     def has_participation(self, value):
         return value in self.get_participations()
@@ -123,12 +123,6 @@ class IParticipation(form.Schema):
         required = False,
         )
 
-    comment = schema.Text(
-        title = _(u'label_comment', default=u'Comment'),
-        description = _(u'help_comment', default=u''),
-        required = False,
-        )
-
 
 
 
@@ -142,10 +136,9 @@ class Participation(Persistent):
     """
     implements(IParticipation)
 
-    def __init__(self, contact, roles=[], comment=''):
+    def __init__(self, contact, roles=[]):
         self.contact = contact
         self.roles = roles
-        self.comment = comment
 
     @setproperty
     def roles(self, value):

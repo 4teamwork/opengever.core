@@ -106,11 +106,11 @@ class Participants(grok.CodeView, OpengeverTab, ListingView):
         ('', icon_helper, ),
 
         {'column': 'contact',
-         'column_title': _(u'column_contact', u'Contact'),
+         'column_title': _(u'column_contact', default=u'Contact'),
          'transform': linked_ogds_author},
 
         {'column': 'roles',
-         'column_title': _(u'column_rolelist', u'role_list'),
+         'column_title': _(u'column_rolelist', default=u'role_list'),
          'transform': role_list_helper},
 
         )
