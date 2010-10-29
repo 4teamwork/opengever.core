@@ -216,7 +216,7 @@ class IAdvancedSearch(directives_form.Schema):
     )
 
     trashed = schema.Bool(
-        title=_('label_trashed', default='Also search in the bin'),
+        title=_('label_trashed', default='Also search in the recycle bin'),
         description=_('help_trashed', default=''),
         required=False,
     )
