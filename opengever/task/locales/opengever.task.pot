@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2010-10-11 10:47+0000\n"
+"POT-Creation-Date: 2010-10-29 09:33+0000\n"
 "PO-Revision-Date: 2009-02-25 14:39+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -27,7 +27,7 @@ msgstr ""
 msgid "Add local roles to all related items for the 'responsible' user."
 msgstr ""
 
-#: ./opengever/task/response.py:445
+#: ./opengever/task/response.py:402
 msgid "Changes saved to response id ${response_id}."
 msgstr ""
 
@@ -47,19 +47,19 @@ msgstr ""
 msgid "Edit Local Roles Action"
 msgstr ""
 
-#: ./opengever/task/response.py:330
+#: ./opengever/task/response.py:287
 msgid "Issue state"
 msgstr ""
 
-#: ./opengever/task/response.py:473
+#: ./opengever/task/response.py:430
 msgid "No response selected for removal."
 msgstr ""
 
-#: ./opengever/task/response.py:436
+#: ./opengever/task/response.py:393
 msgid "No response selected for saving."
 msgstr ""
 
-#: ./opengever/task/response.py:198
+#: ./opengever/task/response.py:175
 msgid "No response selected."
 msgstr ""
 
@@ -75,23 +75,23 @@ msgstr ""
 msgid "Related Items Roles"
 msgstr ""
 
-#: ./opengever/task/response.py:495
+#: ./opengever/task/response.py:452
 msgid "Removed response id ${response_id}."
 msgstr ""
 
-#: ./opengever/task/response.py:488
+#: ./opengever/task/response.py:445
 msgid "Response id ${response_id} does not exist so it cannot be removed."
 msgstr ""
 
-#: ./opengever/task/response.py:212
+#: ./opengever/task/response.py:189
 msgid "Response id ${response_id} does not exist."
 msgstr ""
 
-#: ./opengever/task/response.py:480
+#: ./opengever/task/response.py:437
 msgid "Response id ${response_id} is no integer so it cannot be removed."
 msgstr ""
 
-#: ./opengever/task/response.py:206
+#: ./opengever/task/response.py:183
 msgid "Response id ${response_id} is no integer."
 msgstr ""
 
@@ -107,21 +107,16 @@ msgstr ""
 msgid "The local roles to add."
 msgstr ""
 
-#. Default: "Title"
-#: ./opengever/task/browser/globaltasks.py:56
-msgid "Title"
-msgstr ""
-
-#: ./opengever/task/response.py:467
+#: ./opengever/task/response.py:424
 msgid "You are not allowed to delete responses."
 msgstr ""
 
-#: ./opengever/task/response.py:430
+#: ./opengever/task/response.py:387
 msgid "You are not allowed to edit responses."
 msgstr ""
 
 #. Default: "Add"
-#: ./opengever/task/response.py:251
+#: ./opengever/task/response.py:220
 msgid "add"
 msgstr ""
 
@@ -147,31 +142,21 @@ msgid "button_copy"
 msgstr ""
 
 #. Default: "Cancel"
-#: ./opengever/task/response.py:347
+#: ./opengever/task/response.py:304
 msgid "cancel"
 msgstr ""
 
-#. Default: "Client"
-#: ./opengever/task/browser/globaltasks.py:74
-msgid "client_id"
-msgstr ""
-
 #. Default: "Containing Tasks:"
-#: ./opengever/task/task_templates/view.pt:67
+#: ./opengever/task/task_templates/view.pt:71
 msgid "containing_task"
 msgstr ""
 
-#: ./opengever/task/browser/globaltasks.py:64
-#: ./opengever/task/response.py:286
+#: ./opengever/task/response.py:254
 msgid "date_of_completion"
 msgstr ""
 
-#: ./opengever/task/response.py:284
-msgid "deadline"
-msgstr ""
-
 #. Default: "Documents:"
-#: ./opengever/task/task_templates/view.pt:102
+#: ./opengever/task/task_templates/view.pt:106
 msgid "documents"
 msgstr ""
 
@@ -194,40 +179,36 @@ msgstr ""
 msgid "help_copy_documents"
 msgstr ""
 
-#: ./opengever/task/response.py:68
-#: ./opengever/task/task.py:116
+#: ./opengever/task/response.py:45
+#: ./opengever/task/task.py:113
 msgid "help_date_of_completion"
 msgstr ""
 
-#: ./opengever/task/task.py:108
+#: ./opengever/task/task.py:107
 msgid "help_deadline"
 msgstr ""
 
-#: ./opengever/task/response.py:62
-msgid "help_deadline_response"
-msgstr ""
-
 #. Default: "Coast in CHF"
-#: ./opengever/task/task.py:167
+#: ./opengever/task/task.py:162
 msgid "help_effectiveCost"
 msgstr ""
 
 #. Default: "Duration in h"
-#: ./opengever/task/task.py:161
+#: ./opengever/task/task.py:156
 msgid "help_effectiveDuration"
 msgstr ""
 
 #. Default: "Coast in CHF"
-#: ./opengever/task/task.py:155
+#: ./opengever/task/task.py:150
 msgid "help_expectedCost"
 msgstr ""
 
 #. Default: "Duration in h"
-#: ./opengever/task/task.py:149
+#: ./opengever/task/task.py:144
 msgid "help_expectedDuration"
 msgstr ""
 
-#: ./opengever/task/task.py:143
+#: ./opengever/task/task.py:138
 msgid "help_expectedStartOfWork"
 msgstr ""
 
@@ -235,15 +216,11 @@ msgstr ""
 msgid "help_issuer"
 msgstr ""
 
-#: ./opengever/task/response.py:55
-msgid "help_new_responsible_response"
-msgstr ""
-
-#: ./opengever/task/task.py:174
+#: ./opengever/task/task.py:169
 msgid "help_predecessor"
 msgstr ""
 
-#: ./opengever/task/response.py:41
+#: ./opengever/task/response.py:39
 msgid "help_response"
 msgstr ""
 
@@ -251,7 +228,6 @@ msgstr ""
 msgid "help_responsible"
 msgstr ""
 
-#: ./opengever/task/response.py:48
 #: ./opengever/task/task.py:92
 msgid "help_responsible_client"
 msgstr ""
@@ -288,7 +264,7 @@ msgstr ""
 msgid "help_task_type"
 msgstr ""
 
-#: ./opengever/task/task.py:123
+#: ./opengever/task/task.py:120
 msgid "help_text"
 msgstr ""
 
@@ -297,7 +273,7 @@ msgid "help_title"
 msgstr ""
 
 #: ./opengever/task/behaviors.py:26
-#: ./opengever/task/response.py:74
+#: ./opengever/task/response.py:51
 msgid "help_transition"
 msgstr ""
 
@@ -307,7 +283,7 @@ msgid "info_copied_related_documents"
 msgstr ""
 
 #. Default: "The successor task was created."
-#: ./opengever/task/browser/successor.py:94
+#: ./opengever/task/browser/successor.py:97
 msgid "info_created_successor_task"
 msgstr ""
 
@@ -325,20 +301,14 @@ msgid "label_copy_documents"
 msgstr ""
 
 #. Default: "Date of completion"
-#: ./opengever/task/response.py:67
-#: ./opengever/task/task.py:115
+#: ./opengever/task/response.py:44
+#: ./opengever/task/task.py:112
 msgid "label_date_of_completion"
 msgstr ""
 
 #. Default: "Deadline"
-#: ./opengever/task/browser/globaltasks.py:61
-#: ./opengever/task/task.py:107
+#: ./opengever/task/task.py:106
 msgid "label_deadline"
-msgstr ""
-
-#. Default: "New deadline"
-#: ./opengever/task/response.py:61
-msgid "label_deadline_Response"
 msgstr ""
 
 #. Default: "You are not allowed to edit this response."
@@ -347,12 +317,12 @@ msgid "label_edit_response_not_allowed"
 msgstr ""
 
 #. Default: "effective cost"
-#: ./opengever/task/task.py:166
+#: ./opengever/task/task.py:161
 msgid "label_effectiveCost"
 msgstr ""
 
 #. Default: "effective duration"
-#: ./opengever/task/task.py:160
+#: ./opengever/task/task.py:155
 msgid "label_effectiveDuration"
 msgstr ""
 
@@ -362,23 +332,18 @@ msgid "label_enter_response"
 msgstr ""
 
 #. Default: "expected cost"
-#: ./opengever/task/task.py:154
+#: ./opengever/task/task.py:149
 msgid "label_expectedCost"
 msgstr ""
 
 #. Default: "Expected duration"
-#: ./opengever/task/task.py:148
+#: ./opengever/task/task.py:143
 msgid "label_expectedDuration"
 msgstr ""
 
 #. Default: "Start with work"
-#: ./opengever/task/task.py:142
+#: ./opengever/task/task.py:137
 msgid "label_expectedStartOfWork"
-msgstr ""
-
-#. Default: "issued at"
-#: ./opengever/task/browser/globaltasks.py:71
-msgid "label_issued_date"
 msgstr ""
 
 #. Default: "Issuer"
@@ -387,45 +352,34 @@ msgid "label_issuer"
 msgstr ""
 
 #. Default: "Last change"
-#: ./opengever/task/task_templates/view.pt:46
+#: ./opengever/task/task_templates/view.pt:49
 msgid "label_last_modified"
 msgstr ""
 
 #. Default: "Predecessor"
-#: ./opengever/task/task.py:173
+#: ./opengever/task/task.py:168
 msgid "label_predecessor"
 msgstr ""
 
 #. Default: "Related Items"
-#: ./opengever/task/response.py:80
-#: ./opengever/task/task.py:128
+#: ./opengever/task/response.py:57
+#: ./opengever/task/task.py:125
 msgid "label_related_items"
 msgstr ""
 
 #. Default: "Responsible Client"
-#: ./opengever/task/response.py:46
 #: ./opengever/task/task.py:90
 msgid "label_resonsible_client"
 msgstr ""
 
 #. Default: "Response"
-#: ./opengever/task/response.py:40
+#: ./opengever/task/response.py:38
 msgid "label_response"
 msgstr ""
 
 #. Default: "Responsible"
 #: ./opengever/task/task.py:99
 msgid "label_responsible"
-msgstr ""
-
-#. Default: "New responsible"
-#: ./opengever/task/response.py:54
-msgid "label_responsible_Response"
-msgstr ""
-
-#. Default: "Responsible"
-#: ./opengever/task/browser/globaltasks.py:67
-msgid "label_responsible_task"
 msgstr ""
 
 #. Default: "Return to issue."
@@ -464,13 +418,12 @@ msgid "label_target_client"
 msgstr ""
 
 #. Default: "Task Type"
-#: ./opengever/task/browser/globaltasks.py:59
 #: ./opengever/task/task.py:80
 msgid "label_task_type"
 msgstr ""
 
 #. Default: "Text"
-#: ./opengever/task/task.py:122
+#: ./opengever/task/task.py:119
 msgid "label_text"
 msgstr ""
 
@@ -481,25 +434,20 @@ msgstr ""
 
 #. Default: "Transition"
 #: ./opengever/task/behaviors.py:25
-#: ./opengever/task/response.py:73
+#: ./opengever/task/response.py:50
 msgid "label_transition"
 msgstr ""
 
 #. Default: "State"
-#: ./opengever/task/task_templates/view.pt:42
+#: ./opengever/task/task_templates/view.pt:45
 msgid "label_workflow_state"
 msgstr ""
 
 msgid "mytasks"
 msgstr ""
 
-#. Default: "No Content"
-#: ./opengever/task/task_templates/view.pt:113
-msgid "no_content"
-msgstr ""
-
 #. Default: "Predecessor Task:"
-#: ./opengever/task/task_templates/view.pt:89
+#: ./opengever/task/task_templates/view.pt:93
 msgid "predecessor"
 msgstr ""
 
@@ -509,26 +457,17 @@ msgid "response_label_response"
 msgstr ""
 
 #. Default: "Responses:"
-#: ./opengever/task/task_templates/view.pt:117
+#: ./opengever/task/response_templates/responseview.pt:3
 msgid "responses"
 msgstr ""
 
-#: ./opengever/task/response.py:301
-msgid "responsible"
-msgstr ""
-
-#. Default: "Sequence Number"
-#: ./opengever/task/browser/globaltasks.py:76
-msgid "sequence_number"
-msgstr ""
-
 #. Default: "Subtasks:"
-#: ./opengever/task/task_templates/view.pt:78
+#: ./opengever/task/task_templates/view.pt:82
 msgid "subtasks"
 msgstr ""
 
 #. Default: "Successor Tasks:"
-#: ./opengever/task/task_templates/view.pt:95
+#: ./opengever/task/task_templates/view.pt:99
 msgid "successors"
 msgstr ""
 

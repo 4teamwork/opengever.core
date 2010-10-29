@@ -13,7 +13,6 @@ from opengever.task import _
 from opengever.task import util
 from opengever.task.interfaces import ISuccessorTaskController
 from opengever.task.source import DossierPathSourceBinder
-from opengever.translations.browser.add import TranslatedAddForm
 from plone.dexterity.content import Container
 from plone.dexterity.interfaces import IDexterityFTI
 from plone.directives import form, dexterity
@@ -29,7 +28,7 @@ from zope.component import queryMultiAdapter, getMultiAdapter
 from zope.interface import implements, Interface
 from zope.publisher.interfaces.browser import IBrowserRequest, IBrowserPage
 from zope.traversing.interfaces import ITraversable
-
+from plone.dexterity.browser.add import DefaultAddForm
 
 class ITask(form.Schema):
 
@@ -305,7 +304,7 @@ class View(dexterity.DisplayForm):
 
 #class AddForm(dexterity.AddForm):
 
-class AddForm(TranslatedAddForm):
+class AddForm(DefaultAddForm):
     grok.name('opengever.task.task')
 
     def update(self):
