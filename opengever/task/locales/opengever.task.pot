@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2010-10-29 11:43+0000\n"
+"POT-Creation-Date: 2010-10-29 13:23+0000\n"
 "PO-Revision-Date: 2009-02-25 14:39+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -120,6 +120,11 @@ msgstr ""
 msgid "add"
 msgstr ""
 
+#. Default: "last modified"
+#: ./opengever/task/viewlets/byline.pt:35
+msgid "box_last_modified"
+msgstr ""
+
 #. Default: "Attach"
 #: ./opengever/task/attachdocument.py:172
 msgid "button_attach"
@@ -188,7 +193,7 @@ msgstr ""
 msgid "help_deadline"
 msgstr ""
 
-#. Default: "Coast in CHF"
+#. Default: "Cost in CHF"
 #: ./opengever/task/task.py:162
 msgid "help_effectiveCost"
 msgstr ""
@@ -198,7 +203,7 @@ msgstr ""
 msgid "help_effectiveDuration"
 msgstr ""
 
-#. Default: "Coast in CHF"
+#. Default: "Cost in CHF"
 #: ./opengever/task/task.py:150
 msgid "help_expectedCost"
 msgstr ""
@@ -443,6 +448,11 @@ msgstr ""
 msgid "label_workflow_state"
 msgstr ""
 
+#. Default: "State:"
+#: ./opengever/task/viewlets/byline.pt:28
+msgid "label_workflow_state_byline"
+msgstr ""
+
 msgid "mytasks"
 msgstr ""
 
@@ -479,6 +489,11 @@ msgstr ""
 #. Default: "on"
 #: ./opengever/task/response_templates/responseview.pt:38
 msgid "task_added_on"
+msgstr ""
+
+#. Default: "expired"
+#: ./opengever/task/viewlets/byline.pt:44
+msgid "time_expired"
 msgstr ""
 
 #. Default: "Attach document"

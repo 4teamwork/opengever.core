@@ -1,6 +1,6 @@
 <div class="documentByLine"
      id="plone-document-byline"
-     i18n:domain="opengever.theme"
+     i18n:domain="opengever.task"
      tal:condition="view/show">
 
   <span id="lock-icon"
@@ -25,10 +25,10 @@
   </tal:name>
 
   <tal:state>
-    <span i18n:translate="label_workflow_state" class="documentStatus">
+    <span i18n:translate="label_workflow_state_byline" class="documentStatus">
       State:
     </span>
-    <span tal:content="view/workflow_state" i18n:translate="" i18n:domain="plone" class="documentAuthor" />
+    <span tal:content="view/workflow_state" i18n:translate="" i18n:domain="plone" class="noborder" />
   </tal:state>
 
   <span class="documentModified">

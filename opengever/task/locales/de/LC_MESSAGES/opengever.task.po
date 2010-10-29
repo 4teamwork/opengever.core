@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2010-10-29 11:43+0000\n"
+"POT-Creation-Date: 2010-10-29 13:23+0000\n"
 "PO-Revision-Date: 2010-10-11 12:47+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -117,6 +117,11 @@ msgstr "Sie haben keine Berechtigung Antworten zu editieren"
 msgid "add"
 msgstr "Hinzufügen"
 
+#. Default: "last modified"
+#: ./opengever/task/viewlets/byline.pt:35
+msgid "box_last_modified"
+msgstr "zuletzt verändert"
+
 #. Default: "Attach"
 #: ./opengever/task/attachdocument.py:172
 msgid "button_attach"
@@ -186,8 +191,9 @@ msgstr "Das Datum an dem die Aufgabe beendet wurde"
 msgid "help_deadline"
 msgstr "Tragen sie ein Datum ein, bis wann die Aufgabe erledigt werden muss"
 
-#. Default: "Coast in CHF"
+#. Default: "Cost in CHF"
 #: ./opengever/task/task.py:162
+#, fuzzy
 msgid "help_effectiveCost"
 msgstr "Kosten in CHF"
 
@@ -196,8 +202,9 @@ msgstr "Kosten in CHF"
 msgid "help_effectiveDuration"
 msgstr "Dauer in h"
 
-#. Default: "Coast in CHF"
+#. Default: "Cost in CHF"
 #: ./opengever/task/task.py:150
+#, fuzzy
 msgid "help_expectedCost"
 msgstr "Kosten in CHF"
 
@@ -442,6 +449,11 @@ msgstr "Aktion"
 msgid "label_workflow_state"
 msgstr "Status"
 
+#. Default: "State:"
+#: ./opengever/task/viewlets/byline.pt:28
+msgid "label_workflow_state_byline"
+msgstr "Status:"
+
 msgid "mytasks"
 msgstr "Meine Aufgaben"
 
@@ -479,6 +491,11 @@ msgstr "Hinzugefügt von"
 #: ./opengever/task/response_templates/responseview.pt:38
 msgid "task_added_on"
 msgstr "am"
+
+#. Default: "expired"
+#: ./opengever/task/viewlets/byline.pt:44
+msgid "time_expired"
+msgstr "Abgelaufen"
 
 #. Default: "Attach document"
 #: ./opengever/task/attachdocument.py:44
