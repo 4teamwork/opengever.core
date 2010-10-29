@@ -29,6 +29,7 @@ from plone.namedfile.field import NamedFile
 from plone.namedfile.interfaces import INamedFileField
 from plone.stagingbehavior.relation import StagingRelationValue
 from plone.supermodel.interfaces import FIELDSETS_KEY
+from plone.autoform.interfaces import OMITTED_KEY
 from plone.supermodel.model import Fieldset
 from plone.versioningbehavior.behaviors import IVersionable
 from plone.z3cform.textlines.textlines import TextLinesFieldWidget
@@ -38,7 +39,7 @@ from zope import schema
 from zope.annotation.interfaces import IAnnotations
 from zope.app.intid.interfaces import IIntIds
 from zope.component import queryUtility, getUtility
-from zope.interface import invariant, Invalid
+from zope.interface import invariant, Invalid, Interface
 from zope.lifecycleevent.interfaces import IObjectCreatedEvent
 from zope.lifecycleevent.interfaces import IObjectModifiedEvent
 from collective.elephantvocabulary import wrap_vocabulary
@@ -49,7 +50,7 @@ LOG = logging.getLogger('opengever.document')
 
 # move and omit the changeNote,
 # because it's not possible to make a new version when you editing a file
-IVersionable.setTaggedValue( FIELDSETS_KEY, [
+IVersionable.setTaggedValue(FIELDSETS_KEY, [
         Fieldset( 'common', fields=[
                 'changeNote',
                 ])
@@ -57,9 +58,10 @@ IVersionable.setTaggedValue( FIELDSETS_KEY, [
 
 # TODO: Not Work in plone 4 and the dexterity b2 release
 # possibly it can be solved with plone.directives
-# IVersionable.setTaggedValue( OMITTED_KEY, {
-#         'changeNote' : 'true',
-#         } )
+IVersionable.setTaggedValue(OMITTED_KEY, [
+        (Interface, 'changeNote', 'true'),
+        ]
+)
 
 
 def related_document(context):
@@ -192,6 +194,8 @@ class IDocumentSchema(form.Schema):
         description = _(u'help_delivery_date', default=''),
         required = False,
         )
+
+
 
     @invariant
     def title_or_file_required(data):

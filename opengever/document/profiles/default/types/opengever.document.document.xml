@@ -87,6 +87,11 @@
           condition_expr="python:path('object/@@iterate_control').checkin_allowed" visible="True">
     <permission value="CMFEditions: Checkout to location"/>
   </action>
+  <action title="Checkout and edit" action_id="checkout_edit_document" category="object"
+          url_expr="string:${object_url}/@@document-checkout?mode=external"
+          condition_expr="python:path('object/@@iterate_control').checkin_allowed and context.file != None" visible="True">
+    <permission value="CMFEditions: Checkout to location"/>
+  </action>
   <action title="Checkin" action_id="checkin_document" category="object"
           url_expr="string:${object_url}/@@document-checkin"
           condition_expr="python:path('object/@@iterate_control').checkin_allowed" visible="True">

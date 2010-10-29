@@ -19,3 +19,9 @@ msgstr ""
 
 msgid "cancel_checkout"
 msgstr ""
+
+msgid "Checkout"
+msgstr ""
+
+msgid "Checkout and edit"
+msgstr ""
