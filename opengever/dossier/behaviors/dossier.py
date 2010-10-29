@@ -8,7 +8,7 @@ from opengever.base.interfaces import IReferenceNumberPrefix
 from opengever.dossier import _
 from opengever.dossier.widget import referenceNumberWidgetFactory
 from opengever.ogds.base.interfaces import IContactInformation
-from opengever.translations.browser.add import TranslatedAddForm
+from plone.dexterity.browser.add import DefaultAddForm
 from plone.app.dexterity.behaviors.metadata import IBasic
 from plone.autoform.interfaces import IFormFieldProvider
 from plone.directives import form
@@ -185,7 +185,7 @@ alsoProvides(IDossier, IFormFieldProvider)
 
 
 # TODO: temporary default value (autocompletewidget)
-class AddForm(TranslatedAddForm):
+class AddForm(DefaultAddForm):
     grok.name('opengever.dossier.businesscasedossier')
 
     def update(self):

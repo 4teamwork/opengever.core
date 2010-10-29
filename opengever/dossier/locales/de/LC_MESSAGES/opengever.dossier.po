@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: opengever.dossier 1.0\n"
-"POT-Creation-Date: 2010-10-27 15:28+0000\n"
+"POT-Creation-Date: 2010-10-29 08:53+0000\n"
 "PO-Revision-Date: 2010-10-21 12:06+0200\n"
 "Last-Translator: Thomas Buchberger <t.buchberger@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -12,6 +12,10 @@ msgstr ""
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: opengever.dossier\n"
 "X-Is-Fallback-For: de-at de-li de-lu de-ch de-de\n"
+
+#. Default: "Geschäftsdossier"
+msgid "Add Business Case Dossier"
+msgstr "Geschäftsdossier hinzufügen"
 
 #: ./opengever/dossier/profiles/default/actions.xml
 msgid "Add Participant"
@@ -71,11 +75,11 @@ msgstr "Die Grösse der ausgewählten Dateien überschreiten die Maximalgrösse.
 msgid "The dossier was already resolved"
 msgstr "Das Dossier ist bereits abgeschlossen"
 
-#: ./opengever/dossier/behaviors/dossier.py:188
+#: ./opengever/dossier/behaviors/dossier.py:182
 msgid "The start date must be before the end date."
 msgstr "Das Beginn-Datum muss vor dem Ende-Datum liegen."
 
-#: ./opengever/dossier/behaviors/dossier.py:211
+#: ./opengever/dossier/behaviors/dossier.py:205
 msgid "The start or end date is invalid"
 msgstr "Das Beginn- oder Ende-Datum ist ungültig."
 
@@ -156,7 +160,7 @@ msgid "extern_receiver"
 msgstr "Externer Empfänger"
 
 #. Default: "Filing"
-#: ./opengever/dossier/behaviors/dossier.py:108
+#: ./opengever/dossier/behaviors/dossier.py:102
 msgid "fieldset_filing"
 msgstr "Ablage"
 
@@ -170,7 +174,7 @@ msgstr "Ablagenummer vergeben"
 
 #. Default: "filing prefix"
 #: ./opengever/dossier/archive.py:56
-#: ./opengever/dossier/behaviors/dossier.py:122
+#: ./opengever/dossier/behaviors/dossier.py:116
 msgid "filing_prefix"
 msgstr "Ablage Präfix"
 
@@ -188,7 +192,7 @@ msgstr "Dossier ablegen"
 msgid "help_comment"
 msgstr ""
 
-#: ./opengever/dossier/behaviors/dossier.py:92
+#: ./opengever/dossier/behaviors/dossier.py:86
 msgid "help_comments"
 msgstr ""
 
@@ -196,20 +200,20 @@ msgstr ""
 msgid "help_contact"
 msgstr "Wählen Sie einen Benutzer oder einen Kontakt aus."
 
-#: ./opengever/dossier/behaviors/dossier.py:140
+#: ./opengever/dossier/behaviors/dossier.py:134
 msgid "help_container_id"
 msgstr "Code des Behälters, in dem ein Dossier in Papierform abgelegt ist"
 
-#: ./opengever/dossier/behaviors/dossier.py:154
+#: ./opengever/dossier/behaviors/dossier.py:148
 msgid "help_container_location"
 msgstr "Standortangabe des Behälters, in dem ein Dossier in Papierform abgelegt ist"
 
-#: ./opengever/dossier/behaviors/dossier.py:131
+#: ./opengever/dossier/behaviors/dossier.py:125
 msgid "help_container_type"
 msgstr "Art des Behälters, in dem ein Dossier in Papierform abgelegt ist"
 
 #: ./opengever/dossier/archive.py:65
-#: ./opengever/dossier/behaviors/dossier.py:80
+#: ./opengever/dossier/behaviors/dossier.py:74
 msgid "help_end"
 msgstr ""
 
@@ -218,7 +222,7 @@ msgstr ""
 msgid "help_extern_receiver"
 msgstr "E-Mail Adressen der externen Empfänger manuell eintragen. Pro Zeile eine Adresse eingeben."
 
-#: ./opengever/dossier/behaviors/dossier.py:172
+#: ./opengever/dossier/behaviors/dossier.py:166
 msgid "help_former_reference_number"
 msgstr ""
 
@@ -227,7 +231,7 @@ msgstr ""
 msgid "help_intern_receiver"
 msgstr "Live Search: Nachname/Vorname der internen Mitarbeiter oder Kontakte eingeben. Mehrauswahl möglich."
 
-#: ./opengever/dossier/behaviors/dossier.py:64
+#: ./opengever/dossier/behaviors/dossier.py:58
 msgid "help_keywords"
 msgstr "Schlagworte zur Umschreibung eines Dossiers. Nicht zu verwechseln mit der Ordnungsposition"
 
@@ -235,16 +239,16 @@ msgstr "Schlagworte zur Umschreibung eines Dossiers. Nicht zu verwechseln mit de
 msgid "help_message"
 msgstr ""
 
-#: ./opengever/dossier/behaviors/dossier.py:148
+#: ./opengever/dossier/behaviors/dossier.py:142
 msgid "help_number_of_containers"
 msgstr "Anzahl Behälter, die ein (grosses) Dossier in Papierform enthalten"
 
-#: ./opengever/dossier/behaviors/dossier.py:179
+#: ./opengever/dossier/behaviors/dossier.py:173
 msgid "help_reference_number "
 msgstr ""
 
 #. Default: "select an responsible Manger"
-#: ./opengever/dossier/behaviors/dossier.py:99
+#: ./opengever/dossier/behaviors/dossier.py:93
 msgid "help_responsible"
 msgstr "Verantwortlicher Manager"
 
@@ -256,7 +260,7 @@ msgstr ""
 msgid "help_source_client"
 msgstr ""
 
-#: ./opengever/dossier/behaviors/dossier.py:74
+#: ./opengever/dossier/behaviors/dossier.py:68
 msgid "help_start"
 msgstr ""
 
@@ -268,7 +272,7 @@ msgstr ""
 msgid "help_target_dossier"
 msgstr "Wählen Sie ein Dossier auf dem eigenen Mandanten aus"
 
-#: ./opengever/dossier/behaviors/dossier.py:86
+#: ./opengever/dossier/behaviors/dossier.py:80
 msgid "help_volume_number"
 msgstr "Nummer eines Bandes, zu welchem mehrere zusammengehörige, papierförmige Dossiers zusammengefügt worden sind"
 
@@ -309,7 +313,7 @@ msgid "label_comment"
 msgstr "Kommentar"
 
 #. Default: "Comments"
-#: ./opengever/dossier/behaviors/dossier.py:91
+#: ./opengever/dossier/behaviors/dossier.py:85
 msgid "label_comments"
 msgstr "Kommentar"
 
@@ -319,17 +323,17 @@ msgid "label_contact"
 msgstr "Person"
 
 #. Default: "Container Id"
-#: ./opengever/dossier/behaviors/dossier.py:139
+#: ./opengever/dossier/behaviors/dossier.py:133
 msgid "label_container_id"
 msgstr "Behältnis-Code"
 
 #. Default: "Container Location"
-#: ./opengever/dossier/behaviors/dossier.py:153
+#: ./opengever/dossier/behaviors/dossier.py:147
 msgid "label_container_location"
 msgstr "Behältnis-Standort"
 
 #. Default: "Container Type"
-#: ./opengever/dossier/behaviors/dossier.py:130
+#: ./opengever/dossier/behaviors/dossier.py:124
 msgid "label_container_type"
 msgstr "Behältnis-Art"
 
@@ -350,7 +354,7 @@ msgstr "E-Mail:"
 
 #. Default: "Closing Date"
 #: ./opengever/dossier/archive.py:64
-#: ./opengever/dossier/behaviors/dossier.py:79
+#: ./opengever/dossier/behaviors/dossier.py:73
 msgid "label_end"
 msgstr "Ende"
 
@@ -366,12 +370,12 @@ msgid "label_filing_no"
 msgstr "Ablagenummer:"
 
 #. Default: "Reference Number"
-#: ./opengever/dossier/behaviors/dossier.py:170
+#: ./opengever/dossier/behaviors/dossier.py:164
 msgid "label_former_reference_number"
 msgstr "Früheres Aktenzeichen"
 
 #. Default: "Keywords"
-#: ./opengever/dossier/behaviors/dossier.py:63
+#: ./opengever/dossier/behaviors/dossier.py:57
 msgid "label_keywords"
 msgstr "Schlagworte"
 
@@ -380,13 +384,13 @@ msgstr "Schlagworte"
 msgid "label_message"
 msgstr "Mitteilung"
 
-#. Default: "Reference Number would be generated by creating the content"
+#. Default: "Reference Number would be generated                 by creating the content"
 #: ./opengever/dossier/widget.py:25
 msgid "label_no_reference_number"
 msgstr "Die Archivnummer wird erst beim Erstellen generiert."
 
 #. Default: "Number of Containers"
-#: ./opengever/dossier/behaviors/dossier.py:145
+#: ./opengever/dossier/behaviors/dossier.py:139
 msgid "label_number_of_containers"
 msgstr "Anzahl Behältnisse"
 
@@ -406,18 +410,18 @@ msgid "label_participation"
 msgstr "Beteiligung"
 
 #. Default: "Reference Number"
-#: ./opengever/dossier/behaviors/dossier.py:178
+#: ./opengever/dossier/behaviors/dossier.py:172
 #: ./opengever/dossier/viewlets/businesscase_byline.pt:68
 msgid "label_reference_number"
 msgstr "Aktenzeichen:"
 
 #. Default: "Related Dossier"
-#: ./opengever/dossier/behaviors/dossier.py:159
+#: ./opengever/dossier/behaviors/dossier.py:153
 msgid "label_related_dossier"
 msgstr "Verwandte Dossiers"
 
 #. Default: "Responsible"
-#: ./opengever/dossier/behaviors/dossier.py:98
+#: ./opengever/dossier/behaviors/dossier.py:92
 #: ./opengever/dossier/browser/participants.py:107
 msgid "label_responsible"
 msgstr "Federführend"
@@ -448,7 +452,7 @@ msgid "label_source_client"
 msgstr "Ziel-Mandant"
 
 #. Default: "Opening Date"
-#: ./opengever/dossier/behaviors/dossier.py:73
+#: ./opengever/dossier/behaviors/dossier.py:67
 msgid "label_start"
 msgstr "Beginn"
 
@@ -479,7 +483,7 @@ msgid "label_title"
 msgstr "Titel"
 
 #. Default: "Volume Number"
-#: ./opengever/dossier/behaviors/dossier.py:85
+#: ./opengever/dossier/behaviors/dossier.py:79
 msgid "label_volume_number"
 msgstr "Bandnummer"
 
