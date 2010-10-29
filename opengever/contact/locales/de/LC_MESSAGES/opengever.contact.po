@@ -150,7 +150,7 @@ msgstr "Beschreibung"
 #: ./opengever/contact/contact.py:105
 #: ./opengever/contact/contactfolder.py:37
 msgid "label_email"
-msgstr "E-mail"
+msgstr "E-Mail"
 
 #. Default: "Firstname"
 #: ./opengever/contact/contact.py:81
