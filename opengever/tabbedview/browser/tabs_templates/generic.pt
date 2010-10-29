@@ -18,8 +18,8 @@
         <!--<div tal:content="structure view/render_listing" />-->
     </tal:cond>
 
-    <p tal:condition="not: view/contents">
-        Keine Inhalte vorhanden
+    <p tal:condition="not: view/contents" i18n:translate="label_no_contents">
+        No contents
     </p>
 
     <div id="tabbedview-menu" class="tabbedview-action-menu contentActions">
