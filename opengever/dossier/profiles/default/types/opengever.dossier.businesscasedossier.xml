@@ -104,7 +104,8 @@
             url_expr="string:${object_url}/@@add-participation"
             icon_expr="string:${portal_url}/icon_objekt_kontakt.gif"
             condition_expr=""
-            i18n:domain="opengever.dossier">
+            i18n:domain="opengever.dossier"
+            i18n:attributes="title">
         <permission value="Add portal content"/>
     </action>
 

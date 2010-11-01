@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2010-10-29 14:46+0000\n"
+"POT-Creation-Date: 2010-11-01 08:14+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,7 +21,7 @@ msgstr ""
 msgid "Add Business Case Dossier"
 msgstr ""
 
-#: ./opengever/dossier/profiles/default/actions.xml
+#: ./opengever/dossier/profiles/default/types/opengever.dossier.businesscasedossier.xml
 msgid "Add Participant"
 msgstr ""
 
@@ -249,7 +249,7 @@ msgstr ""
 msgid "help_reference_number "
 msgstr ""
 
-#. Default: "select an responsible Manger"
+#. Default: "Select the responsible manager"
 #: ./opengever/dossier/behaviors/dossier.py:93
 msgid "help_responsible"
 msgstr ""
@@ -296,6 +296,11 @@ msgstr ""
 #. Default: "Intern receiver"
 #: ./opengever/dossier/browser/send_document.py:48
 msgid "intern_receiver"
+msgstr ""
+
+#. Default: "Add Participant"
+#: ./opengever/dossier/profiles/default/actions.xml
+msgid "label_add_participant"
 msgstr ""
 
 #. Default: "by ${author}"
@@ -386,7 +391,7 @@ msgstr ""
 msgid "label_message"
 msgstr ""
 
-#. Default: "Reference Number would be generated                 by creating the content"
+#. Default: "Reference Number will be generated                 after content creation"
 #: ./opengever/dossier/widget.py:25
 msgid "label_no_reference_number"
 msgstr ""

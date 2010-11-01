@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: opengever.dossier 1.0\n"
-"POT-Creation-Date: 2010-10-29 14:46+0000\n"
+"POT-Creation-Date: 2010-11-01 08:14+0000\n"
 "PO-Revision-Date: 2010-10-21 12:06+0200\n"
 "Last-Translator: Thomas Buchberger <t.buchberger@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -17,9 +17,9 @@ msgstr ""
 msgid "Add Business Case Dossier"
 msgstr "Geschäftsdossier hinzufügen"
 
-#: ./opengever/dossier/profiles/default/actions.xml
+#: ./opengever/dossier/profiles/default/types/opengever.dossier.businesscasedossier.xml
 msgid "Add Participant"
-msgstr "Beteiligung hinzufügen"
+msgstr "Teilnehmer hinzufügen"
 
 #. Default: "Business Case Dossier"
 #: ./opengever/dossier/profiles/default/types/opengever.dossier.businesscasedossier.xml
@@ -248,8 +248,9 @@ msgstr "Anzahl Behälter, die ein (grosses) Dossier in Papierform enthalten"
 msgid "help_reference_number "
 msgstr ""
 
-#. Default: "select an responsible Manger"
+#. Default: "Select the responsible manager"
 #: ./opengever/dossier/behaviors/dossier.py:93
+#, fuzzy
 msgid "help_responsible"
 msgstr "Verantwortlicher Manager"
 
@@ -296,6 +297,11 @@ msgstr "Die Beteiligungen wurde entfernt."
 #: ./opengever/dossier/browser/send_document.py:48
 msgid "intern_receiver"
 msgstr "Interne Empfänger"
+
+#. Default: "Add Participant"
+#: ./opengever/dossier/profiles/default/actions.xml
+msgid "label_add_participant"
+msgstr "Teilnehmer hinzufügen"
 
 #. Default: "by ${author}"
 #: ./opengever/dossier/project_templates/byline.pt:16
@@ -385,7 +391,7 @@ msgstr "Schlagworte"
 msgid "label_message"
 msgstr "Mitteilung"
 
-#. Default: "Reference Number would be generated                 by creating the content"
+#. Default: "Reference Number will be generated                 after content creation"
 #: ./opengever/dossier/widget.py:25
 #, fuzzy
 msgid "label_no_reference_number"

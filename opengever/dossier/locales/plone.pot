@@ -20,6 +20,12 @@ msgstr ""
 msgid "Document with docucomposer"
 msgstr ""
 
+msgid "Add Participant"
+msgstr ""
+
+msgid "document_with_template"
+msgstr ""
+
 msgid "Dossier state changed to dossier-state-active"
 msgstr ""
 

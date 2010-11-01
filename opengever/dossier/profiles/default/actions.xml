@@ -20,7 +20,7 @@
 
     <object name="add_participant" meta_type="CMF Action"
             i18n:domain="opengever.dossier">
-      <property name="title" i18n:translate="">Add Participant</property>
+      <property name="title" i18n:translate="label_add_participant">Add Participant</property>
       <property name="description" i18n:translate=""></property>
       <property name="url_expr">string:@@add-participation:method</property>
       <property name="icon_expr"></property>

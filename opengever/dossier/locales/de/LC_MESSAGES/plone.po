@@ -12,6 +12,9 @@ msgstr ""
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: DOMAIN\n"
 
+msgid "Add Participant"
+msgstr "Teilnehmer hinzufügen"
+
 msgid "Document with docucomposer"
 msgstr "Dokument mit Docucomposer"
 
@@ -26,6 +29,9 @@ msgstr "Status des Dossiers geändert zu Storniert"
 
 msgid "Dossier state changed to dossier-state-resolved"
 msgstr "Status des Dossiers geändert zu Abgeschlossen"
+
+msgid "document_with_template"
+msgstr "Dokument mit Vorlage"
 
 msgid "dossier-state-active"
 msgstr "In Bearbeitung"
