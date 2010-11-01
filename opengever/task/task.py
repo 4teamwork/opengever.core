@@ -145,7 +145,7 @@ class ITask(form.Schema):
         required = False,
         )
 
-    expectedCost = schema.Int(
+    expectedCost = schema.Float(
         title = _(u"label_expectedCost", default="expected cost"),
         description = _(u"help_expectedCost", default="Cost in CHF"),
         required = False,
@@ -157,7 +157,7 @@ class ITask(form.Schema):
         required = False,
         )
 
-    effectiveCost = schema.Int(
+    effectiveCost = schema.Float(
         title=_(u"label_effectiveCost", default="effective cost"),
         description=_(u"help_effectiveCost", default="Cost in CHF"),
         required = False,
