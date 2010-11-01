@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<object>
+<default_language value="de-ch"/>
+<use_combined_language_codes value="True"/>
+<display_flags value="False"/>
+<start_neutral value="False"/>
+<use_subdomain_negotiation value="False"/>
+<authenticated_users_only value="False"/>
+<supported_langs>
+<element value="de-ch"/>
+</supported_langs>
+</object>
