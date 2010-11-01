@@ -1,4 +1,5 @@
 from AccessControl.PermissionRole import rolesForPermissionOn
+from Acquisition import aq_inner, aq_parent
 from Products.CMFCore.permissions import View
 from Products.CMFCore.utils import _mergedLocalRoles, getToolByName
 from datetime import datetime
@@ -32,6 +33,8 @@ def get_dossier_sequence_number(task):
 
         if len(brains):
             return brains[0].sequence_number
+        else:
+            path = aq_parent(aq_inner(path))
 
     return ''
 
