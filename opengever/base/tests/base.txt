@@ -51,8 +51,8 @@ We can see this type in the addable types at the root of the site::
     True
     >>> 'Description' in browser.contents
     True
-    >>> browser.getControl('Title').value = 'Foo'
-    >>> browser.getControl('Description').value = 'Bar'
+    >>> browser.getControl(name='form.widgets.IOpenGeverBase.title') = 'Foo'
+    >>> browser.getControl(name='form.widgets.IOpenGeverBase.description').value = 'Bar'
     >>> browser.getControl('Save').click()
     >>> browser.url
     'http://nohost/plone/opengeverbasefti/view'
