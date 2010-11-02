@@ -60,8 +60,6 @@ Get the created object::
     >>> obj = self.portal.opengeverbasefti
     >>> obj
     <Item at ...>
-    >>> base.IOpenGeverBaseMarker.providedBy( obj )
-    True
 
 
 Title should be set::
