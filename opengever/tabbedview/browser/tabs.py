@@ -166,10 +166,7 @@ class Dossiers(OpengeverCatalogListingTab):
 
     grok.name('tabbedview_view-dossiers')
 
-    types = [
-        'opengever.dossier.projectdossier',
-        'opengever.dossier.businesscasedossier',
-        ]
+    object_provides = 'opengever.dossier.behaviors.dossier.IDossierMarker'
 
     columns = (
         ('', helper.draggable),
