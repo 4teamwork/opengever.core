@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 import os
 
-version = '1.0a1-dev'
+version = open('opengever/ogds/base/version.txt').read().strip()
 maintainer = 'Jonas Baumann'
 
 tests_require = [
