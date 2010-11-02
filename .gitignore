@@ -3,3 +3,4 @@
 *.pyo
 *.mo
 *.swp
+buildout.cfg
