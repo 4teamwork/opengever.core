@@ -11,17 +11,12 @@ excluding ambiguity.
 
     >>> from opengever.base.behaviors import base
     >>> from plone.dexterity.fti import DexterityFTI
+
     >>> fti = DexterityFTI('OpenGeverBaseFTI')
+    >>> fti.schema = 'opengever.base.tests.layer.IEmptySchema'
     >>> fti.behaviors = (
     ...                  'opengever.base.behaviors.base.IOpenGeverBase',
     ...                  )
-    >>> fti.model_source = '''
-    ... <model
-    ...     xmlns="http://namespaces.plone.org/supermodel/schema">
-    ...   <schema>
-    ...   </schema>
-    ... </model>
-    ... '''
     >>> self.portal.portal_types._setObject('OpenGeverBaseFTI', fti)
     'OpenGeverBaseFTI'
     >>> schema = fti.lookupSchema()
