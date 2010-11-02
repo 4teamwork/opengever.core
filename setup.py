@@ -27,7 +27,7 @@ setup(name='opengever.ogds.base',
         ],
       keywords='opengever ogds base',
       author='%s, 4teamwork GmbH' % maintainer,
-      author_email='GPL2',
+      author_email='mailto:info@4teamwork.ch',
       maintainer=maintainer,
       url='http://psc.4teamwork.ch/4teamwork/kunden/' + \
           'opengever/opengever-ogds-base',
