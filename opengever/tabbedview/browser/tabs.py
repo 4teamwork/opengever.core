@@ -10,9 +10,8 @@ from opengever.tabbedview.helper import readable_date_set_invisibles
 from opengever.tabbedview.helper import readable_ogds_author, linked
 from opengever.task.helper import task_type_helper
 from plone.app.workflow.browser.sharing import SharingView, AUTH_GROUP
-from plone.app.workflow.interfaces import ISharingPageRole
 from zope.app.pagetemplate import ViewPageTemplateFile
-from zope.component import getUtilitiesFor, getUtility
+from zope.component import getUtility
 from zope.interface import Interface
 import re
 
@@ -321,7 +320,7 @@ class Sharing(grok.View, SharingView):
         else:
             return settings
 
-#     @memoize
+    @memoize
     def roles(self):
         return (
             dict(id='Reader',
