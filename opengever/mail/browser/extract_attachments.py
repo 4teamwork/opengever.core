@@ -125,7 +125,15 @@ class ExtractAttachments(grok.View):
         return generator.generate(items, columns, sortable=False)
 
     def __call__(self):
-        if self.request.get('form.cancelled'):
+        items = get_attachments(self.context.msg)
+        if not len(items):
+            msg = _(u'error_no_attachments_to_extract',
+                    default=u'This mail has no attachments to extract.')
+            IStatusMessage(self.request).addStatusMessage(msg, type='warning')
+            return self.request.RESPONSE.redirect(
+                self.context.absolute_url())
+
+        elif self.request.get('form.cancelled'):
             return self.request.RESPONSE.redirect(
                 self.context.absolute_url())
 
@@ -145,8 +153,9 @@ class ExtractAttachments(grok.View):
 
                 self.extract_attachments(attachments, delete_action)
 
+                dossier = self.find_parent_dossier()
                 return self.request.RESPONSE.redirect(
-                    self.context.absolute_url())
+                    os.path.join(dossier.absolute_url(), '#documents'))
 
         return grok.View.__call__(self)
 
