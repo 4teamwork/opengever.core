@@ -1,17 +1,18 @@
-from five import grok
-from ftw.tabbedview.browser.listing import ListingView
 from copy import deepcopy
-from ftw.table.basesource import BaseTableSource
-from ftw.table.interfaces import ITableSourceConfig, ITableSource
-from opengever.dossier import _
-from opengever.tabbedview.browser.tabs import OpengeverTab
-from zope.interface import implements, Interface
+from five import grok
 from ftw.journal.config import JOURNAL_ENTRIES_ANNOTATIONS_KEY
 from ftw.journal.interfaces import IAnnotationsJournalizable
 from ftw.journal.interfaces import IJournalizable
 from ftw.journal.interfaces import IWorkflowHistoryJournalizable
+from ftw.tabbedview.browser.listing import ListingView
 from ftw.table import helper
+from ftw.table.basesource import BaseTableSource
+from ftw.table.interfaces import ITableSourceConfig, ITableSource
+from opengever.dossier import _
+from opengever.tabbedview.browser.tabs import OpengeverTab
+from opengever.tabbedview.helper import linked_ogds_author
 from zope.annotation.interfaces import IAnnotations
+from zope.interface import implements, Interface
 
 
 def title_helper(item, value):
@@ -35,7 +36,8 @@ class JournalTab(grok.CodeView, OpengeverTab, ListingView):
     # do not select
     select_all_template = lambda *a, **kw: ''
 
-    sort_on = 'title'
+    sort_on = 'time'
+    sort_reverse = True
 
     enabled_actions = []
     minor_buttons = []
@@ -47,7 +49,8 @@ class JournalTab(grok.CodeView, OpengeverTab, ListingView):
          'transform': title_helper},
 
         {'column': 'actor',
-         'column_title': _(u'label_actor', default=u'Actor')},
+         'column_title': _(u'label_actor', default=u'Actor'),
+         'transform': linked_ogds_author},
 
         {'column': 'time',
          'column_title': _(u'label_time', default=u'Time'),

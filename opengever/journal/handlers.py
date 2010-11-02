@@ -127,7 +127,6 @@ def document_added(context, event):
 DOCUMENT_MODIIFED_ACTION = 'Document modified'
 @grok.subscribe(IDocumentSchema, IObjectModifiedEvent)
 def document_modified(context, event):
-    title = _(u'label_document_modified', default=u'Document modified')
     # XXX dirty
     try:
         # if we delete the working copy, we get a aq_based object and don't wanna
@@ -135,6 +134,9 @@ def document_modified(context, event):
         context.portal_types
     except AttributeError:
         return
+    title = _(u'label_document_modified',
+              default=u'Document modified: ${title}',
+              mapping={'title': context.title_or_id()})
     journal_entry_factory(context, DOCUMENT_MODIIFED_ACTION, title, visible=False)
     journal_entry_factory(context.aq_inner.aq_parent, DOCUMENT_MODIIFED_ACTION, title)
     return

@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2010-04-15 13:17+0000\n"
+"POT-Creation-Date: 2010-11-02 10:33+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,62 +18,82 @@ msgstr ""
 "Domain: opengever.journal\n"
 
 #. Default: "Journal"
-#: opengever.journal/opengever/journal/browser_templates/journalhistory.pt:15
+#: ./opengever/journal/browser_templates/journalhistory.pt:15
 msgid "heading_journal"
 msgstr ""
 
+#. Default: "Actor"
+#: ./opengever/journal/tab.py:50
+msgid "label_actor"
+msgstr ""
+
+#. Default: "Comments"
+#: ./opengever/journal/tab.py:57
+msgid "label_comments"
+msgstr ""
+
 #. Default: "Document added: ${title}"
-#: opengever.journal/opengever/journal/handlers.py:114
+#: ./opengever/journal/handlers.py:116
 msgid "label_document_added"
 msgstr ""
 
 #. Default: "Document checked in"
-#: opengever.journal/opengever/journal/handlers.py:171
+#: ./opengever/journal/handlers.py:176
 msgid "label_document_checkin"
 msgstr ""
 
 #. Default: "Document checked out"
-#: opengever.journal/opengever/journal/handlers.py:160
+#: ./opengever/journal/handlers.py:165
 msgid "label_document_checkout"
 msgstr ""
 
-#. Default: "Document modified"
-#: opengever.journal/opengever/journal/handlers.py:128
+#. Default: "Document modified: ${title}"
+#: ./opengever/journal/handlers.py:137
 msgid "label_document_modified"
 msgstr ""
 
 #. Default: "Dossier added: ${title}"
-#: opengever.journal/opengever/journal/handlers.py:68
+#: ./opengever/journal/handlers.py:72
 msgid "label_dossier_added"
 msgstr ""
 
 #. Default: "Dossier modified"
-#: opengever.journal/opengever/journal/handlers.py:79
+#: ./opengever/journal/handlers.py:82
 msgid "label_dossier_modified"
 msgstr ""
 
 #. Default: "Object restore: ${title}"
-#: opengever.journal/opengever/journal/handlers.py:222
+#: ./opengever/journal/handlers.py:228
 msgid "label_restore"
 msgstr ""
 
 #. Default: "Task added: ${title}"
-#: opengever.journal/opengever/journal/handlers.py:185
+#: ./opengever/journal/handlers.py:190
 msgid "label_task_added"
 msgstr ""
 
 #. Default: "Task modified"
-#: opengever.journal/opengever/journal/handlers.py:197
+#: ./opengever/journal/handlers.py:202
 msgid "label_task_modified"
 msgstr ""
 
+#. Default: "Time"
+#: ./opengever/journal/tab.py:53
+msgid "label_time"
+msgstr ""
+
+#. Default: "Title"
+#: ./opengever/journal/tab.py:46
+msgid "label_title"
+msgstr ""
+
 #. Default: "Object moved to trash: ${title}"
-#: opengever.journal/opengever/journal/handlers.py:212
+#: ./opengever/journal/handlers.py:218
 msgid "label_to_trash"
 msgstr ""
 
 #. Default: "Journal"
-#: opengever.journal/opengever/journal/browser_templates/journalhistory.pt:17
+#: ./opengever/journal/browser_templates/journalhistory.pt:17
 msgid "summary_journal"
 msgstr ""
 
