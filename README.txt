@@ -43,41 +43,41 @@ which is stored with the SQL model `Client`.
 A client object has currently following attributes:
 
 :client_id: The ID of the client, which is used for referencing it. The client
-ID should not change when choosen once since we would have to update every place
-it occurs (catalog etc). It have to correspond with the `IClientConfiguration`
-`client_id` configuration.
+    ID should not change when choosen once since we would have to update every place
+    it occurs (catalog etc). It have to correspond with the `IClientConfiguration`
+    `client_id` configuration.
 
 :title: The title of the client which will be shown in the GUI for indicating on
-which client the user is.
+    which client the user is.
 
 :enabled: Possiblity to disable a client. It will not be selectable any more and
-the client cannot make authorisation on other clients anymore when doing internal
-requests.
+    the client cannot make authorisation on other clients anymore when doing internal
+    requests.
 
 :ip_address: IP-Address which the client will use to connect to other clients. This
-may be "127.0.0.1" when you are only using one machine, but it has to be the machine
-IP as soon as the client may connect to a client which is not on the same machine,
-since authentication and authorisation for internal requests validates the IP.
+    may be "127.0.0.1" when you are only using one machine, but it has to be the machine
+    IP as soon as the client may connect to a client which is not on the same machine,
+    since authentication and authorisation for internal requests validates the IP.
 
 :site_url: The site URL is used for internal requests. Clients are able to do
-requests (e.g. list of dossiers) to another client. The site_url should not pass
-any proxy stuff since it may cause problems and is not necessary. The site_url should
-correspond with the ip_address, since the IP address will change when doing requests
-to other clients (such as localhost). The URL points to the Plone-Site.
+    requests (e.g. list of dossiers) to another client. The site_url should not pass
+    any proxy stuff since it may cause problems and is not necessary. The site_url should
+    correspond with the ip_address, since the IP address will change when doing requests
+    to other clients (such as localhost). The URL points to the Plone-Site.
 
 :public_url: The public URL is used for user redirection. If a user needs to be
-redirected to another client this URL will be used as base. It should point to the
-Plone-Site from the user perspective and it may go through proxies and authentication
-machineries.
+    redirected to another client this URL will be used as base. It should point to the
+    Plone-Site from the user perspective and it may go through proxies and authentication
+    machineries.
 
 :group: The group is used for assigning users to a client. Every user which is member
-of this group is automatically assigned to this client. The user may be assigned to
-multiple clients.
+    of this group is automatically assigned to this client. The user may be assigned to
+    multiple clients.
 
 :inbox_group: Tasks which are assigned to the Inbox of a client will be assigned to
-this group. This makes it easy to generate lists of tasks but it also is used for
-granting access to the inbox group for a specific task on a forign client which is
-assign to this inbox group.
+    this group. This makes it easy to generate lists of tasks but it also is used for
+    granting access to the inbox group for a specific task on a forign client which is
+    assign to this inbox group.
 
 
 Users
@@ -92,15 +92,15 @@ The users are imported from a LDAP from time to time with their relevant propert
 Users have following properties:
 
 :userid: Userid which is used as primary key but also as login name and for managing
-the security of Plone. The userid is defined by the LDAP. It is not allowed to
-reuse a once used userid since the new user would succeed with the permissions and
-tasks of the old user - which would generate a security leak. Usually the userid
-consists of four characters, which are usually uppercase, but the system does not
-rely on this definition.
+    the security of Plone. The userid is defined by the LDAP. It is not allowed to
+    reuse a once used userid since the new user would succeed with the permissions and
+    tasks of the old user - which would generate a security leak. Usually the userid
+    consists of four characters, which are usually uppercase, but the system does not
+    rely on this definition.
 
 :active: Indicates if the user is currently active or not. When setting the activity
-to `False` the user will not be selectable e.g. as responsible of a task but it's
-name and other properties can still be queried.
+    to `False` the user will not be selectable e.g. as responsible of a task but it's
+    name and other properties can still be queried.
 
 :firstname: First name of the user.
 
@@ -240,36 +240,36 @@ The OGDS-relevant vocabularies are storied in `opengever.ogds.base.vocabularies`
 :opengever.ogds.base.UsersVocabulary: Vocabulary of all users with a valid login.
 
 :opengever.ogds.base.UsersAndInboxesVocabulary: Vocabulary of all users and all
-inboxes of a specific client. The client is defined in the request either with
-key "client" or with key "form.widgets.responsible_client".
+    inboxes of a specific client. The client is defined in the request either with
+    key "client" or with key "form.widgets.responsible_client".
 
 :opengever.ogds.base.AssignedUsersVocabulary: Vocabulary of all users assigned
-to the current client.
+    to the current client.
 
 :opengever.ogds.base.ContactsVocabulary: Vocabulary of local contacts.
 
 :opengever.ogds.base.ContactsAndUsersVocabulary: Vocabulary of contacts and users.
 
 :opengever.ogds.base.EmailContactsAndUsersVocabulary: Vocabulary containing all
-users and contacts with each e-mail address they have.
+    users and contacts with each e-mail address they have.
 
 :opengever.ogds.base.ClientsVocabulary: Vocabulary of all enabled clients (including
- the current one).
+    the current one).
 
 :opengever.ogds.base.AssignedClientsVocabulary: Vocabulary of all assigned
-clients (=home clients) of the current user, including the current client.
+    clients (=home clients) of the current user, including the current client.
 
 :opengever.ogds.base.OtherAssignedClientsVocabulary: Vocabulary of all assigned
-clients (=home clients) of the current user. The current client is not included!
+    clients (=home clients) of the current user. The current client is not included!
 
 :opengever.ogds.base.HomeDossiersVocabulary: Vocabulary of all open dossiers on
-users home client. Key is the path of dossier relative to its plone site on
-the remote client.
+    users home client. Key is the path of dossier relative to its plone site on
+    the remote client.
 
 :opengever.ogds.base.DocumentInSelectedDossierVocabulary: Provides a vocabulary
-containing all documents within the previously selected dossier. Expects the
-context to be a dict containing the path to the dossier under the key
-'source_dossier'.
+    containing all documents within the previously selected dossier. Expects the
+    context to be a dict containing the path to the dossier under the key
+    'source_dossier'.
 
 
 Transporting system
@@ -294,10 +294,10 @@ Pushing a object to another client:
 :obj: The object which should be copied to the target client.
 
 :target_cid: The target client id which has to correspond with the client
-configuration.
+    configuration.
 
 :container_path: The path of the target container, relative to the target plone
-site root (that means it does not begin with a slash).
+    site root (that means it does not begin with a slash).
 
 Pulling objects from foreign clients:
 
@@ -308,7 +308,7 @@ Pulling objects from foreign clients:
 :source_cid: Client ID of the source client.
 
 :path: Path to the object which should be copied to this client. The path is
-relative to the Plone site root on the remote client.
+    relative to the Plone site root on the remote client.
 
 There are various adapters for creating object, extracting and setting object
 attributes etc. which can be easely customized on per type basis.
