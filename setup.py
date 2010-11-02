@@ -7,6 +7,7 @@ maintainer = 'Jonas Baumann'
 tests_require = [
     'collective.testcaselayer',
     'plone.app.testing',
+    'opengever.ogds.base [tests]'
 ]
 
 setup(name='opengever.document',
