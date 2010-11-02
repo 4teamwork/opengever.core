@@ -46,8 +46,6 @@ setup(name='opengever.ogds.base',
         'collective.elephantvocabulary',
         'collective.transmogrifier',
         'opengever.konsulmigration',
-        # FIXME: probably this dependency shouldn't be here
-        'simplejson',
         'ftw.dictstorage [sqlalchemy]',
         ],
       tests_require=tests_require,
