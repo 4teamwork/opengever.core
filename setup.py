@@ -7,7 +7,7 @@ maintainer = 'Jonas Baumann'
 tests_require = [
     'collective.testcaselayer',
     'plone.app.testing',
-    'opengever.ogds.base [tests]'
+    'opengever.ogds.base[tests]'
 ]
 
 setup(name='opengever.document',
@@ -62,7 +62,6 @@ setup(name='opengever.document',
         'opengever.inbox',
         'opengever.ogds.base',
         'collective.autopermission',
-        'plone.keyring',
         'opengever.mail',
         'collective.vdexvocabulary',
         ],
