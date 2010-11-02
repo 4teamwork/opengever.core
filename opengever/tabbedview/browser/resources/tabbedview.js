@@ -7,9 +7,6 @@ jq(function() {
             fade: 250
         });
 
-        // make more menu work
-        initializeMenus();
-
         /* actions (<a>) should submit the form */
         jq('#tabbedview-menu a.actionicon').click(function(event) {
             event.preventDefault();
@@ -20,6 +17,4 @@ jq(function() {
             })).submit();
         });
     });
-
-    initializeMenus();
 });
