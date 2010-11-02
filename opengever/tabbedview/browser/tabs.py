@@ -1,4 +1,6 @@
 from five import grok
+from Products.CMFCore.utils import getToolByName
+from plone.memoize.instance import memoize
 from ftw.tabbedview.browser.listing import CatalogListingView
 from ftw.tabbedview.interfaces import ITabbedView
 from ftw.table import helper
@@ -7,7 +9,7 @@ from opengever.tabbedview import _
 from opengever.tabbedview.helper import readable_date_set_invisibles
 from opengever.tabbedview.helper import readable_ogds_author, linked
 from opengever.task.helper import task_type_helper
-from plone.app.workflow.browser.sharing import SharingView
+from plone.app.workflow.browser.sharing import SharingView, AUTH_GROUP
 from plone.app.workflow.interfaces import ISharingPageRole
 from zope.app.pagetemplate import ViewPageTemplateFile
 from zope.component import getUtilitiesFor, getUtility
@@ -306,24 +308,45 @@ class Sharing(grok.View, SharingView):
     grok.template('sharing')
     grok.context(Interface)
 
+    @memoize
+    def existing_role_settings(self):
+        mtool = getToolByName(self.context, 'portal_membership')
+        member = mtool.getAuthenticatedMember()
+
+        settings = SharingView.existing_role_settings(self)
+
+        if 'Manager' not in member.getRolesInContext(self.context):
+            # remove AUTH_GROUP
+
+            return filter(lambda item: item.get('id') != AUTH_GROUP,
+                          settings)
+
+        else:
+            return settings
+
+#     @memoize
     def roles(self):
-        """Get a list of roles that can be managed.
+        return (
+            dict(id='Reader',
+                 title=_(u'role_Reader',
+                         default=u'Can view')),
 
-        Returns a list of dicts with keys:
+            dict(id='Editor',
+                 title=_(u'role_Editor',
+                         default=u'Can edit')),
 
-        - id
-        - title
-        """
-        pairs = []
-        aviable_roles_for_users = [
-            u'Editor', u'Reader', u'Contributor', u'Reviewer', ]
-        for name, utility in getUtilitiesFor(ISharingPageRole):
-            if name not in aviable_roles_for_users:
-                continue
-            pairs.append(dict(id = name, title = utility.title))
+            dict(id='Contributor',
+                 title=_(u'role_Contributor',
+                         default=u'Can contribute')),
 
-        pairs.sort(key=lambda x: x["id"])
-        return pairs
+            dict(id='Reviewer',
+                 title=_(u'role_Reviewer',
+                         default='Can activate')),
+
+            dict(id='Administrator',
+                 title=_(u'role_Administrator',
+                         default=u'Can manage')),
+            )
 
     def role_settings(self):
 
