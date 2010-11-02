@@ -5,9 +5,8 @@ from opengever.task.task import ITask
 from opengever.task.tests.layer import Layer
 from plone.dexterity.interfaces import IDexterityFTI
 from plone.dexterity.utils import createContent, addContentToContainer
-from plone.registry.interfaces import IRegistry
 from zope.component import createObject
-from zope.component import queryUtility, getUtility
+from zope.component import queryUtility
 from zope.event import notify
 from zope.lifecycleevent import ObjectCreatedEvent, ObjectAddedEvent
 import unittest
@@ -64,13 +63,10 @@ class TestTaskIntegration(PloneTestCase):
 
     def test_task_type_category(self):
         t1 = create_task(self.folder, title='Task 1')
-        registry = getUtility(IRegistry)
-        registry['opengever.task.interfaces.ITaskSettings.task_types_uni_ref'] = [u'Uni Ref 1',]
-        t1.task_type = u'Uni Ref 1'
-        self.assertEquals(u'uni_ref', t1.task_type_category)
-        registry['opengever.task.interfaces.ITaskSettings.task_types_uni_val'] = [u'Uni Val 1', u'Uni Val 2']
-        t1.task_type = u'Uni Val 2'
-        self.assertEquals(u'uni_val', t1.task_type_category)
+        t1.task_type = u'information'
+        self.assertEquals(u'unidirectional_by_reference', t1.task_type_category)
+        t1.task_type = u'approval'
+        self.assertEquals(u'bidirectional_by_reference', t1.task_type_category)
 
 def test_suite():
     return unittest.defaultTestLoader.loadTestsFromName(__name__)
