@@ -5,6 +5,7 @@ from ftw.tabbedview.browser.listing import CatalogListingView
 from ftw.tabbedview.interfaces import ITabbedView
 from ftw.table import helper
 from opengever.ogds.base.interfaces import IContactInformation
+from opengever.base.browser.helper import client_title_helper
 from opengever.tabbedview import _
 from opengever.tabbedview.helper import readable_date_set_invisibles
 from opengever.tabbedview.helper import readable_ogds_author, linked
@@ -258,7 +259,8 @@ class Tasks(OpengeverCatalogListingTab):
          'transform': helper.readable_date},
 
         {'column': 'client_id',
-         'column_title': _('client_id', 'Client'), },
+         'column_title': _('client_id', 'Client'),
+         'transform': client_title_helper},
 
         {'column': 'sequence_number',
          'column_title': _(u'sequence_number', "Sequence Number"), },
