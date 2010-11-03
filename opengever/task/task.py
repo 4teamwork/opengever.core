@@ -224,6 +224,10 @@ class Task(Container):
                 return category
         return None
 
+    @property
+    def client_id(self):
+        return get_client_id()
+
 
 @form.default_value(field=ITask['deadline'])
 def deadlineDefaultValue(data):
@@ -421,6 +425,12 @@ def assigned_client(obj):
     else:
         return obj.responsible_client
 grok.global_adapter(assigned_client, name='assigned_client')
+
+
+@indexer(ITask)
+def client_id(obj):
+    return get_client_id()
+grok.global_adapter(client_id, name='client_id')
 
 
 @indexer(ITask)
