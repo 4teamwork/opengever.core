@@ -80,7 +80,7 @@ msgstr "Anhänge"
 #. Default: "Checkin"
 #: ./opengever/document/staging/checkin.py:37
 msgid "button_checkin"
-msgstr "Checkin"
+msgstr "Einchecken"
 
 #. Default: "Create"
 #: ./opengever/document/docucomposer.py:46
