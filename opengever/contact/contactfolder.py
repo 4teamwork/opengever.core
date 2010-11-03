@@ -19,8 +19,7 @@ def linked(item, value):
         url_method = item.getURL
     elif hasattr(item, 'absolute_url'):
         url_method = item.absolute_url
-    img = u'<img src="%s"/>' % (item.getIcon)
-    link = u'<a href="%s" >%s%s</a>' % (url_method(), img, value)
+    link = u'<a href="%s" >%s</a>' % (url_method(),value)
     wrapper = u'<span class="linkWrapper">%s</span>' % link
     return wrapper
 
@@ -34,31 +33,38 @@ class Contacts(OpengeverCatalogListingTab):
     types = ['opengever.contact.contact', ]
 
     columns = (
-        ('', helper.draggable),
-        ('', helper.path_checkbox),
+        {'column': 'lastname',
+         'column_title': _(u'label_lastname',
+                           default=u'Lastname'),
+         'transform': linked},
 
-        {'column':'Title',
-         'column_title':_('name', default='Name'),
-         'sort_index' : 'sortable_title',
-         'transform':linked},
-         {'column':'email',
-          'column_title':_('label_email', default="email"),
-          'transform': email_helper,
-          },
-          {'column':'phone_office',
-            'column_title':_('label_phone_office', default='Phone office')
-          },
+        {'column': 'firstname',
+         'column_title': _(u'label_firstname',
+                           default=u'Firstname'),
+         'transform': linked},
+
+        {'column': 'email',
+         'column_title': _(u'label_email',
+                           default=u'email'),
+         'transform': email_helper},
+
+        {'column': 'phone_office',
+         'column_title': _(u'label_phone_office',
+                           default=u'Phone office')},
         )
 
-    sort_on = 'sortable_title'
-    sort_order='asc'
+    sort_on = 'lastname'
+    sort_order=''
 
-    def custom_sort(self, results, sort_on, sort_reverse):
+    enabled_actions = []
+    major_actions = []
+    
+    def update_config(self):
+        OpengeverCatalogListingTab.update_config(self)
 
-        if sort_on in ('email', 'phone_office'):
-            # we have not sort index, so sort manually
-
-            return default_custom_sort(results, sort_on, sort_reverse)
-
-        else:
-            return OpengeverTab.custom_sort(self, results, sort_on, sort_reverse)
+        # configuration for the extjs grid
+        extjs_conf = {'auto_expand_column':'lastname'}
+        if isinstance(self.table_options, dict):
+            self.table_options.update(extjs_conf)
+        elif self.table_options is None:
+            self.table_options = extjs_conf.copy()

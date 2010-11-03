@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2010-10-27 14:08+0000\n"
+"POT-Creation-Date: 2010-11-03 15:37+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -153,17 +153,19 @@ msgstr ""
 
 #. Default: "email"
 #: ./opengever/contact/contact.py:105
-#: ./opengever/contact/contactfolder.py:37
+#: ./opengever/contact/contactfolder.py:47
 msgid "label_email"
 msgstr ""
 
 #. Default: "Firstname"
 #: ./opengever/contact/contact.py:81
+#: ./opengever/contact/contactfolder.py:42
 msgid "label_firstname"
 msgstr ""
 
 #. Default: "Lastname"
 #: ./opengever/contact/contact.py:75
+#: ./opengever/contact/contactfolder.py:37
 msgid "label_lastname"
 msgstr ""
 
@@ -184,7 +186,7 @@ msgstr ""
 
 #. Default: "Phone office"
 #: ./opengever/contact/contact.py:123
-#: ./opengever/contact/contactfolder.py:40
+#: ./opengever/contact/contactfolder.py:52
 msgid "label_phone_office"
 msgstr ""
 
@@ -216,11 +218,6 @@ msgstr ""
 #. Default: "Function"
 #: ./opengever/contact/contact.py:93
 msgid "lable_function"
-msgstr ""
-
-#. Default: "Name"
-#: ./opengever/contact/contactfolder.py:34
-msgid "name"
 msgstr ""
 
 #. Default: "Personal Stuff"

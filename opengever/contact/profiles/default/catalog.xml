@@ -9,5 +9,6 @@
     <column value="email2" />
     <column value="firstname" />
     <column value="lastname" />
+    <column value="phone_office" />
 
 </object>

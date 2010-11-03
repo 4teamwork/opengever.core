@@ -213,8 +213,24 @@ def contactid(obj):
 grok.global_adapter(contactid, name='contactid')
 
 
+@indexer(IContact)
+def phone_office(obj):
+    return obj.phone_office
+grok.global_adapter(phone_office, name='phone_office')
+
+
+@indexer(IContact)
+def firstname(obj):
+    return obj.firstname 
+grok.global_adapter(firstname, name='firstname')
+
+
+@indexer(IContact)
+def lastname(obj):
+    return obj.lastname 
+grok.global_adapter(lastname, name='lastname')
+
+
 class View(dexterity.DisplayForm):
     grok.context(IContact)
     grok.require('zope2.View')
-
-
