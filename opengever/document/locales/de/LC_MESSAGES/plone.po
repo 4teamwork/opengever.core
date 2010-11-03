@@ -12,13 +12,16 @@ msgstr ""
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: DOMAIN\n"
 
+msgid "Cancel Checkout"
+msgstr "Zurücksetzen"
+
+msgid "Checkin"
+msgstr "Einchecken"
+
 msgid "Checkout"
 msgstr "Auschecken"
 
 msgid "Checkout and edit"
 msgstr "Auschecken und bearbeiten"
-
-msgid "cancel_checkout"
-msgstr "Zurückgesetzt"
 
 
