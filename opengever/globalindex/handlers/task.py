@@ -62,18 +62,9 @@ def index_task(obj, event):
     task.issuer = obj.issuer
 
     # we need to have python datetime objects for make it work with sqlite etc.
-    try:
-        task.deadline = datetime(obj.deadline)
-    except TypeError:
-        pass
-    try:
-        task.completed = datetime(obj.date_of_completion)
-    except TypeError:
-        pass
-    try:
-        task.modified = datetime(obj.modified())
-    except TypeError:
-        pass
+    task.deadline = obj.deadline
+    task.completed = obj.date_of_completion
+    task.modified = obj.modified().asdatetime()
 
     task.task_type = obj.task_type
     task.sequence_number = getUtility(ISequenceNumber).get_number(obj)

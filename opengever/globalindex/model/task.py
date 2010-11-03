@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, UniqueConstraint
+from sqlalchemy import Column, Integer, String, DateTime, Date, ForeignKey, UniqueConstraint
 from sqlalchemy.orm import relation
 from sqlalchemy.ext.associationproxy import association_proxy
 from sqlalchemy.schema import Sequence
@@ -32,8 +32,8 @@ class Task(Base):
 
     created = Column(DateTime, default=functions.now())
     modified = Column(DateTime)
-    deadline = Column(DateTime)
-    completed = Column(DateTime)
+    deadline = Column(Date)
+    completed = Column(Date)
 
     assigned_client = Column(String(20), index=True)
 
