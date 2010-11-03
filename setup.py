@@ -35,9 +35,12 @@ setup(name='opengever.contact',
         'plone.dexterity',
         'ftw.table',
         'setuptools',
+        'five.grok',
         'opengever.tabbedview',
         # -*- Extra requirements: -*-
         ],
+        tests_require=tests_require,
+        extras_require=dict(tests=tests_require),
       entry_points="""
       # -*- Entry points: -*-
       [z3c.autoinclude.plugin]

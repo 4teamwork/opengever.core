@@ -1,0 +1,59 @@
+Contact
+======= 
+
+blba bla bla
+
+do some imports and configurations
+    >>> from plone.testing.z2 import Browser
+    >>> from plone.app.testing import TEST_USER_NAME
+    >>> from plone.app.testing import TEST_USER_PASSWORD
+    >>> from plone.app.testing import setRoles
+    >>> from plone.dexterity.utils import createContentInContainer
+
+    >>> app = layer['app']
+    >>> portal = layer['portal']
+
+browser test
+    >>> browser = Browser(app)
+    >>> browser.handleErrors = True
+
+    >>> setRoles(portal, TEST_USER_NAME, ['Member', 'Manager'])
+    >>> browser.addHeader('Authorization', 'Basic %s:%s' % (TEST_USER_NAME, TEST_USER_PASSWORD))
+
+    >>> browser.open(portal.portal_url())
+    >>> 'test_user_1' in browser.contents
+    True
+
+create contact folder
+
+    >>> contacts = createContentInContainer(portal, 'opengever.contact.contactfolder',
+    ...                                     title='Contacts', checkConstraints=False)
+    >>> contacts
+    <Container at /plone/opengever.contact.contactfolder>
+    >>> contacts.manage_setLocalRoles(TEST_USER_NAME, ['Manager', 'Contributor', 'Editor'])
+    >>> contacts.absolute_url()
+    'http://nohost/plone/opengever.contact.contactfolder'
+
+test view:
+    >>> browser.open('http://nohost/plone/opengever.contact.contactfolder/@@sharing')
+
+create a contact:
+
+    >>> browser.open('http://nohost/plone/opengever.contact.contactfolder/folder_factories')
+    >>> browser.getControl('Contact').click()
+    >>> browser.getControl('Add').click()
+
+    >>> browser.url
+    'http://nohost/plone/opengever.contact.contactfolder/++add++opengever.contact.contact'
+    >>> browser.getControl('Firstname').value = 'lorem'
+    >>> browser.getControl('Save').click()
+
+    >>> browser.url
+    'http://nohost/plone/opengever.contact.contactfolder/++add++opengever.contact.contact'
+    >>> browser.getControl('Firstname').value = 'lorem'
+    >>> browser.getControl('Lastname').value = 'ipsum'
+    >>> browser.getControl('Save').click()
+    >>> browser.url
+    'http://nohost/plone/opengever.contact.contactfolder/ipsum-lorem/view'
+    
+    
