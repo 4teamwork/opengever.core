@@ -30,6 +30,8 @@ setup(name='opengever.latex',
       include_package_data=True,
       zip_safe=False,
       install_requires=[
+        'opengever.tabbedview',
+        'opengever.globalindex',
         'plonegov.pdflatex',
         'opengever.task',
         'opengever.repository',
