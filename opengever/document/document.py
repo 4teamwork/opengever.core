@@ -24,7 +24,7 @@ from plone.namedfile.interfaces import INamedFileField
 from plone.stagingbehavior.relation import StagingRelationValue
 from plone.supermodel.interfaces import FIELDSETS_KEY
 from plone.supermodel.model import Fieldset
-from plone.versioningbehavior.behaviors import IVersionable
+from plone.app.versioningbehavior.behaviors import IVersionable
 from plone.z3cform.textlines.textlines import TextLinesFieldWidget
 from z3c.form.browser import checkbox
 from zc.relation.interfaces import ICatalog
