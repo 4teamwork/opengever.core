@@ -203,6 +203,7 @@ class ArchiveForm(directives_form.Form):
                 IDossier(self.context).end = data.get('dossier_enddate')
 
                 # create filing number for all subdossiers
+                # and resolve them also
                 subdossiers = self.context.portal_catalog(
                                         portal_type="opengever.dossier.businesscasedossier",
                                         path=dict(depth=1,
@@ -213,10 +214,14 @@ class ArchiveForm(directives_form.Form):
                 )
 
                 counter = 1
+                wft = self.context.portal_workflow
                 for dossier in subdossiers:
+
                     dossier = dossier.getObject()
                     dossier.filing_no = filing_no + "." + str(counter)
                     counter += 1
+
+                    wft.doActionFor(dossier, 'dossier-transition-resolve')
 
         if action == 0 or action == 1:
             data, errors = self.extractData()
