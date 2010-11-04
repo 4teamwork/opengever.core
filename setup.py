@@ -35,7 +35,7 @@ setup(name='opengever.journal',
         'opengever.document',
         'setuptools',
         'ftw.journal',
-        'plone.versioningbehavior',
+        'plone.app.versioningbehavior',
         # -*- Extra requirements: -*-
         ],
       entry_points="""

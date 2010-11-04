@@ -8,7 +8,7 @@ from zope.lifecycleevent.interfaces import IObjectModifiedEvent
 from zope.i18nmessageid.message import Message
 from zope.i18nmessageid import MessageFactory
 
-from plone.versioningbehavior.utils import get_change_note
+from plone.app.versioningbehavior.utils import get_change_note
 from Products.CMFCore.interfaces import IActionSucceededEvent
 
 from ftw.journal.events.events import JournalEntryEvent
