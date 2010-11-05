@@ -1,32 +1,58 @@
-from zope import schema
-from zope.schema.vocabulary import SimpleVocabulary
-from zope.schema.interfaces import IContextSourceBinder
-from zope.annotation.interfaces import IAnnotations
-from zope.component import getUtility
-from zope.interface import invariant, Invalid
 from Acquisition import aq_inner, aq_parent
-from persistent.dict import PersistentDict
-from five import grok
-from z3c.form import button, field
-from z3c.form.interfaces import INPUT_MODE
-from z3c.form.browser import radio
-from Products.CMFCore.interfaces import ISiteRoot
-from Products.Transience.Transience import Increaser
-from Products.statusmessages.interfaces import IStatusMessage
-
-from plone.registry.interfaces import IRegistry
-from plone.directives import form as directives_form
 from collective.elephantvocabulary import wrap_vocabulary
-
-from opengever.dossier import _
-from opengever.dossier.behaviors.dossier import IDossierMarker
-from opengever.dossier.behaviors.dossier import IDossier
+from datetime import datetime, time
+from five import grok
+from ftw.table.catalog_source import default_custom_sort
 from opengever.base.interfaces import IBaseClientID
+from opengever.dossier import _
+from opengever.dossier.behaviors.dossier import IDossier
+from opengever.dossier.behaviors.dossier import IDossierMarker
+from persistent.dict import PersistentDict
+from plone.directives import form as directives_form
+from plone.registry.interfaces import IRegistry
+from Products.CMFCore.interfaces import ISiteRoot
+from Products.statusmessages.interfaces import IStatusMessage
+from Products.Transience.Transience import Increaser
+from z3c.form import button, field
+from z3c.form import validator
+from z3c.form.browser import radio
+from z3c.form.interfaces import INPUT_MODE
+from zope import schema
+from zope.annotation.interfaces import IAnnotations
+from zope.component import getUtility, provideAdapter
+from zope.interface import invariant, Invalid
+from zope.schema.interfaces import IContextSourceBinder
+from zope.schema.vocabulary import SimpleVocabulary
 
 
 class MissingValue(Invalid):
     """ The Missing value was defined Exception."""
     __doc__ = _(u"Not all required fields are filled")
+
+
+class EnddateValidator(validator.SimpleFieldValidator):
+    """check if the subdossier hasn't a younger date,
+    than the given enddate"""
+
+    def validate(self, value):
+        if not value:
+            raise MissingValue(_(u'The enddate is required.'))
+            
+        subdossiers = self.context.portal_catalog(
+            path=dict(
+                query='/'.join(self.context.getPhysicalPath()),
+                depth=-1) ,
+            object_provides= 'opengever.dossier.behaviors.dossier.IDossierMarker'
+        )
+        if len(subdossiers) != 0:
+            subdossiers = default_custom_sort(subdossiers, 'end', True)
+
+            if datetime.combine(value, time(0,0)) < subdossiers[0].end:
+                raise Invalid(
+                    _(u'The given end date is older than the end date \
+                        of the youngest subdossier(${number})',
+                            mapping = {'number':subdossiers[0].end}))
+
 
 
 @grok.provider(IContextSourceBinder)
@@ -49,7 +75,6 @@ def get_filing_actions(context):
 
     return SimpleVocabulary(values)
 
-
 class IArchiveFormSchema(directives_form.Schema):
 
     filing_prefix = schema.Choice(
@@ -66,7 +91,7 @@ class IArchiveFormSchema(directives_form.Schema):
         required=True,
     )
 
-    filing_year = schema.Int(
+    filing_year = schema.TextLine(
         title = _(u'filing_year', default="filing Year"),
         required=False,
     )
@@ -90,7 +115,7 @@ class IArchiveFormSchema(directives_form.Schema):
 def filing_prefix_default_value(data):
     prefix = IDossier(data.context).filing_prefix
     if prefix:
-        return prefix.encode('utf-8')
+        return prefix.decode('utf-8')
     return ""
 
 @directives_form.default_value(field=IArchiveFormSchema['filing_year'])
@@ -98,15 +123,14 @@ def filing_year_default_value(data):
     documents = data.context.portal_catalog(
         path=dict(
             query='/'.join(data.context.getPhysicalPath()),
-        ),
+            depth=-1) ,
         portal_type= ['opengever.document.document'],
-        sort_on= 'document_date',
-        sort_order='reverse',
     )
     if len(documents) == 0:
         return None
     else:
-        return documents[0].getObject().document_date.year
+        documents = default_custom_sort(documents, 'document_date', True)
+        return str(documents[0].getObject().document_date.year)
 
 @directives_form.default_value(field=IArchiveFormSchema['dossier_enddate'])
 def dossier_date_default_value(data):
@@ -116,12 +140,10 @@ def dossier_date_default_value(data):
             query='/'.join(data.context.getPhysicalPath()),
         ),
         portal_type= ['opengever.document.document'],
-        sort_on= 'document_date',
-        sort_order='reverse',
     )
-
     if len(documents) != 0:
-        if dossier_end == None or dossier_end > documents[0].document_date:
+        documents = default_custom_sort(documents, 'document_date', True)
+        if dossier_end == None or dossier_end < documents[0].document_date:
             return documents[0].document_date
     return dossier_end
 
@@ -135,7 +157,6 @@ class ArchiveForm(directives_form.Form):
     ignoreContext = True
     fields['filing_action'].widgetFactory[INPUT_MODE] = radio.RadioFieldWidget
     label = _(u'heading_archive_form', u'Archive Dossier')
-
 
     def __call__(self):
         """ check if the filing number already exist,
@@ -172,7 +193,7 @@ class ArchiveForm(directives_form.Form):
             else:
                 FILING_NO_KEY = "filing_no"
 
-                filing_year = str(data.get('filing_year'))
+                filing_year = data.get('filing_year')
                 filing_prefix = data.get('filing_prefix')
 
                 # filing_sequence
@@ -199,18 +220,19 @@ class ArchiveForm(directives_form.Form):
                 filing_no = filing_client + "-" + filing_prefix + "-" + filing_year + "-" + str(filing_sequence)
                 self.context.filing_no = filing_no
 
-                # set the dossier end date
+                # set the dossier end date and the dossier filing prefix
                 IDossier(self.context).end = data.get('dossier_enddate')
+                IDossier(self.context).filing_prefix = data.get('filing_prefix')
 
                 # create filing number for all subdossiers
                 # and resolve them also
                 subdossiers = self.context.portal_catalog(
-                                        portal_type="opengever.dossier.businesscasedossier",
-                                        path=dict(depth=1,
-                                            query='/'.join(self.context.getPhysicalPath()),
-                                        ),
-                                        sort_on='modified',
-                                        sort_order='reverse',
+                    portal_type="opengever.dossier.businesscasedossier",
+                    path=dict(depth=1,
+                        query='/'.join(self.context.getPhysicalPath()),
+                    ),
+                    sort_on='modified',
+                    sort_order='reverse',
                 )
 
                 counter = 1
@@ -220,7 +242,7 @@ class ArchiveForm(directives_form.Form):
                     dossier = dossier.getObject()
                     dossier.filing_no = filing_no + "." + str(counter)
                     counter += 1
-
+                    import pdb; pdb.set_trace( )
                     wft.doActionFor(dossier, 'dossier-transition-resolve')
 
         if action == 0 or action == 1:
@@ -242,3 +264,11 @@ class ArchiveForm(directives_form.Form):
     @button.buttonAndHandler(_(u'button_cancel', default=u'Cancel'))
     def cancel(self, action):
         return self.request.RESPONSE.redirect(self.context.absolute_url())
+
+validator.WidgetValidatorDiscriminators(
+    EnddateValidator,
+    field=IArchiveFormSchema['dossier_enddate'],
+)
+
+provideAdapter(EnddateValidator)
+
