@@ -16,11 +16,6 @@
 
         <div tal:replace="structure provider:plone.belowcontenttitle" />
 
-        <p class="documentDescription" tal:content="context/Description" />
-
-        <div tal:replace="structure provider:plone.abovecontentbody" />
-
-
         <table class="listing task-listing">
           <tal:rep tal:define="group python: view.groups[0]">
             <tr tal:repeat="widget group/widgets/values">
@@ -58,7 +53,6 @@
               <tal:block condition="python:widget.__name__ not in ('IBasic.title', 'IBasic.description', 'title', 'description','responsible', 'ITransition.transition', 'date_of_completion') and widget.value and widget.value != ('', '', '')">
                 <th tal:content="widget/label"></th>
                 <td tal:content="structure widget/render" />
-                <span tal:content="python: widget.value"/>
               </tal:block>
               <tal:block condition="python:widget.__name__  == 'responsible'and widget.value">
                 <th tal:content="widget/label"></th>
@@ -117,11 +111,7 @@
               <img tal:attributes="src item/getIcon" />
               <a href="" tal:attributes="href item/absolute_url|nothing" tal:omit-tag="not: item/absolute_url|nothing"><span tal:content="item/Title" /></a>
             </li>
-            <!-- <li tal:repeat="item python:view.w['IRelatedItems.relatedItems'].items">
-                 <a href="" tal:attributes="href item/value|nothing" tal:omit-tag="not: item/value|nothing"><span tal:content="item/label" /></a>
-                 </li> -->
           </ul>
-          <!-- <span tal:condition="not: items" i18n:translate="no_content">No Content</span> -->
         </tal:items>
 
         <div class="visualClear"><!----></div>
