@@ -5,7 +5,7 @@ from ftw.table.interfaces import ITableSource, ITableSourceConfig
 from zope.interface import implements, Interface
 from ftw.table import helper
 from five import grok
-from opengever.tabbedview import _
+from opengever.ogds.base import _
 from sqlalchemy import or_
 from ftw.tabbedview.browser.listing import ListingView
 from opengever.tabbedview.browser.tabs import OpengeverTab

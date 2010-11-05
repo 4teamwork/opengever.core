@@ -15,9 +15,6 @@
       <div tal:content="structure view/render_listing" />
     </tal:cond>
 
-    <p tal:condition="not: view/contents">
-      Keine Inhalte vorhanden
-    </p>
 
   </form>
 
