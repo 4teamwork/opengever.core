@@ -175,7 +175,7 @@ class IDossier(form.Schema):
 
     @invariant
     def validateStartEnd(data):
-        if data.start is not None and data.end is not None:
+        if data.start is not None or data.end is not None:
             if data.start > data.end:
                 raise StartBeforeEnd(
                     _(u"The start date must be before the end date."))
