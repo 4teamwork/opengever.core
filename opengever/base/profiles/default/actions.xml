@@ -81,7 +81,7 @@
             <property name="url_expr">string:${object_url}/view</property>
             <property name="icon_expr"></property>
             <property name="available_expr">
-                python: here.restrictedTraverse('@@plone_context_state').view_template_id() != 'view'
+                python: here.restrictedTraverse('@@plone_context_state').view_template_id() != 'view' and here.portal_type !='opengever.contact.contactfolder'
             </property>
             <property name="permissions">
                 <element value="View"/>
