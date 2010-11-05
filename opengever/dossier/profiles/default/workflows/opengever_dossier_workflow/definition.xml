@@ -223,7 +223,7 @@
  <transition transition_id="dossier-transition-resolve" title="Owner resolves dossier" new_state="dossier-state-resolved" trigger="USER" before_script="" after_script="">
   <action url="%(content_url)s/transition-resolve" category="workflow" icon="">dossier-transition-resolve</action>
   <guard>
-   <guard-role>Owner</guard-role>
+   <guard-role>Reviewer</guard-role>
   </guard>
  </transition>
  <worklist worklist_id="reviewer_queue" title="">
