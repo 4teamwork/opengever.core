@@ -6,7 +6,11 @@
     xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
     i18n_domain="opengever.dossier">
 
+    <!-- <include package="opengever.workflows" /> -->
+    <include package="opengever.task" />
+    <include package="opengever.document" />
     <include package="opengever.workflows" />
+    <include package="opengever.mail" />
 
         
 </configure>

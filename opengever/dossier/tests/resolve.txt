@@ -1,42 +1,187 @@
+Resolve and archive a dossier
+=============================
+
+Resolving
+=========
 In this text we check the rules for resolve a Dossier
-For this we use some Dossiers and also two fake portal_types (ftw.task.task and opengever.document.document).
-First we create this fake portal_types
-    >>> self.folder.invokeFactory('opengever.dossier.businesscasedossier', 'dossier')
-    'dossier'
-    >>> dossier = self.folder.get('dossier')
 
-    >>> from plone.dexterity.fti import DexterityFTI
-    >>> fti = DexterityFTI('opengever.document.document')
-    >>> fti.behaviors = ('plone.app.dexterity.behaviors.metadata.IDublinCore',)
-    >>> if 'opengever.document.document' in self.portal.portal_types.objectIds():
-    ...     self.portal.portal_types.manage_delObjects(['opengever.document.document'])
-    >>> self.portal.portal_types._setObject('opengever.document.document', fti)
-    'opengever.document.document'
-    >>> dossier.invokeFactory('opengever.document.document', 'd1')
-    'd1'
+do some imports
+    >>> from plone.dexterity.utils import createContentInContainer
+    >>> from Products.Five.testbrowser import Browser
+    >>> from datetime import datetime
+    >>> from opengever.dossier.behaviors.dossier import IDossier
 
-So then we create a Dossier, and some content objects, we used for the test
-    >>> fti = DexterityFTI('opengever.task.task')
-    >>> if 'opengever.task.task' in self.portal.portal_types.objectIds():
-    ...     self.portal.portal_types.manage_delObjects(['opengever.task.task'])
-    >>> self.portal.portal_types._setObject('opengever.task.task', fti)
-    'opengever.task.task'
-    >>> dossier.invokeFactory('opengever.task.task', 't1')
-    't1'
+setup the browser for the test, we used later in the test
+    >>> browser = Browser()
+    >>> browser.handleErrors = False
+    >>> self.app.acl_users.userFolderAddUser('root', 'secret',
+    ...                                ['Manager','Contributor', 'Reviewer', 'Administrator'], [])
+    >>> browser.addHeader('Authorization', 'Basic root:secret' )
+    >>> portal.manage_setLocalRoles('root', ['Reviewer',])
 
-Check all documents and tasks are in a subdossier, when a subdossier exists
+creating dossier, ...
+    >>> dossier = createContentInContainer(self.portal,
+    ...     'opengever.dossier.businesscasedossier',
+    ...     title='Dossiers', checkConstraints=False)
+    >>> dossier
+    <DossierContainer at ...>
+
+subdossier, ...
+    >>> subdossier = createContentInContainer(dossier,
+    ...     'opengever.dossier.businesscasedossier',
+    ...     title='Subdossier', checkConstraints=False)
+    >>> dossier
+    <DossierContainer at ...>
+
+documents, ...
+    >>> doc1 = createContentInContainer(dossier, 
+    ...     'opengever.document.document', title="Doc1", checkConstraints=False)
+    >>> doc1
+    <Document at /plone/dossier-1/document-1>
+
+and tasks,
+    >>> task1 = createContentInContainer(dossier, 
+    ...     'opengever.task.task', title="Task1", checkConstraints=False)
+    >>> task1
+    <Task at /plone/dossier-1/task-1>
+
+
+is all supplied
+---------------
+get the resolving object and check the is_all_supplied method
     >>> resolve = dossier.unrestrictedTraverse('transition-resolve')
-    >>> resolve.is_all_supplied()
-    True
-    >>> dossier.invokeFactory('opengever.dossier.businesscasedossier', 'subdossier')
-    'subdossier'
-    >>> subdossier = dossier.get('subdossier')
     >>> resolve.is_all_supplied()
     False
 
-Remove items in the dossier and add some items in to the sudossier
-    >>> dossier.manage_delObjects(ids=['t1', 'd1'])
-    >>> subdossier.invokeFactory('opengever.task.task', 't1')
-    't1'
+Move the object to the subdossier, the task rest in the maindossier, and check is all supplied
+    >>> clibboard = dossier.manage_cutObjects(
+    ...    [doc1.getId(),])
+    >>> result = subdossier.manage_pasteObjects(clibboard)
+    >>> doc1 = getattr(subdossier, result[0].get('new_id'))
+    >>> resolve.is_all_supplied()
+    False
+
+Move also the task to the subdossier and now all should be supplied
+    >>> clibboard = dossier.manage_cutObjects(
+    ...    [task1.getId(),])
+    >>> result = subdossier.manage_pasteObjects(clibboard)
+    >>> task1 = getattr(subdossier, 'task-1')
     >>> resolve.is_all_supplied()
     True
+
+
+is_all_checked_in
+-------------
+test the is all_checked_in method 
+    >>> wft = portal.portal_workflow
+    >>> wft.getInfoFor(doc1, 'review_state')
+    'draft'
+    >>> resolve.is_all_checked_in()
+    True
+    >>> wft.doActionFor(doc1, 'check_out')
+    >>> resolve.is_all_checked_in()
+    False
+    >>> wft.doActionFor(doc1, 'check_in')
+    >>> resolve.is_all_checked_in()
+    True
+
+
+is_all_closed
+-------------
+it should only be possible resolving a dossier when all tasks are resolved
+    >>> wft = portal.portal_workflow
+    >>> wft.getInfoFor(task1, 'review_state')
+    'task-state-open'
+    >>> resolve.is_all_closed()
+    False
+    >>> wft.doActionFor(task1, 'task-transition-open-resolved')
+    >>> resolve.is_all_closed()
+    True
+
+
+Archive
+=======
+create a seconde document
+    >>> doc2 = createContentInContainer(subdossier, 
+    ...     'opengever.document.document', title="Doc2", checkConstraints=False)
+    >>> doc2
+    <Document at ...>
+
+default value's
+---------------
+check default value of date field
+    >>> doc1.document_date = datetime(2011,11,11)
+    >>> doc1.reindexObject()
+    >>> doc2.document_date = datetime(2012,12,12)
+    >>> doc2.reindexObject()
+
+When dossier_end_date is empty, it should set the latest document_date as default
+    >>> browser.open('http://nohost/plone/dossier-1/transition-archive')
+    >>> browser.getControl(name='form.widgets.dossier_enddate-year').value
+    '2012'
+    >>> browser.getControl(name='form.widgets.dossier_enddate-day').value
+    '12'
+    >>> browser.getControl(name='form.widgets.dossier_enddate-month').value
+    ['12']
+
+When a dossier end is set and no document_date is later, it should set the dossier_date as default
+    >>> IDossier(dossier).end = datetime(2015,1,1)
+    >>> dossier.reindexObject()
+    >>> browser.open('http://nohost/plone/dossier-1/transition-archive')
+    >>> browser.getControl(name='form.widgets.dossier_enddate-year').value
+    '2015'
+
+else it should set the latest document_date as default
+    >>> IDossier(dossier).end = datetime(2010, 01,01)
+    >>> dossier.reindexObject()
+    >>> browser.open('http://nohost/plone/dossier-1/transition-archive')
+    >>> browser.getControl(name='form.widgets.dossier_enddate-year').value
+    '2012'
+
+filing prefix it should propose the latest document date
+    >>> browser.getControl('filing Year').value
+    '2012'
+
+
+check validators
+----------------
+    all fields are required when given filingnumber is selected
+    >>> browser.getControl(name='form.widgets.filing_action:list').value = ['resolve and set filing no']
+    >>> browser.getControl('Archive').click()
+    >>> browser.url
+    'http://nohost/plone/dossier-1/transition-archive'
+
+    check if the subdossier has an older end date than the given end date
+    >>> IDossier(subdossier).end = datetime(2015, 1, 1)
+    >>> subdossier.reindexObject()
+    >>> browser.open('http://nohost/plone/dossier-1/transition-archive')
+    >>> browser.getControl('filing prefix').value = ['government']
+    >>> browser.getControl(name='form.widgets.dossier_enddate-year').value = '2010'
+    >>> browser.getControl('Archive').click()
+    >>> browser.url
+    'http://nohost/plone/dossier-1/transition-archive'
+
+
+check the giving of filing numbers
+----------------------------------
+send form with correct data
+    >>> browser.getControl('filing prefix').value = ['government']
+    >>> browser.getControl(name='form.widgets.dossier_enddate-year').value = '2016'
+    >>> browser.getControl(name='form.widgets.filing_action:list').value = ['resolve and set filing no']
+    
+    >>> browser.getControl('Archive').click()
+    >>> browser.url
+    'http://nohost/plone/dossier-1'
+
+check the given filing no
+    >>> getattr(dossier, 'filing_no')
+    u'OG-government-2012-1'
+    >>> getattr(subdossier, 'filing_no')
+    u'OG-government-2012-1.1'
+
+check if the values are assumed to the dossier 
+    >>> IDossier(dossier).end
+    datetime.date(2016, 12, 12)
+    >>> IDossier(dossier).filing_prefix
+    'government'
+
