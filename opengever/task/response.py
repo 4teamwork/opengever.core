@@ -252,7 +252,6 @@ class AddForm(form.AddForm, AutoExtensibleForm):
                 #  _('deadline')),
                 (task.date_of_completion, completion_date,
                  'date_of_completion', _('date_of_completion'))]
-
             for task_field, resp_field, option, title in options:
                 if resp_field and task_field != resp_field:
                     new_response.add_change(option,
