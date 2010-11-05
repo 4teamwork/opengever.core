@@ -106,9 +106,9 @@ User tests:
     ...
     ValueError: principal inbox:client1 is not a user
     >>> info.describe('hugo.boss')
-    u'Boss Hugo'
+    u'Boss Hugo (hugo.boss)'
     >>> info.describe('hugo.boss', with_email=True)
-    u'Boss Hugo (hugo@boss.local)'
+    u'Boss Hugo (hugo.boss, hugo@boss.local)'
 
     >>> info.get_email('hugo.boss')
     u'hugo@boss.local'
@@ -119,7 +119,7 @@ User tests:
     u'http://nohost/plone/@@user-details/hugo.boss'
 
     >>> info.render_link('hugo.boss')
-    u'<a href="http://nohost/plone/@@user-details/hugo.boss">Boss Hugo</a>'
+    u'<a href="http://nohost/plone/@@user-details/hugo.boss">Boss Hugo (hugo.boss)</a>'
 
 
 Contacts tests:

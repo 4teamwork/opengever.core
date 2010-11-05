@@ -175,14 +175,14 @@ List all active users.
     <opengever.ogds.base.vocabularies.UsersVocabularyFactory object at ...>
     >>> voc = fact(portal)
     >>> fterms(list(voc))
-    [u'<Term hugo.boss:Boss Hugo>', u'<Term peter.muster:Muster Peter>', u'<Term hanspeter.linder:Linder Hans-Peter>']
+    [u'<Term hugo.boss:Boss Hugo (hugo.boss)>', u'<Term peter.muster:Muster Peter (peter.muster)>', u'<Term hanspeter.linder:Linder Hans-Peter (hanspeter.linder)>']
 
 Hidden users are always accessible with ``getTerm`` or ``getTermByToken``, but
 not visible in when listing vocabulary or searching it. And keep in mind
 ``Robin Hood`` is always there.
 
     >>> voc.getTerm('robin.hood').title
-    u'Hood Robin'
+    u'Hood Robin (robin.hood)'
 
 Users and inboxes vocabulary
 ----------------------------
@@ -197,7 +197,7 @@ is defined in the request either with key "client" or with key
     ...                   name='opengever.ogds.base.UsersAndInboxesVocabulary')
     >>> voc = fact(portal)
     >>> fterms(list(voc))
-    [u'<Term hanspeter.linder:Linder Hans-Peter>', u'<Term peter.muster:Muster Peter>', u'<Term inbox:client2:Inbox: Client 2>']
+    [u'<Term hanspeter.linder:Linder Hans-Peter (hanspeter.linder)>', u'<Term peter.muster:Muster Peter (peter.muster)>', u'<Term inbox:client2:Inbox: Client 2>']
 
     >>> request.set('client', 'client1')
     >>> setRequest(request)
@@ -205,7 +205,7 @@ is defined in the request either with key "client" or with key
     ...                   name='opengever.ogds.base.UsersAndInboxesVocabulary')
     >>> voc = fact(portal)
     >>> fterms(list(voc))
-    [u'<Term hanspeter.linder:Linder Hans-Peter>', u'<Term hugo.boss:Boss Hugo>', u'<Term inbox:client1:Inbox: Client 1>']
+    [u'<Term hanspeter.linder:Linder Hans-Peter (hanspeter.linder)>', u'<Term hugo.boss:Boss Hugo (hugo.boss)>', u'<Term inbox:client1:Inbox: Client 1>']
 
     >>> request.set('client', None)
 
@@ -220,7 +220,7 @@ Vocabulary of all users assigned to the current client.
     ...                   name='opengever.ogds.base.AssignedUsersVocabulary')
     >>> voc = fact(portal)
     >>> fterms(list(voc))
-    [u'<Term hanspeter.linder:Linder Hans-Peter>', u'<Term hugo.boss:Boss Hugo>']
+    [u'<Term hanspeter.linder:Linder Hans-Peter (hanspeter.linder)>', u'<Term hugo.boss:Boss Hugo (hugo.boss)>']
 
 
 
@@ -233,7 +233,7 @@ Vocabulary of contacts.
     ...                   name='opengever.ogds.base.ContactsVocabulary')
     >>> voc = fact(portal)
     >>> fterms(list(voc))
-    [u'<Term contact:kaufmann-sandra:Kaufmann Sandra>', u'<Term contact:kappeli-elisabeth:K\xe4ppeli Elisabeth>', u'<Term contact:wermuth-roger:Wermuth Roger>']
+    [u'<Term contact:kaufmann-sandra:Kaufmann Sandra (sandra.kaufmann@test.ch)>', u'<Term contact:kappeli-elisabeth:K\xe4ppeli Elisabeth (elisabeth.kaeppeli@test.ch)>', u'<Term contact:wermuth-roger:Wermuth Roger (roger.wermuth@test.ch)>']
 
 
 
@@ -246,7 +246,7 @@ Vocabulary of contacts and users.
     ...                   name='opengever.ogds.base.ContactsAndUsersVocabulary')
     >>> voc = fact(portal)
     >>> fterms(list(voc))
-    [u'<Term hugo.boss:Boss Hugo>', u'<Term peter.muster:Muster Peter>', u'<Term hanspeter.linder:Linder Hans-Peter>', u'<Term contact:kaufmann-sandra:Kaufmann Sandra>', u'<Term contact:kappeli-elisabeth:K\xe4ppeli Elisabeth>', u'<Term contact:wermuth-roger:Wermuth Roger>']
+    [u'<Term hugo.boss:Boss Hugo (hugo.boss)>', u'<Term peter.muster:Muster Peter (peter.muster)>', u'<Term hanspeter.linder:Linder Hans-Peter (hanspeter.linder)>', u'<Term contact:kaufmann-sandra:Kaufmann Sandra (sandra.kaufmann@test.ch)>', u'<Term contact:kappeli-elisabeth:K\xe4ppeli Elisabeth (elisabeth.kaeppeli@test.ch)>', u'<Term contact:wermuth-roger:Wermuth Roger (roger.wermuth@test.ch)>']
 
 
 Email contacts and users vocabulary
@@ -259,7 +259,7 @@ address they have.
     ...                   name='opengever.ogds.base.EmailContactsAndUsersVocabulary')
     >>> voc = fact(portal)
     >>> fterms(list(voc))
-    [u'<Term hugo@boss.local:Boss Hugo (hugo@boss.local)>', u'<Term hugo@private.ch:Boss Hugo (hugo@private.ch)>', u'<Term sandra.kaufmann@test.ch:Kaufmann Sandra (sandra.kaufmann@test.ch)>', u'<Term elisabeth.kaeppeli@test.ch:K\xe4ppeli Elisabeth (elisabeth.kaeppeli@test.ch)>', u'<Term roger.wermuth@test.ch:Wermuth Roger (roger.wermuth@test.ch)>']
+    [u'<Term hugo@boss.local:Boss Hugo (hugo.boss, hugo@boss.local)>', u'<Term hugo@private.ch:Boss Hugo (hugo.boss, hugo@private.ch)>', u'<Term sandra.kaufmann@test.ch:Kaufmann Sandra (sandra.kaufmann@test.ch)>', u'<Term elisabeth.kaeppeli@test.ch:K\xe4ppeli Elisabeth (elisabeth.kaeppeli@test.ch)>', u'<Term roger.wermuth@test.ch:Wermuth Roger (roger.wermuth@test.ch)>']
 
 
 

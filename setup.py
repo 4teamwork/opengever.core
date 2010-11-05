@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 import os
 
-version = '1.0a1-dev'
+version = open('opengever/ogds/base/version.txt').read().strip()
 maintainer = 'Jonas Baumann'
 
 tests_require = [
@@ -26,29 +26,42 @@ setup(name='opengever.ogds.base',
         "Topic :: Software Development :: Libraries :: Python Modules",
         ],
       keywords='opengever ogds base',
-      author='%s, 4teamwork GmbH',
-      author_email='GPL2',
+      author='%s, 4teamwork GmbH' % maintainer,
+      author_email='mailto:info@4teamwork.ch',
+      maintainer=maintainer,
       url='http://psc.4teamwork.ch/4teamwork/kunden/' + \
           'opengever/opengever-ogds-base',
-      license='GPL',
+      license='GPL2',
       packages=find_packages(exclude=['ez_setup']),
       namespace_packages=['opengever', 'opengever.ogds'],
       include_package_data=True,
       zip_safe=False,
       install_requires=[
-        'setuptools',
         'SQLAlchemy',
-        'five.globalrequest',
-        'five.grok',
-        'python-ldap',
-        'plone.app.registry',
-        'z3c.saconfig',
         'collective.elephantvocabulary',
         'collective.transmogrifier',
-        'opengever.konsulmigration',
-        # FIXME: probably this dependency shouldn't be here
-        'simplejson',
+        'five.globalrequest',
+        'five.grok',
         'ftw.dictstorage [sqlalchemy]',
+        'ftw.dictstorage',
+        'ftw.tabbedview',
+        'ftw.table',
+        'opengever.globalindex',
+        'opengever.konsulmigration',
+        'opengever.tabbedview',
+        'plone.app.registry',
+        'plone.dexterity',
+        'plone.formwidget.autocomplete',
+        'plone.namedfile',
+        'plone.registry',
+        'plone.testing',
+        'python-ldap',
+        'setuptools',
+        'z3c.form',
+        'z3c.formwidget.query',
+        'z3c.relationfield',
+        'z3c.saconfig',
+        'zope.globalrequest',
         ],
       tests_require=tests_require,
       extras_require=dict(tests=tests_require),
