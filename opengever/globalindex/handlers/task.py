@@ -64,7 +64,7 @@ def index_task(obj, event):
     # we need to have python datetime objects for make it work with sqlite etc.
     task.deadline = obj.deadline
     task.completed = obj.date_of_completion
-    task.modified = obj.modified().asdatetime()
+    task.modified =  obj.modified().asdatetime().replace(tzinfo=None)
 
     task.task_type = obj.task_type
     task.sequence_number = getUtility(ISequenceNumber).get_number(obj)
