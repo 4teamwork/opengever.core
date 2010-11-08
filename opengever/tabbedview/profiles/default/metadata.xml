@@ -1,7 +1,8 @@
 <?xml version="1.0"?>
 <metadata>
-  <version>2</version>
-  <dependencies>
-	    <dependency>profile-ftw.tabbedview:jqueryui</dependency>
-  </dependencies>
+    <version>3</version>
+    <dependencies>
+        <dependency>profile-ftw.tabbedview:jqueryui</dependency>
+        <dependency>profile-ftw.table:extjs</dependency>
+    </dependencies>
 </metadata>
