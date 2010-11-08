@@ -17,8 +17,10 @@ browser test
     >>> browser = Browser(app)
     >>> browser.handleErrors = True
 
-    >>> setRoles(portal, TEST_USER_NAME, ['Member', 'Manager'])
-    >>> browser.addHeader('Authorization', 'Basic %s:%s' % (TEST_USER_NAME, TEST_USER_PASSWORD))
+    >>> browser.open(portal.absolute_url() + '/login_form')
+    >>> browser.getControl(name='__ac_name').value = TEST_USER_NAME
+    >>> browser.getControl(name='__ac_password').value = TEST_USER_PASSWORD
+    >>> browser.getControl(name='submit').click()
 
     >>> browser.open(portal.portal_url())
     >>> 'test_user_1' in browser.contents
@@ -26,16 +28,17 @@ browser test
 
 create contact folder
 
-    >>> contacts = createContentInContainer(portal, 'opengever.contact.contactfolder',
-    ...                                     title='Contacts', checkConstraints=False)
-    >>> contacts
-    <Container at /plone/opengever.contact.contactfolder>
-    >>> contacts.manage_setLocalRoles(TEST_USER_NAME, ['Manager', 'Contributor', 'Editor'])
-    >>> contacts.absolute_url()
-    'http://nohost/plone/opengever.contact.contactfolder'
+    >>> browser.open('http://nohost/plone/folder_factories')
+    >>> browser.getControl('ContactFolder').click()
+    >>> browser.getControl('Add').click()
+    >>> browser.url
+    'http://nohost/plone/++add++opengever.contact.contactfolder'
+    
+    >>> browser.getControl('Title').value='Foobar'
+    >>> browser.getControl('Description').value='Lorem Ipsum'
+    >>> browser.getControl('Save').click()
 
 test view:
-    >>> browser.open('http://nohost/plone/opengever.contact.contactfolder/@@sharing')
 
 create a contact:
 
@@ -50,10 +53,13 @@ create a contact:
 
     >>> browser.url
     'http://nohost/plone/opengever.contact.contactfolder/++add++opengever.contact.contact'
-    >>> browser.getControl('Firstname').value = 'lorem'
-    >>> browser.getControl('Lastname').value = 'ipsum'
+    >>> browser.getControl('Firstname').value = u'testi'
+    >>> browser.getControl('Lastname').value = u'testmann'
+    >>> browser.getControl('Picture').value = None
+
     >>> browser.getControl('Save').click()
+    >>> import pdb; pdb.set_trace( )
     >>> browser.url
-    'http://nohost/plone/opengever.contact.contactfolder/ipsum-lorem/view'
+    'http://nohost/plone/Foobar/testi-testmann/view'
     
     

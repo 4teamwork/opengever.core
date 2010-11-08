@@ -3,6 +3,9 @@ from plone.app.testing import IntegrationTesting, FunctionalTesting
 from plone.app.testing import PloneSandboxLayer
 from plone.app.testing import PLONE_FIXTURE
 from zope.configuration import xmlconfig
+from plone.app.testing import setRoles
+from plone.app.testing import TEST_USER_NAME
+from plone.testing import z2
 
 
 class ContactIntegrationLayer(PloneSandboxLayer):
@@ -15,10 +18,11 @@ class ContactIntegrationLayer(PloneSandboxLayer):
         # Load testing zcml (optional)
         import opengever.contact
         xmlconfig.file('configure.zcml', opengever.contact, context=configurationContext)
-
+        
     def setUpPloneSite(self, portal):
         applyProfile(portal, 'opengever.contact:default')
         applyProfile(portal, 'opengever.tabbedview:default')
+        setRoles(portal, TEST_USER_NAME, ['Member', 'Contributor', 'Manager'])
 
 
 CONTACT_INTEGRATION_FIXTURE = ContactIntegrationLayer()
