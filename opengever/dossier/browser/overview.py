@@ -1,14 +1,9 @@
 from five import grok
-from ftw.journal.config import JOURNAL_ENTRIES_ANNOTATIONS_KEY
-from ftw.journal.interfaces import IAnnotationsJournalizable
-from ftw.journal.interfaces import IWorkflowHistoryJournalizable
-from opengever.dossier import _
 from opengever.dossier import _ as _dossier
 from opengever.dossier.behaviors.dossier import IDossierMarker, IDossier
 from opengever.dossier.behaviors.participation import IParticipationAware
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.tabbedview.browser.tabs import OpengeverTab
-from zope.annotation.interfaces import IAnnotations
 from zope.component import getUtility
 
 
@@ -53,8 +48,7 @@ class DossierOverview(grok.View, OpengeverTab):
         return [{
             'Title': document.Title,
             'getURL': document.getURL,
-            'alt': self.context.toLocalizedTime(
-                    document.modified, long_format=1),
+            'alt': document.document_date.strftime('%d.%m.%Y'),
             'getIcon': document.getIcon,
         } for document in documents]
         return self.catalog(
@@ -62,7 +56,6 @@ class DossierOverview(grok.View, OpengeverTab):
 
     def events(self):
         return self.catalog(['dummy.event', ])[:5]
-
 
     def sharing(self):
 
