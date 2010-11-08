@@ -5,7 +5,6 @@ from zope.component import getUtility
 def client_title_helper(item, value):
     """Returns the client title out of the client id (`value`).
     """
-    import pdb; pdb.set_trace( )
     if not value:
         return value
 
