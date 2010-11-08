@@ -514,7 +514,7 @@ msgstr "Es sind nicht alle Aufgaben erledigt"
 
 #: ./opengever/dossier/archive.py:42
 msgid "only resolve, set filing no later"
-msgstr "Nur abschliessen (Ablagenummer kann später vergeben werden)"
+msgstr "Nur abschliessen (keine Ablagenummer vergeben)"
 
 msgid "participants"
 msgstr "Beteiligte"
