@@ -1,0 +1,13 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:five="http://namespaces.zope.org/five"
+    xmlns:transmogrifier="http://namespaces.plone.org/transmogrifier"
+    xmlns:genericsetup="http://namespaces.zope.org/genericsetup">
+
+  <!-- Include configuration for dependencies listed in setup.py -->
+  <include package="z3c.autoinclude" file="meta.zcml" />
+  <includeDependencies package="." />
+
+  <include package=".browser" />
+
+</configure>
