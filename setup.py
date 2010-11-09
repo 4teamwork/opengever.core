@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 import os
 
-version = '1.0a1'
+version = open('opengever/setup/version.txt').read().strip()
 maintainer = 'Jonas Baumann'
 
 setup(name='opengever.setup',
