@@ -6,8 +6,8 @@ version = open('opengever/contact/version.txt').read().strip()
 maintainer = 'Philippe Gross'
 
 tests_require = [
-    'collective.testcaselayer',
     'plone.formwidget.namedfile',
+    'plone.app.testing'
     ]
 
 setup(name='opengever.contact',
