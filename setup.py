@@ -1,7 +1,12 @@
 from setuptools import setup, find_packages
 import os
 
-version = '1.0'
+version = open('opengever/advancedsearch/version.txt').read().strip()
+maintainer = 'Philippe Gross'
+
+tests_require = [
+    'plone.app.testing',
+    ]
 
 setup(name='opengever.advancedsearch',
       version=version,
@@ -10,12 +15,17 @@ setup(name='opengever.advancedsearch',
                        open(os.path.join("docs", "HISTORY.txt")).read(),
       # Get more strings from http://pypi.python.org/pypi?%3Aaction=list_classifiers
       classifiers=[
-        "Programming Language :: Python",
+          "Framework :: Plone",
+          "Framework :: Zope2",
+          "Framework :: Zope3",
+          "Programming Language :: Python",
+          "Topic :: Software Development :: Libraries :: Python Modules",
         ],
       keywords='',
-      author='',
-      author_email='',
-      url='http://svn.plone.org/svn/collective/',
+      author='%s, 4teamwork GmbH' % maintainer,
+      author_email='mailto:info@4teamwork.ch',
+      maintainer=maintainer,
+      url='http://psc.4teamwork.ch/4teamwork/kunden/opengever/opengever.advancedsearch/',
       license='GPL',
       packages=find_packages(exclude=['ez_setup']),
       namespace_packages=['opengever'],
@@ -27,6 +37,8 @@ setup(name='opengever.advancedsearch',
           'opengever.task',
           # -*- Extra requirements: -*-
       ],
+      tests_require=tests_require,
+      extras_require=dict(tests=tests_require),
       entry_points="""
       # -*- Entry points: -*-
       """,
