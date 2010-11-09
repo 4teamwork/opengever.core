@@ -1,27 +1,27 @@
-
-from five import grok
-
-from persistent.dict import PersistentDict
-from zope.event import notify
-from zope.app.container.interfaces import IObjectAddedEvent
-from zope.lifecycleevent.interfaces import IObjectModifiedEvent
-from zope.i18nmessageid.message import Message
-from zope.i18nmessageid import MessageFactory
-
-from plone.app.versioningbehavior.utils import get_change_note
 from Products.CMFCore.interfaces import IActionSucceededEvent
-
+from five import grok
 from ftw.journal.events.events import JournalEntryEvent
-from opengever.task.task import ITask
-
+from ftw.journal.interfaces import IJournalizable
 from opengever.document.document import IDocumentSchema
 from opengever.document.interfaces import IObjectCheckedInEvent, IObjectCheckedOutEvent
 from opengever.dossier.behaviors.dossier import IDossierMarker
-from plone.app.iterate.interfaces import IWorkingCopy
-
-from ftw.journal.interfaces import IJournalizable
+from opengever.dossier.browser.participants import role_list_helper
+from opengever.dossier.interfaces import IParticipationCreated
+from opengever.dossier.interfaces import IParticipationRemoved
 from opengever.journal import _
+from opengever.tabbedview.helper import readable_ogds_author
+from opengever.task.task import ITask
 from opengever.trash.trash import ITrashedEvent, IUntrashedEvent
+from persistent.dict import PersistentDict
+from plone.app.iterate.interfaces import IWorkingCopy
+from plone.app.versioningbehavior.utils import get_change_note
+from zope.app.container.interfaces import IObjectAddedEvent
+from zope.event import notify
+from zope.i18nmessageid import MessageFactory
+from zope.i18nmessageid.message import Message
+from zope.lifecycleevent.interfaces import IObjectModifiedEvent
+
+
 pmf = MessageFactory('plone')
 
 
@@ -217,7 +217,7 @@ OBJECT_MOVE_TO_TRASH = 'Object moved to trash'
 def document_trashed(context, event):
     title = _(u'label_to_trash', default = u'Object moved to trash: ${title}', mapping={
             'title':context.title_or_id(),
-    })
+            })
     journal_entry_factory(context, OBJECT_MOVE_TO_TRASH, title)
     journal_entry_factory(context.aq_inner.aq_parent, OBJECT_MOVE_TO_TRASH, title)
     return
@@ -227,7 +227,39 @@ OBJECT_RESTORE = 'Object restore'
 def document_untrashed(context, event):
     title = _(u'label_restore', default = u'Object restore: ${title}', mapping={
             'title':context.title_or_id(),
-    })
+            })
     journal_entry_factory(context, OBJECT_RESTORE, title)
     journal_entry_factory(context.aq_inner.aq_parent, OBJECT_RESTORE, title)
     return
+
+
+# ----------------------- DOSSIER PARTICIPATION -----------------------
+
+
+PARTICIPANT_ADDED = 'Participant added'
+@grok.subscribe(IDossierMarker, IParticipationCreated)
+def participation_created(context, event):
+    title = _(u'label_participant_added',
+              default=u'Participant added: ${contact} with '
+              'roles ${roles}',
+              mapping={
+            'contact' : readable_ogds_author(event.participant,
+                                             event.participant.contact),
+            'roles' : role_list_helper(event.participant,
+                                       event.participant.roles),
+            })
+
+    journal_entry_factory(context, PARTICIPANT_ADDED, title)
+
+
+PARTICIPANT_REMOVED = 'Participant removed'
+@grok.subscribe(IDossierMarker, IParticipationRemoved)
+def participation_removed(context, event):
+    title = _(u'label_participant_removed',
+              default=u'Participant removed: ${contact}',
+              mapping={
+            'contact' : readable_ogds_author(event.participant,
+                                             event.participant.contact),
+            })
+
+    journal_entry_factory(context, PARTICIPANT_REMOVED, title)

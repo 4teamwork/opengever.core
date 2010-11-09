@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2010-11-02 10:33+0000\n"
+"POT-Creation-Date: 2010-11-09 09:28+0000\n"
 "PO-Revision-Date: 2010-11-02 11:34+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -9,87 +9,98 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0\n"
+"Language-Code: en\n"
+"Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: DOMAIN\n"
 
 #. Default: "Journal"
-#: ./opengever/journal/browser_templates/journalhistory.pt:15
+#: opengever.journal/opengever/journal/browser_templates/journalhistory.pt:15
 msgid "heading_journal"
 msgstr "Journal"
 
 #. Default: "Actor"
-#: ./opengever/journal/tab.py:50
+#: opengever.journal/opengever/journal/tab.py:52
 msgid "label_actor"
 msgstr "Aktor"
 
 #. Default: "Comments"
-#: ./opengever/journal/tab.py:57
+#: opengever.journal/opengever/journal/tab.py:60
 msgid "label_comments"
 msgstr "Kommentare"
 
 #. Default: "Document added: ${title}"
-#: ./opengever/journal/handlers.py:116
+#: opengever.journal/opengever/journal/handlers.py:114
 msgid "label_document_added"
 msgstr "Dokument hinzugefügt: ${title}"
 
 #. Default: "Document checked in"
-#: ./opengever/journal/handlers.py:176
+#: opengever.journal/opengever/journal/handlers.py:174
 msgid "label_document_checkin"
 msgstr "Dokument eingecheckt"
 
 #. Default: "Document checked out"
-#: ./opengever/journal/handlers.py:165
+#: opengever.journal/opengever/journal/handlers.py:163
 msgid "label_document_checkout"
 msgstr "Dokument ausgecheckt"
 
 #. Default: "Document modified: ${title}"
-#: ./opengever/journal/handlers.py:137
+#: opengever.journal/opengever/journal/handlers.py:135
 msgid "label_document_modified"
 msgstr "Dokument modifiziert: ${title}"
 
 #. Default: "Dossier added: ${title}"
-#: ./opengever/journal/handlers.py:72
+#: opengever.journal/opengever/journal/handlers.py:70
 msgid "label_dossier_added"
 msgstr "Dossier hinzugefügt: ${title}"
 
 #. Default: "Dossier modified"
-#: ./opengever/journal/handlers.py:82
+#: opengever.journal/opengever/journal/handlers.py:80
 msgid "label_dossier_modified"
 msgstr "Dossier modifiziert"
 
+#. Default: "Participant added: ${contact} with roles ${roles}"
+#: opengever.journal/opengever/journal/handlers.py:240
+msgid "label_participant_added"
+msgstr "Beteiligung hinzugefügt für ${contact} als ${roles}"
+
+#. Default: "Participant removed: ${contact}"
+#: opengever.journal/opengever/journal/handlers.py:254
+msgid "label_participant_removed"
+msgstr "Beteiligung von ${contact} entfernt"
+
 #. Default: "Object restore: ${title}"
-#: ./opengever/journal/handlers.py:228
+#: opengever.journal/opengever/journal/handlers.py:226
 msgid "label_restore"
 msgstr "Objekt wiederhergestellt: ${title}"
 
 #. Default: "Task added: ${title}"
-#: ./opengever/journal/handlers.py:190
+#: opengever.journal/opengever/journal/handlers.py:188
 msgid "label_task_added"
 msgstr "Aufgabe hinzugefügt: ${title}"
 
 #. Default: "Task modified"
-#: ./opengever/journal/handlers.py:202
+#: opengever.journal/opengever/journal/handlers.py:200
 msgid "label_task_modified"
 msgstr "Aufgabe modifiziert"
 
 #. Default: "Time"
-#: ./opengever/journal/tab.py:53
+#: opengever.journal/opengever/journal/tab.py:56
 msgid "label_time"
 msgstr "Zeitpunkt"
 
 #. Default: "Title"
-#: ./opengever/journal/tab.py:46
+#: opengever.journal/opengever/journal/tab.py:48
 msgid "label_title"
 msgstr "Title"
 
 #. Default: "Object moved to trash: ${title}"
-#: ./opengever/journal/handlers.py:218
+#: opengever.journal/opengever/journal/handlers.py:216
 msgid "label_to_trash"
 msgstr "Objekt gelöscht: ${title}"
 
 #. Default: "Journal"
-#: ./opengever/journal/browser_templates/journalhistory.pt:17
+#: opengever.journal/opengever/journal/browser_templates/journalhistory.pt:17
 msgid "summary_journal"
 msgstr "Journal"
-
 
