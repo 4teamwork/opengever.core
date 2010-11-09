@@ -30,11 +30,6 @@ Create a default FTI which has a title and a description.
     'TrashTestFTI'
     >>> schema = fti.lookupSchema()
 
-Popuate the request:
-
-    >>> setRequest(request)
-
-
 Pulling a object
 ----------------
 
