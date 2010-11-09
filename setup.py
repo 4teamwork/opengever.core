@@ -44,5 +44,9 @@ setup(name='opengever.examplecontent',
       # -*- Entry points: -*-
       [z3c.autoinclude.plugin]
       target = opengever
+
+      [opengever.setup]
+      ldap = opengever.examplecontent
+      policies = opengever.examplecontent
       """,
       )
