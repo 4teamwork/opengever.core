@@ -44,6 +44,7 @@ setup(name='opengever.policy.base',
           'opengever.workflows',
           'opengever.contact',
           'opengever.latex',
+          'opengever.advancedsearch',
       ],
       entry_points="""
       # -*- Entry points: -*-
