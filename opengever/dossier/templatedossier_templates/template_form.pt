@@ -14,58 +14,47 @@
 
 <metal:slot metal:fill-slot="main" i18n:domain="cmf_default">
 
-  <form i18n:domain="opengever.dossier" action="">
-    
-<!--   <div class="tabbedview_search">
-      <span i18n:translate="label_filter">Filter </span><input type="text" name="searchable_text" id="tabbedview-searchbox" class="inputLabel"    title="Suchen" autocomplete="false"/></div>
--->
-    <div class="row horizontal">
-      <div class="" tal:attributes="class python: view.errors['paths'] and 'field kssattr-fieldname-form.widgets.title error' or 'field kssattr-fieldname-form.widgets.title'">  
-        <label for="form-widgets-title" class="horizontal">
+  <form i18n:domain="opengever.dossier" action="./document_with_template" method="POST" tal:attributes="is_first python: request.get('form.buttons.save')">
+     <div class="row horizontal">
+      <div class="" tal:attributes="class python: view.errors.get('paths', None) and 'error' or ''">  
+        <label for="form-widgets-template" class="horizontal">
           <span i18n:translate="label_template">Template</span>
         </label>
-        <span title="Erforderlich" class="fieldRequired horizontal" i18n:translate="required">required</span>
+        <span title="Erforderlich" class="fieldRequired" i18n:translate="required">required</span>
         <div tal:content="structure view/templates" />
       </div>
     </div>
-    <div class="row horizontal">
-      <div class="field kssattr-fieldname-form.widgets.title" id="formfield-form-widgets-title" tal:attributes="class python: view.errors['title'] and 'field kssattr-fieldname-form.widgets.title error' or 'field kssattr-fieldname-form.widgets.title'">
-        <label for="form-widgets-title" class="horizontal">
-          <span i18n:translate="label_title">Title</span>
-        </label>
-        <span class="fieldRequired horizontal" title="Erforderlich" i18n:translate="required">required</span>
-        <div class="formHelp"></div>
-        <div class="fieldErrorBox"></div>
-        <div class="widget z3cformInlineValidation horizontal">
-          <input type="text" id="form-widgets-title" name="form.widgets.title" class="text-widget required textline-field"                  
-           tal:attributes="value view/title"/>
+      <div class="row">
+        <div class="" tal:attributes="class python: view.errors.get('title', None) and 'error' or ''">
+            <label for="form-widgets-title" class="">
+                <span i18n:translate="label_title">title</span>
+            </label>
+            <span title="Erforderlich" class="fieldRequired" i18n:translate="required">required</span>
+            <div>
+                <input type="text" name="title" id="form-widgets-title" tal:attributes="value   view/title" />
+            </div>
         </div>
-      </div>
     </div>
-    <div class="row horizontal">
-
-
-    <div id="formfield-form-widgets-edit_form" class="field kssattr-fieldname-form.widgets.edit_form ">
-    <div class="widget z3cformInlineValidation horizontal">
-    <span class="option">
-    <tal:cond tal:condition="view/edit">
-      <input type="checkbox" class="single-checkbox-widget bool-field" name="form.widgets.edit_form:list" id="form-widgets-edit_form-0" originalvalue="selected" />
-    </tal:cond>
-    <tal:cond tal:condition="not: view/edit">
-      <input type="checkbox" class="single-checkbox-widget bool-field" name="form.widgets.edit_form:list" id="form-widgets-edit_form-0" originalvalue="selected" checked="checked" />
-    </tal:cond>
-    <label for="form-widgets-edit_form-0">
-    <span class="label" i18n:translate="label_edit_after_creation">Edit after creation</span>
-    </label>
-    </span>
-    <input type="hidden" value="1" name="form.widgets.edit_form-empty-marker" originalvalue="1" tal:attributes="value view/edit"/>
+    <div id="formfield-form-widgets-edit_form" class="">
+        <div class="">
+        <span class="">
+        <tal:cond tal:condition="view/edit">
+          <input type="checkbox" class="" name="form.widgets.edit_form:list" id="form-widgets-edit_form-0" originalvalue="selected" />
+        </tal:cond>
+        <tal:cond tal:condition="not: view/edit">
+          <input type="checkbox" class="" name="form.widgets.edit_form:list" id="form-widgets-edit_form-0" originalvalue="selected" checked="checked" />
+        </tal:cond>
+        <label for="form-widgets-edit_form-0">
+        <span class="" i18n:translate="label_edit_after_creation">Edit after creation</span>
+        </label>
+        </span>
+        <input type="hidden" value="1" name="form.widgets.edit_form-empty-marker" originalvalue="1" tal:attributes="value view/edit"/>
+        </div>
     </div>
-    </div>
-
-    </div>
-    <div class="formFields">
-      <input type="submit" value="Speichern" class="submit-widget button-field context" name="form.buttons.save" id="form-buttons-save"/>
-      <input type="submit" value="Abbrechen" class="submit-widget button-field standalone" name="form.buttons.cancel" id="form-buttons-cancel"/>
+    
+    <div class="">
+      <input type="submit" value="Speichern" class="context" name="form.buttons.save" id="form-buttons-save"/>
+      <input type="submit" value="Abbrechen" class="standalone" name="form.buttons.cancel" id="form-buttons-cancel"/>
     </div>
   </form>
   
