@@ -47,7 +47,7 @@ class EnddateValidator(validator.SimpleFieldValidator):
         if len(subdossiers) != 0:
             subdossiers = default_custom_sort(subdossiers, 'end', True)
 
-            if datetime.combine(value, time(0,0)) < subdossiers[0].end:
+            if subdossiers[0].end and datetime.combine(value, time(0,0)) < subdossiers[0].end:
                 raise Invalid(
                     _(u'The given end date is older than the end date \
                         of the youngest subdossier(${number})',
@@ -231,8 +231,7 @@ class ArchiveForm(directives_form.Form):
                     path=dict(depth=1,
                         query='/'.join(self.context.getPhysicalPath()),
                     ),
-                    sort_on='modified',
-                    sort_order='reverse',
+                    sort_on='filing_no',
                 )
 
                 counter = 1
@@ -242,7 +241,6 @@ class ArchiveForm(directives_form.Form):
                     dossier = dossier.getObject()
                     dossier.filing_no = filing_no + "." + str(counter)
                     counter += 1
-                    import pdb; pdb.set_trace( )
                     wft.doActionFor(dossier, 'dossier-transition-resolve')
 
         if action == 0 or action == 1:
