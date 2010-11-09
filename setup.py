@@ -4,6 +4,10 @@ import os
 version = open('opengever/trash/version.txt').read().strip()
 maintainer = 'Philippe Gross'
 
+tests_require = [
+    'plone.app.testing',
+    'plone.app.dexterity',
+]
 setup(name='opengever.trash',
       version=version,
       description="the opengever trash packet, implements the special delete " + \
@@ -33,6 +37,9 @@ setup(name='opengever.trash',
         'collective.autopermission',
         # -*- Extra requirements: -*-
         ],
+        
+      tests_require=tests_require,
+      extras_require=dict(tests=tests_require),
       entry_points="""
       # -*- Entry points: -*-
       [z3c.autoinclude.plugin]

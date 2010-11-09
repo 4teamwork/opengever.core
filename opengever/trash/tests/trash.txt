@@ -1,0 +1,81 @@
+TRASH TEST
+==========
+
+Globals:
+
+    >>> app = layer.get('app')
+    >>> portal = layer.get('portal')
+    >>> request = layer.get('request')
+
+Imports:
+
+    >>> from plone.dexterity.fti import DexterityFTI
+    >>> from plone.dexterity.utils import createContentInContainer
+    >>> from zope.component import getUtility
+    >>> from zope.globalrequest import setRequest
+    >>> from opengever.trash.trash import ITrashable, ITrashed
+
+
+FTI
+---
+
+Create a default FTI which has a title and a description.
+
+    >>> fti = DexterityFTI('TrashTestFTI',
+    ...                    klass="plone.dexterity.content.Container",
+    ...                    global_allow=True,
+    ...                    filter_content_types=False)
+    >>> fti.behaviors = ('plone.app.content.interfaces.INameFromTitle', 'opengever.trash.trash.ITrashable')
+    >>> portal.portal_types._setObject('TrashTestFTI', fti)
+    'TrashTestFTI'
+    >>> schema = fti.lookupSchema()
+
+Popuate the request:
+
+    >>> setRequest(request)
+
+
+Pulling a object
+----------------
+
+create a first item
+
+    >>> item1 = createContentInContainer(portal, 'TrashTestFTI',
+    ...                                   checkConstraints=False,
+    ...                                   title='Item1')
+    >>> item1
+    <Container at /plone/item1>
+
+    >>> item2 = createContentInContainer(portal, 'TrashTestFTI',
+    ...                                   checkConstraints=False,
+    ...                                   title='Item2')
+    >>> item2
+    <Container at /plone/item2>
+
+
+trash the item1, first we get the trasher and then we trash it
+
+    >>> trasher = ITrashable(item1)
+    >>> trasher.trash()
+    
+the we check the interfaces
+
+    >>> ITrashed.providedBy(item1)
+    True
+
+and the catalog
+
+    >>> len(portal.portal_catalog(portal_type="TrashTestFTI", trashed=True))
+    1
+
+now we check also the untrashing
+
+    >>> trasher = ITrashable(item1)
+    >>> trasher.untrash()
+
+and the catalog
+    >>> import pdb; pdb.set_trace( )
+    >>> portal.portal_catalog(portal_type="TrashTestFTI", trashed=True)
+    []
+
+    
