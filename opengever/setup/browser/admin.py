@@ -1,4 +1,5 @@
 from Products.CMFPlone.browser.admin import AddPloneSite
+import json
 from Products.CMFPlone.factory import _DEFAULT_PROFILE
 from Products.CMFPlone.factory import addPloneSite
 from Products.CMFPlone.utils import getToolByName
@@ -14,6 +15,7 @@ from zope.component import getUtility
 from zope.publisher.browser import BrowserView
 import opengever.globalindex.model
 import opengever.ogds.base.model
+from opengever.setup.utils import get_ldap_configs, get_policy_configs
 
 
 SQL_BASES = (
@@ -27,15 +29,8 @@ SQL_BASES = (
 EXTENSION_PROFILES = (
     'plonetheme.classic:default',
     'plonetheme.sunburst:default',
-    'opengever.policy.base:default',
     )
 
-
-# these profiles will be installed automatically after setting
-# the client id
-ADDITIONAL_PROFILES = (
-    'opengever.examplecontent:developer',
-    )
 
 
 class AddOpengeverClient(AddPloneSite):
@@ -62,6 +57,23 @@ class AddOpengeverClient(AddPloneSite):
     def get_default_mail_domain(self):
         return self.request.get('SERVER_NAME')
 
+    def get_ldap_profiles(self):
+        """Returns a list of (name, profile) of ldap GS profiles. They are
+        registerd as entrypoints.
+        """
+        return get_ldap_configs()
+
+    def get_policy_options(self):
+        """Returns the options for selecting the policy.
+        """
+        for policy in get_policy_configs():
+            yield {'title': policy['title'],
+                   'value': policy['id']}
+
+    def get_policy_defaults(self):
+        """Returns the policy defaults for use in javascript.
+        """
+        return 'var policy_configs = %s;' % json.dumps(list(get_policy_configs()), indent=2)
 
 
 class CreateOpengeverClient(BrowserView):
@@ -70,9 +82,17 @@ class CreateOpengeverClient(BrowserView):
         form = self.request.form
         session = create_session()
 
+        policy_id = form['policy']
+        config = filter(lambda cfg:cfg['id'] == policy_id,
+                        get_policy_configs())[0]
+
         # drop sql tables
-        if form.get('drop_sql_tables'):
+        if form.get('first', False) and config.get('purge_sql', False):
             self.drop_sql_tables(session)
+
+        ext_profiles = list(EXTENSION_PROFILES)
+        if config.get('base_profile', None):
+            ext_profiles.append(config.get('base_profile'))
 
         # create plone site
         site = addPloneSite(
@@ -80,26 +100,27 @@ class CreateOpengeverClient(BrowserView):
             form['client_id'],
             title=form['title'],
             profile_id=_DEFAULT_PROFILE,
-            extension_ids=EXTENSION_PROFILES,
+            extension_ids=ext_profiles,
             setup_content=False,
             default_language=form['default_language'],
             )
 
-        # register the client in the ogds
-        # is the client already configured? -> delete it
-        clients = session.query(Client).filter_by(
-            client_id=form['client_id']).all()
-        if clients:
-            session.delete(clients[0])
+        if form.get('configsql'):
+            # register the client in the ogds
+            # is the client already configured? -> delete it
+            clients = session.query(Client).filter_by(
+                client_id=form['client_id']).all()
+            if clients:
+                session.delete(clients[0])
 
-        client = Client(form['client_id'],
-                        title=form['title'],
-                        ip_address=form['ip_address'],
-                        site_url=form['site_url'],
-                        public_url=form['public_url'],
-                        group=form['group'],
-                        inbox_group=form['inbox_group'])
-        session.add(client)
+            client = Client(form['client_id'],
+                            title=form['title'],
+                            ip_address=form['ip_address'],
+                            site_url=form['site_url'],
+                            public_url=form['public_url'],
+                            group=form['group'],
+                            inbox_group=form['inbox_group'])
+            session.add(client)
 
 
         # set the client id in the registry
@@ -109,9 +130,8 @@ class CreateOpengeverClient(BrowserView):
 
         # import the defaul generic setup profiles if needed
         stool = getToolByName(site, 'portal_setup')
-        if form.get('example', False):
-            for profile in ADDITIONAL_PROFILES:
-                stool.runAllImportStepsFromProfile('profile-%s' % profile)
+        for profile in config.get('additional_profiles', ()):
+            stool.runAllImportStepsFromProfile('profile-%s' % profile)
 
         # ldap
         if form.get('ldap', False):
@@ -141,7 +161,7 @@ class CreateOpengeverClient(BrowserView):
             plugins.movePluginsUp(IPropertiesPlugin, ('ldap',))
             plugins.movePluginsUp(IPropertiesPlugin, ('ldap',))
 
-        if form.get('import_users'):
+        if form.get('first', False) and config.get('import_users', False):
             print '===== SYNC LDAP ===='
             class Object(object): pass
             options = Object()
