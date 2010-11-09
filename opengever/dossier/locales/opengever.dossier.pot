@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2010-11-01 08:14+0000\n"
+"POT-Creation-Date: 2010-11-09 09:28+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,127 +21,135 @@ msgstr ""
 msgid "Add Business Case Dossier"
 msgstr ""
 
-#: ./opengever/dossier/profiles/default/types/opengever.dossier.businesscasedossier.xml
+#: opengever.dossier/opengever/dossier/profiles/default/types/opengever.dossier.businesscasedossier.xml
 msgid "Add Participant"
 msgstr ""
 
-#: ./opengever/dossier/profiles/default/types/opengever.dossier.businesscasedossier.xml
+#: opengever.dossier/opengever/dossier/profiles/default/types/opengever.dossier.businesscasedossier.xml
 msgid "Business Case Dossier"
 msgstr ""
 
-#: ./opengever/dossier/profiles/default/actions.xml
+#: opengever.dossier/opengever/dossier/profiles/default/actions.xml
 msgid "Copy documents to remote client"
 msgstr ""
 
-#: ./opengever/dossier/profiles/default/actions.xml
+#: opengever.dossier/opengever/dossier/profiles/default/actions.xml
 msgid "Delete"
 msgstr ""
 
-#: ./opengever/dossier/browser/send_document.py:34
+#: opengever.dossier/opengever/dossier/browser/send_document.py:34
 msgid "No Mail Address"
 msgstr ""
 
-#: ./opengever/dossier/archive.py:29
+#: opengever.dossier/opengever/dossier/archive.py:30
 msgid "Not all required fields are filled"
 msgstr ""
 
-#: ./opengever/dossier/templatedossier.py:115
+#: opengever.dossier/opengever/dossier/templatedossier.py:127
 msgid "Not found the templatedossier"
 msgstr ""
 
-#: ./opengever/dossier/profiles/default/types/opengever.dossier.projectdossier.xml
+#: opengever.dossier/opengever/dossier/profiles/default/types/opengever.dossier.projectdossier.xml
 msgid "Project Dossier"
 msgstr ""
 
-#: ./opengever/dossier/profiles/default/types/opengever.dossier.templatedossier.xml
+#: opengever.dossier/opengever/dossier/profiles/default/types/opengever.dossier.templatedossier.xml
 msgid "Template Dossier"
 msgstr ""
 
 msgid "Templates"
 msgstr ""
 
-#: ./opengever/dossier/archive.py:225
+#: opengever.dossier/opengever/dossier/archive.py:252
 msgid "The End that is required, also if only closing is selected"
 msgstr ""
 
-#: ./opengever/dossier/validators.py:18
+#: opengever.dossier/opengever/dossier/validators.py:18
 msgid "The Files you selected are bigger than the maximal Size"
 msgstr ""
 
-#: ./opengever/dossier/archive.py:234
+#: opengever.dossier/opengever/dossier/archive.py:261
 msgid "The dossier was already resolved"
 msgstr ""
 
-#: ./opengever/dossier/behaviors/dossier.py:182
+#: opengever.dossier/opengever/dossier/archive.py:39
+msgid "The enddate is required."
+msgstr ""
+
+#: opengever.dossier/opengever/dossier/archive.py:52
+msgid "The given end date is older than the end date                         of the youngest subdossier(${number})"
+msgstr ""
+
+#: opengever.dossier/opengever/dossier/behaviors/dossier.py:181
 msgid "The start date must be before the end date."
 msgstr ""
 
-#: ./opengever/dossier/behaviors/dossier.py:205
+#: opengever.dossier/opengever/dossier/behaviors/dossier.py:204
 msgid "The start or end date is invalid"
 msgstr ""
 
-#: ./opengever/dossier/archive.py:85
+#: opengever.dossier/opengever/dossier/archive.py:110
 msgid "When the Action give filing number is selected,                     all fields are required."
 msgstr ""
 
-#: ./opengever/dossier/browser/send_document.py:89
+#: opengever.dossier/opengever/dossier/browser/send_document.py:89
 msgid "You have to select a intern                             or enter a extern mail-addres"
 msgstr ""
 
 #. Default: "last modified"
-#: ./opengever/dossier/viewlets/templatedossier_byline.pt:35
+#: opengever.dossier/opengever/dossier/viewlets/templatedossier_byline.pt:35
 msgid "box_last_modified"
 msgstr ""
 
 #. Default: "Add"
-#: ./opengever/dossier/behaviors/participation.py:178
+#: opengever.dossier/opengever/dossier/behaviors/participation.py:153
 msgid "button_add"
 msgstr ""
 
 #. Default: "Archive"
-#: ./opengever/dossier/archive.py:162
+#: opengever.dossier/opengever/dossier/archive.py:183
 msgid "button_archive"
 msgstr ""
 
 #. Default: "Cancel"
-#: ./opengever/dossier/archive.py:237
-#: ./opengever/dossier/behaviors/participation.py:191
-#: ./opengever/dossier/transport.py:45
+#: opengever.dossier/opengever/dossier/archive.py:264
+#: opengever.dossier/opengever/dossier/behaviors/participation.py:166
+#: opengever.dossier/opengever/dossier/transport.py:45
 msgid "button_cancel"
 msgstr ""
 
 #. Default: "Continue"
-#: ./opengever/dossier/transport.py:49
+#: opengever.dossier/opengever/dossier/transport.py:49
 msgid "button_continue"
 msgstr ""
 
 #. Default: "Copy"
-#: ./opengever/dossier/transport.py:125
+#: opengever.dossier/opengever/dossier/transport.py:125
 msgid "button_copy"
 msgstr ""
 
 #. Default: "Send"
-#: ./opengever/dossier/browser/send_document.py:135
+#: opengever.dossier/opengever/dossier/browser/send_document.py:135
 msgid "button_send"
 msgstr ""
 
 #. Default: "Cancel"
-#: ./opengever/dossier/browser/send_document.py:169
+#: opengever.dossier/opengever/dossier/browser/send_document.py:169
 msgid "cancel_back"
 msgstr ""
 
 #. Default: "Contact"
-#: ./opengever/dossier/browser/participants.py:109
+#: opengever.dossier/opengever/dossier/browser/participants.py:109
 msgid "column_contact"
 msgstr ""
 
 #. Default: "role_list"
-#: ./opengever/dossier/browser/participants.py:113
+#: opengever.dossier/opengever/dossier/browser/participants.py:113
 msgid "column_rolelist"
 msgstr ""
 
 #. Default: "create document with template"
-#: ./opengever/dossier/templatedossier.py:43
+#: opengever.dossier/opengever/dossier/templatedossier.py:43
 msgid "create_document_with_template"
 msgstr ""
 
@@ -152,17 +160,17 @@ msgid "documents"
 msgstr ""
 
 #. Default: "Extern receiver"
-#: ./opengever/dossier/browser/send_document.py:58
+#: opengever.dossier/opengever/dossier/browser/send_document.py:58
 msgid "extern_receiver"
 msgstr ""
 
 #. Default: "Filing"
-#: ./opengever/dossier/behaviors/dossier.py:102
+#: opengever.dossier/opengever/dossier/behaviors/dossier.py:101
 msgid "fieldset_filing"
 msgstr ""
 
 #. Default: "Action"
-#: ./opengever/dossier/archive.py:75
+#: opengever.dossier/opengever/dossier/archive.py:100
 msgid "filing_action"
 msgstr ""
 
@@ -170,382 +178,363 @@ msgid "filing_nr"
 msgstr ""
 
 #. Default: "filing prefix"
-#: ./opengever/dossier/archive.py:56
-#: ./opengever/dossier/behaviors/dossier.py:116
+#: opengever.dossier/opengever/dossier/archive.py:81
+#: opengever.dossier/opengever/dossier/behaviors/dossier.py:115
 msgid "filing_prefix"
 msgstr ""
 
 #. Default: "filing Year"
-#: ./opengever/dossier/archive.py:70
+#: opengever.dossier/opengever/dossier/archive.py:95
 msgid "filing_year"
 msgstr ""
 
 #. Default: "Archive Dossier"
-#: ./opengever/dossier/archive.py:137
+#: opengever.dossier/opengever/dossier/archive.py:159
 msgid "heading_archive_form"
 msgstr ""
 
 #. Default: "Send as email"
-#: ./opengever/dossier/browser/send_document.py:113
+#: opengever.dossier/opengever/dossier/browser/send_document.py:113
 msgid "heading_send_as_email"
 msgstr ""
 
-#: ./opengever/dossier/behaviors/participation.py:128
-msgid "help_comment"
-msgstr ""
-
-#: ./opengever/dossier/behaviors/dossier.py:86
+#: opengever.dossier/opengever/dossier/behaviors/dossier.py:85
 msgid "help_comments"
 msgstr ""
 
-#: ./opengever/dossier/behaviors/participation.py:109
+#: opengever.dossier/opengever/dossier/behaviors/participation.py:91
 msgid "help_contact"
 msgstr ""
 
-#: ./opengever/dossier/behaviors/dossier.py:134
+#: opengever.dossier/opengever/dossier/behaviors/dossier.py:133
 msgid "help_container_id"
 msgstr ""
 
-#: ./opengever/dossier/behaviors/dossier.py:148
+#: opengever.dossier/opengever/dossier/behaviors/dossier.py:147
 msgid "help_container_location"
 msgstr ""
 
-#: ./opengever/dossier/behaviors/dossier.py:125
+#: opengever.dossier/opengever/dossier/behaviors/dossier.py:124
 msgid "help_container_type"
 msgstr ""
 
-#: ./opengever/dossier/archive.py:65
-#: ./opengever/dossier/behaviors/dossier.py:74
+#: opengever.dossier/opengever/dossier/archive.py:90
+#: opengever.dossier/opengever/dossier/behaviors/dossier.py:73
 msgid "help_end"
 msgstr ""
 
 #. Default: "email addresses of the receivers. Enter manually the addresses, one per each line."
-#: ./opengever/dossier/browser/send_document.py:59
+#: opengever.dossier/opengever/dossier/browser/send_document.py:59
 msgid "help_extern_receiver"
 msgstr ""
 
-#: ./opengever/dossier/behaviors/dossier.py:166
+#: opengever.dossier/opengever/dossier/behaviors/dossier.py:165
 msgid "help_former_reference_number"
 msgstr ""
 
 #. Default: "Live Search: search for users and contacts"
-#: ./opengever/dossier/browser/send_document.py:49
+#: opengever.dossier/opengever/dossier/browser/send_document.py:49
 msgid "help_intern_receiver"
 msgstr ""
 
-#: ./opengever/dossier/behaviors/dossier.py:58
+#: opengever.dossier/opengever/dossier/behaviors/dossier.py:57
 msgid "help_keywords"
 msgstr ""
 
-#: ./opengever/dossier/browser/send_document.py:73
+#: opengever.dossier/opengever/dossier/browser/send_document.py:73
 msgid "help_message"
 msgstr ""
 
-#: ./opengever/dossier/behaviors/dossier.py:142
+#: opengever.dossier/opengever/dossier/behaviors/dossier.py:141
 msgid "help_number_of_containers"
 msgstr ""
 
-#: ./opengever/dossier/behaviors/dossier.py:173
+#: opengever.dossier/opengever/dossier/behaviors/dossier.py:172
 msgid "help_reference_number "
 msgstr ""
 
 #. Default: "Select the responsible manager"
-#: ./opengever/dossier/behaviors/dossier.py:93
+#: opengever.dossier/opengever/dossier/behaviors/dossier.py:92
 msgid "help_responsible"
 msgstr ""
 
-#: ./opengever/dossier/behaviors/participation.py:116
+#: opengever.dossier/opengever/dossier/behaviors/participation.py:98
 msgid "help_roles"
 msgstr ""
 
-#: ./opengever/dossier/transport.py:34
+#: opengever.dossier/opengever/dossier/transport.py:34
 msgid "help_source_client"
 msgstr ""
 
-#: ./opengever/dossier/behaviors/dossier.py:68
+#: opengever.dossier/opengever/dossier/behaviors/dossier.py:67
 msgid "help_start"
 msgstr ""
 
-#: ./opengever/dossier/browser/send_document.py:67
+#: opengever.dossier/opengever/dossier/browser/send_document.py:67
 msgid "help_subject"
 msgstr ""
 
-#: ./opengever/dossier/transport.py:114
+#: opengever.dossier/opengever/dossier/transport.py:114
 msgid "help_target_dossier"
 msgstr ""
 
-#: ./opengever/dossier/behaviors/dossier.py:80
+#: opengever.dossier/opengever/dossier/behaviors/dossier.py:79
 msgid "help_volume_number"
 msgstr ""
 
 #. Default: "Mails sent"
-#: ./opengever/dossier/browser/send_document.py:164
+#: opengever.dossier/opengever/dossier/browser/send_document.py:164
 msgid "info_mails_sent"
 msgstr ""
 
 #. Default: "Participation created"
-#: ./opengever/dossier/behaviors/participation.py:186
+#: opengever.dossier/opengever/dossier/behaviors/participation.py:161
 msgid "info_participation_create"
 msgstr ""
 
 #. Default: "Removed participations"
-#: ./opengever/dossier/behaviors/participation.py:231
+#: opengever.dossier/opengever/dossier/behaviors/participation.py:206
 msgid "info_removed_participations"
 msgstr ""
 
 #. Default: "Intern receiver"
-#: ./opengever/dossier/browser/send_document.py:48
+#: opengever.dossier/opengever/dossier/browser/send_document.py:48
 msgid "intern_receiver"
 msgstr ""
 
 #. Default: "Add Participant"
-#: ./opengever/dossier/profiles/default/actions.xml
+#: opengever.dossier/opengever/dossier/profiles/default/actions.xml
 msgid "label_add_participant"
 msgstr ""
 
 #. Default: "by ${author}"
-#: ./opengever/dossier/project_templates/byline.pt:16
-#: ./opengever/dossier/viewlets/businesscase_byline.pt:18
-#: ./opengever/dossier/viewlets/templatedossier_byline.pt:16
+#: opengever.dossier/opengever/dossier/project_templates/byline.pt:16
+#: opengever.dossier/opengever/dossier/viewlets/businesscase_byline.pt:18
+#: opengever.dossier/opengever/dossier/viewlets/templatedossier_byline.pt:16
 msgid "label_by_author"
 msgstr ""
 
-#: ./opengever/dossier/transport.py:122
+#: opengever.dossier/opengever/dossier/transport.py:122
 msgid "label_choose_target_dossier"
 msgstr ""
 
-#. Default: "Comment"
-#: ./opengever/dossier/behaviors/participation.py:127
-msgid "label_comment"
-msgstr ""
-
 #. Default: "Comments"
-#: ./opengever/dossier/behaviors/dossier.py:85
+#: opengever.dossier/opengever/dossier/behaviors/dossier.py:84
 msgid "label_comments"
 msgstr ""
 
 #. Default: "Contact"
-#: ./opengever/dossier/behaviors/participation.py:108
+#: opengever.dossier/opengever/dossier/behaviors/participation.py:90
 msgid "label_contact"
 msgstr ""
 
 #. Default: "Container Id"
-#: ./opengever/dossier/behaviors/dossier.py:133
+#: opengever.dossier/opengever/dossier/behaviors/dossier.py:132
 msgid "label_container_id"
 msgstr ""
 
 #. Default: "Container Location"
-#: ./opengever/dossier/behaviors/dossier.py:147
+#: opengever.dossier/opengever/dossier/behaviors/dossier.py:146
 msgid "label_container_location"
 msgstr ""
 
 #. Default: "Container Type"
-#: ./opengever/dossier/behaviors/dossier.py:124
+#: opengever.dossier/opengever/dossier/behaviors/dossier.py:123
 msgid "label_container_type"
 msgstr ""
 
 #. Default: "Documents"
-#: ./opengever/dossier/browser/send_document.py:41
+#: opengever.dossier/opengever/dossier/browser/send_document.py:41
 msgid "label_documents"
 msgstr ""
 
 #. Default: "Edit after creation"
-#: ./opengever/dossier/templatedossier_templates/template_form.pt:58
+#: opengever.dossier/opengever/dossier/templatedossier_templates/template_form.pt:48
 msgid "label_edit_after_creation"
 msgstr ""
 
 #. Default: "E-Mail:"
-#: ./opengever/dossier/viewlets/businesscase_byline.pt:88
+#: opengever.dossier/opengever/dossier/viewlets/businesscase_byline.pt:88
 msgid "label_email_address"
 msgstr ""
 
 #. Default: "Closing Date"
-#: ./opengever/dossier/archive.py:64
-#: ./opengever/dossier/behaviors/dossier.py:73
+#: opengever.dossier/opengever/dossier/archive.py:89
+#: opengever.dossier/opengever/dossier/behaviors/dossier.py:72
 msgid "label_end"
 msgstr ""
 
 #. Default: "to:"
-#: ./opengever/dossier/project_templates/byline.pt:44
-#: ./opengever/dossier/viewlets/businesscase_byline.pt:44
+#: opengever.dossier/opengever/dossier/project_templates/byline.pt:44
+#: opengever.dossier/opengever/dossier/viewlets/businesscase_byline.pt:44
 msgid "label_end_byline"
 msgstr ""
 
 #. Default: "Filing Number:"
-#: ./opengever/dossier/viewlets/businesscase_byline.pt:78
+#: opengever.dossier/opengever/dossier/viewlets/businesscase_byline.pt:78
 msgid "label_filing_no"
 msgstr ""
 
 #. Default: "Reference Number"
-#: ./opengever/dossier/behaviors/dossier.py:164
+#: opengever.dossier/opengever/dossier/behaviors/dossier.py:163
 msgid "label_former_reference_number"
 msgstr ""
 
 #. Default: "Keywords"
-#: ./opengever/dossier/behaviors/dossier.py:57
+#: opengever.dossier/opengever/dossier/behaviors/dossier.py:56
 msgid "label_keywords"
 msgstr ""
 
 #. Default: "Message"
-#: ./opengever/dossier/browser/send_document.py:72
+#: opengever.dossier/opengever/dossier/browser/send_document.py:72
 msgid "label_message"
 msgstr ""
 
 #. Default: "Reference Number will be generated                 after content creation"
-#: ./opengever/dossier/widget.py:25
+#: opengever.dossier/opengever/dossier/widget.py:25
 msgid "label_no_reference_number"
 msgstr ""
 
 #. Default: "Number of Containers"
-#: ./opengever/dossier/behaviors/dossier.py:139
+#: opengever.dossier/opengever/dossier/behaviors/dossier.py:138
 msgid "label_number_of_containers"
 msgstr ""
 
-#. Default: "Participant added: ${contact} with roles ${roles}"
-#: ./opengever/dossier/behaviors/participation.py:67
-msgid "label_participant_added"
-msgstr ""
-
-#. Default: "Participant removed: ${contact}"
-#: ./opengever/dossier/behaviors/participation.py:89
-msgid "label_participant_removed"
-msgstr ""
-
 #. Default: "Participation"
-#: ./opengever/dossier/behaviors/participation.py:174
+#: opengever.dossier/opengever/dossier/behaviors/participation.py:149
 msgid "label_participation"
 msgstr ""
 
 #. Default: "Reference Number"
-#: ./opengever/dossier/behaviors/dossier.py:172
-#: ./opengever/dossier/viewlets/businesscase_byline.pt:68
+#: opengever.dossier/opengever/dossier/behaviors/dossier.py:171
+#: opengever.dossier/opengever/dossier/viewlets/businesscase_byline.pt:68
 msgid "label_reference_number"
 msgstr ""
 
 #. Default: "Related Dossier"
-#: ./opengever/dossier/behaviors/dossier.py:153
+#: opengever.dossier/opengever/dossier/behaviors/dossier.py:152
 msgid "label_related_dossier"
 msgstr ""
 
 #. Default: "Responsible"
-#: ./opengever/dossier/behaviors/dossier.py:92
-#: ./opengever/dossier/browser/participants.py:153
+#: opengever.dossier/opengever/dossier/behaviors/dossier.py:91
+#: opengever.dossier/opengever/dossier/browser/participants.py:153
 msgid "label_responsible"
 msgstr ""
 
 #. Default: "Roles"
-#: ./opengever/dossier/behaviors/participation.py:115
+#: opengever.dossier/opengever/dossier/behaviors/participation.py:97
 msgid "label_roles"
 msgstr ""
 
 #. Default: "Sequence Number:"
-#: ./opengever/dossier/viewlets/businesscase_byline.pt:58
+#: opengever.dossier/opengever/dossier/viewlets/businesscase_byline.pt:58
 msgid "label_sequence_number"
 msgstr ""
 
 #. Default: "Client"
-#: ./opengever/dossier/transport.py:32
+#: opengever.dossier/opengever/dossier/transport.py:32
 msgid "label_source_client"
 msgstr ""
 
 #. Default: "Opening Date"
-#: ./opengever/dossier/behaviors/dossier.py:67
+#: opengever.dossier/opengever/dossier/behaviors/dossier.py:66
 msgid "label_start"
 msgstr ""
 
 #. Default: "from:"
-#: ./opengever/dossier/project_templates/byline.pt:35
-#: ./opengever/dossier/viewlets/businesscase_byline.pt:35
+#: opengever.dossier/opengever/dossier/project_templates/byline.pt:35
+#: opengever.dossier/opengever/dossier/viewlets/businesscase_byline.pt:35
 msgid "label_start_byline"
 msgstr ""
 
 #. Default: "Subject"
-#: ./opengever/dossier/browser/send_document.py:66
+#: opengever.dossier/opengever/dossier/browser/send_document.py:66
 msgid "label_subject"
 msgstr ""
 
 #. Default: "Target Dossier"
-#: ./opengever/dossier/transport.py:113
+#: opengever.dossier/opengever/dossier/transport.py:113
 msgid "label_target_dossier"
 msgstr ""
 
 #. Default: "Template"
-#: ./opengever/dossier/templatedossier_templates/template_form.pt:25
+#: opengever.dossier/opengever/dossier/templatedossier_templates/template_form.pt:21
 msgid "label_template"
 msgstr ""
 
-#. Default: "Title"
-#: ./opengever/dossier/templatedossier_templates/template_form.pt:34
+#. Default: "title"
+#: opengever.dossier/opengever/dossier/templatedossier_templates/template_form.pt:30
 msgid "label_title"
 msgstr ""
 
 #. Default: "Volume Number"
-#: ./opengever/dossier/behaviors/dossier.py:79
+#: opengever.dossier/opengever/dossier/behaviors/dossier.py:78
 msgid "label_volume_number"
 msgstr ""
 
 #. Default: "State:"
-#: ./opengever/dossier/project_templates/byline.pt:28
-#: ./opengever/dossier/viewlets/businesscase_byline.pt:29
-#: ./opengever/dossier/viewlets/templatedossier_byline.pt:28
+#: opengever.dossier/opengever/dossier/project_templates/byline.pt:28
+#: opengever.dossier/opengever/dossier/viewlets/businesscase_byline.pt:29
+#: opengever.dossier/opengever/dossier/viewlets/templatedossier_byline.pt:28
 msgid "label_workflow_state"
 msgstr ""
 
-#: ./opengever/dossier/browser/send_document.py:51
+#: opengever.dossier/opengever/dossier/browser/send_document.py:51
 msgid "mails"
 msgstr ""
 
-#: ./opengever/dossier/browser/overview_templates/overview.pt:17
+#: opengever.dossier/opengever/dossier/browser/overview_templates/overview.pt:17
 msgid "no_content"
 msgstr ""
 
-#: ./opengever/dossier/resolve.py:24
+#: opengever.dossier/opengever/dossier/resolve.py:24
 msgid "not all documents and tasks are stored in a subdossier"
 msgstr ""
 
-#: ./opengever/dossier/resolve.py:28
+#: opengever.dossier/opengever/dossier/resolve.py:28
 msgid "not all documents are checked in"
 msgstr ""
 
-#: ./opengever/dossier/resolve.py:32
+#: opengever.dossier/opengever/dossier/resolve.py:32
 msgid "not all task are closed"
 msgstr ""
 
-#: ./opengever/dossier/archive.py:42
+#: opengever.dossier/opengever/dossier/archive.py:68
 msgid "only resolve, set filing no later"
 msgstr ""
 
 msgid "participants"
 msgstr ""
 
-#: ./opengever/dossier/browser/send_document.py:61
+#: opengever.dossier/opengever/dossier/browser/send_document.py:61
 msgid "receiver"
 msgstr ""
 
-#: ./opengever/dossier/templatedossier_templates/template_form.pt:27
+#: opengever.dossier/opengever/dossier/templatedossier_templates/template_form.pt:23
 msgid "required"
 msgstr ""
 
-#: ./opengever/dossier/archive.py:45
+#: opengever.dossier/opengever/dossier/archive.py:71
 msgid "resolve and set a new filing no"
 msgstr ""
 
-#: ./opengever/dossier/archive.py:41
+#: opengever.dossier/opengever/dossier/archive.py:67
 msgid "resolve and set filing no"
 msgstr ""
 
-#: ./opengever/dossier/archive.py:44
+#: opengever.dossier/opengever/dossier/archive.py:70
 msgid "resolve and take the existing filing no"
 msgstr ""
 
-#: ./opengever/dossier/archive.py:48
+#: opengever.dossier/opengever/dossier/archive.py:74
 msgid "set a filing no"
 msgstr ""
 
 msgid "sharing"
 msgstr ""
 
-#: ./opengever/dossier/browser/overview_templates/overview.pt:14
+#: opengever.dossier/opengever/dossier/browser/overview_templates/overview.pt:14
 msgid "show all"
 msgstr ""
 
@@ -555,33 +544,33 @@ msgstr ""
 msgid "tasks"
 msgstr ""
 
-#: ./opengever/dossier/archive.py:152
+#: opengever.dossier/opengever/dossier/archive.py:173
 msgid "the filling number was already set"
 msgstr ""
 
-#: ./opengever/dossier/archive.py:230
+#: opengever.dossier/opengever/dossier/archive.py:257
 msgid "the filling number was set"
 msgstr ""
 
 #. Default: "expired"
-#: ./opengever/dossier/project_templates/byline.pt:53
-#: ./opengever/dossier/viewlets/businesscase_byline.pt:53
-#: ./opengever/dossier/viewlets/templatedossier_byline.pt:44
+#: opengever.dossier/opengever/dossier/project_templates/byline.pt:53
+#: opengever.dossier/opengever/dossier/viewlets/businesscase_byline.pt:53
+#: opengever.dossier/opengever/dossier/viewlets/templatedossier_byline.pt:44
 msgid "time_expired"
 msgstr ""
 
 #. Default: "Attach document"
-#: ./opengever/dossier/transport.py:42
+#: opengever.dossier/opengever/dossier/transport.py:42
 msgid "title_attach_document_form"
 msgstr ""
 
 #. Default: "You are not assigned to another client where you could copy the documents to."
-#: ./opengever/dossier/transport.py:93
+#: opengever.dossier/opengever/dossier/transport.py:93
 msgid "warning_copy_to_remote_no_client"
 msgstr ""
 
 #. Default: "You didn't select any participants."
-#: ./opengever/dossier/behaviors/participation.py:221
+#: opengever.dossier/opengever/dossier/behaviors/participation.py:196
 msgid "warning_no_participants_selected"
 msgstr ""
 

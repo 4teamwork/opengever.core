@@ -2,6 +2,7 @@ from Products.statusmessages.interfaces import IStatusMessage
 from collective.elephantvocabulary import wrap_vocabulary
 from five import grok
 from opengever.dossier import _
+from opengever.dossier import events
 from persistent import Persistent
 from persistent.list import PersistentList
 from plone.directives import form
@@ -10,6 +11,7 @@ from plone.z3cform import layout
 from rwproperty import getproperty, setproperty
 from zope import schema
 from zope.annotation.interfaces import IAnnotations
+from zope.event import notify
 from zope.interface import Interface, implements
 import base64
 import z3c.form
@@ -63,18 +65,7 @@ class ParticipationHandler(object):
             lst = self.get_participations()
             lst.append(value)
             self.set_participations(lst)
-            # journal entry
-            title = _(u'label_participant_added',
-                      default=u'Participant added: ${contact} with '
-                      'roles ${roles}',
-                      mapping={
-                    'contact' : value.contact,
-                    'roles' : value.role_list,
-                    })
-            # need to import here because of import loop
-            from opengever.journal.handlers import journal_entry_factory
-            journal_entry_factory(self.context, PARTICIPANT_ADDED,
-                                  title)
+            notify(events.ParticipationCreated(self.context, value))
 
     def has_participation(self, value):
         return value in self.get_participations()
@@ -85,16 +76,7 @@ class ParticipationHandler(object):
         lst = self.get_participations()
         lst.remove(value)
         self.set_participations(lst)
-        # journal entry
-        title = _(u'label_participant_removed',
-                  default=u'Participant removed: ${contact}',
-                  mapping={
-                'contact' : value.contact,
-                })
-        # need to import here because of import loop
-        from opengever.journal.handlers import journal_entry_factory
-        journal_entry_factory(self.context, PARTICIPANT_REMOVED,
-                              title)
+        notify(events.ParticipationRemoved(self.context, value))
         del value
 
 

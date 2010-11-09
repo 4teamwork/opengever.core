@@ -1,5 +1,7 @@
 from zope import schema
 from zope.interface import Interface
+from zope.component.interfaces import IObjectEvent
+
 
 class IDossierContainerTypes(Interface):
     """A type for collaborative spaces."""
@@ -61,3 +63,13 @@ class IDossierParticipants(Interface):
             vocabulary=u'opengever.dossier.participation_roles',
         ),
     )
+
+
+class IParticipationCreated(IObjectEvent):
+    """Interface for participation created event.
+    """
+
+
+class IParticipationRemoved(IObjectEvent):
+    """Interface for participation removed event.
+    """
