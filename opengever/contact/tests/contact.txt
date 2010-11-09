@@ -15,7 +15,7 @@ do some imports and configurations
 
 browser test
     >>> browser = Browser(app)
-    >>> browser.handleErrors = True
+    >>> browser.handleErrors = False
 
     >>> browser.open(portal.absolute_url() + '/login_form')
     >>> browser.getControl(name='__ac_name').value = TEST_USER_NAME
@@ -53,13 +53,10 @@ create a contact:
 
     >>> browser.url
     'http://nohost/plone/opengever.contact.contactfolder/++add++opengever.contact.contact'
-    >>> browser.getControl('Firstname').value = u'testi'
-    >>> browser.getControl('Lastname').value = u'testmann'
-    >>> browser.getControl('Picture').value = None
-
+    >>> browser.getControl('Firstname').value = 'testi'
+    >>> browser.getControl('Lastname').value = 'testmann'
     >>> browser.getControl('Save').click()
-    >>> import pdb; pdb.set_trace( )
     >>> browser.url
-    'http://nohost/plone/Foobar/testi-testmann/view'
+    'http://nohost/plone/opengever.contact.contactfolder/opengever.contact.contact/view'
     
     

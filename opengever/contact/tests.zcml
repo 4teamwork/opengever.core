@@ -4,4 +4,5 @@
   
   
     <include package="opengever.tabbedview"/>
+    <include package="plone.formwidget.namedfile" />
 </configure>

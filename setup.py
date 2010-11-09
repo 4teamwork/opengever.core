@@ -7,6 +7,7 @@ maintainer = 'Philippe Gross'
 
 tests_require = [
     'collective.testcaselayer',
+    'plone.formwidget.namedfile',
     ]
 
 setup(name='opengever.contact',

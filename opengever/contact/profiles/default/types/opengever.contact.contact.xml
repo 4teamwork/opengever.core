@@ -23,7 +23,6 @@
     <!-- enabled behaviors -->
     <property name="behaviors">
         <element value="plone.app.content.interfaces.INameFromTitle" />
-        <element value="opengever.base.behaviors.creator.ICreator" />
     </property>
 
     <!-- View information -->
