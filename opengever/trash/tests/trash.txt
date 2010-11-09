@@ -74,7 +74,6 @@ now we check also the untrashing
     >>> trasher.untrash()
 
 and the catalog
-    >>> import pdb; pdb.set_trace( )
     >>> portal.portal_catalog(portal_type="TrashTestFTI", trashed=True)
     []
 
