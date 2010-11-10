@@ -6,7 +6,7 @@
   <includeDependencies package="." />
 
   <include package=".browser" />
-  <include file="skins.zcml" />
+  <include file="profiles.zcml" />
   <include file="transmogrifier.zcml" />
 
 </configure>

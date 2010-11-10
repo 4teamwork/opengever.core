@@ -170,13 +170,9 @@ $(function($) {
       client.find('input[name=clients.mail_domain:records]').val(
         cid.concat('.').concat(location.hostname));
     }
-  }
 
-  $('#clients_config').html('');
-  $('#amount_of_clients').bind('click change', function(event) {
-    setTimeout(update_clients, 100);
-  });
-  update_clients();
+    client.find('[name=clients.client_id:records]').change();
+  }
 
   $('#use_subdomains').change(function() {
     $('.client_config').each(function() {
@@ -272,9 +268,30 @@ $(function($) {
 
   /* helpers */
 
+  $('[name=clients.client_id:records]').live('change', function() {
+    var dt = $(this).parents('dd:first').prev('dt');
+    dt.css('color', null);
+    $.ajax({
+      url: '/'.concat($(this).val()).concat('/Type'),
+      success: function(msg) {
+        dt.css('color', 'red');
+      }
+    });
+  });
+
   $('.import_users_label').click(function(e){
     $(this).parents('.field:first').find('input').click();
     e.preventDefault();
   }).css('cursor', 'default');
+
+
+  /* initialize */
+
+  $('#clients_config').html('');
+  $('#amount_of_clients').bind('click change', function(event) {
+    setTimeout(update_clients, 100);
+  });
+  update_clients();
+
 
 });

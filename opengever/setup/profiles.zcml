@@ -12,4 +12,10 @@
           provides="Products.GenericSetup.interfaces.EXTENSION"
           />
 
+    <genericsetup:importStep
+          name="opengever.setup"
+          title="opengever.setup various imports"
+          description=""
+          handler="opengever.setup.setuphandlers.import_various" />
+
 </configure>

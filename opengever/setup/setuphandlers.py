@@ -16,11 +16,11 @@ def start_import(context):
     transmogrifier(u'opengever.setup.various')
     transaction.commit()
 
-    if '1' in context.getId():
-        transmogrifier(u'opengever.setup.local_roles_m1')
-    else:
-        transmogrifier(u'opengever.setup.local_roles_m2')
-    transaction.commit()
+    # if '1' in context.getId():
+    #     transmogrifier(u'opengever.setup.local_roles_m1')
+    # else:
+    #     transmogrifier(u'opengever.setup.local_roles_m2')
+    # transaction.commit()
 
 
 def settings(context):
@@ -48,7 +48,7 @@ def settings(context):
             treeportlet.Assignment(root_path='ordnungssystem')
 
 
-def setupVarious(setup):
+def import_various(setup):
     if setup.readDataFile('opengever.setup.txt') is None:
         return
     site = setup.getSite()
