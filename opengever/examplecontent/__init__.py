@@ -3,7 +3,9 @@ LDAP_PROFILE = ('4teamwork LDAP', 'opengever.examplecontent:4teamwork-ldap')
 POLICIES = ({
         'title': 'Development with examplecontent',
         'base_profile': 'opengever.policy.base:default',
-        'additional_profiles': ('opengever.examplecontent:developer',),
+        'additional_profiles': (
+            'opengever.setup:default',
+            'opengever.examplecontent:developer',),
         'purge_sql': True,
         'import_users': True,
         'language': 'de',
