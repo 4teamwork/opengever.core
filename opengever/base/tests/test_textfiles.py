@@ -19,6 +19,8 @@ def setup_product():
 setup_product()
 ptc.setupPloneSite(extension_profiles=['plone.app.dexterity:default',
                                        'opengever.base:default',
+                                       'opengever.repository:default',
+                                       'opengever.document:default',
                                        ])
 
 HERE = os.path.dirname( os.path.abspath( __file__ ) )
