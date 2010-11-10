@@ -4,8 +4,5 @@
     <javascript cacheable="True" compression="safe" cookable="True" expression=""
         enabled="True" id="++resource++opengever.base.resources/sharing.js" inline="False"
     />
-    <javascript cacheable="True" compression="safe" cookable="True" expression=""
-        enabled="True" id="++resource++opengever.base.resources/advanced_search.js" inline="False"
-    />
 
 </object>
