@@ -67,6 +67,22 @@ class OpengeverSharingView(SharingView):
 
         return self.roles()
 
+    def role_settings(self):
+        """ The standard role_settings method,
+        but pop the AuthenticatedUsers group for not managers. """
+        results = super(OpengeverSharingView, self).role_settings()
+        
+        member = self.context.portal_membership.getAuthenticatedMember()
+        
+        if member:
+            if 'Manager' in member.getRolesInContext(self.context):
+                return results
+
+        # remove the group AuthenticatedUsers
+        results.pop([r.get('id') for r in results].index('AuthenticatedUsers'))
+
+        return results
+
 
 class SharingTab(OpengeverSharingView):
     """The sharing tab view, which show the standard sharin view, 
