@@ -25,13 +25,6 @@
 
     <include file="profiles.zcml" />
 
-    <browser:page
-        for="opengever.dossier.behaviors.dossier.IDossierMarker"
-        name="tabbedview_view-sharing"
-        class="opengever.tabbedview.browser.tabs.Sharing"
-        permission="zope.Public"
-    />
-
     <i18n:registerTranslations directory="locales" />
 
     <!-- Include custom permissions -->
