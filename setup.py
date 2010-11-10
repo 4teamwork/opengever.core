@@ -45,6 +45,7 @@ setup(name='opengever.policy.base',
           'opengever.contact',
           'opengever.latex',
           'opengever.advancedsearch',
+          'opengever.sharing',
       ],
       entry_points="""
       # -*- Entry points: -*-

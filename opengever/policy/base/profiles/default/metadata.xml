@@ -20,6 +20,7 @@
     <dependency>profile-opengever.ogds.base:default</dependency>
     <dependency>profile-opengever.contact:default</dependency>
     <dependency>profile-opengever.advancedsearch:default</dependency>
+    <dependency>profile-opengever.sharing:default</dependency>
     <!--dependency>profile-ftw.dashboard.dragndrop:default</dependency>
     <dependency>profile-ftw.dashboard.portlets.favourites:default</dependency>
     <dependency>profile-ftw.dashboard.portlets.postit:default</dependency>
