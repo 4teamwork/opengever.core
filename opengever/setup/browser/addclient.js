@@ -16,8 +16,8 @@ $(function($) {
       $('#default_client_config_scheme .client_config').clone().appendTo(
         '#clients_config').find('.client_id').html(
           'Client ' + index).end().each(function() {
-          update_fields($(this), index);
-        });
+            update_fields($(this), index);
+          });
     }
 
   }
@@ -41,6 +41,18 @@ $(function($) {
     }
     $('#clients_config .client_config').remove();
     $('#amount_of_clients').val(amount);
+
+    /* also load ldap users import option */
+    if(config && config.import_users) {
+      $('[name=import_users:boolean]').attr('checked', true);
+    }
+
+    /* warning when purging enabled */
+    $('.policy_warnings li').remove();
+    if(config && config.purge_sql) {
+      $('<li>SQL will be purged completly!</li>').appendTo(
+        $('.policy_warnings'));
+    }
   }
 
   /* set the client_amount on initialize */
@@ -162,8 +174,8 @@ $(function($) {
 
   $('#clients_config').html('');
   $('#amount_of_clients').bind('click change', function(event) {
-      setTimeout(update_clients, 100);
-    });
+    setTimeout(update_clients, 100);
+  });
   update_clients();
 
   $('#use_subdomains').change(function() {
@@ -188,9 +200,9 @@ $(function($) {
     $('select').attr('disabled', true);
 
     // defaults
-    var lang = $('[name=default_language]').val();
     var ldap = $('[name=ldap]').val();
     var policy = $('[name=policy]').val();
+    var import_users = $('[name=import_users:boolean]').attr('checked');
 
     // hide config fieldset
     $('fieldset.config').hide();
@@ -200,7 +212,6 @@ $(function($) {
       var client = $('#clients_config .client_config:visible:first');
       if(client.length > 0) {
         var data = {};
-        data['default_language'] = lang;
         data['ldap'] = ldap;
         data['policy'] = policy;
         client.find('input').each(function() {
@@ -215,6 +226,10 @@ $(function($) {
 
         if(data['index'] == 1) {
           data['first'] = '1';
+        }
+
+        if(data['index'] == 1 && import_users) {
+          data['import_users'] = import_users;
         }
 
         $('<img src="/++resource++addclient-spinner.gif" class="spinner" />').appendTo(client);
@@ -252,7 +267,14 @@ $(function($) {
 
     send_next_client();
 
-
   });
+
+
+  /* helpers */
+
+  $('.import_users_label').click(function(e){
+    $(this).parents('.field:first').find('input').click();
+    e.preventDefault();
+  }).css('cursor', 'default');
 
 });

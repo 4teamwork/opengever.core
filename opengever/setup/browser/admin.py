@@ -102,7 +102,7 @@ class CreateOpengeverClient(BrowserView):
             profile_id=_DEFAULT_PROFILE,
             extension_ids=ext_profiles,
             setup_content=False,
-            default_language=form['default_language'],
+            default_language=config.get('language', 'de'),
             )
 
         if form.get('configsql'):
@@ -161,7 +161,7 @@ class CreateOpengeverClient(BrowserView):
             plugins.movePluginsUp(IPropertiesPlugin, ('ldap',))
             plugins.movePluginsUp(IPropertiesPlugin, ('ldap',))
 
-        if form.get('first', False) and config.get('import_users', False):
+        if form.get('first', False) and form.get('import_users', False):
             print '===== SYNC LDAP ===='
             class Object(object): pass
             options = Object()
