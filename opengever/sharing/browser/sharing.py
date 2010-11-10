@@ -8,20 +8,20 @@ from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from zope.component import getUtilitiesFor
 
 ROLE_MAPPING = {
-    IDossier: {
-        u'Reader': _('sharing_dossier_reader'),
-        u'Contributor': _('sharing_dossier_contributor'),
-        u'Editor': _('sharing_dossier_editor'),
-        u'Reviewer': _('sharing_dossier_reviewer'),
-        u'Publisher': _('sharing_dossier_publisher'),
-        u'Administrator': _('sharing_dossier_administrator'),
-    },
+    IDossier: (
+        (u'Reader', _('sharing_dossier_reader')),
+        (u'Contributor', _('sharing_dossier_contributor')),
+        (u'Editor', _('sharing_dossier_editor')),
+        (u'Reviewer', _('sharing_dossier_reviewer')),
+        (u'Publisher', _('sharing_dossier_publisher')),
+        (u'Administrator', _('sharing_dossier_administrator')),
+    ),
 
-    IStandard: {
-        u'Reader': _('sharing_reader'),
-        u'Contributor': _('sharing_contributor'),
-        u'Editor': _('sharing_editor'),
-    },
+    IStandard: (
+        (u'Reader', _('sharing_reader')),
+        (u'Contributor', _('sharing_contributor')),
+        (u'Editor', _('sharing_editor')),
+    ),
 }
 
 
@@ -57,7 +57,7 @@ class OpengeverSharingView(SharingView):
         result = []
         for key, value in ROLE_MAPPING.items():
             if key.providedBy(self.context) or key is IStandard:
-                for id, title in value.items():
+                for id, title in value:
                     roles = [r.get('id') for r in self.roles()]
                     if id in roles:
                         result.append(
