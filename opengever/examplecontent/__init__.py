@@ -9,7 +9,7 @@ POLICIES = ({
         'additional_profiles': ('opengever.examplecontent:developer',),
         'purge_sql': True,
         'import_users': True,
-        'default_contents': True,
+        'language': 'de',
         'clients': (# {
                 # 'client_id': 'peter',
                 # 'title': 'Peter',
