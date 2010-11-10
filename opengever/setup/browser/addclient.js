@@ -206,7 +206,10 @@ $(function($) {
         client.find('input').each(function() {
           if($(this).attr('name')) {
             var key = $(this).attr('name').split('.')[1].split(':')[0];
-            data[key] = $(this).val();
+            if($(this).attr('type')!='checkbox' ||
+               $(this).attr('checked')) {
+              data[key] = $(this).val();
+            }
           }
         });
 
