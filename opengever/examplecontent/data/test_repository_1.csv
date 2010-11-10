@@ -1,5 +1,4 @@
 _path,_type,reference_number_prefix,effective_title,description,classification,privacy_layer,public_trial,retention_period,retention_period_annotation,archival_value,archival_value_annotation,custody_period,valid_from,valid_until,referenced_activity,location
-/ordnungssystem,opengever.repository.repositoryroot,,Ordnungssystem,,,,,,,,,,,,,
 /ordnungssystem/fuehrung,opengever.repository.repositoryfolder,1,Führung,,unprotected,privacy_layer_no,private,10,,selected,,30,01.10.2010,,,
 /ordnungssystem/fuehrung/strategie-und-planung,opengever.repository.repositoryfolder,1,Strategie und Planung,,unprotected,privacy_layer_no,private,10,,archival worthy,,30,01.10.2010,,,
 /ordnungssystem/fuehrung/berichtwesen,opengever.repository.repositoryfolder,2,Berichtwesen,,unprotected,privacy_layer_no,private,10,,archival worthy,,30,01.10.2010,,,

@@ -33,13 +33,6 @@
       />
 
   <transmogrifier:registerConfig
-      name="opengever.examplecontent.various"
-      title="Opengever ExampleContent various Import"
-      description="Pipeline configuration for Opengever Examplecontent import"
-      configuration="cfgs/various.cfg"
-      />
-
-  <transmogrifier:registerConfig
       name="opengever.examplecontent.users"
       title="Opengever ExampleContent Users Import"
       description="Pipeline configuration for Opengever Examplecontent import"
@@ -58,20 +51,6 @@
       title="Opengever ExampleContent Contacts Import"
       description="Pipeline configuration for Opengever Examplecontent import"
       configuration="cfgs/contacts.cfg"
-      />
-
-  <transmogrifier:registerConfig
-      name="opengever.examplecontent.local_roles_m1"
-      title="Opengever ExampleContent local roles import and setter"
-      description="Opengever ExampleContent local roles import and setter"
-      configuration="cfgs/local_roles_m1.cfg"
-      />
-
-  <transmogrifier:registerConfig
-      name="opengever.examplecontent.local_roles_m2"
-      title="Opengever ExampleContent local roles import and setter"
-      description="Opengever ExampleContent local roles import and setter"
-      configuration="cfgs/local_roles_m2.cfg"
       />
 
   <!-- sections -->
