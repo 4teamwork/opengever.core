@@ -1,0 +1,22 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope">
+
+  <genericsetup:registerProfile
+      name="default"
+      title="opengever.setup: default"
+      directory="profiles/default"
+      description="Sets up the default setup with the basic contents.
+                   Includes all other profiles provided by
+                   opengever.setup."
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      />
+
+  <genericsetup:registerProfile
+      name="default"
+      title="opengever.setup: default"
+      directory="profiles/default"
+      description="Sets up the default setup with the basic contents."
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      />
+
+</configure>

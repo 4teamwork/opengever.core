@@ -1,0 +1,30 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:five="http://namespaces.zope.org/five"
+    xmlns:transmogrifier="http://namespaces.plone.org/transmogrifier">
+
+  <transmogrifier:registerConfig
+      name="opengever.setup.repositoryroot"
+      title="opengever.setup: create repository root"
+      description=""
+      configuration="cfgs/repositoryroot.cfg"
+      />
+
+  <transmogrifier:registerConfig
+      name="opengever.setup.various"
+      title="opengever.setup: various default contents"
+      description=""
+      configuration="cfgs/various.cfg"
+      />
+
+  <utility
+      component=".filesection.NamedFileCreatorSection"
+      name="opengever.setup.filesection.namedfilecreator"
+      />
+
+  <utility
+      component=".jsonsource.JSONSourceSection"
+      name="opengever.setup.jsonsource.jsonsourcesection"
+      />
+
+</configure>
