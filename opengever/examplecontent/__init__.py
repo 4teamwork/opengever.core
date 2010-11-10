@@ -1,6 +1,3 @@
-import patches
-
-
 LDAP_PROFILE = ('4teamwork LDAP', 'opengever.examplecontent:4teamwork-ldap')
 
 POLICIES = ({

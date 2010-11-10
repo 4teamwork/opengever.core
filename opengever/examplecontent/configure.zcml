@@ -9,8 +9,6 @@
   <include package="z3c.autoinclude" file="meta.zcml" />
   <includeDependencies package="." />
 
-  <include package=".browser" />
-
   <genericsetup:registerProfile
       name="developer"
       title="opengever.examplecontent: Developer"
