@@ -16,11 +16,8 @@ def start_import(context):
     transmogrifier(u'opengever.setup.various')
     transaction.commit()
 
-    # if '1' in context.getId():
-    #     transmogrifier(u'opengever.setup.local_roles_m1')
-    # else:
-    #     transmogrifier(u'opengever.setup.local_roles_m2')
-    # transaction.commit()
+    transmogrifier(u'opengever.setup.local_roles')
+    transaction.commit()
 
 
 def settings(context):
