@@ -33,6 +33,13 @@
       />
 
   <transmogrifier:registerConfig
+      name="opengever.examplecontent.various"
+      title="Opengever ExampleContent various Import"
+      description="Pipeline configuration for Opengever Examplecontent import"
+      configuration="cfgs/various.cfg"
+      />
+
+  <transmogrifier:registerConfig
       name="opengever.examplecontent.users"
       title="Opengever ExampleContent Users Import"
       description="Pipeline configuration for Opengever Examplecontent import"

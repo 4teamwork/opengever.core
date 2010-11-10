@@ -7,6 +7,9 @@ def start_import(context):
     transmogrifier(u'opengever.examplecontent.repository')
     transaction.commit()
 
+    transmogrifier(u'opengever.examplecontent.various')
+    transaction.commit()
+
     transmogrifier(u'opengever.examplecontent.templates')
     transaction.commit()
 
