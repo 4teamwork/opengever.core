@@ -110,7 +110,7 @@ msgstr "Sie haben sowohl eine Datei wie auch die Eigenschaft 'nur in Papierform 
 #. Default: "Either the title or the file is required."
 #: ./opengever/document/document.py:194
 msgid "error_title_or_file_required"
-msgstr "Ein Titel oder ein File muss angegeben werden."
+msgstr "Ein Titel oder eine Datei muss angegeben werden."
 
 #. Default: "Common"
 #: ./opengever/document/behaviors.py:29
