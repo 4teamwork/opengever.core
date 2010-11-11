@@ -2,7 +2,6 @@
 <metadata>
   <version>2</version>
   <dependencies>
-	    <dependency>profile-opengever.tabbedview:default</dependency>
 	    <dependency>profile-opengever.ogds.base:default</dependency>
   </dependencies>
 </metadata>

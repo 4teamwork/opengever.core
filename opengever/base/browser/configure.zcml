@@ -9,12 +9,4 @@
         permission="zope2.View"
         />
 
-    <browser:page
-        for="*"
-        name="personal_overview"
-        class=".personal_overview.PersonalOverview"
-        permission="cmf.SetOwnProperties"
-        allowed_attributes="listing select_all"
-        />
-
 </configure>
