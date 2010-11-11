@@ -27,6 +27,7 @@
         <element value="plone.app.content.interfaces.INameFromTitle" />
         <element value="plone.app.dexterity.behaviors.metadata.IBasic" />
         <element value="opengever.tabbedview.interfaces.ITabbedViewEnabled" />
+        <element value="opengever.sharing.behaviors.IDossier" />
     </property>
 
     <!-- View information -->
