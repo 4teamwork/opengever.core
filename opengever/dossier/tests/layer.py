@@ -14,7 +14,6 @@ class IntegrationTestLayer(collective.testcaselayer.ptc.BasePTCLayer):
         self.addProfile('opengever.dossier:default')
         self.addProfile('opengever.document:default')
         self.addProfile('opengever.task:default')
-        self.addProfile('opengever.workflows:default')
         self.addProfile('opengever.mail:default')
 
 Layer = IntegrationTestLayer([collective.testcaselayer.ptc.ptc_layer])
