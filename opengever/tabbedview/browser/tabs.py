@@ -10,7 +10,6 @@ from opengever.tabbedview import _
 from opengever.tabbedview.helper import readable_date_set_invisibles
 from opengever.tabbedview.helper import readable_ogds_author, linked
 from opengever.task.helper import task_type_helper
-from plone.app.workflow.browser.sharing import SharingView, AUTH_GROUP
 from zope.app.pagetemplate import ViewPageTemplateFile
 from zope.component import getUtility
 from zope.interface import Interface
@@ -299,57 +298,3 @@ class Trash(OpengeverCatalogListingTab):
         )
 
     enabled_actions = ['untrashed', ]
-
-
-class Sharing(grok.View, SharingView):
-
-    grok.name('tabbedview_view-sharing')
-    grok.require('zope2.View')
-    grok.template('sharing')
-    grok.context(Interface)
-
-    @memoize
-    def existing_role_settings(self):
-        mtool = getToolByName(self.context, 'portal_membership')
-        member = mtool.getAuthenticatedMember()
-
-        settings = SharingView.existing_role_settings(self)
-
-        if 'Manager' not in member.getRolesInContext(self.context):
-            # remove AUTH_GROUP
-
-            return filter(lambda item: item.get('id') != AUTH_GROUP,
-                          settings)
-
-        else:
-            return settings
-
-    @memoize
-    def roles(self):
-        return (
-            dict(id='Reader',
-                 title=_(u'role_Reader',
-                         default=u'Can view')),
-
-            dict(id='Editor',
-                 title=_(u'role_Editor',
-                         default=u'Can edit')),
-
-            dict(id='Contributor',
-                 title=_(u'role_Contributor',
-                         default=u'Can contribute')),
-
-            dict(id='Reviewer',
-                 title=_(u'role_Reviewer',
-                         default='Can activate')),
-
-            dict(id='Administrator',
-                 title=_(u'role_Administrator',
-                         default=u'Can manage')),
-            )
-
-    def role_settings(self):
-
-        results = super(Sharing, self).role_settings()
-
-        return results
