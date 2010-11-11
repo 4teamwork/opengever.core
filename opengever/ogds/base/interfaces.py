@@ -16,7 +16,11 @@ class IClientConfiguration(Interface):
     """p.a.registry interface for configuring a client
     """
 
-    client_id = schema.TextLine(title=u'Client ID')
+    client_id = schema.TextLine(
+        title=u'Client ID',
+        description=u'Enter the unique ID of this client. \
+        It will be used by OGDS (Opengever Global Directory Service) \
+        to identify this client.',)
 
 
 class IContactInformation(Interface):
