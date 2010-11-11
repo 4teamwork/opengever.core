@@ -35,6 +35,7 @@
     <element value="plone.app.content.interfaces.INameFromTitle" />
     <element value="opengever.tabbedview.interfaces.ITabbedViewEnabled" />
     <element value="opengever.mail.behaviors.IMailInAddress" />
+    <element value="opengever.sharing.behaviors.IDossier" />
   </property>
 
   <!-- View information -->
