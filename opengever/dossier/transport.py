@@ -93,7 +93,7 @@ class ChooseClientView(layout.FormWrapper, grok.CodeView):
             msg = _(u'warning_copy_to_remote_no_client',
                     default=u'You are not assigned to another client where you'
                     ' could copy the documents to.')
-            IStatusMessage(self.request).addStatusMessage(msg, type='warning')
+            IStatusMessage(self.request).addStatusMessage(msg, type='error')
             return self.request.RESPONSE.redirect(self.context.absolute_url())
         else:
             return layout.FormWrapper.__call__(self)
