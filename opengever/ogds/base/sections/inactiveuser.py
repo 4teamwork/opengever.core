@@ -12,7 +12,7 @@ from z3c.saconfig import named_scoped_session
 
 Session = named_scoped_session("opengever")
 
-SQLSOURCE_KEY = 'opengever.konsulmigration.sqlinsertersection'
+SQLSOURCE_KEY = 'transmogrify.sqlinserter.sqlinsertersection'
 
 class InactiveUserSection(object):
     """The Section which set all user which doesn't exist in the LDAP to inactiv.
