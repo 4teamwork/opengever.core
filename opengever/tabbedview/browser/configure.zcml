@@ -3,6 +3,14 @@
     xmlns:browser="http://namespaces.zope.org/browser"
     i18n_domain="opengever.tabbedview">
 
+    <browser:page
+        for="*"
+        name="personal_overview"
+        class=".personal_overview.PersonalOverview"
+        permission="cmf.SetOwnProperties"
+        allowed_attributes="listing select_all"
+        />
+
 	<browser:resourceDirectory
         name="opengever.tabbedview-resources"
         directory="resources" />
