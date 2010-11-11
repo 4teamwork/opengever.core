@@ -195,7 +195,7 @@ class DeleteParticipants(grok.CodeView):
         if not oids:
             msg = _(u'warning_no_participants_selected',
                     default=u'You didn\'t select any participants.')
-            IStatusMessage(self.request).addStatusMessage(msg, type='warning')
+            IStatusMessage(self.request).addStatusMessage(msg, type='error')
             return self.request.RESPONSE.redirect(self.redirect_url)
         phandler = IParticipationAware(self.context)
         for a in oids:
