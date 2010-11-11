@@ -78,7 +78,7 @@ class IDocuComposer(Interface):
 
     dc_rewritten_path = schema.TextLine(
         title=u'Rewritten URL path (DocuComposer)',
-        description='Rewritten url path used by DocuComposer requests. \
+        description=u'Rewritten url path used by DocuComposer requests. \
         See also property "Original URL path (DocuComposer)".')
 
 
