@@ -27,14 +27,17 @@ class TasksListingPDF(BasePDFListing):
         # item may be brain or sqlalchemy task representation (globalindex)
         for item in self.get_selected_data():
             data.append(self._prepare_table_row(
-                    str(item.sequence_number),
+                    unicode(item.sequence_number).encode('utf-8'),
                     helper.readable_date(item, item.deadline),
-                    str(getattr(item, 'Title', getattr(item, 'title', ''))),
+                    unicode(getattr(item, 'Title',getattr(item, 'title', ''))
+                            ).encode('utf-8'),
                     '%s / %s' % (client.title,
                                  info.describe(item.issuer)),
-                    str(self.get_dossier_sequence_number(item)),
-                    str(getattr(item, 'reference',
-                                getattr(item, 'reference_number', ''))),
+                    unicode(self.get_dossier_sequence_number(item)
+                            ).encode('utf-8'),
+                    unicode(getattr(item, 'reference',
+                                getattr(item, 'reference_number', ''))
+                            ).encode('utf-8'),
                     ))
 
         return ''.join(data)

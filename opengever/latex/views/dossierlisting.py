@@ -28,10 +28,10 @@ class DossierListingPDF(BasePDFListing):
 
         for brain in self.get_selected_data():
             data.append(self._prepare_table_row(
-                    str(brain.sequence_number),
+                    unicode(brain.sequence_number).encode('utf-8'),
                     getattr(brain, 'filing_no', None) or '',
-                    str(self.get_repository_title(brain)),
-                    str(brain.Title),
+                    unicode(self.get_repository_title(brain)).encode('utf-8'),
+                    unicode(brain.Title).encode('utf-8'),
                     '%s / %s' % (client.title,
                                  info.describe(brain.responsible)),
                     self.context.translate(brain.review_state,
