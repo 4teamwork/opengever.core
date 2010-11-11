@@ -1,9 +1,6 @@
-
 from zope.interface import Interface
 from zope.component.interfaces import IObjectEvent
 from zope import schema
-
-from plone.dexterity.interfaces import IDexterityContent
 
 class IAttachable(Interface):
     """ IAttachable is used as interfaces for a adapter which can create
@@ -73,9 +70,16 @@ class IDocumentType(Interface):
 
 
 class IDocuComposer(Interface):
-    dc_original_path = schema.TextLine(title=u'dc_original_path')
+    dc_original_path = schema.TextLine(
+        title=u'Original URL path (DocuComposer)',
+        description=u'Original url path of DocuComposer requests. \
+            Only enter a path if a url rewrite is necessary. In this case, \
+            also the property rewritten_path needs to be filled in.')
 
-    dc_rewrited_path = schema.TextLine(title=u'dc_rewrited_path')
+    dc_rewritten_path = schema.TextLine(
+        title=u'Rewritten URL path (DocuComposer)',
+        description='Rewritten url path used by DocuComposer requests. \
+        See also property "Original URL path (DocuComposer)".')
 
 
 class ISendDocumentConf(Interface):
