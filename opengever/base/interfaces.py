@@ -30,7 +30,11 @@ class IRetentionPeriodRegister(Interface):
 
 
 class IBaseClientID(Interface):
-    client_id = schema.TextLine(title=u"client id", default=u"OG")
+    client_id = schema.TextLine(
+        title=u"Prefix of reference number",
+        description=u'Enter the text which will be used as prefix\
+            of the reference number of Opengever content.',
+        default=u"OG")
 
 
 class IReferenceNumberPrefix(Interface):
