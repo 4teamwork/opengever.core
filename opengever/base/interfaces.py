@@ -18,14 +18,15 @@ class IBaseCustodyPeriods(Interface):
 class IRetentionPeriodRegister(Interface):
     """ plone.registry register for retention_period
     """
-    retention_period = schema.List(title=u'retention period',
-                                   default=[u'5',
-                                            u'10',
-                                            u'15',
-                                            u'20',
-                                            u'25'],
-                                   value_type=schema.TextLine(),
-                                   )
+    retention_period = schema.List(
+        title=u'Retention period',
+        description=u'Possible values for retention period in years.',
+        default=[u'5',
+                u'10',
+                u'15',
+                u'20',
+                u'25'],
+        value_type=schema.TextLine(),)
 
 
 class IBaseClientID(Interface):
