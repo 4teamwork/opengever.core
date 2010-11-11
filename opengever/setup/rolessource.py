@@ -24,6 +24,11 @@ class JSONRolesSourceSection(object):
             'client_id': client.client_id,
             }
 
+        repository_root = transmogrifier.context.REQUEST.get(
+            'repository_root', None)
+        if repository_root:
+            replace_map['repository_root_name'] = repository_root[0]
+
         filename = resolvePackageReferenceOrFile(options['filename'])
         file_ = open(filename, 'r')
         data = file_.read() % replace_map

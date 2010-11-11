@@ -128,6 +128,11 @@ class CreateOpengeverClient(BrowserView):
         proxy = registry.forInterface(IClientConfiguration)
         proxy.client_id = form['client_id'].decode('utf-8')
 
+        # provide the repository root for opengever.setup:default
+        repository_root = config.get('repository_root', None)
+        if repository_root:
+            self.request.set('repository_root', repository_root)
+
         # import the defaul generic setup profiles if needed
         stool = getToolByName(site, 'portal_setup')
         for profile in config.get('additional_profiles', ()):

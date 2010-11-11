@@ -1,7 +1,7 @@
 [
 
     {
-        "_path": "/ordnungssystem",
+        "_path": "%(repository_root_name)s",
         "_ac_local_roles": {
             "%(users_group)s": [
                 "Reader",
