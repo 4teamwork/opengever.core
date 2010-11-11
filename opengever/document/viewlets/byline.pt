@@ -27,7 +27,7 @@
     <span i18n:translate="label_workflow_state" class="documentStatus">
       State:
     </span>
-    <span tal:content="view/workflow_state" i18n:translate="" class="noborder" />
+    <span tal:content="view/workflow_state" i18n:domain="plone" i18n:translate="" class="noborder" />
   </tal:state>
   <span class="documentModified" tal:condition="context/document_date">
     <span i18n:translate="label_start_byline" tal:omit-tag="">

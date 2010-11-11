@@ -24,4 +24,28 @@ msgstr "Auschecken"
 msgid "Checkout and edit"
 msgstr "Auschecken und bearbeiten"
 
+msgid "document-state-checked_out"
+msgstr "Ausgecheckt"
+
+msgid "document-state-draft"
+msgstr "Entwurf"
+
+msgid "document-state-pending"
+msgstr "Hängig"
+
+msgid "document-state-working_copy"
+msgstr "Arbeitskopie"
+
+msgid "document-transition-cancel_checkout"
+msgstr "Zurücksetzen"
+
+msgid "document-transition-check_in"
+msgstr "Einchecken"
+
+msgid "document-transition-check_out"
+msgstr "Auschecken"
+
+msgid "document-transition-reject"
+msgstr "Zurückweisen"
+
 

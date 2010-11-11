@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<object name="portal_workflow" meta_type="Plone Workflow Tool">
+ <object name="opengever_document_workflow" meta_type="Workflow"/>
+
+ <bindings>
+  <type type_id="opengever.document.document">
+   <bound-workflow workflow_id="opengever_document_workflow"/>
+  </type>
+ </bindings>
+</object>
