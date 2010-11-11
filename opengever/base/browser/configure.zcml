@@ -17,9 +17,4 @@
         allowed_attributes="listing select_all"
         />
 
-    <browser:resourceDirectory
-        name="opengever.base.resources"
-        directory="resources"
-        />
-
 </configure>
