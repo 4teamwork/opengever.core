@@ -15,7 +15,9 @@ class IDossierContainerTypes(Interface):
     )
 
     maximum_dossier_depth = schema.Int(
-        title=u'Maximum Dossier Depth',
+        title=u'Maximum dossier depth',
+        description=u'Maximum nesting depth of dossiers and subdossiers.\
+            If set to 0, no subdossiers can be created.',
         default=1
     )
 
