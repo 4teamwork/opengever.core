@@ -277,7 +277,7 @@ class Tasks(OpengeverCatalogListingTab):
         ]
 
 
-class Trash(OpengeverCatalogListingTab):
+class Trash(Documents):
     grok.name('tabbedview_view-trash')
 
     types = ['opengever.dossier.dossier',
@@ -286,15 +286,5 @@ class Trash(OpengeverCatalogListingTab):
              'ftw.mail.mail', ]
 
     search_options = {'trashed': True}
-
-    columns = (
-        ('', helper.draggable),
-        ('', helper.path_checkbox),
-
-        {'column': 'Title',
-         'column_title': _(u'label_title', default=u'Title'),
-         'sort_index' : 'sortable_title',
-         'transform': linked},
-        )
 
     enabled_actions = ['untrashed', ]
