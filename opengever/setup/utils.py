@@ -7,7 +7,7 @@ def get_entry_points(name):
     """
 
     for ep in iter_entry_points('opengever.setup'):
-        if ep.name == 'ldap':
+        if ep.name == name:
             yield ep
 
 

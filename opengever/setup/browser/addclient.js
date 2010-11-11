@@ -47,6 +47,8 @@ $(function($) {
       $('[name=import_users:boolean]').attr('checked', true);
     }
 
+    update_clients();
+
     /* warning when purging enabled */
     $('.policy_warnings li').remove();
     if(config && config.purge_sql) {
