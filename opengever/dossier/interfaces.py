@@ -59,7 +59,10 @@ class IDossierParticipants(Interface):
     """
 
     roles = schema.List(
-        title=u'Roles',
+        title=u'Disabled roles of participation',
+        description='Select the terms from the vocabulary containing the\
+            possible roles of participation which should not be\
+            selectable in dossiers.',
         value_type=schema.Choice(
             title=u"Name",
             vocabulary=u'opengever.dossier.participation_roles',
