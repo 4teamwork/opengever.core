@@ -24,9 +24,6 @@ def create_repository_root(context):
 def start_import(context):
     transmogrifier = Transmogrifier(context)
 
-    # transmogrifier(u'opengever.setup.repositoryroot')
-    # transaction.commit()
-
     transmogrifier(u'opengever.setup.various')
     transaction.commit()
 

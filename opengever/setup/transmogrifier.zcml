@@ -4,13 +4,6 @@
     xmlns:transmogrifier="http://namespaces.plone.org/transmogrifier">
 
   <transmogrifier:registerConfig
-      name="opengever.setup.repositoryroot"
-      title="opengever.setup: create repository root"
-      description=""
-      configuration="cfgs/repositoryroot.cfg"
-      />
-
-  <transmogrifier:registerConfig
       name="opengever.setup.various"
       title="opengever.setup: various default contents"
       description=""
