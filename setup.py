@@ -27,6 +27,11 @@ setup(name='opengever.setup',
       zip_safe=False,
       install_requires=[
         'setuptools',
+        'plone.app.transmogrifier',
+        'collective.blueprint.jsonmigrator',
+        'opengever.ogds.base',
+        'collective.transmogrifier',
+        'transmogrify.dexterity',
         # -*- Extra requirements: -*-
         ],
       entry_points="""
