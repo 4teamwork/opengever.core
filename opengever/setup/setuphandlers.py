@@ -52,7 +52,7 @@ def settings(context):
         del manager[u'navigation']
 
     repository_root = context.REQUEST.get('repository_root', None)
-    repository_root_name = repository_root
+    repository_root_name = repository_root[0]
     if 'opengever-portlets-tree-TreePortlet' not in manager.keys():
         manager['opengever-portlets-tree-TreePortlet'] = \
             treeportlet.Assignment(root_path=repository_root_name)
