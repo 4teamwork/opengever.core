@@ -133,13 +133,13 @@ class DossierDetailsPDF(BasePDFListing):
         for brain in brains:
 
             rows.append(self._prepare_table_row(
-                    str(brain.sequence_number),
+                    unicode(brain.sequence_number).encode('utf-8'),
                     task_type_helper(brain, brain.task_type),
                     info.describe(brain.issuer),
                     info.describe(brain.responsible),
                     self.context.translate(brain.review_state,
                                            domain='plone'),
-                    str(brain.Title),
+                    unicode(brain.Title).encode('utf-8'),
                     helper.readable_date(brain, brain.deadline),
                     ))
 
@@ -166,8 +166,8 @@ class DossierDetailsPDF(BasePDFListing):
         for brain in brains:
 
             rows.append(self._prepare_table_row(
-                    str(brain.sequence_number),
-                    str(brain.Title),
+                    unicode(brain.sequence_number).encode('utf-8'),
+                    unicode(brain.Title).encode('utf-8'),
                     helper.readable_date(brain, brain.document_date),
                     ))
 
