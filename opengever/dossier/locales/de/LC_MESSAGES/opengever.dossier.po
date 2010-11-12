@@ -256,7 +256,6 @@ msgstr ""
 
 #. Default: "Select the responsible manager"
 #: opengever.dossier/opengever/dossier/behaviors/dossier.py:92
-#, fuzzy
 msgid "help_responsible"
 msgstr "Verantwortlicher Manager"
 
