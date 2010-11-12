@@ -46,6 +46,13 @@ class CheckinCommentForm(form.Form):
                 redirect_url = last_baseline.absolute_url()
             return self.request.RESPONSE.redirect(redirect_url)
 
+    @button.buttonAndHandler(_(u'button_cancel', default=u'Cancel'))
+    def cancel(self, action):
+        msg = _(u'label_canceled_checkin', default="Checking process canceled")
+        IStatusMessage(self.request).addStatusMessage(msg, type='warning')
+        return self.request.RESPONSE.redirect(self.context.absolute_url())
+        
+
     def checkin_object(self, obj, comment):
         manager = ICheckinCheckoutManager(obj)
         return manager.checkin(comment, show_status_message=True)

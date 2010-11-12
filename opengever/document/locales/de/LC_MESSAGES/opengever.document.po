@@ -3,7 +3,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2010-11-05 14:37+0000\n"
+"POT-Creation-Date: 2010-11-12 13:57+0000\n"
 "PO-Revision-Date: 2009-01-01 10:00+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: Jonas Baumann <j.baumann@4teamwork.ch>\n"
@@ -68,7 +68,7 @@ msgid "Send as email"
 msgstr "Als E-Mail versenden"
 
 #: ./opengever/document/staging/cancel.py:27
-#: ./opengever/document/staging/checkin.py:120
+#: ./opengever/document/staging/checkin.py:127
 #: ./opengever/document/staging/checkout.py:25
 msgid "You have not selected any documents"
 msgstr "Sie haben keine Dokumente angewählt."
@@ -77,13 +77,18 @@ msgstr "Sie haben keine Dokumente angewählt."
 msgid "attachments"
 msgstr "Anhänge"
 
+#. Default: "Cancel"
+#: ./opengever/document/staging/checkin.py:49
+msgid "button_cancel"
+msgstr "Abbrechen"
+
 #. Default: "Checkin"
 #: ./opengever/document/staging/checkin.py:37
 msgid "button_checkin"
 msgstr "Einchecken"
 
 #. Default: "Create"
-#: ./opengever/document/docucomposer.py:46
+#: ./opengever/document/docucomposer.py:47
 msgid "button_create"
 msgstr "Erstellen"
 
@@ -124,7 +129,7 @@ msgid "heading_checkin_comment_form"
 msgstr "Dokumente einchecken"
 
 #. Default: "DocuComposer"
-#: ./opengever/document/docucomposer.py:37
+#: ./opengever/document/docucomposer.py:38
 msgid "heading_docucomposer_wizard_form"
 msgstr "DocuComposer"
 
@@ -240,6 +245,11 @@ msgstr "Autor"
 #: ./opengever/document/viewlets/byline.pt:16
 msgid "label_by_author"
 msgstr "Autor: ${author}"
+
+#. Default: "Checking process canceled"
+#: ./opengever/document/staging/checkin.py:51
+msgid "label_canceled_checkin"
+msgstr "Checkin Prozess wurde abgebrochen."
 
 #. Default: "Journal Comment"
 #: ./opengever/document/staging/checkin.py:23

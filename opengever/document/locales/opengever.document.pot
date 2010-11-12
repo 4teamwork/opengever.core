@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2010-11-05 14:37+0000\n"
+"POT-Creation-Date: 2010-11-12 13:57+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -66,7 +66,7 @@ msgid "Send as email"
 msgstr ""
 
 #: ./opengever/document/staging/cancel.py:27
-#: ./opengever/document/staging/checkin.py:120
+#: ./opengever/document/staging/checkin.py:127
 #: ./opengever/document/staging/checkout.py:25
 msgid "You have not selected any documents"
 msgstr ""
@@ -75,13 +75,18 @@ msgstr ""
 msgid "attachments"
 msgstr ""
 
+#. Default: "Cancel"
+#: ./opengever/document/staging/checkin.py:49
+msgid "button_cancel"
+msgstr ""
+
 #. Default: "Checkin"
 #: ./opengever/document/staging/checkin.py:37
 msgid "button_checkin"
 msgstr ""
 
 #. Default: "Create"
-#: ./opengever/document/docucomposer.py:46
+#: ./opengever/document/docucomposer.py:47
 msgid "button_create"
 msgstr ""
 
@@ -122,7 +127,7 @@ msgid "heading_checkin_comment_form"
 msgstr ""
 
 #. Default: "DocuComposer"
-#: ./opengever/document/docucomposer.py:37
+#: ./opengever/document/docucomposer.py:38
 msgid "heading_docucomposer_wizard_form"
 msgstr ""
 
@@ -230,6 +235,11 @@ msgstr ""
 #. Default: "by ${author}"
 #: ./opengever/document/viewlets/byline.pt:16
 msgid "label_by_author"
+msgstr ""
+
+#. Default: "Checking process canceled"
+#: ./opengever/document/staging/checkin.py:51
+msgid "label_canceled_checkin"
 msgstr ""
 
 #. Default: "Journal Comment"
