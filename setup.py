@@ -29,6 +29,8 @@ setup(name='opengever.globalindex',
       install_requires=[
           'setuptools',
           'z3c.saconfig',
+          'opengever.base',
+          'opengever.ogds.base',
       ],
       tests_require=tests_require,
       extras_require=dict(tests=tests_require),
