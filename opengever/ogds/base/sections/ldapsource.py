@@ -35,7 +35,7 @@ class LDAPSourceSection(object):
                 if isinstance(v, list):
                     v = v[0]
                 if self.mapping.get(k, None):
-                    temp[self.mapping[k]] = v
+                    temp[self.mapping[k]] = v.decode('utf-8')
                 else:
-                    temp[k] = v
+                    temp[k] = v.decode('utf-8')
             yield temp
