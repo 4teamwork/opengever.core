@@ -443,11 +443,9 @@ grok.global_adapter(sequence_number, name='sequence_number')
 @indexer(ITask)
 def SearchableText(obj):
     """searchableText indexer."""
-
     context = aq_inner(obj)
     fields = [
         schema.getFields(ITask).get('title'),
-        schema.getFields(ITask).get('description'),
         ]
     searchable = []
     for field in fields:
