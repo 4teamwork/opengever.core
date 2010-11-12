@@ -64,3 +64,6 @@ msgstr ""
 
 msgid "dossier-transition-resolve"
 msgstr ""
+
+msgid "Give Filing Number"
+msgstr ""

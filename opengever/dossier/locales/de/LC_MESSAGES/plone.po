@@ -30,6 +30,9 @@ msgstr "Status des Dossiers geändert zu Storniert"
 msgid "Dossier state changed to dossier-state-resolved"
 msgstr "Status des Dossiers geändert zu Abgeschlossen"
 
+msgid "Give Filing Number"
+msgstr "Ablagenummer vergeben"
+
 msgid "document_with_template"
 msgstr "Dokument mit Vorlage"
 
