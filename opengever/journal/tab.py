@@ -8,7 +8,7 @@ from ftw.tabbedview.browser.listing import ListingView
 from ftw.table import helper
 from ftw.table.basesource import BaseTableSource
 from ftw.table.interfaces import ITableSourceConfig, ITableSource
-from opengever.dossier import _
+from opengever.journal import _
 from opengever.tabbedview.browser.tabs import OpengeverTab
 from opengever.tabbedview.helper import linked_ogds_author
 from zope.annotation.interfaces import IAnnotations
