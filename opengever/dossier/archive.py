@@ -36,7 +36,7 @@ class EnddateValidator(validator.SimpleFieldValidator):
 
     def validate(self, value):
         if not value:
-            raise MissingValue(_(u'The enddate is required.'))
+            raise MissingValue(_(u'error_enddate', default=u'The enddate is required.'))
             
         subdossiers = self.context.portal_catalog(
             path=dict(

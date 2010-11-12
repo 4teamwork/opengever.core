@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2010-09-30 13:26+0000\n"
+"POT-Creation-Date: 2010-11-12 14:54+0000\n"
 "PO-Revision-Date: 2010-10-13 19:32+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -12,52 +12,8 @@ msgstr ""
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: DOMAIN\n"
 
-msgid "Add Participant"
-msgstr "Teilnehmer hinzufügen"
-
-msgid "Document with docucomposer"
-msgstr "Dokument mit Docucomposer"
-
-msgid "Dossier state changed to dossier-state-active"
-msgstr "Status des Dossiers geändert zu In Bearbeitung"
-
-msgid "Dossier state changed to dossier-state-archived"
-msgstr "Status des Dossiers geändert zu Abgelegt"
-
-msgid "Dossier state changed to dossier-state-inactive"
-msgstr "Status des Dossiers geändert zu Storniert"
-
-msgid "Dossier state changed to dossier-state-resolved"
-msgstr "Status des Dossiers geändert zu Abgeschlossen"
-
-msgid "document_with_template"
-msgstr "Dokument mit Vorlage"
-
-msgid "dossier-state-active"
-msgstr "In Bearbeitung"
-
-msgid "dossier-state-archived"
-msgstr "Abgelegt"
-
-msgid "dossier-state-inactive"
-msgstr "Storniert"
-
-msgid "dossier-state-resolved"
-msgstr "Abgeschlossen"
-
-msgid "dossier-transition-activate"
-msgstr "Aktivieren"
-
-msgid "dossier-transition-archive"
-msgstr "Ablegen"
-
-msgid "dossier-transition-deactivate"
-msgstr "Stornieren"
-
-msgid "dossier-transition-reactivate"
-msgstr "Wieder öffnen"
-
-msgid "dossier-transition-resolve"
-msgstr "Abschliessen"
+#: ./opengever/dossier/profiles/default/types/opengever.dossier.businesscasedossier.xml
+msgid "Give Filing Number"
+msgstr "Ablagenummer vergeben"
 
 
