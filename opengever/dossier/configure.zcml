@@ -17,9 +17,7 @@
     <!-- vdex vocabularies folder -->
     <vdex:vocabulary directory="vdexvocabs" />
 
-	<include package=".latex" />
-	
-	<include package=".viewlets" />
+    <include package=".viewlets" />
 
     <include file="behaviors.zcml" />
 
