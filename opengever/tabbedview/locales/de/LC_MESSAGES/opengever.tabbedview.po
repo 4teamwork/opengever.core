@@ -152,7 +152,7 @@ msgstr "Termine"
 #. Default: "Filing Number"
 #: ./opengever/tabbedview/browser/tabs.py:199
 msgid "filing_number"
-msgstr "Ablage Nummer"
+msgstr "Ablagenummer"
 
 msgid "important_contact"
 msgstr "Allgemein"
