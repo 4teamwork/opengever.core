@@ -23,7 +23,6 @@ setup(name='opengever.policy.base',
       zip_safe=False,
       install_requires=[
           'setuptools',
-          'ftw.mail',
           'collective.js.jstorage',
           'collective.js.extjs',
           'opengever.base',
