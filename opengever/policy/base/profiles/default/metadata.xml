@@ -24,5 +24,6 @@
     <dependency>profile-ftw.dashboard.portlets.recentlymodified:default</dependency-->
     <dependency>profile-opengever.theme:default</dependency>
     <dependency>profile-opengever.latex:default</dependency>
+    <dependency>profile-ftw.datepicker:default</dependency>
   </dependencies>
 </metadata>
