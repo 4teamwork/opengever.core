@@ -242,7 +242,7 @@ msgstr ""
 
 #: ./opengever/advancedsearch/advanced_search.py:254
 msgid "label_tasktype"
-msgstr "Tasktyp"
+msgstr "Aufgabentyp"
 
 #. Default: "Also search in the recycle bin"
 #: ./opengever/advancedsearch/advanced_search.py:219
