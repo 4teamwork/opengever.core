@@ -31,8 +31,6 @@
             </property>
             <property name="visible">True</property>
         </object>
-
-
     </object>
 
     <!-- ================================================================== -->
@@ -51,6 +49,19 @@
                 <element value="View"/>
             </property>
             <property name="visible">True</property>
+        </object>
+
+        <object name="export_pdf" meta_type="CMF Action" 
+                i18n:domain="opengever.latex">
+            <property name="title" i18n:translate="">Cover (PDF)</property>
+            <property name="description" i18n:translate=""></property>
+            <property name="url_expr">string:${object_url}/export_pdf</property>
+            <property name="icon_expr"></property>
+            <property name="available_expr">python:here.restrictedTraverse('@@plone_interface_info').provides('opengever.dossier.behaviors.dossier.IDossierMarker')</property>
+            <property name="permissions">
+                <element value="View"/>
+            </property>
+            <property name="visible">True</property>            
         </object>
 
 
