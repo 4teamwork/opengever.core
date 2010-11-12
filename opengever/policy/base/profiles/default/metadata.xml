@@ -14,7 +14,6 @@
     <dependency>profile-opengever.tasktemplates:default</dependency>
     <dependency>profile-opengever.portlets.tree:default</dependency>
     <dependency>profile-opengever.trash:default</dependency>
-    <dependency>profile-opengever.mail:default</dependency>
     <dependency>profile-opengever.ogds.base:default</dependency>
     <dependency>profile-opengever.contact:default</dependency>
     <dependency>profile-opengever.advancedsearch:default</dependency>
