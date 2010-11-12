@@ -8,7 +8,6 @@ from Products.statusmessages.interfaces import IStatusMessage
 from datetime import datetime, timedelta
 from ftw.table import helper
 from ftw.table.interfaces import ITableGenerator
-from ftw.table.column import Column
 from opengever.dossier.behaviors.dossier import IDossierMarker, IDossier
 from opengever.ogds.base.utils import get_current_client
 from opengever.ogds.base.interfaces import IContactInformation
@@ -72,23 +71,6 @@ class AddForm(BrowserView):
     steps = {
         'templates': {
             'columns' : (('', helper.path_radiobutton), 'Title' ,('created', helper.readable_date)),
-            # 'columns' : (
-            #                  Column(hideable = False,
-            #                         resizeable = False,
-            #                         sortable = False,
-            #                         width = '10',
-            #                         transform = helper.path_radiobutton
-            #                         ),
-            #                  Column(id = 'title',
-            #                         header = 'Title',
-            #                         data_index = 'sortable_title',
-            #                         auto_expand_column = True,
-            #                         transform = helper.linked
-            #                         ),
-            #                  Column(id = 'created',
-            #                         header = 'Created',
-            #                         transform = helper.readable_date)
-            #  ),
             'types': ('TaskTemplateFolder',),
             'states': ('tasktemplate-state-activ',),
             },
@@ -100,25 +82,59 @@ class AddForm(BrowserView):
             }
         }
 
-    def listing(self, show='templates'):
+    def listing(self, show='templates', path='/'):
         """returns a listing of either TaskTemplateFolders or TaskTemplates"""
+
         sort_on = self.request.get('sort', 'Title')
         sort_on = {'Title':'sortable_title'}.get(sort_on, sort_on)
         sort_order = self.request.get('dir', 'ASC')
-        sort_order = {'ASC': 'ascending', 'DESC':'descending'}.get(sort_order)
+        sort_order = {'ASC': 'asc',
+                      'DESC':'reverse'}.get(sort_order, sort_order)
         templates = self.context.portal_catalog(
                         Type=self.steps[show]['types'],
                         sort_on = sort_on,
                         sort_order = sort_order
                         
         )
+        table_options = {'auto_expand_column':'Title'}
         generator = queryUtility(ITableGenerator, 'ftw.tablegenerator')
         return generator.generate(templates,
                                   self.steps[show]['columns'],
                                   sortable = True,
-                                  output='json',
-                                  meta_data = meta_data[show]
+                                  selected = (sort_on, sort_order),
+                                  options = table_options,
+                                  output='json'
                                   )
+
+    def load_request_parameters(self):
+        """Load parameters such as page or filter from request.
+        """
+        # pagenumber
+        self.batching_current_page = int(self.request.get('pagenumber', 1))
+        # XXX eliminate self.pagenumber
+        self.pagenumber = self.batching_current_page
+
+        # pagesize
+        self.batching_pagesize = self.pagesize
+
+        # set url
+        self.url = self.context.absolute_url()
+
+        # filtering
+        if 'searchable_text' in self.request:
+            self.filter_text = self.request.get('searchable_text')
+        # ordering
+        self.sort_on = self.request.get('sort', self.sort_on)
+        if self.sort_on.startswith('header-'):
+            self.sort_on = self.sort_on.split('header-')[1]
+
+        # reverse
+        default_sort_order = self.sort_reverse and 'reverse' or 'asc'
+        sort_order = self.request.get('dir', default_sort_order)
+        self.sort_order = {'ASC': 'asc',
+                         'DESC':'reverse'}.get(sort_order, sort_order)
+
+        self.sort_reverse = self.sort_order == 'reverse'
 
     def create(self, paths):
         """generate the task templates"""

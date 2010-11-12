@@ -17,7 +17,7 @@
                   };
 
                   // initialize table
-                  var table = $('#template_chooser').ftwtable({
+                  table = $('#template_chooser').ftwtable({
                        'url' : '@@add-tasktemplate/listing',
                   });
 
