@@ -61,7 +61,6 @@ setup(name='opengever.document',
         'opengever.repository',
         'opengever.ogds.base',
         'collective.autopermission',
-        'opengever.mail',
         'collective.vdexvocabulary',
         ],
 

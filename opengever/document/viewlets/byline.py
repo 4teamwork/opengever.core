@@ -1,12 +1,9 @@
-from zope.component import getUtility, getAdapter
 from Products.CMFCore.utils import getToolByName
-
+from opengever.base.interfaces import IReferenceNumber, ISequenceNumber
+from opengever.document.document import IDocumentSchema
 from plone.app.layout.viewlets import content
 from plone.memoize.instance import memoize
-
-from opengever.document.document import IDocumentSchema
-from opengever.base.interfaces import IReferenceNumber, ISequenceNumber
-from opengever.mail.behaviors import IMailInAddressMarker, IMailInAddress
+from zope.component import getUtility, getAdapter
 
 
 class DocumentByline(content.DocumentBylineViewlet):
@@ -49,9 +46,3 @@ class DocumentByline(content.DocumentBylineViewlet):
     def get_filing_no(self):
         document = IDocumentSchema(self.context)
         return getattr(document, 'filing_no', None)
-
-    # TODO: should be more generic ;-)
-    #       use sequence_number instead of intid
-    def email(self):
-        if IMailInAddressMarker.providedBy(self.context):
-            return IMailInAddress(self.context).get_email_address()
