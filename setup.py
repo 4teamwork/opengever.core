@@ -23,8 +23,6 @@ setup(name='opengever.policy.base',
       zip_safe=False,
       install_requires=[
           'setuptools',
-          'collective.js.jstorage',
-          'collective.js.extjs',
           'opengever.base',
           'opengever.document',
           'opengever.dossier',
