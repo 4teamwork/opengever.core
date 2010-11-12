@@ -7,6 +7,8 @@ maintainer = 'Jonas Baumann'
 tests_require = [
     'collective.testcaselayer',
     'Products.PloneTestCase',
+    'opengever.repository',
+    'opengever.document',
     ]
 
 setup(name='opengever.base',

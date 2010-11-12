@@ -9,12 +9,16 @@ from Products.PloneTestCase.layer import onsetup
 
 import plone.app.dexterity
 import opengever.base
+import opengever.repository
+import opengever.document
 
 @onsetup
 def setup_product():
     zcml.load_config('meta.zcml', plone.app.dexterity)
     zcml.load_config('configure.zcml', plone.app.dexterity)
     zcml.load_config('configure.zcml', opengever.base)
+    zcml.load_config('configure.zcml', opengever.repository)
+    zcml.load_config('configure.zcml', opengever.document)
 
 setup_product()
 ptc.setupPloneSite(extension_profiles=['plone.app.dexterity:default',
