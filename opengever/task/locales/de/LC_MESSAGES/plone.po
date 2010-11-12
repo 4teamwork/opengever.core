@@ -12,6 +12,12 @@ msgstr ""
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: DOMAIN\n"
 
+msgid "Add response"
+msgstr "Antwort hinzufügen"
+
+msgid "Attach remote document"
+msgstr "Dokument aus eigenem Mandant"
+
 msgid "Create successor task"
 msgstr "Folgeaufgabe erstellen"
 
