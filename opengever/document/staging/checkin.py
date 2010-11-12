@@ -49,7 +49,7 @@ class CheckinCommentForm(form.Form):
     @button.buttonAndHandler(_(u'button_cancel', default=u'Cancel'))
     def cancel(self, action):
         msg = _(u'label_canceled_checkin', default="Checking process canceled")
-        IStatusMessage(self.request).addStatusMessage(msg, type='warning')
+        IStatusMessage(self.request).addStatusMessage(msg, type='info')
         return self.request.RESPONSE.redirect(self.context.absolute_url())
         
 

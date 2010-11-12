@@ -249,7 +249,7 @@ msgstr "Autor: ${author}"
 #. Default: "Checking process canceled"
 #: ./opengever/document/staging/checkin.py:51
 msgid "label_canceled_checkin"
-msgstr "Checkin Prozess wurde abgebrochen."
+msgstr "Einchecken wurde abgebrochen."
 
 #. Default: "Journal Comment"
 #: ./opengever/document/staging/checkin.py:23
