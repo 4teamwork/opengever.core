@@ -6,6 +6,7 @@ maintainer = 'Thomas Buchberger'
 
 tests_require = [
     'collective.testcaselayer',
+    'opengever.task',
 ]
 
 setup(name='opengever.dossier',

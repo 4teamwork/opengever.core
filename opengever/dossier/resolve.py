@@ -97,7 +97,7 @@ class resolve(grok.CodeView):
             path=dict(depth=2,
                 query='/'.join(self.context.getPhysicalPath()),
             ),
-            review_state = 'checked_out',
+            review_state = 'document-state-checked_out',
         )
         
         if len(docs) == 0:
