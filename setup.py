@@ -30,7 +30,6 @@ setup(name='opengever.mail',
         'setuptools',
         'plone.app.dexterity',
         'plone.app.registry',
-        'collective.testcaselayer',
         # -*- Extra requirements: -*-
         ],
       entry_points="""
