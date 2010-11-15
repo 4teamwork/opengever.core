@@ -1,7 +1,0 @@
-<configure
-    xmlns:zope="http://namespaces.zope.org/zope"
-    xmlns:browser="http://namespaces.zope.org/browser">
-    
-    <include package=".viewlets" />
-
-</configure>
