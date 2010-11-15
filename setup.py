@@ -36,6 +36,7 @@ setup(name='opengever.document',
       install_requires=[
         'zc.relation',
         'z3c.form',
+        'z3c.relationfield',
         'plone.z3cform',
         'plone.supermodel',
         'plone.rfc822',
