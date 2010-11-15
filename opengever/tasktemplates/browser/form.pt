@@ -34,6 +34,7 @@
                       table.ftwtable('param', 'path', '/');
                       table.ftwtable('param', 'show', 'templates');
                       table.ftwtable('reload');
+                      $('#form-controls').toggle();
                   }, false);
                   
                   $('#tasktemplateNavigation a[href$=#tasks]').click(function(e){
@@ -44,6 +45,7 @@
                       table.ftwtable('param', 'path', path);
                       table.ftwtable('param', 'show', 'tasks');
                       table.ftwtable('reload');
+                      $('#form-controls').toggle();
                   }, false);
               });
                </script>
