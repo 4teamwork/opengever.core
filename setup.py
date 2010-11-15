@@ -38,8 +38,8 @@ setup(name='opengever.inbox',
         'setuptools',
         'opengever.dossier',
         'opengever.tabbedview',
-        'opengever.task',
         'opengever.globalindex',
+        'opengever.trash',
         
         # -*- Extra requirements: -*-
         ],
