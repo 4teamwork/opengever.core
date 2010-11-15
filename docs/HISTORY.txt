@@ -12,25 +12,25 @@ Changelog
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/642/
   [14.09.2010, phgross]
 
-* Issue #511 Anwendungskomponente "Kontakte": Mögliche Inhalte
+* Issue #511 Anwendungskomponente "Kontakte": Moegliche Inhalte
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/511
   Name der Kontakte werden nun angezeigt.
   [06.04.2010, jbaumann]
   
-* Issue #483 Spaltensortierung bei der Dossierübersicht auf Stufe Ordnungssystem
+* Issue #483 Spaltensortierung bei der Dossieruebersicht auf Stufe Ordnungssystem
   [11.03.2010, jbaumann]
   
-* Issue #483 Spaltensortierung bei der Dossierübersicht auf Stufe Ordnungssystem
+* Issue #483 Spaltensortierung bei der Dossieruebersicht auf Stufe Ordnungssystem
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/483/
   Vergleichen von nicht gesetzten Daten optimiert.
   Sortierung von OGDS kontakten korrigiert
   [25.02.2010, jbaumann]
 
-* Issue #480 Beteiligung am Dossier hinzufügen sollte auch in "Aktionsleiste" möglich sein nicht nur über das Menü "Aktionen"
+* Issue #480 Beteiligung am Dossier hinzufuegen sollte auch in "Aktionsleiste" moeglich sein nicht nur ueber das Menue "Aktionen"
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/480
   [25.02.2010, jbaumann]
   
-* Issue #479 Dokumentenübersicht auf Stufe Dossier: "In Bearbeitung bei Brugger Sylvia"
+* Issue #479 Dokumentenuebersicht auf Stufe Dossier: "In Bearbeitung bei Brugger Sylvia"
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/479
   [23.02.2010, jbaumann]
   
@@ -52,17 +52,17 @@ Changelog
 * Tasks Tab: limited enabled actions to change_state action
   [07.01.2010, jbaumann]
   
-* Issue #332: Aufgabenübersicht, Stufe Dossier: Spalten anpassen
+* Issue #332: Aufgabenuebersicht, Stufe Dossier: Spalten anpassen
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/332/view
   [05.01.2010, jbaumann]
   
-* Issue #322: TabbedView: Übersetzung "more actions"
+* Issue #322: TabbedView: uebersetzung "more actions"
   [04.01.2010, jbaumann]
 
-* Issue #284: Tabbed_view: Buttons unterhalb einer Tabelle müssen pro "View" angezeigt werden können
+* Issue #284: Tabbed_view: Buttons unterhalb einer Tabelle muessen pro "View" angezeigt werden koennen
   [23.12.2009, jbaumann]
 
-* Issue #188: Spalten in der Dokumentenübersicht Stufe Dossier/Subdossier anpassen
+* Issue #188: Spalten in der Dokumentenuebersicht Stufe Dossier/Subdossier anpassen
   [01.12.2009, jbaumann]
 
 * Journal Tab: Hidden entries should not be visible
