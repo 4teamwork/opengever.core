@@ -34,7 +34,6 @@ setup(name='opengever.trash',
       zip_safe=False,
       install_requires=[
         'setuptools',
-        'collective.monkeypatcher',
         'collective.autopermission',
         # -*- Extra requirements: -*-
         ],
