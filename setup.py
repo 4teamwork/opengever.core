@@ -30,6 +30,8 @@ setup(name='opengever.latex',
       include_package_data=True,
       zip_safe=False,
       install_requires=[
+        'plone.registry',
+        'plone.autoform',
         'opengever.tabbedview',
         'opengever.globalindex',
         'plonegov.pdflatex',
