@@ -17,7 +17,7 @@ class DossierPathSourceBinder(ObjPathSourceBinder):
             dossier_path = '/'.join(parent.getPhysicalPath())
             parent = aq_parent(aq_inner(parent))
 
-        self.navigation_tree_query['path'] = dossier_path
+        self.navigation_tree_query['path'] = {'query': dossier_path}
         return self.path_source(
             context,
             selectable_filter=self.selectable_filter,
