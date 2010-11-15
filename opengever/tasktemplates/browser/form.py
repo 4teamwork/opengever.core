@@ -93,8 +93,8 @@ class AddForm(BrowserView):
         templates = self.context.portal_catalog(
                         Type=self.steps[show]['types'],
                         sort_on = sort_on,
-                        sort_order = sort_order
-                        
+                        sort_order = sort_order,
+                        path = path
         )
         table_options = {'auto_expand_column':'Title'}
         generator = queryUtility(ITableGenerator, 'ftw.tablegenerator')

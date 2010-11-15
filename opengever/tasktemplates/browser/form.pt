@@ -38,15 +38,15 @@
              <div tal:replace="structure provider:plone.abovecontenttitle" />
              <h1 class="documentFirstHeading" i18n:translate="">add tasktemplate</h1>
              <form action="add-tasktemplate/create" method="post">
-                 <ul class="wizard" id="tasktemplateNavigation">
+                 <!--<ul class="wizard" id="tasktemplateNavigation">
                      <li><a href="add-tasktemplate#templates">choose template</a></li>
                      <li><a href="add-tasktemplate#tasks">select tasks</a></li>
-                 </ul>
+                 </ul>-->
                  <div id="template_chooser"><!--iefix--></div>
              
                  <div id="form-controls">
-                     <input type="submit" name="save" value="save"/>
-                     <input type="submit" name="abort" value="abort"/>
+                     <input type="submit" name="save" value="Save"  i18n:attributes="value label_save" i18n:domain="plone"/>
+                     <input type="submit" name="abort" value="Abort" i18n:attributes="value label_cancel" i18n:domain="plone" />
                  </div>
              </form>
             
