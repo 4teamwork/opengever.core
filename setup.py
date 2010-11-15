@@ -63,6 +63,7 @@ setup(name='opengever.document',
         'collective.autopermission',
         'collective.vdexvocabulary',
         'collective.elephantvocabulary',
+        'plone.formwidget.contenttree',
         ],
 
         tests_require=tests_require,
