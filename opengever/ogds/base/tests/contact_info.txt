@@ -158,6 +158,8 @@ Inboxes tests:
     False
     >>> info.get_client_of_inbox(u'inbox:client1')
     <Client client1>
+    >>> info.get_group_of_inbox(u'inbox:client1')
+    u'client1_inbox_users'
 
     >>> info.describe(u'inbox:client1')
     u'Inbox: Client 1'

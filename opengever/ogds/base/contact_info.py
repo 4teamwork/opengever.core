@@ -169,6 +169,17 @@ class ContactInformation(grok.GlobalUtility):
         else:
             return clients[0]
 
+    def get_group_of_inbox(self, principal):
+        """Returns the group principal of the inbox `principal`.
+        """
+
+        client = self.get_client_of_inbox(principal)
+
+        if client == None:
+            raise ValueError('Client not found for: %s' % principal)
+
+        return client.inbox_group
+
 
     # CLIENTS
 
