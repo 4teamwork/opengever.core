@@ -8,6 +8,7 @@ tests_require = [
     'plone.app.testing',
     'opengever.contact',
     'plone.app.dexterity',
+    'opengever.globalindex',
     ]
 
 setup(name='opengever.ogds.base',
@@ -44,7 +45,6 @@ setup(name='opengever.ogds.base',
         'five.grok',
         'ftw.dictstorage [sqlalchemy]',
         'ftw.dictstorage',
-        'opengever.globalindex',
         'plone.app.registry',
         'plone.dexterity',
         'plone.formwidget.autocomplete',
