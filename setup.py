@@ -35,6 +35,7 @@ setup(name='opengever.base',
       include_package_data=True,
       zip_safe=False,
       install_requires=[
+        'plone.formwidget.contenttree',
         'z3c.form',
         'plone.z3cform',
         'plone.formwidget.namedfile',
