@@ -10,7 +10,7 @@
               <script type="text/javascript">
               jq(function(){
 
-                  $('#form-controls').toggle();
+                  $('#form-controls input[name=save]').toggle();
 
                   //test global overwrite
                   $.fn.ftwtable.defaults.onBeforeLoad = function(){
@@ -26,7 +26,7 @@
                         table.ftwtable('param', 'path', e.target.value);
                         table.ftwtable('param', 'show', 'tasks');
                         table.ftwtable('reload');
-                        $('#form-controls').toggle();  
+                        $('#form-controls input[name=save]').toggle();  
                     }
                   });
                   
@@ -34,7 +34,7 @@
                       table.ftwtable('param', 'path', '/');
                       table.ftwtable('param', 'show', 'templates');
                       table.ftwtable('reload');
-                      $('#form-controls').toggle();
+                      $('#form-controls input[name=save]').toggle();
                   }, false);
                   
                   $('#tasktemplateNavigation a[href$=#tasks]').click(function(e){
@@ -45,7 +45,7 @@
                       table.ftwtable('param', 'path', path);
                       table.ftwtable('param', 'show', 'tasks');
                       table.ftwtable('reload');
-                      $('#form-controls').toggle();
+                      $('#form-controls input[name=save]').toggle();
                   }, false);
               });
                </script>

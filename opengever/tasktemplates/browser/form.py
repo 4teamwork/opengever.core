@@ -136,8 +136,12 @@ class AddForm(BrowserView):
 
         self.sort_reverse = self.sort_order == 'reverse'
 
-    def create(self, paths):
+    def create(self, paths=[]):
         """generate the task templates"""
+
+        if 'abort' in self.request.keys():
+            return self.request.RESPONSE.redirect(self.context.absolute_url())
+            
         for path in paths:
             template = self.context.restrictedTraverse(path)
             deadline = datetime.today()+timedelta(template.deadline)
