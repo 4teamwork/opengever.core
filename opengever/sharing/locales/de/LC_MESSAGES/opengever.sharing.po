@@ -14,7 +14,7 @@ msgstr ""
 
 #: ./opengever/sharing/browser/sharing.py:22
 msgid "sharing_contributor"
-msgstr "hinzufügen"
+msgstr "Hinzufügen"
 
 #: ./opengever/sharing/browser/sharing.py:17
 msgid "sharing_dossier_administrator"
