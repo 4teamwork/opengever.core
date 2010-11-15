@@ -46,12 +46,13 @@ class EnddateValidator(validator.SimpleFieldValidator):
         )
         if len(subdossiers) != 0:
             subdossiers = default_custom_sort(subdossiers, 'end', True)
-            sub_end = datetime.combine(subdossiers[0].end, time(0,0))
-            if sub_end and datetime.combine(value, time(0,0)) < sub_end:
-                raise Invalid(
-                    _(u'The given end date is older than the end date \
-                        of the youngest subdossier(${number})',
-                            mapping = {'number':subdossiers[0].end}))
+            if subdossiers[0].end:
+                sub_end = datetime.combine(subdossiers[0].end, time(0,0))
+                if sub_end and datetime.combine(value, time(0,0)) < sub_end:
+                    raise Invalid(
+                        _(u'The given end date is older than the end date \
+                            of the youngest subdossier(${number})',
+                                mapping = {'number':subdossiers[0].end}))
 
 
 

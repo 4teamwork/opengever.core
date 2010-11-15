@@ -132,11 +132,6 @@
         <permission value="View"/>
     </action>
 
-    <action i18n:domain="opengever.dossier" title="Journal" action_id="journal" category="tabbedview-tabs"
-            condition_expr="" url_expr="string:#" visible="True">
-        <permission value="View"/>
-    </action>
-
     <action i18n:domain="opengever.dossier" title="Participants" action_id="participants" category="tabbedview-tabs"
             condition_expr="" url_expr="string:#" visible="True">
         <permission value="View"/>
@@ -146,14 +141,19 @@
             condition_expr="" url_expr="string:#" visible="True">
     </action>
 
+    <action i18n:domain="opengever.dossier" title="Journal" action_id="journal" category="tabbedview-tabs"
+            condition_expr="" url_expr="string:#" visible="True">
+        <permission value="View"/>
+    </action>
+    
     <action i18n:domain="opengever.dossier" title="Sharing" action_id="sharing" category="tabbedview-tabs"
             condition_expr="" url_expr="string:#"
             visible="True">
         <permission value="View"/>
     </action>
 
-    <action i18n:domain="plone" title="Give Filing Number" action_id="filing_nr" category="object_buttons"
-            condition_expr="python: object.portal_workflow.getInfoFor(object, 'review_state', None) == 'dossier-state-resolved' and getattr( object, 'filing_no', None) == None" url_expr="string:${object_url}/transition-archive" visible="True" i18n:attributes="title">
+    <action i18n:domain="opengever.dossier" title="Give Filing Number" action_id="filing_nr" category="object_buttons"
+            condition_expr="python: object.portal_workflow.getInfoFor(object, 'review_state', None) == 'dossier-state-resolved' and getattr( object, 'filing_no', None) == None" url_expr="string:${object_url}/transition-archive" visible="True">
         <permission value="View"/>
     </action>
 

@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2010-11-12 14:54+0000\n"
+"POT-Creation-Date: 2010-09-30 13:26+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,6 +17,53 @@ msgstr ""
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: plone\n"
 
-#: ./opengever/dossier/profiles/default/types/opengever.dossier.businesscasedossier.xml
+msgid "Document with docucomposer"
+msgstr ""
+
+msgid "Add Participant"
+msgstr ""
+
+msgid "document_with_template"
+msgstr ""
+
+msgid "Dossier state changed to dossier-state-active"
+msgstr ""
+
+msgid "Dossier state changed to dossier-state-archived"
+msgstr ""
+
+msgid "Dossier state changed to dossier-state-inactive"
+msgstr ""
+
+msgid "Dossier state changed to dossier-state-resolved"
+msgstr ""
+
+msgid "dossier-state-active"
+msgstr ""
+
+msgid "dossier-state-inactive"
+msgstr ""
+
+msgid "dossier-state-resolved"
+msgstr ""
+
+msgid "dossier-state-archived"
+msgstr ""
+
+msgid "dossier-transition-activate"
+msgstr ""
+
+msgid "dossier-transition-deactivate"
+msgstr ""
+
+msgid "dossier-transition-reactivate"
+msgstr ""
+
+msgid "dossier-transition-archive"
+msgstr ""
+
+msgid "dossier-transition-resolve"
+msgstr ""
+
 msgid "Give Filing Number"
 msgstr ""
