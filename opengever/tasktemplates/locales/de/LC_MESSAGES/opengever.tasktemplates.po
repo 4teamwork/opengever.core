@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2010-10-25 09:32+0000\n"
+"POT-Creation-Date: 2010-11-15 09:43+0000\n"
 "PO-Revision-Date: 2010-10-13 14:09+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -26,9 +26,13 @@ msgstr "Standardablauf"
 msgid "Title"
 msgstr "Titel"
 
-#: ./opengever/tasktemplates/browser/form.pt:39
+#: ./opengever/tasktemplates/browser/form.pt:50
 msgid "add tasktemplate"
 msgstr "Aufgabenvorlage hinzufügen"
+
+#: ./opengever/tasktemplates/browser/form.pt:53
+msgid "choose template"
+msgstr "Vorlage auswählen"
 
 #. Default: "Interactive users"
 #: ./opengever/tasktemplates/vocabularies.py:49
@@ -78,12 +82,13 @@ msgid "interactive_user_responsible"
 msgstr "Federführender"
 
 #. Default: "Deadline in Days"
-#: ./opengever/tasktemplates/browser/tasktemplates.py:26
+#: ./opengever/tasktemplates/browser/tasktemplates.py:36
 #: ./opengever/tasktemplates/content/tasktemplate.py:54
 msgid "label_deadline"
 msgstr "Frist in Tagen"
 
 #. Default: "Issuer"
+#: ./opengever/tasktemplates/browser/tasktemplates.py:28
 #: ./opengever/tasktemplates/content/tasktemplate.py:20
 msgid "label_issuer"
 msgstr "Auftraggeber"
@@ -114,8 +119,13 @@ msgid "label_text"
 msgstr "Kommentar"
 
 #. Default: "Title"
+#: ./opengever/tasktemplates/browser/tasktemplates.py:19
 #: ./opengever/tasktemplates/content/tasktemplate.py:13
 msgid "label_title"
 msgstr "Titel"
+
+#: ./opengever/tasktemplates/browser/form.pt:54
+msgid "select tasks"
+msgstr "Aufgaben auswählen"
 
 

@@ -29,7 +29,22 @@
                         $('#form-controls').toggle();  
                     }
                   });
-
+                  
+                  $('#tasktemplateNavigation a[href$=#templates]').click(function(e){
+                      table.ftwtable('param', 'path', '/');
+                      table.ftwtable('param', 'show', 'templates');
+                      table.ftwtable('reload');
+                  }, false);
+                  
+                  $('#tasktemplateNavigation a[href$=#tasks]').click(function(e){
+                      var path = table.ftwtable('param', 'path');
+                      if (path == '/'){
+                          return false;
+                      }
+                      table.ftwtable('param', 'path', path);
+                      table.ftwtable('param', 'show', 'tasks');
+                      table.ftwtable('reload');
+                  }, false);
               });
                </script>
       </head>
@@ -38,10 +53,10 @@
              <div tal:replace="structure provider:plone.abovecontenttitle" />
              <h1 class="documentFirstHeading" i18n:translate="">add tasktemplate</h1>
              <form action="add-tasktemplate/create" method="post">
-                 <!--<ul class="wizard" id="tasktemplateNavigation">
-                     <li><a href="add-tasktemplate#templates">choose template</a></li>
-                     <li><a href="add-tasktemplate#tasks">select tasks</a></li>
-                 </ul>-->
+                 <ul class="wizard" id="tasktemplateNavigation">
+                     <li><a href="add-tasktemplate#templates" i18n:translate="">choose template</a></li>
+                     <li><a href="add-tasktemplate#tasks" i18n:translate="">select tasks</a></li>
+                 </ul>
                  <div id="template_chooser"><!--iefix--></div>
              
                  <div id="form-controls">
