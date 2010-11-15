@@ -127,8 +127,12 @@ class ITask(form.Schema):
         value_type=RelationChoice(title=u"Related",
                                   source=DossierPathSourceBinder(
                 navigation_tree_query=
-                {'portal_type': 'opengever.document.document', },
-                portal_type="opengever.document.document", ),
+                {'portal_type': [
+                    'opengever.document.document',
+                    'ftw.mail.mail'], },
+                portal_type=[
+                    "opengever.document.document",
+                    "ftw.mail.mail"], ),
                                   ),
         required=False,
         )
