@@ -61,6 +61,7 @@ setup(name='opengever.document',
         'opengever.ogds.base',
         'collective.autopermission',
         'collective.vdexvocabulary',
+        'collective.elephantvocabulary',
         ],
 
         tests_require=tests_require,
