@@ -62,7 +62,7 @@ class PersonalOverview(TabbedView):
 
         if inbox:
             roles = member.getRolesInContext(inbox)
-            is_admin = roles and 'Administrator' in roles
+            is_admin = roles and 'Reader' in roles
 
         if is_admin:
             return self.default_tabs + self.admin_tabs
