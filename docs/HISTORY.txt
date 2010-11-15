@@ -18,11 +18,11 @@ Changelog
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/543/
   [17.08.2010, jinfanfer]
 
-* Issue #581 Zusätzliches Feld: Zum Feld Archivwürdigkeit ein Kommentarfeld hinzufügen
+* Issue #581 Zusaetzliches Feld: Zum Feld Archivwuerdigkeit ein Kommentarfeld hinzufuegen
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/581
   [06.08.2010, jinfanfer]
 
-* Issue #580 Zusätzliches Feld: Zum Feld Aufbewahrungsdauer ein Kommentarfeld hinzufügen
+* Issue #580 Zusaetzliches Feld: Zum Feld Aufbewahrungsdauer ein Kommentarfeld hinzufuegen
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/580
   [06.08.2010, jinfanfer]
 
@@ -32,7 +32,7 @@ Changelog
 * Reference number behavior: improved tests
   [17.03.2010, jbaumann]
 
-* Issue #5 Abklärung, ob Präfix des Aktenzeichens auch ein Buchstabe sein kann
+* Issue #5 Abklaerung, ob Praefix des Aktenzeichens auch ein Buchstabe sein kann
   https://extranet.4teamwork.ch/projects/testphase-rms-ais-der-ssgi-2010/tracker-sprint-ssgi-2010/5
   [17.03.2010, jbaumann]
 
@@ -60,19 +60,19 @@ Changelog
 -----
 
 
-* Issue #111: Dokumente mit Umlauten im Filenamen können nicht hinaufgeladen werden
+* Issue #111: Dokumente mit Umlauten im Filenamen koennen nicht hinaufgeladen werden
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/111
   Added some monkey patches for enabling support of umlauts in filenames.
   [05.01.2010, jbaumann]
 
-* Issue #340: Aktenzeichen Dossiers und Subdossiers: Zähler zählt nicht über 2
+* Issue #340: Aktenzeichen Dossiers und Subdossiers: Zaehler zaehlt nicht ueber 2
   [04.01.2010, jbaumann]
 
 * Issue #321: Lifecycle behavior: Vocabulary liefert falsche Werte
   [04.01.2010, jbaumann]
 
-* Issue #292: PloneRegistry: Listen können nicht bearbeitet werden
-  TextLinesFieldWidget als standard-widget für List-Felder vom Typ TextLine konfiguriert
+* Issue #292: PloneRegistry: Listen koennen nicht bearbeitet werden
+  TextLinesFieldWidget als standard-widget fuer List-Felder vom Typ TextLine konfiguriert
 
 * Issue #296: Nummerierungskonzept umsetzen
   IReferenceNumber zum generieren von Aktenzeichen implementiert
