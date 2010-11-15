@@ -1,11 +1,12 @@
 from Acquisition import aq_parent
 from OFS.SimpleItem import SimpleItem
+from opengever.ogds.base.interfaces import IContactInformation
 from opengever.task import _
 from opengever.task.task import ITask
 from plone.app.contentrules.browser.formhelper import AddForm, EditForm
 from plone.contentrules.rule.interfaces import IExecutable, IRuleElementData
 from zope import schema
-from zope.component import adapts
+from zope.component import adapts, getUtility
 from zope.event import notify
 from zope.formlib import form
 from zope.interface import implements, Interface
@@ -69,7 +70,11 @@ class AddLocalRolesActionExecutor(object):
     def __call__(self):
         obj = self.event.object
         if ITask.providedBy(obj) and obj.responsible:
-            user_id = obj.responsible
+            info = getUtility(IContactInformation)
+            if info.is_inbox(obj.responsible):
+                user_id = info.get_group_of_inbox(obj.responsible)
+            else:
+                user_id = obj.responsible
 
             # set object roles
             roles = self.element.object_roles
