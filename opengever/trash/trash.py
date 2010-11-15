@@ -71,7 +71,7 @@ class TrashView(grok.CodeView):
                 obj = self.context.restrictedTraverse(item)
                 trasher = ITrashable(obj)
                 trasher.trash()
-        self.request.RESPONSE.redirect(self.context.absolute_url())
+        self.request.RESPONSE.redirect('%s#trash' % self.context.absolute_url())
     
     def render(self):
         super(TrashView).render()
@@ -88,7 +88,7 @@ class UntrashView(grok.CodeView):
                 obj = self.context.restrictedTraverse(item)
                 trasher = ITrashable(obj)
                 trasher.untrash()
-        self.request.RESPONSE.redirect(self.context.absolute_url())
-    
+        self.request.RESPONSE.redirect('%s#documents' % (self.context.absolute_url()))
+
     def render(self):
         super(UntrashView).render()
