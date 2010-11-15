@@ -52,3 +52,9 @@ msgstr ""
 
 msgid "document-transition-cancel_checkout"
 msgstr ""
+
+msgid "button_download"
+msgstr ""
+
+msgid "label_reset"
+msgstr ""

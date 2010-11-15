@@ -24,6 +24,9 @@ msgstr "Auschecken"
 msgid "Checkout and edit"
 msgstr "Auschecken und bearbeiten"
 
+msgid "button_download"
+msgstr "herunterladen"
+
 msgid "document-state-checked_out"
 msgstr "Ausgecheckt"
 
@@ -47,5 +50,8 @@ msgstr "Auschecken"
 
 msgid "document-transition-reject"
 msgstr "Zurückweisen"
+
+msgid "label_reset"
+msgstr "zurücksetzen"
 
 
