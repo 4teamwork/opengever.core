@@ -8,6 +8,7 @@ tests_require = [
     'lxml >= 2.1.1',
     'collective.testcaselayer',
     'z3c.form [test]',
+    'z3c.saconfig',
     ]
 
 setup(name='opengever.task',
@@ -35,7 +36,6 @@ setup(name='opengever.task',
       install_requires=[
         'setuptools',
         'plone.app.dexterity',
-        'plone.app.contentrules',
         'plone.app.registry',
         'rwproperty',
         'collective.autopermission',
@@ -45,6 +45,7 @@ setup(name='opengever.task',
         'five.globalrequest',
         'collective.vdexvocabulary',
         'ftw.contentmenu',
+        'collective.elephantvocabulary',
        ],
       tests_require=tests_require,
       extras_require = dict(tests=tests_require),
