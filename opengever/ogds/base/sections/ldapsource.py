@@ -1,15 +1,16 @@
 import logging
-import ldap
 from zope.interface import classProvides, implements
 from collective.transmogrifier.interfaces import ISectionBlueprint
 from collective.transmogrifier.interfaces import ISection
 from collective.transmogrifier.utils import Expression
+
 
 class LDAPSourceSection(object):
     classProvides(ISectionBlueprint)
     implements(ISection)
 
     def __init__(self, transmogrifier, name, options, previous):
+        self.context = transmogrifier.context
         self.previous = previous
         self.logger = logging.getLogger(options['blueprint'])
         self.options = options
@@ -20,22 +21,18 @@ class LDAPSourceSection(object):
         for item in self.previous:
             yield item
 
-        # connecting to the ldap
-        con = ldap.initialize(self.options.get('dsn', ''))
-        con.start_tls_s()
-        con.simple_bind_s(self.options.get('bind_dn'), self.options.get('bind_pw'))
-        res = con.search(self.options.get('base_dn'), 3, self.options.get('filter'))
+        # get all the attributes from the ldap plugin
+        ldap_name = self.options.get('ldap_name', 'ldap')
+        ldap_folder = self.context.acl_users.get(ldap_name).get('acl_users')
+        
+        #iterate over the users in the ldap_userfolder
+        for uid in ldap_folder.getUserIds():
+            user = ldap_folder.getUserById(uid)
 
-        while True:
-            code, data = con.result(res, all=False)
-            if code != 100:
-                break
             temp = {}
-            for k, v in data[0][1].items():
+            for old_k, new_k in self.mapping.items():
+                v = user.getProperty(old_k)
                 if isinstance(v, list):
                     v = v[0]
-                if self.mapping.get(k, None):
-                    temp[self.mapping[k]] = v.decode('utf-8')
-                else:
-                    temp[k] = v.decode('utf-8')
+                temp[new_k] = v.decode('utf-8')
             yield temp
