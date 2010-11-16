@@ -26,9 +26,6 @@
 
     <include file="profiles.zcml" />
 
-    <!-- content rules actions -->
-    <include package=".actions" />
-
     <include package=".viewlets" />
 
     <i18n:registerTranslations directory="locales" />
