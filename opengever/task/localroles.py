@@ -15,6 +15,8 @@ class LocalRolesSetter(object):
         self.task = task
 
     def __call__(self, event):
+        if not self.responsible:
+            return
         self.set_roles_on_task()
         self.set_roles_on_distinct_parent()
         self.set_roles_on_related_items()
