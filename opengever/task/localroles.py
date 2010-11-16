@@ -33,10 +33,15 @@ class LocalRolesSetter(object):
         except AttributeError:
             value = self.task.responsible
             info = getUtility(IContactInformation)
+
             if info.is_inbox(value):
                 self._responsible = info.get_group_of_inbox(value)
             else:
                 self._responsible = value
+
+            if isinstance(self._responsible, unicode):
+                self._responsible = self._responsible.encode('utf-8')
+
         return self._responsible
 
     def _add_local_roles(self, context, principal, roles):
