@@ -26,16 +26,16 @@ Changelog
 * updated metadata / changed target release to 1.0a1
   [05.01.2010, jbaumann]
   
-* Issue #340: Aktenzeichen Dossiers und Subdossiers: Zähler zählt nicht über 2
+* Issue #340: Aktenzeichen Dossiers und Subdossiers: Zaehler zaehlt nicht ueber 2
   Die Ordnungsposition braucht nun auch das IReferenceNumber behavior, wie auch
-  das Dossier. Die Validierung und der Default-Wert funktioniert nun Typ-übergreifend.
+  das Dossier. Die Validierung und der Default-Wert funktioniert nun Typ-uebergreifend.
   [04.01.2010, jbaumann]
   
 * Issue #178: Fehlende Metadaten auf Stufe "Ordnungsposition"
-  Neue Felder Felder hinzugefügt und Verhalten der durch Vererbung
-  eingeschränkten Felder verbessert (retention_period, custody_period)
+  Neue Felder Felder hinzugefuegt und Verhalten der durch Vererbung
+  eingeschraenkten Felder verbessert (retention_period, custody_period)
 
-* Issue #277: Hinzufügbare Typen einschränken bei Registraturposition
+* Issue #277: Hinzufuegbare Typen einschraenken bei Registraturposition
   [14.12.2009, jbaumann]
 
 * Issue #172: listCreators einer Registraturposition liefert Owner des ersten Dossiers
@@ -44,7 +44,7 @@ Changelog
 * Added some tests for the RepositoryFolder and the RepositoryRoot
   [26.11.2009, jbaumann]
 
-* Issue #120: RepositoryFolder übersetzen
+* Issue #120: RepositoryFolder uebersetzen
   [11.11.2009, jbaumann]
 
 0.1
@@ -53,32 +53,32 @@ Changelog
 * Implemented content type "RepositoryFolder"
   [09.09.2009, jbaumann]
 
-* Issue #15: PloneGov GEVER Light Registraturplan übernehmen
+* Issue #15: PloneGov GEVER Light Registraturplan uebernehmen
   Properly implemented Title using RecordPosition with a dummy field
   Implemented Classification behavior with fields and localization
   Added Doctess for Classification behavior
   [09.09.2009, jbaumann]
 
-* Issue #15 PloneGov GEVER Light Registraturplan übernehmen
+* Issue #15 PloneGov GEVER Light Registraturplan uebernehmen
   Added acquisition restricted vocabulary system, using for classification
   Added acquisition restricted vocabulary for public_trial
   Added acquisition restricted vocabulary for archival_value
   [10.09.2009, jbaumann]
 
-* Issue #15 PloneGov GEVER Light Registraturplan übernehmen
+* Issue #15 PloneGov GEVER Light Registraturplan uebernehmen
   Fixed bug in Restricted-Acquisition-Vocabulary-System and made tests run again (testing previous changes)
   [16.09.2009, jbaumann]
 
-* Issue #15 PloneGov GEVER Light Registraturplan übernehmen
+* Issue #15 PloneGov GEVER Light Registraturplan uebernehmen
   Changed "privacy_layer" to Choice-Widget with acquision and a restricted vocbulary
   Implemented Validator for custody- and retention-period fields
   [17.09.2009, jbaumann]
 
-* Issue #15 PloneGov GEVER Light Registraturplan übernehmen
+* Issue #15 PloneGov GEVER Light Registraturplan uebernehmen
   Implemented Validator for Repository-Folder field "reference_number"
   Improved translations, added .pot-file
   [21.09.2009, jbaumann]
 
-* Issue #24: Registraturposition: hinzufügbare Typen je nach Inhalt
+* Issue #24: Registraturposition: hinzufuegbare Typen je nach Inhalt
   [21.09.2009, jbaumann]
 
