@@ -26,18 +26,25 @@
                         table.ftwtable('param', 'path', e.target.value);
                         table.ftwtable('param', 'show', 'tasks');
                         table.ftwtable('reload');
+                        $('.wizard li.selected')
+                            .removeClass('selected')
+                            .addClass('visited')
+                            .next()
+                            .addClass('selected');
                         $('#form-controls input[name=save]').toggle();  
                     }
                   });
                   
-                  $('#tasktemplateNavigation a[href$=#templates]').click(function(e){
+                  $('.wizard a[href$=#templates]').click(function(e){
                       table.ftwtable('param', 'path', '/');
                       table.ftwtable('param', 'show', 'templates');
                       table.ftwtable('reload');
+                      $('.wizard li.selected').removeClass('selected');
+                      $(e.target).closest('li').addClass('selected');
                       $('#form-controls input[name=save]').toggle();
                   }, false);
                   
-                  $('#tasktemplateNavigation a[href$=#tasks]').click(function(e){
+                  $('.wizard a[href$=#tasks]').click(function(e){
                       var path = table.ftwtable('param', 'path');
                       if (path == '/'){
                           return false;
@@ -54,16 +61,18 @@
         <div metal:fill-slot="main">
              <div tal:replace="structure provider:plone.abovecontenttitle" />
              <h1 class="documentFirstHeading" i18n:translate="">add tasktemplate</h1>
-             <form action="add-tasktemplate/create" method="post">
-                 <ul class="wizard" id="tasktemplateNavigation">
-                     <li><a href="add-tasktemplate#templates" i18n:translate="">choose template</a></li>
+             <form action="add-tasktemplate/create" method="post" class="wizard">
+                 <ul class="wizardSteps" id="tasktemplateNavigation">
+                     <li class="selected"><a href="add-tasktemplate#templates" i18n:translate="">choose template</a></li>
                      <li><a href="add-tasktemplate#tasks" i18n:translate="">select tasks</a></li>
                  </ul>
-                 <div id="template_chooser"><!--iefix--></div>
+                 <div class="wizardContent">
+                     <div id="template_chooser"><!--iefix--></div>
              
-                 <div id="form-controls">
-                     <input type="submit" name="save" value="Save"  i18n:attributes="value label_save" i18n:domain="plone"/>
-                     <input type="submit" name="abort" value="Abort" i18n:attributes="value label_cancel" i18n:domain="plone" />
+                     <div id="form-controls">
+                         <input type="submit" class="context" name="save" value="Save"  i18n:attributes="value label_save" i18n:domain="plone"/>
+                         <input type="submit" class="standalone" name="abort" value="Abort" i18n:attributes="value label_cancel" i18n:domain="plone" />
+                     </div>
                  </div>
              </form>
             
