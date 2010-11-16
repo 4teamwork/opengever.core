@@ -32,6 +32,7 @@ setup(name='opengever.advancedsearch',
       include_package_data=True,
       zip_safe=False,
       install_requires=[
+        'z3c.form',
           'setuptools',
           'opengever.ogds.base',
           'opengever.task',
