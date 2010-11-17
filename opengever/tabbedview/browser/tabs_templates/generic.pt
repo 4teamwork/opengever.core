@@ -8,7 +8,7 @@
     <input type="hidden" name="orig_template" tal:attributes="value string:${context/absolute_url}/#${view/view_name}" />
 
     <tal:cond tal:condition="view/contents">
-        <div class="tabbedview_select">
+        <div tal:condition="view/show_selects" class="tabbedview_select">
           <span i18n:translate="">Choose:</span> <a href="javascript:tabbedview.select_all()" i18n:translate="">all</a>, <a href="javascript:tabbedview.select_none()" i18n:translate="">none</a>
           <span class="select_folder" style="display:none" i18n:translate=""> All visible entries chosen <a href="#" i18n:translate="">Show all in this Folder</a></span>
           <!--<div tal:replace="structure view/batching" />-->
