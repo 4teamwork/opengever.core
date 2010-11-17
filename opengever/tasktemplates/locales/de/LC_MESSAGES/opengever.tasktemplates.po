@@ -26,9 +26,13 @@ msgstr "Standardablauf"
 msgid "Title"
 msgstr "Titel"
 
-#: ./opengever/tasktemplates/browser/form.pt:39
+#: ./opengever/tasktemplates/browser/form.pt:50
 msgid "add tasktemplate"
 msgstr "Aufgabenvorlage hinzufügen"
+
+#: ./opengever/tasktemplates/browser/form.pt:53
+msgid "choose template"
+msgstr "Vorlage auswählen"
 
 #. Default: "Interactive users"
 #: ./opengever/tasktemplates/vocabularies.py:49
@@ -125,5 +129,9 @@ msgstr "Kommentar"
 #: ./opengever/tasktemplates/content/tasktemplate.py:13
 msgid "label_title"
 msgstr "Titel"
+
+#: ./opengever/tasktemplates/browser/form.pt:54
+msgid "select tasks"
+msgstr "Aufgaben auswählen"
 
 

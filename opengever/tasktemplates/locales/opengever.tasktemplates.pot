@@ -31,8 +31,12 @@ msgstr ""
 msgid "Title"
 msgstr ""
 
-#: ./opengever/tasktemplates/browser/form.pt:39
+#: ./opengever/tasktemplates/browser/form.pt:50
 msgid "add tasktemplate"
+msgstr ""
+
+#: ./opengever/tasktemplates/browser/form.pt:53
+msgid "choose template"
 msgstr ""
 
 #. Default: "Interactive users"
@@ -129,5 +133,9 @@ msgstr ""
 #: ./opengever/tasktemplates/browser/templatefolders.py:18
 #: ./opengever/tasktemplates/content/tasktemplate.py:13
 msgid "label_title"
+msgstr ""
+
+#: ./opengever/tasktemplates/browser/form.pt:54
+msgid "select tasks"
 msgstr ""
 

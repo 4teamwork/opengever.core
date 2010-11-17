@@ -93,8 +93,8 @@ class AddForm(BrowserView):
         templates = self.context.portal_catalog(
                         Type=self.steps[show]['types'],
                         sort_on = sort_on,
-                        sort_order = sort_order
-                        
+                        sort_order = sort_order,
+                        path = path
         )
         table_options = {'auto_expand_column':'Title'}
         generator = queryUtility(ITableGenerator, 'ftw.tablegenerator')
@@ -136,8 +136,12 @@ class AddForm(BrowserView):
 
         self.sort_reverse = self.sort_order == 'reverse'
 
-    def create(self, paths):
+    def create(self, paths=[]):
         """generate the task templates"""
+
+        if 'abort' in self.request.keys():
+            return self.request.RESPONSE.redirect(self.context.absolute_url())
+            
         for path in paths:
             template = self.context.restrictedTraverse(path)
             deadline = datetime.today()+timedelta(template.deadline)
