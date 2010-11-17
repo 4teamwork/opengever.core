@@ -77,7 +77,7 @@ class AddForm(BrowserView):
         'tasks': {
             'columns' : (('', path_checkbox), 'Title', ('created', helper.readable_date)),
             'types': ('TaskTemplate',),
-            'states':'*',
+            'states':('tasktemplate-state-active',),
 
             }
         }
@@ -92,6 +92,7 @@ class AddForm(BrowserView):
                       'DESC':'reverse'}.get(sort_order, sort_order)
         templates = self.context.portal_catalog(
                         Type=self.steps[show]['types'],
+                        review_state=self.steps[show]['states'],
                         sort_on = sort_on,
                         sort_order = sort_order,
                         path = path
