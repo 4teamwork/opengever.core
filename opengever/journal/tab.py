@@ -13,10 +13,12 @@ from opengever.tabbedview.browser.tabs import OpengeverTab
 from opengever.tabbedview.helper import linked_ogds_author
 from zope.annotation.interfaces import IAnnotations
 from zope.interface import implements, Interface
+from zope.app.component.hooks import getSite 
 
 
 def title_helper(item, value):
-    return item['action'].get('title')
+    site = getSite()
+    return site.translate(item['action'].get('title'))
 
 
 class IJournalSourceConfig(ITableSourceConfig):
@@ -111,11 +113,11 @@ class JournalTableSource(grok.MultiAdapter, BaseTableSource):
                 return True
 
             # actor
-            if text.lower() in getattr(item, 'actor'):
+            if text.lower() in item.get('actor', ''):
                 return True
 
             # comment
-            if text.lower() in getattr(item, 'comment'):
+            if text.lower() in item.get('comment', ''):
                 return True
 
             return False
