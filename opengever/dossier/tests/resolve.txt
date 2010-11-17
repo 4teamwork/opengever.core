@@ -75,13 +75,13 @@ is_all_checked_in
 test the is all_checked_in method 
     >>> wft = portal.portal_workflow
     >>> wft.getInfoFor(doc1, 'review_state')
-    'draft'
+    'document-state-draft'
     >>> resolve.is_all_checked_in()
     True
-    >>> wft.doActionFor(doc1, 'check_out')
+    >>> wft.doActionFor(doc1, 'document-transition-check_out')
     >>> resolve.is_all_checked_in()
     False
-    >>> wft.doActionFor(doc1, 'check_in')
+    >>> wft.doActionFor(doc1, 'document-transition-check_in')
     >>> resolve.is_all_checked_in()
     True
 

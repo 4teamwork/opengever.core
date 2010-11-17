@@ -31,17 +31,17 @@ Changelog
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/436
   [02.02.2010, phgross]
 
-* Issue #486 Beteiligung hinzufügen und Beteiligung löschen darf nur möglich sein, wenn das Dossier in Bearbeitung ist
-  Auf eigenem Mandanten nicht möglich
-  Übersetzungen hinzugefügt
+* Issue #486 Beteiligung hinzufuegen und Beteiligung loeschen darf nur moeglich sein, wenn das Dossier in Bearbeitung ist
+  Auf eigenem Mandanten nicht moeglich
+  uebersetzungen hinzugefuegt
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/486
   [01.03.2010, jbaumann]
   
-* Issue #445 Kopieren von an Aufgaben angehängten Dokumenten ("Überweisung", Beteiligung)
+* Issue #445 Kopieren von an Aufgaben angehaengten Dokumenten ("Ueberweisung", Beteiligung)
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/445
   [01.03.2010, jbaumann]
   
-* Issue #480 Beteiligung am Dossier hinzufügen sollte auch in "Aktionsleiste" möglich sein nicht nur über das Menü "Aktionen"
+* Issue #480 Beteiligung am Dossier hinzufuegen sollte auch in "Aktionsleiste" moeglich sein nicht nur ueber das Menue "Aktionen"
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/480
   [25.02.2010, jbaumann]
   
@@ -51,7 +51,7 @@ Changelog
 * Deckblatt PDF: Responsible mit ContactInformation utility generieren
   [10.02.2010, jbaumann]
   
-* Übersetzungen angepasst für Feld "former_reference"
+* Uebersetzungen angepasst fuer Feld "former_reference"
   [03.02.2010, jbaumann]
   
 
@@ -66,7 +66,7 @@ Changelog
 1.0a2
 -----
 
-* Issue #282: Kontakte-Webservice für OGDS
+* Issue #282: Kontakte-Webservice fuer OGDS
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/282
   [13.01.2010, jbaumann]
   
@@ -78,7 +78,7 @@ Changelog
 -----
 
 * Issue #263: Beteiligung in einem Dossier
-  Formular für Beteiligungen hinzugefügt
+  Formular fuer Beteiligungen hinzugefuegt
   [18.12.2009, jbaumann]
 
 * Issue #296: Nummerierungskonzept umsetzen
@@ -86,13 +86,13 @@ Changelog
   [16.12.2009, jbaumann]
 
 * Issue #296: Nummerierungskonzept umsetzen
-  Laufnummer in Byline des Geschäftsdossier eingebaut
+  Laufnummer in Byline des Geschaeftsdossier eingebaut
   [16.12.2009, jbaumann]
 
-* Issue #275: Hinzufügbare Typen einschränken bei Geschäftsdossier
+* Issue #275: Hinzufuegbare Typen einschraenken bei Geschaeftsdossier
   [14.12.2009, jbaumann]
 
-* Issue #120: RepositoryFolder übersetzen
+* Issue #120: RepositoryFolder uebersetzen
   [11.11.2009, jbaumann]
 
 * Issue #52: Versionierung bei Dossier ausschalten

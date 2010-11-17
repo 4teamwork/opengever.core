@@ -6,6 +6,8 @@ maintainer = 'Thomas Buchberger'
 
 tests_require = [
     'collective.testcaselayer',
+    'opengever.task',
+    'opengever.globalindex',
 ]
 
 setup(name='opengever.dossier',
@@ -33,10 +35,8 @@ setup(name='opengever.dossier',
       zip_safe=False,
       install_requires=[
         'z3c.relationfield',
-        'z3c.formwidget.query',
         'z3c.form',
         'plone.z3cform',
-        'plone.registry',
         'plone.namedfile',
         'plone.formwidget.contenttree',
         'plone.formwidget.autocomplete',

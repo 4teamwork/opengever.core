@@ -48,7 +48,8 @@ class DossierOverview(grok.View, OpengeverTab):
         return [{
             'Title': document.Title,
             'getURL': document.getURL,
-            'alt': document.document_date.strftime('%d.%m.%Y'),
+            'alt': document.document_date and \
+                document.document_date.strftime('%d.%m.%Y') or '',
             'getIcon': document.getIcon,
         } for document in documents]
         return self.catalog(
