@@ -9,21 +9,7 @@ from opengever.mail.behaviors import IMailInAddressMarker, IMailInAddress
 from opengever.ogds.base.interfaces import IContactInformation
 
 
-class Byline(content.DocumentBylineViewlet):
-    update = content.DocumentBylineViewlet.update
-
-    @memoize
-    def workflow_state(self):
-        state = self.context_state.workflow_state()
-        workflows = self.context.portal_workflow.getWorkflowsFor(
-            self.context.aq_explicit)
-        if workflows:
-            for w in workflows:
-                if state in w.states:
-                    return w.states[state].title or state
-
-
-class BusinessCaseByline(Byline):
+class BusinessCaseByline(content.DocumentBylineViewlet):
     """ Specific DocumentByLine, for the Businesscasedossier Type"""
 
     update = content.DocumentBylineViewlet.update
