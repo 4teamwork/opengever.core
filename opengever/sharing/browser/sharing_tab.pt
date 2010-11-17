@@ -27,7 +27,7 @@
           <td>
             <a tal:attributes="href string:list_groupmembers?group=${entry/id}"
                tal:omit-tag="not:is_group" class="link-overlay">
-              <img tal:condition="is_group" tal:replace="structure context/group.gif" />
+              <img tal:condition="is_group" tal:replace="structure context/icon_objekt_kontaktgruppe.gif" />
               <img tal:condition="not:is_group" tal:replace="structure context/user.gif" />
               <tal:sticky condition="sticky">
                 <span tal:replace="entry/title" />
