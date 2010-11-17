@@ -3,6 +3,7 @@ from collective.elephantvocabulary import wrap_vocabulary
 from datetime import datetime, time
 from five import grok
 from ftw.table.catalog_source import default_custom_sort
+from ftw.datepicker.widget import DatePickerFieldWidget
 from opengever.base.interfaces import IBaseClientID
 from opengever.dossier import _
 from opengever.dossier.behaviors.dossier import IDossier
@@ -157,6 +158,7 @@ class ArchiveForm(directives_form.Form):
     fields = field.Fields(IArchiveFormSchema)
     ignoreContext = True
     fields['filing_action'].widgetFactory[INPUT_MODE] = radio.RadioFieldWidget
+    fields['dossier_enddate'].widgetFactory[INPUT_MODE] = DatePickerFieldWidget
     label = _(u'heading_archive_form', u'Archive Dossier')
 
     def __call__(self):
