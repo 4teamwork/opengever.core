@@ -1,3 +1,4 @@
+import urllib
 from five import grok
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone import PloneMessageFactory as PMF
@@ -317,7 +318,7 @@ class AdvancedSearchForm(directives_form.Form):
         if not errors:
             # create Parameters and url
             params = '/search?SearchableText=%s&portal_type=%s' % (
-                    data.get('searchableText'), data.get('portal_type'))
+                    data.get('searchableText', ''), data.get('portal_type', ''))
             for field in FIELD_MAPPING.get(
                     data.get('portal_type').replace('.','-')):
                 if data.get(field, None):
@@ -336,7 +337,7 @@ class AdvancedSearchForm(directives_form.Form):
                     elif field == 'trashed':
                         params = '%s&trashed:list:boolean=True&trashed:list:boolean=False' %(params)
                     else:
-                        params = '%s&%s=%s' %(params, field, data.get(field))
+                        params = '%s&%s=%s' %(params, field, urllib.quote(data.get(field)))
 
             params = params.replace('task_responsible', 'repsonsible')
 
