@@ -14,6 +14,7 @@ from opengever.ogds.base.autocomplete_widget import AutocompleteFieldWidget
 from opengever.ogds.base.utils import get_client_id
 from opengever.task.util import getTaskTypeVocabulary
 from datetime import date
+from ftw.datepicker.widget import DatePickerFieldWidget
 
 @grok.provider(IContextSourceBinder)
 def get_possible_states(context):
@@ -280,15 +281,30 @@ class AdvancedSearchForm(directives_form.Form):
         =  radio.RadioFieldWidget
     fields['review_state'].widgetFactory[INPUT_MODE] \
         = checkbox.CheckBoxFieldWidget
-    
-    #fields['portal_type'].widget.addClass('blubb')
+
 
     ignoreContext = True
 
     def updateWidgets(self):
         self.context.REQUEST.set('client', get_client_id())
+        date_fields = [
+            'start_1',
+            'start_2',
+            'end_1',
+            'end_2',
+            'deadline_1',
+            'deadline_2',
+            'receipt_date_1',
+            'receipt_date_2',
+            'delivery_date_1',
+            'delivery_date_2',
+            'document_date_1',
+            'document_date_2',
+        ]
         
-        
+        for field in date_fields:
+            self.fields.get(field).widgetFactory[INPUT_MODE] = DatePickerFieldWidget
+
         super(AdvancedSearchForm, self).updateWidgets()
         for k,v in FIELD_MAPPING.items():
             for name in v:
