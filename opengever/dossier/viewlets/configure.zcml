@@ -16,7 +16,7 @@
        for="opengever.dossier.templatedossier.ITemplateDossier"
        manager="plone.app.layout.viewlets.interfaces.IBelowContentTitle"
        class=".byline.BusinessCaseByline"
-       template="templatedossier_byline.pt"
+       template="./../../../../opengever.theme/opengever/theme/browser/viewlets_templates/byline.pt"
        permission="zope2.View"
        />
 
