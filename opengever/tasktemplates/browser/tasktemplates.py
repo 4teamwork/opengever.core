@@ -29,7 +29,7 @@ class TaskTemplates(OpengeverCatalogListingTab):
          'transform': interactive_user_helper},
 
         {'column' : 'responsible',
-         'column_title' : taskmsg(u'label_responsible_task', 'Responsible'),
+         'column_title' : _(u'label_responsible_task', default=u'Responsible'),
          'transform' : interactive_user_helper},
 
         {'column': 'deadline',

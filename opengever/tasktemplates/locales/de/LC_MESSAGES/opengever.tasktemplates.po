@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2010-11-17 08:44+0000\n"
+"POT-Creation-Date: 2010-11-17 09:14+0000\n"
 "PO-Revision-Date: 2010-10-13 14:09+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -26,11 +26,11 @@ msgstr "Standardablauf"
 msgid "Title"
 msgstr "Titel"
 
-#: ./opengever/tasktemplates/browser/form.pt:50
+#: ./opengever/tasktemplates/browser/form.pt:63
 msgid "add tasktemplate"
 msgstr "Aufgabenvorlage hinzufügen"
 
-#: ./opengever/tasktemplates/browser/form.pt:53
+#: ./opengever/tasktemplates/browser/form.pt:66
 msgid "choose template"
 msgstr "Vorlage auswählen"
 
@@ -108,6 +108,11 @@ msgstr "Mandant des Verantwortlichen"
 msgid "label_responsible"
 msgstr "Verantwortlicher"
 
+#. Default: "Responsible"
+#: ./opengever/tasktemplates/browser/tasktemplates.py:32
+msgid "label_responsible_task"
+msgstr "Verantwortlicher"
+
 #. Default: "Review state"
 #: ./opengever/tasktemplates/browser/templatefolders.py:22
 msgid "label_review_state"
@@ -130,7 +135,7 @@ msgstr "Kommentar"
 msgid "label_title"
 msgstr "Titel"
 
-#: ./opengever/tasktemplates/browser/form.pt:54
+#: ./opengever/tasktemplates/browser/form.pt:67
 msgid "select tasks"
 msgstr "Aufgaben auswählen"
 
