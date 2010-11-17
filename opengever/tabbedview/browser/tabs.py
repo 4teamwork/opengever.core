@@ -17,7 +17,7 @@ import re
 
 
 class OpengeverTab(object):
-    show_searchform = False
+    show_searchform = True
 
     template = ViewPageTemplateFile('tabs_templates/generic.pt')
 
