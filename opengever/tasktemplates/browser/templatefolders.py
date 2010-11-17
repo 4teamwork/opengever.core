@@ -2,6 +2,7 @@ from ftw.table import helper
 from opengever.tabbedview.helper import linked
 from opengever.tabbedview.browser.tabs import OpengeverCatalogListingTab
 from five import grok
+from opengever.tasktemplates import _
 
 
 class TaskTemplateFoldersTab(OpengeverCatalogListingTab):
@@ -13,8 +14,13 @@ class TaskTemplateFoldersTab(OpengeverCatalogListingTab):
     columns= (
         ('', helper.draggable),
         ('', helper.path_checkbox),
-        ('Title', 'sortable_title', linked),
-        ('review_state', 'review_state', helper.translated_string()),
+        {'column': 'Title',
+         'column_title': _(u'label_title', default=u'Title'),
+         'sort_index': 'sortable_title',
+         'transform': linked},
+        {'column': 'review_state',
+         'column_title': _(u'label_review_state', default=u'Review state'),
+          'transform': helper.translated_string()},
         )
 
     types = ['opengever.tasktemplates.tasktemplatefolder', ]
