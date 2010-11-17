@@ -40,7 +40,7 @@ msgstr ""
 
 #: ./opengever/advancedsearch/advanced_search.py:249
 msgid "help_deadline"
-msgstr "Geben sie eine Datumsbereich der Frist ein."
+msgstr "Zeitbereich für Enddatum auswählen."
 
 #: ./opengever/advancedsearch/advanced_search.py:175
 msgid "help_delivery_date"
@@ -80,7 +80,7 @@ msgstr "Auftraggeber auswählen"
 
 #: ./opengever/advancedsearch/advanced_search.py:95
 msgid "help_portal_type"
-msgstr "Wählen sie den Objekttyp aus."
+msgstr "Wählen Sie den Inhaltstyp aus, nachdem gesucht werden soll."
 
 #: ./opengever/advancedsearch/advanced_search.py:163
 msgid "help_receipt_date"
