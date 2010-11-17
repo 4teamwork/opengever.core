@@ -39,6 +39,8 @@ class JournalTab(grok.CodeView, OpengeverTab, ListingView):
     sort_on = 'time'
     sort_reverse = True
 
+    # do not show the selects, because no action is enabled
+    show_selects = False
     enabled_actions = []
     minor_buttons = []
     major_buttons = []
