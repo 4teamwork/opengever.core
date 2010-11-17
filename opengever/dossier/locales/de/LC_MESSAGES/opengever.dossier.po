@@ -256,7 +256,7 @@ msgstr ""
 #. Default: "Select the responsible manager"
 #: ./opengever/dossier/behaviors/dossier.py:92
 msgid "help_responsible"
-msgstr "Verantwortlicher Manager"
+msgstr "Federführung"
 
 #: ./opengever/dossier/behaviors/participation.py:98
 msgid "help_roles"
