@@ -24,6 +24,19 @@ msgstr "Auschecken"
 msgid "Checkout and edit"
 msgstr "Auschecken und bearbeiten"
 
+msgid "Document state changed to document-state-checked_out"
+msgstr "Dokumentstatus verändert: Ausgecheckt"
+
+msgid "Document state changed to document-state-draft"
+msgstr "Dokumentstatus verändert: Entwurf"
+
+msgid "Document state changed to document-state-pending"
+msgstr "Dokumentstatus verändert: Hängig"
+
+
+msgid "Document state changed to document-state-working_copy"
+msgstr "Dokumentstatus verändert: Arbeitskopie"
+
 msgid "button_download"
 msgstr "herunterladen"
 

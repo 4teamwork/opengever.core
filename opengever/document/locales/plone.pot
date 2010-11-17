@@ -58,3 +58,18 @@ msgstr ""
 
 msgid "label_reset"
 msgstr ""
+
+msgid "Document state changed to document-state-working_copy"
+msgstr ""
+
+msgid "Document state changed to document-state-pending"
+msgstr ""
+
+msgid "Document state changed to document-state-draft"
+msgstr ""
+
+msgid "Document state changed to document-state-checked_out"
+msgstr ""
+
+msgid "Document state changed to document-state-reject"
+msgstr ""
