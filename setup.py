@@ -36,6 +36,7 @@ setup(name='opengever.advancedsearch',
           'setuptools',
           'opengever.ogds.base',
           'opengever.task',
+          'ftw.datepicker',
           # -*- Extra requirements: -*-
       ],
       tests_require=tests_require,
