@@ -1,5 +1,6 @@
 from Acquisition import aq_inner, aq_parent
 from five.grok import subscribe
+from opengever.globalindex.handlers.task import index_task
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.task.task import ITask
 from zope.app.container.interfaces import IObjectAddedEvent
@@ -15,9 +16,11 @@ class LocalRolesSetter(object):
         self.task = task
 
     def __call__(self, event):
+        self.event = event
         if not self.responsible:
             return
         self.set_roles_on_task()
+        self.globalindex_reindex_task()
         self.set_roles_on_distinct_parent()
         self.set_roles_on_related_items()
 
@@ -58,6 +61,13 @@ class LocalRolesSetter(object):
         """Set local roles on task
         """
         self._add_local_roles(self.task, self.responsible, ('Editor',))
+
+    def globalindex_reindex_task(self):
+        """We need to reindex the task in globalindex. This was done
+        already with an earlier event handler - but we have just changed
+        the roles which are indexed too (allowed users).
+        """
+        index_task(self.task, self.event)
 
     def set_roles_on_distinct_parent(self):
         """Set local roles on the next parent which has a different
