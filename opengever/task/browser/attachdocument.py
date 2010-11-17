@@ -144,7 +144,7 @@ class IChooseDossierSchema(IChooseClientSchema):
 
 class ChooseDossierForm(z3c.form.form.Form, WizardFormMixin):
     fields = z3c.form.field.Fields(IChooseDossierSchema)
-    fields['source_dossier'].widgetFactory[INPUT_MODE] = AutocompleteFieldWidget
+    # fields['source_dossier'].widgetFactory[INPUT_MODE] = AutocompleteFieldWidget
 
     label = _(u'title_attach_document_form', u'Attach document')
     ignoreContext = True
