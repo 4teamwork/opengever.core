@@ -208,7 +208,7 @@ msgstr "PLZ"
 #. Default: "Email 2"
 #: ./opengever/contact/contact.py:111
 msgid "lable_email2"
-msgstr "E-mail 2"
+msgstr "E-Mail 2"
 
 #. Default: "Function"
 #: ./opengever/contact/contact.py:93
