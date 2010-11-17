@@ -7,7 +7,7 @@
  <permission>Modify portal content</permission>
  <permission>View</permission>
  <permission>Delete objects</permission>
- <state state_id="tasktemplatefolder-state-activ" title="tasktemplatefolder_activ">
+ <state state_id="tasktemplatefolder-state-activ" title="tasktemplatefolder-state-activ">
   <exit-transition transition_id="tasktemplatefolder-transition-activ-inactiv"/>
   <permission-map name="Access contents information" acquired="False">
    <permission-role>Editor</permission-role>
@@ -43,8 +43,8 @@
    <permission-role>Reader</permission-role>
   </permission-map>
  </state>
- <state state_id="tasktemplatefolder-state-inactiv" title="tasktemplatefolder_inactiv">
-  <exit-transition transition_id="tasktemplates-transition-inactiv-activ"/>
+ <state state_id="tasktemplatefolder-state-inactiv" title="tasktemplatefolder-state-inactiv">
+  <exit-transition transition_id="tasktemplatefolder-transition-inactiv-activ"/>
   <permission-map name="Access contents information" acquired="False">
    <permission-role>Editor</permission-role>
    <permission-role>Manager</permission-role>
