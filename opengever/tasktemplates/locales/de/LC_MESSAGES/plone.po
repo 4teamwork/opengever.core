@@ -12,22 +12,22 @@ msgstr ""
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: DOMAIN\n"
 
-msgid "Add TaskTemplateFolder"
-msgstr "Standardablauf hinzufügen"
-
 msgid "Add task from template"
 msgstr "Standardablauf auslösen"
 
-msgid "tasktemplate-state-activ"
+msgid "tasktemplate-state-active"
 msgstr "Aktiv"
 
-msgid "tasktemplate-state-inactiv"
+msgid "tasktemplatefolder-state-activ"
+msgstr "Aktiv"
+
+msgid "tasktemplatefolder-state-inactiv"
 msgstr "Inaktiv"
 
-msgid "tasktemplates-transition-activ-inactiv"
-msgstr "deaktivieren"
+msgid "tasktemplatefolder-transition-activ-inactiv"
+msgstr "Deaktivieren"
 
-msgid "tasktemplates-transition-inactiv-activ"
-msgstr "aktivieren"
+msgid "tasktemplatefolder-transition-inactiv-activ"
+msgstr "Aktivieren"
 
 
