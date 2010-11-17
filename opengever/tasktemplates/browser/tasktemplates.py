@@ -37,3 +37,9 @@ class TaskTemplates(OpengeverCatalogListingTab):
         )
 
     types = ['opengever.tasktemplates.tasktemplate',]
+
+    enabled_actions = [
+        'cut',
+        'paste',
+        'delete',
+        ]

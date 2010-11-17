@@ -72,7 +72,7 @@ class AddForm(BrowserView):
         'templates': {
             'columns' : (('', helper.path_radiobutton), 'Title' ,('created', helper.readable_date)),
             'types': ('TaskTemplateFolder',),
-            'states': ('tasktemplate-state-activ',),
+            'states': ('tasktemplatefolder-state-activ',),
             },
         'tasks': {
             'columns' : (('', path_checkbox), 'Title', ('created', helper.readable_date)),
