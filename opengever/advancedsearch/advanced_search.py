@@ -300,7 +300,7 @@ class AdvancedSearchForm(directives_form.Form):
         data, errors = self.extractData()
         if not errors:
             # create Parameters and url
-            params = '/search?searchableText=%s&portal_type=%s' % (
+            params = '/search?SearchableText=%s&portal_type=%s' % (
                     data.get('searchableText'), data.get('portal_type'))
             for field in FIELD_MAPPING.get(
                     data.get('portal_type').replace('.','-')):
