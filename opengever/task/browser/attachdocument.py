@@ -3,6 +3,7 @@ The transporter module defines functionality for adding a document
 from any context of a foreign client into a existing task.
 """
 
+from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from Products.statusmessages.interfaces import IStatusMessage
 from five import grok
 from opengever.ogds.base.interfaces import IContactInformation
@@ -17,10 +18,48 @@ from zope.component import getUtility
 from zope.schema.interfaces import IVocabularyFactory
 import urllib
 import z3c.form
+from plone.formwidget.autocomplete.widget import AutocompleteFieldWidget
+from z3c.form.interfaces import INPUT_MODE
 
 
 class NoItemsSelected(Exception):
     pass
+
+
+class WizardFormMixin(object):
+    """Mixing for adding a method witch returns the data needed for rendering
+    the wizard steps part. This has nothing to do with the forms itselves, its
+    just the steps bar for making it wizard like.
+    """
+
+    steps = (
+        ('choose_client', _(u'attachdocument_step_choose_client',
+                            default=u'1. Choose client')),
+
+        ('choose_dossier', _(u'attachdocument_step_choose_dossier',
+                             default=u'2. Choose dossier')),
+
+        ('choose_document', _(u'attachdocument_step_choose_document',
+                              default=u'3. Choose document')))
+
+    def wizard_steps(self):
+        """Return ordered list of wizards.
+        """
+
+        current_reached = False
+
+        for name, label in self.steps:
+            classes = ['wizard-step-%s' % name]
+            if name == self.step_name:
+                current_reached = True
+                classes.append('selected')
+            elif not current_reached:
+                classes.append('visited')
+            yield {'name': name,
+                   'label': label,
+                   'class': ' '.join(classes)}
+
+
 
 
 # ------------------- CHOSE HOME CLIENT ----------------------
@@ -39,10 +78,13 @@ class IChooseClientSchema(form.Schema):
         required=True)
 
 
-class ChooseClientForm(z3c.form.form.Form):
+class ChooseClientForm(z3c.form.form.Form, WizardFormMixin):
     fields = z3c.form.field.Fields(IChooseClientSchema)
     label = _(u'title_attach_document_form', u'Attach document')
     ignoreContext = True
+    template = ViewPageTemplateFile(
+        'attachdocument_templates/wizard_wrappedform.pt')
+    step_name = 'choose_client'
 
     @z3c.form.button.buttonAndHandler(_(u'button_cancel', default=u'Cancel'))
     def handle_cancel(self, action):
@@ -100,10 +142,16 @@ class IChooseDossierSchema(IChooseClientSchema):
         )
 
 
-class ChooseDossierForm(z3c.form.form.Form):
+class ChooseDossierForm(z3c.form.form.Form, WizardFormMixin):
     fields = z3c.form.field.Fields(IChooseDossierSchema)
+    fields['source_dossier'].widgetFactory[INPUT_MODE] = AutocompleteFieldWidget
+
     label = _(u'title_attach_document_form', u'Attach document')
     ignoreContext = True
+
+    template = ViewPageTemplateFile(
+        'attachdocument_templates/wizard_wrappedform.pt')
+    step_name = 'choose_dossier'
 
     def updateWidgets(self):
         super(ChooseDossierForm, self).updateWidgets()
@@ -155,10 +203,16 @@ class IChooseDocumentSchema(IChooseDossierSchema):
 
 
 
-class ChooseDocumentForm(z3c.form.form.Form):
+class ChooseDocumentForm(z3c.form.form.Form, WizardFormMixin):
     fields = z3c.form.field.Fields(IChooseDocumentSchema)
+    # fields['source_document'].widgetFactory[INPUT_MODE] = AutocompleteFieldWidget
+
     label = _(u'title_attach_document_form', u'Attach document')
     ignoreContext = True
+
+    template = ViewPageTemplateFile(
+        'attachdocument_templates/wizard_wrappedform.pt')
+    step_name = 'choose_document'
 
     def updateWidgets(self):
         super(ChooseDocumentForm, self).updateWidgets()
