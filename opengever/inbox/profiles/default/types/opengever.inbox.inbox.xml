@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <object name="opengever.inbox.inbox" meta_type="Dexterity FTI"
-        i18n:domain="opengever.dossier" xmlns:i18n="http://xml.zope.org/namespaces/i18n">
+        i18n:domain="opengever.inbox" xmlns:i18n="http://xml.zope.org/namespaces/i18n">
 
   <!-- Basic metadata -->
   <property name="title" i18n:translate="">Inbox</property>

@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2010-04-08 11:46+0000\n"
+"POT-Creation-Date: 2010-11-17 08:10+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,17 +17,21 @@ msgstr ""
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: opengever.inbox\n"
 
+#: ./opengever/inbox/profiles/default/types/opengever.inbox.inbox.xml
+msgid "Inbox"
+msgstr ""
+
 #. Default: "Common"
-#: opengever.inbox/opengever/inbox/inbox.py:13
+#: ./opengever/inbox/inbox.py:14
 msgid "fieldset_common"
 msgstr ""
 
-#: opengever.inbox/opengever/inbox/inbox.py:21
+#: ./opengever/inbox/inbox.py:22
 msgid "help_inbox_group"
 msgstr ""
 
 #. Default: "Inbox Group"
-#: opengever.inbox/opengever/inbox/inbox.py:20
+#: ./opengever/inbox/inbox.py:21
 msgid "label_inbox_group"
 msgstr ""
 
