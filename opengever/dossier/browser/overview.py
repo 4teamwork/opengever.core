@@ -8,6 +8,9 @@ from zope.component import getUtility
 
 
 class DossierOverview(grok.View, OpengeverTab):
+
+    show_searchform = False
+
     grok.context(IDossierMarker)
     grok.name('tabbedview_view-overview')
     grok.template('overview')
