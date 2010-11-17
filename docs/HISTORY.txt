@@ -19,7 +19,7 @@ Changelog
 * Moved tentacle-documents-of-dossier-json from opengever.octopus.tentacle
   [11.08.2010, jbaumann]
 
-* Issue #518 "Änderungen anzeigen" muss bei einem ausgecheckten Dokument ausgeblendet werden (führt zu Fehlermeldung)
+* Issue #518 "aenderungen anzeigen" muss bei einem ausgecheckten Dokument ausgeblendet werden (fuehrt zu Fehlermeldung)
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/518/
   [20.04.2010, jinfanger]
 
@@ -32,7 +32,7 @@ Changelog
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/435
   [03.03.2010, jbaumann]
   
-* Issue #491 Optimierungsmöglichkeiten für File Preview
+* Issue #491 Optimierungsmoeglichkeiten fuer File Preview
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/491
   [02.03.2010, jbaumann]
   
@@ -55,7 +55,7 @@ Changelog
 * Target release changed to 1.0a1
   [05.01.2010, jbaumann]
   
-* Issue #306: Darstellung "Historie" bei Dokument aufräumen.
+* Issue #306: Darstellung "Historie" bei Dokument aufraeumen.
   [18.12.2009, jbaumann]
 
 * Issue #273: Dossier: Reiter Dokumente, Spalte "Ausgecheckt"
@@ -83,19 +83,19 @@ Changelog
 * Issue #132: Dokument sollten nicht in den Home Folder ausgecheckt werden
   [12.11.2009, jbaumann]
 
-* Issue #36: Dokument: External Editor für Dokument-Datei
+* Issue #36: Dokument: External Editor fuer Dokument-Datei
   [11.11.2009, jbaumann]
 
-* Issue #36: Dokument: External Editor für Dokument-Datei
+* Issue #36: Dokument: External Editor fuer Dokument-Datei
   [11.11.2009, pgross]
 
-* Issue #120: RepositoryFolder übersetzen
+* Issue #120: RepositoryFolder uebersetzen
   [11.11.2009, jbaumann]
 
 * Issue #119: Action "Mit externer Anwendung bearbeiten" nur bei Document anzeigen
   [11.11.2009, jbaumann]
 
-* Übersetzungen aktualisiert
+* uebersetzungen aktualisiert
   [11.11.2009, jbaumann]
 
 * Issue #33: Checkout / Checkin
@@ -106,25 +106,25 @@ Changelog
   [09.11.2009, jbaumann]
 
 * Issue #95: EIn Dokument hat drei Datumsfelder: Eingang / Dokument / Ausgang
-  Datum-Felder in Dokument ergänzt und übersetzt.
+  Datum-Felder in Dokument ergaenzt und uebersetzt.
   [09.11.2009]
 
 * Issue #33: Checkout / Checkin
-  CheckinCheckoutManager implementiert, welcher die Vorgänge kontrolliert
+  CheckinCheckoutManager implementiert, welcher die Vorgaenge kontrolliert
   Checkout implementiert
   Cancel action implementiert
   [07.11.2009, jbaumann]
 
 * Issue #33: Checkout / Checkin
-  Ablauf für Checkout implementiert (action, formular, events)
-  Ablauf für Checkin implementiert (action, formular, events)
+  Ablauf fuer Checkout implementiert (action, formular, events)
+  Ablauf fuer Checkin implementiert (action, formular, events)
   Eigentlicher Checkout / in fehlt noch, da plone.stagingbehavior noch nicht fertig
   [07.11.2009, jbaumann]
 
 * Issue #98: Document: Creator fehlt
   [06.11.2009, jbaumann]
 
-* Issue #65: Volltextsuche für Office Dokumente einbauen
+* Issue #65: Volltextsuche fuer Office Dokumente einbauen
   [28.10.2009, jbaumann]
 
 * Added misssing actions for staging
@@ -144,7 +144,7 @@ Changelog
 * Added some translations for Issue #40
   [19.10.2009, jbaumann]
 
-* Issue #40: Versand von E-Mails über OpenGever mit Dokument-Attachment
+* Issue #40: Versand von E-Mails ueber OpenGever mit Dokument-Attachment
   Added Support for sending multiple objects as email-attachments
   The folder_content tab can be used for selecting multiple objects
   [19.10.2009, jbaumann]
