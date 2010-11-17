@@ -56,6 +56,7 @@ class Contacts(OpengeverCatalogListingTab):
     sort_on = 'lastname'
     sort_order=''
 
+    show_selects= False
     enabled_actions = []
     major_actions = []
     
