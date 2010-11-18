@@ -27,8 +27,11 @@ class LDAPSourceSection(object):
         
         #iterate over the users in the ldap_userfolder
         for uid in ldap_folder.getUserIds():
-            user = ldap_folder.getUserById(uid)
-
+            try:
+                user = ldap_folder.getUserById(uid)
+            except UnicodeDecodeError:
+                print "The User with the uid %s can't be imported (UnicodeDecodeError)" % uid
+            
             temp = {}
             for old_k, new_k in self.mapping.items():
                 v = user.getProperty(old_k)
