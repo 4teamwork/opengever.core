@@ -15,7 +15,7 @@ Das Einrichten der Datenbank und des Users kann ueber das SQL-Script gemacht wer
 $ cd src/opengever.ogds.mysql/opengever/ogds/mysql/
 $ mysql -uroot -p < create_database.sql
 
-Site mandant1ae
+Site mandant1
 -------------
 Neue Plone-Site mandant1 erstellen (Sollte dann unter http://localhost:8080/mandant1 erreichbar sein)
 mandant1: Import opengever.policy.base
