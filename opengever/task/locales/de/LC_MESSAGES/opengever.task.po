@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2010-10-29 13:23+0000\n"
+"POT-Creation-Date: 2010-11-18 16:01+0000\n"
 "PO-Revision-Date: 2010-10-11 12:47+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -12,25 +12,9 @@ msgstr ""
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: opengever.task\n"
 
-#: ./opengever/task/actions/addlocalroles.py:110
-msgid "Add Local Roles Action"
-msgstr "Berechtigungen hinzufügen"
-
-#: ./opengever/task/actions/addlocalroles.py:48
-msgid "Add local roles for object: ${object_roles}, related items: ${related_items_roles}, parent: ${parent_roles}"
-msgstr "Rollen auf Objekt setzen: ${object_roles}, related items: ${related_items_roles}, parent: ${parent_roles}"
-
-#: ./opengever/task/actions/addlocalroles.py:111
-msgid "Add local roles to all related items for the 'responsible' user."
-msgstr "Lokale Rollen auf allen related-items für den Verantwortlichen Benutzer setzen."
-
-#: ./opengever/task/response.py:402
+#: ./opengever/task/response.py:401
 msgid "Changes saved to response id ${response_id}."
 msgstr "Änderungen an der Antwort ${response_id} wurden gespeichert"
-
-#: ./opengever/task/actions/addlocalroles.py:112
-msgid "Configure element"
-msgstr "Element konfigurieren"
 
 #: ./opengever/task/response_templates/responseview.pt:26
 msgid "Delete"
@@ -40,19 +24,15 @@ msgstr "Löschen"
 msgid "Edit"
 msgstr "Bearbeiten"
 
-#: ./opengever/task/actions/addlocalroles.py:124
-msgid "Edit Local Roles Action"
-msgstr "Lokale rollen bearbeiten"
-
-#: ./opengever/task/response.py:287
+#: ./opengever/task/response.py:286
 msgid "Issue state"
 msgstr "Status"
 
-#: ./opengever/task/response.py:430
+#: ./opengever/task/response.py:429
 msgid "No response selected for removal."
 msgstr "Es wurde keine Antwort fürs Löschen selektiert"
 
-#: ./opengever/task/response.py:393
+#: ./opengever/task/response.py:392
 msgid "No response selected for saving."
 msgstr "Es wurde keine Antwort fürs Speichern selektiert"
 
@@ -60,23 +40,11 @@ msgstr "Es wurde keine Antwort fürs Speichern selektiert"
 msgid "No response selected."
 msgstr "Kein Antwort selektiert"
 
-#: ./opengever/task/actions/addlocalroles.py:20
-msgid "Object Roles"
-msgstr "Objekt Rollen"
-
-#: ./opengever/task/actions/addlocalroles.py:30
-msgid "Parent Roles"
-msgstr "Rollen auf Parent"
-
-#: ./opengever/task/actions/addlocalroles.py:25
-msgid "Related Items Roles"
-msgstr "Rollen auf related Items"
-
-#: ./opengever/task/response.py:452
+#: ./opengever/task/response.py:451
 msgid "Removed response id ${response_id}."
 msgstr "Antwort ${response_id} gelöscht"
 
-#: ./opengever/task/response.py:445
+#: ./opengever/task/response.py:444
 msgid "Response id ${response_id} does not exist so it cannot be removed."
 msgstr "Antowrt ${response_id} existiert nicht und konnte deshalb nicht gelöscht werden"
 
@@ -84,7 +52,7 @@ msgstr "Antowrt ${response_id} existiert nicht und konnte deshalb nicht gelösch
 msgid "Response id ${response_id} does not exist."
 msgstr "Antwort ${response_id} exisitert nicht"
 
-#: ./opengever/task/response.py:437
+#: ./opengever/task/response.py:436
 msgid "Response id ${response_id} is no integer so it cannot be removed."
 msgstr "Antwort id ${response_id} ist keine Zahl und konnte deshalb nicht gelöscht werden"
 
@@ -100,15 +68,11 @@ msgstr "Unteraufgabe"
 msgid "Task"
 msgstr "Aufgabe"
 
-#: ./opengever/task/actions/addlocalroles.py:21
-msgid "The local roles to add."
-msgstr "Die lokalen Rollen"
-
-#: ./opengever/task/response.py:424
+#: ./opengever/task/response.py:423
 msgid "You are not allowed to delete responses."
 msgstr "Sie haben keine Berechtigung Antworten zu löschen"
 
-#: ./opengever/task/response.py:387
+#: ./opengever/task/response.py:386
 msgid "You are not allowed to edit responses."
 msgstr "Sie haben keine Berechtigung Antworten zu editieren"
 
@@ -117,23 +81,33 @@ msgstr "Sie haben keine Berechtigung Antworten zu editieren"
 msgid "add"
 msgstr "Hinzufügen"
 
+#. Default: "2. Choose document"
+#: ./opengever/task/browser/attachdocument.py:35
+msgid "attachdocument_step_choose_document"
+msgstr "2. Dokument wählen"
+
+#. Default: "1. Choose dossier"
+#: ./opengever/task/browser/attachdocument.py:32
+msgid "attachdocument_step_choose_dossier"
+msgstr "1. Dossier wählen"
+
 #. Default: "last modified"
 #: ./opengever/task/viewlets/byline.pt:35
 msgid "box_last_modified"
 msgstr "zuletzt verändert"
 
 #. Default: "Attach"
-#: ./opengever/task/attachdocument.py:172
+#: ./opengever/task/browser/attachdocument.py:229
 msgid "button_attach"
 msgstr "Anhängen"
 
 #. Default: "Cancel"
-#: ./opengever/task/attachdocument.py:47
+#: ./opengever/task/browser/attachdocument.py:178
 msgid "button_cancel"
 msgstr "Abbrechen"
 
 #. Default: "Continue"
-#: ./opengever/task/attachdocument.py:51
+#: ./opengever/task/browser/attachdocument.py:167
 #: ./opengever/task/browser/successor.py:58
 msgid "button_continue"
 msgstr "Weiter"
@@ -144,12 +118,12 @@ msgid "button_copy"
 msgstr "Kopieren"
 
 #. Default: "Cancel"
-#: ./opengever/task/response.py:304
+#: ./opengever/task/response.py:303
 msgid "cancel"
 msgstr "Abbrechen"
 
 #. Default: "Containing Tasks:"
-#: ./opengever/task/task_templates/view.pt:71
+#: ./opengever/task/task_templates/view.pt:73
 msgid "containing_task"
 msgstr "Übergeordnete Aufgabe"
 
@@ -158,7 +132,7 @@ msgid "date_of_completion"
 msgstr "Erledigungsdatum"
 
 #. Default: "Documents:"
-#: ./opengever/task/task_templates/view.pt:106
+#: ./opengever/task/task_templates/view.pt:108
 msgid "documents"
 msgstr "Dokumente"
 
@@ -192,28 +166,28 @@ msgid "help_deadline"
 msgstr "Tragen sie ein Datum ein, bis wann die Aufgabe erledigt werden muss"
 
 #. Default: "Cost in CHF"
-#: ./opengever/task/task.py:162
+#: ./opengever/task/task.py:166
 #, fuzzy
 msgid "help_effectiveCost"
 msgstr "Kosten in CHF"
 
 #. Default: "Duration in h"
-#: ./opengever/task/task.py:156
+#: ./opengever/task/task.py:160
 msgid "help_effectiveDuration"
 msgstr "Dauer in h"
 
 #. Default: "Cost in CHF"
-#: ./opengever/task/task.py:150
+#: ./opengever/task/task.py:154
 #, fuzzy
 msgid "help_expectedCost"
 msgstr "Kosten in CHF"
 
 #. Default: "Duration in h"
-#: ./opengever/task/task.py:144
+#: ./opengever/task/task.py:148
 msgid "help_expectedDuration"
 msgstr "Dauer in h"
 
-#: ./opengever/task/task.py:138
+#: ./opengever/task/task.py:142
 msgid "help_expectedStartOfWork"
 msgstr ""
 
@@ -221,7 +195,7 @@ msgstr ""
 msgid "help_issuer"
 msgstr ""
 
-#: ./opengever/task/task.py:169
+#: ./opengever/task/task.py:173
 msgid "help_predecessor"
 msgstr ""
 
@@ -238,17 +212,13 @@ msgstr "Wählen Sie die verantwortliche Person aus, die dem oben gewählten Mand
 msgid "help_responsible_client"
 msgstr "Wählen Sie zuerst den Mandant des Verantwortlichen, anschliessend den Verantwortlichen."
 
-#: ./opengever/task/attachdocument.py:36
-msgid "help_source_client"
-msgstr ""
-
 #. Default: "Select a document"
-#: ./opengever/task/attachdocument.py:151
+#: ./opengever/task/browser/attachdocument.py:210
 msgid "help_source_document"
 msgstr "Wählen Sie ein Dokument aus dem vorgängig gewählten Dossier"
 
 #. Default: "Select a source dossier"
-#: ./opengever/task/attachdocument.py:96
+#: ./opengever/task/browser/attachdocument.py:148
 msgid "help_source_dossier"
 msgstr "Wählen Sie ein Dossier von ihrem Mandanten"
 
@@ -323,12 +293,12 @@ msgid "label_edit_response_not_allowed"
 msgstr "Sie sind nicht berechtigt diese Antwort zu löschen"
 
 #. Default: "effective cost"
-#: ./opengever/task/task.py:161
+#: ./opengever/task/task.py:165
 msgid "label_effectiveCost"
 msgstr "Effektive Kosten"
 
 #. Default: "effective duration"
-#: ./opengever/task/task.py:155
+#: ./opengever/task/task.py:159
 msgid "label_effectiveDuration"
 msgstr "Effektive Dauer"
 
@@ -338,17 +308,17 @@ msgid "label_enter_response"
 msgstr "Bitte tragen sie ihre Antwort unten ein"
 
 #. Default: "expected cost"
-#: ./opengever/task/task.py:149
+#: ./opengever/task/task.py:153
 msgid "label_expectedCost"
 msgstr "Geschätzte Kosten"
 
 #. Default: "Expected duration"
-#: ./opengever/task/task.py:143
+#: ./opengever/task/task.py:147
 msgid "label_expectedDuration"
 msgstr "Geschätzte Dauer"
 
 #. Default: "Start with work"
-#: ./opengever/task/task.py:137
+#: ./opengever/task/task.py:141
 msgid "label_expectedStartOfWork"
 msgstr "Beginn der Arbeit"
 
@@ -358,12 +328,12 @@ msgid "label_issuer"
 msgstr "Auftraggeber"
 
 #. Default: "Last change"
-#: ./opengever/task/task_templates/view.pt:49
+#: ./opengever/task/task_templates/view.pt:48
 msgid "label_last_modified"
 msgstr "Letzte Änderung"
 
 #. Default: "Predecessor"
-#: ./opengever/task/task.py:168
+#: ./opengever/task/task.py:172
 msgid "label_predecessor"
 msgstr "Vorgänger"
 
@@ -393,18 +363,13 @@ msgstr "Verantwortlicher"
 msgid "label_return_to_issue"
 msgstr "Zurück zur Aufgabe"
 
-#. Default: "Client"
-#: ./opengever/task/attachdocument.py:34
-msgid "label_source_client"
-msgstr "Mandant"
-
 #. Default: "Document"
-#: ./opengever/task/attachdocument.py:150
+#: ./opengever/task/browser/attachdocument.py:209
 msgid "label_source_document"
 msgstr "Dokument"
 
 #. Default: "Dossier"
-#: ./opengever/task/attachdocument.py:95
+#: ./opengever/task/browser/attachdocument.py:147
 msgid "label_source_dossier"
 msgstr "Dossier"
 
@@ -445,7 +410,7 @@ msgid "label_transition"
 msgstr "Aktion"
 
 #. Default: "State"
-#: ./opengever/task/task_templates/view.pt:45
+#: ./opengever/task/task_templates/view.pt:44
 msgid "label_workflow_state"
 msgstr "Status"
 
@@ -458,7 +423,7 @@ msgid "mytasks"
 msgstr "Meine Aufgaben"
 
 #. Default: "Predecessor Task:"
-#: ./opengever/task/task_templates/view.pt:93
+#: ./opengever/task/task_templates/view.pt:95
 msgid "predecessor"
 msgstr "Vorgängeraufgabe"
 
@@ -473,12 +438,12 @@ msgid "responses"
 msgstr "Antworten:"
 
 #. Default: "Subtasks:"
-#: ./opengever/task/task_templates/view.pt:82
+#: ./opengever/task/task_templates/view.pt:84
 msgid "subtasks"
 msgstr "Unteraufgabe"
 
 #. Default: "Successor Tasks:"
-#: ./opengever/task/task_templates/view.pt:99
+#: ./opengever/task/task_templates/view.pt:101
 msgid "successors"
 msgstr "Folgeaufgaben"
 
@@ -498,9 +463,9 @@ msgid "time_expired"
 msgstr "Abgelaufen"
 
 #. Default: "Attach document"
-#: ./opengever/task/attachdocument.py:44
+#: ./opengever/task/browser/attachdocument.py:160
 msgid "title_attach_document_form"
-msgstr "Dokument aus Heimmandant anhängen"
+msgstr "Dokument aus eigenem Mandant anhängen"
 
 #. Default: "Copy related documents"
 #: ./opengever/task/browser/copy_related_documents.py:74
@@ -521,10 +486,5 @@ msgstr "Antwort bearbeiten"
 #: ./opengever/task/templates/edit_response.pt:30
 msgid "title_error_no_response"
 msgstr "Fehler: keine Antworten zum editieren gefunden"
-
-#. Default: "You are not assigned to another home client from where you could copy a document."
-#: ./opengever/task/attachdocument.py:77
-msgid "warning_attach_document_no_other_home_client"
-msgstr "Sie sind keinem anderen Mandanten zugewiesen. Sie können von nirgendwo Dokumente kopieren."
 
 
