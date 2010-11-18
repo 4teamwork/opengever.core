@@ -80,7 +80,7 @@
             visible="True"
             title="Attach remote document"
             category="folder_factories"
-            url_expr="string:${object_url}/choose_source_client"
+            url_expr="string:${object_url}/@@choose_source_dossier"
             icon_expr="string:${object_url}/icon_funktion_hochladen.gif"
             condition_expr="">
         <permission value="Add portal content"/>
