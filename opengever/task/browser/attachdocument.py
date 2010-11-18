@@ -4,7 +4,6 @@ from any context of a foreign client into a existing task.
 """
 
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
-from Products.statusmessages.interfaces import IStatusMessage
 from five import grok
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.ogds.base.interfaces import ITransporter
@@ -13,18 +12,14 @@ from opengever.task.task import ITask
 from plone.directives import form
 from plone.z3cform import layout
 from z3c.form.interfaces import HIDDEN_MODE
+from z3c.form.interfaces import IFieldWidget
+from z3c.form.interfaces import INPUT_MODE
+from z3c.form.widget import FieldWidget
 from zope import schema
 from zope.component import getUtility
-from zope.schema.interfaces import IVocabularyFactory
+from zope.interface import implementer
 import urllib
 import z3c.form
-from plone.formwidget.autocomplete.widget import AutocompleteFieldWidget
-from z3c.form.interfaces import INPUT_MODE
-from zExceptions import Redirect
-
-
-class NoItemsSelected(Exception):
-    pass
 
 
 class WizardFormMixin(object):
@@ -61,6 +56,49 @@ class WizardFormMixin(object):
         """Sets the client id in the request for making the dossier / document
         vocabularies work.
         """
+
+        task.REQUEST.set('client', task.responsible_client)
+
+
+# ------------------- SPECIAL AUTOCOMPLETE WIDGET --------------------------
+
+from plone.formwidget.autocomplete.widget import AutocompleteSelectionWidget
+
+class ExtendedAutocompleteSelectionWidget(AutocompleteSelectionWidget):
+    """Make it possible to add custom url parameters to the source url.
+    """
+
+    def custom_url_parameters(self):
+        return ''
+
+    def js(self):
+
+        form_url = self.request.getURL()
+
+        form_prefix = self.form.prefix + self.__parent__.prefix
+        widget_name = self.name[len(form_prefix):]
+
+        url = "%s/++widget++%s/@@autocomplete-search%s" % (
+            form_url, widget_name, self.custom_url_parameters())
+
+        js_callback = self.js_callback_template % dict(id=self.id,
+                                                       name=self.name,
+                                                       klass=self.klass,
+                                                       title=self.title,
+                                                       termCount=len(self.terms))
+
+        return self.js_template % dict(id=self.id,
+                                       url=url,
+                                       minLength=self.minLength,
+                                       js_callback=js_callback,
+                                       js_extra=self.js_extra())
+
+
+class DossierAutocompleteSelectionWidget(ExtendedAutocompleteSelectionWidget):
+    """Autocomplete widget for selecting a dossier from a specific client.
+    """
+
+    def custom_url_parameters(self):
         # to which clients is the user assigned?
         info = getUtility(IContactInformation)
         clients = info.get_assigned_clients()
@@ -68,14 +106,35 @@ class WizardFormMixin(object):
 
         # is the responsible client of the task one of the users assigned
         # tasks? it should be!
-        if task.responsible_client not in client_ids:
-            msg = _(u'error_not_assigned_to_responsible_client',
-                    default=u'You are not assigned to the responsible '
-                    'client of this task.')
-            IStatusMessage(task.REQUEST).addStatusMessage(msg)
-            raise Redirect(self.request.RESPONSE.redirect('.'))
+        if self.context.responsible_client not in client_ids:
+            return ''
+        else:
+            return '?client=%s' % self.context.responsible_client
 
-        task.REQUEST.set('client', task.responsible_client)
+
+@implementer(IFieldWidget)
+def DossierAutocompleteFieldWidget(field, request):
+    return FieldWidget(field, DossierAutocompleteSelectionWidget(request))
+
+
+class DocumentAutocompleteSelectionWidget(DossierAutocompleteSelectionWidget):
+    """Autocomplete widget for selecting a document from a dossier
+    within a specific client.
+    """
+
+    def custom_url_parameters(self):
+        params = super(DocumentAutocompleteSelectionWidget,
+                       self).custom_url_parameters()
+        if not params:
+            return ''
+        else:
+            dossier = self.context.REQUEST.get('form.widgets.source_dossier')
+            return '%s&dossier_path=%s' % (params, dossier)
+
+
+@implementer(IFieldWidget)
+def DocumentAutocompleteFieldWidget(field, request):
+    return FieldWidget(field, DocumentAutocompleteSelectionWidget(request))
 
 
 # ------------------- CHOSE DOSSIER --------------------------
@@ -95,7 +154,8 @@ class IChooseDossierSchema(form.Schema):
 
 class ChooseDossierForm(z3c.form.form.Form, WizardFormMixin):
     fields = z3c.form.field.Fields(IChooseDossierSchema)
-    # fields['source_dossier'].widgetFactory[INPUT_MODE] = AutocompleteFieldWidget
+    fields['source_dossier'].widgetFactory[INPUT_MODE] = \
+        DossierAutocompleteFieldWidget
 
     label = _(u'title_attach_document_form', u'Attach document')
     ignoreContext = True
@@ -103,14 +163,6 @@ class ChooseDossierForm(z3c.form.form.Form, WizardFormMixin):
     template = ViewPageTemplateFile(
         'attachdocument_templates/wizard_wrappedform.pt')
     step_name = 'choose_dossier'
-
-    def update(self):
-        self.set_client_id(self.context)
-        return super(ChooseDossierForm, self).update()
-
-    @z3c.form.button.buttonAndHandler(_(u'button_cancel', default=u'Cancel'))
-    def handle_cancel(self, action):
-        return self.request.RESPONSE.redirect('.')
 
     @z3c.form.button.buttonAndHandler(_(u'button_continue',
                                         default=u'Continue'))
@@ -122,6 +174,15 @@ class ChooseDossierForm(z3c.form.form.Form, WizardFormMixin):
             target = self.context.absolute_url() + \
                 '/@@choose_source_document?' + data
             return self.request.RESPONSE.redirect(target)
+
+    @z3c.form.button.buttonAndHandler(_(u'button_cancel', default=u'Cancel'))
+    def handle_cancel(self, action):
+        return self.request.RESPONSE.redirect('.')
+
+    def update(self):
+        self.request.set('client', self.context.responsible_client)
+        super(ChooseDossierForm, self).update()
+
 
 
 class ChooseDossierView(layout.FormWrapper, grok.CodeView):
@@ -155,7 +216,8 @@ class IChooseDocumentSchema(IChooseDossierSchema):
 
 class ChooseDocumentForm(z3c.form.form.Form, WizardFormMixin):
     fields = z3c.form.field.Fields(IChooseDocumentSchema)
-    # fields['source_document'].widgetFactory[INPUT_MODE] = AutocompleteFieldWidget
+    fields['source_document'].widgetFactory[INPUT_MODE] = \
+        DocumentAutocompleteFieldWidget
 
     label = _(u'title_attach_document_form', u'Attach document')
     ignoreContext = True
@@ -163,18 +225,6 @@ class ChooseDocumentForm(z3c.form.form.Form, WizardFormMixin):
     template = ViewPageTemplateFile(
         'attachdocument_templates/wizard_wrappedform.pt')
     step_name = 'choose_document'
-
-    def update(self):
-        self.set_client_id(self.context)
-        return super(ChooseDocumentForm, self).update()
-
-    def updateWidgets(self):
-        super(ChooseDocumentForm, self).updateWidgets()
-        self.widgets['source_dossier'].mode = HIDDEN_MODE
-
-    @z3c.form.button.buttonAndHandler(_(u'button_cancel', default=u'Cancel'))
-    def handle_cancel(self, action):
-        return self.request.RESPONSE.redirect('.')
 
     @z3c.form.button.buttonAndHandler(_(u'button_attach', default=u'Attach'))
     def handle_attach(self, action):
@@ -196,6 +246,18 @@ class ChooseDocumentForm(z3c.form.form.Form, WizardFormMixin):
             trans.transport_from(self.context, cid, document)
             url = self.context.absolute_url()
             return self.request.RESPONSE.redirect(url)
+
+    @z3c.form.button.buttonAndHandler(_(u'button_cancel', default=u'Cancel'))
+    def handle_cancel(self, action):
+        return self.request.RESPONSE.redirect('.')
+
+    def update(self):
+        self.request.set('client', self.context.responsible_client)
+        return super(ChooseDocumentForm, self).update()
+
+    def updateWidgets(self):
+        super(ChooseDocumentForm, self).updateWidgets()
+        self.widgets['source_dossier'].mode = HIDDEN_MODE
 
 
 
