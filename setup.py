@@ -2,10 +2,11 @@ from setuptools import setup, find_packages
 import os
 
 version = open('opengever/policy/base/version.txt').read().strip()
+maintainer = 'Thomas Buchberger'
 
 setup(name='opengever.policy.base',
       version=version,
-      description="Basic policy for installing OpenGever without any client specific dependencies",
+      description="Basic policy for installing OpenGever without any client specific dependencies %s" % (maintainer),
       long_description=open("README.txt").read() + "\n" +
                        open(os.path.join("docs", "HISTORY.txt")).read(),
       # Get more strings from http://pypi.python.org/pypi?%3Aaction=list_classifiers
@@ -13,8 +14,8 @@ setup(name='opengever.policy.base',
         "Programming Language :: Python",
         ],
       keywords='',
-      author='Thomas Buchberger',
-      author_email='t.buchberger@4teamwork.ch',
+      author='%s, 4teamwork GmbH' % maintainer,
+      author_email='mailto:info@4teamwork.ch',
       url='http://www.4teamwork.ch',
       license='GPL',
       packages=find_packages(exclude=['ez_setup']),
