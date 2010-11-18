@@ -68,6 +68,10 @@ class WizardFormMixin(object):
         # is the responsible client of the task one of the users assigned
         # tasks? it should be!
         if task.responsible_client not in client_ids:
+            msg = _(u'error_not_assigned_to_responsible_client',
+                    default=u'You are not assigned to the responsible '
+                    'client.')
+            IStatusMessage(task.REQUEST).addStatusMessage(msg)
             raise ValueError('This user is not assigned to the repsponsible '
                              'client of this task.')
 
@@ -101,7 +105,10 @@ class ChooseDossierForm(z3c.form.form.Form, WizardFormMixin):
     step_name = 'choose_dossier'
 
     def update(self):
-        self.set_client_id(self.context)
+        try:
+            self.set_client_id(self.context)
+        except ValueError:
+            self.handle_cancel({})
         return super(ChooseDossierForm, self).update()
 
     @z3c.form.button.buttonAndHandler(_(u'button_cancel', default=u'Cancel'))
@@ -161,7 +168,10 @@ class ChooseDocumentForm(z3c.form.form.Form, WizardFormMixin):
     step_name = 'choose_document'
 
     def update(self):
-        self.set_client_id(self.context)
+        try:
+            self.set_client_id(self.context)
+        except ValueError:
+            self.handle_cancel({})
         return super(ChooseDocumentForm, self).update()
 
     def updateWidgets(self):
