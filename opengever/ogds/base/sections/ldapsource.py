@@ -2,7 +2,6 @@ import logging
 from zope.interface import classProvides, implements
 from collective.transmogrifier.interfaces import ISectionBlueprint
 from collective.transmogrifier.interfaces import ISection
-from collective.transmogrifier.utils import Expression
 
 
 class LDAPSourceSection(object):
@@ -14,7 +13,7 @@ class LDAPSourceSection(object):
         self.previous = previous
         self.logger = logging.getLogger(options['blueprint'])
         self.options = options
-        self.mapping = Expression(options['mapping'], transmogrifier, name, options)(self.previous)
+        #self.mapping = Expression(options['mapping'], transmogrifier, name, options)(self.previous)
 
     def __iter__(self):
 
@@ -33,9 +32,10 @@ class LDAPSourceSection(object):
                 print "The User with the uid %s can't be imported (UnicodeDecodeError)" % uid
             
             temp = {}
-            for old_k, new_k in self.mapping.items():
-                v = user.getProperty(old_k)
+
+            for attr in ldap_folder.getSchemaDict():
+                v = user.getProperty(attr.get('ldap_name'))
                 if isinstance(v, list):
                     v = v[0]
-                temp[new_k] = v.decode('utf-8')
+                temp[attr.get('public_name')] = v.decode('utf-8')
             yield temp
