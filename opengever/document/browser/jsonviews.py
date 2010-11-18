@@ -22,7 +22,6 @@ class DocumentsOfDossierAsJSONView(grok.CodeView):
             path=str(dossier),
             object_provides=IDocumentSchema.__identifier__,
             )
-        print dossier
         for brain in brains:
             data.append({
                     'path': str(brain.getPath())[len(site_path) + 1:],
