@@ -370,8 +370,18 @@ class DocumentInSelectedDossierVocabularyFactory(grok.GlobalUtility):
 
     def __call__(self, context):
         self.context = context
+        vocab = ContactsVocabulary.create_with_provider(
+            self.key_value_provider)
+        return vocab
+
+    def key_value_provider(self):
         request = getRequest()
-        terms = []
+
+        # if we are not logged in we are in the traversal and should not
+        # do anything...
+        user = AccessControl.getSecurityManager().getUser()
+        if user == AccessControl.SpecialUsers.nobody:
+            return
 
 
         info = getUtility(IContactInformation)
@@ -401,7 +411,4 @@ class DocumentInSelectedDossierVocabularyFactory(grok.GlobalUtility):
                 for doc in comm.get_documents_of_dossier(cid, dossier_path):
                     key = doc.get('path')
                     value = doc.get('title')
-                    terms.append(SimpleVocabulary.createTerm(key, key, value))
-        # XXX: remove sorting as soon as autocomplete widget is used
-        terms.sort(lambda a,b:cmp(a.title, b.title))
-        return SimpleVocabulary(terms)
+                    yield (key, value)
