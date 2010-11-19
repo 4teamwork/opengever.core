@@ -5,6 +5,9 @@ Changelog
 2.0a3
 -----
 
+* Copy documents to remote client: implemented wizard, using autocomplete now, fixed various smaller issues
+  [jbaumann]
+
 
 2.0a2
 -----
@@ -13,7 +16,7 @@ Changelog
 1.0a4
 -----
 
-* Workflow for dossiers moved to opengever.dossier. 
+* Workflow for dossiers moved to opengever.dossier.
   [01.10.2010, phabegger]
 
 * Updated missing and wrong German translations.
@@ -30,11 +33,11 @@ Changelog
 
 * Transporter was refactored: use new method `transport_to()`
   [15.03.2010, jbaumann]
-  
+
 * Using new vocabulary factory for transporter:
   opengever.octopus.tentacle.vocabulary.OpenHomeDossiersVocabularyFactory
   [12.03.2010, jbaumann]
-  
+
 * Issue #436 Workflow Erstellen eines Dokuments ab Vorlagen
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/436
   [02.02.2010, phgross]
@@ -44,24 +47,24 @@ Changelog
   uebersetzungen hinzugefuegt
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/486
   [01.03.2010, jbaumann]
-  
+
 * Issue #445 Kopieren von an Aufgaben angehaengten Dokumenten ("Ueberweisung", Beteiligung)
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/445
   [01.03.2010, jbaumann]
-  
+
 * Issue #480 Beteiligung am Dossier hinzufuegen sollte auch in "Aktionsleiste" moeglich sein nicht nur ueber das Menue "Aktionen"
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/480
   [25.02.2010, jbaumann]
-  
+
 * Do not use windows fonts in LaTeX
   [10.02.2010, jbaumann]
-  
+
 * Deckblatt PDF: Responsible mit ContactInformation utility generieren
   [10.02.2010, jbaumann]
-  
+
 * Uebersetzungen angepasst fuer Feld "former_reference"
   [03.02.2010, jbaumann]
-  
+
 
 1.0a3
 -----
@@ -69,7 +72,7 @@ Changelog
 * Issue #409: Verschieben eines Dossiers von einer Ordnungsposition unter eine andere
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/409
   [20.01.2010, jbaumann]
-  
+
 
 1.0a2
 -----
@@ -77,10 +80,10 @@ Changelog
 * Issue #282: Kontakte-Webservice fuer OGDS
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/282
   [13.01.2010, jbaumann]
-  
+
 * Fixed participants add form, which didn't work with dexterity 1.0a3
   [12.01.2010, jbaumann]
-  
+
 
 1.0a1
 -----
