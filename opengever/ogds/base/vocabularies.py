@@ -191,26 +191,27 @@ class EmailContactsAndUsersVocabularyFactory(grok.GlobalUtility):
         value = Fullname [address], eg. Hugo Boss [hugo@boss.ch]
         """
 
-        # XXX
         info = getUtility(IContactInformation)
-        ids = [(user.userid, user.active) for user in info.list_users()]
-        ids.extend([(contact.contactid, True) for contact
+        ids = [(user, user.active) for user in info.list_users()]
+        ids.extend([(contact, True) for contact
                     in info.list_contacts()])
 
-        for userid, active in ids:
-            email = info.get_email(userid)
+        for contact_or_user, active in ids:
+            email = info.get_email(contact_or_user)
             if email != None:
                 if not active:
                     self.hidden_terms.append(email)
                 yield(email,
-                      info.describe(userid, with_email=True))
+                      info.describe(contact_or_user,
+                                    with_email=True))
 
-                email2 = info.get_email2(userid)
+                email2 = info.get_email2(contact_or_user)
                 if email2 != None:
                     if not active:
                         self.hidden_terms.append(email2)
                     yield(email2,
-                          info.describe(userid, with_email2=True))
+                          info.describe(contact_or_user,
+                                        with_email2=True))
 
 
 class ClientsVocabularyFactory(grok.GlobalUtility):

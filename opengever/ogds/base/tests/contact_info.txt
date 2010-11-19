@@ -119,7 +119,11 @@ User tests:
 
     >>> info.get_email('hugo.boss')
     u'hugo@boss.local'
+    >>> info.get_email(info.get_user('hugo.boss'))
+    u'hugo@boss.local'
     >>> info.get_email2('hugo.boss')
+    u'hugo@private.ch'
+    >>> info.get_email2(info.get_user('hugo.boss'))
     u'hugo@private.ch'
 
     >>> info.get_profile_url('hugo.boss')
@@ -157,6 +161,10 @@ Contacts tests:
     'Kaufmann Sandra (sandra.kaufmann@test.ch)'
     >>> info.describe(contacts[0])
     'Kaufmann Sandra (sandra.kaufmann@test.ch)'
+    >>> info.get_email(u'contact:kaufmann-sandra')
+    'sandra.kaufmann@test.ch'
+    >>> info.get_email(info.get_contact('contact:kaufmann-sandra'))
+    'sandra.kaufmann@test.ch'
 
 
 Inboxes tests:
