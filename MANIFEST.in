@@ -1,2 +1,6 @@
 recursive-include opengever *
-global-exclude *pyc
+recursive-include docs *
+include *.txt
+global-exclude *.pyc
+global-exclude *.mo
+global-exclude ._*
