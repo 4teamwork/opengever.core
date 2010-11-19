@@ -5,6 +5,9 @@ Changelog
 2.0a3
 -----
 
+* Successor wizard form: Added cancel button
+  [jbaumann]
+
 
 2.0a2
 -----

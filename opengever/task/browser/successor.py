@@ -109,6 +109,10 @@ class SuccessorTaskForm(Form):
 
                 return self.request.RESPONSE.redirect(target_url)
 
+    @buttonAndHandler(_(u'button_cancel', default=u'Cancel'))
+    def handle_cancel(self, action):
+        return self.request.RESPONSE.redirect('.')
+
 
 
     def get_documents(self):
