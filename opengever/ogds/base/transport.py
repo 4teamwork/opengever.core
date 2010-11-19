@@ -3,8 +3,8 @@ from opengever.ogds.base.exceptions import TransportationError
 from opengever.ogds.base.interfaces import IDataCollector
 from opengever.ogds.base.interfaces import IObjectCreator
 from opengever.ogds.base.interfaces import ITransporter
-from opengever.ogds.base.utils import remote_request, remote_json_request
 from opengever.ogds.base.utils import decode_for_json, encode_after_json
+from opengever.ogds.base.utils import remote_request, remote_json_request
 from plone.dexterity.interfaces import IDexterityFTI, IDexterityContent
 from plone.dexterity.utils import createContent, addContentToContainer
 from plone.dexterity.utils import iterSchemata
@@ -17,6 +17,7 @@ from zope.component import getUtility
 from zope.event import notify
 from zope.interface import Interface
 from zope.lifecycleevent import ObjectCreatedEvent
+from zope.lifecycleevent import ObjectModifiedEvent
 import DateTime
 import base64
 import datetime
@@ -101,6 +102,9 @@ class Transporter(grok.GlobalUtility):
         collectors = getAdapters((obj,), IDataCollector)
         for name, collector in collectors:
             collector.insert(data[name])
+        # let the object reindex by creating a modified event, which also
+        # runs stuff like globalindex, if needed.
+        notify(ObjectModifiedEvent(obj))
         return obj
 
     def _get_object_creator(self, portal_type):
@@ -172,7 +176,6 @@ class DexterityObjectCreator(grok.Adapter):
         obj = addContentToContainer(container,
                                     obj,
                                     checkConstraints=True)
-        obj.reindexObject()
         return obj
 
 
