@@ -204,7 +204,7 @@ msgstr ""
 #. Default: "Reference number"
 #: ./opengever/advancedsearch/advanced_search.py:126
 msgid "label_reference_number"
-msgstr "Artikelnummer"
+msgstr "Aktenzeichen"
 
 #. Default: "Responsible"
 #: ./opengever/advancedsearch/advanced_search.py:145

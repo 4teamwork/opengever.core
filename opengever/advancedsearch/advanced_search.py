@@ -1,3 +1,4 @@
+import urllib
 from five import grok
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone import PloneMessageFactory as PMF
@@ -14,6 +15,7 @@ from opengever.ogds.base.autocomplete_widget import AutocompleteFieldWidget
 from opengever.ogds.base.utils import get_client_id
 from opengever.task.util import getTaskTypeVocabulary
 from datetime import date
+from ftw.datepicker.widget import DatePickerFieldWidget
 
 @grok.provider(IContextSourceBinder)
 def get_possible_states(context):
@@ -280,15 +282,30 @@ class AdvancedSearchForm(directives_form.Form):
         =  radio.RadioFieldWidget
     fields['review_state'].widgetFactory[INPUT_MODE] \
         = checkbox.CheckBoxFieldWidget
-    
-    #fields['portal_type'].widget.addClass('blubb')
+
 
     ignoreContext = True
 
     def updateWidgets(self):
         self.context.REQUEST.set('client', get_client_id())
+        date_fields = [
+            'start_1',
+            'start_2',
+            'end_1',
+            'end_2',
+            'deadline_1',
+            'deadline_2',
+            'receipt_date_1',
+            'receipt_date_2',
+            'delivery_date_1',
+            'delivery_date_2',
+            'document_date_1',
+            'document_date_2',
+        ]
         
-        
+        for field in date_fields:
+            self.fields.get(field).widgetFactory[INPUT_MODE] = DatePickerFieldWidget
+
         super(AdvancedSearchForm, self).updateWidgets()
         for k,v in FIELD_MAPPING.items():
             for name in v:
@@ -301,7 +318,7 @@ class AdvancedSearchForm(directives_form.Form):
         if not errors:
             # create Parameters and url
             params = '/search?SearchableText=%s&portal_type=%s' % (
-                    data.get('searchableText'), data.get('portal_type'))
+                    data.get('searchableText', ''), data.get('portal_type', ''))
             for field in FIELD_MAPPING.get(
                     data.get('portal_type').replace('.','-')):
                 if data.get(field, None):
@@ -320,7 +337,7 @@ class AdvancedSearchForm(directives_form.Form):
                     elif field == 'trashed':
                         params = '%s&trashed:list:boolean=True&trashed:list:boolean=False' %(params)
                     else:
-                        params = '%s&%s=%s' %(params, field, data.get(field))
+                        params = '%s&%s=%s' %(params, field, urllib.quote(data.get(field)))
 
             params = params.replace('task_responsible', 'repsonsible')
 
