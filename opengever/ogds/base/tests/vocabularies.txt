@@ -398,7 +398,7 @@ Documents in selected dossier vocabulary
     ...                   name='opengever.ogds.base.DocumentInSelectedDossierVocabulary')
     >>> voc = fact(portal)
     >>> fterms(list(voc))
-    ['<Term op1/op2/dossier2/document-1:First Document>', '<Term op1/op2/dossier2/document-2:Second Document>']
+    [u'<Term op1/op2/dossier2/document-1:First Document>', u'<Term op1/op2/dossier2/document-2:Second Document>']
 
     >>> request.set('client', None)
     >>> request.set('dossier_path', None)
