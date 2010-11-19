@@ -1,4 +1,5 @@
 from Products.CMFCore.utils import getToolByName
+from collective.elephantvocabulary import wrap_vocabulary
 from five import grok
 from opengever.ogds.base.interfaces import IClientCommunicator
 from opengever.ogds.base.interfaces import IContactInformation
@@ -8,9 +9,7 @@ from zope.app.component.hooks import getSite, setSite
 from zope.component import getUtility
 from zope.globalrequest import getRequest
 from zope.schema.interfaces import IVocabularyFactory
-from zope.schema.vocabulary import SimpleVocabulary
 import AccessControl
-from collective.elephantvocabulary import wrap_vocabulary
 
 
 class UsersVocabularyFactory(grok.GlobalUtility):
