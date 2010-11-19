@@ -4,7 +4,4 @@
   <javascript cacheable="True" compression="safe" cookable="True" enabled="on"
               expression="" id="++resource++opengever.tabbedview-resources/jquery.tooltip.min.js"
               inline="False"/>
-  <javascript cacheable="True" compression="safe" cookable="True" enabled="on"
-              expression="" id="++resource++opengever.tabbedview-resources/tabbedview.js"
-              inline="False"/>
 </object>
