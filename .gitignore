@@ -2,3 +2,10 @@
 *.egg-info
 *.mo
 *.pyc
+.installed.cfg
+.mr.developer.cfg
+bin/
+buildout.cfg
+develop-eggs/
+parts/
+src/
