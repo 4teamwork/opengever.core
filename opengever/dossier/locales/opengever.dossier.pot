@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2010-11-12 16:42+0000\n"
+"POT-Creation-Date: 2010-11-19 10:03+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -41,7 +41,7 @@ msgstr ""
 msgid "No Mail Address"
 msgstr ""
 
-#: ./opengever/dossier/archive.py:30
+#: ./opengever/dossier/archive.py:31
 msgid "Not all required fields are filled"
 msgstr ""
 
@@ -60,7 +60,7 @@ msgstr ""
 msgid "Templates"
 msgstr ""
 
-#: ./opengever/dossier/archive.py:251
+#: ./opengever/dossier/archive.py:253
 msgid "The End that is required, also if only closing is selected"
 msgstr ""
 
@@ -68,11 +68,11 @@ msgstr ""
 msgid "The Files you selected are bigger than the maximal Size"
 msgstr ""
 
-#: ./opengever/dossier/archive.py:260
+#: ./opengever/dossier/archive.py:262
 msgid "The dossier was already resolved"
 msgstr ""
 
-#: ./opengever/dossier/archive.py:53
+#: ./opengever/dossier/archive.py:54
 msgid "The given end date is older than the end date                             of the youngest subdossier(${number})"
 msgstr ""
 
@@ -84,17 +84,12 @@ msgstr ""
 msgid "The start or end date is invalid"
 msgstr ""
 
-#: ./opengever/dossier/archive.py:111
+#: ./opengever/dossier/archive.py:112
 msgid "When the Action give filing number is selected,                     all fields are required."
 msgstr ""
 
 #: ./opengever/dossier/browser/send_document.py:89
 msgid "You have to select a intern                             or enter a extern mail-addres"
-msgstr ""
-
-#. Default: "last modified"
-#: ./opengever/dossier/viewlets/templatedossier_byline.pt:35
-msgid "box_last_modified"
 msgstr ""
 
 #. Default: "Add"
@@ -103,24 +98,24 @@ msgid "button_add"
 msgstr ""
 
 #. Default: "Archive"
-#: ./opengever/dossier/archive.py:184
+#: ./opengever/dossier/archive.py:186
 msgid "button_archive"
 msgstr ""
 
 #. Default: "Cancel"
-#: ./opengever/dossier/archive.py:263
+#: ./opengever/dossier/archive.py:265
 #: ./opengever/dossier/behaviors/participation.py:166
-#: ./opengever/dossier/transport.py:45
+#: ./opengever/dossier/browser/transport.py:170
 msgid "button_cancel"
 msgstr ""
 
 #. Default: "Continue"
-#: ./opengever/dossier/transport.py:49
+#: ./opengever/dossier/browser/transport.py:159
 msgid "button_continue"
 msgstr ""
 
 #. Default: "Copy"
-#: ./opengever/dossier/transport.py:125
+#: ./opengever/dossier/browser/transport.py:261
 msgid "button_copy"
 msgstr ""
 
@@ -144,6 +139,16 @@ msgstr ""
 msgid "column_rolelist"
 msgstr ""
 
+#. Default: "1. Choose client"
+#: ./opengever/dossier/browser/transport.py:37
+msgid "copy_documents_step_choose_client"
+msgstr ""
+
+#. Default: "2. Choose dossier"
+#: ./opengever/dossier/browser/transport.py:40
+msgid "copy_documents_step_choose_dossier"
+msgstr ""
+
 #. Default: "create document with template"
 #: ./opengever/dossier/templatedossier.py:43
 msgid "create_document_with_template"
@@ -156,7 +161,7 @@ msgid "documents"
 msgstr ""
 
 #. Default: "The enddate is required."
-#: ./opengever/dossier/archive.py:39
+#: ./opengever/dossier/archive.py:40
 msgid "error_enddate"
 msgstr ""
 
@@ -171,7 +176,7 @@ msgid "fieldset_filing"
 msgstr ""
 
 #. Default: "Action"
-#: ./opengever/dossier/archive.py:101
+#: ./opengever/dossier/archive.py:102
 msgid "filing_action"
 msgstr ""
 
@@ -179,18 +184,18 @@ msgid "filing_nr"
 msgstr ""
 
 #. Default: "filing prefix"
-#: ./opengever/dossier/archive.py:82
+#: ./opengever/dossier/archive.py:83
 #: ./opengever/dossier/behaviors/dossier.py:115
 msgid "filing_prefix"
 msgstr ""
 
 #. Default: "filing Year"
-#: ./opengever/dossier/archive.py:96
+#: ./opengever/dossier/archive.py:97
 msgid "filing_year"
 msgstr ""
 
 #. Default: "Archive Dossier"
-#: ./opengever/dossier/archive.py:160
+#: ./opengever/dossier/archive.py:162
 msgid "heading_archive_form"
 msgstr ""
 
@@ -219,7 +224,7 @@ msgstr ""
 msgid "help_container_type"
 msgstr ""
 
-#: ./opengever/dossier/archive.py:91
+#: ./opengever/dossier/archive.py:92
 #: ./opengever/dossier/behaviors/dossier.py:73
 msgid "help_end"
 msgstr ""
@@ -263,7 +268,7 @@ msgstr ""
 msgid "help_roles"
 msgstr ""
 
-#: ./opengever/dossier/transport.py:34
+#: ./opengever/dossier/browser/transport.py:143
 msgid "help_source_client"
 msgstr ""
 
@@ -275,7 +280,7 @@ msgstr ""
 msgid "help_subject"
 msgstr ""
 
-#: ./opengever/dossier/transport.py:114
+#: ./opengever/dossier/browser/transport.py:243
 msgid "help_target_dossier"
 msgstr ""
 
@@ -311,12 +316,7 @@ msgstr ""
 #. Default: "by ${author}"
 #: ./opengever/dossier/project_templates/byline.pt:16
 #: ./opengever/dossier/viewlets/businesscase_byline.pt:18
-#: ./opengever/dossier/viewlets/templatedossier_byline.pt:16
 msgid "label_by_author"
-msgstr ""
-
-#: ./opengever/dossier/transport.py:122
-msgid "label_choose_target_dossier"
 msgstr ""
 
 #. Default: "Comments"
@@ -360,7 +360,7 @@ msgid "label_email_address"
 msgstr ""
 
 #. Default: "Closing Date"
-#: ./opengever/dossier/archive.py:90
+#: ./opengever/dossier/archive.py:91
 #: ./opengever/dossier/behaviors/dossier.py:72
 msgid "label_end"
 msgstr ""
@@ -434,7 +434,7 @@ msgid "label_sequence_number"
 msgstr ""
 
 #. Default: "Client"
-#: ./opengever/dossier/transport.py:32
+#: ./opengever/dossier/browser/transport.py:141
 msgid "label_source_client"
 msgstr ""
 
@@ -455,7 +455,7 @@ msgid "label_subject"
 msgstr ""
 
 #. Default: "Target Dossier"
-#: ./opengever/dossier/transport.py:113
+#: ./opengever/dossier/browser/transport.py:242
 msgid "label_target_dossier"
 msgstr ""
 
@@ -477,7 +477,6 @@ msgstr ""
 #. Default: "State:"
 #: ./opengever/dossier/project_templates/byline.pt:28
 #: ./opengever/dossier/viewlets/businesscase_byline.pt:29
-#: ./opengever/dossier/viewlets/templatedossier_byline.pt:28
 msgid "label_workflow_state"
 msgstr ""
 
@@ -501,7 +500,7 @@ msgstr ""
 msgid "not all task are closed"
 msgstr ""
 
-#: ./opengever/dossier/archive.py:69
+#: ./opengever/dossier/archive.py:70
 msgid "only resolve, set filing no later"
 msgstr ""
 
@@ -516,19 +515,19 @@ msgstr ""
 msgid "required"
 msgstr ""
 
-#: ./opengever/dossier/archive.py:72
+#: ./opengever/dossier/archive.py:73
 msgid "resolve and set a new filing no"
 msgstr ""
 
-#: ./opengever/dossier/archive.py:68
+#: ./opengever/dossier/archive.py:69
 msgid "resolve and set filing no"
 msgstr ""
 
-#: ./opengever/dossier/archive.py:71
+#: ./opengever/dossier/archive.py:72
 msgid "resolve and take the existing filing no"
 msgstr ""
 
-#: ./opengever/dossier/archive.py:75
+#: ./opengever/dossier/archive.py:76
 msgid "set a filing no"
 msgstr ""
 
@@ -545,28 +544,27 @@ msgstr ""
 msgid "tasks"
 msgstr ""
 
-#: ./opengever/dossier/archive.py:174
+#: ./opengever/dossier/archive.py:176
 msgid "the filling number was already set"
 msgstr ""
 
-#: ./opengever/dossier/archive.py:256
+#: ./opengever/dossier/archive.py:258
 msgid "the filling number was set"
 msgstr ""
 
 #. Default: "expired"
 #: ./opengever/dossier/project_templates/byline.pt:53
 #: ./opengever/dossier/viewlets/businesscase_byline.pt:53
-#: ./opengever/dossier/viewlets/templatedossier_byline.pt:44
 msgid "time_expired"
 msgstr ""
 
-#. Default: "Attach document"
-#: ./opengever/dossier/transport.py:42
-msgid "title_attach_document_form"
+#. Default: "Copy documents to own dossier"
+#: ./opengever/dossier/browser/transport.py:151
+msgid "title_copy_documents_to_dossier"
 msgstr ""
 
 #. Default: "You are not assigned to another client where you could copy the documents to."
-#: ./opengever/dossier/transport.py:93
+#: ./opengever/dossier/browser/transport.py:209
 msgid "warning_copy_to_remote_no_client"
 msgstr ""
 

@@ -148,7 +148,8 @@ class IChooseClientSchema(form.Schema):
 
 class ChooseClientForm(z3c.form.form.Form, WizardFormMixin):
     fields = z3c.form.field.Fields(IChooseClientSchema)
-    label = _(u'title_attach_document_form', u'Attach document')
+    label = _(u'title_copy_documents_to_dossier',
+              default=u'Copy documents to own dossier')
     ignoreContext = True
 
     template = ViewPageTemplateFile(
@@ -249,7 +250,8 @@ class CopyDocumentsToRemoteClientForm(z3c.form.form.Form, WizardFormMixin):
     fields = z3c.form.field.Fields(IChooseDossierSchema)
     fields['target_dossier'].widgetFactory[INPUT_MODE] = \
         DossierAutocompleteFieldWidget
-    label = _(u'label_choose_target_dossier', default=u'')
+    label = _(u'title_copy_documents_to_dossier',
+              default=u'Copy documents to own dossier')
     ignoreContext = True
 
     template = ViewPageTemplateFile(

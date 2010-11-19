@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: opengever.dossier 1.0\n"
-"POT-Creation-Date: 2010-11-12 16:42+0000\n"
+"POT-Creation-Date: 2010-11-19 10:03+0000\n"
 "PO-Revision-Date: 2010-10-21 12:06+0200\n"
 "Last-Translator: Thomas Buchberger <t.buchberger@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -38,7 +38,7 @@ msgstr "Beteiligung löschen"
 msgid "No Mail Address"
 msgstr "Keine E-Mail Adresse"
 
-#: ./opengever/dossier/archive.py:30
+#: ./opengever/dossier/archive.py:31
 msgid "Not all required fields are filled"
 msgstr "Nicht alle benötigten Felder wurden ausgefüllt."
 
@@ -59,7 +59,7 @@ msgstr "Vorlagendossier"
 msgid "Templates"
 msgstr "Vorlagen"
 
-#: ./opengever/dossier/archive.py:251
+#: ./opengever/dossier/archive.py:253
 msgid "The End that is required, also if only closing is selected"
 msgstr "Das Enddatum wird auch bei der Aktion 'nur abschliessen' benötigt"
 
@@ -67,12 +67,12 @@ msgstr "Das Enddatum wird auch bei der Aktion 'nur abschliessen' benötigt"
 msgid "The Files you selected are bigger than the maximal Size"
 msgstr "Die Grösse der ausgewählten Dateien überschreiten die Maximalgrösse."
 
-#: ./opengever/dossier/archive.py:260
+#: ./opengever/dossier/archive.py:262
 msgid "The dossier was already resolved"
 msgstr "Das Dossier ist bereits abgeschlossen"
 
-#: ./opengever/dossier/archive.py:53
-msgid "The given end date is older than the end date of the youngest subdossier(${number})"
+#: ./opengever/dossier/archive.py:54
+msgid "The given end date is older than the end date                             of the youngest subdossier(${number})"
 msgstr ""
 
 #: ./opengever/dossier/behaviors/dossier.py:181
@@ -83,7 +83,7 @@ msgstr "Das Beginn-Datum muss vor dem Ende-Datum liegen."
 msgid "The start or end date is invalid"
 msgstr "Das Beginn- oder Ende-Datum ist ungültig."
 
-#: ./opengever/dossier/archive.py:111
+#: ./opengever/dossier/archive.py:112
 msgid "When the Action give filing number is selected,                     all fields are required."
 msgstr "Wenn die Aktion 'Ablagenummer vergeben' selektiert ist, werden alle Felder benötigt"
 
@@ -91,35 +91,30 @@ msgstr "Wenn die Aktion 'Ablagenummer vergeben' selektiert ist, werden alle Feld
 msgid "You have to select a intern                             or enter a extern mail-addres"
 msgstr "Wählen Sie mindestens eine interne oder eine externe E-Mail Adresse."
 
-#. Default: "last modified"
-#: ./opengever/dossier/viewlets/templatedossier_byline.pt:35
-msgid "box_last_modified"
-msgstr "Von:"
-
 #. Default: "Add"
 #: ./opengever/dossier/behaviors/participation.py:153
 msgid "button_add"
 msgstr "Erstellen"
 
 #. Default: "Archive"
-#: ./opengever/dossier/archive.py:184
+#: ./opengever/dossier/archive.py:186
 msgid "button_archive"
 msgstr "Speichern"
 
 #. Default: "Cancel"
-#: ./opengever/dossier/archive.py:263
+#: ./opengever/dossier/archive.py:265
 #: ./opengever/dossier/behaviors/participation.py:166
-#: ./opengever/dossier/transport.py:45
+#: ./opengever/dossier/browser/transport.py:170
 msgid "button_cancel"
 msgstr "Abbrechen"
 
 #. Default: "Continue"
-#: ./opengever/dossier/transport.py:49
+#: ./opengever/dossier/browser/transport.py:159
 msgid "button_continue"
 msgstr "Weiter"
 
 #. Default: "Copy"
-#: ./opengever/dossier/transport.py:125
+#: ./opengever/dossier/browser/transport.py:261
 msgid "button_copy"
 msgstr "Kopieren"
 
@@ -143,6 +138,16 @@ msgstr "Kontakt"
 msgid "column_rolelist"
 msgstr "Rolle"
 
+#. Default: "1. Choose client"
+#: ./opengever/dossier/browser/transport.py:37
+msgid "copy_documents_step_choose_client"
+msgstr "1. Zielmandant auswählen"
+
+#. Default: "2. Choose dossier"
+#: ./opengever/dossier/browser/transport.py:40
+msgid "copy_documents_step_choose_dossier"
+msgstr "2. Zieldossier auswählen"
+
 #. Default: "create document with template"
 #: ./opengever/dossier/templatedossier.py:43
 msgid "create_document_with_template"
@@ -155,7 +160,7 @@ msgid "documents"
 msgstr "Dokumente"
 
 #. Default: "The enddate is required."
-#: ./opengever/dossier/archive.py:39
+#: ./opengever/dossier/archive.py:40
 msgid "error_enddate"
 msgstr "Enddatum erforderlich"
 
@@ -170,7 +175,7 @@ msgid "fieldset_filing"
 msgstr "Ablage"
 
 #. Default: "Action"
-#: ./opengever/dossier/archive.py:101
+#: ./opengever/dossier/archive.py:102
 msgid "filing_action"
 msgstr "Aktion"
 
@@ -178,18 +183,18 @@ msgid "filing_nr"
 msgstr "Ablagenummer vergeben"
 
 #. Default: "filing prefix"
-#: ./opengever/dossier/archive.py:82
+#: ./opengever/dossier/archive.py:83
 #: ./opengever/dossier/behaviors/dossier.py:115
 msgid "filing_prefix"
 msgstr "Ablage Präfix"
 
 #. Default: "filing Year"
-#: ./opengever/dossier/archive.py:96
+#: ./opengever/dossier/archive.py:97
 msgid "filing_year"
 msgstr "Ablage Jahr"
 
 #. Default: "Archive Dossier"
-#: ./opengever/dossier/archive.py:160
+#: ./opengever/dossier/archive.py:162
 msgid "heading_archive_form"
 msgstr "Dossier ablegen"
 
@@ -218,7 +223,7 @@ msgstr "Standortangabe des Behälters, in dem ein Dossier in Papierform abgelegt
 msgid "help_container_type"
 msgstr "Art des Behälters, in dem ein Dossier in Papierform abgelegt ist"
 
-#: ./opengever/dossier/archive.py:91
+#: ./opengever/dossier/archive.py:92
 #: ./opengever/dossier/behaviors/dossier.py:73
 msgid "help_end"
 msgstr ""
@@ -262,7 +267,7 @@ msgstr "Federführung"
 msgid "help_roles"
 msgstr ""
 
-#: ./opengever/dossier/transport.py:34
+#: ./opengever/dossier/browser/transport.py:143
 msgid "help_source_client"
 msgstr ""
 
@@ -274,7 +279,7 @@ msgstr ""
 msgid "help_subject"
 msgstr ""
 
-#: ./opengever/dossier/transport.py:114
+#: ./opengever/dossier/browser/transport.py:243
 msgid "help_target_dossier"
 msgstr "Wählen Sie ein Dossier auf dem eigenen Mandanten aus"
 
@@ -310,13 +315,8 @@ msgstr "Teilnehmer hinzufügen"
 #. Default: "by ${author}"
 #: ./opengever/dossier/project_templates/byline.pt:16
 #: ./opengever/dossier/viewlets/businesscase_byline.pt:18
-#: ./opengever/dossier/viewlets/templatedossier_byline.pt:16
 msgid "label_by_author"
 msgstr "Federführend: ${author}"
-
-#: ./opengever/dossier/transport.py:122
-msgid "label_choose_target_dossier"
-msgstr "Dokumente in Heimmandant kopieren"
 
 #. Default: "Comments"
 #: ./opengever/dossier/behaviors/dossier.py:84
@@ -359,7 +359,7 @@ msgid "label_email_address"
 msgstr "E-Mail:"
 
 #. Default: "Closing Date"
-#: ./opengever/dossier/archive.py:90
+#: ./opengever/dossier/archive.py:91
 #: ./opengever/dossier/behaviors/dossier.py:72
 msgid "label_end"
 msgstr "Ende"
@@ -392,7 +392,6 @@ msgstr "Mitteilung"
 
 #. Default: "Reference Number will be generated                 after content creation"
 #: ./opengever/dossier/widget.py:25
-#, fuzzy
 msgid "label_no_reference_number"
 msgstr "Die Archivnummer wird erst beim Erstellen generiert."
 
@@ -434,7 +433,7 @@ msgid "label_sequence_number"
 msgstr "Laufnummer:"
 
 #. Default: "Client"
-#: ./opengever/dossier/transport.py:32
+#: ./opengever/dossier/browser/transport.py:141
 msgid "label_source_client"
 msgstr "Ziel-Mandant"
 
@@ -455,7 +454,7 @@ msgid "label_subject"
 msgstr "Betreff"
 
 #. Default: "Target Dossier"
-#: ./opengever/dossier/transport.py:113
+#: ./opengever/dossier/browser/transport.py:242
 msgid "label_target_dossier"
 msgstr "Ziel-Dossier"
 
@@ -466,7 +465,6 @@ msgstr "Vorlage"
 
 #. Default: "title"
 #: ./opengever/dossier/templatedossier_templates/template_form.pt:30
-#, fuzzy
 msgid "label_title"
 msgstr "Titel"
 
@@ -478,7 +476,6 @@ msgstr "Bandnummer"
 #. Default: "State:"
 #: ./opengever/dossier/project_templates/byline.pt:28
 #: ./opengever/dossier/viewlets/businesscase_byline.pt:29
-#: ./opengever/dossier/viewlets/templatedossier_byline.pt:28
 msgid "label_workflow_state"
 msgstr "Status:"
 
@@ -502,7 +499,7 @@ msgstr "Es sind nicht alle Dokumente eingecheckt"
 msgid "not all task are closed"
 msgstr "Es sind nicht alle Aufgaben erledigt"
 
-#: ./opengever/dossier/archive.py:69
+#: ./opengever/dossier/archive.py:70
 msgid "only resolve, set filing no later"
 msgstr "Nur abschliessen (keine Ablagenummer vergeben)"
 
@@ -517,19 +514,19 @@ msgstr "Empfänger"
 msgid "required"
 msgstr "erforderlich"
 
-#: ./opengever/dossier/archive.py:72
+#: ./opengever/dossier/archive.py:73
 msgid "resolve and set a new filing no"
 msgstr "Abschliessen und Ablagenummer neu vergeben"
 
-#: ./opengever/dossier/archive.py:68
+#: ./opengever/dossier/archive.py:69
 msgid "resolve and set filing no"
 msgstr "Abschliessen und Ablagenummer vergeben"
 
-#: ./opengever/dossier/archive.py:71
+#: ./opengever/dossier/archive.py:72
 msgid "resolve and take the existing filing no"
 msgstr "Abschliessen und die existierende Ablagenummer verwenden"
 
-#: ./opengever/dossier/archive.py:75
+#: ./opengever/dossier/archive.py:76
 msgid "set a filing no"
 msgstr "Ablagenummer vergeben"
 
@@ -546,28 +543,27 @@ msgstr "Subdossiers"
 msgid "tasks"
 msgstr "Aufgaben"
 
-#: ./opengever/dossier/archive.py:174
+#: ./opengever/dossier/archive.py:176
 msgid "the filling number was already set"
 msgstr "Die Ablagenummer wurde bereits vergeben"
 
-#: ./opengever/dossier/archive.py:256
+#: ./opengever/dossier/archive.py:258
 msgid "the filling number was set"
 msgstr "Die Ablagenummer wurde gesetzt"
 
 #. Default: "expired"
 #: ./opengever/dossier/project_templates/byline.pt:53
 #: ./opengever/dossier/viewlets/businesscase_byline.pt:53
-#: ./opengever/dossier/viewlets/templatedossier_byline.pt:44
 msgid "time_expired"
 msgstr "abgelaufen"
 
-#. Default: "Attach document"
-#: ./opengever/dossier/transport.py:42
-msgid "title_attach_document_form"
-msgstr "Dokument anfügen"
+#. Default: "Copy documents to own dossier"
+#: ./opengever/dossier/browser/transport.py:151
+msgid "title_copy_documents_to_dossier"
+msgstr "Dokumente in eigenes Dossier kopieren"
 
 #. Default: "You are not assigned to another client where you could copy the documents to."
-#: ./opengever/dossier/transport.py:93
+#: ./opengever/dossier/browser/transport.py:209
 msgid "warning_copy_to_remote_no_client"
 msgstr "Sie können die Dokumente nicht an einen anderen Mandanten senden, da Sie nur dem aktuellen Mandanten zugeordnet sind."
 
