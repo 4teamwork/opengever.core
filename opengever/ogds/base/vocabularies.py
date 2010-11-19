@@ -35,7 +35,7 @@ class UsersVocabularyFactory(grok.GlobalUtility):
             if not user.active:
                 self.hidden_terms.append(user.userid)
             yield (user.userid,
-                   info.describe(user.userid))
+                   info.describe(user))
 
 
 class UsersAndInboxesVocabularyFactory(grok.GlobalUtility):
@@ -66,7 +66,7 @@ class UsersAndInboxesVocabularyFactory(grok.GlobalUtility):
                 if not user.active:
                     self.hidden_terms.append(user.userid)
                 yield (user.userid,
-                       info.describe(user.userid))
+                       info.describe(user))
             # client inbox
             principal = u'inbox:%s' % client_id
             yield (principal, info.describe(principal))
@@ -114,7 +114,7 @@ class AssignedUsersVocabularyFactory(grok.GlobalUtility):
             if not user.active:
                 self.hidden_terms.append(user.userid)
             yield (user.userid,
-                   info.describe(user.userid))
+                   info.describe(user))
 
 
 class ContactsVocabularyFactory(grok.GlobalUtility):
@@ -132,7 +132,7 @@ class ContactsVocabularyFactory(grok.GlobalUtility):
         info = getUtility(IContactInformation)
         for contact in info.list_contacts():
             yield (contact.contactid,
-                   info.describe(contact.contactid))
+                   info.describe(contact))
 
 
 class ContactsAndUsersVocabularyFactory(grok.GlobalUtility):
@@ -160,10 +160,10 @@ class ContactsAndUsersVocabularyFactory(grok.GlobalUtility):
             if not user.active:
                 self.hidden_terms.append(user.userid)
             yield (user.userid,
-                   info.describe(user.userid))
+                   info.describe(user))
         for contact in info.list_contacts():
             yield (contact.contactid,
-                   info.describe(contact.contactid))
+                   info.describe(contact))
 
 
 class EmailContactsAndUsersVocabularyFactory(grok.GlobalUtility):
@@ -191,6 +191,7 @@ class EmailContactsAndUsersVocabularyFactory(grok.GlobalUtility):
         value = Fullname [address], eg. Hugo Boss [hugo@boss.ch]
         """
 
+        # XXX
         info = getUtility(IContactInformation)
         ids = [(user.userid, user.active) for user in info.list_users()]
         ids.extend([(contact.contactid, True) for contact
