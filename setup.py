@@ -6,7 +6,6 @@ maintainer = 'Jonas Baumann'
 
 tests_require = [
     'plone.app.testing',
-    'opengever.contact',
     'plone.app.dexterity',
     'opengever.globalindex',
     ]
@@ -56,6 +55,7 @@ setup(name='opengever.ogds.base',
         'z3c.relationfield',
         'z3c.saconfig',
         'zope.globalrequest',
+        'opengever.contact',
         ],
       tests_require=tests_require,
       extras_require=dict(tests=tests_require),

@@ -14,6 +14,11 @@ Imports / globals:
     >>> app = layer.get('app')
     >>> portal = layer.get('portal')
 
+Log in
+    >>> from plone.app.testing import login
+    >>> from plone.app.testing import TEST_USER_NAME
+    >>> login(portal, TEST_USER_NAME)
+
 Lets create some users:
 
     >>> session = create_session()
@@ -109,6 +114,8 @@ User tests:
     u'Boss Hugo (hugo.boss)'
     >>> info.describe('hugo.boss', with_email=True)
     u'Boss Hugo (hugo.boss, hugo@boss.local)'
+    >>> info.describe(info.get_user('hugo.boss'))
+    u'Boss Hugo (hugo.boss)'
 
     >>> info.get_email('hugo.boss')
     u'hugo@boss.local'
@@ -144,6 +151,12 @@ Contacts tests:
     'Kaufmann'
     >>> sandra.email
     'sandra.kaufmann@test.ch'
+    >>> info.describe('contact:kaufmann-sandra')
+    'Kaufmann Sandra (sandra.kaufmann@test.ch)'
+    >>> info.describe(u'contact:kaufmann-sandra')
+    'Kaufmann Sandra (sandra.kaufmann@test.ch)'
+    >>> info.describe(contacts[0])
+    'Kaufmann Sandra (sandra.kaufmann@test.ch)'
 
 
 Inboxes tests:
@@ -185,3 +198,10 @@ Various lists:
     >>> print info.get_client_by_id('unknown client')
     None
 
+
+Test describe with a PAS user:
+
+    >>> info.describe('test_user_1_')
+    ' (test_user_1_)'
+    >>> info.describe('non-existing-user')
+    u'non-existing-user'

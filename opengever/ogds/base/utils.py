@@ -73,6 +73,28 @@ def remote_json_request(target_client_id, viewname, path='',
     return json.loads(data)
 
 
+def brain_is_contact(brain):
+    """Tests, if the object which the `brain` is of, is a contact
+    object. The object is not touched, since the user may not have
+    access.
+    """
+
+    iface = 'opengever.contact.contact.IContact'
+    types_tool = getToolByName(getSite(), 'portal_types')
+    fti = types_tool.get(brain.portal_type)
+
+    # the iface is either defined as schema in the fti..
+    if fti.schema == iface:
+        return True
+
+    # ..  or as a behavior
+    elif iface in fti.behaviors:
+        return True
+
+    else:
+        return False
+
+
 def remote_request(target_client_id, viewname, path='', data={}, headers={}):
     """ Sends a request to another zope instance
     Returns a response stream

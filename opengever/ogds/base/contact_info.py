@@ -1,11 +1,15 @@
 from Products.CMFCore.utils import getToolByName
 from Products.ZCatalog.ZCatalog import ZCatalog
+from Products.ZCatalog.interfaces import ICatalogBrain
 from five import grok
-from opengever.ogds.base.interfaces import IContactInformation
+from opengever.contact.contact import IContact
+from opengever.ogds.base.interfaces import IContactInformation, IUser
 from opengever.ogds.base.model.client import Client
 from opengever.ogds.base.model.user import User
 from opengever.ogds.base.utils import create_session, get_current_client
+from opengever.ogds.base.utils import brain_is_contact
 from zope.app.component.hooks import getSite
+import types
 
 
 class ContactInformation(grok.GlobalUtility):
@@ -228,17 +232,54 @@ class ContactInformation(grok.GlobalUtility):
     def describe(self, principal, with_email=False, with_email2=False):
         """Represent a user / contact / inbox / ... as string. This usually
         returns the fullname or another label / title.
+        `principal` could also be a user or a contact object or brain.
         """
 
         if not principal:
             return ''
 
-        if self.is_inbox(principal):
+        is_string = isinstance(principal, types.StringTypes)
+        brain = None
+        contact = None
+        user = None
+
+        # is principal a brain?
+        if not is_string and ICatalogBrain.providedBy(principal):
+            brain = principal
+
+        # ok, lets check what we have...
+
+        # string inbox
+        if is_string and self.is_inbox(principal):
+            # just do it
             client = self.get_client_of_inbox(principal)
             return u'Inbox: %s' % client.title
 
-        elif self.is_contact(principal):
+        # string contact
+        elif is_string and self.is_contact(principal):
             contact = self.get_contact(principal)
+
+        # string user
+        elif is_string and self.is_user(principal):
+            user = self.get_user(principal)
+
+        # contact brain
+        elif brain and brain_is_contact(brain):
+            contact = brain
+            principal = contact.contactid
+
+        # contact obj
+        elif IContact.providedBy(principal):
+            contact = principal
+            principal = contact.contactid
+
+        # user object
+        elif IUser.providedBy(principal):
+            user = principal
+            principal = user.userid
+
+        # ok, now lookup the stuff
+        if contact:
             if not contact:
                 return principal
             elif contact.lastname and contact.firstname:
@@ -256,40 +297,38 @@ class ContactInformation(grok.GlobalUtility):
                 name = '%s (%s)' % (name, contact.email)
             return name
 
-        elif self.is_user(principal):
-            user = self.get_user(principal)
-            if user:
-                if user.lastname and user.firstname:
-                    name = ' '.join((user.lastname, user.firstname))
-                elif user.lastname:
-                    name = user.lastname
-                elif user.firstname:
-                    name = user.firstname
-                else:
-                    name = user.userid
-
-                if with_email and user.email:
-                    name = '%s (%s, %s)' % (name, user.userid, user.email)
-                elif with_email2 and user.email2:
-                    name = '%s (%s, %s)' % (name, user.userid, user.email2)
-                else:
-                    name = '%s (%s)' % (name, user.userid)
-                return name
-
+        elif user:
+            if user.lastname and user.firstname:
+                name = ' '.join((user.lastname, user.firstname))
+            elif user.lastname:
+                name = user.lastname
+            elif user.firstname:
+                name = user.firstname
             else:
-                # fallback for acl_users
-                portal = getSite()
-                portal_membership = getToolByName(portal, 'portal_membership')
-                member = portal_membership.getMemberById(principal)
-                if not member:
-                    return principal
-                name = member.getProperty('fullname', principal)
-                email = member.getProperty('email', None)
-                if with_email and email:
-                    name = '%s (%s, %s)' % (name, principal, email)
-                else:
-                    name = '%s (%s)' % (name, principal)
-                return name
+                name = user.userid
+
+            if with_email and user.email:
+                name = '%s (%s, %s)' % (name, user.userid, user.email)
+            elif with_email2 and user.email2:
+                name = '%s (%s, %s)' % (name, user.userid, user.email2)
+            else:
+                name = '%s (%s)' % (name, user.userid)
+            return name
+
+        elif is_string:
+            # fallback for acl_users
+            portal = getSite()
+            portal_membership = getToolByName(portal, 'portal_membership')
+            member = portal_membership.getMemberById(principal)
+            if not member:
+                return principal.decode('utf-8')
+            name = member.getProperty('fullname', principal)
+            email = member.getProperty('email', None)
+            if with_email and email:
+                name = '%s (%s, %s)' % (name, principal, email)
+            else:
+                name = '%s (%s)' % (name, principal)
+            return name
 
         else:
             raise ValueError('Unknown principal type: %s' % str(principal))
