@@ -5,6 +5,9 @@ Changelog
 2.0a3
 -----
 
+* Vocabularies / contact info utlity: optimized vocabularies so that they do not make that much requests any more.
+  [jbaumann]
+
 * Transporter: Fixed indexing issues by creating a final object modified event after receiving a object.
   [jbaumann]
 
