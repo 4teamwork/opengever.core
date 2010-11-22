@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2010-11-18 16:01+0000\n"
+"POT-Creation-Date: 2010-11-22 13:22+0000\n"
 "PO-Revision-Date: 2009-02-25 14:39+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -106,6 +106,7 @@ msgstr ""
 
 #. Default: "Cancel"
 #: ./opengever/task/browser/attachdocument.py:178
+#: ./opengever/task/browser/successor.py:112
 msgid "button_cancel"
 msgstr ""
 
