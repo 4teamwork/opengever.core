@@ -8,6 +8,9 @@ Imports
     >>> from plone.app.testing import TEST_USER_NAME
     >>> from opengever.task.task import ITask
     >>> from opengever.ogds.base.autocomplete_widget import AutocompleteFieldWidget
+    >>> from zope.component import getUtility
+    >>> from zope.schema.interfaces import IVocabularyFactory
+    >>> from plone.memoize import volatile
 
 
 
@@ -48,6 +51,13 @@ We bind task (as context) to ``AutocompleteFieldWidget`` widget.
     >>> widget = AutocompleteFieldWidget(field, request)
     >>> widget.context = task1
 
+Let's clear the cache of the vocabulary first:
+
+    >>> fact = getUtility(IVocabularyFactory,
+    ...                   name='opengever.ogds.base.ContactsAndUsersVocabulary')
+    >>> setattr(fact, volatile.ATTR, {})
+
+
 Initialy we dont have any value for our ``ITask.issuer`` field, thats why we
 also don't hide anything.
 
@@ -65,7 +75,7 @@ initialized again.
     >>> task1.issuer = u'test1'
     >>> widget._bound_source = None
 
-Now we can see that value set before does not show in listing, but its 
+Now we can see that value set before does not show in listing, but its
 added to hidden list of terms.
 
     >>> source2 = widget.bound_source

@@ -5,6 +5,9 @@ Changelog
 2.0a3
 -----
 
+* Vocabularies: added some caching
+  [jbaumann]
+
 * Vocabularies / contact info utlity: optimized vocabularies so that they do not make that much requests any more.
   [jbaumann]
 

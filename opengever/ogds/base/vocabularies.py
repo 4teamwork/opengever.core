@@ -5,11 +5,21 @@ from opengever.ogds.base.interfaces import IClientCommunicator
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.ogds.base.utils import get_current_client
 from opengever.ogds.base.vocabulary import ContactsVocabulary
+from plone.memoize import volatile
 from zope.app.component.hooks import getSite, setSite
 from zope.component import getUtility
 from zope.globalrequest import getRequest
 from zope.schema.interfaces import IVocabularyFactory
 import AccessControl
+
+
+def generator_to_list(func):
+    """Casts a generator object into a tuple. This decorator
+    is necessary when memoizing methods which return generator objects.
+    """
+    def caster(*args, **kwargs):
+        return list(func(*args, **kwargs))
+    return caster
 
 
 class UsersVocabularyFactory(grok.GlobalUtility):
@@ -24,11 +34,13 @@ class UsersVocabularyFactory(grok.GlobalUtility):
     def __call__(self, context):
         self.context = context
         vocab = wrap_vocabulary(
-                ContactsVocabulary.create_with_provider(
-                    self.key_value_provider))(context)
+            ContactsVocabulary.create_with_provider(
+                self.key_value_provider))(context)
         vocab.hidden_terms = self.hidden_terms
         return vocab
 
+    @volatile.cache(lambda method, self: True)
+    @generator_to_list
     def key_value_provider(self):
         info = getUtility(IContactInformation)
         for user in info.list_users():
@@ -52,11 +64,13 @@ class UsersAndInboxesVocabularyFactory(grok.GlobalUtility):
     def __call__(self, context):
         self.context = context
         vocab = wrap_vocabulary(
-                ContactsVocabulary.create_with_provider(
-                    self.key_value_provider))(context)
+            ContactsVocabulary.create_with_provider(
+                self.key_value_provider))(context)
         vocab.hidden_terms = self.hidden_terms
         return vocab
 
+    @volatile.cache(lambda method, self: self.get_client())
+    @generator_to_list
     def key_value_provider(self):
         client_id = self.get_client()
         info = getUtility(IContactInformation)
@@ -103,11 +117,13 @@ class AssignedUsersVocabularyFactory(grok.GlobalUtility):
     def __call__(self, context):
         self.context = context
         vocab = wrap_vocabulary(
-                ContactsVocabulary.create_with_provider(
-                    self.key_value_provider))(context)
+            ContactsVocabulary.create_with_provider(
+                self.key_value_provider))(context)
         vocab.hidden_terms = self.hidden_terms
         return vocab
 
+    @volatile.cache(lambda method, self: True)
+    @generator_to_list
     def key_value_provider(self):
         info = getUtility(IContactInformation)
         for user in info.list_assigned_users():
@@ -147,23 +163,32 @@ class ContactsAndUsersVocabularyFactory(grok.GlobalUtility):
     def __call__(self, context):
         self.context = context
         vocab = wrap_vocabulary(
-                ContactsVocabulary.create_with_provider(
-                    self.key_value_provider))(context)
+            ContactsVocabulary.create_with_provider(
+                self.key_value_provider))(context)
         vocab.hidden_terms = self.hidden_terms
         return vocab
 
     def key_value_provider(self):
-        self.hidden_terms = []
         info = getUtility(IContactInformation)
-        # users
+        items, hidden_terms = self._get_users()
+        items = items[:]
+        self.hidden_terms = hidden_terms[:]
+        for contact in info.list_contacts():
+            items.append((contact.contactid,
+                          info.describe(contact)))
+        return items
+
+    @volatile.cache(lambda method, self: True)
+    def _get_users(self):
+        info = getUtility(IContactInformation)
+        items = []
+        hidden_terms = []
         for user in info.list_users():
             if not user.active:
-                self.hidden_terms.append(user.userid)
-            yield (user.userid,
-                   info.describe(user))
-        for contact in info.list_contacts():
-            yield (contact.contactid,
-                   info.describe(contact))
+                hidden_terms.append(user.userid)
+            items.append((user.userid,
+                          info.describe(user)))
+        return (items, hidden_terms)
 
 
 class EmailContactsAndUsersVocabularyFactory(grok.GlobalUtility):
@@ -179,8 +204,8 @@ class EmailContactsAndUsersVocabularyFactory(grok.GlobalUtility):
     def __call__(self, context):
         self.context = context
         vocab = wrap_vocabulary(
-                ContactsVocabulary.create_with_provider(
-                    self.key_value_provider))(context)
+            ContactsVocabulary.create_with_provider(
+                self.key_value_provider))(context)
         vocab.hidden_terms = self.hidden_terms
         return vocab
 
