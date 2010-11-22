@@ -12,18 +12,24 @@ class ContactsVocabulary(SimpleVocabulary):
         all matching contacts.
         """
 
+        query_string = isinstance(query_string, str) and \
+            query_string.decode('utf8') or query_string
+        query = query_string.lower().split(' ')
+        for i, word in enumerate(query):
+            query[i] = word.strip()
+
         if not self.provider and len(self)>0:
             for v in self:
-                if self._compare(query_string, v.value):
+                if self._compare(query, v.value):
                     yield v
 
         elif self.provider:
             items = list(self.provider())
             for key, value in items:
-                if self._compare(query_string, value):
+                if self._compare(query, value):
                     yield self.__class__.createTerm(key, key, value)
 
-    def _compare(self, query_string, value):
+    def _compare(self, query, value):
         """ Compares each word in the query string seperate.
 
         Example 1:
@@ -42,13 +48,9 @@ class ContactsVocabulary(SimpleVocabulary):
 
         if not value:
             return False
-        query_string = isinstance(query_string, str) and \
-            query_string.decode('utf8') or query_string
-        query = query_string.lower().split(' ')
         value = isinstance(value, str) and \
             value.decode('utf8').lower() or value.lower()
         for word in query:
-            word = word.strip()
             if len(word)>0 and word not in value:
                 return False
         return True
