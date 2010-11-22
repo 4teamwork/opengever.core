@@ -1,22 +1,23 @@
 from five import grok
-from Products.CMFCore.utils import getToolByName
-from plone.memoize.instance import memoize
+from ftw.dictstorage.interfaces import ISQLAlchemy
 from ftw.tabbedview.browser.listing import CatalogListingView
 from ftw.tabbedview.interfaces import ITabbedView
 from ftw.table import helper
-from opengever.ogds.base.interfaces import IContactInformation
 from opengever.base.browser.helper import client_title_helper
+from opengever.ogds.base.interfaces import IContactInformation
 from opengever.tabbedview import _
 from opengever.tabbedview.helper import readable_date_set_invisibles
 from opengever.tabbedview.helper import readable_ogds_author, linked
 from opengever.task.helper import task_type_helper
 from zope.app.pagetemplate import ViewPageTemplateFile
 from zope.component import getUtility
-from zope.interface import Interface
+from zope.interface import implements
 import re
 
 
 class OpengeverTab(object):
+    implements(ISQLAlchemy)
+
     show_searchform = True
 
     template = ViewPageTemplateFile('tabs_templates/generic.pt')
