@@ -237,39 +237,44 @@ Vocabularies
 There are various vocabularies used for many different forms / types in opengever.
 The OGDS-relevant vocabularies are storied in `opengever.ogds.base.vocabularies`.
 
-:opengever.ogds.base.UsersVocabulary: Vocabulary of all users with a valid login.
+:opengever.ogds.base.UsersVocabulary: Contains all users listed in OGDS.
 
-:opengever.ogds.base.UsersAndInboxesVocabulary: Vocabulary of all users and all
-    inboxes of a specific client. The client is defined in the request either with
-    key "client" or with key "form.widgets.responsible_client".
+:opengever.ogds.base.UsersAndInboxesVocabulary: Contains the inbox and the
+    users assigned to a specific client. The client is defined in the
+    request either with key "client" or with key
+    "form.widgets.responsible_client".
 
-:opengever.ogds.base.AssignedUsersVocabulary: Vocabulary of all users assigned
+:opengever.ogds.base.AssignedUsersVocabulary: Contains all users assigned
     to the current client.
 
-:opengever.ogds.base.ContactsVocabulary: Vocabulary of local contacts.
+:opengever.ogds.base.ContactsVocabulary: Contains all local contacts.
 
-:opengever.ogds.base.ContactsAndUsersVocabulary: Vocabulary of contacts and users.
+:opengever.ogds.base.ContactsAndUsersVocabulary: Contains all local contacts
+    and all users listed in OGDS.
 
-:opengever.ogds.base.EmailContactsAndUsersVocabulary: Vocabulary containing all
-    users and contacts with each e-mail address they have.
+:opengever.ogds.base.EmailContactsAndUsersVocabulary: Contains all
+    users listed in OGDS and local contacts for every e-mail address they have.
 
-:opengever.ogds.base.ClientsVocabulary: Vocabulary of all enabled clients (including
+:opengever.ogds.base.ClientsVocabulary: Contains all enabled clients (including
     the current one).
 
-:opengever.ogds.base.AssignedClientsVocabulary: Vocabulary of all assigned
+:opengever.ogds.base.AssignedClientsVocabulary: Contains all assigned
     clients (=home clients) of the current user, including the current client.
 
-:opengever.ogds.base.OtherAssignedClientsVocabulary: Vocabulary of all assigned
-    clients (=home clients) of the current user. The current client is not included!
+:opengever.ogds.base.OtherAssignedClientsVocabulary: Contains all assigned
+    clients (=home clients) of the current user except the current client.
 
-:opengever.ogds.base.HomeDossiersVocabulary: Vocabulary of all open dossiers on
+:opengever.ogds.base.HomeDossiersVocabulary: Contains all open dossiers on the
     users home client. Key is the path of dossier relative to its plone site on
-    the remote client.
+    the remote client. The client is defined in the request either with key
+    "client" or with key "form.widgets.client".
 
-:opengever.ogds.base.DocumentInSelectedDossierVocabulary: Provides a vocabulary
-    containing all documents within the previously selected dossier. Expects the
-    context to be a dict containing the path to the dossier under the key
-    'source_dossier'.
+:opengever.ogds.base.DocumentInSelectedDossierVocabulary: Contains all
+    documents within the previously selected dossier. The client is defined in
+    the request either with key "client" or with key "form.widgets.client", the
+    dossier is defined either with the key "dossier_path" or with the key
+    "form.widgets.source_dossier" containing the absolute path to the dossier
+    on the remote client.
 
 
 Transporting system
