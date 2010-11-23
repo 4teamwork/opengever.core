@@ -38,7 +38,7 @@ class TestDocucomposer(PloneTestCase):
                                'IClassification.privacy_layer': u'no',
                                'IClassification.classification':
                                    u'unprotected',
-                               'paper_form': False,
+                               'paper_form': True,
                                'file': None,
                                'keywords': (),
                                'document_type': None,
@@ -55,6 +55,11 @@ class TestDocucomposer(PloneTestCase):
         doc = self.folder['document-1']
         self.assertEquals(url, doc.absolute_url())
 
+        # check the paper form workaround (see docucomposer.py l. 136)
+        self.assertEquals(doc.paper_form, False)
+
+        # check the document icon
+        self.assertEquals(doc.file.contentType, 'application/msword')
 
 def test_suite():
     return unittest.defaultTestLoader.loadTestsFromName(__name__)

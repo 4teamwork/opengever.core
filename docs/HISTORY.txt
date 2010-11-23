@@ -4,7 +4,9 @@ Changelog
 
 2.0a3
 -----
-
+* Issue #690 DocuComposer Formular und Abindung fixen 
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/690/
+  [23.11.2010, phgross]
 
 2.0a2
 -----
