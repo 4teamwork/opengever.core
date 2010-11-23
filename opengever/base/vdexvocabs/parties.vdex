@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vdex xmlns="http://www.imsglobal.org/xsd/imsvdex_v1p0"
+      orderSignificant="false" language="en">
+
+    <vocabIdentifier>opengever.base.parties</vocabIdentifier>
+    
+    <term>
+        <termIdentifier>alg</termIdentifier>
+        <caption>
+            <langstring language="de">ALG</langstring>
+            <langstring language="en">ALG</langstring>
+        </caption>
+    </term>
+    <term>
+        <termIdentifier>csp</termIdentifier>
+        <caption>
+            <langstring language="de">CSP</langstring>
+            <langstring language="en">CSP</langstring>
+        </caption>
+    </term>
+    <term>
+        <termIdentifier>cvp</termIdentifier>
+        <caption>
+            <langstring language="de">CVP</langstring>
+            <langstring language="en">CVP</langstring>
+        </caption>
+    </term>
+    <term>
+        <termIdentifier>fb</termIdentifier>
+        <caption>
+            <langstring language="de">FB</langstring>
+            <langstring language="en">FB</langstring>
+        </caption>
+    </term>
+    <term>
+        <termIdentifier>fdp</termIdentifier>
+        <caption>
+            <langstring language="de">FDP</langstring>
+            <langstring language="en">FDP</langstring>
+        </caption>
+    </term>
+    <term>
+        <termIdentifier>fo</termIdentifier>
+        <caption>
+            <langstring language="de">FO</langstring>
+            <langstring language="en">FO</langstring>
+        </caption>
+    </term>
+    <term>
+        <termIdentifier>g3</termIdentifier>
+        <caption>
+            <langstring language="de">G3</langstring>
+            <langstring language="en">G3</langstring>
+        </caption>
+    </term>
+    <term>
+        <termIdentifier>krifo</termIdentifier>
+        <caption>
+            <langstring language="de">Krifo</langstring>
+            <langstring language="en">Krifo</langstring>
+        </caption>
+    </term>
+    <term>
+        <termIdentifier>pl</termIdentifier>
+        <caption>
+            <langstring language="de">PL</langstring>
+            <langstring language="en">PL</langstring>
+        </caption>
+    </term>
+    <term>
+        <termIdentifier>sga</termIdentifier>
+        <caption>
+            <langstring language="de">SGA</langstring>
+            <langstring language="en">SGA</langstring>
+        </caption>
+    </term>
+    <term>
+        <termIdentifier>sp</termIdentifier>
+        <caption>
+            <langstring language="de">SP</langstring>
+            <langstring language="en">SP</langstring>
+        </caption>
+    </term>
+    <term>
+        <termIdentifier>svp</termIdentifier>
+        <caption>
+            <langstring language="de">SVP</langstring>
+            <langstring language="en">SVP</langstring>
+        </caption>
+    </term>
+    <term>
+        <termIdentifier>un</termIdentifier>
+        <caption>
+            <langstring language="de">UN</langstring>
+            <langstring language="en">UN</langstring>
+        </caption>
+    </term>
+    <term>
+        <termIdentifier>glp</termIdentifier>
+        <caption>
+            <langstring language="de">GLP</langstring>
+            <langstring language="en">GLP</langstring>
+        </caption>
+    </term>
+</vdex>

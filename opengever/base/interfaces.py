@@ -122,3 +122,13 @@ class IBaseSettings(Interface):
         value_type=schema.Choice(
             vocabulary=u'opengever.base.directorates'),
              required=False)
+
+    vocabulary_disabled_parties = schema.List(
+        title=_(u'label_vocabulary_disabled_parties',
+            default=u'Vocabulary: disabled parties'),
+        description=_(u'help_vocabulary_disabled_parties',
+            default=u'Select the entries from the vocabulary which '
+                    'should not be selectable any more.'),
+        value_type=schema.Choice(
+            vocabulary=u'opengever.base.parties'),
+            required=False)
