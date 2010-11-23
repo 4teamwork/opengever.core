@@ -84,17 +84,24 @@
                     <item id="multivalued" value="False"/>
                 </attr>
                 <attr id="sn">
-                    <item id="public_name" value=""/>
+                    <item id="public_name" value="lastname"/>
                     <item id="binary" value="False"/>
                     <item id="ldap_name" value="sn"/>
                     <item id="friendly_name" value="Last Name"/>
                     <item id="multivalued" value="False"/>
                 </attr>
                 <attr id="uid">
-                    <item id="public_name" value=""/>
+                    <item id="public_name" value="userid"/>
                     <item id="binary" value="False"/>
                     <item id="ldap_name" value="uid"/>
                     <item id="friendly_name" value="User id"/>
+                    <item id="multivalued" value="False"/>
+                </attr>
+                <attr id="givenName">
+                    <item id="public_name" value="firstname"/>
+                    <item id="binary" value="False"/>
+                    <item id="ldap_name" value="givenName"/>
+                    <item id="friendly_name" value="First name"/>
                     <item id="multivalued" value="False"/>
                 </attr>
             </schema>
