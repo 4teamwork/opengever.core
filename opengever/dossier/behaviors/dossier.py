@@ -1,17 +1,18 @@
 from Acquisition import aq_inner, aq_parent
 from Products.CMFCore.utils import getToolByName
 from ZODB.POSException import ConflictError
+from collective.elephantvocabulary import wrap_vocabulary
 from datetime import datetime
 from five import grok
 from opengever.base.interfaces import IReferenceNumber, ISequenceNumber
 from opengever.base.interfaces import IReferenceNumberPrefix
 from opengever.dossier import _
 from opengever.dossier.widget import referenceNumberWidgetFactory
+from opengever.ogds.base.autocomplete_widget import AutocompleteFieldWidget
 from opengever.ogds.base.interfaces import IContactInformation
 from plone.app.dexterity.behaviors.metadata import IBasic
 from plone.autoform.interfaces import IFormFieldProvider
 from plone.directives import form, dexterity
-from opengever.ogds.base.autocomplete_widget import AutocompleteFieldWidget
 from plone.formwidget.contenttree import ObjPathSourceBinder
 from plone.indexer import indexer
 from plone.namedfile.interfaces import INamedFileField
@@ -23,8 +24,9 @@ from zope.app.container.interfaces import IObjectMovedEvent
 from zope.component import getAdapter, getUtility
 from zope.interface import Interface, alsoProvides
 from zope.interface import invariant, Invalid
-from collective.elephantvocabulary import wrap_vocabulary
 import logging
+
+
 LOG = logging.getLogger('opengever.dossier')
 
 
@@ -288,8 +290,7 @@ def SearchableText(obj):
             try:
                 datastream = transforms.convertTo(
                     "text/plain",
-                    data.data,
-                    mimetype = data.contentType,
+                    data.data,                    mimetype = data.contentType,
                     filename = data.filename,
                     )
             except (ConflictError, KeyboardInterrupt):
@@ -300,7 +301,8 @@ def SearchableText(obj):
                           "in SearchablceIndex(dossier.py): %s" % (e, ))
             data = str(datastream)
         if isinstance(data, tuple) or isinstance(data, list):
-            data = " ".join([isinstance(a, unicode) and a.encode('utf-8') or a for a in data])
+            data = " ".join([isinstance(a, unicode) and a.encode('utf-8') \
+                                 or a for a in data])
         elif isinstance(data, unicode):
             data = data.encode('utf-8')
         if data:
@@ -322,7 +324,8 @@ def SearchableText(obj):
     #filling_no
     dossier = IDossierMarker(obj)
     if getattr(dossier, 'filing_no', None):
-        searchable.append(str(getattr(dossier, 'filing_no', None)).encode('utf-8'))
+        searchable.append(str(getattr(dossier, 'filing_no',
+                                      None)).encode('utf-8'))
 
     return ' '.join(searchable)
 
