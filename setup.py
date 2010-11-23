@@ -47,6 +47,7 @@ setup(name='opengever.base',
         'plone.registry',
         'collective.elephantvocabulary',
         'collective.vdexvocabulary',
+        'collective.dexteritytextindexer',
         # -*- Extra requirements: -*-
         ],
       tests_require=tests_require,

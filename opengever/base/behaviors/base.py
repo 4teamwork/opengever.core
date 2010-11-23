@@ -1,11 +1,10 @@
-
-from zope.interface import Interface, alsoProvides
-from zope import schema
-
+from collective import dexteritytextindexer
+from opengever.base import _
 from plone.app.dexterity.behaviors import metadata
 from plone.directives import form
+from zope import schema
+from zope.interface import Interface, alsoProvides
 
-from opengever.base import _
 
 class IOpenGeverBase(form.Schema):
     """ IOpengeverBase contains title and description fields
@@ -20,11 +19,13 @@ class IOpenGeverBase(form.Schema):
             ],
         )
 
+    dexteritytextindexer.searchable('title')
     title = schema.TextLine(
         title = _(u'label_title', default=u'Title'),
         required = True
         )
 
+    dexteritytextindexer.searchable('title')
     description = schema.Text(
         title=_(u'label_description', default=u'Description'),
         description = _(u'help_description', default=u''),
