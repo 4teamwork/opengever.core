@@ -1,6 +1,7 @@
 from Acquisition import aq_inner, aq_parent
 from Products.CMFCore.utils import getToolByName
 from ZODB.POSException import ConflictError
+from collective import dexteritytextindexer
 from collective.elephantvocabulary import wrap_vocabulary
 from datetime import datetime
 from five import grok
@@ -54,6 +55,7 @@ class IDossier(form.Schema):
 
     # form.omitted('reference_number_prefix')
 
+    dexteritytextindexer.searchable('keywords')
     keywords = schema.Tuple(
         title = _(u'label_keywords', default=u'Keywords'),
         description = _(u'help_keywords', default=u''),
@@ -265,71 +267,38 @@ def filing_no(obj):
 grok.global_adapter(filing_no, name="filing_no")
 
 
-@indexer(IDossierMarker)
-def SearchableText(obj):
-    """searchableText indexer"""
-    context = aq_inner(obj)
-    transforms = getToolByName(obj, 'portal_transforms')
-    fields = [
-        schema.getFields(IBasic).get('title'),
-        schema.getFields(IBasic).get('description'),
-        schema.getFields(IDossier).get('keywords'),
-        ]
-    searchable = []
-    for field in fields:
-        try:
-            data = field.get(context)
-        except AttributeError:
-            data = field.get(field.interface(context))
-        if not data:
-            continue
-        if INamedFileField.providedBy(field):
-            # we need to convert the file data to string, so we can
-            # index it
-            datastream = ''
-            try:
-                datastream = transforms.convertTo(
-                    "text/plain",
-                    data.data,                    mimetype = data.contentType,
-                    filename = data.filename,
-                    )
-            except (ConflictError, KeyboardInterrupt):
-                raise
-            except Exception, e:
-                LOG.error("Error while trying to convert file contents "
-                          "to 'text/plain' "
-                          "in SearchablceIndex(dossier.py): %s" % (e, ))
-            data = str(datastream)
-        if isinstance(data, tuple) or isinstance(data, list):
-            data = " ".join([isinstance(a, unicode) and a.encode('utf-8') \
-                                 or a for a in data])
-        elif isinstance(data, unicode):
-            data = data.encode('utf-8')
-        if data:
-            searchable.append(data)
-    # append some other attributes to the searchableText index
-    # reference_number
-    refNumb = getAdapter(obj, IReferenceNumber)
-    searchable.append(refNumb.get_number())
+class SearchableTextExtender(grok.Adapter):
+    grok.context(IDossierMarker)
+    grok.name('IDossier')
+    grok.implements(dexteritytextindexer.IDynamicTextIndexExtender)
 
-    # sequence_number
-    seqNumb = getUtility(ISequenceNumber)
-    searchable.append(str(seqNumb.get_number(obj)))
+    def __init__(self, context):
+        self.context = context
 
-    #responsible
-    info = getUtility(IContactInformation)
-    dossier = IDossier(obj)
-    searchable.append(info.describe(dossier.responsible).encode('utf-8'))
+    def __call__(self):
+        searchable = []
+        # append some other attributes to the searchableText index
+        # reference_number
+        refNumb = getAdapter(self.context, IReferenceNumber)
+        searchable.append(refNumb.get_number())
 
-    #filling_no
-    dossier = IDossierMarker(obj)
-    if getattr(dossier, 'filing_no', None):
-        searchable.append(str(getattr(dossier, 'filing_no',
+        # sequence_number
+        seqNumb = getUtility(ISequenceNumber)
+        searchable.append(str(seqNumb.get_number(self.context)))
+
+        #responsible
+        info = getUtility(IContactInformation)
+        dossier = IDossier(self.context)
+        searchable.append(info.describe(dossier.responsible).encode(
+                'utf-8'))
+
+        #filling_no
+        dossier = IDossierMarker(self.context)
+        if getattr(dossier, 'filing_no', None):
+            searchable.append(str(getattr(dossier, 'filing_no',
                                       None)).encode('utf-8'))
 
-    return ' '.join(searchable)
-
-grok.global_adapter(SearchableText, name='SearchableText')
+        return ' '.join(searchable)
 
 
 @grok.subscribe(IDossierMarker, IObjectMovedEvent)

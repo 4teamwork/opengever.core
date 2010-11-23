@@ -27,6 +27,7 @@
 
     <!-- enabled behaviors -->
     <property name="behaviors">
+        <element value="collective.dexteritytextindexer.behavior.IDexterityTextIndexer" />
         <element value="opengever.base.behaviors.base.IOpenGeverBase" />
         <element value="ftw.journal.interfaces.IAnnotationsJournalizable" />
         <element value="opengever.dossier.behaviors.dossier.IDossier" />
@@ -145,7 +146,7 @@
             condition_expr="" url_expr="string:#" visible="True">
         <permission value="View"/>
     </action>
-    
+
     <action i18n:domain="opengever.dossier" title="Sharing" action_id="sharing" category="tabbedview-tabs"
             condition_expr="" url_expr="string:#"
             visible="True">
