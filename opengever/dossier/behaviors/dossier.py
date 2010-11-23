@@ -1,6 +1,4 @@
 from Acquisition import aq_inner, aq_parent
-from Products.CMFCore.utils import getToolByName
-from ZODB.POSException import ConflictError
 from collective import dexteritytextindexer
 from collective.elephantvocabulary import wrap_vocabulary
 from datetime import datetime
@@ -11,12 +9,10 @@ from opengever.dossier import _
 from opengever.dossier.widget import referenceNumberWidgetFactory
 from opengever.ogds.base.autocomplete_widget import AutocompleteFieldWidget
 from opengever.ogds.base.interfaces import IContactInformation
-from plone.app.dexterity.behaviors.metadata import IBasic
 from plone.autoform.interfaces import IFormFieldProvider
 from plone.directives import form, dexterity
 from plone.formwidget.contenttree import ObjPathSourceBinder
 from plone.indexer import indexer
-from plone.namedfile.interfaces import INamedFileField
 from plone.z3cform.textlines.textlines import TextLinesFieldWidget
 from z3c.relationfield.schema import RelationChoice, RelationList
 from zope import schema
