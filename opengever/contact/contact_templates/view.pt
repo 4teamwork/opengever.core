@@ -16,11 +16,8 @@
 
         <div tal:replace="structure provider:plone.belowcontenttitle" />
 
-        <p class="documentDescription" tal:content="context/Description" />
-
         <div tal:replace="structure provider:plone.abovecontentbody" />
 
-       
         <table class="listing">
           <tal:groups tal:repeat="group python:view.groups">
               <tal:rep tal:define="field python: group">
