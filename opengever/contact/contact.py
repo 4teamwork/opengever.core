@@ -1,7 +1,7 @@
 from five import grok
 
 from zope import schema
-
+from collective import dexteritytextindexer
 from plone.dexterity.content import Item
 from plone.directives import form
 from plone.indexer import indexer
@@ -27,8 +27,7 @@ class IContact(form.Schema):
             u'company',
             u'function',
             u'department',
-        ]
-    )
+        ])
 
     form.fieldset(
         u'internet',
@@ -37,8 +36,7 @@ class IContact(form.Schema):
             u'email',
             u'email2',
             u'url',
-        ]
-    )
+        ])
 
     form.fieldset(
         u'telefon',
@@ -48,8 +46,7 @@ class IContact(form.Schema):
             u'phone_fax',
             u'phone_mobile',
             u'phone_home',
-        ]
-    )
+        ])
 
     form.fieldset(
         u'address',
@@ -60,27 +57,26 @@ class IContact(form.Schema):
             u'zip_code',
             u'city',
             u'country',
-        ]
-    )
-    # fieldset adresse
-    # the rest
+        ])
 
     salutation = schema.TextLine(
         title = _(u'label_salutation', default=u'Salutation'),
         description = _(u'help_salutation', default=u''),
-        required = False
+        required = False,
         )
 
+    dexteritytextindexer.searchable('lastname')
     lastname = schema.TextLine(
         title = _(u'label_lastname', default=u'Lastname'),
         description = _(u'help_lastname', default=u''),
-        required = True
+        required = True,
         )
 
+    dexteritytextindexer.searchable('firstname')
     firstname = schema.TextLine(
         title = _(u'label_firstname', default=u'Firstname'),
         description = _(u'help_firstname', default=u''),
-        required = True
+        required = True,
         )
 
     company = schema.TextLine(
@@ -98,51 +94,50 @@ class IContact(form.Schema):
     department = schema.TextLine(
         title = _(u'label_department', default=u'Department'),
         description = _(u'help_department', default=u''),
-        required = False
+        required = False,
     )
 
     email = schema.TextLine(
         title = _(u'label_email', default=u'email'),
         description = _(u'help_email', default=u''),
-        required = False
+        required = False,
         )
 
     email2 = schema.TextLine(
         title = _(u'lable_email2', default=u'Email 2'),
         description = _('help_email2', default=u''),
-        required = False
+        required = False,
         )
 
     url = schema.URI(
         title = _(u'label_url', default=u'Url'),
         description = _(u'help_url', default=u''),
-        required = False
+        required = False,
         )
 
     phone_office = schema.TextLine(
         title = _(u'label_phone_office', default=u'Phone office'),
         description = _(u'help_phone_office', default=u''),
-        required = False
+        required = False,
         )
 
     phone_fax = schema.TextLine(
         title = _(u'label_phone_fax', default=u'Fax'),
         description = _(u'help_phone_fax', default=u''),
-        required = False
+        required = False,
         )
 
     phone_mobile = schema.TextLine(
         title = _(u'label_phone_mobile', default=u'Mobile'),
         description = _(u'help_phone_mobile', default=u''),
-        required = False
+        required = False,
         )
 
     phone_home = schema.TextLine(
         title = _(u'label_phone_home', default=u'Phone home'),
         description = _(u'help_phone_home', default=u''),
-        required = False
+        required = False,
         )
-
 
     picture = NamedImage(
         title=_(u'label_picture', default='Picture'),
@@ -152,37 +147,37 @@ class IContact(form.Schema):
     description = schema.Text(
         title=_(u'label_description', default=u'Description'),
         description = _(u'help_description', default=u''),
-        required=False
+        required=False,
         )
 
     address1 = schema.TextLine(
         title = _(u'label_address1', default=u'Address 1'),
         description = _(u'help_address1', default=u''),
-        required = False
+        required = False,
         )
 
     address2 = schema.TextLine(
         title = _(u'label_address2', default=u'Address 2'),
         description = _(u'help_address2', default=u''),
-        required = False
+        required = False,
         )
 
     zip_code = schema.TextLine(
         title = _(u'label_zip', default=u'ZIP'),
         description = _(u'help_zip', default=u''),
-        required = False
+        required = False,
         )
 
     city = schema.TextLine(
         title = _(u'label_city', default=u'City'),
         description = _(u'help_city', default=u''),
-        required = False
+        required = False,
         )
 
     country = schema.TextLine(
         title = _(u'label_country', default=u'Country'),
         description = _(u'help_country', default=u''),
-        required = False
+        required = False,
         )
 
 
@@ -221,13 +216,13 @@ grok.global_adapter(phone_office, name='phone_office')
 
 @indexer(IContact)
 def firstname(obj):
-    return obj.firstname 
+    return obj.firstname
 grok.global_adapter(firstname, name='firstname')
 
 
 @indexer(IContact)
 def lastname(obj):
-    return obj.lastname 
+    return obj.lastname
 grok.global_adapter(lastname, name='lastname')
 
 
