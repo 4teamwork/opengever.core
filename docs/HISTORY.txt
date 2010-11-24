@@ -5,6 +5,9 @@ Changelog
 2.0b2
 -----
 
+* Grid state storage key generator for sharing the configuration between different dossier types
+  [jbaumann]
+
 
 2.0b1
 -----
