@@ -125,17 +125,11 @@ class ITask(form.Schema):
         title=_(u'label_related_items', default=u'Related Items'),
         default=[],
         value_type=RelationChoice(title=u"Related",
-                                  source=DossierPathSourceBinder(
-                navigation_tree_query=
-                {'portal_type': [
-                    'opengever.document.document',
-                    'ftw.mail.mail'], },
-                portal_type=[
-                    "opengever.document.document",
-                    "ftw.mail.mail"], ),
-                                  ),
-        required=False,
-        )
+        source=DossierPathSourceBinder(
+            portal_type=("opengever.document.document", "ftw.mail.mail"), ),
+    ),
+required=False,
+)
 
     expectedStartOfWork = schema.Date(
         title =_(u"label_expectedStartOfWork", default="Start with work"),

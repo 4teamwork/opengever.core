@@ -16,8 +16,10 @@ class DossierPathSourceBinder(ObjPathSourceBinder):
                 parent.Type() != 'RepositoryFolder':
             dossier_path = '/'.join(parent.getPhysicalPath())
             parent = aq_parent(aq_inner(parent))
-
+        if not self.navigation_tree_query:
+            self.navigation_tree_query = {}
         self.navigation_tree_query['path'] = {'query': dossier_path}
+
         return self.path_source(
             context,
             selectable_filter=self.selectable_filter,
