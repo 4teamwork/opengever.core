@@ -9,7 +9,6 @@ from ftw.mail import utils
 @indexer(IMail)
 def document_author(obj):
     """ doucment_author indexer, return the Sender Adress """
-    import pdb; pdb.set_trace( )
     return utils.get_header(obj.msg, 'From')
 grok.global_adapter(document_author, name='document_author')
 
