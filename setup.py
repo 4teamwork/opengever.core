@@ -38,6 +38,7 @@ setup(name='opengever.contact',
         'setuptools',
         'five.grok',
         'opengever.tabbedview',
+        'collective.dexteritytextindexer',
         # -*- Extra requirements: -*-
         ],
         tests_require=tests_require,
