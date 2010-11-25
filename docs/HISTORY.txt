@@ -5,6 +5,12 @@ Changelog
 2.0b2
 -----
 
+* added multi selection autocomplete widget patch
+  [Jonas Baumann]
+
+* fixed extends path
+  [Jonas Baumann]
+
 * Removed "(None)" from describe when using it on a contact without a email.
   [jbaumann]
 
