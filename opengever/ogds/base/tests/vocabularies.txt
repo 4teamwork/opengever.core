@@ -233,7 +233,7 @@ Vocabulary of contacts.
     ...                   name='opengever.ogds.base.ContactsVocabulary')
     >>> voc = fact(portal)
     >>> fterms(list(voc))
-    [u'<Term contact:kaufmann-sandra:Kaufmann Sandra (sandra.kaufmann@test.ch)>', u'<Term contact:kappeli-elisabeth:K\xe4ppeli Elisabeth (elisabeth.kaeppeli@test.ch)>', u'<Term contact:wermuth-roger:Wermuth Roger (roger.wermuth@test.ch)>']
+    [u'<Term contact:kaufmann-sandra:Kaufmann Sandra (sandra.kaufmann@test.ch)>', u'<Term contact:kappeli-elisabeth:K\xe4ppeli Elisabeth (elisabeth.kaeppeli@test.ch)>', u'<Term contact:wermuth-roger:Wermuth Roger>']
 
 
 
@@ -246,7 +246,7 @@ Vocabulary of contacts and users.
     ...                   name='opengever.ogds.base.ContactsAndUsersVocabulary')
     >>> voc = fact(portal)
     >>> fterms(list(voc))
-    [u'<Term hugo.boss:Boss Hugo (hugo.boss)>', u'<Term peter.muster:Muster Peter (peter.muster)>', u'<Term hanspeter.linder:Linder Hans-Peter (hanspeter.linder)>', u'<Term contact:kaufmann-sandra:Kaufmann Sandra (sandra.kaufmann@test.ch)>', u'<Term contact:kappeli-elisabeth:K\xe4ppeli Elisabeth (elisabeth.kaeppeli@test.ch)>', u'<Term contact:wermuth-roger:Wermuth Roger (roger.wermuth@test.ch)>']
+    [u'<Term hugo.boss:Boss Hugo (hugo.boss)>', u'<Term peter.muster:Muster Peter (peter.muster)>', u'<Term hanspeter.linder:Linder Hans-Peter (hanspeter.linder)>', u'<Term contact:kaufmann-sandra:Kaufmann Sandra (sandra.kaufmann@test.ch)>', u'<Term contact:kappeli-elisabeth:K\xe4ppeli Elisabeth (elisabeth.kaeppeli@test.ch)>', u'<Term contact:wermuth-roger:Wermuth Roger>']
 
 
 Email contacts and users vocabulary
@@ -259,7 +259,7 @@ address they have.
     ...                   name='opengever.ogds.base.EmailContactsAndUsersVocabulary')
     >>> voc = fact(portal)
     >>> fterms(list(voc))
-    [u'<Term hugo@boss.local:Boss Hugo (hugo.boss, hugo@boss.local)>', u'<Term hugo@private.ch:Boss Hugo (hugo.boss, hugo@private.ch)>', u'<Term sandra.kaufmann@test.ch:Kaufmann Sandra (sandra.kaufmann@test.ch)>', u'<Term elisabeth.kaeppeli@test.ch:K\xe4ppeli Elisabeth (elisabeth.kaeppeli@test.ch)>', u'<Term roger.wermuth@test.ch:Wermuth Roger (roger.wermuth@test.ch)>']
+    [u'<Term hugo@boss.local:Boss Hugo (hugo.boss, hugo@boss.local)>', u'<Term hugo@private.ch:Boss Hugo (hugo.boss, hugo@private.ch)>', u'<Term sandra.kaufmann@test.ch:Kaufmann Sandra (sandra.kaufmann@test.ch)>', u'<Term elisabeth.kaeppeli@test.ch:K\xe4ppeli Elisabeth (elisabeth.kaeppeli@test.ch)>']
 
 
 

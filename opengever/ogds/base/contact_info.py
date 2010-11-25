@@ -287,7 +287,7 @@ class ContactInformation(grok.GlobalUtility):
 
             if with_email2 and contact.email2:
                 name = '%s (%s)' % (name, contact.email2)
-            else:
+            elif contact.email:
                 name = '%s (%s)' % (name, contact.email)
             return name
 

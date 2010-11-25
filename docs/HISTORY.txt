@@ -5,6 +5,9 @@ Changelog
 2.0b2
 -----
 
+* Removed "(None)" from describe when using it on a contact without a email.
+  [jbaumann]
+
 * Contact information utility doesn't accept contact objects anymore (not used yet), this solves a circular dependency.
   [jbaumann]
 

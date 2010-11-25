@@ -33,7 +33,7 @@ def create_contacts(portal):
         ('Sandra', 'Kaufmann', 'sandra.kaufmann@test.ch'),
         ('Elisabeth', u'K\xe4ppeli'.encode('utf8'),
          'elisabeth.kaeppeli@test.ch'),
-        ('Roger', 'Wermuth', 'roger.wermuth@test.ch'))
+        ('Roger', 'Wermuth', None))
 
     for firstname, lastname, email in contact_list:
         obj = utils.createContentInContainer(
