@@ -5,6 +5,18 @@ Changelog
 2.0a3
 -----
 
+* added searchableText indexer test
+  [pgross]
+
+* added searchable textindexer (done with collective.dexteritytextindexer)
+  [pgross]
+
+* removed wrong displaying the description, because its allso displaying in the content table
+  [pgross]
+
+* Fixed extends path
+  [jbaumann]
+
 
 2.0a2
 -----
