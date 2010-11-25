@@ -2,7 +2,6 @@ from Products.CMFCore.utils import getToolByName
 from Products.ZCatalog.ZCatalog import ZCatalog
 from Products.ZCatalog.interfaces import ICatalogBrain
 from five import grok
-from opengever.contact.contact import IContact
 from opengever.ogds.base.interfaces import IContactInformation, IUser
 from opengever.ogds.base.model.client import Client
 from opengever.ogds.base.model.user import User
@@ -232,7 +231,7 @@ class ContactInformation(grok.GlobalUtility):
     def describe(self, principal, with_email=False, with_email2=False):
         """Represent a user / contact / inbox / ... as string. This usually
         returns the fullname or another label / title.
-        `principal` could also be a user or a contact object or brain.
+        `principal` could also be a user object or a contact brain.
         """
 
         if not principal:
@@ -266,11 +265,6 @@ class ContactInformation(grok.GlobalUtility):
         # contact brain
         elif brain and brain_is_contact(brain):
             contact = brain
-            principal = contact.contactid
-
-        # contact obj
-        elif IContact.providedBy(principal):
-            contact = principal
             principal = contact.contactid
 
         # user object
@@ -347,10 +341,6 @@ class ContactInformation(grok.GlobalUtility):
                 brain_is_contact(principal):
             return principal.email
 
-        # principal may be a contact object
-        elif IContact.providedBy(principal):
-            return principal.email
-
         # principal may be a user object
         elif IUser.providedBy(principal):
             return principal.email
@@ -379,10 +369,6 @@ class ContactInformation(grok.GlobalUtility):
         # principal may be a contact brain
         elif ICatalogBrain.providedBy(principal) and \
                 brain_is_contact(principal):
-            return principal.email2
-
-        # principal may be a contact object
-        elif IContact.providedBy(principal):
             return principal.email2
 
         # principal may be a user object

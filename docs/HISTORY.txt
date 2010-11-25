@@ -5,6 +5,9 @@ Changelog
 2.0b2
 -----
 
+* Contact information utility doesn't accept contact objects anymore (not used yet), this solves a circular dependency.
+  [jbaumann]
+
 
 2.0a3
 -----
