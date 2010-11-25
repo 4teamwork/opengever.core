@@ -5,13 +5,13 @@ from opengever.dossier.behaviors.dossier import IDossierMarker
 from zope.interface import Interface
 
 
-class DossierGridStateStorageKeyGenerator(grok.Adapter):
+class DossierGridStateStorageKeyGenerator(grok.MultiAdapter):
     """This storage key generator creates a shared key for all dossier types,
     since we need to share the configuration between different dossier types.
     """
 
     grok.implements(IGridStateStorageKeyGenerator)
-    grok.adapts((IDossierMarker, Interface, Interface))
+    grok.adapts(IDossierMarker, Interface, Interface)
 
     def __init__(self, context, tabview, request):
         self.context = context
