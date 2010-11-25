@@ -2,11 +2,22 @@ Changelog
 =========
 
 
-2.0a3
+2.0b1
 -----
-* Issue #690 DocuComposer Formular und Abindung fixen 
+
+* fixed vdex vocabularies: switch language from de to de-ch since portal_languages has changed
+  [jbaumann]
+
+* fixed extends path
+  [jbaumann]
+
+* Issue #690, fixed validator problem, and icon problem in the docucomposer form
+  [pgross]
+
+* Issue #690 DocuComposer Formular und Abindung fixen
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/690/
   [23.11.2010, phgross]
+
 
 2.0a2
 -----
@@ -35,17 +46,17 @@ Changelog
 
 * Issue #506 DocuComposer: falsche Url
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/506/
-  added rewriting functionality in the docucomposer process (look dc_original_path and dc_rewrite_path in the Registry), 
+  added rewriting functionality in the docucomposer process (look dc_original_path and dc_rewrite_path in the Registry),
   [06.04.2010, phgross]
 
 * Issue #435 Darstellung bei ausgechecktem Dokument (Working Copy)
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/435
   [03.03.2010, jbaumann]
-  
+
 * Issue #491 Optimierungsmoeglichkeiten fuer File Preview
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/491
   [02.03.2010, jbaumann]
-  
+
 
 1.0a4
 -----
@@ -64,7 +75,7 @@ Changelog
 
 * Target release changed to 1.0a1
   [05.01.2010, jbaumann]
-  
+
 * Issue #306: Darstellung "Historie" bei Dokument aufraeumen.
   [18.12.2009, jbaumann]
 
