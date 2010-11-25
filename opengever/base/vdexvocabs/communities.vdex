@@ -7,7 +7,7 @@
     <term>
         <termIdentifier>ausserkantonal</termIdentifier>
         <caption>
-            <langstring language="de">Ausserkantonal</langstring>
+            <langstring language="de-ch">Ausserkantonal</langstring>
             <langstring language="en">Foreign canton</langstring>
         </caption>
     </term>
@@ -15,7 +15,7 @@
     <term>
         <termIdentifier>baar</termIdentifier>
         <caption>
-            <langstring language="de">Baar</langstring>
+            <langstring language="de-ch">Baar</langstring>
             <langstring language="en">Baar</langstring>
         </caption>
     </term>
@@ -23,7 +23,7 @@
     <term>
         <termIdentifier>cham</termIdentifier>
         <caption>
-            <langstring language="de">Cham</langstring>
+            <langstring language="de-ch">Cham</langstring>
             <langstring language="en">Cham</langstring>
         </caption>
     </term>
@@ -31,7 +31,7 @@
     <term>
         <termIdentifier>huenenberg</termIdentifier>
         <caption>
-            <langstring language="de">Hünenberg</langstring>
+            <langstring language="de-ch">Hünenberg</langstring>
             <langstring language="en">Hünenberg</langstring>
         </caption>
     </term>
@@ -39,7 +39,7 @@
     <term>
         <termIdentifier>kanton zug</termIdentifier>
         <caption>
-            <langstring language="de">Kanton Zug</langstring>
+            <langstring language="de-ch">Kanton Zug</langstring>
             <langstring language="en">Canton of Zug</langstring>
         </caption>
     </term>
@@ -47,7 +47,7 @@
     <term>
         <termIdentifier>menzingen</termIdentifier>
         <caption>
-            <langstring language="de">Menzingen</langstring>
+            <langstring language="de-ch">Menzingen</langstring>
             <langstring language="en">Menzingen</langstring>
         </caption>
     </term>
@@ -55,7 +55,7 @@
     <term>
         <termIdentifier>neuheim</termIdentifier>
         <caption>
-            <langstring language="de">Neuheim</langstring>
+            <langstring language="de-ch">Neuheim</langstring>
             <langstring language="en">Neuheim</langstring>
         </caption>
     </term>
@@ -63,7 +63,7 @@
     <term>
         <termIdentifier>oberaegeri</termIdentifier>
         <caption>
-            <langstring language="de">Oberägeri</langstring>
+            <langstring language="de-ch">Oberägeri</langstring>
             <langstring language="en">Oberägeri</langstring>
         </caption>
     </term>
@@ -71,7 +71,7 @@
     <term>
         <termIdentifier>risch</termIdentifier>
         <caption>
-            <langstring language="de">Risch</langstring>
+            <langstring language="de-ch">Risch</langstring>
             <langstring language="en">Risch</langstring>
         </caption>
     </term>
@@ -79,7 +79,7 @@
     <term>
         <termIdentifier>steinhausen</termIdentifier>
         <caption>
-            <langstring language="de">Steinhausen</langstring>
+            <langstring language="de-ch">Steinhausen</langstring>
             <langstring language="en">Steinhausen</langstring>
         </caption>
     </term>
@@ -87,7 +87,7 @@
     <term>
         <termIdentifier>unteraegeri</termIdentifier>
         <caption>
-            <langstring language="de">Unterägeri</langstring>
+            <langstring language="de-ch">Unterägeri</langstring>
             <langstring language="en">Unterägeri</langstring>
         </caption>
     </term>
@@ -95,7 +95,7 @@
     <term>
         <termIdentifier>walchwil</termIdentifier>
         <caption>
-            <langstring language="de">Walchwil</langstring>
+            <langstring language="de-ch">Walchwil</langstring>
             <langstring language="en">Walchwil</langstring>
         </caption>
     </term>
@@ -103,7 +103,7 @@
     <term>
         <termIdentifier>zug</termIdentifier>
         <caption>
-            <langstring language="de">Zug</langstring>
+            <langstring language="de-ch">Zug</langstring>
             <langstring language="en">Zug</langstring>
         </caption>
     </term>

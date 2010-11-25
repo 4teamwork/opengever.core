@@ -3,81 +3,81 @@
       orderSignificant="false" language="en">
 
     <vocabIdentifier>opengever.base.directorates</vocabIdentifier>
-    
+
     <term>
         <termIdentifier>bd</termIdentifier>
         <caption>
-            <langstring language="de">Baudirektion</langstring>
+            <langstring language="de-ch">Baudirektion</langstring>
             <langstring language="en">Baudirektion</langstring>
         </caption>
     </term>
     <term>
         <termIdentifier>di</termIdentifier>
         <caption>
-            <langstring language="de">Direktion des Inneren</langstring>
+            <langstring language="de-ch">Direktion des Inneren</langstring>
             <langstring language="en">Direktion des Inneren</langstring>
         </caption>
     </term>
     <term>
         <termIdentifier>dbk</termIdentifier>
         <caption>
-            <langstring language="de">Direktion für Bildung und Kultur</langstring>
+            <langstring language="de-ch">Direktion für Bildung und Kultur</langstring>
             <langstring language="en">Direktion für Bildung und Kultur</langstring>
         </caption>
     </term>
     <term>
         <termIdentifier>fd</termIdentifier>
         <caption>
-            <langstring language="de">Finanzdirektion</langstring>
+            <langstring language="de-ch">Finanzdirektion</langstring>
             <langstring language="en">Finanzdirektion</langstring>
         </caption>
     </term>
     <term>
         <termIdentifier>gdf</termIdentifier>
         <caption>
-            <langstring language="de">Gesundheitsdirektion</langstring>
+            <langstring language="de-ch">Gesundheitsdirektion</langstring>
             <langstring language="en">Gesundheitsdirektion</langstring>
         </caption>
     </term>
     <term>
         <termIdentifier>jpk</termIdentifier>
         <caption>
-            <langstring language="de">Justizprüfungskommission</langstring>
+            <langstring language="de-ch">Justizprüfungskommission</langstring>
             <langstring language="en">Justizprüfungskommission</langstring>
         </caption>
     </term>
     <term>
         <termIdentifier>og</termIdentifier>
         <caption>
-            <langstring language="de">Obergericht</langstring>
+            <langstring language="de-ch">Obergericht</langstring>
             <langstring language="en">Obergericht</langstring>
         </caption>
     </term>
     <term>
         <termIdentifier>sd</termIdentifier>
         <caption>
-            <langstring language="de">Sicherheitsdirektion</langstring>
+            <langstring language="de-ch">Sicherheitsdirektion</langstring>
             <langstring language="en">Sicherheitsdirektion</langstring>
         </caption>
     </term>
     <term>
         <termIdentifier>sk</termIdentifier>
         <caption>
-            <langstring language="de">Staatskanzlei</langstring>
+            <langstring language="de-ch">Staatskanzlei</langstring>
             <langstring language="en">Staatskanzlei</langstring>
         </caption>
     </term>
     <term>
         <termIdentifier>vg</termIdentifier>
         <caption>
-            <langstring language="de">Verwaltungsgericht</langstring>
+            <langstring language="de-ch">Verwaltungsgericht</langstring>
             <langstring language="en">Verwaltungsgericht</langstring>
         </caption>
     </term>
     <term>
         <termIdentifier>vd</termIdentifier>
         <caption>
-            <langstring language="de">Volkswirtschaftsdirektion</langstring>
+            <langstring language="de-ch">Volkswirtschaftsdirektion</langstring>
             <langstring language="en">Volkswirtschaftsdirektion</langstring>
         </caption>
     </term>
