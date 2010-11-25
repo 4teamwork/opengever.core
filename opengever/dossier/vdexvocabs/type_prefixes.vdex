@@ -7,14 +7,14 @@
         <termIdentifier>government</termIdentifier>
         <caption>
             <langstring language="en">Government</langstring>
-            <langstring language="de">Regierungsrat</langstring>
+            <langstring language="de-ch">Regierungsrat</langstring>
         </caption>
     </term>
     <term>
         <termIdentifier>state-archives</termIdentifier>
         <caption>
             <langstring language="en">State Archives</langstring>
-            <langstring language="de">Staatsarchiv</langstring>
+            <langstring language="de-ch">Staatsarchiv</langstring>
         </caption>
     </term>
 
