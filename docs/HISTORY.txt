@@ -2,9 +2,11 @@ Changelog
 =========
 
 
-2.0a3
+2.0b1
 -----
 
+* remove very old pdb ;-)
+  [Philippe Gross]
 
 2.0a2
 -----
