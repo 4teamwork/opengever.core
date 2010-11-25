@@ -2,8 +2,11 @@ Changelog
 =========
 
 
-2.0a3
+2.0b1
 -----
+
+* added schema for ldap_plugin.xml
+  [Philippe Gross]
 
 
 2.0a2
@@ -20,18 +23,18 @@ Changelog
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/505
   Added new field value inbox_group to inbox in generic setup
   [09.04.2010, jbaumann]
-  
+
 * Issue #514 Reiter "Eingangskorb" darf nur angezeigt werden, wenn der angemeldete Benutzer auf den Eingangskorb zugreifen kann
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/514/
   [06.04.2010, jbaumann]
-  
+
 * Fixed bug when running opengever.examplecontent's GS profile "journal" multiple times
   [08.03.2010, jbaumann]
-  
+
 * Issue #457 Ordnungsposition: Werte unter dem Reiter "Lebenszyklus" den Vorgaben des csv anpassen
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/457
   [22.02.2010, jbaumann]
-  
+
 
 1.0a2
 -----
@@ -48,11 +51,11 @@ Changelog
   Content creator: support for List-fields
   minor-ogds-clients GS-profile: added default values for new fields
   [13.01.2010, jbaumann]
-  
+
 * Issue #353: Example-Content setup profiles aufsplitten
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/353
   Changed users csv: added "groups" column. Reimplemented pas importer.
   [11.01.2010, jbaumann]
-  
+
 * Initial release
 
