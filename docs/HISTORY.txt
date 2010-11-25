@@ -2,8 +2,20 @@ Changelog
 =========
 
 
-2.0a3
+2.0b1
 -----
+
+* fixed vdex vocabularies: switch language from de to de-ch since portal_languages has changed
+  [Jonas Baumann]
+
+* fixed sourcebinder and related documents field
+  [Philippe Gross]
+
+* fixed extends path
+  [Jonas Baumann]
+
+* fixed fuzzy entries in translations
+  [Jonas Baumann]
 
 * Successor wizard form: Added cancel button
   [jbaumann]
