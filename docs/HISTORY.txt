@@ -2,8 +2,35 @@ Changelog
 =========
 
 
-2.0a3
+2.0b1
 -----
+
+* fixed vdex vocabularies: switch language from de to de-ch since portal_languages has changed
+  [Jonas Baumann]
+
+* added missing dependency opengever.sharing
+  [Jonas Baumann]
+
+* fixed extends path
+  [Jonas Baumann]
+
+* removed unused imports
+  [Jonas Baumann]
+
+* use collective.dexteritytextindexer for searchable text index
+  [Jonas Baumann]
+
+* cleanup
+  [Jonas Baumann]
+
+* translations of copy documents to remote client wizard
+  [Jonas Baumann]
+
+* Copy documents to remote client: implemented wizard, using autocomplete now, fixed various smaller issues
+  [Jonas Baumann]
+
+* moved transport module to browser, since its a wizard
+  [Jonas Baumann]
 
 * Copy documents to remote client: implemented wizard, using autocomplete now, fixed various smaller issues
   [jbaumann]
