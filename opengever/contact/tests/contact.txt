@@ -1,7 +1,8 @@
 Contact
 ======= 
 
-blba bla bla
+Helpers:
+
 
 do some imports and configurations
     >>> from plone.testing.z2 import Browser
@@ -9,6 +10,7 @@ do some imports and configurations
     >>> from plone.app.testing import TEST_USER_PASSWORD
     >>> from plone.app.testing import setRoles
     >>> from plone.dexterity.utils import createContentInContainer
+    >>> from Products.CMFCore.utils import getToolByName
 
     >>> app = layer['app']
     >>> portal = layer['portal']
@@ -39,6 +41,7 @@ create contact folder
     >>> browser.getControl('Save').click()
 
 test view:
+----------
 
 create a contact:
 
@@ -53,10 +56,37 @@ create a contact:
 
     >>> browser.url
     'http://nohost/plone/opengever.contact.contactfolder/++add++opengever.contact.contact'
-    >>> browser.getControl('Firstname').value = 'testi'
-    >>> browser.getControl('Lastname').value = 'testmann'
+    >>> browser.getControl('Firstname').value = 'Hanspeter'
+    >>> browser.getControl('Lastname').value = 'Walter'
+    >>> browser.getControl('Description').value = 'Lorem ipsum, bla bla'
     >>> browser.getControl('Save').click()
     >>> browser.url
     'http://nohost/plone/opengever.contact.contactfolder/opengever.contact.contact/view'
     
-    
+
+test searchabelText indexing
+----------------------------
+
+helper:
+
+    >>> def obj2brain(obj):
+    ...     catalog = getToolByName(obj, 'portal_catalog')
+    ...     query = {'path': {'query': '/'.join(obj.getPhysicalPath()),
+    ...                       'depth': 0}}
+    ...     brains = catalog(query)
+    ...     if len(brains) == 0:
+    ...         raise Exception('Not in catalog: %s' % obj)
+    ...     else:
+    ...         return brains[0]
+
+    >>> def getSearchableText(obj):
+    ...     brain = obj2brain(obj)
+    ...     catalog = getToolByName(obj, 'portal_catalog')
+    ...     data = catalog.getIndexDataForRID(brain.getRID())
+    ...     return data['SearchableText']
+
+    >>> obj = portal.get(
+    ...     'opengever.contact.contactfolder').get(
+    ...         'opengever.contact.contact')
+    >>> getSearchableText(obj)
+    ['hanspeter', 'walter']
