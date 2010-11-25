@@ -2,8 +2,17 @@ Changelog
 =========
 
 
-2.0a3
+2.0b1
 -----
+
+* added ISQLAlchemy interface for tabbedview tabs, this decides to use SQL in ftw.dictstorage
+  [Jonas Baumann]
+
+* obsolete
+  [Victor Baumann]
+
+* js moved to ftw.tabbedview. generic refactored to use containers only
+  [Victor Baumann]
 
 
 2.0a2
@@ -24,10 +33,10 @@ Changelog
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/511
   Name der Kontakte werden nun angezeigt.
   [06.04.2010, jbaumann]
-  
+
 * Issue #483 Spaltensortierung bei der Dossieruebersicht auf Stufe Ordnungssystem
   [11.03.2010, jbaumann]
-  
+
 * Issue #483 Spaltensortierung bei der Dossieruebersicht auf Stufe Ordnungssystem
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/483/
   Vergleichen von nicht gesetzten Daten optimiert.
@@ -37,14 +46,14 @@ Changelog
 * Issue #480 Beteiligung am Dossier hinzufuegen sollte auch in "Aktionsleiste" moeglich sein nicht nur ueber das Menue "Aktionen"
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/480
   [25.02.2010, jbaumann]
-  
+
 * Issue #479 Dokumentenuebersicht auf Stufe Dossier: "In Bearbeitung bei Brugger Sylvia"
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/479
   [23.02.2010, jbaumann]
-  
+
 * Participants tab: show particpants readable (with fullname and email)
   [04.02.2010, jbaumann]
-  
+
 
 1.0a3
 -----
@@ -59,11 +68,11 @@ Changelog
 
 * Tasks Tab: limited enabled actions to change_state action
   [07.01.2010, jbaumann]
-  
+
 * Issue #332: Aufgabenuebersicht, Stufe Dossier: Spalten anpassen
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/332/view
   [05.01.2010, jbaumann]
-  
+
 * Issue #322: TabbedView: uebersetzung "more actions"
   [04.01.2010, jbaumann]
 
