@@ -9,6 +9,19 @@ Changelog
 2.0a3
 -----
 
+* collective.dexteritytextindexer for searchable text
+  [23.11.2010, jbaumann]
+
+* Issue #683 Migration SKA.KR
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/683/
+  added parties vdex vocabulary
+  [23.11.2010, phgross]
+  
+
+* Issue #683 Migration SKA.KR
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/683/
+  added vdex vocabs
+  [23.11.2010, ttschanz]
 
 2.0a2
 -----
