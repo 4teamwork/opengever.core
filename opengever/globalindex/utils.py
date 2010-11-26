@@ -11,9 +11,11 @@ def indexed_task_link(item, display_client=False):
     the title.
     """
 
+    site = getSite()
+
     # render icon image
     if item.icon:
-        image = '<img src="%s" /> ' % item.icon
+        image = '<img src="%s/%s" /> ' % (site.absolute_url(), item.icon)
     else:
         image = ''
 
@@ -26,7 +28,7 @@ def indexed_task_link(item, display_client=False):
 
     # has the user access to the target task?
     has_access = False
-    mtool = getToolByName(getSite(), 'portal_membership')
+    mtool = getToolByName(site, 'portal_membership')
     member = mtool.getAuthenticatedMember()
 
     if member:
