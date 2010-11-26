@@ -30,7 +30,7 @@ class DossierListingPDF(BasePDFListing):
             data.append(self._prepare_table_row(
                     unicode(brain.sequence_number).encode('utf-8'),
                     getattr(brain, 'filing_no', None) or '',
-                    unicode(self.get_repository_title(brain)).encode('utf-8'),
+                    self.get_repository_title(brain),
                     unicode(brain.Title).encode('utf-8'),
                     '%s / %s' % (client.title,
                                  info.describe(brain.responsible)),

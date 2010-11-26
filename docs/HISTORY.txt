@@ -5,6 +5,9 @@ Changelog
 2.0a3
 -----
 
+* Fixed unicode error in dosserlisting view
+  [jbaumann]
+
 
 2.0a2
 -----
