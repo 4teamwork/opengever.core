@@ -1,11 +1,15 @@
 from AccessControl import getSecurityManager, Unauthorized
 from five import grok
 from opengever.document.document import IDocumentSchema
+from opengever.document.events import ObjectCheckedInEvent
+from opengever.document.events import ObjectCheckedOutEvent
+from opengever.document.events import ObjectCheckoutCanceledEvent
 from opengever.document.interfaces import ICheckinCheckoutManager
 from plone.locking.interfaces import ITTWLockable
 from plone.locking.interfaces import LockType
 from zope.annotation.interfaces import IAnnotations
 from zope.component import getAdapter
+from zope.event import notify
 from zope.publisher.interfaces.browser import IBrowserRequest
 
 
@@ -68,6 +72,9 @@ class CheckinCheckoutManager(grok.MultiAdapter):
         # finally, reindex the object
         self.context.reindexObject()
 
+        # fire the event
+        notify(ObjectCheckedOutEvent(self.context, ''))
+
     def is_checkin_allowed(self):
         """Checks whether checkin is allowed for the current user on the
         adapted document.
@@ -100,7 +107,7 @@ class CheckinCheckoutManager(grok.MultiAdapter):
             return False
 
 
-    def checkin(self, comment=None):
+    def checkin(self, comment=''):
         """Checkin the adapted document, using the `comment` for the
         journal entry.
         """
@@ -120,6 +127,9 @@ class CheckinCheckoutManager(grok.MultiAdapter):
 
         # finally, reindex the object
         self.context.reindexObject()
+
+        # fire the event
+        notify(ObjectCheckedInEvent(self.context, comment))
 
 
     def is_cancel_allowed(self):
@@ -167,6 +177,10 @@ class CheckinCheckoutManager(grok.MultiAdapter):
 
         # finally, reindex the object
         self.context.reindexObject()
+
+        # fire the event
+        notify(ObjectCheckoutCanceledEvent(self.context))
+
 
     @property
     def locking(self):
