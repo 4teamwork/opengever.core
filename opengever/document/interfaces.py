@@ -69,19 +69,6 @@ class IDocumentType(Interface):
     )
 
 
-class IDocuComposer(Interface):
-    dc_original_path = schema.TextLine(
-        title=u'Original URL path (DocuComposer)',
-        description=u'Original url path of DocuComposer requests. \
-            Only enter a path if a url rewrite is necessary. In this case, \
-            also the property rewritten_path needs to be filled in.')
-
-    dc_rewritten_path = schema.TextLine(
-        title=u'Rewritten URL path (DocuComposer)',
-        description=u'Rewritten url path used by DocuComposer requests. \
-        See also property "Original URL path (DocuComposer)".')
-
-
 class ISendDocumentConf(Interface):
     max_size = schema.Int(
         title=u'max_size',
