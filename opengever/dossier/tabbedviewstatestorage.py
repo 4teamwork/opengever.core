@@ -2,7 +2,8 @@ from Products.CMFCore.utils import getToolByName
 from five import grok
 from ftw.tabbedview.interfaces import IGridStateStorageKeyGenerator
 from opengever.dossier.behaviors.dossier import IDossierMarker
-from zope.interface import Interface
+from zope.publisher.interfaces.browser import IBrowserPage
+from zope.publisher.interfaces.browser import IBrowserRequest
 
 
 class DossierGridStateStorageKeyGenerator(grok.MultiAdapter):
@@ -11,7 +12,7 @@ class DossierGridStateStorageKeyGenerator(grok.MultiAdapter):
     """
 
     grok.implements(IGridStateStorageKeyGenerator)
-    grok.adapts(IDossierMarker, Interface, Interface)
+    grok.adapts(IDossierMarker, IBrowserPage, IBrowserRequest)
 
     def __init__(self, context, tabview, request):
         self.context = context
