@@ -3,7 +3,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2010-11-12 13:57+0000\n"
+"POT-Creation-Date: 2010-11-30 10:41+0000\n"
 "PO-Revision-Date: 2009-01-01 10:00+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: Jonas Baumann <j.baumann@4teamwork.ch>\n"
@@ -88,7 +88,7 @@ msgid "button_checkin"
 msgstr "Einchecken"
 
 #. Default: "Create"
-#: ./opengever/document/docucomposer.py:47
+#: ./opengever/document/docucomposer.py:53
 msgid "button_create"
 msgstr "Erstellen"
 
@@ -129,7 +129,7 @@ msgid "heading_checkin_comment_form"
 msgstr "Dokumente einchecken"
 
 #. Default: "DocuComposer"
-#: ./opengever/document/docucomposer.py:38
+#: ./opengever/document/docucomposer.py:39
 msgid "heading_docucomposer_wizard_form"
 msgstr "DocuComposer"
 

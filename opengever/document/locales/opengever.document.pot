@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2010-11-12 13:57+0000\n"
+"POT-Creation-Date: 2010-11-30 10:41+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -86,7 +86,7 @@ msgid "button_checkin"
 msgstr ""
 
 #. Default: "Create"
-#: ./opengever/document/docucomposer.py:47
+#: ./opengever/document/docucomposer.py:53
 msgid "button_create"
 msgstr ""
 
@@ -127,7 +127,7 @@ msgid "heading_checkin_comment_form"
 msgstr ""
 
 #. Default: "DocuComposer"
-#: ./opengever/document/docucomposer.py:38
+#: ./opengever/document/docucomposer.py:39
 msgid "heading_docucomposer_wizard_form"
 msgstr ""
 
