@@ -21,7 +21,6 @@ from plone.i18n.normalizer.interfaces import IIDNormalizer
 from plone.indexer import indexer
 from plone.namedfile.field import NamedFile
 from plone.namedfile.interfaces import INamedFileField
-from plone.stagingbehavior.relation import StagingRelationValue
 from plone.supermodel.interfaces import FIELDSETS_KEY
 from plone.supermodel.model import Fieldset
 from plone.app.versioningbehavior.behaviors import IVersionable
@@ -392,12 +391,7 @@ grok.global_adapter( delivery_date, name='delivery_date' )
 # INDEX: checked_out
 @indexer( IDocumentSchema )
 def checked_out( obj ):
-    context = aq_inner( obj )
-    rels = StagingRelationValue.get_relations_of( context )
-    if len( rels ):
-        rel = rels[0]
-        return rel.creator
-    return '-'
+    return 'NOT IMPLEMENTED'
 grok.global_adapter( checked_out, name='checked_out' )
 
 
