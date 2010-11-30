@@ -35,7 +35,7 @@ $(function($) {
 
   function load_client_amount() {
     var config = get_current_config();
-    var amount = 2;
+    var amount = 1;
     if(config.clients && config.clients.length > 0) {
       amount = config.clients.length;
     }
