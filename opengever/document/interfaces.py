@@ -76,3 +76,40 @@ class ISendDocumentConf(Interface):
         default=5,
     )
 
+
+class ICheckinCheckoutManager(Interface):
+    """Interface for the checkin / checkout manager.
+    """
+
+    def checked_out():
+        """If the document is checked out, this method returns the userid
+        of the user who has checked out the document, otherwise it
+        returns `None`.
+        """
+
+    def is_checkout_allowed():
+        """Checks whether checkout is allowed for the current user on the
+        adapted document.
+        """
+
+    def checkout():
+        """Checkout the adapted document.
+        """
+
+    def is_checkin_allowed():
+        """Checks whether checkin is allowed for the current user on the
+        adapted document.
+        """
+
+    def checkin(comment=None):
+        """Checkin the adapted document, using the `comment` for the
+        journal entry.
+        """
+
+    def is_cancel_allowed():
+        """Checks whether the user is able to cancel a checkout.
+        """
+
+    def cancel():
+        """Cancel the current checkout.
+        """

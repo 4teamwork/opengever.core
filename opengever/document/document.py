@@ -13,24 +13,25 @@ from opengever.tabbedview.browser.tabs import Tasks
 from plone.app.dexterity.behaviors.metadata import IBasic
 from plone.app.iterate.interfaces import IWorkingCopy
 from plone.app.layout.viewlets.interfaces import IBelowContentTitle
+from plone.app.versioningbehavior.behaviors import IVersionable
 from plone.autoform.interfaces import OMITTED_KEY
 from plone.dexterity.content import Item
 from plone.directives import form, dexterity
 from plone.directives.dexterity import DisplayForm
 from plone.i18n.normalizer.interfaces import IIDNormalizer
 from plone.indexer import indexer
+from plone.locking.interfaces import INonStealableLock
 from plone.namedfile.field import NamedFile
 from plone.namedfile.interfaces import INamedFileField
 from plone.supermodel.interfaces import FIELDSETS_KEY
 from plone.supermodel.model import Fieldset
-from plone.app.versioningbehavior.behaviors import IVersionable
 from plone.z3cform.textlines.textlines import TextLinesFieldWidget
 from z3c.form.browser import checkbox
 from zc.relation.interfaces import ICatalog
 from zope import schema
 from zope.app.intid.interfaces import IIntIds
 from zope.component import getUtility
-from zope.interface import invariant, Invalid, Interface
+from zope.interface import invariant, Invalid, Interface, implements
 from zope.lifecycleevent.interfaces import IObjectCreatedEvent
 from zope.lifecycleevent.interfaces import IObjectModifiedEvent
 import logging
@@ -230,6 +231,8 @@ def document_author_default_value(data):
         return user
 
 class Document(Item):
+
+    implements(INonStealableLock)
 
     # disable file preview creation when modifying or creating document
     buildPreview = False
