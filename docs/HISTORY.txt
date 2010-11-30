@@ -5,6 +5,9 @@ Changelog
 2.0b2
 -----
 
+* Fixed name of transmogrify.dexterity.schemaupdater (which was renamed)
+  [jbaumann]
+
 
 2.0b1
 -----
