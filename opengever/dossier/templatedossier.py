@@ -19,7 +19,6 @@ from opengever.base.interfaces import ISequenceNumber
 
 from ftw.table import helper
 from ftw.table.interfaces import ITableGenerator
-from opengever.document.staging.manager import ICheckinCheckoutManager
 from opengever.tabbedview.helper import linked
 
 
@@ -92,19 +91,21 @@ class TemplateDocumentFormView(grok.View):
                     # redirect to the parent Dossier of the new document
                     # and set the redirectTo parameter, which start the
                     # zem-file download. See startredirect.js
-                    manager = ICheckinCheckoutManager(newdoc)
-                    wc = manager.checkout('', show_status_message=False)
-                    portal = self.context.portal_url.getPortalObject()
-                    xpr = re.compile('href="(.*?)"')
-                    html = portal.externalEditLink_(wc)
-                    url = xpr.search(html).groups()[0]
-                    url = url.replace(portal.absolute_url(), '')
-                    get = urllib.urlencode({'redirectTo': url})
 
-                    redirect_url = '%s?%s#documents_overview' % (
-                        self.context.absolute_url(), get)
-                    return self.request.RESPONSE.redirect(
-                        redirect_url)
+                    raise NotImplemented()
+                    # manager = ICheckinCheckoutManager(newdoc)
+                    # wc = manager.checkout('', show_status_message=False)
+                    # portal = self.context.portal_url.getPortalObject()
+                    # xpr = re.compile('href="(.*?)"')
+                    # html = portal.externalEditLink_(wc)
+                    # url = xpr.search(html).groups()[0]
+                    # url = url.replace(portal.absolute_url(), '')
+                    # get = urllib.urlencode({'redirectTo': url})
+
+                    # redirect_url = '%s?%s#documents_overview' % (
+                    #     self.context.absolute_url(), get)
+                    # return self.request.RESPONSE.redirect(
+                    #     redirect_url)
                 else:
                     return self.request.RESPONSE.redirect(
                         self.context.absolute_url()+'#documents_overview')
