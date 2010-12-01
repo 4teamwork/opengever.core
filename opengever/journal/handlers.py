@@ -3,7 +3,9 @@ from five import grok
 from ftw.journal.events.events import JournalEntryEvent
 from ftw.journal.interfaces import IJournalizable
 from opengever.document.document import IDocumentSchema
-from opengever.document.interfaces import IObjectCheckedInEvent, IObjectCheckedOutEvent
+from opengever.document.interfaces import IObjectCheckedInEvent
+from opengever.document.interfaces import IObjectCheckedOutEvent
+from opengever.document.interfaces import IObjectCheckoutCanceledEvent
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.browser.participants import role_list_helper
 from opengever.dossier.interfaces import IParticipationCreated
@@ -178,6 +180,14 @@ def document_checked_in(context, event):
     journal_entry_factory(context, DOCUMENT_CHECKED_IN, title,
                           comment=user_comment)
     return
+
+
+DOCUMENT_CHECKOUT_CANCEL = 'Canceled document checkout'
+@grok.subscribe(IDocumentSchema, IObjectCheckoutCanceledEvent)
+def document_checkout_canceled(context, event):
+    title = _(u'label_document_checkout_cancel',
+              default=u'Canceled document checkout')
+    journal_entry_factory(context, DOCUMENT_CHECKOUT_CANCEL, title)
 
 
 # ----------------------- TASK -----------------------
