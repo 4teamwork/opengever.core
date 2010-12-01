@@ -60,4 +60,12 @@
         for="opengever.document.document.IDocumentSchema"
         />
 
+    <!-- custom edit form for documents -->
+    <browser:page
+          for="opengever.document.document.IDocumentSchema"
+          name="edit"
+          class=".forms.DocumentEditForm"
+          permission="cmf.ModifyPortalContent"
+          />
+
 </configure>
