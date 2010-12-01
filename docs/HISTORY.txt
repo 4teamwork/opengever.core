@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-2.0a3
+2.0b1
 -----
 
 * Fixed icon path in global task listing helper
