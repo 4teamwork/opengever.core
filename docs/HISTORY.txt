@@ -5,6 +5,8 @@ Changelog
 2.0b2
 -----
 
+* fixed template import with transmogrifier
+  [phgross]
 
 2.0b1
 -----
