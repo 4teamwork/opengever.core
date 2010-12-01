@@ -11,6 +11,7 @@ from plone.z3cform import layout
 from z3c.form import form, field, button
 from z3c.form.interfaces import HIDDEN_MODE
 from zope import schema
+from zope.component import getMultiAdapter
 from zope.interface import Interface
 
 
@@ -49,7 +50,9 @@ class CheckinCommentForm(form.Form):
         if len(errors)==0:
             # check in each document
             for obj in self.objects:
-                ICheckinCheckoutManager(obj, data['comment'])
+                manager = getMultiAdapter((obj, obj.REQUEST),
+                                          ICheckinCheckoutManager)
+                manager.checkin(data['comment'])
 
             # redirect to dossier
             dossier = self.context

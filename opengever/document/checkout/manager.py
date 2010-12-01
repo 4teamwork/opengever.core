@@ -1,4 +1,5 @@
 from AccessControl import getSecurityManager, Unauthorized
+from Products.CMFCore.utils import getToolByName
 from five import grok
 from opengever.document.document import IDocumentSchema
 from opengever.document.events import ObjectCheckedInEvent
@@ -44,6 +45,10 @@ class CheckinCheckoutManager(grok.MultiAdapter):
         if self.checked_out():
             return False
 
+        # is it versionable?
+        if not self.repository.isVersionable(self.context):
+            return False
+
         # does the user have the necessary permission?
         if not self.check_permission('opengever.document: Checkout'):
             return False
@@ -85,6 +90,10 @@ class CheckinCheckoutManager(grok.MultiAdapter):
         if not self.checked_out():
             return False
 
+        # is it versionable?
+        if not self.repository.isVersionable(self.context):
+            return False
+
         # is the user able to write to the object?
         if not self.check_permission('cmf.ModifyPortalContent'):
             return False
@@ -117,8 +126,8 @@ class CheckinCheckoutManager(grok.MultiAdapter):
         if not self.is_checkin_allowed():
             raise Unauthorized
 
-        # XXX : create new version
-        print 'XXX create new document version on checkin'
+        # create new version in CMFEditions
+        self.repository.save(obj=self.context, comment=comment)
 
         # unlock the object
         self.locking.unlock(lock_type=DOCUMENT_CHECKOUT_LOCK)
@@ -139,6 +148,10 @@ class CheckinCheckoutManager(grok.MultiAdapter):
 
         # is the document checked out?
         if not self.checked_out():
+            return False
+
+        # is it versionable?
+        if not self.repository.isVersionable(self.context):
             return False
 
         # is the user allowed to cancel?
@@ -198,6 +211,17 @@ class CheckinCheckoutManager(grok.MultiAdapter):
         except AttributeError:
             self._annotations = IAnnotations(self.context)
         return self._annotations
+
+    @property
+    def repository(self):
+        """The portal_repository tool
+        """
+        try:
+            self._portal_repository
+        except AttributeError:
+            self._portal_repository = getToolByName(self.context,
+                                                    'portal_repository')
+        return self._portal_repository
 
     def check_permission(self, permission):
         """Checks, whether the user has the `permission` on the adapted
