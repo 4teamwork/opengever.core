@@ -5,6 +5,12 @@ Changelog
 2.0b2
 -----
 
+* moved all docucomposer speficific stuff to a own package, called opengever.docucomposer
+  [Philippe Gross]
+
+* updated translations
+  [Jonas Baumann]
+
 
 2.0b1
 -----
