@@ -74,9 +74,13 @@
   </action>
 
   <!-- external editor -->
-  <action title="Edit with external application" action_id="extedit" category="object"
-          url_expr="string:$object_url/external_edit"
-          condition_expr="object/externalEditorEnabled" visible="True">
+  <action
+        action_id="extedit"
+        visible="True"
+        title="Edit with external application"
+        url_expr="string:$object_url/external_edit"
+        condition_expr="object/@@external_editing_allowed"
+        category="object">
     <permission value="Modify portal content"/>
   </action>
 
