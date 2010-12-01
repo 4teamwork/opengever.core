@@ -4,6 +4,8 @@ Changelog
 
 2.0a3
 -----
+* Added standard templates from opengever.examplecontent
+  [phgross]
 
 * Fixed name of transmogrify.dexterity.schemaupdater (which was renamed)
   [jbaumann]
