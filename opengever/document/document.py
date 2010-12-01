@@ -7,6 +7,7 @@ from datetime import datetime
 from five import grok
 from opengever.base.interfaces import IReferenceNumber, ISequenceNumber
 from opengever.document import _
+from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.tabbedview.browser.tabs import OpengeverTab
 from opengever.tabbedview.browser.tabs import Tasks
@@ -31,7 +32,7 @@ from z3c.form.browser import checkbox
 from zc.relation.interfaces import ICatalog
 from zope import schema
 from zope.app.intid.interfaces import IIntIds
-from zope.component import getUtility
+from zope.component import getUtility, queryMultiAdapter
 from zope.interface import invariant, Invalid, Interface, implements
 from zope.lifecycleevent.interfaces import IObjectCreatedEvent
 from zope.lifecycleevent.interfaces import IObjectModifiedEvent
@@ -395,7 +396,16 @@ grok.global_adapter( delivery_date, name='delivery_date' )
 # INDEX: checked_out
 @indexer( IDocumentSchema )
 def checked_out( obj ):
-    return 'NOT IMPLEMENTED'
+    manager = queryMultiAdapter((obj, obj.REQUEST), ICheckinCheckoutManager)
+    if not manager:
+        return ''
+
+    value = manager.checked_out()
+    if value:
+        return value
+
+    else:
+        return ''
 grok.global_adapter( checked_out, name='checked_out' )
 
 
