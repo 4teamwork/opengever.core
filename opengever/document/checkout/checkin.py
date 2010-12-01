@@ -114,7 +114,7 @@ class CheckinCommentForm(form.Form):
 
         # from the context?
         if IDocumentSchema.providedBy(self.context):
-            return ['/'.join(self.context)]
+            return ['/'.join(self.context.getPhysicalPath())]
 
         # nothing found..
         raise NoItemsSelected
