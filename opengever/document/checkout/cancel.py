@@ -48,9 +48,9 @@ class CancelDocuments(grok.CodeView):
             # the context is the document
             objects = [self.context]
 
-        # now, lets checkout every document
+        # now, lets cancel every document
         for obj in objects:
-            self.checkout(obj)
+            self.cancel(obj)
 
         # now lets redirect to an appropriate target..
         if len(objects) == 1:

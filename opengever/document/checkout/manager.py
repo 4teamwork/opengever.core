@@ -5,7 +5,7 @@ from opengever.document.events import ObjectCheckedInEvent
 from opengever.document.events import ObjectCheckedOutEvent
 from opengever.document.events import ObjectCheckoutCanceledEvent
 from opengever.document.interfaces import ICheckinCheckoutManager
-from plone.locking.interfaces import ITTWLockable
+from plone.locking.interfaces import IRefreshableLockable
 from plone.locking.interfaces import LockType
 from zope.annotation.interfaces import IAnnotations
 from zope.component import getAdapter
@@ -14,9 +14,10 @@ from zope.publisher.interfaces.browser import IBrowserRequest
 
 
 CHECKIN_CHECKOUT_ANNOTATIONS_KEY = 'opengever.document.checked_out_by'
+
 DOCUMENT_CHECKOUT_LOCK = LockType(u'opengever.document.checkout_lock',
                                   stealable=False,
-                                  user_unlockable=False)
+                                  user_unlockable=True)
 
 
 class CheckinCheckoutManager(grok.MultiAdapter):
@@ -67,7 +68,7 @@ class CheckinCheckoutManager(grok.MultiAdapter):
 
         # now remember who checked out the document
         user_id = getSecurityManager().getUser().getId()
-        self.annotations.set(CHECKIN_CHECKOUT_ANNOTATIONS_KEY, user_id)
+        self.annotations[CHECKIN_CHECKOUT_ANNOTATIONS_KEY] = user_id
 
         # finally, reindex the object
         self.context.reindexObject()
@@ -123,7 +124,7 @@ class CheckinCheckoutManager(grok.MultiAdapter):
         self.locking.unlock(lock_type=DOCUMENT_CHECKOUT_LOCK)
 
         # remember that we checked in
-        self.annotations.set(CHECKIN_CHECKOUT_ANNOTATIONS_KEY, None)
+        self.annotations[CHECKIN_CHECKOUT_ANNOTATIONS_KEY] = None
 
         # finally, reindex the object
         self.context.reindexObject()
@@ -173,7 +174,7 @@ class CheckinCheckoutManager(grok.MultiAdapter):
         self.locking.unlock(lock_type=DOCUMENT_CHECKOUT_LOCK)
 
         # remember that we canceled in
-        self.annotations.set(CHECKIN_CHECKOUT_ANNOTATIONS_KEY, None)
+        self.annotations[CHECKIN_CHECKOUT_ANNOTATIONS_KEY] = None
 
         # finally, reindex the object
         self.context.reindexObject()
@@ -186,7 +187,7 @@ class CheckinCheckoutManager(grok.MultiAdapter):
     def locking(self):
         """The TTWLockable adapter of the current document.
         """
-        return getAdapter(self.context, ITTWLockable)
+        return getAdapter(self.context, IRefreshableLockable)
 
     @property
     def annotations(self):

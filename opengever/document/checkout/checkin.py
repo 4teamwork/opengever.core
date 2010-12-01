@@ -7,8 +7,8 @@ from opengever.document.document import IDocumentSchema
 from opengever.document.exceptions import NoItemsSelected
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.dossier.behaviors.dossier import IDossierMarker
-from plone.z3cform import layout, Form
-from z3c.form import field, button
+from plone.z3cform import layout
+from z3c.form import form, field, button
 from z3c.form.interfaces import HIDDEN_MODE
 from zope import schema
 from zope.interface import Interface
@@ -31,7 +31,7 @@ class ICheckinCommentFormSchema(Interface):
         required=False)
 
 
-class CheckinCommentForm(Form):
+class CheckinCommentForm(form.Form):
     """Comment form for checkin procedure.
     """
 

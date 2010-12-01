@@ -21,6 +21,7 @@ from plone.directives.dexterity import DisplayForm
 from plone.i18n.normalizer.interfaces import IIDNormalizer
 from plone.indexer import indexer
 from plone.locking.interfaces import INonStealableLock
+from plone.locking.interfaces import ITTWLockable
 from plone.namedfile.field import NamedFile
 from plone.namedfile.interfaces import INamedFileField
 from plone.supermodel.interfaces import FIELDSETS_KEY
@@ -232,7 +233,7 @@ def document_author_default_value(data):
 
 class Document(Item):
 
-    implements(INonStealableLock)
+    implements(INonStealableLock, ITTWLockable)
 
     # disable file preview creation when modifying or creating document
     buildPreview = False

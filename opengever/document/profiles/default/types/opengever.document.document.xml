@@ -87,4 +87,46 @@
   </action>
 
 
+  <!-- actions for staging -->
+  <action
+        action_id="checkout_document"
+        visible="True"
+        title="Checkout"
+        url_expr="string:${object_url}/@@checkout_documents"
+        condition_expr="python:path('object/@@checkout_control').is_checkout_allowed()"
+        category="object">
+    <permission value="opengever.document: Checkout"/>
+  </action>
+
+  <action
+        action_id="checkout_edit_document"
+        visible="True"
+        title="Checkout and edit"
+        url_expr="string:${object_url}/@@checkout_documents?mode=external"
+        condition_expr="python:path('object/@@checkout_control').is_checkout_allowed() and context.file != None"
+        category="object">
+    <permission value="opengever.document: Checkout"/>
+  </action>
+
+  <action
+        visible="True"
+        action_id="checkin_document"
+        title="Checkin"
+        url_expr="string:${object_url}/@@checkin_documents"
+        condition_expr="python:path('object/@@checkout_control').is_checkin_allowed()"
+        category="object">
+    <permission value="opengever.document: Checkin"/>
+  </action>
+
+  <action
+        action_id="cancel_document_checkout"
+        visible="True"
+        title="Cancel Checkout"
+        url_expr="string:${object_url}/@@cancel_document_checkouts"
+        condition_expr="python:path('object/@@checkout_control').is_cancel_allowed()"
+        category="object">
+    <permission value="opengever.document: Cancel"/>
+  </action>
+
+
 </object>
