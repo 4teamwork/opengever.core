@@ -61,12 +61,6 @@
       />
 
   <!-- sections -->
-
-  <utility
-      component=".filesection.NamedFileCreatorSection"
-      name="opengever.examplecontent.filesection.namedfilecreator"
-      />
-
   <utility
       component=".jsonsource.JSONSourceSection"
       name="opengever.examplecontent.jsonsource.jsonsourcesection"
