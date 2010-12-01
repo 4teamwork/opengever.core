@@ -52,7 +52,19 @@ class CheckinCommentForm(form.Form):
             for obj in self.objects:
                 manager = getMultiAdapter((obj, obj.REQUEST),
                                           ICheckinCheckoutManager)
-                manager.checkin(data['comment'])
+
+                if not manager.is_checkin_allowed():
+                    msg = _('Could not check in document ${title}',
+                            mapping=dict(title=obj.Title()))
+                    IStatusMessage(self.request).addStatusMessage(
+                        msg, type='error')
+
+                else:
+                    manager.checkin(data['comment'])
+                    msg = _('Checked in: ${title}',
+                            mapping=dict(title=obj.Title()))
+                    IStatusMessage(self.request).addStatusMessage(
+                        msg, type='info')
 
             # redirect to dossier
             dossier = self.context

@@ -68,9 +68,17 @@ class CancelDocuments(grok.CodeView):
         # check out the document
         manager = getMultiAdapter((obj, self.request),
                                   ICheckinCheckoutManager)
-        manager.cancel()
 
-        # notify the user
-        msg = _(u'Cancel checkout: ${title}',
-                mapping={'title': obj.Title()})
-        IStatusMessage(self.request).addStatusMessage(msg, type='info')
+        # is cancel allowed for this document?
+        if not manager.is_cancel_allowed():
+            msg = _(u'Could not cancel checkout on document ${title}',
+                    mapping=dict(title=obj.Title()))
+            IStatusMessage(self.request).addStatusMessage(msg, type='error')
+
+        else:
+            manager.cancel()
+
+            # notify the user
+            msg = _(u'Cancel checkout: ${title}',
+                    mapping={'title': obj.Title()})
+            IStatusMessage(self.request).addStatusMessage(msg, type='info')

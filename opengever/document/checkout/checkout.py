@@ -80,9 +80,18 @@ class CheckoutDocuments(grok.CodeView):
         # check out the document
         manager = getMultiAdapter((obj, self.request),
                                   ICheckinCheckoutManager)
-        manager.checkout()
 
-        # notify the user
-        msg = _(u'Checked out: ${title}',
-                mapping={'title': obj.Title()})
-        IStatusMessage(self.request).addStatusMessage(msg, type='info')
+        # is checkout allowed for this document?
+        if not manager.is_checkout_allowed():
+            msg = _(u'Could not check out document ${title}',
+                    mapping={'title': obj.Title()})
+            IStatusMessage(self.request).addStatusMessage(msg, type='error')
+
+        else:
+            # check it out
+            manager.checkout()
+
+            # notify the user
+            msg = _(u'Checked out: ${title}',
+                    mapping={'title': obj.Title()})
+            IStatusMessage(self.request).addStatusMessage(msg, type='info')
