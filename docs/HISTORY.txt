@@ -5,6 +5,9 @@ Changelog
 2.0b2
 -----
 
+* translation fixes
+  [Jonas Baumann]
+
 
 2.0b1
 -----
