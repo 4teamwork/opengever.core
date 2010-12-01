@@ -132,3 +132,13 @@ class IBaseSettings(Interface):
         value_type=schema.Choice(
             vocabulary=u'opengever.base.parties'),
             required=False)
+
+    vocabulary_disabled_government_keyword = schema.List(
+         title=_(u'label_vocabulary_disabled_government_keywords',
+                 default=u'Vocabulary: government_keyword'),
+         description=_(u'help_vocabulary_disabled_government_keywords',
+                       default=u'Select the terms from government keywords '
+                       'vocabulary which should not be selectable any more.'),
+         value_type=schema.Choice(
+            vocabulary=u'opengever.base.government_keywords'),
+         required=False)

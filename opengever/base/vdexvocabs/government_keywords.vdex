@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vdex xmlns="http://www.imsglobal.org/xsd/imsvdex_v1p0"
+      orderSignificant="false" language="en">
+    <vocabIdentifier>opengever.base.government_keywords</vocabIdentifier>
+
+    <term>
+        <termIdentifier>beziehungen-zug-ausland</termIdentifier>
+        <caption>
+            <langstring language="en">Beziehungen Zug-Ausland</langstring>
+            <langstring language="de-ch">Beziehungen Zug-Ausland</langstring>
+        </caption>
+    </term>
+    <term>
+        <termIdentifier>beziehungen-zug-eidgenossenschaft</termIdentifier>
+        <caption>
+            <langstring language="en">Beziehungen Zug-Eidgenossenschaft</langstring>
+            <langstring language="de-ch">Beziehungen Zug-Eidgenossenschaft</langstring>
+        </caption>
+    </term>
+    <term>
+        <termIdentifier>beziehungen-zug-kantone</termIdentifier>
+        <caption>
+            <langstring language="en">Beziehungen Zug-Kantone</langstring>
+            <langstring language="de-ch">Beziehungen Zug-Kantone</langstring>
+        </caption>
+    </term>
+    <term>
+        <termIdentifier>gesetzgebung</termIdentifier>
+        <caption>
+            <langstring language="en">Gesetzgebung</langstring>
+            <langstring language="de-ch">Gesetzgebung</langstring>
+        </caption>
+    </term>
+    <term>
+        <termIdentifier>parlamentarische-vorstoesse</termIdentifier>
+        <caption>
+            <langstring language="en">Parlamentarische Vorstösse</langstring>
+            <langstring language="de-ch">Parlamentarische Vorstösse</langstring>
+        </caption>
+    </term>
+    <term>
+        <termIdentifier>petitionen</termIdentifier>
+        <caption>
+            <langstring language="en">Petitionen</langstring>
+            <langstring language="de-ch">Petitionen</langstring>
+        </caption>
+    </term>
+    <term>
+        <termIdentifier>wahlen-und-abstimmungen</termIdentifier>
+        <caption>
+            <langstring language="en">Wahlen und Abstimmungen</langstring>
+            <langstring language="de-ch">Wahlen und Abstimmungen</langstring>
+        </caption>
+    </term>
+    <term>
+        <termIdentifier>behoerden</termIdentifier>
+        <caption>
+            <langstring language="en">Behörden</langstring>
+            <langstring language="de-ch">Behörden</langstring>
+        </caption>
+    </term>
+    <term>
+        <termIdentifier>kommissionen-und-staatliche-vertretungen</termIdentifier>
+        <caption>
+            <langstring language="en">Kommissionen und staatliche Vertretungen</langstring>
+            <langstring language="de-ch">Kommissionen und staatliche Vertretungen</langstring>
+        </caption>
+    </term>
+    <term>
+        <termIdentifier>verwaltung</termIdentifier>
+        <caption>
+            <langstring language="en">Verwaltung</langstring>
+            <langstring language="de-ch">Verwaltung</langstring>
+        </caption>
+    </term>
+    <term>
+        <termIdentifier>gemeindeaufsicht</termIdentifier>
+        <caption>
+            <langstring language="en">Gemeindeaufsicht</langstring>
+            <langstring language="de-ch">Gemeindeaufsicht</langstring>
+        </caption>
+    </term>
+    <term>
+        <termIdentifier>beschwerden</termIdentifier>
+        <caption>
+            <langstring language="en">Beschwerden</langstring>
+            <langstring language="de-ch">Beschwerden</langstring>
+        </caption>
+    </term>
+    <term>
+        <termIdentifier>buergerrecht</termIdentifier>
+        <caption>
+            <langstring language="en">Bürgerrecht</langstring>
+            <langstring language="de-ch">Bürgerrecht</langstring>
+        </caption>
+    </term>
+    <term>
+        <termIdentifier>soziales</termIdentifier>
+        <caption>
+            <langstring language="en">Soziales</langstring>
+            <langstring language="de-ch">Soziales</langstring>
+        </caption>
+    </term>
+    <term>
+        <termIdentifier>niederlassung-und-aufenthalt</termIdentifier>
+        <caption>
+            <langstring language="en">Niederlassung und Aufenthalt</langstring>
+            <langstring language="de-ch">Niederlassung und Aufenthalt</langstring>
+        </caption>
+    </term>
+    <term>
+        <termIdentifier>grundbuch-und-vermessung</termIdentifier>
+        <caption>
+            <langstring language="en">Grundbuch und Vermessung</langstring>
+            <langstring language="de-ch">Grundbuch und Vermessung</langstring>
+        </caption>
+    </term>
+    <term>
+        <termIdentifier>forstwesen</termIdentifier>
+        <caption>
+            <langstring language="en">Forstwesen</langstring>
+            <langstring language="de-ch">Forstwesen</langstring>
+        </caption>
+    </term>
+    <term>
+        <termIdentifier>jagd-und-fischerei</termIdentifier>
+        <caption>
+            <langstring language="en">Jagd und Fischerei</langstring>
+            <langstring language="de-ch">Jagd und Fischerei</langstring>
+        </caption>
+    </term>
+    <term>
+        <termIdentifier>heimatschutz-und-denkmalpflege</termIdentifier>
+        <caption>
+            <langstring language="en">Heimatschutz und Denkmalpflege</langstring>
+            <langstring language="de-ch">Heimatschutz und Denkmalpflege</langstring>
+        </caption>
+    </term>
+    <term>
+        <termIdentifier>bildungswesen</termIdentifier>
+        <caption>
+            <langstring language="en">Bildungswesen</langstring>
+            <langstring language="de-ch">Bildungswesen</langstring>
+        </caption>
+    </term>
+    <term>
+        <termIdentifier>beitraege</termIdentifier>
+        <caption>
+            <langstring language="en">Beiträge</langstring>
+            <langstring language="de-ch">Beiträge</langstring>
+        </caption>
+    </term>
+    <term>
+        <termIdentifier>kultuswesen</termIdentifier>
+        <caption>
+            <langstring language="en">Kultuswesen</langstring>
+            <langstring language="de-ch">Kultuswesen</langstring>
+        </caption>
+    </term>
+    <term>
+        <termIdentifier>wirtschaftswesen</termIdentifier>
+        <caption>
+            <langstring language="en">Wirtschaftswesen</langstring>
+            <langstring language="de-ch">Wirtschaftswesen</langstring>
+        </caption>
+    </term>
+    <term>
+        <termIdentifier>landwirtschaft</termIdentifier>
+        <caption>
+            <langstring language="en">Landwirtschaft</langstring>
+            <langstring language="de-ch">Landwirtschaft</langstring>
+        </caption>
+    </term>
+    <term>
+        <termIdentifier>verkehr</termIdentifier>
+        <caption>
+            <langstring language="en">Verkehr</langstring>
+            <langstring language="de-ch">Verkehr</langstring>
+        </caption>
+    </term>
+    <term>
+        <termIdentifier>bauwesen</termIdentifier>
+        <caption>
+            <langstring language="en">Bauwesen</langstring>
+            <langstring language="de-ch">Bauwesen</langstring>
+        </caption>
+    </term>
+    <term>
+        <termIdentifier>energie</termIdentifier>
+        <caption>
+            <langstring language="en">Energie</langstring>
+            <langstring language="de-ch">Energie</langstring>
+        </caption>
+    </term>
+    <term>
+        <termIdentifier>justiz-und-polizei</termIdentifier>
+        <caption>
+            <langstring language="en">Justiz und Polizei</langstring>
+            <langstring language="de-ch">Justiz und Polizei</langstring>
+        </caption>
+    </term>
+    <term>
+        <termIdentifier>feuerpolizei-und-gebaeudeversicherung</termIdentifier>
+        <caption>
+            <langstring language="en">Feuerpolizei und Gebäudeversicherung</langstring>
+            <langstring language="de-ch">Feuerpolizei und Gebäudeversicherung</langstring>
+        </caption>
+    </term>
+    <term>
+        <termIdentifier>zivilschutz-und-militaer</termIdentifier>
+        <caption>
+            <langstring language="en">Zivilschutz und Militär</langstring>
+            <langstring language="de-ch">Zivilschutz und Militär</langstring>
+        </caption>
+    </term>
+    <term>
+        <termIdentifier>gesundheitswesen</termIdentifier>
+        <caption>
+            <langstring language="en">Gesundheitswesen</langstring>
+            <langstring language="de-ch">Gesundheitswesen</langstring>
+        </caption>
+    </term>
+    <term>
+        <termIdentifier>finanzwesen</termIdentifier>
+        <caption>
+            <langstring language="en">Finanzwesen</langstring>
+            <langstring language="de-ch">Finanzwesen</langstring>
+        </caption>
+    </term>
+    <term>
+        <termIdentifier>regalien</termIdentifier>
+        <caption>
+            <langstring language="en">Regalien</langstring>
+            <langstring language="de-ch">Regalien</langstring>
+        </caption>
+    </term>
+</vdex>

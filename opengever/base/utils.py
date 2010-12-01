@@ -40,3 +40,15 @@ def get_parties_vocabulary(context):
         hidden_terms_from_registry=u'opengever.base.interfaces.' +\
             u'IBaseSettings.vocabulary_disabled_parties')
     return voc(context)
+
+@grok.provider(IContextSourceBinder)
+def get_government_keyword_vocabulary(context):
+    """Returns the vdex vocabulary with parties. Hides some
+    terms according to portal_registry configuration.
+    """
+
+    voc = wrap_vocabulary(
+        u'opengever.base.government_keywords',
+        hidden_terms_from_registry=u'opengever.base.interfaces.' +\
+            u'IBaseSettings.vocabulary_disabled_government_keyword')
+    return voc(context)
