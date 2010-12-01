@@ -47,13 +47,6 @@
       />
 
   <transmogrifier:registerConfig
-      name="opengever.examplecontent.templates"
-      title="Opengever ExampleContent Templates Import"
-      description="Pipeline configuration for Opengever Examplecontent import"
-      configuration="cfgs/templates.cfg"
-      />
-
-  <transmogrifier:registerConfig
       name="opengever.examplecontent.contacts"
       title="Opengever ExampleContent Contacts Import"
       description="Pipeline configuration for Opengever Examplecontent import"
