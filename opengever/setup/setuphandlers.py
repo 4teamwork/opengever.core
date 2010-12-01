@@ -27,6 +27,9 @@ def start_import(context):
     transmogrifier(u'opengever.setup.various')
     transaction.commit()
 
+    transmogrifier(u'opengever.setup.templates')
+    transaction.commit()
+
     transmogrifier(u'opengever.setup.local_roles')
     transaction.commit()
 

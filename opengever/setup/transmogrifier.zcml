@@ -17,6 +17,13 @@
       configuration="cfgs/local_roles.cfg"
       />
 
+  <transmogrifier:registerConfig
+      name="opengever.setup.templates"
+      title="Opengever Setup Templates Import"
+      description="Pipeline configuration for Opengever Setup import"
+      configuration="cfgs/templates.cfg"
+      />
+
   <utility
       component=".filesection.NamedFileCreatorSection"
       name="opengever.setup.filesection.namedfilecreator"
