@@ -4,7 +4,8 @@ Changelog
 
 2.0b3
 -----
-
+* removed unused templates, because they are moved to opengever.setup
+  [phgross]
 
 2.0b2
 -----
