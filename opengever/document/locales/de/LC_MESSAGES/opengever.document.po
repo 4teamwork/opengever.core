@@ -1,12 +1,16 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"PO-Revision-Date: 2010-12-01 17:35+0100\n"
+"POT-Creation-Date: 2010-12-01 16:41+0000\n"
+"PO-Revision-Date: 2010-12-01 17:42+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0\n"
+"Preferred-Encodings: utf-8 latin1\n"
+"Domain: DOMAIN\n"
 
 #. Default: "Cancel"
 #: ./opengever/document/profiles/default/actions.xml
@@ -222,6 +226,11 @@ msgstr ""
 #: ./opengever/document/mailing.py:219
 msgid "info_mails_sent"
 msgstr "Die E-Mails wurden versandt"
+
+#. Default: "Initial version"
+#: ./opengever/document/checkout/handlers.py:27
+msgid "initial_document_version_change_note"
+msgstr "Dokument erstellt (Initialversion)"
 
 #. Default: "Archival File"
 #: ./opengever/document/document.py:160

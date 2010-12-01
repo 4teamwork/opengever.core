@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2010-12-01 16:32+0000\n"
+"POT-Creation-Date: 2010-12-01 16:41+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -219,6 +219,11 @@ msgstr ""
 #. Default: "Mails sent"
 #: ./opengever/document/mailing.py:219
 msgid "info_mails_sent"
+msgstr ""
+
+#. Default: "Initial version"
+#: ./opengever/document/checkout/handlers.py:27
+msgid "initial_document_version_change_note"
 msgstr ""
 
 #. Default: "Archival File"
