@@ -2,8 +2,10 @@ Changelog
 =========
 
 
-1.0b2
+2.0b1
 -----
+
+* Previously released wrong tag number..
 
 
 2.0b1
