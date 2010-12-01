@@ -4,8 +4,10 @@ Changelog
 
 2.0b2
 -----
+
 * Added government_keyword vocabulary with vocabulary helper and registry entry
   [phgross]
+
 
 2.0a4
 -----
@@ -21,7 +23,7 @@ Changelog
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/683/
   added parties vdex vocabulary
   [23.11.2010, phgross]
-  
+
 
 * Issue #683 Migration SKA.KR
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/683/
