@@ -180,8 +180,9 @@ class CheckinCheckoutManager(grok.MultiAdapter):
         if not self.is_cancel_allowed():
             raise Unauthorized
 
-        # XXX: revert to prior revision
-        print 'XXX revert document to prior revision on cancel'
+        # revert to prior version (baseline)
+        baseline = self.repository.getHistory(self.context)[0]
+        self.repository.revert(self.context, baseline.version_id)
 
         # unlock the object
         self.locking.unlock(lock_type=DOCUMENT_CHECKOUT_LOCK)
