@@ -5,6 +5,8 @@ Changelog
 2.0a3
 -----
 
+* Fixed icon path in global task listing helper
+
 * Fixed icon path in global task listing helper.
   [jbaumann]
 
