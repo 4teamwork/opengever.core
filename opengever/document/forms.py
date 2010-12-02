@@ -1,6 +1,7 @@
 """Document form customizations.
 """
 
+from AccessControl import getSecurityManager
 from opengever.document.interfaces import ICheckinCheckoutManager
 from plone.dexterity.browser.edit import DefaultEditForm
 from plone.z3cform import layout
@@ -22,7 +23,9 @@ class DocumentEditForm(DefaultEditForm):
         if not manager:
             return
 
-        if not manager.checked_out():
+        current_user_id = getSecurityManager().getUser().getId()
+        if not manager.checked_out() \
+                or manager.checked_out() != current_user_id:
             filefields = [g.fields.get('file') for g in self.groups
                           if 'file' in g.fields]
             if len(filefields)>0:
