@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2010-12-01 16:41+0000\n"
+"POT-Creation-Date: 2010-12-02 09:43+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -59,6 +59,11 @@ msgstr ""
 
 #: ./opengever/document/profiles/default/types/opengever.document.document.xml
 msgid "Document"
+msgstr ""
+
+#: ./opengever/document/checkout/manager.py:249
+#: ./opengever/document/checkout/revert.py:26
+msgid "Reverted file to version ${version_id}"
 msgstr ""
 
 #: ./opengever/document/profiles/default/actions.xml
