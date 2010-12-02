@@ -59,6 +59,11 @@ class IObjectCheckoutCanceledEvent(IObjectEvent):
     """
 
 
+class IObjectRevertedToVersion(IObjectEvent):
+    """The object was reverted back to a specific version.
+    """
+
+
 class IDocumentType(Interface):
     document_types = schema.List(
         title=u"Document Type",

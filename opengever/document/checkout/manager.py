@@ -1,10 +1,12 @@
 from AccessControl import getSecurityManager, Unauthorized
 from Products.CMFCore.utils import getToolByName
 from five import grok
+from opengever.document import _
 from opengever.document.document import IDocumentSchema
 from opengever.document.events import ObjectCheckedInEvent
 from opengever.document.events import ObjectCheckedOutEvent
 from opengever.document.events import ObjectCheckoutCanceledEvent
+from opengever.document.events import ObjectRevertedToVersion
 from opengever.document.interfaces import ICheckinCheckoutManager
 from plone.locking.interfaces import IRefreshableLockable
 from plone.locking.interfaces import LockType
@@ -182,7 +184,7 @@ class CheckinCheckoutManager(grok.MultiAdapter):
 
         # revert to prior version (baseline)
         baseline = self.repository.getHistory(self.context)[0]
-        self.repository.revert(self.context, baseline.version_id)
+        self.revert_to_version(baseline.version_id, create_version=False)
 
         # unlock the object
         self.locking.unlock(lock_type=DOCUMENT_CHECKOUT_LOCK)
@@ -230,3 +232,24 @@ class CheckinCheckoutManager(grok.MultiAdapter):
         """
         return getSecurityManager().checkPermission(permission,
                                                     self.context)
+
+    def revert_to_version(self, version_id, create_version=True):
+        """Reverts the adapted document to a specific version. We only revert
+        the file field, since we do not wan't to version the metadata on the
+        document.
+        If `create_version` is set to `True`, a new version is created after
+        reverting.
+        """
+        version = self.repository.retrieve(self.context, version_id)
+        old_obj = version.object
+        self.context.file = old_obj.file
+
+        if create_version:
+            # let's create a version
+            comment = _(u'Reverted file to version ${version_id}',
+                        mapping=dict(version_id=version_id))
+            self.repository.save(obj=self.context, comment=comment)
+
+        # event
+        notify(ObjectRevertedToVersion(self.context, version_id,
+                                       create_version))

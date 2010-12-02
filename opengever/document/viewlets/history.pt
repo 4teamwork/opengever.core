@@ -50,7 +50,7 @@
                    tal:attributes="href string:${here/absolute_url}/download_file_version?version_id=${item/version_id}" i18n:translate="button_download">Download</a>
                 <a href=""
                    class="standalone"
-                   tal:attributes="href string:${item/revert_url}?version_id=${item/version_id}&amp;submit=1" i18n:translate="label_reset">reset</a>
+                   tal:attributes="href string:${here/absolute_url}/revert-file-to-version?version_id=${item/version_id}" i18n:translate="label_reset">reset</a>
               </td>
             </tr>
           </tal:block>
