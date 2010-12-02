@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"PO-Revision-Date: 2010-12-02 10:43+0100\n"
+"PO-Revision-Date: 2010-12-02 14:28+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
 "MIME-Version: 1.0\n"
@@ -41,7 +41,7 @@ msgstr "Dokument ausgecheckt"
 #. Default: "Canceled document checkout"
 #: ./opengever/journal/handlers.py:189
 msgid "label_document_checkout_cancel"
-msgstr "Dokument zurückgesetzt"
+msgstr "Änderungen an der Datei widerrufen"
 
 #. Default: "Reverte document file to version ${version_id}"
 #: ./opengever/journal/handlers.py:205

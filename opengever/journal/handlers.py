@@ -199,7 +199,7 @@ def document_file_reverted(context, event):
     except AttributeError:
         return
     else:
-        if create:
+        if not create:
             return
 
     title = _(u'label_document_file_reverted',
