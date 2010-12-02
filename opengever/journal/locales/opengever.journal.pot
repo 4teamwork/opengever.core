@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2010-12-01 11:27+0000\n"
+"POT-Creation-Date: 2010-12-02 09:43+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -33,62 +33,67 @@ msgid "label_comments"
 msgstr ""
 
 #. Default: "Document added: ${title}"
-#: ./opengever/journal/handlers.py:118
+#: ./opengever/journal/handlers.py:119
 msgid "label_document_added"
 msgstr ""
 
 #. Default: "Document checked in"
-#: ./opengever/journal/handlers.py:178
+#: ./opengever/journal/handlers.py:179
 msgid "label_document_checkin"
 msgstr ""
 
 #. Default: "Document checked out"
-#: ./opengever/journal/handlers.py:167
+#: ./opengever/journal/handlers.py:168
 msgid "label_document_checkout"
 msgstr ""
 
 #. Default: "Canceled document checkout"
-#: ./opengever/journal/handlers.py:188
+#: ./opengever/journal/handlers.py:189
 msgid "label_document_checkout_cancel"
 msgstr ""
 
+#. Default: "Reverte document file to version ${version_id}"
+#: ./opengever/journal/handlers.py:205
+msgid "label_document_file_reverted"
+msgstr ""
+
 #. Default: "Document modified: ${title}"
-#: ./opengever/journal/handlers.py:139
+#: ./opengever/journal/handlers.py:140
 msgid "label_document_modified"
 msgstr ""
 
 #. Default: "Dossier added: ${title}"
-#: ./opengever/journal/handlers.py:74
+#: ./opengever/journal/handlers.py:75
 msgid "label_dossier_added"
 msgstr ""
 
 #. Default: "Dossier modified"
-#: ./opengever/journal/handlers.py:84
+#: ./opengever/journal/handlers.py:85
 msgid "label_dossier_modified"
 msgstr ""
 
 #. Default: "Participant added: ${contact} with roles ${roles}"
-#: ./opengever/journal/handlers.py:252
+#: ./opengever/journal/handlers.py:271
 msgid "label_participant_added"
 msgstr ""
 
 #. Default: "Participant removed: ${contact}"
-#: ./opengever/journal/handlers.py:268
+#: ./opengever/journal/handlers.py:287
 msgid "label_participant_removed"
 msgstr ""
 
 #. Default: "Object restore: ${title}"
-#: ./opengever/journal/handlers.py:238
+#: ./opengever/journal/handlers.py:257
 msgid "label_restore"
 msgstr ""
 
 #. Default: "Task added: ${title}"
-#: ./opengever/journal/handlers.py:200
+#: ./opengever/journal/handlers.py:219
 msgid "label_task_added"
 msgstr ""
 
 #. Default: "Task modified"
-#: ./opengever/journal/handlers.py:212
+#: ./opengever/journal/handlers.py:231
 msgid "label_task_modified"
 msgstr ""
 
@@ -103,7 +108,7 @@ msgid "label_title"
 msgstr ""
 
 #. Default: "Object moved to trash: ${title}"
-#: ./opengever/journal/handlers.py:228
+#: ./opengever/journal/handlers.py:247
 msgid "label_to_trash"
 msgstr ""
 

@@ -6,6 +6,7 @@ from opengever.document.document import IDocumentSchema
 from opengever.document.interfaces import IObjectCheckedInEvent
 from opengever.document.interfaces import IObjectCheckedOutEvent
 from opengever.document.interfaces import IObjectCheckoutCanceledEvent
+from opengever.document.interfaces import IObjectRevertedToVersion
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.browser.participants import role_list_helper
 from opengever.dossier.interfaces import IParticipationCreated
@@ -188,6 +189,24 @@ def document_checkout_canceled(context, event):
     title = _(u'label_document_checkout_cancel',
               default=u'Canceled document checkout')
     journal_entry_factory(context, DOCUMENT_CHECKOUT_CANCEL, title)
+
+
+DOCUMENT_FILE_REVERTED = 'Reverted document file'
+@grok.subscribe(IDocumentSchema, IObjectRevertedToVersion)
+def document_file_reverted(context, event):
+    try:
+        create = event.create_version
+    except AttributeError:
+        return
+    else:
+        if create:
+            return
+
+    title = _(u'label_document_file_reverted',
+              default=u'Reverte document file to version ${version_id}',
+              mapping=dict(version_id=event.version_id))
+    journal_entry_factory(context, DOCUMENT_FILE_REVERTED, title)
+
 
 
 # ----------------------- TASK -----------------------
