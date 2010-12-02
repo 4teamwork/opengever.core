@@ -8,19 +8,12 @@ from opengever.document.events import ObjectCheckedOutEvent
 from opengever.document.events import ObjectCheckoutCanceledEvent
 from opengever.document.events import ObjectRevertedToVersion
 from opengever.document.interfaces import ICheckinCheckoutManager
-from plone.locking.interfaces import IRefreshableLockable
-from plone.locking.interfaces import LockType
 from zope.annotation.interfaces import IAnnotations
-from zope.component import getAdapter
 from zope.event import notify
 from zope.publisher.interfaces.browser import IBrowserRequest
 
 
 CHECKIN_CHECKOUT_ANNOTATIONS_KEY = 'opengever.document.checked_out_by'
-
-DOCUMENT_CHECKOUT_LOCK = LockType(u'opengever.document.checkout_lock',
-                                  stealable=False,
-                                  user_unlockable=True)
 
 
 class CheckinCheckoutManager(grok.MultiAdapter):
@@ -55,10 +48,6 @@ class CheckinCheckoutManager(grok.MultiAdapter):
         if not self.check_permission('opengever.document: Checkout'):
             return False
 
-        # is the object already locked?
-        if self.locking.locked():
-            return False
-
         return True
 
 
@@ -69,9 +58,6 @@ class CheckinCheckoutManager(grok.MultiAdapter):
         # is the user allowed to checkout?
         if not self.is_checkout_allowed():
             raise Unauthorized
-
-        # first let's lock the object for this user
-        self.locking.lock(lock_type=DOCUMENT_CHECKOUT_LOCK)
 
         # now remember who checked out the document
         user_id = getSecurityManager().getUser().getId()
@@ -104,11 +90,6 @@ class CheckinCheckoutManager(grok.MultiAdapter):
         if not self.check_permission('opengever.document: Checkin'):
             return False
 
-        # is the user able to steal the lock?
-        if not self.locking.can_safely_unlock(
-            lock_type=DOCUMENT_CHECKOUT_LOCK):
-            return False
-
         # is the user either the one who owns the checkout or
         # a manager?
         is_manager = self.check_permission('Manage portal')
@@ -130,9 +111,6 @@ class CheckinCheckoutManager(grok.MultiAdapter):
 
         # create new version in CMFEditions
         self.repository.save(obj=self.context, comment=comment)
-
-        # unlock the object
-        self.locking.unlock(lock_type=DOCUMENT_CHECKOUT_LOCK)
 
         # remember that we checked in
         self.annotations[CHECKIN_CHECKOUT_ANNOTATIONS_KEY] = None
@@ -160,11 +138,6 @@ class CheckinCheckoutManager(grok.MultiAdapter):
         if not self.check_permission('opengever.document: Cancel'):
             return False
 
-        # is the user able to steal the lock?
-        if not self.locking.can_safely_unlock(
-            lock_type=DOCUMENT_CHECKOUT_LOCK):
-            return False
-
         # is the user either the one who owns the checkout or
         # a manager?
         is_manager = self.check_permission('Manage portal')
@@ -186,9 +159,6 @@ class CheckinCheckoutManager(grok.MultiAdapter):
         baseline = self.repository.getHistory(self.context)[0]
         self.revert_to_version(baseline.version_id, create_version=False)
 
-        # unlock the object
-        self.locking.unlock(lock_type=DOCUMENT_CHECKOUT_LOCK)
-
         # remember that we canceled in
         self.annotations[CHECKIN_CHECKOUT_ANNOTATIONS_KEY] = None
 
@@ -197,13 +167,6 @@ class CheckinCheckoutManager(grok.MultiAdapter):
 
         # fire the event
         notify(ObjectCheckoutCanceledEvent(self.context))
-
-
-    @property
-    def locking(self):
-        """The TTWLockable adapter of the current document.
-        """
-        return getAdapter(self.context, IRefreshableLockable)
 
     @property
     def annotations(self):
