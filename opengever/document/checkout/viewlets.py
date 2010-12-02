@@ -29,9 +29,3 @@ class CheckedOutViewlet(grok.Viewlet):
             info = getUtility(IContactInformation)
             owner_id = getSecurityManager().getUser().getId()
             self.checkout_owner = info.render_link(owner_id)
-
-    def render(self):
-        if self.available:
-            return grok.Viewlet.render(self)
-        else:
-            return ''
