@@ -97,7 +97,7 @@ class CheckinCheckoutManager(grok.MultiAdapter):
             return False
 
         # is the user able to write to the object?
-        if not self.check_permission('cmf.ModifyPortalContent'):
+        if not self.check_permission('Modify portal content'):
             return False
 
         # does the user have the necessary permission?
