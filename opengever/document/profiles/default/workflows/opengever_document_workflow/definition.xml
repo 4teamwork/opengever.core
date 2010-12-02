@@ -1,8 +1,5 @@
 <?xml version="1.0"?>
-<dc-workflow workflow_id="opengever_document_workflow"
-             title="Simple Check-out Workflow for OpenGever Documents"
-             description="" state_variable="review_state"
-             initial_state="document-state-draft">
+<dc-workflow workflow_id="opengever_document_workflow" title="Simple Check-out Workflow for OpenGever Documents" description="" state_variable="review_state" initial_state="document-state-draft" manager_bypass="False">
  <permission>Access contents information</permission>
  <permission>CMFEditions: Access previous versions</permission>
  <permission>CMFEditions: Apply version control</permission>
@@ -23,61 +20,48 @@
  <permission>WebDAV Unlock items</permission>
  <permission>WebDAV access</permission>
  <state state_id="document-state-checked_out" title="document-state-checked_out">
-  <description>Can only be seen and edited by the owner.
-</description>
+  <description>Can only be seen and edited by the owner.</description>
   <exit-transition transition_id="document-transition-cancel_checkout"/>
   <exit-transition transition_id="document-transition-check_in"/>
-  <permission-map name="Access contents information"
-                  acquired="False">
+  <permission-map name="Access contents information" acquired="False">
    <permission-role>Editor</permission-role>
    <permission-role>Manager</permission-role>
    <permission-role>Owner</permission-role>
    <permission-role>Reader</permission-role>
   </permission-map>
-  <permission-map name="CMFEditions: Access previous versions"
-                  acquired="False">
+  <permission-map name="CMFEditions: Access previous versions" acquired="False">
   </permission-map>
-  <permission-map name="CMFEditions: Apply version control"
-                  acquired="False">
+  <permission-map name="CMFEditions: Apply version control" acquired="False">
    <permission-role>Editor</permission-role>
    <permission-role>Owner</permission-role>
   </permission-map>
-  <permission-map name="CMFEditions: Checkout to location"
-                  acquired="False">
+  <permission-map name="CMFEditions: Checkout to location" acquired="False">
   </permission-map>
-  <permission-map name="CMFEditions: Manage versioning policies"
-                  acquired="False">
+  <permission-map name="CMFEditions: Manage versioning policies" acquired="False">
   </permission-map>
-  <permission-map name="CMFEditions: Purge version"
-                  acquired="False">
+  <permission-map name="CMFEditions: Purge version" acquired="False">
   </permission-map>
-  <permission-map name="CMFEditions: Revert to previous versions"
-                  acquired="False">
+  <permission-map name="CMFEditions: Revert to previous versions" acquired="False">
   </permission-map>
-  <permission-map name="Change portal events"
-                  acquired="False">
+  <permission-map name="Change portal events" acquired="False">
   </permission-map>
-  <permission-map name="Content rules: Manage rules"
-                  acquired="False">
+  <permission-map name="Content rules: Manage rules" acquired="False">
   </permission-map>
   <permission-map name="Copy or Move" acquired="False">
   </permission-map>
   <permission-map name="Delete objects" acquired="False">
   </permission-map>
-  <permission-map name="List folder contents"
-                  acquired="False">
+  <permission-map name="List folder contents" acquired="False">
    <permission-role>Editor</permission-role>
    <permission-role>Manager</permission-role>
    <permission-role>Owner</permission-role>
    <permission-role>Reader</permission-role>
   </permission-map>
-  <permission-map name="Modify portal content"
-                  acquired="False">
+  <permission-map name="Modify portal content" acquired="False">
   </permission-map>
   <permission-map name="Request review" acquired="False">
   </permission-map>
-  <permission-map name="Sharing page: Delegate roles"
-                  acquired="False">
+  <permission-map name="Sharing page: Delegate roles" acquired="False">
   </permission-map>
   <permission-map name="View" acquired="False">
    <permission-role>Editor</permission-role>
@@ -87,8 +71,7 @@
   </permission-map>
   <permission-map name="WebDAV Lock items" acquired="False">
   </permission-map>
-  <permission-map name="WebDAV Unlock items"
-                  acquired="False">
+  <permission-map name="WebDAV Unlock items" acquired="False">
    <permission-role>Editor</permission-role>
    <permission-role>Owner</permission-role>
   </permission-map>
@@ -96,54 +79,44 @@
   </permission-map>
  </state>
  <state state_id="document-state-draft" title="document-state-draft">
-  <description>Can only be seen and edited by the owner.
-</description>
+  <description>Can only be seen and edited by the owner.</description>
   <exit-transition transition_id="document-transition-check_out"/>
   <exit-transition transition_id="document-transition-use_as_working_copy"/>
-  <permission-map name="Access contents information"
-                  acquired="False">
+  <permission-map name="Access contents information" acquired="False">
    <permission-role>Editor</permission-role>
    <permission-role>Manager</permission-role>
    <permission-role>Owner</permission-role>
    <permission-role>Reader</permission-role>
   </permission-map>
-  <permission-map name="CMFEditions: Access previous versions"
-                  acquired="False">
+  <permission-map name="CMFEditions: Access previous versions" acquired="False">
    <permission-role>Editor</permission-role>
    <permission-role>Owner</permission-role>
   </permission-map>
-  <permission-map name="CMFEditions: Apply version control"
-                  acquired="False">
+  <permission-map name="CMFEditions: Apply version control" acquired="False">
    <permission-role>Editor</permission-role>
    <permission-role>Owner</permission-role>
   </permission-map>
-  <permission-map name="CMFEditions: Checkout to location"
-                  acquired="False">
+  <permission-map name="CMFEditions: Checkout to location" acquired="False">
    <permission-role>Editor</permission-role>
    <permission-role>Owner</permission-role>
   </permission-map>
-  <permission-map name="CMFEditions: Manage versioning policies"
-                  acquired="False">
+  <permission-map name="CMFEditions: Manage versioning policies" acquired="False">
    <permission-role>Editor</permission-role>
    <permission-role>Owner</permission-role>
   </permission-map>
-  <permission-map name="CMFEditions: Purge version"
-                  acquired="False">
+  <permission-map name="CMFEditions: Purge version" acquired="False">
    <permission-role>Editor</permission-role>
    <permission-role>Owner</permission-role>
   </permission-map>
-  <permission-map name="CMFEditions: Revert to previous versions"
-                  acquired="False">
+  <permission-map name="CMFEditions: Revert to previous versions" acquired="False">
    <permission-role>Editor</permission-role>
    <permission-role>Owner</permission-role>
   </permission-map>
-  <permission-map name="Change portal events"
-                  acquired="False">
+  <permission-map name="Change portal events" acquired="False">
    <permission-role>Editor</permission-role>
    <permission-role>Owner</permission-role>
   </permission-map>
-  <permission-map name="Content rules: Manage rules"
-                  acquired="False">
+  <permission-map name="Content rules: Manage rules" acquired="False">
   </permission-map>
   <permission-map name="Copy or Move" acquired="False">
    <permission-role>Editor</permission-role>
@@ -154,20 +127,19 @@
    <permission-role>Editor</permission-role>
    <permission-role>Owner</permission-role>
   </permission-map>
-  <permission-map name="List folder contents"
-                  acquired="False">
+  <permission-map name="List folder contents" acquired="False">
    <permission-role>Editor</permission-role>
    <permission-role>Manager</permission-role>
    <permission-role>Owner</permission-role>
    <permission-role>Reader</permission-role>
   </permission-map>
-  <permission-map name="Modify portal content"
-                  acquired="False">
+  <permission-map name="Modify portal content" acquired="False">
+   <permission-role>Editor</permission-role>
+   <permission-role>Manager</permission-role>
   </permission-map>
   <permission-map name="Request review" acquired="True">
   </permission-map>
-  <permission-map name="Sharing page: Delegate roles"
-                  acquired="False">
+  <permission-map name="Sharing page: Delegate roles" acquired="False">
   </permission-map>
   <permission-map name="View" acquired="False">
    <permission-role>Editor</permission-role>
@@ -180,8 +152,7 @@
    <permission-role>Manager</permission-role>
    <permission-role>Owner</permission-role>
   </permission-map>
-  <permission-map name="WebDAV Unlock items"
-                  acquired="False">
+  <permission-map name="WebDAV Unlock items" acquired="False">
    <permission-role>Editor</permission-role>
    <permission-role>Manager</permission-role>
    <permission-role>Owner</permission-role>
@@ -193,12 +164,10 @@
   </permission-map>
  </state>
  <state state_id="document-state-pending" title="document-state-pending">
-  <description>Waiting to be reviewed, not editable by the owner.
-</description>
+  <description>Waiting to be reviewed, not editable by the owner.</description>
   <exit-transition transition_id="document-transition-reject"/>
   <exit-transition transition_id="document-transition-retract"/>
-  <permission-map name="Access contents information"
-                  acquired="False">
+  <permission-map name="Access contents information" acquired="False">
    <permission-role>Manager</permission-role>
    <permission-role>Owner</permission-role>
    <permission-role>Editor</permission-role>
@@ -206,13 +175,11 @@
    <permission-role>Contributor</permission-role>
    <permission-role>Reviewer</permission-role>
   </permission-map>
-  <permission-map name="Change portal events"
-                  acquired="False">
+  <permission-map name="Change portal events" acquired="False">
    <permission-role>Manager</permission-role>
    <permission-role>Reviewer</permission-role>
   </permission-map>
-  <permission-map name="List folder contents"
-                  acquired="False">
+  <permission-map name="List folder contents" acquired="False">
    <permission-role>Manager</permission-role>
    <permission-role>Owner</permission-role>
    <permission-role>Editor</permission-role>
@@ -220,8 +187,7 @@
    <permission-role>Contributor</permission-role>
    <permission-role>Reviewer</permission-role>
   </permission-map>
-  <permission-map name="Modify portal content"
-                  acquired="False">
+  <permission-map name="Modify portal content" acquired="False">
    <permission-role>Manager</permission-role>
    <permission-role>Reviewer</permission-role>
   </permission-map>
@@ -235,51 +201,39 @@
   </permission-map>
  </state>
  <state state_id="document-state-working_copy" title="document-state-working_copy">
-  <permission-map name="Access contents information"
-                  acquired="False">
+  <permission-map name="Access contents information" acquired="False">
    <permission-role>Editor</permission-role>
   </permission-map>
-  <permission-map name="CMFEditions: Access previous versions"
-                  acquired="False">
+  <permission-map name="CMFEditions: Access previous versions" acquired="False">
   </permission-map>
-  <permission-map name="CMFEditions: Apply version control"
-                  acquired="False">
+  <permission-map name="CMFEditions: Apply version control" acquired="False">
   </permission-map>
-  <permission-map name="CMFEditions: Checkout to location"
-                  acquired="False">
+  <permission-map name="CMFEditions: Checkout to location" acquired="False">
   </permission-map>
-  <permission-map name="CMFEditions: Manage versioning policies"
-                  acquired="False">
+  <permission-map name="CMFEditions: Manage versioning policies" acquired="False">
   </permission-map>
-  <permission-map name="CMFEditions: Purge version"
-                  acquired="False">
+  <permission-map name="CMFEditions: Purge version" acquired="False">
   </permission-map>
-  <permission-map name="CMFEditions: Revert to previous versions"
-                  acquired="False">
+  <permission-map name="CMFEditions: Revert to previous versions" acquired="False">
   </permission-map>
-  <permission-map name="Change portal events"
-                  acquired="False">
+  <permission-map name="Change portal events" acquired="False">
   </permission-map>
-  <permission-map name="Content rules: Manage rules"
-                  acquired="False">
+  <permission-map name="Content rules: Manage rules" acquired="False">
   </permission-map>
   <permission-map name="Copy or Move" acquired="False">
   </permission-map>
   <permission-map name="Delete objects" acquired="False">
   </permission-map>
-  <permission-map name="List folder contents"
-                  acquired="False">
+  <permission-map name="List folder contents" acquired="False">
    <permission-role>Editor</permission-role>
   </permission-map>
-  <permission-map name="Modify portal content"
-                  acquired="False">
+  <permission-map name="Modify portal content" acquired="False">
    <permission-role>Editor</permission-role>
   </permission-map>
   <permission-map name="Request review" acquired="False">
    <permission-role>Editor</permission-role>
   </permission-map>
-  <permission-map name="Sharing page: Delegate roles"
-                  acquired="False">
+  <permission-map name="Sharing page: Delegate roles" acquired="False">
   </permission-map>
   <permission-map name="View" acquired="False">
    <permission-role>Editor</permission-role>
@@ -287,83 +241,55 @@
   <permission-map name="WebDAV Lock items" acquired="False">
    <permission-role>Editor</permission-role>
   </permission-map>
-  <permission-map name="WebDAV Unlock items"
-                  acquired="False">
+  <permission-map name="WebDAV Unlock items" acquired="False">
    <permission-role>Editor</permission-role>
   </permission-map>
   <permission-map name="WebDAV access" acquired="False">
    <permission-role>Editor</permission-role>
   </permission-map>
  </state>
- <transition transition_id="document-transition-cancel_checkout"
-             title="Cancel checkout" new_state="document-state-draft"
-             trigger="USER" before_script="" after_script="">
+ <transition transition_id="document-transition-cancel_checkout" title="Cancel checkout" new_state="document-state-draft" trigger="USER" before_script="" after_script="">
   
   <guard>
    <guard-permission>CMFEditions: Apply version control</guard-permission>
   </guard>
  </transition>
- <transition transition_id="document-transition-check_in"
-             title="Member checks in" new_state="document-state-draft"
-             trigger="USER" before_script="" after_script="">
-  <description>If you submitted the item by mistake or want to perform additional edits, this will take it back.
-</description>
+ <transition transition_id="document-transition-check_in" title="Member checks in" new_state="document-state-draft" trigger="USER" before_script="" after_script="">
+  <description>If you submitted the item by mistake or want to perform additional edits, this will take it back.</description>
   
   <guard>
    <guard-permission>CMFEditions: Apply version control</guard-permission>
   </guard>
  </transition>
- <transition transition_id="document-transition-check_out"
-             title="Member checks out"
-             new_state="document-state-checked_out" trigger="USER"
-             before_script="" after_script="">
-  <description>If you submitted the item by mistake or want to perform additional edits, this will take it back.
-</description>
+ <transition transition_id="document-transition-check_out" title="Member checks out" new_state="document-state-checked_out" trigger="USER" before_script="" after_script="">
+  <description>If you submitted the item by mistake or want to perform additional edits, this will take it back.</description>
   
   <guard>
    <guard-permission>CMFEditions: Checkout to location</guard-permission>
   </guard>
  </transition>
- <transition transition_id="document-transition-reject"
-             title="Reviewer send content back for re-drafting"
-             new_state="document-state-draft" trigger="USER"
-             before_script="" after_script="">
-  <description>Sending the item back will return the item to the original author instead of publishing it. You should preferably include a reason for why it was not published.
-</description>
-  <action url="%(content_url)s/content_status_modify?workflow_action=reject"
-          category="workflow">Send back</action>
+ <transition transition_id="document-transition-reject" title="Reviewer send content back for re-drafting" new_state="document-state-draft" trigger="USER" before_script="" after_script="">
+  <description>Sending the item back will return the item to the original author instead of publishing it. You should preferably include a reason for why it was not published.</description>
+  <action url="%(content_url)s/content_status_modify?workflow_action=reject" category="workflow" icon="">Send back</action>
   <guard>
    <guard-permission>Review portal content</guard-permission>
   </guard>
  </transition>
- <transition transition_id="document-transition-retract"
-             title="Member retracts submission"
-             new_state="document-state-draft" trigger="USER"
-             before_script="" after_script="">
-  <description>If you submitted the item by mistake or want to perform additional edits, this will take it back.
-</description>
-  <action url="%(content_url)s/content_status_modify?workflow_action=retract"
-          category="workflow">Retract</action>
+ <transition transition_id="document-transition-retract" title="Member retracts submission" new_state="document-state-draft" trigger="USER" before_script="" after_script="">
+  <description>If you submitted the item by mistake or want to perform additional edits, this will take it back.</description>
+  <action url="%(content_url)s/content_status_modify?workflow_action=retract" category="workflow" icon="">Retract</action>
   <guard>
    <guard-permission>Request review</guard-permission>
   </guard>
  </transition>
- <transition transition_id="document-transition-submit"
-             title="Member submits content for publication"
-             new_state="document-state-pending" trigger="USER"
-             before_script="" after_script="">
-  <description>Puts your item in a review queue, so it can be published on the site.
-</description>
-  <action url="%(content_url)s/content_status_modify?workflow_action=submit"
-          category="workflow">Submit for publication</action>
+ <transition transition_id="document-transition-submit" title="Member submits content for publication" new_state="document-state-pending" trigger="USER" before_script="" after_script="">
+  <description>Puts your item in a review queue, so it can be published on the site.</description>
+  <action url="%(content_url)s/content_status_modify?workflow_action=submit" category="workflow" icon="">Submit for publication</action>
   <guard>
    <guard-permission>Request review</guard-permission>
   </guard>
  </transition>
- <transition transition_id="document-transition-use_as_working_copy"
-             title="Use copied object as working copy"
-             new_state="document-state-working_copy" trigger="USER"
-             before_script="" after_script="">
+ <transition transition_id="document-transition-use_as_working_copy" title="Use copied object as working copy" new_state="document-state-working_copy" trigger="USER" before_script="" after_script="">
   
   <guard>
    <guard-permission>CMFEditions: Checkout to location</guard-permission>
@@ -371,15 +297,13 @@
  </transition>
  <worklist worklist_id="reviewer_queue" title="">
   <description>Reviewer tasks</description>
-  <action url="%(portal_url)s/search?review_state=document-state-pending"
-          category="global">Pending (%(count)d)</action>
+  <action url="%(portal_url)s/search?review_state=document-state-pending" category="global" icon="">Pending (%(count)d)</action>
   <guard>
    <guard-permission>Review portal content</guard-permission>
   </guard>
   <match name="review_state" values="document-state-pending"/>
  </worklist>
- <variable variable_id="action" for_catalog="False"
-           for_status="True" update_always="True">
+ <variable variable_id="action" for_catalog="False" for_status="True" update_always="True">
   <description>Previous transition</description>
   <default>
    
@@ -388,8 +312,7 @@
   <guard>
   </guard>
  </variable>
- <variable variable_id="actor" for_catalog="False"
-           for_status="True" update_always="True">
+ <variable variable_id="actor" for_catalog="False" for_status="True" update_always="True">
   <description>The ID of the user who performed the previous transition</description>
   <default>
    
@@ -398,8 +321,7 @@
   <guard>
   </guard>
  </variable>
- <variable variable_id="comments" for_catalog="False"
-           for_status="True" update_always="True">
+ <variable variable_id="comments" for_catalog="False" for_status="True" update_always="True">
   <description>Comment about the last transition</description>
   <default>
    
@@ -408,8 +330,7 @@
   <guard>
   </guard>
  </variable>
- <variable variable_id="review_history" for_catalog="False"
-           for_status="False" update_always="False">
+ <variable variable_id="review_history" for_catalog="False" for_status="False" update_always="False">
   <description>Provides access to workflow history</description>
   <default>
    
@@ -420,8 +341,7 @@
    <guard-permission>Review portal content</guard-permission>
   </guard>
  </variable>
- <variable variable_id="time" for_catalog="False"
-           for_status="True" update_always="True">
+ <variable variable_id="time" for_catalog="False" for_status="True" update_always="True">
   <description>When the previous transition was performed</description>
   <default>
    
