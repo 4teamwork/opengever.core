@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2010-12-02 10:43+0000\n"
+"POT-Creation-Date: 2010-12-02 12:57+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -61,7 +61,7 @@ msgstr ""
 msgid "Document"
 msgstr ""
 
-#: ./opengever/document/checkout/manager.py:249
+#: ./opengever/document/checkout/manager.py:212
 #: ./opengever/document/checkout/revert.py:26
 msgid "Reverted file to version ${version_id}"
 msgstr ""
@@ -247,6 +247,11 @@ msgstr ""
 msgid "label_by_author"
 msgstr ""
 
+#. Default: "Checked out"
+#: ./opengever/document/checkout/viewlets_templates/checkedoutviewlet.pt:4
+msgid "label_checked_out"
+msgstr ""
+
 #. Default: "Journal Comment"
 #: ./opengever/document/checkout/checkin.py:27
 msgid "label_checkin_journal_comment"
@@ -388,6 +393,11 @@ msgstr ""
 #. Default: "yes"
 #: ./opengever/document/document_templates/overview.pt:46
 msgid "label_yes"
+msgstr ""
+
+#. Default: "This item is being checked out by ${creator}."
+#: ./opengever/document/checkout/viewlets_templates/checkedoutviewlet.pt:8
+msgid "message_checkout_info"
 msgstr ""
 
 #. Default: "referenced documents"

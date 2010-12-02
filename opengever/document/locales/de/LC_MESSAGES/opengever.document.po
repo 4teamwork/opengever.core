@@ -1,26 +1,12 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"PO-Revision-Date: 2010-12-02 11:43+0100\n"
+"PO-Revision-Date: 2010-12-02 13:57+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-
-msgid ""
-msgstr ""
-"Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2010-12-02 10:43+0000\n"
-"PO-Revision-Date: 2010-12-02 10:44+0100\n"
-"Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
-"Language-Team: 4teamwork <info@4teamwork.ch>\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=1; plural=0\n"
-"Preferred-Encodings: utf-8 latin1\n"
-"Domain: DOMAIN\n"
 
 #. Default: "Cancel"
 #: ./opengever/document/profiles/default/actions.xml
@@ -69,7 +55,7 @@ msgstr "Aufgabe erstellen"
 msgid "Document"
 msgstr "Dokument"
 
-#: ./opengever/document/checkout/manager.py:249
+#: ./opengever/document/checkout/manager.py:212
 #: ./opengever/document/checkout/revert.py:26
 msgid "Reverted file to version ${version_id}"
 msgstr "Datei des Dokuments auf Vesion ${version_id} zurückgesetzt."
@@ -263,6 +249,11 @@ msgstr "Autor"
 msgid "label_by_author"
 msgstr "Autor: ${author}"
 
+#. Default: "Checked out"
+#: ./opengever/document/checkout/viewlets_templates/checkedoutviewlet.pt:4
+msgid "label_checked_out"
+msgstr "Ausgecheckt"
+
 #. Default: "Journal Comment"
 #: ./opengever/document/checkout/checkin.py:27
 msgid "label_checkin_journal_comment"
@@ -405,6 +396,11 @@ msgstr "Status:"
 #: ./opengever/document/document_templates/overview.pt:46
 msgid "label_yes"
 msgstr "Ja"
+
+#. Default: "This item is being checked out by ${creator}."
+#: ./opengever/document/checkout/viewlets_templates/checkedoutviewlet.pt:8
+msgid "message_checkout_info"
+msgstr "Dieses Dokument wurde von ${creator} ausgecheckt."
 
 #. Default: "referenced documents"
 #: ./opengever/document/document_templates/overview.pt:63
