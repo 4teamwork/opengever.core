@@ -19,6 +19,9 @@
  <permission>WebDAV Lock items</permission>
  <permission>WebDAV Unlock items</permission>
  <permission>WebDAV access</permission>
+ <permission>opengever.document: Checkout</permission>
+ <permission>opengever.document: Checkin</permission>
+ <permission>opengever.document: Cancel</permission>
  <state state_id="document-state-checked_out" title="document-state-checked_out">
   <description>Can only be seen and edited by the owner.</description>
   <exit-transition transition_id="document-transition-cancel_checkout"/>
@@ -161,6 +164,18 @@
    <permission-role>Editor</permission-role>
    <permission-role>Manager</permission-role>
    <permission-role>Owner</permission-role>
+  </permission-map>
+  <permission-map name="opengever.document: Cancel" acquired="False">
+   <permission-role>Editor</permission-role>
+   <permission-role>Manager</permission-role>
+  </permission-map>
+  <permission-map name="opengever.document: Checkin" acquired="False">
+   <permission-role>Editor</permission-role>
+   <permission-role>Manager</permission-role>
+  </permission-map>
+  <permission-map name="opengever.document: Checkout" acquired="False">
+   <permission-role>Editor</permission-role>
+   <permission-role>Manager</permission-role>
   </permission-map>
  </state>
  <state state_id="document-state-pending" title="document-state-pending">
