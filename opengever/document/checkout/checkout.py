@@ -62,7 +62,9 @@ class CheckoutDocuments(grok.CodeView):
         if len(objects) == 1 and external_edit:
             redirector = IRedirector(self.request)
             redirector.redirect(
-                '%s?externaledit=1' % objects[0].absolute_url())
+                '%s/external_edit' % objects[0].absolute_url(),
+                target='_self',
+                timeout=1000)
 
         # now lets redirect to an appropriate target..
         if len(objects) == 1:
