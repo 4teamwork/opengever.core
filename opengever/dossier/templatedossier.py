@@ -3,7 +3,7 @@ import urllib
 
 from zope.annotation.interfaces import IAnnotations
 from zope.interface import Interface
-from zope.component import getUtility
+from zope.component import getUtility, getMultiAdapter
 from zope.lifecycleevent import ObjectAddedEvent, ObjectModifiedEvent
 from zope.event import notify
 
@@ -16,6 +16,8 @@ from DateTime import DateTime
 
 from opengever.dossier import _
 from opengever.base.interfaces import ISequenceNumber
+from opengever.document.interfaces import ICheckinCheckoutManager
+from opengever.base.interfaces import IRedirector
 
 from ftw.table import helper
 from ftw.table.interfaces import ITableGenerator
@@ -92,23 +94,21 @@ class TemplateDocumentFormView(grok.View):
                     # and set the redirectTo parameter, which start the
                     # zem-file download. See startredirect.js
 
-                    raise NotImplemented()
-                    # manager = ICheckinCheckoutManager(newdoc)
-                    # wc = manager.checkout('', show_status_message=False)
-                    # portal = self.context.portal_url.getPortalObject()
-                    # xpr = re.compile('href="(.*?)"')
-                    # html = portal.externalEditLink_(wc)
-                    # url = xpr.search(html).groups()[0]
-                    # url = url.replace(portal.absolute_url(), '')
-                    # get = urllib.urlencode({'redirectTo': url})
+                    manager = getMultiAdapter((newdoc, self.request),
+                                              ICheckinCheckoutManager)
+                    manager.checkout()
 
-                    # redirect_url = '%s?%s#documents_overview' % (
-                    #     self.context.absolute_url(), get)
-                    # return self.request.RESPONSE.redirect(
-                    #     redirect_url)
+                    redirector = IRedirector(self.request)
+                    redirector.redirect(
+                        '%s/external_edit' % newdoc.absolute_url(),
+                        target='_self',
+                        timeout=1000)
+
+                    return self.request.RESPONSE.redirect(
+                        self.context.absolute_url() + '#documents')
                 else:
                     return self.request.RESPONSE.redirect(
-                        self.context.absolute_url()+'#documents_overview')
+                        self.context.absolute_url() + '#documents')
             else:
                 if path == None:
                     self.errors['paths'] = True
