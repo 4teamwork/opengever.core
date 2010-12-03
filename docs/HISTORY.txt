@@ -5,6 +5,11 @@ Changelog
 2.0a3
 -----
 
+* Issue #553 Checkout Prozess anpassen
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/553
+  Updated document journal entries
+  [jbaumann]
+
 
 2.0a2
 -----
@@ -23,7 +28,7 @@ Changelog
 
 * Updated setup.py, changed target release to 1.0a1
   [05.01.2010, jbaumann]
-  
+
 * Issue #135: Journal: Eintraege lokalisieren
   Updated journal event handlers and its translations
   [16.11.2009, jbaumann]
