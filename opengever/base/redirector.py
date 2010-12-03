@@ -26,7 +26,7 @@ class Redirector(grok.Adapter):
         except AttributeError:
             self.session = {}
 
-    def redirect(self, url, target='_blank'):
+    def redirect(self, url, target='_blank', timeout=0):
         """Redirects the user to a `url` which is opened in a window called
         `target` after loading the next page.
         """
@@ -37,6 +37,7 @@ class Redirector(grok.Adapter):
         data = PersistentDict()
         data['url'] = url
         data['target'] = target
+        data['timeout'] = int(timeout)
 
         self.session[REDIRECTOR_SESS_KEY].append(data)
 
@@ -66,8 +67,8 @@ class RedirectorViewlet(grok.Viewlet):
 
     JS_TEMPLATE = '''
 <script type="text/javascript">
-jq(function($) {
-    window.open('%(url)s', '%(target)s');
+jq(function() {
+    window.setTimeout("window.open('%(url)s', '%(target)s');", %(timeout)s);
 });
 </script>
 '''
