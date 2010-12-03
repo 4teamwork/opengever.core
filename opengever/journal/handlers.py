@@ -3,7 +3,10 @@ from five import grok
 from ftw.journal.events.events import JournalEntryEvent
 from ftw.journal.interfaces import IJournalizable
 from opengever.document.document import IDocumentSchema
-from opengever.document.interfaces import IObjectCheckedInEvent, IObjectCheckedOutEvent
+from opengever.document.interfaces import IObjectCheckedInEvent
+from opengever.document.interfaces import IObjectCheckedOutEvent
+from opengever.document.interfaces import IObjectCheckoutCanceledEvent
+from opengever.document.interfaces import IObjectRevertedToVersion
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.browser.participants import role_list_helper
 from opengever.dossier.interfaces import IParticipationCreated
@@ -127,19 +130,47 @@ def document_added(context, event):
 DOCUMENT_MODIIFED_ACTION = 'Document modified'
 @grok.subscribe(IDocumentSchema, IObjectModifiedEvent)
 def document_modified(context, event):
-    # XXX dirty
-    try:
-        # if we delete the working copy, we get a aq_based object and don't wanna
-        # make a journal entry
-        context.portal_types
-    except AttributeError:
+    # we need to distinguish between "metadata modified"
+    # and "file modified"
+    file_changed = False
+    metadata_changed = False
+    for desc in event.descriptions:
+        for attr in desc.attributes:
+            if attr == 'file':
+                file_changed = True
+            else:
+                metadata_changed = True
+
+    if not file_changed and not metadata_changed:
+        # the event shouldn't be fired in this case anyway..
         return
-    title = _(u'label_document_modified',
-              default=u'Document modified: ${title}',
-              mapping={'title': context.title_or_id()})
-    journal_entry_factory(context, DOCUMENT_MODIIFED_ACTION, title, visible=False)
-    journal_entry_factory(context.aq_inner.aq_parent, DOCUMENT_MODIIFED_ACTION, title)
-    return
+
+    if file_changed and metadata_changed:
+        title = _(u'label_document_file_and_metadata_modified',
+                  default=u'Changed file and metadata')
+        parent_title = _(u'label_document_file_and_metadata_modified__parent',
+                         default=u'Changed file and metadata of '
+                         'document ${title}',
+                         mapping=dict(title=context.title_or_id()))
+
+    elif file_changed:
+        title = _(u'label_document_file_modified',
+                  default=u'Changed file')
+        parent_title = _(u'label_document_file_modified__parent',
+                         default=u'Changed file of document ${title}',
+                         mapping=dict(title=context.title_or_id()))
+
+    elif metadata_changed:
+        title = _(u'label_document_metadata_modified',
+                  default=u'Changed metadata')
+        parent_title = _(u'label_document_metadata_modified__parent',
+                         default=u'Changed metadata of document ${title}',
+                         mapping=dict(title=context.title_or_id()))
+
+    journal_entry_factory(context, DOCUMENT_MODIIFED_ACTION,
+                          title, visible=False)
+    journal_entry_factory(context.aq_inner.aq_parent,
+                          DOCUMENT_MODIIFED_ACTION, parent_title)
 
 
 
@@ -178,6 +209,32 @@ def document_checked_in(context, event):
     journal_entry_factory(context, DOCUMENT_CHECKED_IN, title,
                           comment=user_comment)
     return
+
+
+DOCUMENT_CHECKOUT_CANCEL = 'Canceled document checkout'
+@grok.subscribe(IDocumentSchema, IObjectCheckoutCanceledEvent)
+def document_checkout_canceled(context, event):
+    title = _(u'label_document_checkout_cancel',
+              default=u'Canceled document checkout')
+    journal_entry_factory(context, DOCUMENT_CHECKOUT_CANCEL, title)
+
+
+DOCUMENT_FILE_REVERTED = 'Reverted document file'
+@grok.subscribe(IDocumentSchema, IObjectRevertedToVersion)
+def document_file_reverted(context, event):
+    try:
+        create = event.create_version
+    except AttributeError:
+        return
+    else:
+        if not create:
+            return
+
+    title = _(u'label_document_file_reverted',
+              default=u'Reverte document file to version ${version_id}',
+              mapping=dict(version_id=event.version_id))
+    journal_entry_factory(context, DOCUMENT_FILE_REVERTED, title)
+
 
 
 # ----------------------- TASK -----------------------
