@@ -98,7 +98,7 @@
         title="Checkout"
         url_expr="string:${object_url}/@@checkout_documents"
         condition_expr="python:path('object/@@checkout_control').is_checkout_allowed()"
-        category="object">
+        category="object_buttons">
     <permission value="opengever.document: Checkout"/>
   </action>
 
