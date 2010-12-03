@@ -28,7 +28,6 @@
     <element value="opengever.tabbedview.interfaces.ITabbedViewEnabled" />
     <element value="opengever.base.behaviors.classification.IClassification" />
     <element value="opengever.document.behaviors.IRelatedDocuments" />
-    <element value="plone.stagingbehavior.interfaces.IStagingSupport" />
     <element value="plone.app.versioningbehavior.behaviors.IVersionable" />
     <element value="opengever.document.behaviors.IDocumentNameFromTitle" />
     <!-- <element value="collective.filepreviewbehavior.interfaces.IPreviewable" /> -->
@@ -38,7 +37,7 @@
 
   <!-- View information -->
   <property name="default_view">tabbed_view</property>
-  <property name="immediate_view">tabbed_view</property>
+  <property name="immediate_view">../#documents</property>
   <property name="default_view_fallback">False</property>
   <property name="view_methods">
     <element value="view"/>
@@ -56,7 +55,7 @@
           url_expr="string:${object_url}" visible="False">
     <permission value="View"/>
   </action>
-  <action title="Edit" action_id="edit" category="object" condition_expr=""
+  <action title="Edit metadata" action_id="edit" category="object" condition_expr=""
           url_expr="string:${object_url}/edit" visible="True">
     <permission value="Modify portal content"/>
   </action>
@@ -75,38 +74,63 @@
   </action>
 
   <!-- external editor -->
-  <action title="Edit with external application" action_id="extedit" category="object"
-          url_expr="string:$object_url/external_edit"
-          condition_expr="object/externalEditorEnabled" visible="True">
+  <action
+        action_id="extedit"
+        visible="True"
+        title="Edit with external application"
+        url_expr="string:$object_url/external_edit"
+        condition_expr="object/@@external_editing_allowed"
+        category="object">
     <permission value="Modify portal content"/>
   </action>
 
-  <!-- actions for staging -->
-  <action title="Checkout" action_id="checkout_document" category="object"
-          url_expr="string:${object_url}/@@document-checkout"
-          condition_expr="python:path('object/@@iterate_control').checkin_allowed" visible="True">
-    <permission value="CMFEditions: Checkout to location"/>
-  </action>
-  <action title="Checkout and edit" action_id="checkout_edit_document" category="object"
-          url_expr="string:${object_url}/@@document-checkout?mode=external"
-          condition_expr="python:path('object/@@iterate_control').checkin_allowed and context.file != None" visible="True">
-    <permission value="CMFEditions: Checkout to location"/>
-  </action>
-  <action title="Checkin" action_id="checkin_document" category="object"
-          url_expr="string:${object_url}/@@document-checkin"
-          condition_expr="python:path('object/@@iterate_control').checkin_allowed" visible="True">
-    <permission value="Modify portal content"/>
-  </action>
-  <action title="Cancel Checkout" action_id="cancel_document_checkout" category="object"
-          url_expr="string:${object_url}/@@document-cancel-checkout"
-          condition_expr="python:path('object/@@iterate_control').cancel_allowed" visible="True">
-    <permission value="Modify portal content"/>
-  </action>
   <action i18n:domain="opengever.dossier" title="Sharing" action_id="sharing" category="tabbedview-tabs"
           condition_expr="" url_expr="string:#"
           visible="True">
       <permission value="View"/>
   </action>
-  
+
+
+  <!-- actions for staging -->
+  <action
+        action_id="checkout_document"
+        visible="True"
+        title="Checkout"
+        url_expr="string:${object_url}/@@checkout_documents"
+        condition_expr="python:path('object/@@checkout_control').is_checkout_allowed()"
+        category="object_buttons">
+    <permission value="opengever.document: Checkout"/>
+  </action>
+
+  <action
+        action_id="checkout_edit_document"
+        visible="True"
+        title="Checkout and edit"
+        url_expr="string:${object_url}/@@checkout_documents?mode=external"
+        condition_expr="python:path('object/@@checkout_control').is_checkout_allowed() and context.file != None"
+        category="object">
+    <permission value="opengever.document: Checkout"/>
+  </action>
+
+  <action
+        visible="True"
+        action_id="checkin_document"
+        title="Checkin"
+        url_expr="string:${object_url}/@@checkin_documents"
+        condition_expr="python:path('object/@@checkout_control').is_checkin_allowed()"
+        category="object">
+    <permission value="opengever.document: Checkin"/>
+  </action>
+
+  <action
+        action_id="cancel_document_checkout"
+        visible="True"
+        title="Cancel Checkout"
+        url_expr="string:${object_url}/@@cancel_document_checkouts"
+        condition_expr="python:path('object/@@checkout_control').is_cancel_allowed()"
+        category="object">
+    <permission value="opengever.document: Cancel"/>
+  </action>
+
 
 </object>

@@ -38,3 +38,13 @@ class ObjectCheckoutCanceledEvent(ObjectEvent):
     def __init__(self, obj):
         self.object = obj
 
+
+class ObjectRevertedToVersion(ObjectEvent):
+    """The document was reverted back to a specific version.
+    """
+    grok.implements(interfaces.IObjectRevertedToVersion)
+
+    def __init__(self, obj, version_id, create_version):
+        self.object = obj
+        self.version_id = version_id
+        self.create_version = create_version
