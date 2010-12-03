@@ -14,9 +14,6 @@
     <!-- Include configuration for dependencies listed in setup.py -->
     <includeDependencies package="." />
 
-    <!-- vdex vocabularies folder -->
-    <vdex:vocabulary directory="vdexvocabs" />
-
     <!-- Register an extension profile to make the product installable -->
     <genericsetup:registerProfile
         name="default"
