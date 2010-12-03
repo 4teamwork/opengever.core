@@ -55,7 +55,7 @@
           url_expr="string:${object_url}" visible="False">
     <permission value="View"/>
   </action>
-  <action title="Edit" action_id="edit" category="object" condition_expr=""
+  <action title="Edit metadata" action_id="edit" category="object" condition_expr=""
           url_expr="string:${object_url}/edit" visible="True">
     <permission value="Modify portal content"/>
   </action>

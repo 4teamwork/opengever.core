@@ -73,3 +73,6 @@ msgstr ""
 
 msgid "Document state changed to document-state-reject"
 msgstr ""
+
+msgid "Edit metadata"
+msgstr ""
