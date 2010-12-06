@@ -62,6 +62,7 @@ setup(name='opengever.document',
         'collective.vdexvocabulary',
         'collective.elephantvocabulary',
         'plone.formwidget.contenttree',
+        'plone.app.lockingbehavior',
         ],
 
         tests_require=tests_require,
