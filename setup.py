@@ -39,6 +39,7 @@ setup(name='opengever.contact',
         'five.grok',
         'opengever.tabbedview',
         'collective.dexteritytextindexer',
+        'plone.app.lockingbehavior',
         # -*- Extra requirements: -*-
         ],
         tests_require=tests_require,
