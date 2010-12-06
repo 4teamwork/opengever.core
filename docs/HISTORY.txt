@@ -5,6 +5,9 @@ Changelog
 2.0b3
 -----
 
+* added locking for dossier content types
+  [jbaumann]
+
 * Issue #553 Checkout Prozess anpassen
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/553
   Support for new checkout / checkin
