@@ -5,6 +5,12 @@ Changelog
 2.0b3
 -----
 
+* enable locking behavior
+  [jbaumann]
+
+* after creating a task, redirect to dossiers #task tab
+  [jbaumann]
+
 
 2.0b1
 -----
