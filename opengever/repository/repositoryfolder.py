@@ -143,7 +143,7 @@ class RepositoryFolder(content.Container):
             if maximum_depth<=current_depth:
                 # depth exceeded
                 # RepositoryFolder not allowed, but any other type
-                return filter(lambda a: a!= fti, types)
+                types = filter(lambda a: a!= fti, types)
         # check if self contains any similar objects
         contains_similar_objects = False
         for id, obj in self.contentItems():
