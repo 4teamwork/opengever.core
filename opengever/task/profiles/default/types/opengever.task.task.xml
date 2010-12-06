@@ -31,6 +31,7 @@
         <element value="opengever.trash.trash.ITrashable" />
         <element value="opengever.task.behaviors.ITaskNameFromTitle" />
         <element value="opengever.base.behaviors.sequence.ISequenceNumberBehavior" />
+        <element value="plone.app.lockingbehavior.behaviors.ILocking" />
     </property>
 
     <!-- View information -->
@@ -63,7 +64,7 @@
             title="Edit"
             category="object"
             url_expr="string:${object_url}/edit"
-            condition_expr="">
+            condition_expr="not:object/@@plone_lock_info/is_locked_for_current_user|python:True">
         <permission value="Modify portal content"/>
     </action>
 
