@@ -42,6 +42,7 @@ setup(name='opengever.tasktemplates',
         'plone.directives.form',
         'ftw.table',
         'setuptools',
+        'plone.app.lockingbehavior',
         # -*- Extra requirements: -*-
         ],
       entry_points="""

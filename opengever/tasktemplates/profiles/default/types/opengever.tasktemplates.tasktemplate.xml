@@ -26,6 +26,7 @@
   <!-- enabled behaviors -->
   <property name="behaviors">
     <element value="opengever.tabbedview.interfaces.ITabbedViewEnabled" />
+    <element value="plone.app.lockingbehavior.behaviors.ILocking" />
   </property>
 
   <!-- View information -->
@@ -47,7 +48,8 @@
           url_expr="string:${object_url}" visible="False">
     <permission value="View"/>
   </action>
-  <action title="Edit" action_id="edit" category="object" condition_expr=""
+  <action title="Edit" action_id="edit" category="object"
+          condition_expr="not:object/@@plone_lock_info/is_locked_for_current_user|python:True"
           url_expr="string:${object_url}/edit" visible="True">
     <permission value="Modify portal content"/>
   </action>
