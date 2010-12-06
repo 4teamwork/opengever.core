@@ -5,6 +5,15 @@ Changelog
 2.0a3
 -----
 
+* enable locking behavior
+  [jbaumann]
+  
+* fixed allowedContentTypes method, the restrictedossier should also ovserved by depth exceeded
+  [pgross]
+
+* fixed extends path
+  [jbaumann]
+
 
 2.0a2
 -----
