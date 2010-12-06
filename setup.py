@@ -39,6 +39,7 @@ setup(name='opengever.repository',
         'opengever.base',
         'opengever.tabbedview',
         'collective.autopermission',
+        'plone.app.lockingbehavior',
         # -*- Extra requirements: -*-
         ],
       tests_require=tests_require,
