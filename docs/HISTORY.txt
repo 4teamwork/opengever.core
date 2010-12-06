@@ -5,6 +5,15 @@ Changelog
 2.0b3
 -----
 
+* moved registry entries to opengever.zug.base
+  [Timon Tschanz]
+
+* redirector: added timeout option, used for tabbedviews
+  [Jonas Baumann]
+
+* moved zug vocabularies to opengever.zug.base
+  [Timon Tschanz]
+
 
 2.0b2
 -----
