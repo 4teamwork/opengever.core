@@ -4,7 +4,8 @@ Changelog
 
 2.0b2
 -----
-
+* enabled locking for content type contact
+  [jbaumann]
 
 2.0b1
 -----
