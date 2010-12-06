@@ -5,6 +5,9 @@ Changelog
 2.0b3
 -----
 
+* enabled locking for document content type
+  [jbaumann]
+
 * Issue #553 Checkout Prozess anpassen
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/553
   Removed plone.stagingbehavior, implemented new checkin / checkout stuff
