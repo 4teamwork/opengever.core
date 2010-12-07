@@ -2,11 +2,11 @@
 <dc-workflow workflow_id="opengever_tasktemplatefolder_workflow" title="Workflow for opengever.tasktemplatesfolder" description="" state_variable="review_state" initial_state="tasktemplatefolder-state-inactiv" manager_bypass="False">
  <permission>Access contents information</permission>
  <permission>Add portal content</permission>
+ <permission>Delete objects</permission>
  <permission>List folder contents</permission>
  <permission>Manage properties</permission>
  <permission>Modify portal content</permission>
  <permission>View</permission>
- <permission>Delete objects</permission>
  <state state_id="tasktemplatefolder-state-activ" title="tasktemplatefolder-state-activ">
   <exit-transition transition_id="tasktemplatefolder-transition-activ-inactiv"/>
   <permission-map name="Access contents information" acquired="False">
@@ -71,6 +71,7 @@
   </permission-map>
   <permission-map name="Modify portal content" acquired="False">
    <permission-role>Editor</permission-role>
+   <permission-role>Manager</permission-role>
   </permission-map>
   <permission-map name="View" acquired="False">
    <permission-role>Editor</permission-role>
