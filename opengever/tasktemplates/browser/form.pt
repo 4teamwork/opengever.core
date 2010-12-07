@@ -6,7 +6,7 @@
       metal:use-macro="context/main_template/macros/master"
       i18n:domain="opengever.tasktemplates">
 
-      <head metal:fill-slot="javascript_head_slot">
+      <tal:head metal:fill-slot="javascript_head_slot">
               <script type="text/javascript">
               jq(function(){
 
@@ -31,10 +31,10 @@
                             .addClass('visited')
                             .next()
                             .addClass('selected');
-                        $('#form-controls input[name=save]').toggle();  
+                        $('#form-controls input[name=save]').toggle();
                     }
                   });
-                  
+
                   $('.wizard a[href$=#templates]').click(function(e){
                       table.ftwtable('param', 'path', '/');
                       table.ftwtable('param', 'show', 'templates');
@@ -43,7 +43,7 @@
                       $(e.target).closest('li').addClass('selected');
                       $('#form-controls input[name=save]').toggle();
                   }, false);
-                  
+
                   $('.wizard a[href$=#tasks]').click(function(e){
                       var path = table.ftwtable('param', 'path');
                       if (path == '/'){
@@ -56,7 +56,9 @@
                   }, false);
               });
                </script>
-      </head>
+
+      </tal:head>
+
   <body>
         <div metal:fill-slot="main">
              <div tal:replace="structure provider:plone.abovecontenttitle" />
@@ -68,16 +70,16 @@
                  </ul>
                  <div class="wizardContent">
                      <div id="template_chooser"><!--iefix--></div>
-             
+
                      <div id="form-controls">
                          <input type="submit" class="context" name="save" value="Save"  i18n:attributes="value label_save" i18n:domain="plone"/>
                          <input type="submit" class="standalone" name="abort" value="Abort" i18n:attributes="value label_cancel" i18n:domain="plone" />
                      </div>
                  </div>
              </form>
-            
+
         <div tal:replace="structure provider:plone.belowcontentbody" />
         </div>
     </body>
 </html>
-    
+

@@ -20,32 +20,65 @@ meta_data = {}
 meta_data['templates'] = {
     'root': 'rows',
     'totalProperty': 'totalCount',
+
     'fields': [
         {'name': 'path_radiobutton', 'type': 'string' ,'hideable' : False},
         {'name': 'created', 'type': 'string'},
         {'name': 'Title', 'type': 'string'}
-    ],
+        ],
+
     'columns': [
-        {'id':'path_radiobutton', 'width': 30, 'menuDisabled':True, 'sortable': False, 'dataIndex': 'path_radiobutton', 'hideable' : False},
-        {'id':'Title','header': 'Title', 'sortable': True, 'dataIndex': 'Title'},
-        {'id':'created','header': 'Created', 'width': 160, 'sortable': True, 'dataIndex': 'created'}
-    ],
-}
+        {'id': 'path_radiobutton',
+         'width': 30,
+         'menuDisabled': True,
+         'sortable': False,
+         'dataIndex': 'path_radiobutton',
+         'hideable' : False},
+
+        {'id': 'Title',
+         'header': 'Title',
+         'sortable': True,
+         'dataIndex': 'Title'},
+
+        {'id': 'created',
+         'header': 'Created',
+         'width': 160,
+         'sortable': True,
+         'dataIndex': 'created'}
+        ],
+    }
 
 meta_data['tasks'] = {
     'root': 'rows',
     'totalProperty': 'totalCount',
+
     'fields': [
         {'name': 'path_checkbox', 'type': 'string'},
         {'name': 'created', 'type': 'string'},
         {'name': 'Title', 'type': 'string'}
-    ],
+        ],
+
     'columns': [
-        {'id':'path_checkbox','header': '', 'width': 30,'sortable': False, 'hideable':False, 'menuDisabled':True, 'dataIndex': 'path_checkbox'},
-        {'id':'Title','header': 'Title', 'sortable': True, 'dataIndex': 'Title'},
-        {'id':'created','header': 'Created', 'width': 160, 'sortable': True, 'dataIndex': 'created'}
-    ],
-}
+        {'id': 'path_checkbox',
+         'header': '',
+         'width': 30,
+         'sortable': False,
+         'hideable': False,
+         'menuDisabled':True,
+         'dataIndex': 'path_checkbox'},
+
+        {'id': 'Title',
+         'header': 'Title',
+         'sortable': True,
+         'dataIndex': 'Title'},
+
+        {'id': 'created',
+         'header': 'Created',
+         'width': 160,
+         'sortable': True,
+         'dataIndex': 'created'}
+        ],
+    }
 
 def path_checkbox(item, value):
     preselected = item.getObject().preselected
@@ -91,12 +124,12 @@ class AddForm(BrowserView):
         sort_order = {'ASC': 'asc',
                       'DESC':'reverse'}.get(sort_order, sort_order)
         templates = self.context.portal_catalog(
-                        Type=self.steps[show]['types'],
-                        review_state=self.steps[show]['states'],
-                        sort_on = sort_on,
-                        sort_order = sort_order,
-                        path = path
-        )
+            Type=self.steps[show]['types'],
+            review_state=self.steps[show]['states'],
+            sort_on = sort_on,
+            sort_order = sort_order,
+            path = path
+            )
         table_options = {'auto_expand_column':'Title'}
         generator = queryUtility(ITableGenerator, 'ftw.tablegenerator')
         return generator.generate(templates,
@@ -133,7 +166,7 @@ class AddForm(BrowserView):
         default_sort_order = self.sort_reverse and 'reverse' or 'asc'
         sort_order = self.request.get('dir', default_sort_order)
         self.sort_order = {'ASC': 'asc',
-                         'DESC':'reverse'}.get(sort_order, sort_order)
+                           'DESC':'reverse'}.get(sort_order, sort_order)
 
         self.sort_reverse = self.sort_order == 'reverse'
 
@@ -142,7 +175,7 @@ class AddForm(BrowserView):
 
         if 'abort' in self.request.keys():
             return self.request.RESPONSE.redirect(self.context.absolute_url())
-            
+
         for path in paths:
             template = self.context.restrictedTraverse(path)
             deadline = datetime.today()+timedelta(template.deadline)
