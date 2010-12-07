@@ -1,5 +1,6 @@
 jq(function(){
 
+  // initially hide the save button
   $('#form-controls input[name=save]').toggle();
 
   //test global overwrite

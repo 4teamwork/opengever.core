@@ -242,3 +242,18 @@ class AddForm(BrowserView):
 
         else:
             return principal
+
+    def javascript_url(self):
+        """Returns the URL to the javascript file (form.js) for embedding in
+        the template. It also adds the date / time as parameter when
+        portal_javscript is in debug mode.
+        """
+        url = getToolByName(self.context, 'portal_url')()
+        url += '/++resource++tasktemplates.form.js'
+
+        # debug mode on?
+        jstool = getToolByName(self.context, 'portal_javascripts')
+        if jstool.getDebugMode():
+            url += '?now=' + str(datetime.now())
+
+        return url
