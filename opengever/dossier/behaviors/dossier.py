@@ -122,7 +122,7 @@ class IDossier(form.Schema):
     container_type = schema.Choice(
         title = _(u'label_container_type', default=u'Container Type'),
         description = _(u'help_container_type', default=u''),
-        source = wrap_vocabulary('opengever.dossier.type_prefixes',
+        source = wrap_vocabulary('opengever.dossier.container_types',
                     visible_terms_from_registry="opengever.dossier" + \
                         '.interfaces.IDossierContainerTypes.container_types'),
         required = False,

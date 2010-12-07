@@ -5,6 +5,8 @@ Changelog
 2.0b4
 -----
 
+* fixed container_types fields, use now the correct vocabulary
+  [phgross]
 
 2.0b3
 -----
