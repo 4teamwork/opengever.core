@@ -229,3 +229,4 @@ grok.global_adapter(lastname, name='lastname')
 class View(dexterity.DisplayForm):
     grok.context(IContact)
     grok.require('zope2.View')
+    grok.name('contact_view')
