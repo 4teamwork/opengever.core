@@ -2,6 +2,10 @@ Changelog
 =========
 
 
+2.0b4
+-----
+
+
 2.0b3
 -----
 * renamed contact view, so we have also the action "Eigenschaften anzeigen" wich show all fields
