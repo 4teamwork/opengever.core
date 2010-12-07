@@ -5,6 +5,9 @@ Changelog
 2.0b4
 -----
 
+* Changed language to de-ch in setup configuration
+  [jbaumann]
+
 
 2.0b3
 -----

@@ -8,7 +8,7 @@ POLICIES = ({
             'opengever.examplecontent:developer',),
         'purge_sql': True,
         'import_users': True,
-        'language': 'de',
+        'language': 'de-ch',
         'clients': (# {
                 # 'client_id': 'peter',
                 # 'title': 'Peter',
