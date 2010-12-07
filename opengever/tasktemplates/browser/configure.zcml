@@ -11,4 +11,8 @@
         allowed_attributes="listing create"
         />
 
+    <browser:resource
+        name="tasktemplates.form.js"
+        file="form.js" />
+
 </configure>
