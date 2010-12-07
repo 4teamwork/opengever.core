@@ -5,6 +5,9 @@ Changelog
 2.0a4
 -----
 
+* Made tasktemplate wizard work again
+  [jbaumann]
+
 
 2.0a3
 -----

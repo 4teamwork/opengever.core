@@ -1,16 +1,12 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2010-11-17 09:14+0000\n"
-"PO-Revision-Date: 2010-10-13 14:09+0200\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"Project-Id-Version: 1.0\n"
+"PO-Revision-Date: 2010-12-07 14:14+0100\n"
+"Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
+"Language-Team: 4teamwork <info@4teamwork.ch>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=1; plural=0\n"
-"Preferred-Encodings: utf-8 latin1\n"
-"Domain: DOMAIN\n"
 
 msgid "Description"
 msgstr "Beschreibung"
@@ -26,11 +22,11 @@ msgstr "Standardablauf"
 msgid "Title"
 msgstr "Titel"
 
-#: ./opengever/tasktemplates/browser/form.pt:63
+#: ./opengever/tasktemplates/browser/form.pt:19
 msgid "add tasktemplate"
 msgstr "Aufgabenvorlage hinzufügen"
 
-#: ./opengever/tasktemplates/browser/form.pt:66
+#: ./opengever/tasktemplates/browser/form.pt:22
 msgid "choose template"
 msgstr "Vorlage auswählen"
 
@@ -81,6 +77,16 @@ msgstr "Sachbearbeiter"
 msgid "interactive_user_responsible"
 msgstr "Federführender"
 
+#. Default: "Continue"
+#: ./opengever/tasktemplates/browser/form.pt:30
+msgid "label_continue"
+msgstr "Weiter"
+
+#. Default: "Created"
+#: ./opengever/tasktemplates/browser/form.py:112
+msgid "label_created"
+msgstr "Erstelldatum"
+
 #. Default: "Deadline in Days"
 #: ./opengever/tasktemplates/browser/tasktemplates.py:36
 #: ./opengever/tasktemplates/content/tasktemplate.py:54
@@ -129,13 +135,13 @@ msgid "label_text"
 msgstr "Kommentar"
 
 #. Default: "Title"
+#: ./opengever/tasktemplates/browser/form.py:110
 #: ./opengever/tasktemplates/browser/tasktemplates.py:19
 #: ./opengever/tasktemplates/browser/templatefolders.py:18
-#: ./opengever/tasktemplates/content/tasktemplate.py:13
 msgid "label_title"
 msgstr "Titel"
 
-#: ./opengever/tasktemplates/browser/form.pt:67
+#: ./opengever/tasktemplates/browser/form.pt:23
 msgid "select tasks"
 msgstr "Aufgaben auswählen"
 

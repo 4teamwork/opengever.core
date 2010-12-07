@@ -9,8 +9,9 @@ from datetime import datetime, timedelta
 from ftw.table import helper
 from ftw.table.interfaces import ITableGenerator
 from opengever.dossier.behaviors.dossier import IDossierMarker, IDossier
-from opengever.ogds.base.utils import get_current_client
 from opengever.ogds.base.interfaces import IContactInformation
+from opengever.ogds.base.utils import get_current_client
+from opengever.tasktemplates import _
 from plone.dexterity.utils import createContent, addContentToContainer
 from zope.component import queryUtility, getUtility
 from zope.event import notify
@@ -103,12 +104,24 @@ class AddForm(BrowserView):
 
     steps = {
         'templates': {
-            'columns' : (('', helper.path_radiobutton), 'Title' ,('created', helper.readable_date)),
+            'columns' : (
+                ('', helper.path_radiobutton),
+                {'column': 'Title',
+                 'column_title': _(u'label_title', default=u'Title')},
+                {'column': 'created',
+                 'column_title': _(u'label_created', default=u'Created'),
+                 'transform': helper.readable_date},),
             'types': ('TaskTemplateFolder',),
             'states': ('tasktemplatefolder-state-activ',),
             },
         'tasks': {
-            'columns' : (('', path_checkbox), 'Title', ('created', helper.readable_date)),
+            'columns': (
+                ('', helper.path_radiobutton),
+                {'column': 'Title',
+                 'column_title': _(u'label_title', default=u'Title')},
+                {'column': 'created',
+                 'column_title': _(u'label_created', default=u'Created'),
+                 'transform': helper.readable_date},),
             'types': ('TaskTemplate',),
             'states':('tasktemplate-state-active',),
 

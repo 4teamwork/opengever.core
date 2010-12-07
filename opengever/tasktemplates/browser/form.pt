@@ -27,6 +27,7 @@
 
                     <div id="form-controls">
                         <input type="submit" class="context" name="save" value="Save"  i18n:attributes="value label_save" i18n:domain="plone"/>
+                        <input type="button" class="context" name="continue" value="Continue"  i18n:attributes="value label_continue"/>
                         <input type="submit" class="standalone" name="abort" value="Abort" i18n:attributes="value label_cancel" i18n:domain="plone" />
                     </div>
                 </div>
