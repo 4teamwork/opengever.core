@@ -27,9 +27,6 @@ msgstr "Abgebrochen"
 msgid "task-state-in-progress"
 msgstr "In Arbeit"
 
-msgid "task-state-new"
-msgstr "Neu"
-
 msgid "task-state-new-successor"
 msgstr "Folgeaufgabe wird Erstellt"
 
@@ -40,13 +37,13 @@ msgid "task-state-rejected"
 msgstr "Abgelehnt"
 
 msgid "task-state-resolved"
-msgstr "Abgeschlossen"
+msgstr "Erledigt"
+
+msgid "task-state-tested-and-closed"
+msgstr "Getestet und abgeschlossen"
 
 msgid "task-transition-in-progress-resolved"
-msgstr "Abschliessen"
-
-msgid "task-transition-new-open"
-msgstr "Offen"
+msgstr "Erledigen"
 
 msgid "task-transition-open-cancelled"
 msgstr "Abbrechen"
@@ -65,5 +62,8 @@ msgstr "wieder eröffnen"
 
 msgid "task-transition-resolved-open"
 msgstr "wieder eröffnen"
+
+msgid "task-transition-resolved-tested-and-closed"
+msgstr "Testen und Abschliessen"
 
 

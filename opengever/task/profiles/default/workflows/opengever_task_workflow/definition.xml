@@ -5,9 +5,10 @@
  <permission>List folder contents</permission>
  <permission>Manage properties</permission>
  <permission>Modify portal content</permission>
+ <permission>Sharing page: Delegate roles</permission>
  <permission>View</permission>
  <permission>opengever.task: Add task</permission>
- <permission>Sharing page: Delegate roles</permission>
+ <permission>opengever.document: Add document</permission>
  <state state_id="task-state-cancelled" title="">
   <permission-map name="Access contents information" acquired="False">
    <permission-role>Editor</permission-role>
@@ -15,9 +16,6 @@
    <permission-role>Owner</permission-role>
   </permission-map>
   <permission-map name="Add portal content" acquired="False">
-   <permission-role>Editor</permission-role>
-   <permission-role>Manager</permission-role>
-   <permission-role>Owner</permission-role>
   </permission-map>
   <permission-map name="List folder contents" acquired="False">
    <permission-role>Editor</permission-role>
@@ -31,18 +29,17 @@
   </permission-map>
   <permission-map name="Modify portal content" acquired="False">
   </permission-map>
+  <permission-map name="Sharing page: Delegate roles" acquired="False">
+   <permission-role>Manager</permission-role>
+  </permission-map>
   <permission-map name="View" acquired="False">
    <permission-role>Editor</permission-role>
    <permission-role>Manager</permission-role>
    <permission-role>Owner</permission-role>
   </permission-map>
-  <permission-map name="opengever.task: Add task" acquired="False">
-   <permission-role>Editor</permission-role>
-   <permission-role>Manager</permission-role>
-   <permission-role>Owner</permission-role>
+  <permission-map name="opengever.document: Add document" acquired="False">
   </permission-map>
-  <permission-map name="Sharing page: Delegate roles" acquired="False">
-   <permission-role>Manager</permission-role>
+  <permission-map name="opengever.task: Add task" acquired="False">
   </permission-map>
  </state>
  <state state_id="task-state-in-progress" title="">
@@ -69,7 +66,15 @@
   </permission-map>
   <permission-map name="Modify portal content" acquired="False">
   </permission-map>
+  <permission-map name="Sharing page: Delegate roles" acquired="False">
+   <permission-role>Manager</permission-role>
+  </permission-map>
   <permission-map name="View" acquired="False">
+   <permission-role>Editor</permission-role>
+   <permission-role>Manager</permission-role>
+   <permission-role>Owner</permission-role>
+  </permission-map>
+  <permission-map name="opengever.document: Add document" acquired="False">
    <permission-role>Editor</permission-role>
    <permission-role>Manager</permission-role>
    <permission-role>Owner</permission-role>
@@ -78,9 +83,6 @@
    <permission-role>Editor</permission-role>
    <permission-role>Manager</permission-role>
    <permission-role>Owner</permission-role>
-  </permission-map>
-  <permission-map name="Sharing page: Delegate roles" acquired="False">
-   <permission-role>Manager</permission-role>
   </permission-map>
  </state>
  <state state_id="task-state-new" title="">
@@ -95,12 +97,12 @@
   </permission-map>
   <permission-map name="Modify portal content" acquired="False">
   </permission-map>
+  <permission-map name="Sharing page: Delegate roles" acquired="False">
+   <permission-role>Manager</permission-role>
+  </permission-map>
   <permission-map name="View" acquired="True">
   </permission-map>
   <permission-map name="opengever.task: Add task" acquired="True">
-  </permission-map>
-  <permission-map name="Sharing page: Delegate roles" acquired="False">
-   <permission-role>Manager</permission-role>
   </permission-map>
  </state>
  <state state_id="task-state-new-successor" title="">
@@ -119,13 +121,15 @@
   <permission-map name="Modify portal content" acquired="False">
    <permission-role>Owner</permission-role>
   </permission-map>
+  <permission-map name="Sharing page: Delegate roles" acquired="False">
+   <permission-role>Manager</permission-role>
+  </permission-map>
   <permission-map name="View" acquired="False">
    <permission-role>Owner</permission-role>
   </permission-map>
-  <permission-map name="opengever.task: Add task" acquired="False">
+  <permission-map name="opengever.document: Add document" acquired="False">
   </permission-map>
-  <permission-map name="Sharing page: Delegate roles" acquired="False">
-   <permission-role>Manager</permission-role>
+  <permission-map name="opengever.task: Add task" acquired="False">
   </permission-map>
  </state>
  <state state_id="task-state-open" title="">
@@ -139,9 +143,6 @@
    <permission-role>Owner</permission-role>
   </permission-map>
   <permission-map name="Add portal content" acquired="False">
-   <permission-role>Editor</permission-role>
-   <permission-role>Manager</permission-role>
-   <permission-role>Owner</permission-role>
   </permission-map>
   <permission-map name="List folder contents" acquired="False">
    <permission-role>Editor</permission-role>
@@ -157,18 +158,17 @@
    <permission-role>Manager</permission-role>
    <permission-role>Owner</permission-role>
   </permission-map>
+  <permission-map name="Sharing page: Delegate roles" acquired="False">
+   <permission-role>Manager</permission-role>
+  </permission-map>
   <permission-map name="View" acquired="False">
    <permission-role>Editor</permission-role>
    <permission-role>Manager</permission-role>
    <permission-role>Owner</permission-role>
   </permission-map>
-  <permission-map name="opengever.task: Add task" acquired="False">
-   <permission-role>Editor</permission-role>
-   <permission-role>Manager</permission-role>
-   <permission-role>Owner</permission-role>
+  <permission-map name="opengever.document: Add document" acquired="False">
   </permission-map>
-  <permission-map name="Sharing page: Delegate roles" acquired="False">
-   <permission-role>Manager</permission-role>
+  <permission-map name="opengever.task: Add task" acquired="False">
   </permission-map>
  </state>
  <state state_id="task-state-rejected" title="">
@@ -179,9 +179,6 @@
    <permission-role>Owner</permission-role>
   </permission-map>
   <permission-map name="Add portal content" acquired="False">
-   <permission-role>Editor</permission-role>
-   <permission-role>Manager</permission-role>
-   <permission-role>Owner</permission-role>
   </permission-map>
   <permission-map name="List folder contents" acquired="False">
    <permission-role>Editor</permission-role>
@@ -195,22 +192,22 @@
   </permission-map>
   <permission-map name="Modify portal content" acquired="False">
   </permission-map>
+  <permission-map name="Sharing page: Delegate roles" acquired="False">
+   <permission-role>Manager</permission-role>
+  </permission-map>
   <permission-map name="View" acquired="False">
    <permission-role>Editor</permission-role>
    <permission-role>Manager</permission-role>
    <permission-role>Owner</permission-role>
   </permission-map>
-  <permission-map name="opengever.task: Add task" acquired="False">
-   <permission-role>Editor</permission-role>
-   <permission-role>Manager</permission-role>
-   <permission-role>Owner</permission-role>
+  <permission-map name="opengever.document: Add document" acquired="False">
   </permission-map>
-  <permission-map name="Sharing page: Delegate roles" acquired="False">
-   <permission-role>Manager</permission-role>
+  <permission-map name="opengever.task: Add task" acquired="False">
   </permission-map>
  </state>
  <state state_id="task-state-resolved" title="">
   <exit-transition transition_id="task-transition-resolved-open"/>
+  <exit-transition transition_id="task-transition-resolved-tested-and-closed"/>
   <permission-map name="Access contents information" acquired="False">
    <permission-role>Editor</permission-role>
    <permission-role>Manager</permission-role>
@@ -230,21 +227,56 @@
   </permission-map>
   <permission-map name="Modify portal content" acquired="False">
   </permission-map>
+  <permission-map name="Sharing page: Delegate roles" acquired="False">
+   <permission-role>Manager</permission-role>
+  </permission-map>
   <permission-map name="View" acquired="False">
    <permission-role>Editor</permission-role>
    <permission-role>Manager</permission-role>
    <permission-role>Owner</permission-role>
   </permission-map>
+  <permission-map name="opengever.document: Add document" acquired="False">
+  </permission-map>
   <permission-map name="opengever.task: Add task" acquired="False">
+  </permission-map>
+ </state>
+ <state state_id="task-state-tested-and-closed" title="task-state-tested-and-closed">
+  <permission-map name="Access contents information" acquired="False">
+   <permission-role>Editor</permission-role>
+   <permission-role>Manager</permission-role>
+   <permission-role>Owner</permission-role>
+  </permission-map>
+  <permission-map name="Add portal content" acquired="False">
+  </permission-map>
+  <permission-map name="List folder contents" acquired="False">
+   <permission-role>Editor</permission-role>
+   <permission-role>Manager</permission-role>
+   <permission-role>Owner</permission-role>
+  </permission-map>
+  <permission-map name="Manage properties" acquired="False">
+   <permission-role>Editor</permission-role>
+   <permission-role>Manager</permission-role>
+   <permission-role>Owner</permission-role>
+  </permission-map>
+  <permission-map name="Modify portal content" acquired="False">
   </permission-map>
   <permission-map name="Sharing page: Delegate roles" acquired="False">
    <permission-role>Manager</permission-role>
+  </permission-map>
+  <permission-map name="View" acquired="False">
+   <permission-role>Editor</permission-role>
+   <permission-role>Manager</permission-role>
+   <permission-role>Owner</permission-role>
+  </permission-map>
+  <permission-map name="opengever.document: Add document" acquired="False">
+  </permission-map>
+  <permission-map name="opengever.task: Add task" acquired="False">
   </permission-map>
  </state>
  <transition transition_id="task-transition-in-progress-resolved" title="task-transition-in-progress-resolved" new_state="task-state-resolved" trigger="USER" before_script="" after_script="">
   <action url="%(content_url)s/addresponse?form.widgets.transition=task-transition-in-progress-resolved" category="workflow" icon="">task-transition-in-progress-resolved</action>
   <guard>
-      <guard-expression>python: here.restrictedTraverse('resolve_check')()</guard-expression>
+   <guard-expression>python: here.restrictedTraverse('resolve_check')()</guard-expression>
   </guard>
  </transition>
  <transition transition_id="task-transition-new-open" title="task-transition-new-open" new_state="task-state-open" trigger="USER" before_script="" after_script="">
@@ -271,7 +303,7 @@
  <transition transition_id="task-transition-open-resolved" title="task-transition-open-resolved" new_state="task-state-resolved" trigger="USER" before_script="" after_script="">
   <action url="%(content_url)s/addresponse?form.widgets.transition=task-transition-open-resolved" category="workflow" icon="">task-transition-open-resolved</action>
   <guard>
-      <guard-expression>python: here.restrictedTraverse('resolve_check')()</guard-expression>
+   <guard-expression>python: here.restrictedTraverse('resolve_check')()</guard-expression>
   </guard>
  </transition>
  <transition transition_id="task-transition-rejected-open" title="task-transition-rejected-open" new_state="task-state-open" trigger="USER" before_script="" after_script="">
@@ -281,6 +313,11 @@
  </transition>
  <transition transition_id="task-transition-resolved-open" title="task-transition-resolved-open" new_state="task-state-open" trigger="USER" before_script="" after_script="">
   <action url="%(content_url)s/addresponse?form.widgets.transition=task-transition-resolved-open" category="workflow" icon="">task-transition-resolved-open</action>
+  <guard>
+  </guard>
+ </transition>
+ <transition transition_id="task-transition-resolved-tested-and-closed" title="task-transition-resolved-tested-and-closed" new_state="task-state-tested-and-closed" trigger="USER" before_script="" after_script="">
+  <action url="%(content_url)s/addresponse?form.widgets.transition=task-transition-resolved-tested-and-closed" category="workflow" icon="">task-transition-resolved-tested-and-closed</action>
   <guard>
   </guard>
  </transition>
@@ -295,7 +332,7 @@
  <variable variable_id="action" for_catalog="False" for_status="True" update_always="True">
   <description>The last transition</description>
   <default>
-
+   
    <expression>transition/getId|nothing</expression>
   </default>
   <guard>
@@ -304,7 +341,7 @@
  <variable variable_id="actor" for_catalog="False" for_status="True" update_always="True">
   <description>The ID of the user who performed the last transition</description>
   <default>
-
+   
    <expression>user/getId</expression>
   </default>
   <guard>
@@ -313,7 +350,7 @@
  <variable variable_id="comments" for_catalog="False" for_status="True" update_always="True">
   <description>Comments about the last transition</description>
   <default>
-
+   
    <expression>python:state_change.kwargs.get('comment', '')</expression>
   </default>
   <guard>
@@ -322,7 +359,7 @@
  <variable variable_id="review_history" for_catalog="False" for_status="False" update_always="False">
   <description>Provides access to workflow history</description>
   <default>
-
+   
    <expression>state_change/getHistory</expression>
   </default>
   <guard>
@@ -332,7 +369,7 @@
  <variable variable_id="time" for_catalog="False" for_status="True" update_always="True">
   <description>Time of the last transition</description>
   <default>
-
+   
    <expression>state_change/getDateTime</expression>
   </default>
   <guard>

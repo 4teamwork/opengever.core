@@ -26,9 +26,6 @@ msgstr ""
 msgid "task-state-in-progress"
 msgstr ""
 
-msgid "task-state-new"
-msgstr ""
-
 msgid "task-state-new-successor"
 msgstr ""
 
@@ -41,7 +38,10 @@ msgstr ""
 msgid "task-state-resolved"
 msgstr ""
 
-msgid "task-transition-new-open"
+msgid "task-state-tested-and-closed"
+msgstr ""
+
+msgid "task-transition-resolved-tested-and-closed"
 msgstr ""
 
 msgid "task-transition-open-cancelled"
