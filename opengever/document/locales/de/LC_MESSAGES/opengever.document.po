@@ -1,12 +1,16 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
+"POT-Creation-Date: 2010-12-08 12:49+0000\n"
 "PO-Revision-Date: 2010-12-02 14:28+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0\n"
+"Preferred-Encodings: utf-8 latin1\n"
+"Domain: DOMAIN\n"
 
 #. Default: "Cancel"
 #: ./opengever/document/profiles/default/actions.xml
@@ -21,7 +25,7 @@ msgstr "Checkout abgebrochen für ${title}"
 msgid "Checked in: ${title}"
 msgstr "Dokument eingecheckt: ${title}"
 
-#: ./opengever/document/checkout/checkout.py:95
+#: ./opengever/document/checkout/checkout.py:97
 msgid "Checked out: ${title}"
 msgstr "Dokument ausgecheckt: ${title}"
 
@@ -43,7 +47,7 @@ msgstr "Konnte Dokument nicht auschecken: ${title}"
 msgid "Could not check in document ${title}"
 msgstr "Konnte Dokument nicht einchecken: ${title}"
 
-#: ./opengever/document/checkout/checkout.py:86
+#: ./opengever/document/checkout/checkout.py:88
 msgid "Could not check out document ${title}"
 msgstr "Konnte Dokument nicht auschecken: ${title}"
 
@@ -85,10 +89,10 @@ msgstr "Abbrechen"
 msgid "button_checkin"
 msgstr "Einchecken"
 
-#. Default: "Create"
-#: ./opengever/document/docucomposer.py:53
-msgid "button_create"
-msgstr "Erstellen"
+#. Default: "Download"
+#: ./opengever/document/viewlets/history.pt:48
+msgid "button_download"
+msgstr ""
 
 #. Default: "Send"
 #: ./opengever/document/mailing.py:188
@@ -125,11 +129,6 @@ msgstr "Allgemein"
 #: ./opengever/document/checkout/checkin.py:41
 msgid "heading_checkin_comment_form"
 msgstr "Dokumente einchecken"
-
-#. Default: "DocuComposer"
-#: ./opengever/document/docucomposer.py:39
-msgid "heading_docucomposer_wizard_form"
-msgstr "DocuComposer"
 
 #. Default: "Send as email"
 #: ./opengever/document/mailing.py:184
@@ -209,11 +208,6 @@ msgstr "Datum, an dem das Dokument über den Korrespondenzweg angekommen ist"
 msgid "help_receivers"
 msgstr ""
 
-#. Default: "the docucomposer should start now automaticly, otherwise start it manually with the link below. Wenn the docucomposer started correctly, You can close this window."
-#: ./opengever/document/docucomposer_templates/startdclauncher.pt:25
-msgid "help_start_dc"
-msgstr "Bitte warten sie der DocuComposer wird nun automatisch gestartet. Sollte dies nicht der Fall sein, können sie ihn mit dem Link manuell starten. Wurde der Docucomposer korrekt gestartet können sie anschliessend dieses Fenster schliessen"
-
 #: ./opengever/document/mailing.py:173
 msgid "help_subject"
 msgstr ""
@@ -233,6 +227,16 @@ msgstr "Die E-Mails wurden versandt"
 msgid "initial_document_version_change_note"
 msgstr "Dokument erstellt (Initialversion)"
 
+#. Default: "Action"
+#: ./opengever/document/viewlets/history.pt:14
+msgid "label_action"
+msgstr "Aktion"
+
+#. Default: "Actor"
+#: ./opengever/document/viewlets/history.pt:15
+msgid "label_actor"
+msgstr "Akteur"
+
 #. Default: "Archival File"
 #: ./opengever/document/document.py:160
 msgid "label_archival_file"
@@ -250,7 +254,7 @@ msgid "label_by_author"
 msgstr "Autor: ${author}"
 
 #. Default: "Checked out"
-#: ./opengever/document/checkout/viewlets_templates/checkedoutviewlet.pt:4
+#: ./opengever/document/checkout/viewlets_templates/checkedoutviewlet.pt:5
 msgid "label_checked_out"
 msgstr "Ausgecheckt"
 
@@ -259,10 +263,20 @@ msgstr "Ausgecheckt"
 msgid "label_checkin_journal_comment"
 msgstr "Journal-Kommentar"
 
+#. Default: "Comment"
+#: ./opengever/document/viewlets/history.pt:17
+msgid "label_comment"
+msgstr "Kommentar"
+
 #. Default: "creator"
 #: ./opengever/document/document_templates/overview.pt:26
 msgid "label_creator"
 msgstr "Ersteller"
+
+#. Default: "Date"
+#: ./opengever/document/viewlets/history.pt:16
+msgid "label_date"
+msgstr "Datum"
 
 #. Default: "Date of delivery"
 #: ./opengever/document/document.py:186
@@ -304,6 +318,11 @@ msgstr "Datei"
 #: ./opengever/document/document_templates/overview.pt:34
 msgid "label_foreign_reference"
 msgstr "Fremdzeichen"
+
+#. Default: "History"
+#: ./opengever/document/viewlets/history.pt:9
+msgid "label_history"
+msgstr "Historie"
 
 #. Default: "Keywords"
 #: ./opengever/document/document.py:101
@@ -357,6 +376,11 @@ msgstr "Aktenzeichen"
 msgid "label_related_documents"
 msgstr "Verwandte Dokumente"
 
+#. Default: "reset"
+#: ./opengever/document/viewlets/history.pt:51
+msgid "label_reset"
+msgstr "Zurücksetzen"
+
 #. Default: "Sequence Number:"
 #: ./opengever/document/viewlets/byline.pt:47
 msgid "label_sequence_number"
@@ -366,11 +390,6 @@ msgstr "Laufnummer:"
 #: ./opengever/document/viewlets/byline.pt:33
 msgid "label_start_byline"
 msgstr "Dokumentdatum:"
-
-#. Default: "start dc_launcher"
-#: ./opengever/document/docucomposer_templates/startdclauncher.pt:30
-msgid "label_start_dc"
-msgstr "Docucomposer starten"
 
 #. Default: "Subject"
 #: ./opengever/document/mailing.py:172
@@ -387,6 +406,11 @@ msgstr "Kurzbild"
 msgid "label_title"
 msgstr "Titel"
 
+#. Default: "Version"
+#: ./opengever/document/viewlets/history.pt:13
+msgid "label_version"
+msgstr "Version"
+
 #. Default: "State:"
 #: ./opengever/document/viewlets/byline.pt:27
 msgid "label_workflow_state"
@@ -398,7 +422,7 @@ msgid "label_yes"
 msgstr "Ja"
 
 #. Default: "This item is being checked out by ${creator}."
-#: ./opengever/document/checkout/viewlets_templates/checkedoutviewlet.pt:8
+#: ./opengever/document/checkout/viewlets_templates/checkedoutviewlet.pt:9
 msgid "message_checkout_info"
 msgstr "Dieses Dokument wurde von ${creator} ausgecheckt."
 
@@ -411,10 +435,5 @@ msgstr "Referenzierte Dokumente"
 #: ./opengever/document/viewlets/byline.pt:42
 msgid "time_expired"
 msgstr "abgelaufen"
-
-#. Default: "Start DocuComposer"
-#: ./opengever/document/docucomposer_templates/startdclauncher.pt:23
-msgid "title_start_dc"
-msgstr "DocuComposer Starten"
 
 

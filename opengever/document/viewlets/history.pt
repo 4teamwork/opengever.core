@@ -2,7 +2,7 @@
      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
      xmlns:tal="http://xml.zope.org/namespaces/tal"
      class="contentHistory"
-     i18n:domain="plone"
+     i18n:domain="opengever.document"
      tal:define="history view/fullHistory;"
      tal:condition="history">
   <dl id="history" class="collapsible collapsedOnLoad">
@@ -10,11 +10,11 @@
     <dd class="collapsibleContent">
       <table class="version_history listing">
         <thead>
-          <th>Version</th>
-          <th>Aktion</th>
-          <th>Aktor</th>
-          <th>Datum</th>
-          <th>Kommentar</th>
+          <th i18n:translate="label_version">Version</th>
+          <th i18n:translate="label_action">Action</th>
+          <th i18n:translate="label_actor">Actor</th>
+          <th i18n:translate="label_date">Date</th>
+          <th i18n:translate="label_comment">Comment</th>
           <th></th>
         </thead>
         <tbody>
