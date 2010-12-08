@@ -70,7 +70,7 @@ msgstr "Mandant"
 #. Default: "Date of completion"
 #: ./opengever/tabbedview/browser/tasklisting.py:70
 msgid "column_date_of_completion"
-msgstr "erledigt am"
+msgstr "Erledigt am"
 
 #. Default: "Deadline"
 #: ./opengever/tabbedview/browser/tasklisting.py:66
