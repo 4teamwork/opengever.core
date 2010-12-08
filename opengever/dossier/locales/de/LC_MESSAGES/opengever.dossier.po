@@ -73,7 +73,7 @@ msgstr "Das Dossier ist bereits abgeschlossen"
 
 #: ./opengever/dossier/archive.py:54
 msgid "The given end date is older than the end date                             of the youngest subdossier(${number})"
-msgstr ""
+msgstr "Das angegebene Enddatum muss jünger sein als alle Enddaten der enthaltenen Subdossiers.(${number})"
 
 #: ./opengever/dossier/behaviors/dossier.py:181
 msgid "The start date must be before the end date."
