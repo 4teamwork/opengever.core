@@ -143,11 +143,17 @@ class TemplateDocumentFormView(grok.View):
         columns = (
             (''),
             ('', helper.path_radiobutton),
-            ('Title', 'sortable_title', linked),
-            ('Creator', 'document_author'),
-            ('modified', helper.readable_date),
-            )
-
+            {'column':'title',
+             'column_title': _(u'label_title', default=u'title'),
+             'sort_index':'sortable_title',
+             'transform':linked},
+            {'column':'Creator',
+             'column_title': _(u'label_creator', default=u'Creator'),
+             'sort_index':'document_author'},
+             {'column':'modified',
+              'column_title': _(u'label_modified', default=u'Modified'),
+              'transform': helper.readable_date}
+              )
         return generator.generate(templates, columns)
 
 

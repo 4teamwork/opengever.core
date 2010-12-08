@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: opengever.dossier 1.0\n"
-"POT-Creation-Date: 2010-11-30 10:49+0000\n"
+"POT-Creation-Date: 2010-12-08 13:19+0000\n"
 "PO-Revision-Date: 2010-10-21 12:06+0200\n"
 "Last-Translator: Thomas Buchberger <t.buchberger@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -42,7 +42,7 @@ msgstr "Keine E-Mail Adresse"
 msgid "Not all required fields are filled"
 msgstr "Nicht alle benötigten Felder wurden ausgefüllt."
 
-#: ./opengever/dossier/templatedossier.py:127
+#: ./opengever/dossier/templatedossier.py:128
 msgid "Not found the templatedossier"
 msgstr "Es sind keine Vorlagen vorhanden."
 
@@ -149,7 +149,7 @@ msgid "copy_documents_step_choose_dossier"
 msgstr "2. Zieldossier auswählen"
 
 #. Default: "create document with template"
-#: ./opengever/dossier/templatedossier.py:43
+#: ./opengever/dossier/templatedossier.py:44
 msgid "create_document_with_template"
 msgstr "Dokument mit Vorlage erstellen"
 
@@ -343,6 +343,11 @@ msgstr "Behältnis-Standort"
 msgid "label_container_type"
 msgstr "Behältnis-Art"
 
+#. Default: "Creator"
+#: ./opengever/dossier/templatedossier.py:151
+msgid "label_creator"
+msgstr "Erstellt von"
+
 #. Default: "Documents"
 #: ./opengever/dossier/browser/send_document.py:41
 msgid "label_documents"
@@ -390,7 +395,12 @@ msgstr "Schlagworte"
 msgid "label_message"
 msgstr "Mitteilung"
 
-#. Default: "Reference Number will be generated                 after content creation"
+#. Default: "Modified"
+#: ./opengever/dossier/templatedossier.py:154
+msgid "label_modified"
+msgstr "Zuletzt Bearbeitet"
+
+#. Default: "Reference Number will be generated after content creation"
 #: ./opengever/dossier/widget.py:25
 msgid "label_no_reference_number"
 msgstr "Die Archivnummer wird erst beim Erstellen generiert."
@@ -464,6 +474,7 @@ msgid "label_template"
 msgstr "Vorlage"
 
 #. Default: "title"
+#: ./opengever/dossier/templatedossier.py:147
 #: ./opengever/dossier/templatedossier_templates/template_form.pt:30
 msgid "label_title"
 msgstr "Titel"

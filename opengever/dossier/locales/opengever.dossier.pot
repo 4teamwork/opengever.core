@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2010-11-30 10:49+0000\n"
+"POT-Creation-Date: 2010-12-08 13:19+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -45,7 +45,7 @@ msgstr ""
 msgid "Not all required fields are filled"
 msgstr ""
 
-#: ./opengever/dossier/templatedossier.py:127
+#: ./opengever/dossier/templatedossier.py:128
 msgid "Not found the templatedossier"
 msgstr ""
 
@@ -150,7 +150,7 @@ msgid "copy_documents_step_choose_dossier"
 msgstr ""
 
 #. Default: "create document with template"
-#: ./opengever/dossier/templatedossier.py:43
+#: ./opengever/dossier/templatedossier.py:44
 msgid "create_document_with_template"
 msgstr ""
 
@@ -344,6 +344,11 @@ msgstr ""
 msgid "label_container_type"
 msgstr ""
 
+#. Default: "Creator"
+#: ./opengever/dossier/templatedossier.py:151
+msgid "label_creator"
+msgstr ""
+
 #. Default: "Documents"
 #: ./opengever/dossier/browser/send_document.py:41
 msgid "label_documents"
@@ -389,6 +394,11 @@ msgstr ""
 #. Default: "Message"
 #: ./opengever/dossier/browser/send_document.py:72
 msgid "label_message"
+msgstr ""
+
+#. Default: "Modified"
+#: ./opengever/dossier/templatedossier.py:154
+msgid "label_modified"
 msgstr ""
 
 #. Default: "Reference Number will be generated                 after content creation"
@@ -465,6 +475,7 @@ msgid "label_template"
 msgstr ""
 
 #. Default: "title"
+#: ./opengever/dossier/templatedossier.py:147
 #: ./opengever/dossier/templatedossier_templates/template_form.pt:30
 msgid "label_title"
 msgstr ""
