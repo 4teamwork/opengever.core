@@ -5,6 +5,8 @@ Changelog
 2.0b4
 -----
 
+* refactoring the whole task workflow
+  [phgross]
 
 2.0b3
 -----
