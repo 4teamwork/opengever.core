@@ -6,8 +6,11 @@ from opengever.task import _ as taskmsg
 from opengever.task.helper import task_type_helper
 from opengever.tasktemplates import _
 from opengever.tasktemplates.browser.helper import interactive_user_helper
-
-
+from plone.directives import dexterity
+from zope.interface import implements, Interface
+from opengever.ogds.base.interfaces import IContactInformation
+from zope.component import getUtility
+from opengever.tasktemplates.content.tasktemplate import ITaskTemplate
 class TaskTemplates(OpengeverCatalogListingTab):
     grok.name('tabbedview_view-tasktemplates')
 
@@ -43,3 +46,24 @@ class TaskTemplates(OpengeverCatalogListingTab):
         'paste',
         'delete',
         ]
+        
+
+class ITasktemplatesView(Interface):
+    pass
+
+
+class View(dexterity.DisplayForm):
+    implements(ITasktemplatesView)
+    grok.context(ITaskTemplate)
+    grok.require('zope2.View')
+    def responsible_link(self):
+        info = getUtility(IContactInformation)
+        task = ITaskTemplate(self.context)
+        return info.render_link(task.responsible)
+
+    def issuer_link(self):
+        info = getUtility(IContactInformation)
+        task = ITaskTemplate(self.context)
+        return info.render_link(task.issuer)
+    def test(self):
+        import pdb; pdb.set_trace( )

@@ -7,8 +7,25 @@ from plone.formwidget.autocomplete import AutocompleteFieldWidget
 from opengever.task import util
 from z3c.form.browser import checkbox
 
-class ITaskTemplate(form.Schema):
 
+class ITaskTemplate(form.Schema):
+    
+    
+    form.fieldset(
+        u'common',
+        label = _(u'fieldset_common', default=u'Common'),
+        fields = [
+            u'title',
+            u'issuer',
+            u'task_type',
+            u'responsible_client',
+            u'responsible',
+            u'deadline',
+            u'text',
+            u'preselected'
+                ],
+            )
+            
     title = schema.TextLine(
         title=_(u"label_title", default=u"Title"),
         description=_('help_title', default=u""),
@@ -65,7 +82,7 @@ class ITaskTemplate(form.Schema):
 
     form.widget(preselected=checkbox.SingleCheckBoxFieldWidget)
     preselected = schema.Bool(
-        title = _(u'label_preselected', default='Preselect'),
+        title= _(u'label_preselected', default='Preselect'),
         description = _(u'help_preselected', default=''),
         required = False,
         )

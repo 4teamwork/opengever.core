@@ -1,12 +1,16 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
+"POT-Creation-Date: 2010-12-08 16:27+0000\n"
 "PO-Revision-Date: 2010-12-07 14:14+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0\n"
+"Preferred-Encodings: utf-8 latin1\n"
+"Domain: DOMAIN\n"
 
 msgid "Description"
 msgstr "Beschreibung"
@@ -35,35 +39,40 @@ msgstr "Vorlage auswählen"
 msgid "client_interactive_users"
 msgstr "Interaktiver Benutzer"
 
-#: ./opengever/tasktemplates/content/tasktemplate.py:55
+#. Default: "Common"
+#: ./opengever/tasktemplates/content/tasktemplate.py:16
+msgid "fieldset_common"
+msgstr "Allgemein"
+
+#: ./opengever/tasktemplates/content/tasktemplate.py:72
 msgid "help_deadline"
 msgstr "Frist in Tagen ab Startdatum der Aufgabe."
 
-#: ./opengever/tasktemplates/content/tasktemplate.py:21
+#: ./opengever/tasktemplates/content/tasktemplate.py:38
 msgid "help_issuer"
 msgstr "Wählen Sie einen Auftraggeber aus. Sie können auch die interaktiven Benutzer \"Federführender\" oder \"Sachbearbeiter\" auswählen."
 
-#: ./opengever/tasktemplates/content/tasktemplate.py:69
+#: ./opengever/tasktemplates/content/tasktemplate.py:86
 msgid "help_preselected"
 msgstr "Diese Vorlage gehört zur Standardauswahl des Standardablaufs."
 
-#: ./opengever/tasktemplates/content/tasktemplate.py:48
+#: ./opengever/tasktemplates/content/tasktemplate.py:65
 msgid "help_responsible"
 msgstr "Wählen Sie den Verantwortlichen aus. Wenn Sie im Feld \"Mandanten des Verantwortlichen\" die Option \"Interaktiver Benutzer\" auswählen, können Sie in diesem Feld auch \"Federführender\" oder \"Sachbearbeiter\" auswählen."
 
-#: ./opengever/tasktemplates/content/tasktemplate.py:40
+#: ./opengever/tasktemplates/content/tasktemplate.py:57
 msgid "help_responsible_client"
 msgstr "Wählen Sie den Mandanten des Verantwortlichen aus oder wählen Sie \"Interaktiver Benutzer\"."
 
-#: ./opengever/tasktemplates/content/tasktemplate.py:29
+#: ./opengever/tasktemplates/content/tasktemplate.py:46
 msgid "help_task_type"
 msgstr "Wählen Sie den Typ der Aufgabe aus."
 
-#: ./opengever/tasktemplates/content/tasktemplate.py:62
+#: ./opengever/tasktemplates/content/tasktemplate.py:79
 msgid "help_text"
 msgstr "Geben Sie eine detaillierte Arbeitsanweisung oder einen Kommentar ein."
 
-#: ./opengever/tasktemplates/content/tasktemplate.py:14
+#: ./opengever/tasktemplates/content/tasktemplate.py:31
 msgid "help_title"
 msgstr "Der Name der Aufgabe."
 
@@ -88,34 +97,34 @@ msgid "label_created"
 msgstr "Erstelldatum"
 
 #. Default: "Deadline in Days"
-#: ./opengever/tasktemplates/browser/tasktemplates.py:36
-#: ./opengever/tasktemplates/content/tasktemplate.py:54
+#: ./opengever/tasktemplates/browser/tasktemplates.py:39
+#: ./opengever/tasktemplates/content/tasktemplate.py:71
 msgid "label_deadline"
 msgstr "Frist in Tagen"
 
 #. Default: "Issuer"
-#: ./opengever/tasktemplates/browser/tasktemplates.py:28
-#: ./opengever/tasktemplates/content/tasktemplate.py:20
+#: ./opengever/tasktemplates/browser/tasktemplates.py:31
+#: ./opengever/tasktemplates/content/tasktemplate.py:37
 msgid "label_issuer"
 msgstr "Auftraggeber"
 
 #. Default: "Preselect"
-#: ./opengever/tasktemplates/content/tasktemplate.py:68
+#: ./opengever/tasktemplates/content/tasktemplate.py:85
 msgid "label_preselected"
 msgstr "Vorselektiert"
 
 #. Default: "Responsible Client"
-#: ./opengever/tasktemplates/content/tasktemplate.py:38
+#: ./opengever/tasktemplates/content/tasktemplate.py:55
 msgid "label_resonsible_client"
 msgstr "Mandant des Verantwortlichen"
 
 #. Default: "Responsible"
-#: ./opengever/tasktemplates/content/tasktemplate.py:47
+#: ./opengever/tasktemplates/content/tasktemplate.py:64
 msgid "label_responsible"
 msgstr "Verantwortlicher"
 
 #. Default: "Responsible"
-#: ./opengever/tasktemplates/browser/tasktemplates.py:32
+#: ./opengever/tasktemplates/browser/tasktemplates.py:35
 msgid "label_responsible_task"
 msgstr "Verantwortlicher"
 
@@ -125,21 +134,26 @@ msgid "label_review_state"
 msgstr "Status"
 
 #. Default: "Task Type"
-#: ./opengever/tasktemplates/content/tasktemplate.py:28
+#: ./opengever/tasktemplates/content/tasktemplate.py:45
 msgid "label_task_type"
 msgstr "Aufgabentyp"
 
 #. Default: "Text"
-#: ./opengever/tasktemplates/content/tasktemplate.py:61
+#: ./opengever/tasktemplates/content/tasktemplate.py:78
 msgid "label_text"
 msgstr "Kommentar"
 
 #. Default: "Title"
 #: ./opengever/tasktemplates/browser/form.py:110
-#: ./opengever/tasktemplates/browser/tasktemplates.py:19
+#: ./opengever/tasktemplates/browser/tasktemplates.py:22
 #: ./opengever/tasktemplates/browser/templatefolders.py:18
 msgid "label_title"
 msgstr "Titel"
+
+#. Default: "Yes"
+#: ./opengever/tasktemplates/browser/tasktemplates_templates/view.pt:39
+msgid "label_yes"
+msgstr "Ja"
 
 #: ./opengever/tasktemplates/browser/form.pt:23
 msgid "select tasks"

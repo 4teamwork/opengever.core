@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2010-12-07 13:10+0000\n"
+"POT-Creation-Date: 2010-12-08 16:27+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -44,35 +44,40 @@ msgstr ""
 msgid "client_interactive_users"
 msgstr ""
 
-#: ./opengever/tasktemplates/content/tasktemplate.py:55
+#. Default: "Common"
+#: ./opengever/tasktemplates/content/tasktemplate.py:16
+msgid "fieldset_common"
+msgstr ""
+
+#: ./opengever/tasktemplates/content/tasktemplate.py:72
 msgid "help_deadline"
 msgstr ""
 
-#: ./opengever/tasktemplates/content/tasktemplate.py:21
+#: ./opengever/tasktemplates/content/tasktemplate.py:38
 msgid "help_issuer"
 msgstr ""
 
-#: ./opengever/tasktemplates/content/tasktemplate.py:69
+#: ./opengever/tasktemplates/content/tasktemplate.py:86
 msgid "help_preselected"
 msgstr ""
 
-#: ./opengever/tasktemplates/content/tasktemplate.py:48
+#: ./opengever/tasktemplates/content/tasktemplate.py:65
 msgid "help_responsible"
 msgstr ""
 
-#: ./opengever/tasktemplates/content/tasktemplate.py:40
+#: ./opengever/tasktemplates/content/tasktemplate.py:57
 msgid "help_responsible_client"
 msgstr ""
 
-#: ./opengever/tasktemplates/content/tasktemplate.py:29
+#: ./opengever/tasktemplates/content/tasktemplate.py:46
 msgid "help_task_type"
 msgstr ""
 
-#: ./opengever/tasktemplates/content/tasktemplate.py:62
+#: ./opengever/tasktemplates/content/tasktemplate.py:79
 msgid "help_text"
 msgstr ""
 
-#: ./opengever/tasktemplates/content/tasktemplate.py:14
+#: ./opengever/tasktemplates/content/tasktemplate.py:31
 msgid "help_title"
 msgstr ""
 
@@ -97,34 +102,34 @@ msgid "label_created"
 msgstr ""
 
 #. Default: "Deadline in Days"
-#: ./opengever/tasktemplates/browser/tasktemplates.py:36
-#: ./opengever/tasktemplates/content/tasktemplate.py:54
+#: ./opengever/tasktemplates/browser/tasktemplates.py:39
+#: ./opengever/tasktemplates/content/tasktemplate.py:71
 msgid "label_deadline"
 msgstr ""
 
 #. Default: "Issuer"
-#: ./opengever/tasktemplates/browser/tasktemplates.py:28
-#: ./opengever/tasktemplates/content/tasktemplate.py:20
+#: ./opengever/tasktemplates/browser/tasktemplates.py:31
+#: ./opengever/tasktemplates/content/tasktemplate.py:37
 msgid "label_issuer"
 msgstr ""
 
 #. Default: "Preselect"
-#: ./opengever/tasktemplates/content/tasktemplate.py:68
+#: ./opengever/tasktemplates/content/tasktemplate.py:85
 msgid "label_preselected"
 msgstr ""
 
 #. Default: "Responsible Client"
-#: ./opengever/tasktemplates/content/tasktemplate.py:38
+#: ./opengever/tasktemplates/content/tasktemplate.py:55
 msgid "label_resonsible_client"
 msgstr ""
 
 #. Default: "Responsible"
-#: ./opengever/tasktemplates/content/tasktemplate.py:47
+#: ./opengever/tasktemplates/content/tasktemplate.py:64
 msgid "label_responsible"
 msgstr ""
 
 #. Default: "Responsible"
-#: ./opengever/tasktemplates/browser/tasktemplates.py:32
+#: ./opengever/tasktemplates/browser/tasktemplates.py:35
 msgid "label_responsible_task"
 msgstr ""
 
@@ -134,20 +139,25 @@ msgid "label_review_state"
 msgstr ""
 
 #. Default: "Task Type"
-#: ./opengever/tasktemplates/content/tasktemplate.py:28
+#: ./opengever/tasktemplates/content/tasktemplate.py:45
 msgid "label_task_type"
 msgstr ""
 
 #. Default: "Text"
-#: ./opengever/tasktemplates/content/tasktemplate.py:61
+#: ./opengever/tasktemplates/content/tasktemplate.py:78
 msgid "label_text"
 msgstr ""
 
 #. Default: "Title"
 #: ./opengever/tasktemplates/browser/form.py:110
-#: ./opengever/tasktemplates/browser/tasktemplates.py:19
+#: ./opengever/tasktemplates/browser/tasktemplates.py:22
 #: ./opengever/tasktemplates/browser/templatefolders.py:18
 msgid "label_title"
+msgstr ""
+
+#. Default: "Yes"
+#: ./opengever/tasktemplates/browser/tasktemplates_templates/view.pt:39
+msgid "label_yes"
 msgstr ""
 
 #: ./opengever/tasktemplates/browser/form.pt:23
