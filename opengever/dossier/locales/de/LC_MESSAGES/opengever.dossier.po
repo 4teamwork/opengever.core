@@ -151,7 +151,7 @@ msgstr "2. Zieldossier auswählen"
 #. Default: "create document with template"
 #: ./opengever/dossier/templatedossier.py:44
 msgid "create_document_with_template"
-msgstr "Dokument mit Vorlage erstellen"
+msgstr "Dokument aus Vorlage erstellen"
 
 msgid "document_with_docucomposer"
 msgstr "Dokument mit Docucomposer"

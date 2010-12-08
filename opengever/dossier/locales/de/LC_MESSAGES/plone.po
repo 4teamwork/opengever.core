@@ -34,7 +34,7 @@ msgid "Give Filing Number"
 msgstr "Ablagenummer vergeben"
 
 msgid "document_with_template"
-msgstr "Dokument mit Vorlage"
+msgstr "Dokument aus Vorlage"
 
 msgid "dossier-state-active"
 msgstr "In Bearbeitung"
