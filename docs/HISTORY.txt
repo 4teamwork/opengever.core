@@ -5,6 +5,13 @@ Changelog
 2.0b5
 -----
 
+* Fixed archiving special subdossiers
+  [phgross]
+
+* Added Event handler for ActionSucceededEvent:
+  By deactivating a dossier it should also deactivate the subdossiers
+  [phgross]
+
 * fixed Arcihve Number process: 
   it should use the title and not the value of the elephant vocabulary
   [phgross]
