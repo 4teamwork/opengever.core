@@ -175,9 +175,9 @@ send form with correct data
 
 check the given filing no
     >>> getattr(dossier, 'filing_no')
-    u'OG-government-2012-1'
+    u'OG-Government-2012-1'
     >>> getattr(subdossier, 'filing_no')
-    u'OG-government-2012-1.1'
+    u'OG-Government-2012-1.1'
 
 check if the values are assumed to the dossier 
     >>> IDossier(dossier).end

@@ -23,7 +23,7 @@ from zope.annotation.interfaces import IAnnotations
 from zope.component import getUtility, provideAdapter
 from zope.interface import invariant, Invalid
 from zope.schema.interfaces import IContextSourceBinder
-from zope.schema.vocabulary import SimpleVocabulary
+from zope.schema.vocabulary import SimpleVocabulary, getVocabularyRegistry
 
 
 class MissingValue(Invalid):
@@ -81,9 +81,7 @@ class IArchiveFormSchema(directives_form.Schema):
 
     filing_prefix = schema.Choice(
         title = _(u'filing_prefix', default="filing prefix"),
-        source = wrap_vocabulary('opengever.dossier.type_prefixes',
-                    visible_terms_from_registry="opengever.dossier" + \
-                        ".interfaces.IDossierContainerTypes.type_prefixes"),
+        source = wrap_vocabulary('opengever.dossier.type_prefixes', visible_terms_from_registry="opengever.dossier.interfaces.IDossierContainerTypes.type_prefixes"),
         required=False,
     )
 
@@ -198,6 +196,11 @@ class ArchiveForm(directives_form.Form):
 
                 filing_year = data.get('filing_year')
                 filing_prefix = data.get('filing_prefix')
+
+                # Get the value and not the key from the prefix vocabulary
+                filing_prefix = getVocabularyRegistry().get(
+                    self.context, 'opengever.dossier.type_prefixes').by_token.get(
+                        filing_prefix).title
 
                 # filing_sequence
                 key = filing_prefix + "-" + filing_year

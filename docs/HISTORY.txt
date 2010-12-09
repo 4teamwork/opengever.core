@@ -4,6 +4,11 @@ Changelog
 
 2.0b5
 -----
+
+* fixed Arcihve Number process: 
+  it should use the title and not the value of the elephant vocabulary
+  [phgross]
+
 * added fallback when the user hasn't a email address, in the send documents process
   [phgross]
 
