@@ -4,7 +4,8 @@ Changelog
 
 2.0b5
 -----
-
+* added fallback when the user hasn't a email address, in the send documents process
+  [phgross]
 
 2.0b4
 -----

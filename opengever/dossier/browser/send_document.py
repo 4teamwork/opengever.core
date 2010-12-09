@@ -149,9 +149,14 @@ class SendDocumentForm(form.Form):
             # create the mail
             msg = self.create_mail(data.get('message'), data.get('documents'))
             msg['Subject'] = Header(data.get('subject'), 'iso-8859-1')
+            sender_address = contact_info.get_email(userid)
+            if not sender_address:
+                sender_address = self.context.portal_url.getPortalObject().email_from_address
+            
             msg['From'] = Header(u'%s <%s>' % (
                     contact_info.describe(userid),
-                    contact_info.get_email(userid)),
+                    sender_address,
+                    ),
                 'iso-8859-1')
 
             header_to = Header(','.join(addresses), 'iso-8859-1')
