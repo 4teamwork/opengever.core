@@ -4,7 +4,8 @@ Changelog
 
 2.0b3
 -----
-
+* fixed get_email function, now it works also with zope users
+  [phgross]
 
 2.0b2
 -----

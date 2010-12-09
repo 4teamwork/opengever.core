@@ -330,7 +330,6 @@ class ContactInformation(grok.GlobalUtility):
     def get_email(self, principal):
         """Returns the email address of a `principal`.
         """
-
         # inbox does not have a email
         if isinstance(principal, types.StringTypes) and \
                 self.is_inbox(principal):
@@ -351,6 +350,8 @@ class ContactInformation(grok.GlobalUtility):
 
         # principal may be a string user principal
         elif self.is_user(principal):
+            if not self.get_user(principal):
+                return None
             return self.get_user(principal).email
 
         else:
