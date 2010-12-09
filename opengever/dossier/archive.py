@@ -233,7 +233,7 @@ class ArchiveForm(directives_form.Form):
                 # create filing number for all subdossiers
                 # and resolve them also
                 subdossiers = self.context.portal_catalog(
-                    portal_type="opengever.dossier.businesscasedossier",
+                    provided_by="opengever.dossier.behaviors.dossier.IDossierMarker",
                     path=dict(depth=1,
                         query='/'.join(self.context.getPhysicalPath()),
                     ),
