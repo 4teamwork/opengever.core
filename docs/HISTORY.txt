@@ -5,6 +5,9 @@ Changelog
 2.0c2
 -----
 
+* Removed pdb import
+  [jbaumann]
+
 
 2.0c1
 -----

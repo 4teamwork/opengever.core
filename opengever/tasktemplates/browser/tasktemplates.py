@@ -46,7 +46,7 @@ class TaskTemplates(OpengeverCatalogListingTab):
         'paste',
         'delete',
         ]
-        
+
 
 class ITasktemplatesView(Interface):
     pass
@@ -65,5 +65,3 @@ class View(dexterity.DisplayForm):
         info = getUtility(IContactInformation)
         task = ITaskTemplate(self.context)
         return info.render_link(task.issuer)
-    def test(self):
-        import pdb; pdb.set_trace( )
