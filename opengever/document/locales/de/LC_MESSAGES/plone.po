@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"PO-Revision-Date: 2010-12-03 11:40+0100\n"
+"PO-Revision-Date: 2010-12-10 11:48+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
 "MIME-Version: 1.0\n"
@@ -9,7 +9,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 msgid "Cancel Checkout"
-msgstr "Wiederrufen"
+msgstr "Widerrufen"
 
 msgid "Checkin"
 msgstr "Einchecken"
