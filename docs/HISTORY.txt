@@ -6,7 +6,11 @@ Changelog
 -----
 
 * refactoring the whole task workflow
-  [phgross]
+  [Philippe Gross]
+
+* fixed translation
+  [Timon Tschanz]
+
 
 2.0b3
 -----
