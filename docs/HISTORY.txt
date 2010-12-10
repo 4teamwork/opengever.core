@@ -5,6 +5,8 @@ Changelog
 2.0b3
 -----
 
+* fixed translation of Date of completition
+  [ttschanz]
 
 2.0b2
 -----
