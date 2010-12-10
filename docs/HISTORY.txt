@@ -5,6 +5,9 @@ Changelog
 2.0b4
 -----
 
+* Disabled external-edit icon since we have a action for that.
+  [jbaumann]
+
 
 2.0b3
 -----

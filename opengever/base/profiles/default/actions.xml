@@ -10,10 +10,10 @@
             <property name="title" i18n:translate="">Cut</property>
             <property name="description" i18n:translate=""></property>
             <property
-                name="url_expr">string:${globals_view/getCurrentObjectUrl}/object_cut</property>
+                  name="url_expr">string:${globals_view/getCurrentObjectUrl}/object_cut</property>
             <property name="icon_expr"></property>
             <property
-                name="available_expr">python:checkPermission("Delete objects", globals_view.getParentObject()) and checkPermission("Copy or Move", object) and not globals_view.isPortalOrPortalDefaultPage()</property>
+                  name="available_expr">python:checkPermission("Delete objects", globals_view.getParentObject()) and checkPermission("Copy or Move", object) and not globals_view.isPortalOrPortalDefaultPage()</property>
             <property name="permissions">
                 <element value="Delete objects"/>
             </property>
@@ -24,10 +24,10 @@
             <property name="title" i18n:translate="">Copy</property>
             <property name="description" i18n:translate=""></property>
             <property
-                name="url_expr">string:${globals_view/getCurrentObjectUrl}/object_copy</property>
+                  name="url_expr">string:${globals_view/getCurrentObjectUrl}/object_copy</property>
             <property name="icon_expr"></property>
             <property
-                name="available_expr">python:checkPermission("Copy or Move", object) and not globals_view.isPortalOrPortalDefaultPage()</property>
+                  name="available_expr">python:checkPermission("Copy or Move", object) and not globals_view.isPortalOrPortalDefaultPage()</property>
             <property name="permissions">
                 <element value="View"/>
             </property>
@@ -38,7 +38,7 @@
             <property name="title" i18n:translate="">Paste</property>
             <property name="description" i18n:translate=""></property>
             <property
-                name="url_expr">string:${globals_view/getCurrentFolderUrl}/object_paste</property>
+                  name="url_expr">string:${globals_view/getCurrentFolderUrl}/object_paste</property>
             <property name="icon_expr"></property>
             <property name="available_expr">folder/cb_dataValid|nothing</property>
             <property name="permissions">
@@ -51,10 +51,10 @@
             <property name="title" i18n:translate="">Delete</property>
             <property name="description" i18n:translate=""></property>
             <property
-                name="url_expr">string:${globals_view/getCurrentObjectUrl}/delete_confirmation</property>
+                  name="url_expr">string:${globals_view/getCurrentObjectUrl}/delete_confirmation</property>
             <property name="icon_expr"></property>
             <property
-                name="available_expr">python:checkPermission("Delete objects", globals_view.getParentObject()) and not globals_view.isPortalOrPortalDefaultPage()</property>
+                  name="available_expr">python:checkPermission("Delete objects", globals_view.getParentObject()) and not globals_view.isPortalOrPortalDefaultPage()</property>
             <property name="permissions">
                 <element value="Delete objects"/>
             </property>
@@ -65,10 +65,10 @@
             <property name="title" i18n:translate="">Rename</property>
             <property name="description" i18n:translate=""></property>
             <property
-                name="url_expr">string:${globals_view/getCurrentObjectUrl}/object_rename</property>
+                  name="url_expr">string:${globals_view/getCurrentObjectUrl}/object_rename</property>
             <property name="icon_expr"></property>
             <property
-                name="available_expr">python:checkPermission("Delete objects", globals_view.getParentObject()) and checkPermission("Copy or Move", object) and checkPermission("Add portal content", object) and not globals_view.isPortalOrPortalDefaultPage()</property>
+                  name="available_expr">python:checkPermission("Delete objects", globals_view.getParentObject()) and checkPermission("Copy or Move", object) and checkPermission("Add portal content", object) and not globals_view.isPortalOrPortalDefaultPage()</property>
             <property name="permissions">
                 <element value="Add portal content"/>
             </property>
@@ -93,7 +93,7 @@
             <property name="title" i18n:translate="">Contents</property>
             <property name="description" i18n:translate=""></property>
             <property
-                name="url_expr">string:${globals_view/getCurrentFolderUrl}/folder_contents</property>
+                  name="url_expr">string:${globals_view/getCurrentFolderUrl}/folder_contents</property>
             <property name="icon_expr"></property>
             <property name="available_expr">object/displayContentsTab</property>
             <property name="permissions">
@@ -108,7 +108,7 @@
             <property name="url_expr">string:${folder_url}/synPropertiesForm</property>
             <property name="icon_expr"></property>
             <property
-                name="available_expr">python:folder is object and portal.portal_syndication.isSiteSyndicationAllowed()</property>
+                  name="available_expr">python:folder is object and portal.portal_syndication.isSiteSyndicationAllowed()</property>
             <property name="permissions">
                 <element value="Manage properties"/>
             </property>
@@ -119,10 +119,10 @@
             <property name="title" i18n:translate="">Rules</property>
             <property name="description" i18n:translate=""></property>
             <property
-                name="url_expr">string:${plone_context_state/canonical_object_url}/@@manage-content-rules</property>
+                  name="url_expr">string:${plone_context_state/canonical_object_url}/@@manage-content-rules</property>
             <property name="icon_expr"></property>
             <property
-                name="available_expr">python:plone_context_state.canonical_object().restrictedTraverse('@@plone_contentrules_info').show_rules_tab()</property>
+                  name="available_expr">python:plone_context_state.canonical_object().restrictedTraverse('@@plone_contentrules_info').show_rules_tab()</property>
             <property name="permissions">
                 <element value="Content rules: Manage rules"/>
             </property>
@@ -150,7 +150,7 @@
             <property name="title" i18n:translate="">Overview</property>
             <property name="description" i18n:translate=""></property>
             <property
-                name="url_expr">string:${globals_view/navigationRootUrl}</property>
+                  name="url_expr">string:${globals_view/navigationRootUrl}</property>
             <property name="link_target"></property>
             <property name="icon_expr"></property>
             <property name="available_expr"></property>
@@ -158,6 +158,25 @@
                 <element value="View"/>
             </property>
             <property name="visible">True</property>
+        </object>
+
+    </object>
+
+
+    <object name="portal_tabs" meta_type="CMF Action Category">
+
+        <object name="extedit" meta_type="CMF Action" i18n:domain="plone">
+            <property name="title"
+                      i18n:translate="">Edit with external application</property>
+            <property name="description" i18n:translate=""></property>
+            <property name="url_expr">string:$object_url/external_edit</property>
+            <property name="link_target"></property>
+            <property name="icon_expr">string:$portal_url/extedit_icon.png</property>
+            <property name="available_expr">object/externalEditorEnabled</property>
+            <property name="permissions">
+                <element value="Modify portal content"/>
+            </property>
+            <property name="visible">False</property>
         </object>
 
     </object>
