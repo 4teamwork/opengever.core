@@ -8,6 +8,9 @@ Changelog
 * Removed pdb import
   [jbaumann]
 
+* changed template that it looks like og.task
+  [Timon Tschanz]
+
 
 2.0c1
 -----
