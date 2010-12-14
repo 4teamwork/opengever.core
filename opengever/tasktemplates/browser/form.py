@@ -132,7 +132,7 @@ class AddForm(BrowserView):
     def listing(self, show='templates', path='/'):
         """returns a listing of either TaskTemplateFolders or TaskTemplates"""
 
-        sort_on = self.request.get('sort', 'Title')
+        sort_on = self.request.get('sort', 'getObjPositionInParent')
         sort_on = {'Title':'sortable_title'}.get(sort_on, sort_on)
         sort_order = self.request.get('dir', 'ASC')
         sort_order = {'ASC': 'asc',
