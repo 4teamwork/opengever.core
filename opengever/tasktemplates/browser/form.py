@@ -85,7 +85,7 @@ def path_checkbox(item, value):
     preselected = item.getObject().preselected
     return """
             <input type="checkbox"
-                    class="noborder"
+                    class="noborder selectable"
                     name="paths:list"
                     id="%s" value="%s"
                     alt="Select %s"
@@ -114,9 +114,10 @@ class AddForm(BrowserView):
             'types': ('TaskTemplateFolder',),
             'states': ('tasktemplatefolder-state-activ',),
             },
+
         'tasks': {
             'columns': (
-                ('', helper.path_radiobutton),
+                ('', path_checkbox),
                 {'column': 'Title',
                  'column_title': _(u'label_title', default=u'Title')},
                 {'column': 'created',
