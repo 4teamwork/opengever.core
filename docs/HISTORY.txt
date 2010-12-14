@@ -5,6 +5,11 @@ Changelog
 2.0c3
 -----
 
+* Issue #709 Korrekturen Standardablauf
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/709/
+  Wizard: Fixed toggling of save button
+  [jbaumann]
+
 
 2.0c2
 -----

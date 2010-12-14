@@ -46,7 +46,7 @@ jq(function(){
     table.ftwtable('param', 'path', path);
     table.ftwtable('param', 'show', 'tasks');
     table.ftwtable('reload');
-    $('#form-controls input[name=save]').toggle();
+    $('#form-controls input[name=save]').show();
     return true;
   }, false);
 
