@@ -10,6 +10,7 @@ Changelog
   Wizard: Fixed toggling of save button
   Wizard: Use checkboxes for selecting task templates
   Wizard: Sort task templates by object position
+  Tasktemplates: Redirect to listing after creating a task template
   [jbaumann]
 
 
