@@ -11,6 +11,7 @@ Changelog
   Wizard: Use checkboxes for selecting task templates
   Wizard: Sort task templates by object position
   Tasktemplates: Redirect to listing after creating a task template
+  Tasktemplates tab: Show "preselected" column
   [jbaumann]
 
 

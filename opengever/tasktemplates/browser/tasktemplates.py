@@ -1,16 +1,25 @@
 from five import grok
 from ftw.table import helper
+from opengever.ogds.base.interfaces import IContactInformation
 from opengever.tabbedview.browser.tabs import OpengeverCatalogListingTab
 from opengever.tabbedview.helper import linked
 from opengever.task import _ as taskmsg
 from opengever.task.helper import task_type_helper
 from opengever.tasktemplates import _
 from opengever.tasktemplates.browser.helper import interactive_user_helper
-from plone.directives import dexterity
-from zope.interface import implements, Interface
-from opengever.ogds.base.interfaces import IContactInformation
-from zope.component import getUtility
 from opengever.tasktemplates.content.tasktemplate import ITaskTemplate
+from plone.directives import dexterity
+from zope.component import getUtility
+from zope.interface import implements, Interface
+
+
+def preselected_helper(item, value):
+    if value == True:
+        return _(u'preselected_yes', default=u'Yes')
+    else:
+        return ''
+
+
 class TaskTemplates(OpengeverCatalogListingTab):
     grok.name('tabbedview_view-tasktemplates')
 
@@ -37,6 +46,10 @@ class TaskTemplates(OpengeverCatalogListingTab):
 
         {'column': 'deadline',
          'column_title': _(u"label_deadline", default=u"Deadline in Days")},
+
+        {'column': 'preselected',
+         'column_title': _(u"label_preselected", default=u"Preselect"),
+         'transform': preselected_helper},
         )
 
     types = ['opengever.tasktemplates.tasktemplate',]

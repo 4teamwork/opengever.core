@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2010-12-08 16:27+0000\n"
-"PO-Revision-Date: 2010-12-07 14:14+0100\n"
+"POT-Creation-Date: 2010-12-14 10:36+0000\n"
+"PO-Revision-Date: 2010-12-14 11:36+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
 "MIME-Version: 1.0\n"
@@ -97,18 +97,19 @@ msgid "label_created"
 msgstr "Erstelldatum"
 
 #. Default: "Deadline in Days"
-#: ./opengever/tasktemplates/browser/tasktemplates.py:39
+#: ./opengever/tasktemplates/browser/tasktemplates.py:48
 #: ./opengever/tasktemplates/content/tasktemplate.py:71
 msgid "label_deadline"
 msgstr "Frist in Tagen"
 
 #. Default: "Issuer"
-#: ./opengever/tasktemplates/browser/tasktemplates.py:31
+#: ./opengever/tasktemplates/browser/tasktemplates.py:40
 #: ./opengever/tasktemplates/content/tasktemplate.py:37
 msgid "label_issuer"
 msgstr "Auftraggeber"
 
 #. Default: "Preselect"
+#: ./opengever/tasktemplates/browser/tasktemplates.py:51
 #: ./opengever/tasktemplates/content/tasktemplate.py:85
 msgid "label_preselected"
 msgstr "Vorselektiert"
@@ -124,7 +125,7 @@ msgid "label_responsible"
 msgstr "Verantwortlicher"
 
 #. Default: "Responsible"
-#: ./opengever/tasktemplates/browser/tasktemplates.py:35
+#: ./opengever/tasktemplates/browser/tasktemplates.py:44
 msgid "label_responsible_task"
 msgstr "Verantwortlicher"
 
@@ -145,7 +146,7 @@ msgstr "Kommentar"
 
 #. Default: "Title"
 #: ./opengever/tasktemplates/browser/form.py:110
-#: ./opengever/tasktemplates/browser/tasktemplates.py:22
+#: ./opengever/tasktemplates/browser/tasktemplates.py:31
 #: ./opengever/tasktemplates/browser/templatefolders.py:18
 msgid "label_title"
 msgstr "Titel"
@@ -153,6 +154,11 @@ msgstr "Titel"
 #. Default: "Yes"
 #: ./opengever/tasktemplates/browser/tasktemplates_templates/view.pt:39
 msgid "label_yes"
+msgstr "Ja"
+
+#. Default: "Yes"
+#: ./opengever/tasktemplates/browser/tasktemplates.py:18
+msgid "preselected_yes"
 msgstr "Ja"
 
 #: ./opengever/tasktemplates/browser/form.pt:23

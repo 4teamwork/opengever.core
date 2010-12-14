@@ -9,8 +9,8 @@ from z3c.form.browser import checkbox
 
 
 class ITaskTemplate(form.Schema):
-    
-    
+
+
     form.fieldset(
         u'common',
         label = _(u'fieldset_common', default=u'Common'),
@@ -25,7 +25,7 @@ class ITaskTemplate(form.Schema):
             u'preselected'
                 ],
             )
-            
+
     title = schema.TextLine(
         title=_(u"label_title", default=u"Title"),
         description=_('help_title', default=u""),
