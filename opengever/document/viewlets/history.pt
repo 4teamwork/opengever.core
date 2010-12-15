@@ -11,7 +11,6 @@
       <table class="version_history listing">
         <thead>
           <th i18n:translate="label_version">Version</th>
-          <th i18n:translate="label_action">Action</th>
           <th i18n:translate="label_actor">Actor</th>
           <th i18n:translate="label_date">Date</th>
           <th i18n:translate="label_comment">Comment</th>
@@ -21,15 +20,6 @@
           <tal:block repeat="item history">
             <tr tal:define="isVersion python:item['type']=='versioning';">
               <td tal:content="item/version_id|nothing" />
-              <tal:if condition="python: item['transition_title'] == 'Edit'">
-              <td tal:define="action item/transition_title;
-                  action python:action and action.replace('Edit', 'Edited')"
-                  tal:content="action" i18n:translate="" />
-              </tal:if>
-              <tal:else condition="python: item['transition_title'] != 'Edit'">
-                <td tal:define="action item/transition_title;"
-                    tal:content="action" i18n:translate="" />
-             </tal:else>
               <td tal:define="actor item/actor;
                               actor_name python:actor and actor.get('fullname','username') or item['actorid'];
                               actor_home item/actor_home;">
