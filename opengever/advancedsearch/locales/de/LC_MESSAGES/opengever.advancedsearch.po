@@ -190,7 +190,7 @@ msgstr "Auftraggeber"
 #. Default: "Type"
 #: ./opengever/advancedsearch/advanced_search.py:94
 msgid "label_portal_type"
-msgstr "Objekttyp"
+msgstr "Inhaltstyp"
 
 #. Default: "Receipt date"
 #: ./opengever/advancedsearch/advanced_search.py:162
