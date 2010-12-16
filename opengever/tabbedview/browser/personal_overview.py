@@ -38,15 +38,15 @@ class PersonalOverview(TabbedView):
     """
 
     default_tabs = [
-            {'id': 'mydossiers', 'icon': None, 'url': '#', 'class': None},
-            {'id': 'mydocuments', 'icon': None, 'url': '#', 'class': None},
-            {'id': 'mytasks', 'icon': None, 'url': '#', 'class': None},
-            {'id': 'issuedtasks', 'icon': None, 'url': '#', 'class': None},
-            ]
+        {'id': 'mydossiers', 'icon': None, 'url': '#', 'class': None},
+        {'id': 'mydocuments', 'icon': None, 'url': '#', 'class': None},
+        {'id': 'mytasks', 'icon': None, 'url': '#', 'class': None},
+        {'id': 'issuedtasks', 'icon': None, 'url': '#', 'class': None},
+        ]
 
     admin_tabs = [
-            {'id': 'alltasks', 'icon': None, 'url': '#', 'class': None},
-            {'id': 'allissuedtasks', 'icon': None, 'url': '#', 'class': None},
+        {'id': 'alltasks', 'icon': None, 'url': '#', 'class': None},
+        {'id': 'allissuedtasks', 'icon': None, 'url': '#', 'class': None},
         ]
 
     def get_tabs(self):
@@ -130,9 +130,15 @@ class MyTasks(GlobalTaskListingTab):
         userid = portal_state.member().getId()
 
         query_util = getUtility(ITaskQuery)
-        return query_util._get_tasks_for_responsible_query(userid,
-                                                           self.sort_on,
-                                                           self.sort_order)
+
+        # show all tasks assigned to this user ..
+        query = query_util._get_tasks_for_responsible_query(userid,
+                                                            self.sort_on,
+                                                            self.sort_order)
+
+        # .. and assigned to the current client
+        query = query.filter_by(assigned_client=get_client_id())
+        return query
 
 class IssuedTasks(Tasks):
     """List all tasks where I'm the issuer and which are physically stored on
