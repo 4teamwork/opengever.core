@@ -59,6 +59,7 @@ class PersonalOverview(TabbedView):
             inbox = self.context.unrestrictedTraverse(inbox_path)
         except KeyError:
             is_admin = False
+            inbox = None
 
         if inbox:
             roles = member.getRolesInContext(inbox)

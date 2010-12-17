@@ -5,6 +5,8 @@ Changelog
 2.0b4
 -----
 
+* Fixed personal_overview, working now without a inbox
+  [ttschanz]
 * Fixed "my tasks" tab in overview: shows now only tasks assigned to the current client
   [jbaumann]
 
