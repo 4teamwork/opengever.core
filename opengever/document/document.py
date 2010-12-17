@@ -21,8 +21,6 @@ from plone.directives import form, dexterity
 from plone.directives.dexterity import DisplayForm
 from plone.i18n.normalizer.interfaces import IIDNormalizer
 from plone.indexer import indexer
-from plone.locking.interfaces import INonStealableLock
-from plone.locking.interfaces import ITTWLockable
 from plone.namedfile.field import NamedFile
 from plone.namedfile.interfaces import INamedFileField
 from plone.supermodel.interfaces import FIELDSETS_KEY
@@ -33,7 +31,7 @@ from zc.relation.interfaces import ICatalog
 from zope import schema
 from zope.app.intid.interfaces import IIntIds
 from zope.component import getUtility, queryMultiAdapter
-from zope.interface import invariant, Invalid, Interface, implements
+from zope.interface import invariant, Invalid, Interface
 from zope.lifecycleevent.interfaces import IObjectCreatedEvent
 from zope.lifecycleevent.interfaces import IObjectModifiedEvent
 import logging
@@ -233,8 +231,6 @@ def document_author_default_value(data):
         return user
 
 class Document(Item):
-
-    implements(INonStealableLock, ITTWLockable)
 
     # disable file preview creation when modifying or creating document
     buildPreview = False
