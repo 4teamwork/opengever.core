@@ -7,6 +7,9 @@ from opengever.document import _
 from opengever.document.document import IDocumentSchema
 from zope.app.container.interfaces import IObjectAddedEvent
 
+# A special Attribute for the migration
+MIGRATION = False
+
 
 @grok.subscribe(IDocumentSchema, IObjectAddedEvent)
 def create_initial_version(context, event):
@@ -14,6 +17,12 @@ def create_initial_version(context, event):
     Since we use manual versioning for the document, the initial version doesn't
     get created automatically.
     """
+    # A special Attribute for the migration
+    # The inital version shouldn't set passing the migration
+    # TODO: After the migration it should be removed
+
+    if MIGRATION:
+        return
 
     if context.portal_factory.isTemporary(context):
         # don't do anything if we're in the factory
