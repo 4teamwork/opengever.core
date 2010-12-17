@@ -1,0 +1,29 @@
+Opengever specific Advanced Search
+==================================
+
+
+imports and standard configuration
+    >>> from plone.dexterity.utils import createContentInContainer
+    >>> from plone.testing.z2 import Browser
+    >>> from plone.app.testing import TEST_USER_NAME
+    >>> from plone.app.testing import TEST_USER_PASSWORD
+    >>> from plone.app.testing import setRoles
+    >>> from datetime import date
+    
+    >>> app = layer['app']
+    >>> portal = layer['portal']
+    
+
+
+browser test
+    >>> browser = Browser(app)
+    >>> browser.handleErrors = False
+
+    >>> browser.open(portal.absolute_url() + '/login_form')
+    >>> browser.getControl(name='__ac_name').value = TEST_USER_NAME
+    >>> browser.getControl(name='__ac_password').value = TEST_USER_PASSWORD
+    >>> browser.getControl(name='submit').click()
+
+    >>> browser.open(portal.portal_url())
+    >>> 'test_user_1' in browser.contents
+    True
