@@ -1,12 +1,11 @@
-from AccessControl import getSecurityManager
-from opengever.globalindex.utils import indexed_task_link
-from zope.schema.vocabulary import getVocabularyRegistry
 from Acquisition import aq_parent, aq_inner
-from Products.CMFCore.utils import getToolByName
 from Products.CMFCore.interfaces import IActionSucceededEvent
+from Products.CMFCore.utils import getToolByName
 from datetime import datetime, timedelta
 from five import grok
 from opengever.base.interfaces import ISequenceNumber
+from opengever.globalindex.utils import indexed_task_link
+from opengever.ogds.base.autocomplete_widget import AutocompleteFieldWidget
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.ogds.base.utils import get_client_id
 from opengever.task import _
@@ -14,20 +13,14 @@ from opengever.task import util
 from opengever.task.interfaces import ISuccessorTaskController
 from opengever.task.source import DossierPathSourceBinder
 from plone.dexterity.content import Container
-from plone.dexterity.interfaces import IDexterityFTI
 from plone.directives import form, dexterity
-from plone.formwidget import autocomplete
-from opengever.ogds.base.autocomplete_widget import AutocompleteFieldWidget
 from plone.indexer import indexer
-from plone.z3cform.traversal import FormWidgetTraversal
 from z3c.relationfield.schema import RelationChoice, RelationList
 from zc.relation.interfaces import ICatalog
 from zope import schema
-from zope.component import getUtility
-from zope.component import queryMultiAdapter, getMultiAdapter
+from zope.component import getUtility, getMultiAdapter
 from zope.interface import implements, Interface
-from zope.publisher.interfaces.browser import IBrowserRequest, IBrowserPage
-from zope.traversing.interfaces import ITraversable
+from zope.schema.vocabulary import getVocabularyRegistry
 
 
 class ITask(form.Schema):
@@ -325,68 +318,6 @@ class AddForm(dexterity.AddForm):
         if not self.request.get('form.widgets.issuer', None):
             self.request.set('form.widgets.issuer', [member.getId()])
         super(AddForm, self).update()
-
-
-class TaskWidgetTraversal(FormWidgetTraversal):
-    implements(ITraversable)
-
-    def __init__(self, context, request = None):
-        self.request = request
-
-        if not ITask.providedBy(context):
-            context = aq_parent(aq_inner(context))
-        fti = getUtility(IDexterityFTI, name='opengever.task.task')
-        adder = queryMultiAdapter((context, self.request, fti),
-                                  IBrowserPage)
-
-        self.context = adder
-
-
-grok.global_adapter(TaskWidgetTraversal,
-                    ((ITask, IBrowserRequest)),
-                    ITraversable,
-                    name=u"widget",
-                    )
-grok.global_adapter(TaskWidgetTraversal,
-                    ((ITaskView, IBrowserRequest)),
-                    ITraversable,
-                    name=u"widget",
-                    )
-
-
-class TaskAutoCompleteSearch(grok.CodeView,
-                             autocomplete.widget.AutocompleteSearch):
-    grok.context(autocomplete.interfaces.IAutocompleteWidget)
-    grok.name("autocomplete-search")
-
-    def __call__(self):
-        return autocomplete.widget.AutocompleteSearch.__call__(self)
-
-    def validate_access(self):
-        content = self.context.form.context
-        super_method = autocomplete.widget.AutocompleteSearch.validate_access
-        if not ITask.providedBy(content):
-            # not on a task
-            return super_method(self)
-        view_name = self.request.getURL().split('/')[-3]
-        if view_name in ['edit', 'add', '@@edit'] or \
-                view_name.startswith('++add++'):
-            # edit task itself
-            return super_method(self)
-        # add response to the task
-        # XXX
-        if 1:
-            return
-        view_name = '++add++opengever.task.task'
-        view_instance = content.restrictedTraverse(view_name)
-        getSecurityManager().validate(content,
-                                      content,
-                                      view_name,
-                                      view_instance,
-                                      )
-
-    def render(self):
-        pass
 
 
 @indexer(ITask)

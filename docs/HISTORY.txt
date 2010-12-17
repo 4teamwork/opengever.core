@@ -5,6 +5,13 @@ Changelog
 2.0b5
 -----
 
+* Issue #710 Aufgabe bearbeiten: Wechseln des Verantwortlichen funktioniert nicht
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/710
+  Removed response Autocomplete-traversal stuff and custom Autocomplete-search view,
+  since response does no more have a autocomplete widget (responsible) and this
+  implementation made editing task and changing the responsible fail.
+  [jbaumann]
+
 
 2.0b4
 -----
