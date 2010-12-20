@@ -34,6 +34,7 @@ from zope.component import getUtility, queryMultiAdapter
 from zope.interface import invariant, Invalid, Interface
 from zope.lifecycleevent.interfaces import IObjectCreatedEvent
 from zope.lifecycleevent.interfaces import IObjectModifiedEvent
+from ftw.datepicker.widget import DatePickerFieldWidget
 import logging
 
 
@@ -115,6 +116,8 @@ class IDocumentSchema(form.Schema):
         description = _(u'help_document_date', default=''),
         required = True,
         )
+    #workaround because ftw.datepicker wasn't working
+    form.widget(document_date = DatePickerFieldWidget)
 
     document_type = schema.Choice(
         title=_(u'label_document_type', default='Document Type'),
@@ -179,13 +182,16 @@ class IDocumentSchema(form.Schema):
         description = _(u'help_receipt_date', default=''),
         required = False,
         )
-
+    #workaround because ftw.datepicker wasn't working
+    form.widget(receipt_date = DatePickerFieldWidget)
+    
     delivery_date = schema.Date(
         title = _(u'label_delivery_date', default='Date of delivery'),
         description = _(u'help_delivery_date', default=''),
         required = False,
         )
-
+    #workaround because ftw.datepicker wasn't working
+    form.widget(delivery_date = DatePickerFieldWidget)
 
 
     @invariant
