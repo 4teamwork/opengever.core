@@ -9,10 +9,27 @@ imports and standard configuration
     >>> from plone.app.testing import TEST_USER_PASSWORD
     >>> from plone.app.testing import setRoles
     >>> from datetime import date
-    
+    >>> from opengever.ogds.base.setuphandlers import _create_example_client
+    >>> from opengever.ogds.base.setuphandlers import _create_example_user
+    >>> from opengever.ogds.base.utils import create_session
+
+
     >>> app = layer['app']
     >>> portal = layer['portal']
-    
+
+
+    >>> _create_example_user(session, portal,
+    ...                      'hugo.boss',
+    ...                      {'firstname': 'Hugo',
+    ...                       'lastname': 'Boss'},
+    ...                      ('og_mandant1_users',))
+
+    >>> _create_example_user(session, portal,
+    ...                      'peter.muster',
+    ...                      {'firstname': 'Peter',
+    ...                       'lastname': 'Muster'},
+    ...                      ('og_mandant2_users',))
+
 
 
 browser test
@@ -27,3 +44,6 @@ browser test
     >>> browser.open(portal.portal_url())
     >>> 'test_user_1' in browser.contents
     True
+    >>> browser.open('http://nohost/plone/folder_factories')
+    >>> browser.getControl('Business Case Dossier').click()
+    >>> browser.getControl('Add').click()

@@ -10,11 +10,13 @@ from plone.dexterity.utils import createContentInContainer
 from plone.registry.interfaces import IRegistry
 from zope.component import getUtility
 from zope.configuration import xmlconfig
-
+from opengever.ogds.base.testing import OPENGEVER_OGDS_BASE_FIXTURE
+from opengever.ogds.base.setuphandlers import _create_example_client
+from opengever.ogds.base.setuphandlers import _create_example_user
 
 class BaseLayer(PloneSandboxLayer):
 
-    defaultBases = (PLONE_FIXTURE, )
+    defaultBases = (PLONE_FIXTURE,)
 
     def setUpZope(self, app, configurationContext):
         # do not install pas plugins (doesnt work in tests)
@@ -48,7 +50,7 @@ class BaseLayer(PloneSandboxLayer):
         # configure client ID
         registry = getUtility(IRegistry, context=portal)
         client = registry.forInterface(IClientConfiguration)
-        client.client_id = u'client1'
+        client.client_id = u'plone'
         # portal workaround
         self.portal = portal
 
@@ -57,28 +59,19 @@ class BaseLayer(PloneSandboxLayer):
         
         login(portal, TEST_USER_NAME)
 
-        # create some opengever standard objects
-        dossier = createContentInContainer(self.portal, 'opengever.dossier.businesscasedossier',
-                                            checkContstraints=False,
-                                            start=date(2010, 2, 2),
-                                            end= date(2010, 5, 5),
-                                            title='dossier1',
-                                            description='eine kleine beschreibung',
-        )
-
-        document = createContentInContainer(self.portal, 'opengever.document.document',
-                                        checkContstraints=False,
-                                        document_date=date(2010, 2, 2),
-                                        title='document',
-                                        description='eine kleine beschreibung',
-                                        )
-        
-
-
     def testSetUp(self):
         # setup the sql tables
         create_sql_tables()
         session = create_session()
+        session = create_session()
+        
+        _create_example_client(session, 'plone',
+                              {'title': 'Plone',
+                              'ip_address': '127.0.0.1',
+                              'site_url': 'http://nohost/plone',
+                              'public_url': 'http://nohost/plone',
+                              'group': 'og_mandant1_users',
+                              'inbox_group': 'og_mandant1_inbox'})
         task_model.Base.metadata.create_all(session.bind)
 
     def testTearDown(test):

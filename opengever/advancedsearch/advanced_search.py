@@ -61,7 +61,7 @@ FIELD_MAPPING = {'opengever-dossier-businesscasedossier': [
                     'end_2',
                     'reference',
                     'sequence_number',
-                    'filing_number',
+                    'filing_no',
                     'responsible',
                     'review_state',
                 ],
@@ -80,7 +80,7 @@ FIELD_MAPPING = {'opengever-dossier-businesscasedossier': [
                     'document_date_1',
                     'document_date_2',
                     'document_author',
-                    'creator',
+                    'Creator',
                     'checked_out',
                     'trashed',
                 ],
@@ -133,13 +133,13 @@ class IAdvancedSearch(directives_form.Schema):
         required=False,
     )
 
-    sequence_number = schema.TextLine(
+    sequence_number = schema.Int(
         title=_('label_sequence_number', default='Sequence number'),
         description=_('help_sequence_number', default=''),
         required=False,
     )
 
-    filing_number = schema.TextLine(
+    filing_no = schema.TextLine(
         title=_('label_filing_number', default='Filing number'),
         description=_('help_filing_number', default=''),
         required=False,
@@ -205,8 +205,8 @@ class IAdvancedSearch(directives_form.Schema):
         required=False,
     )
 
-    creator = schema.Choice(
-        title=_('label_creator', default='Creator'),
+    Creator = schema.Choice(
+        title=_('label_creator', default='creator'),
         description=_('help_creator', default=''),
         vocabulary=u'opengever.ogds.base.UsersVocabulary',
         required=False,
@@ -275,7 +275,7 @@ class AdvancedSearchForm(directives_form.Form):
         = AutocompleteFieldWidget
     fields['task_responsible'].widgetFactory[INPUT_MODE] \
         = AutocompleteFieldWidget
-    fields['creator'].widgetFactory[INPUT_MODE] \
+    fields['Creator'].widgetFactory[INPUT_MODE] \
         = AutocompleteFieldWidget
     fields['checked_out'].widgetFactory[INPUT_MODE] \
         = AutocompleteFieldWidget
@@ -333,6 +333,8 @@ class AdvancedSearchForm(directives_form.Form):
                             if not data.get(field[:-2]+'_2'):
                                 data[field[:-2]+'_2'] = datetime.date(2020, 12, 30)
                         else:
+                            if not data.get(field[:-2]+'_1'):
+                                data[field[:-2]+'_1'] = datetime.date(1900, 1, 1)
                             data[field] = data.get(field) + timedelta(1)
                         params = '%s&%s:list=%s' % (params, field[:-2], data.get(field).strftime('%m/%d/%y'))
 
@@ -341,6 +343,8 @@ class AdvancedSearchForm(directives_form.Form):
                             params = '%s&%s:list=%s' % (params, field, value)
                     elif field == 'trashed':
                         params = '%s&trashed:list:boolean=True&trashed:list:boolean=False' %(params)
+                    elif isinstance(data.get(field), int):
+                        params = '%s&sequence_number:int=%s' %(params, data.get(field))
                     else:
                         params = '%s&%s=%s' %(params, field, urllib.quote(data.get(field)))
 
