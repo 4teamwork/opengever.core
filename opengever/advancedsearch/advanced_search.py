@@ -334,7 +334,9 @@ class AdvancedSearchForm(directives_form.Form):
                                 data[field[:-2]+'_2'] = datetime.date(2020, 12, 30)
                         else:
                             if not data.get(field[:-2]+'_1'):
+                                params = '%s&%s_usage=range:minmax' % (params, field[:-2])
                                 data[field[:-2]+'_1'] = datetime.date(1900, 1, 1)
+                                params = '%s&%s:list=%s' % (params, field[:-2], data.get(field[:-2]+'_1').strftime('%m/%d/%y'))
                             data[field] = data.get(field) + timedelta(1)
                         params = '%s&%s:list=%s' % (params, field[:-2], data.get(field).strftime('%m/%d/%y'))
 
