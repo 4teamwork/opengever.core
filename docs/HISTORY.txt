@@ -2,8 +2,12 @@ Changelog
 =========
 
 
-2.0a3
+2.0b1
 -----
+
+* Issue #713 Eingangskorb: Hinzufuegen Mail verhindern
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/713
+  [jbaumann]
 
 
 2.0a2
@@ -20,11 +24,11 @@ Changelog
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/505
   Inbox schema: added field for configuring inbox-group
   [08.04.2010, jbaumann]
-  
+
 * Issue #514 Reiter "Eingangskorb" darf nur angezeigt werden, wenn der angemeldete Benutzer auf den Eingangskorb zugreifen kann
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/514
   [06.04.2010, jbaumann]
-  
+
 
 1.0a2
 -----
@@ -35,5 +39,5 @@ Changelog
 
 * Updated setup.py, changed target release to 1.0a1
   [05.01.2010, jbaumann]
-  
+
 * Initial release
