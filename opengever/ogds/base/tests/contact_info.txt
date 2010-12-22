@@ -150,17 +150,17 @@ Contacts tests:
     <Products.ZCatalog.Catalog.mybrains object at ...>
 
     >>> sandra.firstname
-    'Sandra'
+    u'Sandra'
     >>> sandra.lastname
-    'Kaufmann'
+    u'Kaufmann'
     >>> sandra.email
     'sandra.kaufmann@test.ch'
     >>> info.describe('contact:kaufmann-sandra')
-    'Kaufmann Sandra (sandra.kaufmann@test.ch)'
+    u'Kaufmann Sandra (sandra.kaufmann@test.ch)'
     >>> info.describe(u'contact:kaufmann-sandra')
-    'Kaufmann Sandra (sandra.kaufmann@test.ch)'
+    u'Kaufmann Sandra (sandra.kaufmann@test.ch)'
     >>> info.describe(contacts[0])
-    'Kaufmann Sandra (sandra.kaufmann@test.ch)'
+    u'Kaufmann Sandra (sandra.kaufmann@test.ch)'
     >>> info.get_email(u'contact:kaufmann-sandra')
     'sandra.kaufmann@test.ch'
     >>> info.get_email(info.get_contact('contact:kaufmann-sandra'))

@@ -5,6 +5,9 @@ Changelog
 2.0b4
 -----
 
+* Fixed tests: use unicode values in dexterity.
+  [jbaumann]
+
 
 2.0b3
 -----

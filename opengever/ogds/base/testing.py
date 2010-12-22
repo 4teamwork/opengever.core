@@ -40,8 +40,8 @@ def create_contacts(portal):
             contacts,
             'opengever.contact.contact',
             checkConstraints=False,
-            firstname=firstname,
-            lastname=lastname,
+            firstname=firstname.decode('utf-8'),
+            lastname=lastname.decode('utf-8'),
             email=email)
         obj.reindexObject()
 
