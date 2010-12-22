@@ -2,11 +2,12 @@ from Products.CMFCore.utils import getToolByName
 from Products.ZCatalog.ZCatalog import ZCatalog
 from Products.ZCatalog.interfaces import ICatalogBrain
 from five import grok
+from opengever.ogds.base import _
 from opengever.ogds.base.interfaces import IContactInformation, IUser
 from opengever.ogds.base.model.client import Client
 from opengever.ogds.base.model.user import User
-from opengever.ogds.base.utils import create_session, get_current_client
 from opengever.ogds.base.utils import brain_is_contact
+from opengever.ogds.base.utils import create_session, get_current_client
 from zope.app.component.hooks import getSite
 import types
 
@@ -252,7 +253,16 @@ class ContactInformation(grok.GlobalUtility):
         if is_string and self.is_inbox(principal):
             # just do it
             client = self.get_client_of_inbox(principal)
-            return u'Inbox: %s' % client.title
+            # some times the site is the z3c validaton, so get
+            # the real site a little bit hacky
+            site = getToolByName(getSite(), 'portal_url').getPortalObject()
+            # we need to instantly translate, because otherwise
+            # stuff like the autocomplete widget will not work
+            # properly.
+            label = _(u'inbox_label',
+                     default=u'Inbox: ${client}',
+                     mapping=dict(client=client.title))
+            return site.translate(label)
 
         # string contact
         elif is_string and self.is_contact(principal):

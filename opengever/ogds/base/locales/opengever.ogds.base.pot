@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2010-10-22 12:35+0000\n"
+"POT-Creation-Date: 2010-12-22 09:37+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -27,13 +27,18 @@ msgstr ""
 msgid "active_yes"
 msgstr ""
 
+#. Default: "Inbox: ${client}"
+#: ./opengever/ogds/base/contact_info.py:256
+msgid "inbox_label"
+msgstr ""
+
 #. Default: "Active:"
 #: ./opengever/ogds/base/browser/userdetails_templates/userdetails.pt:38
 msgid "label_active"
 msgstr ""
 
 #. Default: "Address:"
-#: ./opengever/ogds/base/browser/userdetails_templates/userdetails.pt:104
+#: ./opengever/ogds/base/browser/userdetails_templates/userdetails.pt:108
 msgid "label_address"
 msgstr ""
 
@@ -58,7 +63,7 @@ msgid "label_email"
 msgstr ""
 
 #. Default: "Email 2:"
-#: ./opengever/ogds/base/browser/userdetails_templates/userdetails.pt:79
+#: ./opengever/ogds/base/browser/userdetails_templates/userdetails.pt:80
 msgid "label_email2"
 msgstr ""
 
@@ -68,17 +73,17 @@ msgid "label_fullname"
 msgstr ""
 
 #. Default: "Fax:"
-#: ./opengever/ogds/base/browser/userdetails_templates/userdetails.pt:94
+#: ./opengever/ogds/base/browser/userdetails_templates/userdetails.pt:98
 msgid "label_phone_fax"
 msgstr ""
 
 #. Default: "Mobile phone:"
-#: ./opengever/ogds/base/browser/userdetails_templates/userdetails.pt:99
+#: ./opengever/ogds/base/browser/userdetails_templates/userdetails.pt:103
 msgid "label_phone_mobile"
 msgstr ""
 
 #. Default: "Office phone:"
-#: ./opengever/ogds/base/browser/userdetails_templates/userdetails.pt:89
+#: ./opengever/ogds/base/browser/userdetails_templates/userdetails.pt:93
 msgid "label_phone_office"
 msgstr ""
 
@@ -88,33 +93,8 @@ msgid "label_salutation"
 msgstr ""
 
 #. Default: "URL:"
-#: ./opengever/ogds/base/browser/userdetails_templates/userdetails.pt:84
+#: ./opengever/ogds/base/browser/userdetails_templates/userdetails.pt:86
 msgid "label_url"
-msgstr ""
-
-#. Default: "Email"
-#: ./opengever/ogds/base/browser/users.py:61
-msgid "label_userstab_email"
-msgstr ""
-
-#. Default: "Firstname"
-#: ./opengever/ogds/base/browser/users.py:51
-msgid "label_userstab_firstname"
-msgstr ""
-
-#. Default: "Lastname"
-#: ./opengever/ogds/base/browser/users.py:46
-msgid "label_userstab_lastname"
-msgstr ""
-
-#. Default: "Office Phone"
-#: ./opengever/ogds/base/browser/users.py:66
-msgid "label_userstab_phone_office"
-msgstr ""
-
-#. Default: "Userid"
-#: ./opengever/ogds/base/browser/users.py:56
-msgid "label_userstab_userid"
 msgstr ""
 
 #. Default: "Show all users"

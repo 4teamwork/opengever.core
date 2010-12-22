@@ -5,6 +5,9 @@ Changelog
 2.0b4
 -----
 
+* Translate label of inboxes.
+  [jbaumann]
+
 * Fixed tests: use unicode values in dexterity.
   [jbaumann]
 
