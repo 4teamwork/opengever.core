@@ -5,6 +5,9 @@ Changelog
 2.0b6
 -----
 
+* Show the "attach document" action only for those user where it's reasonable.
+  [jbaumann]
+
 
 2.0b5
 -----

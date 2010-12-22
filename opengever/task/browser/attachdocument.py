@@ -7,6 +7,7 @@ from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from five import grok
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.ogds.base.interfaces import ITransporter
+from opengever.ogds.base.utils import get_current_client
 from opengever.task import _
 from opengever.task.task import ITask
 from plone.directives import form
@@ -17,10 +18,35 @@ from z3c.form.interfaces import INPUT_MODE
 from z3c.form.widget import FieldWidget
 from zope import schema
 from zope.component import getUtility
-from zope.interface import implementer
+from zope.interface import implementer, Interface
 import urllib
 import z3c.form
 
+
+# ------------------- CONTROLLER --------------------------
+
+class AttachDocumentAllowed(grok.View):
+    """This controller view checks if the "attach document" action should
+    be available for this user on this context.
+
+    Only display the action if the user is assigned to at least one *other*
+    client.
+    """
+
+    grok.context(Interface)
+    grok.name('attach-document-allowed')
+
+    def render(self):
+        current_client = get_current_client()
+        info = getUtility(IContactInformation)
+        clients = filter(lambda client: client != current_client,
+                         info.get_assigned_clients())
+        return len(clients) > 0
+
+
+
+
+# ------------------- WIZARD --------------------------
 
 class WizardFormMixin(object):
     """Mixing for adding a method witch returns the data needed for rendering

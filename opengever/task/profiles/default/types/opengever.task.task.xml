@@ -84,7 +84,7 @@
             category="folder_factories"
             url_expr="string:${object_url}/@@choose_source_dossier"
             icon_expr="string:${object_url}/icon_funktion_hochladen.gif"
-            condition_expr="">
+            condition_expr="here/@@attach-document-allowed|nothing">
         <permission value="Add portal content"/>
     </action>
 
