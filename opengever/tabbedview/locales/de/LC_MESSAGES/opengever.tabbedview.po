@@ -1,22 +1,21 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR Free Software Foundation, Inc.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"PO-Revision-Date: 2010-11-29 11:40+0100\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI +ZONE\n"
+"PO-Revision-Date: 2010-12-23 13:53+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0\n"
+"Preferred-Encodings: utf-8 latin1\n"
+"Domain: DOMAIN\n"
 
 #: ./opengever/tabbedview/browser/tabs_templates/generic.pt:13
 msgid "All visible entries chosen <a href="#">x</a>"
-msgstr "Alle Sichtbaren ausgewählt <a href="#">x</a>"
+msgstr "Alle Sichtbaren ausgewählt <a href=\"#\">x</a>"
 
-#: ./opengever/tabbedview/browser/tabs_templates/generic.pt:12
 msgid "Choose:"
 msgstr "Auswählen"
 
@@ -58,7 +57,7 @@ msgid "checked_out"
 msgstr "in Bearbeitung"
 
 #. Default: "Client"
-#: ./opengever/tabbedview/browser/tabs.py:263
+#: ./opengever/tabbedview/browser/tabs.py:264
 msgid "client_id"
 msgstr "Mandant"
 
@@ -66,6 +65,11 @@ msgstr "Mandant"
 #: ./opengever/tabbedview/browser/tasklisting.py:87
 msgid "column_client"
 msgstr "Mandant"
+
+#. Default: "Client ID"
+#: ./opengever/tabbedview/browser/clientslisting.py:51
+msgid "column_client_id"
+msgstr "Mandant ID"
 
 #. Default: "Date of completion"
 #: ./opengever/tabbedview/browser/tasklisting.py:70
@@ -77,10 +81,40 @@ msgstr "Erledigt am"
 msgid "column_deadline"
 msgstr "Zu erledigen bis"
 
+#. Default: "Enabled"
+#: ./opengever/tabbedview/browser/clientslisting.py:57
+msgid "column_enabled"
+msgstr "Aktiviert"
+
+#. Default: "Users group"
+#: ./opengever/tabbedview/browser/clientslisting.py:71
+msgid "column_group"
+msgstr "Benutzer-Gruppe"
+
+#. Default: "Inbox user group"
+#: ./opengever/tabbedview/browser/clientslisting.py:74
+msgid "column_inbox_group"
+msgstr "Eingangskorb-Gruppe"
+
+#. Default: "Internal site URL"
+#: ./opengever/tabbedview/browser/clientslisting.py:63
+msgid "column_interal_site_url"
+msgstr "Interne URL"
+
+#. Default: "IP address"
+#: ./opengever/tabbedview/browser/clientslisting.py:60
+msgid "column_ip_address"
+msgstr "IP-Adresse"
+
 #. Default: "Issued at"
 #: ./opengever/tabbedview/browser/tasklisting.py:83
 msgid "column_issued_at"
 msgstr "Erstellt am"
+
+#. Default: "Public URL"
+#: ./opengever/tabbedview/browser/clientslisting.py:67
+msgid "column_public_url"
+msgstr "Öffentliche URL"
 
 #. Default: "Review state"
 #: ./opengever/tabbedview/browser/tasklisting.py:54
@@ -98,6 +132,7 @@ msgid "column_task_type"
 msgstr "Aufgabentyp"
 
 #. Default: "Title"
+#: ./opengever/tabbedview/browser/clientslisting.py:54
 #: ./opengever/tabbedview/browser/tasklisting.py:58
 msgid "column_title"
 msgstr "Titel"
@@ -149,7 +184,7 @@ msgid "events"
 msgstr "Termine"
 
 #. Default: "Filing Number"
-#: ./opengever/tabbedview/browser/tabs.py:199
+#: ./opengever/tabbedview/browser/tabs.py:200
 msgid "filing_number"
 msgstr "Ablagenummer"
 
@@ -167,94 +202,94 @@ msgid "journal"
 msgstr "Journal"
 
 #. Default: "Checked out by"
-#: ./opengever/tabbedview/browser/tabs.py:140
+#: ./opengever/tabbedview/browser/tabs.py:141
 msgid "label_checked_out"
 msgstr "In Bearbeitung"
 
 #. Default: "Date of Completion"
-#: ./opengever/tabbedview/browser/tabs.py:247
+#: ./opengever/tabbedview/browser/tabs.py:248
 msgid "label_date_of_completion"
 msgstr "Erledigt am"
 
 #. Default: "Deadline"
-#: ./opengever/tabbedview/browser/tabs.py:243
+#: ./opengever/tabbedview/browser/tabs.py:244
 msgid "label_deadline"
 msgstr "Zu erledigen bis"
 
 #. Default: "Delivery Date"
-#: ./opengever/tabbedview/browser/tabs.py:136
+#: ./opengever/tabbedview/browser/tabs.py:137
 msgid "label_delivery_date"
 msgstr "Ausgangsdatum"
 
 #. Default: "Document Author"
-#: ./opengever/tabbedview/browser/tabs.py:124
+#: ./opengever/tabbedview/browser/tabs.py:125
 msgid "label_document_author"
 msgstr "Autor"
 
 #. Default: "Document Date"
-#: ./opengever/tabbedview/browser/tabs.py:128
+#: ./opengever/tabbedview/browser/tabs.py:129
 msgid "label_document_date"
 msgstr "Dokumentdatum"
 
 #. Default: "Responsible"
-#: ./opengever/tabbedview/browser/tabs.py:187
+#: ./opengever/tabbedview/browser/tabs.py:188
 msgid "label_dossier_responsible"
 msgstr "Federführung"
 
 #. Default: "End"
-#: ./opengever/tabbedview/browser/tabs.py:196
+#: ./opengever/tabbedview/browser/tabs.py:197
 msgid "label_end"
 msgstr "Ende"
 
 #. Default: "issued at"
-#: ./opengever/tabbedview/browser/tabs.py:259
+#: ./opengever/tabbedview/browser/tabs.py:260
 msgid "label_issued_date"
 msgstr "Startdatum"
 
 #. Default: "Issuer"
-#: ./opengever/tabbedview/browser/tabs.py:255
+#: ./opengever/tabbedview/browser/tabs.py:256
 #: ./opengever/tabbedview/browser/tasklisting.py:79
 msgid "label_issuer"
 msgstr "Auftraggeber"
 
 #. Default: "No contents"
-#: ./opengever/tabbedview/browser/tabs_templates/generic.pt:25
+#: ./opengever/tabbedview/browser/tabs_templates/generic.pt:22
 msgid "label_no_contents"
 msgstr "Keine Inhalte gefunden"
 
 #. Default: "Receipt Date"
-#: ./opengever/tabbedview/browser/tabs.py:132
+#: ./opengever/tabbedview/browser/tabs.py:133
 msgid "label_receipt_date"
 msgstr "Eingangsdatum"
 
 #. Default: "Reference Number"
-#: ./opengever/tabbedview/browser/tabs.py:175
+#: ./opengever/tabbedview/browser/tabs.py:176
 msgid "label_reference"
 msgstr "Aktenzeichen"
 
 #. Default: "Responsible"
-#: ./opengever/tabbedview/browser/tabs.py:251
+#: ./opengever/tabbedview/browser/tabs.py:252
 #: ./opengever/tabbedview/browser/tasklisting.py:75
 msgid "label_responsible_task"
 msgstr "Verantwortlich"
 
 #. Default: "Review state"
-#: ./opengever/tabbedview/browser/tabs.py:183
+#: ./opengever/tabbedview/browser/tabs.py:184
 msgid "label_review_state"
 msgstr "Status"
 
 #. Default: "Start"
-#: ./opengever/tabbedview/browser/tabs.py:192
+#: ./opengever/tabbedview/browser/tabs.py:193
 msgid "label_start"
 msgstr "Beginn"
 
 #. Default: "Task Type"
-#: ./opengever/tabbedview/browser/tabs.py:239
+#: ./opengever/tabbedview/browser/tabs.py:240
 msgid "label_task_type"
 msgstr "Aufgabentyp"
 
 #. Default: "Title"
-#: ./opengever/tabbedview/browser/tabs.py:119
+#: ./opengever/tabbedview/browser/tabs.py:120
 msgid "label_title"
 msgstr "Titel"
 
@@ -339,7 +374,7 @@ msgid "role_list"
 msgstr "Rollen"
 
 #. Default: "Sequence Number"
-#: ./opengever/tabbedview/browser/tabs.py:267
+#: ./opengever/tabbedview/browser/tabs.py:268
 msgid "sequence_number"
 msgstr "Laufnummer"
 

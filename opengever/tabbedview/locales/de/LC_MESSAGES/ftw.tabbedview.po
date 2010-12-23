@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2010-10-07 08:29+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
+"POT-Creation-Date: 2009-02-25 13:09+0000\n"
+"PO-Revision-Date: 2010-12-23 09:53+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -11,6 +11,12 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0\n"
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: DOMAIN\n"
+
+msgid "ogds-cp-alltasks"
+msgstr "Alle Aufgaben"
+
+msgid "ogds-cp-clients"
+msgstr "Mandanten"
 
 msgid "users"
 msgstr "OGDS"
