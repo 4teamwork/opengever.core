@@ -5,6 +5,9 @@ Changelog
 2.0b6
 -----
 
+* Successor: Task workflows initial state has changed, so we need to move successor tasks into another state after creating / editing.
+  [jbaumann]
+
 * Show the "attach document" action only for those user where it's reasonable.
   [jbaumann]
 

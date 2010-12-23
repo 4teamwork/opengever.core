@@ -215,7 +215,7 @@ def change_successor_state_after_edit(task, event):
         return
 
     from_review_state = 'task-state-new-successor'
-    to_review_state = 'task-state-new'
+    to_review_state = 'task-state-open'
 
     wtool = getToolByName(task, 'portal_workflow')
     review_state = wtool.getInfoFor(task, 'review_state', None)
