@@ -1,81 +1,77 @@
-from sqlalchemy.sql.expression import asc, desc
-from sqlalchemy.orm.query import Query
+from five import grok
+from ftw.tabbedview.browser.listing import ListingView
+from ftw.table import helper
 from ftw.table.basesource import BaseTableSource
 from ftw.table.interfaces import ITableSource, ITableSourceConfig
-from zope.interface import implements, Interface
-from ftw.table import helper
-from five import grok
-from opengever.ogds.base import _
-from sqlalchemy import or_
-from ftw.tabbedview.browser.listing import ListingView
+from opengever.globalindex.model.task import Task
+from opengever.ogds.base.model.client import Client
+from opengever.ogds.base.utils import create_session
+from opengever.tabbedview import _
 from opengever.tabbedview.browser.tabs import OpengeverTab
-from opengever.ogds.base.model.user import User
-from opengever.ogds.base.interfaces import IContactInformation
-from opengever.tabbedview.helper import email_helper
-from zope.component import getUtility
+from sqlalchemy import or_
+from sqlalchemy.orm.query import Query
+from sqlalchemy.sql.expression import asc, desc
+from zope.interface import implements, Interface
 
-
-
-def linked_value_helper(item, value):
-    """Helper for linking the value with the user profile.
+def linked_url_helper(item, value):
+    """Creates a link to `value`, if it's url-ish.
     """
-
-    info = getUtility(IContactInformation)
-    url = info.get_profile_url(getattr(item, 'userid', None))
-
-    if url:
-        return '<a href="%s">%s</a>' % (url, value)
+    if '://' in value:
+        return '<a href="%s">%s</a>' % (value, value)
     else:
         return value
 
 
-class IUsersListingTableSourceConfig(ITableSourceConfig):
-    """Marker interface for table source configuration using the OGDS users
-    model as source.
+class IClientsTableSourceConfig(ITableSourceConfig):
+    """Marker interface for table source configurations using the
+    OGDS clients as source.
     """
 
 
-class UsersListing(grok.CodeView, OpengeverTab, ListingView):
-    """Tab registered on contacts folder (see opengever.contact) listing all
-    users.
+class ClientsListing(grok.CodeView, OpengeverTab, ListingView):
+    """A clients listing tab.
     """
 
-    implements(IUsersListingTableSourceConfig)
+    implements(IClientsTableSourceConfig)
 
-    grok.name('tabbedview_view-users')
     grok.context(Interface)
+    grok.name('tabbedview_view-ogds-cp-clients')
+    grok.require('cmf.ManagePortal')
 
-    sort_on = 'lastname'
-    sort_order = ''
+    sort_on = 'client_id'
+    sort_reverse = False
 
     show_selects = False
     enabled_actions = []
     major_actions = []
 
     columns = (
-        {'column': 'lastname',
-         'column_title': _(u'label_userstab_lastname',
-                           default=u'Lastname'),
-         'transform': linked_value_helper},
 
-        {'column': 'firstname',
-         'column_title': _(u'label_userstab_firstname',
-                           default=u'Firstname'),
-         'transform': linked_value_helper},
+        {'column': 'client_id',
+         'column_title': _(u'column_client_id', default=u'Client ID')},
 
-        {'column': 'userid',
-         'column_title': _(u'label_userstab_userid',
-                           default=u'Userid'),
-         'transform': linked_value_helper},
+        {'column': 'title',
+         'column_title': _(u'column_title', default=u'Title')},
 
-        {'column': 'email',
-         'column_title': _(u'label_userstab_email',
-                           default=u'Email'),
-         'transform': email_helper},
+        {'column': 'enabled',
+         'column_title': _(u'column_enabled', default=u'Enabled')},
 
-        {'column': 'phone_office',
-         'column_title': _(u'label_userstab_phone_office',
-                           default=u'Office Phone')},
+        {'column': 'ip_address',
+         'column_title': _(u'column_ip_address', default=u'IP address')},
+
+        {'column': 'site_url',
+         'column_title': _(u'column_interal_site_url',
+                           default=u'Internal site URL')},
+
+        {'column': 'public_url',
+         'column_title': _(u'column_public_url', default=u'Public URL'),
+         'transform': linked_url_helper},
+
+        {'column': 'group',
+         'column_title': _(u'column_group', default=u'Users group')},
+
+        {'column': 'inbox_group',
+         'column_title': _(u'column_inbox_group', default=u'Inbox user group')},
 
         )
 
@@ -87,17 +83,15 @@ class UsersListing(grok.CodeView, OpengeverTab, ListingView):
         """Returns the base search query (sqlalchemy)
         """
 
-        info = getUtility(IContactInformation)
-        return info._users_query()
+        return create_session().query(Client)
 
 
-class UsersListingTableSource(grok.MultiAdapter, BaseTableSource):
-    """Table source OGDS users.
+class ClientsTableSource(grok.MultiAdapter, BaseTableSource):
+    """Clients source adapter.
     """
 
     grok.implements(ITableSource)
-    grok.adapts(IUsersListingTableSourceConfig, Interface)
-
+    grok.adapts(IClientsTableSourceConfig, Interface)
 
     def validate_base_query(self, query):
         """Validates and fixes the base query. Returns the query object.
@@ -132,7 +126,7 @@ class UsersListingTableSource(grok.MultiAdapter, BaseTableSource):
             if text.endswith('*'):
                 text = text[:-1]
 
-            model = User
+            model = Task
 
             # first lets lookup what fields (= sql columns) we have
             fields = []
@@ -208,3 +202,4 @@ class UsersListingTableSource(grok.MultiAdapter, BaseTableSource):
             list(xrange(self.full_length - start - len(page_results)))
 
         return results
+

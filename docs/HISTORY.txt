@@ -5,6 +5,9 @@ Changelog
 2.0b5
 -----
 
+* Added a OGDS Control Panel, which shows the configuration and other OGDS stuff.
+  [jbaumann]
+
 * Also translate inboxes in tabbed view helpers.
   [jbaumann]
 
