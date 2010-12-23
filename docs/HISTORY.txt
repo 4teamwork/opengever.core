@@ -5,6 +5,9 @@ Changelog
 2.0b6
 -----
 
+* Issue #304 Stufe Dokument: Status anpassen
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/304/
+  [phgross]
 
 2.0b5
 -----

@@ -45,7 +45,7 @@ msgid "document-state-checked_out"
 msgstr "Ausgecheckt"
 
 msgid "document-state-draft"
-msgstr "Entwurf"
+msgstr "Eingecheckt"
 
 msgid "document-state-pending"
 msgstr "Hängig"
