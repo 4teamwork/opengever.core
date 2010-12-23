@@ -5,6 +5,9 @@ Changelog
 2.0b6
 -----
 
+* Task workflow: Allow Owner to add a document after creating a successor task - otherwise documents will be missing.
+  [jbaumann]
+
 * Task workflow: The Editor should have "Review portal content", otherwise he will not see any menu.
   Also removed task-state-new, since its not used anymore.
   [jbaumann]
