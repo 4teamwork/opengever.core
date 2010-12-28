@@ -9,6 +9,9 @@ Changelog
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/304/
   [phgross]
 
+* added DatePickerFieldWidget to datefield because it wasn't working
+  [ttschanz]
+
 2.0b5
 -----
 
