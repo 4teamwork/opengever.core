@@ -11,14 +11,14 @@ Changelog
 * fixed unicodeerrors whenn searching attributes are non-ascii characters
   [phgross]
 
-*fixed bugs when searching for filing number, sequence number, crator.
- [ttschanz]
+* fixed bugs when searching for filing number, sequence number, crator.
+  [ttschanz]
 
-*fixed bug which appered when searching with only one part of a range was given
- [ttschanz]
+* fixed bug which appered when searching with only one part of a range was given
+  [ttschanz]
 
-*fixed bug when searchableText was nothing, a default value was entered
- [ttschanz]
+* fixed bug when searchableText was nothing, a default value was entered
+  [ttschanz]
 
 2.0a3
 -----
