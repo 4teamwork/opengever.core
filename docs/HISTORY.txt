@@ -5,6 +5,11 @@ Changelog
 2.0b2
 -----
 
+* fixed searching task_type
+  [phgross]
+
+* fixed unicodeerrors whenn searching attributes are non-ascii characters
+  [phgross]
 
 *fixed bugs when searching for filing number, sequence number, crator.
  [ttschanz]

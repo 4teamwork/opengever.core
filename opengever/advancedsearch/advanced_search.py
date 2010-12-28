@@ -70,7 +70,7 @@ FIELD_MAPPING = {'opengever-dossier-businesscasedossier': [
                     'task_responsible',
                     'deadline_1',
                     'deadline_2',
-                    'tasktyp',
+                    'task_type',
                 ],
                 'opengever-document-document':[
                     'receipt_date_1',
@@ -255,7 +255,7 @@ class IAdvancedSearch(directives_form.Schema):
         required=False,
     )
     
-    tasktyp = schema.Choice(
+    task_type = schema.Choice(
         title=_('label_tasktype', default=''),
         description=_('help_tasktyp', default=''),
         source=getTaskTypeVocabulary, 
@@ -323,7 +323,7 @@ class AdvancedSearchForm(directives_form.Form):
             params = '/search?portal_type=%s' % (data.get('portal_type', ''))
             # if clause because it entered a searchableText=none without text
             if data.get('searchableText'):
-                params = '%s&SearchableText=%s' % (params, data.get('searchableText'))
+                params = '%s&SearchableText=%s' % (params, data.get('searchableText').encode('utf-8'))
             for field in FIELD_MAPPING.get(
                     data.get('portal_type').replace('.','-')):
                 if data.get(field, None):
@@ -342,13 +342,13 @@ class AdvancedSearchForm(directives_form.Form):
 
                     elif isinstance(data.get(field), list):
                         for value in data.get(field):
-                            params = '%s&%s:list=%s' % (params, field, value)
+                            params = '%s&%s:list=%s' % (params, field, value.encode('utf-8'))
                     elif field == 'trashed':
                         params = '%s&trashed:list:boolean=True&trashed:list:boolean=False' %(params)
                     elif isinstance(data.get(field), int):
                         params = '%s&sequence_number:int=%s' %(params, data.get(field))
                     else:
-                        params = '%s&%s=%s' %(params, field, urllib.quote(data.get(field)))
+                        params = '%s&%s=%s' %(params, field, urllib.quote(data.get(field).encode('utf-8')))
 
             params = params.replace('task_responsible', 'repsonsible')
 
