@@ -56,14 +56,14 @@ class IResponse(Interface):
     relatedItems = RelationList(
         title=_(u'label_related_items', default=u'Related Items'),
         default=[],
-        value_type=RelationChoice(title=u"Related",
-                                  source=DossierPathSourceBinder(
-                navigation_tree_query=
-                {'portal_type': 'opengever.document.document', },
-                portal_type="opengever.document.document", ),
-                                  ),
+        value_type=RelationChoice(
+            title=u"Related",
+            source=DossierPathSourceBinder(
+                portal_type=("opengever.document.document", "ftw.mail.mail"),
+            ),
+        ),
         required=False,
-        )
+    )
 
 
 def voc2dict(vocab, current=None):
