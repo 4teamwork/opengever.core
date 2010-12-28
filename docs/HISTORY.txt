@@ -5,6 +5,9 @@ Changelog
 2.0b4
 -----
 
+* Fixed ContactInformation.describe method to not fail on missing userid
+  [lgraf]
+
 * Translate label of inboxes.
   [jbaumann]
 

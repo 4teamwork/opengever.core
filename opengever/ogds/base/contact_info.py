@@ -292,8 +292,10 @@ class ContactInformation(grok.GlobalUtility):
                 name = contact.lastname
             elif contact.firstname:
                 name = contact.firstname
-            else:
+            elif contact.has_key('userid'):
                 name = contact.userid
+            else:
+                name = contact.id
 
             if with_email2 and contact.email2:
                 name = '%s (%s)' % (name, contact.email2)
