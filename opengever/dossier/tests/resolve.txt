@@ -117,26 +117,22 @@ check default value of date field
 
 When dossier_end_date is empty, it should set the latest document_date as default
     >>> browser.open('http://nohost/plone/dossier-1/transition-archive')
-    >>> browser.getControl(name='form.widgets.dossier_enddate-year').value
-    '2012'
-    >>> browser.getControl(name='form.widgets.dossier_enddate-day').value
-    '12'
-    >>> browser.getControl(name='form.widgets.dossier_enddate-month').value
-    ['12']
+    >>> browser.getControl(name='form.widgets.dossier_enddate').value
+    'December 12, 2012'
 
 When a dossier end is set and no document_date is later, it should set the dossier_date as default
     >>> IDossier(dossier).end = datetime(2015,1,1)
     >>> dossier.reindexObject()
     >>> browser.open('http://nohost/plone/dossier-1/transition-archive')
-    >>> browser.getControl(name='form.widgets.dossier_enddate-year').value
-    '2015'
+    >>> browser.getControl(name='form.widgets.dossier_enddate').value
+    'January 1, 2015'
 
 else it should set the latest document_date as default
     >>> IDossier(dossier).end = datetime(2010, 01,01)
     >>> dossier.reindexObject()
     >>> browser.open('http://nohost/plone/dossier-1/transition-archive')
-    >>> browser.getControl(name='form.widgets.dossier_enddate-year').value
-    '2012'
+    >>> browser.getControl(name='form.widgets.dossier_enddate').value
+    'December 12, 2012'
 
 filing prefix it should propose the latest document date
     >>> browser.getControl('filing Year').value
@@ -156,7 +152,7 @@ check validators
     >>> subdossier.reindexObject()
     >>> browser.open('http://nohost/plone/dossier-1/transition-archive')
     >>> browser.getControl('filing prefix').value = ['government']
-    >>> browser.getControl(name='form.widgets.dossier_enddate-year').value = '2010'
+    >>> browser.getControl(name='form.widgets.dossier_enddate').value = 'December 12, 2010'
     >>> browser.getControl('Archive').click()
     >>> browser.url
     'http://nohost/plone/dossier-1/transition-archive'
@@ -166,7 +162,7 @@ check the giving of filing numbers
 ----------------------------------
 send form with correct data
     >>> browser.getControl('filing prefix').value = ['government']
-    >>> browser.getControl(name='form.widgets.dossier_enddate-year').value = '2016'
+    >>> browser.getControl(name='form.widgets.dossier_enddate').value = 'December 12, 2016'
     >>> browser.getControl(name='form.widgets.filing_action:list').value = ['resolve and set filing no']
     
     >>> browser.getControl('Archive').click()
