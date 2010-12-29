@@ -63,6 +63,7 @@ setup(name='opengever.document',
         'collective.elephantvocabulary',
         'plone.formwidget.contenttree',
         'plone.app.lockingbehavior',
+        'ftw.datepicker',
         ],
 
         tests_require=tests_require,

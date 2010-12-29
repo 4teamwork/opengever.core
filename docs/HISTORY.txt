@@ -4,7 +4,8 @@ Changelog
 
 2.0b7
 -----
-
+* Added missing dependency to ftw.datepicker
+  [phgross]
 
 2.0b6
 -----
