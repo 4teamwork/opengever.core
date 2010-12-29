@@ -74,14 +74,6 @@ class IDocumentType(Interface):
     )
 
 
-class ISendDocumentConf(Interface):
-    max_size = schema.Int(
-        title=u'max_size',
-        description=u'Maximal Size (MB) of the Attachment',
-        default=5,
-    )
-
-
 class ICheckinCheckoutManager(Interface):
     """Interface for the checkin / checkout manager.
     """

@@ -1,4 +1,3 @@
 <registry>
   <records interface="opengever.document.interfaces.IDocumentType" />
-  <records interface="opengever.document.interfaces.ISendDocumentConf" />
 </registry>
