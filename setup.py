@@ -64,6 +64,7 @@ setup(name='opengever.document',
         'plone.formwidget.contenttree',
         'plone.app.lockingbehavior',
         'ftw.datepicker',
+        'opengever.dossier',
         ],
 
         tests_require=tests_require,
