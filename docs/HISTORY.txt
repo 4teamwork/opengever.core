@@ -5,6 +5,8 @@ Changelog
 2.0b4
 -----
 
+* updated the viewname als in the test
+  [phgross]
 
 2.0b3
 -----

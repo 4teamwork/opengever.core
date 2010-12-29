@@ -61,7 +61,7 @@ create a contact:
     >>> browser.getControl('Description').value = 'Lorem ipsum, bla bla'
     >>> browser.getControl('Save').click()
     >>> browser.url
-    'http://nohost/plone/opengever.contact.contactfolder/opengever.contact.contact/view'
+    'http://nohost/plone/opengever.contact.contactfolder/opengever.contact.contact/contact_view'
     
 
 test searchabelText indexing
