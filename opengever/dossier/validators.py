@@ -4,8 +4,8 @@ from zope.component import queryUtility
 from plone.registry.interfaces import IRegistry
 from z3c.form import validator
 
-from opengever.document import _
-from opengever.document.interfaces import ISendDocumentConf
+from opengever.dossier import _
+from opengever.dossier.interfaces import ISendDocumentConf
 
 EMAIL_REGEX = re.compile(
     r"^(\w&.%#$&'\*+-/=?^_`{}|~]+!)*[\w&.%#$&'\*+-/=?^_`{}|~]+@(([0-9a-z]([0-9a-z-]*[0-9a-z])?\.)+[a-z]{2,6}|([0-9]{1,3}\.){3}[0-9]{1,3})$",

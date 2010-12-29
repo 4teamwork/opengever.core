@@ -5,6 +5,12 @@ Changelog
 2.0b6
 -----
 
+* remove all the dependencies to opengever.document
+  [phgross]
+
+* fix the resolve browser test
+  [phgross]
+
 * Issue #722 Release 2b06: Dossier kann nicht abgeschlossen werden, obwohl alle Aufgaben abgeschlossen sind
 https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/722
   [phgross]

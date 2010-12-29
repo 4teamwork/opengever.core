@@ -78,3 +78,11 @@ class IParticipationCreated(IObjectEvent):
 class IParticipationRemoved(IObjectEvent):
     """Interface for participation removed event.
     """
+
+
+class ISendDocumentConf(Interface):
+    max_size = schema.Int(
+        title=u'max_size',
+        description=u'Maximal Size (MB) of the Attachment',
+        default=5,
+    )
