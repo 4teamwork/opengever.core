@@ -65,6 +65,7 @@ class resolve(grok.CodeView):
         closed: - resolved
                 - cancelled
                 - rejected
+                - tested and closed
 
         """
 
@@ -73,7 +74,7 @@ class resolve(grok.CodeView):
             path=dict(query='/'.join(self.context.getPhysicalPath()),
             ),
             review_state = ('task-state-resolved',
-                'task-state-cancelled', 'task-state-rejected'),
+                'task-state-cancelled', 'task-state-rejected', 'task-state-tested-and-closed'),
         )
 
         tasks = self.context.portal_catalog(
