@@ -1,9 +1,6 @@
-import re
-import urllib
-
 from zope.annotation.interfaces import IAnnotations
 from zope.interface import Interface
-from zope.component import getUtility, getMultiAdapter
+from zope.component import getUtility
 from zope.lifecycleevent import ObjectAddedEvent, ObjectModifiedEvent
 from zope.event import notify
 
@@ -16,7 +13,6 @@ from DateTime import DateTime
 
 from opengever.dossier import _
 from opengever.base.interfaces import ISequenceNumber
-from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.base.interfaces import IRedirector
 
 from ftw.table import helper
@@ -90,14 +86,15 @@ class TemplateDocumentFormView(grok.View):
                 notify(event)
                 # check if the direct-edit-mode is selected
                 if self.edit:
-                    # redirect to the parent Dossier of the new document
-                    # and set the redirectTo parameter, which start the
-                    # zem-file download. See startredirect.js
 
-                    manager = getMultiAdapter((newdoc, self.request),
-                                              ICheckinCheckoutManager)
-                    manager.checkout()
+                    # checkout the document
+                    manager = self.context.restrictedTraverse(
+                        'checkout_documents')
+                    manager.checkout(newdoc)
 
+                    # # redirect to the parent Dossier of the new document
+                    # # and set the redirectTo parameter, which start the
+                    # # zem-file download. See startredirect.js
                     redirector = IRedirector(self.request)
                     redirector.redirect(
                         '%s/external_edit' % newdoc.absolute_url(),
