@@ -21,10 +21,10 @@ Register a redirect:
 Getting the redirect:
 
     >>> redirector.get_redirects(remove=False)
-    [{'url': 'http://www.google.ch', 'target': 'named-window'}]
+    [{'url': 'http://www.google.ch', 'target': 'named-window', 'timeout': 0}]
 
     >>> redirector.get_redirects(remove=True)
-    [{'url': 'http://www.google.ch', 'target': 'named-window'}]
+    [{'url': 'http://www.google.ch', 'target': 'named-window', 'timeout': 0}]
 
     >>> redirector.get_redirects()
     []
@@ -44,8 +44,8 @@ The redirection done with javascript:
     >>> viewlet = viewlets[0].factory(self.portal, request, {}, {})
     >>> print viewlet.render().strip()
     <script type="text/javascript">
-    jq(function($) {
-        window.open('http://www.google.ch', 'named-window');
+    jq(function() {
+        window.setTimeout("window.open('http://www.google.ch', 'named-window');", 0);
     });
     </script>
 
