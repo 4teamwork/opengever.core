@@ -19,7 +19,25 @@ def linked(item, value):
         url_method = item.getURL
     elif hasattr(item, 'absolute_url'):
         url_method = item.absolute_url
-    link = u'<a href="%s" >%s</a>' % (url_method(),value)
+    img = '<img src="%s/%s"/>' % (item.portal_url(),
+                                  item.getIcon.encode('utf-8'))
+    link = '%s&nbsp;<a href="%s">%s</a>' % (
+        img, url_method(),
+        value and value.encode('utf-8') or '')
+    wrapper = '<span class="linkWrapper">%s</span>' % link
+    return wrapper
+
+
+def linked_no_icon(item, value):
+    url_method = lambda: '#'
+    #item = hasattr(item, 'aq_explicit') and item.aq_explicit or item
+    if hasattr(item, 'getURL'):
+        url_method = item.getURL
+    elif hasattr(item, 'absolute_url'):
+        url_method = item.absolute_url
+    link = u'<a href="%s" >%s</a>' % (
+        url_method(),
+        value and value or '')
     wrapper = u'<span class="linkWrapper">%s</span>' % link
     return wrapper
 
@@ -41,7 +59,7 @@ class Contacts(OpengeverCatalogListingTab):
         {'column': 'firstname',
          'column_title': _(u'label_firstname',
                            default=u'Firstname'),
-         'transform': linked},
+         'transform': linked_no_icon},
 
         {'column': 'email',
          'column_title': _(u'label_email',
