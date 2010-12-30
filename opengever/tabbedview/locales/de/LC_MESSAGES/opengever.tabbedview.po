@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: YEAR-MO-DA HO:MI +ZONE\n"
+"POT-Creation-Date: 2010-12-30 09:59+0000\n"
 "PO-Revision-Date: 2010-12-23 13:53+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -201,6 +201,11 @@ msgstr "Zugewiesen von"
 msgid "journal"
 msgstr "Journal"
 
+#. Default: "Active"
+#: ./opengever/tabbedview/browser/users.py:82
+msgid "label_active"
+msgstr "Aktiv"
+
 #. Default: "Checked out by"
 #: ./opengever/tabbedview/browser/tabs.py:141
 msgid "label_checked_out"
@@ -252,6 +257,11 @@ msgstr "Startdatum"
 msgid "label_issuer"
 msgstr "Auftraggeber"
 
+#. Default: "No"
+#: ./opengever/tabbedview/helper.py:98
+msgid "label_no"
+msgstr "Nein"
+
 #. Default: "No contents"
 #: ./opengever/tabbedview/browser/tabs_templates/generic.pt:22
 msgid "label_no_contents"
@@ -294,29 +304,34 @@ msgid "label_title"
 msgstr "Titel"
 
 #. Default: "Email"
-#: ./opengever/tabbedview/browser/users.py:72
+#: ./opengever/tabbedview/browser/users.py:73
 msgid "label_userstab_email"
 msgstr "Email"
 
 #. Default: "Firstname"
-#: ./opengever/tabbedview/browser/users.py:62
+#: ./opengever/tabbedview/browser/users.py:63
 msgid "label_userstab_firstname"
 msgstr "Vorname"
 
 #. Default: "Lastname"
-#: ./opengever/tabbedview/browser/users.py:57
+#: ./opengever/tabbedview/browser/users.py:58
 msgid "label_userstab_lastname"
 msgstr "Nachname"
 
 #. Default: "Office Phone"
-#: ./opengever/tabbedview/browser/users.py:77
+#: ./opengever/tabbedview/browser/users.py:78
 msgid "label_userstab_phone_office"
 msgstr "Telefon Geschäft"
 
 #. Default: "Userid"
-#: ./opengever/tabbedview/browser/users.py:67
+#: ./opengever/tabbedview/browser/users.py:68
 msgid "label_userstab_userid"
 msgstr "Benutzerid"
+
+#. Default: "Yes"
+#: ./opengever/tabbedview/helper.py:97
+msgid "label_yes"
+msgstr "Ja"
 
 #. Default: "Änderungsdatum"
 msgid "modified"

@@ -5,6 +5,9 @@ Changelog
 2.0b6
 -----
 
+* Added additional column `Active` to OGDS tab
+  [lgraf]
+
 
 2.0b5
 -----

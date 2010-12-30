@@ -5,13 +5,14 @@ from ftw.table.interfaces import ITableSource, ITableSourceConfig
 from zope.interface import implements, Interface
 from ftw.table import helper
 from five import grok
-from opengever.ogds.base import _
+from opengever.tabbedview import _
 from sqlalchemy import or_
 from ftw.tabbedview.browser.listing import ListingView
 from opengever.tabbedview.browser.tabs import OpengeverTab
 from opengever.ogds.base.model.user import User
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.tabbedview.helper import email_helper
+from opengever.tabbedview.helper import boolean_helper
 from zope.component import getUtility
 
 
@@ -76,6 +77,11 @@ class UsersListing(grok.CodeView, OpengeverTab, ListingView):
         {'column': 'phone_office',
          'column_title': _(u'label_userstab_phone_office',
                            default=u'Office Phone')},
+
+        {'column': 'active',
+         'column_title': _(u'label_active',
+                           default=u'Active'),
+         'transform': boolean_helper},
 
         )
 

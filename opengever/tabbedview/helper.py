@@ -1,6 +1,7 @@
 from Products.CMFCore.interfaces._tools import IMemberData
 from Products.PluggableAuthService.interfaces.authservice import IPropertiedUser
 from opengever.ogds.base.interfaces import IContactInformation
+from opengever.tabbedview import _
 from plone.memoize import ram
 from zope.component import getUtility
 
@@ -87,3 +88,11 @@ def email_helper(item, value):
         return '<a href="mailto:%s">%s</a>' % (value, value)
     else:
         return ''
+
+
+def boolean_helper(item, value):
+    """Helper for displaying a boolean field in human readable form.
+    """
+
+    return value and _(u'label_yes', default='Yes') or \
+                     _(u'label_no', default='No')
