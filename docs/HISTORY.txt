@@ -5,6 +5,9 @@ Changelog
 2.0b4
 -----
 
+* Updated translations
+  [lgraf]
+
 * updated the viewname als in the test
   [phgross]
 

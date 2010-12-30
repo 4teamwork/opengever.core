@@ -104,7 +104,7 @@ class IContact(form.Schema):
         )
 
     email2 = schema.TextLine(
-        title = _(u'lable_email2', default=u'Email 2'),
+        title = _(u'label_email2', default=u'Email 2'),
         description = _('help_email2', default=u''),
         required = False,
         )
