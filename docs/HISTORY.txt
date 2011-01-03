@@ -8,6 +8,9 @@ Changelog
 * Added `academic_title` field, moved `function` field
   [lgraf]
 
+* Tabbed view: show amount of matches.
+  [jbaumann]
+
 * Added helper to display contact icon, updated translations
   Issue #570 Kontakte: Feldbezeichnungen definieren, obligatorische Felder angeben
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/570

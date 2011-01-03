@@ -1,11 +1,9 @@
 from five import grok
-from opengever.tabbedview.browser.tabs import OpengeverCatalogListingTab
-from opengever.tabbedview.browser.tabs import OpengeverTab
-from opengever.tabbedview.helper import email_helper
-from ftw.table import helper
-from ftw.table.catalog_source import default_custom_sort
 from opengever.contact import _
+from opengever.tabbedview.browser.tabs import OpengeverCatalogListingTab
+from opengever.tabbedview.helper import email_helper
 from plone.dexterity.interfaces import IDexterityContainer
+from zope.app.pagetemplate import ViewPageTemplateFile
 
 
 def authenticated_member(context):
@@ -77,7 +75,8 @@ class Contacts(OpengeverCatalogListingTab):
     show_selects= False
     enabled_actions = []
     major_actions = []
-    
+    selection = ViewPageTemplateFile("no_selection_amount.pt")
+
     def update_config(self):
         OpengeverCatalogListingTab.update_config(self)
 

@@ -1,8 +1,5 @@
-msgid ""
-msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2011-01-03 13:02+0000\n"
-"PO-Revision-Date: 2010-10-06 15:29+0200\n"
+"POT-Creation-Date: 2011-01-03 16:48+0000\n"
+"PO-Revision-Date: 2011-01-03 17:49+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -156,8 +153,8 @@ msgid "label_description"
 msgstr "Beschreibung"
 
 #. Default: "email"
-#: ./opengever/contact/contact.py:108
-#: ./opengever/contact/contactfolder.py:65
+#: ./opengever/contact/contact.py:101
+#: ./opengever/contact/contactfolder.py:63
 msgid "label_email"
 msgstr "E-Mail 1"
 
@@ -167,14 +164,14 @@ msgid "label_email2"
 msgstr "E-Mail 2"
 
 #. Default: "Firstname"
-#: ./opengever/contact/contact.py:84
-#: ./opengever/contact/contactfolder.py:60
+#: ./opengever/contact/contact.py:77
+#: ./opengever/contact/contactfolder.py:58
 msgid "label_firstname"
 msgstr "Vorname"
 
 #. Default: "Lastname"
-#: ./opengever/contact/contact.py:77
-#: ./opengever/contact/contactfolder.py:55
+#: ./opengever/contact/contact.py:70
+#: ./opengever/contact/contactfolder.py:53
 msgid "label_lastname"
 msgstr "Nachname"
 
@@ -194,8 +191,8 @@ msgid "label_phone_mobile"
 msgstr "Telefon Mobile"
 
 #. Default: "Phone office"
-#: ./opengever/contact/contact.py:126
-#: ./opengever/contact/contactfolder.py:70
+#: ./opengever/contact/contact.py:119
+#: ./opengever/contact/contactfolder.py:68
 msgid "label_phone_office"
 msgstr "Telefon Arbeit"
 
@@ -228,6 +225,11 @@ msgstr "Funktion"
 #: ./opengever/contact/contact.py:20
 msgid "personal"
 msgstr "Persönliche Angaben"
+
+#. Default: "${amount} matches."
+#: ./opengever/contact/no_selection_amount.pt:3
+msgid "tab_matches"
+msgstr "${amount} Treffer."
 
 #. Default: "Telefon"
 #: ./opengever/contact/contact.py:44
