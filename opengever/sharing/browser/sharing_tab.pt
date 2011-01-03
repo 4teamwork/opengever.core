@@ -46,6 +46,7 @@
             <tal:block define="entry_role python:entry['roles'][role['id']]">
               <img tal:condition="python:entry_role == 'global'" tal:replace="structure context/site_icon.gif" />
               <img tal:condition="python:entry_role == 'acquired'" tal:replace="structure context/confirm_icon.gif" />
+              <img tal:condition="python:entry_role == True" tal:replace="structure context/confirm_icon.gif" />
             </tal:block>
           </td>
         </tr>

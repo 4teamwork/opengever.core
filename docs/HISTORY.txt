@@ -5,6 +5,9 @@ Changelog
 2.0a3
 -----
 
+* Info tab: also show local roles set on the direct context.
+  [jbaumann]
+
 
 2.0a2
 -----
