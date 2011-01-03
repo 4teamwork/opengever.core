@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2010-12-30 09:59+0000\n"
-"PO-Revision-Date: 2010-12-23 13:53+0100\n"
+"POT-Creation-Date: 2011-01-03 16:45+0000\n"
+"PO-Revision-Date: 2011-01-03 17:46+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
 "MIME-Version: 1.0\n"
@@ -67,7 +67,7 @@ msgid "column_client"
 msgstr "Mandant"
 
 #. Default: "Client ID"
-#: ./opengever/tabbedview/browser/clientslisting.py:51
+#: ./opengever/tabbedview/browser/clientslisting.py:53
 msgid "column_client_id"
 msgstr "Mandant ID"
 
@@ -82,27 +82,27 @@ msgid "column_deadline"
 msgstr "Zu erledigen bis"
 
 #. Default: "Enabled"
-#: ./opengever/tabbedview/browser/clientslisting.py:57
+#: ./opengever/tabbedview/browser/clientslisting.py:59
 msgid "column_enabled"
 msgstr "Aktiviert"
 
 #. Default: "Users group"
-#: ./opengever/tabbedview/browser/clientslisting.py:71
+#: ./opengever/tabbedview/browser/clientslisting.py:73
 msgid "column_group"
 msgstr "Benutzer-Gruppe"
 
 #. Default: "Inbox user group"
-#: ./opengever/tabbedview/browser/clientslisting.py:74
+#: ./opengever/tabbedview/browser/clientslisting.py:76
 msgid "column_inbox_group"
 msgstr "Eingangskorb-Gruppe"
 
 #. Default: "Internal site URL"
-#: ./opengever/tabbedview/browser/clientslisting.py:63
+#: ./opengever/tabbedview/browser/clientslisting.py:65
 msgid "column_interal_site_url"
 msgstr "Interne URL"
 
 #. Default: "IP address"
-#: ./opengever/tabbedview/browser/clientslisting.py:60
+#: ./opengever/tabbedview/browser/clientslisting.py:62
 msgid "column_ip_address"
 msgstr "IP-Adresse"
 
@@ -112,7 +112,7 @@ msgid "column_issued_at"
 msgstr "Erstellt am"
 
 #. Default: "Public URL"
-#: ./opengever/tabbedview/browser/clientslisting.py:67
+#: ./opengever/tabbedview/browser/clientslisting.py:69
 msgid "column_public_url"
 msgstr "Öffentliche URL"
 
@@ -132,7 +132,7 @@ msgid "column_task_type"
 msgstr "Aufgabentyp"
 
 #. Default: "Title"
-#: ./opengever/tabbedview/browser/clientslisting.py:54
+#: ./opengever/tabbedview/browser/clientslisting.py:56
 #: ./opengever/tabbedview/browser/tasklisting.py:58
 msgid "column_title"
 msgstr "Titel"
@@ -202,7 +202,7 @@ msgid "journal"
 msgstr "Journal"
 
 #. Default: "Active"
-#: ./opengever/tabbedview/browser/users.py:82
+#: ./opengever/tabbedview/browser/users.py:84
 msgid "label_active"
 msgstr "Aktiv"
 
@@ -304,27 +304,27 @@ msgid "label_title"
 msgstr "Titel"
 
 #. Default: "Email"
-#: ./opengever/tabbedview/browser/users.py:73
+#: ./opengever/tabbedview/browser/users.py:75
 msgid "label_userstab_email"
 msgstr "Email"
 
 #. Default: "Firstname"
-#: ./opengever/tabbedview/browser/users.py:63
+#: ./opengever/tabbedview/browser/users.py:65
 msgid "label_userstab_firstname"
 msgstr "Vorname"
 
 #. Default: "Lastname"
-#: ./opengever/tabbedview/browser/users.py:58
+#: ./opengever/tabbedview/browser/users.py:60
 msgid "label_userstab_lastname"
 msgstr "Nachname"
 
 #. Default: "Office Phone"
-#: ./opengever/tabbedview/browser/users.py:78
+#: ./opengever/tabbedview/browser/users.py:80
 msgid "label_userstab_phone_office"
 msgstr "Telefon Geschäft"
 
 #. Default: "Userid"
-#: ./opengever/tabbedview/browser/users.py:68
+#: ./opengever/tabbedview/browser/users.py:70
 msgid "label_userstab_userid"
 msgstr "Benutzerid"
 
@@ -407,6 +407,11 @@ msgstr "Beginn"
 #. Default: "Subdossiers"
 msgid "subdossiers"
 msgstr "Subdossiers"
+
+#. Default: "${amount} matches."
+#: ./opengever/tabbedview/browser/no_selection_amount.pt:3
+msgid "tab_matches"
+msgstr "${amount} Treffer."
 
 #. Default: "Aufgaben"
 msgid "tasks"

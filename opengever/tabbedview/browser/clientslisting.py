@@ -11,6 +11,7 @@ from opengever.tabbedview.browser.tabs import OpengeverTab
 from sqlalchemy import or_
 from sqlalchemy.orm.query import Query
 from sqlalchemy.sql.expression import asc, desc
+from zope.app.pagetemplate import ViewPageTemplateFile
 from zope.interface import implements, Interface
 
 def linked_url_helper(item, value):
@@ -44,6 +45,7 @@ class ClientsListing(grok.CodeView, OpengeverTab, ListingView):
     show_selects = False
     enabled_actions = []
     major_actions = []
+    selection = ViewPageTemplateFile("no_selection_amount.pt")
 
     columns = (
 

@@ -1,11 +1,12 @@
 from Products.CMFPlone.utils import getToolByName
 from five import grok
-from ftw.table import helper
 from ftw.tabbedview.browser.tabbed import TabbedView
+from ftw.table import helper
 from opengever.globalindex.interfaces import ITaskQuery
 from opengever.ogds.base.utils import get_client_id
 from opengever.tabbedview.browser.tabs import Documents, Dossiers, Tasks
 from opengever.tabbedview.browser.tasklisting import GlobalTaskListingTab
+from zope.app.pagetemplate import ViewPageTemplateFile
 from zope.component import getUtility
 from zope.interface import Interface
 
@@ -102,6 +103,7 @@ class MyDocuments(Documents):
     enabled_actions = []
     major_actions = []
     columns = remove_control_columns(Documents.columns)
+    selection = ViewPageTemplateFile("no_selection_amount.pt")
 
     @property
     def view_name(self):

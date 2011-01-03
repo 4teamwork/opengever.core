@@ -1,19 +1,20 @@
-from sqlalchemy.sql.expression import asc, desc
-from sqlalchemy.orm.query import Query
+from five import grok
+from ftw.tabbedview.browser.listing import ListingView
+from ftw.table import helper
 from ftw.table.basesource import BaseTableSource
 from ftw.table.interfaces import ITableSource, ITableSourceConfig
-from zope.interface import implements, Interface
-from ftw.table import helper
-from five import grok
-from opengever.tabbedview import _
-from sqlalchemy import or_
-from ftw.tabbedview.browser.listing import ListingView
-from opengever.tabbedview.browser.tabs import OpengeverTab
-from opengever.ogds.base.model.user import User
 from opengever.ogds.base.interfaces import IContactInformation
-from opengever.tabbedview.helper import email_helper
+from opengever.ogds.base.model.user import User
+from opengever.tabbedview import _
+from opengever.tabbedview.browser.tabs import OpengeverTab
 from opengever.tabbedview.helper import boolean_helper
+from opengever.tabbedview.helper import email_helper
+from sqlalchemy import or_
+from sqlalchemy.orm.query import Query
+from sqlalchemy.sql.expression import asc, desc
+from zope.app.pagetemplate import ViewPageTemplateFile
 from zope.component import getUtility
+from zope.interface import implements, Interface
 
 
 
@@ -52,6 +53,7 @@ class UsersListing(grok.CodeView, OpengeverTab, ListingView):
     show_selects = False
     enabled_actions = []
     major_actions = []
+    selection = ViewPageTemplateFile("no_selection_amount.pt")
 
     columns = (
         {'column': 'lastname',
