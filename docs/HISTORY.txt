@@ -5,6 +5,9 @@ Changelog
 2.0b6
 -----
 
+* Helpers: Unicode fixes.
+  [jbaumann]
+
 * Tabbed view: show amount of matches.
   [jbaumann]
 
