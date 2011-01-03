@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2010-12-03 09:14+0000\n"
-"PO-Revision-Date: 2010-12-03 10:14+0100\n"
+"POT-Creation-Date: 2011-01-03 16:50+0000\n"
+"PO-Revision-Date: 2011-01-03 17:50+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
 "MIME-Version: 1.0\n"
@@ -18,12 +18,12 @@ msgid "heading_journal"
 msgstr "Journal"
 
 #. Default: "Actor"
-#: ./opengever/journal/tab.py:56
+#: ./opengever/journal/tab.py:58
 msgid "label_actor"
 msgstr "Akteur"
 
 #. Default: "Comments"
-#: ./opengever/journal/tab.py:64
+#: ./opengever/journal/tab.py:66
 msgid "label_comments"
 msgstr "Kommentare"
 
@@ -118,12 +118,12 @@ msgid "label_task_modified"
 msgstr "Aufgabe modifiziert"
 
 #. Default: "Time"
-#: ./opengever/journal/tab.py:60
+#: ./opengever/journal/tab.py:62
 msgid "label_time"
 msgstr "Zeitpunkt"
 
 #. Default: "Title"
-#: ./opengever/journal/tab.py:52
+#: ./opengever/journal/tab.py:54
 msgid "label_title"
 msgstr "Titel"
 
@@ -136,5 +136,10 @@ msgstr "Objekt gelöscht: ${title}"
 #: ./opengever/journal/browser_templates/journalhistory.pt:17
 msgid "summary_journal"
 msgstr "Journal"
+
+#. Default: "${amount} matches."
+#: ./opengever/journal/no_selection_amount.pt:3
+msgid "tab_matches"
+msgstr "${amount} Treffer."
 
 

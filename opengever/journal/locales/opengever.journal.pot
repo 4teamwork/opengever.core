@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2010-12-03 09:14+0000\n"
+"POT-Creation-Date: 2011-01-03 16:50+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -23,12 +23,12 @@ msgid "heading_journal"
 msgstr ""
 
 #. Default: "Actor"
-#: ./opengever/journal/tab.py:56
+#: ./opengever/journal/tab.py:58
 msgid "label_actor"
 msgstr ""
 
 #. Default: "Comments"
-#: ./opengever/journal/tab.py:64
+#: ./opengever/journal/tab.py:66
 msgid "label_comments"
 msgstr ""
 
@@ -123,12 +123,12 @@ msgid "label_task_modified"
 msgstr ""
 
 #. Default: "Time"
-#: ./opengever/journal/tab.py:60
+#: ./opengever/journal/tab.py:62
 msgid "label_time"
 msgstr ""
 
 #. Default: "Title"
-#: ./opengever/journal/tab.py:52
+#: ./opengever/journal/tab.py:54
 msgid "label_title"
 msgstr ""
 
@@ -140,5 +140,10 @@ msgstr ""
 #. Default: "Journal"
 #: ./opengever/journal/browser_templates/journalhistory.pt:17
 msgid "summary_journal"
+msgstr ""
+
+#. Default: "${amount} matches."
+#: ./opengever/journal/no_selection_amount.pt:3
+msgid "tab_matches"
 msgstr ""
 

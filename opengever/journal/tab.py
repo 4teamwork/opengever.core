@@ -12,8 +12,9 @@ from opengever.journal import _
 from opengever.tabbedview.browser.tabs import OpengeverTab
 from opengever.tabbedview.helper import linked_ogds_author
 from zope.annotation.interfaces import IAnnotations
+from zope.app.component.hooks import getSite
+from zope.app.pagetemplate import ViewPageTemplateFile
 from zope.interface import implements, Interface
-from zope.app.component.hooks import getSite 
 
 
 def title_helper(item, value):
@@ -46,6 +47,7 @@ class JournalTab(grok.CodeView, OpengeverTab, ListingView):
     enabled_actions = []
     minor_buttons = []
     major_buttons = []
+    selection = ViewPageTemplateFile("no_selection_amount.pt")
 
     columns = (
         {'column': 'title',

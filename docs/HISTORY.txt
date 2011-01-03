@@ -5,6 +5,9 @@ Changelog
 2.0a4
 -----
 
+* Tabbed view: show amount of matches.
+  [jbaumann]
+
 
 2.0a3
 -----
