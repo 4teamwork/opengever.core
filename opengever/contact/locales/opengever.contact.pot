@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2010-12-30 09:23+0000\n"
+"POT-Creation-Date: 2011-01-03 13:02+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: opengever.contact\n"
 
-#: ./opengever/contact/contact.py:196
+#: ./opengever/contact/contact.py:203
 #: ./opengever/contact/profiles/default/types/opengever.contact.contact.xml
 msgid "Contact"
 msgstr ""
@@ -31,192 +31,201 @@ msgid "ContactFolder"
 msgstr ""
 
 #. Default: "Address"
-#: ./opengever/contact/contact.py:53
+#: ./opengever/contact/contact.py:54
 msgid "address"
 msgstr ""
 
-#: ./opengever/contact/contact.py:155
+#: ./opengever/contact/contact.py:71
+msgid "help_academic_title"
+msgstr ""
+
+#: ./opengever/contact/contact.py:162
 msgid "help_address1"
 msgstr ""
 
-#: ./opengever/contact/contact.py:161
+#: ./opengever/contact/contact.py:168
 msgid "help_address2"
 msgstr ""
 
-#: ./opengever/contact/contact.py:173
+#: ./opengever/contact/contact.py:180
 msgid "help_city"
 msgstr ""
 
-#: ./opengever/contact/contact.py:84
+#: ./opengever/contact/contact.py:91
 msgid "help_company"
 msgstr ""
 
-#: ./opengever/contact/contact.py:179
+#: ./opengever/contact/contact.py:186
 msgid "help_country"
 msgstr ""
 
-#: ./opengever/contact/contact.py:96
+#: ./opengever/contact/contact.py:97
 msgid "help_department"
 msgstr ""
 
-#: ./opengever/contact/contact.py:149
+#: ./opengever/contact/contact.py:156
 msgid "help_description"
 msgstr ""
 
-#: ./opengever/contact/contact.py:102
+#: ./opengever/contact/contact.py:109
 msgid "help_email"
 msgstr ""
 
-#: ./opengever/contact/contact.py:108
+#: ./opengever/contact/contact.py:115
 msgid "help_email2"
 msgstr ""
 
-#: ./opengever/contact/contact.py:78
+#: ./opengever/contact/contact.py:85
 msgid "help_firstname"
 msgstr ""
 
-#: ./opengever/contact/contact.py:90
+#: ./opengever/contact/contact.py:103
 msgid "help_function"
 msgstr ""
 
-#: ./opengever/contact/contact.py:71
+#: ./opengever/contact/contact.py:78
 msgid "help_lastname"
 msgstr ""
 
-#: ./opengever/contact/contact.py:126
+#: ./opengever/contact/contact.py:133
 msgid "help_phone_fax"
 msgstr ""
 
-#: ./opengever/contact/contact.py:138
+#: ./opengever/contact/contact.py:145
 msgid "help_phone_home"
 msgstr ""
 
-#: ./opengever/contact/contact.py:132
+#: ./opengever/contact/contact.py:139
 msgid "help_phone_mobile"
 msgstr ""
 
-#: ./opengever/contact/contact.py:120
+#: ./opengever/contact/contact.py:127
 msgid "help_phone_office"
 msgstr ""
 
-#: ./opengever/contact/contact.py:64
+#: ./opengever/contact/contact.py:65
 msgid "help_salutation"
 msgstr ""
 
-#: ./opengever/contact/contact.py:114
+#: ./opengever/contact/contact.py:121
 msgid "help_url"
 msgstr ""
 
-#: ./opengever/contact/contact.py:167
+#: ./opengever/contact/contact.py:174
 msgid "help_zip"
 msgstr ""
 
 #. Default: "Internet"
-#: ./opengever/contact/contact.py:34
+#: ./opengever/contact/contact.py:35
 msgid "internet"
 msgstr ""
 
+#. Default: "Academic title"
+#: ./opengever/contact/contact.py:70
+msgid "label_academic_title"
+msgstr ""
+
 #. Default: "Address 1"
-#: ./opengever/contact/contact.py:154
+#: ./opengever/contact/contact.py:161
 msgid "label_address1"
 msgstr ""
 
 #. Default: "Address 2"
-#: ./opengever/contact/contact.py:160
+#: ./opengever/contact/contact.py:167
 msgid "label_address2"
 msgstr ""
 
 #. Default: "City"
-#: ./opengever/contact/contact.py:172
+#: ./opengever/contact/contact.py:179
 msgid "label_city"
 msgstr ""
 
 #. Default: "Company"
-#: ./opengever/contact/contact.py:83
+#: ./opengever/contact/contact.py:90
 msgid "label_company"
 msgstr ""
 
 #. Default: "Country"
-#: ./opengever/contact/contact.py:178
+#: ./opengever/contact/contact.py:185
 msgid "label_country"
 msgstr ""
 
 #. Default: "Department"
-#: ./opengever/contact/contact.py:95
+#: ./opengever/contact/contact.py:96
 msgid "label_department"
 msgstr ""
 
 #. Default: "Description"
-#: ./opengever/contact/contact.py:148
+#: ./opengever/contact/contact.py:155
 msgid "label_description"
 msgstr ""
 
 #. Default: "email"
-#: ./opengever/contact/contact.py:101
-#: ./opengever/contact/contactfolder.py:47
+#: ./opengever/contact/contact.py:108
+#: ./opengever/contact/contactfolder.py:65
 msgid "label_email"
 msgstr ""
 
 #. Default: "Email 2"
-#: ./opengever/contact/contact.py:107
+#: ./opengever/contact/contact.py:114
 msgid "label_email2"
 msgstr ""
 
 #. Default: "Firstname"
-#: ./opengever/contact/contact.py:77
-#: ./opengever/contact/contactfolder.py:42
+#: ./opengever/contact/contact.py:84
+#: ./opengever/contact/contactfolder.py:60
 msgid "label_firstname"
 msgstr ""
 
 #. Default: "Lastname"
-#: ./opengever/contact/contact.py:70
-#: ./opengever/contact/contactfolder.py:37
+#: ./opengever/contact/contact.py:77
+#: ./opengever/contact/contactfolder.py:55
 msgid "label_lastname"
 msgstr ""
 
 #. Default: "Fax"
-#: ./opengever/contact/contact.py:125
+#: ./opengever/contact/contact.py:132
 msgid "label_phone_fax"
 msgstr ""
 
 #. Default: "Phone home"
-#: ./opengever/contact/contact.py:137
+#: ./opengever/contact/contact.py:144
 msgid "label_phone_home"
 msgstr ""
 
 #. Default: "Mobile"
-#: ./opengever/contact/contact.py:131
+#: ./opengever/contact/contact.py:138
 msgid "label_phone_mobile"
 msgstr ""
 
 #. Default: "Phone office"
-#: ./opengever/contact/contact.py:119
-#: ./opengever/contact/contactfolder.py:52
+#: ./opengever/contact/contact.py:126
+#: ./opengever/contact/contactfolder.py:70
 msgid "label_phone_office"
 msgstr ""
 
 #. Default: "Picture"
-#: ./opengever/contact/contact.py:143
+#: ./opengever/contact/contact.py:150
 msgid "label_picture"
 msgstr ""
 
 #. Default: "Salutation"
-#: ./opengever/contact/contact.py:63
+#: ./opengever/contact/contact.py:64
 msgid "label_salutation"
 msgstr ""
 
 #. Default: "Url"
-#: ./opengever/contact/contact.py:113
+#: ./opengever/contact/contact.py:120
 msgid "label_url"
 msgstr ""
 
 #. Default: "ZIP"
-#: ./opengever/contact/contact.py:166
+#: ./opengever/contact/contact.py:173
 msgid "label_zip"
 msgstr ""
 
 #. Default: "Function"
-#: ./opengever/contact/contact.py:89
+#: ./opengever/contact/contact.py:102
 msgid "lable_function"
 msgstr ""
 
@@ -226,7 +235,7 @@ msgid "personal"
 msgstr ""
 
 #. Default: "Telefon"
-#: ./opengever/contact/contact.py:43
+#: ./opengever/contact/contact.py:44
 msgid "telefon"
 msgstr ""
 

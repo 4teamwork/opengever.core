@@ -20,13 +20,14 @@ class IContact(form.Schema):
         label = _(u'personal', default=u'Personal Stuff'),
         fields = [
             u'salutation',
+            u'academic_title',
             u'firstname',
             u'lastname',
             u'description',
             u'picture',
             u'company',
-            u'function',
             u'department',
+            u'function',
         ])
 
     form.fieldset(
@@ -65,6 +66,12 @@ class IContact(form.Schema):
         required = False,
         )
 
+    academic_title = schema.TextLine(
+        title = _(u'label_academic_title', default=u'Academic title'),
+        description = _(u'help_academic_title', default=u''),
+        required = False,
+        )
+
     dexteritytextindexer.searchable('lastname')
     lastname = schema.TextLine(
         title = _(u'label_lastname', default=u'Lastname'),
@@ -83,19 +90,19 @@ class IContact(form.Schema):
         title = _(u'label_company', default=u"Company"),
         description = _(u'help_company', default=u''),
         required = False,
-    )
-
-    function = schema.TextLine(
-        title = _(u'lable_function', default=u'Function'),
-        description = _(u'help_function', default=u''),
-        required = False,
-    )
+        )
 
     department = schema.TextLine(
         title = _(u'label_department', default=u'Department'),
         description = _(u'help_department', default=u''),
         required = False,
-    )
+        )
+
+    function = schema.TextLine(
+        title = _(u'lable_function', default=u'Function'),
+        description = _(u'help_function', default=u''),
+        required = False,
+        )
 
     email = schema.TextLine(
         title = _(u'label_email', default=u'email'),
