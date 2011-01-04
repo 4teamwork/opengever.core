@@ -33,7 +33,7 @@ class IMoveItemsSchema(Interface):
                       default="Live Search: search for users and contacts"),
         source= DestinationPathSourceBinder(),
         required=True,
-    )
+        )
 
     request_paths = schema.TextLine(title=u"request_paths")
 
@@ -56,15 +56,15 @@ class MoveItemsForm(form.Form):
         field_name = self.prefix + self.widgets.prefix + 'request_paths'
         value = self.request.get(field_name, False)
         if value:
-           value = value.split(';;')
-           return value
+            value = value.split(';;')
+            return value
         value = self.request.get('paths')
         if not value:
-           pass
+            pass
         return value
 
     @z3c.form.button.buttonAndHandler(_(u'button_submit',
-                                       default=u'Move'))
+                                        default=u'Move'))
     def handle_submit(self, action):
         data, errors = self.extractData()
         if len(errors) == 0:
@@ -81,20 +81,20 @@ class MoveItemsForm(form.Form):
 
 
 class MoveItemsFormView(layout.FormWrapper, grok.CodeView):
-   """ The View wich display the SendDocument-Form.
+    """ The View wich display the SendDocument-Form.
 
-   For sending documents with per mail.
+    For sending documents with per mail.
 
-   """
+    """
 
-   grok.context(IDexterityContainer)
-   grok.name('move_items')
-   grok.require('zope2.View')
-   form = MoveItemsForm
+    grok.context(IDexterityContainer)
+    grok.name('move_items')
+    grok.require('zope2.View')
+    form = MoveItemsForm
 
-   def __init__(self, context, request):
-       layout.FormWrapper.__init__(self, context, request)
-       grok.CodeView.__init__(self, context, request)
+    def __init__(self, context, request):
+        layout.FormWrapper.__init__(self, context, request)
+        grok.CodeView.__init__(self, context, request)
 
 
 class NotInContentTypes(Invalid):
@@ -106,14 +106,14 @@ class DestinationValidator(validator.SimpleFieldValidator):
     adapts(Interface, Interface, Interface, IField, Interface)
 
     def validate(self, value):
-            super(DestinationValidator, self).validate(value)
-            source = self.view.widgets['request_paths'].value
-            portal_catalog = getToolByName(self.context, 'portal_catalog')
-            sourceobj = portal_catalog(path={'query': source, 'depth': 0})
-            inContentTypes = False
-            for item in value.allowedContentTypes():
-                if sourceobj[0].portal_type in item.portal_type:
-                    inContentTypes = True
+        super(DestinationValidator, self).validate(value)
+        source = self.view.widgets['request_paths'].value
+        portal_catalog = getToolByName(self.context, 'portal_catalog')
+        sourceobj = portal_catalog(path={'query': source, 'depth': 0})
+        inContentTypes = False
+        for item in value.allowedContentTypes():
+            if sourceobj[0].portal_type in item.portal_type:
+                inContentTypes = True
             if inContentTypes == False:
                 raise NotInContentTypes(
                     _(u"error_NotInContentTypes",
