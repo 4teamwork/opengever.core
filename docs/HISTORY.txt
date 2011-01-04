@@ -5,13 +5,16 @@ Changelog
 2.0a4
 -----
 
+* Added seperate workflow for repository root which allows Authenticated role to view the root.
+  [jbaumann]
+
 
 2.0a3
 -----
 
 * enable locking behavior
   [jbaumann]
-  
+
 * fixed allowedContentTypes method, the restrictedossier should also ovserved by depth exceeded
   [pgross]
 
@@ -29,7 +32,7 @@ Changelog
 * Updated byline viewlet to Plone 4 (workflow_state).
   [01.10.2010, phabegger]
 
-* Workflow for repository folders/roots moved to opengever.repository. Removed 
+* Workflow for repository folders/roots moved to opengever.repository. Removed
   references to opengever.task workflow as it was moved to the resp. package, too.
   [01.10.2010, phabegger]
 
@@ -39,19 +42,19 @@ Changelog
 * Issue #373: Ordnungssystem: Nummerierung wird nicht mehr angezeigt
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/373/
   [11.01.2010, jbaumann]
-  
+
 
 1.0a1
 -----
 
 * updated metadata / changed target release to 1.0a1
   [05.01.2010, jbaumann]
-  
+
 * Issue #340: Aktenzeichen Dossiers und Subdossiers: Zaehler zaehlt nicht ueber 2
   Die Ordnungsposition braucht nun auch das IReferenceNumber behavior, wie auch
   das Dossier. Die Validierung und der Default-Wert funktioniert nun Typ-uebergreifend.
   [04.01.2010, jbaumann]
-  
+
 * Issue #178: Fehlende Metadaten auf Stufe "Ordnungsposition"
   Neue Felder Felder hinzugefuegt und Verhalten der durch Vererbung
   eingeschraenkten Felder verbessert (retention_period, custody_period)
