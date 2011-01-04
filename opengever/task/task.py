@@ -1,3 +1,4 @@
+from collective import dexteritytextindexer
 from Acquisition import aq_parent, aq_inner
 from Products.CMFCore.interfaces import IActionSucceededEvent
 from Products.CMFCore.utils import getToolByName
@@ -53,7 +54,7 @@ class ITask(form.Schema):
             ],
         )
 
-
+    dexteritytextindexer.searchable('title')
     title = schema.TextLine(
         title=_(u"label_title", default=u"Title"),
         description=_('help_title', default=u""),
@@ -107,6 +108,7 @@ class ITask(form.Schema):
         required = False,
         )
 
+    dexteritytextindexer.searchable('text')
     form.primary('text')
     text = schema.Text(
         title=_(u"label_text", default=u"Text"),
@@ -367,6 +369,32 @@ def sequence_number(obj):
     """ Indexer for the sequence_number """
     return obj._sequence_number
 grok.global_adapter(sequence_number, name='sequence_number')
+
+
+# SearchableText
+class SearchableTextExtender(grok.Adapter):
+    grok.context(ITask)
+    grok.name('IDossier')
+    grok.implements(dexteritytextindexer.IDynamicTextIndexExtender)
+
+    def __init__(self, context):
+        self.context = context
+
+    def __call__(self):
+        searchable = []
+        # append some other attributes to the searchableText index
+
+        # sequence_number
+        seqNumb = getUtility(ISequenceNumber)
+        searchable.append(str(seqNumb.get_number(self.context)))
+
+        #responsible
+        info = getUtility(IContactInformation)
+        dossier = ITask(self.context)
+        searchable.append(info.describe(dossier.responsible).encode(
+                'utf-8'))
+
+        return ' '.join(searchable)
 
 
 @indexer(ITask)

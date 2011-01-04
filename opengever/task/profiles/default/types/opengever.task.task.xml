@@ -27,6 +27,7 @@
 
     <!-- enabled behaviors -->
     <property name="behaviors">
+        <element value="collective.dexteritytextindexer.behavior.IDexterityTextIndexer" />
         <element value="opengever.tabbedview.interfaces.ITabbedViewEnabled" />
         <element value="opengever.trash.trash.ITrashable" />
         <element value="opengever.task.behaviors.ITaskNameFromTitle" />

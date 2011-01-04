@@ -5,6 +5,9 @@ Changelog
 2.0b7
 -----
 
+* Fixed SearchableText of Task which should solve encoding problems.
+  [jbaumann]
+
 * Issue #738 Aufgabe: Neue Aktion "Aufgabe zuweisen"
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/738
   [jbaumann]
