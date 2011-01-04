@@ -1,6 +1,3 @@
-# --- PLEASE EDIT THE LINES BELOW CORRECTLY ---
-# SOME DESCRIPTIVE TITLE.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
@@ -69,4 +66,7 @@ msgid "Add response"
 msgstr ""
 
 msgid "Attach remote document"
+msgstr ""
+
+msgid "Assign task"
 msgstr ""

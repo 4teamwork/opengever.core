@@ -1,10 +1,10 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2010-09-30 13:26+0000\n"
-"PO-Revision-Date: 2010-09-30 15:27+0200\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"Project-Id-Version: 1.0\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI +ZONE\n"
+"PO-Revision-Date: 2011-01-04 15:15+0100\n"
+"Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
+"Language-Team: 4teamwork <info@4teamwork.ch>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -65,5 +65,8 @@ msgstr "wieder eröffnen"
 
 msgid "task-transition-resolved-tested-and-closed"
 msgstr "Testen und Abschliessen"
+
+msgid "Assign task"
+msgstr "Aufgabe zuweisen"
 
 

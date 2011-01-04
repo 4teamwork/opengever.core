@@ -70,3 +70,6 @@ msgstr ""
 
 msgid "Attach remote document"
 msgstr ""
+
+msgid "Assign task"
+msgstr ""

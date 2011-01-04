@@ -5,6 +5,10 @@ Changelog
 2.0b7
 -----
 
+* Issue #738 Aufgabe: Neue Aktion "Aufgabe zuweisen"
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/738
+  [jbaumann]
+
 
 2.0b6
 -----
