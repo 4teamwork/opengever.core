@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2010-12-08 13:19+0000\n"
+"POT-Creation-Date: 2011-01-03 17:16+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -37,6 +37,14 @@ msgstr ""
 msgid "Delete"
 msgstr ""
 
+#: ./opengever/dossier/move_items.py:122
+msgid "It isn't allowed to add such items there"
+msgstr ""
+
+#: ./opengever/dossier/profiles/default/actions.xml
+msgid "Move Items"
+msgstr ""
+
 #: ./opengever/dossier/browser/send_document.py:34
 msgid "No Mail Address"
 msgstr ""
@@ -45,7 +53,7 @@ msgstr ""
 msgid "Not all required fields are filled"
 msgstr ""
 
-#: ./opengever/dossier/templatedossier.py:128
+#: ./opengever/dossier/templatedossier.py:125
 msgid "Not found the templatedossier"
 msgstr ""
 
@@ -60,7 +68,7 @@ msgstr ""
 msgid "Templates"
 msgstr ""
 
-#: ./opengever/dossier/archive.py:253
+#: ./opengever/dossier/archive.py:256
 msgid "The End that is required, also if only closing is selected"
 msgstr ""
 
@@ -68,7 +76,7 @@ msgstr ""
 msgid "The Files you selected are bigger than the maximal Size"
 msgstr ""
 
-#: ./opengever/dossier/archive.py:262
+#: ./opengever/dossier/archive.py:265
 msgid "The dossier was already resolved"
 msgstr ""
 
@@ -84,7 +92,7 @@ msgstr ""
 msgid "The start or end date is invalid"
 msgstr ""
 
-#: ./opengever/dossier/archive.py:112
+#: ./opengever/dossier/archive.py:110
 msgid "When the Action give filing number is selected,                     all fields are required."
 msgstr ""
 
@@ -98,12 +106,12 @@ msgid "button_add"
 msgstr ""
 
 #. Default: "Archive"
-#: ./opengever/dossier/archive.py:186
+#: ./opengever/dossier/archive.py:184
 msgid "button_archive"
 msgstr ""
 
 #. Default: "Cancel"
-#: ./opengever/dossier/archive.py:265
+#: ./opengever/dossier/archive.py:268
 #: ./opengever/dossier/behaviors/participation.py:166
 #: ./opengever/dossier/browser/transport.py:170
 msgid "button_cancel"
@@ -124,8 +132,13 @@ msgstr ""
 msgid "button_send"
 msgstr ""
 
+#. Default: "Move"
+#: ./opengever/dossier/move_items.py:89
+msgid "button_submit"
+msgstr ""
+
 #. Default: "Cancel"
-#: ./opengever/dossier/browser/send_document.py:169
+#: ./opengever/dossier/browser/send_document.py:174
 msgid "cancel_back"
 msgstr ""
 
@@ -150,7 +163,7 @@ msgid "copy_documents_step_choose_dossier"
 msgstr ""
 
 #. Default: "create document with template"
-#: ./opengever/dossier/templatedossier.py:44
+#: ./opengever/dossier/templatedossier.py:40
 msgid "create_document_with_template"
 msgstr ""
 
@@ -158,6 +171,11 @@ msgid "document_with_docucomposer"
 msgstr ""
 
 msgid "documents"
+msgstr ""
+
+#. Default: "It isn't allowed to add such items there"
+#: ./opengever/dossier/move_items.py:134
+msgid "error_NotInContentTypes"
 msgstr ""
 
 #. Default: "The enddate is required."
@@ -176,7 +194,7 @@ msgid "fieldset_filing"
 msgstr ""
 
 #. Default: "Action"
-#: ./opengever/dossier/archive.py:102
+#: ./opengever/dossier/archive.py:100
 msgid "filing_action"
 msgstr ""
 
@@ -190,13 +208,18 @@ msgid "filing_prefix"
 msgstr ""
 
 #. Default: "filing Year"
-#: ./opengever/dossier/archive.py:97
+#: ./opengever/dossier/archive.py:95
 msgid "filing_year"
 msgstr ""
 
 #. Default: "Archive Dossier"
-#: ./opengever/dossier/archive.py:162
+#: ./opengever/dossier/archive.py:160
 msgid "heading_archive_form"
+msgstr ""
+
+#. Default: "Move Items"
+#: ./opengever/dossier/move_items.py:63
+msgid "heading_move_items"
 msgstr ""
 
 #. Default: "Send as email"
@@ -224,7 +247,7 @@ msgstr ""
 msgid "help_container_type"
 msgstr ""
 
-#: ./opengever/dossier/archive.py:92
+#: ./opengever/dossier/archive.py:90
 #: ./opengever/dossier/behaviors/dossier.py:73
 msgid "help_end"
 msgstr ""
@@ -240,6 +263,7 @@ msgstr ""
 
 #. Default: "Live Search: search for users and contacts"
 #: ./opengever/dossier/browser/send_document.py:49
+#: ./opengever/dossier/move_items.py:48
 msgid "help_intern_receiver"
 msgstr ""
 
@@ -289,7 +313,7 @@ msgid "help_volume_number"
 msgstr ""
 
 #. Default: "Mails sent"
-#: ./opengever/dossier/browser/send_document.py:164
+#: ./opengever/dossier/browser/send_document.py:169
 msgid "info_mails_sent"
 msgstr ""
 
@@ -305,6 +329,7 @@ msgstr ""
 
 #. Default: "Intern receiver"
 #: ./opengever/dossier/browser/send_document.py:48
+#: ./opengever/dossier/move_items.py:47
 msgid "intern_receiver"
 msgstr ""
 
@@ -345,7 +370,7 @@ msgid "label_container_type"
 msgstr ""
 
 #. Default: "Creator"
-#: ./opengever/dossier/templatedossier.py:151
+#: ./opengever/dossier/templatedossier.py:148
 msgid "label_creator"
 msgstr ""
 
@@ -365,7 +390,7 @@ msgid "label_email_address"
 msgstr ""
 
 #. Default: "Closing Date"
-#: ./opengever/dossier/archive.py:91
+#: ./opengever/dossier/archive.py:89
 #: ./opengever/dossier/behaviors/dossier.py:72
 msgid "label_end"
 msgstr ""
@@ -397,7 +422,7 @@ msgid "label_message"
 msgstr ""
 
 #. Default: "Modified"
-#: ./opengever/dossier/templatedossier.py:154
+#: ./opengever/dossier/templatedossier.py:151
 msgid "label_modified"
 msgstr ""
 
@@ -475,7 +500,7 @@ msgid "label_template"
 msgstr ""
 
 #. Default: "title"
-#: ./opengever/dossier/templatedossier.py:147
+#: ./opengever/dossier/templatedossier.py:144
 #: ./opengever/dossier/templatedossier_templates/template_form.pt:30
 msgid "label_title"
 msgstr ""
@@ -555,11 +580,11 @@ msgstr ""
 msgid "tasks"
 msgstr ""
 
-#: ./opengever/dossier/archive.py:176
+#: ./opengever/dossier/archive.py:174
 msgid "the filling number was already set"
 msgstr ""
 
-#: ./opengever/dossier/archive.py:258
+#: ./opengever/dossier/archive.py:261
 msgid "the filling number was set"
 msgstr ""
 

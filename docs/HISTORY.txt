@@ -5,6 +5,9 @@ Changelog
 2.0b6
 -----
 
+* Added move items function.
+  [ttschanz]
+
 * Dossier responsible default value: use parent dossier responsible or current user as default.
   [jbaumann]
 
