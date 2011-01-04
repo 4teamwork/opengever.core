@@ -5,6 +5,9 @@ Changelog
 2.0b7
 -----
 
+* Removed old SearchableText indexer - using dexteritytextindexer now.
+  [jbaumann]
+
 * Fixed SearchableText of Task which should solve encoding problems.
   [jbaumann]
 

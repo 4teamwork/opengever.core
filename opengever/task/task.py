@@ -374,7 +374,7 @@ grok.global_adapter(sequence_number, name='sequence_number')
 # SearchableText
 class SearchableTextExtender(grok.Adapter):
     grok.context(ITask)
-    grok.name('IDossier')
+    grok.name('ITask')
     grok.implements(dexteritytextindexer.IDynamicTextIndexExtender)
 
     def __init__(self, context):
@@ -395,43 +395,6 @@ class SearchableTextExtender(grok.Adapter):
                 'utf-8'))
 
         return ' '.join(searchable)
-
-
-@indexer(ITask)
-def SearchableText(obj):
-    """searchableText indexer."""
-    context = aq_inner(obj)
-    fields = [
-        schema.getFields(ITask).get('title'),
-        ]
-    searchable = []
-    for field in fields:
-        try:
-            data = field.get(context)
-        except AttributeError:
-            data = field.get(field.interface(context))
-        if not data:
-            continue
-        if isinstance(data, unicode):
-            data = data.encode('utf8')
-        if isinstance(data, tuple) or isinstance(data, list):
-            data = " ".join([str(a) for a in data])
-        if data:
-            searchable.append(data)
-    # append some other attributes to the searchableText index
-    # sequence_number
-    seqNumb = getUtility(ISequenceNumber)
-    searchable.append(str(seqNumb.get_number(obj)))
-
-    #responsible
-    info = getUtility(IContactInformation)
-    task = ITask(obj)
-    userid = obj.portal_membership.getMemberById(task.responsible).getId()
-    searchable.append(info.describe(userid))
-
-    return ' '.join(searchable).encode('utf-8')
-
-grok.global_adapter(SearchableText, name='SearchableText')
 
 
 @grok.subscribe(ITask, IActionSucceededEvent)
