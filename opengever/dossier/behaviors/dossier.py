@@ -1,4 +1,5 @@
 from Acquisition import aq_inner, aq_parent
+from AccessControl import getSecurityManager
 from collective import dexteritytextindexer
 from collective.elephantvocabulary import wrap_vocabulary
 from datetime import datetime
@@ -189,12 +190,13 @@ class AddForm(dexterity.AddForm):
 
     def update(self):
         """adds responsible to the request"""
-        responsible = ''
+        responsible = getSecurityManager().getUser().getId()
         if self.context.portal_type == 'opengever.dossier.businesscasedossier':
             tmp_dossier = IDossier(self.context)
             if tmp_dossier:
                 responsible = tmp_dossier.responsible
-        responsible = responsible and responsible or ''
+        responsible = responsible and responsible or \
+            getSecurityManager().getUser().getId()
         if not self.request.get('form.widgets.IDossier.responsible', None):
             self.request.set('form.widgets.IDossier.responsible', [responsible])
         super(AddForm, self).update()
@@ -208,15 +210,6 @@ class StartBeforeEnd(Invalid):
 def deadlineDefaultValue(data):
     return datetime.today()
 # TODO: Doesn't work yet
-
-
-#@form.default_value(field=IDossier['responsible'])
-def responsibleDefaultValue(data):
-    if data.context.portal_type == 'opengever.dossier.businesscasedossier':
-        tmp_dossier = IDossier(data.context)
-        if tmp_dossier:
-            return tmp_dossier.responsible
-    return ''
 
 
 @indexer(IDossierMarker)

@@ -5,6 +5,9 @@ Changelog
 2.0b6
 -----
 
+* Dossier responsible default value: use parent dossier responsible or current user as default.
+  [jbaumann]
+
 * remove all the dependencies to opengever.document
   [phgross]
 
@@ -25,7 +28,7 @@ https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/722
   By deactivating a dossier it should also deactivate the subdossiers
   [phgross]
 
-* fixed Arcihve Number process: 
+* fixed Arcihve Number process:
   it should use the title and not the value of the elephant vocabulary
   [phgross]
 
