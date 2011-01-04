@@ -327,7 +327,10 @@ class ContactInformation(grok.GlobalUtility):
             portal_membership = getToolByName(portal, 'portal_membership')
             member = portal_membership.getMemberById(principal)
             if not member:
-                return principal.decode('utf-8')
+                if isinstance(principal, str):
+                    return principal.decode('utf-8')
+                else:
+                    return principal
             name = member.getProperty('fullname', principal)
             email = member.getProperty('email', None)
             if with_email and email:
