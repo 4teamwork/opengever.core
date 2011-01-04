@@ -140,6 +140,10 @@ class Documents(OpengeverCatalogListingTab):
         {'column':'checked_out',
          'column_title':_('label_checked_out', default="Checked out by"),
          'transform':readable_ogds_author},
+
+        {'column':'subdossier',
+         'column_title':_('label_subdossier', default="Subdossier"),
+         'transform':helper.subdossier_helper},
         )
 
     enabled_actions = ['cut',
@@ -266,6 +270,10 @@ class Tasks(OpengeverCatalogListingTab):
 
         {'column': 'sequence_number',
          'column_title': _(u'sequence_number', "Sequence Number"), },
+
+        {'column':'subdossier',
+         'column_title':_('label_subdossier', default="Subdossier"),
+         'transform':helper.subdossier_helper},
         )
 
     types = ['opengever.task.task', ]

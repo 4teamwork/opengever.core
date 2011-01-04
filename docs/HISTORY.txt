@@ -5,6 +5,9 @@ Changelog
 2.0b6
 -----
 
+* Added additional `subdossier` column for tasks and documents
+  [lgraf]
+
 * Helpers: Unicode fixes.
   [jbaumann]
 
