@@ -65,6 +65,7 @@ setup(name='opengever.document',
         'plone.app.lockingbehavior',
         'ftw.datepicker',
         'opengever.dossier',
+        'collective.dexteritytextindexer',
         ],
 
         tests_require=tests_require,

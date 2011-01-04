@@ -2,9 +2,11 @@ from Acquisition import aq_inner
 from Products.CMFCore.utils import getToolByName
 from Products.MimetypesRegistry.common import MimeTypeException
 from ZODB.POSException import ConflictError
+from collective import dexteritytextindexer
 from collective.elephantvocabulary import wrap_vocabulary
 from datetime import datetime
 from five import grok
+from ftw.datepicker.widget import DatePickerFieldWidget
 from opengever.base.interfaces import IReferenceNumber, ISequenceNumber
 from opengever.document import _
 from opengever.document.interfaces import ICheckinCheckoutManager
@@ -30,11 +32,10 @@ from z3c.form.browser import checkbox
 from zc.relation.interfaces import ICatalog
 from zope import schema
 from zope.app.intid.interfaces import IIntIds
-from zope.component import getUtility, queryMultiAdapter
+from zope.component import getUtility, queryMultiAdapter, getAdapter
 from zope.interface import invariant, Invalid, Interface
 from zope.lifecycleevent.interfaces import IObjectCreatedEvent
 from zope.lifecycleevent.interfaces import IObjectModifiedEvent
-from ftw.datepicker.widget import DatePickerFieldWidget
 import logging
 
 
@@ -86,16 +87,19 @@ class IDocumentSchema(form.Schema):
             ]
         )
 
+    dexteritytextindexer.searchable('title')
     title = schema.TextLine(
         title = _(u'label_title', default=u'Title'),
         required=False)
 
+    dexteritytextindexer.searchable('description')
     description = schema.Text(
         title=_(u'label_description', default=u'Description'),
         description = _(u'help_description', default=u''),
         required = False,
         )
 
+    dexteritytextindexer.searchable('keywords')
     keywords = schema.Tuple(
         title = _(u'label_keywords', default=u'Keywords'),
         description = _(u'help_keywords', default=u''),
@@ -128,12 +132,14 @@ class IDocumentSchema(form.Schema):
         required = False,
         )
 
+    dexteritytextindexer.searchable('document_author')
     document_author = schema.TextLine(
         title=_(u'label_author', default='Author'),
         description=_(u'help_author', default=""),
         required=False,
         )
 
+    dexteritytextindexer.searchable('file')
     form.primary('file')
     file = NamedFile(
         title = _(u'label_file', default='File'),
@@ -184,7 +190,7 @@ class IDocumentSchema(form.Schema):
         )
     #workaround because ftw.datepicker wasn't working
     form.widget(receipt_date = DatePickerFieldWidget)
-    
+
     delivery_date = schema.Date(
         title = _(u'label_delivery_date', default='Date of delivery'),
         description = _(u'help_delivery_date', default=''),
@@ -302,58 +308,27 @@ def related_items( obj ):
 grok.global_adapter(related_items, name='related_items')
 
 
-# INDEX: SearchableText
-@indexer(IDocumentSchema)
-def SearchableText( obj ):
-    context = aq_inner( obj )
-    transforms = getToolByName(obj, 'portal_transforms')
-    fields = [
-        schema.getFields(IBasic).get('title'),
-        schema.getFields(IBasic).get('description'),
-        schema.getFields(IDocumentSchema).get('keywords'),
-        schema.getFields(IDocumentSchema).get('file'),
-        ]
-    searchable = []
+# SearchableText
+class SearchableTextExtender(grok.Adapter):
+    grok.context(IDocumentSchema)
+    grok.name('IDocumentSchema')
+    grok.implements(dexteritytextindexer.IDynamicTextIndexExtender)
 
-    #Reference Number
-    ref_number = IReferenceNumber(obj).get_number()
-    searchable.append(ref_number)
-    #Sequence Number
-    seq_number = str(getUtility(ISequenceNumber).get_number(obj))
-    searchable.append(seq_number)
-    #document_author
-    searchable.append(obj.document_author.encode('utf8'))
+    def __init__(self, context):
+        self.context = context
 
-    for field in fields:
-        data = field.get( context )
-        if not data:
-            continue
-        if INamedFileField.providedBy( field ):
-            # we need to convert the file data to string, so we can
-            # index it
-            datastream = ''
-            try:
-                datastream = transforms.convertTo(
-                    "text/plain",
-                    data.data,
-                    mimetype = data.contentType,
-                    filename = data.filename,
-                    )
-            except (ConflictError, KeyboardInterrupt):
-                raise
-            except Exception, e:
-                LOG.error("Error while trying to convert file contents to 'text/plain' "
-                          "in SearchableIndex(document.py): %s" % (e,))
-            data = str(datastream)
-        elif isinstance(data, tuple) or isinstance(data, list):
-            data = " ".join([isinstance(a, unicode) and a.encode('utf-8') or a for a in data])
-        elif isinstance(data, unicode):
-            data = data.encode('utf8')
-        if data:
-            searchable.append(data)
-    return ' '.join(searchable)
+    def __call__(self):
+        searchable = []
+        # append some other attributes to the searchableText index
+        # reference_number
+        refNumb = getAdapter(self.context, IReferenceNumber)
+        searchable.append(refNumb.get_number())
 
-grok.global_adapter(SearchableText, name='SearchableText')
+        # sequence_number
+        seqNumb = getUtility(ISequenceNumber)
+        searchable.append(str(seqNumb.get_number(self.context)))
+
+        return ' '.join(searchable)
 
 
 # INDEX: document_author
