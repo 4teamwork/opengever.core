@@ -274,7 +274,7 @@ class Tasks(OpengeverCatalogListingTab):
 
         {'column':'subdossier',
          'column_title':_('label_subdossier', default="Subdossier"),
-         'transform':helper.subdossier_helper},
+         'transform': subdossier_helper},
         )
 
     types = ['opengever.task.task', ]
