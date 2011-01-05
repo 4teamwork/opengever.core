@@ -5,6 +5,10 @@ Changelog
 2.0b5
 -----
 
+* Removed Navtree strategy for contenttree widget, the source binders
+  are now configured properly.
+  [jbaumann]
+
 * fixed redirector test
   [phgross]
 
