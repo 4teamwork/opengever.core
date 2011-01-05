@@ -5,6 +5,9 @@ Changelog
 2.0b4
 -----
 
+* Fixed translation file.
+  [jbaumann]
+
 * Added `academic_title` field, moved `function` field
   [lgraf]
 
