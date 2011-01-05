@@ -79,6 +79,11 @@ class MoveItemsForm(form.Form):
             destination.manage_pasteObjects(clipboard)
             self.request.RESPONSE.redirect(destination.absolute_url())
 
+    @z3c.form.button.buttonAndHandler(_(u'button_cancel',
+                                        default=u'Cancel'))
+    def handle_cancel(self, action):
+        return self.request.RESPONSE.redirect(self.context.absolute_url())
+
 
 class MoveItemsFormView(layout.FormWrapper, grok.CodeView):
     """ The View wich display the SendDocument-Form.
