@@ -5,6 +5,10 @@ Changelog
 2.0a3
 -----
 
+* Issue #746 "Filtern" ausblenden auf Reiter "Info"
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/746
+  [jbaumann]
+
 * Info tab: also show local roles set on the direct context.
   [jbaumann]
 

@@ -71,9 +71,9 @@ class OpengeverSharingView(SharingView):
         """ The standard role_settings method,
         but pop the AuthenticatedUsers group for not managers. """
         results = super(OpengeverSharingView, self).role_settings()
-        
+
         member = self.context.portal_membership.getAuthenticatedMember()
-        
+
         if member:
             if 'Manager' in member.getRolesInContext(self.context):
                 return results
@@ -85,7 +85,7 @@ class OpengeverSharingView(SharingView):
 
 
 class SharingTab(OpengeverSharingView):
-    """The sharing tab view, which show the standard sharin view, 
+    """The sharing tab view, which show the standard sharin view,
     but wihtout the form."""
 
     template = ViewPageTemplateFile('sharing_tab.pt')
@@ -93,3 +93,6 @@ class SharingTab(OpengeverSharingView):
     @memoize
     def roles(self):
         return super(SharingTab, self).roles(check_permission=False)
+
+    def get_css_classes(self):
+        return ['searchform-hidden']
