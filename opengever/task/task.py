@@ -12,7 +12,7 @@ from opengever.ogds.base.utils import get_client_id
 from opengever.task import _
 from opengever.task import util
 from opengever.task.interfaces import ISuccessorTaskController
-from opengever.task.source import DossierPathSourceBinder
+from opengever.base.source import DossierPathSourceBinder
 from plone.dexterity.content import Container
 from plone.directives import form, dexterity
 from plone.indexer import indexer
@@ -119,12 +119,19 @@ class ITask(form.Schema):
     relatedItems = RelationList(
         title=_(u'label_related_items', default=u'Related Items'),
         default=[],
-        value_type=RelationChoice(title=u"Related",
-        source=DossierPathSourceBinder(
-            portal_type=("opengever.document.document", "ftw.mail.mail"), ),
-    ),
-required=False,
-)
+        value_type=RelationChoice(
+            title=u"Related",
+            source=DossierPathSourceBinder(
+                portal_type=("opengever.document.document", "ftw.mail.mail"),
+                navigation_tree_query={
+                    'object_provides':
+                        ['opengever.dossier.behaviors.dossier.IDossierMarker',
+                         'opengever.document.document.IDocumentSchema',
+                         'ftw.mail.mail.IMail',]
+                    }),
+            ),
+        required=False,
+        )
 
     expectedStartOfWork = schema.Date(
         title =_(u"label_expectedStartOfWork", default="Start with work"),

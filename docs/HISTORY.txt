@@ -8,6 +8,9 @@ Changelog
 https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/750/
   [ttschanz]
 
+* Related items: Fixed path source binder configuration.
+  [jbaumann]
+
 * Removed old SearchableText indexer - using dexteritytextindexer now.
   [jbaumann]
 
