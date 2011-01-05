@@ -5,6 +5,9 @@ Changelog
 2.0b5
 -----
 
+* Added general path source binders.
+  [jbaumann]
+
 * Removed Navtree strategy for contenttree widget, the source binders
   are now configured properly.
   [jbaumann]
