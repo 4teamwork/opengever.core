@@ -5,6 +5,9 @@ Changelog
 2.0b7
 -----
 
+* Related documents: Fixed path source binder configuration.
+  [jbaumann]
+
 * Document searchable text: use dexteritytextindexer.
   [jbaumann]
 

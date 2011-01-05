@@ -4,7 +4,7 @@ from plone.app.content.interfaces import INameFromTitle
 from zope.interface import implements
 from opengever.document import _
 from plone.directives import form
-from plone.formwidget.contenttree import ObjPathSourceBinder
+from opengever.base.source import RepositoryPathSourceBinder
 from z3c.relationfield.schema import RelationChoice, RelationList
 from zope.interface import alsoProvides
 
@@ -17,10 +17,20 @@ class IRelatedDocuments(form.Schema):
     relatedItems = RelationList(
         title=_(u'label_related_documents', default=u'Related Documents'),
         default=[],
-        value_type=RelationChoice(title=u"Related",
-            source=ObjPathSourceBinder(
-                portal_type="opengever.document.document", ),
-        ),
+        value_type=RelationChoice(
+            title=u"Related",
+            source=RepositoryPathSourceBinder(
+                portal_type=("opengever.document.document", "ftw.mail.mail"),
+                navigation_tree_query={
+                    'object_provides':
+                        ['opengever.repository.repositoryroot.IRepositoryRoot',
+                         'opengever.repository.repositoryfolder.' + \
+                             'IRepositoryFolderSchema',
+                         'opengever.dossier.behaviors.dossier.IDossierMarker',
+                         'opengever.document.document.IDocumentSchema',
+                         'ftw.mail.mail.IMail',]
+                    }),
+            ),
         required=False,
         )
 
