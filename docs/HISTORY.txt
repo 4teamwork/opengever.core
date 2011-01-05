@@ -5,6 +5,9 @@ Changelog
 2.0b3
 -----
 
+* Fixed problems with language selection.
+  [jbaumann]
+
 
 2.0b2
 -----

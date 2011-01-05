@@ -1,5 +1,4 @@
 from Products.CMFPlone.browser.admin import AddPloneSite
-import json
 from Products.CMFPlone.factory import _DEFAULT_PROFILE
 from Products.CMFPlone.factory import addPloneSite
 from Products.CMFPlone.utils import getToolByName
@@ -10,12 +9,15 @@ from opengever.ogds.base.interfaces import IClientConfiguration
 from opengever.ogds.base.ldap_import import sync_ldap
 from opengever.ogds.base.model.client import Client
 from opengever.ogds.base.utils import create_session
+from opengever.setup.utils import get_ldap_configs, get_policy_configs
+from plone.app.controlpanel.language import ILanguageSelectionSchema
 from plone.registry.interfaces import IRegistry
+from zope.component import getAdapter
 from zope.component import getUtility
 from zope.publisher.browser import BrowserView
+import json
 import opengever.globalindex.model
 import opengever.ogds.base.model
-from opengever.setup.utils import get_ldap_configs, get_policy_configs
 
 
 SQL_BASES = (
@@ -102,7 +104,7 @@ class CreateOpengeverClient(BrowserView):
             profile_id=_DEFAULT_PROFILE,
             extension_ids=ext_profiles,
             setup_content=False,
-            default_language=config.get('language', 'de'),
+            default_language=config.get('language', 'de-ch'),
             )
 
         if form.get('configsql'):
@@ -181,6 +183,11 @@ class CreateOpengeverClient(BrowserView):
         registry = getUtility(IRegistry)
         proxy = registry.forInterface(IMailSettings)
         proxy.mail_domain = form['mail_domain'].decode('utf-8')
+
+        # REALLY set the language - the plone4 addPloneSite is really
+        # buggy with languages.
+        langCP = getAdapter(site, ILanguageSelectionSchema)
+        langCP.default_language = 'de-ch'
 
         return 'ok'
 
