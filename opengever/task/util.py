@@ -2,8 +2,11 @@ from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone import PloneMessageFactory as PMF
 from collective.elephantvocabulary import wrap_vocabulary
 from five import grok
+from z3c.relationfield import RelationValue
 from zope.annotation.interfaces import IAnnotations
+from zope.component import getUtility
 from zope.event import notify
+from zope.intid.interfaces import IIntIds
 from zope.lifecycleevent import ObjectModifiedEvent
 from zope.schema.interfaces import IContextSourceBinder
 from zope.schema.vocabulary import SimpleVocabulary
@@ -80,7 +83,7 @@ def getTaskTypeVocabulary(context):
     return SimpleVocabulary(terms)
 
 
-def add_simple_response(task, text='', field_changes=None):
+def add_simple_response(task, text='', field_changes=None, added_object=None):
     """Add a simple response which does (not change the task itself).
     `task`: task context
     `text`: fulltext
@@ -100,6 +103,11 @@ def add_simple_response(task, text='', field_changes=None):
                     field.title,
                     old_value,
                     new_value)
+
+    if added_object:
+        intids = getUtility(IIntIds)
+        iid = intids.getId(added_object)
+        response.added_object = RelationValue(iid)
 
     container = opengever.task.adapters.IResponseContainer(task)
     container.add(response)

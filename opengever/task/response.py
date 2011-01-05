@@ -328,7 +328,18 @@ class ResponseView(grok.Viewlet, Base):
             for item in response['response'].changes:
                 if isinstance(item['after'], datetime.date):
                     item['after'] = item['after'].strftime('%d.%m.%Y')
-        
+
+    def get_added_object(self, response):
+        try:
+            response.added_object
+        except AttributeError:
+            return None
+        if response.added_object:
+            return response.added_object.to_object
+        else:
+            return None
+
+
 
 """
 class AddFormView(layout.FormWrapper, grok.Viewlet, Base):
