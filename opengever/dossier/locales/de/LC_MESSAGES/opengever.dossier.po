@@ -427,7 +427,6 @@ msgstr "Zuletzt Bearbeitet"
 
 #. Default: "Reference Number will be generated                 after content creation"
 #: ./opengever/dossier/widget.py:25
-#, fuzzy
 msgid "label_no_reference_number"
 msgstr "Die Archivnummer wird erst beim Erstellen generiert."
 
