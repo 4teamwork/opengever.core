@@ -4,6 +4,9 @@ Changelog
 
 2.0b7
 -----
+* Issue #750 Neue Aufgabe: Fokus auf falschem Feld
+https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/750/
+  [ttschanz]
 
 * Removed old SearchableText indexer - using dexteritytextindexer now.
   [jbaumann]

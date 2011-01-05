@@ -10,8 +10,7 @@ jq(window).load(function() {
                 .concat('?client=')
                 .concat($(this).find('option:selected').attr('value'));
         $('#form-widgets-responsible-widgets-query')
-                .autocomplete('option', 'source', url)
-                .focus();
+                .autocomplete('option', 'source', url);
     }).change();
     $('#form-widgets-responsible_client').change(function(event) {
         $('#form-widgets-responsible-input-fields')
@@ -25,8 +24,7 @@ jq(window).load(function() {
                 .concat('?client=')
                 .concat($(this).find('option:selected').attr('value'));
         $('#form-widgets-dossier-widgets-query')
-                .autocomplete('option', 'source', url)
-                .focus();
+                .autocomplete('option', 'source', url);
     }).change();
     $('#form-widgets-client').change(function(event) {
         $('#form-widgets-dossier-input-fields')
