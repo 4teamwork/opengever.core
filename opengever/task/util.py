@@ -1,17 +1,13 @@
-from five import grok
-import AccessControl
-from zope.annotation.interfaces import IAnnotations
-from zope.schema.interfaces import IContextSourceBinder, ISource
-from zope.schema.vocabulary import SimpleVocabulary
-
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone import PloneMessageFactory as PMF
-
-from zope.component import getUtility
-from plone.registry.interfaces import IRegistry
 from collective.elephantvocabulary import wrap_vocabulary
-from opengever.task.interfaces import ITaskSettings
-
+from five import grok
+from zope.annotation.interfaces import IAnnotations
+from zope.event import notify
+from zope.lifecycleevent import ObjectModifiedEvent
+from zope.schema.interfaces import IContextSourceBinder
+from zope.schema.vocabulary import SimpleVocabulary
+import AccessControl
 import opengever.task
 
 
@@ -32,8 +28,8 @@ def getManagersVocab(context):
             member_name = member_name + "  " + user.getProperty('email') or member_name
 
             terms.append(SimpleVocabulary.createTerm(user.getId(),
-            str(user.getId()),
-            member_name))
+                                                     str(user.getId()),
+                                                     member_name))
     return UsersVocabulary(terms)
 
 
@@ -46,9 +42,9 @@ def getTransitionVocab(context):
     if opengever.task.task.ITask.providedBy(context) and context.REQUEST.URL.find('++add++opengever.task.task') == -1:
         for tdef in wftool.getTransitionsFor(context):
             transitions.append(SimpleVocabulary.createTerm(tdef['id'],
-            tdef['id'],
-            PMF(tdef['id'],
-            default=tdef['title_or_id'])))
+                                                           tdef['id'],
+                                                           PMF(tdef['id'],
+                                                               default=tdef['title_or_id'])))
         return SimpleVocabulary(transitions)
     else:
         wf = wftool.get(wftool.getChainForPortalType('opengever.task.task')[0])
@@ -56,8 +52,8 @@ def getTransitionVocab(context):
         for tid in state.transitions:
             tdef= wf.transitions.get(tid, None)
             transitions.append(SimpleVocabulary.createTerm(tdef.id,
-            tdef.id,
-            PMF(tdef.id, default=tdef.title_or_id)))
+                                                           tdef.id,
+                                                           PMF(tdef.id, default=tdef.title_or_id)))
         return SimpleVocabulary(transitions)
 
 
@@ -77,9 +73,36 @@ def getTaskTypeVocabulary(context):
                       'bidirectional_by_reference',
                       'bidirectional_by_value']:
         for term in wrap_vocabulary('opengever.task.'+task_type,
-                visible_terms_from_registry=\
-                    'opengever.task.interfaces.ITaskSettings.' + \
-                        task_type)(context):
-            terms.append(term)
+                                    visible_terms_from_registry=\
+                                        'opengever.task.interfaces.ITaskSettings.' + \
+                                        task_type)(context):
+                                    terms.append(term)
     return SimpleVocabulary(terms)
+
+
+def add_simple_response(task, text='', field_changes=None):
+    """Add a simple response which does (not change the task itself).
+    `task`: task context
+    `text`: fulltext
+    `field_changes`: list/tuple of task-field object (which has still the
+    old value) and the new value
+    """
+
+    response = opengever.task.adapters.Response(text)
+    response.type = 'additional'
+
+    if field_changes:
+        for field, new_value in field_changes:
+            old_value = field.get(field.interface(task))
+            if old_value != new_value:
+                response.add_change(
+                    field.__name__,
+                    field.title,
+                    old_value,
+                    new_value)
+
+    container = opengever.task.adapters.IResponseContainer(task)
+    container.add(response)
+
+    notify(ObjectModifiedEvent(task))
 

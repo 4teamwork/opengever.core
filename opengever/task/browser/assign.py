@@ -1,7 +1,9 @@
+from Products.statusmessages.interfaces import IStatusMessage
 from five import grok
 from opengever.ogds.base.autocomplete_widget import AutocompleteFieldWidget
 from opengever.task import _
 from opengever.task.task import ITask
+from opengever.task.util import add_simple_response
 from plone.directives import form
 from plone.z3cform import layout
 from z3c.form.button import buttonAndHandler
@@ -34,6 +36,11 @@ class IAssignSchema(form.Schema):
         )
 
 
+@form.default_value(field=IAssignSchema['responsible_client'])
+def responsible_client_default_value(data):
+    return data.context.responsible_client
+
+
 class AssignTaskForm(Form):
     """Form for assigning task.
     """
@@ -49,9 +56,26 @@ class AssignTaskForm(Form):
     def handle_assign(self, action):
         data, errors = self.extractData()
         if not errors:
+            if self.context.responsible_client == data['responsible_client'] \
+                    and self.context.responsible == data['responsible']:
+                # no changes
+                msg = _(u'error_same_responsible',
+                        default=u'No changes: same responsible selected')
+                IStatusMessage(self.request).addStatusMessage(msg, type='error')
+                return self.request.RESPONSE.redirect('.')
+
+            # create a response in the task
+            add_simple_response(
+                self.context,
+                field_changes=((ITask['responsible'], data['responsible']),
+                               (ITask['responsible_client'],
+                                data['responsible_client']),))
+
+            # set responsible
             self.context.responsible_client = data['responsible_client']
             self.context.responsible = data['responsible']
             notify(ObjectModifiedEvent(self.context))
+
             return self.request.RESPONSE.redirect('.')
 
     @buttonAndHandler(_(u'button_cancel', default=u'Cancel'))
