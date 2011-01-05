@@ -128,6 +128,9 @@ class Base(BrowserView):
                 #html = linkDetection(html)
                 response.rendered_text = html
             html = response.rendered_text
+            # if response.changes[0]['after']:
+            #                import pdb; pdb.set_trace( )
+            #                response.changes[0]['after'] = response.changes[0]['after'].strftime('%d.%m.%Y')
             info = dict(id=id,
                         response=response,
                         #relatedItems=getattr(response,"relatedItems",()),
@@ -241,8 +244,8 @@ class AddForm(form.AddForm, AutoExtensibleForm):
             #if util.getManagersVocab.getTerm(responseCreator):
             #   new_response.type =  'reply'
             #check transition
-            if data.get('transition', None) == 'task-transition-open-resolved':
-                completion_date = datetime.datetime.now().date()
+            if data.get('transition', None) in ('task-transition-open-resolved', 'task-transition-in-progress-resolved'):
+                completion_date = datetime.date.today()
             else:
                 completion_date = None
 
@@ -321,6 +324,11 @@ class ResponseView(grok.Viewlet, Base):
     def __init__(self, context, request, view, manager):
         grok.Viewlet.__init__(self, context, request, view, manager)
         Base.__init__(self, context, request)
+        for response in self.responses():
+            for item in response['response'].changes:
+                if isinstance(item['after'], datetime.date):
+                    item['after'] = item['after'].strftime('%d.%m.%Y')
+        
 
 """
 class AddFormView(layout.FormWrapper, grok.Viewlet, Base):

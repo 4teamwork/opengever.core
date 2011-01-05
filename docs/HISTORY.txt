@@ -4,6 +4,11 @@ Changelog
 
 2.0b7
 -----
+
+* issue #736 Aufgabe: Bei Antwort Datum korrekt formatieren
+https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/736/
+  [ttschanz]
+
 * Issue #750 Neue Aufgabe: Fokus auf falschem Feld
 https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/750/
   [ttschanz]
