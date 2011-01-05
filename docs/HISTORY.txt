@@ -5,6 +5,12 @@ Changelog
 2.0b6
 -----
 
+* Removed "paste" from folder-actions, since we have it now in the object buttons.
+  [jbaumann]
+
+* Clenaup task actions: moved some actions to minor actions menu.
+  [jbaumann]
+
 * Added additional `subdossier` column for tasks and documents
   [lgraf]
 

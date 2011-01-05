@@ -149,7 +149,6 @@ class Documents(OpengeverCatalogListingTab):
 
     enabled_actions = ['cut',
                        'copy',
-                       'paste',
                        'send_as_email',
                        'checkout',
                        'checkin',
@@ -211,7 +210,6 @@ class Dossiers(OpengeverCatalogListingTab):
     enabled_actions = ['change_state',
                        'cut',
                        'copy',
-                       'paste',
                        'pdf_dossierlisting',
                        'move_items',
                        ]
@@ -284,9 +282,11 @@ class Tasks(OpengeverCatalogListingTab):
     enabled_actions = [
         'change_state',
         'cut',
-        'paste',
         'pdf_taskslisting',
         ]
+
+    major_actions = ['change_state',
+                     ]
 
 
 class Trash(Documents):
