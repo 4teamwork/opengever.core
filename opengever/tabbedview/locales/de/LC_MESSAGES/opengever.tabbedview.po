@@ -306,7 +306,7 @@ msgstr "Titel"
 #. Default: "Email"
 #: ./opengever/tabbedview/browser/users.py:75
 msgid "label_userstab_email"
-msgstr "Email"
+msgstr "E-Mail"
 
 #. Default: "Firstname"
 #: ./opengever/tabbedview/browser/users.py:65
