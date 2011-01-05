@@ -22,8 +22,7 @@
             <span tal:define="index repeat/widget/index"/>
 
               <tal:block condition="python: widget.__name__ not in ('IBasic.title', 'IBasic.description', 'title', 'description','responsible', 'ITransition.transition', 'issuer', 'relatedItems', 'deadline') and widget.value">
-
-                <th tal:content="widget/label" ></th>
+				<th tal:content="widget/label" ></th>
                 <td tal:content="structure widget/render" />
               </tal:block>
               <tal:block condition="python:widget.__name__  == 'responsible' and widget.value">

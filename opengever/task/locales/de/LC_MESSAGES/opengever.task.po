@@ -302,12 +302,12 @@ msgstr "Sie sind nicht berechtigt diese Antwort zu löschen"
 #. Default: "effective cost"
 #: ./opengever/task/task.py:152
 msgid "label_effectiveCost"
-msgstr "Effektive Kosten"
+msgstr "Effektive Kosten (CHF)"
 
 #. Default: "effective duration"
 #: ./opengever/task/task.py:146
 msgid "label_effectiveDuration"
-msgstr "Effektive Dauer"
+msgstr "Effektive Dauer (h)"
 
 #. Default: "Please enter your response below"
 #: ./opengever/task/templates/edit_response.pt:59
@@ -317,12 +317,12 @@ msgstr "Bitte tragen sie ihre Antwort unten ein"
 #. Default: "expected cost"
 #: ./opengever/task/task.py:140
 msgid "label_expectedCost"
-msgstr "Geschätzte Kosten"
+msgstr "Geschätzte Kosten (CHF)"
 
 #. Default: "Expected duration"
 #: ./opengever/task/task.py:134
 msgid "label_expectedDuration"
-msgstr "Geschätzte Dauer"
+msgstr "Geschätzte Dauer (h)"
 
 #. Default: "Start with work"
 #: ./opengever/task/task.py:128
