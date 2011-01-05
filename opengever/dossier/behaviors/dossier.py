@@ -13,6 +13,8 @@ from opengever.ogds.base.autocomplete_widget import AutocompleteFieldWidget
 from opengever.ogds.base.interfaces import IContactInformation
 from plone.autoform.interfaces import IFormFieldProvider
 from plone.directives import form, dexterity
+from plone.dexterity.interfaces import IDexterityContent
+from plone.formwidget.contenttree import ObjPathSourceBinder
 from plone.indexer import indexer
 from plone.z3cform.textlines.textlines import TextLinesFieldWidget
 from z3c.relationfield.schema import RelationChoice, RelationList
@@ -263,6 +265,22 @@ def filing_no(obj):
 
     return getattr(obj, 'filing_no', None)
 grok.global_adapter(filing_no, name="filing_no")
+
+
+@indexer(IDexterityContent)
+def containing_subdossier(obj):
+    """Returns the title of the subdossier the object is contained in,
+    unless it's contained directly in the root of a dossier, in which
+    case an empty string is returned.
+    """
+    context = aq_inner(obj)
+    parent = aq_parent(context)
+    if IDossierMarker.providedBy(parent):
+        if IDossierMarker.providedBy(aq_parent(parent)):
+            # parent is a subdossier
+            return parent.Title()
+    return ''
+grok.global_adapter(containing_subdossier, name='containing_subdossier')
 
 
 class SearchableTextExtender(grok.Adapter):

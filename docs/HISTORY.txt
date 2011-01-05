@@ -5,6 +5,11 @@ Changelog
 2.0b6
 -----
 
+* Added index and metadata column `containing_subdossier` (used for Documents and Tasks)
+  Issue #739 Neue Spalten in Tabbedview innerhalb Dossier
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/739/
+  [lgraf]
+
 * Related dossiers: Fixed path source binder configuration.
   [jbaumann]
 

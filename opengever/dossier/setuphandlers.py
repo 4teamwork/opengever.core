@@ -31,6 +31,7 @@ def add_catalog_indexes(context, logger=None):
     # Specify the indexes you want, with ('index_name', 'index_type')
     wanted = (('is_subdossier','FieldIndex'),
               ('filing_no','FieldIndex'),
+              ('containing_subdossier', 'FieldIndex'),
               )
     indexables = []
     for name, meta_type in wanted:
