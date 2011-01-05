@@ -5,6 +5,9 @@ Changelog
 2.0b5
 -----
 
+* Allow "paste" action in Actions-Menu (object buttons)
+  [jbaumann]
+
 * Added general path source binders.
   [jbaumann]
 
