@@ -16,7 +16,7 @@ def authenticated_member(context):
 
 
 def remove_control_columns(columns):
-    """Returns the control columns from list of columns and returns it back.
+    """Removes the control columns from list of columns and returns it back.
     """
 
     def _filterer(item):
@@ -31,6 +31,21 @@ def remove_control_columns(columns):
                 return True
 
     return filter(_filterer, columns)
+
+
+def remove_subdossier_column(columns):
+    """Removes the subdossier column from list of columns and returns it back.
+    """
+
+    def _filterer(item):
+        if isinstance(item, dict) and item['column'] == 'subdossier':
+            return False
+        else:
+            return True
+
+    return filter(_filterer, columns)
+
+
 
 
 class PersonalOverview(TabbedView):
@@ -103,7 +118,9 @@ class MyDocuments(Documents):
     enabled_actions = []
     major_actions = []
     columns = remove_control_columns(Documents.columns)
+    columns = remove_subdossier_column(columns)
     selection = ViewPageTemplateFile("no_selection_amount.pt")
+
 
     @property
     def view_name(self):
@@ -156,6 +173,8 @@ class IssuedTasks(Tasks):
 
     search_options = {'issuer': authenticated_member,}
 
+    columns = remove_subdossier_column(Tasks.columns)
+
 
 class AllTasks(MyTasks):
     """Lists all tasks assigned to this clients.
@@ -186,3 +205,5 @@ class AllIssuedTasks(Tasks):
     grok.context(Interface)
 
     enabled_actions = major_actions = ['pdf_taskslisting']
+
+    columns = remove_subdossier_column(Tasks.columns)

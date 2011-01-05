@@ -1,3 +1,4 @@
+from Acquisition import aq_parent
 from Products.CMFCore.interfaces._tools import IMemberData
 from Products.PluggableAuthService.interfaces.authservice import IPropertiedUser
 from opengever.ogds.base.interfaces import IContactInformation
@@ -34,10 +35,6 @@ def readable_ogds_author(item, author):
     if IPropertiedUser.providedBy(author) or IMemberData.providedBy(author):
         author = author.getId()
     info = getUtility(IContactInformation)
-    if isinstance(author, unicode):
-        author = author.decode('utf-8')
-    else:
-        author = str(author)
     if info.is_user(author) or info.is_contact(author) or info.is_inbox(author):
         return info.describe(author)
     else:
@@ -48,10 +45,6 @@ def linked_ogds_author(item, author):
     if IPropertiedUser.providedBy(author) or IMemberData.providedBy(author):
         author = author.getId()
     info = getUtility(IContactInformation)
-    if isinstance(author, unicode):
-        author = author.decode('utf-8')
-    else:
-        author = str(author)
     if info.is_user(author) or info.is_contact(author) or info.is_inbox(author):
         return info.render_link(author)
     else:
@@ -102,3 +95,16 @@ def boolean_helper(item, value):
 
     return value and _(u'label_yes', default='Yes') or \
                      _(u'label_no', default='No')
+
+def subdossier_helper(content, value):
+    """Returns the title of the subdossier the object is contained in, or an empty
+    string if the dossier is the root dossier
+    """
+
+    obj = content.getObject()
+    parent = aq_parent(obj)
+    if 'opengever.dossier' in parent.portal_type:
+        if 'opengever.dossier' in aq_parent(parent).portal_type:
+            # parent is a subdossier
+            return parent.Title()
+    return ''
