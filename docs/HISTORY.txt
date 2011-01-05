@@ -5,6 +5,11 @@ Changelog
 2.0b6
 -----
 
+* Fixed implementation of `subdossier` column
+  Issue #739 Neue Spalten in Tabbedview innerhalb Dossier
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/739/
+  [lgraf]
+
 * Removed "paste" from folder-actions, since we have it now in the object buttons.
   [jbaumann]
 

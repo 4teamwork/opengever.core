@@ -8,7 +8,6 @@ from opengever.ogds.base.interfaces import IContactInformation
 from opengever.tabbedview import _
 from opengever.tabbedview.helper import readable_date_set_invisibles
 from opengever.tabbedview.helper import readable_ogds_author, linked
-from opengever.tabbedview.helper import subdossier_helper
 from opengever.task.helper import task_type_helper
 from zope.app.pagetemplate import ViewPageTemplateFile
 from zope.component import getUtility
@@ -142,9 +141,8 @@ class Documents(OpengeverCatalogListingTab):
          'column_title':_('label_checked_out', default="Checked out by"),
          'transform':readable_ogds_author},
 
-        {'column':'subdossier',
-         'column_title':_('label_subdossier', default="Subdossier"),
-         'transform': subdossier_helper},
+        {'column':'containing_subdossier',
+         'column_title':_('label_subdossier', default="Subdossier"),},
         )
 
     enabled_actions = ['cut',
@@ -272,9 +270,8 @@ class Tasks(OpengeverCatalogListingTab):
         {'column': 'sequence_number',
          'column_title': _(u'sequence_number', "Sequence Number"), },
 
-        {'column':'subdossier',
-         'column_title':_('label_subdossier', default="Subdossier"),
-         'transform': subdossier_helper},
+        {'column':'containing_subdossier',
+         'column_title':_('label_subdossier', default="Subdossier"),},
         )
 
     types = ['opengever.task.task', ]
