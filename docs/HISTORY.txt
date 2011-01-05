@@ -5,6 +5,9 @@ Changelog
 2.0b5
 -----
 
+* Fixed indexing of description.
+  [jbaumann]
+
 * Allow "paste" action in Actions-Menu (object buttons)
   [jbaumann]
 

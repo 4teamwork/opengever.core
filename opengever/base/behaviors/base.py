@@ -25,7 +25,7 @@ class IOpenGeverBase(form.Schema):
         required = True
         )
 
-    dexteritytextindexer.searchable('title')
+    dexteritytextindexer.searchable('description')
     description = schema.Text(
         title=_(u'label_description', default=u'Description'),
         description = _(u'help_description', default=u''),
