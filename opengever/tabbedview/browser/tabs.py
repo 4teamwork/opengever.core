@@ -153,6 +153,7 @@ class Documents(OpengeverCatalogListingTab):
                        'trashed',
                        'send_documents',
                        'copy_documents_to_remote_client',
+                       'move_items',
                        ]
 
     major_actions = ['send_documents',
@@ -207,6 +208,7 @@ class Dossiers(OpengeverCatalogListingTab):
                        'copy',
                        'paste',
                        'pdf_dossierlisting',
+                       'move_items',
                        ]
 
     major_actions = ['change_state',
