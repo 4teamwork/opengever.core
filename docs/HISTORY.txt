@@ -5,8 +5,11 @@ Changelog
 2.0b6
 -----
 
+* Related dossiers: Fixed path source binder configuration.
+  [jbaumann]
+
 * Issue #715 Neuer Wizard: Dossier verschieben
-https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/715/
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/715/
   [ttschanz]
 
 * Dossier responsible default value: use parent dossier responsible or current user as default.

@@ -1,18 +1,18 @@
-from Acquisition import aq_inner, aq_parent
 from AccessControl import getSecurityManager
+from Acquisition import aq_inner, aq_parent
 from collective import dexteritytextindexer
 from collective.elephantvocabulary import wrap_vocabulary
 from datetime import datetime
 from five import grok
 from opengever.base.interfaces import IReferenceNumber, ISequenceNumber
 from opengever.base.interfaces import IReferenceNumberPrefix
+from opengever.base.source import RepositoryPathSourceBinder
 from opengever.dossier import _
 from opengever.dossier.widget import referenceNumberWidgetFactory
 from opengever.ogds.base.autocomplete_widget import AutocompleteFieldWidget
 from opengever.ogds.base.interfaces import IContactInformation
 from plone.autoform.interfaces import IFormFieldProvider
 from plone.directives import form, dexterity
-from plone.formwidget.contenttree import ObjPathSourceBinder
 from plone.indexer import indexer
 from plone.z3cform.textlines.textlines import TextLinesFieldWidget
 from z3c.relationfield.schema import RelationChoice, RelationList
@@ -115,17 +115,17 @@ class IDossier(form.Schema):
     filing_prefix = schema.Choice(
         title = _(u'filing_prefix', default="filing prefix"),
         source = wrap_vocabulary('opengever.dossier.type_prefixes',
-                    visible_terms_from_registry="opengever.dossier" + \
-                        '.interfaces.IDossierContainerTypes.type_prefixes'),
+                                 visible_terms_from_registry="opengever.dossier" + \
+                                     '.interfaces.IDossierContainerTypes.type_prefixes'),
         required = False,
-    )
+        )
 
     container_type = schema.Choice(
         title = _(u'label_container_type', default=u'Container Type'),
         description = _(u'help_container_type', default=u''),
         source = wrap_vocabulary('opengever.dossier.container_types',
-                    visible_terms_from_registry="opengever.dossier" + \
-                        '.interfaces.IDossierContainerTypes.container_types'),
+                                 visible_terms_from_registry="opengever.dossier" + \
+                                     '.interfaces.IDossierContainerTypes.container_types'),
         required = False,
         )
 
@@ -152,17 +152,26 @@ class IDossier(form.Schema):
     relatedDossier = RelationList(
         title=_(u'label_related_dossier', default=u'Related Dossier'),
         default=[],
-        value_type=RelationChoice(title=u"Related",
-            source=ObjPathSourceBinder(
-                portal_type="opengever.dossier.businesscasedossier", ),
-        ),
+        value_type=RelationChoice(
+            title=u"Related",
+            source=RepositoryPathSourceBinder(
+                object_provides='opengever.dossier.behaviors.dossier.' + \
+                    'IDossierMarker',
+                navigation_tree_query={
+                    'object_provides':
+                        ['opengever.repository.repositoryroot.IRepositoryRoot',
+                         'opengever.repository.repositoryfolder.' + \
+                             'IRepositoryFolderSchema',
+                         'opengever.dossier.behaviors.dossier.IDossierMarker',]
+                    }),
+            ),
         required=False,
         )
 
     form.mode(former_reference_number='display')
     former_reference_number = schema.TextLine(
         title = _(u'label_former_reference_number',
-            default=u'Reference Number'),
+                  default=u'Reference Number'),
         description = _(u'help_former_reference_number', default=u''),
         required = False,
         )
@@ -285,7 +294,7 @@ class SearchableTextExtender(grok.Adapter):
         dossier = IDossierMarker(self.context)
         if getattr(dossier, 'filing_no', None):
             searchable.append(str(getattr(dossier, 'filing_no',
-                                      None)).encode('utf-8'))
+                                          None)).encode('utf-8'))
 
         return ' '.join(searchable)
 
