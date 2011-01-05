@@ -49,7 +49,7 @@
           </tr>
           <tal:rep tal:define="group python: view.groups[1]">
             <tr tal:repeat="widget group/widgets/values">
-              <tal:block condition="python:widget.__name__ not in ('IBasic.title', 'IBasic.description', 'title', 'description','responsible', 'ITransition.transition', 'date_of_completion') and widget.value and widget.value != ('', '', '')">
+              <tal:block condition="python:widget.__name__ not in ('IBasic.title', 'IBasic.description', 'title', 'description','responsible', 'ITransition.transition', 'date_of_completion', 'expectedStartOfWork') and widget.value and widget.value != ('', '', '')">
                 <th tal:content="widget/label"></th>
                 <td tal:content="structure widget/render" />
               </tal:block>
@@ -60,6 +60,10 @@
               <tal:block condition="python:widget.__name__ == 'date_of_completion' and widget.value">
                 <th tal:content="widget/label"></th>
                 <td tal:content="python:here.toLocalizedTime(str(context.date_of_completion))"/>
+              </tal:block>
+			<tal:block condition="python:widget.__name__ == 'expectedStartOfWork' and widget.value">
+                <th tal:content="widget/label"></th>
+                <td tal:content="python:context.expectedStartOfWork.strftime('%d.%m.%Y')"/>
               </tal:block>
             </tr>
           </tal:rep>
