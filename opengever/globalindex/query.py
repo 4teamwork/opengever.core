@@ -20,6 +20,33 @@ class TaskQuery(object):
             task = None
         return task
 
+    def get_task_by_path(self, path, client_id):
+        """Returns a task on the specified client identified by its physical
+        path (which is relative to the site root!).
+        """
+        try:
+            task = Session().query(Task).filter(
+                Task.client_id==client_id).filter(
+                Task.physical_path==path).one()
+        except NoResultFound:
+            return None
+        else:
+            return task
+
+    def get_task_by_oguid(self, oguid):
+        """Return a task identified by its OGUID, which is
+        [client_id]:[int_id]
+        """
+        client_id, int_id = oguid.split(':')
+        try:
+            task = Session().query(Task).filter(
+                Task.client_id==client_id).filter(
+                Task.int_id==int_id).one()
+        except NoResultFound:
+            return None
+        else:
+            return task
+
     def get_tasks(self, task_ids):
         """Returns a set of tasks whos task_ids are listed in `task_ids`.
         """

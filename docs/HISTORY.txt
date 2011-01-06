@@ -5,6 +5,9 @@ Changelog
 2.0b2
 -----
 
+* Added query methods "get_task_by_path" and "get_task_by_oguid".
+  [jbaumann]
+
 
 2.0b1
 -----
