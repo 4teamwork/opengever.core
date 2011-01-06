@@ -15,6 +15,8 @@ from zope.component import adapts
 from zope.interface import Interface, Invalid, implements
 from zope.schema.interfaces import IField
 import z3c.form
+from Products.statusmessages.interfaces import IStatusMessage
+from opengever.dossier.behaviors.dossier import IDossierMarker
 
 
 class DestinationPathSourceBinder(ObjPathSourceBinder):
@@ -28,9 +30,9 @@ class DestinationPathSourceBinder(ObjPathSourceBinder):
 
 class IMoveItemsSchema(Interface):
     destination_folder = RelationChoice(
-        title=_('intern_receiver', default="Intern receiver"),
-        description=_('help_intern_receiver',
-                      default="Live Search: search for users and contacts"),
+        title=_('label_destination', default="Destination"),
+        description=_('help_destination',
+                      default="Live Search: search the Plone Site"),
         source= DestinationPathSourceBinder(),
         required=True,
         )
@@ -47,10 +49,15 @@ class MoveItemsForm(form.Form):
     def updateWidgets(self):
         super(MoveItemsForm, self).updateWidgets()
         self.widgets['request_paths'].mode = HIDDEN_MODE
+        if not self.request.get('paths') and not self.widgets['request_paths']:
+            msg = _(u'You have not selected any items')
+            IStatusMessage(self.request).addStatusMessage(
+                msg, type='error')
+            self.request.RESPONSE.redirect(self.context.absolute_url())
         value = self.item_paths
         if value:
             self.widgets['request_paths'].value = ';;'.join(value)
-
+        
     @property
     def item_paths(self):
         field_name = self.prefix + self.widgets.prefix + 'request_paths'
@@ -70,13 +77,27 @@ class MoveItemsForm(form.Form):
         if len(errors) == 0:
             root = getToolByName(self, 'portal_url')
             root = root.getPortalObject()
-            source = data['request_paths']
+            source = data['request_paths'].split(';;')
             destination = data['destination_folder']
-            sourceObject = self.context.unrestrictedTraverse(
-                source.encode('utf-8'))
-            sourceContainer = aq_parent(aq_inner(sourceObject))
-            clipboard = sourceContainer.manage_cutObjects(sourceObject.id)
-            destination.manage_pasteObjects(clipboard)
+            sourceObjects = []
+            for path in source:
+                sourceObjects.append(self.context.unrestrictedTraverse(
+                    path.encode('utf-8')))
+                sourceContainer = aq_parent(aq_inner(self.context.unrestrictedTraverse(
+                    path.encode('utf-8'))))
+                if not IDossierMarker.providedBy(sourceContainer) and (
+                sourceObjects[len(sourceObjects)-1].portal_type == 
+                'opengever.document.document'):
+                    name = sourceObjects[len(sourceObjects)-1].title
+                    msg = _(u'Document ${name} is connected to a Task.\
+                    Please move the Task.', mapping=dict(name=name))
+                    IStatusMessage(self.request).addStatusMessage(
+                        msg, type='error')
+                    sourceObjects.remove(sourceObjects[len(sourceObjects)-1])
+            for obj in sourceObjects:
+                sourceContainer = aq_parent(aq_inner(obj))
+                clipboard = sourceContainer.manage_cutObjects(obj.id)
+                destination.manage_pasteObjects(clipboard)
             self.request.RESPONSE.redirect(destination.absolute_url())
 
     @z3c.form.button.buttonAndHandler(_(u'button_cancel',
@@ -112,17 +133,20 @@ class DestinationValidator(validator.SimpleFieldValidator):
 
     def validate(self, value):
         super(DestinationValidator, self).validate(value)
-        source = self.view.widgets['request_paths'].value
+        source = self.view.widgets['request_paths'].value.split(';;')
         portal_catalog = getToolByName(self.context, 'portal_catalog')
-        sourceobj = portal_catalog(path={'query': source, 'depth': 0})
+        sourceobjs=[]
+        for item in source:
+            sourceobjs.append(portal_catalog(path={'query': item, 'depth': 0}))
         inContentTypes = False
         for item in value.allowedContentTypes():
-            if sourceobj[0].portal_type in item.portal_type:
-                inContentTypes = True
-            if inContentTypes == False:
-                raise NotInContentTypes(
-                    _(u"error_NotInContentTypes",
-                      default=u"It isn't allowed to add such items there"))
+            for sourceobj in sourceobjs:
+                if sourceobj[0].portal_type in item.id:
+                    inContentTypes = True
+        if inContentTypes == False:
+            raise NotInContentTypes(
+                _(u"error_NotInContentTypes",
+                  default=u"It isn't allowed to add such items there"))
 
 validator.WidgetValidatorDiscriminators(
     DestinationValidator, field=IMoveItemsSchema['destination_folder'])
