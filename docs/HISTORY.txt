@@ -8,6 +8,7 @@ Changelog
 * Issue #737 Aufgabe: Hinzufuegen Dokument (aus Mandanten) erzeugt Antwort
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/737
   Add a response whenever a object is added to a task.
+  Add a response when a successor task is created.
   [jbaumann]
 
 * issue #736 Aufgabe: Bei Antwort Datum korrekt formatieren

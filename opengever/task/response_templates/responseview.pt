@@ -63,6 +63,15 @@
                     </span>
                 </div>
 
+                <div tal:define="item python:viewlet.get_added_successor(response)"
+                     tal:condition="nocall:item">
+                    <span i18n:translate="task_object_successor" class="label">
+                        Added successor task
+                    </span>
+                    <span class="issueChange"
+                          tal:content="structure python:view.render_indexed_task(item)" />
+                </div>
+
             </div>
             <span tal:replace="structure html" />
 

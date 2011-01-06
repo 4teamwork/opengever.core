@@ -33,6 +33,7 @@ class IResponse(Interface):
     mimetype = Attribute("Mime type of the response.")
     relatedItems = Attribute('Related Items')
     added_object = Attribute('Relation to an added object')
+    successor_oguid = Attribute('OGUID releation to a successor')
 
     def add_change(id, name, before, after):
         """Add change to the list of changes.
@@ -132,6 +133,7 @@ class Response(Persistent):
         self.rendered_text = None
         self.relatedItems = ()
         self.added_object = None
+        self.successor_oguid = None
 
     def add_change(self, id, name, before, after):
         """Add a new issue change.
