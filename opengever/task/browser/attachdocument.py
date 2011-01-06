@@ -10,7 +10,6 @@ from opengever.ogds.base.interfaces import ITransporter
 from opengever.ogds.base.utils import get_current_client
 from opengever.task import _
 from opengever.task.task import ITask
-from opengever.task.util import add_simple_response
 from plone.directives import form
 from plone.z3cform import layout
 from z3c.form.interfaces import HIDDEN_MODE
@@ -270,10 +269,7 @@ class ChooseDocumentForm(z3c.form.form.Form, WizardFormMixin):
             cid = client.client_id
 
             trans = getUtility(ITransporter)
-            doc = trans.transport_from(self.context, cid, document)
-
-            # add a response with a link to the object
-            add_simple_response(self.context, added_object=doc)
+            trans.transport_from(self.context, cid, document)
 
             url = self.context.absolute_url()
             return self.request.RESPONSE.redirect(url)
