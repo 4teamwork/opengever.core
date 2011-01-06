@@ -5,6 +5,9 @@ Changelog
 2.0b2
 -----
 
+* Don't place task icon inside link for Overview > MyTasks
+  [lgraf]
+
 * Added query methods "get_task_by_path" and "get_task_by_oguid".
   [jbaumann]
 

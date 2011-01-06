@@ -50,9 +50,10 @@ def indexed_task_link(item, display_client=False):
         client_html = ''
 
     # render the full link if he has acccess
-    inner_html = ''.join((image, item.title, client_html))
+    inner_html = ''.join((item.title, client_html))
     if has_access:
-        return '<a href="%s"%s>%s</a>' % (
+        return '%s<a href="%s"%s>%s</a>' % (
+            image,
             client.public_url + '/' + item.physical_path,
             link_target,
             inner_html)
