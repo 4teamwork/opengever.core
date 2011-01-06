@@ -83,12 +83,13 @@ def getTaskTypeVocabulary(context):
     return SimpleVocabulary(terms)
 
 
-def add_simple_response(task, text='', field_changes=None, added_object=None):
+def add_simple_response(task, text='', field_changes=None, added_object=None,
+                        successor_oguid=None):
     """Add a simple response which does (not change the task itself).
     `task`: task context
     `text`: fulltext
-    `field_changes`: list/tuple of task-field object (which has still the
-    old value) and the new value
+    `added_object`: an object which was added to the task
+    `successor_oguid`: an OGUID to a (remote) object which was referened.
     """
 
     response = opengever.task.adapters.Response(text)
@@ -108,6 +109,9 @@ def add_simple_response(task, text='', field_changes=None, added_object=None):
         intids = getUtility(IIntIds)
         iid = intids.getId(added_object)
         response.added_object = RelationValue(iid)
+
+    if successor_oguid:
+        response.successor_oguid = successor_oguid
 
     container = opengever.task.adapters.IResponseContainer(task)
     container.add(response)

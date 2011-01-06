@@ -1,36 +1,33 @@
-import os
-import datetime
-from zope.i18n import translate
-from z3c.form import form, field, button
-from z3c.form.browser import radio
-from zope.lifecycleevent import modified, ObjectModifiedEvent
-from zope.interface import Interface
-from zope.cachedescriptors.property import Lazy
-from zope import schema
-from zope.event import notify
-from zope.component import getUtility
-from zope.intid.interfaces import IIntIds
-from five import grok
-
 from Acquisition import aq_inner
-from Products.Five.browser import BrowserView
-from plone.memoize.view import memoize
-from plone.z3cform import layout
-from plone.autoform.form import AutoExtensibleForm
-
 from Products.CMFCore.utils import getToolByName
+from Products.Five.browser import BrowserView
 from Products.statusmessages.interfaces import IStatusMessage
-
-from z3c.relationfield.schema import RelationChoice, RelationList
-from z3c.relationfield.relation import RelationValue
-
+from five import grok
+from opengever.globalindex.interfaces import ITaskQuery
 from opengever.task import _
+from opengever.task import util
 from opengever.task.adapters import IResponseContainer, Response
 from opengever.task.interfaces import IResponseAdder
 from opengever.task.permissions import DEFAULT_ISSUE_MIME_TYPE
-from opengever.task import util
-from opengever.task.task import ITask
 from opengever.task.source import DossierPathSourceBinder
+from opengever.task.task import ITask
+from plone.autoform.form import AutoExtensibleForm
+from plone.memoize.view import memoize
+from plone.z3cform import layout
+from z3c.form import form, field, button
+from z3c.form.browser import radio
+from z3c.relationfield.relation import RelationValue
+from z3c.relationfield.schema import RelationChoice, RelationList
+from zope import schema
+from zope.cachedescriptors.property import Lazy
+from zope.component import getUtility
+from zope.event import notify
+from zope.i18n import translate
+from zope.interface import Interface
+from zope.intid.interfaces import IIntIds
+from zope.lifecycleevent import modified, ObjectModifiedEvent
+import datetime
+import os
 
 
 class IResponse(Interface):
@@ -340,6 +337,16 @@ class ResponseView(grok.Viewlet, Base):
         else:
             return None
 
+    def get_added_successor(self, response):
+        try:
+            response.successor_oguid
+        except AttributeError:
+            return None
+        if response.successor_oguid:
+            query = getUtility(ITaskQuery)
+            return query.get_task_by_oguid(response.successor_oguid)
+        else:
+            return None
 
 
 """

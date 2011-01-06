@@ -9,6 +9,7 @@ from opengever.ogds.base.utils import remote_request, get_client_id
 from opengever.task import _
 from opengever.task.interfaces import ISuccessorTaskController
 from opengever.task.task import ITask
+from opengever.task.util import add_simple_response
 from plone.directives import form
 from plone.formwidget.autocomplete import AutocompleteFieldWidget
 from plone.z3cform import layout
@@ -81,6 +82,11 @@ class SuccessorTaskForm(Form):
             # copy documents
             for doc in self.get_documents():
                 trans.transport_to(doc, data['client'], target_task_path)
+
+            # create a response indicating that a response was created
+            successor_oguid = successor_controller.get_oguid_by_path(
+                target_task_path, data['client'])
+            add_simple_response(self.context, successor_oguid=successor_oguid)
 
             # redirect to target in new window
             client = info.get_client_by_id(data['client'])

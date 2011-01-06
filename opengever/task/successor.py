@@ -81,3 +81,13 @@ class SuccessorTaskController(grok.Adapter):
             return None
         else:
             return data.successors
+
+    def get_oguid_by_path(self, path, client_id):
+        """Returns the oguid of another object identifed by client_id and path.
+        """
+        query = getUtility(ITaskQuery)
+        task = query.get_task_by_path(path, client_id)
+        if not task:
+            return None
+        else:
+            return '%s:%s' % (str(task.client_id), str(task.int_id))
