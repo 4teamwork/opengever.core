@@ -1,6 +1,7 @@
 from Products.CMFCore.utils import getToolByName
 from collective.elephantvocabulary import wrap_vocabulary
 from five import grok
+from opengever.ogds.base import caching
 from opengever.ogds.base.interfaces import IClientCommunicator
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.ogds.base.utils import get_current_client
@@ -122,7 +123,7 @@ class AssignedUsersVocabularyFactory(grok.GlobalUtility):
         vocab.hidden_terms = self.hidden_terms
         return vocab
 
-    @volatile.cache(lambda method, self: True)
+    @volatile.cache(caching.client_cache_key)
     @generator_to_list
     def key_value_provider(self):
         info = getUtility(IContactInformation)

@@ -5,7 +5,11 @@ Changelog
 2.0b5
 -----
 
-* xFixed encoding problems.
+* Issue #766 Verantwortlicher Dossier: Falsche Auswahl
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/766
+  [jbaumann]
+
+* Fixed encoding problems.
   [jbaumann]
 
 
