@@ -1,5 +1,5 @@
 class DossierLayout(object):
-    
+
     def __call__(self, view, context):
         self.view = view
         self.context = context
@@ -9,8 +9,10 @@ class DossierLayout(object):
         self.appendAboveBodyCommands()
         self.appendBeneathBodyCommands()
 
-    def getResourceFileData(self, filename, resource='opengever.latex.layouts.resources'):
-        fiveFile = self.context.restrictedTraverse('++resource++%s/%s' % (resource, filename))
+    def getResourceFileData(self, filename,
+                            resource='opengever.latex.layouts.resources'):
+        fiveFile = self.context.restrictedTraverse('++resource++%s/%s' % (
+                resource, filename))
         path = fiveFile.context.path
         fileData = open(path).read()
         return fileData
@@ -22,11 +24,12 @@ class DossierLayout(object):
         image = self.getResourceFileData('strich.png')
         self.view.addImage(uid='strich', image=image)
 
-    def registerPackages(self):    
+    def registerPackages(self):
         self.view.registerPackage('inputenc','utf8')
         self.view.registerPackage('fontenc','T1')
         self.view.registerPackage('textcomp')
-        self.view.registerPackage('geometry', 'left=5cm,right=5cm,top=15cm,bottom=4cm')
+        self.view.registerPackage('geometry',
+                                  'left=5cm,right=5cm,top=15cm,bottom=4cm')
         self.view.registerPackage('graphicx')
 
     def appendHeadCommands(self):
