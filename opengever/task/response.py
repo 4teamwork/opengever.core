@@ -34,6 +34,14 @@ from opengever.task.source import DossierPathSourceBinder
 
 
 class IResponse(Interface):
+    
+    transition = schema.Choice(
+        title=_("label_transition", default="Transition"),
+        description=_(u"help_transition", default=""),
+        source = util.getTransitionVocab,
+        required = False,
+        )
+        
     text = schema.Text(
         title = _('label_response', default="Response"),
         description=_('help_response', default=""),
@@ -43,13 +51,6 @@ class IResponse(Interface):
     date_of_completion = schema.Date(
         title=_(u"label_date_of_completion", default=u"Date of completion"),
         description=_(u"help_date_of_completion", default=u""),
-        required = False,
-        )
-
-    transition = schema.Choice(
-        title=_("label_transition", default="Transition"),
-        description=_(u"help_transition", default=""),
-        source = util.getTransitionVocab,
         required = False,
         )
 
@@ -219,9 +220,9 @@ class AddForm(form.AddForm, AutoExtensibleForm):
     fields = field.Fields(IResponse)
     fields['transition'].widgetFactory = radio.RadioFieldWidget
     fields = fields.omit('date_of_completion')
-
-    @button.buttonAndHandler(_(u'add', default='Add'),
-                             name='add', )
+    
+    @button.buttonAndHandler(_(u'save', default='Save'),
+                               name='save', )
     def handleContinue(self, action):
         data, errors = self.extractData()
         if errors:
@@ -365,14 +366,15 @@ class SingleAddFormView(layout.FormWrapper, grok.CodeView):
     grok.implements(IResponseAdder)
     grok.context(ITask)
     grok.name("addresponse")
-
+    
     form = AddForm
 
     def __init__(self, context, request):
         layout.FormWrapper.__init__(self, context, request)
         grok.CodeView.__init__(self, context, request)
-
-
+        self.form.label = context.title
+        
+        
 class Edit(Base):
 
     @property

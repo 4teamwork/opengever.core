@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: YEAR-MO-DA HO:MI +ZONE\n"
+"POT-Creation-Date: 2011-01-06 13:23+0000\n"
 "PO-Revision-Date: 2011-01-05 18:23+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: DOMAIN\n"
 
-#: ./opengever/task/response.py:420
+#: ./opengever/task/response.py:424
 msgid "Changes saved to response id ${response_id}."
 msgstr "Änderungen an der Antwort ${response_id} wurden gespeichert"
 
@@ -24,39 +24,39 @@ msgstr "Löschen"
 msgid "Edit"
 msgstr "Bearbeiten"
 
-#: ./opengever/task/response.py:289
+#: ./opengever/task/response.py:290
 msgid "Issue state"
 msgstr "Status"
 
-#: ./opengever/task/response.py:448
+#: ./opengever/task/response.py:452
 msgid "No response selected for removal."
 msgstr "Es wurde keine Antwort fürs Löschen selektiert"
 
-#: ./opengever/task/response.py:411
+#: ./opengever/task/response.py:415
 msgid "No response selected for saving."
 msgstr "Es wurde keine Antwort fürs Speichern selektiert"
 
-#: ./opengever/task/response.py:178
+#: ./opengever/task/response.py:179
 msgid "No response selected."
 msgstr "Kein Antwort selektiert"
 
-#: ./opengever/task/response.py:470
+#: ./opengever/task/response.py:474
 msgid "Removed response id ${response_id}."
 msgstr "Antwort ${response_id} gelöscht"
 
-#: ./opengever/task/response.py:463
+#: ./opengever/task/response.py:467
 msgid "Response id ${response_id} does not exist so it cannot be removed."
 msgstr "Antowrt ${response_id} existiert nicht und konnte deshalb nicht gelöscht werden"
 
-#: ./opengever/task/response.py:192
+#: ./opengever/task/response.py:193
 msgid "Response id ${response_id} does not exist."
 msgstr "Antwort ${response_id} exisitert nicht"
 
-#: ./opengever/task/response.py:455
+#: ./opengever/task/response.py:459
 msgid "Response id ${response_id} is no integer so it cannot be removed."
 msgstr "Antwort id ${response_id} ist keine Zahl und konnte deshalb nicht gelöscht werden"
 
-#: ./opengever/task/response.py:186
+#: ./opengever/task/response.py:187
 msgid "Response id ${response_id} is no integer."
 msgstr "Antwort ${response_id} ist keine Zahl"
 
@@ -68,18 +68,13 @@ msgstr "Unteraufgabe"
 msgid "Task"
 msgstr "Aufgabe"
 
-#: ./opengever/task/response.py:442
+#: ./opengever/task/response.py:446
 msgid "You are not allowed to delete responses."
 msgstr "Sie haben keine Berechtigung Antworten zu löschen"
 
-#: ./opengever/task/response.py:405
+#: ./opengever/task/response.py:409
 msgid "You are not allowed to edit responses."
 msgstr "Sie haben keine Berechtigung Antworten zu editieren"
-
-#. Default: "Add"
-#: ./opengever/task/response.py:223
-msgid "add"
-msgstr "Hinzufügen"
 
 #. Default: "2. Choose document"
 #: ./opengever/task/browser/attachdocument.py:62
@@ -125,7 +120,7 @@ msgid "button_copy"
 msgstr "Kopieren"
 
 #. Default: "Cancel"
-#: ./opengever/task/response.py:306
+#: ./opengever/task/response.py:307
 msgid "cancel"
 msgstr "Abbrechen"
 
@@ -134,7 +129,7 @@ msgstr "Abbrechen"
 msgid "containing_task"
 msgstr "Übergeordnete Aufgabe"
 
-#: ./opengever/task/response.py:257
+#: ./opengever/task/response.py:258
 msgid "date_of_completion"
 msgstr "Erledigungsdatum"
 
@@ -167,7 +162,7 @@ msgstr "Allgemein"
 msgid "help_copy_documents"
 msgstr ""
 
-#: ./opengever/task/response.py:45
+#: ./opengever/task/response.py:53
 #: ./opengever/task/task.py:107
 msgid "help_date_of_completion"
 msgstr "Das Datum an dem die Aufgabe beendet wurde"
@@ -209,7 +204,7 @@ msgstr ""
 msgid "help_predecessor"
 msgstr ""
 
-#: ./opengever/task/response.py:39
+#: ./opengever/task/response.py:47
 msgid "help_response"
 msgstr ""
 
@@ -261,7 +256,7 @@ msgid "help_title"
 msgstr "Der Name der Aufgabe"
 
 #: ./opengever/task/behaviors.py:26
-#: ./opengever/task/response.py:51
+#: ./opengever/task/response.py:40
 msgid "help_transition"
 msgstr ""
 
@@ -289,7 +284,7 @@ msgid "label_copy_documents"
 msgstr "Mit der Aufgabe verknüpfte Dokumente in den Eingangskorb des Ziel-Mandanten kopieren."
 
 #. Default: "Date of completion"
-#: ./opengever/task/response.py:44
+#: ./opengever/task/response.py:52
 #: ./opengever/task/task.py:106
 msgid "label_date_of_completion"
 msgstr "Erledigungsdatum"
@@ -350,7 +345,7 @@ msgid "label_predecessor"
 msgstr "Vorgänger"
 
 #. Default: "Related Items"
-#: ./opengever/task/response.py:57
+#: ./opengever/task/response.py:58
 #: ./opengever/task/task.py:120
 msgid "label_related_items"
 msgstr "Verweise"
@@ -362,7 +357,7 @@ msgid "label_resonsible_client"
 msgstr "Mandant des Verantwortlichen"
 
 #. Default: "Response"
-#: ./opengever/task/response.py:38
+#: ./opengever/task/response.py:46
 msgid "label_response"
 msgstr "Antworttext"
 
@@ -419,7 +414,7 @@ msgstr "Titel"
 
 #. Default: "Transition"
 #: ./opengever/task/behaviors.py:25
-#: ./opengever/task/response.py:50
+#: ./opengever/task/response.py:39
 msgid "label_transition"
 msgstr "Aktion"
 
@@ -450,6 +445,11 @@ msgstr "Antowrt"
 #: ./opengever/task/response_templates/responseview.pt:3
 msgid "responses"
 msgstr "Antworten:"
+
+#. Default: "Save"
+#: ./opengever/task/response.py:224
+msgid "save"
+msgstr "Speichern"
 
 #. Default: "Subtasks:"
 #: ./opengever/task/task_templates/view.pt:87

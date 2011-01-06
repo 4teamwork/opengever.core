@@ -4,6 +4,9 @@ Changelog
 
 2.0b7
 -----
+* Issue #755 Anpassungen Maske Aufgabeantwort
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/755/
+  [ttschanz]
 
 * Issue #737 Aufgabe: Hinzufuegen Dokument (aus Mandanten) erzeugt Antwort
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/737
