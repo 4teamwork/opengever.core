@@ -13,7 +13,7 @@ msgstr ""
 "Domain: DOMAIN\n"
 
 msgid "Add response"
-msgstr "Antwort hinzufügen"
+msgstr "Antwort"
 
 msgid "Attach remote document"
 msgstr "Dokument aus eigenem Mandant"
