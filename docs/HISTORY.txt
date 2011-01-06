@@ -4,12 +4,14 @@ Changelog
 
 2.0b6
 -----
-
 * Added support for multiple Elements. If an Document is selected that is connected to a Task.
   It can't be moved.
   Issue #715 Neuer Wizard: Dossier verschieben
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/715/
   [ttschanz]
+
+* Fixed title for templates in "create dossier from template" view
+  [lgraf]
 
 * Added index and metadata column `containing_subdossier` (used for Documents and Tasks)
   Issue #739 Neue Spalten in Tabbedview innerhalb Dossier

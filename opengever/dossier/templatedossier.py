@@ -140,7 +140,7 @@ class TemplateDocumentFormView(grok.View):
         columns = (
             (''),
             ('', helper.path_radiobutton),
-            {'column':'title',
+            {'column':'Title',
              'column_title': _(u'label_title', default=u'title'),
              'sort_index':'sortable_title',
              'transform':linked},
