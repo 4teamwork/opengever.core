@@ -18,6 +18,7 @@ from z3c.form.field import Fields
 from z3c.form.form import Form
 from zope import schema
 from zope.component import getUtility
+from zope.lifecycleevent import modified
 from zope.lifecycleevent.interfaces import IObjectModifiedEvent
 import os.path
 
@@ -242,4 +243,5 @@ def change_successor_state_after_edit(task, event):
                                             'comments': comment,})
             wfs = {wf_id: wtool.getWorkflowById(wf_id)}
             wtool._recursiveUpdateRoleMappings(task, wfs)
-            task.reindexObjectSecurity()
+
+            modified(task)
