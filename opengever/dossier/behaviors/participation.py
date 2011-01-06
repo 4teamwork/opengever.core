@@ -102,7 +102,8 @@ class IParticipation(form.Schema):
                 visible_terms_from_registry='opengever.dossier' + \
                     '.interfaces.IDossierParticipants.roles'),
             ),
-        required = False,
+        required=True,
+        missing_value=[],
         )
 
 

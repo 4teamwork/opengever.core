@@ -18,6 +18,10 @@ Changelog
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/739/
   [lgraf]
 
+* Issue #734 Beteiligung: Neue Beteiligung ohne Rollenangabe
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/734
+  [jbaumann]
+
 * Related dossiers: Fixed path source binder configuration.
   [jbaumann]
 
