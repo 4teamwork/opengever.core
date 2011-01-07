@@ -18,55 +18,50 @@
 
         <table class="listing task-listing">
           <tal:rep tal:define="group python: view.groups[0]">
-            <tr tal:repeat="widget group/widgets/values">
-            <span tal:define="index repeat/widget/index"/>
-
-              <tal:block condition="python: widget.__name__ not in ('IBasic.title', 'IBasic.description', 'title', 'description','responsible', 'ITransition.transition', 'issuer', 'relatedItems', 'deadline') and widget.value">
-				<th tal:content="widget/label" ></th>
-                <td tal:content="structure widget/render" />
-              </tal:block>
-              <tal:block condition="python:widget.__name__  == 'responsible' and widget.value">
-                <th tal:content="widget/label"></th>
-                <td tal:content="structure view/responsible_link" />
-              </tal:block>
-              <tal:block condition="python:widget.__name__  == 'issuer' and widget.value">
-                <th tal:content="widget/label"></th>
-                <td tal:content="structure view/issuer_link" />
-              </tal:block>
-              <tal:block condition="python:widget.__name__ == 'deadline' and widget.value">
-                <th tal:content="widget/label"></th>
-                <td tal:content="python:here.toLocalizedTime(str(context.deadline))"/>
-              </tal:block>
+            <tr>
+			<span tal:content="python: group.widgets['text'].value" />
+			  <th tal:content="python: group.widgets['text'].label" />
+			  <td tal:content="structure python: group.widgets['text'].render()" />
             </tr>
-          </tal:rep>
-          <tr>
-            <th i18n:domain="opengever.task" i18n:translate="label_workflow_state">State</th>
-            <td i18n:translate="" i18n:domain="plone" tal:content="python: view.context.portal_workflow.getInfoFor(view.context, 'review_state')" />
-          <tr>
-          <tr>
-            <th i18n:domain="opengever.task" i18n:translate="label_last_modified">Last change</th>
-            <td tal:content="python: view.context.modified().strftime('%d.%m.%Y %H:%M')"/>
-          </tr>
-          <tal:rep tal:define="group python: view.groups[1]">
-            <tr tal:repeat="widget group/widgets/values">
-              <tal:block condition="python:widget.__name__ not in ('IBasic.title', 'IBasic.description', 'title', 'description','responsible', 'ITransition.transition', 'date_of_completion', 'expectedStartOfWork') and widget.value and widget.value != ('', '', '')">
-                <th tal:content="widget/label"></th>
-                <td tal:content="structure widget/render" />
-              </tal:block>
-              <tal:block condition="python:widget.__name__  == 'responsible'and widget.value">
-                <th tal:content="widget/label"></th>
-                <td tal:content="structure python: len(widget.value) > 0 and widget.value[0] or '' " />
-              </tal:block>
-              <tal:block condition="python:widget.__name__ == 'date_of_completion' and widget.value">
-                <th tal:content="widget/label"></th>
-                <td tal:content="python:here.toLocalizedTime(str(context.date_of_completion))"/>
-              </tal:block>
-			<tal:block condition="python:widget.__name__ == 'expectedStartOfWork' and widget.value">
-                <th tal:content="widget/label"></th>
-                <td tal:content="python:context.expectedStartOfWork.strftime('%d.%m.%Y')"/>
-              </tal:block>
-            </tr>
-          </tal:rep>
+			<tr>
+			  <th tal:content="python: group.widgets['task_type'].label" />
+			  <td tal:content="structure python: group.widgets['task_type'].render()" />
+			</tr>
+			<tr>
+			   <th i18n:domain="opengever.task" i18n:translate="label_workflow_state">State</th>
+			   <td i18n:translate="" i18n:domain="plone" tal:content="python: view.context.portal_workflow.getInfoFor(view.context, 'review_state')" />
+			</tr>
+			<tr>
+				<th tal:content="python: group.widgets['issuer'].label"></th>
+			    <td tal:content="structure view/issuer_link" />
+			</tr>
+			<tr>
+				<th i18n:translate="label_responsible">Responsible:</th>
+				<td tal:content="structure view/responsible_link" />
+			</tr>
+			<tr>
+			<th tal:content="python:group.widgets['deadline'].label"></th>
+		    <td tal:content="python:here.toLocalizedTime(str(context.deadline))"/>
+		    </tr>
+		 	<tr>
+			   <th i18n:domain="opengever.task" i18n:translate="label_last_modified">Last change</th>
+			   <td tal:content="python: view.context.modified().strftime('%d.%m.%Y %H:%M')"/>
+			</tr>	
+          
+		  <tal:rep2 tal:define="group2 python: view.groups[1]">
+			<tr>
+				<th tal:content="python: group2.widgets['expectedStartOfWork'].label"></th>
+				<td tal:content="python:context.expectedStartOfWork.strftime('%d.%m.%Y')"/>
+			</tr>
+		  	<tr tal:repeat="widget group2/widgets/values">
+				<tal:block condition="python:widget.__name__ not in ('IBasic.title', 'IBasic.description', 'title',
+				'description', 'ITransition.transition', 'expectedStartOfWork') and widget.value and widget.value != ('', '', '')">
+				<th tal:content="structure widget/label" />
+				<td tal:content="structure widget/render" />
+				</tal:block>
+			</tr>
+		  </tal:rep2>
+		</tal:rep>
         </table>
 
         <div class="visualClear"><!----></div>

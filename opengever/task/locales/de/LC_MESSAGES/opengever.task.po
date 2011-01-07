@@ -405,7 +405,7 @@ msgstr "Auftragstyp"
 #. Default: "Text"
 #: ./opengever/task/task.py:114
 msgid "label_text"
-msgstr "Kommentar"
+msgstr "Beschreibung"
 
 #. Default: "Title"
 #: ./opengever/task/task.py:59

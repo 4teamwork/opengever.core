@@ -8,6 +8,10 @@ Changelog
 * Fixed import of DossierPathSourceBinder in opengever.task.response
   [lgraf]
 
+* Issue #758 Darstellung Aufgabe: Reihenfolge Felder anpassen
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/758/
+  [ttschanz]
+
 * Issue #755 Anpassungen Maske Aufgabeantwort
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/755/
   [ttschanz]

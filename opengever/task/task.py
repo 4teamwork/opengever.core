@@ -281,7 +281,8 @@ class View(dexterity.DisplayForm):
     def responsible_link(self):
         info = getUtility(IContactInformation)
         task = ITask(self.context)
-        return info.render_link(task.responsible)
+        client = self.groups[0].widgets['responsible_client'].value
+        return client[0]  +'/'+ info.render_link(task.responsible)
 
     def issuer_link(self):
         info = getUtility(IContactInformation)
