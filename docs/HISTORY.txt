@@ -5,6 +5,11 @@ Changelog
 2.0b3
 -----
 
+* Removed Search for Creator.
+  Issue #767 Erweiterte Suche: Nicht nach Ersteller suchen (bei Dokument)
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/767/
+  [ttschanz]
+
 * issue #763 Erweiterte Suche: Suche nach Aktenzeichen umständlich
 https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/763/
   [ttschanz]

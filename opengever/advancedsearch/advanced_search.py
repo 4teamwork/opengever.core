@@ -5,7 +5,6 @@ from Products.CMFPlone import PloneMessageFactory as PMF
 from zope import schema
 from zope.schema.interfaces import IContextSourceBinder
 from zope.schema.vocabulary import SimpleVocabulary
-from zope.interface import Interface, implements
 from z3c.form import button, field
 from z3c.form.interfaces import INPUT_MODE
 from z3c.form.browser import radio, checkbox
@@ -18,10 +17,7 @@ from datetime import date
 from ftw.datepicker.widget import DatePickerFieldWidget
 from datetime import timedelta
 import datetime
-from z3c.form import validator
-from zope.schema.interfaces import IField
-from z3c.form.interfaces import IValidator
-from zope.component import adapts
+from zope.interface import Interface
 from plone.registry.interfaces import IRegistry
 from zope.component import getUtility
 import re
@@ -97,7 +93,6 @@ FIELD_MAPPING = {'opengever-dossier-businesscasedossier': [
                     'document_date_1',
                     'document_date_2',
                     'document_author',
-                    'Creator',
                     'checked_out',
                     'trashed',
                 ],
@@ -222,13 +217,6 @@ class IAdvancedSearch(directives_form.Schema):
         required=False,
     )
 
-    Creator = schema.Choice(
-        title=_('label_creator', default='creator'),
-        description=_('help_creator', default=''),
-        vocabulary=u'opengever.ogds.base.UsersVocabulary',
-        required=False,
-    )
-
     directives_form.widget(responsible=AutocompleteFieldWidget)
     checked_out = schema.Choice(
         title=_('label_checked_out', default='Checked out by'),
@@ -298,8 +286,6 @@ class AdvancedSearchForm(directives_form.Form):
     fields['responsible'].widgetFactory[INPUT_MODE] \
         = AutocompleteFieldWidget
     fields['task_responsible'].widgetFactory[INPUT_MODE] \
-        = AutocompleteFieldWidget
-    fields['Creator'].widgetFactory[INPUT_MODE] \
         = AutocompleteFieldWidget
     fields['checked_out'].widgetFactory[INPUT_MODE] \
         = AutocompleteFieldWidget

@@ -8,7 +8,6 @@ jq(function(){
     // add manually the class for some fields, where the addClass function not work (autocomplete widget ect.)
     jq('#form-widgets-responsible-autocomplete').addClass('opengever-dossier-businesscasedossier');
     jq('#form-widgets-review_state-from').addClass('opengever-dossier-businesscasedossier');
-    jq('#form-widgets-creator-autocomplete').addClass('opengever-document-document');
     jq('#form-widgets-checked_out-autocomplete').addClass('opengever-document-document');
     jq('#form-widgets-trashed-0').addClass('opengever-document-document');
     jq('#form-widgets-issuer-autocomplete').addClass('opengever-task-task');
