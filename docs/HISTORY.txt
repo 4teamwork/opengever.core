@@ -5,6 +5,11 @@ Changelog
 2.0b6
 -----
 
+* Adapted SearchableText for Dossiers.
+  Issue #765 SearchableText anpassen für Dossiers und Aufgaben.
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/765/
+  [ttschanz]
+
 * Fixed po file.
   [jbaumann]
 
