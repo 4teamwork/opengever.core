@@ -10,6 +10,10 @@ Changelog
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/748/
   [lgraf]
 
+* Fixed bug in move_items. if allowed Itemsand disallowed Items are Copied together
+  the allowed don't fail anymore.
+  [ttschanz]
+ 
 * Adapted SearchableText for Dossiers.
   Issue #765 SearchableText anpassen für Dossiers und Aufgaben.
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/765/

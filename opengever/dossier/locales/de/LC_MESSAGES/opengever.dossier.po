@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: YEAR-MO-DA HO:MI +ZONE\n"
+"POT-Creation-Date: 2011-01-07 15:19+0000\n"
 "PO-Revision-Date: 2011-01-07 14:18+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -11,6 +11,10 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0\n"
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: DOMAIN\n"
+
+#: ./opengever/dossier/move_items.py:108
+msgid "${copiedItems} Elements were moved successfully"
+msgstr "${copiedItems} Elemente wurden erfolgreich verschoben"
 
 #. Default: "Geschäftsdossier"
 msgid "Add Business Case Dossier"
@@ -33,17 +37,21 @@ msgstr "In eigenes Dossier kopieren"
 msgid "Delete"
 msgstr "Beteiligung löschen"
 
-#: ./opengever/dossier/move_items.py:92
+#: ./opengever/dossier/move_items.py:94
 msgid "Document ${name} is connected to a Task.                    Please move the Task."
 msgstr "Dokument ${name} ist mit einer Aufgabe verbunden, bitte Aufgabe verschieben."
 
-#: ./opengever/dossier/move_items.py:127
+#: ./opengever/dossier/move_items.py:112
+msgid "Failed to copy following objects: ${failedObjects}"
+msgstr "Folgende Elemente konnten nicht verschoben werden: ${failedObjects}"
+
+#: ./opengever/dossier/move_items.py:141
 msgid "It isn't allowed to add such items there"
 msgstr "Sie dürfen dieses Objekt nicht an den Zielort verschieben"
 
 #: ./opengever/dossier/profiles/default/actions.xml
 msgid "Move Items"
-msgstr "Objekt verschieben"
+msgstr "Elemente verschieben"
 
 #: ./opengever/dossier/browser/send_document.py:34
 msgid "No Mail Address"
@@ -180,7 +188,7 @@ msgid "documents"
 msgstr "Dokumente"
 
 #. Default: "It isn't allowed to add such items there"
-#: ./opengever/dossier/move_items.py:148
+#: ./opengever/dossier/move_items.py:162
 msgid "error_NotInContentTypes"
 msgstr "Sie dürfen dieses Objekt nicht an den Zielort verschieben"
 

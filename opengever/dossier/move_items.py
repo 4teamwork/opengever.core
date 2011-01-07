@@ -80,6 +80,8 @@ class MoveItemsForm(form.Form):
             source = data['request_paths'].split(';;')
             destination = data['destination_folder']
             sourceObjects = []
+            failedObjects = []
+            copiedItems = 0
             for path in source:
                 sourceObjects.append(self.context.unrestrictedTraverse(
                     path.encode('utf-8')))
@@ -97,7 +99,19 @@ class MoveItemsForm(form.Form):
             for obj in sourceObjects:
                 sourceContainer = aq_parent(aq_inner(obj))
                 clipboard = sourceContainer.manage_cutObjects(obj.id)
-                destination.manage_pasteObjects(clipboard)
+                try:
+                    destination.manage_pasteObjects(clipboard)
+                    copiedItems +=1
+                except ValueError:
+                    failedObjects.append(obj.title)
+                if copiedItems:
+                    msg = _(u'${copiedItems} Elements were moved successfully', mapping=dict(copiedItems=copiedItems))
+                    IStatusMessage(self.request).addStatusMessage(
+                        msg, type='information')
+                if failedObjects:
+                    msg = _(u'Failed to copy following objects: ${failedObjects}', mapping=dict(failedObjects=','.join(failedObjects)))
+                    IStatusMessage(self.request).addStatusMessage(
+                        msg, type='error')
             self.request.RESPONSE.redirect(destination.absolute_url())
 
     @z3c.form.button.buttonAndHandler(_(u'button_cancel',

@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2011-01-07 13:12+0000\n"
+"POT-Creation-Date: 2011-01-07 15:19+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,6 +16,10 @@ msgstr ""
 "Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: opengever.dossier\n"
+
+#: ./opengever/dossier/move_items.py:108
+msgid "${copiedItems} Elements were moved successfully"
+msgstr ""
 
 #. Default: "Geschäftsdossier"
 msgid "Add Business Case Dossier"
@@ -37,11 +41,15 @@ msgstr ""
 msgid "Delete"
 msgstr ""
 
-#: ./opengever/dossier/move_items.py:92
+#: ./opengever/dossier/move_items.py:94
 msgid "Document ${name} is connected to a Task.                    Please move the Task."
 msgstr ""
 
-#: ./opengever/dossier/move_items.py:127
+#: ./opengever/dossier/move_items.py:112
+msgid "Failed to copy following objects: ${failedObjects}"
+msgstr ""
+
+#: ./opengever/dossier/move_items.py:141
 msgid "It isn't allowed to add such items there"
 msgstr ""
 
@@ -182,7 +190,7 @@ msgid "documents"
 msgstr ""
 
 #. Default: "It isn't allowed to add such items there"
-#: ./opengever/dossier/move_items.py:148
+#: ./opengever/dossier/move_items.py:162
 msgid "error_NotInContentTypes"
 msgstr ""
 
