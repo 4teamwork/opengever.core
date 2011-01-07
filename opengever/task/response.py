@@ -9,7 +9,7 @@ from opengever.task import util
 from opengever.task.adapters import IResponseContainer, Response
 from opengever.task.interfaces import IResponseAdder
 from opengever.task.permissions import DEFAULT_ISSUE_MIME_TYPE
-from opengever.task.source import DossierPathSourceBinder
+from opengever.base.source import DossierPathSourceBinder
 from opengever.task.task import ITask
 from plone.autoform.form import AutoExtensibleForm
 from plone.memoize.view import memoize
