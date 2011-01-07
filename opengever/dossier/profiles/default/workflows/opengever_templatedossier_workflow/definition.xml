@@ -13,7 +13,6 @@
   <description>Visible to everyone, editable by the owner.</description>
   <permission-map name="Access contents information" acquired="False">
    <permission-role>Administrator</permission-role>
-   <permission-role>Authenticated</permission-role>
    <permission-role>Manager</permission-role>
    <permission-role>Reader</permission-role>
   </permission-map>
@@ -27,13 +26,11 @@
   </permission-map>
   <permission-map name="Copy or Move" acquired="False">
    <permission-role>Administrator</permission-role>
-   <permission-role>Authenticated</permission-role>
    <permission-role>Manager</permission-role>
    <permission-role>Reader</permission-role>
   </permission-map>
   <permission-map name="List folder contents" acquired="False">
    <permission-role>Administrator</permission-role>
-   <permission-role>Authenticated</permission-role>
    <permission-role>Manager</permission-role>
    <permission-role>Reader</permission-role>
   </permission-map>
@@ -45,7 +42,6 @@
   </permission-map>
   <permission-map name="View" acquired="False">
    <permission-role>Administrator</permission-role>
-   <permission-role>Authenticated</permission-role>
    <permission-role>Manager</permission-role>
    <permission-role>Reader</permission-role>
   </permission-map>

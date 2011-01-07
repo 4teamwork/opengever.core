@@ -5,6 +5,11 @@ Changelog
 2.0b6
 -----
 
+* Only show Templates (Vorlagen) tab in globalnav if user is on a home client
+  Issue #748 Reiter "Uebersicht" und "Vorlagen" ausblenden fuer Nicht-Users
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/748/
+  [lgraf]
+
 * Adapted SearchableText for Dossiers.
   Issue #765 SearchableText anpassen für Dossiers und Aufgaben.
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/765/
