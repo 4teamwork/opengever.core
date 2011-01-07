@@ -5,6 +5,11 @@ Changelog
 2.0b6
 -----
 
+* Only show Personal Overview tab in globalnav if user is on a home client
+  Issue #748 Reiter "Uebersicht" und "Vorlagen" ausblenden fuer Nicht-Users
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/748/
+  [lgraf]
+
 * Fixed implementation of `subdossier` column
   Issue #739 Neue Spalten in Tabbedview innerhalb Dossier
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/739/

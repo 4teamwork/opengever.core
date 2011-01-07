@@ -3,7 +3,9 @@ from five import grok
 from ftw.tabbedview.browser.tabbed import TabbedView
 from ftw.table import helper
 from opengever.globalindex.interfaces import ITaskQuery
+from opengever.ogds.base.interfaces import IContactInformation
 from opengever.ogds.base.utils import get_client_id
+from opengever.ogds.base.utils import get_current_client
 from opengever.tabbedview.browser.tabs import Documents, Dossiers, Tasks
 from opengever.tabbedview.browser.tasklisting import GlobalTaskListingTab
 from zope.app.pagetemplate import ViewPageTemplateFile
@@ -65,6 +67,19 @@ class PersonalOverview(TabbedView):
         {'id': 'allissuedtasks', 'icon': None, 'url': '#', 'class': None},
         ]
 
+    def __call__(self):
+        """If user is not allowed to view PersonalOverview, redirect him
+        to the repository root, otherwise behave like always.
+        """
+        if not self.user_is_allowed_to_view():
+            catalog = getToolByName(self.context, 'portal_catalog')
+            import pdb; pdb.set_trace( )
+            repos = catalog(portal_type='opengever.repository.repositoryroot')
+            repo_url = repos[0].getURL()
+            return self.request.RESPONSE.redirect(repo_url)
+        else:
+            return super(PersonalOverview, self).__call__()
+
     def get_tabs(self):
         mtool = getToolByName(self.context, 'portal_membership')
         member = mtool.getAuthenticatedMember()
@@ -85,6 +100,14 @@ class PersonalOverview(TabbedView):
             return self.default_tabs + self.admin_tabs
         else:
             return self.default_tabs
+
+    def user_is_allowed_to_view(self):
+        """Returns True if the current client is one of the user's home
+        clients and he therefore is allowed to view the PersonalOverview,
+        False otherwise.
+        """
+        info = getUtility(IContactInformation)
+        return get_current_client() in info.get_assigned_clients()
 
 
 class MyDossiers(Dossiers):
