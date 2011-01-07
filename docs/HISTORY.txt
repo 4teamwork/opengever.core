@@ -5,6 +5,13 @@ Changelog
 2.0b3
 -----
 
+* issue #763 Erweiterte Suche: Suche nach Aktenzeichen umständlich
+https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/763/
+  [ttschanz]
+
+* issue #762 Erweiterte Suche: Suche nach Status fehlt bei Aufgabe
+https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/762/
+  [ttschanz]
 
 2.0b2
 -----

@@ -5,7 +5,7 @@ from Products.CMFPlone import PloneMessageFactory as PMF
 from zope import schema
 from zope.schema.interfaces import IContextSourceBinder
 from zope.schema.vocabulary import SimpleVocabulary
-from zope.interface import Interface
+from zope.interface import Interface, implements
 from z3c.form import button, field
 from z3c.form.interfaces import INPUT_MODE
 from z3c.form.browser import radio, checkbox
@@ -18,13 +18,29 @@ from datetime import date
 from ftw.datepicker.widget import DatePickerFieldWidget
 from datetime import timedelta
 import datetime
-
+from z3c.form import validator
+from zope.schema.interfaces import IField
+from z3c.form.interfaces import IValidator
+from zope.component import adapts
+from plone.registry.interfaces import IRegistry
+from zope.component import getUtility
+import re
 
 @grok.provider(IContextSourceBinder)
-def get_possible_states(context):
+def get_possible_dossier_states(context):
     wftool = getToolByName(context, 'portal_workflow')
     chain = wftool.getChainForPortalType(
         'opengever.dossier.businesscasedossier')[0]
+    states = []
+    for state in wftool.get(chain).states:
+        states.append(SimpleVocabulary.createTerm(state, state, PMF(state)))
+    return SimpleVocabulary(states)
+
+@grok.provider(IContextSourceBinder)
+def get_possible_task_states(context):
+    wftool = getToolByName(context, 'portal_workflow')
+    chain = wftool.getChainForPortalType(
+        'opengever.task.task')[0]
     states = []
     for state in wftool.get(chain).states:
         states.append(SimpleVocabulary.createTerm(state, state, PMF(state)))
@@ -63,7 +79,7 @@ FIELD_MAPPING = {'opengever-dossier-businesscasedossier': [
                     'sequence_number',
                     'filing_no',
                     'responsible',
-                    'review_state',
+                    'dossier_review_state',
                 ],
                 'opengever-task-task':[
                     'issuer',
@@ -71,6 +87,7 @@ FIELD_MAPPING = {'opengever-dossier-businesscasedossier': [
                     'deadline_1',
                     'deadline_2',
                     'task_type',
+                    'task_review_state',
                 ],
                 'opengever-document-document':[
                     'receipt_date_1',
@@ -153,11 +170,11 @@ class IAdvancedSearch(directives_form.Schema):
         required=False,
     )
 
-    review_state = schema.List(
+    dossier_review_state = schema.List(
         title=_('label_review_state', default='State'),
         description=_('help_review_state', default=''),
         value_type=schema.Choice(
-            source=get_possible_states,
+            source=get_possible_dossier_states,
         ),
         required=False,
     )
@@ -261,7 +278,14 @@ class IAdvancedSearch(directives_form.Schema):
         source=getTaskTypeVocabulary, 
         required=False,
     )
-
+    task_review_state = schema.List(
+        title=_('label_review_state', default='State'),
+        description=_('help_review_state', default=''),
+        value_type=schema.Choice(
+            source=get_possible_task_states,
+        ),
+        required=False,
+    )
 
 class AdvancedSearchForm(directives_form.Form):
     grok.context(Interface)
@@ -283,9 +307,10 @@ class AdvancedSearchForm(directives_form.Form):
         = AutocompleteFieldWidget
     fields['portal_type'].widgetFactory[INPUT_MODE] \
         =  radio.RadioFieldWidget
-    fields['review_state'].widgetFactory[INPUT_MODE] \
+    fields['dossier_review_state'].widgetFactory[INPUT_MODE] \
         = checkbox.CheckBoxFieldWidget
-
+    fields['task_review_state'].widgetFactory[INPUT_MODE] \
+        = checkbox.CheckBoxFieldWidget
 
     ignoreContext = True
 
@@ -318,8 +343,10 @@ class AdvancedSearchForm(directives_form.Form):
     @button.buttonAndHandler(_(u'button_search', default=u'Search'))
     def search(self, action):
         data, errors = self.extractData()
+        
         if not errors:
             # create Parameters and url
+            data['reference'] = self.correct_ref(data['reference'])
             params = '/search?portal_type=%s' % (data.get('portal_type', ''))
             # if clause because it entered a searchableText=none without text
             if data.get('searchableText'):
@@ -353,3 +380,13 @@ class AdvancedSearchForm(directives_form.Form):
             params = params.replace('task_responsible', 'repsonsible')
 
             self.context.REQUEST.RESPONSE.redirect(self.context.portal_url() + params)
+                
+                
+    def correct_ref(self, value):
+        registry = getUtility(IRegistry)
+        prefix = registry['opengever.base.interfaces.IBaseClientID.client_id']
+        if prefix in value:
+            value = value.replace(prefix, "")
+        refnr = re.split('[^a-zA-Z0-9\.]', value)
+        value = ' / '.join(refnr)
+        return prefix + " " +value

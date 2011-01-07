@@ -209,7 +209,7 @@ msgstr "Aktenzeichen"
 #. Default: "Responsible"
 #: ./opengever/advancedsearch/advanced_search.py:145
 msgid "label_reponsible"
-msgstr "Verantwortlich"
+msgstr "Federführung"
 
 #. Default: "Responsible"
 #: ./opengever/advancedsearch/advanced_search.py:235
