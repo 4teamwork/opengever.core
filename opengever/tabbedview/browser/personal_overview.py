@@ -73,7 +73,6 @@ class PersonalOverview(TabbedView):
         """
         if not self.user_is_allowed_to_view():
             catalog = getToolByName(self.context, 'portal_catalog')
-            import pdb; pdb.set_trace( )
             repos = catalog(portal_type='opengever.repository.repositoryroot')
             repo_url = repos[0].getURL()
             return self.request.RESPONSE.redirect(repo_url)
