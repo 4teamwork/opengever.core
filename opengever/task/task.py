@@ -23,7 +23,6 @@ from zope.component import getUtility, getMultiAdapter
 from zope.interface import implements, Interface
 from zope.schema.vocabulary import getVocabularyRegistry
 
-
 class ITask(form.Schema):
 
     form.fieldset(

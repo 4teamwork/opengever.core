@@ -19,7 +19,7 @@
         <table class="listing task-listing">
           <tal:rep tal:define="group python: view.groups[0]">
             <tr>
-			<span tal:content="python: group.widgets['text'].value" />
+			<span tal:condition="python: group.widgets['text']" />
 			  <th tal:content="python: group.widgets['text'].label" />
 			  <td tal:content="structure python: group.widgets['text'].render()" />
             </tr>
@@ -49,7 +49,7 @@
 			</tr>	
           
 		  <tal:rep2 tal:define="group2 python: view.groups[1]">
-			<tr>
+			<tr tal:condition="pyhton: context.expectedStartOfWork">
 				<th tal:content="python: group2.widgets['expectedStartOfWork'].label"></th>
 				<td tal:content="python:context.expectedStartOfWork.strftime('%d.%m.%Y')"/>
 			</tr>

@@ -5,9 +5,7 @@ Changelog
 2.0b7
 -----
 
-* Issue #765 SearchableText anpassen für Dossiers und Aufgaben
-  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/765/
-  Adapted SearchableText for Tasks
+* Fixed bug in Tasktemplate
   [ttschanz]
 
 * Fixed import of DossierPathSourceBinder in opengever.task.response
