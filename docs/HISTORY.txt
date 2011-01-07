@@ -15,7 +15,7 @@ Changelog
   [ttschanz]
  
 * Adapted SearchableText for Dossiers.
-  Issue #765 SearchableText anpassen für Dossiers und Aufgaben.
+  Issue #765 SearchableText anpassen fuer Dossiers und Aufgaben.
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/765/
   [ttschanz]
 
@@ -57,7 +57,7 @@ Changelog
   [phgross]
 
 * Issue #722 Release 2b06: Dossier kann nicht abgeschlossen werden, obwohl alle Aufgaben abgeschlossen sind
-https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/722
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/722
   [phgross]
 
 2.0b5
