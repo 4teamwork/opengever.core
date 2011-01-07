@@ -126,12 +126,8 @@ class Base(BrowserView):
                 #html = linkDetection(html)
                 response.rendered_text = html
             html = response.rendered_text
-            # if response.changes[0]['after']:
-            #                import pdb; pdb.set_trace( )
-            #                response.changes[0]['after'] = response.changes[0]['after'].strftime('%d.%m.%Y')
             info = dict(id=id,
                         response=response,
-                        #relatedItems=getattr(response,"relatedItems",()),
                         html=html)
             items.append(info)
             # reverse the items, so that the latest one is above
