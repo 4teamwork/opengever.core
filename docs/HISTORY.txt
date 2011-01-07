@@ -10,7 +10,7 @@ Changelog
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/767/
   [ttschanz]
 
-* Issue #763 Erweiterte Suche: Suche nach Aktenzeichen umständlich
+* Issue #763 Erweiterte Suche: Suche nach Aktenzeichen umstaendlich
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/763/
   [ttschanz]
 
