@@ -56,5 +56,8 @@ setup(name='opengever.base',
       # -*- Entry points: -*-
       [z3c.autoinclude.plugin]
       target = plone
+
+      [izug.basetheme]
+      version = opengever.base
       """,
       )
