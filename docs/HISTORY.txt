@@ -5,6 +5,9 @@ Changelog
 2.0a3
 -----
 
+* Switched to izug.basetheme package.
+  [jbaumann]
+
 
 2.0a2
 -----

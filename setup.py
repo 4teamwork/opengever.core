@@ -38,12 +38,12 @@ setup(name='opengever.policy.base',
           'opengever.tabbedview',
           'opengever.tasktemplates',
           'opengever.task',
-          'opengever.theme',
           'opengever.trash',
           'opengever.contact',
           'opengever.latex',
           'opengever.advancedsearch',
           'opengever.sharing',
+          'izug.basetheme',
       ],
       entry_points="""
       # -*- Entry points: -*-
