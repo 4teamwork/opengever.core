@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2011-01-06 12:21+0000\n"
+"POT-Creation-Date: 2011-01-07 13:12+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -109,7 +109,7 @@ msgid "You have to select a intern                             or enter a extern
 msgstr ""
 
 #. Default: "Add"
-#: ./opengever/dossier/behaviors/participation.py:153
+#: ./opengever/dossier/behaviors/participation.py:154
 msgid "button_add"
 msgstr ""
 
@@ -120,7 +120,7 @@ msgstr ""
 
 #. Default: "Cancel"
 #: ./opengever/dossier/archive.py:268
-#: ./opengever/dossier/behaviors/participation.py:166
+#: ./opengever/dossier/behaviors/participation.py:167
 #: ./opengever/dossier/browser/transport.py:170
 msgid "button_cancel"
 msgstr ""
@@ -330,12 +330,12 @@ msgid "info_mails_sent"
 msgstr ""
 
 #. Default: "Participation created"
-#: ./opengever/dossier/behaviors/participation.py:161
+#: ./opengever/dossier/behaviors/participation.py:162
 msgid "info_participation_create"
 msgstr ""
 
 #. Default: "Removed participations"
-#: ./opengever/dossier/behaviors/participation.py:206
+#: ./opengever/dossier/behaviors/participation.py:207
 msgid "info_removed_participations"
 msgstr ""
 
@@ -453,7 +453,7 @@ msgid "label_number_of_containers"
 msgstr ""
 
 #. Default: "Participation"
-#: ./opengever/dossier/behaviors/participation.py:149
+#: ./opengever/dossier/behaviors/participation.py:150
 msgid "label_participation"
 msgstr ""
 
@@ -621,7 +621,7 @@ msgid "warning_copy_to_remote_no_client"
 msgstr ""
 
 #. Default: "You didn't select any participants."
-#: ./opengever/dossier/behaviors/participation.py:196
+#: ./opengever/dossier/behaviors/participation.py:197
 msgid "warning_no_participants_selected"
 msgstr ""
 

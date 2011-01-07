@@ -1,17 +1,16 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: opengever.dossier 1.0\n"
-"POT-Creation-Date: 2011-01-06 12:21+0000\n"
-"PO-Revision-Date: 2010-10-21 12:06+0200\n"
-"Last-Translator: Thomas Buchberger <t.buchberger@4teamwork.ch>\n"
+"Project-Id-Version: 1.0\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI +ZONE\n"
+"PO-Revision-Date: 2011-01-07 14:18+0100\n"
+"Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0\n"
 "Preferred-Encodings: utf-8 latin1\n"
-"Domain: opengever.dossier\n"
-"X-Is-Fallback-For: de-at de-li de-lu de-ch de-de\n"
+"Domain: DOMAIN\n"
 
 #. Default: "Geschäftsdossier"
 msgid "Add Business Case Dossier"
@@ -36,7 +35,7 @@ msgstr "Beteiligung löschen"
 
 #: ./opengever/dossier/move_items.py:92
 msgid "Document ${name} is connected to a Task.                    Please move the Task."
-msgstr "Dokument ${name} ist mit einer Aufgabe verbunden, bitte Aufgabe verschieben.""
+msgstr "Dokument ${name} ist mit einer Aufgabe verbunden, bitte Aufgabe verschieben."
 
 #: ./opengever/dossier/move_items.py:127
 msgid "It isn't allowed to add such items there"
@@ -108,7 +107,7 @@ msgid "You have to select a intern                             or enter a extern
 msgstr "Wählen Sie mindestens eine interne oder eine externe E-Mail Adresse."
 
 #. Default: "Add"
-#: ./opengever/dossier/behaviors/participation.py:153
+#: ./opengever/dossier/behaviors/participation.py:154
 msgid "button_add"
 msgstr "Erstellen"
 
@@ -119,7 +118,7 @@ msgstr "Speichern"
 
 #. Default: "Cancel"
 #: ./opengever/dossier/archive.py:268
-#: ./opengever/dossier/behaviors/participation.py:166
+#: ./opengever/dossier/behaviors/participation.py:167
 #: ./opengever/dossier/browser/transport.py:170
 msgid "button_cancel"
 msgstr "Abbrechen"
@@ -329,12 +328,12 @@ msgid "info_mails_sent"
 msgstr "Mails wurden versendet."
 
 #. Default: "Participation created"
-#: ./opengever/dossier/behaviors/participation.py:161
+#: ./opengever/dossier/behaviors/participation.py:162
 msgid "info_participation_create"
 msgstr "Die Beteiligung wurde gespeichert."
 
 #. Default: "Removed participations"
-#: ./opengever/dossier/behaviors/participation.py:206
+#: ./opengever/dossier/behaviors/participation.py:207
 msgid "info_removed_participations"
 msgstr "Die Beteiligungen wurde entfernt."
 
@@ -452,7 +451,7 @@ msgid "label_number_of_containers"
 msgstr "Anzahl Behältnisse"
 
 #. Default: "Participation"
-#: ./opengever/dossier/behaviors/participation.py:149
+#: ./opengever/dossier/behaviors/participation.py:150
 msgid "label_participation"
 msgstr "Beteiligung"
 
@@ -620,7 +619,7 @@ msgid "warning_copy_to_remote_no_client"
 msgstr "Sie können die Dokumente nicht an einen anderen Mandanten senden, da Sie nur dem aktuellen Mandanten zugeordnet sind."
 
 #. Default: "You didn't select any participants."
-#: ./opengever/dossier/behaviors/participation.py:196
+#: ./opengever/dossier/behaviors/participation.py:197
 msgid "warning_no_participants_selected"
 msgstr "Sie haben keine Beteiligungen ausgewählt."
 

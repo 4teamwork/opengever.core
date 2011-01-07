@@ -4,6 +4,10 @@ Changelog
 
 2.0b6
 -----
+
+* Fixed po file.
+  [jbaumann]
+
 * Added support for multiple Elements. If an Document is selected that is connected to a Task.
   It can't be moved.
   Issue #715 Neuer Wizard: Dossier verschieben
