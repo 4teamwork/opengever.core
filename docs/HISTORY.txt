@@ -5,6 +5,9 @@ Changelog
 2.0b5
 -----
 
+* Fixed dossier path source binder.
+  [jbaumann]
+
 * Fixed indexing of description.
   [jbaumann]
 

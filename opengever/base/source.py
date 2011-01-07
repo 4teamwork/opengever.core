@@ -46,7 +46,7 @@ class DossierPathSourceBinder(ObjPathSourceBinder):
         dossier_path = ''
         parent = context
         while not IPloneSiteRoot.providedBy(parent) and \
-                parent.portal_type != 'opengever.repository.repositoryroot':
+                parent.portal_type != 'opengever.repository.repositoryfolder':
             dossier_path = '/'.join(parent.getPhysicalPath())
             parent = aq_parent(aq_inner(parent))
         if not self.navigation_tree_query:
