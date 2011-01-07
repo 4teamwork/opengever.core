@@ -157,7 +157,7 @@
                   name="url_expr">string:${globals_view/navigationRootUrl}</property>
             <property name="link_target"></property>
             <property name="icon_expr"></property>
-            <property name="available_expr">here/personal_overview/user_is_allowed_view</property>
+            <property name="available_expr">here/personal_overview/user_is_allowed_to_view</property>
             <property name="permissions">
                 <element value="View"/>
             </property>

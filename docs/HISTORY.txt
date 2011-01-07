@@ -5,6 +5,9 @@ Changelog
 2.0b6
 -----
 
+* Fixed invalid expression in condition for Overview action
+  [lgraf]
+
 
 2.0b5
 -----
