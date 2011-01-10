@@ -332,7 +332,8 @@ class AdvancedSearchForm(directives_form.Form):
         
         if not errors:
             # create Parameters and url
-            data['reference'] = self.correct_ref(data['reference'])
+            if(data['reference']):
+                data['reference'] = self.correct_ref(data['reference'])
             params = '/search?portal_type=%s' % (data.get('portal_type', ''))
             # if clause because it entered a searchableText=none without text
             if data.get('searchableText'):
