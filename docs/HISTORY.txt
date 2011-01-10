@@ -5,6 +5,11 @@ Changelog
 2.0b7
 -----
 
+* Issue #304 Stufe Dokument: Status anpassen
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/304/
+  Removed all states exept draft.
+  [ttschanz]
+
 * Related documents: Fixed path source binder configuration.
   [jbaumann]
 
