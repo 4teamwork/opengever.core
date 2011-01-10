@@ -7,22 +7,22 @@ from Products.CMFCore.utils import getToolByName
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from zope.component import getUtilitiesFor
 
-ROLE_MAPPING = {
-    IDossier: (
-        (u'Reader', _('sharing_dossier_reader')),
-        (u'Contributor', _('sharing_dossier_contributor')),
-        (u'Editor', _('sharing_dossier_editor')),
-        (u'Reviewer', _('sharing_dossier_reviewer')),
-        (u'Publisher', _('sharing_dossier_publisher')),
-        (u'Administrator', _('sharing_dossier_administrator')),
-    ),
+ROLE_MAPPING = (
+    (IDossier, (
+            (u'Reader', _('sharing_dossier_reader')),
+            (u'Contributor', _('sharing_dossier_contributor')),
+            (u'Editor', _('sharing_dossier_editor')),
+            (u'Reviewer', _('sharing_dossier_reviewer')),
+            (u'Publisher', _('sharing_dossier_publisher')),
+            (u'Administrator', _('sharing_dossier_administrator')),
+            )),
 
-    IStandard: (
-        (u'Reader', _('sharing_reader')),
-        (u'Contributor', _('sharing_contributor')),
-        (u'Editor', _('sharing_editor')),
-    ),
-}
+    (IStandard, (
+            (u'Reader', _('sharing_reader')),
+            (u'Contributor', _('sharing_contributor')),
+            (u'Editor', _('sharing_editor')),
+            )),
+    )
 
 
 class OpengeverSharingView(SharingView):
@@ -37,8 +37,8 @@ class OpengeverSharingView(SharingView):
 
         Returns a list of dicts with keys:
 
-            - id
-            - title
+        - id
+        - title
         """
         context = self.context
         portal_membership = getToolByName(context, 'portal_membership')
@@ -47,7 +47,7 @@ class OpengeverSharingView(SharingView):
         for name, utility in getUtilitiesFor(ISharingPageRole):
             permission = utility.required_permission
             if not check_permission or permission is None or \
-                portal_membership.checkPermission(permission, context):
+                    portal_membership.checkPermission(permission, context):
                 pairs.append(dict(id = name, title = utility.title))
 
         pairs.sort(key=lambda x: x["id"])
@@ -55,7 +55,7 @@ class OpengeverSharingView(SharingView):
 
     def available_roles(self):
         result = []
-        for key, value in ROLE_MAPPING.items():
+        for key, value in ROLE_MAPPING:
             if key.providedBy(self.context) or key is IStandard:
                 for id, title in value:
                     roles = [r.get('id') for r in self.roles()]
