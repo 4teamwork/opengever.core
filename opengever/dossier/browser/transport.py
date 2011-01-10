@@ -153,7 +153,7 @@ class ChooseClientForm(z3c.form.form.Form, WizardFormMixin):
     ignoreContext = True
 
     template = ViewPageTemplateFile(
-        'transport_templates/wizard_wrappedform.pt')
+        'templates/wizard_wrappedform.pt')
     step_name = 'choose_client'
 
     @z3c.form.button.buttonAndHandler(_(u'button_continue',
@@ -255,7 +255,7 @@ class CopyDocumentsToRemoteClientForm(z3c.form.form.Form, WizardFormMixin):
     ignoreContext = True
 
     template = ViewPageTemplateFile(
-        'transport_templates/wizard_wrappedform.pt')
+        'templates/wizard_wrappedform.pt')
     step_name = 'choose_dossier'
 
     @z3c.form.button.buttonAndHandler(_(u'button_copy', default=u'Copy'))
