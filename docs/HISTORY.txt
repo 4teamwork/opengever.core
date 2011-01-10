@@ -5,6 +5,9 @@ Changelog
 2.0b8
 -----
 
+* Removed users.pt template since its not used anymore.
+  [jbaumann]
+
 * Moved template for eliminating grok unassociated template warning.
   [jbaumann]
 
