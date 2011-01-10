@@ -46,7 +46,7 @@
         name="journal"
         permission="zope2.View"
         class=".browser.JournalHistory"
-        template="browser_templates/journalhistory.pt"
+        template="templates/journalhistory.pt"
         />
 
 </configure>

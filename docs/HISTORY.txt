@@ -5,6 +5,9 @@ Changelog
 2.0a5
 -----
 
+* Moved template for eliminating grok unassociated template warning.
+  [jbaumann]
+
 
 2.0a4
 -----
