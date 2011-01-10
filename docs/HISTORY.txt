@@ -5,6 +5,9 @@ Changelog
 2.0b7
 -----
 
+* Fixed unauthorized bug on site root.
+  [jbaumann]
+
 
 2.0b6
 -----

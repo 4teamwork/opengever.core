@@ -7,7 +7,7 @@
         for="*"
         name="personal_overview"
         class=".personal_overview.PersonalOverview"
-        permission="cmf.SetOwnProperties"
+        permission="zope2.View"
         allowed_attributes="listing select_all user_is_allowed_to_view"
         />
 

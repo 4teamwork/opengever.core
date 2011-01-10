@@ -11,6 +11,7 @@ from opengever.tabbedview.browser.tasklisting import GlobalTaskListingTab
 from zope.app.pagetemplate import ViewPageTemplateFile
 from zope.component import getUtility
 from zope.interface import Interface
+import AccessControl
 
 
 def authenticated_member(context):
@@ -71,11 +72,17 @@ class PersonalOverview(TabbedView):
         """If user is not allowed to view PersonalOverview, redirect him
         to the repository root, otherwise behave like always.
         """
+        user = AccessControl.getSecurityManager().getUser()
+        if user == AccessControl.SecurityManagement.SpecialUsers.nobody:
+            login = self.context.portal_url() + '/login'
+            return self.request.RESPONSE.redirect(login)
+
         if not self.user_is_allowed_to_view():
             catalog = getToolByName(self.context, 'portal_catalog')
             repos = catalog(portal_type='opengever.repository.repositoryroot')
             repo_url = repos[0].getURL()
             return self.request.RESPONSE.redirect(repo_url)
+
         else:
             return super(PersonalOverview, self).__call__()
 
