@@ -5,6 +5,9 @@ Changelog
 2.0b7
 -----
 
+* Use logger instead of print in monkeypatch.py
+  [jbaumann]
+
 
 2.0b6
 -----

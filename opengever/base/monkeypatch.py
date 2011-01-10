@@ -14,8 +14,13 @@ For further details see:
 * https://bugs.launchpad.net/zope2/+bug/499696
 """
 
-from ZPublisher.HTTPRequest import FileUpload
 from Products.Five.browser import decode
+from ZPublisher.HTTPRequest import FileUpload
+import logging
+
+
+LOGGER = logging.getLogger('opengever.base')
+
 
 def processInputs(request, charsets=None):
     if charsets is None:
@@ -41,7 +46,7 @@ def processInputs(request, charsets=None):
 
 
 decode.processInputs = processInputs
-print '* [opengever.base] Monkey patched Products.Five.browser.decode.processInputs'
+LOGGER.info('Monkey patched Products.Five.browser.decode.processInputs')
 
 
 
@@ -66,5 +71,4 @@ from plone.formwidget.namedfile import widget
 setattr(widget.NamedFileWidget,
         'filename_encoded',
         Foo.filename_encoded)
-print '* [opengever.base] Monkey patched plone.formwidget.namedfile.widget.NameFileWidget.filename_encoded'
-
+LOGGER.info('Monkey patched plone.formwidget.namedfile.widget.NameFileWidget.filename_encoded')
