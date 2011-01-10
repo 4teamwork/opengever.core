@@ -5,6 +5,9 @@ Changelog
 2.0b8
 -----
 
+* Moved template for eliminating grok unassociated template warning.
+  [jbaumann]
+
 * Removed documentcontenthistoryviewlet.pt, journal.pt, preview.pt templates
   since they are not used anymore.
   [jbaumann]
