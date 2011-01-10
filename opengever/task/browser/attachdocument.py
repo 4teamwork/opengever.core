@@ -187,7 +187,7 @@ class ChooseDossierForm(z3c.form.form.Form, WizardFormMixin):
     ignoreContext = True
 
     template = ViewPageTemplateFile(
-        'attachdocument_templates/wizard_wrappedform.pt')
+        'templates/wizard_wrappedform.pt')
     step_name = 'choose_dossier'
 
     @z3c.form.button.buttonAndHandler(_(u'button_continue',
@@ -249,7 +249,7 @@ class ChooseDocumentForm(z3c.form.form.Form, WizardFormMixin):
     ignoreContext = True
 
     template = ViewPageTemplateFile(
-        'attachdocument_templates/wizard_wrappedform.pt')
+        'templates/wizard_wrappedform.pt')
     step_name = 'choose_document'
 
     @z3c.form.button.buttonAndHandler(_(u'button_attach', default=u'Attach'))
