@@ -5,6 +5,10 @@ Changelog
 2.0b8
 -----
 
+* Removed documentcontenthistoryviewlet.pt, journal.pt, preview.pt templates
+  since they are not used anymore.
+  [jbaumann]
+
 
 2.0b7
 -----
