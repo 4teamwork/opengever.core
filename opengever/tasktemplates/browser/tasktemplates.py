@@ -1,6 +1,5 @@
 from five import grok
 from ftw.table import helper
-from opengever.ogds.base.interfaces import IContactInformation
 from opengever.tabbedview.browser.tabs import OpengeverCatalogListingTab
 from opengever.tabbedview.helper import linked
 from opengever.task import _ as taskmsg
@@ -9,7 +8,6 @@ from opengever.tasktemplates import _
 from opengever.tasktemplates.browser.helper import interactive_user_helper
 from opengever.tasktemplates.content.tasktemplate import ITaskTemplate
 from plone.directives import dexterity
-from zope.component import getUtility
 from zope.interface import implements, Interface
 
 
@@ -70,11 +68,9 @@ class View(dexterity.DisplayForm):
     grok.context(ITaskTemplate)
     grok.require('zope2.View')
     def responsible_link(self):
-        info = getUtility(IContactInformation)
         task = ITaskTemplate(self.context)
-        return info.render_link(task.responsible)
+        return interactive_user_helper(task, task.responsible)
 
     def issuer_link(self):
-        info = getUtility(IContactInformation)
         task = ITaskTemplate(self.context)
-        return info.render_link(task.issuer)
+        return interactive_user_helper(task, task.issuer)

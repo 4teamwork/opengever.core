@@ -12,7 +12,6 @@ def interactive_user_helper(item, value):
 
     # create a interactive users mapping
     iuser_map = dict(interactive_users({}))
-
     # is it a interactive user?
     if value in iuser_map:
         return iuser_map.get(value)
