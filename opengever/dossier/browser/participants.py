@@ -97,7 +97,7 @@ class Participants(grok.CodeView, OpengeverTab, ListingView):
     grok.context(IParticipationAwareMarker)
 
     select_all_template = ViewPageTemplateFile(
-        'participants_templates/select_all_participants.pt')
+        'templates/select_all_participants.pt')
     sort_on = 'Contact'
 
     columns = (
