@@ -49,7 +49,7 @@
 			</tr>	
           
 		  <tal:rep2 tal:define="group2 python: view.groups[1]">
-			<tr tal:condition="pyhton: context.expectedStartOfWork">
+			<tr tal:condition="python: context.expectedStartOfWork">
 				<th tal:content="python: group2.widgets['expectedStartOfWork'].label"></th>
 				<td tal:content="python:context.expectedStartOfWork.strftime('%d.%m.%Y')"/>
 			</tr>
