@@ -5,6 +5,11 @@ Changelog
 2.0b8
 -----
 
+* Issue #768 Erweiterte Suche: Suche nach Autor (Dokument) funktioniert nicht
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/768
+  Fixed unicode decode error when searching document author
+  [jbaumann]
+
 * Moved template for eliminating grok unassociated template warning.
   [jbaumann]
 

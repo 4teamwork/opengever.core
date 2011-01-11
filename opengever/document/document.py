@@ -337,7 +337,10 @@ def document_author( obj ):
     context = aq_inner( obj )
     if not context.document_author:
         return None
-    return context.document_author
+    elif isinstance(context.document_author, unicode):
+        return context.document_author.encode('utf-8')
+    else:
+        return context.document_author
 grok.global_adapter( document_author, name='document_author' )
 
 
