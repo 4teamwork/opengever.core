@@ -53,17 +53,29 @@ def add_catalog_indexes(context, logger=None):
     indexes = catalog.indexes()
     # Specify the indexes you want, with ('index_name', 'index_type')
     wanted = (
-            ('delivery_date', 'DateIndex'),
-            ('document_author', 'FieldIndex'),
-            ('checked_out', 'FieldIndex'),
-            ('document_date', 'DateIndex'),
-            ('receipt_date', 'DateIndex'),
-            ('related_items', 'KeywordIndex'),
-              )
+        ('delivery_date', 'DateIndex', {}),
+        ('document_author', 'ZCTextIndex', {'index_type': 'Okapi BM25 Rank',
+                                            'lexicon_id': 'plaintext_lexicon'}),
+        ('checked_out', 'FieldIndex', {}),
+        ('document_date', 'DateIndex', {}),
+        ('receipt_date', 'DateIndex', {}),
+        ('related_items', 'KeywordIndex', {}),
+        )
     indexables = []
-    for name, meta_type in wanted:
+    for name, meta_type, args in wanted:
         if name not in indexes:
-            catalog.addIndex(name, meta_type)
+            if meta_type == 'ZCTextIndex':
+
+                class Extras:
+                    def __init__(self, **kwargs):
+                        for key, value in kwargs.items():
+                            setattr(self, key, value)
+
+                catalog.addIndex(name, meta_type, Extras(**args))
+
+            else:
+                catalog.addIndex(name, meta_type)
+
             indexables.append(name)
             logger.info("Added %s for field %s.", meta_type, name)
     if len(indexables) > 0:

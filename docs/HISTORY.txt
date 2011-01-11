@@ -7,6 +7,11 @@ Changelog
 
 * Issue #768 Erweiterte Suche: Suche nach Autor (Dokument) funktioniert nicht
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/768
+  Changed document_author index to ZCTextIndex for making wildcards possible in advanced search.
+  [jbaumann]
+
+* Issue #768 Erweiterte Suche: Suche nach Autor (Dokument) funktioniert nicht
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/768
   Fixed unicode decode error when searching document author
   [jbaumann]
 
