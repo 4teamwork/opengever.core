@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<object name="ftw.mail.mail" meta_type="Dexterity FTI">
+
+    <action action_id="save_attachments"
+            title="save attachments"
+            visible="True"
+            url_expr="string:${object_url}/extract_attachments"
+            category="object_buttons">
+        <permission value="View" />
+    </action>
+
+</object>
