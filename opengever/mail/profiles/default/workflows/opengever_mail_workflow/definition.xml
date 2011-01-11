@@ -1,36 +1,37 @@
 <?xml version="1.0"?>
-<dc-workflow workflow_id="opengever_mail_workflow" title="Mail Workflow" description="" state_variable="review_state" initial_state="mail-state-active" manager_bypass="False">
- <permission>Access contents information</permission>
- <permission>Change portal events</permission>
- <permission>Copy or Move</permission>
- <permission>Modify portal content</permission>
+<dc-workflow workflow_id="opengever_mail_workflow" title="Mail Workflow" description="" state_variable="state" initial_state="mail-state-active" manager_bypass="False">
  <permission>View</permission>
- <permission>Sharing page: Delegate roles</permission>
+ <permission>Access contents information</permission>
+ <permission>ftw.mail: Add Inbound Mail</permission>
+ <permission>ftw.mail: Add Mail</permission>
+ <permission>Modify portal content</permission>
  <permission>Add portal content</permission>
+ <permission>List folder contents</permission>
+ <permission>Manage properties</permission>
  <state state_id="mail-state-active" title="Active">
-  <description>Visible to everyone, editable only by manager.</description>
   <permission-map name="Access contents information" acquired="False">
-   <permission-role>Reader</permission-role>
    <permission-role>Manager</permission-role>
+   <permission-role>Reader</permission-role>
   </permission-map>
   <permission-map name="Add portal content" acquired="False">
-   <permission-role>Manager</permission-role>
   </permission-map>
-  <permission-map name="Change portal events" acquired="False">
+  <permission-map name="List folder contents" acquired="False">
    <permission-role>Manager</permission-role>
+   <permission-role>Reader</permission-role>
   </permission-map>
-  <permission-map name="Copy or Move" acquired="False">
+  <permission-map name="Manage properties" acquired="False">
    <permission-role>Manager</permission-role>
   </permission-map>
   <permission-map name="Modify portal content" acquired="False">
    <permission-role>Manager</permission-role>
   </permission-map>
-  <permission-map name="Sharing page: Delegate roles" acquired="False">
-   <permission-role>Manager</permission-role>
-  </permission-map>
   <permission-map name="View" acquired="False">
    <permission-role>Manager</permission-role>
    <permission-role>Reader</permission-role>
+  </permission-map>
+  <permission-map name="ftw.mail: Add Inbound Mail" acquired="False">
+  </permission-map>
+  <permission-map name="ftw.mail: Add Mail" acquired="False">
   </permission-map>
  </state>
 </dc-workflow>
