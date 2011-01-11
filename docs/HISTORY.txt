@@ -5,6 +5,11 @@ Changelog
 2.0b2
 -----
 
+* Issue #561 Anpassung Mail in Dossier importieren
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/561
+  Added new mail workflow.
+  [jbaumann]
+
 
 2.0b1
 -----
