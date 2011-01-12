@@ -8,6 +8,10 @@ Changelog
 * Added helper to mark up workflow state with an appropriate CSS class
   [lgraf]
 
+* Issue #768 Erweiterte Suche: Suche nach Autor (Dokument) funktioniert nicht
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/768
+  [jbaumann]
+
 * Removed users.pt template since its not used anymore.
   [jbaumann]
 

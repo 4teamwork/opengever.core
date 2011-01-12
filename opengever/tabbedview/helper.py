@@ -33,6 +33,8 @@ def author_cache_key(m, i, author):
 
 @ram.cache(author_cache_key)
 def readable_ogds_author(item, author):
+    if not isinstance(author, unicode):
+        author = author.decode('utf-8')
     if IPropertiedUser.providedBy(author) or IMemberData.providedBy(author):
         author = author.getId()
     info = getUtility(IContactInformation)
@@ -43,6 +45,8 @@ def readable_ogds_author(item, author):
 
 @ram.cache(author_cache_key)
 def linked_ogds_author(item, author):
+    if not isinstance(author, unicode):
+        author = author.decode('utf-8')
     if IPropertiedUser.providedBy(author) or IMemberData.providedBy(author):
         author = author.getId()
     info = getUtility(IContactInformation)
