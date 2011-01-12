@@ -280,6 +280,7 @@ class Tasks(OpengeverCatalogListingTab):
         'change_state',
         'cut',
         'pdf_taskslisting',
+        'move_items',
         ]
 
     major_actions = ['change_state',
