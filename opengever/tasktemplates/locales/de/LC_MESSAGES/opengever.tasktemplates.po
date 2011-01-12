@@ -137,7 +137,7 @@ msgstr "Status"
 #. Default: "Task Type"
 #: ./opengever/tasktemplates/content/tasktemplate.py:45
 msgid "label_task_type"
-msgstr "Aufgabentyp"
+msgstr "Auftragstyp"
 
 #. Default: "Text"
 #: ./opengever/tasktemplates/content/tasktemplate.py:78
