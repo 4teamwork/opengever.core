@@ -8,6 +8,8 @@ from opengever.ogds.base.interfaces import IContactInformation
 from opengever.tabbedview import _
 from opengever.tabbedview.helper import readable_date_set_invisibles
 from opengever.tabbedview.helper import readable_ogds_author, linked
+from opengever.tabbedview.helper import workflow_state
+
 from opengever.task.helper import task_type_helper
 from zope.app.pagetemplate import ViewPageTemplateFile
 from zope.component import getUtility
@@ -185,7 +187,7 @@ class Dossiers(OpengeverCatalogListingTab):
 
         {'column': 'review_state',
          'column_title': _(u'label_review_state', default=u'Review state'),
-         'transform': helper.translated_string('plone')},
+         'transform': workflow_state},
 
         {'column':'responsible',
          'column_title':_(u'label_dossier_responsible',
@@ -232,7 +234,7 @@ class Tasks(OpengeverCatalogListingTab):
 
         {'column': 'review_state',
          'column_title': _(u'label_review_state', default=u'Review state'),
-         'transform': helper.translated_string('plone')},
+         'transform': workflow_state},
 
         {'column': 'Title',
          'column_title': _(u'label_title', default=u'Title'),

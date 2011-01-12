@@ -3,7 +3,9 @@ from Products.PluggableAuthService.interfaces.authservice import IPropertiedUser
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.tabbedview import _
 from plone.memoize import ram
+from plone.i18n.normalizer.interfaces import IIDNormalizer
 from zope.component import getUtility
+import ftw.table
 
 
 def task_id_checkbox_helper(item, value):
@@ -94,4 +96,11 @@ def boolean_helper(item, value):
 
     return value and _(u'label_yes', default='Yes') or \
                      _(u'label_no', default='No')
+
+def workflow_state(item, value):
+    translate = ftw.table.helper.translated_string('plone')
+    translated_value = translate(item, value)
+    normalize = getUtility(IIDNormalizer).normalize
+    state = normalize(item.review_state)
+    return """<span class="wf-%s">%s</span>""" % (state, translated_value)
 

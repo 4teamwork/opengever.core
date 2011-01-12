@@ -5,6 +5,9 @@ Changelog
 2.0b8
 -----
 
+* Added helper to mark up workflow state with an appropriate CSS class
+  [lgraf]
+
 * Removed users.pt template since its not used anymore.
   [jbaumann]
 
