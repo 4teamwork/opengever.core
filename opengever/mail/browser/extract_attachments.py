@@ -9,6 +9,7 @@ from ftw.mail.utils import get_attachments, remove_attachments
 from ftw.table.interfaces import ITableGenerator
 from opengever.document.behaviors import IRelatedDocuments
 from opengever.dossier.behaviors.dossier import IDossierMarker
+from opengever.inbox.inbox import IInbox
 from opengever.mail import _
 from opengever.ogds.base.interfaces import IContactInformation
 from plone.dexterity.utils import createContentInContainer
@@ -240,7 +241,7 @@ class ExtractAttachments(grok.View):
         """
 
         obj = self.context
-        while not IDossierMarker.providedBy(obj):
+        while not IDossierMarker.providedBy(obj) and not IInbox.providedBy(obj):
             obj = aq_parent(aq_inner(obj))
 
             if IPloneSiteRoot.providedBy(obj):

@@ -5,6 +5,9 @@ Changelog
 2.0b2
 -----
 
+* Support extracting mail-attachments in inbox.
+  [jbaumann]
+
 * Issue #561 Anpassung Mail in Dossier importieren
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/561
   Added new mail workflow.
