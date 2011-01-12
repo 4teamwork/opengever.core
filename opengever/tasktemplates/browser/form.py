@@ -226,7 +226,7 @@ class AddForm(BrowserView):
             notify(ObjectAddedEvent(task))
             task.reindexObject()
 
-        IStatusMessage(self.request).addStatusMessage("tasks created",
+        IStatusMessage(self.request).addStatusMessage(_(u'message_tasks_created',default=u'tasks created'),
                                                       type="info")
         return self.request.RESPONSE.redirect(self.context.absolute_url() + \
                                                   '#tasks')

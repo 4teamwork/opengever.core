@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2010-12-14 10:36+0000\n"
+"POT-Creation-Date: 2011-01-12 08:51+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -102,19 +102,19 @@ msgid "label_created"
 msgstr ""
 
 #. Default: "Deadline in Days"
-#: ./opengever/tasktemplates/browser/tasktemplates.py:48
+#: ./opengever/tasktemplates/browser/tasktemplates.py:46
 #: ./opengever/tasktemplates/content/tasktemplate.py:71
 msgid "label_deadline"
 msgstr ""
 
 #. Default: "Issuer"
-#: ./opengever/tasktemplates/browser/tasktemplates.py:40
+#: ./opengever/tasktemplates/browser/tasktemplates.py:38
 #: ./opengever/tasktemplates/content/tasktemplate.py:37
 msgid "label_issuer"
 msgstr ""
 
 #. Default: "Preselect"
-#: ./opengever/tasktemplates/browser/tasktemplates.py:51
+#: ./opengever/tasktemplates/browser/tasktemplates.py:49
 #: ./opengever/tasktemplates/content/tasktemplate.py:85
 msgid "label_preselected"
 msgstr ""
@@ -130,7 +130,7 @@ msgid "label_responsible"
 msgstr ""
 
 #. Default: "Responsible"
-#: ./opengever/tasktemplates/browser/tasktemplates.py:44
+#: ./opengever/tasktemplates/browser/tasktemplates.py:42
 msgid "label_responsible_task"
 msgstr ""
 
@@ -151,7 +151,7 @@ msgstr ""
 
 #. Default: "Title"
 #: ./opengever/tasktemplates/browser/form.py:110
-#: ./opengever/tasktemplates/browser/tasktemplates.py:31
+#: ./opengever/tasktemplates/browser/tasktemplates.py:29
 #: ./opengever/tasktemplates/browser/templatefolders.py:18
 msgid "label_title"
 msgstr ""
@@ -161,8 +161,13 @@ msgstr ""
 msgid "label_yes"
 msgstr ""
 
+#. Default: "tasks created"
+#: ./opengever/tasktemplates/browser/form.py:229
+msgid "message_tasks_created"
+msgstr ""
+
 #. Default: "Yes"
-#: ./opengever/tasktemplates/browser/tasktemplates.py:18
+#: ./opengever/tasktemplates/browser/tasktemplates.py:16
 msgid "preselected_yes"
 msgstr ""
 

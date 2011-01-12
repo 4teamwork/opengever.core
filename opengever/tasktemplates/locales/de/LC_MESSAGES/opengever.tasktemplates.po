@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2010-12-14 10:36+0000\n"
+"POT-Creation-Date: 2011-01-12 08:51+0000\n"
 "PO-Revision-Date: 2010-12-14 11:36+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -97,19 +97,19 @@ msgid "label_created"
 msgstr "Erstelldatum"
 
 #. Default: "Deadline in Days"
-#: ./opengever/tasktemplates/browser/tasktemplates.py:48
+#: ./opengever/tasktemplates/browser/tasktemplates.py:46
 #: ./opengever/tasktemplates/content/tasktemplate.py:71
 msgid "label_deadline"
 msgstr "Frist in Tagen"
 
 #. Default: "Issuer"
-#: ./opengever/tasktemplates/browser/tasktemplates.py:40
+#: ./opengever/tasktemplates/browser/tasktemplates.py:38
 #: ./opengever/tasktemplates/content/tasktemplate.py:37
 msgid "label_issuer"
 msgstr "Auftraggeber"
 
 #. Default: "Preselect"
-#: ./opengever/tasktemplates/browser/tasktemplates.py:51
+#: ./opengever/tasktemplates/browser/tasktemplates.py:49
 #: ./opengever/tasktemplates/content/tasktemplate.py:85
 msgid "label_preselected"
 msgstr "Vorselektiert"
@@ -125,7 +125,7 @@ msgid "label_responsible"
 msgstr "Verantwortlicher"
 
 #. Default: "Responsible"
-#: ./opengever/tasktemplates/browser/tasktemplates.py:44
+#: ./opengever/tasktemplates/browser/tasktemplates.py:42
 msgid "label_responsible_task"
 msgstr "Verantwortlicher"
 
@@ -146,7 +146,7 @@ msgstr "Kommentar"
 
 #. Default: "Title"
 #: ./opengever/tasktemplates/browser/form.py:110
-#: ./opengever/tasktemplates/browser/tasktemplates.py:31
+#: ./opengever/tasktemplates/browser/tasktemplates.py:29
 #: ./opengever/tasktemplates/browser/templatefolders.py:18
 msgid "label_title"
 msgstr "Titel"
@@ -156,8 +156,13 @@ msgstr "Titel"
 msgid "label_yes"
 msgstr "Ja"
 
+#. Default: "tasks created"
+#: ./opengever/tasktemplates/browser/form.py:229
+msgid "message_tasks_created"
+msgstr "Alle Aufgaben aus gewähltem Standardablauf wurden erstellt."
+
 #. Default: "Yes"
-#: ./opengever/tasktemplates/browser/tasktemplates.py:18
+#: ./opengever/tasktemplates/browser/tasktemplates.py:16
 msgid "preselected_yes"
 msgstr "Ja"
 
