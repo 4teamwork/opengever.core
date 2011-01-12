@@ -129,7 +129,7 @@ msgstr "Laufnummer"
 #. Default: "Task type"
 #: ./opengever/tabbedview/browser/tasklisting.py:62
 msgid "column_task_type"
-msgstr "Aufgabentyp"
+msgstr "Auftragstyp"
 
 #. Default: "Title"
 #: ./opengever/tabbedview/browser/clientslisting.py:56
@@ -296,7 +296,7 @@ msgstr "Beginn"
 #. Default: "Task Type"
 #: ./opengever/tabbedview/browser/tabs.py:240
 msgid "label_task_type"
-msgstr "Aufgabentyp"
+msgstr "Auftragstyp"
 
 #. Default: "Title"
 #: ./opengever/tabbedview/browser/tabs.py:120
