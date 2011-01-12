@@ -245,7 +245,7 @@ msgstr ""
 
 #: ./opengever/task/task.py:75
 msgid "help_task_type"
-msgstr "Wählen sie den Aufgabentyp"
+msgstr "Wählen Sie den Auftragstyp"
 
 #: ./opengever/task/task.py:115
 msgid "help_text"

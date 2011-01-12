@@ -41,7 +41,7 @@
 			</tr>
 			<tr>
 			<th tal:content="python:group.widgets['deadline'].label"></th>
-		    <td tal:content="python:here.toLocalizedTime(str(context.deadline))"/>
+		    <td tal:content="python:context.deadline.strftime('%d.%m.%Y')"/>
 		    </tr>
 		 	<tr>
 			   <th i18n:domain="opengever.task" i18n:translate="label_last_modified">Last change</th>
@@ -55,9 +55,13 @@
 			</tr>
 		  	<tr tal:repeat="widget group2/widgets/values">
 				<tal:block condition="python:widget.__name__ not in ('IBasic.title', 'IBasic.description', 'title',
-				'description', 'ITransition.transition', 'expectedStartOfWork') and widget.value and widget.value != ('', '', '')">
+				'description', 'ITransition.transition', 'expectedStartOfWork', 'date_of_completion') and widget.value and widget.value != ('', '', '')">
 				<th tal:content="structure widget/label" />
 				<td tal:content="structure widget/render" />
+				</tal:block>
+				<tal:block condition="python: widget.__name__=='date_of_completion' and widget.value">	
+					<th tal:content="structure widget/label" />
+					<td tal:content="python: context.date_of_completion.strftime('%d.%m.%Y')" />
 				</tal:block>
 			</tr>
 		  </tal:rep2>

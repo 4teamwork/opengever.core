@@ -22,7 +22,7 @@ from zope import schema
 from zope.component import getUtility, getMultiAdapter
 from zope.interface import implements, Interface
 from zope.schema.vocabulary import getVocabularyRegistry
-
+from opengever.base.browser.helper import client_title_helper
 class ITask(form.Schema):
 
     form.fieldset(
@@ -280,8 +280,8 @@ class View(dexterity.DisplayForm):
     def responsible_link(self):
         info = getUtility(IContactInformation)
         task = ITask(self.context)
-        client = self.groups[0].widgets['responsible_client'].value
-        return client[0]  +'/'+ info.render_link(task.responsible)
+        client = client_title_helper(task, self.groups[0].widgets['responsible_client'].value[0])
+        return client +'/'+ info.render_link(task.responsible)
 
     def issuer_link(self):
         info = getUtility(IContactInformation)
