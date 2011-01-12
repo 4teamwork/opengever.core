@@ -8,6 +8,7 @@ Changelog
 * Issue #561 Anpassung Mail in Dossier importieren
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/561
   Added new mail workflow.
+  Create a reference to the mail when extracting attachments.
   [jbaumann]
 
 

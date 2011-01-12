@@ -7,12 +7,15 @@ from five import grok
 from ftw.mail.mail import IMail
 from ftw.mail.utils import get_attachments, remove_attachments
 from ftw.table.interfaces import ITableGenerator
+from opengever.document.behaviors import IRelatedDocuments
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.mail import _
 from opengever.ogds.base.interfaces import IContactInformation
 from plone.dexterity.utils import createContentInContainer
+from z3c.relationfield.relation import RelationValue
 from zope.app.component.hooks import getSite
 from zope.component import getUtility
+from zope.intid.interfaces import IIntIds
 import os.path
 
 
@@ -184,6 +187,12 @@ class ExtractAttachments(grok.View):
             doc = createContentInContainer(dossier,
                                            'opengever.document.document',
                                            **kwargs)
+
+            # add a reference to the mail
+            intids = getUtility(IIntIds)
+            iid = intids.getId(self.context)
+            IRelatedDocuments(doc).relatedItems = [RelationValue(iid)]
+
             msg = _(u'info_extracted_document',
                     default=u'Created document ${title}',
                     mapping={'title': doc.Title()})
