@@ -5,6 +5,9 @@ Changelog
 2.0b2
 -----
 
+* Updated install requires.
+  [jbaumann]
+
 * Support extracting mail-attachments in inbox.
   [jbaumann]
 
