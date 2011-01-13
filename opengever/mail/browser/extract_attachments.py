@@ -7,10 +7,8 @@ from five import grok
 from ftw.mail.mail import IMail
 from ftw.mail.utils import get_attachments, remove_attachments
 from ftw.table.interfaces import ITableGenerator
-from opengever.document.behaviors import IRelatedDocuments
-from opengever.dossier.behaviors.dossier import IDossierMarker
-from opengever.inbox.inbox import IInbox
 from opengever.mail import _
+from opengever.mail.behaviors import IMailInAddressMarker
 from opengever.ogds.base.interfaces import IContactInformation
 from plone.dexterity.utils import createContentInContainer
 from z3c.relationfield.relation import RelationValue
@@ -87,7 +85,7 @@ def human_readable_filesize_helper(context):
 
 class ExtractAttachments(grok.View):
     """View for extracting attachments from a `ftw.mail` Mail object into
-    `opengever.document` Documents within `opengever.dossier` Dossiers.
+    `opengever.document` Documents in a `IMailInAddressMarker` container.
     """
 
     grok.context(IMail)
@@ -192,6 +190,9 @@ class ExtractAttachments(grok.View):
             # add a reference to the mail
             intids = getUtility(IIntIds)
             iid = intids.getId(self.context)
+
+            # prevent circular dependencies
+            from opengever.document.behaviors import IRelatedDocuments
             IRelatedDocuments(doc).relatedItems = [RelationValue(iid)]
 
             msg = _(u'info_extracted_document',
@@ -241,7 +242,7 @@ class ExtractAttachments(grok.View):
         """
 
         obj = self.context
-        while not IDossierMarker.providedBy(obj) and not IInbox.providedBy(obj):
+        while not IMailInAddressMarker.providedBy(obj):
             obj = aq_parent(aq_inner(obj))
 
             if IPloneSiteRoot.providedBy(obj):

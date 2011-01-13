@@ -5,6 +5,10 @@ Changelog
 2.0b2
 -----
 
+* Fixed circular dependencies by using the IMailInAddressMarker interface for searching
+  the target container when extracting documents.
+  [jbaumann]
+
 * Updated install requires.
   [jbaumann]
 
