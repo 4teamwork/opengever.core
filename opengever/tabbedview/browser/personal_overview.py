@@ -60,7 +60,7 @@ class PersonalOverview(TabbedView):
         {'id': 'mydossiers', 'icon': None, 'url': '#', 'class': None},
         {'id': 'mydocuments', 'icon': None, 'url': '#', 'class': None},
         {'id': 'mytasks', 'icon': None, 'url': '#', 'class': None},
-        {'id': 'issuedtasks', 'icon': None, 'url': '#', 'class': None},
+        {'id': 'myissuedtasks', 'icon': None, 'url': '#', 'class': None},
         ]
 
     admin_tabs = [
@@ -194,7 +194,7 @@ class IssuedTasks(Tasks):
     the current client.
     """
 
-    grok.name('tabbedview_view-issuedtasks')
+    grok.name('tabbedview_view-myissuedtasks')
     grok.require('zope2.View')
     grok.context(Interface)
 

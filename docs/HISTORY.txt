@@ -5,6 +5,11 @@ Changelog
 2.0b8
 -----
 
+* Issue #778 Zwei Reiter gleichzeitig aktiv
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/778
+  The name of a tab should not be contained in the name of another tab.
+  [jbaumann]
+
 * Added helper to mark up workflow state with an appropriate CSS class
   [lgraf]
 

@@ -23,3 +23,5 @@ msgstr ""
 msgid "ogds-cp-alltasks"
 msgstr ""
 
+msgid "myissuedtasks"
+msgstr ""

@@ -21,4 +21,6 @@ msgstr "Mandanten"
 msgid "users"
 msgstr "OGDS"
 
+msgid "myissuedtasks"
+msgstr "Erteilte Aufgaben"
 
