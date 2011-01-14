@@ -5,6 +5,8 @@ Changelog
 2.0c4
 -----
 
+* added localization to opengever.tasktemplate view
+  [ttschanz]
 
 2.0c3
 -----
