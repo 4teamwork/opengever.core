@@ -6,7 +6,7 @@ Changelog
 -----
 
 * added 'OpenGever' to client id viewlet
-  Issue #775 Anpassung Design: Titel über Ordnungssystem anpassen
+  Issue #775 Anpassung Design: Titel ueber Ordnungssystem anpassen
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/775/
   [fsprenger]
 
