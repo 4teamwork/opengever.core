@@ -22,6 +22,8 @@ Changelog
   since they are not used anymore.
   [jbaumann]
 
+* Removed all workflowstates exept draft
+  [ttschanz]
 
 2.0b7
 -----
