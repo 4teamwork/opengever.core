@@ -5,6 +5,11 @@ Changelog
 2.0b2
 -----
 
+* Issue #785 Anpassen Erzeugen eines Mail-Objekts bei Mailempfang
+  #785 Anpassen Erzeugen eines Mail-Objekts bei Mailempfang
+  Changed document_date to Date the Mail was added
+  [ttschanz]
+
 * Fixed circular dependencies by using the IMailInAddressMarker interface for searching
   the target container when extracting documents.
   [jbaumann]
