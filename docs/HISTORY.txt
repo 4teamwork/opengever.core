@@ -5,6 +5,9 @@ Changelog
 2.0b8
 -----
 
+* Fixed bugs in Templates
+  [ttschanz]
+
 * Renamed templates directory for eliminating grok unassociated template warning.
   [jbaumann]
 
