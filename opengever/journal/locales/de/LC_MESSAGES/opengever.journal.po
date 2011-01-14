@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2011-01-03 16:50+0000\n"
+"POT-Creation-Date: 2011-01-14 09:54+0000\n"
 "PO-Revision-Date: 2011-01-03 17:50+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Domain: DOMAIN\n"
 
 #. Default: "Journal"
-#: ./opengever/journal/browser_templates/journalhistory.pt:15
+#: ./opengever/journal/templates/journalhistory.pt:15
 msgid "heading_journal"
 msgstr "Journal"
 
@@ -92,6 +92,11 @@ msgstr "Dossier hinzugefügt: ${title}"
 msgid "label_dossier_modified"
 msgstr "Dossier modifiziert"
 
+#. Default: "Mail added: ${title}"
+#: ./opengever/journal/handlers.py:331
+msgid "label_mail_added"
+msgstr "Mail hinzugefügt: ${title}"
+
 #. Default: "Participant added: ${contact} with roles ${roles}"
 #: ./opengever/journal/handlers.py:299
 msgid "label_participant_added"
@@ -133,7 +138,7 @@ msgid "label_to_trash"
 msgstr "Objekt gelöscht: ${title}"
 
 #. Default: "Journal"
-#: ./opengever/journal/browser_templates/journalhistory.pt:17
+#: ./opengever/journal/templates/journalhistory.pt:17
 msgid "summary_journal"
 msgstr "Journal"
 

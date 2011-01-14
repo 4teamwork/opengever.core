@@ -23,7 +23,7 @@ from zope.event import notify
 from zope.i18nmessageid import MessageFactory
 from zope.i18nmessageid.message import Message
 from zope.lifecycleevent.interfaces import IObjectModifiedEvent
-
+from ftw.mail.mail import IMail
 
 pmf = MessageFactory('plone')
 
@@ -320,3 +320,18 @@ def participation_removed(context, event):
             })
 
     journal_entry_factory(context, PARTICIPANT_REMOVED, title)
+
+
+#------------------------ Mail -----------------------------------------
+
+
+MAIL_ADDED_EVENT = 'Mail added' 
+@grok.subscribe(IMail, IObjectAddedEvent)
+def mail_added(context, event):
+    title = _(u'label_mail_added',
+              default=u'Mail added: ${title}',
+              mapping={
+              'title' : context.title_or_id()
+              })
+    journal_entry_factory(context.aq_inner.aq_parent, MAIL_ADDED_EVENT, title)
+    return

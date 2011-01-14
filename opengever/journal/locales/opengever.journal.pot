@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2011-01-03 16:50+0000\n"
+"POT-Creation-Date: 2011-01-14 09:54+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Domain: opengever.journal\n"
 
 #. Default: "Journal"
-#: ./opengever/journal/browser_templates/journalhistory.pt:15
+#: ./opengever/journal/templates/journalhistory.pt:15
 msgid "heading_journal"
 msgstr ""
 
@@ -97,6 +97,11 @@ msgstr ""
 msgid "label_dossier_modified"
 msgstr ""
 
+#. Default: "Mail added: ${title}"
+#: ./opengever/journal/handlers.py:331
+msgid "label_mail_added"
+msgstr ""
+
 #. Default: "Participant added: ${contact} with roles ${roles}"
 #: ./opengever/journal/handlers.py:299
 msgid "label_participant_added"
@@ -138,7 +143,7 @@ msgid "label_to_trash"
 msgstr ""
 
 #. Default: "Journal"
-#: ./opengever/journal/browser_templates/journalhistory.pt:17
+#: ./opengever/journal/templates/journalhistory.pt:17
 msgid "summary_journal"
 msgstr ""
 
