@@ -5,6 +5,8 @@ Changelog
 2.0b2
 -----
 
+* cleanup
+  [jbaumann]
 
 2.0b1
 -----
