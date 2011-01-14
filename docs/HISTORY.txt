@@ -5,6 +5,9 @@ Changelog
 2.0b7
 -----
 
+* Added Box in overview for Description
+  [ttschanz]
+
 * Removed documents.pt template since its not used anymore.
   [jbaumann]
 
