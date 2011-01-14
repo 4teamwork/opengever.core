@@ -15,7 +15,8 @@ grok.global_adapter(document_author, name='document_author')
 
 @indexer(IMail)
 def document_date(obj):
-    """ document_date indexer, return the from date of the mail """
-    return obj.created()
+        """ document_date indexer, return the from date of the mail """
+        document_date = utils.get_date_header(obj.msg, 'Date')
+        return DateTime(document_date)
 
 grok.global_adapter(document_date, name="document_date")
