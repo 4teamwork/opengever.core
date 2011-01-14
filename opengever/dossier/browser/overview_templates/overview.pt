@@ -3,7 +3,7 @@
   <div tal:repeat="boxes groups" tal:attributes="class string:boxGroup${repeat/boxes/index}">
     <div tal:repeat="box boxes" class="box" tal:attributes="id string:${box/id}Box">
       <h2 i18n:translate="" tal:content="box/id"></h2>
-      <tal:items define="items box/content">
+      <tal:items define="items box/content" tal:condition="python:box['id'] != 'description'">
         <ul tal:condition="items">
           <li tal:repeat="item items">
             <img tal:attributes="src item/getIcon"
@@ -12,10 +12,15 @@
           </li>
           <li class="moreLink">
             <a tal:attributes="href string:#${box/id}" i18n:translate="">show all</a>
-          </li>
-        </ul>
+          </li>		
+		</ul>
         <span tal:condition="not: items" i18n:translate="no_content" />
       </tal:items>
+	<tal:description define="items box/content" tal:condition="python: box['id'] == 'description'">
+		<tal:items define="item items" tal:condition="items">
+			<span tal:content="item" />
+		</tal:items>
+	</tal:description>
     </div>
   </div>
 </tal:block>

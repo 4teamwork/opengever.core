@@ -27,12 +27,14 @@ class DossierOverview(grok.View, OpengeverTab):
         if not self.context.show_subdossier():
             items = [[dict(id = 'tasks', content=self.tasks()),
                       dict(id = 'participants', content=self.sharing())],
-                     [dict(id = 'documents', content=self.documents()), ]]
+                     [dict(id = 'documents', content=self.documents()),
+                      dict(id = 'description', content=self.description), ]]
         else:
             items = [[dict(id = 'subdossiers', content=self.subdossiers()),
                       dict(id = 'tasks', content=self.tasks()),
                       dict(id = 'participants', content=self.sharing())],
-                     [dict(id = 'documents', content=self.documents()), ]]
+                     [dict(id = 'documents', content=self.documents()),
+                      dict(id = 'description', content=self.description), ]]
         return items
 
     def subdossiers(self):
@@ -66,7 +68,11 @@ class DossierOverview(grok.View, OpengeverTab):
         # get the participants
         phandler = IParticipationAware(self.context)
         results = list(phandler.get_participations())
-
+    
+    def description(self):
+        return self.context.description;
+        
+         
         # also append the responsible
         class ResponsibleParticipant(object): pass
 

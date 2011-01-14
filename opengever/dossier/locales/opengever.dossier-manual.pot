@@ -42,4 +42,7 @@ msgid "participants"
 msgstr ""
 
 msgid "Add Business Case Dossier"
-msgstr "Geschäftsdossier"
+msgstr ""
+
+msgid "description"
+msgstr ""

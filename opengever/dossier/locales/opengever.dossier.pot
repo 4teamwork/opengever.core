@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2011-01-07 15:19+0000\n"
+"POT-Creation-Date: 2011-01-14 08:32+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,7 +21,6 @@ msgstr ""
 msgid "${copiedItems} Elements were moved successfully"
 msgstr ""
 
-#. Default: "Geschäftsdossier"
 msgid "Add Business Case Dossier"
 msgstr ""
 
@@ -181,6 +180,9 @@ msgstr ""
 #. Default: "create document with template"
 #: ./opengever/dossier/templatedossier.py:40
 msgid "create_document_with_template"
+msgstr ""
+
+msgid "description"
 msgstr ""
 
 msgid "document_with_docucomposer"
