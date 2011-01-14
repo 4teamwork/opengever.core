@@ -5,6 +5,11 @@ Changelog
 2.0b7
 -----
 
+* added 'OpenGever' to client id viewlet
+  Issue #775 Anpassung Design: Titel über Ordnungssystem anpassen
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/775/
+  [fsprenger]
+
 * Use logger instead of print in monkeypatch.py
   [jbaumann]
 
