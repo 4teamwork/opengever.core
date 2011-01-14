@@ -5,6 +5,8 @@ Changelog
 2.0b4
 -----
 
+* fixed bug that reference number function was called allways
+  [ttschanz]
 
 2.0b3
 -----
