@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "POT-Creation-Date: 2011-01-03 16:45+0000\n"
-"PO-Revision-Date: 2011-01-13 12:13+0100\n"
+"PO-Revision-Date: 2011-01-14 18:22+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
 "MIME-Version: 1.0\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Domain: DOMAIN\n"
 
 #: ./opengever/tabbedview/browser/tabs_templates/generic.pt:13
-msgid "All visible entries chosen <a href="#">x</a>"
+msgid "All visible entries chosen <a href=\"#\">x</a>"
 msgstr "Alle Sichtbaren ausgewählt <a href=\"#\">x</a>"
 
 msgid "Choose:"
