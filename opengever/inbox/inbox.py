@@ -38,10 +38,16 @@ class InboxDocuments(Documents):
 
     @property
     def enabled_actions(self):
-        return super(InboxDocuments, self).enabled_actions + \
-            ['create_forwarding']
+        actions = super(InboxDocuments, self).enabled_actions
+        actions = [action for action in actions
+                   if action not in ('create_task',)]
+        actions += ['create_forwarding']
+        return  actions
 
     @property
     def major_actions(self):
-        return super(InboxDocuments, self).major_actions + \
-            ['create_forwarding']
+        actions = super(InboxDocuments, self).major_actions
+        actions = [action for action in actions
+                   if action not in ('create_task',)]
+        actions += ['create_forwarding']
+        return  actions
