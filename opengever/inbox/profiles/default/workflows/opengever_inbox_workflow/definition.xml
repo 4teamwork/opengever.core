@@ -13,6 +13,7 @@
  <permission>opengever.task: Add task</permission>
  <permission>opengever.trash: Trash content</permission>
  <permission>opengever.trash: Untrash content</permission>
+ <permission>opengever.inbox: Add Forwarding</permission>
  <state state_id="inbox-state-default" title="inbox-state-default">
   <exit-transition transition_id="dossier-transition-deactivate"/>
   <exit-transition transition_id="dossier-transition-resolve"/>
@@ -63,10 +64,12 @@
    <permission-role>Manager</permission-role>
    <permission-role>Owner</permission-role>
   </permission-map>
-  <permission-map name="opengever.task: Add task" acquired="False">
+  <permission-map name="opengever.inbox: Add Forwarding" acquired="False">
    <permission-role>Contributor</permission-role>
    <permission-role>Manager</permission-role>
    <permission-role>Owner</permission-role>
+  </permission-map>
+  <permission-map name="opengever.task: Add task" acquired="False">
   </permission-map>
   <permission-map name="opengever.trash: Trash content" acquired="False">
    <permission-role>Contributor</permission-role>
