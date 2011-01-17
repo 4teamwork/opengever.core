@@ -23,6 +23,8 @@ from zope.component import getUtility, getMultiAdapter
 from zope.interface import implements, Interface
 from zope.schema.vocabulary import getVocabularyRegistry
 from opengever.base.browser.helper import client_title_helper
+
+
 class ITask(form.Schema):
 
     form.fieldset(
