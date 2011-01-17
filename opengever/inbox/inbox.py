@@ -1,7 +1,7 @@
 from five import grok
 from opengever.inbox import _
 from plone.directives import form
-from opengever.tabbedview.browser.tabs import Tasks
+from opengever.tabbedview.browser.tabs import Tasks, Documents
 from zope import schema
 
 
@@ -29,3 +29,19 @@ class GivenTasks(Tasks):
 
     types = ['opengever.inbox.forwarding']
 
+
+class InboxDocuments(Documents):
+    grok.context(IInbox)
+
+    # do not list documents in forwardings
+    depth = 1
+
+    @property
+    def enabled_actions(self):
+        return super(InboxDocuments, self).enabled_actions + \
+            ['create_forwarding']
+
+    @property
+    def major_actions(self):
+        return super(InboxDocuments, self).major_actions + \
+            ['create_forwarding']
