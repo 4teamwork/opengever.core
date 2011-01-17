@@ -5,6 +5,9 @@ Changelog
 2.0b2
 -----
 
+* Issue #788 Papierkorb-Funktionalität funktioniert nicht im Eingangskorb
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/788/
+  [ttschanz]
 
 2.0b1
 -----

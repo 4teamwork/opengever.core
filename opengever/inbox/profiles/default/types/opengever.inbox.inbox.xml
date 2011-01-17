@@ -26,7 +26,8 @@
 
   <!-- enabled behaviors -->
   <property name="behaviors">
-    <element value="opengever.base.behaviors.base.IOpenGeverBase" />
+    <element value="opengever.dossier.behaviors.dossier.IDossier" />
+	<element value="opengever.base.behaviors.base.IOpenGeverBase" />
     <element value="ftw.journal.interfaces.IAnnotationsJournalizable" />
     <element value="plone.app.content.interfaces.INameFromTitle" />
     <element value="opengever.tabbedview.interfaces.ITabbedViewEnabled" />
