@@ -1,11 +1,15 @@
 <configure
-    xmlns="http://namespaces.zope.org/zope"
-
-    i18n_domain="opengever.inbox">
+      xmlns="http://namespaces.zope.org/zope"
+      i18n_domain="opengever.inbox">
 
     <permission
-        id="opengever.inbox.AddInbox"
-        title="opengever.inbox: Add Inbox"
-        />
-   
+          id="opengever.inbox.AddInbox"
+          title="opengever.inbox: Add Inbox"
+          />
+
+    <permission
+          id="opengever.inbox.AddForwarding"
+          title="opengever.inbox: Add Forwarding"
+          />
+
 </configure>

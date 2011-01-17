@@ -5,6 +5,11 @@ Changelog
 2.0b2
 -----
 
+* Issue #789 Umsetzung Postmodul
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/789/
+  Added new content type Forwarding.
+  [jbaumann]
+
 * Issue #788 Papierkorb-Funktionalität funktioniert nicht im Eingangskorb
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/788/
   [ttschanz]

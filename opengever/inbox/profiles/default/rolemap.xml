@@ -1,10 +1,15 @@
 <?xml version="1.0"?>
 <rolemap>
   <permissions>
+
     <permission name="opengever.inbox: Add Inbox" acquire="True">
       <role name="Manager"/>
       <role name="Owner"/>
       <role name="Contributor"/>
     </permission>
+
+    <permission name="opengever.inbox: Add Forwarding" acquire="True">
+    </permission>
+
   </permissions>
 </rolemap>

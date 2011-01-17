@@ -27,3 +27,5 @@ class IInbox(form.Schema):
 class GivenTasks(Tasks):
     grok.name('tabbedview_view-given_tasks')
 
+    types = ['opengever.inbox.forwarding']
+
