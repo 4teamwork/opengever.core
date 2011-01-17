@@ -32,7 +32,10 @@ def get_dossier_sequence_number(task):
                           'object_provides': dossier_marker})
 
         if len(brains):
-            return brains[0].sequence_number
+            if brains[0].sequence_number:
+                return brains[0].sequence_number
+            else:
+                return ''
         else:
             path = aq_parent(aq_inner(path))
 
