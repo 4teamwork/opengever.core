@@ -5,7 +5,13 @@ Changelog
 2.0b3
 -----
 
+* Issue #785 Anpassen Erzeugen eines Mail-Objekts bei Mailempfang
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/785/
+  added receipt_date and fixed document_author
+  [ttschanz]
 
+* Added ITrashable behavior
+  [ttschanz]
 2.0b2
 -----
 

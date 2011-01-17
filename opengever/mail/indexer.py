@@ -9,14 +9,24 @@ from ftw.mail import utils
 @indexer(IMail)
 def document_author(obj):
     """ doucment_author indexer, return the Sender Adress """
-    return utils.get_header(obj.msg, 'From')
+    document_author = utils.get_header(obj.msg, 'From')
+    document_author = document_author.replace('<', '&lt;')
+    document_author = document_author.replace('>', '&gt;')
+    return document_author
 grok.global_adapter(document_author, name='document_author')
 
 
 @indexer(IMail)
 def document_date(obj):
-        """ document_date indexer, return the from date of the mail """
-        document_date = utils.get_date_header(obj.msg, 'Date')
-        return DateTime(document_date)
-
+    """ document_date indexer, return the from date of the mail """
+    document_date = utils.get_date_header(obj.msg, 'Date')
+    return DateTime(document_date)
 grok.global_adapter(document_date, name="document_date")
+
+@indexer(IMail)
+def receipt_date(obj):
+    """receipt_date indexer, return the recived date of the mail"""
+    received = utils.get_header(obj.msg, 'Received')
+    receipt_date = received.split(';')[1]
+    return DateTime(receipt_date)
+grok.global_adapter(receipt_date, name='receipt_date')
