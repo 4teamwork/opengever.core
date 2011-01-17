@@ -8,6 +8,7 @@ Changelog
 * Issue #789 Umsetzung Postmodul
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/789/
   Do not access hidden stuff in task view.
+  Hide relatedItems in answer for forwardings.
   [jbaumann]
 
 * Fixed some typos in translations (workflow states and transitions)

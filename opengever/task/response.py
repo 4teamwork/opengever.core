@@ -3,19 +3,20 @@ from Products.CMFCore.utils import getToolByName
 from Products.Five.browser import BrowserView
 from Products.statusmessages.interfaces import IStatusMessage
 from five import grok
+from opengever.base.source import DossierPathSourceBinder
 from opengever.globalindex.interfaces import ITaskQuery
 from opengever.task import _
 from opengever.task import util
 from opengever.task.adapters import IResponseContainer, Response
 from opengever.task.interfaces import IResponseAdder
 from opengever.task.permissions import DEFAULT_ISSUE_MIME_TYPE
-from opengever.base.source import DossierPathSourceBinder
 from opengever.task.task import ITask
 from plone.autoform.form import AutoExtensibleForm
 from plone.memoize.view import memoize
 from plone.z3cform import layout
 from z3c.form import form, field, button
 from z3c.form.browser import radio
+from z3c.form.interfaces import HIDDEN_MODE
 from z3c.relationfield.relation import RelationValue
 from z3c.relationfield.schema import RelationChoice, RelationList
 from zope import schema
@@ -218,7 +219,6 @@ class AddForm(form.AddForm, AutoExtensibleForm):
         super(AddForm, self).updateActions()
         self.actions["save"].addClass("context")
 
-
     @button.buttonAndHandler(_(u'save', default='Save'),
                                name='save')
     def handleSubmit(self, action):
@@ -263,7 +263,7 @@ class AddForm(form.AddForm, AutoExtensibleForm):
                     task.__setattr__(option, resp_field)
 
             # save relatedItems on task
-            relatedItems = data.get('relatedItems')
+            relatedItems = data.get('relatedItems') or []
             intids = getUtility(IIntIds)
             for item in relatedItems:
                 to_id = intids.getId(item)
@@ -307,6 +307,11 @@ class AddForm(form.AddForm, AutoExtensibleForm):
 
     def handleCancel(self, action):
         return self.request.RESPONSE.redirect('.')
+
+    def updateWidgets(self):
+        form.AddForm.updateWidgets(self)
+        if self.context.portal_type == 'opengever.inbox.forwarding':
+            self.widgets['relatedItems'].mode = HIDDEN_MODE
 
 
 class BeneathTask(grok.ViewletManager):
