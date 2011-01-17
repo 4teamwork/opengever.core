@@ -5,125 +5,139 @@
       lang="en"
       metal:use-macro="context/main_template/macros/master"
       i18n:domain="opengever.task">
-  <body>
+    <body>
 
-    <metal:main fill-slot="main">
-      <tal:main-macro metal:define-macro="main">
+        <metal:main fill-slot="main">
+            <tal:main-macro metal:define-macro="main">
 
-        <div tal:replace="structure provider:plone.abovecontenttitle" />
+                <div tal:replace="structure provider:plone.abovecontenttitle" />
 
-        <h1 class="documentFirstHeading" tal:content="python: context.Title()"/>
+                <h1 class="documentFirstHeading" tal:content="python: context.Title()"/>
 
-        <div tal:replace="structure provider:plone.belowcontenttitle" />
+                <div tal:replace="structure provider:plone.belowcontenttitle" />
 
-        <table class="listing task-listing">
-          <tal:rep tal:define="group python: view.groups[0]">
-            <tr>
-			<span tal:condition="python: group.widgets['text']" />
-			  <th tal:content="python: group.widgets['text'].label" />
-			  <td tal:content="structure python: group.widgets['text'].render()" />
-            </tr>
-			<tr>
-			  <th tal:content="python: group.widgets['task_type'].label" />
-			  <td tal:content="structure python: group.widgets['task_type'].render()" />
-			</tr>
-			<tr>
-			   <th i18n:domain="opengever.task" i18n:translate="label_workflow_state">State</th>
-			   <td i18n:translate="" i18n:domain="plone" tal:content="python: view.context.portal_workflow.getInfoFor(view.context, 'review_state')" />
-			</tr>
-			<tr>
-				<th tal:content="python: group.widgets['issuer'].label"></th>
-			    <td tal:content="structure view/issuer_link" />
-			</tr>
-			<tr>
-				<th i18n:translate="label_responsible">Responsible:</th>
-				<td tal:content="structure view/responsible_link" />
-			</tr>
-			<tr>
-			<th tal:content="python:group.widgets['deadline'].label"></th>
-		    <td tal:content="python:context.deadline.strftime('%d.%m.%Y')"/>
-		    </tr>
-		 	<tr>
-			   <th i18n:domain="opengever.task" i18n:translate="label_last_modified">Last change</th>
-			   <td tal:content="python: view.context.modified().strftime('%d.%m.%Y %H:%M')"/>
-			</tr>	
-          
-		  <tal:rep2 tal:define="group2 python: view.groups[1]">
-			<tr tal:condition="python: context.expectedStartOfWork">
-				<th tal:content="python: group2.widgets['expectedStartOfWork'].label"></th>
-				<td tal:content="python:context.expectedStartOfWork.strftime('%d.%m.%Y')"/>
-			</tr>
-		  	<tr tal:repeat="widget group2/widgets/values">
-				<tal:block condition="python:widget.__name__ not in ('IBasic.title', 'IBasic.description', 'title',
-				'description', 'ITransition.transition', 'expectedStartOfWork', 'date_of_completion') and widget.value and widget.value != ('', '', '')">
-				<th tal:content="structure widget/label" />
-				<td tal:content="structure widget/render" />
-				</tal:block>
-				<tal:block condition="python: widget.__name__=='date_of_completion' and widget.value">	
-					<th tal:content="structure widget/label" />
-					<td tal:content="python: context.date_of_completion.strftime('%d.%m.%Y')" />
-				</tal:block>
-			</tr>
-		  </tal:rep2>
-		</tal:rep>
-        </table>
+                <table class="listing task-listing">
+                    <tal:rep tal:define="group python: view.groups[0]">
 
-        <div class="visualClear"><!----></div>
+                        <tr>
+                            <span tal:condition="python: group.widgets['text']" />
+                            <th tal:content="python: group.widgets['text'].label" />
+                            <td tal:content="structure python: group.widgets['text'].render()" />
+                        </tr>
 
-        <tal:items define="items view/getContainingTask"
-                   condition="items">
-          <div tal:condition="items"><h2 i18n:translate="containing_task">Containing Tasks:</h2></div>
-          <ul tal:condition="items">
-            <li tal:repeat="item items">
-              <img tal:attributes="src item/getIcon" />
-              <a href="" tal:attributes="href item/absolute_url|nothing" tal:omit-tag="not: item/absolute_url|nothing"><span tal:content="item/Title" /></a>
-            </li>
-          </ul>
-        </tal:items>
+                        <tr>
+                            <th tal:content="python: group.widgets['task_type'].label" />
+                            <td tal:content="structure python: group.widgets['task_type'].render()" />
+                        </tr>
 
-        <tal:items define="items view/getSubTasks"
-                   condition="items">
-          <div tal:condition="items"><h2 i18n:translate="subtasks">Subtasks:</h2></div>
-          <ul tal:condition="items">
-            <li tal:repeat="item items">
-              <img tal:attributes="src item/getIcon" />
-              <a href="" tal:attributes="href item/getURL|nothing" tal:omit-tag="not: item/getURL|nothing"><span tal:content="item/Title" /></a>
-            </li>
-          </ul>
-        </tal:items>
+                        <tr>
+                            <th i18n:domain="opengever.task" i18n:translate="label_workflow_state">State</th>
+                            <td i18n:translate="" i18n:domain="plone" tal:content="python: view.context.portal_workflow.getInfoFor(view.context, 'review_state')" />
+                        </tr>
 
-        <tal:items define="item view/getPredecessorTask"
-                   condition="item">
-          <div tal:condition="item"><h2 i18n:translate="predecessor">Predecessor Task:</h2></div>
-          <div tal:content="structure python:view.render_indexed_task(item)" />
-        </tal:items>
+                        <tr>
+                            <th tal:content="python: group.widgets['issuer'].label"></th>
+                            <td tal:content="structure view/issuer_link" />
+                        </tr>
 
-        <tal:items define="items view/getSuccessorTasks"
-                   condition="items">
-          <div><h2 i18n:translate="successors">Successor Tasks:</h2></div>
-          <ul tal:condition="items">
-            <li tal:repeat="item items"
-                tal:content="structure python:view.render_indexed_task(item)" />
-          </ul>
-        </tal:items>
-        <tal:items define="items view/getSubDocuments">
-        <div tal:condition="items"><h2 i18n:translate="documents">Documents:</h2></div>
-         <ul tal:condition="items">
-            <li tal:repeat="item items">
-              <img tal:attributes="src item/getIcon" />
-              <a href="" tal:attributes="href item/absolute_url|nothing" tal:omit-tag="not: item/absolute_url|nothing"><span tal:content="item/Title" /></a>
-            </li>
-          </ul>
-        </tal:items>
+                        <tr>
+                            <th i18n:translate="label_responsible">Responsible:</th>
+                            <td tal:content="structure view/responsible_link" />
+                        </tr>
 
-        <div class="visualClear"><!----></div>
-        <div tal:replace="structure provider:opengever.task.beneathTask" />
-        <div class="visualClear"><!----></div>
-        <div tal:replace="structure provider:plone.belowcontentbody" />
-        <div class="visualClear"><!----></div>
-      </tal:main-macro>
-    </metal:main>
+                        <tr>
+                            <th tal:content="python:group.widgets['deadline'].label"></th>
+                            <td tal:content="python:context.deadline.strftime('%d.%m.%Y')"/>
+                        </tr>
 
-  </body>
+                        <tr>
+                            <th i18n:domain="opengever.task" i18n:translate="label_last_modified">Last change</th>
+                            <td tal:content="python: view.context.modified().strftime('%d.%m.%Y %H:%M')"/>
+                        </tr>
+
+                    </tal:rep>
+
+
+                    <tal:rep2 tal:define="group2 python: view.groups[1]">
+                        <tr tal:condition="python: context.expectedStartOfWork">
+                            <th tal:content="python: group2.widgets['expectedStartOfWork'].label"></th>
+                            <td tal:content="python:context.expectedStartOfWork.strftime('%d.%m.%Y')"/>
+                        </tr>
+
+                        <tr tal:repeat="widget group2/widgets/values">
+                            <tal:block condition="python:widget.__name__ not in ('IBasic.title', 'IBasic.description', 'title',
+                                                  'description', 'ITransition.transition', 'expectedStartOfWork', 'date_of_completion') and widget.value and widget.value != ('', '', '')">
+                                <th tal:content="structure widget/label" />
+                                <td tal:content="structure widget/render" />
+                            </tal:block>
+                            <tal:block condition="python: widget.__name__=='date_of_completion' and widget.value">
+                                <th tal:content="structure widget/label" />
+                                <td tal:content="python: context.date_of_completion.strftime('%d.%m.%Y')" />
+                            </tal:block>
+                        </tr>
+
+                    </tal:rep2>
+
+                </table>
+
+                <div class="visualClear"><!----></div>
+
+                <tal:items define="items view/getContainingTask"
+                           condition="items">
+                    <div tal:condition="items"><h2 i18n:translate="containing_task">Containing Tasks:</h2></div>
+                    <ul tal:condition="items">
+                        <li tal:repeat="item items">
+                            <img tal:attributes="src item/getIcon" />
+                            <a href="" tal:attributes="href item/absolute_url|nothing" tal:omit-tag="not: item/absolute_url|nothing"><span tal:content="item/Title" /></a>
+                        </li>
+                    </ul>
+                </tal:items>
+
+                <tal:items define="items view/getSubTasks"
+                           condition="items">
+                    <div tal:condition="items"><h2 i18n:translate="subtasks">Subtasks:</h2></div>
+                    <ul tal:condition="items">
+                        <li tal:repeat="item items">
+                            <img tal:attributes="src item/getIcon" />
+                            <a href="" tal:attributes="href item/getURL|nothing" tal:omit-tag="not: item/getURL|nothing"><span tal:content="item/Title" /></a>
+                        </li>
+                    </ul>
+                </tal:items>
+
+                <tal:items define="item view/getPredecessorTask"
+                           condition="item">
+                    <div tal:condition="item"><h2 i18n:translate="predecessor">Predecessor Task:</h2></div>
+                    <div tal:content="structure python:view.render_indexed_task(item)" />
+                </tal:items>
+
+                <tal:items define="items view/getSuccessorTasks"
+                           condition="items">
+                    <div><h2 i18n:translate="successors">Successor Tasks:</h2></div>
+                    <ul tal:condition="items">
+                        <li tal:repeat="item items"
+                            tal:content="structure python:view.render_indexed_task(item)" />
+                    </ul>
+                </tal:items>
+
+                <tal:items define="items view/getSubDocuments">
+                    <div tal:condition="items"><h2 i18n:translate="documents">Documents:</h2></div>
+                    <ul tal:condition="items">
+                        <li tal:repeat="item items">
+                            <img tal:attributes="src item/getIcon" />
+                            <a href="" tal:attributes="href item/absolute_url|nothing" tal:omit-tag="not: item/absolute_url|nothing"><span tal:content="item/Title" /></a>
+                        </li>
+                    </ul>
+                </tal:items>
+
+                <div class="visualClear"><!----></div>
+                <div tal:replace="structure provider:opengever.task.beneathTask" />
+                <div class="visualClear"><!----></div>
+                <div tal:replace="structure provider:plone.belowcontentbody" />
+                <div class="visualClear"><!----></div>
+
+            </tal:main-macro>
+        </metal:main>
+
+    </body>
 </html>
 
