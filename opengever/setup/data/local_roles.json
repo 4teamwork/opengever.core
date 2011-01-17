@@ -21,12 +21,6 @@
                 "Reader",
                 "Editor",
                 "Contributor"
-            ],
-
-            "og_administratoren": [
-                "Editor",
-                "Contributor",
-                "Administrator"
             ]
 
         }

@@ -5,6 +5,10 @@ Changelog
 2.0b4
 -----
 
+* Issue #777 Setup OpenGever: Administratoren-Gruppe mit Manager-Rolle
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/777/
+  Created import step to Assign the global role to the Group
+  [ttschanz]
 
 2.0b3
 -----

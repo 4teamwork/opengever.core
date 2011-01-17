@@ -18,4 +18,10 @@
           description=""
           handler="opengever.setup.setuphandlers.import_various" />
 
+	<genericsetup:importStep
+		  name="opengever.import_roles"
+		  title="opengever.setup global roles imports"
+		  description=""
+		  handler="opengever.setup.setuphandlers.set_global_roles" />
+
 </configure>

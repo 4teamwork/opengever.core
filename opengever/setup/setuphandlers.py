@@ -68,3 +68,15 @@ def import_various(setup):
     create_repository_root(site)
     start_import(site)
     settings(site)
+
+def set_global_roles(setup):
+    admin_file = setup.readDataFile('administrator.txt')
+    if admin_file is None:
+        return
+    site = setup.getSite()
+    assign_roles(site, admin_file)
+
+def assign_roles(context, admin_file):
+    admin_groups= admin_file.split('\n')
+    for admin_group in admin_groups:
+        context.acl_users.portal_role_manager.assignRoleToPrincipal('Manager', admin_group.strip())
