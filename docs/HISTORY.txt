@@ -5,8 +5,14 @@ Changelog
 2.0b9
 -----
 
+* Issue #789 Umsetzung Postmodul
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/789/
+  Do not access hidden stuff in task view.
+  [jbaumann]
+
 * Fixed some typos in translations (workflow states and transitions)
   [phabegger]
+
 
 2.0b8
 -----
