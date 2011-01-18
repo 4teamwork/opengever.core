@@ -122,6 +122,13 @@ class IDossier(form.Schema):
         required = False,
         )
 
+    form.omitted('filing_no')
+    filing_no = schema.TextLine(
+        title = _(u'filing_no', default="Filing number"),
+        description = _(u'help_filing_no', default=u''),
+        required=False,
+        )
+
     container_type = schema.Choice(
         title = _(u'label_container_type', default=u'Container Type'),
         description = _(u'help_container_type', default=u''),
@@ -261,9 +268,9 @@ grok.global_adapter(isSubdossierIndexer, name="is_subdossier")
 
 @indexer(IDossierMarker)
 def filing_no(obj):
-    """filing nubmer indexer"""
-
-    return getattr(obj, 'filing_no', None)
+    """filing number indexer"""
+    dossier = IDossier(obj)
+    return getattr(dossier, 'filing_no', None)
 grok.global_adapter(filing_no, name="filing_no")
 
 

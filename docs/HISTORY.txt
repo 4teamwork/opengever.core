@@ -5,6 +5,10 @@ Changelog
 2.0b8
 -----
 
+* - Added `filing_no` field (omitted) on IDossier
+  - Fixed indexer for filing_no
+  [lgraf]
+
 
 2.0b7
 -----
