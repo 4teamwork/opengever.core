@@ -1,13 +1,13 @@
 <?xml version="1.0"?>
 <dc-workflow workflow_id="opengever_forwarding_workflow" title="Workflow for opengever forwardings" description="" state_variable="review_state" initial_state="forwarding-state-open" manager_bypass="False">
  <permission>Access contents information</permission>
- <permission>View</permission>
  <permission>Add portal content</permission>
  <permission>List folder contents</permission>
  <permission>Manage properties</permission>
  <permission>Modify portal content</permission>
  <permission>Review portal content</permission>
  <permission>Sharing page: Delegate roles</permission>
+ <permission>View</permission>
  <permission>opengever.document: Add document</permission>
  <permission>opengever.inbox: Add Forwarding</permission>
  <permission>opengever.task: Add task</permission>
@@ -100,29 +100,33 @@
   </permission-map>
  </state>
  <transition transition_id="forwarding-transition-accept" title="" new_state="forwarding-state-closed" trigger="USER" before_script="" after_script="">
-  <action url="%(content_url)s/addresponse?form.widgets.transition= forwarding-transition-accept" category="workflow" icon="">forwarding-transition-accept</action>
+  <action url="%(content_url)s/addresponse?form.widgets.transition=forwarding-transition-accept" category="workflow" icon="">forwarding-transition-accept</action>
   <guard>
+   <guard-expression>python: here.restrictedTraverse('opengever_view').is_user_assigned_to_client(here.responsible_client)</guard-expression>
   </guard>
  </transition>
  <transition transition_id="forwarding-transition-assign-to-dossier" title="" new_state="forwarding-state-closed" trigger="USER" before_script="" after_script="">
-  <action url="%(content_url)s/assign-to-dossier?form.widgets.transition= forwarding-transition-assign-to-dossier" category="workflow" icon="">forwarding-transition-assign-to-dossier</action>
+  <action url="%(content_url)s/addresponse?form.widgets.transition=forwarding-transition-assign-to-dossier" category="workflow" icon="">forwarding-transition-assign-to-dossier</action>
   <guard>
+   <guard-expression>python: here.restrictedTraverse('opengever_view').is_user_assigned_to_client() or 'Manager' in here.restrictedTraverse('plone_portal_state').member().getRolesInContext(here)</guard-expression>
   </guard>
  </transition>
  <transition transition_id="forwarding-transition-close" title="" new_state="forwarding-state-closed" trigger="USER" before_script="" after_script="">
-  <action url="%(content_url)s/addresponse?form.widgets.transition= forwarding-transition-close" category="workflow" icon="">forwarding-transition-close</action>
+  <action url="%(content_url)s/addresponse?form.widgets.transition=forwarding-transition-close" category="workflow" icon="">forwarding-transition-close</action>
   <guard>
+   <guard-expression>python: here.restrictedTraverse('opengever_view').is_user_assigned_to_client() or 'Manager' in here.restrictedTraverse('plone_portal_state').member().getRolesInContext(here)</guard-expression>
   </guard>
  </transition>
- <transition transition_id="forwarding-transition-refuse" title="" new_state="forwarding-state-closed" trigger="USER" before_script="" after_script="">
-  <action url="%(content_url)s/addresponse?form.widgets.transition= forwarding-transition-refuse" category="workflow" icon="">forwarding-transition-refuse</action>
+ <transition transition_id="forwarding-transition-refuse" title="" new_state="forwarding-state-open" trigger="USER" before_script="" after_script="">
+  <action url="%(content_url)s/addresponse?form.widgets.transition=forwarding-transition-refuse" category="workflow" icon="">forwarding-transition-refuse</action>
   <guard>
+   <guard-expression>python: here.restrictedTraverse('opengever_view').is_user_assigned_to_client(here.responsible_client)</guard-expression>
   </guard>
  </transition>
  <variable variable_id="action" for_catalog="False" for_status="True" update_always="True">
   <description>The last transition</description>
   <default>
-
+   
    <expression>transition/getId|nothing</expression>
   </default>
   <guard>
@@ -131,7 +135,7 @@
  <variable variable_id="actor" for_catalog="False" for_status="True" update_always="True">
   <description>The ID of the user who performed the last transition</description>
   <default>
-
+   
    <expression>user/getId</expression>
   </default>
   <guard>
@@ -140,7 +144,7 @@
  <variable variable_id="comments" for_catalog="False" for_status="True" update_always="True">
   <description>Comments about the last transition</description>
   <default>
-
+   
    <expression>python:state_change.kwargs.get('comment', '')</expression>
   </default>
   <guard>
@@ -149,7 +153,7 @@
  <variable variable_id="review_history" for_catalog="False" for_status="False" update_always="False">
   <description>Provides access to workflow history</description>
   <default>
-
+   
    <expression>state_change/getHistory</expression>
   </default>
   <guard>
@@ -159,7 +163,7 @@
  <variable variable_id="time" for_catalog="False" for_status="True" update_always="True">
   <description>Time of the last transition</description>
   <default>
-
+   
    <expression>state_change/getDateTime</expression>
   </default>
   <guard>
