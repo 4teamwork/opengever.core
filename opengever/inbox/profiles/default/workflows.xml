@@ -2,10 +2,14 @@
 <object name="portal_workflow" meta_type="Plone Workflow Tool">
 
     <object name="opengever_inbox_workflow" meta_type="Workflow"/>
+    <object name="opengever_forwarding_workflow" meta_type="Workflow"/>
 
     <bindings>
         <type type_id="opengever.inbox.inbox">
             <bound-workflow workflow_id="opengever_inbox_workflow"/>
+        </type>
+        <type type_id="opengever.inbox.forwarding">
+            <bound-workflow workflow_id="opengever_forwarding_workflow"/>
         </type>
     </bindings>
 
