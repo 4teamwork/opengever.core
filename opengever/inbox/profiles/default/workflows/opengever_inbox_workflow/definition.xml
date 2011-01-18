@@ -1,128 +1,97 @@
 <?xml version="1.0"?>
-<dc-workflow workflow_id="opengever_forwarding_workflow" title="Workflow for opengever forwardings" description="" state_variable="review_state" initial_state="forwarding-state-open" manager_bypass="False">
+<dc-workflow workflow_id="opengever_inbox_workflow" title="Dossier Workflow" description="" state_variable="review_state" initial_state="inbox-state-default" manager_bypass="False">
  <permission>Access contents information</permission>
  <permission>Add portal content</permission>
  <permission>List folder contents</permission>
  <permission>Manage properties</permission>
  <permission>Modify portal content</permission>
- <permission>Review portal content</permission>
- <permission>Sharing page: Delegate roles</permission>
  <permission>View</permission>
+ <permission>ftw.mail: Add Inbound Mail</permission>
+ <permission>ftw.mail: Add Mail</permission>
  <permission>opengever.document: Add document</permission>
- <permission>opengever.inbox: Add Forwarding</permission>
+ <permission>opengever.dossier: Add businesscasedossier</permission>
  <permission>opengever.task: Add task</permission>
- <state state_id="forwarding-state-closed" title="">
+ <permission>opengever.trash: Trash content</permission>
+ <permission>opengever.trash: Untrash content</permission>
+ <permission>opengever.inbox: Add Forwarding</permission>
+ <state state_id="inbox-state-default" title="inbox-state-default">
+  <exit-transition transition_id="dossier-transition-deactivate"/>
+  <exit-transition transition_id="dossier-transition-resolve"/>
   <permission-map name="Access contents information" acquired="False">
-   <permission-role>Editor</permission-role>
    <permission-role>Manager</permission-role>
    <permission-role>Owner</permission-role>
+   <permission-role>Reader</permission-role>
   </permission-map>
   <permission-map name="Add portal content" acquired="False">
-  </permission-map>
-  <permission-map name="List folder contents" acquired="False">
-   <permission-role>Editor</permission-role>
-   <permission-role>Manager</permission-role>
-   <permission-role>Owner</permission-role>
-  </permission-map>
-  <permission-map name="Manage properties" acquired="False">
-   <permission-role>Editor</permission-role>
-   <permission-role>Manager</permission-role>
-   <permission-role>Owner</permission-role>
-  </permission-map>
-  <permission-map name="Modify portal content" acquired="False">
-  </permission-map>
-  <permission-map name="Review portal content" acquired="False">
-  </permission-map>
-  <permission-map name="Sharing page: Delegate roles" acquired="False">
-   <permission-role>Manager</permission-role>
-  </permission-map>
-  <permission-map name="View" acquired="False">
-   <permission-role>Editor</permission-role>
-   <permission-role>Manager</permission-role>
-   <permission-role>Owner</permission-role>
-  </permission-map>
-  <permission-map name="opengever.document: Add document" acquired="False">
-  </permission-map>
-  <permission-map name="opengever.inbox: Add Forwarding" acquired="False">
-  </permission-map>
-  <permission-map name="opengever.task: Add task" acquired="False">
-  </permission-map>
- </state>
- <state state_id="forwarding-state-open" title="">
-  <exit-transition transition_id="forwarding-transition-accept"/>
-  <exit-transition transition_id="forwarding-transition-assign-to-dossier"/>
-  <exit-transition transition_id="forwarding-transition-close"/>
-  <exit-transition transition_id="forwarding-transition-refuse"/>
-  <permission-map name="Access contents information" acquired="False">
-   <permission-role>Editor</permission-role>
-   <permission-role>Manager</permission-role>
-   <permission-role>Owner</permission-role>
-  </permission-map>
-  <permission-map name="Add portal content" acquired="False">
-   <permission-role>Editor</permission-role>
+   <permission-role>Contributor</permission-role>
    <permission-role>Manager</permission-role>
    <permission-role>Owner</permission-role>
   </permission-map>
   <permission-map name="List folder contents" acquired="False">
-   <permission-role>Editor</permission-role>
    <permission-role>Manager</permission-role>
    <permission-role>Owner</permission-role>
+   <permission-role>Reader</permission-role>
   </permission-map>
   <permission-map name="Manage properties" acquired="False">
-   <permission-role>Editor</permission-role>
    <permission-role>Manager</permission-role>
    <permission-role>Owner</permission-role>
+   <permission-role>Reader</permission-role>
   </permission-map>
   <permission-map name="Modify portal content" acquired="False">
-   <permission-role>Manager</permission-role>
-  </permission-map>
-  <permission-map name="Review portal content" acquired="False">
    <permission-role>Editor</permission-role>
    <permission-role>Manager</permission-role>
    <permission-role>Owner</permission-role>
-  </permission-map>
-  <permission-map name="Sharing page: Delegate roles" acquired="False">
-   <permission-role>Manager</permission-role>
   </permission-map>
   <permission-map name="View" acquired="False">
-   <permission-role>Editor</permission-role>
+   <permission-role>Manager</permission-role>
+   <permission-role>Owner</permission-role>
+   <permission-role>Reader</permission-role>
+  </permission-map>
+  <permission-map name="ftw.mail: Add Inbound Mail" acquired="False">
+   <permission-role>Contributor</permission-role>
    <permission-role>Manager</permission-role>
    <permission-role>Owner</permission-role>
   </permission-map>
+  <permission-map name="ftw.mail: Add Mail" acquired="False">
+  </permission-map>
   <permission-map name="opengever.document: Add document" acquired="False">
-   <permission-role>Editor</permission-role>
+   <permission-role>Contributor</permission-role>
+   <permission-role>Manager</permission-role>
+   <permission-role>Owner</permission-role>
+  </permission-map>
+  <permission-map name="opengever.dossier: Add businesscasedossier" acquired="False">
+   <permission-role>Contributor</permission-role>
    <permission-role>Manager</permission-role>
    <permission-role>Owner</permission-role>
   </permission-map>
   <permission-map name="opengever.inbox: Add Forwarding" acquired="False">
+   <permission-role>Contributor</permission-role>
+   <permission-role>Manager</permission-role>
+   <permission-role>Owner</permission-role>
   </permission-map>
   <permission-map name="opengever.task: Add task" acquired="False">
   </permission-map>
+  <permission-map name="opengever.trash: Trash content" acquired="False">
+   <permission-role>Contributor</permission-role>
+   <permission-role>Editor</permission-role>
+   <permission-role>Manager</permission-role>
+   <permission-role>Owner</permission-role>
+  </permission-map>
+  <permission-map name="opengever.trash: Untrash content" acquired="False">
+   <permission-role>Contributor</permission-role>
+   <permission-role>Editor</permission-role>
+   <permission-role>Manager</permission-role>
+   <permission-role>Owner</permission-role>
+  </permission-map>
  </state>
- <transition transition_id="forwarding-transition-accept" title="" new_state="forwarding-state-closed" trigger="USER" before_script="" after_script="">
-  <action url="%(content_url)s/addresponse?form.widgets.transition=forwarding-transition-accept" category="workflow" icon="">forwarding-transition-accept</action>
+ <worklist worklist_id="reviewer_queue" title="">
+  <description>Reviewer tasks</description>
+  <action url="%(portal_url)s/search?review_state=pending" category="global" icon="">Pending (%(count)d)</action>
   <guard>
-   <guard-expression>python: here.restrictedTraverse('opengever_view').is_user_assigned_to_client(here.responsible_client)</guard-expression>
+   <guard-permission>Review portal content</guard-permission>
   </guard>
- </transition>
- <transition transition_id="forwarding-transition-assign-to-dossier" title="" new_state="forwarding-state-closed" trigger="USER" before_script="" after_script="">
-  <action url="%(content_url)s/addresponse?form.widgets.transition=forwarding-transition-assign-to-dossier" category="workflow" icon="">forwarding-transition-assign-to-dossier</action>
-  <guard>
-   <guard-expression>python: here.restrictedTraverse('opengever_view').is_user_assigned_to_client() or 'Manager' in here.restrictedTraverse('plone_portal_state').member().getRolesInContext(here)</guard-expression>
-  </guard>
- </transition>
- <transition transition_id="forwarding-transition-close" title="" new_state="forwarding-state-closed" trigger="USER" before_script="" after_script="">
-  <action url="%(content_url)s/addresponse?form.widgets.transition=forwarding-transition-close" category="workflow" icon="">forwarding-transition-close</action>
-  <guard>
-   <guard-expression>python: here.restrictedTraverse('opengever_view').is_user_assigned_to_client() or 'Manager' in here.restrictedTraverse('plone_portal_state').member().getRolesInContext(here)</guard-expression>
-  </guard>
- </transition>
- <transition transition_id="forwarding-transition-refuse" title="" new_state="forwarding-state-open" trigger="USER" before_script="" after_script="">
-  <action url="%(content_url)s/addresponse?form.widgets.transition=forwarding-transition-refuse" category="workflow" icon="">forwarding-transition-refuse</action>
-  <guard>
-   <guard-expression>python: here.restrictedTraverse('opengever_view').is_user_assigned_to_client(here.responsible_client)</guard-expression>
-  </guard>
- </transition>
+  <match name="review_state" values="pending"/>
+ </worklist>
  <variable variable_id="action" for_catalog="False" for_status="True" update_always="True">
   <description>The last transition</description>
   <default>
