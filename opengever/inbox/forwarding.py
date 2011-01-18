@@ -32,6 +32,8 @@ class IForwarding(ITask):
 
 
 class Forwarding(Task):
+    """Forwarding model class.
+    """
     implements(IForwarding)
 
     @property
@@ -40,6 +42,11 @@ class Forwarding(Task):
 
 
 class AddForm(AddForm):
+    """Provide a custom add-form which adds the selected documents
+    (tabbed_view) to the hidden relatedItems field and sets some defaults.
+    The documents are later moved by move_documents_into_forwarding (see
+    below).
+    """
     grok.name('opengever.inbox.forwarding')
 
     def update(self):
