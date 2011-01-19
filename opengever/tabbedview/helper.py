@@ -102,9 +102,10 @@ def boolean_helper(item, value):
                      _(u'label_no', default='No')
 
 def workflow_state(item, value):
+    """Helper which translates the workflow_state in plone domain."""
     translate = ftw.table.helper.translated_string('plone')
     translated_value = translate(item, value)
     normalize = getUtility(IIDNormalizer).normalize
     state = normalize(item.review_state)
-    return """<span class="wf-%s">%s</span>""" % (state, translated_value)
+    return """<span class="wf-%s">%s</span>""" % (state, item.translate(translated_value))
 
