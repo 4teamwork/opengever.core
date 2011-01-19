@@ -19,6 +19,7 @@ from persistent.dict import PersistentDict
 from plone.app.iterate.interfaces import IWorkingCopy
 from plone.app.versioningbehavior.utils import get_change_note
 from zope.app.container.interfaces import IObjectAddedEvent
+from zope.component import getMultiAdapter
 from zope.event import notify
 from zope.i18nmessageid import MessageFactory
 from zope.i18nmessageid.message import Message
@@ -40,7 +41,11 @@ def propper_string(value):
 
 
 def journal_entry_factory(context, action, title,
-                          visible=True, comment=''):
+                          visible=True, comment='', actor=None):
+    portal_state = getMultiAdapter((context, context.REQUEST), name=u'plone_portal_state')
+    if actor is None:
+        actor = portal_state.member().getId()
+
     comment = comment=='' and get_change_note(context.REQUEST, '') or comment
     title = propper_string(title)
     action = propper_string(action)
@@ -52,9 +57,12 @@ def journal_entry_factory(context, action, title,
                 'title': title,
                 'visible': visible,
                 }),
+        'actor': actor,
         'comment': comment,
         }
-    notify(JournalEntryEvent(**entry))
+
+    if not actor == 'zopemaster':
+        notify(JournalEntryEvent(**entry))
 
 
 def translated_type(context):
