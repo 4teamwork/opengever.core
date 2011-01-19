@@ -22,7 +22,7 @@ msgstr "Geschäftsdossier hinzufügen"
 
 #: ./opengever/dossier/profiles/default/types/opengever.dossier.businesscasedossier.xml
 msgid "Add Participant"
-msgstr "Teilnehmer hinzufügen"
+msgstr "Beteiligung hinzufügen"
 
 #. Default: "Business Case Dossier"
 #: ./opengever/dossier/profiles/default/types/opengever.dossier.businesscasedossier.xml
