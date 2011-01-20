@@ -84,7 +84,7 @@ class SuccessorTaskForm(Form):
             for doc in self.get_documents():
                 trans.transport_to(doc, data['client'], target_task_path)
 
-            # create a response indicating that a response was created
+            # create a response indicating that a successor was created
             successor_oguid = successor_controller.get_oguid_by_path(
                 target_task_path, data['client'])
             add_simple_response(self.context, successor_oguid=successor_oguid)
@@ -129,7 +129,8 @@ class SuccessorTaskForm(Form):
         # find documents within the task
         brains = self.context.getFolderContents(
             full_objects=False,
-            contentFilter={'portal_type': 'opengever.document.document'})
+            contentFilter={'portal_type': ['opengever.document.document',
+                                           'ftw.mail.mail']})
         for doc in brains:
             yield doc.getObject()
         # find referenced documents

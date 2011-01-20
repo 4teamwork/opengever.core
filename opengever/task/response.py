@@ -230,6 +230,7 @@ class AddForm(form.AddForm, AutoExtensibleForm):
                     errorMessage += '<li>' + error.message + '</li>'
             errorMessage += '</ul>'
             self.status = errorMessage
+            return None
         else:
             new_response = Response(data.get('text'))
             #define responseTyp
@@ -301,6 +302,7 @@ class AddForm(form.AddForm, AutoExtensibleForm):
             else:
                 url = self.context.absolute_url()
             self.request.RESPONSE.redirect(url)
+            return new_response
 
     @button.buttonAndHandler(_(u'cancel', default='Cancel'),
                              name='cancel', )
