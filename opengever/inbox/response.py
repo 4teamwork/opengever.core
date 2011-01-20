@@ -4,6 +4,7 @@ for forwardings.
 
 from Products.CMFCore.utils import getToolByName
 from Products.statusmessages.interfaces import IStatusMessage
+from opengever.task.browser.successor import CleanupSuccessor
 from five import grok
 from opengever.base.interfaces import IRedirector
 from opengever.base.source import RepositoryPathSourceBinder
@@ -177,6 +178,17 @@ class ForwardingResponseAddForm(AddForm):
             for rel in self.context.relatedItems:
                 yield rel.to_object
 
+
+class CleanupForwardingSuccessor(CleanupSuccessor):
+    """For forwardings, we need to modify the behavior a little bit.
+    """
+
+    grok.context(IForwarding)
+
+    def set_workflow_state(self):
+        """Do not change the workflow state, because the initial state is quite ok.
+        """
+        return
 
 
 
