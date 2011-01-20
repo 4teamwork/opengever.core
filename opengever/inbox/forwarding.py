@@ -5,7 +5,7 @@ from opengever.ogds.base.utils import get_client_id
 from opengever.task.task import ITask, Task
 from plone.directives import form
 from plone.directives.dexterity import AddForm
-from z3c.form.interfaces import DISPLAY_MODE
+from z3c.form.interfaces import HIDDEN_MODE
 from zope.app.container.interfaces import IObjectAddedEvent
 from zope.component import getMultiAdapter
 from zope.interface import implements
@@ -20,7 +20,7 @@ class IForwarding(ITask):
 
     # only hide relatedItems - we need it for remembering which documents
     # should be moved after creation when creating forwarding from tabbed view.
-    form.mode(relatedItems=DISPLAY_MODE)
+    form.mode(relatedItems=HIDDEN_MODE)
 
     # additional fieldset
     form.omitted('expectedStartOfWork')
@@ -92,3 +92,4 @@ def move_documents_into_forwarding(context, event):
         obj = relation.to_object
         clipboard = aq_parent(aq_inner(obj)).manage_cutObjects(obj.id)
         context.manage_pasteObjects(clipboard)
+    context.relatedItems = []
