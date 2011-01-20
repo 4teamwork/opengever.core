@@ -103,7 +103,7 @@
  <transition transition_id="forwarding-transition-accept" title="" new_state="forwarding-state-closed" trigger="USER" before_script="" after_script="">
   <action url="%(content_url)s/addresponse?form.widgets.transition=forwarding-transition-accept" category="workflow" icon="">forwarding-transition-accept</action>
   <guard>
-   <guard-expression>python: here.restrictedTraverse('opengever_view').is_user_assigned_to_client(here.responsible_client)</guard-expression>
+   <guard-expression>python: here.responsible_client != here.restrictedTraverse('opengever_view').client_id() and here.restrictedTraverse('opengever_view').is_user_assigned_to_client(here.responsible_client)</guard-expression>
   </guard>
  </transition>
  <transition transition_id="forwarding-transition-assign-to-dossier" title="" new_state="forwarding-state-closed" trigger="USER" before_script="" after_script="">
@@ -121,7 +121,7 @@
  <transition transition_id="forwarding-transition-refuse" title="" new_state="forwarding-state-open" trigger="USER" before_script="" after_script="">
   <action url="%(content_url)s/addresponse?form.widgets.transition=forwarding-transition-refuse" category="workflow" icon="">forwarding-transition-refuse</action>
   <guard>
-   <guard-expression>python: here.restrictedTraverse('opengever_view').is_user_assigned_to_client(here.responsible_client)</guard-expression>
+   <guard-expression>python: here.responsible_client != here.restrictedTraverse('opengever_view').client_id() and here.restrictedTraverse('opengever_view').is_user_assigned_to_client(here.responsible_client)</guard-expression>
   </guard>
  </transition>
  <variable variable_id="action" for_catalog="False" for_status="True" update_always="True">
