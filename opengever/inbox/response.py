@@ -99,6 +99,12 @@ class ForwardingResponseAddForm(AddForm):
             IStatusMessage(self.request).addStatusMessage(
                 'YEAR FOLDERS NOT YET IMPLEMENTED', type='error')
 
+    @button.buttonAndHandler(_(u'cancel', default='Cancel'),
+                             name='cancel', )
+
+    def handleCancel(self, action):
+        return self.request.RESPONSE.redirect('.')
+
 
     def create_successor_forwarding(self, data):
         """"Accepting" means we create a successor-forwarding on the
