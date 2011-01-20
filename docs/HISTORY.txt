@@ -5,6 +5,9 @@ Changelog
 2.0b8
 -----
 
+* Fixed get_filing_no accessor in byline view
+  [lgraf]
+
 * Added new dossier workflow state "archived" on special request of Olivier Debenath.
   [phabegger]
 

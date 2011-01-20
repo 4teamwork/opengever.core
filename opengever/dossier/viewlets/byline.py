@@ -38,7 +38,7 @@ class BusinessCaseByline(content.DocumentBylineViewlet):
         return refNumb.get_number()
 
     def get_filing_no(self):
-        dossier = IDossierMarker(self.context)
+        dossier = IDossier(self.context)
         return getattr(dossier, 'filing_no', None)
 
     # TODO: should be more generic ;-)
