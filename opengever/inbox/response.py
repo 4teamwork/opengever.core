@@ -28,7 +28,7 @@ class IForwardingResponse(IResponse):
         title=_(u'label_target_dossier',
                 default=u'Target dossier'),
         default=[],
-        required=True,
+        required=False,
         value_type=RelationChoice(
             title=u'Target dossier',
             source=RepositoryPathSourceBinder(
@@ -54,23 +54,27 @@ class ForwardingResponseAddForm(AddForm):
     def updateWidgets(self):
         super(ForwardingResponseAddForm, self).updateWidgets()
         self.widgets['relatedItems'].mode = HIDDEN_MODE
-        self.widgets['transition'].mode = DISPLAY_MODE
+        # self.widgets['transition'].mode = HIDDEN_MODE
         assign_trans = u'forwarding-transition-assign-to-dossier'
         if assign_trans not in self.widgets['transition'].value:
             self.widgets['target_dossier'].mode = HIDDEN_MODE
+        else:
+            self.widgets['target_dossier'].required = False
 
     @button.buttonAndHandler(_(u'save', default='Save'),
                              name='save', )
     def handleContinue(self, action):
-        response = super(ForwardingResponseAddForm, self).handleContinue(action)
+        data, errors = self.extractData()
+        response = super(ForwardingResponseAddForm, self).handleContinue(
+            action.form, action)
         if not response:
             return
 
-        data, errors = self.extractData()
-
         wftool = getToolByName(self.context, 'portal_workflow')
         workflow = wftool.getWorkflowById(wftool.getChainFor(self.context)[0])
-        transition_id = data['transition'][0]
+        transition_id = data['transition']
+        if type(transition_id) in (list, tuple):
+            transition_id = transition_id[0]
         transition = workflow.transitions[transition_id]
         new_state_id = transition.new_state_id
 
@@ -122,12 +126,12 @@ class ForwardingResponseAddForm(AddForm):
 
         # send the the task to the remote client
         httpresponse = trans.transport_to(self.context, client.client_id,
-                                          '/eingangskorb')
+                                          'eingangskorb')
         target_task_path = httpresponse.read()
 
         # connect tasks and change state of successor
         response = remote_request(
-            data['client'], '@@cleanup-successor-task',
+            client.client_id, '@@cleanup-successor-task',
             path=target_task_path,
             data={'oguid': successor_controller.get_oguid()})
 
@@ -137,15 +141,15 @@ class ForwardingResponseAddForm(AddForm):
 
         # copy documents
         for doc in self.get_documents():
-            trans.transport_to(doc, data['client'], target_task_path)
+            trans.transport_to(doc, client.client_id, target_task_path)
 
         # add to the just-created response a "link" to the successor
         successor_oguid = successor_controller.get_oguid_by_path(
-            target_task_path, data['client'])
+            target_task_path, client.client_id)
         response.successor_oguid = successor_oguid
 
         # redirect to target in new window
-        client = info.get_client_by_id(data['client'])
+        client = info.get_client_by_id(client.client_id)
         target_url = os.path.join(client.public_url, target_task_path,
                                   '@@edit')
         redirector = IRedirector(self.request)
