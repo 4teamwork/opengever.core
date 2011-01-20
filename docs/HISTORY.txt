@@ -5,6 +5,9 @@ Changelog
 2.0b10
 ------
 
+* Made readable_ogds_author not fail on author == None
+  [lgraf]
+
 
 2.0b9
 -----
