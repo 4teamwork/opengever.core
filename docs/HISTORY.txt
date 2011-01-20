@@ -5,6 +5,9 @@ Changelog
 2.0b8
 -----
 
+* Added new dossier workflow state "archived" on special request of Olivier Debenath.
+  [phabegger]
+
 * Changed permission for "Give Filing No" action to "Modify portal content"
   [lgraf]
 

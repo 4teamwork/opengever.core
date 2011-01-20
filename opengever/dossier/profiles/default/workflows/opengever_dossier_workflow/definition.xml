@@ -97,6 +97,48 @@
    <permission-role>Owner</permission-role>
   </permission-map>
  </state>
+ <state state_id="dossier-state-archived" title="dossier-state-archived">
+  <permission-map name="Access contents information" acquired="False">
+   <permission-role>Editor</permission-role>
+   <permission-role>Manager</permission-role>
+   <permission-role>Reader</permission-role>
+  </permission-map>
+  <permission-map name="Add portal content" acquired="False">
+  </permission-map>
+  <permission-map name="List folder contents" acquired="False">
+   <permission-role>Editor</permission-role>
+   <permission-role>Manager</permission-role>
+   <permission-role>Reader</permission-role>
+  </permission-map>
+  <permission-map name="Manage properties" acquired="False">
+   <permission-role>Editor</permission-role>
+   <permission-role>Manager</permission-role>
+   <permission-role>Reader</permission-role>
+  </permission-map>
+  <permission-map name="Modify portal content" acquired="False">
+  </permission-map>
+  <permission-map name="Review portal content" acquired="True">
+  </permission-map>
+  <permission-map name="View" acquired="False">
+   <permission-role>Editor</permission-role>
+   <permission-role>Manager</permission-role>
+   <permission-role>Reader</permission-role>
+  </permission-map>
+  <permission-map name="ftw.mail: Add Inbound Mail" acquired="False">
+  </permission-map>
+  <permission-map name="ftw.mail: Add Mail" acquired="False">
+  </permission-map>
+  <permission-map name="opengever.document: Add document" acquired="False">
+  </permission-map>
+  <permission-map name="opengever.dossier: Add businesscasedossier" acquired="False">
+  </permission-map>
+  <permission-map name="opengever.task: Add task" acquired="False">
+  </permission-map>
+  <permission-map name="opengever.trash: Trash content" acquired="False">
+  </permission-map>
+  <permission-map name="opengever.trash: Untrash content" acquired="False">
+  </permission-map>
+ </state>
  <state state_id="dossier-state-inactive" title="dossier-state-inactive">
   <exit-transition transition_id="dossier-transition-activate"/>
   <permission-map name="Access contents information" acquired="False">
