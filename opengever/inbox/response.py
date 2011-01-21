@@ -7,7 +7,6 @@ from Products.CMFCore.utils import getToolByName
 from Products.statusmessages.interfaces import IStatusMessage
 from five import grok
 from opengever.base.interfaces import IRedirector
-from opengever.base.source import RepositoryPathSourceBinder
 from opengever.inbox import _
 from opengever.inbox.forwarding import IForwarding
 from opengever.ogds.base.interfaces import IContactInformation
@@ -16,35 +15,36 @@ from opengever.ogds.base.utils import remote_request, get_client_id
 from opengever.task.browser.successor import CleanupSuccessor
 from opengever.task.interfaces import ISuccessorTaskController
 from opengever.task.response import IResponse, AddForm, SingleAddFormView
+from plone.formwidget.contenttree import ObjPathSourceBinder
 from z3c.form import field, button
 from z3c.form.browser import radio
 from z3c.form.interfaces import HIDDEN_MODE
-from z3c.relationfield.schema import RelationChoice, RelationList
+from z3c.relationfield.schema import RelationChoice
 from zope.component import getUtility
 import os.path
 
 
 class IForwardingResponse(IResponse):
 
-    target_dossier = RelationList(
+    target_dossier = RelationChoice(
         title=_(u'label_target_dossier',
                 default=u'Target dossier'),
-        default=[],
+        default=None,
         required=False,
-        value_type=RelationChoice(
-            title=u'Target dossier',
-            source=RepositoryPathSourceBinder(
-                object_provides='opengever.dossier.behaviors.dossier.' +\
-                    'IDossierMarker',
-                navigation_tree_query={
-                    'object_provides':
-                        ['opengever.repository.repositoryroot.' +\
-                             'IRepositoryRoot',
-                         'opengever.repository.repositoryfolder.' +\
-                             'IRepositoryFolderSchema',
-                         'opengever.dossier.behaviors.dossier.' +\
-                             'IDossierMarker']
-                    })))
+        source=ObjPathSourceBinder(
+            object_provides='opengever.dossier.behaviors.dossier.' +\
+                'IDossierMarker',
+            navigation_tree_query={
+                'object_provides':
+                    ['Products.CMFPlone.interfaces.siteroot.' +\
+                         'IPloneSiteRoot',
+                     'opengever.repository.repositoryroot.' +\
+                         'IRepositoryRoot',
+                     'opengever.repository.repositoryfolder.' +\
+                         'IRepositoryFolderSchema',
+                     'opengever.dossier.behaviors.dossier.' +\
+                         'IDossierMarker']
+                }))
 
 
 class ForwardingResponseAddForm(AddForm):
@@ -61,8 +61,11 @@ class ForwardingResponseAddForm(AddForm):
         assign_trans = u'forwarding-transition-assign-to-dossier'
         if assign_trans not in self.widgets['transition'].value:
             self.widgets['target_dossier'].mode = HIDDEN_MODE
-        else:
+            self.fields['target_dossier'].field.required = False
             self.widgets['target_dossier'].required = False
+        else:
+            self.fields['target_dossier'].field.required = True
+            self.widgets['target_dossier'].required = True
 
     @button.buttonAndHandler(_(u'save', default='Save'),
                              name='save', )
@@ -74,7 +77,8 @@ class ForwardingResponseAddForm(AddForm):
             return
 
         wftool = getToolByName(self.context, 'portal_workflow')
-        workflow = wftool.getWorkflowById(wftool.getChainFor(self.context)[0])
+        workflow = wftool.getWorkflowById(wftool.getChainFor(
+                self.context)[0])
         transition_id = data['transition']
         if type(transition_id) in (list, tuple):
             transition_id = transition_id[0]
@@ -141,8 +145,8 @@ class ForwardingResponseAddForm(AddForm):
             data={'oguid': successor_controller.get_oguid()})
 
         if response.read().strip() != 'ok':
-            raise Exception('Cleaning up the successor task failed on the'
-                            'remote client %s' % client.client_id)
+            raise Exception('Cleaning up the successor task failed on '
+                            'the remote client %s' % client.client_id)
 
         # copy documents
         for doc in self.get_documents():
@@ -166,8 +170,8 @@ class ForwardingResponseAddForm(AddForm):
               u'The successor forwarding was created.'), type='info')
 
     def get_documents(self):
-        """All documents which are either within the current task or defined
-        as related items.
+        """All documents which are either within the current task or
+        defined as related items.
         """
         # find documents within the task
         brains = self.context.getFolderContents(
@@ -184,8 +188,8 @@ class ForwardingResponseAddForm(AddForm):
 
     def ressign_refusing(self, response):
         """ When refusing, reassign forwarding to the inbox of the client
-        which raised the forwarding, so that it can be reassigned afterwards
-        to another client / person.
+        which raised the forwarding, so that it can be reassigned
+        afterwards to another client / person.
         """
         new_client = get_client_id()
 
