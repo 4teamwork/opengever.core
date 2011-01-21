@@ -5,6 +5,11 @@ Changelog
 2.0b8
 -----
 
+* Issue #794 Wizard verschieben: Zuviele Statusmeldungen
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/794/
+  removed unnecessarily Statusmessages
+  [ttschanz]
+
 * Fixed get_filing_no accessor in byline view
   [lgraf]
 

@@ -104,14 +104,14 @@ class MoveItemsForm(form.Form):
                     copiedItems +=1
                 except ValueError:
                     failedObjects.append(obj.title)
-                if copiedItems:
-                    msg = _(u'${copiedItems} Elements were moved successfully', mapping=dict(copiedItems=copiedItems))
-                    IStatusMessage(self.request).addStatusMessage(
-                        msg, type='information')
-                if failedObjects:
-                    msg = _(u'Failed to copy following objects: ${failedObjects}', mapping=dict(failedObjects=','.join(failedObjects)))
-                    IStatusMessage(self.request).addStatusMessage(
-                        msg, type='error')
+            if copiedItems:
+                msg = _(u'${copiedItems} Elements were moved successfully', mapping=dict(copiedItems=copiedItems))
+                IStatusMessage(self.request).addStatusMessage(
+                    msg, type='information')
+            if failedObjects:
+                msg = _(u'Failed to copy following objects: ${failedObjects}', mapping=dict(failedObjects=','.join(failedObjects)))
+                IStatusMessage(self.request).addStatusMessage(
+                    msg, type='error')
             self.request.RESPONSE.redirect(destination.absolute_url())
 
     @z3c.form.button.buttonAndHandler(_(u'button_cancel',

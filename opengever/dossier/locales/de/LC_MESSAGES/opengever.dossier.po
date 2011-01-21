@@ -267,7 +267,7 @@ msgstr "Art des Behälters, in dem ein Dossier in Papierform abgelegt ist"
 #. Default: "Live Search: search the Plone Site"
 #: ./opengever/dossier/move_items.py:34
 msgid "help_destination"
-msgstr "Live Search: Durchsuchen sie die Plone seite"
+msgstr "Live Search: Durchsuchen Sie diesen Mandanten"
 
 #: ./opengever/dossier/archive.py:90
 #: ./opengever/dossier/behaviors/dossier.py:76
@@ -397,7 +397,7 @@ msgstr "Erstellt von"
 #. Default: "Destination"
 #: ./opengever/dossier/move_items.py:33
 msgid "label_destination"
-msgstr ""
+msgstr "Zieldossier"
 
 #. Default: "Documents"
 #: ./opengever/dossier/browser/send_document.py:41
