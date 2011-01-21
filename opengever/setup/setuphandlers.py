@@ -5,6 +5,10 @@ from plone.portlets.interfaces import IPortletManager
 from zope.component import getMultiAdapter
 from zope.component import getUtility
 from plone.dexterity.utils import createContentInContainer
+from opengever.ogds.base.interfaces import IClientConfiguration
+from plone.registry.interfaces import IRegistry
+from opengever.mail.interfaces import IMailSettings
+from zope.app.component.hooks import getSite
 import transaction
 
 
@@ -68,6 +72,7 @@ def import_various(setup):
     create_repository_root(site)
     start_import(site)
     settings(site)
+    mail_settings(setup)
 
 def set_global_roles(setup):
     admin_file = setup.readDataFile('administrator.txt')
@@ -80,3 +85,14 @@ def assign_roles(context, admin_file):
     admin_groups= admin_file.split('\n')
     for admin_group in admin_groups:
         context.acl_users.portal_role_manager.assignRoleToPrincipal('Manager', admin_group.strip())
+
+def mail_settings(setup):
+    site = setup.getSite()
+    print site
+    registry = getUtility(IRegistry, context=site)
+    client_config=registry.forInterface(IClientConfiguration)
+    client_id = client_config.client_id
+    mail_config = registry.forInterface(IMailSettings)
+    mail_domain = mail_config.mail_domain
+    site.manage_changeProperties({'email_from_address':'noreply@'+mail_domain,
+                                'email_from_name': client_id})

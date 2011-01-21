@@ -5,6 +5,11 @@ Changelog
 2.0b4
 -----
 
+* Issue #798 Konfiguration Mailhost Zug pro Mandant
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/798/
+  Created import Step to Load Mailsettings
+  [ttschanz]
+
 * Issue #777 Setup OpenGever: Administratoren-Gruppe mit Manager-Rolle
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/777/
   Created import step to Assign the global role to the Group
