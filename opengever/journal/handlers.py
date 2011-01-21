@@ -90,7 +90,9 @@ def dossier_added(context, event):
 DOSSIER_MODIIFED_ACTION = 'Dossier modified'
 @grok.subscribe(IDossierMarker, IObjectModifiedEvent)
 def dossier_modified(context, event):
-    title = _(u'label_dossier_modified', default=u'Dossier modified')
+    title = _(u'label_dossier_modified', default=u'Dossier modified: ${title}', mapping={
+            'title': context.title_or_id(),
+    })
     # XXX dirty
     try:
         # if we delete the working copy, we get a aq_based object and don't wanna
@@ -264,7 +266,9 @@ def task_added(context, event):
 TASK_MODIIFED_ACTION = 'Task modified'
 @grok.subscribe(ITask, IObjectModifiedEvent)
 def task_modified(context, event):
-    title = _(u'label_task_modified', default=u'Task modified')
+    title = _(u'label_task_modified', default=u'Task modified: ${title}', mapping={
+            'title': context.title_or_id(),
+    })
     # XXX dirty
     try:
         # if we delete the working copy, we get a aq_based object and don't wanna
@@ -333,7 +337,7 @@ def participation_removed(context, event):
 #------------------------ Mail -----------------------------------------
 
 
-MAIL_ADDED_EVENT = 'Mail added' 
+MAIL_ADDED_EVENT = 'Mail added'
 @grok.subscribe(IMail, IObjectAddedEvent)
 def mail_added(context, event):
     title = _(u'label_mail_added',
