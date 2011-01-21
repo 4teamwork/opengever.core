@@ -48,7 +48,7 @@
             url_expr="string:${object_url}" visible="False">
         <permission value="View"/>
     </action>
-    <action title="contacts" action_id="contacts" category="tabbedview-tabs"
+    <action title="local" action_id="local" category="tabbedview-tabs"
             condition_expr="" url_expr="string:#" visible="True">
     </action>
 

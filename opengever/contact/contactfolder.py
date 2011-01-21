@@ -43,7 +43,7 @@ def linked_no_icon(item, value):
 class Contacts(OpengeverCatalogListingTab):
     """ Listing of all Task of the authenticated Member """
 
-    grok.name('tabbedview_view-contacts')
+    grok.name('tabbedview_view-local')
     grok.context(IDexterityContainer)
 
     types = ['opengever.contact.contact', ]

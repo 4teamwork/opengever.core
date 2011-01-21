@@ -15,8 +15,8 @@ msgstr ""
 msgid "additional_contact"
 msgstr "Details"
 
-msgid "contacts"
-msgstr "Kontakte"
+msgid "local"
+msgstr "Lokal"
 
 msgid "important_contact"
 msgstr "Übersicht"

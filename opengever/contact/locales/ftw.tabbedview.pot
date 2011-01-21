@@ -17,7 +17,7 @@ msgstr ""
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: ftw.tabbedview\n"
 
-msgid "contacts"
+msgid "local"
 msgstr ""
 
 msgid "additional_contact"
