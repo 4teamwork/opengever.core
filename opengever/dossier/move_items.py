@@ -57,7 +57,7 @@ class MoveItemsForm(form.Form):
         value = self.item_paths
         if value:
             self.widgets['request_paths'].value = ';;'.join(value)
-        
+
     @property
     def item_paths(self):
         field_name = self.prefix + self.widgets.prefix + 'request_paths'
@@ -88,7 +88,7 @@ class MoveItemsForm(form.Form):
                 sourceContainer = aq_parent(aq_inner(self.context.unrestrictedTraverse(
                     path.encode('utf-8'))))
                 if not IDossierMarker.providedBy(sourceContainer) and (
-                sourceObjects[len(sourceObjects)-1].portal_type == 
+                sourceObjects[len(sourceObjects)-1].portal_type ==
                 'opengever.document.document'):
                     name = sourceObjects[len(sourceObjects)-1].title
                     msg = _(u'Document ${name} is connected to a Task.\
@@ -107,7 +107,7 @@ class MoveItemsForm(form.Form):
             if copiedItems:
                 msg = _(u'${copiedItems} Elements were moved successfully', mapping=dict(copiedItems=copiedItems))
                 IStatusMessage(self.request).addStatusMessage(
-                    msg, type='information')
+                    msg, type='info')
             if failedObjects:
                 msg = _(u'Failed to copy following objects: ${failedObjects}', mapping=dict(failedObjects=','.join(failedObjects)))
                 IStatusMessage(self.request).addStatusMessage(
