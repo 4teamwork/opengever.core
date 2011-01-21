@@ -2,9 +2,9 @@
 for forwardings.
 """
 
+# from z3c.form.interfaces import DISPLAY_MODE
 from Products.CMFCore.utils import getToolByName
 from Products.statusmessages.interfaces import IStatusMessage
-from opengever.task.browser.successor import CleanupSuccessor
 from five import grok
 from opengever.base.interfaces import IRedirector
 from opengever.base.source import RepositoryPathSourceBinder
@@ -13,11 +13,12 @@ from opengever.inbox.forwarding import IForwarding
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.ogds.base.interfaces import ITransporter
 from opengever.ogds.base.utils import remote_request, get_client_id
+from opengever.task.browser.successor import CleanupSuccessor
 from opengever.task.interfaces import ISuccessorTaskController
 from opengever.task.response import IResponse, AddForm, SingleAddFormView
 from z3c.form import field, button
 from z3c.form.browser import radio
-from z3c.form.interfaces import HIDDEN_MODE, DISPLAY_MODE
+from z3c.form.interfaces import HIDDEN_MODE
 from z3c.relationfield.schema import RelationChoice, RelationList
 from zope.component import getUtility
 import os.path
@@ -33,16 +34,17 @@ class IForwardingResponse(IResponse):
         value_type=RelationChoice(
             title=u'Target dossier',
             source=RepositoryPathSourceBinder(
-                object_provides='opengever.dossier.behaviors.dossier.' + \
+                object_provides='opengever.dossier.behaviors.dossier.' +\
                     'IDossierMarker',
                 navigation_tree_query={
                     'object_provides':
-                        ['opengever.repository.repositoryroot.IRepositoryRoot',
-                         'opengever.repository.repositoryfolder.' + \
+                        ['opengever.repository.repositoryroot.' +\
+                             'IRepositoryRoot',
+                         'opengever.repository.repositoryfolder.' +\
                              'IRepositoryFolderSchema',
-                         'opengever.dossier.behaviors.dossier.IDossierMarker',]
+                         'opengever.dossier.behaviors.dossier.' +\
+                             'IDossierMarker']
                     })))
-
 
 
 class ForwardingResponseAddForm(AddForm):
@@ -110,10 +112,8 @@ class ForwardingResponseAddForm(AddForm):
 
     @button.buttonAndHandler(_(u'cancel', default='Cancel'),
                              name='cancel', )
-
     def handleCancel(self, action):
         return self.request.RESPONSE.redirect('.')
-
 
     def create_successor_forwarding(self, data):
         """"Accepting" means we create a successor-forwarding on the
@@ -212,10 +212,10 @@ class CleanupForwardingSuccessor(CleanupSuccessor):
     grok.context(IForwarding)
 
     def set_workflow_state(self):
-        """Do not change the workflow state, because the initial state is quite ok.
+        """Do not change the workflow state, because the initial state is
+        quite ok.
         """
         return
-
 
 
 class ForwardingResponseAddFormView(SingleAddFormView):
