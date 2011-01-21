@@ -47,7 +47,13 @@ def index_task(obj, event):
     """
     client_id = get_client_id()
     intids = getUtility(IIntIds)
-    int_id = intids.getId(obj)
+    try:
+        int_id = intids.getId(obj)
+    except KeyError:
+        # The intid event handler didn' create a intid for this object
+        # yet. The event will be fired again after creating the id.
+        return
+
     session = Session()
     try:
         task = session.query(Task).filter(Task.client_id==client_id).filter(

@@ -5,6 +5,10 @@ Changelog
 2.0b3
 -----
 
+* Intid fix: do not reindex if there is no intid. In this case, the
+  event will be fired again after the intid is created.
+  [jbaumann]
+
 
 2.0b2
 -----
