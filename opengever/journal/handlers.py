@@ -27,7 +27,7 @@ from zope.i18nmessageid.message import Message
 from zope.lifecycleevent.interfaces import IObjectModifiedEvent
 from ftw.mail.mail import IMail
 from zope.app.container.interfaces import IObjectMovedEvent
-from OFS.interfaces import IObjectWillBeMovedEvent
+from OFS.interfaces import IObjectWillBeMovedEvent, IObjectWillBeAddedEvent
 pmf = MessageFactory('plone')
 
 
@@ -369,10 +369,11 @@ def object_moved(context, event):
 OBJECT_WILL_BE_MOVED_EVENT = 'Object cut'
 @grok.subscribe(IDexterityContent,IObjectWillBeMovedEvent)
 def object_will_be_moved(context, event):
-    title = _(u'label_object_cut',
-                default=u'Object cut: ${title}',
-                mapping={
-                'title': context.title_or_id()
-                })
-    journal_entry_factory(context.aq_inner.aq_parent, OBJECT_MOVED_EVENT, title)
+    if not IObjectWillBeAddedEvent.providedBy(event):
+        title = _(u'label_object_cut',
+                    default=u'Object cut: ${title}',
+                    mapping={
+                    'title': context.title_or_id()
+                    })
+        journal_entry_factory(context.aq_inner.aq_parent, OBJECT_MOVED_EVENT, title)
     return
