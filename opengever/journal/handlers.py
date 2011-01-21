@@ -1,5 +1,6 @@
 from Products.CMFCore.interfaces import IActionSucceededEvent
 from five import grok
+from plone.dexterity.interfaces import IDexterityContent
 from ftw.journal.events.events import JournalEntryEvent
 from ftw.journal.interfaces import IJournalizable
 from opengever.document.document import IDocumentSchema
@@ -25,7 +26,8 @@ from zope.i18nmessageid import MessageFactory
 from zope.i18nmessageid.message import Message
 from zope.lifecycleevent.interfaces import IObjectModifiedEvent
 from ftw.mail.mail import IMail
-
+from zope.app.container.interfaces import IObjectMovedEvent
+from OFS.interfaces import IObjectWillBeMovedEvent
 pmf = MessageFactory('plone')
 
 
@@ -346,4 +348,31 @@ def mail_added(context, event):
               'title' : context.title_or_id()
               })
     journal_entry_factory(context.aq_inner.aq_parent, MAIL_ADDED_EVENT, title)
+    return
+
+
+
+#----------------------------Verschieben-----------------------------------
+
+
+OBJECT_MOVED_EVENT = 'Object moved'
+@grok.subscribe(IDexterityContent, IObjectMovedEvent)
+def object_moved(context, event):
+    title = _(u'label_object_moved',
+                default=u'Object moved: ${title}',
+                mapping={
+                'title': context.title_or_id()
+                })
+    journal_entry_factory(context.aq_inner.aq_parent, OBJECT_MOVED_EVENT, title)
+    return
+
+OBJECT_WILL_BE_MOVED_EVENT = 'Object cut'
+@grok.subscribe(IDexterityContent,IObjectWillBeMovedEvent)
+def object_will_be_moved(context, event):
+    title = _(u'label_object_cut',
+                default=u'Object cut: ${title}',
+                mapping={
+                'title': context.title_or_id()
+                })
+    journal_entry_factory(context.aq_inner.aq_parent, OBJECT_MOVED_EVENT, title)
     return
