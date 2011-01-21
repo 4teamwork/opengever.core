@@ -6,17 +6,20 @@ for forwardings.
 from Acquisition import aq_inner, aq_parent
 from DateTime import DateTime
 from Products.CMFCore.utils import getToolByName
+from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
 from Products.statusmessages.interfaces import IStatusMessage
 from copy import deepcopy
+from datetime import datetime
 from five import grok
 from opengever.base.interfaces import IRedirector
 from opengever.inbox import _
 from opengever.inbox.forwarding import IForwarding
+from opengever.inbox.inbox import IInbox
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.ogds.base.interfaces import ITransporter
 from opengever.ogds.base.utils import remote_request, get_client_id
-from opengever.task.adapters import IResponseContainer
 from opengever.task.adapters import IResponse as IPersistentResponse
+from opengever.task.adapters import IResponseContainer
 from opengever.task.browser.successor import CleanupSuccessor
 from opengever.task.interfaces import ISuccessorTaskController
 from opengever.task.response import AddForm, SingleAddFormView
@@ -30,6 +33,7 @@ from z3c.form.interfaces import HIDDEN_MODE
 from z3c.relationfield.schema import RelationChoice
 from zope.component import getUtility
 from zope.interface.interface import Attribute
+import AccessControl
 import os.path
 
 
@@ -111,21 +115,49 @@ class ForwardingResponseAddForm(AddForm):
             # folder for the current year (a kind of an archive). If there
             # is no folder, create it.
 
-            # # search the inbox
-            # inbox = self.context
-            # while not IPloneSiteRoot.providedBy(inbox):
-            #     if IInbox.providedBy(inbox):
-            #         break
-            #     else:
-            #         inbox = aq_parent(aq_inner(inbox))
+            # search the inbox
+            inbox = self.context
+            while not IPloneSiteRoot.providedBy(inbox):
+                if IInbox.providedBy(inbox):
+                    break
+                else:
+                    inbox = aq_parent(aq_inner(inbox))
 
-            # # get or create the year folder
-            # year = datetime.now().strftime('%Y')
-            # folder = inbox.get(year, None)
-            # if not folder:
-            #     folder = createContentInContainer(inbox, '')
+            # get or create the year folder
+            year = datetime.now().strftime('%Y')
+            folder = inbox.get(year, None)
+            if not folder:
+                # for creating the folder, we need to be a superuser since
+                # normal user should not be able to add year folders.
+                _sm = AccessControl.getSecurityManager()
+                AccessControl.SecurityManagement.newSecurityManager(
+                    self.request,
+                    AccessControl.SecurityManagement.SpecialUsers.system)
+                try:
+                    folder = createContentInContainer(
+                        inbox, 'opengever.inbox.yearfolder',
+                        title=str(year))
+                except:
+                    AccessControl.SecurityManagement.setSecurityManager(
+                        _sm)
+                    raise
+                else:
+                    AccessControl.SecurityManagement.setSecurityManager(
+                        _sm)
+
+            # move forwarding into folder
+            parent = aq_parent(aq_inner(self.context))
+            clipboard = parent.manage_cutObjects((self.context.getId(),))
+            folder.manage_pasteObjects(clipboard)
+
+            # show status message
+            msg = _(u'info_forwarding_move_to_yearfolder',
+                    default=u'The forwarding was moved to the '
+                    'yearfolder ${year}',
+                    mapping=dict(year=str(year)))
+
             IStatusMessage(self.request).addStatusMessage(
-                'YEAR FOLDERS NOT YET IMPLEMENTED', type='error')
+                msg, type='info')
 
     @button.buttonAndHandler(_(u'cancel', default='Cancel'),
                              name='cancel', )

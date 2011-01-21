@@ -12,4 +12,9 @@
           title="opengever.inbox: Add Forwarding"
           />
 
+    <permission
+          id="opengever.inbox.AddYearFolder"
+          title="opengever.inbox: Add Year Folder"
+          />
+
 </configure>

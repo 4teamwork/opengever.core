@@ -13,6 +13,7 @@
     <element value="opengever.document.document" />
     <element value="opengever.inbox.forwarding"/>
     <element value="ftw.mail.mail"/>
+    <element value="opengever.inbox.yearfolder"/>
   </property>
 
   <!-- schema interface -->
