@@ -1,5 +1,6 @@
 from Acquisition import aq_inner, aq_parent
 from Products.CMFCore.utils import getToolByName
+from OFS.CopySupport import CopyError
 from five import grok
 from opengever.dossier import _
 from plone.dexterity.interfaces import IDexterityContainer
@@ -103,6 +104,8 @@ class MoveItemsForm(form.Form):
                     destination.manage_pasteObjects(clipboard)
                     copiedItems +=1
                 except ValueError:
+                    failedObjects.append(obj.title)
+                except CopyError:
                     failedObjects.append(obj.title)
             if copiedItems:
                 msg = _(u'${copiedItems} Elements were moved successfully', mapping=dict(copiedItems=copiedItems))
