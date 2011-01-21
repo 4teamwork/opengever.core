@@ -5,6 +5,8 @@ Changelog
 2.0b9
 -----
 
+* Fixed some typos in translations (workflow states and transitions)
+  [phabegger]
 
 2.0b8
 -----

@@ -28,7 +28,7 @@ msgid "task-state-in-progress"
 msgstr "In Arbeit"
 
 msgid "task-state-new-successor"
-msgstr "Folgeaufgabe wird Erstellt"
+msgstr "Folgeaufgabe wird erstellt"
 
 msgid "task-state-open"
 msgstr "Offen"
@@ -64,7 +64,7 @@ msgid "task-transition-resolved-open"
 msgstr "wieder eröffnen"
 
 msgid "task-transition-resolved-tested-and-closed"
-msgstr "Testen und Abschliessen"
+msgstr "Abschliessen"
 
 msgid "Assign task"
 msgstr "Aufgabe zuweisen"
