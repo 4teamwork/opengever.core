@@ -3,6 +3,8 @@ for forwardings.
 """
 
 # from z3c.form.interfaces import DISPLAY_MODE
+from DateTime import DateTime
+from Acquisition import aq_inner, aq_parent
 from Products.CMFCore.utils import getToolByName
 from Products.statusmessages.interfaces import IStatusMessage
 from five import grok
@@ -15,6 +17,8 @@ from opengever.ogds.base.utils import remote_request, get_client_id
 from opengever.task.browser.successor import CleanupSuccessor
 from opengever.task.interfaces import ISuccessorTaskController
 from opengever.task.response import IResponse, AddForm, SingleAddFormView
+from opengever.task.task import ITask
+from plone.dexterity.utils import createContentInContainer
 from plone.formwidget.contenttree import ObjPathSourceBinder
 from z3c.form import field, button
 from z3c.form.browser import radio
@@ -92,6 +96,10 @@ class ForwardingResponseAddForm(AddForm):
         # REFUSE
         if transition_id == 'forwarding-transition-refuse':
             self.ressign_refusing(response)
+
+        # ASSIGN TO DOSSIER
+        if transition_id == 'forwarding-transition-assign-to-dossier':
+            self.assign_to_dossier(data, response)
 
         if new_state_id == 'forwarding-state-closed':
             # When the forwarding is closed, we need to move it to the
@@ -207,6 +215,70 @@ class ForwardingResponseAddForm(AddForm):
                             self.context.responsible,
                             new_responsible)
         self.context.responsible = new_responsible
+
+    def assign_to_dossier(self, data, response):
+        """Assigning to a dossier means creating a successor task (!).
+        """
+        dossier = data['target_dossier']
+        forwarding = self.context
+
+
+        # we need all task field values from the forwarding (which is a
+        # kind of task) for creating the new task.
+        fielddata = {}
+        for fieldname in ITask.names():
+            field = ITask.get(fieldname)
+            value = field.get(forwarding)
+            fielddata[fieldname] = value
+
+        # lets create a new task - the successor task
+        task = createContentInContainer(dossier, 'opengever.task.task',
+                                        **fielddata)
+
+        # set the predecessor
+        taskSTC = ISuccessorTaskController(task)
+        forwardingSTC = ISuccessorTaskController(forwarding)
+        taskSTC.set_predecessor(forwardingSTC.get_oguid())
+
+        # add link to response
+        response.successor_oguid = taskSTC.get_oguid()
+
+        # set the workflow state
+        state = 'task-state-new-successor'
+        mtool = getToolByName(self.context, 'portal_membership')
+        wtool = getToolByName(self.context, 'portal_workflow')
+        current_user_id = mtool.getAuthenticatedMember().getId()
+        wf_ids = wtool.getChainFor(task)
+        if wf_ids:
+            wf_id = wf_ids[0]
+            comment = 'Created successor.'
+            wtool.setStatusOf(wf_id, task, {'review_state': state,
+                                            'action' : state,
+                                            'actor': current_user_id,
+                                            'time': DateTime(),
+                                            'comments': comment,})
+
+            wfs = {wf_id: wtool.getWorkflowById(wf_id)}
+            wtool._recursiveUpdateRoleMappings(task, wfs)
+            task.reindexObjectSecurity()
+
+        # Remove the responsible. This solves a problem with the
+        # responsible_client and responsible fields in combination with the
+        # autocomplete widget. It makes anyway sence that the users has to
+        # select a new responsible.
+        task = ITask(task)
+        task.responsible_client = None
+        task.responsible = None
+        task.reindexObject()
+
+        # copy documents
+        for doc in self.get_documents():
+            parent = aq_parent(aq_inner(doc))
+            clipboard = parent.manage_copyObjects([doc.getId()])
+            task.manage_pasteObjects(clipboard)
+
+        # redirect to edit view later
+        self.context.REQUEST.RESPONSE.redirect(task.absolute_url() + '/edit')
 
 
 class CleanupForwardingSuccessor(CleanupSuccessor):
