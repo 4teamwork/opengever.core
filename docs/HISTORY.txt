@@ -5,6 +5,10 @@ Changelog
 2.0b5
 -----
 
+* Issue #762 Erweiterte Suche: Suche nach Status fehlt bei Aufgabe
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/762/
+  fixed bug: Search for task state didn't work.
+  [ttschanz]
 
 2.0b4
 -----

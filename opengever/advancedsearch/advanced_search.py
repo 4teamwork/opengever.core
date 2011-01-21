@@ -67,7 +67,7 @@ def get_portal_types(context):
 
 
 FIELD_MAPPING = {'opengever-dossier-businesscasedossier': [
-                    'start_1', 
+                    'start_1',
                     'start_2',
                     'end_1',
                     'end_2',
@@ -106,7 +106,7 @@ class IAdvancedSearch(directives_form.Schema):
         description=_('help_searchable_text', default=''),
         required=False,
     )
-    
+
     portal_type = schema.Choice(
         title=_('label_portal_type', default="Type"),
         description=_('help_portal_type', default=''),
@@ -259,11 +259,11 @@ class IAdvancedSearch(directives_form.Schema):
         description=_('help_deadline', default=''),
         required=False,
     )
-    
+
     task_type = schema.Choice(
         title=_('label_tasktype', default=''),
         description=_('help_tasktyp', default=''),
-        source=getTaskTypeVocabulary, 
+        source=getTaskTypeVocabulary,
         required=False,
     )
     task_review_state = schema.List(
@@ -279,7 +279,7 @@ class AdvancedSearchForm(directives_form.Form):
     grok.context(Interface)
     grok.name('advanced_search')
     grok.require('zope2.View')
-    
+
     label = _('advanced_search', default='advanced search')
 
     fields = field.Fields(IAdvancedSearch)
@@ -316,7 +316,7 @@ class AdvancedSearchForm(directives_form.Form):
             'document_date_1',
             'document_date_2',
         ]
-        
+
         for field in date_fields:
             self.fields.get(field).widgetFactory[INPUT_MODE] = DatePickerFieldWidget
 
@@ -329,7 +329,7 @@ class AdvancedSearchForm(directives_form.Form):
     @button.buttonAndHandler(_(u'button_search', default=u'Search'))
     def search(self, action):
         data, errors = self.extractData()
-        
+
         if not errors:
             # create Parameters and url
             if(data['reference']):
@@ -365,10 +365,12 @@ class AdvancedSearchForm(directives_form.Form):
                         params = '%s&%s=%s' %(params, field, urllib.quote(data.get(field).encode('utf-8')))
 
             params = params.replace('task_responsible', 'repsonsible')
+            params = params.replace('task_review_state', 'review_state')
+            params = params.replace('dossier_review_state', 'review_state')
 
             self.context.REQUEST.RESPONSE.redirect(self.context.portal_url() + params)
-                
-                
+
+
     def correct_ref(self, value):
         registry = getUtility(IRegistry)
         prefix = registry['opengever.base.interfaces.IBaseClientID.client_id']
