@@ -93,3 +93,4 @@ def move_documents_into_forwarding(context, event):
         clipboard = aq_parent(aq_inner(obj)).manage_cutObjects(obj.id)
         context.manage_pasteObjects(clipboard)
     context.relatedItems = []
+
