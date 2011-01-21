@@ -12,7 +12,7 @@ from opengever.inbox import _
 from opengever.inbox.forwarding import IForwarding
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.ogds.base.interfaces import ITransporter
-from opengever.ogds.base.utils import remote_request
+from opengever.ogds.base.utils import remote_request, get_client_id
 from opengever.task.interfaces import ISuccessorTaskController
 from opengever.task.response import IResponse, AddForm, SingleAddFormView
 from z3c.form import field, button
@@ -82,6 +82,10 @@ class ForwardingResponseAddForm(AddForm):
         # ACCEPT
         if transition_id == 'forwarding-transition-accept':
             self.create_successor_forwarding(data)
+
+        # REFUSE
+        if transition_id == 'forwarding-transition-refuse':
+            self.ressign_refusing(response)
 
         if new_state_id == 'forwarding-state-closed':
             # When the forwarding is closed, we need to move it to the
@@ -177,6 +181,28 @@ class ForwardingResponseAddForm(AddForm):
         if relatedItems:
             for rel in self.context.relatedItems:
                 yield rel.to_object
+
+    def ressign_refusing(self, response):
+        """ When refusing, reassign forwarding to the inbox of the client
+        which raised the forwarding, so that it can be reassigned afterwards
+        to another client / person.
+        """
+        new_client = get_client_id()
+
+        # change responsible client
+        response.add_change('responsible_client',
+                            IForwarding['responsible_client'].title,
+                            self.context.responsible_client,
+                            new_client)
+        self.context.responsible_client = new_client
+
+        # change responsible
+        new_responsible = u'inbox:%s' % get_client_id()
+        response.add_change('responsible',
+                            IForwarding['responsible'].title,
+                            self.context.responsible,
+                            new_responsible)
+        self.context.responsible = new_responsible
 
 
 class CleanupForwardingSuccessor(CleanupSuccessor):
