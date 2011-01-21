@@ -3,10 +3,11 @@ for forwardings.
 """
 
 # from z3c.form.interfaces import DISPLAY_MODE
-from DateTime import DateTime
 from Acquisition import aq_inner, aq_parent
+from DateTime import DateTime
 from Products.CMFCore.utils import getToolByName
 from Products.statusmessages.interfaces import IStatusMessage
+from copy import deepcopy
 from five import grok
 from opengever.base.interfaces import IRedirector
 from opengever.inbox import _
@@ -14,9 +15,12 @@ from opengever.inbox.forwarding import IForwarding
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.ogds.base.interfaces import ITransporter
 from opengever.ogds.base.utils import remote_request, get_client_id
+from opengever.task.adapters import IResponseContainer
+from opengever.task.adapters import IResponse as IPersistentResponse
 from opengever.task.browser.successor import CleanupSuccessor
 from opengever.task.interfaces import ISuccessorTaskController
-from opengever.task.response import IResponse, AddForm, SingleAddFormView
+from opengever.task.response import AddForm, SingleAddFormView
+from opengever.task.response import IResponse, Response
 from opengever.task.task import ITask
 from plone.dexterity.utils import createContentInContainer
 from plone.formwidget.contenttree import ObjPathSourceBinder
@@ -25,6 +29,7 @@ from z3c.form.browser import radio
 from z3c.form.interfaces import HIDDEN_MODE
 from z3c.relationfield.schema import RelationChoice
 from zope.component import getUtility
+from zope.interface.interface import Attribute
 import os.path
 
 
@@ -234,6 +239,19 @@ class ForwardingResponseAddForm(AddForm):
         # lets create a new task - the successor task
         task = createContentInContainer(dossier, 'opengever.task.task',
                                         **fielddata)
+
+        # copy all responses
+        task_responses = IResponseContainer(task)
+        for id, fresp in enumerate(IResponseContainer(forwarding)):
+            tresp = Response('')
+            for key in IPersistentResponse.names():
+                attr = IPersistentResponse[key]
+                if type(attr) == Attribute:
+                    print key, getattr(fresp, key, None)
+                    setattr(tresp, key,
+                            deepcopy(getattr(fresp, key, None)))
+            tresp._p_changed = True
+            task_responses.add(tresp)
 
         # set the predecessor
         taskSTC = ISuccessorTaskController(task)
