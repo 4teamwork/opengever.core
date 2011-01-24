@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2010-11-17 08:10+0000\n"
+"POT-Creation-Date: 2011-01-24 14:00+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -12,9 +12,26 @@ msgstr ""
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: DOMAIN\n"
 
+#: ./opengever/inbox/profiles/default/actions.xml
+msgid "Forward"
+msgstr "Weiterleiten"
+
+#: ./opengever/inbox/profiles/default/types/opengever.inbox.forwarding.xml
+msgid "Forwarding"
+msgstr "Weiterleitung"
+
 #: ./opengever/inbox/profiles/default/types/opengever.inbox.inbox.xml
 msgid "Inbox"
 msgstr "Eingangskorb"
+
+#: ./opengever/inbox/profiles/default/types/opengever.inbox.yearfolder.xml
+msgid "YearFolder"
+msgstr "Jahresordner"
+
+#. Default: "Cancel"
+#: ./opengever/inbox/response.py:164
+msgid "cancel"
+msgstr "Abbrechen"
 
 #. Default: "Common"
 #: ./opengever/inbox/inbox.py:14
@@ -25,9 +42,29 @@ msgstr "Allgemein"
 msgid "help_inbox_group"
 msgstr "Diese Gruppe wird berechtigt, wenn dem Eingangskorb eine Aufgabe zugewiesen wird."
 
+#. Default: "The successor forwarding was created."
+#: ./opengever/inbox/response.py:216
+msgid "info_created_successor_forwarding"
+msgstr ""
+
+#. Default: "The forwarding was moved to the yearfolder ${year}"
+#: ./opengever/inbox/response.py:156
+msgid "info_forwarding_move_to_yearfolder"
+msgstr ""
+
 #. Default: "Inbox Group"
 #: ./opengever/inbox/inbox.py:21
 msgid "label_inbox_group"
 msgstr "Eingangskorb Gruppe"
+
+#. Default: "Target dossier"
+#: ./opengever/inbox/response.py:43
+msgid "label_target_dossier"
+msgstr "Zieldossier"
+
+#. Default: "Save"
+#: ./opengever/inbox/response.py:83
+msgid "save"
+msgstr "Speichern"
 
 

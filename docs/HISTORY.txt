@@ -5,6 +5,11 @@ Changelog
 2.0b2
 -----
 
+* Issue #812 Uebersetzungen Postmodul
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/812/
+  Added Translations for Postmodul
+  [ttschanz]
+
 * Issue #789 Umsetzung Postmodul
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/789/
   Added new content type Forwarding.
