@@ -133,8 +133,10 @@ class Base(BrowserView):
                         response=response,
                         html=html)
             items.append(info)
-            # reverse the items, so that the latest one is above
-            items.reverse()
+
+        # sort the items, so that the latest one is at top
+        items.sort(lambda a,b: cmp(b['response'].date,
+                                   a['response'].date))
         return items
 
     @property
