@@ -73,7 +73,7 @@ def settings(context):
     if 'navigation' not in mapping.keys():
         mapping['navigation'] = navigation.Assignment(root='/eingangskorb',
                                                       currentFolderOnly=False,
-                                                      includeTop=False,
+                                                      includeTop=True,
                                                       topLevel=0,
                                                       bottomLevel=0)
 
