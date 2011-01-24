@@ -82,9 +82,9 @@ class ForwardingResponseAddForm(AddForm):
 
     @button.buttonAndHandler(_(u'save', default='Save'),
                              name='save', )
-    def handleContinue(self, action):
+    def handleSubmit(self, action):
         data, errors = self.extractData()
-        response = super(ForwardingResponseAddForm, self).handleContinue(
+        response = super(ForwardingResponseAddForm, self).handleSubmit(
             action.form, action)
         if not response:
             return
@@ -126,29 +126,31 @@ class ForwardingResponseAddForm(AddForm):
             # get or create the year folder
             year = datetime.now().strftime('%Y')
             folder = inbox.get(year, None)
-            if not folder:
-                # for creating the folder, we need to be a superuser since
-                # normal user should not be able to add year folders.
-                _sm = AccessControl.getSecurityManager()
-                AccessControl.SecurityManagement.newSecurityManager(
-                    self.request,
-                    AccessControl.SecurityManagement.SpecialUsers.system)
-                try:
+
+            _sm = AccessControl.getSecurityManager()
+            AccessControl.SecurityManagement.newSecurityManager(
+                self.request,
+                AccessControl.SecurityManagement.SpecialUsers.system)
+            try:
+                if not folder:
+                    # for creating the folder, we need to be a superuser since
+                    # normal user should not be able to add year folders.
                     folder = createContentInContainer(
                         inbox, 'opengever.inbox.yearfolder',
                         title=str(year))
-                except:
-                    AccessControl.SecurityManagement.setSecurityManager(
-                        _sm)
-                    raise
-                else:
-                    AccessControl.SecurityManagement.setSecurityManager(
-                        _sm)
 
-            # move forwarding into folder
-            parent = aq_parent(aq_inner(self.context))
-            clipboard = parent.manage_cutObjects((self.context.getId(),))
-            folder.manage_pasteObjects(clipboard)
+                # move forwarding into folder
+                parent = aq_parent(aq_inner(self.context))
+                clipboard = parent.manage_cutObjects((self.context.getId(),))
+                folder.manage_pasteObjects(clipboard)
+
+            except:
+                AccessControl.SecurityManagement.setSecurityManager(
+                    _sm)
+                raise
+            else:
+                AccessControl.SecurityManagement.setSecurityManager(
+                    _sm)
 
             # show status message
             msg = _(u'info_forwarding_move_to_yearfolder',
