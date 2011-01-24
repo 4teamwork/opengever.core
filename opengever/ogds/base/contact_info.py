@@ -223,7 +223,7 @@ class ContactInformation(grok.GlobalUtility):
         for client in clients:
             groupid = client.group.encode('utf-8')
             group = acl_users.getGroupById(groupid)
-            if userid in group.getMemberIds():
+            if group and userid in group.getMemberIds():
                 yield client
 
 
