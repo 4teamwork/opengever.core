@@ -28,6 +28,7 @@ class GivenTasks(Tasks):
     grok.name('tabbedview_view-given_tasks')
 
     types = ['opengever.inbox.forwarding']
+    depth = 1
 
 
 class InboxDocuments(Documents):
