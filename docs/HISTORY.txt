@@ -13,6 +13,7 @@ Changelog
 * Issue #789 Umsetzung Postmodul
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/789/
   Added new content type Forwarding.
+  Also copy responses when transporting forwarding to another client.
   [jbaumann]
 
 * Issue #788 Papierkorb-Funktionalität funktioniert nicht im Eingangskorb

@@ -24,12 +24,14 @@ from opengever.task.interfaces import ISuccessorTaskController
 from opengever.task.response import AddForm, SingleAddFormView
 from opengever.task.response import IResponse, Response
 from opengever.task.task import ITask
+from opengever.task.transporter import IResponseTransporter
 from plone.dexterity.utils import createContentInContainer
 from plone.formwidget.contenttree import ObjPathSourceBinder
 from z3c.form import field, button
 from z3c.form.browser import radio
 from z3c.form.interfaces import HIDDEN_MODE
 from z3c.relationfield.schema import RelationChoice
+from zope.app.intid.interfaces import IIntIds
 from zope.component import getUtility
 from zope.interface.interface import Attribute
 from zope.lifecycleevent import modified
@@ -181,9 +183,25 @@ class ForwardingResponseAddForm(AddForm):
                          self.context.responsible_client)
 
         # send the the task to the remote client
-        httpresponse = trans.transport_to(self.context, client.client_id,
+        result = trans.transport_to(self.context, client.client_id,
                                           'eingangskorb')
-        target_task_path = httpresponse.read()
+        target_task_path = result['path']
+
+        # copy documents. we need to create a intids mapping
+        # (intid on our client : intid on remote client) for
+        # being able in the response transporter to change fix
+        # the intids of relation values.
+        intids_mapping = {}
+        intids = getUtility(IIntIds)
+        for doc in self.get_documents():
+            result = trans.transport_to(doc, data['client'],
+                                        target_task_path)
+            intids_mapping[intids.queryId(doc)] = result['intid']
+
+        # copy responses
+        response_transporter = IResponseTransporter(self.context)
+        response_transporter.send_responses(
+            data['client'], target_task_path, intids_mapping)
 
         # connect tasks and change state of successor
         response = remote_request(
@@ -194,10 +212,6 @@ class ForwardingResponseAddForm(AddForm):
         if response.read().strip() != 'ok':
             raise Exception('Cleaning up the successor task failed on '
                             'the remote client %s' % client.client_id)
-
-        # copy documents
-        for doc in self.get_documents():
-            trans.transport_to(doc, client.client_id, target_task_path)
 
         # add to the just-created response a "link" to the successor
         successor_oguid = successor_controller.get_oguid_by_path(
