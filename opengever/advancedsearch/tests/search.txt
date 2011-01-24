@@ -47,3 +47,4 @@ browser test
     >>> browser.open('http://nohost/plone/folder_factories')
     >>> browser.getControl('Business Case Dossier').click()
     >>> browser.getControl('Add').click()
+

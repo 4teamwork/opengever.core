@@ -10,7 +10,8 @@ OPTIONFLAGS = (doctest.NORMALIZE_WHITESPACE|
 
 
 TESTFILES = (
-    'search.txt',
+    'correct_ref.txt',
+    'search.txt'
     )
 
 

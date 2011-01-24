@@ -374,8 +374,11 @@ class AdvancedSearchForm(directives_form.Form):
     def correct_ref(self, value):
         registry = getUtility(IRegistry)
         prefix = registry['opengever.base.interfaces.IBaseClientID.client_id']
-        if prefix in value:
+        if prefix.lower() in value.lower():
             value = value.replace(prefix, "")
+            value = value.replace(prefix.lower(), "")
         refnr = re.split('[^a-zA-Z0-9\.]', value)
+        while refnr.count(''):
+            refnr.remove('')
         value = ' / '.join(refnr)
         return prefix + " " +value
