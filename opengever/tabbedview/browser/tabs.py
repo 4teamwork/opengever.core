@@ -147,8 +147,7 @@ class Documents(OpengeverCatalogListingTab):
          'column_title':_('label_subdossier', default="Subdossier"),},
         )
 
-    enabled_actions = ['cut',
-                       'copy',
+    enabled_actions = [
                        'send_as_email',
                        'checkout',
                        'checkin',
@@ -158,6 +157,7 @@ class Documents(OpengeverCatalogListingTab):
                        'send_documents',
                        'copy_documents_to_remote_client',
                        'move_items',
+                       'copy_items',
                        ]
 
     major_actions = ['send_documents',
@@ -208,10 +208,9 @@ class Dossiers(OpengeverCatalogListingTab):
     search_options = {'is_subdossier': False}
 
     enabled_actions = ['change_state',
-                       'cut',
-                       'copy',
                        'pdf_dossierlisting',
                        'move_items',
+                       'copy_items',
                        ]
 
     major_actions = ['change_state',
@@ -280,9 +279,9 @@ class Tasks(OpengeverCatalogListingTab):
 
     enabled_actions = [
         'change_state',
-        'cut',
         'pdf_taskslisting',
         'move_items',
+        'copy_items',
         ]
 
     major_actions = ['change_state',
