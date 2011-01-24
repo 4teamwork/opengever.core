@@ -489,7 +489,7 @@ msgstr "Abgelaufen"
 #. Default: "Assign task"
 #: ./opengever/task/browser/assign.py:53
 msgid "title_assign_task"
-msgstr "Aufgabe zuweisen"
+msgstr "Neu zuweisen"
 
 #. Default: "Attach document"
 #: ./opengever/task/browser/attachdocument.py:186

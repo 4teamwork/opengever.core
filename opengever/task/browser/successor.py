@@ -9,6 +9,7 @@ from opengever.ogds.base.utils import remote_request, get_client_id
 from opengever.task import _
 from opengever.task.interfaces import ISuccessorTaskController
 from opengever.task.task import ITask
+from opengever.task.transporter import IResponseTransporter
 from opengever.task.util import add_simple_response
 from plone.directives import form
 from plone.formwidget.autocomplete import AutocompleteFieldWidget
@@ -17,6 +18,7 @@ from z3c.form.button import buttonAndHandler
 from z3c.form.field import Fields
 from z3c.form.form import Form
 from zope import schema
+from zope.app.intid.interfaces import IIntIds
 from zope.component import getUtility
 from zope.lifecycleevent import modified
 from zope.lifecycleevent.interfaces import IObjectModifiedEvent
@@ -66,9 +68,9 @@ class SuccessorTaskForm(Form):
             info = getUtility(IContactInformation)
 
             # transport task
-            response = trans.transport_to(self.context, data['client'],
+            result = trans.transport_to(self.context, data['client'],
                                           data['dossier'])
-            target_task_path = response.read()
+            target_task_path = result['path']
 
             # connect tasks and change state of successor
             response = remote_request(
@@ -80,11 +82,23 @@ class SuccessorTaskForm(Form):
                 raise Exception('Cleaning up the successor task failed on the'
                                 'remote client %s' % data['client'])
 
-            # copy documents
+            # copy documents. we need to create a intids mapping
+            # (intid on our client : intid on remote client) for
+            # being able in the response transporter to change fix
+            # the intids of relation values.
+            intids_mapping = {}
+            intids = getUtility(IIntIds)
             for doc in self.get_documents():
-                trans.transport_to(doc, data['client'], target_task_path)
+                result = trans.transport_to(doc, data['client'],
+                                            target_task_path)
+                intids_mapping[intids.queryId(doc)] = result['intid']
 
-            # create a response indicating that a response was created
+            # copy responses
+            response_transporter = IResponseTransporter(self.context)
+            response_transporter.send_responses(
+                data['client'], target_task_path, intids_mapping)
+
+            # create a response indicating that a successor was created
             successor_oguid = successor_controller.get_oguid_by_path(
                 target_task_path, data['client'])
             add_simple_response(self.context, successor_oguid=successor_oguid)
@@ -129,7 +143,8 @@ class SuccessorTaskForm(Form):
         # find documents within the task
         brains = self.context.getFolderContents(
             full_objects=False,
-            contentFilter={'portal_type': 'opengever.document.document'})
+            contentFilter={'portal_type': ['opengever.document.document',
+                                           'ftw.mail.mail']})
         for doc in brains:
             yield doc.getObject()
         # find referenced documents

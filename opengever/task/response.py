@@ -3,19 +3,21 @@ from Products.CMFCore.utils import getToolByName
 from Products.Five.browser import BrowserView
 from Products.statusmessages.interfaces import IStatusMessage
 from five import grok
+from opengever.base.source import DossierPathSourceBinder
 from opengever.globalindex.interfaces import ITaskQuery
+from opengever.ogds.base.interfaces import IContactInformation
 from opengever.task import _
 from opengever.task import util
 from opengever.task.adapters import IResponseContainer, Response
 from opengever.task.interfaces import IResponseAdder
 from opengever.task.permissions import DEFAULT_ISSUE_MIME_TYPE
-from opengever.base.source import DossierPathSourceBinder
 from opengever.task.task import ITask
 from plone.autoform.form import AutoExtensibleForm
 from plone.memoize.view import memoize
 from plone.z3cform import layout
 from z3c.form import form, field, button
 from z3c.form.browser import radio
+from z3c.form.interfaces import HIDDEN_MODE
 from z3c.relationfield.relation import RelationValue
 from z3c.relationfield.schema import RelationChoice, RelationList
 from zope import schema
@@ -26,6 +28,7 @@ from zope.i18n import translate
 from zope.interface import Interface
 from zope.intid.interfaces import IIntIds
 from zope.lifecycleevent import modified, ObjectModifiedEvent
+from opengever.base.browser.opengeverview import OpengeverView
 import datetime
 import os
 
@@ -130,8 +133,10 @@ class Base(BrowserView):
                         response=response,
                         html=html)
             items.append(info)
-            # reverse the items, so that the latest one is above
-            items.reverse()
+
+        # sort the items, so that the latest one is at top
+        items.sort(lambda a,b: cmp(b['response'].date,
+                                   a['response'].date))
         return items
 
     @property
@@ -218,7 +223,6 @@ class AddForm(form.AddForm, AutoExtensibleForm):
         super(AddForm, self).updateActions()
         self.actions["save"].addClass("context")
 
-
     @button.buttonAndHandler(_(u'save', default='Save'),
                                name='save')
     def handleSubmit(self, action):
@@ -230,6 +234,7 @@ class AddForm(form.AddForm, AutoExtensibleForm):
                     errorMessage += '<li>' + error.message + '</li>'
             errorMessage += '</ul>'
             self.status = errorMessage
+            return None
         else:
             new_response = Response(data.get('text'))
             #define responseTyp
@@ -263,7 +268,7 @@ class AddForm(form.AddForm, AutoExtensibleForm):
                     task.__setattr__(option, resp_field)
 
             # save relatedItems on task
-            relatedItems = data.get('relatedItems')
+            relatedItems = data.get('relatedItems') or []
             intids = getUtility(IIntIds)
             for item in relatedItems:
                 to_id = intids.getId(item)
@@ -301,6 +306,7 @@ class AddForm(form.AddForm, AutoExtensibleForm):
             else:
                 url = self.context.absolute_url()
             self.request.RESPONSE.redirect(url)
+            return new_response
 
     @button.buttonAndHandler(_(u'cancel', default='Cancel'),
                              name='cancel', )
@@ -308,6 +314,13 @@ class AddForm(form.AddForm, AutoExtensibleForm):
     def handleCancel(self, action):
         return self.request.RESPONSE.redirect('.')
 
+    def updateWidgets(self):
+        form.AddForm.updateWidgets(self)
+        if self.context.portal_type == 'opengever.inbox.forwarding':
+            self.widgets['relatedItems'].mode = HIDDEN_MODE
+        ogview= OpengeverView({},{})
+        if not ogview.is_user_assigned_to_client():
+            self.widgets['relatedItems'].mode = HIDDEN_MODE
 
 class BeneathTask(grok.ViewletManager):
     grok.context(ITask)
@@ -348,6 +361,22 @@ class ResponseView(grok.Viewlet, Base):
             return query.get_task_by_oguid(response.successor_oguid)
         else:
             return None
+
+    def convert_change_values(self, fieldname, value):
+        if fieldname == 'responsible_client':
+            info = getUtility(IContactInformation)
+            client = info.get_client_by_id(value)
+            if client:
+                return client.title
+            else:
+                return value
+
+        elif fieldname == 'responsible':
+            info = getUtility(IContactInformation)
+            return info.render_link(value)
+
+        return value
+
 
 
 """
