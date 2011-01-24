@@ -233,7 +233,8 @@ def change_successor_state_after_edit(task, event):
     # need to verify that the request was not called by another client
     request = task.REQUEST
     if request.get_header('X-OGDS-AC', None) or \
-            request.get_header('X-OGDS-CID', None):
+            request.get_header('X-OGDS-CID', None) or \
+            request.get('X-CREATING-SUCCESSOR', None):
         return
 
     from_review_state = 'task-state-new-successor'
