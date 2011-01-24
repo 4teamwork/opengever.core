@@ -5,6 +5,10 @@ Changelog
 2.0b9
 -----
 
+* Renamed "Verantwortlicher" zu "Verantwortlich"
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/758
+  [phabegger]
+
 * Fixed some typos in translations (workflow states and transitions)
   [phabegger]
 

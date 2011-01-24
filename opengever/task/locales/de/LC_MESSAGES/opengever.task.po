@@ -365,7 +365,7 @@ msgstr "Antworttext"
 #: ./opengever/task/browser/assign.py:32
 #: ./opengever/task/task.py:93
 msgid "label_responsible"
-msgstr "Verantwortlicher"
+msgstr "Verantwortlich"
 
 #. Default: "Return to issue."
 #: ./opengever/task/templates/edit_response.pt:32
