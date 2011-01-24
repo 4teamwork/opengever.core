@@ -1,0 +1,12 @@
+<object name="portal_skins">
+
+  <object name="opengever.base_scripts"
+          meta_type="Filesystem Directory View"
+          directory="opengever.base:skins/opengever.base_scripts"/>
+
+  <skin-path name="*">
+    <layer name="opengever.base_scripts"
+           insert-after="custom"/>
+  </skin-path>
+
+</object>

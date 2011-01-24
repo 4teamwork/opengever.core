@@ -35,5 +35,6 @@
 
     <include package=".behaviors" />
     <include package=".browser" />
+	<include file="skins.zcml" />
 
 </configure>

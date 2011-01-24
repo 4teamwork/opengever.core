@@ -5,6 +5,10 @@ Changelog
 2.0b8
 -----
 
+* Issue #779 Kopieren und Ausschneiden rekursiv implementieren
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/779/
+  implemented new copyaction wich works recursive
+  [ttschanz]
 
 2.0b7
 -----
