@@ -86,9 +86,7 @@ class ForwardingResponseAddForm(AddForm):
                              name='save', )
     def handleSubmit(self, action):
         data, errors = self.extractData()
-        response = super(ForwardingResponseAddForm, self).handleSubmit(
-            action.form, action)
-        if not response:
+        if errors:
             return
 
         wftool = getToolByName(self.context, 'portal_workflow')
@@ -100,6 +98,19 @@ class ForwardingResponseAddForm(AddForm):
         transition = workflow.transitions[transition_id]
         new_state_id = transition.new_state_id
 
+        # ASSIGN TO DOSSIER
+        if transition_id == 'forwarding-transition-assign-to-dossier':
+            target_task = self.assign_to_dossier(data)
+
+        # CREATE RESPONSE
+        response = super(ForwardingResponseAddForm, self).handleSubmit(
+            action.form, action)
+
+        # add relation to response
+        if transition_id == 'forwarding-transition-assign-to-dossier':
+            taskSTC = ISuccessorTaskController(target_task)
+            response.successor_oguid = taskSTC.get_oguid()
+
         # ACCEPT
         if transition_id == 'forwarding-transition-accept':
             self.create_successor_forwarding(data)
@@ -107,10 +118,6 @@ class ForwardingResponseAddForm(AddForm):
         # REFUSE
         if transition_id == 'forwarding-transition-refuse':
             self.ressign_refusing(response)
-
-        # ASSIGN TO DOSSIER
-        if transition_id == 'forwarding-transition-assign-to-dossier':
-            self.assign_to_dossier(data, response)
 
         if new_state_id == 'forwarding-state-closed':
             # When the forwarding is closed, we need to move it to the
@@ -271,12 +278,17 @@ class ForwardingResponseAddForm(AddForm):
 
         modified(self.context)
 
-    def assign_to_dossier(self, data, response):
+    def assign_to_dossier(self, data):
         """Assigning to a dossier means creating a successor task (!).
         """
+        # There is a change_successor_state_after_edit which resets
+        # the tasks workflow state on modified event. We dont want it
+        # to do that on this request - so we need to set a prevention
+        # flag.
+        self.request.set('X-CREATING-SUCCESSOR', True)
+
         dossier = data['target_dossier']
         forwarding = self.context
-
 
         # we need all task field values from the forwarding (which is a
         # kind of task) for creating the new task.
@@ -306,9 +318,6 @@ class ForwardingResponseAddForm(AddForm):
         taskSTC = ISuccessorTaskController(task)
         forwardingSTC = ISuccessorTaskController(forwarding)
         taskSTC.set_predecessor(forwardingSTC.get_oguid())
-
-        # add link to response
-        response.successor_oguid = taskSTC.get_oguid()
 
         # set the workflow state
         state = 'task-state-new-successor'
@@ -345,7 +354,9 @@ class ForwardingResponseAddForm(AddForm):
             task.manage_pasteObjects(clipboard)
 
         # redirect to edit view later
-        self.context.REQUEST.RESPONSE.redirect(task.absolute_url() + '/edit')
+        redirector = IRedirector(self.request)
+        redirector.redirect(task.absolute_url() + '/edit')
+        return task
 
 
 class CleanupForwardingSuccessor(CleanupSuccessor):
