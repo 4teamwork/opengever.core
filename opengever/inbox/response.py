@@ -283,7 +283,6 @@ class ForwardingResponseAddForm(AddForm):
             for key in IPersistentResponse.names():
                 attr = IPersistentResponse[key]
                 if type(attr) == Attribute:
-                    print key, getattr(fresp, key, None)
                     setattr(tresp, key,
                             deepcopy(getattr(fresp, key, None)))
             tresp._p_changed = True
