@@ -67,6 +67,6 @@ msgid "task-transition-resolved-tested-and-closed"
 msgstr "Abschliessen"
 
 msgid "Assign task"
-msgstr "Aufgabe zuweisen"
+msgstr "Neu zuweisen"
 
 
