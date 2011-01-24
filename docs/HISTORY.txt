@@ -5,6 +5,10 @@ Changelog
 2.0b8
 -----
 
+* Added opengever_view which provides traversable methods
+  such as is_user_assigned_to_client().
+  [jbaumann]
+
 
 2.0b7
 -----
