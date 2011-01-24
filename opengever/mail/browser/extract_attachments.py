@@ -15,6 +15,10 @@ from z3c.relationfield.relation import RelationValue
 from zope.app.component.hooks import getSite
 from zope.component import getUtility
 from zope.intid.interfaces import IIntIds
+from plone.dexterity.utils import iterSchemata
+from zope.schema import getFieldsInOrder
+from zope.component import queryMultiAdapter
+from z3c.form.interfaces import IValue
 import os.path
 
 
@@ -187,7 +191,36 @@ class ExtractAttachments(grok.View):
                                            'opengever.document.document',
                                            **kwargs)
 
-            # add a reference to the mail
+
+            for schemata in iterSchemata(doc):
+                for name, field in getFieldsInOrder(schemata):
+                    if field.get(
+                            field.interface(doc)) == field.missing_value \
+                                or field.get(field.interface(doc)) == None:
+
+                        # No value is given from the pipeline,
+                        # so we try to set the default value
+                        # otherwise we set the missing value
+                        default = queryMultiAdapter((
+                                doc,
+                                doc.REQUEST, # request
+                                None, # form
+                                field,
+                                None, # Widget
+                                ), IValue, name='default')
+                        if default!=None:
+                            default = default.get()
+                        if default==None:
+                            default = getattr(field, 'default', None)
+                        if default==None:
+                            try:
+                                default = field.missing_value
+                            except:
+                                pass
+                        field.set(field.interface(doc), default)
+
+
+            # # add a reference to the mail
             intids = getUtility(IIntIds)
             iid = intids.getId(self.context)
 

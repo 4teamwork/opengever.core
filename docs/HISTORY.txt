@@ -5,6 +5,11 @@ Changelog
 2.0b3
 -----
 
+* Issue #806 Mail: Default Werte setzen bei Anhänge extrahieren
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/806/
+  Took over the Default values from Parentobject.
+  [ttschanz]
+
 * Issue #785 Anpassen Erzeugen eines Mail-Objekts bei Mailempfang
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/785/
   added receipt_date and fixed document_author
