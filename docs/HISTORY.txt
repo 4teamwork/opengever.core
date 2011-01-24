@@ -5,6 +5,9 @@ Changelog
 2.0b6
 -----
 
+* Transporter: Provide more infos when transporting a object.
+  [jbaumann]
+
 * Disable link for inbox principals, since the inbox is not accessible
   by every user and the link was wrong anyway.
   [jbaumann]

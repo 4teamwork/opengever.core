@@ -4,7 +4,7 @@ from opengever.ogds.base.interfaces import IDataCollector
 from opengever.ogds.base.interfaces import IObjectCreator
 from opengever.ogds.base.interfaces import ITransporter
 from opengever.ogds.base.utils import decode_for_json, encode_after_json
-from opengever.ogds.base.utils import remote_request, remote_json_request
+from opengever.ogds.base.utils import remote_json_request
 from plone.dexterity.interfaces import IDexterityFTI, IDexterityContent
 from plone.dexterity.utils import createContent, addContentToContainer
 from plone.dexterity.utils import iterSchemata
@@ -12,6 +12,7 @@ from plone.namedfile.interfaces import INamedFileField
 from z3c.relationfield.interfaces import IRelation, IRelationChoice
 from z3c.relationfield.interfaces import IRelationList
 from zope import schema
+from zope.app.intid.interfaces import IIntIds
 from zope.component import getAdapters, queryAdapter, getAdapter
 from zope.component import getUtility
 from zope.event import notify
@@ -47,9 +48,9 @@ class Transporter(grok.GlobalUtility):
         request_data = {
             REQUEST_KEY : jsondata,
             }
-        return remote_request(target_cid, '@@transporter-receive-object',
-                              path=container_path,
-                              data=request_data)
+        return remote_json_request(
+            target_cid, '@@transporter-receive-object',
+            path=container_path, data=request_data)
 
     def transport_from(self, container, source_cid, path):
         """ Copies the object under *path* from client with *source_cid* into
@@ -132,7 +133,16 @@ class ReceiveObject(grok.CodeView):
         obj = transporter.receive(container, self.request)
         portal = self.context.portal_url.getPortalObject()
         portal_path = '/'.join(portal.getPhysicalPath())
-        return '/'.join(obj.getPhysicalPath())[len(portal_path) + 1:]
+
+        intids = getUtility(IIntIds)
+
+        data = {
+            'path': '/'.join(obj.getPhysicalPath())[
+                len(portal_path) + 1:],
+            'intid': intids.queryId(self.context)
+            }
+
+        return json.dumps(data)
 
 
 class ExtractObject(grok.CodeView):
