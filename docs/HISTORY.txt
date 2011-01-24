@@ -5,6 +5,10 @@ Changelog
 2.0b9
 -----
 
+* Response view: convert responsible client and responsible values into human
+  readable values using ContactInformation utility.
+  [jbaumann]
+
 * Issue #789 Umsetzung Postmodul
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/789/
   Do not access hidden stuff in task view.

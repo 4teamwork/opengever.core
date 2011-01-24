@@ -5,6 +5,7 @@ from Products.statusmessages.interfaces import IStatusMessage
 from five import grok
 from opengever.base.source import DossierPathSourceBinder
 from opengever.globalindex.interfaces import ITaskQuery
+from opengever.ogds.base.interfaces import IContactInformation
 from opengever.task import _
 from opengever.task import util
 from opengever.task.adapters import IResponseContainer, Response
@@ -355,6 +356,22 @@ class ResponseView(grok.Viewlet, Base):
             return query.get_task_by_oguid(response.successor_oguid)
         else:
             return None
+
+    def convert_change_values(self, fieldname, value):
+        if fieldname == 'responsible_client':
+            info = getUtility(IContactInformation)
+            client = info.get_client_by_id(value)
+            if client:
+                return client.title
+            else:
+                return value
+
+        elif fieldname == 'responsible':
+            info = getUtility(IContactInformation)
+            return info.render_link(value)
+
+        return value
+
 
 
 """
