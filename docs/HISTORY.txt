@@ -5,6 +5,11 @@ Changelog
 2.0b4
 -----
 
+* Issue #789 Umsetzung Postmodul
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/789
+  Added a navigation portlet on inbox level, block inherited context portlets.
+  [jbaumann]
+
 * Issue #798 Konfiguration Mailhost Zug pro Mandant
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/798/
   Created import Step to Load Mailsettings

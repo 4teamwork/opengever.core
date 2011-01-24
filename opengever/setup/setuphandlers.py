@@ -1,14 +1,16 @@
 from collective.transmogrifier.transmogrifier import Transmogrifier
+from opengever.mail.interfaces import IMailSettings
+from opengever.ogds.base.interfaces import IClientConfiguration
 from opengever.portlets.tree import treeportlet
+from plone.app.portlets.portlets import navigation
+from plone.dexterity.utils import createContentInContainer
+from plone.portlets.constants import CONTEXT_CATEGORY
+from plone.portlets.interfaces import ILocalPortletAssignmentManager
 from plone.portlets.interfaces import IPortletAssignmentMapping
 from plone.portlets.interfaces import IPortletManager
+from plone.registry.interfaces import IRegistry
 from zope.component import getMultiAdapter
 from zope.component import getUtility
-from plone.dexterity.utils import createContentInContainer
-from opengever.ogds.base.interfaces import IClientConfiguration
-from plone.registry.interfaces import IRegistry
-from opengever.mail.interfaces import IMailSettings
-from zope.app.component.hooks import getSite
 import transaction
 
 
@@ -51,19 +53,33 @@ def settings(context):
         context.get('Members').reindexObject()
 
     # replace unused navigation portlet with the tree portlet
-    column = getUtility(IPortletManager, name=u'plone.leftcolumn',
+    manager = getUtility(IPortletManager, name=u'plone.leftcolumn',
                         context=context)
-    manager = getMultiAdapter((context, column,),
+    mapping = getMultiAdapter((context, manager,),
                               IPortletAssignmentMapping)
-    if 'navigation' in manager.keys():
-        del manager[u'navigation']
+    if 'navigation' in mapping.keys():
+        del mapping[u'navigation']
 
     repository_root = context.REQUEST.get('repository_root', None)
     repository_root_name = repository_root[0]
-    if 'opengever-portlets-tree-TreePortlet' not in manager.keys():
-        manager['opengever-portlets-tree-TreePortlet'] = \
+    if 'opengever-portlets-tree-TreePortlet' not in mapping.keys():
+        mapping['opengever-portlets-tree-TreePortlet'] = \
             treeportlet.Assignment(root_path=repository_root_name)
 
+    # add a new navigation portlet at /eingangskorb
+    inbox = context.restrictedTraverse('eingangskorb')
+    mapping = getMultiAdapter((inbox, manager),
+                              IPortletAssignmentMapping)
+    if 'navigation' not in mapping.keys():
+        mapping['navigation'] = navigation.Assignment(root='/eingangskorb',
+                                                      currentFolderOnly=False,
+                                                      includeTop=False,
+                                                      topLevel=0,
+                                                      bottomLevel=0)
+
+    # block inherited context portlets on /eingangskorb
+    assignable = getMultiAdapter((inbox, manager), ILocalPortletAssignmentManager)
+    assignable.setBlacklistStatus(CONTEXT_CATEGORY, True)
 
 def import_various(setup):
     if setup.readDataFile('opengever.setup.txt') is None:
