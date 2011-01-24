@@ -1,5 +1,6 @@
 from five import grok
 from opengever.globalindex.interfaces import ITaskQuery
+from opengever.globalindex.model.task import Task
 from opengever.ogds.base.utils import get_client_id
 from opengever.tabbedview.browser.tasklisting import GlobalTaskListingTab
 from opengever.inbox.inbox import IInbox
@@ -20,6 +21,6 @@ class InboxAssignedTasks(GlobalTaskListingTab):
         principal = 'inbox:%s' % get_client_id()
 
         query_util = getUtility(ITaskQuery)
-        return query_util._get_tasks_for_responsible_query(principal,
-                                                           self.sort_on,
-                                                           self.sort_order)
+        return query_util._get_tasks_for_responsible_query(
+            principal, self.sort_on, self.sort_order).filter(
+            Task.review_state == 'forwarding-state-open')
