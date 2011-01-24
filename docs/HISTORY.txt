@@ -5,6 +5,11 @@ Changelog
 2.0b9
 -----
 
+* Issue #536 Aufgabe: Verweisfeld in Antwortformular fehlt
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/536/
+  Removed related items field if User isn't from same Client as Task
+  [ttschanz]
+
 * Issue #789 Umsetzung Postmodul
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/789/
   Also copy responses when transporting tasks to another client.

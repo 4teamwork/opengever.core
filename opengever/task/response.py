@@ -28,6 +28,7 @@ from zope.i18n import translate
 from zope.interface import Interface
 from zope.intid.interfaces import IIntIds
 from zope.lifecycleevent import modified, ObjectModifiedEvent
+from opengever.base.browser.opengeverview import OpengeverView
 import datetime
 import os
 
@@ -315,7 +316,9 @@ class AddForm(form.AddForm, AutoExtensibleForm):
         form.AddForm.updateWidgets(self)
         if self.context.portal_type == 'opengever.inbox.forwarding':
             self.widgets['relatedItems'].mode = HIDDEN_MODE
-
+        ogview= OpengeverView({},{})
+        if not ogview.is_user_assigned_to_client():
+            self.widgets['relatedItems'].mode = HIDDEN_MODE
 
 class BeneathTask(grok.ViewletManager):
     grok.context(ITask)
