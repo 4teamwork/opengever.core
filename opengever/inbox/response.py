@@ -2,7 +2,6 @@
 for forwardings.
 """
 
-# from z3c.form.interfaces import DISPLAY_MODE
 from Acquisition import aq_inner, aq_parent
 from DateTime import DateTime
 from Products.CMFCore.utils import getToolByName
@@ -33,6 +32,7 @@ from z3c.form.interfaces import HIDDEN_MODE
 from z3c.relationfield.schema import RelationChoice
 from zope.component import getUtility
 from zope.interface.interface import Attribute
+from zope.lifecycleevent import modified
 import AccessControl
 import os.path
 
@@ -254,6 +254,8 @@ class ForwardingResponseAddForm(AddForm):
                             self.context.responsible,
                             new_responsible)
         self.context.responsible = new_responsible
+
+        modified(self.context)
 
     def assign_to_dossier(self, data, response):
         """Assigning to a dossier means creating a successor task (!).
