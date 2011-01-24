@@ -31,14 +31,14 @@ import os
 
 
 class IResponse(Interface):
-    
+
     transition = schema.Choice(
         title=_("label_transition", default="Transition"),
         description=_(u"help_transition", default=""),
         source = util.getTransitionVocab,
         required = False,
         )
-        
+
     text = schema.Text(
         title = _('label_response', default="Response"),
         description=_('help_response', default=""),
@@ -213,10 +213,15 @@ class AddForm(form.AddForm, AutoExtensibleForm):
     fields = field.Fields(IResponse)
     fields['transition'].widgetFactory = radio.RadioFieldWidget
     fields = fields.omit('date_of_completion')
-    
+
+    def updateActions(self):
+        super(AddForm, self).updateActions()
+        self.actions["save"].addClass("context")
+
+
     @button.buttonAndHandler(_(u'save', default='Save'),
-                               name='save', )
-    def handleContinue(self, action):
+                               name='save')
+    def handleSubmit(self, action):
         data, errors = self.extractData()
         if errors:
             errorMessage ='<ul>'
@@ -369,15 +374,15 @@ class SingleAddFormView(layout.FormWrapper, grok.CodeView):
     grok.implements(IResponseAdder)
     grok.context(ITask)
     grok.name("addresponse")
-    
+
     form = AddForm
 
     def __init__(self, context, request):
         layout.FormWrapper.__init__(self, context, request)
         grok.CodeView.__init__(self, context, request)
         self.form.label = context.title
-        
-        
+
+
 class Edit(Base):
 
     @property
