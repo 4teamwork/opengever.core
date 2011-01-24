@@ -5,6 +5,10 @@ Changelog
 2.0b2
 -----
 
+* Issue #807 Icon fuer Weiterleitung
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/807
+  [jbaumann]
+
 * Issue #812 Uebersetzungen Postmodul
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/812/
   Added Translations for Postmodul
