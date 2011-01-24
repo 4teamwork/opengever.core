@@ -408,8 +408,7 @@ class ContactInformation(grok.GlobalUtility):
         """
 
         if self.is_inbox(principal):
-            client = self.get_client_of_inbox(principal)
-            return '/'.join((client.public_url, 'inbox'))
+            return None
 
         elif self.is_contact(principal):
             contact = self.get_contact(principal, check_permissions=True)

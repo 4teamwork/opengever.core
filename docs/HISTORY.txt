@@ -5,6 +5,10 @@ Changelog
 2.0b6
 -----
 
+* Disable link for inbox principals, since the inbox is not accessible
+  by every user and the link was wrong anyway.
+  [jbaumann]
+
 
 2.0b5
 -----
