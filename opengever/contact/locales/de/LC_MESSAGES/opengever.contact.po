@@ -181,7 +181,7 @@ msgstr "Nachname"
 #. Default: "Fax"
 #: ./opengever/contact/contact.py:132
 msgid "label_phone_fax"
-msgstr "Fax"
+msgstr "Fax Arbeit"
 
 #. Default: "Phone home"
 #: ./opengever/contact/contact.py:144

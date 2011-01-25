@@ -5,6 +5,10 @@ Changelog
 2.0b5
 -----
 
+* Renamed label field "Fax Arbeit"
+  Issue #570 Kontakte: Feldbezeichnungen definieren, obligatorische Felder angeben
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/570
+  [phabegger]
 
 2.0b4
 -----
