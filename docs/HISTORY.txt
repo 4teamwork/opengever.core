@@ -5,6 +5,11 @@ Changelog
 2.0b2
 -----
 
+* Forwarding response: hide transition field, since there are fields (such as
+  target dossier) which only occur on certain transitions, therefore the
+  transition field value should never change in progress.
+  [jbaumann]
+
 * Improved responses when accepting a forwarding.
   [jbaumann]
 

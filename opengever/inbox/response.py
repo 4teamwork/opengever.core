@@ -30,7 +30,6 @@ from persistent.list import PersistentList
 from plone.dexterity.utils import createContentInContainer
 from plone.formwidget.contenttree import ObjPathSourceBinder
 from z3c.form import field, button
-from z3c.form.browser import radio
 from z3c.form.interfaces import HIDDEN_MODE
 from z3c.relationfield.schema import RelationChoice
 from zope.app.intid.interfaces import IIntIds
@@ -68,13 +67,12 @@ class ForwardingResponseAddForm(AddForm):
     """Custom addform for forwarding-responses.
     """
     fields = field.Fields(IForwardingResponse)
-    fields['transition'].widgetFactory = radio.RadioFieldWidget
     fields = fields.omit('date_of_completion')
 
     def updateWidgets(self):
         super(ForwardingResponseAddForm, self).updateWidgets()
         self.widgets['relatedItems'].mode = HIDDEN_MODE
-        # self.widgets['transition'].mode = HIDDEN_MODE
+        self.widgets['transition'].mode = HIDDEN_MODE
         assign_trans = u'forwarding-transition-assign-to-dossier'
         if assign_trans not in self.widgets['transition'].value:
             self.widgets['target_dossier'].mode = HIDDEN_MODE
