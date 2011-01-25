@@ -26,6 +26,7 @@ from opengever.task.response import IResponse, Response
 from opengever.task.task import ITask
 from opengever.task.transporter import IResponseTransporter
 from opengever.task.util import add_simple_response
+from persistent.list import PersistentList
 from plone.dexterity.utils import createContentInContainer
 from plone.formwidget.contenttree import ObjPathSourceBinder
 from z3c.form import field, button
@@ -114,7 +115,36 @@ class ForwardingResponseAddForm(AddForm):
 
         # ACCEPT
         if transition_id == 'forwarding-transition-accept':
-            self.create_successor_forwarding(data)
+            # When accepting a forwarding, we want to have following
+            # response setup afterwards:
+            # PREDECESSOR (self.context):
+            # - Response "accepted", link to successor
+            # - Response "closed"
+            # SUCCESSOR (see self.create_successor_forwarding)
+            # - Response "accepted", link to successor
+
+            # The "accepted" response was already created by the super
+            # class - but it has a "review_state" -> closed change - we
+            # want to have that on the later created "closed_response".
+            # -> find the change, remove it
+            accepted_resp_changes = response.changes
+            response.changes = PersistentList()
+            review_state_change = None
+            for change in accepted_resp_changes:
+                if change.get('id', None) == 'review_state':
+                    review_state_change = change
+                    break
+                else:
+                    response.changes.append(change)
+
+            # then create the successor forwarding
+            self.create_successor_forwarding(data, response)
+
+            # and add the "closed" response ..
+            closed_response = add_simple_response(
+                self.context, transition='forwarding-state-closed')
+            # .. with the review state change
+            closed_response.changes.append(review_state_change)
 
         # REFUSE
         if transition_id == 'forwarding-transition-refuse':
@@ -176,7 +206,7 @@ class ForwardingResponseAddForm(AddForm):
     def handleCancel(self, action):
         return self.request.RESPONSE.redirect('.')
 
-    def create_successor_forwarding(self, data):
+    def create_successor_forwarding(self, data, response):
         """"Accepting" means we create a successor-forwarding on the
         responsible_client (which the user should be assigned to)
         and link them together."""
@@ -192,7 +222,7 @@ class ForwardingResponseAddForm(AddForm):
 
         # send the the task to the remote client
         result = trans.transport_to(self.context, client.client_id,
-                                          'eingangskorb')
+                                    'eingangskorb')
         target_task_path = result['path']
 
         # copy documents. we need to create a intids mapping
@@ -212,12 +242,12 @@ class ForwardingResponseAddForm(AddForm):
             client.client_id, target_task_path, intids_mapping)
 
         # connect tasks and change state of successor
-        response = remote_request(
+        http_response = remote_request(
             client.client_id, '@@cleanup-successor-task',
             path=target_task_path,
             data={'oguid': successor_controller.get_oguid()})
 
-        if response.read().strip() != 'ok':
+        if http_response.read().strip() != 'ok':
             raise Exception('Cleaning up the successor task failed on '
                             'the remote client %s' % client.client_id)
 

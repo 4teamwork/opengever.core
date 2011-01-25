@@ -5,6 +5,9 @@ Changelog
 2.0b2
 -----
 
+* Improved responses when accepting a forwarding.
+  [jbaumann]
+
 * Assigning a forwarding to a dossier: add a response on the successor task.
   [jbaumann]
 
