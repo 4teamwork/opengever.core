@@ -5,6 +5,9 @@ Changelog
 2.0b8
 -----
 
+* Do not show "properties" action on yearfolder.
+  [jbaumann]
+
 * Issue #789 Umsetzung Postmodul
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/789/
   Configured meta types which should not appear in navigation.
