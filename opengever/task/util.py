@@ -121,3 +121,5 @@ def add_simple_response(task, text='', field_changes=None, added_object=None,
 
     notify(ObjectModifiedEvent(task))
 
+    return response
+
