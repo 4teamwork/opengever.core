@@ -38,6 +38,9 @@
         </property>
 
     </object>
-
+    
+    <object name="site_properties" meta_type="Plone Property Sheet">
+        <property name="icon_visibility" type="string">disabled</property>
+    </object>
 </object>
 
