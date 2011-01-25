@@ -5,6 +5,9 @@ Changelog
 2.0b2
 -----
 
+* Year folder: changed form of year folder title.
+  [jbaumann]
+
 * Year folder: added workflow
   [jbaumann]
 

@@ -173,9 +173,23 @@ class ForwardingResponseAddForm(AddForm):
                 if not folder:
                     # for creating the folder, we need to be a superuser since
                     # normal user should not be able to add year folders.
+
+                    # --- help i18ndude ---
+                    msg = _(u'yearfolder_title',
+                            default=u'Closed ${year}',
+                            mapping=dict(year=str(year)))
+                    # --- / help i18ndude ---
+
+                    tool = getToolByName(self.context, 'translation_service')
+                    folder_title = tool.translate(str(msg),
+                                                  msg.domain,
+                                                  msg.mapping,
+                                                  context=self.context,
+                                                  default=msg.default)
+
                     folder = createContentInContainer(
                         inbox, 'opengever.inbox.yearfolder',
-                        title=str(year))
+                        title=folder_title)
 
                 # move forwarding into folder
                 parent = aq_parent(aq_inner(self.context))

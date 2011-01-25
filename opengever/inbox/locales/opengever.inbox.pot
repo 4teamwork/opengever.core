@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2011-01-24 14:00+0000\n"
+"POT-Creation-Date: 2011-01-25 20:31+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -34,7 +34,7 @@ msgid "YearFolder"
 msgstr ""
 
 #. Default: "Cancel"
-#: ./opengever/inbox/response.py:164
+#: ./opengever/inbox/response.py:204
 msgid "cancel"
 msgstr ""
 
@@ -48,12 +48,12 @@ msgid "help_inbox_group"
 msgstr ""
 
 #. Default: "The successor forwarding was created."
-#: ./opengever/inbox/response.py:216
+#: ./opengever/inbox/response.py:268
 msgid "info_created_successor_forwarding"
 msgstr ""
 
 #. Default: "The forwarding was moved to the yearfolder ${year}"
-#: ./opengever/inbox/response.py:156
+#: ./opengever/inbox/response.py:196
 msgid "info_forwarding_move_to_yearfolder"
 msgstr ""
 
@@ -63,12 +63,17 @@ msgid "label_inbox_group"
 msgstr ""
 
 #. Default: "Target dossier"
-#: ./opengever/inbox/response.py:43
+#: ./opengever/inbox/response.py:46
 msgid "label_target_dossier"
 msgstr ""
 
 #. Default: "Save"
-#: ./opengever/inbox/response.py:83
+#: ./opengever/inbox/response.py:85
 msgid "save"
+msgstr ""
+
+#. Default: "Closed ${year}"
+#: ./opengever/inbox/response.py:178
+msgid "yearfolder_title"
 msgstr ""
 
