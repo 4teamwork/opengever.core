@@ -3,14 +3,22 @@
     <div tal:repeat="boxes groups" tal:attributes="class string:boxGroup${repeat/boxes/index}">
         <div tal:repeat="box boxes" class="box" tal:attributes="id string:${box/id}Box">
 
-                <h2 i18n:translate="" tal:content="box/label|box/id"></h2>
+            <h2 i18n:translate="" tal:content="box/label|box/id"></h2>
 
             <tal:items define="items box/content" tal:condition="python:box['id'] != 'description'">
                 <ul tal:condition="items">
                     <li tal:repeat="item items">
-                        <img tal:attributes="src item/getIcon"
-                             tal:condition="item/getIcon" />
-                        <a href="" class="rollover-breadcrumb" tal:attributes="href item/getURL|nothing; title item/alt|nothing" tal:omit-tag="not: item/getURL|nothing"><span tal:content="item/Title" /></a>
+
+                        <tal:BRAIN tal:condition="nocall:item/getIcon|nothing">
+                            <img tal:attributes="src item/getIcon"
+                                 tal:condition="item/getIcon" />
+                            <a href="" class="rollover-breadcrumb" tal:attributes="href item/getURL|nothing; title item/alt|nothing" tal:omit-tag="not: item/getURL|nothing"><span tal:content="item/Title" /></a>
+                        </tal:BRAIN>
+
+                        <tal:GLOBAL_INDEX tal:condition="not:nocall:item/getIcon|nothing">
+                            <div tal:replace="structure python:view.render_globalindex_task(item)" />
+                        </tal:GLOBAL_INDEX>
+
                     </li>
                     <li class="moreLink">
                         <a tal:attributes="href string:#${box/id}" i18n:translate="">show all</a>

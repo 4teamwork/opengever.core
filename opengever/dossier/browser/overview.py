@@ -2,6 +2,7 @@ from five import grok
 from opengever.dossier import _ as _dossier
 from opengever.dossier.behaviors.dossier import IDossierMarker, IDossier
 from opengever.dossier.behaviors.participation import IParticipationAware
+from opengever.globalindex.utils import indexed_task_link_helper
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.tabbedview.browser.tabs import OpengeverTab
 from zope.component import getUtility
@@ -68,11 +69,7 @@ class DossierOverview(grok.View, OpengeverTab):
         # get the participants
         phandler = IParticipationAware(self.context)
         results = list(phandler.get_participations())
-    
-    def description(self):
-        return self.context.description;
-        
-         
+
         # also append the responsible
         class ResponsibleParticipant(object): pass
 
@@ -92,3 +89,9 @@ class DossierOverview(grok.View, OpengeverTab):
             'getIcon':'user.gif',
             }
             for xx in results]
+
+    def description(self):
+        return self.context.description;
+
+    def render_globalindex_task(self, item):
+        return indexed_task_link_helper(item, item.title)

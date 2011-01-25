@@ -5,6 +5,9 @@ Changelog
 2.0b8
 -----
 
+* Overview view: support for globalindex objects
+  [jbaumann]
+
 * Issue #797 Dossier: 2 Metadaten ausblenden
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/797
   Removed fields container_id and volume_no.
