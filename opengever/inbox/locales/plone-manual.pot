@@ -35,6 +35,9 @@ msgstr ""
 msgid "forwarding-transition-refuse"
 msgstr ""
 
+msgid "forwarding-transition-reassign"
+msgstr ""
+
 msgid "inbox-state-default"
 msgstr ""
 

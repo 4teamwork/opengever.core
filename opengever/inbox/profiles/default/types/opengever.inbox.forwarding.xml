@@ -78,14 +78,4 @@
         <permission value="Add portal content"/>
     </action>
 
-    <action action_id="assign_task"
-            visible="True"
-            title="Assign task"
-            category="object_buttons"
-            url_expr="string:${object_url}/@@assign-task"
-            icon_expr=""
-            condition_expr="">
-        <permission value="Modify portal content"/>
-    </action>
-
 </object>

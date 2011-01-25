@@ -36,6 +36,9 @@ msgstr "Abschliessen"
 msgid "forwarding-transition-refuse"
 msgstr "Ablehnen"
 
+msgid "forwarding-transition-reassign"
+msgstr "Neu zuweisen"
+
 msgid "inbox-state-default"
 msgstr "Offen"
 

@@ -5,6 +5,9 @@ Changelog
 2.0b2
 -----
 
+* Use new transition instead of action for reassigning forwarding.
+  [jbaumann]
+
 * Forwardings: Fixed bug when "accepting" a forwarding.
   [jbaumann]
 
