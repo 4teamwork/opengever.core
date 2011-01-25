@@ -24,7 +24,13 @@ def do_transition(context, event):
 def create_response(context, event):
     """When adding a new task object within a task, add a response.
     """
-    if context.REQUEST.get('X-CREATING-SUCCESSOR', None):
+
+    # the event is fired multiple times when the task was transported, so we
+    # need to verify that the request was not called by another client
+    request = context.REQUEST
+    if request.get_header('X-OGDS-AC', None) or \
+            request.get_header('X-OGDS-CID', None) or \
+            request.get('X-CREATING-SUCCESSOR', None):
         return
 
     parent = aq_parent(aq_inner(context))
