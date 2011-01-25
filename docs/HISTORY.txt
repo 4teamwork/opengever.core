@@ -5,6 +5,12 @@ Changelog
 2.0b2
 -----
 
+* Removed IDossier behavior from inbox, because it's not a dossier.
+  This removes some actions such as pdf-exports which should not be
+  visible on a inbox and it hides it from a PathSourceBinder when
+  the user should only be able to select inboxes.
+  [jbaumann]
+
 * Year folder: changed form of year folder title.
   [jbaumann]
 
