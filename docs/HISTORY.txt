@@ -5,6 +5,9 @@ Changelog
 2.0b2
 -----
 
+* Year folder: added workflow
+  [jbaumann]
+
 * Forwardings: "deadline" is not required.
   [jbaumann]
 
