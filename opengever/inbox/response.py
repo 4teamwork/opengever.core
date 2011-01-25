@@ -25,6 +25,7 @@ from opengever.task.response import AddForm, SingleAddFormView
 from opengever.task.response import IResponse, Response
 from opengever.task.task import ITask
 from opengever.task.transporter import IResponseTransporter
+from opengever.task.util import add_simple_response
 from plone.dexterity.utils import createContentInContainer
 from plone.formwidget.contenttree import ObjPathSourceBinder
 from z3c.form import field, button
@@ -313,6 +314,10 @@ class ForwardingResponseAddForm(AddForm):
                             deepcopy(getattr(fresp, key, None)))
             tresp._p_changed = True
             task_responses.add(tresp)
+
+        # add a new response on the successor task indicating that the
+        # user has created it.
+        add_simple_response(task, transition=data.get('transition', None))
 
         # set the predecessor
         taskSTC = ISuccessorTaskController(task)

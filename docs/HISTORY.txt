@@ -5,6 +5,9 @@ Changelog
 2.0b2
 -----
 
+* Assigning a forwarding to a dossier: add a response on the successor task.
+  [jbaumann]
+
 * Use new transition instead of action for reassigning forwarding.
   [jbaumann]
 
