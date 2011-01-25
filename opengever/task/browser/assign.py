@@ -4,11 +4,13 @@ from opengever.ogds.base.autocomplete_widget import AutocompleteFieldWidget
 from opengever.task import _
 from opengever.task.task import ITask
 from opengever.task.util import add_simple_response
+from opengever.task.util import getTransitionVocab
 from plone.directives import form
 from plone.z3cform import layout
 from z3c.form.button import buttonAndHandler
 from z3c.form.field import Fields
 from z3c.form.form import Form
+from z3c.form.interfaces import HIDDEN_MODE
 from z3c.form.interfaces import INPUT_MODE
 from zope import schema
 from zope.event import notify
@@ -20,6 +22,15 @@ class IAssignSchema(form.Schema):
     a task to another person.
     """
 
+
+    # hidden
+    transition = schema.Choice(
+        title=_("label_transition", default="Transition"),
+        description=_(u"help_transition", default=""),
+        source = getTransitionVocab,
+        required = True,
+        )
+
     responsible_client = schema.Choice(
         title=_(u'label_resonsible_client',
                 default=u'Responsible Client'),
@@ -29,7 +40,7 @@ class IAssignSchema(form.Schema):
         required=True)
 
     responsible = schema.Choice(
-        title=_(u"label_responsible", default="Responsible"),
+        title=_(u"label_responsible", default=u"Responsible"),
         description =_(u"help_responsible", default=""),
         vocabulary=u'opengever.ogds.base.UsersAndInboxesVocabulary',
         required = True,
@@ -76,7 +87,8 @@ class AssignTaskForm(Form):
                 text=data.get('text'),
                 field_changes=((ITask['responsible'], data['responsible']),
                                (ITask['responsible_client'],
-                                data['responsible_client']),))
+                                data['responsible_client']),),
+                transition=data.get('transition', None))
 
             # set responsible
             self.context.responsible_client = data['responsible_client']
@@ -88,6 +100,10 @@ class AssignTaskForm(Form):
     @buttonAndHandler(_(u'button_cancel', default=u'Cancel'))
     def handle_cancel(self, action):
         return self.request.RESPONSE.redirect('.')
+
+    def updateWidgets(self):
+        super(AssignTaskForm, self).updateWidgets()
+        self.widgets['transition'].mode = HIDDEN_MODE
 
 
 class AssignTaskView(layout.FormWrapper, grok.View):

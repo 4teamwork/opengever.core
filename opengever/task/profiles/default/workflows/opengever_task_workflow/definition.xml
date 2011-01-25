@@ -297,7 +297,7 @@
   </guard>
  </transition>
  <transition transition_id="task-transition-reassign" title="Reassign" new_state="" trigger="USER" before_script="" after_script="">
-  <action url="%(content_url)s/@@assign-task" category="workflow" icon="">task-transition-reassign</action>
+  <action url="%(content_url)s/@@assign-task?form.widgets.transition=task-transition-reassign" category="workflow" icon="">task-transition-reassign</action>
   <guard>
    <guard-permission>Modify portal content</guard-permission>
   </guard>

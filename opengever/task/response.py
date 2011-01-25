@@ -245,6 +245,10 @@ class AddForm(form.AddForm, AutoExtensibleForm):
                 new_response.type = 'additional'
             if responseCreator == task.Creator():
                 new_response.type = 'clarification'
+
+            if data.get('transition', None):
+                new_response.transition = data.get('transition', None)
+
             #if util.getManagersVocab.getTerm(responseCreator):
             #   new_response.type =  'reply'
             #check transition

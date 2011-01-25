@@ -26,6 +26,7 @@ class IResponse(Interface):
 
     text = Attribute("Text of this response")
     rendered_text = Attribute("Rendered text (html) for caching")
+    transition = Attribute('ID of perfomed transition - if any')
     changes = Attribute("Changes made to the issue in this response.")
     creator = Attribute("Id of user making this change.")
     date = Attribute("Date (plus time) this response was made.")
@@ -134,6 +135,7 @@ class Response(Persistent):
         self.relatedItems = ()
         self.added_object = None
         self.successor_oguid = None
+        self.transition = None
 
     def add_change(self, id, name, before, after):
         """Add a new issue change.

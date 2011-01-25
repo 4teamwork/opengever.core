@@ -5,6 +5,9 @@ Changelog
 2.0b9
 -----
 
+* Show performed transition in answers of tasks.
+  [jbaumann]
+
 * Added textfield for response text to "Assign task" form.
   [jbaumann]
 

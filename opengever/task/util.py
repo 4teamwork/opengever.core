@@ -84,7 +84,7 @@ def getTaskTypeVocabulary(context):
 
 
 def add_simple_response(task, text='', field_changes=None, added_object=None,
-                        successor_oguid=None):
+                        successor_oguid=None, **kwargs):
     """Add a simple response which does (not change the task itself).
     `task`: task context
     `text`: fulltext
@@ -94,6 +94,9 @@ def add_simple_response(task, text='', field_changes=None, added_object=None,
 
     response = opengever.task.adapters.Response(text)
     response.type = 'additional'
+
+    for key, value in kwargs.items():
+        setattr(response, key, value)
 
     if field_changes:
         for field, new_value in field_changes:

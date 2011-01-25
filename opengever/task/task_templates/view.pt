@@ -41,7 +41,7 @@
                         </tr>
 
                         <tr>
-                            <th i18n:translate="label_responsible">Responsible:</th>
+                            <th i18n:translate="label_responsible">Responsible</th>
                             <td tal:content="structure view/responsible_link" />
                         </tr>
 

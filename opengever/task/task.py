@@ -91,7 +91,7 @@ class ITask(form.Schema):
 
     form.widget(responsible=AutocompleteFieldWidget)
     responsible = schema.Choice(
-        title=_(u"label_responsible", default="Responsible"),
+        title=_(u"label_responsible", default=u"Responsible"),
         description =_(u"help_responsible", default=""),
         vocabulary=u'opengever.ogds.base.UsersAndInboxesVocabulary',
         required = True,
