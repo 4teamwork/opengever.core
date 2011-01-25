@@ -5,18 +5,25 @@ Changelog
 2.0b3
 -----
 
-* Issue #806 Mail: Default Werte setzen bei Anhänge extrahieren
+* Issue #785 Anpassen Erzeugen eines Mail-Objekts bei Mailempfang
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/785/
+  Fixed receipt_date: Currently returns document_date.
+  [phabegger]
+
+* Issue #806 Mail: Default Werte setzen bei Anhaenge extrahieren
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/806/
-  Took over the Default values from Parentobject.
+  Took over the default values from Parentobject.
   [ttschanz]
 
 * Issue #785 Anpassen Erzeugen eines Mail-Objekts bei Mailempfang
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/785/
-  added receipt_date and fixed document_author
+  Added receipt_date and fixed document_author
   [ttschanz]
 
 * Added ITrashable behavior
   [ttschanz]
+
+
 2.0b2
 -----
 
@@ -46,7 +53,7 @@ Changelog
 -----
 
 * remove very old pdb ;-)
-  [Philippe Gross]
+  [pgross]
 
 2.0a2
 -----
@@ -56,7 +63,7 @@ Changelog
 -----
 
 * Added extract_attachments view
-  [02.11.2010, jbaumann]
+  [jbaumann]
 
 
 1.0
