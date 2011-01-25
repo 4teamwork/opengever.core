@@ -14,7 +14,6 @@ from opengever.ogds.base.interfaces import IContactInformation
 from plone.autoform.interfaces import IFormFieldProvider
 from plone.directives import form, dexterity
 from plone.dexterity.interfaces import IDexterityContent
-from plone.formwidget.contenttree import ObjPathSourceBinder
 from plone.indexer import indexer
 from plone.z3cform.textlines.textlines import TextLinesFieldWidget
 from z3c.relationfield.schema import RelationChoice, RelationList
@@ -77,12 +76,6 @@ class IDossier(form.Schema):
         required=False,
         )
 
-    volume_number = schema.TextLine(
-        title = _(u'label_volume_number', default=u'Volume Number'),
-        description = _(u'help_volume_number', default=u''),
-        required=False,
-        )
-
     comments = schema.Text(
         title=_(u'label_comments', default=u'Comments'),
         description = _(u'help_comments', default=u''),
@@ -105,8 +98,6 @@ class IDossier(form.Schema):
         fields = [
             u'filing_prefix',
             u'container_type',
-            u'container_id',
-            u'volume_number',
             u'number_of_containers',
             u'container_location',
             u'reference_number',
@@ -135,12 +126,6 @@ class IDossier(form.Schema):
         source = wrap_vocabulary('opengever.dossier.container_types',
                                  visible_terms_from_registry="opengever.dossier" + \
                                      '.interfaces.IDossierContainerTypes.container_types'),
-        required = False,
-        )
-
-    container_id = schema.TextLine(
-        title = _(u'label_container_id', default=u'Container Id'),
-        description = _(u'help_container_id', default=u''),
         required = False,
         )
 
