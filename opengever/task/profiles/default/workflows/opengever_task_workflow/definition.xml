@@ -5,11 +5,11 @@
  <permission>List folder contents</permission>
  <permission>Manage properties</permission>
  <permission>Modify portal content</permission>
+ <permission>Review portal content</permission>
  <permission>Sharing page: Delegate roles</permission>
  <permission>View</permission>
  <permission>opengever.document: Add document</permission>
  <permission>opengever.task: Add task</permission>
- <permission>Review portal content</permission>
  <state state_id="task-state-cancelled" title="">
   <permission-map name="Access contents information" acquired="False">
    <permission-role>Editor</permission-role>
@@ -121,6 +121,7 @@
   <exit-transition transition_id="task-transition-open-in-progress"/>
   <exit-transition transition_id="task-transition-open-rejected"/>
   <exit-transition transition_id="task-transition-open-resolved"/>
+  <exit-transition transition_id="task-transition-reassign"/>
   <permission-map name="Access contents information" acquired="False">
    <permission-role>Editor</permission-role>
    <permission-role>Manager</permission-role>
@@ -295,6 +296,12 @@
    <guard-expression>python: here.restrictedTraverse('resolve_check')()</guard-expression>
   </guard>
  </transition>
+ <transition transition_id="task-transition-reassign" title="Reassign" new_state="" trigger="USER" before_script="" after_script="">
+  <action url="%(content_url)s/@@assign-task" category="workflow" icon="">task-transition-reassign</action>
+  <guard>
+   <guard-permission>Modify portal content</guard-permission>
+  </guard>
+ </transition>
  <transition transition_id="task-transition-rejected-open" title="task-transition-rejected-open" new_state="task-state-open" trigger="USER" before_script="" after_script="">
   <action url="" category="workflow" icon="">task-transition-rejected-open</action>
   <guard>
@@ -321,7 +328,7 @@
  <variable variable_id="action" for_catalog="False" for_status="True" update_always="True">
   <description>The last transition</description>
   <default>
-   
+
    <expression>transition/getId|nothing</expression>
   </default>
   <guard>
@@ -330,7 +337,7 @@
  <variable variable_id="actor" for_catalog="False" for_status="True" update_always="True">
   <description>The ID of the user who performed the last transition</description>
   <default>
-   
+
    <expression>user/getId</expression>
   </default>
   <guard>
@@ -339,7 +346,7 @@
  <variable variable_id="comments" for_catalog="False" for_status="True" update_always="True">
   <description>Comments about the last transition</description>
   <default>
-   
+
    <expression>python:state_change.kwargs.get('comment', '')</expression>
   </default>
   <guard>
@@ -348,7 +355,7 @@
  <variable variable_id="review_history" for_catalog="False" for_status="False" update_always="False">
   <description>Provides access to workflow history</description>
   <default>
-   
+
    <expression>state_change/getHistory</expression>
   </default>
   <guard>
@@ -358,7 +365,7 @@
  <variable variable_id="time" for_catalog="False" for_status="True" update_always="True">
   <description>Time of the last transition</description>
   <default>
-   
+
    <expression>state_change/getDateTime</expression>
   </default>
   <guard>

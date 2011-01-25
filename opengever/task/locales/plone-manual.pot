@@ -62,11 +62,11 @@ msgstr ""
 msgid "task-transition-in-progress-resolved"
 msgstr ""
 
+msgid "task-transition-reassign"
+msgstr ""
+
 msgid "Add response"
 msgstr ""
 
 msgid "Attach remote document"
-msgstr ""
-
-msgid "Assign task"
 msgstr ""

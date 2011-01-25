@@ -5,6 +5,9 @@ Changelog
 2.0b9
 -----
 
+* "Assign Task" action removed, added new workflow Transition.
+  [jbaumann]
+
 * Renamed "Verantwortlicher" zu "Verantwortlich"
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/758
   [phabegger]

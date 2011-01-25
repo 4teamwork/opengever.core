@@ -58,15 +58,15 @@ msgid "task-transition-open-resolved"
 msgstr "Erledigen"
 
 msgid "task-transition-rejected-open"
-msgstr "wieder eröffnen"
+msgstr "Wieder eröffnen"
 
 msgid "task-transition-resolved-open"
-msgstr "wieder eröffnen"
+msgstr "Wieder eröffnen"
 
 msgid "task-transition-resolved-tested-and-closed"
 msgstr "Abschliessen"
 
-msgid "Assign task"
+msgid "task-transition-reassign"
 msgstr "Neu zuweisen"
 
 
