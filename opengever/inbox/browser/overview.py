@@ -1,6 +1,11 @@
 from five import grok
 from opengever.dossier.browser.overview import DossierOverview
+from opengever.globalindex.interfaces import ITaskQuery
+from opengever.globalindex.model.task import Task
 from opengever.inbox.inbox import IInbox
+from opengever.ogds.base.utils import get_client_id
+from zope.component import getUtility
+from zope.i18nmessageid import MessageFactory
 
 
 class InboxOverview(DossierOverview):
@@ -11,6 +16,21 @@ class InboxOverview(DossierOverview):
 
         #TODO: implements the sharing box n ot work yet
         # dict(id = 'sharing', content=self.sharing())],
-        items = [[dict(id = 'tasks', content=self.tasks()),],
-                 [dict(id = 'documents', content=self.documents()), ]]
+        items = [[dict(id='assigned_tasks',
+                       content=self.inbox_forwardings(),
+                       label=MessageFactory('ftw.tabbedview')(u'assigned_tasks')),],
+
+                 [dict(id='documents',
+                       content=self.documents()), ]]
         return items
+
+    def inbox_forwardings(self):
+
+        principal = 'inbox:%s' % get_client_id()
+
+        query_util = getUtility(ITaskQuery)
+
+        query = query_util._get_tasks_for_responsible_query(
+            principal, 'modified')
+        query = query.filter(Task.review_state=='forwarding-state-open')
+        return query.all()
