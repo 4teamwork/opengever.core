@@ -5,6 +5,9 @@ Changelog
 2.0b4
 -----
 
+* Changed name of added yearfolder.
+  [jbaumann]
+
 * Issue #789 Umsetzung Postmodul
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/789
   Added a navigation portlet on inbox level, block inherited context portlets.
