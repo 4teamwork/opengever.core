@@ -5,6 +5,9 @@ Changelog
 2.0b2
 -----
 
+* Forwardings: Fixed bug when "accepting" a forwarding.
+  [jbaumann]
+
 * Issue #807 Icon fuer Weiterleitung
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/807
   [jbaumann]

@@ -201,14 +201,14 @@ class ForwardingResponseAddForm(AddForm):
         intids_mapping = {}
         intids = getUtility(IIntIds)
         for doc in self.get_documents():
-            result = trans.transport_to(doc, data['client'],
+            result = trans.transport_to(doc, client.client_id,
                                         target_task_path)
             intids_mapping[intids.queryId(doc)] = result['intid']
 
         # copy responses
         response_transporter = IResponseTransporter(self.context)
         response_transporter.send_responses(
-            data['client'], target_task_path, intids_mapping)
+            client.client_id, target_task_path, intids_mapping)
 
         # connect tasks and change state of successor
         response = remote_request(
