@@ -5,6 +5,9 @@ Changelog
 2.0b2
 -----
 
+* Forwardings: "deadline" is not required.
+  [jbaumann]
+
 * Inbox documents tab: do not show subdossiers column (since there are
   no subdossiers and documents are not listed recursive).
   [jbaumann]

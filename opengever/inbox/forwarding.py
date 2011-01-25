@@ -2,10 +2,12 @@ from Acquisition import aq_inner, aq_parent
 from Products.CMFCore.utils import getToolByName
 from five import grok
 from opengever.ogds.base.utils import get_client_id
+from opengever.task import _ as task_mf
 from opengever.task.task import ITask, Task
 from plone.directives import form
 from plone.directives.dexterity import AddForm
 from z3c.form.interfaces import HIDDEN_MODE
+from zope import schema
 from zope.app.container.interfaces import IObjectAddedEvent
 from zope.component import getMultiAdapter
 from zope.interface import implements
@@ -29,6 +31,13 @@ class IForwarding(ITask):
     form.omitted('effectiveDuration')
     form.omitted('effectiveCost')
     form.omitted('date_of_completion')
+
+    # deadline is not required
+    deadline = schema.Date(
+        title=task_mf(u"label_deadline", default=u"Deadline"),
+        description=task_mf(u"help_deadline", default=u""),
+        required=False,
+        )
 
 
 class Forwarding(Task):
