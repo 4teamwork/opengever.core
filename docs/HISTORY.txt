@@ -5,6 +5,9 @@ Changelog
 2.0b9
 -----
 
+* Added textfield for response text to "Assign task" form.
+  [jbaumann]
+
 * "Assign Task" action removed, added new workflow Transition.
   [jbaumann]
 

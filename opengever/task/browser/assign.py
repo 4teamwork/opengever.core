@@ -35,6 +35,12 @@ class IAssignSchema(form.Schema):
         required = True,
         )
 
+    text = schema.Text(
+        title = _('label_response', default="Response"),
+        description=_('help_response', default=""),
+        required = False,
+        )
+
 
 @form.default_value(field=IAssignSchema['responsible_client'])
 def responsible_client_default_value(data):
@@ -67,6 +73,7 @@ class AssignTaskForm(Form):
             # create a response in the task
             add_simple_response(
                 self.context,
+                text=data.get('text'),
                 field_changes=((ITask['responsible'], data['responsible']),
                                (ITask['responsible_client'],
                                 data['responsible_client']),))
