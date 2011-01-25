@@ -2,7 +2,9 @@
 <tal:block i18n:domain="opengever.dossier" tal:define="groups view/boxes">
     <div tal:repeat="boxes groups" tal:attributes="class string:boxGroup${repeat/boxes/index}">
         <div tal:repeat="box boxes" class="box" tal:attributes="id string:${box/id}Box">
-            <h2 i18n:translate="" tal:content="box/id"></h2>
+
+                <h2 i18n:translate="" tal:content="box/label|box/id"></h2>
+
             <tal:items define="items box/content" tal:condition="python:box['id'] != 'description'">
                 <ul tal:condition="items">
                     <li tal:repeat="item items">
