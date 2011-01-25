@@ -38,6 +38,21 @@ class InboxDocuments(Documents):
     depth = 1
 
     @property
+    def columns(self):
+        remove_columns = ['containing_subdossier']
+        columns = []
+
+        for col in super(InboxDocuments, self).columns:
+            if isinstance(col, dict) and \
+                    col.get('column') in remove_columns:
+                pass  # remove this column
+
+            else:
+                columns.append(col)
+
+        return columns
+
+    @property
     def enabled_actions(self):
         actions = super(InboxDocuments, self).enabled_actions
         actions = [action for action in actions

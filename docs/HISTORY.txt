@@ -5,6 +5,10 @@ Changelog
 2.0b2
 -----
 
+* Inbox documents tab: do not show subdossiers column (since there are
+  no subdossiers and documents are not listed recursive).
+  [jbaumann]
+
 * Inbox overview: show forwardings instead of tasks.
   [jbaumann]
 
