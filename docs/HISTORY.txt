@@ -5,6 +5,9 @@ Changelog
 2.0b9
 -----
 
+* Fixed handling of empty deadline in view template
+  [lgraf]
+
 * Show performed transition in answers of tasks.
   [jbaumann]
 

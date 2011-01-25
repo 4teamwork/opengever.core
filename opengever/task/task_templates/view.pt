@@ -45,7 +45,7 @@
                             <td tal:content="structure view/responsible_link" />
                         </tr>
 
-                        <tr>
+                        <tr tal:condition="context/deadline">
                             <th tal:content="python:group.widgets['deadline'].label"></th>
                             <td tal:content="python:context.deadline.strftime('%d.%m.%Y')"/>
                         </tr>
