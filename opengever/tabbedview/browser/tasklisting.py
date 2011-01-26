@@ -12,6 +12,7 @@ from opengever.tabbedview import _
 from opengever.tabbedview.helper import readable_date_set_invisibles
 from opengever.tabbedview.helper import readable_ogds_author
 from opengever.tabbedview.helper import task_id_checkbox_helper
+from opengever.tabbedview.helper import workflow_state
 from opengever.task.helper import task_type_helper
 from sqlalchemy import or_
 from zope.app.pagetemplate import ViewPageTemplateFile
@@ -52,7 +53,7 @@ class GlobalTaskListingTab(grok.CodeView, OpengeverTab,
 
         {'column': 'review_state',
          'column_title': _(u'column_review_state', default=u'Review state'),
-         'transform': helper.translated_string()},
+         'transform': workflow_state},
 
         {'column': 'title',
          'column_title': _(u'column_title', default=u'Title'),

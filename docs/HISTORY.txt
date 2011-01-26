@@ -5,6 +5,10 @@ Changelog
 2.0b10
 ------
 
+* Modified workflow_state helper to also work without a context,
+  and made GlobalTaskListingTab use it so wf-state icons get displayed
+  [lgraf]
+
 * Made readable_ogds_author not fail on author == None
   [lgraf]
 
