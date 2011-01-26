@@ -5,6 +5,10 @@ Changelog
 2.0b9
 -----
 
+* Removed IPreview behavior again because og.pdfconverter isn't installed everywhere.
+  We now apply the IPreview behavior in opengever.zugpolicy.base
+  [lgraf]
+
 * Re-added IPreview behavior to document type to make it previewable
   [lgraf]
 
