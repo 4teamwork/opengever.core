@@ -48,6 +48,12 @@ class Forwarding(Task):
     def task_type_category(self):
         return None
 
+    @property
+    def task_type(self):
+        # Provide a marker string, which will be translated in the
+        # tabbedview helper method.
+        return 'forwarding_task_type'
+
 
 class AddForm(AddForm):
     """Provide a custom add-form which adds the selected documents

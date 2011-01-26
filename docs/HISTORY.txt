@@ -5,6 +5,9 @@ Changelog
 2.0b2
 -----
 
+* Forwarding: use task_type value "Forwarding" in tabbed view.
+  [jbaumann]
+
 * Forwarding "assign to dossier": fixed redirect bug.
   [jbaumann]
 
