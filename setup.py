@@ -8,7 +8,7 @@ extras_require = {
     # Adding opengever.document to install_requires will result in circular
     # dependencies. This extras prevents ftw.manager from sugesting this
     # dependency.
-    'document': 'opengever.document',
+    'document': ['opengever.document'],
 }
 
 setup(name='opengever.mail',
