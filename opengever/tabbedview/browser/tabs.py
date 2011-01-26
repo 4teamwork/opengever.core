@@ -9,6 +9,7 @@ from opengever.tabbedview import _
 from opengever.tabbedview.helper import readable_date_set_invisibles
 from opengever.tabbedview.helper import readable_ogds_author, linked
 from opengever.tabbedview.helper import workflow_state
+from opengever.tabbedview.helper import overdue_date_helper
 
 from opengever.task.helper import task_type_helper
 from zope.app.pagetemplate import ViewPageTemplateFile
@@ -246,7 +247,7 @@ class Tasks(OpengeverCatalogListingTab):
 
         {'column': 'deadline',
          'column_title': _(u'label_deadline', 'Deadline'),
-         'transform': helper.readable_date},
+         'transform': overdue_date_helper},
 
         {'column': 'date_of_completion',
          'column_title': _(u'label_date_of_completion', 'Date of Completion'),

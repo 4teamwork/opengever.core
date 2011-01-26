@@ -5,6 +5,10 @@ Changelog
 2.0b10
 ------
 
+* Added overdue_date_helper to add CSS class `overdue` to Tasks whose deadline is 
+  in the past. Used by GlobalTaskListingTab and Tasks tab.
+  [lgraf]
+
 * Modified workflow_state helper to also work without a context,
   and made GlobalTaskListingTab use it so wf-state icons get displayed
   [lgraf]

@@ -1,12 +1,13 @@
-from Products.CMFCore.interfaces._tools import IMemberData
-from Products.PluggableAuthService.interfaces.authservice import IPropertiedUser
+from datetime import date as dt
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.tabbedview import _
-from plone.memoize import ram
 from plone.i18n.normalizer.interfaces import IIDNormalizer
+from plone.memoize import ram
+from Products.CMFCore.interfaces._tools import IMemberData
+from Products.PluggableAuthService.interfaces.authservice import IPropertiedUser
+from zope.app.component.hooks import getSite
 from zope.component import getUtility
 import ftw.table
-from zope.app.component.hooks import getSite
 
 
 def task_id_checkbox_helper(item, value):
@@ -115,4 +116,25 @@ def workflow_state(item, value):
     normalize = getUtility(IIDNormalizer).normalize
     state = normalize(item.review_state)
     return """<span class="wf-%s">%s</span>""" % (state, i18n_translate(translated_value))
+
+def overdue_date_helper(item, date):
+    """Helper for setting CSS class `overdue` if an item's
+    deadline is in the past.
+
+    Partially based on ftw.table.helper.readable_date
+    """
+    overdue = False
+    if not date:
+        return u''
+    strftimestring = '%d.%m.%Y'
+    if date == None:
+        return None
+    try:
+        formatted_date = date.strftime(strftimestring)
+        if date < dt.today():
+            overdue = True
+    except ValueError:
+        return None
+    class_attr = overdue and 'class="overdue"' or ''
+    return """<span %s>%s</span>""" % (class_attr, formatted_date)
 

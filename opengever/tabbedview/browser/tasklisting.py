@@ -13,6 +13,7 @@ from opengever.tabbedview.helper import readable_date_set_invisibles
 from opengever.tabbedview.helper import readable_ogds_author
 from opengever.tabbedview.helper import task_id_checkbox_helper
 from opengever.tabbedview.helper import workflow_state
+from opengever.tabbedview.helper import overdue_date_helper
 from opengever.task.helper import task_type_helper
 from sqlalchemy import or_
 from zope.app.pagetemplate import ViewPageTemplateFile
@@ -65,7 +66,7 @@ class GlobalTaskListingTab(grok.CodeView, OpengeverTab,
 
         {'column': 'deadline',
          'column_title': _(u'column_deadline', default=u'Deadline'),
-         'transform': helper.readable_date},
+         'transform': overdue_date_helper},
 
         {'column': 'completed',
          'column_title': _(u'column_date_of_completion',
