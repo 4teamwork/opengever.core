@@ -9,7 +9,6 @@ from plone.directives.dexterity import AddForm
 from z3c.form.interfaces import HIDDEN_MODE
 from zope import schema
 from zope.app.container.interfaces import IObjectAddedEvent
-from zope.component import getMultiAdapter
 from zope.interface import implements
 
 
