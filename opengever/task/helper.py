@@ -1,3 +1,4 @@
+from opengever.task import _
 from opengever.task.util import getTaskTypeVocabulary
 from plone.memoize import ram
 from zope.app.component.hooks import getSite
@@ -8,6 +9,8 @@ def task_type_helper(item, value):
     """Translate the task type with the vdex vocabulary, which provides
     its own translations stored in the vdex files.
     """
+    if value == 'forwarding_task_type':
+        return _(u'forwarding_task_type', default=u'Forwarding')
 
     voc = getTaskTypeVocabulary(getSite())
     try:

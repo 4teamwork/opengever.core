@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2011-01-25 12:58+0000\n"
+"POT-Creation-Date: 2011-01-26 13:52+0000\n"
 "PO-Revision-Date: 2009-02-25 14:39+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -159,6 +159,11 @@ msgstr ""
 #. Default: "Common"
 #: ./opengever/task/task.py:32
 msgid "fieldset_common"
+msgstr ""
+
+#. Default: "Forwarding"
+#: ./opengever/task/helper.py:13
+msgid "forwarding_task_type"
 msgstr ""
 
 #: ./opengever/task/browser/copy_related_documents.py:59

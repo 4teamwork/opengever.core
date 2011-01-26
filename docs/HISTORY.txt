@@ -5,6 +5,10 @@ Changelog
 2.0b9
 -----
 
+* Forwarding special case: tabbed view helper "task_type" should always
+  display "Forwarding" for forwardings.
+  [jbaumann]
+
 * Task view: also show mails.
   [jbaumann]
 
