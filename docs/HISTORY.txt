@@ -5,6 +5,9 @@ Changelog
 2.0b9
 -----
 
+* Re-added IPreview behavior to document type to make it previewable
+  [lgraf]
+
 * Updated workflow to allow Readers to see past document versions
   [lgraf]
 
