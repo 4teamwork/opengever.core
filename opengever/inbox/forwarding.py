@@ -71,11 +71,9 @@ class AddForm(AddForm):
             self.request.set('form.widgets.relatedItems', paths)
 
         # put default value for issuer into request
-        portal_state = getMultiAdapter((self.context, self.request),
-                                       name=u"plone_portal_state")
-        member = portal_state.member()
         if not self.request.get('form.widgets.issuer', None):
-            self.request.set('form.widgets.issuer', [member.getId()])
+            self.request.set('form.widgets.issuer',
+                             u'inbox:%s' % get_client_id())
 
         # put the default responsible into the request
         if not self.request.get('form.widgets.responsible_client', None):

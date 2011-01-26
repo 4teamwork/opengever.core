@@ -5,6 +5,9 @@ Changelog
 2.0b2
 -----
 
+* Forwardings: use the inbox as issuer default value.
+  [jbaumann]
+
 * Inbox: Disable "sharing" and "edit" for normal users.
   [jbaumann]
 
