@@ -5,6 +5,9 @@ Changelog
 2.0b2
 -----
 
+* Inbox: Disable "sharing" and "edit" for normal users.
+  [jbaumann]
+
 * Removed IDossier behavior from inbox, because it's not a dossier.
   This removes some actions such as pdf-exports which should not be
   visible on a inbox and it hides it from a PathSourceBinder when

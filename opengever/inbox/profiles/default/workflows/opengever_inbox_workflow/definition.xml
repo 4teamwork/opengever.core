@@ -10,10 +10,11 @@
  <permission>ftw.mail: Add Mail</permission>
  <permission>opengever.document: Add document</permission>
  <permission>opengever.dossier: Add businesscasedossier</permission>
+ <permission>opengever.inbox: Add Forwarding</permission>
  <permission>opengever.task: Add task</permission>
  <permission>opengever.trash: Trash content</permission>
  <permission>opengever.trash: Untrash content</permission>
- <permission>opengever.inbox: Add Forwarding</permission>
+ <permission>Sharing page: Delegate roles</permission>
  <state state_id="inbox-state-default" title="inbox-state-default">
   <exit-transition transition_id="dossier-transition-deactivate"/>
   <exit-transition transition_id="dossier-transition-resolve"/>
@@ -38,9 +39,11 @@
    <permission-role>Reader</permission-role>
   </permission-map>
   <permission-map name="Modify portal content" acquired="False">
-   <permission-role>Editor</permission-role>
    <permission-role>Manager</permission-role>
    <permission-role>Owner</permission-role>
+  </permission-map>
+  <permission-map name="Sharing page: Delegate roles" acquired="False">
+   <permission-role>Manager</permission-role>
   </permission-map>
   <permission-map name="View" acquired="False">
    <permission-role>Manager</permission-role>
