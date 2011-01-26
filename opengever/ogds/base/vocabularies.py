@@ -4,7 +4,7 @@ from five import grok
 from opengever.ogds.base import caching
 from opengever.ogds.base.interfaces import IClientCommunicator
 from opengever.ogds.base.interfaces import IContactInformation
-from opengever.ogds.base.utils import get_current_client
+from opengever.ogds.base.utils import get_current_client, get_client_id
 from opengever.ogds.base.vocabulary import ContactsVocabulary
 from plone.memoize import volatile
 from zope.app.component.hooks import getSite, setSite
@@ -152,8 +152,10 @@ class ContactsVocabularyFactory(grok.GlobalUtility):
                    info.describe(contact))
 
 
+# TODO: should be renamed to something like
+# ContactsUsersAndInboxesVocabularyFactory
 class ContactsAndUsersVocabularyFactory(grok.GlobalUtility):
-    """Vocabulary of contacts and users.
+    """Vocabulary of contacts, users and the inbox of each client.
     """
 
     grok.provides(IVocabularyFactory)
@@ -184,11 +186,18 @@ class ContactsAndUsersVocabularyFactory(grok.GlobalUtility):
         info = getUtility(IContactInformation)
         items = []
         hidden_terms = []
+
         for user in info.list_users():
             if not user.active:
                 hidden_terms.append(user.userid)
             items.append((user.userid,
                           info.describe(user)))
+
+        # add also the client inboxes
+        for client in info.get_clients():
+            principal = u'inbox:%s' % client.client_id
+            items.append((principal, info.describe(principal)))
+
         return (items, hidden_terms)
 
 

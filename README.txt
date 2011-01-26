@@ -250,7 +250,8 @@ The OGDS-relevant vocabularies are storied in `opengever.ogds.base.vocabularies`
 :opengever.ogds.base.ContactsVocabulary: Contains all local contacts.
 
 :opengever.ogds.base.ContactsAndUsersVocabulary: Contains all local contacts
-    and all users listed in OGDS.
+    and all users listed in OGDS but also each inbox group for each active
+    client (the vocabulary should be renamed and include "inbox" in the name).
 
 :opengever.ogds.base.EmailContactsAndUsersVocabulary: Contains all
     users listed in OGDS and local contacts for every e-mail address they have.

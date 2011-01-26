@@ -5,6 +5,10 @@ Changelog
 2.0b6
 -----
 
+* ContactsAndUsersVocabulary: added also a "inbox" term for each active client on
+  request of Brigitte Schmid by mail in relation with Issue #789 (forwardings).
+  [jbaumann]
+
 * Transporter: Provide more infos when transporting a object.
   [jbaumann]
 

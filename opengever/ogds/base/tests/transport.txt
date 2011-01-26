@@ -105,8 +105,8 @@ Pushing a object
 
 Let's push obj2 back:
 
-    >>> response = transporter.transport_to(obj2, 'client1', 'folder')
-    >>> path3 = response.read()
+    >>> data = transporter.transport_to(obj2, 'client1', 'folder')
+    >>> path3 = data['path'].encode('utf-8')
     >>> path3
     'folder/foo-2'
 

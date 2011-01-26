@@ -246,7 +246,7 @@ Vocabulary of contacts and users.
     ...                   name='opengever.ogds.base.ContactsAndUsersVocabulary')
     >>> voc = fact(portal)
     >>> fterms(list(voc))
-    [u'<Term hugo.boss:Boss Hugo (hugo.boss)>', u'<Term peter.muster:Muster Peter (peter.muster)>', u'<Term hanspeter.linder:Linder Hans-Peter (hanspeter.linder)>', u'<Term contact:kaufmann-sandra:Kaufmann Sandra (sandra.kaufmann@test.ch)>', u'<Term contact:kappeli-elisabeth:K\xe4ppeli Elisabeth (elisabeth.kaeppeli@test.ch)>', u'<Term contact:wermuth-roger:Wermuth Roger>']
+    [u'<Term hugo.boss:Boss Hugo (hugo.boss)>', u'<Term peter.muster:Muster Peter (peter.muster)>', u'<Term hanspeter.linder:Linder Hans-Peter (hanspeter.linder)>', u'<Term inbox:client1:Inbox: Client 1>', u'<Term inbox:client2:Inbox: Client 2>', u'<Term contact:kaufmann-sandra:Kaufmann Sandra (sandra.kaufmann@test.ch)>', u'<Term contact:kappeli-elisabeth:K\xe4ppeli Elisabeth (elisabeth.kaeppeli@test.ch)>', u'<Term contact:wermuth-roger:Wermuth Roger>']
 
 
 Email contacts and users vocabulary
