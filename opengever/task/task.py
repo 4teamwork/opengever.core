@@ -23,6 +23,16 @@ from zope.component import getUtility, getMultiAdapter
 from zope.interface import implements, Interface
 from zope.schema.vocabulary import getVocabularyRegistry
 from opengever.base.browser.helper import client_title_helper
+from opengever.tabbedview.browser.tabs import OpengeverTab
+from plone.directives.dexterity import DisplayForm
+from zope.app.intid.interfaces import IIntIds
+from ftw.table.basesource import BaseTableSource
+from opengever.tabbedview.browser.tabs import Documents
+from opengever.tabbedview.helper import readable_ogds_author, linked
+from ftw.table import helper
+from operator import attrgetter
+from ftw.tabbedview.browser.listing import ListingView
+from ftw.table.interfaces import ITableSource, ITableSourceConfig
 
 
 class ITask(form.Schema):
@@ -241,14 +251,10 @@ def responsible_client_default_value(data):
     return get_client_id()
 
 
-class ITaskView(Interface):
-    pass
-
-
-class View(dexterity.DisplayForm):
-    implements(ITaskView)
+class Overview(DisplayForm, OpengeverTab):
     grok.context(ITask)
-    grok.require('zope2.View')
+    grok.name('tabbedview_view-overview')
+    grok.template('overview')
 
     def getSubTasks(self):
         tasks = self.context.getFolderContents(
@@ -308,6 +314,166 @@ class View(dexterity.DisplayForm):
         return indexed_task_link(item, display_client=True)
 
 
+
+
+
+class IRelatedDocumentsTableSourceConfig(ITableSourceConfig):
+
+    # search_options = {'portal_type': 'opengever.document.document'}
+    # depth = 2
+    pass
+#
+#
+class RelatedDocumentTableSource(grok.MultiAdapter, BaseTableSource):
+
+    grok.implements(ITableSource)
+    grok.adapts(IRelatedDocumentsTableSourceConfig, Interface)
+
+    def build_query(self):
+        """Builds the query based on `get_base_query()` method of config.
+        Returns the query object.
+        """
+
+        # initalize config
+        self.config.update_config()
+
+        # get the base query from the config
+        query = self.config.get_base_query()
+        portal_catalog = getToolByName(self.config.context, 'portal_catalog')
+        brains = portal_catalog(path={'query':query, 'depth': 2}, portal_type=['opengever.document.document', 'ftw.mail.mail'])
+        objects = []
+        for brain in brains:
+            objects.append(brain.getObject())
+        for item in self.config.context.relatedItems():
+            objects.append(item)
+        objects = self.extend_query_with_ordering(objects)
+        if self.config.filter_text:
+            objects = self.extend_query_with_textfilter(
+                objects, self.config.filter_text)
+        return objects
+
+
+    def extend_query_with_ordering(self, query):
+        sort_index=self.request.get('sort',  '')
+        column = {}
+        objects = []
+        if sort_index != 'draggable' and sort_index != 'checkbox' and sort_index:
+            for item in self.config.columns:
+                if item['column'] == sort_index:
+                    column = item
+            if 'transform' in column.keys():
+                transform = column.get('transform', None)
+                if transform != None:
+                    for item in query:
+                        objects.append((transform(item, item[sort_index]), item))
+                    objects_sort = objects.sort()
+                    return objects_sort
+                else:
+                    objects_sort = sorted(query, key=attrgetter(sort_index))
+                    return objects_sort
+            else:
+                objects_sort = sorted(query, key=attrgetter(sort_index))
+                return objects_sort
+
+    def extend_query_with_texfilter(self, query, text):
+        return query
+
+    def extend_query_with_batching(self, query):
+        """Extends the given `query` with batching filters and returns the
+        new query. This method is only called when batching is enabled in
+        the source config with the `batching_enabled` attribute.
+        """
+
+        if not self.config.batching_enabled:
+            # batching is disabled
+            return query
+
+        if not self.config.lazy:
+            # do not batch since we are not lazy
+            return query
+
+        # we need to know how many records we would have without batching
+        self.full_length = len(query)
+
+        # now add batching
+        pagesize = self.config.batching_pagesize
+        current_page = self.config.batching_current_page
+        start = pagesize * (current_page - 1)
+
+        query = query[start:start+pagesize]
+        return query
+
+    def search_results(self, query):
+        return query
+
+
+class RelatedDocuments(grok.CodeView,OpengeverTab,ListingView):
+
+    grok.implements(IRelatedDocumentsTableSourceConfig)
+    grok.name('tabbedview_view-related_documents')
+    grok.context(ITask)
+
+    columns = (
+        {'column':'draggable',
+         'column_title':'',
+         'transform':helper.draggable},
+        {'column':'checkbox',
+         'column_title':'',
+         'transform':helper.path_checkbox},
+
+        {'column': 'Title',
+         'column_title': _(u'label_title', default=u'Title'),
+         'sort_index' : 'sortable_title',
+         'transform': linked},
+
+        {'column':'document_author',
+         'column_title':_('label_document_author', default="Document Author"),
+         'transform': readable_ogds_author},
+
+        {'column':'document_date',
+         'column_title':_('label_document_date', default="Document Date"),
+         'transform':helper.readable_date},
+
+        {'column':'receipt_date',
+         'column_title':_('label_receipt_date', default="Receipt Date"),
+         'transform':helper.readable_date},
+
+        {'column':'delivery_date',
+         'column_title':_('label_delivery_date', default="Delivery Date"),
+         'transform':helper.readable_date},
+
+        {'column':'checked_out',
+         'column_title':_('label_checked_out', default="Checked out by"),
+         'transform':readable_ogds_author},
+
+        {'column':'containing_subdossier',
+         'column_title':_('label_subdossier', default="Subdossier"),},
+        )
+
+    enabled_actions = [
+                       'send_as_email',
+                       'checkout',
+                       'checkin',
+                       'cancel',
+                       'create_task',
+                       'trashed',
+                       'send_documents',
+                       'copy_documents_to_remote_client',
+                       'move_items',
+                       'copy_items',
+                       ]
+
+    major_actions = ['send_documents',
+                     'checkout',
+                     'checkin',
+                     'create_task',
+                     ]
+    def get_base_query(self):
+        return '/'.join(self.context.getPhysicalPath())
+
+    __call__ = ListingView.__call__
+    render = __call__
+    update = ListingView.update
 
 # XXX
 # setting the default value of a RelationField does not work as expected
@@ -418,3 +584,7 @@ def set_dates(task, event):
         task.expectedStartOfWork = datetime.now()
     elif event.action == 'task-transition-in-progress-resolved':
         task.date_of_completion = datetime.now()
+
+def related_document(context):
+    intids = getUtility( IIntIds )
+    return intids.getId( context )
