@@ -32,8 +32,8 @@ Changelog
 * Changed permission for "Give Filing No" action to "Modify portal content"
   [lgraf]
 
-* - Added `filing_no` field (omitted) on IDossier
-  - Fixed indexer for filing_no
+* Added `filing_no` field (omitted) on IDossier
+  Fixed indexer for filing_no
   [lgraf]
 
 
