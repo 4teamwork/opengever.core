@@ -5,6 +5,11 @@ Changelog
 2.0a7
 -----
 
+* fixed bug in Eventhandler for IObjectWillBeMovedEvent
+  [ttschanz]
+
+* Added Journal entries for Cut and Move event
+  [ttschanz]
 
 2.0a6
 -----
