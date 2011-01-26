@@ -5,6 +5,9 @@ Changelog
 2.0b9
 -----
 
+* Task view: also show mails.
+  [jbaumann]
+
 * Fixed handling of empty deadline in view template
   [lgraf]
 

@@ -265,7 +265,8 @@ class View(dexterity.DisplayForm):
     def getSubDocuments(self):
         brains = self.context.getFolderContents(
             full_objects=False,
-            contentFilter={'portal_type': 'opengever.document.document'})
+            contentFilter={'portal_type': ['opengever.document.document',
+                                           'ftw.mail.mail']})
 
         docs = []
         for doc in brains:
