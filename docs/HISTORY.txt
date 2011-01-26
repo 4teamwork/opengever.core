@@ -10,6 +10,10 @@ Changelog
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/570
   [phabegger]
 
+* renamed contacts action because translations would not work with this name
+  [ttschanz]
+
+
 2.0b4
 -----
 
