@@ -6,6 +6,7 @@ maintainer = 'Florian Sprenger'
 
 setup(name='opengever.examplecontent',
       version=version,
+      maintainer = maintainer,
       description="Adds example content to an opengever site (Maintainer: %s)" % \
           maintainer,
       long_description=open("README.txt").read() + "\n" + \
