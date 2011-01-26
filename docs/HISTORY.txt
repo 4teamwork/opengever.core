@@ -12,6 +12,11 @@ Changelog
 * Made readable_ogds_author not fail on author == None
   [lgraf]
 
+* Added Copy_items action
+  [ttschanz]
+
+* Fixed workflow_state helper which translates the workflow states in plone domain. It wasn't working because the String which was generated with MessageFactory wasn't translated.
+  [ttschanz]
 
 2.0b9
 -----
