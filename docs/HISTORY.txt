@@ -71,7 +71,7 @@ Changelog
   Also copy responses when transporting forwarding to another client.
   [jbaumann]
 
-* Issue #788 Papierkorb-Funktionalität funktioniert nicht im Eingangskorb
+* Issue #788 Papierkorb-Funktionalitaet funktioniert nicht im Eingangskorb
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/788/
   [ttschanz]
 
