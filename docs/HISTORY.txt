@@ -5,6 +5,11 @@ Changelog
 2.0b8
 -----
 
+* Issue #456 Falscher Dossierzaehler beim Verschieben eines Dossiers unter eine andere Ordnungsposition
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/456
+  Updated translation
+  [phabegger]
+
 * Overview view: support for globalindex objects
   [jbaumann]
 
