@@ -5,6 +5,10 @@ Changelog
 2.0b3
 -----
 
+* Prevent ftw.manager from suggesting the dependency opengever.document by
+  adding the dependency in a extras_require.
+  [jbaumann]
+
 * Issue #785 Anpassen Erzeugen eines Mail-Objekts bei Mailempfang
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/785/
   Fixed receipt_date: Currently returns document_date.

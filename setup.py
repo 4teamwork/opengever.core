@@ -4,6 +4,13 @@ import os
 version = open('opengever/mail/version.txt').read().strip()
 maintainer = 'Julian Infanger'
 
+extras_require = {
+    # Adding opengever.document to install_requires will result in circular
+    # dependencies. This extras prevents ftw.manager from sugesting this
+    # dependency.
+    'document': 'opengever.document',
+}
+
 setup(name='opengever.mail',
       version=version,
       description="OpenGever Mail (Maintainer: %s)" % maintainer,
@@ -34,10 +41,11 @@ setup(name='opengever.mail',
         'plone.app.registry',
         # -*- Extra requirements: -*-
         ],
+      extras_require=extras_require,
       entry_points="""
       # -*- Entry points: -*-
 
       [z3c.autoinclude.plugin]
-      target = opengever
+      target = plone
       """,
       )
