@@ -5,6 +5,9 @@ Changelog
 2.0b2
 -----
 
+* Forwarding "assign to dossier": fixed redirect bug.
+  [jbaumann]
+
 * Forwardings: use the inbox as issuer default value.
   [jbaumann]
 

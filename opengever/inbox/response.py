@@ -89,6 +89,8 @@ class ForwardingResponseAddForm(AddForm):
         if errors:
             return
 
+        redirect_url = None
+
         wftool = getToolByName(self.context, 'portal_workflow')
         workflow = wftool.getWorkflowById(wftool.getChainFor(
                 self.context)[0])
@@ -101,6 +103,7 @@ class ForwardingResponseAddForm(AddForm):
         # ASSIGN TO DOSSIER
         if transition_id == 'forwarding-transition-assign-to-dossier':
             target_task = self.assign_to_dossier(data)
+            redirect_url = target_task.absolute_url() + '/edit'
 
         # CREATE RESPONSE
         response = super(ForwardingResponseAddForm, self).handleSubmit(
@@ -213,6 +216,9 @@ class ForwardingResponseAddForm(AddForm):
             IStatusMessage(self.request).addStatusMessage(
                 msg, type='info')
 
+            if redirect_url:
+                self.request.RESPONSE.redirect(redirect_url)
+
     @button.buttonAndHandler(_(u'cancel', default='Cancel'),
                              name='cancel', )
     def handleCancel(self, action):
@@ -268,17 +274,17 @@ class ForwardingResponseAddForm(AddForm):
             target_task_path, client.client_id)
         response.successor_oguid = successor_oguid
 
-        # redirect to target in new window
-        client = info.get_client_by_id(client.client_id)
-        target_url = os.path.join(client.public_url, target_task_path,
-                                  '@@edit')
-        redirector = IRedirector(self.request)
-        redirector.redirect(target_url, target='_blank')
-
         # add status message and redirect current window back to task
         IStatusMessage(self.request).addStatusMessage(
             _(u'info_created_successor_forwarding',
               u'The successor forwarding was created.'), type='info')
+
+        # redirect to target in new window
+        client = info.get_client_by_id(client.client_id)
+        target_url = os.path.join(client.public_url, target_task_path,
+                                  '@@edit')
+
+        return target_url
 
     def get_documents(self):
         """All documents which are either within the current task or
@@ -400,9 +406,6 @@ class ForwardingResponseAddForm(AddForm):
             clipboard = parent.manage_copyObjects([doc.getId()])
             task.manage_pasteObjects(clipboard)
 
-        # redirect to edit view later
-        redirector = IRedirector(self.request)
-        redirector.redirect(task.absolute_url() + '/edit')
         return task
 
 
