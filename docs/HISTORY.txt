@@ -5,6 +5,9 @@ Changelog
 2.0b8
 -----
 
+* re-enabling portal-type icons
+  [fsprenger]
+
 * Do not show "properties" action on yearfolder.
   [jbaumann]
 
