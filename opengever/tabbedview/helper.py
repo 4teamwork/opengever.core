@@ -6,6 +6,7 @@ from plone.memoize import ram
 from plone.i18n.normalizer.interfaces import IIDNormalizer
 from zope.component import getUtility
 import ftw.table
+from zope.app.component.hooks import getSite
 
 
 def task_id_checkbox_helper(item, value):
@@ -105,10 +106,13 @@ def boolean_helper(item, value):
                      _(u'label_no', default='No')
 
 def workflow_state(item, value):
-    """Helper which translates the workflow_state in plone domain."""
+    """Helper which translates the workflow_state in plone domain
+    and adds a CSS class to indicate the worflow state.
+    """
+    i18n_translate = getSite().translate
     translate = ftw.table.helper.translated_string('plone')
     translated_value = translate(item, value)
     normalize = getUtility(IIDNormalizer).normalize
     state = normalize(item.review_state)
-    return """<span class="wf-%s">%s</span>""" % (state, item.translate(translated_value))
+    return """<span class="wf-%s">%s</span>""" % (state, i18n_translate(translated_value))
 
