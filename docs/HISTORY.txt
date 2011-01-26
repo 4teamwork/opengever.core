@@ -5,6 +5,9 @@ Changelog
 2.0b5
 -----
 
+* removed mailsettings which are configured now in opengever.setup
+  [ttschanz]
+
 
 2.0b4
 -----
