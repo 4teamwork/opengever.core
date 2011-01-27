@@ -5,6 +5,11 @@ Changelog
 2.0b10
 ------
 
+* Issue #836 Folgeaufgabe: Fehler beim Erstellen innerhalb gleichen Mandants
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/836
+  Added handling of python datetime objects when copying responses.
+  [jbaumann]
+
 * Issue #844 Aufgabe: Aktion Hinzufuegen "Dokument aus eigenem Mandant" umbenennen
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/844
   Updated translation.
