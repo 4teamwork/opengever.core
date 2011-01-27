@@ -60,7 +60,7 @@
       <property name="available_expr"></property>
       <property name="permissions">
         <element value="opengever.document: Cancel"/>
-      </property
+      </property>
       <property name="visible">True</property>
     </object>
 
