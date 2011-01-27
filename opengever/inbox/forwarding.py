@@ -1,6 +1,8 @@
+from ftw.contentmenu.interfaces import IContentmenuPostFactoryMenu
 from Acquisition import aq_inner, aq_parent
 from Products.CMFCore.utils import getToolByName
 from five import grok
+from opengever.inbox.inbox import IInbox
 from opengever.ogds.base.utils import get_client_id
 from opengever.task import _ as task_mf
 from opengever.task.task import ITask, Task
@@ -9,7 +11,7 @@ from plone.directives.dexterity import AddForm
 from z3c.form.interfaces import HIDDEN_MODE
 from zope import schema
 from zope.app.container.interfaces import IObjectAddedEvent
-from zope.interface import implements
+from zope.interface import implements, Interface
 
 
 class IForwarding(ITask):
@@ -106,3 +108,32 @@ def move_documents_into_forwarding(context, event):
         context.manage_pasteObjects(clipboard)
     context.relatedItems = []
 
+
+class RemoveForwardingFactoryMenuEntry(grok.MultiAdapter):
+    """In Inboxes we should not be able to add forwardings using the factory
+    menu, but only by selecting a task and clicking the "Forward"
+    folder_contents button in the documents tab.
+    So we need to remove the "create forwarding" action from the factory
+    menu.
+    """
+
+    grok.adapts(IInbox, Interface)
+    grok.implements(IContentmenuPostFactoryMenu)
+
+    def __init__(self, context, request):
+        self.context = context
+        self.request = request
+
+    def __call__(self, factories):
+        new_factories = []
+
+        for factory in factories:
+            if isinstance(factory, dict) and \
+                    factory.get('id', None) == 'opengever.inbox.forwarding':
+                # remove the forwarding action
+                pass
+
+            else:
+                new_factories.append(factory)
+
+        return new_factories

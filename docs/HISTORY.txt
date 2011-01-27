@@ -5,6 +5,10 @@ Changelog
 2.0b3
 -----
 
+* Issue #842 Postmodul: "Hinzufuegen/Weiterleitung" ausblenden
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/842
+  [jbaumann]
+
 
 2.0b2
 -----
