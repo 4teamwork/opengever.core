@@ -16,7 +16,7 @@ msgstr ""
 "X-Poedit-Language: German\n"
 
 #: ./opengever/tabbedview/browser/tabs_templates/generic.pt:13
-msgid "All visible entries chosen <a href="#">x</a>"
+msgid "All visible entries chosen <a href=\"#\">x</a>"
 msgstr ""
 
 msgid "Choose:"
