@@ -18,33 +18,32 @@
 
         <div tal:replace="structure provider:plone.abovecontentbody" />
 
-        <table class="invisible">
-          <tal:groups tal:repeat="group python:view.groups">
-              <tal:rep tal:define="field python: group">
-                <tr tal:repeat="widget field/widgets/values">
-                    <tal:cond tal:condition="widget/value">
-                        <tal:widget tal:condition="python: widget.name not in ['form.widgets.email', 'form.widgets.email2', 'form.widgets.url']">
-                            <th tal:content="widget/label" ></th>
-                            <td tal:content="structure widget/render" />
-                        </tal:widget>
-                        <tal:widget tal:condition="python: widget.name in ['form.widgets.email', 'form.widgets.email2']">
-                            <th tal:content="widget/label" ></th>
-                            <td>
-                                <a tal:attributes="href string: mailto:${widget/value}" tal:content="structure widget/render" /> 
-                            </td>
-                        </tal:widget>
-                        <tal:widget tal:condition="python: widget.name == 'form.widgets.url'">
-                            <th tal:content="widget/label" ></th>
-                            <td>
-                                <a tal:attributes="href widget/value" tal:content="structure widget/render" />
-                            </td>
-                        </tal:widget>
-                    </tal:cond>
+        <table class="vertical invisible ">
+          <tal:groups repeat="fieldsets python:view.groups">
+            <tal:block repeat="widget fieldsets/widgets/values">
+              <tal:cond condition="widget/value">                
+                <tr>
+                  <tal:widget condition="python: widget.name not in ['form.widgets.email', 'form.widgets.email2', 'form.widgets.url']">
+                      <th tal:content="widget/label" ></th>
+                      <td tal:content="structure widget/render" />
+                  </tal:widget>
+                  <tal:widget condition="python: widget.name in ['form.widgets.email', 'form.widgets.email2']">
+                      <th tal:content="widget/label" ></th>
+                      <td>
+                          <a tal:attributes="href string: mailto:${widget/value}" tal:content="structure widget/render" /> 
+                      </td>
+                  </tal:widget>
+                  <tal:widget condition="python: widget.name == 'form.widgets.url'">
+                      <th tal:content="widget/label" ></th>
+                      <td>
+                          <a tal:attributes="href widget/value" tal:content="structure widget/render" />
+                      </td>
+                  </tal:widget>
                 </tr>
-              </tal:rep>
+              </tal:cond>
+            </tal:block>
           </tal:groups>
         </table>
-
         <div class="visualClear"><!----></div>
       </tal:main-macro>
     </metal:main>
