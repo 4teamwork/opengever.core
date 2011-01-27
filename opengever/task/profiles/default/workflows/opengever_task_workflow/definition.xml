@@ -10,7 +10,8 @@
  <permission>View</permission>
  <permission>opengever.document: Add document</permission>
  <permission>opengever.task: Add task</permission>
- <state state_id="task-state-cancelled" title="">
+ <state state_id="task-state-cancelled" title="task-state-cancelled">
+  <exit-transition transition_id="task-transition-cancelled-open"/>
   <permission-map name="Access contents information" acquired="False">
    <permission-role>Editor</permission-role>
    <permission-role>Manager</permission-role>
@@ -43,7 +44,7 @@
   <permission-map name="opengever.task: Add task" acquired="False">
   </permission-map>
  </state>
- <state state_id="task-state-in-progress" title="">
+ <state state_id="task-state-in-progress" title="task-state-in-progress">
   <exit-transition transition_id="task-transition-in-progress-resolved"/>
   <permission-map name="Access contents information" acquired="False">
    <permission-role>Editor</permission-role>
@@ -86,7 +87,7 @@
    <permission-role>Owner</permission-role>
   </permission-map>
  </state>
- <state state_id="task-state-new-successor" title="">
+ <state state_id="task-state-new-successor" title="task-state-new-successor">
   <permission-map name="Access contents information" acquired="False">
    <permission-role>Owner</permission-role>
   </permission-map>
@@ -116,11 +117,12 @@
   <permission-map name="opengever.task: Add task" acquired="False">
   </permission-map>
  </state>
- <state state_id="task-state-open" title="">
+ <state state_id="task-state-open" title="task-state-open">
   <exit-transition transition_id="task-transition-open-cancelled"/>
   <exit-transition transition_id="task-transition-open-in-progress"/>
   <exit-transition transition_id="task-transition-open-rejected"/>
   <exit-transition transition_id="task-transition-open-resolved"/>
+  <exit-transition transition_id="task-transition-open-tested-and-closed"/>
   <exit-transition transition_id="task-transition-reassign"/>
   <permission-map name="Access contents information" acquired="False">
    <permission-role>Editor</permission-role>
@@ -161,7 +163,7 @@
   <permission-map name="opengever.task: Add task" acquired="False">
   </permission-map>
  </state>
- <state state_id="task-state-rejected" title="">
+ <state state_id="task-state-rejected" title="task-state-rejected">
   <exit-transition transition_id="task-transition-rejected-open"/>
   <permission-map name="Access contents information" acquired="False">
    <permission-role>Editor</permission-role>
@@ -195,7 +197,7 @@
   <permission-map name="opengever.task: Add task" acquired="False">
   </permission-map>
  </state>
- <state state_id="task-state-resolved" title="">
+ <state state_id="task-state-resolved" title="task-state-resolved">
   <exit-transition transition_id="task-transition-resolved-open"/>
   <exit-transition transition_id="task-transition-resolved-tested-and-closed"/>
   <permission-map name="Access contents information" acquired="False">
@@ -263,15 +265,15 @@
   <permission-map name="opengever.task: Add task" acquired="False">
   </permission-map>
  </state>
+ <transition transition_id="task-transition-cancelled-open" title="task-transition-cancelled-open" new_state="task-state-open" trigger="USER" before_script="" after_script="">
+  <action url="%(content_url)s/addresponse?form.widgets.transition=task-transition-cancelled-open" category="workflow" icon="">task-transition-cancelled-open</action>
+  <guard>
+  </guard>
+ </transition>
  <transition transition_id="task-transition-in-progress-resolved" title="task-transition-in-progress-resolved" new_state="task-state-resolved" trigger="USER" before_script="" after_script="">
   <action url="%(content_url)s/addresponse?form.widgets.transition=task-transition-in-progress-resolved" category="workflow" icon="">task-transition-in-progress-resolved</action>
   <guard>
    <guard-expression>python: here.restrictedTraverse('resolve_check')()</guard-expression>
-  </guard>
- </transition>
- <transition transition_id="task-transition-new-open" title="task-transition-new-open" new_state="task-state-open" trigger="USER" before_script="" after_script="">
-  <action url="" category="workflow" icon="">task-transition-new-open</action>
-  <guard>
   </guard>
  </transition>
  <transition transition_id="task-transition-open-cancelled" title="task-transition-open-cancelled" new_state="task-state-cancelled" trigger="USER" before_script="" after_script="">
@@ -282,7 +284,7 @@
  <transition transition_id="task-transition-open-in-progress" title="task-transition-open-in-progress" new_state="task-state-in-progress" trigger="USER" before_script="" after_script="">
   <action url="%(content_url)s/addresponse?form.widgets.transition=task-transition-open-in-progress" category="workflow" icon="">task-transition-open-in-progress</action>
   <guard>
-   <guard-expression>python:here.task_type_category == 'bidirectional_by_reference'</guard-expression>
+   <guard-expression>here/task_workflow_checks/is_bidirectional</guard-expression>
   </guard>
  </transition>
  <transition transition_id="task-transition-open-rejected" title="task-transition-open-rejected" new_state="task-state-rejected" trigger="USER" before_script="" after_script="">
@@ -293,7 +295,12 @@
  <transition transition_id="task-transition-open-resolved" title="task-transition-open-resolved" new_state="task-state-resolved" trigger="USER" before_script="" after_script="">
   <action url="%(content_url)s/addresponse?form.widgets.transition=task-transition-open-resolved" category="workflow" icon="">task-transition-open-resolved</action>
   <guard>
-   <guard-expression>python: here.restrictedTraverse('resolve_check')()</guard-expression>
+   <guard-expression>python: here.restrictedTraverse('resolve_check')() and here.restrictedTraverse('task_workflow_checks').is_bidirectional()</guard-expression>
+  </guard>
+ </transition>
+ <transition transition_id="task-transition-open-tested-and-closed" title="task-transition-open-tested-and-closed" new_state="task-state-tested-and-closed" trigger="USER" before_script="" after_script="">
+  <action url="%(content_url)s/addresponse?form.widgets.transition=task-transition-open-tested-and-closed" category="workflow" icon="">task-transition-open-tested-and-closed</action>
+  <guard>
   </guard>
  </transition>
  <transition transition_id="task-transition-reassign" title="Reassign" new_state="" trigger="USER" before_script="" after_script="">
@@ -328,7 +335,7 @@
  <variable variable_id="action" for_catalog="False" for_status="True" update_always="True">
   <description>The last transition</description>
   <default>
-
+   
    <expression>transition/getId|nothing</expression>
   </default>
   <guard>
@@ -337,7 +344,7 @@
  <variable variable_id="actor" for_catalog="False" for_status="True" update_always="True">
   <description>The ID of the user who performed the last transition</description>
   <default>
-
+   
    <expression>user/getId</expression>
   </default>
   <guard>
@@ -346,7 +353,7 @@
  <variable variable_id="comments" for_catalog="False" for_status="True" update_always="True">
   <description>Comments about the last transition</description>
   <default>
-
+   
    <expression>python:state_change.kwargs.get('comment', '')</expression>
   </default>
   <guard>
@@ -355,7 +362,7 @@
  <variable variable_id="review_history" for_catalog="False" for_status="False" update_always="False">
   <description>Provides access to workflow history</description>
   <default>
-
+   
    <expression>state_change/getHistory</expression>
   </default>
   <guard>
@@ -365,7 +372,7 @@
  <variable variable_id="time" for_catalog="False" for_status="True" update_always="True">
   <description>Time of the last transition</description>
   <default>
-
+   
    <expression>state_change/getDateTime</expression>
   </default>
   <guard>
