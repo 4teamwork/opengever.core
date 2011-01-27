@@ -73,10 +73,13 @@ class LocalRolesSetter(object):
         """Set local roles on the next parent which has a different
         content type.
         """
-        context = self.task
-        while context.Type() == self.task.Type():
-            context = aq_parent(aq_inner(context))
-        self._add_local_roles(context, self.responsible, ('Contributor', ))
+        # according to Issue #832 we don't set a role in the parent
+        # any more.
+        return
+        # context = self.task
+        # while context.Type() == self.task.Type():
+        #     context = aq_parent(aq_inner(context))
+        # self._add_local_roles(context, self.responsible, ('Contributor', ))
 
     def set_roles_on_related_items(self):
         """Set local roles on related items (usually documents)
