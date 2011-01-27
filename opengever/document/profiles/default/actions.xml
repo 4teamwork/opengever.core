@@ -23,7 +23,7 @@
       <property name="icon_expr"></property>
       <property name="available_expr"></property>
       <property name="permissions">
-          <element value="iterate : Check out content"/>
+          <element value="opengever.document: Checkout"/>
       </property>
       <property name="visible">True</property>
     </object>
@@ -35,7 +35,7 @@
       <property name="icon_expr"></property>
       <property name="available_expr"></property>
       <property name="permissions">
-        <element value="iterate : Check in content"/>
+        <element value="opengever.document: Checkin"/>
       </property>
       <property name="visible">True</property>
     </object>
@@ -59,8 +59,8 @@
       <property name="icon_expr"></property>
       <property name="available_expr"></property>
       <property name="permissions">
-        <element value="View"/>
-      </property>
+        <element value="opengever.document: Cancel"/>
+      </property
       <property name="visible">True</property>
     </object>
 
