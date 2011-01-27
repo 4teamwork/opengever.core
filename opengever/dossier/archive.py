@@ -2,6 +2,7 @@ from Acquisition import aq_inner, aq_parent
 from collective.elephantvocabulary import wrap_vocabulary
 from datetime import datetime, time
 from five import grok
+import locale
 from ftw.table.catalog_source import default_custom_sort
 from ftw.datepicker.widget import DatePickerFieldWidget
 from opengever.base.interfaces import IBaseClientID
@@ -132,21 +133,6 @@ def filing_year_default_value(data):
         documents = default_custom_sort(documents, 'document_date', True)
         return str(documents[0].getObject().document_date.year)
 
-@directives_form.default_value(field=IArchiveFormSchema['dossier_enddate'])
-def dossier_date_default_value(data):
-    dossier_end = IDossier(data.context).end
-    documents = data.context.portal_catalog(
-        path=dict(
-            query='/'.join(data.context.getPhysicalPath()),
-        ),
-        portal_type= ['opengever.document.document'],
-    )
-    if len(documents) != 0:
-        documents = default_custom_sort(documents, 'document_date', True)
-        if dossier_end == None or dossier_end < documents[0].document_date:
-            return documents[0].document_date
-    return dossier_end
-
 
 class ArchiveForm(directives_form.Form):
     grok.context(IDossierMarker)
@@ -243,11 +229,30 @@ class ArchiveForm(directives_form.Form):
                 counter = 1
                 wft = self.context.portal_workflow
                 for dossier in subdossiers:
-
                     dossier = dossier.getObject()
-                    dossier.filing_no = filing_no + "." + str(counter)
-                    counter += 1
-                    wft.doActionFor(dossier, 'dossier-transition-resolve')
+                    if dossier.computeEndDate():
+                        # Resolve subdossier after setting end date and filing_no
+                        if not IDossier(dossier).end:
+                            IDossier(dossier).end = dossier.computeEndDate()
+                            dossier.filing_no = filing_no + "." + str(counter)
+                        else:
+                            # Validate the existing end date
+                            if IDossier(dossier).end < dossier.computeEndDate():
+                                status = IStatusMessage(self.request)
+                                status.addStatusMessage(_("The subdossier '${title}' has an invalid end date." , 
+                                                          mapping=dict(title=dossier.Title())
+                                                          ), type="error")
+                                return self.request.RESPONSE.redirect(self.context.absolute_url())
+
+                        counter += 1
+                        wft.doActionFor(dossier, 'dossier-transition-resolve')
+                    else:
+                        # The subdossier's end date can't be determined automatically
+                        status = IStatusMessage(self.request)
+                        status.addStatusMessage(_("The subdossier '${title}' needs to be resolved manually.",
+                                                  mapping=dict(title=dossier.Title())
+                                                  ), type="error")
+                        return self.request.RESPONSE.redirect(self.context.absolute_url())
 
         if action == 0 or action == 1:
             data, errors = self.extractData()
@@ -268,6 +273,15 @@ class ArchiveForm(directives_form.Form):
     @button.buttonAndHandler(_(u'button_cancel', default=u'Cancel'))
     def cancel(self, action):
         return self.request.RESPONSE.redirect(self.context.absolute_url())
+
+    def updateWidgets(self):
+        super(ArchiveForm, self).updateWidgets()
+        end_date = self.context.computeEndDate()
+        if end_date:
+            locale.setlocale(locale.LC_ALL, ('de_DE', ''))
+            formatted_date = end_date.strftime("%d. %B %Y")
+            self.widgets['dossier_enddate'].value = formatted_date
+
 
 validator.WidgetValidatorDiscriminators(
     EnddateValidator,

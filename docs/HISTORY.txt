@@ -5,6 +5,11 @@ Changelog
 2.0b9
 -----
 
+* Issue #390 Datum-Plausibilitaetspruefung
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/390/
+  Added plausibility checks for end dates when resolving a dossier
+  [lgraf]
+
 * Updated dossier workflow: Setting checkin/checkout perms on dossier (used to
   be document)
   [phabegger]
