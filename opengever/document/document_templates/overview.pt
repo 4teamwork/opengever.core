@@ -5,7 +5,7 @@
       lang="de"
       i18n:domain="opengever.document">
 <body>
-	<table class="listingPrevious">
+	<table class="vertical invisible">
 		<tr tal:condition="context/title">
 			<th i18n:translate="label_document">document</th>
 			<td tal:content="context/title"/>
