@@ -61,7 +61,7 @@
   </permission-map>
   <permission-map name="Content rules: Manage rules" acquired="False">
   </permission-map>
-  <permission-map name="Copy or Move" acquired="False">
+  <permission-map name="Copy or Move" acquired="True">
   </permission-map>
   <permission-map name="Delete objects" acquired="True">
   </permission-map>

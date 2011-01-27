@@ -5,6 +5,9 @@ Changelog
 2.0b10
 ------
 
+* Updated workflow: Acquire Copy or Move perm from parent.
+  [phabegger]
+
 * Updated workflow: Acquire checkout relevant perms from parent.
   [phabegger]
 
