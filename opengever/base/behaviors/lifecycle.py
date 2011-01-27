@@ -7,7 +7,7 @@ from z3c.form import validator
 from five import grok
 
 from plone.autoform.interfaces import IFormFieldProvider
-from plone.directives import form
+from plone.directives import form, dexterity
 from Products.CMFCore.interfaces import ISiteRoot
 
 from opengever.base import _
@@ -39,6 +39,7 @@ class ILifeCycle(form.Schema):
             ],
         )
 
+    #dexterity.write_permission(retention_period='cmf.ManagePortal')
     retention_period = schema.Choice(
         title = _(u'label_retention_period', u'Retention period (years)'),
         description = _(u'help_retention_period', default=u''),
@@ -46,12 +47,14 @@ class ILifeCycle(form.Schema):
         required = True,
         )
 
+    #dexterity.write_permission(retention_period_annotation='cmf.ManagePortal')
     retention_period_annotation = schema.Text(
         title=_(u'label_retention_period_annotation', default=u'retentionPeriodAnnotation'),
         description = _(u'help_retention_period_annotation', default=u''),
         required=False
         )
 
+    #dexterity.write_permission(archival_value='cmf.ManagePortal')
     archival_value = schema.Choice(
         title = _(u'label_archival_value', default=u'Archival value'),
         description = _(u'help_archival_value', default=u'Archival value code'),
@@ -59,23 +62,29 @@ class ILifeCycle(form.Schema):
         required = True,
         )
 
+    #dexterity.write_permission(archival_value_annotation='cmf.ManagePortal')
     archival_value_annotation = schema.Text(
         title=_(u'label_archival_value_annotation', default=u'archivalValueAnnotation'),
         description = _(u'help_archival_value_annotation', default=u''),
         required=False
         )
 
+    #dexterity.write_permission(custody_period='cmf.ManagePortal')
     custody_period = schema.Choice(
         title = _(u'label_custody_period', default=u'Custody period (years)'),
         description = _(u'help_custody_period', default=u''),
         source = u'lifecycle_custody_period_vocabulary',
         required = True,
         )
+
+    #dexterity.write_permission(date_of_cassation='cmf.ManagePortal')
     date_of_cassation = schema.Date(
         title = _(u'label_dateofcassation', default=u'Date of cassation'),
         description = _(u'help_dateofcassation', default=u''),
         required = False,
         )
+
+    #dexterity.write_permission(date_of_submission='cmf.ManagePortal')
     date_of_submission = schema.Date(
         title = _(u'label_dateofsubmission', default=u'Date of submission'),
         description = _(u'help_dateofsubmission', default=u''),
