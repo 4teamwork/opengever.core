@@ -13,7 +13,7 @@
                       tal:attributes="action string:@@task_response_edit"
                       tal:condition="viewlet/can_edit_response">
                     <input type="hidden" name="response_id" tal:attributes="value id" />
-                    <input class="standalone"
+                    <input class="context"
                            type="submit"
                            i18n:attributes="value"
                            value="Edit"
