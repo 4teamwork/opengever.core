@@ -5,6 +5,11 @@ Changelog
 2.0b9
 -----
 
+* Issue #841 Dossier , Tab Ablage, Wertebereich "Behaeltnis-Art"
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/841
+  Added new container "Dossier".
+  [phabegger]
+
 
 2.0b8
 -----
