@@ -97,10 +97,10 @@ class Resolve(grok.CodeView):
         docs = self.context.portal_catalog(
             portal_type="opengever.document.document",
             path=dict(depth=2,
-                      query='/'.join(self.context.getPhysicalPath())),
-            review_state='document-state-checked_out')
+                      query='/'.join(self.context.getPhysicalPath())))
 
-        if len(docs) == 0:
-            return True
-        else:
-            return False
+        for doc in docs:
+            if doc.checked_out:
+                return False
+
+        return True

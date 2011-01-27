@@ -5,6 +5,11 @@ Changelog
 2.0b9
 -----
 
+* Issue #843 Dossier abschliessen: Noch falsche Ueberpruefung, ob ausgecheckte Dokumente existieren
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/843/
+  Fixed dossier-resolve-check for checked out documents.
+  [jbaumann]
+
 * Adjusted check if dossier can be closed: state "resolved" is not part of closed
   states anymore.
   [phabegger]
