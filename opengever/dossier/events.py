@@ -15,7 +15,7 @@ class ParticipationCreated(ObjectEvent):
 
 
 class ParticipationRemoved(ObjectEvent):
-    """The `ParticipationCreated` is fired before a participation is removed.
+    """The `ParticipationRemoved` is fired before a participation is removed.
     """
 
     implements(interfaces.IParticipationRemoved)
