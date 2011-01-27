@@ -30,10 +30,18 @@ class RepositoryPathSourceBinder(ObjPathSourceBinder):
 
         self.navigation_tree_query['path']['query'] = root_path
 
-        return self.path_source(
+        source = self.path_source(
             context,
             selectable_filter=self.selectable_filter,
             navigation_tree_query=self.navigation_tree_query)
+
+        # The path source bases on the navtree strategy, which adds a
+        # portal_type query option, which disables all types not-to-list
+        # in the navigation. This is not a navigation - so remove this
+        # limitation.
+        del source.navigation_tree_query['portal_type']
+
+        return source
 
 
 class DossierPathSourceBinder(ObjPathSourceBinder):
@@ -53,7 +61,15 @@ class DossierPathSourceBinder(ObjPathSourceBinder):
             self.navigation_tree_query = {}
         self.navigation_tree_query['path'] = {'query': dossier_path}
 
-        return self.path_source(
+        source = self.path_source(
             context,
             selectable_filter=self.selectable_filter,
             navigation_tree_query=self.navigation_tree_query)
+
+        # The path source bases on the navtree strategy, which adds a
+        # portal_type query option, which disables all types not-to-list
+        # in the navigation. This is not a navigation - so remove this
+        # limitation.
+        del source.navigation_tree_query['portal_type']
+
+        return source

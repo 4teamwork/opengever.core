@@ -5,6 +5,14 @@ Changelog
 2.0b9
 -----
 
+* Issue #830 Verweis auf Dokument in Aufgabe nicht moeglich
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/830
+  Path binders usually use the navtree strategy. Since we hide in the navigation
+  certain types such as documents, tasks and forwardings, we need to fix this
+  behavior for making them selectable again in related items widgets (using
+  path source binders).
+  [jbaumann]
+
 
 2.0b8
 -----
