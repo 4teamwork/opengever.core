@@ -18,7 +18,7 @@
 
         <div tal:replace="structure provider:plone.abovecontentbody" />
 
-        <table class="listing">
+        <table class="invisible">
           <tal:groups tal:repeat="group python:view.groups">
               <tal:rep tal:define="field python: group">
                 <tr tal:repeat="widget field/widgets/values">
