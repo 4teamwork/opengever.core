@@ -50,11 +50,16 @@ class Forwarding(Task):
     def task_type_category(self):
         return None
 
-    @property
-    def task_type(self):
+    def get_static_task_type(self):
         # Provide a marker string, which will be translated in the
         # tabbedview helper method.
         return 'forwarding_task_type'
+
+    def set_static_task_type(self, value):
+        # do not file when trying to set the task type - but ignore
+        return
+
+    task_type = property(get_static_task_type, set_static_task_type)
 
 
 class AddForm(AddForm):

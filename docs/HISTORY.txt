@@ -5,6 +5,12 @@ Changelog
 2.0b3
 -----
 
+* Issue #850 Fehler beim Akzeptieren einer Weiterleitung (uebergreifend)
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/850
+  Fixed property bug: the task_type is a field must therefore be writeable. For
+  instance in successor task/forwarding system this is required.
+  [jbaumann]
+
 * Issue #842 Postmodul: "Hinzufuegen/Weiterleitung" ausblenden
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/842
   [jbaumann]
