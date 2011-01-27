@@ -5,6 +5,10 @@ Changelog
 2.0b9
 -----
 
+* Updated dossier workflow: Setting checkin/checkout perms on dossier (used to
+  be document)
+  [phabegger]
+
 * Issue #843 Dossier abschliessen: Noch falsche Ueberpruefung, ob ausgecheckte Dokumente existieren
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/843/
   Fixed dossier-resolve-check for checked out documents.

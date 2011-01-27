@@ -14,6 +14,10 @@
  <permission>opengever.task: Add task</permission>
  <permission>opengever.trash: Trash content</permission>
  <permission>opengever.trash: Untrash content</permission>
+ <permission>opengever.document: Cancel</permission>
+ <permission>opengever.document: Checkin</permission>
+ <permission>opengever.document: Checkout</permission>
+ <permission>Copy or Move</permission>
  <state state_id="dossier-state-active" title="dossier-state-active">
   <exit-transition transition_id="dossier-transition-deactivate"/>
   <exit-transition transition_id="dossier-transition-resolve"/>
@@ -29,6 +33,11 @@
    <permission-role>Editor</permission-role>
    <permission-role>Manager</permission-role>
    <permission-role>Owner</permission-role>
+  </permission-map>
+  <permission-map name="Copy or Move" acquired="False">
+   <permission-role>Editor</permission-role>
+   <permission-role>Owner</permission-role>
+   <permission-role>Reader</permission-role>
   </permission-map>
   <permission-map name="List folder contents" acquired="False">
    <permission-role>Contributor</permission-role>
@@ -67,6 +76,24 @@
   <permission-map name="ftw.mail: Add Mail" acquired="False">
   </permission-map>
   <permission-map name="opengever.document: Add document" acquired="False">
+   <permission-role>Contributor</permission-role>
+   <permission-role>Editor</permission-role>
+   <permission-role>Manager</permission-role>
+   <permission-role>Owner</permission-role>
+  </permission-map>
+  <permission-map name="opengever.document: Cancel" acquired="False">
+   <permission-role>Contributor</permission-role>
+   <permission-role>Editor</permission-role>
+   <permission-role>Manager</permission-role>
+   <permission-role>Owner</permission-role>
+  </permission-map>
+  <permission-map name="opengever.document: Checkin" acquired="False">
+   <permission-role>Contributor</permission-role>
+   <permission-role>Editor</permission-role>
+   <permission-role>Manager</permission-role>
+   <permission-role>Owner</permission-role>
+  </permission-map>
+  <permission-map name="opengever.document: Checkout" acquired="False">
    <permission-role>Contributor</permission-role>
    <permission-role>Editor</permission-role>
    <permission-role>Manager</permission-role>
@@ -105,6 +132,8 @@
   </permission-map>
   <permission-map name="Add portal content" acquired="False">
   </permission-map>
+  <permission-map name="Copy or Move" acquired="False">
+  </permission-map>
   <permission-map name="List folder contents" acquired="False">
    <permission-role>Editor</permission-role>
    <permission-role>Manager</permission-role>
@@ -129,6 +158,12 @@
   <permission-map name="ftw.mail: Add Mail" acquired="False">
   </permission-map>
   <permission-map name="opengever.document: Add document" acquired="False">
+  </permission-map>
+  <permission-map name="opengever.document: Cancel" acquired="False">
+  </permission-map>
+  <permission-map name="opengever.document: Checkin" acquired="False">
+  </permission-map>
+  <permission-map name="opengever.document: Checkout" acquired="False">
   </permission-map>
   <permission-map name="opengever.dossier: Add businesscasedossier" acquired="False">
   </permission-map>
@@ -149,6 +184,8 @@
   </permission-map>
   <permission-map name="Add portal content" acquired="False">
   </permission-map>
+  <permission-map name="Copy or Move" acquired="False">
+  </permission-map>
   <permission-map name="List folder contents" acquired="False">
    <permission-role>Editor</permission-role>
    <permission-role>Manager</permission-role>
@@ -176,6 +213,12 @@
   <permission-map name="ftw.mail: Add Mail" acquired="False">
   </permission-map>
   <permission-map name="opengever.document: Add document" acquired="False">
+  </permission-map>
+  <permission-map name="opengever.document: Cancel" acquired="False">
+  </permission-map>
+  <permission-map name="opengever.document: Checkin" acquired="False">
+  </permission-map>
+  <permission-map name="opengever.document: Checkout" acquired="False">
   </permission-map>
   <permission-map name="opengever.dossier: Add businesscasedossier" acquired="False">
   </permission-map>
@@ -198,6 +241,8 @@
   </permission-map>
   <permission-map name="Add portal content" acquired="False">
   </permission-map>
+  <permission-map name="Copy or Move" acquired="False">
+  </permission-map>
   <permission-map name="List folder contents" acquired="False">
    <permission-role>Administrator</permission-role>
    <permission-role>Contributor</permission-role>
@@ -233,6 +278,12 @@
   <permission-map name="ftw.mail: Add Mail" acquired="False">
   </permission-map>
   <permission-map name="opengever.document: Add document" acquired="False">
+  </permission-map>
+  <permission-map name="opengever.document: Cancel" acquired="False">
+  </permission-map>
+  <permission-map name="opengever.document: Checkin" acquired="False">
+  </permission-map>
+  <permission-map name="opengever.document: Checkout" acquired="False">
   </permission-map>
   <permission-map name="opengever.dossier: Add businesscasedossier" acquired="False">
   </permission-map>
