@@ -5,6 +5,9 @@ Changelog
 2.0b6
 -----
 
+* Updated several translations (German).
+  [phabegger]
+
 
 2.0b5
 -----
