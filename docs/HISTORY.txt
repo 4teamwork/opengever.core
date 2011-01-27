@@ -5,6 +5,11 @@ Changelog
 2.0b10
 ------
 
+* Issue #844 Aufgabe: Aktion Hinzufuegen "Dokument aus eigenem Mandant" umbenennen
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/844
+  Updated translation.
+  [phabegger]
+
 
 2.0b9
 -----
