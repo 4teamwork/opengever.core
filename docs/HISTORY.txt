@@ -5,6 +5,10 @@ Changelog
 2.0b9
 -----
 
+* Adjusted check if dossier can be closed: state "resolved" is not part of closed
+  states anymore.
+  [phabegger]
+
 * Issue #841 Dossier , Tab Ablage, Wertebereich "Behaeltnis-Art"
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/841
   Added new container "Dossier".
@@ -14,7 +18,8 @@ Changelog
 2.0b8
 -----
 
-* Issue #456 Falscher Dossierzaehler beim Verschieben eines Dossiers unter eine andere Ordnungsposition
+* Issue #456 Falscher Dossierzaehler beim Verschieben eines Dossiers unter eine andere
+  Ordnungsposition
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/456
   Updated translation
   [phabegger]

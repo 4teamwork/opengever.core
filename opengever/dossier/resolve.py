@@ -37,10 +37,9 @@ class resolve(grok.CodeView):
             self.request.RESPONSE.redirect(self.context.absolute_url() + '/transition-archive')
 
     def is_all_supplied(self):
-        """Check if all task and all documents are supplied in a subdossier
-        
-        if there have subdossiers 
-        
+        """Check if all tasks and all documents are supplied in a subdossier
+           provided there are any subdossiers
+
         """
         subddosiers = self.context.getFolderContents(
             {'object_provides':
@@ -49,7 +48,7 @@ class resolve(grok.CodeView):
 
         if len(subddosiers) > 0:
             results = self.context.getFolderContents({
-                'portal_type':['opengever.task.task', 
+                'portal_type':['opengever.task.task',
                     'opengever.document.document']
                 }
             )
@@ -60,10 +59,9 @@ class resolve(grok.CodeView):
         return True
 
     def is_all_closed(self):
-        """ Check if all the task are closed 
-        
-        closed: - resolved
-                - cancelled
+        """ Check if all tasks are in a closed state.
+
+        closed: - cancelled
                 - rejected
                 - tested and closed
 
@@ -73,8 +71,8 @@ class resolve(grok.CodeView):
             portal_type="opengever.task.task",
             path=dict(query='/'.join(self.context.getPhysicalPath()),
             ),
-            review_state = ('task-state-resolved',
-                'task-state-cancelled', 'task-state-rejected', 'task-state-tested-and-closed'),
+            review_state = ('task-state-cancelled',
+                'task-state-rejected', 'task-state-tested-and-closed'),
         )
 
         tasks = self.context.portal_catalog(
@@ -83,7 +81,7 @@ class resolve(grok.CodeView):
                 query='/'.join(self.context.getPhysicalPath()),
             ),
         )
-        
+
         if len(tasks_closed) < len(tasks):
             return False
         else:
@@ -91,7 +89,7 @@ class resolve(grok.CodeView):
 
     def is_all_checked_in(self):
         """ check if all documents in this path are checked in """
-        
+
         # all document are checked in
         docs = self.context.portal_catalog(
             portal_type="opengever.document.document",
@@ -100,7 +98,7 @@ class resolve(grok.CodeView):
             ),
             review_state = 'document-state-checked_out',
         )
-        
+
         if len(docs) == 0:
             return True
         else:
