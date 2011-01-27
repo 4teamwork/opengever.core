@@ -5,6 +5,9 @@ Changelog
 2.0b10
 ------
 
+* Updated workflow: Acquire checkout relevant perms from parent.
+  [phabegger]
+
 
 2.0b9
 -----

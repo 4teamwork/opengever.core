@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<dc-workflow workflow_id="opengever_document_workflow" title="Simple Check-out Workflow for OpenGever Documents" description="" state_variable="review_state" initial_state="document-state-draft" manager_bypass="False">
+<dc-workflow workflow_id="opengever_document_workflow" title="Simple one-state-workflow for OpenGever Documents" description="" state_variable="review_state" initial_state="document-state-draft" manager_bypass="False">
  <permission>Access contents information</permission>
  <permission>CMFEditions: Access previous versions</permission>
  <permission>CMFEditions: Apply version control</permission>
@@ -23,9 +23,7 @@
  <permission>opengever.document: Checkin</permission>
  <permission>opengever.document: Checkout</permission>
  <state state_id="document-state-draft" title="document-state-draft">
-  <description>Can only be seen and edited by the owner.</description>
-  <exit-transition transition_id="document-transition-check_out"/>
-  <exit-transition transition_id="document-transition-use_as_working_copy"/>
+  <description>one single state</description>
   <permission-map name="Access contents information" acquired="False">
    <permission-role>Editor</permission-role>
    <permission-role>Manager</permission-role>
@@ -64,13 +62,8 @@
   <permission-map name="Content rules: Manage rules" acquired="False">
   </permission-map>
   <permission-map name="Copy or Move" acquired="False">
-   <permission-role>Editor</permission-role>
-   <permission-role>Owner</permission-role>
-   <permission-role>Reader</permission-role>
   </permission-map>
-  <permission-map name="Delete objects" acquired="False">
-   <permission-role>Editor</permission-role>
-   <permission-role>Owner</permission-role>
+  <permission-map name="Delete objects" acquired="True">
   </permission-map>
   <permission-map name="List folder contents" acquired="False">
    <permission-role>Editor</permission-role>
@@ -78,9 +71,7 @@
    <permission-role>Owner</permission-role>
    <permission-role>Reader</permission-role>
   </permission-map>
-  <permission-map name="Modify portal content" acquired="False">
-   <permission-role>Editor</permission-role>
-   <permission-role>Manager</permission-role>
+  <permission-map name="Modify portal content" acquired="True">
   </permission-map>
   <permission-map name="Request review" acquired="True">
   </permission-map>
@@ -107,17 +98,11 @@
    <permission-role>Manager</permission-role>
    <permission-role>Owner</permission-role>
   </permission-map>
-  <permission-map name="opengever.document: Cancel" acquired="False">
-   <permission-role>Editor</permission-role>
-   <permission-role>Manager</permission-role>
+  <permission-map name="opengever.document: Cancel" acquired="True">
   </permission-map>
-  <permission-map name="opengever.document: Checkin" acquired="False">
-   <permission-role>Editor</permission-role>
-   <permission-role>Manager</permission-role>
+  <permission-map name="opengever.document: Checkin" acquired="True">
   </permission-map>
-  <permission-map name="opengever.document: Checkout" acquired="False">
-   <permission-role>Editor</permission-role>
-   <permission-role>Manager</permission-role>
+  <permission-map name="opengever.document: Checkout" acquired="True">
   </permission-map>
  </state>
  <worklist worklist_id="reviewer_queue" title="">
