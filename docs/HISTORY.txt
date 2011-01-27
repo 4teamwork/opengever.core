@@ -5,6 +5,11 @@ Changelog
 2.0a5
 -----
 
+* Issue #792 TabbedView listing fuer Dossiers dauert viel zu lange
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/792
+  Added overview-tab on repository root.
+  [jbaumann]
+
 * removed repository folder overview: seems not to be used anymore
   [jbaumann]
 

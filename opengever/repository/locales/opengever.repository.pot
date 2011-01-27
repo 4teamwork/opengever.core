@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2010-10-21 14:42+0000\n"
+"POT-Creation-Date: 2011-01-27 18:21+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -67,11 +67,17 @@ msgid "help_referenced_activity"
 msgstr ""
 
 #: ./opengever/repository/repositoryfolder.py:57
+#: ./opengever/repository/repositoryroot.py:11
 msgid "help_valid_from"
 msgstr ""
 
 #: ./opengever/repository/repositoryfolder.py:63
+#: ./opengever/repository/repositoryroot.py:17
 msgid "help_valid_until"
+msgstr ""
+
+#: ./opengever/repository/repositoryroot.py:23
+msgid "help_version"
 msgstr ""
 
 #. Default: "Addable dossier types"
@@ -106,16 +112,38 @@ msgstr ""
 
 #. Default: "Valid from"
 #: ./opengever/repository/repositoryfolder.py:56
+#: ./opengever/repository/repositoryroot.py:10
 msgid "label_valid_from"
 msgstr ""
 
 #. Default: "Valid until"
 #: ./opengever/repository/repositoryfolder.py:62
+#: ./opengever/repository/repositoryroot.py:16
 msgid "label_valid_until"
+msgstr ""
+
+#. Default: "Version"
+#: ./opengever/repository/repositoryroot.py:22
+msgid "label_version"
 msgstr ""
 
 #. Default: "State:"
 #: ./opengever/repository/repositoryfolder_templates/byline.pt:5
 msgid "label_workflow_state"
+msgstr ""
+
+#. Default: "Documents:"
+#: ./opengever/repository/browser/overview_templates/repositoryrootoverview.pt:16
+msgid "th_documents"
+msgstr ""
+
+#. Default: "Dossiers:"
+#: ./opengever/repository/browser/overview_templates/repositoryrootoverview.pt:6
+msgid "th_dossiers"
+msgstr ""
+
+#. Default: "Tasks:"
+#: ./opengever/repository/browser/overview_templates/repositoryrootoverview.pt:11
+msgid "th_task"
 msgstr ""
 

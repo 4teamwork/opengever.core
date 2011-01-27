@@ -3,8 +3,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2010-10-21 14:42+0000\n"
-"PO-Revision-Date: 2010-10-21 16:46+0200\n"
+"POT-Creation-Date: 2011-01-27 18:21+0000\n"
+"PO-Revision-Date: 2011-01-27 19:24+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "MIME-Version: 1.0\n"
@@ -66,11 +66,17 @@ msgid "help_referenced_activity"
 msgstr ""
 
 #: ./opengever/repository/repositoryfolder.py:57
+#: ./opengever/repository/repositoryroot.py:11
 msgid "help_valid_from"
 msgstr ""
 
 #: ./opengever/repository/repositoryfolder.py:63
+#: ./opengever/repository/repositoryroot.py:17
 msgid "help_valid_until"
+msgstr ""
+
+#: ./opengever/repository/repositoryroot.py:23
+msgid "help_version"
 msgstr ""
 
 #. Default: "Addable dossier types"
@@ -105,17 +111,39 @@ msgstr "Leistung"
 
 #. Default: "Valid from"
 #: ./opengever/repository/repositoryfolder.py:56
+#: ./opengever/repository/repositoryroot.py:10
 msgid "label_valid_from"
 msgstr "Gültig ab"
 
 #. Default: "Valid until"
 #: ./opengever/repository/repositoryfolder.py:62
+#: ./opengever/repository/repositoryroot.py:16
 msgid "label_valid_until"
 msgstr "Gültig bis"
+
+#. Default: "Version"
+#: ./opengever/repository/repositoryroot.py:22
+msgid "label_version"
+msgstr "Version"
 
 #. Default: "State:"
 #: ./opengever/repository/repositoryfolder_templates/byline.pt:5
 msgid "label_workflow_state"
 msgstr "Status:"
+
+#. Default: "Documents:"
+#: ./opengever/repository/browser/overview_templates/repositoryrootoverview.pt:16
+msgid "th_documents"
+msgstr "Dokumente"
+
+#. Default: "Dossiers:"
+#: ./opengever/repository/browser/overview_templates/repositoryrootoverview.pt:6
+msgid "th_dossiers"
+msgstr "Dossiers"
+
+#. Default: "Tasks:"
+#: ./opengever/repository/browser/overview_templates/repositoryrootoverview.pt:11
+msgid "th_task"
+msgstr "Aufgaben"
 
 

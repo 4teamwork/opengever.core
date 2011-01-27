@@ -64,6 +64,15 @@
     <!-- Tabbedview tabs-->
 
     <action visible="True"
+            action_id="overview"
+            title="Overview"
+            category="tabbedview-tabs"
+            condition_expr=""
+            url_expr="string:#">
+        <permission value="View"/>
+    </action>
+
+    <action visible="True"
             action_id="dossiers"
             title="Dossiers"
             category="tabbedview-tabs"
