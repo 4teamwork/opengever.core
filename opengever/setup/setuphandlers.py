@@ -71,9 +71,9 @@ def settings(context):
     mapping = getMultiAdapter((inbox, manager),
                               IPortletAssignmentMapping)
     if 'navigation' not in mapping.keys():
-        mapping['navigation'] = navigation.Assignment(root='/eingangskorb',
+        mapping['navigation'] = navigation.Assignment(root=None,
                                                       currentFolderOnly=False,
-                                                      includeTop=True,
+                                                      includeTop=False,
                                                       topLevel=0,
                                                       bottomLevel=0)
 

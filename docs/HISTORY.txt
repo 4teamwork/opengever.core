@@ -5,6 +5,11 @@ Changelog
 2.0b5
 -----
 
+* Issue #820 Baumdarstellung "Abgeschlossene Weiterleitungen"
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/820
+  Fixed navigation portlet on site creation.
+  [jbaumann]
+
 
 2.0b4
 -----
