@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2011-01-27 16:49+0000\n"
+"POT-Creation-Date: 2011-01-28 15:30+0000\n"
 "PO-Revision-Date: 2011-01-26 11:25+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -78,17 +78,13 @@ msgstr "Vorlagendossier"
 msgid "Templates"
 msgstr "Vorlagen"
 
-#: ./opengever/dossier/archive.py:276
+#: ./opengever/dossier/archive.py:274
 msgid "The End that is required, also if only closing is selected"
 msgstr "Das Enddatum wird auch bei der Aktion 'nur abschliessen' benötigt"
 
 #: ./opengever/dossier/validators.py:18
 msgid "The Files you selected are bigger than the maximal Size"
 msgstr "Die Grösse der ausgewählten Dateien überschreiten die Maximalgrösse."
-
-#: ./opengever/dossier/archive.py:285
-msgid "The dossier was already resolved"
-msgstr "Das Dossier ist bereits abgeschlossen"
 
 #: ./opengever/dossier/archive.py:55
 msgid "The given end date is older than the end date                             of the youngest subdossier(${number})"
@@ -102,11 +98,11 @@ msgstr "Das Beginn-Datum muss vor dem Ende-Datum liegen."
 msgid "The start or end date is invalid"
 msgstr "Das Beginn- oder Ende-Datum ist ungültig."
 
-#: ./opengever/dossier/archive.py:257
+#: ./opengever/dossier/archive.py:186
 msgid "The subdossier '${title}' has an invalid end date."
 msgstr "Das Subdossier '${title}' hat ein ungültiges End-Datum."
 
-#: ./opengever/dossier/archive.py:267
+#: ./opengever/dossier/archive.py:195
 msgid "The subdossier '${title}' needs to be resolved manually."
 msgstr "Das Subdossier '${title}' muss manuell abgeschlossen werden."
 
@@ -128,12 +124,12 @@ msgid "button_add"
 msgstr "Erstellen"
 
 #. Default: "Archive"
-#: ./opengever/dossier/archive.py:185
+#: ./opengever/dossier/archive.py:201
 msgid "button_archive"
 msgstr "Speichern"
 
 #. Default: "Cancel"
-#: ./opengever/dossier/archive.py:288
+#: ./opengever/dossier/archive.py:283
 #: ./opengever/dossier/behaviors/participation.py:167
 #: ./opengever/dossier/browser/transport.py:170
 msgid "button_cancel"
@@ -243,7 +239,7 @@ msgid "filing_year"
 msgstr "Ablage Jahr"
 
 #. Default: "Archive Dossier"
-#: ./opengever/dossier/archive.py:161
+#: ./opengever/dossier/archive.py:146
 msgid "heading_archive_form"
 msgstr "Dossier ablegen"
 
@@ -548,15 +544,15 @@ msgstr "E-Mails"
 msgid "no_content"
 msgstr "Keine Inhalte"
 
-#: ./opengever/dossier/resolve.py:24
+#: ./opengever/dossier/resolve.py:27
 msgid "not all documents and tasks are stored in a subdossier"
 msgstr "Es sind nicht alle Dokumente und Aufgaben in Subdossiers abgelegt."
 
-#: ./opengever/dossier/resolve.py:28
+#: ./opengever/dossier/resolve.py:33
 msgid "not all documents are checked in"
 msgstr "Es sind nicht alle Dokumente eingecheckt"
 
-#: ./opengever/dossier/resolve.py:32
+#: ./opengever/dossier/resolve.py:39
 msgid "not all task are closed"
 msgstr "Es sind nicht alle Aufgaben erledigt"
 
@@ -604,11 +600,11 @@ msgstr "Subdossiers"
 msgid "tasks"
 msgstr "Aufgaben"
 
-#: ./opengever/dossier/archive.py:175
+#: ./opengever/dossier/archive.py:160
 msgid "the filling number was already set"
 msgstr "Die Ablagenummer wurde bereits vergeben"
 
-#: ./opengever/dossier/archive.py:281
+#: ./opengever/dossier/archive.py:279
 msgid "the filling number was set"
 msgstr "Die Ablagenummer wurde gesetzt"
 

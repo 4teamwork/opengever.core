@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2011-01-27 16:49+0000\n"
+"POT-Creation-Date: 2011-01-28 15:30+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -79,16 +79,12 @@ msgstr ""
 msgid "Templates"
 msgstr ""
 
-#: ./opengever/dossier/archive.py:276
+#: ./opengever/dossier/archive.py:274
 msgid "The End that is required, also if only closing is selected"
 msgstr ""
 
 #: ./opengever/dossier/validators.py:18
 msgid "The Files you selected are bigger than the maximal Size"
-msgstr ""
-
-#: ./opengever/dossier/archive.py:285
-msgid "The dossier was already resolved"
 msgstr ""
 
 #: ./opengever/dossier/archive.py:55
@@ -103,11 +99,11 @@ msgstr ""
 msgid "The start or end date is invalid"
 msgstr ""
 
-#: ./opengever/dossier/archive.py:257
+#: ./opengever/dossier/archive.py:186
 msgid "The subdossier '${title}' has an invalid end date."
 msgstr ""
 
-#: ./opengever/dossier/archive.py:267
+#: ./opengever/dossier/archive.py:195
 msgid "The subdossier '${title}' needs to be resolved manually."
 msgstr ""
 
@@ -129,12 +125,12 @@ msgid "button_add"
 msgstr ""
 
 #. Default: "Archive"
-#: ./opengever/dossier/archive.py:185
+#: ./opengever/dossier/archive.py:201
 msgid "button_archive"
 msgstr ""
 
 #. Default: "Cancel"
-#: ./opengever/dossier/archive.py:288
+#: ./opengever/dossier/archive.py:283
 #: ./opengever/dossier/behaviors/participation.py:167
 #: ./opengever/dossier/browser/transport.py:170
 msgid "button_cancel"
@@ -244,7 +240,7 @@ msgid "filing_year"
 msgstr ""
 
 #. Default: "Archive Dossier"
-#: ./opengever/dossier/archive.py:161
+#: ./opengever/dossier/archive.py:146
 msgid "heading_archive_form"
 msgstr ""
 
@@ -549,15 +545,15 @@ msgstr ""
 msgid "no_content"
 msgstr ""
 
-#: ./opengever/dossier/resolve.py:24
+#: ./opengever/dossier/resolve.py:27
 msgid "not all documents and tasks are stored in a subdossier"
 msgstr ""
 
-#: ./opengever/dossier/resolve.py:28
+#: ./opengever/dossier/resolve.py:33
 msgid "not all documents are checked in"
 msgstr ""
 
-#: ./opengever/dossier/resolve.py:32
+#: ./opengever/dossier/resolve.py:39
 msgid "not all task are closed"
 msgstr ""
 
@@ -605,11 +601,11 @@ msgstr ""
 msgid "tasks"
 msgstr ""
 
-#: ./opengever/dossier/archive.py:175
+#: ./opengever/dossier/archive.py:160
 msgid "the filling number was already set"
 msgstr ""
 
-#: ./opengever/dossier/archive.py:281
+#: ./opengever/dossier/archive.py:279
 msgid "the filling number was set"
 msgstr ""
 

@@ -167,107 +167,118 @@ class ArchiveForm(directives_form.Form):
                 '/content_status_modify?workflow_action=dossier-transition-resolve')
         return super(ArchiveForm, self).__call__()
 
+    def resolve_subdossiers(self, subdossiers, filing_no):
+        """REsolves all subdossiers of this dossier, if possible.
+        Otherwise, throw an error message and return to the context
+        """
+
+        counter = 1
+        for subdossier in subdossiers:
+            subdossier = subdossier.getObject()
+            if subdossier.computeEndDate():
+                # Resolve subdossier after setting end date and filing_no
+                if not IDossier(subdossier).end:
+                    IDossier(subdossier).end = subdossier.computeEndDate()
+                    IDossier(subdossier).filing_no = filing_no + "." + str(counter)
+                else:
+                    # Validate the existing end date
+                    if IDossier(subdossier).end < subdossier.computeEndDate():
+                        self.status.addStatusMessage(_("The subdossier '${title}' has an invalid end date." , 
+                                                  mapping=dict(title=subdossier.Title())
+                                                  ), type="error")
+                        return self.request.RESPONSE.redirect(self.context.absolute_url())
+
+                counter += 1
+                self.wft.doActionFor(subdossier, 'dossier-transition-resolve')
+            else:
+                # The subdossier's end date can't be determined automatically
+                self.status.addStatusMessage(_("The subdossier '${title}' needs to be resolved manually.",
+                                          mapping=dict(title=subdossier.Title())
+                                          ), type="error")
+                return self.request.RESPONSE.redirect(self.context.absolute_url())
+
+
     @button.buttonAndHandler(_(u'button_archive', default=u'Archive'))
     def archive(self, action):
+        """Try to archive this dossier.
+
+        For that to happen, first all subdossiers need to have filing_no
+        and end_date set, and then be resolved. If resolving any of the
+        subdossier fails, we'll throw and error and return.
+        """
+
         RESOLVE_AND_NEW_FILING_NO = 0 # Abschliessen und Ablagenummer vergeben / Abschliessen und Ablagenummer NEU vergeben
         RESOLVE_USE_EXISTING = 1  # Nur abschliessen (keine Ablagenummer vergeben) / Abschliessen und die existierende Ablagenummer verwenden
+        FILING_NO_KEY = "filing_no"
+
+        self.status = IStatusMessage(self.request)
+        self.wft = self.context.portal_workflow
         data, errors = self.extractData()
-        status = IStatusMessage(self.request)
 
-        try:
-            action = data['filing_action']
-        except KeyError:
+        # Abort if there were errors or user hasn't selected a filing action
+        if len(errors) > 0 or not 'filing_action' in data:
             return
-        if action == RESOLVE_AND_NEW_FILING_NO or action == 2:
-            if len(errors) > 0:
-                return
 
-            FILING_NO_KEY = "filing_no"
+        action = data.get('filing_action')
+        filing_year = data.get('filing_year')
+        filing_prefix = data.get('filing_prefix')
 
-            filing_year = data.get('filing_year')
-            filing_prefix = data.get('filing_prefix')
+        # Get the value and not the key from the prefix vocabulary
+        filing_prefix = getVocabularyRegistry().get(
+            self.context, 'opengever.dossier.type_prefixes').by_token.get(
+                filing_prefix).title
 
-            # Get the value and not the key from the prefix vocabulary
-            filing_prefix = getVocabularyRegistry().get(
-                self.context, 'opengever.dossier.type_prefixes').by_token.get(
-                    filing_prefix).title
+        # compute filing_sequence
+        key = filing_prefix + "-" + filing_year
+        portal = getUtility(ISiteRoot)
+        ann = IAnnotations(portal)
+        if FILING_NO_KEY not in ann.keys():
+            ann[FILING_NO_KEY] = PersistentDict()
+        mappping = ann.get(FILING_NO_KEY)
+        if key not in mappping:
+            mappping[key] = Increaser(0)
 
-            # filing_sequence
-            key = filing_prefix + "-" + filing_year
-            portal = getUtility(ISiteRoot)
-            ann = IAnnotations(portal)
-            if FILING_NO_KEY not in ann.keys():
-                ann[FILING_NO_KEY] = PersistentDict()
-            map = ann.get(FILING_NO_KEY)
-            if key not in map:
-                map[key] = Increaser(0)
-            # increase
-            inc = map[key]
-            inc.set(inc()+1)
-            map[key] = inc
-            filing_sequence = inc()
+        inc = mappping[key]
+        inc.set(inc() + 1)
+        mappping[key] = inc
+        filing_sequence = inc()
 
-            # filing_client
-            registry = getUtility(IRegistry)
-            proxy = registry.forInterface(IBaseClientID)
-            filing_client = getattr(proxy, 'client_id')
+        # compute filing_client
+        registry = getUtility(IRegistry)
+        proxy = registry.forInterface(IBaseClientID)
+        filing_client = getattr(proxy, 'client_id')
 
-            # filing_no
-            filing_no = filing_client + "-" + filing_prefix + "-" + filing_year + "-" + str(filing_sequence)
+        # compute filing_no
+        filing_no = filing_client + "-" + filing_prefix + "-" + filing_year + "-" + str(filing_sequence)
+
+        # create filing number for all subdossiers
+        # and resolve them also
+        subdossiers = self.context.portal_catalog(
+            provided_by="opengever.dossier.behaviors.dossier.IDossierMarker",
+            path=dict(depth=1,
+                query='/'.join(self.context.getPhysicalPath()),
+            ),
+            sort_on='filing_no',)
+
+        self.resolve_subdossiers(subdossiers, filing_no)
+
+        if action == RESOLVE_AND_NEW_FILING_NO:
+            # Set filing_no if subdossiers have been resolved successfully
             IDossier(self.context).filing_no = filing_no
 
-            # set the dossier end date and the dossier filing prefix
-            IDossier(self.context).end = data.get('dossier_enddate')
-            IDossier(self.context).filing_prefix = data.get('filing_prefix')
+        # set the dossier end date and the dossier filing prefix
+        IDossier(self.context).end = data.get('dossier_enddate')
+        IDossier(self.context).filing_prefix = data.get('filing_prefix')
 
-            # create filing number for all subdossiers
-            # and resolve them also
-            subdossiers = self.context.portal_catalog(
-                provided_by="opengever.dossier.behaviors.dossier.IDossierMarker",
-                path=dict(depth=1,
-                    query='/'.join(self.context.getPhysicalPath()),
-                ),
-                sort_on='filing_no',
-            )
+        if data.get('dossier_enddate') == None:
+            self.status.addStatusMessage(_("The End that is required, also if only closing is selected"), type="error")
+            return
 
-            counter = 1
-            wft = self.context.portal_workflow
-            for dossier in subdossiers:
-                dossier = dossier.getObject()
-                if dossier.computeEndDate():
-                    # Resolve subdossier after setting end date and filing_no
-                    if not IDossier(dossier).end:
-                        IDossier(dossier).end = dossier.computeEndDate()
-                        IDossier(dossier).filing_no = filing_no + "." + str(counter)
-                    else:
-                        # Validate the existing end date
-                        if IDossier(dossier).end < dossier.computeEndDate():
-                            status.addStatusMessage(_("The subdossier '${title}' has an invalid end date." , 
-                                                      mapping=dict(title=dossier.Title())
-                                                      ), type="error")
-                            return self.request.RESPONSE.redirect(self.context.absolute_url())
+        # If everything went well, resolve the main dossier
+        self.wft.doActionFor(self.context, 'dossier-transition-resolve')
+        self.status.addStatusMessage(_("the filling number was set"), type="info")
+        return self.request.RESPONSE.redirect(self.context.absolute_url())
 
-                    counter += 1
-                    wft.doActionFor(dossier, 'dossier-transition-resolve')
-                else:
-                    # The subdossier's end date can't be determined automatically
-                    status.addStatusMessage(_("The subdossier '${title}' needs to be resolved manually.",
-                                              mapping=dict(title=dossier.Title())
-                                              ), type="error")
-                    return self.request.RESPONSE.redirect(self.context.absolute_url())
-
-        if action == RESOLVE_AND_NEW_FILING_NO or action == RESOLVE_USE_EXISTING:
-            data, errors = self.extractData()
-            if data.get('dossier_enddate') == None:
-                status.addStatusMessage(_("The End that is required, also if only closing is selected"), type="error")
-                return
-            self.request.RESPONSE.redirect(self.context.absolute_url() + '/content_status_modify?workflow_action=dossier-transition-resolve')
-        elif action == 2:
-            status.addStatusMessage(_("the filling number was set"), type="info")
-            return self.request.RESPONSE.redirect(self.context.absolute_url())
-        else:
-            status.addStatusMessage(_("The dossier was already resolved"), type="warning")
-            return self.request.RESPONSE.redirect(self.context.absolute_url())
 
     @button.buttonAndHandler(_(u'button_cancel', default=u'Cancel'))
     def cancel(self, action):
