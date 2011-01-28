@@ -46,3 +46,9 @@ def linked(item, value):
         value.encode('utf-8'))
     wrapper = '<span class="linkWrapper">%s</span>' % link
     return wrapper
+
+def path_checkbox(item, value):
+    try:
+        return '<input type="checkbox" class="noborder selectable" name="paths:list" id="%s" value="%s" alt="Select %s" title="Select %s" />' % (item.id, item.getPath(),  item.Title, item.Title)
+    except AttributeError:
+        return '<input type="checkbox" class="noborder selectable" name="paths:list" id="%s" value="%s" alt="Select %s" title="Select %s" />' % (item.id, '/'.join(item.getPhysicalPath()),  item.Title(), item.Title())
