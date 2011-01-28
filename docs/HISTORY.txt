@@ -5,6 +5,9 @@ Changelog
 2.0b10
 ------
 
+* Show task wfstate icons in task view.
+  [phabegger]
+
 * Fixed task resolve check: added all valid closed-states.
   [jbaumann]
 
