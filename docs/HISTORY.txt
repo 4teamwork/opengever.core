@@ -5,6 +5,9 @@ Changelog
 2.0b9
 -----
 
+* Fixed setting of filing_no when resolving dossiers
+  [lgraf]
+
 * Issue #390 Datum-Plausibilitaetspruefung
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/390/
   Added plausibility checks for end dates when resolving a dossier
