@@ -5,11 +5,14 @@ Changelog
 2.0b11
 ------
 
+* fixed translations
+  [lgraf]
+
 
 2.0b10
 ------
 
-* Added overdue_date_helper to add CSS class `overdue` to Tasks whose deadline is 
+* Added overdue_date_helper to add CSS class `overdue` to Tasks whose deadline is
   in the past. Used by GlobalTaskListingTab and Tasks tab.
   [lgraf]
 
