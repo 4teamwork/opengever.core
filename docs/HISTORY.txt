@@ -5,6 +5,12 @@ Changelog
 2.0b9
 -----
 
+* Changed type of document_date for template dossiers from datetime to date
+  [lgraf]
+
+* Refactored archiving logic for dossiers
+  [lgraf]
+
 * Fixed setting of filing_no when resolving dossiers
   [lgraf]
 

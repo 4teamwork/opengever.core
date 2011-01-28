@@ -8,7 +8,7 @@ from five import grok
 from Acquisition import aq_inner, aq_parent
 from Products.statusmessages.interfaces import IStatusMessage
 from Products.CMFCore.utils import getToolByName
-from datetime import datetime
+from datetime import date
 from DateTime import DateTime
 
 from opengever.dossier import _
@@ -75,7 +75,7 @@ class TemplateDocumentFormView(grok.View):
                 newdoc.setTitle(self.title)
                 newdoc.changeOwnership(member)
                 newdoc.creation_date = DateTime()
-                newdoc.document_date = datetime.now()
+                newdoc.document_date = date.today()
                 newdoc.creators = (member.title_or_id(), )
                 newdoc.document_author = member.title_or_id()
                 newdoc.manage_delLocalRoles(
