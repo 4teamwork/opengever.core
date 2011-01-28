@@ -5,6 +5,9 @@ Changelog
 2.0b6
 -----
 
+* using invisible table for this view
+  [fsprenger]
+
 
 2.0b5
 -----
