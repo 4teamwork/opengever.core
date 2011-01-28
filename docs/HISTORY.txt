@@ -5,6 +5,9 @@ Changelog
 2.0b9
 -----
 
+* Added check for valid end date for subdossiers
+  [lgraf]
+
 * Changed type of document_date for template dossiers from datetime to date
   [lgraf]
 

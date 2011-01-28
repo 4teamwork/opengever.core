@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2011-01-28 15:30+0000\n"
+"POT-Creation-Date: 2011-01-28 16:44+0000\n"
 "PO-Revision-Date: 2011-01-26 11:25+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -540,19 +540,23 @@ msgstr "Status:"
 msgid "mails"
 msgstr "E-Mails"
 
+#: ./opengever/dossier/resolve.py:46
+msgid "no valid end date provided"
+msgstr "Es wurde kein gültiges End-Datum angegeben."
+
 #: ./opengever/dossier/browser/overview_templates/overview.pt:27
 msgid "no_content"
 msgstr "Keine Inhalte"
 
-#: ./opengever/dossier/resolve.py:27
+#: ./opengever/dossier/resolve.py:28
 msgid "not all documents and tasks are stored in a subdossier"
 msgstr "Es sind nicht alle Dokumente und Aufgaben in Subdossiers abgelegt."
 
-#: ./opengever/dossier/resolve.py:33
+#: ./opengever/dossier/resolve.py:34
 msgid "not all documents are checked in"
 msgstr "Es sind nicht alle Dokumente eingecheckt"
 
-#: ./opengever/dossier/resolve.py:39
+#: ./opengever/dossier/resolve.py:40
 msgid "not all task are closed"
 msgstr "Es sind nicht alle Aufgaben erledigt"
 

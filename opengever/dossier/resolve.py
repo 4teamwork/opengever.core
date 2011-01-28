@@ -3,6 +3,7 @@ from Products.statusmessages.interfaces import IStatusMessage
 from five import grok
 from opengever.dossier import _
 from opengever.dossier.behaviors.dossier import IDossierMarker
+from opengever.dossier.behaviors.dossier import IDossier
 
 
 class Resolve(grok.CodeView):
@@ -37,6 +38,12 @@ class Resolve(grok.CodeView):
             errors = True
             status.addStatusMessage(
                 _("not all task are closed"),
+                type="error")
+
+        if not self.has_valid_enddate():
+            errors = True
+            status.addStatusMessage(
+                _("no valid end date provided"),
                 type="error")
 
         if errors:
@@ -103,4 +110,17 @@ class Resolve(grok.CodeView):
             if doc.checked_out:
                 return False
 
+        return True
+
+    def has_valid_enddate(self):
+        """Check if the enddate is valid.
+        """
+        dossier = IDossier(self.context)
+        end_date = self.context.computeEndDate()
+
+        if dossier.end is None:
+            return False
+        if end_date:
+            if end_date < dossier.end:
+                return False
         return True

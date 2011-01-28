@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2011-01-28 15:30+0000\n"
+"POT-Creation-Date: 2011-01-28 16:44+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -541,19 +541,23 @@ msgstr ""
 msgid "mails"
 msgstr ""
 
+#: ./opengever/dossier/resolve.py:46
+msgid "no valid end date provided"
+msgstr ""
+
 #: ./opengever/dossier/browser/overview_templates/overview.pt:27
 msgid "no_content"
 msgstr ""
 
-#: ./opengever/dossier/resolve.py:27
+#: ./opengever/dossier/resolve.py:28
 msgid "not all documents and tasks are stored in a subdossier"
 msgstr ""
 
-#: ./opengever/dossier/resolve.py:33
+#: ./opengever/dossier/resolve.py:34
 msgid "not all documents are checked in"
 msgstr ""
 
-#: ./opengever/dossier/resolve.py:39
+#: ./opengever/dossier/resolve.py:40
 msgid "not all task are closed"
 msgstr ""
 
