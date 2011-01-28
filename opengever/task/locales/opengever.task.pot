@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2011-01-26 13:52+0000\n"
+"POT-Creation-Date: 2011-01-28 15:20+0000\n"
 "PO-Revision-Date: 2009-02-25 14:39+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -152,17 +152,17 @@ msgid "error_same_responsible"
 msgstr ""
 
 #. Default: "Additional"
-#: ./opengever/task/task.py:47
+#: ./opengever/task/task.py:58
 msgid "fieldset_additional"
 msgstr ""
 
 #. Default: "Common"
-#: ./opengever/task/task.py:32
+#: ./opengever/task/task.py:43
 msgid "fieldset_common"
 msgstr ""
 
 #. Default: "Forwarding"
-#: ./opengever/task/helper.py:13
+#: ./opengever/task/helper.py:14
 msgid "forwarding_task_type"
 msgstr ""
 
@@ -171,43 +171,43 @@ msgid "help_copy_documents"
 msgstr ""
 
 #: ./opengever/task/response.py:53
-#: ./opengever/task/task.py:108
+#: ./opengever/task/task.py:119
 msgid "help_date_of_completion"
 msgstr ""
 
-#: ./opengever/task/task.py:102
+#: ./opengever/task/task.py:113
 msgid "help_deadline"
 msgstr ""
 
 #. Default: "Cost in CHF"
-#: ./opengever/task/task.py:163
+#: ./opengever/task/task.py:174
 msgid "help_effectiveCost"
 msgstr ""
 
 #. Default: "Duration in h"
-#: ./opengever/task/task.py:157
+#: ./opengever/task/task.py:168
 msgid "help_effectiveDuration"
 msgstr ""
 
 #. Default: "Cost in CHF"
-#: ./opengever/task/task.py:151
+#: ./opengever/task/task.py:162
 msgid "help_expectedCost"
 msgstr ""
 
 #. Default: "Duration in h"
-#: ./opengever/task/task.py:145
+#: ./opengever/task/task.py:156
 msgid "help_expectedDuration"
 msgstr ""
 
-#: ./opengever/task/task.py:139
+#: ./opengever/task/task.py:150
 msgid "help_expectedStartOfWork"
 msgstr ""
 
-#: ./opengever/task/task.py:68
+#: ./opengever/task/task.py:79
 msgid "help_issuer"
 msgstr ""
 
-#: ./opengever/task/task.py:170
+#: ./opengever/task/task.py:181
 msgid "help_predecessor"
 msgstr ""
 
@@ -217,12 +217,12 @@ msgid "help_response"
 msgstr ""
 
 #: ./opengever/task/browser/assign.py:44
-#: ./opengever/task/task.py:95
+#: ./opengever/task/task.py:106
 msgid "help_responsible"
 msgstr ""
 
 #: ./opengever/task/browser/assign.py:37
-#: ./opengever/task/task.py:87
+#: ./opengever/task/task.py:98
 msgid "help_responsible_client"
 msgstr ""
 
@@ -250,15 +250,15 @@ msgstr ""
 msgid "help_target_client"
 msgstr ""
 
-#: ./opengever/task/task.py:76
+#: ./opengever/task/task.py:87
 msgid "help_task_type"
 msgstr ""
 
-#: ./opengever/task/task.py:116
+#: ./opengever/task/task.py:127
 msgid "help_text"
 msgstr ""
 
-#: ./opengever/task/task.py:61
+#: ./opengever/task/task.py:72
 msgid "help_title"
 msgstr ""
 
@@ -286,6 +286,11 @@ msgstr ""
 msgid "label_by_author"
 msgstr ""
 
+#. Default: "Checked out by"
+#: ./opengever/task/task.py:433
+msgid "label_checked_out"
+msgstr ""
+
 #. Default: "Copy related documents to inbox of target client"
 #: ./opengever/task/browser/copy_related_documents.py:57
 msgid "label_copy_documents"
@@ -293,13 +298,28 @@ msgstr ""
 
 #. Default: "Date of completion"
 #: ./opengever/task/response.py:52
-#: ./opengever/task/task.py:107
+#: ./opengever/task/task.py:118
 msgid "label_date_of_completion"
 msgstr ""
 
 #. Default: "Deadline"
-#: ./opengever/task/task.py:101
+#: ./opengever/task/task.py:112
 msgid "label_deadline"
+msgstr ""
+
+#. Default: "Delivery Date"
+#: ./opengever/task/task.py:429
+msgid "label_delivery_date"
+msgstr ""
+
+#. Default: "Document Author"
+#: ./opengever/task/task.py:417
+msgid "label_document_author"
+msgstr ""
+
+#. Default: "Document Date"
+#: ./opengever/task/task.py:421
+msgid "label_document_date"
 msgstr ""
 
 #. Default: "You are not allowed to edit this response."
@@ -308,12 +328,12 @@ msgid "label_edit_response_not_allowed"
 msgstr ""
 
 #. Default: "effective cost"
-#: ./opengever/task/task.py:162
+#: ./opengever/task/task.py:173
 msgid "label_effectiveCost"
 msgstr ""
 
 #. Default: "effective duration"
-#: ./opengever/task/task.py:156
+#: ./opengever/task/task.py:167
 msgid "label_effectiveDuration"
 msgstr ""
 
@@ -323,44 +343,50 @@ msgid "label_enter_response"
 msgstr ""
 
 #. Default: "expected cost"
-#: ./opengever/task/task.py:150
+#: ./opengever/task/task.py:161
 msgid "label_expectedCost"
 msgstr ""
 
 #. Default: "Expected duration"
-#: ./opengever/task/task.py:144
+#: ./opengever/task/task.py:155
 msgid "label_expectedDuration"
 msgstr ""
 
 #. Default: "Start with work"
-#: ./opengever/task/task.py:138
+#: ./opengever/task/task.py:149
 msgid "label_expectedStartOfWork"
 msgstr ""
 
 #. Default: "Issuer"
-#: ./opengever/task/task.py:67
+#: ./opengever/task/task.py:78
 msgid "label_issuer"
 msgstr ""
 
 #. Default: "Last change"
+#: ./opengever/task/task_templates/overview.pt:36
 #: ./opengever/task/task_templates/view.pt:54
 msgid "label_last_modified"
 msgstr ""
 
 #. Default: "Predecessor"
-#: ./opengever/task/task.py:169
+#: ./opengever/task/task.py:180
 msgid "label_predecessor"
+msgstr ""
+
+#. Default: "Receipt Date"
+#: ./opengever/task/task.py:425
+msgid "label_receipt_date"
 msgstr ""
 
 #. Default: "Related Items"
 #: ./opengever/task/response.py:58
-#: ./opengever/task/task.py:121
+#: ./opengever/task/task.py:132
 msgid "label_related_items"
 msgstr ""
 
 #. Default: "Responsible Client"
 #: ./opengever/task/browser/assign.py:35
-#: ./opengever/task/task.py:85
+#: ./opengever/task/task.py:96
 msgid "label_resonsible_client"
 msgstr ""
 
@@ -377,7 +403,7 @@ msgstr ""
 
 #. Default: "Responsible"
 #: ./opengever/task/browser/assign.py:43
-#: ./opengever/task/task.py:94
+#: ./opengever/task/task.py:105
 #: ./opengever/task/task_templates/view.pt:44
 msgid "label_responsible"
 msgstr ""
@@ -413,17 +439,17 @@ msgid "label_target_client"
 msgstr ""
 
 #. Default: "Task Type"
-#: ./opengever/task/task.py:75
+#: ./opengever/task/task.py:86
 msgid "label_task_type"
 msgstr ""
 
 #. Default: "Text"
-#: ./opengever/task/task.py:115
+#: ./opengever/task/task.py:126
 msgid "label_text"
 msgstr ""
 
 #. Default: "Title"
-#: ./opengever/task/task.py:60
+#: ./opengever/task/task.py:71
 msgid "label_title"
 msgstr ""
 
@@ -435,6 +461,7 @@ msgid "label_transition"
 msgstr ""
 
 #. Default: "State"
+#: ./opengever/task/task_templates/overview.pt:16
 #: ./opengever/task/task_templates/view.pt:34
 msgid "label_workflow_state"
 msgstr ""

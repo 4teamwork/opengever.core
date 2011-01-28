@@ -28,7 +28,8 @@ from plone.directives.dexterity import DisplayForm
 from zope.app.intid.interfaces import IIntIds
 from ftw.table.basesource import BaseTableSource
 from opengever.tabbedview.browser.tabs import Documents
-from opengever.tabbedview.helper import readable_ogds_author, linked
+from opengever.tabbedview.helper import readable_ogds_author
+from opengever.task.helper import linked
 from ftw.table import helper
 from operator import attrgetter
 from ftw.tabbedview.browser.listing import ListingView
@@ -344,12 +345,13 @@ class RelatedDocumentTableSource(grok.MultiAdapter, BaseTableSource):
         objects = []
         for brain in brains:
             objects.append(brain.getObject())
-        for item in self.config.context.relatedItems():
+        for item in self.config.context.relatedItems:
             objects.append(item)
         objects = self.extend_query_with_ordering(objects)
         if self.config.filter_text:
             objects = self.extend_query_with_textfilter(
                 objects, self.config.filter_text)
+        objects = self.extend_query_with_batching(objects)
         return objects
 
 
@@ -374,6 +376,8 @@ class RelatedDocumentTableSource(grok.MultiAdapter, BaseTableSource):
             else:
                 objects_sort = sorted(query, key=attrgetter(sort_index))
                 return objects_sort
+        else:
+            return query
 
     def extend_query_with_texfilter(self, query, text):
         return query
@@ -383,24 +387,6 @@ class RelatedDocumentTableSource(grok.MultiAdapter, BaseTableSource):
         new query. This method is only called when batching is enabled in
         the source config with the `batching_enabled` attribute.
         """
-
-        if not self.config.batching_enabled:
-            # batching is disabled
-            return query
-
-        if not self.config.lazy:
-            # do not batch since we are not lazy
-            return query
-
-        # we need to know how many records we would have without batching
-        self.full_length = len(query)
-
-        # now add batching
-        pagesize = self.config.batching_pagesize
-        current_page = self.config.batching_current_page
-        start = pagesize * (current_page - 1)
-
-        query = query[start:start+pagesize]
         return query
 
     def search_results(self, query):
@@ -413,18 +399,19 @@ class RelatedDocuments(grok.CodeView,OpengeverTab,ListingView):
     grok.name('tabbedview_view-related_documents')
     grok.context(ITask)
 
+    lazy = False
     columns = (
-        {'column':'draggable',
+        {'column':'',
          'column_title':'',
          'transform':helper.draggable},
-        {'column':'checkbox',
+        {'column':'',
          'column_title':'',
          'transform':helper.path_checkbox},
 
-        {'column': 'Title',
+        {'column': 'title',
          'column_title': _(u'label_title', default=u'Title'),
          'sort_index' : 'sortable_title',
-         'transform': linked},
+         'transform':linked},
 
         {'column':'document_author',
          'column_title':_('label_document_author', default="Document Author"),
@@ -441,13 +428,6 @@ class RelatedDocuments(grok.CodeView,OpengeverTab,ListingView):
         {'column':'delivery_date',
          'column_title':_('label_delivery_date', default="Delivery Date"),
          'transform':helper.readable_date},
-
-        {'column':'checked_out',
-         'column_title':_('label_checked_out', default="Checked out by"),
-         'transform':readable_ogds_author},
-
-        {'column':'containing_subdossier',
-         'column_title':_('label_subdossier', default="Subdossier"),},
         )
 
     enabled_actions = [

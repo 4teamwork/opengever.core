@@ -62,3 +62,47 @@
     </tal:rep2>
 
 </table>
+
+<div class="visualClear"><!----></div>
+
+<tal:items define="items view/getContainingTask"
+           condition="items">
+    <div tal:condition="items"><h2 i18n:translate="containing_task">Containing Tasks:</h2></div>
+    <ul tal:condition="items">
+        <li tal:repeat="item items">
+            <img tal:attributes="src item/getIcon" />
+            <a href="" tal:attributes="href item/absolute_url|nothing" tal:omit-tag="not: item/absolute_url|nothing"><span tal:content="item/Title" /></a>
+        </li>
+    </ul>
+</tal:items>
+
+<tal:items define="items view/getSubTasks"
+           condition="items">
+    <div tal:condition="items"><h2 i18n:translate="subtasks">Subtasks:</h2></div>
+    <ul tal:condition="items">
+        <li tal:repeat="item items">
+            <img tal:attributes="src item/getIcon" />
+            <a href="" tal:attributes="href item/getURL|nothing" tal:omit-tag="not: item/getURL|nothing"><span tal:content="item/Title" /></a>
+        </li>
+    </ul>
+</tal:items>
+
+<tal:items define="item view/getPredecessorTask"
+           condition="item">
+    <div tal:condition="item"><h2 i18n:translate="predecessor">Predecessor Task:</h2></div>
+    <div tal:content="structure python:view.render_indexed_task(item)" />
+</tal:items>
+
+<tal:items define="items view/getSuccessorTasks"
+           condition="items">
+    <div><h2 i18n:translate="successors">Successor Tasks:</h2></div>
+    <ul tal:condition="items">
+        <li tal:repeat="item items"
+            tal:content="structure python:view.render_indexed_task(item)" />
+    </ul>
+</tal:items>
+<div class="visualClear"><!----></div>
+ <div tal:replace="structure provider:opengever.task.beneathTask" />
+ <div class="visualClear"><!----></div>
+ <div tal:replace="structure provider:plone.belowcontentbody" />
+ <div class="visualClear"><!----></div>
