@@ -16,6 +16,12 @@ Changelog
   Added handling of python datetime objects when copying responses.
   [jbaumann]
 
+* updated opengever task workflow
+  [jbaumann]
+
+* added new browser view "task_workflow_checks"
+  [jbaumann]
+
 * Issue #844 Aufgabe: Aktion Hinzufuegen "Dokument aus eigenem Mandant" umbenennen
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/844
   Updated translation.
