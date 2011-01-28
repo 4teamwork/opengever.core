@@ -4,7 +4,7 @@ from five import grok
 from opengever.ogds.base import caching
 from opengever.ogds.base.interfaces import IClientCommunicator
 from opengever.ogds.base.interfaces import IContactInformation
-from opengever.ogds.base.utils import get_current_client, get_client_id
+from opengever.ogds.base.utils import get_current_client
 from opengever.ogds.base.vocabulary import ContactsVocabulary
 from plone.memoize import volatile
 from zope.app.component.hooks import getSite, setSite
