@@ -5,6 +5,9 @@ Changelog
 2.0b10
 ------
 
+* Fixed task resolve check: added all valid closed-states.
+  [jbaumann]
+
 * Issue #836 Folgeaufgabe: Fehler beim Erstellen innerhalb gleichen Mandants
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/836
   Added handling of python datetime objects when copying responses.
