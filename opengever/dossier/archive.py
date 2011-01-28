@@ -170,6 +170,7 @@ class ArchiveForm(directives_form.Form):
     @button.buttonAndHandler(_(u'button_archive', default=u'Archive'))
     def archive(self, action):
         data, errors = self.extractData()
+        status = IStatusMessage(self.request)
         try:
             action = data['filing_action']
         except KeyError:
@@ -238,7 +239,6 @@ class ArchiveForm(directives_form.Form):
                         else:
                             # Validate the existing end date
                             if IDossier(dossier).end < dossier.computeEndDate():
-                                status = IStatusMessage(self.request)
                                 status.addStatusMessage(_("The subdossier '${title}' has an invalid end date." , 
                                                           mapping=dict(title=dossier.Title())
                                                           ), type="error")
@@ -248,7 +248,6 @@ class ArchiveForm(directives_form.Form):
                         wft.doActionFor(dossier, 'dossier-transition-resolve')
                     else:
                         # The subdossier's end date can't be determined automatically
-                        status = IStatusMessage(self.request)
                         status.addStatusMessage(_("The subdossier '${title}' needs to be resolved manually.",
                                                   mapping=dict(title=dossier.Title())
                                                   ), type="error")
@@ -257,16 +256,13 @@ class ArchiveForm(directives_form.Form):
         if action == 0 or action == 1:
             data, errors = self.extractData()
             if data.get('dossier_enddate') == None:
-                status = IStatusMessage(self.request)
                 status.addStatusMessage(_("The End that is required, also if only closing is selected"), type="error")
                 return
             self.request.RESPONSE.redirect(self.context.absolute_url() + '/content_status_modify?workflow_action=dossier-transition-resolve')
         elif action == 2:
-            status = IStatusMessage(self.request)
             status.addStatusMessage(_("the filling number was set"), type="info")
             return self.request.RESPONSE.redirect(self.context.absolute_url())
         else:
-            status = IStatusMessage(self.request)
             status.addStatusMessage(_("The dossier was already resolved"), type="warning")
             return self.request.RESPONSE.redirect(self.context.absolute_url())
 
