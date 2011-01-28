@@ -5,6 +5,10 @@ Changelog
 2.0b7
 -----
 
+* Added some caching of IContactInformation utility (volatile) and caching also
+  utils.get_client_id (ram cache).
+  [jbaumann]
+
 
 2.0b6
 -----

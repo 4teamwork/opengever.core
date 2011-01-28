@@ -8,6 +8,7 @@ from opengever.ogds.base.model.client import Client
 from opengever.ogds.base.model.user import User
 from opengever.ogds.base.utils import brain_is_contact
 from opengever.ogds.base.utils import create_session, get_current_client
+from plone.memoize import volatile
 from zope.app.component.hooks import getSite
 import types
 
@@ -173,6 +174,7 @@ class ContactInformation(grok.GlobalUtility):
         else:
             return clients[0]
 
+    @volatile.cache(lambda method, self, principal: principal)
     def get_group_of_inbox(self, principal):
         """Returns the group principal of the inbox `principal`.
         """
@@ -229,6 +231,7 @@ class ContactInformation(grok.GlobalUtility):
 
     # general principal methods
 
+    @volatile.cache(lambda method, self, *args, **kwargs: (args, kwargs))
     def describe(self, principal, with_email=False, with_email2=False):
         """Represent a user / contact / inbox / ... as string. This usually
         returns the fullname or another label / title.
@@ -342,6 +345,7 @@ class ContactInformation(grok.GlobalUtility):
         else:
             raise ValueError('Unknown principal type: %s' % str(principal))
 
+    @volatile.cache(lambda method, self, principal: principal)
     def get_email(self, principal):
         """Returns the email address of a `principal`.
         """
@@ -373,6 +377,7 @@ class ContactInformation(grok.GlobalUtility):
             raise ValueError('Unknown principal type: %s' %
                              str(principal))
 
+    @volatile.cache(lambda method, self, principal: principal)
     def get_email2(self, principal):
         """Returns the second email address of a `principal`.
         """
@@ -403,6 +408,7 @@ class ContactInformation(grok.GlobalUtility):
             raise ValueError('Unknown principal type: %s' %
                              str(principal))
 
+    @volatile.cache(lambda method, self, principal: principal)
     def get_profile_url(self, principal):
         """Returns the profile url of this `principal`.
         """
@@ -431,6 +437,7 @@ class ContactInformation(grok.GlobalUtility):
                     return portal_membership.getMemberById(principal).getHomeUrl()
             return None
 
+    @volatile.cache(lambda method, self, principal: principal)
     def render_link(self, principal):
         """Render a link to the `principal`
         """
