@@ -13,6 +13,9 @@ Changelog
   path source binders).
   [jbaumann]
 
+* Added (inactive) write_permission directives to lifecycle fields
+  [lgraf]
+
 
 2.0b8
 -----
