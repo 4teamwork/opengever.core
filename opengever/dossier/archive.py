@@ -2,9 +2,8 @@ from Acquisition import aq_inner, aq_parent
 from collective.elephantvocabulary import wrap_vocabulary
 from datetime import datetime, time
 from five import grok
-import locale
-from ftw.table.catalog_source import default_custom_sort
 from ftw.datepicker.widget import DatePickerFieldWidget
+from ftw.table.catalog_source import default_custom_sort
 from opengever.base.interfaces import IBaseClientID
 from opengever.dossier import _
 from opengever.dossier.behaviors.dossier import IDossier
@@ -25,6 +24,8 @@ from zope.component import getUtility, provideAdapter
 from zope.interface import invariant, Invalid
 from zope.schema.interfaces import IContextSourceBinder
 from zope.schema.vocabulary import SimpleVocabulary, getVocabularyRegistry
+import locale
+
 
 
 class MissingValue(Invalid):
@@ -39,18 +40,19 @@ class EnddateValidator(validator.SimpleFieldValidator):
     def validate(self, value):
         if not value:
             raise MissingValue(_(u'error_enddate', default=u'The enddate is required.'))
-            
+        dossier_path = '/'.join(self.context.getPhysicalPath())
         subdossiers = self.context.portal_catalog(
-            path=dict(
-                query='/'.join(self.context.getPhysicalPath()),
-                depth=-1) ,
-            object_provides= 'opengever.dossier.behaviors.dossier.IDossierMarker'
-        )
-        if len(subdossiers) != 0:
-            subdossiers = default_custom_sort(subdossiers, 'end', True)
+            path=dict(query=dossier_path,
+                      depth=-1),
+            object_provides= 'opengever.dossier.behaviors.dossier.IDossierMarker')
+
+        # Remove the object itself from the list of subdossiers
+        subdossiers = [s for s in subdossiers if not s.getPath() == dossier_path]
+
+        if subdossiers:
+            subdossiers.sort(key=lambda d: d.end)
             if subdossiers[0].end:
-                sub_end = datetime.combine(subdossiers[0].end, time(0,0))
-                if sub_end and datetime.combine(value, time(0,0)) < sub_end:
+                if value < subdossiers[0].end:
                     raise Invalid(
                         _(u'The given end date is older than the end date \
                             of the youngest subdossier(${number})',
