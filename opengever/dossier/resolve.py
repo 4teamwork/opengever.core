@@ -14,13 +14,24 @@ class Resolve(grok.CodeView):
 
     def render(self):
         parent = aq_parent(aq_inner(self.context))
-        url = self.context.absolute_url() + \
-            '/content_status_modify?workflow_action=dossier-transition-resolve'
-        if IDossierMarker.providedBy(parent):
-            self.request.RESPONSE.redirect(url)
-
         errors = False
         status = IStatusMessage(self.request)
+
+        url = self.context.absolute_url() + \
+            '/content_status_modify?workflow_action=dossier-transition-resolve'
+
+        # Check if it's a SubDossier
+        if IDossierMarker.providedBy(parent):
+            # If so, check for valid end date
+            if not self.has_valid_enddate():
+                status.addStatusMessage(
+                    _("no valid end date provided"),
+                    type="error") 
+                self.request.RESPONSE.redirect(self.context.absolute_url())
+
+            # Everything ok, resolve subdossier
+            self.request.RESPONSE.redirect(url)
+
 
         if not self.is_all_supplied():
             errors = True
@@ -40,11 +51,7 @@ class Resolve(grok.CodeView):
                 _("not all task are closed"),
                 type="error")
 
-        if not self.has_valid_enddate():
-            errors = True
-            status.addStatusMessage(
-                _("no valid end date provided"),
-                type="error")
+
 
         if errors:
             self.request.RESPONSE.redirect(self.context.absolute_url())
