@@ -5,6 +5,12 @@ Changelog
 2.0b10
 ------
 
+* Issue #860 Abgeschlossene und stornierte Dossiers koennen im derzeitigen Release
+  durch Sekretariat nicht wiedereroeffnet werden
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/860
+  Updated dossier workflow: Changed guards to role Publisher.
+  [phabegger]
+
 
 2.0b9
 -----

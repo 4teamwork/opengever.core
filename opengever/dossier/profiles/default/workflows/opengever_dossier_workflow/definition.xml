@@ -297,20 +297,19 @@
  <transition transition_id="dossier-transition-activate" title="Owner activates dossier" new_state="dossier-state-active" trigger="USER" before_script="" after_script="">
   <action url="%(content_url)s/content_status_modify?workflow_action=dossier-transition-activate" category="workflow" icon="">dossier-transition-activate</action>
   <guard>
-   <guard-role>Manager</guard-role>
+   <guard-role>Publisher</guard-role>
   </guard>
  </transition>
  <transition transition_id="dossier-transition-deactivate" title="Owner deactivates dossier" new_state="dossier-state-inactive" trigger="USER" before_script="" after_script="">
   <action url="%(content_url)s/content_status_modify?workflow_action=dossier-transition-deactivate" category="workflow" icon="">dossier-transition-deactivate</action>
   <guard>
-   <guard-role>Owner</guard-role>
+   <guard-role>Editor</guard-role>
   </guard>
  </transition>
  <transition transition_id="dossier-transition-reactivate" title="Owner reactivates dossier" new_state="dossier-state-active" trigger="USER" before_script="" after_script="">
   <action url="%(content_url)s/content_status_modify?workflow_action=dossier-transition-reactivate" category="workflow" icon="">dossier-transition-reactivate</action>
   <guard>
-   <guard-role>Owner</guard-role>
-   <guard-role>Administrator</guard-role>
+   <guard-role>Publisher</guard-role>
   </guard>
  </transition>
  <transition transition_id="dossier-transition-resolve" title="Owner resolves dossier" new_state="dossier-state-resolved" trigger="USER" before_script="" after_script="">
@@ -330,7 +329,7 @@
  <variable variable_id="action" for_catalog="False" for_status="True" update_always="True">
   <description>The last transition</description>
   <default>
-   
+
    <expression>transition/getId|nothing</expression>
   </default>
   <guard>
@@ -339,7 +338,7 @@
  <variable variable_id="actor" for_catalog="False" for_status="True" update_always="True">
   <description>The ID of the user who performed the last transition</description>
   <default>
-   
+
    <expression>user/getId</expression>
   </default>
   <guard>
@@ -348,7 +347,7 @@
  <variable variable_id="comments" for_catalog="False" for_status="True" update_always="True">
   <description>Comments about the last transition</description>
   <default>
-   
+
    <expression>python:state_change.kwargs.get('comment', '')</expression>
   </default>
   <guard>
@@ -357,7 +356,7 @@
  <variable variable_id="review_history" for_catalog="False" for_status="False" update_always="False">
   <description>Provides access to workflow history</description>
   <default>
-   
+
    <expression>state_change/getHistory</expression>
   </default>
   <guard>
@@ -367,7 +366,7 @@
  <variable variable_id="time" for_catalog="False" for_status="True" update_always="True">
   <description>Time of the last transition</description>
   <default>
-   
+
    <expression>state_change/getDateTime</expression>
   </default>
   <guard>
