@@ -1,6 +1,6 @@
 from Acquisition import aq_inner, aq_parent
 from collective.elephantvocabulary import wrap_vocabulary
-from datetime import datetime, time
+from datetime import datetime, date
 from five import grok
 from ftw.datepicker.widget import DatePickerFieldWidget
 from ftw.table.catalog_source import default_custom_sort
@@ -49,7 +49,7 @@ class EnddateValidator(validator.SimpleFieldValidator):
         subdossiers = [s for s in subdossiers if not s.getPath() == dossier_path]
 
         if subdossiers:
-            subdossiers.sort(key=lambda d: d.end)
+            subdossiers.sort(key=lambda d: d.end or date(1900, 1, 1))
             if subdossiers[0].end:
                 if value < subdossiers[0].end:
                     raise Invalid(
