@@ -364,7 +364,7 @@ class AdvancedSearchForm(directives_form.Form):
                     else:
                         params = '%s&%s=%s' %(params, field, urllib.quote(data.get(field).encode('utf-8')))
 
-            params = params.replace('task_responsible', 'repsonsible')
+            params = params.replace('task_responsible', 'responsible')
             params = params.replace('task_review_state', 'review_state')
             params = params.replace('dossier_review_state', 'review_state')
 
