@@ -27,7 +27,7 @@ class Resolve(grok.CodeView):
                 status.addStatusMessage(
                     _("no valid end date provided"),
                     type="error") 
-                self.request.RESPONSE.redirect(self.context.absolute_url())
+                return self.request.RESPONSE.redirect(self.context.absolute_url())
 
             # Everything ok, resolve subdossier
             self.request.RESPONSE.redirect(url)
