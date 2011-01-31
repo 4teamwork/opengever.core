@@ -5,6 +5,9 @@ Changelog
 2.0b10
 ------
 
+* Fixed error handling if resolving subdossiers fails
+  [lgraf]
+
 * Fixed EnddateValidator for dossier end dates
   [lgraf]
 

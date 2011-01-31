@@ -27,7 +27,6 @@ from zope.schema.vocabulary import SimpleVocabulary, getVocabularyRegistry
 import locale
 
 
-
 class MissingValue(Invalid):
     """ The Missing value was defined Exception."""
     __doc__ = _(u"Not all required fields are filled")
@@ -170,7 +169,7 @@ class ArchiveForm(directives_form.Form):
         return super(ArchiveForm, self).__call__()
 
     def resolve_subdossiers(self, subdossiers, filing_no):
-        """REsolves all subdossiers of this dossier, if possible.
+        """Resolves all subdossiers of this dossier, if possible.
         Otherwise, throw an error message and return to the context
         """
 
@@ -192,7 +191,7 @@ class ArchiveForm(directives_form.Form):
                             self.status.addStatusMessage(_("The subdossier '${title}' has an invalid end date." , 
                                                       mapping=dict(title=subdossier.Title())
                                                       ), type="error")
-                            return self.request.RESPONSE.redirect(self.context.absolute_url())
+                            return False
 
                     counter += 1
                     self.wft.doActionFor(subdossier, 'dossier-transition-resolve')
@@ -201,7 +200,8 @@ class ArchiveForm(directives_form.Form):
                     self.status.addStatusMessage(_("The subdossier '${title}' needs to be resolved manually.",
                                               mapping=dict(title=subdossier.Title())
                                               ), type="error")
-                    return self.request.RESPONSE.redirect(self.context.absolute_url())
+                    return False
+        return True
 
 
     @button.buttonAndHandler(_(u'button_archive', default=u'Archive'))
@@ -266,7 +266,10 @@ class ArchiveForm(directives_form.Form):
             ),
             sort_on='filing_no',)
 
-        self.resolve_subdossiers(subdossiers, filing_no)
+        success = self.resolve_subdossiers(subdossiers, filing_no)
+        if not success:
+            # If resolving subdossiers failed, abort and return to context
+            return self.request.RESPONSE.redirect(self.context.absolute_url())
 
         if action == RESOLVE_AND_NEW_FILING_NO:
             # Set filing_no if subdossiers have been resolved successfully
