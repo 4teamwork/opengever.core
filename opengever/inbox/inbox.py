@@ -30,6 +30,20 @@ class GivenTasks(Tasks):
     types = ['opengever.inbox.forwarding']
     depth = 1
 
+    @property
+    def columns(self):
+        remove_columns = ['containing_subdossier']
+        columns = []
+
+        for col in super(GivenTasks, self).columns:
+            if isinstance(col, dict) and \
+                    col.get('column') in remove_columns:
+                pass  # remove this column
+
+            else:
+                columns.append(col)
+
+        return columns
 
 class InboxDocuments(Documents):
     grok.context(IInbox)

@@ -5,6 +5,11 @@ Changelog
 2.0b4
 -----
 
+* Issue #869 Postmodul: Spalte Subdossier unter Tab Weiterleitung entfernen
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/869
+  removed subdossier column
+  [ttschanz]
+
 
 2.0b3
 -----
