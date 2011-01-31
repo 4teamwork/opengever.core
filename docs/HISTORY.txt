@@ -5,6 +5,11 @@ Changelog
 2.0b11
 ------
 
+* Issue #832 Workflow Task anpassen
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/832
+  Added wf guards for transitions reject and cancel.
+  [phabegger]
+
 
 2.0b10
 ------

@@ -279,6 +279,7 @@
  <transition transition_id="task-transition-open-cancelled" title="task-transition-open-cancelled" new_state="task-state-cancelled" trigger="USER" before_script="" after_script="">
   <action url="%(content_url)s/addresponse?form.widgets.transition=task-transition-open-cancelled" category="workflow" icon="">task-transition-open-cancelled</action>
   <guard>
+   <guard-role>Owner</guard-role>
   </guard>
  </transition>
  <transition transition_id="task-transition-open-in-progress" title="task-transition-open-in-progress" new_state="task-state-in-progress" trigger="USER" before_script="" after_script="">
@@ -290,6 +291,7 @@
  <transition transition_id="task-transition-open-rejected" title="task-transition-open-rejected" new_state="task-state-rejected" trigger="USER" before_script="" after_script="">
   <action url="%(content_url)s/addresponse?form.widgets.transition=task-transition-open-rejected" category="workflow" icon="">task-transition-open-rejected</action>
   <guard>
+   <guard-expression>python:state_change.object.responsible == here.portal_membership.getAuthenticatedMember().getId()</guard-expression>
   </guard>
  </transition>
  <transition transition_id="task-transition-open-resolved" title="task-transition-open-resolved" new_state="task-state-resolved" trigger="USER" before_script="" after_script="">
