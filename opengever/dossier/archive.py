@@ -175,27 +175,31 @@ class ArchiveForm(directives_form.Form):
         counter = 1
         for subdossier in subdossiers:
             subdossier = subdossier.getObject()
-            if subdossier.computeEndDate():
-                # Resolve subdossier after setting end date and filing_no
-                if not IDossier(subdossier).end:
-                    IDossier(subdossier).end = subdossier.computeEndDate()
-                    IDossier(subdossier).filing_no = filing_no + "." + str(counter)
-                else:
-                    # Validate the existing end date
-                    if IDossier(subdossier).end < subdossier.computeEndDate():
-                        self.status.addStatusMessage(_("The subdossier '${title}' has an invalid end date." , 
-                                                  mapping=dict(title=subdossier.Title())
-                                                  ), type="error")
-                        return self.request.RESPONSE.redirect(self.context.absolute_url())
+            status =  self.wft.getStatusOf("opengever_dossier_workflow", subdossier)
+            state = status["review_state"]
 
-                counter += 1
-                self.wft.doActionFor(subdossier, 'dossier-transition-resolve')
-            else:
-                # The subdossier's end date can't be determined automatically
-                self.status.addStatusMessage(_("The subdossier '${title}' needs to be resolved manually.",
-                                          mapping=dict(title=subdossier.Title())
-                                          ), type="error")
-                return self.request.RESPONSE.redirect(self.context.absolute_url())
+            if not state == 'dossier-state-resolved':
+                if subdossier.computeEndDate():
+                    # Resolve subdossier after setting end date and filing_no
+                    if not IDossier(subdossier).end:
+                        IDossier(subdossier).end = subdossier.computeEndDate()
+                        IDossier(subdossier).filing_no = filing_no + "." + str(counter)
+                    else:
+                        # Validate the existing end date
+                        if IDossier(subdossier).end < subdossier.computeEndDate():
+                            self.status.addStatusMessage(_("The subdossier '${title}' has an invalid end date." , 
+                                                      mapping=dict(title=subdossier.Title())
+                                                      ), type="error")
+                            return self.request.RESPONSE.redirect(self.context.absolute_url())
+
+                    counter += 1
+                    self.wft.doActionFor(subdossier, 'dossier-transition-resolve')
+                else:
+                    # The subdossier's end date can't be determined automatically
+                    self.status.addStatusMessage(_("The subdossier '${title}' needs to be resolved manually.",
+                                              mapping=dict(title=subdossier.Title())
+                                              ), type="error")
+                    return self.request.RESPONSE.redirect(self.context.absolute_url())
 
 
     @button.buttonAndHandler(_(u'button_archive', default=u'Archive'))
