@@ -130,7 +130,7 @@ msgstr "Aufgabe hinzugefügt: ${title}"
 #. Default: "Task modified: ${title}"
 #: ./opengever/journal/handlers.py:271
 msgid "label_task_modified"
-msgstr "Aufgabe modifiziert"
+msgstr "Aufgabe modifiziert: ${title}"
 
 #. Default: "Time"
 #: ./opengever/journal/tab.py:62
