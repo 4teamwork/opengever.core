@@ -62,7 +62,7 @@ class EnddateValidator(validator.SimpleFieldValidator):
 def get_filing_actions(context):
 
     review_state = context.portal_workflow.getInfoFor(context, 'review_state', None)
-    filing_no = getattr(IDossierMarker(context), 'filing_no', None)
+    filing_no = getattr(IDossier(context), 'filing_no', None)
 
     values = []
     if review_state != 'dossier-state-resolved':

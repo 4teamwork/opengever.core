@@ -5,6 +5,12 @@ Changelog
 2.0b10
 ------
 
+* Issue #390 Datum-Plausibilitaetspruefung
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/390/
+  Only validating end date on subdossiers not yet resolved
+  Only check for valid end date for subdossiers
+  Fixed retrieval of filing_no in dossier archiving screen
+
 * Issue #860 Abgeschlossene und stornierte Dossiers koennen im derzeitigen Release
   durch Sekretariat nicht wiedereroeffnet werden
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/860
