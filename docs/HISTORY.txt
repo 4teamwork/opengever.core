@@ -7,6 +7,12 @@ Changelog
 
 * Issue #832 Workflow Task anpassen
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/832
+  Added condition for action "follow-up task". It is now only available for
+  responsible person.
+  [phabegger]
+
+* Issue #832 Workflow Task anpassen
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/832
   Added guards in order to reduce the number of available actions depending
   on the logged-in user.
   [phabegger]
