@@ -20,6 +20,7 @@ from z3c.relationfield.schema import RelationChoice, RelationList
 from zope import schema
 from zope.app.container.interfaces import IObjectAddedEvent
 from zope.app.container.interfaces import IObjectMovedEvent
+from OFS.interfaces import IObjectWillBeMovedEvent
 from zope.component import getAdapter, getUtility
 from zope.interface import Interface, alsoProvides
 from zope.interface import invariant, Invalid
@@ -51,8 +52,6 @@ class IDossier(form.Schema):
             ],
         )
 
-    # form.omitted('reference_number_prefix')
-
     dexteritytextindexer.searchable('keywords')
     keywords = schema.Tuple(
         title = _(u'label_keywords', default=u'Keywords'),
@@ -62,7 +61,6 @@ class IDossier(form.Schema):
         missing_value = (),
         )
     form.widget(keywords = TextLinesFieldWidget)
-
 
     start = schema.Date(
         title=_(u'label_start', default=u'Opening Date'),
@@ -118,6 +116,16 @@ class IDossier(form.Schema):
         title = _(u'filing_no', default="Filing number"),
         description = _(u'help_filing_no', default=u''),
         required=False,
+        )
+
+    # needed for temporarily storing current reference number when
+    # moving this dossier
+    form.omitted('temporary_former_reference_number')
+    temporary_former_reference_number = schema.TextLine(
+        title = _(u'temporary_former_reference_number'
+                  , default="Temporary former reference number"),
+        description = _(u'help_temporary_former_reference_number', default=u''),
+        required = False,
         )
 
     container_type = schema.Choice(
@@ -309,18 +317,38 @@ class SearchableTextExtender(grok.Adapter):
         return ' '.join(searchable)
 
 
+@grok.subscribe(IDossierMarker, IObjectWillBeMovedEvent)
+def set_former_reference_before_moving(obj, event):
+    """ Temporarily store current reference number before
+        moving the dossier.
+
+    """
+
+    # make sure obj wasn't just created or deleted
+    if not event.oldParent or not event.newParent:
+        return
+
+    repr = IDossier(obj)
+    ref_no = getAdapter(obj, IReferenceNumber).get_number()
+    IDossier['temporary_former_reference_number'].set(repr, ref_no)
+
+
 @grok.subscribe(IDossierMarker, IObjectMovedEvent)
 def set_former_reference_after_moving(obj, event):
+    """ Use the (hopefully) stored former reference number
+        as the real new former reference number. This has to
+        be done after the dossier was moved.
+
+    """
+    # make sure obj wasn't just created or deleted
     if not event.oldParent or not event.newParent:
-        # object was just created or deleted
         return
-    # we need to reconstruct the reference number
-    new_obj_rn = getAdapter(obj, IReferenceNumber).get_number()
-    new_par_rn = getAdapter(event.newParent, IReferenceNumber).get_number()
-    old_par_rn = getAdapter(event.oldParent, IReferenceNumber).get_number()
-    old_obj_rn = old_par_rn + new_obj_rn[len(new_par_rn):]
+
     repr = IDossier(obj)
-    IDossier['former_reference_number'].set(repr, old_obj_rn)
+    former_ref_no = repr.temporary_former_reference_number
+    IDossier['former_reference_number'].set(repr, former_ref_no)
+    # reset temporary former reference number
+    IDossier['temporary_former_reference_number'].set(repr, '')
 
     # setting the new number
     parent= aq_parent(aq_inner(obj))

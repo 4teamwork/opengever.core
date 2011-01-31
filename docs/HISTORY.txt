@@ -5,6 +5,13 @@ Changelog
 2.0b10
 ------
 
+* Issue #456 Falscher Dossierzaehler beim Verschieben eines Dossiers unter eine
+  andere Ordnungsposition
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/456
+  Added a temporary reference number field which is used to hold the former
+  reference number.
+  [phabegger]
+
 * Fixed sorting order in EnddateValidator
   [lgraf]
 
