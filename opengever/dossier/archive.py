@@ -49,13 +49,14 @@ class EnddateValidator(validator.SimpleFieldValidator):
         subdossiers = [s for s in subdossiers if not s.getPath() == dossier_path]
 
         if subdossiers:
+            # Sort subdossiers by end date, oldest first
             subdossiers.sort(key=lambda d: d.end or date(1900, 1, 1))
-            if subdossiers[0].end:
-                if value < subdossiers[0].end:
+            if subdossiers[-1].end:
+                if value < subdossiers[-1].end:
                     raise Invalid(
                         _(u'The given end date is older than the end date \
                             of the youngest subdossier(${number})',
-                                mapping = {'number':subdossiers[0].end}))
+                                mapping = {'number':subdossiers[-1].end}))
 
 
 
