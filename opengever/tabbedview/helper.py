@@ -131,7 +131,7 @@ def overdue_date_helper(item, date):
         return None
     try:
         formatted_date = date.strftime(strftimestring)
-        if date < dt.today():
+        if dt.fromordinal(date.toordinal()) < dt.today():
             overdue = True
     except ValueError:
         return None
