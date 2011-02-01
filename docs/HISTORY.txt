@@ -5,7 +5,7 @@ Changelog
 2.0a6
 -----
 
-* Issue #792 TabbedView listing für Dossiers dauert viel zu lange
+* Issue #792 TabbedView listing fuer Dossiers dauert viel zu lange
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/792
   Do not count subdossiers, respect current repository root.
   [phabegger]
