@@ -12,6 +12,7 @@ from persistent.dict import PersistentDict
 from plone.directives import form as directives_form
 from plone.registry.interfaces import IRegistry
 from Products.CMFCore.interfaces import ISiteRoot
+from Products.CMFCore.utils import getToolByName
 from Products.statusmessages.interfaces import IStatusMessage
 from Products.Transience.Transience import Increaser
 from z3c.form import button, field
@@ -189,7 +190,7 @@ class ArchiveForm(directives_form.Form):
                     else:
                         # Validate the existing end date
                         if IDossier(subdossier).end < subdossier.computeEndDate():
-                            self.status.addStatusMessage(_("The subdossier '${title}' has an invalid end date." , 
+                            self.ptool.addPortalMessage(_("The subdossier '${title}' has an invalid end date." , 
                                                       mapping=dict(title=subdossier.Title())
                                                       ), type="error")
                             return False
@@ -198,7 +199,7 @@ class ArchiveForm(directives_form.Form):
                     self.wft.doActionFor(subdossier, 'dossier-transition-resolve')
                 else:
                     # The subdossier's end date can't be determined automatically
-                    self.status.addStatusMessage(_("The subdossier '${title}' needs to be resolved manually.",
+                    self.ptool.addPortalMessage(_("The subdossier '${title}' needs to be resolved manually.",
                                               mapping=dict(title=subdossier.Title())
                                               ), type="error")
                     return False
@@ -218,7 +219,7 @@ class ArchiveForm(directives_form.Form):
         RESOLVE_USE_EXISTING = 1  # Nur abschliessen (keine Ablagenummer vergeben) / Abschliessen und die existierende Ablagenummer verwenden
         FILING_NO_KEY = "filing_no"
 
-        self.status = IStatusMessage(self.request)
+        self.ptool = getToolByName(self.context, 'plone_utils')
         self.wft = self.context.portal_workflow
         data, errors = self.extractData()
 
@@ -281,12 +282,12 @@ class ArchiveForm(directives_form.Form):
         IDossier(self.context).filing_prefix = data.get('filing_prefix')
 
         if data.get('dossier_enddate') == None:
-            self.status.addStatusMessage(_("The End that is required, also if only closing is selected"), type="error")
+            self.ptool.addPortalMessage(_("The End that is required, also if only closing is selected"), type="error")
             return
 
         # If everything went well, resolve the main dossier
         self.wft.doActionFor(self.context, 'dossier-transition-resolve')
-        self.status.addStatusMessage(_("the filling number was set"), type="info")
+        self.ptool.addPortalMessage(_("the filling number was set"), type="info")
         return self.request.RESPONSE.redirect(self.context.absolute_url())
 
 

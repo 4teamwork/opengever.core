@@ -1,16 +1,16 @@
 from Acquisition import aq_inner, aq_parent
 from five import grok
-from zope.component import queryMultiAdapter, queryUtility
-
-from plone.registry.interfaces import IRegistry
+from opengever.dossier.behaviors.dossier import IDossier
+from opengever.dossier.behaviors.dossier import IDossierMarker
+from opengever.dossier.interfaces import IConstrainTypeDecider, IDossierContainerTypes
 from plone.dexterity.content import Container
 from plone.dexterity.interfaces import IDexterityFTI
-from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
+from plone.registry.interfaces import IRegistry
+from Products.CMFCore.utils import getToolByName
 from Products.CMFDefault.interfaces import ICMFDefaultSkin
+from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
+from zope.component import queryMultiAdapter, queryUtility
 
-from opengever.dossier.interfaces import IConstrainTypeDecider, IDossierContainerTypes
-from opengever.dossier.behaviors.dossier import IDossierMarker
-from opengever.dossier.behaviors.dossier import IDossier
 
 class DossierContainer(Container):
 
