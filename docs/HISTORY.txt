@@ -5,6 +5,9 @@ Changelog
 2.0b11
 ------
 
+* Fixed bug when checking for valid end date on dossier archiving screen
+  [lgraf]
+
 
 2.0b10
 ------

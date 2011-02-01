@@ -200,7 +200,8 @@ class ArchiveForm(directives_form.Form):
             self.ptool.addPortalMessage(_("Filing Prefix is required"), type="error")
             return
 
-        if data.get('dossier_enddate') < self.context.computeEndDate():
+        end_date = self.context.computeEndDate()
+        if end_date and data.get('dossier_enddate') < end_date:
             self.ptool.addPortalMessage(_("The Dossier's end date needs to be younger than the youngest contained object's date"), type="error")
             return
 
