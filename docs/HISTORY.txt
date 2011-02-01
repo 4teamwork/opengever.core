@@ -5,6 +5,9 @@ Changelog
 2.0b12
 ------
 
+* fixed overdue_date_helper
+  [ttschanz]
+
 
 2.0b11
 ------
