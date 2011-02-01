@@ -5,6 +5,8 @@ Changelog
 2.0b11
 ------
 
+* Removed duplicate condition expression in profile
+
 * Issue #832 Workflow Task anpassen
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/832
   Added condition for action "follow-up task". It is now only available for
