@@ -155,7 +155,6 @@ class DossierContainer(Container):
         The final end date is the date of the most recent object that's
         contained (directly or indirectly) in this dossier.
         """
-        import pdb; pdb.set_trace( )
         wft = getToolByName(self, 'portal_workflow')
         end_dates = []
         children = self.getChildNodes()
