@@ -1,5 +1,6 @@
 from Acquisition import aq_inner, aq_parent
 from five import grok
+from opengever.dossier import _
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.interfaces import IConstrainTypeDecider, IDossierContainerTypes
@@ -10,6 +11,7 @@ from Products.CMFCore.utils import getToolByName
 from Products.CMFDefault.interfaces import ICMFDefaultSkin
 from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
 from zope.component import queryMultiAdapter, queryUtility
+
 
 
 class DossierContainer(Container):
@@ -56,6 +58,96 @@ class DossierContainer(Container):
         else:
             return True
 
+
+    def get_subdossiers(self):
+        dossier_path = '/'.join(self.getPhysicalPath())
+        subdossiers = self.portal_catalog(
+            path=dict(query=dossier_path,
+                      depth=-1),
+            object_provides= 'opengever.dossier.behaviors.dossier.IDossierMarker')
+
+        # Remove the object itself from the list of subdossiers
+        subdossiers = [s for s in subdossiers if not s.getPath() == dossier_path]
+        return subdossiers
+
+
+    def is_all_supplied(self):
+        """Check if all tasks and all documents are supplied in a subdossier
+        provided there are any subdossiers
+
+        """
+        subddosiers = self.getFolderContents({
+                'object_provides':
+                    'opengever.dossier.behaviors.dossier.IDossierMarker'})
+
+        if len(subddosiers) > 0:
+            results = self.getFolderContents({
+                    'portal_type': ['opengever.task.task',
+                                    'opengever.document.document']})
+
+            if len(results) > 0:
+                return False
+
+        return True
+
+
+    def is_all_closed(self):
+        """ Check if all tasks are in a closed state.
+
+        closed: - cancelled
+        - rejected
+        - tested and closed
+
+        """
+
+        tasks_closed = self.portal_catalog(
+            portal_type="opengever.task.task",
+            path=dict(query='/'.join(self.getPhysicalPath())),
+            review_state=('task-state-cancelled',
+                          'task-state-rejected',
+                          'task-state-tested-and-closed'))
+
+        tasks = self.portal_catalog(
+            portal_type="opengever.task.task",
+            path=dict(depth=2,
+                      query='/'.join(self.getPhysicalPath())))
+
+        if len(tasks_closed) < len(tasks):
+            return False
+        else:
+            return True
+
+
+    def is_all_checked_in(self):
+        """ check if all documents in this path are checked in """
+
+        # all document are checked in
+        docs = self.portal_catalog(
+            portal_type="opengever.document.document",
+            path=dict(depth=2,
+                      query='/'.join(self.getPhysicalPath())))
+
+        for doc in docs:
+            if doc.checked_out:
+                return False
+
+        return True
+
+
+    def has_valid_enddate(self):
+        """Check if the enddate is valid.
+        """
+        dossier = IDossier(self)
+        end_date = self.computeEndDate()
+
+        if dossier.end is None:
+            return False
+        if end_date:
+            if end_date < dossier.end:
+                return False
+        return True
+
+
     def computeEndDate(self):
         """Compute a suggested end date for the (sub)dossier, based
         on the dates of its contained objects.
@@ -85,12 +177,144 @@ class DossierContainer(Container):
             and review_state == 'dossier-state-resolved'
             and IDossier(self).end):
                 return IDossier(self).end
+
+            # If it has an end date, but isn't necessarily resolved yet,
+            # use the end date UNLESS it has subdossiers
+            elif (IDossierMarker.providedBy(self)
+            and self.get_subdossiers() == []
+            and IDossier(self).end):
+                return IDossier(self).end
+
             return None
 
         # Don't allow end_dates older than start_date
         if end_date < IDossier(self).start:
             end_date = IDossier(self).start
         return end_date
+
+
+    def check_preconditions(self):
+        errors = False
+        ptool = getToolByName(self, 'plone_utils')
+        # Check if it's a SubDossier
+        parent = aq_parent(aq_inner(self))
+        if IDossierMarker.providedBy(parent):
+            # If so, check for valid end date
+            if not self.has_valid_enddate():
+                ptool.addPortalMessage(
+                    _("no valid end date provided"),
+                    type="error") 
+                return False
+
+            # Everything ok
+            return True
+
+        if not self.is_all_supplied():
+            errors = True
+            ptool.addPortalMessage(
+                _("not all documents and tasks are stored in a subdossier"),
+                type="error")
+
+        if not self.is_all_checked_in():
+            errors = True
+            ptool.addPortalMessage(
+                _("not all documents are checked in"),
+                type="error")
+
+        if not self.is_all_closed():
+            errors = True
+            ptool.addPortalMessage(
+                _("not all task are closed"),
+                type="error")
+
+        if errors:
+            return False
+        return True
+
+
+
+    def recursively_resolve(self):
+        # Check preconditions for resolving dossier
+        preconditions_ok = self.check_preconditions()
+        if not preconditions_ok:
+            return self.REQUEST.RESPONSE.redirect(self.absolute_url())
+
+        subdossiers_resolved = self.resolve_subdossiers()
+        if not subdossiers_resolved:
+            return self.REQUEST.RESPONSE.redirect(self.absolute_url())
+
+        dossier_resolved = self.resolve()
+        if not dossier_resolved:
+            return self.REQUEST.RESPONSE.redirect(self.absolute_url())
+
+        # All ok, show resolving mask
+        return self.REQUEST.RESPONSE.redirect(self.absolute_url() + \
+                                              '/transition-archive')
+
+    def resolve_subdossiers(self):
+        """Resolves all subdossiers of this dossier, if possible.
+        Otherwise, throw an error message and return to the context
+        """
+        ptool = getToolByName(self, 'plone_utils')
+        wft = getToolByName(self, 'portal_workflow')
+        subdossiers = self.get_subdossiers()
+
+        for subdossier in subdossiers:
+            subdossier = subdossier.getObject()
+            status =  wft.getStatusOf("opengever_dossier_workflow", subdossier)
+            state = status["review_state"]
+
+            if not state == 'dossier-state-resolved':
+                if subdossier.computeEndDate():
+                    # Resolve subdossier after setting end date and filing_no
+                    if not IDossier(subdossier).end:
+                        IDossier(subdossier).end = subdossier.computeEndDate()
+
+                    else:
+                        # Validate the existing end date
+                        if IDossier(subdossier).end < subdossier.computeEndDate():
+                            ptool.addPortalMessage(_("The subdossier '${title}' has an invalid end date." , 
+                                                      mapping=dict(title=subdossier.Title())
+                                                      ), type="error")
+                            return False
+
+
+                    wft.doActionFor(subdossier, 'dossier-transition-resolve')
+                else:
+                    # The subdossier's end date can't be determined automatically
+                    ptool.addPortalMessage(_("The subdossier '${title}' needs to be resolved manually.",
+                                              mapping=dict(title=subdossier.Title())
+                                              ), type="error")
+                    return False
+        return True
+
+    def resolve(self):
+        """Try to resolve this dossier.
+
+        For that to happen, first all subdossiers need to have filing_no
+        and end_date set, and then be resolved. If resolving any of the
+        subdossier fails, we'll throw and error and return.
+        """
+        ptool = getToolByName(self, 'plone_utils')
+        wft = getToolByName(self, 'portal_workflow')
+
+        parent = aq_parent(aq_inner(self))
+
+        if IDossierMarker.providedBy(parent):
+            # It's a subdossier
+            end_date = self.computeEndDate()
+            if end_date:
+                IDossier(self).end = end_date
+                wft.doActionFor(self, 'dossier-transition-resolve')
+                return True
+            else:
+                ptool.addPortalMessage(_("The subdossier '${title}' needs to be resolved manually.",
+                                          mapping=dict(title=self.Title())
+                                          ), type="error")
+                return False
+        else:
+            # It's a main dossier
+            return True
 
 
 class DefaultConstrainTypeDecider(grok.MultiAdapter):

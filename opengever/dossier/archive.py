@@ -170,41 +170,6 @@ class ArchiveForm(directives_form.Form):
                 '/content_status_modify?workflow_action=dossier-transition-resolve')
         return super(ArchiveForm, self).__call__()
 
-    def resolve_subdossiers(self, subdossiers, filing_no):
-        """Resolves all subdossiers of this dossier, if possible.
-        Otherwise, throw an error message and return to the context
-        """
-
-        counter = 1
-        for subdossier in subdossiers:
-            subdossier = subdossier.getObject()
-            status =  self.wft.getStatusOf("opengever_dossier_workflow", subdossier)
-            state = status["review_state"]
-
-            if not state == 'dossier-state-resolved':
-                if subdossier.computeEndDate():
-                    # Resolve subdossier after setting end date and filing_no
-                    if not IDossier(subdossier).end:
-                        IDossier(subdossier).end = subdossier.computeEndDate()
-                        IDossier(subdossier).filing_no = filing_no + "." + str(counter)
-                    else:
-                        # Validate the existing end date
-                        if IDossier(subdossier).end < subdossier.computeEndDate():
-                            self.ptool.addPortalMessage(_("The subdossier '${title}' has an invalid end date." , 
-                                                      mapping=dict(title=subdossier.Title())
-                                                      ), type="error")
-                            return False
-
-                    counter += 1
-                    self.wft.doActionFor(subdossier, 'dossier-transition-resolve')
-                else:
-                    # The subdossier's end date can't be determined automatically
-                    self.ptool.addPortalMessage(_("The subdossier '${title}' needs to be resolved manually.",
-                                              mapping=dict(title=subdossier.Title())
-                                              ), type="error")
-                    return False
-        return True
-
 
     @button.buttonAndHandler(_(u'button_archive', default=u'Archive'))
     def archive(self, action):
@@ -225,6 +190,14 @@ class ArchiveForm(directives_form.Form):
 
         # Abort if there were errors or user hasn't selected a filing action
         if len(errors) > 0 or not 'filing_action' in data:
+            return
+
+        if data.get('dossier_enddate') == None:
+            self.ptool.addPortalMessage(_("The End that is required, also if only closing is selected"), type="error")
+            return
+
+        if RESOLVE_USE_EXISTING and data.get('filing_prefix') == None:
+            self.ptool.addPortalMessage(_("Filing Prefix is required"), type="error")
             return
 
         action = data.get('filing_action')
@@ -259,20 +232,6 @@ class ArchiveForm(directives_form.Form):
         # compute filing_no
         filing_no = filing_client + "-" + filing_prefix + "-" + filing_year + "-" + str(filing_sequence)
 
-        # create filing number for all subdossiers
-        # and resolve them also
-        subdossiers = self.context.portal_catalog(
-            provided_by="opengever.dossier.behaviors.dossier.IDossierMarker",
-            path=dict(depth=1,
-                query='/'.join(self.context.getPhysicalPath()),
-            ),
-            sort_on='filing_no',)
-
-        success = self.resolve_subdossiers(subdossiers, filing_no)
-        if not success:
-            # If resolving subdossiers failed, abort and return to context
-            return self.request.RESPONSE.redirect(self.context.absolute_url())
-
         if action == RESOLVE_AND_NEW_FILING_NO:
             # Set filing_no if subdossiers have been resolved successfully
             IDossier(self.context).filing_no = filing_no
@@ -280,10 +239,17 @@ class ArchiveForm(directives_form.Form):
         # set the dossier end date and the dossier filing prefix
         IDossier(self.context).end = data.get('dossier_enddate')
         IDossier(self.context).filing_prefix = data.get('filing_prefix')
+        
+        # Also set the filing_no for all the subdossiers, which at this point
+        # already have been resolved
+        filing_no_suffix = 1
+        subdossiers = self.context.get_subdossiers()
+        for subdossier in subdossiers:
 
-        if data.get('dossier_enddate') == None:
-            self.ptool.addPortalMessage(_("The End that is required, also if only closing is selected"), type="error")
-            return
+            obj = subdossier.getObject()
+            IDossier(obj).filing_no = "%s.%s" % (filing_no, filing_no_suffix)
+            obj.reindexObject(idxs=['filing_no'])
+            filing_no_suffix += 1
 
         # If everything went well, resolve the main dossier
         self.wft.doActionFor(self.context, 'dossier-transition-resolve')
