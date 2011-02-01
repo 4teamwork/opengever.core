@@ -239,6 +239,7 @@ class ArchiveForm(directives_form.Form):
         if action == RESOLVE_AND_NEW_FILING_NO:
             # Set filing_no if subdossiers have been resolved successfully
             IDossier(self.context).filing_no = filing_no
+            self.ptool.addPortalMessage(_("the filling number was set"), type="info")
 
         # set the dossier end date and the dossier filing prefix
         IDossier(self.context).end = data.get('dossier_enddate')
@@ -257,7 +258,7 @@ class ArchiveForm(directives_form.Form):
 
         # If everything went well, resolve the main dossier
         self.wft.doActionFor(self.context, 'dossier-transition-resolve')
-        self.ptool.addPortalMessage(_("the filling number was set"), type="info")
+        self.ptool.addPortalMessage(_("The Dossier has been resolved"), type="info")
         return self.request.RESPONSE.redirect(self.context.absolute_url())
 
 

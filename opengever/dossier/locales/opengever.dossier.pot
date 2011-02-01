@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2011-02-01 17:18+0000\n"
+"POT-Creation-Date: 2011-02-01 17:26+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -83,6 +83,10 @@ msgstr ""
 msgid "Templates"
 msgstr ""
 
+#: ./opengever/dossier/archive.py:261
+msgid "The Dossier has been resolved"
+msgstr ""
+
 #: ./opengever/dossier/archive.py:204
 msgid "The Dossier's end date needs to be younger than the youngest contained object's date"
 msgstr ""
@@ -138,7 +142,7 @@ msgid "button_archive"
 msgstr ""
 
 #. Default: "Cancel"
-#: ./opengever/dossier/archive.py:264
+#: ./opengever/dossier/archive.py:265
 #: ./opengever/dossier/behaviors/participation.py:167
 #: ./opengever/dossier/browser/transport.py:170
 msgid "button_cancel"
@@ -626,7 +630,7 @@ msgstr ""
 msgid "the filling number was already set"
 msgstr ""
 
-#: ./opengever/dossier/archive.py:260
+#: ./opengever/dossier/archive.py:242
 msgid "the filling number was set"
 msgstr ""
 
