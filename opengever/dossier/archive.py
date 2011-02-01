@@ -299,7 +299,7 @@ class ArchiveForm(directives_form.Form):
         end_date = self.context.computeEndDate()
         if end_date:
             locale.setlocale(locale.LC_ALL, ('de_DE', ''))
-            formatted_date = end_date.strftime("%d. %B %Y")
+            formatted_date = end_date.strftime("%d. %B %Y").decode('latin1')
             self.widgets['dossier_enddate'].value = formatted_date
 
 

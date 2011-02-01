@@ -5,6 +5,9 @@ Changelog
 2.0b10
 ------
 
+* Added handling of empty subdossiers that are resolved and have an end date set
+  [lgraf]
+
 * Issue #456 Falscher Dossierzaehler beim Verschieben eines Dossiers unter eine
   andere Ordnungsposition
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/456

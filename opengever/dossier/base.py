@@ -63,6 +63,7 @@ class DossierContainer(Container):
         The final end date is the date of the most recent object that's
         contained (directly or indirectly) in this dossier.
         """
+        wft = getToolByName(self, 'portal_workflow')
         end_dates = []
         children = self.getChildNodes()
         for child in children:
@@ -77,6 +78,13 @@ class DossierContainer(Container):
         if end_dates:
             end_date = max(end_dates)
         else:
+            review_state = wft.getInfoFor(self, 'review_state', None)
+            # If a subdossier doesn't have documents, but has a (valid)
+            # end date and has been resolved, use its end date
+            if (IDossierMarker.providedBy(self)
+            and review_state == 'dossier-state-resolved'
+            and IDossier(self).end):
+                return IDossier(self).end
             return None
 
         # Don't allow end_dates older than start_date
