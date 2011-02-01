@@ -200,6 +200,10 @@ class ArchiveForm(directives_form.Form):
             self.ptool.addPortalMessage(_("Filing Prefix is required"), type="error")
             return
 
+        if data.get('dossier_enddate') < self.context.computeEndDate():
+            self.ptool.addPortalMessage(_("The Dossier's end date needs to be younger than the youngest contained object's date"), type="error")
+            return
+
         action = data.get('filing_action')
         filing_year = data.get('filing_year')
         filing_prefix = data.get('filing_prefix')
@@ -239,7 +243,7 @@ class ArchiveForm(directives_form.Form):
         # set the dossier end date and the dossier filing prefix
         IDossier(self.context).end = data.get('dossier_enddate')
         IDossier(self.context).filing_prefix = data.get('filing_prefix')
-        
+
         # Also set the filing_no for all the subdossiers, which at this point
         # already have been resolved
         filing_no_suffix = 1
