@@ -95,8 +95,7 @@
             category="object_buttons"
             url_expr="string:${object_url}/@@create-successor-task"
             condition_expr="python:object.responsible==member.id"
-            icon_expr=""
-            condition_expr="">
+            icon_expr="">
         <permission value="View"/>
     </action>
 
