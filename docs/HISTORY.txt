@@ -5,6 +5,12 @@ Changelog
 2.0b10
 ------
 
+* Issue #712 Advanced Search korrigieren und testen
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/712
+  Changed German translation of WF state "archived" to "archiviert" (used to be
+  "abgelegt".
+  [phabegger]
+
 * Added handling of empty subdossiers that are resolved and have an end date set
   [lgraf]
 
