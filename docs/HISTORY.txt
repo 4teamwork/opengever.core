@@ -5,6 +5,9 @@ Changelog
 2.0b13
 ------
 
+* Added "clear and rebuild tasks" action to OGDS control panel
+  [lgraf]
+
 
 2.0b12
 ------

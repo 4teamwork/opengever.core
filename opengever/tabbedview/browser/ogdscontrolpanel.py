@@ -56,7 +56,7 @@ class OGDSAllTasks(GlobalTaskListingTab):
     grok.name('tabbedview_view-ogds-cp-alltasks')
     grok.require('cmf.ManagePortal')
 
-    enabled_actions = major_actions = ['pdf_taskslisting']
+    enabled_actions = major_actions = ['pdf_taskslisting', 'clear_and_rebuild_tasks']
 
     def get_base_query(self):
         """Returns the base search query (sqlalchemy)
