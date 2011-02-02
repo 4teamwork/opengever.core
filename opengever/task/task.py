@@ -1,39 +1,41 @@
-from collective import dexteritytextindexer
 from Acquisition import aq_parent, aq_inner
-from Products.CMFCore.interfaces import IActionSucceededEvent
-from Products.CMFCore.utils import getToolByName
+from collective import dexteritytextindexer
 from datetime import datetime, timedelta
 from five import grok
+from ftw.tabbedview.browser.listing import ListingView
+from ftw.table import helper
+from ftw.table.basesource import BaseTableSource
+from ftw.table.interfaces import ITableSource, ITableSourceConfig
+from opengever.base.browser.helper import client_title_helper
 from opengever.base.interfaces import ISequenceNumber
+from opengever.base.source import DossierPathSourceBinder
 from opengever.globalindex.utils import indexed_task_link
 from opengever.ogds.base.autocomplete_widget import AutocompleteFieldWidget
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.ogds.base.utils import get_client_id
-from opengever.task import _
+from opengever.tabbedview.browser.tabs import Documents
+from opengever.tabbedview.browser.tabs import OpengeverTab
+from opengever.tabbedview.helper import readable_ogds_author
 from opengever.task import util
+from opengever.task import _
+from opengever.task.helper import linked
+from opengever.task.helper import path_checkbox
 from opengever.task.interfaces import ISuccessorTaskController
-from opengever.base.source import DossierPathSourceBinder
+from operator import attrgetter
 from plone.dexterity.content import Container
 from plone.directives import form, dexterity
+from plone.directives.dexterity import DisplayForm
 from plone.indexer import indexer
+from Products.CMFCore.interfaces import IActionSucceededEvent
+from Products.CMFCore.utils import getToolByName
 from z3c.relationfield.schema import RelationChoice, RelationList
 from zc.relation.interfaces import ICatalog
 from zope import schema
+from zope.app.intid.interfaces import IIntIds
 from zope.component import getUtility, getMultiAdapter
 from zope.interface import implements, Interface
 from zope.schema.vocabulary import getVocabularyRegistry
-from opengever.base.browser.helper import client_title_helper
-from opengever.tabbedview.browser.tabs import OpengeverTab
-from plone.directives.dexterity import DisplayForm
-from zope.app.intid.interfaces import IIntIds
-from ftw.table.basesource import BaseTableSource
-from opengever.tabbedview.browser.tabs import Documents
-from opengever.tabbedview.helper import readable_ogds_author
-from opengever.task.helper import linked
-from ftw.table import helper
-from operator import attrgetter
-from ftw.tabbedview.browser.listing import ListingView
-from ftw.table.interfaces import ITableSource, ITableSourceConfig
+
 
 
 class ITask(form.Schema):
@@ -346,7 +348,9 @@ class RelatedDocumentTableSource(grok.MultiAdapter, BaseTableSource):
         for brain in brains:
             objects.append(brain.getObject())
         for item in self.config.context.relatedItems:
-            objects.append(item)
+            obj = item.to_object
+            if obj.portal_type=='opengever.document.document' or obj.portal_type=='ftw.mail.mail':
+                objects.append(obj)
         objects = self.extend_query_with_ordering(objects)
         if self.config.filter_text:
             objects = self.extend_query_with_textfilter(
@@ -393,11 +397,12 @@ class RelatedDocumentTableSource(grok.MultiAdapter, BaseTableSource):
         return query
 
 
-class RelatedDocuments(grok.CodeView,OpengeverTab,ListingView):
+class RelatedDocuments(Documents):
 
-    grok.implements(IRelatedDocumentsTableSourceConfig)
-    grok.name('tabbedview_view-related_documents')
+    grok.name('tabbedview_view-documents')
     grok.context(ITask)
+    grok.implements(IRelatedDocumentsTableSourceConfig)
+
 
     lazy = False
     columns = (
@@ -406,7 +411,7 @@ class RelatedDocuments(grok.CodeView,OpengeverTab,ListingView):
          'transform':helper.draggable},
         {'column':'',
          'column_title':'',
-         'transform':helper.path_checkbox},
+         'transform':path_checkbox},
 
         {'column': 'title',
          'column_title': _(u'label_title', default=u'Title'),
