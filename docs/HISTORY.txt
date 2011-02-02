@@ -5,6 +5,9 @@ Changelog
 2.0b12
 ------
 
+* Added some typechecking in computeEndDate() to avoid comparing datetime to date
+  [lgraf]
+
 
 2.0b11
 ------

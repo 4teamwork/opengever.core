@@ -1,4 +1,5 @@
 from Acquisition import aq_inner, aq_parent
+from datetime import datetime
 from five import grok
 from opengever.dossier import _
 from opengever.dossier.behaviors.dossier import IDossier
@@ -11,7 +12,6 @@ from Products.CMFCore.utils import getToolByName
 from Products.CMFDefault.interfaces import ICMFDefaultSkin
 from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
 from zope.component import queryMultiAdapter, queryUtility
-
 
 
 class DossierContainer(Container):
@@ -58,7 +58,6 @@ class DossierContainer(Container):
         else:
             return True
 
-
     def get_subdossiers(self):
         dossier_path = '/'.join(self.getPhysicalPath())
         subdossiers = self.portal_catalog(
@@ -69,7 +68,6 @@ class DossierContainer(Container):
         # Remove the object itself from the list of subdossiers
         subdossiers = [s for s in subdossiers if not s.getPath() == dossier_path]
         return subdossiers
-
 
     def is_all_supplied(self):
         """Check if all tasks and all documents are supplied in a subdossier
@@ -89,7 +87,6 @@ class DossierContainer(Container):
                 return False
 
         return True
-
 
     def is_all_closed(self):
         """ Check if all tasks are in a closed state.
@@ -117,7 +114,6 @@ class DossierContainer(Container):
         else:
             return True
 
-
     def is_all_checked_in(self):
         """ check if all documents in this path are checked in """
 
@@ -133,7 +129,6 @@ class DossierContainer(Container):
 
         return True
 
-
     def has_valid_enddate(self):
         """Check if the enddate is valid.
         """
@@ -146,7 +141,6 @@ class DossierContainer(Container):
             if end_date < dossier.end:
                 return False
         return True
-
 
     def computeEndDate(self):
         """Compute a suggested end date for the (sub)dossier, based
@@ -166,6 +160,11 @@ class DossierContainer(Container):
 
         # Remove dates that are 'None'
         end_dates = [d for d in end_dates if d]
+
+        # Make sure all dates are datetime.date instances
+        for i, d in enumerate(end_dates):
+            if isinstance(d, datetime):
+                end_dates[i] = d.date()
 
         if end_dates:
             end_date = max(end_dates)
@@ -191,7 +190,6 @@ class DossierContainer(Container):
         if end_date < IDossier(self).start:
             end_date = IDossier(self).start
         return end_date
-
 
     def check_preconditions(self):
         errors = False
@@ -230,8 +228,6 @@ class DossierContainer(Container):
         if errors:
             return False
         return True
-
-
 
     def recursively_resolve(self):
         # Check preconditions for resolving dossier
