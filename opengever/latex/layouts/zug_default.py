@@ -7,7 +7,7 @@ class ZugDefaultLayout(object):
 
     customconverters = []
 
-    def __init__(self, show_logo=True, show_organisation=True,
+    def __init__(self, show_logo=True, show_organisation=False,
                  show_contact=True):
         self.show_logo = show_logo
         self.show_contact = show_contact

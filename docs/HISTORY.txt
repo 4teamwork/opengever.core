@@ -5,6 +5,11 @@ Changelog
 2.0b3
 -----
 
+* Issue #529 Standard-Druckvorlagen erstellen & einbauen
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/529
+  Removed display of organisation, changed width of selected columns (task listing)
+  [phabegger]
+
 
 2.0b2
 -----
