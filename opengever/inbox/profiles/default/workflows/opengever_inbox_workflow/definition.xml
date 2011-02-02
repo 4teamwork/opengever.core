@@ -5,6 +5,7 @@
  <permission>List folder contents</permission>
  <permission>Manage properties</permission>
  <permission>Modify portal content</permission>
+ <permission>Sharing page: Delegate roles</permission>
  <permission>View</permission>
  <permission>ftw.mail: Add Inbound Mail</permission>
  <permission>ftw.mail: Add Mail</permission>
@@ -14,7 +15,9 @@
  <permission>opengever.task: Add task</permission>
  <permission>opengever.trash: Trash content</permission>
  <permission>opengever.trash: Untrash content</permission>
- <permission>Sharing page: Delegate roles</permission>
+ <permission>opengever.document: Cancel</permission>
+ <permission>opengever.document: Checkin</permission>
+ <permission>opengever.document: Checkout</permission>
  <state state_id="inbox-state-default" title="inbox-state-default">
   <exit-transition transition_id="dossier-transition-deactivate"/>
   <exit-transition transition_id="dossier-transition-resolve"/>
@@ -61,6 +64,12 @@
    <permission-role>Contributor</permission-role>
    <permission-role>Manager</permission-role>
    <permission-role>Owner</permission-role>
+  </permission-map>
+  <permission-map name="opengever.document: Cancel" acquired="False">
+  </permission-map>
+  <permission-map name="opengever.document: Checkin" acquired="False">
+  </permission-map>
+  <permission-map name="opengever.document: Checkout" acquired="False">
   </permission-map>
   <permission-map name="opengever.dossier: Add businesscasedossier" acquired="False">
    <permission-role>Contributor</permission-role>
