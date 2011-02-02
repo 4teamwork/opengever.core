@@ -5,6 +5,11 @@ Changelog
 2.0b4
 -----
 
+* Issue #887 Tabbedview: Sortieren nach Spalte "In Bearbeitung" auf Stufe Dokumente in Dossiers blendet Mails aus
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/887/
+  added checked_out indexer for mails
+  [ttschanz]
+
 
 2.0b3
 -----
