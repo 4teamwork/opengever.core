@@ -96,6 +96,15 @@ class TaskQuery(object):
         return self._get_tasks_for_issuer_query(
             issuer, sort_on=sort_on, sort_order=sort_order).all()
 
+    def get_tasks_for_client(self, client, sort_on='modified'):
+        """Return a sqlachemy query of all task on the specified client.
+        """
+
+        sort_on = getattr(Task, sort_on)
+        return Session().query(Task).filter(Task.client_id==client
+                                            ).order_by(asc(sort_on)).all()
+
+
     def _get_tasks_for_assigned_client_query(self, client, sort_on='modified',
                                              sort_order='reverse'):
         """Return a sqlachemy query of all task assigned to the actual client.

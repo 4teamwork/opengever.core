@@ -22,6 +22,7 @@
         />
 
     <include package=".handlers" />
+    <include package=".browser" />
 
     <utility factory=".query.TaskQuery" />
 

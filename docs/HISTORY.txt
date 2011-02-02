@@ -5,6 +5,9 @@ Changelog
 2.0b4
 -----
 
+* Added "clear and rebuild task index" action to OGDS control panel
+  [lgraf]
+
 
 2.0b3
 -----
