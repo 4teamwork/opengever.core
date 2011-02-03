@@ -39,7 +39,8 @@ class Task(Base):
 
     predecessor_id = Column(Integer, ForeignKey('tasks.id'))
     successors = relationship("Task", backref=backref('predecessor',
-                                                      remote_side=task_id))
+                                                      remote_side=task_id),
+                                      cascade="delete")
 
     _principals = relation('TaskPrincipal', backref='task',
                      cascade='all, delete-orphan')

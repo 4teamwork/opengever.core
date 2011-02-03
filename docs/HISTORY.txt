@@ -5,6 +5,9 @@ Changelog
 2.0b4
 -----
 
+* Added cascade=delete for successor <-> predecessor relationship of tasks
+  [lgraf]
+
 * Added "clear and rebuild task index" action to OGDS control panel
   [lgraf]
 
