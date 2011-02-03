@@ -5,6 +5,11 @@ Changelog
 2.0b13
 ------
 
+* Issue #861 Markierung ueberfaelliger Aufgaben
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/861
+  Only mark task as overdue if task is not in a final workflow state.
+  [phabegger]
+
 * Added "clear and rebuild tasks" action to OGDS control panel
   [lgraf]
 

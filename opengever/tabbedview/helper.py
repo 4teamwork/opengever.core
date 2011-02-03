@@ -117,24 +117,32 @@ def workflow_state(item, value):
     state = normalize(item.review_state)
     return """<span class="wf-%s">%s</span>""" % (state, i18n_translate(translated_value))
 
+
 def overdue_date_helper(item, date):
     """Helper for setting CSS class `overdue` if an item's
     deadline is in the past.
 
     Partially based on ftw.table.helper.readable_date
     """
-    overdue = False
+
     if not date:
         return u''
+
     strftimestring = '%d.%m.%Y'
-    if date == None:
-        return None
+
+    overdue = False
     try:
         formatted_date = date.strftime(strftimestring)
         if dt.fromordinal(date.toordinal()) < dt.today():
             overdue = True
     except ValueError:
         return None
+
+    if overdue and item and item.review_state in ['task-state-cancelled'
+                                                  , 'task-state-rejected'
+                                                  , 'task-state-tested-and-closed']:
+        overdue = False
+
     class_attr = overdue and 'class="overdue"' or ''
     return """<span %s>%s</span>""" % (class_attr, formatted_date)
 
