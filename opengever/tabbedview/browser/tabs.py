@@ -116,7 +116,7 @@ class Documents(OpengeverCatalogListingTab):
     search_options = {'isWorkingCopy': 0,}
 
     columns = (
-        ('', helper.draggable),
+
         ('', helper.path_checkbox),
 
         {'column': 'Title',
@@ -175,7 +175,6 @@ class Dossiers(OpengeverCatalogListingTab):
     object_provides = 'opengever.dossier.behaviors.dossier.IDossierMarker'
 
     columns = (
-        ('', helper.draggable),
         ('', helper.path_checkbox),
 
         {'column': 'reference',
@@ -229,7 +228,6 @@ class Tasks(OpengeverCatalogListingTab):
     grok.name('tabbedview_view-tasks')
 
     columns= (
-        ('', helper.draggable),
         ('', helper.path_checkbox),
 
         {'column': 'review_state',
