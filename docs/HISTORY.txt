@@ -5,13 +5,13 @@ Changelog
 2.0b12
 ------
 
-
-2.0b11
-------
-
 * Added exit-transition "task-transition-reassign" to task-state-in-progress,
   removed guard permission, added guard condition
   [lgraf]
+
+
+2.0b11
+------
 
 * Removed duplicate condition expression in profile
   [lgraf]
