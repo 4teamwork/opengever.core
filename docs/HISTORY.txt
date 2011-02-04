@@ -5,6 +5,9 @@ Changelog
 2.0b5
 -----
 
+* Only listing assigned forwardings in inbox that don't belong to current client
+  [lgraf]
+
 * Issue #888 Anpassung Mandantenuebergreifende Aufgaben
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/888/
   added assigned_tasks tab
