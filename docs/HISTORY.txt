@@ -4,6 +4,10 @@ Changelog
 
 2.0b8
 -----
+
+*  Fixed cache key for ``describe()`` method. Do not use db objects (e.g. brains) as cache keys.
+  [tbuchberger]
+
 * Corrected table class on user detail view
   [fsprenger]
 
