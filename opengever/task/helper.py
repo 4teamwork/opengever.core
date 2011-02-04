@@ -43,7 +43,7 @@ def linked(item, value):
     link = '%s&nbsp;<a class="rollover-breadcrumb" href="%s" title="%s">%s</a>' % (
         img, url_method(),
         " &gt; ".join(t for t in breadcrumb_titles),
-        value.de    code('utf-8'))
+        value.decode('utf-8'))
     wrapper = '<span class="linkWrapper">%s</span>' % link
     return wrapper
 
