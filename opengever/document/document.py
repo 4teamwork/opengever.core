@@ -37,7 +37,7 @@ from zope.interface import invariant, Invalid, Interface
 from zope.lifecycleevent.interfaces import IObjectCreatedEvent
 from zope.lifecycleevent.interfaces import IObjectModifiedEvent
 import logging
-
+from opengever.tabbedview.helper import readable_ogds_author
 
 LOG = logging.getLogger('opengever.document')
 
@@ -388,7 +388,13 @@ def checked_out( obj ):
         return ''
 grok.global_adapter( checked_out, name='checked_out' )
 
-
+@indexer(IDocumentSchema)
+def sortable_author(obj):
+    """Index to allow users to sort on document_author."""
+    author = obj.document_author
+    readable_author = readable_ogds_author(obj, author)
+    return readable_author
+grok.global_adapter( sortable_author, name='sortable_author' )
 
 
 

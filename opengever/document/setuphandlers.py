@@ -60,6 +60,7 @@ def add_catalog_indexes(context, logger=None):
         ('document_date', 'DateIndex', {}),
         ('receipt_date', 'DateIndex', {}),
         ('related_items', 'KeywordIndex', {}),
+        ('sortable_author','FieldIndex', {}),
         )
     indexables = []
     for name, meta_type, args in wanted:

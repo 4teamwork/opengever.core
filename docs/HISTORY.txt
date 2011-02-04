@@ -5,6 +5,11 @@ Changelog
 2.0b12
 ------
 
+* Issue #886 Nach Autor kann nicht sortiert werden
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/886/
+  added index sortable_author
+  [ttschanz]
+
 
 2.0b11
 ------
