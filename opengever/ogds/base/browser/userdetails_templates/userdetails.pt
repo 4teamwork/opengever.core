@@ -22,7 +22,7 @@
            tal:attributes="href string:${here/absolute_url}/kontakte/#users"
            i18n:translate="link_all_users">Show all users</a>
 
-        <table class="listing">
+        <table class="vertical listing">
 
           <colgroup>
             <col width="200">

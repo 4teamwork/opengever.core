@@ -4,7 +4,8 @@ Changelog
 
 2.0b8
 -----
-
+* Corrected table class on user detail view
+  [fsprenger]
 
 2.0b7
 -----
