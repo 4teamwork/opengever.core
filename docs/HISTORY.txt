@@ -5,9 +5,8 @@ Changelog
 2.0b9
 -----
 
-* Changed cache keys for methods having a single ``principal`` parameter to make sure
-the cache key is not based on a db object. Untested yet! :-)
-
+* Changed cache keys for methods having a single ``principal`` parameter to make sure the cache key is not based on a db object. Untested yet!
+  [tbuchberger]
 
 2.0b8
 -----
