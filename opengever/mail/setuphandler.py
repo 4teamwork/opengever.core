@@ -54,7 +54,6 @@ def mail_settings(setup):
     client_id = client_config.client_id
     mail_config = registry.forInterface(IMailSettings)
     mail_domain = mail_config.mail_domain
-    import pdb; pdb.set_trace( )
     site.manage_changeProperties({'email_from_address':'noreply@'+mail_domain,
                                 'email_from_name': client_id})
 
@@ -63,8 +62,6 @@ def mail_settings(setup):
 def import_various(setup):
     """Import step for configuration that is not handled in xml files.
     """
-    if setup.readDataFile('opengever.mail.txt') is not None:
-        import pdb; pdb.set_trace( )
     if setup.readDataFile('opengever.mail.txt') is None:
         return
     add_catalog_indexes(setup.getSite(),setup.getLogger('opengever.mail'))
