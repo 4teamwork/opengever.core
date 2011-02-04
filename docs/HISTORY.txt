@@ -5,6 +5,9 @@ Changelog
 2.0b13
 ------
 
+* Disabled "clear and rebuild" action in OGDS control panel until it works reliably
+  [lgraf]
+
 * Disabled draggable / manual sort column in tabbed view
   [lgraf]
 
