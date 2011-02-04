@@ -16,7 +16,7 @@ msgid "assigned_forwardings"
 msgstr "Eingang"
 
 msgid "assigned_tasks"
-msgstr "Zugewiesene Aufgaben"
+msgstr "Aufgaben aus anderem Mandant"
 
 msgid "myissuedtasks"
 msgstr "Erteilte Aufgaben"
