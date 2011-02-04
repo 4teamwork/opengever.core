@@ -32,4 +32,10 @@
           provides="Products.GenericSetup.interfaces.EXTENSION"
           />
 
+    <genericsetup:importStep
+        name="opengever.mail"
+        title="opengever.mail special import handlers"
+        description=""
+        handler="opengever.mail.setuphandler.import_various" />
+
 </configure>
