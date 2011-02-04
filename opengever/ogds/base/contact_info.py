@@ -13,6 +13,14 @@ from zope.app.component.hooks import getSite
 import types
 
 
+def cache_key_describe(method, self, principal, with_email=False, with_email2=False):
+    if ICatalogBrain.providedBy(principal):
+        return (principal.contactid, with_email, with_email2)
+    if IUser.providedBy(principal):
+        return (principal.userid, with_email, with_email2)
+    return (principal, with_email, with_email2)
+
+
 class ContactInformation(grok.GlobalUtility):
     """The principal information utility provides useful functions for
     building vocabularies with users, contacts, in-boxes groups and
@@ -231,7 +239,7 @@ class ContactInformation(grok.GlobalUtility):
 
     # general principal methods
 
-    @volatile.cache(lambda method, self, *args, **kwargs: (args, kwargs))
+    @volatile.cache(cache_key_describe)
     def describe(self, principal, with_email=False, with_email2=False):
         """Represent a user / contact / inbox / ... as string. This usually
         returns the fullname or another label / title.
