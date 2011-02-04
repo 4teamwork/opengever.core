@@ -9,7 +9,12 @@ Changelog
 2.0b11
 ------
 
+* Added exit-transition "task-transition-reassign" to task-state-in-progress,
+  removed guard permission, added guard condition
+  [lgraf]
+
 * Removed duplicate condition expression in profile
+  [lgraf]
 
 * Issue #832 Workflow Task anpassen
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/832
