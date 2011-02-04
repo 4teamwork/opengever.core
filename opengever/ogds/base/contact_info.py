@@ -20,6 +20,13 @@ def cache_key_describe(method, self, principal, with_email=False, with_email2=Fa
         return (principal.userid, with_email, with_email2)
     return (principal, with_email, with_email2)
 
+def cache_key_principal(method, self, principal):
+    if ICatalogBrain.providedBy(principal):
+        return principal.contactid
+    if IUser.providedBy(principal):
+        return principal.userid
+    return principal
+
 
 class ContactInformation(grok.GlobalUtility):
     """The principal information utility provides useful functions for
@@ -182,7 +189,7 @@ class ContactInformation(grok.GlobalUtility):
         else:
             return clients[0]
 
-    @volatile.cache(lambda method, self, principal: principal)
+    @volatile.cache(cache_key_principal)
     def get_group_of_inbox(self, principal):
         """Returns the group principal of the inbox `principal`.
         """
@@ -353,7 +360,7 @@ class ContactInformation(grok.GlobalUtility):
         else:
             raise ValueError('Unknown principal type: %s' % str(principal))
 
-    @volatile.cache(lambda method, self, principal: principal)
+    @volatile.cache(cache_key_principal)
     def get_email(self, principal):
         """Returns the email address of a `principal`.
         """
@@ -385,7 +392,7 @@ class ContactInformation(grok.GlobalUtility):
             raise ValueError('Unknown principal type: %s' %
                              str(principal))
 
-    @volatile.cache(lambda method, self, principal: principal)
+    @volatile.cache(cache_key_principal)
     def get_email2(self, principal):
         """Returns the second email address of a `principal`.
         """
@@ -416,7 +423,7 @@ class ContactInformation(grok.GlobalUtility):
             raise ValueError('Unknown principal type: %s' %
                              str(principal))
 
-    @volatile.cache(lambda method, self, principal: principal)
+    @volatile.cache(cache_key_principal)
     def get_profile_url(self, principal):
         """Returns the profile url of this `principal`.
         """
@@ -445,7 +452,7 @@ class ContactInformation(grok.GlobalUtility):
                     return portal_membership.getMemberById(principal).getHomeUrl()
             return None
 
-    @volatile.cache(lambda method, self, principal: principal)
+    @volatile.cache(cache_key_principal)
     def render_link(self, principal):
         """Render a link to the `principal`
         """
