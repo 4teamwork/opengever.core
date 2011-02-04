@@ -207,55 +207,62 @@ class ArchiveForm(directives_form.Form):
 
         action = data.get('filing_action')
         filing_year = data.get('filing_year')
-        filing_prefix = data.get('filing_prefix')
+        filing_no = None
 
-        # Get the value and not the key from the prefix vocabulary
-        filing_prefix = getVocabularyRegistry().get(
-            self.context, 'opengever.dossier.type_prefixes').by_token.get(
-                filing_prefix).title
-
-        # compute filing_sequence
-        key = filing_prefix + "-" + filing_year
-        portal = getUtility(ISiteRoot)
-        ann = IAnnotations(portal)
-        if FILING_NO_KEY not in ann.keys():
-            ann[FILING_NO_KEY] = PersistentDict()
-        mappping = ann.get(FILING_NO_KEY)
-        if key not in mappping:
-            mappping[key] = Increaser(0)
-
-        inc = mappping[key]
-        inc.set(inc() + 1)
-        mappping[key] = inc
-        filing_sequence = inc()
-
-        # compute filing_client
-        registry = getUtility(IRegistry)
-        proxy = registry.forInterface(IBaseClientID)
-        filing_client = getattr(proxy, 'client_id')
-
-        # compute filing_no
-        filing_no = filing_client + "-" + filing_prefix + "-" + filing_year + "-" + str(filing_sequence)
 
         if action == RESOLVE_AND_NEW_FILING_NO:
+            # Generate a new filing no
+
+            IDossier(self.context).filing_prefix = data.get('filing_prefix')
+
+            # Get the value and not the key from the prefix vocabulary
+            filing_prefix = getVocabularyRegistry().get(
+                self.context, 'opengever.dossier.type_prefixes').by_token.get(
+                    IDossier(self.context).filing_prefix).title
+
+            # compute filing_sequence
+            key = filing_prefix + "-" + filing_year
+            portal = getUtility(ISiteRoot)
+            ann = IAnnotations(portal)
+            if FILING_NO_KEY not in ann.keys():
+                ann[FILING_NO_KEY] = PersistentDict()
+            mappping = ann.get(FILING_NO_KEY)
+            if key not in mappping:
+                mappping[key] = Increaser(0)
+
+            inc = mappping[key]
+            inc.set(inc() + 1)
+            mappping[key] = inc
+            filing_sequence = inc()
+
+            # compute filing_client
+            registry = getUtility(IRegistry)
+            proxy = registry.forInterface(IBaseClientID)
+            filing_client = getattr(proxy, 'client_id')
+
+            # assemble filing_no
+            filing_no = filing_client + "-" + filing_prefix + "-" + filing_year + "-" + str(filing_sequence)
+
             # Set filing_no if subdossiers have been resolved successfully
             IDossier(self.context).filing_no = filing_no
             self.ptool.addPortalMessage(_("the filling number was set"), type="info")
 
-        # set the dossier end date and the dossier filing prefix
-        IDossier(self.context).end = data.get('dossier_enddate')
-        IDossier(self.context).filing_prefix = data.get('filing_prefix')
+        if action == RESOLVE_USE_EXISTING:
+            filing_no = IDossier(self.context).filing_no
 
         # Also set the filing_no for all the subdossiers, which at this point
-        # already have been resolved
-        filing_no_suffix = 1
-        subdossiers = self.context.get_subdossiers()
-        for subdossier in subdossiers:
+        # already have been resolved - but only if there is actually a filing_no
+        if filing_no:
+            filing_no_suffix = 1
+            subdossiers = self.context.get_subdossiers()
+            for subdossier in subdossiers:
+                obj = subdossier.getObject()
+                IDossier(obj).filing_no = "%s.%s" % (filing_no, filing_no_suffix)
+                obj.reindexObject(idxs=['filing_no'])
+                filing_no_suffix += 1
 
-            obj = subdossier.getObject()
-            IDossier(obj).filing_no = "%s.%s" % (filing_no, filing_no_suffix)
-            obj.reindexObject(idxs=['filing_no'])
-            filing_no_suffix += 1
+        # set the dossier end date
+        IDossier(self.context).end = data.get('dossier_enddate')
 
         # If everything went well, resolve the main dossier
         self.wft.doActionFor(self.context, 'dossier-transition-resolve')
