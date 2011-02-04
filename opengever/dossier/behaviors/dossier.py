@@ -25,12 +25,13 @@ from zope.component import getAdapter, getUtility
 from zope.interface import Interface, alsoProvides
 from zope.interface import invariant, Invalid
 import logging
+from opengever.inbox.interfaces import ISendable
 
 
 LOG = logging.getLogger('opengever.dossier')
 
 
-class IDossierMarker(Interface):
+class IDossierMarker(Interface, ISendable):
     """ Marker Interface for dossiers.
     """
 

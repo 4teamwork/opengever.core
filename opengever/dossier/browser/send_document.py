@@ -27,6 +27,7 @@ from opengever.dossier.validators import DocumentSizeValidator, \
     AddressValidator
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.ogds.base.interfaces import IContactInformation
+from opengever.inbox.interfaces import ISendable
 
 
 class NoMail(Invalid):
@@ -152,7 +153,7 @@ class SendDocumentForm(form.Form):
             sender_address = contact_info.get_email(userid)
             if not sender_address:
                 sender_address = self.context.portal_url.getPortalObject().email_from_address
-            
+
             msg['From'] = Header(u'%s <%s>' % (
                     contact_info.describe(userid),
                     sender_address,
@@ -210,7 +211,7 @@ class SendDocumentFormView(layout.FormWrapper, grok.CodeView):
 
     """
 
-    grok.context(IDossierMarker)
+    grok.context(ISendable)
     grok.name('send_documents')
     grok.require('zope2.View')
     form = SendDocumentForm

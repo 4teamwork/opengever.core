@@ -5,6 +5,11 @@ Changelog
 2.0b12
 ------
 
+* Issue #891 E-Mail versenden aus Eingangskorb funktioniert nicht
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/891/
+  Added new marker interface
+  [ttschanz]
+
 * Only incrementing filing_no if it is actually being set
   [lgraf]
 
