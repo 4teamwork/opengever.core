@@ -12,6 +12,15 @@ msgstr ""
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: DOMAIN\n"
 
+msgid "assigned_forwardings"
+msgstr "Eingang"
+
+msgid "assigned_tasks"
+msgstr "Zugewiesene Aufgaben"
+
+msgid "myissuedtasks"
+msgstr "Erteilte Aufgaben"
+
 msgid "ogds-cp-alltasks"
 msgstr "Alle Aufgaben"
 
@@ -21,6 +30,4 @@ msgstr "Mandanten"
 msgid "users"
 msgstr "OGDS"
 
-msgid "myissuedtasks"
-msgstr "Erteilte Aufgaben"
 

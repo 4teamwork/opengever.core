@@ -25,3 +25,9 @@ msgstr ""
 
 msgid "myissuedtasks"
 msgstr ""
+
+msgid "assigned_forwardings"
+msgstr ""
+
+msgid "assigned_tasks"
+msgstr ""

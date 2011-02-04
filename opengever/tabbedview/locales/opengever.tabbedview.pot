@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2011-01-03 16:45+0000\n"
+"POT-Creation-Date: 2011-02-04 09:55+0000\n"
 "PO-Revision-Date: 2009-02-25 14:39+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -57,12 +57,12 @@ msgid "checked_out"
 msgstr ""
 
 #. Default: "Client"
-#: ./opengever/tabbedview/browser/tabs.py:264
+#: ./opengever/tabbedview/browser/tabs.py:268
 msgid "client_id"
 msgstr ""
 
 #. Default: "Client"
-#: ./opengever/tabbedview/browser/tasklisting.py:87
+#: ./opengever/tabbedview/browser/tasklisting.py:89
 msgid "column_client"
 msgstr ""
 
@@ -72,12 +72,12 @@ msgid "column_client_id"
 msgstr ""
 
 #. Default: "Date of completion"
-#: ./opengever/tabbedview/browser/tasklisting.py:70
+#: ./opengever/tabbedview/browser/tasklisting.py:72
 msgid "column_date_of_completion"
 msgstr ""
 
 #. Default: "Deadline"
-#: ./opengever/tabbedview/browser/tasklisting.py:66
+#: ./opengever/tabbedview/browser/tasklisting.py:68
 msgid "column_deadline"
 msgstr ""
 
@@ -107,7 +107,7 @@ msgid "column_ip_address"
 msgstr ""
 
 #. Default: "Issued at"
-#: ./opengever/tabbedview/browser/tasklisting.py:83
+#: ./opengever/tabbedview/browser/tasklisting.py:85
 msgid "column_issued_at"
 msgstr ""
 
@@ -117,23 +117,23 @@ msgid "column_public_url"
 msgstr ""
 
 #. Default: "Review state"
-#: ./opengever/tabbedview/browser/tasklisting.py:54
+#: ./opengever/tabbedview/browser/tasklisting.py:56
 msgid "column_review_state"
 msgstr ""
 
 #. Default: "Sequence number"
-#: ./opengever/tabbedview/browser/tasklisting.py:91
+#: ./opengever/tabbedview/browser/tasklisting.py:93
 msgid "column_sequence_number"
 msgstr ""
 
 #. Default: "Task type"
-#: ./opengever/tabbedview/browser/tasklisting.py:62
+#: ./opengever/tabbedview/browser/tasklisting.py:64
 msgid "column_task_type"
 msgstr ""
 
 #. Default: "Title"
 #: ./opengever/tabbedview/browser/clientslisting.py:56
-#: ./opengever/tabbedview/browser/tasklisting.py:58
+#: ./opengever/tabbedview/browser/tasklisting.py:60
 msgid "column_title"
 msgstr ""
 
@@ -180,7 +180,7 @@ msgid "events"
 msgstr ""
 
 #. Default: "Filing Number"
-#: ./opengever/tabbedview/browser/tabs.py:200
+#: ./opengever/tabbedview/browser/tabs.py:206
 msgid "filing_number"
 msgstr ""
 
@@ -202,99 +202,104 @@ msgid "label_active"
 msgstr ""
 
 #. Default: "Checked out by"
-#: ./opengever/tabbedview/browser/tabs.py:141
+#: ./opengever/tabbedview/browser/tabs.py:145
 msgid "label_checked_out"
 msgstr ""
 
 #. Default: "Date of Completion"
-#: ./opengever/tabbedview/browser/tabs.py:248
+#: ./opengever/tabbedview/browser/tabs.py:252
 msgid "label_date_of_completion"
 msgstr ""
 
 #. Default: "Deadline"
-#: ./opengever/tabbedview/browser/tabs.py:244
+#: ./opengever/tabbedview/browser/tabs.py:248
 msgid "label_deadline"
 msgstr ""
 
 #. Default: "Delivery Date"
-#: ./opengever/tabbedview/browser/tabs.py:137
+#: ./opengever/tabbedview/browser/tabs.py:141
 msgid "label_delivery_date"
 msgstr ""
 
 #. Default: "Document Author"
-#: ./opengever/tabbedview/browser/tabs.py:125
+#: ./opengever/tabbedview/browser/tabs.py:128
 msgid "label_document_author"
 msgstr ""
 
 #. Default: "Document Date"
-#: ./opengever/tabbedview/browser/tabs.py:129
+#: ./opengever/tabbedview/browser/tabs.py:133
 msgid "label_document_date"
 msgstr ""
 
 #. Default: "Responsible"
-#: ./opengever/tabbedview/browser/tabs.py:188
+#: ./opengever/tabbedview/browser/tabs.py:194
 msgid "label_dossier_responsible"
 msgstr ""
 
 #. Default: "End"
-#: ./opengever/tabbedview/browser/tabs.py:197
+#: ./opengever/tabbedview/browser/tabs.py:203
 msgid "label_end"
 msgstr ""
 
 #. Default: "issued at"
-#: ./opengever/tabbedview/browser/tabs.py:260
+#: ./opengever/tabbedview/browser/tabs.py:264
 msgid "label_issued_date"
 msgstr ""
 
 #. Default: "Issuer"
-#: ./opengever/tabbedview/browser/tabs.py:256
-#: ./opengever/tabbedview/browser/tasklisting.py:79
+#: ./opengever/tabbedview/browser/tabs.py:260
+#: ./opengever/tabbedview/browser/tasklisting.py:81
 msgid "label_issuer"
 msgstr ""
 
 #. Default: "No"
-#: ./opengever/tabbedview/helper.py:98
+#: ./opengever/tabbedview/helper.py:107
 msgid "label_no"
 msgstr ""
 
 #. Default: "No contents"
-#: ./opengever/tabbedview/browser/tabs_templates/generic.pt:22
+#: ./opengever/tabbedview/browser/generic.pt:22
 msgid "label_no_contents"
 msgstr ""
 
 #. Default: "Receipt Date"
-#: ./opengever/tabbedview/browser/tabs.py:133
+#: ./opengever/tabbedview/browser/tabs.py:137
 msgid "label_receipt_date"
 msgstr ""
 
 #. Default: "Reference Number"
-#: ./opengever/tabbedview/browser/tabs.py:176
+#: ./opengever/tabbedview/browser/tabs.py:182
 msgid "label_reference"
 msgstr ""
 
 #. Default: "Responsible"
-#: ./opengever/tabbedview/browser/tabs.py:252
-#: ./opengever/tabbedview/browser/tasklisting.py:75
+#: ./opengever/tabbedview/browser/tabs.py:256
+#: ./opengever/tabbedview/browser/tasklisting.py:77
 msgid "label_responsible_task"
 msgstr ""
 
 #. Default: "Review state"
-#: ./opengever/tabbedview/browser/tabs.py:184
+#: ./opengever/tabbedview/browser/tabs.py:190
 msgid "label_review_state"
 msgstr ""
 
 #. Default: "Start"
-#: ./opengever/tabbedview/browser/tabs.py:193
+#: ./opengever/tabbedview/browser/tabs.py:199
 msgid "label_start"
 msgstr ""
 
+#. Default: "Subdossier"
+#: ./opengever/tabbedview/browser/tabs.py:149
+msgid "label_subdossier"
+msgstr ""
+
 #. Default: "Task Type"
-#: ./opengever/tabbedview/browser/tabs.py:240
+#: ./opengever/tabbedview/browser/tabs.py:244
 msgid "label_task_type"
 msgstr ""
 
 #. Default: "Title"
-#: ./opengever/tabbedview/browser/tabs.py:120
+#: ./opengever/tabbedview/browser/tabs.py:123
 msgid "label_title"
 msgstr ""
 
@@ -324,7 +329,7 @@ msgid "label_userstab_userid"
 msgstr ""
 
 #. Default: "Yes"
-#: ./opengever/tabbedview/helper.py:97
+#: ./opengever/tabbedview/helper.py:106
 msgid "label_yes"
 msgstr ""
 
@@ -378,7 +383,7 @@ msgid "role_list"
 msgstr ""
 
 #. Default: "Sequence Number"
-#: ./opengever/tabbedview/browser/tabs.py:268
+#: ./opengever/tabbedview/browser/tabs.py:272
 msgid "sequence_number"
 msgstr ""
 
