@@ -5,6 +5,11 @@ Changelog
 2.0b5
 -----
 
+* Issue #891 E-Mail versenden aus Eingangskorb funktioniert nicht
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/891/
+  Added new marker interface
+  [ttschanz]
+
 * Only listing assigned forwardings in inbox that don't belong to current client
   [lgraf]
 

@@ -3,9 +3,9 @@ from opengever.inbox import _
 from plone.directives import form
 from opengever.tabbedview.browser.tabs import Tasks, Documents
 from zope import schema
+from opengever.inbox.interfaces import ISendable
 
-
-class IInbox(form.Schema):
+class IInbox(form.Schema, ISendable):
     """ Inbox for OpenGever
     """
 
