@@ -5,6 +5,9 @@ Changelog
 2.0b4
 -----
 
+* Added import step which sets mail_from_address
+  [ttschanz]
+
 * Issue #886 Nach Autor kann nicht sortiert werden
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/886/
   added index sortable_author
