@@ -5,16 +5,18 @@ Changelog
 2.0b5
 -----
 
-* Issue #888 Anpassung Mandantenuebergreifende Aufgaben
-  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/888/
-  added assigned_tasks tab
-  [ttschanz]
-
+<<<<<<< HEAD
 * Issue #787 Checkin/Checkout deaktivieren auf Stufe Eingangskorb
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/787
   Updated inbox workflow to respect opengever.document Checkin/Checkout/Cancel
   permissions.
   [phabegger]
+=======
+* Issue #888 Anpassung Mandantenuebergreifende Aufgaben
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/888/
+  added assigned_tasks tab
+  [ttschanz]
+>>>>>>> added AssignedTasks tab
 
 
 2.0b4
