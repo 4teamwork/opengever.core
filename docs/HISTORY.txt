@@ -8,6 +8,9 @@ Changelog
 * Disabled "clear and rebuild" action in OGDS control panel until it works reliably
   [lgraf]
 
+* added sort_index to document_author
+  [ttschanz]
+
 * Disabled draggable / manual sort column in tabbed view
   [lgraf]
 
