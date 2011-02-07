@@ -7,7 +7,7 @@ Changelog
 
 * Issue #900 Eingangskorb, Aufgaben aus anderem Mandant: Aktion neu zuweisen fehlt!
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/900
-  Removed (too restrictive) guard
+  Removed (too restrictive) guards for transitions reject/accept/resolve
   [phabegger]
 
 
