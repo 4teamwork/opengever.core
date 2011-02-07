@@ -5,6 +5,11 @@ Changelog
 2.0b13
 ------
 
+* Issue #900 Eingangskorb, Aufgaben aus anderem Mandant: Aktion neu zuweisen fehlt!
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/900
+  Removed (too restrictive) guard
+  [phabegger]
+
 
 2.0b12
 ------
