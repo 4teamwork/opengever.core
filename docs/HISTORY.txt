@@ -5,6 +5,11 @@ Changelog
 2.0b6
 -----
 
+* Issue #899 Eingangskorb / Übersicht: Aufgabenicon wird nicht angezeigt
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/899/
+  removed client_id from iconpath
+  [ttschanz]
+
 
 2.0b5
 -----
