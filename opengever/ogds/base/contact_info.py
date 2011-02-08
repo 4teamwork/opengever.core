@@ -1,6 +1,3 @@
-from Products.CMFCore.utils import getToolByName
-from Products.ZCatalog.ZCatalog import ZCatalog
-from Products.ZCatalog.interfaces import ICatalogBrain
 from five import grok
 from opengever.ogds.base import _
 from opengever.ogds.base.interfaces import IContactInformation, IUser
@@ -9,9 +6,15 @@ from opengever.ogds.base.model.user import User
 from opengever.ogds.base.utils import brain_is_contact
 from opengever.ogds.base.utils import create_session, get_current_client
 from plone.memoize import volatile
+from Products.CMFCore.utils import getToolByName
+from Products.ZCatalog.interfaces import ICatalogBrain
+from Products.ZCatalog.ZCatalog import ZCatalog
 from zope.app.component.hooks import getSite
+import logging
 import types
 
+
+logger = logging.getLogger('opengever.ogds.base')
 
 def cache_key_describe(method, self, principal, with_email=False, with_email2=False):
     if ICatalogBrain.providedBy(principal):
@@ -84,9 +87,12 @@ class ContactInformation(grok.GlobalUtility):
         acl_users = getToolByName(getSite(), 'acl_users')
         group = acl_users.getGroupById(groupid.encode('utf-8'))
 
-        ids = group.getGroupMemberIds()
-        for user in self._users_query().filter(User.userid.in_(ids)):
-            yield user
+        if not group:
+            logger.warn("Group %s does not exist!" % groupid)
+        else:
+            ids = group.getGroupMemberIds()
+            for user in self._users_query().filter(User.userid.in_(ids)):
+                yield user
 
     def get_user(self, principal):
         """Returns the user with the userid `principal`.

@@ -5,12 +5,16 @@ Changelog
 2.0b10
 ------
 
+* Made list_assigned_users() more robust in case group is missing
+  [lgraf]
+
 
 2.0b9
 -----
 
 * Changed cache keys for methods having a single ``principal`` parameter to make sure the cache key is not based on a db object. Untested yet!
   [tbuchberger]
+
 
 2.0b8
 -----
@@ -20,6 +24,7 @@ Changelog
 
 * Corrected table class on user detail view
   [fsprenger]
+
 
 2.0b7
 -----
@@ -74,6 +79,7 @@ Changelog
 * fixed get_email function, now it works also with zope users
   [phgross]
 
+
 2.0b2
 -----
 
@@ -105,6 +111,7 @@ Changelog
 
 2.0a2
 -----
+
 
 1.0a1-devdev (unreleased)
 -------------------------
