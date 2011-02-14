@@ -5,6 +5,9 @@ Changelog
 2.0b13
 ------
 
+* Added purge=False to behaviours property so as not to erase previously installed behaviors
+  [lgraf]
+
 
 2.0b12
 ------
