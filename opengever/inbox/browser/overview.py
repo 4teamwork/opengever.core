@@ -32,7 +32,8 @@ class InboxOverview(DossierOverview):
 
         query = query_util._get_tasks_for_responsible_query(
             principal, 'modified')
-        query = query.filter(Task.review_state=='forwarding-state-open')
+        query = query.filter(Task.review_state=='task-state-open').filter(
+        Task.client_id != get_client_id())
         for item in query.all():
             item.icon = item.icon.replace(item.client_id+'/', '')
         return query.all()
