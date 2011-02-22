@@ -9,7 +9,7 @@
     <property name="allow_discussion">False</property>
     <property name="global_allow">True</property>
     <property name="filter_content_types">True</property>
-    <property name="allowed_content_types">
+    <property name="allowed_content_types" purge="False">
         <element value="opengever.repository.repositoryfolder" />
         <element value="opengever.dossier.businesscasedossier" />
     </property>

@@ -5,6 +5,10 @@ Changelog
 2.0a7
 -----
 
+* Issue #920 Aktivierung der Spezialdossiers
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/920/
+  Added purge=False to allowed_content_types property so as not to erase previously installed behaviors
+
 
 2.0a6
 -----
