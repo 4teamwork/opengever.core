@@ -2,8 +2,11 @@ Changelog
 =========
 
 
-2.0b11
-------
+2.0b11 (unreleased)
+-------------------
+
+* Setup collation for oracle db engine.
+  [tbuchberger]
 
 
 2.0b10

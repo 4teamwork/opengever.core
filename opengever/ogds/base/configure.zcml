@@ -21,6 +21,11 @@
         for="ftw.dictstorage.interfaces.ISQLAlchemy"
         />
 
+    <subscriber
+        for="z3c.saconfig.interfaces.IEngineCreatedEvent"
+        handler=".events.setup_oracle_collation"
+        />
+
     <genericsetup:registerProfile
         name="default"
         title="opengever.ogds.base"
