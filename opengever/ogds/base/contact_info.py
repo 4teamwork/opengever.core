@@ -6,6 +6,7 @@ from opengever.ogds.base.model.user import User
 from opengever.ogds.base.utils import brain_is_contact
 from opengever.ogds.base.utils import create_session, get_current_client
 from plone.memoize import volatile
+from plone.memoize import instance
 from Products.CMFCore.utils import getToolByName
 from Products.ZCatalog.interfaces import ICatalogBrain
 from Products.ZCatalog.ZCatalog import ZCatalog
@@ -29,6 +30,13 @@ def cache_key_principal(method, self, principal):
     if IUser.providedBy(principal):
         return principal.userid
     return principal
+
+
+class UserDict(object):
+    """A dictionary representing a user.
+    """
+    def __init__(self, **kw):
+        self.__dict__.update(kw)
 
 
 class ContactInformation(grok.GlobalUtility):
@@ -65,11 +73,20 @@ class ContactInformation(grok.GlobalUtility):
 
         return principal and ':' not in principal
 
+    @instance.memoize
     def list_users(self):
-        """Returns a sql-alchemy query set containing all users.
+        """A list of dicts.
         """
+        session = create_session()
+        userdata_keys = User.__table__.columns.keys()
+        result = session.execute(User.__table__.select())
+        return [UserDict(**dict(zip(userdata_keys,row))) for row in result]
 
-        return self._users_query().all()
+    # def list_users(self):
+    #     """Returns a sql-alchemy query set containing all users.
+    #     """
+    # 
+    #     return self._users_query().all()
 
     def list_assigned_users(self, client_id=None):
         """Lists all users assigned to a client.
@@ -302,7 +319,7 @@ class ContactInformation(grok.GlobalUtility):
             principal = contact.contactid
 
         # user object
-        elif IUser.providedBy(principal):
+        elif IUser.providedBy(principal) or isinstance(principal, UserDict):
             user = principal
             principal = user.userid
 
@@ -381,7 +398,7 @@ class ContactInformation(grok.GlobalUtility):
             return principal.email
 
         # principal may be a user object
-        elif IUser.providedBy(principal):
+        elif IUser.providedBy(principal) or isinstance(principal, UserDict):
             return principal.email
 
         # principal may ba a string contact principal
@@ -414,7 +431,7 @@ class ContactInformation(grok.GlobalUtility):
             return principal.email2
 
         # principal may be a user object
-        elif IUser.providedBy(principal):
+        elif IUser.providedBy(principal) or isinstance(principal, UserDict):
             return principal.email2
 
         # principal may ba a string contact principal
