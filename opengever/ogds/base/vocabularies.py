@@ -233,7 +233,7 @@ class EmailContactsAndUsersVocabularyFactory(grok.GlobalUtility):
 
         for contact_or_user, active in ids:
             email = info.get_email(contact_or_user)
-            if email != None:
+            if email:
                 if not active:
                     self.hidden_terms.append(email)
                 yield(email,
@@ -241,7 +241,7 @@ class EmailContactsAndUsersVocabularyFactory(grok.GlobalUtility):
                                     with_email=True))
 
                 email2 = info.get_email2(contact_or_user)
-                if email2 != None:
+                if email2:
                     if not active:
                         self.hidden_terms.append(email2)
                     yield(email2,
