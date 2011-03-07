@@ -269,7 +269,6 @@ class ContactInformation(grok.GlobalUtility):
 
     # general principal methods
 
-    @volatile.cache(cache_key_describe)
     def describe(self, principal, with_email=False, with_email2=False):
         """Represent a user / contact / inbox / ... as string. This usually
         returns the fullname or another label / title.
@@ -383,7 +382,6 @@ class ContactInformation(grok.GlobalUtility):
         else:
             raise ValueError('Unknown principal type: %s' % str(principal))
 
-    @volatile.cache(cache_key_principal)
     def get_email(self, principal):
         """Returns the email address of a `principal`.
         """
@@ -415,7 +413,6 @@ class ContactInformation(grok.GlobalUtility):
             raise ValueError('Unknown principal type: %s' %
                              str(principal))
 
-    @volatile.cache(cache_key_principal)
     def get_email2(self, principal):
         """Returns the second email address of a `principal`.
         """
