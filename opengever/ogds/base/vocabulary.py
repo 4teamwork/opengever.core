@@ -69,10 +69,10 @@ class ContactsVocabulary(SimpleVocabulary):
         """
 
         terms = []
-        termed_keys = []
+        termed_keys = set()
         for key, label in provider():
             if key not in termed_keys:
-                termed_keys.append(key)
+                termed_keys.add(key)
 
                 if isinstance(label, str):
                     label = label.decode('utf8')
