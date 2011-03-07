@@ -13,7 +13,7 @@ from email.Header import Header
 from email.Utils import formatdate
 from email import Encoders
 
-from plone.formwidget.contenttree import ObjPathSourceBinder
+from opengever.base.source import DossierPathSourceBinder
 from plone.formwidget.autocomplete import AutocompleteMultiFieldWidget
 from plone.z3cform import layout
 from plone.z3cform.textlines.textlines import TextLinesFieldWidget
@@ -25,7 +25,6 @@ from z3c.form.interfaces import INPUT_MODE
 from opengever.dossier import _
 from opengever.dossier.validators import DocumentSizeValidator, \
     AddressValidator
-from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.inbox.interfaces import ISendable
 
@@ -38,13 +37,6 @@ class NoMail(Invalid):
 class ISendDocumentSchema(Interface):
     """ The Send Document Form Schema."""
 
-    documents = RelationList(
-        title=_(u'label_documents', default="Documents"),
-        default=[],
-        value_type=RelationChoice(title=u"documents",
-            source = ObjPathSourceBinder()),
-        required=True,
-    )
     intern_receiver = schema.Tuple(
         title=_('intern_receiver', default="Intern receiver"),
         description=_('help_intern_receiver', default="Live Search: search for users and contacts"),
@@ -76,12 +68,21 @@ class ISendDocumentSchema(Interface):
     )
 
     documents = RelationList(
-        title=_('label_documents', default="Documents"),
+        title=_(u'label_documents', default=u'Documents'),
         default=[],
-        value_type=RelationChoice(title=u"documents",
-            source = ObjPathSourceBinder()),
-        required=True,
-    )
+        value_type=RelationChoice(
+            title=u"Documents",
+            source=DossierPathSourceBinder(
+                portal_type=("opengever.document.document", "ftw.mail.mail"),
+                navigation_tree_query={
+                    'object_provides':
+                        ['opengever.dossier.behaviors.dossier.IDossierMarker',
+                         'opengever.document.document.IDocumentSchema',
+                         'ftw.mail.mail.IMail',]
+                    }),
+            ),
+        required=False,
+        )
 
     @invariant
     def validateHasEmail(data):

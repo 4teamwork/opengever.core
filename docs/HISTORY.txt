@@ -5,6 +5,10 @@ Changelog
 2.0b13
 ------
 
+* Issue #937 Mailversand: Fehlerhafte Dokumentauswahl
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/937/
+  Fixed SourceBinder for related documents when sending docs as mail
+
 
 2.0b12
 ------
