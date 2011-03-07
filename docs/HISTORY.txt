@@ -5,6 +5,11 @@ Changelog
 2.0b10
 ------
 
+* Issue #921 Primaerschluesselverletzung bei Migrationen
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/921
+  Added view to adjust dossier sequence number counter and migrate dossiers
+  [lgraf]
+
 
 2.0b9
 -----
