@@ -77,7 +77,7 @@ class ContactsVocabulary(SimpleVocabulary):
                 if isinstance(label, str):
                     label = label.decode('utf8')
                 terms.append(cls.createTerm(
-                        key, key, label))
+                        key, key.encode('ascii', 'replace'), label))
 
         return terms
 
