@@ -7,6 +7,7 @@ from opengever.ogds.base.interfaces import IContactInformation
 from opengever.ogds.base.utils import get_current_client
 from opengever.ogds.base.vocabulary import ContactsVocabulary
 from plone.memoize import volatile
+from plone.memoize import instance
 from zope.app.component.hooks import getSite, setSite
 from zope.component import getUtility
 from zope.globalrequest import getRequest
@@ -226,27 +227,40 @@ class EmailContactsAndUsersVocabularyFactory(grok.GlobalUtility):
         value = Fullname [address], eg. Hugo Boss [hugo@boss.ch]
         """
 
+        for item in self._user_data():
+            yield item
+
+    # TODO: we need to figure out a way how to invalidate the cache.
+    @instance.memoize
+    def _user_data(self):
+        """Create a list containing all user data which can be memoized.
+
+        key = mail-address
+        value = Fullname [address], eg. Hugo Boss [hugo@boss.ch]
+        """
         info = getUtility(IContactInformation)
         ids = [(user, user.active) for user in info.list_users()]
         ids.extend([(contact, True) for contact
                     in info.list_contacts()])
 
+        user_data = []
         for contact_or_user, active in ids:
             email = info.get_email(contact_or_user)
             if email:
                 if not active:
                     self.hidden_terms.append(email)
-                yield(email,
-                      info.describe(contact_or_user,
-                                    with_email=True))
+                user_data.append(email,
+                                 info.describe(contact_or_user,
+                                               with_email=True))
 
-                email2 = info.get_email2(contact_or_user)
-                if email2:
-                    if not active:
-                        self.hidden_terms.append(email2)
-                    yield(email2,
-                          info.describe(contact_or_user,
-                                        with_email2=True))
+            email2 = info.get_email2(contact_or_user)
+            if email2:
+                if not active:
+                    self.hidden_terms.append(email2)
+                user_data.append(email2,
+                                 info.describe(contact_or_user,
+                                               with_email2=True))
+        return user_data
 
 
 class ClientsVocabularyFactory(grok.GlobalUtility):
