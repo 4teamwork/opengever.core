@@ -1,18 +1,18 @@
 from Products.CMFCore.utils import getToolByName
 from collective.elephantvocabulary import wrap_vocabulary
 from five import grok
-from opengever.ogds.base import caching
 from opengever.ogds.base.interfaces import IClientCommunicator
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.ogds.base.utils import get_current_client
 from opengever.ogds.base.vocabulary import ContactsVocabulary
-from plone.memoize import volatile
 from plone.memoize import ram
 from zope.app.component.hooks import getSite, setSite
 from zope.component import getUtility
 from zope.globalrequest import getRequest
 from zope.schema.interfaces import IVocabularyFactory
 import AccessControl
+from opengever.ogds.base.utils import get_client_id
+
 
 def voc_cachekey(method, self):
     """A cache key for vocabularies which are implemented as grok utilities
@@ -20,6 +20,18 @@ def voc_cachekey(method, self):
     """
     return getattr(self, 'grokcore.component.directive.name')
 
+def client_voc_cachekey(method, self):
+    """A cache key depending on the vocabulary name and the current client id.
+    """
+    return '%s:%s' % (getattr(self, 'grokcore.component.directive.name'),
+                      get_client_id())
+
+def reqclient_voc_cachekey(method, self):
+    """A cache key depending on the vocabulary name and the client id in the
+       request.
+    """
+    return '%s:%s' % (getattr(self, 'grokcore.component.directive.name'),
+                      self.get_client())
 
 def generator_to_list(func):
     """Casts a generator object into a tuple. This decorator
@@ -47,7 +59,7 @@ class UsersVocabularyFactory(grok.GlobalUtility):
         vocab.hidden_terms = self.hidden_terms
         return vocab
 
-    @volatile.cache(lambda method, self: True)
+    @ram.cache(voc_cachekey)
     @generator_to_list
     def key_value_provider(self):
         info = getUtility(IContactInformation)
@@ -77,7 +89,7 @@ class UsersAndInboxesVocabularyFactory(grok.GlobalUtility):
         vocab.hidden_terms = self.hidden_terms
         return vocab
 
-    @volatile.cache(lambda method, self: self.get_client())
+    @ram.cache(reqclient_voc_cachekey)
     @generator_to_list
     def key_value_provider(self):
         client_id = self.get_client()
@@ -130,7 +142,7 @@ class AssignedUsersVocabularyFactory(grok.GlobalUtility):
         vocab.hidden_terms = self.hidden_terms
         return vocab
 
-    @volatile.cache(caching.client_cache_key)
+    @ram.cache(client_voc_cachekey)
     @generator_to_list
     def key_value_provider(self):
         info = getUtility(IContactInformation)
@@ -188,7 +200,7 @@ class ContactsAndUsersVocabularyFactory(grok.GlobalUtility):
                           info.describe(contact)))
         return items
 
-    @volatile.cache(lambda method, self: True)
+    @ram.cache(voc_cachekey)
     def _get_users(self):
         info = getUtility(IContactInformation)
         items = []

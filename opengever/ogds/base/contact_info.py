@@ -6,7 +6,7 @@ from opengever.ogds.base.model.user import User
 from opengever.ogds.base.utils import brain_is_contact
 from opengever.ogds.base.utils import create_session, get_current_client
 from plone.memoize import volatile
-from plone.memoize import instance
+from plone.memoize import ram
 from Products.CMFCore.utils import getToolByName
 from Products.ZCatalog.interfaces import ICatalogBrain
 from Products.ZCatalog.ZCatalog import ZCatalog
@@ -17,19 +17,17 @@ import types
 
 logger = logging.getLogger('opengever.ogds.base')
 
-def cache_key_describe(method, self, principal, with_email=False, with_email2=False):
-    if ICatalogBrain.providedBy(principal):
-        return (principal.contactid, with_email, with_email2)
-    if IUser.providedBy(principal):
-        return (principal.userid, with_email, with_email2)
-    return (principal, with_email, with_email2)
-
 def cache_key_principal(method, self, principal):
     if ICatalogBrain.providedBy(principal):
         return principal.contactid
     if IUser.providedBy(principal):
         return principal.userid
     return principal
+
+def class_cachekey(method, self):
+    """A cache key including the class' name.
+    """
+    return self.__class__
 
 
 class UserDict(object):
@@ -73,7 +71,7 @@ class ContactInformation(grok.GlobalUtility):
 
         return principal and ':' not in principal
 
-    @instance.memoize
+    @ram.cache(class_cachekey)
     def list_users(self):
         """A list of dicts.
         """
@@ -81,12 +79,6 @@ class ContactInformation(grok.GlobalUtility):
         userdata_keys = User.__table__.columns.keys()
         result = session.execute(User.__table__.select())
         return [UserDict(**dict(zip(userdata_keys,row))) for row in result]
-
-    # def list_users(self):
-    #     """Returns a sql-alchemy query set containing all users.
-    #     """
-    # 
-    #     return self._users_query().all()
 
     def list_assigned_users(self, client_id=None):
         """Lists all users assigned to a client.
