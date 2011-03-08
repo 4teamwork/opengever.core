@@ -249,17 +249,17 @@ class EmailContactsAndUsersVocabularyFactory(grok.GlobalUtility):
             if email:
                 if not active:
                     self.hidden_terms.append(email)
-                user_data.append(email,
-                                 info.describe(contact_or_user,
-                                               with_email=True))
+                user_data.append((email,
+                                  info.describe(contact_or_user,
+                                                with_email=True)))
 
             email2 = info.get_email2(contact_or_user)
             if email2:
                 if not active:
                     self.hidden_terms.append(email2)
-                user_data.append(email2,
-                                 info.describe(contact_or_user,
-                                               with_email2=True))
+                user_data.append((email2,
+                                  info.describe(contact_or_user,
+                                                with_email2=True)))
         return user_data
 
 
