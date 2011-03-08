@@ -7,12 +7,18 @@ from opengever.ogds.base.interfaces import IContactInformation
 from opengever.ogds.base.utils import get_current_client
 from opengever.ogds.base.vocabulary import ContactsVocabulary
 from plone.memoize import volatile
-from plone.memoize import instance
+from plone.memoize import ram
 from zope.app.component.hooks import getSite, setSite
 from zope.component import getUtility
 from zope.globalrequest import getRequest
 from zope.schema.interfaces import IVocabularyFactory
 import AccessControl
+
+def voc_cachekey(method, self):
+    """A cache key for vocabularies which are implemented as grok utilities
+       and which do not depend on other parameters.
+    """
+    return getattr(self, 'grokcore.component.directive.name')
 
 
 def generator_to_list(func):
@@ -230,8 +236,9 @@ class EmailContactsAndUsersVocabularyFactory(grok.GlobalUtility):
         for item in self._user_data():
             yield item
 
-    # TODO: we need to figure out a way how to invalidate the cache.
-    @instance.memoize
+    # We use the default ram cache because it automatically expires after
+    # 1 day. This could be customized by providing our own ICacheChooser.
+    @ram.cache(voc_cachekey)
     def _user_data(self):
         """Create a list containing all user data which can be memoized.
 
