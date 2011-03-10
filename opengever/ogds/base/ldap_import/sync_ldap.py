@@ -60,8 +60,8 @@ def main():
 
     # check if we have a zope environment aka 'app'
     mod = __import__(__name__)
-    if 'app' not in dir(mod):
-        print "Must be run with 'zopectl run'."
+    if not ('app' in dir(mod) or 'app' in globals()):
+        print "Must be run with 'bin/instance run'."
         return
 
     parser = OptionParser()
@@ -72,7 +72,7 @@ def main():
 
     if options.debug:
         debugAfterException()
-    
+
     run_import(app, options)
 
 if __name__ == '__main__':
