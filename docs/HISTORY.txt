@@ -5,6 +5,9 @@ Changelog
 2.0b11 (unreleased)
 -------------------
 
+* Fixed import script to correctly detect zope application 'app' object
+  [lgraf]
+
 * Decode public_name as latin1 since that's the encoding ldap_userfolder uses
   [lgraf]
 
