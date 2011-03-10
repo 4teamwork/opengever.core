@@ -5,6 +5,9 @@ Changelog
 2.0b11 (unreleased)
 -------------------
 
+* Decode public_name as latin1 since that's the encoding ldap_userfolder uses
+  [lgraf]
+
 * Setup collation for oracle db engine.
   [tbuchberger]
 
