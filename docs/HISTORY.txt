@@ -5,6 +5,11 @@ Changelog
 2.0b5
 -----
 
+* Issue #923 Fehler beim Extrahieren eines Dokuments, welches als Email Attachment an ein Dossier versendet worden ist
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/923/
+  Fixed UnicodeDecodeError when extracting attachments with umlauts in filename
+  [lgraf]
+
 
 2.0b4
 -----

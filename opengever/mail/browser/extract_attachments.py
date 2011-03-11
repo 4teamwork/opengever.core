@@ -181,7 +181,7 @@ class ExtractAttachments(grok.View):
         for att in attachments_to_extract:
             pos = att.get('position')
 
-            kwargs = {'title': att.get('filename'),
+            kwargs = {'title': att.get('filename').decode('utf-8'),
                       'file': self.get_attachment_as_namedfile(pos),
                       'document_date': datetime.now(),
                       'document_author': document_author,
