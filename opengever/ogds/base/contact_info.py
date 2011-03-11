@@ -6,6 +6,7 @@ from opengever.ogds.base.model.user import User
 from opengever.ogds.base.utils import brain_is_contact
 from opengever.ogds.base.utils import create_session, get_current_client
 from plone.memoize import volatile
+from plone.memoize import ram
 from Products.CMFCore.utils import getToolByName
 from Products.ZCatalog.interfaces import ICatalogBrain
 from Products.ZCatalog.ZCatalog import ZCatalog
@@ -16,19 +17,24 @@ import types
 
 logger = logging.getLogger('opengever.ogds.base')
 
-def cache_key_describe(method, self, principal, with_email=False, with_email2=False):
-    if ICatalogBrain.providedBy(principal):
-        return (principal.contactid, with_email, with_email2)
-    if IUser.providedBy(principal):
-        return (principal.userid, with_email, with_email2)
-    return (principal, with_email, with_email2)
-
 def cache_key_principal(method, self, principal):
     if ICatalogBrain.providedBy(principal):
         return principal.contactid
     if IUser.providedBy(principal):
         return principal.userid
     return principal
+
+def class_cachekey(method, self):
+    """A cache key including the class' name.
+    """
+    return self.__class__
+
+
+class UserDict(object):
+    """A dictionary representing a user.
+    """
+    def __init__(self, **kw):
+        self.__dict__.update(kw)
 
 
 class ContactInformation(grok.GlobalUtility):
@@ -65,11 +71,14 @@ class ContactInformation(grok.GlobalUtility):
 
         return principal and ':' not in principal
 
+    @ram.cache(class_cachekey)
     def list_users(self):
-        """Returns a sql-alchemy query set containing all users.
+        """A list of dicts.
         """
-
-        return self._users_query().all()
+        session = create_session()
+        userdata_keys = User.__table__.columns.keys()
+        result = session.execute(User.__table__.select())
+        return [UserDict(**dict(zip(userdata_keys,row))) for row in result]
 
     def list_assigned_users(self, client_id=None):
         """Lists all users assigned to a client.
@@ -252,7 +261,6 @@ class ContactInformation(grok.GlobalUtility):
 
     # general principal methods
 
-    @volatile.cache(cache_key_describe)
     def describe(self, principal, with_email=False, with_email2=False):
         """Represent a user / contact / inbox / ... as string. This usually
         returns the fullname or another label / title.
@@ -302,7 +310,7 @@ class ContactInformation(grok.GlobalUtility):
             principal = contact.contactid
 
         # user object
-        elif IUser.providedBy(principal):
+        elif IUser.providedBy(principal) or isinstance(principal, UserDict):
             user = principal
             principal = user.userid
 
@@ -366,7 +374,6 @@ class ContactInformation(grok.GlobalUtility):
         else:
             raise ValueError('Unknown principal type: %s' % str(principal))
 
-    @volatile.cache(cache_key_principal)
     def get_email(self, principal):
         """Returns the email address of a `principal`.
         """
@@ -381,7 +388,7 @@ class ContactInformation(grok.GlobalUtility):
             return principal.email
 
         # principal may be a user object
-        elif IUser.providedBy(principal):
+        elif IUser.providedBy(principal) or isinstance(principal, UserDict):
             return principal.email
 
         # principal may ba a string contact principal
@@ -398,7 +405,6 @@ class ContactInformation(grok.GlobalUtility):
             raise ValueError('Unknown principal type: %s' %
                              str(principal))
 
-    @volatile.cache(cache_key_principal)
     def get_email2(self, principal):
         """Returns the second email address of a `principal`.
         """
@@ -414,7 +420,7 @@ class ContactInformation(grok.GlobalUtility):
             return principal.email2
 
         # principal may be a user object
-        elif IUser.providedBy(principal):
+        elif IUser.providedBy(principal) or isinstance(principal, UserDict):
             return principal.email2
 
         # principal may ba a string contact principal

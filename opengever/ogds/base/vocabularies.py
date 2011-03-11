@@ -1,18 +1,37 @@
 from Products.CMFCore.utils import getToolByName
 from collective.elephantvocabulary import wrap_vocabulary
 from five import grok
-from opengever.ogds.base import caching
 from opengever.ogds.base.interfaces import IClientCommunicator
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.ogds.base.utils import get_current_client
 from opengever.ogds.base.vocabulary import ContactsVocabulary
-from plone.memoize import volatile
+from plone.memoize import ram
 from zope.app.component.hooks import getSite, setSite
 from zope.component import getUtility
 from zope.globalrequest import getRequest
 from zope.schema.interfaces import IVocabularyFactory
 import AccessControl
+from opengever.ogds.base.utils import get_client_id
 
+
+def voc_cachekey(method, self):
+    """A cache key for vocabularies which are implemented as grok utilities
+       and which do not depend on other parameters.
+    """
+    return getattr(self, 'grokcore.component.directive.name')
+
+def client_voc_cachekey(method, self):
+    """A cache key depending on the vocabulary name and the current client id.
+    """
+    return '%s:%s' % (getattr(self, 'grokcore.component.directive.name'),
+                      get_client_id())
+
+def reqclient_voc_cachekey(method, self):
+    """A cache key depending on the vocabulary name and the client id in the
+       request.
+    """
+    return '%s:%s' % (getattr(self, 'grokcore.component.directive.name'),
+                      self.get_client())
 
 def generator_to_list(func):
     """Casts a generator object into a tuple. This decorator
@@ -40,7 +59,7 @@ class UsersVocabularyFactory(grok.GlobalUtility):
         vocab.hidden_terms = self.hidden_terms
         return vocab
 
-    @volatile.cache(lambda method, self: True)
+    @ram.cache(voc_cachekey)
     @generator_to_list
     def key_value_provider(self):
         info = getUtility(IContactInformation)
@@ -70,7 +89,7 @@ class UsersAndInboxesVocabularyFactory(grok.GlobalUtility):
         vocab.hidden_terms = self.hidden_terms
         return vocab
 
-    @volatile.cache(lambda method, self: self.get_client())
+    @ram.cache(reqclient_voc_cachekey)
     @generator_to_list
     def key_value_provider(self):
         client_id = self.get_client()
@@ -123,7 +142,7 @@ class AssignedUsersVocabularyFactory(grok.GlobalUtility):
         vocab.hidden_terms = self.hidden_terms
         return vocab
 
-    @volatile.cache(caching.client_cache_key)
+    @ram.cache(client_voc_cachekey)
     @generator_to_list
     def key_value_provider(self):
         info = getUtility(IContactInformation)
@@ -181,7 +200,7 @@ class ContactsAndUsersVocabularyFactory(grok.GlobalUtility):
                           info.describe(contact)))
         return items
 
-    @volatile.cache(lambda method, self: True)
+    @ram.cache(voc_cachekey)
     def _get_users(self):
         info = getUtility(IContactInformation)
         items = []
@@ -226,27 +245,41 @@ class EmailContactsAndUsersVocabularyFactory(grok.GlobalUtility):
         value = Fullname [address], eg. Hugo Boss [hugo@boss.ch]
         """
 
+        for item in self._user_data():
+            yield item
+
+    # We use the default ram cache because it automatically expires after
+    # 1 day. This could be customized by providing our own ICacheChooser.
+    @ram.cache(voc_cachekey)
+    def _user_data(self):
+        """Create a list containing all user data which can be memoized.
+
+        key = mail-address
+        value = Fullname [address], eg. Hugo Boss [hugo@boss.ch]
+        """
         info = getUtility(IContactInformation)
         ids = [(user, user.active) for user in info.list_users()]
         ids.extend([(contact, True) for contact
                     in info.list_contacts()])
 
+        user_data = []
         for contact_or_user, active in ids:
             email = info.get_email(contact_or_user)
-            if email != None:
+            if email:
                 if not active:
                     self.hidden_terms.append(email)
-                yield(email,
-                      info.describe(contact_or_user,
-                                    with_email=True))
+                user_data.append((email,
+                                  info.describe(contact_or_user,
+                                                with_email=True)))
 
-                email2 = info.get_email2(contact_or_user)
-                if email2 != None:
-                    if not active:
-                        self.hidden_terms.append(email2)
-                    yield(email2,
-                          info.describe(contact_or_user,
-                                        with_email2=True))
+            email2 = info.get_email2(contact_or_user)
+            if email2:
+                if not active:
+                    self.hidden_terms.append(email2)
+                user_data.append((email2,
+                                  info.describe(contact_or_user,
+                                                with_email2=True)))
+        return user_data
 
 
 class ClientsVocabularyFactory(grok.GlobalUtility):
