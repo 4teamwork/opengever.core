@@ -31,4 +31,11 @@
       provides="Products.GenericSetup.interfaces.EXTENSION"
       />
 
+  <!-- Register the "various" import step -->
+  <genericsetup:importStep
+      name="opengever.inbox"
+      title="opengever.inbox various import steps"
+      description=""
+      handler="opengever.inbox.setuphandlers.import_various" />
+
 </configure>

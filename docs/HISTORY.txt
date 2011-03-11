@@ -5,6 +5,11 @@ Changelog
 2.0b7
 -----
 
+* Issue #952 Eingangskorb SKA ARCH: Reiter Eingang kommt direkt nach Reiter Dokumente (und vor Weiterleitung)
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/952/
+  Added setuphandler method to order inbox actions
+  [lgraf]
+
 * Issue #904 Eingangskorb: Aufgabe aus anderem Mandant wird auf der Übersicht nicht dargestellt
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/904/
   [ttschanz]
