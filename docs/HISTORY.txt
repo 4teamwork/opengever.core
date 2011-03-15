@@ -5,6 +5,10 @@ Changelog
 2.0b11 (unreleased)
 -------------------
 
+* Issue #949 Vocabulary "Mandant" alphabetisch sortieren
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/949
+  [jbaumann]
+
 * Fixed import script to correctly detect zope application 'app' object
   [lgraf]
 

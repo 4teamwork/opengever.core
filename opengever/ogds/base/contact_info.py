@@ -223,7 +223,8 @@ class ContactInformation(grok.GlobalUtility):
         """Returns a list of all enabled clients.
         """
 
-        return self._clients_query().filter_by(enabled=True).all()
+        return self._clients_query().filter_by(enabled=True).order_by(
+            Client.title).all()
 
     def get_client_by_id(self, client_id):
         """Returns a client identified by `client_id`.
