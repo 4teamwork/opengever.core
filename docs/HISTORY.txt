@@ -5,6 +5,17 @@ Changelog
 2.0b7
 -----
 
+* Issue #904 Eingangskorb: Aufgabe aus anderem Mandant wird auf der Uebersicht nicht dargestellt (unter dem Tab schon)
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/904
+  Added box 'inbox' to inbox overview and fixed display of assigned tasks
+  [lgraf]
+
+* Issue #960 Eingangskorb / Uebersicht: Dokumente, die bereits weitergeleitet worden sind, 
+  werden im Uebersichtstab angezeigt bzw. bleiben stehen
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/960
+  Only displaying documents in inbox overview that are directly contained in inbox, not in forwardings
+  [lgraf]
+
 * Issue #952 Eingangskorb SKA ARCH: Reiter Eingang kommt direkt nach Reiter Dokumente (und vor Weiterleitung)
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/952/
   Added setuphandler method to order inbox actions
