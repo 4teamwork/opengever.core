@@ -138,7 +138,9 @@ class DossierContainer(Container):
         if dossier.end is None:
             return False
         if end_date:
-            if end_date < dossier.end:
+            # Dossier end date needs to be larger (younger)
+            # than the computed end date
+            if end_date > dossier.end:
                 return False
         return True
 
@@ -149,8 +151,13 @@ class DossierContainer(Container):
         The final end date is the date of the most recent object that's
         contained (directly or indirectly) in this dossier.
         """
+        import pdb; pdb.set_trace( )
         wft = getToolByName(self, 'portal_workflow')
         end_dates = []
+
+        # Also consider the (sub)dossier's end date
+        end_dates.append(IDossier(self).end)
+
         children = self.getChildNodes()
         for child in children:
             if child.portal_type == "opengever.document.document":

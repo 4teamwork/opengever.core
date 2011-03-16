@@ -5,6 +5,11 @@ Changelog
 2.0b13
 ------
 
+* Issue #390 Datum-Plausibilitaetspruefung
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/390/
+  Fixed bug where end date validation and suggestion for subdossiers didn't work correctly
+  [lgraf]
+
 * Issue #937 Mailversand: Fehlerhafte Dokumentauswahl
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/937/
   Fixed SourceBinder for related documents when sending docs as mail
