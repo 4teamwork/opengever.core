@@ -21,7 +21,7 @@ Changelog
   Added setuphandler method to order inbox actions
   [lgraf]
 
-* Issue #904 Eingangskorb: Aufgabe aus anderem Mandant wird auf der Übersicht nicht dargestellt
+* Issue #904 Eingangskorb: Aufgabe aus anderem Mandant wird auf der Uebersicht nicht dargestellt
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/904/
   [ttschanz]
 
