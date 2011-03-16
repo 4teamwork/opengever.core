@@ -5,6 +5,9 @@ Changelog
 2.0b15
 ------
 
+* Added 'forwarding-state-closed' to list of states for which overdue icon shouldn't be displayed
+  [lgraf]
+
 
 2.0b14
 ------

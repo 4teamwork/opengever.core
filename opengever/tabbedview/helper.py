@@ -138,9 +138,10 @@ def overdue_date_helper(item, date):
     except ValueError:
         return None
 
-    if overdue and item and item.review_state in ['task-state-cancelled'
-                                                  , 'task-state-rejected'
-                                                  , 'task-state-tested-and-closed']:
+    if overdue and item and item.review_state in ['task-state-cancelled',
+                                                  'task-state-rejected',
+                                                  'task-state-tested-and-closed',
+                                                  'forwarding-state-closed']:
         overdue = False
 
     class_attr = overdue and 'class="overdue"' or ''
