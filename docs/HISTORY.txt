@@ -5,6 +5,9 @@ Changelog
 2.0b6
 -----
 
+* Patching ZMI to display warning if OG client needs upgrading
+  [lgraf]
+
 
 2.0b5
 -----
