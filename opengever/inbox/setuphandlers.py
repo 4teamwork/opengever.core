@@ -1,4 +1,16 @@
 from Products.CMFCore.utils import getToolByName
+
+from zope.component import getUtility
+from zope.component import getMultiAdapter
+
+from plone.portlets.interfaces import IPortletManager
+from plone.portlets.interfaces import IPortletAssignmentMapping
+from plone.portlets.interfaces import ILocalPortletAssignmentManager
+from plone.app.portlets.portlets import navigation
+from plone.portlets.constants import CONTEXT_CATEGORY as CONTEXT_PORTLETS
+
+
+
 # The profile id of your package:
 PROFILE_ID = 'profile-opengever.inbox:default'
 
@@ -51,6 +63,20 @@ def order_actions(site, logger):
             logger.info("Moved '%s' action to position %s" % (action_id, target_pos))
 
 
+def assign_portlets(site, logger=None):
+    logger.info("Setting up portlet assignments for inbox")
+    inbox = site['eingangskorb']
+    column = getUtility(IPortletManager, name=u'plone.leftcolumn', context=inbox)
+
+    # Add navigation portlet
+    manager = getMultiAdapter((inbox, column), IPortletAssignmentMapping)
+    if not 'navigation' in manager.keys():
+        manager['navigation'] = navigation.Assignment()
+
+    # Block inheritance of portlets from parent
+    portletAssignments = getMultiAdapter((inbox, column,), ILocalPortletAssignmentManager)
+    portletAssignments.setBlacklistStatus(CONTEXT_PORTLETS, True)
+
 
 def import_various(context):
     """Import step for configuration that is not handled in xml files.
@@ -60,3 +86,4 @@ def import_various(context):
     logger = context.getLogger('opengever.inbox')
     site = context.getSite()
     order_actions(site, logger)
+    assign_portlets(site, logger)

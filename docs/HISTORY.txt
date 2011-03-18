@@ -5,6 +5,9 @@ Changelog
 2.0b8
 -----
 
+* Setting up portlet assignments for inbox in GS import step
+  [lgraf]
+
 
 2.0b7
 -----
