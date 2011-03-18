@@ -303,17 +303,22 @@ class SearchableTextExtender(grok.Adapter):
         seqNumb = getUtility(ISequenceNumber)
         searchable.append(str(seqNumb.get_number(self.context)))
 
-        #responsible
+        # responsible
         info = getUtility(IContactInformation)
         dossier = IDossier(self.context)
         searchable.append(info.describe(dossier.responsible).encode(
                 'utf-8'))
 
-        #filling_no
+        # filling_no
         dossier = IDossierMarker(self.context)
         if getattr(dossier, 'filing_no', None):
             searchable.append(str(getattr(dossier, 'filing_no',
                                           None)).encode('utf-8'))
+
+        # comments
+        comments = getattr(IDossier(self.context), 'comments', None)
+        if comments:
+            searchable.append(comments.encode('utf-8'))
 
         return ' '.join(searchable)
 
