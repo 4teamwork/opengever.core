@@ -5,6 +5,9 @@ Changelog
 2.0a4
 -----
 
+* Bumped profile version to 2002 to trigger upgrade steps for rebuilding SearchableText index
+  [lgraf]
+
 
 2.0a3
 -----
