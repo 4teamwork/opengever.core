@@ -43,6 +43,7 @@ setup(name='opengever.policy.base',
           'opengever.latex',
           'opengever.advancedsearch',
           'opengever.sharing',
+          'opengever.upgrade',
           'izug.basetheme',
       ],
       entry_points="""

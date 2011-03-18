@@ -5,6 +5,9 @@ Changelog
 2.0a4
 -----
 
+* Added opengever.upgrade as a dependency in setup.py
+  [lgraf]
+
 * Bumped profile version to 2002 to trigger upgrade steps for rebuilding SearchableText index
   [lgraf]
 
