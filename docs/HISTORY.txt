@@ -5,6 +5,9 @@ Changelog
 2.0b8
 -----
 
+* Removed method for assigning portlets - now done in opengever.setup
+  [lgraf]
+
 * Setting up portlet assignments for inbox in GS import step
   [lgraf]
 
