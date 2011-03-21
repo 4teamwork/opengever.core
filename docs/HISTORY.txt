@@ -5,6 +5,9 @@ Changelog
 2.0b6
 -----
 
+* Made assign_portlets method work as upgrade step
+  [lgraf]
+
 * Refactored methods in setuphandlers
   [lgraf]
 

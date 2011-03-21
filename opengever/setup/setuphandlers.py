@@ -87,10 +87,14 @@ def assign_portlets(context):
         del mapping[u'navigation']
 
     repository_root = context.REQUEST.get('repository_root', None)
-    repository_root_name = repository_root[0]
-    if 'opengever-portlets-tree-TreePortlet' not in mapping.keys():
-        mapping['opengever-portlets-tree-TreePortlet'] = \
-            treeportlet.Assignment(root_path=repository_root_name)
+    # If called as an upgrade step we don't have
+    # repository_root in the request
+    # TODO: Figure out how to get RR for client anyway
+    if repository_root:
+        repository_root_name = repository_root[0]
+        if 'opengever-portlets-tree-TreePortlet' not in mapping.keys():
+            mapping['opengever-portlets-tree-TreePortlet'] = \
+                treeportlet.Assignment(root_path=repository_root_name)
 
     # add a new navigation portlet at /eingangskorb
     inbox = context.restrictedTraverse('eingangskorb')
