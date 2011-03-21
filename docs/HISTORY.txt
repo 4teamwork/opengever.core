@@ -5,6 +5,9 @@ Changelog
 2.0b6
 -----
 
+* Fixed declaration of behaviors in ftw.mail.mail FTI (purge=False)
+  [lukasg]
+
 
 2.0b5
 -----

@@ -8,7 +8,7 @@
             category="object_buttons">
         <permission value="View" />
     </action>
-	<property name="behaviors">
-		<element value="opengever.trash.trash.ITrashable" />
-	</property>
+    <property name="behaviors" purge="False">
+        <element value="opengever.trash.trash.ITrashable" />
+    </property>
 </object>
