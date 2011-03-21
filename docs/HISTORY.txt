@@ -5,6 +5,9 @@ Changelog
 2.0b6
 -----
 
+* Improved assignment of tree portlets for repository roots (primary and secondary)
+  [lgraf]
+
 * Made assign_portlets method work as upgrade step
   [lgraf]
 
