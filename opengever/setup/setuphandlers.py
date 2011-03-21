@@ -27,6 +27,7 @@ def create_repository_root(context):
     obj.setTitle(title)
     obj.reindexObject()
 
+
 def start_import(context):
     transmogrifier = Transmogrifier(context)
 
@@ -52,9 +53,34 @@ def settings(context):
         context.get('Members').setExcludeFromNav(True)
         context.get('Members').reindexObject()
 
+
+def set_global_roles(setup):
+    admin_file = setup.readDataFile('administrator.txt')
+    if admin_file is None:
+        return
+    site = setup.getSite()
+    assign_roles(site, admin_file)
+
+
+def assign_roles(context, admin_file):
+    admin_groups= admin_file.split('\n')
+    for admin_group in admin_groups:
+        context.acl_users.portal_role_manager.assignRoleToPrincipal('Manager', admin_group.strip())
+
+
+def mail_settings(site):
+    registry = getUtility(IRegistry, context=site)
+    client_config=registry.forInterface(IClientConfiguration)
+    client_id = client_config.client_id
+    mail_config = registry.forInterface(IMailSettings)
+    mail_domain = mail_config.mail_domain
+    site.manage_changeProperties({'email_from_address':'noreply@'+mail_domain,
+                                'email_from_name': client_id})
+
+
+def assign_portlets(context):
     # replace unused navigation portlet with the tree portlet
-    manager = getUtility(IPortletManager, name=u'plone.leftcolumn',
-                        context=context)
+    manager = getUtility(IPortletManager, name=u'plone.leftcolumn', context=context)
     mapping = getMultiAdapter((context, manager,),
                               IPortletAssignmentMapping)
     if 'navigation' in mapping.keys():
@@ -81,34 +107,15 @@ def settings(context):
     assignable = getMultiAdapter((inbox, manager), ILocalPortletAssignmentManager)
     assignable.setBlacklistStatus(CONTEXT_CATEGORY, True)
 
+
 def import_various(setup):
     if setup.readDataFile('opengever.setup.txt') is None:
         return
     site = setup.getSite()
+
     create_repository_root(site)
     start_import(site)
     settings(site)
-    mail_settings(setup)
+    mail_settings(site)
+    assign_portlets(site)
 
-def set_global_roles(setup):
-    admin_file = setup.readDataFile('administrator.txt')
-    if admin_file is None:
-        return
-    site = setup.getSite()
-    assign_roles(site, admin_file)
-
-def assign_roles(context, admin_file):
-    admin_groups= admin_file.split('\n')
-    for admin_group in admin_groups:
-        context.acl_users.portal_role_manager.assignRoleToPrincipal('Manager', admin_group.strip())
-
-def mail_settings(setup):
-    site = setup.getSite()
-    print site
-    registry = getUtility(IRegistry, context=site)
-    client_config=registry.forInterface(IClientConfiguration)
-    client_id = client_config.client_id
-    mail_config = registry.forInterface(IMailSettings)
-    mail_domain = mail_config.mail_domain
-    site.manage_changeProperties({'email_from_address':'noreply@'+mail_domain,
-                                'email_from_name': client_id})

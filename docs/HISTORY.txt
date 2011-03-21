@@ -5,6 +5,9 @@ Changelog
 2.0b6
 -----
 
+* Refactored methods in setuphandlers
+  [lgraf]
+
 * Patching ZMI to display warning if OG client needs upgrading
   [lgraf]
 
