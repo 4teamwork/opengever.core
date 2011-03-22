@@ -321,22 +321,26 @@ class Overview(DisplayForm, OpengeverTab):
 
 
 class IRelatedDocumentsTableSourceConfig(ITableSourceConfig):
+    """Related documents table source config
+    """
 
     # search_options = {'portal_type': 'opengever.document.document'}
     # depth = 2
     pass
-#
-#
-class RelatedDocumentTableSource(grok.MultiAdapter, BaseTableSource):
+
+
+class RelatedDocumentsTableSource(grok.MultiAdapter, BaseTableSource):
+    """Related documents table source adapter
+    """
 
     grok.implements(ITableSource)
     grok.adapts(IRelatedDocumentsTableSourceConfig, Interface)
+
 
     def build_query(self):
         """Builds the query based on `get_base_query()` method of config.
         Returns the query object.
         """
-
         # initalize config
         self.config.update_config()
 
@@ -397,9 +401,10 @@ class RelatedDocumentTableSource(grok.MultiAdapter, BaseTableSource):
         return query
 
 
+
 class RelatedDocuments(Documents):
 
-    grok.name('tabbedview_view-documents')
+    grok.name('tabbedview_view-relateddocuments')
     grok.context(ITask)
     grok.implements(IRelatedDocumentsTableSourceConfig)
 
@@ -453,6 +458,7 @@ class RelatedDocuments(Documents):
                      'checkin',
                      'create_task',
                      ]
+
     def get_base_query(self):
         return '/'.join(self.context.getPhysicalPath())
 
