@@ -201,14 +201,17 @@ class AddForm(dexterity.AddForm):
     grok.name('opengever.dossier.businesscasedossier')
 
     def update(self):
-        """adds responsible to the request"""
+        """Adds a default value for `responsible` to the request so the
+        field is prefilled with the current user, or the parent dossier's
+        responsible in the case of a subdossier.
+        """
         responsible = getSecurityManager().getUser().getId()
-        if self.context.portal_type == 'opengever.dossier.businesscasedossier':
-            tmp_dossier = IDossier(self.context)
-            if tmp_dossier:
-                responsible = tmp_dossier.responsible
-        responsible = responsible and responsible or \
-            getSecurityManager().getUser().getId()
+        if IDossierMarker.providedBy(self.context):
+            # If adding a subdossier, use parent's responsible
+            parent_dossier = IDossier(self.context)
+            if parent_dossier:
+                responsible = parent_dossier.responsible
+
         if not self.request.get('form.widgets.IDossier.responsible', None):
             self.request.set('form.widgets.IDossier.responsible', [responsible])
         super(AddForm, self).update()

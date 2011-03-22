@@ -5,6 +5,11 @@ Changelog
 2.0b15
 ------
 
+* Made update() method of dossier AddForm usable by special dossiers
+  (check for IDossierMarker, not portal_type="og.dossier.businesscasedossier")
+  [lukasg]
+
+
 * Issue #935 Feld "Kommentar" eines Dossiers indexieren
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/935/
   Included dossier comments in SearchableText index
