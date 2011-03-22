@@ -109,7 +109,7 @@ class AssignTaskForm(Form):
 class AssignTaskView(layout.FormWrapper, grok.View):
     grok.context(ITask)
     grok.name('assign-task')
-    grok.require('cmf.ModifyPortalContent')
+    grok.require('zope2.View')
 
     form = AssignTaskForm
 

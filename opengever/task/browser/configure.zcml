@@ -1,10 +1,18 @@
 <configure
-    xmlns="http://namespaces.zope.org/zope"
-    xmlns:browser="http://namespaces.zope.org/browser"
-    i18n_domain="opengever.task">
+      xmlns="http://namespaces.zope.org/zope"
+      xmlns:browser="http://namespaces.zope.org/browser"
+      i18n_domain="opengever.task">
 
     <browser:resource
-        name="opengever.task.responsible.js"
-        file="resources/opengever.task.responsible.js" />
+          name="opengever.task.responsible.js"
+          file="resources/opengever.task.responsible.js" />
+
+    <browser:page
+          name="task_workflow_checks"
+          for="opengever.task.task.ITask"
+          class=".workflowchecks.TaskWorfklowChecks"
+          allowed_interface=".workflowchecks.ITaskWorkflowChecks"
+          permission="zope2.View"
+          />
 
 </configure>

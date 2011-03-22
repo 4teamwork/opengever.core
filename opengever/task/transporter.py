@@ -1,4 +1,5 @@
 from DateTime import DateTime
+from datetime import datetime
 from five import grok
 from opengever.ogds.base.utils import remote_request
 from opengever.task.adapters import IResponse as IPersistentResponse
@@ -71,16 +72,19 @@ class ResponseTransporter(grok.Adapter):
         if isinstance(value, str):
             return ('string:utf8', value.decode('utf-8'))
 
-        elif isinstance(value, unicode):
+        if isinstance(value, unicode):
             return ('unicode', value)
 
-        elif isinstance(value, DateTime):
+        if isinstance(value, datetime):
+            return ('datetime', str(value))
+
+        if isinstance(value, DateTime):
             return ('DateTime', str(value))
 
-        elif isinstance(value, PersistentList):
+        if isinstance(value, PersistentList):
             return list(value)
 
-        elif isinstance(value, RelationValue):
+        if isinstance(value, RelationValue):
             if value.to_id in self.intids_mapping:
                 return ('RelationValue',
                         self.intids_mapping[value.to_id])
@@ -135,13 +139,16 @@ class ReceiveResponses(grok.CodeView):
         if type_.startswith('string:'):
             return val.encode(type_.split(':', 1)[1])
 
-        elif type_ == 'unicode':
+        if type_ == 'unicode':
             return unicode(val)
 
-        elif type_ == 'DateTime':
+        if type_ == 'datetime':
+            return DateTime(val).asdatetime()
+
+        if type_ == 'DateTime':
             return DateTime(val)
 
-        elif type_ == 'RelationValue':
+        if type_ == 'RelationValue':
             return RelationValue(val)
 
         return val

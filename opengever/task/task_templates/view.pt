@@ -16,7 +16,7 @@
 
                 <div tal:replace="structure provider:plone.belowcontenttitle" />
 
-                <table class="listing task-listing">
+                <table class="vertical invisible task-listing">
                     <tal:rep tal:define="group python: view.groups[0]">
 
                         <tr>
@@ -32,7 +32,13 @@
 
                         <tr>
                             <th i18n:domain="opengever.task" i18n:translate="label_workflow_state">State</th>
-                            <td i18n:translate="" i18n:domain="plone" tal:content="python: view.context.portal_workflow.getInfoFor(view.context, 'review_state')" />
+                            <td i18n:domain="plone">
+                                <span tal:define="wfstate python:context.portal_workflow.getInfoFor(view.context, 'review_state')"
+                                      tal:attributes="class string:wf-${wfstate}"
+                                      i18n:translate=""
+                                      tal:content="wfstate">state
+                                </span>
+                            </td>
                         </tr>
 
                         <tr>

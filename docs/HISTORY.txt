@@ -2,8 +2,90 @@ Changelog
 =========
 
 
+2.0b15
+------
+
+
+2.0b14
+------
+
+
+2.0b13
+------
+
+* Issue #900 Eingangskorb, Aufgaben aus anderem Mandant: Aktion neu zuweisen fehlt!
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/900
+  Removed (too restrictive) guards for transitions reject/accept/resolve
+  [phabegger]
+
+
+2.0b12
+------
+
+* Added exit-transition "task-transition-reassign" to task-state-in-progress,
+  removed guard permission, added guard condition
+  [lgraf]
+
+
+2.0b11
+------
+
+* Removed duplicate condition expression in profile
+  [lgraf]
+
+* Issue #832 Workflow Task anpassen
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/832
+  Added condition for action "follow-up task". It is now only available for
+  responsible person.
+  [phabegger]
+
+* Issue #832 Workflow Task anpassen
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/832
+  Added guards in order to reduce the number of available actions depending
+  on the logged-in user.
+  [phabegger]
+
+* Issue #832 Workflow Task anpassen
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/832
+  Added wf guards for transitions reject and cancel.
+  [phabegger]
+
+
+2.0b10
+------
+
+* Show task wfstate icons in task view.
+  [phabegger]
+
+* Fixed task resolve check: added all valid closed-states.
+  [jbaumann]
+
+* Issue #836 Folgeaufgabe: Fehler beim Erstellen innerhalb gleichen Mandants
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/836
+  Added handling of python datetime objects when copying responses.
+  [jbaumann]
+
+* updated opengever task workflow
+  [jbaumann]
+
+* added new browser view "task_workflow_checks"
+  [jbaumann]
+
+* Issue #844 Aufgabe: Aktion Hinzufuegen "Dokument aus eigenem Mandant" umbenennen
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/844
+  Updated translation.
+  [phabegger]
+
+
 2.0b9
 -----
+
+* Issue #832 Workflow Task anpassen
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/832
+  Updated workflow and it's translations.
+  Added task_workflow_checks view used by the workflow guards.
+  Disabled setting Contributor role on task parent.
+  [jbaumann]
 
 * Forwarding special case: tabbed view helper "task_type" should always
   display "Forwarding" for forwardings.
