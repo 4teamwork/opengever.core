@@ -5,6 +5,9 @@ Changelog
 2.0b15
 ------
 
+* Re-enabled setting contributor role on parent dossier for assigned tasks
+  [lgraf]
+
 
 2.0b14
 ------

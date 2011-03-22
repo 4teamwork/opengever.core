@@ -75,11 +75,14 @@ class LocalRolesSetter(object):
         """
         # according to Issue #832 we don't set a role in the parent
         # any more.
-        return
-        # context = self.task
-        # while context.Type() == self.task.Type():
-        #     context = aq_parent(aq_inner(context))
-        # self._add_local_roles(context, self.responsible, ('Contributor', ))
+        # --------------
+        # However, since tabbed view for tasks isn't finished yet,
+        # we temporarily enable this again. [lgraf]
+
+        context = self.task
+        while context.Type() == self.task.Type():
+            context = aq_parent(aq_inner(context))
+        self._add_local_roles(context, self.responsible, ('Contributor', ))
 
     def set_roles_on_related_items(self):
         """Set local roles on related items (usually documents)
