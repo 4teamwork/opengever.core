@@ -112,6 +112,10 @@ class PersonalOverview(TabbedView):
         clients and he therefore is allowed to view the PersonalOverview,
         False otherwise.
         """
+        # This check is temporarily disabled to test impact on
+        # performance. [lgraf]
+        return True
+
         info = getUtility(IContactInformation)
         return get_current_client() in info.get_assigned_clients()
 

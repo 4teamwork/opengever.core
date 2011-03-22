@@ -5,6 +5,9 @@ Changelog
 2.0b16
 ------
 
+* Temporarily disabled check if user is allowed to see personal overview tab
+  [lgraf]
+
 
 2.0b15
 ------
