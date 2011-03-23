@@ -103,7 +103,7 @@
             condition_expr="" url_expr="string:#" visible="True">
         <permission value="View"/>
 	</action>
-	<action i18n:domain="opengever.task" title="Related Documents" action_id="documents" category="tabbedview-tabs"
+	<action i18n:domain="opengever.task" title="Related Documents" action_id="relateddocuments" category="tabbedview-tabs"
             condition_expr="" url_expr="string:#" visible="True">
         <permission value="View"/>
 	</action>

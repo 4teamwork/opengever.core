@@ -323,9 +323,6 @@ class Overview(DisplayForm, OpengeverTab):
 class IRelatedDocumentsTableSourceConfig(ITableSourceConfig):
     """Related documents table source config
     """
-
-    # search_options = {'portal_type': 'opengever.document.document'}
-    # depth = 2
     pass
 
 
@@ -352,6 +349,7 @@ class RelatedDocumentsTableSource(grok.MultiAdapter, BaseTableSource):
         for brain in brains:
             objects.append(brain.getObject())
         for item in self.config.context.relatedItems:
+            
             obj = item.to_object
             if obj.portal_type=='opengever.document.document' or obj.portal_type=='ftw.mail.mail':
                 objects.append(obj)
@@ -460,6 +458,7 @@ class RelatedDocuments(Documents):
                      ]
 
     def get_base_query(self):
+        import pdb; pdb.set_trace( )
         return '/'.join(self.context.getPhysicalPath())
 
     __call__ = ListingView.__call__
@@ -470,8 +469,6 @@ class RelatedDocuments(Documents):
 # setting the default value of a RelationField does not work as expected
 # or we don't know how to set it.
 # thus we use an add form hack by injecting the values into the request.
-
-#class AddForm(dexterity.AddForm):
 
 class AddForm(dexterity.AddForm):
     grok.name('opengever.task.task')
