@@ -458,7 +458,6 @@ class RelatedDocuments(Documents):
                      ]
 
     def get_base_query(self):
-        import pdb; pdb.set_trace( )
         return '/'.join(self.context.getPhysicalPath())
 
     __call__ = ListingView.__call__
