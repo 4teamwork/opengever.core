@@ -12,6 +12,15 @@ Changelog
 * Re-enabled setting contributor role on parent dossier for assigned tasks
   [lgraf]
 
+* Updated profile to reflect new action name, updated translations
+  [lgraf]
+
+* Renamed related documents tabbedview for Tasks to avoid naming conflict
+  [lgraf]
+
+* Enabled tabbed_view support for tasks
+  [lgraf]
+
 
 2.0b14
 ------

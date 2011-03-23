@@ -1,28 +1,41 @@
-from collective import dexteritytextindexer
 from Acquisition import aq_parent, aq_inner
-from Products.CMFCore.interfaces import IActionSucceededEvent
-from Products.CMFCore.utils import getToolByName
+from collective import dexteritytextindexer
 from datetime import datetime, timedelta
 from five import grok
+from ftw.tabbedview.browser.listing import ListingView
+from ftw.table import helper
+from ftw.table.basesource import BaseTableSource
+from ftw.table.interfaces import ITableSource, ITableSourceConfig
+from opengever.base.browser.helper import client_title_helper
 from opengever.base.interfaces import ISequenceNumber
+from opengever.base.source import DossierPathSourceBinder
 from opengever.globalindex.utils import indexed_task_link
 from opengever.ogds.base.autocomplete_widget import AutocompleteFieldWidget
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.ogds.base.utils import get_client_id
-from opengever.task import _
+from opengever.tabbedview.browser.tabs import Documents
+from opengever.tabbedview.browser.tabs import OpengeverTab
+from opengever.tabbedview.helper import readable_ogds_author
 from opengever.task import util
+from opengever.task import _
+from opengever.task.helper import linked
+from opengever.task.helper import path_checkbox
 from opengever.task.interfaces import ISuccessorTaskController
-from opengever.base.source import DossierPathSourceBinder
+from operator import attrgetter
 from plone.dexterity.content import Container
 from plone.directives import form, dexterity
+from plone.directives.dexterity import DisplayForm
 from plone.indexer import indexer
+from Products.CMFCore.interfaces import IActionSucceededEvent
+from Products.CMFCore.utils import getToolByName
 from z3c.relationfield.schema import RelationChoice, RelationList
 from zc.relation.interfaces import ICatalog
 from zope import schema
+from zope.app.intid.interfaces import IIntIds
 from zope.component import getUtility, getMultiAdapter
 from zope.interface import implements, Interface
 from zope.schema.vocabulary import getVocabularyRegistry
-from opengever.base.browser.helper import client_title_helper
+
 
 
 class ITask(form.Schema):
@@ -241,14 +254,10 @@ def responsible_client_default_value(data):
     return get_client_id()
 
 
-class ITaskView(Interface):
-    pass
-
-
-class View(dexterity.DisplayForm):
-    implements(ITaskView)
+class Overview(DisplayForm, OpengeverTab):
     grok.context(ITask)
-    grok.require('zope2.View')
+    grok.name('tabbedview_view-overview')
+    grok.template('overview')
 
     def getSubTasks(self):
         tasks = self.context.getFolderContents(
@@ -309,12 +318,156 @@ class View(dexterity.DisplayForm):
 
 
 
+
+
+class IRelatedDocumentsTableSourceConfig(ITableSourceConfig):
+    """Related documents table source config
+    """
+    pass
+
+
+class RelatedDocumentsTableSource(grok.MultiAdapter, BaseTableSource):
+    """Related documents table source adapter
+    """
+
+    grok.implements(ITableSource)
+    grok.adapts(IRelatedDocumentsTableSourceConfig, Interface)
+
+
+    def build_query(self):
+        """Builds the query based on `get_base_query()` method of config.
+        Returns the query object.
+        """
+        # initalize config
+        self.config.update_config()
+
+        # get the base query from the config
+        query = self.config.get_base_query()
+        portal_catalog = getToolByName(self.config.context, 'portal_catalog')
+        brains = portal_catalog(path={'query':query, 'depth': 2}, portal_type=['opengever.document.document', 'ftw.mail.mail'])
+        objects = []
+        for brain in brains:
+            objects.append(brain.getObject())
+        for item in self.config.context.relatedItems:
+            
+            obj = item.to_object
+            if obj.portal_type=='opengever.document.document' or obj.portal_type=='ftw.mail.mail':
+                objects.append(obj)
+        objects = self.extend_query_with_ordering(objects)
+        if self.config.filter_text:
+            objects = self.extend_query_with_textfilter(
+                objects, self.config.filter_text)
+        objects = self.extend_query_with_batching(objects)
+        return objects
+
+
+    def extend_query_with_ordering(self, query):
+        sort_index=self.request.get('sort',  '')
+        column = {}
+        objects = []
+        if sort_index != 'draggable' and sort_index != 'checkbox' and sort_index:
+            for item in self.config.columns:
+                if item['column'] == sort_index:
+                    column = item
+            if 'transform' in column.keys():
+                transform = column.get('transform', None)
+                if transform != None:
+                    for item in query:
+                        objects.append((transform(item, item[sort_index]), item))
+                    objects_sort = objects.sort()
+                    return objects_sort
+                else:
+                    objects_sort = sorted(query, key=attrgetter(sort_index))
+                    return objects_sort
+            else:
+                objects_sort = sorted(query, key=attrgetter(sort_index))
+                return objects_sort
+        else:
+            return query
+
+    def extend_query_with_texfilter(self, query, text):
+        return query
+
+    def extend_query_with_batching(self, query):
+        """Extends the given `query` with batching filters and returns the
+        new query. This method is only called when batching is enabled in
+        the source config with the `batching_enabled` attribute.
+        """
+        return query
+
+    def search_results(self, query):
+        return query
+
+
+
+class RelatedDocuments(Documents):
+
+    grok.name('tabbedview_view-relateddocuments')
+    grok.context(ITask)
+    grok.implements(IRelatedDocumentsTableSourceConfig)
+
+
+    lazy = False
+    columns = (
+        {'column':'',
+         'column_title':'',
+         'transform':helper.draggable},
+        {'column':'',
+         'column_title':'',
+         'transform':path_checkbox},
+
+        {'column': 'title',
+         'column_title': _(u'label_title', default=u'Title'),
+         'sort_index' : 'sortable_title',
+         'transform':linked},
+
+        {'column':'document_author',
+         'column_title':_('label_document_author', default="Document Author"),
+         'transform': readable_ogds_author},
+
+        {'column':'document_date',
+         'column_title':_('label_document_date', default="Document Date"),
+         'transform':helper.readable_date},
+
+        {'column':'receipt_date',
+         'column_title':_('label_receipt_date', default="Receipt Date"),
+         'transform':helper.readable_date},
+
+        {'column':'delivery_date',
+         'column_title':_('label_delivery_date', default="Delivery Date"),
+         'transform':helper.readable_date},
+        )
+
+    enabled_actions = [
+                       'send_as_email',
+                       'checkout',
+                       'checkin',
+                       'cancel',
+                       'create_task',
+                       'trashed',
+                       'send_documents',
+                       'copy_documents_to_remote_client',
+                       'move_items',
+                       'copy_items',
+                       ]
+
+    major_actions = ['send_documents',
+                     'checkout',
+                     'checkin',
+                     'create_task',
+                     ]
+
+    def get_base_query(self):
+        return '/'.join(self.context.getPhysicalPath())
+
+    __call__ = ListingView.__call__
+    render = __call__
+    update = ListingView.update
+
 # XXX
 # setting the default value of a RelationField does not work as expected
 # or we don't know how to set it.
 # thus we use an add form hack by injecting the values into the request.
-
-#class AddForm(dexterity.AddForm):
 
 class AddForm(dexterity.AddForm):
     grok.name('opengever.task.task')
@@ -418,3 +571,7 @@ def set_dates(task, event):
         task.expectedStartOfWork = datetime.now()
     elif event.action == 'task-transition-in-progress-resolved':
         task.date_of_completion = datetime.now()
+
+def related_document(context):
+    intids = getUtility( IIntIds )
+    return intids.getId( context )

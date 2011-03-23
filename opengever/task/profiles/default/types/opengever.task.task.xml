@@ -27,7 +27,7 @@
 
     <!-- enabled behaviors -->
     <property name="behaviors">
-		<element value="collective.dexteritytextindexer.behavior.IDexterityTextIndexer" />
+        <element value="collective.dexteritytextindexer.behavior.IDexterityTextIndexer" />
         <element value="opengever.tabbedview.interfaces.ITabbedViewEnabled" />
         <element value="opengever.trash.trash.ITrashable" />
         <element value="opengever.task.behaviors.ITaskNameFromTitle" />
@@ -36,12 +36,12 @@
     </property>
 
     <!-- View information -->
-    <property name="default_view">view</property>
+    <property name="default_view">tabbed_view</property>
     <property name="immediate_view">../#tasks</property>
     <property name="default_view_fallback">False</property>
     <property name="view_methods">
         <element value="view"/>
-
+        <element value="tabbed_view"/>
     </property>
 
     <!-- Method aliases -->
@@ -99,4 +99,12 @@
         <permission value="View"/>
     </action>
 
+    <action i18n:domain="opengever.task" title="Overview" action_id="overview" category="tabbedview-tabs"
+            condition_expr="" url_expr="string:#" visible="True">
+        <permission value="View"/>
+    </action>
+    <action i18n:domain="opengever.task" title="Related Documents" action_id="relateddocuments" category="tabbedview-tabs"
+            condition_expr="" url_expr="string:#" visible="True">
+        <permission value="View"/>
+    </action>
 </object>
