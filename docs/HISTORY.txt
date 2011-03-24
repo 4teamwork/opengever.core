@@ -9,6 +9,12 @@ Changelog
 2.0b10
 ------
 
+* Issue #934 Fehler bei den Falldossiers 1 und 2 BD.ARP
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/934
+  Overriding ploneform_macros view to fix bug where status message isn't rendered
+  with "error" class if there were errors in (sub)groups of the form
+  [lgraf]
+
 * Added some sanity checks regarding conflicts to adjust-sequence-numbers view
   [lgraf]
 
