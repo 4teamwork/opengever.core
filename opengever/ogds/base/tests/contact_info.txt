@@ -93,8 +93,10 @@ Get the contact information utlity:
 
 User tests:
 
-    >>> info.list_users()
-    [<User hugo.boss>, <User peter.muster>]
+    >>> len(info.list_users())
+    2
+    >>> [u.userid for u in info.list_users()]
+    [u'hugo.boss', u'peter.muster']
     >>> info.is_user('hugo.boss')
     True
     >>> info.is_contact('hugo.boss')

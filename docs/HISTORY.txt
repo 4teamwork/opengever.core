@@ -9,6 +9,9 @@ Changelog
 2.0b11 (unreleased)
 -------------------
 
+* Fixed tests - info.list_users() now returns UserDict objects
+  [lgraf]
+
 * Issue #949 Vocabulary "Mandant" alphabetisch sortieren
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/949
   [jbaumann]
