@@ -91,9 +91,11 @@ class DossierContainer(Container):
     def is_all_closed(self):
         """ Check if all tasks are in a closed state.
 
-        closed: - cancelled
-        - rejected
-        - tested and closed
+        closed: 
+            - cancelled
+            - rejected
+            - tested and closed
+            - resolved
 
         """
 
@@ -102,7 +104,8 @@ class DossierContainer(Container):
             path=dict(query='/'.join(self.getPhysicalPath())),
             review_state=('task-state-cancelled',
                           'task-state-rejected',
-                          'task-state-tested-and-closed'))
+                          'task-state-tested-and-closed',
+                          'task-state-resolved'))
 
         tasks = self.portal_catalog(
             portal_type="opengever.task.task",

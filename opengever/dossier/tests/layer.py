@@ -15,6 +15,7 @@ class IntegrationTestLayer(collective.testcaselayer.ptc.BasePTCLayer):
         self.loadZCML('testing.zcml', package=tests)
         
         # Install the example.conference product
+        self.addProfile('opengever.ogds.base:default')
         self.addProfile('opengever.dossier:default')
         self.addProfile('opengever.document:default')
         self.addProfile('opengever.task:default')

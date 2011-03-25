@@ -3,17 +3,20 @@ Resolve and archive a dossier
 
 Resolving
 =========
-In this text we check the rules for resolve a Dossier
+In this test we check the rules for resolving a Dossier
 
 do some imports
     >>> from plone.dexterity.utils import createContentInContainer
+    >>> from zope.component import getMultiAdapter
     >>> from Products.Five.testbrowser import Browser
     >>> from datetime import datetime
     >>> from opengever.dossier.behaviors.dossier import IDossier
+    >>> from opengever.document.interfaces import ICheckinCheckoutManager
 
-setup the browser for the test, we used later in the test
+setup the browser for the test, we use it later in the test
     >>> browser = Browser()
     >>> browser.handleErrors = False
+    >>> browser.addHeader('Accept-Language', 'en-US')
     >>> self.app.acl_users.userFolderAddUser('root', 'secret',
     ...                                ['Manager','Contributor', 'Reviewer', 'Administrator'], [])
     >>> browser.addHeader('Authorization', 'Basic root:secret' )
@@ -25,13 +28,16 @@ creating dossier, ...
     ...     title='Dossiers', checkConstraints=False)
     >>> dossier
     <DossierContainer at ...>
+    >>> IDossier(dossier).start = datetime.today().date()
 
 subdossier, ...
     >>> subdossier = createContentInContainer(dossier,
     ...     'opengever.dossier.businesscasedossier',
     ...     title='Subdossier', checkConstraints=False)
-    >>> dossier
+    >>> subdossier
     <DossierContainer at ...>
+    >>> IDossier(subdossier).start = datetime.today().date()
+
 
 documents, ...
     >>> doc1 = createContentInContainer(dossier, 
@@ -41,16 +47,15 @@ documents, ...
 
 and tasks,
     >>> task1 = createContentInContainer(dossier, 
-    ...     'opengever.task.task', title="Task1", checkConstraints=False)
+    ...     'opengever.task.task', title="Task1", task_type='correction', checkConstraints=False)
     >>> task1
     <Task at /plone/dossier-1/task-1>
 
 
 is all supplied
 ---------------
-get the resolving object and check the is_all_supplied method
-    >>> resolve = dossier.unrestrictedTraverse('transition-resolve')
-    >>> resolve.is_all_supplied()
+Check if all contents of the dossier are "supplied" (filed)
+    >>> dossier.is_all_supplied()
     False
 
 Move the object to the subdossier, the task rest in the maindossier, and check is all supplied
@@ -58,7 +63,7 @@ Move the object to the subdossier, the task rest in the maindossier, and check i
     ...    [doc1.getId(),])
     >>> result = subdossier.manage_pasteObjects(clibboard)
     >>> doc1 = getattr(subdossier, result[0].get('new_id'))
-    >>> resolve.is_all_supplied()
+    >>> dossier.is_all_supplied()
     False
 
 Move also the task to the subdossier and now all should be supplied
@@ -66,23 +71,24 @@ Move also the task to the subdossier and now all should be supplied
     ...    [task1.getId(),])
     >>> result = subdossier.manage_pasteObjects(clibboard)
     >>> task1 = getattr(subdossier, 'task-1')
-    >>> resolve.is_all_supplied()
+    >>> dossier.is_all_supplied()
     True
 
 
 is_all_checked_in
--------------
-test the is all_checked_in method 
+-----------------
+test the is_all_checked_in method 
     >>> wft = portal.portal_workflow
     >>> wft.getInfoFor(doc1, 'review_state')
     'document-state-draft'
-    >>> resolve.is_all_checked_in()
+    >>> dossier.is_all_checked_in()
     True
-    >>> wft.doActionFor(doc1, 'document-transition-check_out')
-    >>> resolve.is_all_checked_in()
+    >>> manager = getMultiAdapter((doc1, app.REQUEST), ICheckinCheckoutManager)
+    >>> manager.checkout()
+    >>> dossier.is_all_checked_in()
     False
-    >>> wft.doActionFor(doc1, 'document-transition-check_in')
-    >>> resolve.is_all_checked_in()
+    >>> manager.checkin()
+    >>> dossier.is_all_checked_in()
     True
 
 
@@ -92,47 +98,47 @@ it should only be possible resolving a dossier when all tasks are resolved
     >>> wft = portal.portal_workflow
     >>> wft.getInfoFor(task1, 'review_state')
     'task-state-open'
-    >>> resolve.is_all_closed()
+    >>> dossier.is_all_closed()
     False
     >>> wft.doActionFor(task1, 'task-transition-open-resolved')
-    >>> resolve.is_all_closed()
+    >>> dossier.is_all_closed()
     True
 
 
 Archive
 =======
-create a seconde document
+create a second document
     >>> doc2 = createContentInContainer(subdossier, 
     ...     'opengever.document.document', title="Doc2", checkConstraints=False)
     >>> doc2
     <Document at ...>
 
-default value's
----------------
+default values
+--------------
 check default value of date field
-    >>> doc1.document_date = datetime(2011,11,11)
+    >>> doc1.document_date = datetime(2011,11,11).date()
     >>> doc1.reindexObject()
-    >>> doc2.document_date = datetime(2012,12,12)
+    >>> doc2.document_date = datetime(2012,12,12).date()
     >>> doc2.reindexObject()
 
 When dossier_end_date is empty, it should set the latest document_date as default
     >>> browser.open('http://nohost/plone/dossier-1/transition-archive')
     >>> browser.getControl(name='form.widgets.dossier_enddate').value
-    'December 12, 2012'
+    '12. Dezember 2012'
 
 When a dossier end is set and no document_date is later, it should set the dossier_date as default
-    >>> IDossier(dossier).end = datetime(2015,1,1)
+    >>> IDossier(dossier).end = datetime(2015,1,1).date()
     >>> dossier.reindexObject()
     >>> browser.open('http://nohost/plone/dossier-1/transition-archive')
     >>> browser.getControl(name='form.widgets.dossier_enddate').value
-    'January 1, 2015'
+    '01. Januar 2015'
 
 else it should set the latest document_date as default
-    >>> IDossier(dossier).end = datetime(2010, 01,01)
+    >>> IDossier(dossier).end = datetime(2010, 01,01).date()
     >>> dossier.reindexObject()
     >>> browser.open('http://nohost/plone/dossier-1/transition-archive')
     >>> browser.getControl(name='form.widgets.dossier_enddate').value
-    'December 12, 2012'
+    '12. Dezember 2012'
 
 filing prefix it should propose the latest document date
     >>> browser.getControl('filing Year').value
@@ -148,11 +154,12 @@ check validators
     'http://nohost/plone/dossier-1/transition-archive'
 
     check if the subdossier has an older end date than the given end date
-    >>> IDossier(subdossier).end = datetime(2015, 1, 1)
+    >>> IDossier(subdossier).end = datetime(2015, 1, 1).date()
     >>> subdossier.reindexObject()
     >>> browser.open('http://nohost/plone/dossier-1/transition-archive')
     >>> browser.getControl('filing prefix').value = ['government']
     >>> browser.getControl(name='form.widgets.dossier_enddate').value = 'December 12, 2010'
+
     >>> browser.getControl('Archive').click()
     >>> browser.url
     'http://nohost/plone/dossier-1/transition-archive'
@@ -170,9 +177,9 @@ send form with correct data
     'http://nohost/plone/dossier-1'
 
 check the given filing no
-    >>> getattr(dossier, 'filing_no')
+    >>> IDossier(dossier).filing_no
     u'OG-Government-2012-1'
-    >>> getattr(subdossier, 'filing_no')
+    >>> IDossier(subdossier).filing_no
     u'OG-Government-2012-1.1'
 
 check if the values are assumed to the dossier 

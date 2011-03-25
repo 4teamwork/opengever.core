@@ -5,9 +5,12 @@ Changelog
 2.0b15
 ------
 
+* Fixed tests
+  [lgraf]
+
 * Made update() method of dossier AddForm usable by special dossiers
   (check for IDossierMarker, not portal_type="og.dossier.businesscasedossier")
-  [lukasg]
+  [lgraf]
 
 
 * Issue #935 Feld "Kommentar" eines Dossiers indexieren
