@@ -5,6 +5,9 @@ Changelog
 2.0b11
 ------
 
+* Added dependency on izug.basetheme to setup.py
+  [lgraf]
+
 
 2.0b10
 ------

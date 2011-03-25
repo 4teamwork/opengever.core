@@ -48,6 +48,7 @@ setup(name='opengever.base',
         'collective.elephantvocabulary',
         'collective.vdexvocabulary',
         'collective.dexteritytextindexer',
+        'izug.basetheme',
         # -*- Extra requirements: -*-
         ],
       tests_require=tests_require,
