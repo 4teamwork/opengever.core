@@ -5,6 +5,10 @@ Changelog
 2.0b8
 -----
 
+* Moved ISendable to opengever.mail to avoid circular dependency 
+  and renamed it to ISendableDocsContainer
+  [lgraf]
+
 * Removed method for assigning portlets - now done in opengever.setup
   [lgraf]
 
