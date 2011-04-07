@@ -15,8 +15,7 @@ ADD_PLONE_SITE_HTML = '''
 <dtml-if "this().meta_type == 'Plone Site'">
   <!-- Warn if outdated -->
   <dtml-if "this().portal_setup.listUpgrades('opengever.policy.base:default') != []">
-    <div style="background: url(/misc_/PageTemplates/exclamation.gif) top left no-repeat;
-                padding: 0 0 0 1.2em; font-weight: bold; font-size: 125%;
+    <div style="background: #CC2A2A; padding: 10px; font-weight: bold; font-size: 125%;
                 margin-top: 1em;">
       This OpenGever client's configuration is outdated and needs to be upgraded.
       <a href="&dtml-URL1;/portal_setup/manage_upgrades?profile_id=opengever.policy.base:default" title="Go to the upgrade page">
