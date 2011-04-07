@@ -5,6 +5,9 @@ Changelog
 2.0b15
 ------
 
+* Added missing dependency on izug.basetheme
+  [lgraf]
+
 * Adjusting imports after moving ISendableDocsContainer to opengever.mail
   [lgraf]
 
