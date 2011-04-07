@@ -5,6 +5,9 @@ Changelog
 2.0b6
 -----
 
+* Moved ISendable from opengever.inbox and renamed it to ISendableDocsContainer
+  [lgraf]
+
 * Fixed declaration of behaviors in ftw.mail.mail FTI (purge=False)
   [lukasg]
 
