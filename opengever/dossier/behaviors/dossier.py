@@ -1,37 +1,39 @@
+from datetime import datetime
+import logging
+
 from AccessControl import getSecurityManager
 from Acquisition import aq_inner, aq_parent
 from collective import dexteritytextindexer
 from collective.elephantvocabulary import wrap_vocabulary
-from datetime import datetime
 from five import grok
-from opengever.base.interfaces import IReferenceNumber, ISequenceNumber
-from opengever.base.interfaces import IReferenceNumberPrefix
-from opengever.base.source import RepositoryPathSourceBinder
-from opengever.dossier import _
-from opengever.dossier.widget import referenceNumberWidgetFactory
-from opengever.ogds.base.autocomplete_widget import AutocompleteFieldWidget
-from opengever.ogds.base.interfaces import IContactInformation
+from OFS.interfaces import IObjectWillBeMovedEvent
 from plone.autoform.interfaces import IFormFieldProvider
-from plone.directives import form, dexterity
 from plone.dexterity.interfaces import IDexterityContent
+from plone.directives import form, dexterity
 from plone.indexer import indexer
 from plone.z3cform.textlines.textlines import TextLinesFieldWidget
 from z3c.relationfield.schema import RelationChoice, RelationList
 from zope import schema
 from zope.app.container.interfaces import IObjectAddedEvent
 from zope.app.container.interfaces import IObjectMovedEvent
-from OFS.interfaces import IObjectWillBeMovedEvent
 from zope.component import getAdapter, getUtility
 from zope.interface import Interface, alsoProvides
 from zope.interface import invariant, Invalid
-import logging
-from opengever.inbox.interfaces import ISendable
+
+from opengever.base.interfaces import IReferenceNumber, ISequenceNumber
+from opengever.base.interfaces import IReferenceNumberPrefix
+from opengever.base.source import RepositoryPathSourceBinder
+from opengever.dossier import _
+from opengever.dossier.widget import referenceNumberWidgetFactory
+from opengever.mail.interfaces import ISendableDocsContainer
+from opengever.ogds.base.autocomplete_widget import AutocompleteFieldWidget
+from opengever.ogds.base.interfaces import IContactInformation
 
 
 LOG = logging.getLogger('opengever.dossier')
 
 
-class IDossierMarker(Interface, ISendable):
+class IDossierMarker(Interface, ISendableDocsContainer):
     """ Marker Interface for dossiers.
     """
 

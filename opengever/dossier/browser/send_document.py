@@ -1,32 +1,30 @@
-from zope.interface import Interface
-from zope import schema
-from zope.component import getUtility, provideAdapter
-from zope.interface import invariant, Invalid
-
-from Products.CMFCore.utils import getToolByName
-from Products.statusmessages.interfaces import IStatusMessage
-from five import grok
-from email.MIMEMultipart import MIMEMultipart
-from email.MIMEBase import MIMEBase
-from email.MIMEText import MIMEText
-from email.Header import Header
-from email.Utils import formatdate
 from email import Encoders
+from email.Header import Header
+from email.MIMEBase import MIMEBase
+from email.MIMEMultipart import MIMEMultipart
+from email.MIMEText import MIMEText
+from email.Utils import formatdate
 
-from opengever.base.source import DossierPathSourceBinder
+from five import grok
 from plone.formwidget.autocomplete import AutocompleteMultiFieldWidget
 from plone.z3cform import layout
 from plone.z3cform.textlines.textlines import TextLinesFieldWidget
-from z3c.relationfield.schema import RelationChoice, RelationList
+from Products.CMFCore.utils import getToolByName
+from Products.statusmessages.interfaces import IStatusMessage
 from z3c.form import form, button, field, validator
 from z3c.form.interfaces import INPUT_MODE
+from z3c.relationfield.schema import RelationChoice, RelationList
+from zope import schema
+from zope.component import getUtility, provideAdapter
+from zope.interface import Interface
+from zope.interface import invariant, Invalid
 
-
+from opengever.base.source import DossierPathSourceBinder
 from opengever.dossier import _
-from opengever.dossier.validators import DocumentSizeValidator, \
-    AddressValidator
+from opengever.dossier.validators import AddressValidator
+from opengever.dossier.validators import DocumentSizeValidator
+from opengever.mail.interfaces import ISendableDocsContainer
 from opengever.ogds.base.interfaces import IContactInformation
-from opengever.inbox.interfaces import ISendable
 
 
 class NoMail(Invalid):
@@ -212,7 +210,7 @@ class SendDocumentFormView(layout.FormWrapper, grok.CodeView):
 
     """
 
-    grok.context(ISendable)
+    grok.context(ISendableDocsContainer)
     grok.name('send_documents')
     grok.require('zope2.View')
     form = SendDocumentForm
