@@ -5,6 +5,9 @@ Changelog
 2.0b6
 -----
 
+* Refactoring: Moved send_document.py from opengever.dossier to og.mail
+  [lgraf]
+
 * Moved ISendable from opengever.inbox and renamed it to ISendableDocsContainer
   [lgraf]
 
