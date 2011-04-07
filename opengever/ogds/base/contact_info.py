@@ -229,16 +229,21 @@ class ContactInformation(grok.GlobalUtility):
     def get_client_by_id(self, client_id):
         """Returns a client identified by `client_id`.
         """
-
         clients = self._clients_query().filter_by(client_id=client_id,
                                                   enabled=True).all()
-        if len(clients) == 0:
-            return None
-        elif len(clients) > 1:
-            raise ValueError('Found %i clients with client_id, %s ' % (
-                    len(clients), client_id) + 'expected only one' )
-        else:
-            return clients[0]
+        # Depending on the collation, filter_by matches are
+        # case-insensitive, which can potentially lead to
+        # several clients being returned with their client_id
+        # only differing in case.
+        # In that case we only return the exact match, if there
+        # is one, and log the incident.
+        exact_matches = [c for c in clients if c.client_id == client_id]
+
+        if len(clients) > 1:
+            logger.warn('Found %i clients with client_id %s, ' % (
+                    len(clients), client_id) + 'expected only one')
+
+        return exact_matches and exact_matches[0] or None
 
     def get_assigned_clients(self, userid=None):
         """Returns all assigned clients (home clients).
