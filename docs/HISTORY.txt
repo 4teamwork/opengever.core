@@ -5,6 +5,9 @@ Changelog
 2.0b15
 ------
 
+* Moved adjust_sequence_numbers view from opengever.base to avoid circular dependency
+  [lgraf]
+
 * Refactoring: Moved send_document.py to opengever.mail
   [lgraf]
 
