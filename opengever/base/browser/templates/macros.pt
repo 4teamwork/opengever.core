@@ -15,7 +15,7 @@
             <metal:define define-macro="titlelessform">
 
                 <tal:status define="status view/status;
-                                    groupErrors python: [e for e in [g.widgets.errors for g in view.groups] if e]"
+                                    groupErrors python: [e for e in [g.widgets.errors for g in getattr(view, 'groups', [])] if e]"
                             condition="status">
                     <dl class="portalMessage error" tal:condition="python: view.widgets.errors or groupErrors">
                         <dt i18n:translate="">
