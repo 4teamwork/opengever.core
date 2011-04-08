@@ -110,13 +110,13 @@ class ReferenceNumberPrefixAdpater(grok.Adapter):
 
         return False
 
-    # XXX Not used at the moment
-    # def delete_number(self, obj):
-    #     
-    #     # check if the given object has the given number ever
-    #     intids = getUtility(IIntIds)
-    #     intid = intids.getId(aq_base(obj))
-    #     
-    #     if intid in self.child_mapping.keys():
-    #         self.child_mapping.pop(intid)
+# XXX Not used at the moment
+# def delete_number(self, obj):
+#     
+#     # check if the given object has the given number ever
+#     intids = getUtility(IIntIds)
+#     intid = intids.getId(aq_base(obj))
+#     
+#     if intid in self.child_mapping.keys():
+#         self.child_mapping.pop(intid)
         
