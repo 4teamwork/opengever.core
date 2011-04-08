@@ -1,15 +1,5 @@
 from Products.CMFCore.utils import getToolByName
 
-from zope.component import getUtility
-from zope.component import getMultiAdapter
-
-from plone.portlets.interfaces import IPortletManager
-from plone.portlets.interfaces import IPortletAssignmentMapping
-from plone.portlets.interfaces import ILocalPortletAssignmentManager
-from plone.app.portlets.portlets import navigation
-from plone.portlets.constants import CONTEXT_CATEGORY as CONTEXT_PORTLETS
-
-
 
 # The profile id of your package:
 PROFILE_ID = 'profile-opengever.inbox:default'
@@ -33,34 +23,17 @@ def order_actions(site, logger):
     pt = getToolByName(site, 'portal_types')
     inbox_fti = pt['opengever.inbox.inbox']
 
-    # Get all actions, and append the ones
-    # not yet listed in ACTIONS_ORDER to the end
-    # (since we don't care about their order)
     actions = inbox_fti._actions
-    all_actions = [a.id for a in actions]
-    other_actions = set(all_actions) - set(ACTIONS_ORDER)
-    ACTIONS_ORDER.extend(other_actions)
 
+    ordered_actions = []
     for action_id in ACTIONS_ORDER:
-        pos = 0
-        target_pos = ACTIONS_ORDER.index(action_id)
+        action = [a for a in actions if a.id == action_id][0]
+        ordered_actions.append(action)
 
-        if actions and actions[target_pos].id != action_id:
-            # Determine the action's current position
-            for i in range(len(actions)):
-                if actions[i].id == action_id:
-                    pos = i
-                    break
+    remaining_actions = [a for a in actions if a.id not in ACTIONS_ORDER]
 
-            if pos > target_pos:
-            # If action is positioned too low, move it up,
-            # otherwise move it down
-                for i in range(pos, target_pos, -1):
-                    inbox_fti.moveUpActions(selections=[i])
-            else:
-                for i in range(pos, target_pos):
-                    inbox_fti.moveDownActions(selections=[i])
-            logger.info("Moved '%s' action to position %s" % (action_id, target_pos))
+    all_actions = ordered_actions + remaining_actions
+    inbox_fti._actions = all_actions
 
 
 def import_various(context):

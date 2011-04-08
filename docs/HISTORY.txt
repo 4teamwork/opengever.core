@@ -5,6 +5,9 @@ Changelog
 2.0b8
 -----
 
+* Fixed algorithm for sorting actions
+  [lgraf]
+
 * Moved ISendable to opengever.mail to avoid circular dependency 
   and renamed it to ISendableDocsContainer
   [lgraf]
