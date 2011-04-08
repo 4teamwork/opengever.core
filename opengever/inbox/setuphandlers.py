@@ -15,12 +15,12 @@ ACTIONS_ORDER = ['overview',
                  'sharing']
 
 
-def order_actions(site, logger):
+def order_actions(context):
     """ Order the actions on the opengever.inbox.inbox FTI
     according to the order given in ACTIONS_ORDER
     """
 
-    pt = getToolByName(site, 'portal_types')
+    pt = getToolByName(context, 'portal_types')
     inbox_fti = pt['opengever.inbox.inbox']
 
     actions = inbox_fti._actions
@@ -41,7 +41,7 @@ def import_various(context):
     """
     if context.readDataFile('opengever.inbox_various.txt') is None:
         return
-    logger = context.getLogger('opengever.inbox')
+    #logger = context.getLogger('opengever.inbox')
     site = context.getSite()
-    order_actions(site, logger)
+    order_actions(site)
 
