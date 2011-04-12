@@ -25,7 +25,7 @@ class ReferenceNumberPrefixAdpater(grok.Adapter):
     def __init__(self, context):
         self.context = context
         annotations = IAnnotations(self.context)
-        
+
         #child mapping
         self.child_mapping = annotations.get(self.CHILD_REF_KEY, None)
         if self.child_mapping is None:
@@ -112,11 +112,11 @@ class ReferenceNumberPrefixAdpater(grok.Adapter):
 
 # XXX Not used at the moment
 # def delete_number(self, obj):
-#     
+#
 #     # check if the given object has the given number ever
 #     intids = getUtility(IIntIds)
 #     intid = intids.getId(aq_base(obj))
-#     
+#
 #     if intid in self.child_mapping.keys():
 #         self.child_mapping.pop(intid)
-        
+
