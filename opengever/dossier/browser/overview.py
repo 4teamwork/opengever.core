@@ -39,10 +39,7 @@ class DossierOverview(grok.View, OpengeverTab):
         return items
 
     def subdossiers(self):
-        return self.catalog(
-            ['opengever.dossier.projectdossier',
-                'opengever.dossier.businesscasedossier', ],
-            depth=1)[:5]
+        return self.context.get_subdossiers()[:5]
 
     def tasks(self):
         return self.catalog(['opengever.task.task', ])[:5]
