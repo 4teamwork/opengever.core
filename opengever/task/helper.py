@@ -22,6 +22,8 @@ def task_type_helper(item, value):
         return term.title
 
 def linked(item, value):
+    if not isinstance(value, unicode):
+        value = value.decode('utf-8')
     url_method = lambda: '#'
     #item = hasattr(item, 'aq_explicit') and item.aq_explicit or item
     if hasattr(item, 'getURL'):
@@ -43,7 +45,7 @@ def linked(item, value):
     link = '%s&nbsp;<a class="rollover-breadcrumb" href="%s" title="%s">%s</a>' % (
         img, url_method(),
         " &gt; ".join(t for t in breadcrumb_titles),
-        value.decode('utf-8'))
+        value)
     wrapper = '<span class="linkWrapper">%s</span>' % link
     return wrapper
 
