@@ -1,17 +1,20 @@
-from ftw.contentmenu.interfaces import IContentmenuPostFactoryMenu
 from Acquisition import aq_inner, aq_parent
-from Products.CMFCore.utils import getToolByName
 from five import grok
-from opengever.inbox.inbox import IInbox
-from opengever.ogds.base.utils import get_client_id
-from opengever.task import _ as task_mf
-from opengever.task.task import ITask, Task
 from plone.directives import form
 from plone.directives.dexterity import AddForm
+from Products.CMFCore.utils import getToolByName
+from Products.statusmessages.interfaces import IStatusMessage
 from z3c.form.interfaces import HIDDEN_MODE
 from zope import schema
 from zope.app.container.interfaces import IObjectAddedEvent
 from zope.interface import implements, Interface
+
+from ftw.contentmenu.interfaces import IContentmenuPostFactoryMenu
+from opengever.inbox import _
+from opengever.inbox.inbox import IInbox
+from opengever.ogds.base.utils import get_client_id
+from opengever.task import _ as task_mf
+from opengever.task.task import ITask, Task
 
 
 class IForwarding(ITask):
@@ -73,8 +76,15 @@ class AddForm(AddForm):
     def update(self):
         # put default value for relatedItems into request - the added
         # objects will later be moved insed the forwarding
-
         paths = self.request.get('paths', [])
+        if not paths:
+            # add status message and redirect current window back to inbox
+            IStatusMessage(self.request).addStatusMessage(
+                _(u'error_no_document_selected',
+                  u'Error: Please select at least one document to forward'), type='error')
+            redir_url = self.request.get('orig_template', self.context.absolute_url())
+            self.request.RESPONSE.redirect(redir_url)
+
         if paths:
             utool = getToolByName(self.context, 'portal_url')
             portal_path = utool.getPortalPath()

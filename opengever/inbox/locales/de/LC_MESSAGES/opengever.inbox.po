@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2011-01-25 20:31+0000\n"
+"POT-Creation-Date: 2011-04-21 09:08+0000\n"
 "PO-Revision-Date: 2011-01-25 21:32+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -29,9 +29,14 @@ msgid "YearFolder"
 msgstr "Jahresordner"
 
 #. Default: "Cancel"
-#: ./opengever/inbox/response.py:204
+#: ./opengever/inbox/response.py:222
 msgid "cancel"
 msgstr "Abbrechen"
+
+#. Default: "Error: Please select at least one document to forward"
+#: ./opengever/inbox/forwarding.py:83
+msgid "error_no_document_selected"
+msgstr "Fehler: Bitte wählen Sie mindestens ein Dokument aus das weitergeleitet werden soll"
 
 #. Default: "Common"
 #: ./opengever/inbox/inbox.py:14
@@ -43,12 +48,12 @@ msgid "help_inbox_group"
 msgstr "Diese Gruppe wird berechtigt, wenn dem Eingangskorb eine Aufgabe zugewiesen wird."
 
 #. Default: "The successor forwarding was created."
-#: ./opengever/inbox/response.py:268
+#: ./opengever/inbox/response.py:279
 msgid "info_created_successor_forwarding"
 msgstr "Folge-Weiterleitung wurde erstellt."
 
 #. Default: "The forwarding was moved to the yearfolder ${year}"
-#: ./opengever/inbox/response.py:196
+#: ./opengever/inbox/response.py:211
 msgid "info_forwarding_move_to_yearfolder"
 msgstr "Die Weiterleitung wurde nach \"Abgeschlossen ${year}\" verschoben."
 
@@ -68,7 +73,7 @@ msgid "save"
 msgstr "Speichern"
 
 #. Default: "Closed ${year}"
-#: ./opengever/inbox/response.py:178
+#: ./opengever/inbox/response.py:181
 msgid "yearfolder_title"
 msgstr "Abgeschlossen ${year}"
 

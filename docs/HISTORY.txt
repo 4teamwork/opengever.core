@@ -5,6 +5,9 @@ Changelog
 2.0b8
 -----
 
+* Displaying error message if choosing ``forward`` action with no documents selected
+  [lgraf]
+
 * Fixed algorithm for sorting actions
   [lgraf]
 
