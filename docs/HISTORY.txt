@@ -5,6 +5,9 @@ Changelog
 2.0b16
 ------
 
+* Fixed translations
+  [lgraf]
+
 * Fixed UnicodeDecode error in helpers.linked()
   [lgraf]
 

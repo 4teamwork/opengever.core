@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2011-03-24 07:59+0000\n"
+"POT-Creation-Date: 2011-04-21 07:41+0000\n"
 "PO-Revision-Date: 2011-01-26 14:52+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -123,6 +123,11 @@ msgstr "Kopieren"
 #: ./opengever/task/response.py:315
 msgid "cancel"
 msgstr "Abbrechen"
+
+#. Default: "Containing Task:"
+#: ./opengever/task/task_templates/overview.pt:76
+msgid "containing_task"
+msgstr "Hauptaufgabe:"
 
 #: ./opengever/task/response.py:265
 msgid "date_of_completion"
@@ -347,7 +352,7 @@ msgid "label_issuer"
 msgstr "Auftraggeber"
 
 #. Default: "Last change"
-#: ./opengever/task/task_templates/overview.pt:41
+#: ./opengever/task/task_templates/overview.pt:42
 msgid "label_last_modified"
 msgstr "Letzte Änderung"
 
@@ -387,7 +392,7 @@ msgstr "Aktion"
 #. Default: "Responsible"
 #: ./opengever/task/browser/assign.py:43
 #: ./opengever/task/task.py:107
-#: ./opengever/task/task_templates/overview.pt:31
+#: ./opengever/task/task_templates/overview.pt:32
 msgid "label_responsible"
 msgstr "Verantwortlich"
 
@@ -444,7 +449,7 @@ msgid "label_transition"
 msgstr "Aktion"
 
 #. Default: "State"
-#: ./opengever/task/task_templates/overview.pt:15
+#: ./opengever/task/task_templates/overview.pt:16
 msgid "label_workflow_state"
 msgstr "Status"
 
@@ -456,10 +461,15 @@ msgstr "Status:"
 msgid "mytasks"
 msgstr "Meine Aufgaben"
 
+#. Default: "Predecessor Task:"
+#: ./opengever/task/task_templates/overview.pt:98
+msgid "predecessor"
+msgstr "Vorgängeraufgabe:"
+
 #. Default: "Response"
 #: ./opengever/task/templates/edit_response.pt:56
 msgid "response_label_response"
-msgstr "Antowrt"
+msgstr "Antwort"
 
 #. Default: "Responses:"
 #: ./opengever/task/response_templates/responseview.pt:3
@@ -470,6 +480,16 @@ msgstr "Antworten:"
 #: ./opengever/task/response.py:226
 msgid "save"
 msgstr "Speichern"
+
+#. Default: "Subtasks:"
+#: ./opengever/task/task_templates/overview.pt:87
+msgid "subtasks"
+msgstr "Unteraufgaben:"
+
+#. Default: "Successor Tasks:"
+#: ./opengever/task/task_templates/overview.pt:104
+msgid "successors"
+msgstr "Nachfolgeaufgaben:"
 
 #. Default: "Added by"
 #: ./opengever/task/response_templates/responseview.pt:35

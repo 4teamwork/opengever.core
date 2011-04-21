@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2011-03-24 07:59+0000\n"
+"POT-Creation-Date: 2011-04-21 07:41+0000\n"
 "PO-Revision-Date: 2009-02-25 14:39+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -125,6 +125,11 @@ msgstr ""
 #. Default: "Cancel"
 #: ./opengever/task/response.py:315
 msgid "cancel"
+msgstr ""
+
+#. Default: "Containing Task:"
+#: ./opengever/task/task_templates/overview.pt:76
+msgid "containing_task"
 msgstr ""
 
 #: ./opengever/task/response.py:265
@@ -348,7 +353,7 @@ msgid "label_issuer"
 msgstr ""
 
 #. Default: "Last change"
-#: ./opengever/task/task_templates/overview.pt:41
+#: ./opengever/task/task_templates/overview.pt:42
 msgid "label_last_modified"
 msgstr ""
 
@@ -388,7 +393,7 @@ msgstr ""
 #. Default: "Responsible"
 #: ./opengever/task/browser/assign.py:43
 #: ./opengever/task/task.py:107
-#: ./opengever/task/task_templates/overview.pt:31
+#: ./opengever/task/task_templates/overview.pt:32
 msgid "label_responsible"
 msgstr ""
 
@@ -445,7 +450,7 @@ msgid "label_transition"
 msgstr ""
 
 #. Default: "State"
-#: ./opengever/task/task_templates/overview.pt:15
+#: ./opengever/task/task_templates/overview.pt:16
 msgid "label_workflow_state"
 msgstr ""
 
@@ -455,6 +460,11 @@ msgid "label_workflow_state_byline"
 msgstr ""
 
 msgid "mytasks"
+msgstr ""
+
+#. Default: "Predecessor Task:"
+#: ./opengever/task/task_templates/overview.pt:98
+msgid "predecessor"
 msgstr ""
 
 #. Default: "Response"
@@ -470,6 +480,16 @@ msgstr ""
 #. Default: "Save"
 #: ./opengever/task/response.py:226
 msgid "save"
+msgstr ""
+
+#. Default: "Subtasks:"
+#: ./opengever/task/task_templates/overview.pt:87
+msgid "subtasks"
+msgstr ""
+
+#. Default: "Successor Tasks:"
+#: ./opengever/task/task_templates/overview.pt:104
+msgid "successors"
 msgstr ""
 
 #. Default: "Added by"
