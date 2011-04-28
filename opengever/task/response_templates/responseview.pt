@@ -64,7 +64,8 @@
                      tal:condition="nocall:added_obj">
                     <span i18n:translate="task_object_add" class="label">Added</span>
                     <span class="issueChange">
-                        <img tal:attributes="src added_obj/getIcon" />
+                        <img tal:define="icon_name python:added_obj.getIcon(relative_to_portal=1)"
+                             tal:attributes="src string:${context/@@plone_portal_state/portal_url}/${icon_name}" />
                         <a href=""
                            tal:attributes="href added_obj/absolute_url|nothing"
                            tal:omit-tag="not: added_obj/absolute_url|nothing">
