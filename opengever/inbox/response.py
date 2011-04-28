@@ -105,6 +105,11 @@ class ForwardingResponseAddForm(AddForm):
             target_task = self.assign_to_dossier(data)
             redirect_url = target_task.absolute_url() + '/edit'
 
+            # Set responsible and responsible_client
+            fwd = self.context
+            target_task.responsible = fwd.responsible
+            target_task.responsible_client = fwd.responsible_client
+
         # CREATE RESPONSE
         response = super(ForwardingResponseAddForm, self).handleSubmit(
             action.form, action)

@@ -5,6 +5,11 @@ Changelog
 2.0b8
 -----
 
+* Issue #945 Uebernahme von Informationen, wenn ein Posteingang/Weiterleitung einem Dossier zugewiesen wird
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/945/
+  Setting responsible and resp. client for newly created task when assigning forwarding to dossier
+  [lgraf]
+
 * Fixed bug in check for selected documents when creating a forwarding
   [lgraf]
 
