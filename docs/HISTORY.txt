@@ -5,6 +5,11 @@ Changelog
 2.0b16
 ------
 
+* Issue #946 Eingangskorb: Vorselektion des Mandanten beim neu Zuweisen
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/946
+  Implemented prefilling of responsible_client when reassigning forwardings
+  [lgraf]
+
 * Fixed translations
   [lgraf]
 
