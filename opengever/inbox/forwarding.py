@@ -77,8 +77,12 @@ class AddForm(AddForm):
         # put default value for relatedItems into request - the added
         # objects will later be moved insed the forwarding
         paths = self.request.get('paths', [])
-        if not paths:
+
+        if not (paths or self.request.form.get('form.widgets.relatedItems', []) \
+        or '@@autocomplete-search' in self.request.get('ACTUAL_URL', '')):
             # add status message and redirect current window back to inbox
+            # but ONLY if we're not in a z3cform_inline_validation or 
+            # autocomplete-search request!
             IStatusMessage(self.request).addStatusMessage(
                 _(u'error_no_document_selected',
                   u'Error: Please select at least one document to forward'), type='error')

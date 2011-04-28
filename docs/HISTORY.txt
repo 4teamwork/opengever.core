@@ -5,6 +5,9 @@ Changelog
 2.0b8
 -----
 
+* Fixed bug in check for selected documents when creating a forwarding
+  [lgraf]
+
 * Displaying error message if choosing ``forward`` action with no documents selected
   [lgraf]
 
