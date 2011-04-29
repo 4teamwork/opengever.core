@@ -36,7 +36,7 @@ def author_cache_key(m, i, author):
 
 @ram.cache(author_cache_key)
 def readable_ogds_author(item, author):
-    if item.portal_type == 'ftw.mail.mail':
+    if getattr(item, 'portal_type', None) == 'ftw.mail.mail':
         if getattr(item, 'msg', None):
             # Object
             author = get_header(item.msg, 'From')
