@@ -5,13 +5,16 @@ Changelog
 2.0b12
 ------
 
+* Bash script for autamatically updating OGDS on 0000oglx09.zg.ch
+  [phabegger]
+
 * Made get_assigned_clients only return exact matches and not raise an exception if
   several clients with the same client_id are found
   [lgraf]
 
 
-2.0b11 (unreleased)
--------------------
+2.0b11
+------
 
 * Fixed tests - info.list_users() now returns UserDict objects
   [lgraf]
