@@ -30,8 +30,12 @@ def linked(item, value):
         url_method = item.getURL
     elif hasattr(item, 'absolute_url'):
         url_method = item.absolute_url
+    if callable(item.getIcon):
+        icon = item.getIcon()
+    else:
+        icon = item.getIcon
     img = '<img src="%s/%s"/>' % (item.portal_url(),
-                                  item.getIcon().encode('utf-8'))
+                                  icon.encode('utf-8'))
 
     breadcrumb_titles = []
     breadcrumbs_view = getMultiAdapter((item, item.REQUEST),

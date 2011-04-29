@@ -7,6 +7,11 @@ Changelog
 
 * Issue #786 Darstellung Aufgabe als TabbedView
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/786
+  Fixed display of metadata for mails attached to tasks
+  [lgraf]
+
+* Issue #786 Darstellung Aufgabe als TabbedView
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/786
   Fixed icon URL for subtasks
   [lgraf]
 
