@@ -5,6 +5,11 @@ Changelog
 2.0b6
 -----
 
+* Issue #983 E-Mail: Extrahieren von Dokumenten. Fehler bei Autor und Dokumentdatum
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/983
+  Implemented setting author and date of documents extracted from mails to mail from and date
+  [lgraf]
+
 * Issue #923 Fehler beim Extrahieren eines Dokuments, welches als Email Attachment an ein Dossier versendet worden ist
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/923
   Fixed bug that caused duplicated extension in attachements extracted from mails

@@ -1,25 +1,28 @@
+import os.path
+
 from Acquisition import aq_inner, aq_parent
+from DateTime import DateTime
+from five import grok
+from plone.dexterity.utils import createContentInContainer
+from plone.dexterity.utils import iterSchemata
 from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
 from Products.CMFPlone.utils import getToolByName
 from Products.statusmessages.interfaces import IStatusMessage
-from datetime import datetime
-from five import grok
-from ftw.mail.mail import IMail
-from ftw.mail.utils import get_attachments, remove_attachments
-from ftw.table.interfaces import ITableGenerator
-from opengever.mail import _
-from opengever.mail.behaviors import IMailInAddressMarker
-from opengever.ogds.base.interfaces import IContactInformation
-from plone.dexterity.utils import createContentInContainer
+from z3c.form.interfaces import IValue
 from z3c.relationfield.relation import RelationValue
 from zope.app.component.hooks import getSite
 from zope.component import getUtility
-from zope.intid.interfaces import IIntIds
-from plone.dexterity.utils import iterSchemata
-from zope.schema import getFieldsInOrder
 from zope.component import queryMultiAdapter
-from z3c.form.interfaces import IValue
-import os.path
+from zope.intid.interfaces import IIntIds
+from zope.schema import getFieldsInOrder
+
+from ftw.mail.mail import IMail
+from ftw.mail.utils import get_attachments
+from ftw.mail.utils import get_header
+from ftw.mail.utils import remove_attachments
+from ftw.table.interfaces import ITableGenerator
+from opengever.mail import _
+from opengever.mail.behaviors import IMailInAddressMarker
 
 
 from plone.namedfile import HAVE_BLOBS
@@ -27,7 +30,6 @@ if HAVE_BLOBS:
     from plone.namedfile import NamedFile as NamedFile
 else:
     from plone.namedfile import NamedFile
-
 
 
 def attachment_checkbox_helper(item, position):
@@ -168,10 +170,16 @@ class ExtractAttachments(grok.View):
     def extract_attachments(self, positions, delete_action):
         dossier = self.find_parent_dossier()
 
-        info = getUtility(IContactInformation)
-        mtool = getToolByName(self.context, 'portal_membership')
-        member = mtool.getAuthenticatedMember()
-        document_author = info.describe(member.getId())
+        # info = getUtility(IContactInformation)
+        # mtool = getToolByName(self.context, 'portal_membership')
+        # member = mtool.getAuthenticatedMember()
+        # document_author = info.describe(member.getId())
+
+        mail = self.context
+        mail_author = get_header(mail.msg, 'From')
+        mail_date = get_header(mail.msg, 'Date')
+
+        document_author = mail_author
 
         attachments_to_extract = filter(
             lambda att: att.get('position') in positions,
@@ -184,7 +192,7 @@ class ExtractAttachments(grok.View):
 
             kwargs = {'title': filename[:filename.rfind('.')].decode('utf-8'),
                       'file': self.get_attachment_as_namedfile(pos),
-                      'document_date': datetime.now(),
+                      'document_date': DateTime(mail_date),
                       'document_author': document_author,
                       'keywords': ()}
 
