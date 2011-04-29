@@ -8,6 +8,7 @@ from Products.PluggableAuthService.interfaces.authservice import IPropertiedUser
 from zope.app.component.hooks import getSite
 from zope.component import getUtility
 import ftw.table
+from ftw.mail.utils import get_header
 
 
 def task_id_checkbox_helper(item, value):
@@ -35,6 +36,13 @@ def author_cache_key(m, i, author):
 
 @ram.cache(author_cache_key)
 def readable_ogds_author(item, author):
+    if item.portal_type == 'ftw.mail.mail':
+        if getattr(item, 'msg', None):
+            # Object
+            author = get_header(item.msg, 'From')
+        else:
+            # Brain
+            author = item.document_author
     if not isinstance(author, unicode):
         if author is not None:
             author = author.decode('utf-8')

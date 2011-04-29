@@ -5,6 +5,11 @@ Changelog
 2.0b16
 ------
 
+* Issue #786 Darstellung Aufgabe als TabbedView
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/786
+  Fixed display of metadata for mails attached to tasks
+  [lgraf]
+
 * Temporarily disabled check if user is allowed to see personal overview tab
   [lgraf]
 
