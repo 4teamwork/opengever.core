@@ -180,8 +180,9 @@ class ExtractAttachments(grok.View):
         # create documents from the selected attachments
         for att in attachments_to_extract:
             pos = att.get('position')
+            filename = att.get('filename')
 
-            kwargs = {'title': att.get('filename').decode('utf-8'),
+            kwargs = {'title': filename[:filename.rfind('.')].decode('utf-8'),
                       'file': self.get_attachment_as_namedfile(pos),
                       'document_date': datetime.now(),
                       'document_author': document_author,

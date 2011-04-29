@@ -5,6 +5,11 @@ Changelog
 2.0b6
 -----
 
+* Issue #923 Fehler beim Extrahieren eines Dokuments, welches als Email Attachment an ein Dossier versendet worden ist
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/923
+  Fixed bug that caused duplicated extension in attachements extracted from mails
+  [lgraf]
+
 * Refactoring: Moved send_document.py from opengever.dossier to og.mail
   [lgraf]
 
