@@ -5,6 +5,11 @@ Changelog
 2.0b15
 ------
 
+* #722 Release 2b06: Dossier kann nicht abgeschlossen werden, obwohl alle Aufgaben abgeschlossen sind
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/722
+  Updated translations.
+  [phabegger]
+  
 * Added handler for IObjectModified that updates the ``containing_subdossier`` index for documents
   [lgraf]
 

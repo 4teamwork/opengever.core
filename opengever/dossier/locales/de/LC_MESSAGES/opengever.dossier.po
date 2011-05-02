@@ -574,7 +574,7 @@ msgstr "Es sind nicht alle Dokumente eingecheckt"
 
 #: ./opengever/dossier/base.py:228
 msgid "not all task are closed"
-msgstr "Es sind nicht alle Aufgaben erledigt"
+msgstr "Es sind nicht alle Aufgaben abgeschlossen"
 
 #: ./opengever/dossier/archive.py:74
 msgid "only resolve, set filing no later"
