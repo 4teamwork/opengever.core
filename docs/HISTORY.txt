@@ -5,6 +5,9 @@ Changelog
 2.0b4
 -----
 
+* Using new readable_date helper from opengever.tabbedview
+  [lgraf]
+
 
 2.0b3
 -----

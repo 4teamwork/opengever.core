@@ -1,9 +1,9 @@
 from Products.CMFCore.utils import getToolByName
-from ftw.table import helper
 from opengever.latex.template import LatexTemplateFile
 from opengever.latex.views.baselisting import BasePDFListing
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.ogds.base.utils import get_current_client
+from opengever.tabbedview.helper import readable_date
 from zope.component import getUtility
 
 
@@ -28,7 +28,7 @@ class TasksListingPDF(BasePDFListing):
         for item in self.get_selected_data():
             data.append(self._prepare_table_row(
                     unicode(item.sequence_number).encode('utf-8'),
-                    helper.readable_date(item, item.deadline),
+                    readable_date(item, item.deadline),
                     unicode(getattr(item, 'Title',getattr(item, 'title', ''))
                             ).encode('utf-8'),
                     '%s / %s' % (client.title,
