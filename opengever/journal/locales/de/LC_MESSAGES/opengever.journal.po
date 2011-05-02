@@ -75,7 +75,7 @@ msgstr "Datei des Dokuments auf Version ${version_id} zurückgesetzt"
 #. Default: "Changed metadata"
 #: ./opengever/journal/handlers.py:176
 msgid "label_document_metadata_modified"
-msgstr "Metadataen bearbeitet"
+msgstr "Metadaten bearbeitet"
 
 #. Default: "Changed metadata of document ${title}"
 #: ./opengever/journal/handlers.py:178
@@ -156,5 +156,4 @@ msgstr "Journal"
 #: ./opengever/journal/no_selection_amount.pt:3
 msgid "tab_matches"
 msgstr "${amount} Treffer."
-
 

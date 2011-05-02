@@ -5,6 +5,10 @@ Changelog
 2.0a9
 -----
 
+* Issue #553 Checkout Prozess anpassen
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/553
+  Updated translation
+  [phabegger]
 
 2.0a8
 -----
