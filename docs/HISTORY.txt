@@ -5,6 +5,9 @@ Changelog
 2.0b16
 ------
 
+* Using new readable_date helper from opengever.tabbedview
+  [lgraf]
+
 * Issue #786 Darstellung Aufgabe als TabbedView
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/786
   Fixed display of metadata for mails attached to tasks
