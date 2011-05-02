@@ -1,25 +1,26 @@
-from sqlalchemy.sql.expression import asc, desc
+from five import grok
+from sqlalchemy import or_
 from sqlalchemy.orm.query import Query
+from sqlalchemy.sql.expression import asc, desc
+from zope.app.pagetemplate import ViewPageTemplateFile
+from zope.interface import implements, Interface
+
+from ftw.journal.interfaces import IJournalizable
+from ftw.tabbedview.browser.listing import ListingView
 from ftw.table.basesource import BaseTableSource
 from ftw.table.interfaces import ITableSource, ITableSourceConfig
-from zope.interface import implements, Interface
-from ftw.table import helper
-from five import grok
 from opengever.base.browser.helper import client_title_helper
 from opengever.globalindex.model.task import Task
 from opengever.globalindex.utils import indexed_task_link_helper
 from opengever.tabbedview import _
+from opengever.tabbedview.browser.tabs import OpengeverTab
+from opengever.tabbedview.helper import overdue_date_helper
+from opengever.tabbedview.helper import readable_date
 from opengever.tabbedview.helper import readable_date_set_invisibles
 from opengever.tabbedview.helper import readable_ogds_author
 from opengever.tabbedview.helper import task_id_checkbox_helper
 from opengever.tabbedview.helper import workflow_state
-from opengever.tabbedview.helper import overdue_date_helper
 from opengever.task.helper import task_type_helper
-from sqlalchemy import or_
-from zope.app.pagetemplate import ViewPageTemplateFile
-from ftw.tabbedview.browser.listing import ListingView
-from opengever.tabbedview.browser.tabs import OpengeverTab
-from ftw.journal.interfaces import IJournalizable
 
 
 class IGlobalTaskTableSourceConfig(ITableSourceConfig):
@@ -83,7 +84,7 @@ class GlobalTaskListingTab(grok.CodeView, OpengeverTab,
 
         {'column': 'created',
          'column_title': _(u'column_issued_at', default=u'Issued at'),
-         'transform': helper.readable_date},
+         'transform': readable_date},
 
         {'column': 'client_id',
          'column_title': _('column_client', default=u'Client'),
@@ -152,7 +153,7 @@ class GlobalTaskTableSource(grok.MultiAdapter, BaseTableSource):
                     continue
 
                 # do not support dates
-                if column.get('transform') == helper.readable_date:
+                if column.get('transform') == readable_date:
                     continue
 
                 field = getattr(model, colname, None)

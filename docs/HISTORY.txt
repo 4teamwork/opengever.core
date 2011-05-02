@@ -5,6 +5,10 @@ Changelog
 2.0b16
 ------
 
+* Created copy of readable_date helper in og.tabbedview with modifications to handle
+  ftw.mail.mail objects. Adjusted tabbed views to use new helper.
+  [lgraf]
+
 * Added missing dependency on ftw.mail
   [lgraf]
 
