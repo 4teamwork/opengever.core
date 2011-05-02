@@ -1,21 +1,24 @@
 from AccessControl import Unauthorized
 from Acquisition import aq_inner, aq_parent
+from datetime import datetime, timedelta
+from plone.dexterity.utils import createContent, addContentToContainer
 from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
 from Products.CMFPlone.utils import getToolByName
 from Products.Five.browser import BrowserView
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from Products.statusmessages.interfaces import IStatusMessage
-from datetime import datetime, timedelta
+from zope.component import queryUtility, getUtility
+from zope.event import notify
+from zope.lifecycleevent import ObjectCreatedEvent, ObjectAddedEvent
+
 from ftw.table import helper
 from ftw.table.interfaces import ITableGenerator
 from opengever.dossier.behaviors.dossier import IDossierMarker, IDossier
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.ogds.base.utils import get_current_client
+from opengever.tabbedview.helper import readable_date
 from opengever.tasktemplates import _
-from plone.dexterity.utils import createContent, addContentToContainer
-from zope.component import queryUtility, getUtility
-from zope.event import notify
-from zope.lifecycleevent import ObjectCreatedEvent, ObjectAddedEvent
+
 
 meta_data = {}
 meta_data['templates'] = {
@@ -110,7 +113,7 @@ class AddForm(BrowserView):
                  'column_title': _(u'label_title', default=u'Title')},
                 {'column': 'created',
                  'column_title': _(u'label_created', default=u'Created'),
-                 'transform': helper.readable_date},),
+                 'transform': readable_date},),
             'types': ('TaskTemplateFolder',),
             'states': ('tasktemplatefolder-state-activ',),
             },
@@ -122,7 +125,7 @@ class AddForm(BrowserView):
                  'column_title': _(u'label_title', default=u'Title')},
                 {'column': 'created',
                  'column_title': _(u'label_created', default=u'Created'),
-                 'transform': helper.readable_date},),
+                 'transform': readable_date},),
             'types': ('TaskTemplate',),
             'states':('tasktemplate-state-active',),
 
