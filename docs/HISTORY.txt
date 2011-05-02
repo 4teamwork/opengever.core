@@ -5,6 +5,9 @@ Changelog
 2.0b16
 ------
 
+* Added missing dependency on ftw.mail
+  [lgraf]
+
 * Issue #786 Darstellung Aufgabe als TabbedView
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/786
   Fixed display of metadata for mails attached to tasks
