@@ -5,6 +5,11 @@ Changelog
 2.0b16
 ------
 
+* Issue #944 Fehler beim Abarbeiten einer Aufgabe (FD.FDS)
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/944/
+  Made get_predecessor() in successor.py more robust and respect ``default`` keyword argument
+  [lgraf]
+
 * Using new readable_date helper from opengever.tabbedview
   [lgraf]
 

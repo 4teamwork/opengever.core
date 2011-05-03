@@ -47,10 +47,10 @@ class SuccessorTaskController(grok.Adapter):
         """
 
         data = self.get_indexed_data()
-        if data.predecessor:
+        if getattr(data, 'predecessor', None):
             return data.predecessor
         else:
-            return None
+            return default
 
     def set_predecessor(self, oguid):
         """Sets the predecessor on the adapted object to ``oguid``.
