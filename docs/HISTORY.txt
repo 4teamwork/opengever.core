@@ -5,6 +5,9 @@ Changelog
 2.0b11
 ------
 
+* Added translation
+  [phgross]
+
 * Moved adjust_sequence_numbers view to opengever.dossier to avoid circular dependency
   [lgraf]
 
