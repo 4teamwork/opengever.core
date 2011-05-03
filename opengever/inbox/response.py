@@ -197,7 +197,7 @@ class ForwardingResponseAddForm(AddForm):
 
                     folder = createContentInContainer(
                         inbox, 'opengever.inbox.yearfolder',
-                        title=folder_title)
+                        title=folder_title, id=year)
 
                 # move forwarding into folder
                 parent = aq_parent(aq_inner(self.context))

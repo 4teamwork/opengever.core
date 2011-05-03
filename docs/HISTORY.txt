@@ -5,6 +5,11 @@ Changelog
 2.0b8
 -----
 
+* Issue #950 SKA.RR/Eingangskorb: Fehlender Baum für die abgeschlossenen Weiterleitungen
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/950
+  fixed yearfolder creation
+  [phgross]
+
 * Issue #1004 Posteingang: Wird ein Posteingang abgeschlossen, erscheint das Abschlussdatum nicht
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1004/
   Added forwarding specific eventhandler, which set the enddate

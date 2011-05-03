@@ -26,14 +26,13 @@
     <property name="behaviors">
         <element value="opengever.base.behaviors.base.IOpenGeverBase" />
         <element value="ftw.journal.interfaces.IAnnotationsJournalizable" />
-        <element value="plone.app.content.interfaces.INameFromTitle" />
         <element value="opengever.tabbedview.interfaces.ITabbedViewEnabled" />
     </property>
 
     <!-- View information -->
     <property name="immediate_view">tabbed_view</property>
     <property name="default_view">tabbed_view</property>
-    <property name="default_view_fallback">False</property>
+    <property name="default_view_fallbyack">False</property>
     <property name="view_methods">
         <element value="view"/>
         <element value="tabbed_view" />
