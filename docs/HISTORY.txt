@@ -5,6 +5,9 @@ Changelog
 2.0b6
 -----
 
+* removed yearfolder creation, because the creation is part of the closing mechanism
+  [phgross]
+
 * Improved assignment of tree portlets for repository roots (primary and secondary)
   [lgraf]
 

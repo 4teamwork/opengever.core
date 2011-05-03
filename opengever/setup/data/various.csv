@@ -1,5 +1,4 @@
 _path,_type,inbox_group,title,responsible,responsible_client,issuer,deadline,task_type,transitions
 /eingangskorb,opengever.inbox.inbox,og_mandant1_eingangskorb,Eingangskorb,
-/eingangskorb/2011,opengever.inbox.yearfolder,,Abgeschlossen 2011
 /vorlagen,opengever.dossier.templatedossier,,Vorlagen,franz.michel,
 /kontakte,opengever.contact.contactfolder,,Kontakte,,,,,,publish
