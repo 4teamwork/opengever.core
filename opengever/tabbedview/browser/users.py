@@ -8,6 +8,7 @@ from opengever.ogds.base.model.user import User
 from opengever.tabbedview import _
 from opengever.tabbedview.browser.tabs import OpengeverTab
 from opengever.tabbedview.helper import boolean_helper
+from opengever.tabbedview.helper import readable_date
 from opengever.tabbedview.helper import email_helper
 from sqlalchemy import or_
 from sqlalchemy.orm.query import Query
@@ -152,7 +153,7 @@ class UsersListingTableSource(grok.MultiAdapter, BaseTableSource):
                     continue
 
                 # do not support dates
-                if column.get('transform') == helper.readable_date:
+                if column.get('transform') == readable_date:
                     continue
 
                 field = getattr(model, colname, None)

@@ -31,6 +31,7 @@ setup(name='opengever.tabbedview',
       install_requires=[
         'opengever.ogds.base',
         'ftw.journal',
+        'ftw.mail',
         'setuptools',
         'ftw.tabbedview[extjs]',
         'plone.app.dexterity',

@@ -1,6 +1,11 @@
 from five import grok
+from sqlalchemy import or_
+from sqlalchemy.orm.query import Query
+from sqlalchemy.sql.expression import asc, desc
+from zope.app.pagetemplate import ViewPageTemplateFile
+from zope.interface import implements, Interface
+
 from ftw.tabbedview.browser.listing import ListingView
-from ftw.table import helper
 from ftw.table.basesource import BaseTableSource
 from ftw.table.interfaces import ITableSource, ITableSourceConfig
 from opengever.globalindex.model.task import Task
@@ -8,11 +13,8 @@ from opengever.ogds.base.model.client import Client
 from opengever.ogds.base.utils import create_session
 from opengever.tabbedview import _
 from opengever.tabbedview.browser.tabs import OpengeverTab
-from sqlalchemy import or_
-from sqlalchemy.orm.query import Query
-from sqlalchemy.sql.expression import asc, desc
-from zope.app.pagetemplate import ViewPageTemplateFile
-from zope.interface import implements, Interface
+from opengever.tabbedview.helper import readable_date
+
 
 def linked_url_helper(item, value):
     """Creates a link to `value`, if it's url-ish.
@@ -140,7 +142,7 @@ class ClientsTableSource(grok.MultiAdapter, BaseTableSource):
                     continue
 
                 # do not support dates
-                if column.get('transform') == helper.readable_date:
+                if column.get('transform') == readable_date:
                     continue
 
                 field = getattr(model, colname, None)
