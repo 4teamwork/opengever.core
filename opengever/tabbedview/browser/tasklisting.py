@@ -205,6 +205,9 @@ class GlobalTaskTableSource(grok.MultiAdapter, BaseTableSource):
         if not self.config.lazy or not self.config.batching_enabled:
             return query.all()
 
+        # we need to know how many records we would have without batching
+        self.full_length = query.count()
+
         page_results = query.all()
 
         pagesize = self.config.batching_pagesize
