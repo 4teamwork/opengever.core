@@ -1,9 +1,11 @@
 from Acquisition import aq_inner, aq_parent
 from five import grok
+from datetime import datetime
 from plone.directives import form
 from plone.directives.dexterity import AddForm
 from Products.CMFCore.utils import getToolByName
 from Products.statusmessages.interfaces import IStatusMessage
+from Products.CMFCore.interfaces import IActionSucceededEvent
 from z3c.form.interfaces import HIDDEN_MODE
 from zope import schema
 from zope.app.container.interfaces import IObjectAddedEvent
@@ -126,6 +128,15 @@ def move_documents_into_forwarding(context, event):
         clipboard = aq_parent(aq_inner(obj)).manage_cutObjects(obj.id)
         context.manage_pasteObjects(clipboard)
     context.relatedItems = []
+
+
+@grok.subscribe(IForwarding, IActionSucceededEvent)
+def set_dates(context, event):
+    """Eventhandler wich set automaticly the enddate
+    when a forwarding would be closed"""
+
+    if event.action == 'forwarding-transition-close':
+        context.date_of_completion = datetime.now()
 
 
 class RemoveForwardingFactoryMenuEntry(grok.MultiAdapter):

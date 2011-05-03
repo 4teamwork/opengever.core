@@ -5,6 +5,11 @@ Changelog
 2.0b8
 -----
 
+* Issue #1004 Posteingang: Wird ein Posteingang abgeschlossen, erscheint das Abschlussdatum nicht
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1004/
+  Added forwarding specific eventhandler, which set the enddate
+  [phgross]
+
 * Issue #945 Uebernahme von Informationen, wenn ein Posteingang/Weiterleitung einem Dossier zugewiesen wird
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/945/
   Setting responsible and resp. client for newly created task when assigning forwarding to dossier
