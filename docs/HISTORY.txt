@@ -5,6 +5,13 @@ Changelog
 2.0b16
 ------
 
+* Issue #786 Darstellung Aufgabe als TabbedView
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/786
+  Implemented custom sorting for related documents tab of tasks. Especially the
+  sortable_title sorting mechanism is optimised using the original indexer
+  function to convert the title in properly compareable strings.
+  [jbaumann]
+
 * Issue #944 Fehler beim Abarbeiten einer Aufgabe (FD.FDS)
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/944/
   Made get_predecessor() in successor.py more robust and respect ``default`` keyword argument

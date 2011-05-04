@@ -1,4 +1,7 @@
 from Acquisition import aq_parent, aq_inner
+from Products.CMFCore.interfaces import IActionSucceededEvent
+from Products.CMFCore.utils import getToolByName
+from Products.CMFPlone.CatalogTool import sortable_title
 from collective import dexteritytextindexer
 from datetime import datetime, timedelta
 from five import grok
@@ -15,10 +18,10 @@ from opengever.ogds.base.interfaces import IContactInformation
 from opengever.ogds.base.utils import get_client_id
 from opengever.tabbedview.browser.tabs import Documents
 from opengever.tabbedview.browser.tabs import OpengeverTab
-from opengever.tabbedview.helper import readable_ogds_author
 from opengever.tabbedview.helper import readable_date
-from opengever.task import util
+from opengever.tabbedview.helper import readable_ogds_author
 from opengever.task import _
+from opengever.task import util
 from opengever.task.helper import linked
 from opengever.task.helper import path_checkbox
 from opengever.task.interfaces import ISuccessorTaskController
@@ -27,8 +30,6 @@ from plone.dexterity.content import Container
 from plone.directives import form, dexterity
 from plone.directives.dexterity import DisplayForm
 from plone.indexer import indexer
-from Products.CMFCore.interfaces import IActionSucceededEvent
-from Products.CMFCore.utils import getToolByName
 from z3c.relationfield.schema import RelationChoice, RelationList
 from zc.relation.interfaces import ICatalog
 from zope import schema
@@ -37,6 +38,8 @@ from zope.component import getUtility, getMultiAdapter
 from zope.interface import implements, Interface
 from zope.schema.vocabulary import getVocabularyRegistry
 
+
+_marker = object()
 
 
 class ITask(form.Schema):
@@ -327,6 +330,18 @@ class IRelatedDocumentsTableSourceConfig(ITableSourceConfig):
     pass
 
 
+def sortable_title_transform(item, value):
+    """This transform should only be used for sorting items by title
+    using the sortable_title indexer. Its used as wrapper for for the
+    CatalogTool sortable_title indexer for making it callable like a
+    normal ftw.table transform.
+
+    This transform only works when using objects as item, using brain
+    or dicts is not supported.
+    """
+    return sortable_title(item)()
+
+
 class RelatedDocumentsTableSource(grok.MultiAdapter, BaseTableSource):
     """Related documents table source adapter
     """
@@ -345,12 +360,12 @@ class RelatedDocumentsTableSource(grok.MultiAdapter, BaseTableSource):
         # get the base query from the config
         query = self.config.get_base_query()
         portal_catalog = getToolByName(self.config.context, 'portal_catalog')
-        brains = portal_catalog(path={'query':query, 'depth': 2}, portal_type=['opengever.document.document', 'ftw.mail.mail'])
+        brains = portal_catalog(query)
         objects = []
         for brain in brains:
             objects.append(brain.getObject())
         for item in self.config.context.relatedItems:
-            
+
             obj = item.to_object
             if obj.portal_type=='opengever.document.document' or obj.portal_type=='ftw.mail.mail':
                 objects.append(obj)
@@ -366,25 +381,55 @@ class RelatedDocumentsTableSource(grok.MultiAdapter, BaseTableSource):
         sort_index=self.request.get('sort',  '')
         column = {}
         objects = []
-        if sort_index != 'draggable' and sort_index != 'checkbox' and sort_index:
-            for item in self.config.columns:
-                if item['column'] == sort_index:
-                    column = item
-            if 'transform' in column.keys():
-                transform = column.get('transform', None)
-                if transform != None:
-                    for item in query:
-                        objects.append((transform(item, item[sort_index]), item))
-                    objects_sort = objects.sort()
-                    return objects_sort
-                else:
-                    objects_sort = sorted(query, key=attrgetter(sort_index))
-                    return objects_sort
-            else:
-                objects_sort = sorted(query, key=attrgetter(sort_index))
-                return objects_sort
-        else:
+
+        if not sort_index:
+            # currently we are not sorting
             return query
+
+        if sort_index in ('draggable', 'checkbox'):
+            # these columns are not sortable
+            return query
+
+        # get current column
+        for item in self.config.columns:
+            if sort_index in (item.get('column', _marker),
+                              item.get('sort_index', _marker)):
+                column = item
+                break
+
+        # when a transform exists for this column, we use it, since wan't to
+        # sort what the user is seeing.
+        transform = column.get('transform', None)
+
+        # use the sortable_title indexer function as transform for
+        # sorting Title column
+        if sort_index=='sortable_title':
+            transform = sortable_title_transform
+
+        if transform:
+            # when using a transform we just sort the items using the
+            # transformed items
+            for item in query:
+                # try to safely get the value - but it may not be needed
+                # for certain transforms...
+                value = getattr(item, sort_index, None)
+                if not value and column.get('column', None):
+                    value = getattr(item, column.get('column'), None)
+
+                objects.append((transform(item, value), item))
+            objects.sort()
+            objects = [obj for val, obj in objects]
+            if self.config.sort_reverse:
+                objects.reverse()
+
+            return objects
+
+        else:
+            # directly sort the value
+            objects_sort = sorted(query, key=attrgetter(sort_index))
+            if self.config.sort_reverse:
+                objects_sort.reverse()
+            return objects_sort
 
     def extend_query_with_texfilter(self, query, text):
         return query
@@ -459,7 +504,11 @@ class RelatedDocuments(Documents):
                      ]
 
     def get_base_query(self):
-        return '/'.join(self.context.getPhysicalPath())
+        return {
+            'path': {'query': '/'.join(self.context.getPhysicalPath()),
+                     'depth': 2},
+            'portal_type': ['opengever.document.document', 'ftw.mail.mail'],
+            }
 
     __call__ = ListingView.__call__
     render = __call__
