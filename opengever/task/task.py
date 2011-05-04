@@ -390,15 +390,15 @@ class RelatedDocumentsTableSource(grok.MultiAdapter, BaseTableSource):
             # these columns are not sortable
             return query
 
-        # get current column
+        # get column that's being sorted on
         for item in self.config.columns:
             if sort_index in (item.get('column', _marker),
                               item.get('sort_index', _marker)):
                 column = item
                 break
 
-        # when a transform exists for this column, we use it, since wan't to
-        # sort what the user is seeing.
+        # when a transform exists for this column, we use it, since we 
+        # want to sort what the user is seeing.
         transform = column.get('transform', None)
 
         # use the sortable_title indexer function as transform for
@@ -417,8 +417,12 @@ class RelatedDocumentsTableSource(grok.MultiAdapter, BaseTableSource):
                     value = getattr(item, column.get('column'), None)
 
                 objects.append((transform(item, value), item))
+
+            # Now that we've got the sortable values for all items, sort the
+            # list and then discard the values, leaving just the objects
             objects.sort()
             objects = [obj for val, obj in objects]
+
             if self.config.sort_reverse:
                 objects.reverse()
 
