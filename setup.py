@@ -4,6 +4,10 @@ import os
 version = open('opengever/tabbedview/version.txt').read().strip()
 maintainer = 'Victor Baumann'
 
+tests_require = [
+    'plone.app.testing',
+    ]
+
 setup(name='opengever.tabbedview',
       version=version,
       description="opengever integration for ftw.tabbedview (Maintainer %s)" % \
@@ -41,6 +45,8 @@ setup(name='opengever.tabbedview',
           #'collective.jqhistory'
           # -*- Extra requirements: -*-
       ],
+      tests_require=tests_require,
+      extras_require=dict(tests=tests_require),
       entry_points="""
       # -*- Entry points: -*-
       [z3c.autoinclude.plugin]
