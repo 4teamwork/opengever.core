@@ -91,7 +91,7 @@ class DossierContainer(Container):
     def is_all_closed(self):
         """ Check if all tasks are in a closed state.
 
-        closed: 
+        closed:
             - cancelled
             - rejected
             - tested and closed
@@ -210,7 +210,7 @@ class DossierContainer(Container):
             if not self.has_valid_enddate():
                 ptool.addPortalMessage(
                     _("no valid end date provided"),
-                    type="error") 
+                    type="error")
                 return False
 
             # Everything ok
@@ -278,7 +278,7 @@ class DossierContainer(Container):
                     else:
                         # Validate the existing end date
                         if IDossier(subdossier).end < subdossier.computeEndDate():
-                            ptool.addPortalMessage(_("The subdossier '${title}' has an invalid end date." , 
+                            ptool.addPortalMessage(_("The subdossier '${title}' has an invalid end date." ,
                                                       mapping=dict(title=subdossier.Title())
                                                       ), type="error")
                             return False
@@ -355,7 +355,7 @@ class DefaultConstrainTypeDecider(grok.MultiAdapter):
 
     @property
     def constrain_type_mapping(self):
-        conf = DefaultConstrainTypeDecider.CONSTRAIN_CONFIGURATION
+        conf = self.__class__.CONSTRAIN_CONFIGURATION
         for container_type, type_constr in conf.items():
             for factory_type, max_depth in type_constr.items():
                 yield container_type, max_depth, factory_type

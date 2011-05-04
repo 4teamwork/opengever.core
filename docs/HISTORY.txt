@@ -5,6 +5,9 @@ Changelog
 2.0b15
 ------
 
+* Made DefaultConstrainTypeDecider subclassable.
+  [jbaumann]
+
 * Using new readable_date helper from opengever.tabbedview
   [lgraf]
 
@@ -12,7 +15,7 @@ Changelog
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/722
   Updated translations.
   [phabegger]
-  
+
 * Added handler for IObjectModified that updates the ``containing_subdossier`` index for documents
   [lgraf]
 
