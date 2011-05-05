@@ -1,13 +1,7 @@
 from five import grok
 from logging import getLogger
 
-from opengever.base import _
-from opengever.base.interfaces import ISequenceNumber
-from opengever.base.sequence import SEQUENCE_NUMBER_ANNOTATION_KEY
-from opengever.dossier.behaviors.dossier import IDossierMarker
-from opengever.dossier.sequence import DossierSequenceNumberGenerator
-from opengever.repository.repositoryroot import IRepositoryRoot
-
+from Missing import Value as MissingValue
 from plone.directives import form
 from plone.formwidget.contenttree import ObjPathSourceBinder
 from Products.CMFCore.interfaces import ISiteRoot
@@ -18,6 +12,13 @@ from z3c.relationfield.schema import RelationChoice, RelationList
 from zope import schema
 from zope.annotation.interfaces import IAnnotations
 from zope.component import getUtility
+
+from opengever.base import _
+from opengever.base.interfaces import ISequenceNumber
+from opengever.base.sequence import SEQUENCE_NUMBER_ANNOTATION_KEY
+from opengever.dossier.behaviors.dossier import IDossierMarker
+from opengever.dossier.sequence import DossierSequenceNumberGenerator
+from opengever.repository.repositoryroot import IRepositoryRoot
 
 
 logger = getLogger('opengever.base')
@@ -109,7 +110,8 @@ class AdjustSequenceNumbersForm(form.SchemaForm):
 
         # Check for conflicts
         all_dossiers = catalog(object_provides=IDossierMarker.__identifier__)
-        seq_numbers = [brain.sequence_number for brain in all_dossiers]
+        seq_numbers = [brain.sequence_number for brain in all_dossiers 
+                       if not brain.sequence_number == MissingValue]
         for seq_no in seq_numbers:
             if new_counter_value < seq_no:
                 # There's a potential conflict
