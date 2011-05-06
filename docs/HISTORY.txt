@@ -5,6 +5,11 @@ Changelog
 2.0b16
 ------
 
+* Isssue #992 Aufgabe, Zur direkten Erledigung: Aktion akzeptieren fehlt
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/992
+  changed expression for task-transition-open-in-progress
+  [phgross]
+
 * Issue #786 Darstellung Aufgabe als TabbedView
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/786
   Implemented custom sorting for related documents tab of tasks. Especially the
