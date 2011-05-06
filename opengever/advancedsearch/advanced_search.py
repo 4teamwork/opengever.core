@@ -43,30 +43,30 @@ def get_possible_task_states(context):
     return SimpleVocabulary(states)
 
 @grok.provider(IContextSourceBinder)
-def get_portal_types(context):
+def get_types(context):
     types = []
     types.append(SimpleVocabulary.createTerm(
-        'opengever.dossier.businesscasedossier',
-        'opengever.dossier.businesscasedossier',
+        'opengever.dossier.behaviors.dossier.IDossierMarker',
+        'opengever.dossier.behaviors.dossier.IDossierMarker',
         _('dossier')
         )
     )
     types.append(SimpleVocabulary.createTerm(
-        'opengever.task.task',
-        'opengever.task.task',
+        'opengever.task.task.ITask',
+        'opengever.task.task.ITask',
         _('task')
         )
     )
     types.append(SimpleVocabulary.createTerm(
-        'opengever.document.document',
-        'opengever.document.document',
+        'opengever.document.document.IDocumentSchema',
+        'opengever.document.document.IDocumentSchema',
         _('document')
         )
     )
     return SimpleVocabulary(types)
 
 
-FIELD_MAPPING = {'opengever-dossier-businesscasedossier': [
+FIELD_MAPPING = {'opengever-dossier-behaviors-dossier-IDossierMarker': [
                     'start_1',
                     'start_2',
                     'end_1',
@@ -77,7 +77,7 @@ FIELD_MAPPING = {'opengever-dossier-businesscasedossier': [
                     'responsible',
                     'dossier_review_state',
                 ],
-                'opengever-task-task':[
+                'opengever-task-task-ITask':[
                     'issuer',
                     'task_responsible',
                     'deadline_1',
@@ -85,7 +85,7 @@ FIELD_MAPPING = {'opengever-dossier-businesscasedossier': [
                     'task_type',
                     'task_review_state',
                 ],
-                'opengever-document-document':[
+                'opengever-document-document-IDocumentSchema':[
                     'receipt_date_1',
                     'receipt_date_2',
                     'delivery_date_1',
@@ -107,10 +107,10 @@ class IAdvancedSearch(directives_form.Schema):
         required=False,
     )
 
-    portal_type = schema.Choice(
+    object_provides = schema.Choice(
         title=_('label_portal_type', default="Type"),
         description=_('help_portal_type', default=''),
-        source= get_portal_types,
+        source= get_types,
         required=True,
     )
 
@@ -291,7 +291,7 @@ class AdvancedSearchForm(directives_form.Form):
         = AutocompleteFieldWidget
     fields['issuer'].widgetFactory[INPUT_MODE] \
         = AutocompleteFieldWidget
-    fields['portal_type'].widgetFactory[INPUT_MODE] \
+    fields['object_provides'].widgetFactory[INPUT_MODE] \
         =  radio.RadioFieldWidget
     fields['dossier_review_state'].widgetFactory[INPUT_MODE] \
         = checkbox.CheckBoxFieldWidget
@@ -334,12 +334,12 @@ class AdvancedSearchForm(directives_form.Form):
             # create Parameters and url
             if(data['reference']):
                 data['reference'] = self.correct_ref(data['reference'])
-            params = '/search?portal_type=%s' % (data.get('portal_type', ''))
+            params = '/search?object_provides=%s' % (urllib.quote(data.get('object_provides', '')))
             # if clause because it entered a searchableText=none without text
             if data.get('searchableText'):
                 params = '%s&SearchableText=%s' % (params, data.get('searchableText').encode('utf-8'))
             for field in FIELD_MAPPING.get(
-                    data.get('portal_type').replace('.','-')):
+                    data.get('object_provides').replace('.','-')):
                 if data.get(field, None):
                     if isinstance(data.get(field), date):
                         if '1' in field:
