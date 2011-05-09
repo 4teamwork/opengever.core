@@ -2,15 +2,15 @@ from AccessControl.PermissionRole import rolesForPermissionOn
 from Acquisition import aq_inner, aq_parent
 from Products.CMFCore.permissions import View
 from Products.CMFCore.utils import _mergedLocalRoles, getToolByName
-from datetime import datetime
+from sqlalchemy.orm.exc import NoResultFound
+from zope.component import getUtility
+from zope.intid.interfaces import IIntIds
+
 from opengever.base.interfaces import IReferenceNumber
 from opengever.base.interfaces import ISequenceNumber
 from opengever.globalindex import Session
 from opengever.globalindex.model.task import Task
 from opengever.ogds.base.utils import get_client_id
-from sqlalchemy.orm.exc import NoResultFound
-from zope.component import getUtility
-from zope.intid.interfaces import IIntIds
 
 
 def get_dossier_sequence_number(task):
@@ -88,8 +88,13 @@ def index_task(obj, event):
     # index the predecessor
     if obj.predecessor:
         pred_client_id, pred_init_id = obj.predecessor.split(':', 1)
-        predecessor = session.query(Task).filter_by(client_id=pred_client_id,
+        try: 
+            predecessor = session.query(Task).filter_by(client_id=pred_client_id,
                                                     int_id=pred_init_id).one()
+        except NoResultFound:
+            # For some reason the referenced predecessor doesn't exist
+            predecessor = None
+
     else:
         predecessor = None
 

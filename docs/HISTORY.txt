@@ -5,6 +5,9 @@ Changelog
 2.0b5
 -----
 
+* Made reindexing of predecessor task more robust
+  [lgraf]
+
 
 2.0b4
 -----
