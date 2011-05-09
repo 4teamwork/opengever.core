@@ -5,6 +5,9 @@ Changelog
 2.0b16
 ------
 
+* Made sure self.full_length is always set on UsersListingTableSource
+  [lgraf]
+
 * Fixed Tasklisting view, changes in the TableSource had bad impacts
   [phgross]
 

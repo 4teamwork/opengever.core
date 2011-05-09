@@ -185,9 +185,6 @@ class UsersListingTableSource(grok.MultiAdapter, BaseTableSource):
             # do not batch since we are not lazy
             return query
 
-        # we need to know how many records we would have without batching
-        self.full_length = query.count()
-
         # now add batching
         pagesize = self.config.batching_pagesize
         current_page = self.config.batching_current_page
@@ -201,6 +198,9 @@ class UsersListingTableSource(grok.MultiAdapter, BaseTableSource):
     def search_results(self, query):
         """Executes the query and returns a tuple of `results`.
         """
+
+        # we need to know how many records we would have without batching
+        self.full_length = query.count()
 
         # not lazy
         if not self.config.lazy or not self.config.batching_enabled:
