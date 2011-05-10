@@ -5,6 +5,12 @@ Changelog
 2.0b12
 ------
 
+* Issue # 948 Posteingang an anderen Mandanten weiterleiten
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/948/
+  added special vocabulary for Forwardings (InboxesVocabulary)
+  [phgross]
+  
+
 * Bash script for autamatically updating OGDS on 0000oglx09.zg.ch
   [phabegger]
 

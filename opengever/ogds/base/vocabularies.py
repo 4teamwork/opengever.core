@@ -70,6 +70,10 @@ class UsersVocabularyFactory(grok.GlobalUtility):
                    info.describe(user))
 
 
+
+    
+
+
 class UsersAndInboxesVocabularyFactory(grok.GlobalUtility):
     """Vocabulary of all users and all inboxes of a specific client. The client
     is defined in the request either with key "client" or with key
@@ -123,6 +127,43 @@ class UsersAndInboxesVocabularyFactory(grok.GlobalUtility):
             return client_id[0]
         else:
             return client_id
+
+
+class InboxesVocabularyFactory(UsersAndInboxesVocabularyFactory):
+    """Similar like the UsersAndInboxesVocabularyFactory, but return just the
+    inboxes if is not the actual client. The client is defined in the request
+    either with key "client" or with key "form.widgets.responsible_client"."""
+
+    grok.provides(IVocabularyFactory)
+    grok.name('opengever.ogds.base.InboxesVocabulary')
+
+    hidden_terms = []
+
+    def __call__(self, context):
+        self.context = context
+        vocab = wrap_vocabulary(
+            ContactsVocabulary.create_with_provider(
+                self.key_value_provider))(context)
+        vocab.hidden_terms = self.hidden_terms
+        return vocab
+
+    @ram.cache(reqclient_voc_cachekey)
+    @generator_to_list
+    def key_value_provider(self):
+        client_id = self.get_client()
+        info = getUtility(IContactInformation)
+        if client_id and info.get_client_by_id(client_id):
+            # check if it the current client is selected then add all users
+            if get_current_client().client_id == client_id:
+                for user in info.list_assigned_users(client_id=client_id):
+                    if not user.active:
+                        self.hidden_terms.append(user.userid)
+                    yield (user.userid,
+                           info.describe(user))
+            # client inbox
+            principal = u'inbox:%s' % client_id
+            yield (principal, info.describe(principal))
+
 
 
 class AssignedUsersVocabularyFactory(grok.GlobalUtility):
