@@ -15,6 +15,7 @@ from ftw.contentmenu.interfaces import IContentmenuPostFactoryMenu
 from opengever.inbox import _
 from opengever.inbox.inbox import IInbox
 from opengever.ogds.base.utils import get_client_id
+from opengever.ogds.base.autocomplete_widget import AutocompleteFieldWidget
 from opengever.task import _ as task_mf
 from opengever.task.task import ITask, Task
 
@@ -43,6 +44,14 @@ class IForwarding(ITask):
         title=task_mf(u"label_deadline", default=u"Deadline"),
         description=task_mf(u"help_deadline", default=u""),
         required=False,
+        )
+
+    form.widget(responsible=AutocompleteFieldWidget)
+    responsible = schema.Choice(
+        title=_(u"label_responsible", default=u"Responsible"),
+        description =_(u"help_responsible", default=""),
+        vocabulary=u'opengever.ogds.base.InboxesVocabulary',
+        required = True,
         )
 
 

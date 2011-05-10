@@ -5,6 +5,11 @@ Changelog
 2.0b8
 -----
 
+* Issue # 948 Posteingang an anderen Mandanten weiterleiten
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/948/
+  use special vocabulary for Forwardings (InboxesVocabulary)
+  [phgross]
+
 * Issue #950 SKA.RR/Eingangskorb: Fehlender Baum für die abgeschlossenen Weiterleitungen
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/950
   fixed yearfolder creation
