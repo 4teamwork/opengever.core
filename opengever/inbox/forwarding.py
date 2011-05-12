@@ -48,8 +48,8 @@ class IForwarding(ITask):
 
     form.widget(responsible=AutocompleteFieldWidget)
     responsible = schema.Choice(
-        title=_(u"label_responsible", default=u"Responsible"),
-        description =_(u"help_responsible", default=""),
+        title=task_mf(u"label_responsible", default=u"Responsible"),
+        description =task_mf(u"help_responsible", default=""),
         vocabulary=u'opengever.ogds.base.InboxesVocabulary',
         required = True,
         )
