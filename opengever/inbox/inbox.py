@@ -1,3 +1,4 @@
+"""Defines some Vies for Inbox"""
 from five import grok
 from opengever.inbox import _
 from plone.directives import form

@@ -400,26 +400,26 @@ class ForwardingResponseAddForm(AddForm):
 
 
     def set_workflow_state(self, task):
-           """sets the workflow state of a task if a new Successor is created.
-           """
-           state = 'task-state-new-successor'
-           mtool = getToolByName(self.context, 'portal_membership')
-           wtool = getToolByName(self.context, 'portal_workflow')
-           current_user_id = mtool.getAuthenticatedMember().getId()
-           wf_ids = wtool.getChainFor(task)
-           if wf_ids:
-               wf_id = wf_ids[0]
-               comment = 'Created successor.'
-               wtool.setStatusOf(wf_id, task, {'review_state': state,
-                                               'action' : state,
-                                               'actor': current_user_id,
-                                               'time': DateTime(),
-                                               'comments': comment,})
+        """sets the workflow state of a task if a new Successor is created.
+        """
+        state = 'task-state-new-successor'
+        mtool = getToolByName(self.context, 'portal_membership')
+        wtool = getToolByName(self.context, 'portal_workflow')
+        current_user_id = mtool.getAuthenticatedMember().getId()
+        wf_ids = wtool.getChainFor(task)
+        if wf_ids:
+           wf_id = wf_ids[0]
+           comment = 'Created successor.'
+           wtool.setStatusOf(wf_id, task, {'review_state': state,
+                                           'action' : state,
+                                           'actor': current_user_id,
+                                           'time': DateTime(),
+                                           'comments': comment,})
 
-               wfs = {wf_id: wtool.getWorkflowById(wf_id)}
-               wtool._recursiveUpdateRoleMappings(task, wfs)
-               task.reindexObjectSecurity()
-           return
+           wfs = {wf_id: wtool.getWorkflowById(wf_id)}
+           wtool._recursiveUpdateRoleMappings(task, wfs)
+           task.reindexObjectSecurity()
+        return
 
     def copy_docs(self, task):
         """Copys documents"""

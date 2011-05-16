@@ -1,3 +1,4 @@
+"""Contains a Class wich checks if the user is allowed to see the inbox"""
 from five import grok
 from zope.interface import Interface
 

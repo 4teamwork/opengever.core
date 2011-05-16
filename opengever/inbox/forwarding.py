@@ -1,3 +1,4 @@
+"""Contains the Code for forwarding content type    """
 from Acquisition import aq_inner, aq_parent
 from five import grok
 from datetime import datetime
@@ -89,8 +90,9 @@ class ForwardingAddForm(AddForm):
     grok.name('opengever.inbox.forwarding')
 
     def update(self):
-        # put default value for relatedItems into request - the added
-        # objects will later be moved insed the forwarding
+        """put default value for relatedItems into request - the added
+           objects will later be moved insed the forwarding
+        """
         paths = self.request.get('paths', [])
 
         if not (paths or self.request.form.get('form.widgets.relatedItems', [])\

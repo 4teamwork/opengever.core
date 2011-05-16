@@ -1,3 +1,4 @@
+"""Contains a Controller wich checks the Transitions"""
 from zope.interface import Interface
 from Products.Five import BrowserView
 

@@ -1,3 +1,4 @@
+"""Defines a customized byline for inbox"""
 from plone.app.layout.viewlets import content
 from opengever.mail.behaviors import IMailInAddressMarker, IMailInAddress
 

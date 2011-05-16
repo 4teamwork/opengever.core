@@ -1,3 +1,4 @@
+"""Contains a View wich shows all assigned Forwardings"""
 from five import grok
 from opengever.globalindex.interfaces import ITaskQuery
 from opengever.globalindex.model.task import Task

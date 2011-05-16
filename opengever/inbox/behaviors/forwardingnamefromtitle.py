@@ -1,3 +1,4 @@
+"""Contains a Behavior that gets the Forwardingname from Title"""
 from opengever.base.interfaces import ISequenceNumber
 from plone.app.content.interfaces import INameFromTitle
 from zope.component import getUtility

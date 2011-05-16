@@ -1,3 +1,4 @@
+"""Contains the view for Assigned Tasks"""
 from opengever.inbox.browser.assignedforwardings import InboxAssignedForwardings
 from five import grok
 from opengever.inbox.inbox import IInbox
