@@ -20,7 +20,6 @@ class InboxOverview(DossierOverview):
         """Defines the boxes wich are Displayed at the Overview tab"""
         #TODO: implement the sharing box - doesn't work yet
         # dict(id = 'sharing', content=self.sharing())],
-        import pdb; pdb.set_trace( )
         items = [[dict(id='inbox', # Eingang
                        content=self.inbox(),
                        label=MessageFactory('ftw.tabbedview')\
