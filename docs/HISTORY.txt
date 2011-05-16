@@ -5,6 +5,11 @@ Changelog
 2.0b8
 -----
 
+* Issue #947 Weiterleitung einem Dossier zuweisen
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/947/
+  removed state task-state-new-successor
+  [phgross]
+
 * Issue # 948 Posteingang an anderen Mandanten weiterleiten
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/948/
   use special vocabulary for Forwardings (InboxesVocabulary)

@@ -3,14 +3,12 @@ for forwardings.
 """
 
 from Acquisition import aq_inner, aq_parent
-from DateTime import DateTime
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
 from Products.statusmessages.interfaces import IStatusMessage
 from copy import deepcopy
 from datetime import datetime
 from five import grok
-from opengever.base.interfaces import IRedirector
 from opengever.inbox import _
 from opengever.inbox.forwarding import IForwarding
 from opengever.inbox.inbox import IInbox
@@ -376,34 +374,6 @@ class ForwardingResponseAddForm(AddForm):
         taskSTC = ISuccessorTaskController(task)
         forwardingSTC = ISuccessorTaskController(forwarding)
         taskSTC.set_predecessor(forwardingSTC.get_oguid())
-
-        # set the workflow state
-        state = 'task-state-new-successor'
-        mtool = getToolByName(self.context, 'portal_membership')
-        wtool = getToolByName(self.context, 'portal_workflow')
-        current_user_id = mtool.getAuthenticatedMember().getId()
-        wf_ids = wtool.getChainFor(task)
-        if wf_ids:
-            wf_id = wf_ids[0]
-            comment = 'Created successor.'
-            wtool.setStatusOf(wf_id, task, {'review_state': state,
-                                            'action' : state,
-                                            'actor': current_user_id,
-                                            'time': DateTime(),
-                                            'comments': comment,})
-
-            wfs = {wf_id: wtool.getWorkflowById(wf_id)}
-            wtool._recursiveUpdateRoleMappings(task, wfs)
-            task.reindexObjectSecurity()
-
-        # Remove the responsible. This solves a problem with the
-        # responsible_client and responsible fields in combination with the
-        # autocomplete widget. It makes anyway sence that the users has to
-        # select a new responsible.
-        task = ITask(task)
-        task.responsible_client = None
-        task.responsible = None
-        task.reindexObject()
 
         # copy documents
         for doc in self.get_documents():
