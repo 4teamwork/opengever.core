@@ -1,5 +1,3 @@
-from DateTime import DateTime
-from Products.CMFPlone.utils import getToolByName
 from Products.statusmessages.interfaces import IStatusMessage
 from five import grok
 from opengever.base.interfaces import IRedirector
@@ -20,8 +18,6 @@ from z3c.form.form import Form
 from zope import schema
 from zope.app.intid.interfaces import IIntIds
 from zope.component import getUtility
-from zope.lifecycleevent import modified
-from zope.lifecycleevent.interfaces import IObjectModifiedEvent
 import os.path
 
 
@@ -179,8 +175,6 @@ class CleanupSuccessor(grok.CodeView):
 
     def render(self):
         self.set_predecessor()
-        self.set_workflow_state()
-        self.remove_responsible()
         return 'ok'
 
     def set_predecessor(self):
@@ -190,74 +184,3 @@ class CleanupSuccessor(grok.CodeView):
 
         scontroller = ISuccessorTaskController(self.context)
         scontroller.set_predecessor(oguid)
-
-    def set_workflow_state(self):
-        state = 'task-state-new-successor'
-        mtool = getToolByName(self.context, 'portal_membership')
-        wtool = getToolByName(self.context, 'portal_workflow')
-        current_user_id = mtool.getAuthenticatedMember().getId()
-        wf_ids = wtool.getChainFor(self.context)
-        if wf_ids:
-            wf_id = wf_ids[0]
-            comment = 'Created successor.'
-            wtool.setStatusOf(wf_id, self.context, {'review_state': state,
-                                                    'action' : state,
-                                                    'actor': current_user_id,
-                                                    'time': DateTime(),
-                                                    'comments': comment,})
-
-            wfs = {wf_id: wtool.getWorkflowById(wf_id)}
-            wtool._recursiveUpdateRoleMappings(self.context, wfs)
-            self.context.reindexObjectSecurity()
-
-    def remove_responsible(self):
-        """Remove the responsible. This solves a problem with the
-        responsible_client and responsible fields in combination with the
-        autocomplete widget. It makes anyway sence that the users has to select
-        a new responsible.
-        """
-        task = ITask(self.context)
-        task.responsible_client = None
-        task.responsible = None
-        self.context.reindexObject()
-
-
-@grok.subscribe(ITask, IObjectModifiedEvent)
-def change_successor_state_after_edit(task, event):
-    """After creating a successor the task is has a special successor initial
-    state because the user needs to be able to edit the task once.
-    After the user has edited the task we move it to the default initial state.
-    """
-
-    # the event is fired multiple times when the task was transported, so we
-    # need to verify that the request was not called by another client
-    request = task.REQUEST
-    if request.get_header('X-OGDS-AC', None) or \
-            request.get_header('X-OGDS-CID', None) or \
-            request.get('X-CREATING-SUCCESSOR', None):
-        return
-
-    from_review_state = 'task-state-new-successor'
-    to_review_state = 'task-state-open'
-
-    wtool = getToolByName(task, 'portal_workflow')
-    review_state = wtool.getInfoFor(task, 'review_state', None)
-
-    if review_state == from_review_state:
-
-        mtool = getToolByName(task, 'portal_membership')
-        current_user_id = mtool.getAuthenticatedMember().getId()
-        wf_ids = wtool.getChainFor(task)
-
-        if wf_ids:
-            wf_id = wf_ids[0]
-            comment = 'Initial state after editing successor metadata.'
-            wtool.setStatusOf(wf_id, task, {'review_state': to_review_state,
-                                            'action' : to_review_state,
-                                            'actor': current_user_id,
-                                            'time': DateTime(),
-                                            'comments': comment,})
-            wfs = {wf_id: wtool.getWorkflowById(wf_id)}
-            wtool._recursiveUpdateRoleMappings(task, wfs)
-
-            modified(task)

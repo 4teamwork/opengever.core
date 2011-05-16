@@ -35,11 +35,6 @@ def create_response(context, event):
 
     parent = aq_parent(aq_inner(context))
 
-    tool = getToolByName(context, "portal_workflow")
-    parent_review_state = tool.getInfoFor(aq_inner(context),
-                                          'review_state', None)
-
-    if ITask.providedBy(parent) and \
-            parent_review_state != 'task-state-new-successor':
+    if ITask.providedBy(parent):
         # add a response with a link to the object
         add_simple_response(parent, added_object=context)
