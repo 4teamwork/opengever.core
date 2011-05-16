@@ -5,6 +5,7 @@ import json
 
 
 class InboxGroupAsJSONView(grok.CodeView):
+    """Displays the Inboxgroup of this client"""
     grok.context(IPloneSiteRoot)
     grok.name('tentacle-inbox-group-json')
 
@@ -12,5 +13,5 @@ class InboxGroupAsJSONView(grok.CodeView):
         # returns the configigured inbox_group of this client
         portal = self.context.portal_url.getPortalObject()
         inbox = portal.get('eingangskorb')
-        repr = IInbox(inbox)
-        return json.dumps(getattr(repr, 'inbox_group'))
+        repr_ = IInbox(inbox)
+        return json.dumps(getattr(repr_, 'inbox_group'))

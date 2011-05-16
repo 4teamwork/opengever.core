@@ -23,8 +23,8 @@ class IInbox(form.Schema, ISendableDocsContainer):
          required = False,
          )
 
-
 class GivenTasks(Tasks):
+    """Displays all Given Tasks"""
     grok.name('tabbedview_view-given_tasks')
 
     types = ['opengever.inbox.forwarding']
@@ -32,6 +32,8 @@ class GivenTasks(Tasks):
 
     @property
     def columns(self):
+        """Gets the columns wich wich will be displayed
+        """
         remove_columns = ['containing_subdossier']
         columns = []
 
@@ -46,6 +48,8 @@ class GivenTasks(Tasks):
         return columns
 
 class InboxDocuments(Documents):
+    """Lists all Forwardings in this container
+    """
     grok.context(IInbox)
 
     # do not list documents in forwardings
@@ -53,6 +57,8 @@ class InboxDocuments(Documents):
 
     @property
     def columns(self):
+        """Gets the columns wich wich will be displayed
+        """
         remove_columns = ['containing_subdossier']
         columns = []
 
@@ -68,6 +74,7 @@ class InboxDocuments(Documents):
 
     @property
     def enabled_actions(self):
+        """Defines the enabled Actions"""
         actions = super(InboxDocuments, self).enabled_actions
         actions = [action for action in actions
                    if action not in ('create_task',)]
@@ -76,6 +83,7 @@ class InboxDocuments(Documents):
 
     @property
     def major_actions(self):
+        """Defines wich actions are major Actions"""
         actions = super(InboxDocuments, self).major_actions
         actions = [action for action in actions
                    if action not in ('create_task',)]

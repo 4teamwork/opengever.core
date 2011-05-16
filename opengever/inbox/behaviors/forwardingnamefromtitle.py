@@ -24,5 +24,6 @@ class ForwardingNameFromTitle(object):
 
     @property
     def title(self):
+        """Writes a property wich safes the id"""
         seq_number = getUtility(ISequenceNumber).get_number(self.context)
         return self.format % seq_number

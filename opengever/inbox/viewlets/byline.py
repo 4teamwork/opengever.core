@@ -8,5 +8,6 @@ class InboxByline(content.DocumentBylineViewlet):
     update = content.DocumentBylineViewlet.update
 
     def email(self):
+        """Gets Email and display it in Byline"""
         if IMailInAddressMarker.providedBy(self.context):
             return IMailInAddress(self.context).get_email_address()

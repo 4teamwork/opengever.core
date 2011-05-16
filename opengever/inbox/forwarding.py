@@ -62,21 +62,25 @@ class Forwarding(Task):
 
     @property
     def task_type_category(self):
+        """Generates a Property for task categories"""
         return None
 
     def get_static_task_type(self):
-        # Provide a marker string, which will be translated in the
-        # tabbedview helper method.
+
+        """Provide a marker string, which will be translated
+           in the tabbedview helper method.
+        """
         return 'forwarding_task_type'
 
     def set_static_task_type(self, value):
+        """Marker set function"""
         # do not file when trying to set the task type - but ignore
         return
 
     task_type = property(get_static_task_type, set_static_task_type)
 
 
-class AddForm(AddForm):
+class ForwardingAddForm(AddForm):
     """Provide a custom add-form which adds the selected documents
     (tabbed_view) to the hidden relatedItems field and sets some defaults.
     The documents are later moved by move_documents_into_forwarding (see
@@ -89,15 +93,17 @@ class AddForm(AddForm):
         # objects will later be moved insed the forwarding
         paths = self.request.get('paths', [])
 
-        if not (paths or self.request.form.get('form.widgets.relatedItems', []) \
+        if not (paths or self.request.form.get('form.widgets.relatedItems', [])\
         or '@@autocomplete-search' in self.request.get('ACTUAL_URL', '')):
             # add status message and redirect current window back to inbox
-            # but ONLY if we're not in a z3cform_inline_validation or 
+            # but ONLY if we're not in a z3cform_inline_validation or
             # autocomplete-search request!
             IStatusMessage(self.request).addStatusMessage(
                 _(u'error_no_document_selected',
-                  u'Error: Please select at least one document to forward'), type='error')
-            redir_url = self.request.get('orig_template', self.context.absolute_url())
+                  u'Error: Please select at least one document to forward'),
+                   type='error')
+            redir_url = self.request.get('orig_template',
+                        self.context.absolute_url())
             self.request.RESPONSE.redirect(redir_url)
 
         if paths:
@@ -119,7 +125,7 @@ class AddForm(AddForm):
             self.request.set('form.widgets.responsible',
                              [(u'inbox:%s' % client).encode('utf-8')])
 
-        super(AddForm, self).update()
+        AddForm.update(self)
 
 
 @grok.subscribe(IForwarding, IObjectAddedEvent)
