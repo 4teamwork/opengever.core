@@ -71,7 +71,7 @@ class ForwardingResponseAddForm(AddForm):
     def updateWidgets(self):
         """Changes Widgets and Widgets modes. Overrides addform.updateWidgets
         """
-        AddForm.updateWidgets()
+        super(ForwardingResponseAddForm, self).updateWidgets()
         self.widgets['relatedItems'].mode = HIDDEN_MODE
         self.widgets['transition'].mode = HIDDEN_MODE
         assign_trans = u'forwarding-transition-assign-to-dossier'
