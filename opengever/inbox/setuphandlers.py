@@ -1,3 +1,4 @@
+"""Contains setuphandlers"""
 from Products.CMFCore.utils import getToolByName
 
 

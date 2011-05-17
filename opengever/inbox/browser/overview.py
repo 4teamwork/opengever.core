@@ -11,21 +11,24 @@ from zope.i18nmessageid import MessageFactory
 
 
 class InboxOverview(DossierOverview):
+    """Displayes the Inbox Overview
+    """
     grok.context(IInbox)
     grok.name('tabbedview_view-overview')
 
     def boxes(self):
-
+        """Defines the boxes wich are Displayed at the Overview tab"""
         #TODO: implement the sharing box - doesn't work yet
         # dict(id = 'sharing', content=self.sharing())],
-
         items = [[dict(id='inbox', # Eingang
                        content=self.inbox(),
-                       label=MessageFactory('ftw.tabbedview')(u'assigned_forwardings')),
+                       label=MessageFactory('ftw.tabbedview')\
+                       (u'assigned_forwardings')),
 
                   dict(id='assigned_tasks', # Aufgaben aus anderem Mandant
                        content=self.assigned_tasks(),
-                       label=MessageFactory('ftw.tabbedview')(u'assigned_tasks')),
+                       label=MessageFactory('ftw.tabbedview')\
+                       (u'assigned_tasks')),
                  ],
 
                  [dict(id='documents', # Dokumente
@@ -39,9 +42,10 @@ class InboxOverview(DossierOverview):
         are assigned to this client's inbox.
         """
         query_util = getUtility(ITaskQuery)
-        
+
         principal = 'inbox:%s' % get_client_id()
-        query = query_util._get_tasks_for_responsible_query(principal, 'modified')
+        query = query_util._get_tasks_for_responsible_query(\
+                principal, 'modified')
         query = query.filter(Task.review_state=='task-state-open')
         query = query.filter(Task.client_id != get_client_id())
 
@@ -53,13 +57,15 @@ class InboxOverview(DossierOverview):
 
     def documents(self):
         """
-        Get documents and mails that are directly contained in 
+        Get documents and mails that are directly contained in
         the inbox, but not in forwardings.
         """
         catalog = self.context.portal_catalog
         query = {'isWorkingCopy': 0,
-                 'path': {'depth': 1, 'query': "/%s/eingangskorb" % get_client_id()},
-                 'portal_type': ['opengever.document.document', 'ftw.mail.mail']}
+                 'path': {'depth': 1,
+                          'query': "/%s/eingangskorb" % get_client_id()},
+                 'portal_type': ['opengever.document.document',
+                                 'ftw.mail.mail']}
         documents = catalog(query)[:10]
 
         return [{
@@ -70,7 +76,7 @@ class InboxOverview(DossierOverview):
             'getIcon': document.getIcon,
         } for document in documents]
 
-        return catalog(query)[:10]
+        # return catalog(query)[:10]
 
 
     def inbox(self):

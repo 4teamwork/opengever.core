@@ -1,3 +1,4 @@
+"""Defines a schema for YearFolders"""
 from plone.directives import form
 
 

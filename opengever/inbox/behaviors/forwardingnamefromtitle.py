@@ -1,3 +1,4 @@
+"""Contains a Behavior that gets the Forwardingname from Title"""
 from opengever.base.interfaces import ISequenceNumber
 from plone.app.content.interfaces import INameFromTitle
 from zope.component import getUtility
@@ -24,5 +25,6 @@ class ForwardingNameFromTitle(object):
 
     @property
     def title(self):
+        """Writes a property wich safes the id"""
         seq_number = getUtility(ISequenceNumber).get_number(self.context)
         return self.format % seq_number

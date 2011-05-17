@@ -1,3 +1,4 @@
+"""Contains a Controller wich checks the Transitions"""
 from zope.interface import Interface
 from Products.Five import BrowserView
 
@@ -8,23 +9,23 @@ class IForwardingTransitionController(Interface):
     current user in the current object state.
     """
 
-    def is_accept_possible():
+    def is_accept_possible(self):
         """Checks, whether the transition forwarding-transition-accept
         is possible and allowed at the moment.
         """
 
-    def is_assign_to_dossier_possible():
+    def is_assign_to_dossier_possible(self):
         """Checks, whether the transition
         forwarding-transition-assign-to-dossier is possible and allowed
         at the moment.
         """
 
-    def is_close_possible():
+    def is_close_possible(self):
         """Checks, whether the transition forwarding-transition-close
         is possible and allowed at the moment.
         """
 
-    def is_refuse_possible():
+    def is_refuse_possible(self):
         """Checks, whether the transition forwarding-transition-refuse
         is possible and allowed at the moment.
         """

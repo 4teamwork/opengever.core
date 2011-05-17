@@ -39,7 +39,8 @@ import os.path
 
 
 class IForwardingResponse(IResponse):
-
+    """Adds a field for moving Forwardings to Dossier.
+    """
     target_dossier = RelationChoice(
         title=_(u'label_target_dossier',
                 default=u'Target dossier'),
@@ -68,7 +69,9 @@ class ForwardingResponseAddForm(AddForm):
     fields = fields.omit('date_of_completion')
 
     def updateWidgets(self):
-        super(ForwardingResponseAddForm, self).updateWidgets()
+        """Changes Widgets and Widgets modes. Overrides addform.updateWidgets
+        """
+        AddForm.updateWidgets()
         self.widgets['relatedItems'].mode = HIDDEN_MODE
         self.widgets['transition'].mode = HIDDEN_MODE
         assign_trans = u'forwarding-transition-assign-to-dossier'
@@ -83,6 +86,10 @@ class ForwardingResponseAddForm(AddForm):
     @button.buttonAndHandler(_(u'save', default='Save'),
                              name='save', )
     def handleSubmit(self, action):
+        """Handles Submit of Forwarding Responses.
+            Gets new Workflowstate and Executes the action.
+            overrides AddForm.handeSubmit
+        """
         data, errors = self.extractData()
         if errors:
             return
@@ -104,7 +111,7 @@ class ForwardingResponseAddForm(AddForm):
             redirect_url = target_task.absolute_url() + '/edit'
 
         # CREATE RESPONSE
-        response = super(ForwardingResponseAddForm, self).handleSubmit(
+        response = AddForm.handleSubmit(
             action.form, action)
 
         # add relation to response
@@ -220,6 +227,9 @@ class ForwardingResponseAddForm(AddForm):
     @button.buttonAndHandler(_(u'cancel', default='Cancel'),
                              name='cancel', )
     def handleCancel(self, action):
+        """Cancels Creation of Forwarding response.
+           Redirects to Forwarding.
+        """
         return self.request.RESPONSE.redirect('.')
 
     def create_successor_forwarding(self, data, response):
@@ -279,10 +289,8 @@ class ForwardingResponseAddForm(AddForm):
 
         # redirect to target in new window
         client = info.get_client_by_id(client.client_id)
-        target_url = os.path.join(client.public_url, target_task_path,
+        return os.path.join(client.public_url, target_task_path,
                                   '@@edit')
-
-        return target_url
 
     def get_documents(self):
         """All documents which are either within the current task or
@@ -341,8 +349,7 @@ class ForwardingResponseAddForm(AddForm):
         # kind of task) for creating the new task.
         fielddata = {}
         for fieldname in ITask.names():
-            field = ITask.get(fieldname)
-            value = field.get(forwarding)
+            value = ITask.get(fieldname).get(forwarding)
             fielddata[fieldname] = value
 
         # lets create a new task - the successor task
@@ -351,7 +358,7 @@ class ForwardingResponseAddForm(AddForm):
 
         # copy all responses
         task_responses = IResponseContainer(task)
-        for id, fresp in enumerate(IResponseContainer(forwarding)):
+        for id_, fresp in enumerate(IResponseContainer(forwarding)):
             tresp = Response('')
             for key in IPersistentResponse.names():
                 attr = IPersistentResponse[key]
@@ -370,13 +377,20 @@ class ForwardingResponseAddForm(AddForm):
         forwardingSTC = ISuccessorTaskController(forwarding)
         taskSTC.set_predecessor(forwardingSTC.get_oguid())
 
+        task = ITask(task)
+        task.reindexObject()
+
         # copy documents
+        self.copy_docs(task)
+
+        return task
+
+    def copy_docs(self, task):
+        """Copys documents"""
         for doc in self.get_documents():
             parent = aq_parent(aq_inner(doc))
             clipboard = parent.manage_copyObjects([doc.getId()])
             task.manage_pasteObjects(clipboard)
-
-        return task
 
 
 class CleanupForwardingSuccessor(CleanupSuccessor):
@@ -393,6 +407,8 @@ class CleanupForwardingSuccessor(CleanupSuccessor):
 
 
 class ForwardingResponseAddFormView(SingleAddFormView):
+    """Displays the Forwarding Response Add Form
+    """
     grok.context(IForwarding)
     grok.name('addresponse')
 
