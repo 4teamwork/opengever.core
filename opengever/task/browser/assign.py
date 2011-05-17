@@ -107,7 +107,7 @@ class AssignTaskForm(Form):
         # Prefill the responsible_client based on forwarding
         fwd = self.context
         self.widgets['responsible_client'].value = [fwd.responsible_client]
-
+        self.widgets['responsible_client'].mode = HIDDEN_MODE
         self.widgets['transition'].mode = HIDDEN_MODE
 
 
