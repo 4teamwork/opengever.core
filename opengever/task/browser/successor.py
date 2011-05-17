@@ -15,6 +15,7 @@ from plone.z3cform import layout
 from z3c.form.button import buttonAndHandler
 from z3c.form.field import Fields
 from z3c.form.form import Form
+from z3c.form.interfaces import HIDDEN_MODE
 from zope import schema
 from zope.app.intid.interfaces import IIntIds
 from zope.component import getUtility
@@ -26,6 +27,7 @@ class ISuccessorTaskSchema(form.Schema):
     a successor task.
     """
 
+    form.mode(client=HIDDEN_MODE)
     client = schema.Choice(
         title=_(u'label_sucessor_target_client',
                 default=u'Target client for successor task'),
@@ -131,7 +133,6 @@ class SuccessorTaskForm(Form):
         return self.request.RESPONSE.redirect('.')
 
 
-
     def get_documents(self):
         """All documents which are either within the current task or defined
         as related items.
@@ -148,6 +149,12 @@ class SuccessorTaskForm(Form):
         if relatedItems:
             for rel in self.context.relatedItems:
                 yield rel.to_object
+
+    def updateWidgets(self):
+        super(SuccessorTaskForm, self).updateWidgets()
+        self.widgets['client'].mode = HIDDEN_MODE
+        self.widgets['client'].value = get_client_id()
+        self.request['form.widgets.client'] = self.widgets['client'].value
 
 
 class CreateSuccessorTask(layout.FormWrapper, grok.CodeView):
