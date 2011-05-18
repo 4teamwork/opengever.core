@@ -16,7 +16,6 @@ Changelog
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/948/
   added special vocabulary for Forwardings (InboxesVocabulary)
   [phgross]
-  
 
 * Bash script for autamatically updating OGDS on 0000oglx09.zg.ch
   [phabegger]
