@@ -5,6 +5,11 @@ Changelog
 2.0b16
 ------
 
+* Issue #832 Workflow Task anpassen
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/832/
+  added and changed some guards in the workflow 
+  [phgross]
+
 * Issue #947 Weiterleitung einem Dossier zuweisen
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/947/
   removed state task-state-new-successor

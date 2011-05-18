@@ -241,6 +241,7 @@
  <transition transition_id="task-transition-cancelled-open" title="task-transition-cancelled-open" new_state="task-state-open" trigger="USER" before_script="" after_script="">
   <action url="%(content_url)s/addresponse?form.widgets.transition=task-transition-cancelled-open" category="workflow" icon="">task-transition-cancelled-open</action>
   <guard>
+      <guard-expression>python: str(here.restrictedTraverse('plone_portal_state').member()) == here.issuer</guard-expression>
   </guard>
  </transition>
  <transition transition_id="task-transition-in-progress-resolved" title="task-transition-in-progress-resolved" new_state="task-state-resolved" trigger="USER" before_script="" after_script="">
@@ -258,7 +259,7 @@
  <transition transition_id="task-transition-open-in-progress" title="task-transition-open-in-progress" new_state="task-state-in-progress" trigger="USER" before_script="" after_script="">
   <action url="%(content_url)s/addresponse?form.widgets.transition=task-transition-open-in-progress" category="workflow" icon="">task-transition-open-in-progress</action>
   <guard>
-   <guard-expression>python: here.task_type_category != 'unidirectional_by_reference'</guard-expression>
+   <guard-expression>python: here.task_type_category != 'unidirectional_by_reference' and(str(here.restrictedTraverse('plone_portal_state').member()) != here.issuer or here.issuer == here.responsible)</guard-expression>
   </guard>
  </transition>
  <transition transition_id="task-transition-open-rejected" title="task-transition-open-rejected" new_state="task-state-rejected" trigger="USER" before_script="" after_script="">
@@ -269,7 +270,7 @@
  <transition transition_id="task-transition-open-resolved" title="task-transition-open-resolved" new_state="task-state-resolved" trigger="USER" before_script="" after_script="">
   <action url="%(content_url)s/addresponse?form.widgets.transition=task-transition-open-resolved" category="workflow" icon="">task-transition-open-resolved</action>
   <guard>
-   <guard-expression>python: here.restrictedTraverse('resolve_check')() and here.restrictedTraverse('task_workflow_checks').is_bidirectional()</guard-expression>
+   <guard-expression>python: here.restrictedTraverse('resolve_check')() and here.restrictedTraverse('task_workflow_checks').is_bidirectional() and(str(here.restrictedTraverse('plone_portal_state').member()) != here.issuer or here.issuer == here.responsible)</guard-expression>
   </guard>
  </transition>
  <transition transition_id="task-transition-open-tested-and-closed" title="task-transition-open-tested-and-closed" new_state="task-state-tested-and-closed" trigger="USER" before_script="" after_script="">
