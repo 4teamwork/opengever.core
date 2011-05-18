@@ -1,3 +1,5 @@
+import sys
+import ldap
 from collective.transmogrifier.transmogrifier import Transmogrifier
 import transaction
 from Testing.makerequest import makerequest
@@ -9,8 +11,6 @@ from optparse import OptionParser
 def debugAfterException():
     """Starts pdb at the point where an uncatched exception was raised.
     """
-
-    import sys
 
     def info(type, value, tb):
        if hasattr(sys, 'ps1') or not sys.stderr.isatty():
@@ -27,11 +27,41 @@ def debugAfterException():
 
     sys.excepthook = info
 
+
+def check_if_ldap_reachable(site):
+    """This function gets the LDAP server from the
+    LDAPUserFolder Plugin on the Plone site and tries
+    to establish a connection.
+
+    If for some reason we can't get a connection to the LDAP,
+    we abort the entire import, because otherwise we would
+    end up with all users being set to inactive since they
+    can't be found in the LDAP.
+    """
+
+    ldap_folder = site.acl_users.get('ldap').get('acl_users')
+    server = ldap_folder.getServers()[0]
+    ldap_url = "%s://%s:%s" % (server['protocol'], server['host'], server['port'])
+    ldap_conn = ldap.initialize(ldap_url)
+    try:
+        ldap_conn.search_s('ou=Users,ou=OpenGever,dc=4teamwork,dc=ch',ldap.SCOPE_SUBTREE)
+    except ldap.LDAPError, e:
+        # If for some reason we can't get a connection to the LDAP,
+        # we abort the entire import, because otherwise we would
+        # end up with all users being set to inactive since they
+        # can't be found in the LDAP.
+        print "ERROR: Couldn't connect to LDAP server: %s %s" % (e.__class__.__name__, e)
+        print "The import has been aborted."
+        transaction.abort()
+        sys.exit(1)
+
 def run_import(app, options):
 
     # setup request and get plone site
-    app=makerequest(app)
+    app = makerequest(app)
     plone = app.unrestrictedTraverse(options.site_root)
+
+    check_if_ldap_reachable(plone)
 
     # setup user context
     user = app.acl_users.getUser('zopemaster')
@@ -46,10 +76,12 @@ def run_import(app, options):
     print "Importing..."
     import time
     now = time.clock()
+
     transmogrifier(options.config)
+
     #transmogrifier(u'opengever.repository1.ska-arch')
     #transmogrifier(u'opengever.konsulmigration.repository')
-    elapsed = time.clock()-now
+    elapsed = time.clock() - now
     print "Done in %.0f seconds." % elapsed
     print "Committing transaction..."
     transaction.commit()

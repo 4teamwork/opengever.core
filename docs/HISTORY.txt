@@ -5,6 +5,13 @@ Changelog
 2.0b12
 ------
 
+* Issue #1005 OGDS: in Realitaet inaktive Benutzer werden als aktiv angezeigt
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1005/
+  Re-implemented import of LDAP users
+  Now all OGDS users are first set to inactive, then the ones still contained
+  in the LDAP directory are set to active.
+  [lgraf]
+
 * Issue # 948 Posteingang an anderen Mandanten weiterleiten
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/948/
   added special vocabulary for Forwardings (InboxesVocabulary)
