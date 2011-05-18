@@ -5,6 +5,11 @@ Changelog
 2.0b4
 -----
 
+* Issue #1007 Fehler beim Ausdruck des Deckblatts, wenn das Dossier spezielle Zeichen enthaelt
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1007/
+  added error handling
+  [phgross]
+
 * Using new readable_date helper from opengever.tabbedview
   [lgraf]
 

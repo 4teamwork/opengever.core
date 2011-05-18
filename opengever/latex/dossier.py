@@ -1,9 +1,9 @@
 from five import grok
-from plone.directives import dexterity
 from Acquisition import aq_inner, aq_parent
 
 from opengever.dossier.behaviors.dossier import IDossierMarker, IDossier
-from Products.CMFCore.utils import getToolByName
+from Products.statusmessages.interfaces import IStatusMessage
+from opengever.latex import _
 from opengever.latex.layouts.dossierlayout import DossierLayout
 from opengever.ogds.base.interfaces import IContactInformation
 
@@ -14,6 +14,7 @@ from plone.registry.interfaces import IRegistry
 from opengever.base.interfaces import IBaseClientID
 from plone.autoform.base import AutoFields
 
+from plonegov.pdflatex.pdfgenerator import PdfMissingException
 from plonegov.pdflatex.browser.converter import LatexCTConverter
 
 class ExportPDFView(grok.CodeView):
@@ -28,7 +29,14 @@ class ExportPDFView(grok.CodeView):
         as_pdf = self.context.restrictedTraverse(
             '%s/as_pdf' % '/'.join(self.context.getPhysicalPath())
         )
-        return as_pdf(**arguments)
+        try:
+            pdf = as_pdf(**arguments)
+        except PdfMissingException:
+            # happens with arabic letters
+            msg = _(u'pdf_generation_failed', default=u'The pdf generation process failed.')
+            IStatusMessage(self.request).addStatusMessage(msg, type='error')
+            return self.request.RESPONSE.redirect(self.context.absolute_url())
+        return pdf
 
 def pre_compiler(view, object):
     layout = DossierLayout()
@@ -64,7 +72,6 @@ class DossierLatexConverter(LatexCTConverter,grok.CodeView,AutoFields):
         return self.context.portal_membership.getMemberById(creator_id)
 
     def responsible(self):
-        mt=getToolByName(self.context,'portal_membership')
         dossier = IDossier(self.context)
         return dossier.responsible
 
