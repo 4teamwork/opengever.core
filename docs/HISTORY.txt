@@ -5,6 +5,10 @@ Changelog
 2.0b16
 ------
 
+* Issue #1024 Feedback Fokus: Aufgabe: Reiter Allgemein
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1024/
+  [phgross]
+
 * Issue #832 Workflow Task anpassen
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/832/
   added and changed some guards in the workflow 
