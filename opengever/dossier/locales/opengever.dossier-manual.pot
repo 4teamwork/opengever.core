@@ -32,6 +32,9 @@ msgstr ""
 msgid "documents"
 msgstr ""
 
+msgid "newest_documents"
+msgstr ""
+
 msgid "sharing"
 msgstr ""
 
