@@ -8,7 +8,7 @@ from opengever.tabbedview.helper import readable_ogds_author
 #indexes
 @indexer(IMail)
 def document_author(obj):
-    """ doucment_author indexer, return the Sender Adress """
+    """Return the sender address for the indexer document_author."""
     document_author = utils.get_header(obj.msg, 'From')
     document_author = document_author.replace('<', '&lt;')
     document_author = document_author.replace('>', '&gt;')
@@ -18,7 +18,9 @@ grok.global_adapter(document_author, name='document_author')
 
 @indexer(IMail)
 def document_date(obj):
-    """ document_date indexer, return the from date of the mail """
+    """Return the sent (not receipt) date of the mail for the
+    document_date indexer.
+    """
     document_date = utils.get_date_header(obj.msg, 'Date')
     return DateTime(document_date)
 grok.global_adapter(document_date, name="document_date")
@@ -26,17 +28,17 @@ grok.global_adapter(document_date, name="document_date")
 
 @indexer(IMail)
 def receipt_date(obj):
-    """Returns the receipt date of the mail.
-       We currently approximate this date by using the
-       document date"""
-    # TODO: Parse Received-values of header mail
+    """Return the receipt date of the mail for the receipt_date indexer.
+    We currently approximate this date by using the document date.
+    """
+    # TODO: Parse received-values of header mail
     document_date = utils.get_date_header(obj.msg, 'Date')
     return DateTime(document_date)
 grok.global_adapter(receipt_date, name='receipt_date')
 
 @indexer(IMail)
 def sortable_author(obj):
-    """Index to allow users to sort on document_author."""
+    """Return the normalized author name for sortable_author indexer."""
     author = document_author(obj)
     readable_author = readable_ogds_author(obj, author())
     return readable_author

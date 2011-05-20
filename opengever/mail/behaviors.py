@@ -8,7 +8,7 @@ from opengever.mail.interfaces import IMailSettings
 
 class IMailInAddress(Interface):
     def get_email_address(self):
-        """ generates an email adress for a dossier
+        """ generates an email address for a dossier
         """
         
 class IMailInAddressMarker(Interface):

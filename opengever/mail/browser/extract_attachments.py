@@ -229,7 +229,7 @@ class ExtractAttachments(grok.View):
                         field.set(field.interface(doc), default)
 
 
-            # # add a reference to the mail
+            # add a reference from the attachment to the mail
             intids = getUtility(IIntIds)
             iid = intids.getId(self.context)
 
@@ -246,7 +246,6 @@ class ExtractAttachments(grok.View):
         if delete_action in ('all', 'selected'):
             if delete_action == 'selected':
                 pos_to_delete = positions
-
             else:
                 # all
                 pos_to_delete = [int(att['position']) for att in
