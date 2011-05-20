@@ -13,6 +13,7 @@
 
     <browser:viewlet
         name="plone.belowcontentbody.contenthistory"
+        for="opengever.document.document.IDocumentSchema"
         manager="plone.app.layout.viewlets.interfaces.IBelowContentBody"
         class=".history.DocumentContentHistoryViewlet"
         template="history.pt"
