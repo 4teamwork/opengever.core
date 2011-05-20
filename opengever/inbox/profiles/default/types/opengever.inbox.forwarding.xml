@@ -36,11 +36,12 @@
     </property>
 
     <!-- View information -->
-    <property name="default_view">view</property>
+    <property name="default_view">tabbed_view</property>
     <property name="immediate_view">../#given_tasks</property>
     <property name="default_view_fallback">False</property>
     <property name="view_methods">
         <element value="view"/>
+        <element value="view" />
     </property>
 
     <!-- Method aliases -->
@@ -77,5 +78,12 @@
             condition_expr="">
         <permission value="Add portal content"/>
     </action>
-
+    <action i18n:domain="opengever.task" title="Overview" action_id="overview" category="tabbedview-tabs"
+            condition_expr="" url_expr="string:#" visible="True">
+        <permission value="View"/>
+    </action>
+    <action i18n:domain="opengever.task" title="Related Documents" action_id="relateddocuments" category="tabbedview-tabs"
+            condition_expr="" url_expr="string:#" visible="True">
+        <permission value="View"/>
+    </action>
 </object>

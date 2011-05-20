@@ -5,6 +5,11 @@ Changelog
 2.0b8
 -----
 
+* Issue #1020 Neuer Fehler im Eingangskorb: Auf der Weiterleitung erscheint der Verweis auf die Vorgaenger-/Nachfolgeaufgabe nicht mehr
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1020/
+  changes type configuration for forwardings, they use now also the tabbedview, like the task
+  [phgross]
+
 * Issue #947 Weiterleitung einem Dossier zuweisen
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/947/
   removed state task-state-new-successor
