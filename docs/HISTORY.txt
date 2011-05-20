@@ -4,7 +4,10 @@ Changelog
 
 2.0b14
 ------
-
+* Issue #1017 Feedback Fokus: PDF Dokument zu jeder Dokumentversion 
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1017/
+  changed viewlet registration, that overwritting works in opengever.pdfconverter
+  [phgross]
 
 2.0b13
 ------
