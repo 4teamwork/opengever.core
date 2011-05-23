@@ -5,6 +5,28 @@
       lang="en"
       metal:use-macro="context/main_template/macros/master"
       i18n:domain="opengever.mail">
+  <head>
+      <metal:js fill-slot="javascript_head_slot">
+        <script type="text/javascript">
+
+        (function($) {    
+              $("#select_all a").live("click", function(e) {
+                  $("input[type=checkbox]").selected(true);
+                  $("#select_all").hide();
+                  $("#foldercontents-clearselection").show();
+                  e.preventDefault();
+              });
+              $("#foldercontents-clearselection a").live("click", function(e){
+                  $("#select_all").show();
+                  $("#foldercontents-clearselection").hide();
+                  $("input[type=checkbox]").selected(false);
+                  e.preventDefault();
+              }); 
+        })(jQuery);
+        
+        </script>
+      </metal:js>
+  </head>
   <body>
 
     <metal:main fill-slot="main">
@@ -28,6 +50,15 @@
 
               <div class="formHelp" i18n:translate="help_select_attachments">
                 Select the attachments to extract.
+              </div>
+              <div i18n:domain="plone" id="select_all">
+                  <b i18n:translate="label_select">Select:</b> 
+                  <a i18n:translate="label_all" href="#">All</a>
+              </div>
+              <div i18n:domain="plone" id="foldercontents-clearselection"
+                   style="display:none">
+                  <a i18n:translate="tableheading_clear_selection"
+                     href="#">Clear selection</a>                  
               </div>
 
               <table tal:replace="structure view/render_attachment_table" />
