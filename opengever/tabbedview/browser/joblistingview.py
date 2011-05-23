@@ -4,42 +4,44 @@ from ftw.tabbedview.browser.tabbed import TabbedView
 from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
 from ftw.table.basesource import BaseTableSource
 from zope.interface import implements, Interface
-
+from opengever.tabbedview.browser.tabs import OpengeverTab
+from ftw.tabbedview.browser.listing import ListingView
+from opengever.tabbedview import _
 
 class IJoblistingSourceConfig(ITableSourceConfig):
     """Marker interface for table source configurations using the
     `opengever.globalindex` as source.
     """
 
-    class AsyncControlPanel(grok.View, TabbedView):
-        """zc.async control panel tabbed view.
-        """
+class JobsView(grok.View, TabbedView):
+    """zc.async control panel tabbed view.
+    """
 
-        grok.context(IPloneSiteRoot)
-        grok.name('jobs_view')
-        grok.require('cmf.ManagePortal')
+    grok.context(IPloneSiteRoot)
+    grok.name('jobs_view')
+    grok.require('cmf.ManagePortal')
 
-        tabs = [
-            {'id': 'jobs',
-             'icon': None,
-             'url': '#',
-             'class': None},
-
-
-            ]
-
-        def __init__(self, *args, **kwargs):
-            grok.View.__init__(self, *args, **kwargs)
-            TabbedView.__init__(self, *args, **kwargs)
-
-        def get_tabs(self):
-            return self.tabs
-
-        def render(self):
-            return TabbedView.__call__(self)
+    tabs = [
+        {'id': 'jobs',
+         'icon': None,
+         'url': '#',
+         'class': None},
 
 
-class QueueListingTab(grok.CodeView, OpengeverTab,
+        ]
+
+    def __init__(self, *args, **kwargs):
+        grok.View.__init__(self, *args, **kwargs)
+        TabbedView.__init__(self, *args, **kwargs)
+
+    def get_tabs(self):
+        return self.tabs
+
+    def render(self):
+        return TabbedView.__call__(self)
+
+
+class JobListingTab(grok.CodeView, OpengeverTab,
                            ListingView):
     """A tabbed view mixing which brings support for listing tasks from
     the SQL (globally over all clients).
@@ -47,7 +49,7 @@ class QueueListingTab(grok.CodeView, OpengeverTab,
     There is support for searching, batching and ordering.
     """
 
-    implements(IAsyncTableSourceConfig)
+    implements(IJoblistingSourceConfig)
 
     grok.context(Interface)
 
@@ -61,7 +63,6 @@ class QueueListingTab(grok.CodeView, OpengeverTab,
 
         {'column': 'name',
          'column_title': _(u'column_name', default=u'Name'),
-         'transform': queue_view_helper
          },
 
         {'column': 'length',

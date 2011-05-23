@@ -84,7 +84,6 @@ class QueueListingTab(grok.CodeView, OpengeverTab,
 class AsyncControlPanel(grok.View, TabbedView):
     """zc.async control panel tabbed view.
     """
-
     grok.context(IPloneSiteRoot)
     grok.name('async-controlpanel')
     grok.require('cmf.ManagePortal')
