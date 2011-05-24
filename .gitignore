@@ -1,5 +1,11 @@
 *.egg-info
+*.mo
 *.pyc
 *.pyo
-*.mo
-
+.installed.cfg
+.mr.developer.cfg
+bin/
+buildout.cfg
+develop-eggs/
+eggs/
+src/

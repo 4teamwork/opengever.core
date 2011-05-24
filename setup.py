@@ -4,6 +4,10 @@ import os
 version = open('opengever/tabbedview/version.txt').read().strip()
 maintainer = 'Victor Baumann'
 
+tests_require = [
+    'plone.app.testing',
+    ]
+
 setup(name='opengever.tabbedview',
       version=version,
       description="opengever integration for ftw.tabbedview (Maintainer %s)" % \
@@ -29,21 +33,23 @@ setup(name='opengever.tabbedview',
       include_package_data=True,
       zip_safe=False,
       install_requires=[
-        'opengever.ogds.base',
+        'setuptools',
+        'five.grok',
         'ftw.journal',
         'ftw.mail',
-        'setuptools',
         'ftw.tabbedview[extjs]',
-        'plone.app.dexterity',
-        'opengever.globalindex',
-        'opengever.task',
         'opengever.base',
-          #'collective.jqhistory'
-          # -*- Extra requirements: -*-
+        'opengever.globalindex',
+        'opengever.ogds.base',
+        'opengever.task',
+        'plone.app.dexterity',
+        'z3c.autoinclude',
       ],
+      tests_require=tests_require,
+      extras_require=dict(tests=tests_require),
       entry_points="""
       # -*- Entry points: -*-
       [z3c.autoinclude.plugin]
-      target = opengever
+      target = plone
       """,
       )

@@ -25,7 +25,7 @@ def task_id_checkbox_helper(item, value):
         }
 
     return '<input %s />' % ' '.join(['%s="%s"' % (k, v)
-                                      for k, v in attrs.items()])
+                                      for k, v in sorted(attrs.items())])
 
 
 def author_cache_key(m, i, author):
