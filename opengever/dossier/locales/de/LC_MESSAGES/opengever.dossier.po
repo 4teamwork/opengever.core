@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2011-05-19 16:30+0000\n"
+"POT-Creation-Date: 2011-05-24 13:11+0000\n"
 "PO-Revision-Date: 2011-01-26 11:25+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -97,6 +97,10 @@ msgstr "Projektdossier"
 #: ./opengever/dossier/browser/adjust_sequence.py:76
 msgid "Sequence number generator hasn't been initialized yet"
 msgstr ""
+
+#: ./opengever/dossier/menu.py:25
+msgid "Subdossier"
+msgstr "Subdossier"
 
 #: ./opengever/dossier/profiles/default/types/opengever.dossier.templatedossier.xml
 msgid "Template Dossier"
