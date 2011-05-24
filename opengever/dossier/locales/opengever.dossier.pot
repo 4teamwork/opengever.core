@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2011-05-19 16:30+0000\n"
+"POT-Creation-Date: 2011-05-24 13:11+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -98,6 +98,10 @@ msgstr ""
 
 #: ./opengever/dossier/browser/adjust_sequence.py:76
 msgid "Sequence number generator hasn't been initialized yet"
+msgstr ""
+
+#: ./opengever/dossier/menu.py:25
+msgid "Subdossier"
 msgstr ""
 
 #: ./opengever/dossier/profiles/default/types/opengever.dossier.templatedossier.xml

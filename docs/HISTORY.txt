@@ -5,6 +5,11 @@ Changelog
 2.0b15
 ------
 
+* Issue #1016 Feedback Fokus: Subdossier eroeffnen
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1016/
+  [phgross]
+
+
 * Issue #1010 Feedback Fokus: Dossier: Übersicht: Angabe "Dokumente"
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1010/
   [phgross]
