@@ -5,6 +5,10 @@ Changelog
 2.0b16
 ------
 
+* Issue #1011 Feedback Fokus: Dossier / Subdossier
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1011/
+  [phgross]
+
 * Issue #759 Oracle Konfiguration: collation
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/759/
   [phgross]
