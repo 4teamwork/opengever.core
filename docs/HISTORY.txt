@@ -5,6 +5,10 @@ Changelog
 2.0b16
 ------
 
+* Issue #759 Oracle Konfiguration: collation
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/759/
+  [phgross]
+
 * Made sure self.full_length is always set on UsersListingTableSource
   [lgraf]
 

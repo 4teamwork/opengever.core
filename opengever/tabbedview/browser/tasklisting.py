@@ -166,6 +166,11 @@ class GlobalTaskTableSource(grok.MultiAdapter, BaseTableSource):
             for word in text.strip().split(' '):
                 term = '%%%s%%' % word
 
+                # Fixed Problems with the collation with the Oracle DB
+                # the case insensitive worked just every second time - now it works fine
+                # https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/759
+                query.session
+
                 query = query.filter(or_(*[field.like(term)
                                            for field in fields]))
 
