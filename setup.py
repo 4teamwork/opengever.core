@@ -8,6 +8,7 @@ tests_require = [
     'plone.app.testing',
     ]
 
+
 setup(name='opengever.tabbedview',
       version=version,
       description="opengever integration for ftw.tabbedview (Maintainer %s)" % \
