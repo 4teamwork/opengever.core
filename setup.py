@@ -38,6 +38,7 @@ setup(name='opengever.tabbedview',
         'opengever.globalindex',
         'opengever.task',
         'opengever.base',
+        'plone.app.async',
           #'collective.jqhistory'
           # -*- Extra requirements: -*-
       ],

@@ -33,7 +33,10 @@ from opengever.tabbedview.helper import readable_ogds_author
 from opengever.tabbedview.helper import task_id_checkbox_helper
 from opengever.tabbedview.helper import workflow_state
 from opengever.task.helper import task_type_helper
-
+import zc.async.interfaces
+from zope.app.component.hooks import setSite
+from Products.CMFCore.utils import getToolByName
+from opengever.tabbedview.helper import queue_view_helper
 
 class IAsyncTableSourceConfig(ITableSourceConfig):
     """Marker interface for table source configurations using the
@@ -63,6 +66,7 @@ class QueueListingTab(grok.CodeView, OpengeverTab,
 
         {'column': 'name',
          'column_title': _(u'column_name', default=u'Name'),
+         'transform': queue_view_helper
          },
 
         {'column': 'length',
@@ -70,6 +74,7 @@ class QueueListingTab(grok.CodeView, OpengeverTab,
          },
 
         )
+
 
     __call__ = ListingView.__call__
     update = ListingView.update
@@ -79,7 +84,6 @@ class QueueListingTab(grok.CodeView, OpengeverTab,
 class AsyncControlPanel(grok.View, TabbedView):
     """zc.async control panel tabbed view.
     """
-
     grok.context(IPloneSiteRoot)
     grok.name('async-controlpanel')
     grok.require('cmf.ManagePortal')
@@ -120,10 +124,15 @@ class AsyncAllTasks(QueueListingTab):
         """
         context = self.context
         catalog = context.portal_catalog
-        query = catalog(portal_type="opengever.document.document")
-        query = [{'name':'foo', 'length': 5},
-                 {'name':'bar', 'length': 9},
-                 ]
+        portal_url = getToolByName(context, 'portal_url')
+        portal = portal_url.getPortalObject()
+        setSite(portal)
+        conn = portal._p_jar
+        root = conn.root()
+        queues = root[zc.async.interfaces.KEY]
+        query = []
+        for k, v in queues.items():
+            query.append({'name':k,'length':len(v)})
         return query
 
 
