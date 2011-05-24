@@ -12,15 +12,4 @@
         <permission>Manage portal</permission>
     </configlet>
 
-    <configlet title="Async Control Panel"
-               action_id="async-controlpanel"
-               appId="opengever.tabbedview"
-               category="Products"
-               url_expr="string:${portal_url}/@@async-controlpanel"
-               condition_expr=""
-               icon_expr="string:$portal_url/++resource++plone.app.registry/icon.png"
-               visible="True">
-        <permission>Manage portal</permission>
-    </configlet>
-
 </object>

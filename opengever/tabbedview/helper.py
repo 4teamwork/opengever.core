@@ -185,8 +185,3 @@ def overdue_date_helper(item, date):
     class_attr = overdue and 'class="overdue"' or ''
     return """<span %s>%s</span>""" % (class_attr, formatted_date)
 
-def queue_view_helper(item, value):
-    site = getSite()
-    return """<a href='%s/jobs_view?%s'>%s</a>""" %(site.absolute_url(),value,value)
-
-
