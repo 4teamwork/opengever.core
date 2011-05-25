@@ -47,7 +47,7 @@ class DossierDetailsPDF(BasePDFListing):
         data['reference'] = IReferenceNumber(self.context).get_number()
         seq = getUtility(ISequenceNumber)
         data['sequence'] = str(seq.get_number(self.context))
-        data['filing_no'] = str(getattr(self.context, 'filing_no', ''))
+        data['filing_no'] = str(getattr(IDossier(self.context), 'filing_no', ''))
 
         # buildout a kind of breadcrumbs with all parental repository folders
         repository = []

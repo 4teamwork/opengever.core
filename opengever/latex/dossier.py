@@ -85,7 +85,7 @@ class DossierLatexConverter(LatexCTConverter,grok.CodeView,AutoFields):
         end = end==None and '-' or end
         registry = queryUtility(IRegistry)
         proxy = registry.forInterface(IBaseClientID)
-        filling_no = getattr(IDossierMarker(context), 'filing_no', None)
+        filling_no = getattr(IDossier(context), 'filing_no', None)
         fillingNumber = ""
 
         self.view = view
