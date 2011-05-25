@@ -3,7 +3,6 @@ from Products.CMFCore.utils import getToolByName
 from Products.MimetypesRegistry.common import MimeTypeException
 from collective import dexteritytextindexer
 from collective.elephantvocabulary import wrap_vocabulary
-from datetime import datetime
 from five import grok
 from ftw.datepicker.widget import DatePickerFieldWidget
 from opengever.base.interfaces import IReferenceNumber, ISequenceNumber
@@ -115,7 +114,7 @@ class IDocumentSchema(form.Schema):
     document_date = schema.Date(
         title = _(u'label_document_date', default='Document Date'),
         description = _(u'help_document_date', default=''),
-        required = True,
+        required = False,
         )
     #workaround because ftw.datepicker wasn't working
     form.widget(document_date = DatePickerFieldWidget)
@@ -224,10 +223,6 @@ class IDocumentSchema(form.Schema):
     # TODO: doesn't work with Plone 4
     #form.order_after(**{'IRelatedItems.relatedItems': 'file'})
 
-@form.default_value(field=IDocumentSchema['document_date'])
-def documentDateDefaultValue(data):
-    """Set today's date as default for document_data"""
-    return datetime.today()
 
 class Document(Item):
 

@@ -10,7 +10,7 @@
 			<th i18n:translate="label_document">document</th>
 			<td tal:content="context/title"/>
 		    </tr>
-		<tr tal:condition="python: view.w['document_date'].value">
+		<tr tal:condition="python: view.w['document_date'].value != ('', '', '')">
 			<th i18n:translate="label_document_date">Document Date</th>
 			<td tal:content="structure view/w/document_date/render"/>
 		</tr>
