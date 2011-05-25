@@ -5,6 +5,10 @@ Changelog
 2.0b16
 ------
 
+* Issue #1031 Direkter Checkout Aufruf aus Dokumentenliste heraus
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1031/
+  [phgross]
+
 * Issue #1024 Feedback Fokus: Aufgabe: Reiter Allgemein
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1024/
   [phgross]
