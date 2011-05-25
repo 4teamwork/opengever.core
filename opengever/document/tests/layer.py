@@ -5,7 +5,7 @@ from opengever.ogds.base.model.client import Client
 from plone.registry.interfaces import IRegistry
 from zope.component import getUtility
 import collective.testcaselayer.ptc
-
+from opengever.ogds.base.setuphandlers import _create_example_client
 
 ptc.setupPloneSite()
 
@@ -18,6 +18,20 @@ class IntegrationTestLayer(collective.testcaselayer.ptc.BasePTCLayer):
         # Install the opengever.document product
         self.addProfile('opengever.document:default')
         self.addProfile('opengever.document:tests')
+
+    def testSetUp(self):
+        # setup the sql tables
+        create_sql_tables()
+        session = create_session()
+        session = create_session()
+
+        _create_example_client(session, 'plone',
+                              {'title': 'Plone',
+                              'ip_address': '127.0.0.1',
+                              'site_url': 'http://nohost/plone',
+                              'public_url': 'http://nohost/plone',
+                              'group': 'og_mandant1_users',
+                              'inbox_group': 'og_mandant1_inbox'})
 
 Layer = IntegrationTestLayer([collective.testcaselayer.ptc.ptc_layer])
 
