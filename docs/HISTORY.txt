@@ -5,6 +5,11 @@ Changelog
 2.0b16
 ------
 
+* Issue #1031 Direkter Checkout Aufruf aus Dokumentenliste heraus
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1031/
+  added external_edit_link helper and add column to documents listing
+  [phgross]
+
 * Issue #1011 Feedback Fokus: Dossier / Subdossier
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1011/
   [phgross]
