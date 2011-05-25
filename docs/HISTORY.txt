@@ -4,6 +4,10 @@ Changelog
 
 2.0b6
 -----
+* Issue #984 E-Mail: Extrahieren von Dokumenten. Auswahl Alle, Keine ermöglichen
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/984
+  Select all / none in attachment extraction page
+  [fsprenger] 
 
 * Issue #983 E-Mail: Extrahieren von Dokumenten. Fehler bei Autor und Dokumentdatum
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/983

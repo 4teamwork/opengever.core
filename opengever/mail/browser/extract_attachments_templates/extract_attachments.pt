@@ -9,16 +9,12 @@
       <metal:js fill-slot="javascript_head_slot">
         <script type="text/javascript">
 
-        (function($) {    
-              $("#select_all a").live("click", function(e) {
+        (function($) {
+              $("a#all").live("click", function(e) {
                   $("input[type=checkbox]").selected(true);
-                  $("#select_all").hide();
-                  $("#foldercontents-clearselection").show();
                   e.preventDefault();
               });
-              $("#foldercontents-clearselection a").live("click", function(e){
-                  $("#select_all").show();
-                  $("#foldercontents-clearselection").hide();
+              $("a#none").live("click", function(e){
                   $("input[type=checkbox]").selected(false);
                   e.preventDefault();
               }); 
@@ -51,16 +47,12 @@
               <div class="formHelp" i18n:translate="help_select_attachments">
                 Select the attachments to extract.
               </div>
-              <div i18n:domain="plone" id="select_all">
-                  <b i18n:translate="label_select">Select:</b> 
-                  <a i18n:translate="label_all" href="#">All</a>
-              </div>
-              <div i18n:domain="plone" id="foldercontents-clearselection"
-                   style="display:none">
-                  <a i18n:translate="tableheading_clear_selection"
-                     href="#">Clear selection</a>                  
-              </div>
-
+              <p i18n:domain="opengever.tabbedview" >
+                  <span i18n:translate="Choose:">Choose</span>: 
+                  <a i18n:translate="all" href="#" id="all">All</a>
+                  <a i18n:translate="none" href="#" id="none">None</a>
+              </p>
+              
               <table tal:replace="structure view/render_attachment_table" />
             </div>
 
