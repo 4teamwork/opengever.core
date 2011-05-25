@@ -5,6 +5,11 @@ Changelog
 2.0b14
 ------
 
+* Issue #1031 Direkter Checkout Aufruf aus Dokumentenliste heraus
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1031/
+  added editing_document view
+  [phgross]
+
 * Issue #1018 Feedback Fokus: Autor leer lassen
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1018/
   [phgross]
