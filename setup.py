@@ -45,6 +45,9 @@ setup(name='opengever.tabbedview',
         'opengever.task',
         'plone.app.dexterity',
         'z3c.autoinclude',
+        'plone.app.async',
+          #'collective.jqhistory'
+          # -*- Extra requirements: -*-
       ],
       tests_require=tests_require,
       extras_require=dict(tests=tests_require),
