@@ -45,23 +45,23 @@ test view:
 
 create a contact:
 
-    >>> browser.open('http://nohost/plone/opengever.contact.contactfolder/folder_factories')
+    >>> browser.open('http://nohost/plone/foobar/folder_factories')
     >>> browser.getControl('Contact').click()
     >>> browser.getControl('Add').click()
 
     >>> browser.url
-    'http://nohost/plone/opengever.contact.contactfolder/++add++opengever.contact.contact'
+    'http://nohost/plone/foobar/++add++opengever.contact.contact'
     >>> browser.getControl('Firstname').value = 'lorem'
     >>> browser.getControl('Save').click()
 
     >>> browser.url
-    'http://nohost/plone/opengever.contact.contactfolder/++add++opengever.contact.contact'
+    'http://nohost/plone/foobar/++add++opengever.contact.contact'
     >>> browser.getControl('Firstname').value = 'Hanspeter'
     >>> browser.getControl('Lastname').value = 'Walter'
     >>> browser.getControl('Description').value = 'Lorem ipsum, bla bla'
     >>> browser.getControl('Save').click()
     >>> browser.url
-    'http://nohost/plone/opengever.contact.contactfolder/opengever.contact.contact/contact_view'
+    'http://nohost/plone/foobar/walter-hanspeter/contact_view'
     
 
 test searchabelText indexing
@@ -86,7 +86,7 @@ helper:
     ...     return data['SearchableText']
 
     >>> obj = portal.get(
-    ...     'opengever.contact.contactfolder').get(
-    ...         'opengever.contact.contact')
+    ...     'foobar').get(
+    ...         'walter-hanspeter')
     >>> getSearchableText(obj)
     ['walter', 'hanspeter']
