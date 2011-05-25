@@ -4,6 +4,12 @@ Changelog
 
 2.0b6
 -----
+
+* Issue #1021 Feedback Fokus: Datum bei Dokument
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1021/
+  remove document_date setter in extract_attachements
+  [phgross]
+
 * Issue #984 E-Mail: Extrahieren von Dokumenten. Auswahl Alle, Keine ermöglichen
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/984
   Select all / none in attachment extraction page

@@ -1,7 +1,6 @@
 import os.path
 
 from Acquisition import aq_inner, aq_parent
-from DateTime import DateTime
 from five import grok
 from plone.dexterity.utils import createContentInContainer
 from plone.dexterity.utils import iterSchemata
@@ -18,7 +17,6 @@ from zope.schema import getFieldsInOrder
 
 from ftw.mail.mail import IMail
 from ftw.mail.utils import get_attachments
-from ftw.mail.utils import get_header
 from ftw.mail.utils import remove_attachments
 from ftw.table.interfaces import ITableGenerator
 from opengever.mail import _
@@ -170,9 +168,6 @@ class ExtractAttachments(grok.View):
     def extract_attachments(self, positions, delete_action):
         dossier = self.find_parent_dossier()
 
-        mail = self.context
-        mail_date = get_header(mail.msg, 'Date')
-
         attachments_to_extract = filter(
             lambda att: att.get('position') in positions,
             get_attachments(self.context.msg))
@@ -184,7 +179,6 @@ class ExtractAttachments(grok.View):
 
             kwargs = {'title': filename[:filename.rfind('.')].decode('utf-8'),
                       'file': self.get_attachment_as_namedfile(pos),
-                      'document_date': DateTime(mail_date),
                       'keywords': ()}
 
             doc = createContentInContainer(dossier,
