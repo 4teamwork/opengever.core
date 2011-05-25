@@ -1,7 +1,6 @@
 from Acquisition import aq_inner
 from Products.CMFCore.utils import getToolByName
 from Products.MimetypesRegistry.common import MimeTypeException
-from ZODB.POSException import ConflictError
 from collective import dexteritytextindexer
 from collective.elephantvocabulary import wrap_vocabulary
 from datetime import datetime
@@ -13,7 +12,6 @@ from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.tabbedview.browser.tabs import OpengeverTab
 from opengever.tabbedview.browser.tabs import Tasks
-from plone.app.dexterity.behaviors.metadata import IBasic
 from plone.app.iterate.interfaces import IWorkingCopy
 from plone.app.layout.viewlets.interfaces import IBelowContentTitle
 from plone.app.versioningbehavior.behaviors import IVersionable
@@ -24,7 +22,6 @@ from plone.directives.dexterity import DisplayForm
 from plone.i18n.normalizer.interfaces import IIDNormalizer
 from plone.indexer import indexer
 from plone.namedfile.field import NamedFile
-from plone.namedfile.interfaces import INamedFileField
 from plone.supermodel.interfaces import FIELDSETS_KEY
 from plone.supermodel.model import Fieldset
 from plone.z3cform.textlines.textlines import TextLinesFieldWidget
@@ -232,16 +229,6 @@ def documentDateDefaultValue(data):
     """Set today's date as default for document_data"""
     return datetime.today()
 
-@form.default_value(field=IDocumentSchema['document_author'])
-def document_author_default_value(data):
-    user = data.context.portal_membership.getAuthenticatedMember()
-    info = getUtility(IContactInformation)
-    user = user.getId()
-    if info.is_user(user) or info.is_contact(user):
-        return info.describe(user)
-    else:
-        return user
-
 class Document(Item):
 
     # disable file preview creation when modifying or creating document
@@ -392,8 +379,10 @@ grok.global_adapter( checked_out, name='checked_out' )
 def sortable_author(obj):
     """Index to allow users to sort on document_author."""
     author = obj.document_author
-    readable_author = readable_ogds_author(obj, author)
-    return readable_author
+    if author:
+        readable_author = readable_ogds_author(obj, author)
+        return readable_author
+    return ''
 grok.global_adapter( sortable_author, name='sortable_author' )
 
 
@@ -430,8 +419,9 @@ class View(dexterity.DisplayForm):
 
     def author_link(self):
         info = getUtility(IContactInformation)
-        return info.render_link(self.context.document_author)
-
+        if self.context.document_author:
+            return info.render_link(self.context.document_author)
+        return None
 
 class ForwardViewlet(grok.Viewlet):
     """Display the message subject
