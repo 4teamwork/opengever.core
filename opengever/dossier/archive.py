@@ -1,6 +1,6 @@
 from Acquisition import aq_inner, aq_parent
 from collective.elephantvocabulary import wrap_vocabulary
-from datetime import datetime, date
+from datetime import date
 from five import grok
 from ftw.datepicker.widget import DatePickerFieldWidget
 from ftw.table.catalog_source import default_custom_sort
@@ -134,8 +134,9 @@ def filing_year_default_value(data):
         return None
     else:
         documents = default_custom_sort(documents, 'document_date', True)
-        return str(documents[0].getObject().document_date.year)
-
+        if documents[0].getObject().document_date:
+            return str(documents[0].getObject().document_date.year)
+        return None
 
 class ArchiveForm(directives_form.Form):
     grok.context(IDossierMarker)

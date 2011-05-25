@@ -163,7 +163,8 @@ class DossierContainer(Container):
         children = self.getChildNodes()
         for child in children:
             if child.portal_type == "opengever.document.document":
-                end_dates.append(child.document_date)
+                if child.document_date:
+                    end_dates.append(child.document_date)
             elif IDossierMarker.providedBy(child):
                 end_dates.append(child.computeEndDate())
 
