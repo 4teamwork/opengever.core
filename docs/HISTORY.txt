@@ -5,6 +5,10 @@ Changelog
 2.0b15
 ------
 
+* Issue #1018 Feedback Fokus: Autor leer lassen
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1018/
+  [phgross]
+
 * Issue #1016 Feedback Fokus: Subdossier eroeffnen
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1016/
   [phgross]

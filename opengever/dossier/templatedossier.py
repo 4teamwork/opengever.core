@@ -78,7 +78,7 @@ class TemplateDocumentFormView(grok.View):
                 newdoc.creation_date = DateTime()
                 newdoc.document_date = date.today()
                 newdoc.creators = (member.title_or_id(), )
-                newdoc.document_author = member.title_or_id()
+                newdoc.document_author = None
                 newdoc.manage_delLocalRoles(
                     [u for u, r in newdoc.get_local_roles()])
                 newdoc.manage_setLocalRoles(
