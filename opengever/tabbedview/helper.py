@@ -189,6 +189,8 @@ def overdue_date_helper(item, date):
 def external_edit_link(item, value):
     """Return a link Tag to the checkout_documents view,
     with the external_edit mode selected """
+    if item.portal_type != 'opengever.document.document':
+        return ''
     #item = hasattr(item, 'aq_explicit') and item.aq_explicit or item
     if hasattr(item, 'getURL'):
         url = item.getURL()
