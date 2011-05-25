@@ -170,16 +170,8 @@ class ExtractAttachments(grok.View):
     def extract_attachments(self, positions, delete_action):
         dossier = self.find_parent_dossier()
 
-        # info = getUtility(IContactInformation)
-        # mtool = getToolByName(self.context, 'portal_membership')
-        # member = mtool.getAuthenticatedMember()
-        # document_author = info.describe(member.getId())
-
         mail = self.context
-        mail_author = get_header(mail.msg, 'From')
         mail_date = get_header(mail.msg, 'Date')
-
-        document_author = mail_author
 
         attachments_to_extract = filter(
             lambda att: att.get('position') in positions,
@@ -193,7 +185,6 @@ class ExtractAttachments(grok.View):
             kwargs = {'title': filename[:filename.rfind('.')].decode('utf-8'),
                       'file': self.get_attachment_as_namedfile(pos),
                       'document_date': DateTime(mail_date),
-                      'document_author': document_author,
                       'keywords': ()}
 
             doc = createContentInContainer(dossier,
@@ -277,7 +268,6 @@ class ExtractAttachments(grok.View):
                          contentType=attachment.get_content_type(),
                          filename=attachment.get_filename().decode('utf-8'))
 
-
     def find_parent_dossier(self):
         """Returns the first parent dossier relative to the current context.
         """
@@ -291,5 +281,3 @@ class ExtractAttachments(grok.View):
                                   'parent dossier.')
 
         return obj
-
-

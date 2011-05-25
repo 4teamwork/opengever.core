@@ -7,6 +7,13 @@ Changelog
 
 * Issue #983 E-Mail: Extrahieren von Dokumenten. Fehler bei Autor und Dokumentdatum
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/983
+  Issue #1018 Feedback Fokus: Autor leer lassen
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1018/
+  remove document_author setter in extract_attachements
+  [phgross]
+
+* Issue #983 E-Mail: Extrahieren von Dokumenten. Fehler bei Autor und Dokumentdatum
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/983
   Implemented setting author and date of documents extracted from mails to mail from and date
   [lgraf]
 
