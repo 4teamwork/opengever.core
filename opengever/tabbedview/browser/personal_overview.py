@@ -128,7 +128,8 @@ class MyDossiers(Dossiers):
     types = ['opengever.dossier.businesscasedossier',
              'opengever.dossier.projectdossier',]
 
-    search_options = {'responsible': authenticated_member,}
+    search_options = {'responsible': authenticated_member, 
+                      'is_subdossier':False}
 
     enabled_actions = ['pdf_dossierlisting']
     major_actions = ['pdf_dossierlisting']

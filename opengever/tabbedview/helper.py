@@ -185,8 +185,27 @@ def overdue_date_helper(item, date):
     class_attr = overdue and 'class="overdue"' or ''
     return """<span %s>%s</span>""" % (class_attr, formatted_date)
 
+
 def queue_view_helper(item, value):
     site = getSite()
     return """<a href='%s/jobs_view?queue=%s'>%s</a>""" %(site.absolute_url(),value,value)
 
 
+def external_edit_link(item, value):
+    """Return a link Tag to the checkout_documents view,
+    with the external_edit mode selected """
+    if item.portal_type != 'opengever.document.document':
+        return ''
+    #item = hasattr(item, 'aq_explicit') and item.aq_explicit or item
+    if hasattr(item, 'getURL'):
+        url = item.getURL()
+    elif hasattr(item, 'absolute_url'):
+        url = item.absolute_url()
+    else:
+        return ''
+
+    url = '%s/editing_document' % url
+    icon = '%s/icon_funktion_editieren.gif' % item.portal_url()
+
+    return '<a id="%s" href="%s" class="function-edit"><img src="%s"></a>' % (
+        item.id, url, icon)

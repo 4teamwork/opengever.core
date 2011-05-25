@@ -8,7 +8,7 @@ from opengever.ogds.base.interfaces import IContactInformation
 from opengever.tabbedview import _
 from opengever.tabbedview.helper import readable_date_set_invisibles
 from opengever.tabbedview.helper import readable_ogds_author, linked
-from opengever.tabbedview.helper import readable_date
+from opengever.tabbedview.helper import readable_date, external_edit_link
 from opengever.tabbedview.helper import workflow_state
 from opengever.tabbedview.helper import overdue_date_helper
 
@@ -148,6 +148,9 @@ class Documents(OpengeverCatalogListingTab):
 
         {'column':'containing_subdossier',
          'column_title':_('label_subdossier', default="Subdossier"),},
+
+        ('', external_edit_link),
+
         )
 
     enabled_actions = [
