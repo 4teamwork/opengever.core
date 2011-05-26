@@ -4,18 +4,19 @@ Check the indexers of a document
     >>> from plone.dexterity.utils import createContentInContainer
     >>> from zope.component import getUtility
     >>> from plone.app.testing import TEST_USER_NAME, setRoles
-    >>> from opengever.document.document import document_author, sortable_author
+    >>> from opengever.document.document import document_author, sortable_author, document_date
+    >>> import datetime
 
 Create a document and check the indexers document_author and sortable_author: 
 
-    >>> doc1 = createContentInContainer(folder, 'opengever.document.document', title=u"Doc One", document_author=u'Hugo Boss')
+    >>> doc1 = createContentInContainer(folder, 'opengever.document.document', 
+    ...     title=u"Doc One", document_author=u'Hugo Boss', document_date=datetime.date(2011,1,1))
     >>> doc1
     <Document at /plone/Members/test_user_1_/document-1>
     >>> document_author(doc1)()
     'Hugo Boss'
     >>> sortable_author(doc1)()
     u'Hugo Boss'
-
 
 Second document without a author
 
@@ -39,3 +40,11 @@ Should also work with non-ascii characters
     >>> sortable_author(doc3)()
     u'H\xfcgo B\xf6ss'
 
+
+check also the docuent_date indexer, should also work with No value:
+    >>> document_date(doc1)() == datetime.date (2011,1,1)
+    True
+
+    >>> document_date(doc2)() == None
+    True
+    
