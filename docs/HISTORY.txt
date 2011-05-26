@@ -5,6 +5,10 @@ Changelog
 2.0b14
 ------
 
+* Issue #1012 Feedback Fokus: Dokument: kopieren
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1012
+  [phgross]
+
 * Issue #1021 Feedback Fokus: Datum bei Dokument
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1021/
   set document_date to optional, remove default_value, fixed views

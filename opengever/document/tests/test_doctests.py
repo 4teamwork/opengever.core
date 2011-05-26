@@ -11,6 +11,7 @@ MODULENAMES = ()
 TESTFILES = (
     'document_id.txt',
     'document_indexers.txt',
+    'copy_document.txt',
     )
 
 
