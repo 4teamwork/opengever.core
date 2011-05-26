@@ -23,7 +23,6 @@ class EditingDocument(grok.CodeView):
 
     def render(self):
         # check out the document
-        import pdb; pdb.set_trace( )
         manager = getMultiAdapter((self.context, self.request),
                                   ICheckinCheckoutManager)
 

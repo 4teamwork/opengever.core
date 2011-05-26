@@ -47,4 +47,4 @@ check also the docuent_date indexer, should also work with No value:
 
     >>> document_date(doc2)() == None
     True
-    
+
