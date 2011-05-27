@@ -202,7 +202,6 @@ def external_edit_link(item, value):
         return ''
 
     url = '%s/editing_document' % url
-    icon = '%s/icon_funktion_editieren.gif' % item.portal_url()
 
-    return '<a id="%s" href="%s" class="function-edit"><img src="%s"></a>' % (
-        item.id, url, icon)
+    return '<a id="%s" href="%s" class="function-edit"></a>' % (
+        item.id, url)
