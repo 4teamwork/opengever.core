@@ -6,4 +6,5 @@
   <column value="delivery_date" />
   <column value="checked_out" />
   <column value="related_items" />
+  <column value="document_mimetype" />
 </object>
