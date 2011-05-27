@@ -53,7 +53,7 @@ class DossierOverview(grok.View, OpengeverTab):
             'getURL': document.getURL,
             'alt': document.document_date and \
                 document.document_date.strftime('%d.%m.%Y') or '',
-            'getIcon': document.getIcon,
+            'getIcon': document.css_icon_class,
         } for document in documents]
         return self.catalog(
             ['opengever.document.document', 'ftw.mail.mail'])[:10]
@@ -83,7 +83,7 @@ class DossierOverview(grok.View, OpengeverTab):
         return [{
             'Title': info.describe(xx.contact),
             'getURL': info.get_profile_url(xx.contact),
-            'getIcon':'user.gif',
+            'getIcon':'function-user',
             }
             for xx in results]
 
@@ -92,3 +92,26 @@ class DossierOverview(grok.View, OpengeverTab):
 
     def render_globalindex_task(self, item):
         return indexed_task_link_helper(item, item.title)
+
+    def get_css_class(self, item):
+        """Return the css classes
+        """
+        return "%s %s" % ("rollover-breadcrumb", self._get_css_icon_class(item))
+
+    def _get_css_icon_class(self, item):
+        """Return the rigth css-class for the icon.
+        """
+        if not hasattr(item, 'portal_type'):
+            try:
+
+                return item['getIcon']
+            except KeyError:
+                return ""
+
+        mimetype = item.css_icon_class
+
+        if mimetype:
+            return mimetype
+        else:
+            return ""
+
