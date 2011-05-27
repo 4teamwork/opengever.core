@@ -5,6 +5,9 @@ Changelog
 2.0b16
 ------
 
+* Added css_icon_class handling
+  [27.05.2011, elio.schmutz]
+
 * Issue #1031 Direkter Checkout Aufruf aus Dokumentenliste heraus
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1031/
   added external_edit_link helper and add column to documents listing
