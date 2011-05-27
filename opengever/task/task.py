@@ -1,7 +1,4 @@
 from Acquisition import aq_parent, aq_inner
-from Products.CMFCore.interfaces import IActionSucceededEvent
-from Products.CMFCore.utils import getToolByName
-from Products.CMFPlone.CatalogTool import sortable_title
 from collective import dexteritytextindexer
 from datetime import datetime, timedelta
 from five import grok
@@ -20,8 +17,8 @@ from opengever.tabbedview.browser.tabs import Documents
 from opengever.tabbedview.browser.tabs import OpengeverTab
 from opengever.tabbedview.helper import readable_date, external_edit_link
 from opengever.tabbedview.helper import readable_ogds_author
-from opengever.task import _
 from opengever.task import util
+from opengever.task import _
 from opengever.task.helper import linked
 from opengever.task.helper import path_checkbox
 from opengever.task.interfaces import ISuccessorTaskController
@@ -29,7 +26,11 @@ from operator import attrgetter
 from plone.dexterity.content import Container
 from plone.directives import form, dexterity
 from plone.directives.dexterity import DisplayForm
+from plone.i18n.normalizer.interfaces import IIDNormalizer
 from plone.indexer import indexer
+from Products.CMFCore.interfaces import IActionSucceededEvent
+from Products.CMFCore.utils import getToolByName
+from Products.CMFPlone.CatalogTool import sortable_title
 from z3c.relationfield.schema import RelationChoice, RelationList
 from zc.relation.interfaces import ICatalog
 from zope import schema
@@ -246,6 +247,16 @@ class Task(Container):
     def client_id(self):
         return get_client_id()
 
+    def css_icon_class(self):
+        """Return the normalized portal-type
+           for the catalog
+        """
+        type_ = "contenttype"
+        normalize_method = getUtility(IIDNormalizer).normalize
+
+        contenttype = self.portal_type
+
+        return "%s-%s" % (type_, normalize_method(contenttype))
 
 @form.default_value(field=ITask['deadline'])
 def deadlineDefaultValue(data):
@@ -397,7 +408,7 @@ class RelatedDocumentsTableSource(grok.MultiAdapter, BaseTableSource):
                 column = item
                 break
 
-        # when a transform exists for this column, we use it, since we 
+        # when a transform exists for this column, we use it, since we
         # want to sort what the user is seeing.
         transform = column.get('transform', None)
 

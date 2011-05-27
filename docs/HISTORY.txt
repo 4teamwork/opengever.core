@@ -5,6 +5,9 @@ Changelog
 2.0b16
 ------
 
+* Added new method for metatype: css_icon_class
+  [27.05.2011, elio.schmutz]
+
 * Issue #1031 Direkter Checkout Aufruf aus Dokumentenliste heraus
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1031/
   [phgross]
