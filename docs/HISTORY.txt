@@ -5,6 +5,9 @@ Changelog
 2.0b14
 ------
 
+* Temporarily disabled indexing of document contents
+  [lgraf]
+
 * Issue #1012 Feedback Fokus: Dokument: kopieren
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1012
   [phgross]

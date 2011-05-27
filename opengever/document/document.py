@@ -135,7 +135,7 @@ class IDocumentSchema(form.Schema):
         required=False,
         )
 
-    dexteritytextindexer.searchable('file')
+#    dexteritytextindexer.searchable('file')
     form.primary('file')
     file = NamedFile(
         title = _(u'label_file', default='File'),
