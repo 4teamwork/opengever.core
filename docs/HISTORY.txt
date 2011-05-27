@@ -5,6 +5,9 @@ Changelog
 2.0b15
 ------
 
+* Added new method for metatype: css_icon_class
+  [27.05.2011, elio.schmutz]
+
 * Issue #1021 Feedback Fokus: Datum bei Dokument
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1021/
    - adjust filing_year default value (work now also without a document_date)

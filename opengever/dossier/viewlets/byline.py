@@ -9,6 +9,7 @@ from opengever.mail.behaviors import IMailInAddressMarker, IMailInAddress
 from opengever.ogds.base.interfaces import IContactInformation
 
 
+
 class BusinessCaseByline(content.DocumentBylineViewlet):
     """ Specific DocumentByLine, for the Businesscasedossier Type"""
 
