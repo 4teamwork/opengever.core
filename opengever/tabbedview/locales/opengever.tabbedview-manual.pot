@@ -158,6 +158,9 @@ msgstr ""
 msgid "created"
 msgstr ""
 
+msgid "checkout_and_edit"
+msgstr ""
+
 #: ./opengever/tabbedview/browser/tabs_templates/generic.pt:13
 msgid "All visible entries chosen <a href=\"#\">x</a>"
 msgstr ""
