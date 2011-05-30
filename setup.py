@@ -8,6 +8,7 @@ tests_require = [
     'plone.app.testing',
     ]
 
+
 setup(name='opengever.tabbedview',
       version=version,
       description="opengever integration for ftw.tabbedview (Maintainer %s)" % \
@@ -44,6 +45,8 @@ setup(name='opengever.tabbedview',
         'opengever.task',
         'plone.app.dexterity',
         'z3c.autoinclude',
+          #'collective.jqhistory'
+          # -*- Extra requirements: -*-
       ],
       tests_require=tests_require,
       extras_require=dict(tests=tests_require),

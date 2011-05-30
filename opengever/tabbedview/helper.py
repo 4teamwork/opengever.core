@@ -186,6 +186,11 @@ def overdue_date_helper(item, date):
     return """<span %s>%s</span>""" % (class_attr, formatted_date)
 
 
+def queue_view_helper(item, value):
+    site = getSite()
+    return """<a href='%s/jobs_view?queue=%s'>%s</a>""" %(site.absolute_url(),value,value)
+
+
 def external_edit_link(item, value):
     """Return a link Tag to the checkout_documents view,
     with the external_edit mode selected """
