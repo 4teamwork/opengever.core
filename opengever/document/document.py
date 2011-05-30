@@ -235,28 +235,18 @@ class Document(Item):
             return '%s (Arbeitskopie)' % title
         return title
 
+    def surrender(self, relative_to_portal=0):
+        return super(Document, self).getIcon(relative_to_portal=relative_to_portal)
+
     def getIcon(self, relative_to_portal=0):
         """Calculate the icon using the mime type of the file
         """
-        surrender = lambda :super(Document, self).getIcon(relative_to_portal=relative_to_portal)
-        mtr   = getToolByName(self, 'mimetypes_registry', None)
         utool = getToolByName(self, 'portal_url')
 
-        field = self.file
-        if not field or not field.getSize():
-            # there is no file
-            return surrender()
-
-        # get icon by content type
-        contenttype       = field.contentType
-        mimetypeitem = None
-        try:
-            mimetypeitem = mtr.lookup(contenttype)
-        except MimeTypeException, msg:
-            LOG.error('MimeTypeException for %s. Error is: %s' % (self.absolute_url(), str(msg)))
+        mimetypeitem = self.get_mimetype()
         if not mimetypeitem:
-            # not found
-            return surrender()
+            return self.surrender(relative_to_portal)
+
         icon = mimetypeitem[0].icon_path
 
         if relative_to_portal:
@@ -273,6 +263,45 @@ class Document(Item):
         """
         return self.getIcon()
 
+    def css_icon_class(self):
+        """Return the normalized mimetype of
+           the attached file for the catalog
+        """
+        type_ = "mimetype"
+        normalize_method = getUtility(IIDNormalizer).normalize
+
+        mimetypeitem = self.get_mimetype()
+        if not mimetypeitem:
+            return "%s-plain" % type_
+
+        # Get the first mimetype-entry
+        mimetypes = mimetypeitem[0].mimetypes[0].split("/")
+        mimetype = mimetypes[len(mimetypes)-1]
+
+        return "%s-%s" % (type_, normalize_method(mimetype))
+
+    def get_mimetype(self):
+        """Return the mimetype as object. If there is no matching mimetype,
+           it returns False.
+        """
+        mtr   = getToolByName(self, 'mimetypes_registry', None)
+
+        field = self.file
+        if not field or not field.getSize():
+            # there is no file
+            return False
+
+        # get icon by content type
+        contenttype       = field.contentType
+        mimetypeitem = None
+        try:
+            mimetypeitem = mtr.lookup(contenttype)
+        except MimeTypeException, msg:
+            LOG.error('MimeTypeException for %s. Error is: %s' % (self.absolute_url(), str(msg)))
+        if not mimetypeitem:
+            # not found
+            return False
+        return mimetypeitem
 
 
 @indexer(IDocumentSchema)
