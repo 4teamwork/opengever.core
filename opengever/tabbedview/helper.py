@@ -79,7 +79,7 @@ def linked(item, value):
     elif hasattr(item, 'absolute_url'):
         url_method = item.absolute_url
 
-    cssClass = item.css_icon_class
+    css_class = item.css_icon_class
 
     breadcrumb_titles = []
     for elem in item.breadcrumb_titles:
@@ -89,7 +89,7 @@ def linked(item, value):
             breadcrumb_titles.append(elem.get('Title'))
 
     link = '<a class="rollover-breadcrumb %s" href="%s" title="%s">%s</a>' % (
-        cssClass, url_method(),
+        css_class, url_method(),
         " &gt; ".join(t for t in breadcrumb_titles),
         value.encode('utf-8'))
 
