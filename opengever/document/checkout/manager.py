@@ -73,7 +73,6 @@ class CheckinCheckoutManager(grok.MultiAdapter):
         """Checks whether checkin is allowed for the current user on the
         adapted document.
         """
-
         # is it checked out?
         if not self.checked_out():
             return False
