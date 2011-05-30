@@ -17,7 +17,6 @@ class IntegrationTestLayer(collective.testcaselayer.ptc.BasePTCLayer):
         zcml.load_config('tests.zcml', opengever.document)
         # Install the opengever.document product
         self.addProfile('opengever.document:default')
-        self.addProfile('opengever.document:tests')
 
     def testSetUp(self):
         # setup the sql tables

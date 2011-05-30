@@ -1,0 +1,91 @@
+Test the checkout process and the different views wich are use during the checkout process
+==========================================================================================
+
+imports
+    >>> from plone.namedfile.file import NamedFile
+    >>> from plone.dexterity.utils import createContentInContainer
+    >>> from zope.component import getUtility
+    >>> from zope.component import getMultiAdapter
+    >>> import datetime
+    >>> from opengever.document.interfaces import ICheckinCheckoutManager
+    >>> from Testing import makerequest
+    >>> from Products.CMFCore.utils import getToolByName
+
+standard test stuff
+    >>> self.login()
+    >>> self.setRoles(['Manager','Editor','Contributor'])
+    >>> folder = makerequest.makerequest(folder)
+    >>> pr = getToolByName(folder,'portal_repository')
+
+
+obj2brain
+    >>> def obj2brain(obj):
+    ...     catalog = getToolByName(obj, 'portal_catalog')
+    ...     query = {'path': {'query': '/'.join(obj.getPhysicalPath()),
+    ...                       'depth': 0}}
+    ...     brains = catalog(query)
+    ...     if len(brains) == 0:
+    ...         raise Exception('Not in catalog: %s' % obj)
+    ...     else:
+    ...         return brains[0]
+
+
+create a document, and get the CheckinCheckoutManager for the document
+
+    >>> mok_file1 = NamedFile('bla bla', filename='test.txt')
+    >>> doc1 = createContentInContainer(folder, 'opengever.document.document', 
+    ...     title=u"Doc One", document_author=u'Hugo Boss', 
+    ...     document_date=datetime.date(2011,1,1), file=mok_file1)
+    >>> manager = getMultiAdapter((doc1, folder.REQUEST), ICheckinCheckoutManager)
+
+
+
+Checkout:
+_________
+
+checkout should now allowed, but just for a user with authorization
+    >>> manager.is_checkout_allowed()
+    True
+
+
+the annotations should be still empty
+    >>> manager.checked_out()
+
+checkout the document
+    >>> manager.checkout()
+    >>> manager.checked_out()
+    'test_user_1_'
+
+cancelling and checkin should be allowed for the 'test_user_1_'
+    >>> manager.is_checkin_allowed() and manager.is_cancel_allowed()
+    True
+    >>> manager.is_checkout_allowed()
+    False
+
+
+
+checkin and cancelling:
+_______________________
+
+    >>> mok_file2 = NamedFile('blubb blubb', filename="blubb.txt")
+    >>> doc1.file = mok_file2
+    >>> manager.checkin(comment="Test commit Nr. 1")
+
+    >>> import transaction
+    >>> transaction.commit()
+
+    >>> manager.checked_out()
+    >>> pr.retrieve(doc1, 1).object.file.filename
+    'blubb.txt'
+    >>> doc1.file == mok_file2
+    True
+
+    >>> manager.checkout()
+    >>> manager.checked_out()
+    'test_user_1_'
+
+    >>> manager.cancel()
+    >>> pr.getHistoryMetadata(doc1).retrieve(2)
+
+    >>> manager.checked_out() == None
+    True 
