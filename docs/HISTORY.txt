@@ -5,6 +5,8 @@ Changelog
 2.0b7
 -----
 
+* added css_icon_class and modified function linked to handle sprites
+  [30.05.2011, elio.schmutz]
 
 2.0b6
 -----

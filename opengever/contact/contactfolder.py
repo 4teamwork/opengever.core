@@ -17,12 +17,13 @@ def linked(item, value):
         url_method = item.getURL
     elif hasattr(item, 'absolute_url'):
         url_method = item.absolute_url
-    img = '<img src="%s/%s"/>' % (item.portal_url(),
-                                  item.getIcon.encode('utf-8'))
-    link = '%s&nbsp;<a href="%s">%s</a>' % (
-        img, url_method(),
+
+    css_class = item.css_icon_class
+
+    link = '<a href="%s">%s</a>' % (
+        url_method(),
         value and value.encode('utf-8') or '')
-    wrapper = '<span class="linkWrapper">%s</span>' % link
+    wrapper = '<span class="linkWrapper %s">%s</span>' % (css_class, link)
     return wrapper
 
 
