@@ -7,11 +7,12 @@ from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.interfaces import IConstrainTypeDecider, IDossierContainerTypes
 from plone.dexterity.content import Container
 from plone.dexterity.interfaces import IDexterityFTI
+from plone.i18n.normalizer.interfaces import IIDNormalizer
 from plone.registry.interfaces import IRegistry
 from Products.CMFCore.utils import getToolByName
 from Products.CMFDefault.interfaces import ICMFDefaultSkin
 from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
-from zope.component import queryMultiAdapter, queryUtility
+from zope.component import queryMultiAdapter, queryUtility, getUtility
 
 
 class DossierContainer(Container):
@@ -322,6 +323,16 @@ class DossierContainer(Container):
             # It's a main dossier
             return True
 
+    def css_icon_class(self):
+        """Return the normalized portal-type
+           for the catalog
+        """
+        type_ = "contenttype"
+        normalize_method = getUtility(IIDNormalizer).normalize
+
+        contenttype = self.portal_type
+
+        return "%s-%s" % (type_, normalize_method(contenttype))
 
 class DefaultConstrainTypeDecider(grok.MultiAdapter):
     grok.provides(IConstrainTypeDecider)
