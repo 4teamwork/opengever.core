@@ -10,9 +10,10 @@
                     <li tal:repeat="item items">
 
                         <tal:BRAIN tal:condition="nocall:item/getIcon|nothing">
-                            <img tal:attributes="src item/getIcon"
-                                 tal:condition="item/getIcon" />
-                            <a href="" class="rollover-breadcrumb" tal:attributes="href item/getURL|nothing; title item/alt|nothing" tal:omit-tag="not: item/getURL|nothing"><span tal:content="item/Title" /></a>
+
+                            <a href="" tal:attributes="href item/getURL|nothing;
+                                      				   title item/alt|nothing;
+                                                       class python:view.get_css_class(item)" tal:omit-tag="not: item/getURL|nothing"><span tal:content="item/Title" /></a>
                         </tal:BRAIN>
 
                         <tal:GLOBAL_INDEX tal:condition="not:nocall:item/getIcon|nothing">

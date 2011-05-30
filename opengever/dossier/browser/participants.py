@@ -59,7 +59,7 @@ def role_list_helper(item, value):
 
 
 def icon_helper(item, value):
-    return '<img src="user.gif" alt="" title="" border="0" />'
+    return "<span class='function-user' />"
 
 
 def base64_oid_checkbox_helper(item, value):
