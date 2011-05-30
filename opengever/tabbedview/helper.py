@@ -78,8 +78,8 @@ def linked(item, value):
         url_method = item.getURL
     elif hasattr(item, 'absolute_url'):
         url_method = item.absolute_url
-    img = '<img src="%s/%s"/>' % (item.portal_url(),
-                                  item.getIcon.encode('utf-8'))
+
+    cssClass = item.css_icon_class
 
     breadcrumb_titles = []
     for elem in item.breadcrumb_titles:
@@ -87,10 +87,12 @@ def linked(item, value):
             breadcrumb_titles.append(elem.get('Title').encode('utf-8'))
         else:
             breadcrumb_titles.append(elem.get('Title'))
-    link = '%s&nbsp;<a class="rollover-breadcrumb" href="%s" title="%s">%s</a>' % (
-        img, url_method(),
+
+    link = '<a class="rollover-breadcrumb %s" href="%s" title="%s">%s</a>' % (
+        cssClass, url_method(),
         " &gt; ".join(t for t in breadcrumb_titles),
         value.encode('utf-8'))
+
     wrapper = '<span class="linkWrapper">%s</span>' % link
     return wrapper
 
@@ -205,10 +207,8 @@ def external_edit_link(item, value):
         return ''
 
     url = '%s/editing_document' % url
-    icon = '%s/icon_funktion_editieren.gif' % item.portal_url()
 
-    return '<a id="%s" title="%s" href="%s" class="function-edit"><img src="%s"></a>' % (
+    return '<a id="%s" title="%s" href="%s" class="function-edit"></a>' % (
         item.id,
         getSite().translate('checkout_and_edit',domain="opengever.tabbedview"),
-        url,
-        icon)
+        url)
