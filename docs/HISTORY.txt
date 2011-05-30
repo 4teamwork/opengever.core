@@ -5,6 +5,9 @@ Changelog
 2.0b15
 ------
 
+* Moved adjust_sequence_numbers view to opengever.konsulmigration
+  [lgraf]
+
 * Added new method for metatype: css_icon_class
   [27.05.2011, elio.schmutz]
 
@@ -22,7 +25,6 @@ Changelog
 * Issue #1016 Feedback Fokus: Subdossier eroeffnen
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1016/
   [phgross]
-
 
 * Issue #1010 Feedback Fokus: Dossier: Übersicht: Angabe "Dokumente"
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1010/
