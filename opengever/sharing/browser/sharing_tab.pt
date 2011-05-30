@@ -27,9 +27,9 @@
           <td>
             <a tal:attributes="href string:list_groupmembers?group=${entry/id}"
                tal:omit-tag="not:is_group" class="link-overlay">
-              <img tal:condition="is_group" tal:replace="structure context/icon_objekt_kontaktgruppe.gif" />
-              <img tal:condition="not:is_group" tal:replace="structure context/user.gif" />
-              <tal:sticky condition="sticky">
+			  <span tal:condition="is_group" tal:attributes="class string:contenttype-opengever-contact-contactfolder" />
+			  <span tal:condition="not:is_group" tal:attributes="class string:function-user" />
+                <tal:sticky condition="sticky">
                 <span tal:replace="entry/title" />
               </tal:sticky>
               <tal:nonsticky condition="not:sticky">
@@ -44,9 +44,9 @@
           <td class="listingCheckbox"
               tal:repeat="role available_roles">
             <tal:block define="entry_role python:entry['roles'][role['id']]">
-              <img tal:condition="python:entry_role == 'global'" tal:replace="structure context/site_icon.gif" />
-              <img tal:condition="python:entry_role == 'acquired'" tal:replace="structure context/confirm_icon.gif" />
-              <img tal:condition="python:entry_role == True" tal:replace="structure context/confirm_icon.gif" />
+              <span tal:condition="python:entry_role == 'global'" tal:attributes="class string:function-site" />
+              <span tal:condition="python:entry_role == 'acquired'" tal:attributes="class string:function-ok" />
+              <span tal:condition="python:entry_role == True" tal:attributes="class string:function-ok" />
             </tal:block>
           </td>
         </tr>

@@ -5,6 +5,8 @@ Changelog
 2.0a5
 -----
 
+* added sprites css class for sharing-tab and sharing view
+  [30.05.2011, elio.schmutz]
 
 2.0a4
 -----

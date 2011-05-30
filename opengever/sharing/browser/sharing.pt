@@ -86,9 +86,8 @@
                         <td>
                             <a tal:attributes="href string:list_groupmembers?group=${entry/id}"
                                tal:omit-tag="not:is_group" class="link-overlay">
-                            <img tal:condition="is_group" tal:replace="structure context/icon_objekt_kontaktgruppe.gif" /> 
-                            <img tal:condition="not:is_group" tal:replace="structure context/user.gif" /> 
-
+							  <span tal:condition="is_group" tal:attributes="class string:contenttype-opengever-contact-contactfolder" />
+							  <span tal:condition="not:is_group" tal:attributes="class string:function-user" />
                             <tal:sticky condition="sticky">
                               <span tal:replace="entry/title" />
                             </tal:sticky>
@@ -116,8 +115,8 @@
                         <td class="listingCheckbox"
                             tal:repeat="role available_roles">
                             <tal:block define="entry_role python:entry['roles'][role['id']]">
-                                <img tal:condition="python:entry_role == 'global'" tal:replace="structure context/site_icon.gif" />
-                                <img tal:condition="python:entry_role == 'acquired'" tal:replace="structure context/confirm_icon.gif" />
+			              <span tal:condition="python:entry_role == 'global'" tal:attributes="class string:function-site" />
+			              <span tal:condition="python:entry_role == 'acquired'" tal:attributes="class string:function-ok" />
                                 <tal:block condition="python:entry_role in (True, False)">
                                   <input class="noborder"
                                          type="checkbox"
@@ -152,11 +151,9 @@
                 If you disable this, only the explicitly defined sharing permissions will
                 be valid.
                 In the overview, the symbol
-                <img i18n:name="image_confirm_icon"
-                     tal:replace="structure context/confirm_icon.gif" />
+				<span i18n:name="image_confirm_icon" tal:attributes="class string:function-ok" />
                 indicates an inherited value. Similarly, the symbol
-                <img i18n:name="image_link_icon"
-                     tal:replace="structure context/site_icon.gif" /> 
+				<span i18n:name="image_link_icon" tal:attributes="class string:function-site" />
                 indicates a global role, which is managed by the site administrator.
             </div>
         </div>
