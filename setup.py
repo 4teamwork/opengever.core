@@ -7,6 +7,7 @@ maintainer = 'Thomas Buchberger'
 tests_require = [
     'collective.testcaselayer',
     'opengever.task',
+    'opengever.document',
     'opengever.globalindex',
 ]
 
