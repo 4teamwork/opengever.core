@@ -79,7 +79,7 @@ def linked(item, value):
     elif hasattr(item, 'absolute_url'):
         url_method = item.absolute_url
 
-    css_class = item.css_icon_class
+    css_class = getattr(item, 'css_icon_class', '')
 
     breadcrumb_titles = []
     for elem in item.breadcrumb_titles:
