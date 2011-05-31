@@ -10,7 +10,7 @@
             title="Add task from template"
             category="folder_factories"
             url_expr="string:${object_url}/add-tasktemplate"
-            icon_expr="string:${object_url}/icon_objekt_prozess.gif"
+            icon_expr=""
             i18n:domain="opengever.tasktemplates">
         <permission value="Add portal content"/>
     </action>

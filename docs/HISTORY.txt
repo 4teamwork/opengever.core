@@ -5,6 +5,9 @@ Changelog
 2.0c5
 -----
 
+* Removed content_icons and icon_exprs - now done with sprites
+  [lgraf]
+
 * Using new readable_date helper from opengever.tabbedview
   [lgraf]
 
