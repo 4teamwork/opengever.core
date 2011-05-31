@@ -5,6 +5,9 @@ Changelog
 2.0b15
 ------
 
+* Removed content_icons and icon_expr's - now done with sprites
+  [lgraf]
+
 * Moved adjust_sequence_numbers view to opengever.konsulmigration
   [lgraf]
 

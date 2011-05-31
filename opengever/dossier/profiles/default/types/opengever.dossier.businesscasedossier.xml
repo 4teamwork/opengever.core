@@ -5,7 +5,7 @@
     <!-- Basic metadata -->
     <property name="title" i18n:translate="">Business Case Dossier</property>
     <property name="description" i18n:translate=""></property>
-    <property name="content_icon">icon_objekt_dossier.gif</property>
+    <property name="content_icon"></property>
     <property name="allow_discussion">False</property>
     <property name="global_allow">True</property>
     <property name="filter_content_types">True</property>
@@ -83,7 +83,7 @@
             title="Document with docucomposer"
             category="folder_factories"
             url_expr="string:${object_url}/docucomposer-wizard"
-            icon_expr="string:${object_url}/document_icon.gif"
+            icon_expr=""
             condition_expr=""
             i18n:domain="opengever.dossier">
         <permission value="Add portal content"/>
@@ -94,7 +94,7 @@
             title="document_with_template"
             category="folder_factories"
             url_expr="string:${object_url}/document_with_template"
-            icon_expr="string:${object_url}/document_icon.gif"
+            icon_expr=""
             condition_expr=""
             i18n:domain="opengever.dossier">
         <permission value="Add portal content"/>
@@ -105,7 +105,7 @@
             title="Add Participant"
             category="folder_factories"
             url_expr="string:${object_url}/@@add-participation"
-            icon_expr="string:${portal_url}/icon_objekt_kontakt.gif"
+            icon_expr=""
             condition_expr=""
             i18n:domain="opengever.dossier"
             i18n:attributes="title">
