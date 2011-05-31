@@ -5,6 +5,9 @@ Changelog
 2.0b7
 -----
 
+* Removed content_icon for contact and contactfolder FTIs (now done with sprites)
+  [lgraf]
+
 * added css_icon_class and modified function linked to handle sprites
   [30.05.2011, elio.schmutz]
 
