@@ -103,26 +103,26 @@
 			<tr i18n:domain="opengever.base">
 			    <th i18n:translate="label_classification">classification</th>
 			    <td>
-			        <div i18n:translate="" tal:content="context/classification" />
+			        <div i18n:translate="" tal:content="context/classification | nothing" />
 			    </td>
 			</tr>
 			<tr i18n:domain="opengever.base">
 			    <th i18n:translate="label_privacy_layer">privacy_layer</th>
 			    <td>
-			        <div i18n:translate="" tal:content="context/privacy_layer" />
+			        <div i18n:translate="" tal:content="context/privacy_layer | nothing" />
 			    </td>
 			</tr>
 			<tr i18n:domain="opengever.base">
 			    <th i18n:translate="label_public_trial">public_trial</th>
 			    <td>
-			        <div i18n:translate="" tal:content="context/public_trial" />
+			        <div i18n:translate="" tal:content="context/public_trial | nothing" />
 			    </td>
 			</tr>
 			<tr i18n:domain="opengever.base">
 			    <th i18n:translate="label_public_trial_statement">public_trial_statement</th>
 			    <td>
-			        <tal:statement tal:condition="context/public_trial_statement" tal:content="context/public_trial_statement" />
-			        <tal:statement tal:condition="not:context/public_trial_statement">-</tal:statement>
+			        <tal:statement tal:condition="context/public_trial_statement | nothing" tal:content="context/public_trial_statement" />
+			        <tal:statement tal:condition="not:context/public_trial_statement | nothing">-</tal:statement>
 			    </td>
 			</tr>
 		</table>
