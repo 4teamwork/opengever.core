@@ -5,7 +5,7 @@
     <!-- Basic metadata -->
     <property name="title" i18n:translate="">Task</property>
     <property name="description" i18n:translate=""></property>
-    <property name="content_icon">icon_objekt_aufgabe.gif</property>
+    <property name="content_icon"></property>
 
     <property name="allow_discussion">False</property>
     <property name="global_allow">True</property>
@@ -74,7 +74,7 @@
             title="Add response"
             category="folder_factories"
             url_expr="string:${object_url}/addresponse"
-            icon_expr="string:${object_url}/icon_objekt_bemerkung.gif"
+            icon_expr=""
             condition_expr="">
         <permission value="Add portal content"/>
     </action>
@@ -84,7 +84,7 @@
             title="Attach remote document"
             category="folder_factories"
             url_expr="string:${object_url}/@@choose_source_dossier"
-            icon_expr="string:${object_url}/icon_funktion_hochladen.gif"
+            icon_expr=""
             condition_expr="here/@@attach-document-allowed|nothing">
         <permission value="Add portal content"/>
     </action>

@@ -5,6 +5,9 @@ Changelog
 2.0b16
 ------
 
+* Removed content_icon and icon_exprs - now done with sprites
+  [lgraf]
+
 * Added new method for metatype: css_icon_class
   [27.05.2011, elio.schmutz]
 
