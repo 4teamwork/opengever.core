@@ -78,7 +78,7 @@ class EditingDocument(grok.CodeView):
             try:
                 obj = self.context.restrictedTraverse(obj_path)
             except KeyError:
-                return  '%s#documents' & self.context.absolute_url()
+                return  '%s#documents' % self.context.absolute_url()
 
             # redirect to right tabbedview-tab
             if ITask.providedBy(obj):
@@ -91,4 +91,4 @@ class EditingDocument(grok.CodeView):
                 return obj.absolute_url()
 
         else:
-            return  '%s#documents' & self.context.absolute_url()
+            return  '%s#documents' % self.context.absolute_url()
