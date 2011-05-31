@@ -5,6 +5,9 @@ Changelog
 2.0b14
 ------
 
+* Removed content_icon for document FTI - now done with sprites
+  [lgraf]
+
 * Temporarily disabled indexing of document contents
   [lgraf]
 
