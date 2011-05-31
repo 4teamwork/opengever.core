@@ -5,6 +5,9 @@ Changelog
 2.0a8
 -----
 
+* Removed content_icons for repositoryfolder and repositoryroot FTIs - now done with sprites
+  [lgraf]
+
 
 2.0a7
 -----
