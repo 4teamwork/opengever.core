@@ -10,6 +10,7 @@ from Products.PloneTestCase.ptc import PloneTestCase
 from opengever.document.tests.layer import Layer
 
 from opengever.document.document import IDocumentSchema
+from opengever.base.behaviors.classification import IClassification
 
 
 class TestDocumentIntegration(PloneTestCase):
@@ -44,12 +45,14 @@ class TestDocumentIntegration(PloneTestCase):
         field.set(d1, monk_file)
         self.assertTrue(field.get(d1).data == 'bla bla')
 
-    # def test_view(self):
-    #     self.folder.invokeFactory('opengever.document.document', 'document1')
-    #     d1 = self.folder['document1']
-    #     d1.keywords=()
-    #     view = d1.restrictedTraverse('@@view')
-    #     self.failUnless(view())
+    def test_views(self):
+        self.folder.invokeFactory('opengever.document.document', 'document1')
+        d1 = self.folder['document1']
+        d1.keywords=()
+        view = d1.restrictedTraverse('@@view')
+        self.failUnless(view())
+        tabbed_view = d1.restrictedTraverse('@@tabbed_view')
+        self.failUnless(tabbed_view())
 
 def test_suite():
     return unittest.defaultTestLoader.loadTestsFromName(__name__)
