@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2011-05-24 13:11+0000\n"
+"POT-Creation-Date: 2011-05-31 14:11+0000\n"
 "PO-Revision-Date: 2011-01-26 11:25+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -24,22 +24,10 @@ msgstr "Geschäftsdossier hinzufügen"
 msgid "Add Participant"
 msgstr "Beteiligung hinzufügen"
 
-#: ./opengever/dossier/browser/adjust_sequence.py:89
-msgid "Adjust"
-msgstr ""
-
-#: ./opengever/dossier/browser/adjust_sequence.py:57
-msgid "Adjust Dossier Sequence Number Counter"
-msgstr ""
-
 #. Default: "Business Case Dossier"
 #: ./opengever/dossier/profiles/default/types/opengever.dossier.businesscasedossier.xml
 msgid "Business Case Dossier"
 msgstr "Geschäftsdossier"
-
-#: ./opengever/dossier/browser/adjust_sequence.py:165
-msgid "Cancel"
-msgstr ""
 
 #: ./opengever/dossier/profiles/default/actions.xml
 msgid "Copy documents to remote client"
@@ -53,15 +41,11 @@ msgstr "Beteiligung löschen"
 msgid "Document ${name} is connected to a Task.                    Please move the Task."
 msgstr "Dokument ${name} ist mit einer Aufgabe verbunden, bitte Aufgabe verschieben."
 
-#: ./opengever/dossier/browser/adjust_sequence.py:29
-msgid "Enter the new value for the dossier sequence number counter"
-msgstr ""
-
 #: ./opengever/dossier/move_items.py:115
 msgid "Failed to copy following objects: ${failedObjects}"
 msgstr "Folgende Elemente konnten nicht verschoben werden: ${failedObjects}"
 
-#: ./opengever/dossier/archive.py:200
+#: ./opengever/dossier/archive.py:201
 msgid "Filing Prefix is required"
 msgstr "Das Ablage Präfix muss eingegeben werden"
 
@@ -69,17 +53,9 @@ msgstr "Das Ablage Präfix muss eingegeben werden"
 msgid "It isn't allowed to add such items there"
 msgstr "Sie dürfen dieses Objekt nicht an den Zielort verschieben"
 
-#: ./opengever/dossier/browser/adjust_sequence.py:58
-msgid "Modify the internal counter used for generating dossier sequence numbers"
-msgstr ""
-
 #: ./opengever/dossier/profiles/default/actions.xml
 msgid "Move Items"
 msgstr "Elemente verschieben"
-
-#: ./opengever/dossier/browser/adjust_sequence.py:119
-msgid "New value %s for sequence number counter will conflict with existing sequence number %s"
-msgstr ""
 
 #: ./opengever/dossier/archive.py:33
 msgid "Not all required fields are filled"
@@ -94,10 +70,6 @@ msgstr "Es sind keine Vorlagen vorhanden."
 msgid "Project Dossier"
 msgstr "Projektdossier"
 
-#: ./opengever/dossier/browser/adjust_sequence.py:76
-msgid "Sequence number generator hasn't been initialized yet"
-msgstr ""
-
 #: ./opengever/dossier/menu.py:25
 msgid "Subdossier"
 msgstr "Subdossier"
@@ -110,15 +82,15 @@ msgstr "Vorlagendossier"
 msgid "Templates"
 msgstr "Vorlagen"
 
-#: ./opengever/dossier/archive.py:269
+#: ./opengever/dossier/archive.py:270
 msgid "The Dossier has been resolved"
 msgstr "Das Dossier wurde erfolgreich abgeschlossen"
 
-#: ./opengever/dossier/archive.py:205
+#: ./opengever/dossier/archive.py:206
 msgid "The Dossier's end date needs to be younger than the youngest contained object's date"
 msgstr "Das angegebene Enddatum muss jünger sein als alle Enddaten der enthaltenen Subdossiers."
 
-#: ./opengever/dossier/archive.py:196
+#: ./opengever/dossier/archive.py:197
 msgid "The End that is required, also if only closing is selected"
 msgstr "Das Enddatum wird auch bei der Aktion 'nur abschliessen' benötigt"
 
@@ -138,11 +110,11 @@ msgstr "Das Beginn-Datum muss vor dem Ende-Datum liegen."
 msgid "The start or end date is invalid"
 msgstr "Das Beginn- oder Ende-Datum ist ungültig."
 
-#: ./opengever/dossier/base.py:281
+#: ./opengever/dossier/base.py:283
 msgid "The subdossier '${title}' has an invalid end date."
 msgstr "Das Subdossier '${title}' hat ein ungültiges End-Datum."
 
-#: ./opengever/dossier/base.py:290
+#: ./opengever/dossier/base.py:292
 msgid "The subdossier '${title}' needs to be resolved manually."
 msgstr "Das Subdossier '${title}' muss manuell abgeschlossen werden."
 
@@ -160,12 +132,12 @@ msgid "button_add"
 msgstr "Erstellen"
 
 #. Default: "Archive"
-#: ./opengever/dossier/archive.py:174
+#: ./opengever/dossier/archive.py:175
 msgid "button_archive"
 msgstr "Speichern"
 
 #. Default: "Cancel"
-#: ./opengever/dossier/archive.py:273
+#: ./opengever/dossier/archive.py:274
 #: ./opengever/dossier/behaviors/participation.py:167
 #: ./opengever/dossier/browser/transport.py:170
 msgid "button_cancel"
@@ -207,7 +179,7 @@ msgid "copy_documents_step_choose_dossier"
 msgstr "2. Zieldossier auswählen"
 
 #. Default: "create document with template"
-#: ./opengever/dossier/templatedossier.py:41
+#: ./opengever/dossier/templatedossier.py:40
 msgid "create_document_with_template"
 msgstr "Dokument aus Vorlage erstellen"
 
@@ -260,7 +232,7 @@ msgid "filing_year"
 msgstr "Ablage Jahr"
 
 #. Default: "Archive Dossier"
-#: ./opengever/dossier/archive.py:149
+#: ./opengever/dossier/archive.py:150
 msgid "heading_archive_form"
 msgstr "Dossier ablegen"
 
@@ -496,11 +468,6 @@ msgstr "Beginn:"
 msgid "label_target_dossier"
 msgstr "Ziel-Dossier"
 
-#. Default: "Target Repositories"
-#: ./opengever/dossier/browser/adjust_sequence.py:35
-msgid "label_target_repos"
-msgstr ""
-
 #. Default: "Template"
 #: ./opengever/dossier/templatedossier_templates/template_form.pt:21
 msgid "label_template"
@@ -521,23 +488,26 @@ msgstr "Status:"
 msgid "newest_documents"
 msgstr "Neuste Dokumente"
 
-#: ./opengever/dossier/base.py:212
+msgid "newest_tasks"
+msgstr "Neuste Aufgaben"
+
+#: ./opengever/dossier/base.py:214
 msgid "no valid end date provided"
 msgstr "Es wurde kein gültiges End-Datum angegeben."
 
-#: ./opengever/dossier/browser/overview_templates/overview.pt:27
+#: ./opengever/dossier/browser/overview_templates/overview.pt:28
 msgid "no_content"
 msgstr "Keine Inhalte"
 
-#: ./opengever/dossier/base.py:222
+#: ./opengever/dossier/base.py:224
 msgid "not all documents and tasks are stored in a subdossier"
 msgstr "Es sind nicht alle Dokumente und Aufgaben in Subdossiers abgelegt."
 
-#: ./opengever/dossier/base.py:228
+#: ./opengever/dossier/base.py:230
 msgid "not all documents are checked in"
 msgstr "Es sind nicht alle Dokumente eingecheckt"
 
-#: ./opengever/dossier/base.py:234
+#: ./opengever/dossier/base.py:236
 msgid "not all task are closed"
 msgstr "Es sind nicht alle Aufgaben abgeschlossen"
 
@@ -571,7 +541,7 @@ msgstr "Ablagenummer vergeben"
 msgid "sharing"
 msgstr "Beteiligungen"
 
-#: ./opengever/dossier/browser/overview_templates/overview.pt:24
+#: ./opengever/dossier/browser/overview_templates/overview.pt:25
 msgid "show all"
 msgstr "Alle anzeigen"
 
@@ -586,11 +556,11 @@ msgstr "Aufgaben"
 msgid "temporary_former_reference_number"
 msgstr ""
 
-#: ./opengever/dossier/archive.py:163
+#: ./opengever/dossier/archive.py:164
 msgid "the filling number was already set"
 msgstr "Die Ablagenummer wurde bereits vergeben"
 
-#: ./opengever/dossier/archive.py:248
+#: ./opengever/dossier/archive.py:249
 msgid "the filling number was set"
 msgstr "Die Ablagenummer wurde gesetzt"
 

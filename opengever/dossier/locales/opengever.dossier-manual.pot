@@ -35,6 +35,9 @@ msgstr ""
 msgid "newest_documents"
 msgstr ""
 
+msgid "newest_tasks"
+msgstr ""
+
 msgid "sharing"
 msgstr ""
 
