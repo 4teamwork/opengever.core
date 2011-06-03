@@ -141,7 +141,7 @@ msgstr "Es ist nicht möglich, die verknüpften Dokumente zu kopieren."
 #. Default: "No changes: same responsible selected"
 #: ./opengever/task/browser/assign.py:79
 msgid "error_same_responsible"
-msgstr "Keine Änderung, da kein anderer Verantwortlicher ausgewählt wurde."
+msgstr "Keine Änderung, da kein anderer Auftragnehmer ausgewählt wurde."
 
 #. Default: "Additional"
 #: ./opengever/task/task.py:64
@@ -218,7 +218,7 @@ msgstr "Wählen Sie die verantwortliche Person aus, die dem oben gewählten Mand
 #: ./opengever/task/browser/assign.py:37
 #: ./opengever/task/task.py:104
 msgid "help_responsible_client"
-msgstr "Wählen Sie zuerst den Mandant des Verantwortlichen, anschliessend den Verantwortlichen."
+msgstr "Wählen Sie zuerst den Mandant des Auftragnehmers, anschliessend den Auftragnehmer."
 
 #. Default: "Select a document"
 #: ./opengever/task/browser/attachdocument.py:236
@@ -278,7 +278,7 @@ msgstr "In Auftrag gegebene Aufgaben"
 #. Default: "by ${author}"
 #: ./opengever/task/viewlets/byline.pt:17
 msgid "label_by_author"
-msgstr "Verantwortlich: ${author}"
+msgstr "Auftragnehmer: ${author}"
 
 #. Default: "Copy related documents to inbox of target client"
 #: ./opengever/task/browser/copy_related_documents.py:57
