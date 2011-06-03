@@ -58,11 +58,11 @@ msgstr "Diese Vorlage gehört zur Standardauswahl des Standardablaufs."
 
 #: ./opengever/tasktemplates/content/tasktemplate.py:65
 msgid "help_responsible"
-msgstr "Wählen Sie den Verantwortlichen aus. Wenn Sie im Feld \"Mandanten des Verantwortlichen\" die Option \"Interaktiver Benutzer\" auswählen, können Sie in diesem Feld auch \"Federführender\" oder \"Sachbearbeiter\" auswählen."
+msgstr "Wählen Sie den Auftragnehmer aus. Wenn Sie im Feld \"Mandanten des Auftragnehmers\" die Option \"Interaktiver Benutzer\" auswählen, können Sie in diesem Feld auch \"Federführender\" oder \"Sachbearbeiter\" auswählen."
 
 #: ./opengever/tasktemplates/content/tasktemplate.py:57
 msgid "help_responsible_client"
-msgstr "Wählen Sie den Mandanten des Verantwortlichen aus oder wählen Sie \"Interaktiver Benutzer\"."
+msgstr "Wählen Sie den Mandanten des Auftragnehmers aus oder wählen Sie \"Interaktiver Benutzer\"."
 
 #: ./opengever/tasktemplates/content/tasktemplate.py:46
 msgid "help_task_type"
@@ -117,17 +117,17 @@ msgstr "Vorselektiert"
 #. Default: "Responsible Client"
 #: ./opengever/tasktemplates/content/tasktemplate.py:55
 msgid "label_resonsible_client"
-msgstr "Mandant des Verantwortlichen"
+msgstr "Mandant des Auftragnehmers"
 
 #. Default: "Responsible"
 #: ./opengever/tasktemplates/content/tasktemplate.py:64
 msgid "label_responsible"
-msgstr "Verantwortlicher"
+msgstr "Auftragnehmer"
 
 #. Default: "Responsible"
 #: ./opengever/tasktemplates/browser/tasktemplates.py:42
 msgid "label_responsible_task"
-msgstr "Verantwortlicher"
+msgstr "Auftragnehmer"
 
 #. Default: "Review state"
 #: ./opengever/tasktemplates/browser/templatefolders.py:22
