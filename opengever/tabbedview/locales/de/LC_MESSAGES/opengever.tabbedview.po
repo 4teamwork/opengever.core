@@ -284,7 +284,7 @@ msgstr "Aktenzeichen"
 #: ./opengever/tabbedview/browser/tabs.py:260
 #: ./opengever/tabbedview/browser/tasklisting.py:78
 msgid "label_responsible_task"
-msgstr "Verantwortlich"
+msgstr "Auftragnehmer"
 
 #. Default: "Review state"
 #: ./opengever/tabbedview/browser/tabs.py:194
