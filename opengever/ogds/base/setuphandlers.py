@@ -1,6 +1,6 @@
 from Products.PluggableAuthService.interfaces import plugins
 from opengever.ogds.base.model.client import Client
-from opengever.ogds.base.model.user import User
+from opengever.ogds.base.model.user import User, Group, groups_users, Base
 from opengever.ogds.base.utils import create_session
 from zope.interface import alsoProvides
 from z3c.saconfig.interfaces import IScopedSession
@@ -10,11 +10,12 @@ from ftw.dictstorage.sql import DictStorageModel
 from z3c.saconfig import named_scoped_session
 
 
+
 def OpenGeverSessionName(object):
     return named_scoped_session('opengever')
 
 
-MODELS = [User, Client, DictStorageModel]
+MODELS = [User,Group, groups_users, Client, DictStorageModel]
 
 
 def import_various(context):
@@ -32,11 +33,10 @@ def import_various(context):
 def create_sql_tables():
     """Creates the sql tables for the models.
     """
-
+    
     session = create_session()
-    for model in MODELS:
-        getattr(model, 'metadata').create_all(session.bind)
-
+    
+    Base.metadata.create_all(session.bind)
 
 def create_example(portal_setup):
     """Creates some example users and clients in the mysql db and in the

@@ -1,9 +1,15 @@
 <configure xmlns="http://namespaces.zope.org/zope">
 
     <utility
-        component=".ldapsource.LDAPSourceSection"
-        name="opengever.ogds.base.sections.ldapsource"
+        component=".ldapsource.LDAPUserSourceSection"
+        name="opengever.ogds.base.sections.ldapsource.users"
         />
+
+    <utility
+        component=".ldapsource.LDAPGroupSourceSection"
+        name="opengever.ogds.base.sections.ldapsource.groups"
+        />
+
 
     <utility
         component=".activeusers.ActiveUsersSection"

@@ -12,6 +12,12 @@ class IClient(Interface):
     """
 
 
+class IGroup(Interface):
+    """Marker interface for groups.
+    """
+
+
+
 class IClientConfiguration(Interface):
     """p.a.registry interface for configuring a client
     """
