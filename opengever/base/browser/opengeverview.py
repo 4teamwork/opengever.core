@@ -1,6 +1,6 @@
 from Products.Five import BrowserView
 from opengever.ogds.base.interfaces import IContactInformation
-from opengever.ogds.base.utils import get_client_id, get_current_client
+from opengever.ogds.base.utils import get_client_id
 from zope.component import getUtility
 from zope.interface import Interface
 
@@ -37,10 +37,9 @@ class OpengeverView(BrowserView):
         """Returns `True` if the authenticated user is assigned to
         this client.
         """
+
         info = getUtility(IContactInformation)
         if client_id == current_client_marker:
-            client = get_current_client()
-        else:
-            client = info.get_client_by_id(client_id)
+            client_id = get_client_id()
 
-        return client in info.get_assigned_clients()
+        return client_id in [c.client_id for c in info.get_assigned_clients()]
