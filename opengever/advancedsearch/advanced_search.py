@@ -242,8 +242,8 @@ class IAdvancedSearch(directives_form.Schema):
 
     directives_form.widget(responsible=AutocompleteFieldWidget)
     task_responsible = schema.Choice(
-        title=_(u"label_responsible", default="Responsible"),
-        description =_(u"help_responsible", default=""),
+        title=_(u"label_task_responsible", default="Responsible"),
+        description =_(u"help_task_responsible", default=""),
         vocabulary=u'opengever.ogds.base.UsersAndInboxesVocabulary',
         required = False,
         )
