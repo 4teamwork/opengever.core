@@ -18,11 +18,12 @@ from zope.publisher.browser import BrowserView
 import json
 import opengever.globalindex.model
 import opengever.ogds.base.model
+from sqlalchemy.exc import NoReferencedTableError
 
 
 SQL_BASES = (
-    opengever.ogds.base.model.client.Base,
     opengever.ogds.base.model.user.Base,
+    opengever.ogds.base.model.client.Base,
     opengever.globalindex.model.Base,
     )
 
@@ -120,8 +121,10 @@ class CreateOpengeverClient(BrowserView):
                             ip_address=form['ip_address'],
                             site_url=form['site_url'],
                             public_url=form['public_url'],
-                            group=form['group'],
-                            inbox_group=form['inbox_group'])
+                            # TODO
+                            # group=form['group'],
+                            # inbox_group=form['inbox_group']
+                            )
             session.add(client)
 
 
@@ -195,4 +198,7 @@ class CreateOpengeverClient(BrowserView):
         """Drops sql tables, usually when creating the first client
         """
         for base in SQL_BASES:
-            getattr(base, 'metadata').drop_all(session.bind)
+            try:
+                getattr(base, 'metadata').drop_all(session.bind)
+            except NoReferencedTableError:
+                pass
