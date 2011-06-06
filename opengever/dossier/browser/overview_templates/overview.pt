@@ -9,18 +9,30 @@
                 <ul tal:condition="items">
                     <li tal:repeat="item items">
 
-                        <tal:BRAIN tal:condition="nocall:item/getIcon|nothing">
+                        <!-- Tasks from GlobalIndex are SQLAlchemy Objects-->
+                        <tal:GLOBAL_INDEX_TASK tal:condition="python:box['id'] in ['assigned_tasks', 'inbox']">
+                            <div tal:replace="structure python:view.render_globalindex_task(item)" />
+                        </tal:GLOBAL_INDEX_TASK>
+
+                        <!-- Documents are dictionaries -->
+                        <tal:DOCUMENT tal:condition="python:box['id'] == 'documents'">
+                            <a href="" tal:attributes="href item/getURL|nothing;
+                                                       title item/alt|nothing;
+                                                       class python:view.get_css_class(item)" tal:omit-tag="not: item/getURL|nothing">
+                                                       <span tal:content="item/Title" /></a>
+                        </tal:DOCUMENT>
+
+                        <!-- Everything else we consider to be a brain -->
+                        <tal:BRAIN tal:condition="python:box['id'] not in ['documents', 'assigned_tasks', 'inbox']">
 
                             <a href="" tal:attributes="href item/getURL|nothing;
-                                      				   title item/alt|nothing;
-                                                       class python:view.get_css_class(item)" tal:omit-tag="not: item/getURL|nothing"><span tal:content="item/Title" /></a>
+                                                       title item/alt|nothing;
+                                                       class python:view.get_css_class(item)" tal:omit-tag="not: item/getURL|nothing">
+                                                       <span tal:content="item/Title" /></a>
                         </tal:BRAIN>
 
-                        <tal:GLOBAL_INDEX tal:condition="not:nocall:item/getIcon|nothing">
-                            <div tal:replace="structure python:view.render_globalindex_task(item)" />
-                        </tal:GLOBAL_INDEX>
-
                     </li>
+
                     <li class="moreLink">
                         <a tal:attributes="href string:#${box/id}" i18n:translate="">show all</a>
                     </li>

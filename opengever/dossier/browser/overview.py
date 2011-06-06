@@ -47,16 +47,18 @@ class DossierOverview(grok.View, OpengeverTab):
     def documents(self):
         documents = self.catalog(
             ['opengever.document.document', 'ftw.mail.mail', ])[:10]
-
-        return [{
+        document_list = [{
             'Title': document.Title,
             'getURL': document.getURL,
             'alt': document.document_date and \
                 document.document_date.strftime('%d.%m.%Y') or '',
             'getIcon': document.css_icon_class,
+            'portal_type': document.portal_type,
         } for document in documents]
-        return self.catalog(
-            ['opengever.document.document', 'ftw.mail.mail'])[:10]
+
+        return document_list
+
+
 
     def events(self):
         return self.catalog(['dummy.event', ])[:5]

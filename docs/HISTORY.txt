@@ -5,6 +5,9 @@ Changelog
 2.0b15
 ------
 
+* Refactored inbox / dossier overview
+  [lukasg]
+
 * Removed content_icons and icon_expr's - now done with sprites
   [lgraf]
 
