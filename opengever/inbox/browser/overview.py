@@ -68,15 +68,16 @@ class InboxOverview(DossierOverview):
                                  'ftw.mail.mail']}
         documents = catalog(query)[:10]
 
-        return [{
+        document_list = [{
             'Title': document.Title,
             'getURL': document.getURL,
             'alt': document.document_date and \
                 document.document_date.strftime('%d.%m.%Y') or '',
-            'getIcon': document.getIcon,
+            'getIcon': document.css_icon_class,
+            'portal_type': document.portal_type,
         } for document in documents]
 
-        # return catalog(query)[:10]
+        return document_list
 
 
     def inbox(self):

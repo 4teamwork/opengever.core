@@ -5,6 +5,9 @@ Changelog
 2.0b8
 -----
 
+* Adjusted document query for inbox overview to use css_icon_class
+  [lgraf]
+
 * Removed content_icons and icon_exprs - now done with sprites
   [lgraf]
 
