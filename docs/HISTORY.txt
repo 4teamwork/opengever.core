@@ -5,6 +5,9 @@ Changelog
 2.0b6
 -----
 
+* Moved import of additional profiles after LDAP setup to avoid violating user constraint
+  [lgraf]
+
 * removed yearfolder creation, because the creation is part of the closing mechanism
   [phgross]
 

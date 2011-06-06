@@ -135,12 +135,9 @@ class CreateOpengeverClient(BrowserView):
         if repository_root:
             self.request.set('repository_root', repository_root)
 
-        # import the defaul generic setup profiles if needed
-        stool = getToolByName(site, 'portal_setup')
-        for profile in config.get('additional_profiles', ()):
-            stool.runAllImportStepsFromProfile('profile-%s' % profile)
 
         # ldap
+        stool = getToolByName(site, 'portal_setup')
         if form.get('ldap', False):
             stool.runAllImportStepsFromProfile('profile-%s' % form.get('ldap'))
 
@@ -175,6 +172,11 @@ class CreateOpengeverClient(BrowserView):
             options.config = u'opengever.ogds.base.user-import'
             options.site_root = '/' + form['client_id']
             sync_ldap.run_import(self.context, options)
+
+
+        # import the defaul generic setup profiles if needed
+        for profile in config.get('additional_profiles', ()):
+            stool.runAllImportStepsFromProfile('profile-%s' % profile)
 
         # set the site title
         site.manage_changeProperties(title=form['title'])
