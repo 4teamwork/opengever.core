@@ -8,7 +8,7 @@ from zope.component import queryUtility
 
 from ftw.dictstorage.sql import DictStorageModel
 from z3c.saconfig import named_scoped_session
-
+import transaction
 
 
 def OpenGeverSessionName(object):
@@ -125,28 +125,53 @@ def setup_pas_plugins(setup):
 def _create_example_user(session, site, userid, properties, groups):
     acl_users = site.acl_users
     password = 'demo09'
-
     # add the user to acl_users on site level
     if not acl_users.getUserById(userid):
         acl_users.source_users.addUser(userid, userid, password)
 
-    # user should be in the given groups
-    for groupid in groups:
-        # does the group exist?
-        group = acl_users.source_groups.getGroupById(groupid)
-        if not group:
-            acl_users.source_groups.addGroup(groupid)
-            group = acl_users.source_groups.getGroupById(groupid)
-        group.addMember(userid)
-
     # create the user object in sql
-    if len(session.query(User).filter_by(userid=userid).all()) == 0:
+    if session.query(User).filter_by(userid=userid).count() == 0:
         user = User(userid, **properties)
         session.add(user)
+    else:
+        user = session.query(User).filter_by(userid=userid).first()
+
+    # append the user to the group
+    for groupid in groups:
+        groups = session.query(Group).filter(Group.groupid == groupid).all()
+        # does the group don't exist create it
+        if len(groups) == 0:
+            group = Group(groupid)
+            group.users.append(user)
+            session.add(group)
+        else:
+            groups[0].users.append(user)
+            session.add(groups[0])
+
+    transaction.commit()
 
 def _create_example_client(session, client_id, properties):
     if len(session.query(Client).filter_by(client_id=client_id).all()) == 0:
+
+        #create users_group if not exist
+        temp = session.query(Group).filter(Group.groupid == properties.get('group')).all()
+        if len(temp) == 0:
+            users_group= Group(properties.get('group'))
+        else:
+            users_group = temp[0]
+        properties.pop('group')
+
+        #create inbox_group if not exist
+        temp = session.query(Group).filter(Group.groupid == properties.get('inbox_group')).all()
+        if len(temp) == 0:
+            inbox_group= Group(properties.get('inbox_group'))
+        else:
+            inbox_group = temp[0]
+        properties.pop('inbox_group')
+
         client = Client(client_id, **properties)
+        client.users_group = users_group
+        client.inbox_group = inbox_group
         session.add(client)
 
 def setup_scriptable_plugin(acl_users, plugin_id, external_methods):

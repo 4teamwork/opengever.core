@@ -34,7 +34,10 @@ Set up a client for testing:
     ...                       {'title': 'Client 1',
     ...                        'ip_address': '127.0.0.1',
     ...                        'site_url': 'http://nohost/plone',
-    ...                        'public_url': 'http://nohost/plone'})
+    ...                        'public_url': 'http://nohost/plone',
+    ...                        'group': 'og_mandant2_users',
+    ...                        'inbox_group': 'og_mandant2_inbox'})
+
 
 
 

@@ -39,6 +39,13 @@ Lets create some users:
     ...                      ('client2_users',
     ...                       'client2_inbox_users'))
 
+    >>> _create_example_user(session, portal,
+    ...                      'hanspeter.linder',
+    ...                      {'firstname': 'hanspeter',
+    ...                       'lastname': 'linder'},
+    ...                      ('client2_users', 'client1_users'))
+
+
 
 
 And we also need some clients:
@@ -94,9 +101,9 @@ Get the contact information utlity:
 User tests:
 
     >>> len(info.list_users())
-    2
+    3
     >>> [u.userid for u in info.list_users()]
-    [u'hugo.boss', u'peter.muster']
+    [u'hugo.boss', u'peter.muster', u'hanspeter.linder']
     >>> info.is_user('hugo.boss')
     True
     >>> info.is_contact('hugo.boss')
@@ -188,13 +195,31 @@ Inboxes tests:
     u'Inbox: Client 1'
 
 
-Various lists:
+Various lists and other methods:
 
     >>> list(info.list_assigned_users())
-    [<User hugo.boss>]
+    [<User hanspeter.linder>, <User hugo.boss>]
 
     >>> list(info.list_assigned_users(client_id='client2'))
-    [<User peter.muster>]
+    [<User hanspeter.linder>, <User peter.muster>]
+    
+    >>> list(info.get_assigned_clients(userid='hugo.boss'))
+    [<Client client1>]
+
+    >>> list(info.get_assigned_clients(userid='hanspeter.linder'))
+    [<Client client1>, <Client client2>]
+
+    >>> info.is_client_assigned(userid='hugo.boss', client_id='client2')
+    False
+
+    >>> info.is_client_assigned(userid='hugo.boss', client_id='client1')
+    True
+
+    >>> list(info.list_group_users('client2_users'))
+    [<User hanspeter.linder>, <User peter.muster>]
+
+    >>> list(info.list_group_users('not_existing_groupid'))
+    []
 
     >>> list(info.get_clients())
     [<Client client1>, <Client client2>]
