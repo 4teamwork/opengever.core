@@ -33,13 +33,13 @@ class OpengeverView(BrowserView):
         """
         return get_client_id()
 
-    def is_user_assigned_to_client(self, client_id=current_client_marker):
+    def is_user_assigned_to_client(self, client_id=None):
         """Returns `True` if the authenticated user is assigned to
         this client.
         """
 
         info = getUtility(IContactInformation)
-        if client_id == current_client_marker:
-            client_id = get_client_id()
+        if not client_id:
+            client_id = get_client_id
 
-        return client_id in [c.client_id for c in info.get_assigned_clients()]
+        return info.is_client_assigned(client_id=client_id)
