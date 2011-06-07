@@ -98,7 +98,7 @@ class UsersAndInboxesVocabularyFactory(grok.GlobalUtility):
     def key_value_provider(self):
         client_id = self.get_client()
         info = getUtility(IContactInformation)
-        if client_id and info.get_client_by_id(client_id):
+        if client_id:
             # all users
             for user in info.list_assigned_users(client_id=client_id):
                 if not user.active:
