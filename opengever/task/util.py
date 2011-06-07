@@ -21,22 +21,6 @@ class UsersVocabulary(SimpleVocabulary):
 
 
 @grok.provider(IContextSourceBinder)
-def getManagersVocab(context):
-
-    acl_users = getToolByName(context, 'acl_users')
-    terms = []
-    if acl_users is not None:
-        for user in acl_users.getUsers():
-            member_name = user.getProperty('fullname') or user.getName()
-            member_name = member_name + "  " + user.getProperty('email') or member_name
-
-            terms.append(SimpleVocabulary.createTerm(user.getId(),
-                                                     str(user.getId()),
-                                                     member_name))
-    return UsersVocabulary(terms)
-
-
-@grok.provider(IContextSourceBinder)
 def getTransitionVocab(context):
     if AccessControl.getSecurityManager().getUser() == AccessControl.SpecialUsers.nobody:
         return SimpleVocabulary([])
