@@ -87,10 +87,8 @@ class DossierAutocompleteSelectionWidget(AutocompleteSelectionWidget):
             client_id = None
 
         if client_id:
-            client = info.get_client_by_id(client_id)
-
             # verify that the user is assigned to the requested client
-            if client not in info.get_assigned_clients():
+            if client_id not in [client.client_id for client in home_clients]:
                 raise RuntimeError(
                     'Expected current user to be assigned to the '
                     'client "%s" read from request' % client_id)
