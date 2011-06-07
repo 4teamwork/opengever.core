@@ -10,10 +10,15 @@
         name="opengever.ogds.base.sections.ldapsource.groups"
         />
 
-
     <utility
         component=".activeusers.ActiveUsersSection"
         name="opengever.ogds.base.sections.activeusers"
         />
+
+    <utility
+        component=".groupusers.GroupUsersSection"
+        name="opengever.ogds.base.sections.groupusers"
+        />
+
 
 </configure>

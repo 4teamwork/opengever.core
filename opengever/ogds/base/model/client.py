@@ -23,12 +23,14 @@ class Client(Base):
     site_url = Column(String(100))
     public_url = Column(String(100))
 
-    # #ehemals group
-    # users_group_id = Column(String(), ForeignKey('groups.group_id'))
-    # users_group = relationship(Group, backref=backref('group_client')) 
-    # 
-    # inbox_group_id = Column(String(), ForeignKey('groups.group_id'))
-    # inbox_group = relationship(Group, backref=backref('inbox_group_client'))
+    # ehemals group
+    users_group_id = Column(String(30), ForeignKey('groups.groupid'))
+    users_group = relationship("Group", backref='client_group', primaryjoin=users_group_id==Group.groupid)
+
+    inbox_group_id = Column(String(30), ForeignKey('groups.groupid'))
+    inbox_group = relationship("Group", backref='inbox_group', primaryjoin=inbox_group_id==Group.groupid)
+    
+
 
     def __init__(self, client_id, **kwargs):
         self.client_id = client_id

@@ -72,7 +72,7 @@ class Group(Base):
     __tablename__ = 'groups'
 
     groupid = Column(String(30), primary_key=True)
-    title = Column(String(30))
+    title = Column(String(50))
 
     users = relation(User, secondary=groups_users, backref=backref('group_users'))
 

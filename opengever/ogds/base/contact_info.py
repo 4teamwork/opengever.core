@@ -2,9 +2,9 @@ from five import grok
 from opengever.ogds.base import _
 from opengever.ogds.base.interfaces import IContactInformation, IUser
 from opengever.ogds.base.model.client import Client
-from opengever.ogds.base.model.user import User
-from opengever.ogds.base.utils import brain_is_contact
-from opengever.ogds.base.utils import create_session, get_current_client
+from opengever.ogds.base.model.user import User, Group
+from opengever.ogds.base.utils import brain_is_contact, get_client_id
+from opengever.ogds.base.utils import create_session
 from plone.memoize import volatile
 from plone.memoize import ram
 from Products.CMFCore.utils import getToolByName
@@ -58,7 +58,7 @@ class ContactInformation(grok.GlobalUtility):
     :committee: A committee is a heap of users and contacts. They are not
     relevant for the security.
 
-    :group: Groups are defined in the LDAP and used with PAS.
+    :group: Groups is a sql reprensantation of a LDAP Group.
     """
 
     grok.provides(IContactInformation)
@@ -83,25 +83,27 @@ class ContactInformation(grok.GlobalUtility):
     def list_assigned_users(self, client_id=None):
         """Lists all users assigned to a client.
         """
+        if not client_id:
+            client_id = get_client_id()
 
         if not client_id:
-            client = get_current_client()
-        else:
-            client = self.get_client_by_id(client_id)
+            raise ValueError('client_id is not defined')
 
-        if not client:
-            raise ValueError('Could not find client "%s"' % str(client_id))
+        session = create_session()
+        users = session.query(Group).join(Client.inbox_group
+            ).filter(Client.client_id=='mandant1').all()[0].users
 
-        groupid = client.group
-        acl_users = getToolByName(getSite(), 'acl_users')
-        group = acl_users.getGroupById(groupid.encode('utf-8'))
+        return users
 
-        if not group:
-            logger.warn("Group %s does not exist!" % groupid)
-        else:
-            ids = group.getGroupMemberIds()
-            for user in self._users_query().filter(User.userid.in_(ids)):
-                yield user
+    def list_group_users(self, groupid):
+        """Return all users of a group"""
+
+        if groupid:
+            session = create_session()
+            groups = session.query(Group).filter(Group.groupid==groupid).all()
+            if len(groups) > 0:
+                return groups[0].users
+        return []
 
     def get_user(self, principal):
         """Returns the user with the userid `principal`.
@@ -214,7 +216,7 @@ class ContactInformation(grok.GlobalUtility):
         if client == None:
             raise ValueError('Client not found for: %s' % principal)
 
-        return client.inbox_group
+        return client.inbox_group.groupid
 
 
     # CLIENTS
@@ -249,20 +251,37 @@ class ContactInformation(grok.GlobalUtility):
         """Returns all assigned clients (home clients).
         """
 
-        acl_users = getToolByName(getSite(), 'acl_users')
-
         if not userid:
-            member = getToolByName(
-                getSite(),
-                'portal_membership').getAuthenticatedMember()
+            member = getToolByName(getSite(),'portal_membership'
+                ).getAuthenticatedMember()
             userid = member.getId()
 
-        clients = self.get_clients()
-        for client in clients:
-            groupid = client.group.encode('utf-8')
-            group = acl_users.getGroupById(groupid)
-            if group and userid in group.getMemberIds():
-                yield client
+        session = create_session()
+
+        # select all clients with the user in the user group
+        clients = session.query(Client).join(Client.users_group).join(
+                Group.users).filter(User.userid == userid).all()
+
+        return clients
+
+    def is_client_assigned(self, userid=None, client_id=get_client_id):
+        """Return True if the specified user is in the user_group
+        of the specified client"""
+        
+        if not userid:
+            member = getToolByName(getSite(),'portal_membership'
+                ).getAuthenticatedMember()
+            userid = member.getId()
+
+        session = create_session()
+
+        # check if the specified user is in the user_group of the specified client
+        if len(session.query(Client).join(Client.users_group).join(Group.users
+                ).filter(User.userid == userid).filter(
+                    Client.client_id==client_id).all()) > 0:
+                return True
+
+        return False
 
 
     # general principal methods
@@ -445,8 +464,12 @@ class ContactInformation(grok.GlobalUtility):
     def get_profile_url(self, principal):
         """Returns the profile url of this `principal`.
         """
+        if isinstance(principal, User):
+            portal = getSite()
+            return '/'.join((portal.portal_url(), '@@user-details',
+                                 principal.userid))
 
-        if self.is_inbox(principal):
+        elif self.is_inbox(principal):
             return None
 
         elif self.is_contact(principal):
@@ -475,7 +498,7 @@ class ContactInformation(grok.GlobalUtility):
         """Render a link to the `principal`
         """
 
-        if not principal or len(principal) == 0:
+        if not principal or principal =='':
             return None
 
         url = self.get_profile_url(principal)

@@ -35,8 +35,10 @@ def create_sql_tables():
     """
     
     session = create_session()
-    
     Base.metadata.create_all(session.bind)
+
+    DictStorageModel.metadata.create_all(session.bind )
+
 
 def create_example(portal_setup):
     """Creates some example users and clients in the mysql db and in the

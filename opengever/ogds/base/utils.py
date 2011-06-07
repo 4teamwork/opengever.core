@@ -29,7 +29,6 @@ Session = named_scoped_session('opengever')
 def create_session():
     """Returns a new sql session bound to the defined named scope.
     """
-
     return Session()
 
 
@@ -118,13 +117,8 @@ def remote_request(target_client_id, viewname, path='', data={}, headers={}):
         path = path.encode('utf-8')
 
     site = getSite()
-    info = getUtility(IContactInformation)
-    target = info.get_client_by_id(target_client_id)
 
-    if not target:
-        raise ClientNotFound()
-
-    if get_current_client() == target:
+    if get_client_id() == target_client_id:
         # do not connect to the site itself but do a restrictedTraverse
         request = getRequest()
 
@@ -149,6 +143,14 @@ def remote_request(target_client_id, viewname, path='', data={}, headers={}):
         request.other = ori_other
 
         return StringIO(data)
+
+
+    site = getSite()
+    info = getUtility(IContactInformation)
+    target = info.get_client_by_id(target_client_id)
+
+    if not target:
+        raise ClientNotFound()
 
     headers = headers.copy()
     data = data.copy()
