@@ -90,8 +90,8 @@ class ContactInformation(grok.GlobalUtility):
             raise ValueError('client_id is not defined')
 
         session = create_session()
-        users = session.query(Group).join(Client.inbox_group
-            ).filter(Client.client_id=='mandant1').all()[0].users
+        users = session.query(Group).join(Client.users_group
+            ).filter(Client.client_id==client_id).first().users
 
         return users
 
