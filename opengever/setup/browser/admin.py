@@ -8,6 +8,7 @@ from opengever.mail.interfaces import IMailSettings
 from opengever.ogds.base.interfaces import IClientConfiguration
 from opengever.ogds.base.ldap_import import sync_ldap
 from opengever.ogds.base.model.client import Client
+from opengever.ogds.base.model.user import Group
 from opengever.ogds.base.utils import create_session
 from opengever.setup.utils import get_ldap_configs, get_policy_configs
 from plone.app.controlpanel.language import ILanguageSelectionSchema
@@ -108,43 +109,9 @@ class CreateOpengeverClient(BrowserView):
             default_language=config.get('language', 'de-ch'),
             )
 
-        if form.get('configsql'):
-            # register the client in the ogds
-            # is the client already configured? -> delete it
-            clients = session.query(Client).filter_by(
-                client_id=form['client_id']).all()
-            if clients:
-                session.delete(clients[0])
-
-            client = Client(form['client_id'],
-                            title=form['title'],
-                            ip_address=form['ip_address'],
-                            site_url=form['site_url'],
-                            public_url=form['public_url'],
-                            # TODO
-                            # group=form['group'],
-                            # inbox_group=form['inbox_group']
-                            )
-            session.add(client)
-
-
-        # set the client id in the registry
-        registry = getUtility(IRegistry)
-        proxy = registry.forInterface(IClientConfiguration)
-        proxy.client_id = form['client_id'].decode('utf-8')
-
-        # provide the repository root for opengever.setup:default
-        repository_root = config.get('repository_root', None)
-        if repository_root:
-            self.request.set('repository_root', repository_root)
-
-        # import the defaul generic setup profiles if needed
-        stool = getToolByName(site, 'portal_setup')
-        for profile in config.get('additional_profiles', ()):
-            stool.runAllImportStepsFromProfile('profile-%s' % profile)
-
         # ldap
         if form.get('ldap', False):
+            stool = getToolByName(site, 'portal_setup')
             stool.runAllImportStepsFromProfile('profile-%s' % form.get('ldap'))
 
             acl_users = getToolByName(site, 'acl_users')
@@ -173,11 +140,57 @@ class CreateOpengeverClient(BrowserView):
 
         if form.get('first', False) and form.get('import_users', False):
             print '===== SYNC LDAP ===='
+
+            #user import
             class Object(object): pass
             options = Object()
             options.config = u'opengever.ogds.base.user-import'
             options.site_root = '/' + form['client_id']
             sync_ldap.run_import(self.context, options)
+
+            #group import
+            options.config = u'opengever.ogds.base.group-import'
+            sync_ldap.run_import(self.context, options)
+
+        if form.get('configsql'):
+            # register the client in the ogds
+            # is the client already configured? -> delete it
+            clients = session.query(Client).filter_by(
+                client_id=form['client_id']).all()
+            if clients:
+                session.delete(clients[0])
+
+            # groups must exist
+            users_group = session.query(Group).filter_by(groupid=form['group'])[0]
+            inbox_group = session.query(Group).filter_by(groupid=form['inbox_group'])[0]
+
+            client = Client(form['client_id'],
+                            title=form['title'],
+                            ip_address=form['ip_address'],
+                            site_url=form['site_url'],
+                            public_url=form['public_url'],
+                            )
+
+            client.users_group = users_group
+            client.inbox_group = inbox_group
+
+            session.add(client)
+
+
+        # set the client id in the registry
+        registry = getUtility(IRegistry)
+        proxy = registry.forInterface(IClientConfiguration)
+        proxy.client_id = form['client_id'].decode('utf-8')
+
+        # provide the repository root for opengever.setup:default
+        repository_root = config.get('repository_root', None)
+        if repository_root:
+            self.request.set('repository_root', repository_root)
+
+        # import the defaul generic setup profiles if needed
+        stool = getToolByName(site, 'portal_setup')
+        for profile in config.get('additional_profiles', ()):
+            stool.runAllImportStepsFromProfile('profile-%s' % profile)
 
         # set the site title
         site.manage_changeProperties(title=form['title'])
