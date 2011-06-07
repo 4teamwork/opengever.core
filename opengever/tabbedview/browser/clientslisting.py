@@ -25,6 +25,14 @@ def linked_url_helper(item, value):
         return value
 
 
+def readable_inbox_group(item, value):
+    return item.inbox_group.groupid
+
+
+def readable_user_group(item, value):
+    return item.users_group.groupid
+
+
 class IClientsTableSourceConfig(ITableSourceConfig):
     """Marker interface for table source configurations using the
     OGDS clients as source.
@@ -72,10 +80,12 @@ class ClientsListing(grok.CodeView, OpengeverTab, ListingView):
          'transform': linked_url_helper},
 
         {'column': 'group',
-         'column_title': _(u'column_group', default=u'Users group')},
+         'column_title': _(u'column_group', default=u'Users group'),
+         'transform': readable_user_group},
 
         {'column': 'inbox_group',
-         'column_title': _(u'column_inbox_group', default=u'Inbox user group')},
+         'column_title': _(u'column_inbox_group', default=u'Inbox user group'),
+         'transform': readable_inbox_group},
 
         )
 
@@ -86,7 +96,6 @@ class ClientsListing(grok.CodeView, OpengeverTab, ListingView):
     def get_base_query(self):
         """Returns the base search query (sqlalchemy)
         """
-
         return create_session().query(Client)
 
 
@@ -190,6 +199,8 @@ class ClientsTableSource(grok.MultiAdapter, BaseTableSource):
     def search_results(self, query):
         """Executes the query and returns a tuple of `results`.
         """
+
+        self.full_length = query.count()
 
         # not lazy
         if not self.config.lazy or not self.config.batching_enabled:
