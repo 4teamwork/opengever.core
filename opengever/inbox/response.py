@@ -241,7 +241,7 @@ class ForwardingResponseAddForm(AddForm):
         successor_controller = ISuccessorTaskController(self.context)
 
         client = info.get_client_by_id(self.context.responsible_client)
-        if client not in info.get_assigned_clients():
+        if not info.is_client_assigned(client_id=client.client_id):
             # this should never happen
             RuntimeError('The user should be assigned to client %s' %
                          self.context.responsible_client)
@@ -288,7 +288,6 @@ class ForwardingResponseAddForm(AddForm):
               u'The successor forwarding was created.'), type='info')
 
         # redirect to target in new window
-        client = info.get_client_by_id(client.client_id)
         return os.path.join(client.public_url, target_task_path,
                                   '@@edit')
 
