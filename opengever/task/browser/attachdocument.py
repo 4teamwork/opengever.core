@@ -7,7 +7,7 @@ from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from five import grok
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.ogds.base.interfaces import ITransporter
-from opengever.ogds.base.utils import get_current_client
+from opengever.ogds.base.utils import get_client_id
 from opengever.task import _
 from opengever.task.task import ITask
 from plone.directives import form
@@ -37,13 +37,10 @@ class AttachDocumentAllowed(grok.View):
     grok.name('attach-document-allowed')
 
     def render(self):
-        current_client = get_current_client()
         info = getUtility(IContactInformation)
-        clients = filter(lambda client: client != current_client,
+        clients = filter(lambda client: client.client_id != get_client_id(),
                          info.get_assigned_clients())
         return len(clients) > 0
-
-
 
 
 # ------------------- WIZARD --------------------------
