@@ -17,12 +17,14 @@ import types
 
 logger = logging.getLogger('opengever.ogds.base')
 
+
 def cache_key_principal(method, self, principal):
     if ICatalogBrain.providedBy(principal):
         return principal.contactid
     if IUser.providedBy(principal):
         return principal.userid
     return principal
+
 
 def class_cachekey(method, self):
     """A cache key including the class' name.
@@ -33,6 +35,7 @@ def class_cachekey(method, self):
 class UserDict(object):
     """A dictionary representing a user.
     """
+
     def __init__(self, **kw):
         self.__dict__.update(kw)
 
@@ -64,7 +67,6 @@ class ContactInformation(grok.GlobalUtility):
     grok.provides(IContactInformation)
 
     # USERS
-
     def is_user(self, principal):
         """Returns true, if `principal` is a userid.
         """
@@ -78,7 +80,7 @@ class ContactInformation(grok.GlobalUtility):
         session = create_session()
         userdata_keys = User.__table__.columns.keys()
         result = session.execute(User.__table__.select())
-        return [UserDict(**dict(zip(userdata_keys,row))) for row in result]
+        return [UserDict(**dict(zip(userdata_keys, row))) for row in result]
 
     def list_assigned_users(self, client_id=None):
         """Lists all users assigned to a client.
@@ -90,8 +92,8 @@ class ContactInformation(grok.GlobalUtility):
             raise ValueError('client_id is not defined')
 
         session = create_session()
-        users = session.query(Group).join(Client.users_group
-            ).filter(Client.client_id==client_id).first().users
+        users = session.query(Group).join(Client.users_group).filter(
+            Client.client_id==client_id).first().users
 
         return users
 
@@ -117,13 +119,12 @@ class ContactInformation(grok.GlobalUtility):
             return None
         elif len(users) > 1:
             raise ValueError('Found %i users with principal, %s ' % (
-                    len(users), principal) + 'expected only one' )
+                    len(users), principal) + 'expected only one')
         else:
             return users[0]
 
 
     # CONTACTS
-
     def is_contact(self, principal):
         """Return true, if `principal` is a contact.
         """
@@ -153,9 +154,10 @@ class ContactInformation(grok.GlobalUtility):
                  'contactid': principal}
 
         if not check_permissions:
-            # usually foreign users may not have access to the contacts, but we
-            # want to be able to print the name etc. in this case too. So we need
-            # to use ZCatalog for ignoring the allowedRolesAndUsers index.
+            # usually foreign users may not have access to the contacts,
+            # but we want to be able to print the name etc. in this case too.
+            # So we need to use ZCatalog for ignoring the allowedRolesAndUsers
+            # index.
             contacts = ZCatalog.searchResults(catalog, **query)
         else:
             contacts = catalog.searchResults(**query)
@@ -170,7 +172,6 @@ class ContactInformation(grok.GlobalUtility):
 
 
     # INBOXES
-
     def is_inbox(self, principal):
         """Returns true, if `principal` is a inbox.
         """
@@ -202,7 +203,7 @@ class ContactInformation(grok.GlobalUtility):
             return None
         elif len(clients) > 1:
             raise ValueError('Found %i clients with client_id, %s ' % (
-                    len(clients), client_id) + 'expected only one' )
+                    len(clients), client_id) + 'expected only one')
         else:
             return clients[0]
 
@@ -220,7 +221,6 @@ class ContactInformation(grok.GlobalUtility):
 
 
     # CLIENTS
-
     def get_clients(self):
         """Returns a list of all enabled clients.
         """
@@ -252,32 +252,36 @@ class ContactInformation(grok.GlobalUtility):
         """
 
         if not userid:
-            member = getToolByName(getSite(),'portal_membership'
-                ).getAuthenticatedMember()
+            member = getToolByName(
+                getSite(), 'portal_membership').getAuthenticatedMember()
             userid = member.getId()
 
         session = create_session()
 
         # select all clients with the user in the user group
         clients = session.query(Client).join(Client.users_group).join(
-                Group.users).filter(User.userid == userid).all()
+            Group.users).filter(User.userid == userid).all()
 
         return clients
 
-    def is_client_assigned(self, userid=None, client_id=get_client_id):
+    def is_client_assigned(self, userid=None, client_id=None):
         """Return True if the specified user is in the user_group
         of the specified client"""
-        
+
+        if not client_id:
+            client_id = get_client_id()
+
         if not userid:
-            member = getToolByName(getSite(),'portal_membership'
-                ).getAuthenticatedMember()
+            member = getToolByName(
+                getSite(), 'portal_membership').getAuthenticatedMember()
             userid = member.getId()
 
         session = create_session()
 
-        # check if the specified user is in the user_group of the specified client
-        if len(session.query(Client).join(Client.users_group).join(Group.users
-                ).filter(User.userid == userid).filter(
+        # check if the specified user is in the user_group of the specified
+        # client
+        if len(session.query(Client).join(Client.users_group).join(
+            Group.users).filter(User.userid == userid).filter(
                     Client.client_id==client_id).all()) > 0:
                 return True
 
@@ -285,7 +289,6 @@ class ContactInformation(grok.GlobalUtility):
 
 
     # general principal methods
-
     def describe(self, principal, with_email=False, with_email2=False):
         """Represent a user / contact / inbox / ... as string. This usually
         returns the fullname or another label / title.
@@ -490,7 +493,8 @@ class ContactInformation(grok.GlobalUtility):
                 portal_membership = getToolByName(portal, 'portal_membership')
                 member = portal_membership.getMemberById(principal)
                 if member:
-                    return portal_membership.getMemberById(principal).getHomeUrl()
+                    return portal_membership.getMemberById(
+                        principal).getHomeUrl()
             return None
 
     @volatile.cache(cache_key_principal)
@@ -510,7 +514,6 @@ class ContactInformation(grok.GlobalUtility):
             self.describe(principal))
 
     # internal methods
-
     def _users_query(self):
         session = create_session()
         return session.query(User)
