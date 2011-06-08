@@ -5,7 +5,6 @@ from ftw.table import helper
 from opengever.globalindex.interfaces import ITaskQuery
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.ogds.base.utils import get_client_id
-from opengever.ogds.base.utils import get_current_client
 from opengever.tabbedview.browser.tabs import Documents, Dossiers, Tasks
 from opengever.tabbedview.browser.tasklisting import GlobalTaskListingTab
 from zope.app.pagetemplate import ViewPageTemplateFile
@@ -112,12 +111,9 @@ class PersonalOverview(TabbedView):
         clients and he therefore is allowed to view the PersonalOverview,
         False otherwise.
         """
-        # This check is temporarily disabled to test impact on
-        # performance. [lgraf]
-        return True
 
         info = getUtility(IContactInformation)
-        return get_current_client() in info.get_assigned_clients()
+        return info.is_client_assigned()
 
 
 class MyDossiers(Dossiers):
