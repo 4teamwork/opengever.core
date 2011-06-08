@@ -1,3 +1,4 @@
+from datetime import datetime
 from Products.PloneTestCase.ptc import PloneTestCase
 from opengever.task.adapters import IResponseContainer
 from opengever.task.response import Response
@@ -49,7 +50,7 @@ class TestTaskIntegration(PloneTestCase):
 
     def test_view(self):
         t1 = create_task(self.folder, title='Task 1')
-        view = t1.restrictedTraverse('@@view')
+        view = t1.restrictedTraverse('@@tabbedview_view-overview')
         self.failUnless(len(view.getSubTasks())==0)
         t2 = create_task(t1, title='Task 2')
         self.failUnless(view.getSubTasks()[0].getObject()==t2)
@@ -67,6 +68,18 @@ class TestTaskIntegration(PloneTestCase):
         self.assertEquals(u'unidirectional_by_reference', t1.task_type_category)
         t1.task_type = u'approval'
         self.assertEquals(u'bidirectional_by_reference', t1.task_type_category)
+
+    def test_task_date_subscriber(self):
+        t1 = create_task(self.folder, title='Task 1')
+        wft = t1.portal_workflow
+        
+        self.failUnless(t1.expectedStartOfWork == None)
+        wft.doActionFor(t1, 'task-transition-open-in-progress')
+        self.failUnless(t1.expectedStartOfWork.date() == datetime.now().date())
+
+        self.failUnless(t1.date_of_completion == None)
+        wft.doActionFor(t1, 'task-transition-in-progress-resolved')
+        self.failUnless(t1.date_of_completion.date() == datetime.now().date())
 
 def test_suite():
     return unittest.defaultTestLoader.loadTestsFromName(__name__)
