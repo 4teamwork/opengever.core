@@ -439,7 +439,6 @@ class HomeDossiersVocabularyFactory(grok.GlobalUtility):
 
         info = getUtility(IContactInformation)
         comm = getUtility(IClientCommunicator)
-        home_clients = tuple(info.get_assigned_clients())
 
         client_id = request.get(
             'client', request.get('form.widgets.client'))
@@ -447,7 +446,7 @@ class HomeDossiersVocabularyFactory(grok.GlobalUtility):
             client_id = client_id[0]
         client = info.get_client_by_id(client_id)
 
-        if client and client not in home_clients:
+        if client and not info.is_client_assigned(client_id=client_id):
             raise ValueError('Expected %s to be a ' % client_id + \
                                  'assigned client of the current user.')
 
@@ -496,16 +495,14 @@ class DocumentInSelectedDossierVocabularyFactory(grok.GlobalUtility):
 
         info = getUtility(IContactInformation)
         comm = getUtility(IClientCommunicator)
-        home_clients = info.get_assigned_clients()
 
         # get client
         client_id = request.get(
             'client', request.get('form.widgets.client'))
         if type(client_id) in (list, tuple, set):
             client_id = client_id[0]
-        client = info.get_client_by_id(client_id)
 
-        if client not in home_clients:
+        if not info.is_client_assigned(client_id=client_id):
             raise ValueError('Expected %s to be a ' % client_id + \
                                  'assigned client of the current user.')
 
@@ -516,7 +513,7 @@ class DocumentInSelectedDossierVocabularyFactory(grok.GlobalUtility):
             dossier_path = dossier_path[0]
 
         if dossier_path:
-            cid = client.client_id
+            cid = client_id
             if cid:
                 for doc in comm.get_documents_of_dossier(cid, dossier_path):
                     key = doc.get('path')
