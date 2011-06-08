@@ -1,0 +1,44 @@
+upgradesteps:
+=============
+
+To upgrade the opengever.ogds.base to the new version, some changes in the database are required.
+
+'groups' table creation :
+-------------------------
+
+    CREATE TABLE `groups` (
+      `groupid` varchar(30) NOT NULL,
+      `title` varchar(50) DEFAULT NULL,
+      PRIMARY KEY (`groupid`)
+    ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+
+'groups_users' table creation:
+------------------------------
+
+    CREATE TABLE `groups_users` (
+      `groupid` varchar(30) NOT NULL,
+      `userid` varchar(30) NOT NULL,
+      PRIMARY KEY (`groupid`,`userid`),
+      KEY `userid` (`userid`)
+    ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+
+adjust the 'clients' table:
+---------------------------
+
+    ALTER TABLE `opengeverold`.`clients` 
+    CHANGE COLUMN `group` `users_group_id` VARCHAR(30) NULL DEFAULT NULL,
+    CHANGE COLUMN `inbox_group` `inbox_group_id` VARCHAR(30) NULL DEFAULT NULL,
+    ADD INDEX `inbox_group_id` (`inbox_group_id` ASC),
+    ADD INDEX `users_group_id` (`users_group_id` ASC) ;
+
+
+LDAP - Import:
+--------------
+
+After you have to start the group import, but start first the user import:
+
+    bin/instance1 run src/opengever.ogds.base/opengever/ogds/base/ldap_import/sync_ldap.py -s 'mandant1' -c 'opengever.ogds.base.user-import'
+
+    bin/instance1 run src/opengever.ogds.base/opengever/ogds/base/ldap_import/sync_ldap.py -s 'mandant1' -c 'opengever.ogds.base.group-import'
