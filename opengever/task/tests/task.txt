@@ -6,23 +6,29 @@ This test checks the resolve rules of a task.
     >>> from opengever.base.interfaces import ISequenceNumber
     >>> from zope.component import getUtility
     >>> from plone.app.testing import TEST_USER_NAME, setRoles
-    >>> setRoles(self.portal, TEST_USER_NAME, ['Reviewer'])
+    >>> setRoles(self.portal, TEST_USER_NAME, ['Reviewer', 'Manager'])
 
 Create a Task:
 
-    >>> task1 = createContentInContainer(folder, 'opengever.task.task')
+    >>> task1 = createContentInContainer(folder, 'opengever.task.task',
+    ...     issuer=TEST_USER_NAME, responsible=TEST_USER_NAME)
     >>> task1
     <Task ...>
 
-    >>> task2 = createContentInContainer(task1, 'opengever.task.task')
-    >>> wft = task1.portal_workflow
-    >>> wf = wft.get(wft.getChainFor(task1)[0])
-    >>> transitions = [t.get('id') for t in wft.getTransitionsFor(task1)]
-    >>> 'task-transition-open-resolved' not in transitions
-    True
+set task to in progress state
 
-So now we resolve the subtask and after the task resolving should also be work 
-    >>> wft.doActionFor(task2, 'task-transition-open-resolved')
-    >>> wft.doActionFor(task1, 'task-transition-open-resolved')
-    >>> wft.getInfoFor(task1, 'review_state')
-    'task-state-resolved'
+    >>> wft = task1.portal_workflow
+    >>> wft.doActionFor(task1, 'task-transition-open-in-progress')
+
+    >>> task2 = createContentInContainer(task1, 'opengever.task.task',
+    ...    responsible=TEST_USER_NAME, issuer=TEST_USER_NAME)
+
+    >>> task1.restrictedTraverse('resolve_check').render()
+    False
+
+So now we resolve the subtask and after the task resolving should also be work
+
+    >>> wft.doActionFor(task2, 'task-transition-open-tested-and-closed')
+
+    >>> task1.restrictedTraverse('resolve_check').render()
+    True

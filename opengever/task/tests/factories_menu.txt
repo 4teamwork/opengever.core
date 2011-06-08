@@ -4,6 +4,11 @@ Factories menu
 If a task is added to another task, it is called subtask. So we need
 to change the name of the task in the add-menu if we are in a task.
 
+import, roles ect.
+
+    >>> from plone.app.testing import TEST_USER_NAME, setRoles
+    >>> setRoles(self.portal, TEST_USER_NAME, ['Reviewer', 'Manager'])
+
 
 Let the task be implicitly addable:
 
@@ -39,11 +44,15 @@ Let's create a task within the folder:
     >>> from plone.dexterity.utils import createContentInContainer
     >>> task = createContentInContainer(self.folder, 'opengever.task.task',
     ...                                 checkConstraints=False,
-    ...                                 title='Task one')
+    ...                                 title='Task one',
+    ...                                 issuer=TEST_USER_NAME,
+    ...                                 responsible=TEST_USER_NAME,)
+
+    >>> wft = task.portal_workflow
+    >>> wft.doActionFor(task, 'task-transition-open-in-progress')
 
 
 Check the addables:
-
     >>> items = menu.getMenuItems(task, self.app.REQUEST)
     >>> titles = [item['title'] for item in items]
     >>> u'Task' in titles
