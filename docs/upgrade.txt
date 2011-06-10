@@ -6,15 +6,28 @@ To upgrade the opengever.ogds.base to the new version, some changes in the datab
 'groups' table creation :
 -------------------------
 
-    CREATE TABLE `groups` (
-      `groupid` varchar(30) NOT NULL,
-      `title` varchar(50) DEFAULT NULL,
-      PRIMARY KEY (`groupid`)
+MySQL:
+
+    CREATE TABLE "groups" (
+      "groupid" varchar(30) NOT NULL,
+      "title" varchar(50) DEFAULT NULL,
+      PRIMARY KEY ("groupid")
     ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+Oracle:
+
+    CREATE TABLE "groups" (
+      "groupid" varchar(30) NOT NULL,
+      "title" varchar(50) DEFAULT NULL,
+      PRIMARY KEY ("groupid")
+    );
+
 
 
 'groups_users' table creation:
 ------------------------------
+
+MySQL:
 
     CREATE TABLE `groups_users` (
       `groupid` varchar(30) NOT NULL,
@@ -23,15 +36,43 @@ To upgrade the opengever.ogds.base to the new version, some changes in the datab
       KEY `userid` (`userid`)
     ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
+Oracle:
+
+    CREATE TABLE groups_users (
+      groupid varchar(30) NOT NULL,
+      userid varchar(30) NOT NULL,
+      PRIMARY KEY (groupid,userid)
+    );
+
 
 adjust the 'clients' table:
 ---------------------------
+
+MySQL:
 
     ALTER TABLE `clients` 
     CHANGE COLUMN `group` `users_group_id` VARCHAR(30) NULL DEFAULT NULL,
     CHANGE COLUMN `inbox_group` `inbox_group_id` VARCHAR(30) NULL DEFAULT NULL,
     ADD INDEX `inbox_group_id` (`inbox_group_id` ASC),
-    ADD INDEX `users_group_id` (`users_group_id` ASC) ;
+    ADD INDEX `users_group_id` (`users_group_id` ASC);
+
+Oracle:
+
+    ALTER TABLE clients
+    RENAME COLUMN "group" TO "users_group_id";
+
+    ALTER TABLE clients
+    RENAME COLUMN inbox_group TO inbox_group_id;
+
+    ALTER TABLE clients
+    ADD INDEX "inbox_group_id" ("inbox_group_id" ASC),
+    ADD INDEX "users_group_id" ("users_group_id" ASC) ;
+
+    CREATE INDEX inbox_group_id
+    ON clients (inbox_group_id);
+
+    CREATE INDEX users_group_id
+    ON clients (users_group_id);
 
 
 LDAP - Import:
