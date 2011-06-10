@@ -19,8 +19,8 @@ class JSONRolesSourceSection(object):
         client = get_current_client()
 
         replace_map = {
-            'users_group': client.group,
-            'inbox_group': client.inbox_group,
+            'users_group': client.users_group.groupid,
+            'inbox_group': client.inbox_group.groupid,
             'client_id': client.client_id,
             }
 
