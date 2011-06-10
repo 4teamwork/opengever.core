@@ -5,6 +5,9 @@ Changelog
 2.0b12
 ------
 
+* Rebuild OGDS, added groups to the OGDS, because of performance problems
+  [phgross]
+
 * Issue #1005 OGDS: in Realitaet inaktive Benutzer werden als aktiv angezeigt
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1005/
   Re-implemented import of LDAP users
