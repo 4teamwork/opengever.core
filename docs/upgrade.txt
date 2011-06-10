@@ -27,7 +27,7 @@ To upgrade the opengever.ogds.base to the new version, some changes in the datab
 adjust the 'clients' table:
 ---------------------------
 
-    ALTER TABLE `opengeverold`.`clients` 
+    ALTER TABLE `clients` 
     CHANGE COLUMN `group` `users_group_id` VARCHAR(30) NULL DEFAULT NULL,
     CHANGE COLUMN `inbox_group` `inbox_group_id` VARCHAR(30) NULL DEFAULT NULL,
     ADD INDEX `inbox_group_id` (`inbox_group_id` ASC),
