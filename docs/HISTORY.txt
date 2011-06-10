@@ -5,6 +5,9 @@ Changelog
 2.0b11
 ------
 
+* Rebuild OGDS, added groups to the OGDS, because of performance problems
+  [phgross]
+
 * Removed icon_expr for extedit action (now done with sprites)
   [lgraf]
 
