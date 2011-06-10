@@ -66,9 +66,9 @@ class LDAPGroupSourceSection(LDAPUserSourceSection):
                 print "The Group with the groupid %s can't be imported (UnicodeDecodeError)" % groupid
         
             temp = {}
-        
-            temp['groupid'] = group.getId()
-            temp['title'] = group.getName()
-            temp['_users'] = group.getMemberIds()
+            if groupid.startswith('og_'):
+                temp['groupid'] = group.getId()
+                temp['title'] = group.getName()
+                temp['_users'] = group.getMemberIds()
 
-            yield temp
+                yield temp
