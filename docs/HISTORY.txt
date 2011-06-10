@@ -5,6 +5,9 @@ Changelog
 2.0b16
 ------
 
+* Rebuild OGDS, added groups to the OGDS, because of performance problems
+  [phgross]
+
 * Removed content_icon and icon_exprs - now done with sprites
   [lgraf]
 
