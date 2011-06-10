@@ -5,6 +5,9 @@ Changelog
 2.0b16
 ------
 
+* Rebuild OGDS, added groups to the OGDS, because of performance problems
+  [phgross]
+
 * Added css_icon_class handling
   [27.05.2011, elio.schmutz]
 
