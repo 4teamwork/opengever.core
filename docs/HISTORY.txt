@@ -5,6 +5,9 @@ Changelog
 2.0b8
 -----
 
+* Made inbox overview more robust in regard to missing icons
+  [lgraf]
+
 * Adjusted document query for inbox overview to use css_icon_class
   [lgraf]
 

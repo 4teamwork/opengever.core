@@ -51,7 +51,7 @@ class InboxOverview(DossierOverview):
 
         # Fix the icon path
         for item in query.all():
-            item.icon = item.icon.replace(item.client_id+'/', '')
+            item.icon = item.icon and item.icon.replace(item.client_id+'/', '') or None
         return query.all()
 
 
