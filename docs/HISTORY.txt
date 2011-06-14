@@ -5,6 +5,10 @@ Changelog
 2.0b6
 -----
 
+* Removed task-template objects from various.csv since they currently break setup
+  because field validation for 'task_type' fails
+  [lgraf]
+
 * added special user (ogadmin) in to ogds, for correct contstraints of standard content
   [phgross]
 
