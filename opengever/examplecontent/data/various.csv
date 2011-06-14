@@ -1,7 +1,7 @@
 _path,_type,inbox_group,title,responsible,responsible_client,issuer,deadline,task_type,transitions
-/ordnungssystem/fuehrung/kommunikation-und-oeffentlichkeitsarbeit/dossier-1,opengever.dossier.businesscasedossier,,Hugo's Dossier,franz.michel,
-/ordnungssystem/fuehrung/kommunikation-und-oeffentlichkeitsarbeit/dossier-1/dossier-2,opengever.dossier.businesscasedossier,,Unterteilung in ein Subdossier,franz.michel,
-/ordnungssystem/fuehrung/kommunikation-und-oeffentlichkeitsarbeit/dossier-1/document-1,opengever.document.document,,Ein kleines Testdocument,,
+/ordnungssystem/fuehrung/kommunikation-und-oeffentlichkeitsarbeit/dossier-1,opengever.dossier.businesscasedossier,,Hugo's Dossier,franz.michel,,,2050-01-01,,
+/ordnungssystem/fuehrung/kommunikation-und-oeffentlichkeitsarbeit/dossier-1/dossier-2,opengever.dossier.businesscasedossier,,Unterteilung in ein Subdossier,franz.michel,,,2050-01-01,,
+/ordnungssystem/fuehrung/kommunikation-und-oeffentlichkeitsarbeit/dossier-1/document-1,opengever.document.document,,Ein kleines Testdocument,,,,2050-01-01,,
 /vorlagen/beispiel-standardablauf,opengever.tasktemplates.tasktemplatefolder,,Beispiel Standardablauf,,,,,,tasktemplates-transition-inactiv-activ
 /vorlagen/beispiel-standardablauf/tt1,opengever.tasktemplates.tasktemplate,,Aufgabe eins,responsible,interactive_users,responsible,4,report,
 /vorlagen/beispiel-standardablauf/tt2,opengever.tasktemplates.tasktemplate,,Aufgabe zwei,responsible,interactive_users,current_user,4,direct-execution,

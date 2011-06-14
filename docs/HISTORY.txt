@@ -5,6 +5,9 @@ Changelog
 2.0b6
 -----
 
+* Adjusted dates to match international date format now used in transmogrify.dexterity
+  [lgraf]
+
 
 2.0b5
 -----
