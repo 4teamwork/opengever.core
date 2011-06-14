@@ -8,7 +8,7 @@ from opengever.mail.interfaces import IMailSettings
 from opengever.ogds.base.interfaces import IClientConfiguration
 from opengever.ogds.base.ldap_import import sync_ldap
 from opengever.ogds.base.model.client import Client
-from opengever.ogds.base.model.user import Group
+from opengever.ogds.base.model.user import User, Group
 from opengever.ogds.base.utils import create_session
 from opengever.setup.utils import get_ldap_configs, get_policy_configs
 from plone.app.controlpanel.language import ILanguageSelectionSchema
@@ -35,7 +35,7 @@ EXTENSION_PROFILES = (
     'plonetheme.sunburst:default',
     )
 
-
+ADMIN_USER_ID = 'ogadmin'
 
 class AddOpengeverClient(AddPloneSite):
 
@@ -177,6 +177,19 @@ class CreateOpengeverClient(BrowserView):
 
             session.add(client)
 
+        # create the admin user in the ogds if he not exist
+        # and add it to the specified user_group
+        # so we avoid a constraintError in the choice fields
+
+        if session.query(User).filter_by(userid=ADMIN_USER_ID).count() == 0:
+            user = User(ADMIN_USER_ID, firstname='OG',
+                        lastname='Administrator', active=True)
+            session.add(user)
+        else:
+            user = session.query(User).filter_by(userid=ADMIN_USER_ID).first()
+
+        users_group = session.query(Group).filter_by(groupid=form['group']).first()
+        users_group.users.append(user)
 
         # set the client id in the registry
         registry = getUtility(IRegistry)
