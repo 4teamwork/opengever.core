@@ -5,6 +5,9 @@ Changelog
 2.0b6
 -----
 
+* added special user (ogadmin) in opengever client creation, is used during the standard content creation
+  [phgross]
+
 * Rebuild OGDS, added groups to the OGDS, because of performance problems
   [phgross]
 
