@@ -26,7 +26,7 @@ _path,_type,reference_number_prefix,effective_title,description,classification,p
 /ordnungssystem/ressourcen/infrastruktur/gebaeude-und-raumbewirtschaftung,opengever.repository.repositoryfolder,4,Gebäude- und Raumbewirtschaftung,,unprotected,privacy_layer_no,private,10,,unchecked,,30,2010-10-01
 /ordnungssystem/ressourcen/infrastruktur/sicherheit,opengever.repository.repositoryfolder,5,Sicherheit,,unprotected,privacy_layer_no,private,10,,unchecked,,30,2010-10-01
 /ordnungssystem/ressourcen/informatik,opengever.repository.repositoryfolder,5,Informatik,,unprotected,privacy_layer_no,private,10,,unchecked,,30,2010-10-01
-/ordnungssystem/ressourcen/administration,opengever.repository.repositoryfolder,6,Administration,,unprotected,privacy_layer_no,private,10,,not archival worthy,,,2010-10-01
+/ordnungssystem/ressourcen/administration,opengever.repository.repositoryfolder,6,Administration,,unprotected,privacy_layer_no,private,10,,not archival worthy,,30,2010-10-01
 /ordnungssystem/kernbereich-1,opengever.repository.repositoryfolder,3,Kernbereich 1,,unprotected,privacy_layer_no,private,10,,unchecked,,30,2010-10-01
 /ordnungssystem/kernbereich-1/kernbereich-1a,opengever.repository.repositoryfolder,1,Kernbereich 1a,,unprotected,privacy_layer_no,private,10,,archival worthy,,30,2010-10-01
 /ordnungssystem/kernbereich-1/kernbereich-1b,opengever.repository.repositoryfolder,2,Kernbereich 1b,,unprotected,privacy_layer_no,private,10,,archival worthy with sampling,,30,2010-10-01
@@ -35,7 +35,7 @@ _path,_type,reference_number_prefix,effective_title,description,classification,p
 /ordnungssystem/kernbereich-2/kernbereich-2b,opengever.repository.repositoryfolder,2,Kernbereich 2b,,confidential,privacy_layer_yes,private,10,,archival worthy with sampling,,100,2010-10-01
 /ordnungssystem/kernbereich-3,opengever.repository.repositoryfolder,5,Kernbereich 3,,unprotected,privacy_layer_no,private,10,,unchecked,,30,2010-10-01
 /ordnungssystem/kernbereich-3/kernbereich-3a,opengever.repository.repositoryfolder,1,Kernbereich 3a,,unprotected,privacy_layer_no,private,10,,archival worthy with sampling,,30,2010-10-01
-/ordnungssystem/kernbereich-3/kernbereich-3b,opengever.repository.repositoryfolder,2,Kernbereich 3b,,unprotected,privacy_layer_no,private,10,,not archival worthy,,,2010-10-01
+/ordnungssystem/kernbereich-3/kernbereich-3b,opengever.repository.repositoryfolder,2,Kernbereich 3b,,unprotected,privacy_layer_no,private,10,,not archival worthy,,30,2010-10-01
 /ordnungssystem/statistiken,opengever.repository.repositoryfolder,6,Statistiken,,unprotected,privacy_layer_no,private,10,,archival worthy,,30,2010-10-01
 /ordnungssystem/statistiken/kernbereich-1,opengever.repository.repositoryfolder,1,Kernbereich 1,,unprotected,privacy_layer_no,private,10,,archival worthy,,30,2010-10-01
 /ordnungssystem/statistiken/kernbereich-2,opengever.repository.repositoryfolder,2,Kernbereich 2,,unprotected,privacy_layer_no,private,10,,archival worthy,,30,2010-10-01

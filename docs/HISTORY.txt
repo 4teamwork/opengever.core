@@ -8,11 +8,15 @@ Changelog
 * added special user (ogadmin) in to ogds, for correct contstraints of standard content
   [phgross]
 
+* Fixed some errors in example repository data (missing custody_period, invalid date)
+  [lgraf]
+
 * Changed deprecated classification value 'selected' to 'unchecked' in example repository
   [lgraf]
 
 * Adjusted dates to match international date format now used in transmogrify.dexterity
   [lgraf]
+
 
 2.0b5
 -----
