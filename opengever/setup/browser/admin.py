@@ -182,14 +182,16 @@ class CreateOpengeverClient(BrowserView):
         # so we avoid a constraintError in the choice fields
 
         if session.query(User).filter_by(userid=ADMIN_USER_ID).count() == 0:
-            user = User(ADMIN_USER_ID, firstname='OG',
+            og_admin_user = User(ADMIN_USER_ID, firstname='OG',
                         lastname='Administrator', active=True)
-            session.add(user)
+            session.add(og_admin_user)
         else:
-            user = session.query(User).filter_by(userid=ADMIN_USER_ID).first()
+            og_admin_user = session.query(User).filter_by(userid=ADMIN_USER_ID).first()
+            og_admin_user.active = True
 
         users_group = session.query(Group).filter_by(groupid=form['group']).first()
-        users_group.users.append(user)
+        if og_admin_user not in users_group.users:
+            users_group.users.append(og_admin_user)
 
         # set the client id in the registry
         registry = getUtility(IRegistry)
@@ -218,6 +220,9 @@ class CreateOpengeverClient(BrowserView):
         # buggy with languages.
         langCP = getAdapter(site, ILanguageSelectionSchema)
         langCP.default_language = 'de-ch'
+
+        # the og_admin_user is not longer used so we set him to inactive
+        og_admin_user.active = False
 
         return 'ok'
 
