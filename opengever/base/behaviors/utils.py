@@ -70,7 +70,7 @@ def create_restricted_vocabulary(field, options, message_factory=None):
 
         def _get_acquisiton_value(self):
             context = self.context
-            if isinstance(context, MetadataBase):
+            if isinstance(context, MetadataBase) or context is None:
                 # we do not test the factory, it is not acquisition wrapped and
                 # we cant get the request...
                 return None

@@ -5,6 +5,9 @@ Changelog
 2.0b11
 ------
 
+* Made _get_acquisition_value() behave more robustly if context == None
+  [lgraf]
+
 * Rebuild OGDS, added groups to the OGDS, because of performance problems
   [phgross]
 
