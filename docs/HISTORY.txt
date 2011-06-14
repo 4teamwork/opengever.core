@@ -5,6 +5,8 @@ Changelog
 2.0b6
 -----
 
+* added special user (ogadmin) in to ogds, for correct contstraints of standard content
+  [phgross]
 
 2.0b5
 -----
