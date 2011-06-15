@@ -5,6 +5,9 @@ Changelog
 2.0b6
 -----
 
+* Disabled icon for ftw.mail.mail content type
+  [lgraf]
+
 * Issue #1021 Feedback Fokus: Datum bei Dokument
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1021/
   remove document_date setter in extract_attachements

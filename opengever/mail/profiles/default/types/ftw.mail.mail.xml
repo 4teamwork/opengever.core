@@ -1,6 +1,8 @@
 <?xml version="1.0"?>
 <object name="ftw.mail.mail" meta_type="Dexterity FTI">
 
+    <property name="icon_expr"></property>
+
     <action action_id="save_attachments"
             title="save attachments"
             visible="True"
