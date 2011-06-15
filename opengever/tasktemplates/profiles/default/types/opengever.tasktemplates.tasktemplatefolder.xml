@@ -4,7 +4,7 @@
 
     <!-- Basic metadata -->
     <property name="title" i18n:translate="">TaskTemplateFolder</property>
-    <property name="content_icon"></property>
+    <property name="icon_expr"></property>
     <property name="allow_discussion">False</property>
     <property name="global_allow">False</property>
     <property name="filter_content_types">True</property>
