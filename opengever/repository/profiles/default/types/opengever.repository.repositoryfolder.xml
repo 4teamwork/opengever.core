@@ -5,7 +5,7 @@
     <!-- Basic metadata -->
     <property name="title" i18n:translate="">RepositoryFolder</property>
     <property name="description" i18n:translate=""></property>
-    <property name="content_icon"></property>
+    <property name="icon_expr"></property>
     <property name="allow_discussion">False</property>
     <property name="global_allow">True</property>
     <property name="filter_content_types">True</property>
