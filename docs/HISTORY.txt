@@ -5,10 +5,6 @@ Changelog
 2.0b5
 -----
 
-* Issue #1040 Mandantenübergreifende Beteiligung: Anpassung Darstellung
-  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1040
-  [phgross]
-
 * Made reindexing of predecessor task more robust
   [lgraf]
 
