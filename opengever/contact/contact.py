@@ -1,11 +1,9 @@
 from five import grok
 
 from zope import schema
-from zope.component import getUtility
 from collective import dexteritytextindexer
 from plone.dexterity.content import Item
 from plone.directives import form
-from plone.i18n.normalizer.interfaces import IIDNormalizer
 from plone.indexer import indexer
 from plone.namedfile.field import NamedImage
 
@@ -211,16 +209,6 @@ class Contact(Item):
         """
         pass
 
-    def css_icon_class(self):
-        """Return the normalized portal-type
-           for the catalog
-        """
-        type_ = "contenttype"
-        normalize_method = getUtility(IIDNormalizer).normalize
-
-        contenttype = self.portal_type
-
-        return "%s-%s" % (type_, normalize_method(contenttype))
 
 @indexer(IContact)
 def contactid(obj):

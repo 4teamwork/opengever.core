@@ -5,6 +5,9 @@ Changelog
 2.0b7
 -----
 
+* Removed css_icon_class method - now done in tabbedview linked helper
+  [lgraf]
+
 * Removed content_icon for contact and contactfolder FTIs (now done with sprites)
   [lgraf]
 
