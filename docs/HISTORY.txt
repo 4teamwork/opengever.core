@@ -5,6 +5,9 @@ Changelog
 2.0b14
 ------
 
+* Using icon_expr instead of content_icon
+  [lgraf]
+
 * Removed content_icon for document FTI - now done with sprites
   [lgraf]
 
