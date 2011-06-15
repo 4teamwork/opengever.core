@@ -263,22 +263,6 @@ class Document(Item):
         """
         return self.getIcon()
 
-    def css_icon_class(self):
-        """Return the normalized mimetype of
-           the attached file for the catalog
-        """
-        type_ = "mimetype"
-        normalize_method = getUtility(IIDNormalizer).normalize
-
-        mimetypeitem = self.get_mimetype()
-        if not mimetypeitem:
-            return "%s-plain" % type_
-
-        # Get the first mimetype-entry
-        mimetypes = mimetypeitem[0].mimetypes[0].split("/")
-        mimetype = mimetypes[len(mimetypes)-1]
-
-        return "%s-%s" % (type_, normalize_method(mimetype))
 
     def get_mimetype(self):
         """Return the mimetype as object. If there is no matching mimetype,
