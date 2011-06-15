@@ -5,6 +5,10 @@ Changelog
 2.0b16
 ------
 
+* Issue #1040 Mandantenübergreifende Beteiligung: Anpassung Darstellung
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1040
+  [phgross]
+
 * https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/758
   change order of the fields
   [phgross]
