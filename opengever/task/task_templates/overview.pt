@@ -38,20 +38,22 @@
                 <td tal:content="python:context.deadline.strftime('%d.%m.%Y')"/>
             </tr>
 
+            <tr tal:condition="python: context.expectedStartOfWork">
+                <th tal:content="python: view.groups[1].widgets['expectedStartOfWork'].label"></th>
+                <td tal:content="python:context.expectedStartOfWork.strftime('%d.%m.%Y')"/>
+            </tr>
+
             <tr>
                 <th i18n:domain="opengever.task" i18n:translate="label_last_modified">Last change</th>
                 <td tal:content="python: view.context.modified().strftime('%d.%m.%Y %H:%M')"/>
             </tr>
+            <tr><td></td></tr>
 
         </tal:rep>
 
 
         <tal:rep2 tal:define="group2 python: len(view.groups) > 1 and view.groups[1] or None"
                   tal:condition="python: len(view.groups) > 1">
-            <tr tal:condition="python: context.expectedStartOfWork">
-                <th tal:content="python: group2.widgets['expectedStartOfWork'].label"></th>
-                <td tal:content="python:context.expectedStartOfWork.strftime('%d.%m.%Y')"/>
-            </tr>
 
             <tr tal:repeat="widget group2/widgets/values">
                 <tal:block condition="python:widget.__name__ not in ('IBasic.title', 'IBasic.description', 'title',

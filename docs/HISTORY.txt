@@ -5,6 +5,10 @@ Changelog
 2.0b16
 ------
 
+* https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/758
+  change order of the fields
+  [phgross]
+
 * Rebuild OGDS, added groups to the OGDS, because of performance problems
   [phgross]
 
