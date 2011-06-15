@@ -3,7 +3,7 @@ from opengever.ogds.base.interfaces import IContactInformation
 from opengever.ogds.base.utils import get_client_id
 from zope.app.component.hooks import getSite
 from zope.component import queryUtility
-
+from opengever.base.redirector import REMOTE_CLIENT_KEY
 
 def indexed_task_link(item, display_client=False):
     """Renders a indexed task item (globalindex sqlalchemy object) either
@@ -40,8 +40,10 @@ def indexed_task_link(item, display_client=False):
     # it is...
     if item.client_id != get_client_id():
         link_target = ' target="_blank"'
+        url = '%s/%s?%s=1' % (client.public_url, item.physical_path, REMOTE_CLIENT_KEY)
     else:
         link_target = ''
+        url = client.public_url + '/' + item.physical_path,
 
     # embed the client
     if display_client:
@@ -54,7 +56,7 @@ def indexed_task_link(item, display_client=False):
     if has_access:
         return '%s<a href="%s"%s>%s</a>' % (
             image,
-            client.public_url + '/' + item.physical_path,
+            url,
             link_target,
             inner_html)
     else:
