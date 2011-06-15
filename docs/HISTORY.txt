@@ -5,6 +5,9 @@ Changelog
 2.0b15
 ------
 
+* Removed css_icon_class method - now done in tabbedview linked helper
+  [lgraf]
+
 * Rebuild OGDS, added groups to the OGDS, because of performance problems
   [phgross]
 
