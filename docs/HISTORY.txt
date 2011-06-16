@@ -5,6 +5,9 @@ Changelog
 2.0b6
 -----
 
+* Removed also task-templatefolder
+  [phgross]
+
 * Removed task-template objects from various.csv since they currently break setup
   because field validation for 'task_type' fails
   [lgraf]
