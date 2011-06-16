@@ -37,7 +37,7 @@ obj2brain
 
 create a document, and get the CheckinCheckoutManager for the document
 
-    >>> mok_file1 = NamedFile('bla bla', filename='test.txt')
+    >>> mok_file1 = NamedFile('bla bla', filename=u'test.txt')
     >>> doc1 = createContentInContainer(folder, 'opengever.document.document', 
     ...     title=u"Doc One", document_author=u'Hugo Boss', 
     ...     document_date=datetime.date(2011,1,1), file=mok_file1)
@@ -75,7 +75,7 @@ cancelling and checkin should be allowed for the 'test_user_1_'
 checkin and cancelling:
 _______________________
 
-    >>> mok_file2 = NamedFile('blubb blubb', filename="blubb.txt")
+    >>> mok_file2 = NamedFile('blubb blubb', filename=u"blubb.txt")
     >>> doc1.file = mok_file2
     >>> manager.checkin(comment="Test commit Nr. 1")
 
@@ -85,9 +85,9 @@ _______________________
 document isn't checked out and the old object is in the history
     >>> manager.checked_out()
     >>> pr.retrieve(doc1, 0).object.file.filename
-    'doc-one.txt'
+    u'doc-one.txt'
     >>> doc1.file.filename
-    'blubb.txt'
+    u'blubb.txt'
 
     >>> manager.checkout()
     >>> manager.checked_out()
