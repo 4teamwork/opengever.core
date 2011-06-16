@@ -5,6 +5,12 @@ Changelog
 2.0b14
 ------
 
+* Removed css_icon_class method - now done in tabbedview linked helper
+  [lgraf]
+
+* Using icon_expr instead of content_icon
+  [lgraf]
+
 * Removed content_icon for document FTI - now done with sprites
   [lgraf]
 
