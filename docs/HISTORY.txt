@@ -5,6 +5,11 @@ Changelog
 2.0b12
 ------
 
+* #Issue 759 Oracle Konfiguration: collation
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/759/
+  [phgross]
+  
+
 * Rebuild OGDS, added groups to the OGDS, because of performance problems
   [phgross]
 
