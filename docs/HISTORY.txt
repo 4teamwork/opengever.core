@@ -5,6 +5,9 @@ Changelog
 2.0b15
 ------
 
+* Adjusted dossier overview to not need a metadata column for CSS icon class any more
+  [lgraf]
+
 * Removed css_icon_class method - now done in tabbedview linked helper
   [lgraf]
 

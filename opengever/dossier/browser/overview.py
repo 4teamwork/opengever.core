@@ -5,7 +5,26 @@ from opengever.dossier.behaviors.participation import IParticipationAware
 from opengever.globalindex.utils import indexed_task_link_helper
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.tabbedview.browser.tabs import OpengeverTab
+from plone.i18n.normalizer.interfaces import IIDNormalizer
 from zope.component import getUtility
+
+
+def css_class_from_brain(item):
+    normalize = getUtility(IIDNormalizer).normalize
+    if not item.portal_type == 'opengever.document.document':
+        css_class = "contenttype-%s" % normalize(item.portal_type)
+    else:
+        # It's a document, we therefore want to display an icon
+        # for the mime type of the contained file
+        icon = getattr(item, 'getIcon', '')
+        if not icon == '':
+            # Strip '.gif' from end of icon name and remove leading 'icon_'
+            filetype = icon[:icon.rfind('.')].replace('icon_', '')
+            css_class = 'icon-%s' % normalize(filetype)
+        else:
+            # Fallback for unknown file type
+            css_class = "contenttype-%s" % normalize(item.portal_type)
+    return css_class
 
 
 class DossierOverview(grok.View, OpengeverTab):
@@ -52,7 +71,7 @@ class DossierOverview(grok.View, OpengeverTab):
             'getURL': document.getURL,
             'alt': document.document_date and \
                 document.document_date.strftime('%d.%m.%Y') or '',
-            'getIcon': document.css_icon_class,
+            'css_class': css_class_from_brain(document),
             'portal_type': document.portal_type,
         } for document in documents]
 
@@ -85,7 +104,7 @@ class DossierOverview(grok.View, OpengeverTab):
         return [{
             'Title': info.describe(xx.contact),
             'getURL': info.get_profile_url(xx.contact),
-            'getIcon':'function-user',
+            'css_class':'function-user',
             }
             for xx in results]
 
@@ -103,17 +122,9 @@ class DossierOverview(grok.View, OpengeverTab):
     def _get_css_icon_class(self, item):
         """Return the rigth css-class for the icon.
         """
-        if not hasattr(item, 'portal_type'):
-            try:
-
-                return item['getIcon']
-            except KeyError:
-                return ""
-
-        mimetype = item.css_icon_class
-
-        if mimetype:
-            return mimetype
+        if hasattr(item, 'portal_type'):
+            # It's a brain
+            return css_class_from_brain(item)
         else:
-            return ""
-
+            # It's a dict
+            return item['css_class']
