@@ -5,6 +5,9 @@ Changelog
 2.0b16
 ------
 
+* Extended `linked` helper to compute CSS classes for icons
+  [lgraf]
+
 * Rebuild OGDS, added groups to the OGDS, because of performance problems
   [phgross]
 
