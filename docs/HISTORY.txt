@@ -5,6 +5,9 @@ Changelog
 2.0b14
 ------
 
+* adjust the direct_checkout functionality, error message when document has no file
+  [phgross] 
+
 * Removed css_icon_class method - now done in tabbedview linked helper
   [lgraf]
 

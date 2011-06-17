@@ -22,6 +22,14 @@ class EditingDocument(grok.CodeView):
     grok.name('editing_document')
 
     def render(self):
+
+        # have the document a file
+        if not self.context.file:
+            msg = _(u'The Document ${title} has no File',
+                mapping={'title': self.context.Title()})
+            IStatusMessage(self.request).addStatusMessage(msg, type='error')
+            return self.request.RESPONSE.redirect(self.get_redirect_url())
+        
         # check out the document
         manager = getMultiAdapter((self.context, self.request),
                                   ICheckinCheckoutManager)
