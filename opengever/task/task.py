@@ -26,7 +26,6 @@ from operator import attrgetter
 from plone.dexterity.content import Container
 from plone.directives import form, dexterity
 from plone.directives.dexterity import DisplayForm
-from plone.i18n.normalizer.interfaces import IIDNormalizer
 from plone.indexer import indexer
 from Products.CMFCore.interfaces import IActionSucceededEvent
 from Products.CMFCore.utils import getToolByName
@@ -247,16 +246,6 @@ class Task(Container):
     def client_id(self):
         return get_client_id()
 
-    def css_icon_class(self):
-        """Return the normalized portal-type
-           for the catalog
-        """
-        type_ = "contenttype"
-        normalize_method = getUtility(IIDNormalizer).normalize
-
-        contenttype = self.portal_type
-
-        return "%s-%s" % (type_, normalize_method(contenttype))
 
 @form.default_value(field=ITask['deadline'])
 def deadlineDefaultValue(data):

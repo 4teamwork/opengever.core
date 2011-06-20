@@ -5,6 +5,9 @@ Changelog
 2.0b16
 ------
 
+* Removed css_icon_class method - now done in tabbedview linked helper
+  [lgraf]
+
 * https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/758
   change order of the fields
   [phgross]
