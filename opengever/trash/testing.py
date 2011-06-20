@@ -1,7 +1,7 @@
 from plone.app.testing import PloneSandboxLayer
 from plone.app.testing import applyProfile
 from plone.app.testing import PLONE_FIXTURE
-from plone.app.testing import IntegrationTesting, TEST_USER_NAME, setRoles
+from plone.app.testing import IntegrationTesting, TEST_USER_ID, setRoles
 from zope.configuration import xmlconfig
 
 
@@ -18,7 +18,7 @@ class TrashLayer(PloneSandboxLayer):
     def setUpPloneSite(self, portal):
         # Install into Plone site using portal_setup
         applyProfile(portal, 'opengever.trash:default')
-        setRoles(portal, TEST_USER_NAME, ['Member', 'Contributor', 'Manager'])
+        setRoles(portal, TEST_USER_ID, ['Member', 'Contributor', 'Manager'])
         # portal workaround
         self.portal = portal
 
