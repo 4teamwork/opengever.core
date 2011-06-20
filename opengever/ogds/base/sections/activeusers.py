@@ -1,5 +1,6 @@
 import logging
 import sqlalchemy
+import transaction
 from sqlalchemy.exceptions import OperationalError
 from sqlalchemy.sql.expression import update
 from sqlalchemy import Table
@@ -44,11 +45,10 @@ class ActiveUsersSection(object):
         self.table = Table(tablename, meta, autoload=True, autoload_with=self.connection.engine)
 
     def __iter__(self):
-        trans = self.connection.begin()
-
         # First, set all the users in the SQL DB to inactive
         set_all_inactive = update(self.table)
         self.connection.execute(set_all_inactive, {'active':'0'})
+        transaction.commit()
 
         for item in self.previous:
             try:
@@ -58,9 +58,10 @@ class ActiveUsersSection(object):
                 yield item
 
             except OperationalError, e:
-                trans.rollback()
+                transaction.abort()
                 self.logger.warn("SQL operational error: %s" % e)
             except:
-                trans.rollback()
+                transaction.abort()
                 raise
-        trans.commit()
+
+        transaction.commit()
