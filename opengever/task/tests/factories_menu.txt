@@ -6,8 +6,8 @@ to change the name of the task in the add-menu if we are in a task.
 
 import, roles ect.
 
-    >>> from plone.app.testing import TEST_USER_NAME, setRoles
-    >>> setRoles(self.portal, TEST_USER_NAME, ['Reviewer', 'Manager'])
+    >>> from plone.app.testing import TEST_USER_ID, setRoles
+    >>> setRoles(self.portal, TEST_USER_ID, ['Reviewer', 'Manager'])
 
 
 Let the task be implicitly addable:
@@ -45,8 +45,8 @@ Let's create a task within the folder:
     >>> task = createContentInContainer(self.folder, 'opengever.task.task',
     ...                                 checkConstraints=False,
     ...                                 title='Task one',
-    ...                                 issuer=TEST_USER_NAME,
-    ...                                 responsible=TEST_USER_NAME,)
+    ...                                 issuer=TEST_USER_ID,
+    ...                                 responsible=TEST_USER_ID,)
 
     >>> wft = task.portal_workflow
     >>> wft.doActionFor(task, 'task-transition-open-in-progress')

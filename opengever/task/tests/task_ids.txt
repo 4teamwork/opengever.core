@@ -5,7 +5,7 @@ The task ID needs to be in following format:
     >>> from plone.dexterity.utils import createContentInContainer
     >>> from opengever.base.interfaces import ISequenceNumber
     >>> from zope.component import getUtility
-    >>> from plone.app.testing import TEST_USER_NAME, setRoles
+    >>> from plone.app.testing import TEST_USER_ID, setRoles
 
 Create a task:
 
