@@ -5,7 +5,7 @@ Imports
     >>> from opengever.ogds.base.utils import create_session
     >>> from opengever.ogds.base.setuphandlers import _create_example_user
     >>> from plone.app.testing import setRoles
-    >>> from plone.app.testing import TEST_USER_NAME
+    >>> from plone.app.testing import TEST_USER_ID
     >>> from opengever.task.task import ITask
     >>> from opengever.ogds.base.autocomplete_widget import AutocompleteFieldWidget
     >>> from zope.component import getUtility
@@ -41,7 +41,7 @@ Users:
 
 we create example task
 
-    >>> setRoles(portal, TEST_USER_NAME, ['Member', 'Manager'])
+    >>> setRoles(portal, TEST_USER_ID, ['Member', 'Manager'])
     >>> id = portal.invokeFactory('opengever.task.task', 'task-1')
     >>> task1 = portal[id]
 
