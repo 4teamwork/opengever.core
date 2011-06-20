@@ -5,6 +5,9 @@ Changelog
 2.0b12
 ------
 
+* added ldap synchronisation ldap panel
+  [phgross]
+
 * fixed transaction handling in activeuser section used in the ldap import
   [phgross]
 
