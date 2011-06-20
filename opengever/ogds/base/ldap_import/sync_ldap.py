@@ -44,7 +44,7 @@ def check_if_ldap_reachable(site):
     ldap_url = "%s://%s:%s" % (server['protocol'], server['host'], server['port'])
     ldap_conn = ldap.initialize(ldap_url)
     try:
-        ldap_conn.search_s('ou=Users,ou=OpenGever,dc=4teamwork,dc=ch',ldap.SCOPE_SUBTREE)
+        ldap_conn.search_s(ldap_folder.users_base,ldap.SCOPE_SUBTREE)
     except ldap.LDAPError, e:
         # If for some reason we can't get a connection to the LDAP,
         # we abort the entire import, because otherwise we would
