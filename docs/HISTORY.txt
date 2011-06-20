@@ -5,6 +5,9 @@ Changelog
 2.0b11
 ------
 
+* fixed bug in copyitem_view 
+  [ttschanz]
+
 * Made _get_acquisition_value() behave more robustly if context == None
   [lgraf]
 
