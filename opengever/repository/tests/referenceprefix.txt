@@ -13,10 +13,6 @@ Since plone tests sucks, we need to re-register the reference number validator a
     >>> from z3c.form.interfaces import IValidator
     >>> getMultiAdapter((self.portal, None, None,
     ...                  referenceprefix.IReferenceNumberPrefix['reference_number_prefix'], None), IValidator)
-    <SimpleFieldValidator for IReferenceNumberPrefix['reference_number_prefix']>
-    >>> provideAdapter(referenceprefix.ReferenceNumberPrefixValidator)
-    >>> getMultiAdapter((self.portal, None, None,
-    ...                  referenceprefix.IReferenceNumberPrefix['reference_number_prefix'], None), IValidator)
     <ReferenceNumberPrefixValidator for IReferenceNumberPrefix['reference_number_prefix']>
 
 When we create a dexterity content type::
@@ -111,6 +107,6 @@ Check the reference numbers of the objects::
     ...     if referenceprefix.IReferenceNumberPrefixMarker.providedBy(obj):
     ...         num = referenceprefix.IReferenceNumberPrefix(obj).reference_number_prefix
     ...         print (obj.Title(), num)
-    (u'Hugo', u'1')
-    (u'Hans', u'2')
-    (u'Peter', u'a1x10')
+    ('Hugo', u'1')
+    ('Hans', u'2')
+    ('Peter', u'a1x10')

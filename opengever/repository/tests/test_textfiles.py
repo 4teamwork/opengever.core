@@ -1,42 +1,23 @@
 import unittest
+import os
 
 from Testing import ZopeTestCase as ztc
 
-from Products.Five import zcml
-from Products.PloneTestCase import PloneTestCase as ptc
-from Products.PloneTestCase.layer import onsetup
+from opengever.repository.tests.base import OpengeverRepositoryTestCase
 
-import plone.app.dexterity
-import opengever.repository
-
-@onsetup
-def setup_product():
-    zcml.load_config('meta.zcml', plone.app.dexterity)
-    zcml.load_config('configure.zcml', plone.app.dexterity)
-    zcml.load_config('configure.zcml', opengever.repository)
-
-setup_product()
-ptc.setupPloneSite(extension_profiles=['plone.app.dexterity:default',
-                                        'opengever.repository:default'])
-
-doc_tests = (
-    )
-functional_tests = (
-    'referenceprefix.txt',
-    'repositoryfolder.txt',
-    )
+HERE = os.path.dirname( os.path.abspath( __file__ ) )
 
 def test_suite():
+    txtfiles = [f for f in os.listdir(HERE)
+                if f.endswith('.txt') and
+                not f.startswith('.')]
     return unittest.TestSuite(
         [ztc.FunctionalDocFileSuite(
-            'tests/%s' % f, package='opengever.repository',
-            test_class=ptc.FunctionalTestCase)
-            for f in functional_tests] + 
-        [ztc.ZopeDocFileSuite(
-            'tests/%s' % f, package='opengever.repository',
-            test_class=ptc.FunctionalTestCase)
-            for f in doc_tests],
+                'tests/%s' % f, package='opengever.repository',
+                test_class=OpengeverRepositoryTestCase)
+         for f in txtfiles]
         )
 
 if __name__ == '__main__':
     unittest.main(defaultTest='test_suite')
+    

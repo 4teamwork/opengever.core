@@ -16,7 +16,7 @@ For surfing we need a Browser::
 
     >>> from Products.Five.testbrowser import Browser
     >>> browser = Browser()
-    >>> browser.handleErrors = True
+    >>> browser.handleErrors = False
     >>> self.app.acl_users.userFolderAddUser('root', 'secret',
     ...                                      ['Manager'], [])
     >>> browser.addHeader('Authorization', 'Basic root:secret')
