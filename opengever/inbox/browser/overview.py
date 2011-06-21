@@ -5,9 +5,28 @@ from opengever.globalindex.model.task import Task
 from opengever.inbox.inbox import IInbox
 from opengever.ogds.base.interfaces import IClientConfiguration
 from opengever.ogds.base.utils import get_client_id
+from plone.i18n.normalizer.interfaces import IIDNormalizer
 from plone.registry.interfaces import IRegistry
 from zope.component import getUtility
 from zope.i18nmessageid import MessageFactory
+
+
+def css_class_from_brain(item):
+    normalize = getUtility(IIDNormalizer).normalize
+    if not item.portal_type == 'opengever.document.document':
+        css_class = "contenttype-%s" % normalize(item.portal_type)
+    else:
+        # It's a document, we therefore want to display an icon
+        # for the mime type of the contained file
+        icon = getattr(item, 'getIcon', '')
+        if not icon == '':
+            # Strip '.gif' from end of icon name and remove leading 'icon_'
+            filetype = icon[:icon.rfind('.')].replace('icon_', '')
+            css_class = 'icon-%s' % normalize(filetype)
+        else:
+            # Fallback for unknown file type
+            css_class = "contenttype-%s" % normalize(item.portal_type)
+    return css_class
 
 
 class InboxOverview(DossierOverview):
@@ -68,7 +87,7 @@ class InboxOverview(DossierOverview):
             'getURL': document.getURL,
             'alt': document.document_date and \
                 document.document_date.strftime('%d.%m.%Y') or '',
-            'getIcon': document.css_icon_class,
+            'css_class': css_class_from_brain(document),
             'portal_type': document.portal_type,
         } for document in documents]
 
