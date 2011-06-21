@@ -152,7 +152,11 @@ def set_dates(context, event):
     """Eventhandler wich set automaticly the enddate
     when a forwarding would be closed"""
 
-    if event.action == 'forwarding-transition-close':
+    closing_transitions = [
+        'forwarding-transition-close',
+        'forwarding-transition-assign-to-dossier']
+
+    if event.action in closing_transitions:
         context.date_of_completion = datetime.now()
 
 
