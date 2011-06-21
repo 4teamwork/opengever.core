@@ -13,18 +13,17 @@ def indexed_task_link(item, display_client=False):
 
     site = getSite()
 
-    # render icon image
-    if item.icon:
-        image = '<img src="%s/%s" /> ' % (site.absolute_url(), item.icon)
+    if item.task_type == 'forwarding_task_type':
+        css_class = 'contenttype-opengever-inbox-forwarding'
     else:
-        image = ''
+        css_class = 'contenttype-opengever-task-task'
 
     # get the contact information utlity and the client
     info = queryUtility(IContactInformation)
     if info:
         client = info.get_client_by_id(item.client_id)
     if not info or not client:
-        return '%s<span>%s</span>' % (image, item.title)
+        return '<span class="%s">%s</span>' % (css_class, item.title)
 
     # has the user access to the target task?
     has_access = False
@@ -50,10 +49,9 @@ def indexed_task_link(item, display_client=False):
         client_html = ''
 
     # render the full link if he has acccess
-    inner_html = ''.join((item.title, client_html))
+    inner_html = ''.join(('<span class="%s">%s</span>' % (css_class, item.title), client_html))
     if has_access:
-        return '%s<a href="%s"%s>%s</a>' % (
-            image,
+        return '<a href="%s"%s>%s</a>' % (
             client.public_url + '/' + item.physical_path,
             link_target,
             inner_html)
