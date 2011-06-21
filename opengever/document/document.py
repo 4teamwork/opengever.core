@@ -230,10 +230,14 @@ class Document(Item):
     buildPreview = False
 
     def Title(self):
-        title = Item.Title(self)
+        # this is a CMF-style accessor, so should return utf8-encoded
+        title = self.title
+        if isinstance(title, unicode):
+            title = self.title.encode('utf8')
         if IWorkingCopy.providedBy(self):
             return '%s (Arbeitskopie)' % title
-        return title
+        return self.title or ''
+
 
     def surrender(self, relative_to_portal=0):
         return super(Document, self).getIcon(relative_to_portal=relative_to_portal)
