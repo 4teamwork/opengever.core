@@ -188,8 +188,6 @@ class MyTasks(GlobalTaskListingTab):
 
         # .. and assigned to the current client
         query = query.filter_by(assigned_client=get_client_id())
-        for item in query:
-            item.icon = item.icon.replace(item.client_id+'/', '')
         return query
 
 class IssuedTasks(Tasks):
