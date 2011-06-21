@@ -5,6 +5,9 @@ Changelog
 2.0b8
 -----
 
+* Removed unnecessary code for fixing icon paths
+  [lgraf]
+
 * Made inbox overview more robust in regard to missing icons
   [lgraf]
 

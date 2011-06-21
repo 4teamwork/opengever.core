@@ -49,11 +49,6 @@ class InboxOverview(DossierOverview):
         query = query.filter(Task.review_state=='task-state-open')
         query = query.filter(Task.client_id != get_client_id())
 
-        # Fix the icon path
-        for item in query.all():
-            item.icon = item.icon and item.icon.replace(item.client_id+'/', '') or None
-        return query.all()
-
 
     def documents(self):
         """
