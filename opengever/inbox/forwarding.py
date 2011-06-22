@@ -38,7 +38,9 @@ class IForwarding(ITask):
     form.omitted('expectedCost')
     form.omitted('effectiveDuration')
     form.omitted('effectiveCost')
-    form.omitted('date_of_completion')
+
+    #only hide date_of_completion, it's used
+    form.mode(date_of_completion=HIDDEN_MODE)
 
     # deadline is not required
     deadline = schema.Date(
