@@ -5,6 +5,11 @@ Changelog
 2.0b15
 ------
 
+* #996 Mails in Dossier verschieben ist nicht erlaubt
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/996/
+  Updated permissionroles in Workflow definition. Mails now are hidden in Contentmenu.
+  [ttschanz]
+
 * Added Custom Label for Add and EditForm, special handling for Subdossiers
   [phgross]
 
