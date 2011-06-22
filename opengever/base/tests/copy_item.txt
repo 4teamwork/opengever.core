@@ -2,7 +2,6 @@ copy_item function
 ==================
 
 imports:
-	>>> from plone.testing.z2 import Browser
     >>> from plone.dexterity.fti import DexterityFTI
     >>> from Products.CMFCore.utils import getToolByName
 	>>> self.setRoles('Manager')
