@@ -3,7 +3,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2011-05-03 10:13+0000\n"
+"POT-Creation-Date: 2011-06-22 07:52+0000\n"
 "PO-Revision-Date: 2009-01-01 10:00+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: Jonas Baumann <j.baumann@4teamwork.ch>\n"
@@ -52,9 +52,14 @@ msgid "confidential"
 msgstr "Vertraulich"
 
 #. Default: "You have not selected any Items"
-#: ./opengever/base/browser/copy_items.py:43
+#: ./opengever/base/browser/copy_items.py:45
 msgid "error_no_items"
 msgstr "Sie haben keine Objekte ausgewählt"
+
+#. Default: "The item you selected cannot be copied"
+#: ./opengever/base/browser/copy_items.py:34
+msgid "error_not_copyable"
+msgstr "Der gewählte Inhalt kann nicht kopiert werden"
 
 #. Default: "Classification"
 #: ./opengever/base/behaviors/classification.py:20
