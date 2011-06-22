@@ -5,6 +5,9 @@ Changelog
 2.0b6
 -----
 
+* Updated Permission-roles
+  [ttschanz]
+
 * Disabled icon for ftw.mail.mail content type
   [lgraf]
 
