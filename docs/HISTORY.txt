@@ -5,6 +5,11 @@ Changelog
 2.0b16
 ------
 
+* #1031 Direkter Checkout Aufruf aus Dokumentenliste heraus
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1031
+  disable external_edit_link in trash tab
+  [phgross]
+
 * Extended `linked` helper to compute CSS classes for icons
   [lgraf]
 
