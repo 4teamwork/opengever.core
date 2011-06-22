@@ -153,7 +153,7 @@ class SuccessorTaskForm(Form):
     def updateWidgets(self):
         super(SuccessorTaskForm, self).updateWidgets()
         self.widgets['client'].mode = HIDDEN_MODE
-        self.widgets['client'].value = get_client_id()
+        self.widgets['client'].value = self.context.responsible_client
         self.request['form.widgets.client'] = self.widgets['client'].value
 
 
