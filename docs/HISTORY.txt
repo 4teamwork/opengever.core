@@ -5,6 +5,11 @@ Changelog
 2.0b8
 -----
 
+* #1031 Direkter Checkout Aufruf aus Dokumentenliste heraus
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1031
+  disable external_edit_link in inbox
+  [phgross]
+
 * Removed unnecessary code for fixing icon paths
   [lgraf]
 

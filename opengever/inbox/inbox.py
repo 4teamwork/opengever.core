@@ -3,6 +3,7 @@ from five import grok
 from opengever.inbox import _
 from plone.directives import form
 from opengever.tabbedview.browser.tabs import Tasks, Documents
+from opengever.tabbedview.helper import external_edit_link
 from zope import schema
 from opengever.mail.interfaces import ISendableDocsContainer
 
@@ -67,7 +68,9 @@ class InboxDocuments(Documents):
             if isinstance(col, dict) and \
                     col.get('column') in remove_columns:
                 pass  # remove this column
-
+            # remove external_edit_link from the columns not used
+            elif isinstance(col, tuple) and col[1] == external_edit_link:
+                pass # remove this colun
             else:
                 columns.append(col)
 
