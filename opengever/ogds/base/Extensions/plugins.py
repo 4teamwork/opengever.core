@@ -32,6 +32,7 @@ def authenticate_credentials(self, credentials):
     # is the client_id and the ip combination valid?
     info = getUtility(IContactInformation)
     client = info.get_client_by_id(cid)
-    if client and client.client_id == cid and client.ip_address == ip:
+    #split client.ip_address because they could be a comme seperated list
+    if client and ip in client.ip_address.split(','):
         return uid, login
     return None
