@@ -81,7 +81,11 @@ class InboxDocuments(Documents):
         """Defines the enabled Actions"""
         actions = super(InboxDocuments, self).enabled_actions
         actions = [action for action in actions
-                   if action not in ('create_task',)]
+                   if action not in (
+                    'create_task', 
+                    'copy_documents_to_remote_client',
+                    'move_items',)]
+
         actions += ['create_forwarding']
         return  actions
 
