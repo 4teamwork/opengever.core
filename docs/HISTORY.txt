@@ -5,6 +5,10 @@ Changelog
 2.0b16
 ------
 
+* Issue #1046 Tab Meine Aufgaben etc.: Laufnummer folgt der Stringsortierung
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1046/
+  [phgross]
+
 * #1031 Direkter Checkout Aufruf aus Dokumentenliste heraus
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1031
   disable external_edit_link in trash tab

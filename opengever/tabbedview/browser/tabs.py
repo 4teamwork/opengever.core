@@ -43,7 +43,7 @@ class OpengeverTab(object):
         if getattr(self, '_custom_sort_method', None) is not None:
             results = self._custom_sort_method(results, sort_on, sort_reverse)
 
-        elif sort_on=='reference':
+        elif sort_on=='reference' or sort_on=='sequence_number':
             splitter = re.compile('[/\., ]')
 
             def _sortable_data(brain):
