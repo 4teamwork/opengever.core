@@ -5,6 +5,11 @@ Changelog
 2.0b4
 -----
 
+* Issue #1015 Dossier abschliessen: Deckblatt anpassen
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1015
+  implemented new template
+  [phgross]
+
 * Issue #1013 Feedback Fokus: Ausdruck Geschaeftsdetail (Art des Geschaefts)
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1013/
   [phgross]

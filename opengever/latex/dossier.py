@@ -6,14 +6,17 @@ from Products.statusmessages.interfaces import IStatusMessage
 from opengever.latex import _
 from opengever.latex.layouts.dossierlayout import DossierLayout
 from opengever.ogds.base.interfaces import IContactInformation
+from opengever.repository.interfaces import IRepositoryFolder
 
 from zope.component import getUtility, getAdapter
+from zope.schema.vocabulary import getVocabularyRegistry
 from opengever.base.interfaces import IReferenceNumber, ISequenceNumber
 from zope.component import queryUtility
 from plone.registry.interfaces import IRegistry
 from opengever.base.interfaces import IBaseClientID
 from plone.autoform.base import AutoFields
 
+from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
 from plonegov.pdflatex.pdfgenerator import PdfMissingException
 from plonegov.pdflatex.browser.converter import LatexCTConverter
 
@@ -85,9 +88,21 @@ class DossierLatexConverter(LatexCTConverter,grok.CodeView,AutoFields):
         end = end==None and '-' or end
         registry = queryUtility(IRegistry)
         proxy = registry.forInterface(IBaseClientID)
-        filling_no = getattr(IDossier(context), 'filing_no', None)
-        fillingNumber = ""
+        
+        # buildout a kind of breadcrumbs with all parental repository folders
+        repository = []
+        while not IPloneSiteRoot.providedBy(parent):
+            if IRepositoryFolder.providedBy(parent):
+                repository.append(parent.Title())
+            parent = aq_parent(aq_inner(parent))
 
+        # filing_prefix
+        # Get the value and not the key from the prefix vocabulary
+        filing_prefix = getVocabularyRegistry().get(
+            self.context, 'opengever.dossier.type_prefixes').by_token.get(
+                IDossier(self.context).filing_prefix).title
+
+        filling_no = getattr(IDossier(context), 'filing_no', None)
         self.view = view
         latex = '\\linespread {1.5}\n'
         latex += '\\thispagestyle{empty}\n'
@@ -95,13 +110,17 @@ class DossierLatexConverter(LatexCTConverter,grok.CodeView,AutoFields):
         latex += '\\small %s \\newline\n' % self.view.convert(proxy.client_id)
         latex += '\\noindent\n'
         latex += '\\includegraphics{strich} \\newline\n'
-        latex += '\\scriptsize Aktenzeichen: %s\\hspace{0.15cm}|' % self.view.convert(getAdapter(self.context, IReferenceNumber).get_number())
+        latex += '\\scriptsize'
+        latex += '\\hspace{0.15cm}Ordnungsposition: %s\\newline\n' % self.view.convert(' / '.join(repository))
+        latex += '\\hspace{0.15cm}Aktenzeichen: %s\\newline\n' % self.view.convert(getAdapter(self.context, IReferenceNumber).get_number())
+        if filing_prefix:
+            latex += '\\hspace{0.15cm}Ablage: %s\\newline\n' % self.view.convert(filing_prefix)
         if filling_no:
-            fillingNumber = self.view.convert(filling_no)
-            latex += '\\hspace{0.15cm}Ablagenummer: %s\\hspace{0.15cm}|' % fillingNumber
+            latex += '\\hspace{0.15cm}Ablagenummer: %s\\newline\n' % self.view.convert(filling_no)
+
         latex += '\\hspace{0.15cm}Laufnummer: %s\n' % self.view.convert(str(getUtility(ISequenceNumber).get_number(self.context)))
         latex += '\\noindent\n'
-        latex += '\\vspace{1.5cm} \\newline\n'
+        latex += '\\vspace{0.8cm} \\newline\n'
         latex += '\\scriptsize %s\n' % self.view.convert(repositoryfolder)
         latex += '\\vspace{0.3cm} \\newline\n'
         latex += '\\small \\textbf{%s}. %s \\newline\n' %(self.view.convert(context.Title()),self.view.convert(context.Description()))
