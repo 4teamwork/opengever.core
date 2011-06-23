@@ -233,6 +233,9 @@ Various lists and other methods:
     >>> print info.get_client_by_id('unknown client')
     None
 
+    >>> list(info.list_user_groups('hugo.boss'))
+    [<Group client1_users>, <Group client1_inbox_users>]
+
 
 Test describe with a PAS user:
 

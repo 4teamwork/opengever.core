@@ -10,7 +10,8 @@
     <metal:main fill-slot="main">
       <tal:main-macro metal:define-macro="main"
                       tal:define="data view/get_userdata;
-                                  user data/user">
+                                  user data/user;
+                                  groups data/groups">
 
         <div tal:replace="structure provider:plone.abovecontenttitle" />
         <h1 class="documentFirstHeading" tal:content="data/fullname"/>
@@ -115,6 +116,17 @@
               </div>
               <div tal:content="user/country" tal:condition="user/country" />
             </td>
+          </tr>
+
+          <tr tal:condition="python:len(groups) > 0">
+              <th i18n:translate="label_groups">Groups:</th>
+              <td>
+                  <ul tal:repeat="group groups">
+                      <li>
+                        <a tal:attributes="href string:list_groupmembers?group=${group/groupid}" class="link-overlay" tal:content="python: group.title or group.groupid"></a>
+                      </li>
+                  </ul>
+              </td>
           </tr>
 
         </table>

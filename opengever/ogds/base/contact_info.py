@@ -107,6 +107,14 @@ class ContactInformation(grok.GlobalUtility):
                 return groups[0].users
         return []
 
+    def list_user_groups(self, userid):
+        if userid:
+            session = create_session()
+            groups = session.query(User).filter(
+                        User.userid==userid).first().group_users
+            return groups
+        return []
+
     def get_user(self, principal):
         """Returns the user with the userid `principal`.
         """

@@ -18,9 +18,12 @@ class UserDetails(grok.View):
         """
         info = getUtility(IContactInformation)
         user = info.get_user(self.userid)
+        groups = info.list_user_groups(self.userid)
+
         return {'user': user,
                 'userid': self.userid,
-                'fullname': info.describe(self.userid)}
+                'fullname': info.describe(self.userid),
+                'groups': groups}
 
     def publishTraverse(self, request, name):
         """The name is the userid of the user who should be displayed.
