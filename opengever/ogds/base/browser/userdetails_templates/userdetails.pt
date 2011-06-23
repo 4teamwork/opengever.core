@@ -121,14 +121,13 @@
           <tr tal:condition="python:len(groups) > 0">
               <th i18n:translate="label_groups">Groups:</th>
               <td>
-                  <ul tal:repeat="group groups">
-                      <li>
-                        <a tal:attributes="href string:list_groupmembers?group=${group/groupid}" class="link-overlay" tal:content="python: group.title or group.groupid"></a>
+                  <ul>
+                      <li tal:repeat="group groups">
+                        <a class="contenttype-opengever-contact-contactfolder link-overlay" tal:attributes="href string:list_groupmembers?group=${group/groupid}" tal:content="python: group.title or group.groupid"></a>
                       </li>
                   </ul>
               </td>
           </tr>
-
         </table>
 
         <div tal:replace="structure provider:plone.belowcontentbody" />
