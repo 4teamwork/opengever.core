@@ -5,6 +5,11 @@ Changelog
 2.0b8
 -----
 
+* Issue #996 Mails in Dossier verschieben ist nicht erlaubt
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/996/
+  use now moved css_class_from_brain helper method from opengever.base
+  [phgross]
+
 * Issue #868 Postumodul: Aktionen berichtigen
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/868/
   [phgross]

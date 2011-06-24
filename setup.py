@@ -40,6 +40,7 @@ setup(name='opengever.inbox',
         'opengever.tabbedview',
         'opengever.globalindex',
         'opengever.trash',
+        'opengever.base',
         
         # -*- Extra requirements: -*-
         ],
