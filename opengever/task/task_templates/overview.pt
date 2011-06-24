@@ -78,8 +78,7 @@
         <div tal:condition="items"><h2 i18n:translate="containing_task">Containing Task:</h2></div>
         <ul tal:condition="items">
             <li tal:repeat="item items">
-                <img tal:attributes="src item/getIcon" />
-                <a href="" tal:attributes="href item/absolute_url|nothing" tal:omit-tag="not: item/absolute_url|nothing"><span tal:content="item/Title" /></a>
+                <a href="" tal:attributes="href item/absolute_url|nothing; class python: view.css_class_from_brain(item)" tal:omit-tag="not: item/absolute_url|nothing"><span tal:content="item/Title" /></a>
             </li>
         </ul>
     </tal:items>
@@ -89,8 +88,7 @@
         <div tal:condition="items"><h2 i18n:translate="subtasks">Subtasks:</h2></div>
         <ul tal:condition="items">
             <li tal:repeat="item items">
-                <img tal:attributes="src item/getIcon" />
-                <a href="" tal:attributes="href item/getURL|nothing" tal:omit-tag="not: item/getURL|nothing"><span tal:content="item/Title" /></a>
+                <a href="" class="contenttype-opengever-task-task" tal:attributes="href item/getURL|nothing; class python: view.css_class_from_brain(item)" tal:omit-tag="not: item/getURL|nothing"><span tal:content="item/Title" /></a>
             </li>
         </ul>
     </tal:items>

@@ -6,7 +6,7 @@ from ftw.tabbedview.browser.listing import ListingView
 from ftw.table import helper
 from ftw.table.basesource import BaseTableSource
 from ftw.table.interfaces import ITableSource, ITableSourceConfig
-from opengever.base.browser.helper import client_title_helper
+from opengever.base.browser.helper import client_title_helper, css_class_from_brain
 from opengever.base.interfaces import ISequenceNumber
 from opengever.base.source import DossierPathSourceBinder
 from opengever.globalindex.utils import indexed_task_link
@@ -263,6 +263,10 @@ class Overview(DisplayForm, OpengeverTab):
     grok.name('tabbedview_view-overview')
     grok.template('overview')
 
+    def css_class_from_brain(self, item):
+        """used for display icons in the view"""
+        return css_class_from_brain(item)
+
     def getSubTasks(self):
         tasks = self.context.getFolderContents(
             full_objects=False,
@@ -274,24 +278,6 @@ class Overview(DisplayForm, OpengeverTab):
         if parent.portal_type == self.context.portal_type:
             return [parent, ]
         return None
-
-    def getSubDocuments(self):
-        brains = self.context.getFolderContents(
-            full_objects=False,
-            contentFilter={'portal_type': ['opengever.document.document',
-                                           'ftw.mail.mail']})
-
-        docs = []
-        for doc in brains:
-            docs.append(doc.getObject())
-
-        relatedItems = getattr(self.context, 'relatedItems', None)
-        if relatedItems:
-            for rel in self.context.relatedItems:
-                docs.append(rel.to_object)
-
-        docs.sort(lambda x, y: cmp(x.Title(), y.Title()))
-        return docs
 
     def responsible_link(self):
         info = getUtility(IContactInformation)

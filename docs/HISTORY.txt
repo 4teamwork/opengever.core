@@ -5,6 +5,11 @@ Changelog
 2.0b16
 ------
 
+* Issue #996 Mails in Dossier verschieben ist nicht erlaubt
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/996/
+  fixed icons in the task overview for sub or predeccessor tasks
+  [phgross]
+
 * Removed css_icon_class method - now done in tabbedview linked helper
   [lgraf]
 
