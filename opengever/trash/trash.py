@@ -5,7 +5,10 @@ from plone.indexer import indexer
 from five import grok
 from Acquisition import aq_inner, aq_parent
 from AccessControl import Unauthorized
-from Products.CMFCore.utils import _checkPermission
+from Products.CMFCore.utils import _checkPermission, getToolByName
+from Products.statusmessages.interfaces import IStatusMessage
+from opengever.trash import _
+
 
 class ITrashable(Interface):
     pass
@@ -39,8 +42,10 @@ class Trasher(object):
 
     def trash(self):
         folder = aq_parent(aq_inner(self.context))
+        # check trash permission
         if not _checkPermission('opengever.trash: Trash content', folder):
             raise Unauthorized()
+
         alsoProvides(self.context, ITrashed)
         self.context.reindexObject()
         notify(TrashedEvent(self.context))
@@ -66,12 +71,33 @@ class TrashView(grok.CodeView):
     
     def __call__(self):
         paths = self.request.get('paths')
+        catalog = getToolByName(self.context, 'portal_catalog')
         if paths:
+            trashed = False
             for item in paths:
                 obj = self.context.restrictedTraverse(item)
+
+                # check that the document isn't checked_out
+                if catalog(path=item)[0].checked_out:
+                    msg = _('could not trash the object ${obj}, it is checked out',
+                        mapping={'obj' : obj.Title()})
+                    IStatusMessage(self.request).addStatusMessage(msg, type='error')
+                    continue
+
                 trasher = ITrashable(obj)
                 trasher.trash()
-        self.request.RESPONSE.redirect('%s#trash' % self.context.absolute_url())
+                trashed = True
+                msg = _('the object ${obj} trashed',
+                    mapping={'obj' : obj.Title()})
+                IStatusMessage(self.request).addStatusMessage(msg, type='info')
+                
+
+        if trashed:
+            self.request.RESPONSE.redirect(
+                '%s#trash' % self.context.absolute_url())
+        else:
+            self.request.RESPONSE.redirect(
+                '%s#documents' % self.context.absolute_url())
     
     def render(self):
         super(TrashView).render()
