@@ -12,31 +12,39 @@ from opengever.trash import _
 
 class ITrashable(Interface):
     pass
-    
+
+
 class ITrashableMarker(Interface):
     pass
 
+
 class ITrashed(Interface):
     """
-    All Objects wich provide that interfaces are "moved to trash" (special delete functionality)
+    All Objects wich provide that interfaces
+    are "moved to trash" (special delete functionality)
     """
     pass
-    
+
 #Events
 
 class ITrashedEvent(IObjectEvent):
     pass
-    
+
+
 class IUntrashedEvent(IObjectEvent):
     pass
-    
+
+
 class TrashedEvent(ObjectEvent):
     grok.implements(ITrashedEvent)
+
 
 class UntrashedEvent(ObjectEvent):
     grok.implements(IUntrashedEvent)
 
+
 class Trasher(object):
+
     def __init__(self, context):
         self.context = context
 
@@ -49,7 +57,7 @@ class Trasher(object):
         alsoProvides(self.context, ITrashed)
         self.context.reindexObject()
         notify(TrashedEvent(self.context))
-    
+
     def untrash(self):
         #XXX check Permission
         folder = aq_parent(aq_inner(self.context))
@@ -58,17 +66,19 @@ class Trasher(object):
         noLongerProvides(self.context, ITrashed)
         self.context.reindexObject()
         notify(UntrashedEvent(self.context))
-        
+
+
 @indexer(Interface)
-def trashIndexer(obj): 
+def trashIndexer(obj):
     return ITrashed.providedBy(obj)
 grok.global_adapter(trashIndexer, name="trashed")
+
 
 class TrashView(grok.CodeView):
     grok.context(ITrashableMarker)
     grok.require('opengever.trash.TrashContent')
     grok.name('trashed')
-    
+
     def __call__(self):
         paths = self.request.get('paths')
         catalog = getToolByName(self.context, 'portal_catalog')
@@ -79,18 +89,20 @@ class TrashView(grok.CodeView):
 
                 # check that the document isn't checked_out
                 if catalog(path=item)[0].checked_out:
-                    msg = _('could not trash the object ${obj}, it is checked out',
-                        mapping={'obj' : obj.Title()})
-                    IStatusMessage(self.request).addStatusMessage(msg, type='error')
+                    msg = _(
+                        'could not trash the object ${obj}, it is checked out',
+                        mapping={'obj': obj.Title()})
+                    IStatusMessage(self.request).addStatusMessage(
+                        msg, type='error')
                     continue
 
                 trasher = ITrashable(obj)
                 trasher.trash()
                 trashed = True
                 msg = _('the object ${obj} trashed',
-                    mapping={'obj' : obj.Title()})
-                IStatusMessage(self.request).addStatusMessage(msg, type='info')
-                
+                    mapping={'obj': obj.Title()})
+                IStatusMessage(self.request).addStatusMessage(
+                    msg, type='info')
 
         if trashed:
             self.request.RESPONSE.redirect(
@@ -98,15 +110,16 @@ class TrashView(grok.CodeView):
         else:
             self.request.RESPONSE.redirect(
                 '%s#documents' % self.context.absolute_url())
-    
+
     def render(self):
         super(TrashView).render()
-        
+
+
 class UntrashView(grok.CodeView):
     grok.context(ITrashableMarker)
     grok.require('opengever.trash.UntrashContent')
     grok.name('untrashed')
-    
+
     def __call__(self):
         paths = self.request.get('paths')
         if paths:
@@ -114,7 +127,8 @@ class UntrashView(grok.CodeView):
                 obj = self.context.restrictedTraverse(item)
                 trasher = ITrashable(obj)
                 trasher.untrash()
-        self.request.RESPONSE.redirect('%s#documents' % (self.context.absolute_url()))
+        self.request.RESPONSE.redirect('%s#documents' % (
+            self.context.absolute_url()))
 
     def render(self):
         super(UntrashView).render()
