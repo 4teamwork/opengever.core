@@ -5,6 +5,10 @@ Changelog
 2.0b8
 -----
 
+* Issue #1050 Ausblenden von Spalten bei Dokumentenauflistungen
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1050/
+  [phgross]
+
 * Issue #996 Mails in Dossier verschieben ist nicht erlaubt
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/996/
   use now moved css_class_from_brain helper method from opengever.base

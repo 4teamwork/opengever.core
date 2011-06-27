@@ -2,7 +2,7 @@
 from five import grok
 from opengever.inbox import _
 from plone.directives import form
-from opengever.tabbedview.browser.tabs import Tasks, Documents
+from opengever.tabbedview.browser.tabs import Tasks, Documents, Trash
 from opengever.tabbedview.helper import external_edit_link
 from zope import schema
 from opengever.mail.interfaces import ISendableDocsContainer
@@ -61,7 +61,7 @@ class InboxDocuments(Documents):
     def columns(self):
         """Gets the columns wich wich will be displayed
         """
-        remove_columns = ['containing_subdossier']
+        remove_columns = ['containing_subdossier', 'checked_out']
         columns = []
 
         for col in super(InboxDocuments, self).columns:
@@ -97,3 +97,29 @@ class InboxDocuments(Documents):
                    if action not in ('create_task',)]
         actions += ['create_forwarding']
         return  actions
+
+
+class InboxTrash(Trash):
+    """Special Trash view, 
+    some columns from the standard Trash view are disabled"""
+
+    grok.context(IInbox)
+
+    @property
+    def columns(self):
+        """Gets the columns wich wich will be displayed
+           remove some columns from the columns property
+        """
+        remove_columns = ['containing_subdossier', 'checked_out']
+        columns = []
+        for col in super(InboxTrash, self).columns:
+            if isinstance(col, dict) and \
+                    col.get('column') in remove_columns:
+                pass  # remove this column
+            elif isinstance(col, tuple) and \
+                    col[1] == external_edit_link:
+                pass  # remove external_edit colunmn
+            else:
+                columns.append(col)
+
+        return columns
