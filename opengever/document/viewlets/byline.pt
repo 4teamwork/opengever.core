@@ -2,7 +2,8 @@
      id="plone-document-byline"
      i18n:domain="opengever.document"
      tal:condition="view/show">
-
+  <span class="" tal:attributes="class string:byline-icon ${view/css_class_from_obj}"
+></span>
   <span id="lock-icon"
         tal:define="lock_icon view/locked_icon"
         tal:condition="lock_icon">

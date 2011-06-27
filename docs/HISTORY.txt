@@ -13,6 +13,10 @@ Changelog
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1051/
   [phgross]
 
+* Issue #1052 Byline icons durch sprite icons ersetzen
+  Added ByLine modifications for sprites
+  [ttschanz]
+
 * adjust the direct_checkout functionality, error message when document has no file
   [phgross] 
 
