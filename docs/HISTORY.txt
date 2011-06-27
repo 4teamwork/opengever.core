@@ -5,6 +5,10 @@ Changelog
 2.0b16
 ------
 
+* Issue #1052 Byline icons durch sprite icons ersetzen
+  Added ByLine modifications for sprites
+  [ttschanz]
+
 * Issue #996 Mails in Dossier verschieben ist nicht erlaubt
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/996/
   fixed icons in the task overview for sub or predeccessor tasks
