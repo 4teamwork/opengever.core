@@ -5,6 +5,9 @@ Changelog
 2.0b16
 ------
 
+* Fixed Unicode error in linked helper
+  [lgraf]
+
 * Issue #1046 Tab Meine Aufgaben etc.: Laufnummer folgt der Stringsortierung
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1046/
   [phgross]

@@ -102,10 +102,13 @@ def linked(item, value):
         else:
             breadcrumb_titles.append(elem.get('Title'))
 
+    if isinstance(value, unicode):
+        value = value.encode('utf-8')
+
     link = '<a class="rollover-breadcrumb %s" href="%s" title="%s">%s</a>' % (
         css_class, url_method(),
         " &gt; ".join(t for t in breadcrumb_titles),
-        value.encode('utf-8'))
+        value)
 
     wrapper = '<span class="linkWrapper">%s</span>' % link
     return wrapper
