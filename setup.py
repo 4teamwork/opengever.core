@@ -6,6 +6,7 @@ maintainer = 'Thomas Buchberger'
 
 tests_require = [
     'collective.testcaselayer',
+    'opengever.ogds.base[tests]',
     ]
 
 setup(name='opengever.inbox',
