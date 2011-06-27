@@ -151,6 +151,21 @@ class MyDocuments(Documents):
     columns = remove_subdossier_column(columns)
     selection = ViewPageTemplateFile("no_selection_amount.pt")
 
+    @property
+    def columns(self):
+        """Gets the columns wich wich will be displayed
+        """
+        remove_columns = ['containing_subdossier']
+        columns = []
+
+        for col in super(MyDocuments, self).columns:
+            if isinstance(col, dict) and \
+                    col.get('column') in remove_columns:
+                pass  # remove this column
+            else:
+                columns.append(col)
+
+        return columns
 
     @property
     def view_name(self):
