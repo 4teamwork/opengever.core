@@ -8,6 +8,7 @@ from opengever.document.events import ObjectCheckedOutEvent
 from opengever.document.events import ObjectCheckoutCanceledEvent
 from opengever.document.events import ObjectRevertedToVersion
 from opengever.document.interfaces import ICheckinCheckoutManager
+from opengever.trash.trash import ITrashed
 from zope.annotation.interfaces import IAnnotations
 from zope.event import notify
 from zope.publisher.interfaces.browser import IBrowserRequest
@@ -46,6 +47,10 @@ class CheckinCheckoutManager(grok.MultiAdapter):
 
         # does the user have the necessary permission?
         if not self.check_permission('opengever.document: Checkout'):
+            return False
+
+        # is it not trashed
+        if ITrashed.providedBy(self.context):
             return False
 
         return True

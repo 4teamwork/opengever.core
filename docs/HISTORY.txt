@@ -5,6 +5,10 @@ Changelog
 2.0b14
 ------
 
+* Issue #1051 Fehler bzw. Anpassung im Papierkorb des Dossiers/Subdossiers
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1051/
+  [phgross]
+
 * adjust the direct_checkout functionality, error message when document has no file
   [phgross] 
 
