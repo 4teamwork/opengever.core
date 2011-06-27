@@ -17,6 +17,7 @@ from opengever.repository.interfaces import IRepositoryFolder
 from opengever.repository.behaviors.referenceprefix import \
     IReferenceNumberPrefix, IReferenceNumberPrefixMarker
 from opengever.repository.interfaces import IRepositoryFolderRecords
+from opengever.base.browser.helper import css_class_from_obj
 
 
 class IRepositoryFolderSchema(form.Schema):
@@ -203,6 +204,10 @@ class Byline(grok.Viewlet):
     grok.name("plone.belowcontenttitle.documentbyline")
 
     #update = content.DocumentBylineViewlet.update
+    
+    def css_class_from_obj(self):
+        return css_class_from_obj(self.context)
+
     @memoize
     def workflow_state(self):
         context_state = self.context.restrictedTraverse("@@plone_context_state")

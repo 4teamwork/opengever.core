@@ -5,6 +5,10 @@ Changelog
 2.0a8
 -----
 
+* Issue #1052 Byline icons durch sprite icons ersetzen
+  Added ByLine modifications for sprites
+  [ttschanz]
+
 * Removed content_icons for repositoryfolder and repositoryroot FTIs - now done with sprites
   [lgraf]
 
