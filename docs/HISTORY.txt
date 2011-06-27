@@ -5,6 +5,10 @@ Changelog
 2.0b15
 ------
 
+* Issue #1052 Byline icons durch sprite icons ersetzen
+  Added ByLine modifications for sprites
+  [ttschanz]
+
 * Issue #996 Mails in Dossier verschieben ist nicht erlaubt
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/996/
   moved css_class_from_brain helper from opengever dossier to opengever.base

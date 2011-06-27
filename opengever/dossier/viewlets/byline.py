@@ -7,6 +7,7 @@ from opengever.base.interfaces import IReferenceNumber, ISequenceNumber
 from opengever.dossier.behaviors.dossier import IDossier, IDossierMarker
 from opengever.mail.behaviors import IMailInAddressMarker, IMailInAddress
 from opengever.ogds.base.interfaces import IContactInformation
+from opengever.base.browser.helper import css_class_from_obj
 
 
 
@@ -15,6 +16,10 @@ class BusinessCaseByline(content.DocumentBylineViewlet):
 
     update = content.DocumentBylineViewlet.update
 
+    def css_class_from_obj(self):
+        return css_class_from_obj(self.context)
+
+    
     def start(self):
         dossier = IDossier(self.context)
         return dossier.start
