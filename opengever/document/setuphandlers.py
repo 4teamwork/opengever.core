@@ -55,7 +55,7 @@ def add_catalog_indexes(context, logger=None):
     wanted = (
         ('delivery_date', 'DateIndex', {}),
         ('document_author', 'ZCTextIndex', {'index_type': 'Okapi BM25 Rank',
-                                            'lexicon_id': 'plaintext_lexicon'}),
+                                            'lexicon_id': 'plone_lexicon'}),
         ('checked_out', 'FieldIndex', {}),
         ('document_date', 'DateIndex', {}),
         ('receipt_date', 'DateIndex', {}),
