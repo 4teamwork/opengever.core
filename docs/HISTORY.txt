@@ -5,6 +5,10 @@ Changelog
 2.0b12
 ------
 
+* Issue #1048 Falsche Anzeige von Umlauten im OGDS (Rot 2.03)
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1048/
+  [phgross]
+
 * Issue #1047 Bei Anzeige von Benutzern auch die zugehoerigen Gruppen darstellen
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1047/
   added list_user_groups method to contact_info utility

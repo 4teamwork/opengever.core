@@ -4,8 +4,6 @@ from collective.transmogrifier.interfaces import ISectionBlueprint
 from collective.transmogrifier.interfaces import ISection
 
 
-LDAP_CHARSET = 'latin1'
-
 class LDAPUserSourceSection(object):
     classProvides(ISectionBlueprint)
     implements(ISection)
@@ -39,7 +37,7 @@ class LDAPUserSourceSection(object):
                 v = user.getProperty(attr.get('ldap_name'))
                 if isinstance(v, list):
                     v = v[0]
-                temp[attr.get('public_name')] = v.decode(LDAP_CHARSET)
+                temp[attr.get('public_name')] = v
             yield temp
 
 
