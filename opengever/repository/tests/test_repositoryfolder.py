@@ -6,13 +6,13 @@ from zope.component import queryUtility
 from plone.dexterity.interfaces import IDexterityFTI
 
 from Products.PloneTestCase.ptc import PloneTestCase
-from opengever.repository.tests.layer import Layer
+from opengever.repository.tests.layer import repository_integration_layer
 
 from opengever.repository.repositoryfolder import IRepositoryFolderSchema
 
 class TestRepositoryFolderIntegration(PloneTestCase):
     
-    layer = Layer
+    layer = repository_integration_layer
     
     def test_adding(self):
         self.folder.invokeFactory('opengever.repository.repositoryfolder', 'repository1')
