@@ -9,6 +9,7 @@ tests_require = [
     'collective.testcaselayer',
     'z3c.form [test]',
     'z3c.saconfig',
+    'plone.app.testing',
     ]
 
 setup(name='opengever.task',
