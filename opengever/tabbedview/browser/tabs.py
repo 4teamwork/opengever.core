@@ -307,13 +307,17 @@ class Trash(Documents):
     @property
     def columns(self):
         """Gets the columns wich wich will be displayed
-           remove external_edit_link from the columns property
+           remove some columns from the columns property
         """
+        remove_columns = ['checked_out',]
         columns = []
         for col in super(Trash, self).columns:
-            if isinstance(col, tuple) and \
-                    col[1] == external_edit_link:
+            if isinstance(col, dict) and \
+                    col.get('column') in remove_columns:
                 pass  # remove this column
+            elif isinstance(col, tuple) and \
+                    col[1] == external_edit_link:
+                pass  # remove external_edit colunmn
             else:
                 columns.append(col)
 
