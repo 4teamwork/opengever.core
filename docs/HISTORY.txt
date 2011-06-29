@@ -5,6 +5,11 @@ Changelog
 2.0b12
 ------
 
+* Issue #759 Oracle Konfiguration: collation
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/759/
+  set the collation with a PoolListener on the sqlalchmey engine
+  [phgross]
+
 * Issue #1048 Falsche Anzeige von Umlauten im OGDS (Rot 2.03)
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1048/
   [phgross]
