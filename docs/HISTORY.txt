@@ -5,6 +5,10 @@ Changelog
 2.0b8
 -----
 
+* Issue #868 Postumodul: Aktionen berichtigen
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/868/
+  [phgross]
+
 * Issue #1050 Ausblenden von Spalten bei Dokumentenauflistungen
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1050/
   [phgross]
