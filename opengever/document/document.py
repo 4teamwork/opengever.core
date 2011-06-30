@@ -239,10 +239,10 @@ class Document(Item):
         return self.title or ''
 
 
-    def surrender(self, relative_to_portal=0):
+    def surrender(self, relative_to_portal=1):
         return super(Document, self).getIcon(relative_to_portal=relative_to_portal)
 
-    def getIcon(self, relative_to_portal=0):
+    def getIcon(self, relative_to_portal=1):
         """Calculate the icon using the mime type of the file
         """
         utool = getToolByName(self, 'portal_url')

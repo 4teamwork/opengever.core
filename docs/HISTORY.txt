@@ -5,6 +5,9 @@ Changelog
 2.0b14
 ------
 
+* Fixed display of mimetype icon in byline
+  [lgraf]
+
 * Issue #1045 Fehler: Suche nach Autor in der erweiterten Suche
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1045
   [phgross]
