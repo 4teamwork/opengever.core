@@ -5,6 +5,10 @@ Changelog
 2.0b16
 ------
 
+* Issue #901 In der Unteraufgabe fehlt das Icon fuer die Hauptaufgabe
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/901
+  [phgross]
+
 * Issue #992 Aufgabe, Zur direkten Erledigung: Aktion akzeptieren fehlt
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/992
   [phgross]

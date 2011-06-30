@@ -4,6 +4,7 @@ from Products.Five.browser import BrowserView
 from Products.statusmessages.interfaces import IStatusMessage
 from five import grok
 from opengever.base.source import DossierPathSourceBinder
+from opengever.base.browser.helper import css_class_from_obj
 from opengever.globalindex.interfaces import ITaskQuery
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.task import _
@@ -344,6 +345,10 @@ class ResponseView(grok.Viewlet, Base):
             for item in response['response'].changes:
                 if isinstance(item['after'], datetime.date):
                     item['after'] = item['after'].strftime('%d.%m.%Y')
+
+    def css_class_from_obj(self, item):
+        """used for display icons in the view"""
+        return css_class_from_obj(item)
 
     def get_added_object(self, response):
         try:
