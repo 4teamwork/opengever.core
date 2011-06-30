@@ -7,6 +7,7 @@ from opengever.base.browser.helper import client_title_helper
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.tabbedview import _
 from opengever.tabbedview.helper import readable_date_set_invisibles
+from opengever.tabbedview.helper import readable_ogds_user
 from opengever.tabbedview.helper import readable_ogds_author, linked
 from opengever.tabbedview.helper import readable_date, external_edit_link
 from opengever.tabbedview.helper import workflow_state
@@ -144,7 +145,7 @@ class Documents(OpengeverCatalogListingTab):
 
         {'column':'checked_out',
          'column_title':_('label_checked_out', default="Checked out by"),
-         'transform':readable_ogds_author},
+         'transform':readable_ogds_user},
 
         {'column':'containing_subdossier',
          'column_title':_('label_subdossier', default="Subdossier"),},

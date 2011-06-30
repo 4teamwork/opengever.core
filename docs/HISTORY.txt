@@ -5,6 +5,12 @@ Changelog
 2.0b16
 ------
 
+* Added new helper readable_ogds_user which is used to render the user
+  that checked out a document. This is necessary because the existing
+  readable_ogds_author treats ftw.mail.mail specially and causes things
+  to be cached incorrectly.
+  [lgraf]
+
 * Issue #1051 Fehler bzw. Anpassung im Papierkorb des Dossiers/Subdossiers
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1051/
   [phgross]

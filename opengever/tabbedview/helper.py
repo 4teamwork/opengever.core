@@ -59,6 +59,22 @@ def readable_ogds_author(item, author):
 
 
 @ram.cache(author_cache_key)
+def readable_ogds_user(item, user):
+    if not isinstance(user, unicode):
+        if user is not None:
+            user = user.decode('utf-8')
+        else:
+            user = ''
+    if IPropertiedUser.providedBy(user) or IMemberData.providedBy(user):
+        user = user.getId()
+    info = getUtility(IContactInformation)
+    if info.is_user(user) or info.is_contact(user) or info.is_inbox(user):
+        return info.describe(user)
+    else:
+        return user
+
+
+@ram.cache(author_cache_key)
 def linked_ogds_author(item, author):
     if not isinstance(author, unicode):
         author = author.decode('utf-8')
