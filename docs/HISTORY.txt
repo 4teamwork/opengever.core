@@ -5,6 +5,10 @@ Changelog
 2.0b16
 ------
 
+* Issue #992 Aufgabe, Zur direkten Erledigung: Aktion akzeptieren fehlt
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/992
+  [phgross]
+
 * Issue #1052 Byline icons durch sprite icons ersetzen
   Added ByLine modifications for sprites
   [ttschanz]

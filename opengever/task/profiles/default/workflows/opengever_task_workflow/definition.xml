@@ -46,6 +46,7 @@
  </state>
  <state state_id="task-state-in-progress" title="task-state-in-progress">
   <exit-transition transition_id="task-transition-in-progress-resolved"/>
+  <exit-transition transition_id="task-transition-in-progress-tested-and-closed"/>
   <exit-transition transition_id="task-transition-reassign"/>
   <permission-map name="Access contents information" acquired="False">
    <permission-role>Editor</permission-role>
@@ -248,6 +249,12 @@
   <action url="%(content_url)s/addresponse?form.widgets.transition=task-transition-in-progress-resolved" category="workflow" icon="">task-transition-in-progress-resolved</action>
   <guard>
    <guard-expression>python:here.restrictedTraverse('resolve_check')()</guard-expression>
+  </guard>
+ </transition>
+ <transition transition_id="task-transition-in-progress-tested-and-closed" title="task-transition-in-progress-tested-and-closed" new_state="task-state-tested-and-closed" trigger="USER" before_script="" after_script="">
+  <action url="%(content_url)s/addresponse?form.widgets.transition=task-transition-in-progress-tested-and-closed" category="workflow" icon="">task-transition-in-progress-tested-and-closed</action>
+  <guard>
+   <guard-expression>python:here.restrictedTraverse('resolve_check')() and here.task_type_category != 'unidirectional_by_value'</guard-expression>
   </guard>
  </transition>
  <transition transition_id="task-transition-open-cancelled" title="task-transition-open-cancelled" new_state="task-state-cancelled" trigger="USER" before_script="" after_script="">

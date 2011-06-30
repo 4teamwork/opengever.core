@@ -75,4 +75,5 @@ msgstr "Wieder eröffnen"
 msgid "task-transition-resolved-tested-and-closed"
 msgstr "Abschliessen"
 
-
+msgid "task-transition-in-progress-tested-and-closed"
+msgstr "Abschliessen"

@@ -96,3 +96,7 @@ msgstr ""
 
 msgid "task-state-tested-and-closed"
 msgstr ""
+
+
+msgid "task-transition-in-progress-tested-and-closed"
+msgstr ""
