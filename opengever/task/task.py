@@ -609,10 +609,18 @@ class SearchableTextExtender(grok.Adapter):
 
 @grok.subscribe(ITask, IActionSucceededEvent)
 def set_dates(task, event):
+    
+    resolved_transitions= ['task-transition-in-progress-resolved',
+                           'task-transition-open-resolved',
+                           'task-transition-open-tested-and-closed',
+                           'task-transition-in-progress-tested-and-closed',]
+    
     if event.action == 'task-transition-open-in-progress':
         task.expectedStartOfWork = datetime.now()
-    elif event.action == 'task-transition-in-progress-resolved':
+    elif event.action in resolved_transitions:
         task.date_of_completion = datetime.now()
+    if event.action == 'task-transition-resolved-open':
+        task.date_of_completion = None
 
 def related_document(context):
     intids = getUtility( IIntIds )
