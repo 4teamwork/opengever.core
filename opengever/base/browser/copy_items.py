@@ -31,7 +31,9 @@ class CopyItemsFormView(layout.FormWrapper, grok.CodeView):
                 # getting Objects with catalog
                 obj = portal_catalog(path={'query': path, 'depth': 0})[0].getObject()
                 if not obj.cb_isCopyable():
-                    raise CopyError('An Item can not be copied')
+                    msg = _(u'error_not_copyable', default=u"The item you selected cannot be copied")
+                    IStatusMessage(self.request).addStatusMessage(msg, type='error')
+                    return self.request.response.redirect(self.context.absolute_url())
                 objlist.append(obj)
             for objid in objlist:
                 cplist.append(aq_parent(aq_inner(objid)).manage_copyObjects(objid.id))

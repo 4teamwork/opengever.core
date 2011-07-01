@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2011-05-03 10:13+0000\n"
+"POT-Creation-Date: 2011-06-22 07:52+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -54,8 +54,13 @@ msgid "confidential"
 msgstr ""
 
 #. Default: "You have not selected any Items"
-#: ./opengever/base/browser/copy_items.py:43
+#: ./opengever/base/browser/copy_items.py:45
 msgid "error_no_items"
+msgstr ""
+
+#. Default: "The item you selected cannot be copied"
+#: ./opengever/base/browser/copy_items.py:34
+msgid "error_not_copyable"
 msgstr ""
 
 #. Default: "Classification"

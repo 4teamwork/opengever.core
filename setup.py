@@ -9,6 +9,7 @@ tests_require = [
     'Products.PloneTestCase',
     'opengever.repository',
     'opengever.document',
+    'opengever.contact',
     ]
 
 setup(name='opengever.base',

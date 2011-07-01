@@ -26,7 +26,7 @@ If we access the site as an admin TTW::
 
     >>> from Products.Five.testbrowser import Browser
     >>> browser = Browser()
-    >>> browser.handleErrors = True
+    >>> browser.handleErrors = False
     >>> self.app.acl_users.userFolderAddUser('root', 'secret',
     ...                                ['Manager','Contributor'], [])
     >>> browser.addHeader('Authorization', 'Basic root:secret' )
@@ -65,9 +65,9 @@ Get the created object::
 Title should be set::
 
     >>> obj.Title()
-    u'Foo'
+    'Foo'
     >>> obj.Description()
-    u'Bar'
+    'Bar'
 
 
 

@@ -5,9 +5,18 @@ Changelog
 2.0b11
 ------
 
-* Issue #1040 Mandantenübergreifende Beteiligung: Anpassung Darstellung
-  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1040
+* Issue #1052 Byline icons durch sprite icons ersetzen
+  Added css_class_from_obj helper to opengever.base
+  [ttschanz]
+
+
+* Issue #996 Mails in Dossier verschieben ist nicht erlaubt
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/996/
+  moved css_class_from_brain helper from opengever dossier to opengever.base
   [phgross]
+
+* fixed bug in copyitem_view 
+  [ttschanz]
 
 * Made _get_acquisition_value() behave more robustly if context == None
   [lgraf]
