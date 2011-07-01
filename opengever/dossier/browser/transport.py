@@ -79,7 +79,7 @@ class DossierAutocompleteSelectionWidget(AutocompleteSelectionWidget):
         # read the client from the request
         client_id = self.request.get(
             'client', self.request.get('form.widgets.client'),
-            default.client_id)
+            default)
         if isinstance(client_id, list) and len(client_id) == 1:
             client_id = client_id[0]
 

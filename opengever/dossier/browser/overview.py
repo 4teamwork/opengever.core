@@ -1,4 +1,5 @@
 from five import grok
+from opengever.base.browser.helper import css_class_from_brain
 from opengever.dossier import _ as _dossier
 from opengever.dossier.behaviors.dossier import IDossierMarker, IDossier
 from opengever.dossier.behaviors.participation import IParticipationAware
@@ -52,7 +53,7 @@ class DossierOverview(grok.View, OpengeverTab):
             'getURL': document.getURL,
             'alt': document.document_date and \
                 document.document_date.strftime('%d.%m.%Y') or '',
-            'getIcon': document.css_icon_class,
+            'css_class': css_class_from_brain(document),
             'portal_type': document.portal_type,
         } for document in documents]
 
@@ -85,7 +86,7 @@ class DossierOverview(grok.View, OpengeverTab):
         return [{
             'Title': info.describe(xx.contact),
             'getURL': info.get_profile_url(xx.contact),
-            'getIcon':'function-user',
+            'css_class':'function-user',
             }
             for xx in results]
 
@@ -103,17 +104,9 @@ class DossierOverview(grok.View, OpengeverTab):
     def _get_css_icon_class(self, item):
         """Return the rigth css-class for the icon.
         """
-        if not hasattr(item, 'portal_type'):
-            try:
-
-                return item['getIcon']
-            except KeyError:
-                return ""
-
-        mimetype = item.css_icon_class
-
-        if mimetype:
-            return mimetype
+        if hasattr(item, 'portal_type'):
+            # It's a brain
+            return css_class_from_brain(item)
         else:
-            return ""
-
+            # It's a dict
+            return item['css_class']

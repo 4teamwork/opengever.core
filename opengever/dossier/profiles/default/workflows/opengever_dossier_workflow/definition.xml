@@ -73,7 +73,11 @@
    <permission-role>Manager</permission-role>
    <permission-role>Owner</permission-role>
   </permission-map>
-  <permission-map name="ftw.mail: Add Mail" acquired="False">
+  <permission-map name="ftw.mail: Add Mail" acquired="True">
+  	  <permission-role>Owner</permission-role>
+      <permission-role>Manager</permission-role>
+      <permission-role>Member</permission-role>
+      <permission-role>Contributor</permission-role>
   </permission-map>
   <permission-map name="opengever.document: Add document" acquired="False">
    <permission-role>Contributor</permission-role>

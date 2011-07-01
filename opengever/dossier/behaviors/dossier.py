@@ -9,6 +9,8 @@ from five import grok
 from OFS.interfaces import IObjectWillBeMovedEvent
 from plone.autoform.interfaces import IFormFieldProvider
 from plone.dexterity.interfaces import IDexterityContent
+from plone.dexterity.interfaces import IDexterityFTI
+from plone.dexterity.i18n import MessageFactory as pd_mf
 from plone.directives import form, dexterity
 from plone.indexer import indexer
 from plone.z3cform.textlines.textlines import TextLinesFieldWidget
@@ -216,6 +218,29 @@ class AddForm(dexterity.AddForm):
         if not self.request.get('form.widgets.IDossier.responsible', None):
             self.request.set('form.widgets.IDossier.responsible', [responsible])
         super(AddForm, self).update()
+
+    @property
+    def label(self):
+        if IDossierMarker.providedBy(self.context):
+            return _(u'Add Subdossier')
+        else:
+            portal_type = self.portal_type
+            fti = getUtility(IDexterityFTI, name=portal_type)
+            type_name = fti.Title()
+            return pd_mf(u"Add ${name}", mapping={'name': type_name})
+
+
+class EditForm(dexterity.EditForm):
+    """Standard Editform, provide just a special label for subdossiers"""
+    grok.context(IDossierMarker)
+    
+    @property
+    def label(self):
+        if IDossierMarker.providedBy(aq_parent(aq_inner(self.context))):
+            return _(u'Edit Subdossier')
+        else:
+            type_name = self.fti.Title()
+            return pd_mf(u"Edit ${name}", mapping={'name': type_name})
 
 
 class StartBeforeEnd(Invalid):
