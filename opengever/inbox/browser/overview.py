@@ -50,6 +50,7 @@ class InboxOverview(DossierOverview):
         query = query.filter(Task.review_state=='task-state-open')
         query = query.filter(Task.client_id != get_client_id())
 
+        return query.all()
 
     def documents(self):
         """

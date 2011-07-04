@@ -5,6 +5,10 @@ Changelog
 2.0b8
 -----
 
+* Issue #1064 Test Rot 2.0.3: Eingangskorb, Tab Uebersicht: Aufgabe aus anderem Mandant wird nicht angezeigt
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1064/
+  [phgross]
+
 * Issue #868 Postumodul: Aktionen berichtigen
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/868/
   [phgross]
