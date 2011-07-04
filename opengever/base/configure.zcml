@@ -6,7 +6,10 @@
     xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
     xmlns:vdex="http://namespaces.zope.org/vdex"
     xmlns:monkey="http://namespaces.plone.org/monkey"
+    xmlns:meta="http://namespaces.zope.org/meta"
     i18n_domain="opengever.base">
+
+    <meta:provides feature="opengever" />
 
     <i18n:registerTranslations directory="locales" />
 

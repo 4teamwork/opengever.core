@@ -5,10 +5,13 @@ Changelog
 2.0b11
 ------
 
+* Provided feature "opengever" in order to be able to conditionally exclude 
+  things for opengever in izug.basetheme
+  [lgraf]
+
 * Issue #1052 Byline icons durch sprite icons ersetzen
   Added css_class_from_obj helper to opengever.base
   [ttschanz]
-
 
 * Issue #996 Mails in Dossier verschieben ist nicht erlaubt
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/996/
