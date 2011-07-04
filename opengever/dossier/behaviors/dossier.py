@@ -22,6 +22,7 @@ from zope.component import getAdapter, getUtility
 from zope.interface import Interface, alsoProvides
 from zope.interface import invariant, Invalid
 
+from ftw.datepicker.widget import DatePickerFieldWidget
 from opengever.base.interfaces import IReferenceNumber, ISequenceNumber
 from opengever.base.interfaces import IReferenceNumberPrefix
 from opengever.base.source import RepositoryPathSourceBinder
@@ -67,12 +68,16 @@ class IDossier(form.Schema):
         )
     form.widget(keywords = TextLinesFieldWidget)
 
+    #workaround because ftw.datepicker wasn't working on the edit form
+    form.widget(start = DatePickerFieldWidget)
     start = schema.Date(
         title=_(u'label_start', default=u'Opening Date'),
         description = _(u'help_start', default=u''),
         required=False,
         )
 
+    #workaround because ftw.datepicker wasn't working on the edit form
+    form.widget(end = DatePickerFieldWidget)
     end = schema.Date(
         title=_(u'label_end', default=u'Closing Date'),
         description = _(u'help_end', default=u''),
