@@ -27,8 +27,8 @@
           <td>
             <a tal:attributes="href string:list_groupmembers?group=${entry/id}"
                tal:omit-tag="not:is_group" class="link-overlay">
-			  <span tal:condition="is_group" tal:attributes="class string:contenttype-opengever-contact-contactfolder" />
-			  <span tal:condition="not:is_group" tal:attributes="class string:function-user" />
+			  <span tal:condition="is_group" tal:attributes="class string:contenttype-opengever-contact-contactfolder"></span>
+			  <span tal:condition="not:is_group" tal:attributes="class string:function-user"></span>
                 <tal:sticky condition="sticky">
                 <span tal:replace="entry/title" />
               </tal:sticky>
