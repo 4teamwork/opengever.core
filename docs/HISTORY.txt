@@ -5,6 +5,10 @@ Changelog
 2.0b15
 ------
 
+* Issue #1067 Test Rot 2.0.3: "In eigenes Dossier kopieren" funktioniert nicht
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1067
+  [phgross]
+
 * Issue #1052 Byline icons durch sprite icons ersetzen
   Added ByLine modifications for sprites
   [ttschanz]

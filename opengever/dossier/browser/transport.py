@@ -1,9 +1,9 @@
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from Products.statusmessages.interfaces import IStatusMessage
+from plone.dexterity.interfaces import IDexterityContent
 from five import grok
 from opengever.base.interfaces import IRedirector
 from opengever.dossier import _
-from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.ogds.base.interfaces import ITransporter
 from opengever.ogds.base.utils import get_client_id
@@ -188,7 +188,7 @@ class ChooseClientForm(z3c.form.form.Form, WizardFormMixin):
 
 
 class ChooseClientView(layout.FormWrapper, grok.CodeView):
-    grok.context(IDossierMarker)
+    grok.context(IDexterityContent)
     grok.name('copy-documents-to-remote-client')
     form = ChooseClientForm
 
@@ -314,7 +314,7 @@ class CopyDocumentsToRemoteClientForm(z3c.form.form.Form, WizardFormMixin):
 
 
 class CopyDocumentsToRemoteClientView(layout.FormWrapper, grok.CodeView):
-    grok.context(IDossierMarker)
+    grok.context(IDexterityContent)
     grok.name('copy-documents-to-remote-client2')
     form = CopyDocumentsToRemoteClientForm
 
