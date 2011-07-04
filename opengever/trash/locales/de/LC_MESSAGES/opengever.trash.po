@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: opengever.trash 1.0\n"
-"POT-Creation-Date: 2011-06-27 15:16+0000\n"
+"POT-Creation-Date: 2011-07-04 11:57+0000\n"
 "PO-Revision-Date: 2009-12-08 14:00+0000\n"
 "Last-Translator: Julian Infanger <julian.infangner.@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -13,11 +13,15 @@ msgstr ""
 "Domain: opengever.trash\n"
 "X-Is-Fallback-For: de-at de-li de-lu de-ch de-de\n"
 
-#: ./opengever/trash/trash.py:82
+#: ./opengever/trash/trash.py:108
+msgid "You have not selected any items"
+msgstr "Sie haben keine Objekte ausgewählt"
+
+#: ./opengever/trash/trash.py:92
 msgid "could not trash the object ${obj}, it is checked out"
 msgstr "Das Objekt ${obj} konnte nicht in den Papierkorb verschoben werden, es ist ausgecheckt."
 
-#: ./opengever/trash/trash.py:90
+#: ./opengever/trash/trash.py:102
 msgid "the object ${obj} trashed"
 msgstr "Das Objekt ${obj} wurde in den Papierkorb verschoben."
 

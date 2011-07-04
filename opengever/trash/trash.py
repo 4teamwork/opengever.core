@@ -82,8 +82,8 @@ class TrashView(grok.CodeView):
     def __call__(self):
         paths = self.request.get('paths')
         catalog = getToolByName(self.context, 'portal_catalog')
+        trashed = False
         if paths:
-            trashed = False
             for item in paths:
                 obj = self.context.restrictedTraverse(item)
 
@@ -104,11 +104,16 @@ class TrashView(grok.CodeView):
                 IStatusMessage(self.request).addStatusMessage(
                     msg, type='info')
 
+        else:
+            msg = _(u'You have not selected any items')
+            IStatusMessage(self.request).addStatusMessage(
+                msg, type='error')
+
         if trashed:
-            self.request.RESPONSE.redirect(
+            return self.request.RESPONSE.redirect(
                 '%s#trash' % self.context.absolute_url())
         else:
-            self.request.RESPONSE.redirect(
+            return self.request.RESPONSE.redirect(
                 '%s#documents' % self.context.absolute_url())
 
     def render(self):
@@ -127,8 +132,17 @@ class UntrashView(grok.CodeView):
                 obj = self.context.restrictedTraverse(item)
                 trasher = ITrashable(obj)
                 trasher.untrash()
-        self.request.RESPONSE.redirect('%s#documents' % (
-            self.context.absolute_url()))
+
+            return self.request.RESPONSE.redirect('%s#documents' % (
+                self.context.absolute_url()))
+
+        else:
+            msg = _(u'You have not selected any items')
+            IStatusMessage(self.request).addStatusMessage(
+                msg, type='error')
+
+            return self.request.RESPONSE.redirect(
+                '%s#trash' % self.context.absolute_url())
 
     def render(self):
         super(UntrashView).render()
