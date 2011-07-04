@@ -139,6 +139,24 @@ class MoveItemsFormView(layout.FormWrapper, grok.CodeView):
         layout.FormWrapper.__init__(self, context, request)
         grok.CodeView.__init__(self, context, request)
 
+    def render(self):
+        if not self.request.get('paths'):
+            msg = _(u'You have not selected any items')
+            IStatusMessage(self.request).addStatusMessage(
+                msg, type='error')
+
+            # redirect to the right tabbedview_tab
+            if self.request.form.get('orig_template'):
+
+                return self.request.RESPONSE.redirect(
+                    self.request.form.get('orig_template'))
+            # fallback documents tab
+            else:
+                return self.request.RESPONSE.redirect(
+                    '%s#documents' % self.context.absolute_url())
+
+        return super(MoveItemsFormView, self).render()
+
 
 class NotInContentTypes(Invalid):
     __doc__ = _(u"It isn't allowed to add such items there")

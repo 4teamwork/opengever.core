@@ -5,6 +5,10 @@ Changelog
 2.0b15
 ------
 
+* Issue #588 Fehler bei Klick auf Weitere Aktionen in Dokumentenliste
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/588
+  [phgross]
+
 * Issue #1067 Test Rot 2.0.3: "In eigenes Dossier kopieren" funktioniert nicht
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1067
   [phgross]
