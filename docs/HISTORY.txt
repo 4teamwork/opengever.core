@@ -5,6 +5,10 @@ Changelog
 2.0b16
 ------
 
+* Issue #1071 Ausgewaehltes Dokument wird beim Erstellen einer Weiterleitung nicht respektiert
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1071
+  [phgross]
+
 * Issue #901 In der Unteraufgabe fehlt das Icon fuer die Hauptaufgabe
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/901
   [phgross]
