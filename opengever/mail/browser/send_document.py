@@ -125,10 +125,6 @@ class SendDocumentForm(form.Form):
         """
         paths = self.request.get('paths', [])
         if paths:
-            utool = getToolByName(self.context, 'portal_url')
-            portal_path = utool.getPortalPath()
-            # paths have to be relative to the portal
-            paths = [path[len(portal_path):] for path in paths]
             self.request.set('form.widgets.documents', paths)
         super(SendDocumentForm, self).update()
 
