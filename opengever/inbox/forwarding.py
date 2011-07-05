@@ -4,7 +4,6 @@ from five import grok
 from datetime import datetime
 from plone.directives import form
 from plone.directives.dexterity import AddForm
-from Products.CMFCore.utils import getToolByName
 from Products.statusmessages.interfaces import IStatusMessage
 from Products.CMFCore.interfaces import IActionSucceededEvent
 from z3c.form.interfaces import HIDDEN_MODE
@@ -111,10 +110,6 @@ class ForwardingAddForm(AddForm):
             self.request.RESPONSE.redirect(redir_url)
 
         if paths:
-            utool = getToolByName(self.context, 'portal_url')
-            portal_path = utool.getPortalPath()
-            # paths have to be relative to the portal
-            paths = [path[len(portal_path):] for path in paths]
             self.request.set('form.widgets.relatedItems', paths)
 
         # put default value for issuer into request

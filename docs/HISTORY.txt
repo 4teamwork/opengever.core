@@ -5,6 +5,10 @@ Changelog
 2.0b8
 -----
 
+* Issue #1071 Ausgewaehltes Dokument wird beim Erstellen einer Weiterleitung nicht respektiert
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1071
+  [phgross]
+
 * Issue #1064 Test Rot 2.0.3: Eingangskorb, Tab Uebersicht: Aufgabe aus anderem Mandant wird nicht angezeigt
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1064/
   [phgross]
