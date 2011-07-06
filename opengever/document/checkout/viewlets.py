@@ -1,4 +1,3 @@
-from AccessControl import getSecurityManager
 from five import grok
 from opengever.document.document import IDocumentSchema
 from opengever.document.interfaces import ICheckinCheckoutManager
@@ -27,5 +26,5 @@ class CheckedOutViewlet(grok.Viewlet):
             self.available = True
 
             info = getUtility(IContactInformation)
-            owner_id = getSecurityManager().getUser().getId()
+            owner_id = manager.checked_out()
             self.checkout_owner = info.render_link(owner_id)

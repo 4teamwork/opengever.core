@@ -5,6 +5,10 @@ Changelog
 2.0b14
 ------
 
+* Fixed bug that reported the current user as being the one that checked out a document
+  instead of the actual user that checked out the document.
+  [lgraf]
+
 * Fixed display of mimetype icon in byline
   [lgraf]
 
