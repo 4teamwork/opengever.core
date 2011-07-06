@@ -105,6 +105,32 @@ it should only be possible resolving a dossier when all tasks are resolved
     True
 
 
+has_valid_enddate
+-----------------
+In order to be resolved, a dossier needs to have a valid end date.
+
+Currently, our dossier does not have one, so has_valid_enddate() should fail:
+    >>> IDossier(dossier).end is None
+    True
+
+    >>> dossier.has_valid_enddate()
+    False
+
+If the dossier has an end date, it needs to be younger than the latest document's date:
+    >>> IDossier(dossier).end = datetime(1999,11,11).date()
+    >>> dossier.has_valid_enddate()
+    False
+
+Now we set an acceptable end date and try again:
+    >>> IDossier(dossier).end = datetime(2050,11,11).date()
+    >>> dossier.has_valid_enddate()
+    True
+
+We reset the dossier end date again for further testing below:
+    >>> IDossier(dossier).end = None
+
+
+
 Try to resolve the dossier
 --------------------------
     >>> browser.open(dossier.absolute_url() + '/transition-resolve')
