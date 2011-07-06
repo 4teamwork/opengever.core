@@ -105,6 +105,31 @@ it should only be possible resolving a dossier when all tasks are resolved
     True
 
 
+Try to resolve the dossier
+--------------------------
+    >>> browser.open(dossier.absolute_url() + '/transition-resolve')
+    >>> "The subdossier 'Subdossier' needs to be resolved manually." in browser.contents
+    True
+
+This is because the subdossier's documents don't have dates that would allow the compution
+of the subdossier's end date.
+Therefore we set a valid date on one of the documents and try to resolve the dossier again:
+
+    >>> doc1.document_date = datetime(2011,11,11).date()
+
+Now let's try again:
+
+    >>> browser.open(dossier.absolute_url() + '/transition-resolve')
+    >>> "The subdossier 'Subdossier' needs to be resolved manually." in browser.contents
+    False
+
+    >>> 'transition-archive' in browser.url
+    True
+
+It worked, we should now be on the form for archiving the dossier which will be tested next.
+
+
+
 Archive
 =======
 create a second document

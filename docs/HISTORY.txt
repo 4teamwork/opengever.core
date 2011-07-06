@@ -5,6 +5,9 @@ Changelog
 2.0b15
 ------
 
+* Added test for resolving dossiers
+  [lgraf]
+
 * Issue #588 Fehler bei Klick auf Weitere Aktionen in Dokumentenliste
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/588
   [phgross]
