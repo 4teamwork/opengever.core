@@ -135,7 +135,6 @@ def move_documents_into_forwarding(context, event):
     place. After saving the forwarding, we need to move the documents into
     the forwarding (which did not exist before).
     """
-
     relations = context.relatedItems
     for relation in relations:
         obj = relation.to_object
