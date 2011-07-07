@@ -11,7 +11,6 @@ from Products.PloneTestCase.ptc import PloneTestCase
 from opengever.document.tests.layer import Layer
 
 from opengever.document.document import IDocumentSchema
-from opengever.base.behaviors.classification import IClassification
 
 
 class TestDocumentIntegration(PloneTestCase):
