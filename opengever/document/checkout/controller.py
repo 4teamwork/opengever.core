@@ -11,12 +11,14 @@ class CheckinCheckoutController(BrowserView):
     def is_checkout_allowed(self):
         """Checks whether checkout is allowed or not.
         """
-        manager = queryMultiAdapter((self.context, self.request),
-                                    ICheckinCheckoutManager)
-        if manager:
-            return manager.is_checkout_allowed()
-        else:
-            return False
+        if self.context.digital_available:
+            
+            manager = queryMultiAdapter((self.context, self.request),
+                                        ICheckinCheckoutManager)
+            if manager:
+                return manager.is_checkout_allowed()
+
+        return False
 
     def is_checkin_allowed(self):
         """Checks whether checkin is allowed or not.
