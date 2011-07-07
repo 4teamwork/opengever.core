@@ -357,7 +357,7 @@ class ForwardingResponseAddForm(AddForm):
 
         # copy all responses
         task_responses = IResponseContainer(task)
-        for id_, fresp in enumerate(IResponseContainer(forwarding)):
+        for fresp in IResponseContainer(forwarding):
             tresp = Response('')
             for key in IPersistentResponse.names():
                 attr = IPersistentResponse[key]

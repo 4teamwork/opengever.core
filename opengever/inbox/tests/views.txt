@@ -116,3 +116,12 @@ all actions should not be in enabled_actions
     True
     >>> 'create_task' not in inbox_docs.major_actions
     True
+
+test AccessInboxAllowed:
+========================
+    >>> self.logout()
+    >>> inbox.restrictedTraverse('access-inbox-allowed')() is None
+    True
+    >>> self.login()
+    >>> inbox.restrictedTraverse('access-inbox-allowed')()
+    1
