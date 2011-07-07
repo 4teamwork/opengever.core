@@ -1,0 +1,83 @@
+Test views:
+===========
+
+imports and general stuff
+    >>> from datetime import datetime
+    >>> from plone.dexterity.utils import createContentInContainer
+    >>> from Products.CMFCore.utils import getToolByName
+    >>> from Products.Five.testbrowser import Browser
+    >>> from Products.PloneTestCase.setup import portal_owner, default_password
+    >>> import urllib
+    >>> from opengever.globalindex.interfaces import ITaskQuery
+    >>> from opengever.globalindex.model.task import Task
+    >>> from zope.component import getUtility
+    >>> from opengever.ogds.base.utils import get_client_id
+
+    >>> self.setRoles(['Editor', 'Contributor', 'Owner'])
+
+create content:
+===============
+    >>> inbox = createContentInContainer(
+    ...     self.portal, 'opengever.inbox.inbox', title=u'eingangskorb')
+    >>> view = inbox.restrictedTraverse('tabbedview_view-overview')
+
+    >>> doc1 = createContentInContainer(
+    ...     inbox, 'opengever.document.document', title=u'Document in inbox')
+    >>> doc2 = createContentInContainer(
+    ...     inbox, 'opengever.document.document',
+    ...     title=u'Another document in inbox')
+    >>> fw1 = createContentInContainer(
+    ...     inbox, 'opengever.inbox.forwarding', title=u'Forwarting 1',
+    ...     issuer='inbox:plone', responsible='inbox:plone',
+    ...     responsible_client='plone' )
+    >>> doc3 = createContentInContainer(
+    ...     fw1, 'opengever.document.document',
+    ...     title=u'Document for forwarting')
+
+test documents():
+=================
+    >>> [doc['Title'] for doc in view.documents()]
+    [u'Document in inbox', u'Another document in inbox']
+
+test assigned_tasks():
+======================
+    >>> task1 = createContentInContainer(
+    ...     portal, 'opengever.task.task', title=u'Task for forwarting',
+    ...     responsible='inbox:plone', review_state='task-state-open')
+
+change tasks client_id
+    >>> principal = 'inbox:%s' % get_client_id()
+    >>> query_util = getUtility(ITaskQuery)
+    >>> query = query_util._get_tasks_for_responsible_query(
+    ...     principal, 'modified')
+    >>> query.filter(Task.title==u'Task for forwarting').all()[0].client_id = 'something_else'
+
+    >>> len(view.assigned_tasks())
+    1
+
+test inbox():
+=============
+change forwardings client_id
+    >>> query_util = getUtility(ITaskQuery)
+    >>> query = query_util._get_tasks_for_responsible_query(
+    ...     principal, 'modified')
+    >>> query.filter(Task.title==u'Forwarting 1').all()[0].client_id = 'something_else'
+
+    >>> len(view.inbox())
+    1
+
+test boxes():
+=============
+    >>> boxes = view.boxes()
+    >>> boxes[1][0].get('id')
+    'documents'
+    >>> boxes[0][0].get('id')
+    'inbox'
+    >>> boxes[0][1].get('id')
+    'assigned_tasks'
+    >>> len(boxes)
+    2
+    >>> len(boxes[0])
+    2
+
+    

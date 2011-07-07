@@ -37,8 +37,8 @@ class IntegrationTestLayer(collective.testcaselayer.ptc.BasePTCLayer):
 
         model.Base.metadata.create_all(session.bind)
 
-        _create_example_client(session, 'client1',
-                              {'title': 'client1',
+        _create_example_client(session, 'plone',
+                              {'title': 'plone',
                               'ip_address': '127.0.0.1',
                               'site_url': 'http://nohost/plone',
                               'public_url': 'http://nohost/plone',
@@ -63,7 +63,7 @@ class IntegrationTestLayer(collective.testcaselayer.ptc.BasePTCLayer):
         # configure client ID
         registry = getUtility(IRegistry, context=self.portal)
         client = registry.forInterface(IClientConfiguration)
-        client.client_id = u'client1'
+        client.client_id = u'plone'
           
 
 Layer = IntegrationTestLayer([collective.testcaselayer.ptc.ptc_layer])

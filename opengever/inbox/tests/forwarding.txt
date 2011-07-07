@@ -53,11 +53,11 @@ create a forwarding with two documents
 
 check defaults
     >>> browser.getControl(name='form.widgets.issuer:list').value
-    ['inbox:client1']
+    ['inbox:plone']
     >>> browser.getControl(name='form.widgets.responsible:list').value
-    ['inbox:client1']
+    ['inbox:plone']
     >>> browser.getControl(name='form.widgets.responsible_client:list').value
-    ['client1']
+    ['plone']
 
 create forwarding and check if documents are corectly moved
     >>> browser.getControl(name="form.buttons.save").click()
@@ -118,4 +118,4 @@ check the new created task
     >>> task.deadline.year == 2025
     True
     >>> task.issuer and task.responsible
-    u'inbox:client1'
+    u'inbox:plone'

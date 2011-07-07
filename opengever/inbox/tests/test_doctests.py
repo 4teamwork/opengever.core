@@ -10,6 +10,7 @@ MODULENAMES = ()
 
 TESTFILES = (
     'forwarding.txt',
+    'views.txt',
     )
 
 
