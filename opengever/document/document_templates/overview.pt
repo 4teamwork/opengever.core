@@ -42,9 +42,9 @@
 			</td>
 		</tr>
 		<tr>
-			<th i18n:translate="help_paper_form">Available in paper form only</th>
-			<td tal:condition="context/paper_form" i18n:translate="label_yes">yes</td>
-			<td tal:condition="not:context/paper_form" i18n:translate="label_no">no</td>
+			<th i18n:translate="label_digital_available">Digital Available</th>
+			<td tal:condition="context/digital_available" i18n:translate="label_yes">yes</td>
+			<td tal:condition="not:context/digital_available" i18n:translate="label_no">no</td>
 		</tr>
 		<tr>
 			<th i18n:translate="label_preserved_as_paper">Preserved as paper</th>
