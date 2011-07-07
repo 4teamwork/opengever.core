@@ -5,6 +5,10 @@ Changelog
 2.0b16
 ------
 
+* Issue #992 Aufgabe, Zur direkten Erledigung: Aktion akzeptieren fehlt
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/992
+  [phgross]
+
 * Issue #1071 Ausgewaehltes Dokument wird beim Erstellen einer Weiterleitung nicht respektiert
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1071
   [phgross]
