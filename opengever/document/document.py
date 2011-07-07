@@ -24,6 +24,7 @@ from plone.namedfile.field import NamedFile
 from plone.supermodel.interfaces import FIELDSETS_KEY
 from plone.supermodel.model import Fieldset
 from plone.z3cform.textlines.textlines import TextLinesFieldWidget
+from Products.statusmessages.interfaces import IStatusMessage
 from z3c.form.browser import checkbox
 from zc.relation.interfaces import ICatalog
 from zope import schema
@@ -492,6 +493,12 @@ class DownloadFileVersion(grok.CodeView):
         pr = self.context.portal_repository
         old_obj = pr.retrieve(self.context, version_id).object
         old_file = old_obj.file
+        if not old_file:
+            msg = _(u'No file in in this version')
+            IStatusMessage(self.request).addStatusMessage(
+                msg, type='error')
+            return self.request.RESPONSE.redirect(self.context.absolute_url())
+            
         response = self.request.RESPONSE
         response.setHeader('Content-Type', old_file.contentType)
         response.setHeader('Content-Length', old_file.getSize())
