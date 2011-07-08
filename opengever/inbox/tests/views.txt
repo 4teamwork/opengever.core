@@ -10,6 +10,8 @@ imports and general stuff
     >>> import urllib
     >>> from opengever.globalindex.interfaces import ITaskQuery
     >>> from opengever.globalindex.model.task import Task
+    >>> from opengever.ogds.base.model.client import Client
+    >>> from opengever.ogds.base.model.user import User, Group
     >>> from zope.component import getUtility
     >>> from opengever.ogds.base.utils import get_client_id
 
@@ -33,6 +35,10 @@ create content:
     >>> doc3 = createContentInContainer(
     ...     fw1, 'opengever.document.document',
     ...     title=u'Document for forwarding')
+    >>> fw2 = createContentInContainer(
+    ...     inbox, 'opengever.inbox.forwarding', title=u'Another forwarding',
+    ...     issuer='inbox:client2', responsible='inbox:client2',
+    ...     responsible_client='client2' )
 
 test documents():
 =================
@@ -125,3 +131,42 @@ test AccessInboxAllowed:
     >>> self.login()
     >>> inbox.restrictedTraverse('access-inbox-allowed')()
     1
+
+test InboxAssignedForwardings:
+==============================
+    >>> assigned_fws = inbox.restrictedTraverse('tabbedview_view-assigned_forwardings')
+    >>> assigned_fws.sort_order = 'reverse'
+    >>> len(assigned_fws.get_base_query().all())
+    1
+
+test forwarding_transition_controller
+=====================================
+user not in group
+    >>> ftc = fw1.restrictedTraverse('forwarding_transition_controller')
+    >>> ftc.is_accept_possible()
+    False
+    >>> ftc.is_assign_to_dossier_possible()
+    False
+    >>> ftc.is_close_possible()
+    False
+    >>> ftc.is_refuse_possible()
+    False
+
+wrong client_id
+    >>> self.login('portal_owner')
+    >>> ftc.is_accept_possible()
+    False
+    
+    >>> ftc.is_refuse_possible()
+    False
+
+user in group & correct client_id
+    >>> ftc2 = fw2.restrictedTraverse('forwarding_transition_controller')
+    >>> ftc2.is_accept_possible()
+    True
+    >>> ftc2.is_assign_to_dossier_possible()
+    True
+    >>> ftc2.is_close_possible()
+    True
+    >>> ftc2.is_refuse_possible()
+    True

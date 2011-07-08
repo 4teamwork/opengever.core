@@ -58,7 +58,7 @@ class IntegrationTestLayer(collective.testcaselayer.ptc.BasePTCLayer):
             'lastname': 'User',
             'email': 'test.user@local.ch',
             'email2': 'test_user@private.ch'},
-            ('og_mandant1_users','og_mandant1_inbox'))
+            ('og_mandant1_users','og_mandant1_inbox', 'og_mandant2_users'))
 
         # configure client ID
         registry = getUtility(IRegistry, context=self.portal)
