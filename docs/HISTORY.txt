@@ -59,9 +59,9 @@ Changelog
 
 * Issue #1021 Feedback Fokus: Datum bei Dokument
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1021/
-   - adjust filing_year default value (work now also without a document_date)
-   - adjust computeEndDate (work now also without a document_date)
-   - reset document_date
+  - adjust filing_year default value (work now also without a document_date)
+  - adjust computeEndDate (work now also without a document_date)
+  - reset document_date
   [phgross]
 
 * Issue #1018 Feedback Fokus: Autor leer lassen
@@ -72,7 +72,7 @@ Changelog
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1016/
   [phgross]
 
-* Issue #1010 Feedback Fokus: Dossier: Übersicht: Angabe "Dokumente"
+* Issue #1010 Feedback Fokus: Dossier: Uebersicht: Angabe "Dokumente"
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1010/
   [phgross]
 
