@@ -20,7 +20,7 @@ Changelog
   remove document_date setter in extract_attachements
   [phgross]
 
-* Issue #984 E-Mail: Extrahieren von Dokumenten. Auswahl Alle, Keine ermöglichen
+* Issue #984 E-Mail: Extrahieren von Dokumenten. Auswahl Alle, Keine ermoeglichen
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/984
   Select all / none in attachment extraction page
   [fsprenger] 
