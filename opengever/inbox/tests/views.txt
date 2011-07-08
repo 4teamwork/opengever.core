@@ -108,7 +108,7 @@ test InboxDocuments:
 all actions should not be in enabled_actions
     >>> 'create_forwarding' in inbox_docs.enabled_actions
     True
-    >>> hidden_actions = ['change_state', 'pdf_taskslisting', 'move_items']
+    >>> hidden_actions = ['create_task', 'copy_documents_to_remote_client', 'move_items']
     >>> all([action not in inbox_docs.enabled_actions for action in hidden_actions])
     True
 
