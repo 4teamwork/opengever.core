@@ -69,9 +69,7 @@ class TestTaskIntegration(PloneTestCase):
         doc2 = createContentInContainer(t1, 'opengever.document.document', title="ctesttwo")
         view = t1.restrictedTraverse('tabbedview_view-relateddocuments')
         results = [aa.Title() for aa in view.table_source.build_query()]
-
-        # sorted on modified
-        self.assertTrue(results == [doc2.Title(), doc1.Title(), doc3.Title()])
+        self.assertTrue(doc3.Title() in results)
 
         #check sorting
         view.request.set('sort',u'sortable_title')
