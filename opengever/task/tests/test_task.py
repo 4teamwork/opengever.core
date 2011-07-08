@@ -58,6 +58,8 @@ class TestTaskIntegration(PloneTestCase):
         self.failUnless(len(view.getSubTasks())==0)
         t2 = create_task(t1, title='Task 2')
         self.failUnless(view.getSubTasks()[0].getObject()==t2)
+        view.request = self.context.REQUEST
+        self.failUnless(view())
 
     def test_relateddocuments(self):
         # create document and append it to the relatedItems of the task
