@@ -342,7 +342,6 @@ class RelatedDocumentsTableSource(grok.MultiAdapter, BaseTableSource):
         """
         # initalize config
         self.config.update_config()
-
         # get the base query from the config
         query = self.config.get_base_query()
         portal_catalog = getToolByName(self.config.context, 'portal_catalog')

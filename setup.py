@@ -10,6 +10,7 @@ tests_require = [
     'z3c.form [test]',
     'z3c.saconfig',
     'plone.app.testing',
+    'ftw.tabbedview',
     ]
 
 setup(name='opengever.task',
