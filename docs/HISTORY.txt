@@ -66,7 +66,7 @@ Changelog
   use special vocabulary for Forwardings (InboxesVocabulary)
   [phgross]
 
-* Issue #950 SKA.RR/Eingangskorb: Fehlender Baum für die abgeschlossenen Weiterleitungen
+* Issue #950 SKA.RR/Eingangskorb: Fehlender Baum fuer die abgeschlossenen Weiterleitungen
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/950
   fixed yearfolder creation
   [phgross]
