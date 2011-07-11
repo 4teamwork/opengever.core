@@ -3,7 +3,7 @@ from opengever.task.util import getTaskTypeVocabulary
 from plone.memoize import ram
 from zope.app.component.hooks import getSite
 from zope.component import getMultiAdapter
-
+from opengever.base.browser.helper import css_class_from_obj, css_class_from_brain
 
 @ram.cache(lambda m,i,value: value)
 def task_type_helper(item, value):
@@ -30,13 +30,11 @@ def linked(item, value):
         url_method = item.getURL
     elif hasattr(item, 'absolute_url'):
         url_method = item.absolute_url
-    if callable(item.getIcon):
-        icon = item.getIcon()
+    css = ''
+    if hasattr(item, 'getObject'):
+        css = css_class_from_brain(item)
     else:
-        icon = item.getIcon
-    img = '<img src="%s/%s"/>' % (item.portal_url(),
-                                  icon.encode('utf-8'))
-
+        css = css_class_from_obj(item)
     breadcrumb_titles = []
     breadcrumbs_view = getMultiAdapter((item, item.REQUEST),
                                        name='breadcrumbs_view')
@@ -46,11 +44,11 @@ def linked(item, value):
             breadcrumb_titles.append(elem.get('Title'))
         else:
             breadcrumb_titles.append(elem.get('Title').decode('utf-8'))
-    link = '%s&nbsp;<a class="rollover-breadcrumb" href="%s" title="%s">%s</a>' % (
-        img, url_method(),
+    link = '<a class="rollover-breadcrumb" href="%s" title="%s">%s</a>' % (
+        url_method(),
         " &gt; ".join(t for t in breadcrumb_titles),
             value)
-    wrapper = '<span class="linkWrapper">%s</span>' % link
+    wrapper = '<span class="linkWrapper %s">%s</span>' % (css, link)
     return wrapper
 
 def path_checkbox(item, value):
