@@ -5,6 +5,11 @@ Changelog
 2.0b16
 ------
 
+* Issue #786 Darstellung Aufgabe als TabbedView  
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/786
+  Fixed Unicodeerror in linked helper. breadcrumbs_titles should be unicode.
+  [ttschanz] 
+
 * Issue #992 Aufgabe, Zur direkten Erledigung: Aktion akzeptieren fehlt
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/992
   [phgross]

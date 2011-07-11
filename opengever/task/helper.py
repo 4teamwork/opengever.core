@@ -42,14 +42,14 @@ def linked(item, value):
                                        name='breadcrumbs_view')
 
     for elem in breadcrumbs_view.breadcrumbs():
-        if isinstance(elem, unicode):
-            breadcrumb_titles.append(elem.get('Title').encode('utf-8'))
-        else:
+        if isinstance(elem.get('Title'), unicode):
             breadcrumb_titles.append(elem.get('Title'))
+        else:
+            breadcrumb_titles.append(elem.get('Title').decode('utf-8'))
     link = '%s&nbsp;<a class="rollover-breadcrumb" href="%s" title="%s">%s</a>' % (
         img, url_method(),
         " &gt; ".join(t for t in breadcrumb_titles),
-        value)
+            value)
     wrapper = '<span class="linkWrapper">%s</span>' % link
     return wrapper
 
