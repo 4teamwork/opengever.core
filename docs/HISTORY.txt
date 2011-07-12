@@ -20,7 +20,13 @@ Changelog
   display groups in user details view
   [phgross]
 
+* Added Upgrade statements for Oracle
+  [lgraf]
+
 * added ldap synchronisation ldap panel
+  [phgross]
+
+* added LDAP groupimport to ldap_import shell script
   [phgross]
 
 * fixed transaction handling in activeuser section used in the ldap import
