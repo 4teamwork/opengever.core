@@ -5,6 +5,15 @@ Changelog
 2.0b8
 -----
 
+* Added several Tests for opengever.inbox
+  [jinfanger]
+
+* Added Doctests for forwardings
+  [phgross]
+
+* remove paths parsing, the contenttree widget expected a correct path
+  [phgross]
+
 * Issue #1071 Ausgewaehltes Dokument wird beim Erstellen einer Weiterleitung nicht respektiert
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1071
   [phgross]
