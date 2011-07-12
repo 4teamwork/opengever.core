@@ -9,10 +9,11 @@ Changelog
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1067
   [phgross]
 
-* Issue #786 Darstellung Aufgabe als TabbedView  
+* Issue #786 Darstellung Aufgabe als TabbedView
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/786
+  relateddocuments now uses sprites
   Fixed Unicodeerror in linked helper. breadcrumbs_titles should be unicode.
-  [ttschanz] 
+  [ttschanz]
 
 * Issue #992 Aufgabe, Zur direkten Erledigung: Aktion akzeptieren fehlt
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/992
@@ -65,7 +66,7 @@ Changelog
 
 * Issue #832 Workflow Task anpassen
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/832/
-  added and changed some guards in the workflow 
+  added and changed some guards in the workflow
   [phgross]
 
 * Issue #947 Weiterleitung einem Dossier zuweisen
