@@ -38,6 +38,9 @@ setup(name='opengever.advancedsearch',
           'opengever.ogds.base',
           'opengever.task',
           'ftw.datepicker',
+          'plone.dexterity',
+          'plone.app.registry'
+          'opengever.globalindex',
           # -*- Extra requirements: -*-
       ],
       tests_require=tests_require,
