@@ -9,6 +9,7 @@ Changelog
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/712
   changed advancedsearch, so that it use now the interfaces for the type selection instead of the portal_type
   advancedsearch works now also for specialdossiers and forwards
+  task_responsible search: find now only tasks wich are assinged to the current client
   [phgross]
 
 2.0b7

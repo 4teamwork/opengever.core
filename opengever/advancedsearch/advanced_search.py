@@ -361,6 +361,8 @@ class AdvancedSearchForm(directives_form.Form):
                         params = '%s&trashed:list:boolean=True&trashed:list:boolean=False' %(params)
                     elif isinstance(data.get(field), int):
                         params = '%s&sequence_number:int=%s' %(params, data.get(field))
+                    elif field == 'task_responsible':
+                        params = '%s&assigned_client=%s' %(params, get_client_id())
                     else:
                         params = '%s&%s=%s' %(params, field, urllib.quote(data.get(field).encode('utf-8')))
 
