@@ -5,14 +5,26 @@ Changelog
 2.0b7
 -----
 
+* updated test setup
+  [phgross]
+
 * Removed css_icon_class method - now done in tabbedview linked helper
   [lgraf]
+
+* Using icon_expr instead of content_icon
+  [lgraf]
+
+* fixed linked helper function, css_info_class problem
+  [phgross]
 
 * Removed content_icon for contact and contactfolder FTIs (now done with sprites)
   [lgraf]
 
 * added css_icon_class and modified function linked to handle sprites
   [30.05.2011, elio.schmutz]
+
+* fixed tests, id generation changed
+  [phgross]
 
 2.0b6
 -----
