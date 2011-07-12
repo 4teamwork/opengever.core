@@ -5,6 +5,10 @@ Changelog
 2.0b16
 ------
 
+* Issue #1067 Test Rot 2.0.3: "In eigenes Dossier kopieren" funktioniert nicht
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1067
+  [phgross]
+
 * Issue #786 Darstellung Aufgabe als TabbedView  
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/786
   Fixed Unicodeerror in linked helper. breadcrumbs_titles should be unicode.

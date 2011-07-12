@@ -19,10 +19,7 @@ jq(window).load(function() {
 
     /* for creating a successor task: */
     $('#form-widgets-client').change(function(event) {
-        var url = $('#form-widgets-dossier-widgets-query')
-                .autocomplete('option', 'source').split('?')[0]
-                .concat('?client=')
-                .concat($(this).find('option:selected').attr('value'));
+        var url = $('#form-widgets-dossier-widgets-query').autocomplete('option', 'source').split('?')[0].concat('?client=').concat($(this).find('option:selected').attr('value'));
         $('#form-widgets-dossier-widgets-query')
                 .autocomplete('option', 'source', url);
     }).change();
@@ -30,5 +27,16 @@ jq(window).load(function() {
         $('#form-widgets-dossier-input-fields')
                 .find('span').remove();
     });
+
+    /* for copy documents to a remote client */
+    $('#formfield-form-widgets-client').change(function(event){
+        var url = $('#form-widgets-target_dossier-widgets-query')
+               .autocomplete('option', 'source').split('?')[0]
+               .concat('?client=')
+               .concat($(this).find('.hidden-widget').attr('value'));
+        $('#form-widgets-target_dossier-widgets-query').autocomplete('option', 'source', url);
+    }).change();
+
+
 
 });
