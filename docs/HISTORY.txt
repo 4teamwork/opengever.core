@@ -8,6 +8,12 @@ Changelog
 * Added test for resolving dossiers
   [lgraf]
 
+* Added Browser test for opengever.dossier
+  [phgross]
+
+* fixed markup
+  [fsprenger]
+
 * Issue #588 Fehler bei Klick auf Weitere Aktionen in Dokumentenliste
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/588
   [phgross]
