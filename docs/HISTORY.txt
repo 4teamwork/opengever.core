@@ -9,6 +9,9 @@ Changelog
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1071
   [phgross]
 
+* fixed import of messagefactory (use the own messagefactory)
+  [phgross]
+
 * Updated Permission-roles
   [ttschanz]
 
