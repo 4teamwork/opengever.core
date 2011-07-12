@@ -18,6 +18,9 @@ Changelog
   moved css_class_from_brain helper from opengever dossier to opengever.base
   [phgross]
 
+* Added Tests for Copy_items method
+  [ttschanz]
+
 * fixed bug in copyitem_view 
   [ttschanz]
 
