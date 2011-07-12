@@ -35,6 +35,7 @@ setup(name='opengever.dossier',
       include_package_data=True,
       zip_safe=False,
       install_requires=[
+        'ftw.contentmenu',
         'plone.registry',
         'opengever.repository',
         'collective.elephantvocabulary',
