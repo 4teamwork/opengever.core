@@ -14,6 +14,9 @@ Changelog
 * Moved import of additional profiles after LDAP setup to avoid violating user constraint
   [lgraf]
 
+* modified install opengever methods - for working with the new table configuration
+  [phgross]
+
 * removed yearfolder creation, because the creation is part of the closing mechanism
   [phgross]
 
