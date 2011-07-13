@@ -5,6 +5,9 @@ Changelog
 2.0c5
 -----
 
+* Using icon_expr instead of content_icon
+  [lgraf]
+
 * Removed content_icons and icon_exprs - now done with sprites
   [lgraf]
 
