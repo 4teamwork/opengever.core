@@ -15,7 +15,16 @@ Changelog
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1051/
   [phgross]
 
+* Disabled Subdossier column
+  [phgross]
+
+* changed Clientlisting, work now with the rebuilded ogds
+  [phgross]
+
 * Fixed Unicode error in linked helper
+  [lgraf]
+
+* Moved async CP from og.tabbedview to og.pdfconverter
   [lgraf]
 
 * Issue #1046 Tab Meine Aufgaben etc.: Laufnummer folgt der Stringsortierung
