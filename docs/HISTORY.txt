@@ -5,6 +5,9 @@ Changelog
 2.0a3
 -----
 
+* added special handling for calling the trash view without selecting any items
+  [phgross]
+
 * Issue #1051 Fehler bzw. Anpassung im Papierkorb des Dossiers/Subdossiers
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1051/
   [phgross]
@@ -12,6 +15,8 @@ Changelog
 * updated testsetup, so that it works with new plone.app.testing version
   [phgross]
 
+* fixed extends path
+  [jbaumann]
 
 2.0a2
 -----
