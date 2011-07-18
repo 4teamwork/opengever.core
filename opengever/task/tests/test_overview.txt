@@ -31,4 +31,17 @@ check response
     >>> container = IResponseContainer(task1)
     >>> len(container)
     1
-    
+
+
+Test helper
+===========
+    >>> from opengever.task import helper
+
+    >>> helper.task_type_helper(task1, 'forwarding_task_type')
+    u'forwarding_task_type'
+
+    >>> helper.linked(task1, 'Task 1')
+    u'<span class="linkWrapper contenttype-opengever-task-task"><a class="rollover-breadcrumb" href="http://nohost/plone/task-1" title="Task for forwarding">Task 1</a></span>'
+
+    >>> helper.path_checkbox(task1, '')
+    u'<input type="checkbox" class="noborder selectable" name="paths:list" id="task-1" value="/plone/task-1" alt="Select Task for forwarding" title="Select Task for forwarding" />'
