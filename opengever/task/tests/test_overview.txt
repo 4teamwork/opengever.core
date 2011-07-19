@@ -1,0 +1,53 @@
+Test tabbedview_view-overview:
+==============================
+    >>> from Products.Five.testbrowser import Browser
+    >>> from Products.PloneTestCase.setup import portal_owner, default_password
+    >>> from plone.dexterity.utils import createContentInContainer
+
+create some content
+    >>> browser = Browser()
+    >>> browser.handleErrors = False
+    >>> portal_url = self.portal.absolute_url()
+
+login
+    >>> browser.open('%s/login_form' % portal_url)
+    >>> browser.getControl(name='__ac_name').value = portal_owner
+    >>> browser.getControl(name='__ac_password').value = default_password
+    >>> browser.getControl(name='submit').click()
+
+create a task
+    >>> self.setRoles(['Editor', 'Contributor', 'Owner'])
+    >>> task1 = createContentInContainer(
+    ...     portal, 'opengever.task.task', title=u'Task for forwarding',
+    ...     responsible='inbox:plone', review_state='task-state-open')
+
+browse
+    >>> browser.open('%s/addresponse' % task1.absolute_url())
+    >>> browser.getControl(name='form.widgets.text').value='Antwort'
+    >>> browser.getControl(name='form.buttons.save').click()
+
+check response
+    >>> from opengever.task.adapters import IResponseContainer
+    >>> container = IResponseContainer(task1)
+    >>> len(container)
+    1
+
+
+Test helper
+===========
+    >>> from opengever.task import helper
+
+    >>> helper.task_type_helper(task1, 'forwarding_task_type')
+    u'forwarding_task_type'
+    >>> helper.task_type_helper(task1, 'another value')
+    'another value'
+    >>> helper.task_type_helper(task1, 'information')
+    'For information'
+
+    >>> helper.linked(task1, 'Task 1')
+    u'<span class="linkWrapper contenttype-opengever-task-task"><a class="rollover-breadcrumb" href="http://nohost/plone/task-1" title="Task for forwarding">Task 1</a></span>'
+    >>> helper.linked(task1.portal_catalog({'Title': 'Task for forwarding'})[0], 'Task 1')
+    u'<span class="linkWrapper contenttype-opengever-task-task"><a class="rollover-breadcrumb" href="http://nohost/plone/task-1" title="portal_catalog &gt; Task for forwarding">Task 1</a></span>'
+
+    >>> helper.path_checkbox(task1, '')
+    u'<input type="checkbox" class="noborder selectable" name="paths:list" id="task-1" value="/plone/task-1" alt="Select Task for forwarding" title="Select Task for forwarding" />'

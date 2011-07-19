@@ -2,7 +2,7 @@ import unittest
 import os
 
 from Testing import ZopeTestCase as ztc
-
+from opengever.task.tests.layer import Layer
 from Products.Five import zcml
 from Products.PloneTestCase import PloneTestCase as ptc
 from Products.PloneTestCase.layer import onsetup
@@ -44,12 +44,14 @@ def test_suite():
     txtfiles = [f for f in os.listdir(HERE)
                 if f.endswith('.txt') and
                 not f.startswith('.')]
-    return unittest.TestSuite(
-        [ztc.FunctionalDocFileSuite(
+    suites = []
+    for f in txtfiles:
+        fdfs = ztc.FunctionalDocFileSuite(
                 'tests/%s' % f, package='opengever.task',
                 test_class=ptc.FunctionalTestCase)
-         for f in txtfiles]
-        )
+        fdfs.layer = Layer
+        suites.append(fdfs)
+    return unittest.TestSuite(suites)
 
 if __name__ == '__main__':
     unittest.main(defaultTest='test_suite')

@@ -11,6 +11,7 @@ tests_require = [
     'z3c.saconfig',
     'plone.app.testing',
     'opengever.document',
+    'opengever.contact',
     'ftw.tabbedview',
     ]
 
