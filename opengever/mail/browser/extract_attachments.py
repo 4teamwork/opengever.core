@@ -260,7 +260,7 @@ class ExtractAttachments(grok.View):
 
         return NamedFile(data=attachment.get_payload(decode=1),
                          contentType=attachment.get_content_type(),
-                         filename=attachment.get_filename().decode('utf-8'))
+                         filename=attachment.get_filename())
 
     def find_parent_dossier(self):
         """Returns the first parent dossier relative to the current context.

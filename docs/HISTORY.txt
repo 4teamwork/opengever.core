@@ -5,6 +5,11 @@ Changelog
 2.0b7
 -----
 
+* Issue #923 Fehler beim Extrahieren eines Dokuments, welches als Email Attachment an ein Dossier versendet worden ist
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/923
+  Fixed UnicodeError in get_attachment_as_namedfile, works now also with attachment titles with non-ascii characters.
+  [phgross]
+
 
 2.0b6
 -----
