@@ -5,6 +5,11 @@ Changelog
 2.0b9
 -----
 
+* Issue #712 Advanced Search korrigieren und testen
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/712
+  fixed assigned_client setter, should only set when a task_responsible is selected
+  [phgross]
+
 
 2.0b8
 -----

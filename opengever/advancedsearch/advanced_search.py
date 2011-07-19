@@ -338,6 +338,12 @@ class AdvancedSearchForm(directives_form.Form):
             # if clause because it entered a searchableText=none without text
             if data.get('searchableText'):
                 params = '%s&SearchableText=%s' % (params, data.get('searchableText').encode('utf-8'))
+
+            # when search by task_responsible,
+            # show only tasks which are assigned to this client
+            if data.get('task_responsible', None):
+                params = '%s&assigned_client=%s' %(params, get_client_id())
+
             for field in FIELD_MAPPING.get(
                     data.get('object_provides').replace('.','-')):
                 if data.get(field, None):
@@ -361,8 +367,6 @@ class AdvancedSearchForm(directives_form.Form):
                         params = '%s&trashed:list:boolean=True&trashed:list:boolean=False' %(params)
                     elif isinstance(data.get(field), int):
                         params = '%s&sequence_number:int=%s' %(params, data.get(field))
-                    elif field == 'task_responsible':
-                        params = '%s&assigned_client=%s' %(params, get_client_id())
                     else:
                         params = '%s&%s=%s' %(params, field, urllib.quote(data.get(field).encode('utf-8')))
 
