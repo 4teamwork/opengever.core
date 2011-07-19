@@ -118,6 +118,9 @@ class DossierAutocompleteSelectionWidget(AutocompleteSelectionWidget):
                                        url=url,
                                        minLength=self.minLength,
                                        js_callback=js_callback,
+                                       klass=self.klass,
+                                       title=self.title,
+                                       input_type=self.input_type,
                                        js_extra=self.js_extra())
 
 

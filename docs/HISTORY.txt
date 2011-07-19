@@ -5,6 +5,12 @@ Changelog
 2.0b16
 ------
 
+* Issue #1067 Test Rot 2.0.3: "In eigenes Dossier kopieren" funktioniert nicht
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1067/
+  Added missing parameters for the js_template call in the DossierAutocompleteSelectionWidget,
+  works now with the newest version of the plone.formwidget.autocomplete 
+  (see https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1069/)
+  [phgross]
 
 2.0b15
 ------
