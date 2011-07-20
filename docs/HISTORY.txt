@@ -9,6 +9,11 @@ Changelog
 2.0b11
 ------
 
+* Fixed bug where document icons appear twice in ContentTreeWidget
+  Issue #1069 Test Rot 2.0.3: Fehlende Icons bei Verweis-Baum u.ae.
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1069
+  [lgraf]
+
 * Provided feature "opengever" in order to be able to conditionally exclude 
   things for opengever in izug.basetheme
   [lgraf]

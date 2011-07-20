@@ -31,4 +31,6 @@
         permission="zope.Public"
         />
 
+    <adapter factory=".navtree.OpengeverNavtreeStrategy" />
+
 </configure>
