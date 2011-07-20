@@ -34,7 +34,6 @@ setup(name='opengever.mail',
       install_requires=[
         'plone.z3cform',
         'plone.formwidget.autocomplete',
-        'opengever.dossier',
         'opengever.base',
         'z3c.relationfield',
         'z3c.form',
