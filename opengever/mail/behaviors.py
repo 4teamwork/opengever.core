@@ -6,13 +6,17 @@ from zope.component import queryUtility
 from zope.app.intid.interfaces import IIntIds
 from opengever.mail.interfaces import IMailSettings
 
+
 class IMailInAddress(Interface):
+
     def get_email_address(self):
         """ generates an email address for a dossier
         """
-        
+
+
 class IMailInAddressMarker(Interface):
     pass
+
 
 class MailInAddress(object):
     grok.provides(IMailInAddress)
@@ -25,6 +29,5 @@ class MailInAddress(object):
         intid = id_util.queryId(self.context)
         registry = queryUtility(IRegistry)
         proxy = registry.forInterface(IMailSettings)
-        domain = getattr(proxy,'mail_domain','fehler')
-        return '%s@%s' % (str(intid),domain)
-
+        domain = getattr(proxy, 'mail_domain', 'fehler')
+        return '%s@%s' % (str(intid), domain)
