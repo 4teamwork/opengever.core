@@ -40,7 +40,7 @@ class IMoveItemsSchema(Interface):
     #We Use TextLine here because Tuple and List have no hidden_mode.
     request_paths = schema.TextLine(title=u"request_paths")
 
-    
+
 class MoveItemsForm(form.Form):
 
     fields = field.Fields(IMoveItemsSchema)
@@ -49,10 +49,7 @@ class MoveItemsForm(form.Form):
 
     def updateWidgets(self):
         super(MoveItemsForm, self).updateWidgets()
-        if self.request.get('paths'):
-            self.paths = self.request.get('paths')
-
-        self.widgets['request_paths'].mode = HIDDEN_MODE   
+        self.widgets['request_paths'].mode = HIDDEN_MODE
         value = self.request.get('paths')
         if value:
             self.widgets['request_paths'].value = ';;'.join(value)
@@ -69,11 +66,17 @@ class MoveItemsForm(form.Form):
             sourceObjects = []
             failedObjects = []
             copiedItems = 0
+            # loop through paths
             for path in source:
+                #get objects and parents
                 sourceObjects.append(self.context.unrestrictedTraverse(
                     path.encode('utf-8')))
-                sourceContainer = aq_parent(aq_inner(self.context.unrestrictedTraverse(
+                sourceContainer = aq_parent(aq_inner(
+                self.context.unrestrictedTraverse(
                     path.encode('utf-8'))))
+                #if parent isn't a dossier and obj is a document
+                # it's connected to a task
+                # and shouldn't be moved
                 if not IDossierMarker.providedBy(sourceContainer) and (
                 sourceObjects[len(sourceObjects)-1].portal_type ==
                 'opengever.document.document'):
@@ -85,20 +88,26 @@ class MoveItemsForm(form.Form):
                     sourceObjects.remove(sourceObjects[len(sourceObjects)-1])
             for obj in sourceObjects:
                 sourceContainer = aq_parent(aq_inner(obj))
+                #cut object and add it to clipboard
                 clipboard = sourceContainer.manage_cutObjects(obj.id)
                 try:
+                    #try to paste object
                     destination.manage_pasteObjects(clipboard)
                     copiedItems +=1
                 except ValueError:
+                    #catch exception and add title to a list ofr failed objects
                     failedObjects.append(obj.title)
                 except CopyError:
+                    #catch exception and add title to a list of failed objects
                     failedObjects.append(obj.title)
             if copiedItems:
-                msg = _(u'${copiedItems} Elements were moved successfully', mapping=dict(copiedItems=copiedItems))
+                msg = _(u'${copiedItems} Elements were moved successfully',
+                 mapping=dict(copiedItems=copiedItems))
                 IStatusMessage(self.request).addStatusMessage(
                     msg, type='info')
             if failedObjects:
-                msg = _(u'Failed to copy following objects: ${failedObjects}', mapping=dict(failedObjects=','.join(failedObjects)))
+                msg = _(u'Failed to copy following objects: ${failedObjects}',
+                 mapping=dict(failedObjects=','.join(failedObjects)))
                 IStatusMessage(self.request).addStatusMessage(
                     msg, type='error')
             self.request.RESPONSE.redirect(destination.absolute_url())
@@ -126,7 +135,8 @@ class MoveItemsFormView(layout.FormWrapper, grok.CodeView):
         grok.CodeView.__init__(self, context, request)
 
     def render(self):
-        if not self.request.get('paths') and not self.form_instance.widgets['request_paths'].value:
+        if not self.request.get('paths') and not \
+        self.form_instance.widgets['request_paths'].value:
             msg = _(u'You have not selected any items')
             IStatusMessage(self.request).addStatusMessage(
                 msg, type='error')
