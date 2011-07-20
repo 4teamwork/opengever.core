@@ -14,3 +14,11 @@ class ISendableDocsContainer(Interface):
     """Marker interface which states that the `send_documents` action is
     callable on this container type.
     """
+
+
+class ISendDocumentConf(Interface):
+    max_size = schema.Int(
+        title=u'max_size',
+        description=u'Maximal Size (MB) of the Attachment',
+        default=5,
+    )

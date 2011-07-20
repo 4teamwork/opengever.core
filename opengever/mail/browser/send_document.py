@@ -21,8 +21,8 @@ from zope.interface import invariant, Invalid
 
 from opengever.base.source import DossierPathSourceBinder
 from opengever.mail import _
-from opengever.dossier.validators import AddressValidator
-from opengever.dossier.validators import DocumentSizeValidator
+from opengever.mail.validators import AddressValidator
+from opengever.mail.validators import DocumentSizeValidator
 from opengever.mail.interfaces import ISendableDocsContainer
 from opengever.ogds.base.interfaces import IContactInformation
 

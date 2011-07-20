@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2011-05-20 08:16+0000\n"
+"POT-Creation-Date: 2011-07-20 08:39+0000\n"
 "PO-Revision-Date: 2010-11-02 11:31+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -12,11 +12,11 @@ msgstr ""
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: opengever.mail\n"
 
-#: ./opengever/mail/browser/extract_attachments_templates/extract_attachments.pt:83
+#: ./opengever/mail/browser/extract_attachments_templates/extract_attachments.pt:106
 msgid "Cancel"
 msgstr "Abbrechen"
 
-#: ./opengever/mail/browser/extract_attachments_templates/extract_attachments.pt:78
+#: ./opengever/mail/browser/extract_attachments_templates/extract_attachments.pt:101
 msgid "Create documents"
 msgstr "Dokumente extrahieren"
 
@@ -24,46 +24,50 @@ msgstr "Dokumente extrahieren"
 msgid "No Mail Address"
 msgstr "Keine E-Mail Adresse"
 
+#: ./opengever/mail/validators.py:20
+msgid "The files you selected are larger than the maximum size"
+msgstr "Die Grösse der ausgewählten Dateien überschreitet die erlaubte Maximalgrösse."
+
 #: ./opengever/mail/browser/send_document.py:89
 msgid "You have to select a intern                             or enter a extern mail-addres"
 msgstr "Wählen Sie mindestens eine interne oder eine externe E-Mail Adresse."
 
 #. Default: "Send"
-#: ./opengever/mail/browser/send_document.py:135
+#: ./opengever/mail/browser/send_document.py:131
 msgid "button_send"
 msgstr "Senden"
 
 #. Default: "Cancel"
-#: ./opengever/mail/browser/send_document.py:174
+#: ./opengever/mail/browser/send_document.py:170
 msgid "cancel_back"
 msgstr "Abbrechen"
 
-#: ./opengever/mail/browser/extract_attachments.py:110
+#: ./opengever/mail/browser/extract_attachments.py:108
 msgid "column_attachment_checkbox"
 msgstr ""
 
 #. Default: "Filename"
-#: ./opengever/mail/browser/extract_attachments.py:120
+#: ./opengever/mail/browser/extract_attachments.py:118
 msgid "column_attachment_filename"
 msgstr "Dateiname"
 
 #. Default: "Size"
-#: ./opengever/mail/browser/extract_attachments.py:125
+#: ./opengever/mail/browser/extract_attachments.py:123
 msgid "column_attachment_size"
 msgstr "Grösse"
 
 #. Default: "Type"
-#: ./opengever/mail/browser/extract_attachments.py:115
+#: ./opengever/mail/browser/extract_attachments.py:113
 msgid "column_attachment_type"
 msgstr "Typ"
 
 #. Default: "You have not selected any attachments."
-#: ./opengever/mail/browser/extract_attachments.py:151
+#: ./opengever/mail/browser/extract_attachments.py:149
 msgid "error_no_attachments_selected"
 msgstr "Sie haben keine Anhänge ausgewählt."
 
 #. Default: "This mail has no attachments to extract."
-#: ./opengever/mail/browser/extract_attachments.py:138
+#: ./opengever/mail/browser/extract_attachments.py:136
 msgid "error_no_attachments_to_extract"
 msgstr "Diese E-Mail hat keine Anhänge, die extrahiert werden könnten."
 
@@ -78,7 +82,7 @@ msgid "heading_send_as_email"
 msgstr "Dokumente als E-Mail versenden"
 
 #. Default: "Select which attachments should be deleted."
-#: ./opengever/mail/browser/extract_attachments_templates/extract_attachments.pt:43
+#: ./opengever/mail/browser/extract_attachments_templates/extract_attachments.pt:66
 msgid "help_delete_action"
 msgstr "Wählen Sie aus, ob und welche Anhänge aus dieser E-Mail gelöscht werden sollen."
 
@@ -97,7 +101,7 @@ msgid "help_message"
 msgstr ""
 
 #. Default: "Select the attachments to extract."
-#: ./opengever/mail/browser/extract_attachments_templates/extract_attachments.pt:29
+#: ./opengever/mail/browser/extract_attachments_templates/extract_attachments.pt:47
 msgid "help_select_attachments"
 msgstr "Wählen Sie die Anhänge aus, die extrahiert werden sollen. Aus jedem ausgewähltem Anhang wird ein Dokument im übergeordneten Dossier erzeugt."
 
@@ -106,12 +110,12 @@ msgid "help_subject"
 msgstr ""
 
 #. Default: "Created document ${title}"
-#: ./opengever/mail/browser/extract_attachments.py:240
+#: ./opengever/mail/browser/extract_attachments.py:225
 msgid "info_extracted_document"
 msgstr "Dokument wurde erstellt: ${title}"
 
 #. Default: "Mails sent"
-#: ./opengever/mail/browser/send_document.py:169
+#: ./opengever/mail/browser/send_document.py:165
 msgid "info_mails_sent"
 msgstr "Mails wurden versendet."
 
@@ -121,22 +125,22 @@ msgid "intern_receiver"
 msgstr "Interne Empfänger"
 
 #. Default: "Delete attachments"
-#: ./opengever/mail/browser/extract_attachments_templates/extract_attachments.pt:38
+#: ./opengever/mail/browser/extract_attachments_templates/extract_attachments.pt:61
 msgid "label_delete_action"
 msgstr "Anhänge löschen"
 
 #. Default: "Delete all attachments"
-#: ./opengever/mail/browser/extract_attachments_templates/extract_attachments.pt:60
+#: ./opengever/mail/browser/extract_attachments_templates/extract_attachments.pt:83
 msgid "label_delete_action_all"
 msgstr "Alle Anhänge in dieser E-Mail löschen"
 
 #. Default: "Delete nothing"
-#: ./opengever/mail/browser/extract_attachments_templates/extract_attachments.pt:51
+#: ./opengever/mail/browser/extract_attachments_templates/extract_attachments.pt:74
 msgid "label_delete_action_nothing"
 msgstr "Keine Anhänge löschen"
 
 #. Default: "Delete all selected attachments"
-#: ./opengever/mail/browser/extract_attachments_templates/extract_attachments.pt:69
+#: ./opengever/mail/browser/extract_attachments_templates/extract_attachments.pt:92
 msgid "label_delete_action_selected"
 msgstr "Alle oben ausgewählten Anhänge aus dieser E-Mail löschen"
 
@@ -151,7 +155,7 @@ msgid "label_message"
 msgstr "Mitteilung"
 
 #. Default: "Attachments to extract"
-#: ./opengever/mail/browser/extract_attachments_templates/extract_attachments.pt:24
+#: ./opengever/mail/browser/extract_attachments_templates/extract_attachments.pt:42
 msgid "label_select_attachments"
 msgstr "Anhänge"
 
