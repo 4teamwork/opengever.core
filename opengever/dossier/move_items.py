@@ -37,10 +37,10 @@ class IMoveItemsSchema(Interface):
         source= DestinationPathSourceBinder(),
         required=True,
         )
-
+    #We Use TextLine here because Tuple and List have no hidden_mode.
     request_paths = schema.TextLine(title=u"request_paths")
 
-
+    
 class MoveItemsForm(form.Form):
 
     fields = field.Fields(IMoveItemsSchema)
@@ -49,27 +49,13 @@ class MoveItemsForm(form.Form):
 
     def updateWidgets(self):
         super(MoveItemsForm, self).updateWidgets()
-        self.widgets['request_paths'].mode = HIDDEN_MODE
-        if not self.request.get('paths') and not self.widgets['request_paths']:
-            msg = _(u'You have not selected any items')
-            IStatusMessage(self.request).addStatusMessage(
-                msg, type='error')
-            self.request.RESPONSE.redirect(self.context.absolute_url())
-        value = self.item_paths
+        if self.request.get('paths'):
+            self.paths = self.request.get('paths')
+
+        self.widgets['request_paths'].mode = HIDDEN_MODE   
+        value = self.request.get('paths')
         if value:
             self.widgets['request_paths'].value = ';;'.join(value)
-
-    @property
-    def item_paths(self):
-        field_name = self.prefix + self.widgets.prefix + 'request_paths'
-        value = self.request.get(field_name, False)
-        if value:
-            value = value.split(';;')
-            return value
-        value = self.request.get('paths')
-        if not value:
-            pass
-        return value
 
     @z3c.form.button.buttonAndHandler(_(u'button_submit',
                                         default=u'Move'))
@@ -140,7 +126,7 @@ class MoveItemsFormView(layout.FormWrapper, grok.CodeView):
         grok.CodeView.__init__(self, context, request)
 
     def render(self):
-        if not self.request.get('paths'):
+        if not self.request.get('paths') and not self.form_instance.widgets['request_paths'].value:
             msg = _(u'You have not selected any items')
             IStatusMessage(self.request).addStatusMessage(
                 msg, type='error')
