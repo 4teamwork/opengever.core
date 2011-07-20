@@ -24,6 +24,7 @@ from plone.namedfile.field import NamedFile
 from plone.supermodel.interfaces import FIELDSETS_KEY
 from plone.supermodel.model import Fieldset
 from plone.z3cform.textlines.textlines import TextLinesFieldWidget
+from Products.statusmessages.interfaces import IStatusMessage
 from z3c.form.browser import checkbox
 from zc.relation.interfaces import ICatalog
 from zope import schema
@@ -76,7 +77,7 @@ class IDocumentSchema(form.Schema):
             u'document_type',
             u'document_author',
             u'file',
-            u'paper_form',
+            u'digital_available',
             u'preserved_as_paper',
             u'archival_file',
             u'thumbnail',
@@ -116,6 +117,7 @@ class IDocumentSchema(form.Schema):
         description = _(u'help_document_date', default=''),
         required = False,
         )
+
     #workaround because ftw.datepicker wasn't working
     form.widget(document_date = DatePickerFieldWidget)
 
@@ -143,10 +145,10 @@ class IDocumentSchema(form.Schema):
         required = False,
         )
 
-    form.widget(paper_form=checkbox.SingleCheckBoxFieldWidget)
-    paper_form = schema.Bool(
-        title = _(u'label_paper_form', default='Paper form'),
-        description = _(u'help_paper_form', default='Available in paper form only'),
+    form.mode(digital_available='hidden')
+    digital_available = schema.Bool(
+        title = _(u'label_digital_available', default='Digital Available'),
+        description = _(u'help_digital_available', default='Is the Document Digital Availabe'),
         required = False,
         )
 
@@ -204,21 +206,15 @@ class IDocumentSchema(form.Schema):
                             'required.'))
 
     @invariant
-    def file_or_paper_form(data):
-        """ Small validator who check:
-            paper_form xor file
+    def file_or_preserved_as_paper(data):
+        """ When no digital file exist, the document must be
+        preserved in paper.
         """
-        if not (data.paper_form ^ bool(data.file)):
-            if data.paper_form:
-                raise Invalid(
-                    _(u'error_paperform_and_file',
-                    default=u"You select a file and said is only in paper_form,\
-                    please correct it."))
-            else:
-                raise Invalid(
-                    _(u'error_no_paperform_and_no_file',
-                    default=u"You don't select a file and also the 'only in paper_form' isn't selected,\
-                    please correct it."))
+        if not data.file and not data.preserved_as_paper:
+            raise Invalid(
+                _(u'error_file_and_preserved_as_paper',
+                default=u"You don't select a file and document is also not preserved in paper_form,\
+                please correct it."))
 
     # TODO: doesn't work with Plone 4
     #form.order_after(**{'IRelatedItems.relatedItems': 'file'})
@@ -398,6 +394,17 @@ def sortable_author(obj):
 grok.global_adapter( sortable_author, name='sortable_author' )
 
 
+@grok.subscribe(IDocumentSchema, IObjectCreatedEvent)
+@grok.subscribe(IDocumentSchema, IObjectModifiedEvent)
+def set_digital_available(doc, event):
+    """set the digital_available field, 
+    if a file exist the document is digital available"""
+
+    if doc.file:
+        doc.digital_available = True
+    else:
+        doc.digital_available = False
+
 
 @grok.subscribe(IDocumentSchema, IObjectCreatedEvent)
 @grok.subscribe(IDocumentSchema, IObjectModifiedEvent)
@@ -486,6 +493,12 @@ class DownloadFileVersion(grok.CodeView):
         pr = self.context.portal_repository
         old_obj = pr.retrieve(self.context, version_id).object
         old_file = old_obj.file
+        if not old_file:
+            msg = _(u'No file in in this version')
+            IStatusMessage(self.request).addStatusMessage(
+                msg, type='error')
+            return self.request.RESPONSE.redirect(self.context.absolute_url())
+            
         response = self.request.RESPONSE
         response.setHeader('Content-Type', old_file.contentType)
         response.setHeader('Content-Length', old_file.getSize())
