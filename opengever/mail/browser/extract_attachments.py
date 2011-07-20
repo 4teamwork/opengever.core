@@ -258,9 +258,14 @@ class ExtractAttachments(grok.View):
         if not attachment:
             return None
 
+        # decode when it's necessary
+        filename = attachment.get_filename()
+        if not isinstance(filename, unicode):
+            filename = filename.decode('utf-8')
+
         return NamedFile(data=attachment.get_payload(decode=1),
                          contentType=attachment.get_content_type(),
-                         filename=attachment.get_filename())
+                         filename=filename)
 
     def find_parent_dossier(self):
         """Returns the first parent dossier relative to the current context.
