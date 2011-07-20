@@ -11,6 +11,9 @@ Changelog
   works now with the newest version of the plone.formwidget.autocomplete 
   [phgross]
 
+* Added several Tests
+  [jinfanger]
+
 
 2.0b16
 ------
