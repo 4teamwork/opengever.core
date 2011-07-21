@@ -6,7 +6,8 @@ from ftw.tabbedview.browser.listing import ListingView
 from ftw.table import helper
 from ftw.table.basesource import BaseTableSource
 from ftw.table.interfaces import ITableSource, ITableSourceConfig
-from opengever.base.browser.helper import client_title_helper, css_class_from_brain
+from opengever.base.browser.helper import client_title_helper
+from opengever.base.browser.helper import css_class_from_brain
 from opengever.base.interfaces import ISequenceNumber
 from opengever.base.source import DossierPathSourceBinder
 from opengever.globalindex.utils import indexed_task_link
@@ -145,7 +146,7 @@ class ITask(form.Schema):
                     'object_provides':
                         ['opengever.dossier.behaviors.dossier.IDossierMarker',
                          'opengever.document.document.IDocumentSchema',
-                         'ftw.mail.mail.IMail',]
+                         'ftw.mail.mail.IMail', ],
                     }),
             ),
         required=False,
@@ -287,7 +288,9 @@ class Overview(DisplayForm, OpengeverTab):
             # in some special cases the responsible client may not be set.
             return info.render_link(task.responsible)
 
-        client = client_title_helper(task, self.groups[0].widgets['responsible_client'].value[0])
+        client = client_title_helper(
+            task, self.groups[0].widgets['responsible_client'].value[0])
+
         return client +' / '+ info.render_link(task.responsible)
 
     def issuer_link(self):
@@ -305,9 +308,6 @@ class Overview(DisplayForm, OpengeverTab):
 
     def render_indexed_task(self, item):
         return indexed_task_link(item, display_client=True)
-
-
-
 
 
 class IRelatedDocumentsTableSourceConfig(ITableSourceConfig):
@@ -335,7 +335,6 @@ class RelatedDocumentsTableSource(grok.MultiAdapter, BaseTableSource):
     grok.implements(ITableSource)
     grok.adapts(IRelatedDocumentsTableSourceConfig, Interface)
 
-
     def build_query(self):
         """Builds the query based on `get_base_query()` method of config.
         Returns the query object.
@@ -352,7 +351,8 @@ class RelatedDocumentsTableSource(grok.MultiAdapter, BaseTableSource):
         for item in self.config.context.relatedItems:
 
             obj = item.to_object
-            if obj.portal_type=='opengever.document.document' or obj.portal_type=='ftw.mail.mail':
+            if (obj.portal_type=='opengever.document.document'\
+                    or obj.portal_type=='ftw.mail.mail'):
                 objects.append(obj)
         objects = self.extend_query_with_ordering(objects)
         if self.config.filter_text:
@@ -361,9 +361,8 @@ class RelatedDocumentsTableSource(grok.MultiAdapter, BaseTableSource):
         objects = self.extend_query_with_batching(objects)
         return objects
 
-
     def extend_query_with_ordering(self, query):
-        sort_index=self.request.get('sort',  '')
+        sort_index=self.request.get('sort', '')
         column = {}
         objects = []
 
@@ -434,7 +433,6 @@ class RelatedDocumentsTableSource(grok.MultiAdapter, BaseTableSource):
         return query
 
 
-
 class RelatedDocuments(Documents):
 
     grok.name('tabbedview_view-relateddocuments')
@@ -444,33 +442,33 @@ class RelatedDocuments(Documents):
 
     lazy = False
     columns = (
-        {'column':'',
-         'column_title':'',
-         'transform':helper.draggable},
-        {'column':'',
-         'column_title':'',
-         'transform':path_checkbox},
+        {'column': '',
+         'column_title': '',
+         'transform': helper.draggable},
+        {'column': '',
+         'column_title': '',
+         'transform': path_checkbox},
 
         {'column': 'title',
          'column_title': _(u'label_title', default=u'Title'),
-         'sort_index' : 'sortable_title',
-         'transform':linked},
+         'sort_index': 'sortable_title',
+         'transform': linked},
 
-        {'column':'document_author',
-         'column_title':_('label_document_author', default="Document Author"),
+        {'column': 'document_author',
+         'column_title': _('label_document_author', default="Document Author"),
          'transform': readable_ogds_author},
 
-        {'column':'document_date',
-         'column_title':_('label_document_date', default="Document Date"),
-         'transform':readable_date},
+        {'column': 'document_date',
+         'column_title': _('label_document_date', default="Document Date"),
+         'transform': readable_date},
 
-        {'column':'receipt_date',
-         'column_title':_('label_receipt_date', default="Receipt Date"),
-         'transform':readable_date},
+        {'column': 'receipt_date',
+         'column_title': _('label_receipt_date', default="Receipt Date"),
+         'transform': readable_date},
 
-        {'column':'delivery_date',
-         'column_title':_('label_delivery_date', default="Delivery Date"),
-         'transform':readable_date},
+        {'column': 'delivery_date',
+         'column_title': _('label_delivery_date', default="Delivery Date"),
+         'transform': readable_date},
 
         ('', external_edit_link),
         )
@@ -576,8 +574,9 @@ def sequence_number(obj):
 grok.global_adapter(sequence_number, name='sequence_number')
 
 
-# SearchableText
 class SearchableTextExtender(grok.Adapter):
+    """ Task specific SearchableText Extender"""
+
     grok.context(ITask)
     grok.name('ITask')
     grok.implements(dexteritytextindexer.IDynamicTextIndexExtender)
@@ -604,12 +603,12 @@ class SearchableTextExtender(grok.Adapter):
 
 @grok.subscribe(ITask, IActionSucceededEvent)
 def set_dates(task, event):
-    
+
     resolved_transitions= ['task-transition-in-progress-resolved',
                            'task-transition-open-resolved',
                            'task-transition-open-tested-and-closed',
-                           'task-transition-in-progress-tested-and-closed',]
-    
+                           'task-transition-in-progress-tested-and-closed', ]
+
     if event.action == 'task-transition-open-in-progress':
         task.expectedStartOfWork = datetime.now()
     elif event.action in resolved_transitions:
@@ -617,6 +616,7 @@ def set_dates(task, event):
     if event.action == 'task-transition-resolved-open':
         task.date_of_completion = None
 
+
 def related_document(context):
-    intids = getUtility( IIntIds )
-    return intids.getId( context )
+    intids = getUtility(IIntIds)
+    return intids.getId(context)
