@@ -5,6 +5,10 @@ Changelog
 2.0a5
 -----
 
+* Issue #1053 Dokumentattribut "Papierform" begrifflich schaerfen
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1053/
+  increase the versionnumber for upgradesteps in opengever.upgrade
+  [phgross]
 
 2.0a4
 -----
