@@ -421,6 +421,41 @@ class SingleAddFormView(layout.FormWrapper, grok.CodeView):
         self.form.label = context.title
 
 
+class DirectResponseView(grok.CodeView):
+    grok.context(ITask)
+    grok.name('direct_response')
+
+    def render(self):
+        self.request = self.context.REQUEST
+
+        if self.request.get('form.widgets.transition', None):
+            # create response
+            new_response = Response('')
+            new_response.transition = self.request.get(
+                'form.widgets.transition', None)
+
+            # do transition - change workflow state
+            wftool = getToolByName(self.context, 'portal_workflow')
+            before = wftool.getInfoFor(self.context, 'review_state')
+            if self.request.get('form.widgets.transition') != before:
+                before = wftool.getTitleForStateOnType(
+                    before, self.context.Type())
+                wftool.doActionFor(
+                    self.context, self.request.get('form.widgets.transition'))
+                after = wftool.getInfoFor(self.context, 'review_state')
+                after = wftool.getTitleForStateOnType(
+                    after, self.context.Type())
+                new_response.add_change('review_state', _(u'Issue state'),
+                                        before, after)
+
+            container = IResponseContainer(self.context)
+            container.add(new_response)
+
+            self.request.RESPONSE.redirect(self.context.absolute_url())
+        else:
+            self.request.RESPONSE.redirect(self.context.absolute_url())
+
+
 class Edit(Base):
 
     @property

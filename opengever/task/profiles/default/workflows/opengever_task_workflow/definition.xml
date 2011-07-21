@@ -240,48 +240,48 @@
   </permission-map>
  </state>
  <transition transition_id="task-transition-cancelled-open" title="task-transition-cancelled-open" new_state="task-state-open" trigger="USER" before_script="" after_script="">
-  <action url="%(content_url)s/addresponse?form.widgets.transition=task-transition-cancelled-open" category="workflow" icon="">task-transition-cancelled-open</action>
+  <action url="%(content_url)s/direct_response?form.widgets.transition=task-transition-cancelled-open" category="workflow" icon="">task-transition-cancelled-open</action>
   <guard>
       <guard-expression>python: str(here.restrictedTraverse('plone_portal_state').member()) == here.issuer</guard-expression>
   </guard>
  </transition>
  <transition transition_id="task-transition-in-progress-resolved" title="task-transition-in-progress-resolved" new_state="task-state-resolved" trigger="USER" before_script="" after_script="">
-  <action url="%(content_url)s/addresponse?form.widgets.transition=task-transition-in-progress-resolved" category="workflow" icon="">task-transition-in-progress-resolved</action>
+  <action url="%(content_url)s/direct_response?form.widgets.transition=task-transition-in-progress-resolved" category="workflow" icon="">task-transition-in-progress-resolved</action>
   <guard>
    <guard-expression>python:here.task_type_category != 'unidirectional_by_value' and here.restrictedTraverse('resolve_check')()</guard-expression>
   </guard>
  </transition>
  <transition transition_id="task-transition-in-progress-tested-and-closed" title="task-transition-in-progress-tested-and-closed" new_state="task-state-tested-and-closed" trigger="USER" before_script="" after_script="">
-  <action url="%(content_url)s/addresponse?form.widgets.transition=task-transition-in-progress-tested-and-closed" category="workflow" icon="">task-transition-in-progress-tested-and-closed</action>
+  <action url="%(content_url)s/direct_response?form.widgets.transition=task-transition-in-progress-tested-and-closed" category="workflow" icon="">task-transition-in-progress-tested-and-closed</action>
   <guard>
    <guard-expression>python:here.restrictedTraverse('resolve_check')() and here.task_type_category == 'unidirectional_by_value'</guard-expression>
   </guard>
  </transition>
  <transition transition_id="task-transition-open-cancelled" title="task-transition-open-cancelled" new_state="task-state-cancelled" trigger="USER" before_script="" after_script="">
-  <action url="%(content_url)s/addresponse?form.widgets.transition=task-transition-open-cancelled" category="workflow" icon="">task-transition-open-cancelled</action>
+  <action url="%(content_url)s/direct_response?form.widgets.transition=task-transition-open-cancelled" category="workflow" icon="">task-transition-open-cancelled</action>
   <guard>
    <guard-role>Owner</guard-role>
   </guard>
  </transition>
  <transition transition_id="task-transition-open-in-progress" title="task-transition-open-in-progress" new_state="task-state-in-progress" trigger="USER" before_script="" after_script="">
-  <action url="%(content_url)s/addresponse?form.widgets.transition=task-transition-open-in-progress" category="workflow" icon="">task-transition-open-in-progress</action>
+  <action url="%(content_url)s/direct_response?form.widgets.transition=task-transition-open-in-progress" category="workflow" icon="">task-transition-open-in-progress</action>
   <guard>
    <guard-expression>python: here.task_type_category != 'unidirectional_by_reference' and(str(here.restrictedTraverse('plone_portal_state').member()) != here.issuer or here.issuer == here.responsible)</guard-expression>
   </guard>
  </transition>
  <transition transition_id="task-transition-open-rejected" title="task-transition-open-rejected" new_state="task-state-rejected" trigger="USER" before_script="" after_script="">
-  <action url="%(content_url)s/addresponse?form.widgets.transition=task-transition-open-rejected" category="workflow" icon="">task-transition-open-rejected</action>
+  <action url="%(content_url)s/direct_response?form.widgets.transition=task-transition-open-rejected" category="workflow" icon="">task-transition-open-rejected</action>
   <guard>
   </guard>
  </transition>
  <transition transition_id="task-transition-open-resolved" title="task-transition-open-resolved" new_state="task-state-resolved" trigger="USER" before_script="" after_script="">
-  <action url="%(content_url)s/addresponse?form.widgets.transition=task-transition-open-resolved" category="workflow" icon="">task-transition-open-resolved</action>
+  <action url="%(content_url)s/direct_response?form.widgets.transition=task-transition-open-resolved" category="workflow" icon="">task-transition-open-resolved</action>
   <guard>
    <guard-expression>python: here.restrictedTraverse('resolve_check')() and here.restrictedTraverse('task_workflow_checks').is_bidirectional() and(str(here.restrictedTraverse('plone_portal_state').member()) != here.issuer or here.issuer == here.responsible)</guard-expression>
   </guard>
  </transition>
  <transition transition_id="task-transition-open-tested-and-closed" title="task-transition-open-tested-and-closed" new_state="task-state-tested-and-closed" trigger="USER" before_script="" after_script="">
-  <action url="%(content_url)s/addresponse?form.widgets.transition=task-transition-open-tested-and-closed" category="workflow" icon="">task-transition-open-tested-and-closed</action>
+  <action url="%(content_url)s/direct_response?form.widgets.transition=task-transition-open-tested-and-closed" category="workflow" icon="">task-transition-open-tested-and-closed</action>
   <guard>
   </guard>
  </transition>
@@ -296,12 +296,12 @@
   </guard>
  </transition>
  <transition transition_id="task-transition-resolved-open" title="task-transition-resolved-open" new_state="task-state-open" trigger="USER" before_script="" after_script="">
-  <action url="%(content_url)s/addresponse?form.widgets.transition=task-transition-resolved-open" category="workflow" icon="">task-transition-resolved-open</action>
+  <action url="%(content_url)s/direct_response?form.widgets.transition=task-transition-resolved-open" category="workflow" icon="">task-transition-resolved-open</action>
   <guard>
   </guard>
  </transition>
  <transition transition_id="task-transition-resolved-tested-and-closed" title="task-transition-resolved-tested-and-closed" new_state="task-state-tested-and-closed" trigger="USER" before_script="" after_script="">
-  <action url="%(content_url)s/addresponse?form.widgets.transition=task-transition-resolved-tested-and-closed" category="workflow" icon="">task-transition-resolved-tested-and-closed</action>
+  <action url="%(content_url)s/direct_response?form.widgets.transition=task-transition-resolved-tested-and-closed" category="workflow" icon="">task-transition-resolved-tested-and-closed</action>
   <guard>
    <guard-role>Owner</guard-role>
   </guard>
