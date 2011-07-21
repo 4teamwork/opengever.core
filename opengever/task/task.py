@@ -146,6 +146,7 @@ class ITask(form.Schema):
                     'object_provides':
                         ['opengever.dossier.behaviors.dossier.IDossierMarker',
                          'opengever.document.document.IDocumentSchema',
+                         'opengever.task.task.ITask',
                          'ftw.mail.mail.IMail', ],
                     }),
             ),

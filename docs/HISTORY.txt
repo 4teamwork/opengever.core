@@ -5,6 +5,11 @@ Changelog
 2.0b18
 ------
 
+* Issue #1074 Verweisefeld bei Aufgabe, zeigt keine Dokumente einer Aufgabe.
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1074/
+  added Task interface to the navigation_tree_query source
+  [phgross]
+
 * Issue #1058 Erledigungsdatum bei unidirektionale Aufgaben
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1058/
   adjust the set_date subscriber, works now also for unidirectional tasks
