@@ -5,10 +5,6 @@ Changelog
 2.0b12
 ------
 
-* Issue #929 ZEO Clients ueber mehrere dedizierte Server verteilen.
-  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/929/
-  [phgross]
-
 * added ldap synchronisation ldap panel
   [phgross]
 
