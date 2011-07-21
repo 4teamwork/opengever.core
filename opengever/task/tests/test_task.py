@@ -104,5 +104,13 @@ class TestTaskIntegration(PloneTestCase):
         wft.doActionFor(t1, 'task-transition-in-progress-resolved')
         self.failUnless(t1.date_of_completion.date() == datetime.now().date())
 
+        wft.doActionFor(t1, 'task-transition-resolved-open')
+        self.failUnless(t1.date_of_completion == None)
+
+        t2 = create_task(self.folder, title='Task 2')
+        self.failUnless(t2.date_of_completion == None)
+        wft.doActionFor(t2, 'task-transition-open-tested-and-closed')
+        self.failUnless(t2.date_of_completion.date() == datetime.now().date())
+
 def test_suite():
     return unittest.defaultTestLoader.loadTestsFromName(__name__)
