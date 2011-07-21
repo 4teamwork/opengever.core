@@ -1,29 +1,3 @@
+# right now is no special handling for copying documents implemented. Maybe later ( Kopie von).
 
-When a document is copied, the copy should have  a reference to the orignal document
 
-    >>> from plone.dexterity.utils import createContentInContainer
-    >>> from zope.component import getUtility
-    >>> from zope.intid.interfaces import IIntIds
-    >>> from opengever.document.behaviors import  IRelatedDocuments
-
-    >>> intids = getUtility(IIntIds)
-
-Create a documents
-
-    >>> doc1 = createContentInContainer(folder, 'opengever.document.document', title=u"Doc One")
-
-copy it, the copy should have a reference to the orignial one
-    >>> clibboard = folder.manage_copyObjects(doc1.getId())
-    >>> result = folder.manage_pasteObjects(clibboard)
-    >>> doc2 = folder.get(result[0].get('new_id'))
-    >>> IRelatedDocuments(doc2).relatedItems[0].to_id == intids.getId(doc1)
-    True
-
-copy the second one, the copy should now have a copy to the doc1 and the doc2
-    >>> clibboard = folder.manage_copyObjects(doc2.getId())
-    >>> result = folder.manage_pasteObjects(clibboard)
-    >>> doc3 = folder.get(result[0].get('new_id'))
-    >>> IRelatedDocuments(doc3).relatedItems[0].to_id == intids.getId(doc1)
-    True
-    >>> IRelatedDocuments(doc3).relatedItems[1].to_id == intids.getId(doc2)
-    True
