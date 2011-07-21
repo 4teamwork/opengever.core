@@ -5,6 +5,11 @@ Changelog
 2.0b18
 ------
 
+* Issue #1058 Erledigungsdatum bei unidirektionale Aufgaben
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1058/
+  adjust the set_date subscriber, works now also for unidirectional tasks
+  [phgross]
+
 
 2.0b17
 ------
