@@ -9,16 +9,16 @@ To upgrade the opengever.ogds.base to the new version, some changes in the datab
 MySQL:
 
     CREATE TABLE "groups" (
-      "groupid" varchar(30) NOT NULL,
-      "title" varchar(50) DEFAULT NULL,
+      "groupid" varchar(60) NOT NULL,
+      "title" varchar(60) DEFAULT NULL,
       PRIMARY KEY ("groupid")
     ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 Oracle:
 
     CREATE TABLE "groups" (
-      "groupid" varchar(30) NOT NULL,
-      "title" varchar(50) DEFAULT NULL,
+      "groupid" varchar(60) NOT NULL,
+      "title" varchar(60) DEFAULT NULL,
       PRIMARY KEY ("groupid")
     );
 
@@ -30,7 +30,7 @@ Oracle:
 MySQL:
 
     CREATE TABLE `groups_users` (
-      `groupid` varchar(30) NOT NULL,
+      `groupid` varchar(60) NOT NULL,
       `userid` varchar(30) NOT NULL,
       PRIMARY KEY (`groupid`,`userid`),
       KEY `userid` (`userid`)
