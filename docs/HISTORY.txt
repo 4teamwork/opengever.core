@@ -5,6 +5,12 @@ Changelog
 2.0b9
 -----
 
+* Issue #1027 Feedback Fokus: Posteingang: Eingang akzeptieren (unnoetiger Screen)
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1027/
+  overwrote the render method of the response form,
+  for implements direct responses for some transitions
+  [phgross]
+
 
 2.0b8
 -----

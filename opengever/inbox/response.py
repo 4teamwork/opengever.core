@@ -58,7 +58,7 @@ class IForwardingResponse(IResponse):
                      'opengever.repository.repositoryfolder.' +\
                          'IRepositoryFolderSchema',
                      'opengever.dossier.behaviors.dossier.' +\
-                         'IDossierMarker']
+                         'IDossierMarker'],
                 }))
 
 
@@ -201,7 +201,7 @@ class ForwardingResponseAddForm(AddForm):
 
                 # move forwarding into folder
                 parent = aq_parent(aq_inner(self.context))
-                clipboard = parent.manage_cutObjects((self.context.getId(),))
+                clipboard = parent.manage_cutObjects((self.context.getId(), ))
                 folder.manage_pasteObjects(clipboard)
 
             except:
@@ -412,3 +412,21 @@ class ForwardingResponseAddFormView(SingleAddFormView):
     grok.name('addresponse')
 
     form = ForwardingResponseAddForm
+
+    direct_tranistions = [
+        'forwarding-transition-accept',
+        'forwarding-transition-refuse',
+    ]
+
+    def render(self):
+        """special render method,
+        provides direct submit for some transitions"""
+
+        if self.request.get(
+            'form.widgets.transition', None) in self.direct_tranistions:
+
+            button_action = self.form_instance.actions.get('save')
+            self.form_instance.handleSubmit.func(
+            self.form_instance, button_action)
+        else:
+            return super(SingleAddFormView, self).render()
