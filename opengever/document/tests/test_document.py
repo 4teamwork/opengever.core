@@ -2,6 +2,7 @@ import unittest
 
 from zope.component import createObject
 from zope.component import queryUtility
+from zope.interface import Invalid
 
 from plone.dexterity.interfaces import IDexterityFTI
 from plone.dexterity.utils import createContentInContainer
@@ -52,9 +53,15 @@ class TestDocumentIntegration(PloneTestCase):
         self.assertTrue(d1.digital_available==True)
         d2 = createContentInContainer(self.folder, 'opengever.document.document')
         self.assertTrue(d2.digital_available==False)
+
+        # check the file_or_preserved_as_paper validator
         d3 = createContentInContainer(self.folder, 'opengever.document.document',
                 checkConstraints=True, preserved_as_paper=False)
-        self.assertTrue(d3==None)
+        try:
+            IDocumentSchema.validateInvariants(d3)
+            self.fail()
+        except Invalid:
+            pass
 
 def test_views(self):
         self.folder.invokeFactory('opengever.document.document', 'document1')
