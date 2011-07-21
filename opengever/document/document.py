@@ -41,22 +41,20 @@ LOG = logging.getLogger('opengever.document')
 # move and omit the changeNote,
 # because it's not possible to make a new version when you editing a file
 IVersionable.setTaggedValue(FIELDSETS_KEY, [
-        Fieldset( 'common', fields=[
+        Fieldset('common', fields=[
                 'changeNote',
                 ])
-        ] )
+        ])
 
 # TODO: Not Work in plone 4 and the dexterity b2 release
 # possibly it can be solved with plone.directives
-IVersionable.setTaggedValue(OMITTED_KEY, [
-        (Interface, 'changeNote', 'true'),
-        ]
-)
+IVersionable.setTaggedValue(OMITTED_KEY,
+    [(Interface, 'changeNote', 'true'), ])
 
 
 def related_document(context):
-    intids = getUtility( IIntIds )
-    return intids.getId( context )
+    intids = getUtility(IIntIds)
+    return intids.getId(context)
 
 
 class IDocumentSchema(form.Schema):
@@ -81,7 +79,7 @@ class IDocumentSchema(form.Schema):
             u'preserved_as_paper',
             u'archival_file',
             u'thumbnail',
-            ]
+            ],
         )
 
     dexteritytextindexer.searchable('title')
@@ -148,7 +146,8 @@ class IDocumentSchema(form.Schema):
     form.mode(digital_available='hidden')
     digital_available = schema.Bool(
         title = _(u'label_digital_available', default='Digital Available'),
-        description = _(u'help_digital_available', default='Is the Document Digital Availabe'),
+        description = _(u'help_digital_available',
+            default='Is the Document Digital Availabe'),
         required = False,
         )
 
@@ -197,7 +196,6 @@ class IDocumentSchema(form.Schema):
     #workaround because ftw.datepicker wasn't working
     form.widget(delivery_date = DatePickerFieldWidget)
 
-
     @invariant
     def title_or_file_required(data):
         if not data.title and not data.file:
@@ -213,12 +211,11 @@ class IDocumentSchema(form.Schema):
         if not data.file and not data.preserved_as_paper:
             raise Invalid(
                 _(u'error_file_and_preserved_as_paper',
-                default=u"You don't select a file and document is also not preserved in paper_form,\
-                please correct it."))
+                default=u"You don't select a file and document is also not \
+                preserved in paper_form, please correct it."))
 
     # TODO: doesn't work with Plone 4
     #form.order_after(**{'IRelatedItems.relatedItems': 'file'})
-
 
 class Document(Item):
 
@@ -234,9 +231,9 @@ class Document(Item):
             return '%s (Arbeitskopie)' % title
         return self.title or ''
 
-
     def surrender(self, relative_to_portal=1):
-        return super(Document, self).getIcon(relative_to_portal=relative_to_portal)
+        return super(Document, self).getIcon(
+            relative_to_portal=relative_to_portal)
 
     def getIcon(self, relative_to_portal=1):
         """Calculate the icon using the mime type of the file
@@ -263,12 +260,11 @@ class Document(Item):
         """
         return self.getIcon()
 
-
     def get_mimetype(self):
         """Return the mimetype as object. If there is no matching mimetype,
            it returns False.
         """
-        mtr   = getToolByName(self, 'mimetypes_registry', None)
+        mtr = getToolByName(self, 'mimetypes_registry', None)
 
         field = self.file
         if not field or not field.getSize():
@@ -276,12 +272,14 @@ class Document(Item):
             return False
 
         # get icon by content type
-        contenttype       = field.contentType
+        contenttype = field.contentType
         mimetypeitem = None
         try:
             mimetypeitem = mtr.lookup(contenttype)
         except MimeTypeException, msg:
-            LOG.error('MimeTypeException for %s. Error is: %s' % (self.absolute_url(), str(msg)))
+            LOG.error(
+                'MimeTypeException for %s. Error is: %s' % (
+                    self.absolute_url(), str(msg)))
         if not mimetypeitem:
             # not found
             return False
@@ -289,12 +287,13 @@ class Document(Item):
 
 
 @indexer(IDocumentSchema)
-def related_items( obj ):
-    catalog = getUtility( ICatalog )
-    intids = getUtility( IIntIds )
-    obj_id = intids.getId( obj )
+def related_items(obj):
+    catalog = getUtility(ICatalog)
+    intids = getUtility(IIntIds)
+    obj_id = intids.getId(obj)
     results = []
-    relations = catalog.findRelations({'to_id' : obj_id, 'from_attribute': 'relatedItems'})
+    relations = catalog.findRelations(
+        {'to_id': obj_id, 'from_attribute': 'relatedItems'})
     for rel in relations:
         results.append(rel.from_id)
     return results
@@ -303,8 +302,9 @@ def related_items( obj ):
 grok.global_adapter(related_items, name='related_items')
 
 
-# SearchableText
 class SearchableTextExtender(grok.Adapter):
+    """Specifix SearchableText Extender for document"""
+
     grok.context(IDocumentSchema)
     grok.name('IDocumentSchema')
     grok.implements(dexteritytextindexer.IDynamicTextIndexExtender)
@@ -326,51 +326,55 @@ class SearchableTextExtender(grok.Adapter):
         return ' '.join(searchable)
 
 
-# INDEX: document_author
-@indexer( IDocumentSchema )
-def document_author( obj ):
-    context = aq_inner( obj )
+@indexer(IDocumentSchema)
+def document_author(obj):
+    """document_author indexer"""
+
+    context = aq_inner(obj)
     if not context.document_author:
         return None
     elif isinstance(context.document_author, unicode):
         return context.document_author.encode('utf-8')
     else:
         return context.document_author
-grok.global_adapter( document_author, name='document_author' )
+grok.global_adapter(document_author, name='document_author')
 
 
-# INDEX: document_date
-@indexer( IDocumentSchema )
-def document_date( obj ):
-    context = aq_inner( obj )
+@indexer(IDocumentSchema)
+def document_date(obj):
+    """document_date indexer"""
+
+    context = aq_inner(obj)
     if not context.document_date:
         return None
     return context.document_date
-grok.global_adapter( document_date, name='document_date' )
+grok.global_adapter(document_date, name='document_date')
 
 
-# INDEX: receipt_date
-@indexer( IDocumentSchema )
-def receipt_date( obj ):
-    context = aq_inner( obj )
+@indexer(IDocumentSchema)
+def receipt_date(obj):
+    """receipt_date indexer, can handle None Value"""
+    context = aq_inner(obj)
     if not context.receipt_date:
         return None
     return context.receipt_date
-grok.global_adapter( receipt_date, name='receipt_date' )
+grok.global_adapter(receipt_date, name='receipt_date')
 
 
-# INDEX: delivery_date
-@indexer( IDocumentSchema )
-def delivery_date( obj ):
-    context = aq_inner( obj )
+@indexer(IDocumentSchema)
+def delivery_date(obj):
+    """delivery_date indexer"""
+    context = aq_inner(obj)
     if not context.delivery_date:
         return None
     return context.delivery_date
-grok.global_adapter( delivery_date, name='delivery_date' )
+grok.global_adapter(delivery_date, name='delivery_date')
 
-# INDEX: checked_out
-@indexer( IDocumentSchema )
-def checked_out( obj ):
+
+@indexer(IDocumentSchema)
+def checked_out(obj):
+    """checked_out indexer, save the userid of the
+    Member who checked the document out"""
     manager = queryMultiAdapter((obj, obj.REQUEST), ICheckinCheckoutManager)
     if not manager:
         return ''
@@ -381,7 +385,8 @@ def checked_out( obj ):
 
     else:
         return ''
-grok.global_adapter( checked_out, name='checked_out' )
+grok.global_adapter(checked_out, name='checked_out')
+
 
 @indexer(IDocumentSchema)
 def sortable_author(obj):
@@ -391,13 +396,13 @@ def sortable_author(obj):
         readable_author = readable_ogds_author(obj, author)
         return readable_author
     return ''
-grok.global_adapter( sortable_author, name='sortable_author' )
+grok.global_adapter(sortable_author, name='sortable_author')
 
 
 @grok.subscribe(IDocumentSchema, IObjectCreatedEvent)
 @grok.subscribe(IDocumentSchema, IObjectModifiedEvent)
 def set_digital_available(doc, event):
-    """set the digital_available field, 
+    """set the digital_available field,
     if a file exist the document is digital available"""
 
     if doc.file:
@@ -442,6 +447,7 @@ class View(dexterity.DisplayForm):
             return info.render_link(self.context.document_author)
         return None
 
+
 class ForwardViewlet(grok.Viewlet):
     """Display the message subject
     """
@@ -451,8 +457,9 @@ class ForwardViewlet(grok.Viewlet):
     grok.viewletmanager(IBelowContentTitle)
 
     def render(self):
-        if self.request.get("externaledit",None):
-            return '<script language="JavaScript">jq(function(){window.location.href="'+str(self.context.absolute_url())+'/external_edit"})</script>'
+        if self.request.get("externaledit", None):
+            return '<script language="JavaScript">jq(function(){window.location.href="'+str(
+                self.context.absolute_url())+'/external_edit"})</script>'
         return ''
 
 
@@ -463,7 +470,7 @@ class Overview(DisplayForm, OpengeverTab):
 
     def get_referenced_documents(self):
         pc = self.context.portal_catalog
-        return pc({'portal_type':'Document',})
+        return pc({'portal_type': 'Document', })
 
     def creator_link(self):
         info = getUtility(IContactInformation)
@@ -483,7 +490,6 @@ class RelatedTasks(Tasks):
         self.filter_path = None
 
 
-
 class DownloadFileVersion(grok.CodeView):
     grok.context(IDocumentSchema)
     grok.name('download_file_version')
@@ -498,7 +504,7 @@ class DownloadFileVersion(grok.CodeView):
             IStatusMessage(self.request).addStatusMessage(
                 msg, type='error')
             return self.request.RESPONSE.redirect(self.context.absolute_url())
-            
+
         response = self.request.RESPONSE
         response.setHeader('Content-Type', old_file.contentType)
         response.setHeader('Content-Length', old_file.getSize())
