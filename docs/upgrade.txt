@@ -1,7 +1,7 @@
 upgradesteps:
 =============
 
-To upgrade the opengever.ogds.base to the new version, some changes in the database are required.
+To upgrade the opengever.ogds.base to the new version (include groups), some changes in the database are required.
 
 'groups' table creation :
 -------------------------
@@ -83,3 +83,14 @@ After you have to start the group import, but start first the user import:
     bin/instance1 run src/opengever.ogds.base/opengever/ogds/base/ldap_import/sync_ldap.py -s 'mandant1' -c 'opengever.ogds.base.user-import'
 
     bin/instance1 run src/opengever.ogds.base/opengever/ogds/base/ldap_import/sync_ldap.py -s 'mandant1' -c 'opengever.ogds.base.group-import'
+
+
+Upgrade-step 2, make multiple client ip_addresses possible:
+
+MySQL:
+
+ALTER TABLE `opengever`.`clients` CHANGE COLUMN `ip_address` `ip_address` VARCHAR(50) NULL DEFAULT NULL  ;
+
+
+
+

@@ -19,7 +19,7 @@ class Client(Base):
     client_id = Column(String(30), primary_key=True)
     title = Column(String(30))
     enabled = Column(Boolean(), default=True)
-    ip_address = Column(String(15))
+    ip_address = Column(String(50))
     site_url = Column(String(100))
     public_url = Column(String(100))
 

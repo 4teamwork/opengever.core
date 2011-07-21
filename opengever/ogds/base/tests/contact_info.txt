@@ -67,10 +67,12 @@ And we also need some clients:
     ...                        'group': 'client2_users',
     ...                        'inbox_group': 'client2_inbox_users'})
 
+the ip_address column should also work with a comma seperated list
+
     >>> _create_example_client(session, 'client3',
     ...                       {'title': 'Client 3',
     ...                        'enabled': False,
-    ...                        'ip_address': '127.0.0.1',
+    ...                        'ip_address': '127.0.0.1,192.168.1.2',
     ...                        'site_url': 'http://nohost/client3',
     ...                        'public_url': 'http://nohost/client3',
     ...                        'group': 'client3_users',
