@@ -5,6 +5,13 @@ Changelog
 2.0b13
 ------
 
+* Issue #929 ZEO Clients ueber mehrere dedizierte Server verteilen.
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/929/
+  added multiple client ip's possibility in the ogds plugin and specific tests
+  upgrade queries for sql adjustments
+  changed contact_info it should work with mutiple client ips
+  [phgross]
+
 
 2.0b12
 ------
