@@ -5,6 +5,11 @@ Changelog
 2.0b17
 ------
 
+* Issue #1079 Falsche weiterleitung beim erstellen eines Dokuments in einem Task.
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1079/
+  added a global DocumentRedirector View, to allow type specific redirects
+  [phgross]
+
 
 2.0b16
 ------

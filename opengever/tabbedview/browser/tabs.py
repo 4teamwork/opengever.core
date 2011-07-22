@@ -12,8 +12,8 @@ from opengever.tabbedview.helper import readable_ogds_author, linked
 from opengever.tabbedview.helper import readable_date, external_edit_link
 from opengever.tabbedview.helper import workflow_state
 from opengever.tabbedview.helper import overdue_date_helper
-
 from opengever.task.helper import task_type_helper
+from plone.dexterity.interfaces import IDexterityContainer
 from zope.app.pagetemplate import ViewPageTemplateFile
 from zope.component import getUtility
 from zope.interface import implements
@@ -104,7 +104,6 @@ class OpengeverCatalogListingTab(grok.CodeView, OpengeverTab,
     __call__ = CatalogListingView.__call__
     update = CatalogListingView.update
     render = __call__
-
 
 
 class Documents(OpengeverCatalogListingTab):
@@ -323,3 +322,20 @@ class Trash(Documents):
                 columns.append(col)
 
         return columns
+
+
+class DocumentRedirector(grok.CodeView):
+    """Redirector View is called after a Document is created,
+    make it easier to implement type specifics immediate_views
+    like implemented for opengever.task"""
+
+    grok.name('document-redirector')
+    grok.context(IDexterityContainer)
+
+    def render(self):
+        referer = self.context.REQUEST.environ.get('HTTP_REFERER')
+        if referer.endswith('++add++opengever.document.document'):
+            return self.context.REQUEST.RESPONSE.redirect(
+                '%s#documents' % self.context.absolute_url())
+
+        return self.context.REQUEST.RESPONSE.redirect(self.context.absolute_url())
