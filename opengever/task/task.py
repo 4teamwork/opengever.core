@@ -621,3 +621,22 @@ def set_dates(task, event):
 def related_document(context):
     intids = getUtility(IIntIds)
     return intids.getId(context)
+
+
+class DocumentRedirector(grok.CodeView):
+    """Redirector View specific for documents created on a task
+    redirect directly to the relateddocuments tab
+    instead of the default documents tab
+    """
+
+    grok.name('document-redirector')
+    grok.context(ITask)
+
+    def render(self):
+        referer = self.context.REQUEST.environ.get('HTTP_REFERER')
+        if referer.endswith('++add++opengever.document.document'):
+            return self.context.REQUEST.RESPONSE.redirect(
+                '%s#relateddocuments' % self.context.absolute_url())
+        else:
+            return self.context.REQUEST.RESPONSE.redirect(
+                self.context.absolute_url())
