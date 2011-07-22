@@ -114,7 +114,7 @@ class Documents(OpengeverCatalogListingTab):
 
     types = ['opengever.document.document', 'ftw.mail.mail']
 
-    search_options = {'isWorkingCopy': 0,}
+    search_options = {'isWorkingCopy': 0, }
 
     columns = (
 
@@ -122,32 +122,32 @@ class Documents(OpengeverCatalogListingTab):
 
         {'column': 'Title',
          'column_title': _(u'label_title', default=u'Title'),
-         'sort_index' : 'sortable_title',
+         'sort_index': 'sortable_title',
          'transform': linked},
 
-        {'column':'document_author',
-         'column_title':_('label_document_author', default="Document Author"),
+        {'column': 'document_author',
+         'column_title': _('label_document_author', default="Document Author"),
          'sort_index': 'sortable_author',
          'transform': readable_ogds_author},
 
-        {'column':'document_date',
-         'column_title':_('label_document_date', default="Document Date"),
-         'transform':readable_date},
+        {'column': 'document_date',
+         'column_title': _('label_document_date', default="Document Date"),
+         'transform': readable_date},
 
-        {'column':'receipt_date',
-         'column_title':_('label_receipt_date', default="Receipt Date"),
-         'transform':readable_date},
+        {'column': 'receipt_date',
+         'column_title': _('label_receipt_date', default="Receipt Date"),
+         'transform': readable_date},
 
-        {'column':'delivery_date',
-         'column_title':_('label_delivery_date', default="Delivery Date"),
-         'transform':readable_date},
+        {'column': 'delivery_date',
+         'column_title': _('label_delivery_date', default="Delivery Date"),
+         'transform': readable_date},
 
-        {'column':'checked_out',
-         'column_title':_('label_checked_out', default="Checked out by"),
-         'transform':readable_ogds_user},
+        {'column': 'checked_out',
+         'column_title': _('label_checked_out', default="Checked out by"),
+         'transform': readable_ogds_user},
 
-        {'column':'containing_subdossier',
-         'column_title':_('label_subdossier', default="Subdossier"),},
+        {'column': 'containing_subdossier',
+         'column_title': _('label_subdossier', default="Subdossier"), },
 
         ('', external_edit_link),
 
@@ -187,17 +187,17 @@ class Dossiers(OpengeverCatalogListingTab):
 
         {'column': 'Title',
          'column_title': _(u'label_title', default=u'Title'),
-         'sort_index' : 'sortable_title',
+         'sort_index': 'sortable_title',
          'transform': linked},
 
         {'column': 'review_state',
          'column_title': _(u'label_review_state', default=u'Review state'),
          'transform': workflow_state},
 
-        {'column':'responsible',
-         'column_title':_(u'label_dossier_responsible',
+        {'column': 'responsible',
+         'column_title': _(u'label_dossier_responsible',
                           default=u"Responsible"),
-         'transform':readable_ogds_author},
+         'transform': readable_ogds_author},
 
         {'column': 'start',
          'column_title': _(u'label_start', default=u'Start'),
@@ -241,7 +241,7 @@ class Tasks(OpengeverCatalogListingTab):
 
         {'column': 'Title',
          'column_title': _(u'label_title', default=u'Title'),
-         'sort_index' : 'sortable_title',
+         'sort_index': 'sortable_title',
          'transform': linked},
 
         {'column': 'task_type',
@@ -275,8 +275,8 @@ class Tasks(OpengeverCatalogListingTab):
         {'column': 'sequence_number',
          'column_title': _(u'sequence_number', "Sequence Number"), },
 
-        {'column':'containing_subdossier',
-         'column_title':_('label_subdossier', default="Subdossier"),},
+        {'column': 'containing_subdossier',
+         'column_title': _('label_subdossier', default="Subdossier"), },
         )
 
     types = ['opengever.task.task', ]
@@ -309,7 +309,7 @@ class Trash(Documents):
         """Gets the columns wich wich will be displayed
            remove some columns from the columns property
         """
-        remove_columns = ['checked_out',]
+        remove_columns = ['checked_out', ]
         columns = []
         for col in super(Trash, self).columns:
             if isinstance(col, dict) and \
@@ -338,4 +338,5 @@ class DocumentRedirector(grok.CodeView):
             return self.context.REQUEST.RESPONSE.redirect(
                 '%s#documents' % self.context.absolute_url())
 
-        return self.context.REQUEST.RESPONSE.redirect(self.context.absolute_url())
+        return self.context.REQUEST.RESPONSE.redirect(
+            self.context.absolute_url())
