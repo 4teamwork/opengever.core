@@ -33,7 +33,6 @@ class MailIntegrationLayer(BasePTCLayer):
         registry = getUtility(IRegistry )
         registry['opengever.ogds.base.interfaces.'
                  'IClientConfiguration.client_id'] = u'plone'
-#        registry['ftw.tabbedview.interfaces.ITabbedView.batch_size'] = 50
         registry['opengever.base.interfaces.IBaseClientID.client_id'] = u'OG'
 
 
