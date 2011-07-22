@@ -4,11 +4,21 @@ import os
 version = open('opengever/mail/version.txt').read().strip()
 maintainer = 'Julian Infanger'
 
+tests_require = [
+    'collective.testcaselayer',
+    'plone.app.testing',
+    'opengever.ogds.base[tests]',
+    'opengever.base',
+    'Products.CMFPlone',
+    'opengever.document',
+    ]
+
 extras_require = {
     # Adding opengever.document to install_requires will result in circular
     # dependencies. This extras prevents ftw.manager from sugesting this
     # dependency.
     'document': ['opengever.document'],
+    'tests': tests_require,
 }
 
 setup(name='opengever.mail',
@@ -49,6 +59,7 @@ setup(name='opengever.mail',
         'plone.app.registry',
         # -*- Extra requirements: -*-
         ],
+      tests_require=tests_require,
       extras_require=extras_require,
       entry_points="""
       # -*- Entry points: -*-

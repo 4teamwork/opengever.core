@@ -1,0 +1,54 @@
+Test views:
+===========
+
+imports and general stuff
+    >>> from plone.dexterity.utils import createContentInContainer
+    >>> from Products.Five.testbrowser import Browser
+    >>> from Products.PloneTestCase.setup import portal_owner, default_password
+    >>> browser = Browser()
+    >>> browser.handleErrors = False
+    >>> self.setRoles(['Editor', 'Contributor', 'Owner'])
+
+create document
+    >>> doc1 = createContentInContainer(self.folder, 'opengever.document.document', title=u'Document 1')
+
+portal has to provide ISendableDocsContainer
+    >>> from zope.interface import alsoProvides
+    >>> from opengever.mail.interfaces import ISendableDocsContainer
+    >>> alsoProvides(self.portal, ISendableDocsContainer)
+    >>> ISendableDocsContainer.providedBy(self.portal)
+    True
+
+login
+    >>> browser.open('%s/login_form' % self.portal.absolute_url())
+    >>> browser.getControl(name='__ac_name').value = portal_owner
+    >>> browser.getControl(name='__ac_password').value = default_password
+    >>> browser.getControl(name='submit').click()
+
+browse
+    >>> data = 'paths:list=%s'% '/'.join(doc1.getPhysicalPath())
+    >>> browser.open('%s/send_documents' % self.portal.absolute_url(), data=data)
+    >>> browser.getControl(name='form.widgets.subject').value = 'Test Betreff'
+    >>> browser.getControl(name='form.widgets.message').value = 'Test Nachricht'
+
+Mock MailHost
+    >>> from Products.CMFPlone.tests.utils import MockMailHost
+    >>> from zope.site.hooks import getSite
+    >>> from Products.MailHost.interfaces import IMailHost
+    >>> mockmailhost = MockMailHost('MailHost')
+    >>> doc1.MailHost = mockmailhost
+    >>> sm = getSite().getSiteManager()
+    >>> sm.registerUtility(component=mockmailhost,
+    ...                    provided=IMailHost)
+
+Test form
+    >>> browser.getControl(name='form.widgets.documents:list').value == ['/'.join(doc1.getPhysicalPath())]
+    True
+    >>> browser.getControl(name='form.buttons.button_send').click()
+    >>> 'You have to select a intern                             '\
+    ... 'or enter a extern mail-addres' in browser.contents
+    True
+    >>> browser.getControl(name='form.widgets.extern_receiver').value = 'info@4teamwork.ch'
+    >>> browser.getControl(name='form.buttons.button_send').click()
+    >>> len(doc1.MailHost.messages)
+    1
