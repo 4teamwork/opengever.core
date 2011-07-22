@@ -25,12 +25,6 @@ login
     >>> browser.getControl(name='__ac_password').value = default_password
     >>> browser.getControl(name='submit').click()
 
-browse
-    >>> data = 'paths:list=%s'% '/'.join(doc1.getPhysicalPath())
-    >>> browser.open('%s/send_documents' % self.portal.absolute_url(), data=data)
-    >>> browser.getControl(name='form.widgets.subject').value = 'Test Betreff'
-    >>> browser.getControl(name='form.widgets.message').value = 'Test Nachricht'
-
 Mock MailHost
     >>> from Products.CMFPlone.tests.utils import MockMailHost
     >>> from zope.site.hooks import getSite
@@ -41,7 +35,12 @@ Mock MailHost
     >>> sm.registerUtility(component=mockmailhost,
     ...                    provided=IMailHost)
 
-Test form
+test form
+    >>> data = 'paths:list=%s'% '/'.join(doc1.getPhysicalPath())
+    >>> browser.open('%s/send_documents' % self.portal.absolute_url(), data=data)
+    >>> browser.getControl(name='form.widgets.subject').value = 'Test Betreff'
+    >>> browser.getControl(name='form.widgets.message').value = 'Test Nachricht'
+
     >>> browser.getControl(name='form.widgets.documents:list').value == ['/'.join(doc1.getPhysicalPath())]
     True
     >>> browser.getControl(name='form.buttons.button_send').click()
@@ -52,3 +51,16 @@ Test form
     >>> browser.getControl(name='form.buttons.button_send').click()
     >>> len(doc1.MailHost.messages)
     1
+
+Test again (now document have a file)
+    >>> from plone.namedfile.file import NamedFile
+    >>> mok_file1 = NamedFile('bla bla', filename=u'test.txt')
+    >>> doc1.file = mok_file1
+    >>> data = 'paths:list=%s'% '/'.join(doc1.getPhysicalPath())
+    >>> browser.open('%s/send_documents' % self.portal.absolute_url(), data=data)
+    >>> browser.getControl(name='form.widgets.subject').value = 'Test Betreff'
+    >>> browser.getControl(name='form.widgets.message').value = 'Test Nachricht'
+    >>> browser.getControl(name='form.widgets.extern_receiver').value = 'info@4teamwork.ch'
+    >>> browser.getControl(name='form.buttons.button_send').click()
+    >>> len(doc1.MailHost.messages)
+    2
