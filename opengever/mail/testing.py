@@ -14,25 +14,28 @@ class MailIntegrationLayer(BasePTCLayer):
         import opengever.base
         import opengever.ogds.base
         import opengever.document
+        import opengever.dossier
         self.loadZCML('configure.zcml', package=opengever.mail)
         self.loadZCML('configure.zcml', package=opengever.base)
         self.loadZCML('tests.zcml', package=opengever.ogds.base)
         self.loadZCML('configure.zcml', package=opengever.document)
+        self.loadZCML('configure.zcml', package=opengever.dossier)
 
         # Load GS profile
         self.addProfile('opengever.ogds.base:default')
         self.addProfile('opengever.mail:default')
         self.addProfile('opengever.base:default')
         self.addProfile('opengever.document:default')
+        self.addProfile('opengever.dossier:default')
+        self.addProfile('ftw.tabbedview:default')
 
         # configure client ID
-        registry = getUtility(IRegistry, context=self.portal)
-        client = registry.forInterface(IClientConfiguration)
-        client.client_id = u'plone'
+        registry = getUtility(IRegistry )
+        registry['opengever.ogds.base.interfaces.'
+                 'IClientConfiguration.client_id'] = u'plone'
+#        registry['ftw.tabbedview.interfaces.ITabbedView.batch_size'] = 50
+        registry['opengever.base.interfaces.IBaseClientID.client_id'] = u'OG'
 
-        from opengever.base.interfaces import IBaseClientID
-        baseclientid = registry.forInterface(IBaseClientID)
-        baseclientid.client_id = u'OG'
 
     def beforeTearDown(self):
         pass

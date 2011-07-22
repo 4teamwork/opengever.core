@@ -7,6 +7,7 @@ maintainer = 'Julian Infanger'
 tests_require = [
     'collective.testcaselayer',
     'plone.app.testing',
+    'opengever.dossier',
     'opengever.ogds.base[tests]',
     'opengever.base',
     'Products.CMFPlone',
