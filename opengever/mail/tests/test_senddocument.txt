@@ -5,6 +5,15 @@ imports and general stuff
     >>> from plone.dexterity.utils import createContentInContainer
     >>> from Products.Five.testbrowser import Browser
     >>> from Products.PloneTestCase.setup import portal_owner, default_password
+    >>> from plone.namedfile.file import NamedFile
+    >>> from plone.registry.interfaces import IRegistry
+    >>> from zope.component import queryUtility
+    >>> from opengever.mail.interfaces import ISendDocumentConf
+    >>> from zope.interface import alsoProvides
+    >>> from opengever.mail.interfaces import ISendableDocsContainer
+    >>> from Products.CMFPlone.tests.utils import MockMailHost
+    >>> from zope.site.hooks import getSite
+    >>> from Products.MailHost.interfaces import IMailHost
     >>> browser = Browser()
     >>> browser.handleErrors = False
     >>> self.setRoles(['Editor', 'Contributor', 'Owner'])
@@ -13,8 +22,6 @@ create document
     >>> doc1 = createContentInContainer(self.folder, 'opengever.document.document', title=u'Document 1')
 
 portal has to provide ISendableDocsContainer
-    >>> from zope.interface import alsoProvides
-    >>> from opengever.mail.interfaces import ISendableDocsContainer
     >>> alsoProvides(self.portal, ISendableDocsContainer)
     >>> ISendableDocsContainer.providedBy(self.portal)
     True
@@ -26,9 +33,6 @@ login
     >>> browser.getControl(name='submit').click()
 
 Mock MailHost
-    >>> from Products.CMFPlone.tests.utils import MockMailHost
-    >>> from zope.site.hooks import getSite
-    >>> from Products.MailHost.interfaces import IMailHost
     >>> mockmailhost = MockMailHost('MailHost')
     >>> doc1.MailHost = mockmailhost
     >>> sm = getSite().getSiteManager()
@@ -53,14 +57,24 @@ test form
     1
 
 Test again (now document have a file)
-    >>> from plone.namedfile.file import NamedFile
-    >>> mok_file1 = NamedFile('bla bla', filename=u'test.txt')
+    >>> mok_file1 = NamedFile(500000*'bla', filename=u'test.txt')
     >>> doc1.file = mok_file1
     >>> data = 'paths:list=%s'% '/'.join(doc1.getPhysicalPath())
     >>> browser.open('%s/send_documents' % self.portal.absolute_url(), data=data)
     >>> browser.getControl(name='form.widgets.subject').value = 'Test Betreff'
     >>> browser.getControl(name='form.widgets.message').value = 'Test Nachricht'
     >>> browser.getControl(name='form.widgets.extern_receiver').value = 'info@4teamwork.ch'
+
+max size to smal
+    >>> registry = queryUtility(IRegistry)
+    >>> reg_proxy = registry.forInterface(ISendDocumentConf)
+    >>> reg_proxy.max_size = 1
+    >>> browser.getControl(name='form.buttons.button_send').click()
+    >>> 'The files you selected are larger than the maximum size' in browser.contents
+    True
+
+max size ok
+    >>> reg_proxy.max_size = 5
     >>> browser.getControl(name='form.buttons.button_send').click()
     >>> len(doc1.MailHost.messages)
     2
