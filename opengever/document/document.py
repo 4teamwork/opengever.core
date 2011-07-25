@@ -75,7 +75,7 @@ class IDocumentSchema(form.Schema):
             u'document_type',
             u'document_author',
             u'file',
-            u'digital_available',
+            u'digitally_available',
             u'preserved_as_paper',
             u'archival_file',
             u'thumbnail',
@@ -143,10 +143,10 @@ class IDocumentSchema(form.Schema):
         required = False,
         )
 
-    form.mode(digital_available='hidden')
-    digital_available = schema.Bool(
-        title = _(u'label_digital_available', default='Digital Available'),
-        description = _(u'help_digital_available',
+    form.mode(digitally_available='hidden')
+    digitally_available = schema.Bool(
+        title = _(u'label_digitally_available', default='Digital Available'),
+        description = _(u'help_digitally_available',
             default='Is the Document Digital Availabe'),
         required = False,
         )
@@ -401,14 +401,14 @@ grok.global_adapter(sortable_author, name='sortable_author')
 
 @grok.subscribe(IDocumentSchema, IObjectCreatedEvent)
 @grok.subscribe(IDocumentSchema, IObjectModifiedEvent)
-def set_digital_available(doc, event):
-    """set the digital_available field,
+def set_digitally_available(doc, event):
+    """set the digitally_available field,
     if a file exist the document is digital available"""
 
     if doc.file:
-        doc.digital_available = True
+        doc.digitally_available = True
     else:
-        doc.digital_available = False
+        doc.digitally_available = False
 
 
 @grok.subscribe(IDocumentSchema, IObjectCreatedEvent)

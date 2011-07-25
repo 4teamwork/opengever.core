@@ -67,10 +67,10 @@
 				</td>
 			</tr>
 			<tr>
-				<th i18n:translate="label_digital_available">Digital Available</th>
-				<td tal:define="digital_available context/digital_available">
-					<tal:paperform condition="digital_available">Ja</tal:paperform>
-					<tal:paperform condition="python: not digital_available">Nein</tal:paperform>
+				<th i18n:translate="label_digitally_available">Digital Available</th>
+				<td tal:define="digitally_available context/digitally_available">
+					<tal:paperform condition="digitally_available">Ja</tal:paperform>
+					<tal:paperform condition="python: not digitally_available">Nein</tal:paperform>
 				</td>
 			</tr>
 			<tr>

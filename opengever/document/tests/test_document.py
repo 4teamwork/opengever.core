@@ -46,13 +46,13 @@ class TestDocumentIntegration(PloneTestCase):
         field.set(d1, monk_file)
         self.assertTrue(field.get(d1).data == 'bla bla')
 
-    def test_digital_available(self):
+    def test_digitally_available(self):
         monk_file = NamedFile('bla bla', filename=u'test.txt')
         d1 = createContentInContainer(self.folder, 'opengever.document.document',
             file=monk_file)
-        self.assertTrue(d1.digital_available==True)
+        self.assertTrue(d1.digitally_available==True)
         d2 = createContentInContainer(self.folder, 'opengever.document.document')
-        self.assertTrue(d2.digital_available==False)
+        self.assertTrue(d2.digitally_available==False)
 
         # check the file_or_preserved_as_paper validator
         d3 = createContentInContainer(self.folder, 'opengever.document.document',

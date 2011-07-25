@@ -169,7 +169,7 @@ msgstr ""
 
 #. Default: "Is the Document Digital Availabe"
 #: ./opengever/document/document.py:151
-msgid "help_digital_available"
+msgid "help_digitally_available"
 msgstr ""
 
 #: ./opengever/document/document.py:117
@@ -297,7 +297,7 @@ msgstr "Beschreibung"
 #: ./opengever/document/document.py:150
 #: ./opengever/document/document_templates/overview.pt:45
 #: ./opengever/document/document_templates/view.pt:70
-msgid "label_digital_available"
+msgid "label_digitally_available"
 msgstr "Digital verfügbar"
 
 #. Default: "document"
