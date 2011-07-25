@@ -12,7 +12,7 @@ class CheckinCheckoutController(BrowserView):
         """Checks whether checkout is allowed or not.
         """
         if self.context.digitally_available:
-            
+
             manager = queryMultiAdapter((self.context, self.request),
                                         ICheckinCheckoutManager)
             if manager:
