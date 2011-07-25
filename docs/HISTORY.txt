@@ -5,6 +5,9 @@ Changelog
 2.0b9
 -----
 
+* Added missing dependency on opengever.task
+  [lgraf]
+
 * Issue #1027 Feedback Fokus: Posteingang: Eingang akzeptieren (unnoetiger Screen)
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1027/
   overwrote the render method of the response form,

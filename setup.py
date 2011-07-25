@@ -50,6 +50,7 @@ setup(name='opengever.inbox',
         'opengever.globalindex',
         'opengever.trash',
         'opengever.base',
+        'opengever.task',
         
         # -*- Extra requirements: -*-
         ],
