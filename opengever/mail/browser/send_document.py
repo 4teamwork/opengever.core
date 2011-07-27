@@ -37,7 +37,8 @@ class ISendDocumentSchema(Interface):
 
     intern_receiver = schema.Tuple(
         title=_('intern_receiver', default="Intern receiver"),
-        description=_('help_intern_receiver', default="Live Search: search for users and contacts"),
+        description=_('help_intern_receiver',
+                      default="Live Search: search for users and contacts"),
 
         value_type=schema.Choice(title=_(u"mails"),
         source=u'opengever.ogds.base.EmailContactsAndUsersVocabulary'),
@@ -76,16 +77,16 @@ class ISendDocumentSchema(Interface):
                     'object_provides':
                         ['opengever.dossier.behaviors.dossier.IDossierMarker',
                          'opengever.document.document.IDocumentSchema',
-                         'ftw.mail.mail.IMail',]
-                    }),
+                         'ftw.mail.mail.IMail',
+                        ]}),
             ),
         required=False,
         )
 
     @invariant
-    def validateHasEmail(data):
+    def validateHasEmail(self):
         """ check if minium one e-mail-address is given."""
-        if len(data.intern_receiver) == 0 and not data.extern_receiver:
+        if len(self.intern_receiver) == 0 and not self.extern_receiver:
             raise NoMail(_(u'You have to select a intern \
                             or enter a extern mail-addres'))
 
@@ -180,7 +181,8 @@ class SendDocumentForm(form.Form):
         docs_links = u'Dokumente:\r\n'
         for doc in docs:
             if not doc.file:
-                docs_links = '%s\r\n - %s (%s)' % (docs_links, doc.title, doc.absolute_url())
+                docs_links = '%s\r\n - %s (%s)' % (
+                    docs_links, doc.title, doc.absolute_url())
                 continue
             docfile = doc.file
             docs_links = '%s\r\n - %s (siehe Anhang)' % (docs_links, doc.title)

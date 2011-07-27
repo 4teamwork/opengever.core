@@ -201,11 +201,11 @@ class ExtractAttachments(grok.View):
                                 field,
                                 None, # Widget
                                 ), IValue, name='default')
-                        if default!=None:
+                        if default != None:
                             default = default.get()
-                        if default==None:
+                        if default == None:
                             default = getattr(field, 'default', None)
-                        if default==None:
+                        if default == None:
                             try:
                                 default = field.missing_value
                             except:

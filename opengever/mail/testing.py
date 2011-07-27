@@ -1,5 +1,4 @@
 from collective.testcaselayer.ptc import BasePTCLayer, ptc_layer
-from opengever.ogds.base.interfaces import IClientConfiguration
 from plone.registry.interfaces import IRegistry
 from zope.component import getUtility
 
