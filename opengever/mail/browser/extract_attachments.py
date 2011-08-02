@@ -18,6 +18,7 @@ from zope.schema import getFieldsInOrder
 from ftw.mail.mail import IMail
 from ftw.mail.utils import get_attachments
 from ftw.mail.utils import remove_attachments
+from ftw.mail.utils import get_filename
 from ftw.table.interfaces import ITableGenerator
 from opengever.mail import _
 from opengever.mail.behaviors import IMailInAddressMarker
@@ -258,7 +259,7 @@ class ExtractAttachments(grok.View):
             return None
 
         # decode when it's necessary
-        filename = attachment.get_filename()
+        filename = get_filename(attachment)
         if not isinstance(filename, unicode):
             filename = filename.decode('utf-8')
 
