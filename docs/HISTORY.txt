@@ -5,6 +5,9 @@ Changelog
 2.0b15
 ------
 
+* Removed unused (implicit) dependency on plone.app.iterate
+  [lgraf]
+
 * Issue #1044 Dokument ohne Datei
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1044/
   change DISPLAY_MODE setter for the file field

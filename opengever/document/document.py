@@ -11,7 +11,6 @@ from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.tabbedview.browser.tabs import OpengeverTab
 from opengever.tabbedview.browser.tabs import Tasks
-from plone.app.iterate.interfaces import IWorkingCopy
 from plone.app.layout.viewlets.interfaces import IBelowContentTitle
 from plone.app.versioningbehavior.behaviors import IVersionable
 from plone.autoform.interfaces import OMITTED_KEY
@@ -227,8 +226,6 @@ class Document(Item):
         title = self.title
         if isinstance(title, unicode):
             title = self.title.encode('utf8')
-        if IWorkingCopy.providedBy(self):
-            return '%s (Arbeitskopie)' % title
         return self.title or ''
 
     def surrender(self, relative_to_portal=1):
