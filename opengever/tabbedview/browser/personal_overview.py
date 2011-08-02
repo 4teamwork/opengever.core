@@ -121,9 +121,6 @@ class MyDossiers(Dossiers):
     grok.require('zope2.View')
     grok.context(Interface)
 
-    types = ['opengever.dossier.businesscasedossier',
-             'opengever.dossier.projectdossier',]
-
     search_options = {'responsible': authenticated_member, 
                       'is_subdossier':False}
 

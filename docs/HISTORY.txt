@@ -5,6 +5,12 @@ Changelog
 2.0b17
 ------
 
+* Issue #1133 Test Gelb 2.0.3: Uebersicht / Meine Dossiers   bei ARP, Sicht Olivier Debenath
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1133
+  removed types attribut in the MyDossier View, use the dossier standard object_provides filter instead
+  so specialdossiers are also listed in the mydossier listing
+  [phgross]
+
 * Issue #1079 Falsche weiterleitung beim erstellen eines Dokuments in einem Task.
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1079/
   added a global DocumentRedirector View, to allow type specific redirects
