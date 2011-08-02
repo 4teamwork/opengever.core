@@ -17,7 +17,6 @@ from opengever.tabbedview.helper import readable_ogds_author
 from opengever.task.task import ITask
 from opengever.trash.trash import ITrashedEvent, IUntrashedEvent
 from persistent.dict import PersistentDict
-from plone.app.iterate.interfaces import IWorkingCopy
 from plone.app.versioningbehavior.utils import get_change_note
 from zope.app.container.interfaces import IObjectAddedEvent
 from zope.component import getMultiAdapter
@@ -126,8 +125,6 @@ def dossier_state_changed(context, event):
 DOCUMENT_ADDED_ACTION = 'Document added'
 @grok.subscribe(IDocumentSchema, IObjectAddedEvent)
 def document_added(context, event):
-    if IWorkingCopy.providedBy(context):
-        return
     title = _(u'label_document_added', default=u'Document added: ${title}', mapping={
             'title' : context.title_or_id(),
             })
@@ -254,8 +251,6 @@ def document_file_reverted(context, event):
 TASK_ADDED_EVENT = 'Task added'
 @grok.subscribe(ITask, IObjectAddedEvent)
 def task_added(context, event):
-    if IWorkingCopy.providedBy(context):
-        return
     title = _(u'label_task_added', default=u'Task added: ${title}', mapping={
             'title' : context.title_or_id(),
             })
