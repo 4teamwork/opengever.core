@@ -5,6 +5,9 @@ Changelog
 2.0b13
 ------
 
+* Added test-cfg for plone-4.1.x
+  [lgraf]
+
 
 2.0b12
 ------
