@@ -75,7 +75,11 @@ class ReferenceNumberPrefixAdpater(grok.Adapter):
         if no number is registred for this obj, we generate a new one.
         """
         intids = getUtility(IIntIds)
-        intid = intids.getId(aq_base(obj))
+        try:
+            intid = intids.getId(aq_base(obj))
+        # In some cases we might not have an intid yet.
+        except KeyError:
+            return None
         if intid in self.reference_mapping:
             return self.reference_mapping.get(intid)
         return None
