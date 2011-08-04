@@ -1,4 +1,4 @@
-from Acquisition import aq_inner
+from Acquisition import aq_inner, aq_base
 from Products.CMFCore.utils import getToolByName
 from Products.MimetypesRegistry.common import MimeTypeException
 from collective import dexteritytextindexer
@@ -287,7 +287,13 @@ class Document(Item):
 def related_items(obj):
     catalog = getUtility(ICatalog)
     intids = getUtility(IIntIds)
-    obj_id = intids.getId(obj)
+
+    try:
+        obj_id = intids.getId(aq_base(obj))
+    # In some cases we might not have an intid yet.
+    except KeyError:
+        return None
+
     results = []
     relations = catalog.findRelations(
         {'to_id': obj_id, 'from_attribute': 'relatedItems'})

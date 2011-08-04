@@ -5,6 +5,11 @@ Changelog
 2.0b15
 ------
 
+* Made related_items indexer more robust when the object doesn't have an intid yet.
+  This may occur in IObjectAddedEvent subscribers that are called before the one
+  from five.intid.
+  [phgross]
+
 * Removed unused (implicit) dependency on plone.app.iterate
   [lgraf]
 
