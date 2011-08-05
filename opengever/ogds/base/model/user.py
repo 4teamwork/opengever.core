@@ -58,7 +58,7 @@ class User(Base):
 
 # association table
 groups_users = Table('groups_users', Base.metadata,
-    Column('groupid', String(30), ForeignKey('groups.groupid'), primary_key=True),
+    Column('groupid', String(50), ForeignKey('groups.groupid'), primary_key=True),
     Column('userid', String(30), ForeignKey('users.userid'), primary_key=True),
 )
 
@@ -71,7 +71,7 @@ class Group(Base):
 
     __tablename__ = 'groups'
 
-    groupid = Column(String(30), primary_key=True)
+    groupid = Column(String(50), primary_key=True)
     title = Column(String(50))
 
     users = relation(User, secondary=groups_users, backref=backref('group_users'))

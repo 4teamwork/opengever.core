@@ -5,6 +5,9 @@ Changelog
 2.0b13
 ------
 
+* elevated the size of a the groupid attribute in the table configuration
+  [phgross]
+
 * Issue #929 ZEO Clients ueber mehrere dedizierte Server verteilen.
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/929/
   added multiple client ip's possibility in the ogds plugin and specific tests
