@@ -18,6 +18,7 @@ class TestBusinessCaseDossierIntegration(unittest.TestCase):
         portal.invokeFactory('opengever.dossier.businesscasedossier', 'dossier1')
         d1 = portal['dossier1']
         self.failUnless(IBusinessCaseDossier.providedBy(d1))
+        del portal['dossier1']
 
     def test_fti(self):
         fti = queryUtility(IDexterityFTI, name='opengever.dossier.businesscasedossier')
@@ -33,6 +34,7 @@ class TestBusinessCaseDossierIntegration(unittest.TestCase):
         factory = fti.factory
         new_object = createObject(factory)
         self.failUnless(IBusinessCaseDossier.providedBy(new_object))
+
 
     # XXX
     # Don't work yet because its not possible to access to the dependent vocabulary from opengever.octopus.tentacle

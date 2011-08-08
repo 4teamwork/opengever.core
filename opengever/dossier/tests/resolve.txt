@@ -250,4 +250,3 @@ check if the values are assumed to the dossier
     datetime.date(2016, 12, 12)
     >>> IDossier(dossier).filing_prefix
     'government'
-

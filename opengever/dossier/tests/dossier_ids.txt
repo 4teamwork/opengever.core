@@ -12,20 +12,16 @@ Create a dossier:
     >>> d1 = createContentInContainer(portal,
     ...                               'opengever.dossier.businesscasedossier')
     >>> d1
-    <DossierContainer at /plone/dossier-3>
-    >>> d1.id
-    'dossier-3'
-    >>> getUtility(ISequenceNumber).get_number(d1)
-    3
+    <DossierContainer at ...>
+    >>> d1.id == 'dossier-' + str(getUtility(ISequenceNumber).get_number(d1))
+	True
 
 Create another dossier:
 
     >>> d2 = createContentInContainer(portal,
     ...                               'opengever.dossier.businesscasedossier')
     >>> d2
-    <DossierContainer at /plone/dossier-4>
-    >>> d2.id
-    'dossier-4'
-    >>> getUtility(ISequenceNumber).get_number(d2)
-    4
+    <DossierContainer at ...>
+    >>> d2.id == 'dossier-' + str(getUtility(ISequenceNumber).get_number(d2))
+    True
 
