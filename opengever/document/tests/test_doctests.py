@@ -23,7 +23,8 @@ def test_suite():
 
     for testfile in TESTFILES:
         suite.addTests([
-            layered(doctest.DocFileSuite(testfile),
+            layered(doctest.DocFileSuite(testfile,
+                    optionflags=OPTIONFLAGS),
                     layer=OPENGEVER_DOCUMENT_INTEGRATION_TESTING),
         ])
 
