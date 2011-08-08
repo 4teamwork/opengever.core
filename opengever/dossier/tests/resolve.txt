@@ -6,28 +6,31 @@ Resolving
 In this test we check the rules for resolving a Dossier
 
 do some imports
+    >>> import transaction
     >>> from plone.dexterity.utils import createContentInContainer
     >>> from zope.component import getMultiAdapter
-    >>> from Products.Five.testbrowser import Browser
+    >>> from plone.testing.z2 import Browser
     >>> from datetime import datetime
     >>> from opengever.dossier.behaviors.dossier import IDossier
     >>> from opengever.document.interfaces import ICheckinCheckoutManager
 
 setup the browser for the test, we use it later in the test
-    >>> browser = Browser()
+	>>> app = layer['app']
+	>>> portal = layer['portal']
+    >>> browser = Browser(app)
     >>> browser.handleErrors = False
     >>> browser.addHeader('Accept-Language', 'en-US')
-    >>> self.app.acl_users.userFolderAddUser('root', 'secret',
+    >>> app.acl_users.userFolderAddUser('root', 'secret',
     ...                                ['Manager','Contributor', 'Reviewer', 'Administrator'], [])
     >>> browser.addHeader('Authorization', 'Basic root:secret' )
     >>> portal.manage_setLocalRoles('root', ['Reviewer',])
 
 creating dossier, ...
-    >>> dossier = createContentInContainer(self.portal,
+    >>> dossier = createContentInContainer(portal,
     ...     'opengever.dossier.businesscasedossier',
     ...     title='Dossiers', checkConstraints=False)
     >>> dossier
-    <DossierContainer at ...>
+    <DossierContainer at /plone/dossier-1>
     >>> IDossier(dossier).start = datetime.today().date()
 
 subdossier, ...
@@ -35,7 +38,7 @@ subdossier, ...
     ...     'opengever.dossier.businesscasedossier',
     ...     title='Subdossier', checkConstraints=False)
     >>> subdossier
-    <DossierContainer at ...>
+    <DossierContainer at /plone/dossier-1/dossier-2>
     >>> IDossier(subdossier).start = datetime.today().date()
 
 
@@ -50,6 +53,9 @@ and tasks,
     ...     'opengever.task.task', title="Task1", task_type='correction', checkConstraints=False)
     >>> task1
     <Task at /plone/dossier-1/task-1>
+
+in plone.app.testing we need to commit the transaction before we can use the content with the browser.
+    >>> transaction.commit()
 
 
 is all supplied
@@ -133,6 +139,7 @@ We reset the dossier end date again for further testing below:
 
 Try to resolve the dossier
 --------------------------
+    >>> transaction.commit()
     >>> browser.open(dossier.absolute_url() + '/transition-resolve')
     >>> "The subdossier 'Subdossier' needs to be resolved manually." in browser.contents
     True
@@ -145,6 +152,7 @@ Therefore we set a valid date on one of the documents and try to resolve the dos
 
 Now let's try again:
 
+    >>> transaction.commit()
     >>> browser.open(dossier.absolute_url() + '/transition-resolve')
     >>> "The subdossier 'Subdossier' needs to be resolved manually." in browser.contents
     False
@@ -162,7 +170,7 @@ create a second document
     >>> doc2 = createContentInContainer(subdossier, 
     ...     'opengever.document.document', title="Doc2", checkConstraints=False)
     >>> doc2
-    <Document at ...>
+    <Document at /plone/dossier-1/dossier-2/document-2>
 
 default values
 --------------
@@ -173,6 +181,7 @@ check default value of date field
     >>> doc2.reindexObject()
 
 When dossier_end_date is empty, it should set the latest document_date as default
+    >>> transaction.commit()
     >>> browser.open('http://nohost/plone/dossier-1/transition-archive')
     >>> browser.getControl(name='form.widgets.dossier_enddate').value
     '12. Dezember 2012'
@@ -180,6 +189,7 @@ When dossier_end_date is empty, it should set the latest document_date as defaul
 When a dossier end is set and no document_date is later, it should set the dossier_date as default
     >>> IDossier(dossier).end = datetime(2015,1,1).date()
     >>> dossier.reindexObject()
+    >>> transaction.commit()
     >>> browser.open('http://nohost/plone/dossier-1/transition-archive')
     >>> browser.getControl(name='form.widgets.dossier_enddate').value
     '01. Januar 2015'
@@ -187,6 +197,7 @@ When a dossier end is set and no document_date is later, it should set the dossi
 else it should set the latest document_date as default
     >>> IDossier(dossier).end = datetime(2010, 01,01).date()
     >>> dossier.reindexObject()
+    >>> transaction.commit()
     >>> browser.open('http://nohost/plone/dossier-1/transition-archive')
     >>> browser.getControl(name='form.widgets.dossier_enddate').value
     '12. Dezember 2012'
@@ -207,6 +218,7 @@ check validators
     check if the subdossier has an older end date than the given end date
     >>> IDossier(subdossier).end = datetime(2015, 1, 1).date()
     >>> subdossier.reindexObject()
+    >>> transaction.commit()
     >>> browser.open('http://nohost/plone/dossier-1/transition-archive')
     >>> browser.getControl('filing prefix').value = ['government']
     >>> browser.getControl(name='form.widgets.dossier_enddate').value = 'December 12, 2010'

@@ -301,6 +301,7 @@ class DossierContainer(Container):
         and end_date set, and then be resolved. If resolving any of the
         subdossier fails, we'll throw and error and return.
         """
+
         ptool = getToolByName(self, 'plone_utils')
         wft = getToolByName(self, 'portal_workflow')
 

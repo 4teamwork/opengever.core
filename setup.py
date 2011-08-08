@@ -5,7 +5,7 @@ version = open('opengever/dossier/version.txt').read().strip()
 maintainer = 'Thomas Buchberger'
 
 tests_require = [
-    'collective.testcaselayer',
+    'plone.app.testing',
     'opengever.task',
     'opengever.document',
     'opengever.globalindex',

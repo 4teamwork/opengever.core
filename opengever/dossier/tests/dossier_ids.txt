@@ -8,23 +8,24 @@ The dossier ID needs to be in following format:
 
 Create a dossier:
 
-    >>> d1 = createContentInContainer(self.folder,
+	>>> portal = layer['portal']
+    >>> d1 = createContentInContainer(portal,
     ...                               'opengever.dossier.businesscasedossier')
     >>> d1
-    <DossierContainer at /plone/Members/test_user_1_/dossier-1>
+    <DossierContainer at /plone/dossier-3>
     >>> d1.id
-    'dossier-1'
+    'dossier-3'
     >>> getUtility(ISequenceNumber).get_number(d1)
-    1
+    3
 
 Create another dossier:
 
-    >>> d2 = createContentInContainer(self.folder,
+    >>> d2 = createContentInContainer(portal,
     ...                               'opengever.dossier.businesscasedossier')
     >>> d2
-    <DossierContainer at /plone/Members/test_user_1_/dossier-2>
+    <DossierContainer at /plone/dossier-4>
     >>> d2.id
-    'dossier-2'
+    'dossier-4'
     >>> getUtility(ISequenceNumber).get_number(d2)
-    2
+    4
 
