@@ -5,6 +5,8 @@ Changelog
 2.0b17
 ------
 
+* moved tests from collective.testcaselayer to plone.app.testing
+  [eschmutz]
 
 2.0b16
 ------
