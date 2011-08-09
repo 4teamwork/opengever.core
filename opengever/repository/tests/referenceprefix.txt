@@ -11,11 +11,18 @@ Since plone tests sucks, we need to re-register the reference number validator a
 
     >>> from zope.component import getMultiAdapter, provideAdapter
     >>> from z3c.form.interfaces import IValidator
-    >>> getMultiAdapter((self.portal, None, None,
+    >>> from plone.app.testing import setRoles, TEST_USER_ID, TEST_USER_NAME, TEST_USER_PASSWORD
+	>>> portal = layer['portal']
+	>>> app = layer['app']
+	>>> request = layer['request']
+    
+
+
+    >>> getMultiAdapter((portal, None, None,
     ...                  referenceprefix.IReferenceNumberPrefix['reference_number_prefix'], None), IValidator)
     <SimpleFieldValidator for IReferenceNumberPrefix['reference_number_prefix']>
     >>> provideAdapter(referenceprefix.ReferenceNumberPrefixValidator)
-    >>> getMultiAdapter((self.portal, None, None,
+    >>> getMultiAdapter((portal, None, None,
     ...                  referenceprefix.IReferenceNumberPrefix['reference_number_prefix'], None), IValidator)
     <ReferenceNumberPrefixValidator for IReferenceNumberPrefix['reference_number_prefix']>
 
@@ -26,7 +33,7 @@ When we create a dexterity content type::
     >>> fti.behaviors = (
     ...                  'opengever.repository.behaviors.referenceprefix.IReferenceNumberPrefix',
     ...                  )
-    >>> self.portal.portal_types._setObject('ReferenceFTI', fti)
+    >>> portal.portal_types._setObject('ReferenceFTI', fti)
     'ReferenceFTI'
     >>> from plone.dexterity.interfaces import IDexterityFTI
     >>> from zope.component import provideUtility
@@ -34,19 +41,16 @@ When we create a dexterity content type::
     >>> from plone.dexterity.schema import SCHEMA_CACHE
     >>> SCHEMA_CACHE.clear()
     >>> schema = fti.lookupSchema()
+	>>> import transaction
+	>>> transaction.commit()
 
 If we access the site as an admin TTW::
-
-    >>> from Products.Five.testbrowser import Browser
-    >>> browser = Browser()
+    >>> from plone.testing.z2 import Browser
+    >>> browser = Browser(app)
     >>> browser.handleErrors = False
-    >>> self.app.acl_users.userFolderAddUser('root', 'secret',
-    ...                                      ['Manager'], [])
-    >>> browser.addHeader('Authorization', 'Basic root:secret')
-
+	>>> browser.addHeader('Authorization', 'Basic %s:%s' % (TEST_USER_NAME, TEST_USER_PASSWORD,))
 
 We can see this type in the addable types at the root of the site::
-
     >>> browser.open('http://nohost/plone/folder_factories')
     >>> 'ReferenceFTI' in browser.contents
     True
@@ -64,7 +68,7 @@ We can see this type in the addable types at the root of the site::
     'http://nohost/plone/referencefti/view'
 
 checked the saved obj ::
-    >>> obj = self.portal.get('referencefti')
+    >>> obj = portal.get('referencefti')
     >>> obj
     <Item at ...>
     >>> referenceprefix.IReferenceNumberPrefixMarker.providedBy(obj)
@@ -107,7 +111,7 @@ It should be possbile to use alpha-numeric references::
     'http://nohost/plone/referencefti-2/view'
 
 Check the reference numbers of the objects::
-    >>> for obj in self.portal.objectValues():
+    >>> for obj in portal.objectValues():
     ...     if referenceprefix.IReferenceNumberPrefixMarker.providedBy(obj):
     ...         num = referenceprefix.IReferenceNumberPrefix(obj).reference_number_prefix
     ...         print (obj.Title(), num)

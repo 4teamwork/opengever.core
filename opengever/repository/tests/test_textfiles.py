@@ -1,23 +1,33 @@
-import unittest
-import os
+import unittest2 as unittest
+import doctest
+from plone.testing import layered
+from opengever.repository.testing import OPENGEVER_REPOSITORY_INTEGRATION_TESTING
 
-from Testing import ZopeTestCase as ztc
 
-from opengever.repository.tests.base import OpengeverRepositoryTestCase
+TESTFILES = (
+    'referenceprefix.txt',
+    'repositoryfolder.txt',
+    )
 
-HERE = os.path.dirname( os.path.abspath( __file__ ) )
+
+OPTIONFLAGS = (doctest.NORMALIZE_WHITESPACE |
+               doctest.ELLIPSIS |
+               doctest.REPORT_NDIFF)
+
 
 def test_suite():
-    txtfiles = [f for f in os.listdir(HERE)
-                if f.endswith('.txt') and
-                not f.startswith('.')]
-    return unittest.TestSuite(
-        [ztc.FunctionalDocFileSuite(
-                'tests/%s' % f, package='opengever.repository',
-                test_class=OpengeverRepositoryTestCase)
-         for f in txtfiles]
-        )
+
+    suite = unittest.TestSuite()
+
+    for testfile in TESTFILES:
+        suite.addTests([
+            layered(doctest.DocFileSuite(testfile,
+                    optionflags=OPTIONFLAGS),
+                    layer=OPENGEVER_REPOSITORY_INTEGRATION_TESTING),
+        ])
+
+    return suite
 
 if __name__ == '__main__':
     unittest.main(defaultTest='test_suite')
-    
+

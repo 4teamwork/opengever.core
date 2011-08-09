@@ -5,6 +5,9 @@ Changelog
 2.0a9
 -----
 
+* Tests now work with plone.app.testing
+  [ttschanz]
+
 
 2.0a8
 -----
