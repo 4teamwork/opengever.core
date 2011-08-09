@@ -3,8 +3,8 @@ Test views:
 
 imports and general stuff
     >>> from plone.dexterity.utils import createContentInContainer
-    >>> from Products.Five.testbrowser import Browser
-    >>> from Products.PloneTestCase.setup import portal_owner, default_password
+    >>> from plone.testing.z2 import Browser
+    >>> from plone.app.testing.interfaces import TEST_USER_NAME as portal_owner, TEST_USER_PASSWORD as default_password
     >>> from plone.namedfile.file import NamedFile
     >>> from plone.registry.interfaces import IRegistry
     >>> from zope.component import queryUtility
@@ -14,20 +14,28 @@ imports and general stuff
     >>> from Products.CMFPlone.tests.utils import MockMailHost
     >>> from zope.site.hooks import getSite
     >>> from Products.MailHost.interfaces import IMailHost
-    >>> browser = Browser()
+    >>> import transaction
+
+  	>>> app = layer['app']
+	>>> portal = layer['portal']
+    >>> browser = Browser(app)
     >>> browser.handleErrors = False
-    >>> self.setRoles(['Editor', 'Contributor', 'Owner'])
+
+	>>> app.acl_users.userFolderAddUser(portal_owner, default_password,['Manager','Contributor','Reviewer','Administrator'], [])
+	>>> browser.addHeader('Authorization', 'Basic '+portal_owner+':'+default_password )
+    >>> portal.manage_setLocalRoles(portal_owner, ['Owner','Editor','Contributor'])
 
 create document
-    >>> doc1 = createContentInContainer(self.folder, 'opengever.document.document', title=u'Document 1')
+    >>> doc1 = createContentInContainer(portal, 'opengever.document.document', title=u'Document 1')
 
 portal has to provide ISendableDocsContainer
-    >>> alsoProvides(self.portal, ISendableDocsContainer)
-    >>> ISendableDocsContainer.providedBy(self.portal)
+    >>> alsoProvides(portal, ISendableDocsContainer)
+    >>> ISendableDocsContainer.providedBy(portal)
     True
+	>>> transaction.commit()
 
 login
-    >>> browser.open('%s/login_form' % self.portal.absolute_url())
+    >>> browser.open('%s/login_form' % portal.absolute_url())
     >>> browser.getControl(name='__ac_name').value = portal_owner
     >>> browser.getControl(name='__ac_password').value = default_password
     >>> browser.getControl(name='submit').click()
@@ -41,7 +49,7 @@ Mock MailHost
 
 test form
     >>> data = 'paths:list=%s'% '/'.join(doc1.getPhysicalPath())
-    >>> browser.open('%s/send_documents' % self.portal.absolute_url(), data=data)
+    >>> browser.open('%s/send_documents' % portal.absolute_url(), data=data)
     >>> browser.getControl(name='form.widgets.subject').value = 'Test Betreff'
     >>> browser.getControl(name='form.widgets.message').value = 'Test Nachricht'
 
@@ -51,7 +59,7 @@ test form
     >>> 'You have to select a intern                             '\
     ... 'or enter a extern mail-addres' in browser.contents
     True
-    >>> browser.getControl(name='form.widgets.extern_receiver').value = 'info@4teamwork.ch'
+    >>> browser.getControl(name='form.widgets.extern_receiver').value = 'elio.schmutz@4teamwork.ch'
     >>> browser.getControl(name='form.buttons.button_send').click()
     >>> len(doc1.MailHost.messages)
     1
@@ -60,7 +68,8 @@ Test again (now document have a file)
     >>> mok_file1 = NamedFile(500000*'bla', filename=u'test.txt')
     >>> doc1.file = mok_file1
     >>> data = 'paths:list=%s'% '/'.join(doc1.getPhysicalPath())
-    >>> browser.open('%s/send_documents' % self.portal.absolute_url(), data=data)
+	>>> transaction.commit()
+    >>> browser.open('%s/send_documents' % portal.absolute_url(), data=data)
     >>> browser.getControl(name='form.widgets.subject').value = 'Test Betreff'
     >>> browser.getControl(name='form.widgets.message').value = 'Test Nachricht'
     >>> browser.getControl(name='form.widgets.extern_receiver').value = 'info@4teamwork.ch'

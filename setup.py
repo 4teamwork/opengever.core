@@ -5,7 +5,6 @@ version = open('opengever/mail/version.txt').read().strip()
 maintainer = 'Julian Infanger'
 
 tests_require = [
-    'collective.testcaselayer',
     'plone.app.testing',
     'opengever.dossier',
     'opengever.ogds.base[tests]',

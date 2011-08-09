@@ -133,6 +133,7 @@ class SendDocumentForm(form.Form):
     def send_button_handler(self, action):
         """ create and Send the Email """
         data, errors = self.extractData()
+
         if len(errors) == 0:
             mh = getToolByName(self.context, 'MailHost')
             contact_info = getUtility(IContactInformation)
@@ -140,7 +141,7 @@ class SendDocumentForm(form.Form):
             userid = userid.getId()
             intern_receiver = data.get('intern_receiver') or ()
             extern_receiver = data.get('extern_receiver') or ()
-
+            print extern_receiver
             addresses = intern_receiver + tuple(extern_receiver)
 
             # create the mail
@@ -164,6 +165,7 @@ class SendDocumentForm(form.Form):
 
             # let the user know that the mail was sent
             info = _(u'info_mails_sent', 'Mails sent')
+
             IStatusMessage(self.request).addStatusMessage(info, type='info')
             # and redirect to default view / tab
             return self.request.RESPONSE.redirect('./#documents-tab')

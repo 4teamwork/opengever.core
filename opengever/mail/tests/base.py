@@ -1,8 +1,7 @@
-from Products.PloneTestCase import ptc
-from opengever.mail.testing import mail_integration_layer
+from opengever.mail.testing import OPENGEVER_MAIL_INTEGRATION_TESTING
+import unittest2 as unittest
 
-
-class MailTestCase(ptc.PloneTestCase):
+class MailTestCase(unittest.TestCase):
     """Base class for integration tests."""
 
-    layer = mail_integration_layer
+    layer = OPENGEVER_MAIL_INTEGRATION_TESTING

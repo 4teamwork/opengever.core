@@ -5,6 +5,9 @@ Changelog
 2.0b9
 -----
 
+*  moved tests from collective.testcaselayer to plone.app.testing
+   [eschmutz]
+
 * Issue #1134 Test Gelb 2.0.3: Nicht korrekte Dateiendung beim Extrahieren eines Dokuments mit Umlaut aus Mail
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1134/
   use get_filename method from ftw.mail.utils, can handle non-ascii characters in the attachment title
