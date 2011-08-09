@@ -7,6 +7,7 @@ TESTFILES = (
     'resolve.txt',
     'dossier_ids.txt',
     'dossier.txt',
+    '../behaviors.txt',
     )
 
 
