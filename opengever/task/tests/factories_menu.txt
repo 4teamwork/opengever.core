@@ -6,13 +6,14 @@ to change the name of the task in the add-menu if we are in a task.
 
 import, roles ect.
 
+	>>> portal = layer['portal']
+	>>> app = layer['app']
+	>>> request = layer['request']
     >>> from plone.app.testing import TEST_USER_ID, setRoles
-    >>> setRoles(self.portal, TEST_USER_ID, ['Reviewer', 'Manager'])
-
+    >>> setRoles(portal, TEST_USER_ID, ['Reviewer', 'Manager'])
 
 Let the task be implicitly addable:
-
-    >>> self.portal.portal_types['opengever.task.task'].global_allow = True
+    >>> portal.portal_types['opengever.task.task'].global_allow = True
 
 
 Lets get the browser menu:
@@ -22,16 +23,16 @@ Lets get the browser menu:
 
     >>> menu = getUtility(IBrowserMenu,
     ...                   name='plone_contentmenu_factory',
-    ...                   context=self.portal)
+    ...                   context=portal)
 
     >>> menu
-    <ftw.contentmenu.menu.FactoriesMenu object at ...>
+	 <ftw.contentmenu.menu.FactoriesMenu object at ...>
 
 
 In the folder the task should be addable as "Task" since we have made it
 implicitly addable:
 
-    >>> items = menu.getMenuItems(self.folder, self.app.REQUEST)
+    >>> items = menu.getMenuItems(portal, request)
     >>> titles = [item['title'] for item in items]
     >>> u'Task' in titles
     True
@@ -42,7 +43,7 @@ implicitly addable:
 Let's create a task within the folder:
 
     >>> from plone.dexterity.utils import createContentInContainer
-    >>> task = createContentInContainer(self.folder, 'opengever.task.task',
+    >>> task = createContentInContainer(portal, 'opengever.task.task',
     ...                                 checkConstraints=False,
     ...                                 title='Task one',
     ...                                 issuer=TEST_USER_ID,
@@ -53,7 +54,7 @@ Let's create a task within the folder:
 
 
 Check the addables:
-    >>> items = menu.getMenuItems(task, self.app.REQUEST)
+    >>> items = menu.getMenuItems(task, request)
     >>> titles = [item['title'] for item in items]
     >>> u'Task' in titles
     False

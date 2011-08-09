@@ -1,7 +1,5 @@
-from Products.PloneTestCase.ptc import PloneTestCase
 from opengever.ogds.base import contact_info
 from opengever.task.response import Base
-from opengever.task.tests.layer import Layer
 from plone.dexterity.utils import createContent, addContentToContainer
 from z3c.form import testing
 from zope.annotation.interfaces import IAttributeAnnotatable
@@ -11,7 +9,9 @@ from zope.event import notify
 from zope.globalrequest import setRequest
 from zope.interface import alsoProvides, implements
 from zope.lifecycleevent import ObjectCreatedEvent, ObjectAddedEvent
-
+import unittest2 as unittest
+from opengever.task.testing import OPENGEVER_TASK_INTEGRATION_TESTING
+import transaction
 
 class MockedContactInformation(contact_info.ContactInformation):
     implements(contact_info.IContactInformation)
@@ -20,11 +20,11 @@ class MockedContactInformation(contact_info.ContactInformation):
         pass
 
 
-class TestResponse(PloneTestCase):
+class TestResponse(unittest.TestCase):
 
-    layer = Layer
+    layer = OPENGEVER_TASK_INTEGRATION_TESTING
 
-    def afterSetUp(self):
+    def setUp(self):
         # Set up z3c.form defaults
         testing.setupFormDefaults()
         # mock tentacle
@@ -33,20 +33,24 @@ class TestResponse(PloneTestCase):
         createContent('opengever.task.task')
         task = createContent('opengever.task.task', title='Task')
         notify(ObjectCreatedEvent(task))
-        task = addContentToContainer(self.folder, task, checkConstraints=False)
+        task = addContentToContainer(self.layer['portal'], task, checkConstraints=False)
         notify(ObjectAddedEvent(task))
+        transaction.commit()
 
     def test_base_view(self):
-        view = Base(self.folder.get('task-1'), self.app.REQUEST)
+        view = Base(self.layer['portal'].get('task-1'), self.layer['request'])
         self.assertEquals([], view.responses())
 
     def test_add_form(self):
-        request = self.app.REQUEST
+        request = self.layer['request']
         request.LANGUAGE = 'de'
         setRequest(request)
         alsoProvides(request, IAttributeAnnotatable)
-        task1 = self.folder.get('task-1')
+        task1 = self.layer['portal'].get('task-1')
         view = getMultiAdapter((task1, request),
                                 name=u'addresponse').__of__(task1)
         view.update()
         self.failUnless('form.buttons.save' in view.render())
+
+def test_suite():
+    return unittest.defaultTestLoader.loadTestsFromName(__name__)

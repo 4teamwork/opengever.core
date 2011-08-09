@@ -14,6 +14,10 @@ Imports / globals:
     >>> from zope.event import notify
     >>> from zope.intid.interfaces import IIntIds
     >>> from zope.lifecycleevent import ObjectModifiedEvent
+	>>> from plone.app.testing import TEST_USER_ID
+	>>> portal = layer['portal']
+	>>> app = layer['app']
+	>>> request = layer['request']
 
     >>> intids = getUtility(IIntIds)
 
@@ -22,8 +26,9 @@ Lets assume we have a related item. For simplicity we also create
 a task, since tasks are the only dexterity type we now for shure
 we should have it here:
 
+    >>> folder = portal['Members'][TEST_USER_ID]
     >>> related = createContentInContainer(
-    ...     self.folder, 'opengever.task.task',
+    ...     folder, 'opengever.task.task',
     ...     title=u'Related',
     ...     checkConstraints=False)
     >>> related
@@ -35,7 +40,7 @@ we should have it here:
 Let's also check the local roles on the folder, which is our container
 and acts like a dossier:
 
-    >>> self.folder.get_local_roles()
+    >>> folder.get_local_roles()
     (('test_user_1_', ('Owner',)),)
 
 
@@ -43,7 +48,7 @@ Now let's create a new task with a relation to our "related" task:
 
     >>> relation = RelationValue(intids.getId(related))
     >>> task2 = createContentInContainer(
-    ...     self.folder, 'opengever.task.task',
+    ...     folder, 'opengever.task.task',
     ...     checkConstraints=False,
     ...     task_type=u'direct-execution',
     ...     title=u'Task 2', responsible=u'foo',
@@ -57,7 +62,7 @@ Now check the local roles:
 
     >>> task2.get_local_roles()
     (('foo', ('Editor',)), ('test_user_1_', ('Owner',)))
-    >>> self.folder.get_local_roles()
+    >>> folder.get_local_roles()
     (('foo', ('Contributor',)), ('test_user_1_', ('Owner',)))
     >>> related.get_local_roles()
     (('foo', ('Reader',)), ('test_user_1_', ('Owner',)))
@@ -68,7 +73,7 @@ which should set Editor role on the related item:
 
     >>> relation2 = RelationValue(intids.getId(related))
     >>> task3 = createContentInContainer(
-    ...     self.folder, 'opengever.task.task',
+    ...     folder, 'opengever.task.task',
     ...     checkConstraints=False,
     ...     task_type=u'comment',
     ...     title=u'Task 3', responsible=u'bar',
@@ -80,7 +85,7 @@ which should set Editor role on the related item:
 
     >>> task3.get_local_roles()
     (('bar', ('Editor',)), ('test_user_1_', ('Owner',)))
-    >>> self.folder.get_local_roles()
+    >>> folder.get_local_roles()
     (('bar', ('Contributor',)), ('foo', ('Contributor',)), ('test_user_1_', ('Owner',)))
     >>> related.get_local_roles()
     (('bar', ('Editor', 'Reader')), ('foo', ('Reader',)), ('test_user_1_', ('Owner',)))
@@ -93,7 +98,7 @@ When updating, it should also update the related items:
 
     >>> task3.get_local_roles()
     (('bar', ('Editor',)), ('new', ('Editor',)), ('test_user_1_', ('Owner',)))
-    >>> self.folder.get_local_roles()
+    >>> folder.get_local_roles()
     (('bar', ('Contributor',)), ('foo', ('Contributor',)), ('new', ('Contributor',)), ('test_user_1_', ('Owner',)))
     >>> related.get_local_roles()
     (('bar', ('Editor', 'Reader')), ('foo', ('Reader',)), ('new', ('Editor', 'Reader')), ('test_user_1_', ('Owner',)))

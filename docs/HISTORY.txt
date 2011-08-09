@@ -5,6 +5,9 @@ Changelog
 2.0b18
 ------
 
+* Moved Tests from PloneTestCase to plone.app.testing
+  [ttschanz]
+
 * Issue #1079 Falsche weiterleitung beim erstellen eines Dokuments in einem Task.
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1079/
   added task specific DocumentRedirector View

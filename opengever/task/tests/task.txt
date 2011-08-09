@@ -6,11 +6,15 @@ This test checks the resolve rules of a task.
     >>> from opengever.base.interfaces import ISequenceNumber
     >>> from zope.component import getUtility
     >>> from plone.app.testing import TEST_USER_ID, setRoles
-    >>> setRoles(self.portal, TEST_USER_ID, ['Reviewer', 'Manager'])
+	>>> portal = layer['portal']
+	>>> app = layer['app']
+	>>> request = layer['request']
+
+    >>> setRoles(portal, TEST_USER_ID, ['Reviewer', 'Manager'])
 
 Create a Task:
 
-    >>> task1 = createContentInContainer(folder, 'opengever.task.task',
+    >>> task1 = createContentInContainer(portal, 'opengever.task.task',
     ...     issuer=TEST_USER_ID, responsible=TEST_USER_ID)
     >>> task1
     <Task ...>

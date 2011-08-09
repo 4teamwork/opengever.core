@@ -16,8 +16,11 @@ between tasks.
 
 We need the client id to be configured properly:
 
+	>>> portal = layer['portal']
+	>>> app = layer['app']
+	>>> request = layer['request']
     >>> CLIENT_ID = u'm1'
-    >>> registry = getUtility(IRegistry, context=self.portal)
+    >>> registry = getUtility(IRegistry, context=portal)
     >>> registry.registerInterface(IClientConfiguration)
     >>> registry.forInterface(IClientConfiguration).client_id = CLIENT_ID
 
@@ -33,14 +36,14 @@ Let's create some tasks:
 
     >>> t1 = createContent('opengever.task.task', title='Task one')
     >>> notify(ObjectCreatedEvent(t1))
-    >>> t1 = addContentToContainer(self.folder,
+    >>> t1 = addContentToContainer(portal,
     ...                            t1,
     ...                            checkConstraints=False)
     >>> notify(ObjectAddedEvent(t1))
 
     >>> t2 = createContent('opengever.task.task', title='Task two')
     >>> notify(ObjectCreatedEvent(t2))
-    >>> t2 = addContentToContainer(self.folder,
+    >>> t2 = addContentToContainer(portal,
     ...                            t2,
     ...                            checkConstraints=False)
     >>> notify(ObjectAddedEvent(t2))

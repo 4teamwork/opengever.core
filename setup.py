@@ -6,13 +6,13 @@ maintainer = 'Philippe Gross'
 
 tests_require = [
     'lxml >= 2.1.1',
-    'collective.testcaselayer',
     'z3c.form [test]',
     'z3c.saconfig',
     'plone.app.testing',
     'opengever.document',
     'opengever.contact',
     'ftw.tabbedview',
+    'ftw.contentmenu',
     ]
 
 setup(name='opengever.task',

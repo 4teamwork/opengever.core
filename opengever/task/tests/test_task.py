@@ -2,7 +2,6 @@ from datetime import datetime
 from opengever.task.adapters import IResponseContainer
 from opengever.task.response import Response
 from opengever.task.task import ITask
-from opengever.task.tests.layer import Layer
 from plone.dexterity.interfaces import IDexterityFTI
 from plone.dexterity.utils import createContent, addContentToContainer
 from plone.dexterity.utils import createContentInContainer
@@ -15,7 +14,8 @@ from zope.component import queryUtility
 from zope.event import notify
 from zope.intid.interfaces import IIntIds
 from zope.lifecycleevent import ObjectCreatedEvent, ObjectAddedEvent
-import unittest
+import unittest2 as unittest
+from opengever.task.testing import OPENGEVER_TASK_INTEGRATION_TESTING
 
 
 def create_task(parent, **kwargs):
@@ -29,7 +29,7 @@ def create_task(parent, **kwargs):
 
 class TestTaskIntegration(PloneTestCase):
 
-    layer = Layer
+    layer = OPENGEVER_TASK_INTEGRATION_TESTING
 
     def afterSetUp(self):
         self.portal.portal_types['opengever.task.task'].global_allow = True
@@ -110,7 +110,7 @@ class TestTaskIntegration(PloneTestCase):
     def test_task_date_subscriber(self):
         t1 = create_task(self.folder, title='Task 1')
         wft = t1.portal_workflow
-        
+
         self.failUnless(t1.expectedStartOfWork == None)
         wft.doActionFor(t1, 'task-transition-open-in-progress')
         self.failUnless(t1.expectedStartOfWork.date() == datetime.now().date())

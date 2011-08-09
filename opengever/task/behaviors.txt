@@ -73,7 +73,6 @@ We also expect this behavior to be a form field provider. Let's verify that.
 
 Let's create a content object that has this behavior enabled and check that
 it works.
-
     >>> doc = Container('doc')
     >>> task_adapter = ITransition(doc, None)
     >>> task_adapter is not None
