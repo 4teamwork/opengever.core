@@ -6,7 +6,7 @@
     <br />
     <ul class="member_listing" tal:condition="view/members">
         <li tal:repeat="member view/members">
-            <img tal:attributes="src string:${here/portal_url}/user.gif" alt="" />
+            <span class="function-user"></span>
             <span tal:content="structure member" />
         </li>
     </ul>
