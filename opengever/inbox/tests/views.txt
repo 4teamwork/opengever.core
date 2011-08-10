@@ -153,7 +153,6 @@ user not in group
     >>> ftc = fw1.restrictedTraverse('forwarding_transition_controller')
     >>> ftc.is_accept_possible()
     False
-	>>> import pdb; pdb.set_trace()
     >>> ftc.is_assign_to_dossier_possible()
     False
     >>> ftc.is_close_possible()

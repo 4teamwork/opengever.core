@@ -61,7 +61,7 @@ class ForwardingTransitionController(BrowserView):
         ogview = self.context.restrictedTraverse('@@opengever_view')
         stateview = self.context.restrictedTraverse(
             '@@plone_portal_state')
-        import pdb; pdb.set_trace( )
+
         # Manager user can assign always:
         if 'Manager' in stateview.member().getRolesInContext(
             self.context):

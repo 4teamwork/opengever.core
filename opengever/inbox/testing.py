@@ -27,10 +27,12 @@ class InboxFunctionalLayer(PloneSandboxLayer):
          xmlconfig.file('testing.zcml', package=tests,
              context=configurationContext)
 
+         import ftw.contentmenu
+         xmlconfig.file('overrides.zcml', package=ftw.contentmenu,
+             context=configurationContext)
 
     def setUpPloneSite(self, portal):
 
-        # Install the example.conference product
         applyProfile(portal, 'opengever.inbox:default')
         applyProfile(portal, 'opengever.document:default')
         applyProfile(portal, 'opengever.task:default')
