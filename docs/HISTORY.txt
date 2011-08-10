@@ -8,6 +8,9 @@ Changelog
 * Optionflages are now used in tests
   [ttschanz]
 
+* Added sprite function-lock to byline.pt
+  [eschmutz]
+
 * moved tests from collective.testcaselayer to plone.app.testing
   [phgross]
 

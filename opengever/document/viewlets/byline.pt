@@ -4,12 +4,10 @@
      tal:condition="view/show">
   <span class="" tal:attributes="class string:byline-icon ${view/css_class_from_obj}"
 ></span>
-  <span id="lock-icon"
-        tal:define="lock_icon view/locked_icon"
-        tal:condition="lock_icon">
-    <img tal:replace="structure lock_icon" />
-  </span>
-
+<span id="lock-icon" class="function-lock"
+      tal:define="lock_icon view/locked_icon"
+      tal:condition="lock_icon">
+</span>
   <tal:name tal:condition="context/document_author">
     <span class="documentAuthor"
           i18n:translate="label_by_author">
