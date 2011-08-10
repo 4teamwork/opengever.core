@@ -21,9 +21,7 @@ imports and general stuff
     >>> browser = Browser(app)
     >>> browser.handleErrors = False
 
-	>>> app.acl_users.userFolderAddUser(portal_owner, default_password,['Manager','Contributor','Reviewer','Administrator'], [])
-	>>> browser.addHeader('Authorization', 'Basic '+portal_owner+':'+default_password )
-    >>> portal.manage_setLocalRoles(portal_owner, ['Owner','Editor','Contributor'])
+    >>> portal.manage_setLocalRoles('mail-test', ['Owner','Editor','Contributor'])
 
 create document
     >>> doc1 = createContentInContainer(portal, 'opengever.document.document', title=u'Document 1')
@@ -36,16 +34,18 @@ portal has to provide ISendableDocsContainer
 
 login
     >>> browser.open('%s/login_form' % portal.absolute_url())
-    >>> browser.getControl(name='__ac_name').value = portal_owner
-    >>> browser.getControl(name='__ac_password').value = default_password
+    >>> browser.getControl(name='__ac_name').value = 'mail-test'
+    >>> browser.getControl(name='__ac_password').value = 'demo09'
     >>> browser.getControl(name='submit').click()
 
 Mock MailHost
     >>> mockmailhost = MockMailHost('MailHost')
     >>> doc1.MailHost = mockmailhost
+    >>> portal.MailHost = mockmailhost
     >>> sm = getSite().getSiteManager()
     >>> sm.registerUtility(component=mockmailhost,
     ...                    provided=IMailHost)
+	>>> transaction.commit()
 
 test form
     >>> data = 'paths:list=%s'% '/'.join(doc1.getPhysicalPath())
@@ -59,8 +59,9 @@ test form
     >>> 'You have to select a intern                             '\
     ... 'or enter a extern mail-addres' in browser.contents
     True
-    >>> browser.getControl(name='form.widgets.extern_receiver').value = 'elio.schmutz@4teamwork.ch'
+    >>> browser.getControl(name='form.widgets.extern_receiver').value = 'info@4teamwork.ch'
     >>> browser.getControl(name='form.buttons.button_send').click()
+    [u'info@4teamwork.ch']
     >>> len(doc1.MailHost.messages)
     1
 
@@ -73,17 +74,20 @@ Test again (now document have a file)
     >>> browser.getControl(name='form.widgets.subject').value = 'Test Betreff'
     >>> browser.getControl(name='form.widgets.message').value = 'Test Nachricht'
     >>> browser.getControl(name='form.widgets.extern_receiver').value = 'info@4teamwork.ch'
-
-max size to smal
+	
+max size to small
     >>> registry = queryUtility(IRegistry)
     >>> reg_proxy = registry.forInterface(ISendDocumentConf)
     >>> reg_proxy.max_size = 1
+    >>> transaction.commit()
     >>> browser.getControl(name='form.buttons.button_send').click()
     >>> 'The files you selected are larger than the maximum size' in browser.contents
     True
 
 max size ok
     >>> reg_proxy.max_size = 5
+    >>> transaction.commit()
     >>> browser.getControl(name='form.buttons.button_send').click()
+    [u'info@4teamwork.ch']
     >>> len(doc1.MailHost.messages)
     2

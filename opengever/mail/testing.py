@@ -10,7 +10,7 @@ from plone.app.testing import IntegrationTesting
 from zope.configuration import xmlconfig
 from opengever.ogds.base.setuphandlers import _create_example_client
 from opengever.ogds.base.setuphandlers import _create_example_user
-from plone.app.testing.interfaces import SITE_OWNER_NAME
+from plone.app.testing import setRoles, TEST_USER_ID, login
 from opengever.ogds.base.setuphandlers import create_sql_tables
 
 
@@ -54,7 +54,7 @@ class MailIntegrationLayer(PloneSandboxLayer):
 
         _create_example_user(
             session, portal,
-            SITE_OWNER_NAME,
+            'mail-test',
             {'firstname': 'Test',
              'lastname': 'User',
              'email': 'test.user@local.ch',
@@ -65,12 +65,11 @@ class MailIntegrationLayer(PloneSandboxLayer):
         # configure client ID
         registry = getUtility(IRegistry )
         registry['opengever.ogds.base.interfaces.'
-                 'IClientConfiguration.client_id'] = u'plone'
+                 'IClientConfiguration.client_id'] = u'client1'
         registry['opengever.base.interfaces.IBaseClientID.client_id'] = u'OG'
 
-        from plone.app.testing import setRoles, TEST_USER_ID
         setRoles(portal, TEST_USER_ID, ['Member', 'Contributor', 'Editor'])
-
+        login(portal, 'mail-test')
     def tearDownPloneSite(self, portal):
          session = create_session()
          for model in MODELS:
