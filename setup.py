@@ -5,7 +5,7 @@ version = open('opengever/inbox/version.txt').read().strip()
 maintainer = 'Thomas Buchberger'
 
 tests_require = [
-    'collective.testcaselayer',
+    'plone.app.testing',
     'opengever.ogds.base[tests]',
     'opengever.document',
     'opengever.task',
@@ -51,7 +51,7 @@ setup(name='opengever.inbox',
         'opengever.trash',
         'opengever.base',
         'opengever.task',
-        
+
         # -*- Extra requirements: -*-
         ],
       tests_require=tests_require,

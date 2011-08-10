@@ -5,24 +5,32 @@ imports and general stuff
     >>> from datetime import datetime
     >>> from plone.dexterity.utils import createContentInContainer
     >>> from Products.CMFCore.utils import getToolByName
-    >>> from Products.Five.testbrowser import Browser
+    >>> from plone.testing.z2 import Browser
     >>> from Products.PloneTestCase.setup import portal_owner, default_password
+    >>> from plone.app.testing.interfaces import TEST_USER_ID as portal_owner_id ,TEST_USER_NAME as portal_owner, TEST_USER_PASSWORD as default_password
+	>>> import transaction
+    >>>	from plone.app.testing import setRoles
     >>> import urllib
 
-    >>> self.setRoles(['Editor', 'Contributor', 'Owner'])
+	>>> app = layer['app']
+	>>> portal = layer['portal']
+    >>> browser = Browser(app)
 
+    >>> setRoles(portal, portal_owner_id, ['Owner','Editor','Contributor'])
+	>>> browser.addHeader('Authorization', 'Basic %s:%s' % (portal_owner, default_password,))
+	
 create inbox and some documents for tests
 -----------------------------------------
-    >>> inbox = createContentInContainer(self.portal, 'opengever.inbox.inbox', title=u'inbox')
+    >>> inbox = createContentInContainer(portal, 'opengever.inbox.inbox', title=u'inbox')
     >>> doc1 = createContentInContainer(inbox, 'opengever.document.document',title=u'Document for a forwarding')
     >>> doc2 = createContentInContainer(inbox, 'opengever.document.document',title=u'second Document for a forwarding')
+    >>> transaction.commit()
 
 start browser testing and create fakerequest
 --------------------------------------------
 browser configuration
-    >>> browser = Browser()
     >>> browser.handleErrors = False
-    >>> portal_url = self.portal.absolute_url()
+    >>> portal_url = portal.absolute_url()
     >>> wft = getToolByName(portal, 'portal_workflow')
 
 login
@@ -77,9 +85,10 @@ test assign to dossier
 
 create dossier
     >>> dossier = createContentInContainer(
-    ...     self.portal, 'opengever.dossier.businesscasedossier',
+    ...     portal, 'opengever.dossier.businesscasedossier',
     ...     title=u'testdossier', responsible='portal_owner')
     >>> dossier_path = '/'.join(dossier.getPhysicalPath())
+    >>> transaction.commit()
 
 assign to dossier
     >>> browser.open(

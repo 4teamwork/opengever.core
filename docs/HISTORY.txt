@@ -5,6 +5,9 @@ Changelog
 2.0b9
 -----
 
+* moved tests from collective.testcaselayer to plone.app.testing
+  [eschmutz]
+
 * Added missing dependency on opengever.task
   [lgraf]
 

@@ -5,22 +5,30 @@ imports and general stuff
     >>> from datetime import datetime
     >>> from plone.dexterity.utils import createContentInContainer
     >>> from Products.CMFCore.utils import getToolByName
-    >>> from Products.Five.testbrowser import Browser
-    >>> from Products.PloneTestCase.setup import portal_owner, default_password
+    >>> from plone.testing.z2 import Browser
     >>> import urllib
+    >>>	from plone.app.testing import setRoles
+    >>>	from plone.app.testing import logout, login
+    >>> from plone.app.testing.interfaces import TEST_USER_ID as portal_owner_id ,TEST_USER_NAME as portal_owner, TEST_USER_PASSWORD as default_password
     >>> from opengever.globalindex.interfaces import ITaskQuery
     >>> from opengever.globalindex.model.task import Task
     >>> from opengever.ogds.base.model.client import Client
     >>> from opengever.ogds.base.model.user import User, Group
     >>> from zope.component import getUtility
     >>> from opengever.ogds.base.utils import get_client_id
+	>>> import transaction
+	
+	>>> app = layer['app']
+	>>> portal = layer['portal']
+    >>> browser = Browser(app)
 
-    >>> self.setRoles(['Editor', 'Contributor', 'Owner'])
+    >>> setRoles(portal, portal_owner_id, ['Owner','Editor','Contributor'])
+	>>> browser.addHeader('Authorization', 'Basic %s:%s' % (portal_owner, default_password,))
 
 create content:
 ===============
     >>> inbox = createContentInContainer(
-    ...     self.portal, 'opengever.inbox.inbox', title=u'eingangskorb')
+    ...     portal, 'opengever.inbox.inbox', title=u'eingangskorb')
     >>> view = inbox.restrictedTraverse('tabbedview_view-overview')
 
     >>> doc1 = createContentInContainer(
@@ -125,10 +133,10 @@ all actions should not be in enabled_actions
 
 test AccessInboxAllowed:
 ========================
-    >>> self.logout()
+    >>> logout()
     >>> inbox.restrictedTraverse('access-inbox-allowed')() is None
     True
-    >>> self.login()
+    >>> login(portal, portal_owner)
     >>> inbox.restrictedTraverse('access-inbox-allowed')()
     1
 
@@ -145,6 +153,7 @@ user not in group
     >>> ftc = fw1.restrictedTraverse('forwarding_transition_controller')
     >>> ftc.is_accept_possible()
     False
+	>>> import pdb; pdb.set_trace()
     >>> ftc.is_assign_to_dossier_possible()
     False
     >>> ftc.is_close_possible()
@@ -153,7 +162,7 @@ user not in group
     False
 
 wrong client_id
-    >>> self.login('portal_owner')
+    >>> login(portal, portal_owner)
     >>> ftc.is_accept_possible()
     False
     
