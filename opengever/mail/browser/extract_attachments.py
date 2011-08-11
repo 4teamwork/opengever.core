@@ -1,9 +1,15 @@
-import os.path
-
 from Acquisition import aq_inner, aq_parent
 from five import grok
+from ftw.mail.mail import IMail
+from ftw.mail.utils import get_attachments
+from ftw.mail.utils import get_filename
+from ftw.mail.utils import remove_attachments
+from ftw.table.interfaces import ITableGenerator
+from opengever.mail import _
+from opengever.mail.behaviors import IMailInAddressMarker
 from plone.dexterity.utils import createContentInContainer
 from plone.dexterity.utils import iterSchemata
+from plone.i18n.normalizer.interfaces import IIDNormalizer
 from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
 from Products.CMFPlone.utils import getToolByName
 from Products.statusmessages.interfaces import IStatusMessage
@@ -14,15 +20,7 @@ from zope.component import getUtility
 from zope.component import queryMultiAdapter
 from zope.intid.interfaces import IIntIds
 from zope.schema import getFieldsInOrder
-
-from ftw.mail.mail import IMail
-from ftw.mail.utils import get_attachments
-from ftw.mail.utils import remove_attachments
-from ftw.mail.utils import get_filename
-from ftw.table.interfaces import ITableGenerator
-from opengever.mail import _
-from opengever.mail.behaviors import IMailInAddressMarker
-
+import os.path
 
 from plone.namedfile import HAVE_BLOBS
 if HAVE_BLOBS:
@@ -48,21 +46,16 @@ def content_type_helper(item, content_type):
 
     site = getSite()
     mtr = getToolByName(site, 'mimetypes_registry')
-    purl = getToolByName(site, 'portal_url')
-
-    attrs = {}
+    normalize = getUtility(IIDNormalizer).normalize
 
     types = mtr.lookup(content_type)
     if types:
-        attrs['src'] = os.path.join(purl(), types[0].icon_path)
-        attrs['alt'] = attrs['title'] = types[0].name()
+        css = "mimetype-%s" % normalize(types[0].minor())
 
     else:
-        attrs['src'] = os.path.join(purl(), 'file_icon.gif')
-        attrs['alt'] = attrs['title'] = 'File'
+        css = "mimetype-plain"
 
-    return '<img %s />' % ' '.join(['%s="%s"' % (k, v)
-                                    for k, v in attrs.items()])
+    return '<span class=%s />' % css
 
 
 def downloadable_filename_helper(context):
