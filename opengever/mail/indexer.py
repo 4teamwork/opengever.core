@@ -3,7 +3,6 @@ from five import grok
 from ftw.mail import utils
 from ftw.mail.mail import IMail
 from plone.indexer import indexer
-from opengever.tabbedview.helper import readable_ogds_author
 
 #indexes
 @indexer(IMail)
@@ -36,10 +35,12 @@ def receipt_date(obj):
     return DateTime(document_date)
 grok.global_adapter(receipt_date, name='receipt_date')
 
+
 @indexer(IMail)
 def sortable_author(obj):
-    """Return the normalized author name for sortable_author indexer."""
+    """Return the normalized author name for sortable_author indexer.
+    For mails, this currently equals the document_author.
+    """
     author = document_author(obj)
-    readable_author = readable_ogds_author(obj, author())
-    return readable_author
+    return author
 grok.global_adapter(sortable_author, name='sortable_author')
