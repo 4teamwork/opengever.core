@@ -5,6 +5,9 @@ Changelog
 2.0b17
 ------
 
+* Fixed tests
+  [eschmutz]
+
 * Added sprite function-lock to byline.pt
   [eschmutz]
 

@@ -62,7 +62,10 @@ class DossierFunctionalLayer(PloneSandboxLayer):
             ('client1_users',
             'client1_inbox_users'))
 
-
+        # configure client ID
+        registry = getUtility(IRegistry, context=portal)
+        client = registry.forInterface(IClientConfiguration)
+        client.client_id = u'client1'
 
         from plone.app.testing import setRoles, TEST_USER_ID
         setRoles(portal, TEST_USER_ID, ['Member', 'Contributor', 'Editor'])
