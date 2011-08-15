@@ -5,6 +5,9 @@ Changelog
 2.0b9
 -----
 
+* fixed encoding in sortable_author indexer, should always return unicode
+  [phgross]
+
 * adjust extract_attachment functionality, the opengever.document use now NameBlobFiles
   [phgross]
 
