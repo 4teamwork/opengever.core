@@ -5,6 +5,11 @@ Changelog
 2.0c6
 -----
 
+* Issue #709 Korrekturen Standardablauf
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/709
+  fixed ResponsibleVocabularyFactory, the interactive_users shouldn't get the UsersAndInboxesVocabulary
+  [phgross]
+
 
 2.0c5
 -----

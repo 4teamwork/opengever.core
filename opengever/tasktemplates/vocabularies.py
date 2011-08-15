@@ -65,6 +65,7 @@ class ResponsibleVocabularyFactory(UsersAndInboxesVocabularyFactory):
         if self.get_client() == u'interactive_users':
             for e in interactive_users(self.context):
                 yield e
-        for e in UsersAndInboxesVocabularyFactory.key_value_provider(self):
-            yield e
+        else:
+            for e in UsersAndInboxesVocabularyFactory.key_value_provider(self):
+                yield e
 
