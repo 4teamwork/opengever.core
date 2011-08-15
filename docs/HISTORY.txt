@@ -5,6 +5,9 @@ Changelog
 2.0b9
 -----
 
+* adjust extract_attachment functionality, the opengever.document use now NameBlobFiles
+  [phgross]
+
 *  added sprites for extract_attachments.py and mail.py
    overrides the original mail-view in ftw.mail.
    [eschmutz]

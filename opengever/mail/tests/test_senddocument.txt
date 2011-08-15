@@ -5,7 +5,7 @@ imports and general stuff
     >>> from plone.dexterity.utils import createContentInContainer
     >>> from plone.testing.z2 import Browser
     >>> from plone.app.testing.interfaces import TEST_USER_NAME as portal_owner, TEST_USER_PASSWORD as default_password
-    >>> from plone.namedfile.file import NamedFile
+    >>> from plone.namedfile.file import NamedBlobFile
     >>> from plone.registry.interfaces import IRegistry
     >>> from zope.component import queryUtility
     >>> from opengever.mail.interfaces import ISendDocumentConf
@@ -66,7 +66,7 @@ test form
     1
 
 Test again (now document have a file)
-    >>> mok_file1 = NamedFile(500000*'bla', filename=u'test.txt')
+    >>> mok_file1 = NamedBlobFile(500000*'bla', filename=u'test.txt')
     >>> doc1.file = mok_file1
     >>> data = 'paths:list=%s'% '/'.join(doc1.getPhysicalPath())
 	>>> transaction.commit()

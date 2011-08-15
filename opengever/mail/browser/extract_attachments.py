@@ -24,7 +24,7 @@ import os.path
 
 from plone.namedfile import HAVE_BLOBS
 if HAVE_BLOBS:
-    from plone.namedfile import NamedFile as NamedFile
+    from plone.namedfile import NamedBlobFile as NamedFile
 else:
     from plone.namedfile import NamedFile
 
