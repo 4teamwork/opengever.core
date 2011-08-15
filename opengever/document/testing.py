@@ -5,6 +5,7 @@ from plone.app.testing import applyProfile
 from plone.app.testing import FunctionalTesting
 from plone.app.testing import PloneSandboxLayer
 from plone.app.testing import PLONE_FIXTURE
+from plone.testing import z2
 from plone.registry.interfaces import IRegistry
 from zope.component import getUtility
 from zope.configuration import xmlconfig
@@ -20,6 +21,11 @@ class DocumentFunctionalLayer(PloneSandboxLayer):
         from opengever.ogds.base import setuphandlers
         setuphandlers.setup_scriptable_plugin = lambda *a, **kw: None
 
+        import plone.app.versioningbehavior
+        xmlconfig.file('configure.zcml', package=plone.app.versioningbehavior,
+                        context=configurationContext)
+        z2.installProduct(app, 'plone.app.versioningbehavior')
+
         from opengever import document
         xmlconfig.file('configure.zcml', package=document,
             context=configurationContext)
@@ -32,6 +38,7 @@ class DocumentFunctionalLayer(PloneSandboxLayer):
 
 
     def setUpPloneSite(self, portal):
+        applyProfile(portal, 'plone.app.versioningbehavior:default')
         applyProfile(portal, 'opengever.document:default')
         applyProfile(portal, 'opengever.ogds.base:default')
         applyProfile(portal, 'opengever.base:default')
@@ -57,6 +64,11 @@ class DocumentFunctionalLayer(PloneSandboxLayer):
 
         from plone.app.testing import setRoles, TEST_USER_ID
         setRoles(portal, TEST_USER_ID, ['Member', 'Contributor', 'Editor'])
+
+        # savepoint "support" for sqlite
+        # We need savepoint support for version retrieval with CMFEditions.
+        import zope.sqlalchemy.datamanager
+        zope.sqlalchemy.datamanager.NO_SAVEPOINT_SUPPORT = set([])
 
 
 OPENGEVER_DOCUMENT_FIXTURE = DocumentFunctionalLayer()

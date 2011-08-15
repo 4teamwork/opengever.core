@@ -5,6 +5,10 @@ Changelog
 2.0b15
 ------
 
+* Implements blob support for alle the file fields
+  Use NamedBlobFile instead of NamedFile
+  [phgross]
+
 * Added [blobs] extra to dependency on plone.namedfile
   [lgraf]
 

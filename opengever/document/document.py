@@ -19,7 +19,7 @@ from plone.directives import form, dexterity
 from plone.directives.dexterity import DisplayForm
 from plone.i18n.normalizer.interfaces import IIDNormalizer
 from plone.indexer import indexer
-from plone.namedfile.field import NamedFile
+from plone.namedfile.field import NamedBlobFile
 from plone.supermodel.interfaces import FIELDSETS_KEY
 from plone.supermodel.model import Fieldset
 from plone.z3cform.textlines.textlines import TextLinesFieldWidget
@@ -136,7 +136,7 @@ class IDocumentSchema(form.Schema):
 
 #    dexteritytextindexer.searchable('file')
     form.primary('file')
-    file = NamedFile(
+    file = NamedBlobFile(
         title = _(u'label_file', default='File'),
         description = _(u'help_file', default=''),
         required = False,
@@ -159,21 +159,21 @@ class IDocumentSchema(form.Schema):
         )
 
     form.omitted('archival_file')
-    archival_file = NamedFile(
+    archival_file = NamedBlobFile(
         title = _(u'label_archival_file', default='Archival File'),
         description = _(u'help_archival_file', default=''),
         required = False,
         )
 
     form.omitted('thumbnail')
-    thumbnail = NamedFile(
+    thumbnail = NamedBlobFile(
         title = _(u'label_thumbnail', default='Thumbnail'),
         description = _(u'help_thumbnail', default=''),
         required = False,
         )
 
     form.omitted('preview')
-    preview = NamedFile(
+    preview = NamedBlobFile(
         title = _(u'label_preview', default='Preview'),
         description = _(u'help_preview', default=''),
         required = False,

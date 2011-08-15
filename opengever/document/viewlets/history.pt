@@ -3,7 +3,7 @@
      xmlns:tal="http://xml.zope.org/namespaces/tal"
      class="contentHistory"
      i18n:domain="opengever.document"
-     tal:define="history view/fullHistory;"
+     tal:define="history view/revisionHistory;"
      tal:condition="history">
   <dl id="history" class="collapsible collapsedOnLoad">
     <dt class="collapsibleHeader" i18n:translate="label_history">History</dt>

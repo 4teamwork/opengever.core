@@ -4,7 +4,7 @@ from zope.interface import Invalid
 
 from plone.dexterity.interfaces import IDexterityFTI
 from plone.dexterity.utils import createContentInContainer
-from plone.namedfile.file import NamedFile
+from plone.namedfile.file import NamedBlobFile
 
 from opengever.document.testing import OPENGEVER_DOCUMENT_INTEGRATION_TESTING
 
@@ -41,13 +41,13 @@ class TestDocumentIntegration(unittest.TestCase):
         portal.invokeFactory('opengever.document.document', 'document1')
         d1 = portal['document1']
         field = IDocumentSchema['file']
-        monk_file = NamedFile('bla bla', filename=u'test.txt')
+        monk_file = NamedBlobFile('bla bla', filename=u'test.txt')
         field.set(d1, monk_file)
         self.assertTrue(field.get(d1).data == 'bla bla')
 
     def test_digitally_available(self):
         portal = self.layer['portal']
-        monk_file = NamedFile('bla bla', filename=u'test.txt')
+        monk_file = NamedBlobFile('bla bla', filename=u'test.txt')
         d1 = createContentInContainer(portal, 'opengever.document.document',
             file=monk_file)
         self.assertTrue(d1.digitally_available==True)
