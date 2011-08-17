@@ -5,6 +5,9 @@ Changelog
 2.0b13
 ------
 
+* Fix tests
+  [eschmutz]
+
 * Made sure `principal` is encoded when used in an SA query
   [lgraf]
 
