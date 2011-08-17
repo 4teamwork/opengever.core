@@ -27,11 +27,13 @@ from Products.statusmessages.interfaces import IStatusMessage
 from z3c.form.browser import checkbox
 from zc.relation.interfaces import ICatalog
 from zope import schema
+from zope.app.component.hooks import getSite
 from zope.app.intid.interfaces import IIntIds
 from zope.component import getUtility, queryMultiAdapter, getAdapter
 from zope.interface import invariant, Invalid, Interface
 from zope.lifecycleevent.interfaces import IObjectCreatedEvent
 from zope.lifecycleevent.interfaces import IObjectModifiedEvent
+from zope.lifecycleevent.interfaces import IObjectCopiedEvent
 import logging
 from opengever.tabbedview.helper import readable_ogds_author
 
@@ -434,6 +436,18 @@ def sync_title_and_filename_handler(doc, event):
         filename = doc.file.filename
         doc.file.filename = normalize_method(doc.title) + \
             filename[filename.rfind('.'):]
+
+
+
+@grok.subscribe(IDocumentSchema, IObjectCopiedEvent)
+def set_copyname(doc, event):
+    """Documents wich are copied, should be renamed to copy of filename
+    """
+
+    doc.title = u'%s %s' % (
+        getSite().translate(_('copy_of', default="copy of")),
+        doc.title
+    )
 
 
 class View(dexterity.DisplayForm):

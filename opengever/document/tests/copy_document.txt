@@ -1,3 +1,0 @@
-# right now is no special handling for copying documents implemented. Maybe later ( Kopie von).
-
-

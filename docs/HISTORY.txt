@@ -5,6 +5,11 @@ Changelog
 2.0b15
 ------
 
+* Issue #1012 Feedback Fokus: Dokument: kopieren
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1012
+  implements eventhandler which add 'copy of' to the filename of copied documents
+  [phgross]
+
 * Implements blob support for alle the file fields
   Use NamedBlobFile instead of NamedFile
   [phgross]

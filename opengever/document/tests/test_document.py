@@ -11,13 +11,14 @@ from opengever.document.testing import OPENGEVER_DOCUMENT_INTEGRATION_TESTING
 from opengever.document.document import IDocumentSchema
 import unittest2 as unittest
 
+
 class TestDocumentIntegration(unittest.TestCase):
 
     layer = OPENGEVER_DOCUMENT_INTEGRATION_TESTING
 
     def test_adding(self):
         portal = self.layer['portal']
-        portal.invokeFactory( 'opengever.document.document', 'document1')
+        portal.invokeFactory('opengever.document.document', 'document1')
         d1 = portal['document1']
         self.failUnless(IDocumentSchema.providedBy(d1))
 
@@ -76,6 +77,19 @@ class TestDocumentIntegration(unittest.TestCase):
         self.failUnless(view())
         tabbed_view = d1.restrictedTraverse('@@tabbed_view')
         self.failUnless(tabbed_view())
+
+    def test_copying(self):
+        portal = self.layer['portal']
+        portal.invokeFactory(
+            'opengever.document.document',
+            'document1', title="Testdocument")
+        d1 = portal['document1']
+
+        cb = portal.manage_copyObjects(d1.id)
+        portal.manage_pasteObjects(cb)
+        self.assertTrue(
+            portal['copy_of_document1'].title == u'copy of Testdocument')
+
 
 def test_suite():
     return unittest.defaultTestLoader.loadTestsFromName(__name__)

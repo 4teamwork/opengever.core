@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2011-07-07 12:53+0000\n"
+"POT-Creation-Date: 2011-08-17 13:19+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -63,7 +63,7 @@ msgstr ""
 msgid "Document"
 msgstr ""
 
-#: ./opengever/document/document.py:497
+#: ./opengever/document/document.py:520
 msgid "No file in in this version"
 msgstr ""
 
@@ -119,19 +119,24 @@ msgstr ""
 msgid "cancel_back"
 msgstr ""
 
-#. Default: "You don't select a file and document is also not preserved in paper_form,                please correct it."
-#: ./opengever/document/document.py:215
+#. Default: "copy of"
+#: ./opengever/document/document.py:448
+msgid "copy_of"
+msgstr ""
+
+#. Default: "You don't select a file and document is also not                 preserved in paper_form, please correct it."
+#: ./opengever/document/document.py:214
 msgid "error_file_and_preserved_as_paper"
 msgstr ""
 
 #. Default: "Either the title or the file is required."
-#: ./opengever/document/document.py:204
+#: ./opengever/document/document.py:203
 msgid "error_title_or_file_required"
 msgstr ""
 
 #. Default: "Common"
 #: ./opengever/document/behaviors.py:39
-#: ./opengever/document/document.py:68
+#: ./opengever/document/document.py:67
 msgid "fieldset_common"
 msgstr ""
 
@@ -149,7 +154,7 @@ msgstr ""
 msgid "help_archival_file"
 msgstr ""
 
-#: ./opengever/document/document.py:136
+#: ./opengever/document/document.py:135
 msgid "help_author"
 msgstr ""
 
@@ -162,32 +167,32 @@ msgstr ""
 msgid "help_delivery_date"
 msgstr ""
 
-#: ./opengever/document/document.py:95
+#: ./opengever/document/document.py:94
 msgid "help_description"
 msgstr ""
 
 #. Default: "Is the Document Digital Availabe"
-#: ./opengever/document/document.py:151
+#: ./opengever/document/document.py:150
 msgid "help_digitally_available"
 msgstr ""
 
-#: ./opengever/document/document.py:117
+#: ./opengever/document/document.py:116
 msgid "help_document_date"
 msgstr ""
 
-#: ./opengever/document/document.py:126
+#: ./opengever/document/document.py:125
 msgid "help_document_type"
 msgstr ""
 
-#: ./opengever/document/document.py:144
+#: ./opengever/document/document.py:143
 msgid "help_file"
 msgstr ""
 
-#: ./opengever/document/document.py:111
+#: ./opengever/document/document.py:110
 msgid "help_foreign_reference"
 msgstr ""
 
-#: ./opengever/document/document.py:102
+#: ./opengever/document/document.py:101
 msgid "help_keywords"
 msgstr ""
 
@@ -240,13 +245,13 @@ msgid "label_archival_file"
 msgstr ""
 
 #. Default: "Author"
-#: ./opengever/document/document.py:135
+#: ./opengever/document/document.py:134
 #: ./opengever/document/document_templates/overview.pt:22
 msgid "label_author"
 msgstr ""
 
 #. Default: "by ${author}"
-#: ./opengever/document/viewlets/byline.pt:17
+#: ./opengever/document/viewlets/byline.pt:15
 msgid "label_by_author"
 msgstr ""
 
@@ -282,13 +287,13 @@ msgid "label_delivery_date"
 msgstr ""
 
 #. Default: "Description"
-#: ./opengever/document/document.py:94
+#: ./opengever/document/document.py:93
 #: ./opengever/document/document_templates/overview.pt:30
 msgid "label_description"
 msgstr ""
 
 #. Default: "Digital Available"
-#: ./opengever/document/document.py:150
+#: ./opengever/document/document.py:149
 #: ./opengever/document/document_templates/overview.pt:45
 #: ./opengever/document/document_templates/view.pt:70
 msgid "label_digitally_available"
@@ -300,25 +305,25 @@ msgid "label_document"
 msgstr ""
 
 #. Default: "Document Date"
-#: ./opengever/document/document.py:116
+#: ./opengever/document/document.py:115
 #: ./opengever/document/document_templates/overview.pt:14
 msgid "label_document_date"
 msgstr ""
 
 #. Default: "Document Type"
-#: ./opengever/document/document.py:125
+#: ./opengever/document/document.py:124
 #: ./opengever/document/document_templates/overview.pt:18
 msgid "label_document_type"
 msgstr ""
 
 #. Default: "File"
-#: ./opengever/document/document.py:143
+#: ./opengever/document/document.py:142
 #: ./opengever/document/document_templates/overview.pt:38
 msgid "label_file"
 msgstr ""
 
 #. Default: "Foreign Reference"
-#: ./opengever/document/document.py:110
+#: ./opengever/document/document.py:109
 #: ./opengever/document/document_templates/overview.pt:34
 msgid "label_foreign_reference"
 msgstr ""
@@ -329,7 +334,7 @@ msgid "label_history"
 msgstr ""
 
 #. Default: "Keywords"
-#: ./opengever/document/document.py:101
+#: ./opengever/document/document.py:100
 msgid "label_keywords"
 msgstr ""
 
@@ -366,7 +371,7 @@ msgid "label_receivers"
 msgstr ""
 
 #. Default: "Reference Number:"
-#: ./opengever/document/viewlets/byline.pt:51
+#: ./opengever/document/viewlets/byline.pt:49
 msgid "label_reference_number"
 msgstr ""
 
@@ -381,12 +386,12 @@ msgid "label_reset"
 msgstr ""
 
 #. Default: "Sequence Number:"
-#: ./opengever/document/viewlets/byline.pt:41
+#: ./opengever/document/viewlets/byline.pt:39
 msgid "label_sequence_number"
 msgstr ""
 
 #. Default: "from"
-#: ./opengever/document/viewlets/byline.pt:27
+#: ./opengever/document/viewlets/byline.pt:25
 msgid "label_start_byline"
 msgstr ""
 
@@ -401,7 +406,7 @@ msgid "label_thumbnail"
 msgstr ""
 
 #. Default: "Title"
-#: ./opengever/document/document.py:89
+#: ./opengever/document/document.py:88
 msgid "label_title"
 msgstr ""
 
@@ -426,7 +431,7 @@ msgid "referenced_documents"
 msgstr ""
 
 #. Default: "expired"
-#: ./opengever/document/viewlets/byline.pt:36
+#: ./opengever/document/viewlets/byline.pt:34
 msgid "time_expired"
 msgstr ""
 
