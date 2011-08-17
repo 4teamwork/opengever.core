@@ -72,3 +72,8 @@ setattr(widget.NamedFileWidget,
         'filename_encoded',
         Foo.filename_encoded)
 LOGGER.info('Monkey patched plone.formwidget.namedfile.widget.NameFileWidget.filename_encoded')
+
+import Products.LDAPUserFolder
+
+Products.LDAPUserFolder.utils.encoding = 'utf-8'
+LOGGER.info('Monkey patched Products.LDAPUserFolder.utils.encoding (utf-8)')
