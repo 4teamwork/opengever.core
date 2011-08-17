@@ -161,7 +161,6 @@ class Documents(OpengeverCatalogListingTab):
                        'create_task',
                        'trashed',
                        'send_documents',
-                       'copy_documents_to_remote_client',
                        'move_items',
                        'copy_items',
                        ]

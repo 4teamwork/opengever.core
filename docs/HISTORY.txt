@@ -5,6 +5,12 @@ Changelog
 2.0b17
 ------
 
+* Issue #1077 Aktion "In eigenes Dossier kopieren" bei der Dokumentenliste entfernen
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1077
+  removed copy_documents_to_remote_client from the document listing in a dossier,
+  should only displayed in the document listing of a task
+  [phgross]
+
 * Issue #1133 Test Gelb 2.0.3: Uebersicht / Meine Dossiers   bei ARP, Sicht Olivier Debenath
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1133
   removed types attribut in the MyDossier View, use the dossier standard object_provides filter instead
