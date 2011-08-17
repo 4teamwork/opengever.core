@@ -90,7 +90,7 @@
     </action>
 
     <action action_id="create_successor"
-            visible="True"
+            visible="False"
             title="Create successor task"
             category="object_buttons"
             url_expr="string:${object_url}/@@create-successor-task"

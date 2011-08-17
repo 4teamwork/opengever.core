@@ -5,6 +5,11 @@ Changelog
 2.0b18
 ------
 
+* Issue #1059 Folgeaufgabe ausblenden
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1059
+  disable the create successor task action
+  [phgross]
+
 * Moved Tests from PloneTestCase to plone.app.testing
   [ttschanz]
 
