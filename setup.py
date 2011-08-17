@@ -50,6 +50,7 @@ setup(name='opengever.base',
         'collective.vdexvocabulary',
         'collective.dexteritytextindexer',
         'izug.basetheme',
+        'Products.LDAPUserFolder',
         # -*- Extra requirements: -*-
         ],
       tests_require=tests_require,
