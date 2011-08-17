@@ -5,6 +5,8 @@ Changelog
 2.0b8
 -----
 
+* Fix tests
+  [eschmutz]
 
 2.0b7
 -----
