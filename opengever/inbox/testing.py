@@ -74,6 +74,13 @@ class InboxFunctionalLayer(PloneSandboxLayer):
         #
         # setRoles(portal, TEST_USER_ID, ['Member', 'Contributor', 'Editor'])
 
+        # savepoint "support" for sqlite
+        # We need savepoint support for version retrieval with CMFEditions.
+        import zope.sqlalchemy.datamanager
+        zope.sqlalchemy.datamanager.NO_SAVEPOINT_SUPPORT = set([])
+
+
+
     def tearDownPloneSite(self, portal):
         session = create_session()
         for model in MODELS:
