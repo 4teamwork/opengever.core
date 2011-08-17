@@ -438,7 +438,6 @@ def sync_title_and_filename_handler(doc, event):
             filename[filename.rfind('.'):]
 
 
-
 @grok.subscribe(IDocumentSchema, IObjectCopiedEvent)
 def set_copyname(doc, event):
     """Documents wich are copied, should be renamed to copy of filename
@@ -446,8 +445,7 @@ def set_copyname(doc, event):
 
     doc.title = u'%s %s' % (
         getSite().translate(_('copy_of', default="copy of")),
-        doc.title
-    )
+        doc.title)
 
 
 class View(dexterity.DisplayForm):
