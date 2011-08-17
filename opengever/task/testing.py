@@ -81,6 +81,12 @@ class TaskFunctionalLayer(PloneSandboxLayer):
         portal.invokeFactory('Folder', 'Members')
         portal['Members'].invokeFactory('Folder', TEST_USER_ID)
 
+        # savepoint "support" for sqlite
+        # We need savepoint support for version retrieval with CMFEditions.
+        import zope.sqlalchemy.datamanager
+        zope.sqlalchemy.datamanager.NO_SAVEPOINT_SUPPORT = set([])
+
+
 
 OPENGEVER_TASK_FIXTURE = TaskFunctionalLayer()
 OPENGEVER_TASK_INTEGRATION_TESTING = FunctionalTesting(

@@ -5,6 +5,9 @@ Changelog
 2.0b18
 ------
 
+* Fix tests
+  [eschmutz]
+
 * Issue #1059 Folgeaufgabe ausblenden
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1059
   disable the create successor task action
