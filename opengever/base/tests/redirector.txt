@@ -6,6 +6,7 @@ named window in the browser.
     >>> from plone.app.customerize import registration
     >>> from zope.publisher.interfaces.browser import IBrowserRequest
     >>> from zope.viewlet.interfaces import IViewlet
+    >>> from opengever.base.redirector import REMOTE_CLIENT_KEY
 
     >>> request = self.app.REQUEST
     >>> if 'SESSION' not in request.keys():
@@ -54,3 +55,29 @@ Only redirect once:
     >>> viewlet.render()
     ''
 
+Check remote_client functionality:
+    >>> request[REMOTE_CLIENT_KEY]='1'
+    >>> viewlet = viewlets[0].factory(self.portal, request, {}, {})
+    >>> print viewlet.render().strip()
+    <script type="text/javascript">
+    jq(function() {
+        jq('#portal-column-content').expose({closeOnClick: false, closeOnEsc: false});
+        jq('#portal-breadcrumbs').append('<span style="float:right"><a href="javascript:window.close()">Fenster schliessen</a></span')
+    });
+    </script>
+
+both functionality should work together
+    >>> redirector.redirect('http://www.google.ch', target='named-window')
+    >>> request[REMOTE_CLIENT_KEY]='1'
+    >>> print viewlet.render().strip()
+    <script type="text/javascript">
+    jq(function() {
+        window.setTimeout("window.open('http://www.google.ch', 'named-window');", 0);
+    });
+    </script>
+    <script type="text/javascript">
+    jq(function() {
+        jq('#portal-column-content').expose({closeOnClick: false, closeOnEsc: false});
+        jq('#portal-breadcrumbs').append('<span style="float:right"><a href="javascript:window.close()">Fenster schliessen</a></span')
+    });
+    </script>
