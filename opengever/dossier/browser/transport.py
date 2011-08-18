@@ -3,6 +3,7 @@ from Products.statusmessages.interfaces import IStatusMessage
 from plone.dexterity.interfaces import IDexterityContent
 from five import grok
 from opengever.base.interfaces import IRedirector
+from opengever.base.redirector import REMOTE_CLIENT_KEY
 from opengever.dossier import _
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.ogds.base.interfaces import ITransporter
@@ -274,6 +275,7 @@ class CopyDocumentsToRemoteClientForm(z3c.form.form.Form, WizardFormMixin):
                 trans.transport_to(obj, cid, target)
             redirect_to = os.path.join(client.public_url,
                                        target, '#documents')
+            redirect_to = '%s?%s=1' % (redirect_to, REMOTE_CLIENT_KEY)
             redirector = IRedirector(self.request)
             redirector.redirect(redirect_to, target='_blank')
             return self.request.RESPONSE.redirect(
