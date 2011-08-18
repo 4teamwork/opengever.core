@@ -79,7 +79,6 @@ FIELD_MAPPING = {'opengever-dossier-behaviors-dossier-IDossierMarker': [
                 ],
                 'opengever-task-task-ITask':[
                     'issuer',
-                    'task_responsible',
                     'deadline_1',
                     'deadline_2',
                     'task_type',
@@ -240,14 +239,6 @@ class IAdvancedSearch(directives_form.Schema):
         required = False,
     )
 
-    directives_form.widget(responsible=AutocompleteFieldWidget)
-    task_responsible = schema.Choice(
-        title=_(u"label_task_responsible", default="Responsible"),
-        description =_(u"help_task_responsible", default=""),
-        vocabulary=u'opengever.ogds.base.UsersAndInboxesVocabulary',
-        required = False,
-        )
-
     deadline_1 = schema.Date(
         title=_('label_deadline', default='Deadline'),
         description=_('help_start', default=''),
@@ -284,8 +275,6 @@ class AdvancedSearchForm(directives_form.Form):
 
     fields = field.Fields(IAdvancedSearch)
     fields['responsible'].widgetFactory[INPUT_MODE] \
-        = AutocompleteFieldWidget
-    fields['task_responsible'].widgetFactory[INPUT_MODE] \
         = AutocompleteFieldWidget
     fields['checked_out'].widgetFactory[INPUT_MODE] \
         = AutocompleteFieldWidget
@@ -339,11 +328,6 @@ class AdvancedSearchForm(directives_form.Form):
             if data.get('searchableText'):
                 params = '%s&SearchableText=%s' % (params, data.get('searchableText').encode('utf-8'))
 
-            # when search by task_responsible,
-            # show only tasks which are assigned to this client
-            if data.get('task_responsible', None):
-                params = '%s&assigned_client=%s' %(params, get_client_id())
-
             for field in FIELD_MAPPING.get(
                     data.get('object_provides').replace('.','-')):
                 if data.get(field, None):
@@ -370,7 +354,6 @@ class AdvancedSearchForm(directives_form.Form):
                     else:
                         params = '%s&%s=%s' %(params, field, urllib.quote(data.get(field).encode('utf-8')))
 
-            params = params.replace('task_responsible', 'responsible')
             params = params.replace('task_review_state', 'review_state')
             params = params.replace('dossier_review_state', 'review_state')
 

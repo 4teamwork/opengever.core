@@ -5,6 +5,10 @@ Changelog
 2.0b10
 ------
 
+* Issue #712 Advanced Search korrigieren und testen
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/712
+  removed field task_responsible and changed translations
+
 
 2.0b9
 -----

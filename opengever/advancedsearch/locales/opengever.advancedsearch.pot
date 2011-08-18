@@ -119,10 +119,6 @@ msgstr ""
 msgid "help_start_1"
 msgstr ""
 
-#: ./opengever/advancedsearch/advanced_search.py:246
-msgid "help_task_responsible"
-msgstr ""
-
 #: ./opengever/advancedsearch/advanced_search.py:265
 msgid "help_tasktyp"
 msgstr ""
@@ -233,11 +229,6 @@ msgstr ""
 
 #: ./opengever/advancedsearch/advanced_search.py:125
 msgid "label_start_1"
-msgstr ""
-
-#. Default: "Responsible"
-#: ./opengever/advancedsearch/advanced_search.py:245
-msgid "label_task_responsible"
 msgstr ""
 
 #: ./opengever/advancedsearch/advanced_search.py:264
