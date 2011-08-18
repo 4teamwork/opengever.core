@@ -6,7 +6,12 @@ maintainer = 'Philippe Gross'
 
 tests_require = [
     'plone.app.testing',
-    'opengever.ogds.base [tests]'
+    'opengever.ogds.base [tests]',
+    'opengever.base',
+    'opengever.document',
+    'opengever.dossier',
+    'opengever.contact',
+    'opengever.task'
     ]
 
 setup(name='opengever.advancedsearch',
