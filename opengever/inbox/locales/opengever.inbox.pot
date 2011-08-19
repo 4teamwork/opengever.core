@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2011-04-21 09:08+0000\n"
+"POT-Creation-Date: 2011-08-19 08:11+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -34,51 +34,60 @@ msgid "YearFolder"
 msgstr ""
 
 #. Default: "Cancel"
-#: ./opengever/inbox/response.py:222
+#: ./opengever/inbox/response.py:227
 msgid "cancel"
 msgstr ""
 
 #. Default: "Error: Please select at least one document to forward"
-#: ./opengever/inbox/forwarding.py:83
+#: ./opengever/inbox/forwarding.py:105
 msgid "error_no_document_selected"
 msgstr ""
 
 #. Default: "Common"
-#: ./opengever/inbox/inbox.py:14
+#: ./opengever/inbox/inbox.py:16
 msgid "fieldset_common"
 msgstr ""
 
-#: ./opengever/inbox/inbox.py:22
+#: ./opengever/inbox/inbox.py:24
 msgid "help_inbox_group"
 msgstr ""
 
+#: ./opengever/inbox/forwarding.py:54
+msgid "help_responsible"
+msgstr ""
+
 #. Default: "The successor forwarding was created."
-#: ./opengever/inbox/response.py:279
+#: ./opengever/inbox/response.py:287
 msgid "info_created_successor_forwarding"
 msgstr ""
 
 #. Default: "The forwarding was moved to the yearfolder ${year}"
-#: ./opengever/inbox/response.py:211
+#: ./opengever/inbox/response.py:216
 msgid "info_forwarding_move_to_yearfolder"
 msgstr ""
 
 #. Default: "Inbox Group"
-#: ./opengever/inbox/inbox.py:21
+#: ./opengever/inbox/inbox.py:23
 msgid "label_inbox_group"
 msgstr ""
 
+#. Default: "Responsible"
+#: ./opengever/inbox/forwarding.py:53
+msgid "label_responsible"
+msgstr ""
+
 #. Default: "Target dossier"
-#: ./opengever/inbox/response.py:46
+#: ./opengever/inbox/response.py:45
 msgid "label_target_dossier"
 msgstr ""
 
 #. Default: "Save"
-#: ./opengever/inbox/response.py:85
+#: ./opengever/inbox/response.py:86
 msgid "save"
 msgstr ""
 
 #. Default: "Closed ${year}"
-#: ./opengever/inbox/response.py:181
+#: ./opengever/inbox/response.py:186
 msgid "yearfolder_title"
 msgstr ""
 

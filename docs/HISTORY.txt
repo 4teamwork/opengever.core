@@ -5,6 +5,11 @@ Changelog
 2.0b9
 -----
 
+* Issue #1135 Textanpassung bei Weiterleitung
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1135/
+  changed helptext for the responsible field in the forwarding form
+  [phgross]
+
 * Fix tests
   [eschmutz]
 
