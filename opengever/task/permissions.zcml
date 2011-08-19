@@ -8,4 +8,9 @@
         title="opengever.task: Add task"
         />
 
+    <permission
+        id="opengever.task.EditTask"
+        title="opengever.task: Edit task"
+        />
+
 </configure>

@@ -5,6 +5,13 @@ Changelog
 2.0b18
 ------
 
+* Issue #1072 Task workflow ueberarbeiten und korrigieren
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1072
+  - added Edit Task permission
+  - adjust workflow (allow allways adding and editing documents)
+  - customize editform for protecting
+  [phgross]
+
 * Fix tests
   [eschmutz]
 

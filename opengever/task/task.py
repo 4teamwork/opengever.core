@@ -2,6 +2,7 @@ from Acquisition import aq_parent, aq_inner
 from collective import dexteritytextindexer
 from datetime import datetime, timedelta
 from five import grok
+from ftw.datepicker.widget import DatePickerFieldWidget
 from ftw.tabbedview.browser.listing import ListingView
 from ftw.table import helper
 from ftw.table.basesource import BaseTableSource
@@ -115,12 +116,14 @@ class ITask(form.Schema):
         required = True,
         )
 
+    form.widget(deadline = DatePickerFieldWidget)
     deadline = schema.Date(
         title=_(u"label_deadline", default=u"Deadline"),
         description=_(u"help_deadline", default=u""),
         required = True,
         )
 
+    form.widget(deadline = DatePickerFieldWidget)
     date_of_completion = schema.Date(
         title=_(u"label_date_of_completion", default=u"Date of completion"),
         description=_(u"help_date_of_completion", default=u""),
@@ -153,6 +156,7 @@ class ITask(form.Schema):
         required=False,
         )
 
+    form.widget(deadline = DatePickerFieldWidget)
     expectedStartOfWork = schema.Date(
         title =_(u"label_expectedStartOfWork", default="Start with work"),
         description = _(u"help_expectedStartOfWork", default=""),
@@ -524,6 +528,12 @@ class AddForm(dexterity.AddForm):
         if not self.request.get('form.widgets.issuer', None):
             self.request.set('form.widgets.issuer', [member.getId()])
         super(AddForm, self).update()
+
+
+class EditForm(dexterity.EditForm):
+    """Standard EditForm, just require the Edit Task permission"""
+    grok.context(ITask)
+    grok.require('opengever.task.EditTask')
 
 
 @indexer(ITask)

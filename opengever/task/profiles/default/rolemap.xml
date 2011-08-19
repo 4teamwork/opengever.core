@@ -5,5 +5,10 @@
       <role name="Owner"/>
       <role name="Contributor"/>
     </permission>
+    <permission name="opengever.task: Edit task" acquire="True">
+      <role name="Manager"/>
+      <role name="Owner"/>
+      <role name="Contributor"/>
+    </permission>
   </permissions>
 </rolemap>

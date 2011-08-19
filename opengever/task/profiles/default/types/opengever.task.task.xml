@@ -66,7 +66,7 @@
             category="object"
             url_expr="string:${object_url}/edit"
             condition_expr="not:object/@@plone_lock_info/is_locked_for_current_user|python:True">
-        <permission value="Modify portal content"/>
+       <permission value="opengever.task: Edit task"/>
     </action>
 
     <action action_id="addresponse"
