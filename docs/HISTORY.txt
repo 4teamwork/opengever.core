@@ -5,6 +5,10 @@ Changelog
 2.0b13
 ------
 
+* Monkey patching plone.formwidget.contenttree so the URLs of relatedItems
+  are correct in a virtual hosting environment.
+  [lgraf]
+
 * Monkey patching Products.LDAPUserFolder.utils.encoding to use `utf-8`
   [lgraf]
 
