@@ -76,7 +76,7 @@ msgstr "Auftraggeber auswählen"
 
 #: ./opengever/advancedsearch/advanced_search.py:112
 msgid "help_portal_type"
-msgstr "Wählen Sie den Inhaltstyp aus, nachdem gesucht werden soll.\nDurchsucht werden nur Inhalte die sich im aktuellen Mandanten befinden."
+msgstr "Wählen Sie den Inhaltstyp aus, nachdem gesucht werden soll.\nDurchsucht werden nur Inhalte, die sich im aktuellen Mandanten befinden."
 
 #: ./opengever/advancedsearch/advanced_search.py:180
 msgid "help_receipt_date"
