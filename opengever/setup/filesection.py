@@ -10,7 +10,7 @@ from collective.transmogrifier.utils import defaultMatcher
 class NamedFileCreatorSection(object):
     classProvides(ISectionBlueprint)
     implements(ISection)
-    
+
     def __init__(self, transmogrifier, name, options, previous):
         self.previous = previous
         self.context = transmogrifier.context
@@ -24,7 +24,7 @@ class NamedFileCreatorSection(object):
         for item in self.previous:
             filename = resolvePackageReferenceOrFile(item[self.key])
             file_ = open(filename, 'r')
-            
+
             keys = item.keys()
             pathkey = self.pathkey(*keys)[0]
             typekey = self.typekey(*keys)[0]
@@ -34,10 +34,10 @@ class NamedFileCreatorSection(object):
             obj = self.context.unrestrictedTraverse(path.lstrip('/'), None)
             if obj is None:         # path doesn't exist
                 yield item; continue
-            
+
             if not file_:
                 yield item; continue
-            
+
             # Set file field
             fti = getUtility(IDexterityFTI, name=item[typekey])
             schema = fti.lookupSchema()
