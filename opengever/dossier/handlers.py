@@ -24,15 +24,17 @@ def deactivate_subdossiers(dossier, event):
             wft.doActionFor(subdossier.getObject(), 'dossier-transition-deactivate')
 
 @grok.subscribe(IDossierMarker, IObjectModifiedEvent)
-def reindex_contained_documents(dossier, event):
+def reindex_contained_objects(dossier, event):
     """When a subdossier is modified, we update the ``containing_subdossier``
-    index of all contained documents so they don't show a stale title in the
-    ``subdossier`` column
+    index of all contained objects (documents, mails and tasks) so they don't 
+    show an outdated title in the ``subdossier`` column
     """
     parent = aq_parent(aq_inner(dossier))
     is_subdossier = IDossierMarker.providedBy(parent)
     if is_subdossier:
-        documents = dossier.getFolderContents(
-            contentFilter={'portal_type': 'opengever.document.document'})
-        for doc in documents:
-            doc.getObject().reindexObject(idxs=['containing_subdossier'])
+        objects = dossier.getFolderContents(
+            contentFilter={'portal_type': ['opengever.document.document',
+                                           'opengever.task.task',
+                                           'ftw.mail.mail']})
+        for obj in objects:
+            obj.getObject().reindexObject(idxs=['containing_subdossier'])
