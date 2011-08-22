@@ -9,6 +9,10 @@ Changelog
 2.0b6
 -----
 
+* Prevent template files from being deleted during site creation 
+  (Pass file data to field constructor, not file descriptor)
+  [lgraf]
+
 * added special user (ogadmin) in opengever client creation, is used during the standard content creation
   [phgross]
 
