@@ -8,6 +8,9 @@ Changelog
 * Update `containing_subdossier` index for all contained objects when a dossier is renamed
   [lgraf]
 
+* Fixed tests
+  [eschmutz]
+
 * Don't allow dossiers to be resolved anymore if tasks are in state 'task-state-resolved'
   [lgraf]
 

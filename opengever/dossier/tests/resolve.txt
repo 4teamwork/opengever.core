@@ -106,7 +106,8 @@ it should only be possible resolving a dossier when all tasks are resolved
     'task-state-open'
     >>> dossier.is_all_closed()
     False
-    >>> wft.doActionFor(task1, 'task-transition-open-resolved')
+	>>> task1.task_type="information"
+    >>> wft.doActionFor(task1, 'task-transition-open-tested-and-closed')
     >>> dossier.is_all_closed()
     True
 
