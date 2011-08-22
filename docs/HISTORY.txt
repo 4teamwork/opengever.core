@@ -5,6 +5,9 @@ Changelog
 2.0b17
 ------
 
+* Don't allow dossiers to be resolved anymore if tasks are in state 'task-state-resolved'
+  [lgraf]
+
 * Fixed tests
   [eschmutz]
 

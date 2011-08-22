@@ -95,8 +95,6 @@ class DossierContainer(Container):
             - cancelled
             - rejected
             - tested and closed
-            - resolved
-
         """
 
         tasks_closed = self.portal_catalog(
@@ -104,8 +102,7 @@ class DossierContainer(Container):
             path=dict(query='/'.join(self.getPhysicalPath())),
             review_state=('task-state-cancelled',
                           'task-state-rejected',
-                          'task-state-tested-and-closed',
-                          'task-state-resolved'))
+                          'task-state-tested-and-closed',))
 
         tasks = self.portal_catalog(
             portal_type="opengever.task.task",
