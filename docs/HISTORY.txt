@@ -5,6 +5,10 @@ Changelog
 2.0b13
 ------
 
+* Issue #1136 Umschreiben von Tests von PloneTestCase nach plone.app.testing
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1136
+  [eschmutz]
+
 * Monkey patching plone.formwidget.contenttree so the URLs of relatedItems
   are correct in a virtual hosting environment.
   [lgraf]

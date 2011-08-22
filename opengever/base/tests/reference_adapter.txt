@@ -1,25 +1,27 @@
 ReferenceNumber Prefix Adapter
 ==============================
 Do some imports, and standard configuration:
+
+	>>> app = layer.get('app')
+	>>> portal = layer.get('portal')
     >>> from opengever.base.behaviors import base
     >>> from plone.dexterity.fti import DexterityFTI
     >>> from plone.dexterity.content import Item, Container
     >>> from opengever.base.interfaces import IReferenceNumberPrefix
 
-    >>> self.setRoles('Manager')
-    >>> fti = DexterityFTI('OpenGeverBaseFTI', klass="plone.dexterity.content.Container", global_allow=True, allowed_content_types=['OpenGeverBaseFTI'],)
-    >>> self.portal.portal_types._setObject('OpenGeverBaseFTI', fti)
-    'OpenGeverBaseFTI'
-    >>> self.portal.invokeFactory('OpenGeverBaseFTI', 'f1')
+    >>> fti = DexterityFTI('OpenGeverBaseFTI3', klass="plone.dexterity.content.Container", global_allow=True, allowed_content_types=['OpenGeverBaseFTI3'], behaviors=["opengever.base.interfaces.IReferenceNumberPrefix"])
+    >>> portal.portal_types._setObject('OpenGeverBaseFTI3', fti)
+    'OpenGeverBaseFTI3'
+    >>> portal.invokeFactory('OpenGeverBaseFTI3', 'f1')
     'f1'
 
 Create Folder, and items and get the referenceNumberPrefixAdapter:
-    >>> f1 = self.portal.get('f1')
+    >>> f1 = portal.get('f1')
     >>> adapter = IReferenceNumberPrefix(f1)
-    >>> f1.invokeFactory('OpenGeverBaseFTI', 'Item1')
+    >>> f1.invokeFactory('OpenGeverBaseFTI3', 'Item1')
     'Item1'
     >>> item1 = f1.get('Item1')
-    >>> f1.invokeFactory('OpenGeverBaseFTI', 'Item2')
+    >>> f1.invokeFactory('OpenGeverBaseFTI3', 'Item2')
     'Item2'
     >>> item2 = f1.get('Item2')
 

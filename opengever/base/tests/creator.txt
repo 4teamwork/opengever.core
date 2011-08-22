@@ -8,27 +8,33 @@ methods. The field is hidden by default.
 
 When we create a dexterity content type::
 
+	>>> app = layer.get('app')
+ 	>>> portal = layer.get('portal')
     >>> from opengever.base.behaviors import creator
     >>> from plone.dexterity.fti import DexterityFTI
     >>> fti = DexterityFTI('ReferenceFTI')
     >>> fti.behaviors = (
     ...                  'opengever.base.behaviors.creator.ICreator',
     ...                  )
-    >>> self.portal.portal_types._setObject('ReferenceFTI', fti)
+    >>> portal.portal_types._setObject('ReferenceFTI', fti)
     'ReferenceFTI'
     >>> schema = fti.lookupSchema()
 
 
-If we access the site as an admin TTW::
+With plone.app.testing we need to explicitly commit these changes for them 
+to become visible to the testbrowser:
 
-    >>> from Products.Five.testbrowser import Browser
-    >>> from Products.PloneTestCase.setup import portal_owner, default_password
-    >>> browser = Browser()
-    >>> browser.handleErrors = True
-    >>> self.app.acl_users.userFolderAddUser('root', 'secret',
-    ...                                      ['Manager'], [])
-    >>> browser.addHeader('Authorization', 'Basic root:secret' )
+    >>> import transaction
+    >>> transaction.commit()
 
+
+If we access the site as an admin TTW:
+
+    >>> from plone.testing.z2 import Browser
+    >>> browser = Browser(app)
+    >>> browser.handleErrors = False
+    >>> from plone.app.testing import TEST_USER_NAME, TEST_USER_PASSWORD
+    >>> browser.addHeader('Authorization', 'Basic %s:%s' % (TEST_USER_NAME, TEST_USER_PASSWORD,))
 
 
 We can see this type in the addable types at the root of the site::
@@ -52,7 +58,7 @@ We can see this type in the addable types at the root of the site::
 
 Get the created object::
 
-    >>> obj = self.portal.get('referencefti')
+    >>> obj = portal.get('referencefti')
     >>> obj
     <Item at ...>
     >>> creator.ICreatorAware.providedBy( obj )
@@ -62,9 +68,9 @@ Get the created object::
 There should be a creator::
 
     >>> obj.listCreators()
-    ('root',)
+    ('test_user_1_',)
     >>> obj.Creator()
-    'root'
+    'test_user_1_'
 
 
 We should be able to set the creators list::
