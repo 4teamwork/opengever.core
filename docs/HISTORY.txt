@@ -5,6 +5,11 @@ Changelog
 2.0b18
 ------
 
+* Issue #832 Workflow Task anpassen
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/832
+  changed and added some new workflow guards
+  [phgross]
+
 * Issue #1072 Task workflow ueberarbeiten und korrigieren
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1072
   - added Edit Task permission
