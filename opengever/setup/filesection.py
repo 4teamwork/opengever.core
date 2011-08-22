@@ -42,6 +42,11 @@ class NamedFileCreatorSection(object):
             fti = getUtility(IDexterityFTI, name=item[typekey])
             schema = fti.lookupSchema()
             field = getFields(schema)[self.field]
-            fileobj = field._type(file_, filename=file_.name[file_.name.rfind('/')+1:].decode('utf-8'))
+
+            # Don't pass the file descriptor but only the file's data as
+            # a string, because else the source files get removed!
+            filedata = file_.read()
+
+            fileobj = field._type(filedata, filename=file_.name[file_.name.rfind('/')+1:].decode('utf-8'))
             field.set(field.interface(obj), fileobj)
             yield item
