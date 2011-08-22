@@ -16,7 +16,7 @@ from zope.intid.interfaces import IIntIds
 from zope.lifecycleevent import ObjectCreatedEvent, ObjectAddedEvent
 import unittest2 as unittest
 from opengever.task.testing import OPENGEVER_TASK_INTEGRATION_TESTING
-
+from plone.app.testing import TEST_USER_ID
 
 def create_task(parent, **kwargs):
     createContent('opengever.task.task')
@@ -109,6 +109,9 @@ class TestTaskIntegration(PloneTestCase):
 
     def test_task_date_subscriber(self):
         t1 = create_task(self.folder, title='Task 1')
+        member = self.portal.restrictedTraverse('plone_portal_state').member()
+        t1.responsible = str(member)
+        t1.issuer = str(member)
         wft = t1.portal_workflow
 
         self.failUnless(t1.expectedStartOfWork == None)
@@ -123,6 +126,7 @@ class TestTaskIntegration(PloneTestCase):
         self.failUnless(t1.date_of_completion == None)
 
         t2 = create_task(self.folder, title='Task 2')
+        t2.issuer = str(member)
         self.failUnless(t2.date_of_completion == None)
         wft.doActionFor(t2, 'task-transition-open-tested-and-closed')
         self.failUnless(t2.date_of_completion.date() == datetime.now().date())
