@@ -11,8 +11,10 @@ a container:
     custody_period
     retention_period
 
-When we create a dexterity content type::
+When we create a dexterity content type:
 
+    >>> portal = layer.get('portal')
+    >>> app = layer.get('app')
     >>> from opengever.base.behaviors import classification
     >>> from plone.dexterity.fti import DexterityFTI
     >>> from Products.CMFCore.interfaces._content import IFolderish
@@ -21,19 +23,27 @@ When we create a dexterity content type::
     ...                    global_allow=True,
     ...                    filter_content_types=False)
     >>> fti.behaviors = ('opengever.base.behaviors.classification.IClassification',)
-    >>> self.portal.portal_types._setObject('ClassificationFTI', fti)
+    >>> portal.portal_types._setObject('ClassificationFTI', fti)
     'ClassificationFTI'
     >>> schema = fti.lookupSchema()
 
-If we access the site as an admin TTW::
 
-    >>> from Products.Five.testbrowser import Browser
-    >>> browser = Browser()
+With plone.app.testing we need to explicitly commit these changes for them
+to become visible to the testbrowser:
+
+    >>> import transaction
+    >>> transaction.commit()
+
+
+If we access the site as an admin TTW:
+
+    >>> from plone.testing.z2 import Browser
+    >>> browser = Browser(app)
     >>> browser.handleErrors = False
-    >>> self.app.acl_users.userFolderAddUser('root', 'secret', ['Manager'], [])
-    >>> browser.addHeader('Authorization', 'Basic root:secret')
+    >>> from plone.app.testing import TEST_USER_NAME, TEST_USER_PASSWORD
+    >>> browser.addHeader('Authorization', 'Basic %s:%s' % (TEST_USER_NAME, TEST_USER_PASSWORD,))
 
-We can see this type in the addable types at the root of the site::
+We can see this type in the addable types at the root of the site:
 
     >>> browser.open("http://nohost/plone/folder_factories")
     >>> 'ClassificationFTI' in browser.contents
@@ -49,13 +59,13 @@ We can see this type in the addable types at the root of the site::
     >>> browser.url
     'http://nohost/plone/classificationfti/view'
 
-Get the created object::
+Get the created object:
     
-    >>> obj = self.portal.get('classificationfti')
+    >>> obj = portal.get('classificationfti')
     >>> obj!=None
     True
 
-Check the values of the created object::
+Check the values of the created object:
 
     >>> obj.classification == classification.CLASSIFICATION_CONFIDENTIAL
     True
@@ -65,12 +75,14 @@ Check the values of the created object::
     True
     >>> obj.public_trial_statement == 'My Statement'
     True
-    
-create a subitem
+
+Create a subitem:
+
     >>> from plone.dexterity.utils import createContentInContainer
-    >>> self.setRoles(['Manager'])
     >>> title = 'testobject'
     >>> tobj = createContentInContainer(obj, 'ClassificationFTI', title=title)
+    >>> transaction.commit()
+
     >>> browser.open('http://nohost/plone/classificationfti/classificationfti/edit')
     >>> class_cont = browser.getControl(name="form.widgets.IClassification.classification:list")
     >>> classification.CLASSIFICATION_UNPROTECTED in class_cont.options

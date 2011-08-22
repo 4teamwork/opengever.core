@@ -9,6 +9,8 @@ When we create a dexterity content type, but we must enshure that we do not
 use the default model source with another title and description for
 excluding ambiguity.
 
+    >>> portal = layer['portal']
+    >>> app = layer['app']
     >>> from opengever.base.behaviors import base
     >>> from plone.dexterity.fti import DexterityFTI
 
@@ -17,23 +19,27 @@ excluding ambiguity.
     >>> fti.behaviors = (
     ...                  'opengever.base.behaviors.base.IOpenGeverBase',
     ...                  )
-    >>> self.portal.portal_types._setObject('OpenGeverBaseFTI', fti)
+    >>> portal.portal_types._setObject('OpenGeverBaseFTI', fti)
     'OpenGeverBaseFTI'
     >>> schema = fti.lookupSchema()
 
+With plone.app.testing we need to explicitly commit these changes for them 
+to become visible to the testbrowser:
 
-If we access the site as an admin TTW::
+    >>> import transaction
+    >>> transaction.commit()
 
-    >>> from Products.Five.testbrowser import Browser
-    >>> browser = Browser()
+
+If we access the site as an admin TTW:
+
+    >>> from plone.testing.z2 import Browser
+    >>> browser = Browser(app)
     >>> browser.handleErrors = False
-    >>> self.app.acl_users.userFolderAddUser('root', 'secret',
-    ...                                ['Manager','Contributor'], [])
-    >>> browser.addHeader('Authorization', 'Basic root:secret' )
+    >>> from plone.app.testing import TEST_USER_NAME, TEST_USER_PASSWORD
+    >>> browser.addHeader('Authorization', 'Basic %s:%s' % (TEST_USER_NAME, TEST_USER_PASSWORD,))
 
 
-
-We can see this type in the addable types at the root of the site::
+We can see this type in the addable types at the root of the site:
 
     >>> browser.open('http://nohost/plone/folder_factories')
     >>> 'OpenGeverBaseFTI' in browser.contents
@@ -55,14 +61,14 @@ We can see this type in the addable types at the root of the site::
     'http://nohost/plone/opengeverbasefti/view'
 
 
-Get the created object::
+Get the created object:
 
-    >>> obj = self.portal.opengeverbasefti
+    >>> obj = portal.opengeverbasefti
     >>> obj
     <Item at ...>
 
 
-Title should be set::
+Title should be set:
 
     >>> obj.Title()
     'Foo'
@@ -71,7 +77,7 @@ Title should be set::
 
 
 
-We use the "Common" fieldset, not the "Default" fieldset::
+We use the "Common" fieldset, not the "Default" fieldset:
 
     >>> browser.open('http://nohost/plone/opengeverbasefti/edit')
     >>> 'Common' in browser.contents

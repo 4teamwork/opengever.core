@@ -10,6 +10,7 @@ tests_require = [
     'opengever.repository',
     'opengever.document',
     'opengever.contact',
+    'plone.app.testing',
     ]
 
 setup(name='opengever.base',
