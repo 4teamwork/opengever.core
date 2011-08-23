@@ -1,17 +1,16 @@
 """
 Webdav support for Document
 """
-from StringIO import StringIO
 
-from rwproperty import getproperty, setproperty
-
-from zope.filerepresentation.interfaces import IRawReadFile, IRawWriteFile
 from five import grok
-
-from plone.memoize.instance import memoize
-from plone.dexterity import filerepresentation
-
 from opengever.document.document import IDocumentSchema
+from plone.dexterity import filerepresentation
+from plone.memoize.instance import memoize
+from rwproperty import getproperty, setproperty
+from StringIO import StringIO
+from zope.filerepresentation.interfaces import IRawReadFile, IRawWriteFile
+import tempfile
+
 
 class DocumentReadFile(filerepresentation.DefaultReadFile, grok.Adapter):
     grok.implements(IRawReadFile)
@@ -33,7 +32,16 @@ class DocumentReadFile(filerepresentation.DefaultReadFile, grok.Adapter):
         except AttributeError:
             pass
         if streaming_supported:
-            return self.filefield.open()
+
+            # TODO: XXX
+            # copy Document.data in to a temporary file, so we can avoid the
+            # the error: 
+            #    BlobError: Already opened for reading.
+            tmp = tempfile.TemporaryFile(mode='w+b')
+            tmp.write(self.filefield.data)
+            tmp.flush()
+            tmp.seek(0)
+            return tmp
         else:
             return StringIO(self.filefield.data)
 
@@ -93,5 +101,5 @@ class DocumentWriteFile(filerepresentation.DefaultWriteFile, grok.Adapter):
         self.stream.write(data)
 
     def close(self):
-        self.filefield.data = self.stream
-
+        self.stream.seek(0)
+        self.filefield.data = self.stream.read()
