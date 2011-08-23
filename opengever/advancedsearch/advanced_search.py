@@ -318,7 +318,6 @@ class AdvancedSearchForm(directives_form.Form):
     @button.buttonAndHandler(_(u'button_search', default=u'Search'))
     def search(self, action):
         data, errors = self.extractData()
-
         if not errors:
             # create Parameters and url
             if(data['reference']):
@@ -357,7 +356,7 @@ class AdvancedSearchForm(directives_form.Form):
             params = params.replace('task_review_state', 'review_state')
             params = params.replace('dossier_review_state', 'review_state')
 
-            self.context.REQUEST.RESPONSE.redirect(self.context.portal_url() + params)
+            return self.context.REQUEST.RESPONSE.redirect(self.context.portal_url() + params)
 
 
     def correct_ref(self, value):
