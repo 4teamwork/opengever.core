@@ -43,7 +43,7 @@ def indexed_task_link(item, display_client=False):
         url = '%s/%s?%s=1' % (client.public_url, item.physical_path, REMOTE_CLIENT_KEY)
     else:
         link_target = ''
-        url = client.public_url + '/' + item.physical_path,
+        url = client.public_url + '/' + item.physical_path
 
     # embed the client
     if display_client:
