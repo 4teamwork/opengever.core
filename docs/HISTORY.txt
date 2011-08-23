@@ -5,6 +5,9 @@ Changelog
 2.0b13
 ------
 
+* Monkey patch Products.LDAPUserFolder.utils.encoding before user / group import
+  [lgraf]
+
 * Fix tests
   [eschmutz]
 
