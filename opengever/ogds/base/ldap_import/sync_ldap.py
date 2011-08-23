@@ -56,13 +56,6 @@ def check_if_ldap_reachable(site):
         sys.exit(1)
 
 def run_import(app, options):
-    # Monkey patch Products.LDAPUserFolder.utils.encoding
-    # because otherwise we get UnicodeDecodeErrors when
-    # retrieving users objects from LUF
-    import Products.LDAPUserFolder
-    Products.LDAPUserFolder.utils.encoding = 'utf-8'
-    print 'Monkey patched Products.LDAPUserFolder.utils.encoding (utf-8)'
-
     # setup request and get plone site
     app = makerequest(app)
     plone = app.unrestrictedTraverse(options.site_root)
