@@ -170,7 +170,7 @@ msgstr "Das Datum an dem die Aufgabe beendet wurde"
 #. Default: "Deadline"
 #: ./opengever/task/task.py:119
 msgid "help_deadline"
-msgstr "Tragen sie ein Datum ein, bis wann die Aufgabe erledigt werden muss"
+msgstr "Tragen Sie ein Datum ein, bis wann die Aufgabe erledigt werden muss"
 
 #. Default: "Cost in CHF"
 #: ./opengever/task/task.py:180
@@ -218,7 +218,7 @@ msgstr "Wählen Sie die verantwortliche Person aus, die dem oben gewählten Mand
 #: ./opengever/task/browser/assign.py:37
 #: ./opengever/task/task.py:104
 msgid "help_responsible_client"
-msgstr "Wählen Sie zuerst den Mandant des Auftragnehmers, anschliessend den Auftragnehmer."
+msgstr "Wählen Sie zuerst den Mandanten des Auftragnehmers, anschliessend den Auftragnehmer."
 
 #. Default: "Select a document"
 #: ./opengever/task/browser/attachdocument.py:236
