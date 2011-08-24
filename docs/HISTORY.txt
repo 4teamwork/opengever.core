@@ -7,6 +7,13 @@ Changelog
 
 * added test-buildout for plone 4.1
   [eschmutz]
+  
+* Issue #1040 Mandantenuebergreifende Beteiligung: Anpassung Darstellung
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1040
+  implements caching for the is_assigned_client method, 
+  because the method is called on every request (personal_overview, exposator viewlet)
+  [phgros]
+
 
 2.0b13
 ------

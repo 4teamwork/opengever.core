@@ -276,6 +276,22 @@ class ContactInformation(grok.GlobalUtility):
 
         return clients
 
+    def _user_client_cachekey(method, self, userid, client_id):
+        return (userid, client_id)
+
+    @ram.cache(_user_client_cachekey)
+    def _is_client_assigned(self, userid, client_id):
+        session = create_session()
+
+        # check if the specified user is in the user_group of the specified
+        # client
+        if session.query(Client).join(Client.users_group).join(
+            Group.users).filter(User.userid == userid).filter(
+                    Client.client_id==client_id).count() > 0:
+                return True
+
+        return False
+
     def is_client_assigned(self, userid=None, client_id=None):
         """Return True if the specified user is in the user_group
         of the specified client"""
@@ -288,17 +304,7 @@ class ContactInformation(grok.GlobalUtility):
                 getSite(), 'portal_membership').getAuthenticatedMember()
             userid = member.getId()
 
-        session = create_session()
-
-        # check if the specified user is in the user_group of the specified
-        # client
-        if len(session.query(Client).join(Client.users_group).join(
-            Group.users).filter(User.userid == userid).filter(
-                    Client.client_id==client_id).all()) > 0:
-                return True
-
-        return False
-
+        return self._is_client_assigned(userid, client_id)
 
     # general principal methods
     def describe(self, principal, with_email=False, with_email2=False):
