@@ -5,6 +5,9 @@ Changelog
 2.0b15
 ------
 
+* added test-buildout for plone 4.1
+  [eschmutz]
+
 * Issue #1143 External Editor funktioniert nicht mehr
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1143/view
   implemented workaround for the webdav/external editor connection
