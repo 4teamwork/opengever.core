@@ -3,12 +3,13 @@ from opengever.base.interfaces import IRedirector
 from persistent.dict import PersistentDict
 from persistent.list import PersistentList
 from plone.app.layout.viewlets.interfaces import IAboveContentTitle
+
 from zope.interface import Interface
 from zope.publisher.interfaces.browser import IBrowserRequest
 
+
 REDIRECTOR_SESS_KEY = 'opengever_base_IRedirector'
 
-REMOTE_CLIENT_KEY = 'remote_client'
 
 class Redirector(grok.Adapter):
     """An adapter for the BrowserRequest to redirect a user after loading the
@@ -54,11 +55,8 @@ class Redirector(grok.Adapter):
             return redirects
 
 
-
-
 class RedirectorViewlet(grok.Viewlet):
     """ Viewlet which adds the redirects for the IRedirector.
-        And expose-view when the remote_client_key is set in the request
     """
 
     grok.name('redirector')
@@ -74,16 +72,6 @@ jq(function() {
 </script>
 '''
 
-
-    REMOTE_CLIENT_JS = '''
-<script type="text/javascript">
-jq(function() {
-    jq('#portal-column-content').expose({closeOnClick: false, closeOnEsc: false});
-    jq('#portal-breadcrumbs').append('<span style="float:right"><a href="javascript:window.close()">Fenster schliessen</a></span')
-});
-</script>
-'''
-
     def render(self):
         redirector = IRedirector(self.request)
         redirects = redirector.get_redirects(remove=True)
@@ -91,7 +79,4 @@ jq(function() {
         for redirect in redirects:
             html.append(RedirectorViewlet.JS_TEMPLATE % redirect)
 
-        if REMOTE_CLIENT_KEY in self.request.keys(
-                ) and self.request[REMOTE_CLIENT_KEY] == '1':
-            html.append(RedirectorViewlet.REMOTE_CLIENT_JS)
         return ''.join(html)

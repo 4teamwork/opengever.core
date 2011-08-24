@@ -56,30 +56,3 @@ Only redirect once:
 
     >>> viewlet.render()
     ''
-
-Check remote_client functionality:
-    >>> request[REMOTE_CLIENT_KEY]='1'
-    >>> viewlet = viewlets[0].factory(portal, request, {}, {})
-    >>> print viewlet.render().strip()
-    <script type="text/javascript">
-    jq(function() {
-        jq('#portal-column-content').expose({closeOnClick: false, closeOnEsc: false});
-        jq('#portal-breadcrumbs').append('<span style="float:right"><a href="javascript:window.close()">Fenster schliessen</a></span')
-    });
-    </script>
-
-both functionality should work together
-    >>> redirector.redirect('http://www.google.ch', target='named-window')
-    >>> request[REMOTE_CLIENT_KEY]='1'
-    >>> print viewlet.render().strip()
-    <script type="text/javascript">
-    jq(function() {
-        window.setTimeout("window.open('http://www.google.ch', 'named-window');", 0);
-    });
-    </script>
-    <script type="text/javascript">
-    jq(function() {
-        jq('#portal-column-content').expose({closeOnClick: false, closeOnEsc: false});
-        jq('#portal-breadcrumbs').append('<span style="float:right"><a href="javascript:window.close()">Fenster schliessen</a></span')
-    });
-    </script>
