@@ -8,12 +8,13 @@ from collective.elephantvocabulary import wrap_vocabulary
 from five import grok
 from OFS.interfaces import IObjectWillBeMovedEvent
 from plone.autoform.interfaces import IFormFieldProvider
+from plone.dexterity.i18n import MessageFactory as pd_mf
 from plone.dexterity.interfaces import IDexterityContent
 from plone.dexterity.interfaces import IDexterityFTI
-from plone.dexterity.i18n import MessageFactory as pd_mf
 from plone.directives import form, dexterity
 from plone.indexer import indexer
 from plone.z3cform.textlines.textlines import TextLinesFieldWidget
+from Products.CMFCore.interfaces import ISiteRoot
 from z3c.relationfield.schema import RelationChoice, RelationList
 from zope import schema
 from zope.app.container.interfaces import IObjectAddedEvent
@@ -21,6 +22,7 @@ from zope.app.container.interfaces import IObjectMovedEvent
 from zope.component import getAdapter, getUtility
 from zope.interface import Interface, alsoProvides
 from zope.interface import invariant, Invalid
+
 
 from ftw.datepicker.widget import DatePickerFieldWidget
 from opengever.base.interfaces import IReferenceNumber, ISequenceNumber
@@ -309,11 +311,26 @@ def containing_subdossier(obj):
     case an empty string is returned.
     """
     context = aq_inner(obj)
-    parent = aq_parent(context)
-    if IDossierMarker.providedBy(parent):
-        if IDossierMarker.providedBy(aq_parent(parent)):
-            # parent is a subdossier
-            return parent.Title()
+    # Only compute for types that actually can be contained in a dossier
+    if not context.portal_type in ['opengever.document.document',
+                                   'opengever.task.task',
+                                   'ftw.mail.mail']:
+        return ''
+
+    parent = context
+    parent_dossier_found = False
+    while not parent_dossier_found:
+        parent = aq_parent(parent)
+        if ISiteRoot.providedBy(parent):
+            # Shouldn't happen, just to be safe
+            break
+        if IDossierMarker.providedBy(parent):
+            parent_dossier_found = True
+            parent_dossier = parent
+
+    if IDossierMarker.providedBy(aq_parent(parent_dossier)):
+        # parent dossier is a subdossier
+        return parent.Title()
     return ''
 grok.global_adapter(containing_subdossier, name='containing_subdossier')
 
