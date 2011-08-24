@@ -12,6 +12,7 @@ Changelog
 * Issue #1072 Task workflow ueberarbeiten und korrigieren
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1072
   disabling adding documents in a tested-and-closed task
+  remove roles-guards with check the owner role, works not in every case
   [phgross]
 
 * Issue #832 Workflow Task anpassen

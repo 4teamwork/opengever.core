@@ -318,7 +318,6 @@
  <transition transition_id="task-transition-open-cancelled" title="task-transition-open-cancelled" new_state="task-state-cancelled" trigger="USER" before_script="" after_script="">
   <action url="%(content_url)s/direct_response?form.widgets.transition=task-transition-open-cancelled" category="workflow" icon="">task-transition-open-cancelled</action>
   <guard>
-   <guard-role>Owner</guard-role>
    <guard-expression>python: str(here.restrictedTraverse('plone_portal_state').member()) == here.issuer</guard-expression>
   </guard>
  </transition>
@@ -366,7 +365,6 @@
  <transition transition_id="task-transition-resolved-tested-and-closed" title="task-transition-resolved-tested-and-closed" new_state="task-state-tested-and-closed" trigger="USER" before_script="" after_script="">
   <action url="%(content_url)s/direct_response?form.widgets.transition=task-transition-resolved-tested-and-closed" category="workflow" icon="">task-transition-resolved-tested-and-closed</action>
   <guard>
-   <guard-role>Owner</guard-role>
    <guard-expression>python: str(here.restrictedTraverse('plone_portal_state').member()) == here.issuer</guard-expression>
   </guard>
  </transition>
