@@ -3,4 +3,3 @@ recursive-include docs *
 include *.txt
 global-exclude *.pyc
 global-exclude ._*
-global-exclude *.mo
