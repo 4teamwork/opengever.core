@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-2.0b110
+2.0b20
 -------
 
 * added test-buildout for plone 4.1
