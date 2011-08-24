@@ -23,7 +23,7 @@
 
     <subscriber
         for="z3c.saconfig.interfaces.IEngineCreatedEvent"
-        handler=".events.setup_oracle_collation"
+        handler=".events.setup_engine_options"
         />
 
     <genericsetup:registerProfile

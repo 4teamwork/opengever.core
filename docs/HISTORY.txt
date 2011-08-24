@@ -5,6 +5,10 @@ Changelog
 2.0b14
 ------
 
+* Setting transaction isolation level when using SQLite engine.
+  (Needed to make savepoints work properly with SQLite)
+  [lgraf]
+
 * added test-buildout for plone 4.1
   [eschmutz]
   
