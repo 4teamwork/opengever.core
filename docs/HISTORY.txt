@@ -5,7 +5,9 @@ Changelog
 2.0b6
 -----
 
-
+* fixed url generator in indexed_task_link, removed wrong comma
+  [pgross]
+  
 2.0b5
 -----
 
