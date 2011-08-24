@@ -5,17 +5,17 @@ Changelog
 2.0b14
 ------
 
-* added test-buildout for plone 4.1
-  [eschmutz]
-
-2.0b13
-------
-
 * Issue #1040 Mandantenuebergreifende Beteiligung: Anpassung Darstellung
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1040
   reimplement remoteclient_expose functionality:
   added exposator viewlet, wich work with the OGDS and not longer with request variable
   [phgross]
+
+* added test-buildout for plone 4.1
+  [eschmutz]
+
+2.0b13
+------
 
 * Issue #1136 Umschreiben von Tests von PloneTestCase nach plone.app.testing
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1136
