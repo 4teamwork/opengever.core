@@ -331,7 +331,7 @@ def containing_subdossier(obj):
 
     if IDossierMarker.providedBy(aq_parent(parent_dossier)):
         # parent dossier is a subdossier
-        return parent.Title()
+        return parent_dossier.Title()
     return ''
 grok.global_adapter(containing_subdossier, name='containing_subdossier')
 
