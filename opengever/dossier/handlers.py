@@ -1,8 +1,9 @@
 from Acquisition import aq_inner, aq_parent
 from five import grok
-from Products.CMFCore.interfaces import IActionSucceededEvent
-from zope.lifecycleevent.interfaces import IObjectModifiedEvent
 from opengever.dossier.behaviors.dossier import IDossierMarker
+from Products.CMFCore.interfaces import IActionSucceededEvent
+from Products.CMFCore.utils import getToolByName
+from zope.lifecycleevent.interfaces import IObjectModifiedEvent
 
 
 @grok.subscribe(IDossierMarker, IActionSucceededEvent)
@@ -29,12 +30,13 @@ def reindex_contained_objects(dossier, event):
     index of all contained objects (documents, mails and tasks) so they don't 
     show an outdated title in the ``subdossier`` column
     """
+    catalog = getToolByName(dossier, 'portal_catalog')
     parent = aq_parent(aq_inner(dossier))
     is_subdossier = IDossierMarker.providedBy(parent)
     if is_subdossier:
-        objects = dossier.getFolderContents(
-            contentFilter={'portal_type': ['opengever.document.document',
-                                           'opengever.task.task',
-                                           'ftw.mail.mail']})
+        objects = catalog(path='/'.join(dossier.getPhysicalPath()),
+                          portal_type=['opengever.document.document',
+                                       'opengever.task.task',
+                                       'ftw.mail.mail'])
         for obj in objects:
             obj.getObject().reindexObject(idxs=['containing_subdossier'])

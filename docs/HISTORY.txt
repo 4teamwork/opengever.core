@@ -5,6 +5,10 @@ Changelog
 2.0b17
 ------
 
+* When updating `containing_subdossier` index also update objects not
+  *directly* contained in the subdossier.
+  [lgraf]
+
 * Fixed `containing_subdossier` index to also work for objects not *directly*
   contained in a dossier.
   [lgraf]
