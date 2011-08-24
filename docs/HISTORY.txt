@@ -5,6 +5,8 @@ Changelog
 2.0a4
 -----
 
+* added test-buildout for plone 4.1
+  [eschmutz]
 
 2.0a3
 -----
