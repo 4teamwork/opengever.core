@@ -11,6 +11,11 @@ Changelog
 2.0b19
 ------
 
+* Issue #1040 Mandantenuebergreifende Beteiligung: Anpassung Darstellung
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1040
+  reimplement Exposator viewlet, request parameter is not longer used
+  [phgross]
+
 * Issue #1072 Task workflow ueberarbeiten und korrigieren
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1072
   disabling adding documents in a tested-and-closed task

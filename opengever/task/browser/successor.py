@@ -1,7 +1,6 @@
 from Products.statusmessages.interfaces import IStatusMessage
 from five import grok
 from opengever.base.interfaces import IRedirector
-from opengever.base.redirector import REMOTE_CLIENT_KEY
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.ogds.base.interfaces import ITransporter
 from opengever.ogds.base.utils import remote_request, get_client_id
@@ -110,7 +109,6 @@ class SuccessorTaskForm(Form):
             if get_client_id() != data['client']:
                 # foreign client (open in popup) and with a jq-expose
                 redirector = IRedirector(self.request)
-                target_url = '%s?%s=1' %(target_url, REMOTE_CLIENT_KEY)
                 redirector.redirect(target_url, target='_blank')
 
                 # add status message and redirect current window back to task
