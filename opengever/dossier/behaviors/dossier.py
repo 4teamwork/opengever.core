@@ -318,6 +318,7 @@ def containing_subdossier(obj):
         return ''
 
     parent = context
+    parent_dossier = None
     parent_dossier_found = False
     while not parent_dossier_found:
         parent = aq_parent(parent)
