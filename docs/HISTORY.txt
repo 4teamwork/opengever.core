@@ -5,6 +5,11 @@ Changelog
 2.0b18
 ------
 
+* Issue #1040 Mandantenuebergreifende Beteiligung: Anpassung Darstellung
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1040
+  reimplement Exposator viewlet, request parameter is not longer used
+  [phgross]
+
 * added test-buildout for plone 4.1
   [eschmutz]
 
