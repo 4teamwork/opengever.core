@@ -12,7 +12,7 @@ class ExposatorViewlet(grok.Viewlet):
     the navi and header area is blanked out.
     """
 
-    grok.name('redirector')
+    grok.name('exposator')
     grok.context(Interface)
     grok.viewletmanager(IPortalHeader)
     grok.require('zope2.View')
