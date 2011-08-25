@@ -13,12 +13,12 @@ class ContactIntegrationLayer(PloneSandboxLayer):
     defaultBases = (PLONE_FIXTURE,)
 
     def setUpZope(self, app, configurationContext):
-        
+
         # Load testing zcml (optional)
         import opengever.contact
         xmlconfig.file('configure.zcml', opengever.contact, context=configurationContext)
         xmlconfig.file('tests.zcml', opengever.contact, context=configurationContext)
-        
+
     def setUpPloneSite(self, portal):
         applyProfile(portal, 'opengever.contact:default')
         applyProfile(portal, 'opengever.tabbedview:default')
