@@ -5,6 +5,10 @@ Changelog
 2.0b9
 -----
 
+* Fixed tests: Made sure og.ogds.base GS profile gets exectuted and PAS
+  plugins *don't* get installed.
+  [lgraf]
+
 * added test-buildout for plone 4.1
   [eschmutz]
 

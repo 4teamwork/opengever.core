@@ -13,6 +13,12 @@ class ContactIntegrationLayer(PloneSandboxLayer):
     defaultBases = (PLONE_FIXTURE,)
 
     def setUpZope(self, app, configurationContext):
+        # do not install pas plugins (doesnt work in tests)
+        from opengever.ogds.base import setuphandlers
+        setuphandlers.setup_scriptable_plugin = lambda *a, **kw: None
+
+        from opengever.ogds import base
+        xmlconfig.file('tests.zcml', package=base, context=configurationContext)
 
         # Load testing zcml (optional)
         import opengever.contact
@@ -20,6 +26,7 @@ class ContactIntegrationLayer(PloneSandboxLayer):
         xmlconfig.file('tests.zcml', opengever.contact, context=configurationContext)
 
     def setUpPloneSite(self, portal):
+        applyProfile(portal, 'opengever.ogds.base:default')
         applyProfile(portal, 'opengever.contact:default')
         applyProfile(portal, 'opengever.tabbedview:default')
         setRoles(portal, TEST_USER_ID, ['Member', 'Contributor', 'Manager'])
