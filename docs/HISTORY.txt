@@ -9,6 +9,9 @@ Changelog
   plugins *don't* get installed.
   [lgraf]
 
+* made the type configuration of opengever.contact.contact overwritable for other packages
+  [phgross]
+
 * added test-buildout for plone 4.1
   [eschmutz]
 

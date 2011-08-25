@@ -21,7 +21,7 @@
     <property name="add_permission">opengever.contact.AddContact</property>
 
     <!-- enabled behaviors -->
-    <property name="behaviors">
+    <property name="behaviors" purge="False">
         <element value="collective.dexteritytextindexer.behavior.IDexterityTextIndexer" />
         <element value="plone.app.content.interfaces.INameFromTitle" />
         <element value="plone.app.lockingbehavior.behaviors.ILocking" />
