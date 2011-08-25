@@ -114,8 +114,7 @@ And a task form displayed
 
 set the required fields
     >>> browser.getControl(name='form.widgets.task_type:list').value = ['direct-execution']
-    >>> browser.getControl(name='form.widgets.deadline-day').value = '1'
-    >>> browser.getControl(name='form.widgets.deadline-year').value = '2025'
+    >>> browser.getControl(name='form.widgets.deadline').value = '01-01-2025'
     >>> browser.getControl(name='form.buttons.save').click()
 
 check the new created task

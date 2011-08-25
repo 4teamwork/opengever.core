@@ -5,6 +5,9 @@ Changelog
 2.0b10
 ------
 
+* Fixed testing of deadline datetime widget
+  [lgraf]
+
 * added test-buildout for plone 4.1
   [eschmutz]
 
