@@ -5,6 +5,8 @@ Changelog
 2.0a6
 -----
 
+* Added GS profile dependencies on p.formwidget.autocomplete and p.f.contenttree
+  [lgraf]
 
 2.0a5
 -----
