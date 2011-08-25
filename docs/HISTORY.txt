@@ -5,6 +5,9 @@ Changelog
 2.0b21
 ------
 
+* fixed task globalindex reindexing in the direct_response functionality
+  [phgross]
+
 
 2.0b20
 -------

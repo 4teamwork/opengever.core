@@ -451,6 +451,10 @@ class DirectResponseView(grok.CodeView):
             container = IResponseContainer(self.context)
             container.add(new_response)
 
+            # we fire the IObjectModifiedEvent because
+            # the task must be reindex also by globalindex
+            notify(ObjectModifiedEvent(self.context))
+
             self.request.RESPONSE.redirect(self.context.absolute_url())
         else:
             self.request.RESPONSE.redirect(self.context.absolute_url())
