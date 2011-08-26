@@ -41,6 +41,3 @@ class TestTemplateDossierIntegration(unittest.TestCase):
     #     d1 = self.folder['dossier1']
     #     view = d1.restrictedTraverse('@@view')
     #     self.failUnless(view())
-
-def test_suite():
-    return unittest.defaultTestLoader.loadTestsFromName(__name__)

@@ -5,9 +5,11 @@ Changelog
 2.0b20
 -------
 
+* added default-tests for all dossiers
+  [eschmutz]
+
 * removed unused check in the order_factories method
   [phgross]
-
 
 2.0b19
 ------
