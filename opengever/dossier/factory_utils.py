@@ -23,13 +23,6 @@ def order_factories(context, factories):
                        fti.title,
                        'Add task from template']
 
-    # Ideally, we would check for the behavior's marker interface
-    # However, there doesn't seem to be a simple way to get a
-    # reference from an FTI to one of it's behavior's marker interfaces
-    if not context.portal_type == portal_type:
-        # use default
-        return factories
-
     ordered_factories = []
     for factory_title in factories_order:
         try:

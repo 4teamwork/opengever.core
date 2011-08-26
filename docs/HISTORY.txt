@@ -9,6 +9,9 @@ Changelog
 2.0b19
 ------
 
+* removed unused check in the order_factories method
+  [phgross]
+
 * moved factory_utils order_factories method from arp to opengever.dossier package
   [phgross]
 
