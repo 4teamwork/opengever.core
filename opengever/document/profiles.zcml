@@ -11,11 +11,21 @@
       provides="Products.GenericSetup.interfaces.EXTENSION"
       />
 
-  <!-- Register the import step -->
+  <!-- Register the import_various step -->
   <genericsetup:importStep
-      name="opengever.document"
+      name="opengever.document.various"
       title="opengever.document catalog indexes"
       description=""
-      handler="opengever.document.setuphandlers.import_various" />
+      handler="opengever.document.setuphandlers.import_various">
+  </genericsetup:importStep>
+
+  <!-- Register the versioning step -->
+  <genericsetup:importStep
+      name="opengever.document.versioning"
+      title="OpenGever Document: enable versioning"
+      description=""
+      handler="opengever.document.setuphandlers.setup_versioning">
+      <depends name="types"/>
+  </genericsetup:importStep>
 
 </configure>
