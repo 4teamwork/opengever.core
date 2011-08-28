@@ -25,7 +25,7 @@
       title="OpenGever Document: enable versioning"
       description=""
       handler="opengever.document.setuphandlers.setup_versioning">
-      <depends name="types"/>
+      <depends name="typeinfo"/>
   </genericsetup:importStep>
 
 </configure>

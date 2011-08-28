@@ -5,7 +5,9 @@ Changelog
 2.0b16
 ------
 
-* Registering custom import steps in ZCML instead of import_steps.xml (deprecated)
+* - Registering custom import steps in ZCML instead of import_steps.xml (deprecated)
+  - Fixed unresolved import step dependency on `types` (should be `typeinfo`)
+
   [lgraf]
 
 
