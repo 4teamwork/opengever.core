@@ -43,13 +43,13 @@ subdossier, ...
 
 
 documents, ...
-    >>> doc1 = createContentInContainer(dossier, 
+    >>> doc1 = createContentInContainer(dossier,
     ...     'opengever.document.document', title="Doc1", checkConstraints=False)
     >>> doc1
     <Document at /plone/dossier-1/document-1>
 
 and tasks,
-    >>> task1 = createContentInContainer(dossier, 
+    >>> task1 = createContentInContainer(dossier,
     ...     'opengever.task.task', title="Task1", task_type='correction', checkConstraints=False)
     >>> task1
     <Task at /plone/dossier-1/task-1>
@@ -83,7 +83,7 @@ Move also the task to the subdossier and now all should be supplied
 
 is_all_checked_in
 -----------------
-test the is_all_checked_in method 
+test the is_all_checked_in method
     >>> wft = portal.portal_workflow
     >>> wft.getInfoFor(doc1, 'review_state')
     'document-state-draft'
@@ -168,7 +168,7 @@ It worked, we should now be on the form for archiving the dossier which will be 
 Archive
 =======
 create a second document
-    >>> doc2 = createContentInContainer(subdossier, 
+    >>> doc2 = createContentInContainer(subdossier,
     ...     'opengever.document.document', title="Doc2", checkConstraints=False)
     >>> doc2
     <Document at /plone/dossier-1/dossier-2/document-2>
@@ -235,7 +235,7 @@ send form with correct data
     >>> browser.getControl('filing prefix').value = ['government']
     >>> browser.getControl(name='form.widgets.dossier_enddate').value = 'December 12, 2016'
     >>> browser.getControl(name='form.widgets.filing_action:list').value = ['resolve and set filing no']
-    
+
     >>> browser.getControl('Archive').click()
     >>> browser.url
     'http://nohost/plone/dossier-1'
@@ -246,7 +246,7 @@ check the given filing no
     >>> IDossier(subdossier).filing_no
     u'OG-Government-2012-1.1'
 
-check if the values are assumed to the dossier 
+check if the values are assumed to the dossier
     >>> IDossier(dossier).end
     datetime.date(2016, 12, 12)
     >>> IDossier(dossier).filing_prefix

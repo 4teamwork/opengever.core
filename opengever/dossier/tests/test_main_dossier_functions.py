@@ -12,7 +12,7 @@ from zope.component import provideUtility
 from zope.dottedname.resolve import resolve
 from zope.component import queryMultiAdapter
 from plone.indexer.interfaces import IIndexableObject
-
+from opengever.dossier.behaviors.dossier import IDossier
 
 class DummyVocabulary(object):
     implements(IVocabularyFactory)
@@ -33,13 +33,28 @@ class TestDefaultDossierFunctions(unittest.TestCase):
     dossier-tests.
     The none-parameter-tests will start automatically, and the parameter-
     tests you have to call explicitly in a test_method:
+
+    To set up a new test, you have to set in normal case this attributes:
+    - dossier_types
+    - layer
+    - is_special_dossier
     """
 
     # Dossier-type you like to test
-    # 1. typename, 2. map of additional schema behaviour
-    dossier_types = ['opengever.dossier.businesscasedossier',]
-    # Allowed subdossiers
-    subdossier_types = dossier_types
+    # 1. typename, 2. map of additional schema behaviour to test
+    # example:dossier_types =
+    #   {'opengever.zug.bdarp.casedossier1':
+    #       {IARPCaseBehavior1:
+    #           {'attr1':'val1', 'attr2':'sadfsadf'},
+    #       {IARPCaseBehavior2:
+    #           {'attr1':'val1', 'attr2':'sadfsadf'},
+    #   {'opengever.zug.bdarp.casedossier2':
+    #       {IARPCaseBehavior1:
+    #           {'attr1':'val1', 'attr2':'sadfsadf'},
+    #       {IARPCaseBehavior2:
+    #           {'attr1':'val1', 'attr2':'sadfsadf'},
+    # }}
+    dossier_types = {'opengever.dossier.businesscasedossier':{}}
     # testlayer to use
     layer = OPENGEVER_DOSSIER_INTEGRATION_TESTING
     # Tabs to control
@@ -58,10 +73,11 @@ class TestDefaultDossierFunctions(unittest.TestCase):
     # Deepth of subdossiers. How many times you can add a subdossier
     deepth = 1
     # Default dossier behavior
-    default_behavior = 'opengever.dossier.behaviors.dossier.IDossier'
+    default_behavior = IDossier
     # Default dossier behavior attributes
-    defautl_attr = {'keywords': ('hallo','hugo')}
-
+    defautl_attr = {'keywords': ['hallo','hugo']}
+    # Is special dossier?
+    is_special_dossier = False
 
     # tests
     # ***************************************************
@@ -170,102 +186,58 @@ class TestDefaultDossierFunctions(unittest.TestCase):
             self.cleanup()
 
     def test_adding(self):
-        for dossier_type in self.dossier_types:
-            portal = self.layer['portal']
+        if self.is_special_dossier:
+            for dossier_type in self.dossier_types:
+                portal = self.layer['portal']
 
-            # Should not be addable in portal
-            try:
-                portal.invokeFactory(
-                    dossier_type, self.name)
-                self.fail('Case dossier 1 should not be addable except within\
-                            repository folders.')
-            except (ValueError, Unauthorized):
-                pass
+                # Should not be addable in portal
+                try:
+                    portal.invokeFactory(
+                        dossier_type, self.name)
+                    self.fail('Case dossier 1 should not be addable except within\
+                                repository folders.')
+                except (ValueError, Unauthorized):
+                    pass
 
-            self.cleanup()
+                self.cleanup()
 
     def test_searchabletext(self):
         portal = self.layer['portal']
         provideUtility(
             DummyVocabulary(), name='opengever.ogds.base.ContactsVocabulary')
 
-        for dossier_type in self.dossier_types:
+        for dossier_type, additional_behaviors in self.dossier_types.items():
 
             dossier = self.create_dossier(dossier_type)
-
-            # set default dossier schema attributes
-            schema = resolve(self.default_behavior)(dossier)
-
-            for attr, val in self.defautl_attr:
-                import pdb; pdb.set_trace( )
-                schema.__setattr__(attr, val)
-
-            # set additional dossier schema attributes
-            if self.additional_behavior:
-                schema = resolve(self.additional_behavior)(dossier)
-
-                for attr, val in self.additional_attr:
-                    schema.__setattr__(attr, val)
-
             wrapper = queryMultiAdapter(
                 (dossier, portal.portal_catalog), IIndexableObject)
 
-            # search
-            # storage.applicant = 'contact:hugo.boss'
-            # storage.community = ['kanton zug']
-            # storage.location = 'City'
-            # storage.gsNumber = ['gs1', 'gs2', 'gs3']
-            # storage.zones = ['zoneA', 'zoneB', ]
+            # set and search default dossier schema attributes
+            schema = self.default_behavior(dossier)
 
-            # self.assertIn('Dossier 1', wrapper.SearchableText)
-            # self.assertIn('Hugo', wrapper.SearchableText)
-            # self.assertIn('Boss', wrapper.SearchableText)
-            # self.assertIn('Zug', wrapper.SearchableText)
-            # self.assertIn('City', wrapper.SearchableText)
-            # self.assertIn('gs1', wrapper.SearchableText)
-            # self.assertIn('gs2', wrapper.SearchableText)
-            # self.assertIn('gs3', wrapper.SearchableText)
-            # self.assertIn('zoneA', wrapper.SearchableText)
-            # self.assertIn('zoneB', wrapper.SearchableText)
-            #
-            # dossier2 = repo[repo.invokeFactory('opengever.zug.bdarp.casedossier2',
-            #                                    'dossier2', title='Dossier 2')]
-            # storage = IARPCaseBehavior2(dossier2)
-            # storage.applicant = 'contact:hugo.boss'
-            # storage.agent = ['contact:james.bond']
-            # storage.community = ['cham']
-            # storage.location = 'City'
-            # storage.requestType = 'Anfrage'
-            # storage.gsNumber = ['gs1', 'gs2', 'gs3']
-            # storage.assekNumber = ['123', '456']
-            # storage.zones = ['zoneA', 'zoneB']
-            # storage.usage = 'Landwirtschaft'
-            # storage.coordinateX = 600000
-            # storage.coordinateY = 200000
-            # storage.legalTitle =['Art. 18a']
-            #
-            # wrapper = queryMultiAdapter(
-            #     (dossier2, portal.portal_catalog), IIndexableObject)
-            # self.assertIn('Dossier 2', wrapper.SearchableText)
-            # self.assertIn('Hugo', wrapper.SearchableText)
-            # self.assertIn('Boss', wrapper.SearchableText)
-            # self.assertIn('James', wrapper.SearchableText)
-            # self.assertIn('Bond', wrapper.SearchableText)
-            # self.assertIn('Cham', wrapper.SearchableText)
-            # self.assertIn('City', wrapper.SearchableText)
-            # self.assertIn('Anfrage', wrapper.SearchableText)
-            # self.assertIn('gs1', wrapper.SearchableText)
-            # self.assertIn('gs2', wrapper.SearchableText)
-            # self.assertIn('gs3', wrapper.SearchableText)
-            # self.assertIn('123', wrapper.SearchableText)
-            # self.assertIn('456', wrapper.SearchableText)
-            # self.assertIn('zoneA', wrapper.SearchableText)
-            # self.assertIn('zoneB', wrapper.SearchableText)
-            # self.assertIn('Landwirtschaft', wrapper.SearchableText)
-            # self.assertIn('600000', wrapper.SearchableText)
-            # self.assertIn('200000', wrapper.SearchableText)
-            # self.assertIn('Art. 18a', wrapper.SearchableText)
-            #
+            for attr, val in self.defautl_attr.items():
+                schema.__setattr__(attr, val)
+
+                if type(val) is list:
+                    for v in val:
+                        self.assertIn(v, wrapper.SearchableText)
+                else:
+                    self.assertIn(val, wrapper.SearchableText)
+
+            # set and search additional dossier schema attributes
+            if additional_behaviors:
+                for behavior, attributes in additional_behaviors.items():
+                    schema = resolve(behavior)(dossier)
+
+                    for attr, val in attributes.items():
+                        schema.__setattr__(attr, val)
+                        if type(val) is list:
+                            for v in val:
+                                self.assertIn(v, wrapper.SearchableText)
+                        else:
+                            self.assertIn(val, wrapper.SearchableText)
+
+            self.cleanup()
 
     # Helpers
     # ***************************************************
@@ -340,6 +312,9 @@ class TestDefaultDossierFunctions(unittest.TestCase):
         """Cleanup the test-environment
         """
         portal = self.layer['portal']
+
+        if portal.hasObject(self.name):
+            del portal[self.name]
 
         if portal.hasObject(self.repo_name):
             del portal[self.repo_name]
