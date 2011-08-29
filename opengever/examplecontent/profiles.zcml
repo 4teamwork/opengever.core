@@ -1,0 +1,29 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+    i18n_domain="opengever.examplecontent">
+
+  <genericsetup:registerProfile
+      name="developer"
+      title="opengever.examplecontent: Developer"
+      directory="profiles/default"
+      description="create example content for developing "
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      />
+
+  <genericsetup:registerProfile
+      name="4teamwork-ldap"
+      title="opengever.examplecontent: 4teamwork LDAP"
+      directory="profiles/4teamwork-ldap"
+      description="4teamwork LDAP configuration"
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      />
+
+  <!-- Register the `various` import step -->
+  <genericsetup:importStep
+      name="opengever.examplecontent.various"
+      title="Example content for OpenGever"
+      description="Import steps that start the whole transmogrify csv import."
+      handler="opengever.examplecontent.setuphandlers.setupVarious" />
+
+</configure>
