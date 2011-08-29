@@ -31,13 +31,14 @@ class DossierFunctionalLayer(PloneSandboxLayer):
     def setUpPloneSite(self, portal):
 
         # Install the example.conference product
+        applyProfile(portal, 'plone.app.registry:default')
         applyProfile(portal, 'opengever.ogds.base:default')
         applyProfile(portal, 'opengever.dossier:default')
         applyProfile(portal, 'opengever.document:default')
         applyProfile(portal, 'opengever.task:default')
         applyProfile(portal, 'opengever.mail:default')
         applyProfile(portal, 'opengever.tabbedview:default')
-
+        applyProfile(portal, 'opengever.repository:default')
         # setup the sql tables
         create_sql_tables()
         session = create_session()
