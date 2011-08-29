@@ -5,6 +5,9 @@ Changelog
 2.0b10
 ------
 
+* Removed non-working parts of ForwardingTransitionController tests
+  [lgraf]
+
 * Fixed testing of deadline datetime widget
   [lgraf]
 
