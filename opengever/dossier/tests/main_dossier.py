@@ -340,8 +340,8 @@ class TestMainDossier(unittest.TestCase):
                             val = self.map_with_vocab(behavior, attr, val)
                             self.assertIn(val, wrapper.SearchableText)
 
-    def test_z_cleanup(self):
-        """Cleanup the test-environment
+    def tearDown(self):
+        """Cleanup the test-environment after each test
         """
         # TODO: We need to reset the sequencenumber that other tests wont fail.
         # This implementation dont work.
