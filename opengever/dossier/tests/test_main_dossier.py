@@ -1,18 +1,24 @@
-from plone.testing.z2 import Browser
-from plone.app.testing import TEST_USER_NAME, TEST_USER_PASSWORD
-import transaction
-import unittest2 as unittest
-from opengever.dossier.testing import OPENGEVER_DOSSIER_INTEGRATION_TESTING
 from ftw.contentmenu.menu import FactoriesMenu
+from opengever.base.sequence import SEQUENCE_NUMBER_ANNOTATION_KEY
+from opengever.dossier.behaviors.dossier import IDossier
+from opengever.dossier.testing import OPENGEVER_DOSSIER_INTEGRATION_TESTING
+from persistent.dict import PersistentDict
+from plone.app.testing import TEST_USER_NAME, TEST_USER_PASSWORD
+from plone.dexterity.utils import createContentInContainer
+from plone.indexer.interfaces import IIndexableObject
+from plone.testing.z2 import Browser
 from zExceptions import Unauthorized
+from zope.annotation.interfaces import IAnnotations
+from zope.component import provideUtility
+from zope.component import queryMultiAdapter
+from zope.dottedname.resolve import resolve
 from zope.interface import implements
 from zope.schema.interfaces import IVocabularyFactory
 from zope.schema.vocabulary import SimpleVocabulary, SimpleTerm
-from zope.component import provideUtility
-from zope.dottedname.resolve import resolve
-from zope.component import queryMultiAdapter
-from plone.indexer.interfaces import IIndexableObject
-from opengever.dossier.behaviors.dossier import IDossier
+import transaction
+import unittest2 as unittest
+from zope.component import getUtility
+from opengever.dossier.sequence import DossierSequenceNumberGenerator
 
 class DummyVocabulary(object):
     implements(IVocabularyFactory)
@@ -60,11 +66,11 @@ class TestDefaultDossierFunctions(unittest.TestCase):
     # Tabs to control
     tabs = ['Common', 'Filing', 'Life Cycle', 'Classification']
     # Defaultname of new dossiers
-    name = 'dossier1'
+    dossier_id = 'dossier'
     # Repositoryname
-    repo_name = 'repo'
+    repo_id = 'repo'
     # new contents will be created in this folder
-    location = 'http://nohost/plone/%s' % repo_name
+    location = 'http://nohost/plone/%s' % repo_id
     # Default labels to check
     labels = {'label_add':'Add Subdossier',
               'label_edit':'Edit Subdossier',
@@ -79,165 +85,6 @@ class TestDefaultDossierFunctions(unittest.TestCase):
     # Is special dossier?
     is_special_dossier = False
 
-    # tests
-    # ***************************************************
-    def test_content_types_installed(self):
-        portal = self.layer['portal']
-        types = portal.portal_types.objectIds()
-        for dossier_type in self.dossier_types:
-            self.assertTrue(dossier_type in types)
-
-    def test_default_values(self):
-        """Check the default values of the document
-        """
-        for dossier_type in self.dossier_types:
-            browser = self.get_add_view(dossier_type)
-            responsible = browser.getControl(name='form.widgets.IDossier.responsible.widgets.query').value
-            self.assertNotEquals(None, responsible)
-
-            self.cleanup()
-
-    def test_default_tabs(self):
-        """Check default-tabs of the tabbedview.
-        """
-        for dossier_type in self.dossier_types:
-            browser = self.get_add_view(dossier_type)
-
-            for tab in self.tabs:
-
-                # For exact search
-                tab = "%s</legend>" % tab
-                self.assertEquals(tab in browser.contents, True)
-
-            self.cleanup()
-
-    def test_default_formular_labels(self):
-        """Check default formular labels
-        """
-        for dossier_type in self.dossier_types:
-            d1 = self.create_dossier(dossier_type)
-            browser =self.get_browser()
-
-            # Check action label
-            menu = FactoriesMenu(d1)
-            menu_items = menu.getMenuItems(d1, d1.REQUEST)
-
-            # mails should never be addable in a dossier (over the menu)
-            self.assertTrue('ftw.mail.mail' not in [item.get('id') for item in menu_items])
-
-            # a dossier in a dossier should called subdossier
-            self.assertIn(self.labels.get('label_action'), [item.get('title') for item in menu_items])
-
-            # Check add label
-            browser = self.get_add_view(dossier_type, path=d1.absolute_url(), browser=browser)
-            self.assertEquals(self.labels.get('label_add') in browser.contents, True)
-
-            url = browser.url.split('/')[-1]
-            self.assertTrue(url == '++add++%s' % dossier_type)
-
-            # Check edit label
-            d2 = self.create_dossier(dossier_type, subpath=d1.getId())
-            browser = self.get_edit_view(d2.absolute_url(), browser=browser)
-            self.assertEquals(self.labels.get('label_edit') in browser.contents, True)
-
-            self.cleanup()
-
-
-    def test_nesting_deepth(self):
-        """Check the deepth of subdossiers. Normally we just can add a subdossier to a dossier
-        And the subdossier must be the same dossier-type like the parent-dossier. Its not
-        possible to add a subdossier to a subdossier
-        """
-
-        for dossier_type in self.dossier_types:
-            dossiers = []
-            browser = self.get_browser()
-
-            # First normal dossier
-            dossiers.append(self.create_dossier(dossier_type))
-
-            # Create subdossiers
-            for i in range(self.deepth):
-
-                path = []
-                for dossier in dossiers:
-                    path.append(dossier.getId())
-
-                subdossier = self.create_dossier(dossier_type, subpath="/".join(path))
-
-                browser.open(subdossier.absolute_url())
-                # its possible to add a subdossier
-                if i < self.deepth-1:
-                    # Check link is enabled
-                    self.assertEquals(self.labels.get('label_action') in browser.contents, True)
-                    # Check contenttype is allowed
-                    self.assertIn(
-                        dossier_type,
-                        [fti.id for fti in subdossier.allowedContentTypes()])
-                # its disallowed to add a subdossier
-                else:
-                    # Check link is disabled
-                    self.assertNotEquals(self.labels.get('label_action') in browser.contents, True)
-                    # Chekc contenttype is disallowed
-                    self.assertTrue(
-                        dossier_type not in [fti.id for fti in subdossier.allowedContentTypes()])
-
-
-            self.cleanup()
-
-    def test_adding(self):
-        if self.is_special_dossier:
-            for dossier_type in self.dossier_types:
-                portal = self.layer['portal']
-
-                # Should not be addable in portal
-                try:
-                    portal.invokeFactory(
-                        dossier_type, self.name)
-                    self.fail('Case dossier 1 should not be addable except within\
-                                repository folders.')
-                except (ValueError, Unauthorized):
-                    pass
-
-                self.cleanup()
-
-    def test_searchabletext(self):
-        portal = self.layer['portal']
-        provideUtility(
-            DummyVocabulary(), name='opengever.ogds.base.ContactsVocabulary')
-
-        for dossier_type, additional_behaviors in self.dossier_types.items():
-
-            dossier = self.create_dossier(dossier_type)
-            wrapper = queryMultiAdapter(
-                (dossier, portal.portal_catalog), IIndexableObject)
-
-            # set and search default dossier schema attributes
-            schema = self.default_behavior(dossier)
-
-            for attr, val in self.defautl_attr.items():
-                schema.__setattr__(attr, val)
-
-                if type(val) is list:
-                    for v in val:
-                        self.assertIn(v, wrapper.SearchableText)
-                else:
-                    self.assertIn(val, wrapper.SearchableText)
-
-            # set and search additional dossier schema attributes
-            if additional_behaviors:
-                for behavior, attributes in additional_behaviors.items():
-                    schema = resolve(behavior)(dossier)
-
-                    for attr, val in attributes.items():
-                        schema.__setattr__(attr, val)
-                        if type(val) is list:
-                            for v in val:
-                                self.assertIn(v, wrapper.SearchableText)
-                        else:
-                            self.assertIn(val, wrapper.SearchableText)
-
-            self.cleanup()
 
     # Helpers
     # ***************************************************
@@ -288,13 +135,13 @@ class TestDefaultDossierFunctions(unittest.TestCase):
         self.check_repo()
 
         if subpath:
-            subpath = "%s/%s" % (self.repo_name, subpath)
+            subpath = "%s/%s" % (self.repo_id, subpath)
         else:
-            subpath = self.repo_name
-
+            subpath = self.repo_id
         obj = self.layer['portal'].restrictedTraverse(subpath)
+        dossier = createContentInContainer(obj, dossier_type, title="Dossier")
 
-        dossier = obj[obj.invokeFactory(dossier_type, self.name)]
+        # XXX
         transaction.commit()
         return dossier
 
@@ -302,22 +149,163 @@ class TestDefaultDossierFunctions(unittest.TestCase):
         """Create repository-folder
         """
         portal = self.layer['portal']
-        if not portal.hasObject(self.repo_name):
+        if not portal.hasObject(self.repo_id):
             portal[portal.invokeFactory(
-                'opengever.repository.repositoryfolder', self.repo_name)]
+                'opengever.repository.repositoryfolder', self.repo_id)]
 
             transaction.commit()
 
-    def cleanup(self):
+    #
+    # tests
+    # ***************************************************
+    def test_content_types_installed(self):
+        portal = self.layer['portal']
+        types = portal.portal_types.objectIds()
+        for dossier_type in self.dossier_types:
+            self.assertTrue(dossier_type in types)
+
+    def test_default_values(self):
+        """Check the default values of the document
+        """
+        for dossier_type in self.dossier_types:
+            browser = self.get_add_view(dossier_type)
+            responsible = browser.getControl(name='form.widgets.IDossier.responsible.widgets.query').value
+            self.assertNotEquals(None, responsible)
+
+    def test_default_tabs(self):
+        """Check default-tabs of the tabbedview.
+        """
+        for dossier_type in self.dossier_types:
+            browser = self.get_add_view(dossier_type)
+
+            for tab in self.tabs:
+
+                # For exact search
+                tab = "%s</legend>" % tab
+                self.assertEquals(tab in browser.contents, True)
+
+    def test_default_formular_labels(self):
+        """Check default formular labels
+        """
+        for dossier_type in self.dossier_types:
+            d1 = self.create_dossier(dossier_type)
+            browser =self.get_browser()
+
+            # Check action label
+            menu = FactoriesMenu(d1)
+            menu_items = menu.getMenuItems(d1, d1.REQUEST)
+
+            # mails should never be addable in a dossier (over the menu)
+            self.assertTrue('ftw.mail.mail' not in [item.get('id') for item in menu_items])
+
+            # a dossier in a dossier should called subdossier
+            self.assertIn(self.labels.get('label_action'), [item.get('title') for item in menu_items])
+
+            # Check add label
+            browser = self.get_add_view(dossier_type, path=d1.absolute_url(), browser=browser)
+            self.assertEquals(self.labels.get('label_add') in browser.contents, True)
+
+            url = browser.url.split('/')[-1]
+            self.assertTrue(url == '++add++%s' % dossier_type)
+
+            # Check edit label
+            d2 = self.create_dossier(dossier_type, subpath=d1.getId())
+            browser = self.get_edit_view(d2.absolute_url(), browser=browser)
+            self.assertEquals(self.labels.get('label_edit') in browser.contents, True)
+
+    def test_nesting_deepth(self):
+        """Check the deepth of subdossiers. Normally we just can add a subdossier to a dossier
+        And the subdossier must be the same dossier-type like the parent-dossier. Its not
+        possible to add a subdossier to a subdossier
+        """
+
+        for dossier_type in self.dossier_types:
+            dossiers = []
+            browser = self.get_browser()
+            # First normal dossier
+            dossiers.append(self.create_dossier(dossier_type))
+
+            # Create subdossiers
+            for i in range(self.deepth):
+
+                path = []
+                for dossier in dossiers:
+                    path.append(dossier.getId())
+
+                subdossier = self.create_dossier(dossier_type, subpath="/".join(path))
+
+                browser.open(subdossier.absolute_url())
+                # its possible to add a subdossier
+                if i < self.deepth-1:
+                    # Check link is enabled
+                    self.assertEquals(self.labels.get('label_action') in browser.contents, True)
+                    # Check contenttype is allowed
+                    self.assertIn(
+                        dossier_type,
+                        [fti.id for fti in subdossier.allowedContentTypes()])
+                # its disallowed to add a subdossier
+                else:
+                    # Check link is disabled
+                    self.assertNotEquals(self.labels.get('label_action') in browser.contents, True)
+                    # Chekc contenttype is disallowed
+                    self.assertTrue(
+                        dossier_type not in [fti.id for fti in subdossier.allowedContentTypes()])
+
+    def test_adding(self):
+        if self.is_special_dossier:
+            for dossier_type in self.dossier_types:
+                portal = self.layer['portal']
+
+                # Should not be addable in portal
+                try:
+                    portal.invokeFactory(
+                        dossier_type, self.name)
+                    self.fail('Case dossier 1 should not be addable except within\
+                                repository folders.')
+                except (ValueError, Unauthorized):
+                    pass
+
+    def test_searchabletext(self):
+        portal = self.layer['portal']
+        provideUtility(
+            DummyVocabulary(), name='opengever.ogds.base.ContactsVocabulary')
+
+        for dossier_type, additional_behaviors in self.dossier_types.items():
+
+            dossier = self.create_dossier(dossier_type)
+            wrapper = queryMultiAdapter(
+                (dossier, portal.portal_catalog), IIndexableObject)
+
+            # set and search default dossier schema attributes
+            schema = self.default_behavior(dossier)
+
+            for attr, val in self.defautl_attr.items():
+                schema.__setattr__(attr, val)
+
+                if type(val) is list:
+                    for v in val:
+                        self.assertIn(v, wrapper.SearchableText)
+                else:
+                    self.assertIn(val, wrapper.SearchableText)
+
+            # set and search additional dossier schema attributes
+            if additional_behaviors:
+                for behavior, attributes in additional_behaviors.items():
+                    schema = resolve(behavior)(dossier)
+
+                    for attr, val in attributes.items():
+                        schema.__setattr__(attr, val)
+                        if type(val) is list:
+                            for v in val:
+                                self.assertIn(v, wrapper.SearchableText)
+                        else:
+                            self.assertIn(val, wrapper.SearchableText)
+
+    def test_z_cleanup(self):
         """Cleanup the test-environment
         """
+        # Adjust the counter
+        new_counter_value = 0
         portal = self.layer['portal']
-
-        if portal.hasObject(self.name):
-            del portal[self.name]
-
-        if portal.hasObject(self.repo_name):
-            del portal[self.repo_name]
-
-
-        transaction.commit()
+        ann = IAnnotations(portal)
+        ann[SEQUENCE_NUMBER_ANNOTATION_KEY] = PersistentDict()

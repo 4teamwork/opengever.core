@@ -14,10 +14,10 @@ configuration. This will configure the behavior.
     ... <configure
     ...      xmlns="http://namespaces.zope.org/zope"
     ...      i18n_domain="opengever.dossier">
-    ...      
+    ...
     ...     <include package="Products.Five" file="meta.zcml" />
     ...     <include package="opengever.dossier" file="behaviors.zcml" />
-    ...     
+    ...
     ... </configure>
     ... """
 
@@ -38,15 +38,15 @@ IBehaviorAssignable adapter to mark the behavior as enabled.
     >>> class TestingAssignable(object):
     ...     implements(IBehaviorAssignable)
     ...     adapts(Container)
-    ...     
+    ...
     ...     enabled = [IDossier]
-    ...     
+    ...
     ...     def __init__(self, context):
     ...         self.context = context
-    ...     
+    ...
     ...     def supports(self, behavior_interface):
     ...         return behavior_interface in self.enabled
-    ...     
+    ...
     ...     def enumerate_behaviors(self):
     ...         for e in self.enabled:
     ...             yield queryUtility(IBehavior, name=e.__identifier__)
@@ -79,4 +79,10 @@ it works.
     >>> dossier_adapter = IDossier(doc, None)
     >>> dossier_adapter is not None
     True
+
+Clean up
+    >>> from zope import component
+    >>> component.getGlobalSiteManager().unregisterAdapter(factory=TestingAssignable)
+    True
+
 

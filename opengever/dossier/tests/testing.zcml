@@ -12,6 +12,8 @@
     <include package="opengever.mail" />
     <include package="opengever.globalindex" />
     <include package="ftw.tabbedview" />
+    <include package="opengever.repository" />
+    <include package="opengever.dossier" />
     
     <!-- configure a temporary testing DB -->
     <db:engine name="opengever.db"
