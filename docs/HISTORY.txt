@@ -5,6 +5,10 @@ Changelog
 2.0b16
 ------
 
+* Enabling versioning for documents in repositorytool.xml, custom setuphandler
+  is not needed any more
+  [lgraf]
+
 * - Registering custom import steps in ZCML instead of import_steps.xml (deprecated)
   - Fixed unresolved import step dependency on `types` (should be `typeinfo`)
 

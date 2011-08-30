@@ -19,13 +19,4 @@
       handler="opengever.document.setuphandlers.import_various">
   </genericsetup:importStep>
 
-  <!-- Register the versioning step -->
-  <genericsetup:importStep
-      name="opengever.document.versioning"
-      title="OpenGever Document: enable versioning"
-      description=""
-      handler="opengever.document.setuphandlers.setup_versioning">
-      <depends name="typeinfo"/>
-  </genericsetup:importStep>
-
 </configure>
