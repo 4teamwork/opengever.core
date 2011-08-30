@@ -5,7 +5,7 @@ Changelog
 2.0b20
 -------
 
-* added default-tests for all dossiers
+* added default-tests for dossiers
   [eschmutz]
 
 * removed unused check in the order_factories method

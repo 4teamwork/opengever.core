@@ -16,17 +16,16 @@ from zope.configuration import xmlconfig
 
 class DossierFunctionalLayer(PloneSandboxLayer):
 
-    defaultBases = (PLONE_FIXTURE,)
+    defaultBases = (PLONE_FIXTURE, )
 
     def setUpZope(self, app, configurationContext):
         # do not install pas plugins (doesnt work in tests)
-         from opengever.ogds.base import setuphandlers
-         setuphandlers.setup_scriptable_plugin = lambda *a, **kw: None
+        from opengever.ogds.base import setuphandlers
+        setuphandlers.setup_scriptable_plugin = lambda *a, **kw: None
 
-         from opengever.dossier import tests
-         xmlconfig.file('testing.zcml', package=tests,
-             context=configurationContext)
-
+        from opengever.dossier import tests
+        xmlconfig.file('testing.zcml', package=tests,
+            context=configurationContext)
 
     def setUpPloneSite(self, portal):
 
@@ -39,6 +38,7 @@ class DossierFunctionalLayer(PloneSandboxLayer):
         applyProfile(portal, 'opengever.mail:default')
         applyProfile(portal, 'opengever.tabbedview:default')
         applyProfile(portal, 'opengever.repository:default')
+
         # setup the sql tables
         create_sql_tables()
         session = create_session()
@@ -79,4 +79,4 @@ class DossierFunctionalLayer(PloneSandboxLayer):
 
 OPENGEVER_DOSSIER_FIXTURE = DossierFunctionalLayer()
 OPENGEVER_DOSSIER_INTEGRATION_TESTING = IntegrationTesting(
-    bases=(OPENGEVER_DOSSIER_FIXTURE,), name="OpengeverDossier:Integration")
+    bases=(OPENGEVER_DOSSIER_FIXTURE, ), name="OpengeverDossier:Integration")
