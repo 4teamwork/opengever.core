@@ -40,47 +40,49 @@ class TestMainDossier(unittest.TestCase):
     - dossier_types
     - layer
     - is_special_dossier
-    """
 
-    # Dossier-type you like to test
-    # 1. typename
-    # 2. map of additional schema behaviour to test
-    # 3. additional attributes with value
-    # example:dossier_types =
-    #   {'opengever.zug.bdarp.casedossier1':
-    #       {IARPCaseBehavior1:
-    #           {'attr1':'val1', 'attr2':'sadfsadf'},
-    #       {IARPCaseBehavior2:
-    #           {'attr1':'val1', 'attr2':'sadfsadf'},
-    #   {'opengever.zug.bdarp.casedossier2':
-    #       {IARPCaseBehavior1:
-    #           {'attr1':'val1', 'attr2':'sadfsadf'},
-    #       {IARPCaseBehavior2:
-    #           {'attr1':'val1', 'attr2':'sadfsadf'},
-    # }}
+    Params:
+
+    - dossier-type: portal_type you like to test -->
+        1. typename
+        (for search)
+        2. map of additional schema behaviour to test
+        3. additional attributes with value
+        example:dossier_types =
+          {'opengever.zug.bdarp.casedossier1':
+              {IARPCaseBehavior1:
+                  {'attr1':'val1', 'attr2':'sadfsadf'},
+              {IARPCaseBehavior2:
+                  {'attr1':'val1', 'attr2':'sadfsadf'},
+          {'opengever.zug.bdarp.casedossier2':
+              {IARPCaseBehavior1:
+                  {'attr1':'val1', 'attr2':'sadfsadf'},
+              {IARPCaseBehavior2:
+                  {'attr1':'val1', 'attr2':'sadfsadf'},
+        }}
+
+    - layer: testlayer to use
+    - tabs: available tabs
+    - repo_id: repositoryid
+    - base_url: new content will be created in this folder
+    - subdossier_labels: map with labels of subdossiers
+    - deepth: how deepth you can add subdossiers
+    - default_behavior: schema-behavior of default dossier
+    - default_attr: attributes to test in the default behavior
+    - is_special_dossier: if true, that we can add this dossie just in a repos
+    """
     dossier_types = {'opengever.dossier.businesscasedossier': {}}
-    # testlayer to use
     layer = OPENGEVER_DOSSIER_INTEGRATION_TESTING
-    # Tabs to control
     tabs = ['Common', 'Filing', 'Life Cycle', 'Classification']
-    # Defaultname of new dossiers
-    dossier_id = 'dossier'
-    # Repositoryname
     repo_id = 'repo'
-    # new contents will be created in this folder
-    location = 'http://nohost/plone/%s' % repo_id
-    # Default labels to check
-    labels = {'label_add': 'Add Subdossier',
+    base_url = 'http://nohost/plone/%s' % repo_id
+    subdossier_labels = {'label_add': 'Add Subdossier',
               'label_edit': 'Edit Subdossier',
               'label_action': 'Subdossier',
              }
-    # Deepth of subdossiers. How many times you can add a subdossier
     deepth = 1
-    # Default dossier behavior
     default_behavior = IDossier
-    # Default dossier behavior attributes
     defautl_attr = {'keywords': ['hallo', 'hugo']}
-    # Is special dossier?
     is_special_dossier = False
 
 
@@ -107,7 +109,7 @@ class TestMainDossier(unittest.TestCase):
         """Return a browser whos content is in the add-view of a dossier
         """
         if not path:
-            path = self.location
+            path = self.base_url
 
         if not browser:
             browser = self.get_browser()
@@ -211,8 +213,11 @@ class TestMainDossier(unittest.TestCase):
                 tab = "%s</legend>" % tab
                 self.assertEquals(tab in browser.contents, True)
 
-    def test_default_formular_labels(self):
-        """Check default formular labels
+    def test_default_subdossier_labels(self):
+        """Check default form labels of subdossier
+        We have a special handling of labels in subdossiers.
+        We have different specialdossies, but we always have the same
+        text in the add, edit and action-view.
         """
         for dossier_type in self.dossier_types:
             d1 = self.create_dossier(dossier_type)
@@ -228,14 +233,15 @@ class TestMainDossier(unittest.TestCase):
 
             # a dossier in a dossier should called subdossier
             self.assertIn(
-                self.labels.get('label_action'),
+                self.subdossier_labels.get('label_action'),
                 [item.get('title') for item in menu_items])
 
             # Check add label
             browser = self.get_add_view(
                 dossier_type, path=d1.absolute_url(), browser=browser)
             self.assertEquals(
-                self.labels.get('label_add') in browser.contents, True)
+                self.subdossier_labels.get(
+                    'label_add') in browser.contents, True)
 
             url = browser.url.split('/')[-1]
             self.assertTrue(url == '++add++%s' % dossier_type)
@@ -244,7 +250,8 @@ class TestMainDossier(unittest.TestCase):
             d2 = self.create_dossier(dossier_type, subpath=d1.getId())
             browser = self.get_edit_view(d2.absolute_url(), browser=browser)
             self.assertEquals(
-                self.labels.get('label_edit') in browser.contents, True)
+                self.subdossier_labels.get(
+                    'label_edit') in browser.contents, True)
 
     def test_nesting_deepth(self):
         """Check the deepth of subdossiers. Normally we just can add a
@@ -274,7 +281,8 @@ class TestMainDossier(unittest.TestCase):
                 if i < self.deepth-1:
                     # Check link is enabled
                     self.assertEquals(
-                        self.labels.get('label_action') in browser.contents,
+                        self.subdossier_labels.get(
+                            'label_action') in browser.contents,
                         True)
 
                     # Check contenttype is allowed
@@ -285,8 +293,8 @@ class TestMainDossier(unittest.TestCase):
                 else:
                     # Check link is disabled
                     self.assertNotEquals(
-                        self.labels.get('label_action') in browser.contents,
-                        True)
+                        self.subdossier_labels.get(
+                            'label_action') in browser.contents, True)
                     # Chekc contenttype is disallowed
                     self.assertTrue(
                         dossier_type not in [
@@ -345,7 +353,9 @@ class TestMainDossier(unittest.TestCase):
                         else:
                             val = self.map_with_vocab(behavior, attr, val)
 
-                        self.assertIn(val.encode('utf-8'), wrapper.SearchableText)
+                        self.assertIn(
+                            val.encode('utf-8'), wrapper.SearchableText)
+
     def tearDown(self):
         """Cleanup the test-environment after each test
         """
