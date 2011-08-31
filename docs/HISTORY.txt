@@ -5,12 +5,11 @@ Changelog
 2.0b21
 ------
 
+* added fixes for default-tests
+  [eschmutz]
 
 2.0b20
 -------
-
-* added fixes for default-tests
-  [eschmutz]
 
 * added default-tests for dossiers
   [eschmutz]
