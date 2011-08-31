@@ -114,8 +114,6 @@ class TestMainDossier(unittest.TestCase):
         if not browser:
             browser = self.get_browser()
 
-        self.check_repo()
-
         browser.open('%s/++add++%s' % (path, dossier_type))
         return browser
 
@@ -131,7 +129,6 @@ class TestMainDossier(unittest.TestCase):
     def create_dossier(self, dossier_type, subpath=''):
         """Create and return a dossier in a given location
         """
-        self.check_repo()
 
         if subpath:
             subpath = "%s/%s" % (self.repo_id, subpath)
@@ -143,16 +140,6 @@ class TestMainDossier(unittest.TestCase):
         # XXX
         transaction.commit()
         return dossier
-
-    def check_repo(self):
-        """Create repository-folder
-        """
-        portal = self.layer['portal']
-        if not portal.hasObject(self.repo_id):
-            portal[portal.invokeFactory(
-                'opengever.repository.repositoryfolder', self.repo_id)]
-
-            transaction.commit()
 
     def map_with_vocab(self, behavior, fieldname, value):
         """Look in the schema for a vocab and return the mapped value
@@ -185,6 +172,16 @@ class TestMainDossier(unittest.TestCase):
 
     # tests
     # ***************************************************
+    #
+    def setUp(self):
+        """"""
+        portal = self.layer['portal']
+        if not portal.hasObject(self.repo_id):
+            portal[portal.invokeFactory(
+                'opengever.repository.repositoryfolder', self.repo_id)]
+
+            transaction.commit()
+
     def test_content_types_installed(self):
         portal = self.layer['portal']
         types = portal.portal_types.objectIds()
@@ -276,14 +273,15 @@ class TestMainDossier(unittest.TestCase):
                 subdossier = self.create_dossier(
                     dossier_type, subpath="/".join(path))
 
+                dossiers.append(subdossier)
+
                 browser.open(subdossier.absolute_url())
                 # its possible to add a subdossier
                 if i < self.deepth-1:
                     # Check link is enabled
                     self.assertEquals(
                         self.subdossier_labels.get(
-                            'label_action') in browser.contents,
-                        True)
+                            'label_action') in browser.contents, True)
 
                     # Check contenttype is allowed
                     self.assertIn(
