@@ -168,8 +168,14 @@ class TestMainDossier(unittest.TestCase):
         portal = self.layer['portal']
         fields = getFieldsInOrder(behavior)
         for name, field in fields:
-            if name == fieldname and hasattr(field, 'value_type'):
-                value_type = field.value_type
+            if name == fieldname:
+
+                # We have different types of fields, so we have to check,
+                # that we become the vocabulary
+                value_type = field
+                if hasattr(field, 'value_type'):
+                    value_type = field.value_type
+
                 if hasattr(value_type, 'vocabulary'):
                     vocab = value_type.vocabulary(portal)
                     value = vocab.by_value.get(value).title
@@ -334,12 +340,12 @@ class TestMainDossier(unittest.TestCase):
                         # search value
                         if type(val) is list:
                             for v in val:
-                                v = self.map_with_vocab(behavior, attr, v)
-                                self.assertIn(v, wrapper.SearchableText)
+                                val = self.map_with_vocab(behavior, attr, v)
+
                         else:
                             val = self.map_with_vocab(behavior, attr, val)
-                            self.assertIn(val, wrapper.SearchableText)
 
+                        self.assertIn(val.encode('utf-8'), wrapper.SearchableText)
     def tearDown(self):
         """Cleanup the test-environment after each test
         """

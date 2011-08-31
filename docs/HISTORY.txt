@@ -9,6 +9,9 @@ Changelog
 2.0b20
 -------
 
+* added fixes for default-tests
+  [eschmutz]
+
 * added default-tests for dossiers
   [eschmutz]
 
