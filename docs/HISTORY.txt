@@ -6,6 +6,7 @@ Changelog
 ------
 
 * Added special content-type guess for word documents wich are saved as octetStream
+  [phgross]
 
 * added test-buildout for plone 4.1
   [eschmutz]
