@@ -27,10 +27,15 @@ class View(ftwView):
         for attachment in attachments:
             icon = 'mimetype-plain'
             type_name = 'File'
-            lookup = mtr.lookup(attachment['content-type'])
+            if attachment.get('content-type') == 'application/octet-stream':
+                lookup = mtr.globFilename(attachment.get('filename'))
+            else:
+                lookup = mtr.lookup(attachment['content-type'])
             if lookup:
-                icon = "mimetype-%s" % normalize(lookup[0].minor())
-                type_name = lookup[0].name()
+                if isinstance(lookup, list):
+                    lookup = lookup[0]
+                icon = "mimetype-%s" % normalize(lookup.minor())
+                type_name = lookup.name()
             attachment['icon'] = icon
             attachment['type-name'] = type_name
         return attachments

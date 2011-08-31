@@ -5,6 +5,8 @@ Changelog
 2.0b10
 ------
 
+* Added special content-type guess for word documents wich are saved as octetStream
+
 * added test-buildout for plone 4.1
   [eschmutz]
 
