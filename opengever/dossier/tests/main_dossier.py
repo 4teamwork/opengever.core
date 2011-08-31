@@ -203,7 +203,6 @@ class TestMainDossier(unittest.TestCase):
 
         for dossier_type in self.dossier_types:
             browser = self.get_add_view(dossier_type)
-
             for tab in self.tabs:
 
                 # For exact search
@@ -299,7 +298,10 @@ class TestMainDossier(unittest.TestCase):
                             fti.id for fti in
                             subdossier.allowedContentTypes()])
 
-    def test_adding(self):
+    def test_not_addable(self):
+        """We check that the dossie isn't addable in the
+        portal-root
+        """
         if self.is_special_dossier:
             for dossier_type in self.dossier_types:
                 portal = self.layer['portal']
@@ -308,12 +310,17 @@ class TestMainDossier(unittest.TestCase):
                 try:
                     portal.invokeFactory(
                         dossier_type, 'dossier1')
+
+                    # if we can add the dossier, we have to raise an error
                     self.fail('Case dossier 1 should not be addable \
                                 except within repository folders.')
                 except (ValueError, Unauthorized):
+                    # if we can't add the dossier, everything is ok
                     pass
 
     def test_searchabletext(self):
+        """Check the searchable text of an object
+        """
         portal = self.layer['portal']
         provideUtility(
             DummyVocabulary(), name='opengever.ogds.base.ContactsVocabulary')
