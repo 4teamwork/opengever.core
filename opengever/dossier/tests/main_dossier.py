@@ -181,7 +181,8 @@ class TestMainDossier(unittest.TestCase):
     # ***************************************************
     #
     def setUp(self):
-        """"""
+        """Set up the testenvironment
+        """
         portal = self.layer['portal']
         if not portal.hasObject(self.repo_id):
             portal[portal.invokeFactory(
@@ -190,14 +191,22 @@ class TestMainDossier(unittest.TestCase):
             transaction.commit()
 
     def test_content_types_installed(self):
+        """Check whether the content-type is installed
+        """
         portal = self.layer['portal']
         types = portal.portal_types.objectIds()
         for dossier_type in self.dossier_types:
             self.assertTrue(dossier_type in types)
 
     def test_default_values(self):
-        """Check the default values of the document
+        """Check the default values of the dossier
+        Default responsible of a new dossier must be the owner. The
+        default responsible of a subdossier must be the owner of the
+        parent-dossier
         """
+        # TODO:
+        # This test won't work because we won't get a value from the responsible
+        # widget.
         for dossier_type in self.dossier_types:
             browser = self.get_add_view(dossier_type)
             responsible = browser.getControl(
