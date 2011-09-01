@@ -73,12 +73,19 @@ class TestMainDossier(unittest.TestCase):
     """
     dossier_types = {'opengever.dossier.businesscasedossier': {}}
     layer = OPENGEVER_DOSSIER_INTEGRATION_TESTING
-    tabs = ['Common', 'Filing', 'Life Cycle', 'Classification']
+    tabs = ['Overview',
+            'Subdossiers',
+            'Documents',
+            'Tasks',
+            'Participants',
+            'Trash',
+            'Journal',
+            'Sharing', ]
     repo_id = 'repo'
     base_url = 'http://nohost/plone/%s' % repo_id
     subdossier_labels = {'label_add': 'Add Subdossier',
-              'label_edit': 'Edit Subdossier',
-              'label_action': 'Subdossier',
+                          'label_edit': 'Edit Subdossier',
+                          'label_action': 'Subdossier',
              }
     deepth = 1
     default_behavior = IDossier
@@ -200,14 +207,26 @@ class TestMainDossier(unittest.TestCase):
     def test_default_tabs(self):
         """Check default-tabs of the tabbedview.
         """
+        portal = self.layer['portal']
+        types_tool = portal.portal_types
 
         for dossier_type in self.dossier_types:
-            browser = self.get_add_view(dossier_type)
-            for tab in self.tabs:
 
-                # For exact search
-                tab = "%s</legend>" % tab
-                self.assertEquals(tab in browser.contents, True)
+            # Copy of tabs, because we pop the tab if we found one.
+            # If we take the original, and we have more than one
+            # dossier_type, then the second and all other dossier_types
+            # are true.
+            tabs = self.tabs
+            obj = self.create_dossier(dossier_type)
+            actions = types_tool.listActions(object=obj)
+            for action in actions:
+                if action.category == 'tabbedview-tabs':
+                    # if its a default-tab we pop it from the tabs
+                    if action.title in tabs:
+                        tabs.pop(tabs.index(action.title))
+
+            # the tabs-var should be empty if we found every tab
+            self.assertEquals(tabs, [])
 
     def test_default_subdossier_labels(self):
         """Check default form labels of subdossier
