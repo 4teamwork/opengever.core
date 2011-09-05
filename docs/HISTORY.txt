@@ -5,6 +5,9 @@ Changelog
 2.0b17
 ------
 
+* Moved customized history viewlet into opengever.base
+  [lgraf]
+
 
 2.0b16
 ------

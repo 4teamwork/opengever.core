@@ -1,6 +1,4 @@
 from Acquisition import aq_inner, aq_base
-from Products.CMFCore.utils import getToolByName
-from Products.MimetypesRegistry.common import MimeTypeException
 from collective import dexteritytextindexer
 from collective.elephantvocabulary import wrap_vocabulary
 from five import grok
@@ -11,6 +9,7 @@ from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.tabbedview.browser.tabs import OpengeverTab
 from opengever.tabbedview.browser.tabs import Tasks
+from opengever.tabbedview.helper import readable_ogds_author
 from plone.app.layout.viewlets.interfaces import IBelowContentTitle
 from plone.app.versioningbehavior.behaviors import IVersionable
 from plone.autoform.interfaces import OMITTED_KEY
@@ -23,7 +22,8 @@ from plone.namedfile.field import NamedBlobFile
 from plone.supermodel.interfaces import FIELDSETS_KEY
 from plone.supermodel.model import Fieldset
 from plone.z3cform.textlines.textlines import TextLinesFieldWidget
-from Products.statusmessages.interfaces import IStatusMessage
+from Products.CMFCore.utils import getToolByName
+from Products.MimetypesRegistry.common import MimeTypeException
 from z3c.form.browser import checkbox
 from zc.relation.interfaces import ICatalog
 from zope import schema
@@ -31,11 +31,11 @@ from zope.app.component.hooks import getSite
 from zope.app.intid.interfaces import IIntIds
 from zope.component import getUtility, queryMultiAdapter, getAdapter
 from zope.interface import invariant, Invalid, Interface
+from zope.lifecycleevent.interfaces import IObjectCopiedEvent
 from zope.lifecycleevent.interfaces import IObjectCreatedEvent
 from zope.lifecycleevent.interfaces import IObjectModifiedEvent
-from zope.lifecycleevent.interfaces import IObjectCopiedEvent
 import logging
-from opengever.tabbedview.helper import readable_ogds_author
+
 
 LOG = logging.getLogger('opengever.document')
 
@@ -504,25 +504,3 @@ class RelatedTasks(Tasks):
         # do not search on this context, search on site
         self.filter_path = None
 
-
-class DownloadFileVersion(grok.CodeView):
-    grok.context(IDocumentSchema)
-    grok.name('download_file_version')
-
-    def render(self):
-        version_id = self.request.get('version_id')
-        pr = self.context.portal_repository
-        old_obj = pr.retrieve(self.context, version_id).object
-        old_file = old_obj.file
-        if not old_file:
-            msg = _(u'No file in in this version')
-            IStatusMessage(self.request).addStatusMessage(
-                msg, type='error')
-            return self.request.RESPONSE.redirect(self.context.absolute_url())
-
-        response = self.request.RESPONSE
-        response.setHeader('Content-Type', old_file.contentType)
-        response.setHeader('Content-Length', old_file.getSize())
-        response.setHeader('Content-Disposition',
-                           'attachment;filename="%s"' % old_file.filename)
-        return old_file.data
