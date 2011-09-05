@@ -52,6 +52,7 @@ setup(name='opengever.base',
         'collective.dexteritytextindexer',
         'izug.basetheme',
         'Products.LDAPUserFolder',
+        'plone.app.versioningbehavior',
         # -*- Extra requirements: -*-
         ],
       tests_require=tests_require,

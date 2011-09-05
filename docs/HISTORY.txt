@@ -5,6 +5,10 @@ Changelog
 2.0b15
 ------
 
+* Moved customized history viewlet from og.document into og.base and
+  modified it to handle PDF previews if available.
+  [lgraf]
+
 
 2.0b14
 ------

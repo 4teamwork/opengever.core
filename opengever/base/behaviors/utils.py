@@ -2,11 +2,46 @@
 from Acquisition import aq_inner, aq_parent
 import zope.schema.vocabulary
 from zope.component import getMultiAdapter
+from zope.component import adapts
+from plone.dexterity.interfaces import IDexterityContent
+from zope.component import getUtility
+from plone.dexterity.interfaces import IDexterityFTI
+from zope.schema import getFieldsInOrder
+
+from zope.interface import implements
+from plone.rfc822.interfaces import IPrimaryFieldInfo
+from plone.rfc822.interfaces import IPrimaryField
 
 from Products.CMFCore.interfaces import ISiteRoot
 from plone.app.dexterity.behaviors.metadata import MetadataBase
 from z3c.form.interfaces import IValue
 from z3c.form.value import ComputedValue
+
+
+class PrimaryFieldInfo(object):
+    """Helper class that determines the primary field of a schema.
+    See http://groups.google.com/group/dexterity-development/browse_thread/thread/1f244caa7425b814
+    """
+    # XXX: Remove as soon as this gets implemented in dexterity
+    implements(IPrimaryFieldInfo)
+    adapts(IDexterityContent)
+
+    def __init__(self, context):
+        self.context = context
+        fti = getUtility(IDexterityFTI, name=context.portal_type)
+        self.schema = fti.lookupSchema()
+        primary = [
+            (name, field) for name, field in getFieldsInOrder(self.schema)
+            if IPrimaryField.providedBy(field)
+            ]
+        if len(primary) != 1:
+            raise TypeError('Could not adapt', context, IPrimaryFieldInfo)
+        self.fieldname, self.field = primary[0]
+
+    @property
+    def value(self):
+        return self.field.get(self.schema(self.context))
+
 
 def create_restricted_vocabulary(field, options, message_factory=None):
     """
