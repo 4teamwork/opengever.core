@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<repositorytool>
+ <policymap purge="false">
+  <type name="ftw.mail.mail">
+   <policy name="version_on_revert"/>
+   <policy name="at_edit_autoversion"/>
+  </type>
+ </policymap>
+</repositorytool>

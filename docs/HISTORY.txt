@@ -8,6 +8,9 @@ Changelog
 * Added special content-type guess for word documents wich are saved as octetStream
   [phgross]
 
+* Enabled versioning for ftw.mail.mail
+  [lgraf]
+
 * added test-buildout for plone 4.1
   [eschmutz]
 

@@ -12,5 +12,6 @@
     </action>
     <property name="behaviors" purge="False">
         <element value="opengever.trash.trash.ITrashable" />
+        <element value="plone.app.versioningbehavior.behaviors.IVersionable" />
     </property>
 </object>
