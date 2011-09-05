@@ -151,7 +151,7 @@ class TestMainDossier(unittest.TestCase):
         return dossier
 
     def get_logged_in_user(self):
-         return getSecurityManager().getUser().getId()
+        return getSecurityManager().getUser().getId()
 
     def map_with_vocab(self, behavior, fieldname, value):
         """Look in the schema for a vocab and return the mapped value
@@ -216,14 +216,16 @@ class TestMainDossier(unittest.TestCase):
             request = self.layer['request']
             request.set('form.widgets.IDossier.responsible', [])
 
-            d1_view = portal.repo.unrestrictedTraverse('++add++%s' % dossier_type)
+            d1_view = portal.repo.unrestrictedTraverse(
+                '++add++%s' % dossier_type)
             # We have to call the view to run the update-method
             d1_view()
 
             # In the request we must have the logged in user
-            self.assertEquals([self.get_logged_in_user()], d1_view.request.get('form.widgets.IDossier.responsible', None))
+            self.assertEquals([self.get_logged_in_user()], d1_view.request.get(
+                'form.widgets.IDossier.responsible', None))
 
-            # In tests, the default value from the request won't work correctly.
+            # In tests, the default value from the request won't work correctly
             # So we create a new dossier and add the resposible manually
             d1 = self.create_dossier(dossier_type)
 
@@ -237,9 +239,11 @@ class TestMainDossier(unittest.TestCase):
             login(portal, SITE_OWNER_NAME)
 
             # The same with another user
-            d2_view = portal.repo.unrestrictedTraverse('++add++%s' % dossier_type)
+            d2_view = portal.repo.unrestrictedTraverse(
+                '++add++%s' % dossier_type)
             d2_view()
-            self.assertEquals([self.get_logged_in_user()], d2_view.request.get('form.widgets.IDossier.responsible', None))
+            self.assertEquals([self.get_logged_in_user()], d2_view.request.get(
+                'form.widgets.IDossier.responsible', None))
             d2 = self.create_dossier(dossier_type)
             IDossier(d2).responsible = self.get_logged_in_user()
             request.set('form.widgets.IDossier.responsible', [])
@@ -250,8 +254,13 @@ class TestMainDossier(unittest.TestCase):
 
             d2_1_view = d2.unrestrictedTraverse('++add++%s' % dossier_type)
             d2_1_view()
-            # This is a subdossier, so in responsible we must have the responsible of the parent
-            self.assertEquals([IDossier(d2).responsible], d2_1_view.request.get('form.widgets.IDossier.responsible', None))
+
+            # This is a subdossier, so in responsible we must have the responsible
+            # of the parent
+            self.assertEquals(
+                [IDossier(d2).responsible],
+                d2_1_view.request.get(
+                    'form.widgets.IDossier.responsible', None))
 
     def test_default_tabs(self):
         """Check default-tabs of the tabbedview.
