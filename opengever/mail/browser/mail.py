@@ -32,7 +32,7 @@ class View(ftwView):
             else:
                 lookup = mtr.lookup(attachment['content-type'])
             if lookup:
-                if isinstance(lookup, list):
+                if isinstance(lookup, list) or isinstance(lookup, tuple):
                     lookup = lookup[0]
                 icon = "mimetype-%s" % normalize(lookup.minor())
                 type_name = lookup.name()
