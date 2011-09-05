@@ -221,7 +221,6 @@ class AddForm(dexterity.AddForm):
             parent_dossier = IDossier(self.context)
             if parent_dossier:
                 responsible = parent_dossier.responsible
-
         if not self.request.get('form.widgets.IDossier.responsible', None):
             self.request.set('form.widgets.IDossier.responsible', [responsible])
         super(AddForm, self).update()
@@ -240,7 +239,7 @@ class AddForm(dexterity.AddForm):
 class EditForm(dexterity.EditForm):
     """Standard Editform, provide just a special label for subdossiers"""
     grok.context(IDossierMarker)
-    
+
     @property
     def label(self):
         if IDossierMarker.providedBy(aq_parent(aq_inner(self.context))):

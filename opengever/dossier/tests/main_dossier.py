@@ -2,6 +2,7 @@ from ftw.contentmenu.menu import FactoriesMenu
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.testing import OPENGEVER_DOSSIER_INTEGRATION_TESTING
 from plone.app.testing import TEST_USER_NAME, TEST_USER_PASSWORD
+from plone.app.testing import SITE_OWNER_NAME, login, logout
 from plone.dexterity.utils import createContentInContainer
 from plone.indexer.interfaces import IIndexableObject
 from plone.testing.z2 import Browser
@@ -14,6 +15,7 @@ from zope.schema.vocabulary import SimpleVocabulary, SimpleTerm
 import transaction
 import unittest2 as unittest
 from zope.schema import getFieldsInOrder
+from AccessControl import getSecurityManager
 
 
 class DummyVocabulary(object):
@@ -148,6 +150,9 @@ class TestMainDossier(unittest.TestCase):
         transaction.commit()
         return dossier
 
+    def get_logged_in_user(self):
+         return getSecurityManager().getUser().getId()
+
     def map_with_vocab(self, behavior, fieldname, value):
         """Look in the schema for a vocab and return the mapped value
         """
@@ -204,14 +209,49 @@ class TestMainDossier(unittest.TestCase):
         default responsible of a subdossier must be the owner of the
         parent-dossier
         """
-        # TODO:
-        # This test won't work because we won't get a value from the responsible
-        # widget.
+
         for dossier_type in self.dossier_types:
-            browser = self.get_add_view(dossier_type)
-            responsible = browser.getControl(
-                name='form.widgets.IDossier.responsible.widgets.query').value
-            self.assertNotEquals(None, responsible)
+            # browser = self.get_add_view(dossier_type)
+            portal = self.layer['portal']
+            request = self.layer['request']
+            request.set('form.widgets.IDossier.responsible', [])
+
+            d1_view = portal.repo.unrestrictedTraverse('++add++%s' % dossier_type)
+            # We have to call the view to run the update-method
+            d1_view()
+
+            # In the request we must have the logged in user
+            self.assertEquals([self.get_logged_in_user()], d1_view.request.get('form.widgets.IDossier.responsible', None))
+
+            # In tests, the default value from the request won't work correctly.
+            # So we create a new dossier and add the resposible manually
+            d1 = self.create_dossier(dossier_type)
+
+            # set the responsible
+            IDossier(d1).responsible = self.get_logged_in_user()
+
+            # We have to reset the request for the new dossier
+            request.set('form.widgets.IDossier.responsible', [])
+
+            logout()
+            login(portal, SITE_OWNER_NAME)
+
+            # The same with another user
+            d2_view = portal.repo.unrestrictedTraverse('++add++%s' % dossier_type)
+            d2_view()
+            self.assertEquals([self.get_logged_in_user()], d2_view.request.get('form.widgets.IDossier.responsible', None))
+            d2 = self.create_dossier(dossier_type)
+            IDossier(d2).responsible = self.get_logged_in_user()
+            request.set('form.widgets.IDossier.responsible', [])
+
+            # We change the user again an create a subdossier
+            logout()
+            login(portal, TEST_USER_NAME)
+
+            d2_1_view = d2.unrestrictedTraverse('++add++%s' % dossier_type)
+            d2_1_view()
+            # This is a subdossier, so in responsible we must have the responsible of the parent
+            self.assertEquals([IDossier(d2).responsible], d2_1_view.request.get('form.widgets.IDossier.responsible', None))
 
     def test_default_tabs(self):
         """Check default-tabs of the tabbedview.

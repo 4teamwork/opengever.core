@@ -5,6 +5,9 @@ Changelog
 2.0b21
 ------
 
+* added better test for test_default_values
+  [eschmutz]
+
 * added fixes for default-tests
   [eschmutz]
 
