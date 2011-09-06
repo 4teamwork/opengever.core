@@ -39,20 +39,20 @@ class IResponse(Interface):
     transition = schema.Choice(
         title=_("label_transition", default="Transition"),
         description=_(u"help_transition", default=""),
-        source = util.getTransitionVocab,
-        required = False,
+        source=util.getTransitionVocab,
+        required=False,
         )
 
     text = schema.Text(
-        title = _('label_response', default="Response"),
+        title=_('label_response', default="Response"),
         description=_('help_response', default=""),
-        required = False,
+        required=False,
         )
 
     date_of_completion = schema.Date(
         title=_(u"label_date_of_completion", default=u"Date of completion"),
         description=_(u"help_date_of_completion", default=u""),
-        required = False,
+        required=False,
         )
 
     relatedItems = RelationList(
@@ -136,8 +136,8 @@ class Base(BrowserView):
             items.append(info)
 
         # sort the items, so that the latest one is at top
-        items.sort(lambda a,b: cmp(b['response'].date,
-                                   a['response'].date))
+        items.sort(lambda a, b: cmp(b['response'].date,
+                                    a['response'].date))
         return items
 
     @property
@@ -229,7 +229,7 @@ class AddForm(form.AddForm, AutoExtensibleForm):
     def handleSubmit(self, action):
         data, errors = self.extractData()
         if errors:
-            errorMessage ='<ul>'
+            errorMessage = '<ul>'
             for error in errors:
                 if errorMessage.find(error.message):
                     errorMessage += '<li>' + error.message + '</li>'
@@ -253,8 +253,12 @@ class AddForm(form.AddForm, AutoExtensibleForm):
             #if util.getManagersVocab.getTerm(responseCreator):
             #   new_response.type =  'reply'
             #check transition
-            if data.get('transition', None) in ('task-transition-open-resolved', 'task-transition-in-progress-resolved'):
+            if data.get('transition', None) in (
+                'task-transition-open-resolved',
+                'task-transition-in-progress-resolved'):
+
                 completion_date = datetime.date.today()
+
             else:
                 completion_date = None
 
@@ -279,8 +283,10 @@ class AddForm(form.AddForm, AutoExtensibleForm):
                 to_id = intids.getId(item)
                 if task.get('relatedItems'):
                     task.relatedItems.append(RelationValue(to_id))
+
                 else:
                     setattr(task, 'relatedItems', [RelationValue(to_id)])
+
                 new_response.add_change('relatedItems',
                                         _(u'label_related_items',
                                           default=u"Related Items"),
@@ -316,7 +322,6 @@ class AddForm(form.AddForm, AutoExtensibleForm):
 
     @button.buttonAndHandler(_(u'cancel', default='Cancel'),
                              name='cancel', )
-
     def handleCancel(self, action):
         return self.request.RESPONSE.redirect('.')
 
@@ -324,9 +329,10 @@ class AddForm(form.AddForm, AutoExtensibleForm):
         form.AddForm.updateWidgets(self)
         if self.context.portal_type == 'opengever.inbox.forwarding':
             self.widgets['relatedItems'].mode = HIDDEN_MODE
-        ogview= OpengeverView({},{})
+        ogview = OpengeverView({}, {})
         if not ogview.is_user_assigned_to_client():
             self.widgets['relatedItems'].mode = HIDDEN_MODE
+
 
 class BeneathTask(grok.ViewletManager):
     grok.context(ITask)
@@ -386,7 +392,6 @@ class ResponseView(grok.Viewlet, Base):
             return info.render_link(value)
 
         return value
-
 
 
 """
