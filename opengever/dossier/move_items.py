@@ -34,7 +34,7 @@ class IMoveItemsSchema(Interface):
         title=_('label_destination', default="Destination"),
         description=_('help_destination',
                       default="Live Search: search the Plone Site"),
-        source= DestinationPathSourceBinder(),
+        source=DestinationPathSourceBinder(),
         required=True,
         )
     #We Use TextLine here because Tuple and List have no hidden_mode.
@@ -81,17 +81,17 @@ class MoveItemsForm(form.Form):
                 # it's connected to a task
                 # and shouldn't be moved
 
-                is_document = sourceObjects[
-                    len(sourceObjects)-1].portal_type == 'opengever.document.document'
+                src_obj = sourceObjects[len(sourceObjects) - 1]
+                is_doc = src_obj.portal_type == 'opengever.document.document'
 
-                if not IDossierMarker.providedBy(sourceContainer) and is_document:
+                if not IDossierMarker.providedBy(sourceContainer) and is_doc:
 
-                    name = sourceObjects[len(sourceObjects)-1].title
+                    name = sourceObjects[len(sourceObjects) - 1].title
                     msg = _(u'Document ${name} is connected to a Task.\
                     Please move the Task.', mapping=dict(name=name))
                     IStatusMessage(self.request).addStatusMessage(
                         msg, type='error')
-                    sourceObjects.remove(sourceObjects[len(sourceObjects)-1])
+                    sourceObjects.remove(sourceObjects[len(sourceObjects) - 1])
 
             for obj in sourceObjects:
                 sourceContainer = aq_parent(aq_inner(obj))
@@ -101,7 +101,7 @@ class MoveItemsForm(form.Form):
                 try:
                     #try to paste object
                     destination.manage_pasteObjects(clipboard)
-                    copiedItems +=1
+                    copiedItems += 1
 
                 except ValueError:
                     #catch exception and add title to a list ofr failed objects
@@ -178,7 +178,7 @@ class DestinationValidator(validator.SimpleFieldValidator):
         super(DestinationValidator, self).validate(value)
         source = self.view.widgets['request_paths'].value.split(';;')
         portal_catalog = getToolByName(self.context, 'portal_catalog')
-        sourceobjs=[]
+        sourceobjs = []
         for item in source:
             sourceobjs.append(portal_catalog(path={'query': item, 'depth': 0}))
         inContentTypes = False
