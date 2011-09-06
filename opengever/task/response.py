@@ -62,10 +62,10 @@ class IResponse(Interface):
             title=u"Related",
             source=DossierPathSourceBinder(
                 portal_type=("opengever.document.document", "ftw.mail.mail"),
+                ),
             ),
-        ),
         required=False,
-    )
+        )
 
 
 def voc2dict(vocab, current=None):
@@ -225,7 +225,7 @@ class AddForm(form.AddForm, AutoExtensibleForm):
         self.actions["save"].addClass("context")
 
     @button.buttonAndHandler(_(u'save', default='Save'),
-                               name='save')
+                             name='save')
     def handleSubmit(self, action):
         data, errors = self.extractData()
         if errors:
