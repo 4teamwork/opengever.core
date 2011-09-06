@@ -58,6 +58,7 @@ class MoveItemsForm(form.Form):
                                         default=u'Move'))
     def handle_submit(self, action):
         data, errors = self.extractData()
+
         if len(errors) == 0:
             root = getToolByName(self, 'portal_url')
             root = root.getPortalObject()
@@ -66,48 +67,59 @@ class MoveItemsForm(form.Form):
             sourceObjects = []
             failedObjects = []
             copiedItems = 0
+
             # loop through paths
             for path in source:
                 #get objects and parents
                 sourceObjects.append(self.context.unrestrictedTraverse(
-                    path.encode('utf-8')))
+                        path.encode('utf-8')))
                 sourceContainer = aq_parent(aq_inner(
-                self.context.unrestrictedTraverse(
-                    path.encode('utf-8'))))
+
+                        self.context.unrestrictedTraverse(
+                            path.encode('utf-8'))))
                 #if parent isn't a dossier and obj is a document
                 # it's connected to a task
                 # and shouldn't be moved
-                if not IDossierMarker.providedBy(sourceContainer) and (
-                sourceObjects[len(sourceObjects)-1].portal_type ==
-                'opengever.document.document'):
+
+                is_document = sourceObjects[
+                    len(sourceObjects)-1].portal_type == 'opengever.document.document'
+
+                if not IDossierMarker.providedBy(sourceContainer) and is_document:
+
                     name = sourceObjects[len(sourceObjects)-1].title
                     msg = _(u'Document ${name} is connected to a Task.\
                     Please move the Task.', mapping=dict(name=name))
                     IStatusMessage(self.request).addStatusMessage(
                         msg, type='error')
                     sourceObjects.remove(sourceObjects[len(sourceObjects)-1])
+
             for obj in sourceObjects:
                 sourceContainer = aq_parent(aq_inner(obj))
                 #cut object and add it to clipboard
                 clipboard = sourceContainer.manage_cutObjects(obj.id)
+
                 try:
                     #try to paste object
                     destination.manage_pasteObjects(clipboard)
                     copiedItems +=1
+
                 except ValueError:
                     #catch exception and add title to a list ofr failed objects
                     failedObjects.append(obj.title)
+
                 except CopyError:
                     #catch exception and add title to a list of failed objects
                     failedObjects.append(obj.title)
+
             if copiedItems:
                 msg = _(u'${copiedItems} Elements were moved successfully',
-                 mapping=dict(copiedItems=copiedItems))
+                        mapping=dict(copiedItems=copiedItems))
                 IStatusMessage(self.request).addStatusMessage(
                     msg, type='info')
+
             if failedObjects:
                 msg = _(u'Failed to copy following objects: ${failedObjects}',
-                 mapping=dict(failedObjects=','.join(failedObjects)))
+                        mapping=dict(failedObjects=','.join(failedObjects)))
                 IStatusMessage(self.request).addStatusMessage(
                     msg, type='error')
             self.request.RESPONSE.redirect(destination.absolute_url())
@@ -136,7 +148,7 @@ class MoveItemsFormView(layout.FormWrapper, grok.CodeView):
 
     def render(self):
         if not self.request.get('paths') and not \
-        self.form_instance.widgets['request_paths'].value:
+                self.form_instance.widgets['request_paths'].value:
             msg = _(u'You have not selected any items')
             IStatusMessage(self.request).addStatusMessage(
                 msg, type='error')
