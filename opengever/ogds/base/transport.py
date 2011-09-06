@@ -46,7 +46,7 @@ class Transporter(grok.GlobalUtility):
         jsondata = json.dumps(self._extract_data(obj))
 
         request_data = {
-            REQUEST_KEY : jsondata,
+            REQUEST_KEY: jsondata,
             }
         return remote_json_request(
             target_cid, '@@transporter-receive-object',
@@ -127,7 +127,7 @@ class ReceiveObject(grok.CodeView):
     grok.require('cmf.AddPortalContent')
     grok.context(Interface)
 
-    def render( self ):
+    def render(self):
         transporter = getUtility(ITransporter)
         container = self.context
         obj = transporter.receive(container, self.request)
@@ -205,7 +205,7 @@ class DexterityFieldDataCollector(grok.Adapter):
         for schemata in iterSchemata(self.context):
             subdata = {}
             repr = schemata(self.context)
-            for name, field in schema.getFieldsInOrder( schemata ):
+            for name, field in schema.getFieldsInOrder(schemata):
                 value = getattr(repr, name, _marker)
                 if value == _marker:
                     value = getattr(self.context, name, None)
@@ -227,27 +227,27 @@ class DexterityFieldDataCollector(grok.Adapter):
             for name, field in schema.getFieldsInOrder(schemata):
                 value = subdata[name]
                 value = self.unpack(name, field, value)
-                if value!=_marker:
+                if value != _marker:
                     setattr(repr, name, value)
 
     def pack(self, name, field, value):
         """Packs the field data and makes it ready for transportation with
         json, which does only support basic data types.
         """
-        if self._provided_by_one_of( field, [
+        if self._provided_by_one_of(field, [
                 schema.interfaces.IDate,
                 schema.interfaces.ITime,
                 schema.interfaces.IDatetime,
                 ]):
             if value:
-                return str( value )
-        elif self._provided_by_one_of( field, [
+                return str(value)
+        elif self._provided_by_one_of(field, [
                 INamedFileField,
-                ] ):
+                ]):
             if value:
                 return {
-                    'filename' : value.filename,
-                    'data' : base64.encodestring( value.data ),
+                    'filename': value.filename,
+                    'data': base64.encodestring(value.data),
                     }
 
         elif self._provided_by_one_of(field, (
@@ -278,7 +278,7 @@ class DexterityFieldDataCollector(grok.Adapter):
                 dt = DateTime.DateTime(value).parts()[:-1]
                 return datetime.datetime(*dt)
 
-        if self._provided_by_one_of(field, [INamedFileField,]):
+        if self._provided_by_one_of(field, [INamedFileField]):
             if value and isinstance(value, dict):
                 filename = value['filename']
                 data = base64.decodestring(value['data'])
@@ -294,4 +294,3 @@ class DexterityFieldDataCollector(grok.Adapter):
             if ifc.providedBy(obj):
                 return True
         return False
-
