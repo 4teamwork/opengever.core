@@ -1,29 +1,11 @@
-from datetime import datetime
-import logging
-
 from AccessControl import getSecurityManager
 from Acquisition import aq_inner, aq_parent
+from OFS.interfaces import IObjectWillBeMovedEvent
+from Products.CMFCore.interfaces import ISiteRoot
 from collective import dexteritytextindexer
 from collective.elephantvocabulary import wrap_vocabulary
+from datetime import datetime
 from five import grok
-from OFS.interfaces import IObjectWillBeMovedEvent
-from plone.autoform.interfaces import IFormFieldProvider
-from plone.dexterity.i18n import MessageFactory as pd_mf
-from plone.dexterity.interfaces import IDexterityContent
-from plone.dexterity.interfaces import IDexterityFTI
-from plone.directives import form, dexterity
-from plone.indexer import indexer
-from plone.z3cform.textlines.textlines import TextLinesFieldWidget
-from Products.CMFCore.interfaces import ISiteRoot
-from z3c.relationfield.schema import RelationChoice, RelationList
-from zope import schema
-from zope.app.container.interfaces import IObjectAddedEvent
-from zope.app.container.interfaces import IObjectMovedEvent
-from zope.component import getAdapter, getUtility
-from zope.interface import Interface, alsoProvides
-from zope.interface import invariant, Invalid
-
-
 from ftw.datepicker.widget import DatePickerFieldWidget
 from opengever.base.interfaces import IReferenceNumber, ISequenceNumber
 from opengever.base.interfaces import IReferenceNumberPrefix
@@ -33,6 +15,21 @@ from opengever.dossier.widget import referenceNumberWidgetFactory
 from opengever.mail.interfaces import ISendableDocsContainer
 from opengever.ogds.base.autocomplete_widget import AutocompleteFieldWidget
 from opengever.ogds.base.interfaces import IContactInformation
+from plone.autoform.interfaces import IFormFieldProvider
+from plone.dexterity.i18n import MessageFactory as pd_mf
+from plone.dexterity.interfaces import IDexterityContent
+from plone.dexterity.interfaces import IDexterityFTI
+from plone.directives import form, dexterity
+from plone.indexer import indexer
+from plone.z3cform.textlines.textlines import TextLinesFieldWidget
+from z3c.relationfield.schema import RelationChoice, RelationList
+from zope import schema
+from zope.app.container.interfaces import IObjectAddedEvent
+from zope.app.container.interfaces import IObjectMovedEvent
+from zope.component import getAdapter, getUtility
+from zope.interface import Interface, alsoProvides
+from zope.interface import invariant, Invalid
+import logging
 
 
 LOG = logging.getLogger('opengever.dossier')
@@ -50,7 +47,7 @@ class IDossier(form.Schema):
 
     form.fieldset(
         u'common',
-        fields = [
+        fields=[
             u'keywords',
             u'start',
             u'end',
@@ -62,49 +59,49 @@ class IDossier(form.Schema):
 
     dexteritytextindexer.searchable('keywords')
     keywords = schema.Tuple(
-        title = _(u'label_keywords', default=u'Keywords'),
-        description = _(u'help_keywords', default=u''),
-        value_type = schema.TextLine(),
-        required = False,
-        missing_value = (),
+        title=_(u'label_keywords', default=u'Keywords'),
+        description=_(u'help_keywords', default=u''),
+        value_type=schema.TextLine(),
+        required=False,
+        missing_value=(),
         )
-    form.widget(keywords = TextLinesFieldWidget)
+    form.widget(keywords=TextLinesFieldWidget)
 
     #workaround because ftw.datepicker wasn't working on the edit form
-    form.widget(start = DatePickerFieldWidget)
+    form.widget(start=DatePickerFieldWidget)
     start = schema.Date(
         title=_(u'label_start', default=u'Opening Date'),
-        description = _(u'help_start', default=u''),
+        description=_(u'help_start', default=u''),
         required=False,
         )
 
     #workaround because ftw.datepicker wasn't working on the edit form
-    form.widget(end = DatePickerFieldWidget)
+    form.widget(end=DatePickerFieldWidget)
     end = schema.Date(
         title=_(u'label_end', default=u'Closing Date'),
-        description = _(u'help_end', default=u''),
+        description=_(u'help_end', default=u''),
         required=False,
         )
 
     comments = schema.Text(
         title=_(u'label_comments', default=u'Comments'),
-        description = _(u'help_comments', default=u''),
+        description=_(u'help_comments', default=u''),
         required=False,
         )
 
     form.widget(responsible=AutocompleteFieldWidget)
     responsible = schema.Choice(
         title=_(u"label_responsible", default="Responsible"),
-        description =_(
+        description=_(
             u"help_responsible", default="Select the responsible manager"),
         vocabulary=u'opengever.ogds.base.AssignedUsersVocabulary',
-        required = True,
+        required=True,
         )
 
     form.fieldset(
         u'filing',
-        label = _(u'fieldset_filing', default=u'Filing'),
-        fields = [
+        label=_(u'fieldset_filing', default=u'Filing'),
+        fields=[
             u'filing_prefix',
             u'container_type',
             u'number_of_containers',
@@ -115,17 +112,18 @@ class IDossier(form.Schema):
         )
 
     filing_prefix = schema.Choice(
-        title = _(u'filing_prefix', default="filing prefix"),
-        source = wrap_vocabulary('opengever.dossier.type_prefixes',
-                                 visible_terms_from_registry="opengever.dossier" + \
-                                     '.interfaces.IDossierContainerTypes.type_prefixes'),
-        required = False,
+        title=_(u'filing_prefix', default="filing prefix"),
+        source=wrap_vocabulary(
+            'opengever.dossier.type_prefixes',
+            visible_terms_from_registry="opengever.dossier" + \
+                '.interfaces.IDossierContainerTypes.type_prefixes'),
+        required=False,
         )
 
     form.omitted('filing_no')
     filing_no = schema.TextLine(
-        title = _(u'filing_no', default="Filing number"),
-        description = _(u'help_filing_no', default=u''),
+        title=_(u'filing_no', default="Filing number"),
+        description=_(u'help_filing_no', default=u''),
         required=False,
         )
 
@@ -133,33 +131,33 @@ class IDossier(form.Schema):
     # moving this dossier
     form.omitted('temporary_former_reference_number')
     temporary_former_reference_number = schema.TextLine(
-        title = _(u'temporary_former_reference_number'
-                  , default="Temporary former reference number"),
-        description = _(u'help_temporary_former_reference_number', default=u''),
-        required = False,
+        title=_(u'temporary_former_reference_number',
+                default="Temporary former reference number"),
+        description=_(u'help_temporary_former_reference_number', default=u''),
+        required=False,
         )
 
     container_type = schema.Choice(
-        title = _(u'label_container_type', default=u'Container Type'),
-        description = _(u'help_container_type', default=u''),
-        source = wrap_vocabulary('opengever.dossier.container_types',
-                                 visible_terms_from_registry="opengever.dossier" + \
-                                     '.interfaces.IDossierContainerTypes.container_types'),
-        required = False,
+        title=_(u'label_container_type', default=u'Container Type'),
+        description=_(u'help_container_type', default=u''),
+        source=wrap_vocabulary(
+            'opengever.dossier.container_types',
+            visible_terms_from_registry="opengever.dossier" + \
+                '.interfaces.IDossierContainerTypes.container_types'),
+        required=False,
         )
 
     number_of_containers = schema.Int(
-        title = _(
-            u'label_number_of_containers',
-            default=u'Number of Containers'),
-        description = _(u'help_number_of_containers', default=u''),
-        required = False,
+        title=_(u'label_number_of_containers',
+                default=u'Number of Containers'),
+        description=_(u'help_number_of_containers', default=u''),
+        required=False,
         )
 
     container_location = schema.TextLine(
-        title = _(u'label_container_location', default=u'Container Location'),
-        description = _(u'help_container_location', default=u''),
-        required = False,
+        title=_(u'label_container_location', default=u'Container Location'),
+        description=_(u'help_container_location', default=u''),
+        required=False,
         )
 
     relatedDossier = RelationList(
@@ -171,11 +169,12 @@ class IDossier(form.Schema):
                 object_provides='opengever.dossier.behaviors.dossier.' + \
                     'IDossierMarker',
                 navigation_tree_query={
-                    'object_provides':
-                        ['opengever.repository.repositoryroot.IRepositoryRoot',
-                         'opengever.repository.repositoryfolder.' + \
-                             'IRepositoryFolderSchema',
-                         'opengever.dossier.behaviors.dossier.IDossierMarker',]
+                    'object_provides': [
+                        'opengever.repository.repositoryroot.IRepositoryRoot',
+                        'opengever.repository.repositoryfolder.' + \
+                            'IRepositoryFolderSchema',
+                        'opengever.dossier.behaviors.dossier.IDossierMarker',
+                        ]
                     }),
             ),
         required=False,
@@ -183,17 +182,17 @@ class IDossier(form.Schema):
 
     form.mode(former_reference_number='display')
     former_reference_number = schema.TextLine(
-        title = _(u'label_former_reference_number',
+        title=_(u'label_former_reference_number',
                   default=u'Reference Number'),
-        description = _(u'help_former_reference_number', default=u''),
-        required = False,
+        description=_(u'help_former_reference_number', default=u''),
+        required=False,
         )
 
     form.widget(reference_number=referenceNumberWidgetFactory)
-    reference_number= schema.TextLine(
-        title = _(u'label_reference_number', default=u'Reference Number'),
-        description = _(u'help_reference_number ', default=u''),
-        required = False,
+    reference_number = schema.TextLine(
+        title=_(u'label_reference_number', default=u'Reference Number'),
+        description=_(u'help_reference_number ', default=u''),
+        required=False,
         )
 
     @invariant
@@ -222,7 +221,8 @@ class AddForm(dexterity.AddForm):
             if parent_dossier:
                 responsible = parent_dossier.responsible
         if not self.request.get('form.widgets.IDossier.responsible', None):
-            self.request.set('form.widgets.IDossier.responsible', [responsible])
+            self.request.set('form.widgets.IDossier.responsible',
+                             [responsible])
         super(AddForm, self).update()
 
     @property
@@ -377,7 +377,7 @@ class SearchableTextExtender(grok.Adapter):
 @grok.subscribe(IDossierMarker, IObjectWillBeMovedEvent)
 def set_former_reference_before_moving(obj, event):
     """ Temporarily store current reference number before
-        moving the dossier.
+    moving the dossier.
 
     """
 
@@ -393,8 +393,8 @@ def set_former_reference_before_moving(obj, event):
 @grok.subscribe(IDossierMarker, IObjectMovedEvent)
 def set_former_reference_after_moving(obj, event):
     """ Use the (hopefully) stored former reference number
-        as the real new former reference number. This has to
-        be done after the dossier was moved.
+    as the real new former reference number. This has to
+    be done after the dossier was moved.
 
     """
     # make sure obj wasn't just created or deleted
@@ -408,15 +408,16 @@ def set_former_reference_after_moving(obj, event):
     IDossier['temporary_former_reference_number'].set(repr, '')
 
     # setting the new number
-    parent= aq_parent(aq_inner(obj))
+    parent = aq_parent(aq_inner(obj))
     prefix_adapter = IReferenceNumberPrefix(parent)
     prefix_adapter.set_number(obj)
 
     obj.reindexObject(idxs=['reference'])
 
+
 @grok.subscribe(IDossierMarker, IObjectAddedEvent)
 def saveReferenceNumberPrefix(obj, event):
-    parent= aq_parent(aq_inner(obj))
+    parent = aq_parent(aq_inner(obj))
     prefix_adapter = IReferenceNumberPrefix(parent)
     if not prefix_adapter.get_number(obj):
         prefix_adapter.set_number(obj)
