@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2011-08-17 13:19+0000\n"
+"POT-Creation-Date: 2011-09-06 09:22+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -63,10 +63,6 @@ msgstr ""
 msgid "Document"
 msgstr ""
 
-#: ./opengever/document/document.py:520
-msgid "No file in in this version"
-msgstr ""
-
 #: ./opengever/document/checkout/manager.py:216
 #: ./opengever/document/checkout/revert.py:26
 msgid "Reverted file to version ${version_id}"
@@ -104,11 +100,6 @@ msgstr ""
 msgid "button_checkin"
 msgstr ""
 
-#. Default: "Download"
-#: ./opengever/document/viewlets/history.pt:38
-msgid "button_download"
-msgstr ""
-
 #. Default: "Send"
 #: ./opengever/document/mailing.py:188
 msgid "button_send"
@@ -120,7 +111,7 @@ msgid "cancel_back"
 msgstr ""
 
 #. Default: "copy of"
-#: ./opengever/document/document.py:448
+#: ./opengever/document/document.py:447
 msgid "copy_of"
 msgstr ""
 
@@ -234,11 +225,6 @@ msgstr ""
 msgid "initial_document_version_change_note"
 msgstr ""
 
-#. Default: "Actor"
-#: ./opengever/document/viewlets/history.pt:14
-msgid "label_actor"
-msgstr ""
-
 #. Default: "Archival File"
 #: ./opengever/document/document.py:165
 msgid "label_archival_file"
@@ -265,19 +251,9 @@ msgstr ""
 msgid "label_checkin_journal_comment"
 msgstr ""
 
-#. Default: "Comment"
-#: ./opengever/document/viewlets/history.pt:16
-msgid "label_comment"
-msgstr ""
-
 #. Default: "creator"
 #: ./opengever/document/document_templates/overview.pt:26
 msgid "label_creator"
-msgstr ""
-
-#. Default: "Date"
-#: ./opengever/document/viewlets/history.pt:15
-msgid "label_date"
 msgstr ""
 
 #. Default: "Date of delivery"
@@ -328,11 +304,6 @@ msgstr ""
 msgid "label_foreign_reference"
 msgstr ""
 
-#. Default: "History"
-#: ./opengever/document/viewlets/history.pt:9
-msgid "label_history"
-msgstr ""
-
 #. Default: "Keywords"
 #: ./opengever/document/document.py:100
 msgid "label_keywords"
@@ -380,11 +351,6 @@ msgstr ""
 msgid "label_related_documents"
 msgstr ""
 
-#. Default: "reset"
-#: ./opengever/document/viewlets/history.pt:41
-msgid "label_reset"
-msgstr ""
-
 #. Default: "Sequence Number:"
 #: ./opengever/document/viewlets/byline.pt:39
 msgid "label_sequence_number"
@@ -408,11 +374,6 @@ msgstr ""
 #. Default: "Title"
 #: ./opengever/document/document.py:88
 msgid "label_title"
-msgstr ""
-
-#. Default: "Version"
-#: ./opengever/document/viewlets/history.pt:13
-msgid "label_version"
 msgstr ""
 
 #. Default: "yes"

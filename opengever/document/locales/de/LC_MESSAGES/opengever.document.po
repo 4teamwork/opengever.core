@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2011-08-17 13:19+0000\n"
+"POT-Creation-Date: 2011-09-06 09:22+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -61,10 +61,6 @@ msgstr "Aufgabe erstellen"
 msgid "Document"
 msgstr "Dokument"
 
-#: ./opengever/document/document.py:520
-msgid "No file in in this version"
-msgstr "In dieser Version ist keine Datei vorhanden"
-
 #: ./opengever/document/checkout/manager.py:216
 #: ./opengever/document/checkout/revert.py:26
 msgid "Reverted file to version ${version_id}"
@@ -103,11 +99,6 @@ msgstr "Abbrechen"
 msgid "button_checkin"
 msgstr "Einchecken"
 
-#. Default: "Download"
-#: ./opengever/document/viewlets/history.pt:38
-msgid "button_download"
-msgstr ""
-
 #. Default: "Send"
 #: ./opengever/document/mailing.py:188
 msgid "button_send"
@@ -119,7 +110,7 @@ msgid "cancel_back"
 msgstr "Abbrechen"
 
 #. Default: "copy of"
-#: ./opengever/document/document.py:448
+#: ./opengever/document/document.py:447
 msgid "copy_of"
 msgstr "Kopie von"
 
@@ -240,11 +231,6 @@ msgstr "Die E-Mails wurden versandt"
 msgid "initial_document_version_change_note"
 msgstr "Dokument erstellt (Initialversion)"
 
-#. Default: "Actor"
-#: ./opengever/document/viewlets/history.pt:14
-msgid "label_actor"
-msgstr "Geändert von"
-
 #. Default: "Archival File"
 #: ./opengever/document/document.py:165
 msgid "label_archival_file"
@@ -271,20 +257,10 @@ msgstr "Ausgecheckt"
 msgid "label_checkin_journal_comment"
 msgstr "Journal-Kommentar"
 
-#. Default: "Comment"
-#: ./opengever/document/viewlets/history.pt:16
-msgid "label_comment"
-msgstr "Kommentar"
-
 #. Default: "creator"
 #: ./opengever/document/document_templates/overview.pt:26
 msgid "label_creator"
 msgstr "Ersteller"
-
-#. Default: "Date"
-#: ./opengever/document/viewlets/history.pt:15
-msgid "label_date"
-msgstr "Datum"
 
 #. Default: "Date of delivery"
 #: ./opengever/document/document.py:193
@@ -334,11 +310,6 @@ msgstr "Datei"
 msgid "label_foreign_reference"
 msgstr "Fremdzeichen"
 
-#. Default: "History"
-#: ./opengever/document/viewlets/history.pt:9
-msgid "label_history"
-msgstr "Historie"
-
 #. Default: "Keywords"
 #: ./opengever/document/document.py:100
 msgid "label_keywords"
@@ -386,11 +357,6 @@ msgstr "Aktenzeichen"
 msgid "label_related_documents"
 msgstr "Verwandte Dokumente"
 
-#. Default: "reset"
-#: ./opengever/document/viewlets/history.pt:41
-msgid "label_reset"
-msgstr "Zurücksetzen"
-
 #. Default: "Sequence Number:"
 #: ./opengever/document/viewlets/byline.pt:39
 msgid "label_sequence_number"
@@ -415,11 +381,6 @@ msgstr "Kurzbild"
 #: ./opengever/document/document.py:88
 msgid "label_title"
 msgstr "Titel"
-
-#. Default: "Version"
-#: ./opengever/document/viewlets/history.pt:13
-msgid "label_version"
-msgstr "Version"
 
 #. Default: "yes"
 #: ./opengever/document/document_templates/overview.pt:46
