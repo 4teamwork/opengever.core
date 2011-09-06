@@ -48,8 +48,8 @@ class ITask(form.Schema):
 
     form.fieldset(
         u'common',
-        label = _(u'fieldset_common', default=u'Common'),
-        fields = [
+        label=_(u'fieldset_common', default=u'Common'),
+        fields=[
             u'title',
             u'issuer',
             u'task_type',
@@ -63,8 +63,8 @@ class ITask(form.Schema):
 
     form.fieldset(
         u'additional',
-        label = _(u'fieldset_additional', u'Additional'),
-        fields = [
+        label=_(u'fieldset_additional', u'Additional'),
+        fields=[
             u'expectedStartOfWork',
             u'expectedDuration',
             u'expectedCost',
@@ -78,26 +78,26 @@ class ITask(form.Schema):
     title = schema.TextLine(
         title=_(u"label_title", default=u"Title"),
         description=_('help_title', default=u""),
-        required = True,
+        required=True,
         )
 
     form.widget(issuer=AutocompleteFieldWidget)
     issuer = schema.Choice(
-        title =_(u"label_issuer", default=u"Issuer"),
-        description = _('help_issuer', default=u""),
+        title=_(u"label_issuer", default=u"Issuer"),
+        description=_('help_issuer', default=u""),
         vocabulary=u'opengever.ogds.base.ContactsAndUsersVocabulary',
-        required = True,
+        required=True,
         )
 
     form.widget(task_type='z3c.form.browser.radio.RadioFieldWidget')
     task_type = schema.Choice(
-        title =_(u'label_task_type', default=u'Task Type'),
-        description = _('help_task_type', default=u''),
-        required = True,
-        readonly = False,
-        default = None,
-        missing_value = None,
-        source = util.getTaskTypeVocabulary,
+        title=_(u'label_task_type', default=u'Task Type'),
+        description=_('help_task_type', default=u''),
+        required=True,
+        readonly=False,
+        default=None,
+        missing_value=None,
+        source=util.getTaskTypeVocabulary,
         )
 
     responsible_client = schema.Choice(
@@ -111,23 +111,23 @@ class ITask(form.Schema):
     form.widget(responsible=AutocompleteFieldWidget)
     responsible = schema.Choice(
         title=_(u"label_responsible", default=u"Responsible"),
-        description =_(u"help_responsible", default=""),
+        description=_(u"help_responsible", default=""),
         vocabulary=u'opengever.ogds.base.UsersAndInboxesVocabulary',
-        required = True,
+        required=True,
         )
 
-    form.widget(deadline = DatePickerFieldWidget)
+    form.widget(deadline=DatePickerFieldWidget)
     deadline = schema.Date(
         title=_(u"label_deadline", default=u"Deadline"),
         description=_(u"help_deadline", default=u""),
-        required = True,
+        required=True,
         )
 
-    form.widget(deadline = DatePickerFieldWidget)
+    form.widget(deadline=DatePickerFieldWidget)
     date_of_completion = schema.Date(
         title=_(u"label_date_of_completion", default=u"Date of completion"),
         description=_(u"help_date_of_completion", default=u""),
-        required = False,
+        required=False,
         )
 
     dexteritytextindexer.searchable('text')
@@ -135,7 +135,7 @@ class ITask(form.Schema):
     text = schema.Text(
         title=_(u"label_text", default=u"Text"),
         description=_(u"help_text", default=u""),
-        required = False,
+        required=False,
         )
 
     relatedItems = RelationList(
@@ -156,35 +156,35 @@ class ITask(form.Schema):
         required=False,
         )
 
-    form.widget(deadline = DatePickerFieldWidget)
+    form.widget(deadline=DatePickerFieldWidget)
     expectedStartOfWork = schema.Date(
-        title =_(u"label_expectedStartOfWork", default="Start with work"),
-        description = _(u"help_expectedStartOfWork", default=""),
-        required = False,
+        title=_(u"label_expectedStartOfWork", default="Start with work"),
+        description=_(u"help_expectedStartOfWork", default=""),
+        required=False,
         )
 
     expectedDuration = schema.Float(
-        title = _(u"label_expectedDuration", default="Expected duration", ),
-        description = _(u"help_expectedDuration", default="Duration in h"),
-        required = False,
+        title=_(u"label_expectedDuration", default="Expected duration", ),
+        description=_(u"help_expectedDuration", default="Duration in h"),
+        required=False,
         )
 
     expectedCost = schema.Float(
-        title = _(u"label_expectedCost", default="expected cost"),
-        description = _(u"help_expectedCost", default="Cost in CHF"),
-        required = False,
+        title=_(u"label_expectedCost", default="expected cost"),
+        description=_(u"help_expectedCost", default="Cost in CHF"),
+        required=False,
         )
 
     effectiveDuration = schema.Float(
-        title = _(u"label_effectiveDuration", default="effective duration"),
-        description = _(u"help_effectiveDuration", default="Duration in h"),
-        required = False,
+        title=_(u"label_effectiveDuration", default="effective duration"),
+        description=_(u"help_effectiveDuration", default="Duration in h"),
+        required=False,
         )
 
     effectiveCost = schema.Float(
         title=_(u"label_effectiveCost", default="effective cost"),
         description=_(u"help_effectiveCost", default="Cost in CHF"),
-        required = False,
+        required=False,
         )
 
     form.omitted('predecessor')
@@ -198,6 +198,7 @@ class ITask(form.Schema):
 
 # # XXX doesn't work yet.
 #@form.default_value(field=ITask['issuer'])
+
 
 def default_issuer(data):
     portal_state = getMultiAdapter(
@@ -296,7 +297,7 @@ class Overview(DisplayForm, OpengeverTab):
         client = client_title_helper(
             task, self.groups[0].widgets['responsible_client'].value[0])
 
-        return client +' / '+ info.render_link(task.responsible)
+        return client + ' / ' + info.render_link(task.responsible)
 
     def issuer_link(self):
         info = getUtility(IContactInformation)
@@ -356,8 +357,8 @@ class RelatedDocumentsTableSource(grok.MultiAdapter, BaseTableSource):
         for item in self.config.context.relatedItems:
 
             obj = item.to_object
-            if (obj.portal_type=='opengever.document.document'\
-                    or obj.portal_type=='ftw.mail.mail'):
+            if (obj.portal_type == 'opengever.document.document'\
+                    or obj.portal_type == 'ftw.mail.mail'):
                 objects.append(obj)
         objects = self.extend_query_with_ordering(objects)
         if self.config.filter_text:
@@ -367,7 +368,7 @@ class RelatedDocumentsTableSource(grok.MultiAdapter, BaseTableSource):
         return objects
 
     def extend_query_with_ordering(self, query):
-        sort_index=self.request.get('sort', '')
+        sort_index = self.request.get('sort', '')
         column = {}
         objects = []
 
@@ -392,7 +393,7 @@ class RelatedDocumentsTableSource(grok.MultiAdapter, BaseTableSource):
 
         # use the sortable_title indexer function as transform for
         # sorting Title column
-        if sort_index=='sortable_title':
+        if sort_index == 'sortable_title':
             transform = sortable_title_transform
 
         if transform:
@@ -444,7 +445,6 @@ class RelatedDocuments(Documents):
     grok.context(ITask)
     grok.implements(IRelatedDocumentsTableSourceConfig)
 
-
     lazy = False
     columns = (
         {'column': '',
@@ -479,17 +479,17 @@ class RelatedDocuments(Documents):
         )
 
     enabled_actions = [
-                       'send_as_email',
-                       'checkout',
-                       'checkin',
-                       'cancel',
-                       'create_task',
-                       'trashed',
-                       'send_documents',
-                       'copy_documents_to_remote_client',
-                       'move_items',
-                       'copy_items',
-                       ]
+        'send_as_email',
+        'checkout',
+        'checkin',
+        'cancel',
+        'create_task',
+        'trashed',
+        'send_documents',
+        'copy_documents_to_remote_client',
+        'move_items',
+        'copy_items',
+        ]
 
     major_actions = ['send_documents',
                      'checkout',
@@ -512,6 +512,7 @@ class RelatedDocuments(Documents):
 # setting the default value of a RelationField does not work as expected
 # or we don't know how to set it.
 # thus we use an add form hack by injecting the values into the request.
+
 
 class AddForm(dexterity.AddForm):
     grok.name('opengever.task.task')
@@ -615,10 +616,11 @@ class SearchableTextExtender(grok.Adapter):
 @grok.subscribe(ITask, IActionSucceededEvent)
 def set_dates(task, event):
 
-    resolved_transitions= ['task-transition-in-progress-resolved',
-                           'task-transition-open-resolved',
-                           'task-transition-open-tested-and-closed',
-                           'task-transition-in-progress-tested-and-closed', ]
+    resolved_transitions = ['task-transition-in-progress-resolved',
+                            'task-transition-open-resolved',
+                            'task-transition-open-tested-and-closed',
+                            'task-transition-in-progress-tested-and-closed',
+                            ]
 
     if event.action == 'task-transition-open-in-progress':
         task.expectedStartOfWork = datetime.now()
