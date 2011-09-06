@@ -5,6 +5,10 @@ Changelog
 2.0b10
 ------
 
+* Set versioning policy for ftw.mail.mail to "Manual", because "Automatic"
+  causes bogus versions to be created during migration.
+  [lgraf]
+
 * Fixed bug in determining mimeType of attachments
   [lgraf]
 
