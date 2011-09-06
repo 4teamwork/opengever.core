@@ -38,31 +38,33 @@ class ISendDocumentSchema(Interface):
         description=_('help_intern_receiver',
                       default="Live Search: search for users and contacts"),
 
-        value_type=schema.Choice(title=_(u"mails"),
-        source=u'opengever.ogds.base.EmailContactsAndUsersVocabulary'),
+        value_type=schema.Choice(
+            title=_(u"mails"),
+            source=u'opengever.ogds.base.EmailContactsAndUsersVocabulary'),
         required=False,
-        missing_value=(), # important!
-    )
+        missing_value=(),  # important!
+        )
 
     extern_receiver = schema.List(
         title=_('extern_receiver', default="Extern receiver"),
         description=_('help_extern_receiver',
-            default="email addresses of the receivers. Enter manually the addresses, one per each line."),
+                      default="email addresses of the receivers. " + \
+                          "Enter manually the addresses, one per each line."),
         value_type=schema.TextLine(title=_('receiver'), ),
         required=False,
-    )
+        )
 
     subject = schema.TextLine(
         title=_(u'label_subject', default=u'Subject'),
         description=_(u'help_subject', default=u''),
         required=True,
-    )
+        )
 
     message = schema.Text(
         title=_(u'label_message', default=u'Message'),
         description=_(u'help_message', default=u''),
         required=True,
-    )
+        )
 
     documents = RelationList(
         title=_(u'label_documents', default=u'Documents'),
@@ -76,7 +78,7 @@ class ISendDocumentSchema(Interface):
                         ['opengever.dossier.behaviors.dossier.IDossierMarker',
                          'opengever.document.document.IDocumentSchema',
                          'ftw.mail.mail.IMail',
-                        ]}),
+                         ]}),
             ),
         required=False,
         )
@@ -93,12 +95,12 @@ class ISendDocumentSchema(Interface):
 validator.WidgetValidatorDiscriminators(
     DocumentSizeValidator,
     field=ISendDocumentSchema['documents'],
-)
+    )
 
 validator.WidgetValidatorDiscriminators(
     AddressValidator,
     field=ISendDocumentSchema['extern_receiver'],
-)
+    )
 
 provideAdapter(DocumentSizeValidator)
 provideAdapter(AddressValidator)
@@ -147,13 +149,14 @@ class SendDocumentForm(form.Form):
             msg['Subject'] = Header(data.get('subject'), 'iso-8859-1')
             sender_address = contact_info.get_email(userid)
             if not sender_address:
-                sender_address = self.context.portal_url.getPortalObject().email_from_address
+                portal = self.context.portal_url.getPortalObject()
+                sender_address = portal.email_from_address
 
             msg['From'] = Header(u'%s <%s>' % (
                     contact_info.describe(userid),
                     sender_address,
                     ),
-                'iso-8859-1')
+                                 'iso-8859-1')
 
             header_to = Header(','.join(addresses), 'iso-8859-1')
             msg['To'] = header_to
@@ -190,7 +193,7 @@ class SendDocumentForm(form.Form):
             part.set_payload(docfile.data)
             Encoders.encode_base64(part)
             part.add_header('Content-Disposition', 'attachment; filename="%s"'
-                       % docfile.filename)
+                            % docfile.filename)
             msg.attach(part)
 
         text = '%s\r\n\r\n%s' % (text, docs_links)
