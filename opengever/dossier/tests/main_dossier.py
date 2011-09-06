@@ -64,7 +64,7 @@ class TestMainDossier(unittest.TestCase):
         }}
 
     - layer: testlayer to use
-    - tabs: available tabs
+    - tabs: available tabs in the given order
     - repo_id: repositoryid
     - base_url: new content will be created in this folder
     - subdossier_labels: map with labels of subdossiers
@@ -263,7 +263,7 @@ class TestMainDossier(unittest.TestCase):
                     'form.widgets.IDossier.responsible', None))
 
     def test_default_tabs(self):
-        """Check default-tabs of the tabbedview.
+        """Check default-tabs and order of the tabbedview.
         """
         portal = self.layer['portal']
         types_tool = portal.portal_types
@@ -279,9 +279,10 @@ class TestMainDossier(unittest.TestCase):
             actions = types_tool.listActions(object=obj)
             for action in actions:
                 if action.category == 'tabbedview-tabs':
-                    # if its a default-tab we pop it from the tabs
-                    if action.title in tabs:
-                        tabs.pop(tabs.index(action.title))
+                    # if its a default-tab in the correct order
+                    # we pop it from the tabs-list
+                    if action.title in tabs and tabs.index(action.title) == 0:
+                        tabs.pop(0)
 
             # the tabs-var should be empty if we found every tab
             self.assertEquals(tabs, [])
@@ -376,8 +377,7 @@ class TestMainDossier(unittest.TestCase):
                             subdossier.allowedContentTypes()])
 
     def test_not_addable(self):
-        """We check that the dossie isn't addable in the
-        portal-root
+        """check whether the dossier is not addable
         """
         if self.is_special_dossier:
             for dossier_type in self.dossier_types:

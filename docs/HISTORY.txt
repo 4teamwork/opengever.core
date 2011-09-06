@@ -5,6 +5,9 @@ Changelog
 2.0b21
 ------
 
+* checks now order of tabs in test
+  [eschmutz]
+
 * added better test for test_default_values
   [eschmutz]
 
