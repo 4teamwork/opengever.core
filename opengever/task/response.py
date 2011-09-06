@@ -3,8 +3,9 @@ from Products.CMFCore.utils import getToolByName
 from Products.Five.browser import BrowserView
 from Products.statusmessages.interfaces import IStatusMessage
 from five import grok
-from opengever.base.source import DossierPathSourceBinder
 from opengever.base.browser.helper import css_class_from_obj
+from opengever.base.browser.opengeverview import OpengeverView
+from opengever.base.source import DossierPathSourceBinder
 from opengever.globalindex.interfaces import ITaskQuery
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.task import _
@@ -29,7 +30,6 @@ from zope.i18n import translate
 from zope.interface import Interface
 from zope.intid.interfaces import IIntIds
 from zope.lifecycleevent import modified, ObjectModifiedEvent
-from opengever.base.browser.opengeverview import OpengeverView
 import datetime
 import os
 
