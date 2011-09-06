@@ -5,6 +5,11 @@ Changelog
 2.0b15
 ------
 
+* Implemented a `version-view` that displays a particular version of an object 
+  using the default view of the respective content type and updated our
+  customized history viewlet to create links to that view.
+  [lgraf]
+
 * Registering history viewlet for generic interface
   plone.app.versioningbehavior.behaviors.IVersioningSupport
   [lgraf]
