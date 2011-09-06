@@ -3,7 +3,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2011-06-22 07:52+0000\n"
+"POT-Creation-Date: 2011-09-06 09:18+0000\n"
 "PO-Revision-Date: 2009-01-01 10:00+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: Jonas Baumann <j.baumann@4teamwork.ch>\n"
@@ -18,6 +18,10 @@ msgstr ""
 #: ./opengever/base/profiles/default/actions.xml
 msgid "Copy Items"
 msgstr "Kopieren"
+
+#: ./opengever/base/viewlets/download.py:19
+msgid "No file in in this version"
+msgstr "In dieser Version ist keine Datei vorhanden"
 
 #: ./opengever/base/profiles/default/actions.xml
 msgid "Properties"
@@ -40,6 +44,21 @@ msgstr "Archivwürdig"
 #: opengever/repository/classification.py
 msgid "archival worthy with sampling"
 msgstr "Sampling"
+
+#. Default: "Download"
+#: ./opengever/base/viewlets/history.pt:41
+msgid "button_file"
+msgstr "Download"
+
+#. Default: "PDF"
+#: ./opengever/base/viewlets/history.pt:49
+msgid "button_pdf"
+msgstr "PDF Vorschau"
+
+#. Default: "Show"
+#: ./opengever/base/viewlets/history.pt:45
+msgid "button_show"
+msgstr "Anzeigen"
 
 #. Default: "classified"
 #: opengever/repository/classification.py
