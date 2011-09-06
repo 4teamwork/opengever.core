@@ -1,16 +1,21 @@
+from Products.CMFCore.utils import getToolByName
+from Products.statusmessages.interfaces import IStatusMessage
 from email import Encoders
 from email.Header import Header
 from email.MIMEBase import MIMEBase
 from email.MIMEMultipart import MIMEMultipart
 from email.MIMEText import MIMEText
 from email.Utils import formatdate
-
 from five import grok
+from opengever.base.source import DossierPathSourceBinder
+from opengever.mail import _
+from opengever.mail.interfaces import ISendableDocsContainer
+from opengever.mail.validators import AddressValidator
+from opengever.mail.validators import DocumentSizeValidator
+from opengever.ogds.base.interfaces import IContactInformation
 from plone.formwidget.autocomplete import AutocompleteMultiFieldWidget
 from plone.z3cform import layout
 from plone.z3cform.textlines.textlines import TextLinesFieldWidget
-from Products.CMFCore.utils import getToolByName
-from Products.statusmessages.interfaces import IStatusMessage
 from z3c.form import form, button, field, validator
 from z3c.form.interfaces import INPUT_MODE
 from z3c.relationfield.schema import RelationChoice, RelationList
@@ -18,13 +23,6 @@ from zope import schema
 from zope.component import getUtility, provideAdapter
 from zope.interface import Interface
 from zope.interface import invariant, Invalid
-
-from opengever.base.source import DossierPathSourceBinder
-from opengever.mail import _
-from opengever.mail.validators import AddressValidator
-from opengever.mail.validators import DocumentSizeValidator
-from opengever.mail.interfaces import ISendableDocsContainer
-from opengever.ogds.base.interfaces import IContactInformation
 
 
 class NoMail(Invalid):
