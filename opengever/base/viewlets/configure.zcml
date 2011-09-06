@@ -4,20 +4,11 @@
 
    <browser:viewlet
        name="plone.belowcontentbody.contenthistory"
-       for="opengever.document.document.IDocumentSchema"
+       for="plone.app.versioningbehavior.behaviors.IVersioningSupport"
        manager="plone.app.layout.viewlets.interfaces.IBelowContentBody"
        class=".history.DocumentContentHistoryViewlet"
        template="history.pt"
        permission="zope2.View"
        />
-
-    <browser:viewlet
-        name="plone.belowcontentbody.contenthistory"
-        for="ftw.mail.mail.IMail"
-        manager="plone.app.layout.viewlets.interfaces.IBelowContentBody"
-        class=".history.DocumentContentHistoryViewlet"
-        template="history.pt"
-        permission="zope2.View"
-        />
 
 </configure>
