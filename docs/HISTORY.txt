@@ -5,6 +5,9 @@ Changelog
 2.0b15
 ------
 
+* Added grok.require to DownloadFileVersion and VersionView
+  [eschmutz]
+
 * chenged deprecated grok.CodeView to grok.View
   [eschmutz] 
 

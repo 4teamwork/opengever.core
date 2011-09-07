@@ -8,6 +8,7 @@ class VersionView(grok.View):
     the respective content type.
     """
     grok.context(IVersioningSupport)
+    grok.require('zope2.View')
     grok.name('version-view')
 
     def render(self, version_id):
