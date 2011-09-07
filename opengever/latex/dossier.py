@@ -23,7 +23,7 @@ from plonegov.pdflatex.browser.converter import LatexCTConverter
 class ExportPDFView(grok.View):
     grok.context(IDossierMarker)
     grok.name('export_pdf')
-    grok.require('zope2.view')
+    grok.require('zope2.View')
 
     def render(self):
         arguments = {
