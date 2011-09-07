@@ -414,7 +414,7 @@ return layout.FormWrapper.render_form(self)
 """
 
 
-class SingleAddFormView(layout.FormWrapper, grok.CodeView):
+class SingleAddFormView(layout.FormWrapper, grok.View):
     grok.implements(IResponseAdder)
     grok.context(ITask)
     grok.name("addresponse")
@@ -423,11 +423,11 @@ class SingleAddFormView(layout.FormWrapper, grok.CodeView):
 
     def __init__(self, context, request):
         layout.FormWrapper.__init__(self, context, request)
-        grok.CodeView.__init__(self, context, request)
+        grok.View.__init__(self, context, request)
         self.form.label = context.title
 
 
-class DirectResponseView(grok.CodeView):
+class DirectResponseView(grok.View):
     grok.context(ITask)
     grok.name('direct_response')
 

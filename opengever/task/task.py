@@ -633,7 +633,7 @@ def related_document(context):
     return intids.getId(context)
 
 
-class DocumentRedirector(grok.CodeView):
+class DocumentRedirector(grok.View):
     """Redirector View specific for documents created on a task
     redirect directly to the relateddocuments tab
     instead of the default documents tab

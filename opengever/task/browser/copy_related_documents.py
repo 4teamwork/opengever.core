@@ -123,14 +123,14 @@ class CopyRelatedDocumentsForm(Form):
             return True
 
 
-class CopyRelatedDocumentsToInbox(layout.FormWrapper, grok.CodeView):
+class CopyRelatedDocumentsToInbox(layout.FormWrapper, grok.View):
     grok.context(Interface)
     grok.name('copy-related-documents-to-inbox')
     form = CopyRelatedDocumentsForm
 
     def __init__(self, *args, **kwargs):
         layout.FormWrapper.__init__(self, *args, **kwargs)
-        grok.CodeView.__init__(self, *args, **kwargs)
+        grok.View.__init__(self, *args, **kwargs)
 
     def available(self):
         return self.form_instance.available()

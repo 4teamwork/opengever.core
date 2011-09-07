@@ -120,6 +120,6 @@ class AssignTaskView(layout.FormWrapper, grok.View):
 
     def __init__(self, *args, **kwargs):
         layout.FormWrapper.__init__(self, *args, **kwargs)
-        grok.CodeView.__init__(self, *args, **kwargs)
+        grok.View.__init__(self, *args, **kwargs)
 
     __call__ = layout.FormWrapper.__call__

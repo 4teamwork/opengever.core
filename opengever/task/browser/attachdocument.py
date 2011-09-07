@@ -211,14 +211,14 @@ class ChooseDossierForm(z3c.form.form.Form, WizardFormMixin):
 
 
 
-class ChooseDossierView(layout.FormWrapper, grok.CodeView):
+class ChooseDossierView(layout.FormWrapper, grok.View):
     grok.context(ITask)
     grok.name('choose_source_dossier')
     form = ChooseDossierForm
 
     def __init__(self, *args, **kwargs):
         layout.FormWrapper.__init__(self, *args, **kwargs)
-        grok.CodeView.__init__(self, *args, **kwargs)
+        grok.View.__init__(self, *args, **kwargs)
 
     __call__ = layout.FormWrapper.__call__
 
@@ -288,14 +288,14 @@ class ChooseDocumentForm(z3c.form.form.Form, WizardFormMixin):
 
 
 
-class ChooseDocumentView(layout.FormWrapper, grok.CodeView):
+class ChooseDocumentView(layout.FormWrapper, grok.View):
     grok.context(ITask)
     grok.name('choose_source_document')
     form = ChooseDocumentForm
 
     def __init__(self, *args, **kwargs):
         layout.FormWrapper.__init__(self, *args, **kwargs)
-        grok.CodeView.__init__(self, *args, **kwargs)
+        grok.View.__init__(self, *args, **kwargs)
 
     __call__ = layout.FormWrapper.__call__
 

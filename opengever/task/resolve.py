@@ -7,7 +7,7 @@ TASK_CLOSED_STATES = ['task-state-tested-and-closed',
                       'task-state-cancelled']
 
 
-class ResolveCheck(grok.CodeView):
+class ResolveCheck(grok.View):
     """This view checks if the task can be resolved.
     It will be called from a transition-expression """
 

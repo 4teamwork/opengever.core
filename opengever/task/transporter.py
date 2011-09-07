@@ -97,7 +97,7 @@ class ResponseTransporter(grok.Adapter):
 
 
 
-class ReceiveResponses(grok.CodeView):
+class ReceiveResponses(grok.View):
     """Receives a json request cotnaining one or more responses to
     add to the context task.
     """

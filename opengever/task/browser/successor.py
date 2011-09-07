@@ -157,7 +157,7 @@ class SuccessorTaskForm(Form):
         self.request['form.widgets.client'] = self.widgets['client'].value
 
 
-class CreateSuccessorTask(layout.FormWrapper, grok.CodeView):
+class CreateSuccessorTask(layout.FormWrapper, grok.View):
     grok.context(ITask)
     grok.name('create-successor-task')
     grok.require('zope2.View')
@@ -165,11 +165,11 @@ class CreateSuccessorTask(layout.FormWrapper, grok.CodeView):
 
     def __init__(self, *args, **kwargs):
         layout.FormWrapper.__init__(self, *args, **kwargs)
-        grok.CodeView.__init__(self, *args, **kwargs)
+        grok.View.__init__(self, *args, **kwargs)
 
 
 
-class CleanupSuccessor(grok.CodeView):
+class CleanupSuccessor(grok.View):
     """Do cleanup tasks after creating a successor:
     - add a global reference to the predecessor
     - move the successor task in a special initial state
