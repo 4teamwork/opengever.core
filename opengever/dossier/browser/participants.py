@@ -86,7 +86,7 @@ class IParticipationSourceConfig(ITableSourceConfig):
     """
 
 
-class Participants(grok.CodeView, OpengeverTab, ListingView):
+class Participants(grok.View, OpengeverTab, ListingView):
     """ Participants listing tab for dossiers using the
     IParticipantsAware behavior
     """

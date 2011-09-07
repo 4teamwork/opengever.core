@@ -173,7 +173,7 @@ class ParticipationAddForm(z3c.form.form.Form):
         return self.request.RESPONSE.redirect(url)
 
 
-class ParticipationAddFormView(layout.FormWrapper, grok.CodeView):
+class ParticipationAddFormView(layout.FormWrapper, grok.View):
     grok.context(IParticipationAwareMarker)
     grok.name('add-participation')
     grok.require('cmf.AddPortalContent')
@@ -181,12 +181,12 @@ class ParticipationAddFormView(layout.FormWrapper, grok.CodeView):
 
     def __init__(self, *args, **kwargs):
         layout.FormWrapper.__init__(self, *args, **kwargs)
-        grok.CodeView.__init__(self, *args, **kwargs)
+        grok.View.__init__(self, *args, **kwargs)
 
 
 # ------- delete view -------
 
-class DeleteParticipants(grok.CodeView):
+class DeleteParticipants(grok.View):
     grok.context(IParticipationAwareMarker)
     grok.require('cmf.ModifyPortalContent')
     grok.name('delete_participants')

@@ -5,7 +5,7 @@ from opengever.dossier.behaviors.dossier import IDossierMarker
 import json
 
 
-class OpenDossiersAsJSONView(grok.CodeView):
+class OpenDossiersAsJSONView(grok.View):
     grok.context(IPloneSiteRoot)
     grok.name('list-open-dossiers-json')
 

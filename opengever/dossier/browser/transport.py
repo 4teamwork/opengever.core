@@ -190,14 +190,14 @@ class ChooseClientForm(z3c.form.form.Form, WizardFormMixin):
         return value
 
 
-class ChooseClientView(layout.FormWrapper, grok.CodeView):
+class ChooseClientView(layout.FormWrapper, grok.View):
     grok.context(IDexterityContent)
     grok.name('copy-documents-to-remote-client')
     form = ChooseClientForm
 
     def __init__(self, *args, **kwargs):
         layout.FormWrapper.__init__(self, *args, **kwargs)
-        grok.CodeView.__init__(self, *args, **kwargs)
+        grok.View.__init__(self, *args, **kwargs)
 
     def __call__(self):
         factory = getUtility(
@@ -316,11 +316,11 @@ class CopyDocumentsToRemoteClientForm(z3c.form.form.Form, WizardFormMixin):
         return value
 
 
-class CopyDocumentsToRemoteClientView(layout.FormWrapper, grok.CodeView):
+class CopyDocumentsToRemoteClientView(layout.FormWrapper, grok.View):
     grok.context(IDexterityContent)
     grok.name('copy-documents-to-remote-client2')
     form = CopyDocumentsToRemoteClientForm
 
     def __init__(self, *args, **kwargs):
         layout.FormWrapper.__init__(self, *args, **kwargs)
-        grok.CodeView.__init__(self, *args, **kwargs)
+        grok.View.__init__(self, *args, **kwargs)

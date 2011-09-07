@@ -130,7 +130,7 @@ class MoveItemsForm(form.Form):
         return self.request.RESPONSE.redirect(self.context.absolute_url())
 
 
-class MoveItemsFormView(layout.FormWrapper, grok.CodeView):
+class MoveItemsFormView(layout.FormWrapper, grok.View):
     """ The View wich display the SendDocument-Form.
 
     For sending documents with per mail.
@@ -144,7 +144,7 @@ class MoveItemsFormView(layout.FormWrapper, grok.CodeView):
 
     def __init__(self, context, request):
         layout.FormWrapper.__init__(self, context, request)
-        grok.CodeView.__init__(self, context, request)
+        grok.View.__init__(self, context, request)
 
     def render(self):
         if not self.request.get('paths') and not \

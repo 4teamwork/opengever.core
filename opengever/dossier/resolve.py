@@ -6,7 +6,7 @@ from opengever.dossier.behaviors.dossier import IDossierMarker
 #from opengever.dossier.behaviors.dossier import IDossier
 
 
-class Resolve(grok.CodeView):
+class Resolve(grok.View):
 
     grok.context(IDossierMarker)
     grok.name('transition-resolve')
