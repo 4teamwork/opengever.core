@@ -20,7 +20,7 @@ from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
 from plonegov.pdflatex.pdfgenerator import PdfMissingException
 from plonegov.pdflatex.browser.converter import LatexCTConverter
 
-class ExportPDFView(grok.CodeView):
+class ExportPDFView(grok.View):
     grok.context(IDossierMarker)
     grok.name('export_pdf')
 
@@ -45,7 +45,7 @@ def pre_compiler(view, object):
     layout = DossierLayout()
     layout(view, object)
 
-class DossierLatexConverter(LatexCTConverter,grok.CodeView,AutoFields):
+class DossierLatexConverter(LatexCTConverter,grok.View,AutoFields):
     grok.name("pdflatex_convert_object")
     grok.context(IDossierMarker)
     grok.require('zope2.View')
@@ -88,7 +88,7 @@ class DossierLatexConverter(LatexCTConverter,grok.CodeView,AutoFields):
         end = end==None and '-' or end
         registry = queryUtility(IRegistry)
         proxy = registry.forInterface(IBaseClientID)
-        
+
         # buildout a kind of breadcrumbs with all parental repository folders
         repository = []
         while not IPloneSiteRoot.providedBy(parent):
