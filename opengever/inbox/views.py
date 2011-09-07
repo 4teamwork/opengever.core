@@ -2,7 +2,7 @@
 from five import grok
 from zope.interface import Interface
 
-class AccessInboxAllowed(grok.CodeView):
+class AccessInboxAllowed(grok.View):
     """Checks if the User has enough permissions to view the Inbox.
     """
     grok.context(Interface)
