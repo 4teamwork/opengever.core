@@ -74,7 +74,7 @@ def trashIndexer(obj):
 grok.global_adapter(trashIndexer, name="trashed")
 
 
-class TrashView(grok.CodeView):
+class TrashView(grok.View):
     grok.context(ITrashableMarker)
     grok.require('opengever.trash.TrashContent')
     grok.name('trashed')
@@ -120,7 +120,7 @@ class TrashView(grok.CodeView):
         super(TrashView).render()
 
 
-class UntrashView(grok.CodeView):
+class UntrashView(grok.View):
     grok.context(ITrashableMarker)
     grok.require('opengever.trash.UntrashContent')
     grok.name('untrashed')
