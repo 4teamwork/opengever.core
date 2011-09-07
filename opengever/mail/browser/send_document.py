@@ -204,7 +204,7 @@ class SendDocumentForm(form.Form):
         return msg
 
 
-class SendDocumentFormView(layout.FormWrapper, grok.CodeView):
+class SendDocumentFormView(layout.FormWrapper, grok.View):
     """ The View wich display the SendDocument-Form.
 
     For sending documents with per mail.
@@ -218,4 +218,4 @@ class SendDocumentFormView(layout.FormWrapper, grok.CodeView):
 
     def __init__(self, context, request):
         layout.FormWrapper.__init__(self, context, request)
-        grok.CodeView.__init__(self, context, request)
+        grok.View.__init__(self, context, request)

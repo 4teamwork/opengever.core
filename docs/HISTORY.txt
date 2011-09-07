@@ -5,6 +5,9 @@ Changelog
 2.0b10
 ------
 
+* changed deprecated grok.CodeView to grok.View
+  [eschmutz]
+
 * Set versioning policy for ftw.mail.mail to "Manual", because "Automatic"
   causes bogus versions to be created during migration.
   [lgraf]
