@@ -8,6 +8,7 @@ class RepositoryRootOverview(grok.View, OpengeverTab):
 
     grok.context(IRepositoryRoot)
     grok.name('tabbedview_view-overview')
+    grok.require('zope2.View')
 
     show_searchform = False
 
