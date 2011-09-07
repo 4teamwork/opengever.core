@@ -431,6 +431,7 @@ class SingleAddFormView(layout.FormWrapper, grok.View):
 class DirectResponseView(grok.View):
     grok.context(ITask)
     grok.name('direct_response')
+    grok.require('zope2.View')
 
     def render(self):
         self.request = self.context.REQUEST
