@@ -27,7 +27,7 @@ class IJournalSourceConfig(ITableSourceConfig):
     """
 
 
-class JournalTab(grok.CodeView, OpengeverTab, ListingView):
+class JournalTab(grok.View, OpengeverTab, ListingView):
     """Journal tab implementing IJorunalConfig.
     """
 
