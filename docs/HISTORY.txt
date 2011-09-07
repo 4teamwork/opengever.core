@@ -5,6 +5,9 @@ Changelog
 2.0a11
 ------
 
+* added grok.require for JournalTab
+  [eschmutz]
+
 * changed deprecated grok.CodeView to grok.View
   [eschmutz]
 
