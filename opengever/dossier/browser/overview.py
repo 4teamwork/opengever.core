@@ -15,6 +15,7 @@ class DossierOverview(grok.View, OpengeverTab):
 
     grok.context(IDossierMarker)
     grok.name('tabbedview_view-overview')
+    grok.require('zope2.View')
     grok.template('overview')
 
     def catalog(self, types, showTrashed=False, depth=2):
