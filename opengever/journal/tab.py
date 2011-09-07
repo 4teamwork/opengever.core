@@ -34,7 +34,7 @@ class JournalTab(grok.View, OpengeverTab, ListingView):
     implements(IJournalSourceConfig)
 
     grok.name('tabbedview_view-journal')
-    grok.require('zope2.view')
+    grok.require('zope2.View')
     grok.context(IJournalizable)
 
     # do not select
