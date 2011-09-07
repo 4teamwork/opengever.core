@@ -5,6 +5,9 @@ Changelog
 2.0b5
 -----
 
+* added zope.require for ExportPDFView
+  [eschmutz]
+
 * changed deprecated grok.CodeView to grok.View
   [eschmutz]
 
