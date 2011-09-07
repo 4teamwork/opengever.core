@@ -1,3 +1,6 @@
+from Products.CMFCore.utils import getToolByName
+from Products.ZCatalog.ZCatalog import ZCatalog
+from Products.ZCatalog.interfaces import ICatalogBrain
 from five import grok
 from opengever.ogds.base import _
 from opengever.ogds.base.interfaces import IContactInformation, IUser
@@ -5,11 +8,8 @@ from opengever.ogds.base.model.client import Client
 from opengever.ogds.base.model.user import User, Group
 from opengever.ogds.base.utils import brain_is_contact, get_client_id
 from opengever.ogds.base.utils import create_session
-from plone.memoize import volatile
 from plone.memoize import ram
-from Products.CMFCore.utils import getToolByName
-from Products.ZCatalog.interfaces import ICatalogBrain
-from Products.ZCatalog.ZCatalog import ZCatalog
+from plone.memoize import volatile
 from zope.app.component.hooks import getSite
 import logging
 import types

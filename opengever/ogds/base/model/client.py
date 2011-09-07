@@ -1,9 +1,9 @@
 from opengever.ogds.base.interfaces import IClient
 from opengever.ogds.base.model.user import Group, Base
 from sqlalchemy import Column, String, Boolean
+from sqlalchemy import ForeignKey
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship, backref
-from sqlalchemy import ForeignKey
 from zope.interface import implements
 
 
@@ -29,7 +29,7 @@ class Client(Base):
 
     inbox_group_id = Column(String(30), ForeignKey('groups.groupid'))
     inbox_group = relationship("Group", backref='inbox_group', primaryjoin=inbox_group_id==Group.groupid)
-    
+
 
 
     def __init__(self, client_id, **kwargs):

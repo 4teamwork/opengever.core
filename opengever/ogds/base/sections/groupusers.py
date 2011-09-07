@@ -1,9 +1,9 @@
-import logging
-from opengever.ogds.base.model.user import User, Group
-from zope.interface import classProvides, implements
-from collective.transmogrifier.interfaces import ISectionBlueprint
 from collective.transmogrifier.interfaces import ISection
+from collective.transmogrifier.interfaces import ISectionBlueprint
+from opengever.ogds.base.model.user import User, Group
 from z3c.saconfig import named_scoped_session
+from zope.interface import classProvides, implements
+import logging
 
 Session = named_scoped_session("opengever")
 
@@ -24,8 +24,8 @@ class GroupUsersSection(object):
         self.session = Session()
 
     def __iter__(self):
-        
-        
+
+
         for item in self.previous:
             groups = self.session.query(Group).filter_by(
                 groupid=item.get('groupid')).all()
@@ -35,7 +35,7 @@ class GroupUsersSection(object):
                 temp_user = [user for user in groups[0].users]
                 for user in temp_user:
                     groups[0].users.remove(user)
-                
+
                 # get all userobjects and append it to the group
                 users = self.session.query(User).filter(User.userid.in_(item.get('_users'))).all()
                 for user in users:

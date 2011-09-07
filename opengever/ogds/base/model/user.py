@@ -1,10 +1,10 @@
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import Column, String, Text, Boolean, Table
-from zope.interface import implements
-from opengever.ogds.base.interfaces import IUser
 from opengever.ogds.base.interfaces import IClient
-from sqlalchemy.orm import backref, relation
+from opengever.ogds.base.interfaces import IUser
+from sqlalchemy import Column, String, Text, Boolean, Table
 from sqlalchemy import ForeignKey
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import backref, relation
+from zope.interface import implements
 
 Base = declarative_base()
 

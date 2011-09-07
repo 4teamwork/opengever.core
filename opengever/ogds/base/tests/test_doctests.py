@@ -1,7 +1,7 @@
-import doctest
-from plone.testing import layered
-import unittest2 as unittest
 from opengever.ogds.base.testing import OPENGEVER_OGDS_BASE_TESTING
+from plone.testing import layered
+import doctest
+import unittest2 as unittest
 
 
 OPTIONFLAGS = (doctest.NORMALIZE_WHITESPACE|
