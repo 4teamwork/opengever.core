@@ -193,6 +193,7 @@ class ChooseClientForm(z3c.form.form.Form, WizardFormMixin):
 class ChooseClientView(layout.FormWrapper, grok.View):
     grok.context(IDexterityContent)
     grok.name('copy-documents-to-remote-client')
+    grok.require('zoep2.view')
     form = ChooseClientForm
 
     def __init__(self, *args, **kwargs):
@@ -319,6 +320,7 @@ class CopyDocumentsToRemoteClientForm(z3c.form.form.Form, WizardFormMixin):
 class CopyDocumentsToRemoteClientView(layout.FormWrapper, grok.View):
     grok.context(IDexterityContent)
     grok.name('copy-documents-to-remote-client2')
+    grok.require('zoep2.view')
     form = CopyDocumentsToRemoteClientForm
 
     def __init__(self, *args, **kwargs):

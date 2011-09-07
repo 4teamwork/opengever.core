@@ -5,7 +5,7 @@ Changelog
 2.0b21
 ------
 
-* added grok.require for DossierOverview
+* added grok.require for DossierOverview, Participants, ChooseClientView, CopyDocumentsToRemoteClientView
   [eschmutz]
 
 * changed deprecated grok.CodeView to grok.View

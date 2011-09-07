@@ -93,6 +93,7 @@ class Participants(grok.View, OpengeverTab, ListingView):
 
     implements(IParticipationSourceConfig)
 
+    grok.require('zope2.View')
     grok.name('tabbedview_view-participants')
     grok.context(IParticipationAwareMarker)
 
