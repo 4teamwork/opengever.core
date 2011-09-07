@@ -2,8 +2,7 @@ from opengever.ogds.base.interfaces import IClient
 from opengever.ogds.base.model.user import Group, Base
 from sqlalchemy import Column, String, Boolean
 from sqlalchemy import ForeignKey
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import relationship, backref
+from sqlalchemy.orm import relationship
 from zope.interface import implements
 
 

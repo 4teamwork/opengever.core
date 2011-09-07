@@ -45,7 +45,6 @@ def create_contacts(portal):
         obj.reindexObject()
 
 
-
 class BaseLayer(PloneSandboxLayer):
 
     defaultBases = (PLONE_FIXTURE, )
@@ -88,7 +87,7 @@ class BaseLayer(PloneSandboxLayer):
         for model in MODELS:
             getattr(model, 'metadata').drop_all(session.bind)
         getattr(task_model.Base, 'metadata').drop_all(session.bind)
-        # we may have created custom users and
+        # we may hav°e created custom users and
 
 
 OPENGEVER_OGDS_BASE_FIXTURE = BaseLayer()

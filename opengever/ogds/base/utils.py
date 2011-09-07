@@ -144,7 +144,6 @@ def remote_request(target_client_id, viewname, path='', data={}, headers={}):
 
         return StringIO(data)
 
-
     site = getSite()
     info = getUtility(IContactInformation)
     target = info.get_client_by_id(target_client_id)

@@ -5,9 +5,10 @@ from z3c.saconfig import named_scoped_session
 from zope.interface import classProvides, implements
 import logging
 
-Session = named_scoped_session("opengever")
 
+Session = named_scoped_session("opengever")
 SQLSOURCE_KEY = 'transmogrify.sqlinserter.sqlinsertersection'
+
 
 class GroupUsersSection(object):
     """This section write all relations beetwen users and groups,
@@ -25,7 +26,6 @@ class GroupUsersSection(object):
 
     def __iter__(self):
 
-
         for item in self.previous:
             groups = self.session.query(Group).filter_by(
                 groupid=item.get('groupid')).all()
@@ -37,10 +37,13 @@ class GroupUsersSection(object):
                     groups[0].users.remove(user)
 
                 # get all userobjects and append it to the group
-                users = self.session.query(User).filter(User.userid.in_(item.get('_users'))).all()
+                users = self.session.query(User).filter(
+                    User.userid.in_(item.get('_users'))).all()
                 for user in users:
                     groups[0].users.append(user)
+
             else:
-                self.logger.warn("Couldn't find group with the id %s" % (item.get('groupid')))
+                self.logger.warn("Couldn't find group with the id %s" % (
+                        item.get('groupid')))
 
             yield item

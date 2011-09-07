@@ -4,8 +4,8 @@ import doctest
 import unittest2 as unittest
 
 
-OPTIONFLAGS = (doctest.NORMALIZE_WHITESPACE|
-               doctest.ELLIPSIS|
+OPTIONFLAGS = (doctest.NORMALIZE_WHITESPACE |
+               doctest.ELLIPSIS |
                doctest.REPORT_NDIFF)
 
 
@@ -18,7 +18,6 @@ TESTFILES = (
     'autocomplete_widget.txt',
     'plugins.txt',
     )
-
 
 
 def test_suite():

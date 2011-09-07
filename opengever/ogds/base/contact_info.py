@@ -93,7 +93,7 @@ class ContactInformation(grok.GlobalUtility):
 
         session = create_session()
         users = session.query(Group).join(Client.users_group).filter(
-            Client.client_id==client_id).first().users
+            Client.client_id == client_id).first().users
 
         return users
 
@@ -102,7 +102,8 @@ class ContactInformation(grok.GlobalUtility):
 
         if groupid:
             session = create_session()
-            groups = session.query(Group).filter(Group.groupid==groupid).all()
+            groups = session.query(Group).filter(
+                Group.groupid == groupid).all()
             if len(groups) > 0:
                 return groups[0].users
         return []
@@ -111,7 +112,7 @@ class ContactInformation(grok.GlobalUtility):
         if userid:
             session = create_session()
             groups = session.query(User).filter(
-                        User.userid==userid).first().group_users
+                        User.userid == userid).first().group_users
             return groups
         return []
 
@@ -134,7 +135,6 @@ class ContactInformation(grok.GlobalUtility):
                     len(users), principal) + 'expected only one')
         else:
             return users[0]
-
 
     # CONTACTS
     def is_contact(self, principal):
@@ -181,7 +181,6 @@ class ContactInformation(grok.GlobalUtility):
                     len(contacts), principal))
         else:
             return contacts[0]
-
 
     # INBOXES
     def is_inbox(self, principal):
@@ -230,7 +229,6 @@ class ContactInformation(grok.GlobalUtility):
             raise ValueError('Client not found for: %s' % principal)
 
         return client.inbox_group.groupid
-
 
     # CLIENTS
     def get_clients(self):
@@ -287,7 +285,7 @@ class ContactInformation(grok.GlobalUtility):
         # client
         if session.query(Client).join(Client.users_group).join(
             Group.users).filter(User.userid == userid).filter(
-                    Client.client_id==client_id).count() > 0:
+                    Client.client_id == client_id).count() > 0:
                 return True
 
         return False
@@ -370,7 +368,7 @@ class ContactInformation(grok.GlobalUtility):
                 name = contact.lastname
             elif contact.firstname:
                 name = contact.firstname
-            elif contact.has_key('userid'):
+            elif 'userid' in contact:
                 name = contact.userid
             else:
                 name = contact.id
@@ -520,7 +518,7 @@ class ContactInformation(grok.GlobalUtility):
         """Render a link to the `principal`
         """
 
-        if not principal or principal =='':
+        if not principal or principal == '':
             return None
 
         url = self.get_profile_url(principal)
