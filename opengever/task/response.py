@@ -418,6 +418,7 @@ class SingleAddFormView(layout.FormWrapper, grok.View):
     grok.implements(IResponseAdder)
     grok.context(ITask)
     grok.name("addresponse")
+    grok.require('cmf.AddPortalContent')
 
     form = AddForm
 

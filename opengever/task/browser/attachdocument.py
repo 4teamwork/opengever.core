@@ -214,6 +214,7 @@ class ChooseDossierForm(z3c.form.form.Form, WizardFormMixin):
 class ChooseDossierView(layout.FormWrapper, grok.View):
     grok.context(ITask)
     grok.name('choose_source_dossier')
+    grok.require('cmf.AddPortalContent')
     form = ChooseDossierForm
 
     def __init__(self, *args, **kwargs):
@@ -291,6 +292,7 @@ class ChooseDocumentForm(z3c.form.form.Form, WizardFormMixin):
 class ChooseDocumentView(layout.FormWrapper, grok.View):
     grok.context(ITask)
     grok.name('choose_source_document')
+    grok.require('cmf.AddPortalContent')
     form = ChooseDocumentForm
 
     def __init__(self, *args, **kwargs):

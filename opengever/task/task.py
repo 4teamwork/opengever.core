@@ -641,6 +641,7 @@ class DocumentRedirector(grok.View):
 
     grok.name('document-redirector')
     grok.context(ITask)
+    grok.require('zope2.View')
 
     def render(self):
         referer = self.context.REQUEST.environ.get('HTTP_REFERER')

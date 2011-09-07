@@ -104,6 +104,7 @@ class ReceiveResponses(grok.View):
 
     grok.context(ITask)
     grok.name('task-responses-receive')
+    grok.require('zope2.View')
 
     def render(self):
         rawdata = self.request.get('responses')

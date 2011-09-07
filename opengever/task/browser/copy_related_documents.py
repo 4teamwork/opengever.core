@@ -126,6 +126,7 @@ class CopyRelatedDocumentsForm(Form):
 class CopyRelatedDocumentsToInbox(layout.FormWrapper, grok.View):
     grok.context(Interface)
     grok.name('copy-related-documents-to-inbox')
+    grok.require('cmf.AddPortalContent')
     form = CopyRelatedDocumentsForm
 
     def __init__(self, *args, **kwargs):

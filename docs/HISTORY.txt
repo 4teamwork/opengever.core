@@ -5,6 +5,10 @@ Changelog
 2.0b22
 ------
 
+* Added grok.require to ReceiveResponses, DocumentRedirector, DirectResponseView, SingleAddFormView,
+  CopyRelatedDocumentsToInbox
+  [eschmutz]
+
 * changed deprecated grok.CodeView to grok.View
   [eschmutz]
 
