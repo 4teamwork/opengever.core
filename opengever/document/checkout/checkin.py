@@ -140,7 +140,7 @@ class CheckinCommentForm(form.Form):
         self.widgets['paths'].value = ';;'.join(self.item_paths)
 
 
-class CheckinDocuments(layout.FormWrapper, grok.CodeView):
+class CheckinDocuments(layout.FormWrapper, grok.View):
     """View for checking in one or more documents. This view is either
     called from a tabbed_view or folder_contents action (using the
     request parameter "paths") or directly on the document itself
@@ -154,7 +154,7 @@ class CheckinDocuments(layout.FormWrapper, grok.CodeView):
 
     def __init__(self, context, request):
         layout.FormWrapper.__init__(self, context, request)
-        grok.CodeView.__init__(self, context, request)
+        grok.View.__init__(self, context, request)
 
     def __call__(self, *args, **kwargs):
         try:

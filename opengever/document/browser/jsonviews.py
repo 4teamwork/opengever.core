@@ -6,7 +6,7 @@ import json
 import os.path
 
 
-class DocumentsOfDossierAsJSONView(grok.CodeView):
+class DocumentsOfDossierAsJSONView(grok.View):
     """This view provides a json representation of all visible documents
     of a dossier (REQUEST['dossier']) on this client.
 

@@ -12,7 +12,7 @@ from zope.component import getMultiAdapter, getUtility
 from zope.interface import Interface
 
 
-class EditingDocument(grok.CodeView):
+class EditingDocument(grok.View):
     """ The view for direct editing document. When they view is called,
     it checkouts the document if it's possible and necessary and
     redirect to the external_edit link"""

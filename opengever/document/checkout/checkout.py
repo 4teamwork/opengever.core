@@ -9,7 +9,7 @@ from zope.component import getMultiAdapter
 from zope.interface import Interface
 
 
-class CheckoutDocuments(grok.CodeView):
+class CheckoutDocuments(grok.View):
     """View for checking out one or more document. This view is either
     called from a tabbed_view / folder_contents action (using the request
     parameter "paths") or directly on the document itself (without any

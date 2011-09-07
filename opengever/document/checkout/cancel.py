@@ -8,7 +8,7 @@ from zope.component import getMultiAdapter
 from zope.interface import Interface
 
 
-class CancelDocuments(grok.CodeView):
+class CancelDocuments(grok.View):
     """Cancel the checkout of one or more documents. This view is either
     called from a tabbed_view or folder_contents action (using the request
     parameter "paths") or directly on the document itself (without any
