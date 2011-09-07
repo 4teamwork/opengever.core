@@ -5,7 +5,8 @@ Changelog
 2.0b18
 ------
 
-* Added grok.require to UsersListing
+* Added grok.require to UsersListing, OpengeverCatalogListingTab, DocumentRedirector,
+  GlobalTaskListingTab
   [eschmutz]
 
 * changed deprecated grok.CodeView to grok.View

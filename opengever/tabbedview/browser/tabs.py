@@ -94,6 +94,7 @@ class OpengeverCatalogListingTab(grok.View, OpengeverTab,
     """
 
     grok.context(ITabbedView)
+    grok.require('zope2.View')
 
     columns = ()
 
@@ -330,6 +331,7 @@ class DocumentRedirector(grok.View):
 
     grok.name('document-redirector')
     grok.context(IDexterityContainer)
+    grok.require('cmf.AddPortalContent')
 
     def render(self):
         referer = self.context.REQUEST.environ.get('HTTP_REFERER')

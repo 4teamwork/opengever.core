@@ -40,6 +40,7 @@ class GlobalTaskListingTab(grok.View, OpengeverTab,
     implements(IGlobalTaskTableSourceConfig)
 
     grok.context(IJournalizable)
+    grok.require('zope2.View')
 
     sort_on = 'modified'
     sort_reverse = False
