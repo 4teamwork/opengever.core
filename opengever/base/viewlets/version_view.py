@@ -3,7 +3,7 @@ from plone.app.versioningbehavior.behaviors import IVersioningSupport
 from zope.component import getMultiAdapter
 
 
-class VersionView(grok.CodeView):
+class VersionView(grok.View):
     """Displays a particular version of an object using the default view of
     the respective content type.
     """

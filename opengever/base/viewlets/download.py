@@ -5,7 +5,7 @@ from plone.app.versioningbehavior.behaviors import IVersioningSupport
 from Products.statusmessages.interfaces import IStatusMessage
 
 
-class DownloadFileVersion(grok.CodeView):
+class DownloadFileVersion(grok.View):
     grok.context(IVersioningSupport)
     grok.name('download_file_version')
 

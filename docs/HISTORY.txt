@@ -5,6 +5,9 @@ Changelog
 2.0b15
 ------
 
+* chenged deprecated grok.CodeView to grok.View
+  [eschmutz] 
+
 * Implemented a `version-view` that displays a particular version of an object 
   using the default view of the respective content type and updated our
   customized history viewlet to create links to that view.
