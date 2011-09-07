@@ -88,7 +88,7 @@ class OpengeverTab(object):
         return results
 
 
-class OpengeverCatalogListingTab(grok.CodeView, OpengeverTab,
+class OpengeverCatalogListingTab(grok.View, OpengeverTab,
                                  CatalogListingView):
     """Base view for catalog listing tabs.
     """
@@ -323,7 +323,7 @@ class Trash(Documents):
         return columns
 
 
-class DocumentRedirector(grok.CodeView):
+class DocumentRedirector(grok.View):
     """Redirector View is called after a Document is created,
     make it easier to implement type specifics immediate_views
     like implemented for opengever.task"""

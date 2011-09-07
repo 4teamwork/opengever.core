@@ -38,7 +38,7 @@ class IUsersListingTableSourceConfig(ITableSourceConfig):
     """
 
 
-class UsersListing(grok.CodeView, OpengeverTab, ListingView):
+class UsersListing(grok.View, OpengeverTab, ListingView):
     """Tab registered on contacts folder (see opengever.contact) listing all
     users.
     """

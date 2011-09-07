@@ -39,7 +39,7 @@ class IClientsTableSourceConfig(ITableSourceConfig):
     """
 
 
-class ClientsListing(grok.CodeView, OpengeverTab, ListingView):
+class ClientsListing(grok.View, OpengeverTab, ListingView):
     """A clients listing tab.
     """
 

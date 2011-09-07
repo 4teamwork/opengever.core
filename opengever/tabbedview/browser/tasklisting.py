@@ -29,7 +29,7 @@ class IGlobalTaskTableSourceConfig(ITableSourceConfig):
     """
 
 
-class GlobalTaskListingTab(grok.CodeView, OpengeverTab,
+class GlobalTaskListingTab(grok.View, OpengeverTab,
                            ListingView):
     """A tabbed view mixing which brings support for listing tasks from
     the SQL (globally over all clients).
