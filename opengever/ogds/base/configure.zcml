@@ -8,7 +8,7 @@
 
     <include package="z3c.autoinclude" file="meta.zcml" />
     <includeDependencies package="." />
-    
+
     <include package=".sections" />
     <include package=".ldap_import" />
     <grok:grok package="." />
@@ -16,49 +16,49 @@
     <i18n:registerTranslations directory="locales" />
 
     <adapter
-        factory=".setuphandlers.OpenGeverSessionName"
-        provides="ftw.dictstorage.interfaces.IConfig"
-        for="ftw.dictstorage.interfaces.ISQLAlchemy"
-        />
+          factory=".setuphandlers.OpenGeverSessionName"
+          provides="ftw.dictstorage.interfaces.IConfig"
+          for="ftw.dictstorage.interfaces.ISQLAlchemy"
+          />
 
     <subscriber
-        for="z3c.saconfig.interfaces.IEngineCreatedEvent"
-        handler=".events.setup_engine_options"
-        />
+          for="z3c.saconfig.interfaces.IEngineCreatedEvent"
+          handler=".events.setup_engine_options"
+          />
 
     <genericsetup:registerProfile
-        name="default"
-        title="opengever.ogds.base"
-        description="OpenGever directory service base profile"
-        directory="profiles/default"
-        provides="Products.GenericSetup.interfaces.EXTENSION"
-        />
+          name="default"
+          title="opengever.ogds.base"
+          description="OpenGever directory service base profile"
+          directory="profiles/default"
+          provides="Products.GenericSetup.interfaces.EXTENSION"
+          />
 
     <genericsetup:registerProfile
-        name="example"
-        title="opengever.ogds.base : example users / clients"
-        description="OpenGever directory service : create example users and clients"
-        directory="profiles/example"
-        provides="Products.GenericSetup.interfaces.EXTENSION"
-        />
+          name="example"
+          title="opengever.ogds.base : example users / clients"
+          description="OpenGever directory service : create example users and clients"
+          directory="profiles/example"
+          provides="Products.GenericSetup.interfaces.EXTENSION"
+          />
 
     <!-- Register the import steps -->
     <genericsetup:importStep
-        name="opengever.ogds.base"
-        title="opengever.ogds.base special import handlers"
-        description=""
-        handler="opengever.ogds.base.setuphandlers.import_various" />
+          name="opengever.ogds.base"
+          title="opengever.ogds.base special import handlers"
+          description=""
+          handler="opengever.ogds.base.setuphandlers.import_various" />
 
     <genericsetup:importStep
-        name="opengever.ogds.base : example"
-        title="opengever.ogds.base create example users and clients"
-        description=""
-        handler="opengever.ogds.base.setuphandlers.create_example" />
+          name="opengever.ogds.base : example"
+          title="opengever.ogds.base create example users and clients"
+          description=""
+          handler="opengever.ogds.base.setuphandlers.create_example" />
 
     <genericsetup:importStep
-        name="opengever.ogds.base : pas plugins"
-        title="opengever.ogds.base setup pas plugins"
-        description=""
-        handler="opengever.ogds.base.setuphandlers.setup_pas_plugins" />
+          name="opengever.ogds.base : pas plugins"
+          title="opengever.ogds.base setup pas plugins"
+          description=""
+          handler="opengever.ogds.base.setuphandlers.setup_pas_plugins" />
 
 </configure>
