@@ -1,21 +1,27 @@
+# -*- coding: utf-8 -*-
+from AccessControl import getSecurityManager
+from zope.component import getAdapter
+from opengever.base.interfaces import IReferenceNumber
 from ftw.contentmenu.menu import FactoriesMenu
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.testing import OPENGEVER_DOSSIER_INTEGRATION_TESTING
-from plone.app.testing import TEST_USER_NAME, TEST_USER_PASSWORD
 from plone.app.testing import SITE_OWNER_NAME, login, logout
+from plone.app.testing import TEST_USER_NAME, TEST_USER_PASSWORD
 from plone.dexterity.utils import createContentInContainer
+from plone.dexterity.utils import iterSchemata
 from plone.indexer.interfaces import IIndexableObject
 from plone.testing.z2 import Browser
 from zExceptions import Unauthorized
 from zope.component import provideUtility
 from zope.component import queryMultiAdapter
 from zope.interface import implements
+from zope.schema import getFieldsInOrder
+from zope.schema.interfaces import IChoice, IList, ITuple
 from zope.schema.interfaces import IVocabularyFactory
+from zope.schema.vocabulary import getVocabularyRegistry
 from zope.schema.vocabulary import SimpleVocabulary, SimpleTerm
 import transaction
 import unittest2 as unittest
-from zope.schema import getFieldsInOrder
-from AccessControl import getSecurityManager
 
 
 class DummyVocabulary(object):
@@ -48,19 +54,12 @@ class TestMainDossier(unittest.TestCase):
     - dossier-type: portal_type you like to test -->
         1. typename
         (for search)
-        2. map of additional schema behaviour to test
-        3. additional attributes with value
+        2. additional attributes to search with value to set
         example:dossier_types =
           {'opengever.zug.bdarp.casedossier1':
-              {IARPCaseBehavior1:
-                  {'attr1':'val1', 'attr2':'sadfsadf'},
-              {IARPCaseBehavior2:
-                  {'attr1':'val1', 'attr2':'sadfsadf'},
+              {'search_attr1':'val1', 'search_attr2':'sadfsadf'},
           {'opengever.zug.bdarp.casedossier2':
-              {IARPCaseBehavior1:
-                  {'attr1':'val1', 'attr2':'sadfsadf'},
-              {IARPCaseBehavior2:
-                  {'attr1':'val1', 'attr2':'sadfsadf'},
+              {'search_attr1':'val1', 'search_attr2':'sadfsadf'},
         }}
 
     - layer: testlayer to use
@@ -69,8 +68,10 @@ class TestMainDossier(unittest.TestCase):
     - base_url: new content will be created in this folder
     - subdossier_labels: map with labels of subdossiers
     - deepth: how deepth you can add subdossiers
-    - default_behavior: schema-behavior of default dossier
-    - default_attr: attributes to test in the default behavior
+    - default_searchable_attr: attributes to test the searchable text: special:
+        reference_number is handled special, set it to 'test_reference_number'
+        (default) if you like to test it or to '' if not. You can't set a
+        a value manually to this attribute
     - is_special_dossier: if true, that we can add this dossie just in a repos
     """
     dossier_types = {'opengever.dossier.businesscasedossier': {}}
@@ -90,8 +91,13 @@ class TestMainDossier(unittest.TestCase):
                           'label_action': 'Subdossier',
              }
     deepth = 1
-    default_behavior = IDossier
-    defautl_attr = {'keywords': ['hallo', 'hugo']}
+    default_searchable_attr = {'reference_number':'test_reference_number',
+                                'sequence_number': 23456,
+                               'responsible': SITE_OWNER_NAME,
+                               'filling_no': 34567,
+                               'comments': u'wir brauchen James "Bond" überall',
+                               'keywords': ['hallo', 'hugo']}
+
     is_special_dossier = False
 
 
@@ -156,6 +162,7 @@ class TestMainDossier(unittest.TestCase):
     def map_with_vocab(self, behavior, fieldname, value):
         """Look in the schema for a vocab and return the mapped value
         """
+
         if type(value) == int:
             return str(value)
 
@@ -174,12 +181,20 @@ class TestMainDossier(unittest.TestCase):
                 # We have different types of fields, so we have to check,
                 # that we become the vocabulary
                 value_type = field
-                if hasattr(field, 'value_type'):
+
+                if IList.providedBy(field) or ITuple.providedBy(field):
                     value_type = field.value_type
 
-                if hasattr(value_type, 'vocabulary'):
-                    vocab = value_type.vocabulary(portal)
-                    value = vocab.by_value.get(value).title
+                if IChoice.providedBy(value_type):
+                    if value_type.vocabulary:
+                        vocab = value_type.vocabulary(portal)
+
+                    else:
+                        vocab = getVocabularyRegistry().get(
+                            portal, value_type.vocabularyName)
+
+                    value = vocab.getTerm(value).title
+
         return value
 
     # tests
@@ -402,38 +417,36 @@ class TestMainDossier(unittest.TestCase):
         provideUtility(
             DummyVocabulary(), name='opengever.ogds.base.ContactsVocabulary')
 
-        for dossier_type, additional_behaviors in self.dossier_types.items():
+        for dossier_type, additional_searchable_attr in self.dossier_types.items():
 
             dossier = self.create_dossier(dossier_type)
             wrapper = queryMultiAdapter(
                 (dossier, portal.portal_catalog), IIndexableObject)
 
-            # set and search default dossier schema attributes
-            schema = self.default_behavior(dossier)
+            #merge default and additional searchable attr
+            searchable_attr = self.default_searchable_attr
+            searchable_attr.update(additional_searchable_attr)
 
-            for attr, val in self.defautl_attr.items():
-                schema.__setattr__(attr, val)
+            for schemata in iterSchemata(dossier):
+                for name, field in getFieldsInOrder(schemata):
+                    value = searchable_attr.get(name, '')
+                    if value:
 
-                if type(val) is list:
-                    for v in val:
-                        self.assertIn(v, wrapper.SearchableText)
-                else:
-                    self.assertIn(val, wrapper.SearchableText)
+                        field.set(field.interface(dossier), value)
 
-            # set and search additional dossier schema attributes
-            if additional_behaviors:
-                for behavior, attributes in additional_behaviors.items():
-                    schema = behavior(dossier)
-                    for attr, val in attributes.items():
-                        # set value
-                        schema.__setattr__(attr, val)
                         # search value
-                        if type(val) is list:
-                            for v in val:
-                                val = self.map_with_vocab(behavior, attr, v)
-
+                        if isinstance(value, list):
+                            for v in value:
+                                val = self.map_with_vocab(schemata, name, v)
+                        # the field reference_number is handled special.
+                        # the searchable text is set over an adapter whos
+                        # return a reference-number. so we cant set the
+                        # reference_number filed like the other attributes.
+                        elif value == 'test_reference_number':
+                            refNumb = getAdapter(dossier, IReferenceNumber)
+                            val = refNumb.get_number()
                         else:
-                            val = self.map_with_vocab(behavior, attr, val)
+                            val = self.map_with_vocab(schemata, name, value)
 
                         self.assertIn(
                             val.encode('utf-8'), wrapper.SearchableText)

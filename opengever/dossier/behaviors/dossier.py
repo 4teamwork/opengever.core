@@ -353,7 +353,6 @@ class SearchableTextExtender(grok.Adapter):
         # sequence_number
         seqNumb = getUtility(ISequenceNumber)
         searchable.append(str(seqNumb.get_number(self.context)))
-
         # responsible
         info = getUtility(IContactInformation)
         dossier = IDossier(self.context)

@@ -5,6 +5,9 @@ Changelog
 2.0b21
 ------
 
+* Updated test_searchabletext method
+  [eschmutz]
+
 * added grok.require for DossierOverview, Participants, ChooseClientView, CopyDocumentsToRemoteClientView
   [eschmutz]
 
