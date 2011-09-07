@@ -2,6 +2,7 @@
            xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
            xmlns:grok="http://namespaces.zope.org/grok"
            xmlns:i18n="http://namespaces.zope.org/i18n"
+           xmlns:five="http://namespaces.zope.org/five"
            xmlns:plone="http://namespaces.plone.org/plone"
            i18n_domain="opengever.ogds.base"
            package="opengever.ogds.base">
@@ -60,5 +61,20 @@
           title="opengever.ogds.base setup pas plugins"
           description=""
           handler="opengever.ogds.base.setuphandlers.setup_pas_plugins" />
+
+    <five:implements
+          class="opengever.ogds.models.user.User"
+          interface="opengever.ogds.base.interfaces.IUser"
+          />
+
+    <five:implements
+          class="opengever.ogds.models.client.Client"
+          interface="opengever.ogds.base.interfaces.IClient"
+          />
+
+    <five:implements
+          class="opengever.ogds.models.group.Group"
+          interface="opengever.ogds.base.interfaces.IGroup"
+          />
 
 </configure>
