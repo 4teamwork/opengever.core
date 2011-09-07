@@ -16,7 +16,7 @@ class LDAPControlPanel(grok.View):
     grok.require('cmf.ManagePortal')
 
 
-class UserSyncView(grok.CodeView):
+class UserSyncView(grok.View):
     """A view wich start the ldap group synchronisation """
 
     grok.name('sync_user')

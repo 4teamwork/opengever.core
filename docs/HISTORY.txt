@@ -5,6 +5,8 @@ Changelog
 2.0b15
 ------
 
+* changed deprecated grok.CodeView to grok.View
+  [eschmutz]
 
 2.0b14
 ------

@@ -118,7 +118,7 @@ class Transporter(grok.GlobalUtility):
         return creator
 
 
-class ReceiveObject(grok.CodeView):
+class ReceiveObject(grok.View):
     """The `ReceiveObject` view receives a object-transporter request on the
     target client and creates or updates the object.
     """
@@ -145,7 +145,7 @@ class ReceiveObject(grok.CodeView):
         return json.dumps(data)
 
 
-class ExtractObject(grok.CodeView):
+class ExtractObject(grok.View):
     """The `ExtractObject` view is called by the transporter on a specific
     context on the source client for extract the data and returning it to
     the receiver.
