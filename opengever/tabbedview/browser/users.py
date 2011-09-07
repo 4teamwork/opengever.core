@@ -47,6 +47,7 @@ class UsersListing(grok.View, OpengeverTab, ListingView):
 
     grok.name('tabbedview_view-users')
     grok.context(Interface)
+    grok.require('zope2.View')
 
     sort_on = 'lastname'
     sort_order = ''

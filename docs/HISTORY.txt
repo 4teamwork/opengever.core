@@ -5,6 +5,9 @@ Changelog
 2.0b18
 ------
 
+* Added grok.require to UsersListing
+  [eschmutz]
+
 * changed deprecated grok.CodeView to grok.View
   [eschmutz]
 
