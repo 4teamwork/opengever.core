@@ -11,7 +11,7 @@ class UserDetails(grok.View):
 
     grok.name('user-details')
     grok.context(Interface)
-    grok.require('zope2.view')
+    grok.require('zope2.View')
     grok.implements(IPublishTraverse)
 
     def get_userdata(self):
