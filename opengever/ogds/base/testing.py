@@ -1,3 +1,4 @@
+from opengever.globalindex import model as task_model
 from opengever.ogds.base.interfaces import IClientConfiguration
 from opengever.ogds.base.setuphandlers import create_sql_tables, MODELS
 from opengever.ogds.base.utils import create_session
@@ -9,8 +10,6 @@ from plone.dexterity import utils
 from plone.registry.interfaces import IRegistry
 from zope.component import getUtility
 from zope.configuration import xmlconfig
-from opengever.globalindex import model as task_model
-
 
 
 def create_contacts(portal):
@@ -44,7 +43,6 @@ def create_contacts(portal):
             lastname=lastname.decode('utf-8'),
             email=email)
         obj.reindexObject()
-
 
 
 class BaseLayer(PloneSandboxLayer):

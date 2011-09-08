@@ -5,11 +5,16 @@ Changelog
 2.0b15
 ------
 
+* Changed imports of ogds models to new opengever.ogds.models package
+  Removed models, since they are now in opengever.ogds.models
+  [jbaumann]
+
 * Added grok.require to UserDetails
   [eschmutz]
 
 * Changed deprecated grok.CodeView to grok.View
   [eschmutz]
+
 
 2.0b14
 ------
@@ -20,10 +25,10 @@ Changelog
 
 * added test-buildout for plone 4.1
   [eschmutz]
-  
+
 * Issue #1040 Mandantenuebergreifende Beteiligung: Anpassung Darstellung
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1040
-  implements caching for the is_assigned_client method, 
+  implements caching for the is_assigned_client method,
   because the method is called on every request (personal_overview, exposator viewlet)
   [phgros]
 

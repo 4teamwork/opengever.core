@@ -1,13 +1,14 @@
 from Products.PluggableAuthService.interfaces import plugins
-from opengever.ogds.base.model.client import Client
-from opengever.ogds.base.model.user import User, Group, groups_users, Base
+from ftw.dictstorage.sql import DictStorageModel
 from opengever.ogds.base.utils import create_session
-from zope.interface import alsoProvides
+from opengever.ogds.models import BASE
+from opengever.ogds.models.client import Client
+from opengever.ogds.models.group import Group, groups_users
+from opengever.ogds.models.user import User
+from z3c.saconfig import named_scoped_session
 from z3c.saconfig.interfaces import IScopedSession
 from zope.component import queryUtility
-
-from ftw.dictstorage.sql import DictStorageModel
-from z3c.saconfig import named_scoped_session
+from zope.interface import alsoProvides
 import transaction
 
 
@@ -15,7 +16,7 @@ def OpenGeverSessionName(object):
     return named_scoped_session('opengever')
 
 
-MODELS = [User,Group, groups_users, Client, DictStorageModel]
+MODELS = [User, Group, groups_users, Client, DictStorageModel]
 
 
 def import_various(context):
@@ -33,11 +34,11 @@ def import_various(context):
 def create_sql_tables():
     """Creates the sql tables for the models.
     """
-    
-    session = create_session()
-    Base.metadata.create_all(session.bind)
 
-    DictStorageModel.metadata.create_all(session.bind )
+    session = create_session()
+    BASE.metadata.create_all(session.bind)
+
+    DictStorageModel.metadata.create_all(session.bind)
 
 
 def create_example(portal_setup):
@@ -116,7 +117,7 @@ def setup_pas_plugins(setup):
                 'title': 'authenticateCredentials',
                 'module': 'opengever.ogds.base.plugins',
                 'function': 'authenticate_credentials'},
-            'interface' : plugins.IAuthenticationPlugin}
+            'interface': plugins.IAuthenticationPlugin}
         }
     setup_scriptable_plugin(acl_users, 'octopus_tentacle_plugin',
                             external_methods)
@@ -150,21 +151,24 @@ def _create_example_user(session, site, userid, properties, groups):
 
     transaction.commit()
 
+
 def _create_example_client(session, client_id, properties):
     if len(session.query(Client).filter_by(client_id=client_id).all()) == 0:
 
         #create users_group if not exist
-        temp = session.query(Group).filter(Group.groupid == properties.get('group')).all()
+        temp = session.query(Group).filter(
+            Group.groupid == properties.get('group')).all()
         if len(temp) == 0:
-            users_group= Group(properties.get('group'))
+            users_group = Group(properties.get('group'))
         else:
             users_group = temp[0]
         properties.pop('group')
 
         #create inbox_group if not exist
-        temp = session.query(Group).filter(Group.groupid == properties.get('inbox_group')).all()
+        temp = session.query(Group).filter(
+            Group.groupid == properties.get('inbox_group')).all()
         if len(temp) == 0:
-            inbox_group= Group(properties.get('inbox_group'))
+            inbox_group = Group(properties.get('inbox_group'))
         else:
             inbox_group = temp[0]
         properties.pop('inbox_group')
@@ -173,6 +177,7 @@ def _create_example_client(session, client_id, properties):
         client.users_group = users_group
         client.inbox_group = inbox_group
         session.add(client)
+
 
 def setup_scriptable_plugin(acl_users, plugin_id, external_methods):
     """Registers a scriptable plugin to the pas.
@@ -199,6 +204,6 @@ def setup_scriptable_plugin(acl_users, plugin_id, external_methods):
     for info in plug.plugins.listPluginTypeInfo():
         if info['interface'].providedBy(plug):
             enabled = plug.plugins.listPlugins(info['interface'])
-            if plug.getId() in [k for k,v in enabled]:
+            if plug.getId() in [k for k, v in enabled]:
                 active_interfaces.append(info['interface'].__name__)
     plug.manage_activateInterfaces(active_interfaces + activate_interfaces)

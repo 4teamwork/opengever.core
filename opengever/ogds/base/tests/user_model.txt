@@ -1,6 +1,6 @@
 Create a user
 
-    >>> from opengever.ogds.base.model.user import User
+    >>> from opengever.ogds.models.user import User
     >>> from opengever.ogds.base.utils import create_session
     >>> session = create_session()
     >>> user = User('hugo.boss')

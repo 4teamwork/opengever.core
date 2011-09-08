@@ -7,6 +7,11 @@ class IUser(Interface):
     """
 
 
+class IGroup(Interface):
+    """Marker interface for groups.
+    """
+
+
 class IClient(Interface):
     """Marker interface for clients.
     """

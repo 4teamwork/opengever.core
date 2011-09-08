@@ -2,8 +2,8 @@ Imports / globals:
 
     >>> from Products.CMFCore.utils import getToolByName
     >>> from opengever.ogds.base.interfaces import IContactInformation
-    >>> from opengever.ogds.base.model.client import Client
-    >>> from opengever.ogds.base.model.user import User
+    >>> from opengever.ogds.models.client import Client
+    >>> from opengever.ogds.models.user import User
     >>> from opengever.ogds.base.setuphandlers import _create_example_client
     >>> from opengever.ogds.base.setuphandlers import _create_example_user
     >>> from opengever.ogds.base.testing import create_contacts
@@ -204,7 +204,7 @@ Various lists and other methods:
 
     >>> list(info.list_assigned_users(client_id='client2'))
     [<User hanspeter.linder>, <User peter.muster>]
-    
+
     >>> list(info.get_assigned_clients(userid='hugo.boss'))
     [<Client client1>]
 
