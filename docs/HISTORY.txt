@@ -10,6 +10,8 @@ Changelog
     in use by sorting strings numerically, not by simple string comparison
   - get_next_number() now always returns unicode
   - set_number() always coerces the number it's being passed to unicode
+  
+  [lgraf]
 
 * Added grok.require to DownloadFileVersion and VersionView
   [eschmutz]
