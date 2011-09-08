@@ -126,7 +126,7 @@ class CopyRelatedDocumentsForm(Form):
 class CopyRelatedDocumentsToInbox(layout.FormWrapper, grok.View):
     grok.context(Interface)
     grok.name('copy-related-documents-to-inbox')
-    grok.require('cmf.AddPortalContent')
+    grok.require('zope2.View')
     form = CopyRelatedDocumentsForm
 
     def __init__(self, *args, **kwargs):
