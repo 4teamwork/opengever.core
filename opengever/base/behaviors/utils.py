@@ -1,12 +1,12 @@
-
 from Acquisition import aq_inner, aq_parent
-import zope.schema.vocabulary
-from zope.component import getMultiAdapter
-from zope.component import adapts
 from plone.dexterity.interfaces import IDexterityContent
-from zope.component import getUtility
 from plone.dexterity.interfaces import IDexterityFTI
+from zope.component import adapts
+from zope.component import getMultiAdapter
+from zope.component import getUtility
 from zope.schema import getFieldsInOrder
+import re
+import zope.schema.vocabulary
 
 from zope.interface import implements
 from plone.rfc822.interfaces import IPrimaryFieldInfo
@@ -218,3 +218,11 @@ def overrides_child(folder, event, aq_fields, marker):
                     if isinstance(default, ComputedValue):
                         default = default.get()
                     setattr(schema_field.interface(obj), field, default)
+
+
+# Used as sortkey for sorting strings in numerical order
+# TODO: Move to a more suitable place
+def split_string_by_numbers(x):
+    r = re.compile('(\d+)')
+    l = r.split(x)
+    return [int(y) if y.isdigit() else y for y in l]
