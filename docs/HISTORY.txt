@@ -5,6 +5,9 @@ Changelog
 2.0b10
 ------
 
+* Changed imports of ogds models to new opengever.ogds.models package
+  [jbaumann]
+
 * changed deprecated grok.CodeView to grok.View
   [eschmutz]
 
@@ -138,7 +141,7 @@ Changelog
 * Fixed algorithm for sorting actions
   [lgraf]
 
-* Moved ISendable to opengever.mail to avoid circular dependency 
+* Moved ISendable to opengever.mail to avoid circular dependency
   and renamed it to ISendableDocsContainer
   [lgraf]
 
@@ -157,7 +160,7 @@ Changelog
   Added box 'inbox' to inbox overview and fixed display of assigned tasks
   [lgraf]
 
-* Issue #960 Eingangskorb / Uebersicht: Dokumente, die bereits weitergeleitet worden sind, 
+* Issue #960 Eingangskorb / Uebersicht: Dokumente, die bereits weitergeleitet worden sind,
   werden im Uebersichtstab angezeigt bzw. bleiben stehen
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/960
   Only displaying documents in inbox overview that are directly contained in inbox, not in forwardings

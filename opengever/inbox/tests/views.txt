@@ -12,12 +12,13 @@ imports and general stuff
     >>> from plone.app.testing.interfaces import TEST_USER_ID as portal_owner_id ,TEST_USER_NAME as portal_owner, TEST_USER_PASSWORD as default_password
     >>> from opengever.globalindex.interfaces import ITaskQuery
     >>> from opengever.globalindex.model.task import Task
-    >>> from opengever.ogds.base.model.client import Client
-    >>> from opengever.ogds.base.model.user import User, Group
+    >>> from opengever.ogds.models.client import Client
+    >>> from opengever.ogds.models.user import User
+    >>> from opengever.ogds.models.groups import Group
     >>> from zope.component import getUtility
     >>> from opengever.ogds.base.utils import get_client_id
 	>>> import transaction
-	
+
 	>>> app = layer['app']
 	>>> portal = layer['portal']
     >>> browser = Browser(app)
@@ -165,15 +166,15 @@ never has:
 ..     False
 ..     >>> ftc.is_refuse_possible()
 ..     False
-.. 
+..
 .. wrong client_id
 ..     >>> login(portal, portal_owner)
 ..     >>> ftc.is_accept_possible()
 ..     False
-..     
+..
 ..     >>> ftc.is_refuse_possible()
 ..     False
-.. 
+..
 .. user in group & correct client_id
 ..     >>> ftc2 = fw2.restrictedTraverse('forwarding_transition_controller')
 ..     >>> ftc2.is_accept_possible()
