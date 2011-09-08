@@ -3,6 +3,5 @@
   <version>2</version>
   <dependencies>
     <dependency>profile-ftw.mail:default</dependency>
-    <dependency>profile-Products.CMFEditions:CMFEditions</dependency>
   </dependencies>
 </metadata>
