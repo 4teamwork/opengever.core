@@ -5,6 +5,10 @@ Changelog
 2.0b17
 ------
 
+* Removed GS profile dep on CMFEditions default profile because it causes
+  policymaps to be purged
+  [lgraf]
+
 * chenged deprecated grok.CodeView to grok.View
   [eschmutz]
 
