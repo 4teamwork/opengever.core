@@ -62,19 +62,16 @@
           description=""
           handler="opengever.ogds.base.setuphandlers.setup_pas_plugins" />
 
-    <five:implements
-          class="opengever.ogds.models.user.User"
-          interface="opengever.ogds.base.interfaces.IUser"
-          />
+    <class class="opengever.ogds.models.user.User">
+        <implements interface="opengever.ogds.base.interfaces.IUser" />
+    </class>
 
-    <five:implements
-          class="opengever.ogds.models.client.Client"
-          interface="opengever.ogds.base.interfaces.IClient"
-          />
+    <class class="opengever.ogds.models.client.Client">
+        <implements interface="opengever.ogds.base.interfaces.IClient" />
+    </class>
 
-    <five:implements
-          class="opengever.ogds.models.group.Group"
-          interface="opengever.ogds.base.interfaces.IGroup"
-          />
+    <class class="opengever.ogds.models.group.Group">
+        <implements interface="opengever.ogds.base.interfaces.IGroup" />
+    </class>
 
 </configure>
