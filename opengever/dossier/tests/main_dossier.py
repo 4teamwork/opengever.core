@@ -421,7 +421,6 @@ class TestMainDossier(unittest.TestCase):
             dossier = self.create_dossier(dossier_type)
             wrapper = queryMultiAdapter(
                 (dossier, portal.portal_catalog), IIndexableObject)
-
             #merge default and additional searchable attr
             searchable_attr = self.default_searchable_attr
             searchable_attr.update(additional_searchable_attr)
@@ -430,7 +429,6 @@ class TestMainDossier(unittest.TestCase):
                 for name, field in getFieldsInOrder(schemata):
                     value = searchable_attr.get(name, '')
                     if value:
-
                         field.set(field.interface(dossier), value)
 
                         # search value
@@ -449,6 +447,13 @@ class TestMainDossier(unittest.TestCase):
 
                         self.assertIn(
                             val.encode('utf-8'), wrapper.SearchableText)
+
+                        # We pop the field if we found it to check at the
+                        # end whether all attributes where found in the schema
+                        searchable_attr.pop(name)
+
+            self.assertTrue(len(searchable_attr) == 0)
+
 
     def tearDown(self):
         """Cleanup the test-environment after each test
