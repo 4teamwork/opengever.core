@@ -26,15 +26,16 @@ Create Folder, and items and get the referenceNumberPrefixAdapter:
     >>> item2 = f1.get('Item2')
 
 Check the numbering concept, starting by 1:
+(get_next_number() should always return unicode!)
     >>> adapter.get_next_number()
-    1
+    u'1'
     >>> item1 = f1.get('Item1')
     >>> adapter.set_number(item1)
-    1
+    u'1'
     >>> adapter.get_number(item1)
-    1
+    u'1'
     >>> adapter.get_next_number()
-    2
+    u'2'
 
 The next number generator should be able to increase number greater than 9:
 It also give allways the next number from the highest one, and not use all numbers
