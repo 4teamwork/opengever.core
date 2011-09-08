@@ -5,6 +5,9 @@ Changelog
 2.0b18
 ------
 
+* Changed imports of ogds models to new opengever.ogds.models package
+  [jbaumann]
+
 * Added grok.require to UsersListing, OpengeverCatalogListingTab, DocumentRedirector,
   GlobalTaskListingTab
   [eschmutz]
@@ -14,6 +17,7 @@ Changelog
 
 * added test-buildout for plone 4.1
   [eschmutz]
+
 
 2.0b17
 ------

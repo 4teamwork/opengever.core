@@ -1,15 +1,14 @@
 from five import grok
 from ftw.tabbedview.browser.listing import ListingView
-from ftw.table import helper
 from ftw.table.basesource import BaseTableSource
 from ftw.table.interfaces import ITableSource, ITableSourceConfig
 from opengever.ogds.base.interfaces import IContactInformation
-from opengever.ogds.base.model.user import User
+from opengever.ogds.models.user import User
 from opengever.tabbedview import _
 from opengever.tabbedview.browser.tabs import OpengeverTab
 from opengever.tabbedview.helper import boolean_helper
-from opengever.tabbedview.helper import readable_date
 from opengever.tabbedview.helper import email_helper
+from opengever.tabbedview.helper import readable_date
 from sqlalchemy import or_
 from sqlalchemy.orm.query import Query
 from sqlalchemy.sql.expression import asc, desc
