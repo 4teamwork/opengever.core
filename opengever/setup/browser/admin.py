@@ -7,24 +7,24 @@ from datetime import datetime
 from opengever.mail.interfaces import IMailSettings
 from opengever.ogds.base.interfaces import IClientConfiguration
 from opengever.ogds.base.ldap_import import sync_ldap
-from opengever.ogds.base.model.client import Client
-from opengever.ogds.base.model.user import User, Group
 from opengever.ogds.base.utils import create_session
+from opengever.ogds.models import BASE
+from opengever.ogds.models.client import Client
+from opengever.ogds.models.group import Group
+from opengever.ogds.models.user import User
 from opengever.setup.utils import get_ldap_configs, get_policy_configs
 from plone.app.controlpanel.language import ILanguageSelectionSchema
 from plone.registry.interfaces import IRegistry
+from sqlalchemy.exc import NoReferencedTableError
 from zope.component import getAdapter
 from zope.component import getUtility
 from zope.publisher.browser import BrowserView
 import json
 import opengever.globalindex.model
-import opengever.ogds.base.model
-from sqlalchemy.exc import NoReferencedTableError
 
 
 SQL_BASES = (
-    opengever.ogds.base.model.user.Base,
-    opengever.ogds.base.model.client.Base,
+    BASE,
     opengever.globalindex.model.Base,
     )
 
