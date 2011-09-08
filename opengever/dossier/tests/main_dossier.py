@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 from AccessControl import getSecurityManager
-from zope.component import getAdapter
-from opengever.base.interfaces import IReferenceNumber
 from ftw.contentmenu.menu import FactoriesMenu
+from opengever.base.interfaces import IReferenceNumber, ISequenceNumber
 from opengever.dossier.behaviors.dossier import IDossier
+from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.testing import OPENGEVER_DOSSIER_INTEGRATION_TESTING
 from plone.app.testing import SITE_OWNER_NAME, login, logout
 from plone.app.testing import TEST_USER_NAME, TEST_USER_PASSWORD
@@ -12,6 +12,7 @@ from plone.dexterity.utils import iterSchemata
 from plone.indexer.interfaces import IIndexableObject
 from plone.testing.z2 import Browser
 from zExceptions import Unauthorized
+from zope.component import getAdapter, getUtility
 from zope.component import provideUtility
 from zope.component import queryMultiAdapter
 from zope.interface import implements
@@ -69,9 +70,10 @@ class TestMainDossier(unittest.TestCase):
     - subdossier_labels: map with labels of subdossiers
     - deepth: how deepth you can add subdossiers
     - default_searchable_attr: attributes to test the searchable text: special:
-        reference_number is handled special, set it to 'test_reference_number'
-        (default) if you like to test it or to '' if not. You can't set a
-        a value manually to this attribute
+        reference_number to test, set it to 'test_reference_number'
+        sequence_number to test, set it to 'test_sequence_number'
+        filing_no to test, set it to 'test_filing_no'
+        otherwise remove the attrs
     - is_special_dossier: if true, that we can add this dossie just in a repos
     """
     dossier_types = {'opengever.dossier.businesscasedossier': {}}
@@ -92,9 +94,9 @@ class TestMainDossier(unittest.TestCase):
              }
     deepth = 1
     default_searchable_attr = {'reference_number':'test_reference_number',
-                                'sequence_number': 23456,
+                                'sequence_number': 'test_sequence_number',
                                'responsible': SITE_OWNER_NAME,
-                               'filling_no': 34567,
+                               'filing_no': 'test_filing_no',
                                'comments': u'wir brauchen James "Bond" überall',
                                'keywords': ['hallo', 'hugo']}
     is_special_dossier = False
@@ -442,6 +444,13 @@ class TestMainDossier(unittest.TestCase):
                         elif value == 'test_reference_number':
                             refNumb = getAdapter(dossier, IReferenceNumber)
                             val = refNumb.get_number()
+                        # the filing_no is handled special.
+                        # the searchable text is just set if the dossier is
+                        # archived. So we bypass this
+                        elif value == 'test_filing_no':
+                            val = "GS-Filing 12345"
+                            archived_dossier = IDossierMarker(dossier)
+                            archived_dossier.filing_no = val
                         else:
                             val = self.map_with_vocab(schemata, name, value)
 
@@ -452,7 +461,17 @@ class TestMainDossier(unittest.TestCase):
                         # end whether all attributes where found in the schema
                         searchable_attr.pop(name)
 
-            self.assertTrue(len(searchable_attr) == 0)
+            # Test sequencenumber
+            if searchable_attr.get(
+                'sequence_number', '') == 'test_sequence_number':
+                seqNumb = getUtility(ISequenceNumber)
+
+                self.assertIn(
+                    str(seqNumb.get_number(dossier)), wrapper.SearchableText)
+
+                searchable_attr.pop('sequence_number')
+
+        self.assertTrue(searchable_attr.values() == [])
 
 
     def tearDown(self):
