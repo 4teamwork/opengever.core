@@ -39,21 +39,21 @@ Check the numbering concept, starting by 1:
 
 The next number generator should be able to increase number greater than 9:
 It also give allways the next number from the highest one, and not use all numbers
-    >>> adapter.set_number(item2, '9')
-    '9'
+    >>> adapter.set_number(item2, u'9')
+    u'9'
     >>> adapter.get_next_number()
-    '10'
+    u'10'
 
 and also alpha-numeric numbers:
-    >>> adapter.set_number(item1, 'A1A15')
-    'A1A15'
+    >>> adapter.set_number(item1, u'A1A15')
+    u'A1A15'
     >>> adapter.set_number(item2)
-    'A1A16'
+    u'A1A16'
     >>> adapter.get_next_number()
-    'A1A17'
+    u'A1A17'
 
 Check the is_valid_number() method:
-    >>> adapter.is_valid_number('A1A16')
+    >>> adapter.is_valid_number(u'A1A16')
     False
-    >>> adapter.is_valid_number('A1A17')
+    >>> adapter.is_valid_number(u'A1A17')
     True
