@@ -5,11 +5,14 @@ Changelog
 2.0b8
 -----
 
+* Changed imports of ogds models to new opengever.ogds.models package
+  [jbaumann]
+
 
 2.0b7
 -----
 
-* Prevent template files from being deleted during site creation 
+* Prevent template files from being deleted during site creation
   (Pass file data to field constructor, not file descriptor)
   [lgraf]
 
