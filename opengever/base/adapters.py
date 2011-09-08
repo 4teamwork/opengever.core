@@ -102,6 +102,9 @@ class ReferenceNumberPrefixAdpater(grok.Adapter):
         if not number:
             number = self.get_next_number()
 
+        if not isinstance(number, unicode):
+            number = unicode(number)
+
         self.reference_mapping[intid] = number
         self.child_mapping[number] = intid
 
