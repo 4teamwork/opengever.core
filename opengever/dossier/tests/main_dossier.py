@@ -93,11 +93,11 @@ class TestMainDossier(unittest.TestCase):
                           'label_action': 'Subdossier',
              }
     deepth = 1
-    default_searchable_attr = {'reference_number':'test_reference_number',
+    default_searchable_attr = {'reference_number': 'test_reference_number',
                                 'sequence_number': 'test_sequence_number',
                                'responsible': SITE_OWNER_NAME,
                                'filing_no': 'test_filing_no',
-                               'comments': u'wir brauchen James "Bond" überall',
+                               'comments': u'wir wollen James "Bond" überall',
                                'keywords': ['hallo', 'hugo']}
     is_special_dossier = False
 
@@ -166,13 +166,6 @@ class TestMainDossier(unittest.TestCase):
 
         if type(value) == int:
             return str(value)
-
-        if 'contact:' in value:
-            # this is a hack for contacts because in tests
-            # we dont have access to the ogds contacts an
-            # we need to create a dummy-vocab
-            voca = DummyVocabulary()(self.layer['portal'])
-            return voca.by_value.get(value).title
 
         portal = self.layer['portal']
         fields = getFieldsInOrder(behavior)
@@ -271,8 +264,8 @@ class TestMainDossier(unittest.TestCase):
             d2_1_view = d2.unrestrictedTraverse('++add++%s' % dossier_type)
             d2_1_view()
 
-            # This is a subdossier, so in responsible we must have the responsible
-            # of the parent
+            # This is a subdossier, so in responsible
+            # we must have the responsible of the parent
             self.assertEquals(
                 [IDossier(d2).responsible],
                 d2_1_view.request.get(
@@ -418,7 +411,8 @@ class TestMainDossier(unittest.TestCase):
         provideUtility(
             DummyVocabulary(), name='opengever.ogds.base.ContactsVocabulary')
 
-        for dossier_type, additional_searchable_attr in self.dossier_types.items():
+        for dossier_type, additional_searchable_attr in \
+            self.dossier_types.items():
 
             dossier = self.create_dossier(dossier_type)
             wrapper = queryMultiAdapter(
@@ -472,7 +466,6 @@ class TestMainDossier(unittest.TestCase):
                 searchable_attr.pop('sequence_number')
 
         self.assertTrue(searchable_attr.values() == [])
-
 
     def tearDown(self):
         """Cleanup the test-environment after each test
