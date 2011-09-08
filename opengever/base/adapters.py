@@ -42,7 +42,9 @@ class ReferenceNumberPrefixAdpater(grok.Adapter):
         """ return the next possible reference number for object
         at the actual context
         """
-        if self.child_mapping.keys():
+        if not self.child_mapping.keys():
+            return u'1'
+        else:
             lastnumber = max(self.child_mapping.keys())
 
             # then increase by one, if possible:
@@ -68,7 +70,6 @@ class ReferenceNumberPrefixAdpater(grok.Adapter):
                         return lastnumber
                 else:
                     return ''
-        return 1
 
     def get_number(self, obj):
         """return the reference number for the object,
