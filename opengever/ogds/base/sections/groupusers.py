@@ -1,6 +1,7 @@
 from collective.transmogrifier.interfaces import ISection
 from collective.transmogrifier.interfaces import ISectionBlueprint
-from opengever.ogds.base.model.user import User, Group
+from opengever.ogds.models.group import Group
+from opengever.ogds.models.user import User
 from z3c.saconfig import named_scoped_session
 from zope.interface import classProvides, implements
 import logging

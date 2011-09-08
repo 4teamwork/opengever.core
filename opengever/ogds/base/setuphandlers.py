@@ -1,8 +1,10 @@
 from Products.PluggableAuthService.interfaces import plugins
 from ftw.dictstorage.sql import DictStorageModel
-from opengever.ogds.base.model.client import Client
-from opengever.ogds.base.model.user import User, Group, groups_users, Base
 from opengever.ogds.base.utils import create_session
+from opengever.ogds.models import BASE
+from opengever.ogds.models.client import Client
+from opengever.ogds.models.group import Group, groups_users
+from opengever.ogds.models.user import User
 from z3c.saconfig import named_scoped_session
 from z3c.saconfig.interfaces import IScopedSession
 from zope.component import queryUtility
@@ -34,7 +36,7 @@ def create_sql_tables():
     """
 
     session = create_session()
-    Base.metadata.create_all(session.bind)
+    BASE.metadata.create_all(session.bind)
 
     DictStorageModel.metadata.create_all(session.bind)
 

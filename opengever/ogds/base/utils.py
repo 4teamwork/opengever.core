@@ -3,7 +3,7 @@ from StringIO import StringIO
 from opengever.ogds.base.exceptions import ClientNotFound
 from opengever.ogds.base.interfaces import IClientConfiguration
 from opengever.ogds.base.interfaces import IContactInformation
-from opengever.ogds.base.model.client import Client
+from opengever.ogds.models.client import Client
 from plone.memoize import ram
 from plone.registry.interfaces import IRegistry
 from z3c.saconfig import named_scoped_session

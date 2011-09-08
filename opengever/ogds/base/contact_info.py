@@ -4,10 +4,11 @@ from Products.ZCatalog.interfaces import ICatalogBrain
 from five import grok
 from opengever.ogds.base import _
 from opengever.ogds.base.interfaces import IContactInformation, IUser
-from opengever.ogds.base.model.client import Client
-from opengever.ogds.base.model.user import User, Group
 from opengever.ogds.base.utils import brain_is_contact, get_client_id
 from opengever.ogds.base.utils import create_session
+from opengever.ogds.models.client import Client
+from opengever.ogds.models.group import Group
+from opengever.ogds.models.user import User
 from plone.memoize import ram
 from plone.memoize import volatile
 from zope.app.component.hooks import getSite
