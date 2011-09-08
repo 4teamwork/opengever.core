@@ -97,7 +97,6 @@ class TestMainDossier(unittest.TestCase):
                                'filling_no': 34567,
                                'comments': u'wir brauchen James "Bond" überall',
                                'keywords': ['hallo', 'hugo']}
-
     is_special_dossier = False
 
 
@@ -278,7 +277,7 @@ class TestMainDossier(unittest.TestCase):
                     'form.widgets.IDossier.responsible', None))
 
     def test_default_tabs(self):
-        """Check default-tabs and order of the tabbedview.
+        """Check default-tabs and tabs-order
         """
         portal = self.layer['portal']
         types_tool = portal.portal_types
