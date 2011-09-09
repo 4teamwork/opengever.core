@@ -194,7 +194,7 @@ grok.global_utility(utils.create_restricted_vocabulary(
 form.default_value(field=ILifeCycle['custody_period'])(
     utils.set_default_with_acquisition(
         field=ILifeCycle['custody_period'],
-        default=10,
+        default=30,
         )
     )
 
