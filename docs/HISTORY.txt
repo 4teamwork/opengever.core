@@ -5,6 +5,9 @@ Changelog
 2.0b5
 -----
 
+* Fixed bug that caused cover PDF generation to fail if no filing_prefix was set
+  [lgraf]
+
 * added zope.require for ExportPDFView
   [eschmutz]
 

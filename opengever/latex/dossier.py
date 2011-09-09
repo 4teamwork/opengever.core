@@ -98,10 +98,12 @@ class DossierLatexConverter(LatexCTConverter,grok.View,AutoFields):
             parent = aq_parent(aq_inner(parent))
 
         # filing_prefix
-        # Get the value and not the key from the prefix vocabulary
-        filing_prefix = getVocabularyRegistry().get(
-            self.context, 'opengever.dossier.type_prefixes').by_token.get(
-                IDossier(self.context).filing_prefix).title
+        filing_prefix = getattr(IDossier(context), 'filing_prefix', None)
+        if filing_prefix:
+            # Get the value and not the key from the prefix vocabulary
+            filing_prefix = getVocabularyRegistry().get(
+                self.context, 'opengever.dossier.type_prefixes').by_token.get(
+                    filing_prefix).title
 
         filling_no = getattr(IDossier(context), 'filing_no', None)
         self.view = view
