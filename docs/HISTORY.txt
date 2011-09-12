@@ -5,6 +5,9 @@ Changelog
 2.0b21
 ------
 
+* Changed var-name in tests
+  [eschmutz]
+
 * Updated test_searchabletext method
   [eschmutz]
 

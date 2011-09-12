@@ -67,7 +67,7 @@ class TestMainDossier(unittest.TestCase):
     - tabs: available tabs in the given order
     - repo_id: repositoryid
     - base_url: new content will be created in this folder
-    - subdossier_labels: map with labels of subdossiers
+    - labels: map with labels of subdossiers
     - deepth: how deepth you can add subdossiers
     - default_searchable_attr: attributes to test the searchable text: special:
         reference_number to test, set it to 'test_reference_number'
@@ -88,9 +88,9 @@ class TestMainDossier(unittest.TestCase):
             'Sharing', ]
     repo_id = 'repo'
     base_url = 'http://nohost/plone/%s' % repo_id
-    subdossier_labels = {'label_add': 'Add Subdossier',
-                          'label_edit': 'Edit Subdossier',
-                          'label_action': 'Subdossier',
+    labels = {'add_subdossier': 'Add Subdossier',
+              'edit_subdossier': 'Edit Subdossier',
+              'action_name': 'Subdossier',
              }
     deepth = 1
     default_searchable_attr = {'reference_number': 'test_reference_number',
@@ -296,7 +296,7 @@ class TestMainDossier(unittest.TestCase):
             # the tabs-var should be empty if we found every tab
             self.assertEquals(tabs, [])
 
-    def test_default_subdossier_labels(self):
+    def test_default_labels(self):
         """Check default form labels of subdossier
         We have a special handling of labels in subdossiers.
         We have different specialdossies, but we always have the same
@@ -316,15 +316,15 @@ class TestMainDossier(unittest.TestCase):
 
             # a dossier in a dossier should called subdossier
             self.assertIn(
-                self.subdossier_labels.get('label_action'),
+                self.labels.get('action_name'),
                 [item.get('title') for item in menu_items])
 
             # Check add label
             browser = self.get_add_view(
                 dossier_type, path=d1.absolute_url(), browser=browser)
             self.assertEquals(
-                self.subdossier_labels.get(
-                    'label_add') in browser.contents, True)
+                self.labels.get(
+                    'add_subdossier') in browser.contents, True)
 
             url = browser.url.split('/')[-1]
             self.assertTrue(url == '++add++%s' % dossier_type)
@@ -333,8 +333,8 @@ class TestMainDossier(unittest.TestCase):
             d2 = self.create_dossier(dossier_type, subpath=d1.getId())
             browser = self.get_edit_view(d2.absolute_url(), browser=browser)
             self.assertEquals(
-                self.subdossier_labels.get(
-                    'label_edit') in browser.contents, True)
+                self.labels.get(
+                    'edit_subdossier') in browser.contents, True)
 
     def test_nesting_deepth(self):
         """Check the deepth of subdossiers. Normally we just can add a
@@ -366,8 +366,8 @@ class TestMainDossier(unittest.TestCase):
                 if i < self.deepth-1:
                     # Check link is enabled
                     self.assertEquals(
-                        self.subdossier_labels.get(
-                            'label_action') in browser.contents, True)
+                        self.labels.get(
+                            'action_name') in browser.contents, True)
 
                     # Check contenttype is allowed
                     self.assertIn(
@@ -377,8 +377,8 @@ class TestMainDossier(unittest.TestCase):
                 else:
                     # Check link is disabled
                     self.assertNotEquals(
-                        self.subdossier_labels.get(
-                            'label_action') in browser.contents, True)
+                        self.labels.get(
+                            'action_name') in browser.contents, True)
                     # Chekc contenttype is disallowed
                     self.assertTrue(
                         dossier_type not in [
