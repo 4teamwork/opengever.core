@@ -7,17 +7,15 @@ jq(function(){
     };
     
     activate_filters = function(set_filter){
-        console.info('activate_filters');
+        console.info('active filters');
         if(tabbedview.prop('review_state')){
-            console.info('RED OPEN');
             jq('#filter_open').css('color', 'red');
         }
         else{
             jq('#filter_all').css('color', 'red');
-            console.info('RED ALL');
         }
     };
-    
-    // jq('.tabbedview_view').bind('reload', activate_filters(false));
+
+    jq('.tabbedview_view').live('reload', function(){activate_filters(false);});
 
 });
