@@ -56,6 +56,14 @@ def get_client_id():
     return proxy.client_id
 
 
+@ram.cache(lambda method: True)
+def get_client_public_url():
+    """Returns the public_url of the current client.
+    """
+
+    return get_current_client().public_url
+
+
 def remote_json_request(target_client_id, viewname, path='',
                         data={}, headers={}):
     """ Sends a request to a json-action on a remote zope instance,
