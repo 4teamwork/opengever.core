@@ -1,0 +1,14 @@
+<div tal:condition="view/show_selects" class="tabbedview_select" i18n:domain="ftw.tabbedview">
+    <span i18n:translate="">Choose:</span>
+    <a href="javascript:tabbedview.select_all()" i18n:translate="">
+        all (<span i18n:name="amount" tal:replace="python:len(view.contents)" />)</a>,
+    <a href="javascript:tabbedview.select_none()" i18n:translate="">none</a>
+    <span class="select_folder" style="display:none" i18n:translate="">
+        All visible entries chosen <a href="#" i18n:translate="">Show all in this Folder</a>
+    </span>
+    
+    <span i18n:translate="">| Status:</span>
+    <a id="filter_all" href="javascript:review_state_filter(false);" i18n:translate="">Alle</a>
+    <a id="filter_open" href="javascript:review_state_filter(true);" i18n:translate="">Offen</a>
+    <!--<div tal:replace="structure view/batching" />-->
+</div>
