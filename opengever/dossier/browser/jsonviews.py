@@ -8,6 +8,7 @@ import json
 class OpenDossiersAsJSONView(grok.View):
     grok.context(IPloneSiteRoot)
     grok.name('list-open-dossiers-json')
+    grok.require('zope2.View')
 
     def render(self):
         data = []
