@@ -13,7 +13,7 @@ class DocumentsOfDossierAsJSONView(grok.View):
     """
     grok.context(IPloneSiteRoot)
     grok.name('tentacle-documents-of-dossier-json')
-    grok.name('zope2.View')
+    grok.require('zope2.View')
 
     def render(self):
         site_path = '/'.join(self.context.getPhysicalPath())
