@@ -35,6 +35,7 @@ class AttachDocumentAllowed(grok.View):
 
     grok.context(Interface)
     grok.name('attach-document-allowed')
+    grok.require('zope2.View')
 
     def render(self):
         info = getUtility(IContactInformation)
