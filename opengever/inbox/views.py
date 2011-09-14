@@ -7,6 +7,7 @@ class AccessInboxAllowed(grok.View):
     """
     grok.context(Interface)
     grok.name('access-inbox-allowed')
+    grok.require('zope2.View')
 
     def render(self):
         """Checks User permissions"""
