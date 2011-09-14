@@ -11,6 +11,7 @@ tests_require = [
     'opengever.document',
     'opengever.contact',
     'plone.app.testing',
+    'plone.mocktestcase',
     ]
 
 setup(name='opengever.base',

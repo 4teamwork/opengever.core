@@ -111,7 +111,7 @@ def create_restricted_vocabulary(field, options, message_factory=None):
                 return None
             request = self.context.REQUEST
             #XXX CHANGED FROM PATH_TRANSLATED TO PATH_INFO because the test don't work
-            if '++add++' in request.get('PATH_INFO', object()):
+            if '++add++' in request.get('PATH_INFO', ''):
                 # object is not yet existing, context is container
                 obj = context
             else:

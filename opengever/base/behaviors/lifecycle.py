@@ -183,7 +183,7 @@ validator.WidgetValidatorDiscriminators(
     field=ILifeCycle['custody_period'])
 
 
-zope.component.provideAdapter(CustodyPeriodValidator)
+grok.global_adapter(CustodyPeriodValidator)
 
 
 # ---------- CUSTODY PERIOD -----------
@@ -232,7 +232,7 @@ validator.WidgetValidatorDiscriminators(
     )
 
 
-zope.component.provideAdapter(RetentionPeriodValidator)
+grok.global_adapter(RetentionPeriodValidator)
 
 
 # ARCHIVAL VALUE: Vocabulary and default value
