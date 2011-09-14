@@ -1,6 +1,6 @@
-"""Contains a Class wich checks if the user is allowed to see the inbox"""
 from five import grok
 from zope.interface import Interface
+
 
 class AccessInboxAllowed(grok.View):
     """Checks if the User has enough permissions to view the Inbox.
@@ -19,4 +19,3 @@ class AccessInboxAllowed(grok.View):
             return False
         else:
             return member.checkPermission('View', eingangskorb)
-
