@@ -1,21 +1,17 @@
+from Products.CMFCore.interfaces import ISiteRoot
+from five import grok
+from opengever.base import _
+from opengever.base.behaviors import utils
+from opengever.base.interfaces import IBaseCustodyPeriods
+from opengever.base.interfaces import IRetentionPeriodRegister
+from plone.autoform.interfaces import IFormFieldProvider
+from plone.directives import form
+from plone.registry.interfaces import IRegistry
+from z3c.form import validator
 from zope import schema
 from zope.interface import alsoProvides, Interface
 from zope.lifecycleevent.interfaces import IObjectModifiedEvent
 import zope.component
-from z3c.form import validator
-
-from five import grok
-
-from plone.autoform.interfaces import IFormFieldProvider
-from plone.directives import form, dexterity
-from Products.CMFCore.interfaces import ISiteRoot
-
-from opengever.base import _
-from opengever.base.behaviors import utils
-
-from plone.registry.interfaces import IRegistry
-from opengever.base.interfaces import IBaseCustodyPeriods
-from opengever.base.interfaces import IRetentionPeriodRegister
 
 
 class ILifeCycleMarker(Interface):
