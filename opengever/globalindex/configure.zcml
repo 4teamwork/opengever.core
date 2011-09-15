@@ -1,10 +1,15 @@
 <configure
     xmlns="http://namespaces.zope.org/zope"
     xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+    xmlns:grok="http://namespaces.zope.org/grok"
+    xmlns:i18n="http://namespaces.zope.org/i18n"
     i18n_domain="opengever.globalindex">
 
     <include package="z3c.autoinclude" file="meta.zcml" />
     <includeDependencies package="." />
+
+    <!-- Grok the package -->
+    <grok:grok package="." />
 
     <genericsetup:registerProfile
         name="default"
@@ -20,6 +25,8 @@
         description=""
         handler="opengever.globalindex.setuphandlers.create_tables"
         />
+
+    <i18n:registerTranslations directory="locales" />
 
     <include package=".handlers" />
     <include package=".browser" />
