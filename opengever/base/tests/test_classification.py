@@ -1,3 +1,4 @@
+from Products.CMFCore.interfaces import ISiteRoot
 from grokcore.component.testing import grok
 from mocker import ANY
 from mocker import Mocker
@@ -7,9 +8,12 @@ from plone.mocktestcase import MockTestCase
 from plone.registry.interfaces import IRegistry
 from unittest2 import TestCase
 from z3c.form.interfaces import IValidator
+from z3c.form.interfaces import IValue
 from zope.component import getMultiAdapter
 from zope.component import getUtility
+from zope.component import provideAdapter
 from zope.component import provideUtility
+from zope.interface import directlyProvides
 from zope.schema.interfaces import ConstraintNotSatisfied
 from zope.schema.interfaces import IVocabularyFactory
 from zope.schema.vocabulary import VocabularyRegistryError
@@ -22,6 +26,9 @@ class TestCustodyPeriod(MockTestCase, TestCase):
         self.testcase_mocker = Mocker()
         grok('opengever.base.behaviors.lifecycle')
 
+        # mock the registry, so that we have a static
+        # configuration in our tests. we test functionality,
+        # not configuration..
         proxy = self.testcase_mocker.mock()
         proxy.custody_periods
         self.testcase_mocker.result([u'0', u'10', u'20', u'30'])
@@ -33,14 +40,24 @@ class TestCustodyPeriod(MockTestCase, TestCase):
         self.testcase_mocker.result(proxy)
         self.testcase_mocker.count(0, None)
 
+        # we need to register the vocabulary utility in the
+        # vocabulary registry manually at this point:
         vocabulary_registry = getVocabularyRegistry()
         field = lifecycle.ILifeCycle['custody_period']
         try:
             vocabulary_registry.get(None, field.vocabularyName)
         except VocabularyRegistryError:
             factory = getUtility(IVocabularyFactory,
-                                name=u'lifecycle_custody_period_vocabulary')
+                                 name=u'lifecycle_custody_period_vocabulary')
             vocabulary_registry.register(field.vocabularyName, factory)
+
+        # in this stage, only the grok-components (adapaters, utilities)
+        # of the module are registered in the component registry.
+
+        # we need to register any plone.directives.form magic components
+        # from the module manually (they are not grokky):
+        for factory, name in lifecycle.__form_value_adapters__:
+            provideAdapter(factory, name=name)
 
         self.testcase_mocker.replay()
 
@@ -120,3 +137,37 @@ class TestCustodyPeriod(MockTestCase, TestCase):
 
         with TestCase.assertRaises(self, ConstraintNotSatisfied):
             validator.validate(20)
+
+    def test_default_value(self):
+        field = lifecycle.ILifeCycle['custody_period']
+
+        portal = self.create_dummy()
+        directlyProvides(portal, ISiteRoot)
+
+        default_value = getMultiAdapter(
+            (portal,  # context
+             None,  # request
+             None,  # form
+             field,  # field
+             None,  # Widget
+             ),
+            IValue,
+            name='default')
+        self.assertEqual(default_value.get(), 30)
+
+    def test_default_value_in_context(self):
+        field = lifecycle.ILifeCycle['custody_period']
+
+        context = self.create_dummy(custody_period=10)
+        directlyProvides(context, lifecycle.ILifeCycle)
+
+        default_value = getMultiAdapter(
+            (context,  # context
+             None,  # request
+             None,  # form
+             field,  # field
+             None,  # Widget
+             ),
+            IValue,
+            name='default')
+        self.assertEqual(default_value.get(), 10)
