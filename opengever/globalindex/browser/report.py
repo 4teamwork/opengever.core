@@ -5,7 +5,8 @@ from Products.statusmessages.interfaces import IStatusMessage
 from opengever.globalindex.interfaces import ITaskQuery
 from zope.component import getUtility
 from opengever.ogds.base.utils import get_client_id
-from opengever.base.reporter import format_datetime, get_date_style, readable_author
+from opengever.base.reporter import format_datetime, get_date_style
+from opengever.base.reporter import readable_author
 from opengever.base.reporter import StringTranslater, XLSReporter
 
 
@@ -22,12 +23,19 @@ class TaskReporter(grok.View):
 
         task_attributes = [
             {'id':'title', 'title':_('label_title')},
-            {'id':'review_state','title':_('review_state'), 'transform':StringTranslater(self.context.REQUEST,'plone').translate},
-            {'id':'deadline','title':_('label_deadline'), 'transform':format_datetime ,'style':get_date_style()},
-            {'id':'completed','title':_('label_completed'), 'transform':format_datetime ,'style':get_date_style()},
-            {'id':'created','title':_('label_created'), 'transform':format_datetime ,'style':get_date_style()},
-            {'id':'responsible','title':_('label_responsible'), 'transform':readable_author},
-            {'id':'issuer', 'title':_('label_issuer'), 'transform':readable_author},
+            {'id':'review_state', 'title':_('review_state'),
+             'transform':StringTranslater(
+                self.context.REQUEST, 'plone').translate},
+            {'id':'deadline', 'title':_('label_deadline'),
+             'transform':format_datetime, 'style':get_date_style()},
+            {'id':'completed', 'title':_('label_completed'),
+             'transform':format_datetime, 'style':get_date_style()},
+            {'id':'created', 'title':_('label_created'),
+             'transform':format_datetime, 'style':get_date_style()},
+            {'id':'responsible', 'title':_('label_responsible'),
+             'transform':readable_author},
+            {'id':'issuer', 'title':_('label_issuer'),
+             'transform':readable_author},
             {'id':'task_type', 'title':_('label_task_type')},
             {'id':'sequence_number', 'title':_('label_sequence_number')},
             {'id':'client_id', 'title':_('label_client_id')},
@@ -49,5 +57,5 @@ class TaskReporter(grok.View):
 
         response.setHeader('Content-Type', 'application/vnd.ms-excel')
         response.setHeader('Content-Disposition',
-                           'attachment;filename="task_report.xls"' )
+                           'attachment;filename="task_report.xls"')
         return data
