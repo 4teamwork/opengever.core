@@ -7,7 +7,8 @@ class AccessInboxAllowed(grok.View):
     """
     grok.context(Interface)
     grok.name('access-inbox-allowed')
-    grok.require('Public')
+    # grok.require('zope.Public')  <-- does not work since zope.Public
+    # is not registered as Permission. Do not define grok.require!
 
     def render(self):
         """Checks User permissions"""
