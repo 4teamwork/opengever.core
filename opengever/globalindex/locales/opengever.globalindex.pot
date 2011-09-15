@@ -1,0 +1,67 @@
+# --- PLEASE EDIT THE LINES BELOW CORRECTLY ---
+# SOME DESCRIPTIVE TITLE.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2011-09-15 12:30+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0\n"
+"Language-Code: en\n"
+"Language-Name: English\n"
+"Preferred-Encodings: utf-8 latin1\n"
+"Domain: opengever.globalindex\n"
+
+#: ./opengever/globalindex/browser/report.py:43
+msgid "Could not generate the report"
+msgstr ""
+
+#: ./opengever/globalindex/browser/cleartasks.py:46
+msgid "Global task index has been cleared (${cleared}) and rebuilt (${rebuilt})"
+msgstr ""
+
+#: ./opengever/globalindex/browser/report.py:33
+msgid "label_client_id"
+msgstr ""
+
+#: ./opengever/globalindex/browser/report.py:27
+msgid "label_completed"
+msgstr ""
+
+#: ./opengever/globalindex/browser/report.py:28
+msgid "label_created"
+msgstr ""
+
+#: ./opengever/globalindex/browser/report.py:26
+msgid "label_deadline"
+msgstr ""
+
+#: ./opengever/globalindex/browser/report.py:30
+msgid "label_issuer"
+msgstr ""
+
+#: ./opengever/globalindex/browser/report.py:29
+msgid "label_responsible"
+msgstr ""
+
+#: ./opengever/globalindex/browser/report.py:32
+msgid "label_sequence_number"
+msgstr ""
+
+#: ./opengever/globalindex/browser/report.py:31
+msgid "label_task_type"
+msgstr ""
+
+#: ./opengever/globalindex/browser/report.py:24
+msgid "label_title"
+msgstr ""
+
+#: ./opengever/globalindex/browser/report.py:25
+msgid "review_state"
+msgstr ""
+
