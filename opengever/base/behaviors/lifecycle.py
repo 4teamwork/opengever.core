@@ -101,7 +101,7 @@ def validate_children(folder, event):
     utils.overrides_child(folder, event, aq_fields, ILifeCycleMarker)
 
 
-# CUSTODY PERIOD / RETENTION PERIOD
+# RETENTION PERIOD
 class IntLowerEqualThanParentValidator(validator.SimpleFieldValidator):
 
     def validate(self, value):
@@ -142,6 +142,47 @@ class IntLowerEqualThanParentValidator(validator.SimpleFieldValidator):
             raise schema.interfaces.TooBig()
 
 
+# RETENTION PERIOD
+class IntGreaterEqualThanParentValidator(validator.SimpleFieldValidator):
+
+    def validate(self, value):
+        super(IntGreaterEqualThanParentValidator, self).validate(value)
+
+        # should not be negative
+        if int(value) < 0:
+            raise schema.interfaces.TooSmall()
+
+        # get parent value
+        #XXX CHANGED FROM PATH_TRANSLATED TO PATH_INFO because the test
+        # don't work
+        if '++add++' in self.request.get('PATH_INFO', object()):
+            obj = self.context
+        else:
+            obj = self.context.aq_inner.aq_parent
+
+        parent_value = -1
+        while parent_value < 0 and not ISiteRoot.providedBy(obj):
+            cf_obj = zope.component.queryAdapter(obj, ILifeCycle)
+
+            if cf_obj:
+                try:
+                    parent_value = int(self.field.get(cf_obj))
+                except AttributeError:
+                    pass
+                except TypeError:
+                    parent_value = 0
+
+            try:
+                obj = obj.aq_inner.aq_parent
+
+            except AttributeError:
+                return
+
+        # should not be smaller than parent
+        if parent_value > - 1 and int(value) < parent_value:
+            raise schema.interfaces.TooBig()
+
+
 # ---------- RETENTION PERIOD -----------
 # Vocabulary
 def _get_retention_period_options(vocabulary):
@@ -174,7 +215,7 @@ form.default_value(field=ILifeCycle['retention_period'])(
 
 
 # Validator
-class CustodyPeriodValidator(IntLowerEqualThanParentValidator):
+class CustodyPeriodValidator(IntGreaterEqualThanParentValidator):
     pass
 
 
@@ -195,10 +236,9 @@ def _get_custody_period_options(context):
     options = []
     nums = getattr(proxy, 'custody_periods')
 
-    for i, num in enumerate(nums):
+    for num in nums:
         num = int(num)
-        pos = int(nums[- i - 1])
-        options.append((pos, num))
+        options.append((num, num))
 
     return options
 

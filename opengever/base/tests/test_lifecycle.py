@@ -88,13 +88,13 @@ class TestCustodyPeriod(MockTestCase, TestCase):
 
         context = self.mocker.mock()
         self.expect(context.REQUEST).result(request)
-        self.expect(context.custody_period).result(10)
+        self.expect(context.custody_period).result(20)
 
         self.replay()
 
         vocabulary = vocfactory(context)
         self.assertEqual(sorted(self._get_term_titles_from_vocabulary(vocabulary)),
-                         [u'0', u'10'])
+                         [u'20', u'30'])
 
     def test_validator(self):
         request = self.mocker.mock()
@@ -121,9 +121,9 @@ class TestCustodyPeriod(MockTestCase, TestCase):
 
         context = self.mocker.mock()
         self.expect(context.REQUEST).result(request).count(0, None)
-        self.expect(context.custody_period).result(10).count(0, None)
-        self.expect(context.aq_inner).result(context)
-        self.expect(context.aq_parent).result(None)
+        self.expect(context.custody_period).result(20).count(0, None)
+        self.expect(context.aq_inner).result(context).count(0, None)
+        self.expect(context.aq_parent).result(None).count(0, None)
 
         field = lifecycle.ILifeCycle['custody_period']
 
@@ -133,10 +133,11 @@ class TestCustodyPeriod(MockTestCase, TestCase):
         self.replay()
 
         validator = getMultiAdapter((context, request, view, field, widget), IValidator)
-        validator.validate(10)
+        validator.validate(20)
+        validator.validate(30)
 
         with TestCase.assertRaises(self, ConstraintNotSatisfied):
-            validator.validate(20)
+            validator.validate(10)
 
     def test_default_value(self):
         field = lifecycle.ILifeCycle['custody_period']
