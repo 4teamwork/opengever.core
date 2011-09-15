@@ -20,21 +20,27 @@ class DossierReporter(grok.View):
 
         dossier_attributes = [
             {'id':'Title', 'title':_('label_title')},
-            {'id':'start','title':_('label_start'), 'transform':format_datetime ,'style':get_date_style()},
-            {'id':'end','title':_('label_end'), 'transform':format_datetime ,'style':get_date_style()},
-            {'id':'responsible','title':_('label_responsible'), 'transform':readable_author},
-            {'id':'filing_no','title':_('filing_no')},
-            {'id':'review_state','title':_('review_state'), 'transform':StringTranslater(self.context.REQUEST,'plone').translate},
-            {'id':'reference','title':_('label_reference_number')},
+            {'id':'start', 'title':_('label_start'),
+             'transform':format_datetime, 'style':get_date_style()},
+            {'id':'end', 'title':_('label_end'),
+             'transform':format_datetime, 'style':get_date_style()},
+            {'id':'responsible', 'title':_('label_responsible'),
+             'transform':readable_author},
+            {'id':'filing_no', 'title':_('filing_no')},
+            {'id':'review_state', 'title':_('review_state'),
+             'transform':StringTranslater(
+                self.context.REQUEST, 'plone').translate},
+            {'id':'reference', 'title':_('label_reference_number')},
         ]
 
 
         dossiers = self.context.portal_catalog(
-            object_provides = 'opengever.dossier.behaviors.dossier.IDossierMarker',
-            is_subdossier=False
-        )
+            object_provides = \
+                'opengever.dossier.behaviors.dossier.IDossierMarker',
+            is_subdossier=False)
 
-        reporter = XLSReporter(self.context.REQUEST, dossier_attributes, dossiers)
+        reporter = XLSReporter(
+            self.context.REQUEST, dossier_attributes, dossiers)
 
         data = reporter()
         if not data:
@@ -47,5 +53,5 @@ class DossierReporter(grok.View):
 
         response.setHeader('Content-Type', 'application/vnd.ms-excel')
         response.setHeader('Content-Disposition',
-                           'attachment;filename="dossier_report.xls"' )
+                           'attachment;filename="dossier_report.xls"')
         return data
