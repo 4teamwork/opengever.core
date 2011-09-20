@@ -5,6 +5,11 @@ Changelog
 2.0b10
 ------
 
+* Issue #1163 Frage zur Weiterleitung (vgl. auch Ticket 1012)
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1163
+  Disable renaming documents when assigning forwarding to dossier
+  [jbaumann]
+
 * Changed imports of ogds models to new opengever.ogds.models package
   [jbaumann]
 

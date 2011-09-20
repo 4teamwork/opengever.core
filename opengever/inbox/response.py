@@ -386,6 +386,8 @@ class ForwardingResponseAddForm(AddForm):
 
     def copy_docs(self, task):
         """Copys documents"""
+        task.REQUEST.set('prevent-copyname-on-document-copy', True)
+
         for doc in self.get_documents():
             parent = aq_parent(aq_inner(doc))
             clipboard = parent.manage_copyObjects([doc.getId()])
