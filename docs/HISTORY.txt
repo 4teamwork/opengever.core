@@ -5,6 +5,11 @@ Changelog
 2.0b17
 ------
 
+* Issue #1163 Frage zur Weiterleitung (vgl. auch Ticket 1012)
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1163
+  Provide a hook on request for disabling renaming of documents on copy
+  [jbaumann]
+
 * Removed GS profile dep on CMFEditions default profile because it causes
   policymaps to be purged
   [lgraf]
@@ -105,7 +110,7 @@ Changelog
   [ttschanz]
 
 * adjust the direct_checkout functionality, error message when document has no file
-  [phgross] 
+  [phgross]
 
 * Removed css_icon_class method - now done in tabbedview linked helper
   [lgraf]
@@ -136,7 +141,7 @@ Changelog
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1018/
   [phgross]
 
-* Issue #1017 Feedback Fokus: PDF Dokument zu jeder Dokumentversion 
+* Issue #1017 Feedback Fokus: PDF Dokument zu jeder Dokumentversion
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1017/
   changed viewlet registration, that overwritting works in opengever.pdfconverter
   [phgross]
