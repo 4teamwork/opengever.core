@@ -5,11 +5,16 @@ Changelog
 2.0a10
 ------
 
+* added 'Add portal content' permission to the Contributor role, for allowing add repositoryfolders on the root
+  [phgross]
+
 * Added grok.require to RepositoryRootOverview
   [eschmutz]
 
 * Added test-buildout for plone 4.1
   [eschmutz]
+
+
 
 2.0a9
 -----
