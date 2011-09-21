@@ -62,6 +62,19 @@ class ResponsibleVocabularyFactory(UsersAndInboxesVocabularyFactory):
     grok.name('opengever.tasktemplates.ResponsibleVocabulary')
 
     def key_value_provider(self):
+        request = self.context.REQUEST
+        items = list(self._get_items())
+        keys = dict(items).keys()
+
+        if '/@@edit' in request.getURL():
+            current_value = self.context.responsible
+            if current_value and current_value not in keys:
+                self.hidden_terms.append(current_value)
+                items.append((current_value, current_value))
+
+        return items
+
+    def _get_items(self):
         if self.get_client() == u'interactive_users':
             for e in interactive_users(self.context):
                 yield e

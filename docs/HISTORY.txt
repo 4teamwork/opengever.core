@@ -5,6 +5,10 @@ Changelog
 2.0c7
 -----
 
+* Issue #1155 Standardablauf: Fehler beim Feld 'Auftragnehmer' im Editformular
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1155
+  [jbaumann]
+
 
 2.0c6
 -----
