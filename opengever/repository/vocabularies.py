@@ -2,7 +2,7 @@ from zope.schema.vocabulary import SimpleVocabulary
 from Products.CMFCore.PortalFolder import PortalFolderBase
 from five import grok
 from zope.schema.interfaces import IVocabularyFactory
-
+from zope.i18n import translate
 
 class RestrictedAddableDossiersVocabularyFactory(grok.GlobalUtility):
     """A list of content types which are restricted addable on the context.
@@ -39,7 +39,9 @@ class RestrictedAddableDossiersVocabularyFactory(grok.GlobalUtility):
         # create the terms
         terms = []
         for fti in restricted_types:
-            title = context.translate(fti.title, domain=fti.i18n_domain)
+            title = translate(fti.title,
+                              domain=fti.i18n_domain,
+                              context=context.REQUEST)
             terms.append(SimpleVocabulary.createTerm(
                     fti.id, fti.id, title))
 
