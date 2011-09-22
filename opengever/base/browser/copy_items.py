@@ -2,11 +2,6 @@ from plone.z3cform import layout
 from five import grok
 from plone.dexterity.interfaces import IDexterityContainer
 from Products.CMFCore.utils import getToolByName
-from OFS.CopySupport import CopyError
-from OFS.Moniker import Moniker
-from zlib import compress
-from urllib import quote
-from marshal import dumps
 from Products.statusmessages.interfaces import IStatusMessage
 from opengever.base import _
 from Acquisition import aq_inner, aq_parent
@@ -44,7 +39,7 @@ class CopyItemsFormView(layout.FormWrapper, grok.CodeView):
         else:
             msg = _(u'error_no_items', default=u'You have not selected any Items')
             IStatusMessage(self.request).addStatusMessage(msg, type='error')
-        return self.request.RESPONSE.redirect(self.context.absolute_url())
+        return self.request.RESPONSE.redirect(self.request.form['orig_template'])
 
     def cookie_path(self, request):
         # Return a "path" value for use in a cookie that refers

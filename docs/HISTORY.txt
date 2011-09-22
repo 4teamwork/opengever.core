@@ -5,6 +5,11 @@ Changelog
 2.0b15
 ------
 
+* #1171 Feedback aus Pilotphase: Kopiertes Dokument einfügen - falscher Reiter
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1171
+  Copy_items now redirects to original view
+  [ttschanz]
+
 
 2.0b14
 ------
