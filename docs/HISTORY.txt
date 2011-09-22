@@ -5,6 +5,11 @@ Changelog
 2.0b15
 ------
 
+* #1154 Umstellung OpenGever in GEVER
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1154
+  Modified siteactions and Clientid viewlet
+  [ttschanz]
+
 * #1158 Fehler Darstellung Kalenderwidget
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1158
   added DatePickerFieldWidget as Formwidget
