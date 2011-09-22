@@ -7,14 +7,14 @@ from opengever.base import _
 from Acquisition import aq_inner, aq_parent
 
 
-class CopyItemsFormView(layout.FormWrapper, grok.CodeView):
+class CopyItemsFormView(layout.FormWrapper, grok.View):
     grok.context(IDexterityContainer)
     grok.name('copy_items')
     grok.require('zope2.View')
 
     def __init__(self, context, request):
         layout.FormWrapper.__init__(self, context, request)
-        grok.CodeView.__init__(self, context, request)
+        grok.View.__init__(self, context, request)
 
     def __call__(self):
         portal_catalog = getToolByName(self.context, 'portal_catalog')

@@ -6,7 +6,6 @@ from zope.interface import Interface
 class IBaseCustodyPeriods(Interface):
     custody_periods = schema.List(title=u"custody period",
                                   default=[u'0',
-                                           u'10',
                                            u'30',
                                            u'100',
                                            u'150',

@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2011-06-22 07:52+0000\n"
+"POT-Creation-Date: 2011-09-06 09:18+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,6 +19,10 @@ msgstr ""
 
 #: ./opengever/base/profiles/default/actions.xml
 msgid "Copy Items"
+msgstr ""
+
+#: ./opengever/base/viewlets/download.py:19
+msgid "No file in in this version"
 msgstr ""
 
 #: ./opengever/base/profiles/default/actions.xml
@@ -41,6 +45,21 @@ msgstr ""
 #. Default ""
 #: opengever/repository/classification.py
 msgid "archival worthy with sampling"
+msgstr ""
+
+#. Default: "Download"
+#: ./opengever/base/viewlets/history.pt:41
+msgid "button_file"
+msgstr ""
+
+#. Default: "PDF"
+#: ./opengever/base/viewlets/history.pt:49
+msgid "button_pdf"
+msgstr ""
+
+#. Default: "Show"
+#: ./opengever/base/viewlets/history.pt:45
+msgid "button_show"
 msgstr ""
 
 #. Default: "classified"

@@ -10,6 +10,44 @@ Changelog
   Copy_items now redirects to original view
   [ttschanz]
 
+* Issue #1152 Anpassungen Archivische Schutzfrist
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1152
+  custody_period: must be greater or equal than custody_period on parent
+  [jbaumann]
+
+*Issue #1152 Anpassungen Archivische Schutzfrist
+ https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1152
+ IBaseCustodyPeriods angepasst
+ [eschmutz]
+
+* Fixed ReferenceNumberPrefixAdpater:
+  - Made sure get_next_number() correctly determines the highest prefix
+    in use by sorting strings numerically, not by simple string comparison
+  - get_next_number() now always returns unicode
+  - set_number() always coerces the number it's being passed to unicode
+
+  [lgraf]
+
+* Added grok.require to DownloadFileVersion and VersionView
+  [eschmutz]
+
+* chenged deprecated grok.CodeView to grok.View
+  [eschmutz]
+
+* Implemented a `version-view` that displays a particular version of an object
+  using the default view of the respective content type and updated our
+  customized history viewlet to create links to that view.
+  [lgraf]
+
+* Registering history viewlet for generic interface
+  plone.app.versioningbehavior.behaviors.IVersioningSupport
+  [lgraf]
+
+
+* Moved customized history viewlet from og.document into og.base and
+  modified it to handle PDF previews if available.
+  [lgraf]
+
 
 2.0b14
 ------
@@ -59,7 +97,7 @@ Changelog
 2.0b11
 ------
 
-* Provided feature "opengever" in order to be able to conditionally exclude 
+* Provided feature "opengever" in order to be able to conditionally exclude
   things for opengever in izug.basetheme
   [lgraf]
 
@@ -75,7 +113,7 @@ Changelog
 * Added Tests for Copy_items method
   [ttschanz]
 
-* fixed bug in copyitem_view 
+* fixed bug in copyitem_view
   [ttschanz]
 
 * Made _get_acquisition_value() behave more robustly if context == None
