@@ -34,6 +34,7 @@ from zope.app.intid.interfaces import IIntIds
 from zope.component import getUtility
 from zope.interface.interface import Attribute
 from zope.lifecycleevent import modified
+from zope.i18n import translate
 import AccessControl
 import os.path
 
@@ -188,12 +189,11 @@ class ForwardingResponseAddForm(AddForm):
                             mapping=dict(year=str(year)))
                     # --- / help i18ndude ---
 
-                    tool = getToolByName(self.context, 'translation_service')
-                    folder_title = tool.translate(str(msg),
-                                                  msg.domain,
-                                                  msg.mapping,
-                                                  context=self.context,
-                                                  default=msg.default)
+                    folder_title = translate(str(msg),
+                                             msg.domain,
+                                             msg.mapping,
+                                             context=self.request,
+                                             default=msg.default)
 
                     folder = createContentInContainer(
                         inbox, 'opengever.inbox.yearfolder',
