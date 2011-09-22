@@ -12,6 +12,7 @@ from zope import schema
 from zope.interface import alsoProvides, Interface
 from zope.lifecycleevent.interfaces import IObjectModifiedEvent
 import zope.component
+from ftw.datepicker.widget import DatePickerFieldWidget
 
 
 class ILifeCycleMarker(Interface):
@@ -75,6 +76,7 @@ class ILifeCycle(form.Schema):
         )
 
     #dexterity.write_permission(date_of_cassation='cmf.ManagePortal')
+    form.widget(date_of_cassation = DatePickerFieldWidget)
     date_of_cassation = schema.Date(
         title=_(u'label_dateofcassation', default=u'Date of cassation'),
         description=_(u'help_dateofcassation', default=u''),
@@ -82,6 +84,7 @@ class ILifeCycle(form.Schema):
         )
 
     #dexterity.write_permission(date_of_submission='cmf.ManagePortal')
+    form.widget(date_of_submission = DatePickerFieldWidget)
     date_of_submission = schema.Date(
         title=_(u'label_dateofsubmission', default=u'Date of submission'),
         description=_(u'help_dateofsubmission', default=u''),
