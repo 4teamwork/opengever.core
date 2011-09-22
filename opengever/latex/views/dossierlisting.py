@@ -5,7 +5,7 @@ from opengever.latex.views.baselisting import BasePDFListing
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.ogds.base.utils import get_current_client
 from zope.component import getUtility
-
+from zope.i18n import translate
 
 class DossierListingPDF(BasePDFListing):
     """Listing of all dossiers as PDF (recursive). Is called from
@@ -34,8 +34,9 @@ class DossierListingPDF(BasePDFListing):
                     unicode(brain.Title).encode('utf-8'),
                     '%s / %s' % (client.title,
                                  info.describe(brain.responsible)),
-                    self.context.translate(brain.review_state,
-                                           domain='plone'),
+                    translate(brain.review_state,
+                              domain='plone',
+                              context=self.request),
                     helper.readable_date(brain, brain.start),
                     ))
 

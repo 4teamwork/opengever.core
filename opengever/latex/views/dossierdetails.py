@@ -16,7 +16,7 @@ from opengever.tabbedview.helper import readable_ogds_author
 from opengever.tabbedview.helper import readable_date
 from opengever.task.helper import task_type_helper
 from zope.component import getUtility
-
+from zope.i18n import translate
 
 class DossierDetailsPDF(BasePDFListing):
     """Create a PDF with dossier details.
@@ -60,8 +60,9 @@ class DossierDetailsPDF(BasePDFListing):
 
         data['title'] = self.context.Title()
         state = self.context.restrictedTraverse('@@plone_context_state')
-        data['review_state'] = self.context.translate(state.workflow_state(),
-                                                      domain='plone')
+        data['review_state'] = translate(state.workflow_state(),
+                                         domain='plone',
+                                         context=self.request)
 
         data['responsible'] = ' '.join(
             (str(client.title), '/', info.describe(dossier.responsible)))
@@ -136,8 +137,9 @@ class DossierDetailsPDF(BasePDFListing):
                     task_type_helper(brain, brain.task_type),
                     info.describe(brain.issuer),
                     info.describe(brain.responsible),
-                    self.context.translate(brain.review_state,
-                                           domain='plone'),
+                    translate(brain.review_state,
+                              domain='plone',
+                              context=self.request),
                     unicode(brain.Title).encode('utf-8'),
                     readable_date(brain, brain.deadline),
                     ))
@@ -204,8 +206,9 @@ class DossierDetailsPDF(BasePDFListing):
                     getattr(brain, 'filing_no', None) or '',
                     str(brain.Title),
                     info.describe(brain.responsible),
-                    self.context.translate(brain.review_state,
-                                           domain='plone'),
+                    translate(brain.review_state,
+                              domain='plone',
+                              context=self.request),
                     readable_date(brain, brain.start),
                     ))
 
