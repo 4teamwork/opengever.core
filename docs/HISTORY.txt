@@ -5,6 +5,10 @@ Changelog
 2.0a4
 -----
 
+* #1165 UnicodeDecodeError im opengever.trash
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1165
+  [ttschanz]
+
 * changed deprecated grok.CodeView to grok.View
   [eschmutz]
 

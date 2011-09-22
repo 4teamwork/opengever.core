@@ -90,7 +90,7 @@ class TrashView(grok.View):
                 # check that the document isn't checked_out
                 if catalog(path=item)[0].checked_out:
                     msg = _(
-                        'could not trash the object ${obj}, it is checked out',
+                        u'could not trash the object ${obj}, it is checked out',
                         mapping={'obj': obj.Title()})
                     IStatusMessage(self.request).addStatusMessage(
                         msg, type='error')
@@ -99,7 +99,7 @@ class TrashView(grok.View):
                 trasher = ITrashable(obj)
                 trasher.trash()
                 trashed = True
-                msg = _('the object ${obj} trashed',
+                msg = _(u'the object ${obj} trashed',
                     mapping={'obj': obj.Title()})
                 IStatusMessage(self.request).addStatusMessage(
                     msg, type='info')
