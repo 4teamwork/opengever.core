@@ -126,7 +126,7 @@ class DossierLatexConverter(LatexCTConverter,grok.View,AutoFields):
         latex += '\\vspace{0.8cm} \\newline\n'
         latex += '\\scriptsize %s\n' % self.view.convert(repositoryfolder)
         latex += '\\vspace{0.3cm} \\newline\n'
-        latex += '\\small \\textbf{%s}. %s \\newline\n' %(self.view.convert(context.Title()),self.view.convert(context.Description()))
+        latex += '\\small \\textbf{%s} %s \\newline\n' %(self.view.convert(context.Title()),self.view.convert(context.Description()))
         latex += '\\vspace{0.3cm} \\newline\n'
         cinfo = getUtility(IContactInformation)
         responsible_name = cinfo.describe(self.responsible())
