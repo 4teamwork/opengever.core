@@ -27,7 +27,6 @@ from plone.z3cform.textlines.textlines import TextLinesFieldWidget
 from z3c.form.browser import checkbox
 from zc.relation.interfaces import ICatalog
 from zope import schema
-from zope.app.component.hooks import getSite
 from zope.app.intid.interfaces import IIntIds
 from zope.component import getUtility, queryMultiAdapter, getAdapter
 from zope.globalrequest import getRequest
@@ -35,6 +34,7 @@ from zope.interface import invariant, Invalid, Interface
 from zope.lifecycleevent.interfaces import IObjectCopiedEvent
 from zope.lifecycleevent.interfaces import IObjectCreatedEvent
 from zope.lifecycleevent.interfaces import IObjectModifiedEvent
+from zope.i18n import translate
 import logging
 
 
@@ -444,14 +444,15 @@ def set_copyname(doc, event):
     """Documents wich are copied, should be renamed to copy of filename
     """
 
+
+
     key = 'prevent-copyname-on-document-copy'
     request = getRequest()
 
     if request.get(key, False):
         return
-
     doc.title = u'%s %s' % (
-        getSite().translate(_('copy_of', default="copy of")),
+        translate(_('copy_of', default="copy of"), context=request),
         doc.title)
 
 
