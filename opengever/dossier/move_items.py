@@ -1,6 +1,6 @@
 from Acquisition import aq_inner, aq_parent
 from Products.CMFCore.utils import getToolByName
-from OFS.CopySupport import CopyError
+from OFS.CopySupport import CopyError, ResourceLockedError
 from five import grok
 from opengever.dossier import _
 from plone.dexterity.interfaces import IDexterityContainer
@@ -66,6 +66,7 @@ class MoveItemsForm(form.Form):
             destination = data['destination_folder']
             sourceObjects = []
             failedObjects = []
+            failedResourceLockedObjects = []
             copiedItems = 0
 
             # loop through paths
@@ -96,7 +97,11 @@ class MoveItemsForm(form.Form):
             for obj in sourceObjects:
                 sourceContainer = aq_parent(aq_inner(obj))
                 #cut object and add it to clipboard
-                clipboard = sourceContainer.manage_cutObjects(obj.id)
+                try:
+                    clipboard = sourceContainer.manage_cutObjects(obj.id)
+                except ResourceLockedError:
+                    failedResourceLockedObjects.append(obj.title)
+                    continue
 
                 try:
                     #try to paste object
@@ -122,6 +127,15 @@ class MoveItemsForm(form.Form):
                         mapping=dict(failedObjects=','.join(failedObjects)))
                 IStatusMessage(self.request).addStatusMessage(
                     msg, type='error')
+
+            if failedResourceLockedObjects:
+                msg = _(u'Failed to copy following objects: ${failedObjects}\
+                        . Locket via WebDAV',
+                        mapping=dict(failedObjects=','.join(
+                            failedResourceLockedObjects)))
+                IStatusMessage(self.request).addStatusMessage(
+                    msg, type='error')
+
             self.request.RESPONSE.redirect(destination.absolute_url())
 
     @z3c.form.button.buttonAndHandler(_(u'button_cancel',

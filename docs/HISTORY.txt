@@ -5,6 +5,11 @@ Changelog
 2.0b21
 ------
 
+* Issue #1177 move_items ergibt wenn Objekte per WEBDav gesperrt sind.
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1177
+  exception-handling for cutObject-method
+  [eschmutz]
+
 * Changed var-name in tests
   [eschmutz]
 
