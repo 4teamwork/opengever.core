@@ -34,27 +34,26 @@ Pulling a object
 
 create a first item
 
-    >>> item1 = createContentInContainer(portal, 'TrashTestFTI',
+    >>> utem1 = createContentInContainer(portal, 'TrashTestFTI',
     ...                                   checkConstraints=False,
-    ...                                   title='Item1')
-    >>> item1
-    <Container at /plone/item1>
+    ...                                   title=u'\xfctem1', checked_out=False)
+    >>> utem1
+    <Container at /plone/utem1>
 
-    >>> item2 = createContentInContainer(portal, 'TrashTestFTI',
+    >>> utem2 = createContentInContainer(portal, 'TrashTestFTI',
     ...                                   checkConstraints=False,
-    ...                                   title='Item2')
-    >>> item2
-    <Container at /plone/item2>
+    ...                                   title=u'\xfctem2')
+    >>> utem2
+    <Container at /plone/utem2>
 
+    >>> portal.REQUEST['paths'] = ['/'.join(utem1.getPhysicalPath())]
+    >>> utem1.restrictedTraverse('trashed')()
+    'http://nohost/plone/utem1#trash'
 
-trash the item1, first we get the trasher and then we trash it
-
-    >>> trasher = ITrashable(item1)
-    >>> trasher.trash()
     
 the we check the interfaces
 
-    >>> ITrashed.providedBy(item1)
+    >>> ITrashed.providedBy(utem1)
     True
 
 and the catalog
@@ -64,8 +63,9 @@ and the catalog
 
 now we check also the untrashing
 
-    >>> trasher = ITrashable(item1)
-    >>> trasher.untrash()
+    >>> portal.REQUEST['paths'] = ['/'.join(utem1.getPhysicalPath())]
+    >>> utem1.restrictedTraverse('untrashed')()
+    'http://nohost/plone/utem1#documents'
 
 and the catalog
     >>> portal.portal_catalog(portal_type="TrashTestFTI", trashed=True)
