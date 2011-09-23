@@ -12,6 +12,8 @@ from opengever.ogds.models.user import User
 from plone.memoize import ram
 from plone.memoize import volatile
 from zope.app.component.hooks import getSite
+from zope.i18n import translate
+from zope.globalrequest import getRequest
 import logging
 import types
 
@@ -330,16 +332,14 @@ class ContactInformation(grok.GlobalUtility):
         if is_string and self.is_inbox(principal):
             # just do it
             client = self.get_client_of_inbox(principal)
-            # some times the site is the z3c validaton, so get
-            # the real site a little bit hacky
-            site = getToolByName(getSite(), 'portal_url').getPortalObject()
             # we need to instantly translate, because otherwise
             # stuff like the autocomplete widget will not work
             # properly.
             label = _(u'inbox_label',
                      default=u'Inbox: ${client}',
                      mapping=dict(client=client.title))
-            return site.translate(label)
+
+            return translate(label, context=getRequest())
 
         # string contact
         elif is_string and self.is_contact(principal):
