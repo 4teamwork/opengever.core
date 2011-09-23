@@ -6,6 +6,7 @@ from plone.memoize import ram
 from Products.CMFCore.interfaces._tools import IMemberData
 from Products.PluggableAuthService.interfaces.authservice import IPropertiedUser
 from zope.app.component.hooks import getSite
+from zope.i18n import translate
 from zope.component import getUtility
 import ftw.table
 from ftw.mail.utils import get_header
@@ -183,12 +184,11 @@ def workflow_state(item, value):
     """Helper which translates the workflow_state in plone domain
     and adds a CSS class to indicate the worflow state.
     """
-    i18n_translate = getSite().translate
-    translate = ftw.table.helper.translated_string('plone')
-    translated_value = translate(item, value)
+    translate_helper = ftw.table.helper.translated_string('plone')
+    translated_value = translate_helper(item, value)
     normalize = getUtility(IIDNormalizer).normalize
     state = normalize(item.review_state)
-    return """<span class="wf-%s">%s</span>""" % (state, i18n_translate(translated_value))
+    return """<span class="wf-%s">%s</span>""" % (state, translate(translated_value, context=item.REQUEST))
 
 
 def overdue_date_helper(item, date):
