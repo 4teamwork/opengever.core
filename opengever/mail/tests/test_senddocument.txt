@@ -64,6 +64,8 @@ test form
     [u'info@4teamwork.ch']
     >>> len(doc1.MailHost.messages)
     1
+    >>> 'Test Nachricht' in doc1.MailHost.messages[0]
+    True
 
 Test again (now document have a file)
     >>> mok_file1 = NamedBlobFile(500000*'bla', filename=u'test.txt')
@@ -91,3 +93,6 @@ max size ok
     [u'info@4teamwork.ch']
     >>> len(doc1.MailHost.messages)
     2
+    >>> 'Test Nachricht' in doc1.MailHost.messages[1]
+    True
+    

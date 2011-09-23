@@ -5,6 +5,8 @@ Changelog
 2.0b10
 ------
 
+* Tests now check if the Message is in the Mail
+
 * Removed GS profile dep on CMFEditions default profile because it causes
   policymaps to be purged
   [lgraf]
