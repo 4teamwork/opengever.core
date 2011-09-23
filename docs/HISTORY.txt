@@ -8,6 +8,7 @@ Changelog
 * Issue #1176 alle translatinos mit from zope.i18n import translate
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1176
   [eschmutz]
+
 * Changed imports of ogds models to new opengever.ogds.models package
   Removed models, since they are now in opengever.ogds.models
   [jbaumann]
