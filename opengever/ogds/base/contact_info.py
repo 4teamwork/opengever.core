@@ -4,16 +4,17 @@ from Products.ZCatalog.interfaces import ICatalogBrain
 from five import grok
 from opengever.ogds.base import _
 from opengever.ogds.base.interfaces import IContactInformation, IUser
+from opengever.ogds.base.interfaces import ISyncStamp
 from opengever.ogds.base.utils import brain_is_contact, get_client_id
 from opengever.ogds.base.utils import create_session
 from opengever.ogds.models.client import Client
 from opengever.ogds.models.group import Group
 from opengever.ogds.models.user import User
 from plone.memoize import ram
-from plone.memoize import volatile
 from zope.app.component.hooks import getSite
-from zope.i18n import translate
+from zope.component import getUtility
 from zope.globalrequest import getRequest
+from zope.i18n import translate
 import logging
 import types
 
@@ -21,18 +22,39 @@ import types
 logger = logging.getLogger('opengever.ogds.base')
 
 
-def cache_key_principal(method, self, principal):
-    if ICatalogBrain.providedBy(principal):
-        return principal.contactid
-    if IUser.providedBy(principal):
-        return principal.userid
-    return principal
+def ogds_principal_cachekey(method, self, principal):
+    """A chache_key including which is, explicit for the
+    method, ogds_sync_stamp and principal."""
 
 
-def class_cachekey(method, self):
+    return '%s.%s:%s:%s' % (
+        self.__class__.__module__,
+        self.__class__.__name__,
+        getUtility(ISyncStamp).get_sync_stamp(),
+        principal)
+
+
+def ogds_user_client_cachekey(method, self, user, client):
+    """A chache_key including which is, explicit for the
+    method, ogds_sync_stamp and principal."""
+
+    return '%s.%s:%s:%s:%s' % (
+        self.__class__.__module__,
+        self.__class__.__name__,
+        getUtility(ISyncStamp).get_sync_stamp(),
+        user,
+        client)
+
+
+def ogds_class_cachekey(method, self):
     """A cache key including the class' name.
+    and the actual ogds sync stamp.
     """
-    return self.__class__
+
+    return '%s.%s:%s' % (
+        self.__class__.__module__,
+        self.__class__.__name__,
+        getUtility(ISyncStamp).get_sync_stamp())
 
 
 class UserDict(object):
@@ -76,7 +98,7 @@ class ContactInformation(grok.GlobalUtility):
 
         return principal and ':' not in principal
 
-    @ram.cache(class_cachekey)
+    @ram.cache(ogds_class_cachekey)
     def list_users(self):
         """A list of dicts.
         """
@@ -92,7 +114,8 @@ class ContactInformation(grok.GlobalUtility):
             client_id = get_client_id()
 
         if not client_id:
-            raise ValueError('client_id is not defined')
+            logger.warn("can't list assigned users, without a client_id")
+            return []
 
         session = create_session()
         users = session.query(Group).join(Client.users_group).filter(
@@ -221,7 +244,7 @@ class ContactInformation(grok.GlobalUtility):
         else:
             return clients[0]
 
-    @volatile.cache(cache_key_principal)
+    @ram.cache(ogds_principal_cachekey)
     def get_group_of_inbox(self, principal):
         """Returns the group principal of the inbox `principal`.
         """
@@ -277,10 +300,7 @@ class ContactInformation(grok.GlobalUtility):
 
         return clients
 
-    def _user_client_cachekey(method, self, userid, client_id):
-        return (userid, client_id)
-
-    @ram.cache(_user_client_cachekey)
+    @ram.cache(ogds_user_client_cachekey)
     def _is_client_assigned(self, userid, client_id):
         session = create_session()
 
@@ -480,7 +500,7 @@ class ContactInformation(grok.GlobalUtility):
             raise ValueError('Unknown principal type: %s' %
                              str(principal))
 
-    @volatile.cache(cache_key_principal)
+    @ram.cache(ogds_principal_cachekey)
     def get_profile_url(self, principal):
         """Returns the profile url of this `principal`.
         """
@@ -514,7 +534,7 @@ class ContactInformation(grok.GlobalUtility):
                         principal).getHomeUrl()
             return None
 
-    @volatile.cache(cache_key_principal)
+    @ram.cache(ogds_principal_cachekey)
     def render_link(self, principal):
         """Render a link to the `principal`
         """

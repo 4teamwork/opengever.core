@@ -6,6 +6,8 @@ from Testing.makerequest import makerequest
 from AccessControl.SecurityManagement import newSecurityManager
 from zope.app.component.hooks import setSite
 from optparse import OptionParser
+from opengever.ogds.base.ldap_import.import_stamp import \
+    set_remote_import_stamp
 
 
 def debugAfterException():
@@ -13,17 +15,17 @@ def debugAfterException():
     """
 
     def info(type, value, tb):
-       if hasattr(sys, 'ps1') or not sys.stderr.isatty():
-          # we are in interactive mode or we don't have a tty-like
-          # device, so we call the default hook
-          sys.__excepthook__(type, value, tb)
-       else:
-          import traceback, pdb
-          # we are NOT in interactive mode, print the exception...
-          traceback.print_exception(type, value, tb)
-          print
-          # ...then start the debugger in post-mortem mode.
-          pdb.pm()
+        if hasattr(sys, 'ps1') or not sys.stderr.isatty():
+            # we are in interactive mode or we don't have a tty-like
+            # device, so we call the default hook
+            sys.__excepthook__(type, value, tb)
+        else:
+            import traceback, pdb
+            # we are NOT in interactive mode, print the exception...
+            traceback.print_exception(type, value, tb)
+            print
+            # ...then start the debugger in post-mortem mode.
+            pdb.pm()
 
     sys.excepthook = info
 
@@ -72,18 +74,25 @@ def run_import(app, options):
 
     transmogrifier = Transmogrifier(plone)
 
-    print "Importing..."
-    import time
-    now = time.clock()
+    trans_configs = options.config.split(';')
+    for config in trans_configs:
 
-    transmogrifier(options.config)
+        print "Importing..."
+        import time
+        now = time.clock()
+        transmogrifier(config)
 
-    #transmogrifier(u'opengever.repository1.ska-arch')
-    #transmogrifier(u'opengever.konsulmigration.repository')
-    elapsed = time.clock() - now
-    print "Done in %.0f seconds." % elapsed
-    print "Committing transaction..."
-    transaction.commit()
+        #transmogrifier(u'opengever.repository1.ska-arch')
+        #transmogrifier(u'opengever.konsulmigration.repository')
+        elapsed = time.clock() - now
+        print "Done in %.0f seconds." % elapsed
+        print "Committing transaction..."
+        transaction.commit()
+
+    if len(trans_configs) != 0:
+        print "update LDAP SYNC importstamp"
+        set_remote_import_stamp(plone)
+        transaction.commit()
     print "Done"
 
 
@@ -97,7 +106,7 @@ def main():
 
     parser = OptionParser()
     parser.add_option("-D", "--debug", action="store_true", dest="debug", default=False)
-    parser.add_option("-c", "--config", dest="config", default=u'opengever.ogds.base.user-import')
+    parser.add_option("-c", "--config", dest="config", default=u'opengever.ogds.base.user-import;opengever.ogds.base.group-import')
     parser.add_option("-s", "--site-root", dest="site_root", default=u'/Plone')
     (options, args) = parser.parse_args()
 

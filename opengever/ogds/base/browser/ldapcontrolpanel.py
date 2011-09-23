@@ -1,3 +1,4 @@
+from opengever.ogds.base.ldap_import.import_stamp import set_remote_import_stamp
 from collective.transmogrifier.transmogrifier import Transmogrifier
 from five import grok
 from Products.CMFPlone.interfaces import IPloneSiteRoot
@@ -54,13 +55,19 @@ class UserSyncView(grok.View):
 
         transmogrifier = Transmogrifier(self.context)
 
+
         log("Start user import")
         transmogrifier(self.configuration)
-
+        transaction.commit()
         elapsed = time.clock() - now
         log("Done in %.0f seconds." % elapsed)
+
+        if self.configuration:
+            print "update LDAP SYNC importstamp"
+            set_remote_import_stamp(self.context)
+            transaction.commit()
+
         log("Committing transaction...")
-        transaction.commit()
 
         log('Done user import')
 

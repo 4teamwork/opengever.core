@@ -22,7 +22,6 @@ class IGroup(Interface):
     """
 
 
-
 class IClientConfiguration(Interface):
     """p.a.registry interface for configuring a client
     """
@@ -31,7 +30,7 @@ class IClientConfiguration(Interface):
         title=u'Client ID',
         description=u'Enter the unique ID of this client. \
         It will be used by OGDS (Opengever Global Directory Service) \
-        to identify this client.',)
+        to identify this client.', )
 
 
 class IContactInformation(Interface):
@@ -87,3 +86,7 @@ class IObjectCreator(Interface):
         """ Creates the object according to the data
         This method returns the created object
         """
+
+
+class ISyncStamp(Interface):
+    """Adapter Inteface for the Import Stamp"""
