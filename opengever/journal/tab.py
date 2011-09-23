@@ -15,11 +15,13 @@ from zope.annotation.interfaces import IAnnotations
 from zope.app.component.hooks import getSite
 from zope.app.pagetemplate import ViewPageTemplateFile
 from zope.interface import implements, Interface
+from zope.i18n import translate
+from zope.globalrequest import getRequest
 
 
 def title_helper(item, value):
-    site = getSite()
-    return site.translate(item['action'].get('title'))
+    return translate(item['action'].get('title'),
+                    context=getRequest())
 
 
 class IJournalSourceConfig(ITableSourceConfig):
@@ -82,7 +84,6 @@ class JournalTableSource(grok.MultiAdapter, BaseTableSource):
 
     def validate_base_query(self, query):
         context = self.config.context
-
         if IAnnotationsJournalizable.providedBy(context):
             annotations = IAnnotations(context)
             data = annotations.get(JOURNAL_ENTRIES_ANNOTATIONS_KEY, [])

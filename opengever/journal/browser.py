@@ -22,6 +22,7 @@ class JournalHistory(BrowserView):
         context = self.context
         history = []
 
+
         if IAnnotationsJournalizable.providedBy(self.context):
             annotations = IAnnotations(context)
             return annotations.get(JOURNAL_ENTRIES_ANNOTATIONS_KEY, [])
