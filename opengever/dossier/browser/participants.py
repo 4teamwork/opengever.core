@@ -13,7 +13,9 @@ from persistent.list import PersistentList
 from plone.memoize import ram
 from zope.app.component.hooks import getSite
 from zope.app.pagetemplate import ViewPageTemplateFile
+from zope.globalrequest import getRequest
 from zope.i18nmessageid.message import Message
+from zope.i18n import translate
 from zope.interface import implements, Interface
 from zope.schema.vocabulary import getVocabularyRegistry
 import base64
@@ -39,8 +41,7 @@ def role_list_helper(item, value):
 
     if isinstance(value, Message):
         # translate the message
-        site = getSite()
-        return site.translate(value)
+        return translate(value, context=getRequest())
 
     elif sum([int(isinstance(value, t)) for t in (str, unicode)]):
         # is it a string or unicode or a subtype of them?

@@ -8,6 +8,10 @@ Changelog
 * Extended Tests for Tasks. It now tests if all_is_closed is true with cancelled tastks
   [ttschanz]
 
+* Issue #1176 alle translatinos mit from zope.i18n import translate
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1176
+  [eschmutz]
+
 * Issue #1177 move_items ergibt wenn Objekte per WEBDav gesperrt sind.
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1177
   exception-handling for cutObject-method
