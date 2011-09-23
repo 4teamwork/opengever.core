@@ -54,6 +54,12 @@ and tasks,
     >>> task1
     <Task at /plone/dossier-1/task-1>
 
+    >>> task2 = createContentInContainer(subdossier,
+    ...     'opengever.task.task', title="Task1", task_type='correction', issuer=str(portal.restrictedTraverse('plone_portal_state').member()), checkConstraints=False)
+    >>> task2
+    <Task at /plone/dossier-1/dossier-2/task-2>
+
+
 in plone.app.testing we need to commit the transaction before we can use the content with the browser.
     >>> transaction.commit()
 
@@ -107,6 +113,7 @@ it should only be possible resolving a dossier when all tasks are resolved
     >>> dossier.is_all_closed()
     False
 	>>> task1.task_type="information"
+    >>> wft.doActionFor(task2, 'task-transition-open-cancelled')
     >>> wft.doActionFor(task1, 'task-transition-open-tested-and-closed')
     >>> dossier.is_all_closed()
     True
