@@ -12,7 +12,6 @@ from opengever.journal import _
 from opengever.tabbedview.browser.tabs import OpengeverTab
 from opengever.tabbedview.helper import linked_ogds_author
 from zope.annotation.interfaces import IAnnotations
-from zope.app.component.hooks import getSite
 from zope.app.pagetemplate import ViewPageTemplateFile
 from zope.interface import implements, Interface
 from zope.i18n import translate
