@@ -5,6 +5,10 @@ Changelog
 2.0b22
 ------
 
+* Issue #1181 Unused ITransition entfernen und testanpassungen
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1181
+  [eschmuttz]
+
 * Added grok.require to ReceiveResponses, DocumentRedirector, DirectResponseView, SingleAddFormView,
   CopyRelatedDocumentsToInbox
   [eschmutz]
@@ -96,7 +100,7 @@ Changelog
 * Issue #1069 Test Rot 2.0.3: Fehlende Icons bei Verweis-Baum u.ae.
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1069/
   Added missing parameters for the js_template call in the DossierAutocompleteSelectionWidget,
-  works now with the newest version of the plone.formwidget.autocomplete 
+  works now with the newest version of the plone.formwidget.autocomplete
   [phgross]
 
 * Added several Tests

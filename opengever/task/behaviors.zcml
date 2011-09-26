@@ -9,15 +9,6 @@
     <include package="plone.directives.form" file="meta.zcml" />
     <include package="plone.directives.form" />
 
-    <plone:behavior
-        title="Transition"
-        description="Transition Support for opengever.task"
-        provides=".behaviors.ITransition"
-        factory=".behaviors.Transition"
-        marker=".behaviors.ITransitionMarker"
-        for="plone.dexterity.interfaces.IDexterityContent"
-        />
-
     <!-- name from title beahvior -->
     <plone:behavior
         title="task name from title"

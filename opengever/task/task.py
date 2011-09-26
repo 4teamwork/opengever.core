@@ -193,9 +193,6 @@ class ITask(form.Schema):
         description=_(u'help_predecessor', default=u''),
         required=False)
 
-    # TODO: doesn't work with Plone 4
-    #form.order_before(**{'ITransition.transition': "responsible"})
-
 # # XXX doesn't work yet.
 #@form.default_value(field=ITask['issuer'])
 

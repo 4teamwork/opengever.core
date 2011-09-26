@@ -57,7 +57,7 @@
 
             <tr tal:repeat="widget group2/widgets/values">
                 <tal:block condition="python:widget.__name__ not in ('IBasic.title', 'IBasic.description', 'title',
-                                      'description', 'ITransition.transition', 'expectedStartOfWork', 'date_of_completion') and widget.value and widget.value != ('', '', '')">
+                                      'description', 'expectedStartOfWork', 'date_of_completion') and widget.value and widget.value != ('', '', '')">
                     <th tal:content="structure widget/label" />
                     <td tal:content="structure widget/render" />
                 </tal:block>
