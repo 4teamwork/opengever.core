@@ -1,3 +1,4 @@
+from Products.CMFPlone.interfaces import IPloneSiteRoot
 from Products.CMFCore.utils import getToolByName
 from StringIO import StringIO
 from opengever.ogds.base.exceptions import ClientNotFound
@@ -46,7 +47,23 @@ def get_current_client():
         return clients[0]
 
 
-@ram.cache(lambda method: True)
+def client_id_cachekey(method):
+    """chackekey for the get_client_id, wich is unique for every plone site.
+    So a setup with multiple opengever sites on one plone instance is possible.
+    """
+
+    context = getSite()
+
+    if not IPloneSiteRoot.providedBy(context):
+        for obj in context.aq_chain:
+            if IPloneSiteRoot.providedBy(obj):
+                context = obj
+                break
+
+    return 'get_client_id:%s' %(context.id)
+
+
+@ram.cache(client_id_cachekey)
 def get_client_id():
     """Returns the client_id of the current client.
     """
