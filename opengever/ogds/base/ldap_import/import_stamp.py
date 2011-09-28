@@ -35,7 +35,7 @@ def set_remote_import_stamp(context):
                        data={REQUEST_SYNC_KEY: timestamp})
 
 
-class ImportStampUtility(grok.GlobalUtility):
+class SyncStampUtility(grok.GlobalUtility):
     """Named Adapter which handles the persistent storing
     of the LDAP SYNC timestamp"""
 
