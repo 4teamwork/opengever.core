@@ -25,6 +25,9 @@ from zope.interface import Interface
 from zope.interface import invariant, Invalid
 
 
+CHARSET = 'iso-8859-1'
+
+
 class NoMail(Invalid):
     """ The No Mail was defined Exception."""
     __doc__ = _(u"No Mail Address")
@@ -141,28 +144,27 @@ class SendDocumentForm(form.Form):
             userid = userid.getId()
             intern_receiver = data.get('intern_receiver') or ()
             extern_receiver = data.get('extern_receiver') or ()
-            print extern_receiver
             addresses = intern_receiver + tuple(extern_receiver)
 
             # create the mail
             msg = self.create_mail(data.get('message'), data.get('documents'))
-            msg['Subject'] = Header(data.get('subject'), 'iso-8859-1')
+            msg['Subject'] = Header(data.get('subject'), CHARSET)
             sender_address = contact_info.get_email(userid)
             if not sender_address:
                 portal = self.context.portal_url.getPortalObject()
                 sender_address = portal.email_from_address
 
-            msg['From'] = Header(u'%s <%s>' % (
-                    contact_info.describe(userid),
-                    sender_address,
-                    ),
-                                 'iso-8859-1')
+            mail_from = '%s <%s>' % (
+                    contact_info.describe(userid).encode(CHARSET),
+                    sender_address.encode(CHARSET))
 
-            header_to = Header(','.join(addresses), 'iso-8859-1')
+            msg['From'] = Header(mail_from, CHARSET)
+
+            header_to = Header(','.join(addresses), CHARSET)
             msg['To'] = header_to
 
             # send it
-            mh.send(msg, mto=','.join(addresses))
+            mh.send(msg, mfrom=mail_from, mto=','.join(addresses))
 
             # let the user know that the mail was sent
             info = _(u'info_mails_sent', 'Mails sent')
@@ -199,7 +201,7 @@ class SendDocumentForm(form.Form):
         text = '%s\r\n\r\n%s' % (text, docs_links)
         if not isinstance(text, unicode):
             text = text.decode('utf8')
-        msg.attach(MIMEText(text, 'plain', 'iso-8859-1'))
+        msg.attach(MIMEText(text, 'plain', CHARSET))
 
         return msg
 

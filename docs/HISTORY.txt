@@ -5,6 +5,9 @@ Changelog
 2.0b10
 ------
 
+* Fixed UnicodeError that happened when mail FROM contained non-ASCII characters
+  [lgraf]
+
 * Tests now check if the Message is in the Mail
 
 * Removed GS profile dep on CMFEditions default profile because it causes
