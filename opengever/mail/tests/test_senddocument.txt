@@ -16,8 +16,8 @@ imports and general stuff
     >>> from Products.MailHost.interfaces import IMailHost
     >>> import transaction
 
-  	>>> app = layer['app']
-	>>> portal = layer['portal']
+    >>> app = layer['app']
+    >>> portal = layer['portal']
     >>> browser = Browser(app)
     >>> browser.handleErrors = False
 
@@ -30,7 +30,7 @@ portal has to provide ISendableDocsContainer
     >>> alsoProvides(portal, ISendableDocsContainer)
     >>> ISendableDocsContainer.providedBy(portal)
     True
-	>>> transaction.commit()
+    >>> transaction.commit()
 
 login
     >>> browser.open('%s/login_form' % portal.absolute_url())
@@ -45,7 +45,7 @@ Mock MailHost
     >>> sm = getSite().getSiteManager()
     >>> sm.registerUtility(component=mockmailhost,
     ...                    provided=IMailHost)
-	>>> transaction.commit()
+    >>> transaction.commit()
 
 test form
     >>> data = 'paths:list=%s'% '/'.join(doc1.getPhysicalPath())
@@ -71,12 +71,12 @@ Test again (now document have a file)
     >>> mok_file1 = NamedBlobFile(500000*'bla', filename=u'test.txt')
     >>> doc1.file = mok_file1
     >>> data = 'paths:list=%s'% '/'.join(doc1.getPhysicalPath())
-	>>> transaction.commit()
+    >>> transaction.commit()
     >>> browser.open('%s/send_documents' % portal.absolute_url(), data=data)
     >>> browser.getControl(name='form.widgets.subject').value = 'Test Betreff'
     >>> browser.getControl(name='form.widgets.message').value = 'Test Nachricht'
     >>> browser.getControl(name='form.widgets.extern_receiver').value = 'info@4teamwork.ch'
-	
+
 max size to small
     >>> registry = queryUtility(IRegistry)
     >>> reg_proxy = registry.forInterface(ISendDocumentConf)
@@ -95,4 +95,3 @@ max size ok
     2
     >>> 'Test Nachricht' in doc1.MailHost.messages[1]
     True
-    
