@@ -147,6 +147,7 @@ class CreateOpengeverClient(BrowserView):
             options = Object()
             options.config = u'opengever.ogds.base.user-import'
             options.site_root = '/' + form['client_id']
+            options.update_syncstamp = False
             sync_ldap.run_import(self.context, options)
 
             #group import

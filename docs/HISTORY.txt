@@ -5,6 +5,12 @@ Changelog
 2.0b8
 -----
 
+* Disable updating the syncstamp while setup a client.
+  Because we can't update the sync_stamp when the client process is not finished and the plone site not yet exists.
+  Issue #1164 OGDS caching anpassen
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1164
+  [phgross]
+
 * Changed imports of ogds models to new opengever.ogds.models package
   [jbaumann]
 
