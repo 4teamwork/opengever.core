@@ -3,6 +3,7 @@ from collective.elephantvocabulary import wrap_vocabulary
 from five import grok
 from opengever.ogds.base.interfaces import IClientCommunicator
 from opengever.ogds.base.interfaces import IContactInformation
+from opengever.ogds.base.interfaces import ISyncStamp
 from opengever.ogds.base.utils import get_current_client
 from opengever.ogds.base.vocabulary import ContactsVocabulary
 from plone.memoize import ram
@@ -18,25 +19,32 @@ def voc_cachekey(method, self):
     """A cache key for vocabularies which are implemented as grok utilities
        and which do not depend on other parameters.
     """
-    return getattr(self, 'grokcore.component.directive.name')
+    return '%s:%s' % (getattr(self, 'grokcore.component.directive.name'),
+                          getUtility(ISyncStamp).get_sync_stamp())
+
 
 def client_voc_cachekey(method, self):
     """A cache key depending on the vocabulary name and the current client id.
     """
-    return '%s:%s' % (getattr(self, 'grokcore.component.directive.name'),
-                      get_client_id())
+    return '%s:%s:%s' % (getattr(self, 'grokcore.component.directive.name'),
+                      get_client_id(), getUtility(ISyncStamp).get_sync_stamp())
+
 
 def reqclient_voc_cachekey(method, self):
     """A cache key depending on the vocabulary name and the client id in the
        request.
     """
-    return '%s:%s' % (getattr(self, 'grokcore.component.directive.name'),
-                      self.get_client())
+    return '%s:%s:%s' % (
+        getattr(self, 'grokcore.component.directive.name'),
+        self.get_client(),
+        getUtility(ISyncStamp).get_sync_stamp())
+
 
 def generator_to_list(func):
     """Casts a generator object into a tuple. This decorator
     is necessary when memoizing methods which return generator objects.
     """
+
     def caster(*args, **kwargs):
         return list(func(*args, **kwargs))
     return caster
@@ -68,10 +76,6 @@ class UsersVocabularyFactory(grok.GlobalUtility):
                 self.hidden_terms.append(user.userid)
             yield (user.userid,
                    info.describe(user))
-
-
-
-    
 
 
 class UsersAndInboxesVocabularyFactory(grok.GlobalUtility):
@@ -165,7 +169,6 @@ class InboxesVocabularyFactory(UsersAndInboxesVocabularyFactory):
             yield (principal, info.describe(principal))
 
 
-
 class AssignedUsersVocabularyFactory(grok.GlobalUtility):
     """Vocabulary of all users assigned to the current client.
     """
@@ -211,9 +214,9 @@ class ContactsVocabularyFactory(grok.GlobalUtility):
             yield (contact.contactid,
                    info.describe(contact))
 
-
 # TODO: should be renamed to something like
 # ContactsUsersAndInboxesVocabularyFactory
+
 class ContactsAndUsersVocabularyFactory(grok.GlobalUtility):
     """Vocabulary of contacts, users and the inbox of each client.
     """
@@ -406,7 +409,6 @@ class OtherAssignedClientsVocabularyFactory(grok.GlobalUtility):
             if current_client_id != client.client_id:
                 yield (client.client_id,
                        client.title)
-
 
 
 class HomeDossiersVocabularyFactory(grok.GlobalUtility):
