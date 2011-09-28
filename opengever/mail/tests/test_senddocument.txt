@@ -61,7 +61,6 @@ test form
     True
     >>> browser.getControl(name='form.widgets.extern_receiver').value = 'info@4teamwork.ch'
     >>> browser.getControl(name='form.buttons.button_send').click()
-    [u'info@4teamwork.ch']
     >>> len(doc1.MailHost.messages)
     1
     >>> 'Test Nachricht' in doc1.MailHost.messages[0]
@@ -90,7 +89,6 @@ max size ok
     >>> reg_proxy.max_size = 5
     >>> transaction.commit()
     >>> browser.getControl(name='form.buttons.button_send').click()
-    [u'info@4teamwork.ch']
     >>> len(doc1.MailHost.messages)
     2
     >>> 'Test Nachricht' in doc1.MailHost.messages[1]
