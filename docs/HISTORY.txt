@@ -5,6 +5,9 @@ Changelog
 2.0b18
 ------
 
+* Removed unused helperfunction in helper.py
+  [eschmutz]
+
 * Issue #1176 alle translatinos mit from zope.i18n import translate
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1176
   [eschmutz]
