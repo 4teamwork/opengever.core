@@ -89,7 +89,7 @@ def run_import(app, options):
         print "Committing transaction..."
         transaction.commit()
 
-    if len(trans_configs) != 0:
+    if len(trans_configs) != 0 and options.update_syncstamp :
         print "update LDAP SYNC importstamp"
         set_remote_import_stamp(plone)
         transaction.commit()
@@ -107,6 +107,7 @@ def main():
     parser = OptionParser()
     parser.add_option("-D", "--debug", action="store_true", dest="debug", default=False)
     parser.add_option("-c", "--config", dest="config", default=u'opengever.ogds.base.user-import;opengever.ogds.base.group-import')
+    parser.add_option('-u', "--update-syncstamp", dest="update_syncstamp", default=True)
     parser.add_option("-s", "--site-root", dest="site_root", default=u'/Plone')
     (options, args) = parser.parse_args()
 

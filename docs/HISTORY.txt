@@ -14,6 +14,13 @@ Changelog
   added sync_stamp functionality, which allow to invalid the caches after a LDAP synchronisation
   [phgross]
 
+* Added updating syncstamp option to the sync process, because we can't update the syncstamp while we setup a client.
+  Because we can't update the sync_stamp when the client process is not finished and the plone site not yet exists.
+  Issue #1164 OGDS caching anpassen
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1164
+  [phgross]
+
+
 * Changed imports of ogds models to new opengever.ogds.models package
   Removed models, since they are now in opengever.ogds.models
   [jbaumann]
