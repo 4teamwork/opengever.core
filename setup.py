@@ -4,6 +4,11 @@ import os
 version = open('opengever/tasktemplates/version.txt').read().strip()
 maintainer = 'Victor Baumann'
 
+tests_require = [
+    'plone.app.testing',
+    'opengever.task',
+    ]
+
 setup(name='opengever.tasktemplates',
       version=version,
       description="" + \
@@ -45,6 +50,8 @@ setup(name='opengever.tasktemplates',
         'plone.app.lockingbehavior',
         # -*- Extra requirements: -*-
         ],
+      tests_require=tests_require,
+      extras_require = dict(tests=tests_require),
       entry_points="""
       # -*- Entry points: -*-
       [z3c.autoinclude.plugin]
