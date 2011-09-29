@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-2.0b21 (unreleased)
+2.0b21 (2011-09-29)
 -------------------
 
 - Extended Tests for Tasks. It now tests if all_is_closed is true with cancelled tastks
