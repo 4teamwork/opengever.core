@@ -75,6 +75,11 @@ $(function($) {
       client_cfg = config.clients[index-1];
     }
 
+    // If development profile, set client active by default
+    if(config.id == "opengever.examplecontent:0") {
+        client.find('input[name=clients.active:boolean]').attr("checked", "checked");
+    }
+
     if(index) {
       // just created.. need to update
       if(client_cfg && client_cfg.client_id) {

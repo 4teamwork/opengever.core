@@ -5,7 +5,10 @@ Changelog
 2.0b8
 -----
 
-* Added checkbox to choose if client should be activated in OGDS or not
+* Added checkbox to choose if client should be activated in OGDS or not.
+  Defaults:
+  - False for production profiles
+  - True for development profile with example content
   [lgraf]
 
 * Disable updating the syncstamp while setup a client.
