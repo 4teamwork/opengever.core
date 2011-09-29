@@ -196,6 +196,7 @@ class AddForm(BrowserView):
 
         for path in paths:
             template = self.context.restrictedTraverse(path)
+
             deadline = datetime.today()+timedelta(template.deadline)
 
 
@@ -207,7 +208,6 @@ class AddForm(BrowserView):
                         text=template.text,
                         deadline=deadline,
                         )
-
             if template.responsible_client == 'interactive_users':
                 info = getUtility(IContactInformation)
                 responsible_assigned_clients = tuple(
