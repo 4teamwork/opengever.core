@@ -5,6 +5,10 @@ Changelog
 2.0a10
 ------
 
+* Fixed saveReferenceNumberPrefix() event handler - not only store the prefix
+  in the list of issued prefixes, but also assign it to the actual object.
+  [lgraf]
+
 * Issue #1176 alle translatinos mit from zope.i18n import translate
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1176
   [eschmutz]

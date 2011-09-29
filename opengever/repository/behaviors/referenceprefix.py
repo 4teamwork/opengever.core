@@ -80,7 +80,17 @@ class IReferenceNumberPrefixMarker(Interface):
 @grok.subscribe(IReferenceNumberPrefixMarker, IObjectAddedEvent)
 @grok.subscribe(IReferenceNumberPrefixMarker, IObjectModifiedEvent)
 def saveReferenceNumberPrefix(obj, event):
+    """When an object providing IReferenceNumberPrefixMarker (repository
+    folders) gets added or has been modified, make sure it has
+    a unique reference number prefix.
+
+    If necessary, set_number() creates a collision free prefix.
+    """
     parent= aq_parent(aq_inner(obj))
-    
-    PrefixAdapter(parent).set_number(
+
+    # Mark the reference number as issued in the parent's annotations
+    number = PrefixAdapter(parent).set_number(
         obj, IReferenceNumberPrefix(obj).reference_number_prefix)
+
+    # Store the number on the actual object
+    IReferenceNumberPrefix(obj).reference_number_prefix = number
