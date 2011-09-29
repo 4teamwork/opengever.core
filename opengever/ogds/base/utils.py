@@ -60,7 +60,7 @@ def client_id_cachekey(method):
                 context = obj
                 break
 
-    return 'get_client_id:%s' %(context.id)
+    return 'get_client_id:%s' % (context.id)
 
 
 @ram.cache(client_id_cachekey)
@@ -74,8 +74,9 @@ def get_client_id():
 
 
 def client_public_url_cachekey(method):
-    """chackekey for the get_client_public_url,  wich is unique for every plone site.
-    So a setup with multiple opengever sites on one plone instance is possible.
+    """chackekey for the get_client_public_url, wich is unique for every plone
+    site. So a setup with multiple opengever sites on one plone instance is
+    possible.
     """
 
     context = getSite()
@@ -86,7 +87,7 @@ def client_public_url_cachekey(method):
                 context = obj
                 break
 
-    return 'get_client_public_url:%s' %(context.id)
+    return 'get_client_public_url:%s' % (context.id)
 
 
 @ram.cache(client_public_url_cachekey)
