@@ -12,6 +12,7 @@ tests_require = [
     'opengever.contact',
     'ftw.table',
     'ftw.contentmenu',
+    'plone.mocktestcase',
     ]
 
 setup(name='opengever.tasktemplates',
