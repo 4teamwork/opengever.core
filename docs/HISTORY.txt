@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-2.0b10 (unreleased)
+2.0b10 (2011-09-29)
 -------------------
 
 - Fixed UnicodeError that happened when mail FROM contained non-ASCII characters
