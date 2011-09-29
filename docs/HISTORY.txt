@@ -2,61 +2,62 @@ Changelog
 =========
 
 
-2.0b10
-------
+2.0b10 (unreleased)
+-------------------
 
-* Fixed UnicodeError that happened when mail FROM contained non-ASCII characters
+- Fixed UnicodeError that happened when mail FROM contained non-ASCII characters
   [lgraf]
 
-* Tests now check if the Message is in the Mail
+- Tests: check now if the Message is in the Mail
+  [ttschanz]
 
-* Removed GS profile dep on CMFEditions default profile because it causes
+- Removed GS profile dep on CMFEditions default profile because it causes
   policymaps to be purged
   [lgraf]
 
-* changed deprecated grok.CodeView to grok.View
+- changed deprecated grok.CodeView to grok.View
   [eschmutz]
 
-* Set versioning policy for ftw.mail.mail to "Manual", because "Automatic"
+- Set versioning policy for ftw.mail.mail to "Manual", because "Automatic"
   causes bogus versions to be created during migration.
   [lgraf]
 
-* Fixed bug in determining mimeType of attachments
+- Fixed bug in determining mimeType of attachments
   [lgraf]
 
-* Added special content-type guess for word documents wich are saved as octetStream
+- Added special content-type guess for word documents wich are saved as octetStream
   [phgross]
 
-* Enabled versioning for ftw.mail.mail
+- Enabled versioning for ftw.mail.mail
   [lgraf]
 
-* added test-buildout for plone 4.1
+- added test-buildout for plone 4.1
   [eschmutz]
 
-2.0b9
------
+2.0b9 (2011-08-24)
+------------------
 
-* Fix tests
+- Fix tests
   [eschmutz]
 
-* fixed encoding in sortable_author indexer, should always return unicode
+- fixed encoding in sortable_author indexer, should always return unicode
   [phgross]
 
-* adjust extract_attachment functionality, the opengever.document use now NameBlobFiles
+- adjust extract_attachment functionality, the opengever.document use now NameBlobFiles
   [phgross]
 
-*  added sprites for extract_attachments.py and mail.py
+-  added sprites for extract_attachments.py and mail.py
    overrides the original mail-view in ftw.mail.
    [eschmutz]
 
-*  moved tests from collective.testcaselayer to plone.app.testing
+-  moved tests from collective.testcaselayer to plone.app.testing
    [eschmutz]
 
-* Don't transform sortable_author with readable_ogds_author helper anymore - 
+- Don't transform sortable_author with readable_ogds_author helper anymore -
   makes no sense for e-mails.
   [lgraf]
 
-* Issue #1134 Test Gelb 2.0.3: Nicht korrekte Dateiendung beim Extrahieren eines Dokuments mit Umlaut aus Mail
+- Issue #1134 Test Gelb 2.0.3: Nicht korrekte Dateiendung beim Extrahieren eines Dokuments mit Umlaut aus Mail
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1134/
   use get_filename method from ftw.mail.utils, can handle non-ascii characters in the attachment title
   [phgross]
@@ -64,7 +65,7 @@ Changelog
 2.0b8
 -----
 
-* Issue #923 Fehler beim Extrahieren eines Dokuments, welches als Email Attachment an ein Dossier versendet worden ist
+- Issue #923 Fehler beim Extrahieren eines Dokuments, welches als Email Attachment an ein Dossier versendet worden ist
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/923
   Fixed UnicodeError in get_attachment_as_namedfile, work now with unicode and not unicode filenames
   [phgross]
@@ -73,10 +74,10 @@ Changelog
 2.0b7
 -----
 
-* Moved validators from opengever.dossier to opengever.mail to avoid circular dependency
+- Moved validators from opengever.dossier to opengever.mail to avoid circular dependency
   [lgraf]
 
-* Issue #923 Fehler beim Extrahieren eines Dokuments, welches als Email Attachment an ein Dossier versendet worden ist
+- Issue #923 Fehler beim Extrahieren eines Dokuments, welches als Email Attachment an ein Dossier versendet worden ist
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/923
   Fixed UnicodeError in get_attachment_as_namedfile, works now also with attachment titles with non-ascii characters.
   [phgross]
@@ -85,60 +86,60 @@ Changelog
 2.0b6
 -----
 
-* Issue #1071 Ausgewaehltes Dokument wird beim Erstellen einer Weiterleitung nicht respektiert
+- Issue #1071 Ausgewaehltes Dokument wird beim Erstellen einer Weiterleitung nicht respektiert
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1071
   [phgross]
 
-* fixed import of messagefactory (use the own messagefactory)
+- fixed import of messagefactory (use the own messagefactory)
   [phgross]
 
-* Updated Permission-roles
+- Updated Permission-roles
   [ttschanz]
 
-* Disabled icon for ftw.mail.mail content type
+- Disabled icon for ftw.mail.mail content type
   [lgraf]
 
-* Issue #1021 Feedback Fokus: Datum bei Dokument
+- Issue #1021 Feedback Fokus: Datum bei Dokument
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1021/
   remove document_date setter in extract_attachements
   [phgross]
 
-* Issue #984 E-Mail: Extrahieren von Dokumenten. Auswahl Alle, Keine ermoeglichen
+- Issue #984 E-Mail: Extrahieren von Dokumenten. Auswahl Alle, Keine ermoeglichen
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/984
   Select all / none in attachment extraction page
-  [fsprenger] 
+  [fsprenger]
 
-* Issue #983 E-Mail: Extrahieren von Dokumenten. Fehler bei Autor und Dokumentdatum
+- Issue #983 E-Mail: Extrahieren von Dokumenten. Fehler bei Autor und Dokumentdatum
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/983
   Issue #1018 Feedback Fokus: Autor leer lassen
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1018/
   remove document_author setter in extract_attachements
   [phgross]
 
-* Issue #983 E-Mail: Extrahieren von Dokumenten. Fehler bei Autor und Dokumentdatum
+- Issue #983 E-Mail: Extrahieren von Dokumenten. Fehler bei Autor und Dokumentdatum
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/983
   Implemented setting author and date of documents extracted from mails to mail from and date
   [lgraf]
 
-* Issue #923 Fehler beim Extrahieren eines Dokuments, welches als Email Attachment an ein Dossier versendet worden ist
+- Issue #923 Fehler beim Extrahieren eines Dokuments, welches als Email Attachment an ein Dossier versendet worden ist
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/923
   Fixed bug that caused duplicated extension in attachements extracted from mails
   [lgraf]
 
-* Refactoring: Moved send_document.py from opengever.dossier to og.mail
+- Refactoring: Moved send_document.py from opengever.dossier to og.mail
   [lgraf]
 
-* Moved ISendable from opengever.inbox and renamed it to ISendableDocsContainer
+- Moved ISendable from opengever.inbox and renamed it to ISendableDocsContainer
   [lgraf]
 
-* Fixed declaration of behaviors in ftw.mail.mail FTI (purge=False)
+- Fixed declaration of behaviors in ftw.mail.mail FTI (purge=False)
   [lukasg]
 
 
 2.0b5
 -----
 
-* Issue #923 Fehler beim Extrahieren eines Dokuments, welches als Email Attachment an ein Dossier versendet worden ist
+- Issue #923 Fehler beim Extrahieren eines Dokuments, welches als Email Attachment an ein Dossier versendet worden ist
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/923/
   Fixed UnicodeDecodeError when extracting attachments with umlauts in filename
   [lgraf]
@@ -147,15 +148,15 @@ Changelog
 2.0b4
 -----
 
-* Added import step which sets mail_from_address
+- Added import step which sets mail_from_address
   [ttschanz]
 
-* Issue #886 Nach Autor kann nicht sortiert werden
+- Issue #886 Nach Autor kann nicht sortiert werden
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/886/
   added index sortable_author
   [ttschanz]
 
-* Issue #887 Tabbedview: Sortieren nach Spalte "In Bearbeitung" auf Stufe Dokumente in Dossiers blendet Mails aus
+- Issue #887 Tabbedview: Sortieren nach Spalte "In Bearbeitung" auf Stufe Dokumente in Dossiers blendet Mails aus
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/887/
   added checked_out indexer for mails
   [ttschanz]
@@ -164,48 +165,48 @@ Changelog
 2.0b3
 -----
 
-* Prevent ftw.manager from suggesting the dependency opengever.document by
+- Prevent ftw.manager from suggesting the dependency opengever.document by
   adding the dependency in a extras_require.
   [jbaumann]
 
-* Issue #785 Anpassen Erzeugen eines Mail-Objekts bei Mailempfang
+- Issue #785 Anpassen Erzeugen eines Mail-Objekts bei Mailempfang
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/785/
   Fixed receipt_date: Currently returns document_date.
   [phabegger]
 
-* Issue #806 Mail: Default Werte setzen bei Anhaenge extrahieren
+- Issue #806 Mail: Default Werte setzen bei Anhaenge extrahieren
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/806/
   Took over the default values from Parentobject.
   [ttschanz]
 
-* Issue #785 Anpassen Erzeugen eines Mail-Objekts bei Mailempfang
+- Issue #785 Anpassen Erzeugen eines Mail-Objekts bei Mailempfang
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/785/
   Added receipt_date and fixed document_author
   [ttschanz]
 
-* Added ITrashable behavior
+- Added ITrashable behavior
   [ttschanz]
 
 
 2.0b2
 -----
 
-* Issue #785 Anpassen Erzeugen eines Mail-Objekts bei Mailempfang
+- Issue #785 Anpassen Erzeugen eines Mail-Objekts bei Mailempfang
   #785 Anpassen Erzeugen eines Mail-Objekts bei Mailempfang
   Changed document_date to Date the Mail was added
   [ttschanz]
 
-* Fixed circular dependencies by using the IMailInAddressMarker interface for searching
+- Fixed circular dependencies by using the IMailInAddressMarker interface for searching
   the target container when extracting documents.
   [jbaumann]
 
-* Updated install requires.
+- Updated install requires.
   [jbaumann]
 
-* Support extracting mail-attachments in inbox.
+- Support extracting mail-attachments in inbox.
   [jbaumann]
 
-* Issue #561 Anpassung Mail in Dossier importieren
+- Issue #561 Anpassung Mail in Dossier importieren
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/561
   Added new mail workflow.
   Create a reference to the mail when extracting attachments.
@@ -215,7 +216,7 @@ Changelog
 2.0b1
 -----
 
-* remove very old pdb ;-)
+- remove very old pdb ;-)
   [pgross]
 
 2.0a2
@@ -225,11 +226,11 @@ Changelog
 1.0a2
 -----
 
-* Added extract_attachments view
+- Added extract_attachments view
   [jbaumann]
 
 
 1.0
 ---
 
-* initial release
+- initial release
