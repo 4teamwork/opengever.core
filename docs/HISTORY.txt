@@ -2,25 +2,25 @@ Changelog
 =========
 
 
-2.0b11
-------
+2.0b11 (unreleased)
+-------------------
 
-* added test-buildout for plone 4.1
+- added test-buildout for plone 4.1
   [eschmutz]
 
-2.0b10
-------
+2.0b10 (2011-08-24)
+-------------------
 
-* expanded tests
+- expanded tests
   [eschmutz]
 
-* Jenkins-integration
+- Jenkins-integration
   [eschmutz]
 
-* Setup testcase for plone.app.testing
+- Setup testcase for plone.app.testing
   [eschmutz]
 
-* Issue #712 Advanced Search korrigieren und testen
+- Issue #712 Advanced Search korrigieren und testen
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/712
   removed field task_responsible and changed translations
   [eschmutz]
@@ -29,7 +29,7 @@ Changelog
 2.0b9
 -----
 
-* Issue #712 Advanced Search korrigieren und testen
+- Issue #712 Advanced Search korrigieren und testen
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/712
   fixed assigned_client setter, should only set when a task_responsible is selected
   [phgross]
@@ -38,7 +38,7 @@ Changelog
 2.0b8
 -----
 
-* Issue #712 Advanced Search korrigieren und testen
+- Issue #712 Advanced Search korrigieren und testen
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/712
   changed advancedsearch, so that it use now the interfaces for the type selection instead of the portal_type
   advancedsearch works now also for specialdossiers and forwards
@@ -48,7 +48,7 @@ Changelog
 2.0b7
 -----
 
-* Issue #712 Advanced Search korrigieren und testen
+- Issue #712 Advanced Search korrigieren und testen
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/712
   Corrected annoying typo which made search for tasks by responsible unusable.
   [phabegger]
@@ -57,17 +57,17 @@ Changelog
 2.0b6
 -----
 
-* Updated several translations (German).
+- Updated several translations (German).
   [phabegger]
 
 
 2.0b5
 -----
 
-* fixed correct_ref method
+- fixed correct_ref method
   [ttschanz]
 
-* Issue #762 Erweiterte Suche: Suche nach Status fehlt bei Aufgabe
+- Issue #762 Erweiterte Suche: Suche nach Status fehlt bei Aufgabe
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/762/
   fixed bug: Search for task state didn't work.
   [ttschanz]
@@ -75,41 +75,41 @@ Changelog
 2.0b4
 -----
 
-* fixed bug that reference number function was called allways
+- fixed bug that reference number function was called allways
   [ttschanz]
 
 2.0b3
 -----
 
-* Removed Search for Creator.
+- Removed Search for Creator.
   Issue #767 Erweiterte Suche: Nicht nach Ersteller suchen (bei Dokument)
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/767/
   [ttschanz]
 
-* Issue #763 Erweiterte Suche: Suche nach Aktenzeichen umstaendlich
+- Issue #763 Erweiterte Suche: Suche nach Aktenzeichen umstaendlich
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/763/
   [ttschanz]
 
-* Issue #762 Erweiterte Suche: Suche nach Status fehlt bei Aufgabe
+- Issue #762 Erweiterte Suche: Suche nach Status fehlt bei Aufgabe
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/762/
   [ttschanz]
 
 2.0b2
 -----
 
-* fixed searching task_type
+- fixed searching task_type
   [phgross]
 
-* fixed unicodeerrors whenn searching attributes are non-ascii characters
+- fixed unicodeerrors whenn searching attributes are non-ascii characters
   [phgross]
 
-* fixed bugs when searching for filing number, sequence number, crator.
+- fixed bugs when searching for filing number, sequence number, crator.
   [ttschanz]
 
-* fixed bug which appered when searching with only one part of a range was given
+- fixed bug which appered when searching with only one part of a range was given
   [ttschanz]
 
-* fixed bug when searchableText was nothing, a default value was entered
+- fixed bug when searchableText was nothing, a default value was entered
   [ttschanz]
 
 2.0a3
