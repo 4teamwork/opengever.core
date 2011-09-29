@@ -9,7 +9,7 @@ tests_require = [
     'opengever.task',
     'opengever.dossier',
     'opengever.tabbedview',
-    'opengever.contact'
+    'opengever.contact',
     'ftw.table',
     'ftw.contentmenu',
     ]
