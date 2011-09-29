@@ -5,6 +5,9 @@ Changelog
 2.0c7
 -----
 
+* added functional-tests for helper
+  [eschmutz]
+
 * added functional-tests for vocas
   [eschmutz]
 

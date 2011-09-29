@@ -8,7 +8,7 @@ from opengever.tasktemplates.vocabularies import \
 from plone.mocktestcase import MockTestCase
 
 
-class TestTaskTemplatesIntegration(MockTestCase):
+class TestFunctionalVocabularies(MockTestCase):
     """ Functional tests
     """
 
