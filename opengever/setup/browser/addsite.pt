@@ -195,6 +195,12 @@
             <strong class="client_id"></strong>
             <span class="info"></span><br />
             <dl>
+              <dt>Active</dt>
+              <dd>
+                  <input type="checkbox" name="clients.active:boolean"
+                         value="1" />
+                  <span>Set client as 'active' in OGDS</span>
+              </dd>
               <dt>Client ID</dt>
               <dd>
                 <input type="hidden" name="clients.index:records"

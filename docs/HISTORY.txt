@@ -5,6 +5,9 @@ Changelog
 2.0b8
 -----
 
+* Added checkbox to choose if client should be activated in OGDS or not
+  [lgraf]
+
 * Disable updating the syncstamp while setup a client.
   Because we can't update the sync_stamp when the client process is not finished and the plone site not yet exists.
   Issue #1164 OGDS caching anpassen

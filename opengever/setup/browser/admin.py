@@ -166,7 +166,10 @@ class CreateOpengeverClient(BrowserView):
             users_group = session.query(Group).filter_by(groupid=form['group'])[0]
             inbox_group = session.query(Group).filter_by(groupid=form['inbox_group'])[0]
 
+            active = bool(form.get('active', False))
+
             client = Client(form['client_id'],
+                            enabled=active,
                             title=form['title'],
                             ip_address=form['ip_address'],
                             site_url=form['site_url'],
