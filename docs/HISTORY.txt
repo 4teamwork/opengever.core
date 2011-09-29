@@ -5,6 +5,9 @@ Changelog
 2.0c7
 -----
 
+* added functional-tests for vocas
+  [eschmutz]
+
 * added integration-tests
   [eschmutz]
 
