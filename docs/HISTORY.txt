@@ -2,51 +2,51 @@ Changelog
 =========
 
 
-2.0b15
-------
+2.0b15 (unreleased)
+-------------------
 
-* Fixed caching of the get_client_public_url:
+- Fixed caching of the get_client_public_url:
   Implements a correct chache-key which incloud the method name and the site id, which allows a installation with mutlitple plone site on one instance.
   [phgross]
 
-* Issue #1176 alle translatinos mit from zope.i18n import translate
+- Issue #1176 alle translatinos mit from zope.i18n import translate
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1176
   [eschmutz]
 
-* Issue #1164 OGDS caching anpassen
+- Issue #1164 OGDS caching anpassen
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1164
   added sync_stamp functionality, which allow to invalid the caches after a LDAP synchronisation
   [phgross]
 
-* Added updating syncstamp option to the sync process, because we can't update the syncstamp while we setup a client.
+- Added updating syncstamp option to the sync process, because we can't update the syncstamp while we setup a client.
   Because we can't update the sync_stamp when the client process is not finished and the plone site not yet exists.
   Issue #1164 OGDS caching anpassen
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1164
   [phgross]
 
 
-* Changed imports of ogds models to new opengever.ogds.models package
+- Changed imports of ogds models to new opengever.ogds.models package
   Removed models, since they are now in opengever.ogds.models
   [jbaumann]
 
-* Added grok.require to UserDetails
+- Added grok.require to UserDetails
   [eschmutz]
 
-* Changed deprecated grok.CodeView to grok.View
+- Changed deprecated grok.CodeView to grok.View
   [eschmutz]
 
 
-2.0b14
-------
+2.0b14 (2011-08-24)
+-------------------
 
-* Setting transaction isolation level when using SQLite engine.
+- Setting transaction isolation level when using SQLite engine.
   (Needed to make savepoints work properly with SQLite)
   [lgraf]
 
-* added test-buildout for plone 4.1
+- added test-buildout for plone 4.1
   [eschmutz]
 
-* Issue #1040 Mandantenuebergreifende Beteiligung: Anpassung Darstellung
+- Issue #1040 Mandantenuebergreifende Beteiligung: Anpassung Darstellung
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1040
   implements caching for the is_assigned_client method,
   because the method is called on every request (personal_overview, exposator viewlet)
@@ -56,19 +56,19 @@ Changelog
 2.0b13
 ------
 
-* Fix tests
+- Fix tests
   [eschmutz]
 
-* Made sure `principal` is encoded when used in an SA query
+- Made sure `principal` is encoded when used in an SA query
   [lgraf]
 
-* removed decoding section in the user import cfg
+- removed decoding section in the user import cfg
   [phgros]
 
-* elevated the size of a the groupid attribute in the table configuration
+- elevated the size of a the groupid attribute in the table configuration
   [phgross]
 
-* Issue #929 ZEO Clients ueber mehrere dedizierte Server verteilen.
+- Issue #929 ZEO Clients ueber mehrere dedizierte Server verteilen.
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/929/
   added multiple client ip's possibility in the ogds plugin and specific tests
   upgrade queries for sql adjustments
@@ -79,56 +79,56 @@ Changelog
 2.0b12
 ------
 
-* Issue #759 Oracle Konfiguration: collation
+- Issue #759 Oracle Konfiguration: collation
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/759/
   set the collation with a PoolListener on the sqlalchmey engine
   [phgross]
 
-* Issue #1048 Falsche Anzeige von Umlauten im OGDS (Rot 2.03)
+- Issue #1048 Falsche Anzeige von Umlauten im OGDS (Rot 2.03)
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1048/
   [phgross]
 
-* Issue #1047 Bei Anzeige von Benutzern auch die zugehoerigen Gruppen darstellen
+- Issue #1047 Bei Anzeige von Benutzern auch die zugehoerigen Gruppen darstellen
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1047/
   added list_user_groups method to contact_info utility
   display groups in user details view
   [phgross]
 
-* Added Upgrade statements for Oracle
+- Added Upgrade statements for Oracle
   [lgraf]
 
-* added ldap synchronisation ldap panel
+- added ldap synchronisation ldap panel
   [phgross]
 
-* added LDAP groupimport to ldap_import shell script
+- added LDAP groupimport to ldap_import shell script
   [phgross]
 
-* fixed transaction handling in activeuser section used in the ldap import
+- fixed transaction handling in activeuser section used in the ldap import
   [phgross]
 
-* #Issue 759 Oracle Konfiguration: collation
+- #Issue 759 Oracle Konfiguration: collation
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/759/
   [phgross]
 
-* Rebuild OGDS, added groups to the OGDS, because of performance problems
+- Rebuild OGDS, added groups to the OGDS, because of performance problems
   [phgross]
 
-* Issue #1005 OGDS: in Realitaet inaktive Benutzer werden als aktiv angezeigt
+- Issue #1005 OGDS: in Realitaet inaktive Benutzer werden als aktiv angezeigt
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1005/
   Re-implemented import of LDAP users
   Now all OGDS users are first set to inactive, then the ones still contained
   in the LDAP directory are set to active.
   [lgraf]
 
-* Issue # 948 Posteingang an anderen Mandanten weiterleiten
+- Issue # 948 Posteingang an anderen Mandanten weiterleiten
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/948/
   added special vocabulary for Forwardings (InboxesVocabulary)
   [phgross]
 
-* Bash script for autamatically updating OGDS on 0000oglx09.zg.ch
+- Bash script for autamatically updating OGDS on 0000oglx09.zg.ch
   [phabegger]
 
-* Made get_assigned_clients only return exact matches and not raise an exception if
+- Made get_assigned_clients only return exact matches and not raise an exception if
   several clients with the same client_id are found
   [lgraf]
 
@@ -136,51 +136,51 @@ Changelog
 2.0b11
 ------
 
-* Fixed tests - info.list_users() now returns UserDict objects
+- Fixed tests - info.list_users() now returns UserDict objects
   [lgraf]
 
-* Issue #949 Vocabulary "Mandant" alphabetisch sortieren
+- Issue #949 Vocabulary "Mandant" alphabetisch sortieren
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/949
   [jbaumann]
 
-* Fixed import script to correctly detect zope application 'app' object
+- Fixed import script to correctly detect zope application 'app' object
   [lgraf]
 
-* Decode public_name as latin1 since that's the encoding ldap_userfolder uses
+- Decode public_name as latin1 since that's the encoding ldap_userfolder uses
   [lgraf]
 
-* Setup collation for oracle db engine.
+- Setup collation for oracle db engine.
   [tbuchberger]
 
 
 2.0b10
 ------
 
-* Made list_assigned_users() more robust in case group is missing
+- Made list_assigned_users() more robust in case group is missing
   [lgraf]
 
 
 2.0b9
 -----
 
-* Changed cache keys for methods having a single ``principal`` parameter to make sure the cache key is not based on a db object. Untested yet!
+- Changed cache keys for methods having a single ``principal`` parameter to make sure the cache key is not based on a db object. Untested yet!
   [tbuchberger]
 
 
 2.0b8
 -----
 
-* Fixed cache key for ``describe()`` method. Do not use db objects (e.g. brains) as cache keys.
+- Fixed cache key for ``describe()`` method. Do not use db objects (e.g. brains) as cache keys.
   [tbuchberger]
 
-* Corrected table class on user detail view
+- Corrected table class on user detail view
   [fsprenger]
 
 
 2.0b7
 -----
 
-* Added some caching of IContactInformation utility (volatile) and caching also
+- Added some caching of IContactInformation utility (volatile) and caching also
   utils.get_client_id (ram cache).
   [jbaumann]
 
@@ -188,14 +188,14 @@ Changelog
 2.0b6
 -----
 
-* ContactsAndUsersVocabulary: added also a "inbox" term for each active client on
+- ContactsAndUsersVocabulary: added also a "inbox" term for each active client on
   request of Brigitte Schmid by mail in relation with Issue #789 (forwardings).
   [jbaumann]
 
-* Transporter: Provide more infos when transporting a object.
+- Transporter: Provide more infos when transporting a object.
   [jbaumann]
 
-* Disable link for inbox principals, since the inbox is not accessible
+- Disable link for inbox principals, since the inbox is not accessible
   by every user and the link was wrong anyway.
   [jbaumann]
 
@@ -203,60 +203,60 @@ Changelog
 2.0b5
 -----
 
-* Issue #766 Verantwortlicher Dossier: Falsche Auswahl
+- Issue #766 Verantwortlicher Dossier: Falsche Auswahl
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/766
   [jbaumann]
 
-* Fixed encoding problems.
+- Fixed encoding problems.
   [jbaumann]
 
 
 2.0b4
 -----
 
-* Fixed ContactInformation.describe method to not fail on missing userid
+- Fixed ContactInformation.describe method to not fail on missing userid
   [lgraf]
 
-* Translate label of inboxes.
+- Translate label of inboxes.
   [jbaumann]
 
-* Fixed tests: use unicode values in dexterity.
+- Fixed tests: use unicode values in dexterity.
   [jbaumann]
 
 
 2.0b3
 -----
 
-* fixed get_email function, now it works also with zope users
+- fixed get_email function, now it works also with zope users
   [phgross]
 
 
 2.0b2
 -----
 
-* added multi selection autocomplete widget patch
+- added multi selection autocomplete widget patch
   [Jonas Baumann]
 
-* fixed extends path
+- fixed extends path
   [Jonas Baumann]
 
-* Removed "(None)" from describe when using it on a contact without a email.
+- Removed "(None)" from describe when using it on a contact without a email.
   [jbaumann]
 
-* Contact information utility doesn't accept contact objects anymore (not used yet), this solves a circular dependency.
+- Contact information utility doesn't accept contact objects anymore (not used yet), this solves a circular dependency.
   [jbaumann]
 
 
 2.0a3
 -----
 
-* Vocabularies: added some caching
+- Vocabularies: added some caching
   [jbaumann]
 
-* Vocabularies / contact info utlity: optimized vocabularies so that they do not make that much requests any more.
+- Vocabularies / contact info utlity: optimized vocabularies so that they do not make that much requests any more.
   [jbaumann]
 
-* Transporter: Fixed indexing issues by creating a final object modified event after receiving a object.
+- Transporter: Fixed indexing issues by creating a final object modified event after receiving a object.
   [jbaumann]
 
 
