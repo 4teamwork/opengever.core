@@ -33,6 +33,8 @@ class TaskTemplatesFunctionalLayer(PloneSandboxLayer):
         xmlconfig.file('configure.zcml', package=dossier, context=configurationContext)
         from opengever import tabbedview
         xmlconfig.file('configure.zcml', package=tabbedview, context=configurationContext)
+        from opengever import contact
+        xmlconfig.file('configure.zcml', package=contact, context=configurationContext)
         from ftw import table
         xmlconfig.file('configure.zcml', package=table, context=configurationContext)
         from ftw import contentmenu
@@ -45,6 +47,7 @@ class TaskTemplatesFunctionalLayer(PloneSandboxLayer):
         applyProfile(portal, 'opengever.dossier:default')
         applyProfile(portal, 'opengever.ogds.base:default')
         applyProfile(portal, 'opengever.tabbedview:default')
+        applyProfile(portal, 'opengever.contact:default')
         applyProfile(portal, 'ftw.contentmenu:default')
         applyProfile(portal, 'ftw.table:default')
 
