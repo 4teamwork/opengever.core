@@ -5,6 +5,9 @@ Changelog
 2.0c7
 -----
 
+* added integration-tests
+  [eschmutz]
+
 * Issue #1198 Tests opengever.tasktemplates
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1198/view
   added testsetup

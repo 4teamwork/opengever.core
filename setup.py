@@ -7,6 +7,10 @@ maintainer = 'Victor Baumann'
 tests_require = [
     'plone.app.testing',
     'opengever.task',
+    'opengever.dossier',
+    'opengever.tabbedview',
+    'ftw.table',
+    'ftw.contentmenu',
     ]
 
 setup(name='opengever.tasktemplates',

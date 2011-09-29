@@ -11,7 +11,7 @@ from zope.configuration import xmlconfig
 from opengever.globalindex import model
 
 
-class TaskTemplateFunctionalLayer(PloneSandboxLayer):
+class TaskTemplatesFunctionalLayer(PloneSandboxLayer):
     """Layer for integration tests."""
 
     defaultBases = (PLONE_FIXTURE, )
@@ -27,16 +27,26 @@ class TaskTemplateFunctionalLayer(PloneSandboxLayer):
         xmlconfig.file('tests.zcml', package=base, context=configurationContext)
         from opengever import task
         xmlconfig.file('configure.zcml', package=task, context=configurationContext)
-        from opengever import tasktemplate
-        xmlconfig.file('configure.zcml', package=tasktemplate, context=configurationContext)
+        from opengever import tasktemplates
+        xmlconfig.file('configure.zcml', package=tasktemplates, context=configurationContext)
+        from opengever import dossier
+        xmlconfig.file('configure.zcml', package=dossier, context=configurationContext)
+        from opengever import tabbedview
+        xmlconfig.file('configure.zcml', package=tabbedview, context=configurationContext)
+        from ftw import table
+        xmlconfig.file('configure.zcml', package=table, context=configurationContext)
+        from ftw import contentmenu
+        xmlconfig.file('configure.zcml', package=contentmenu, context=configurationContext)
+        xmlconfig.file('overrides.zcml', package=contentmenu, context=configurationContext)
 
     def setUpPloneSite(self, portal):
         applyProfile(portal, 'opengever.task:default')
-        applyProfile(portal, 'opengever.tasktemplate:default')
-        # applyProfile(portal, 'opengever.document:default')
+        applyProfile(portal, 'opengever.tasktemplates:default')
+        applyProfile(portal, 'opengever.dossier:default')
         applyProfile(portal, 'opengever.ogds.base:default')
-        # applyProfile(portal, 'ftw.tabbedview:default')
-        # applyProfile(portal, 'ftw.contentmenu:default')
+        applyProfile(portal, 'opengever.tabbedview:default')
+        applyProfile(portal, 'ftw.contentmenu:default')
+        applyProfile(portal, 'ftw.table:default')
 
         create_sql_tables()
         session = create_session()
@@ -73,9 +83,9 @@ class TaskTemplateFunctionalLayer(PloneSandboxLayer):
         portal['Members'].invokeFactory('Folder', TEST_USER_ID)
 
 
-OPENGEVER_TASKTEMPLATE_FIXTURE = TaskTemplateFunctionalLayer()
-OPENGEVER_TASKTEMPLATE_INTEGRATION_TESTING = FunctionalTesting(
-    bases=(OPENGEVER_TASKTEMPLATE_FIXTURE, ),
-    name="OpengeverTaskTemplate:Integration")
+OPENGEVER_TASKTEMPLATES_FIXTURE = TaskTemplatesFunctionalLayer()
+OPENGEVER_TASKTEMPLATES_INTEGRATION_TESTING = FunctionalTesting(
+    bases=(OPENGEVER_TASKTEMPLATES_FIXTURE, ),
+    name="OpengeverTaskTemplates:Integration")
 
 

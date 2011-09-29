@@ -147,6 +147,7 @@ class AddForm(BrowserView):
             sort_order = sort_order,
             path = path
             )
+
         table_options = {'auto_expand_column':'Title'}
         generator = queryUtility(ITableGenerator, 'ftw.tablegenerator')
         return generator.generate(templates,
