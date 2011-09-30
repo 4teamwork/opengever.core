@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-2.0b16 (unreleased)
+2.0b16 (2011-09-30)
 -------------------
 
 - Do not allow an inactive client to communicate to another client, especially disallow
