@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-2.0b22 (unreleased)
+2.0b22 (2011-09-30)
 -------------------
 
 - Issue #1181 Unused ITransition entfernen und testanpassungen
