@@ -2,67 +2,67 @@ Changelog
 =========
 
 
-2.0b8
------
+2.0b8 (unreleased)
+------------------
 
-* Added checkbox to choose if client should be activated in OGDS or not.
+- Added checkbox to choose if client should be activated in OGDS or not.
   Defaults:
   - False for production profiles
   - True for development profile with example content
   [lgraf]
 
-* Disable updating the syncstamp while setup a client.
+- Disable updating the syncstamp while setup a client.
   Because we can't update the sync_stamp when the client process is not finished and the plone site not yet exists.
   Issue #1164 OGDS caching anpassen
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1164
   [phgross]
 
-* Changed imports of ogds models to new opengever.ogds.models package
+- Changed imports of ogds models to new opengever.ogds.models package
   [jbaumann]
 
 
-2.0b7
------
+2.0b7 (2011-08-24)
+------------------
 
-* Prevent template files from being deleted during site creation
+- Prevent template files from being deleted during site creation
   (Pass file data to field constructor, not file descriptor)
   [lgraf]
 
 2.0b6
 -----
 
-* added special user (ogadmin) in opengever client creation, is used during the standard content creation
+- added special user (ogadmin) in opengever client creation, is used during the standard content creation
   [phgross]
 
-* Rebuild OGDS, added groups to the OGDS, because of performance problems
+- Rebuild OGDS, added groups to the OGDS, because of performance problems
   [phgross]
 
-* Moved import of additional profiles after LDAP setup to avoid violating user constraint
+- Moved import of additional profiles after LDAP setup to avoid violating user constraint
   [lgraf]
 
-* modified install opengever methods - for working with the new table configuration
+- modified install opengever methods - for working with the new table configuration
   [phgross]
 
-* removed yearfolder creation, because the creation is part of the closing mechanism
+- removed yearfolder creation, because the creation is part of the closing mechanism
   [phgross]
 
-* Improved assignment of tree portlets for repository roots (primary and secondary)
+- Improved assignment of tree portlets for repository roots (primary and secondary)
   [lgraf]
 
-* Made assign_portlets method work as upgrade step
+- Made assign_portlets method work as upgrade step
   [lgraf]
 
-* Refactored methods in setuphandlers
+- Refactored methods in setuphandlers
   [lgraf]
 
-* Patching ZMI to display warning if OG client needs upgrading
+- Patching ZMI to display warning if OG client needs upgrading
   [lgraf]
 
 
 2.0b5
 -----
 
-* Issue #820 Baumdarstellung "Abgeschlossene Weiterleitungen"
+- Issue #820 Baumdarstellung "Abgeschlossene Weiterleitungen"
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/820
   Fixed navigation portlet on site creation.
   [jbaumann]
@@ -71,21 +71,21 @@ Changelog
 2.0b4
 -----
 
-* Changed name of added yearfolder.
+- Changed name of added yearfolder.
   [jbaumann]
 
-* Issue #789 Umsetzung Postmodul
+- Issue #789 Umsetzung Postmodul
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/789
   Added a navigation portlet on inbox level, block inherited context portlets.
   Create a year folder on setup.
   [jbaumann]
 
-* Issue #798 Konfiguration Mailhost Zug pro Mandant
+- Issue #798 Konfiguration Mailhost Zug pro Mandant
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/798/
   Created import Step to Load Mailsettings
   [ttschanz]
 
-* Issue #777 Setup OpenGever: Administratoren-Gruppe mit Manager-Rolle
+- Issue #777 Setup OpenGever: Administratoren-Gruppe mit Manager-Rolle
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/777/
   Created import step to Assign the global role to the Group
   [ttschanz]
@@ -93,23 +93,23 @@ Changelog
 2.0b3
 -----
 
-* Fixed problems with language selection.
+- Fixed problems with language selection.
   [jbaumann]
 
 
 2.0b2
 -----
 
-* fixed template import with transmogrifier
+- fixed template import with transmogrifier
   [phgross]
 
 2.0b1
 -----
 
-* Added standard templates from opengever.examplecontent
+- Added standard templates from opengever.examplecontent
   [phgross]
 
-* Fixed name of transmogrify.dexterity.schemaupdater (which was renamed)
+- Fixed name of transmogrify.dexterity.schemaupdater (which was renamed)
   [jbaumann]
 
 
