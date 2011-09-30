@@ -12,8 +12,6 @@ Changelog
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1182/
   [jone]
 
-- Nothing changed yet.
-
 
 2.0b15 (2011-09-29)
 -------------------
