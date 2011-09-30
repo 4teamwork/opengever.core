@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from mocker import ANY
 from opengever.ogds.base.interfaces import IContactInformation
+from opengever.ogds.base.interfaces import ISyncStamp
 from opengever.tasktemplates.vocabularies import interactive_users
 from opengever.tasktemplates.vocabularies import \
     IssuerVocabularyFactory, ResponsibleClientVocabularyFactory,\
@@ -37,6 +38,9 @@ class TestFunctionalVocabularies(MockTestCase):
 
         # Register Contact Information Utility
         self.register_contact_info_utility()
+
+        # Register Sync Stamp Utility
+        self.register_sync_stamp_utility()
 
         # Expected users
         users = ['Responsible',
@@ -111,9 +115,11 @@ class TestFunctionalVocabularies(MockTestCase):
         self.expect(
             mock_context.responsible).result('zopemaster').count(0, None)
 
-        # # Register Contact Information Utility
+        # Register Contact Information Utility
         self.register_contact_info_utility()
 
+        # Register Sync Stamp Utility
+        self.register_sync_stamp_utility()
 
         # Patching context var from ResponsibleClientVocabularyFactory-Object
         VocabFactory = self.mocker.patch(
@@ -143,6 +149,17 @@ class TestFunctionalVocabularies(MockTestCase):
 
         # We must have two entries in voca
         self.assertTrue(check_gen == len(expected))
+
+    def register_sync_stamp_utility(self):
+        """ Register the IContactInformation utility
+        """
+
+        # Register Sync Stamp Utility
+        mock_sync_stamp = self.mocker.mock()
+        self.expect(
+            mock_sync_stamp.get_sync_stamp()).result('').count(0, None)
+
+        self.mock_utility(mock_sync_stamp, ISyncStamp, name=u"")
 
     def register_contact_info_utility(self):
         """ Register the IContactInformation utility
