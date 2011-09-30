@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-2.0b18 (unreleased)
+2.0b18 (2011-09-30)
 -------------------
 
 - Removed unused helperfunction in helper.py
