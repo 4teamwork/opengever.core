@@ -2,8 +2,8 @@ Changelog
 =========
 
 
-2.0a10
-------
+2.0a10 (unreleased)
+-------------------
 
 * Fixed saveReferenceNumberPrefix() event handler - not only store the prefix
   in the list of issued prefixes, but also assign it to the actual object.
@@ -24,8 +24,8 @@ Changelog
 
 
 
-2.0a9
------
+2.0a9 (2011-08-24)
+------------------
 
 * Tests now work with plone.app.testing
   [ttschanz]
