@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-2.0b8 (unreleased)
+2.0b8 (2011-09-30)
 ------------------
 
 - Added checkbox to choose if client should be activated in OGDS or not.
