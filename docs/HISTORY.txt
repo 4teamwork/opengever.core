@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-2.0a4 (unreleased)
+2.0a4 (2011-09-30)
 ------------------
 
 - #1165 UnicodeDecodeError im opengever.trash
