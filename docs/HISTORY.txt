@@ -3,7 +3,7 @@ Changelog
 
 
 2.0a4 (unreleased)
------
+------------------
 
 - #1165 UnicodeDecodeError im opengever.trash
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1165
@@ -15,8 +15,9 @@ Changelog
 - added test-buildout for plone 4.1
   [eschmutz]
 
+
 2.0a3 (2011-07-13)
------
+------------------
 
 - added special handling for calling the trash view without selecting any items
   [phgross]
@@ -30,6 +31,7 @@ Changelog
 
 - fixed extends path
   [jbaumann]
+
 
 2.0a2
 -----
