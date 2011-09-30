@@ -2,32 +2,32 @@ Changelog
 =========
 
 
-2.0c7
------
+2.0c7 (unreleased)
+------------------
 
-* added functional-tests for helper
+- added functional-tests for helper
   [eschmutz]
 
-* added functional-tests for vocas
+- added functional-tests for vocas
   [eschmutz]
 
-* added integration-tests
+- added integration-tests
   [eschmutz]
 
-* Issue #1198 Tests opengever.tasktemplates
+- Issue #1198 Tests opengever.tasktemplates
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1198/view
   added testsetup
   [eschmutz]
 
-* Issue #1155 Standardablauf: Fehler beim Feld 'Auftragnehmer' im Editformular
+- Issue #1155 Standardablauf: Fehler beim Feld 'Auftragnehmer' im Editformular
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1155
   [jbaumann]
 
 
-2.0c6
------
+2.0c6 (2011-08-24)
+------------------
 
-* Issue #709 Korrekturen Standardablauf
+- Issue #709 Korrekturen Standardablauf
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/709
   fixed ResponsibleVocabularyFactory, the interactive_users shouldn't get the UsersAndInboxesVocabulary
   [phgross]
@@ -36,26 +36,26 @@ Changelog
 2.0c5
 -----
 
-* Using icon_expr instead of content_icon
+- Using icon_expr instead of content_icon
   [lgraf]
 
-* Removed content_icons and icon_exprs - now done with sprites
+- Removed content_icons and icon_exprs - now done with sprites
   [lgraf]
 
-* Using new readable_date helper from opengever.tabbedview
+- Using new readable_date helper from opengever.tabbedview
   [lgraf]
 
 
 2.0c4
 -----
 
-* added localization to opengever.tasktemplate view
+- added localization to opengever.tasktemplate view
   [ttschanz]
 
 2.0c3
 -----
 
-* Issue #709 Korrekturen Standardablauf
+- Issue #709 Korrekturen Standardablauf
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/709/
   Wizard: Fixed toggling of save button
   Wizard: Use checkboxes for selecting task templates
@@ -69,24 +69,24 @@ Changelog
 2.0c2
 -----
 
-* Removed pdb import
+- Removed pdb import
   [jbaumann]
 
-* changed template that it looks like og.task
+- changed template that it looks like og.task
   [Timon Tschanz]
 
 
 2.0c1
 -----
 
-* Made tasktemplate wizard work again
+- Made tasktemplate wizard work again
   [jbaumann]
 
 
 2.0a3
 -----
 
-* enable locking behavior
+- enable locking behavior
   [jbaumann]
 
 
