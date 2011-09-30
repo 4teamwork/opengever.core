@@ -2,8 +2,8 @@ Changelog
 =========
 
 
-2.0b22
-------
+2.0b22 (unreleased)
+-------------------
 
 * Issue #1181 Unused ITransition entfernen und testanpassungen
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1181
@@ -16,8 +16,8 @@ Changelog
 * changed deprecated grok.CodeView to grok.View
   [eschmutz]
 
-2.0b21
-------
+2.0b21 (2011-08-25)
+-------------------
 
 * fixed task globalindex reindexing in the direct_response functionality
   [phgross]
