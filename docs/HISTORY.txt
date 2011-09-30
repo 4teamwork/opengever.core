@@ -5,6 +5,13 @@ Changelog
 2.0b16 (unreleased)
 -------------------
 
+- Do not allow an inactive client to communicate to another client, especially disallow
+  to create and assign tasks from an inactive client to an active client. The inactive
+  client should be isolated.
+  Issue #1182 opengever.setup: Erweiterung um aktiven / inaktiven Mandant
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1182/
+  [jone]
+
 - Nothing changed yet.
 
 

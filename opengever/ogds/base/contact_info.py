@@ -7,6 +7,7 @@ from opengever.ogds.base.interfaces import IContactInformation, IUser
 from opengever.ogds.base.interfaces import ISyncStamp
 from opengever.ogds.base.utils import brain_is_contact, get_client_id
 from opengever.ogds.base.utils import create_session
+from opengever.ogds.base.utils import get_current_client
 from opengever.ogds.models.client import Client
 from opengever.ogds.models.group import Group
 from opengever.ogds.models.user import User
@@ -260,6 +261,12 @@ class ContactInformation(grok.GlobalUtility):
     def get_clients(self):
         """Returns a list of all enabled clients.
         """
+
+        # If the current client is not enabled, we should not be able to
+        # assign something to another client or interact in any way with
+        # another client. This client is completely isolated.
+        if not get_current_client().enabled:
+            return []
 
         return self._clients_query().filter_by(enabled=True).order_by(
             Client.title).all()
