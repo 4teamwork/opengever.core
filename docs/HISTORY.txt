@@ -2,33 +2,33 @@ Changelog
 =========
 
 
-2.0a4
+2.0a4 (unreleased)
 -----
 
-* #1165 UnicodeDecodeError im opengever.trash
+- #1165 UnicodeDecodeError im opengever.trash
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1165
   [ttschanz]
 
-* changed deprecated grok.CodeView to grok.View
+- changed deprecated grok.CodeView to grok.View
   [eschmutz]
 
-* added test-buildout for plone 4.1
+- added test-buildout for plone 4.1
   [eschmutz]
 
-2.0a3
+2.0a3 (2011-07-13)
 -----
 
-* added special handling for calling the trash view without selecting any items
+- added special handling for calling the trash view without selecting any items
   [phgross]
 
-* Issue #1051 Fehler bzw. Anpassung im Papierkorb des Dossiers/Subdossiers
+- Issue #1051 Fehler bzw. Anpassung im Papierkorb des Dossiers/Subdossiers
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1051/
   [phgross]
 
-* updated testsetup, so that it works with new plone.app.testing version
+- updated testsetup, so that it works with new plone.app.testing version
   [phgross]
 
-* fixed extends path
+- fixed extends path
   [jbaumann]
 
 2.0a2
@@ -50,5 +50,5 @@ Changelog
 1.0a1
 -----
 
-* Initial release
+- Initial release
 
