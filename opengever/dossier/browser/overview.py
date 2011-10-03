@@ -28,15 +28,15 @@ class DossierOverview(grok.View, OpengeverTab):
 
     def boxes(self):
         if not self.context.show_subdossier():
-            items = [[dict(id = 'newest_tasks', content=self.tasks()),
+            items = [[dict(id = 'newest_tasks', content=self.tasks(), href='tasks'),
                       dict(id = 'participants', content=self.sharing())],
-                     [dict(id = 'newest_documents', content=self.documents()),
+                     [dict(id = 'newest_documents', content=self.documents(), href='documents'),
                       dict(id = 'description', content=self.description), ]]
         else:
             items = [[dict(id = 'subdossiers', content=self.subdossiers()),
-                      dict(id = 'newest_tasks', content=self.tasks()),
+                      dict(id = 'newest_tasks', content=self.tasks(), href='tasks'),
                       dict(id = 'participants', content=self.sharing())],
-                     [dict(id = 'newest_documents', content=self.documents()),
+                     [dict(id = 'newest_documents', content=self.documents(), href='documents'),
                       dict(id = 'description', content=self.description), ]]
         return items
 

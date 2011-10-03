@@ -5,7 +5,10 @@ Changelog
 2.0b22 (unreleased)
 -------------------
 
-- Nothing changed yet.
+- Fixed morelinks(show all link) for the boxes in the dossiers overview.
+  Issue #1201 Dossier/Uebersicht, Link "Alle anzeigen" auf Dokumentenuebersicht umleiten
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1201
+  [phgross]
 
 
 2.0b21 (2011-09-29)

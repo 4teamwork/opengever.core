@@ -34,7 +34,10 @@
                     </li>
 
                     <li class="moreLink">
-                        <a tal:attributes="href string:#${box/id}" i18n:translate="">show all</a>
+                        <a
+                            tal:attributes="href python: box.get('href', None) and '#%s' % box.get('href') or '#%s' % box.get('id')"
+                            i18n:translate="">
+                        show all</a>
                     </li>
                 </ul>
                 <span tal:condition="not: items" i18n:translate="no_content" />
