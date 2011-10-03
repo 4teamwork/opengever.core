@@ -1,4 +1,7 @@
-from opengever.ogds.base.ldap_import.import_stamp import set_remote_import_stamp
+from opengever.ogds.base.ldap_import.import_stamp \
+    import set_remote_import_stamp
+from Products.statusmessages.interfaces import IStatusMessage
+from opengever.ogds.base.ldap_import.import_stamp import DICTSTORAGE_SYNC_KEY
 from collective.transmogrifier.transmogrifier import Transmogrifier
 from five import grok
 from Products.CMFPlone.interfaces import IPloneSiteRoot
@@ -6,6 +9,10 @@ import ldap
 import time
 import transaction
 from time import strftime
+from zope.component import getUtility
+from opengever.ogds.base.interfaces import ISyncStamp
+from ftw.dictstorage.interfaces import IDictStorage
+from datetime import datetime
 
 
 class LDAPControlPanel(grok.View):
@@ -15,6 +22,18 @@ class LDAPControlPanel(grok.View):
     grok.name('ldap_controlpanel')
     grok.context(IPloneSiteRoot)
     grok.require('cmf.ManagePortal')
+
+    def get_local_sync_stamp(self):
+        """Return the current local sync stamp
+        which is used by the different cachekeys"""
+
+        return getUtility(ISyncStamp).get_sync_stamp()
+
+    def get_db_sync_stamp(self):
+        storage = IDictStorage(self.context)
+        timestamp = datetime.now().isoformat()
+        storage.get(DICTSTORAGE_SYNC_KEY)
+        return timestamp
 
 
 class UserSyncView(grok.View):
@@ -50,11 +69,11 @@ class UserSyncView(grok.View):
         try:
             ldap_conn.search_s(ldap_folder.users_base, ldap.SCOPE_SUBTREE)
         except ldap.LDAPError, e:
-            return "LDAP is not reachable. Couldn't start Group import. LDAPError: %s" %(e)
+            return "LDAP is not reachable. \
+                Couldn't start Group import. LDAPError: %s" % (e)
         now = time.clock()
 
         transmogrifier = Transmogrifier(self.context)
-
 
         log("Start user import")
         transmogrifier(self.configuration)
@@ -81,3 +100,23 @@ class GroupSyncView(UserSyncView):
     grok.require('cmf.ManagePortal')
 
     configuration = 'opengever.ogds.base.group-import'
+
+
+class ResetStampView(grok.View):
+    """A view wich reset the actual syncstamp with a actual stamp
+    on every client registered in the ogds """
+
+    grok.name('reset_syncstamp')
+    grok.context(IPloneSiteRoot)
+    grok.require('cmf.ManagePortal')
+
+    def render(self):
+        set_remote_import_stamp(self.context)
+        IStatusMessage(self.context.REQUEST).addStatusMessage(
+            u"Successfully reset the Syncstamp on every client", "info")
+
+        url = self.context.REQUEST.environ.get('HTTP_REFERER')
+        if not url:
+            url = self.context.absolute_url()
+
+        return self.context.REQUEST.RESPONSE.redirect(url)

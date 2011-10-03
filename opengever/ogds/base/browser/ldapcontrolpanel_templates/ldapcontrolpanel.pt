@@ -30,6 +30,23 @@
                 <tr>
             </tbody>
         </table>
+        <h2>Sync stamp:</h2>
+        <table class="listing">
+            <thead>
+                <tr>
+                    <td>Current syncstamp local</td>
+                    <td>Current syncstamp from OGDS</td>
+                    <td>Reset</td>
+                <tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td tal:content="view/get_local_sync_stamp" ></td>
+                    <td tal:content="view/get_db_sync_stamp" ></td>
+                    <td><a tal:attributes="href string:${portal_url}/@@reset_syncstamp" href="">Reset SyncStamp</a></td>
+                <tr>
+            </tbody>
+        </table>
 
         <div tal:replace="structure provider:plone.belowcontentbody" />
       </tal:main-macro>
