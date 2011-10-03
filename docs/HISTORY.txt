@@ -5,6 +5,9 @@ Changelog
 2.0c8 (unreleased)
 ------------------
 
+- added more tests for form
+  [eschmutz]
+
 - added functional-tests for templates
   [eschmutz]
 
