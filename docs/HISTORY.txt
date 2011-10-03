@@ -5,7 +5,9 @@ Changelog
 2.0b16 (unreleased)
 -------------------
 
-- Nothing changed yet.
+- Added resolve_oguid view redirecting to a specified oguid.
+  Usage: platform/resolve_oguid?oguid=client:intid
+  [jone]
 
 
 2.0b15 (2011-09-29)
