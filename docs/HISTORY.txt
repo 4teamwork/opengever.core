@@ -11,6 +11,9 @@ Changelog
 2.0c7 (2011-09-30)
 ------------------
 
+- added functional-tests for templates
+  [eschmutz]
+
 - added functional-tests for form
   [eschmutz]
 
