@@ -55,7 +55,7 @@ msgstr "Folgende Elemente konnten nicht verschoben werden: ${failedObjects}"
 
 #: ./opengever/dossier/move_items.py:132
 msgid "Failed to copy following objects: ${failedObjects}                        . Locket via WebDAV"
-msgstr "Folgende Elemente konnten nicht verschoben werden: ${failedObjects}. Durch einen anderen Benutzer gesperrt"
+msgstr "Folgende Elemente sind durch einen anderen Benutzer gesperrt und konnten nicht verschoben werden: ${failedObjects}."
 
 #: ./opengever/dossier/archive.py:201
 msgid "Filing Prefix is required"

@@ -5,6 +5,11 @@ Changelog
 2.0b22 (unreleased)
 -------------------
 
+- Issue #1177 move_items ergibt wenn Objekte per WEBDav gesperrt sind.
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1177
+  changed translation for error-message
+  [eschmutz]
+
 - Fixed morelinks(show all link) for the boxes in the dossiers overview.
   Issue #1201 Dossier/Uebersicht, Link "Alle anzeigen" auf Dokumentenuebersicht umleiten
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1201
