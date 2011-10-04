@@ -6,11 +6,18 @@ Changelog
 -------------------
 
 - Removed mail_settings Importstep it isnt needed anymore
-  #1204 Absender E-Mail Addresse anpassen 
+  #1204 Absender E-Mail Addresse anpassen
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1204
   [ttschanz]
 
-- Added fallback for the sortable_author indexer, when no author is given. It should return a empty string instead of None, because that's not sortable
+- fixed sortable_author indexer for mails:
+  return now the returned value of the document_author method not just the indexerobject.
+  Issue #1215 Dokumentenauflistung: sortieren nach Autor dropt Mails
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1215/view
+  [phgross]
+
+- Added fallback for the sortable_author indexer, when no author is given. It should return a
+  empty string instead of None, because that's not sortable
   [phgross]
 
 

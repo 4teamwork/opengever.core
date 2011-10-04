@@ -41,7 +41,8 @@ def sortable_author(obj):
     """Return the normalized author name for sortable_author indexer.
     For mails, this currently equals the document_author.
     """
-    author = document_author(obj)
+
+    author = document_author(obj)()
     if author:
         return author.decode('utf8')
     else:
