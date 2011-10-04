@@ -3,7 +3,11 @@ import os
 
 version = open('opengever/journal/version.txt').read().strip()
 maintainer = 'Jonas Baumann'
-
+tests_require = ['ftw.table',
+                 'ftw.tabbedview',
+                 'ftw.journal',
+                 'opengever.ogds.base',
+                 'plone.app.testing',]
 setup(name='opengever.journal',
       version=version,
       description="Opengever Journal integrates ftw.journal (Maintainer: %s)" % \
@@ -43,6 +47,8 @@ setup(name='opengever.journal',
         'plone.app.versioningbehavior',
         # -*- Extra requirements: -*-
         ],
+      tests_require=tests_require,
+      extras_require = dict(tests=tests_require),
       entry_points="""
       # -*- Entry points: -*-
       [z3c.autoinclude.plugin]

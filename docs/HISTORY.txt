@@ -5,7 +5,8 @@ Changelog
 2.0a12 (unreleased)
 -------------------
 
-- Nothing changed yet.
+- added testsetup for jenkins
+  [eschmutz]
 
 
 2.0a11 (2011-09-29)
