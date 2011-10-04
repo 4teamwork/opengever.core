@@ -61,7 +61,7 @@ class TestTaskTemplatesIntegration(unittest.TestCase):
             issuer='responsible',
             responsible_client='interactive_users',
             deadline=7,
-            responsible='current_user',)
+            responsible='current_user', )
 
         template2 = create_testobject(
             template_folder_1,
@@ -73,7 +73,7 @@ class TestTaskTemplatesIntegration(unittest.TestCase):
             issuer='responsible',
             responsible_client='zopemaster',
             deadline=7,
-            responsible='current_user',)
+            responsible='current_user', )
 
         template3 = create_testobject(
             template_folder_1,
@@ -85,7 +85,7 @@ class TestTaskTemplatesIntegration(unittest.TestCase):
             issuer='responsible',
             responsible_client='interactive_users',
             deadline=7,
-            responsible='responsible',)
+            responsible='responsible', )
 
         # Activate folder 1
         workflow.doActionFor(template_folder_1,
@@ -110,7 +110,7 @@ class TestTaskTemplatesIntegration(unittest.TestCase):
 
         # Activate folder 2
         workflow.doActionFor(template_folder_2,
-                             'tasktemplatefolder-transition-inactiv-activ',)
+                             'tasktemplatefolder-transition-inactiv-activ', )
 
         # Now we can see both
         self.assertTrue(

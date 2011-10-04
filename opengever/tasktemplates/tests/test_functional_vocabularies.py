@@ -191,6 +191,7 @@ class TestFunctionalVocabularies(MockTestCase):
         self.expect(
             mock_contact_info.list_contacts()).result([]).count(0, None)
         self.expect(
-            mock_contact_info.list_assigned_users(client_id=ANY)).result([mock_contact1]).count(0, None)
+            mock_contact_info.list_assigned_users(
+                client_id=ANY)).result([mock_contact1]).count(0, None)
 
         self.mock_utility(mock_contact_info, IContactInformation, name=u"")

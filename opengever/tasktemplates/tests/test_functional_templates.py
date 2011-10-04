@@ -13,5 +13,6 @@ class TestFunctionalTemplates(MockTestCase):
 
         self.replay()
 
-        self.assertEquals('preselected_yes', preselected_helper(mock_context, True))
+        self.assertEquals(
+            'preselected_yes', preselected_helper(mock_context, True))
         self.assertEquals('', preselected_helper(mock_context, False))

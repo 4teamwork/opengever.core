@@ -25,7 +25,8 @@ class TestFunctionalHelper(MockTestCase):
         mock_context = self.mocker.mock()
 
         # Patch
-        patch_ogds_author = self.mocker.replace('opengever.tabbedview.helper.readable_ogds_author')
+        patch_ogds_author = self.mocker.replace(
+            'opengever.tabbedview.helper.readable_ogds_author')
         self.expect(patch_ogds_author(ANY, ANY)).result('OGDS User')
 
         self.replay()

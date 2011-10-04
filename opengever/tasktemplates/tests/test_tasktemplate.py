@@ -103,7 +103,7 @@ class TestTaskTemplatesIntegration(unittest.TestCase):
             issuer='responsible',
             responsible_client='interactive_users',
             deadline=7,
-            responsible='current_user',)
+            responsible='current_user', )
 
 
         transaction.commit()

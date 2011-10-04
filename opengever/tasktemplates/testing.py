@@ -24,22 +24,38 @@ class TaskTemplatesFunctionalLayer(PloneSandboxLayer):
 
         setuphandlers.setup_scriptable_plugin = lambda *a, **kw: None
 
-        xmlconfig.file('tests.zcml', package=base, context=configurationContext)
+        xmlconfig.file(
+            'tests.zcml', package=base, context=configurationContext)
         from opengever import task
-        xmlconfig.file('configure.zcml', package=task, context=configurationContext)
+        xmlconfig.file(
+            'configure.zcml', package=task, context=configurationContext)
         from opengever import tasktemplates
-        xmlconfig.file('configure.zcml', package=tasktemplates, context=configurationContext)
+        xmlconfig.file(
+            'configure.zcml',
+            package=tasktemplates, context=configurationContext)
         from opengever import dossier
-        xmlconfig.file('configure.zcml', package=dossier, context=configurationContext)
+        xmlconfig.file(
+            'configure.zcml',
+            package=dossier, context=configurationContext)
         from opengever import tabbedview
-        xmlconfig.file('configure.zcml', package=tabbedview, context=configurationContext)
+        xmlconfig.file(
+            'configure.zcml',
+            package=tabbedview, context=configurationContext)
         from opengever import contact
-        xmlconfig.file('configure.zcml', package=contact, context=configurationContext)
+        xmlconfig.file(
+            'configure.zcml',
+            package=contact, context=configurationContext)
         from ftw import table
-        xmlconfig.file('configure.zcml', package=table, context=configurationContext)
+        xmlconfig.file(
+            'configure.zcml',
+            package=table, context=configurationContext)
         from ftw import contentmenu
-        xmlconfig.file('configure.zcml', package=contentmenu, context=configurationContext)
-        xmlconfig.file('overrides.zcml', package=contentmenu, context=configurationContext)
+        xmlconfig.file(
+            'configure.zcml',
+            package=contentmenu, context=configurationContext)
+        xmlconfig.file(
+            'overrides.zcml',
+            package=contentmenu, context=configurationContext)
 
     def setUpPloneSite(self, portal):
         applyProfile(portal, 'opengever.task:default')
@@ -74,14 +90,14 @@ class TaskTemplatesFunctionalLayer(PloneSandboxLayer):
                             'group': 'og_mandant2_users',
                             'inbox_group': 'og_mandant2_inbox'})
 
-        _create_example_user(session, portal, TEST_USER_ID,{
+        _create_example_user(session, portal, TEST_USER_ID, {
             'firstname': 'Test',
             'lastname': 'User',
             'email': 'test.user@local.ch',
             'email2': 'test_user@private.ch'},
-            ('og_mandant1_users','og_mandant1_inbox', 'og_mandant2_users'))
+            ('og_mandant1_users', 'og_mandant1_inbox', 'og_mandant2_users', ))
 
-        _create_example_user(session, portal, SITE_OWNER_NAME,{
+        _create_example_user(session, portal, SITE_OWNER_NAME, {
             'firstname': 'Site',
             'lastname': 'Owner',
             'email': 'site.owner@local.ch',
@@ -97,5 +113,3 @@ OPENGEVER_TASKTEMPLATES_FIXTURE = TaskTemplatesFunctionalLayer()
 OPENGEVER_TASKTEMPLATES_INTEGRATION_TESTING = FunctionalTesting(
     bases=(OPENGEVER_TASKTEMPLATES_FIXTURE, ),
     name="OpengeverTaskTemplates:Integration")
-
-
