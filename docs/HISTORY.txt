@@ -5,7 +5,11 @@ Changelog
 2.0b18 (unreleased)
 -------------------
 
-- Nothing changed yet.
+- Added fallback and correct error handling, for given objects wich aren't documents,
+  to the checkin_documents view.
+  Issue #1207 checkin_documents view ergibt Fehler, wenn auch Mails ausgewaehlt wurden.
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1207/
+  [phgross]
 
 
 2.0b17 (2011-09-29)

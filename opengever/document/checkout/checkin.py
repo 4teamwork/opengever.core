@@ -15,7 +15,6 @@ from zope.component import getMultiAdapter
 from zope.interface import Interface
 
 
-
 class ICheckinCommentFormSchema(Interface):
     """ Form schema for entering a journal comment in checkin procedure
     """
@@ -47,24 +46,32 @@ class CheckinCommentForm(form.Form):
 
         data, errors = self.extractData()
 
-        if len(errors)==0:
+        if len(errors) == 0:
             # check in each document
             for obj in self.objects:
-                manager = getMultiAdapter((obj, obj.REQUEST),
-                                          ICheckinCheckoutManager)
+                if IDocumentSchema.providedBy(obj):
+                    manager = getMultiAdapter((obj, obj.REQUEST),
+                                              ICheckinCheckoutManager)
 
-                if not manager.is_checkin_allowed():
-                    msg = _('Could not check in document ${title}',
-                            mapping=dict(title=obj.Title()))
-                    IStatusMessage(self.request).addStatusMessage(
-                        msg, type='error')
+                    if not manager.is_checkin_allowed():
+                        msg = _(u'Could not check in document ${title}',
+                                mapping=dict(title=obj.Title()))
+                        IStatusMessage(self.request).addStatusMessage(
+                            msg, type='error')
+
+                    else:
+                        manager.checkin(data['comment'])
+                        msg = _(u'Checked in: ${title}',
+                                mapping=dict(title=obj.Title()))
+                        IStatusMessage(self.request).addStatusMessage(
+                            msg, type='info')
 
                 else:
-                    manager.checkin(data['comment'])
-                    msg = _('Checked in: ${title}',
-                            mapping=dict(title=obj.Title()))
+                    msg = _(
+                        u'Could not check in ${title}, it is not a document.',
+                        mapping=dict(title=obj.Title().decode('utf-8')))
                     IStatusMessage(self.request).addStatusMessage(
-                        msg, type='info')
+                        msg, type='error')
 
             # redirect to dossier
             dossier = self.context
@@ -103,11 +110,12 @@ class CheckinCommentForm(form.Form):
         tabbed view
         """
         catalog = self.context.portal_catalog
+
         def lookup(path):
             query = {
-                'path' : {
-                    'query' : path,
-                    'depth' : 0,
+                'path': {
+                    'query': path,
+                    'depth': 0,
                     }
                 }
             return catalog(query)[0].getObject()
