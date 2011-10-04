@@ -5,6 +5,11 @@ Changelog
 2.0b16 (unreleased)
 -------------------
 
+- #1171 Feedback aus Pilotphase: Kopiertes Dokument einfügen - falscher Reiter
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1171
+  object_paste now tries to guess the right tab
+  [ttschanz]
+
 - Added resolve_oguid view redirecting to a specified oguid.
   Usage: platform/resolve_oguid?oguid=client:intid
   [jone]
