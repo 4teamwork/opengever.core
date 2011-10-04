@@ -4,7 +4,7 @@ from ftw.mail import utils
 from ftw.mail.mail import IMail
 from plone.indexer import indexer
 
-#indexes
+
 @indexer(IMail)
 def document_author(obj):
     """Return the sender address for the indexer document_author."""
