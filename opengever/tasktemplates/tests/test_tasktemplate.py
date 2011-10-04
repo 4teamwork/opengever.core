@@ -9,6 +9,12 @@ from zope.component import queryUtility
 from zope.event import notify
 from zope.lifecycleevent import ObjectCreatedEvent, ObjectAddedEvent
 import unittest2 as unittest
+from plone.testing.z2 import Browser
+from plone.app.testing import TEST_USER_NAME, TEST_USER_PASSWORD
+from opengever.ogds.base.interfaces import IClientConfiguration
+from plone.registry.interfaces import IRegistry
+from zope.component import getUtility
+import transaction
 
 
 def create_testobject(parent, ptype, **kwargs):
@@ -72,3 +78,54 @@ class TestTaskTemplatesIntegration(unittest.TestCase):
         self.assertTrue(
             'opengever_tasktemplate_workflow' in workflow.getWorkflowsFor(
                 'opengever.tasktemplates.tasktemplate')[0].getId())
+
+    def test_view(self):
+
+        portal = self.layer['portal']
+
+        # Set client-name in registry
+        getUtility(IRegistry).forInterface(
+            IClientConfiguration).client_id = u'plone'
+
+        # Folders and templates
+        template_folder_1 = create_testobject(
+            portal,
+            'opengever.tasktemplates.tasktemplatefolder',
+            title='TaskTemplateFolder 1')
+
+        template1 = create_testobject(
+            template_folder_1,
+            'opengever.tasktemplates.tasktemplate',
+            title='TaskTemplate 1',
+            text='Test Text',
+            preselected=True,
+            task_type='unidirectional_by_value',
+            issuer='responsible',
+            responsible_client='interactive_users',
+            deadline=7,
+            responsible='current_user',)
+
+
+        transaction.commit()
+        browser = self.get_browser()
+        browser.open('%s' % template1.absolute_url())
+
+        # Check the content
+        self.assertTrue('TaskTemplate 1' in browser.contents)
+
+    def get_browser(self):
+        """Return logged in browser
+        """
+        # Create browser an login
+        portal_url = self.layer['portal'].absolute_url()
+        browser = Browser(self.layer['app'])
+        browser.open('%s/login_form' % portal_url)
+        browser.getControl(name='__ac_name').value = TEST_USER_NAME
+        browser.getControl(name='__ac_password').value = TEST_USER_PASSWORD
+        browser.getControl(name='submit').click()
+
+        # Check login
+        self.assertNotEquals('__ac_name' in browser.contents, True)
+        self.assertNotEquals('__ac_password' in browser.contents, True)
+
+        return browser

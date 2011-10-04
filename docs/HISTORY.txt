@@ -5,6 +5,9 @@ Changelog
 2.0c8 (unreleased)
 ------------------
 
+- added test for tasktemplate view
+  [eschmutz]
+
 - added more tests for form
   [eschmutz]
 
