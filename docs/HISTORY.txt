@@ -5,6 +5,9 @@ Changelog
 2.0b17 (unreleased)
 -------------------
 
+- Added (verbose) logging for OGDS import stamp functionality
+  [lgraf]
+
 - Added correct errorhandling to the set_remote_import_stamp method, it should not fail when a client is not reachable
   [phgross]
 

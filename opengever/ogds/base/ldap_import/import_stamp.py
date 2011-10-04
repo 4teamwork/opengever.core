@@ -9,7 +9,10 @@ from zope.app.component.hooks import getSite
 from zope.component import getUtility
 from zope.globalrequest import setRequest
 from urllib2 import URLError
+import logging
 
+
+logger = logging.getLogger('opengever.ogds.base')
 
 DICTSTORAGE_SYNC_KEY = 'last_ldap_synchronisation'
 REQUEST_SYNC_KEY = 'last_ldap_synchronisation'
@@ -21,6 +24,7 @@ def update_sync_stamp(context):
     storage = IDictStorage(context)
     timestamp = datetime.now().isoformat()
     storage.set(DICTSTORAGE_SYNC_KEY, timestamp)
+    logger.info("Updated sync_stamp in dictstorage to current timestamp (%s)" % timestamp)
     return timestamp
 
 
@@ -36,8 +40,9 @@ def set_remote_import_stamp(context):
         try:
             remote_request(client.client_id, '@@update_sync_stamp',
                        data={REQUEST_SYNC_KEY: timestamp})
-        except URLError:
-            pass
+            logger.info("Issued remote request to update sync_stamp on %s to %s" % (client.client_id, timestamp))
+        except URLError, e:
+            logger.warn("ERROR while trying to remotely update sync_stamp for %s: %s" % (client.client_id, e))
 
 
 class SyncStampUtility(grok.GlobalUtility):
@@ -77,6 +82,7 @@ class SyncStampUtility(grok.GlobalUtility):
         context = self.get_context(context)
         self.annotations = IAnnotations(context)
         self.annotations['sync_stamp'] = stamp
+        logger.info("Stored sync_stamp %s in annotations" % stamp)
 
 
 class UpdateSyncStamp(grok.View):
@@ -95,6 +101,7 @@ class UpdateSyncStamp(grok.View):
         timestamp = self.request.form.get(REQUEST_SYNC_KEY, None)
 
         if timestamp:
+            logger.info("Updating sync_stamp to %s" % timestamp)
             getUtility(ISyncStamp).set_sync_stamp(timestamp)
             return True
 
