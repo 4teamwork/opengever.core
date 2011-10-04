@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-2.0b16 (unreleased)
+2.0b16 (2011-10-04)
 -------------------
 
 - Coerce input to split_string_by_numbers() to a string
