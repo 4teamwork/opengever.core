@@ -5,7 +5,10 @@ Changelog
 2.0b9 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Removed mail_settings import-step it isnt needed anymore. email_from_address now gets generated from maildomain given by the User.
+  #1204 Absender E-Mail Addresse anpassen 
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1204
+  [ttschanz]
 
 
 2.0b8 (2011-09-30)

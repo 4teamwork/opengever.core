@@ -1,6 +1,4 @@
 from collective.transmogrifier.transmogrifier import Transmogrifier
-from opengever.mail.interfaces import IMailSettings
-from opengever.ogds.base.interfaces import IClientConfiguration
 from opengever.portlets.tree import treeportlet
 from plone.app.portlets.portlets import navigation
 from plone.dexterity.utils import createContentInContainer
@@ -8,7 +6,6 @@ from plone.portlets.constants import CONTEXT_CATEGORY
 from plone.portlets.interfaces import ILocalPortletAssignmentManager
 from plone.portlets.interfaces import IPortletAssignmentMapping
 from plone.portlets.interfaces import IPortletManager
-from plone.registry.interfaces import IRegistry
 from Products.CMFCore.utils import getToolByName
 from zope.component import getMultiAdapter
 from zope.component import getUtility
@@ -68,15 +65,6 @@ def assign_roles(context, admin_file):
     for admin_group in admin_groups:
         context.acl_users.portal_role_manager.assignRoleToPrincipal('Manager', admin_group.strip())
 
-
-def mail_settings(site):
-    registry = getUtility(IRegistry, context=site)
-    client_config=registry.forInterface(IClientConfiguration)
-    client_id = client_config.client_id
-    mail_config = registry.forInterface(IMailSettings)
-    mail_domain = mail_config.mail_domain
-    site.manage_changeProperties({'email_from_address':'noreply@'+mail_domain,
-                                'email_from_name': client_id})
 
 
 def assign_tree_portlet(context, root_path, remove_nav=False,
@@ -153,10 +141,8 @@ def import_various(setup):
     if setup.readDataFile('opengever.setup.txt') is None:
         return
     site = setup.getSite()
-
     create_repository_root(site)
     start_import(site)
     settings(site)
-    mail_settings(site)
     assign_portlets(site)
 

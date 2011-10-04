@@ -12,7 +12,7 @@ from opengever.ogds.models import BASE
 from opengever.ogds.models.client import Client
 from opengever.ogds.models.group import Group
 from opengever.ogds.models.user import User
-from opengever.setup.utils import get_ldap_configs, get_policy_configs
+from opengever.setup.utils import get_ldap_configs, get_policy_configs, get_entry_points
 from plone.app.controlpanel.language import ILanguageSelectionSchema
 from plone.registry.interfaces import IRegistry
 from sqlalchemy.exc import NoReferencedTableError
@@ -108,7 +108,7 @@ class CreateOpengeverClient(BrowserView):
             setup_content=False,
             default_language=config.get('language', 'de-ch'),
             )
-
+        
         # ldap
         stool = getToolByName(site, 'portal_setup')
         if form.get('ldap', False):
@@ -198,14 +198,25 @@ class CreateOpengeverClient(BrowserView):
             users_group.users.append(og_admin_user)
 
         # set the client id in the registry
+        client_id = form['client_id'].decode('utf-8')
         registry = getUtility(IRegistry)
         proxy = registry.forInterface(IClientConfiguration)
         proxy.client_id = form['client_id'].decode('utf-8')
 
+        # set the mail domain in the registry
+        mail_domain = form['mail_domain'].decode('utf-8')
+        registry = getUtility(IRegistry)
+        proxy = registry.forInterface(IMailSettings)
+        proxy.mail_domain = form['mail_domain'].decode('utf-8')
+        mail_name = self.get_mail_name()
+        site.manage_changeProperties({'email_from_address': mail_name+'@'+mail_domain,
+                                    'email_from_name': client_id})
+        
         # provide the repository root for opengever.setup:default
         repository_root = config.get('repository_root', None)
         if repository_root:
             self.request.set('repository_root', repository_root)
+
 
         # import the defaul generic setup profiles if needed
         stool = getToolByName(site, 'portal_setup')
@@ -215,10 +226,6 @@ class CreateOpengeverClient(BrowserView):
         # set the site title
         site.manage_changeProperties(title=form['title'])
 
-        # set the client id in the registry
-        registry = getUtility(IRegistry)
-        proxy = registry.forInterface(IMailSettings)
-        proxy.mail_domain = form['mail_domain'].decode('utf-8')
 
         # REALLY set the language - the plone4 addPloneSite is really
         # buggy with languages.
@@ -238,3 +245,15 @@ class CreateOpengeverClient(BrowserView):
                 getattr(base, 'metadata').drop_all(session.bind)
             except NoReferencedTableError:
                 pass
+    
+    
+    def get_mail_name(self):
+        mail_name = 'noreply'
+        import pdb; pdb.set_trace( )
+        for ep in get_entry_points('mail_name'):
+            module = ep.load()
+            if getattr(module, 'MAIL_NAME', None):
+                mail_name = getattr(module, 'MAIL_NAME')
+
+        return mail_name
+    
