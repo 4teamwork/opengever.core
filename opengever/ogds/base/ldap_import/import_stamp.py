@@ -8,7 +8,7 @@ from zope.annotation.interfaces import IAnnotations
 from zope.app.component.hooks import getSite
 from zope.component import getUtility
 from zope.globalrequest import setRequest
-from urllib2 import HTTPError
+from urllib2 import URLError
 
 
 DICTSTORAGE_SYNC_KEY = 'last_ldap_synchronisation'
@@ -36,7 +36,7 @@ def set_remote_import_stamp(context):
         try:
             remote_request(client.client_id, '@@update_sync_stamp',
                        data={REQUEST_SYNC_KEY: timestamp})
-        except HTTPError:
+        except URLError:
             pass
 
 
