@@ -42,7 +42,10 @@ def sortable_author(obj):
     For mails, this currently equals the document_author.
     """
     author = document_author(obj)
-    return author.decode('utf8')
+    if author:
+        return author.decode('utf8')
+    else:
+        return ''
 grok.global_adapter(sortable_author, name='sortable_author')
 
 

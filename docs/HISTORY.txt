@@ -5,7 +5,8 @@ Changelog
 2.0b11 (unreleased)
 -------------------
 
-- Nothing changed yet.
+- Added fallback for the sortable_author indexer, when no author is given. It should return a empty string instead of None, because that's not sortable
+  [phgross]
 
 
 2.0b10 (2011-09-29)
