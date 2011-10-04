@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-2.0b11 (unreleased)
+2.0b11 (2011-10-04)
 -------------------
 
 - Removed mail_settings Importstep it isnt needed anymore
