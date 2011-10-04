@@ -8,6 +8,8 @@ from zope.annotation.interfaces import IAnnotations
 from zope.app.component.hooks import getSite
 from zope.component import getUtility
 from zope.globalrequest import setRequest
+from urllib2 import HTTPError
+
 
 DICTSTORAGE_SYNC_KEY = 'last_ldap_synchronisation'
 REQUEST_SYNC_KEY = 'last_ldap_synchronisation'
@@ -23,16 +25,19 @@ def update_sync_stamp(context):
 
 
 def set_remote_import_stamp(context):
-    """update the import Stamp into the OG"""
+    """update the sync stap on every enabled client."""
 
     # fake the request, because the remote_request use one
     context = setRequest(context.REQUEST)
 
     info = getUtility(IContactInformation)
     timestamp = update_sync_stamp(context)
-    for client in info._clients_query().all():
-        remote_request(client.client_id, '@@update_sync_stamp',
+    for client in info.get_clients():
+        try:
+            remote_request(client.client_id, '@@update_sync_stamp',
                        data={REQUEST_SYNC_KEY: timestamp})
+        except HTTPError:
+            pass
 
 
 class SyncStampUtility(grok.GlobalUtility):

@@ -5,8 +5,14 @@ Changelog
 2.0b17 (unreleased)
 -------------------
 
+- Added correct errorhandling to the set_remote_import_stamp method, it should not fail when a client is not reachable
+  [phgross]
+
+- Adjsut the set_remote_import_stamp method, just update enabled clients.
+  [phgross]
+
 - Added syncstamp table, which show the actual and the remote syncstamp and provide also the functionality to invalidate the cache.
- [phgross]
+  [phgross]
 
 
 2.0b16 (2011-09-30)
