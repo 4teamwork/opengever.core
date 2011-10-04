@@ -44,3 +44,13 @@ def sortable_author(obj):
     author = document_author(obj)
     return author.decode('utf8')
 grok.global_adapter(sortable_author, name='sortable_author')
+
+
+@indexer(IMail)
+def checked_out(obj):
+    """Empty string checked out indexer, because we need an index value
+    for sorted listings, but a mail can't be checked out so we return a
+    empty string."""
+
+    return ''
+grok.global_adapter(checked_out, name='checked_out')
