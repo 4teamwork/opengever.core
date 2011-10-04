@@ -12,7 +12,6 @@ from time import strftime
 from zope.component import getUtility
 from opengever.ogds.base.interfaces import ISyncStamp
 from ftw.dictstorage.interfaces import IDictStorage
-from datetime import datetime
 
 
 class LDAPControlPanel(grok.View):
@@ -31,8 +30,7 @@ class LDAPControlPanel(grok.View):
 
     def get_db_sync_stamp(self):
         storage = IDictStorage(self.context)
-        timestamp = datetime.now().isoformat()
-        storage.get(DICTSTORAGE_SYNC_KEY)
+        timestamp = storage.get(DICTSTORAGE_SYNC_KEY)
         return timestamp
 
 
