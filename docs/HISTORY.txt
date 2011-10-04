@@ -5,6 +5,11 @@ Changelog
 2.0b11 (unreleased)
 -------------------
 
+- Removed mail_settings Importstep it isnt needed anymore
+  #1204 Absender E-Mail Addresse anpassen 
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1204
+  [ttschanz]
+
 - Added fallback for the sortable_author indexer, when no author is given. It should return a empty string instead of None, because that's not sortable
   [phgross]
 
