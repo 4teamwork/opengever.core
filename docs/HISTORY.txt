@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-2.0b22 (unreleased)
+2.0b22 (2011-10-04)
 -------------------
 
 - Fixed filing_no indexing in the archive process.
