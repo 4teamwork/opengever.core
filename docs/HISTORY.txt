@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-2.0b18 (unreleased)
+2.0b18 (2011-10-04)
 -------------------
 
 - Added fallback and correct error handling, for given objects wich aren't documents,
