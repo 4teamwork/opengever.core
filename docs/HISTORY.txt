@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-2.0b17 (unreleased)
+2.0b17 (2011-10-04)
 -------------------
 
 - Added (verbose) logging for OGDS import stamp functionality
