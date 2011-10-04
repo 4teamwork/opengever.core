@@ -5,6 +5,9 @@ Changelog
 2.0c8 (unreleased)
 ------------------
 
+- added more templates in integrationtest for better coverage
+  [eschmutz]
+
 - added test for tasktemplate view
   [eschmutz]
 

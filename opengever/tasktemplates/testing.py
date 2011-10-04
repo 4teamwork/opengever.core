@@ -1,7 +1,7 @@
 from opengever.ogds.base.setuphandlers import create_sql_tables
 from opengever.ogds.base.setuphandlers import _create_example_client
 from opengever.ogds.base.setuphandlers import _create_example_user
-from plone.app.testing import TEST_USER_ID, setRoles
+from plone.app.testing import TEST_USER_ID, SITE_OWNER_NAME, setRoles
 from opengever.ogds.base.utils import create_session
 from plone.app.testing import applyProfile
 from plone.app.testing import FunctionalTesting
@@ -80,6 +80,13 @@ class TaskTemplatesFunctionalLayer(PloneSandboxLayer):
             'email': 'test.user@local.ch',
             'email2': 'test_user@private.ch'},
             ('og_mandant1_users','og_mandant1_inbox', 'og_mandant2_users'))
+
+        _create_example_user(session, portal, SITE_OWNER_NAME,{
+            'firstname': 'Site',
+            'lastname': 'Owner',
+            'email': 'site.owner@local.ch',
+            'email2': 'site_owner@private.ch'},
+            ('og_mandant2_users', ))
 
         setRoles(portal, TEST_USER_ID, ['Manager'])
         portal.invokeFactory('Folder', 'Members')
