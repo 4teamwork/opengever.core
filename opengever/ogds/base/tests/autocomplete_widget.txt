@@ -3,7 +3,7 @@
 Imports
 
     >>> from opengever.ogds.base.utils import create_session
-    >>> from opengever.ogds.base.setuphandlers import _create_example_user
+    >>> from opengever.ogds.base.setuphandlers import _create_example_user, _create_example_client
     >>> from plone.app.testing import setRoles
     >>> from plone.app.testing import TEST_USER_ID
     >>> from opengever.task.task import ITask
@@ -39,6 +39,16 @@ Users:
     ...                     ('og_mandant1_users',
     ...                      'og_mandant2_users'))
 
+
+    >>> _create_example_client(session, 'client1',
+    ...                          {'title': 'client1',
+    ...                          'ip_address': '127.0.0.1',
+    ...                          'site_url': 'http://nohost/plone',
+    ...                          'public_url': 'http://nohost/plone',
+    ...                          'group': 'og_mandant1_users',
+    ...                          'inbox_group': 'og_mandant1_inbox'})
+
+
 we create example task
 
     >>> setRoles(portal, TEST_USER_ID, ['Member', 'Manager'])
@@ -63,7 +73,7 @@ also don't hide anything.
 
     >>> source = widget.bound_source
     >>> [i.value for i in source]
-    [u'hugo.boss', u'franz.michel']
+    [u'hugo.boss', u'franz.michel', u'inbox:client1']
 
     >>> source.hidden_terms
     []
@@ -80,7 +90,7 @@ added to hidden list of terms.
 
     >>> source2 = widget.bound_source
     >>> [i.value for i in source2]
-    [u'hugo.boss', u'franz.michel']
+    [u'hugo.boss', u'franz.michel', u'inbox:client1']
 
     >>> source2.hidden_terms
     [u'test1']
