@@ -18,10 +18,8 @@ class OpengeverJournalFunctionalLayer(PloneSandboxLayer):
 
     def setUpZope(self, app, configurationContext):
         # do not install pas plugins (doesnt work in tests)
-
         from opengever.ogds import base
         from opengever.ogds.base import setuphandlers
-
         setuphandlers.setup_scriptable_plugin = lambda *a, **kw: None
 
         xmlconfig.file(
@@ -39,10 +37,15 @@ class OpengeverJournalFunctionalLayer(PloneSandboxLayer):
         xmlconfig.file(
             'configure.zcml',
             package=journal, context=configurationContext)
+        from opengever import contact
+        xmlconfig.file(
+            'configure.zcml',
+            package=contact, context=configurationContext)
 
     def setUpPloneSite(self, portal):
         applyProfile(portal, 'opengever.ogds.base:default')
         applyProfile(portal, 'opengever.tabbedview:default')
+        applyProfile(portal, 'opengever.contact:default')
         applyProfile(portal, 'ftw.table:default')
 
         create_sql_tables()
