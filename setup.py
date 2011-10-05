@@ -7,7 +7,7 @@ tests_require = ['ftw.table',
                  'ftw.tabbedview',
                  'ftw.journal',
                  'opengever.ogds.base',
-                 'opengever.contact'
+                 'opengever.contact',
                  'plone.app.testing',]
 setup(name='opengever.journal',
       version=version,
