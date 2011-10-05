@@ -1,17 +1,17 @@
-from opengever.ogds.base.ldap_import.import_stamp \
-    import set_remote_import_stamp
+from Products.CMFPlone.interfaces import IPloneSiteRoot
 from Products.statusmessages.interfaces import IStatusMessage
-from opengever.ogds.base.ldap_import.import_stamp import DICTSTORAGE_SYNC_KEY
 from collective.transmogrifier.transmogrifier import Transmogrifier
 from five import grok
-from Products.CMFPlone.interfaces import IPloneSiteRoot
+from ftw.dictstorage.interfaces import IDictStorage
+from opengever.ogds.base.interfaces import ISyncStamp
+from opengever.ogds.base.ldap_import.import_stamp import DICTSTORAGE_SYNC_KEY
+from opengever.ogds.base.ldap_import.import_stamp import set_remote_import_stamp
+from opengever.ogds.base.ldap_import.import_stamp import DictStorageConfigurationContext
+from time import strftime
+from zope.component import getUtility
 import ldap
 import time
 import transaction
-from time import strftime
-from zope.component import getUtility
-from opengever.ogds.base.interfaces import ISyncStamp
-from ftw.dictstorage.interfaces import IDictStorage
 
 
 class LDAPControlPanel(grok.View):
@@ -29,7 +29,7 @@ class LDAPControlPanel(grok.View):
         return getUtility(ISyncStamp).get_sync_stamp()
 
     def get_db_sync_stamp(self):
-        storage = IDictStorage(self.context)
+        storage = IDictStorage(DictStorageConfigurationContext())
         timestamp = storage.get(DICTSTORAGE_SYNC_KEY)
         return timestamp
 

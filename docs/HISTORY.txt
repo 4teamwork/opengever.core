@@ -5,6 +5,10 @@ Changelog
 2.0b18 (unreleased)
 -------------------
 
+- Fixed dictstorage writing/reading in the import stamp functionality.
+  Implements special fake context, wich allows to get the ftw.dictstorage.sql.DictStorage.
+  [phgross]
+
 - Added (verbose) logging for OGDS import stamp functionality
   [lgraf]
 

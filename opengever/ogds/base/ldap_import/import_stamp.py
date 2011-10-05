@@ -2,13 +2,15 @@ from Products.CMFPlone.interfaces import IPloneSiteRoot
 from datetime import datetime
 from five import grok
 from ftw.dictstorage.interfaces import IDictStorage
+from ftw.dictstorage.interfaces import ISQLAlchemy
 from opengever.ogds.base.interfaces import IContactInformation, ISyncStamp
 from opengever.ogds.base.utils import remote_request
+from urllib2 import URLError
 from zope.annotation.interfaces import IAnnotations
 from zope.app.component.hooks import getSite
 from zope.component import getUtility
 from zope.globalrequest import setRequest
-from urllib2 import URLError
+from zope.interface import implements
 import logging
 
 
@@ -18,10 +20,18 @@ DICTSTORAGE_SYNC_KEY = 'last_ldap_synchronisation'
 REQUEST_SYNC_KEY = 'last_ldap_synchronisation'
 
 
+class DictStorageConfigurationContext(object):
+    """Fake Object which provide the ISQLAlchemy Interface,
+    so it's possible to get the ftw.dictstorage sqlstorage.
+    """
+
+    implements(ISQLAlchemy)
+
+
 def update_sync_stamp(context):
     """update the SYNC key with the actual timestamp in the dictstorage"""
 
-    storage = IDictStorage(context)
+    storage = IDictStorage(DictStorageConfigurationContext())
     timestamp = datetime.now().isoformat()
     storage.set(DICTSTORAGE_SYNC_KEY, timestamp)
     logger.info("Updated sync_stamp in dictstorage to current timestamp (%s)" % timestamp)
@@ -31,11 +41,12 @@ def update_sync_stamp(context):
 def set_remote_import_stamp(context):
     """update the sync stap on every enabled client."""
 
-    # fake the request, because the remote_request use one
-    context = setRequest(context.REQUEST)
+    timestamp = update_sync_stamp(context)
+
+    # fake the request, because the remote_request expects it
+    setRequest(context.REQUEST)
 
     info = getUtility(IContactInformation)
-    timestamp = update_sync_stamp(context)
     for client in info.get_clients():
         try:
             remote_request(client.client_id, '@@update_sync_stamp',
