@@ -5,7 +5,8 @@ Changelog
 2.0b19 (unreleased)
 -------------------
 
-- Nothing changed yet.
+- Made sure all data used in HTML snippet produced by `linked` helper is properly escaped.
+  [lgraf]
 
 
 2.0b18 (2011-09-30)
