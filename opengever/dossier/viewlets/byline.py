@@ -50,8 +50,12 @@ class BusinessCaseByline(content.DocumentBylineViewlet):
     # TODO: should be more generic ;-)
     #       use sequence_number instead of intid
     def email(self):
-        if IMailInAddressMarker.providedBy(self.context):
+        """Displays email-address if the IMailInAddressMarker behavior
+         is provided and the dossier is Active"""
+        if IMailInAddressMarker.providedBy(self.context) \
+        and self.workflow_state() == 'dossier-state-active': 
             return IMailInAddress(self.context).get_email_address()
+        
 
     @memoize
     def workflow_state(self):

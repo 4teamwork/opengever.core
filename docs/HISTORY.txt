@@ -5,6 +5,12 @@ Changelog
 2.0b22 (unreleased)
 -------------------
 
+- emailaddress is now hidden, when the dossier isn't active.
+  Issue #1218 Mailadresse ausblenden bei abgeschlossenen Dossiers.
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1218
+  [ttschanz]
+
+
 - Issue #1177 move_items ergibt wenn Objekte per WEBDav gesperrt sind.
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1177
   changed translation for error-message
