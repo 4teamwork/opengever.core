@@ -204,12 +204,11 @@ class CreateOpengeverClient(BrowserView):
         proxy.client_id = form['client_id'].decode('utf-8')
 
         # set the mail domain in the registry
-        mail_domain = form['mail_domain'].decode('utf-8')
         registry = getUtility(IRegistry)
         proxy = registry.forInterface(IMailSettings)
         proxy.mail_domain = form['mail_domain'].decode('utf-8')
-        mail_name = self.get_mail_name()
-        site.manage_changeProperties({'email_from_address': mail_name+'@'+mail_domain,
+        mail_from_address = self.get_mail_from_address()
+        site.manage_changeProperties({'email_from_address': mail_from_address,
                                     'email_from_name': client_id})
         
         # provide the repository root for opengever.setup:default
@@ -247,13 +246,12 @@ class CreateOpengeverClient(BrowserView):
                 pass
     
     
-    def get_mail_name(self):
-        mail_name = 'noreply'
-        import pdb; pdb.set_trace( )
-        for ep in get_entry_points('mail_name'):
+    def get_mail_from_address(self):
+        email_from_address = 'noreply@opengever.4teamwork.ch'
+        for ep in get_entry_points('email_from_address'):
             module = ep.load()
-            if getattr(module, 'MAIL_NAME', None):
-                mail_name = getattr(module, 'MAIL_NAME')
+            if getattr(module, 'EMAIL_FROM_ADDRESS', None):
+                email_from_address = getattr(module, 'EMAIL_FROM_ADDRESS')
 
-        return mail_name
+        return email_from_address
     
