@@ -262,6 +262,9 @@ class ArchiveForm(directives_form.Form):
                 obj.reindexObject(idxs=['filing_no'])
                 filing_no_suffix += 1
 
+            #reindex the filing_no index for the current object
+            self.context.reindexObject(idxs=['filing_no'])
+
         # set the dossier end date
         IDossier(self.context).end = data.get('dossier_enddate')
 

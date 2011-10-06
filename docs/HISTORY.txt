@@ -5,6 +5,12 @@ Changelog
 2.0b22 (unreleased)
 -------------------
 
+- Fixed filing_no indexing in the archive process.
+  manually reindex the filing_no index after setting a filing number.
+  Issue #1222 Fehler beim Einchecken SKA.ARCH
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1222
+  [phgross]
+
 - emailaddress is now hidden, when the dossier isn't active.
   Issue #1218 Mailadresse ausblenden bei abgeschlossenen Dossiers.
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1218
