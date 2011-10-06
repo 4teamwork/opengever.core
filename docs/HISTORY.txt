@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-2.0b19 (unreleased)
+2.0b19 (2011-10-06)
 -------------------
 
 - Fixed bug that broke "My Tasks" view - don't try to access REQUEST on a
