@@ -1,5 +1,6 @@
 import cgi
 from datetime import date as dt
+from ftw.mail.utils import get_header
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.tabbedview import _
 from plone.i18n.normalizer.interfaces import IIDNormalizer
@@ -7,9 +8,9 @@ from plone.memoize import ram
 from Products.CMFCore.interfaces._tools import IMemberData
 from Products.PluggableAuthService.interfaces.authservice import IPropertiedUser
 from zope.app.component.hooks import getSite
-from zope.i18n import translate
 from zope.component import getUtility
-from ftw.mail.utils import get_header
+from zope.globalrequest import getRequest
+from zope.i18n import translate
 
 
 def task_id_checkbox_helper(item, value):
@@ -193,7 +194,10 @@ def workflow_state(item, value):
 
     normalize = getUtility(IIDNormalizer).normalize
     state = normalize(item.review_state)
-    return """<span class="wf-%s">%s</span>""" % (state, translate(value, domain='plone', context=item.REQUEST))
+    # We use zope.globalrequest because item can be a SQLAlchemy `Task` object
+    # which doesn't have a request
+    request = getRequest()
+    return """<span class="wf-%s">%s</span>""" % (state, translate(value, domain='plone', context=request))
 
 
 def overdue_date_helper(item, date):

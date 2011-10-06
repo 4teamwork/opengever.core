@@ -5,6 +5,10 @@ Changelog
 2.0b19 (unreleased)
 -------------------
 
+- Fixed bug that broke "My Tasks" view - don't try to access REQUEST on a
+  SQLAlchemy `Task` object, use zope.globalrequest instead
+  [lgraf]
+
 - Made sure all data used in HTML snippet produced by `linked` helper is properly escaped.
   [lgraf]
 
