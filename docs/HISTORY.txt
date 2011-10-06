@@ -12,6 +12,8 @@ Changelog
 - Made sure all data used in HTML snippet produced by `linked` helper is properly escaped.
   [lgraf]
 
+- removed needles search option 'isWorkingCopy', we not longer use the versioningbehavior and the working copy functionality.
+  [phgross]
 
 2.0b18 (2011-09-30)
 -------------------

@@ -115,8 +115,6 @@ class Documents(OpengeverCatalogListingTab):
 
     types = ['opengever.document.document', 'ftw.mail.mail']
 
-    search_options = {'isWorkingCopy': 0, }
-
     columns = (
 
         ('', helper.path_checkbox),
