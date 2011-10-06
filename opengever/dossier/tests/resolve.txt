@@ -13,6 +13,10 @@ do some imports
     >>> from datetime import datetime
     >>> from opengever.dossier.behaviors.dossier import IDossier
     >>> from opengever.document.interfaces import ICheckinCheckoutManager
+    >>> from zope.component import queryMultiAdapter
+    >>> from plone.indexer.interfaces import IIndexableObject
+
+
 
 setup the browser for the test, we use it later in the test
 	>>> app = layer['app']
@@ -251,6 +255,17 @@ check the given filing no
     >>> IDossier(dossier).filing_no
     u'OG-Government-2012-1'
     >>> IDossier(subdossier).filing_no
+    u'OG-Government-2012-1.1'
+
+check also the filing no index
+    >>> wrapper = queryMultiAdapter(
+    ...         (dossier, portal.portal_catalog), IIndexableObject)
+    >>> wrapper.filing_no
+    u'OG-Government-2012-1'
+
+    >>> wrapper = queryMultiAdapter(
+    ...         (subdossier, portal.portal_catalog), IIndexableObject)
+    >>> wrapper.filing_no
     u'OG-Government-2012-1.1'
 
 check if the values are assumed to the dossier
