@@ -5,6 +5,10 @@ Changelog
 2.0b17 (unreleased)
 -------------------
 
+- https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1225/
+  added translations and changed i18n domain for history.pt
+  [eschmutz]
+
 - #1171 Feedback aus Pilotphase: Kopiertes Dokument einfügen - falscher Reiter
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1171
   object_paste now tries to guess the right tab
