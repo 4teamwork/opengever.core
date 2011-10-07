@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-2.0b16 (unreleased)
+2.0b17 (unreleased)
 -------------------
 
 - #1171 Feedback aus Pilotphase: Kopiertes Dokument einfügen - falscher Reiter
@@ -10,6 +10,16 @@ Changelog
   object_paste now tries to guess the right tab
   [ttschanz]
 
+
+2.0b16 (2011-10-04)
+-------------------
+
+- Coerce input to split_string_by_numbers() to a string
+  (previous versions of the reference prefix adapter stored integers and
+  made this function fail)
+  [lgraf]
+  
+>>>>>>> f8b57629d6bf71eec06aa3a76f3849c878446e5a
 - Added resolve_oguid view redirecting to a specified oguid.
   Usage: platform/resolve_oguid?oguid=client:intid
   [jone]

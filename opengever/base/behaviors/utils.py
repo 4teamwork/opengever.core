@@ -223,6 +223,7 @@ def overrides_child(folder, event, aq_fields, marker):
 # Used as sortkey for sorting strings in numerical order
 # TODO: Move to a more suitable place
 def split_string_by_numbers(x):
+    x = str(x)
     r = re.compile('(\d+)')
     l = r.split(x)
     return [int(y) if y.isdigit() else y for y in l]
