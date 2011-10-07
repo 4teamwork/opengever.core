@@ -5,6 +5,13 @@ Changelog
 2.0a12 (unreleased)
 -------------------
 
+- changed journalentry action-type string for IObjectWillBeMovedEvent
+  because it referenced to IObjectMovedEvent
+  [eschmutz]
+
+- added testsetup for jenkins
+  [eschmutz]
+
 - Implements generating journal entries for local_roles modifications on repositoryfolders or dossiers.
   Issue #1242 Fuer local_roles Anpassungen Journaleintraege generieren
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1242/
@@ -13,10 +20,6 @@ Changelog
 - Fixed batching by using the ListingView from opengever.tabbedview which
   overrides the batching template to match the CSS in izug.basetheme
   [lgraf]
-
-- added testsetup for jenkins
-  [eschmutz]
-
 
 2.0a11 (2011-09-29)
 -------------------

@@ -503,5 +503,6 @@ def object_will_be_moved(context, event):
                     mapping={
                     'title': context.title_or_id()
                     })
-        journal_entry_factory(context.aq_inner.aq_parent, OBJECT_MOVED_EVENT, title)
+
+        journal_entry_factory(context.aq_inner.aq_parent, OBJECT_WILL_BE_MOVED_EVENT, title)
     return
