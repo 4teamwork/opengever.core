@@ -1,19 +1,26 @@
 from DateTime import DateTime
 from ftw.journal.config import JOURNAL_ENTRIES_ANNOTATIONS_KEY
-from opengever.document.events import ObjectCheckedOutEvent, ObjectCheckedInEvent, ObjectCheckoutCanceledEvent, ObjectRevertedToVersion
+from OFS.event import ObjectWillBeMovedEvent, ObjectWillBeAddedEvent
+from opengever.document.events import \
+    ObjectCheckedOutEvent, ObjectCheckedInEvent, \
+    ObjectCheckoutCanceledEvent, ObjectRevertedToVersion
+from opengever.dossier.events import ParticipationCreated, ParticipationRemoved
+from opengever.dossier.behaviors.participation import Participation
 from opengever.journal.testing import OPENGEVER_JOURNAL_INTEGRATION_TESTING
+from opengever.trash.trash import TrashedEvent, UntrashedEvent
 from plone.app.testing import TEST_USER_ID
 from plone.dexterity.utils import createContentInContainer
 from Products.CMFCore.utils import getToolByName
 from Products.CMFCore.WorkflowCore import ActionSucceededEvent
 from zope.annotation.interfaces import IAnnotations
+from zope.lifecycleevent import ObjectMovedEvent
 from zope.event import notify
 from zope.interface import Interface
 from zope.lifecycleevent import ObjectModifiedEvent, Attributes
 import unittest2 as unittest
 
 
-class TestFtwJournalGeneral(unittest.TestCase):
+class TestOpengeverJournalGeneral(unittest.TestCase):
 
     layer = OPENGEVER_JOURNAL_INTEGRATION_TESTING
 
@@ -21,12 +28,11 @@ class TestFtwJournalGeneral(unittest.TestCase):
         """ Trigger every event of a dossier at least one times
         and check the journalentries.
         """
-
         portal = self.layer['portal']
 
         # Add-Event
         dossier = createContentInContainer(
-            portal, 'opengever.dossier.businesscasedossier','d1')
+            portal, 'opengever.dossier.businesscasedossier', 'd1')
 
         self.check_object_added(
             dossier,
@@ -46,12 +52,14 @@ class TestFtwJournalGeneral(unittest.TestCase):
         workflow = wftool.get('simple_publication_workflow')
 
         # Action-Succeeded-Event
-        notify(ActionSucceededEvent(dossier, workflow, 'publish', 'published', ))
+        notify(
+            ActionSucceededEvent(dossier, workflow, 'publish', 'published', ))
 
         # Check
-        self.check_annotation(dossier,
-                              action_type='Dossier state changed',
-                              action_title='Dossier state changed to published')
+        self.check_annotation(
+            dossier,
+            action_type='Dossier state changed',
+            action_title='Dossier state changed to published')
 
     def test_integration_document_events(self):
         """ Trigger every event of a document at least one times
@@ -67,11 +75,12 @@ class TestFtwJournalGeneral(unittest.TestCase):
         comment = 'my comment'
 
         dossier = createContentInContainer(
-            portal, 'opengever.dossier.businesscasedossier','d1')
+            portal, 'opengever.dossier.businesscasedossier', 'd1')
 
         # Add-Event
         document = createContentInContainer(
-            dossier, 'opengever.document.document','d1')
+            dossier, 'opengever.document.document', 'd1')
+
         self.check_object_added(
             document,
             'Document added',
@@ -129,11 +138,11 @@ class TestFtwJournalGeneral(unittest.TestCase):
 
         # Object Reverted-To-Version-Event with fail
         length = self.get_journal_length(document)
-        notify(ObjectRevertedToVersion(document, '',''))
+        notify(ObjectRevertedToVersion(document, '', ''))
         self.assertTrue(length == self.get_journal_length(document))
 
         # Object Reverted-To-Version-Event
-        notify(ObjectRevertedToVersion(document, 'v1','v1'))
+        notify(ObjectRevertedToVersion(document, 'v1', 'v1'))
         self.check_document_revertedtoversion(document)
 
     def test_integration_task_events(self):
@@ -143,37 +152,151 @@ class TestFtwJournalGeneral(unittest.TestCase):
         portal = self.layer['portal']
 
         dossier = createContentInContainer(
-            portal, 'opengever.dossier.businesscasedossier','d1')
+            portal, 'opengever.dossier.businesscasedossier', 'd1')
 
         # Add-Event
         task = createContentInContainer(
-            dossier, 'opengever.task.task','d1')
+            dossier, 'opengever.task.task', 'd1')
 
-        self.check_object_added(
-            task,
-            'Task added',
-            'label_task_added',
-            dossier, )
+        self.check_annotation(
+            dossier,
+            action_type='Task added',
+            action_title='label_task_added',
+            check_entry=-2, )
 
+        # Modified-Event
+        notify(ObjectModifiedEvent(task))
+        self.check_annotation(
+            dossier,
+            action_type='Task modified',
+            action_title='label_task_modified', )
+
+    def test_integration_trashed_events(self):
+        """ Trigger every event of trashing objects
+        """
+        portal = self.layer['portal']
+
+        dossier = createContentInContainer(
+            portal, 'opengever.dossier.businesscasedossier', 'd1')
+
+        # Create object to put it in the trash
+        document = createContentInContainer(
+            dossier, 'opengever.document.document', 'd1')
+
+        # Trash-Event
+        notify(TrashedEvent(document))
+
+        self.check_annotation(
+            document,
+            action_type='Object moved to trash',
+            action_title='label_to_trash', )
+        self.check_annotation(
+            dossier,
+            action_type='Object moved to trash',
+            action_title='label_to_trash', )
+
+        # Untrash-Event
+        notify(UntrashedEvent(document))
+        self.check_annotation(
+            document,
+            action_type='Object restore',
+            action_title='label_restore', )
+        self.check_annotation(
+            dossier,
+            action_type='Object restore',
+            action_title='label_restore', )
 
     def test_integration_participation_events(self):
         """ Trigger every event of a participation at least one times
         and check the journalentries.
         """
-        pass
+        portal = self.layer['portal']
+        participant = Participation('ratman','held')
+
+        dossier = createContentInContainer(
+            portal, 'opengever.dossier.businesscasedossier','d1')
+
+        # Participation-Created-Event
+        notify(ParticipationCreated(dossier, participant))
+        self.check_annotation(
+            dossier,
+            action_type='Participant added',
+            action_title='label_participant_added', )
+
+        # Participation-Removed-Event
+        notify(ParticipationRemoved(dossier, participant))
+        self.check_annotation(
+            dossier,
+            action_type='Participant removed',
+            action_title='label_participant_removed', )
 
     def test_integration_mail_events(self):
         """ Trigger every event of a mail at least one times
         and check the journalentries.
         """
-        pass
+        portal = self.layer['portal']
+
+        dossier = createContentInContainer(
+            portal, 'opengever.dossier.businesscasedossier','d1')
+
+        createContentInContainer(
+            dossier, 'ftw.mail.mail','m1')
+
+        # The journal of a mail is always on the parents dossier and not
+        # on the mail
+        self.check_annotation(
+            dossier,
+            action_type='Mail added',
+            action_title='label_mail_added',
+            check_entry=-2, )
+
 
     def test_integration_object_events(self):
         """ Trigger every event of a objec at least one times
         and check the journalentries.
         """
-        pass
+        portal = self.layer['portal']
 
+        dossier1 = createContentInContainer(
+            portal, 'opengever.dossier.businesscasedossier','d1')
+        dossier2 = createContentInContainer(
+            portal, 'opengever.dossier.businesscasedossier','d2')
+
+
+        document = createContentInContainer(
+            dossier1, 'opengever.document.document', 'doc1')
+
+        notify(ObjectMovedEvent(
+            document,
+            dossier1,
+            'oldName',
+            dossier2,
+            'newName', ))
+        self.check_annotation(
+            dossier1,
+            action_type='Object moved',
+            action_title='label_object_moved', )
+
+        notify(ObjectWillBeMovedEvent(
+            document,
+            dossier1,
+            'oldName',
+            dossier2,
+            'newName', ))
+        self.check_annotation(
+                dossier1,
+                action_type='Object cut',
+                action_title='label_object_cut', )
+
+        # Here we don't have a journal-entry
+        length = self.get_journal_length(dossier1)
+        notify(ObjectWillBeAddedEvent(
+            document,
+            dossier2,
+            'newName', ))
+        self.assertTrue(length == self.get_journal_length(dossier1))
+
+    # Helpers
     def get_journal_length(self, obj):
         """ Get the lenght of the journal
         """
@@ -203,7 +326,7 @@ class TestFtwJournalGeneral(unittest.TestCase):
         self.assertTrue(action_title == journal.get('action').get('title'))
 
     def check_object_added(self, obj, action_type='', action_title='', parent=None):
-        """ Check the journal after adding a document
+        """ Check the journal after adding a object
         """
         self.check_annotation(obj,
                               action_type=action_type,
@@ -212,7 +335,7 @@ class TestFtwJournalGeneral(unittest.TestCase):
         if parent:
             self.check_annotation(parent,
                                   action_type=action_type,
-                                  action_title=action_type,
+                                  action_title=action_title,
                                   check_entry=-2, )
 
     def check_document_modified(self, obj, parent, mode):
@@ -227,8 +350,7 @@ class TestFtwJournalGeneral(unittest.TestCase):
             self.check_annotation(
                 parent,
                 action_type='Document modified',
-                action_title='label_document_file_modified__parent',
-                check_entry=-1, )
+                action_title='label_document_file_modified__parent', )
 
         elif mode == 'meta':
             self.check_annotation(
@@ -238,8 +360,7 @@ class TestFtwJournalGeneral(unittest.TestCase):
             self.check_annotation(
                 parent,
                 action_type='Document modified',
-                action_title='label_document_metadata_modified__parent',
-                check_entry=-1, )
+                action_title='label_document_metadata_modified__parent', )
 
         elif mode == 'file_meta':
             self.check_annotation(
@@ -249,8 +370,7 @@ class TestFtwJournalGeneral(unittest.TestCase):
             self.check_annotation(
                 parent,
                 action_type='Document modified',
-                action_title='label_document_file_and_metadata_modified__parent',
-                check_entry=-1, )
+                action_title='label_document_file_and_metadata_modified__parent', )
 
     def check_document_actionsucceeded(self, obj):
         """ Check the journal after changing portal state
@@ -298,31 +418,3 @@ class TestFtwJournalGeneral(unittest.TestCase):
             obj,
             action_type='Reverted document file',
             action_title='label_document_file_reverted')
-
-
-        # @grok.subscribe(ITask, IObjectAddedEvent)
-        # def task_added(context, event):
-        #
-        # @grok.subscribe(ITask, IObjectModifiedEvent)
-        # def task_modified(context, event):
-        #
-        # @grok.subscribe(IJournalizable, ITrashedEvent)
-        # def document_trashed(context, event):
-        #
-        # @grok.subscribe(IJournalizable, IUntrashedEvent)
-        # def document_untrashed(context, event):
-        #
-        # @grok.subscribe(IDossierMarker, IParticipationCreated)
-        # def participation_created(context, event):
-        #
-        # @grok.subscribe(IDossierMarker, IParticipationRemoved)
-        # def participation_removed(context, event):
-        #
-        # @grok.subscribe(IMail, IObjectAddedEvent)
-        # def mail_added(context, event):
-        #
-        # @grok.subscribe(IDexterityContent, IObjectMovedEvent)
-        # def object_moved(context, event):
-        #
-        # @grok.subscribe(IDexterityContent,IObjectWillBeMovedEvent)
-        # def object_will_be_moved(context, event):

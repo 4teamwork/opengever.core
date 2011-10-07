@@ -41,10 +41,18 @@ class OpengeverJournalFunctionalLayer(PloneSandboxLayer):
         xmlconfig.file(
             'configure.zcml',
             package=task, context=configurationContext)
+        from opengever import trash
+        xmlconfig.file(
+            'configure.zcml',
+            package=trash, context=configurationContext)
         from opengever import dossier
         xmlconfig.file(
             'configure.zcml',
             package=dossier, context=configurationContext)
+        from opengever import mail
+        xmlconfig.file(
+            'configure.zcml',
+            package=mail, context=configurationContext)
         from ftw import table
         xmlconfig.file(
             'configure.zcml',
@@ -64,6 +72,9 @@ class OpengeverJournalFunctionalLayer(PloneSandboxLayer):
         applyProfile(portal, 'opengever.contact:default')
         applyProfile(portal, 'opengever.document:default')
         applyProfile(portal, 'opengever.dossier:default')
+        applyProfile(portal, 'opengever.task:default')
+        applyProfile(portal, 'opengever.trash:default')
+        applyProfile(portal, 'opengever.mail:default')
         applyProfile(portal, 'ftw.table:default')
 
         create_sql_tables()
