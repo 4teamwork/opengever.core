@@ -10,6 +10,10 @@ Changelog
   object_paste now tries to guess the right tab
   [ttschanz]
 
+- https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1225/
+  added translations and changed i18n domain for history.pt
+  [eschmutz]
+
 
 2.0b16 (2011-10-04)
 -------------------
@@ -18,7 +22,7 @@ Changelog
   (previous versions of the reference prefix adapter stored integers and
   made this function fail)
   [lgraf]
-  
+
 - Added resolve_oguid view redirecting to a specified oguid.
   Usage: platform/resolve_oguid?oguid=client:intid
   [jone]
