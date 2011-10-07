@@ -6,7 +6,7 @@ Changelog
 -------------------
 
 - removed unused journalentry factories for Objects implementing ITask because
-  tasks haven't a journal history
+  tasks havent a journal history
   [eschmutz]
   
 - changed journalentry action-type string for IObjectWillBeMovedEvent
