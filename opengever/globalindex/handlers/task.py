@@ -88,7 +88,7 @@ def index_task(obj, event):
     # index the predecessor
     if obj.predecessor:
         pred_client_id, pred_init_id = obj.predecessor.split(':', 1)
-        try: 
+        try:
             predecessor = session.query(Task).filter_by(client_id=pred_client_id,
                                                     int_id=pred_init_id).one()
         except NoResultFound:
