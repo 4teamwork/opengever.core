@@ -19,7 +19,6 @@ Changelog
   made this function fail)
   [lgraf]
   
->>>>>>> f8b57629d6bf71eec06aa3a76f3849c878446e5a
 - Added resolve_oguid view redirecting to a specified oguid.
   Usage: platform/resolve_oguid?oguid=client:intid
   [jone]
