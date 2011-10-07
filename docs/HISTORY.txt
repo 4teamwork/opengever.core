@@ -5,7 +5,9 @@ Changelog
 2.0b19 (unreleased)
 -------------------
 
-- Nothing changed yet.
+- Temporary disabled navigation tree query for content tree widget
+  in relatedItems field because it has a severe performance impact.
+  [lgraf]
 
 
 2.0b18 (2011-10-04)
