@@ -49,7 +49,7 @@ class GlobalTaskListingTab(grok.View, OpengeverTab,
     major_actions = []
 
     select_all_template = ViewPageTemplateFile('select_all_globaltasks.pt')
-    selection = ViewPageTemplateFile("selection_globaltasks.pt")
+    selection = ViewPageTemplateFile("selection_tasks.pt")
 
     columns = (
 

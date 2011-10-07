@@ -291,7 +291,7 @@ class Tasks(OpengeverCatalogListingTab):
 
     grok.name('tabbedview_view-tasks')
 
-    selection = ViewPageTemplateFile("selection_globaltasks.pt")
+    selection = ViewPageTemplateFile("selection_tasks.pt")
 
     columns = (
         ('', helper.path_checkbox),
