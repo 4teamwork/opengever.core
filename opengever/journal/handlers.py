@@ -387,8 +387,7 @@ def task_added(context, event):
     title = _(u'label_task_added', default=u'Task added: ${title}', mapping={
             'title' : context.title_or_id(),
             })
-    # journal_entry for task:
-    journal_entry_factory(context, TASK_ADDED_EVENT, title)
+
     # journal entry for parent (usually dossier)
     journal_entry_factory(context.aq_inner.aq_parent, TASK_ADDED_EVENT, title)
     return
@@ -406,7 +405,7 @@ def task_modified(context, event):
         context.portal_types
     except AttributeError:
         return
-    journal_entry_factory(context, TASK_MODIIFED_ACTION, title, visible=False)
+
     journal_entry_factory(context.aq_inner.aq_parent, TASK_MODIIFED_ACTION, title)
     return
 
