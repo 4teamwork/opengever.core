@@ -3,6 +3,7 @@ from Acquisition import aq_inner, aq_parent
 from Products.CMFCore.permissions import View
 from Products.CMFCore.utils import _mergedLocalRoles, getToolByName
 from sqlalchemy.orm.exc import NoResultFound
+from zope.component import getMultiAdapter
 from zope.component import getUtility
 from zope.intid.interfaces import IIntIds
 
@@ -63,6 +64,20 @@ def index_task(obj, event):
         session.add(task)
 
     task.title = obj.title
+
+
+    # Generate and store the breadcrumb tooltip
+    breadcrumb_titles = []
+    breadcrumbs_view = getMultiAdapter((obj, obj.REQUEST),
+                                       name='breadcrumbs_view')
+    for elem in breadcrumbs_view.breadcrumbs():
+        if isinstance(elem.get('Title'), unicode):
+            breadcrumb_titles.append(elem.get('Title'))
+        else:
+            breadcrumb_titles.append(elem.get('Title').decode('utf-8'))
+
+    task.breadcrumb_title = ' > '.join(breadcrumb_titles)
+
     url_tool = obj.unrestrictedTraverse('@@plone_tools').url()
     task.physical_path = '/'.join(url_tool.getRelativeContentPath(obj))
     task.review_state = obj.unrestrictedTraverse('@@plone_context_state').workflow_state()

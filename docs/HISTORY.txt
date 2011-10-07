@@ -5,6 +5,11 @@ Changelog
 2.0b8
 -----
 
+* Issue #1023 Feedback Fokus: Aufgabenverzeichnis ergaenzen
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1023
+  Implemented breadcrumb tooltips that include the remote client title for
+  globally indexed tasks.
+
 
 2.0b7
 -----
