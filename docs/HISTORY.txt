@@ -5,7 +5,8 @@ Changelog
 2.0a7 (unreleased)
 ------------------
 
-- Nothing changed yet
+- Bumped profile version in metadata.xml to 2101
+  [lgraf]
 
 
 2.0a6
@@ -14,6 +15,7 @@ Changelog
 - Added GS profile dependencies on p.formwidget.autocomplete and p.f.contenttree
   [lgraf]
 
+
 2.0a5
 -----
 
@@ -21,6 +23,7 @@ Changelog
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1053/
   increase the versionnumber for upgradesteps in opengever.upgrade to 2002 (2.0.3 release)
   [phgross]
+
 
 2.0a4
 -----
@@ -42,7 +45,8 @@ Changelog
 2.0a2
 -----
 
-1.0dev (unreleased)
--------------------
+
+1.0
+---
 
 - Initial release
