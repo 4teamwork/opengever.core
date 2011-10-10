@@ -5,6 +5,12 @@ Changelog
 2.0b23 (unreleased)
 -------------------
 
+- Fixed source for the destination_folder field in the move_items view.
+  Just allows repositoryfolders and dossiers.
+  Issue #1231 Probleme im Autocomplete Feld in der move_items view
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1231/view
+  [phgross]
+
 - Fixed filing_no indexing in the archive process.
   manually reindex the filing_no index after setting a filing number.
   Issue #1162 Fehler bei Suche nach Ablagenummer

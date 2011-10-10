@@ -20,21 +20,16 @@ from Products.statusmessages.interfaces import IStatusMessage
 from opengever.dossier.behaviors.dossier import IDossierMarker
 
 
-class DestinationPathSourceBinder(ObjPathSourceBinder):
-
-    def __call__(self, context):
-        return self.path_source(
-            context,
-            selectable_filter=self.selectable_filter,
-            navigation_tree_query=self.navigation_tree_query)
-
-
 class IMoveItemsSchema(Interface):
     destination_folder = RelationChoice(
         title=_('label_destination', default="Destination"),
         description=_('help_destination',
                       default="Live Search: search the Plone Site"),
-        source=DestinationPathSourceBinder(),
+        source=ObjPathSourceBinder(
+            object_provides=[
+                'opengever.dossier.behaviors.dossier.IDossierMarker',
+                'opengever.repository.repositoryfolder.IRepositoryFolderSchema']
+            ),
         required=True,
         )
     #We Use TextLine here because Tuple and List have no hidden_mode.
