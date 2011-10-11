@@ -83,7 +83,6 @@ import Products.LDAPUserFolder
 Products.LDAPUserFolder.utils.encoding = 'utf-8'
 LOGGER.info('Monkey patched Products.LDAPUserFolder.utils.encoding (utf-8)')
 
-
 # --------
 
 def _fix_terms(self):
@@ -117,3 +116,9 @@ import plone.formwidget.contenttree
 plone.formwidget.contenttree.widget.ContentTreeBase._fix_terms = _fix_terms
 plone.formwidget.contenttree.widget.ContentTreeBase.render = render
 LOGGER.info('Monkey patched plone.formwidget.contenttree.widget.ContentTreeBase')
+
+# --------
+
+import webdav.LockItem
+webdav.LockItem.DEFAULTTIMEOUT = 2 * 60 * 60L # 2 hours
+LOGGER.info('Monkey patched webdav.LockItem.DEFAULTTIMEOUT')

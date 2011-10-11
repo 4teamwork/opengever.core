@@ -5,7 +5,8 @@ Changelog
 2.0b18 (unreleased)
 -------------------
 
-- Nothing changed yet.
+- Monkey patching webdav.LockItem.DEFAULTTIMEOUT (2 hours)
+  [lgraf]
 
 
 2.0b17 (2011-10-07)
