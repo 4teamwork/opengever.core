@@ -211,10 +211,10 @@ class TestOpengeverJournalGeneral(unittest.TestCase):
         and check the journalentries.
         """
         portal = self.layer['portal']
-        participant = Participation('ratman','held')
+        participant = Participation('ratman', 'held')
 
         dossier = createContentInContainer(
-            portal, 'opengever.dossier.businesscasedossier','d1')
+            portal, 'opengever.dossier.businesscasedossier', 'd1')
 
         # Participation-Created-Event
         notify(ParticipationCreated(dossier, participant))
@@ -237,10 +237,10 @@ class TestOpengeverJournalGeneral(unittest.TestCase):
         portal = self.layer['portal']
 
         dossier = createContentInContainer(
-            portal, 'opengever.dossier.businesscasedossier','d1')
+            portal, 'opengever.dossier.businesscasedossier', 'd1')
 
         createContentInContainer(
-            dossier, 'ftw.mail.mail','m1')
+            dossier, 'ftw.mail.mail', 'm1')
 
         # The journal of a mail is always on the parents dossier and not
         # on the mail
@@ -250,7 +250,6 @@ class TestOpengeverJournalGeneral(unittest.TestCase):
             action_title='label_mail_added',
             check_entry=-2, )
 
-
     def test_integration_object_events(self):
         """ Trigger every event of a objec at least one times
         and check the journalentries.
@@ -258,9 +257,9 @@ class TestOpengeverJournalGeneral(unittest.TestCase):
         portal = self.layer['portal']
 
         dossier1 = createContentInContainer(
-            portal, 'opengever.dossier.businesscasedossier','d1')
+            portal, 'opengever.dossier.businesscasedossier', 'd1')
         dossier2 = createContentInContainer(
-            portal, 'opengever.dossier.businesscasedossier','d2')
+            portal, 'opengever.dossier.businesscasedossier', 'd2')
 
 
         document = createContentInContainer(
@@ -325,7 +324,8 @@ class TestOpengeverJournalGeneral(unittest.TestCase):
         self.assertTrue(action_type == journal.get('action').get('type'))
         self.assertTrue(action_title == journal.get('action').get('title'))
 
-    def check_object_added(self, obj, action_type='', action_title='', parent=None):
+    def check_object_added(
+        self, obj, action_type='', action_title='', parent=None):
         """ Check the journal after adding a object
         """
         self.check_annotation(obj,
@@ -370,7 +370,8 @@ class TestOpengeverJournalGeneral(unittest.TestCase):
             self.check_annotation(
                 parent,
                 action_type='Document modified',
-                action_title='label_document_file_and_metadata_modified__parent', )
+                action_title=(
+                    'label_document_file_and_metadata_modified__parent'), )
 
     def check_document_actionsucceeded(self, obj):
         """ Check the journal after changing portal state
