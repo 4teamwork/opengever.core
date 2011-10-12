@@ -1,4 +1,5 @@
 from Acquisition import aq_inner, aq_parent
+from zope.component import provideAdapter
 from Products.CMFCore.utils import getToolByName
 from OFS.CopySupport import CopyError, ResourceLockedError
 from five import grok
@@ -9,12 +10,9 @@ from plone.z3cform import layout
 from z3c.form import form, field
 from z3c.form import validator
 from z3c.form.interfaces import HIDDEN_MODE
-from z3c.form.interfaces import IValidator
 from z3c.relationfield.schema import RelationChoice
 from zope import schema
-from zope.component import adapts
-from zope.interface import Interface, Invalid, implements
-from zope.schema.interfaces import IField
+from zope.interface import Interface, Invalid
 import z3c.form
 from Products.statusmessages.interfaces import IStatusMessage
 from opengever.dossier.behaviors.dossier import IDossierMarker
@@ -53,8 +51,8 @@ class MoveItemsForm(form.Form):
                                         default=u'Move'))
     def handle_submit(self, action):
         data, errors = self.extractData()
-
         if len(errors) == 0:
+            # TODO: we don't use root, so we can remove it
             root = getToolByName(self, 'portal_url')
             root = root.getPortalObject()
             source = data['request_paths'].split(';;')
@@ -63,14 +61,12 @@ class MoveItemsForm(form.Form):
             failedObjects = []
             failedResourceLockedObjects = []
             copiedItems = 0
-
             # loop through paths
             for path in source:
                 #get objects and parents
                 sourceObjects.append(self.context.unrestrictedTraverse(
                         path.encode('utf-8')))
                 sourceContainer = aq_parent(aq_inner(
-
                         self.context.unrestrictedTraverse(
                             path.encode('utf-8'))))
                 #if parent isn't a dossier and obj is a document
@@ -81,14 +77,13 @@ class MoveItemsForm(form.Form):
                 is_doc = src_obj.portal_type == 'opengever.document.document'
 
                 if not IDossierMarker.providedBy(sourceContainer) and is_doc:
-
                     name = sourceObjects[len(sourceObjects) - 1].title
                     msg = _(u'Document ${name} is connected to a Task.\
                     Please move the Task.', mapping=dict(name=name))
                     IStatusMessage(self.request).addStatusMessage(
                         msg, type='error')
                     sourceObjects.remove(sourceObjects[len(sourceObjects) - 1])
-
+            # TODO: we get two times parent object of obj. We can solve that better
             for obj in sourceObjects:
                 sourceContainer = aq_parent(aq_inner(obj))
                 #cut object and add it to clipboard
@@ -171,7 +166,6 @@ class MoveItemsFormView(layout.FormWrapper, grok.View):
             else:
                 return self.request.RESPONSE.redirect(
                     '%s#documents' % self.context.absolute_url())
-
         return super(MoveItemsFormView, self).render()
 
 
@@ -180,9 +174,6 @@ class NotInContentTypes(Invalid):
 
 
 class DestinationValidator(validator.SimpleFieldValidator):
-    implements(IValidator)
-    adapts(Interface, Interface, Interface, IField, Interface)
-
     def validate(self, value):
         super(DestinationValidator, self).validate(value)
         source = self.view.widgets['request_paths'].value.split(';;')
@@ -202,3 +193,4 @@ class DestinationValidator(validator.SimpleFieldValidator):
 
 validator.WidgetValidatorDiscriminators(
     DestinationValidator, field=IMoveItemsSchema['destination_folder'])
+provideAdapter(DestinationValidator)
