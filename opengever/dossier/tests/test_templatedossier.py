@@ -1,13 +1,9 @@
+from opengever.dossier.templatedossier import ITemplateDossier
+from opengever.dossier.testing import OPENGEVER_DOSSIER_INTEGRATION_TESTING
+from plone.dexterity.interfaces import IDexterityFTI
+from zope.component import createObject, queryUtility
 import unittest2 as unittest
 
-from zope.component import createObject
-from zope.component import queryUtility
-
-from plone.dexterity.interfaces import IDexterityFTI
-
-from opengever.dossier.testing import OPENGEVER_DOSSIER_INTEGRATION_TESTING
-
-from opengever.dossier.templatedossier import ITemplateDossier
 
 class TestTemplateDossierIntegration(unittest.TestCase):
 
@@ -20,24 +16,23 @@ class TestTemplateDossierIntegration(unittest.TestCase):
         self.failUnless(ITemplateDossier.providedBy(d1))
 
     def test_fti(self):
-        fti = queryUtility(IDexterityFTI, name='opengever.dossier.templatedossier')
+        fti = queryUtility(IDexterityFTI,
+                           name='opengever.dossier.templatedossier')
         self.assertNotEquals(None, fti)
 
     def test_schema(self):
-        fti = queryUtility(IDexterityFTI, name='opengever.dossier.templatedossier')
+        fti = queryUtility(IDexterityFTI,
+                           name='opengever.dossier.templatedossier')
         schema = fti.lookupSchema()
         self.assertEquals(ITemplateDossier, schema)
 
     def test_factory(self):
-        fti = queryUtility(IDexterityFTI, name='opengever.dossier.templatedossier')
+        fti = queryUtility(IDexterityFTI,
+                           name='opengever.dossier.templatedossier')
         factory = fti.factory
         new_object = createObject(factory)
         self.failUnless(ITemplateDossier.providedBy(new_object))
 
-    # XXX
-    # Don't work yet because its not possible to access to the dependent vocabulary from opengever.octopus.tentacle
-    # def test_view(self):
-    #     self.folder.invokeFactory('opengever.dossier.templatedossier', 'dossier1')
-    #     d1 = self.folder['dossier1']
-    #     view = d1.restrictedTraverse('@@view')
-    #     self.failUnless(view())
+    def test_templatefolder_utility(self):
+
+        pass

@@ -9,6 +9,7 @@ tests_require = [
     'opengever.task',
     'opengever.document',
     'opengever.globalindex',
+    'plone.mocktestcase',
 ]
 
 setup(name='opengever.dossier',

@@ -45,7 +45,10 @@ class TemplateDocumentFormView(grok.View):
         self.errors = {}
         self.title = ''
         self.edit = False
+
         if self.request.get('form.buttons.save'):
+
+            #inialize attributes with the values from the request.
             path = None
             if self.request.get('paths'):
                 path = self.request.get('paths')[0]
@@ -53,60 +56,16 @@ class TemplateDocumentFormView(grok.View):
             self.edit = self.request.get('form.widgets.edit_form') == ['on']
 
             if path and self.title:
-
                 #create document
-                doc = self.context.restrictedTraverse(path)
-                clibboard = aq_parent(aq_inner(doc)).manage_copyObjects(
-                    [doc.getId()])
-                result = self.context.manage_pasteObjects(clibboard)
-                newdoc = self.context.get(result[0].get('new_id'))
-                annotations = IAnnotations(newdoc)
-                for a in list(annotations.keys()):
-                    del annotations[a]
+                newdoc = self.create_document(path)
 
-                # change attributes: id, title, owner, creation_date ect.
-                name = "document-%s" % getUtility(ISequenceNumber).get_number(
-                    newdoc)
-                member = self.context.portal_membership.getAuthenticatedMember()
-                self.context.manage_renameObject(newdoc.getId(), name)
-                event = ObjectAddedEvent(
-                    newdoc, newParent=self.context, newName=newdoc.getId())
-                notify(event)
-                newdoc.setTitle(self.title)
-                newdoc.changeOwnership(member)
-                newdoc.creation_date = DateTime()
-                newdoc.creators = (member.title_or_id(), )
-                #reset document_date and document_author
-                newdoc.document_date = None
-                newdoc.document_author = None
-                newdoc.manage_delLocalRoles(
-                    [u for u, r in newdoc.get_local_roles()])
-                newdoc.manage_setLocalRoles(
-                    member.getId(), ('Owner', ))
-                event = ObjectModifiedEvent(newdoc)
-                notify(event)
                 # check if the direct-edit-mode is selected
                 if self.edit:
+                    self.activate_external_editing(newdoc)
 
-                    # checkout the document
-                    manager = self.context.restrictedTraverse(
-                        'checkout_documents')
-                    manager.checkout(newdoc)
-
-                    # # redirect to the parent Dossier of the new document
-                    # # and set the redirectTo parameter, which start the
-                    # # zem-file download. See startredirect.js
-                    redirector = IRedirector(self.request)
-                    redirector.redirect(
-                        '%s/external_edit' % newdoc.absolute_url(),
-                        target='_self',
-                        timeout=1000)
-
-                    return self.request.RESPONSE.redirect(
+                return self.request.RESPONSE.redirect(
                         self.context.absolute_url() + '#documents')
-                else:
-                    return self.request.RESPONSE.redirect(
-                        self.context.absolute_url() + '#documents')
+
             else:
                 if path == None:
                     self.errors['paths'] = True
@@ -116,6 +75,71 @@ class TemplateDocumentFormView(grok.View):
         elif self.request.get('form.buttons.cancel'):
             return self.request.RESPONSE.redirect(self.context.absolute_url())
 
+        return self.render_form()
+
+    def activate_external_editing(self, newdoc):
+        """Checkout the given document, and add the external_editor url
+        to redirector cue"""
+
+        # checkout the document
+        manager = self.context.restrictedTraverse(
+            'checkout_documents')
+        manager.checkout(newdoc)
+
+        # Add redirect to the zem-file download,
+        # for starting external editing with external editor.
+
+        redirector = IRedirector(self.request)
+        redirector.redirect(
+            '%s/external_edit' % newdoc.absolute_url(),
+            target='_self',
+            timeout=1000)
+
+    def create_document(self, path):
+        doc = self.context.restrictedTraverse(path)
+        clibboard = aq_parent(aq_inner(doc)).manage_copyObjects(
+            [doc.getId()])
+        result = self.context.manage_pasteObjects(clibboard)
+        newdoc = self.context.get(result[0].get('new_id'))
+
+        #remove every annotation which was stored on the template object
+        annotations = IAnnotations(newdoc)
+        for a in list(annotations.keys()):
+            del annotations[a]
+
+        # rename it
+        name = "document-%s" % getUtility(ISequenceNumber).get_number(
+            newdoc)
+        member = getToolByName(
+            self.context, 'portal_membership').getAuthenticatedMember()
+        self.context.manage_renameObject(newdoc.getId(), name)
+
+        event = ObjectAddedEvent(
+            newdoc, newParent=self.context, newName=newdoc.getId())
+        notify(event)
+
+        newdoc.setTitle(self.title)
+
+        # change other attributes
+        newdoc.changeOwnership(member)
+        newdoc.creation_date = DateTime()
+        newdoc.creators = (member.title_or_id(), )
+
+        #reset document_date and document_author
+        newdoc.document_date = None
+        newdoc.document_author = None
+        newdoc.manage_delLocalRoles(
+            [u for u, r in newdoc.get_local_roles()])
+        newdoc.manage_setLocalRoles(
+            member.getId(), ('Owner', ))
+
+        # notify necassary standard events
+        event = ObjectModifiedEvent(newdoc)
+        notify(event)
+
+        return newdoc
+
+    def render_form(self):
         # get the templatedocuments and show the form template
         templateUtil = getUtility(
             ITemplateUtility, 'opengever.templatedossier')
@@ -141,14 +165,14 @@ class TemplateDocumentFormView(grok.View):
         columns = (
             (''),
             ('', helper.path_radiobutton),
-            {'column':'Title',
+            {'column': 'Title',
              'column_title': _(u'label_title', default=u'title'),
-             'sort_index':'sortable_title',
-             'transform':linked},
-            {'column':'Creator',
+             'sort_index': 'sortable_title',
+             'transform': linked},
+            {'column': 'Creator',
              'column_title': _(u'label_creator', default=u'Creator'),
-             'sort_index':'document_author'},
-             {'column':'modified',
+             'sort_index': 'document_author'},
+             {'column': 'modified',
               'column_title': _(u'label_modified', default=u'Modified'),
               'transform': readable_date}
               )
@@ -163,7 +187,5 @@ class TemplateFolder(grok.GlobalUtility):
         catalog = getToolByName(context, 'portal_catalog')
         result = catalog(portal_type="opengever.dossier.templatedossier")
         if result:
-            brain = result[0]
-            if brain:
-                return brain.getPath()
+            return result[0].getPath()
         return None

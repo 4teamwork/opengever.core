@@ -5,6 +5,11 @@ Changelog
 2.0b23 (unreleased)
 -------------------
 
+- Split the whole create document from template process into different methods,
+  to made the code better readable and allow specifig testing.
+  Added mocktests for the create document from template process.
+  [phgross]
+
 - Fixed source for the destination_folder field in the move_items view.
   Just allows repositoryfolders and dossiers.
   Issue #1231 Probleme im Autocomplete Feld in der move_items view
