@@ -1,7 +1,6 @@
 import unittest2 as unittest
 from opengever.dossier.testing import OPENGEVER_DOSSIER_INTEGRATION_TESTING
-from plone.app.testing import TEST_USER_NAME, TEST_USER_PASSWORD
-from plone.testing.z2 import Browser
+
 
 class TestMoveItemsIntegration(unittest.TestCase):
 
@@ -63,12 +62,14 @@ class TestMoveItemsIntegration(unittest.TestCase):
 
         # Check childs bevore moving
         self.assertTrue(dossier1.hasChildNodes() == 3)
+        self.assertTrue(dossier2.hasChildNodes() == 0)
 
         # Move objects
         form.handle_submit(form, object)
 
         # Check childs after moving
         self.assertTrue(dossier1.hasChildNodes() == 0)
+        self.assertTrue(dossier2.hasChildNodes() == 3)
 
         self.failUnless(portal.unrestrictedTraverse('repo2/dossier2/doc1'))
         self.failUnless(portal.unrestrictedTraverse('repo2/dossier2/task1'))
