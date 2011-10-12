@@ -21,11 +21,36 @@ Create content
     >>> field_type = getFields(schema)['message']._type
     >>> msgtxt = 'Mime-Version: 1.0\nContent-Type: multipart/mixed; boundary=908752978\nTo: to@example.org\nFrom: from@example.org\nSubject: Attachment Test\nDate: Thu, 01 Jan 1970 01:00:00 +0100\nMessage-Id: <1>\n\n\n--908752978\nContent-Disposition: attachment;\n	filename*=iso-8859-1''B%FCcher.txt\nContent-Type: text/plain;\n	name="=?iso-8859-1?Q?B=FCcher.txt?="\nContent-Transfer-Encoding: base64\n\nw6TDtsOcCg==\n\n--908752978--\n'
 
+    >>> linebreak_msgtxt = """Mime-Version: 1.0
+    ... Content-Type: multipart/mixed; boundary=908752978
+    ... To: to@example.org\nFrom: from@example.org
+    ... Subject: Attachment Test
+    ... Date: Thu, 01 Jan 1970 01:00:00 +0100\nMessage-Id: <1>
+    ...
+    ...
+    ... --908752978
+    ... Content-Disposition: attachment;
+    ... 	filename=Projekt Test Inputvorschlag.doc
+    ... Content-Type: text/plain;
+    ... 	name="Projekt Test Input
+    ...         vorschlag.doc"
+    ... Content-Transfer-Encoding: base64
+    ...
+    ... w6TDtsOcCg==
+    ...
+    ... --908752978--
+    ... """
+
+
     >>> dossier = createContentInContainer(
     ...     portal, 'opengever.dossier.businesscasedossier', title=u'Dossier 1')
 
     >>> mail1 = createContentInContainer(dossier, 'ftw.mail.mail',
     ...     message=field_type(data=msgtxt,
+    ...          contentType=u'message/rfc822', filename=u'attachment.txt'))
+
+    >>> mail3 = createContentInContainer(dossier, 'ftw.mail.mail',
+    ...     message=field_type(data=linebreak_msgtxt,
     ...          contentType=u'message/rfc822', filename=u'attachment.txt'))
 
     >>> mail2 = createContentInContainer(
@@ -40,7 +65,7 @@ Browser & login
     >>> browser.getControl(name='__ac_name').value = portal_owner
     >>> browser.getControl(name='__ac_password').value = default_password
     >>> browser.getControl(name='submit').click()
-	
+
 No attachments
     >>> browser.open('%s/extract_attachments' % mail2.absolute_url())
     >>> browser.url == mail2.absolute_url()
@@ -60,6 +85,13 @@ Submit
     >>> browser.getControl(name='attachments:list').value=[1]
     >>> browser.getControl(name='form.submitted').click()
     >>> 'Created document Bücher' in browser.contents
+    True
+
+Should work also with line breaks in the attachment title
+    >>> browser.open('%s/extract_attachments' % mail3.absolute_url())
+    >>> browser.getControl(name='attachments:list').value=[1]
+    >>> browser.getControl(name='form.submitted').click()
+    >>> dossier.get('document-2').title == 'Projekt Test Input vorschlag'
     True
 
 Delete attachments from message

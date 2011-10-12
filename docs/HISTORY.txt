@@ -5,6 +5,11 @@ Changelog
 2.0b12 (unreleased)
 -------------------
 
+- Fixed extract_attachment method, remove line breaks from the attachment filenames.
+  Issue #1236 Probleme im inbound mail.
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1236
+  [phgross]
+
 - Nothing changed yet.
 
 

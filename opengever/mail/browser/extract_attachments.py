@@ -1,4 +1,7 @@
 from Acquisition import aq_inner, aq_parent
+from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
+from Products.CMFPlone.utils import getToolByName
+from Products.statusmessages.interfaces import IStatusMessage
 from five import grok
 from ftw.mail.mail import IMail
 from ftw.mail.utils import get_attachments
@@ -10,9 +13,6 @@ from opengever.mail.behaviors import IMailInAddressMarker
 from plone.dexterity.utils import createContentInContainer
 from plone.dexterity.utils import iterSchemata
 from plone.i18n.normalizer.interfaces import IIDNormalizer
-from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
-from Products.CMFPlone.utils import getToolByName
-from Products.statusmessages.interfaces import IStatusMessage
 from z3c.form.interfaces import IValue
 from z3c.relationfield.relation import RelationValue
 from zope.app.component.hooks import getSite
@@ -21,6 +21,7 @@ from zope.component import queryMultiAdapter
 from zope.intid.interfaces import IIntIds
 from zope.schema import getFieldsInOrder
 import os.path
+import re
 
 from plone.namedfile import HAVE_BLOBS
 if HAVE_BLOBS:
@@ -171,13 +172,15 @@ class ExtractAttachments(grok.View):
             pos = att.get('position')
             filename = att.get('filename')
 
+            # remove line breaks from the filename
+            filename = re.sub('\s{1,}', ' ', filename)
+
             kwargs = {'title': filename[:filename.rfind('.')].decode('utf-8'),
                       'file': self.get_attachment_as_namedfile(pos),
                       'keywords': ()}
             doc = createContentInContainer(dossier,
                                            'opengever.document.document',
                                            **kwargs)
-
 
             for schemata in iterSchemata(doc):
                 for name, field in getFieldsInOrder(schemata):
@@ -190,10 +193,10 @@ class ExtractAttachments(grok.View):
                         # otherwise we set the missing value
                         default = queryMultiAdapter((
                                 doc,
-                                doc.REQUEST, # request
-                                None, # form
+                                doc.REQUEST,  # request
+                                None,  # form
                                 field,
-                                None, # Widget
+                                None,  # Widget
                                 ), IValue, name='default')
                         if default != None:
                             default = default.get()
@@ -205,7 +208,6 @@ class ExtractAttachments(grok.View):
                             except:
                                 pass
                         field.set(field.interface(doc), default)
-
 
             # add a reference from the attachment to the mail
             intids = getUtility(IIntIds)
@@ -255,6 +257,9 @@ class ExtractAttachments(grok.View):
         filename = get_filename(attachment)
         if not isinstance(filename, unicode):
             filename = filename.decode('utf-8')
+
+        # remove line breaks from the filename
+        filename = re.sub('\s{1,}', ' ', filename)
 
         return NamedFile(data=attachment.get_payload(decode=1),
                          contentType=attachment.get_content_type(),
