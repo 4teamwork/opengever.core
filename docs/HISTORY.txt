@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-2.0b12 (unreleased)
+2.0b12 (2011-10-13)
 -------------------
 
 - Replace german string with correct translations, in the send_document fucionality.
