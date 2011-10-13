@@ -174,22 +174,29 @@ class NotInContentTypes(Invalid):
 
 
 class DestinationValidator(validator.SimpleFieldValidator):
+    """Validator for destination-path.
+    We check the destinations allowed content-type. If one or more source-types
+    are not allowed in the destination, we raise an error
+    """
     def validate(self, value):
         super(DestinationValidator, self).validate(value)
+
+        # Allowed contenttypes for destination-folder
+        allowed_types = [t.getId() for t in value.allowedContentTypes()]
+
+        # Paths to source object
         source = self.view.widgets['request_paths'].value.split(';;')
+
+        # Get source-brains
         portal_catalog = getToolByName(self.context, 'portal_catalog')
-        sourceobjs = []
-        for item in source:
-            sourceobjs.append(portal_catalog(path={'query': item, 'depth': 0}))
-        inContentTypes = False
-        for item in value.allowedContentTypes():
-            for sourceobj in sourceobjs:
-                if sourceobj[0].portal_type in item.id:
-                    inContentTypes = True
-        if inContentTypes == False:
-            raise NotInContentTypes(
-                _(u"error_NotInContentTypes",
-                  default=u"It isn't allowed to add such items there"))
+        sourceobjs = portal_catalog(path={'query': source, 'depth': 0})
+
+        # Look for invalid contenttype
+        for sourceobj in sourceobjs:
+            if not sourceobj.portal_type in allowed_types:
+                raise NotInContentTypes(
+                    _(u"error_NotInContentTypes",
+                      default=u"It isn't allowed to add such items there"))
 
 validator.WidgetValidatorDiscriminators(
     DestinationValidator, field=IMoveItemsSchema['destination_folder'])
