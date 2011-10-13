@@ -189,14 +189,21 @@ class DestinationValidator(validator.SimpleFieldValidator):
 
         # Get source-brains
         portal_catalog = getToolByName(self.context, 'portal_catalog')
-        sourceobjs = portal_catalog(path={'query': source, 'depth': 0})
+        src_brains = portal_catalog(path={'query': source, 'depth': 0})
+        failed_objects = []
 
         # Look for invalid contenttype
-        for sourceobj in sourceobjs:
-            if not sourceobj.portal_type in allowed_types:
-                raise NotInContentTypes(
-                    _(u"error_NotInContentTypes",
-                      default=u"It isn't allowed to add such items there"))
+        for src_brain in src_brains:
+            if not src_brain.portal_type in allowed_types:
+                failed_objects.append(src_brain.Title)
+
+        # If we found one or more invalid contenttypes, we raise an error
+        if failed_objects:
+            raise NotInContentTypes(
+                _(u"error_NotInContentTypes ${failedObjects}",
+                  default=u"It isn't allowed to add such items there: "\
+                           "${failedObjects}", mapping=dict(
+                           failedObjects='.'.join(failed_objects))))
 
 validator.WidgetValidatorDiscriminators(
     DestinationValidator, field=IMoveItemsSchema['destination_folder'])
