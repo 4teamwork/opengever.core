@@ -23,6 +23,7 @@ from zope import schema
 from zope.component import getUtility, provideAdapter
 from zope.interface import Interface
 from zope.interface import invariant, Invalid
+from zope.i18n import translate
 from ftw.mail.mail import IMail
 
 CHARSET = 'iso-8859-1'
@@ -185,7 +186,10 @@ class SendDocumentForm(form.Form):
 
         # iterate over object list (which can include documents and mails)
         # and attach the file to the mail
-        docs_links = u'Dokumente:\r\n'
+        docs_links = '%s:\r\n' % (translate(
+                _('label_documents', default=u'Documents'),
+                context=self.request))
+
         for obj in objs:
 
             if IMail.providedBy(obj):
@@ -198,7 +202,13 @@ class SendDocumentForm(form.Form):
                     docs_links, obj.title, obj.absolute_url())
                 continue
 
-            docs_links = '%s\r\n - %s (siehe Anhang)' % (docs_links, obj.title)
+            docs_links = '%s\r\n - %s (%s)' % (
+                docs_links,
+                obj.title,
+                translate(
+                    _('label_see_attachment', default=u'see attachment'),
+                    context=self.request))
+
             part = MIMEBase('application', obj_file.contentType)
             part.set_payload(obj_file.data)
             Encoders.encode_base64(part)

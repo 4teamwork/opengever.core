@@ -5,6 +5,9 @@ Changelog
 2.0b12 (unreleased)
 -------------------
 
+- Replace german string with correct translations, in the send_document fucionality.
+  [phgross]
+
 - Rebuilding send_document fucionality. Implements mail transfers also for mails.
   Issue #1238 Fehler im DocumentSizeValidator im opengever.mail
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1238/
