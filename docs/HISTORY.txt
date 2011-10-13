@@ -5,6 +5,12 @@ Changelog
 2.0b23 (unreleased)
 -------------------
 
+- Refactoring move_items module
+  [eschmutz]
+
+- Add tests for move_items module
+  [eschmutz]
+
 - Split the whole create document from template process into different methods,
   to made the code better readable and allow specifig testing.
   Added mocktests for the create document from template process.
