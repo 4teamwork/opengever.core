@@ -30,6 +30,10 @@ class TestMoveItemsIntegration(unittest.TestCase):
         subdossier1 = dossier1[dossier1.invokeFactory(
             'opengever.dossier.businesscasedossier', 'subdossier1')]
 
+        # In repo we can't add other content than businescasedossiers
+        badrepo1 = portal[portal.invokeFactory(
+            'opengever.repository.repositoryfolder', 'badrepo1')]
+
         # Move-items view
         view = dossier1.restrictedTraverse('move_items')
 
@@ -50,6 +54,33 @@ class TestMoveItemsIntegration(unittest.TestCase):
         request['paths'] = paths
         request['form.widgets.request_paths'] = paths
         request['form.widgets.destination_folder'] = "/".join(
+            badrepo1.getPhysicalPath())
+
+        # Get move_items form
+        form = view.form(dossier1, request)
+        form.updateWidgets()
+
+        # Set widget values
+        form.widgets['destination_folder'].value = badrepo1
+        form.widgets['request_paths'].value = paths
+
+        # Check childs bevore moving
+        self.assertTrue(dossier1.hasChildNodes() == 3)
+        self.assertTrue(dossier2.hasChildNodes() == 0)
+
+        # Move objects
+        # We want to put disallowed contenttype into the repo.
+        form.handle_submit(form, object)
+
+        # Check childs after moving
+        # Its like before because the move-step was invalid
+        self.assertTrue(dossier1.hasChildNodes() == 3)
+        self.assertTrue(dossier2.hasChildNodes() == 0)
+
+        # Set request vars
+        request['paths'] = paths
+        request['form.widgets.request_paths'] = paths
+        request['form.widgets.destination_folder'] = "/".join(
             dossier2.getPhysicalPath())
 
         # Get move_items form
@@ -60,14 +91,12 @@ class TestMoveItemsIntegration(unittest.TestCase):
         form.widgets['destination_folder'].value = dossier2
         form.widgets['request_paths'].value = paths
 
-        # Check childs bevore moving
-        self.assertTrue(dossier1.hasChildNodes() == 3)
-        self.assertTrue(dossier2.hasChildNodes() == 0)
-
         # Move objects
+        # Now we just copy allowed contenttypes
         form.handle_submit(form, object)
 
         # Check childs after moving
+        # And you see... they where moved to the the new dossier
         self.assertTrue(dossier1.hasChildNodes() == 0)
         self.assertTrue(dossier2.hasChildNodes() == 3)
 
