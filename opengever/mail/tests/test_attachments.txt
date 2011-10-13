@@ -103,3 +103,10 @@ Delete attachments from message
     >>> len(get_attachments(mail1.msg)) == 0
     True
 
+XXX
+Test the temporary fix for the Title accessor
+See patch.py
+    >>> isinstance(mail1.Title(), unicode)
+    True
+    >>> isinstance(mail2.Title(), unicode)
+    True

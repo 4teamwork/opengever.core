@@ -4,6 +4,7 @@
       xmlns:grok="http://namespaces.zope.org/grok"
       xmlns:i18n="http://namespaces.zope.org/i18n"
       xmlns:plone="http://namespaces.plone.org/plone"
+      xmlns:monkey="http://namespaces.plone.org/monkey"
       xmlns:browser="http://namespaces.zope.org/browser"
       i18n_domain="opengever.mail">
 
@@ -38,5 +39,13 @@
         description=""
         handler="opengever.mail.setuphandler.import_various" />
 
+    <include package="collective.monkeypatcher" />
+
+    <monkey:patch
+       description="Temporary fix for Title accessor"
+       class="ftw.mail.mail.Mail"
+       original="Title"
+       replacement=".patch.Title"
+       />
 
 </configure>
