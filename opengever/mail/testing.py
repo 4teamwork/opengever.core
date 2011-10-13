@@ -28,10 +28,15 @@ class MailIntegrationLayer(PloneSandboxLayer):
          xmlconfig.file('testing.zcml', package=tests,
              context=configurationContext)
 
+         from ftw import mail
+         xmlconfig.file('configure.zcml', package=mail,
+             context=configurationContext)
+
     def setUpPloneSite(self, portal):
 
         applyProfile(portal, 'opengever.ogds.base:default')
         applyProfile(portal, 'opengever.mail:default')
+        applyProfile(portal, 'ftw.mail:default')
         applyProfile(portal, 'opengever.base:default')
         applyProfile(portal, 'opengever.document:default')
         applyProfile(portal, 'opengever.dossier:default')

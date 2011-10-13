@@ -5,6 +5,11 @@ Changelog
 2.0b12 (unreleased)
 -------------------
 
+- Rebuilding send_document fucionality. Implements mail transfers also for mails.
+  Issue #1238 Fehler im DocumentSizeValidator im opengever.mail
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1238/
+  [phgross]
+
 - Fixed extract_attachment method, remove line breaks from the attachment filenames.
   Issue #1236 Probleme im inbound mail.
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1236

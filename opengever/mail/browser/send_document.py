@@ -23,7 +23,7 @@ from zope import schema
 from zope.component import getUtility, provideAdapter
 from zope.interface import Interface
 from zope.interface import invariant, Invalid
-
+from ftw.mail.mail import IMail
 
 CHARSET = 'iso-8859-1'
 
@@ -177,25 +177,33 @@ class SendDocumentForm(form.Form):
     def cancel_button_handler(self, action):
         return self.request.RESPONSE.redirect('./#documents-tab')
 
-    def create_mail(self, text='', docs=[]):
-        """ create the mail with the attached files """
+    def create_mail(self, text='', objs=[]):
+        """Create the mail and attach the the files. For object without a file
+        it include a Link to the Object in to the message"""
         msg = MIMEMultipart()
         msg['Date'] = formatdate(localtime=True)
 
-        # iterate over document list and attach the file to the mail
+        # iterate over object list (which can include documents and mails)
+        # and attach the file to the mail
         docs_links = u'Dokumente:\r\n'
-        for doc in docs:
-            if not doc.file:
+        for obj in objs:
+
+            if IMail.providedBy(obj):
+                obj_file= obj.message
+            else:
+                obj_file = obj.file
+
+            if not obj_file:
                 docs_links = '%s\r\n - %s (%s)' % (
-                    docs_links, doc.title, doc.absolute_url())
+                    docs_links, obj.title, obj.absolute_url())
                 continue
-            docfile = doc.file
-            docs_links = '%s\r\n - %s (siehe Anhang)' % (docs_links, doc.title)
-            part = MIMEBase('application', docfile.contentType)
-            part.set_payload(docfile.data)
+
+            docs_links = '%s\r\n - %s (siehe Anhang)' % (docs_links, obj.title)
+            part = MIMEBase('application', obj_file.contentType)
+            part.set_payload(obj_file.data)
             Encoders.encode_base64(part)
             part.add_header('Content-Disposition', 'attachment; filename="%s"'
-                            % docfile.filename)
+                            % obj_file.filename)
             msg.attach(part)
 
         text = '%s\r\n\r\n%s' % (text, docs_links)
