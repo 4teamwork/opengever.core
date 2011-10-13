@@ -52,79 +52,58 @@ class MoveItemsForm(form.Form):
     def handle_submit(self, action):
         data, errors = self.extractData()
         if len(errors) == 0:
-            # TODO: we don't use root, so we can remove it
-            root = getToolByName(self, 'portal_url')
-            root = root.getPortalObject()
+
             source = data['request_paths'].split(';;')
             destination = data['destination_folder']
-            sourceObjects = []
             failedObjects = []
             failedResourceLockedObjects = []
             copiedItems = 0
-            # loop through paths
+
             for path in source:
-                #get objects and parents
-                sourceObjects.append(self.context.unrestrictedTraverse(
-                        path.encode('utf-8')))
+
+                # Get source object
+                srcObject = self.context.unrestrictedTraverse(
+                        path.encode('utf-8'))
+
+                # Get parent object
                 sourceContainer = aq_parent(aq_inner(
                         self.context.unrestrictedTraverse(
                             path.encode('utf-8'))))
-                #if parent isn't a dossier and obj is a document
-                # it's connected to a task
-                # and shouldn't be moved
 
-                src_obj = sourceObjects[len(sourceObjects) - 1]
-                is_doc = src_obj.portal_type == 'opengever.document.document'
+                src_name = srcObject.title
+                src_id = srcObject.id
+
+                # If parent isn't a dossier and obj is a document
+                # it's connected to a task and shouldn't be moved
+                is_doc = srcObject.portal_type == 'opengever.document.document'
 
                 if not IDossierMarker.providedBy(sourceContainer) and is_doc:
-                    name = sourceObjects[len(sourceObjects) - 1].title
                     msg = _(u'Document ${name} is connected to a Task.\
-                    Please move the Task.', mapping=dict(name=name))
+                    Please move the Task.', mapping=dict(name=src_name))
                     IStatusMessage(self.request).addStatusMessage(
                         msg, type='error')
-                    sourceObjects.remove(sourceObjects[len(sourceObjects) - 1])
-            # TODO: we get two times parent object of obj. We can solve that better
-            for obj in sourceObjects:
-                sourceContainer = aq_parent(aq_inner(obj))
-                #cut object and add it to clipboard
-                try:
-                    clipboard = sourceContainer.manage_cutObjects(obj.id)
-                except ResourceLockedError:
-                    failedResourceLockedObjects.append(obj.title)
                     continue
 
                 try:
-                    #try to paste object
+                    # Try to cut and paste object
+                    clipboard = sourceContainer.manage_cutObjects(src_id)
                     destination.manage_pasteObjects(clipboard)
                     copiedItems += 1
 
-                except ValueError:
-                    #catch exception and add title to a list ofr failed objects
-                    failedObjects.append(obj.title)
+                except ResourceLockedError:
+                    # The object is locket over webdav
+                    failedResourceLockedObjects.append(src_name)
+                    continue
 
-                except CopyError:
-                    #catch exception and add title to a list of failed objects
-                    failedObjects.append(obj.title)
+                except (ValueError, CopyError):
+                    # Catch exception and add title to a list of failed objects
+                    failedObjects.append(src_name)
+                    continue
 
-            if copiedItems:
-                msg = _(u'${copiedItems} Elements were moved successfully',
-                        mapping=dict(copiedItems=copiedItems))
-                IStatusMessage(self.request).addStatusMessage(
-                    msg, type='info')
-
-            if failedObjects:
-                msg = _(u'Failed to copy following objects: ${failedObjects}',
-                        mapping=dict(failedObjects=','.join(failedObjects)))
-                IStatusMessage(self.request).addStatusMessage(
-                    msg, type='error')
-
-            if failedResourceLockedObjects:
-                msg = _(u'Failed to copy following objects: ${failedObjects}\
-                        . Locket via WebDAV',
-                        mapping=dict(failedObjects=','.join(
-                            failedResourceLockedObjects)))
-                IStatusMessage(self.request).addStatusMessage(
-                    msg, type='error')
+            self.create_statusmessages(
+                copiedItems,
+                failedObjects,
+                failedResourceLockedObjects, )
 
             self.request.RESPONSE.redirect(destination.absolute_url())
 
@@ -133,12 +112,37 @@ class MoveItemsForm(form.Form):
     def handle_cancel(self, action):
         return self.request.RESPONSE.redirect(self.context.absolute_url())
 
+    def create_statusmessages(
+        self,
+        copiedItems,
+        failedObjects,
+        failedResourceLockedObjects, ):
+        """ Create statusmessages with errors and infos af the move-process
+        """
+
+        if copiedItems:
+            msg = _(u'${copiedItems} Elements were moved successfully',
+                    mapping=dict(copiedItems=copiedItems))
+            IStatusMessage(self.request).addStatusMessage(
+                msg, type='info')
+
+        if failedObjects:
+            msg = _(u'Failed to copy following objects: ${failedObjects}',
+                    mapping=dict(failedObjects=','.join(failedObjects)))
+            IStatusMessage(self.request).addStatusMessage(
+                msg, type='error')
+
+        if failedResourceLockedObjects:
+            msg = _(u'Failed to copy following objects: ${failedObjects}\
+                    . Locket via WebDAV',
+                    mapping=dict(failedObjects=','.join(
+                        failedResourceLockedObjects)))
+            IStatusMessage(self.request).addStatusMessage(
+                msg, type='error')
+
 
 class MoveItemsFormView(layout.FormWrapper, grok.View):
-    """ The View wich display the SendDocument-Form.
-
-    For sending documents with per mail.
-
+    """ View to move selected items into another location
     """
 
     grok.context(IDexterityContainer)
@@ -178,6 +182,7 @@ class DestinationValidator(validator.SimpleFieldValidator):
     We check the destinations allowed content-type. If one or more source-types
     are not allowed in the destination, we raise an error
     """
+
     def validate(self, value):
         super(DestinationValidator, self).validate(value)
 
