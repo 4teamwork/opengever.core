@@ -203,7 +203,7 @@ class DestinationValidator(validator.SimpleFieldValidator):
                 _(u"error_NotInContentTypes ${failedObjects}",
                   default=u"It isn't allowed to add such items there: "\
                            "${failedObjects}", mapping=dict(
-                           failedObjects='.'.join(failed_objects))))
+                           failedObjects=', '.join(failed_objects))))
 
 validator.WidgetValidatorDiscriminators(
     DestinationValidator, field=IMoveItemsSchema['destination_folder'])
