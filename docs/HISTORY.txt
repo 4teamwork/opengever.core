@@ -5,7 +5,9 @@ Changelog
 2.0b23 (unreleased)
 -------------------
 
-- Nothing changed yet.
+- Fixed batching by using the ListingView from opengever.tabbedview which
+  overrides the batching template to match the CSS in izug.basetheme
+  [lgraf]
 
 
 2.0b22 (2011-09-30)

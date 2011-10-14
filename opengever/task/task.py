@@ -1,12 +1,8 @@
 from Acquisition import aq_parent, aq_inner
-from Products.CMFCore.interfaces import IActionSucceededEvent
-from Products.CMFCore.utils import getToolByName
-from Products.CMFPlone.CatalogTool import sortable_title
 from collective import dexteritytextindexer
 from datetime import datetime, timedelta
 from five import grok
 from ftw.datepicker.widget import DatePickerFieldWidget
-from ftw.tabbedview.browser.listing import ListingView
 from ftw.table import helper
 from ftw.table.basesource import BaseTableSource
 from ftw.table.interfaces import ITableSource, ITableSourceConfig
@@ -18,12 +14,13 @@ from opengever.globalindex.utils import indexed_task_link
 from opengever.ogds.base.autocomplete_widget import AutocompleteFieldWidget
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.ogds.base.utils import get_client_id
+from opengever.tabbedview.browser.listing import ListingView
 from opengever.tabbedview.browser.tabs import Documents
 from opengever.tabbedview.browser.tabs import OpengeverTab
 from opengever.tabbedview.helper import readable_date, external_edit_link
 from opengever.tabbedview.helper import readable_ogds_author
-from opengever.task import _
 from opengever.task import util
+from opengever.task import _
 from opengever.task.helper import linked
 from opengever.task.helper import path_checkbox
 from opengever.task.interfaces import ISuccessorTaskController
@@ -32,6 +29,9 @@ from plone.dexterity.content import Container
 from plone.directives import form, dexterity
 from plone.directives.dexterity import DisplayForm
 from plone.indexer import indexer
+from Products.CMFCore.interfaces import IActionSucceededEvent
+from Products.CMFCore.utils import getToolByName
+from Products.CMFPlone.CatalogTool import sortable_title
 from z3c.relationfield.schema import RelationChoice, RelationList
 from zc.relation.interfaces import ICatalog
 from zope import schema
