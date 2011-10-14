@@ -5,6 +5,10 @@ Changelog
 2.0b23 (unreleased)
 -------------------
 
+- Fixed batching by using the ListingView from opengever.tabbedview which
+  overrides the batching template to match the CSS in izug.basetheme
+  [lgraf]
+
 - Split the whole create document from template process into different methods,
   to made the code better readable and allow specifig testing.
   Added mocktests for the create document from template process.
