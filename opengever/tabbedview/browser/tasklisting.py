@@ -1,18 +1,12 @@
 from five import grok
-from sqlalchemy import or_
-from sqlalchemy.orm.query import Query
-from sqlalchemy.sql.expression import asc, desc
-from zope.app.pagetemplate import ViewPageTemplateFile
-from zope.interface import implements, Interface
-
 from ftw.journal.interfaces import IJournalizable
-from ftw.tabbedview.browser.listing import ListingView
 from ftw.table.basesource import BaseTableSource
 from ftw.table.interfaces import ITableSource, ITableSourceConfig
 from opengever.base.browser.helper import client_title_helper
 from opengever.globalindex.model.task import Task
 from opengever.globalindex.utils import indexed_task_link_helper
 from opengever.tabbedview import _
+from opengever.tabbedview.browser.listing import ListingView
 from opengever.tabbedview.browser.tabs import OpengeverTab
 from opengever.tabbedview.helper import overdue_date_helper
 from opengever.tabbedview.helper import readable_date
@@ -21,6 +15,11 @@ from opengever.tabbedview.helper import readable_ogds_author
 from opengever.tabbedview.helper import task_id_checkbox_helper
 from opengever.tabbedview.helper import workflow_state
 from opengever.task.helper import task_type_helper
+from sqlalchemy import or_
+from sqlalchemy.orm.query import Query
+from sqlalchemy.sql.expression import asc, desc
+from zope.app.pagetemplate import ViewPageTemplateFile
+from zope.interface import implements, Interface
 
 
 class IGlobalTaskTableSourceConfig(ITableSourceConfig):

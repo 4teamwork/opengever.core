@@ -1,5 +1,5 @@
 from five import grok
-from ftw.tabbedview.browser.listing import ListingView
+from opengever.tabbedview.browser.listing import ListingView
 from ftw.table.basesource import BaseTableSource
 from ftw.table.interfaces import ITableSource, ITableSourceConfig
 from opengever.globalindex.model.task import Task

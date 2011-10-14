@@ -1,10 +1,10 @@
 from five import grok
-from ftw.tabbedview.browser.listing import ListingView
 from ftw.table.basesource import BaseTableSource
 from ftw.table.interfaces import ITableSource, ITableSourceConfig
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.ogds.models.user import User
 from opengever.tabbedview import _
+from opengever.tabbedview.browser.listing import ListingView
 from opengever.tabbedview.browser.tabs import OpengeverTab
 from opengever.tabbedview.helper import boolean_helper
 from opengever.tabbedview.helper import email_helper

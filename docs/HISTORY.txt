@@ -5,7 +5,10 @@ Changelog
 2.0b110 (unreleased)
 --------------------
 
-- Nothing changed yet.
+- Fixed batching by providing an OpenGever-specific subclass for ListingView
+  and CatalogListingView that override the batching template to match the
+  CSS in izug.basetheme
+  [lgraf]
 
 
 2.0b19 (2011-10-06)

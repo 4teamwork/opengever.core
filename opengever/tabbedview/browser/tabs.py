@@ -1,17 +1,17 @@
 from five import grok
 from ftw.dictstorage.interfaces import ISQLAlchemy
-from ftw.tabbedview.browser.listing import CatalogListingView
 from ftw.tabbedview.interfaces import ITabbedView
 from ftw.table import helper
 from opengever.base.browser.helper import client_title_helper
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.tabbedview import _
-from opengever.tabbedview.helper import readable_date_set_invisibles
-from opengever.tabbedview.helper import readable_ogds_user
-from opengever.tabbedview.helper import readable_ogds_author, linked
-from opengever.tabbedview.helper import readable_date, external_edit_link
-from opengever.tabbedview.helper import workflow_state
+from opengever.tabbedview.browser.listing import CatalogListingView
 from opengever.tabbedview.helper import overdue_date_helper
+from opengever.tabbedview.helper import readable_date, external_edit_link
+from opengever.tabbedview.helper import readable_date_set_invisibles
+from opengever.tabbedview.helper import readable_ogds_author, linked
+from opengever.tabbedview.helper import readable_ogds_user
+from opengever.tabbedview.helper import workflow_state
 from opengever.task.helper import task_type_helper
 from plone.dexterity.interfaces import IDexterityContainer
 from zope.app.pagetemplate import ViewPageTemplateFile
