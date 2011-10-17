@@ -5,6 +5,11 @@ Changelog
 2.0a12 (unreleased)
 -------------------
 
+- Implements generating journal entries for local_roles modifications on repositoryfolders or dossiers.
+  Issue #1242 Fuer local_roles Anpassungen Journaleintraege generieren
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1242/
+  [phgross]
+
 - Fixed batching by using the ListingView from opengever.tabbedview which
   overrides the batching template to match the CSS in izug.basetheme
   [lgraf]

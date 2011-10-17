@@ -1,8 +1,11 @@
+from Acquisition import aq_inner, aq_parent
+from OFS.interfaces import IObjectWillBeMovedEvent, IObjectWillBeAddedEvent
 from Products.CMFCore.interfaces import IActionSucceededEvent
+from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
 from five import grok
-from plone.dexterity.interfaces import IDexterityContent
 from ftw.journal.events.events import JournalEntryEvent
 from ftw.journal.interfaces import IJournalizable
+from ftw.mail.mail import IMail
 from opengever.document.document import IDocumentSchema
 from opengever.document.interfaces import IObjectCheckedInEvent
 from opengever.document.interfaces import IObjectCheckedOutEvent
@@ -13,22 +16,27 @@ from opengever.dossier.browser.participants import role_list_helper
 from opengever.dossier.interfaces import IParticipationCreated
 from opengever.dossier.interfaces import IParticipationRemoved
 from opengever.journal import _
+from opengever.repository.repositoryfolder import IRepositoryFolderSchema
+from opengever.repository.repositoryroot import IRepositoryRoot
+from opengever.sharing.browser.sharing import ROLE_MAPPING
+from opengever.sharing.interfaces import ILocalRolesAcquisitionActivated
+from opengever.sharing.interfaces import ILocalRolesAcquisitionBlocked
+from opengever.sharing.interfaces import ILocalRolesModified
 from opengever.tabbedview.helper import readable_ogds_author
 from opengever.task.task import ITask
 from opengever.trash.trash import ITrashedEvent, IUntrashedEvent
 from persistent.dict import PersistentDict
 from plone.app.versioningbehavior.utils import get_change_note
+from plone.dexterity.interfaces import IDexterityContent
 from zope.app.container.interfaces import IObjectAddedEvent
+from zope.app.container.interfaces import IObjectMovedEvent
 from zope.component import getMultiAdapter
 from zope.event import notify
+from zope.i18n import translate
 from zope.i18nmessageid import MessageFactory
 from zope.i18nmessageid.message import Message
 from zope.lifecycleevent.interfaces import IObjectModifiedEvent
-from ftw.mail.mail import IMail
-from zope.app.container.interfaces import IObjectMovedEvent
-from OFS.interfaces import IObjectWillBeMovedEvent, IObjectWillBeAddedEvent
 pmf = MessageFactory('plone')
-
 
 def propper_string(value):
     if not value:
@@ -64,6 +72,32 @@ def journal_entry_factory(context, action, title,
 
     if not actor == 'zopemaster':
         notify(JournalEntryEvent(**entry))
+    notify(JournalEntryEvent(**entry))
+
+
+def role_mapping_to_str(context, mapping):
+    """Parse the given local_roles mapping to a str,
+    with the help of the ROLE_MAPPING from opengever.sharing"""
+
+    skip_roles = [u'Owner', ]
+
+    user_roles = []
+    trans_mapping = None
+    for behavior, translations in ROLE_MAPPING:
+        if behavior.providedBy(context):
+            trans_mapping = dict(translations)
+
+    for principal, roles in mapping:
+        translated_roles = []
+        for role in roles:
+            if role not in skip_roles:
+                translated_roles.append(
+                    translate(trans_mapping.get(role), context=context.REQUEST))
+
+        if len(translated_roles):
+            user_roles.append('%s: %s' %(principal, ', '.join(translated_roles)))
+
+    return '; '.join(user_roles)
 
 
 def translated_type(context):
@@ -72,6 +106,65 @@ def translated_type(context):
     """
     type_name = context.portal_types.get(context.portal_type).Title()
     return _(unicode(type_name))
+
+
+# ----------------------- REPOSITORYFOLDER --------------
+
+def get_repository_root(context):
+    while not IRepositoryRoot.providedBy(context) \
+            and not IPloneSiteRoot.providedBy(context):
+        context = aq_parent(aq_inner(context))
+    return context
+
+
+LOCAL_ROLES_AQUISITION_BLOCKED = 'Local roles Aquisition Blocked'
+@grok.subscribe(IRepositoryFolderSchema, ILocalRolesAcquisitionBlocked)
+def repositoryfolder_local_roles_acquisition_blocked(context, event):
+
+    title = _(u'label_local_roles_acquisition_blocked_at',
+              default=u'Local roles aquistion blocked at ${repository}.',
+              mapping={'repository': context.title_or_id(),})
+
+    journal_entry_factory(
+        get_repository_root(context),
+        LOCAL_ROLES_AQUISITION_BLOCKED,
+        title=title)
+
+    return
+
+
+LOCALROLES_AQUISITION_ACTIVATED = 'Local roles Aquisition Activated'
+@grok.subscribe(IRepositoryFolderSchema, ILocalRolesAcquisitionActivated)
+def repositoryfolder_local_roles_acquisition_activated(context, event):
+
+    title = _(u'label_local_roles_acquisition_activated_at',
+              default=u'Local roles aquistion activated at ${repository}.',
+              mapping={'repository': context.title_or_id(),})
+
+    journal_entry_factory(
+        get_repository_root(context),
+        LOCAL_ROLES_AQUISITION_BLOCKED,
+        title=title)
+
+    return
+
+
+LOCAL_ROLES_MODIFIED ='Local roles modified'
+@grok.subscribe(IRepositoryFolderSchema, ILocalRolesModified)
+def repositoryfolder_local_roles_modified(context, event):
+
+    title = _(u'label_local_roles_modified_at',
+          default=u'Local roles modified at ${repository}.',
+          mapping={'repository': context.title_or_id(),})
+
+
+    journal_entry_factory(
+        get_repository_root(context),
+        LOCAL_ROLES_MODIFIED,
+        title=title,
+        comment=role_mapping_to_str(context, event.new_local_roles))
+
+    return
 
 
 # ----------------------- DOSSIER -----------------------
@@ -116,6 +209,46 @@ def dossier_state_changed(context, event):
     newstate = event.workflow.transitions.get(event.action).new_state_id
     title = pmf( u'Dossier state changed to %s' % newstate )
     journal_entry_factory(context, DOSSIER_STATE_CHANGED, title)
+    return
+
+
+LOCAL_ROLES_AQUISITION_BLOCKED = 'Local roles Aquisition Blocked'
+@grok.subscribe(IDossierMarker, ILocalRolesAcquisitionBlocked)
+def dossier_local_roles_acquisition_blocked(context, event):
+
+    journal_entry_factory(
+        context,
+        LOCAL_ROLES_AQUISITION_BLOCKED,
+        title=_(u'label_local_roles_acquisition_blocked',
+                default=u'Local roles aquistion blocked.'))
+
+    return
+
+
+LOCAL_ROLES_AQUISITION_ACTIVATED = 'Local roles Aquisition Activated'
+@grok.subscribe(IDossierMarker, ILocalRolesAcquisitionActivated)
+def dossier_local_roles_acquisition_activated(context, event):
+
+    journal_entry_factory(
+        context,
+        LOCAL_ROLES_AQUISITION_ACTIVATED,
+        title=_(u'label_local_roles_acquisition_activated',
+                default=u'Local roles aquistion activated.'))
+
+    return
+
+
+LOCAL_ROLES_MODIFIED ='Local roles modified'
+@grok.subscribe(IDossierMarker, ILocalRolesModified)
+def dossier_local_roles_modified(context, event):
+
+    journal_entry_factory(
+        context,
+        LOCAL_ROLES_MODIFIED,
+        title=_(u'label_local_roles_modified',
+                default=u'Local roles modified.'),
+        comment=role_mapping_to_str(context, event.new_local_roles))
+
     return
 
 
