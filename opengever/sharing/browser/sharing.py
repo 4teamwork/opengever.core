@@ -1,11 +1,15 @@
+from Products.CMFCore.utils import getToolByName
+from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from opengever.sharing import _
 from opengever.sharing.behaviors import IDossier, IStandard
+from opengever.sharing.events import LocalRolesAcquisitionActivated
+from opengever.sharing.events import LocalRolesAcquisitionBlocked
+from opengever.sharing.events import LocalRolesModified
 from plone.app.workflow.browser.sharing import SharingView
 from plone.app.workflow.interfaces import ISharingPageRole
 from plone.memoize.instance import memoize
-from Products.CMFCore.utils import getToolByName
-from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from zope.component import getUtilitiesFor
+from zope.event import notify
 
 ROLE_MAPPING = (
     (IDossier, (
@@ -48,7 +52,7 @@ class OpengeverSharingView(SharingView):
             permission = utility.required_permission
             if not check_permission or permission is None or \
                     portal_membership.checkPermission(permission, context):
-                pairs.append(dict(id = name, title = utility.title))
+                pairs.append(dict(id=name, title=utility.title))
 
         pairs.sort(key=lambda x: x["id"])
         return pairs
@@ -82,6 +86,38 @@ class OpengeverSharingView(SharingView):
         results.pop([r.get('id') for r in results].index('AuthenticatedUsers'))
 
         return results
+
+    def update_inherit(self, status=True, reindex=True):
+        """Method Wrapper for the super method, to allow notify a
+        corresponding event. Needed for adding a Journalentry after a
+        change of the inheritance"""
+
+        changed = super(
+            OpengeverSharingView, self).update_inherit(
+                status=status, reindex=reindex)
+
+        if changed:
+            # notify the correspondig event
+            if status:
+                notify(LocalRolesAcquisitionActivated(self.context))
+            else:
+                notify(LocalRolesAcquisitionBlocked(self.context))
+
+    def update_role_settings(self, new_settings, reindex):
+        """"Method Wrapper for the super method, to allow notify a
+        LocalRolesModified event. Needed for adding a Journalentry after a
+        role_settings change"""
+
+        old_local_roles = dict(self.context.get_local_roles())
+
+        changed = super(OpengeverSharingView, self).update_role_settings(
+            new_settings, reindex)
+
+        if changed:
+            notify(LocalRolesModified(
+                    self.context,
+                    old_local_roles,
+                    self.context.get_local_roles()))
 
 
 class SharingTab(OpengeverSharingView):
