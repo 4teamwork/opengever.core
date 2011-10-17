@@ -1,23 +1,22 @@
 from Acquisition import aq_inner, aq_parent
-from Products.CMFCore.utils import getToolByName
-from OFS.CopySupport import CopyError, ResourceLockedError
 from five import grok
+from OFS.CopySupport import CopyError, ResourceLockedError
+from opengever.document.document import IDocumentSchema
 from opengever.dossier import _
+from opengever.dossier.behaviors.dossier import IDossierMarker
 from plone.dexterity.interfaces import IDexterityContainer
 from plone.formwidget.contenttree import ObjPathSourceBinder
 from plone.z3cform import layout
+from Products.CMFCore.utils import getToolByName
+from Products.statusmessages.interfaces import IStatusMessage
 from z3c.form import form, field
 from z3c.form import validator
 from z3c.form.interfaces import HIDDEN_MODE
-from z3c.form.interfaces import IValidator
 from z3c.relationfield.schema import RelationChoice
 from zope import schema
-from zope.component import adapts
-from zope.interface import Interface, Invalid, implements
-from zope.schema.interfaces import IField
+from zope.component import provideAdapter
+from zope.interface import Interface, Invalid
 import z3c.form
-from Products.statusmessages.interfaces import IStatusMessage
-from opengever.dossier.behaviors.dossier import IDossierMarker
 
 
 class IMoveItemsSchema(Interface):
@@ -28,7 +27,8 @@ class IMoveItemsSchema(Interface):
         source=ObjPathSourceBinder(
             object_provides=[
                 'opengever.dossier.behaviors.dossier.IDossierMarker',
-                'opengever.repository.repositoryfolder.IRepositoryFolderSchema']
+                'opengever.repository.repositoryfolder.' \
+                'IRepositoryFolderSchema']
             ),
         required=True,
         )
@@ -53,83 +53,58 @@ class MoveItemsForm(form.Form):
                                         default=u'Move'))
     def handle_submit(self, action):
         data, errors = self.extractData()
-
         if len(errors) == 0:
-            root = getToolByName(self, 'portal_url')
-            root = root.getPortalObject()
+
             source = data['request_paths'].split(';;')
             destination = data['destination_folder']
-            sourceObjects = []
-            failedObjects = []
-            failedResourceLockedObjects = []
-            copiedItems = 0
+            failed_objects = []
+            failed_resource_locked_objects = []
+            copied_items = 0
 
-            # loop through paths
             for path in source:
-                #get objects and parents
-                sourceObjects.append(self.context.unrestrictedTraverse(
-                        path.encode('utf-8')))
-                sourceContainer = aq_parent(aq_inner(
 
+                # Get source object
+                src_object = self.context.unrestrictedTraverse(
+                        path.encode('utf-8'))
+
+                # Get parent object
+                source_container = aq_parent(aq_inner(
                         self.context.unrestrictedTraverse(
                             path.encode('utf-8'))))
-                #if parent isn't a dossier and obj is a document
-                # it's connected to a task
-                # and shouldn't be moved
 
-                src_obj = sourceObjects[len(sourceObjects) - 1]
-                is_doc = src_obj.portal_type == 'opengever.document.document'
+                src_name = src_object.title
+                src_id = src_object.id
 
-                if not IDossierMarker.providedBy(sourceContainer) and is_doc:
-
-                    name = sourceObjects[len(sourceObjects) - 1].title
+                # If parent isn't a dossier and obj is a document
+                # it's connected to a task and shouldn't be moved
+                if not IDossierMarker.providedBy(source_container) and \
+                    IDocumentSchema.providedBy(src_object):
                     msg = _(u'Document ${name} is connected to a Task.\
-                    Please move the Task.', mapping=dict(name=name))
+                    Please move the Task.', mapping=dict(name=src_name))
                     IStatusMessage(self.request).addStatusMessage(
                         msg, type='error')
-                    sourceObjects.remove(sourceObjects[len(sourceObjects) - 1])
-
-            for obj in sourceObjects:
-                sourceContainer = aq_parent(aq_inner(obj))
-                #cut object and add it to clipboard
-                try:
-                    clipboard = sourceContainer.manage_cutObjects(obj.id)
-                except ResourceLockedError:
-                    failedResourceLockedObjects.append(obj.title)
                     continue
 
                 try:
-                    #try to paste object
+                    # Try to cut and paste object
+                    clipboard = source_container.manage_cutObjects(src_id)
                     destination.manage_pasteObjects(clipboard)
-                    copiedItems += 1
+                    copied_items += 1
 
-                except ValueError:
-                    #catch exception and add title to a list ofr failed objects
-                    failedObjects.append(obj.title)
+                except ResourceLockedError:
+                    # The object is locket over webdav
+                    failed_resource_locked_objects.append(src_name)
+                    continue
 
-                except CopyError:
-                    #catch exception and add title to a list of failed objects
-                    failedObjects.append(obj.title)
+                except (ValueError, CopyError):
+                    # Catch exception and add title to a list of failed objects
+                    failed_objects.append(src_name)
+                    continue
 
-            if copiedItems:
-                msg = _(u'${copiedItems} Elements were moved successfully',
-                        mapping=dict(copiedItems=copiedItems))
-                IStatusMessage(self.request).addStatusMessage(
-                    msg, type='info')
-
-            if failedObjects:
-                msg = _(u'Failed to copy following objects: ${failedObjects}',
-                        mapping=dict(failedObjects=','.join(failedObjects)))
-                IStatusMessage(self.request).addStatusMessage(
-                    msg, type='error')
-
-            if failedResourceLockedObjects:
-                msg = _(u'Failed to copy following objects: ${failedObjects}\
-                        . Locket via WebDAV',
-                        mapping=dict(failedObjects=','.join(
-                            failedResourceLockedObjects)))
-                IStatusMessage(self.request).addStatusMessage(
-                    msg, type='error')
+            self.create_statusmessages(
+                copied_items,
+                failed_objects,
+                failed_resource_locked_objects, )
 
             self.request.RESPONSE.redirect(destination.absolute_url())
 
@@ -138,12 +113,37 @@ class MoveItemsForm(form.Form):
     def handle_cancel(self, action):
         return self.request.RESPONSE.redirect(self.context.absolute_url())
 
+    def create_statusmessages(
+        self,
+        copied_items,
+        failed_objects,
+        failed_resource_locked_objects, ):
+        """ Create statusmessages with errors and infos af the move-process
+        """
+
+        if copied_items:
+            msg = _(u'${copied_items} Elements were moved successfully',
+                    mapping=dict(copied_items=copied_items))
+            IStatusMessage(self.request).addStatusMessage(
+                msg, type='info')
+
+        if failed_objects:
+            msg = _(u'Failed to copy following objects: ${failed_objects}',
+                    mapping=dict(failed_objects=','.join(failed_objects)))
+            IStatusMessage(self.request).addStatusMessage(
+                msg, type='error')
+
+        if failed_resource_locked_objects:
+            msg = _(u'Failed to copy following objects: ${failed_objects}\
+                    . Locket via WebDAV',
+                    mapping=dict(failed_objects=','.join(
+                        failed_resource_locked_objects)))
+            IStatusMessage(self.request).addStatusMessage(
+                msg, type='error')
+
 
 class MoveItemsFormView(layout.FormWrapper, grok.View):
-    """ The View wich display the SendDocument-Form.
-
-    For sending documents with per mail.
-
+    """ View to move selected items into another location
     """
 
     grok.context(IDexterityContainer)
@@ -171,7 +171,6 @@ class MoveItemsFormView(layout.FormWrapper, grok.View):
             else:
                 return self.request.RESPONSE.redirect(
                     '%s#documents' % self.context.absolute_url())
-
         return super(MoveItemsFormView, self).render()
 
 
@@ -180,25 +179,38 @@ class NotInContentTypes(Invalid):
 
 
 class DestinationValidator(validator.SimpleFieldValidator):
-    implements(IValidator)
-    adapts(Interface, Interface, Interface, IField, Interface)
+    """Validator for destination-path.
+    We check the destinations allowed content-type. If one or more source-types
+    are not allowed in the destination, we raise an error
+    """
 
     def validate(self, value):
         super(DestinationValidator, self).validate(value)
+
+        # Allowed contenttypes for destination-folder
+        allowed_types = [t.getId() for t in value.allowedContentTypes()]
+
+        # Paths to source object
         source = self.view.widgets['request_paths'].value.split(';;')
+
+        # Get source-brains
         portal_catalog = getToolByName(self.context, 'portal_catalog')
-        sourceobjs = []
-        for item in source:
-            sourceobjs.append(portal_catalog(path={'query': item, 'depth': 0}))
-        inContentTypes = False
-        for item in value.allowedContentTypes():
-            for sourceobj in sourceobjs:
-                if sourceobj[0].portal_type in item.id:
-                    inContentTypes = True
-        if inContentTypes == False:
+        src_brains = portal_catalog(path={'query': source, 'depth': 0})
+        failed_objects = []
+
+        # Look for invalid contenttype
+        for src_brain in src_brains:
+            if not src_brain.portal_type in allowed_types:
+                failed_objects.append(src_brain.Title)
+
+        # If we found one or more invalid contenttypes, we raise an error
+        if failed_objects:
             raise NotInContentTypes(
-                _(u"error_NotInContentTypes",
-                  default=u"It isn't allowed to add such items there"))
+                _(u"error_NotInContentTypes ${failed_objects}",
+                  default=u"It isn't allowed to add such items there: "\
+                           "${failed_objects}", mapping=dict(
+                           failed_objects=', '.join(failed_objects))))
 
 validator.WidgetValidatorDiscriminators(
     DestinationValidator, field=IMoveItemsSchema['destination_folder'])
+provideAdapter(DestinationValidator)
