@@ -13,8 +13,8 @@ msgstr ""
 "Domain: DOMAIN\n"
 
 #: ./opengever/dossier/move_items.py:110
-msgid "${copiedItems} Elements were moved successfully"
-msgstr "${copiedItems} Elemente wurden erfolgreich verschoben"
+msgid "${copied_items} Elements were moved successfully"
+msgstr "${copied_items} Elemente wurden erfolgreich verschoben"
 
 #. Default: "Geschäftsdossier"
 msgid "Add Business Case Dossier"
@@ -50,12 +50,12 @@ msgid "Edit Subdossier"
 msgstr "Subdossier bearbeiten"
 
 #: ./opengever/dossier/move_items.py:116
-msgid "Failed to copy following objects: ${failedObjects}"
-msgstr "Folgende Elemente konnten nicht verschoben werden: ${failedObjects}"
+msgid "Failed to copy following objects: ${failed_objects}"
+msgstr "Folgende Elemente konnten nicht verschoben werden: ${failed_objects}"
 
 #: ./opengever/dossier/move_items.py:122
-msgid "Failed to copy following objects: ${failedObjects}                        . Locket via WebDAV"
-msgstr "Folgende Elemente sind durch einen anderen Benutzer gesperrt und konnten nicht verschoben werden: ${failedObjects}."
+msgid "Failed to copy following objects: ${failed_objects}                        . Locket via WebDAV"
+msgstr "Folgende Elemente sind durch einen anderen Benutzer gesperrt und konnten nicht verschoben werden: ${failed_objects}."
 
 #: ./opengever/dossier/archive.py:201
 msgid "Filing Prefix is required"
@@ -200,10 +200,10 @@ msgstr "Dokument mit Docucomposer"
 msgid "documents"
 msgstr "Dokumente"
 
-#. Default: "It isn't allowed to add such items there: ${failedObjects}"
+#. Default: "It isn't allowed to add such items there: ${failed_objects}"
 #: ./opengever/dossier/move_items.py:203
-msgid "error_NotInContentTypes ${failedObjects}"
-msgstr "Es wurden keine Objekte verschoben. Folgende Objekte dürfen nicht in den Zielordner eingefügt werden: ${failedObjects}"
+msgid "error_NotInContentTypes ${failed_objects}"
+msgstr "Es wurden keine Objekte verschoben. Folgende Objekte dürfen nicht in den Zielordner eingefügt werden: ${failed_objects}"
 
 #. Default: "The enddate is required."
 #: ./opengever/dossier/archive.py:42
