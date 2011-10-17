@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2011-10-13 06:58+0000\n"
+"POT-Creation-Date: 2011-10-17 15:30+0000\n"
 "PO-Revision-Date: 2011-01-26 11:25+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: DOMAIN\n"
 
-#: ./opengever/dossier/move_items.py:110
+#: ./opengever/dossier/move_items.py:125
 msgid "${copied_items} Elements were moved successfully"
 msgstr "${copied_items} Elemente wurden erfolgreich verschoben"
 
@@ -41,7 +41,7 @@ msgstr "In eigenes Dossier kopieren"
 msgid "Delete"
 msgstr "Beteiligung löschen"
 
-#: ./opengever/dossier/move_items.py:81
+#: ./opengever/dossier/move_items.py:82
 msgid "Document ${name} is connected to a Task.                    Please move the Task."
 msgstr "Dokument ${name} ist mit einer Aufgabe verbunden, bitte Aufgabe verschieben."
 
@@ -49,19 +49,19 @@ msgstr "Dokument ${name} ist mit einer Aufgabe verbunden, bitte Aufgabe verschie
 msgid "Edit Subdossier"
 msgstr "Subdossier bearbeiten"
 
-#: ./opengever/dossier/move_items.py:116
+#: ./opengever/dossier/move_items.py:131
 msgid "Failed to copy following objects: ${failed_objects}"
 msgstr "Folgende Elemente konnten nicht verschoben werden: ${failed_objects}"
 
-#: ./opengever/dossier/move_items.py:122
-msgid "Failed to copy following objects: ${failed_objects}                        . Locket via WebDAV"
+#: ./opengever/dossier/move_items.py:137
+msgid "Failed to copy following objects: ${failed_objects}                    . Locket via WebDAV"
 msgstr "Folgende Elemente sind durch einen anderen Benutzer gesperrt und konnten nicht verschoben werden: ${failed_objects}."
 
 #: ./opengever/dossier/archive.py:201
 msgid "Filing Prefix is required"
 msgstr "Das Ablage Präfix muss eingegeben werden"
 
-#: ./opengever/dossier/move_items.py:173
+#: ./opengever/dossier/move_items.py:178
 msgid "It isn't allowed to add such items there"
 msgstr "Sie dürfen dieses Objekt nicht an den Zielort verschieben"
 
@@ -73,7 +73,7 @@ msgstr "Elemente verschieben"
 msgid "Not all required fields are filled"
 msgstr "Nicht alle benötigten Felder wurden ausgefüllt."
 
-#: ./opengever/dossier/templatedossier.py:126
+#: ./opengever/dossier/templatedossier.py:150
 msgid "Not found the templatedossier"
 msgstr "Es sind keine Vorlagen vorhanden."
 
@@ -130,7 +130,7 @@ msgstr "Das Subdossier '${title}' muss manuell abgeschlossen werden."
 msgid "When the Action give filing number is selected,                     all fields are required."
 msgstr "Wenn die Aktion 'Ablagenummer vergeben' selektiert ist, werden alle Felder benötigt"
 
-#: ./opengever/dossier/move_items.py:156
+#: ./opengever/dossier/move_items.py:161
 msgid "You have not selected any items"
 msgstr "Sie haben kein Element ausgewählt"
 
@@ -162,7 +162,7 @@ msgid "button_copy"
 msgstr "Kopieren"
 
 #. Default: "Move"
-#: ./opengever/dossier/move_items.py:50
+#: ./opengever/dossier/move_items.py:52
 msgid "button_submit"
 msgstr "Verschieben"
 
@@ -201,7 +201,7 @@ msgid "documents"
 msgstr "Dokumente"
 
 #. Default: "It isn't allowed to add such items there: ${failed_objects}"
-#: ./opengever/dossier/move_items.py:203
+#: ./opengever/dossier/move_items.py:209
 msgid "error_NotInContentTypes ${failed_objects}"
 msgstr "Es wurden keine Objekte verschoben. Folgende Objekte dürfen nicht in den Zielordner eingefügt werden: ${failed_objects}"
 
@@ -245,7 +245,7 @@ msgid "heading_archive_form"
 msgstr "Dossier ablegen"
 
 #. Default: "Move Items"
-#: ./opengever/dossier/move_items.py:41
+#: ./opengever/dossier/move_items.py:43
 msgid "heading_move_items"
 msgstr "Elemente verschieben"
 
@@ -266,7 +266,7 @@ msgid "help_container_type"
 msgstr "Art des Behälters, in dem ein Dossier in Papierform abgelegt ist"
 
 #. Default: "Live Search: search the Plone Site"
-#: ./opengever/dossier/move_items.py:24
+#: ./opengever/dossier/move_items.py:25
 msgid "help_destination"
 msgstr "Live Search: Durchsuchen Sie diesen Mandanten"
 
@@ -362,12 +362,12 @@ msgid "label_container_type"
 msgstr "Behältnis-Art"
 
 #. Default: "Creator"
-#: ./opengever/dossier/templatedossier.py:149
+#: ./opengever/dossier/templatedossier.py:173
 msgid "label_creator"
 msgstr "Erstellt von"
 
 #. Default: "Destination"
-#: ./opengever/dossier/move_items.py:23
+#: ./opengever/dossier/move_items.py:24
 msgid "label_destination"
 msgstr "Zielposition / Zieldossier"
 
@@ -409,7 +409,7 @@ msgid "label_keywords"
 msgstr "Schlagworte"
 
 #. Default: "Modified"
-#: ./opengever/dossier/templatedossier.py:152
+#: ./opengever/dossier/templatedossier.py:176
 msgid "label_modified"
 msgstr "Zuletzt Bearbeitet"
 
@@ -482,7 +482,7 @@ msgid "label_template"
 msgstr "Vorlage"
 
 #. Default: "title"
-#: ./opengever/dossier/templatedossier.py:145
+#: ./opengever/dossier/templatedossier.py:169
 #: ./opengever/dossier/templatedossier_templates/template_form.pt:30
 msgid "label_title"
 msgstr "Titel"
