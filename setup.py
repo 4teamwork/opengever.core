@@ -5,7 +5,9 @@ version = open('opengever/sharing/version.txt').read().strip()
 maintainer = 'Philippe Gross'
 
 tests_require = [
-    'plone.app.testing',
+    'opengever.dossier',
+    'plone.mocktestcase',
+    'opengever.tabbedview',
     ]
 
 setup(name='opengever.sharing',
