@@ -5,6 +5,11 @@ Changelog
 2.0a6
 -----
 
+- Added new events for local_roles modifications, which allows to generate journal entries after a local_role modification.
+  Issue #1242 Fuer local_roles Anpassungen Journaleintraege generieren
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1242/
+  [phgross]
+
 
 2.0a5
 -----
