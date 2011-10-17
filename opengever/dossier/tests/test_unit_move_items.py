@@ -1,11 +1,12 @@
 from mocker import ANY, IN
-from plone.mocktestcase import MockTestCase
-from opengever.dossier.move_items import MoveItemsForm
-from Products.statusmessages.interfaces import IStatusMessage
-from zope.interface import Interface, directlyProvides
 from OFS.CopySupport import CopyError
-from webdav.Lockable import ResourceLockedError
+from opengever.document.document import IDocumentSchema
 from opengever.dossier.behaviors.dossier import IDossierMarker
+from opengever.dossier.move_items import MoveItemsForm
+from plone.mocktestcase import MockTestCase
+from Products.statusmessages.interfaces import IStatusMessage
+from webdav.Lockable import ResourceLockedError
+from zope.interface import Interface, directlyProvides
 
 
 class TestOpengeverDossierMoveItems(MockTestCase):
@@ -18,10 +19,10 @@ class TestOpengeverDossierMoveItems(MockTestCase):
         mock_parent_task = self.create_dummy()
 
         # Source-Object in Task
-        mock_src_task = self.mocker.mock(count=False)
+        src_task = self.create_dummy()
+        directlyProvides(src_task, IDocumentSchema)
+        mock_src_task = self.mocker.proxy(src_task, spec=False, count=False)
         self.expect(mock_src_task.__parent__).result(mock_parent_task)
-        self.expect(
-            mock_src_task.portal_type).result('opengever.document.document')
         self.expect(mock_src_task.title).result('doc_in_task')
         self.expect(mock_src_task.id).result('doc_in_task')
 
