@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2010-11-10 15:39+0000\n"
+"POT-Creation-Date: 2011-10-17 13:55+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -47,6 +47,10 @@ msgstr "Bearbeiten"
 #: ./opengever/sharing/browser/sharing.py:21
 msgid "sharing_reader"
 msgstr "Lesen"
+
+#: ./opengever/sharing/browser/sharing.py:24
+msgid "sharing_role_manager"
+msgstr "Rollen verwalten"
 
 #. Default: "Can administrate"
 #: ./opengever/sharing/utilities.py:14
