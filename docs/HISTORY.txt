@@ -5,8 +5,10 @@ Changelog
 2.0a11 (unreleased)
 -------------------
 
-- Nothing changed yet.
-
+- Made Repositoryroot Journalizable and added journal tab to the tabbedview, enabled only for role managers.
+  Issue #1242 Fuer local_roles Anpassungen Journaleintraege generieren
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1242/
+  [phgross]
 
 2.0a10 (2011-09-30)
 -------------------

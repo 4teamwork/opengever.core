@@ -29,6 +29,7 @@
         <element value="opengever.tabbedview.interfaces.ITabbedViewEnabled" />
         <element value="opengever.sharing.behaviors.IDossier" />
         <element value="plone.app.lockingbehavior.behaviors.ILocking" />
+        <element value="ftw.journal.interfaces.IAnnotationsJournalizable" />
     </property>
 
     <!-- View information -->
@@ -90,5 +91,11 @@
             i18n:domain="opengever.dossier">
         <permission value="View"/>
     </action>
+
+    <action i18n:domain="opengever.dossier" title="Journal" action_id="journal" category="tabbedview-tabs"
+            condition_expr="" url_expr="string:#" visible="True">
+        <permission value="Sharing page: Delegate roles"/>
+    </action>
+
 
 </object>
