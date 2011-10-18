@@ -5,6 +5,10 @@ Changelog
 2.0a12 (unreleased)
 -------------------
 
+- changed journalentry action-type string for ILocalRolesAcquisitionActivated
+  on IRepositoryFolderSchema
+  [eschmutz]
+
 - removed unused journalentry factories for Objects implementing ITask because
   tasks havent a journal history
   [eschmutz]

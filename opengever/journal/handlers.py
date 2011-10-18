@@ -120,7 +120,6 @@ def get_repository_root(context):
 LOCAL_ROLES_AQUISITION_BLOCKED = 'Local roles Aquisition Blocked'
 @grok.subscribe(IRepositoryFolderSchema, ILocalRolesAcquisitionBlocked)
 def repositoryfolder_local_roles_acquisition_blocked(context, event):
-
     title = _(u'label_local_roles_acquisition_blocked_at',
               default=u'Local roles aquistion blocked at ${repository}.',
               mapping={'repository': context.title_or_id(),})
@@ -143,7 +142,7 @@ def repositoryfolder_local_roles_acquisition_activated(context, event):
 
     journal_entry_factory(
         get_repository_root(context),
-        LOCAL_ROLES_AQUISITION_BLOCKED,
+        LOCALROLES_AQUISITION_ACTIVATED,
         title=title)
 
     return
