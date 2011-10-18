@@ -32,11 +32,26 @@ class OpengeverSharingIntegrationLayer(PloneSandboxLayer):
         xmlconfig.file(
             'configure.zcml',
             package=tabbedview, context=configurationContext)
+        from opengever import journal
+        xmlconfig.file(
+            'configure.zcml',
+            package=journal, context=configurationContext)
+        from opengever import repository
+        xmlconfig.file(
+            'configure.zcml',
+            package=repository, context=configurationContext)
+        from ftw import table
+        xmlconfig.file(
+            'configure.zcml',
+            package=table, context=configurationContext)
 
     def setUpPloneSite(self, portal):
         applyProfile(portal, 'opengever.ogds.base:default')
         applyProfile(portal, 'opengever.dossier:default')
         applyProfile(portal, 'opengever.tabbedview:default')
+        applyProfile(portal, 'opengever.journal:default')
+        applyProfile(portal, 'opengever.repository:default')
+        applyProfile(portal, 'ftw.table:default')
 
         create_sql_tables()
         session = create_session()
