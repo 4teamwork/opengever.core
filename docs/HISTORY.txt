@@ -5,7 +5,12 @@ Changelog
 2.0a11 (unreleased)
 -------------------
 
-- Nothing changed yet.
+* Updated repositoryfolder and repositoryroot workflows:
+  Added new role "Role Manager" that has permissions to delegate roles via
+  the sharing tab.
+  #1245 Neue Rolle einführen um local roles anzupassen
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1245/
+  [lgraf]
 
 
 2.0a10 (2011-09-30)
