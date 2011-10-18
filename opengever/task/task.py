@@ -14,7 +14,6 @@ from opengever.globalindex.utils import indexed_task_link
 from opengever.ogds.base.autocomplete_widget import AutocompleteFieldWidget
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.ogds.base.utils import get_client_id
-from opengever.tabbedview.browser.listing import ListingView
 from opengever.tabbedview.browser.tabs import Documents
 from opengever.tabbedview.browser.tabs import OpengeverTab
 from opengever.tabbedview.helper import readable_date, external_edit_link
@@ -501,9 +500,6 @@ class RelatedDocuments(Documents):
             'portal_type': ['opengever.document.document', 'ftw.mail.mail'],
             }
 
-    __call__ = ListingView.__call__
-    render = __call__
-    update = ListingView.update
 
 # XXX
 # setting the default value of a RelationField does not work as expected
