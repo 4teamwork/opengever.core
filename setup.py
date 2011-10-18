@@ -10,6 +10,7 @@ tests_require = [
     'opengever.dossier',
     'opengever.tabbedview',
     'opengever.contact',
+    'opengever.document',
     'ftw.table',
     'ftw.contentmenu',
     'plone.mocktestcase',
