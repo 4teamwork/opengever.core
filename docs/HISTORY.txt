@@ -11,6 +11,12 @@ Changelog
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1245/
   [lgraf]
 
+- Refactoring move_items module
+  [eschmutz]
+
+- Add tests for move_items module
+  [eschmutz]
+
 - Fixed batching by using the ListingView from opengever.tabbedview which
   overrides the batching template to match the CSS in izug.basetheme
   [lgraf]

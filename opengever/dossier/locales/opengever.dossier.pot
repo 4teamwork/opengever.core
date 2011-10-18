@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2011-09-22 08:11+0000\n"
+"POT-Creation-Date: 2011-10-17 15:30+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,8 +17,8 @@ msgstr ""
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: opengever.dossier\n"
 
-#: ./opengever/dossier/move_items.py:120
-msgid "${copiedItems} Elements were moved successfully"
+#: ./opengever/dossier/move_items.py:125
+msgid "${copied_items} Elements were moved successfully"
 msgstr ""
 
 msgid "Add Business Case Dossier"
@@ -44,7 +44,7 @@ msgstr ""
 msgid "Delete"
 msgstr ""
 
-#: ./opengever/dossier/move_items.py:91
+#: ./opengever/dossier/move_items.py:82
 msgid "Document ${name} is connected to a Task.                    Please move the Task."
 msgstr ""
 
@@ -52,19 +52,19 @@ msgstr ""
 msgid "Edit Subdossier"
 msgstr ""
 
-#: ./opengever/dossier/move_items.py:126
-msgid "Failed to copy following objects: ${failedObjects}"
+#: ./opengever/dossier/move_items.py:131
+msgid "Failed to copy following objects: ${failed_objects}"
 msgstr ""
 
-#: ./opengever/dossier/move_items.py:132
-msgid "Failed to copy following objects: ${failedObjects}                        . Locket via WebDAV"
+#: ./opengever/dossier/move_items.py:137
+msgid "Failed to copy following objects: ${failed_objects}                    . Locket via WebDAV"
 msgstr ""
 
 #: ./opengever/dossier/archive.py:201
 msgid "Filing Prefix is required"
 msgstr ""
 
-#: ./opengever/dossier/move_items.py:184
+#: ./opengever/dossier/move_items.py:178
 msgid "It isn't allowed to add such items there"
 msgstr ""
 
@@ -76,7 +76,7 @@ msgstr ""
 msgid "Not all required fields are filled"
 msgstr ""
 
-#: ./opengever/dossier/templatedossier.py:126
+#: ./opengever/dossier/templatedossier.py:150
 msgid "Not found the templatedossier"
 msgstr ""
 
@@ -95,7 +95,7 @@ msgstr ""
 msgid "Templates"
 msgstr ""
 
-#: ./opengever/dossier/archive.py:270
+#: ./opengever/dossier/archive.py:273
 msgid "The Dossier has been resolved"
 msgstr ""
 
@@ -131,7 +131,7 @@ msgstr ""
 msgid "When the Action give filing number is selected,                     all fields are required."
 msgstr ""
 
-#: ./opengever/dossier/move_items.py:166
+#: ./opengever/dossier/move_items.py:161
 msgid "You have not selected any items"
 msgstr ""
 
@@ -146,7 +146,7 @@ msgid "button_archive"
 msgstr ""
 
 #. Default: "Cancel"
-#: ./opengever/dossier/archive.py:274
+#: ./opengever/dossier/archive.py:277
 #: ./opengever/dossier/behaviors/participation.py:167
 #: ./opengever/dossier/browser/transport.py:171
 msgid "button_cancel"
@@ -163,17 +163,17 @@ msgid "button_copy"
 msgstr ""
 
 #. Default: "Move"
-#: ./opengever/dossier/move_items.py:57
+#: ./opengever/dossier/move_items.py:52
 msgid "button_submit"
 msgstr ""
 
 #. Default: "Contact"
-#: ./opengever/dossier/browser/participants.py:110
+#: ./opengever/dossier/browser/participants.py:111
 msgid "column_contact"
 msgstr ""
 
 #. Default: "role_list"
-#: ./opengever/dossier/browser/participants.py:114
+#: ./opengever/dossier/browser/participants.py:115
 msgid "column_rolelist"
 msgstr ""
 
@@ -201,9 +201,9 @@ msgstr ""
 msgid "documents"
 msgstr ""
 
-#. Default: "It isn't allowed to add such items there"
-#: ./opengever/dossier/move_items.py:205
-msgid "error_NotInContentTypes"
+#. Default: "It isn't allowed to add such items there: ${failed_objects}"
+#: ./opengever/dossier/move_items.py:209
+msgid "error_NotInContentTypes ${failed_objects}"
 msgstr ""
 
 #. Default: "The enddate is required."
@@ -246,7 +246,7 @@ msgid "heading_archive_form"
 msgstr ""
 
 #. Default: "Move Items"
-#: ./opengever/dossier/move_items.py:48
+#: ./opengever/dossier/move_items.py:43
 msgid "heading_move_items"
 msgstr ""
 
@@ -267,7 +267,7 @@ msgid "help_container_type"
 msgstr ""
 
 #. Default: "Live Search: search the Plone Site"
-#: ./opengever/dossier/move_items.py:35
+#: ./opengever/dossier/move_items.py:25
 msgid "help_destination"
 msgstr ""
 
@@ -363,12 +363,12 @@ msgid "label_container_type"
 msgstr ""
 
 #. Default: "Creator"
-#: ./opengever/dossier/templatedossier.py:149
+#: ./opengever/dossier/templatedossier.py:173
 msgid "label_creator"
 msgstr ""
 
 #. Default: "Destination"
-#: ./opengever/dossier/move_items.py:34
+#: ./opengever/dossier/move_items.py:24
 msgid "label_destination"
 msgstr ""
 
@@ -410,7 +410,7 @@ msgid "label_keywords"
 msgstr ""
 
 #. Default: "Modified"
-#: ./opengever/dossier/templatedossier.py:152
+#: ./opengever/dossier/templatedossier.py:176
 msgid "label_modified"
 msgstr ""
 
@@ -442,7 +442,7 @@ msgstr ""
 
 #. Default: "Responsible"
 #: ./opengever/dossier/behaviors/dossier.py:94
-#: ./opengever/dossier/browser/participants.py:154
+#: ./opengever/dossier/browser/participants.py:155
 msgid "label_responsible"
 msgstr ""
 
@@ -483,7 +483,7 @@ msgid "label_template"
 msgstr ""
 
 #. Default: "title"
-#: ./opengever/dossier/templatedossier.py:145
+#: ./opengever/dossier/templatedossier.py:169
 #: ./opengever/dossier/templatedossier_templates/template_form.pt:30
 msgid "label_title"
 msgstr ""
@@ -504,7 +504,7 @@ msgstr ""
 msgid "no valid end date provided"
 msgstr ""
 
-#: ./opengever/dossier/browser/overview_templates/overview.pt:40
+#: ./opengever/dossier/browser/overview_templates/overview.pt:43
 msgid "no_content"
 msgstr ""
 
