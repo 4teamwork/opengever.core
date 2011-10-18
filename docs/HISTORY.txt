@@ -5,6 +5,9 @@ Changelog
 2.0a12 (unreleased)
 -------------------
 
+- Removed zopemaster-check for journal-entries
+  [eschmutz]
+
 - Implements generating journal entries for local_roles modifications on repositoryfolders or dossiers.
   Issue #1242 Fuer local_roles Anpassungen Journaleintraege generieren
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1242/
