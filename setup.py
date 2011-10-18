@@ -8,6 +8,7 @@ tests_require = [
     'opengever.dossier',
     'plone.mocktestcase',
     'opengever.tabbedview',
+    'plone.app.testing',
     ]
 
 setup(name='opengever.sharing',
