@@ -12,6 +12,7 @@
     <role name="Reader"/>
     <role name="Reviewer"/>
     <role name="Publisher" />
+    <role name="Role Manager" />
   </roles>
   <permissions>
     <permission name="Modify view template" acquire="False">

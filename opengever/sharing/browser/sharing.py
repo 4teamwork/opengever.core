@@ -1,5 +1,6 @@
-from Products.CMFCore.utils import getToolByName
-from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
+from AccessControl.SecurityManagement import getSecurityManager
+from AccessControl.SecurityManagement import newSecurityManager
+from AccessControl.SecurityManagement import setSecurityManager
 from opengever.sharing import _
 from opengever.sharing.behaviors import IDossier, IStandard
 from opengever.sharing.events import LocalRolesAcquisitionActivated
@@ -8,8 +9,11 @@ from opengever.sharing.events import LocalRolesModified
 from plone.app.workflow.browser.sharing import SharingView
 from plone.app.workflow.interfaces import ISharingPageRole
 from plone.memoize.instance import memoize
+from Products.CMFCore.utils import getToolByName
+from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from zope.component import getUtilitiesFor
 from zope.event import notify
+
 
 ROLE_MAPPING = (
     (IDossier, (
@@ -25,6 +29,7 @@ ROLE_MAPPING = (
             (u'Reader', _('sharing_reader')),
             (u'Contributor', _('sharing_contributor')),
             (u'Editor', _('sharing_editor')),
+            (u'Role Manager', _('sharing_role_manager')),
             )),
     )
 
@@ -92,9 +97,21 @@ class OpengeverSharingView(SharingView):
         corresponding event. Needed for adding a Journalentry after a
         change of the inheritance"""
 
+        # Modifying local roles needs the "Sharing page: Delegate roles"
+        # permission as well as "Modify portal content". However, we don't
+        # want to give the "Role Manager" Role "Modify portal content",
+        # so we circumvent the permission check here by temporarily assuming
+        # the owner's roles. [lgraf]
+        old_sm = getSecurityManager()
+        owner = self.context.getWrappedOwner()
+        newSecurityManager(self.context, owner)
+
         changed = super(
             OpengeverSharingView, self).update_inherit(
                 status=status, reindex=reindex)
+
+        # Restore the old security manager
+        setSecurityManager(old_sm)
 
         if changed:
             # notify the correspondig event

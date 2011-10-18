@@ -5,6 +5,12 @@ Changelog
 2.0a6
 -----
 
+- Added new role "Role Manager" that has permissions to delegate roles via
+  the sharing tab.
+  #1245 Neue Rolle einführen um local roles anzupassen
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1245/
+  [lgraf]
+
 - Added new events for local_roles modifications, which allows to generate journal entries after a local_role modification.
   Issue #1242 Fuer local_roles Anpassungen Journaleintraege generieren
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1242/
