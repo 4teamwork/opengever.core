@@ -31,22 +31,28 @@ class TestOpengeverJournalIntegration(unittest.TestCase):
         browser.open('%s/@@tabbedview_view-sharing' % dossier.absolute_url())
 
     def test_update_inherit(self):
+        """ tests update inherit method
+        """
 
         request = self.layer['request']
         portal = self.layer['portal']
 
         # We are owner of the portal, with inheritance we are also owner of
-        # the repo and dossier. If we disable role aquisition on context, we lose the
-        # role 'owner' on the context
+        # the repo and dossier. If we disable role aquisition on context,
+        # we lose the role 'owner' on the context
+        repo_root = createContentInContainer(
+            portal, 'opengever.repository.repositoryroot', 'root')
         repo = createContentInContainer(
-            portal, 'opengever.repository.repositoryfolder', 'r1')
+            repo_root, 'opengever.repository.repositoryfolder', 'r1')
         dossier = createContentInContainer(
             repo, 'opengever.dossier.businesscasedossier', 'd1')
 
-        view = OpengeverSharingView(dossier, request)
+        # Get the sharing-view of repo and dossier
+        view_repo = OpengeverSharingView(repo, request)
+        view_dossier = OpengeverSharingView(dossier, request)
 
         # We disable locale role aquisition on dossier
-        view.update_inherit(status=False, reindex=False)
+        view_dossier.update_inherit(status=False, reindex=False)
 
         self.check_annotation(
             dossier,
@@ -54,20 +60,31 @@ class TestOpengeverJournalIntegration(unittest.TestCase):
             'label_local_roles_acquisition_blocked')
 
         # We disable locale role aquisition on repo.
-        view.update_inherit(status=False, reindex=False)
+        # The journalentry is on the next repo_root object or plone
+        # siteroot. In our case we have a repo object, so we have
+        # to check the repo_root
+        view_repo.update_inherit(status=False, reindex=False)
 
         self.check_annotation(
-            repo,
+            repo_root,
             'Local roles Aquisition Blocked',
-            'label_local_roles_acquisition_blocked')
+            'label_local_roles_acquisition_blocked_at')
 
         # We enable locale role aquisition on dossier
-        view.update_inherit(status=True, reindex=False)
+        view_dossier.update_inherit(status=True, reindex=False)
 
         self.check_annotation(
             dossier,
             'Local roles Aquisition Activated',
             'label_local_roles_acquisition_activated')
+
+        # And again on the repo
+        view_repo.update_inherit(status=True, reindex=False)
+
+        self.check_annotation(
+            repo_root,
+            'Local roles Aquisition Activated',
+            'label_local_roles_acquisition_activated_at')
 
     def test_update_role_settings(self):
         pass
@@ -99,7 +116,6 @@ class TestOpengeverJournalIntegration(unittest.TestCase):
         """ Check the annotations for the right entries.
         """
         time = DateTime().Date()
-        import pdb; pdb.set_trace( )
         journal = IAnnotations(
             obj, JOURNAL_ENTRIES_ANNOTATIONS_KEY).get(
                 JOURNAL_ENTRIES_ANNOTATIONS_KEY)[check_entry]
