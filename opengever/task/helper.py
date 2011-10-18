@@ -53,6 +53,10 @@ def linked(item, value):
 
 def path_checkbox(item, value):
     try:
-        return '<input type="checkbox" class="noborder selectable" name="paths:list" id="%s" value="%s" alt="Select %s" title="Select %s" />' % (item.id, item.getPath(),  item.Title, item.Title)
+        path = item.getPath()
+        title = item.Title
     except AttributeError:
-        return '<input type="checkbox" class="noborder selectable" name="paths:list" id="%s" value="%s" alt="Select %s" title="Select %s" />' % (item.id, '/'.join(item.getPhysicalPath()),  item.Title(), item.Title())
+        path = '/'.join(item.getPhysicalPath())
+        title = item.Title()
+    return '<input type="checkbox" class="noborder selectable" name="paths:list" id="%s" value="%s" alt="Select %s" title="Select %s" />' % (item.id, path, title, title)
+
