@@ -5,6 +5,12 @@ Changelog
 2.0b23 (unreleased)
 -------------------
 
+- Updated dossier and templatedossier workflows: Added new role "Role Manager"
+  that has permissions to delegate roles via the sharing tab.
+  #1245 Neue Rolle einführen um local roles anzupassen
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1245/
+  [lgraf]
+
 - Fixed batching by using the ListingView from opengever.tabbedview which
   overrides the batching template to match the CSS in izug.basetheme
   [lgraf]
