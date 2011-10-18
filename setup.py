@@ -7,6 +7,7 @@ maintainer = 'Philippe Gross'
 tests_require = [
     'opengever.dossier',
     'opengever.contact',
+    'opengever.document',
     'plone.mocktestcase',
     'opengever.tabbedview',
     'plone.app.testing',
