@@ -77,7 +77,7 @@ class OpengeverSharingIntegrationLayer(PloneSandboxLayer):
 
         setRoles(
             portal,
-            TEST_USER_ID, ['Manager', 'Member', 'Contributor', 'Editor'])
+            TEST_USER_ID, ['Manager', 'Contributor', 'Editor'])
 
 OPENGEVER_SHARING_FIXTURE = OpengeverSharingIntegrationLayer()
 OPENGEVER_SHARING_INTEGRATION_TESTING = IntegrationTesting(

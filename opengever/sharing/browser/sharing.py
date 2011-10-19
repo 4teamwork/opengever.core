@@ -126,7 +126,6 @@ class OpengeverSharingView(SharingView):
         role_settings change"""
 
         old_local_roles = dict(self.context.get_local_roles())
-
         changed = super(OpengeverSharingView, self).update_role_settings(
             new_settings, reindex)
 
