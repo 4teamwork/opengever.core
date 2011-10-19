@@ -5,6 +5,9 @@ Changelog
 2.0a7 (unreleased)
 ------------------
 
+- Changed default visibility for `logout` action to True
+  [lgraf]
+
 - Bumped profile version in metadata.xml to 2101
   [lgraf]
 

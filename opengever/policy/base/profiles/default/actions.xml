@@ -115,7 +115,7 @@
             <property name="permissions">
                 <element value="View"/>
             </property>
-            <property name="visible">False</property>
+            <property name="visible">True</property>
         </object>
 
     </object>
