@@ -5,6 +5,9 @@ Changelog
 2.0a6
 -----
 
+- Added integratoin and unittests
+  [eschmutz]
+
 - Added new role "Role Manager" that has permissions to delegate roles via
   the sharing tab.
   #1245 Neue Rolle einführen um local roles anzupassen
