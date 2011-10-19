@@ -5,6 +5,9 @@ Changelog
 2.0a12 (unreleased)
 -------------------
 
+- added tests for new local_roles events on repositoryfolders and dossiers
+  [eschmutz]
+
 - changed journalentry action-type string for ILocalRolesAcquisitionActivated
   on IRepositoryFolderSchema
   [eschmutz]

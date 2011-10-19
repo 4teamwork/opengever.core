@@ -70,10 +70,7 @@ def journal_entry_factory(context, action, title,
         'comment': comment,
         }
 
-    if not actor == 'zopemaster':
-        notify(JournalEntryEvent(**entry))
     notify(JournalEntryEvent(**entry))
-
 
 def role_mapping_to_str(context, mapping):
     """Parse the given local_roles mapping to a str,
@@ -86,7 +83,6 @@ def role_mapping_to_str(context, mapping):
     for behavior, translations in ROLE_MAPPING:
         if behavior.providedBy(context):
             trans_mapping = dict(translations)
-
     for principal, roles in mapping:
         translated_roles = []
         for role in roles:

@@ -53,6 +53,10 @@ class OpengeverJournalFunctionalLayer(PloneSandboxLayer):
         xmlconfig.file(
             'configure.zcml',
             package=mail, context=configurationContext)
+        from opengever import repository
+        xmlconfig.file(
+            'configure.zcml',
+            package=repository, context=configurationContext)
         from ftw import table
         xmlconfig.file(
             'configure.zcml',
@@ -75,6 +79,7 @@ class OpengeverJournalFunctionalLayer(PloneSandboxLayer):
         applyProfile(portal, 'opengever.task:default')
         applyProfile(portal, 'opengever.trash:default')
         applyProfile(portal, 'opengever.mail:default')
+        applyProfile(portal, 'opengever.repository:default')
         applyProfile(portal, 'ftw.table:default')
 
         create_sql_tables()
@@ -99,7 +104,7 @@ class OpengeverJournalFunctionalLayer(PloneSandboxLayer):
             ('og_mandant1_users', 'og_mandant1_inbox', ))
 
 
-        setRoles(portal, TEST_USER_ID, ['Member', 'Contributor', 'Editor'])
+        setRoles(portal, TEST_USER_ID, ['Member', 'Manager', 'Editor'])
 
 OPENGEVER_JOURNAL_FIXTURE = OpengeverJournalFunctionalLayer()
 OPENGEVER_JOURNAL_INTEGRATION_TESTING = FunctionalTesting(

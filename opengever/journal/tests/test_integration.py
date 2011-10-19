@@ -8,6 +8,8 @@ from opengever.dossier.events import ParticipationCreated, ParticipationRemoved
 from opengever.dossier.behaviors.participation import Participation
 from opengever.journal.testing import OPENGEVER_JOURNAL_INTEGRATION_TESTING
 from opengever.trash.trash import TrashedEvent, UntrashedEvent
+from opengever.sharing.events import LocalRolesAcquisitionBlocked, \
+    LocalRolesAcquisitionActivated, LocalRolesModified
 from plone.app.testing import TEST_USER_ID
 from plone.dexterity.utils import createContentInContainer
 from Products.CMFCore.utils import getToolByName
@@ -23,6 +25,55 @@ import unittest2 as unittest
 class TestOpengeverJournalGeneral(unittest.TestCase):
 
     layer = OPENGEVER_JOURNAL_INTEGRATION_TESTING
+
+    def test_integration_repository_events(self):
+        """ Trigger every event of a repo at least one times
+        and check the journalentries.
+        """
+        portal = self.layer['portal']
+
+        repo_root = createContentInContainer(
+            portal, 'opengever.repository.repositoryroot', 'root')
+        repo = createContentInContainer(
+            repo_root, 'opengever.repository.repositoryfolder', 'r1')
+
+        # Local roles Aquisition Blocked-Event
+        notify(
+            LocalRolesAcquisitionBlocked(repo, ))
+
+        # Check
+        self.check_annotation(
+            repo_root,
+            action_type='Local roles Aquisition Blocked',
+            action_title='label_local_roles_acquisition_blocked_at')
+
+        # Local roles Aquisition Activated-Event
+        notify(
+            LocalRolesAcquisitionActivated(repo, ))
+
+        # Check
+        self.check_annotation(
+            repo_root,
+            action_type='Local roles Aquisition Activated',
+            action_title='label_local_roles_acquisition_activated_at')
+
+        # Local roles Modified
+        notify(
+            LocalRolesModified(repo, 'old roles',
+                (
+                ['catman', ['Owner']],
+                ['ratman', ['Owner', 'Reader']],
+                ['test_user', ['Reader', 'Publisher']],
+                )
+            ))
+
+        # CheckLocalRolesModified
+        self.check_annotation(
+            repo_root,
+            action_type='Local roles modified',
+            action_title='label_local_roles_modified_at',
+            comment='ratman: sharing_dossier_reader; test_user: ' \
+                'sharing_dossier_reader, sharing_dossier_publisher')
 
     def test_integration_dossier_events(self):
         """ Trigger every event of a dossier at least one times
@@ -60,6 +111,44 @@ class TestOpengeverJournalGeneral(unittest.TestCase):
             dossier,
             action_type='Dossier state changed',
             action_title='Dossier state changed to published')
+
+        # Local roles Aquisition Blocked-Event
+        notify(
+            LocalRolesAcquisitionBlocked(dossier, ))
+
+        # Check
+        self.check_annotation(
+            dossier,
+            action_type='Local roles Aquisition Blocked',
+            action_title='label_local_roles_acquisition_blocked')
+
+        # Local roles Aquisition Activated-Event
+        notify(
+            LocalRolesAcquisitionActivated(dossier, ))
+
+        # Check
+        self.check_annotation(
+            dossier,
+            action_type='Local roles Aquisition Activated',
+            action_title='label_local_roles_acquisition_activated')
+
+        # Local roles Modified
+        notify(
+            LocalRolesModified(dossier, 'old roles',
+                (
+                ['catman', ['Owner']],
+                ['ratman', ['Owner', 'Reader']],
+                ['test_user', ['Reader', 'Publisher']],
+                )
+            ))
+
+        # CheckLocalRolesModified
+        self.check_annotation(
+            dossier,
+            action_type='Local roles modified',
+            action_title='label_local_roles_modified',
+            comment='ratman: sharing_dossier_reader; test_user: ' \
+                'sharing_dossier_reader, sharing_dossier_publisher')
 
     def test_integration_document_events(self):
         """ Trigger every event of a document at least one times

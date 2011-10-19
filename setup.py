@@ -13,6 +13,7 @@ tests_require = ['ftw.table',
                  'opengever.trash',
                  'opengever.mail',
                  'opengever.contact',
+                 'opengever.repository',
                  'plone.app.testing',]
 setup(name='opengever.journal',
       version=version,
