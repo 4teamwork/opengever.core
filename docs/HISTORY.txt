@@ -18,6 +18,11 @@ Changelog
 - Added XLSReorter view, which generates an excel export for a group of selected objects.
   Issue #1038 Statistiken/Auswertungen
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1038
+
+- Added UnqiueNumber Utility and Generator, which provides a dynamic counter functionality.
+  Used by different special dossiers.
+  Issue #1159 Anpassung Falldossier Beschwerden (BD.BDS)
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1159
   [phgross]
 
 
