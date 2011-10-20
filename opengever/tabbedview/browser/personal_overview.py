@@ -121,7 +121,7 @@ class MyDossiers(Dossiers):
     grok.require('zope2.View')
     grok.context(Interface)
 
-    search_options = {'responsible': authenticated_member, 
+    search_options = {'responsible': authenticated_member,
                       'is_subdossier':False}
 
     enabled_actions = ['pdf_dossierlisting']
@@ -139,7 +139,6 @@ class MyDocuments(Documents):
     grok.context(Interface)
 
     search_options = {'Creator': authenticated_member,
-                      'isWorkingCopy': 0,
                       'trashed': False}
 
     enabled_actions = []

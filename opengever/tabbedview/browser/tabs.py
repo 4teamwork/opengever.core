@@ -1,17 +1,17 @@
 from five import grok
 from ftw.dictstorage.interfaces import ISQLAlchemy
-from ftw.tabbedview.browser.listing import CatalogListingView
 from ftw.tabbedview.interfaces import ITabbedView
 from ftw.table import helper
 from opengever.base.browser.helper import client_title_helper
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.tabbedview import _
-from opengever.tabbedview.helper import readable_date_set_invisibles
-from opengever.tabbedview.helper import readable_ogds_user
-from opengever.tabbedview.helper import readable_ogds_author, linked
-from opengever.tabbedview.helper import readable_date, external_edit_link
-from opengever.tabbedview.helper import workflow_state
+from opengever.tabbedview.browser.listing import CatalogListingView
 from opengever.tabbedview.helper import overdue_date_helper
+from opengever.tabbedview.helper import readable_date, external_edit_link
+from opengever.tabbedview.helper import readable_date_set_invisibles
+from opengever.tabbedview.helper import readable_ogds_author, linked
+from opengever.tabbedview.helper import readable_ogds_user
+from opengever.tabbedview.helper import workflow_state
 from opengever.task.helper import task_type_helper
 from plone.dexterity.interfaces import IDexterityContainer
 from zope.app.pagetemplate import ViewPageTemplateFile
@@ -88,12 +88,13 @@ class OpengeverTab(object):
         return results
 
 
-class OpengeverCatalogListingTab(grok.CodeView, OpengeverTab,
+class OpengeverCatalogListingTab(grok.View, OpengeverTab,
                                  CatalogListingView):
     """Base view for catalog listing tabs.
     """
 
     grok.context(ITabbedView)
+    grok.require('zope2.View')
 
     columns = ()
 
@@ -114,8 +115,6 @@ class Documents(OpengeverCatalogListingTab):
     grok.name('tabbedview_view-documents')
 
     types = ['opengever.document.document', 'ftw.mail.mail']
-
-    search_options = {'isWorkingCopy': 0, }
 
     columns = (
 
@@ -324,13 +323,14 @@ class Trash(Documents):
         return columns
 
 
-class DocumentRedirector(grok.CodeView):
+class DocumentRedirector(grok.View):
     """Redirector View is called after a Document is created,
     make it easier to implement type specifics immediate_views
     like implemented for opengever.task"""
 
     grok.name('document-redirector')
     grok.context(IDexterityContainer)
+    grok.require('cmf.AddPortalContent')
 
     def render(self):
         referer = self.context.REQUEST.environ.get('HTTP_REFERER')

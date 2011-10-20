@@ -2,28 +2,68 @@ Changelog
 =========
 
 
-2.0b18
-------
+2.0b110 (unreleased)
+--------------------
 
-* added test-buildout for plone 4.1
+- Fixed batching by providing an OpenGever-specific subclass for ListingView
+  and CatalogListingView that override the batching template to match the
+  CSS in izug.basetheme
+  [lgraf]
+
+
+2.0b19 (2011-10-06)
+-------------------
+
+- Fixed bug that broke "My Tasks" view - don't try to access REQUEST on a
+  SQLAlchemy `Task` object, use zope.globalrequest instead
+  [lgraf]
+
+- Made sure all data used in HTML snippet produced by `linked` helper is properly escaped.
+  [lgraf]
+
+- removed needles search option 'isWorkingCopy', we not longer use the versioningbehavior and the working copy functionality.
+  [phgross]
+
+2.0b18 (2011-09-30)
+-------------------
+
+- Removed unused helperfunction in helper.py
   [eschmutz]
 
-2.0b17
-------
+- Issue #1176 alle translatinos mit from zope.i18n import translate
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1176
+  [eschmutz]
 
-* Issue #1077 Aktion "In eigenes Dossier kopieren" bei der Dokumentenliste entfernen
+- Changed imports of ogds models to new opengever.ogds.models package
+  [jbaumann]
+
+- Added grok.require to UsersListing, OpengeverCatalogListingTab, DocumentRedirector,
+  GlobalTaskListingTab
+  [eschmutz]
+
+- changed deprecated grok.CodeView to grok.View
+  [eschmutz]
+
+- added test-buildout for plone 4.1
+  [eschmutz]
+
+
+2.0b17 (2011-08-24)
+-------------------
+
+- Issue #1077 Aktion "In eigenes Dossier kopieren" bei der Dokumentenliste entfernen
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1077
   removed copy_documents_to_remote_client from the document listing in a dossier,
   should only displayed in the document listing of a task
   [phgross]
 
-* Issue #1133 Test Gelb 2.0.3: Uebersicht / Meine Dossiers   bei ARP, Sicht Olivier Debenath
+- Issue #1133 Test Gelb 2.0.3: Uebersicht / Meine Dossiers   bei ARP, Sicht Olivier Debenath
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1133
   removed types attribut in the MyDossier View, use the dossier standard object_provides filter instead
   so specialdossiers are also listed in the mydossier listing
   [phgross]
 
-* Issue #1079 Falsche weiterleitung beim erstellen eines Dokuments in einem Task.
+- Issue #1079 Falsche weiterleitung beim erstellen eines Dokuments in einem Task.
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1079/
   added a global DocumentRedirector View, to allow type specific redirects
   [phgross]
@@ -32,267 +72,267 @@ Changelog
 2.0b16
 ------
 
-* Added new helper readable_ogds_user which is used to render the user
+- Added new helper readable_ogds_user which is used to render the user
   that checked out a document. This is necessary because the existing
   readable_ogds_author treats ftw.mail.mail specially and causes things
   to be cached incorrectly.
   [lgraf]
 
-* Issue #1051 Fehler bzw. Anpassung im Papierkorb des Dossiers/Subdossiers
+- Issue #1051 Fehler bzw. Anpassung im Papierkorb des Dossiers/Subdossiers
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1051/
   [phgross]
 
-* Disabled Subdossier column
+- Disabled Subdossier column
   [phgross]
 
-* changed Clientlisting, work now with the rebuilded ogds
+- changed Clientlisting, work now with the rebuilded ogds
   [phgross]
 
-* Fixed Unicode error in linked helper
+- Fixed Unicode error in linked helper
   [lgraf]
 
-* Moved async CP from og.tabbedview to og.pdfconverter
+- Moved async CP from og.tabbedview to og.pdfconverter
   [lgraf]
 
-* Issue #1046 Tab Meine Aufgaben etc.: Laufnummer folgt der Stringsortierung
+- Issue #1046 Tab Meine Aufgaben etc.: Laufnummer folgt der Stringsortierung
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1046/
   [phgross]
 
-* #1031 Direkter Checkout Aufruf aus Dokumentenliste heraus
+- #1031 Direkter Checkout Aufruf aus Dokumentenliste heraus
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1031
   disable external_edit_link in trash tab
   [phgross]
 
-* Extended `linked` helper to compute CSS classes for icons
+- Extended `linked` helper to compute CSS classes for icons
   [lgraf]
 
-* Rebuild OGDS, added groups to the OGDS, because of performance problems
+- Rebuild OGDS, added groups to the OGDS, because of performance problems
   [phgross]
 
-* Added css_icon_class handling
+- Added css_icon_class handling
   [27.05.2011, elio.schmutz]
 
-* Issue #1031 Direkter Checkout Aufruf aus Dokumentenliste heraus
+- Issue #1031 Direkter Checkout Aufruf aus Dokumentenliste heraus
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1031/
   added external_edit_link helper and add column to documents listing
   [phgross]
 
-* Issue #1011 Feedback Fokus: Dossier / Subdossier
+- Issue #1011 Feedback Fokus: Dossier / Subdossier
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1011/
   [phgross]
 
-* Issue #759 Oracle Konfiguration: collation
+- Issue #759 Oracle Konfiguration: collation
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/759/
   [phgross]
 
-* Made sure self.full_length is always set on UsersListingTableSource
+- Made sure self.full_length is always set on UsersListingTableSource
   [lgraf]
 
-* Fixed Tasklisting view, changes in the TableSource had bad impacts
+- Fixed Tasklisting view, changes in the TableSource had bad impacts
   [phgross]
 
-* Created copy of readable_date helper in og.tabbedview with modifications to handle
+- Created copy of readable_date helper in og.tabbedview with modifications to handle
   ftw.mail.mail objects. Adjusted tabbed views to use new helper.
   [lgraf]
 
-* Added missing dependency on ftw.mail
+- Added missing dependency on ftw.mail
   [lgraf]
 
-* Issue #786 Darstellung Aufgabe als TabbedView
+- Issue #786 Darstellung Aufgabe als TabbedView
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/786
   Fixed display of metadata for mails attached to tasks
   [lgraf]
 
-* Temporarily disabled check if user is allowed to see personal overview tab
+- Temporarily disabled check if user is allowed to see personal overview tab
   [lgraf]
 
 
 2.0b15
 ------
 
-* Added 'forwarding-state-closed' to list of states for which overdue icon shouldn't be displayed
+- Added 'forwarding-state-closed' to list of states for which overdue icon shouldn't be displayed
   [lgraf]
 
 
 2.0b14
 ------
 
-* updated translations
+- updated translations
   [ttschanz]
 
 
 2.0b13
 ------
 
-* Disabled "clear and rebuild" action in OGDS control panel until it works reliably
+- Disabled "clear and rebuild" action in OGDS control panel until it works reliably
   [lgraf]
 
-* added sort_index to document_author
+- added sort_index to document_author
   [ttschanz]
 
-* Disabled draggable / manual sort column in tabbed view
+- Disabled draggable / manual sort column in tabbed view
   [lgraf]
 
-* Issue #861 Markierung ueberfaelliger Aufgaben
+- Issue #861 Markierung ueberfaelliger Aufgaben
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/861
   Only mark task as overdue if task is not in a final workflow state.
   [phabegger]
 
-* Added "clear and rebuild tasks" action to OGDS control panel
+- Added "clear and rebuild tasks" action to OGDS control panel
   [lgraf]
 
 
 2.0b12
 ------
 
-* fixed overdue_date_helper
+- fixed overdue_date_helper
   [ttschanz]
 
 
 2.0b11
 ------
 
-* fixed translations
+- fixed translations
   [lgraf]
 
 
 2.0b10
 ------
 
-* Added overdue_date_helper to add CSS class `overdue` to Tasks whose deadline is
+- Added overdue_date_helper to add CSS class `overdue` to Tasks whose deadline is
   in the past. Used by GlobalTaskListingTab and Tasks tab.
   [lgraf]
 
-* Modified workflow_state helper to also work without a context,
+- Modified workflow_state helper to also work without a context,
   and made GlobalTaskListingTab use it so wf-state icons get displayed
   [lgraf]
 
-* Made readable_ogds_author not fail on author == None
+- Made readable_ogds_author not fail on author == None
   [lgraf]
 
-* Added Copy_items action
+- Added Copy_items action
   [ttschanz]
 
-* Fixed workflow_state helper which translates the workflow states in plone domain. It wasn't working because the String which was generated with MessageFactory wasn't translated.
+- Fixed workflow_state helper which translates the workflow states in plone domain. It wasn't working because the String which was generated with MessageFactory wasn't translated.
   [ttschanz]
 
 2.0b9
 -----
 
-* Fixed translations
+- Fixed translations
   [jbaumann]
 
 
 2.0b8
 -----
 
-* Issue #778 Zwei Reiter gleichzeitig aktiv
+- Issue #778 Zwei Reiter gleichzeitig aktiv
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/778
   The name of a tab should not be contained in the name of another tab.
   [jbaumann]
 
-* Added helper to mark up workflow state with an appropriate CSS class
+- Added helper to mark up workflow state with an appropriate CSS class
   [lgraf]
 
-* Added move Items action.
+- Added move Items action.
   [ttschanz]
 
-* Issue #768 Erweiterte Suche: Suche nach Autor (Dokument) funktioniert nicht
+- Issue #768 Erweiterte Suche: Suche nach Autor (Dokument) funktioniert nicht
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/768
   [jbaumann]
 
-* Removed users.pt template since its not used anymore.
+- Removed users.pt template since its not used anymore.
   [jbaumann]
 
-* Moved template for eliminating grok unassociated template warning.
+- Moved template for eliminating grok unassociated template warning.
   [jbaumann]
 
-* Removed journal.pt template since its not used anymore.
+- Removed journal.pt template since its not used anymore.
   [jbaumann]
 
 
 2.0b7
 -----
 
-* Fixed unauthorized bug on site root.
+- Fixed unauthorized bug on site root.
   [jbaumann]
 
 
 2.0b6
 -----
 
-* Only show Personal Overview tab in globalnav if user is on a home client
+- Only show Personal Overview tab in globalnav if user is on a home client
   Issue #748 Reiter "Uebersicht" und "Vorlagen" ausblenden fuer Nicht-Users
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/748/
   [lgraf]
 
-* Fixed implementation of `subdossier` column
+- Fixed implementation of `subdossier` column
   Issue #739 Neue Spalten in Tabbedview innerhalb Dossier
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/739/
   [lgraf]
 
-* Removed "paste" from folder-actions, since we have it now in the object buttons.
+- Removed "paste" from folder-actions, since we have it now in the object buttons.
   [jbaumann]
 
-* Clenaup task actions: moved some actions to minor actions menu.
+- Clenaup task actions: moved some actions to minor actions menu.
   [jbaumann]
 
-* Added additional `subdossier` column for tasks and documents
+- Added additional `subdossier` column for tasks and documents
   [lgraf]
 
-* Helpers: Unicode fixes.
+- Helpers: Unicode fixes.
   [jbaumann]
 
-* Tabbed view: show amount of matches.
+- Tabbed view: show amount of matches.
   [jbaumann]
 
-* Added additional column `Active` to OGDS tab
+- Added additional column `Active` to OGDS tab
   [lgraf]
 
 
 2.0b5
 -----
 
-* Added a OGDS Control Panel, which shows the configuration and other OGDS stuff.
+- Added a OGDS Control Panel, which shows the configuration and other OGDS stuff.
   [jbaumann]
 
-* Also translate inboxes in tabbed view helpers.
+- Also translate inboxes in tabbed view helpers.
   [jbaumann]
 
 
 2.0b4
 -----
 
-* Fixed personal_overview, working now without a inbox
+- Fixed personal_overview, working now without a inbox
   [ttschanz]
 
-* Fixed "my tasks" tab in overview: shows now only tasks assigned to the current client
+- Fixed "my tasks" tab in overview: shows now only tasks assigned to the current client
   [jbaumann]
 
 
 2.0b3
 -----
 
-* fixed translation of Date of completition
+- fixed translation of Date of completition
   [ttschanz]
 
 2.0b2
 -----
 
-* translation fixes
+- translation fixes
   [Jonas Baumann]
 
 
 2.0b1
 -----
 
-* added ISQLAlchemy interface for tabbedview tabs, this decides to use SQL in ftw.dictstorage
+- added ISQLAlchemy interface for tabbedview tabs, this decides to use SQL in ftw.dictstorage
   [Jonas Baumann]
 
-* obsolete
+- obsolete
   [Victor Baumann]
 
-* js moved to ftw.tabbedview. generic refactored to use containers only
+- js moved to ftw.tabbedview. generic refactored to use containers only
   [Victor Baumann]
 
 
@@ -303,36 +343,36 @@ Changelog
 1.0a4
 -----
 
-* Removed all dependencies to opengever.solr and collective.solr. We don't use solr animore.
+- Removed all dependencies to opengever.solr and collective.solr. We don't use solr animore.
   [05.10.2009, phgross]
 
-* Issue #642 GUI, 2. Teil: Oeffnen von Aufgaben auf fremden Mandanten in neuem Fenster
+- Issue #642 GUI, 2. Teil: Oeffnen von Aufgaben auf fremden Mandanten in neuem Fenster
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/642/
   [14.09.2010, phgross]
 
-* Issue #511 Anwendungskomponente "Kontakte": Moegliche Inhalte
+- Issue #511 Anwendungskomponente "Kontakte": Moegliche Inhalte
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/511
   Name der Kontakte werden nun angezeigt.
   [06.04.2010, jbaumann]
 
-* Issue #483 Spaltensortierung bei der Dossieruebersicht auf Stufe Ordnungssystem
+- Issue #483 Spaltensortierung bei der Dossieruebersicht auf Stufe Ordnungssystem
   [11.03.2010, jbaumann]
 
-* Issue #483 Spaltensortierung bei der Dossieruebersicht auf Stufe Ordnungssystem
+- Issue #483 Spaltensortierung bei der Dossieruebersicht auf Stufe Ordnungssystem
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/483/
   Vergleichen von nicht gesetzten Daten optimiert.
   Sortierung von OGDS kontakten korrigiert
   [25.02.2010, jbaumann]
 
-* Issue #480 Beteiligung am Dossier hinzufuegen sollte auch in "Aktionsleiste" moeglich sein nicht nur ueber das Menue "Aktionen"
+- Issue #480 Beteiligung am Dossier hinzufuegen sollte auch in "Aktionsleiste" moeglich sein nicht nur ueber das Menue "Aktionen"
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/480
   [25.02.2010, jbaumann]
 
-* Issue #479 Dokumentenuebersicht auf Stufe Dossier: "In Bearbeitung bei Brugger Sylvia"
+- Issue #479 Dokumentenuebersicht auf Stufe Dossier: "In Bearbeitung bei Brugger Sylvia"
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/479
   [23.02.2010, jbaumann]
 
-* Participants tab: show particpants readable (with fullname and email)
+- Participants tab: show particpants readable (with fullname and email)
   [04.02.2010, jbaumann]
 
 
@@ -347,24 +387,24 @@ Changelog
 1.0a1
 -----
 
-* Tasks Tab: limited enabled actions to change_state action
+- Tasks Tab: limited enabled actions to change_state action
   [07.01.2010, jbaumann]
 
-* Issue #332: Aufgabenuebersicht, Stufe Dossier: Spalten anpassen
+- Issue #332: Aufgabenuebersicht, Stufe Dossier: Spalten anpassen
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/332/view
   [05.01.2010, jbaumann]
 
-* Issue #322: TabbedView: uebersetzung "more actions"
+- Issue #322: TabbedView: uebersetzung "more actions"
   [04.01.2010, jbaumann]
 
-* Issue #284: Tabbed_view: Buttons unterhalb einer Tabelle muessen pro "View" angezeigt werden koennen
+- Issue #284: Tabbed_view: Buttons unterhalb einer Tabelle muessen pro "View" angezeigt werden koennen
   [23.12.2009, jbaumann]
 
-* Issue #188: Spalten in der Dokumentenuebersicht Stufe Dossier/Subdossier anpassen
+- Issue #188: Spalten in der Dokumentenuebersicht Stufe Dossier/Subdossier anpassen
   [01.12.2009, jbaumann]
 
-* Journal Tab: Hidden entries should not be visible
+- Journal Tab: Hidden entries should not be visible
   [16.11.2009, jbaumann]
 
-* Initial release
+- Initial release
 

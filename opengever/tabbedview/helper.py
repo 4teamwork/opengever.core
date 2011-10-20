@@ -1,4 +1,6 @@
+import cgi
 from datetime import date as dt
+from ftw.mail.utils import get_header
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.tabbedview import _
 from plone.i18n.normalizer.interfaces import IIDNormalizer
@@ -7,8 +9,8 @@ from Products.CMFCore.interfaces._tools import IMemberData
 from Products.PluggableAuthService.interfaces.authservice import IPropertiedUser
 from zope.app.component.hooks import getSite
 from zope.component import getUtility
-import ftw.table
-from ftw.mail.utils import get_header
+from zope.globalrequest import getRequest
+from zope.i18n import translate
 
 
 def task_id_checkbox_helper(item, value):
@@ -121,9 +123,15 @@ def linked(item, value):
     if isinstance(value, unicode):
         value = value.encode('utf-8')
 
+    link_title = " &gt; ".join(t for t in breadcrumb_titles)
+
+    # Make sure all data used in the HTML snipped is properly escaped
+    link_title = cgi.escape(link_title, quote=True)
+    value = cgi.escape(value, quote=True)
+
     link = '<a class="rollover-breadcrumb %s" href="%s" title="%s">%s</a>' % (
         css_class, url_method(),
-        " &gt; ".join(t for t in breadcrumb_titles),
+        link_title,
         value)
 
     wrapper = '<span class="linkWrapper">%s</span>' % link
@@ -183,12 +191,13 @@ def workflow_state(item, value):
     """Helper which translates the workflow_state in plone domain
     and adds a CSS class to indicate the worflow state.
     """
-    i18n_translate = getSite().translate
-    translate = ftw.table.helper.translated_string('plone')
-    translated_value = translate(item, value)
+
     normalize = getUtility(IIDNormalizer).normalize
     state = normalize(item.review_state)
-    return """<span class="wf-%s">%s</span>""" % (state, i18n_translate(translated_value))
+    # We use zope.globalrequest because item can be a SQLAlchemy `Task` object
+    # which doesn't have a request
+    request = getRequest()
+    return """<span class="wf-%s">%s</span>""" % (state, translate(value, domain='plone', context=request))
 
 
 def overdue_date_helper(item, date):
