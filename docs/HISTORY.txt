@@ -6,6 +6,7 @@ Changelog
 --------------------
 
 - Implements reset tableconfiguration action for listing views, which reset the column order and size.
+  And add the action for every listing view.
   Issue #796 Zuruecksetzen der Tabellen-Konfiguration
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/796/
   [phgross]
