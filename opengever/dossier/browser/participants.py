@@ -122,8 +122,16 @@ class Participants(grok.View, OpengeverTab, ListingView):
             return ''
         return base64.encodestring(item._p_oid).strip()
 
-    enabled_actions = ['delete_participants',
-                       'add_participant']
+    enabled_actions = [
+        'delete_participants',
+        'add_participant',
+        'reset_tableconfiguration',
+        ]
+
+    major_actions = [
+        'delete_participants',
+        'add_participant',
+        ]
 
     def get_base_query(self):
         return None
