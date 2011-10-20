@@ -319,9 +319,10 @@ class TestMainDossier(unittest.TestCase):
                 self.labels.get('action_name'),
                 [item.get('title') for item in menu_items])
 
-            # Check add label
+            # Check title of addformular for a subdossier
             browser = self.get_add_view(
                 dossier_type, path=d1.absolute_url(), browser=browser)
+
             self.assertEquals(
                 self.labels.get(
                     'add_subdossier') in browser.contents, True)
