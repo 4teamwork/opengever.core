@@ -101,7 +101,6 @@ class OpengeverCatalogListingTab(grok.View, OpengeverTab,
     search_index = 'SearchableText'
     sort_on = 'modified'
     sort_order = 'reverse'
-    selection = ViewPageTemplateFile("selection.pt")
 
     __call__ = CatalogListingView.__call__
     update = CatalogListingView.update
