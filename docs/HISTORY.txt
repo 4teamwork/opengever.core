@@ -5,6 +5,11 @@ Changelog
 2.0a12 (unreleased)
 -------------------
 
+- Add reset_tableconfiguration action for every listing view.
+  Issue #796 Zuruecksetzen der Tabellen-Konfiguration
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/796/
+  [phgross]
+
 - Implements generating journal entries for local_roles modifications on repositoryfolders or dossiers.
   Issue #1242 Fuer local_roles Anpassungen Journaleintraege generieren
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1242/

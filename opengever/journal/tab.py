@@ -46,9 +46,10 @@ class JournalTab(grok.View, OpengeverTab, ListingView):
 
     # do not show the selects, because no action is enabled
     show_selects = False
-    enabled_actions = []
-    minor_buttons = []
-    major_buttons = []
+    enabled_actions = [
+        'reset_tableconfiguration',
+        ]
+    major_actions = []
     selection = ViewPageTemplateFile("no_selection_amount.pt")
 
     columns = (
