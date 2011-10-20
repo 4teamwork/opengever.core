@@ -162,6 +162,7 @@ class Documents(OpengeverCatalogListingTab):
                        'send_documents',
                        'move_items',
                        'copy_items',
+                       'reset_tableconfiguration',
                        ]
 
     major_actions = ['send_documents',
@@ -214,6 +215,7 @@ class Dossiers(OpengeverCatalogListingTab):
                        'pdf_dossierlisting',
                        'move_items',
                        'copy_items',
+                       'reset_tableconfiguration',
                        ]
 
     major_actions = ['change_state',
@@ -284,6 +286,7 @@ class Tasks(OpengeverCatalogListingTab):
         'pdf_taskslisting',
         'move_items',
         'copy_items',
+        'reset_tableconfiguration',
         ]
 
     major_actions = ['change_state',
@@ -300,7 +303,13 @@ class Trash(Documents):
 
     search_options = {'trashed': True}
 
-    enabled_actions = ['untrashed', ]
+    enabled_actions = [
+        'untrashed',
+        'reset_tableconfiguration',]
+
+    major_actions= [
+        'reset_tableconfiguration',
+        ]
 
     @property
     def columns(self):
