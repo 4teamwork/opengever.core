@@ -66,12 +66,13 @@ class OpengeverSharingView(SharingView):
         result = []
         for key, value in ROLE_MAPPING:
             if key.providedBy(self.context) or key is IStandard:
+                roles = [r.get('id') for r in self.roles()]
                 for id, title in value:
-                    roles = [r.get('id') for r in self.roles()]
                     if id in roles:
                         result.append(
                             {'id': id,
                              'title': title, })
+
                 return result
 
         return self.roles()
