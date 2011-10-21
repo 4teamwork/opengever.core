@@ -4,10 +4,15 @@ from opengever.sharing.browser.sharing import OpengeverSharingView
 from plone.dexterity.utils import createContentInContainer
 from plone.testing.z2 import Browser
 import unittest2 as unittest
+from plone.app.testing import setRoles, TEST_USER_ID
 import transaction
 from zope.component import provideHandler
-from opengever.sharing.interfaces import ILocalRolesAcquisitionBlocked, ILocalRolesAcquisitionActivated, ILocalRolesModified
-from opengever.sharing.events import LocalRolesAcquisitionActivated, LocalRolesAcquisitionBlocked, LocalRolesModified
+from opengever.sharing.interfaces import \
+    ILocalRolesAcquisitionBlocked, ILocalRolesAcquisitionActivated, \
+    ILocalRolesModified
+from opengever.sharing.events import \
+    LocalRolesAcquisitionActivated, LocalRolesAcquisitionBlocked, \
+    LocalRolesModified
 
 
 class TestOpengeverSharingIntegration(unittest.TestCase):
@@ -29,7 +34,6 @@ class TestOpengeverSharingIntegration(unittest.TestCase):
             self.repo_root, 'opengever.repository.repositoryfolder', 'r1')
         self.dossier = createContentInContainer(
             self.repo, 'opengever.dossier.businesscasedossier', 'd1')
-
         transaction.commit()
 
         # Get the sharing-view of repo and dossier
@@ -47,11 +51,47 @@ class TestOpengeverSharingIntegration(unittest.TestCase):
 
         self.mock_event = MockEvent()
 
-    def test_available_roles(self):
-        roles = self.view_dossier()
+    def test_available_roles_with_manager(self):
+        """ Test available roles if we are manager on a context providing
+        IDossier of sharing
+        """
+        setRoles(self.portal, TEST_USER_ID, ['Manager', ])
+        expect = [
+            u'Reader',
+            u'Editor',
+            u'Contributor',
+            u'Reviewer',
+            u'Publisher',
+            u'Administrator', ]
 
-    def base_available_roles(self):
-        pass
+        self.base_available_roles(expect)
+
+    def test_available_roles_with_reader_and_owner(self):
+        """ Test available roles if we are reader and owner on a context
+        providing IDossier of sharing
+        """
+        setRoles(self.portal, TEST_USER_ID, ['Reader', ])
+        expect = [u'Reader', u'Editor', u'Contributor', ]
+
+        self.base_available_roles(expect)
+
+    def base_available_roles(self, expect):
+        """ Base method to check the received roles
+        """
+
+        roles = self.view_dossier.available_roles()
+
+        # Check the roles and sort order
+
+        for role in roles:
+            self.assertTrue(role.get('id') in expect)
+            expect.remove(role.get('id'))
+
+        self.assertTrue(len(expect) == 0)
+
+        # Reset the roles
+        setRoles(
+            self.portal, TEST_USER_ID, ['Manager', 'Contributor', 'Editor'])
 
     def test_integration_dossier_events(self):
         """ Test Integration of opengever.sharing
@@ -171,7 +211,8 @@ class TestOpengeverSharingIntegration(unittest.TestCase):
         self.base_update_role_settings(
             self.view_repo, self.repo, new_settings)
 
-    def base_update_role_settings(self, view, context, settings, reindex=False):
+    def base_update_role_settings(
+        self, view, context, settings, reindex=False):
         """ Base method to call update_role_settings method
         """
         # Get the number of fired events before the update
