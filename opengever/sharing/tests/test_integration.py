@@ -47,6 +47,45 @@ class TestOpengeverSharingIntegration(unittest.TestCase):
 
         self.mock_event = MockEvent()
 
+    def test_available_roles(self):
+        roles = self.view_dossier()
+
+    def base_available_roles(self):
+        pass
+
+    def test_integration_dossier_events(self):
+        """ Test Integration of opengever.sharing
+        """
+
+        self.request = self.layer['request']
+        self.portal = self.layer['portal']
+        self.browser = self.get_browser()
+
+        # Setup minimal repo with one dossier
+        self.repo_root = createContentInContainer(
+            self.portal, 'opengever.repository.repositoryroot', 'root')
+        self.repo = createContentInContainer(
+            self.repo_root, 'opengever.repository.repositoryfolder', 'r1')
+        self.dossier = createContentInContainer(
+            self.repo, 'opengever.dossier.businesscasedossier', 'd1')
+
+        transaction.commit()
+
+        # Get the sharing-view of repo and dossier
+        self.view_repo = OpengeverSharingView(self.repo, self.request)
+        self.view_dossier = OpengeverSharingView(self.dossier, self.request)
+
+        # Event class to look for fired events
+        class MockEvent(object):
+
+            # History: [[interface, context], ]
+            event_history = []
+
+            def mock_handler(self, handler):
+                self.event_history.append([handler, handler.object])
+
+        self.mock_event = MockEvent()
+
     def test_sharing_views(self):
         """ Test Integration of opengever.sharing
         """
