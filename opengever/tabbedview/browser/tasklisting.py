@@ -44,7 +44,9 @@ class GlobalTaskListingTab(grok.View, OpengeverTab,
     sort_on = 'modified'
     sort_reverse = False
 
-    enabled_actions = []
+    enabled_actions = [
+        'reset_tableconfiguration',
+        ]
     major_actions = []
 
     select_all_template = ViewPageTemplateFile('select_all_globaltasks.pt')

@@ -124,7 +124,11 @@ class MyDossiers(Dossiers):
     search_options = {'responsible': authenticated_member,
                       'is_subdossier':False}
 
-    enabled_actions = ['pdf_dossierlisting']
+    enabled_actions = [
+        'pdf_dossierlisting',
+        'reset_tableconfiguration',
+        ]
+
     major_actions = ['pdf_dossierlisting']
 
     @property
@@ -141,7 +145,7 @@ class MyDocuments(Documents):
     search_options = {'Creator': authenticated_member,
                       'trashed': False}
 
-    enabled_actions = []
+    enabled_actions = ['reset_tableconfiguration',]
     major_actions = []
     columns = remove_control_columns(Documents.columns)
     columns = remove_subdossier_column(columns)
@@ -180,7 +184,10 @@ class MyTasks(GlobalTaskListingTab):
     grok.require('zope2.View')
     grok.context(Interface)
 
-    enabled_actions = major_actions = ['pdf_taskslisting']
+    enabled_actions = major_actions = [
+        'pdf_taskslisting',
+        'reset_tableconfiguration',
+        ]
 
     def get_base_query(self):
         """Returns the base search query (sqlalchemy)
@@ -210,7 +217,12 @@ class IssuedTasks(Tasks):
     grok.require('zope2.View')
     grok.context(Interface)
 
-    enabled_actions = major_actions = ['pdf_taskslisting']
+    enabled_actions = [
+        'pdf_taskslisting',
+        'reset_tableconfiguration',
+        ]
+
+    major_actions = ['pdf_taskslisting']
 
     search_options = {'issuer': authenticated_member,}
 
@@ -226,7 +238,12 @@ class AllTasks(MyTasks):
     grok.require('zope2.View')
     grok.context(Interface)
 
-    enabled_actions = major_actions = ['pdf_taskslisting']
+    enabled_actions = [
+        'pdf_taskslisting',
+        'reset_tableconfiguration',
+        ]
+
+    major_actions = ['pdf_taskslisting']
 
     def get_base_query(self):
         """Returns the base search query (sqlalchemy)
@@ -245,6 +262,11 @@ class AllIssuedTasks(Tasks):
     grok.require('zope2.View')
     grok.context(Interface)
 
-    enabled_actions = major_actions = ['pdf_taskslisting']
+    enabled_actions = [
+        'pdf_taskslisting',
+        'reset_tableconfiguration',
+        ]
+
+    major_actions = ['pdf_taskslisting']
 
     columns = remove_subdossier_column(Tasks.columns)

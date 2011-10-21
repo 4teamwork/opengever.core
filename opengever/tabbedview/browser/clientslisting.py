@@ -52,7 +52,9 @@ class ClientsListing(grok.View, OpengeverTab, ListingView):
     sort_reverse = False
 
     show_selects = False
-    enabled_actions = []
+    enabled_actions = [
+        'reset_tableconfiguration',
+        ]
     major_actions = []
     selection = ViewPageTemplateFile("no_selection_amount.pt")
 

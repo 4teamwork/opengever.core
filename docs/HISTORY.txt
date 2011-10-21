@@ -5,6 +5,12 @@ Changelog
 2.0b110 (unreleased)
 --------------------
 
+- Implements reset tableconfiguration action for listing views, which reset the column order and size.
+  And add the action for every listing view.
+  Issue #796 Zuruecksetzen der Tabellen-Konfiguration
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/796/
+  [phgross]
+
 - Fixed batching by providing an OpenGever-specific subclass for ListingView
   and CatalogListingView that override the batching template to match the
   CSS in izug.basetheme
