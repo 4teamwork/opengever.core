@@ -5,6 +5,9 @@ Changelog
 2.0b23 (unreleased)
 -------------------
 
+- Add test for main_dossier to test mapped workflows
+  [eschmutz]
+  
 - Add reset_tableconfiguration action for every listing view.
   Issue #796 Zuruecksetzen der Tabellen-Konfiguration
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/796/

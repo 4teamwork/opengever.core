@@ -11,6 +11,7 @@ from plone.dexterity.utils import createContentInContainer
 from plone.dexterity.utils import iterSchemata
 from plone.indexer.interfaces import IIndexableObject
 from plone.testing.z2 import Browser
+from Products.CMFCore.utils import getToolByName
 from zExceptions import Unauthorized
 from zope.component import getAdapter, getUtility
 from zope.component import provideUtility
@@ -78,6 +79,7 @@ class TestMainDossier(unittest.TestCase):
     """
     dossier_types = {'opengever.dossier.businesscasedossier': {}}
     layer = OPENGEVER_DOSSIER_INTEGRATION_TESTING
+    workflow = "opengever_dossier_workflow"
     tabs = ['Overview',
             'Subdossiers',
             'Documents',
@@ -197,9 +199,11 @@ class TestMainDossier(unittest.TestCase):
     def setUp(self):
         """Set up the testenvironment
         """
-        portal = self.layer['portal']
-        if not portal.hasObject(self.repo_id):
-            portal[portal.invokeFactory(
+        self.portal = self.layer['portal']
+        self.request = self.layer['request']
+
+        if not self.portal.hasObject(self.repo_id):
+            self.repo = self.portal[self.portal.invokeFactory(
                 'opengever.repository.repositoryfolder', self.repo_id)]
 
             transaction.commit()
@@ -207,10 +211,20 @@ class TestMainDossier(unittest.TestCase):
     def test_content_types_installed(self):
         """Check whether the content-type is installed
         """
-        portal = self.layer['portal']
-        types = portal.portal_types.objectIds()
+        types = self.portal.portal_types.objectIds()
         for dossier_type in self.dossier_types:
             self.assertTrue(dossier_type in types)
+
+    def test_workflows_mapped(self):
+        """Check wheter the workflow is mapped correctly
+        """
+        wftool = getToolByName(self.portal, 'portal_workflow')
+
+        for dossier_type in self.dossier_types:
+            self.assertTrue(
+                self.workflow in \
+                    wftool.getWorkflowsFor(
+                        dossier_type)[0].getId())
 
     def test_default_values(self):
         """Check the default values of the dossier
@@ -221,11 +235,10 @@ class TestMainDossier(unittest.TestCase):
 
         for dossier_type in self.dossier_types:
             # browser = self.get_add_view(dossier_type)
-            portal = self.layer['portal']
-            request = self.layer['request']
-            request.set('form.widgets.IDossier.responsible', [])
 
-            d1_view = portal.repo.unrestrictedTraverse(
+            self.request.set('form.widgets.IDossier.responsible', [])
+
+            d1_view = self.portal.repo.unrestrictedTraverse(
                 '++add++%s' % dossier_type)
             # We have to call the view to run the update-method
             d1_view()
@@ -242,24 +255,24 @@ class TestMainDossier(unittest.TestCase):
             IDossier(d1).responsible = self.get_logged_in_user()
 
             # We have to reset the request for the new dossier
-            request.set('form.widgets.IDossier.responsible', [])
+            self.request.set('form.widgets.IDossier.responsible', [])
 
             logout()
-            login(portal, SITE_OWNER_NAME)
+            login(self.portal, SITE_OWNER_NAME)
 
             # The same with another user
-            d2_view = portal.repo.unrestrictedTraverse(
+            d2_view = self.portal.repo.unrestrictedTraverse(
                 '++add++%s' % dossier_type)
             d2_view()
             self.assertEquals([self.get_logged_in_user()], d2_view.request.get(
                 'form.widgets.IDossier.responsible', None))
             d2 = self.create_dossier(dossier_type)
             IDossier(d2).responsible = self.get_logged_in_user()
-            request.set('form.widgets.IDossier.responsible', [])
+            self.request.set('form.widgets.IDossier.responsible', [])
 
             # We change the user again an create a subdossier
             logout()
-            login(portal, TEST_USER_NAME)
+            login(self.portal, TEST_USER_NAME)
 
             d2_1_view = d2.unrestrictedTraverse('++add++%s' % dossier_type)
             d2_1_view()
@@ -274,8 +287,7 @@ class TestMainDossier(unittest.TestCase):
     def test_default_tabs(self):
         """Check default-tabs and tabs-order
         """
-        portal = self.layer['portal']
-        types_tool = portal.portal_types
+        types_tool = getToolByName(self.portal, 'portal_types')
 
         for dossier_type in self.dossier_types:
 
@@ -287,11 +299,13 @@ class TestMainDossier(unittest.TestCase):
             obj = self.create_dossier(dossier_type)
             actions = types_tool.listActions(object=obj)
             for action in actions:
-                if action.category == 'tabbedview-tabs':
-                    # if its a default-tab in the correct order
-                    # we pop it from the tabs-list
-                    if action.title in tabs and tabs.index(action.title) == 0:
-                        tabs.pop(0)
+                if not action.category == 'tabbedview-tabs':
+                    continue
+
+                # if its a default-tab in the correct order
+                # we pop it from the tabs-list
+                if action.title in tabs and tabs.index(action.title) == 0:
+                    tabs.pop(0)
 
             # the tabs-var should be empty if we found every tab
             self.assertEquals(tabs, [])
@@ -408,7 +422,6 @@ class TestMainDossier(unittest.TestCase):
     def test_searchabletext(self):
         """Check the searchable text of an object
         """
-        portal = self.layer['portal']
         provideUtility(
             DummyVocabulary(), name='opengever.ogds.base.ContactsVocabulary')
 
@@ -417,7 +430,7 @@ class TestMainDossier(unittest.TestCase):
 
             dossier = self.create_dossier(dossier_type)
             wrapper = queryMultiAdapter(
-                (dossier, portal.portal_catalog), IIndexableObject)
+                (dossier, self.portal.portal_catalog), IIndexableObject)
             #merge default and additional searchable attr
             searchable_attr = self.default_searchable_attr
             searchable_attr.update(additional_searchable_attr)
@@ -425,36 +438,38 @@ class TestMainDossier(unittest.TestCase):
             for schemata in iterSchemata(dossier):
                 for name, field in getFieldsInOrder(schemata):
                     value = searchable_attr.get(name, '')
-                    if value:
-                        field.set(field.interface(dossier), value)
+                    if not value:
+                        continue
 
-                        # search value
-                        if isinstance(value, list):
-                            for v in value:
-                                val = self.map_with_vocab(schemata, name, v)
-                        # the field reference_number is handled special.
-                        # the searchable text is set over an adapter whos
-                        # return a reference-number. so we cant set the
-                        # reference_number filed like the other attributes.
-                        elif value == 'test_reference_number':
-                            refNumb = getAdapter(dossier, IReferenceNumber)
-                            val = refNumb.get_number()
-                        # the filing_no is handled special.
-                        # the searchable text is just set if the dossier is
-                        # archived. So we bypass this
-                        elif value == 'test_filing_no':
-                            val = "GS-Filing 12345"
-                            archived_dossier = IDossierMarker(dossier)
-                            archived_dossier.filing_no = val
-                        else:
-                            val = self.map_with_vocab(schemata, name, value)
+                    field.set(field.interface(dossier), value)
 
-                        self.assertIn(
-                            val.encode('utf-8'), wrapper.SearchableText)
+                    # search value
+                    if isinstance(value, list):
+                        for v in value:
+                            val = self.map_with_vocab(schemata, name, v)
+                    # the field reference_number is handled special.
+                    # the searchable text is set over an adapter whos
+                    # return a reference-number. so we cant set the
+                    # reference_number filed like the other attributes.
+                    elif value == 'test_reference_number':
+                        refNumb = getAdapter(dossier, IReferenceNumber)
+                        val = refNumb.get_number()
+                    # the filing_no is handled special.
+                    # the searchable text is just set if the dossier is
+                    # archived. So we bypass this
+                    elif value == 'test_filing_no':
+                        val = "GS-Filing 12345"
+                        archived_dossier = IDossierMarker(dossier)
+                        archived_dossier.filing_no = val
+                    else:
+                        val = self.map_with_vocab(schemata, name, value)
 
-                        # We pop the field if we found it to check at the
-                        # end whether all attributes where found in the schema
-                        searchable_attr.pop(name)
+                    self.assertIn(
+                        val.encode('utf-8'), wrapper.SearchableText)
+
+                    # We pop the field if we found it to check at the
+                    # end whether all attributes where found in the schema
+                    searchable_attr.pop(name)
 
             # Test sequencenumber
             if searchable_attr.get(
