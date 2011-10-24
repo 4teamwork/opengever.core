@@ -7,7 +7,12 @@ Changelog
 
 - Add test for main_dossier to test mapped workflows
   [eschmutz]
-  
+
+- Added dossier_report view, which generates a excel export for the selected dossiers.
+  Issue #1038 Statistiken/Auswertungen
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1038
+  [phgross]
+
 - Add reset_tableconfiguration action for every listing view.
   Issue #796 Zuruecksetzen der Tabellen-Konfiguration
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/796/
