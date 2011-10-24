@@ -163,6 +163,21 @@ class ContactInformation(grok.GlobalUtility):
         else:
             return users[0]
 
+    def is_user_in_inbox_group(self, userid=None, client_id=None):
+        if not client_id:
+            client_id = get_client_id()
+
+        if not userid:
+            member = getToolByName(
+                getSite(), 'portal_membership').getAuthenticatedMember()
+            userid = member.getId()
+
+        if self.get_user(userid) in self.get_client_by_id(
+                client_id).inbox_group.users:
+            return True
+
+        return False
+
     # CONTACTS
     def is_contact(self, principal):
         """Return true, if `principal` is a contact.

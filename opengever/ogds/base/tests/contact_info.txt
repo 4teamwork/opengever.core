@@ -238,6 +238,18 @@ Various lists and other methods:
     >>> list(info.list_user_groups('hugo.boss'))
     [<Group client1_users>, <Group client1_inbox_users>]
 
+    >>> info.is_user_in_inbox_group(
+    ...    userid='hugo.boss', client_id='client1')
+    True
+
+    >>> info.is_user_in_inbox_group(
+    ...    userid='hugo.boss', client_id='client2')
+    False
+
+    >>> info.is_user_in_inbox_group(
+    ...    userid='hanspeter.linder', client_id='client1')
+    False
+
 
 Test describe with a PAS user:
 
