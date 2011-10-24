@@ -50,8 +50,13 @@ def indexed_task_link(item, display_client=False):
     else:
         client_html = ''
 
+    # create breadcrumbs including the (possibly remote) client title
+    breadcrumb_titles = "[%s] > %s" % (client.title, item.breadcrumb_title)
+
     # render the full link if he has acccess
-    inner_html = ''.join(('<span class="%s">%s</span>' % (css_class, item.title), client_html))
+    inner_html = ''.join(('<span class="rollover-breadcrumb %s" \
+                                 title="%s">%s</span>' % \
+                    (css_class, breadcrumb_titles, item.title), client_html))
     if has_access:
         return '<a href="%s"%s>%s</a>' % (
             url,
