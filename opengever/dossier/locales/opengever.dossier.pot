@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2011-10-17 15:30+0000\n"
+"POT-Creation-Date: 2011-10-24 07:54+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -40,6 +40,10 @@ msgstr ""
 msgid "Copy documents to remote client"
 msgstr ""
 
+#: ./opengever/dossier/browser/report.py:56
+msgid "Could not generate the report"
+msgstr ""
+
 #: ./opengever/dossier/profiles/default/actions.xml
 msgid "Delete"
 msgstr ""
@@ -50,6 +54,10 @@ msgstr ""
 
 #: ./opengever/dossier/behaviors/dossier.py:246
 msgid "Edit Subdossier"
+msgstr ""
+
+#: ./opengever/dossier/profiles/default/actions.xml
+msgid "Export selection"
 msgstr ""
 
 #: ./opengever/dossier/move_items.py:131
@@ -211,6 +219,11 @@ msgstr ""
 msgid "error_enddate"
 msgstr ""
 
+#. Default: "You have not selected any Items"
+#: ./opengever/dossier/browser/report.py:23
+msgid "error_no_items"
+msgstr ""
+
 #. Default: "Filing"
 #: ./opengever/dossier/behaviors/dossier.py:103
 msgid "fieldset_filing"
@@ -223,6 +236,7 @@ msgstr ""
 
 #. Default: "Filing number"
 #: ./opengever/dossier/behaviors/dossier.py:125
+#: ./opengever/dossier/browser/report.py:43
 msgid "filing_no"
 msgstr ""
 
@@ -385,6 +399,7 @@ msgstr ""
 #. Default: "Closing Date"
 #: ./opengever/dossier/archive.py:93
 #: ./opengever/dossier/behaviors/dossier.py:81
+#: ./opengever/dossier/browser/report.py:39
 msgid "label_end"
 msgstr ""
 
@@ -431,6 +446,7 @@ msgstr ""
 
 #. Default: "Reference Number"
 #: ./opengever/dossier/behaviors/dossier.py:193
+#: ./opengever/dossier/browser/report.py:48
 #: ./opengever/dossier/viewlets/businesscase_byline.pt:69
 msgid "label_reference_number"
 msgstr ""
@@ -442,8 +458,14 @@ msgstr ""
 
 #. Default: "Responsible"
 #: ./opengever/dossier/behaviors/dossier.py:94
-#: ./opengever/dossier/browser/participants.py:155
+#: ./opengever/dossier/browser/participants.py:163
+#: ./opengever/dossier/browser/report.py:41
 msgid "label_responsible"
+msgstr ""
+
+#. Default: "Review state"
+#: ./opengever/dossier/browser/report.py:45
+msgid "label_review_state"
 msgstr ""
 
 #. Default: "Roles"
@@ -463,6 +485,7 @@ msgstr ""
 
 #. Default: "Opening Date"
 #: ./opengever/dossier/behaviors/dossier.py:73
+#: ./opengever/dossier/browser/report.py:37
 msgid "label_start"
 msgstr ""
 
@@ -483,6 +506,7 @@ msgid "label_template"
 msgstr ""
 
 #. Default: "title"
+#: ./opengever/dossier/browser/report.py:36
 #: ./opengever/dossier/templatedossier.py:169
 #: ./opengever/dossier/templatedossier_templates/template_form.pt:30
 msgid "label_title"

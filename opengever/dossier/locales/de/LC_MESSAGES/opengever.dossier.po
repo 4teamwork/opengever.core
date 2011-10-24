@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2011-10-17 15:30+0000\n"
-"PO-Revision-Date: 2011-01-26 11:25+0100\n"
+"POT-Creation-Date: 2011-10-24 07:54+0000\n"
+"PO-Revision-Date: 2011-10-24 09:59+0200\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
 "MIME-Version: 1.0\n"
@@ -37,6 +37,10 @@ msgstr "Geschäftsdossier"
 msgid "Copy documents to remote client"
 msgstr "In eigenes Dossier kopieren"
 
+#: ./opengever/dossier/browser/report.py:56
+msgid "Could not generate the report"
+msgstr "Report konnte nicht generiert werden."
+
 #: ./opengever/dossier/profiles/default/actions.xml
 msgid "Delete"
 msgstr "Beteiligung löschen"
@@ -48,6 +52,10 @@ msgstr "Dokument ${name} ist mit einer Aufgabe verbunden, bitte Aufgabe verschie
 #: ./opengever/dossier/behaviors/dossier.py:246
 msgid "Edit Subdossier"
 msgstr "Subdossier bearbeiten"
+
+#: ./opengever/dossier/profiles/default/actions.xml
+msgid "Export selection"
+msgstr "Auswahl exportieren"
 
 #: ./opengever/dossier/move_items.py:131
 msgid "Failed to copy following objects: ${failed_objects}"
@@ -210,6 +218,11 @@ msgstr "Es wurden keine Objekte verschoben. Folgende Objekte dürfen nicht in de
 msgid "error_enddate"
 msgstr "Enddatum erforderlich"
 
+#. Default: "You have not selected any Items"
+#: ./opengever/dossier/browser/report.py:23
+msgid "error_no_items"
+msgstr "Sie haben keine Objekte ausgewählt."
+
 #. Default: "Filing"
 #: ./opengever/dossier/behaviors/dossier.py:103
 msgid "fieldset_filing"
@@ -222,6 +235,7 @@ msgstr "Aktion"
 
 #. Default: "Filing number"
 #: ./opengever/dossier/behaviors/dossier.py:125
+#: ./opengever/dossier/browser/report.py:43
 msgid "filing_no"
 msgstr "Ablagenummer"
 
@@ -384,6 +398,7 @@ msgstr "E-Mail:"
 #. Default: "Closing Date"
 #: ./opengever/dossier/archive.py:93
 #: ./opengever/dossier/behaviors/dossier.py:81
+#: ./opengever/dossier/browser/report.py:39
 msgid "label_end"
 msgstr "Ende"
 
@@ -430,6 +445,7 @@ msgstr "Beteiligung"
 
 #. Default: "Reference Number"
 #: ./opengever/dossier/behaviors/dossier.py:193
+#: ./opengever/dossier/browser/report.py:48
 #: ./opengever/dossier/viewlets/businesscase_byline.pt:69
 msgid "label_reference_number"
 msgstr "Aktenzeichen:"
@@ -441,9 +457,15 @@ msgstr "Verwandte Dossiers"
 
 #. Default: "Responsible"
 #: ./opengever/dossier/behaviors/dossier.py:94
-#: ./opengever/dossier/browser/participants.py:155
+#: ./opengever/dossier/browser/participants.py:163
+#: ./opengever/dossier/browser/report.py:41
 msgid "label_responsible"
 msgstr "Federführend"
+
+#. Default: "Review state"
+#: ./opengever/dossier/browser/report.py:45
+msgid "label_review_state"
+msgstr "Status"
 
 #. Default: "Roles"
 #: ./opengever/dossier/behaviors/participation.py:97
@@ -462,6 +484,7 @@ msgstr "Ziel-Mandant"
 
 #. Default: "Opening Date"
 #: ./opengever/dossier/behaviors/dossier.py:73
+#: ./opengever/dossier/browser/report.py:37
 msgid "label_start"
 msgstr "Beginn"
 
@@ -482,6 +505,7 @@ msgid "label_template"
 msgstr "Vorlage"
 
 #. Default: "title"
+#: ./opengever/dossier/browser/report.py:36
 #: ./opengever/dossier/templatedossier.py:169
 #: ./opengever/dossier/templatedossier_templates/template_form.pt:30
 msgid "label_title"

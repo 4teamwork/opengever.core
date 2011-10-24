@@ -53,7 +53,18 @@
       	</property>
 		<property name="visible">True</property>
 	</object>
-  </object>
+	<object name="export_dossiers" meta_type="CMF Action" i18n:domain="opengever.dossier">
+		<property name="title" i18n:translate="">Export selection</property>
+		<property name="description" i18n:translate=""></property>
+		<property name="url_expr">string:@@dossier_report:method</property>
+        <property name="icon_expr"></property>
+		<property name="available_expr">python:context.restrictedTraverse('reporting_controller')()</property>
+		<property name="permissions">
+			<element value="View"/>
+      	</property>
+		<property name="visible">True</property>
+	</object>
+ </object>
 
 
 </object>
