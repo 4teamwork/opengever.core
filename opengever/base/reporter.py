@@ -1,11 +1,28 @@
-from xlwt import Workbook, XFStyle
-from zope.i18n import translate
-from StringIO import StringIO
-from opengever.ogds.base.interfaces import IContactInformation
 from Products.CMFCore.interfaces._tools import IMemberData
-from Products.PluggableAuthService.interfaces.authservice \
-    import IPropertiedUser
+from Products.PluggableAuthService.interfaces.authservice import \
+    IPropertiedUser
+from StringIO import StringIO
+from five import grok
+from opengever.ogds.base.interfaces import IContactInformation
+from xlwt import Workbook, XFStyle
 from zope.component import getUtility
+from zope.interface import Interface
+from zope.i18n import translate
+
+
+class ReportingController(grok.View):
+    """The controllerview check if the actual user has the permissions to acces
+    the inbox.
+    """
+
+    grok.context(Interface)
+    grok.name('reporting_controller')
+
+    def render(self):
+        """check if the user is in the inbox group."""
+
+        info = getUtility(IContactInformation)
+        return info.is_user_in_inbox_group()
 
 
 def format_datetime(date):
@@ -16,6 +33,9 @@ def format_datetime(date):
 
 
 def readable_author(author):
+    """Helper method which returns the author description,
+    instead of the userid"""
+
     if not isinstance(author, unicode):
         if author is not None:
             author = author.decode('utf-8')
@@ -56,13 +76,24 @@ def get_date_style(format='D.M.YY h:mm'):
 
 
 class XLSReporter(object):
+    """XLS Reporter View generates a xls-report for the given results set.
+    """
 
     def __init__(self, request, attributes, results):
+        """Initalize the XLS reporter
+        Arguments:
+        attributes -- a list of mappings (with 'id', 'title', 'transform')
+        results -- a list of objects, brains or sqlalchemy objects
+        """
+
         self.attributes = attributes
         self.results = results
         self.request = request
 
     def __call__(self):
+        """Generates the xls data for the given objects.
+        """
+
         w = Workbook()
         sheet = w.add_sheet('Dossiers')
 
@@ -82,9 +113,9 @@ class XLSReporter(object):
 
                 # set a XFStyle, when one is given
                 if attr.get('style'):
-                    sheet.write(r+1, c, value, attr.get('style'))
+                    sheet.write(r + 1, c, value, attr.get('style'))
                 else:
-                    sheet.write(r+1, c, value)
+                    sheet.write(r + 1, c, value)
 
         # save the Workbook-data in to a StringIO
         data = StringIO()
