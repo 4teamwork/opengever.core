@@ -1,8 +1,9 @@
 from Acquisition import aq_base
-from Products.CMFCore.interfaces._content import IFolderish
 from five import grok
+from opengever.base.behaviors.utils import split_string_by_numbers
 from opengever.base.interfaces import IReferenceNumberPrefix
 from persistent.dict import PersistentDict
+from Products.CMFCore.interfaces._content import IFolderish
 from zope.annotation.interfaces import IAnnotations
 from zope.app.intid.interfaces import IIntIds
 from zope.component import getUtility
@@ -42,33 +43,40 @@ class ReferenceNumberPrefixAdpater(grok.Adapter):
         """ return the next possible reference number for object
         at the actual context
         """
-        if self.child_mapping.keys():
-            lastnumber = max(self.child_mapping.keys())
+        if not self.child_mapping.keys():
+            # It's the first number ever issued
+            return u'1'
+        else:
+            prefixes_in_use = self.child_mapping.keys()
+            # Sort the list of unicode strings *numerically*
+            prefixes_in_use.sort(key=split_string_by_numbers)
+            lastnumber = prefixes_in_use[-1]
 
-            # then increase by one, if possible:
             # if its a number, we increase the whole number
+            try:
+                lastnumber = int(lastnumber)
+                return unicode(lastnumber + 1)
+            except ValueError:
+                pass
+
             # .. otherwise try to increment the last numeric part
-            if isinstance(lastnumber, int):
-                return lastnumber + 1
-            else:
-                xpr = re.compile('\d+')
-                matches = tuple(xpr.finditer(lastnumber))
-                if len(matches)>0:
-                    span = matches[-1].span()
-                    subvalue = lastnumber[span[0]:span[1]]
-                    try:
-                        subvalue = int(subvalue)
-                    except (ValueError, TypeError):
-                        pass
-                    else:
-                        subvalue += 1
-                        subvalue = str(subvalue)
-                        lastnumber = lastnumber[:span[0]] + \
-                                        subvalue + lastnumber[span[1]:]
-                        return lastnumber
+            xpr = re.compile('\d+')
+            matches = tuple(xpr.finditer(lastnumber))
+            if len(matches)>0:
+                span = matches[-1].span()
+                subvalue = lastnumber[span[0]:span[1]]
+                try:
+                    subvalue = int(subvalue)
+                except (ValueError, TypeError):
+                    pass
                 else:
-                    return ''
-        return 1
+                    subvalue += 1
+                    subvalue = unicode(subvalue)
+                    lastnumber = lastnumber[:span[0]] + \
+                                    subvalue + lastnumber[span[1]:]
+                    return lastnumber
+            else:
+                return u''
 
     def get_number(self, obj):
         """return the reference number for the object,
@@ -93,6 +101,9 @@ class ReferenceNumberPrefixAdpater(grok.Adapter):
 
         if not number:
             number = self.get_next_number()
+
+        if not isinstance(number, unicode):
+            number = unicode(number)
 
         self.reference_mapping[intid] = number
         self.child_mapping[number] = intid

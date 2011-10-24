@@ -13,9 +13,3 @@ products.
    - IReferenceNumber
 
  * reference and sequence number generation
-
- * 
-
- 
-
-

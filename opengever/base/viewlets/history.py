@@ -22,4 +22,12 @@ class DocumentContentHistoryViewlet(content.ContentHistoryViewlet):
         else:
             return IPreviewMarker.providedBy(self.context)
 
+    def downloadLink(self):
+        """Determines if the history viewlet should display a link to
+        download the content as a file or a link to show the content with
+        the default view."""
+        if self.context.portal_type in ['opengever.document.document']:
+            return True
+        return False
+
     update = content.ContentHistoryViewlet.update

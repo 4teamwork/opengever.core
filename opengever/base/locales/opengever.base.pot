@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2011-06-22 07:52+0000\n"
+"POT-Creation-Date: 2011-10-07 10:05+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,6 +19,10 @@ msgstr ""
 
 #: ./opengever/base/profiles/default/actions.xml
 msgid "Copy Items"
+msgstr ""
+
+#: ./opengever/base/viewlets/download.py:20
+msgid "No file in in this version"
 msgstr ""
 
 #: ./opengever/base/profiles/default/actions.xml
@@ -43,6 +47,21 @@ msgstr ""
 msgid "archival worthy with sampling"
 msgstr ""
 
+#. Default: "Download"
+#: ./opengever/base/viewlets/history.pt:41
+msgid "button_file"
+msgstr ""
+
+#. Default: "PDF"
+#: ./opengever/base/viewlets/history.pt:49
+msgid "button_pdf"
+msgstr ""
+
+#. Default: "Show"
+#: ./opengever/base/viewlets/history.pt:45
+msgid "button_show"
+msgstr ""
+
 #. Default: "classified"
 #: opengever/repository/classification.py
 msgid "classified"
@@ -54,12 +73,12 @@ msgid "confidential"
 msgstr ""
 
 #. Default: "You have not selected any Items"
-#: ./opengever/base/browser/copy_items.py:45
+#: ./opengever/base/browser/copy_items.py:40
 msgid "error_no_items"
 msgstr ""
 
 #. Default: "The item you selected cannot be copied"
-#: ./opengever/base/browser/copy_items.py:34
+#: ./opengever/base/browser/copy_items.py:29
 msgid "error_not_copyable"
 msgstr ""
 
@@ -74,16 +93,16 @@ msgid "fieldset_common"
 msgstr ""
 
 #. Default: "Life Cycle"
-#: ./opengever/base/behaviors/lifecycle.py:30
+#: ./opengever/base/behaviors/lifecycle.py:26
 msgid "fieldset_lifecycle"
 msgstr ""
 
 #. Default: "Archival value code"
-#: ./opengever/base/behaviors/lifecycle.py:60
+#: ./opengever/base/behaviors/lifecycle.py:57
 msgid "help_archival_value"
 msgstr ""
 
-#: ./opengever/base/behaviors/lifecycle.py:68
+#: ./opengever/base/behaviors/lifecycle.py:66
 msgid "help_archival_value_annotation"
 msgstr ""
 
@@ -95,11 +114,11 @@ msgstr ""
 msgid "help_creators"
 msgstr ""
 
-#: ./opengever/base/behaviors/lifecycle.py:75
+#: ./opengever/base/behaviors/lifecycle.py:73
 msgid "help_custody_period"
 msgstr ""
 
-#: ./opengever/base/behaviors/lifecycle.py:83
+#: ./opengever/base/behaviors/lifecycle.py:82
 msgid "help_dateofcassation"
 msgstr ""
 
@@ -123,21 +142,26 @@ msgstr ""
 msgid "help_public_trial_statement"
 msgstr ""
 
-#: ./opengever/base/behaviors/lifecycle.py:45
+#: ./opengever/base/behaviors/lifecycle.py:41
 msgid "help_retention_period"
 msgstr ""
 
-#: ./opengever/base/behaviors/lifecycle.py:53
+#: ./opengever/base/behaviors/lifecycle.py:50
 msgid "help_retention_period_annotation"
 msgstr ""
 
+#. Default: "Actor"
+#: ./opengever/base/viewlets/history.pt:17
+msgid "label_actor"
+msgstr ""
+
 #. Default: "Archival value"
-#: ./opengever/base/behaviors/lifecycle.py:59
+#: ./opengever/base/behaviors/lifecycle.py:56
 msgid "label_archival_value"
 msgstr ""
 
 #. Default: "archivalValueAnnotation"
-#: ./opengever/base/behaviors/lifecycle.py:67
+#: ./opengever/base/behaviors/lifecycle.py:64
 msgid "label_archival_value_annotation"
 msgstr ""
 
@@ -146,18 +170,28 @@ msgstr ""
 msgid "label_classification"
 msgstr ""
 
+#. Default: "Comment"
+#: ./opengever/base/viewlets/history.pt:19
+msgid "label_comment"
+msgstr ""
+
 #. Default: "Creators"
 #: ./opengever/base/behaviors/creator.py:20
 msgid "label_creators"
 msgstr ""
 
 #. Default: "Custody period (years)"
-#: ./opengever/base/behaviors/lifecycle.py:74
+#: ./opengever/base/behaviors/lifecycle.py:72
 msgid "label_custody_period"
 msgstr ""
 
+#. Default: "Date"
+#: ./opengever/base/viewlets/history.pt:18
+msgid "label_date"
+msgstr ""
+
 #. Default: "Date of cassation"
-#: ./opengever/base/behaviors/lifecycle.py:82
+#: ./opengever/base/behaviors/lifecycle.py:81
 msgid "label_dateofcassation"
 msgstr ""
 
@@ -169,6 +203,11 @@ msgstr ""
 #. Default: "Description"
 #: ./opengever/base/behaviors/base.py:30
 msgid "label_description"
+msgstr ""
+
+#. Default: "History"
+#: ./opengever/base/viewlets/history.pt:12
+msgid "label_history"
 msgstr ""
 
 #. Default: "Privacy layer"
@@ -186,19 +225,29 @@ msgstr ""
 msgid "label_public_trial_statement"
 msgstr ""
 
+#. Default: "reset"
+#: ./opengever/base/viewlets/history.pt:53
+msgid "label_reset"
+msgstr ""
+
 #. Default: "Retention period (years)"
-#: ./opengever/base/behaviors/lifecycle.py:44
+#: ./opengever/base/behaviors/lifecycle.py:40
 msgid "label_retention_period"
 msgstr ""
 
 #. Default: "retentionPeriodAnnotation"
-#: ./opengever/base/behaviors/lifecycle.py:52
+#: ./opengever/base/behaviors/lifecycle.py:48
 msgid "label_retention_period_annotation"
 msgstr ""
 
 #. Default: "Title"
 #: ./opengever/base/behaviors/base.py:24
 msgid "label_title"
+msgstr ""
+
+#. Default: "Version"
+#: ./opengever/base/viewlets/history.pt:16
+msgid "label_version"
 msgstr ""
 
 #. Default ""

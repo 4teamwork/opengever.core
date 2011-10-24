@@ -1,12 +1,12 @@
-
 from Acquisition import aq_inner, aq_parent
-import zope.schema.vocabulary
-from zope.component import getMultiAdapter
-from zope.component import adapts
 from plone.dexterity.interfaces import IDexterityContent
-from zope.component import getUtility
 from plone.dexterity.interfaces import IDexterityFTI
+from zope.component import adapts
+from zope.component import getMultiAdapter
+from zope.component import getUtility
 from zope.schema import getFieldsInOrder
+import re
+import zope.schema.vocabulary
 
 from zope.interface import implements
 from plone.rfc822.interfaces import IPrimaryFieldInfo
@@ -111,7 +111,7 @@ def create_restricted_vocabulary(field, options, message_factory=None):
                 return None
             request = self.context.REQUEST
             #XXX CHANGED FROM PATH_TRANSLATED TO PATH_INFO because the test don't work
-            if '++add++' in request.get('PATH_INFO', object()):
+            if '++add++' in request.get('PATH_INFO', ''):
                 # object is not yet existing, context is container
                 obj = context
             else:
@@ -218,3 +218,12 @@ def overrides_child(folder, event, aq_fields, marker):
                     if isinstance(default, ComputedValue):
                         default = default.get()
                     setattr(schema_field.interface(obj), field, default)
+
+
+# Used as sortkey for sorting strings in numerical order
+# TODO: Move to a more suitable place
+def split_string_by_numbers(x):
+    x = str(x)
+    r = re.compile('(\d+)')
+    l = r.split(x)
+    return [int(y) if y.isdigit() else y for y in l]

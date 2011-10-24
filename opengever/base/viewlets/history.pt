@@ -2,9 +2,10 @@
      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
      xmlns:tal="http://xml.zope.org/namespaces/tal"
      class="contentHistory"
-     i18n:domain="opengever.document"
+     i18n:domain="opengever.base"
      tal:define="history view/revisionHistory;
-                 previewSupported view/previewSupported"
+                 previewSupported view/previewSupported;
+                 downloadLink view/downloadLink"
      tal:condition="history">
 
   <dl id="history" class="collapsible collapsedOnLoad">
@@ -39,11 +40,16 @@
               <td tal:condition="isVersion">
                 <a href=""
                    class="standalone"
-                   tal:attributes="href string:${here/absolute_url}/download_file_version?version_id=${item/version_id}" i18n:domain="opengever.base" i18n:translate="button_file">Download</a>
+                   tal:condition="downloadLink"
+                   tal:attributes="href string:${here/absolute_url}/download_file_version?version_id=${item/version_id}" i18n:translate="button_file">Download</a>
+               <a href=""
+                  class="standalone"
+                  tal:condition="not:downloadLink"
+                  tal:attributes="href string:${here/absolute_url}/version-view?version_id=${item/version_id}" i18n:translate="button_show">Show</a>
                <a href="" 
                   class="standalone"
                   tal:condition="previewSupported"
-                  tal:attributes="href string:${here/absolute_url}/download_pdf_version?version_id=${item/version_id}" i18n:domain="opengever.base" i18n:translate="button_pdf">PDF</a>
+                  tal:attributes="href string:${here/absolute_url}/download_pdf_version?version_id=${item/version_id}"  i18n:translate="button_pdf">PDF</a>
                 <a href=""
                    class="standalone"
                    tal:attributes="href string:${here/absolute_url}/revert-file-to-version?version_id=${item/version_id}" i18n:translate="label_reset">reset</a>

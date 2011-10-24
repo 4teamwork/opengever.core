@@ -10,7 +10,17 @@
 ##
 
 if context.REQUEST['__cp']:
+    objid = ''
     objlist = context.REQUEST['__cp'].split(':')
     for obj in objlist:
-        context.manage_pasteObjects(obj)
-return context.REQUEST.RESPONSE.redirect(context.absolute_url())
+        objid = context.manage_pasteObjects(obj)
+    myobj = context.get(objid[0]['new_id'])
+    if myobj.portal_type == 'opengever.document.document':
+        redirect_view = '#documents'
+    elif myobj.portal_type == 'opengever.task.task':
+        redirect_view = '#task'
+    elif myobj.portal_type == 'opengever.dossier.businesscasedossier':
+        redirect_view = '#dossiers'
+    else:
+        redirect_view = ''
+return context.REQUEST.RESPONSE.redirect(context.absolute_url()+ redirect_view)

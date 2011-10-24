@@ -5,6 +5,7 @@ imports:
 
     >>> app = layer.get('app')
     >>> portal = layer.get('portal')
+    >>> request = layer.get('request')
     >>> from plone.dexterity.fti import DexterityFTI
     >>> from Products.CMFCore.utils import getToolByName
 
@@ -35,6 +36,9 @@ create test objects:
     >>> doc = folder['opengeverbasefti2']
 
 test copy_items view:
+we have to fake the request since copy_items view will redirect to the orig_template
+    >>> request.form['orig_template'] = folder.absolute_url()
+
 
 should select any items
     >>> folder.restrictedTraverse('copy_items')()

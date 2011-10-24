@@ -2,54 +2,146 @@ Changelog
 =========
 
 
-2.0b15
-------
+2.0b19 (unreleased)
+-------------------
 
-* Moved customized history viewlet from og.document into og.base and
+- Nothing changed yet.
+
+
+2.0b18 (2011-10-13)
+-------------------
+
+- Monkey patching webdav.LockItem.DEFAULTTIMEOUT (2 hours)
+  [lgraf]
+
+
+2.0b17 (2011-10-07)
+-------------------
+
+- https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1225/
+  added translations and changed i18n domain for history.pt
+  [eschmutz]
+
+- #1171 Feedback aus Pilotphase: Kopiertes Dokument einfügen - falscher Reiter
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1171
+  object_paste now tries to guess the right tab
+  [ttschanz]
+
+- https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1225/
+  added translations and changed i18n domain for history.pt
+  [eschmutz]
+
+
+2.0b16 (2011-10-04)
+-------------------
+
+- Coerce input to split_string_by_numbers() to a string
+  (previous versions of the reference prefix adapter stored integers and
+  made this function fail)
+  [lgraf]
+
+- Added resolve_oguid view redirecting to a specified oguid.
+  Usage: platform/resolve_oguid?oguid=client:intid
+  [jone]
+
+
+2.0b15 (2011-09-29)
+-------------------
+
+- #1154 Umstellung OpenGever in GEVER
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1154
+  Modified siteactions and Clientid viewlet
+  [ttschanz]
+
+- #1158 Fehler Darstellung Kalenderwidget
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1158
+  added DatePickerFieldWidget as Formwidget
+  [ttschanz]
+
+- #1171 Feedback aus Pilotphase: Kopiertes Dokument einfügen - falscher Reiter
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1171
+  Copy_items now redirects to original view
+  [ttschanz]
+
+- Issue #1152 Anpassungen Archivische Schutzfrist
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1152
+  custody_period: must be greater or equal than custody_period on parent
+  [jbaumann]
+
+- Issue #1152 Anpassungen Archivische Schutzfrist
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1152
+  IBaseCustodyPeriods angepasst
+  [eschmutz]
+
+- Fixed ReferenceNumberPrefixAdpater:
+   - Made sure get_next_number() correctly determines the highest prefix
+     in use by sorting strings numerically, not by simple string comparison
+   - get_next_number() now always returns unicode
+   - set_number() always coerces the number it's being passed to unicode
+
+  [lgraf]
+
+- Added grok.require to DownloadFileVersion and VersionView
+  [eschmutz]
+
+- chenged deprecated grok.CodeView to grok.View
+  [eschmutz]
+
+- Implemented a `version-view` that displays a particular version of an object
+  using the default view of the respective content type and updated our
+  customized history viewlet to create links to that view.
+  [lgraf]
+
+- Registering history viewlet for generic interface
+  plone.app.versioningbehavior.behaviors.IVersioningSupport
+  [lgraf]
+
+
+- Moved customized history viewlet from og.document into og.base and
   modified it to handle PDF previews if available.
   [lgraf]
 
 
-2.0b14
-------
+2.0b14 (2011-08-24)
+-------------------
 
-* Issue #1040 Mandantenuebergreifende Beteiligung: Anpassung Darstellung
+- Issue #1040 Mandantenuebergreifende Beteiligung: Anpassung Darstellung
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1040
   reimplement remoteclient_expose functionality:
   added exposator viewlet, wich work with the OGDS and not longer with request variable
   [phgross]
 
-* added test-buildout for plone 4.1
+- added test-buildout for plone 4.1
   [eschmutz]
 
 2.0b13
 ------
 
-* Issue #1136 Umschreiben von Tests von PloneTestCase nach plone.app.testing
+- Issue #1136 Umschreiben von Tests von PloneTestCase nach plone.app.testing
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1136
   [eschmutz]
 
-* Monkey patching plone.formwidget.contenttree so the URLs of relatedItems
+- Monkey patching plone.formwidget.contenttree so the URLs of relatedItems
   are correct in a virtual hosting environment.
   [lgraf]
 
-* Monkey patching Products.LDAPUserFolder.utils.encoding to use `utf-8`
+- Monkey patching Products.LDAPUserFolder.utils.encoding to use `utf-8`
   [lgraf]
 
-* Added sprite for list_groupmembers.pt
+- Added sprite for list_groupmembers.pt
   [eschmutz]
 
-* Removed `breadcrumb_titles` index - not used
+- Removed `breadcrumb_titles` index - not used
   [lgraf]
 
-* Added test-cfg for plone-4.1.x
+- Added test-cfg for plone-4.1.x
   [lgraf]
 
 
 2.0b12
 ------
 
-* Fixed bug where document icons appear twice in ContentTreeWidget
+- Fixed bug where document icons appear twice in ContentTreeWidget
   Issue #1069 Test Rot 2.0.3: Fehlende Icons bei Verweis-Baum u.ae.
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1069
   [lgraf]
@@ -58,57 +150,57 @@ Changelog
 2.0b11
 ------
 
-* Provided feature "opengever" in order to be able to conditionally exclude 
+- Provided feature "opengever" in order to be able to conditionally exclude
   things for opengever in izug.basetheme
   [lgraf]
 
-* Issue #1052 Byline icons durch sprite icons ersetzen
+- Issue #1052 Byline icons durch sprite icons ersetzen
   Added css_class_from_obj helper to opengever.base
   [ttschanz]
 
-* Issue #996 Mails in Dossier verschieben ist nicht erlaubt
+- Issue #996 Mails in Dossier verschieben ist nicht erlaubt
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/996/
   moved css_class_from_brain helper from opengever dossier to opengever.base
   [phgross]
 
-* Added Tests for Copy_items method
+- Added Tests for Copy_items method
   [ttschanz]
 
-* fixed bug in copyitem_view 
+- fixed bug in copyitem_view
   [ttschanz]
 
-* Made _get_acquisition_value() behave more robustly if context == None
+- Made _get_acquisition_value() behave more robustly if context == None
   [lgraf]
 
-* Rebuild OGDS, added groups to the OGDS, because of performance problems
+- Rebuild OGDS, added groups to the OGDS, because of performance problems
   [phgross]
 
-* Removed icon_expr for extedit action (now done with sprites)
+- Removed icon_expr for extedit action (now done with sprites)
   [lgraf]
 
-* Added translation
+- Added translation
   [phgross]
 
-* Moved adjust_sequence_numbers view to opengever.dossier to avoid circular dependency
+- Moved adjust_sequence_numbers view to opengever.dossier to avoid circular dependency
   [lgraf]
 
-* Added dependency on izug.basetheme to setup.py
+- Added dependency on izug.basetheme to setup.py
   [lgraf]
 
 
 2.0b10
 ------
 
-* Issue #934 Fehler bei den Falldossiers 1 und 2 BD.ARP
+- Issue #934 Fehler bei den Falldossiers 1 und 2 BD.ARP
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/934
   Overriding ploneform_macros view to fix bug where status message isn't rendered
   with "error" class if there were errors in (sub)groups of the form
   [lgraf]
 
-* Added some sanity checks regarding conflicts to adjust-sequence-numbers view
+- Added some sanity checks regarding conflicts to adjust-sequence-numbers view
   [lgraf]
 
-* Issue #921 Primaerschluesselverletzung bei Migrationen
+- Issue #921 Primaerschluesselverletzung bei Migrationen
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/921
   Added view to adjust dossier sequence number counter and migrate dossiers
   [lgraf]
@@ -117,7 +209,7 @@ Changelog
 2.0b9
 -----
 
-* Issue #830 Verweis auf Dokument in Aufgabe nicht moeglich
+- Issue #830 Verweis auf Dokument in Aufgabe nicht moeglich
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/830
   Path binders usually use the navtree strategy. Since we hide in the navigation
   certain types such as documents, tasks and forwardings, we need to fix this
@@ -125,103 +217,103 @@ Changelog
   path source binders).
   [jbaumann]
 
-* Added (inactive) write_permission directives to lifecycle fields
+- Added (inactive) write_permission directives to lifecycle fields
   [lgraf]
 
 
 2.0b8
 -----
 
-* re-enabling portal-type icons
+- re-enabling portal-type icons
   [fsprenger]
 
-* Do not show "properties" action on yearfolder.
+- Do not show "properties" action on yearfolder.
   [jbaumann]
 
-* Issue #789 Umsetzung Postmodul
+- Issue #789 Umsetzung Postmodul
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/789/
   Configured meta types which should not appear in navigation.
   [jbaumann]
 
-* Issue #779 Kopieren und Ausschneiden rekursiv implementieren
+- Issue #779 Kopieren und Ausschneiden rekursiv implementieren
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/779/
   implemented new copyaction wich works recursive
   [ttschanz]
 
-* Added opengever_view which provides traversable methods
+- Added opengever_view which provides traversable methods
   such as is_user_assigned_to_client().
   [jbaumann]
 
 2.0b7
 -----
 
-* added 'OpenGever' to client id viewlet
+- added 'OpenGever' to client id viewlet
   Issue #775 Anpassung Design: Titel ueber Ordnungssystem anpassen
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/775/
   [fsprenger]
 
-* Use logger instead of print in monkeypatch.py
+- Use logger instead of print in monkeypatch.py
   [jbaumann]
 
 
 2.0b6
 -----
 
-* Fixed invalid expression in condition for Overview action
+- Fixed invalid expression in condition for Overview action
   [lgraf]
 
 
 2.0b5
 -----
 
-* Only show Personal Overview tab in globalnav if user is on a home client
+- Only show Personal Overview tab in globalnav if user is on a home client
   Issue #748 Reiter "Uebersicht" und "Vorlagen" ausblenden fuer Nicht-Users
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/748/
 
-* Fixed dossier path source binder.
+- Fixed dossier path source binder.
   [jbaumann]
 
-* Fixed indexing of description.
+- Fixed indexing of description.
   [jbaumann]
 
-* Allow "paste" action in Actions-Menu (object buttons)
+- Allow "paste" action in Actions-Menu (object buttons)
   [jbaumann]
 
-* Added general path source binders.
+- Added general path source binders.
   [jbaumann]
 
-* Removed Navtree strategy for contenttree widget, the source binders
+- Removed Navtree strategy for contenttree widget, the source binders
   are now configured properly.
   [jbaumann]
 
-* fixed redirector test
+- fixed redirector test
   [phgross]
 
 
 2.0b4
 -----
 
-* Disabled external-edit icon since we have a action for that.
+- Disabled external-edit icon since we have a action for that.
   [jbaumann]
 
 
 2.0b3
 -----
 
-* moved registry entries to opengever.zug.base
+- moved registry entries to opengever.zug.base
   [Timon Tschanz]
 
-* redirector: added timeout option, used for tabbedviews
+- redirector: added timeout option, used for tabbedviews
   [Jonas Baumann]
 
-* moved zug vocabularies to opengever.zug.base
+- moved zug vocabularies to opengever.zug.base
   [Timon Tschanz]
 
 
 2.0b2
 -----
 
-* Added government_keyword vocabulary with vocabulary helper and registry entry
+- Added government_keyword vocabulary with vocabulary helper and registry entry
   [phgross]
 
 
@@ -232,16 +324,16 @@ Changelog
 2.0a3
 -----
 
-* collective.dexteritytextindexer for searchable text
+- collective.dexteritytextindexer for searchable text
   [23.11.2010, jbaumann]
 
-* Issue #683 Migration SKA.KR
+- Issue #683 Migration SKA.KR
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/683/
   added parties vdex vocabulary
   [23.11.2010, phgross]
 
 
-* Issue #683 Migration SKA.KR
+- Issue #683 Migration SKA.KR
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/683/
   added vdex vocabs
   [23.11.2010, ttschanz]
@@ -253,46 +345,46 @@ Changelog
 1.0a4
 -----
 
-* fixed permission check on inbox for displaying additional tabs in personal overview
+- fixed permission check on inbox for displaying additional tabs in personal overview
   enabled pdf_taskslisting action and made items selectable
   [26.10.2010, jbaumann]
 
-* Issue #541 Darstellung der Mitglieder einer Gruppe, die auf einem OpenGever Inhaltstyp zugelassen ist
+- Issue #541 Darstellung der Mitglieder einer Gruppe, die auf einem OpenGever Inhaltstyp zugelassen ist
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/541
   order user by name
   [21.10.2010, jinfanfer]
 
-* Issue #543 Metadaten diverser Inhaltstypen bereinigen
+- Issue #543 Metadaten diverser Inhaltstypen bereinigen
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/543/
   [17.08.2010, jinfanfer]
 
-* Issue #581 Zusaetzliches Feld: Zum Feld Archivwuerdigkeit ein Kommentarfeld hinzufuegen
+- Issue #581 Zusaetzliches Feld: Zum Feld Archivwuerdigkeit ein Kommentarfeld hinzufuegen
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/581
   [06.08.2010, jinfanfer]
 
-* Issue #580 Zusaetzliches Feld: Zum Feld Aufbewahrungsdauer ein Kommentarfeld hinzufuegen
+- Issue #580 Zusaetzliches Feld: Zum Feld Aufbewahrungsdauer ein Kommentarfeld hinzufuegen
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/580
   [06.08.2010, jinfanfer]
 
-* Fixed validator problems in test
+- Fixed validator problems in test
   [18.03.2010, jbaumann]
 
-* Reference number behavior: improved tests
+- Reference number behavior: improved tests
   [17.03.2010, jbaumann]
 
-* Issue #5 Abklaerung, ob Praefix des Aktenzeichens auch ein Buchstabe sein kann
+- Issue #5 Abklaerung, ob Praefix des Aktenzeichens auch ein Buchstabe sein kann
   https://extranet.4teamwork.ch/projects/testphase-rms-ais-der-ssgi-2010/tracker-sprint-ssgi-2010/5
   [17.03.2010, jbaumann]
 
-* Issue #431 Checkouts auf allgdblx09 mit Oracle-Storage dauern EWIG
+- Issue #431 Checkouts auf allgdblx09 mit Oracle-Storage dauern EWIG
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/431
   Added _getCopy patch, which removes __parent__ pointer before copying it.
   [03.03.2010, jbaumann]
 
-* Added missing reference_number indexer
+- Added missing reference_number indexer
   [26.02.2010, jbaumann]
 
-* Issue #409 Verschieben eines Dossiers von einer Ordnungsposition unter eine andere
+- Issue #409 Verschieben eines Dossiers von einer Ordnungsposition unter eine andere
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/409/
   [22.02.2010, jbaumann]
 
@@ -308,35 +400,35 @@ Changelog
 -----
 
 
-* Issue #111: Dokumente mit Umlauten im Filenamen koennen nicht hinaufgeladen werden
+- Issue #111: Dokumente mit Umlauten im Filenamen koennen nicht hinaufgeladen werden
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/111
   Added some monkey patches for enabling support of umlauts in filenames.
   [05.01.2010, jbaumann]
 
-* Issue #340: Aktenzeichen Dossiers und Subdossiers: Zaehler zaehlt nicht ueber 2
+- Issue #340: Aktenzeichen Dossiers und Subdossiers: Zaehler zaehlt nicht ueber 2
   [04.01.2010, jbaumann]
 
-* Issue #321: Lifecycle behavior: Vocabulary liefert falsche Werte
+- Issue #321: Lifecycle behavior: Vocabulary liefert falsche Werte
   [04.01.2010, jbaumann]
 
-* Issue #292: PloneRegistry: Listen koennen nicht bearbeitet werden
+- Issue #292: PloneRegistry: Listen koennen nicht bearbeitet werden
   TextLinesFieldWidget als standard-widget fuer List-Felder vom Typ TextLine konfiguriert
 
-* Issue #296: Nummerierungskonzept umsetzen
+- Issue #296: Nummerierungskonzept umsetzen
   IReferenceNumber zum generieren von Aktenzeichen implementiert
   [16.12.2009, jbaumann]
 
-* Issue #296: Nummerierungskonzept umsetzen
+- Issue #296: Nummerierungskonzept umsetzen
   ISequenceNumber utility implementiert
   [16.12.2009, jbaumann]
 
-* Issue #239: Registraturposition: Fehler bei leerer Eingabe "Aufbewahrungsdauer"
+- Issue #239: Registraturposition: Fehler bei leerer Eingabe "Aufbewahrungsdauer"
   [10.12.2009, jbaumann]
 
-* Issue #163: OpenGeverBase behavior erstellen
+- Issue #163: OpenGeverBase behavior erstellen
   [27.11.2009, jbaumann]
 
-* Issue #172: listCreators einer Registraturposition liefert Owner des ersten Dossiers
+- Issue #172: listCreators einer Registraturposition liefert Owner des ersten Dossiers
   Added a ICreator behavior
   [27.11.2009, jbaumann]
 
