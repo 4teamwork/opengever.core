@@ -2,6 +2,7 @@ from five import grok
 from ftw.journal.interfaces import IJournalizable
 from ftw.table.basesource import BaseTableSource
 from ftw.table.interfaces import ITableSource, ITableSourceConfig
+from ftw.table import helper
 from opengever.base.browser.helper import client_title_helper
 from opengever.globalindex.model.task import Task
 from opengever.globalindex.utils import indexed_task_link_helper
@@ -9,7 +10,6 @@ from opengever.tabbedview import _
 from opengever.tabbedview.browser.listing import ListingView
 from opengever.tabbedview.browser.tabs import OpengeverTab
 from opengever.tabbedview.helper import overdue_date_helper
-from opengever.tabbedview.helper import readable_date
 from opengever.tabbedview.helper import readable_date_set_invisibles
 from opengever.tabbedview.helper import readable_ogds_author
 from opengever.tabbedview.helper import task_id_checkbox_helper
@@ -86,7 +86,7 @@ class GlobalTaskListingTab(grok.View, OpengeverTab,
 
         {'column': 'created',
          'column_title': _(u'column_issued_at', default=u'Issued at'),
-         'transform': readable_date},
+         'transform': helper.readable_date},
 
         {'column': 'client_id',
          'column_title': _('column_client', default=u'Client'),
@@ -155,7 +155,7 @@ class GlobalTaskTableSource(grok.MultiAdapter, BaseTableSource):
                     continue
 
                 # do not support dates
-                if column.get('transform') == readable_date:
+                if column.get('transform') == helper.readable_date:
                     continue
 
                 field = getattr(model, colname, None)

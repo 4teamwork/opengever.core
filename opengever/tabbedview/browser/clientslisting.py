@@ -2,12 +2,12 @@ from five import grok
 from opengever.tabbedview.browser.listing import ListingView
 from ftw.table.basesource import BaseTableSource
 from ftw.table.interfaces import ITableSource, ITableSourceConfig
+from ftw.table import helper
 from opengever.globalindex.model.task import Task
 from opengever.ogds.models.client import Client
 from opengever.ogds.base.utils import create_session
 from opengever.tabbedview import _
 from opengever.tabbedview.browser.tabs import OpengeverTab
-from opengever.tabbedview.helper import readable_date
 from sqlalchemy import or_
 from sqlalchemy.orm.query import Query
 from sqlalchemy.sql.expression import asc, desc
@@ -152,7 +152,7 @@ class ClientsTableSource(grok.MultiAdapter, BaseTableSource):
                     continue
 
                 # do not support dates
-                if column.get('transform') == readable_date:
+                if column.get('transform') == helper.readable_date:
                     continue
 
                 field = getattr(model, colname, None)

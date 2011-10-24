@@ -7,7 +7,7 @@ from opengever.ogds.base.interfaces import IContactInformation
 from opengever.tabbedview import _
 from opengever.tabbedview.browser.listing import CatalogListingView
 from opengever.tabbedview.helper import overdue_date_helper
-from opengever.tabbedview.helper import readable_date, external_edit_link
+from opengever.tabbedview.helper import external_edit_link
 from opengever.tabbedview.helper import readable_date_set_invisibles
 from opengever.tabbedview.helper import readable_ogds_author, linked
 from opengever.tabbedview.helper import readable_ogds_user
@@ -131,15 +131,15 @@ class Documents(OpengeverCatalogListingTab):
 
         {'column': 'document_date',
          'column_title': _('label_document_date', default="Document Date"),
-         'transform': readable_date},
+         'transform': helper.readable_date},
 
         {'column': 'receipt_date',
          'column_title': _('label_receipt_date', default="Receipt Date"),
-         'transform': readable_date},
+         'transform': helper.readable_date},
 
         {'column': 'delivery_date',
          'column_title': _('label_delivery_date', default="Delivery Date"),
-         'transform': readable_date},
+         'transform': helper.readable_date},
 
         {'column': 'checked_out',
          'column_title': _('label_checked_out', default="Checked out by"),
@@ -200,11 +200,11 @@ class Dossiers(OpengeverCatalogListingTab):
 
         {'column': 'start',
          'column_title': _(u'label_start', default=u'Start'),
-         'transform': readable_date},
+         'transform': helper.readable_date},
 
         {'column': 'end',
          'column_title': _(u'label_end', default=u'End'),
-         'transform': readable_date},
+         'transform': helper.readable_date},
         {'column': 'filing_no',
          'column_title': _(u'filing_number', default=u'Filing Number')},
         )
@@ -266,7 +266,7 @@ class Tasks(OpengeverCatalogListingTab):
 
         {'column': 'created',
          'column_title': _(u'label_issued_date', 'issued at'),
-         'transform': readable_date},
+         'transform': helper.readable_date},
 
         {'column': 'client_id',
          'column_title': _('client_id', 'Client'),

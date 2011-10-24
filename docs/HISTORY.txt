@@ -5,6 +5,12 @@ Changelog
 2.0b110 (unreleased)
 --------------------
 
+- Issue #1249 Mail: Beim Importieren eines E-Mails muss die Spalte Ausgangsdatum leer bleiben
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1249/
+  removed unused function from commit 91a5b16e because we have already all attributes in
+  the metadata. see indexer.py of opengever.mail
+  [eschmutz]
+
 - Implements reset tableconfiguration action for listing views, which reset the column order and size.
   And add the action for every listing view.
   Issue #796 Zuruecksetzen der Tabellen-Konfiguration
