@@ -10,8 +10,8 @@ from opengever.base.reporter import StringTranslater, XLSReporter
 
 
 class TaskReporter(grok.View):
-    """View that generate an excel spreadsheet which list all task
-    and their important attributes from the globalindex.
+    """View that generate an excel spreadsheet which list all selected
+    task and their important attributes from the globalindex.
     """
 
     grok.context(IPloneSiteRoot)
