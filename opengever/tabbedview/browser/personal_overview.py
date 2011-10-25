@@ -86,20 +86,9 @@ class PersonalOverview(TabbedView):
             return super(PersonalOverview, self).__call__()
 
     def get_tabs(self):
-        mtool = getToolByName(self.context, 'portal_membership')
-        member = mtool.getAuthenticatedMember()
-        inbox_path = '%s/eingangskorb' % \
-            self.context.portal_url.getPortalPath()
 
-        try:
-            inbox = self.context.unrestrictedTraverse(inbox_path)
-        except KeyError:
-            is_admin = False
-            inbox = None
-
-        if inbox:
-            roles = member.getRolesInContext(inbox)
-            is_admin = roles and 'Reader' in roles
+        info = getUtility(IContactInformation)
+        is_admin = info.is_user_in_inbox_group()
 
         if is_admin:
             return self.default_tabs + self.admin_tabs

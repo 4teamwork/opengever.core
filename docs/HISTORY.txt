@@ -5,6 +5,9 @@ Changelog
 2.0b110 (unreleased)
 --------------------
 
+- Replace 'hacky' is_admin check with a correct ogds query in the get tabs method.
+  [phgross]
+
 - Implements reset tableconfiguration action for listing views, which reset the column order and size.
   And add the action for every listing view.
   Issue #796 Zuruecksetzen der Tabellen-Konfiguration
