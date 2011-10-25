@@ -115,6 +115,7 @@ class MyDossiers(Dossiers):
 
     enabled_actions = [
         'pdf_dossierlisting',
+        'export_dossiers',
         'reset_tableconfiguration',
         ]
 
@@ -175,6 +176,7 @@ class MyTasks(GlobalTaskListingTab):
 
     enabled_actions = major_actions = [
         'pdf_taskslisting',
+        'export_tasks',
         'reset_tableconfiguration',
         ]
 
@@ -208,6 +210,7 @@ class IssuedTasks(Tasks):
 
     enabled_actions = [
         'pdf_taskslisting',
+        'export_tasks',
         'reset_tableconfiguration',
         ]
 
@@ -229,6 +232,7 @@ class AllTasks(MyTasks):
 
     enabled_actions = [
         'pdf_taskslisting',
+        'export_tasks',
         'reset_tableconfiguration',
         ]
 
@@ -253,6 +257,7 @@ class AllIssuedTasks(Tasks):
 
     enabled_actions = [
         'pdf_taskslisting',
+        'export_tasks',
         'reset_tableconfiguration',
         ]
 

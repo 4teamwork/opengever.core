@@ -213,6 +213,7 @@ class Dossiers(OpengeverCatalogListingTab):
 
     enabled_actions = ['change_state',
                        'pdf_dossierlisting',
+                       'export_dossiers',
                        'move_items',
                        'copy_items',
                        'reset_tableconfiguration',
@@ -286,6 +287,7 @@ class Tasks(OpengeverCatalogListingTab):
         'pdf_taskslisting',
         'move_items',
         'copy_items',
+        'export_dossiers',
         'reset_tableconfiguration',
         ]
 

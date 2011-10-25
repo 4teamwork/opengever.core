@@ -5,6 +5,11 @@ Changelog
 2.0b110 (unreleased)
 --------------------
 
+- Activate dossier_report or task_report action for every task and dossier listing.
+  Issue #1038 Statistiken/Auswertungen
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1038
+  [phgross]
+
 - Replace 'hacky' is_admin check with a correct ogds query in the get tabs method.
   [phgross]
 
