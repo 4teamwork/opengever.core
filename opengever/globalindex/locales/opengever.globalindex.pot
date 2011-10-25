@@ -1,0 +1,72 @@
+# --- PLEASE EDIT THE LINES BELOW CORRECTLY ---
+# SOME DESCRIPTIVE TITLE.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2011-10-24 14:36+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0\n"
+"Language-Code: en\n"
+"Language-Name: English\n"
+"Preferred-Encodings: utf-8 latin1\n"
+"Domain: opengever.globalindex\n"
+
+#: ./opengever/globalindex/browser/report.py:59
+msgid "Could not generate the report"
+msgstr ""
+
+#: ./opengever/globalindex/browser/cleartasks.py:46
+msgid "Global task index has been cleared (${cleared}) and rebuilt (${rebuilt})"
+msgstr ""
+
+#. Default: "You have not selected any Items"
+#: ./opengever/globalindex/browser/report.py:24
+msgid "error_no_items"
+msgstr ""
+
+#: ./opengever/globalindex/browser/report.py:52
+msgid "label_client_id"
+msgstr ""
+
+#: ./opengever/globalindex/browser/report.py:42
+msgid "label_completed"
+msgstr ""
+
+#: ./opengever/globalindex/browser/report.py:44
+msgid "label_created"
+msgstr ""
+
+#: ./opengever/globalindex/browser/report.py:40
+msgid "label_deadline"
+msgstr ""
+
+#: ./opengever/globalindex/browser/report.py:48
+msgid "label_issuer"
+msgstr ""
+
+#: ./opengever/globalindex/browser/report.py:46
+msgid "label_responsible"
+msgstr ""
+
+#: ./opengever/globalindex/browser/report.py:51
+msgid "label_sequence_number"
+msgstr ""
+
+#: ./opengever/globalindex/browser/report.py:50
+msgid "label_task_type"
+msgstr ""
+
+#: ./opengever/globalindex/browser/report.py:36
+msgid "label_title"
+msgstr ""
+
+#: ./opengever/globalindex/browser/report.py:37
+msgid "review_state"
+msgstr ""
+

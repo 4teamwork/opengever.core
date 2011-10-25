@@ -2,56 +2,61 @@ Changelog
 =========
 
 
-2.0b8
------
+2.0b8 (unreleased)
+------------------
 
-* Issue #1023 Feedback Fokus: Aufgabenverzeichnis ergaenzen
+- Added task_report view, which generates a excel export for the selected tasks.
+  Issue #1038 Statistiken/Auswertungen
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1038
+  [phgross]
+
+- Issue #1023 Feedback Fokus: Aufgabenverzeichnis ergaenzen
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1023
   Implemented breadcrumb tooltips that include the remote client title for
   globally indexed tasks.
 
 
-2.0b7
------
+2.0b7 (2011-08-24)
+------------------
 
-* Issue #1040 Mandantenuebergreifende Beteiligung: Anpassung Darstellung
+- Issue #1040 Mandantenuebergreifende Beteiligung: Anpassung Darstellung
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1040
   reimplement Exposator viewlet, request parameter is not longer used
   [phgross]
 
-* added test-buildout for plone 4.1
+- added test-buildout for plone 4.1
   [eschmutz]
 
 2.0b6
 -----
 
-* fixed url generator in indexed_task_link, removed wrong comma
+- fixed url generator in indexed_task_link, removed wrong comma
   [pgross]
-  
+
 2.0b5
 -----
 
-* Updated link helper for tasks/fwdings to use CSS sprites
+- Updated link helper for tasks/fwdings to use CSS sprites
   [lgraf]
 
-* Made reindexing of predecessor task more robust
+- Made reindexing of predecessor task more robust
   [lgraf]
 
 
 2.0b4
 -----
 
-* Added cascade=delete for successor <-> predecessor relationship of tasks
+- Added cascade=delete for successor <-> predecessor relationship of tasks
   [lgraf]
 
-* Added "clear and rebuild task index" action to OGDS control panel
+- Added "clear and rebuild task index" action to OGDS control panel
   [lgraf]
 
 
 2.0b3
 -----
 
-* Intid fix: do not reindex if there is no intid. In this case, the
+- Intid fix: do not reindex if there is no intid. In this case, the
   event will be fired again after the intid is created.
   [jbaumann]
 
@@ -59,19 +64,19 @@ Changelog
 2.0b2
 -----
 
-* Don't place task icon inside link for Overview > MyTasks
+- Don't place task icon inside link for Overview > MyTasks
   [lgraf]
 
-* Added query methods "get_task_by_path" and "get_task_by_oguid".
+- Added query methods "get_task_by_path" and "get_task_by_oguid".
   [jbaumann]
 
 
 2.0b1
 -----
 
-* Fixed icon path in global task listing helper
+- Fixed icon path in global task listing helper
 
-* Fixed icon path in global task listing helper.
+- Fixed icon path in global task listing helper.
   [jbaumann]
 
 
