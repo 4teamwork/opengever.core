@@ -3,6 +3,7 @@ from Products.CMFCore.utils import getToolByName
 from Products.MimetypesRegistry.common import MimeTypeException
 from collective import dexteritytextindexer
 from collective.elephantvocabulary import wrap_vocabulary
+from datetime import date
 from five import grok
 from ftw.datepicker.widget import DatePickerFieldWidget
 from opengever.base.interfaces import IReferenceNumber, ISequenceNumber
@@ -30,11 +31,11 @@ from zope import schema
 from zope.app.intid.interfaces import IIntIds
 from zope.component import getUtility, queryMultiAdapter, getAdapter
 from zope.globalrequest import getRequest
+from zope.i18n import translate
 from zope.interface import invariant, Invalid, Interface
 from zope.lifecycleevent.interfaces import IObjectCopiedEvent
 from zope.lifecycleevent.interfaces import IObjectCreatedEvent
 from zope.lifecycleevent.interfaces import IObjectModifiedEvent
-from zope.i18n import translate
 import logging
 
 
@@ -205,6 +206,7 @@ class IDocumentSchema(form.Schema):
                             default=u'Either the title or the file is '
                             'required.'))
 
+
     @invariant
     def file_or_preserved_as_paper(data):
         """ When no digital file exist, the document must be
@@ -216,8 +218,12 @@ class IDocumentSchema(form.Schema):
                 default=u"You don't select a file and document is also not \
                 preserved in paper_form, please correct it."))
 
-    # TODO: doesn't work with Plone 4
-    #form.order_after(**{'IRelatedItems.relatedItems': 'file'})
+
+@form.default_value(field=IDocumentSchema['document_date'])
+def default_document_date(data):
+    """Set the actual date as default document_date"""
+    return date.today()
+
 
 class Document(Item):
 

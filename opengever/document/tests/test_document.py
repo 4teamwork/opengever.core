@@ -1,16 +1,16 @@
-from zope.component import createObject
-from zope.component import queryUtility
-from zope.interface import Invalid
-
+from datetime import date
+from opengever.document.document import IDocumentSchema
+from opengever.document.testing import OPENGEVER_DOCUMENT_INTEGRATION_TESTING
 from plone.dexterity.interfaces import IDexterityFTI
 from plone.dexterity.utils import createContentInContainer
 from plone.namedfile.file import NamedBlobFile
-
-from opengever.document.testing import OPENGEVER_DOCUMENT_INTEGRATION_TESTING
-
-from opengever.document.document import IDocumentSchema
+from z3c.form.interfaces import IValue
+from zope.component import createObject
+from zope.component import queryMultiAdapter
+from zope.component import queryUtility
+from zope.interface import Invalid
+from zope.schema import getFields
 import unittest2 as unittest
-
 
 class TestDocumentIntegration(unittest.TestCase):
 
@@ -90,6 +90,15 @@ class TestDocumentIntegration(unittest.TestCase):
         self.assertTrue(
             portal['copy_of_document1'].title == u'copy of Testdocument')
 
+    def test_default_values(self):
+        portal = self.layer['portal']
+        monk_file = NamedBlobFile('bla bla', filename=u'test.txt')
+        d1 = createContentInContainer(portal, 'opengever.document.document',
+              file=monk_file)
+        field = getFields(IDocumentSchema).get('document_date')
+        default = queryMultiAdapter(
+            (d1,d1.REQUEST,None,field,None,), IValue, name='default')
+        self.assertTrue(default.get(), date.today())
 
 def test_suite():
     return unittest.defaultTestLoader.loadTestsFromName(__name__)
