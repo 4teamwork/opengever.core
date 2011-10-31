@@ -5,6 +5,10 @@ Changelog
 2.0b110 (unreleased)
 --------------------
 
+- Added directorate and department rows to ogds userlisting
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1258
+  [ttschanz]
+
 - Checkin and Checkout aren't majoractions anymore.
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1263
   [ttschanz]

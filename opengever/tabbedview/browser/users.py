@@ -83,6 +83,15 @@ class UsersListing(grok.View, OpengeverTab, ListingView):
          'column_title': _(u'label_userstab_phone_office',
                            default=u'Office Phone')},
 
+        {'column': 'department',
+         'column_title': _(u'label_department_user',
+                          default=u'Department')},
+
+
+        {'column': 'directorate',
+         'column_title': _(u'label_directorate_user',
+                         default=u'Directorate')},
+
         {'column': 'active',
          'column_title': _(u'label_active',
                            default=u'Active'),
@@ -97,7 +106,6 @@ class UsersListing(grok.View, OpengeverTab, ListingView):
     def get_base_query(self):
         """Returns the base search query (sqlalchemy)
         """
-
         info = getUtility(IContactInformation)
         return info._users_query()
 
@@ -217,5 +225,4 @@ class UsersListingTableSource(grok.MultiAdapter, BaseTableSource):
         results = list(xrange(start)) + \
             page_results + \
             list(xrange(self.full_length - start - len(page_results)))
-
         return results
