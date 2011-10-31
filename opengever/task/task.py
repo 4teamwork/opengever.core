@@ -487,12 +487,6 @@ class RelatedDocuments(Documents):
         'copy_items',
         ]
 
-    major_actions = ['send_documents',
-                     'checkout',
-                     'checkin',
-                     'create_task',
-                     ]
-
     def get_base_query(self):
         return {
             'path': {'query': '/'.join(self.context.getPhysicalPath()),
