@@ -17,7 +17,6 @@ from zope.component import getUtility
 from zope.interface import implements, Interface
 
 
-
 def linked_value_helper(item, value):
     """Helper for linking the value with the user profile.
     """
@@ -116,7 +115,6 @@ class UsersListingTableSource(grok.MultiAdapter, BaseTableSource):
 
     grok.implements(ITableSource)
     grok.adapts(IUsersListingTableSourceConfig, Interface)
-
 
     def validate_base_query(self, query):
         """Validates and fixes the base query. Returns the query object.
