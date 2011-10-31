@@ -5,6 +5,10 @@ Changelog
 2.0b110 (unreleased)
 --------------------
 
+- Checkin and Checkout arn't majoractions anymore
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1263
+  [ttschanz]
+
 - Activate dossier_report or task_report action for every task and dossier listing.
   Issue #1038 Statistiken/Auswertungen
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1038

@@ -166,8 +166,6 @@ class Documents(OpengeverCatalogListingTab):
                        ]
 
     major_actions = ['send_documents',
-                     'checkout',
-                     'checkin',
                      'create_task',
                      ]
 
