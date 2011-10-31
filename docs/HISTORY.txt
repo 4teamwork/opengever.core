@@ -5,6 +5,12 @@ Changelog
 2.0b11 (unreleased)
 -------------------
 
+- Made the filing number search more comfortable:
+  use the new ZCTextIndex 'searchable_filing_no'.
+  Issue #1260 Suche nach Ablagenummer
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1260
+  [phgross]
+
 - added test-buildout for plone 4.1
   [eschmutz]
 

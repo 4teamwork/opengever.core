@@ -73,7 +73,7 @@ FIELD_MAPPING = {'opengever-dossier-behaviors-dossier-IDossierMarker': [
                     'end_2',
                     'reference',
                     'sequence_number',
-                    'filing_no',
+                    'searchable_filing_no',
                     'responsible',
                     'dossier_review_state',
                 ],
@@ -150,7 +150,7 @@ class IAdvancedSearch(directives_form.Schema):
         required=False,
     )
 
-    filing_no = schema.TextLine(
+    searchable_filing_no = schema.TextLine(
         title=_('label_filing_number', default='Filing number'),
         description=_('help_filing_number', default=''),
         required=False,
