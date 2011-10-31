@@ -2,13 +2,37 @@ Changelog
 =========
 
 
-2.0b17 (unreleased)
+2.0b19 (unreleased)
 -------------------
+
+- Added XLSReorter view, which generates an excel export for a group of selected objects.
+  Issue #1038 Statistiken/Auswertungen
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1038
+  [phgross]
+
+
+2.0b18 (2011-10-13)
+-------------------
+
+- Monkey patching webdav.LockItem.DEFAULTTIMEOUT (2 hours)
+  [lgraf]
+
+
+2.0b17 (2011-10-07)
+-------------------
+
+- https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1225/
+  added translations and changed i18n domain for history.pt
+  [eschmutz]
 
 - #1171 Feedback aus Pilotphase: Kopiertes Dokument einfügen - falscher Reiter
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1171
   object_paste now tries to guess the right tab
   [ttschanz]
+
+- https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1225/
+  added translations and changed i18n domain for history.pt
+  [eschmutz]
 
 
 2.0b16 (2011-10-04)
@@ -18,7 +42,7 @@ Changelog
   (previous versions of the reference prefix adapter stored integers and
   made this function fail)
   [lgraf]
-  
+
 - Added resolve_oguid view redirecting to a specified oguid.
   Usage: platform/resolve_oguid?oguid=client:intid
   [jone]

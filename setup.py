@@ -54,6 +54,7 @@ setup(name='opengever.base',
         'izug.basetheme',
         'Products.LDAPUserFolder',
         'plone.app.versioningbehavior',
+	'xlwt',
         # -*- Extra requirements: -*-
         ],
       tests_require=tests_require,
