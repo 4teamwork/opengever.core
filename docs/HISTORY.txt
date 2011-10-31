@@ -5,6 +5,9 @@ Changelog
 2.0b110 (unreleased)
 --------------------
 
+- Fixed Batching in SQL listings
+  [ttschanz]
+
 - Added directorate and department rows to ogds userlisting
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1258
   [ttschanz]
