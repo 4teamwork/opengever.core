@@ -206,7 +206,6 @@ class IDocumentSchema(form.Schema):
                             default=u'Either the title or the file is '
                             'required.'))
 
-
     @invariant
     def file_or_preserved_as_paper(data):
         """ When no digital file exist, the document must be
@@ -219,6 +218,7 @@ class IDocumentSchema(form.Schema):
                 preserved in paper_form, please correct it."))
 
 
+# Default values
 @form.default_value(field=IDocumentSchema['document_date'])
 def default_document_date(data):
     """Set the actual date as default document_date"""
@@ -449,8 +449,6 @@ def sync_title_and_filename_handler(doc, event):
 def set_copyname(doc, event):
     """Documents wich are copied, should be renamed to copy of filename
     """
-
-
 
     key = 'prevent-copyname-on-document-copy'
     request = getRequest()
