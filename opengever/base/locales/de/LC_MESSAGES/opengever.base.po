@@ -209,7 +209,7 @@ msgstr "Beschreibung"
 #. Default: "History"
 #: ./opengever/base/viewlets/history.pt:12
 msgid "label_history"
-msgstr "Historie"
+msgstr "Versionen"
 
 #. Default: "Privacy layer"
 #: ./opengever/base/behaviors/classification.py:38

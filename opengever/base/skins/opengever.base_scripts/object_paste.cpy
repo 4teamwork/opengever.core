@@ -9,7 +9,9 @@
 ##title=Paste objects into a folder
 ##
 
-if context.REQUEST['__cp']:
+
+redirect_view = ''
+if context.REQUEST.get(['__cp']):
     objid = ''
     objlist = context.REQUEST['__cp'].split(':')
     for obj in objlist:
@@ -20,7 +22,5 @@ if context.REQUEST['__cp']:
     elif myobj.portal_type == 'opengever.task.task':
         redirect_view = '#task'
     elif myobj.portal_type == 'opengever.dossier.businesscasedossier':
-        redirect_view = '#dossiers'
-    else:
-        redirect_view = ''
+        redirect_view = '#dossiers'        
 return context.REQUEST.RESPONSE.redirect(context.absolute_url()+ redirect_view)

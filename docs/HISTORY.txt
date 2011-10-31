@@ -5,6 +5,11 @@ Changelog
 2.0b19 (unreleased)
 -------------------
 
+- Adjust german translation: Renamed Historie to Versionen
+  Issue #1257 Umbenennung "Historie" bei Dokumenten
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1257
+  [ttschanz]
+
 - Added XLSReorter view, which generates an excel export for a group of selected objects.
   Issue #1038 Statistiken/Auswertungen
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1038
