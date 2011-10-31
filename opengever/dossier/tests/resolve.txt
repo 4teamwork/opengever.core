@@ -257,15 +257,20 @@ check the given filing no
     >>> IDossier(subdossier).filing_no
     u'OG-Government-2012-1.1'
 
-check also the filing no index
+check also the filing no and the searchable filing no index
     >>> wrapper = queryMultiAdapter(
     ...         (dossier, portal.portal_catalog), IIndexableObject)
     >>> wrapper.filing_no
     u'OG-Government-2012-1'
+    >>> wrapper.searchable_filing_no
+    u'OG-Government-2012-1'
+
 
     >>> wrapper = queryMultiAdapter(
     ...         (subdossier, portal.portal_catalog), IIndexableObject)
     >>> wrapper.filing_no
+    u'OG-Government-2012-1.1'
+    >>> wrapper.searchable_filing_no
     u'OG-Government-2012-1.1'
 
 check if the values are assumed to the dossier

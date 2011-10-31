@@ -303,6 +303,14 @@ def filing_no(obj):
 grok.global_adapter(filing_no, name="filing_no")
 
 
+@indexer(IDossierMarker)
+def searchable_filing_no(obj):
+    """Searchable filing number indexer"""
+    dossier = IDossier(obj)
+    return getattr(dossier, 'filing_no', None)
+grok.global_adapter(searchable_filing_no, name="searchable_filing_no")
+
+
 @indexer(IDexterityContent)
 def containing_subdossier(obj):
     """Returns the title of the subdossier the object is contained in,

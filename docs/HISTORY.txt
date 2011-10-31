@@ -5,6 +5,11 @@ Changelog
 2.0b23 (unreleased)
 -------------------
 
+- Made the filing number search more comfortable: added searchable_filing_no ZCTextIndex
+  Issue #1260 Suche nach Ablagenummer
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1260
+  [phgross]
+
 - Add test for main_dossier to test mapped workflows
   [eschmutz]
 
