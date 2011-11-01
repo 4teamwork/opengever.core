@@ -5,6 +5,11 @@ Changelog
 2.0b110 (unreleased)
 --------------------
 
+- Implement the Main Class SqlTableSource, for listings with a sqlalchemy source:
+  - merge the different sqltablesources in to one.
+  - Fixed batching for SqlTableSource listings.
+  [ttschanz]
+
 - Added directorate and department rows to ogds userlisting
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1258
   [ttschanz]
