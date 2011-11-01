@@ -16,7 +16,7 @@ from opengever.ogds.base.interfaces import IContactInformation
 from opengever.ogds.base.utils import get_client_id
 from opengever.tabbedview.browser.tabs import Documents
 from opengever.tabbedview.browser.tabs import OpengeverTab
-from opengever.tabbedview.helper import readable_date, external_edit_link
+from opengever.tabbedview.helper import external_edit_link
 from opengever.tabbedview.helper import readable_ogds_author
 from opengever.task import util
 from opengever.task import _
@@ -461,15 +461,15 @@ class RelatedDocuments(Documents):
 
         {'column': 'document_date',
          'column_title': _('label_document_date', default="Document Date"),
-         'transform': readable_date},
+         'transform': helper.readable_date},
 
         {'column': 'receipt_date',
          'column_title': _('label_receipt_date', default="Receipt Date"),
-         'transform': readable_date},
+         'transform': helper.readable_date},
 
         {'column': 'delivery_date',
          'column_title': _('label_delivery_date', default="Delivery Date"),
-         'transform': readable_date},
+         'transform': helper.readable_date},
 
         ('', external_edit_link),
         )
