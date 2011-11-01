@@ -1,7 +1,7 @@
 from five import grok
 from ftw.table.basesource import BaseTableSource
 from ftw.table.interfaces import ITableSource, ITableSourceConfig
-from opengever.tabbedview.helper import readable_date
+from ftw.table import helper
 from sqlalchemy import or_
 from sqlalchemy.orm.query import Query
 from sqlalchemy.sql.expression import asc, desc
@@ -63,7 +63,7 @@ class SqlTableSource(grok.MultiAdapter, BaseTableSource):
                     continue
 
                 # do not support dates
-                if column.get('transform') == readable_date:
+                if column.get('transform') == helper.readable_date:
                     continue
 
                 field = getattr(model, colname, None)
