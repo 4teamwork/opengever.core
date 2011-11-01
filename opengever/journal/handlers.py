@@ -70,8 +70,6 @@ def journal_entry_factory(context, action, title,
         'comment': comment,
         }
 
-    if not actor == 'zopemaster':
-        notify(JournalEntryEvent(**entry))
     notify(JournalEntryEvent(**entry))
 
 
