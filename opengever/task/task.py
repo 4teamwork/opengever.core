@@ -526,11 +526,18 @@ class EditForm(dexterity.EditForm):
 
 @indexer(ITask)
 def related_items(obj):
-    # FIXME this indexer seems to return ALL relatedItems and
-    # does not use the `obj`..
     catalog = getUtility(ICatalog)
+    intids = getUtility(IIntIds)
+
+    # object might not have an intid yet
+    try:
+        obj_intid = intids.getId(aq_inner(obj))
+    except KeyError:
+        return []
+
     results = []
-    relations = catalog.findRelations({'from_attribute': 'relatedItems'})
+    relations = catalog.findRelations({'from_id': obj_intid,
+                                       'from_attribute': 'relatedItems'})
     for rel in relations:
         results.append(rel.to_id)
     return results

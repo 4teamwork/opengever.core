@@ -11,7 +11,7 @@ TESTFILES = (
     'task.txt',
     'task_ids.txt',
     'test_overview.txt',
-
+    'test_indexers.txt',
     )
 
 
