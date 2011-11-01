@@ -137,31 +137,6 @@ def linked(item, value):
     wrapper = '<span class="linkWrapper">%s</span>' % link
     return wrapper
 
-
-def readable_date(item, date):
-    if getattr(item, 'portal_type', None) == 'ftw.mail.mail':
-        # Conditional import to avoid dependency on ftw.mail
-        from ftw.mail.utils import get_header
-        from DateTime import DateTime
-        if getattr(item, 'msg', ''):
-            # Object
-            datestr = get_header(item.msg, 'Date')
-            # Thu, 28 Apr 2011 11:38:38 +0200
-            date = DateTime(datestr).asdatetime()
-        else:
-            # Brain
-            date = item.document_date.asdatetime()
-
-    if not date:
-        return u''
-    strftimestring = '%d.%m.%Y'
-    if date == None:
-        return None
-    try:
-        return date.strftime(strftimestring)
-    except ValueError:
-        return None
-
 def readable_date_set_invisibles(item, date):
     if not date or str(date) == '1970/01/01' \
             or str(date) == '1970-01-01 00:00:00':
