@@ -5,6 +5,11 @@ Changelog
 2.0a12 (unreleased)
 -------------------
 
+- Add reset_tableconfiguration action for every listing view.
+  Issue #796 Zuruecksetzen der Tabellen-Konfiguration
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/796/
+  [phgross]
+
 - Removed zopemaster-check for journal-entries
   [eschmutz]
 
