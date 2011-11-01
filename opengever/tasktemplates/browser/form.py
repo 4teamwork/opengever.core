@@ -16,7 +16,6 @@ from ftw.table.interfaces import ITableGenerator
 from opengever.dossier.behaviors.dossier import IDossierMarker, IDossier
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.ogds.base.utils import get_current_client
-from opengever.tabbedview.helper import readable_date
 from opengever.tasktemplates import _
 
 
@@ -113,7 +112,7 @@ class AddForm(BrowserView):
                  'column_title': _(u'label_title', default=u'Title')},
                 {'column': 'created',
                  'column_title': _(u'label_created', default=u'Created'),
-                 'transform': readable_date},),
+                 'transform': helper.readable_date},),
             'types': ('TaskTemplateFolder',),
             'states': ('tasktemplatefolder-state-activ',),
             },
@@ -125,7 +124,7 @@ class AddForm(BrowserView):
                  'column_title': _(u'label_title', default=u'Title')},
                 {'column': 'created',
                  'column_title': _(u'label_created', default=u'Created'),
-                 'transform': readable_date},),
+                 'transform': helper.readable_date},),
             'types': ('TaskTemplate',),
             'states':('tasktemplate-state-active',),
 
