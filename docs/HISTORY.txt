@@ -5,7 +5,10 @@ Changelog
 2.0b6 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Issue #1249 Mail: Beim Importieren eines E-Mails muss die Spalte Ausgangsdatum leer bleiben
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1249
+  back to ftw.table helper function for readable_date
+  [eschmutz]
 
 
 2.0b5 (2011-09-29)

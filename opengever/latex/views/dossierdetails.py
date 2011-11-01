@@ -1,6 +1,7 @@
 from Acquisition import aq_inner, aq_parent
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
+from ftw.table import helper
 from opengever.base.interfaces import IReferenceNumber
 from opengever.base.interfaces import ISequenceNumber
 from opengever.dossier import _ as _dossier
@@ -13,7 +14,6 @@ from opengever.ogds.base.interfaces import IContactInformation
 from opengever.ogds.base.utils import get_current_client
 from opengever.repository.interfaces import IRepositoryFolder
 from opengever.tabbedview.helper import readable_ogds_author
-from opengever.tabbedview.helper import readable_date
 from opengever.task.helper import task_type_helper
 from zope.component import getUtility
 from zope.i18n import translate
@@ -67,8 +67,8 @@ class DossierDetailsPDF(BasePDFListing):
         data['responsible'] = ' '.join(
             (str(client.title), '/', info.describe(dossier.responsible)))
 
-        data['start'] = readable_date(self.context, dossier.start)
-        data['end'] = readable_date(self.context, dossier.end)
+        data['start'] = helper.readable_date(self.context, dossier.start)
+        data['end'] = helper.readable_date(self.context, dossier.end)
 
         # convert to latex
         return dict([(key, self.convert(value))
@@ -141,7 +141,7 @@ class DossierDetailsPDF(BasePDFListing):
                               domain='plone',
                               context=self.request),
                     unicode(brain.Title).encode('utf-8'),
-                    readable_date(brain, brain.deadline),
+                    helper.readable_date(brain, brain.deadline),
                     ))
 
         return self.tasks(rows=''.join(rows))
@@ -169,7 +169,7 @@ class DossierDetailsPDF(BasePDFListing):
             rows.append(self._prepare_table_row(
                     unicode(brain.sequence_number).encode('utf-8'),
                     unicode(brain.Title).encode('utf-8'),
-                    readable_date(brain, brain.document_date),
+                    helper.readable_date(brain, brain.document_date),
                     ))
 
         return self.documents(rows=''.join(rows))
@@ -209,7 +209,7 @@ class DossierDetailsPDF(BasePDFListing):
                     translate(brain.review_state,
                               domain='plone',
                               context=self.request),
-                    readable_date(brain, brain.start),
+                    helper.readable_date(brain, brain.start),
                     ))
 
         return self.subdossiers(rows=''.join(rows))
