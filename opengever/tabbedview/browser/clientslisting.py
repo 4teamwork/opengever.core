@@ -1,5 +1,5 @@
 from five import grok
-from ftw.tabbedview.browser.listing import ListingView
+from opengever.tabbedview.browser.listing import ListingView
 from ftw.table.basesource import BaseTableSource
 from ftw.table.interfaces import ITableSource, ITableSourceConfig
 from opengever.globalindex.model.task import Task
@@ -52,7 +52,9 @@ class ClientsListing(grok.View, OpengeverTab, ListingView):
     sort_reverse = False
 
     show_selects = False
-    enabled_actions = []
+    enabled_actions = [
+        'reset_tableconfiguration',
+        ]
     major_actions = []
     selection = ViewPageTemplateFile("no_selection_amount.pt")
 

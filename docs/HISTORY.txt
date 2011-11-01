@@ -2,7 +2,43 @@ Changelog
 =========
 
 
-2.0b19 (unreleased)
+2.0b110 (unreleased)
+--------------------
+
+- Implement the Main Class SqlTableSource, for listings with a sqlalchemy source:
+  - merge the different sqltablesources in to one.
+  - Fixed batching for SqlTableSource listings.
+  [ttschanz]
+
+- Added directorate and department rows to ogds userlisting
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1258
+  [ttschanz]
+
+- Checkin and Checkout aren't majoractions anymore.
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1263
+  [ttschanz]
+
+- Activate dossier_report or task_report action for every task and dossier listing.
+  Issue #1038 Statistiken/Auswertungen
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1038
+  [phgross]
+
+- Replace 'hacky' is_admin check with a correct ogds query in the get tabs method.
+  [phgross]
+
+- Implements reset tableconfiguration action for listing views, which reset the column order and size.
+  And add the action for every listing view.
+  Issue #796 Zuruecksetzen der Tabellen-Konfiguration
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/796/
+  [phgross]
+
+- Fixed batching by providing an OpenGever-specific subclass for ListingView
+  and CatalogListingView that override the batching template to match the
+  CSS in izug.basetheme
+  [lgraf]
+
+
+2.0b19 (2011-10-06)
 -------------------
 
 - Fixed bug that broke "My Tasks" view - don't try to access REQUEST on a

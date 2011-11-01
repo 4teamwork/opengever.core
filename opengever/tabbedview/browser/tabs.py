@@ -1,12 +1,12 @@
 from five import grok
 from ftw.dictstorage.interfaces import ISQLAlchemy
-from ftw.tabbedview.browser.listing import CatalogListingView
 from ftw.tabbedview.interfaces import ITabbedView
 from ftw.table import helper
 from ftw.table.catalog_source import CatalogTableSource
 from opengever.base.browser.helper import client_title_helper
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.tabbedview import _
+from opengever.tabbedview.browser.listing import CatalogListingView
 from opengever.tabbedview.helper import overdue_date_helper
 from opengever.tabbedview.helper import readable_date, external_edit_link
 from opengever.tabbedview.helper import readable_date_set_invisibles
@@ -165,11 +165,10 @@ class Documents(OpengeverCatalogListingTab):
                        'send_documents',
                        'move_items',
                        'copy_items',
+                       'reset_tableconfiguration',
                        ]
 
     major_actions = ['send_documents',
-                     'checkout',
-                     'checkin',
                      'create_task',
                      ]
 
@@ -215,8 +214,10 @@ class Dossiers(OpengeverCatalogListingTab):
 
     enabled_actions = ['change_state',
                        'pdf_dossierlisting',
+                       'export_dossiers',
                        'move_items',
                        'copy_items',
+                       'reset_tableconfiguration',
                        ]
 
     major_actions = ['change_state',
@@ -347,6 +348,8 @@ class Tasks(OpengeverCatalogListingTab):
         'pdf_taskslisting',
         'move_items',
         'copy_items',
+        'export_dossiers',
+        'reset_tableconfiguration',
         ]
 
     major_actions = ['change_state',
@@ -363,7 +366,13 @@ class Trash(Documents):
 
     search_options = {'trashed': True}
 
-    enabled_actions = ['untrashed', ]
+    enabled_actions = [
+        'untrashed',
+        'reset_tableconfiguration',]
+
+    major_actions= [
+        'reset_tableconfiguration',
+        ]
 
     @property
     def columns(self):
