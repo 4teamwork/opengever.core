@@ -51,6 +51,7 @@ class GlobalTaskListingTab(grok.View, OpengeverTab,
     major_actions = []
 
     select_all_template = ViewPageTemplateFile('select_all_globaltasks.pt')
+    selection = ViewPageTemplateFile("selection_tasks.pt")
 
     columns = (
 
@@ -110,3 +111,56 @@ class GlobalTaskTableSource(SqlTableSource):
 
     grok.implements(ITableSource)
     grok.adapts(IGlobalTaskTableSourceConfig, Interface)
+
+    def build_query(self):
+        """Builds the query based on `get_base_query()` method of config.
+        Returns the query object.
+        """
+
+        # initalize config
+        self.config.update_config()
+
+        # get the base query from the config
+        query = self.config.get_base_query()
+        query = self.validate_base_query(query)
+
+        # ordering
+        query = self.extend_query_with_ordering(query)
+
+        # filter
+        if self.config.filter_text:
+            query = self.extend_query_with_textfilter(
+                query, self.config.filter_text)
+
+        # reviewstate-filter
+        review_state_filter = self.request.get('review_state', None)
+
+        if review_state_filter == 'false':
+            review_state_filter = False
+        else:
+            review_state_filter = True
+
+        query = self.extend_query_with_statefilter(query, review_state_filter)
+
+        # batching
+        if self.config.batching_enabled and not self.config.lazy:
+            query = self.extend_query_with_batching(query)
+
+        return query
+
+    def extend_query_with_statefilter(self, query, open_state):
+        """When a state filter is active, we add a filter which select just the open tasks"""
+
+        open_task_states = [
+            'task-state-cancelled',
+            'task-state-open',
+            'task-state-in-progress',
+            'task-state-resolved',
+            'task-state-rejected',
+            'forwarding-state-open',
+        ]
+
+        if open_state:
+            query = query.filter(Task.review_state.in_(open_task_states))
+
+        return query

@@ -2,6 +2,7 @@ from five import grok
 from ftw.dictstorage.interfaces import ISQLAlchemy
 from ftw.tabbedview.interfaces import ITabbedView
 from ftw.table import helper
+from ftw.table.catalog_source import CatalogTableSource
 from opengever.base.browser.helper import client_title_helper
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.tabbedview import _
@@ -12,10 +13,12 @@ from opengever.tabbedview.helper import readable_date_set_invisibles
 from opengever.tabbedview.helper import readable_ogds_author, linked
 from opengever.tabbedview.helper import readable_ogds_user
 from opengever.tabbedview.helper import workflow_state
+from opengever.tabbedview.interfaces import ITaskCatalogTableSourceConfig
 from opengever.task.helper import task_type_helper
 from plone.dexterity.interfaces import IDexterityContainer
 from zope.app.pagetemplate import ViewPageTemplateFile
-from zope.component import getUtility
+from zope.component import getUtility, adapts
+from zope.interface import Interface
 from zope.interface import implements
 import re
 
@@ -44,7 +47,7 @@ class OpengeverTab(object):
         if getattr(self, '_custom_sort_method', None) is not None:
             results = self._custom_sort_method(results, sort_on, sort_reverse)
 
-        elif sort_on=='reference' or sort_on=='sequence_number':
+        elif sort_on == 'reference' or sort_on == 'sequence_number':
             splitter = re.compile('[/\., ]')
 
             def _sortable_data(brain):
@@ -227,11 +230,71 @@ class SubDossiers(Dossiers):
     search_options = {'is_subdossier': True}
 
 
+class TaskCatalogTableSource(grok.MultiAdapter, CatalogTableSource):
+    """Table source Adapter for task stored in the portal catalog"""
+
+    adapts(ITaskCatalogTableSourceConfig, Interface)
+
+    def build_query(self):
+        """extends the standard catalog soruce build_query with the
+        extend_query_with_taskstatefilter functionality.
+        """
+
+        # initalize config
+        self.config.update_config()
+
+        # get the base query from the config
+        query = self.config.get_base_query()
+        query = self.validate_base_query(query)
+
+        # ordering
+        query = self.extend_query_with_ordering(query)
+
+        # filter
+        if self.config.filter_text:
+            query = self.extend_query_with_textfilter(
+                query, self.config.filter_text)
+
+        # reviewstate-filter
+        review_state_filter = self.request.get('review_state', None)
+
+        # when state_filter is not set to all, we just return the open states
+        if review_state_filter != 'false':
+            query = self.extend_query_with_taskstatefilter(query)
+
+        # batching
+        if self.config.batching_enabled and not self.config.lazy:
+            query = self.extend_query_with_batching(query)
+
+        return query
+
+    def extend_query_with_taskstatefilter(self, query):
+        """Extends the given query with a filter,
+        which show just open dossiers."""
+
+        open_task_states = [
+            'task-state-cancelled',
+            'task-state-open',
+            'task-state-in-progress',
+            'task-state-resolved',
+            'task-state-rejected',
+            'forwarding-state-open',
+        ]
+
+        query['review_state'] = open_task_states
+
+        return query
+
+
 class Tasks(OpengeverCatalogListingTab):
+
+    implements(ITaskCatalogTableSourceConfig)
 
     grok.name('tabbedview_view-tasks')
 
-    columns= (
+    selection = ViewPageTemplateFile("selection_tasks.pt")
+
+    columns = (
         ('', helper.path_checkbox),
 
         {'column': 'review_state',
