@@ -42,8 +42,8 @@ class GlobalTaskListingTab(grok.View, OpengeverTab,
     sort_reverse = False
     #lazy must be false otherwise there will be no correct batching
     lazy = False
-    #model is set here because we're using the same tablesource for
-    # 2 different types
+
+    # the model attributes is used for a dynamic textfiltering functionality
     model = Task
     enabled_actions = [
         'reset_tableconfiguration',

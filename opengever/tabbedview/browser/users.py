@@ -47,8 +47,8 @@ class UsersListing(grok.View, OpengeverTab, ListingView):
     sort_order = ''
     #lazy must be false otherwise there will be no correct batching
     lazy = False
-    #model is set here because we're using the same tablesource for
-    # 2 different types
+
+    # the model attributes is used for a dynamic textfiltering functionality
     model = User
     show_selects = False
     enabled_actions = [

@@ -49,8 +49,8 @@ class SqlTableSource(grok.MultiAdapter, BaseTableSource):
             if text.endswith('*'):
                 text = text[:-1]
 
-            # get model from config.
-            # This makes TableSource work with multiple types
+            # get the sqlalchemy model from config, used for a dynamic
+            # implementation of the textfiltering functionality
             model = self.config.model
 
             # first lets lookup what fields (= sql columns) we have
