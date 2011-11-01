@@ -17,7 +17,6 @@ from opengever.base.interfaces import IRedirector
 from ftw.table import helper
 from ftw.table.interfaces import ITableGenerator
 from opengever.tabbedview.helper import linked
-from opengever.tabbedview.helper import readable_date
 
 
 class ITemplateDossier(Interface):
@@ -174,7 +173,7 @@ class TemplateDocumentFormView(grok.View):
              'sort_index': 'document_author'},
              {'column': 'modified',
               'column_title': _(u'label_modified', default=u'Modified'),
-              'transform': readable_date}
+              'transform': helper.readable_date}
               )
         return generator.generate(templates, columns)
 
