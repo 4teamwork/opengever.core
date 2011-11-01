@@ -11,6 +11,11 @@ Changelog
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1261/
   [lgraf]
 
+- Issue #1249 Mail: Beim Importieren eines E-Mails muss die Spalte Ausgangsdatum leer bleiben
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1249/
+  back to ftw.table helper function for readable_date
+  [eschmutz]
+
 - removed majoractions, they are now inherited from the Documents tab.
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1263
   [ttschanz]
