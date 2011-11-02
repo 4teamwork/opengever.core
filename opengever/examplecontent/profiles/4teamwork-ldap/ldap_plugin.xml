@@ -66,7 +66,7 @@
                 <item value="SHA"/>
             </property>
             <property id="_roles" type="list">
-                <item value="Member"/>
+              <item value="Authenticated" />
             </property>
             <schema>
                 <attr id="mail">

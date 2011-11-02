@@ -5,6 +5,12 @@ Changelog
 2.0b8
 -----
 
+- Adjust the ldap configuration: defaut role for ldap_users is Authenticated instead of Member.
+  Because only users of this clients should have the Member role.
+  Issue #1269 Ordnungspositionen fuer alle Mitglieder eines Mandanten sichtbar machen
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1269/
+  [phgross]
+
 
 2.0b7
 -----
