@@ -1,4 +1,3 @@
-import cgi
 from datetime import date as dt
 from ftw.mail.utils import get_header
 from opengever.ogds.base.interfaces import IContactInformation
@@ -8,9 +7,11 @@ from plone.memoize import ram
 from Products.CMFCore.interfaces._tools import IMemberData
 from Products.PluggableAuthService.interfaces.authservice import IPropertiedUser
 from zope.app.component.hooks import getSite
+from zope.component import getMultiAdapter
 from zope.component import getUtility
 from zope.globalrequest import getRequest
 from zope.i18n import translate
+import cgi
 
 
 def task_id_checkbox_helper(item, value):
@@ -105,6 +106,9 @@ def linked(item, value):
         # It's a document, we therefore want to display an icon
         # for the mime type of the contained file
         icon = getattr(item, 'getIcon', '')
+        if callable(icon):
+            icon = icon()
+
         if not icon == '':
             # Strip '.gif' from end of icon name and remove leading 'icon_'
             filetype = icon[:icon.rfind('.')].replace('icon_', '')
@@ -114,7 +118,14 @@ def linked(item, value):
             css_class = "contenttype-%s" % normalize(item.portal_type)
 
     breadcrumb_titles = []
-    for elem in item.breadcrumb_titles:
+    raw_breadcrumb_titles = getattr(item, 'breadcrumb_titles', None)
+    if not raw_breadcrumb_titles:
+        # Not a brain - get breadcrumbs from the breadcrumbs view
+        breadcrumbs_view = getMultiAdapter((item, item.REQUEST),
+                                           name='breadcrumbs_view')
+        raw_breadcrumb_titles = breadcrumbs_view.breadcrumbs()
+
+    for elem in raw_breadcrumb_titles:
         if isinstance(elem.get('Title'), unicode):
             breadcrumb_titles.append(elem.get('Title').encode('utf-8'))
         else:

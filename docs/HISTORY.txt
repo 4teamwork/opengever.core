@@ -5,6 +5,9 @@ Changelog
 2.0b110 (unreleased)
 --------------------
 
+- Adjusted `linked` helper to correctly deal with objects (as opposed to brains)
+  [lgraf]
+
 - Made sure title gets escaped only once in tabbedview `linked` helper
   [lgraf]
 
