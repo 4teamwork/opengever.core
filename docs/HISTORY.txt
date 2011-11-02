@@ -5,6 +5,9 @@ Changelog
 2.0b23 (unreleased)
 -------------------
 
+- Removed `linked` helper, now using the one from og.tabbedview.helpers
+  [lgraf]
+
 - Fixed related_items indexer for tasks: It used to return ALL relations,
   not just the ones from the context.
   Issue #1261 Fehlerhafte Assoziation von Dokument/Aufgaben

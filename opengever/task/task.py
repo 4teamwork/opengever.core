@@ -17,10 +17,10 @@ from opengever.ogds.base.utils import get_client_id
 from opengever.tabbedview.browser.tabs import Documents
 from opengever.tabbedview.browser.tabs import OpengeverTab
 from opengever.tabbedview.helper import external_edit_link
+from opengever.tabbedview.helper import linked
 from opengever.tabbedview.helper import readable_ogds_author
 from opengever.task import util
 from opengever.task import _
-from opengever.task.helper import linked
 from opengever.task.helper import path_checkbox
 from opengever.task.interfaces import ISuccessorTaskController
 from operator import attrgetter
