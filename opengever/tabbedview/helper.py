@@ -123,16 +123,14 @@ def linked(item, value):
     if isinstance(value, unicode):
         value = value.encode('utf-8')
 
-    link_title = " &gt; ".join(t for t in breadcrumb_titles)
+    link_title = " > ".join(t for t in breadcrumb_titles)
 
-    # Make sure all data used in the HTML snipped is properly escaped
+    # Make sure all data used in the HTML snippet is properly escaped
     link_title = cgi.escape(link_title, quote=True)
     value = cgi.escape(value, quote=True)
 
     link = '<a class="rollover-breadcrumb %s" href="%s" title="%s">%s</a>' % (
-        css_class, url_method(),
-        link_title,
-        value)
+        css_class, url_method(), link_title, value)
 
     wrapper = '<span class="linkWrapper">%s</span>' % link
     return wrapper

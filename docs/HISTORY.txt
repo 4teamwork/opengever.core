@@ -5,6 +5,9 @@ Changelog
 2.0b110 (unreleased)
 --------------------
 
+- Made sure title gets escaped only once in tabbedview `linked` helper
+  [lgraf]
+
 - Implements statefilter (all/open) for every tasklisting (globaltasklistings and cataloglistings)
   Issue #1070  Abgeschlossene Aufgaben nicht immer einblenden
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1070/view
