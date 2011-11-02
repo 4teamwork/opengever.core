@@ -5,6 +5,11 @@ Changelog
 2.0a7 (unreleased)
 ------------------
 
+- Issue #17 Suchtext fuer Suchportlet muss einfacher angepasst werden koennen
+  https://extranet.4teamwork.ch/projects/verein-plonegov/tracker-verein-plonegov.ch/17
+  Added setuphandler for new search-text handling to set the correct text
+  [eschmutz]
+  
 - Changed default visibility for `logout` action to True
   [lgraf]
 

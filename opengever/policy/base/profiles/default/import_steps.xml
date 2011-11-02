@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<import-steps>
+
+ <import-step id="opengever-policy-search-string"
+              version="20111102-01"
+              handler="opengever.policy.base.setuphandlers.search_string"
+              title="Set the searchstring in portalregistry">
+    Set the search praefix
+ </import-step>
+
+</import-steps>
