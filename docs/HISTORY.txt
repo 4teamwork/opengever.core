@@ -5,7 +5,12 @@ Changelog
 2.0a11 (unreleased)
 -------------------
 
-* Updated repositoryfolder and repositoryroot workflows:
+- Adjust the repository workflow: Repositoryfolders should be visible for users with the Member role.
+  Issue #1269 Ordnungspositionen fuer alle Mitglieder eines Mandanten sichtbar machen
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1269/
+  [phgross]
+
+- Updated repositoryfolder and repositoryroot workflows:
   Added new role "Role Manager" that has permissions to delegate roles via
   the sharing tab.
   #1245 Neue Rolle einführen um local roles anzupassen
