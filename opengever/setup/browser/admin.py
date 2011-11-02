@@ -108,7 +108,7 @@ class CreateOpengeverClient(BrowserView):
             setup_content=False,
             default_language=config.get('language', 'de-ch'),
             )
-        
+
         # ldap
         stool = getToolByName(site, 'portal_setup')
         if form.get('ldap', False):
@@ -210,7 +210,12 @@ class CreateOpengeverClient(BrowserView):
         mail_from_address = self.get_mail_from_address()
         site.manage_changeProperties({'email_from_address': mail_from_address,
                                     'email_from_name': client_id})
-        
+
+
+        # set global member role for the client users group
+        site.acl_users.portal_role_manager.assignRoleToPrincipal(
+            'Member', form['group'])
+
         # provide the repository root for opengever.setup:default
         repository_root = config.get('repository_root', None)
         if repository_root:
@@ -244,8 +249,8 @@ class CreateOpengeverClient(BrowserView):
                 getattr(base, 'metadata').drop_all(session.bind)
             except NoReferencedTableError:
                 pass
-    
-    
+
+
     def get_mail_from_address(self):
         email_from_address = 'noreply@opengever.4teamwork.ch'
         for ep in get_entry_points('email_from_address'):
@@ -254,4 +259,4 @@ class CreateOpengeverClient(BrowserView):
                 email_from_address = getattr(module, 'EMAIL_FROM_ADDRESS')
 
         return email_from_address
-    
+
