@@ -28,6 +28,12 @@ Changelog
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/796/
   [phgross]
 
+- Updated dossier and templatedossier workflows: Added new role "Role Manager"
+  that has permissions to delegate roles via the sharing tab.
+  #1245 Neue Rolle einführen um local roles anzupassen
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1245/
+  [lgraf]
+
 - Refactoring move_items module
   [eschmutz]
 

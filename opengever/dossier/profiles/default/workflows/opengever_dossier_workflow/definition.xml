@@ -6,6 +6,7 @@
  <permission>Manage properties</permission>
  <permission>Modify portal content</permission>
  <permission>Review portal content</permission>
+ <permission>Sharing page: Delegate roles</permission>
  <permission>View</permission>
  <permission>ftw.mail: Add Inbound Mail</permission>
  <permission>ftw.mail: Add Mail</permission>
@@ -60,6 +61,28 @@
   </permission-map>
   <permission-map name="Review portal content" acquired="True">
   </permission-map>
+
+  <permission-map name="Sharing page: Delegate roles" acquired="False">
+   <permission-role>Manager</permission-role>
+   <permission-role>Role Manager</permission-role>
+  </permission-map>
+  <permission-map name="Sharing page: Delegate Contributor role" acquired="False">
+   <permission-role>Manager</permission-role>
+   <permission-role>Role Manager</permission-role>
+  </permission-map>
+  <permission-map name="Sharing page: Delegate Editor role" acquired="False">
+   <permission-role>Manager</permission-role>
+   <permission-role>Role Manager</permission-role>
+  </permission-map>
+  <permission-map name="Sharing page: Delegate Reader role" acquired="False">
+   <permission-role>Manager</permission-role>
+   <permission-role>Role Manager</permission-role>
+  </permission-map>
+  <permission-map name="Sharing page: Delegate Reviewer role" acquired="False">
+   <permission-role>Manager</permission-role>
+   <permission-role>Role Manager</permission-role>
+  </permission-map>
+
   <permission-map name="View" acquired="False">
    <permission-role>Contributor</permission-role>
    <permission-role>Editor</permission-role>
@@ -152,6 +175,28 @@
   </permission-map>
   <permission-map name="Review portal content" acquired="True">
   </permission-map>
+
+  <permission-map name="Sharing page: Delegate roles" acquired="False">
+   <permission-role>Manager</permission-role>
+   <permission-role>Role Manager</permission-role>
+  </permission-map>
+  <permission-map name="Sharing page: Delegate Contributor role" acquired="False">
+   <permission-role>Manager</permission-role>
+   <permission-role>Role Manager</permission-role>
+  </permission-map>
+  <permission-map name="Sharing page: Delegate Editor role" acquired="False">
+   <permission-role>Manager</permission-role>
+   <permission-role>Role Manager</permission-role>
+  </permission-map>
+  <permission-map name="Sharing page: Delegate Reader role" acquired="False">
+   <permission-role>Manager</permission-role>
+   <permission-role>Role Manager</permission-role>
+  </permission-map>
+  <permission-map name="Sharing page: Delegate Reviewer role" acquired="False">
+   <permission-role>Manager</permission-role>
+   <permission-role>Role Manager</permission-role>
+  </permission-map>
+
   <permission-map name="View" acquired="False">
    <permission-role>Editor</permission-role>
    <permission-role>Manager</permission-role>
@@ -206,6 +251,28 @@
   </permission-map>
   <permission-map name="Review portal content" acquired="True">
   </permission-map>
+
+  <permission-map name="Sharing page: Delegate roles" acquired="False">
+   <permission-role>Manager</permission-role>
+   <permission-role>Role Manager</permission-role>
+  </permission-map>
+  <permission-map name="Sharing page: Delegate Contributor role" acquired="False">
+   <permission-role>Manager</permission-role>
+   <permission-role>Role Manager</permission-role>
+  </permission-map>
+  <permission-map name="Sharing page: Delegate Editor role" acquired="False">
+   <permission-role>Manager</permission-role>
+   <permission-role>Role Manager</permission-role>
+  </permission-map>
+  <permission-map name="Sharing page: Delegate Reader role" acquired="False">
+   <permission-role>Manager</permission-role>
+   <permission-role>Role Manager</permission-role>
+  </permission-map>
+  <permission-map name="Sharing page: Delegate Reviewer role" acquired="False">
+   <permission-role>Manager</permission-role>
+   <permission-role>Role Manager</permission-role>
+  </permission-map>
+
   <permission-map name="View" acquired="False">
    <permission-role>Editor</permission-role>
    <permission-role>Manager</permission-role>
@@ -269,6 +336,28 @@
    <permission-role>Administrator</permission-role>
    <permission-role>Owner</permission-role>
   </permission-map>
+
+  <permission-map name="Sharing page: Delegate roles" acquired="False">
+   <permission-role>Manager</permission-role>
+   <permission-role>Role Manager</permission-role>
+  </permission-map>
+  <permission-map name="Sharing page: Delegate Contributor role" acquired="False">
+   <permission-role>Manager</permission-role>
+   <permission-role>Role Manager</permission-role>
+  </permission-map>
+  <permission-map name="Sharing page: Delegate Editor role" acquired="False">
+   <permission-role>Manager</permission-role>
+   <permission-role>Role Manager</permission-role>
+  </permission-map>
+  <permission-map name="Sharing page: Delegate Reader role" acquired="False">
+   <permission-role>Manager</permission-role>
+   <permission-role>Role Manager</permission-role>
+  </permission-map>
+  <permission-map name="Sharing page: Delegate Reviewer role" acquired="False">
+   <permission-role>Manager</permission-role>
+   <permission-role>Role Manager</permission-role>
+  </permission-map>
+
   <permission-map name="View" acquired="False">
    <permission-role>Administrator</permission-role>
    <permission-role>Contributor</permission-role>
