@@ -90,16 +90,45 @@ def linked_ogds_author(item, author):
         return author
 
 
+def _breadcrumbs_from_item(item):
+    """Returns a list of titles for the items parent hierarchy (breadcrumbs).
+    `item` can be either a brain or an object.
+    """
+    breadcrumb_titles = []
+    raw_breadcrumb_titles = getattr(item, 'breadcrumb_titles', None)
+    if not raw_breadcrumb_titles:
+        # Not a brain - get breadcrumbs from the breadcrumbs view
+        breadcrumbs_view = getMultiAdapter((item, item.REQUEST),
+                                           name='breadcrumbs_view')
+        raw_breadcrumb_titles = breadcrumbs_view.breadcrumbs()
+
+    # Make sure all titles are utf-8
+    for elem in raw_breadcrumb_titles:
+        title = elem.get('Title')
+        if isinstance(title, unicode):
+            title = title.encode('utf-8')
+        breadcrumb_titles.append(title)
+
+    return breadcrumb_titles
+
+
 def linked(item, value):
+    """Takes an item (object or brain) and returns a HTML snippet that
+    contains a link to the item, it's icon and breadcrumbs in the tooltip.
+    """
+
+    if isinstance(value, unicode):
+        value = value.encode('utf-8')
+
+    # Determine URL method
     url_method = lambda: '#'
-    #item = hasattr(item, 'aq_explicit') and item.aq_explicit or item
     if hasattr(item, 'getURL'):
         url_method = item.getURL
     elif hasattr(item, 'absolute_url'):
         url_method = item.absolute_url
 
+    # Construct CSS class
     normalize = getUtility(IIDNormalizer).normalize
-
     if not item.portal_type == 'opengever.document.document':
         css_class = "contenttype-%s" % normalize(item.portal_type)
     else:
@@ -117,23 +146,8 @@ def linked(item, value):
             # Fallback for unknown file type
             css_class = "contenttype-%s" % normalize(item.portal_type)
 
-    breadcrumb_titles = []
-    raw_breadcrumb_titles = getattr(item, 'breadcrumb_titles', None)
-    if not raw_breadcrumb_titles:
-        # Not a brain - get breadcrumbs from the breadcrumbs view
-        breadcrumbs_view = getMultiAdapter((item, item.REQUEST),
-                                           name='breadcrumbs_view')
-        raw_breadcrumb_titles = breadcrumbs_view.breadcrumbs()
-
-    for elem in raw_breadcrumb_titles:
-        if isinstance(elem.get('Title'), unicode):
-            breadcrumb_titles.append(elem.get('Title').encode('utf-8'))
-        else:
-            breadcrumb_titles.append(elem.get('Title'))
-
-    if isinstance(value, unicode):
-        value = value.encode('utf-8')
-
+    # Construct breadcrumbs
+    breadcrumb_titles = _breadcrumbs_from_item(item)
     link_title = " > ".join(t for t in breadcrumb_titles)
 
     # Make sure all data used in the HTML snippet is properly escaped
@@ -145,6 +159,7 @@ def linked(item, value):
 
     wrapper = '<span class="linkWrapper">%s</span>' % link
     return wrapper
+
 
 def readable_date_set_invisibles(item, date):
     if not date or str(date) == '1970/01/01' \
