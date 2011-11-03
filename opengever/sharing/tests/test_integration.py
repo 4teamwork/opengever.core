@@ -1,18 +1,15 @@
-from plone.app.testing import TEST_USER_NAME, TEST_USER_PASSWORD
-from opengever.sharing.testing import OPENGEVER_SHARING_INTEGRATION_TESTING
 from opengever.sharing.browser.sharing import OpengeverSharingView
+from opengever.sharing.interfaces import ILocalRolesAcquisitionActivated
+from opengever.sharing.interfaces import ILocalRolesAcquisitionBlocked
+from opengever.sharing.interfaces import ILocalRolesModified
+from opengever.sharing.testing import OPENGEVER_SHARING_INTEGRATION_TESTING
+from plone.app.testing import TEST_USER_NAME, TEST_USER_PASSWORD
+from plone.app.testing import setRoles, TEST_USER_ID
 from plone.dexterity.utils import createContentInContainer
 from plone.testing.z2 import Browser
-import unittest2 as unittest
-from plone.app.testing import setRoles, TEST_USER_ID
-import transaction
 from zope.component import provideHandler
-from opengever.sharing.interfaces import \
-    ILocalRolesAcquisitionBlocked, ILocalRolesAcquisitionActivated, \
-    ILocalRolesModified
-from opengever.sharing.events import \
-    LocalRolesAcquisitionActivated, LocalRolesAcquisitionBlocked, \
-    LocalRolesModified
+import transaction
+import unittest2 as unittest
 
 
 class TestOpengeverSharingIntegration(unittest.TestCase):
@@ -34,6 +31,7 @@ class TestOpengeverSharingIntegration(unittest.TestCase):
             self.repo_root, 'opengever.repository.repositoryfolder', 'r1')
         self.dossier = createContentInContainer(
             self.repo, 'opengever.dossier.businesscasedossier', 'd1')
+
         transaction.commit()
 
         # Get the sharing-view of repo and dossier
@@ -46,10 +44,40 @@ class TestOpengeverSharingIntegration(unittest.TestCase):
             # History: [[interface, context], ]
             event_history = []
 
-            def mock_handler(self, handler):
-                self.event_history.append([handler, handler.object])
+            def mock_handler(self, event):
+                self.event_history.append(event, )
+
+            def last_event(self):
+                return self.event_history[-1]
 
         self.mock_event = MockEvent()
+
+    def get_browser(self):
+        """Return logged in browser
+        """
+        # Create browser an login
+        portal_url = self.layer['portal'].absolute_url()
+        browser = Browser(self.layer['app'])
+        browser.open('%s/login_form' % portal_url)
+        browser.getControl(name='__ac_name').value = TEST_USER_NAME
+        browser.getControl(name='__ac_password').value = TEST_USER_PASSWORD
+        browser.getControl(name='submit').click()
+
+        # Check login
+        self.assertNotEquals('__ac_name' in browser.contents, True)
+        self.assertNotEquals('__ac_password' in browser.contents, True)
+
+        return browser
+
+    def test_sharing_views(self):
+        """ Test Integration of opengever.sharing
+        """
+
+        # We just test to open the views because the rest is tested
+        # in other packages
+        self.browser.open('%s/@@sharing' % self.dossier.absolute_url())
+        self.browser.open(
+            '%s/@@tabbedview_view-sharing' % self.dossier.absolute_url())
 
     def test_available_roles_with_manager(self):
         """ Test available roles if we are manager on a context providing
@@ -93,49 +121,6 @@ class TestOpengeverSharingIntegration(unittest.TestCase):
         setRoles(
             self.portal, TEST_USER_ID, ['Manager', 'Contributor', 'Editor'])
 
-    def test_integration_dossier_events(self):
-        """ Test Integration of opengever.sharing
-        """
-
-        self.request = self.layer['request']
-        self.portal = self.layer['portal']
-        self.browser = self.get_browser()
-
-        # Setup minimal repo with one dossier
-        self.repo_root = createContentInContainer(
-            self.portal, 'opengever.repository.repositoryroot', 'root')
-        self.repo = createContentInContainer(
-            self.repo_root, 'opengever.repository.repositoryfolder', 'r1')
-        self.dossier = createContentInContainer(
-            self.repo, 'opengever.dossier.businesscasedossier', 'd1')
-
-        transaction.commit()
-
-        # Get the sharing-view of repo and dossier
-        self.view_repo = OpengeverSharingView(self.repo, self.request)
-        self.view_dossier = OpengeverSharingView(self.dossier, self.request)
-
-        # Event class to look for fired events
-        class MockEvent(object):
-
-            # History: [[interface, context], ]
-            event_history = []
-
-            def mock_handler(self, handler):
-                self.event_history.append([handler, handler.object])
-
-        self.mock_event = MockEvent()
-
-    def test_sharing_views(self):
-        """ Test Integration of opengever.sharing
-        """
-
-        # We just test to open the views because the rest is tested
-        # in other packages
-        self.browser.open('%s/@@sharing' % self.dossier.absolute_url())
-        self.browser.open(
-            '%s/@@tabbedview_view-sharing' % self.dossier.absolute_url())
-
     def test_update_inherit(self):
         """ tests update inherit method
 
@@ -153,35 +138,25 @@ class TestOpengeverSharingIntegration(unittest.TestCase):
             adapts=[ILocalRolesAcquisitionActivated, ], )
 
         # We disable locale role aquisition on dossier
-        self.base_update_inherit(self.view_dossier, self.dossier, False)
+        self.view_dossier.update_inherit(False, reindex=False)
+        last_event = self.mock_event.last_event()
+        self.assertTrue(ILocalRolesAcquisitionBlocked.providedBy(last_event))
+        self.assertEquals(last_event.object, self.dossier)
 
-        # We disable locale role aquisition on repo.
-        # The journalentry is on the next repo_root object or plone
-        # siteroot. In our case we have a repo object, so we have
-        # to check the repo_root
-        self.base_update_inherit(self.view_repo, self.repo, False)
+        # we disable it again,it shouldn't fire a event because nothing changed
+        self.view_dossier.update_inherit(False, reindex=False)
+        self.assertEquals(last_event, self.mock_event.last_event())
 
-        # We enable locale role aquisition on dossier
-        self.base_update_inherit(self.view_dossier, self.dossier, True)
+        # # We enable locale role aquisition on dossier
+        self.view_dossier.update_inherit(True, reindex=False)
+        # and check the fired event
+        last_event = self.mock_event.last_event()
+        self.assertTrue(ILocalRolesAcquisitionActivated.providedBy(last_event))
+        self.assertEquals(last_event.object, self.dossier)
 
-        # And again on the repo
-        self.base_update_inherit(self.view_repo, self.repo, True)
-
-    def base_update_inherit(self, view, context, status, reindex=False):
-        """ Base method to call update_inherit mehtod
-        """
-        # Get the number of fired events before the update
-        events_before = len(self.mock_event.event_history)
-
-        # Update inherit
-        view.update_inherit(status, reindex)
-
-        # Get the fired event
-        event = status and LocalRolesAcquisitionActivated or \
-            LocalRolesAcquisitionBlocked
-
-        # Check the result of the function
-        self.check_event_history(events_before, event, context)
+        # we disable it again,it shouldn't fire a event because nothing changed
+        self.view_dossier.update_inherit(True, reindex=False)
+        self.assertEquals(last_event, self.mock_event.last_event())
 
     def test_update_role_settings(self):
         """ Test update_role_settings method
@@ -195,64 +170,30 @@ class TestOpengeverSharingIntegration(unittest.TestCase):
         new_settings = \
             [{'type': 'user', 'id': 'test_user_1_', 'roles': ['Publisher']}, ]
 
-        self.base_update_role_settings(
-            self.view_dossier, self.dossier, new_settings)
+        self.view_repo.update_role_settings(new_settings, False)
 
-        self.base_update_role_settings(
-            self.view_repo, self.repo, new_settings)
+        last_event = self.mock_event.last_event()
+        # check the event type
+        self.assertTrue(ILocalRolesModified.providedBy(last_event))
+        # check the event context
+        self.assertEquals(last_event.object, self.repo)
+        # check the stored localroles
+        self.assertEquals(last_event.old_local_roles,
+                          {'test_user_1_': ('Owner',)})
+        self.assertEquals(last_event.new_local_roles,
+                          (('test_user_1_', ('Owner', 'Publisher')),))
 
-        # We try to remove the new local role 'publisher'
+        # now we remvove the local role 'publisher'
         new_settings = \
             [{'type': 'user', 'id': 'test_user_1_', 'roles': []}, ]
 
-        self.base_update_role_settings(
-            self.view_dossier, self.dossier, new_settings)
+        self.view_repo.update_role_settings(new_settings, False)
 
-        self.base_update_role_settings(
-            self.view_repo, self.repo, new_settings)
-
-    def base_update_role_settings(
-        self, view, context, settings, reindex=False):
-        """ Base method to call update_role_settings method
-        """
-        # Get the number of fired events before the update
-        events_before = len(self.mock_event.event_history)
-
-        # Update role_settings
-        view.update_role_settings(settings, reindex)
-
-        # Check the result of the function
-        self.check_event_history(events_before, LocalRolesModified, context)
-
-    def check_event_history(self, len_before, event, context):
-        """ Check the event history of the dummy event class
-        """
-
-        # We need one more entry than before
+        # check event attributes
+        last_event = self.mock_event.last_event()
+        self.assertTrue(ILocalRolesModified.providedBy(last_event))
+        self.assertEquals(last_event.object, self.repo)
+        self.assertEquals(last_event.old_local_roles,
+                          {'test_user_1_': ('Owner', 'Publisher')})
         self.assertTrue(
-            len_before+1 == len(self.mock_event.event_history))
-
-        # The right event must be called
-        self.assertTrue(
-            self.mock_event.event_history[-1][0].__class__ == event)
-
-        # The right context must fire the event
-        self.assertTrue(
-            self.mock_event.event_history[-1][1] == context)
-
-    def get_browser(self):
-        """Return logged in browser
-        """
-        # Create browser an login
-        portal_url = self.layer['portal'].absolute_url()
-        browser = Browser(self.layer['app'])
-        browser.open('%s/login_form' % portal_url)
-        browser.getControl(name='__ac_name').value = TEST_USER_NAME
-        browser.getControl(name='__ac_password').value = TEST_USER_PASSWORD
-        browser.getControl(name='submit').click()
-
-        # Check login
-        self.assertNotEquals('__ac_name' in browser.contents, True)
-        self.assertNotEquals('__ac_password' in browser.contents, True)
-
-        return browser
+            last_event.new_local_roles == (('test_user_1_', ('Owner',)),))
