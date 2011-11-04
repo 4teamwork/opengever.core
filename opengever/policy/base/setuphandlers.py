@@ -1,17 +1,20 @@
 from zope.component import getUtility
 from plone.registry.interfaces import IRegistry
-from izug.basetheme.browser.interfaces import ISearchText
+from izug.basetheme.interfaces import ISiteProperties
 
-def search_string(context):
-    """ Set the searchstring for izug"""
+def set_application_title(context):
+    """ Set the application title for GEVER.
+    (used in the live search box)
+    """
     registry = getUtility(IRegistry)
 
     try:
-        first_part = registry.forInterface(ISearchText)
+        site_properties = registry.forInterface(ISiteProperties)
     except KeyError:
+        # The registry entry doesn't exist yet
         return
 
-    first_part.searchtext = u'Gever'
+    site_properties.application_title = u'Gever'
 
 
 
