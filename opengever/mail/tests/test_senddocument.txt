@@ -4,7 +4,7 @@ Test views:
 imports and general stuff
     >>> from Products.CMFPlone.tests.utils import MockMailHost
     >>> from Products.MailHost.interfaces import IMailHost
-    >>> from opengever.mail.interfaces import ISendDocumentConf
+    >>> from opengever.mail.interfaces import ISendDocumentConf, IDocumentSent
     >>> from opengever.mail.interfaces import ISendableDocsContainer
     >>> from plone.app.testing.interfaces import TEST_USER_NAME as portal_owner, TEST_USER_PASSWORD as default_password
     >>> from plone.dexterity.interfaces import IDexterityFTI
@@ -17,6 +17,9 @@ imports and general stuff
     >>> from zope.interface import alsoProvides
     >>> from zope.site.hooks import getSite
     >>> from zope.schema import getFields
+    >>> from opengever.mail.testing import MockEvent
+    >>> from zope.component import provideHandler
+    >>> from zope.intid.interfaces import IIntIds
     >>> import transaction
 
     >>> app = layer['app']
@@ -45,6 +48,12 @@ portal has to provide ISendableDocsContainer
     True
     >>> transaction.commit()
 
+    >>> mock_event = MockEvent()
+    >>> provideHandler(
+    ... factory=mock_event.mock_handler,
+    ... adapts=[IDocumentSent, ], )
+
+
 login
     >>> browser.open('%s/login_form' % portal.absolute_url())
     >>> browser.getControl(name='__ac_name').value = 'mail-test'
@@ -59,6 +68,7 @@ Mock MailHost
     >>> sm.registerUtility(component=mockmailhost,
     ...                    provided=IMailHost)
     >>> transaction.commit()
+
 
 test form
     >>> data = 'paths:list=%s'% '/'.join(doc1.getPhysicalPath())
@@ -121,3 +131,17 @@ validator should also work with mails ect
     3
     >>> 'Test Nachricht' in doc1.MailHost.messages[1]
     True
+
+    >>> documentsent = mock_event.last_event()
+    >>> documentsent.sender
+    u'mail-test'
+    >>> documentsent.subject
+    'Test Betreff 2'
+    >>> id_util = getUtility(IIntIds)
+    >>> id_util.getObject(documentsent.intids[0]).Title()
+    u'Attachment Test'
+    >>> documentsent.receiver
+    'info@4teamwork.ch'
+    >>> documentsent.message
+    'Test Nachricht 2'
+

@@ -1,5 +1,6 @@
 from zope import schema
-from zope.interface import Interface
+from zope.interface import Interface, Attribute
+from zope.component.interfaces import IObjectEvent
 
 
 class IMailSettings(Interface):
@@ -22,3 +23,13 @@ class ISendDocumentConf(Interface):
         description=u'Maximal Size (MB) of the Attachment',
         default=5,
     )
+
+
+class IDocumentSent(IObjectEvent):
+    """Local Roles has been modified"""
+
+    sender = Attribute("The Mailsender")
+    receiver = Attribute("The Mailreceiver")
+    subject = Attribute("The Mailsubject")
+    message = Attribute("The Message")
+    attachments = Attribute("The Attachments")

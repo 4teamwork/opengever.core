@@ -25,6 +25,9 @@ from zope.interface import Interface
 from zope.interface import invariant, Invalid
 from zope.i18n import translate
 from ftw.mail.mail import IMail
+from opengever.mail.events import DocumentSent
+from zope.event import notify
+
 
 CHARSET = 'iso-8859-1'
 
@@ -169,10 +172,11 @@ class SendDocumentForm(form.Form):
 
             # let the user know that the mail was sent
             info = _(u'info_mails_sent', 'Mails sent')
-
+            notify(DocumentSent(self.context, userid, header_to, data.get('subject'),\
+             data.get('message'), data.get('documents')))
             IStatusMessage(self.request).addStatusMessage(info, type='info')
             # and redirect to default view / tab
-            return self.request.RESPONSE.redirect('./#documents-tab')
+            return self.request.RESPONSE.redirect('./#documents')
 
     @button.buttonAndHandler(_('cancel_back', default=u'Cancel'))
     def cancel_button_handler(self, action):
