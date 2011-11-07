@@ -72,7 +72,6 @@ def journal_entry_factory(context, action, title,
 
     notify(JournalEntryEvent(**entry))
 
-
 def role_mapping_to_str(context, mapping):
     """Parse the given local_roles mapping to a str,
     with the help of the ROLE_MAPPING from opengever.sharing"""
@@ -84,7 +83,6 @@ def role_mapping_to_str(context, mapping):
     for behavior, translations in ROLE_MAPPING:
         if behavior.providedBy(context):
             trans_mapping = dict(translations)
-
     for principal, roles in mapping:
         translated_roles = []
         for role in roles:
@@ -118,7 +116,6 @@ def get_repository_root(context):
 LOCAL_ROLES_AQUISITION_BLOCKED = 'Local roles Aquisition Blocked'
 @grok.subscribe(IRepositoryFolderSchema, ILocalRolesAcquisitionBlocked)
 def repositoryfolder_local_roles_acquisition_blocked(context, event):
-
     title = _(u'label_local_roles_acquisition_blocked_at',
               default=u'Local roles aquistion blocked at ${repository}.',
               mapping={'repository': context.title_or_id(),})
@@ -141,7 +138,7 @@ def repositoryfolder_local_roles_acquisition_activated(context, event):
 
     journal_entry_factory(
         get_repository_root(context),
-        LOCAL_ROLES_AQUISITION_BLOCKED,
+        LOCALROLES_AQUISITION_ACTIVATED,
         title=title)
 
     return
@@ -385,8 +382,7 @@ def task_added(context, event):
     title = _(u'label_task_added', default=u'Task added: ${title}', mapping={
             'title' : context.title_or_id(),
             })
-    # journal_entry for task:
-    journal_entry_factory(context, TASK_ADDED_EVENT, title)
+
     # journal entry for parent (usually dossier)
     journal_entry_factory(context.aq_inner.aq_parent, TASK_ADDED_EVENT, title)
     return
@@ -404,7 +400,7 @@ def task_modified(context, event):
         context.portal_types
     except AttributeError:
         return
-    journal_entry_factory(context, TASK_MODIIFED_ACTION, title, visible=False)
+
     journal_entry_factory(context.aq_inner.aq_parent, TASK_MODIIFED_ACTION, title)
     return
 
@@ -473,6 +469,7 @@ def mail_added(context, event):
               mapping={
               'title' : context.title_or_id()
               })
+
     journal_entry_factory(context.aq_inner.aq_parent, MAIL_ADDED_EVENT, title)
     return
 
@@ -501,5 +498,6 @@ def object_will_be_moved(context, event):
                     mapping={
                     'title': context.title_or_id()
                     })
-        journal_entry_factory(context.aq_inner.aq_parent, OBJECT_MOVED_EVENT, title)
+
+        journal_entry_factory(context.aq_inner.aq_parent, OBJECT_WILL_BE_MOVED_EVENT, title)
     return
