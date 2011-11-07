@@ -371,7 +371,6 @@ class TestOpengeverJournalGeneral(unittest.TestCase):
         dossier2 = createContentInContainer(
             portal, 'opengever.dossier.businesscasedossier', 'd2')
 
-
         document = createContentInContainer(
             dossier1, 'opengever.document.document', 'doc1')
 
