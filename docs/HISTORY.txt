@@ -5,6 +5,11 @@ Changelog
 2.0b110 (unreleased)
 --------------------
 
+- Adjust the templates to support the dynamic batchbox for batched listing views.
+  Issue #1262 Listenfoermige Ausdrucke
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1262/
+  [phgross]
+
 - Adjusted `linked` helper to correctly deal with objects (as opposed to brains)
   [lgraf]
 
