@@ -1,30 +1,30 @@
 <tal:translation i18n:domain="opengever.tabbedview">
-  <form name="tabbedview_form"
-        method="post"
-        action="folder_object"
-        tal:attributes="action context/absolute_url"
-        >
 
     <input type="hidden" name="orig_template" tal:attributes="value string:${context/absolute_url}/#${view/view_name}" />
 
     <tal:cond tal:condition="view/contents">
 
         <div id="selection_container" class="ftwtable"><!--iefix--></div>
-        
+
         <div id="batching_container" class="ftwtable"><!--iefix--></div>
 
-        <div id="listing_container" class="ftwtable"><!--iefix--></div>
-        
-        <div id="menu_container" class="ftwtable"><!--iefix--></div>
- 
+        <form name="tabbedview_form"
+              method="post"
+              action="folder_object"
+              tal:attributes="action context/absolute_url"
+              >
+          <div id="listing_container" class="ftwtable"><!--iefix--></div>
+          <div id="menu_container" class="ftwtable"><!--iefix--></div>
+        </form>
+
+
     </tal:cond>
 
-    <p id="message_no_contents" 
+    <p id="message_no_contents"
        style="display:none"
        i18n:translate="label_no_contents">
         No contents
     </p>
 
-  </form>
 
 </tal:translation>
