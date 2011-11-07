@@ -469,6 +469,7 @@ def mail_added(context, event):
               mapping={
               'title' : context.title_or_id()
               })
+
     journal_entry_factory(context.aq_inner.aq_parent, MAIL_ADDED_EVENT, title)
     return
 

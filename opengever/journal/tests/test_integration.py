@@ -17,9 +17,13 @@ from Products.CMFCore.WorkflowCore import ActionSucceededEvent
 from zope.annotation.interfaces import IAnnotations
 from zope.lifecycleevent import ObjectMovedEvent
 from zope.event import notify
+from zope.i18n import translate
 from zope.interface import Interface
 from zope.lifecycleevent import ObjectModifiedEvent, Attributes
 import unittest2 as unittest
+from plone.dexterity.interfaces import IDexterityFTI
+from zope.schema import getFields
+from zope.component import getUtility
 
 
 class TestOpengeverJournalGeneral(unittest.TestCase):
@@ -45,7 +49,8 @@ class TestOpengeverJournalGeneral(unittest.TestCase):
         self.check_annotation(
             repo_root,
             action_type='Local roles Aquisition Blocked',
-            action_title='label_local_roles_acquisition_blocked_at')
+            action_title='Local roles aquistion blocked at %s.' % (
+                repo.title_or_id()))
 
         # Local roles Aquisition Activated-Event
         notify(
@@ -55,7 +60,8 @@ class TestOpengeverJournalGeneral(unittest.TestCase):
         self.check_annotation(
             repo_root,
             action_type='Local roles Aquisition Activated',
-            action_title='label_local_roles_acquisition_activated_at')
+            action_title='Local roles aquistion activated at %s.' % (
+                repo.title_or_id()))
 
         # Local roles Modified
         notify(
@@ -71,7 +77,8 @@ class TestOpengeverJournalGeneral(unittest.TestCase):
         self.check_annotation(
             repo_root,
             action_type='Local roles modified',
-            action_title='label_local_roles_modified_at',
+            action_title='Local roles modified at %s.' % (
+                repo.title_or_id()),
             comment='ratman: sharing_dossier_reader; test_user: ' \
                 'sharing_dossier_reader, sharing_dossier_publisher')
 
@@ -88,7 +95,7 @@ class TestOpengeverJournalGeneral(unittest.TestCase):
         self.check_object_added(
             dossier,
             'Dossier added',
-            'label_dossier_added', )
+            'Dossier added: %s' % dossier.title_or_id(), )
 
         # Modified-Event
         notify(ObjectModifiedEvent(dossier))
@@ -96,7 +103,8 @@ class TestOpengeverJournalGeneral(unittest.TestCase):
         # Check
         self.check_annotation(dossier,
                               action_type='Dossier modified',
-                              action_title='label_dossier_modified')
+                              action_title='Dossier modified: %s' % (
+                                dossier.title_or_id()))
 
         # Get the workflow for the dossier to test the ActionSucceededEvent
         wftool = getToolByName(dossier, 'portal_workflow')
@@ -120,7 +128,7 @@ class TestOpengeverJournalGeneral(unittest.TestCase):
         self.check_annotation(
             dossier,
             action_type='Local roles Aquisition Blocked',
-            action_title='label_local_roles_acquisition_blocked')
+            action_title='Local roles aquistion blocked.')
 
         # Local roles Aquisition Activated-Event
         notify(
@@ -130,7 +138,7 @@ class TestOpengeverJournalGeneral(unittest.TestCase):
         self.check_annotation(
             dossier,
             action_type='Local roles Aquisition Activated',
-            action_title='label_local_roles_acquisition_activated')
+            action_title='Local roles aquistion activated.')
 
         # Local roles Modified
         notify(
@@ -146,7 +154,7 @@ class TestOpengeverJournalGeneral(unittest.TestCase):
         self.check_annotation(
             dossier,
             action_type='Local roles modified',
-            action_title='label_local_roles_modified',
+            action_title='Local roles modified.',
             comment='ratman: sharing_dossier_reader; test_user: ' \
                 'sharing_dossier_reader, sharing_dossier_publisher')
 
@@ -173,7 +181,7 @@ class TestOpengeverJournalGeneral(unittest.TestCase):
         self.check_object_added(
             document,
             'Document added',
-            'label_document_added',
+            'Document added: %s' % document.title_or_id(),
             dossier)
 
         # Modified-Event - nothing changed
@@ -250,7 +258,7 @@ class TestOpengeverJournalGeneral(unittest.TestCase):
         self.check_annotation(
             dossier,
             action_type='Task added',
-            action_title='label_task_added',
+            action_title='Task added: %s' % task.title_or_id(),
             check_entry=-2, )
 
         # Modified-Event
@@ -258,7 +266,7 @@ class TestOpengeverJournalGeneral(unittest.TestCase):
         self.check_annotation(
             dossier,
             action_type='Task modified',
-            action_title='label_task_modified', )
+            action_title='Task modified: %s' % task.title_or_id(), )
 
     def test_integration_trashed_events(self):
         """ Trigger every event of trashing objects
@@ -278,29 +286,33 @@ class TestOpengeverJournalGeneral(unittest.TestCase):
         self.check_annotation(
             document,
             action_type='Object moved to trash',
-            action_title='label_to_trash', )
+            action_title='Object moved to trash: %s' % (
+                document.title_or_id()), )
         self.check_annotation(
             dossier,
             action_type='Object moved to trash',
-            action_title='label_to_trash', )
+            action_title='Object moved to trash: %s' % (
+                document.title_or_id()), )
 
         # Untrash-Event
         notify(UntrashedEvent(document))
         self.check_annotation(
             document,
             action_type='Object restore',
-            action_title='label_restore', )
+            action_title='Object restore: %s' % (
+                document.title_or_id()), )
         self.check_annotation(
             dossier,
             action_type='Object restore',
-            action_title='label_restore', )
+            action_title='Object restore: %s' % (
+                document.title_or_id()), )
 
     def test_integration_participation_events(self):
         """ Trigger every event of a participation at least one times
         and check the journalentries.
         """
         portal = self.layer['portal']
-        participant = Participation('ratman', 'held')
+        participant = Participation('ratman', ['held', 'manager'])
 
         dossier = createContentInContainer(
             portal, 'opengever.dossier.businesscasedossier', 'd1')
@@ -310,14 +322,16 @@ class TestOpengeverJournalGeneral(unittest.TestCase):
         self.check_annotation(
             dossier,
             action_type='Participant added',
-            action_title='label_participant_added', )
+            action_title='Participant added: %s with roles %s' % (
+                participant.contact, ', '.join(participant.roles)), )
 
         # Participation-Removed-Event
         notify(ParticipationRemoved(dossier, participant))
         self.check_annotation(
             dossier,
             action_type='Participant removed',
-            action_title='label_participant_removed', )
+            action_title='Participant removed: %s' % (
+                participant.contact), )
 
     def test_integration_mail_events(self):
         """ Trigger every event of a mail at least one times
@@ -328,15 +342,22 @@ class TestOpengeverJournalGeneral(unittest.TestCase):
         dossier = createContentInContainer(
             portal, 'opengever.dossier.businesscasedossier', 'd1')
 
-        createContentInContainer(
-            dossier, 'ftw.mail.mail', 'm1')
+        fti = getUtility(IDexterityFTI, name='ftw.mail.mail')
+        schema = fti.lookupSchema()
+        field_type = getFields(schema)['message']._type
+        msgtxt = 'Subject: mail-test\n'
+
+        mail = createContentInContainer(
+            dossier, 'ftw.mail.mail',
+            message=field_type(data=msgtxt,
+                contentType=u'message/rfc822', filename=u'attachment.txt'))
 
         # The journal of a mail is always on the parents dossier and not
         # on the mail
         self.check_annotation(
             dossier,
             action_type='Mail added',
-            action_title='label_mail_added',
+            action_title='Mail added: %s' % mail.title_or_id(),
             check_entry=-2, )
 
     def test_integration_object_events(self):
@@ -363,7 +384,7 @@ class TestOpengeverJournalGeneral(unittest.TestCase):
         self.check_annotation(
             dossier1,
             action_type='Object moved',
-            action_title='label_object_moved', )
+            action_title='Object moved: %s' % document.title_or_id(), )
 
         notify(ObjectWillBeMovedEvent(
             document,
@@ -374,7 +395,7 @@ class TestOpengeverJournalGeneral(unittest.TestCase):
         self.check_annotation(
                 dossier1,
                 action_type='Object cut',
-                action_title='label_object_cut', )
+                action_title='Object cut: %s' % document.title_or_id(), )
 
         # Here we don't have a journal-entry
         length = self.get_journal_length(dossier1)
@@ -411,7 +432,8 @@ class TestOpengeverJournalGeneral(unittest.TestCase):
         self.assertTrue(actor == journal.get('actor'))
         self.assertTrue(time == journal.get('time').Date())
         self.assertTrue(action_type == journal.get('action').get('type'))
-        self.assertTrue(action_title == journal.get('action').get('title'))
+        self.assertTrue(
+            action_title == translate(journal.get('action').get('title')))
 
     def check_object_added(
         self, obj, action_type='', action_title='', parent=None):
@@ -435,32 +457,34 @@ class TestOpengeverJournalGeneral(unittest.TestCase):
             self.check_annotation(
                 obj,
                 action_type='Document modified',
-                action_title='label_document_file_modified')
+                action_title='Changed file')
             self.check_annotation(
                 parent,
                 action_type='Document modified',
-                action_title='label_document_file_modified__parent', )
+                action_title='Changed file of document %s' % (
+                    obj.title_or_id()), )
 
         elif mode == 'meta':
             self.check_annotation(
                 obj,
                 action_type='Document modified',
-                action_title='label_document_metadata_modified')
+                action_title='Changed metadata')
             self.check_annotation(
                 parent,
                 action_type='Document modified',
-                action_title='label_document_metadata_modified__parent', )
+                action_title='Changed metadata of document %s' % (
+                    obj.title_or_id()), )
 
         elif mode == 'file_meta':
             self.check_annotation(
                 obj,
                 action_type='Document modified',
-                action_title='label_document_file_and_metadata_modified')
+                action_title='Changed file and metadata')
             self.check_annotation(
                 parent,
                 action_type='Document modified',
-                action_title=(
-                    'label_document_file_and_metadata_modified__parent'), )
+                action_title='Changed file and metadata of document %s' % (
+                    obj.title_or_id()), )
 
     def check_document_actionsucceeded(self, obj):
         """ Check the journal after changing portal state
@@ -478,7 +502,7 @@ class TestOpengeverJournalGeneral(unittest.TestCase):
         self.check_annotation(
             obj,
             action_type='Document checked out',
-            action_title='label_document_checkout',
+            action_title='Document checked out',
             comment=comment, )
 
     def check_document_checkedin(self, obj, comment):
@@ -488,7 +512,7 @@ class TestOpengeverJournalGeneral(unittest.TestCase):
         self.check_annotation(
             obj,
             action_type='Document checked in',
-            action_title='label_document_checkin',
+            action_title='Document checked in',
             comment=comment, )
 
     def check_document_checkoutcanceled(self, obj):
@@ -498,7 +522,7 @@ class TestOpengeverJournalGeneral(unittest.TestCase):
         self.check_annotation(
             obj,
             action_type='Canceled document checkout',
-            action_title='label_document_checkout_cancel')
+            action_title='Canceled document checkout')
 
     def check_document_revertedtoversion(self, obj):
         """ Check the journal after reverting
@@ -507,4 +531,5 @@ class TestOpengeverJournalGeneral(unittest.TestCase):
         self.check_annotation(
             obj,
             action_type='Reverted document file',
-            action_title='label_document_file_reverted')
+            action_title='Reverte document file to version v%s' % (
+                "1"))
