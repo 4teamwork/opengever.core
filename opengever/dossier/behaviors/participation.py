@@ -87,17 +87,17 @@ class IParticipation(form.Schema):
     """
 
     contact = schema.Choice(
-        title = _(u'label_contact', default=u'Contact'),
-        description = _(u'help_contact', default=u''),
+        title=_(u'label_contact', default=u'Contact'),
+        description=_(u'help_contact', default=u''),
         vocabulary=u'opengever.ogds.base.ContactsAndUsersVocabulary',
-        required = True,
+        required=True,
         )
 
     roles = schema.List(
-        title = _(u'label_roles', default=u'Roles'),
-        description = _(u'help_roles', default=u''),
-        value_type = schema.Choice(
-            source = wrap_vocabulary(
+        title=_(u'label_roles', default=u'Roles'),
+        description=_(u'help_roles', default=u''),
+        value_type=schema.Choice(
+            source=wrap_vocabulary(
                 'opengever.dossier.participation_roles',
                 visible_terms_from_registry='opengever.dossier' + \
                     '.interfaces.IDossierParticipants.roles'),
@@ -106,11 +106,8 @@ class IParticipation(form.Schema):
         missing_value=[],
         )
 
-
-
-
-
 # --------- model class --------
+
 
 class Participation(Persistent):
     """ A participation represents a relation between a contact and
@@ -125,7 +122,7 @@ class Participation(Persistent):
 
     @setproperty
     def roles(self, value):
-        if value==None:
+        if value == None:
             pass
         elif not isinstance(value, PersistentList):
             value = PersistentList(value)
