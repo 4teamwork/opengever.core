@@ -58,4 +58,3 @@ class TestTemplateDossierIntegration(unittest.TestCase):
         view = dossier.restrictedTraverse('document_with_template')
         self.failUnless(view())
         self.assertTrue('empty document template', view.templates())
-        import pdb; pdb.set_trace()
