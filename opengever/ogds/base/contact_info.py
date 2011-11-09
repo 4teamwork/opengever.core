@@ -172,8 +172,8 @@ class ContactInformation(grok.GlobalUtility):
                 getSite(), 'portal_membership').getAuthenticatedMember()
             userid = member.getId()
 
-        if self.get_user(userid) in self.get_client_by_id(
-                client_id).inbox_group.users:
+        if self.get_client_by_id(client_id) and self.get_user(userid) in \
+                self.get_client_by_id(client_id).inbox_group.users:
             return True
 
         return False

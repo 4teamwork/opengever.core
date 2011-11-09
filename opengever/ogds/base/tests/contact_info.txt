@@ -250,6 +250,10 @@ Various lists and other methods:
     ...    userid='hanspeter.linder', client_id='client1')
     False
 
+    >>> info.is_user_in_inbox_group(
+    ...    userid='hanspeter.linder', client_id='notexists')
+    False
+
 
 Test describe with a PAS user:
 

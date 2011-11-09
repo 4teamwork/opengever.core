@@ -5,6 +5,9 @@ Changelog
 2.0b19 (unreleased)
 -------------------
 
+- Made is_user_in_inbox_group method safer, he can now handle request with a id from a not enabled client.
+  [phgross]
+
 - Added is_user_in_inbox_group method to the contact_information utility.
   Used by different views and actions for check if the user has access to the inbox.
   [phgross]
