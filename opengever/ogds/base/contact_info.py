@@ -27,7 +27,6 @@ def ogds_principal_cachekey(method, self, principal):
     """A chache_key including which is, explicit for the
     method, ogds_sync_stamp and principal."""
 
-
     return '%s.%s:%s:%s' % (
         self.__class__.__module__,
         self.__class__.__name__,
