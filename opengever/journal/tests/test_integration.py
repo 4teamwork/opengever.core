@@ -24,6 +24,7 @@ import unittest2 as unittest
 from plone.dexterity.interfaces import IDexterityFTI
 from zope.schema import getFields
 from zope.component import getUtility
+from opengever.mail.events import DocumentSent
 
 
 class TestOpengeverJournalGeneral(unittest.TestCase):
@@ -158,6 +159,7 @@ class TestOpengeverJournalGeneral(unittest.TestCase):
             comment='ratman: sharing_dossier_reader; test_user: ' \
                 'sharing_dossier_reader, sharing_dossier_publisher')
 
+
     def test_integration_document_events(self):
         """ Trigger every event of a document at least one times
         and check the journalentries.
@@ -242,6 +244,9 @@ class TestOpengeverJournalGeneral(unittest.TestCase):
         notify(ObjectRevertedToVersion(document, 'v1', 'v1'))
         self.check_document_revertedtoversion(document)
 
+        notify(DocumentSent(dossier, TEST_USER_ID, 'test@test.ch', 'test mail', 'Mymessage', [document]))
+        self.check_document_sent(dossier, document)
+
     def test_integration_task_events(self):
         """ Trigger every event of a task at least one times
         and check the journalentries.
@@ -267,6 +272,8 @@ class TestOpengeverJournalGeneral(unittest.TestCase):
             dossier,
             action_type='Task modified',
             action_title='Task modified: %s' % task.title_or_id(), )
+
+
 
     def test_integration_trashed_events(self):
         """ Trigger every event of trashing objects
@@ -426,7 +433,6 @@ class TestOpengeverJournalGeneral(unittest.TestCase):
         journal = IAnnotations(
             obj, JOURNAL_ENTRIES_ANNOTATIONS_KEY).get(
                 JOURNAL_ENTRIES_ANNOTATIONS_KEY)[check_entry]
-
         self.assertTrue(comment == journal.get('comments'))
         self.assertTrue(actor == journal.get('actor'))
         self.assertTrue(time == journal.get('time').Date())
@@ -532,3 +538,13 @@ class TestOpengeverJournalGeneral(unittest.TestCase):
             action_type='Reverted document file',
             action_title='Reverte document file to version v%s' % (
                 "1"))
+
+    def check_document_sent(self, obj, doc):
+
+        self.check_annotation(
+            obj,
+            action_type='Document Sent',
+            action_title=u'Document sent by Mail: test mail',
+            actor=TEST_USER_ID,
+            comment='Attachments: <span><a href="%s">%s</a></span>' % (doc.absolute_url(), doc.Title()),
+            )
