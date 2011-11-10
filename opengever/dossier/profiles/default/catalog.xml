@@ -2,6 +2,5 @@
 <object name="portal_catalog" meta_type="Dossier Catalog">
     <column value="reference_number"/>
     <column value="filing_no"/>
-    <column value="searchable_filing_no"/>
     <column value="containing_subdossier"/>
 </object>
