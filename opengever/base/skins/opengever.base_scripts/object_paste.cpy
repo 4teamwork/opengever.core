@@ -11,7 +11,7 @@
 
 
 redirect_view = ''
-if context.REQUEST.get(['__cp']):
+if context.REQUEST.get('__cp'):
     objid = ''
     objlist = context.REQUEST['__cp'].split(':')
     for obj in objlist:
