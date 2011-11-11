@@ -1,0 +1,33 @@
+<tal:translation i18n:domain="opengever.tabbedview">
+
+    <input type="hidden" name="orig_template" tal:attributes="value string:${context/absolute_url}/#${view/view_name}" />
+
+    <tal:cond tal:condition="view/contents">
+
+        <div id="selection_container" class="ftwtable"><!--iefix--></div>
+
+        <div id="batching_container" class="ftwtable"><!--iefix--></div>
+
+        <form name="tabbedview_form"
+              method="post"
+              action="folder_object"
+              tal:attributes="action context/absolute_url"
+              >
+          <div id="listing_container" class="ftwtable"><!--iefix--></div>
+          <div id="menu_container" class="ftwtable"><!--iefix--></div>
+        </form>
+
+
+    </tal:cond>
+    <div id="message_no_contents" tal:define="all_filter python: view.request.get('review_state') == 'false'" class="tabbedview_select" style="display:none" i18n:domain="ftw.tabbedview">
+        <span i18n:translate="" i18n:domain="opengever.tabbedview">State</span>
+        <a id="filter_all" tal:attributes="class python: all_filter and 'active'" href="javascript:void(0);" i18n:domain="opengever.tabbedview" i18n:translate="">All</a>
+        <a id="filter_open" tal:attributes="class python: not all_filter and 'active' " href="javascript:void(0);" i18n:domain="opengever.tabbedview" i18n:translate="">Open</a>
+    </div>
+
+    
+    <p i18n:translate="label_no_contents">
+        No contents
+    </p>
+
+</tal:translation>

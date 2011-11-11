@@ -29,7 +29,7 @@ msgstr "Ersteller"
 
 #: ./opengever/tabbedview/browser/selection_tasks.pt:15
 msgid "Open"
-msgstr "Offen"
+msgstr "Pendent"
 
 #: ./opengever/tabbedview/profiles/default/actions.xml
 msgid "Reset Tableconfiguration"

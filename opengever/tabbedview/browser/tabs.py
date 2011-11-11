@@ -179,6 +179,7 @@ class Dossiers(OpengeverCatalogListingTab):
 
     object_provides = 'opengever.dossier.behaviors.dossier.IDossierMarker'
 
+
     columns = (
         ('', helper.path_checkbox),
 
@@ -273,7 +274,6 @@ class TaskCatalogTableSource(grok.MultiAdapter, CatalogTableSource):
         which show just open dossiers."""
 
         open_task_states = [
-            'task-state-cancelled',
             'task-state-open',
             'task-state-in-progress',
             'task-state-resolved',
@@ -291,6 +291,8 @@ class Tasks(OpengeverCatalogListingTab):
     implements(ITaskCatalogTableSourceConfig)
 
     grok.name('tabbedview_view-tasks')
+
+    template = ViewPageTemplateFile("generic_task.pt")
 
     selection = ViewPageTemplateFile("selection_tasks.pt")
 
