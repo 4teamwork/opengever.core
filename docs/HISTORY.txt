@@ -5,6 +5,9 @@ Changelog
 2.0b110 (unreleased)
 --------------------
 
+- Moved hidden input element orig_template *into* tabbedview_form so it always gets submitted.
+  [lgraf]
+
 - Adjust the templates to support the dynamic batchbox for batched listing views.
   Issue #1262 Listenfoermige Ausdrucke
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1262/
