@@ -39,7 +39,14 @@ class CopyItemsFormView(layout.FormWrapper, grok.View):
         else:
             msg = _(u'error_no_items', default=u'You have not selected any Items')
             IStatusMessage(self.request).addStatusMessage(msg, type='error')
-        return self.request.RESPONSE.redirect(self.request.form['orig_template'])
+
+        orig_template = self.request.form.get('orig_template')
+        if orig_template:
+            redir_url = orig_template
+        else:
+            # orig_template might not be in the request - fall back to context
+            redir_url = self.context.absolute_url()
+        return self.request.RESPONSE.redirect(redir_url)
 
     def cookie_path(self, request):
         # Return a "path" value for use in a cookie that refers

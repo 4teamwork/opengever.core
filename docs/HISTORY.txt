@@ -5,6 +5,11 @@ Changelog
 2.0b19 (unreleased)
 -------------------
 
+- Fixed redirect after copying items
+  Issue #1284 Test Rot 2.2.: Kopieren von Dokumenten funktioniert nicht.
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1284/
+  [lgraf]
+
 - Adjust german translation: Renamed Historie to Versionen
   Issue #1257 Umbenennung "Historie" bei Dokumenten
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1257
