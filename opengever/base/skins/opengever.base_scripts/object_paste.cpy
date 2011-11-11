@@ -22,5 +22,5 @@ if context.REQUEST.get(['__cp']):
     elif myobj.portal_type == 'opengever.task.task':
         redirect_view = '#task'
     elif myobj.portal_type == 'opengever.dossier.businesscasedossier':
-        redirect_view = '#dossiers'        
+        redirect_view = '#dossiers'
 return context.REQUEST.RESPONSE.redirect(context.absolute_url()+ redirect_view)
