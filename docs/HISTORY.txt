@@ -10,6 +10,16 @@ Changelog
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1282/
   [ttschanz]
 
+- Adjust task-state-filter:
+    - Updated Translation.
+    - Hide Cancelled tasks.
+    - Fixed Bug which made Tasks unaccessible when all Tasks arn't active anymore.
+  Issue #1070 Abgeschlossene Aufgaben nicht immer einblenden
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1070
+  [ttschanz]
+
+- Moved hidden input element orig_template *into* tabbedview_form so it always gets submitted.
+  [lgraf]
 
 - Adjust the templates to support the dynamic batchbox for batched listing views.
   Issue #1262 Listenfoermige Ausdrucke

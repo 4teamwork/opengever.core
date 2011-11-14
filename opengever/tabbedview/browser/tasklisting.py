@@ -38,6 +38,8 @@ class GlobalTaskListingTab(grok.View, OpengeverTab,
     grok.context(IJournalizable)
     grok.require('zope2.View')
 
+    template = ViewPageTemplateFile("generic_task.pt")
+
     sort_on = 'modified'
     sort_reverse = False
     #lazy must be false otherwise there will be no correct batching
@@ -152,7 +154,6 @@ class GlobalTaskTableSource(SqlTableSource):
         """When a state filter is active, we add a filter which select just the open tasks"""
 
         open_task_states = [
-            'task-state-cancelled',
             'task-state-open',
             'task-state-in-progress',
             'task-state-resolved',
