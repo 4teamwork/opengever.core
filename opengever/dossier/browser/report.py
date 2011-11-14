@@ -3,7 +3,7 @@ from opengever.base.reporter import format_datetime, get_date_style
 from opengever.base.reporter import readable_author
 from opengever.base.reporter import StringTranslater, XLSReporter
 from opengever.dossier import _
-from Products.CMFPlone.interfaces import IPloneSiteRoot
+from zope.interface import Interface
 from Products.statusmessages.interfaces import IStatusMessage
 
 
@@ -13,7 +13,7 @@ class DossierReporter(grok.View):
     and their important attributes.
     """
 
-    grok.context(IPloneSiteRoot)
+    grok.context(Interface)
     grok.name('dossier_report')
     grok.require('zope2.View')
 
