@@ -5,6 +5,9 @@ Changelog
 2.0b8 (unreleased)
 ------------------
 
+- Adjust translations used in the report view.
+  [phgross]
+
 - Added task_report view, which generates a excel export for the selected tasks.
   Issue #1038 Statistiken/Auswertungen
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1038
