@@ -5,6 +5,9 @@ Changelog
 2.0b23 (unreleased)
 -------------------
 
+- Fixed dossier report for the myDossiers view, activate the report view on every content type.
+  [phgross]
+
 - Issue #1249 Mail: Beim Importieren eines E-Mails muss die Spalte Ausgangsdatum leer bleiben
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1249/
   back to ftw.table helper function for readable_date
