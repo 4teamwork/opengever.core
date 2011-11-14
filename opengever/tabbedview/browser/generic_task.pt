@@ -19,15 +19,15 @@
 
 
     </tal:cond>
-    <div id="message_no_contents" tal:define="all_filter python: view.request.get('review_state') == 'false'" class="tabbedview_select" style="display:none" i18n:domain="ftw.tabbedview">
-        <span i18n:translate="" i18n:domain="opengever.tabbedview">State</span>
+    <div id="message_no_contents" tal:define="all_filter python: view.request.get('review_state') == 'false'" class="tabbedview_select" style="display:none">
+        <span i18n:translate="" >State</span>
         <a id="filter_all" tal:attributes="class python: all_filter and 'active'" href="javascript:void(0);" i18n:domain="opengever.tabbedview" i18n:translate="">All</a>
-        <a id="filter_open" tal:attributes="class python: not all_filter and 'active' " href="javascript:void(0);" i18n:domain="opengever.tabbedview" i18n:translate="">Open</a>
-    </div>
-
+        <a id="filter_open" tal:attributes="class python: not all_filter and 'active' " href="javascript:void(0);" i18n:translate="">Open</a>
     
     <p i18n:translate="label_no_contents">
         No contents
     </p>
+
+</div>
 
 </tal:translation>
