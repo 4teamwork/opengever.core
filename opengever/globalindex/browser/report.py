@@ -1,12 +1,30 @@
-from five import grok
 from Products.CMFPlone.interfaces import IPloneSiteRoot
-from opengever.globalindex import _
 from Products.statusmessages.interfaces import IStatusMessage
-from opengever.globalindex.interfaces import ITaskQuery
-from zope.component import getUtility
+from five import grok
+from opengever.base.reporter import StringTranslater, XLSReporter
 from opengever.base.reporter import format_datetime, get_date_style
 from opengever.base.reporter import readable_author
-from opengever.base.reporter import StringTranslater, XLSReporter
+from opengever.globalindex import _
+from opengever.globalindex.interfaces import ITaskQuery
+from opengever.task.util import getTaskTypeVocabulary
+from zope.app.component.hooks import getSite
+from zope.component import getUtility
+
+
+def task_type_helper(value):
+    """XLS Reporter helper method which returns the translated
+    value stored in the vdex files"""
+
+    if value == 'forwarding_task_type':
+        return _(u'forwarding_task_type', default=u'Forwarding')
+
+    voc = getTaskTypeVocabulary(getSite())
+    try:
+        term = voc.getTerm(value)
+    except LookupError:
+        return value
+    else:
+        return term.title
 
 
 class TaskReporter(grok.View):
@@ -47,7 +65,8 @@ class TaskReporter(grok.View):
              'transform':readable_author},
             {'id':'issuer', 'title':_('label_issuer'),
              'transform':readable_author},
-            {'id':'task_type', 'title':_('label_task_type')},
+            {'id':'task_type', 'title':_('label_task_type'),
+             'transform':task_type_helper},
             {'id':'sequence_number', 'title':_('label_sequence_number')},
             {'id':'client_id', 'title':_('label_client_id')},
         ]
