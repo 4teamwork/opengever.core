@@ -1,7 +1,6 @@
 from datetime import date as dt
 from ftw.mail.utils import get_header
 from opengever.ogds.base.interfaces import IContactInformation
-from opengever.tabbedview import _
 from plone.i18n.normalizer.interfaces import IIDNormalizer
 from plone.memoize import ram
 from Products.CMFCore.interfaces._tools import IMemberData
@@ -182,9 +181,11 @@ def boolean_helper(item, value):
     """Helper for displaying a boolean field in human readable form.
     """
 
-    return value and _(u'label_yes', default='Yes') or \
-                     _(u'label_no', default='No')
+    request = getRequest()
+    if value:
+        return translate('Yes', domain='plone', context=request)
 
+    return translate('No', domain='plone', context=request)
 
 def workflow_state(item, value):
     """Helper which translates the workflow_state in plone domain

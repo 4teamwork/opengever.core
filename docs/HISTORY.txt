@@ -5,6 +5,11 @@ Changelog
 2.0b110 (unreleased)
 --------------------
 
+- The Active column is now translated
+  Issue #1282 Fehler OGDS: Status wird englisch dargestellt (Yes, No)
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1282/
+  [ttschanz]
+
 - Adjust task-state-filter:
     - Updated Translation.
     - Hide Cancelled tasks.
