@@ -18,6 +18,10 @@ from zope.i18n import translate
 from zope.globalrequest import getRequest
 
 
+def tooltip_helper(item, value):
+    return '<span title="%s">%s</span>' % (value, value)
+
+
 def title_helper(item, value):
     return translate(item['action'].get('title'),
                     context=getRequest())
@@ -66,7 +70,8 @@ class JournalTab(grok.View, OpengeverTab, ListingView):
          'transform': helper.readable_date_time},
 
         {'column': 'comments',
-         'column_title': _(u'label_comments', default=u'Comments'),},
+         'column_title': _(u'label_comments', default=u'Comments'),
+         'transform': tooltip_helper},
         )
 
     def get_base_query(self):
@@ -132,4 +137,3 @@ class JournalTableSource(grok.MultiAdapter, BaseTableSource):
 
     def search_results(self, results):
         return results
-
