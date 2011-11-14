@@ -180,8 +180,12 @@ class MyTasks(GlobalTaskListingTab):
         'reset_tableconfiguration',
         ]
 
+    major_actions = [
+        'pdf_taskslisting',
+        ]
+
     def get_base_query(self):
-        """Returns the base search query (sqlalchemy)
+        """Returns the base search query (sqlalchemy)i
         """
 
         portal_state = self.context.unrestrictedTraverse(
