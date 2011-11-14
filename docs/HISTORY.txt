@@ -8,6 +8,12 @@ Changelog
 - Fixed bug in accessing request variable in object_paste.cpy
   [lgraf]
 
+- Overwrite the contentviews viewlet and remove the showEditableBorder condition:
+  in opengever the ftw-edit-bar should always be shown.
+  Issue #1178 OG-Spezifische Anpassungen in main_template
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1178/
+  [phgross]
+
 - Fixed redirect after copying items
   Issue #1284 Test Rot 2.2.: Kopieren von Dokumenten funktioniert nicht.
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1284/
