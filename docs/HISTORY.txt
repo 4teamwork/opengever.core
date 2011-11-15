@@ -5,6 +5,9 @@ Changelog
 2.0b19 (unreleased)
 -------------------
 
+- Avoid trying to traverse a Z3CFormValidation object in remote_request()
+  [lgraf]
+
 - Added LDAP source for `ldap_gds_public_externe` to be imported upon LDAP sync
   [lgraf]
 

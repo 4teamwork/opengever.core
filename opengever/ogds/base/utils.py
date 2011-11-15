@@ -8,7 +8,7 @@ from opengever.ogds.models.client import Client
 from plone.memoize import ram
 from plone.registry.interfaces import IRegistry
 from z3c.saconfig import named_scoped_session
-from zope.app.component.hooks import getSite
+from zope.app.component.hooks import getSite, setSite
 from zope.component import getUtility
 from zope.globalrequest import getRequest
 import json
@@ -174,11 +174,25 @@ def remote_request(target_client_id, viewname, path='', data={}, headers={}):
             if key in request.other:
                 del request.other[key]
 
+        # kss validation overrides getSite() hook with a bad object
+        # but we need getSite to work properly, so we fix it.
+        old_site = None
+        if site.__class__.__name__ == 'Z3CFormValidation':
+            old_site = site
+            fixed_site = getToolByName(site, 'portal_url').getPortalObject()
+            setSite(fixed_site)
+
+        site = getSite()
         if path:
             view = site.restrictedTraverse(os.path.join(path, viewname))
         else:
             view = site.restrictedTraverse(viewname)
         data = view()
+
+        if old_site:
+            # Restore the site if necessary
+            site = old_site
+            setSite(site)
 
         # restore the request
         request.form = ori_form
