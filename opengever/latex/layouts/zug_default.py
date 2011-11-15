@@ -81,7 +81,7 @@ class ZugDefaultLayout(object):
             }
         member = self.getOwnerMember()
         client = get_current_client()
-        vars['CreatorDirektion'] = 'Direktionsname?'
+        # vars['CreatorDirektion'] = 'Direktionsname?'
         vars['CreatorAmt'] = client.title
 
         if member and member.getProperty('email', False):
