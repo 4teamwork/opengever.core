@@ -5,6 +5,9 @@ Changelog
 2.0b19 (unreleased)
 -------------------
 
+- Added LDAP source for `ldap_gds_public_externe` to be imported upon LDAP sync
+  [lgraf]
+
 - Made is_user_in_inbox_group method safer, he can now handle request with a id from a not enabled client.
   [phgross]
 
