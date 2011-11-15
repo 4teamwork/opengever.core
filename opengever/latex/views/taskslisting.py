@@ -1,9 +1,10 @@
 from Products.CMFCore.utils import getToolByName
+from ftw.table import helper
+from opengever.latex.layouts.zug_landscape import ZugLandscapeLayout
 from opengever.latex.template import LatexTemplateFile
 from opengever.latex.views.baselisting import BasePDFListing
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.ogds.base.utils import get_current_client
-from ftw.table import helper
 from zope.component import getUtility
 
 
@@ -12,6 +13,11 @@ class TasksListingPDF(BasePDFListing):
     """
 
     template = LatexTemplateFile('taskslisting_content.tex')
+
+    def get_layout(self):
+        """Returns the layout to use.
+        """
+        return ZugLandscapeLayout(show_organisation=True)
 
     def render(self):
         return self.template(rows=self.get_listing_rows())
