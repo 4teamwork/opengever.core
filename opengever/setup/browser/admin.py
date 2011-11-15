@@ -1,8 +1,3 @@
-from Products.CMFPlone.browser.admin import AddPloneSite
-from Products.CMFPlone.factory import _DEFAULT_PROFILE
-from Products.CMFPlone.factory import addPloneSite
-from Products.CMFPlone.utils import getToolByName
-from Products.PluggableAuthService.interfaces.plugins import IPropertiesPlugin
 from datetime import datetime
 from opengever.mail.interfaces import IMailSettings
 from opengever.ogds.base.interfaces import IClientConfiguration
@@ -15,10 +10,16 @@ from opengever.ogds.models.user import User
 from opengever.setup.utils import get_ldap_configs, get_policy_configs, get_entry_points
 from plone.app.controlpanel.language import ILanguageSelectionSchema
 from plone.registry.interfaces import IRegistry
+from Products.CMFPlone.browser.admin import AddPloneSite
+from Products.CMFPlone.factory import addPloneSite
+from Products.CMFPlone.factory import _DEFAULT_PROFILE
+from Products.CMFPlone.utils import getToolByName
+from Products.PluggableAuthService.interfaces.plugins import IPropertiesPlugin
 from sqlalchemy.exc import NoReferencedTableError
 from zope.component import getAdapter
 from zope.component import getUtility
 from zope.publisher.browser import BrowserView
+import App.config
 import json
 import opengever.globalindex.model
 
@@ -78,6 +79,34 @@ class AddOpengeverClient(AddPloneSite):
         """Returns the policy defaults for use in javascript.
         """
         return 'var policy_configs = %s;' % json.dumps(list(get_policy_configs()), indent=2)
+
+    def get_ogds_config(self):
+        """Returns the DSN URL for the OGDS DB connection currently being
+        used.
+        """
+        session = create_session()
+        engine = session.bind
+        return "%s" % engine.url
+
+    def get_zodb_config(self):
+        """Returns information about the ZODB configuration.
+        """
+        db_info = ""
+        conf = App.config.getConfiguration()
+        main_db = [db for db in conf.databases if db.name == 'main'][0]
+        storage_cfg = main_db.config.storage.config
+        section_type = storage_cfg.getSectionType()
+
+        if section_type == 'relstorage':
+            adapter_cfg = storage_cfg.adapter.config
+            backend_type = adapter_cfg._matcher.type.name
+            dsn = adapter_cfg.dsn
+            user = adapter_cfg.user
+            db_info = "%s (%s): %s @%s" % (section_type, backend_type, user, dsn)
+        else:
+            # blobstorage
+            db_info = "%s" % section_type
+        return db_info
 
 
 class CreateOpengeverClient(BrowserView):

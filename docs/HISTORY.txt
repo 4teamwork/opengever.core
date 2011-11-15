@@ -5,6 +5,9 @@ Changelog
 2.0b9 (unreleased)
 ------------------
 
+- Displaying current OGDS and ZODB config on client setup screen
+  [lgraf]
+
 - Adjust the og-setup process:
   Automaticly set global Member role for the client users group.
   Issue #1269 Ordnungspositionen fuer alle Mitglieder eines Mandanten sichtbar machen

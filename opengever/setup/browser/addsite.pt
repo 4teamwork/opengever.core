@@ -75,6 +75,11 @@
       .policy_warnings li {
       color: red;
       }
+
+      .dbinfo {
+          font-size: 130%;
+          margin-top: 0;
+      }
     </style>
 
     <script type="text/javascript" language="javascript"
@@ -142,6 +147,16 @@
 
           <ul class="policy_warnings">
           </ul>
+        </div>
+
+        <div>
+            <strong>OGDS database configuration</strong>
+            <pre class="dbinfo" tal:content="view/get_ogds_config"></pre>
+        </div>
+
+        <div>
+            <strong>ZODB database configuration</strong>
+            <pre class="dbinfo" tal:content="view/get_zodb_config"></pre>
         </div>
 
         <div class="field">
