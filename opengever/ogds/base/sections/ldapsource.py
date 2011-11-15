@@ -22,23 +22,27 @@ class LDAPUserSourceSection(object):
 
         # get all the attributes from the ldap plugin
         ldap_name = self.options.get('ldap_name', 'ldap')
-        ldap_folder = self.context.acl_users.get(ldap_name).get('acl_users')
+        ldap_plugin = self.context.acl_users.get(ldap_name)
+        if not ldap_plugin:
+            self.logger.warn("Coulnd't find LDAP '%s', skipping..." % ldap_name)
+        else:
+            ldap_folder = ldap_plugin.get('acl_users')
 
-        #iterate over the users in the ldap_userfolder
-        for uid in ldap_folder.getUserIds():
-            try:
-                user = ldap_folder.getUserById(uid)
-            except UnicodeDecodeError:
-                print "The User with the uid %s can't be imported (UnicodeDecodeError)" % uid
+            #iterate over the users in the ldap_userfolder
+            for uid in ldap_folder.getUserIds():
+                try:
+                    user = ldap_folder.getUserById(uid)
+                except UnicodeDecodeError:
+                    print "The User with the uid %s can't be imported (UnicodeDecodeError)" % uid
 
-            temp = {}
+                temp = {}
 
-            for attr in ldap_folder.getSchemaDict():
-                v = user.getProperty(attr.get('ldap_name'))
-                if isinstance(v, list):
-                    v = v[0]
-                temp[attr.get('public_name')] = v
-            yield temp
+                for attr in ldap_folder.getSchemaDict():
+                    v = user.getProperty(attr.get('ldap_name'))
+                    if isinstance(v, list):
+                        v = v[0]
+                    temp[attr.get('public_name')] = v
+                yield temp
 
 
 class LDAPGroupSourceSection(LDAPUserSourceSection):
@@ -53,20 +57,24 @@ class LDAPGroupSourceSection(LDAPUserSourceSection):
 
         # get all the attributes from the ldap plugin
         ldap_name = self.options.get('ldap_name', 'ldap')
-        ldap_folder = self.context.acl_users.get(ldap_name).get('acl_users')
+        ldap_plugin = self.context.acl_users.get(ldap_name)
+        if not ldap_plugin:
+            self.logger.warn("Coulnd't find LDAP '%s', skipping..." % ldap_name)
+        else:
+            ldap_folder = self.context.acl_users.get(ldap_name).get('acl_users')
 
-        # #iterate over the groups in the ldap_userfolder
-        for group_data in ldap_folder.getGroups():
-            groupid = group_data[0]
-            try:
-                group = ldap_folder.getGroupById(groupid)
-            except UnicodeDecodeError:
-                print "The Group with the groupid %s can't be imported (UnicodeDecodeError)" % groupid
-        
-            temp = {}
-            if groupid.startswith('og_'):
-                temp['groupid'] = group.getId()
-                temp['title'] = group.getName()
-                temp['_users'] = group.getMemberIds()
+            # #iterate over the groups in the ldap_userfolder
+            for group_data in ldap_folder.getGroups():
+                groupid = group_data[0]
+                try:
+                    group = ldap_folder.getGroupById(groupid)
+                except UnicodeDecodeError:
+                    print "The Group with the groupid %s can't be imported (UnicodeDecodeError)" % groupid
 
-                yield temp
+                temp = {}
+                if groupid.startswith('og_'):
+                    temp['groupid'] = group.getId()
+                    temp['title'] = group.getName()
+                    temp['_users'] = group.getMemberIds()
+
+                    yield temp
