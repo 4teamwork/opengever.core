@@ -1,9 +1,13 @@
-from Products.CMFCore.utils import getToolByName
+from Acquisition import aq_inner, aq_parent
+from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
+from ftw.table import helper
+from opengever.base.interfaces import ISequenceNumber
+from opengever.dossier.behaviors.dossier import IDossierMarker
+from opengever.latex.layouts.zug_landscape import ZugLandscapeLayout
 from opengever.latex.template import LatexTemplateFile
 from opengever.latex.views.baselisting import BasePDFListing
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.ogds.base.utils import get_current_client
-from ftw.table import helper
 from zope.component import getUtility
 
 
@@ -12,6 +16,11 @@ class TasksListingPDF(BasePDFListing):
     """
 
     template = LatexTemplateFile('taskslisting_content.tex')
+
+    def get_layout(self):
+        """Returns the layout to use.
+        """
+        return ZugLandscapeLayout(show_organisation=True)
 
     def render(self):
         return self.template(rows=self.get_listing_rows())
@@ -26,6 +35,9 @@ class TasksListingPDF(BasePDFListing):
 
         # item may be brain or sqlalchemy task representation (globalindex)
         for item in self.get_selected_data():
+            dossier_seq_num, dossier_title = self.get_dossier_sequence_number_and_title(
+                item)
+
             data.append(self._prepare_table_row(
                     unicode(item.sequence_number).encode('utf-8'),
                     helper.readable_date(item, item.deadline),
@@ -33,8 +45,8 @@ class TasksListingPDF(BasePDFListing):
                             ).encode('utf-8'),
                     '%s / %s' % (client.title,
                                  info.describe(item.issuer)),
-                    unicode(self.get_dossier_sequence_number(item)
-                            ).encode('utf-8'),
+                    dossier_seq_num,
+                    dossier_title,
                     unicode(getattr(item, 'reference',
                                 getattr(item, 'reference_number', ''))
                             ).encode('utf-8'),
@@ -42,37 +54,36 @@ class TasksListingPDF(BasePDFListing):
 
         return ''.join(data)
 
-    def get_dossier_sequence_number(self, item):
-        """Searches the first parental dossier relative to the task
-        (breadcrumbs like) and returns its sequence number.
-
-        A item my be the brain of the task or the sqlalchemy task
-        representation.
+    def get_dossier_sequence_number_and_title(self, item):
+        """Returns the sequence number and title of the parent dossier of the item.
+        `item` may be a brain or a sqlalchemy task object.
         """
-
-        dossier_marker = 'opengever.dossier.behaviors.dossier.IDossierMarker'
 
         try:
             # brain?
-            path = item.getPath()
+            item.getPath()
         except AttributeError:
-            # sqlalchemy ! -> the information is stored on the item already
-            return item.dossier_sequence_number
+            is_brain = False
         else:
-            path = path.split('/')[:-1]
+            is_brain = True
 
-        portal = getToolByName(self.context, 'portal_url').getPortalObject()
-        portal_path = '/'.join(portal.getPhysicalPath())
-        catalog = getToolByName(self.context, 'portal_catalog')
+        if is_brain:
+            dossier = item.getObject()
 
-        while path and '/'.join(path) != portal_path:
-            brains = catalog({'path': {'query': '/'.join(path),
-                                       'depth': 0},
-                              'object_provides': dossier_marker})
+            while not IDossierMarker.providedBy(dossier):
+                if IPloneSiteRoot.providedBy(dossier):
+                    return ('', '')
+                dossier = aq_parent(aq_inner(dossier))
 
-            if len(brains):
-                return brains[0].sequence_number
-            else:
-                path = path[:-1]
+            sequence_number = getUtility(ISequenceNumber).get_number(dossier)
+            title = dossier.Title()
 
-        return ''
+        else:
+            # sqlalchemy task object
+            sequence_number = item.dossier_sequence_number
+            title = item.breadcrumb_title.split(' > ')[-2]
+
+        if isinstance(title, unicode):
+            title = title.encode('utf-8')
+
+        return str(sequence_number), title

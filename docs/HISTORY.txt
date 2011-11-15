@@ -5,6 +5,11 @@ Changelog
 2.0b6 (unreleased)
 ------------------
 
+- Added new latex template for the tasklisting including features:landscape format, dossier title, customzations
+  Issue #1174 Feedback aus Pilotphase: Vorlage "Aufgabenverzeichnis" ueberarbeiten
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1174
+  [jbaumann]
+
 - Issue #1249 Mail: Beim Importieren eines E-Mails muss die Spalte Ausgangsdatum leer bleiben
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1249
   back to ftw.table helper function for readable_date

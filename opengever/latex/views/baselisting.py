@@ -16,8 +16,13 @@ class BasePDFListing(AsPDFView):
         if 'default_book_settings' not in kwargs:
             kwargs['default_book_settings'] = False
         if 'pre_compiler' not in kwargs:
-            kwargs['pre_compiler'] = ZugDefaultLayout(show_contact=False)
+            kwargs['pre_compiler'] = self.get_layout()
         return AsPDFView.__call__(self, *args, **kwargs)
+
+    def get_layout(self):
+        """Returns the layout to use.
+        """
+        return ZugDefaultLayout(show_contact=False)
 
     def _generate_latex(self, *a, **kw):
         """We do not render the context but a catalog query.
