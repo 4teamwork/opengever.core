@@ -5,6 +5,10 @@ Changelog
 2.0b6 (unreleased)
 ------------------
 
+- Made get_dossier_sequence_number_and_title method safer:
+  added fallback for sqlalchemy objects without a breadcrumb_title
+  [phgross]
+
 - Added new latex template for the tasklisting including features:landscape format, dossier title, customzations
   Issue #1174 Feedback aus Pilotphase: Vorlage "Aufgabenverzeichnis" ueberarbeiten
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1174

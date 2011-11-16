@@ -81,7 +81,10 @@ class TasksListingPDF(BasePDFListing):
         else:
             # sqlalchemy task object
             sequence_number = item.dossier_sequence_number
-            title = item.breadcrumb_title.split(' > ')[-2]
+            if item.breadcrumb_title:
+                title = item.breadcrumb_title.split(' > ')[-2]
+            else:
+                title = u''
 
         if isinstance(title, unicode):
             title = title.encode('utf-8')
