@@ -4,6 +4,7 @@ from opengever.base.interfaces import IUniqueNumberUtility
 from opengever.base.interfaces import IUniqueNumberGenerator
 from zope.component import getAdapter
 from Products.CMFPlone.interfaces import IPloneSiteRoot
+from Products.CMFCore.utils import getToolByName
 
 COUNTER_START = 1
 COUNTER_ADDITION_VALUE = 1
@@ -28,8 +29,9 @@ class UniqueNumberUtility(grok.GlobalUtility):
 
         ann = IAnnotations(obj)
         if key not in ann.keys():
+            portal_url = getToolByName(obj, 'portal_url')
             generator = getAdapter(
-                obj.portal_url.getPortalObject(), IUniqueNumberGenerator)
+                portal_url.getPortalObject(), IUniqueNumberGenerator)
             value = generator.generate(key)
             ann[key] = value
         return ann.get(key)

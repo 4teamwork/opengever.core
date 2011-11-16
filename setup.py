@@ -12,6 +12,7 @@ tests_require = [
     'opengever.contact',
     'plone.app.testing',
     'plone.mocktestcase',
+    'ftw.testing',
     ]
 
 setup(name='opengever.base',

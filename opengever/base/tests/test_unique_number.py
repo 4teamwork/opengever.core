@@ -1,13 +1,12 @@
 from Products.CMFPlone.interfaces import IPloneSiteRoot
+from ftw.testing import MockTestCase
 from grokcore.component.testing import grok
 from opengever.base.interfaces import IUniqueNumberGenerator
 from opengever.base.interfaces import IUniqueNumberUtility
-from plone.mocktestcase import MockTestCase
 from zope.annotation.interfaces import IAnnotations
 from zope.component import getAdapter
 from zope.component import getUtility
 from zope.interface import Interface, directlyProvides
-
 
 class TestUniqueNumberGenerator(MockTestCase):
 
@@ -42,6 +41,11 @@ class TestUniqueNumberGenerator(MockTestCase):
         # portal
         portal = self.create_dummy()
         directlyProvides(portal, IPloneSiteRoot)
+
+        portal_url_tool = self.stub()
+        self.mock_tool(portal_url_tool, 'portal_url')
+        self.expect(
+            portal_url_tool.getPortalObject()).result(portal)
 
         # setup annotations
         annotation_factory = self.mocker.mock()
@@ -81,7 +85,6 @@ class TestUniqueNumberGenerator(MockTestCase):
         self.assertEquals(utility.get_number(obj2, foo='foo', bar='bar'), 2)
         self.assertEquals(utility.get_number(obj2, foo='foo', baz='bar'), 1)
         self.assertEquals(utility.get_number(obj, foo='foo', baz='bar'), 2)
-
 
         self.assertEquals(utility.get_number(obj2, month=('2011', 5)), 1)
         self.assertEquals(utility.get_number(obj2, month=('2011', 5)), 1)
