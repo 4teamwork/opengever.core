@@ -2,8 +2,8 @@ Changelog
 =========
 
 
-2.0a6
------
+2.0a6 (unreleased)
+------------------
 
 - Added integratoin and unittests
   [eschmutz]
@@ -20,19 +20,19 @@ Changelog
   [phgross]
 
 
-2.0a5
------
+2.0a5 (2011-07-13)
+------------------
 
-* Fixed Markup
+- Fixed Markup
   [ttschanz]
 
-* added sprites css class for sharing-tab and sharing view
+- added sprites css class for sharing-tab and sharing view
   [30.05.2011, elio.schmutz]
 
 2.0a4
 -----
 
-* Issue #723 Info/Sharing-Tab zeigt nicht alle Rollen
+- Issue #723 Info/Sharing-Tab zeigt nicht alle Rollen
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/723
   [jbaumann]
 
@@ -40,11 +40,11 @@ Changelog
 2.0a3
 -----
 
-* Issue #746 "Filtern" ausblenden auf Reiter "Info"
+- Issue #746 "Filtern" ausblenden auf Reiter "Info"
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/746
   [jbaumann]
 
-* Info tab: also show local roles set on the direct context.
+- Info tab: also show local roles set on the direct context.
   [jbaumann]
 
 
