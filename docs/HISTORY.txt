@@ -2,14 +2,14 @@ Changelog
 =========
 
 
-2.0a4
------
+2.0a4 (unreleased)
+------------------
 
-* added test-buildout for plone 4.1
+- added test-buildout for plone 4.1
   [eschmutz]
 
-2.0a3
------
+2.0a3 (2011-08-24)
+------------------
 
 
 2.0a2
@@ -27,7 +27,7 @@ Changelog
 1.0a1
 -----
 
-* updated metadata / changed target release to 1.0a1
+- updated metadata / changed target release to 1.0a1
   [05.01.2010, jbaumann]
-  
-* Initial release
+
+- Initial release
