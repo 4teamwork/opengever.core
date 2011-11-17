@@ -2,8 +2,8 @@ Changelog
 =========
 
 
-2.0b10 (unreleased)
--------------------
+2.0 (2011-11-17)
+----------------
 
 - Final Release.
   [phgross]
