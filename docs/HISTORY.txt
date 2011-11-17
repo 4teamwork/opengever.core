@@ -2,8 +2,8 @@ Changelog
 =========
 
 
-2.0b110 (unreleased)
---------------------
+2.0 (2011-11-17)
+----------------
 
 - The Active column is now translated
   Issue #1282 Fehler OGDS: Status wird englisch dargestellt (Yes, No)
