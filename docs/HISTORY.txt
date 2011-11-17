@@ -15,7 +15,7 @@ Changelog
 2.0b7
 -----
 
-* Registering custom import steps in ZCML instead of import_steps.xml (deprecated)
+2.0 (2011-11-17)
   [lgraf]
 
 
