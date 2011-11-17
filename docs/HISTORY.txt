@@ -2,8 +2,8 @@ Changelog
 =========
 
 
-2.0c8 (unreleased)
-------------------
+2.0 (2011-11-17)
+----------------
 
 - Issue #1249 Mail: Beim Importieren eines E-Mails muss die Spalte Ausgangsdatum leer bleiben
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1249/
