@@ -5,7 +5,8 @@ Changelog
 2.0b13 (unreleased)
 -------------------
 
-- Nothing changed yet.
+- Final release
+  [phgross]
 
 
 2.0b12 (2011-10-13)
