@@ -2,8 +2,8 @@ Changelog
 =========
 
 
-2.0b23 (unreleased)
--------------------
+2.0 (2011-11-17)
+----------------
 
 - Fixed dossier report for the myDossiers view, activate the report view on every content type.
   [phgross]
