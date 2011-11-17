@@ -5,7 +5,8 @@ Changelog
 2.1 (unreleased)
 ----------------
 
-- Nothing changed yet.
+- Fixed changelog
+  [lgraf]
 
 
 2.0 (2011-11-17)
@@ -159,7 +160,7 @@ Changelog
 ------
 
 - When updating `containing_subdossier` index also update objects not
-  *directly- contained in the subdossier.
+  *directly* contained in the subdossier.
   [lgraf]
 
 - Fixed `containing_subdossier` index to also work for objects not *directly*
