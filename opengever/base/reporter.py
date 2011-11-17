@@ -28,7 +28,7 @@ class ReportingController(grok.View):
 def format_datetime(date):
     """helper method for formatting a dattime in to string"""
     if date:
-        return date.strftime('%d.%m.%Y %H:%M')
+        return date.strftime('%d.%m.%Y')
     return None
 
 
@@ -67,7 +67,7 @@ class StringTranslater(object):
         return None
 
 
-def get_date_style(format='D.M.YY h:mm'):
+def get_date_style(format='D.M.YY'):
     """ Set up a date format style to use in the spreadsheet and return it."""
     excel_date_fmt = format
     style = XFStyle()
