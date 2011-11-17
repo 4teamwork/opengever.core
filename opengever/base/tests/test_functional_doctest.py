@@ -10,7 +10,8 @@ TESTFILES = (
     'creator.txt',
     'redirector.txt',
     'reference_adapter.txt',
-    'sequence.txt'
+    'sequence.txt',
+    'viewlets.txt',
     )
 
 OPTIONFLAGS = (doctest.NORMALIZE_WHITESPACE |

@@ -5,6 +5,11 @@ Changelog
 2.0b19 (unreleased)
 -------------------
 
+- Fixed Unicode error in file download viewlet and added tests for it.
+  Issue #1302 Fehler in der download_file_version view
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1302/
+  [lgraf]
+
 - Changed standard datetime format for xlsreport helper.
   Issue #1038 Statistiken/Auswertungen
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1038

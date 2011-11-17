@@ -26,5 +26,6 @@ class DownloadFileVersion(grok.View):
         response.setHeader('Content-Type', old_file.contentType)
         response.setHeader('Content-Length', old_file.getSize())
         response.setHeader('Content-Disposition',
-                           'attachment;filename="%s"' % old_file.filename)
+                           'attachment;filename="%s"' % old_file.filename.encode('utf-8'))
+
         return old_file.data
