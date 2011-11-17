@@ -3,4 +3,5 @@
     <column value="reference_number"/>
     <column value="filing_no"/>
     <column value="containing_subdossier"/>
+    <column value="containing_dossier"/>
 </object>

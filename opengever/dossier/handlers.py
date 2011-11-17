@@ -24,10 +24,11 @@ def deactivate_subdossiers(dossier, event):
         for subdossier in subdossiers:
             wft.doActionFor(subdossier.getObject(), 'dossier-transition-deactivate')
 
+
 @grok.subscribe(IDossierMarker, IObjectModifiedEvent)
 def reindex_contained_objects(dossier, event):
     """When a subdossier is modified, we update the ``containing_subdossier``
-    index of all contained objects (documents, mails and tasks) so they don't 
+    index of all contained objects (documents, mails and tasks) so they don't
     show an outdated title in the ``subdossier`` column
     """
     catalog = getToolByName(dossier, 'portal_catalog')
@@ -40,3 +41,16 @@ def reindex_contained_objects(dossier, event):
                                        'ftw.mail.mail'])
         for obj in objects:
             obj.getObject().reindexObject(idxs=['containing_subdossier'])
+
+
+@grok.subscribe(IDossierMarker, IObjectModifiedEvent)
+def reindex_containing_dossier(dossier, event):
+    if not IDossierMarker.providedBy(aq_parent(aq_inner(dossier))):
+        for descr in event.descriptions:
+            for attr in descr.attributes:
+                if attr == 'IOpenGeverBase.title':
+                    for brains in dossier.portal_catalog(
+                        path='/'.join(dossier.getPhysicalPath())):
+
+                        brains.getObject().reindexObject(
+                            idxs=['containing_dossier'])
