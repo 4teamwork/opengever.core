@@ -14,6 +14,7 @@ Changelog
     - Updated Translation.
     - Hide Cancelled tasks.
     - Fixed Bug which made Tasks unaccessible when all Tasks arn't active anymore.
+
   Issue #1070 Abgeschlossene Aufgaben nicht immer einblenden
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1070
   [ttschanz]
