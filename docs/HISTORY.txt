@@ -2,8 +2,8 @@ Changelog
 =========
 
 
-2.0a6 (unreleased)
-------------------
+2.0 (2011-11-17)
+----------------
 
 - Added integratoin and unittests
   [eschmutz]
