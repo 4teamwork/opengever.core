@@ -2,8 +2,8 @@ Changelog
 =========
 
 
-2.0b19 (unreleased)
--------------------
+2.0 (2011-11-17)
+----------------
 
 - Made ldapsource section behave more robust if ldap plugin can't be found
   [lgraf]
