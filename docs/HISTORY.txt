@@ -2,8 +2,8 @@ Changelog
 =========
 
 
-2.0b11 (unreleased)
--------------------
+2.0 (2011-11-17)
+----------------
 
 - Made the filing number search more comfortable:
   use the new ZCTextIndex 'searchable_filing_no'.
