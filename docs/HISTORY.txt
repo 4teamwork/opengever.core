@@ -2,8 +2,8 @@ Changelog
 =========
 
 
-2.0b19 (unreleased)
--------------------
+2.0 (2011-11-17)
+----------------
 
 - Implement default value generator(actual date) for the document_date field.
   Issue #1255 Vorschlag Tagesdatum bei Dokumenten
