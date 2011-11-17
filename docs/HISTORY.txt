@@ -2,8 +2,8 @@ Changelog
 =========
 
 
-2.0a12 (unreleased)
--------------------
+2.0 (2011-11-17)
+----------------
 
 - Add tooltip_helper which show the complete comment of a journal entry, in a tooltip.
   [phgross]
