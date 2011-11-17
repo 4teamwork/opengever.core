@@ -2,8 +2,8 @@ Changelog
 =========
 
 
-2.0b19 (unreleased)
--------------------
+2.0 (2011-11-17)
+----------------
 
 - Fixed Unicode error in file download viewlet and added tests for it.
   Issue #1302 Fehler in der download_file_version view
