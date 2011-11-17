@@ -2,8 +2,8 @@ Changelog
 =========
 
 
-2.0b8 (unreleased)
-------------------
+2.0 (2011-11-17)
+----------------
 
 - Add task_type_helper, which return the translated value to the task reporting view.
   [phgross]
