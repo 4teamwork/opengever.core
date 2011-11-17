@@ -2,8 +2,8 @@ Changelog
 =========
 
 
-2.0b6 (unreleased)
-------------------
+2.0 (2011-11-17)
+----------------
 
 - Made get_dossier_sequence_number_and_title method safer:
   added fallback for sqlalchemy objects without a breadcrumb_title
