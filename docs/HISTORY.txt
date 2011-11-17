@@ -2,8 +2,8 @@ Changelog
 =========
 
 
-2.0a11 (unreleased)
--------------------
+2.0 (2011-11-17)
+----------------
 
 - Adjust the repository workflow: Repositoryfolders should be visible for users with the Member role.
   Issue #1269 Ordnungspositionen fuer alle Mitglieder eines Mandanten sichtbar machen
