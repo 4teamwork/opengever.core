@@ -5,7 +5,8 @@ Changelog
 2.1 (unreleased)
 ----------------
 
-- Nothing changed yet.
+- Removed `extedit` action from `portal_tabs` category
+  [lgraf]
 
 
 2.0 (2011-11-17)

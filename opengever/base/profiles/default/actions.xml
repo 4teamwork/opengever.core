@@ -216,23 +216,6 @@
             <property name="visible">True</property>
         </object>
 
-        <object name="extedit" meta_type="CMF Action" i18n:domain="plone">
-            <property name="title"
-                      i18n:translate="">Edit with external application</property>
-            <property name="description" i18n:translate=""></property>
-            <property name="url_expr">string:$object_url/external_edit</property>
-            <property name="link_target"></property>
-            <property name="icon_expr"></property>
-            <property name="available_expr">object/externalEditorEnabled</property>
-            <property name="permissions">
-                <element value="Modify portal content"/>
-            </property>
-            <property name="visible">False</property>
-        </object>
-
-
-
-
     </object>
 
     <object name="site_actions" meta_type="CMF Action Category">
