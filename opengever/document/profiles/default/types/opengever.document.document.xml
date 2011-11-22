@@ -72,17 +72,6 @@
           condition_expr="" visible="False">
   </action>
 
-  <!-- external editor -->
-  <action
-        action_id="extedit"
-        visible="False"
-        title="Edit with external application"
-        url_expr="string:$object_url/external_edit"
-        condition_expr="object/@@external_editing_allowed"
-        category="object">
-    <permission value="Modify portal content"/>
-  </action>
-
   <action i18n:domain="opengever.dossier" title="Sharing" action_id="sharing" category="tabbedview-tabs"
           condition_expr="" url_expr="string:#"
           visible="True">
