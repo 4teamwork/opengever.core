@@ -5,6 +5,9 @@ Changelog
 2.1 (unreleased)
 ----------------
 
+- Added testcase for checking there's an initial version after a document got copied.
+  [lgraf]
+
 - Removed `extedit` action from opengever.document.document object actions
   [lgraf]
 

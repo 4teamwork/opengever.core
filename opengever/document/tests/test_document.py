@@ -90,6 +90,25 @@ class TestDocumentIntegration(unittest.TestCase):
         self.assertTrue(
             portal['copy_of_document1'].title == u'copy of Testdocument')
 
+    def test_copying_and_versions(self):
+        portal = self.layer['portal']
+        pr = portal.portal_repository
+        orig_doc = createContentInContainer(portal, 'opengever.document.document',
+            checkConstraints=True, preserved_as_paper=False,
+            title="Testdocument")
+
+        cb = portal.manage_copyObjects(orig_doc.id)
+        portal.manage_pasteObjects(cb)
+
+        new_doc = portal['copy_of_document-1']
+        self.assertTrue(new_doc.title == u'copy of Testdocument')
+
+        new_history = pr.getHistory(new_doc)
+        # The new history should have an initial version,
+        # but existing versions shouldn't be copied
+        self.assertEquals(len(new_history), 1)
+
+
     def test_default_values(self):
         portal = self.layer['portal']
         monk_file = NamedBlobFile('bla bla', filename=u'test.txt')
