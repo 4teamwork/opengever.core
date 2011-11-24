@@ -3,7 +3,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2011-10-07 10:05+0000\n"
+"POT-Creation-Date: 2011-11-24 10:06+0000\n"
 "PO-Revision-Date: 2009-01-01 10:00+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: Jonas Baumann <j.baumann@4teamwork.ch>\n"
@@ -210,6 +210,11 @@ msgstr "Beschreibung"
 #: ./opengever/base/viewlets/history.pt:12
 msgid "label_history"
 msgstr "Versionen"
+
+#. Default: "Initial version (document copied)"
+#: ./opengever/base/subscribers.py:16
+msgid "label_initial_version_copied"
+msgstr "Dokument kopiert (Initialversion)"
 
 #. Default: "Privacy layer"
 #: ./opengever/base/behaviors/classification.py:38

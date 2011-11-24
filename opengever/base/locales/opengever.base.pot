@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2011-10-07 10:05+0000\n"
+"POT-Creation-Date: 2011-11-24 10:06+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -208,6 +208,11 @@ msgstr ""
 #. Default: "History"
 #: ./opengever/base/viewlets/history.pt:12
 msgid "label_history"
+msgstr ""
+
+#. Default: "Initial version (document copied)"
+#: ./opengever/base/subscribers.py:16
+msgid "label_initial_version_copied"
 msgstr ""
 
 #. Default: "Privacy layer"

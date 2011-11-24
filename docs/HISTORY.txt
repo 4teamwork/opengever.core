@@ -5,6 +5,11 @@ Changelog
 2.1 (unreleased)
 ----------------
 
+- Made sure an initial version gets created when an object is copied and pasted
+  Issue #1306 History Viewlet erscheint nicht immer, Initialversion wird nicht immer erstellt.
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1306/
+  [lgraf]
+
 - Removed `extedit` action from `portal_tabs` category
   [lgraf]
 
