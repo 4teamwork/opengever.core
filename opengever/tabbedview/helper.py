@@ -254,3 +254,12 @@ def external_edit_link(item, value):
         item.id,
         getSite().translate('checkout_and_edit',domain="opengever.tabbedview"),
         url)
+
+
+def translated_string(domain='plone'):
+    domain = domain
+    def _translate(item, value):
+        import pdb; pdb.set_trace()
+        return translate(
+            value, context=getRequest(), domain=domain)
+    return _translate
