@@ -30,12 +30,13 @@ from zope.component import getAdapter, getUtility
 from zope.interface import Interface, alsoProvides
 from zope.interface import invariant, Invalid
 import logging
+from ftw.tabbedview.interfaces import ITabbedviewUploadable
 
 
 LOG = logging.getLogger('opengever.dossier')
 
 
-class IDossierMarker(Interface, ISendableDocsContainer):
+class IDossierMarker(Interface, ISendableDocsContainer, ITabbedviewUploadable):
     """ Marker Interface for dossiers.
     """
 
