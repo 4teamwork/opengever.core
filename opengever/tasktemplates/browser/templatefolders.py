@@ -1,5 +1,5 @@
 from ftw.table import helper
-from opengever.tabbedview.helper import linked
+from opengever.tabbedview.helper import linked, translated_string
 from opengever.tabbedview.browser.tabs import OpengeverCatalogListingTab
 from five import grok
 from opengever.tasktemplates import _
@@ -20,7 +20,7 @@ class TaskTemplateFoldersTab(OpengeverCatalogListingTab):
          'transform': linked},
         {'column': 'review_state',
          'column_title': _(u'label_review_state', default=u'Review state'),
-          'transform': helper.translated_string()},
+          'transform': translated_string()},
         )
 
     types = ['opengever.tasktemplates.tasktemplatefolder', ]

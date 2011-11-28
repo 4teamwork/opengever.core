@@ -5,7 +5,10 @@ Changelog
 2.0.1 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Use the translated_string helper from og.tabbedview wich really translate the string.
+  Issue #1268 Falsches Icon bei Aufgabe unter Standardablauf
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1268/
+  [phgross]
 
 
 2.0 (2011-11-17)
