@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-2.0.1 (unreleased)
+2.0.1 (2011-11-29)
 ------------------
 
 - Implements a dynamic translated_string helper, wich also translate strings from the plone domain
