@@ -7,7 +7,8 @@ from opengever.ogds.models import BASE
 from opengever.ogds.models.client import Client
 from opengever.ogds.models.group import Group
 from opengever.ogds.models.user import User
-from opengever.setup.utils import get_ldap_configs, get_policy_configs, get_entry_points
+from opengever.setup.utils import get_entry_points
+from opengever.setup.utils import get_ldap_configs, get_policy_configs
 from plone.app.controlpanel.language import ILanguageSelectionSchema
 from plone.registry.interfaces import IRegistry
 from Products.CMFPlone.browser.admin import AddPloneSite
@@ -37,6 +38,7 @@ EXTENSION_PROFILES = (
     )
 
 ADMIN_USER_ID = 'ogadmin'
+
 
 class AddOpengeverClient(AddPloneSite):
 
@@ -78,7 +80,8 @@ class AddOpengeverClient(AddPloneSite):
     def get_policy_defaults(self):
         """Returns the policy defaults for use in javascript.
         """
-        return 'var policy_configs = %s;' % json.dumps(list(get_policy_configs()), indent=2)
+        return 'var policy_configs = %s;' % json.dumps(
+            list(get_policy_configs()), indent=2)
 
     def get_ogds_config(self):
         """Returns the DSN URL for the OGDS DB connection currently being
@@ -116,7 +119,7 @@ class CreateOpengeverClient(BrowserView):
         session = create_session()
 
         policy_id = form['policy']
-        config = filter(lambda cfg:cfg['id'] == policy_id,
+        config = filter(lambda cfg: cfg['id'] == policy_id,
                         get_policy_configs())[0]
 
         # drop sql tables
@@ -172,7 +175,9 @@ class CreateOpengeverClient(BrowserView):
             print '===== SYNC LDAP ===='
 
             #user import
-            class Object(object): pass
+            class Object(object):
+                pass
+
             options = Object()
             options.config = u'opengever.ogds.base.user-import'
             options.site_root = '/' + form['client_id']
@@ -192,8 +197,10 @@ class CreateOpengeverClient(BrowserView):
                 session.delete(clients[0])
 
             # groups must exist
-            users_group = session.query(Group).filter_by(groupid=form['group'])[0]
-            inbox_group = session.query(Group).filter_by(groupid=form['inbox_group'])[0]
+            users_group = session.query(Group).filter_by(
+                groupid=form['group'])[0]
+            inbox_group = session.query(Group).filter_by(
+                groupid=form['inbox_group'])[0]
 
             active = bool(form.get('active', False))
 
@@ -219,10 +226,13 @@ class CreateOpengeverClient(BrowserView):
                         lastname='Administrator', active=True)
             session.add(og_admin_user)
         else:
-            og_admin_user = session.query(User).filter_by(userid=ADMIN_USER_ID).first()
+            og_admin_user = session.query(User).filter_by(
+                userid=ADMIN_USER_ID).first()
             og_admin_user.active = True
 
-        users_group = session.query(Group).filter_by(groupid=form['group']).first()
+        users_group = session.query(Group).filter_by(
+            groupid=form['group']).first()
+
         if og_admin_user not in users_group.users:
             users_group.users.append(og_admin_user)
 
@@ -240,7 +250,6 @@ class CreateOpengeverClient(BrowserView):
         site.manage_changeProperties({'email_from_address': mail_from_address,
                                     'email_from_name': client_id})
 
-
         # set global member role for the client users group
         site.acl_users.portal_role_manager.assignRoleToPrincipal(
             'Member', form['group'])
@@ -254,7 +263,6 @@ class CreateOpengeverClient(BrowserView):
         if repository_root:
             self.request.set('repository_root', repository_root)
 
-
         # import the defaul generic setup profiles if needed
         stool = getToolByName(site, 'portal_setup')
         for profile in config.get('additional_profiles', ()):
@@ -262,7 +270,6 @@ class CreateOpengeverClient(BrowserView):
 
         # set the site title
         site.manage_changeProperties(title=form['title'])
-
 
         # REALLY set the language - the plone4 addPloneSite is really
         # buggy with languages.
@@ -283,7 +290,6 @@ class CreateOpengeverClient(BrowserView):
             except NoReferencedTableError:
                 pass
 
-
     def get_mail_from_address(self):
         email_from_address = 'noreply@opengever.4teamwork.ch'
         for ep in get_entry_points('email_from_address'):
@@ -292,4 +298,3 @@ class CreateOpengeverClient(BrowserView):
                 email_from_address = getattr(module, 'EMAIL_FROM_ADDRESS')
 
         return email_from_address
-
