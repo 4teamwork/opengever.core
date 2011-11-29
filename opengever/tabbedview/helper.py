@@ -259,7 +259,6 @@ def external_edit_link(item, value):
 def translated_string(domain='plone'):
     domain = domain
     def _translate(item, value):
-        import pdb; pdb.set_trace()
         return translate(
             value, context=getRequest(), domain=domain)
     return _translate
