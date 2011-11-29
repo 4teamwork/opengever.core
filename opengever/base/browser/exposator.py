@@ -1,10 +1,7 @@
-from five import grok
-from opengever.ogds.base.interfaces import IContactInformation
-from plone.app.layout.viewlets.interfaces import IPortalHeader
 from Products.CMFCore.utils import getToolByName
-
+from five import grok
+from plone.app.layout.viewlets.interfaces import IPortalHeader
 from zope.interface import Interface
-from zope.component import getUtility
 
 
 class ExposatorViewlet(grok.Viewlet):
@@ -30,11 +27,9 @@ jq(function() {
         html = []
         member = getToolByName(
             self.context, 'portal_membership').getAuthenticatedMember()
-        userid = member.getId()
 
-        # check if it's a home_client, when not show expose
-        info = getUtility(IContactInformation)
-        if userid != u'zopemaster' and \
-                not info.is_client_assigned(userid=userid):
+        # check if the users isn't a Member or a Manger
+        # then display the expose
+        if not member.has_role('Member') and not member.has_role('Manager'):
             html.append(ExposatorViewlet.REMOTE_CLIENT_JS)
         return ''.join(html)
