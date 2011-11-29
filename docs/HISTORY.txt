@@ -5,7 +5,10 @@ Changelog
 2.0.1 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Fix issuer client in task listing PDF.
+  Issue #1174 Feedback aus Pilotphase: Vorlage "Aufgabenverzeichnis" ueberarbeiten
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1174
+  [jone]
 
 
 2.0 (2011-11-17)

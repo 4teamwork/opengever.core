@@ -7,12 +7,12 @@ from opengever.latex.layouts.zug_landscape import ZugLandscapeLayout
 from opengever.latex.template import LatexTemplateFile
 from opengever.latex.views.baselisting import BasePDFListing
 from opengever.ogds.base.interfaces import IContactInformation
-from opengever.ogds.base.utils import get_current_client
 from zope.component import getUtility
 
 
 class TasksListingPDF(BasePDFListing):
-    """Create a PDF listing of all tasks, which were selected in a tabbed view.
+    """Create a PDF listing of all tasks, which were selected in a tabbed
+    view.
     """
 
     template = LatexTemplateFile('taskslisting_content.tex')
@@ -31,32 +31,33 @@ class TasksListingPDF(BasePDFListing):
 
         data = []
         info = getUtility(IContactInformation)
-        client = get_current_client()
 
         # item may be brain or sqlalchemy task representation (globalindex)
         for item in self.get_selected_data():
-            dossier_seq_num, dossier_title = self.get_dossier_sequence_number_and_title(
-                item)
+            dossier_seq_num, dossier_title = \
+                self.get_dossier_sequence_number_and_title(item)
+
+            issuer_client_title = info.get_client_by_id(item.client_id).title
 
             data.append(self._prepare_table_row(
                     unicode(item.sequence_number).encode('utf-8'),
                     helper.readable_date(item, item.deadline),
                     unicode(getattr(item, 'Title',getattr(item, 'title', ''))
                             ).encode('utf-8'),
-                    '%s / %s' % (client.title,
+                    '%s / %s' % (issuer_client_title,
                                  info.describe(item.issuer)),
                     dossier_seq_num,
                     dossier_title,
                     unicode(getattr(item, 'reference',
-                                getattr(item, 'reference_number', ''))
+                                    getattr(item, 'reference_number', ''))
                             ).encode('utf-8'),
                     ))
 
         return ''.join(data)
 
     def get_dossier_sequence_number_and_title(self, item):
-        """Returns the sequence number and title of the parent dossier of the item.
-        `item` may be a brain or a sqlalchemy task object.
+        """Returns the sequence number and title of the parent dossier of
+        the item. `item` may be a brain or a sqlalchemy task object.
         """
 
         try:
