@@ -2,8 +2,8 @@ Changelog
 =========
 
 
-2.1 (unreleased)
-----------------
+2.0.1 (2011-11-29)
+------------------
 
 - Added testcase for checking there's an initial version after a document got copied.
   [lgraf]
