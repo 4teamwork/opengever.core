@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-2.0.2 (unreleased)
+2.0.2 (2011-11-29)
 ------------------
 
 - Fixed translated_string helper method.
