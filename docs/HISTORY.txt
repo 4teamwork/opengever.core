@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-2.0.1 (unreleased)
+2.0.1 (2011-11-29)
 ------------------
 
 - Use the translated_string helper from og.tabbedview wich really translate the string.
