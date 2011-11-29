@@ -6,6 +6,10 @@
  <permission>Manage properties</permission>
  <permission>Modify portal content</permission>
  <permission>Review portal content</permission>
+ <permission>Sharing page: Delegate Contributor role</permission>
+ <permission>Sharing page: Delegate Editor role</permission>
+ <permission>Sharing page: Delegate Reader role</permission>
+ <permission>Sharing page: Delegate Reviewer role</permission>
  <permission>Sharing page: Delegate roles</permission>
  <permission>View</permission>
  <permission>ftw.mail: Add Inbound Mail</permission>

@@ -5,7 +5,8 @@ Changelog
 2.0.2 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Fixed workflow definitions: add all configured permission also to the permissions managed by this workflow.
+  [phgross]
 
 
 2.0.1 (2011-11-17)
