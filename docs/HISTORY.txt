@@ -5,16 +5,14 @@ Changelog
 2.0.1 (unreleased)
 ------------------
 
-- Nothing changed yet.
-
-
-2.0 (2011-11-17)
-----------------
-
 - Implements a dynamic translated_string helper, wich also translate strings from the plone domain
   Issue #1268 Falsches Icon bei Aufgabe unter Standardablauf
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1268/
   [phgross]
+
+
+2.0 (2011-11-17)
+----------------
 
 - The Active column is now translated
   Issue #1282 Fehler OGDS: Status wird englisch dargestellt (Yes, No)
