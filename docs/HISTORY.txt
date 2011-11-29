@@ -2,8 +2,8 @@ Changelog
 =========
 
 
-2.1 (unreleased)
-----------------
+2.0.1 (2011-11-29)
+------------------
 
 - Fix dossier sequence number for tasks in global index.
   [jone]
