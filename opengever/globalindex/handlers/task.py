@@ -1,5 +1,4 @@
 from AccessControl.PermissionRole import rolesForPermissionOn
-from Acquisition import aq_inner, aq_parent
 from Products.CMFCore.permissions import View
 from Products.CMFCore.utils import _mergedLocalRoles, getToolByName
 from sqlalchemy.orm.exc import NoResultFound
@@ -38,7 +37,7 @@ def get_dossier_sequence_number(task):
             else:
                 return ''
         else:
-            path = aq_parent(aq_inner(path))
+            path = path[:-1]
 
     return ''
 
