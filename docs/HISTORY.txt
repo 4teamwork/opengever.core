@@ -5,7 +5,9 @@ Changelog
 2.0.1 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Added reader_group attribute to the client setup form.
+  The og setup automaticlly sets the Member role for the reader_group in the portal_role_manager
+  [phgross]
 
 
 2.0 (2011-11-17)

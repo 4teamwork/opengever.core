@@ -165,6 +165,15 @@ $(function($) {
         'og_'.concat(cid).concat('_eingangskorb'));
     }
 
+    // reader group
+    if(client_cfg && client_cfg.reader_group) {
+      client.find('input[name=clients.reader_group:records]').val(
+        client_cfg.reader_group);
+    } else {
+      client.find('input[name=clients.reader_group:records]').val(
+        'og_'.concat(cid).concat('_lesen'));
+    }
+
     // mail domain
     if(client_cfg && client_cfg.mail_domain) {
       client.find('input[name=clients.mail_domain:records]').val(

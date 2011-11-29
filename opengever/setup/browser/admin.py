@@ -245,6 +245,10 @@ class CreateOpengeverClient(BrowserView):
         site.acl_users.portal_role_manager.assignRoleToPrincipal(
             'Member', form['group'])
 
+        if form['reader_group']:
+            site.acl_users.portal_role_manager.assignRoleToPrincipal(
+                'Member', form['reader_group'])
+
         # provide the repository root for opengever.setup:default
         repository_root = config.get('repository_root', None)
         if repository_root:
