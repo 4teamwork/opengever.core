@@ -5,7 +5,10 @@ Changelog
 2.0.1 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Fixed update_inherit method: the avoiding definitive lose of access implemenation should be done with the actual user instead of the portal owner.
+  Issue #1245 Neue Rolle einfuehren um local roles anzupassen
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1245
+  [phgross]
 
 
 2.0 (2011-11-17)

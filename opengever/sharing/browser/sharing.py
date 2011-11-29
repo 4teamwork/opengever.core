@@ -1,6 +1,9 @@
+from Acquisition import aq_base
 from AccessControl.SecurityManagement import getSecurityManager
 from AccessControl.SecurityManagement import newSecurityManager
 from AccessControl.SecurityManagement import setSecurityManager
+from Products.CMFCore.utils import getToolByName
+from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from opengever.sharing import _
 from opengever.sharing.behaviors import IDossier, IStandard
 from opengever.sharing.events import LocalRolesAcquisitionActivated
@@ -9,8 +12,6 @@ from opengever.sharing.events import LocalRolesModified
 from plone.app.workflow.browser.sharing import SharingView
 from plone.app.workflow.interfaces import ISharingPageRole
 from plone.memoize.instance import memoize
-from Products.CMFCore.utils import getToolByName
-from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from zope.component import getUtilitiesFor
 from zope.event import notify
 
@@ -103,23 +104,50 @@ class OpengeverSharingView(SharingView):
         # want to give the "Role Manager" Role "Modify portal content",
         # so we circumvent the permission check here by temporarily assuming
         # the owner's roles. [lgraf]
+
+        context = self.context
+        portal_membership = getToolByName(context, 'portal_membership')
+
+        block = not status
+        oldblock = bool(getattr(aq_base(context),
+                                '__ac_local_roles_block__', False))
+
+        if block == oldblock:
+            return False
+
+        # store the real user
+        user = portal_membership.getAuthenticatedMember()
+
+        # assume the manger user security context
         old_sm = getSecurityManager()
-        owner = self.context.getWrappedOwner()
+
+        owner = getToolByName(
+            context, 'portal_url').getPortalObject().getWrappedOwner()
         newSecurityManager(self.context, owner)
 
-        changed = super(
-            OpengeverSharingView, self).update_inherit(
-                status=status, reindex=reindex)
+        if block:
+            # If user has inherited local roles and removes inheritance,
+            # locally set roles he inherited before
+            # to avoid definitive lose of access (refs #11945)
+            context_roles = user.getRolesInContext(context)
+            global_roles = user.getRoles()
+            local_roles = [r for r in context_roles if r not in global_roles]
+            context.manage_setLocalRoles(user.getId(), local_roles)
+
+        context.__ac_local_roles_block__ = block and True or None
 
         # Restore the old security manager
         setSecurityManager(old_sm)
 
-        if changed:
-            # notify the correspondig event
-            if status:
-                notify(LocalRolesAcquisitionActivated(self.context))
-            else:
-                notify(LocalRolesAcquisitionBlocked(self.context))
+        if reindex:
+            context.reindexObjectSecurity()
+
+        if not block:
+            notify(LocalRolesAcquisitionActivated(self.context))
+        else:
+            notify(LocalRolesAcquisitionBlocked(self.context))
+
+        return True
 
     def update_role_settings(self, new_settings, reindex):
         """"Method Wrapper for the super method, to allow notify a
