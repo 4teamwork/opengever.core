@@ -52,11 +52,9 @@ class TaskTemplates(OpengeverCatalogListingTab):
 
     types = ['opengever.tasktemplates.tasktemplate',]
 
-    enabled_actions = [
-        'cut',
-        'paste',
-        'delete',
-        ]
+    enabled_actions = []
+
+    major_actions = []
 
 
 class ITasktemplatesView(Interface):

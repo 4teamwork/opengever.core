@@ -11,7 +11,7 @@ class TaskTemplateFoldersTab(OpengeverCatalogListingTab):
 
     grok.name('tabbedview_view-tasktemplatefolders')
 
-    columns= (
+    columns = (
         ('', helper.draggable),
         ('', helper.path_checkbox),
         {'column': 'Title',
@@ -24,3 +24,7 @@ class TaskTemplateFoldersTab(OpengeverCatalogListingTab):
         )
 
     types = ['opengever.tasktemplates.tasktemplatefolder', ]
+
+    enabled_actions = []
+
+    major_actions = []
