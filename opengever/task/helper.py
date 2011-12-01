@@ -9,10 +9,11 @@ def task_type_helper(item, value):
     """Translate the task type with the vdex vocabulary, which provides
     its own translations stored in the vdex files.
     """
+    portal = getSite()
     if value == 'forwarding_task_type':
-        return _(u'forwarding_task_type', default=u'Forwarding')
+        return portal.translate(_(u'forwarding_task_type', default=u'Forwarding'))
 
-    voc = getTaskTypeVocabulary(getSite())
+    voc = getTaskTypeVocabulary(portal)
     try:
         term = voc.getTerm(value)
     except LookupError:
