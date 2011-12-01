@@ -21,26 +21,26 @@ def preselected_helper(item, value):
 class TaskTemplates(OpengeverCatalogListingTab):
     grok.name('tabbedview_view-tasktemplates')
 
-    columns= (
+    columns = (
         ('', helper.draggable),
         ('', helper.path_checkbox),
 
         {'column': 'Title',
          'column_title': _(u'label_title', default=u'Title'),
-         'sort_index' : 'sortable_title',
+         'sort_index': 'sortable_title',
          'transform': linked},
 
-        {'column' : 'task_type',
-         'column_title' : taskmsg(u'label_task_type', 'Task Type'),
+        {'column': 'task_type',
+         'column_title': taskmsg(u'label_task_type', 'Task Type'),
          'transform': task_type_helper},
 
         {'column': 'issuer',
          'column_title': _(u'label_issuer', 'Issuer'),
          'transform': interactive_user_helper},
 
-        {'column' : 'responsible',
-         'column_title' : _(u'label_responsible_task', default=u'Responsible'),
-         'transform' : interactive_user_helper},
+        {'column': 'responsible',
+         'column_title': _(u'label_responsible_task', default=u'Responsible'),
+         'transform': interactive_user_helper},
 
         {'column': 'deadline',
          'column_title': _(u"label_deadline", default=u"Deadline in Days")},
@@ -50,7 +50,7 @@ class TaskTemplates(OpengeverCatalogListingTab):
          'transform': preselected_helper},
         )
 
-    types = ['opengever.tasktemplates.tasktemplate',]
+    types = ['opengever.tasktemplates.tasktemplate', ]
 
     enabled_actions = []
 
@@ -65,6 +65,7 @@ class View(dexterity.DisplayForm):
     implements(ITasktemplatesView)
     grok.context(ITaskTemplate)
     grok.require('zope2.View')
+
     def responsible_link(self):
         task = ITaskTemplate(self.context)
         return interactive_user_helper(task, task.responsible)
