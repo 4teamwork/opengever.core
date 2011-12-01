@@ -16,11 +16,12 @@ jq(function(){
         var types = ['opengever-dossier-behaviors-dossier-IDossierMarker', 'opengever-task-task-ITask', 'opengever-document-document-IDocumentSchema'];
         selected = jq('input[name=form.widgets.object_provides:list]:checked').attr('value').replace(/\./g, '-');
         types.remove(selected);
+
         // show current
         jq('.'+selected).each(function(){
             jq(this).parents('.field:first').show();
         });
-        
+
         //hide others
         jq(types).each(function(){
             jq('.'+this).each(function(){
@@ -28,5 +29,18 @@ jq(function(){
             });
         });
     }).change();
-    
+
+    // ie workaround for fix the submit on enter functionality
+    // needed that z3c form call the rigth button handler.
+    jq('#form').append('<input type="hidden" name="form.buttons.button_search" value="Search" />');
+
+    // submit the form manualy when the enter key was pressed.
+    jq('#form').find('input').keydown(function(e){
+        if (e.keyCode == 13) {
+            if (jq(this).attr('class').indexOf('ui-autocomplete-input') == -1){
+              jq('#form').submit();
+              return false;
+            }
+        }
+    });
 });

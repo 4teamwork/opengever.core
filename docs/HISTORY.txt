@@ -5,7 +5,10 @@ Changelog
 2.1 (unreleased)
 ----------------
 
-- Nothing changed yet.
+- Implements IE workaround for submitting the advanced search form on submit.
+  Issue #1313 Erweiterte Suche: Formular kann im IE nicht mit <Enter> abgesendet werden.
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1313/
+  [phgross]
 
 
 2.0 (2011-11-17)
