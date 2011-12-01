@@ -151,9 +151,9 @@
                 If you disable this, only the explicitly defined sharing permissions will
                 be valid.
                 In the overview, the symbol
-				<span i18n:name="image_confirm_icon" tal:attributes="class string:function-ok" />
+				<span i18n:name="image_confirm_icon" tal:attributes="class string:function-ok"></span>
                 indicates an inherited value. Similarly, the symbol
-				<span i18n:name="image_link_icon" tal:attributes="class string:function-site" />
+				<span i18n:name="image_link_icon" tal:attributes="class string:function-site"></span>
                 indicates a global role, which is managed by the site administrator.
             </div>
         </div>

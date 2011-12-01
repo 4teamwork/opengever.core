@@ -5,6 +5,10 @@ Changelog
 2.0.1 (unreleased)
 ------------------
 
+- Fixed IE bug in sharing view: Because our special needs browser can't deal with
+  shorthand tag syntax, we use explicit opening and closing span tags.
+  [lgraf]
+
 - Fixed update_inherit method: the avoiding definitive lose of access implemenation should be done with the actual user instead of the portal owner.
   Issue #1245 Neue Rolle einfuehren um local roles anzupassen
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1245
