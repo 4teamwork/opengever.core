@@ -171,7 +171,7 @@ $(function($) {
         client_cfg.reader_group);
     } else {
       client.find('input[name=clients.reader_group:records]').val(
-        'og_'.concat(cid).concat('_lesen'));
+        'og_'.concat(cid).concat('_leser'));
     }
 
     // mail domain

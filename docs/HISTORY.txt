@@ -5,8 +5,8 @@ Changelog
 2.1.1 (unreleased)
 ------------------
 
-- Nothing changed yet.
-
+- changed reader_group default from og_mandantid_lesen to og_mandantid_leser.
+  [phgross]
 
 2.1 (2011-11-29)
 ----------------
