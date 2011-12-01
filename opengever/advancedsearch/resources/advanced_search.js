@@ -34,13 +34,4 @@ jq(function(){
     // needed that z3c form call the rigth button handler.
     jq('#form').append('<input type="hidden" name="form.buttons.button_search" value="Search" />');
 
-    // submit the form manualy when the enter key was pressed.
-    jq('#form').find('input').keydown(function(e){
-        if (e.keyCode == 13) {
-            if (jq(this).attr('class').indexOf('ui-autocomplete-input') == -1){
-              jq('#form').submit();
-              return false;
-            }
-        }
-    });
 });
