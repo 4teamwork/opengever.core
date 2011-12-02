@@ -35,7 +35,12 @@ def start_import(context):
     transmogrifier(u'opengever.setup.templates')
     transaction.commit()
 
-    transmogrifier(u'opengever.setup.local_roles')
+    # check if the setup should set local roles also one the repo root
+    if context.REQUEST.get('local_roles') == '1':
+        transmogrifier(u'opengever.setup.local_roles_with_repo')
+    else:
+        transmogrifier(u'opengever.setup.local_roles')
+
     transaction.commit()
 
 

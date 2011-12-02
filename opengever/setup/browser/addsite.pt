@@ -216,6 +216,12 @@
                          value="1" />
                   <span>Set client as 'active' in OGDS</span>
               </dd>
+              <dt>Local Roles</dt>
+              <dd>
+                  <input type="checkbox" name="clients.local_roles:boolean"
+                         value="1" />
+                  <span>Set default local roles on repositoryroot </span>
+              </dd>
               <dt>Client ID</dt>
               <dd>
                 <input type="hidden" name="clients.index:records"

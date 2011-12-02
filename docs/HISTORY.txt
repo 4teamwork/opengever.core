@@ -5,6 +5,9 @@ Changelog
 2.1.1 (unreleased)
 ------------------
 
+- Made the local_roles setting on the repository root configurable.
+  [phgross]
+
 - changed reader_group default from og_mandantid_lesen to og_mandantid_leser.
   [phgross]
 
