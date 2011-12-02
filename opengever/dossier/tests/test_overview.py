@@ -99,8 +99,17 @@ class TestOverviewIntegration(unittest.TestCase):
         self._create_objects(
             dossier, 'opengever.task.task', 'Task', 7)
 
+        # create also two testmails
         self._create_objects(
             dossier, 'ftw.mail.mail', 'Mail', 2)
+
+        #updated manually the modification date to avoid conflicts with the documents
+        dossier.get('mail-1').setModificationDate(datetime(2011, 8, 11, 20, 10))
+        dossier.get('mail-1').reindexObject(idxs=['modified'])
+
+        dossier.get('mail-2').setModificationDate(datetime(2011, 6, 11, 20, 10))
+        dossier.get('mail-2').reindexObject(idxs=['modified'])
+
 
         # get the overview
         overview = dossier.unrestrictedTraverse('tabbedview_view-overview')
