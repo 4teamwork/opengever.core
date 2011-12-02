@@ -1,5 +1,6 @@
-from opengever.document.checkout import handlers
+from Products.CMFCore.utils import getToolByName
 from datetime import datetime
+from opengever.document.checkout import handlers
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.testing import OPENGEVER_DOSSIER_INTEGRATION_TESTING
 from plone.app.testing import setRoles, TEST_USER_ID
@@ -8,6 +9,7 @@ from zope.interface import implements
 from zope.interface.verify import verifyClass
 from zope.schema.interfaces import IVocabularyFactory
 from zope.schema.vocabulary import SimpleVocabulary, SimpleTerm
+import json
 import unittest2 as unittest
 
 
@@ -51,7 +53,7 @@ TEST_CREATED_MAPPING = {
     }
 
 
-class TestOverviewIntegration(unittest.TestCase):
+class TestViewsIntegration(unittest.TestCase):
 
     layer = OPENGEVER_DOSSIER_INTEGRATION_TESTING
 
@@ -60,14 +62,14 @@ class TestOverviewIntegration(unittest.TestCase):
         # otherwise we have some savepoints problems with the sqlite db
         handlers.MIGRATION = True
 
-        super(TestOverviewIntegration, self).setUp()
+        super(TestViewsIntegration, self).setUp()
 
     def tearDown(self):
         # disable create_inital_version handler for og.documents
         # otherwise we have some savepoints problems with the sqlite db
         handlers.MIGRATION = False
 
-        super(TestOverviewIntegration, self).tearDown()
+        super(TestViewsIntegration, self).tearDown()
 
     def test_overview(self):
 
@@ -171,6 +173,33 @@ class TestOverviewIntegration(unittest.TestCase):
         # (should include the responsible of the dossier)
         participations = [s.get('Title') for s in  overview.sharing()]
         self.assertTrue('chuck.norris' in participations)
+
+    def test_jsonviews(self):
+        portal = self.layer['portal']
+        setRoles(portal, TEST_USER_ID, ['Reviewer', 'Manager'])
+
+        # create test objects
+        self._create_objects(
+            portal, 'opengever.dossier.businesscasedossier', 'Testdossier', 7)
+
+        wft = getToolByName(portal, 'portal_workflow')
+
+        wft.doActionFor(
+            portal.get('testdossier-3'), 'dossier-transition-resolve')
+        wft.doActionFor(
+            portal.get('testdossier-5'), 'dossier-transition-resolve')
+
+        # call the json view
+        json_data = portal.unrestrictedTraverse('list-open-dossiers-json')()
+
+        # and check the json result
+        objs = json.loads(json_data)
+        self.assertEquals(len(objs), 5)
+        self.assertEquals(objs[0].get('url'), u'http://nohost/plone/testdossier-1')
+        self.assertEquals(objs[0].get('path'), u'testdossier-1')
+        self.assertEquals(objs[0].get('review_state'), u'dossier-state-active')
+        self.assertEquals(objs[0].get('title'), u'Testdossier 1')
+        self.assertEquals(objs[0].get('reference_number'), u'OG / 1')
 
     def _create_objects(self, context, type, title, number):
         for i in range(1, number + 1):
