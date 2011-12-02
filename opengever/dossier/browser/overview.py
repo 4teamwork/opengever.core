@@ -8,7 +8,6 @@ from opengever.globalindex.utils import indexed_task_link_helper
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.tabbedview.browser.tabs import OpengeverTab
 from zope.component import getUtility
-# from sqlalchemy.ext.declarative import Base
 
 
 class DossierOverview(grok.View, OpengeverTab):
