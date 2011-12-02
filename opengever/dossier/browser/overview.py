@@ -1,4 +1,4 @@
-# from Products.ZCatalog.interfaces import ICatalogBrain
+from Products.ZCatalog.interfaces import ICatalogBrain
 from five import grok
 from opengever.base.browser.helper import css_class_from_brain
 from opengever.dossier import _ as _dossier
@@ -7,8 +7,8 @@ from opengever.dossier.behaviors.participation import IParticipationAware
 from opengever.globalindex.utils import indexed_task_link_helper
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.tabbedview.browser.tabs import OpengeverTab
-# from sqlalchemy.ext.declarative import Base
 from zope.component import getUtility
+# from sqlalchemy.ext.declarative import Base
 
 
 class DossierOverview(grok.View, OpengeverTab):
@@ -31,11 +31,12 @@ class DossierOverview(grok.View, OpengeverTab):
     def boxes(self):
         if not self.context.show_subdossier():
             items = [
-                [dict(id='newest_tasks', content=self.tasks(), href='tasks'),],
-                [dict(id='participants', content=self.sharing()),],
+                [dict(id='newest_tasks', content=self.tasks(), href='tasks'),
+                ],
+                [dict(id='participants', content=self.sharing()), ],
                 [dict(id='newest_documents', content=self.documents(),
                       href='documents'),
-                 dict(id='description', content=self.description),]
+                 dict(id='description', content=self.description), ]
                 ]
         else:
             items = [
@@ -44,7 +45,7 @@ class DossierOverview(grok.View, OpengeverTab):
                 [dict(id='newest_tasks', content=self.tasks(), href='tasks')],
                 [dict(id='newest_documents', content=self.documents(),
                       href='documents'),
-                 dict(id='description', content=self.description),],]
+                 dict(id='description', content=self.description), ], ]
         return items
 
     def subdossiers(self):
@@ -99,13 +100,13 @@ class DossierOverview(grok.View, OpengeverTab):
         return self.context.description
 
     def render_globalindex_task(self, item):
-        import pdb; pdb.set_trace()
         return indexed_task_link_helper(item, item.title)
 
     def get_css_class(self, item):
         """Return the css classes
         """
-        return "%s %s" % ("rollover-breadcrumb", self._get_css_icon_class(item))
+        return "%s %s" % (
+            "rollover-breadcrumb", self._get_css_icon_class(item))
 
     def _get_css_icon_class(self, item):
         """Return the rigth css-class for the icon.
@@ -114,12 +115,9 @@ class DossierOverview(grok.View, OpengeverTab):
 
     def get_type(self, item):
         """differ the object typ and return the type as string"""
-        return 'brain'
-        # if isinstance(item) == dict:
-        #     return 'dict'
-        # elif ICatalogBrain.providedBy(item):
-        #     return 'brain'
-        # elif isinstance(item) == Base:
-        #     return 'sqlalchemy_object'
-        # else:
-        #     return 'string'
+        if isinstance(item, dict):
+            return 'dict'
+        elif ICatalogBrain.providedBy(item):
+            return 'brain'
+        else:
+            return 'sqlalchemy_object'
