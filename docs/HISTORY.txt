@@ -5,7 +5,9 @@ Changelog
 2.0.2 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Fixed IE bug in sharing view: Because our special needs browser can't deal with
+  shorthand tag syntax, we use explicit opening and closing span tags.
+  [lgraf]
 
 
 2.0.1 (2011-12-06)
