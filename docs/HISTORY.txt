@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-2.0.1 (unreleased)
+2.0.1 (2011-12-06)
 ------------------
 
 - Fixed update_inherit method: the avoiding definitive lose of access implemenation should be done with the actual user instead of the portal owner.
