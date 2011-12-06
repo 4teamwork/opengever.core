@@ -1,7 +1,9 @@
+from Acquisition import aq_parent
 from Products.CMFCore.utils import getToolByName
 from datetime import datetime
 from opengever.document.checkout import handlers
 from opengever.dossier.behaviors.dossier import IDossier
+from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.testing import OPENGEVER_DOSSIER_INTEGRATION_TESTING
 from plone.app.testing import setRoles, TEST_USER_ID
 from zope.component import provideUtility
@@ -178,6 +180,17 @@ class TestViewsIntegration(unittest.TestCase):
         portal = self.layer['portal']
         setRoles(portal, TEST_USER_ID, ['Reviewer', 'Manager'])
 
+        # remove all existing dossiers
+        dossiers = portal.portal_catalog(
+            object_provides=IDossierMarker.__identifier__,
+            is_subdossier=False)
+
+        for brain in dossiers:
+            try:
+                aq_parent(brain.getObject()).manage_delObjects(brain.getId)
+            except Exception:
+                import pdb; pdb.set_trace()
+
         # create test objects
         self._create_objects(
             portal, 'opengever.dossier.businesscasedossier', 'Testdossier', 7)
@@ -194,12 +207,17 @@ class TestViewsIntegration(unittest.TestCase):
 
         # and check the json result
         objs = json.loads(json_data)
-        self.assertEquals(len(objs), 5)
+
         self.assertEquals(objs[0].get('url'), u'http://nohost/plone/testdossier-1')
         self.assertEquals(objs[0].get('path'), u'testdossier-1')
         self.assertEquals(objs[0].get('review_state'), u'dossier-state-active')
         self.assertEquals(objs[0].get('title'), u'Testdossier 1')
         self.assertEquals(objs[0].get('reference_number'), u'OG / 1')
+
+        # only active dossiers are included in the result
+        titles = [o.get('title') for o in objs]
+        self.assertTrue('Testdossier 3' not in titles)
+        self.assertTrue('Testdossier 5' not in titles)
 
     def _create_objects(self, context, type, title, number):
         for i in range(1, number + 1):
