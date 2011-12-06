@@ -18,10 +18,6 @@
     <dependency>profile-opengever.contact:default</dependency>
     <dependency>profile-opengever.advancedsearch:default</dependency>
     <dependency>profile-opengever.sharing:default</dependency>
-    <!--dependency>profile-ftw.dashboard.dragndrop:default</dependency>
-    <dependency>profile-ftw.dashboard.portlets.favourites:default</dependency>
-    <dependency>profile-ftw.dashboard.portlets.postit:default</dependency>
-    <dependency>profile-ftw.dashboard.portlets.recentlymodified:default</dependency-->
     <dependency>profile-opengever.latex:default</dependency>
     <dependency>profile-ftw.datepicker:default</dependency>
     <dependency>profile-izug.basetheme:opengever</dependency>
