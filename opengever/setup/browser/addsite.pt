@@ -250,6 +250,8 @@
               <dd><input type="text" name="clients.inbox_group:records" /></dd>
               <dt>Reader users group</dt>
               <dd><input type="text" name="clients.reader_group:records" /></dd>
+              <dt>Rolemanager group</dt>
+              <dd><input type="text" name="clients.rolemanager_group:records" /></dd>
               <dt>Mail domain</dt>
               <dd><input type="text" name="clients.mail_domain:records" /></dd>
             </dl>

@@ -250,13 +250,19 @@ class CreateOpengeverClient(BrowserView):
         site.manage_changeProperties({'email_from_address': mail_from_address,
                                     'email_from_name': client_id})
 
-        # set global member role for the client users group
+        # set global Member role for the client users group
         site.acl_users.portal_role_manager.assignRoleToPrincipal(
             'Member', form['group'])
 
+        # set global Member role for readers group
         if form['reader_group']:
             site.acl_users.portal_role_manager.assignRoleToPrincipal(
                 'Member', form['reader_group'])
+
+        # set Role Manager role for rolemanager group
+        if form['rolemanager_group']:
+            site.acl_users.portal_role_manager.assignRoleToPrincipal(
+                'Role Manager', form['rolemanager_group'])
 
         # provide the repository root for opengever.setup:default
         repository_root = config.get('repository_root', None)

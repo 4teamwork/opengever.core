@@ -179,6 +179,15 @@ $(function($) {
         'og_'.concat(cid).concat('_leser'));
     }
 
+    // reader group
+    if(client_cfg && client_cfg.rolemanager_group) {
+      client.find('input[name=clients.rolemanager_group:records]').val(
+        client_cfg.rolemanager_group);
+    } else {
+      client.find('input[name=clients.rolemanager_group:records]').val(
+        'og_'.concat(cid).concat('_rolemanager'));
+    }
+
     // mail domain
     if(client_cfg && client_cfg.mail_domain) {
       client.find('input[name=clients.mail_domain:records]').val(

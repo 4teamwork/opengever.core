@@ -5,6 +5,10 @@ Changelog
 2.1.1 (unreleased)
 ------------------
 
+- Added rolemanager_group attribute to client setup form.
+  Users in this group will automatically be assigned the "Role Manager" role.
+  [lgraf]
+
 - Made the local_roles setting on the repository root configurable.
   [phgross]
 
