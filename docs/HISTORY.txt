@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-2.0.2 (unreleased)
+2.0.2 (2011-12-06)
 ------------------
 
 - Fixed IE bug in sharing view: Because our special needs browser can't deal with
