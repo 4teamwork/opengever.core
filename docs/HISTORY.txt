@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-2.1.1 (unreleased)
+2.1.1 (2011-12-06)
 ------------------
 
 - Added rolemanager_group attribute to client setup form.
