@@ -78,15 +78,20 @@ class OpengeverTab(object):
                          'Creator', 'checked_out', 'issuer', 'contact'):
             info = getUtility(IContactInformation)
 
+            sort_dict = info.get_user_sort_dict()
+
             def _sorter(a, b):
-                av = (info.describe(getattr(a, sort_on, '')) or '').lower()
-                bv = (info.describe(getattr(b, sort_on, '')) or '').lower()
-                return cmp(av, bv)
+                return cmp(sort_dict.get(getattr(a, sort_on, '')), sort_dict.get(getattr(b, sort_on, '')))
+
+            def _reverse_sorter(b, a):
+                return cmp(sort_dict.get(getattr(a, sort_on, '')), sort_dict.get(getattr(b, sort_on, '')))
 
             results = list(results)
-            results.sort(_sorter)
             if sort_reverse:
-                results.reverse()
+                results.sort(_reverse_sorter)
+            else:
+                results.sort(_sorter)
+
         return results
 
 
