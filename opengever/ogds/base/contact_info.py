@@ -51,11 +51,11 @@ def ogds_class_cachekey(method, self):
     and the actual ogds sync stamp.
     """
 
-    return '%s.%s:%s' % (
+    return '%s.%s.%s:%s' % (
         self.__class__.__module__,
         self.__class__.__name__,
+        method.__name__,
         getUtility(ISyncStamp).get_sync_stamp())
-
 
 class UserDict(object):
     """A dictionary representing a user.
@@ -570,6 +570,18 @@ class ContactInformation(grok.GlobalUtility):
         return '<a href="%s">%s</a>' % (
             url,
             self.describe(principal))
+
+
+    @ram.cache(ogds_class_cachekey)
+    def get_user_sort_dict(self):
+        """Returns a dict present userid and the sort index, sorted by the fullname"""
+        session = create_session()
+        ids = session.query(
+            User.userid).order_by(User.lastname, User.firstname).all()
+        sort_dict = {}
+        for i, userid in enumerate(ids):
+            sort_dict[userid[0]] = i
+        return sort_dict
 
     # internal methods
     def _users_query(self):

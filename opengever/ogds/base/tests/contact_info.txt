@@ -254,6 +254,9 @@ Various lists and other methods:
     ...    userid='hanspeter.linder', client_id='notexists')
     False
 
+    >>> info.get_user_sort_dict()
+    {u'hugo.boss': 0, u'hanspeter.linder': 2, u'peter.muster': 1}
+
 
 Test describe with a PAS user:
 
