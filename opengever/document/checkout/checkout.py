@@ -6,7 +6,6 @@ from opengever.document.interfaces import ICheckinCheckoutManager
 from Products.CMFCore.utils import getToolByName
 from Products.statusmessages.interfaces import IStatusMessage
 from zope.component import getMultiAdapter
-from zope.component.interfaces import ComponentLookupError
 from zope.interface import Interface
 
 
@@ -55,6 +54,14 @@ class CheckoutDocuments(grok.View):
 
         # now, lets checkout every document
         for obj in objects:
+            if not IDocumentSchema.providedBy(obj):
+                # notify the user. we have a no-checkoutable object
+                msg = _(
+                    u'Could not check out object: ${title}, it is not a document',
+                    mapping={'title': obj.Title()})
+                IStatusMessage(self.request).addStatusMessage(msg, type='error')
+                continue
+
             self.checkout(obj)
 
         # lets register a redirector for starting external
@@ -81,16 +88,8 @@ class CheckoutDocuments(grok.View):
         """
 
         # check out the document
-        try:
-            manager = getMultiAdapter((obj, self.request),
-                                  ICheckinCheckoutManager)
-        except ComponentLookupError:
-            # notify the user. we have no checkoutable object
-            msg = _(
-                u'Could not check out object: ${title}, it is not a document',
-                mapping={'title': obj.Title()})
-            IStatusMessage(self.request).addStatusMessage(msg, type='error')
-            return
+        manager = getMultiAdapter((obj, self.request),
+                            ICheckinCheckoutManager)
 
         # is checkout allowed for this document?
         if not manager.is_checkout_allowed():

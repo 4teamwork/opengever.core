@@ -138,7 +138,7 @@ cancel_document_checkouts:
     >>> manager.checked_out()
 
 
-checkout_documents and a bad content-type:
+checkout_documents and a default-content-type:
     >>> portal.REQUEST['paths'] = [
     ...     obj2brain(doc1).getPath(),
     ...     obj2brain(doc2).getPath(),
