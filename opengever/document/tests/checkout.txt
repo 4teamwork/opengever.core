@@ -37,6 +37,14 @@ obj2brain
     ...         return brains[0]
 
 
+create a defaultfolder
+
+    >>> portal.invokeFactory('Folder', 'folder')
+    'folder'
+    >>> folder = portal['folder']
+    >>> import transaction
+    >>> transaction.commit()
+
 create a document, and get the CheckinCheckoutManager for the document
 
     >>> mok_file1 = NamedBlobFile('bla bla', filename=u'test.txt')
@@ -130,8 +138,11 @@ cancel_document_checkouts:
     >>> manager.checked_out()
 
 
-checkout_documents:
-    >>> portal.REQUEST['paths'] = [obj2brain(doc1).getPath(), obj2brain(doc2).getPath()]
+checkout_documents and a bad content-type:
+    >>> portal.REQUEST['paths'] = [
+    ...     obj2brain(doc1).getPath(),
+    ...     obj2brain(doc2).getPath(),
+    ...     obj2brain(folder).getPath()]
     >>> view = doc1.restrictedTraverse('@@checkout_documents').render()
     >>> manager.checked_out()
     'test_user_1_'

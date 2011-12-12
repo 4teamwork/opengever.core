@@ -5,7 +5,9 @@ Changelog
 2.0.2 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- #1326 Checkout_documents wirft ein Fehler beim Versuch ein Mail auszuchecken.
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1326
+  [eschmutz]
 
 
 2.0.1 (2011-11-29)

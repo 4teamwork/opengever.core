@@ -1,11 +1,12 @@
-from Products.CMFCore.utils import getToolByName
-from Products.statusmessages.interfaces import IStatusMessage
 from five import grok
 from opengever.base.interfaces import IRedirector
 from opengever.document import _
 from opengever.document.document import IDocumentSchema
 from opengever.document.interfaces import ICheckinCheckoutManager
+from Products.CMFCore.utils import getToolByName
+from Products.statusmessages.interfaces import IStatusMessage
 from zope.component import getMultiAdapter
+from zope.component.interfaces import ComponentLookupError
 from zope.interface import Interface
 
 
@@ -80,8 +81,16 @@ class CheckoutDocuments(grok.View):
         """
 
         # check out the document
-        manager = getMultiAdapter((obj, self.request),
+        try:
+            manager = getMultiAdapter((obj, self.request),
                                   ICheckinCheckoutManager)
+        except ComponentLookupError:
+            # notify the user. we have no checkoutable object
+            msg = _(
+                u'Could not check out object: ${title}, it is not a document',
+                mapping={'title': obj.Title()})
+            IStatusMessage(self.request).addStatusMessage(msg, type='error')
+            return
 
         # is checkout allowed for this document?
         if not manager.is_checkout_allowed():
