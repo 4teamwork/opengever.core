@@ -7,6 +7,8 @@ Changelog
 
 - #1326 Checkout_documents wirft ein Fehler beim Versuch ein Mail auszuchecken.
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1326
+  Improved error handling in checkout_documents: Provide the user with a status
+  message if one of the selected objects is not a document
   [eschmutz]
 
 
