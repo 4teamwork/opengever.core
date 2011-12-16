@@ -5,7 +5,8 @@ Changelog
 2.0.3 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Fix tabbedview markup for compatibility with changes in ftw.tabbedview.
+  [jone]
 
 
 2.0.2 (2011-11-29)

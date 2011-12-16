@@ -28,8 +28,6 @@ class OpengeverTab(object):
 
     show_searchform = True
 
-    template = ViewPageTemplateFile('generic.pt')
-
     def get_css_classes(self):
         if self.show_searchform:
             return ['searchform-visible']
