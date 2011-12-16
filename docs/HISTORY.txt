@@ -5,7 +5,9 @@ Changelog
 2.0.3 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Tabbedview custom storage key: use better matching interface,
+  according to changes in ftw.tabbedview.
+  [jone]
 
 
 2.0.2 (2011-12-06)
