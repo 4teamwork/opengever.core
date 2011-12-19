@@ -164,6 +164,8 @@ class OpengeverSharingView(SharingView):
                     old_local_roles,
                     self.context.get_local_roles()))
 
+        return changed
+
 
 class SharingTab(OpengeverSharingView):
     """The sharing tab view, which show the standard sharin view,
