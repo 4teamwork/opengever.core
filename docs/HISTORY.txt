@@ -5,7 +5,8 @@ Changelog
 2.1.2 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Setup wizard: respect "active" configuration in clients.
+  [jone]
 
 
 2.1.1 (2011-12-06)
