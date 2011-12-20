@@ -182,11 +182,16 @@ class TestOpengeverSharingIntegration(unittest.TestCase):
             factory=self.mock_event.mock_handler,
             adapts=[ILocalRolesModified, ], )
 
+        # If nothing has changed it needs to be reported accordingly
+        changed = self.view_repo.update_role_settings([], False)
+        self.assertFalse(changed)
+
         # We try to add the new local role 'publisher'
         new_settings = \
             [{'type': 'user', 'id': 'test_user_1_', 'roles': ['Publisher']}, ]
 
-        self.view_repo.update_role_settings(new_settings, False)
+        changed = self.view_repo.update_role_settings(new_settings, False)
+        self.assertTrue(changed)
 
         last_event = self.mock_event.last_event()
         # check the event type
@@ -203,7 +208,8 @@ class TestOpengeverSharingIntegration(unittest.TestCase):
         new_settings = \
             [{'type': 'user', 'id': 'test_user_1_', 'roles': []}, ]
 
-        self.view_repo.update_role_settings(new_settings, False)
+        changed = self.view_repo.update_role_settings(new_settings, False)
+        self.assertTrue(changed)
 
         # check event attributes
         last_event = self.mock_event.last_event()
