@@ -5,7 +5,8 @@ Changelog
 2.2 (unreleased)
 ----------------
 
-- Nothing changed yet.
+- Client ID portlet should not crash when client configuration is missing.
+  [jone]
 
 
 2.1 (2011-11-29)
