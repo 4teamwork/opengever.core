@@ -52,6 +52,7 @@ class OpengeverSharingIntegrationLayer(PloneSandboxLayer):
         applyProfile(portal, 'opengever.journal:default')
         applyProfile(portal, 'opengever.repository:default')
         applyProfile(portal, 'ftw.table:default')
+        applyProfile(portal, 'opengever.sharing:default')
 
         create_sql_tables()
         session = create_session()

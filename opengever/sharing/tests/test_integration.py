@@ -79,38 +79,10 @@ class TestOpengeverSharingIntegration(unittest.TestCase):
         self.browser.open(
             '%s/@@tabbedview_view-sharing' % self.dossier.absolute_url())
 
-    def test_available_roles_with_manager(self):
-        """ Test available roles if we are manager on a context providing
-        IDossier of sharing
-        """
-        setRoles(self.portal, TEST_USER_ID, ['Manager', ])
-        expect = [
-            u'Reader',
-            u'Editor',
-            u'Contributor',
-            u'Reviewer',
-            u'Publisher',
-            u'Administrator', ]
-
-        self.base_available_roles(expect)
-
-    def test_available_roles_with_reader_and_owner(self):
-        """ Test available roles if we are reader and owner on a context
-        providing IDossier of sharing
-        """
-        setRoles(self.portal, TEST_USER_ID, ['Reader', ])
-        expect = [u'Reader', u'Editor', u'Contributor', ]
-
-        self.base_available_roles(expect)
-
-    def base_available_roles(self, expect):
+    def _check_roles(self, expect, roles):
         """ Base method to check the received roles
         """
-
-        roles = self.view_dossier.available_roles()
-
         # Check the roles and sort order
-
         for role in roles:
             self.assertTrue(role.get('id') in expect)
             expect.remove(role.get('id'))
@@ -120,6 +92,50 @@ class TestOpengeverSharingIntegration(unittest.TestCase):
         # Reset the roles
         setRoles(
             self.portal, TEST_USER_ID, ['Manager', 'Contributor', 'Editor'])
+
+
+    def test_available_roles(self):
+        """ Test available roles if we are reader and owner on a context
+        providing IDossier of sharing
+        """
+        setRoles(self.portal, TEST_USER_ID, ['Reader', 'Role Manager'])
+        expect = [
+            u'Reader',
+            u'Editor',
+            u'Contributor',
+            u'Reviewer',
+            u'Publisher',
+            u'Administrator', ]
+        self._check_roles(expect, self.view_dossier.available_roles())
+
+    def test_manageable_roles_with_reader_and_owner(self):
+        """ Test manageable roles if we are reader and owner on a context
+        providing IDossier of sharing
+        """
+        setRoles(self.portal, TEST_USER_ID, ['Reader', 'Role Manager'])
+        expect = [
+            u'Reader',
+            u'Editor',
+            u'Contributor',
+            u'Reviewer',
+            u'Publisher',
+            u'Administrator', ]
+        self._check_roles(expect, self.view_dossier.roles())
+
+    def test_info_tab_roles(self):
+        """ Test the roles displayed in the info tab on a context
+        providing IDossier of sharing
+        """
+        setRoles(self.portal, TEST_USER_ID, ['Reader', 'Role Manager'])
+        expect = [
+            u'Reader',
+            u'Editor',
+            u'Contributor',
+            u'Reviewer',
+            u'Publisher',
+            u'Administrator', ]
+        self._check_roles(expect, self.view_dossier.roles(check_permission=False))
+
 
     def test_update_inherit(self):
         """ tests update inherit method
