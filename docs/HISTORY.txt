@@ -5,7 +5,8 @@ Changelog
 2.0.2 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Single client setup: hide responsible_client field if only one client is set up.
+  [jone]
 
 
 2.0.1 (2011-12-06)
