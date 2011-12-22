@@ -1,13 +1,15 @@
 from five import grok
 from ftw.journal.interfaces import IJournalizable
-from ftw.table.interfaces import ITableSource, ITableSourceConfig
 from ftw.table import helper
+from ftw.table.interfaces import ITableSource, ITableSourceConfig
 from opengever.base.browser.helper import client_title_helper
 from opengever.globalindex.model.task import Task
 from opengever.globalindex.utils import indexed_task_link_helper
 from opengever.tabbedview import _
 from opengever.tabbedview.browser.listing import ListingView
+from opengever.tabbedview.browser.sqltablelisting import SqlTableSource
 from opengever.tabbedview.browser.tabs import OpengeverTab
+from opengever.tabbedview.helper import display_client_title_condition
 from opengever.tabbedview.helper import overdue_date_helper
 from opengever.tabbedview.helper import readable_date_set_invisibles
 from opengever.tabbedview.helper import readable_ogds_author
@@ -16,7 +18,6 @@ from opengever.tabbedview.helper import workflow_state
 from opengever.task.helper import task_type_helper
 from zope.app.pagetemplate import ViewPageTemplateFile
 from zope.interface import implements, Interface
-from opengever.tabbedview.browser.sqltablelisting import SqlTableSource
 
 
 class IGlobalTaskTableSourceConfig(ITableSourceConfig):
@@ -94,7 +95,8 @@ class GlobalTaskListingTab(grok.View, OpengeverTab,
 
         {'column': 'client_id',
          'column_title': _('column_client', default=u'Client'),
-         'transform': client_title_helper},
+         'transform': client_title_helper,
+         'condition': display_client_title_condition},
 
         {'column': 'sequence_number',
          'column_title': _(u'column_sequence_number',

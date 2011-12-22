@@ -7,8 +7,9 @@ from opengever.base.browser.helper import client_title_helper
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.tabbedview import _
 from opengever.tabbedview.browser.listing import CatalogListingView
-from opengever.tabbedview.helper import overdue_date_helper
+from opengever.tabbedview.helper import display_client_title_condition
 from opengever.tabbedview.helper import external_edit_link
+from opengever.tabbedview.helper import overdue_date_helper
 from opengever.tabbedview.helper import readable_date_set_invisibles
 from opengever.tabbedview.helper import readable_ogds_author, linked
 from opengever.tabbedview.helper import readable_ogds_user
@@ -332,7 +333,8 @@ class Tasks(OpengeverCatalogListingTab):
 
         {'column': 'client_id',
          'column_title': _('client_id', 'Client'),
-         'transform': client_title_helper},
+         'transform': client_title_helper,
+         'condition': display_client_title_condition},
 
         {'column': 'sequence_number',
          'column_title': _(u'sequence_number', "Sequence Number"), },

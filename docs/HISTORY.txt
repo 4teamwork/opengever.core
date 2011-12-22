@@ -5,6 +5,9 @@ Changelog
 2.0.3 (unreleased)
 ------------------
 
+- Single client setup: hide client column in task listings when only one client is configured.
+  [jone]
+
 - Fix tabbedview markup for compatibility with changes in ftw.tabbedview.
   [jone]
 

@@ -262,3 +262,17 @@ def translated_string(domain='plone'):
         return translate(
             value, context=getRequest(), domain=domain)
     return _translate
+
+
+def display_client_title_condition():
+    """A helper for hiding the client title from a task listing if we
+    have a single client setup (it would be the same all the time).
+    """
+    info = getUtility(IContactInformation)
+    if len(info.get_clients()) <= 1:
+        # Single client setup - hide the client title column
+        return False
+
+    else:
+        # Multi client setup - display the client title column
+        return True
