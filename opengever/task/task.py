@@ -291,6 +291,11 @@ class Overview(DisplayForm, OpengeverTab):
             # in some special cases the responsible client may not be set.
             return info.render_link(task.responsible)
 
+        if len(info.get_clients()) <= 1:
+            # We have a single client setup, so we don't need to display
+            # the client here.
+            return info.render_link(task.responsible)
+
         client = client_title_helper(
             task, self.groups[0].widgets['responsible_client'].value[0])
 

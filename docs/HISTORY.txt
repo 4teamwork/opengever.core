@@ -5,6 +5,9 @@ Changelog
 2.0.2 (unreleased)
 ------------------
 
+- Single client setup: do not display the responsible_client in the task overview.
+  [jone]
+
 - Single client setup: hide responsible_client field if only one client is set up.
   [jone]
 
