@@ -5,6 +5,9 @@ Changelog
 2.1.2 (unreleased)
 ------------------
 
+- Setup wizard: respect "local_roles" configuration in clients.
+  [jone]
+
 - Setup wizard: respect "active" configuration in clients.
   [jone]
 

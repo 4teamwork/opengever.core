@@ -85,6 +85,8 @@ $(function($) {
     // If development profile, set default local roles by default
     if(config.id == "opengever.examplecontent:0") {
         client.find('input[name=clients.local_roles:boolean]').attr("checked", "checked");
+    } else {
+      client.find('input[name=clients.local_roles:boolean]').attr('checked', client_cfg.local_roles);
     }
 
     if(index) {
