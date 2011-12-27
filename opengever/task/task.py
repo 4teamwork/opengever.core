@@ -1,4 +1,5 @@
 from Acquisition import aq_parent, aq_inner
+from plone.indexer.interfaces import IIndexer
 from Products.CMFCore.interfaces import IActionSucceededEvent
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone.CatalogTool import sortable_title
@@ -22,6 +23,7 @@ from opengever.tabbedview.browser.tabs import OpengeverTab
 from opengever.tabbedview.helper import external_edit_link
 from opengever.tabbedview.helper import linked
 from opengever.tabbedview.helper import readable_ogds_author
+from opengever.tabbedview.helper import readable_ogds_user
 from opengever.task import _
 from opengever.task import util
 from opengever.task.helper import path_checkbox
@@ -440,6 +442,12 @@ class RelatedDocumentsTableSource(grok.MultiAdapter, BaseTableSource):
     def search_results(self, query):
         return query
 
+def readable_ogds_user_(obj, user):
+    """ Return the user checked out the obj
+    """
+    catalog = obj.portal_catalog
+    user = getMultiAdapter((obj, catalog), IIndexer, name='checked_out')()
+    return readable_ogds_user(obj, user)
 
 class RelatedDocuments(Documents):
 
@@ -477,6 +485,10 @@ class RelatedDocuments(Documents):
          'column_title': _('label_delivery_date', default="Delivery Date"),
          'transform': helper.readable_date},
 
+        {'column': 'checked_out',
+         'column_title': _('label_checked_out', default="Checked out by"),
+         'transform': readable_ogds_user_},
+
         ('', external_edit_link),
         )
 
@@ -499,7 +511,6 @@ class RelatedDocuments(Documents):
                      'depth': 2},
             'portal_type': ['opengever.document.document', 'ftw.mail.mail'],
             }
-
 
 # XXX
 # setting the default value of a RelationField does not work as expected

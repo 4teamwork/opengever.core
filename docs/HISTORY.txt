@@ -5,6 +5,11 @@ Changelog
 2.0.2 (unreleased)
 ------------------
 
+- #1299 Spalte 'In Bearbeitung' hinzufügen bei Dokumentenauflistung in einer Aufgabe
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1299/
+  add new column 'checked_out' for the document tab in task-view
+  [eschmutz]
+
 - Single client setup: do not display the responsible_client in the task overview.
   [jone]
 
