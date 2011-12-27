@@ -1,8 +1,4 @@
 from Acquisition import aq_parent, aq_inner
-from plone.indexer.interfaces import IIndexer
-from Products.CMFCore.interfaces import IActionSucceededEvent
-from Products.CMFCore.utils import getToolByName
-from Products.CMFPlone.CatalogTool import sortable_title
 from collective import dexteritytextindexer
 from datetime import datetime, timedelta
 from five import grok
@@ -24,8 +20,8 @@ from opengever.tabbedview.helper import external_edit_link
 from opengever.tabbedview.helper import linked
 from opengever.tabbedview.helper import readable_ogds_author
 from opengever.tabbedview.helper import readable_ogds_user
-from opengever.task import _
 from opengever.task import util
+from opengever.task import _
 from opengever.task.helper import path_checkbox
 from opengever.task.interfaces import ISuccessorTaskController
 from operator import attrgetter
@@ -33,6 +29,10 @@ from plone.dexterity.content import Container
 from plone.directives import form, dexterity
 from plone.directives.dexterity import DisplayForm
 from plone.indexer import indexer
+from plone.indexer.interfaces import IIndexer
+from Products.CMFCore.interfaces import IActionSucceededEvent
+from Products.CMFCore.utils import getToolByName
+from Products.CMFPlone.CatalogTool import sortable_title
 from z3c.form.interfaces import HIDDEN_MODE
 from z3c.relationfield.schema import RelationChoice, RelationList
 from zc.relation.interfaces import ICatalog
