@@ -5,7 +5,8 @@ Changelog
 2.0.2 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Fix bug in custom allowedContentTypes when FTI has no "behaviors" (AT).
+  [jone]
 
 
 2.0.1 (2011-12-06)

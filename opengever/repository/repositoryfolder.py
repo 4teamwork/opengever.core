@@ -169,7 +169,7 @@ class RepositoryFolder(content.Container):
                 # fti is enabled in repository folder
                 return True
 
-            elif getattr(fti, 'behaviors') \
+            elif getattr(fti, 'behaviors', None) \
                     and marker_behavior in fti.behaviors:
                 # fti has marker interface and is not enabled
                 return False
@@ -204,7 +204,7 @@ class Byline(grok.Viewlet):
     grok.name("plone.belowcontenttitle.documentbyline")
 
     #update = content.DocumentBylineViewlet.update
-    
+
     def css_class_from_obj(self):
         return css_class_from_obj(self.context)
 
