@@ -17,11 +17,13 @@ from opengever.globalindex.utils import indexed_task_link
 from opengever.ogds.base.autocomplete_widget import AutocompleteFieldWidget
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.ogds.base.utils import get_client_id
+from opengever.tabbedview import _ as TMF
 from opengever.tabbedview.browser.tabs import Documents
 from opengever.tabbedview.browser.tabs import OpengeverTab
 from opengever.tabbedview.helper import external_edit_link
 from opengever.tabbedview.helper import linked
 from opengever.tabbedview.helper import readable_ogds_author
+from opengever.tabbedview.helper import readable_ogds_user
 from opengever.task import _
 from opengever.task import util
 from opengever.task.helper import path_checkbox
@@ -31,6 +33,7 @@ from plone.dexterity.content import Container
 from plone.directives import form, dexterity
 from plone.directives.dexterity import DisplayForm
 from plone.indexer import indexer
+from plone.indexer.interfaces import IIndexer
 from z3c.form.interfaces import HIDDEN_MODE
 from z3c.relationfield.schema import RelationChoice, RelationList
 from zc.relation.interfaces import ICatalog
@@ -440,6 +443,12 @@ class RelatedDocumentsTableSource(grok.MultiAdapter, BaseTableSource):
     def search_results(self, query):
         return query
 
+def readable_checked_out_user(obj, user):
+    """ Return the readable user who checked out the obj
+    """
+    catalog = obj.portal_catalog
+    user = getMultiAdapter((obj, catalog), IIndexer, name='checked_out')()
+    return readable_ogds_user(obj, user)
 
 class RelatedDocuments(Documents):
 
@@ -477,6 +486,9 @@ class RelatedDocuments(Documents):
          'column_title': _('label_delivery_date', default="Delivery Date"),
          'transform': helper.readable_date},
 
+        {'column': 'checked_out',
+         'column_title': TMF('label_checked_out', default="Checked out by"),
+         'transform': readable_checked_out_user},
         ('', external_edit_link),
         )
 
@@ -499,7 +511,6 @@ class RelatedDocuments(Documents):
                      'depth': 2},
             'portal_type': ['opengever.document.document', 'ftw.mail.mail'],
             }
-
 
 # XXX
 # setting the default value of a RelationField does not work as expected
