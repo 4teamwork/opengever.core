@@ -61,6 +61,13 @@ and the catalog
     >>> len(portal.portal_catalog(portal_type="TrashTestFTI", trashed=True))
     1
 
+if we trash the object again we get a fallback
+
+    >>> portal.REQUEST['paths'] = ['/'.join(utem1.getPhysicalPath())]
+    >>> utem1.restrictedTraverse('trashed')()
+    'http://nohost/plone/utem1#documents'
+
+
 now we check also the untrashing
 
     >>> portal.REQUEST['paths'] = ['/'.join(utem1.getPhysicalPath())]

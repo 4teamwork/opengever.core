@@ -86,9 +86,19 @@ class TrashView(grok.View):
         if paths:
             for item in paths:
                 obj = self.context.restrictedTraverse(item)
+                brains = catalog(path=item)
 
+                # check that the object isn't already trashed
+                if not brains:
+                    msg = _(
+                        u'could not trash the object ${obj}, ' \
+                        'it is already trashed',
+                        mapping={'obj': obj.Title()})
+                    IStatusMessage(self.request).addStatusMessage(
+                        msg, type='error')
+                    continue
                 # check that the document isn't checked_out
-                if catalog(path=item)[0].checked_out:
+                if brains[0].checked_out:
                     msg = _(
                         u'could not trash the object ${obj}, it is checked out',
                         mapping={'obj': obj.Title()})
