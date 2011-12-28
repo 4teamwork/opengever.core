@@ -1,4 +1,7 @@
 from Acquisition import aq_parent, aq_inner
+from Products.CMFCore.interfaces import IActionSucceededEvent
+from Products.CMFCore.utils import getToolByName
+from Products.CMFPlone.CatalogTool import sortable_title
 from collective import dexteritytextindexer
 from datetime import datetime, timedelta
 from five import grok
@@ -14,14 +17,15 @@ from opengever.globalindex.utils import indexed_task_link
 from opengever.ogds.base.autocomplete_widget import AutocompleteFieldWidget
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.ogds.base.utils import get_client_id
+from opengever.tabbedview import _ as TMF
 from opengever.tabbedview.browser.tabs import Documents
 from opengever.tabbedview.browser.tabs import OpengeverTab
 from opengever.tabbedview.helper import external_edit_link
 from opengever.tabbedview.helper import linked
 from opengever.tabbedview.helper import readable_ogds_author
 from opengever.tabbedview.helper import readable_ogds_user
-from opengever.task import util
 from opengever.task import _
+from opengever.task import util
 from opengever.task.helper import path_checkbox
 from opengever.task.interfaces import ISuccessorTaskController
 from operator import attrgetter
@@ -30,9 +34,6 @@ from plone.directives import form, dexterity
 from plone.directives.dexterity import DisplayForm
 from plone.indexer import indexer
 from plone.indexer.interfaces import IIndexer
-from Products.CMFCore.interfaces import IActionSucceededEvent
-from Products.CMFCore.utils import getToolByName
-from Products.CMFPlone.CatalogTool import sortable_title
 from z3c.form.interfaces import HIDDEN_MODE
 from z3c.relationfield.schema import RelationChoice, RelationList
 from zc.relation.interfaces import ICatalog
@@ -41,7 +42,7 @@ from zope.app.intid.interfaces import IIntIds
 from zope.component import getUtility, getMultiAdapter
 from zope.interface import implements, Interface
 from zope.schema.vocabulary import getVocabularyRegistry
-from zope.i18nmessageid import MessageFactory
+
 
 _marker = object()
 
@@ -486,11 +487,8 @@ class RelatedDocuments(Documents):
          'transform': helper.readable_date},
 
         {'column': 'checked_out',
-         'column_title': MessageFactory('opengever.tabbedview')(
-            'label_checked_out',
-            default="Checked out by"),
+         'column_title': TMF('label_checked_out', default="Checked out by"),
          'transform': readable_checked_out_user},
-
         ('', external_edit_link),
         )
 
