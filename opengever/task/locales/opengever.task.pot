@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2011-12-27 15:29+0000\n"
+"POT-Creation-Date: 2011-12-28 17:05+0000\n"
 "PO-Revision-Date: 2009-02-25 14:39+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -278,11 +278,6 @@ msgstr ""
 #. Default: "by ${author}"
 #: ./opengever/task/viewlets/byline.pt:17
 msgid "label_by_author"
-msgstr ""
-
-#. Default: "Checked out by"
-#: ./opengever/task/task.py:489
-msgid "label_checked_out"
 msgstr ""
 
 #. Default: "Copy related documents to inbox of target client"

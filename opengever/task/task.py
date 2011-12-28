@@ -41,7 +41,7 @@ from zope.app.intid.interfaces import IIntIds
 from zope.component import getUtility, getMultiAdapter
 from zope.interface import implements, Interface
 from zope.schema.vocabulary import getVocabularyRegistry
-
+from zope.i18nmessageid import MessageFactory
 
 _marker = object()
 
@@ -442,8 +442,8 @@ class RelatedDocumentsTableSource(grok.MultiAdapter, BaseTableSource):
     def search_results(self, query):
         return query
 
-def readable_ogds_user_(obj, user):
-    """ Return the user checked out the obj
+def readable_checked_out_user(obj, user):
+    """ Return the readable user who checked out the obj
     """
     catalog = obj.portal_catalog
     user = getMultiAdapter((obj, catalog), IIndexer, name='checked_out')()
@@ -486,8 +486,10 @@ class RelatedDocuments(Documents):
          'transform': helper.readable_date},
 
         {'column': 'checked_out',
-         'column_title': _('label_checked_out', default="Checked out by"),
-         'transform': readable_ogds_user_},
+         'column_title': MessageFactory('opengever.tabbedview')(
+            'label_checked_out',
+            default="Checked out by"),
+         'transform': readable_checked_out_user},
 
         ('', external_edit_link),
         )
