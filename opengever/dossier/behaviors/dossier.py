@@ -1,13 +1,10 @@
 from AccessControl import getSecurityManager
 from Acquisition import aq_inner, aq_parent
-from OFS.interfaces import IObjectWillBeMovedEvent
 from collective import dexteritytextindexer
 from collective.elephantvocabulary import wrap_vocabulary
 from datetime import datetime
 from five import grok
 from ftw.datepicker.widget import DatePickerFieldWidget
-from opengever.base.interfaces import IReferenceNumber
-from opengever.base.interfaces import IReferenceNumberPrefix
 from opengever.base.source import RepositoryPathSourceBinder
 from opengever.dossier import _
 from opengever.dossier.widget import referenceNumberWidgetFactory
@@ -20,9 +17,6 @@ from plone.directives import form, dexterity
 from plone.z3cform.textlines.textlines import TextLinesFieldWidget
 from z3c.relationfield.schema import RelationChoice, RelationList
 from zope import schema
-from zope.app.container.interfaces import IObjectAddedEvent
-from zope.app.container.interfaces import IObjectMovedEvent
-from zope.component import getAdapter, getUtility
 from zope.interface import Interface, alsoProvides
 from zope.interface import invariant, Invalid
 import logging
@@ -253,53 +247,3 @@ class StartBeforeEnd(Invalid):
 def deadlineDefaultValue(data):
     return datetime.today()
 # TODO: Doesn't work yet
-
-
-@grok.subscribe(IDossierMarker, IObjectWillBeMovedEvent)
-def set_former_reference_before_moving(obj, event):
-    """ Temporarily store current reference number before
-    moving the dossier.
-
-    """
-
-    # make sure obj wasn't just created or deleted
-    if not event.oldParent or not event.newParent:
-        return
-
-    repr = IDossier(obj)
-    ref_no = getAdapter(obj, IReferenceNumber).get_number()
-    IDossier['temporary_former_reference_number'].set(repr, ref_no)
-
-
-@grok.subscribe(IDossierMarker, IObjectMovedEvent)
-def set_former_reference_after_moving(obj, event):
-    """ Use the (hopefully) stored former reference number
-    as the real new former reference number. This has to
-    be done after the dossier was moved.
-
-    """
-    # make sure obj wasn't just created or deleted
-    if not event.oldParent or not event.newParent:
-        return
-
-    repr = IDossier(obj)
-    former_ref_no = repr.temporary_former_reference_number
-    IDossier['former_reference_number'].set(repr, former_ref_no)
-    # reset temporary former reference number
-    IDossier['temporary_former_reference_number'].set(repr, '')
-
-    # setting the new number
-    parent = aq_parent(aq_inner(obj))
-    prefix_adapter = IReferenceNumberPrefix(parent)
-    prefix_adapter.set_number(obj)
-
-    obj.reindexObject(idxs=['reference'])
-
-
-@grok.subscribe(IDossierMarker, IObjectAddedEvent)
-def saveReferenceNumberPrefix(obj, event):
-    parent = aq_parent(aq_inner(obj))
-    prefix_adapter = IReferenceNumberPrefix(parent)
-    if not prefix_adapter.get_number(obj):
-        prefix_adapter.set_number(obj)
-    obj.reindexObject(idxs=['reference'])
