@@ -45,6 +45,8 @@ def reindex_contained_objects(dossier, event):
 
 @grok.subscribe(IDossierMarker, IObjectModifiedEvent)
 def reindex_containing_dossier(dossier, event):
+    """Reindex the containging_dossier index for all the contained obects,
+    when the title has changed."""
     if not IDossierMarker.providedBy(aq_parent(aq_inner(dossier))):
         for descr in event.descriptions:
             for attr in descr.attributes:
