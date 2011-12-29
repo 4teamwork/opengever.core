@@ -254,9 +254,23 @@ Various lists and other methods:
     ...    userid='hanspeter.linder', client_id='notexists')
     False
 
-    >>> info.get_user_sort_dict()
-    {u'hugo.boss': 0, u'hanspeter.linder': 2, u'peter.muster': 1}
+check the sort dictionaries
 
+    >>> info.get_user_sort_dict()
+    {u'hugo.boss': u'Boss Hugo',
+     u'hanspeter.linder': u'linder hanspeter',
+     u'inbox:client2': u'Inbox: Client 2',
+     u'peter.muster': u'Muster Peter',
+     u'inbox:client1': u'Inbox: Client 1'}
+
+    >>> info.get_user_contact_sort_dict()
+    {u'inbox:client1': u'Inbox: Client 1', u'inbox:client2': u'Inbox: Client 2',
+     u'hugo.boss': u'Boss Hugo',
+     u'kaufmann-sandra': u'Kaufmann Sandra',
+     u'hanspeter.linder': u'linder hanspeter',
+     u'kappeli-elisabeth': u'K\xe4ppeli Elisabeth',
+     u'peter.muster': u'Muster Peter',
+     u'wermuth-roger': u'Wermuth Roger'}
 
 Test describe with a PAS user:
 

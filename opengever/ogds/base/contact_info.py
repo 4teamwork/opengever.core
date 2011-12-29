@@ -57,6 +57,21 @@ def ogds_class_cachekey(method, self):
         method.__name__,
         getUtility(ISyncStamp).get_sync_stamp())
 
+
+def ogds_class_language_cachekey(method, self):
+    """A cache key including the class' name, the preffered language
+    and the actual ogds sync stamp.
+    """
+
+    return '%s.%s.%s:%s:%s' % (
+        self.__class__.__module__,
+        self.__class__.__name__,
+        method.__name__,
+        getToolByName(getSite(), 'portal_languages').getPreferredLanguage()[0],
+        getUtility(ISyncStamp).get_sync_stamp())
+
+
+
 class UserDict(object):
     """A dictionary representing a user.
     """
@@ -572,15 +587,33 @@ class ContactInformation(grok.GlobalUtility):
             self.describe(principal))
 
 
-    @ram.cache(ogds_class_cachekey)
+    @ram.cache(ogds_class_language_cachekey)
     def get_user_sort_dict(self):
-        """Returns a dict present userid and the sort index, sorted by the fullname"""
+        """Returns a dict presenting userid and the fullname,
+        that allows correct sorting on the fullname.
+        Including also every client inbox.
+        """
+
         session = create_session()
         ids = session.query(
-            User.userid).order_by(User.lastname, User.firstname).all()
+            User.userid,User.lastname, User.firstname).order_by(User.lastname, User.firstname).all()
         sort_dict = {}
-        for i, userid in enumerate(ids):
-            sort_dict[userid[0]] = i
+        for userid, lastname, firstname in ids:
+            sort_dict[userid] = u'%s %s' % (lastname, firstname)
+
+        #includes every client inbox
+        clients = self._clients_query()
+        active_clients = clients.filter_by(enabled=True)
+        for client in active_clients:
+            principal = u'inbox:%s' % client.client_id
+            sort_dict[principal] = translate(self.describe(principal))
+        return sort_dict
+
+    def get_user_contact_sort_dict(self):
+        sort_dict = self.get_user_sort_dict()
+        for contact in self.list_contacts():
+            sort_dict['contact:%s' %(contact.id)] = u'%s %s' % (
+                contact.lastname, contact.firstname)
         return sort_dict
 
     # internal methods
