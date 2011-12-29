@@ -5,7 +5,10 @@ Changelog
 2.0.2 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Dossier details PDF: also show label "filing" when no filing prefix is defined.
+  Issue #1332 Deckblatt PDF: Label Anzeige auch wenn keine Ablage Nummer definiert
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1332/
+  [jone]
 
 
 2.0.1 (2011-11-29)

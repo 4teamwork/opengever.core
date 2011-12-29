@@ -98,7 +98,7 @@ class DossierLatexConverter(LatexCTConverter,grok.View,AutoFields):
             parent = aq_parent(aq_inner(parent))
 
         # filing_prefix
-        filing_prefix = getattr(IDossier(context), 'filing_prefix', None)
+        filing_prefix = getattr(IDossier(context), 'filing_prefix', None) or ''
         if filing_prefix:
             # Get the value and not the key from the prefix vocabulary
             filing_prefix = getVocabularyRegistry().get(
@@ -116,8 +116,7 @@ class DossierLatexConverter(LatexCTConverter,grok.View,AutoFields):
         latex += '\\scriptsize'
         latex += '\\hspace{0.15cm}Ordnungsposition: %s\\newline\n' % self.view.convert(' / '.join(repository))
         latex += '\\hspace{0.15cm}Aktenzeichen: %s\\newline\n' % self.view.convert(getAdapter(self.context, IReferenceNumber).get_number())
-        if filing_prefix:
-            latex += '\\hspace{0.15cm}Ablage: %s\\newline\n' % self.view.convert(filing_prefix)
+        latex += '\\hspace{0.15cm}Ablage: %s\\newline\n' % self.view.convert(filing_prefix)
         if filling_no:
             latex += '\\hspace{0.15cm}Ablagenummer: %s\\newline\n' % self.view.convert(filling_no)
 
