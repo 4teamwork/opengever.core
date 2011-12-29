@@ -5,7 +5,10 @@ Changelog
 2.0.2 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Implement sort_dicts used for faster custom_sort methods for sorting on the readable fullname.
+  Issue #1325 og.tabbedview: custom_sort methoden performanter implementieren.
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1325
+  [phgross]
 
 
 2.0.1 (2011-12-20)
