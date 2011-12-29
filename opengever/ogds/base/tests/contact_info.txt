@@ -264,13 +264,14 @@ check the sort dictionaries
      u'inbox:client1': u'Inbox: Client 1'}
 
     >>> info.get_user_contact_sort_dict()
-    {u'inbox:client1': u'Inbox: Client 1', u'inbox:client2': u'Inbox: Client 2',
-     u'hugo.boss': u'Boss Hugo',
-     u'kaufmann-sandra': u'Kaufmann Sandra',
-     u'hanspeter.linder': u'linder hanspeter',
-     u'kappeli-elisabeth': u'K\xe4ppeli Elisabeth',
-     u'peter.muster': u'Muster Peter',
-     u'wermuth-roger': u'Wermuth Roger'}
+    {u'inbox:client1': u'Inbox: Client 1',
+    'contact:wermuth-roger': u'Wermuth Roger',
+    'contact:kaufmann-sandra': u'Kaufmann Sandra',
+    'contact:kappeli-elisabeth': u'K\xe4ppeli Elisabeth',
+    u'hugo.boss': u'Boss Hugo',
+    u'inbox:client2': u'Inbox: Client 2',
+    u'hanspeter.linder': u'linder hanspeter',
+    u'peter.muster': u'Muster Peter'}
 
 Test describe with a PAS user:
 
