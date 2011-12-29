@@ -303,4 +303,3 @@ def saveReferenceNumberPrefix(obj, event):
     if not prefix_adapter.get_number(obj):
         prefix_adapter.set_number(obj)
     obj.reindexObject(idxs=['reference'])
-
