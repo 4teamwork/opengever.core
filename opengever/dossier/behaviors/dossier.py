@@ -6,6 +6,7 @@ from collective.elephantvocabulary import wrap_vocabulary
 from datetime import datetime
 from five import grok
 from ftw.datepicker.widget import DatePickerFieldWidget
+from opengever.base.interfaces import IReferenceNumber
 from opengever.base.interfaces import IReferenceNumberPrefix
 from opengever.base.source import RepositoryPathSourceBinder
 from opengever.dossier import _
@@ -302,3 +303,4 @@ def saveReferenceNumberPrefix(obj, event):
     if not prefix_adapter.get_number(obj):
         prefix_adapter.set_number(obj)
     obj.reindexObject(idxs=['reference'])
+
