@@ -74,24 +74,33 @@ class OpengeverTab(object):
             if sort_reverse:
                 results.reverse()
 
-        elif sort_on in ('responsible',
-                         'Creator', 'checked_out', 'issuer', 'contact'):
+        #custom sort for sorting on the readable fullname of the users, contacts and inboxes
+        elif sort_on in ('responsible','Creator', 'checked_out', 'issuer', 'contact'):
             info = getUtility(IContactInformation)
 
-            sort_dict = info.get_user_sort_dict()
+            if sort_on in ('issuer', 'contact'):
+                sort_dict = info.get_user_contact_sort_dict()
+            else:
+                sort_dict = info.get_user_sort_dict()
 
             def _sorter(a, b):
-                return cmp(sort_dict.get(getattr(a, sort_on, '')), sort_dict.get(getattr(b, sort_on, '')))
+                return cmp(
+                    sort_dict.get(getattr(a, sort_on, ''), getattr(a, sort_on, '')),
+                    sort_dict.get(getattr(b, sort_on, ''), getattr(b, sort_on, ''))
+                    )
 
             def _reverse_sorter(b, a):
-                return cmp(sort_dict.get(getattr(a, sort_on, '')), sort_dict.get(getattr(b, sort_on, '')))
+                return cmp(
+                    sort_dict.get(getattr(a, sort_on, ''), getattr(a, sort_on, '')),
+                    sort_dict.get(getattr(b, sort_on, ''), getattr(b, sort_on, ''))
+                    )
 
             results = list(results)
+
             if sort_reverse:
                 results.sort(_reverse_sorter)
             else:
                 results.sort(_sorter)
-
         return results
 
 
