@@ -17,6 +17,7 @@ from plone.directives import form, dexterity
 from plone.z3cform.textlines.textlines import TextLinesFieldWidget
 from z3c.relationfield.schema import RelationChoice, RelationList
 from zope import schema
+from zope.component import getUtility
 from zope.interface import Interface, alsoProvides
 from zope.interface import invariant, Invalid
 import logging
