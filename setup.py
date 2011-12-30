@@ -4,6 +4,11 @@ import os
 version = open('opengever/latex/version.txt').read().strip()
 maintainer = 'Jonas Baumann'
 
+tests_require = [
+    'ftw.testing',
+    'plone.testing',
+    ]
+
 setup(name='opengever.latex',
       version=version,
       description="Opengever latex views" + \
@@ -29,6 +34,7 @@ setup(name='opengever.latex',
       namespace_packages=['opengever'],
       include_package_data=True,
       zip_safe=False,
+
       install_requires=[
         'plone.registry',
         'plone.autoform',
@@ -44,6 +50,10 @@ setup(name='opengever.latex',
         'setuptools',
         # -*- Extra requirements: -*-
         ],
+
+      tests_require=tests_require,
+      extras_require=dict(tests=tests_require),
+
       entry_points="""
       # -*- Entry points: -*-
       [z3c.autoinclude.plugin]
