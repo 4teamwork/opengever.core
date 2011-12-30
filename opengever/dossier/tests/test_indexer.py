@@ -36,6 +36,7 @@ class Testindexers(unittest.TestCase):
 
         dossier.invokeFactory('opengever.dossier.businesscasedossier', 'subdossier')
         subdossier = dossier.get('subdossier')
+        IOpenGeverBase(subdossier).title=u"Subdossier XY"
         subdossier.reindexObject()
 
         subdossier.invokeFactory('opengever.document.document', 'document')
@@ -70,4 +71,13 @@ class Testindexers(unittest.TestCase):
         portal = self.layer['portal']
         subdossier = portal.get('dossier').get('subdossier')
         self.assertEquals(obj2brain(subdossier).containing_subdossier, '')
-        self.assertEquals(obj2brain(subdossier.get('document')).containing_subdossier, '')
+        self.assertEquals(obj2brain(subdossier.get('document')).containing_subdossier, 'Subdossier XY')
+
+        #check subscriber for catch editing subdossier titel
+        IOpenGeverBase(subdossier).title=u"Subdossier CHANGED"
+        subdossier.reindexObject()
+        notify(
+            ObjectModifiedEvent(subdossier, Attributes(Interface, 'IOpenGeverBase.title')))
+
+        self.assertEquals(obj2brain(subdossier).containing_subdossier,u'')
+        self.assertEquals(obj2brain(subdossier.get('document')).containing_subdossier, u'Subdossier CHANGED')
