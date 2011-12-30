@@ -5,6 +5,11 @@ Changelog
 2.0.2 (unreleased)
 ------------------
 
+- Task listing PDF: updated layout and columns.
+  Issue #1331 Anpassung am PDF-Aufgabenverzeichnis
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1331/
+  [jone]
+
 - Reimplement task listing PDF with ftw.pdfgenerator.
   [jone]
 

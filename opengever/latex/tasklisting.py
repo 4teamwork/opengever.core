@@ -6,9 +6,11 @@ from ftw.pdfgenerator.interfaces import ILaTeXView
 from ftw.pdfgenerator.view import MakoLaTeXView
 from ftw.table import helper
 from opengever.latex.interfaces import ILandscapeLayer
-from opengever.latex.utils import get_dossier_sequence_number_and_title
+from opengever.latex.utils import get_dossier_title
 from opengever.latex.utils import get_selected_items
 from opengever.ogds.base.interfaces import IContactInformation
+from opengever.tabbedview.helper import workflow_state
+from opengever.task.helper import task_type_helper
 from zope.component import getUtility
 from zope.interface import Interface
 from zope.interface import directlyProvidedBy, directlyProvides
@@ -53,6 +55,8 @@ class TaskListingLaTeXView(grok.MultiAdapter, MakoLaTeXView):
         return rows
 
     def get_row_for_item(self, item):
+        client = self.info.get_client_by_id(item.client_id).title
+        task_type = task_type_helper(item, item.task_type)
         sequence_number = unicode(item.sequence_number).encode('utf-8')
         deadline = helper.readable_date(item, item.deadline)
 
@@ -63,22 +67,27 @@ class TaskListingLaTeXView(grok.MultiAdapter, MakoLaTeXView):
             item.client_id).title
         issuer = '%s / %s' % (issuer_client_title,
                          self.info.describe(item.issuer))
+        responsible = self.info.describe(item.responsible)
 
-        dossier_seq_num, dossier_title = \
-            get_dossier_sequence_number_and_title(item)
+        dossier_title = get_dossier_title(item)
 
         reference = unicode(getattr(
                 item, 'reference',
                 getattr(item, 'reference_number', ''))).encode('utf-8')
 
+        review_state = workflow_state(item, item.review_state)
+
         data = [
+            client,
             sequence_number,
-            deadline,
             title,
-            issuer,
-            dossier_seq_num,
+            task_type,
             dossier_title,
             reference,
+            issuer,
+            responsible,
+            deadline,
+            review_state,
             ]
 
         return self.convert_list_to_row(data)

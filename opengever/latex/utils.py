@@ -47,7 +47,7 @@ def get_selected_items(context, request):
         pass
 
 
-def get_dossier_sequence_number_and_title(item):
+def get_dossier_title(item):
     """Returns the sequence number and title of the parent dossier of
     the item. `item` may be a brain or a sqlalchemy task object.
     """
@@ -68,12 +68,10 @@ def get_dossier_sequence_number_and_title(item):
                 return ('', '')
             dossier = aq_parent(aq_inner(dossier))
 
-        sequence_number = getUtility(ISequenceNumber).get_number(dossier)
         title = dossier.Title()
 
     else:
         # sqlalchemy task object
-        sequence_number = item.dossier_sequence_number
         if item.breadcrumb_title:
             title = item.breadcrumb_title.split(' > ')[-2]
         else:
@@ -82,4 +80,4 @@ def get_dossier_sequence_number_and_title(item):
     if isinstance(title, unicode):
         title = title.encode('utf-8')
 
-    return str(sequence_number), title
+    return title
