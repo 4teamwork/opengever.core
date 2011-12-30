@@ -5,6 +5,11 @@ Changelog
 2.0.3 (unreleased)
 ------------------
 
+- Added new containing_dossier index used for show in the searchresults and some other listings
+  Issue #1253 Darstellung Dossiertitel bei Suchresultaten (Subdossiers, Dokumente, Aufgaben)
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1253
+  [phgross]
+
 - Tabbedview custom storage key: use better matching interface,
   according to changes in ftw.tabbedview.
   [jone]
