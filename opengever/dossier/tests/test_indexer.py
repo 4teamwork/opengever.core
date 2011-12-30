@@ -5,6 +5,22 @@ from zope.event import notify
 from zope.interface import Interface
 from zope.lifecycleevent import ObjectModifiedEvent, Attributes
 import unittest2 as unittest
+import transaction
+
+
+def obj2brain(obj):
+    catalog = getToolByName(obj, 'portal_catalog')
+    query = {'path': {'query': '/'.join(obj.getPhysicalPath()),
+                  'depth': 0}}
+    brains = catalog(query)
+    if len(brains) == 0:
+        raise Exception('Not in catalog: %s' % obj)
+    else:
+        return brains[0]
+
+def getindexDataForObj(obj):
+    catalog = getToolByName(obj, 'portal_catalog')
+    return catalog.getIndexDataForRID(obj2brain(obj).getRID())
 
 
 class Testindexers(unittest.TestCase):
@@ -22,23 +38,13 @@ class Testindexers(unittest.TestCase):
         subdossier = dossier.get('subdossier')
         subdossier.reindexObject()
 
-        dossier.invokeFactory('opengever.document.document', 'document')
-        document = dossier.get('document')
+        subdossier.invokeFactory('opengever.document.document', 'document')
+        document = subdossier.get('document')
         document.reindexObject()
 
-        catalog = getToolByName(portal, 'portal_catalog')
+        self.assertEquals(obj2brain(subdossier).containing_dossier,u'Testdossier XY')
 
-        self.assertEquals(
-            catalog(
-                path='/'.join(subdossier.getPhysicalPath()))[0].containing_dossier,
-            u'Testdossier XY'
-            )
-
-        self.assertEquals(
-            catalog(
-                path='/'.join(document.getPhysicalPath()))[0].containing_dossier,
-            u'Testdossier XY'
-            )
+        self.assertEquals(obj2brain(document).containing_dossier, u'Testdossier XY')
 
         #check subscriber for catch editing maindossier titel
         IOpenGeverBase(dossier).title=u"Testdossier CHANGED"
@@ -46,15 +52,22 @@ class Testindexers(unittest.TestCase):
         notify(
             ObjectModifiedEvent(dossier, Attributes(Interface, 'IOpenGeverBase.title')))
 
-        self.assertEquals(
-            catalog(
-                path='/'.join(subdossier.getPhysicalPath()))[0].containing_dossier,
-            u'Testdossier CHANGED'
-            )
+        self.assertEquals(obj2brain(subdossier).containing_dossier,u'Testdossier CHANGED')
+        self.assertEquals(obj2brain(document).containing_dossier, u'Testdossier CHANGED')
 
-        self.assertEquals(
-            catalog(
-                path='/'.join(document.getPhysicalPath()))[0].containing_dossier,
-            u'Testdossier CHANGED'
-            )
+        transaction.commit()
 
+    def test_is_subdossier_index(self):
+        portal = self.layer['portal']
+
+        dossier = portal.get('dossier')
+        subdossier = dossier.get('subdossier')
+
+        self.assertEquals(getindexDataForObj(dossier).get('is_subdossier'), False)
+        self.assertEquals(getindexDataForObj(subdossier).get('is_subdossier'), True)
+
+    def test_containing_subdossier(self):
+        portal = self.layer['portal']
+        subdossier = portal.get('dossier').get('subdossier')
+        self.assertEquals(obj2brain(subdossier).containing_subdossier, '')
+        self.assertEquals(obj2brain(subdossier.get('document')).containing_subdossier, '')
