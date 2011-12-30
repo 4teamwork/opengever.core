@@ -44,6 +44,7 @@ class DossierCoverPDFView(grok.View, BaseStandalonePDFView):
         self.use_package('graphicx')
         self.use_package('inputenc', options='utf8', append_options=False)
         self.use_package('textcomp')
+        self.use_package('tabularx')
 
         self.add_raw_template_file('strich.png')
 

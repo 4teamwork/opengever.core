@@ -14,13 +14,16 @@
 \linespread {1.5}
 \thispagestyle{empty}
 \noindent
-\small ${clientid} \newline
+\setlength\tabcolsep{0pt}
+\hspace{-0.15cm}
+\begin{tabularx}{\linewidth}{lXr}
+\small ${clientid} & &\scriptsize Ablage: ${filingprefix}
+\end{tabularx}
 \noindent
 \includegraphics{strich} \newline
 \scriptsize
 \hspace{0.15cm}Aktenzeichen: ${referencenr}\newline
-\hspace{0.15cm}Laufnummer: ${sequencenr}\newline
-\hspace{0.15cm}Ablage: ${filingprefix}
+\hspace{0.15cm}Laufnummer: ${sequencenr}
 % if filingnr:
 \newline\hspace{0.15cm}Ablagenummer: ${filingnr}
 % endif
