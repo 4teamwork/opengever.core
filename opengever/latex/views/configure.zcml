@@ -17,11 +17,4 @@
         permission="zope2.View"
         />
 
-    <browser:view
-        for="*"
-        name="pdf-tasks-listing"
-        class=".taskslisting.TasksListingPDF"
-        permission="zope2.View"
-        />
-
 </configure>

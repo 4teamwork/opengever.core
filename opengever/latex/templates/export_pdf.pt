@@ -1,0 +1,65 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      lang="en"
+      metal:use-macro="here/main_template/macros/master"
+      i18n:domain="ftw.pdfgenerator">
+
+  <body>
+    <metal:main fill-slot="main">
+      <div metal:define-macro="main">
+
+        <h1 class="documentFirstHeading"
+            i18n:translate="">Export PDF</h1>
+
+        <form method="POST" class="export-pdf-form"
+              tal:attributes="action context/@@plone_context_state/current_base_url">
+
+          <p tal:condition="view/allow_alternate_output">
+            <b i18n:translate="">Output</b><br />
+
+            <input type="radio" name="output"
+                   value="pdf" id="output_pdf" checked="checked" />
+            <label for="output_pdf" i18n:translate="">PDF</label>
+
+            <br />
+
+            <input type="radio" name="output"
+                   value="latex" id="output_latex" />
+            <label for="output_latex" i18n:translate="">LaTeX code</label>
+
+            <br />
+
+            <input type="radio" name="output"
+                   value="zip" id="output_zip" />
+            <label for="output_zip" i18n:translate="">ZIP bundle</label>
+          </p>
+
+          <tal:folder_contents_selection
+              tal:condition="request/paths | nothing">
+            <input tal:repeat="path request/paths"
+                   tal:attributes="value path"
+                   name="paths:list" type="hidden" />
+          </tal:folder_contents_selection>
+
+          <tal:task_listing_selection
+              tal:condition="request/task_ids | nothing">
+            <input tal:repeat="path request/task_ids"
+                   tal:attributes="value path"
+                   name="task_ids:list" type="hidden" />
+          </tal:task_listing_selection>
+
+          <input type="submit" name="submitted"
+                 value="Export"
+                 i18n:attributes="value"
+                 class="allowMultiSubmit submit" />
+
+        </form>
+
+      </div>
+
+    </metal:main>
+  </body>
+</html>
+

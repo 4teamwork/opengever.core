@@ -5,6 +5,9 @@ Changelog
 2.0.2 (unreleased)
 ------------------
 
+- Reimplement task listing PDF with ftw.pdfgenerator.
+  [jone]
+
 - Dossier cover PDF: various changes and layout optimizations.
   Issue #1332 Deckblatt PDF: Label Anzeige auch wenn keine Ablage Nummer definiert
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1332/
