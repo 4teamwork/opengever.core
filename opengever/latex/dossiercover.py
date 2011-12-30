@@ -58,7 +58,6 @@ class DossierCoverPDFView(grok.View, BaseStandalonePDFView):
             'sequencenr': self.convert(
                 str(getUtility(ISequenceNumber).get_number(self.context))),
 
-            'repositoryfolder': self.find_repositoryfolder().Title(),
             'title': self.convert(self.context.Title()),
             'description': self.convert(self.context.Description()),
             'responsible': self.convert(self.get_responsible()),
@@ -79,17 +78,6 @@ class DossierCoverPDFView(grok.View, BaseStandalonePDFView):
             obj = aq_parent(aq_inner(obj))
 
         return ' / '.join(titles)
-
-    def find_repositoryfolder(self):
-        obj = self.context
-
-        while obj is not None:
-            if IRepositoryFolder.providedBy(obj):
-                return obj
-
-            obj = aq_parent(aq_inner(obj))
-
-        return None
 
     def get_clientid(self):
         registry = getUtility(IRegistry)

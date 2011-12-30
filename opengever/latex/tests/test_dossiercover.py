@@ -137,21 +137,6 @@ class TestDossierCoverPDFView(MockTestCase):
         self.assertEqual(view.get_reversed_breadcrumbs(),
                          'Sub Folder / Folder')
 
-    def test_find_repositoryfolder(self):
-        tree = self.stub_tree()
-        request = self.stub()
-
-        self.replay()
-
-        view = DossierCoverPDFView(tree.subdossier, request)
-        self.assertEqual(view.find_repositoryfolder(), tree.subfolder)
-
-        view2 = DossierCoverPDFView(tree.dossier, request)
-        self.assertEqual(view2.find_repositoryfolder(), tree.subfolder)
-
-        view3 = DossierCoverPDFView(tree.repository, request)
-        self.assertEqual(view3.find_repositoryfolder(), None)
-
     def test_get_render_arguments(self):
         tree = self.stub_tree()
         context = tree.subdossier
@@ -171,7 +156,6 @@ class TestDossierCoverPDFView(MockTestCase):
              'filingprefix': 'Leitung',
              'filingnr': '5',
              'sequencenr': '2',
-             'repositoryfolder': 'Sub Folder',
              'title': 'My Dossier',
              'description': 'The description',
              'responsible': 'John Doe',

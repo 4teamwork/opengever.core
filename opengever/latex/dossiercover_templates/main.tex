@@ -17,18 +17,19 @@
 \small ${clientid} \newline
 \noindent
 \includegraphics{strich} \newline
-\scriptsize\hspace{0.15cm}Ordnungsposition: ${repository}\newline
+\scriptsize
 \hspace{0.15cm}Aktenzeichen: ${referencenr}\newline
-\hspace{0.15cm}Ablage: ${filingprefix}\newline
+\hspace{0.15cm}Laufnummer: ${sequencenr}\newline
+\hspace{0.15cm}Ablage: ${filingprefix}
 % if filingnr:
-\hspace{0.15cm}Ablagenummer: ${filingnr}\newline
+\newline\hspace{0.15cm}Ablagenummer: ${filingnr}
 % endif
-\hspace{0.15cm}Laufnummer: ${sequencenr}
 \noindent
 \vspace{0.8cm} \newline
-\scriptsize ${repositoryfolder}
+\scriptsize Ordnungsposition: ${repository}
 \vspace{0.3cm} \newline
-\small \textbf{${title}} ${description} \newline
+\small \textbf{${title}} \newline
+${description} \newline
 \vspace{0.3cm} \newline
 \scriptsize Federführung: ${responsible}
 \vspace{0.15cm} \newline
