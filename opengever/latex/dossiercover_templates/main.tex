@@ -1,0 +1,39 @@
+<%block name="documentclass">
+\documentclass[a4paper,11pt]{article}
+</%block>
+
+<%block name="use_packages">
+  ${packages}
+</%block>
+
+
+\renewcommand{\familydefault}{ma1}
+
+\begin{document}
+
+\linespread {1.5}
+\thispagestyle{empty}
+\noindent
+\small ${clientid} \newline
+\noindent
+\includegraphics{strich} \newline
+\scriptsize\hspace{0.15cm}Ordnungsposition: ${repository}\newline
+\hspace{0.15cm}Aktenzeichen: ${referencenr}\newline
+\hspace{0.15cm}Ablage: ${filingprefix}\newline
+% if filingnr:
+\hspace{0.15cm}Ablagenummer: ${filingnr}\newline
+% endif
+\hspace{0.15cm}Laufnummer: ${sequencenr}
+\noindent
+\vspace{0.8cm} \newline
+\scriptsize ${repositoryfolder}
+\vspace{0.3cm} \newline
+\small \textbf{${title}} ${description} \newline
+\vspace{0.3cm} \newline
+\scriptsize Federführung: ${responsible}
+\vspace{0.15cm} \newline
+Beginn: ${start}\hspace{0.15cm}|\hspace{0.15cm}
+Abschluss: ${end}\hspace{0.15cm} \newline
+
+
+\end{document}
