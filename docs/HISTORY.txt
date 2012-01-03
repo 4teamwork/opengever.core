@@ -5,7 +5,8 @@ Changelog
 2.1.2 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Give admin group 'Administrator' role instead of 'Manager'
+  [lgraf]
 
 
 2.1.1 (2011-12-06)

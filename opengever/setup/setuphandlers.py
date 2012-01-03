@@ -68,7 +68,7 @@ def set_global_roles(setup):
 def assign_roles(context, admin_file):
     admin_groups= admin_file.split('\n')
     for admin_group in admin_groups:
-        context.acl_users.portal_role_manager.assignRoleToPrincipal('Manager', admin_group.strip())
+        context.acl_users.portal_role_manager.assignRoleToPrincipal('Administrator', admin_group.strip())
 
 
 
