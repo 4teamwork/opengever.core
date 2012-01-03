@@ -5,6 +5,9 @@ Changelog
 2.0.2 (unreleased)
 ------------------
 
+- Added 'Force Checkin' permission
+  [lgraf]
+
 - #1326 Checkout_documents wirft ein Fehler beim Versuch ein Mail auszuchecken.
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1326
   Improved error handling in checkout_documents: Provide the user with a status

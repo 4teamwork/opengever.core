@@ -17,6 +17,10 @@
           title="opengever.document: Checkin" />
 
     <permission
+        id="opengever.document.ForceCheckin"
+        title="opengever.document: Force Checkin" />
+
+    <permission
           id="opengever.document.Cancel"
           title="opengever.document: Cancel" />
 

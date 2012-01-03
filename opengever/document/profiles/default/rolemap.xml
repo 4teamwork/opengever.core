@@ -5,5 +5,9 @@
       <role name="Owner"/>
       <role name="Contributor"/>
     </permission>
+    <permission name="opengever.document: Force Checkin" acquire="True">
+      <role name="Manager"/>
+      <role name="Administrator"/>
+    </permission>
   </permissions>
 </rolemap>

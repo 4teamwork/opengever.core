@@ -86,6 +86,10 @@ class CheckinCheckoutManager(grok.MultiAdapter):
         if not self.repository.isVersionable(self.context):
             return False
 
+        # Admins with Force Checkin permission may always check in
+        if self.check_permission('opengever.document: Force Checkin'):
+            return True
+
         # is the user able to write to the object?
         if not self.check_permission('Modify portal content'):
             return False
