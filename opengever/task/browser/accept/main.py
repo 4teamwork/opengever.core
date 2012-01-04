@@ -106,15 +106,15 @@ class ChooseMethodStepForm(AcceptWizardFormMixin, Form):
 
     step_name = 'accept_choose_method'
 
-    @buttonAndHandler(_(u'button_continue', default=u'Continue'), name='save')
+    @buttonAndHandler(_(u'button_continue', default=u'Continue'),
+                      name='save')
     def handle_continue(self, action):
         data, errors = self.extractData()
 
         if not errors:
             method = data.get('method')
             if method == 'participate':
-                transition = 'task-transition-open-in-progress'
-                url = '@@addresponse?form.widgets.transition=%s' % transition
+                url = '%s/@@accept_participate' % self.context.absolute_url()
                 return self.request.RESPONSE.redirect(url)
 
             elif method == 'existing_dossier':
