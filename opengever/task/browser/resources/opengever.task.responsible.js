@@ -52,12 +52,10 @@ jq(window).load(function() {
     $('.template-accept_dossier_add_form').each(function() {
         var query = $('#form-widgets-IDossier-responsible-widgets-query');
 
-        var dossier_type = $(this).find('input[name=dossier_type]').
-          attr('value');
+        var oguid = $(this).find('input[name=oguid]').attr('value');
 
-        console.log(query);
         var url = query.autocomplete('option', 'source').split('?')[0].
-          concat('?dossier_type=').concat(dossier_type);
+          concat('?oguid=').concat(oguid);
         query.autocomplete('option', 'source', url);
     });
 
