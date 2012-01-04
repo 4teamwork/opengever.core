@@ -5,16 +5,15 @@ dossier where the task is then filed.
 
 from Products.CMFCore.PortalFolder import PortalFolderBase
 from Products.CMFCore.utils import getToolByName
+from Products.statusmessages.interfaces import IStatusMessage
 from five import grok
 from opengever.base.source import RepositoryPathSourceBinder
 from opengever.globalindex.interfaces import ITaskQuery
-from opengever.ogds.base.interfaces import ITransporter
-from opengever.ogds.base.utils import remote_request
 from opengever.repository.interfaces import IRepositoryFolder
 from opengever.task import _
 from opengever.task.browser.accept.main import AcceptWizardFormMixin
 from opengever.task.browser.accept.utils import AcceptTaskSessionDataManager
-from opengever.task.interfaces import ISuccessorTaskController
+from opengever.task.browser.accept.utils import accept_task_with_successor
 from opengever.task.task import ITask
 from opengever.task.util import add_simple_response
 from plone.dexterity.i18n import MessageFactory as dexterityMF
@@ -81,7 +80,8 @@ class SelectRepositoryfolderStepForm(AcceptWizardNewDossierFormMixin, Form):
     step_name = 'accept_select_repositoryfolder'
     passed_data = ['oguid']
 
-    @buttonAndHandler(_(u'button_continue', default=u'Continue'), name='save')
+    @buttonAndHandler(_(u'button_continue', default=u'Continue'),
+                      name='save')
     def handle_continue(self, action):
         data, errors = self.extractData()
 
@@ -94,7 +94,8 @@ class SelectRepositoryfolderStepForm(AcceptWizardNewDossierFormMixin, Form):
                 self.request.get('oguid'))
             return self.request.RESPONSE.redirect(url)
 
-    @buttonAndHandler(_(u'button_cancel', default=u'Cancel'))
+    @buttonAndHandler(_(u'button_cancel', default=u'Cancel'),
+                      name='cancel')
     def handle_cancel(self, action):
         portal_url = getToolByName(self.context, 'portal_url')
         url = '%s/resolve_oguid?oguid=%s' % (
@@ -159,7 +160,8 @@ class SelectDossierTypeStepForm(AcceptWizardNewDossierFormMixin, Form):
     step_name = 'accept_select_dossier_type'
     passed_data = ['oguid']
 
-    @buttonAndHandler(_(u'button_continue', default=u'Continue'), name='save')
+    @buttonAndHandler(_(u'button_continue', default=u'Continue'),
+                      name='save')
     def handle_continue(self, action):
         data, errors = self.extractData()
 
@@ -170,7 +172,8 @@ class SelectDossierTypeStepForm(AcceptWizardNewDossierFormMixin, Form):
                 self.request.get('oguid'))
             return self.request.RESPONSE.redirect(url)
 
-    @buttonAndHandler(_(u'button_cancel', default=u'Cancel'))
+    @buttonAndHandler(_(u'button_cancel', default=u'Cancel'),
+                      name='cancel')
     def handle_cancel(self, action):
         portal_url = getToolByName(self.context, 'portal_url')
         url = '%s/resolve_oguid?oguid=%s' % (
@@ -236,6 +239,7 @@ class DossierAddFormView(FormWrapper, grok.View):
 
             @buttonAndHandler(dexterityMF('Save'), name='save')
             def handleAdd(self, action):
+                # create the dossier
                 data, errors = self.extractData()
                 if errors:
                     self.status = self.formErrorsMessage
@@ -248,38 +252,17 @@ class DossierAddFormView(FormWrapper, grok.View):
                 # Get a properly aq wrapped object
                 dossier = self.context.get(obj.id)
 
-                oguid = self.request.get('oguid')
-                query = getUtility(ITaskQuery)
-                task = query.get_task_by_oguid(oguid)
+                # create the successor task, accept the predecessor
+                task = accept_task_with_successor(
+                    dossier,
+                    self.request.get('oguid'),
+                    AcceptTaskSessionDataManager(self.request).get('text'))
 
-                # XXX also transport responses
-                # XXX also transport related documents
-                transporter = getUtility(ITransporter)
-                taskobj = transporter.transport_from(
-                    dossier, task.client_id, task.physical_path)
+                IStatusMessage(self.request).addStatusMessage(
+                    _(u'The new dossier has been created and the task has '
+                      u'been copied to the new dossier.'), 'info')
 
-                successor_controller = ISuccessorTaskController(taskobj)
-                successor_controller.set_predecessor(oguid)
-
-                text = AcceptTaskSessionDataManager(self.request).get('text')
-                successor_oguid = successor_controller.get_oguid()
-
-                query = getUtility(ITaskQuery)
-                predecessor_task = query.get_task_by_oguid(oguid)
-
-                # XXX also make workflow change on successor task.
-                response = remote_request(predecessor_task.client_id,
-                               '@@accept_task_workflow_transition',
-                               path=predecessor_task.physical_path,
-                               data={'text': text,
-                                     'successor_oguid': successor_oguid})
-
-                if response.read().strip() != 'OK':
-                    raise Exception('Adding the response and changing the '
-                                    'workflow state on the predecessor task '
-                                    'failed.')
-
-                self.request.RESPONSE.redirect(taskobj.absolute_url())
+                self.request.RESPONSE.redirect(task.absolute_url())
 
             @buttonAndHandler(dexterityMF(u'Cancel'), name='cancel')
             def handleCancel(self, action):
@@ -306,8 +289,8 @@ class DossierAddFormView(FormWrapper, grok.View):
 
         if self.request.form.get(title_key, None) is None:
             title = task.title
-            if isinstance(title, unicode):
-                title = title.encode('utf-8')
+            if isinstance(title, str):
+                title = title.decode('utf-8')
             self.request.set(title_key, title)
 
         return FormWrapper.__call__(self)
