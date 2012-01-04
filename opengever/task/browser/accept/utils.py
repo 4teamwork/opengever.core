@@ -1,4 +1,5 @@
 from Products.CMFCore.utils import getToolByName
+from five import grok
 from opengever.globalindex.interfaces import ITaskQuery
 from opengever.ogds.base.interfaces import ITransporter
 from opengever.ogds.base.utils import remote_request
@@ -7,6 +8,8 @@ from opengever.task.interfaces import ISuccessorTaskController
 from opengever.task.util import add_simple_response
 from persistent.dict import PersistentDict
 from zope.component import getUtility
+from zope.interface import Interface
+import json
 
 
 def accept_task_with_response(task, response_text, successor_oguid=None):
@@ -95,3 +98,32 @@ class AcceptTaskSessionDataManager(object):
 
     def update(self, data):
         self.get_data().update(data)
+
+    def push_to_foreign_client(self, client_id):
+        data = {'session-data': json.dumps(dict(self.get_data())),
+                'oguid': self.oguid}
+        response = remote_request(client_id,
+                                  '@@accept_task_receive_session_data',
+                                  data=data)
+
+        if response.read().strip() != 'OK':
+            raise Exception('Could not push session data to client %s' % (
+                    client_id))
+
+
+class ReceiveSessionData(grok.View):
+    """This view is used to update the session data. The session data manager
+    calls this view on a remote client for pushing the data to the target
+    client.
+    """
+
+    grok.context(Interface)
+    grok.name('accept_task_receive_session_data')
+    grok.require('zope2.View')
+
+    def render(self):
+        jsondata = self.request.get('session-data')
+        data = json.loads(jsondata)
+
+        AcceptTaskSessionDataManager(self.request).update(data)
+        return 'OK'
