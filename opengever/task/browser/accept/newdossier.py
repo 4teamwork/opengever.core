@@ -13,7 +13,7 @@ from opengever.ogds.base.utils import remote_request
 from opengever.repository.interfaces import IRepositoryFolder
 from opengever.task import _
 from opengever.task.browser.accept.main import AcceptWizardFormMixin
-from opengever.task.browser.accept.session import AcceptTaskSessionDataManager
+from opengever.task.browser.accept.utils import AcceptTaskSessionDataManager
 from opengever.task.interfaces import ISuccessorTaskController
 from opengever.task.task import ITask
 from opengever.task.util import add_simple_response
