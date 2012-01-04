@@ -301,6 +301,7 @@ class DossierAddFormView(FormWrapper, grok.View):
 
 
 class AcceptTaskWorkflowTransitionView(grok.View):
+    # XXX move this view since its also used by existing dossier method
     grok.context(ITask)
     grok.name('accept_task_workflow_transition')
     grok.require('cmf.AddPortalContent')

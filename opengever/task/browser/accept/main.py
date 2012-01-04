@@ -22,8 +22,11 @@ from z3c.form.button import buttonAndHandler
 from z3c.form.field import Fields
 from z3c.form.form import Form
 from z3c.form.interfaces import INPUT_MODE
+from z3c.form.validator import SimpleFieldValidator
+from z3c.form.validator import WidgetValidatorDiscriminators
 from zope import schema
 from zope.component import getUtility
+from zope.interface import Invalid
 from zope.intid.interfaces import IIntIds
 from zope.schema.vocabulary import SimpleVocabulary, SimpleTerm
 
@@ -126,6 +129,32 @@ class IChooseMethodSchema(Schema):
         required=False)
 
 
+class MethodValidator(SimpleFieldValidator):
+
+    def validate(self, value):
+        super(MethodValidator, self).validate(value)
+
+        # The user should not be able to create a dossier or use on existing
+        # dossier on a remote client if he does not participate in this
+        # client.
+        if value != u'participate':
+            mtool = getToolByName(self.context, 'portal_membership')
+            userid = mtool.getAuthenticatedMember().getId()
+
+            info = getUtility(IContactInformation)
+            client = info.get_client_by_id(self.context.responsible_client)
+            user = info.get_user(userid)
+
+            if user not in client.users_group.users:
+                raise Invalid(_(u'You are not assigned to the responsible '
+                                u'client. You can only process the task '
+                                u'in the issuers dossier.'))
+
+WidgetValidatorDiscriminators(MethodValidator,
+                              field=IChooseMethodSchema['method'])
+grok.global_adapter(MethodValidator)
+
+
 class ChooseMethodStepForm(AcceptWizardFormMixin, Form):
     fields = Fields(IChooseMethodSchema)
     fields['method'].widgetFactory[INPUT_MODE] = RadioFieldWidget
@@ -138,7 +167,8 @@ class ChooseMethodStepForm(AcceptWizardFormMixin, Form):
         data, errors = self.extractData()
 
         if not errors:
-            AcceptTaskSessionDataManager(self.request).update(data)
+            sdm = AcceptTaskSessionDataManager(self.request)
+            sdm.update(data)
 
             method = data.get('method')
             if method == 'participate':
@@ -149,18 +179,19 @@ class ChooseMethodStepForm(AcceptWizardFormMixin, Form):
                     self.context.absolute_url())
 
             elif method == 'existing_dossier':
-                # XXX multi client redirect
-                # XXX use successor task adapter for getting oguid
-                # XXX sync session data with target client
-                intids = getUtility(IIntIds)
-                iid = intids.getId(self.context)
-                oguid = '%s:%s' % (get_client_id(), str(iid))
+                info = getUtility(IContactInformation)
+                client = info.get_client_by_id(
+                    self.context.responsible_client)
+                oguid = ISuccessorTaskController(self.context).get_oguid()
 
-                portal_url = getToolByName(self.context, 'portal_url')
+                # push session data to target client
+                sdm.push_to_foreign_client(client.client_id)
+
                 # XXX: should "ordnungssystem" really be hardcode?
-                url = '@@accept_choose_dossier?oguid=%s' % oguid
-                return self.request.RESPONSE.redirect('/'.join((
-                            portal_url(), 'ordnungssystem', url)))
+                url = '%s/ordnungssystem/@@accept_choose_dossier?oguid=%s' % (
+                    client.public_url,
+                    oguid)
+                return self.request.RESPONSE.redirect(url)
 
             elif method == 'new_dossier':
                 # XXX: redirect to target client
