@@ -5,6 +5,9 @@ Changelog
 2.2 (unreleased)
 ----------------
 
+- resolve_oguid: redirect to right client if oguid does not belong to "this" client.
+  [jone]
+
 - Client ID portlet should not crash when client configuration is missing.
   [jone]
 
