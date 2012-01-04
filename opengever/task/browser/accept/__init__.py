@@ -50,7 +50,7 @@ class AcceptWizardFormMixin(object):
 
     label = _(u'title_accept_task', u'Accept task')
     template = ViewPageTemplateFile(
-        'templates/wizard_wrappedform.pt')
+        '../templates/wizard_wrappedform.pt')
     ignoreContext = True
 
     passed_data = []
