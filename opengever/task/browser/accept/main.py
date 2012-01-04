@@ -34,9 +34,15 @@ class AcceptTask(grok.View):
     grok.require('cmf.AddPortalContent')
 
     def render(self):
-        # XXX redirect to direct_response in single client setup
-        url = '@@accept_choose_method'
-        return self.request.RESPONSE.redirect(url)
+        if self.is_wizard_active():
+            url = '@@accept_choose_method'
+
+        else:
+            url = 'direct_response?form.widgets.transition=' + \
+                'task-transition-open-in-progress'
+
+        return self.request.RESPONSE.redirect(
+            '/'.join((self.context.absolute_url(), url)))
 
     def is_wizard_active(self):
         """The wizard is only active in multi client setup.
