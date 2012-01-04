@@ -6,9 +6,14 @@ step, where the user has to choose the method of participation.
 
 from Products.CMFCore.utils import getToolByName
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
+from Products.statusmessages.interfaces import IStatusMessage
 from five import grok
+from opengever.ogds.base.interfaces import IContactInformation
 from opengever.ogds.base.utils import get_client_id
 from opengever.task import _
+from opengever.task.browser.accept.utils import AcceptTaskSessionDataManager
+from opengever.task.browser.accept.utils import accept_task_with_response
+from opengever.task.interfaces import ISuccessorTaskController
 from opengever.task.task import ITask
 from plone.directives.form import Schema
 from plone.z3cform.layout import FormWrapper
@@ -29,8 +34,15 @@ class AcceptTask(grok.View):
     grok.require('cmf.AddPortalContent')
 
     def render(self):
+        # XXX redirect to direct_response in single client setup
         url = '@@accept_choose_method'
         return self.request.RESPONSE.redirect(url)
+
+    def is_wizard_active(self):
+        """The wizard is only active in multi client setup.
+        """
+        info = getUtility(IContactInformation)
+        return len(info.get_clients()) > 1
 
 
 class AcceptWizardFormMixin(object):
@@ -53,7 +65,8 @@ class AcceptWizardFormMixin(object):
         '../templates/wizard_wrappedform.pt')
     ignoreContext = True
 
-    passed_data = []
+    # XXX generalize that so that it is not defined in the subclasses any more
+    passed_data = ['oguid']
 
     def wizard_steps(self):
         current_reached = False
@@ -99,6 +112,13 @@ class IChooseMethodSchema(Schema):
         vocabulary=method_vocabulary,
         required=True)
 
+    text = schema.Text(
+        title=_(u'label_response', default=u'Response'),
+        description=_(u'help_accept_task_response',
+                      default=u'Enter a answer text which will be shown '
+                      u'as response when the task is accepted.'),
+        required=False)
+
 
 class ChooseMethodStepForm(AcceptWizardFormMixin, Form):
     fields = Fields(IChooseMethodSchema)
@@ -112,14 +132,20 @@ class ChooseMethodStepForm(AcceptWizardFormMixin, Form):
         data, errors = self.extractData()
 
         if not errors:
+            AcceptTaskSessionDataManager(self.request).update(data)
+
             method = data.get('method')
             if method == 'participate':
-                url = '%s/@@accept_participate' % self.context.absolute_url()
-                return self.request.RESPONSE.redirect(url)
+                accept_task_with_response(self.context, data['text'])
+                IStatusMessage(self.request).addStatusMessage(
+                    _(u'The task has been accepted.'), 'info')
+                return self.request.response.redirect(
+                    self.context.absolute_url())
 
             elif method == 'existing_dossier':
                 # XXX multi client redirect
                 # XXX use successor task adapter for getting oguid
+                # XXX sync session data with target client
                 intids = getUtility(IIntIds)
                 iid = intids.getId(self.context)
                 oguid = '%s:%s' % (get_client_id(), str(iid))
@@ -133,6 +159,7 @@ class ChooseMethodStepForm(AcceptWizardFormMixin, Form):
             elif method == 'new_dossier':
                 # XXX: redirect to target client
                 # XXX use successor task adapter for getting oguid
+                # XXX sync session data with target client
                 intids = getUtility(IIntIds)
                 iid = intids.getId(self.context)
                 oguid = '%s:%s' % (get_client_id(), str(iid))
@@ -146,6 +173,19 @@ class ChooseMethodStepForm(AcceptWizardFormMixin, Form):
     @buttonAndHandler(_(u'button_cancel', default=u'Cancel'))
     def handle_cancel(self, action):
         return self.request.RESPONSE.redirect('.')
+
+    def updateWidgets(self):
+        if self.request.form.get('form.widgets.text', None) is None:
+            if self.request.get('oguid', None) is None:
+                oguid = ISuccessorTaskController(self.context).get_oguid()
+                self.request.set('oguid', oguid)
+
+            text = AcceptTaskSessionDataManager(self.request).get('text')
+
+            if text:
+                self.request.set('form.widgets.text', text)
+
+        super(ChooseMethodStepForm, self).updateWidgets()
 
 
 class ChooseMethodStepView(FormWrapper, grok.View):

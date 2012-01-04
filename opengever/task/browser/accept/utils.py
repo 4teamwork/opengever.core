@@ -91,7 +91,7 @@ class AcceptTaskSessionDataManager(object):
         return self.get_data().get(key, default)
 
     def set(self, key, value):
-        return self.get_data().set(key, value)
+        self.get_data()[key] = value
 
     def update(self, data):
         self.get_data().update(data)

@@ -9,6 +9,7 @@ from five import grok
 from opengever.base.source import RepositoryPathSourceBinder
 from opengever.task import _
 from opengever.task.browser.accept.main import AcceptWizardFormMixin
+from opengever.task.browser.accept.utils import AcceptTaskSessionDataManager
 from opengever.task.browser.accept.utils import accept_task_with_successor
 from plone.directives.form import Schema
 from plone.z3cform.layout import FormWrapper
@@ -16,7 +17,6 @@ from z3c.form.button import buttonAndHandler
 from z3c.form.field import Fields
 from z3c.form.form import Form
 from z3c.relationfield.schema import RelationChoice
-from zope import schema
 from zope.interface import Interface
 
 
@@ -42,14 +42,6 @@ class IChooseDossierSchema(Schema):
                     'opengever.dossier.behaviors.dossier.IDossierMarker',
                     ]}))
 
-    text = schema.Text(
-        title=_(u'label_response', default=u'Response'),
-        description=_(u'help_accept_task_response',
-                      default=u'Enter a answer text which will be shown '
-                      u'as response when the task is accepted.'),
-        required=False,
-        )
-
 
 class ChooseDossierStepForm(AcceptWizardFormMixin, Form):
     fields = Fields(IChooseDossierSchema)
@@ -64,13 +56,16 @@ class ChooseDossierStepForm(AcceptWizardFormMixin, Form):
          _(u'accept_step_2', default=u'Step 2')),
         )
 
-    @buttonAndHandler(_(u'button_continue', default=u'Continue'), name='save')
+    @buttonAndHandler(_(u'button_continue', default=u'Continue'),
+                      name='save')
     def handle_continue(self, action):
         data, errors = self.extractData()
 
         if not errors:
+            text = AcceptTaskSessionDataManager(self.request).get('text')
             task = accept_task_with_successor(
-                data['dossier'], self.request.get('oguid'), data['text'])
+                data['dossier'], self.request.get('oguid'), text)
+
             IStatusMessage(self.request).addStatusMessage(
                 _(u'The task has been copied to the selected dossier and '
                   u'accepted.'), 'info')

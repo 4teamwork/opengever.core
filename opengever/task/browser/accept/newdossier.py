@@ -146,14 +146,6 @@ class ISelectDossierTypeSchema(Schema):
         source=allowed_dossier_types_vocabulary,
         required=True)
 
-    text = schema.Text(
-        title=_(u'label_response', default=u'Response'),
-        description=_(u'help_accept_task_response',
-                      default=u'Enter a answer text which will be shown '
-                      u'as response when the task is accepted.'),
-        required=False,
-        )
-
 
 class SelectDossierTypeStepForm(AcceptWizardNewDossierFormMixin, Form):
     fields = Fields(ISelectDossierTypeSchema)

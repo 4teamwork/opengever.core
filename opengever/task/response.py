@@ -11,7 +11,9 @@ from opengever.ogds.base.interfaces import IContactInformation
 from opengever.task import _
 from opengever.task import util
 from opengever.task.adapters import IResponseContainer, Response
+from opengever.task.browser.accept.utils import AcceptTaskSessionDataManager
 from opengever.task.interfaces import IResponseAdder
+from opengever.task.interfaces import ISuccessorTaskController
 from opengever.task.permissions import DEFAULT_ISSUE_MIME_TYPE
 from opengever.task.task import ITask
 from plone.autoform.form import AutoExtensibleForm
@@ -237,6 +239,20 @@ class AddForm(form.AddForm, AutoExtensibleForm):
             self.status = errorMessage
             return None
         else:
+            # redirect to the accept-task wizard if necessary.
+            is_accept_transition = data.get('transition', None) == \
+                    'task-transition-open-in-progress'
+            if is_accept_transition and self.context.restrictedTraverse(
+                    '@@accept_task').is_wizard_active():
+
+                oguid = ISuccessorTaskController(self.context).get_oguid()
+                self.request.set('oguid', oguid)
+                AcceptTaskSessionDataManager(self.request).set(
+                    'text', data.get('text'))
+
+                url = '%s/@@accept_task' % self.context.absolute_url()
+                return self.request.RESPONSE.redirect(url)
+
             new_response = Response(data.get('text'))
             #define responseTyp
             responseCreator = new_response.creator
