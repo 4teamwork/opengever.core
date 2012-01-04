@@ -4,29 +4,26 @@ from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from five import grok
 from opengever.base.source import RepositoryPathSourceBinder
 from opengever.globalindex.interfaces import ITaskQuery
+from opengever.ogds.base.interfaces import ITransporter
 from opengever.ogds.base.utils import get_client_id
 from opengever.repository.interfaces import IRepositoryFolder
 from opengever.task import _
+from opengever.task.interfaces import ISuccessorTaskController
 from opengever.task.task import ITask
-from plone.autoform.interfaces import IFormFieldProvider
 from plone.dexterity.i18n import MessageFactory as dexterityMF
-from plone.dexterity.utils import getAdditionalSchemata
 from plone.directives.form import Schema
-from plone.directives.form import fieldset
-from plone.directives.form import mode
 from plone.z3cform.layout import FormWrapper
 from z3c.form.browser.radio import RadioFieldWidget
 from z3c.form.button import buttonAndHandler
 from z3c.form.field import Fields
 from z3c.form.form import Form
-from z3c.form.interfaces import HIDDEN_MODE
 from z3c.form.interfaces import INPUT_MODE
 from z3c.relationfield.schema import RelationChoice
 from zope import schema
 from zope.component import getUtility
 from zope.component import queryMultiAdapter
 from zope.i18nmessageid import MessageFactory
-from zope.interface import Interface, alsoProvides
+from zope.interface import Interface
 from zope.intid.interfaces import IIntIds
 from zope.schema.interfaces import IContextSourceBinder
 from zope.schema.vocabulary import SimpleVocabulary, SimpleTerm
@@ -54,6 +51,8 @@ class AcceptWizardFormMixin(object):
         'templates/wizard_wrappedform.pt')
     ignoreContext = True
 
+    passed_data = []
+
     def wizard_steps(self):
         current_reached = False
 
@@ -70,6 +69,11 @@ class AcceptWizardFormMixin(object):
                    'label': label,
                    'class': ' '.join(classes)}
 
+    def get_passed_data(self):
+        for key in self.passed_data:
+            yield {'key': key,
+                   'value': self.request.get(key, '')}
+
 
 class AcceptTask(grok.View):
     grok.context(ITask)
@@ -79,6 +83,15 @@ class AcceptTask(grok.View):
     def render(self):
         url = '@@accept_choose_method'
         return self.request.RESPONSE.redirect(url)
+
+
+class WizardStepBaseView(FormWrapper, grok.View):
+    grok.baseclass()
+
+    def __init__(self, *args, **kwargs):
+        FormWrapper.__init__(self, *args, **kwargs)
+        grok.View.__init__(self, *args, **kwargs)
+
 
 
 # ------------------- CHOOSE METHOD --------------------------
@@ -135,8 +148,7 @@ class ChooseMethodStepForm(AcceptWizardFormMixin, Form):
 
                 portal_url = getToolByName(self.context, 'portal_url')
                 # XXX: should "ordnungssystem" really be hardcode?
-                url = '@@accept_select_repositoryfolder?' + \
-                    'form.widgets.oguid=%s' % oguid
+                url = '@@accept_select_repositoryfolder?oguid=%s' % oguid
                 return self.request.RESPONSE.redirect('/'.join((
                             portal_url(), 'ordnungssystem', url)))
 
@@ -145,18 +157,12 @@ class ChooseMethodStepForm(AcceptWizardFormMixin, Form):
         return self.request.RESPONSE.redirect('.')
 
 
-class ChooseMethodStepView(FormWrapper, grok.View):
+class ChooseMethodStepView(WizardStepBaseView):
     grok.context(ITask)
     grok.name('accept_choose_method')
     grok.require('cmf.AddPortalContent')
 
     form = ChooseMethodStepForm
-
-    def __init__(self, *args, **kwargs):
-        FormWrapper.__init__(self, *args, **kwargs)
-        grok.View.__init__(self, *args, **kwargs)
-
-    __call__ = FormWrapper.__call__
 
 
 # ################### NEW DOSSIER ##########################
@@ -184,8 +190,6 @@ class AcceptWizardNewDossierFormMixin(AcceptWizardFormMixin):
 
 class ISelectRepositoryfolderSchema(Schema):
 
-    oguid = schema.TextLine()
-
     repositoryfolder = RelationChoice(
         title=_(u'label_accept_select_repositoryfolder',
                 default=u'Repository folder'),
@@ -210,6 +214,7 @@ class SelectRepositoryfolderStepForm(AcceptWizardNewDossierFormMixin, Form):
     fields = Fields(ISelectRepositoryfolderSchema)
 
     step_name = 'accept_select_repositoryfolder'
+    passed_data = ['oguid']
 
     @buttonAndHandler(_(u'button_continue', default=u'Continue'), name='save')
     def handle_continue(self, action):
@@ -220,33 +225,27 @@ class SelectRepositoryfolderStepForm(AcceptWizardNewDossierFormMixin, Form):
             folder = data['repositoryfolder']
             url = folder.absolute_url()
 
-            url += '/@@accept_select_dossier_type?form.widgets.oguid=%s' % data['oguid']
+            url += '/@@accept_select_dossier_type?oguid=%s' % (
+                self.request.get('oguid'))
             return self.request.RESPONSE.redirect(url)
 
     @buttonAndHandler(_(u'button_cancel', default=u'Cancel'))
     def handle_cancel(self, action):
-        data, errors = self.extractData()
         portal_url = getToolByName(self.context, 'portal_url')
-        url = '%s/resolve_oguid?oguid=%s' % (portal_url(), data['oguid'])
+        url = '%s/resolve_oguid?oguid=%s' % (
+            portal_url(), self.request.get('oguid'))
         return self.request.RESPONSE.redirect(url)
 
     def updateWidgets(self):
         super(SelectRepositoryfolderStepForm, self).updateWidgets()
-        self.widgets['oguid'].mode = HIDDEN_MODE
 
 
-class SelectRepositoryfolderStepView(FormWrapper, grok.View):
+class SelectRepositoryfolderStepView(WizardStepBaseView):
     grok.context(Interface)
     grok.name('accept_select_repositoryfolder')
     grok.require('zope2.View')
 
     form = SelectRepositoryfolderStepForm
-
-    def __init__(self, *args, **kwargs):
-        FormWrapper.__init__(self, *args, **kwargs)
-        grok.View.__init__(self, *args, **kwargs)
-
-    __call__ = FormWrapper.__call__
 
 
 # ------------------- SELECT DOSSIER TYPE --------------------------
@@ -269,8 +268,6 @@ def allowed_dossier_types_vocabulary(context):
 
 class ISelectDossierTypeSchema(Schema):
 
-    oguid = schema.TextLine()
-
     dossier_type = schema.Choice(
         title=_('label_accept_select_dossier_type', default=u'Dossier type'),
         description=_(u'help_accept_select_dossier_type',
@@ -282,31 +279,31 @@ class ISelectDossierTypeSchema(Schema):
 class SelectDossierTypeStepForm(AcceptWizardNewDossierFormMixin, Form):
     fields = Fields(ISelectDossierTypeSchema)
     step_name = 'accept_select_dossier_type'
+    passed_data = ['oguid']
 
     @buttonAndHandler(_(u'button_continue', default=u'Continue'), name='save')
     def handle_continue(self, action):
         data, errors = self.extractData()
 
         if not errors:
-            url = '%s/@@accept_dossier_add_form?%s' % (
+            url = '%s/@@accept_dossier_add_form?oguid=%s&%s' % (
                 self.context.absolute_url(),
+                self.request.get('oguid'),
                 urllib.urlencode(data))
             return self.request.RESPONSE.redirect(url)
 
     @buttonAndHandler(_(u'button_cancel', default=u'Cancel'))
     def handle_cancel(self, action):
-        data, errors = self.extractData()
         portal_url = getToolByName(self.context, 'portal_url')
         url = '%s/resolve_oguid?oguid=%s' % (
-            portal_url(), data['oguid'])
+            portal_url(), self.request.get('oguid'))
         return self.request.RESPONSE.redirect(url)
 
     def updateWidgets(self):
         super(SelectDossierTypeStepForm, self).updateWidgets()
-        self.widgets['oguid'].mode = HIDDEN_MODE
 
 
-class SelectDossierTypeStepView(FormWrapper, grok.View):
+class SelectDossierTypeStepView(WizardStepBaseView):
     grok.context(IRepositoryFolder)
     grok.name('accept_select_dossier_type')
     grok.require('zope2.View')
@@ -314,31 +311,11 @@ class SelectDossierTypeStepView(FormWrapper, grok.View):
     form = SelectDossierTypeStepForm
 
 
-    def __init__(self, *args, **kwargs):
-        FormWrapper.__init__(self, *args, **kwargs)
-        grok.View.__init__(self, *args, **kwargs)
-
-    __call__ = FormWrapper.__call__
-
 
 # ------------------- DOSSIER ADD FORM --------------------------
 
 
-class IDossierAddFormAdditionalSchema(Schema):
-
-    fieldset(
-        u'common',
-        fields=[
-            u'oguid',
-            ])
-
-    mode(oguid='hidden')
-    oguid = schema.TextLine()
-
-alsoProvides(IDossierAddFormAdditionalSchema, IFormFieldProvider)
-
-
-class DossierAddFormView(FormWrapper, grok.View):
+class DossierAddFormView(WizardStepBaseView):
     grok.context(IRepositoryFolder)
     grok.name('accept_dossier_add_form')
     # XXX improve permissions
@@ -346,6 +323,7 @@ class DossierAddFormView(FormWrapper, grok.View):
 
     def __init__(self, context, request):
         typename = request.form.get('dossier_type')
+
         ttool = getToolByName(context, 'portal_types')
         self.ti = ttool.getTypeInfo(typename)
 
@@ -375,21 +353,48 @@ class DossierAddFormView(FormWrapper, grok.View):
     def _wrap_form(self, formclass):
         class WrappedForm(AcceptWizardNewDossierFormMixin, formclass):
             step_name = 'accept_dossier_add_form'
+            passed_data = ['oguid', 'dossier_type']
 
-            @property
-            def additionalSchemata(self):
-                yield IDossierAddFormAdditionalSchema
-                for schema in getAdditionalSchemata(
-                    portal_type=self.portal_type):
-                    yield schema
+            @buttonAndHandler(dexterityMF('Save'), name='save')
+            def handleAdd(self, action):
+                data, errors = self.extractData()
+                if errors:
+                    self.status = self.formErrorsMessage
+                    return
+                obj = self.createAndAdd(data)
+                if obj is not None:
+                    # mark only as finished if we get the new object
+                    self._finishedAdd = True
+
+                # Get a properly aq wrapped object
+                dossier = self.context.get(obj.id)
+
+                oguid = self.request.get('oguid')
+                query = getUtility(ITaskQuery)
+                task = query.get_task_by_oguid(oguid)
+
+                # XXX also transport responses
+                transporter = getUtility(ITransporter)
+                taskobj = transporter.transport_from(
+                    dossier, task.client_id, task.physical_path)
+
+                successor_controller = ISuccessorTaskController(taskobj)
+                successor_controller.set_predecessor(oguid)
+
+                self.request.RESPONSE.redirect(taskobj.absolute_url())
+
+            @buttonAndHandler(dexterityMF(u'Cancel'), name='cancel')
+            def handleCancel(self, action):
+                portal_url = getToolByName(self.context, 'portal_url')
+                url = '%s/resolve_oguid?oguid=%s' % (
+                    portal_url(), self.request.get('oguid'))
+                return self.request.RESPONSE.redirect(url)
 
         WrappedForm.__name__ = 'WizardForm: %s' % formclass.__name__
         return WrappedForm
 
-    def update(self):
+    def __call__(self):
         oguid = self.request.get('oguid')
-        self.request.set('form.widgets.IDossierAddFormAdditionalSchema.oguid',
-                         oguid)
 
         query = getUtility(ITaskQuery)
         task = query.get_task_by_oguid(oguid)
@@ -398,6 +403,13 @@ class DossierAddFormView(FormWrapper, grok.View):
         # globalindex contianing_dossier is missing yet, see:
         # Issue #1253 Darstellung Dossiertitel bei Suchresultaten (Subdossiers, Dokumente, Aufgaben)
         # https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1253
-        self.request.set('form.widgets.IOpenGeverBase.title', task.title)
 
-        FormWrapper.update(self)
+        title_key = 'form.widgets.IOpenGeverBase.title'
+
+        if self.request.form.get(title_key, None) is None:
+            title = task.title
+            if isinstance(title, unicode):
+                title = title.encode('utf-8')
+            self.request.set(title_key, title)
+
+        return FormWrapper.__call__(self)

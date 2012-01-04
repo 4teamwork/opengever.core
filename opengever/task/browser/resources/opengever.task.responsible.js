@@ -48,6 +48,17 @@ jq(window).load(function() {
         $('#form-widgets-target_dossier-widgets-query').autocomplete('option', 'source', url);
     }).change();
 
+    /* for create dossier in accept-task wizard */
+    $('.template-accept_dossier_add_form').each(function() {
+        var query = $('#form-widgets-IDossier-responsible-widgets-query');
 
+        var dossier_type = $(this).find('input[name=dossier_type]').
+          attr('value');
+
+        console.log(query);
+        var url = query.autocomplete('option', 'source').split('?')[0].
+          concat('?dossier_type=').concat(dossier_type);
+        query.autocomplete('option', 'source', url);
+    });
 
 });
