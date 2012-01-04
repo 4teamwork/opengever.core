@@ -100,6 +100,10 @@ class SelectRepositoryfolderStepForm(AcceptWizardNewDossierFormMixin, Form):
         portal_url = getToolByName(self.context, 'portal_url')
         url = '%s/resolve_oguid?oguid=%s' % (
             portal_url(), self.request.get('oguid'))
+
+        IStatusMessage(self.request).addStatusMessage(
+            _(u'Accepting task cancelled.'), 'info')
+
         return self.request.RESPONSE.redirect(url)
 
     def updateWidgets(self):
@@ -170,6 +174,10 @@ class SelectDossierTypeStepForm(AcceptWizardNewDossierFormMixin, Form):
         portal_url = getToolByName(self.context, 'portal_url')
         url = '%s/resolve_oguid?oguid=%s' % (
             portal_url(), self.request.get('oguid'))
+
+        IStatusMessage(self.request).addStatusMessage(
+            _(u'Accepting task cancelled.'), 'info')
+
         return self.request.RESPONSE.redirect(url)
 
 
@@ -261,6 +269,10 @@ class DossierAddFormView(FormWrapper, grok.View):
                 portal_url = getToolByName(self.context, 'portal_url')
                 url = '%s/resolve_oguid?oguid=%s' % (
                     portal_url(), self.request.get('oguid'))
+
+                IStatusMessage(self.request).addStatusMessage(
+                    _(u'Accepting task cancelled.'), 'info')
+
                 return self.request.RESPONSE.redirect(url)
 
         WrappedForm.__name__ = 'WizardForm: %s' % formclass.__name__

@@ -76,6 +76,10 @@ class ChooseDossierStepForm(AcceptWizardFormMixin, Form):
         portal_url = getToolByName(self.context, 'portal_url')
         url = '%s/resolve_oguid?oguid=%s' % (
             portal_url(), self.request.get('oguid'))
+
+        IStatusMessage(self.request).addStatusMessage(
+            _(u'Accepting task cancelled.'), 'info')
+
         return self.request.RESPONSE.redirect(url)
 
 

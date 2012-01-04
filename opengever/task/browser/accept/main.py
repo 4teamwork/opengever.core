@@ -178,6 +178,9 @@ class ChooseMethodStepForm(AcceptWizardFormMixin, Form):
 
     @buttonAndHandler(_(u'button_cancel', default=u'Cancel'))
     def handle_cancel(self, action):
+        IStatusMessage(self.request).addStatusMessage(
+            _(u'Accepting task cancelled.'), 'info')
+
         return self.request.RESPONSE.redirect('.')
 
     def updateWidgets(self):
