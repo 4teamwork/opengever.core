@@ -51,8 +51,7 @@ class ParticipateStepForm(AcceptWizardFormMixin, Form):
 
     @buttonAndHandler(_(u'button_cancel', default=u'Cancel'))
     def handle_cancel(self, action):
-        url = '%s/@@accept_task' % self.context.absolute_url()
-        return self.request.RESPONSE.redirect(url)
+        return self.request.RESPONSE.redirect(self.context.absolute_url())
 
 
 class ParticipateStepView(FormWrapper, grok.View):
