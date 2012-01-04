@@ -1,3 +1,6 @@
+from persistent.dict import PersistentDict
+
+
 class AcceptTaskSessionDataManager(object):
 
     KEY = 'accept-task-wizard'
