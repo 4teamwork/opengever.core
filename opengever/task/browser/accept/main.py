@@ -118,10 +118,21 @@ class ChooseMethodStepForm(AcceptWizardFormMixin, Form):
                 return self.request.RESPONSE.redirect(url)
 
             elif method == 'existing_dossier':
-                raise NotImplementedError()
+                # XXX multi client redirect
+                # XXX use successor task adapter for getting oguid
+                intids = getUtility(IIntIds)
+                iid = intids.getId(self.context)
+                oguid = '%s:%s' % (get_client_id(), str(iid))
+
+                portal_url = getToolByName(self.context, 'portal_url')
+                # XXX: should "ordnungssystem" really be hardcode?
+                url = '@@accept_choose_dossier?oguid=%s' % oguid
+                return self.request.RESPONSE.redirect('/'.join((
+                            portal_url(), 'ordnungssystem', url)))
 
             elif method == 'new_dossier':
                 # XXX: redirect to target client
+                # XXX use successor task adapter for getting oguid
                 intids = getUtility(IIntIds)
                 iid = intids.getId(self.context)
                 oguid = '%s:%s' % (get_client_id(), str(iid))
