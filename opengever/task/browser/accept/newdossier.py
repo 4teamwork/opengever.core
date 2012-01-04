@@ -33,7 +33,6 @@ from zope.schema.interfaces import IContextSourceBinder
 from zope.schema.vocabulary import SimpleVocabulary, SimpleTerm
 
 
-
 class AcceptWizardNewDossierFormMixin(AcceptWizardFormMixin):
 
     steps = (
@@ -177,9 +176,6 @@ class SelectDossierTypeStepForm(AcceptWizardNewDossierFormMixin, Form):
         url = '%s/resolve_oguid?oguid=%s' % (
             portal_url(), self.request.get('oguid'))
         return self.request.RESPONSE.redirect(url)
-
-    def updateWidgets(self):
-        super(SelectDossierTypeStepForm, self).updateWidgets()
 
 
 class SelectDossierTypeStepView(FormWrapper, grok.View):
