@@ -30,6 +30,8 @@ def accept_task_with_response(task, response_text, successor_oguid=None):
     response.add_change('review_state', _(u'Issue state'),
                         before, after)
 
+    # XXX reindex global index does not work / too late
+
     return response
 
 

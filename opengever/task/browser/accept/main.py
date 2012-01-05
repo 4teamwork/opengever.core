@@ -28,6 +28,7 @@ from zope import schema
 from zope.component import getUtility
 from zope.interface import Invalid
 from zope.intid.interfaces import IIntIds
+from zope.schema.interfaces import IContextSourceBinder
 from zope.schema.vocabulary import SimpleVocabulary, SimpleTerm
 
 
@@ -99,18 +100,28 @@ class AcceptWizardFormMixin(object):
                    'value': self.request.get(key, '')}
 
 
-method_vocabulary = SimpleVocabulary([
-                SimpleTerm(value=u'participate',
-                           title=_(u'accept_method_participate',
-                                   default=u"process in issuer's dossier")),
+@grok.provider(IContextSourceBinder)
+def method_vocabulary_factory(context):
+    info = getUtility(IContactInformation)
+    client = info.get_client_by_id(context.responsible_client)
 
-                SimpleTerm(value=u'existing_dossier',
-                           title=_(u'accept_method_existing_dossier',
-                                   default=u'file in existing dossier')),
+    return SimpleVocabulary([
+            SimpleTerm(
+                value=u'participate',
+                title=_(u'accept_method_participate',
+                        default=u"process in issuer's dossier")),
 
-                SimpleTerm(value=u'new_dossier',
-                           title=_(u'accept_method_new_dossier',
-                                   default=u'file in new dossier'))])
+            SimpleTerm(
+                value=u'existing_dossier',
+                title=_(u'accept_method_existing_dossier',
+                        default=u'file in existing dossier in ${client}',
+                        mapping={'client': client.title})),
+
+            SimpleTerm(
+                value=u'new_dossier',
+                title=_(u'accept_method_new_dossier',
+                        default=u'file in new dossier in ${client}',
+                        mapping={'client': client.title}))])
 
 
 class IChooseMethodSchema(Schema):
@@ -118,7 +129,7 @@ class IChooseMethodSchema(Schema):
     method = schema.Choice(
         title=_('label_accept_choose_method',
                 default=u'Accept the task and ...'),
-        vocabulary=method_vocabulary,
+        source=method_vocabulary_factory,
         required=True)
 
     text = schema.Text(
@@ -146,9 +157,11 @@ class MethodValidator(SimpleFieldValidator):
             user = info.get_user(userid)
 
             if user not in client.users_group.users:
-                raise Invalid(_(u'You are not assigned to the responsible '
-                                u'client. You can only process the task '
-                                u'in the issuers dossier.'))
+                msg = _(u'You are not assigned to the responsible client '
+                        u'(${client}). You can only process the task in the '
+                        u'issuers dossier.',
+                        mapping={'client': client.title})
+                raise Invalid(msg)
 
 WidgetValidatorDiscriminators(MethodValidator,
                               field=IChooseMethodSchema['method'])
