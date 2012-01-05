@@ -11,7 +11,7 @@ from opengever.ogds.base.interfaces import IContactInformation
 from opengever.task import _
 from opengever.task import util
 from opengever.task.adapters import IResponseContainer, Response
-from opengever.task.browser.accept.utils import AcceptTaskSessionDataManager
+from opengever.task.browser.accept.storage import IAcceptTaskStorageManager
 from opengever.task.interfaces import IResponseAdder
 from opengever.task.interfaces import ISuccessorTaskController
 from opengever.task.permissions import DEFAULT_ISSUE_MIME_TYPE
@@ -247,8 +247,8 @@ class AddForm(form.AddForm, AutoExtensibleForm):
 
                 oguid = ISuccessorTaskController(self.context).get_oguid()
                 self.request.set('oguid', oguid)
-                AcceptTaskSessionDataManager(self.request).set(
-                    'text', data.get('text'))
+                dm = getUtility(IAcceptTaskStorageManager)
+                dm.set('text', data.get('text'), oguid=oguid)
 
                 url = '%s/@@accept_task' % self.context.absolute_url()
                 return self.request.RESPONSE.redirect(url)

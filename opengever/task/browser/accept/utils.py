@@ -9,9 +9,7 @@ from opengever.task import _
 from opengever.task.interfaces import ISuccessorTaskController
 from opengever.task.task import ITask
 from opengever.task.util import add_simple_response
-from persistent.dict import PersistentDict
 from zope.component import getUtility
-from zope.interface import Interface
 import json
 import transaction
 
@@ -54,8 +52,9 @@ def accept_task_with_successor(dossier, predecessor_oguid, response_text):
     accept_task_with_response(successor, response_text)
 
     transaction.savepoint()
-    request_data = {'text': response_text,
+    request_data = {'text': response_text.encode('utf-8'),
                     'successor_oguid': successor_tc.get_oguid()}
+
     response = remote_request(predecessor.client_id,
                               '@@accept_task_workflow_transition',
                               path=predecessor.physical_path,
@@ -85,6 +84,7 @@ def transport_task_documents(predecessor, target_task):
 
     for item in data:
         item = encode_after_json(item)
+        # XXX this creates responses, but maybe shouldnt
         transporter._create_object(target_task, item)
 
 
@@ -120,64 +120,3 @@ class ExtractTaskDocuments(grok.View):
         if relatedItems:
             for rel in self.context.relatedItems:
                 yield rel.to_object
-
-
-# XXX: session is zeo-client specific, we need to find another solution
-class AcceptTaskSessionDataManager(object):
-
-    KEY = 'accept-task-wizard'
-
-    def __init__(self, request):
-        self.request = request
-        self.oguid = self.request.get('oguid')
-        assert self.oguid, 'Could not find "oguid" in request.'
-        self.session = request.SESSION
-
-    def get_data(self):
-        if self.KEY not in self.session.keys():
-            self.session[self.KEY] = PersistentDict()
-
-        wizard_data = self.session[self.KEY]
-
-        if self.oguid not in wizard_data:
-            wizard_data[self.oguid] = PersistentDict()
-
-        return wizard_data[self.oguid]
-
-    def get(self, key, default=None):
-        return self.get_data().get(key, default)
-
-    def set(self, key, value):
-        self.get_data()[key] = value
-
-    def update(self, data):
-        self.get_data().update(data)
-
-    def push_to_foreign_client(self, client_id):
-        data = {'session-data': json.dumps(dict(self.get_data())),
-                'oguid': self.oguid}
-        response = remote_request(client_id,
-                                  '@@accept_task_receive_session_data',
-                                  data=data)
-
-        if response.read().strip() != 'OK':
-            raise Exception('Could not push session data to client %s' % (
-                    client_id))
-
-
-class ReceiveSessionData(grok.View):
-    """This view is used to update the session data. The session data manager
-    calls this view on a remote client for pushing the data to the target
-    client.
-    """
-
-    grok.context(Interface)
-    grok.name('accept_task_receive_session_data')
-    grok.require('zope2.View')
-
-    def render(self):
-        jsondata = self.request.get('session-data')
-        data = json.loads(jsondata)
-
-        AcceptTaskSessionDataManager(self.request).update(data)
-        return 'OK'

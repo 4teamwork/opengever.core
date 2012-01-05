@@ -12,9 +12,9 @@ from opengever.globalindex.interfaces import ITaskQuery
 from opengever.repository.interfaces import IRepositoryFolder
 from opengever.task import _
 from opengever.task.browser.accept.main import AcceptWizardFormMixin
-from opengever.task.browser.accept.utils import AcceptTaskSessionDataManager
-from opengever.task.browser.accept.utils import accept_task_with_successor
+from opengever.task.browser.accept.storage import IAcceptTaskStorageManager
 from opengever.task.browser.accept.utils import accept_task_with_response
+from opengever.task.browser.accept.utils import accept_task_with_successor
 from opengever.task.task import ITask
 from plone.dexterity.i18n import MessageFactory as dexterityMF
 from plone.directives.form import Schema
@@ -30,6 +30,7 @@ from zope.i18nmessageid import MessageFactory
 from zope.interface import Interface
 from zope.schema.interfaces import IContextSourceBinder
 from zope.schema.vocabulary import SimpleVocabulary, SimpleTerm
+import urllib
 
 
 class AcceptWizardNewDossierFormMixin(AcceptWizardFormMixin):
@@ -162,10 +163,14 @@ class SelectDossierTypeStepForm(AcceptWizardNewDossierFormMixin, Form):
         data, errors = self.extractData()
 
         if not errors:
-            AcceptTaskSessionDataManager(self.request).update(data)
-            url = '%s/@@accept_dossier_add_form?oguid=%s&' % (
+            oguid = self.request.get('oguid')
+            dm = getUtility(IAcceptTaskStorageManager)
+            dm.update(data, oguid=oguid)
+
+            url = '%s/@@accept_dossier_add_form?oguid=%s&%s' % (
                 self.context.absolute_url(),
-                self.request.get('oguid'))
+                oguid,
+                urllib.urlencode(data))
             return self.request.RESPONSE.redirect(url)
 
     @buttonAndHandler(_(u'button_cancel', default=u'Cancel'),
@@ -204,7 +209,7 @@ class DossierAddFormView(FormWrapper, grok.View):
     grok.require('zope2.View')
 
     def __init__(self, context, request):
-        typename = AcceptTaskSessionDataManager(request).get('dossier_type')
+        typename = request.get('dossier_type')
 
         ttool = getToolByName(context, 'portal_types')
         self.ti = ttool.getTypeInfo(typename)
@@ -235,7 +240,7 @@ class DossierAddFormView(FormWrapper, grok.View):
     def _wrap_form(self, formclass):
         class WrappedForm(AcceptWizardNewDossierFormMixin, formclass):
             step_name = 'accept_dossier_add_form'
-            passed_data = ['oguid']
+            passed_data = ['oguid', 'dossier_type']
 
             @buttonAndHandler(dexterityMF('Save'), name='save')
             def handleAdd(self, action):
@@ -252,11 +257,14 @@ class DossierAddFormView(FormWrapper, grok.View):
                 # Get a properly aq wrapped object
                 dossier = self.context.get(obj.id)
 
+                dm = getUtility(IAcceptTaskStorageManager)
+                oguid = self.request.get('oguid')
+
                 # create the successor task, accept the predecessor
                 task = accept_task_with_successor(
                     dossier,
-                    self.request.get('oguid'),
-                    AcceptTaskSessionDataManager(self.request).get('text'))
+                    oguid,
+                    dm.get('text', oguid=oguid))
 
                 IStatusMessage(self.request).addStatusMessage(
                     _(u'The new dossier has been created and the task has '

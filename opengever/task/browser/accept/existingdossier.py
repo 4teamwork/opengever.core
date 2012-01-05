@@ -9,7 +9,7 @@ from five import grok
 from opengever.base.source import RepositoryPathSourceBinder
 from opengever.task import _
 from opengever.task.browser.accept.main import AcceptWizardFormMixin
-from opengever.task.browser.accept.utils import AcceptTaskSessionDataManager
+from opengever.task.browser.accept.storage import IAcceptTaskStorageManager
 from opengever.task.browser.accept.utils import accept_task_with_successor
 from plone.directives.form import Schema
 from plone.z3cform.layout import FormWrapper
@@ -17,6 +17,7 @@ from z3c.form.button import buttonAndHandler
 from z3c.form.field import Fields
 from z3c.form.form import Form
 from z3c.relationfield.schema import RelationChoice
+from zope.component import getUtility
 from zope.interface import Interface
 
 
@@ -62,9 +63,10 @@ class ChooseDossierStepForm(AcceptWizardFormMixin, Form):
         data, errors = self.extractData()
 
         if not errors:
-            text = AcceptTaskSessionDataManager(self.request).get('text')
+            oguid = self.request.get('oguid')
+            text = getUtility(IAcceptTaskStorageManager).get('text', oguid)
             task = accept_task_with_successor(
-                data['dossier'], self.request.get('oguid'), text)
+                data['dossier'], oguid, text)
 
             IStatusMessage(self.request).addStatusMessage(
                 _(u'The task has been copied to the selected dossier and '
