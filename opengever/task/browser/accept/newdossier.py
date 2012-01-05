@@ -14,6 +14,7 @@ from opengever.task import _
 from opengever.task.browser.accept.main import AcceptWizardFormMixin
 from opengever.task.browser.accept.utils import AcceptTaskSessionDataManager
 from opengever.task.browser.accept.utils import accept_task_with_successor
+from opengever.task.browser.accept.utils import accept_task_with_response
 from opengever.task.task import ITask
 from opengever.task.util import add_simple_response
 from plone.dexterity.i18n import MessageFactory as dexterityMF
@@ -312,20 +313,7 @@ class AcceptTaskWorkflowTransitionView(grok.View):
     def render(self):
         text = self.request.get('text')
         successor_oguid = self.request.get('successor_oguid')
-        response = add_simple_response(self.context, text=text,
-                                       successor_oguid=successor_oguid)
 
-        transition = 'task-transition-open-in-progress'
-        wftool = getToolByName(self.context, 'portal_workflow')
-
-        before = wftool.getInfoFor(self.context, 'review_state')
-        before = wftool.getTitleForStateOnType(before, self.context.Type())
-
-        wftool.doActionFor(self.context, transition)
-
-        after = wftool.getInfoFor(self.context, 'review_state')
-        after = wftool.getTitleForStateOnType(after, self.context.Type())
-
-        response.add_change('review_state', _(u'Issue state'),
-                            before, after)
+        accept_task_with_response(self.context, text,
+                                  successor_oguid=successor_oguid)
         return 'OK'
