@@ -16,7 +16,6 @@ from opengever.task.browser.accept.utils import AcceptTaskSessionDataManager
 from opengever.task.browser.accept.utils import accept_task_with_successor
 from opengever.task.browser.accept.utils import accept_task_with_response
 from opengever.task.task import ITask
-from opengever.task.util import add_simple_response
 from plone.dexterity.i18n import MessageFactory as dexterityMF
 from plone.directives.form import Schema
 from plone.z3cform.layout import FormWrapper

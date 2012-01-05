@@ -13,9 +13,6 @@ import json
 
 
 def accept_task_with_response(task, response_text, successor_oguid=None):
-    response = add_simple_response(task, text=response_text,
-                                   successor_oguid=successor_oguid)
-
     transition = 'task-transition-open-in-progress'
     wftool = getToolByName(task, 'portal_workflow')
 
@@ -27,11 +24,10 @@ def accept_task_with_response(task, response_text, successor_oguid=None):
     after = wftool.getInfoFor(task, 'review_state')
     after = wftool.getTitleForStateOnType(after, task.Type())
 
+    response = add_simple_response(task, text=response_text,
+                                   successor_oguid=successor_oguid)
     response.add_change('review_state', _(u'Issue state'),
                         before, after)
-
-    # XXX reindex global index does not work / too late
-
     return response
 
 
@@ -73,6 +69,7 @@ def accept_task_with_successor(dossier, predecessor_oguid, response_text):
     return successor
 
 
+# XXX: session is zeo-client specific, we need to find another solution
 class AcceptTaskSessionDataManager(object):
 
     KEY = 'accept-task-wizard'
