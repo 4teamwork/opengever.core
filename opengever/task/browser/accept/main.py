@@ -207,18 +207,20 @@ class ChooseMethodStepForm(AcceptWizardFormMixin, Form):
                 return self.request.RESPONSE.redirect(url)
 
             elif method == 'new_dossier':
-                # XXX: redirect to target client
-                # XXX use successor task adapter for getting oguid
-                # XXX sync session data with target client
-                intids = getUtility(IIntIds)
-                iid = intids.getId(self.context)
-                oguid = '%s:%s' % (get_client_id(), str(iid))
+                info = getUtility(IContactInformation)
+                client = info.get_client_by_id(
+                    self.context.responsible_client)
+                oguid = ISuccessorTaskController(self.context).get_oguid()
 
-                portal_url = getToolByName(self.context, 'portal_url')
+                # push session data to target client
+                sdm.push_to_foreign_client(client.client_id)
+
                 # XXX: should "ordnungssystem" really be hardcode?
-                url = '@@accept_select_repositoryfolder?oguid=%s' % oguid
-                return self.request.RESPONSE.redirect('/'.join((
-                            portal_url(), 'ordnungssystem', url)))
+                url = '/'.join((
+                        client.public_url,
+                        'ordnungssystem',
+                        '@@accept_select_repositoryfolder?oguid=%s' % oguid))
+                return self.request.RESPONSE.redirect(url)
 
     @buttonAndHandler(_(u'button_cancel', default=u'Cancel'))
     def handle_cancel(self, action):
