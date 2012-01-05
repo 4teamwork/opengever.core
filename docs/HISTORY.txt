@@ -5,6 +5,10 @@ Changelog
 2.0.2 (unreleased)
 ------------------
 
+- Fix task indexing bug: do not use plone_context_state for indexing workflow_state
+  since this is cached and it may not work when the workflow state has changed.
+  [jone]
+
 - Increased length of task_principals.principal column from 32 to 64
   [lgraf]
 

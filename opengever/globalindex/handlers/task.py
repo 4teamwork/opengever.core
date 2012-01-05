@@ -79,7 +79,9 @@ def index_task(obj, event):
 
     url_tool = obj.unrestrictedTraverse('@@plone_tools').url()
     task.physical_path = '/'.join(url_tool.getRelativeContentPath(obj))
-    task.review_state = obj.unrestrictedTraverse('@@plone_context_state').workflow_state()
+
+    wftool = getToolByName(obj, 'portal_workflow')
+    task.review_state = wftool.getInfoFor(obj, 'review_state')
     task.icon = obj.getIcon()
     task.responsible = obj.responsible
     task.issuer = obj.issuer
