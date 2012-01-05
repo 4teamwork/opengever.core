@@ -2,9 +2,12 @@ from Products.CMFCore.utils import getToolByName
 from five import grok
 from opengever.globalindex.interfaces import ITaskQuery
 from opengever.ogds.base.interfaces import ITransporter
+from opengever.ogds.base.utils import encode_after_json
+from opengever.ogds.base.utils import remote_json_request
 from opengever.ogds.base.utils import remote_request
 from opengever.task import _
 from opengever.task.interfaces import ISuccessorTaskController
+from opengever.task.task import ITask
 from opengever.task.util import add_simple_response
 from persistent.dict import PersistentDict
 from zope.component import getUtility
@@ -36,7 +39,6 @@ def accept_task_with_successor(dossier, predecessor_oguid, response_text):
     predecessor = getUtility(ITaskQuery).get_task_by_oguid(predecessor_oguid)
 
     # XXX also transport responses
-    # XXX also transport related documents
 
     # Transport the original task (predecessor) to this dossier. The new
     # response and task change is not yet done and will be done later. This
@@ -45,6 +47,8 @@ def accept_task_with_successor(dossier, predecessor_oguid, response_text):
     successor = transporter.transport_from(
         dossier, predecessor.client_id, predecessor.physical_path)
     successor_tc = ISuccessorTaskController(successor)
+
+    transport_task_documents(predecessor, successor)
 
     # First "accept" the successor task..
     accept_task_with_response(successor, response_text)
@@ -67,6 +71,55 @@ def accept_task_with_successor(dossier, predecessor_oguid, response_text):
     successor_tc.set_predecessor(predecessor_oguid)
 
     return successor
+
+
+def transport_task_documents(predecessor, target_task):
+    """Transports documents related to or contained by the remote task with
+    the `predecessor_oguid` to the local `target_task`.
+    """
+
+    transporter = getUtility(ITransporter)
+    data = remote_json_request(predecessor.client_id,
+                               '@@accept_task-extract_task_documents',
+                               path=predecessor.physical_path)
+
+    for item in data:
+        item = encode_after_json(item)
+        transporter._create_object(target_task, item)
+
+
+class ExtractTaskDocuments(grok.View):
+    grok.context(ITask)
+    grok.require('zope2.View')
+    grok.name('accept_task-extract_task_documents')
+
+    def render(self):
+        transporter = getUtility(ITransporter)
+        data = []
+
+        for doc in self.get_documents():
+            data.append(transporter._extract_data(doc))
+
+        return json.dumps(data)
+
+    def get_documents(self):
+        """All documents which are either within the current task or defined
+        as related items.
+        """
+
+        # find documents within the task
+        brains = self.context.getFolderContents(
+            full_objects=False,
+            contentFilter={'portal_type': ['opengever.document.document',
+                                           'ftw.mail.mail']})
+        for doc in brains:
+            yield doc.getObject()
+
+        # find referenced documents
+        relatedItems = getattr(self.context, 'relatedItems', None)
+        if relatedItems:
+            for rel in self.context.relatedItems:
+                yield rel.to_object
 
 
 # XXX: session is zeo-client specific, we need to find another solution
