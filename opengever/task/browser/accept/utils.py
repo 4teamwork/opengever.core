@@ -10,6 +10,7 @@ from persistent.dict import PersistentDict
 from zope.component import getUtility
 from zope.interface import Interface
 import json
+import transaction
 
 
 def accept_task_with_response(task, response_text, successor_oguid=None):
@@ -48,8 +49,7 @@ def accept_task_with_successor(dossier, predecessor_oguid, response_text):
     # First "accept" the successor task..
     accept_task_with_response(successor, response_text)
 
-    # XXX make transaction savepoint for a kind of transaction pre-validation
-    # .. then accept the predecessor task
+    transaction.savepoint()
     request_data = {'text': response_text,
                     'successor_oguid': successor_tc.get_oguid()}
     response = remote_request(predecessor.client_id,
