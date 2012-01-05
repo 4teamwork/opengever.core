@@ -49,12 +49,10 @@ def accept_task_with_successor(dossier, predecessor_oguid, response_text):
         dossier, predecessor.client_id, predecessor.physical_path)
     successor_tc = ISuccessorTaskController(successor)
 
-    # Connect the predecessor and the successor task
-    successor_tc.set_predecessor(predecessor_oguid)
-
     # First "accept" the successor task..
     accept_task_with_response(successor, response_text)
 
+    # XXX make transaction savepoint for a kind of transaction pre-validation
     # .. then accept the predecessor task
     request_data = {'text': response_text,
                     'successor_oguid': successor_tc.get_oguid()}
@@ -67,6 +65,10 @@ def accept_task_with_successor(dossier, predecessor_oguid, response_text):
         raise Exception('Adding the response and changing the '
                         'workflow state on the predecessor task '
                         'failed.')
+
+    # Connect the predecessor and the successor task. This needs to be done
+    # that late for preventing a deadlock because of the locked tasks table.
+    successor_tc.set_predecessor(predecessor_oguid)
 
     return successor
 

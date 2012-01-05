@@ -270,6 +270,9 @@ class DossierAddFormView(FormWrapper, grok.View):
                 url = '%s/resolve_oguid?oguid=%s' % (
                     portal_url(), self.request.get('oguid'))
 
+                # XXX remove cancelled messages on remote client: the message
+                # is never displayed because the user is redirected to the
+                # source client.
                 IStatusMessage(self.request).addStatusMessage(
                     _(u'Accepting task cancelled.'), 'info')
 
