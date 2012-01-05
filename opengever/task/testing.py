@@ -1,17 +1,40 @@
-from opengever.ogds.base.setuphandlers import create_sql_tables
+from ftw.tabbedview.interfaces import ITabbedView
+from opengever.globalindex import model
 from opengever.ogds.base.setuphandlers import _create_example_client
 from opengever.ogds.base.setuphandlers import _create_example_user
-from ftw.tabbedview.interfaces import ITabbedView
-from plone.app.testing import TEST_USER_ID, setRoles
+from opengever.ogds.base.setuphandlers import create_sql_tables
 from opengever.ogds.base.utils import create_session
-from plone.app.testing import applyProfile
 from plone.app.testing import FunctionalTesting
-from plone.app.testing import PloneSandboxLayer
 from plone.app.testing import PLONE_FIXTURE
+from plone.app.testing import PloneSandboxLayer
+from plone.app.testing import TEST_USER_ID, setRoles
+from plone.app.testing import applyProfile
 from plone.registry.interfaces import IRegistry
+from plone.testing import Layer
+from plone.testing import zca
 from zope.component import getUtility
 from zope.configuration import xmlconfig
-from opengever.globalindex import model
+
+
+class AnnotationLayer(Layer):
+    """Loads ZML of zope.annotation.
+    """
+
+    defaultBases = (zca.ZCML_DIRECTIVES,)
+
+    def testSetUp(self):
+        self['configurationContext'] = zca.stackConfigurationContext(
+            self.get('configurationContext'))
+
+        import zope.annotation
+        xmlconfig.file('configure.zcml', zope.annotation,
+                       context=self['configurationContext'])
+
+    def testTearDown(self):
+        del self['configurationContext']
+
+
+ANNOTATION_LAYER = AnnotationLayer()
 
 
 class TaskFunctionalLayer(PloneSandboxLayer):
@@ -92,5 +115,3 @@ OPENGEVER_TASK_FIXTURE = TaskFunctionalLayer()
 OPENGEVER_TASK_INTEGRATION_TESTING = FunctionalTesting(
     bases=(OPENGEVER_TASK_FIXTURE, ),
     name="OpengeverTask:Integration")
-
-
