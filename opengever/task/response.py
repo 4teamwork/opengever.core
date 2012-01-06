@@ -243,7 +243,7 @@ class AddForm(form.AddForm, AutoExtensibleForm):
             is_accept_transition = data.get('transition', None) == \
                     'task-transition-open-in-progress'
             if is_accept_transition and self.context.restrictedTraverse(
-                    '@@accept_task').is_wizard_active():
+                    '@@accept_task').is_successing_possible():
 
                 oguid = ISuccessorTaskController(self.context).get_oguid()
                 self.request.set('oguid', oguid)
