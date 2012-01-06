@@ -268,7 +268,8 @@ class DossierAddFormView(FormWrapper, grok.View):
             step_name = 'accept_dossier_add_form'
             passed_data = ['oguid', 'dossier_type']
 
-            @buttonAndHandler(dexterityMF('Save'), name='save')
+            @buttonAndHandler(_(u'button_save', default=u'Save'),
+                              name='save')
             def handleAdd(self, action):
                 # create the dossier
                 data, errors = self.extractData()

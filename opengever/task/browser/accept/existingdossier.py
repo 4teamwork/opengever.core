@@ -81,7 +81,7 @@ class ChooseDossierStepForm(AcceptWizardFormMixin, Form):
          _(u'accept_step_2', default=u'Step 2')),
         )
 
-    @buttonAndHandler(_(u'button_continue', default=u'Continue'),
+    @buttonAndHandler(_(u'button_save', default=u'Save'),
                       name='save')
     def handle_continue(self, action):
         data, errors = self.extractData()
