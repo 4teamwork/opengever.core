@@ -3,7 +3,6 @@ the parts of the wizard where the user is able to instantly create a new
 dossier where the task is then filed.
 """
 
-from Products.CMFCore.PortalFolder import PortalFolderBase
 from Products.CMFCore.utils import getToolByName
 from Products.statusmessages.interfaces import IStatusMessage
 from five import grok
@@ -20,12 +19,15 @@ from plone.z3cform.layout import FormWrapper
 from z3c.form.button import buttonAndHandler
 from z3c.form.field import Fields
 from z3c.form.form import Form
+from z3c.form.validator import SimpleFieldValidator
+from z3c.form.validator import WidgetValidatorDiscriminators
 from z3c.relationfield.schema import RelationChoice
 from zope import schema
 from zope.component import getUtility
 from zope.component import queryMultiAdapter
 from zope.i18nmessageid import MessageFactory
 from zope.interface import Interface
+from zope.interface import Invalid
 from zope.schema.interfaces import IContextSourceBinder
 from zope.schema.vocabulary import SimpleVocabulary, SimpleTerm
 import urllib
@@ -73,6 +75,34 @@ class ISelectRepositoryfolderSchema(Schema):
                 }))
 
 
+class RepositoryfolderValidator(SimpleFieldValidator):
+
+    def validate(self, value):
+        super(RepositoryfolderValidator, self).validate(value)
+
+        # The user should be able to create a dossier (of any type) in the
+        # selected repository folder.
+        dossier_behavior = 'opengever.dossier.behaviors.dossier.IDossier'
+        dossier_addable = False
+
+        for fti in value.allowedContentTypes():
+            if dossier_behavior in getattr(fti, 'behaviors', ()):
+                dossier_addable = True
+                break
+
+        if not dossier_addable:
+            msg = _(u'You cannot add dossiers in the selected repository '
+                    u'folder. Either you do not have the privileges or the '
+                    u'repository folder contains another repository folder.')
+            raise Invalid(msg)
+
+WidgetValidatorDiscriminators(
+    RepositoryfolderValidator,
+    field=ISelectRepositoryfolderSchema['repositoryfolder'])
+grok.global_adapter(RepositoryfolderValidator)
+
+
+
 class SelectRepositoryfolderStepForm(AcceptWizardNewDossierFormMixin, Form):
     fields = Fields(ISelectRepositoryfolderSchema)
 
@@ -84,7 +114,6 @@ class SelectRepositoryfolderStepForm(AcceptWizardNewDossierFormMixin, Form):
     def handle_continue(self, action):
         data, errors = self.extractData()
 
-        # XXX validate if repositoryfolder can contain a dossier
         if not errors:
             folder = data['repositoryfolder']
             url = folder.absolute_url()
@@ -129,7 +158,7 @@ def allowed_dossier_types_vocabulary(context):
     dossier_behavior = 'opengever.dossier.behaviors.dossier.IDossier'
 
     terms = []
-    for fti in PortalFolderBase.allowedContentTypes(context):
+    for fti in context.allowedContentTypes():
         if dossier_behavior not in getattr(fti, 'behaviors', ()):
             continue
 
