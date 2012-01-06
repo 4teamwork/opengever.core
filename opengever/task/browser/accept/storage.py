@@ -109,5 +109,5 @@ class ReceiveAcceptTaskStorageData(grok.View):
         oguid = self.request.get('oguid')
         data = json.loads(jsondata)
 
-        getUtility(IAcceptTaskStorageManager).update_data(data, oguid=oguid)
+        getUtility(IAcceptTaskStorageManager).update(data, oguid=oguid)
         return 'OK'
