@@ -58,6 +58,7 @@ def accept_task_with_successor(dossier, predecessor_oguid, response_text):
     accept_task_with_response(successor, response_text)
 
     transaction.savepoint()
+    response_text = response_text or ''
     request_data = {'text': response_text.encode('utf-8'),
                     'successor_oguid': successor_tc.get_oguid()}
 
