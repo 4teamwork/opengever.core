@@ -58,7 +58,7 @@ class DossierValidator(SimpleFieldValidator):
                 break
 
         if not task_addable:
-            msg = _(u'You cannot add tasks in the selected doisser. Either '
+            msg = _(u'You cannot add tasks in the selected dossier. Either '
                     u'the dossier is closed or you do not have the '
                     u'privileges.')
             raise Invalid(msg)
