@@ -23,6 +23,11 @@ Changelog
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1342
   [jone]
 
+- Implement task accept wizard.
+  Issue #1342 "Aufgabe akzeptieren" Wizard
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1342
+  [jone]
+
 - #1299 Spalte 'In Bearbeitung' hinzufügen bei Dokumentenauflistung in einer Aufgabe
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1299/
   add new column 'checked_out' for the document tab in task-view
