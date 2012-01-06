@@ -232,8 +232,7 @@ class SelectDossierTypeStepView(FormWrapper, grok.View):
 class DossierAddFormView(FormWrapper, grok.View):
     grok.context(IRepositoryFolder)
     grok.name('accept_dossier_add_form')
-    # XXX improve permissions
-    grok.require('zope2.View')
+    grok.require('cmf.AddPortalContent')
 
     def __init__(self, context, request):
         typename = request.get('dossier_type')
