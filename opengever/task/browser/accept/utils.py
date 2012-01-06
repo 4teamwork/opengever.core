@@ -2,13 +2,17 @@ from Products.CMFCore.utils import getToolByName
 from five import grok
 from opengever.globalindex.interfaces import ITaskQuery
 from opengever.ogds.base.interfaces import ITransporter
+from opengever.ogds.base.transport import ORIGINAL_INTID_ANNOTATION_KEY
 from opengever.ogds.base.utils import encode_after_json
 from opengever.ogds.base.utils import remote_json_request
 from opengever.ogds.base.utils import remote_request
 from opengever.task import _
 from opengever.task.interfaces import ISuccessorTaskController
 from opengever.task.task import ITask
+from opengever.task.transporter import IResponseTransporter
 from opengever.task.util import add_simple_response
+from zope.annotation.interfaces import IAnnotations
+from zope.app.intid.interfaces import IIntIds
 from zope.component import getUtility
 import json
 import transaction
@@ -36,8 +40,6 @@ def accept_task_with_response(task, response_text, successor_oguid=None):
 def accept_task_with_successor(dossier, predecessor_oguid, response_text):
     predecessor = getUtility(ITaskQuery).get_task_by_oguid(predecessor_oguid)
 
-    # XXX also transport responses
-
     # Transport the original task (predecessor) to this dossier. The new
     # response and task change is not yet done and will be done later. This
     # is necessary for beeing as transaction aware as possible.
@@ -52,7 +54,15 @@ def accept_task_with_successor(dossier, predecessor_oguid, response_text):
         dossier, predecessor.client_id, predecessor.physical_path)
     successor_tc = ISuccessorTaskController(successor)
 
-    transport_task_documents(predecessor, successor)
+    # copy documents and map the intids
+    intids_mapping = transport_task_documents(predecessor, successor)
+
+    # copy the responses
+    response_transporter = IResponseTransporter(successor)
+    response_transporter.get_responses(predecessor.client_id,
+                                       predecessor.physical_path,
+                                       intids_mapping=intids_mapping)
+
 
     # First "accept" the successor task..
     accept_task_with_response(successor, response_text)
@@ -96,6 +106,7 @@ class AcceptTaskWorkflowTransitionView(grok.View):
 def transport_task_documents(predecessor, target_task):
     """Transports documents related to or contained by the remote task with
     the `predecessor_oguid` to the local `target_task`.
+    It returns an intids mapping (original client : this client).
     """
 
     transporter = getUtility(ITransporter)
@@ -107,9 +118,17 @@ def transport_task_documents(predecessor, target_task):
     # from creating additional responses per added document.
     target_task.REQUEST.set('X-CREATING-SUCCESSOR', True)
 
+    intids_mapping = {}
+    intids = getUtility(IIntIds)
+
     for item in data:
         item = encode_after_json(item)
-        transporter._create_object(target_task, item)
+        obj = transporter._create_object(target_task, item)
+        oldintid = IAnnotations(obj)[ORIGINAL_INTID_ANNOTATION_KEY]
+        newintid = intids.getId(obj)
+        intids_mapping[oldintid] = newintid
+
+    return intids_mapping
 
 
 class ExtractTaskDocuments(grok.View):
