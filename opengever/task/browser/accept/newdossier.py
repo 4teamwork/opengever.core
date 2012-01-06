@@ -13,9 +13,7 @@ from opengever.repository.interfaces import IRepositoryFolder
 from opengever.task import _
 from opengever.task.browser.accept.main import AcceptWizardFormMixin
 from opengever.task.browser.accept.storage import IAcceptTaskStorageManager
-from opengever.task.browser.accept.utils import accept_task_with_response
 from opengever.task.browser.accept.utils import accept_task_with_successor
-from opengever.task.task import ITask
 from plone.dexterity.i18n import MessageFactory as dexterityMF
 from plone.directives.form import Schema
 from plone.z3cform.layout import FormWrapper
@@ -309,18 +307,3 @@ class DossierAddFormView(FormWrapper, grok.View):
             self.request.set(title_key, title)
 
         return FormWrapper.__call__(self)
-
-
-class AcceptTaskWorkflowTransitionView(grok.View):
-    # XXX move this view since its also used by existing dossier method
-    grok.context(ITask)
-    grok.name('accept_task_workflow_transition')
-    grok.require('cmf.AddPortalContent')
-
-    def render(self):
-        text = self.request.get('text')
-        successor_oguid = self.request.get('successor_oguid')
-
-        accept_task_with_response(self.context, text,
-                                  successor_oguid=successor_oguid)
-        return 'OK'

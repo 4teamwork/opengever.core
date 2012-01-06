@@ -72,6 +72,20 @@ def accept_task_with_successor(dossier, predecessor_oguid, response_text):
     return successor
 
 
+class AcceptTaskWorkflowTransitionView(grok.View):
+    grok.context(ITask)
+    grok.name('accept_task_workflow_transition')
+    grok.require('cmf.AddPortalContent')
+
+    def render(self):
+        text = self.request.get('text')
+        successor_oguid = self.request.get('successor_oguid')
+
+        accept_task_with_response(self.context, text,
+                                  successor_oguid=successor_oguid)
+        return 'OK'
+
+
 def transport_task_documents(predecessor, target_task):
     """Transports documents related to or contained by the remote task with
     the `predecessor_oguid` to the local `target_task`.
