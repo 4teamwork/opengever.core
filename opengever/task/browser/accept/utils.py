@@ -102,9 +102,12 @@ def transport_task_documents(predecessor, target_task):
                                '@@accept_task-extract_task_documents',
                                path=predecessor.physical_path)
 
+    # Set the "X-CREATING-SUCCESSOR" flag for preventing the event handler
+    # from creating additional responses per added document.
+    target_task.REQUEST.set('X-CREATING-SUCCESSOR', True)
+
     for item in data:
         item = encode_after_json(item)
-        # XXX this creates responses, but maybe shouldnt
         transporter._create_object(target_task, item)
 
 
