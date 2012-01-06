@@ -18,6 +18,11 @@ Changelog
   Is Allready released in the Hotfix 2.0.2.
   [phgross]
 
+- Implement task accept wizard.
+  Issue #1342 "Aufgabe akzeptieren" Wizard
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1342
+  [jone]
+
 - #1299 Spalte 'In Bearbeitung' hinzufügen bei Dokumentenauflistung in einer Aufgabe
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1299/
   add new column 'checked_out' for the document tab in task-view
@@ -705,4 +710,3 @@ Changelog
   [01.12.2009, jbaumann]
 
 - Initial release
-
