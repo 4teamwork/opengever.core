@@ -117,7 +117,6 @@ class AcceptWizardFormMixin(object):
         '../templates/wizard_wrappedform.pt')
     ignoreContext = True
 
-    # XXX generalize that so that it is not defined in the subclasses any more
     passed_data = ['oguid']
 
     def wizard_steps(self):

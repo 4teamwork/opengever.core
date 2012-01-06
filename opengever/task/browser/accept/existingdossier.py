@@ -71,7 +71,6 @@ grok.global_adapter(DossierValidator)
 class ChooseDossierStepForm(AcceptWizardFormMixin, Form):
     fields = Fields(IChooseDossierSchema)
     step_name = 'accept_choose_dossier'
-    passed_data = ['oguid']
 
     steps = (
         ('accept_choose_method',

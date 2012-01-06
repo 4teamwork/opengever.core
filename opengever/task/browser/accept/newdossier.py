@@ -107,7 +107,6 @@ class SelectRepositoryfolderStepForm(AcceptWizardNewDossierFormMixin, Form):
     fields = Fields(ISelectRepositoryfolderSchema)
 
     step_name = 'accept_select_repositoryfolder'
-    passed_data = ['oguid']
 
     @buttonAndHandler(_(u'button_continue', default=u'Continue'),
                       name='save')
@@ -178,7 +177,6 @@ class ISelectDossierTypeSchema(Schema):
 class SelectDossierTypeStepForm(AcceptWizardNewDossierFormMixin, Form):
     fields = Fields(ISelectDossierTypeSchema)
     step_name = 'accept_select_dossier_type'
-    passed_data = ['oguid']
 
     @buttonAndHandler(_(u'button_continue', default=u'Continue'),
                       name='save')
