@@ -41,6 +41,12 @@ def accept_task_with_successor(dossier, predecessor_oguid, response_text):
     # Transport the original task (predecessor) to this dossier. The new
     # response and task change is not yet done and will be done later. This
     # is necessary for beeing as transaction aware as possible.
+
+    # XXX maybe the issuer should be reset to the current user, since no only
+    # the issuer is able to close the task (task-state-tested-and-closed) and
+    # since the original issuer has no access to the successor task nobody is
+    # able to close the task unless the issuer is changed. This results in
+    # not beeing able to resolve the dossier.
     transporter = getUtility(ITransporter)
     successor = transporter.transport_from(
         dossier, predecessor.client_id, predecessor.physical_path)
