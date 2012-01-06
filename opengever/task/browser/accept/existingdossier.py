@@ -16,14 +16,16 @@ from plone.z3cform.layout import FormWrapper
 from z3c.form.button import buttonAndHandler
 from z3c.form.field import Fields
 from z3c.form.form import Form
+from z3c.form.validator import SimpleFieldValidator
+from z3c.form.validator import WidgetValidatorDiscriminators
 from z3c.relationfield.schema import RelationChoice
 from zope.component import getUtility
 from zope.interface import Interface
+from zope.interface import Invalid
 
 
 class IChooseDossierSchema(Schema):
 
-    # XXX: validator: dossier should be writeable
     dossier = RelationChoice(
         title=_(u'label_accept_select_dossier',
                 default=u'Target dossier'),
@@ -42,6 +44,28 @@ class IChooseDossierSchema(Schema):
                         'IRepositoryFolderSchema',
                     'opengever.dossier.behaviors.dossier.IDossierMarker',
                     ]}))
+
+
+class DossierValidator(SimpleFieldValidator):
+
+    def validate(self, value):
+        super(DossierValidator, self).validate(value)
+
+        task_addable = False
+        for fti in value.allowedContentTypes():
+            if fti.id == 'opengever.task.task':
+                task_addable = True
+                break
+
+        if not task_addable:
+            msg = _(u'You cannot add tasks in the selected doisser. Either '
+                    u'the dossier is closed or you do not have the '
+                    u'privileges.')
+            raise Invalid(msg)
+
+WidgetValidatorDiscriminators(DossierValidator,
+                              field=IChooseDossierSchema['dossier'])
+grok.global_adapter(DossierValidator)
 
 
 class ChooseDossierStepForm(AcceptWizardFormMixin, Form):
