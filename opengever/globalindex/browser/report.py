@@ -67,6 +67,7 @@ class TaskReporter(grok.View):
              'transform':readable_author},
             {'id':'task_type', 'title':_('label_task_type'),
              'transform':task_type_helper},
+            {'id': 'containing_dossier', 'title':_('label_dossier')},
             {'id':'sequence_number', 'title':_('label_sequence_number')},
             {'id':'client_id', 'title':_('label_client_id')},
         ]

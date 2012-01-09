@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2011-11-14 11:32+0000\n"
+"POT-Creation-Date: 2012-01-09 16:27+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: opengever.globalindex\n"
 
-#: ./opengever/globalindex/browser/report.py:59
+#: ./opengever/globalindex/browser/report.py:79
 msgid "Could not generate the report"
 msgstr ""
 
@@ -30,47 +30,56 @@ msgid "Global task index has been cleared (${cleared}) and rebuilt (${rebuilt})"
 msgstr ""
 
 #. Default: "You have not selected any Items"
-#: ./opengever/globalindex/browser/report.py:24
+#: ./opengever/globalindex/browser/report.py:42
 msgid "error_no_items"
 msgstr ""
 
-#: ./opengever/globalindex/browser/report.py:52
+#. Default: "Forwarding"
+#: ./opengever/globalindex/browser/report.py:19
+msgid "forwarding_task_type"
+msgstr ""
+
+#: ./opengever/globalindex/browser/report.py:72
 msgid "label_client_id"
 msgstr ""
 
-#: ./opengever/globalindex/browser/report.py:42
+#: ./opengever/globalindex/browser/report.py:60
 msgid "label_completed"
 msgstr ""
 
-#: ./opengever/globalindex/browser/report.py:44
+#: ./opengever/globalindex/browser/report.py:62
 msgid "label_created"
 msgstr ""
 
-#: ./opengever/globalindex/browser/report.py:40
+#: ./opengever/globalindex/browser/report.py:58
 msgid "label_deadline"
 msgstr ""
 
-#: ./opengever/globalindex/browser/report.py:48
+#: ./opengever/globalindex/browser/report.py:70
+msgid "label_dossier"
+msgstr ""
+
+#: ./opengever/globalindex/browser/report.py:66
 msgid "label_issuer"
 msgstr ""
 
-#: ./opengever/globalindex/browser/report.py:46
+#: ./opengever/globalindex/browser/report.py:64
 msgid "label_responsible"
 msgstr ""
 
-#: ./opengever/globalindex/browser/report.py:51
+#: ./opengever/globalindex/browser/report.py:71
 msgid "label_sequence_number"
 msgstr ""
 
-#: ./opengever/globalindex/browser/report.py:50
+#: ./opengever/globalindex/browser/report.py:68
 msgid "label_task_type"
 msgstr ""
 
-#: ./opengever/globalindex/browser/report.py:36
+#: ./opengever/globalindex/browser/report.py:54
 msgid "label_title"
 msgstr ""
 
-#: ./opengever/globalindex/browser/report.py:37
+#: ./opengever/globalindex/browser/report.py:55
 msgid "review_state"
 msgstr ""
 
