@@ -95,6 +95,9 @@ class GlobalTaskListingTab(grok.View, OpengeverTab,
          'column_title': _(u'column_issued_at', default=u'Issued at'),
          'transform': helper.readable_date},
 
+        {'column': 'containing_dossier',
+         'column_title': _('containing_dossier', 'Dossier'), },
+
         {'column': 'client_id',
          'column_title': _('column_client', default=u'Client'),
          'transform': client_title_helper,

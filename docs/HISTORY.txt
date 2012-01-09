@@ -5,6 +5,11 @@ Changelog
 2.0.3 (unreleased)
 ------------------
 
+- Added containing_dossier column to every tasklisting.
+  Issue #1252 Darstellung Dossiertitel bei Aufgabenuebersichten und im Eingangskorb (fuer Aufgaben, nicht fuer Weiterleitungen)
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1252
+  [phgross]
+
 - If a task has a successor task, list only one of them.
   List the only the one which is assigned to this client.
   Issue #1345 Anpassungen Darstellung der Aufgabenauflistungen

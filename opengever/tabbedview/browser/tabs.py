@@ -350,6 +350,9 @@ class Tasks(OpengeverCatalogListingTab):
          'transform': client_title_helper,
          'condition': display_client_title_condition},
 
+        {'column': 'containing_dossier',
+         'column_title': _('containing_dossier', 'Dossier'), },
+
         {'column': 'sequence_number',
          'column_title': _(u'sequence_number', "Sequence Number"), },
 
