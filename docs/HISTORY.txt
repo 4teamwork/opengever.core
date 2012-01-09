@@ -5,6 +5,11 @@ Changelog
 2.0.2 (unreleased)
 ------------------
 
+- Added new containing_dossier column to the globalindex.
+  Issue #1253 Darstellung Dossiertitel bei Suchresultaten (Subdossiers, Dokumente, Aufgaben)
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1253
+  [phgross]
+
 - Fix task indexing bug: do not use plone_context_state for indexing workflow_state
   since this is cached and it may not work when the workflow state has changed.
   [jone]

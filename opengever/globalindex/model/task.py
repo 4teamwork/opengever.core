@@ -30,6 +30,7 @@ class Task(Base):
     reference_number = Column(String(100))
     sequence_number = Column(String(10), index=True)
     dossier_sequence_number = Column(String(10))
+    containing_dossier = Column(String(256))
 
     created = Column(DateTime, default=functions.now())
     modified = Column(DateTime)
