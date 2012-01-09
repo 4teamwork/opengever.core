@@ -12,6 +12,7 @@ from plone.namedfile.interfaces import INamedFileField
 from z3c.relationfield.interfaces import IRelation, IRelationChoice
 from z3c.relationfield.interfaces import IRelationList
 from zope import schema
+from zope.annotation.interfaces import IAnnotations
 from zope.app.intid.interfaces import IIntIds
 from zope.component import getAdapters, queryAdapter, getAdapter
 from zope.component import getUtility
@@ -27,6 +28,8 @@ import json
 
 BASEDATA_KEY = 'basedata'
 REQUEST_KEY = 'object_data'
+
+ORIGINAL_INTID_ANNOTATION_KEY = 'transporter_original-intid'
 
 
 _marker = object()
@@ -294,3 +297,21 @@ class DexterityFieldDataCollector(grok.Adapter):
             if ifc.providedBy(obj):
                 return True
         return False
+
+
+class OriginalIntidDataCollector(grok.Adapter):
+    """This data collector stores the intid of the originally extracted
+    object in the annotations of the copy. This is very important for being
+    able to map the intids and fix relations.
+    """
+
+    grok.context(IDexterityContent)
+    grok.provides(IDataCollector)
+    grok.name('intid-data')
+
+    def extract(self):
+        intids = getUtility(IIntIds)
+        return intids.getId(self.context)
+
+    def insert(self, data):
+        IAnnotations(self.context)[ORIGINAL_INTID_ANNOTATION_KEY] = data
