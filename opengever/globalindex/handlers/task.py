@@ -67,14 +67,13 @@ def index_task(obj, event):
 
     session = Session()
     try:
-        task = session.query(Task).filter(Task.client_id==client_id).filter(
-            Task.int_id==int_id).one()
+        task = session.query(Task).filter(Task.client_id == client_id).filter(
+            Task.int_id == int_id).one()
     except NoResultFound:
         task = Task(int_id, client_id)
         session.add(task)
 
     task.title = obj.title
-
 
     # Generate and store the breadcrumb tooltip
     breadcrumb_titles = []
@@ -90,7 +89,6 @@ def index_task(obj, event):
 
     url_tool = obj.unrestrictedTraverse('@@plone_tools').url()
     task.physical_path = '/'.join(url_tool.getRelativeContentPath(obj))
-
     wftool = getToolByName(obj, 'portal_workflow')
     task.review_state = wftool.getInfoFor(obj, 'review_state')
     task.icon = obj.getIcon()
@@ -100,7 +98,7 @@ def index_task(obj, event):
     # we need to have python datetime objects for make it work with sqlite etc.
     task.deadline = obj.deadline
     task.completed = obj.date_of_completion
-    task.modified =  obj.modified().asdatetime().replace(tzinfo=None)
+    task.modified = obj.modified().asdatetime().replace(tzinfo=None)
 
     task.task_type = obj.task_type
     task.sequence_number = getUtility(ISequenceNumber).get_number(obj)
@@ -117,8 +115,8 @@ def index_task(obj, event):
     if obj.predecessor:
         pred_client_id, pred_init_id = obj.predecessor.split(':', 1)
         try:
-            predecessor = session.query(Task).filter_by(client_id=pred_client_id,
-                                                    int_id=pred_init_id).one()
+            predecessor = session.query(Task).filter_by(
+                client_id=pred_client_id, int_id=pred_init_id).one()
         except NoResultFound:
             # For some reason the referenced predecessor doesn't exist
             predecessor = None
