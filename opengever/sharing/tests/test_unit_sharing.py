@@ -17,11 +17,10 @@ class TestOpengeverSharing(MockTestCase):
         """
         results = self.base_available_roles(IDossier)
 
-        self.assertTrue(len(results) == 2)
+        self.assertTrue(len(results) == 1)
 
         ids = [r.get('id') for r in results]
         self.assertTrue('Reader' in ids)
-        self.assertTrue('Administrator' in ids)
 
     def test_available_roles_standard(self):
         """ Test available roles from a standard contenttype
@@ -32,7 +31,6 @@ class TestOpengeverSharing(MockTestCase):
 
         ids = [r.get('id') for r in results]
         self.assertTrue('Reader' in ids)
-        self.assertTrue(not 'Administrator' in ids)
 
     def base_available_roles(self, provide=""):
         """ Test available_roles mehtod from OpengeverSharingView class
@@ -52,8 +50,7 @@ class TestOpengeverSharing(MockTestCase):
         sharing = OpengeverSharingView(mock_context, mock_request)
         mock_sharing = self.mocker.patch(sharing)
         self.expect(mock_sharing.roles()).result(
-            [{'id':'Administrator', },
-             {'id':'Reader', }, ]).count(0, None)
+            [{'id':'Reader', }, ]).count(0, None)
 
         self.replay()
 
@@ -68,7 +65,6 @@ class TestOpengeverSharing(MockTestCase):
 
         ids = [p.get('id') for p in pairs]
         self.assertTrue('Reader' in ids)
-        self.assertTrue(not 'Administrator' in ids)
 
     def test_roles_without_check_permission(self):
         """ Test roles method without permission-check
@@ -79,7 +75,6 @@ class TestOpengeverSharing(MockTestCase):
 
         ids = [p.get('id') for p in pairs]
         self.assertTrue('Reader' in ids)
-        self.assertTrue('Administrator' in ids)
 
     def base_roles(self, check_permission):
         """ Test roles method of OpengeverSharingView class
