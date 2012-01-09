@@ -5,6 +5,7 @@ from ftw.table.interfaces import ITableSource, ITableSourceConfig
 from opengever.base.browser.helper import client_title_helper
 from opengever.globalindex.model.task import Task
 from opengever.globalindex.utils import indexed_task_link_helper
+from opengever.ogds.base.utils import get_client_id
 from opengever.tabbedview import _
 from opengever.tabbedview.browser.listing import ListingView
 from opengever.tabbedview.browser.sqltablelisting import SqlTableSource
@@ -16,6 +17,7 @@ from opengever.tabbedview.helper import readable_ogds_author
 from opengever.tabbedview.helper import task_id_checkbox_helper
 from opengever.tabbedview.helper import workflow_state
 from opengever.task.helper import task_type_helper
+from sqlalchemy import and_, or_
 from zope.app.pagetemplate import ViewPageTemplateFile
 from zope.interface import implements, Interface
 
@@ -127,6 +129,13 @@ class GlobalTaskTableSource(SqlTableSource):
         # get the base query from the config
         query = self.config.get_base_query()
         query = self.validate_base_query(query)
+
+        # If a task has a successor task, list only one of them.
+        # List the only the one which is assigned to this client.
+        query = query.filter(
+            or_(
+                and_(Task.predecessor == None, Task.successors == None),
+                Task.client_id == get_client_id()))
 
         # ordering
         query = self.extend_query_with_ordering(query)

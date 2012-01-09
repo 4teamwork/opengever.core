@@ -5,6 +5,12 @@ Changelog
 2.0.3 (unreleased)
 ------------------
 
+- If a task has a successor task, list only one of them.
+  List the only the one which is assigned to this client.
+  Issue #1345 Anpassungen Darstellung der Aufgabenauflistungen
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1345/
+  [jone]
+
 - Implement faster custom_sort methods for sorting on the readable fullname,
   with the help of the sort_dicts from og.ogds.base
   Issue #1325 og.tabbedview: custom_sort methoden performanter implementieren.
@@ -504,4 +510,3 @@ Changelog
   [16.11.2009, jbaumann]
 
 - Initial release
-
