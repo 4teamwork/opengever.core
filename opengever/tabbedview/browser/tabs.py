@@ -74,8 +74,10 @@ class OpengeverTab(object):
             if sort_reverse:
                 results.reverse()
 
-        #custom sort for sorting on the readable fullname of the users, contacts and inboxes
-        elif sort_on in ('responsible','Creator', 'checked_out', 'issuer', 'contact'):
+        # custom sort for sorting on the readable fullname
+        # of the users, contacts and inboxes
+        elif sort_on in (
+            'responsible', 'Creator', 'checked_out', 'issuer', 'contact'):
             info = getUtility(IContactInformation)
 
             if sort_on in ('issuer', 'contact'):
@@ -85,14 +87,18 @@ class OpengeverTab(object):
 
             def _sorter(a, b):
                 return cmp(
-                    sort_dict.get(getattr(a, sort_on, ''), getattr(a, sort_on, '')),
-                    sort_dict.get(getattr(b, sort_on, ''), getattr(b, sort_on, ''))
+                    sort_dict.get(
+                        getattr(a, sort_on, ''), getattr(a, sort_on, '')),
+                    sort_dict.get(
+                        getattr(b, sort_on, ''), getattr(b, sort_on, ''))
                     )
 
             def _reverse_sorter(b, a):
                 return cmp(
-                    sort_dict.get(getattr(a, sort_on, ''), getattr(a, sort_on, '')),
-                    sort_dict.get(getattr(b, sort_on, ''), getattr(b, sort_on, ''))
+                    sort_dict.get(
+                        getattr(a, sort_on, ''), getattr(a, sort_on, '')),
+                    sort_dict.get(
+                        getattr(b, sort_on, ''), getattr(b, sort_on, ''))
                     )
 
             results = list(results)
@@ -191,7 +197,6 @@ class Dossiers(OpengeverCatalogListingTab):
     grok.name('tabbedview_view-dossiers')
 
     object_provides = 'opengever.dossier.behaviors.dossier.IDossierMarker'
-
 
     columns = (
         ('', helper.path_checkbox),
@@ -387,9 +392,9 @@ class Trash(Documents):
 
     enabled_actions = [
         'untrashed',
-        'reset_tableconfiguration',]
+        'reset_tableconfiguration', ]
 
-    major_actions= [
+    major_actions = [
         'reset_tableconfiguration',
         ]
 

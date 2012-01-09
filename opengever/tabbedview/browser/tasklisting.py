@@ -165,7 +165,8 @@ class GlobalTaskTableSource(SqlTableSource):
         return query
 
     def extend_query_with_statefilter(self, query, open_state):
-        """When a state filter is active, we add a filter which select just the open tasks"""
+        """When a state filter is active,
+        we add a filter which select just the open tasks"""
 
         open_task_states = [
             'task-state-open',
