@@ -5,7 +5,11 @@ Changelog
 2.0.4 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Implemented a wrapper for the _principal_search_results method,
+  which constrain the principal list to the client assigned users.
+  Issue #1288 Freigabeansicht:  Rollenanpassung nur fuer Mandanten user moeglich machen.
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1288
+  [phgross]
 
 
 2.0.3 (2011-12-20)

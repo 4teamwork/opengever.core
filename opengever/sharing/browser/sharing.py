@@ -1,9 +1,10 @@
-from Acquisition import aq_base
 from AccessControl.SecurityManagement import getSecurityManager
 from AccessControl.SecurityManagement import newSecurityManager
 from AccessControl.SecurityManagement import setSecurityManager
+from Acquisition import aq_base
 from Products.CMFCore.utils import getToolByName
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
+from opengever.ogds.base.interfaces import IContactInformation
 from opengever.sharing import _
 from opengever.sharing.behaviors import IDossier, IStandard
 from opengever.sharing.events import LocalRolesAcquisitionActivated
@@ -13,6 +14,7 @@ from plone.app.workflow.browser.sharing import SharingView
 from plone.app.workflow.interfaces import ISharingPageRole
 from plone.memoize.instance import memoize
 from zope.component import getUtilitiesFor
+from zope.component import getUtility
 from zope.event import notify
 
 
@@ -165,6 +167,37 @@ class OpengeverSharingView(SharingView):
                     self.context.get_local_roles()))
 
         return changed
+
+    def _principal_search_results(self,
+                                  search_for_principal,
+                                  get_principal_by_id,
+                                  get_principal_title,
+                                  principal_type,
+                                  id_key):
+        """A mapper for the original method, to constraint the users
+        list to only the users which are assigned to the current client"""
+
+        all_principals = SharingView._principal_search_results(
+            self,
+            search_for_principal,
+            get_principal_by_id,
+            get_principal_title,
+            principal_type,
+            id_key)
+
+        if len(all_principals) == 0:
+            return all_principals
+
+        info = getUtility(IContactInformation)
+        assigned_users = [user.userid for user in info.list_assigned_users()]
+        results = []
+
+        for principal in all_principals:
+            if principal.get(
+                'id') in assigned_users or principal.get('type') != 'user':
+                results.append(principal)
+
+        return results
 
 
 class SharingTab(OpengeverSharingView):

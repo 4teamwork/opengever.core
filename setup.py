@@ -42,6 +42,7 @@ setup(name='opengever.sharing',
       zip_safe=False,
       install_requires=[
           'setuptools',
+          'opengever.ogds.base',
           # -*- Extra requirements: -*-
       ],
       tests_require=tests_require,

@@ -1,10 +1,12 @@
-from mocker import ANY
-from plone.mocktestcase import MockTestCase
-from opengever.sharing.browser.sharing import OpengeverSharingView
+from opengever.ogds.base.interfaces import IContactInformation
 from Products.CMFDefault.MembershipTool import MembershipTool
-from plone.app.workflow.interfaces import ISharingPageRole
+from mocker import ANY
 from opengever.sharing.behaviors import IDossier
+from opengever.sharing.browser.sharing import OpengeverSharingView
+from plone.app.workflow.interfaces import ISharingPageRole
+from plone.mocktestcase import MockTestCase
 from zope.interface import directlyProvides
+
 
 class TestOpengeverSharing(MockTestCase):
     """ Tests for sharing.py
@@ -129,6 +131,7 @@ class TestOpengeverSharing(MockTestCase):
         self.assertTrue(len(results) == 3)
         self.assertTrue(
             'AuthenticatedUsers' in [r.get('id') for r in results])
+
     def test_role_settings_as_user(self):
         """ Test role_settings logged in with user-role
         """
@@ -137,6 +140,42 @@ class TestOpengeverSharing(MockTestCase):
         self.assertTrue(len(results) == 2)
         self.assertTrue(
             not 'AuthenticatedUsers' in [r.get('id') for r in results])
+
+    def test_principal_search_results(self):
+        # Context
+        context = self.create_dummy()
+        mock_context = self.mocker.proxy(context)
+
+        # Request
+        request = self.create_dummy()
+        mock_request = self.mocker.proxy(request)
+
+        # Sharing view
+        _principal_search_results = self.mocker.replace(
+            'plone.app.workflow.browser.sharing.SharingView._principal_search_results')
+
+        utility_mock = self.mocker.mock()
+        self.mock_utility(utility_mock, IContactInformation)
+
+        user1 = self.create_dummy(userid='sb2m1')
+        user2 = self.create_dummy(userid='sb1m1')
+
+        self.expect(utility_mock.list_assigned_users()).result([user1, user2])
+
+        self.expect(
+            _principal_search_results(ANY, ANY, ANY, ANY, ANY, ANY)).result(
+            [{'type': 'user', 'id': 'sb2m1', 'roles': {u'Publisher': False, u'Administrator': False, u'Editor': False, u'Reader': False, u'Contributor': False, u'Reviewer': False}, 'title': 'Sachbearbeiter2 Mandant1'},
+             {'type': 'user', 'id': 'sb1m1', 'roles': {u'Publisher': False, u'Administrator': False, u'Editor': False, u'Reader': False, u'Contributor': False, u'Reviewer': False}, 'title': 'Sachbearbeiter1 Mandant1'},
+             {'type': 'user', 'id': 'sb1m2', 'roles': {u'Publisher': False, u'Administrator': False, u'Editor': False, u'Reader': False, u'Contributor': False, u'Reviewer': False}, 'title': 'Leitung1 Mandant1'},
+             {'type': 'user', 'id': 'sb2m2', 'roles': {u'Publisher': False, u'Administrator': False, u'Editor': False, u'Reader': False, u'Contributor': False, u'Reviewer': False}, 'title': 'Sekretariat1 Mandant1'},
+             {'type': 'group', 'id': 'sb2m1', 'roles': {u'Publisher': False, u'Administrator': False, u'Editor': False, u'Reader': False, u'Contributor': False, u'Reviewer': False}, 'title': 'Administrator1 Mandant1'}
+             ])
+
+        self.replay()
+
+        sharing = OpengeverSharingView(mock_context, mock_request)
+        principals = sharing._principal_search_results(
+            None, None, None, None, None)
 
     def base_role_settings(self, roles):
         """ Test role_settings method of OpengeverSharingView class
@@ -188,3 +227,4 @@ class TestOpengeverSharing(MockTestCase):
         self.replay()
 
         return mock_sharing.role_settings()
+
