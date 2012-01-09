@@ -1,4 +1,5 @@
-from sqlalchemy import Column, Integer, String, DateTime, Date, ForeignKey, UniqueConstraint
+from sqlalchemy import Column, Integer, String, DateTime, Date
+from sqlalchemy import ForeignKey, UniqueConstraint
 from sqlalchemy.orm import relation
 from sqlalchemy.ext.associationproxy import association_proxy
 from sqlalchemy.schema import Sequence
@@ -7,10 +8,9 @@ from sqlalchemy.sql import functions
 from opengever.globalindex.model import Base
 
 
-
 class Task(Base):
     """docstring for Task"""
-    __tablename__='tasks'
+    __tablename__ = 'tasks'
     __table_args__ = (UniqueConstraint('client_id', 'int_id'), {})
 
     task_id = Column("id", Integer, Sequence("task_id_seq"), primary_key=True)
