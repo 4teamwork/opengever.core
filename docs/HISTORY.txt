@@ -23,6 +23,11 @@ Changelog
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1342
   [jone]
 
+- Implement task delegate wizard.
+  Issue #1343 "Aufgabe Delegieren" Wizard
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1343
+  [jone]
+
 - Implement task accept wizard.
   Issue #1342 "Aufgabe akzeptieren" Wizard
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1342
