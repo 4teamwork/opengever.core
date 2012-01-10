@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2012-01-06 14:11+0000\n"
+"POT-Creation-Date: 2012-01-10 10:36+0000\n"
 "PO-Revision-Date: 2012-01-06 15:23+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -115,29 +115,6 @@ msgstr "in einem neuen Dossier auf ${client} bearbeiten."
 #: ./opengever/task/browser/accept/main.py:152
 msgid "accept_method_participate"
 msgstr "direkt im Dossier des Auftraggebers bearbeiten."
-
-#. Default: "Step 1"
-#: ./opengever/task/browser/accept/existingdossier.py:77
-#: ./opengever/task/browser/accept/main.py:110
-#: ./opengever/task/browser/accept/newdossier.py:41
-msgid "accept_step_1"
-msgstr "Schritt 1"
-
-#. Default: "Step 2"
-#: ./opengever/task/browser/accept/existingdossier.py:80
-#: ./opengever/task/browser/accept/newdossier.py:44
-msgid "accept_step_2"
-msgstr "Schritt 2"
-
-#. Default: "Step 3"
-#: ./opengever/task/browser/accept/newdossier.py:47
-msgid "accept_step_3"
-msgstr "Schritt 3"
-
-#. Default: "Step 4"
-#: ./opengever/task/browser/accept/newdossier.py:50
-msgid "accept_step_4"
-msgstr "Schritt 4"
 
 #. Default: "2. Choose document"
 #: ./opengever/task/browser/attachdocument.py:59
@@ -589,6 +566,29 @@ msgstr "Antworten:"
 #: ./opengever/task/response.py:229
 msgid "save"
 msgstr "Speichern"
+
+#. Default: "Step 1"
+#: ./opengever/task/browser/accept/existingdossier.py:77
+#: ./opengever/task/browser/accept/main.py:110
+#: ./opengever/task/browser/accept/newdossier.py:41
+msgid "step_1"
+msgstr "Schritt 1"
+
+#. Default: "Step 2"
+#: ./opengever/task/browser/accept/existingdossier.py:80
+#: ./opengever/task/browser/accept/newdossier.py:44
+msgid "step_2"
+msgstr "Schritt 2"
+
+#. Default: "Step 3"
+#: ./opengever/task/browser/accept/newdossier.py:47
+msgid "step_3"
+msgstr "Schritt 3"
+
+#. Default: "Step 4"
+#: ./opengever/task/browser/accept/newdossier.py:50
+msgid "step_4"
+msgstr "Schritt 4"
 
 #. Default: "Subtasks:"
 #: ./opengever/task/task_templates/overview.pt:88

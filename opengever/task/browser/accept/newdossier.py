@@ -38,16 +38,16 @@ class AcceptWizardNewDossierFormMixin(AcceptWizardFormMixin):
     steps = (
 
         ('accept_choose_method',
-         _(u'accept_step_1', default=u'Step 1')),
+         _(u'step_1', default=u'Step 1')),
 
         ('accept_select_repositoryfolder',
-         _(u'accept_step_2', default=u'Step 2')),
+         _(u'step_2', default=u'Step 2')),
 
         ('accept_select_dossier_type',
-         _(u'accept_step_3', default=u'Step 3')),
+         _(u'step_3', default=u'Step 3')),
 
         ('accept_dossier_add_form',
-         _(u'accept_step_4', default=u'Step 4')),
+         _(u'step_4', default=u'Step 4')),
         )
 
 

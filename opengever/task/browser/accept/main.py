@@ -107,7 +107,7 @@ class AcceptWizardFormMixin(object):
     steps = (
 
         ('accept_choose_method',
-         _(u'accept_step_1', default=u'Step 1')),
+         _(u'step_1', default=u'Step 1')),
 
         ('...', u'...'),
         )

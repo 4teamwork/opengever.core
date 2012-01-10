@@ -74,10 +74,10 @@ class ChooseDossierStepForm(AcceptWizardFormMixin, Form):
 
     steps = (
         ('accept_choose_method',
-         _(u'accept_step_1', default=u'Step 1')),
+         _(u'step_1', default=u'Step 1')),
 
         ('accept_choose_dossier',
-         _(u'accept_step_2', default=u'Step 2')),
+         _(u'step_2', default=u'Step 2')),
         )
 
     @buttonAndHandler(_(u'button_save', default=u'Save'),
