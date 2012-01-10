@@ -11,6 +11,7 @@ from plone.z3cform.layout import FormWrapper
 from z3c.form.browser.checkbox import CheckBoxFieldWidget
 from z3c.form.button import buttonAndHandler
 from z3c.form.field import Fields
+from z3c.form.interfaces import HIDDEN_MODE
 from zope import schema
 
 
@@ -61,6 +62,13 @@ class SelectRecipientsForm(DelegateWizardFormMixin, Form):
     def handle_cancel(self, action):
         url = self.context.absolute_url()
         return self.request.RESPONSE.redirect(url)
+
+    def updateWidgets(self):
+        super(SelectRecipientsForm, self).updateWidgets()
+
+        documents_source = self.fields['documents'].field.value_type.source
+        if len(documents_source(self.context)) == 0:
+            self.widgets['documents'].mode = HIDDEN_MODE
 
 
 class SelectRecipientsStepView(FormWrapper, grok.View):
