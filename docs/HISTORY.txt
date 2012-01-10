@@ -5,6 +5,9 @@ Changelog
 2.0.3 (unreleased)
 ------------------
 
+- Refactored some parts of opengever.dossier (overview, added tests, adjust some docstrings, pep8)
+  [phgross]
+
 - Add reindexing the containing_dossier value also in the globalindex.
   [phgross]
 

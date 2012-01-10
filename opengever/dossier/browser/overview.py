@@ -1,3 +1,4 @@
+from Products.ZCatalog.interfaces import ICatalogBrain
 from five import grok
 from opengever.base.browser.helper import css_class_from_brain
 from opengever.dossier import _ as _dossier
@@ -28,20 +29,27 @@ class DossierOverview(grok.View, OpengeverTab):
 
     def boxes(self):
         if not self.context.show_subdossier():
-            items = [[dict(id = 'newest_tasks', content=self.tasks(), href='tasks'),
-                      dict(id = 'participants', content=self.sharing())],
-                     [dict(id = 'newest_documents', content=self.documents(), href='documents'),
-                      dict(id = 'description', content=self.description), ]]
+            items = [
+                [dict(id='newest_tasks', content=self.tasks(), href='tasks'),
+                ],
+                [dict(id='participants', content=self.sharing()), ],
+                [dict(id='newest_documents', content=self.documents(),
+                      href='documents'),
+                 dict(id='description', content=self.description), ]
+                ]
         else:
-            items = [[dict(id = 'subdossiers', content=self.subdossiers()),
-                      dict(id = 'newest_tasks', content=self.tasks(), href='tasks'),
-                      dict(id = 'participants', content=self.sharing())],
-                     [dict(id = 'newest_documents', content=self.documents(), href='documents'),
-                      dict(id = 'description', content=self.description), ]]
+            items = [
+                [dict(id='subdossiers', content=self.subdossiers()),
+                 dict(id='participants', content=self.sharing()), ],
+                [dict(id='newest_tasks', content=self.tasks(), href='tasks')],
+                [dict(id='newest_documents', content=self.documents(),
+                      href='documents'),
+                 dict(id='description', content=self.description), ], ]
         return items
 
     def subdossiers(self):
-        return self.context.get_subdossiers()[:5]
+        return self.context.get_subdossiers(
+            sort_on='modified', sort_order='reverse')[:5]
 
     def tasks(self):
         return self.catalog(['opengever.task.task', ])[:5]
@@ -60,11 +68,6 @@ class DossierOverview(grok.View, OpengeverTab):
 
         return document_list
 
-
-
-    def events(self):
-        return self.catalog(['dummy.event', ])[:5]
-
     def sharing(self):
 
         # get the participants
@@ -72,7 +75,8 @@ class DossierOverview(grok.View, OpengeverTab):
         results = list(phandler.get_participations())
 
         # also append the responsible
-        class ResponsibleParticipant(object): pass
+        class ResponsibleParticipant(object):
+            pass
 
         responsible = ResponsibleParticipant()
         responsible.roles = _dossier(u'label_responsible', 'Responsible')
@@ -92,7 +96,7 @@ class DossierOverview(grok.View, OpengeverTab):
             for xx in results]
 
     def description(self):
-        return self.context.description;
+        return self.context.description
 
     def render_globalindex_task(self, item):
         return indexed_task_link_helper(item, item.title)
@@ -100,14 +104,19 @@ class DossierOverview(grok.View, OpengeverTab):
     def get_css_class(self, item):
         """Return the css classes
         """
-        return "%s %s" % ("rollover-breadcrumb", self._get_css_icon_class(item))
+        return "%s %s" % (
+            "rollover-breadcrumb", self._get_css_icon_class(item))
 
     def _get_css_icon_class(self, item):
         """Return the rigth css-class for the icon.
         """
-        if hasattr(item, 'portal_type'):
-            # It's a brain
-            return css_class_from_brain(item)
+        return css_class_from_brain(item)
+
+    def get_type(self, item):
+        """differ the object typ and return the type as string"""
+        if isinstance(item, dict):
+            return 'dict'
+        elif ICatalogBrain.providedBy(item):
+            return 'brain'
         else:
-            # It's a dict
-            return item['css_class']
+            return 'sqlalchemy_object'

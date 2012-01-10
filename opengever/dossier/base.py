@@ -58,11 +58,13 @@ class DossierContainer(Container):
         else:
             return True
 
-    def get_subdossiers(self):
+    def get_subdossiers(self, sort_on='created', sort_order='ascending'):
         dossier_path = '/'.join(self.getPhysicalPath())
         subdossiers = self.portal_catalog(
             path=dict(query=dossier_path,
                       depth=-1),
+            sort_on=sort_on,
+            sort_order=sort_order,
             object_provides= 'opengever.dossier.behaviors.dossier.IDossierMarker')
 
         # Remove the object itself from the list of subdossiers

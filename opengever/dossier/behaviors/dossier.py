@@ -247,4 +247,4 @@ class StartBeforeEnd(Invalid):
 @form.default_value(field=IDossier['start'])
 def deadlineDefaultValue(data):
     return datetime.today()
-# TODO: Doesn't work yet
+

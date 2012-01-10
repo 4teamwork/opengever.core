@@ -88,6 +88,7 @@ def reindex_contained_objects(dossier, event):
     index of all contained objects (documents, mails and tasks) so they don't
     show an outdated title in the ``subdossier`` column
     """
+
     catalog = getToolByName(dossier, 'portal_catalog')
     parent = aq_parent(aq_inner(dossier))
     is_subdossier = IDossierMarker.providedBy(parent)
