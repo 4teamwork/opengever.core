@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2012-01-10 10:36+0000\n"
+"POT-Creation-Date: 2012-01-10 11:16+0000\n"
 "PO-Revision-Date: 2009-02-25 14:39+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -14,6 +14,10 @@ msgstr ""
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: opengever.task\n"
 "X-Poedit-Language: German\n"
+
+#: ./opengever/task/browser/delegate/metadata.py:80
+msgid "${subtask_num} subtasks were create."
+msgstr ""
 
 #: ./opengever/task/response.py:531
 msgid "Changes saved to response id ${response_id}."
@@ -62,6 +66,10 @@ msgstr ""
 
 #: ./opengever/task/response.py:188
 msgid "Response id ${response_id} is no integer."
+msgstr ""
+
+#: ./opengever/task/browser/delegate/recipients.py:33
+msgid "Select the related documents you wish to attach to the new subtasks."
 msgstr ""
 
 #: ./opengever/task/adapters.py:183
@@ -166,6 +174,7 @@ msgstr ""
 #. Default: "Save"
 #: ./opengever/task/browser/accept/existingdossier.py:83
 #: ./opengever/task/browser/accept/newdossier.py:261
+#: ./opengever/task/browser/delegate/metadata.py:70
 msgid "button_save"
 msgstr ""
 
@@ -181,6 +190,21 @@ msgstr ""
 
 #: ./opengever/task/response.py:286
 msgid "date_of_completion"
+msgstr ""
+
+#. Default: "Select one or more responsibles. For each selected responsible a subtask will be created and assigned."
+#: ./opengever/task/browser/delegate/recipients.py:22
+msgid "delegate_help_responsible"
+msgstr ""
+
+#. Default: "Attach documents"
+#: ./opengever/task/browser/delegate/recipients.py:32
+msgid "delegate_label_documents"
+msgstr ""
+
+#. Default: "Responsibles"
+#: ./opengever/task/browser/delegate/recipients.py:21
+msgid "delegate_label_responsibles"
 msgstr ""
 
 #. Default: "It's not possible to copy related documents."
@@ -237,6 +261,7 @@ msgstr ""
 msgid "help_date_of_completion"
 msgstr ""
 
+#: ./opengever/task/browser/delegate/metadata.py:34
 #: ./opengever/task/task.py:125
 msgid "help_deadline"
 msgstr ""
@@ -265,6 +290,7 @@ msgstr ""
 msgid "help_expectedStartOfWork"
 msgstr ""
 
+#: ./opengever/task/browser/delegate/metadata.py:28
 #: ./opengever/task/task.py:90
 msgid "help_issuer"
 msgstr ""
@@ -316,10 +342,12 @@ msgstr ""
 msgid "help_task_type"
 msgstr ""
 
+#: ./opengever/task/browser/delegate/metadata.py:39
 #: ./opengever/task/task.py:140
 msgid "help_text"
 msgstr ""
 
+#: ./opengever/task/browser/delegate/metadata.py:23
 #: ./opengever/task/task.py:83
 msgid "help_title"
 msgstr ""
@@ -379,6 +407,7 @@ msgid "label_date_of_completion"
 msgstr ""
 
 #. Default: "Deadline"
+#: ./opengever/task/browser/delegate/metadata.py:33
 #: ./opengever/task/task.py:124
 msgid "label_deadline"
 msgstr ""
@@ -434,6 +463,7 @@ msgid "label_expectedStartOfWork"
 msgstr ""
 
 #. Default: "Issuer"
+#: ./opengever/task/browser/delegate/metadata.py:27
 #: ./opengever/task/task.py:89
 msgid "label_issuer"
 msgstr ""
@@ -520,11 +550,13 @@ msgid "label_task_type"
 msgstr ""
 
 #. Default: "Text"
+#: ./opengever/task/browser/delegate/metadata.py:38
 #: ./opengever/task/task.py:139
 msgid "label_text"
 msgstr ""
 
 #. Default: "Title"
+#: ./opengever/task/browser/delegate/metadata.py:22
 #: ./opengever/task/task.py:82
 msgid "label_title"
 msgstr ""
@@ -578,6 +610,7 @@ msgstr ""
 #. Default: "Step 2"
 #: ./opengever/task/browser/accept/existingdossier.py:80
 #: ./opengever/task/browser/accept/newdossier.py:44
+#: ./opengever/task/browser/delegate/main.py:25
 msgid "step_2"
 msgstr ""
 
@@ -649,6 +682,11 @@ msgstr ""
 #. Default: "Create successor task"
 #: ./opengever/task/browser/successor.py:57
 msgid "title_create_successor_task"
+msgstr ""
+
+#. Default: "Delegate task"
+#: ./opengever/task/browser/delegate/main.py:28
+msgid "title_delegate_task"
 msgstr ""
 
 #. Default: "Edit response"

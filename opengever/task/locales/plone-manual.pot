@@ -14,6 +14,9 @@ msgstr ""
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: plone\n"
 
+msgid "Delegate task"
+msgstr ""
+
 msgid "Create successor task"
 msgstr ""
 
