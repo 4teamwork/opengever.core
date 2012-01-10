@@ -1,3 +1,4 @@
+from Products.statusmessages.interfaces import IStatusMessage
 from five import grok
 from ftw.datepicker.widget import DatePickerFieldWidget
 from opengever.ogds.base import autocomplete_widget
@@ -66,14 +67,20 @@ class UpdateMetadataForm(DelegateWizardFormMixin, Form):
     step_name = 'delegate_metadata'
     passed_data = ['responsibles', 'documents']
 
-    @buttonAndHandler(_(u'button_continue', default=u'Continue'),
+    @buttonAndHandler(_(u'button_save', default=u'Save'),
                       name='save')
-    def handle_continue(self, action):
+    def handle_save(self, action):
         data, errors = self.extractData()
         if not errors:
             responsibles = self.request.get('responsibles')
-            documents = self.request.get('documents')
-            create_subtasks(self.context, responsibles, documents, data)
+            documents = self.request.get('documents', [])
+            subtasks = create_subtasks(self.context, responsibles,
+                                       documents, data)
+
+            msg = _(u'${subtask_num} subtasks were create.',
+                    mapping={u'subtask_num': len(subtasks)})
+            IStatusMessage(self.request).addStatusMessage(msg, 'info')
+
             url = self.context.absolute_url()
             return self.request.RESPONSE.redirect(url)
 
