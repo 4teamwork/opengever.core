@@ -58,6 +58,9 @@ and the default value
     >>> browser.getControl(name='form.widgets.IDossier.responsible:list').value
     ['admin']
 
+cancel
+    >>> browser.getControl(name='form.buttons.cancel').click()
+
 create and edit subdossier
     >>> browser.open('http://nohost/plone/dossier-3/++add++opengever.dossier.businesscasedossier')
     >>> 'Add Subdossier' in browser.contents
