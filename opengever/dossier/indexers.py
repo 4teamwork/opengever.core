@@ -68,7 +68,8 @@ def top_dossier_title(obj):
     """return the tilte of the top containing dossier."""
     dossier_title = ''
     while not IPloneSiteRoot.providedBy(obj):
-        if IDossierMarker.providedBy(obj):
+        if IDossierMarker.providedBy(
+            obj) or obj.portal_type == 'opengever.inbox.inbox':
             dossier_title = obj.Title()
         obj = aq_parent(aq_inner(obj))
     return dossier_title

@@ -5,6 +5,9 @@ Changelog
 2.0.3 (unreleased)
 ------------------
 
+- Adjust the containing_dossier indexer: it should also work for objects in the inbox.
+  [phgross]
+
 - Added IDisplayedInOverview Interfaces:
   to mark additional dossier behaviors, which should displayed in the overview.
   Issue #1251 Darstellung von Zusatzattributen
