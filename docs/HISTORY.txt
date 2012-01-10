@@ -5,6 +5,12 @@ Changelog
 2.0.3 (unreleased)
 ------------------
 
+- Added IDisplayedInOverview Interfaces:
+  to mark additional dossier behaviors, which should displayed in the overview.
+  Issue #1251 Darstellung von Zusatzattributen
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1251/
+  [phgross]
+
 - Refactored some parts of opengever.dossier (overview, added tests, adjust some docstrings, pep8)
   [phgross]
 

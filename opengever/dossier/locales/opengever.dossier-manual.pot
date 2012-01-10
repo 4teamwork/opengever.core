@@ -52,3 +52,6 @@ msgstr ""
 
 msgid "description"
 msgstr ""
+
+msgid "additional_attributes"
+msgstr ""

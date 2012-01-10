@@ -1,6 +1,7 @@
+from opengever.dossier.behaviors.dossier import IDossierMarker
 from zope import schema
-from zope.interface import Interface
 from zope.component.interfaces import IObjectEvent
+from zope.interface import Interface
 
 
 class IDossierContainerTypes(Interface):
@@ -79,3 +80,10 @@ class IParticipationRemoved(IObjectEvent):
     """Interface for participation removed event.
     """
 
+
+class IDisplayedInOverviewMarker(IDossierMarker):
+    """Marker Interface for additional dossier behaviors."""
+
+
+class IDisplayedInOverview(Interface):
+    """Super class for additional dossier behaviors."""
