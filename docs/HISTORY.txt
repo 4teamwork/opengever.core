@@ -5,6 +5,10 @@ Changelog
 2.0.2 (unreleased)
 ------------------
 
+- Fixed autocomplete_widget test:
+  add a Mocked Indexer for the new containing_dossier indexer, to avoid a dependency.
+  [phgross]
+
 - Transporter: store original intid in annotations when transporting an object.
   [jone]
 
