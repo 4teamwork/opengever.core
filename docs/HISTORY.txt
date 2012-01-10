@@ -5,6 +5,11 @@ Changelog
 2.0.2 (unreleased)
 ------------------
 
+- Adjust the Task indexer: get the containing_dossier value with the indexer instead over the brain.
+  Issue #1253 Darstellung Dossiertitel bei Suchresultaten (Subdossiers, Dokumente, Aufgaben)
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1253
+  [phgross]
+
 - Added new containing_dossier column to the globalindex.
   Issue #1253 Darstellung Dossiertitel bei Suchresultaten (Subdossiers, Dokumente, Aufgaben)
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1253

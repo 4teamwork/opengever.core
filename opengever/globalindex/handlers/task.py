@@ -1,6 +1,7 @@
 from AccessControl.PermissionRole import rolesForPermissionOn
 from Products.CMFCore.permissions import View
 from Products.CMFCore.utils import _mergedLocalRoles, getToolByName
+from plone.indexer.interfaces import IIndexer
 from sqlalchemy.orm.exc import NoResultFound
 from zope.component import getMultiAdapter
 from zope.component import getUtility
@@ -11,17 +12,6 @@ from opengever.base.interfaces import ISequenceNumber
 from opengever.globalindex import Session
 from opengever.globalindex.model.task import Task
 from opengever.ogds.base.utils import get_client_id
-
-
-def obj2brain(obj):
-    catalog = getToolByName(obj, 'portal_catalog')
-    query = {'path': {'query': '/'.join(obj.getPhysicalPath()),
-                  'depth': 0}}
-    brains = catalog(query)
-    if len(brains) == 0:
-        raise Exception('Not in catalog: %s' % obj)
-    else:
-        return brains[0]
 
 
 def get_dossier_sequence_number(task):
@@ -102,8 +92,12 @@ def index_task(obj, event):
 
     task.task_type = obj.task_type
     task.sequence_number = getUtility(ISequenceNumber).get_number(obj)
-    task.containing_dossier = obj2brain(obj).containing_dossier
     task.reference_number = IReferenceNumber(obj).get_number()
+
+    #get the containing_dossier value directly with the indexer
+    catalog = getToolByName(obj, 'portal_catalog')
+    task.containing_dossier = getMultiAdapter(
+        (obj, catalog), IIndexer, name='containing_dossier')()
 
     # the dossier_sequence_number index is required for generating lists
     # of tasks as PDFs (LaTeX) as defined by the customer.
