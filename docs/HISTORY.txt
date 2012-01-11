@@ -5,6 +5,9 @@ Changelog
 2.0.3 (unreleased)
 ------------------
 
+- Adjust the main dossier test: added IDisplayInOverview functionality test.
+  [phgross]
+
 - Adjust the containing_dossier indexer: it should also work for objects in the inbox.
   [phgross]
 
