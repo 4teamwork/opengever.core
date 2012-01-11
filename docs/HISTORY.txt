@@ -5,6 +5,12 @@ Changelog
 2.0.2 (unreleased)
 ------------------
 
+- Adjust the collation settings for oracle connections (changed rom BINARY_CI to GERMAN_CI):
+  to avoid problems with umlaut sorting.
+  Issue #1328 NLS_SORT Parameter umstellen.
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1328
+  [phgross]
+
 - Fixed autocomplete_widget test:
   add a Mocked Indexer for the new containing_dossier indexer, to avoid a dependency.
   [phgross]

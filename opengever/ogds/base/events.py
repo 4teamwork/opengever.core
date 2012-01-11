@@ -6,7 +6,7 @@ from sqlalchemy.interfaces import PoolListener
 # def alter_session_on_connect(dbapi_connection, connection_record):
 #     """
 #     """
-#     dbapi_connection.execute('alter session set NLS_SORT=BINARY_CI')
+#     dbapi_connection.execute('alter session set NLS_SORT=GERMAN_CI')
 #     dbapi_connection.execute('alter session set NLS_COMP=LINGUISTIC')
 
 
@@ -15,7 +15,7 @@ class SetupCollationListener(PoolListener):
     def connect(self, dbapi_con, con_record):
         '''perform connect operations'''
         cursor = dbapi_con.cursor()
-        cursor.execute('alter session set NLS_SORT=BINARY_CI')
+        cursor.execute('alter session set NLS_SORT=GERMANY_CI')
         cursor.execute('alter session set NLS_COMP=LINGUISTIC')
 
 
