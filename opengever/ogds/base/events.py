@@ -15,7 +15,7 @@ class SetupCollationListener(PoolListener):
     def connect(self, dbapi_con, con_record):
         '''perform connect operations'''
         cursor = dbapi_con.cursor()
-        cursor.execute('alter session set NLS_SORT=GERMANY_CI')
+        cursor.execute('alter session set NLS_SORT=GERMAN_CI')
         cursor.execute('alter session set NLS_COMP=LINGUISTIC')
 
 
