@@ -13,6 +13,7 @@
     <property name="allowed_content_types">
         <element value="opengever.task.task" />
         <element value="opengever.document.document" />
+        <element value="ftw.mail.mail" />
     </property>
 
 
