@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2012-01-10 11:16+0000\n"
+"POT-Creation-Date: 2012-01-13 16:28+0000\n"
 "PO-Revision-Date: 2009-02-25 14:39+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -19,7 +19,7 @@ msgstr ""
 msgid "${subtask_num} subtasks were create."
 msgstr ""
 
-#: ./opengever/task/response.py:531
+#: ./opengever/task/response.py:554
 msgid "Changes saved to response id ${response_id}."
 msgstr ""
 
@@ -32,15 +32,16 @@ msgid "Edit"
 msgstr ""
 
 #: ./opengever/task/browser/accept/utils.py:35
-#: ./opengever/task/response.py:321
+#: ./opengever/task/browser/complete.py:277
+#: ./opengever/task/response.py:330
 msgid "Issue state"
 msgstr ""
 
-#: ./opengever/task/response.py:559
+#: ./opengever/task/response.py:582
 msgid "No response selected for removal."
 msgstr ""
 
-#: ./opengever/task/response.py:522
+#: ./opengever/task/response.py:545
 msgid "No response selected for saving."
 msgstr ""
 
@@ -48,11 +49,11 @@ msgstr ""
 msgid "No response selected."
 msgstr ""
 
-#: ./opengever/task/response.py:581
+#: ./opengever/task/response.py:604
 msgid "Removed response id ${response_id}."
 msgstr ""
 
-#: ./opengever/task/response.py:574
+#: ./opengever/task/response.py:597
 msgid "Response id ${response_id} does not exist so it cannot be removed."
 msgstr ""
 
@@ -60,7 +61,7 @@ msgstr ""
 msgid "Response id ${response_id} does not exist."
 msgstr ""
 
-#: ./opengever/task/response.py:566
+#: ./opengever/task/response.py:589
 msgid "Response id ${response_id} is no integer so it cannot be removed."
 msgstr ""
 
@@ -80,6 +81,10 @@ msgstr ""
 msgid "Task"
 msgstr ""
 
+#: ./opengever/task/browser/complete.py:236
+msgid "The documents were delivered to the issuer and the tasks were completed."
+msgstr ""
+
 #: ./opengever/task/browser/accept/newdossier.py:287
 msgid "The new dossier has been created and the task has been copied to the new dossier."
 msgstr ""
@@ -92,11 +97,11 @@ msgstr ""
 msgid "The task has been copied to the selected dossier and accepted."
 msgstr ""
 
-#: ./opengever/task/response.py:553
+#: ./opengever/task/response.py:576
 msgid "You are not allowed to delete responses."
 msgstr ""
 
-#: ./opengever/task/response.py:516
+#: ./opengever/task/response.py:539
 msgid "You are not allowed to edit responses."
 msgstr ""
 
@@ -110,6 +115,10 @@ msgstr ""
 
 #: ./opengever/task/browser/accept/existingdossier.py:61
 msgid "You cannot add tasks in the selected dossier. Either the dossier is closed or you do not have the privileges."
+msgstr ""
+
+#: ./opengever/task/browser/complete.py:80
+msgid "You have insufficient privileges on the predecessor task."
 msgstr ""
 
 #. Default: "file in existing dossier in ${client}"
@@ -174,12 +183,12 @@ msgstr ""
 #. Default: "Save"
 #: ./opengever/task/browser/accept/existingdossier.py:83
 #: ./opengever/task/browser/accept/newdossier.py:261
-#: ./opengever/task/browser/delegate/metadata.py:70
+#: ./opengever/task/browser/complete.py:227
 msgid "button_save"
 msgstr ""
 
 #. Default: "Cancel"
-#: ./opengever/task/response.py:339
+#: ./opengever/task/response.py:348
 msgid "cancel"
 msgstr ""
 
@@ -188,7 +197,7 @@ msgstr ""
 msgid "containing_task"
 msgstr ""
 
-#: ./opengever/task/response.py:286
+#: ./opengever/task/response.py:295
 msgid "date_of_completion"
 msgstr ""
 
@@ -250,6 +259,16 @@ msgstr ""
 #. Default: "Enter a answer text which will be shown as response when the task is accepted."
 #: ./opengever/task/browser/accept/main.py:178
 msgid "help_accept_task_response"
+msgstr ""
+
+#. Default: "Select the documents you want to deliver to the issuer of the task. They will be attached to the original task of the issuer."
+#: ./opengever/task/browser/complete.py:195
+msgid "help_complete_documents"
+msgstr ""
+
+#. Default: "Enter a answer text which will be shown as response when the task is completed."
+#: ./opengever/task/browser/complete.py:207
+msgid "help_complete_task_response"
 msgstr ""
 
 #: ./opengever/task/browser/copy_related_documents.py:59
@@ -353,6 +372,7 @@ msgid "help_title"
 msgstr ""
 
 #: ./opengever/task/browser/assign.py:29
+#: ./opengever/task/browser/complete.py:215
 #: ./opengever/task/response.py:43
 msgid "help_transition"
 msgstr ""
@@ -393,6 +413,11 @@ msgstr ""
 #. Default: "by ${author}"
 #: ./opengever/task/viewlets/byline.pt:17
 msgid "label_by_author"
+msgstr ""
+
+#. Default: "Documents to deliver"
+#: ./opengever/task/browser/complete.py:193
+msgid "label_complete_documents"
 msgstr ""
 
 #. Default: "Copy related documents to inbox of target client"
@@ -498,7 +523,7 @@ msgstr ""
 #. Default: "Response"
 #: ./opengever/task/browser/accept/main.py:177
 #: ./opengever/task/browser/assign.py:50
-#: ./opengever/task/response.py:49
+#: ./opengever/task/browser/complete.py:206
 msgid "label_response"
 msgstr ""
 
@@ -563,6 +588,7 @@ msgstr ""
 
 #. Default: "Transition"
 #: ./opengever/task/browser/assign.py:28
+#: ./opengever/task/browser/complete.py:214
 #: ./opengever/task/response.py:42
 msgid "label_transition"
 msgstr ""
@@ -645,12 +671,12 @@ msgid "task_added_on"
 msgstr ""
 
 #. Default: "Added"
-#: ./opengever/task/response_templates/responseview.pt:65
+#: ./opengever/task/response_templates/responseview.pt:64
 msgid "task_object_add"
 msgstr ""
 
 #. Default: "Added successor task"
-#: ./opengever/task/response_templates/responseview.pt:76
+#: ./opengever/task/response_templates/responseview.pt:75
 msgid "task_object_successor"
 msgstr ""
 
@@ -672,6 +698,11 @@ msgstr ""
 #. Default: "Attach document"
 #: ./opengever/task/browser/attachdocument.py:187
 msgid "title_attach_document_form"
+msgstr ""
+
+#. Default: "Complete task"
+#: ./opengever/task/browser/complete.py:224
+msgid "title_complete_task"
 msgstr ""
 
 #. Default: "Copy related documents"
