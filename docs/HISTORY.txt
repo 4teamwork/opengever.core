@@ -5,22 +5,12 @@ Changelog
 2.2 (unreleased)
 ----------------
 
-- Nothing changed yet.
+- Implement task complete form.
+  Issue #1344 Aufgabe erledigen bzw. abschliessen
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1344
+  [jone]
 
-
-2.1 (2012-01-13)
-----------------
-
-- Moved the workflow guards checks in to a TaskTransitionController and added Tests.
-  [phgross]
-
-- Adjust task configuration, added ftw.mail.mail to the allowed content types of tasks.
-  Is Allready released in the Hotfix 2.0.2.
-  [phgross]
-
-- Implement task accept wizard.
-  Issue #1342 "Aufgabe akzeptieren" Wizard
-  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1342
+- Reponse: support for referencing multiple added documents in one response.
   [jone]
 
 - Implement task delegate wizard.
@@ -32,6 +22,17 @@ Changelog
   Issue #1342 "Aufgabe akzeptieren" Wizard
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1342
   [jone]
+
+- Moved the workflow guards checks in to a TaskTransitionController and added Tests.
+  [phgross]
+
+
+2.1 (2012-01-13)
+----------------
+
+- Adjust task configuration, added ftw.mail.mail to the allowed content types of tasks.
+  Is Allready released in the Hotfix 2.0.2.
+  [phgross]
 
 - #1299 Spalte 'In Bearbeitung' hinzufügen bei Dokumentenauflistung in einer Aufgabe
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1299/
