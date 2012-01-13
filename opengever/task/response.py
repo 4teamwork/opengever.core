@@ -239,6 +239,15 @@ class AddForm(form.AddForm, AutoExtensibleForm):
             self.status = errorMessage
             return None
         else:
+            # use complete form if necessary.
+            complete_task = self.context.restrictedTraverse('@@complete_task')
+            if complete_task.use_successor_form():
+                dm = getUtility(IAcceptTaskStorageManager)
+                dm.set('text', data.get('text'), task=self.context)
+
+                url = '%s/@@complete_task' % self.context.absolute_url()
+                return self.request.RESPONSE.redirect(url)
+
             # redirect to the accept-task wizard if necessary.
             is_accept_transition = data.get('transition', None) == \
                     'task-transition-open-in-progress'

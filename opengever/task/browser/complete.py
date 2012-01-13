@@ -15,6 +15,7 @@ from opengever.ogds.base.utils import encode_after_json
 from opengever.ogds.base.utils import remote_request
 from opengever.task import _
 from opengever.task import util
+from opengever.task.browser.accept.storage import IAcceptTaskStorageManager
 from opengever.task.task import ITask
 from opengever.task.util import add_simple_response
 from plone.directives.form import Schema
@@ -62,7 +63,7 @@ class CompleteTask(grok.View):
 
     grok.context(ITask)
     grok.name('complete_task')
-    grok.require('cmf.AddPortalContent')
+    grok.require('zope2.View')
 
     def render(self):
         transition = self.request.get('transition', None)
@@ -70,12 +71,35 @@ class CompleteTask(grok.View):
             'Bad request: could not find transition in request'
 
         if self.use_successor_form(transition):
+            # The user should have access to the predecessor.
+            pred_oguid = self.context.predecessor
+            task_query = getUtility(ITaskQuery)
+            if not pred_oguid or \
+                    task_query.get_task_by_oguid(pred_oguid) is None:
+
+                msg = _(u'You have insufficient privileges on the '
+                        u'predecessor task.')
+                IStatusMessage(self.request).addStatusMessage(msg, 'error')
+                return self.request.RESPONSE.redirect(
+                    self.context.absolute_url())
+
+            # User should be allowed to execute the transition.
+            wftool = getToolByName(self.context, 'portal_workflow')
+            possible_transitions = []
+            for tid in wftool.getTransitionsFor(self.context):
+                possible_transitions.append(tid)
+
+            if transition not in possible_transitions:
+                msg = _(u'You have insufficient privileges on the '
+                        u'predecessor task.')
+                IStatusMessage(self.request).addStatusMessage(msg, 'error')
+                return self.request.RESPONSE.redirect(
+                    self.context.absolute_url())
+
+            # OK, complete tasks.
             url = '%s/@@complete_successor_task?transition=%s' % (
                 self.context.absolute_url(),
                 transition)
-
-            # XXX gently fail if user has no access to predecessor.
-            # XXX gently fail if the transition is not possible on the task.
 
         else:
             url = '%s/direct_response?form.widgets.transition=%s' % (
@@ -87,6 +111,11 @@ class CompleteTask(grok.View):
     def use_successor_form(self, transition):
         """Returns True if the 'complete_successor_task' form should be used.
         """
+        portal_membership = getToolByName(self.context, 'portal_membership')
+        if not portal_membership.checkPermission(
+            'Add portal content', self.context):
+            return False
+
         if not self.context.predecessor:
             return False
 
@@ -221,7 +250,12 @@ class CompleteSuccessorTaskForm(Form):
             self.request.set('form.widgets.transition',
                              self.request.get('transition'))
 
-        # XXX get initial "text" from response add form
+        # Use text passed from response-add-form.
+        if self.request.form.get('form.widgets.text', None) is None:
+            dm = getUtility(IAcceptTaskStorageManager)
+            text = dm.get('text', task=self.context)
+            if text:
+                self.request.set('form.widgets.text', text)
 
         Form.updateWidgets(self)
 
