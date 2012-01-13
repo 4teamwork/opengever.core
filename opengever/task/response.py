@@ -388,15 +388,29 @@ class ResponseView(grok.Viewlet, Base):
         """used for display icons in the view"""
         return css_class_from_obj(item)
 
-    def get_added_object(self, response):
+    def get_added_objects(self, response):
+        # Some relations may not have an added_object attribute...
         try:
             response.added_object
         except AttributeError:
             return None
-        if response.added_object:
-            return response.added_object.to_object
-        else:
+
+        # .. and sometimes it may be empty.
+        if not response.added_object:
             return None
+
+        # Support for multiple added objects was added, so added_object may
+        # be a list of relations, but could also be a relation directly.
+        if hasattr(response.added_object, '__iter__'):
+            relations = response.added_object
+        else:
+            relations = [response.added_object]
+
+        # Return the target objects, not the relations.
+        objects = []
+        for rel in relations:
+            objects.append(rel.to_object)
+        return objects
 
     def get_added_successor(self, response):
         try:

@@ -60,8 +60,7 @@
                           tal:content="structure python: viewlet.convert_change_values(delta['id'], delta['after'])" />
                 </div>
 
-                <div tal:define="added_obj python:viewlet.get_added_object(response)"
-                     tal:condition="nocall:added_obj">
+                <div tal:repeat="added_obj python:viewlet.get_added_objects(response)">
                     <span i18n:translate="task_object_add" class="label">Added</span>
                     <span class="issueChange">
                         <a href=""

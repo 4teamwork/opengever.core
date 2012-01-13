@@ -1,3 +1,4 @@
+from persistent.list import PersistentList
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone import PloneMessageFactory as PMF
 from collective.elephantvocabulary import wrap_vocabulary
@@ -94,8 +95,16 @@ def add_simple_response(task, text='', field_changes=None, added_object=None,
 
     if added_object:
         intids = getUtility(IIntIds)
-        iid = intids.getId(added_object)
-        response.added_object = RelationValue(iid)
+
+        if hasattr(added_object, '__iter__'):
+            response.added_object = PersistentList()
+            for obj in added_object:
+                iid = intids.getId(obj)
+                response.added_object.append(RelationValue(iid))
+
+        else:
+            iid = intids.getId(added_object)
+            response.added_object = RelationValue(iid)
 
     if successor_oguid:
         response.successor_oguid = successor_oguid
@@ -106,4 +115,3 @@ def add_simple_response(task, text='', field_changes=None, added_object=None,
     notify(ObjectModifiedEvent(task))
 
     return response
-
