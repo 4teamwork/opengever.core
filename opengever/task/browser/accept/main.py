@@ -5,9 +5,9 @@ step, where the user has to choose the method of participation.
 """
 
 from Products.CMFCore.utils import getToolByName
-from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from Products.statusmessages.interfaces import IStatusMessage
 from five import grok
+from opengever.base.browser.wizard import BaseWizardStepForm
 from opengever.base.browser.wizard.interfaces import IWizardDataStorage
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.ogds.base.utils import get_client_id
@@ -97,12 +97,7 @@ class AcceptTask(grok.View):
             return True
 
 
-class AcceptWizardFormMixin(object):
-    """This form wizard mixin class is used by wizard step forms and makes
-    the wizard aware. It provides information about the steps for displaying
-    the progress bar and also provides a mechanism for passing data along the
-    steps.
-    """
+class AcceptWizardFormMixin(BaseWizardStepForm):
 
     steps = (
 
@@ -113,32 +108,8 @@ class AcceptWizardFormMixin(object):
         )
 
     label = _(u'title_accept_task', u'Accept task')
-    template = ViewPageTemplateFile(
-        '../templates/wizard_wrappedform.pt')
-    ignoreContext = True
 
     passed_data = ['oguid']
-
-    def wizard_steps(self):
-        current_reached = False
-
-        for name, label in self.steps:
-            classes = ['wizard-step-%s' % name]
-            if name == self.step_name:
-                current_reached = True
-                classes.append('selected')
-
-            elif not current_reached:
-                classes.append('visited')
-
-            yield {'name': name,
-                   'label': label,
-                   'class': ' '.join(classes)}
-
-    def get_passed_data(self):
-        for key in self.passed_data:
-            yield {'key': key,
-                   'value': self.request.get(key, '')}
 
 
 @grok.provider(IContextSourceBinder)
