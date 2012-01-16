@@ -6,10 +6,10 @@ the task needs to be copied to this dossier (successor task).
 from Products.CMFCore.utils import getToolByName
 from Products.statusmessages.interfaces import IStatusMessage
 from five import grok
+from opengever.base.browser.wizard.interfaces import IWizardDataStorage
 from opengever.base.source import RepositoryPathSourceBinder
 from opengever.task import _
 from opengever.task.browser.accept.main import AcceptWizardFormMixin
-from opengever.task.browser.accept.storage import IAcceptTaskStorageManager
 from opengever.task.browser.accept.utils import accept_task_with_successor
 from plone.directives.form import Schema
 from plone.z3cform.layout import FormWrapper
@@ -87,7 +87,8 @@ class ChooseDossierStepForm(AcceptWizardFormMixin, Form):
 
         if not errors:
             oguid = self.request.get('oguid')
-            text = getUtility(IAcceptTaskStorageManager).get('text', oguid)
+            key = 'accept:%s' % oguid
+            text = getUtility(IWizardDataStorage).get(key, 'text')
             task = accept_task_with_successor(
                 data['dossier'], oguid, text)
 

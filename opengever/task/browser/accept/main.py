@@ -8,10 +8,10 @@ from Products.CMFCore.utils import getToolByName
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from Products.statusmessages.interfaces import IStatusMessage
 from five import grok
+from opengever.base.browser.wizard.interfaces import IWizardDataStorage
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.ogds.base.utils import get_client_id
 from opengever.task import _
-from opengever.task.browser.accept.storage import IAcceptTaskStorageManager
 from opengever.task.browser.accept.utils import accept_task_with_response
 from opengever.task.interfaces import ISuccessorTaskController
 from opengever.task.task import ITask
@@ -221,8 +221,11 @@ class ChooseMethodStepForm(AcceptWizardFormMixin, Form):
         data, errors = self.extractData()
 
         if not errors:
-            dm = getUtility(IAcceptTaskStorageManager)
-            dm.update(data, task=self.context)
+            oguid = ISuccessorTaskController(self.context).get_oguid()
+
+            dm = getUtility(IWizardDataStorage)
+            dmkey = 'accept:%s' % oguid
+            dm.update(dmkey, data)
 
             method = data.get('method')
             if method == 'participate':
@@ -236,10 +239,9 @@ class ChooseMethodStepForm(AcceptWizardFormMixin, Form):
                 info = getUtility(IContactInformation)
                 client = info.get_client_by_id(
                     self.context.responsible_client)
-                oguid = ISuccessorTaskController(self.context).get_oguid()
 
                 # push session data to target client
-                dm.push_to_remote_client(client.client_id, oguid)
+                dm.push_to_remote_client(dmkey, client.client_id)
 
                 # XXX: should "ordnungssystem" really be hardcode?
                 url = '%s/ordnungssystem/@@accept_choose_dossier?oguid=%s' % (
@@ -254,7 +256,7 @@ class ChooseMethodStepForm(AcceptWizardFormMixin, Form):
                 oguid = ISuccessorTaskController(self.context).get_oguid()
 
                 # push session data to target client
-                dm.push_to_remote_client(client.client_id, oguid)
+                dm.push_to_remote_client(dmkey, client.client_id)
 
                 # XXX: should "ordnungssystem" really be hardcode?
                 url = '/'.join((
@@ -273,8 +275,9 @@ class ChooseMethodStepForm(AcceptWizardFormMixin, Form):
                 oguid = ISuccessorTaskController(self.context).get_oguid()
                 self.request.set('oguid', oguid)
 
-            dm = getUtility(IAcceptTaskStorageManager)
-            text = dm.get('text', oguid=self.request.get('oguid'))
+            dm = getUtility(IWizardDataStorage)
+            dmkey = 'accept:%s' % self.request.get('oguid')
+            text = dm.get(dmkey, 'text')
 
             if text:
                 self.request.set('form.widgets.text', text)

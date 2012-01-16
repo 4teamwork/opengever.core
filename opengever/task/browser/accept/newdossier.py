@@ -11,7 +11,7 @@ from opengever.globalindex.interfaces import ITaskQuery
 from opengever.repository.interfaces import IRepositoryFolder
 from opengever.task import _
 from opengever.task.browser.accept.main import AcceptWizardFormMixin
-from opengever.task.browser.accept.storage import IAcceptTaskStorageManager
+from opengever.base.browser.wizard.interfaces import IWizardDataStorage
 from opengever.task.browser.accept.utils import accept_task_with_successor
 from plone.dexterity.i18n import MessageFactory as dexterityMF
 from plone.directives.form import Schema
@@ -185,8 +185,9 @@ class SelectDossierTypeStepForm(AcceptWizardNewDossierFormMixin, Form):
 
         if not errors:
             oguid = self.request.get('oguid')
-            dm = getUtility(IAcceptTaskStorageManager)
-            dm.update(data, oguid=oguid)
+            dmkey = 'accept:%s' % oguid
+            dm = getUtility(IWizardDataStorage)
+            dm.update(dmkey, data)
 
             url = '%s/@@accept_dossier_add_form?oguid=%s&%s' % (
                 self.context.absolute_url(),
@@ -274,14 +275,15 @@ class DossierAddFormView(FormWrapper, grok.View):
                 # Get a properly aq wrapped object
                 dossier = self.context.get(obj.id)
 
-                dm = getUtility(IAcceptTaskStorageManager)
+                dm = getUtility(IWizardDataStorage)
                 oguid = self.request.get('oguid')
+                dmkey = 'accept:%s' % oguid
 
                 # create the successor task, accept the predecessor
                 task = accept_task_with_successor(
                     dossier,
                     oguid,
-                    dm.get('text', oguid=oguid))
+                    dm.get(dmkey, 'text'))
 
                 IStatusMessage(self.request).addStatusMessage(
                     _(u'The new dossier has been created and the task has '
