@@ -45,6 +45,10 @@ class BaseWizardStepForm(object):
 
     template = ViewPageTemplateFile('wizard_wrappedform.pt')
 
+    label = 'wizard'
+
+    passed_data = []
+
     def wizard_steps(self):
         current_reached = False
 
