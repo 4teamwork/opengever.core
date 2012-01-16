@@ -243,8 +243,10 @@ class AddForm(form.AddForm, AutoExtensibleForm):
             complete_task = self.context.restrictedTraverse('@@complete_task')
             transition = data.get('transition')
             if complete_task.use_successor_form(transition):
-                dm = getUtility(IAcceptTaskStorageManager)
-                dm.set('text', data.get('text'), task=self.context)
+                dm = getUtility(IWizardDataStorage)
+                oguid = ISuccessorTaskController(self.context).get_oguid()
+                dmkey = 'delegate:%s' % oguid
+                dm.set(dmkey, 'text', data.get('text'))
 
                 url = '%s/@@complete_task?transition=%s' % (
                     self.context.absolute_url(),

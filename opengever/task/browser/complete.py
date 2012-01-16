@@ -8,6 +8,7 @@ from Acquisition import aq_parent, aq_inner
 from Products.CMFCore.utils import getToolByName
 from Products.statusmessages.interfaces import IStatusMessage
 from five import grok
+from opengever.base.browser.wizard.interfaces import IWizardDataStorage
 from opengever.base.interfaces import IReferenceNumber
 from opengever.globalindex.interfaces import ITaskQuery
 from opengever.ogds.base.interfaces import ITransporter
@@ -15,7 +16,7 @@ from opengever.ogds.base.utils import encode_after_json
 from opengever.ogds.base.utils import remote_request
 from opengever.task import _
 from opengever.task import util
-from opengever.task.browser.accept.storage import IAcceptTaskStorageManager
+from opengever.task.interfaces import ISuccessorTaskController
 from opengever.task.task import ITask
 from opengever.task.util import add_simple_response
 from plone.directives.form import Schema
@@ -253,8 +254,10 @@ class CompleteSuccessorTaskForm(Form):
 
         # Use text passed from response-add-form.
         if self.request.form.get('form.widgets.text', None) is None:
-            dm = getUtility(IAcceptTaskStorageManager)
-            text = dm.get('text', task=self.context)
+            dm = getUtility(IWizardDataStorage)
+            oguid = ISuccessorTaskController(self.context).get_oguid()
+            dmkey = 'delegate:%s' % oguid
+            text = dm.get(dmkey, 'text')
             if text:
                 self.request.set('form.widgets.text', text)
 
