@@ -1,5 +1,5 @@
-from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from five import grok
+from opengever.base.browser.wizard import BaseWizardStepForm
 from opengever.task import _
 from opengever.task.task import ITask
 
@@ -14,7 +14,7 @@ class DelegateTask(grok.View):
         return self.request.RESPONSE.redirect(url)
 
 
-class DelegateWizardFormMixin(object):
+class DelegateWizardFormMixin(BaseWizardStepForm):
 
     steps = (
 
@@ -26,36 +26,3 @@ class DelegateWizardFormMixin(object):
         )
 
     label = _(u'title_delegate_task', u'Delegate task')
-    template = ViewPageTemplateFile(
-        '../templates/wizard_wrappedform.pt')
-    ignoreContext = True
-
-    passed_data = []
-
-    def wizard_steps(self):
-        current_reached = False
-
-        for name, label in self.steps:
-            classes = ['wizard-step-%s' % name]
-            if name == self.step_name:
-                current_reached = True
-                classes.append('selected')
-
-            elif not current_reached:
-                classes.append('visited')
-
-            yield {'name': name,
-                   'label': label,
-                   'class': ' '.join(classes)}
-
-    def get_passed_data(self):
-        for key in self.passed_data:
-            value = self.request.get(key, '')
-            if hasattr(value, '__iter__'):
-                for val in value:
-                    yield {'key': '%s:list' % key,
-                           'value': val}
-
-            else:
-                yield {'key': key,
-                       'value': value}
