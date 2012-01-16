@@ -74,6 +74,7 @@ class CompleteTask(grok.View):
             # The user should have access to the predecessor.
             pred_oguid = self.context.predecessor
             task_query = getUtility(ITaskQuery)
+
             if not pred_oguid or \
                     task_query.get_task_by_oguid(pred_oguid) is None:
 
@@ -86,12 +87,12 @@ class CompleteTask(grok.View):
             # User should be allowed to execute the transition.
             wftool = getToolByName(self.context, 'portal_workflow')
             possible_transitions = []
-            for tid in wftool.getTransitionsFor(self.context):
-                possible_transitions.append(tid)
+            for trans in wftool.getTransitionsFor(self.context):
+                possible_transitions.append(trans.get('id'))
 
             if transition not in possible_transitions:
-                msg = _(u'You have insufficient privileges on the '
-                        u'predecessor task.')
+                msg = _(u'The selected transition is not available for this '
+                        u'task.')
                 IStatusMessage(self.request).addStatusMessage(msg, 'error')
                 return self.request.RESPONSE.redirect(
                     self.context.absolute_url())
