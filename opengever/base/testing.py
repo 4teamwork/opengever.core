@@ -1,16 +1,39 @@
 from opengever.globalindex import model as task_model
 from opengever.ogds.base.interfaces import IClientConfiguration
-from opengever.ogds.base.setuphandlers import create_sql_tables, MODELS
 from opengever.ogds.base.setuphandlers import _create_example_client
+from opengever.ogds.base.setuphandlers import create_sql_tables, MODELS
 from opengever.ogds.base.utils import create_session
-from plone.app.testing import applyProfile
 from plone.app.testing import IntegrationTesting
-from plone.app.testing import PloneSandboxLayer
 from plone.app.testing import PLONE_FIXTURE
+from plone.app.testing import PloneSandboxLayer
+from plone.app.testing import applyProfile
 from plone.directives import form
 from plone.registry.interfaces import IRegistry
+from plone.testing import Layer
+from plone.testing import zca
 from zope.component import getUtility
 from zope.configuration import xmlconfig
+
+
+class AnnotationLayer(Layer):
+    """Loads ZML of zope.annotation.
+    """
+
+    defaultBases = (zca.ZCML_DIRECTIVES,)
+
+    def testSetUp(self):
+        self['configurationContext'] = zca.stackConfigurationContext(
+            self.get('configurationContext'))
+
+        import zope.annotation
+        xmlconfig.file('configure.zcml', zope.annotation,
+                       context=self['configurationContext'])
+
+    def testTearDown(self):
+        del self['configurationContext']
+
+
+ANNOTATION_LAYER = AnnotationLayer()
 
 
 class BaseFunctionalLayer(PloneSandboxLayer):

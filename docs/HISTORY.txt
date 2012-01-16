@@ -5,6 +5,9 @@ Changelog
 2.2 (unreleased)
 ----------------
 
+- Add wizard data storage.
+  [jone]
+
 - resolve_oguid: redirect to right client if oguid does not belong to "this" client.
   [jone]
 
