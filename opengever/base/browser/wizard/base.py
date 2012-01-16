@@ -67,5 +67,12 @@ class BaseWizardStepForm(object):
 
     def get_passed_data(self):
         for key in self.passed_data:
-            yield {'key': key,
-                   'value': self.request.get(key, '')}
+            value = self.request.get(key, '')
+            if hasattr(value, '__iter__'):
+                for val in value:
+                    yield {'key': '%s:list' % key,
+                           'value': val}
+
+            else:
+                yield {'key': key,
+                       'value': value}
