@@ -29,6 +29,7 @@ class DefaultLayout(grok.MultiAdapter, MakoLayoutBase):
         # XXX rename logo to logo.pdf
         self.add_raw_template_file('logo_sw.pdf')
 
+        self.use_package('inputenc', options='utf8', append_options=False)
         self.use_package('ae,aecompl')
         self.use_package('babel', 'ngerman', append_options=False)
         self.use_package('fancyhdr')
