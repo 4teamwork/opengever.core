@@ -25,7 +25,7 @@ class TaskListingPDFView(grok.View, ExportPDFView):
     def render(self):
         # let the request provide ILandscapeLayer
         if not ILandscapeLayer.providedBy(self.request):
-            ifaces = [ILandscapeLayer,] + list(directlyProvidedBy(
+            ifaces = [ILandscapeLayer] + list(directlyProvidedBy(
                     self.request))
             directlyProvides(self.request, *ifaces)
 

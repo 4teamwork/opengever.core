@@ -33,8 +33,8 @@ def get_selected_items(context, request):
             mapping[str(task.task_id)] = task
 
         # get the task from the mapping
-        for id in ids:
-            task = mapping.get(str(id))
+        for taskid in ids:
+            task = mapping.get(str(taskid))
             if task:
                 yield task
 
