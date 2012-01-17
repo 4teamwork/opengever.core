@@ -50,6 +50,7 @@ class TestDefaultLayout(MockTestCase):
         layout.before_render_hook()
 
         packages = '\n'.join([
+                r'\usepackage[utf8]{inputenc}',
                 r'\usepackage{ae,aecompl}',
                 r'\usepackage[ngerman]{babel}',
                 r'\usepackage{fancyhdr}',
