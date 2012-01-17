@@ -8,6 +8,7 @@ tests_require = [
     'collective.testcaselayer',
     'Products.PloneTestCase',
     'opengever.ogds.base[tests]',
+    'ftw.testing',
     ]
 
 setup(name='opengever.repository',
