@@ -10,11 +10,4 @@
         permission="zope2.View"
         />
 
-    <browser:view
-        for="*"
-        name="pdf-dossier-listing"
-        class=".dossierlisting.DossierListingPDF"
-        permission="zope2.View"
-        />
-
 </configure>

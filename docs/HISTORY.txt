@@ -5,6 +5,9 @@ Changelog
 2.0.2 (unreleased)
 ------------------
 
+- Dossier listing PDF: reimplement with ftw.pdfgenerator.
+  [jone]
+
 - Task listing PDF: use containing_dossier.
   [jone]
 
