@@ -133,6 +133,52 @@ class UsersAndInboxesVocabularyFactory(grok.GlobalUtility):
             return client_id
 
 
+class AllUsersAndInboxesVocabularyFactory(grok.GlobalUtility):
+    """Vocabulary of all users and all inbexes, but client unspecific.
+    The client is added as prefix to each user.
+    Users assigned to multiple clients are once per client in the vocabulary.
+    """
+
+    grok.provides(IVocabularyFactory)
+    grok.name('opengever.ogds.base.AllUsersAndInboxesVocabulary')
+
+    hidden_terms = []
+
+    def __call__(self, context):
+        self.context = context
+        vocab = wrap_vocabulary(
+            ContactsVocabulary.create_with_provider(
+                self.key_value_provider))(context)
+        vocab.hidden_terms = self.hidden_terms
+        return vocab
+
+    @ram.cache(voc_cachekey)
+    @generator_to_list
+    def key_value_provider(self):
+        info = getUtility(IContactInformation)
+
+        for client in info.get_clients():
+            client_id = client.client_id
+
+            # all users
+            for user in info.list_assigned_users(client_id=client_id):
+                value = u'%s:%s' % (client_id, user.userid)
+                label = u'%s: %s' % (
+                    client.title,
+                    info.describe(user))
+
+                if not user.active:
+                    self.hidden_terms.append(value)
+
+                yield (value, label)
+
+            # client inbox
+            principal = u'inbox:%s' % client_id
+            value = u'%s:%s' % (client_id, principal)
+            label = info.describe(principal)
+            yield (value, label)
+
+
 class InboxesVocabularyFactory(UsersAndInboxesVocabularyFactory):
     """Similar like the UsersAndInboxesVocabularyFactory, but return just the
     inboxes if is not the actual client. The client is defined in the request

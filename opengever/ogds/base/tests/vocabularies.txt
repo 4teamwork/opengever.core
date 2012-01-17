@@ -210,6 +210,20 @@ is defined in the request either with key "client" or with key
     >>> request.set('client', None)
 
 
+All users and inboxes vocabulary
+--------------------------------
+
+The UsersAndInboxesVocabulary lists all users once per assigned client
+and all inboxes.
+
+    >>> fact = getUtility(IVocabularyFactory,
+    ...                   name='opengever.ogds.base.AllUsersAndInboxesVocabulary')
+    >>> voc = fact(portal)
+    >>> fterms(list(voc))
+    [u'<Term client1:hanspeter.linder:Client 1: Linder Hans-Peter (hanspeter.linder)>', u'<Term client1:hugo.boss:Client 1: Boss Hugo (hugo.boss)>', u'<Term client1:inbox:client1:Inbox: Client 1>', u'<Term client2:hanspeter.linder:Client 2: Linder Hans-Peter (hanspeter.linder)>', u'<Term client2:peter.muster:Client 2: Muster Peter (peter.muster)>', u'<Term client2:inbox:client2:Inbox: Client 2>']
+
+
+
 
 Assigned users
 --------------
@@ -402,4 +416,3 @@ Documents in selected dossier vocabulary
 
     >>> request.set('client', None)
     >>> request.set('dossier_path', None)
-

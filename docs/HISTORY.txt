@@ -5,6 +5,9 @@ Changelog
 2.0.2 (unreleased)
 ------------------
 
+- Add AllUsersAndInboxesVocabulary.
+  [jone]
+
 - Adjust the collation settings for oracle connections (changed rom BINARY_CI to GERMAN_CI):
   to avoid problems with umlaut sorting.
   Issue #1328 NLS_SORT Parameter umstellen.
