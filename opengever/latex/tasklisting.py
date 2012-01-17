@@ -68,7 +68,7 @@ class TaskListingLaTeXView(grok.MultiAdapter, MakoLaTeXView):
                          self.info.describe(item.issuer))
         responsible = self.info.describe(item.responsible)
 
-        dossier_title = item.containing_dossier
+        dossier_title = item.containing_dossier or ''
 
         reference = unicode(getattr(
                 item, 'reference',
