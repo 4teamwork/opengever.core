@@ -331,15 +331,10 @@ class DossierAddFormView(FormWrapper, grok.View):
         query = getUtility(ITaskQuery)
         task = query.get_task_by_oguid(oguid)
 
-        # XXX use DOSSIER title as default title, not TASK title - the
-        # globalindex contianing_dossier is missing yet, see:
-        # Issue #1253 Darstellung Dossiertitel bei Suchresultaten (Subdossiers, Dokumente, Aufgaben)
-        # https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1253
-
         title_key = 'form.widgets.IOpenGeverBase.title'
 
         if self.request.form.get(title_key, None) is None:
-            title = task.title
+            title = task.containing_dossier
             if isinstance(title, str):
                 title = title.decode('utf-8')
             self.request.set(title_key, title)
