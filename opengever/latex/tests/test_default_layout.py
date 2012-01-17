@@ -50,22 +50,22 @@ class TestDefaultLayout(MockTestCase):
         layout.before_render_hook()
 
         packages = '\n'.join([
-            r'\usepackage{ae,aecompl}',
-            r'\usepackage[ngerman]{babel}',
-            r'\usepackage{fancyhdr}',
-            r'\usepackage[left=35mm, right=10mm, top=55mm, ' + \
-                r'bottom=10.5mm]{geometry}',
-            r'\usepackage{graphicx}',
-            r'\usepackage{lastpage}',
-            r'\usepackage[neveradjust]{paralist}',
-            r'\usepackage{textcomp}',
-            r'\usepackage[absolute, overlay]{textpos}',
-            r'\usepackage[compact]{titlesec}',
-            r'\usepackage{wrapfig}',
-            r'\usepackage{array,supertabular}',
-            r'\usepackage{setspace}',
-            '',
-            ])
+                r'\usepackage{ae,aecompl}',
+                r'\usepackage[ngerman]{babel}',
+                r'\usepackage{fancyhdr}',
+                r'\usepackage[left=35mm, right=10mm, top=55mm, ' + \
+                    r'bottom=10.5mm]{geometry}',
+                r'\usepackage{graphicx}',
+                r'\usepackage{lastpage}',
+                r'\usepackage[neveradjust]{paralist}',
+                r'\usepackage{textcomp}',
+                r'\usepackage[absolute, overlay]{textpos}',
+                r'\usepackage[compact]{titlesec}',
+                r'\usepackage{wrapfig}',
+                r'\usepackage{array,supertabular}',
+                r'\usepackage{setspace}',
+                '',
+                ])
 
         self.assertEqual(layout.get_packages_latex(), packages)
 
