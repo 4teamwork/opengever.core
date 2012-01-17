@@ -2,4 +2,11 @@
 *.pyc
 *.pyo
 *.mo
-
+*.swp
+.installed.cfg
+.mr.developer.cfg
+bin/
+buildout.cfg
+develop-eggs/
+parts/
+src/
