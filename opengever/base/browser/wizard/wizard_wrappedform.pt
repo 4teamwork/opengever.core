@@ -1,27 +1,34 @@
-<metal:use use-macro="context/@@ploneform-macros/titlelessform">
+<html xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      tal:omit-tag="python: True">
 
-    <metal:formtop fill-slot="formtop">
-        <div class="wizard">
 
-            <ul class="wizardSteps">
-                <li tal:repeat="step view/wizard_steps"
-                    tal:attributes="class step/class">
-                    <a tal:content="step/label" />
-                </li>
-            </ul>
+    <metal:use use-macro="context/@@ploneform-macros/titlelessform">
 
-        </div>
+        <metal:formtop fill-slot="formtop">
+            <div class="wizard">
 
-        <div class="wizardContent">
-            <metal:passed-data tal:define="data view/get_passed_data|nothing"
-                               tal:condition="data">
-                <input tal:repeat="item data"
-                       type="hidden"
-                       tal:attributes="name item/key;
-                                       value item/value" />
-            </metal:passed-data>
-        </div>
+                <ul class="wizardSteps">
+                    <li tal:repeat="step view/wizard_steps"
+                        tal:attributes="class step/class">
+                        <a tal:content="step/label" />
+                    </li>
+                </ul>
 
-    </metal:formtop>
+            </div>
 
-</metal:use>
+            <div class="wizardContent">
+                <metal:passed-data tal:define="data view/get_passed_data|nothing"
+                                   tal:condition="data">
+                    <input tal:repeat="item data"
+                           type="hidden"
+                           tal:attributes="name item/key;
+                                           value item/value" />
+                </metal:passed-data>
+            </div>
+
+        </metal:formtop>
+
+    </metal:use>
+
+</html>
