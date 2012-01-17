@@ -6,7 +6,6 @@ from ftw.pdfgenerator.interfaces import ILaTeXView
 from ftw.pdfgenerator.view import MakoLaTeXView
 from ftw.table import helper
 from opengever.latex.interfaces import ILandscapeLayer
-from opengever.latex.utils import get_dossier_title
 from opengever.latex.utils import get_selected_items
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.tabbedview.helper import workflow_state
@@ -69,7 +68,7 @@ class TaskListingLaTeXView(grok.MultiAdapter, MakoLaTeXView):
                          self.info.describe(item.issuer))
         responsible = self.info.describe(item.responsible)
 
-        dossier_title = get_dossier_title(item)
+        dossier_title = item.containing_dossier
 
         reference = unicode(getattr(
                 item, 'reference',

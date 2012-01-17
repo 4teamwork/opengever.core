@@ -1,8 +1,4 @@
-from Acquisition import aq_inner, aq_parent
 from Products.CMFCore.utils import getToolByName
-from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
-from opengever.base.interfaces import ISequenceNumber
-from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.globalindex.interfaces import ITaskQuery
 from zope.component import getUtility
 
@@ -45,39 +41,3 @@ def get_selected_items(context, request):
     else:
         # empty generator
         pass
-
-
-def get_dossier_title(item):
-    """Returns the sequence number and title of the parent dossier of
-    the item. `item` may be a brain or a sqlalchemy task object.
-    """
-
-    try:
-        # brain?
-        item.getPath()
-    except AttributeError:
-        is_brain = False
-    else:
-        is_brain = True
-
-    if is_brain:
-        dossier = item.getObject()
-
-        while not IDossierMarker.providedBy(dossier):
-            if IPloneSiteRoot.providedBy(dossier):
-                return ('', '')
-            dossier = aq_parent(aq_inner(dossier))
-
-        title = dossier.Title()
-
-    else:
-        # sqlalchemy task object
-        if item.breadcrumb_title:
-            title = item.breadcrumb_title.split(' > ')[-2]
-        else:
-            title = u''
-
-    if isinstance(title, unicode):
-        title = title.encode('utf-8')
-
-    return title
