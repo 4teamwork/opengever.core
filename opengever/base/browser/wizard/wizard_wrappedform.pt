@@ -5,7 +5,7 @@
 
     <metal:use use-macro="context/@@ploneform-macros/titlelessform">
 
-        <metal:formtop fill-slot="formtop">
+        <metal:description fill-slot="description">
             <div class="wizard">
 
                 <ul class="wizardSteps">
@@ -16,7 +16,10 @@
                 </ul>
 
             </div>
+        </metal:description>
 
+
+        <metal:formtop fill-slot="formtop">
             <div class="wizardContent">
                 <metal:passed-data tal:define="data view/get_passed_data|nothing"
                                    tal:condition="data">
@@ -26,7 +29,6 @@
                                            value item/value" />
                 </metal:passed-data>
             </div>
-
         </metal:formtop>
 
     </metal:use>
