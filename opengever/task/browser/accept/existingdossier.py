@@ -4,6 +4,7 @@ the task needs to be copied to this dossier (successor task).
 """
 
 from Products.CMFCore.utils import getToolByName
+from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
 from Products.statusmessages.interfaces import IStatusMessage
 from five import grok
 from opengever.base.browser.wizard.interfaces import IWizardDataStorage
@@ -115,3 +116,27 @@ class ChooseDossierStepView(FormWrapper, grok.View):
     def __init__(self, *args, **kwargs):
         FormWrapper.__init__(self, *args, **kwargs)
         grok.View.__init__(self, *args, **kwargs)
+
+
+class ChooseDosserStepRedirecter(grok.View):
+    """Remote clients redirect usually to the site root, but this step needs
+    to be called on the repository root.
+
+    The remote client does not know the URL to the repository root, so it
+    redirects to the site root. This view just redirects to the repository
+    root, passing the parameters on.
+    """
+
+    grok.context(IPloneSiteRoot)
+    grok.name('accept_choose_dossier')
+    grok.require('zope2.View')
+
+    def render(self):
+        root = self.context.restrictedTraverse(
+            '@@primary_repository_root').get_primary_repository_root()
+
+        url = '%s/@@accept_choose_dossier?%s' % (
+            root.absolute_url(),
+            self.request.get('QUERY_STRING'))
+
+        return self.request.RESPONSE.redirect(url)

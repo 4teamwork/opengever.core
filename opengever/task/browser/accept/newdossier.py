@@ -4,14 +4,15 @@ dossier where the task is then filed.
 """
 
 from Products.CMFCore.utils import getToolByName
+from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
 from Products.statusmessages.interfaces import IStatusMessage
 from five import grok
+from opengever.base.browser.wizard.interfaces import IWizardDataStorage
 from opengever.base.source import RepositoryPathSourceBinder
 from opengever.globalindex.interfaces import ITaskQuery
 from opengever.repository.interfaces import IRepositoryFolder
 from opengever.task import _
 from opengever.task.browser.accept.main import AcceptWizardFormMixin
-from opengever.base.browser.wizard.interfaces import IWizardDataStorage
 from opengever.task.browser.accept.utils import accept_task_with_successor
 from plone.dexterity.i18n import MessageFactory as dexterityMF
 from plone.directives.form import Schema
@@ -144,6 +145,29 @@ class SelectRepositoryfolderStepView(FormWrapper, grok.View):
         FormWrapper.__init__(self, *args, **kwargs)
         grok.View.__init__(self, *args, **kwargs)
 
+
+class SelectiRepositoryfolderStepRedirector(grok.View):
+    """Remote clients redirect usually to the site root, but this step needs
+    to be called on the repository root.
+
+    The remote client does not know the URL to the repository root, so it
+    redirects to the site root. This view just redirects to the repository
+    root, passing the parameters on.
+    """
+
+    grok.context(IPloneSiteRoot)
+    grok.name('accept_select_repositoryfolder')
+    grok.require('zope2.View')
+
+    def render(self):
+        root = self.context.restrictedTraverse(
+            '@@primary_repository_root').get_primary_repository_root()
+
+        url = '%s/@@accept_select_repositoryfolder?%s' % (
+            root.absolute_url(),
+            self.request.get('QUERY_STRING'))
+
+        return self.request.RESPONSE.redirect(url)
 
 # ------------------- SELECT DOSSIER TYPE --------------------------
 

@@ -214,8 +214,7 @@ class ChooseMethodStepForm(AcceptWizardFormMixin, Form):
                 # push session data to target client
                 dm.push_to_remote_client(dmkey, client.client_id)
 
-                # XXX: should "ordnungssystem" really be hardcode?
-                url = '%s/ordnungssystem/@@accept_choose_dossier?oguid=%s' % (
+                url = '%s/@@accept_choose_dossier?oguid=%s' % (
                     client.public_url,
                     oguid)
                 return self.request.RESPONSE.redirect(url)
@@ -229,10 +228,8 @@ class ChooseMethodStepForm(AcceptWizardFormMixin, Form):
                 # push session data to target client
                 dm.push_to_remote_client(dmkey, client.client_id)
 
-                # XXX: should "ordnungssystem" really be hardcode?
                 url = '/'.join((
                         client.public_url,
-                        'ordnungssystem',
                         '@@accept_select_repositoryfolder?oguid=%s' % oguid))
                 return self.request.RESPONSE.redirect(url)
 
