@@ -45,6 +45,7 @@ class DossierListingLaTeXView(grok.MultiAdapter, MakoLaTeXView):
     template_name = 'dossierlisting.tex'
 
     def get_render_arguments(self):
+        self.layout.show_organisation = True
         self.info = getUtility(IContactInformation)
         self.client = get_current_client()
 
@@ -59,10 +60,11 @@ class DossierListingLaTeXView(grok.MultiAdapter, MakoLaTeXView):
         return rows
 
     def get_row_for_brain(self, brain):
-        sequence_number = unicode(brain.sequence_number).encode('utf-8')
+        reference_number = brain.reference
+        sequence_number = brain.sequence_number
         filing_number = getattr(brain, 'filing_no', None)
         repository_title = self.get_repository_title(brain)
-        title = unicode(brain.Title).encode('utf-8')
+        title = brain.Title
 
         responsible = '%s / %s' % (
             self.client.title,
@@ -70,22 +72,38 @@ class DossierListingLaTeXView(grok.MultiAdapter, MakoLaTeXView):
 
         review_state = workflow_state(brain, brain.review_state)
         start_date = helper.readable_date(brain, brain.start)
-        # end_date = helper.readable_date(brain, brain.end)
+        end_date = helper.readable_date(brain, brain.end)
 
-        data = (sequence_number or '',
+        data = (reference_number or '',
+                sequence_number or '',
                 filing_number or '',
                 repository_title or '',
                 title or '',
                 responsible or '',
                 review_state or '',
                 start_date or '',
-                # end_date or '',
-                )
+                end_date or '')
 
         return self.convert_list_to_row(data)
 
     def convert_list_to_row(self, row):
-        return ' & '.join([self.convert(cell) for cell in row])
+        data = []
+
+        for cell in row:
+            if cell is None:
+                data.append('')
+
+            elif isinstance(cell, unicode):
+                cell = cell.encode('utf-8')
+                data.append(self.convert(cell))
+
+            elif isinstance(cell, str):
+                data.append(self.convert(cell))
+
+            else:
+                data.append(self.convert(str(cell)))
+
+        return ' & '.join(data)
 
     def get_repository_title(self, brain):
         """Returns the title of the first parental repository folder.
