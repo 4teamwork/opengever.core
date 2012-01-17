@@ -15,6 +15,14 @@ from zope.interface import Interface
 from zope.interface import directlyProvidedBy, directlyProvides
 
 
+
+class ITaskListingLayer(ILandscapeLayer):
+    """Dossier listing request layer.
+    - Select landsacpe layout by subclassing ITaskListingLayer
+    - Select view
+    """
+
+
 class TaskListingPDFView(grok.View, ExportPDFView):
     grok.name('pdf-tasks-listing')
     grok.require('zope2.View')
@@ -23,9 +31,9 @@ class TaskListingPDFView(grok.View, ExportPDFView):
     index = ViewPageTemplateFile('templates/export_pdf.pt')
 
     def render(self):
-        # let the request provide ILandscapeLayer
-        if not ILandscapeLayer.providedBy(self.request):
-            ifaces = [ILandscapeLayer] + list(directlyProvidedBy(
+        # let the request provide ITaskListingLayer
+        if not ITaskListingLayer.providedBy(self.request):
+            ifaces = [ITaskListingLayer] + list(directlyProvidedBy(
                     self.request))
             directlyProvides(self.request, *ifaces)
 
@@ -34,7 +42,7 @@ class TaskListingPDFView(grok.View, ExportPDFView):
 
 class TaskListingLaTeXView(grok.MultiAdapter, MakoLaTeXView):
     grok.provides(ILaTeXView)
-    grok.adapts(Interface, ILandscapeLayer, ILaTeXLayout)
+    grok.adapts(Interface, ITaskListingLayer, ILaTeXLayout)
 
     template_directories = ['templates']
     template_name = 'tasklisting.tex'
