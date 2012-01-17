@@ -15,4 +15,12 @@
           permission="zope2.View"
           />
 
+    <browser:page
+          name="task_transition_controller"
+          for="opengever.task.task.ITask"
+          class=".transitioncontroller.TaskTransitionController"
+          permission="zope.Public"
+          allowed_interface=".transitioncontroller.ITaskTransitionController"
+          />
+
 </configure>

@@ -13,6 +13,7 @@ tests_require = [
     'opengever.contact',
     'ftw.tabbedview',
     'ftw.contentmenu',
+    'ftw.testing',
     ]
 
 setup(name='opengever.task',

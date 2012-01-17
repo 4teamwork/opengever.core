@@ -8,7 +8,6 @@ TESTFILES = (
     'factories_menu.txt',
     'localroles.txt',
     'successor.txt',
-    'task.txt',
     'task_ids.txt',
     'test_overview.txt',
     'test_indexers.txt',

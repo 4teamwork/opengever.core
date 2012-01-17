@@ -300,49 +300,49 @@
  <transition transition_id="task-transition-cancelled-open" title="task-transition-cancelled-open" new_state="task-state-open" trigger="USER" before_script="" after_script="">
   <action url="%(content_url)s/direct_response?form.widgets.transition=task-transition-cancelled-open" category="workflow" icon="">task-transition-cancelled-open</action>
   <guard>
-   <guard-expression>python: str(here.restrictedTraverse('plone_portal_state').member()) == here.issuer</guard-expression>
+   <guard-expression>python: here.restrictedTraverse('@@task_transition_controller').is_re_open_possible()</guard-expression>
   </guard>
  </transition>
  <transition transition_id="task-transition-in-progress-resolved" title="task-transition-in-progress-resolved" new_state="task-state-resolved" trigger="USER" before_script="" after_script="">
   <action url="%(content_url)s/direct_response?form.widgets.transition=task-transition-in-progress-resolved" category="workflow" icon="">task-transition-in-progress-resolved</action>
   <guard>
-   <guard-expression>python:here.task_type_category != 'unidirectional_by_value' and here.restrictedTraverse('resolve_check')() and here.responsible == str(here.restrictedTraverse('plone_portal_state').member())</guard-expression>
+   <guard-expression>python: here.restrictedTraverse('@@task_transition_controller').is_progress_to_resolve_possible()</guard-expression>
   </guard>
  </transition>
  <transition transition_id="task-transition-in-progress-tested-and-closed" title="task-transition-in-progress-tested-and-closed" new_state="task-state-tested-and-closed" trigger="USER" before_script="" after_script="">
   <action url="%(content_url)s/direct_response?form.widgets.transition=task-transition-in-progress-tested-and-closed" category="workflow" icon="">task-transition-in-progress-tested-and-closed</action>
   <guard>
-   <guard-expression>python:here.restrictedTraverse('resolve_check')() and here.task_type_category == 'unidirectional_by_value'</guard-expression>
+   <guard-expression>python: here.restrictedTraverse('@@task_transition_controller').is_progress_to_closed_possible()</guard-expression>
   </guard>
  </transition>
  <transition transition_id="task-transition-open-cancelled" title="task-transition-open-cancelled" new_state="task-state-cancelled" trigger="USER" before_script="" after_script="">
   <action url="%(content_url)s/direct_response?form.widgets.transition=task-transition-open-cancelled" category="workflow" icon="">task-transition-open-cancelled</action>
   <guard>
-   <guard-expression>python: str(here.restrictedTraverse('plone_portal_state').member()) == here.issuer</guard-expression>
+   <guard-expression>python: here.restrictedTraverse('@@task_transition_controller').is_cancel_possible()</guard-expression>
   </guard>
  </transition>
  <transition transition_id="task-transition-open-in-progress" title="task-transition-open-in-progress" new_state="task-state-in-progress" trigger="USER" before_script="" after_script="">
   <action url="%(content_url)s/direct_response?form.widgets.transition=task-transition-open-in-progress" category="workflow" icon="">task-transition-open-in-progress</action>
   <guard>
-   <guard-expression>python: here.task_type_category != 'unidirectional_by_reference' and(str(here.restrictedTraverse('plone_portal_state').member()) != here.issuer or here.issuer == here.responsible)</guard-expression>
+   <guard-expression>python: here.restrictedTraverse('@@task_transition_controller').is_open_to_progress_possible()</guard-expression>
   </guard>
  </transition>
  <transition transition_id="task-transition-open-rejected" title="task-transition-open-rejected" new_state="task-state-rejected" trigger="USER" before_script="" after_script="">
   <action url="%(content_url)s/direct_response?form.widgets.transition=task-transition-open-rejected" category="workflow" icon="">task-transition-open-rejected</action>
   <guard>
-   <guard-expression>python: str(here.restrictedTraverse('plone_portal_state').member()) == here.responsible</guard-expression>
+   <guard-expression>python: here.restrictedTraverse('@@task_transition_controller').is_reject_possible()</guard-expression>
   </guard>
  </transition>
  <transition transition_id="task-transition-open-resolved" title="task-transition-open-resolved" new_state="task-state-resolved" trigger="USER" before_script="" after_script="">
   <action url="%(content_url)s/direct_response?form.widgets.transition=task-transition-open-resolved" category="workflow" icon="">task-transition-open-resolved</action>
   <guard>
-   <guard-expression>python: here.restrictedTraverse('resolve_check')() and here.restrictedTraverse('task_workflow_checks').is_bidirectional() and(str(here.restrictedTraverse('plone_portal_state').member()) != here.issuer or here.issuer == here.responsible)</guard-expression>
+   <guard-expression>python: here.restrictedTraverse('@@task_transition_controller').is_open_to_resolve_possible()</guard-expression>
   </guard>
  </transition>
  <transition transition_id="task-transition-open-tested-and-closed" title="task-transition-open-tested-and-closed" new_state="task-state-tested-and-closed" trigger="USER" before_script="" after_script="">
   <action url="%(content_url)s/direct_response?form.widgets.transition=task-transition-open-tested-and-closed" category="workflow" icon="">task-transition-open-tested-and-closed</action>
   <guard>
-   <guard-expression>python: str(here.restrictedTraverse('plone_portal_state').member()) == here.issuer or  here.task_type_category == 'unidirectional_by_reference'</guard-expression>
+   <guard-expression>python: here.restrictedTraverse('@@task_transition_controller').is_open_to_close_possible()</guard-expression>
   </guard>
  </transition>
  <transition transition_id="task-transition-reassign" title="Reassign" new_state="" trigger="USER" before_script="" after_script="">
@@ -353,19 +353,19 @@
  <transition transition_id="task-transition-rejected-open" title="task-transition-rejected-open" new_state="task-state-open" trigger="USER" before_script="" after_script="">
   <action url="" category="workflow" icon="">task-transition-rejected-open</action>
   <guard>
-   <guard-expression>python: str(here.restrictedTraverse('plone_portal_state').member()) == here.issuer</guard-expression>
+   <guard-expression>python: here.restrictedTraverse('@@task_transition_controller').is_open_to_close_possible()</guard-expression>
   </guard>
  </transition>
  <transition transition_id="task-transition-resolved-open" title="task-transition-resolved-open" new_state="task-state-open" trigger="USER" before_script="" after_script="">
   <action url="%(content_url)s/direct_response?form.widgets.transition=task-transition-resolved-open" category="workflow" icon="">task-transition-resolved-open</action>
   <guard>
-   <guard-expression>python: str(here.restrictedTraverse('plone_portal_state').member()) == here.issuer</guard-expression>
+   <guard-expression>python: here.restrictedTraverse('@@task_transition_controller').is_resolve_to_open_possible()</guard-expression>
   </guard>
  </transition>
  <transition transition_id="task-transition-resolved-tested-and-closed" title="task-transition-resolved-tested-and-closed" new_state="task-state-tested-and-closed" trigger="USER" before_script="" after_script="">
   <action url="%(content_url)s/direct_response?form.widgets.transition=task-transition-resolved-tested-and-closed" category="workflow" icon="">task-transition-resolved-tested-and-closed</action>
   <guard>
-   <guard-expression>python: str(here.restrictedTraverse('plone_portal_state').member()) == here.issuer</guard-expression>
+   <guard-expression>python: here.restrictedTraverse('@@task_transition_controller').is_resolve_to_closed_possible()</guard-expression>
   </guard>
  </transition>
  <worklist worklist_id="reviewer_queue" title="">
@@ -379,7 +379,7 @@
  <variable variable_id="action" for_catalog="False" for_status="True" update_always="True">
   <description>The last transition</description>
   <default>
-   
+
    <expression>transition/getId|nothing</expression>
   </default>
   <guard>
@@ -388,7 +388,7 @@
  <variable variable_id="actor" for_catalog="False" for_status="True" update_always="True">
   <description>The ID of the user who performed the last transition</description>
   <default>
-   
+
    <expression>user/getId</expression>
   </default>
   <guard>
@@ -397,7 +397,7 @@
  <variable variable_id="comments" for_catalog="False" for_status="True" update_always="True">
   <description>Comments about the last transition</description>
   <default>
-   
+
    <expression>python:state_change.kwargs.get('comment', '')</expression>
   </default>
   <guard>
@@ -406,7 +406,7 @@
  <variable variable_id="review_history" for_catalog="False" for_status="False" update_always="False">
   <description>Provides access to workflow history</description>
   <default>
-   
+
    <expression>state_change/getHistory</expression>
   </default>
   <guard>
@@ -416,7 +416,7 @@
  <variable variable_id="time" for_catalog="False" for_status="True" update_always="True">
   <description>Time of the last transition</description>
   <default>
-   
+
    <expression>state_change/getDateTime</expression>
   </default>
   <guard>
