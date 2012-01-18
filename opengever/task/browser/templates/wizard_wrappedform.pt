@@ -12,7 +12,15 @@
 
         </div>
 
-        <div class="wizardContent"></div>
+        <div class="wizardContent">
+            <metal:passed-data tal:define="data view/get_passed_data|nothing"
+                               tal:condition="data">
+                <input tal:repeat="item data"
+                       type="hidden"
+                       tal:attributes="name item/key;
+                                       value item/value" />
+            </metal:passed-data>
+        </div>
 
     </metal:formtop>
 

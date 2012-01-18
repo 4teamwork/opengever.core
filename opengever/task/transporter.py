@@ -28,7 +28,7 @@ class ResponseTransporter(grok.Adapter):
     grok.require('zope2.View')
 
     def send_responses(self, target_cid, remote_task_url,
-                       intids_mapping={}):
+                       intids_mapping=None):
         """ Sends all responses of task self.context to task on
         a remote client.
         `target_cid`: client_id of a target client
@@ -38,6 +38,39 @@ class ResponseTransporter(grok.Adapter):
         to this mapping. This fixes the intids on remote clients.
         RelationValues not listed in this mapping will not be sent.
         """
+
+        jsondata = self.extract_responses(intids_mapping)
+
+        return remote_request(target_cid,
+                                   '@@task-responses-receive',
+                                   path=remote_task_url,
+                                   data=dict(responses=jsondata))
+
+    def get_responses(self, target_cid, remote_task_path, intids_mapping):
+        """Retrieves all responses from the task with path `remote_task_path`
+        on the client `client` and adds them to the current context (target
+        task).
+
+        Provide a an `intids_mapping` (dict), mapping the original intids of
+        related objects to the new intids of the copies on this client. This
+        is necessary for fixing the relations.
+        """
+
+        req_data = {'intids_mapping': json.dumps(intids_mapping)}
+
+        response = remote_request(target_cid,
+                                  '@@task-responses-extract',
+                                  path=remote_task_path,
+                                  data=req_data)
+
+        data = json.loads(response.read())
+
+        self.create_responses(data)
+
+    def extract_responses(self, intids_mapping=None):
+        if intids_mapping is None:
+            intids_mapping = {}
+
         self.intids_mapping = intids_mapping
 
         data = []
@@ -58,12 +91,22 @@ class ResponseTransporter(grok.Adapter):
                         resp_data[key] = val
             data.append(resp_data)
 
-        jsondata = json.dumps(data)
+        return json.dumps(data)
 
-        return remote_request(target_cid,
-                                   '@@task-responses-receive',
-                                   path=remote_task_url,
-                                   data=dict(responses=jsondata))
+    def create_responses(self, data):
+        container = IResponseContainer(self.context)
+
+        for resp_data in data:
+            response = Response('')
+
+            for key, value in resp_data.items():
+                if value:
+                    value = self._decode(value)
+                setattr(response, key, value)
+
+            container.add(response)
+
+        modified(self.context)
 
     def _encode(self, value):
         """Lazy encoding function.
@@ -94,37 +137,6 @@ class ResponseTransporter(grok.Adapter):
 
         return value
 
-
-
-
-class ReceiveResponses(grok.View):
-    """Receives a json request cotnaining one or more responses to
-    add to the context task.
-    """
-
-    grok.context(ITask)
-    grok.name('task-responses-receive')
-    grok.require('zope2.View')
-
-    def render(self):
-        rawdata = self.request.get('responses')
-        data = json.loads(rawdata)
-
-        container = IResponseContainer(self.context)
-
-        for resp_data in data:
-            response = Response('')
-
-            for key, value in resp_data.items():
-                if value:
-                    value = self._decode(value)
-                setattr(response, key, value)
-
-            container.add(response)
-
-        modified(self.context)
-        return 'ok'
-
     def _decode(self, value):
         """Decode the previously encoded value.
         """
@@ -153,3 +165,40 @@ class ReceiveResponses(grok.View):
             return RelationValue(val)
 
         return val
+
+
+class ReceiveResponses(grok.View):
+    """Receives a json request cotnaining one or more responses to
+    add to the context task.
+    """
+
+    grok.context(ITask)
+    grok.name('task-responses-receive')
+    grok.require('zope2.View')
+
+    def render(self):
+        rawdata = self.request.get('responses')
+        data = json.loads(rawdata)
+
+        transporter = IResponseTransporter(self.context)
+        transporter.create_responses(data)
+
+        return 'ok'
+
+
+class ExtractResponses(grok.View):
+    grok.context(ITask)
+    grok.name('task-responses-extract')
+    grok.require('zope2.View')
+
+    def render(self):
+        intids_mapping = json.loads(self.request.get(
+                'intids_mapping', '{}'))
+
+        # json converts dict-keys to strings - but we need
+        # keys and values as int
+        intids_mapping = dict([(int(k), int(v))
+                               for (k, v) in intids_mapping.items()])
+
+        transporter = IResponseTransporter(self.context)
+        return transporter.extract_responses(intids_mapping)

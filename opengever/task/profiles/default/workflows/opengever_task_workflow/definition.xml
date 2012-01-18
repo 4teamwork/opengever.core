@@ -304,13 +304,13 @@
   </guard>
  </transition>
  <transition transition_id="task-transition-in-progress-resolved" title="task-transition-in-progress-resolved" new_state="task-state-resolved" trigger="USER" before_script="" after_script="">
-  <action url="%(content_url)s/direct_response?form.widgets.transition=task-transition-in-progress-resolved" category="workflow" icon="">task-transition-in-progress-resolved</action>
+  <action url="%(content_url)s/complete_task?transition=task-transition-in-progress-resolved" category="workflow" icon="">task-transition-in-progress-resolved</action>
   <guard>
    <guard-expression>python: here.restrictedTraverse('@@task_transition_controller').is_progress_to_resolve_possible()</guard-expression>
   </guard>
  </transition>
  <transition transition_id="task-transition-in-progress-tested-and-closed" title="task-transition-in-progress-tested-and-closed" new_state="task-state-tested-and-closed" trigger="USER" before_script="" after_script="">
-  <action url="%(content_url)s/direct_response?form.widgets.transition=task-transition-in-progress-tested-and-closed" category="workflow" icon="">task-transition-in-progress-tested-and-closed</action>
+  <action url="%(content_url)s/complete_task?transition=task-transition-in-progress-tested-and-closed" category="workflow" icon="">task-transition-in-progress-tested-and-closed</action>
   <guard>
    <guard-expression>python: here.restrictedTraverse('@@task_transition_controller').is_progress_to_closed_possible()</guard-expression>
   </guard>
@@ -322,7 +322,7 @@
   </guard>
  </transition>
  <transition transition_id="task-transition-open-in-progress" title="task-transition-open-in-progress" new_state="task-state-in-progress" trigger="USER" before_script="" after_script="">
-  <action url="%(content_url)s/direct_response?form.widgets.transition=task-transition-open-in-progress" category="workflow" icon="">task-transition-open-in-progress</action>
+  <action url="%(content_url)s/@@accept_task" category="workflow" icon="">task-transition-open-in-progress</action>
   <guard>
    <guard-expression>python: here.restrictedTraverse('@@task_transition_controller').is_open_to_progress_possible()</guard-expression>
   </guard>
@@ -334,13 +334,13 @@
   </guard>
  </transition>
  <transition transition_id="task-transition-open-resolved" title="task-transition-open-resolved" new_state="task-state-resolved" trigger="USER" before_script="" after_script="">
-  <action url="%(content_url)s/direct_response?form.widgets.transition=task-transition-open-resolved" category="workflow" icon="">task-transition-open-resolved</action>
+  <action url="%(content_url)s/complete_task?transition=task-transition-open-resolved" category="workflow" icon="">task-transition-open-resolved</action>
   <guard>
    <guard-expression>python: here.restrictedTraverse('@@task_transition_controller').is_open_to_resolve_possible()</guard-expression>
   </guard>
  </transition>
  <transition transition_id="task-transition-open-tested-and-closed" title="task-transition-open-tested-and-closed" new_state="task-state-tested-and-closed" trigger="USER" before_script="" after_script="">
-  <action url="%(content_url)s/direct_response?form.widgets.transition=task-transition-open-tested-and-closed" category="workflow" icon="">task-transition-open-tested-and-closed</action>
+  <action url="%(content_url)s/complete_task?transition=task-transition-open-tested-and-closed" category="workflow" icon="">task-transition-open-tested-and-closed</action>
   <guard>
    <guard-expression>python: here.restrictedTraverse('@@task_transition_controller').is_open_to_close_possible()</guard-expression>
   </guard>
@@ -363,7 +363,7 @@
   </guard>
  </transition>
  <transition transition_id="task-transition-resolved-tested-and-closed" title="task-transition-resolved-tested-and-closed" new_state="task-state-tested-and-closed" trigger="USER" before_script="" after_script="">
-  <action url="%(content_url)s/direct_response?form.widgets.transition=task-transition-resolved-tested-and-closed" category="workflow" icon="">task-transition-resolved-tested-and-closed</action>
+  <action url="%(content_url)s/complete_task?transition=task-transition-resolved-tested-and-closed" category="workflow" icon="">task-transition-resolved-tested-and-closed</action>
   <guard>
    <guard-expression>python: here.restrictedTraverse('@@task_transition_controller').is_resolve_to_closed_possible()</guard-expression>
   </guard>

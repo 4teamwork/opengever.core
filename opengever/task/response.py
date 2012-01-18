@@ -11,7 +11,9 @@ from opengever.ogds.base.interfaces import IContactInformation
 from opengever.task import _
 from opengever.task import util
 from opengever.task.adapters import IResponseContainer, Response
+from opengever.base.browser.wizard.interfaces import IWizardDataStorage
 from opengever.task.interfaces import IResponseAdder
+from opengever.task.interfaces import ISuccessorTaskController
 from opengever.task.permissions import DEFAULT_ISSUE_MIME_TYPE
 from opengever.task.task import ITask
 from plone.autoform.form import AutoExtensibleForm
@@ -237,6 +239,35 @@ class AddForm(form.AddForm, AutoExtensibleForm):
             self.status = errorMessage
             return None
         else:
+            # use complete form if necessary.
+            complete_task = self.context.restrictedTraverse('@@complete_task')
+            transition = data.get('transition')
+            if complete_task.use_successor_form(transition):
+                dm = getUtility(IWizardDataStorage)
+                oguid = ISuccessorTaskController(self.context).get_oguid()
+                dmkey = 'delegate:%s' % oguid
+                dm.set(dmkey, 'text', data.get('text'))
+
+                url = '%s/@@complete_task?transition=%s' % (
+                    self.context.absolute_url(),
+                    transition)
+                return self.request.RESPONSE.redirect(url)
+
+            # redirect to the accept-task wizard if necessary.
+            is_accept_transition = data.get('transition', None) == \
+                    'task-transition-open-in-progress'
+            if is_accept_transition and self.context.restrictedTraverse(
+                    '@@accept_task').is_successing_possible():
+
+                oguid = ISuccessorTaskController(self.context).get_oguid()
+                self.request.set('oguid', oguid)
+                dm = getUtility(IWizardDataStorage)
+                dmkey = 'accept:%s' % oguid
+                dm.set(dmkey, 'text', data.get('text'))
+
+                url = '%s/@@accept_task' % self.context.absolute_url()
+                return self.request.RESPONSE.redirect(url)
+
             new_response = Response(data.get('text'))
             #define responseTyp
             responseCreator = new_response.creator
