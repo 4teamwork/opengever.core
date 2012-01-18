@@ -83,6 +83,7 @@
             <div tal:condition="items"><h2 i18n:translate="containing_task">Containing Task:</h2></div>
             <ul tal:condition="items">
                 <li tal:repeat="item items">
+                    <span tal:attributes="class string:wf-${item/@@plone_context_state/workflow_state}" />
                     <a href="" tal:attributes="href item/absolute_url|nothing; class python: view.css_class_from_brain(item)" tal:omit-tag="not: item/absolute_url|nothing"><span tal:content="item/Title" /></a>
                 </li>
             </ul>
@@ -93,7 +94,10 @@
             <div tal:condition="items"><h2 i18n:translate="subtasks">Subtasks:</h2></div>
             <ul tal:condition="items">
                 <li tal:repeat="item items">
-                    <a href="" class="contenttype-opengever-task-task" tal:attributes="href item/getURL|nothing; class python: view.css_class_from_brain(item)" tal:omit-tag="not: item/getURL|nothing"><span tal:content="item/Title" /></a>
+                    <span tal:attributes="class string:wf-${item/review_state}" />
+                    <a href="" class="contenttype-opengever-task-task"
+                       tal:attributes="href item/getURL|nothing; class python: view.css_class_from_brain(item)"
+                       tal:omit-tag="not: item/getURL|nothing"><span tal:content="item/Title" /></a>
                 </li>
             </ul>
         </tal:items>
@@ -101,7 +105,8 @@
         <tal:items define="item view/getPredecessorTask"
                    condition="item">
             <div tal:condition="item"><h2 i18n:translate="predecessor">Predecessor Task:</h2></div>
-            <div tal:content="structure python:view.render_indexed_task(item)" />
+            <div tal:content="structure python:view.render_indexed_task(item)"
+                 tal:attributes="class string:wf-${item/review_state}"/>
         </tal:items>
 
         <tal:items define="items view/getSuccessorTasks"
@@ -109,7 +114,8 @@
             <div><h2 i18n:translate="successors">Successor Tasks:</h2></div>
             <ul tal:condition="items">
                 <li tal:repeat="item items"
-                    tal:content="structure python:view.render_indexed_task(item)" />
+                    tal:content="structure python:view.render_indexed_task(item)"
+                    tal:attributes="class string:wf-${item/review_state}"/>
             </ul>
         </tal:items>
         <div class="visualClear"><!----></div>
