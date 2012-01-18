@@ -41,25 +41,6 @@ Changelog
   [jone]
 
 
-2.1 (2012-01-13)
-----------------
-
-- Adjust task configuration, added ftw.mail.mail to the allowed content types of tasks.
-  Is Allready released in the Hotfix 2.0.2.
-  [phgross]
-
-- #1299 Spalte 'In Bearbeitung' hinzufügen bei Dokumentenauflistung in einer Aufgabe
-  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1299/
-  add new column 'checked_out' for the document tab in task-view
-  [eschmutz]
-
-- Single client setup: do not display the responsible_client in the task overview.
-  [jone]
-
-- Single client setup: hide responsible_client field if only one client is set up.
-  [jone]
-
-
 2.0.1 (2011-12-06)
 ------------------
 
