@@ -5,14 +5,13 @@ Changelog
 2.2 (unreleased)
 ----------------
 
-- Nothing changed yet.
+- Moved the workflow guards checks in to a TaskTransitionController and added Tests.
+  [phgross]
+
 
 
 2.1 (2012-01-13)
 ----------------
-
-- Moved the workflow guards checks in to a TaskTransitionController and added Tests.
-  [phgross]
 
 - Adjust task configuration, added ftw.mail.mail to the allowed content types of tasks.
   Is Allready released in the Hotfix 2.0.2.
