@@ -307,7 +307,15 @@ class Overview(DisplayForm, OpengeverTab):
     def issuer_link(self):
         info = getUtility(IContactInformation)
         task = ITask(self.context)
-        return info.render_link(task.issuer)
+
+        if task.predecessor:
+            client_id = task.predecessor.split(':')[0]
+        else:
+            client_id = get_client_id()
+
+        client = client_title_helper(task, client_id)
+
+        return client + ' / ' + info.render_link(task.issuer)
 
     def getPredecessorTask(self):
         controller = ISuccessorTaskController(self.context)

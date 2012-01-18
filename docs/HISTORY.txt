@@ -5,6 +5,9 @@ Changelog
 2.2 (unreleased)
 ----------------
 
+- Display issuer client in task overview.
+  [jone]
+
 - Reponse: support for referencing multiple added documents in one response.
   [jone]
 
