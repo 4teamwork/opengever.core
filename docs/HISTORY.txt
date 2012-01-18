@@ -2,8 +2,8 @@ Changelog
 =========
 
 
-2.0.3 (unreleased)
-------------------
+2.1 (unreleased)
+----------------
 
 - Added containing_dossier column to every tasklisting.
   Issue #1252 Darstellung Dossiertitel bei Aufgabenuebersichten und im Eingangskorb (fuer Aufgaben, nicht fuer Weiterleitungen)
@@ -16,17 +16,22 @@ Changelog
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1345/
   [jone]
 
+- Single client setup: hide client column in task listings when only one client is configured.
+  [jone]
+
+- Fix tabbedview markup for compatibility with changes in ftw.tabbedview.
+  [jone]
+
+
+2.0.3 (2012-01-18)
+------------------
+
 - Implement faster custom_sort methods for sorting on the readable fullname,
   with the help of the sort_dicts from og.ogds.base
   Issue #1325 og.tabbedview: custom_sort methoden performanter implementieren.
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1325
   [phgross]
 
-- Single client setup: hide client column in task listings when only one client is configured.
-  [jone]
-
-- Fix tabbedview markup for compatibility with changes in ftw.tabbedview.
-  [jone]
 
 2.0.2 (2011-11-29)
 ------------------
