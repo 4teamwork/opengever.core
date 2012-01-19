@@ -17,8 +17,8 @@ class DossierCoverPDFView(grok.View, BaseStandalonePDFView):
     grok.name('dossier_cover_pdf')
     grok.require('zope2.View')
 
-    template_directories = ['dossiercover_templates']
-    template_name = 'main.tex'
+    template_directories = ['templates']
+    template_name = 'dossiercover.tex'
 
     __call__ = BaseStandalonePDFView.__call__
 
@@ -46,7 +46,7 @@ class DossierCoverPDFView(grok.View, BaseStandalonePDFView):
         self.use_package('textcomp')
         self.use_package('tabularx')
 
-        self.add_raw_template_file('strich.png')
+        self.add_raw_template_file('line.png')
 
     def get_render_arguments(self):
         return {
