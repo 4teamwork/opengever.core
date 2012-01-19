@@ -26,8 +26,8 @@ class DefaultLayout(grok.MultiAdapter, MakoLayoutBase):
         self.location = 'Zug'
 
     def before_render_hook(self):
-        # XXX rename logo to logo.pdf
-        self.add_raw_template_file('logo_sw.pdf')
+        # XXX use general logo and replace it in zug customization
+        self.add_raw_template_file('logo.pdf')
 
         self.use_package('inputenc', options='utf8', append_options=False)
         self.use_package('ae,aecompl')

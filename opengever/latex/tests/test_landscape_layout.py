@@ -46,7 +46,7 @@ class TestLandscapeLayout(MockTestCase):
     def test_show_contact(self):
         request = self.create_dummy()
         builder = self.stub()
-        self.expect(builder.add_file('logo_sw.pdf', data=ANY))
+        self.expect(builder.add_file('logo.pdf', data=ANY))
 
         self.replay()
 
@@ -58,7 +58,7 @@ class TestLandscapeLayout(MockTestCase):
     def test_rendering(self):
         request = self.create_dummy()
         builder = self.stub()
-        self.expect(builder.add_file('logo_sw.pdf', data=ANY))
+        self.expect(builder.add_file('logo.pdf', data=ANY))
 
         self.replay()
         layout = LandscapeLayout(self.context, request, builder)
@@ -66,14 +66,14 @@ class TestLandscapeLayout(MockTestCase):
         latex = layout.render_latex('CONTENT LATEX')
         self.assertIn('CONTENT LATEX', latex)
         self.assertIn(layout.get_packages_latex(), latex)
-        self.assertIn(r'\includegraphics{logo_sw.pdf}', latex)
+        self.assertIn(r'\includegraphics{logo.pdf}', latex)
         self.assertNotIn(r'T direkt ', latex)
         self.assertNotIn(r'\phantom{foo}\vspace{-2\baselineskip}', latex)
 
     def test_box_sizes_and_positions(self):
         request = self.create_dummy()
         builder = self.stub()
-        self.expect(builder.add_file('logo_sw.pdf', data=ANY))
+        self.expect(builder.add_file('logo.pdf', data=ANY))
 
         self.replay()
         layout = LandscapeLayout(self.context, request, builder)

@@ -42,7 +42,7 @@ class TestDefaultLayout(MockTestCase):
         context = self.create_dummy()
         request = self.create_dummy()
         builder = self.mocker.mock()
-        self.expect(builder.add_file('logo_sw.pdf', data=ANY))
+        self.expect(builder.add_file('logo.pdf', data=ANY))
 
         self.replay()
         layout = DefaultLayout(context, request, builder)
@@ -100,7 +100,7 @@ class TestDefaultLayout(MockTestCase):
         context = self.stub()
         request = self.create_dummy()
         builder = self.stub()
-        self.expect(builder.add_file('logo_sw.pdf', data=ANY))
+        self.expect(builder.add_file('logo.pdf', data=ANY))
 
         member = self.stub()
         self.expect(context.Creator()).result('john.doe')
@@ -115,7 +115,7 @@ class TestDefaultLayout(MockTestCase):
         latex = layout.render_latex('LATEX CONTENT')
         self.assertIn('LATEX CONTENT', latex)
         self.assertIn(layout.get_packages_latex(), latex)
-        self.assertIn(r'\includegraphics{logo_sw.pdf}', latex)
+        self.assertIn(r'\includegraphics{logo.pdf}', latex)
         self.assertIn(r'T direkt ', latex)
         self.assertIn(r'\phantom{foo}\vspace{-2\baselineskip}', latex)
 
@@ -123,7 +123,7 @@ class TestDefaultLayout(MockTestCase):
         context = self.stub()
         request = self.create_dummy()
         builder = self.stub()
-        self.expect(builder.add_file('logo_sw.pdf', data=ANY))
+        self.expect(builder.add_file('logo.pdf', data=ANY))
 
         member = self.stub()
         self.expect(context.Creator()).result('john.doe')
