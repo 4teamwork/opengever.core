@@ -5,6 +5,9 @@ Changelog
 2.2 (unreleased)
 ----------------
 
+- Task overview: display responsible of tasks referenced in response.
+  [jone]
+
 - Delegate: fix pointer on response to subtask.
   [jone]
 

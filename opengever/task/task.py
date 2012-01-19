@@ -309,6 +309,12 @@ class Overview(DisplayForm, OpengeverTab):
     def subtask_responsible(self, subtask):
         """Render the responsible of a subtask (object) as text.
         """
+        if not ITask.providedBy(subtask) and \
+                subtask.portal_type != 'opengever.task.task':
+            # It is not a task, it may be a document or something else. So
+            # we do nothing.
+            return None
+
         info = getUtility(IContactInformation)
 
         if not subtask.responsible_client or len(info.get_clients()) <= 1:

@@ -66,7 +66,14 @@
                         <a href=""
                            tal:attributes="href added_obj/absolute_url|nothing; class python:viewlet.css_class_from_obj(added_obj)"
                            tal:omit-tag="not: added_obj/absolute_url|nothing">
-                        <span tal:content="added_obj/Title" /></a>
+                            <span tal:content="added_obj/Title" />
+                            <span class="discreet"
+                                  tal:define="responsible python:view.subtask_responsible(added_obj)"
+                                  tal:condition="responsible">
+                                (<tal:responsible replace="responsible" />)
+                            </span>
+                        </a>
+
                     </span>
                 </div>
 
