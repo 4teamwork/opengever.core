@@ -24,6 +24,7 @@ from zope.component import getUtility
 from zope.i18n import translate
 from zope.interface import Interface
 from zope.interface import directlyProvidedBy, directlyProvides
+from zope.schema import vocabulary
 
 
 class IDossierDetailsLayer(Interface):
@@ -58,6 +59,9 @@ class DossierDetailsLaTeXView(grok.MultiAdapter, MakoLaTeXView):
 
         args = self.get_dossier_metadata()
 
+        parent = aq_parent(aq_inner(self.context))
+        args['is_subdossier'] = IDossierMarker.providedBy(parent)
+
         args['participants'] = self.get_participants()
         args['tasks'] = self.get_tasks()
         args['documents'] = self.get_documents()
@@ -91,8 +95,22 @@ class DossierDetailsLaTeXView(grok.MultiAdapter, MakoLaTeXView):
         args['sequence'] = seq.get_number(self.context)
 
         args['filing_no'] = getattr(dossier, 'filing_no', None)
+        args['filingprefix'] = self.get_filingprefix()
 
         return self.convert_dict(args)
+
+    def get_filingprefix(self):
+        value = IDossier(self.context).filing_prefix
+
+        if value:
+            # Get the value and not the key from the prefix vocabulary
+            voc = vocabulary.getVocabularyRegistry().get(
+                self.context, 'opengever.dossier.type_prefixes')
+
+            return voc.by_token.get(value).title
+
+        else:
+            return ''
 
     def get_repository_path(self):
         """Returns a reverted, path-like list of parental repository folder

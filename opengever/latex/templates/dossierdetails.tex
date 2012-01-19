@@ -1,4 +1,8 @@
-{\bf Geschäftsdetail}\\%%
+% if is_subdossier:
+  {\bf Subdossier}\\%%
+% else:
+  {\bf Dossier}\\%%
+% endif
 \vspace{\baselineskip}
 \scriptsize
 \noindent
@@ -7,6 +11,9 @@
 \shrinkheight{60mm}
 \bf{Aktenzeichen} & ${reference} \\%%
 \bf{Laufnummer} & ${sequence} \\%%
+% if filingprefix:
+  \bf{Ablage} & ${filingprefix} \\%%
+% endif
 % if filing_no:
   \bf{Ablagenummer} & ${filing_no} \\%%
 % endif
