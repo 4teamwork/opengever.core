@@ -5,6 +5,9 @@ Changelog
 2.0.2 (unreleased)
 ------------------
 
+- Dossier details PDF: remplement with ftw.pdfgenerator.
+  [jone]
+
 - Dossier listing PDF: Update layout and date according to definitions in ticket.
   Issue #1173 Feedback aus Pilotphase: Vorlage "Dossierverzeichnis" ueberarbeiten
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1173

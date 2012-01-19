@@ -1,0 +1,67 @@
+{\bf Geschäftsdetail}\\%%
+\vspace{\baselineskip}
+\scriptsize
+\noindent
+
+\begin{supertabular*}{150mm}{lp{130mm}}
+\shrinkheight{60mm}
+\bf{Aktenzeichen} & ${reference} \\%%
+\bf{Laufnummer} & ${sequence} \\%%
+% if filing_no:
+  \bf{Ablagenummer} & ${filing_no} \\%%
+% endif
+\bf{Ordnungsposition} & ${repository} \\%%
+\bf{Geschäftstitel} & ${title} \\%%
+\bf{Status} & ${review_state} \\%%
+\bf{Federführend} & ${responsible} \\%%
+% if participants:
+  \bf{Beteiligung} & {
+    \vspace{-\baselineskip}\begin{itemize}
+    % for item in participants:
+      \item ${item}
+    % endfor
+    \vspace{-\baselineskip}\end{itemize}
+  } \\%%
+% endif
+\bf{Beginn} & ${start} \\%%
+\bf{Ende} & ${end} \\%%
+\end{supertabular*}
+
+\setlength\extrarowheight{1pt}
+
+% if subdossiers:
+  \vspace{5mm}
+  {\bf Subdossiers}\\
+  \vspace{1mm}
+  \tablehead{\bfseries Nr. & \bfseries Ablagenr. & \bfseries Titel & \bfseries Verantwortlich & \bfseries Status & \bfseries Beginn\\ \hline}
+  \begin{supertabular*}{\textwidth}{p{4mm}p{20mm}p{55mm}p{35mm}p{10mm}p{10mm}}
+  % for row in subdossiers:
+    ${row} \\ \hline
+  % endfor
+  \end{supertabular*}
+% endif
+
+% if tasks:
+  \vspace{5mm}
+  {\bf Aufgaben}\\
+  \vspace{1mm}
+  \tablehead{\bfseries Nr. & \bfseries Art & \bfseries Auftraggeber & \bfseries An & \bfseries Status & \bfseries Beschreibung & \bfseries Zu erledigen bis\\ \hline}
+  \begin{supertabular*}{\textwidth}{lllllp{35mm}l}
+  % for row in tasks:
+    ${row} \\ \hline
+  % endfor
+  \end{supertabular*}
+% endif
+
+% if documents:
+  \vspace{5mm}
+  {\bf Dokumente}\\
+  \vspace{1mm}
+  \tablehead{\bfseries Nr. & \bfseries Titel & \bfseries Dokument-Datum\\ \hline}
+  \begin{supertabular*}{\textwidth}{lp{110mm}l}
+  % for row in documents:
+    ${row} \\ \hline
+  % endfor
+  \shrinkheight{20mm}
+  \end{supertabular*}
+% endif

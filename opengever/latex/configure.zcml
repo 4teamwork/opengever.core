@@ -15,7 +15,6 @@
     <!-- grok -->
     <grok:grok package="." />
 
-    <include package=".views" />
     <include package=".layouts" />
 
     <!-- generic setup -->
