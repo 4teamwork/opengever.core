@@ -52,9 +52,13 @@ class SelectRecipientsForm(DelegateWizardFormMixin, Form):
     def handle_continue(self, action):
         data, errors = self.extractData()
         if not errors:
+            passed_data = data.copy()
+            if passed_data['documents'] is None:
+                del passed_data['documents']
+
             url = '%s/@@delegate_metadata?%s' % (
                 self.context.absolute_url(),
-                encode_data(data))
+                encode_data(passed_data))
             return self.request.RESPONSE.redirect(url)
 
     @buttonAndHandler(_(u'button_cancel', default=u'Cancel'),

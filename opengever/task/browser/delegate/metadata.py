@@ -73,7 +73,7 @@ class UpdateMetadataForm(DelegateWizardFormMixin, Form):
         data, errors = self.extractData()
         if not errors:
             responsibles = self.request.get('responsibles')
-            documents = self.request.get('documents', [])
+            documents = self.request.get('documents', None) or []
             subtasks = create_subtasks(self.context, responsibles,
                                        documents, data)
 

@@ -5,6 +5,9 @@ Changelog
 2.2 (unreleased)
 ----------------
 
+- Delegate: fix bug when there are no related documents.
+  [jone]
+
 - Task overview: display responsible of subtasks.
   [jone]
 
