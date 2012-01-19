@@ -36,8 +36,12 @@ def create_subtasks(task, responsibles, documents, data):
         subtask_data['responsible_client'] = client
         subtask_data['responsible'] = user
 
+        # remove predecessor
+        subtask_data['predecessor'] = None
+
         # related documents
         subtask_data['relatedItems'] = []
+
         for intid in documents:
             subtask_data['relatedItems'].append(RelationValue(int(intid)))
 
