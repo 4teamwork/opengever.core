@@ -4,7 +4,6 @@
     xmlns:grok="http://namespaces.zope.org/grok"
     xmlns:i18n="http://namespaces.zope.org/i18n"
     i18n_domain="opengever.latex">
-    <!--     xmlns:plone="http://namespaces.plone.org/plone" -->
 
     <i18n:registerTranslations directory="locales" />
 
@@ -14,8 +13,6 @@
 
     <!-- grok -->
     <grok:grok package="." />
-
-    <include package=".layouts" />
 
     <!-- generic setup -->
     <genericsetup:registerProfile

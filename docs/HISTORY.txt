@@ -5,6 +5,9 @@ Changelog
 2.0.2 (unreleased)
 ------------------
 
+- Cleanup: remove old plonegov.pdflatex stuff, all views are rewritten with ftw.pdfgenerator.
+  [jone]
+
 - Dossier details PDF: remplement with ftw.pdfgenerator.
   [jone]
 
