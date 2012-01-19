@@ -5,6 +5,9 @@ Changelog
 2.2 (unreleased)
 ----------------
 
+- Fixed the guard expresssion for the 'task-transition-rejected-open' transition.
+  [phgross]
+
 - The localrolesetter authorize now also the inbox_group of the responsible_client.
   Issue #1295 Bei Mandantenuebergreifenden Aufgaben auch Eingangskorb mitberechtigen.
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1295

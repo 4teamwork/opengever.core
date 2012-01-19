@@ -353,7 +353,7 @@
  <transition transition_id="task-transition-rejected-open" title="task-transition-rejected-open" new_state="task-state-open" trigger="USER" before_script="" after_script="">
   <action url="" category="workflow" icon="">task-transition-rejected-open</action>
   <guard>
-   <guard-expression>python: here.restrictedTraverse('@@task_transition_controller').is_open_to_closed_possible()</guard-expression>
+   <guard-expression>python: here.restrictedTraverse('@@task_transition_controller').is_rejected_to_open_possible()</guard-expression>
   </guard>
  </transition>
  <transition transition_id="task-transition-resolved-open" title="task-transition-resolved-open" new_state="task-state-open" trigger="USER" before_script="" after_script="">
