@@ -13,11 +13,11 @@ class ITaskTransitionController(Interface):
     """Interface for a controller view for checking,
     if certain transitions should be available or not"""
 
-    def is_re_open_possible():
+    def is_cancelled_to_open_possible():
         """Checks if:
         - The actual user is the issuer of the actual task(context)"""
 
-    def is_progress_to_resolve_possible():
+    def is_progress_to_resolved_possible():
         """Checks if:
         - Task is not unidirectional_by_value (zu direkten Erledigung).
         - The responsible is the actual user or a inbox_group user.
@@ -45,14 +45,14 @@ class ITaskTransitionController(Interface):
         - The actual user is the responsible.
         """
 
-    def is_open_to_resolve_possible():
+    def is_open_to_resolved_possible():
         """Checks if:
         - All subtaskes are resolved, cancelled or closed.
         - The Task is is_bidirectional
         - The user is not the issuer, appart from he's also the responsible
         """
 
-    def is_open_to_close_possible():
+    def is_open_to_closed_possible():
         """Checks if:
         - The user is the issuer or is a unidirectional_byrefrence task"""
 
@@ -60,11 +60,11 @@ class ITaskTransitionController(Interface):
         """Checks if:
         - The actual user is the issuer of the task"""
 
-    def is_resolve_to_open_possible():
+    def is_resolved_to_open_possible():
         """Checks if:
         - The actual user is the issuer of the task"""
 
-    def is_resolve_to_closed_possible():
+    def is_resolved_to_closed_possible():
         """Checks if:
         - The actual user is the issuer of the task"""
 
@@ -74,12 +74,12 @@ class TaskTransitionController(BrowserView):
 
     implements(ITaskTransitionController)
 
-    def is_re_open_possible(self):
+    def is_cancelled_to_open_possible(self):
         """see ITaskTransitionController"""
 
         return self._is_issuer()
 
-    def is_progress_to_resolve_possible(self):
+    def is_progress_to_resolved_possible(self):
         """see ITaskTransitionController"""
 
         return (self._is_responsible_or_inbox_group_user() and
@@ -109,7 +109,7 @@ class TaskTransitionController(BrowserView):
         """see ITaskTransitionController"""
         return self._is_responsible()
 
-    def is_open_to_resolve_possible(self):
+    def is_open_to_resolved_possible(self):
         """see ITaskTransitionController"""
         if self._is_substasks_closed() and self._is_bidirectional():
             if not self._is_issuer():
@@ -118,7 +118,7 @@ class TaskTransitionController(BrowserView):
                 return True
         return False
 
-    def is_open_to_close_possible(self):
+    def is_open_to_closed_possible(self):
         """see ITaskTransitionController"""
 
         return self._is_issuer() or self._is_unidirectional_by_reference()
@@ -128,12 +128,12 @@ class TaskTransitionController(BrowserView):
 
         return self._is_issuer()
 
-    def is_resolve_to_open_possible(self):
+    def is_resolved_to_open_possible(self):
         """see ITaskTransitionController"""
 
         return self._is_issuer()
 
-    def is_resolve_to_closed_possible(self):
+    def is_resolved_to_closed_possible(self):
         """see ITaskTransitionController"""
 
         return self._is_issuer()
