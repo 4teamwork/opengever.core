@@ -1,5 +1,6 @@
 from ftw.testing import MockTestCase
 from mocker import ANY
+from opengever.ogds.base.interfaces import IContactInformation
 from opengever.task.browser.transitioncontroller import ITaskTransitionController
 from opengever.task.browser.transitioncontroller import TaskTransitionController
 from opengever.task.task import ITask
@@ -49,6 +50,30 @@ class TestTaskTransitionController(MockTestCase):
         self.assertTrue(TaskTransitionController(task2, {})._is_responsible())
         self.assertFalse(TaskTransitionController(task1, {})._is_responsible())
 
+    def test_is_responsible_or_inbox_group_user(self):
+        task1 = self.stub()
+        self.expect(task1.responsible).result('hugo.boss')
+
+        plone_portal_state = self.stub()
+        self.expect(
+            plone_portal_state(ANY, ANY)).result(plone_portal_state)
+        self.expect(plone_portal_state.member().id).result('hugo.boss')
+        self.mock_adapter(
+            plone_portal_state, ITask, [Interface, Interface], 'plone_portal_state')
+
+        contact_info = self.mocker.mock()
+        self.mock_utility(contact_info, IContactInformation, name=u"")
+        with self.mocker.order():
+            self.expect(contact_info.is_user_in_inbox_group()).result(False).count(0, None)
+            self.expect(contact_info.is_user_in_inbox_group()).result(True).count(0, None)
+
+        self.replay()
+
+        self.assertTrue(TaskTransitionController(
+                task1, {})._is_responsible_or_inbox_group_user())
+        self.assertTrue(TaskTransitionController(
+                task1, {})._is_responsible_or_inbox_group_user())
+
     def test_type_category_methods(self):
         task1 = self.mocker.mock()
         task2 = self.mocker.mock()
@@ -96,6 +121,7 @@ class TestTaskTransitionController(MockTestCase):
         with self.mocker.order():
             # Task 1
             self.expect(controller_mock._is_responsible()).result(False)
+            self.expect(controller_mock._is_inbox_group_user()).result(False)
 
             self.expect(controller_mock._is_responsible()).result(True)
             self.expect(controller_mock._is_substasks_closed()).result(False)
@@ -108,10 +134,17 @@ class TestTaskTransitionController(MockTestCase):
             self.expect(controller_mock._is_substasks_closed()).result(True)
             self.expect(controller_mock._is_unidirectional_by_value()).result(False)
 
+            self.expect(controller_mock._is_responsible()).result(False)
+            self.expect(controller_mock._is_inbox_group_user()).result(True)
+            self.expect(controller_mock._is_substasks_closed()).result(True)
+            self.expect(controller_mock._is_unidirectional_by_value()).result(False)
+
+
         self.replay()
         self.assertFalse(controller.is_progress_to_resolve_possible())
         self.assertFalse(controller.is_progress_to_resolve_possible())
         self.assertFalse(controller.is_progress_to_resolve_possible())
+        self.assertTrue(controller.is_progress_to_resolve_possible())
         self.assertTrue(controller.is_progress_to_resolve_possible())
 
     def test_is_progress_to_closed_possible(self):

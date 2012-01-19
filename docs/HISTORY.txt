@@ -5,9 +5,13 @@ Changelog
 2.2 (unreleased)
 ----------------
 
-- Moved the workflow guards checks in to a TaskTransitionController and added Tests.
+- Adjsut the transitioncontroller: for inbox group users it should also be possible to resolve and the accept tasks.
+  Issue #1296 Task Workflow Guards: Eingangskorb Benutzer sollen auch Aufgaben akzeptieren und erledigen koennen
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1296
   [phgross]
 
+- Moved the workflow guards checks in to a TaskTransitionController and added Tests.
+  [phgross]
 
 
 2.1 (2012-01-13)

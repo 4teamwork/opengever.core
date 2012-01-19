@@ -1,3 +1,5 @@
+from opengever.ogds.base.interfaces import IContactInformation
+from zope.component import getUtility
 from zope.component import getMultiAdapter
 from zope.interface import Interface, implements
 from Products.Five import BrowserView
@@ -18,7 +20,7 @@ class ITaskTransitionController(Interface):
     def is_progress_to_resolve_possible():
         """Checks if:
         - Task is not unidirectional_by_value (zu direkten Erledigung).
-        - The responsible is the actual user.
+        - The responsible is the actual user or a inbox_group user.
         - All subtaskes are resolve, cancelled or closed.
         """
 
@@ -80,7 +82,7 @@ class TaskTransitionController(BrowserView):
     def is_progress_to_resolve_possible(self):
         """see ITaskTransitionController"""
 
-        return (self._is_responsible() and
+        return (self._is_responsible_or_inbox_group_user() and
                 self._is_substasks_closed() and
                 not self._is_unidirectional_by_value())
 
@@ -95,6 +97,7 @@ class TaskTransitionController(BrowserView):
 
     def is_open_to_progress_possible(self):
         """see ITaskTransitionController"""
+
         if not self._is_unidirectional_by_reference():
             if not self._is_issuer():
                 return True
@@ -148,6 +151,20 @@ class TaskTransitionController(BrowserView):
 
         return getMultiAdapter((self.context, self.request),
             name='plone_portal_state').member().id == self.context.responsible
+
+    def _is_inbox_group_user(self):
+        """Checks with the help of the contact information utility
+        if the actual user is in the inbox group"""
+
+        info = getUtility(IContactInformation)
+        return info.is_user_in_inbox_group(
+            client_id=self.context.responsible_client)
+
+    def _is_responsible_or_inbox_group_user(self):
+        """Checks if the actual user is the responsible
+        or in the inbox_group"""
+
+        return self._is_responsible() or self._is_inbox_group_user()
 
     def _is_substasks_closed(self):
         """Checks if all subtasks are done(resolve, cancelled or closed)"""
