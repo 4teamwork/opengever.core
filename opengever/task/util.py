@@ -1,8 +1,8 @@
-from persistent.list import PersistentList
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone import PloneMessageFactory as PMF
 from collective.elephantvocabulary import wrap_vocabulary
 from five import grok
+from persistent.list import PersistentList
 from z3c.relationfield import RelationValue
 from zope.annotation.interfaces import IAnnotations
 from zope.component import getUtility
@@ -13,6 +13,7 @@ from zope.schema.interfaces import IContextSourceBinder
 from zope.schema.vocabulary import SimpleVocabulary
 import AccessControl
 import opengever.task
+import types
 
 
 class UsersVocabulary(SimpleVocabulary):
@@ -96,7 +97,9 @@ def add_simple_response(task, text='', field_changes=None, added_object=None,
     if added_object:
         intids = getUtility(IIntIds)
 
-        if hasattr(added_object, '__iter__'):
+        if isinstance(added_object, types.ListType) or \
+                isinstance(added_object, types.TupleType) or \
+                isinstance(added_object, types.GeneratorType):
             response.added_object = PersistentList()
             for obj in added_object:
                 iid = intids.getId(obj)
