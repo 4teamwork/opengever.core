@@ -287,6 +287,8 @@ class Overview(DisplayForm, OpengeverTab):
         return None
 
     def responsible_link(self):
+        """Render the responsible of the current task as link.
+        """
         info = getUtility(IContactInformation)
         task = ITask(self.context)
 
@@ -303,6 +305,20 @@ class Overview(DisplayForm, OpengeverTab):
             task, self.groups[0].widgets['responsible_client'].value[0])
 
         return client + ' / ' + info.render_link(task.responsible)
+
+    def subtask_responsible(self, subtask):
+        """Render the responsible of a subtask (object) as text.
+        """
+        info = getUtility(IContactInformation)
+
+        if not subtask.responsible_client or len(info.get_clients()) <= 1:
+            # No responsible client is set yet or we have a single client
+            # setup.
+            return info.describe(subtask.responsible)
+
+        else:
+            client = client_title_helper(subtask, subtask.responsible_client)
+            return client + ' / ' + info.describe(subtask.responsible)
 
     def issuer_link(self):
         info = getUtility(IContactInformation)

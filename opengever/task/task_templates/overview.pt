@@ -97,7 +97,12 @@
                     <span tal:attributes="class string:wf-${item/review_state}" />
                     <a href="" class="contenttype-opengever-task-task"
                        tal:attributes="href item/getURL|nothing; class python: view.css_class_from_brain(item)"
-                       tal:omit-tag="not: item/getURL|nothing"><span tal:content="item/Title" /></a>
+                       tal:omit-tag="not: item/getURL|nothing">
+                        <span tal:content="item/Title" />
+                        <span class="discreet">
+                            (<tal:reponsible replace="python:view.subtask_responsible(item)" />)
+                        </span>
+                    </a>
                 </li>
             </ul>
         </tal:items>

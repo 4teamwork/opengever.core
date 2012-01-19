@@ -5,6 +5,9 @@ Changelog
 2.2 (unreleased)
 ----------------
 
+- Task overview: display responsible of subtasks.
+  [jone]
+
 - Display workflow state icon for related tasks in task overview.
   [jone]
 
