@@ -30,7 +30,8 @@ we should have it here:
     >>> related = createContentInContainer(
     ...     folder, 'opengever.task.task',
     ...     title=u'Related',
-    ...     checkConstraints=False)
+    ...     checkConstraints=False,
+    ...     responsible_client="plone")
     >>> related
     <Task at /plone/Members/test_user_1_/task-1>
     >>> related.get_local_roles()
@@ -52,6 +53,7 @@ Now let's create a new task with a relation to our "related" task:
     ...     checkConstraints=False,
     ...     task_type=u'direct-execution',
     ...     title=u'Task 2', responsible=u'foo',
+    ...     responsible_client="plone",
     ...     relatedItems=[relation])
     >>> task2
     <Task at /plone/Members/test_user_1_/task-2>
@@ -61,11 +63,11 @@ Now let's create a new task with a relation to our "related" task:
 Now check the local roles:
 
     >>> task2.get_local_roles()
-    (('foo', ('Editor',)), ('test_user_1_', ('Owner',)))
+    (('foo', ('Editor',)), (u'og_mandant1_inbox', ('Editor',)), ('test_user_1_', ('Owner',)))
     >>> folder.get_local_roles()
     (('foo', ('Contributor',)), ('test_user_1_', ('Owner',)))
     >>> related.get_local_roles()
-    (('foo', ('Reader',)), ('test_user_1_', ('Owner',)))
+    (('foo', ('Reader',)), (u'og_mandant1_inbox', ('Reader',)), ('test_user_1_', ('Owner',)))
 
 
 Now lets create a new task with a task type from bidirectional_by_reference,
@@ -77,6 +79,7 @@ which should set Editor role on the related item:
     ...     checkConstraints=False,
     ...     task_type=u'comment',
     ...     title=u'Task 3', responsible=u'bar',
+    ...     responsible_client="client2",
     ...     relatedItems=[relation2])
     >>> task3
     <Task at /plone/Members/test_user_1_/task-3>
@@ -84,24 +87,24 @@ which should set Editor role on the related item:
     [<z3c.relationfield.relation.RelationValue object at ...>]
 
     >>> task3.get_local_roles()
-    (('bar', ('Editor',)), ('test_user_1_', ('Owner',)))
+    (('bar', ('Editor',)), (u'og_mandant2_inbox', ('Editor',)), ('test_user_1_', ('Owner',)))
     >>> folder.get_local_roles()
     (('bar', ('Contributor',)), ('foo', ('Contributor',)), ('test_user_1_', ('Owner',)))
     >>> related.get_local_roles()
-    (('bar', ('Editor', 'Reader')), ('foo', ('Reader',)), ('test_user_1_', ('Owner',)))
-
+    (('bar', ('Editor', 'Reader')), ('foo', ('Reader',)), (u'og_mandant1_inbox', ('Reader',)), (u'og_mandant2_inbox', ('Editor', 'Reader')), ('test_user_1_', ('Owner',)))
 
 When updating, it should also update the related items:
 
     >>> task3.responsible=u'new'
+    >>> task3.responsible_client=u'plone'
     >>> notify(ObjectModifiedEvent(task3))
 
     >>> task3.get_local_roles()
-    (('bar', ('Editor',)), ('new', ('Editor',)), ('test_user_1_', ('Owner',)))
+    (('bar', ('Editor',)), ('new', ('Editor',)), (u'og_mandant1_inbox', ('Editor',)), (u'og_mandant2_inbox', ('Editor',)), ('test_user_1_', ('Owner',)))
     >>> folder.get_local_roles()
     (('bar', ('Contributor',)), ('foo', ('Contributor',)), ('new', ('Contributor',)), ('test_user_1_', ('Owner',)))
     >>> related.get_local_roles()
-    (('bar', ('Editor', 'Reader')), ('foo', ('Reader',)), ('new', ('Editor', 'Reader')), ('test_user_1_', ('Owner',)))
+    (('bar', ('Editor', 'Reader')), ('foo', ('Reader',)), ('new', ('Editor', 'Reader')), (u'og_mandant1_inbox', ('Editor', 'Reader',)), (u'og_mandant2_inbox', ('Editor', 'Reader')), ('test_user_1_', ('Owner',)))
 
 
 # XXX Missing test: we should also test here that if we select a inbox

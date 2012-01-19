@@ -14,6 +14,7 @@ class LocalRolesSetter(object):
 
     def __init__(self, task):
         self.task = task
+        self._inbox_group = None
 
     def __call__(self, event):
         self.event = event
@@ -47,6 +48,15 @@ class LocalRolesSetter(object):
 
         return self._responsible
 
+    @property
+    def inbox_group(self):
+        if self._inbox_group is None:
+            info = getUtility(IContactInformation)
+            client = info.get_client_by_id(self.task.responsible_client)
+            self._inbox_group = client.inbox_group_id
+
+        return self._inbox_group
+
     def _add_local_roles(self, context, principal, roles):
         """Adds local roles to the context.
         `roles` example:
@@ -61,6 +71,7 @@ class LocalRolesSetter(object):
         """Set local roles on task
         """
         self._add_local_roles(self.task, self.responsible, ('Editor',))
+        self._add_local_roles(self.task, self.inbox_group, ('Editor',))
 
     def globalindex_reindex_task(self):
         """We need to reindex the task in globalindex. This was done
@@ -94,6 +105,7 @@ class LocalRolesSetter(object):
 
         for item in getattr(self.task, 'relatedItems', []):
             self._add_local_roles(item.to_object, self.responsible, roles)
+            self._add_local_roles(item.to_object, self.inbox_group, roles)
 
 
 @subscribe(ITask, IObjectAddedEvent)

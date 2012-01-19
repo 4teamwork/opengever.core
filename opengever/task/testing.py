@@ -1,17 +1,18 @@
-from opengever.ogds.base.setuphandlers import create_sql_tables
+from ftw.tabbedview.interfaces import ITabbedView
+from opengever.globalindex import model
+from opengever.ogds.base.interfaces import IClientConfiguration
 from opengever.ogds.base.setuphandlers import _create_example_client
 from opengever.ogds.base.setuphandlers import _create_example_user
-from ftw.tabbedview.interfaces import ITabbedView
-from plone.app.testing import TEST_USER_ID, setRoles
+from opengever.ogds.base.setuphandlers import create_sql_tables
 from opengever.ogds.base.utils import create_session
-from plone.app.testing import applyProfile
 from plone.app.testing import FunctionalTesting
-from plone.app.testing import PloneSandboxLayer
 from plone.app.testing import PLONE_FIXTURE
+from plone.app.testing import PloneSandboxLayer
+from plone.app.testing import TEST_USER_ID, setRoles
+from plone.app.testing import applyProfile
 from plone.registry.interfaces import IRegistry
 from zope.component import getUtility
 from zope.configuration import xmlconfig
-from opengever.globalindex import model
 
 
 class TaskFunctionalLayer(PloneSandboxLayer):
@@ -51,6 +52,9 @@ class TaskFunctionalLayer(PloneSandboxLayer):
 
         # configure client ID
         registry = getUtility(IRegistry, context=portal)
+        proxy = registry.forInterface(IClientConfiguration)
+        proxy.client_id
+
         tab_reg = registry.forInterface(ITabbedView)
         tab_reg.batch_size = 5
 

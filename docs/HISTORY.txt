@@ -5,6 +5,11 @@ Changelog
 2.2 (unreleased)
 ----------------
 
+- The localrolesetter authorize now also the inbox_group of the responsible_client.
+  Issue #1295 Bei Mandantenuebergreifenden Aufgaben auch Eingangskorb mitberechtigen.
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1295
+  [phgross]
+
 - Adjsut the transitioncontroller: for inbox group users it should also be possible to resolve and the accept tasks.
   Issue #1296 Task Workflow Guards: Eingangskorb Benutzer sollen auch Aufgaben akzeptieren und erledigen koennen
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1296
