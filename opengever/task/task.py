@@ -276,7 +276,7 @@ class Overview(DisplayForm, OpengeverTab):
 
     def getSubTasks(self):
         tasks = self.context.getFolderContents(
-            full_objects=False,
+            full_objects=True,
             contentFilter={'portal_type': 'opengever.task.task'})
         return tasks
 
