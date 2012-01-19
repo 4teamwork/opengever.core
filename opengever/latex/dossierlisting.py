@@ -44,6 +44,11 @@ class DossierListingLaTeXView(grok.MultiAdapter, MakoLaTeXView):
     template_directories = ['templates']
     template_name = 'dossierlisting.tex'
 
+    def __init__(self, *args, **kwargs):
+        MakoLaTeXView.__init__(self, *args, **kwargs)
+        self.info = None
+        self.client = None
+
     def get_render_arguments(self):
         self.layout.show_organisation = True
         self.info = getUtility(IContactInformation)

@@ -15,7 +15,6 @@ from zope.interface import Interface
 from zope.interface import directlyProvidedBy, directlyProvides
 
 
-
 class ITaskListingLayer(ILandscapeLayer):
     """Dossier listing request layer.
     - Select landsacpe layout by subclassing ITaskListingLayer
@@ -46,6 +45,10 @@ class TaskListingLaTeXView(grok.MultiAdapter, MakoLaTeXView):
 
     template_directories = ['templates']
     template_name = 'tasklisting.tex'
+
+    def __init__(self, *args, **kwargs):
+        MakoLaTeXView.__init__(self, *args, **kwargs)
+        self.info = None
 
     def get_render_arguments(self):
         self.layout.show_organisation = True

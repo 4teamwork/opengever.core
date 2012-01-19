@@ -56,7 +56,6 @@ class TestDossierCoverPDFView(MockTestCase):
                             tree.repository,
                             tree.site)))))
 
-
         return tree
 
     def mock_metadata(self, context_mock, metadata=None):
@@ -161,5 +160,3 @@ class TestDossierCoverPDFView(MockTestCase):
              'responsible': 'John Doe',
              'start': '2011-09-24 00:00:00',
              'end': '2011-11-22 00:00:00'})
-
-

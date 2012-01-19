@@ -18,7 +18,7 @@ def get_selected_items(context, request):
 
         for path in request.get('paths', []):
             brains = catalog({'path': {'query': path,
-                                   'depth': 0}})
+                                       'depth': 0}})
             assert len(brains) == 1, "Could not find task at %s" % path
             yield brains[0]
 
