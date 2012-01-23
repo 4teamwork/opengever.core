@@ -2,8 +2,17 @@ Changelog
 =========
 
 
-2.0a12 (unreleased)
--------------------
+2.0.1 (unreleased)
+------------------
+
+- Nothing changed yet.
+
+
+2.0 (2011-11-17)
+----------------
+
+- Add tooltip_helper which show the complete comment of a journal entry, in a tooltip.
+  [phgross]
 
 - added tests for new local_roles events on repositoryfolders and dossiers
   [eschmutz]
@@ -15,14 +24,14 @@ Changelog
 - removed unused journalentry factories for Objects implementing ITask because
   tasks havent a journal history
   [eschmutz]
-  
+
 - changed journalentry action-type string for IObjectWillBeMovedEvent
   because it referenced to IObjectMovedEvent
   [eschmutz]
 
 - added testsetup for jenkins
   [eschmutz]
-  
+
 - Removed zopemaster-check for journal-entries
   [eschmutz]
 
