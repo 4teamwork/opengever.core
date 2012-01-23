@@ -1,6 +1,7 @@
 
     >>> from opengever.globalindex.model.task import Task
     >>> from opengever.globalindex.model.task import TaskPrincipal
+    >>> session = layer.session
     >>> task = Task(10, 'm1')
     >>> session.add(task)
     >>> task

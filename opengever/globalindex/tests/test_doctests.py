@@ -1,48 +1,28 @@
-import unittest
+from opengever.globalindex.testing import MEMORY_DB_LAYER
+from plone.testing import layered
 import doctest
+import unittest
 
 
-OPTIONFLAGS = (doctest.NORMALIZE_WHITESPACE|
-               doctest.ELLIPSIS|
+OPTIONFLAGS = (doctest.NORMALIZE_WHITESPACE |
+               doctest.ELLIPSIS |
                doctest.REPORT_NDIFF)
 
-def setUp(test):
-    # setup a sqlite db in memory
-    from sqlalchemy import create_engine
-    from sqlalchemy.orm import sessionmaker
-    from opengever.globalindex.model import Base
-    from opengever.globalindex.model.task import Task
-    Task #make pyflakes happy
-    engine = create_engine('sqlite:///:memory:', echo=False)
-    Session = sessionmaker(bind=engine)
-    session = Session()
+TESTFILES = (
+    'task.txt',
+    'query.txt',
+    'task_principals.txt',
+    )
 
-    # create tables
-    Base.metadata.create_all(session.bind)
-
-    test.globs['session'] = session
-
-def tearDown(test):
-    #test.globs['session'].remove()
-    pass
 
 def test_suite():
 
-    return unittest.TestSuite([
+    suite = unittest.TestSuite()
 
-        doctest.DocFileSuite(
-            'task.txt',
-            setUp=setUp, tearDown=tearDown,
-            optionflags=OPTIONFLAGS),
-
-        doctest.DocFileSuite(
-            'query.txt',
-            setUp=setUp, tearDown=tearDown,
-            optionflags=OPTIONFLAGS),
-
-        doctest.DocFileSuite(
-            'task_principals.txt',
-            setUp=setUp, tearDown=tearDown,
-            optionflags=OPTIONFLAGS),
-
-    ])
+    for testfile in TESTFILES:
+        suite.addTests([
+                layered(doctest.DocFileSuite(
+                        testfile, optionflags=OPTIONFLAGS),
+                        layer=MEMORY_DB_LAYER),
+                ])
+    return suite
