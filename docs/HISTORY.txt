@@ -5,6 +5,11 @@ Changelog
 2.0.2 (unreleased)
 ------------------
 
+- Temporarily hide the task-tab in the document-tabbedview.
+  #1293 Aufgaben Tab eines Dokuments voruebergehend ausblenden.
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1293/
+  [phgross]
+
 - #1326 Checkout_documents wirft ein Fehler beim Versuch ein Mail auszuchecken.
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1326
   Improved error handling in checkout_documents: Provide the user with a status

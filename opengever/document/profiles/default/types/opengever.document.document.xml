@@ -63,7 +63,7 @@
   <action title="overview" action_id="overview" category="tabbedview-tabs" condition_expr="" url_expr="string:#" visible="True"></action>
   <!-- # TODO: Remove/replace preview tab -->
   <!-- <action title="preview" action_id="preview" category="tabbedview-tabs" condition_expr="" url_expr="string:#" visible="True"></action> -->
-  <action title="tasks" action_id="tasks" category="tabbedview-tabs" condition_expr="" url_expr="string:#" visible="True"></action>
+  <action title="tasks" action_id="tasks" category="tabbedview-tabs" condition_expr="" url_expr="string:#" visible="False"></action>
   <action title="journal" action_id="journal" category="tabbedview-tabs" condition_expr="" url_expr="string:#" visible="True"></action>
 
   <!-- disable some old actions -->
