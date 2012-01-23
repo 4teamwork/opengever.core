@@ -65,7 +65,7 @@ Now check the local roles:
     >>> task2.get_local_roles()
     (('foo', ('Editor',)), (u'og_mandant1_inbox', ('Editor',)), ('test_user_1_', ('Owner',)))
     >>> folder.get_local_roles()
-    (('foo', ('Contributor',)), ('test_user_1_', ('Owner',)))
+    (('test_user_1_', ('Owner',)),)
     >>> related.get_local_roles()
     (('foo', ('Reader',)), (u'og_mandant1_inbox', ('Reader',)), ('test_user_1_', ('Owner',)))
 
@@ -89,7 +89,7 @@ which should set Editor role on the related item:
     >>> task3.get_local_roles()
     (('bar', ('Editor',)), (u'og_mandant2_inbox', ('Editor',)), ('test_user_1_', ('Owner',)))
     >>> folder.get_local_roles()
-    (('bar', ('Contributor',)), ('foo', ('Contributor',)), ('test_user_1_', ('Owner',)))
+    (('test_user_1_', ('Owner',)),)
     >>> related.get_local_roles()
     (('bar', ('Editor', 'Reader')), ('foo', ('Reader',)), (u'og_mandant1_inbox', ('Reader',)), (u'og_mandant2_inbox', ('Editor', 'Reader')), ('test_user_1_', ('Owner',)))
 
@@ -102,9 +102,9 @@ When updating, it should also update the related items:
     >>> task3.get_local_roles()
     (('bar', ('Editor',)), ('new', ('Editor',)), (u'og_mandant1_inbox', ('Editor',)), (u'og_mandant2_inbox', ('Editor',)), ('test_user_1_', ('Owner',)))
     >>> folder.get_local_roles()
-    (('bar', ('Contributor',)), ('foo', ('Contributor',)), ('new', ('Contributor',)), ('test_user_1_', ('Owner',)))
+    (('test_user_1_', ('Owner',)),)
     >>> related.get_local_roles()
-    (('bar', ('Editor', 'Reader')), ('foo', ('Reader',)), ('new', ('Editor', 'Reader')), (u'og_mandant1_inbox', ('Editor', 'Reader',)), (u'og_mandant2_inbox', ('Editor', 'Reader')), ('test_user_1_', ('Owner',)))
+    (('bar', ('Editor', 'Reader')), ('foo', ('Reader',)), ('new', ('Editor', 'Reader')), (u'og_mandant1_inbox', ('Editor', 'Reader')), (u'og_mandant2_inbox', ('Editor', 'Reader')), ('test_user_1_', ('Owner',)))
 
 
 # XXX Missing test: we should also test here that if we select a inbox
