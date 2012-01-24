@@ -5,6 +5,9 @@ Changelog
 2.0.2 (unreleased)
 ------------------
 
+- Added necessary permissions for Administrator role
+  [lgraf]
+
 - Add @@primary_repository_root view for getting the primary repository root.
   [jone]
 
