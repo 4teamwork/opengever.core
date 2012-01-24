@@ -1,4 +1,3 @@
-from Acquisition import aq_inner, aq_parent
 from five.grok import subscribe
 from opengever.globalindex.handlers.task import index_task
 from opengever.ogds.base.interfaces import IContactInformation
@@ -14,6 +13,7 @@ class LocalRolesSetter(object):
 
     def __init__(self, task):
         self.task = task
+        self._inbox_group = None
 
     def __call__(self, event):
         self.event = event
@@ -21,7 +21,6 @@ class LocalRolesSetter(object):
             return
         self.set_roles_on_task()
         self.globalindex_reindex_task()
-        self.set_roles_on_distinct_parent()
         self.set_roles_on_related_items()
 
     @property
@@ -47,6 +46,16 @@ class LocalRolesSetter(object):
 
         return self._responsible
 
+    @property
+    def inbox_group(self):
+        if self._inbox_group is None:
+            info = getUtility(IContactInformation)
+            client = info.get_client_by_id(self.task.responsible_client)
+            if client:
+                self._inbox_group = client.inbox_group_id
+
+        return self._inbox_group
+
     def _add_local_roles(self, context, principal, roles):
         """Adds local roles to the context.
         `roles` example:
@@ -61,6 +70,8 @@ class LocalRolesSetter(object):
         """Set local roles on task
         """
         self._add_local_roles(self.task, self.responsible, ('Editor',))
+        if self.inbox_group:
+            self._add_local_roles(self.task, self.inbox_group, ('Editor',))
 
     def globalindex_reindex_task(self):
         """We need to reindex the task in globalindex. This was done
@@ -68,21 +79,6 @@ class LocalRolesSetter(object):
         the roles which are indexed too (allowed users).
         """
         index_task(self.task, self.event)
-
-    def set_roles_on_distinct_parent(self):
-        """Set local roles on the next parent which has a different
-        content type.
-        """
-        # according to Issue #832 we don't set a role in the parent
-        # any more.
-        # --------------
-        # However, since tabbed view for tasks isn't finished yet,
-        # we temporarily enable this again. [lgraf]
-
-        context = self.task
-        while context.Type() == self.task.Type():
-            context = aq_parent(aq_inner(context))
-        self._add_local_roles(context, self.responsible, ('Contributor', ))
 
     def set_roles_on_related_items(self):
         """Set local roles on related items (usually documents)
@@ -94,6 +90,8 @@ class LocalRolesSetter(object):
 
         for item in getattr(self.task, 'relatedItems', []):
             self._add_local_roles(item.to_object, self.responsible, roles)
+            if self.inbox_group:
+                self._add_local_roles(item.to_object, self.inbox_group, roles)
 
 
 @subscribe(ITask, IObjectAddedEvent)

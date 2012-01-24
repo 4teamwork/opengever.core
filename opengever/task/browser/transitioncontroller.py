@@ -1,3 +1,5 @@
+from opengever.ogds.base.interfaces import IContactInformation
+from zope.component import getUtility
 from zope.component import getMultiAdapter
 from zope.interface import Interface, implements
 from Products.Five import BrowserView
@@ -11,14 +13,14 @@ class ITaskTransitionController(Interface):
     """Interface for a controller view for checking,
     if certain transitions should be available or not"""
 
-    def is_re_open_possible():
+    def is_cancelled_to_open_possible():
         """Checks if:
         - The actual user is the issuer of the actual task(context)"""
 
-    def is_progress_to_resolve_possible():
+    def is_progress_to_resolved_possible():
         """Checks if:
         - Task is not unidirectional_by_value (zu direkten Erledigung).
-        - The responsible is the actual user.
+        - The responsible is the actual user or a inbox_group user.
         - All subtaskes are resolve, cancelled or closed.
         """
 
@@ -43,14 +45,14 @@ class ITaskTransitionController(Interface):
         - The actual user is the responsible.
         """
 
-    def is_open_to_resolve_possible():
+    def is_open_to_resolved_possible():
         """Checks if:
         - All subtaskes are resolved, cancelled or closed.
         - The Task is is_bidirectional
         - The user is not the issuer, appart from he's also the responsible
         """
 
-    def is_open_to_close_possible():
+    def is_open_to_closed_possible():
         """Checks if:
         - The user is the issuer or is a unidirectional_byrefrence task"""
 
@@ -58,11 +60,11 @@ class ITaskTransitionController(Interface):
         """Checks if:
         - The actual user is the issuer of the task"""
 
-    def is_resolve_to_open_possible():
+    def is_resolved_to_open_possible():
         """Checks if:
         - The actual user is the issuer of the task"""
 
-    def is_resolve_to_closed_possible():
+    def is_resolved_to_closed_possible():
         """Checks if:
         - The actual user is the issuer of the task"""
 
@@ -72,15 +74,15 @@ class TaskTransitionController(BrowserView):
 
     implements(ITaskTransitionController)
 
-    def is_re_open_possible(self):
+    def is_cancelled_to_open_possible(self):
         """see ITaskTransitionController"""
 
         return self._is_issuer()
 
-    def is_progress_to_resolve_possible(self):
+    def is_progress_to_resolved_possible(self):
         """see ITaskTransitionController"""
 
-        return (self._is_responsible() and
+        return (self._is_responsible_or_inbox_group_user() and
                 self._is_substasks_closed() and
                 not self._is_unidirectional_by_value())
 
@@ -95,6 +97,7 @@ class TaskTransitionController(BrowserView):
 
     def is_open_to_progress_possible(self):
         """see ITaskTransitionController"""
+
         if not self._is_unidirectional_by_reference():
             if not self._is_issuer():
                 return True
@@ -106,7 +109,7 @@ class TaskTransitionController(BrowserView):
         """see ITaskTransitionController"""
         return self._is_responsible()
 
-    def is_open_to_resolve_possible(self):
+    def is_open_to_resolved_possible(self):
         """see ITaskTransitionController"""
         if self._is_substasks_closed() and self._is_bidirectional():
             if not self._is_issuer():
@@ -115,7 +118,7 @@ class TaskTransitionController(BrowserView):
                 return True
         return False
 
-    def is_open_to_close_possible(self):
+    def is_open_to_closed_possible(self):
         """see ITaskTransitionController"""
 
         return self._is_issuer() or self._is_unidirectional_by_reference()
@@ -125,12 +128,12 @@ class TaskTransitionController(BrowserView):
 
         return self._is_issuer()
 
-    def is_resolve_to_open_possible(self):
+    def is_resolved_to_open_possible(self):
         """see ITaskTransitionController"""
 
         return self._is_issuer()
 
-    def is_resolve_to_closed_possible(self):
+    def is_resolved_to_closed_possible(self):
         """see ITaskTransitionController"""
 
         return self._is_issuer()
@@ -148,6 +151,20 @@ class TaskTransitionController(BrowserView):
 
         return getMultiAdapter((self.context, self.request),
             name='plone_portal_state').member().id == self.context.responsible
+
+    def _is_inbox_group_user(self):
+        """Checks with the help of the contact information utility
+        if the actual user is in the inbox group"""
+
+        info = getUtility(IContactInformation)
+        return info.is_user_in_inbox_group(
+            client_id=self.context.responsible_client)
+
+    def _is_responsible_or_inbox_group_user(self):
+        """Checks if the actual user is the responsible
+        or in the inbox_group"""
+
+        return self._is_responsible() or self._is_inbox_group_user()
 
     def _is_substasks_closed(self):
         """Checks if all subtasks are done(resolve, cancelled or closed)"""

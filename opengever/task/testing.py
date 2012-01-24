@@ -1,5 +1,6 @@
 from ftw.tabbedview.interfaces import ITabbedView
 from opengever.globalindex import model
+from opengever.ogds.base.interfaces import IClientConfiguration
 from opengever.ogds.base.setuphandlers import _create_example_client
 from opengever.ogds.base.setuphandlers import _create_example_user
 from opengever.ogds.base.setuphandlers import create_sql_tables
@@ -74,6 +75,9 @@ class TaskFunctionalLayer(PloneSandboxLayer):
 
         # configure client ID
         registry = getUtility(IRegistry, context=portal)
+        proxy = registry.forInterface(IClientConfiguration)
+        proxy.client_id
+
         tab_reg = registry.forInterface(ITabbedView)
         tab_reg.batch_size = 5
 
