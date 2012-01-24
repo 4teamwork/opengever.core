@@ -8,6 +8,12 @@ Changelog
 - Give admin group 'Administrator' role instead of 'Manager'
   [lgraf]
 
+- Setup wizard: respect "local_roles" configuration in clients.
+  [jone]
+
+- Setup wizard: respect "active" configuration in clients.
+  [jone]
+
 
 2.1.1 (2011-12-06)
 ------------------
