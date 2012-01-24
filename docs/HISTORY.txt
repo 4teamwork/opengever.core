@@ -5,6 +5,9 @@ Changelog
 2.0.2 (unreleased)
 ------------------
 
+- Set permissions for Administrator role
+  [lgraf]
+
 - Added 'Force Checkin' permission
   [lgraf]
 

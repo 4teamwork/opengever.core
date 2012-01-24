@@ -29,11 +29,13 @@
    <permission-role>Manager</permission-role>
    <permission-role>Owner</permission-role>
    <permission-role>Reader</permission-role>
+   <permission-role>Administrator</permission-role>
   </permission-map>
   <permission-map name="CMFEditions: Access previous versions" acquired="False">
    <permission-role>Editor</permission-role>
    <permission-role>Owner</permission-role>
    <permission-role>Reader</permission-role>
+   <permission-role>Administrator</permission-role>
   </permission-map>
   <permission-map name="CMFEditions: Apply version control" acquired="False">
    <permission-role>Editor</permission-role>
@@ -70,6 +72,7 @@
    <permission-role>Manager</permission-role>
    <permission-role>Owner</permission-role>
    <permission-role>Reader</permission-role>
+   <permission-role>Administrator</permission-role>
   </permission-map>
   <permission-map name="Modify portal content" acquired="True">
   </permission-map>
@@ -82,21 +85,25 @@
    <permission-role>Manager</permission-role>
    <permission-role>Owner</permission-role>
    <permission-role>Reader</permission-role>
+   <permission-role>Administrator</permission-role>
   </permission-map>
   <permission-map name="WebDAV Lock items" acquired="False">
    <permission-role>Editor</permission-role>
    <permission-role>Manager</permission-role>
    <permission-role>Owner</permission-role>
+   <permission-role>Administrator</permission-role>
   </permission-map>
   <permission-map name="WebDAV Unlock items" acquired="False">
    <permission-role>Editor</permission-role>
    <permission-role>Manager</permission-role>
    <permission-role>Owner</permission-role>
+   <permission-role>Administrator</permission-role>
   </permission-map>
   <permission-map name="WebDAV access" acquired="False">
    <permission-role>Editor</permission-role>
    <permission-role>Manager</permission-role>
    <permission-role>Owner</permission-role>
+   <permission-role>Administrator</permission-role>
   </permission-map>
   <permission-map name="opengever.document: Cancel" acquired="True">
   </permission-map>
