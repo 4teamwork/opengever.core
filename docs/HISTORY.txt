@@ -5,6 +5,9 @@ Changelog
 2.2 (unreleased)
 ----------------
 
+- Added necessary permissions for Administrator role
+  [lgraf]
+
 - Fixed the guard expresssion for the 'task-transition-rejected-open' transition.
   [phgross]
 

@@ -4,11 +4,14 @@
       <role name="Manager"/>
       <role name="Owner"/>
       <role name="Contributor"/>
+      <role name="Administrator"/>
+
     </permission>
     <permission name="opengever.task: Edit task" acquire="True">
       <role name="Manager"/>
       <role name="Owner"/>
       <role name="Contributor"/>
+      <role name="Administrator"/>
     </permission>
   </permissions>
 </rolemap>
