@@ -58,7 +58,7 @@ class TestTaskIntegration(PloneTestCase):
         view = t1.restrictedTraverse('@@tabbedview_view-overview')
         self.failUnless(len(view.getSubTasks())==0)
         t2 = create_task(t1, title='Task 2')
-        self.failUnless(view.getSubTasks()[0].getObject()==t2)
+        self.failUnless(view.getSubTasks()[0]==t2)
 
     def test_relateddocuments(self):
         # create document and append it to the relatedItems of the task
