@@ -12,13 +12,16 @@
   <permission-map name="Access contents information" acquired="False">
    <permission-role>Manager</permission-role>
    <permission-role>Reader</permission-role>
+   <permission-role>Administrator</permission-role>
   </permission-map>
   <permission-map name="Add portal content" acquired="False">
    <permission-role>Manager</permission-role>
+   <permission-role>Administrator</permission-role>
   </permission-map>
   <permission-map name="List folder contents" acquired="False">
    <permission-role>Manager</permission-role>
    <permission-role>Reader</permission-role>
+   <permission-role>Administrator</permission-role>
   </permission-map>
   <permission-map name="Manage properties" acquired="False">
    <permission-role>Manager</permission-role>
@@ -32,6 +35,7 @@
   <permission-map name="View" acquired="False">
    <permission-role>Manager</permission-role>
    <permission-role>Reader</permission-role>
+   <permission-role>Administrator</permission-role>
   </permission-map>
   <permission-map name="opengever.inbox: Add Forwarding" acquired="False">
    <permission-role>Manager</permission-role>

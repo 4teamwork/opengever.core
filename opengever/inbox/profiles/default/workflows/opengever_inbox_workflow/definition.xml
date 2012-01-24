@@ -25,39 +25,47 @@
    <permission-role>Manager</permission-role>
    <permission-role>Owner</permission-role>
    <permission-role>Reader</permission-role>
+   <permission-role>Administrator</permission-role>
   </permission-map>
   <permission-map name="Add portal content" acquired="False">
    <permission-role>Contributor</permission-role>
    <permission-role>Manager</permission-role>
    <permission-role>Owner</permission-role>
+   <permission-role>Administrator</permission-role>
   </permission-map>
   <permission-map name="List folder contents" acquired="False">
    <permission-role>Manager</permission-role>
    <permission-role>Owner</permission-role>
    <permission-role>Reader</permission-role>
+   <permission-role>Administrator</permission-role>
   </permission-map>
   <permission-map name="Manage properties" acquired="False">
    <permission-role>Manager</permission-role>
    <permission-role>Owner</permission-role>
    <permission-role>Reader</permission-role>
+   <permission-role>Administrator</permission-role>
   </permission-map>
   <permission-map name="Modify portal content" acquired="False">
    <permission-role>Manager</permission-role>
    <permission-role>Editor</permission-role>
    <permission-role>Owner</permission-role>
+   <permission-role>Administrator</permission-role>
   </permission-map>
   <permission-map name="Sharing page: Delegate roles" acquired="False">
    <permission-role>Manager</permission-role>
+   <permission-role>Administrator</permission-role>
   </permission-map>
   <permission-map name="View" acquired="False">
    <permission-role>Manager</permission-role>
    <permission-role>Owner</permission-role>
    <permission-role>Reader</permission-role>
+   <permission-role>Administrator</permission-role>
   </permission-map>
   <permission-map name="ftw.mail: Add Inbound Mail" acquired="False">
    <permission-role>Contributor</permission-role>
    <permission-role>Manager</permission-role>
    <permission-role>Owner</permission-role>
+   <permission-role>Administrator</permission-role>
   </permission-map>
   <permission-map name="ftw.mail: Add Mail" acquired="False">
   </permission-map>
@@ -65,6 +73,7 @@
    <permission-role>Contributor</permission-role>
    <permission-role>Manager</permission-role>
    <permission-role>Owner</permission-role>
+   <permission-role>Administrator</permission-role>
   </permission-map>
   <permission-map name="opengever.document: Cancel" acquired="False">
   </permission-map>
@@ -76,11 +85,13 @@
    <permission-role>Contributor</permission-role>
    <permission-role>Manager</permission-role>
    <permission-role>Owner</permission-role>
+   <permission-role>Administrator</permission-role>
   </permission-map>
   <permission-map name="opengever.inbox: Add Forwarding" acquired="False">
    <permission-role>Contributor</permission-role>
    <permission-role>Manager</permission-role>
    <permission-role>Owner</permission-role>
+   <permission-role>Administrator</permission-role>
   </permission-map>
   <permission-map name="opengever.task: Add task" acquired="False">
   </permission-map>
@@ -89,12 +100,14 @@
    <permission-role>Editor</permission-role>
    <permission-role>Manager</permission-role>
    <permission-role>Owner</permission-role>
+   <permission-role>Administrator</permission-role>
   </permission-map>
   <permission-map name="opengever.trash: Untrash content" acquired="False">
    <permission-role>Contributor</permission-role>
    <permission-role>Editor</permission-role>
    <permission-role>Manager</permission-role>
    <permission-role>Owner</permission-role>
+   <permission-role>Administrator</permission-role>
   </permission-map>
  </state>
  <worklist worklist_id="reviewer_queue" title="">

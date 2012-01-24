@@ -6,6 +6,7 @@
       <role name="Manager"/>
       <role name="Owner"/>
       <role name="Contributor"/>
+      <role name="Administrator"/>
     </permission>
 
     <permission name="opengever.inbox: Add Forwarding" acquire="True">
