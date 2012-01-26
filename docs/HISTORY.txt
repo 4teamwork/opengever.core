@@ -5,7 +5,8 @@ Changelog
 2.0.3 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- PAS plugin applies a request layer to the request.
+  [jone]
 
 
 2.0.2 (2012-01-18)

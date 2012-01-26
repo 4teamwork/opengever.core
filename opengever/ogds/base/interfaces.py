@@ -90,3 +90,9 @@ class IObjectCreator(Interface):
 
 class ISyncStamp(Interface):
     """Adapter Inteface for the Import Stamp"""
+
+
+class IInternalOpengeverRequestLayer(Interface):
+    """This request layer is activated on interal requests which are
+    authenticated with the OGDS PAS plugin.
+    """
