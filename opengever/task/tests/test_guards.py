@@ -265,16 +265,6 @@ class TestTaskTransitionController(MockTestCase):
         self.assertFalse(controller.is_rejected_to_open_possible())
         self.assertTrue(controller.is_rejected_to_open_possible())
 
-    def test_is_resolved_to_open_possible(self):
-        controller, controller_mock, task = self._create_task_controller()
-        with self.mocker.order():
-            self.expect(controller_mock._is_issuer()).result(False)
-            self.expect(controller_mock._is_issuer()).result(True)
-
-        self.replay()
-        self.assertFalse(controller.is_resolved_to_open_possible())
-        self.assertTrue(controller.is_resolved_to_open_possible())
-
     def test_is_resolved_to_closed_possible(self):
         controller, controller_mock, task = self._create_task_controller()
         with self.mocker.order():

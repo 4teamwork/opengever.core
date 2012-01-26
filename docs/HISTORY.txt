@@ -5,6 +5,10 @@ Changelog
 2.2 (unreleased)
 ----------------
 
+- Implements some workflow adjustments:
+   - Removed resolved-open(wieder eroeffnen) transition.
+  [phgross]
+
 - Task overview: display responsible of tasks referenced in response.
   [jone]
 

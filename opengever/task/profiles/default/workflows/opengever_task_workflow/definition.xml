@@ -211,7 +211,6 @@
   </permission-map>
  </state>
  <state state_id="task-state-resolved" title="task-state-resolved">
-  <exit-transition transition_id="task-transition-resolved-open"/>
   <exit-transition transition_id="task-transition-resolved-tested-and-closed"/>
   <permission-map name="Access contents information" acquired="False">
    <permission-role>Editor</permission-role>
@@ -354,12 +353,6 @@
   <action url="" category="workflow" icon="">task-transition-rejected-open</action>
   <guard>
    <guard-expression>python: here.restrictedTraverse('@@task_transition_controller').is_rejected_to_open_possible()</guard-expression>
-  </guard>
- </transition>
- <transition transition_id="task-transition-resolved-open" title="task-transition-resolved-open" new_state="task-state-open" trigger="USER" before_script="" after_script="">
-  <action url="%(content_url)s/direct_response?form.widgets.transition=task-transition-resolved-open" category="workflow" icon="">task-transition-resolved-open</action>
-  <guard>
-   <guard-expression>python: here.restrictedTraverse('@@task_transition_controller').is_resolved_to_open_possible()</guard-expression>
   </guard>
  </transition>
  <transition transition_id="task-transition-resolved-tested-and-closed" title="task-transition-resolved-tested-and-closed" new_state="task-state-tested-and-closed" trigger="USER" before_script="" after_script="">
