@@ -59,7 +59,6 @@ def journal_entry_factory(context, action, title,
     portal_state = getMultiAdapter((context, context.REQUEST), name=u'plone_portal_state')
     if actor is None:
         actor = portal_state.member().getId()
-
     comment = comment=='' and get_change_note(context.REQUEST, '') or comment
     title = propper_string(title)
     action = propper_string(action)
@@ -385,9 +384,12 @@ def document_sent(context, event):
 
     for intid in event.intids:
         obj = id_util.getObject(intid)
-        url = obj.absolute_url()
         title = obj.Title()
-        objs.append({'url':url,'title':title})
+        receiver = event.receiver
+        message = event.message
+        if isinstance(receiver, list):
+            receiver = ', '.join(receiver)
+        objs.append({'intid':intid,'title':title})
 
     title = _(u'label_document_sent',
               default=u'Document sent by Mail: ${subject}',
@@ -396,9 +398,11 @@ def document_sent(context, event):
             })
 
     comment = translate(_(u'label_document_sent_comment',
-                default=u'Attachments: ${documents}',
+                default=u'Attachments: ${documents} | Receivers: ${receiver} | Message: ${message}',
                 mapping={
-                'documents': documents_list_helper(objs),
+                'documents': documents_list_helper(context, objs),
+                'receiver': receiver,
+                'message': message,
                 }), context=context.REQUEST)
     journal_entry_factory(context, DOCUMENT_SENT, title, visible=True, comment=comment)
 

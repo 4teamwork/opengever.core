@@ -28,4 +28,3 @@ class JournalHistory(BrowserView):
             return annotations.get(JOURNAL_ENTRIES_ANNOTATIONS_KEY, [])
         elif IWorkflowHistoryJournalizable.providedBy(self.context):
             raise NotImplemented
-

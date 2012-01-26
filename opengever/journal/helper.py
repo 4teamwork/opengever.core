@@ -1,6 +1,12 @@
+from opengever.ogds.base.utils import get_client_id
 
-def documents_list_helper(items):
+
+def documents_list_helper(context, items):
     urlstring = ''
-    for item in items:
-        urlstring = urlstring + '<span><a href="'+item['url']+'">'+item['title']+'</a></span>'
+    lastindex = len(items)-1
+    for i,item in enumerate(items):
+        if lastindex == i:
+            urlstring = urlstring + '<span><a href="./@@resolve_oguid?oguid='+get_client_id()+':'+str(item['intid'])+'">'+item['title']+'</a></span>'
+        else:
+            urlstring = urlstring + '<span><a href="./@@resolve_oguid?oguid='+get_client_id()+':'+str(item['intid'])+'">'+item['title']+', </a></span>'
     return urlstring
