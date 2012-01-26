@@ -15,61 +15,48 @@ class ITaskTransitionController(Interface):
     if certain transitions should be available or not"""
 
     def is_cancelled_to_open_possible():
-        """Checks if:
-        - The current user is the issuer of the current task(context)"""
+        """Guard check for transition:
+        task-transition-cancelled-open"""
 
     def is_progress_to_resolved_possible():
-        """Checks if:
-        - The task has no successors
-        - Task is not unidirectional_by_value (zu direkten Erledigung).
-        - The responsible is the current user or a inbox_group user.
-        - All subtaskes are resolve, cancelled or closed.
-        """
+        """Guard check for transition:
+        task-transition-in-progress-resolved"""
 
     def is_progress_to_closed_possible():
-        """Checks if:
-        - The task has no successors
-        - Task is unidirectional_by_value (zu direkten Erledigung).
-        - All subtaskes are resolved, cancelled or closed.
-        """
+        """Guard check for transition:
+        task-transition-in-progress-tested-and-closed"""
 
     def is_cancel_possible():
-        """Checks if:
-        - The current user is the issuer."""
+        """Guard check for transition:
+        task-transition-open-cancelled"""
 
     def is_open_to_progress_possible():
-        """Checks if ...
-        - Not unidirectional_by_reference
-        - The user is not the issuer, appart from he's also the responsible
-        """
+        """Guard check for transition:
+        task-transition-open-in-progress"""
 
     def is_reject_possible():
-        """Checks if ...
-        - The current user is the responsible.
-        """
+        """Guard check for transition:
+        task-transition-open-rejected"""
 
     def is_open_to_resolved_possible():
-        """Checks if:
-        - All subtaskes are resolved, cancelled or closed.
-        - The Task is is_bidirectional
-        - The user is not the issuer, appart from he's also the responsible
-        """
+        """Guard check for transition:
+        task-transition-open-resolved"""
 
     def is_open_to_closed_possible():
-        """Checks if:
-        - The user is the issuer or is a unidirectional_byrefrence task"""
+        """Guard check for transition:
+        task-transition-open-tested-and-closed"""
 
     def is_rejected_to_open_possible():
-        """Checks if:
-        - The current user is the issuer of the task"""
+        """Guard check for transition:
+        task-transition-rejected-open"""
 
     def is_resolved_to_closed_possible():
-        """Checks if:
-        - The current user is the issuer of the task"""
+        """Guard check for transition:
+        task-transition-resolved-in-progress"""
 
     def is_resolved_to_progress_possible():
-        """Checks if:
-        - The current user is the issuer of the task"""
+        """Guard check for transition:
+        task-transition-resolved-tested-and-closed"""
 
 
 class TaskTransitionController(BrowserView):
@@ -78,31 +65,42 @@ class TaskTransitionController(BrowserView):
     implements(ITaskTransitionController)
 
     def is_cancelled_to_open_possible(self):
-        """see ITaskTransitionController"""
-
+        """Checks if:
+        - The current user is the issuer of the current task(context)"""
         return self._is_issuer()
 
     def is_progress_to_resolved_possible(self):
-        """see ITaskTransitionController"""
-
+        """Checks if:
+        - The task has no successors
+        - Task is not unidirectional_by_value (zu direkten Erledigung).
+        - The responsible is the current user or a inbox_group user.
+        - All subtaskes are resolve, cancelled or closed.
+        """
         return (self._is_responsible_or_inbox_group_user() and
                 self._is_substasks_closed() and
                 not self._is_unidirectional_by_value() and
                 (not self._has_successors() or self._is_remote_request()))
 
     def is_progress_to_closed_possible(self):
-        """see ITaskTransitionController"""
+        """Checks if:
+        - The task has no successors
+        - Task is unidirectional_by_value (zu direkten Erledigung).
+        - All subtaskes are resolved, cancelled or closed.
+        """
         return (self._is_unidirectional_by_value() and
                 self._is_substasks_closed() and
                 (not self._has_successors() or self._is_remote_request()))
 
     def is_cancel_possible(self):
-        """see ITaskTransitionController"""
+        """Checks if:
+        - The current user is the issuer."""
         return self._is_issuer()
 
     def is_open_to_progress_possible(self):
-        """see ITaskTransitionController"""
-
+        """Checks if ...
+        - Not unidirectional_by_reference
+        - The user is not the issuer, appart from he's also the responsible
+        """
         if not self._is_unidirectional_by_reference():
             if not self._is_issuer():
                 return True
@@ -111,11 +109,17 @@ class TaskTransitionController(BrowserView):
         return False
 
     def is_reject_possible(self):
-        """see ITaskTransitionController"""
+        """Checks if ...
+        - The current user is the responsible.
+        """
         return self._is_responsible()
 
     def is_open_to_resolved_possible(self):
-        """see ITaskTransitionController"""
+        """Checks if:
+        - All subtaskes are resolved, cancelled or closed.
+        - The Task is is_bidirectional
+        - The user is not the issuer, appart from he's also the responsible
+        """
         if self._is_substasks_closed() and self._is_bidirectional():
             if not self._is_issuer():
                 return True
@@ -124,23 +128,23 @@ class TaskTransitionController(BrowserView):
         return False
 
     def is_open_to_closed_possible(self):
-        """see ITaskTransitionController"""
-
+        """Checks if:
+        - The user is the issuer or is a unidirectional_byrefrence task"""
         return self._is_issuer() or self._is_unidirectional_by_reference()
 
     def is_rejected_to_open_possible(self):
-        """see ITaskTransitionController"""
-
+        """Checks if:
+        - The current user is the issuer of the task"""
         return self._is_issuer()
 
     def is_resolved_to_closed_possible(self):
-        """see ITaskTransitionController"""
-
+        """Checks if:
+        - The current user is the issuer of the task"""
         return self._is_issuer()
 
     def is_resolved_to_progress_possible(self):
-        """see ITaskTransitionController"""
-
+        """Checks if:
+        - The current user is the issuer of the task"""
         return self._is_issuer()
 
     def _is_issuer(self):
