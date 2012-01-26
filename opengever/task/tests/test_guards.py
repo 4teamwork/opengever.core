@@ -3,9 +3,11 @@ from mocker import ANY
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.task.browser.transitioncontroller import ITaskTransitionController
 from opengever.task.browser.transitioncontroller import TaskTransitionController
+from opengever.task.interfaces import ISuccessorTaskController
 from opengever.task.task import ITask
 from zope.interface import Interface
 from zope.interface.verify import verifyClass
+
 
 class TestTaskTransitionController(MockTestCase):
 
@@ -49,6 +51,27 @@ class TestTaskTransitionController(MockTestCase):
 
         self.assertTrue(TaskTransitionController(task2, {})._is_responsible())
         self.assertFalse(TaskTransitionController(task1, {})._is_responsible())
+
+    def test_has_successors(self):
+        task1 = self.mocker.mock()
+
+        successor_task_controller = self.stub()
+        self.expect(
+            successor_task_controller(ANY)).result(successor_task_controller)
+
+        with self.mocker.order():
+            self.expect(successor_task_controller.get_successors()).result(None)
+            self.expect(successor_task_controller.get_successors()).result([])
+            self.expect(successor_task_controller.get_successors()).result([object(), object])
+        self.mock_adapter(
+            successor_task_controller, ISuccessorTaskController, [Interface])
+
+        self.replay()
+
+        self.assertFalse(TaskTransitionController(task1, {})._has_successors())
+        self.assertFalse(TaskTransitionController(task1, {})._has_successors())
+        self.assertTrue(TaskTransitionController(task1, {})._has_successors())
+
 
     def test_is_responsible_or_inbox_group_user(self):
         task1 = self.stub()
