@@ -96,3 +96,28 @@ class ISuccessorTaskController(Interface):
     def get_successors(self):
         """Returns all successors of the adapted context as solr flair objects.
         """
+
+
+class IWorkflowStateSyncer(Interface):
+    """The state syncer syncs workflow states of related tasks (successors and
+    predecessors).
+
+    It is triggered by workflow changes, such as the direct_response view or the
+    response add form. It automatically decides if it is necessary to change
+    the state of a related task and performs the change.
+
+    IStateSyncer is an adapter interface.
+    """
+
+    def __init__(context, request):
+        pass
+
+    def get_tasks_to_sync(transition):
+        """Returns all related tasks which have to be updated when performing this
+        `transition` on the current task in the current state.
+        """
+
+    def change_remote_tasks_workflow_state(transition, text):
+        """Performs `transition` on related tasks and creates a response with
+        `text`.
+        """

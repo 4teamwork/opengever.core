@@ -357,7 +357,7 @@
   </guard>
  </transition>
  <transition transition_id="task-transition-resolved-in-progress" title="task-transition-resolved-in-progress" new_state="task-state-in-progress" trigger="USER" before_script="" after_script="">
-  <action url="%(content_url)s/complete_task?transition=task-transition-resolved-in-progress" category="workflow" icon="">task-transition-resolved-in-progress</action>
+  <action url="%(content_url)s/direct_response?form.widgets.transition=task-transition-resolved-in-progress" category="workflow" icon="">task-transition-resolved-in-progress</action>
   <guard>
    <guard-expression>python: here.restrictedTraverse('@@task_transition_controller').is_resolved_to_progress_possible()</guard-expression>
   </guard>

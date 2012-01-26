@@ -5,15 +5,16 @@ from Products.statusmessages.interfaces import IStatusMessage
 from five import grok
 from opengever.base.browser.helper import css_class_from_obj
 from opengever.base.browser.opengeverview import OpengeverView
+from opengever.base.browser.wizard.interfaces import IWizardDataStorage
 from opengever.base.source import DossierPathSourceBinder
 from opengever.globalindex.interfaces import ITaskQuery
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.task import _
 from opengever.task import util
 from opengever.task.adapters import IResponseContainer, Response
-from opengever.base.browser.wizard.interfaces import IWizardDataStorage
 from opengever.task.interfaces import IResponseAdder
 from opengever.task.interfaces import ISuccessorTaskController
+from opengever.task.interfaces import IWorkflowStateSyncer
 from opengever.task.permissions import DEFAULT_ISSUE_MIME_TYPE
 from opengever.task.task import ITask
 from plone.autoform.form import AutoExtensibleForm
@@ -26,7 +27,7 @@ from z3c.relationfield.relation import RelationValue
 from z3c.relationfield.schema import RelationChoice, RelationList
 from zope import schema
 from zope.cachedescriptors.property import Lazy
-from zope.component import getUtility
+from zope.component import getUtility, getMultiAdapter
 from zope.event import notify
 from zope.i18n import translate
 from zope.interface import Interface
@@ -341,6 +342,11 @@ class AddForm(form.AddForm, AutoExtensibleForm):
 
             notify(ObjectModifiedEvent(self.context))
 
+            syncer = getMultiAdapter((self.context, self.request),
+                                     IWorkflowStateSyncer)
+            syncer.change_remote_tasks_workflow_state(
+                transition, text=data.get('text'))
+
             copy_related_documents_view = self.context.restrictedTraverse(
                 '@@copy-related-documents-to-inbox')
             if copy_related_documents_view.available():
@@ -481,20 +487,19 @@ class DirectResponseView(grok.View):
     def render(self):
         self.request = self.context.REQUEST
 
-        if self.request.get('form.widgets.transition', None):
+        transition = self.request.get('form.widgets.transition', None)
+        if transition:
             # create response
             new_response = Response('')
-            new_response.transition = self.request.get(
-                'form.widgets.transition', None)
+            new_response.transition = transition
 
             # do transition - change workflow state
             wftool = getToolByName(self.context, 'portal_workflow')
             before = wftool.getInfoFor(self.context, 'review_state')
-            if self.request.get('form.widgets.transition') != before:
+            if transition != before:
                 before = wftool.getTitleForStateOnType(
                     before, self.context.Type())
-                wftool.doActionFor(
-                    self.context, self.request.get('form.widgets.transition'))
+                wftool.doActionFor(self.context, transition)
                 after = wftool.getInfoFor(self.context, 'review_state')
                 after = wftool.getTitleForStateOnType(
                     after, self.context.Type())
@@ -507,6 +512,10 @@ class DirectResponseView(grok.View):
             # we fire the IObjectModifiedEvent because
             # the task must be reindex also by globalindex
             notify(ObjectModifiedEvent(self.context))
+
+            syncer = getMultiAdapter((self.context, self.request),
+                                     IWorkflowStateSyncer)
+            syncer.change_remote_tasks_workflow_state(transition, text='')
 
             self.request.RESPONSE.redirect(self.context.absolute_url())
         else:
