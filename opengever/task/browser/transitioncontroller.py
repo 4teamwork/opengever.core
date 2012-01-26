@@ -16,13 +16,13 @@ class ITaskTransitionController(Interface):
 
     def is_cancelled_to_open_possible():
         """Checks if:
-        - The actual user is the issuer of the actual task(context)"""
+        - The current user is the issuer of the current task(context)"""
 
     def is_progress_to_resolved_possible():
         """Checks if:
         - The task has no successors
         - Task is not unidirectional_by_value (zu direkten Erledigung).
-        - The responsible is the actual user or a inbox_group user.
+        - The responsible is the current user or a inbox_group user.
         - All subtaskes are resolve, cancelled or closed.
         """
 
@@ -35,7 +35,7 @@ class ITaskTransitionController(Interface):
 
     def is_cancel_possible():
         """Checks if:
-        - The actual user is the issuer."""
+        - The current user is the issuer."""
 
     def is_open_to_progress_possible():
         """Checks if ...
@@ -45,7 +45,7 @@ class ITaskTransitionController(Interface):
 
     def is_reject_possible():
         """Checks if ...
-        - The actual user is the responsible.
+        - The current user is the responsible.
         """
 
     def is_open_to_resolved_possible():
@@ -61,15 +61,15 @@ class ITaskTransitionController(Interface):
 
     def is_rejected_to_open_possible():
         """Checks if:
-        - The actual user is the issuer of the task"""
+        - The current user is the issuer of the task"""
 
     def is_resolved_to_closed_possible():
         """Checks if:
-        - The actual user is the issuer of the task"""
+        - The current user is the issuer of the task"""
 
     def is_resolved_to_progress_possible():
         """Checks if:
-        - The actual user is the issuer of the task"""
+        - The current user is the issuer of the task"""
 
 
 class TaskTransitionController(BrowserView):
@@ -87,14 +87,14 @@ class TaskTransitionController(BrowserView):
 
         return (self._is_responsible_or_inbox_group_user() and
                 self._is_substasks_closed() and
-                not self._is_unidirectional_by_value()
-                and not self._has_successors())
+                not self._is_unidirectional_by_value() and
+                (not self._has_successors() or self._is_remote_request()))
 
     def is_progress_to_closed_possible(self):
         """see ITaskTransitionController"""
         return (self._is_unidirectional_by_value() and
                 self._is_substasks_closed() and
-                not self._has_successors())
+                (not self._has_successors() or self._is_remote_request()))
 
     def is_cancel_possible(self):
         """see ITaskTransitionController"""
@@ -143,31 +143,30 @@ class TaskTransitionController(BrowserView):
 
         return self._is_issuer()
 
-
     def _is_issuer(self):
-        """Checks if the actual user is the issuer of the
-        actual task(actual context)"""
+        """Checks if the current user is the issuer of the
+        current task(current context)"""
 
         return getMultiAdapter((self.context, self.request),
             name='plone_portal_state').member().id == self.context.issuer
 
     def _is_responsible(self):
-        """Checks if the actual user is the issuer of the
-        actual task(actual context)"""
+        """Checks if the current user is the issuer of the
+        current task(current context)"""
 
         return getMultiAdapter((self.context, self.request),
             name='plone_portal_state').member().id == self.context.responsible
 
     def _is_inbox_group_user(self):
         """Checks with the help of the contact information utility
-        if the actual user is in the inbox group"""
+        if the current user is in the inbox group"""
 
         info = getUtility(IContactInformation)
         return info.is_user_in_inbox_group(
             client_id=self.context.responsible_client)
 
     def _is_responsible_or_inbox_group_user(self):
-        """Checks if the actual user is the responsible
+        """Checks if the current user is the responsible
         or in the inbox_group"""
 
         return self._is_responsible() or self._is_inbox_group_user()
@@ -209,6 +208,15 @@ class TaskTransitionController(BrowserView):
         categories = ['bidirectional_by_reference',
                       'bidirectional_by_value']
         return self.context.task_type_category in categories
+
+    def _is_remote_request(self):
+        """checks if the current request cames from a remote client.
+        For example a task over a mutliple clients."""
+
+        if self.request.get_header('X-OGDS-CID', None):
+            return True
+        else:
+            return False
 
     def _has_successors(self):
         """checks is the task has some successors
