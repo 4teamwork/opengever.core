@@ -55,7 +55,7 @@ class TestCompleteTaskView(MockTestCase):
             'task-transition-open-tested-and-closed': True,
             'task-transition-reassign': False,
             'task-transition-rejected-open': False,
-            'task-transition-resolved-open': False,
+            'task-transition-resolved-in-progress': False,
             'task-transition-resolved-tested-and-closed': True
             }
 
@@ -81,7 +81,7 @@ class TestCompleteTaskView(MockTestCase):
             'task-transition-open-tested-and-closed': False,
             'task-transition-reassign': False,
             'task-transition-rejected-open': False,
-            'task-transition-resolved-open': False,
+            'task-transition-resolved-in-progress': False,
             'task-transition-resolved-tested-and-closed': False
             }
 

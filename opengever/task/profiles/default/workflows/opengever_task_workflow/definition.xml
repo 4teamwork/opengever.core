@@ -212,6 +212,7 @@
  </state>
  <state state_id="task-state-resolved" title="task-state-resolved">
   <exit-transition transition_id="task-transition-resolved-tested-and-closed"/>
+  <exit-transition transition_id="task-transition-resolved-in-progress"/>
   <permission-map name="Access contents information" acquired="False">
    <permission-role>Editor</permission-role>
    <permission-role>Manager</permission-role>
@@ -353,6 +354,12 @@
   <action url="" category="workflow" icon="">task-transition-rejected-open</action>
   <guard>
    <guard-expression>python: here.restrictedTraverse('@@task_transition_controller').is_rejected_to_open_possible()</guard-expression>
+  </guard>
+ </transition>
+ <transition transition_id="task-transition-resolved-in-progress" title="task-transition-resolved-in-progress" new_state="task-state-in-progress" trigger="USER" before_script="" after_script="">
+  <action url="%(content_url)s/complete_task?transition=task-transition-resolved-in-progress" category="workflow" icon="">task-transition-resolved-in-progress</action>
+  <guard>
+   <guard-expression>python: here.restrictedTraverse('@@task_transition_controller').is_resolved_to_progress_possible()</guard-expression>
   </guard>
  </transition>
  <transition transition_id="task-transition-resolved-tested-and-closed" title="task-transition-resolved-tested-and-closed" new_state="task-state-tested-and-closed" trigger="USER" before_script="" after_script="">

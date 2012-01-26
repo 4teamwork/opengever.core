@@ -685,7 +685,7 @@ def set_dates(task, event):
         task.expectedStartOfWork = datetime.now()
     elif event.action in resolved_transitions:
         task.date_of_completion = datetime.now()
-    if event.action == 'task-transition-resolved-open':
+    if event.action == 'task-transition-resolved-in-progress':
         task.date_of_completion = None
 
 
