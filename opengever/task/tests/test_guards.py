@@ -133,12 +133,19 @@ class TestTaskTransitionController(MockTestCase):
             self.expect(controller_mock._is_responsible()).result(True)
             self.expect(controller_mock._is_substasks_closed()).result(True)
             self.expect(controller_mock._is_unidirectional_by_value()).result(False)
+            self.expect(controller_mock._has_successors()).result(False)
 
             self.expect(controller_mock._is_responsible()).result(False)
             self.expect(controller_mock._is_inbox_group_user()).result(True)
             self.expect(controller_mock._is_substasks_closed()).result(True)
             self.expect(controller_mock._is_unidirectional_by_value()).result(False)
+            self.expect(controller_mock._has_successors()).result(False)
 
+            self.expect(controller_mock._is_responsible()).result(False)
+            self.expect(controller_mock._is_inbox_group_user()).result(True)
+            self.expect(controller_mock._is_substasks_closed()).result(True)
+            self.expect(controller_mock._is_unidirectional_by_value()).result(False)
+            self.expect(controller_mock._has_successors()).result(True)
 
         self.replay()
         self.assertFalse(controller.is_progress_to_resolved_possible())
@@ -146,6 +153,7 @@ class TestTaskTransitionController(MockTestCase):
         self.assertFalse(controller.is_progress_to_resolved_possible())
         self.assertTrue(controller.is_progress_to_resolved_possible())
         self.assertTrue(controller.is_progress_to_resolved_possible())
+        self.assertFalse(controller.is_progress_to_resolved_possible())
 
     def test_is_progress_to_closed_possible(self):
         controller, controller_mock, task = self._create_task_controller()
@@ -158,8 +166,14 @@ class TestTaskTransitionController(MockTestCase):
 
             self.expect(controller_mock._is_unidirectional_by_value()).result(True)
             self.expect(controller_mock._is_substasks_closed()).result(True)
+            self.expect(controller_mock._has_successors()).result(True)
+
+            self.expect(controller_mock._is_unidirectional_by_value()).result(True)
+            self.expect(controller_mock._is_substasks_closed()).result(True)
+            self.expect(controller_mock._has_successors()).result(False)
 
         self.replay()
+        self.assertFalse(controller.is_progress_to_closed_possible())
         self.assertFalse(controller.is_progress_to_closed_possible())
         self.assertFalse(controller.is_progress_to_closed_possible())
         self.assertTrue(controller.is_progress_to_closed_possible())

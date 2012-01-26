@@ -1,8 +1,9 @@
-from opengever.ogds.base.interfaces import IContactInformation
-from zope.component import getUtility
-from zope.component import getMultiAdapter
-from zope.interface import Interface, implements
 from Products.Five import BrowserView
+from opengever.task.interfaces import ISuccessorTaskController
+from opengever.ogds.base.interfaces import IContactInformation
+from zope.component import getMultiAdapter
+from zope.component import getUtility
+from zope.interface import Interface, implements
 
 TASK_CLOSED_STATES = ['task-state-tested-and-closed',
                       'task-state-rejected',
@@ -19,6 +20,7 @@ class ITaskTransitionController(Interface):
 
     def is_progress_to_resolved_possible():
         """Checks if:
+        - The task has no successors
         - Task is not unidirectional_by_value (zu direkten Erledigung).
         - The responsible is the actual user or a inbox_group user.
         - All subtaskes are resolve, cancelled or closed.
@@ -26,6 +28,7 @@ class ITaskTransitionController(Interface):
 
     def is_progress_to_closed_possible():
         """Checks if:
+        - The task has no successors
         - Task is unidirectional_by_value (zu direkten Erledigung).
         - All subtaskes are resolved, cancelled or closed.
         """
@@ -60,11 +63,11 @@ class ITaskTransitionController(Interface):
         """Checks if:
         - The actual user is the issuer of the task"""
 
-    def is_resolved_to_open_possible():
+    def is_resolved_to_closed_possible():
         """Checks if:
         - The actual user is the issuer of the task"""
 
-    def is_resolved_to_closed_possible():
+    def is_resolved_to_progress_possible():
         """Checks if:
         - The actual user is the issuer of the task"""
 
@@ -84,12 +87,14 @@ class TaskTransitionController(BrowserView):
 
         return (self._is_responsible_or_inbox_group_user() and
                 self._is_substasks_closed() and
-                not self._is_unidirectional_by_value())
+                not self._is_unidirectional_by_value()
+                and not self._has_successors())
 
     def is_progress_to_closed_possible(self):
         """see ITaskTransitionController"""
         return (self._is_unidirectional_by_value() and
-                self._is_substasks_closed())
+                self._is_substasks_closed() and
+                not self._has_successors())
 
     def is_cancel_possible(self):
         """see ITaskTransitionController"""
@@ -128,15 +133,16 @@ class TaskTransitionController(BrowserView):
 
         return self._is_issuer()
 
-    def is_resolved_to_open_possible(self):
-        """see ITaskTransitionController"""
-
-        return self._is_issuer()
-
     def is_resolved_to_closed_possible(self):
         """see ITaskTransitionController"""
 
         return self._is_issuer()
+
+    def is_resolved_to_progress_possible(self):
+        """see ITaskTransitionController"""
+
+        return self._is_issuer()
+
 
     def _is_issuer(self):
         """Checks if the actual user is the issuer of the
@@ -203,3 +209,10 @@ class TaskTransitionController(BrowserView):
         categories = ['bidirectional_by_reference',
                       'bidirectional_by_value']
         return self.context.task_type_category in categories
+
+    def _has_successors(self):
+        """checks is the task has some successors
+        """
+        if ISuccessorTaskController(self.context).get_successors():
+            return True
+        return False

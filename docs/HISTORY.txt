@@ -7,6 +7,7 @@ Changelog
 
 - Implements some workflow adjustments:
    - Removed resolved-open(wieder eroeffnen) transition.
+   - Add no-successors checks for the resolve and close transitions.
   [phgross]
 
 - Task overview: display responsible of tasks referenced in response.
