@@ -121,6 +121,9 @@ class DossierListingLaTeXView(grok.MultiAdapter, MakoLaTeXView):
         # index. So we take the latter, altough it seems a little risky when
         # the reference number concept is changed.
 
+        if '/' not in brain.reference:
+            return ''
+
         # get the last part of the reference number
         dossier_ref_nr = brain.reference.split('/')[-1].strip()
 

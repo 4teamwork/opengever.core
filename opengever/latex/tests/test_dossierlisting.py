@@ -98,6 +98,10 @@ class TestDossierListingLaTeXView(MockTestCase):
             reference='OG 1.2 / 2.1',
             breadcrumb_titles=sub_breadcrumb_titles)
 
+        wrong_dossier = self.create_dummy(
+            reference='OG 1',
+            breadcrumb_titles=sub_breadcrumb_titles)
+
         context = request = layout = object()
         self.replay()
         view = dossierlisting.DossierListingLaTeXView(
@@ -108,6 +112,9 @@ class TestDossierListingLaTeXView(MockTestCase):
 
         self.assertEqual(view.get_repository_title(sub_dossier),
                          '1.2. Berichtwesen')
+
+        self.assertEqual(view.get_repository_title(wrong_dossier),
+                         '')
 
     def test_convert_list_to_row(self):
         context = self.create_dummy()
