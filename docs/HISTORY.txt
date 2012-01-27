@@ -5,6 +5,9 @@ Changelog
 2.0.1 (unreleased)
 ------------------
 
+- Updated rolemap.xml to include Administrator role
+  [lgraf]
+
 - #1336 Trash: Robusteres Verhalten bei doppeltem Aufruf der trashed view
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1336/
   Fallback if the object is already trashed

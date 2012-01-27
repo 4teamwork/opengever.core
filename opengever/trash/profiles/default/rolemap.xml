@@ -2,9 +2,11 @@
   <permissions>
     <permission name="opengever.trash: Trash content" acquire="True">
       <role name="Manager"/>
+      <role name="Administrator"/>
     </permission>
     <permission name="opengever.trash: Untrash content" acquire="True">
       <role name="Manager"/>
-    </permission>    
+      <role name="Administrator"/>
+    </permission>
   </permissions>
 </rolemap>
