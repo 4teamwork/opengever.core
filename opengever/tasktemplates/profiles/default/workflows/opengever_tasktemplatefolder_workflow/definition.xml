@@ -14,11 +14,13 @@
    <permission-role>Manager</permission-role>
    <permission-role>Owner</permission-role>
    <permission-role>Reader</permission-role>
+   <permission-role>Administrator</permission-role>
   </permission-map>
   <permission-map name="Add portal content" acquired="False">
    <permission-role>Editor</permission-role>
    <permission-role>Manager</permission-role>
    <permission-role>Owner</permission-role>
+   <permission-role>Administrator</permission-role>
   </permission-map>
   <permission-map name="Delete objects" acquired="False">
    <permission-role>Manager</permission-role>
@@ -28,11 +30,13 @@
    <permission-role>Manager</permission-role>
    <permission-role>Owner</permission-role>
    <permission-role>Reader</permission-role>
+   <permission-role>Administrator</permission-role>
   </permission-map>
   <permission-map name="Manage properties" acquired="False">
    <permission-role>Editor</permission-role>
    <permission-role>Manager</permission-role>
    <permission-role>Owner</permission-role>
+   <permission-role>Administrator</permission-role>
   </permission-map>
   <permission-map name="Modify portal content" acquired="False">
   </permission-map>
@@ -41,6 +45,7 @@
    <permission-role>Manager</permission-role>
    <permission-role>Owner</permission-role>
    <permission-role>Reader</permission-role>
+   <permission-role>Administrator</permission-role>
   </permission-map>
  </state>
  <state state_id="tasktemplatefolder-state-inactiv" title="tasktemplatefolder-state-inactiv">
@@ -50,11 +55,13 @@
    <permission-role>Manager</permission-role>
    <permission-role>Owner</permission-role>
    <permission-role>Reader</permission-role>
+   <permission-role>Administrator</permission-role>
   </permission-map>
   <permission-map name="Add portal content" acquired="False">
    <permission-role>Editor</permission-role>
    <permission-role>Manager</permission-role>
    <permission-role>Owner</permission-role>
+   <permission-role>Administrator</permission-role>
   </permission-map>
   <permission-map name="Delete objects" acquired="False">
    <permission-role>Manager</permission-role>
@@ -63,21 +70,25 @@
    <permission-role>Editor</permission-role>
    <permission-role>Manager</permission-role>
    <permission-role>Owner</permission-role>
+   <permission-role>Administrator</permission-role>
   </permission-map>
   <permission-map name="Manage properties" acquired="False">
    <permission-role>Editor</permission-role>
    <permission-role>Manager</permission-role>
    <permission-role>Owner</permission-role>
+   <permission-role>Administrator</permission-role>
   </permission-map>
   <permission-map name="Modify portal content" acquired="False">
    <permission-role>Editor</permission-role>
    <permission-role>Manager</permission-role>
+   <permission-role>Administrator</permission-role>
   </permission-map>
   <permission-map name="View" acquired="False">
    <permission-role>Editor</permission-role>
    <permission-role>Manager</permission-role>
    <permission-role>Owner</permission-role>
    <permission-role>Reader</permission-role>
+   <permission-role>Administrator</permission-role>
   </permission-map>
  </state>
  <transition transition_id="tasktemplatefolder-transition-activ-inactiv" title="tasktemplatefolder-transition-activ-inactiv" new_state="tasktemplatefolder-state-inactiv" trigger="USER" before_script="" after_script="">

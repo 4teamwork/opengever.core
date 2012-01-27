@@ -5,6 +5,9 @@ Changelog
 2.0.2 (unreleased)
 ------------------
 
+- Added necessary permissions for Admininstrator role
+  [lgraf]
+
 - Adjust the tabbedview actions for the templates and templatefolder listings.
   Issue #1315 Aufgabenvorlagen Auflistung: Aktion 'Einfuegen' wird dargestellt.
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1315/
