@@ -13,12 +13,14 @@
   <permission-map name="Access contents information" acquired="False">
    <permission-role>Manager</permission-role>
    <permission-role>Reader</permission-role>
+   <permission-role>Administrator</permission-role>
   </permission-map>
   <permission-map name="Add portal content" acquired="False">
   </permission-map>
   <permission-map name="List folder contents" acquired="False">
    <permission-role>Manager</permission-role>
    <permission-role>Reader</permission-role>
+   <permission-role>Administrator</permission-role>
   </permission-map>
   <permission-map name="Manage properties" acquired="False">
    <permission-role>Manager</permission-role>
@@ -29,6 +31,7 @@
   <permission-map name="View" acquired="False">
    <permission-role>Manager</permission-role>
    <permission-role>Reader</permission-role>
+   <permission-role>Administrator</permission-role>
   </permission-map>
   <permission-map name="ftw.mail: Add Inbound Mail" acquired="False">
   </permission-map>
@@ -37,6 +40,7 @@
       <permission-role>Manager</permission-role>
       <permission-role>Member</permission-role>
       <permission-role>Contributor</permission-role>
+      <permission-role>Administrator</permission-role>
   </permission-map>
   <permission-map name="CMFEditions: Access previous versions"
                   acquired="False">
@@ -46,6 +50,7 @@
    <permission-role>Manager</permission-role>
    <permission-role>Member</permission-role>
    <permission-role>Contributor</permission-role>
+   <permission-role>Administrator</permission-role>
   </permission-map>
  </state>
 </dc-workflow>

@@ -5,7 +5,8 @@ Changelog
 2.0.1 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Added necessary permissions for Administrator role
+  [lgraf]
 
 
 2.0 (2011-11-17)
