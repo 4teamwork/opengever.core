@@ -21,6 +21,7 @@
  <permission>opengever.trash: Untrash content</permission>
  <permission>opengever.document: Cancel</permission>
  <permission>opengever.document: Checkin</permission>
+ <permission>opengever.document: Force Checkin</permission>
  <permission>opengever.document: Checkout</permission>
  <permission>Copy or Move</permission>
  <state state_id="dossier-state-active" title="dossier-state-active">
@@ -141,6 +142,10 @@
    <permission-role>Owner</permission-role>
    <permission-role>Administrator</permission-role>
   </permission-map>
+  <permission-map name="opengever.document: Force Checkin" acquired="False">
+   <permission-role>Manager</permission-role>
+   <permission-role>Administrator</permission-role>
+  </permission-map>
   <permission-map name="opengever.document: Checkout" acquired="False">
    <permission-role>Contributor</permission-role>
    <permission-role>Editor</permission-role>
@@ -247,6 +252,8 @@
   </permission-map>
   <permission-map name="opengever.document: Checkin" acquired="False">
   </permission-map>
+  <permission-map name="opengever.document: Force Checkin" acquired="False">
+  </permission-map>
   <permission-map name="opengever.document: Checkout" acquired="False">
   </permission-map>
   <permission-map name="opengever.dossier: Add businesscasedossier" acquired="False">
@@ -332,6 +339,8 @@
   <permission-map name="opengever.document: Cancel" acquired="False">
   </permission-map>
   <permission-map name="opengever.document: Checkin" acquired="False">
+  </permission-map>
+  <permission-map name="opengever.document: Force Checkin" acquired="False">
   </permission-map>
   <permission-map name="opengever.document: Checkout" acquired="False">
   </permission-map>
@@ -424,6 +433,8 @@
   <permission-map name="opengever.document: Cancel" acquired="False">
   </permission-map>
   <permission-map name="opengever.document: Checkin" acquired="False">
+  </permission-map>
+  <permission-map name="opengever.document: Force Checkin" acquired="False">
   </permission-map>
   <permission-map name="opengever.document: Checkout" acquired="False">
   </permission-map>

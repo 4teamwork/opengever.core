@@ -5,7 +5,7 @@ Changelog
 2.0.3 (unreleased)
 ------------------
 
-- Added necessary permissions for Administrator role
+- Updated workflow for new Administrator role
   [lgraf]
 
 - Adjust the main dossier test: added IDisplayInOverview functionality test.
