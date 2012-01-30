@@ -36,20 +36,37 @@ import urllib
 
 class AcceptWizardNewDossierFormMixin(AcceptWizardFormMixin):
 
-    steps = (
 
-        ('accept_choose_method',
-         _(u'step_1', default=u'Step 1')),
+    @property
+    def steps(self):
+        # Default: 3 steps. But if more than one dossier type is addable on
+        # the selected repository folder, display 3 steps and also show the
+        # the dossier step selection step.
 
-        ('accept_select_repositoryfolder',
-         _(u'step_2', default=u'Step 2')),
+        if IRepositoryFolder.providedBy(self.context) and \
+                len(allowed_dossier_types_vocabulary(self.context)) > 1:
+            return (
+                ('accept_choose_method',
+                 _(u'step_1', default=u'Step 1')),
 
-        ('accept_select_dossier_type',
-         _(u'step_3', default=u'Step 3')),
+                ('accept_select_repositoryfolder',
+                 _(u'step_2', default=u'Step 2')),
 
-        ('accept_dossier_add_form',
-         _(u'step_4', default=u'Step 4')),
-        )
+                ('accept_select_dossier_type',
+                 _(u'step_3', default=u'Step 3')),
+
+                ('accept_dossier_add_form',
+                 _(u'step_4', default=u'Step 4')))
+
+        return (
+            ('accept_choose_method',
+             _(u'step_1', default=u'Step 1')),
+
+            ('accept_select_repositoryfolder',
+             _(u'step_2', default=u'Step 2')),
+
+            ('accept_dossier_add_form',
+             _(u'step_3', default=u'Step 3')))
 
 
 # ------------------- SELECT REPOSITORY FOLDER --------------------------
@@ -118,8 +135,18 @@ class SelectRepositoryfolderStepForm(AcceptWizardNewDossierFormMixin, Form):
             folder = data['repositoryfolder']
             url = folder.absolute_url()
 
-            url += '/@@accept_select_dossier_type?oguid=%s' % (
-                self.request.get('oguid'))
+            args = '?oguid=%s' % self.request.get('oguid')
+
+            dossier_type_voc = allowed_dossier_types_vocabulary(folder)
+            if len(dossier_type_voc) > 1:
+                viewname = '@@accept_select_dossier_type'
+
+            else:
+                viewname = '@@accept_dossier_add_form'
+                args += '&dossier_type=%s' % (
+                    dossier_type_voc.by_value.keys()[0])
+
+            url += '/%s%s' % (viewname, args)
             return self.request.RESPONSE.redirect(url)
 
     @buttonAndHandler(_(u'button_cancel', default=u'Cancel'),
