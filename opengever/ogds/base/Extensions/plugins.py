@@ -2,7 +2,6 @@ from opengever.ogds.base.interfaces import IContactInformation
 from opengever.ogds.base.interfaces import IInternalOpengeverRequestLayer
 from zope.component import getUtility
 from zope.interface import alsoProvides
-from zope.interface import directlyProvidedBy, directlyProvides
 
 
 # IExtractionPlugin.extractCredentials
@@ -43,10 +42,4 @@ def authenticate_credentials(self, credentials):
 
 def activate_request_layer(request, layer):
     if not layer.providedBy(request):
-        ifaces = [layer,] + list(directlyProvidedBy(request))
-        # Since we allow multiple markers here, we can't use
-        # zope.publisher.browser.applySkin() since this filters out
-        # IBrowserSkinType interfaces, nor can we use alsoProvides(), since
-        # this appends the interface (in which case we end up *after* the
-        # default Plone/CMF skin)
-        directlyProvides(request, *ifaces)
+        alsoProvides(request, layer)
