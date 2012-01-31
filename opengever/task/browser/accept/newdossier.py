@@ -15,6 +15,7 @@ from opengever.task import _
 from opengever.task.browser.accept.main import AcceptWizardFormMixin
 from opengever.task.browser.accept.utils import accept_task_with_successor
 from plone.dexterity.i18n import MessageFactory as dexterityMF
+from plone.dexterity.i18n import MessageFactory as pd_mf
 from plone.directives.form import Schema
 from plone.z3cform.layout import FormWrapper
 from z3c.form.button import buttonAndHandler
@@ -320,9 +321,13 @@ class DossierAddFormView(FormWrapper, grok.View):
         # we need to do our custom stuff instead of the default dossier
         # creation.
 
+        steptitle = pd_mf(u'Add ${name}',
+                           mapping={'name': self.ti.Title()})
+
         class WrappedForm(AcceptWizardNewDossierFormMixin, formclass):
             step_name = 'accept_dossier_add_form'
             passed_data = ['oguid', 'dossier_type']
+            step_title = steptitle
 
             @buttonAndHandler(_(u'button_save', default=u'Save'),
                               name='save')
