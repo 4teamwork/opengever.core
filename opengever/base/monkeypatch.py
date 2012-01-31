@@ -120,5 +120,5 @@ LOGGER.info('Monkey patched plone.formwidget.contenttree.widget.ContentTreeBase'
 # --------
 
 import webdav.LockItem
-webdav.LockItem.DEFAULTTIMEOUT = 2 * 60 * 60L # 2 hours
+webdav.LockItem.DEFAULTTIMEOUT = 24 * 60 * 60L # 24 hours
 LOGGER.info('Monkey patched webdav.LockItem.DEFAULTTIMEOUT')
