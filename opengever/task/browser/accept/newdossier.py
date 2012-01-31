@@ -292,6 +292,13 @@ class DossierAddFormView(FormWrapper, grok.View):
 
     @property
     def form(self):
+        # This form wraps the dossier add form into the wizard. It is
+        # important that the original dossier add form is used, since there
+        # may be custom things like hidden widgets in updateWidgets(). There
+        # are also several ways how a dexterity add form can be customized.
+        # Therefor we just get the original add form from the add-view and
+        # wrap it with our wizard stuff. See _wrap_form()
+
         if getattr(self, '_form', None) is not None:
             return self._form
 
@@ -306,6 +313,13 @@ class DossierAddFormView(FormWrapper, grok.View):
         return self._form
 
     def _wrap_form(self, formclass):
+        # The original form is passed as `formclass` here and is "extended"
+        # with the wizard stuff (different template, passing of values from
+        # earlier steps, step configuration etc.). This is done by
+        # subclassing the original form and overwriting the buttons, since
+        # we need to do our custom stuff instead of the default dossier
+        # creation.
+
         class WrappedForm(AcceptWizardNewDossierFormMixin, formclass):
             step_name = 'accept_dossier_add_form'
             passed_data = ['oguid', 'dossier_type']
@@ -355,6 +369,9 @@ class DossierAddFormView(FormWrapper, grok.View):
     def __call__(self):
         oguid = self.request.get('oguid')
 
+        # The default value for the title of the new dossier should be the
+        # title of the remote dossier, which contains the task which is
+        # accepted with this wizard.
         query = getUtility(ITaskQuery)
         task = query.get_task_by_oguid(oguid)
 
