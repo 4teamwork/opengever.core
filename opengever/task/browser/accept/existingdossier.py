@@ -38,13 +38,18 @@ class IChooseDossierSchema(Schema):
         source=RepositoryPathSourceBinder(
             object_provides='opengever.dossier.behaviors.dossier.' + \
                 'IDossierMarker',
+            review_state='dossier-state-active',
             navigation_tree_query={
                 'object_provides': [
                     'opengever.repository.repositoryroot.IRepositoryRoot',
                     'opengever.repository.repositoryfolder.' + \
                         'IRepositoryFolderSchema',
                     'opengever.dossier.behaviors.dossier.IDossierMarker',
-                    ]}))
+                    ],
+                'review_state': ['repositoryroot-state-active',
+                                 'repositoryfolder-state-active',
+                                 'dossier-state-active'],
+                }))
 
 
 class DossierValidator(SimpleFieldValidator):
