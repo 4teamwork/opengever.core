@@ -46,6 +46,7 @@ class BaseWizardStepForm(object):
     template = ViewPageTemplateFile('wizard_wrappedform.pt')
 
     label = 'wizard'
+    step_title = None
 
     passed_data = []
 

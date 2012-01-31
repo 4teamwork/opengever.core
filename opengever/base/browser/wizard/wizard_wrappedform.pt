@@ -16,6 +16,11 @@
                 </ul>
 
             </div>
+
+            <h2 tal:define="step_title view/step_title|nothing"
+                tal:condition="step_title"
+                tal:content="step_title" />
+
         </metal:description>
 
 
