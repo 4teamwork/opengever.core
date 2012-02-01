@@ -172,33 +172,27 @@ class TestTaskTransitionController(MockTestCase):
             self.expect(controller_mock._is_inbox_group_user()).result(False)
             # Task 2
             self.expect(controller_mock._is_responsible()).result(True)
-            self.expect(controller_mock._is_substasks_closed()).result(False)
+            self.expect(controller_mock._is_unidirectional_by_value()).result(True)
             # Task 3
             self.expect(controller_mock._is_responsible()).result(True)
-            self.expect(controller_mock._is_substasks_closed()).result(True)
-            self.expect(
-                controller_mock._is_unidirectional_by_value()).result(True)
+            self.expect(controller_mock._is_unidirectional_by_value()).result(False)
+            self.expect(controller_mock._is_substasks_closed()).result(False)
             # Task 4
             self.expect(controller_mock._is_responsible()).result(True)
+            self.expect(controller_mock._is_unidirectional_by_value()).result(False)
             self.expect(controller_mock._is_substasks_closed()).result(True)
-            self.expect(
-                controller_mock._is_unidirectional_by_value()).result(False)
             self.expect(controller_mock._has_successors()).result(True)
             self.expect(controller_mock._is_remote_request()).result(False)
-            # Task 5
-            self.expect(controller_mock._is_responsible()).result(False)
-            self.expect(controller_mock._is_inbox_group_user()).result(True)
+            # # Task 5
+            self.expect(controller_mock._is_responsible()).result(True)
+            self.expect(controller_mock._is_unidirectional_by_value()).result(False)
             self.expect(controller_mock._is_substasks_closed()).result(True)
-            self.expect(
-                controller_mock._is_unidirectional_by_value()).result(False)
             self.expect(controller_mock._has_successors()).result(True)
             self.expect(controller_mock._is_remote_request()).result(True)
-            # Task 6
-            self.expect(controller_mock._is_responsible()).result(False)
-            self.expect(controller_mock._is_inbox_group_user()).result(True)
+            # # Task 6
+            self.expect(controller_mock._is_responsible()).result(True)
+            self.expect(controller_mock._is_unidirectional_by_value()).result(False)
             self.expect(controller_mock._is_substasks_closed()).result(True)
-            self.expect(
-                controller_mock._is_unidirectional_by_value()).result(False)
             self.expect(controller_mock._has_successors()).result(False)
 
         self.replay()
@@ -213,36 +207,49 @@ class TestTaskTransitionController(MockTestCase):
         controller, controller_mock, task = self._create_task_controller()
 
         with self.mocker.order():
+            #task1
+            self.expect(controller_mock._is_unidirectional_by_value()).result(False)
+            #task2
+            self.expect(controller_mock._is_unidirectional_by_value()).result(True)
             self.expect(
-                controller_mock._is_unidirectional_by_value()).result(False)
-
+                controller_mock._is_responsible_or_inbox_group_user()).result(False)
+            #task3
+            self.expect(controller_mock._is_unidirectional_by_value()).result(True)
             self.expect(
-                controller_mock._is_unidirectional_by_value()).result(True)
+                controller_mock._is_responsible_or_inbox_group_user()).result(True)
             self.expect(
                 controller_mock._is_substasks_closed()).result(False)
-
+            #task4
+            self.expect(controller_mock._is_unidirectional_by_value()).result(True)
             self.expect(
-                controller_mock._is_unidirectional_by_value()).result(True)
+                controller_mock._is_responsible_or_inbox_group_user()).result(True)
             self.expect(
                 controller_mock._is_substasks_closed()).result(True)
             self.expect(
                 controller_mock._has_successors()).result(True)
             self.expect(controller_mock._is_remote_request()).result(False)
-
+            #task5
+            self.expect(controller_mock._is_unidirectional_by_value()).result(True)
             self.expect(
-                controller_mock._is_unidirectional_by_value()).result(True)
+                controller_mock._is_responsible_or_inbox_group_user()).result(True)
             self.expect(
                 controller_mock._is_substasks_closed()).result(True)
-            self.expect(controller_mock._has_successors()).result(True)
+            self.expect(
+                controller_mock._has_successors()).result(True)
+            self.expect(controller_mock._is_remote_request()).result(True)
+            #task6
+            self.expect(controller_mock._is_unidirectional_by_value()).result(True)
+            self.expect(
+                controller_mock._is_responsible_or_inbox_group_user()).result(True)
+            self.expect(
+                controller_mock._is_substasks_closed()).result(True)
+            self.expect(
+                controller_mock._has_successors()).result(True)
             self.expect(controller_mock._is_remote_request()).result(True)
 
-            self.expect(
-                controller_mock._is_unidirectional_by_value()).result(True)
-            self.expect(
-                controller_mock._is_substasks_closed()).result(True)
-            self.expect(controller_mock._has_successors()).result(False)
-
         self.replay()
+
+        self.assertFalse(controller.is_progress_to_closed_possible())
         self.assertFalse(controller.is_progress_to_closed_possible())
         self.assertFalse(controller.is_progress_to_closed_possible())
         self.assertFalse(controller.is_progress_to_closed_possible())
@@ -262,36 +269,32 @@ class TestTaskTransitionController(MockTestCase):
     def test_is_open_to_progress_possible(self):
         controller, controller_mock, task = self._create_task_controller()
         with self.mocker.order():
+            #task1
             self.expect(
                 controller_mock._is_unidirectional_by_reference()).result(True)
-
+            #task2
             self.expect(controller_mock._is_unidirectional_by_reference(
                     )).result(False)
-            self.expect(controller_mock._is_issuer()).result(True)
-            self.expect(task.issuer).result('james.bond')
-            self.expect(task.responsible).result('hugo.boss')
-
+            self.expect(
+                controller_mock._is_responsible_or_inbox_group_user()).result(False)
+            #task3
             self.expect(controller_mock._is_unidirectional_by_reference(
                     )).result(False)
-            self.expect(controller_mock._is_issuer()).result(True)
-            self.expect(task.issuer).result('hugo.boss')
-            self.expect(task.responsible).result('hugo.boss')
-
-            self.expect(controller_mock._is_unidirectional_by_reference(
-                    )).result(False)
-            self.expect(controller_mock._is_issuer()).result(False)
+            self.expect(
+                controller_mock._is_responsible_or_inbox_group_user()).result(True)
 
         self.replay()
         self.assertFalse(controller.is_open_to_progress_possible())
         self.assertFalse(controller.is_open_to_progress_possible())
         self.assertTrue(controller.is_open_to_progress_possible())
-        self.assertTrue(controller.is_open_to_progress_possible())
 
     def test_is_reject_possible(self):
         controller, controller_mock, task = self._create_task_controller()
         with self.mocker.order():
-            self.expect(controller_mock._is_responsible()).result(False)
-            self.expect(controller_mock._is_responsible()).result(True)
+            self.expect(
+                controller_mock._is_responsible_or_inbox_group_user()).result(False)
+            self.expect(
+                controller_mock._is_responsible_or_inbox_group_user()).result(True)
 
         self.replay()
         self.assertFalse(controller.is_reject_possible())
@@ -300,50 +303,49 @@ class TestTaskTransitionController(MockTestCase):
     def test_is_open_to_resolved_possible(self):
         controller, controller_mock, task = self._create_task_controller()
         with self.mocker.order():
-            self.expect(controller_mock._is_substasks_closed()).result(False)
-
-            self.expect(controller_mock._is_substasks_closed()).result(True)
+            #task1
             self.expect(controller_mock._is_bidirectional()).result(False)
-
-            self.expect(controller_mock._is_substasks_closed()).result(True)
+            #task2
             self.expect(controller_mock._is_bidirectional()).result(True)
-            self.expect(controller_mock._is_issuer()).result(True)
-            self.expect(task.issuer).result('james.bond')
-            self.expect(task.responsible).result('hugo.boss')
-
-            self.expect(controller_mock._is_substasks_closed()).result(True)
+            self.expect(
+                controller_mock._is_responsible_or_inbox_group_user()).result(False)
+            #task3
             self.expect(controller_mock._is_bidirectional()).result(True)
-            self.expect(controller_mock._is_issuer()).result(True)
-            self.expect(task.issuer).result('james.bond')
-            self.expect(task.responsible).result('james.bond')
+            self.expect(
+                controller_mock._is_responsible_or_inbox_group_user()).result(True)
 
-            self.expect(controller_mock._is_substasks_closed()).result(True)
-            self.expect(controller_mock._is_bidirectional()).result(True)
-            self.expect(controller_mock._is_issuer()).result(False)
 
         self.replay()
         self.assertFalse(controller.is_open_to_resolved_possible())
         self.assertFalse(controller.is_open_to_resolved_possible())
-        self.assertFalse(controller.is_open_to_resolved_possible())
-        self.assertTrue(controller.is_open_to_resolved_possible())
         self.assertTrue(controller.is_open_to_resolved_possible())
 
     def test_is_open_to_closed_possible(self):
         controller, controller_mock, task = self._create_task_controller()
         with self.mocker.order():
-            self.expect(controller_mock._is_issuer()).result(False)
-            self.expect(controller_mock._is_unidirectional_by_reference(
-                    )).result(False)
-
-            self.expect(controller_mock._is_issuer()).result(False)
+            # task1
             self.expect(controller_mock._is_unidirectional_by_reference(
                     )).result(True)
-
+            self.expect(
+                controller_mock._is_responsible_or_inbox_group_user()).result(False)
+            # task2
+            self.expect(controller_mock._is_unidirectional_by_reference(
+                    )).result(True)
+            self.expect(
+                controller_mock._is_responsible_or_inbox_group_user()).result(True)
+            # task3
+            self.expect(controller_mock._is_unidirectional_by_reference(
+                    )).result(False)
+            self.expect(controller_mock._is_issuer()).result(False)
+            # task4
+            self.expect(controller_mock._is_unidirectional_by_reference(
+                    )).result(False)
             self.expect(controller_mock._is_issuer()).result(True)
 
         self.replay()
         self.assertFalse(controller.is_open_to_closed_possible())
         self.assertTrue(controller.is_open_to_closed_possible())
+        self.assertFalse(controller.is_open_to_closed_possible())
         self.assertTrue(controller.is_open_to_closed_possible())
 
     def test_is_rejected_to_open_possible(self):

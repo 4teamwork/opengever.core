@@ -71,23 +71,25 @@ class TaskTransitionController(BrowserView):
 
     def is_progress_to_resolved_possible(self):
         """Checks if:
-        - The task has no successors
-        - Task is not unidirectional_by_value (zu direkten Erledigung).
         - The responsible is the current user or a inbox_group user.
+        - Task is not unidirectional_by_value (zu direkten Erledigung).
         - All subtaskes are resolve, cancelled or closed.
+        - The task has no successors
         """
         return (self._is_responsible_or_inbox_group_user() and
-                self._is_substasks_closed() and
                 not self._is_unidirectional_by_value() and
+                self._is_substasks_closed() and
                 (not self._has_successors() or self._is_remote_request()))
 
     def is_progress_to_closed_possible(self):
         """Checks if:
-        - The task has no successors
         - Task is unidirectional_by_value (zu direkten Erledigung).
+        - The current user is the responsible or a member of the inbox group.
         - All subtaskes are resolved, cancelled or closed.
+        - The task has no successors or is a remote request
         """
         return (self._is_unidirectional_by_value() and
+                self._is_responsible_or_inbox_group_user() and
                 self._is_substasks_closed() and
                 (not self._has_successors() or self._is_remote_request()))
 
@@ -99,38 +101,37 @@ class TaskTransitionController(BrowserView):
     def is_open_to_progress_possible(self):
         """Checks if ...
         - Not unidirectional_by_reference
-        - The user is not the issuer, appart from he's also the responsible
+        - The current user is the responsible or a member of the inbox group.
         """
         if not self._is_unidirectional_by_reference():
-            if not self._is_issuer():
-                return True
-            elif self.context.issuer == self.context.responsible:
-                return True
+            return self._is_responsible_or_inbox_group_user()
         return False
 
     def is_reject_possible(self):
         """Checks if ...
-        - The current user is the responsible.
+        - The current user is the responsible or a member of the inbox group.
         """
-        return self._is_responsible()
+        return self._is_responsible_or_inbox_group_user()
 
     def is_open_to_resolved_possible(self):
         """Checks if:
-        - All subtaskes are resolved, cancelled or closed.
         - The Task is is_bidirectional
-        - The user is not the issuer, appart from he's also the responsible
+        - The current user is the responsible or a member of the inbox group.
         """
-        if self._is_substasks_closed() and self._is_bidirectional():
-            if not self._is_issuer():
-                return True
-            elif self.context.issuer == self.context.responsible:
-                return True
-        return False
+        if not self._is_bidirectional():
+            return False
+        return self._is_responsible_or_inbox_group_user()
 
     def is_open_to_closed_possible(self):
         """Checks if:
-        - The user is the issuer or is a unidirectional_byrefrence task"""
-        return self._is_issuer() or self._is_unidirectional_by_reference()
+        - It's a unidirectional_byrefrence task
+        - Current user is the responsible or a member of the inbox group.
+        or
+        - The current user is the issuer
+        """
+        if self._is_unidirectional_by_reference():
+            return self._is_responsible_or_inbox_group_user()
+        return self._is_issuer()
 
     def is_rejected_to_open_possible(self):
         """Checks if:
