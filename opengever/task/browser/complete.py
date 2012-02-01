@@ -19,6 +19,7 @@ from opengever.task import util
 from opengever.task.interfaces import ISuccessorTaskController
 from opengever.task.task import ITask
 from opengever.task.util import add_simple_response
+from opengever.task.util import get_documents_of_task
 from plone.directives.form import Schema
 from plone.z3cform.layout import FormWrapper
 from z3c.form.browser.checkbox import CheckBoxFieldWidget
@@ -157,22 +158,7 @@ def deliverable_documents_vocabulary(context):
     filed within the task).
     """
 
-    documents = []
-    portal_types = ['opengever.document.document', 'ftw.mail.mail']
-    catalog = getToolByName(context, 'portal_catalog')
-
-    # Find documents within the task. There may also be subtasks containing
-    # documents we want to deliver upstream.
-    query = {'path': '/'.join(context.getPhysicalPath()),
-             'portal_type': portal_types}
-    for doc in catalog(query):
-        documents.append(doc.getObject())
-
-    # Find referenced documents.
-    for relation in getattr(context, 'relatedItems', []):
-        doc = relation.to_object
-        if doc.portal_type in portal_types:
-            documents.append(doc)
+    documents = get_documents_of_task(context)
 
     # Create the vocabulary.
     terms = []
