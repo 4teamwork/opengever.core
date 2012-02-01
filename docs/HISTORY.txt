@@ -8,6 +8,7 @@ Changelog
 - Made some adjustments on the reponse functionality:
    - Made the transition field readonly.
    - Remove direct_response functionality, is no longer used.
+   - Removed the add response action.
   Issue #1377 Ueberarbeitung Antwort einer Aufgaben
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1377
   [phgross]

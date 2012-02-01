@@ -70,16 +70,6 @@
        <permission value="opengever.task: Edit task"/>
     </action>
 
-    <action action_id="addresponse"
-            visible="True"
-            title="Add response"
-            category="folder_factories"
-            url_expr="string:${object_url}/addresponse"
-            icon_expr=""
-            condition_expr="">
-        <permission value="Add portal content"/>
-    </action>
-
     <action action_id="attach_remote_document"
             visible="True"
             title="Attach remote document"
