@@ -5,6 +5,11 @@ Changelog
 2.2 (unreleased)
 ----------------
 
+- Implement wizard for copying documents when closing a uniref task.
+  Issue #1376 Auftragstyp "Zur Kenntnisnahme": Aktion abschliessen
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1376
+  [jone]
+
 - Made some adjustments on the reponse functionality:
    - Made the transition field readonly.
    - Remove direct_response functionality, is no longer used.
