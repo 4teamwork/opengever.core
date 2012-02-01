@@ -118,3 +118,32 @@ def add_simple_response(task, text='', field_changes=None, added_object=None,
     notify(ObjectModifiedEvent(task))
 
     return response
+
+
+def get_documents_of_task(task, include_mails=False):
+    """Returns all related and contained documents and mails for this task
+    recursively as full object.
+    """
+
+    documents = []
+    portal_types = ['opengever.document.document']
+    if include_mails:
+        portal_types.append('ftw.mail.mail')
+    catalog = getToolByName(task, 'portal_catalog')
+    membership = getToolByName(task, 'portal_membership')
+
+    # Find documents within the task. There may also be subtasks containing
+    # documents.
+    query = {'path': '/'.join(task.getPhysicalPath()),
+             'portal_type': portal_types}
+    for doc in catalog(query):
+        documents.append(doc.getObject())
+
+    # Find referenced documents.
+    for relation in getattr(task, 'relatedItems', []):
+        doc = relation.to_object
+        if doc.portal_type in portal_types and \
+                membership.checkPermission('View', doc):
+            documents.append(doc)
+
+    return documents
