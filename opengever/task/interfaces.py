@@ -121,3 +121,24 @@ class IWorkflowStateSyncer(Interface):
         """Performs `transition` on related tasks and creates a response with
         `text`.
         """
+
+
+class ITaskDocumentsTransporter(Interface):
+    """Utility for transporting documents related to a task.
+    """
+
+    def copy_documents_from_remote_task(task, target, documents=None):
+        """Copy documents from a remote `task` to a `target`.
+
+        Copyable documents: the documents need to be either referenced from
+        the task (relatedItems) or stored within the task.
+
+        Arguments:
+        task -- globalindex task object
+        target -- container on the local client where the documents will
+        be added
+        documents -- if `None`, all related tasks are copied - otherwise a
+        list of intids is expected.
+
+        An intids mapping (old => new) is returned.
+        """
