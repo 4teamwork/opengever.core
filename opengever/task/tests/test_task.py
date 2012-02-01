@@ -1,4 +1,3 @@
-from Products.CMFCore.utils import getToolByName
 from Products.PloneTestCase.ptc import PloneTestCase
 from datetime import datetime
 from opengever.task.adapters import IResponseContainer
