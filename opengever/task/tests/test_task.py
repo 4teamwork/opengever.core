@@ -90,23 +90,6 @@ class TestTaskIntegration(PloneTestCase):
         container.add(res)
         self.failUnless(res in container)
 
-    def test_direct_response(self):
-        t1 = create_task(self.folder, title='Task 1')
-        t1.REQUEST[
-            'form.widgets.transition'] = 'task-transition-open-in-progress'
-        view = t1.unrestrictedTraverse('direct_response')
-        view()
-        container = IResponseContainer(t1)
-        self.failUnless(container.__len__() == 1)
-
-        response = container[0]
-        self.failUnless(
-            response.transition == 'task-transition-open-in-progress')
-
-        wft = getToolByName(t1, 'portal_workflow')
-        self.failUnless(
-            wft.getInfoFor(t1, 'review_state'), 'task-state-in-progress')
-
     def test_task_type_category(self):
         t1 = create_task(self.folder, title='Task 1')
         t1.task_type = u'information'
