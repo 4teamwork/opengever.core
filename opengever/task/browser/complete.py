@@ -51,9 +51,7 @@ class CompleteTask(grok.View):
     conditions are true:
 
     1) task-type is unidirectional and transition is one of:
-    - task-transition-open-tested-and-closed
     - task-transition-in-progress-tested-and-closed
-    - task-transition-resolved-tested-and-closed
 
     2) task-type is bidirectional and transition is one of:
     - task-transition-open-resolved
@@ -129,9 +127,7 @@ class CompleteTask(grok.View):
             'unidirectional_by_value')
 
         unidirectional_transitions = (
-            'task-transition-open-tested-and-closed',
-            'task-transition-in-progress-tested-and-closed',
-            'task-transition-resolved-tested-and-closed')
+            'task-transition-in-progress-tested-and-closed')
 
         bidirectional_type_categories = (
             'bidirectional_by_reference',
