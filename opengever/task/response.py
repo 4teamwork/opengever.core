@@ -22,6 +22,7 @@ from plone.memoize.view import memoize
 from plone.z3cform import layout
 from z3c.form import form, field, button
 from z3c.form.browser import radio
+from z3c.form.interfaces import DISPLAY_MODE
 from z3c.form.interfaces import HIDDEN_MODE
 from z3c.relationfield.relation import RelationValue
 from z3c.relationfield.schema import RelationChoice, RelationList
@@ -370,6 +371,8 @@ class AddForm(form.AddForm, AutoExtensibleForm):
         if not ogview.is_user_assigned_to_client():
             self.widgets['relatedItems'].mode = HIDDEN_MODE
 
+        self.widgets['transition'].mode = DISPLAY_MODE
+
 
 class BeneathTask(grok.ViewletManager):
     grok.context(ITask)
@@ -477,49 +480,6 @@ class SingleAddFormView(layout.FormWrapper, grok.View):
         layout.FormWrapper.__init__(self, context, request)
         grok.View.__init__(self, context, request)
         self.form.label = context.title
-
-
-class DirectResponseView(grok.View):
-    grok.context(ITask)
-    grok.name('direct_response')
-    grok.require('zope2.View')
-
-    def render(self):
-        self.request = self.context.REQUEST
-
-        transition = self.request.get('form.widgets.transition', None)
-        if transition:
-            # create response
-            new_response = Response('')
-            new_response.transition = transition
-
-            # do transition - change workflow state
-            wftool = getToolByName(self.context, 'portal_workflow')
-            before = wftool.getInfoFor(self.context, 'review_state')
-            if transition != before:
-                before = wftool.getTitleForStateOnType(
-                    before, self.context.Type())
-                wftool.doActionFor(self.context, transition)
-                after = wftool.getInfoFor(self.context, 'review_state')
-                after = wftool.getTitleForStateOnType(
-                    after, self.context.Type())
-                new_response.add_change('review_state', _(u'Issue state'),
-                                        before, after)
-
-            container = IResponseContainer(self.context)
-            container.add(new_response)
-
-            # we fire the IObjectModifiedEvent because
-            # the task must be reindex also by globalindex
-            notify(ObjectModifiedEvent(self.context))
-
-            syncer = getMultiAdapter((self.context, self.request),
-                                     IWorkflowStateSyncer)
-            syncer.change_remote_tasks_workflow_state(transition, text='')
-
-            self.request.RESPONSE.redirect(self.context.absolute_url())
-        else:
-            self.request.RESPONSE.redirect(self.context.absolute_url())
 
 
 class Edit(Base):

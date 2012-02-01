@@ -5,6 +5,13 @@ Changelog
 2.2 (unreleased)
 ----------------
 
+- Made some adjustments on the reponse functionality:
+   - Made the transition field readonly.
+   - Remove direct_response functionality, is no longer used.
+  Issue #1377 Ueberarbeitung Antwort einer Aufgaben
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1377
+  [phgross]
+
 - Implements some workflow adjustments:
    - Removed resolved-open(wieder eroeffnen) transition.
    - Added new transition resolved-in-progress (ueberarbeiten) instead of resolved-open.

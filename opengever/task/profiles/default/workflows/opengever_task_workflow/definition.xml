@@ -298,7 +298,7 @@
   </permission-map>
  </state>
  <transition transition_id="task-transition-cancelled-open" title="task-transition-cancelled-open" new_state="task-state-open" trigger="USER" before_script="" after_script="">
-  <action url="%(content_url)s/direct_response?form.widgets.transition=task-transition-cancelled-open" category="workflow" icon="">task-transition-cancelled-open</action>
+  <action url="%(content_url)s/addresponse?form.widgets.transition=task-transition-cancelled-open" category="workflow" icon="">task-transition-cancelled-open</action>
   <guard>
    <guard-expression>python: here.restrictedTraverse('@@task_transition_controller').is_cancelled_to_open_possible()</guard-expression>
   </guard>
@@ -316,7 +316,7 @@
   </guard>
  </transition>
  <transition transition_id="task-transition-open-cancelled" title="task-transition-open-cancelled" new_state="task-state-cancelled" trigger="USER" before_script="" after_script="">
-  <action url="%(content_url)s/direct_response?form.widgets.transition=task-transition-open-cancelled" category="workflow" icon="">task-transition-open-cancelled</action>
+  <action url="%(content_url)s/addresponse?form.widgets.transition=task-transition-open-cancelled" category="workflow" icon="">task-transition-open-cancelled</action>
   <guard>
    <guard-expression>python: here.restrictedTraverse('@@task_transition_controller').is_cancel_possible()</guard-expression>
   </guard>
@@ -328,7 +328,7 @@
   </guard>
  </transition>
  <transition transition_id="task-transition-open-rejected" title="task-transition-open-rejected" new_state="task-state-rejected" trigger="USER" before_script="" after_script="">
-  <action url="%(content_url)s/direct_response?form.widgets.transition=task-transition-open-rejected" category="workflow" icon="">task-transition-open-rejected</action>
+  <action url="%(content_url)s/addresponse?form.widgets.transition=task-transition-open-rejected" category="workflow" icon="">task-transition-open-rejected</action>
   <guard>
    <guard-expression>python: here.restrictedTraverse('@@task_transition_controller').is_reject_possible()</guard-expression>
   </guard>
@@ -357,7 +357,7 @@
   </guard>
  </transition>
  <transition transition_id="task-transition-resolved-in-progress" title="task-transition-resolved-in-progress" new_state="task-state-in-progress" trigger="USER" before_script="" after_script="">
-  <action url="%(content_url)s/direct_response?form.widgets.transition=task-transition-resolved-in-progress" category="workflow" icon="">task-transition-resolved-in-progress</action>
+  <action url="%(content_url)s/addresponse?form.widgets.transition=task-transition-resolved-in-progress" category="workflow" icon="">task-transition-resolved-in-progress</action>
   <guard>
    <guard-expression>python: here.restrictedTraverse('@@task_transition_controller').is_resolved_to_progress_possible()</guard-expression>
   </guard>
