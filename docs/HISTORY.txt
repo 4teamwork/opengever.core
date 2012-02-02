@@ -5,6 +5,10 @@ Changelog
 2.0.2 (unreleased)
 ------------------
 
+- Removed 'List folder contents' permission from anyone but Manager in
+  repositoryfolder and repositoryroot workflows.
+  [lgraf]
+  
 - Added necessary permissions for Administrator role
   [lgraf]
 
