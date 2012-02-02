@@ -253,7 +253,7 @@ class ExtractDocuments(grok.View):
 
     def get_documents(self):
         documents = json.loads(self.request.get('documents'))
-        documents = [int(iid) for iid in documents]
+        documents = documents and [int(iid) for iid in documents]
         intids = getUtility(IIntIds)
 
         for doc in get_documents_of_task(self.context):
