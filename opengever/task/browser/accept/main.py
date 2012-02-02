@@ -62,6 +62,7 @@ class AcceptTask(grok.View):
         he can define a response text - so we use the normal response form.
         """
 
+        # XXX direct_response does not exist any more!
         if not self.is_wizard_active():
             url = 'direct_response?form.widgets.transition=' + \
                 'task-transition-open-in-progress'

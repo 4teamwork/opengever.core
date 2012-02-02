@@ -103,6 +103,7 @@ class CompleteTask(grok.View):
                 transition)
 
         else:
+            # XXX direct_response does not exist anymore!
             url = '%s/direct_response?form.widgets.transition=%s' % (
                 self.context.absolute_url(),
                 transition)
