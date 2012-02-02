@@ -18,6 +18,7 @@ from zope.i18n import translate
 from zope.globalrequest import getRequest
 from BeautifulSoup import BeautifulSoup
 
+
 def tooltip_helper(item, value):
     text = ''.join(BeautifulSoup(value).findAll(text=True))
     return '<span title="%s">%s</span>' % (text.encode('utf-8'), value)
