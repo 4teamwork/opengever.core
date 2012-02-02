@@ -526,11 +526,82 @@ class TestTaskTransitionController(MockTestCase):
         transition = 'task-transition-open-tested-and-closed'
         controller, controller_mock, task = self._create_task_controller()
 
+        info = self.stub()
+        self.mock_utility(info, IContactInformation)
+
+        registry = self.stub()
+        self.mock_utility(registry, IRegistry)
+        proxy = self.stub()
+        self.expect(registry.forInterface(
+                IClientConfiguration)).result(proxy)
+        self.expect(proxy.client_id).result('client1')
+
+        catalog = self.stub()
+        self.mock_tool(catalog, 'portal_catalog')
+        membership = self.stub()
+        self.mock_tool(membership, 'portal_membership')
+
+        with self.mocker.order():
+            # testcase 1: not uniref
+            self.expect(task.task_type_category).result(
+                'bidirectional_by_value')
+
+            # testcase 2: unrief but single client setup
+            self.expect(task.task_type_category).result(
+                'unidirectional_by_reference')
+            self.expect(len(info.get_clients())).result(1)
+
+            # testcase 3: unrief, multi clientbut on responsible client
+            self.expect(task.task_type_category).result(
+                'unidirectional_by_reference')
+            self.expect(len(info.get_clients())).result(2)
+            self.expect(task.responsible_client).result('client1')
+
+            # testcase 4: uniref, multi client, foreign client but no
+            # documents to copy
+            self.expect(task.task_type_category).result(
+                'unidirectional_by_reference')
+            self.expect(len(info.get_clients())).result(2)
+            self.expect(task.responsible_client).result('client2')
+            self.expect(catalog(ANY)).result([])
+            self.expect(task.relatedItems).result([])
+
+            # testcase 5: unrief, multi client, foreign client, documents
+            self.expect(task.task_type_category).result(
+                'unidirectional_by_reference')
+            self.expect(len(info.get_clients())).result(2)
+            self.expect(task.responsible_client).result('client2')
+            self.expect(catalog(ANY)).result([
+                    self.create_dummy(getObject=lambda: object())])
+            self.expect(task.relatedItems).result([])
+
         self.replay()
 
-        # XXX move @@close-task-wizard logic to transitioncontroller
+        wizard_url = 'http://nohost/plone/task-1/' + \
+            '@@close-task-wizard_select-documents'
+
+        default_url = 'http://nohost/plone/task-1/addresponse?' + \
+            'form.widgets.transition=%s' % transition
+
+        # testcase 1: use default response add form
         self.assertEqual(controller.get_transition_action(transition),
-                         'http://nohost/plone/task-1/@@close-task-wizard')
+                         default_url)
+
+        # testcase 2: use default response add form
+        self.assertEqual(controller.get_transition_action(transition),
+                         default_url)
+
+        # testcase 3: use default response add form
+        self.assertEqual(controller.get_transition_action(transition),
+                         default_url)
+
+        # testcase 4: use default response add form
+        self.assertEqual(controller.get_transition_action(transition),
+                         default_url)
+
+        # testcase 5: use close wizard
+        self.assertEqual(controller.get_transition_action(transition),
+                         wizard_url)
 
     def test_reassign_guards(self):
         controller, controller_mock, task = self._create_task_controller()
@@ -616,6 +687,8 @@ class TestTaskTransitionController(MockTestCase):
         task1 = self.mocker.mock()
         self.expect(task1.absolute_url()).result(
             'http://nohost/plone/task-1').count(0, None)
+        self.expect(task1.getPhysicalPath()).result(
+            ['', 'plone', 'task-1']).count(0, None)
 
         controller = TaskTransitionController(task1, {})
         controller_mock = self.mocker.patch(controller)

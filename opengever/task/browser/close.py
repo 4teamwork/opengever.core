@@ -39,45 +39,6 @@ from zope.schema.vocabulary import SimpleVocabulary
 import urllib
 
 
-
-class CloseTaskWizard(grok.View):
-    """This view decides whether the wizard is activated
-    and redirects to the appropriate form.
-    """
-
-    grok.context(ITask)
-    grok.name('close-task-wizard')
-    grok.require('cmf.AddPortalContent')
-
-
-    def render(self):
-        if self.is_wizard_active():
-            url = '@@close-task-wizard_select-documents'
-        else:
-            url = 'addresponse?form.widgets.transition=' + \
-                'task-transition-open-tested-and-closed'
-
-        return self.request.RESPONSE.redirect(
-            '/'.join((self.context.absolute_url(), url)))
-
-    def is_wizard_active(self):
-        info = getUtility(IContactInformation)
-        if len(info.get_clients()) < 2:
-            return False
-
-        task_type_category = self.context.task_type_category
-        if task_type_category != 'unidirectional_by_reference':
-            return False
-
-        if self.context.responsible_client == get_client_id():
-            return False
-
-        if len(get_documents_of_task(self.context)) == 0:
-            return False
-
-        return True
-
-
 class CloseTaskWizardStepFormMixin(BaseWizardStepForm):
 
     steps = (

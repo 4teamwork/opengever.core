@@ -2,6 +2,7 @@ from Products.Five import BrowserView
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.ogds.base.utils import get_client_id
 from opengever.task.interfaces import ISuccessorTaskController
+from opengever.task.util import get_documents_of_task
 from zExceptions import NotFound
 from zope.component import getMultiAdapter
 from zope.component import getUtility
@@ -245,7 +246,32 @@ class TaskTransitionController(BrowserView):
 
     @action('task-transition-open-tested-and-closed')
     def open_to_closed_action(self, transition):
-        return '%s/@@close-task-wizard' % self.context.absolute_url()
+        return self._addresponse_form_url(transition)
+
+    @guard('task-transition-open-tested-and-closed')
+    @task_type_category('unidirectional_by_reference')
+    def uniref_open_to_closed_guard(self):
+        """Checks if:
+        - It's a unidirectional_byrefrence task
+        - Current user is the responsible or a member of the inbox group.
+        """
+        return self._is_responsible_or_inbox_group_user()
+
+    @action('task-transition-open-tested-and-closed')
+    @task_type_category('unidirectional_by_reference')
+    def uniref_open_to_closed_action(self, transition):
+        if not self._is_multiclient_setup():
+            return self._addresponse_form_url(transition)
+
+        elif self._is_task_on_responsible_client():
+            return self._addresponse_form_url(transition)
+
+        elif len(get_documents_of_task(self.context)) == 0:
+            return self._addresponse_form_url(transition)
+
+        else:
+            return '%s/@@close-task-wizard_select-documents' % (
+                self.context.absolute_url())
 
     @guard('task-transition-reassign')
     def reassign_guard(self):
@@ -256,15 +282,6 @@ class TaskTransitionController(BrowserView):
         return '%s/@@assign-task?form.widgets.transition=%s' % (
             self.context.absolute_url(),
             transition)
-
-    @guard('task-transition-open-tested-and-closed')
-    @task_type_category('unidirectional_by_reference')
-    def uniref_open_to_closed_guard(self):
-        """Checks if:
-        - It's a unidirectional_byrefrence task
-        - Current user is the responsible or a member of the inbox group.
-        """
-        return self._is_responsible_or_inbox_group_user()
 
     @guard('task-transition-rejected-open')
     def rejected_to_open_guard(self):
