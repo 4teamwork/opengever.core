@@ -5,6 +5,10 @@ Changelog
 2.1 (unreleased)
 ----------------
 
+- Removed 'List folder contents' permission from anyone but Manager in
+  contact and contactfolder workflows.
+  [lgraf]
+
 - Added neccessary permissions for Administrator role
   [lgraf]
 
