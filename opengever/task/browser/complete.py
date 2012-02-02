@@ -18,7 +18,6 @@ from opengever.task import _
 from opengever.task import util
 from opengever.task.interfaces import ISuccessorTaskController
 from opengever.task.task import ITask
-from opengever.task.util import add_simple_response
 from opengever.task.util import get_documents_of_task
 from plone.directives.form import Schema
 from plone.z3cform.layout import FormWrapper
@@ -215,7 +214,10 @@ class CompleteSuccessorTaskForm(Form):
         data, errors = self.extractData()
 
         if not errors:
-            self.complete_successor_task(data)
+            util.change_task_workflow_state(self.context,
+                                            data['transition'],
+                                            text=data['text'])
+
             self.deliver_documents_and_complete_task(data)
 
             msg = _(u'The documents were delivered to the issuer and the '
@@ -247,23 +249,6 @@ class CompleteSuccessorTaskForm(Form):
         Form.updateWidgets(self)
 
         self.widgets['transition'].mode = HIDDEN_MODE
-
-    def complete_successor_task(self, formdata):
-        wftool = getToolByName(self.context, 'portal_workflow')
-
-        before = wftool.getInfoFor(self.context, 'review_state')
-        before = wftool.getTitleForStateOnType(before, self.context.Type())
-
-        wftool.doActionFor(self.context, formdata['transition'])
-
-        after = wftool.getInfoFor(self.context, 'review_state')
-        after = wftool.getTitleForStateOnType(after, self.context.Type())
-
-        response = add_simple_response(self.context,
-                                       text=formdata['text'])
-        response.add_change('review_state', _(u'Issue state'),
-                            before, after)
-        return response
 
     def deliver_documents_and_complete_task(self, formdata):
         """Delivers the selected documents to the predecesser task and
@@ -333,8 +318,8 @@ class CompleteSuccessorTaskReceiveDelivery(grok.View):
         assert data is not None, 'Bad request: no delivery data found'
         data = json.loads(data)
 
-        # Set the "X-CREATING-SUCCESSOR" flag for preventing the event handler
-        # from creating additional responses per added document.
+        # Set the "X-CREATING-SUCCESSOR" flag for preventing the event
+        # handler from creating additional responses per added document.
         self.request.set('X-CREATING-SUCCESSOR', True)
 
         # Create the delivered documents:
@@ -346,22 +331,8 @@ class CompleteSuccessorTaskReceiveDelivery(grok.View):
             documents.append(doc)
 
         # Change workflow state of predecessor task:
-        wftool = getToolByName(self.context, 'portal_workflow')
-
-        before = wftool.getInfoFor(self.context, 'review_state')
-        before = wftool.getTitleForStateOnType(before, self.context.Type())
-
-        wftool.doActionFor(self.context, data['transition'])
-
-        after = wftool.getInfoFor(self.context, 'review_state')
-        after = wftool.getTitleForStateOnType(after, self.context.Type())
-
-        # Create response:
-        response = add_simple_response(
-            self.context,
-            text=data['text'],
+        util.change_task_workflow_state(
+            self.context, data['transition'], text=data['text'],
             added_object=documents)
-        response.add_change('review_state', _(u'Issue state'),
-                            before, after)
 
         return 'OK'

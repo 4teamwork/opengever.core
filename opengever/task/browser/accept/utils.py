@@ -1,34 +1,23 @@
-from Products.CMFCore.utils import getToolByName
 from five import grok
 from opengever.globalindex.interfaces import ITaskQuery
 from opengever.ogds.base.interfaces import ITransporter
 from opengever.ogds.base.utils import remote_request
-from opengever.task import _
 from opengever.task.interfaces import ISuccessorTaskController
 from opengever.task.interfaces import ITaskDocumentsTransporter
 from opengever.task.task import ITask
 from opengever.task.transporter import IResponseTransporter
-from opengever.task.util import add_simple_response
+from opengever.task.util import change_task_workflow_state
 from zope.component import getUtility
 import transaction
 
 
 def accept_task_with_response(task, response_text, successor_oguid=None):
     transition = 'task-transition-open-in-progress'
-    wftool = getToolByName(task, 'portal_workflow')
+    response = change_task_workflow_state(task,
+                                          transition,
+                                          text=response_text,
+                                          successor_oguid=successor_oguid)
 
-    before = wftool.getInfoFor(task, 'review_state')
-    before = wftool.getTitleForStateOnType(before, task.Type())
-
-    wftool.doActionFor(task, transition)
-
-    after = wftool.getInfoFor(task, 'review_state')
-    after = wftool.getTitleForStateOnType(after, task.Type())
-
-    response = add_simple_response(task, text=response_text,
-                                   successor_oguid=successor_oguid)
-    response.add_change('review_state', _(u'Issue state'),
-                        before, after)
     return response
 
 

@@ -17,7 +17,7 @@ from opengever.task import _
 from opengever.task.interfaces import ISuccessorTaskController
 from opengever.task.interfaces import ITaskDocumentsTransporter
 from opengever.task.task import ITask
-from opengever.task.util import add_simple_response
+from opengever.task.util import change_task_workflow_state
 from opengever.task.util import get_documents_of_task
 from plone.directives.form import Schema
 from plone.z3cform.layout import FormWrapper
@@ -336,30 +336,14 @@ class CloseTaskView(grok.View):
         task = self.get_task()
         text = self.get_text()
 
-        self.close_task(task, text)
+        transition = 'task-transition-open-tested-and-closed'
+        change_task_workflow_state(task, transition, text=text)
 
         redirect_url = self.request.get('redirect_url', None)
         if redirect_url is None:
             redirect_url = task.absolute_url()
 
         return self.request.RESPONSE.redirect(redirect_url)
-
-    def close_task(self, task, text):
-        transition = 'task-transition-open-tested-and-closed'
-        wftool = getToolByName(task, 'portal_workflow')
-
-        before = wftool.getInfoFor(task, 'review_state')
-        before = wftool.getTitleForStateOnType(before, task.Type())
-
-        wftool.doActionFor(task, transition)
-
-        after = wftool.getInfoFor(task, 'review_state')
-        after = wftool.getTitleForStateOnType(after, task.Type())
-
-        response = add_simple_response(task, text=text)
-        response.add_change('review_state', _(u'Issue state'),
-                            before, after)
-        return response
 
     def get_task(self):
         intids = getUtility(IIntIds)
