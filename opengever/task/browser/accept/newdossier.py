@@ -217,7 +217,6 @@ def allowed_dossier_types_vocabulary(context):
 
 class ISelectDossierTypeSchema(Schema):
 
-    # XXX hide if only one dossier type is selectable?
     dossier_type = schema.Choice(
         title=_('label_accept_select_dossier_type', default=u'Dossier type'),
         description=_(u'help_accept_select_dossier_type',
