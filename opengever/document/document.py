@@ -66,8 +66,8 @@ class IDocumentSchema(form.Schema):
 
     form.fieldset(
         u'common',
-        label = _(u'fieldset_common', u'Common'),
-        fields = [
+        label=_(u'fieldset_common', u'Common'),
+        fields=[
             u'title',
             u'description',
             u'keywords',
@@ -87,40 +87,40 @@ class IDocumentSchema(form.Schema):
 
     dexteritytextindexer.searchable('title')
     title = schema.TextLine(
-        title = _(u'label_title', default=u'Title'),
+        title=_(u'label_title', default=u'Title'),
         required=False)
 
     dexteritytextindexer.searchable('description')
     description = schema.Text(
         title=_(u'label_description', default=u'Description'),
-        description = _(u'help_description', default=u''),
-        required = False,
+        description=_(u'help_description', default=u''),
+        required=False,
         )
 
     dexteritytextindexer.searchable('keywords')
     keywords = schema.Tuple(
-        title = _(u'label_keywords', default=u'Keywords'),
-        description = _(u'help_keywords', default=u''),
-        value_type = schema.TextLine(),
-        required = False,
-        missing_value = (),
+        title=_(u'label_keywords', default=u'Keywords'),
+        description=_(u'help_keywords', default=u''),
+        value_type=schema.TextLine(),
+        required=False,
+        missing_value=(),
         )
-    form.widget(keywords = TextLinesFieldWidget)
+    form.widget(keywords=TextLinesFieldWidget)
 
     foreign_reference = schema.TextLine(
-        title = _(u'label_foreign_reference', default='Foreign Reference'),
-        description = _('help_foreign_reference', default=''),
-        required = False,
+        title=_(u'label_foreign_reference', default='Foreign Reference'),
+        description=_('help_foreign_reference', default=''),
+        required=False,
         )
 
     document_date = schema.Date(
-        title = _(u'label_document_date', default='Document Date'),
-        description = _(u'help_document_date', default=''),
-        required = False,
+        title=_(u'label_document_date', default='Document Date'),
+        description=_(u'help_document_date', default=''),
+        required=False,
         )
 
     #workaround because ftw.datepicker wasn't working
-    form.widget(document_date = DatePickerFieldWidget)
+    form.widget(document_date=DatePickerFieldWidget)
 
     document_type = schema.Choice(
         title=_(u'label_document_type', default='Document Type'),
@@ -128,7 +128,7 @@ class IDocumentSchema(form.Schema):
         source=wrap_vocabulary('opengever.document.document_types',
                     visible_terms_from_registry='opengever.document' + \
                             '.interfaces.IDocumentType.document_types'),
-        required = False,
+        required=False,
         )
 
     dexteritytextindexer.searchable('document_author')
@@ -141,63 +141,63 @@ class IDocumentSchema(form.Schema):
 #    dexteritytextindexer.searchable('file')
     form.primary('file')
     file = NamedBlobFile(
-        title = _(u'label_file', default='File'),
-        description = _(u'help_file', default=''),
-        required = False,
+        title=_(u'label_file', default='File'),
+        description=_(u'help_file', default=''),
+        required=False,
         )
 
     form.mode(digitally_available='hidden')
     digitally_available = schema.Bool(
-        title = _(u'label_digitally_available', default='Digital Available'),
-        description = _(u'help_digitally_available',
+        title=_(u'label_digitally_available', default='Digital Available'),
+        description=_(u'help_digitally_available',
             default='Is the Document Digital Availabe'),
-        required = False,
+        required=False,
         )
 
     form.widget(preserved_as_paper=checkbox.SingleCheckBoxFieldWidget)
     preserved_as_paper = schema.Bool(
-        title = _(u'label_preserved_as_paper', default='Preserved as paper'),
-        description = _(u'help_preserved_as_paper', default=''),
-        required = False,
-        default = True,
+        title=_(u'label_preserved_as_paper', default='Preserved as paper'),
+        description=_(u'help_preserved_as_paper', default=''),
+        required=False,
+        default=True,
         )
 
     form.omitted('archival_file')
     archival_file = NamedBlobFile(
-        title = _(u'label_archival_file', default='Archival File'),
-        description = _(u'help_archival_file', default=''),
-        required = False,
+        title=_(u'label_archival_file', default='Archival File'),
+        description=_(u'help_archival_file', default=''),
+        required=False,
         )
 
     form.omitted('thumbnail')
     thumbnail = NamedBlobFile(
-        title = _(u'label_thumbnail', default='Thumbnail'),
-        description = _(u'help_thumbnail', default=''),
-        required = False,
+        title=_(u'label_thumbnail', default='Thumbnail'),
+        description=_(u'help_thumbnail', default=''),
+        required=False,
         )
 
     form.omitted('preview')
     preview = NamedBlobFile(
-        title = _(u'label_preview', default='Preview'),
-        description = _(u'help_preview', default=''),
-        required = False,
+        title=_(u'label_preview', default='Preview'),
+        description=_(u'help_preview', default=''),
+        required=False,
         )
 
     receipt_date = schema.Date(
-        title = _(u'label_receipt_date', default='Date of receipt'),
-        description = _(u'help_receipt_date', default=''),
-        required = False,
+        title=_(u'label_receipt_date', default='Date of receipt'),
+        description=_(u'help_receipt_date', default=''),
+        required=False,
         )
     #workaround because ftw.datepicker wasn't working
-    form.widget(receipt_date = DatePickerFieldWidget)
+    form.widget(receipt_date=DatePickerFieldWidget)
 
     delivery_date = schema.Date(
-        title = _(u'label_delivery_date', default='Date of delivery'),
-        description = _(u'help_delivery_date', default=''),
-        required = False,
+        title=_(u'label_delivery_date', default='Date of delivery'),
+        description=_(u'help_delivery_date', default=''),
+        required=False,
         )
     #workaround because ftw.datepicker wasn't working
-    form.widget(delivery_date = DatePickerFieldWidget)
+    form.widget(delivery_date=DatePickerFieldWidget)
 
     @invariant
     def title_or_file_required(data):
@@ -481,8 +481,8 @@ class ForwardViewlet(grok.Viewlet):
 
     def render(self):
         if self.request.get("externaledit", None):
-            return '<script language="JavaScript">jq(function(){window.location.href="'+str(
-                self.context.absolute_url())+'/external_edit"})</script>'
+            return '<script language="JavaScript">jq(function(){window.location.href="' + str(
+                self.context.absolute_url()) + '/external_edit"})</script>'
         return ''
 
 
@@ -511,4 +511,3 @@ class RelatedTasks(Tasks):
 
         # do not search on this context, search on site
         self.filter_path = None
-
