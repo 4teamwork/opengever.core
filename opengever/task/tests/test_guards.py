@@ -5,8 +5,10 @@ from opengever.task.browser.transitioncontroller import \
     ITaskTransitionController, TaskTransitionController
 from opengever.task.interfaces import ISuccessorTaskController
 from opengever.task.task import ITask
+from xml.dom.minidom import parse
 from zope.interface import Interface
 from zope.interface.verify import verifyClass
+import os.path
 
 
 class TestTaskTransitionController(MockTestCase):
@@ -15,6 +17,34 @@ class TestTaskTransitionController(MockTestCase):
         self.assertTrue(
             verifyClass(ITaskTransitionController,
                         TaskTransitionController))
+
+    def test_transitions_in_defintion_use_controller(self):
+        import opengever.task
+        path = os.path.join(
+            os.path.dirname(os.path.abspath(opengever.task.__file__)),
+            'profiles', 'default', 'workflows', 'opengever_task_workflow',
+            'definition.xml')
+        self.assertTrue(os.path.isfile(path))
+
+        doc = parse(path)
+
+        for node in doc.getElementsByTagName('transition'):
+            transition = node.getAttribute('transition_id')
+            self.assertEqual(node.getAttribute('title'), transition)
+
+            actions = node.getElementsByTagName('action')
+            self.assertEqual(len(actions), 1)
+            self.assertEqual(actions[0].firstChild.nodeValue, transition)
+            self.assertEqual(
+                actions[0].getAttribute('url'),
+                '%(content_url)s/@@task_transition_controller?transition=' +\
+                    transition)
+
+            guard = node.getElementsByTagName('guard-expression')[0]
+            self.assertEqual(
+                guard.firstChild.nodeValue,
+                "python: here.restrictedTraverse('@@task_transition_" + \
+                    "controller').is_transition_possible('%s')" % transition)
 
     def test_is_issuer(self):
         task1 = self.mocker.mock()
@@ -118,7 +148,8 @@ class TestTaskTransitionController(MockTestCase):
         self.assertTrue(TaskTransitionController(
                 task1, {})._is_responsible_or_inbox_group_user())
 
-    def test_is_cancelled_to_open_possible(self):
+    def test_cancelled_to_open_guards(self):
+        transition = 'task-transition-cancelled-open'
         controller, controller_mock, task = self._create_task_controller()
 
         with self.mocker.order():
@@ -126,11 +157,20 @@ class TestTaskTransitionController(MockTestCase):
             self.expect(controller_mock._is_issuer()).result(True)
 
         self.replay()
-        transition = 'task-transition-cancelled-open'
         self.assertFalse(controller.is_transition_possible(transition))
         self.assertTrue(controller.is_transition_possible(transition))
 
-    def test_is_progress_to_resolved_possible(self):
+    def test_cancelled_to_open_actions(self):
+        transition = 'task-transition-cancelled-open'
+        controller, controller_mock, task = self._create_task_controller()
+
+        self.replay()
+
+        self.assertEqual(controller.get_transition_action(transition),
+                         'http://nohost/plone/task-1/addresponse?' + \
+                             'form.widgets.transition=%s' % transition)
+
+    def test_progress_to_resolved_guards(self):
         controller, controller_mock, task = self._create_task_controller()
 
         with self.mocker.order():
@@ -182,7 +222,18 @@ class TestTaskTransitionController(MockTestCase):
         self.assertTrue(controller.is_transition_possible(transition))
         self.assertTrue(controller.is_transition_possible(transition))
 
-    def test_is_progress_to_closed_possible(self):
+    def test_progress_to_resolved_actions(self):
+        transition = 'task-transition-in-progress-resolved'
+        controller, controller_mock, task = self._create_task_controller()
+
+        self.replay()
+
+        # XXX move @@complete_task to action function
+        self.assertEqual(controller.get_transition_action(transition),
+                         'http://nohost/plone/task-1/@@complete_task?' + \
+                             'transition=%s' % transition)
+
+    def test_progress_to_closed_guards(self):
         controller, controller_mock, task = self._create_task_controller()
 
         with self.mocker.order():
@@ -194,13 +245,15 @@ class TestTaskTransitionController(MockTestCase):
             self.expect(task.task_type_category).result(
                 'unidirectional_by_value')
             self.expect(
-                controller_mock._is_responsible_or_inbox_group_user()).result(False)
+                controller_mock._is_responsible_or_inbox_group_user()).result(
+                False)
 
             #task3
             self.expect(task.task_type_category).result(
                 'unidirectional_by_value')
             self.expect(
-                controller_mock._is_responsible_or_inbox_group_user()).result(True)
+                controller_mock._is_responsible_or_inbox_group_user()).result(
+                True)
             self.expect(
                 controller_mock._is_substasks_closed()).result(False)
 
@@ -208,7 +261,8 @@ class TestTaskTransitionController(MockTestCase):
             self.expect(task.task_type_category).result(
                 'unidirectional_by_value')
             self.expect(
-                controller_mock._is_responsible_or_inbox_group_user()).result(True)
+                controller_mock._is_responsible_or_inbox_group_user()).result(
+                True)
             self.expect(
                 controller_mock._is_substasks_closed()).result(True)
             self.expect(
@@ -219,7 +273,8 @@ class TestTaskTransitionController(MockTestCase):
             self.expect(task.task_type_category).result(
                 'unidirectional_by_value')
             self.expect(
-                controller_mock._is_responsible_or_inbox_group_user()).result(True)
+                controller_mock._is_responsible_or_inbox_group_user()).result(
+                True)
             self.expect(
                 controller_mock._is_substasks_closed()).result(True)
             self.expect(
@@ -230,7 +285,8 @@ class TestTaskTransitionController(MockTestCase):
             self.expect(task.task_type_category).result(
                 'unidirectional_by_value')
             self.expect(
-                controller_mock._is_responsible_or_inbox_group_user()).result(True)
+                controller_mock._is_responsible_or_inbox_group_user()).result(
+                True)
             self.expect(
                 controller_mock._is_substasks_closed()).result(True)
             self.expect(
@@ -247,7 +303,18 @@ class TestTaskTransitionController(MockTestCase):
         self.assertTrue(controller.is_transition_possible(transition))
         self.assertTrue(controller.is_transition_possible(transition))
 
-    def test_is_cancel_possible(self):
+    def test_progress_to_closed_actions(self):
+        transition = 'task-transition-in-progress-tested-and-closed'
+        controller, controller_mock, task = self._create_task_controller()
+
+        self.replay()
+
+        # XXX move @@complete_task to action function
+        self.assertEqual(controller.get_transition_action(transition),
+                         'http://nohost/plone/task-1/@@complete_task?' + \
+                             'transition=%s' % transition)
+
+    def test_open_to_cancel_guards(self):
         controller, controller_mock, task = self._create_task_controller()
         with self.mocker.order():
             self.expect(controller_mock._is_issuer()).result(False)
@@ -258,7 +325,17 @@ class TestTaskTransitionController(MockTestCase):
         self.assertFalse(controller.is_transition_possible(transition))
         self.assertTrue(controller.is_transition_possible(transition))
 
-    def test_is_open_to_progress_possible(self):
+    def test_open_to_cancel_actions(self):
+        transition = 'task-transition-open-cancelled'
+        controller, controller_mock, task = self._create_task_controller()
+
+        self.replay()
+
+        self.assertEqual(controller.get_transition_action(transition),
+                         'http://nohost/plone/task-1/addresponse?' + \
+                             'form.widgets.transition=%s' % transition)
+
+    def test_open_to_progress_guards(self):
         controller, controller_mock, task = self._create_task_controller()
         with self.mocker.order():
             #task1
@@ -286,20 +363,42 @@ class TestTaskTransitionController(MockTestCase):
         self.assertFalse(controller.is_transition_possible(transition))
         self.assertTrue(controller.is_transition_possible(transition))
 
-    def test_is_reject_possible(self):
+    def test_open_to_progress_actions(self):
+        transition = 'task-transition-open-in-progress'
+        controller, controller_mock, task = self._create_task_controller()
+
+        self.replay()
+
+        # XXX move @@accept_task logic to transitioncontroller
+        self.assertEqual(controller.get_transition_action(transition),
+                         'http://nohost/plone/task-1/@@accept_task')
+
+    def test_open_to_reject_guards(self):
         controller, controller_mock, task = self._create_task_controller()
         with self.mocker.order():
             self.expect(
-                controller_mock._is_responsible_or_inbox_group_user()).result(False)
+                controller_mock._is_responsible_or_inbox_group_user()).result(
+                False)
             self.expect(
-                controller_mock._is_responsible_or_inbox_group_user()).result(True)
+                controller_mock._is_responsible_or_inbox_group_user()).result(
+                True)
 
         self.replay()
         transition = 'task-transition-open-rejected'
         self.assertFalse(controller.is_transition_possible(transition))
         self.assertTrue(controller.is_transition_possible(transition))
 
-    def test_is_open_to_resolved_possible(self):
+    def test_open_to_reject_actions(self):
+        transition = 'task-transition-open-rejected'
+        controller, controller_mock, task = self._create_task_controller()
+
+        self.replay()
+
+        self.assertEqual(controller.get_transition_action(transition),
+                         'http://nohost/plone/task-1/addresponse?' + \
+                             'form.widgets.transition=%s' % transition)
+
+    def test_open_to_resolved_guards(self):
         controller, controller_mock, task = self._create_task_controller()
         with self.mocker.order():
             #task1
@@ -330,7 +429,18 @@ class TestTaskTransitionController(MockTestCase):
         self.assertFalse(controller.is_transition_possible(transition))
         self.assertTrue(controller.is_transition_possible(transition))
 
-    def test_is_open_to_closed_possible(self):
+    def test_open_to_resolved_actions(self):
+        transition = 'task-transition-open-resolved'
+        controller, controller_mock, task = self._create_task_controller()
+
+        self.replay()
+
+        # XXX move @@complete_task to action function
+        self.assertEqual(controller.get_transition_action(transition),
+                         'http://nohost/plone/task-1/@@complete_task?' + \
+                             'transition=%s' % transition)
+
+    def test_open_to_closed_guards(self):
         controller, controller_mock, task = self._create_task_controller()
         with self.mocker.order():
             # task1
@@ -364,7 +474,34 @@ class TestTaskTransitionController(MockTestCase):
         self.assertFalse(controller.is_transition_possible(transition))
         self.assertTrue(controller.is_transition_possible(transition))
 
-    def test_is_rejected_to_open_possible(self):
+    def test_open_to_closed_actions(self):
+        transition = 'task-transition-open-tested-and-closed'
+        controller, controller_mock, task = self._create_task_controller()
+
+        self.replay()
+
+        # XXX move @@close-task-wizard logic to transitioncontroller
+        self.assertEqual(controller.get_transition_action(transition),
+                         'http://nohost/plone/task-1/@@close-task-wizard')
+
+    def test_reassign_guards(self):
+        controller, controller_mock, task = self._create_task_controller()
+
+        self.replay()
+        transition = 'task-transition-reassign'
+        self.assertTrue(controller.is_transition_possible(transition))
+
+    def test_reassign_actions(self):
+        transition = 'task-transition-reassign'
+        controller, controller_mock, task = self._create_task_controller()
+
+        self.replay()
+
+        self.assertEqual(controller.get_transition_action(transition),
+                         'http://nohost/plone/task-1/@@assign-task?' + \
+                             'form.widgets.transition=%s' % transition)
+
+    def test_rejected_to_open_guards(self):
         controller, controller_mock, task = self._create_task_controller()
         with self.mocker.order():
             self.expect(controller_mock._is_issuer()).result(False)
@@ -375,7 +512,17 @@ class TestTaskTransitionController(MockTestCase):
         self.assertFalse(controller.is_transition_possible(transition))
         self.assertTrue(controller.is_transition_possible(transition))
 
-    def test_is_resolved_to_closed_possible(self):
+    def test_rejected_to_open_actions(self):
+        transition = 'task-transition-rejected-open'
+        controller, controller_mock, task = self._create_task_controller()
+
+        self.replay()
+
+        self.assertEqual(controller.get_transition_action(transition),
+                         'http://nohost/plone/task-1/addresponse?' + \
+                             'form.widgets.transition=%s' % transition)
+
+    def test_resolved_to_closed_guards(self):
         controller, controller_mock, task = self._create_task_controller()
         with self.mocker.order():
             self.expect(controller_mock._is_issuer()).result(False)
@@ -386,7 +533,17 @@ class TestTaskTransitionController(MockTestCase):
         self.assertFalse(controller.is_transition_possible(transition))
         self.assertTrue(controller.is_transition_possible(transition))
 
-    def test_is_resolved_to_progress_possible(self):
+    def test_resolved_to_closed_actions(self):
+        transition = 'task-transition-resolved-tested-and-closed'
+        controller, controller_mock, task = self._create_task_controller()
+
+        self.replay()
+
+        self.assertEqual(controller.get_transition_action(transition),
+                         'http://nohost/plone/task-1/addresponse?' + \
+                             'form.widgets.transition=%s' % transition)
+
+    def test_resolved_to_progress_guards(self):
         controller, controller_mock, task = self._create_task_controller()
         with self.mocker.order():
             self.expect(controller_mock._is_issuer()).result(False)
@@ -397,9 +554,21 @@ class TestTaskTransitionController(MockTestCase):
         self.assertFalse(controller.is_transition_possible(transition))
         self.assertTrue(controller.is_transition_possible(transition))
 
+    def test_resolved_to_progress_actions(self):
+        transition = 'task-transition-resolved-in-progress'
+        controller, controller_mock, task = self._create_task_controller()
+
+        self.replay()
+
+        self.assertEqual(controller.get_transition_action(transition),
+                         'http://nohost/plone/task-1/addresponse?' + \
+                             'form.widgets.transition=%s' % transition)
 
     def _create_task_controller(self):
         task1 = self.mocker.mock()
+        self.expect(task1.absolute_url()).result(
+            'http://nohost/plone/task-1').count(0, None)
+
         controller = TaskTransitionController(task1, {})
         controller_mock = self.mocker.patch(controller)
 

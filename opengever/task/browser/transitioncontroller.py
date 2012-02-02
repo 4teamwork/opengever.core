@@ -1,6 +1,7 @@
 from Products.Five import BrowserView
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.task.interfaces import ISuccessorTaskController
+from zExceptions import NotFound
 from zope.component import getMultiAdapter
 from zope.component import getUtility
 from zope.interface import Interface, implements
@@ -72,6 +73,16 @@ class TaskTransitionController(BrowserView):
 
     # ------------ public interface --------------
 
+    def __call__(self):
+        transition = self.request.get('transition')
+
+        if not self.is_transition_possible(transition):
+            raise NotFound
+
+        else:
+            url = self.get_transition_action(transition)
+            return self.request.RESPONSE.redirect(url)
+
     def is_transition_possible(self, transition):
         """Returns `True` if the current user can execute the
         `transition` on the current task.
@@ -97,7 +108,7 @@ class TaskTransitionController(BrowserView):
             return ''
 
         # this is an unbound method
-        return action_url_generator(self)
+        return action_url_generator(self, transition)
 
     # ------------ workflow implementation --------------
 
@@ -106,6 +117,10 @@ class TaskTransitionController(BrowserView):
         """Checks if:
         - The current user is the issuer of the current task(context)"""
         return self._is_issuer()
+
+    @action('task-transition-cancelled-open')
+    def cancelled_to_open_action(self, transition):
+        return self._addresponse_form_url(transition)
 
     @guard('task-transition-in-progress-resolved')
     def progress_to_resolved_guard(self):
@@ -122,6 +137,12 @@ class TaskTransitionController(BrowserView):
     @task_type_category('unidirectional_by_value')
     def unival_progress_to_resolved_guard(self):
         return False
+
+    @action('task-transition-in-progress-resolved')
+    def progress_to_resolved_action(self, transition):
+        return '%s/@@complete_task?transition=%s' % (
+            self.context.absolute_url(),
+            transition)
 
     @guard('task-transition-in-progress-tested-and-closed')
     def progress_to_closed_guard(self):
@@ -142,11 +163,21 @@ class TaskTransitionController(BrowserView):
                 self._is_substasks_closed() and
                 (not self._has_successors() or self._is_remote_request()))
 
+    @action('task-transition-in-progress-tested-and-closed')
+    def progress_to_closed_action(self, transition):
+        return '%s/@@complete_task?transition=%s' % (
+            self.context.absolute_url(),
+            transition)
+
     @guard('task-transition-open-cancelled')
     def open_to_cancelled_guard(self):
         """Checks if:
         - The current user is the issuer."""
         return self._is_issuer()
+
+    @action('task-transition-open-cancelled')
+    def open_to_cancelled_action(self, transition):
+        return self._addresponse_form_url(transition)
 
     @guard('task-transition-open-in-progress')
     def open_to_progress_guard(self):
@@ -154,6 +185,10 @@ class TaskTransitionController(BrowserView):
         - The current user is the responsible or a member of the inbox group.
         """
         return self._is_responsible_or_inbox_group_user()
+
+    @action('task-transition-open-in-progress')
+    def open_to_progress_action(self, transition):
+        return '%s/@@accept_task' % self.context.absolute_url()
 
     @guard('task-transition-open-in-progress')
     @task_type_category('unidirectional_by_reference')
@@ -166,6 +201,10 @@ class TaskTransitionController(BrowserView):
         - The current user is the responsible or a member of the inbox group.
         """
         return self._is_responsible_or_inbox_group_user()
+
+    @action('task-transition-open-rejected')
+    def open_to_rejected_action(self, transition):
+        return self._addresponse_form_url(transition)
 
     @guard('task-transition-open-resolved')
     def open_to_resolved_guard(self):
@@ -183,12 +222,32 @@ class TaskTransitionController(BrowserView):
         """
         return False
 
+    @action('task-transition-open-resolved')
+    def open_to_resolved_action(self, transition):
+        return '%s/@@complete_task?transition=%s' % (
+            self.context.absolute_url(),
+            transition)
+
     @guard('task-transition-open-tested-and-closed')
     def open_to_closed_guard(self):
         """Checks if:
         - The current user is the issuer
         """
         return self._is_issuer()
+
+    @action('task-transition-open-tested-and-closed')
+    def open_to_closed_action(self, transition):
+        return '%s/@@close-task-wizard' % self.context.absolute_url()
+
+    @guard('task-transition-reassign')
+    def reassign_guard(self):
+        return True
+
+    @action('task-transition-reassign')
+    def reassign_action(self, transition):
+        return '%s/@@assign-task?form.widgets.transition=%s' % (
+            self.context.absolute_url(),
+            transition)
 
     @guard('task-transition-open-tested-and-closed')
     @task_type_category('unidirectional_by_reference')
@@ -205,17 +264,29 @@ class TaskTransitionController(BrowserView):
         - The current user is the issuer of the task"""
         return self._is_issuer()
 
+    @action('task-transition-rejected-open')
+    def rejected_to_open_action(self, transition):
+        return self._addresponse_form_url(transition)
+
     @guard('task-transition-resolved-tested-and-closed')
     def resolved_to_closed_guard(self):
         """Checks if:
         - The current user is the issuer of the task"""
         return self._is_issuer()
 
+    @action('task-transition-resolved-tested-and-closed')
+    def resolved_to_closed_action(self, transition):
+        return self._addresponse_form_url(transition)
+
     @guard('task-transition-resolved-in-progress')
-    def is_resolved_to_progress_possible(self):
+    def resolved_to_progress_guard(self):
         """Checks if:
         - The current user is the issuer of the task"""
         return self._is_issuer()
+
+    @action('task-transition-resolved-in-progress')
+    def resolved_to_progress_action(self, transition):
+        return self._addresponse_form_url(transition)
 
 
     # ------------ helper functions --------------
@@ -343,3 +414,10 @@ class TaskTransitionController(BrowserView):
         if ISuccessorTaskController(self.context).get_successors():
             return True
         return False
+
+    def _addresponse_form_url(self, transition):
+        """Returns the redirect url to the addresponse, passing `transition`.
+        """
+        return '%s/addresponse?form.widgets.transition=%s' % (
+            self.context.absolute_url(),
+            transition)
