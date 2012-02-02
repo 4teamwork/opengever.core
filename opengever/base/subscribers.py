@@ -1,7 +1,10 @@
+from AccessControl import Unauthorized
 from five import grok
 from OFS.interfaces import IObjectClonedEvent
+from OFS.interfaces import IObjectWillBeRemovedEvent
 from opengever.base import _
 from plone.dexterity.interfaces import IDexterityContent
+from zope.component import getMultiAdapter
 from zope.component.hooks import getSite
 
 
@@ -19,3 +22,13 @@ def create_initial_version(obj, event):
         # Create an initial version
         pr._recursiveSave(obj, {}, pr._prepareSysMetadata(comment),
             autoapply=pr.autoapply)
+
+
+@grok.subscribe(IDexterityContent, IObjectWillBeRemovedEvent)
+def prevent_deletion(obj, event):
+    """Prevent deletion of objects by anyone except Managers
+    """
+    membership = getMultiAdapter((obj, obj.REQUEST),
+                                        name=u"plone_tools").membership()
+    if not membership.checkPermission('Manage portal', obj):
+        raise Unauthorized()

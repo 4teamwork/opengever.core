@@ -5,6 +5,10 @@ Changelog
 2.2 (unreleased)
 ----------------
 
+- Prevent obj deletion for anyone except Managers.
+  (Subscriber for IObjectWillBeRemovedEvent that checks for 'Manage portal' permission)
+  [lgraf]
+
 - Changed grok context to make resolveoguid work everywere.
   [ttschanz]
 
