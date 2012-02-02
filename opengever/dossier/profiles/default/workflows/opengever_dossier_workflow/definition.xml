@@ -49,12 +49,7 @@
    <permission-role>Administrator</permission-role>
   </permission-map>
   <permission-map name="List folder contents" acquired="False">
-   <permission-role>Contributor</permission-role>
-   <permission-role>Editor</permission-role>
    <permission-role>Manager</permission-role>
-   <permission-role>Owner</permission-role>
-   <permission-role>Reader</permission-role>
-   <permission-role>Administrator</permission-role>
   </permission-map>
   <permission-map name="Manage properties" acquired="False">
    <permission-role>Contributor</permission-role>
@@ -194,10 +189,7 @@
   <permission-map name="Copy or Move" acquired="False">
   </permission-map>
   <permission-map name="List folder contents" acquired="False">
-   <permission-role>Editor</permission-role>
    <permission-role>Manager</permission-role>
-   <permission-role>Reader</permission-role>
-   <permission-role>Administrator</permission-role>
   </permission-map>
   <permission-map name="Manage properties" acquired="False">
    <permission-role>Editor</permission-role>
@@ -279,11 +271,7 @@
   <permission-map name="Copy or Move" acquired="False">
   </permission-map>
   <permission-map name="List folder contents" acquired="False">
-   <permission-role>Editor</permission-role>
    <permission-role>Manager</permission-role>
-   <permission-role>Owner</permission-role>
-   <permission-role>Reader</permission-role>
-   <permission-role>Administrator</permission-role>
   </permission-map>
   <permission-map name="Manage properties" acquired="False">
    <permission-role>Editor</permission-role>
@@ -368,12 +356,7 @@
   <permission-map name="Copy or Move" acquired="False">
   </permission-map>
   <permission-map name="List folder contents" acquired="False">
-   <permission-role>Administrator</permission-role>
-   <permission-role>Contributor</permission-role>
-   <permission-role>Editor</permission-role>
    <permission-role>Manager</permission-role>
-   <permission-role>Owner</permission-role>
-   <permission-role>Reader</permission-role>
   </permission-map>
   <permission-map name="Manage properties" acquired="False">
    <permission-role>Administrator</permission-role>
