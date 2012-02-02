@@ -1,6 +1,6 @@
 from Products.Five import BrowserView
-from opengever.task.interfaces import ISuccessorTaskController
 from opengever.ogds.base.interfaces import IContactInformation
+from opengever.task.interfaces import ISuccessorTaskController
 from zope.component import getMultiAdapter
 from zope.component import getUtility
 from zope.interface import Interface, implements
@@ -14,49 +14,55 @@ class ITaskTransitionController(Interface):
     """Interface for a controller view for checking,
     if certain transitions should be available or not"""
 
-    def is_cancelled_to_open_possible():
-        """Guard check for transition:
-        task-transition-cancelled-open"""
+    def is_transition_possible(transition):
+        """Returns `True` if the current user can execute the
+        `transition` on the current task.
+        """
 
-    def is_progress_to_resolved_possible():
-        """Guard check for transition:
-        task-transition-in-progress-resolved"""
+    def get_transition_action(transition):
+        """Returns the action URL for executing the `transition`
+        on the current context.
+        """
 
-    def is_progress_to_closed_possible():
-        """Guard check for transition:
-        task-transition-in-progress-tested-and-closed"""
 
-    def is_cancel_possible():
-        """Guard check for transition:
-        task-transition-open-cancelled"""
+def guard(transition):
+    """Decorator for marking a function as guard for
+    a specific `transition`.
+    """
+    def _guard_decorator(func):
+        assert getattr(func, '_action_transitions', None) is None, \
+            '@action and @guard cannot be used for the same function.'
+        if getattr(func, '_guard_transitions', None) is None:
+            func._guard_transitions = []
+        func._guard_transitions.append(transition)
+        return func
+    return _guard_decorator
 
-    def is_open_to_progress_possible():
-        """Guard check for transition:
-        task-transition-open-in-progress"""
 
-    def is_reject_possible():
-        """Guard check for transition:
-        task-transition-open-rejected"""
+def action(transition):
+    """Decorator for marking a function as action for a
+    sepcific `transition`.
+    """
+    def _action_decorator(func):
+        assert getattr(func, '_guard_transitions', None) is None, \
+            '@action and @guard cannot be used for the same function.'
+        if getattr(func, '_action_transitions', None) is None:
+            func._action_transitions = []
+        func._action_transitions.append(transition)
+        return func
+    return _action_decorator
 
-    def is_open_to_resolved_possible():
-        """Guard check for transition:
-        task-transition-open-resolved"""
 
-    def is_open_to_closed_possible():
-        """Guard check for transition:
-        task-transition-open-tested-and-closed"""
-
-    def is_rejected_to_open_possible():
-        """Guard check for transition:
-        task-transition-rejected-open"""
-
-    def is_resolved_to_closed_possible():
-        """Guard check for transition:
-        task-transition-resolved-in-progress"""
-
-    def is_resolved_to_progress_possible():
-        """Guard check for transition:
-        task-transition-resolved-tested-and-closed"""
+def task_type_category(category):
+    """Decorator for making a guard or action specific to a task type
+    category.
+    """
+    def _category_decorator(func):
+        if getattr(func, '_filter_categories', None) is None:
+            func._filter_categories = []
+        func._filter_categories.append(category)
+        return func
+    return _category_decorator
 
 
 class TaskTransitionController(BrowserView):
@@ -64,89 +70,213 @@ class TaskTransitionController(BrowserView):
 
     implements(ITaskTransitionController)
 
-    def is_cancelled_to_open_possible(self):
+    # ------------ public interface --------------
+
+    def is_transition_possible(self, transition):
+        """Returns `True` if the current user can execute the
+        `transition` on the current task.
+        """
+
+        guard = self._get_function_for_transition('guard', transition)
+        # this is an unbound method
+
+        if not guard:
+            return None
+
+        return guard(self)
+
+    def get_transition_action(self, transition):
+        """Returns the action URL for executing the `transition`
+        on the current context.
+        """
+
+        action_url_generator = self._get_function_for_transition(
+            'action', transition)
+
+        if not action_url_generator:
+            return ''
+
+        # this is an unbound method
+        return action_url_generator(self)
+
+    # ------------ workflow implementation --------------
+
+    @guard('task-transition-cancelled-open')
+    def cancelled_to_open_guard(self):
         """Checks if:
         - The current user is the issuer of the current task(context)"""
         return self._is_issuer()
 
-    def is_progress_to_resolved_possible(self):
+    @guard('task-transition-in-progress-resolved')
+    def progress_to_resolved_guard(self):
         """Checks if:
         - The responsible is the current user or a inbox_group user.
-        - Task is not unidirectional_by_value (zu direkten Erledigung).
         - All subtaskes are resolve, cancelled or closed.
         - The task has no successors
         """
         return (self._is_responsible_or_inbox_group_user() and
-                not self._is_unidirectional_by_value() and
                 self._is_substasks_closed() and
                 (not self._has_successors() or self._is_remote_request()))
 
-    def is_progress_to_closed_possible(self):
+    @guard('task-transition-in-progress-resolved')
+    @task_type_category('unidirectional_by_value')
+    def unival_progress_to_resolved_guard(self):
+        return False
+
+    @guard('task-transition-in-progress-tested-and-closed')
+    def progress_to_closed_guard(self):
+        """This transition is by default not available. It is only available
+        for unidirectional_by_value tasks.
+        """
+        return False
+
+    @guard('task-transition-in-progress-tested-and-closed')
+    @task_type_category('unidirectional_by_value')
+    def unival_progress_to_closed_guard(self):
         """Checks if:
-        - Task is unidirectional_by_value (zu direkten Erledigung).
         - The current user is the responsible or a member of the inbox group.
         - All subtaskes are resolved, cancelled or closed.
         - The task has no successors or is a remote request
         """
-        return (self._is_unidirectional_by_value() and
-                self._is_responsible_or_inbox_group_user() and
+        return (self._is_responsible_or_inbox_group_user() and
                 self._is_substasks_closed() and
                 (not self._has_successors() or self._is_remote_request()))
 
-    def is_cancel_possible(self):
+    @guard('task-transition-open-cancelled')
+    def open_to_cancelled_guard(self):
         """Checks if:
         - The current user is the issuer."""
         return self._is_issuer()
 
-    def is_open_to_progress_possible(self):
-        """Checks if ...
-        - Not unidirectional_by_reference
-        - The current user is the responsible or a member of the inbox group.
-        """
-        if not self._is_unidirectional_by_reference():
-            return self._is_responsible_or_inbox_group_user()
-        return False
-
-    def is_reject_possible(self):
+    @guard('task-transition-open-in-progress')
+    def open_to_progress_guard(self):
         """Checks if ...
         - The current user is the responsible or a member of the inbox group.
         """
         return self._is_responsible_or_inbox_group_user()
 
-    def is_open_to_resolved_possible(self):
+    @guard('task-transition-open-in-progress')
+    @task_type_category('unidirectional_by_reference')
+    def uniref_open_to_progress_guard(self):
+        return False
+
+    @guard('task-transition-open-rejected')
+    def open_to_rejected_guard(self):
+        """Checks if ...
+        - The current user is the responsible or a member of the inbox group.
+        """
+        return self._is_responsible_or_inbox_group_user()
+
+    @guard('task-transition-open-resolved')
+    def open_to_resolved_guard(self):
         """Checks if:
         - The Task is is_bidirectional
         - The current user is the responsible or a member of the inbox group.
         """
-        if not self._is_bidirectional():
-            return False
         return self._is_responsible_or_inbox_group_user()
 
-    def is_open_to_closed_possible(self):
+    @guard('task-transition-open-resolved')
+    @task_type_category('unidirectional_by_reference')
+    @task_type_category('unidirectional_by_value')
+    def uni_open_to_resolved_guard(self):
+        """Transition is not available for unidirectional tasks.
+        """
+        return False
+
+    @guard('task-transition-open-tested-and-closed')
+    def open_to_closed_guard(self):
+        """Checks if:
+        - The current user is the issuer
+        """
+        return self._is_issuer()
+
+    @guard('task-transition-open-tested-and-closed')
+    @task_type_category('unidirectional_by_reference')
+    def uniref_open_to_closed_guard(self):
         """Checks if:
         - It's a unidirectional_byrefrence task
         - Current user is the responsible or a member of the inbox group.
-        or
-        - The current user is the issuer
         """
-        if self._is_unidirectional_by_reference():
-            return self._is_responsible_or_inbox_group_user()
-        return self._is_issuer()
+        return self._is_responsible_or_inbox_group_user()
 
-    def is_rejected_to_open_possible(self):
+    @guard('task-transition-rejected-open')
+    def rejected_to_open_guard(self):
         """Checks if:
         - The current user is the issuer of the task"""
         return self._is_issuer()
 
-    def is_resolved_to_closed_possible(self):
+    @guard('task-transition-resolved-tested-and-closed')
+    def resolved_to_closed_guard(self):
         """Checks if:
         - The current user is the issuer of the task"""
         return self._is_issuer()
 
+    @guard('task-transition-resolved-in-progress')
     def is_resolved_to_progress_possible(self):
         """Checks if:
         - The current user is the issuer of the task"""
         return self._is_issuer()
+
+
+    # ------------ helper functions --------------
+
+
+    def _get_function_for_transition(self, type_, transition):
+        """Returns the appropriate function (guard or action) for a
+        transition.
+
+        Arguments:
+        type_ -- Either "guard" or "action"
+        transition -- Name of the transition
+        """
+
+        if type_ == 'guard':
+            argname = '_guard_transitions'
+        elif type_ == 'action':
+            argname = '_action_transitions'
+        else:
+            raise ValueError('type_ must be "guard" or "action"')
+
+        functions = self._get_functions_with(argname, transition)
+        return self._filter_function_for_tasktype(functions)
+
+    def _filter_function_for_tasktype(self, functions):
+        """Picks the right function from a list of `functions`, based on the
+        task_type_category decorator used on the functions.
+        """
+        if len(functions) == 0:
+            return None
+
+        elif len(functions) == 1:
+            return functions[0]
+
+        category = self.context.task_type_category
+        default = None
+
+        for func in functions:
+            filter_categories = getattr(func, '_filter_categories', None)
+            if filter_categories is None:
+                default = func
+            elif category in filter_categories:
+                return func
+
+        return default
+
+    def _get_functions_with(self, argname, value):
+        """Returns all functions of the transition controller,
+        where `value` is in the value of the function-attribute `argname`.
+        """
+
+        functions = []
+        instance = self.__class__
+
+        for name in dir(instance):
+            obj = getattr(instance, name, None)
+            argvalue = getattr(obj, argname, None)
+            if argvalue is not None and value in argvalue:
+                functions.append(obj)
+
+        return functions
 
     def _is_issuer(self):
         """Checks if the current user is the issuer of the
@@ -197,22 +327,6 @@ class TaskTransitionController(BrowserView):
             return False
         else:
             return True
-
-    def _is_unidirectional_by_value(self):
-        """Check if the task.type is unidirectional_by_value"""
-        return self.context.task_type_category == 'unidirectional_by_value'
-
-    def _is_unidirectional_by_reference(self):
-        """Check if the task.type is unidirectional_by_reference"""
-
-        return self.context.task_type_category == 'unidirectional_by_reference'
-
-    def _is_bidirectional(self):
-        """see ITaskWorkflowChecks
-        """
-        categories = ['bidirectional_by_reference',
-                      'bidirectional_by_value']
-        return self.context.task_type_category in categories
 
     def _is_remote_request(self):
         """checks if the current request cames from a remote client.

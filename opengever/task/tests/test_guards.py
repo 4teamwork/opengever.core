@@ -118,40 +118,6 @@ class TestTaskTransitionController(MockTestCase):
         self.assertTrue(TaskTransitionController(
                 task1, {})._is_responsible_or_inbox_group_user())
 
-    def test_type_category_methods(self):
-        task1 = self.mocker.mock()
-        task2 = self.mocker.mock()
-        task3 = self.mocker.mock()
-        task4 = self.mocker.mock()
-
-        self.expect(task1.task_type_category).result(
-            'unidirectional_by_reference').count(0, None)
-        self.expect(task2.task_type_category).result(
-            'unidirectional_by_value').count(0, None)
-        self.expect(task3.task_type_category).result(
-            'bidirectional_by_value').count(0, None)
-        self.expect(task4.task_type_category).result(
-            'bidirectional_by_reference').count(0, None)
-
-        self.replay()
-
-        self.assertFalse(TaskTransitionController(
-                task1, {})._is_unidirectional_by_value())
-        self.assertTrue(TaskTransitionController(
-                task2, {})._is_unidirectional_by_value())
-        self.assertTrue(TaskTransitionController(
-                task1, {})._is_unidirectional_by_reference())
-        self.assertFalse(TaskTransitionController(
-                task2, {})._is_unidirectional_by_reference())
-        self.assertFalse(TaskTransitionController(
-                task1, {})._is_bidirectional())
-        self.assertFalse(TaskTransitionController(
-                task2, {})._is_bidirectional())
-        self.assertTrue(TaskTransitionController(
-                task3, {})._is_bidirectional())
-        self.assertTrue(TaskTransitionController(
-                task4, {})._is_bidirectional())
-
     def test_is_cancelled_to_open_possible(self):
         controller, controller_mock, task = self._create_task_controller()
 
@@ -160,67 +126,87 @@ class TestTaskTransitionController(MockTestCase):
             self.expect(controller_mock._is_issuer()).result(True)
 
         self.replay()
-        self.assertFalse(controller.is_cancelled_to_open_possible())
-        self.assertTrue(controller.is_cancelled_to_open_possible())
+        transition = 'task-transition-cancelled-open'
+        self.assertFalse(controller.is_transition_possible(transition))
+        self.assertTrue(controller.is_transition_possible(transition))
 
     def test_is_progress_to_resolved_possible(self):
         controller, controller_mock, task = self._create_task_controller()
 
         with self.mocker.order():
             # Task 1
+            self.expect(task.task_type_category).result(
+                'bidirectional_by_value')
             self.expect(controller_mock._is_responsible()).result(False)
             self.expect(controller_mock._is_inbox_group_user()).result(False)
+
             # Task 2
-            self.expect(controller_mock._is_responsible()).result(True)
-            self.expect(controller_mock._is_unidirectional_by_value()).result(True)
+            self.expect(task.task_type_category).result(
+                'unidirectional_by_value')
+
             # Task 3
+            self.expect(task.task_type_category).result(
+                'bidirectional_by_value')
             self.expect(controller_mock._is_responsible()).result(True)
-            self.expect(controller_mock._is_unidirectional_by_value()).result(False)
             self.expect(controller_mock._is_substasks_closed()).result(False)
+
             # Task 4
+            self.expect(task.task_type_category).result(
+                'bidirectional_by_value')
             self.expect(controller_mock._is_responsible()).result(True)
-            self.expect(controller_mock._is_unidirectional_by_value()).result(False)
             self.expect(controller_mock._is_substasks_closed()).result(True)
             self.expect(controller_mock._has_successors()).result(True)
             self.expect(controller_mock._is_remote_request()).result(False)
+
             # # Task 5
+            self.expect(task.task_type_category).result(
+                'bidirectional_by_value')
             self.expect(controller_mock._is_responsible()).result(True)
-            self.expect(controller_mock._is_unidirectional_by_value()).result(False)
             self.expect(controller_mock._is_substasks_closed()).result(True)
             self.expect(controller_mock._has_successors()).result(True)
             self.expect(controller_mock._is_remote_request()).result(True)
+
             # # Task 6
+            self.expect(task.task_type_category).result(
+                'bidirectional_by_value')
             self.expect(controller_mock._is_responsible()).result(True)
-            self.expect(controller_mock._is_unidirectional_by_value()).result(False)
             self.expect(controller_mock._is_substasks_closed()).result(True)
             self.expect(controller_mock._has_successors()).result(False)
 
         self.replay()
-        self.assertFalse(controller.is_progress_to_resolved_possible())
-        self.assertFalse(controller.is_progress_to_resolved_possible())
-        self.assertFalse(controller.is_progress_to_resolved_possible())
-        self.assertFalse(controller.is_progress_to_resolved_possible())
-        self.assertTrue(controller.is_progress_to_resolved_possible())
-        self.assertTrue(controller.is_progress_to_resolved_possible())
+        transition = 'task-transition-in-progress-resolved'
+        self.assertFalse(controller.is_transition_possible(transition))
+        self.assertFalse(controller.is_transition_possible(transition))
+        self.assertFalse(controller.is_transition_possible(transition))
+        self.assertFalse(controller.is_transition_possible(transition))
+        self.assertTrue(controller.is_transition_possible(transition))
+        self.assertTrue(controller.is_transition_possible(transition))
 
     def test_is_progress_to_closed_possible(self):
         controller, controller_mock, task = self._create_task_controller()
 
         with self.mocker.order():
             #task1
-            self.expect(controller_mock._is_unidirectional_by_value()).result(False)
+            self.expect(task.task_type_category).result(
+                'bidirectional_by_value')
+
             #task2
-            self.expect(controller_mock._is_unidirectional_by_value()).result(True)
+            self.expect(task.task_type_category).result(
+                'unidirectional_by_value')
             self.expect(
                 controller_mock._is_responsible_or_inbox_group_user()).result(False)
+
             #task3
-            self.expect(controller_mock._is_unidirectional_by_value()).result(True)
+            self.expect(task.task_type_category).result(
+                'unidirectional_by_value')
             self.expect(
                 controller_mock._is_responsible_or_inbox_group_user()).result(True)
             self.expect(
                 controller_mock._is_substasks_closed()).result(False)
+
             #task4
-            self.expect(controller_mock._is_unidirectional_by_value()).result(True)
+            self.expect(task.task_type_category).result(
+                'unidirectional_by_value')
             self.expect(
                 controller_mock._is_responsible_or_inbox_group_user()).result(True)
             self.expect(
@@ -228,8 +214,10 @@ class TestTaskTransitionController(MockTestCase):
             self.expect(
                 controller_mock._has_successors()).result(True)
             self.expect(controller_mock._is_remote_request()).result(False)
+
             #task5
-            self.expect(controller_mock._is_unidirectional_by_value()).result(True)
+            self.expect(task.task_type_category).result(
+                'unidirectional_by_value')
             self.expect(
                 controller_mock._is_responsible_or_inbox_group_user()).result(True)
             self.expect(
@@ -237,8 +225,10 @@ class TestTaskTransitionController(MockTestCase):
             self.expect(
                 controller_mock._has_successors()).result(True)
             self.expect(controller_mock._is_remote_request()).result(True)
+
             #task6
-            self.expect(controller_mock._is_unidirectional_by_value()).result(True)
+            self.expect(task.task_type_category).result(
+                'unidirectional_by_value')
             self.expect(
                 controller_mock._is_responsible_or_inbox_group_user()).result(True)
             self.expect(
@@ -249,12 +239,13 @@ class TestTaskTransitionController(MockTestCase):
 
         self.replay()
 
-        self.assertFalse(controller.is_progress_to_closed_possible())
-        self.assertFalse(controller.is_progress_to_closed_possible())
-        self.assertFalse(controller.is_progress_to_closed_possible())
-        self.assertFalse(controller.is_progress_to_closed_possible())
-        self.assertTrue(controller.is_progress_to_closed_possible())
-        self.assertTrue(controller.is_progress_to_closed_possible())
+        transition = 'task-transition-in-progress-tested-and-closed'
+        self.assertFalse(controller.is_transition_possible(transition))
+        self.assertFalse(controller.is_transition_possible(transition))
+        self.assertFalse(controller.is_transition_possible(transition))
+        self.assertFalse(controller.is_transition_possible(transition))
+        self.assertTrue(controller.is_transition_possible(transition))
+        self.assertTrue(controller.is_transition_possible(transition))
 
     def test_is_cancel_possible(self):
         controller, controller_mock, task = self._create_task_controller()
@@ -263,30 +254,37 @@ class TestTaskTransitionController(MockTestCase):
             self.expect(controller_mock._is_issuer()).result(True)
 
         self.replay()
-        self.assertFalse(controller.is_cancel_possible())
-        self.assertTrue(controller.is_cancel_possible())
+        transition = 'task-transition-open-cancelled'
+        self.assertFalse(controller.is_transition_possible(transition))
+        self.assertTrue(controller.is_transition_possible(transition))
 
     def test_is_open_to_progress_possible(self):
         controller, controller_mock, task = self._create_task_controller()
         with self.mocker.order():
             #task1
-            self.expect(
-                controller_mock._is_unidirectional_by_reference()).result(True)
+            self.expect(task.task_type_category).result(
+                'unidirectional_by_reference')
+
             #task2
-            self.expect(controller_mock._is_unidirectional_by_reference(
-                    )).result(False)
+            self.expect(task.task_type_category).result(
+                'bidirectional_by_value')
+
             self.expect(
-                controller_mock._is_responsible_or_inbox_group_user()).result(False)
+                controller_mock._is_responsible_or_inbox_group_user()).result(
+                False)
+
             #task3
-            self.expect(controller_mock._is_unidirectional_by_reference(
-                    )).result(False)
+            self.expect(task.task_type_category).result(
+                'bidirectional_by_value')
             self.expect(
-                controller_mock._is_responsible_or_inbox_group_user()).result(True)
+                controller_mock._is_responsible_or_inbox_group_user()).result(
+                True)
 
         self.replay()
-        self.assertFalse(controller.is_open_to_progress_possible())
-        self.assertFalse(controller.is_open_to_progress_possible())
-        self.assertTrue(controller.is_open_to_progress_possible())
+        transition = 'task-transition-open-in-progress'
+        self.assertFalse(controller.is_transition_possible(transition))
+        self.assertFalse(controller.is_transition_possible(transition))
+        self.assertTrue(controller.is_transition_possible(transition))
 
     def test_is_reject_possible(self):
         controller, controller_mock, task = self._create_task_controller()
@@ -297,56 +295,74 @@ class TestTaskTransitionController(MockTestCase):
                 controller_mock._is_responsible_or_inbox_group_user()).result(True)
 
         self.replay()
-        self.assertFalse(controller.is_reject_possible())
-        self.assertTrue(controller.is_reject_possible())
+        transition = 'task-transition-open-rejected'
+        self.assertFalse(controller.is_transition_possible(transition))
+        self.assertTrue(controller.is_transition_possible(transition))
 
     def test_is_open_to_resolved_possible(self):
         controller, controller_mock, task = self._create_task_controller()
         with self.mocker.order():
             #task1
-            self.expect(controller_mock._is_bidirectional()).result(False)
-            #task2
-            self.expect(controller_mock._is_bidirectional()).result(True)
-            self.expect(
-                controller_mock._is_responsible_or_inbox_group_user()).result(False)
-            #task3
-            self.expect(controller_mock._is_bidirectional()).result(True)
-            self.expect(
-                controller_mock._is_responsible_or_inbox_group_user()).result(True)
+            self.expect(task.task_type_category).result(
+                'unidirectional_by_reference')
 
+            #task2
+            self.expect(task.task_type_category).result(
+                'unidirectional_by_value')
+
+            #task3
+            self.expect(task.task_type_category).result(
+                'bidirectional_by_value')
+            self.expect(
+                controller_mock._is_responsible_or_inbox_group_user()).result(
+                False)
+            #task4
+            self.expect(task.task_type_category).result(
+                'bidirectional_by_value')
+            self.expect(
+                controller_mock._is_responsible_or_inbox_group_user()).result(
+                True)
 
         self.replay()
-        self.assertFalse(controller.is_open_to_resolved_possible())
-        self.assertFalse(controller.is_open_to_resolved_possible())
-        self.assertTrue(controller.is_open_to_resolved_possible())
+        transition = 'task-transition-open-resolved'
+        self.assertFalse(controller.is_transition_possible(transition))
+        self.assertFalse(controller.is_transition_possible(transition))
+        self.assertFalse(controller.is_transition_possible(transition))
+        self.assertTrue(controller.is_transition_possible(transition))
 
     def test_is_open_to_closed_possible(self):
         controller, controller_mock, task = self._create_task_controller()
         with self.mocker.order():
             # task1
-            self.expect(controller_mock._is_unidirectional_by_reference(
-                    )).result(True)
+            self.expect(task.task_type_category).result(
+                'unidirectional_by_reference')
             self.expect(
-                controller_mock._is_responsible_or_inbox_group_user()).result(False)
+                controller_mock._is_responsible_or_inbox_group_user()).result(
+                False)
+
             # task2
-            self.expect(controller_mock._is_unidirectional_by_reference(
-                    )).result(True)
+            self.expect(task.task_type_category).result(
+                'unidirectional_by_reference')
             self.expect(
-                controller_mock._is_responsible_or_inbox_group_user()).result(True)
+                controller_mock._is_responsible_or_inbox_group_user()).result(
+                True)
+
             # task3
-            self.expect(controller_mock._is_unidirectional_by_reference(
-                    )).result(False)
+            self.expect(task.task_type_category).result(
+                'bidirectional_by_value')
             self.expect(controller_mock._is_issuer()).result(False)
+
             # task4
-            self.expect(controller_mock._is_unidirectional_by_reference(
-                    )).result(False)
+            self.expect(task.task_type_category).result(
+                'bidirectional_by_value')
             self.expect(controller_mock._is_issuer()).result(True)
 
         self.replay()
-        self.assertFalse(controller.is_open_to_closed_possible())
-        self.assertTrue(controller.is_open_to_closed_possible())
-        self.assertFalse(controller.is_open_to_closed_possible())
-        self.assertTrue(controller.is_open_to_closed_possible())
+        transition = 'task-transition-open-tested-and-closed'
+        self.assertFalse(controller.is_transition_possible(transition))
+        self.assertTrue(controller.is_transition_possible(transition))
+        self.assertFalse(controller.is_transition_possible(transition))
+        self.assertTrue(controller.is_transition_possible(transition))
 
     def test_is_rejected_to_open_possible(self):
         controller, controller_mock, task = self._create_task_controller()
@@ -355,8 +371,9 @@ class TestTaskTransitionController(MockTestCase):
             self.expect(controller_mock._is_issuer()).result(True)
 
         self.replay()
-        self.assertFalse(controller.is_rejected_to_open_possible())
-        self.assertTrue(controller.is_rejected_to_open_possible())
+        transition = 'task-transition-rejected-open'
+        self.assertFalse(controller.is_transition_possible(transition))
+        self.assertTrue(controller.is_transition_possible(transition))
 
     def test_is_resolved_to_closed_possible(self):
         controller, controller_mock, task = self._create_task_controller()
@@ -365,8 +382,21 @@ class TestTaskTransitionController(MockTestCase):
             self.expect(controller_mock._is_issuer()).result(True)
 
         self.replay()
-        self.assertFalse(controller.is_resolved_to_closed_possible())
-        self.assertTrue(controller.is_resolved_to_closed_possible())
+        transition = 'task-transition-resolved-tested-and-closed'
+        self.assertFalse(controller.is_transition_possible(transition))
+        self.assertTrue(controller.is_transition_possible(transition))
+
+    def test_is_resolved_to_progress_possible(self):
+        controller, controller_mock, task = self._create_task_controller()
+        with self.mocker.order():
+            self.expect(controller_mock._is_issuer()).result(False)
+            self.expect(controller_mock._is_issuer()).result(True)
+
+        self.replay()
+        transition = 'task-transition-resolved-in-progress'
+        self.assertFalse(controller.is_transition_possible(transition))
+        self.assertTrue(controller.is_transition_possible(transition))
+
 
     def _create_task_controller(self):
         task1 = self.mocker.mock()
