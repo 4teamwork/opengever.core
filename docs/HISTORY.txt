@@ -8,6 +8,10 @@ Changelog
 - Updated workflow for new Administrator role
   [lgraf]
 
+- Dossier resolving: Only require tasks and docs to be filed in a
+  subdossier if there's any *active* subdossiers.
+  [lgraf]
+
 - Adjust the main dossier test: added IDisplayInOverview functionality test.
   [phgross]
 
