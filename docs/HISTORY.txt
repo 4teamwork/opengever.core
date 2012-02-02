@@ -5,6 +5,10 @@ Changelog
 2.0.2 (unreleased)
 ------------------
 
+- Removed 'List folder contents' permission from anyone but Manager in
+  contact and contactfolder workflows.
+  [lgraf]
+
 - Reimplement the document view template(depends on the dexterity standard template)
   Issue #1383 Dokument: Eigenschaften anzeigen View anpassen
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1383/
