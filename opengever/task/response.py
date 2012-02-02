@@ -264,21 +264,6 @@ class AddForm(form.AddForm, AutoExtensibleForm):
                     transition)
                 return self.request.RESPONSE.redirect(url)
 
-            # redirect to the accept-task wizard if necessary.
-            is_accept_transition = data.get('transition', None) == \
-                    'task-transition-open-in-progress'
-            if is_accept_transition and self.context.restrictedTraverse(
-                    '@@accept_task').is_successing_possible():
-
-                oguid = ISuccessorTaskController(self.context).get_oguid()
-                self.request.set('oguid', oguid)
-                dm = getUtility(IWizardDataStorage)
-                dmkey = 'accept:%s' % oguid
-                dm.set(dmkey, 'text', data.get('text'))
-
-                url = '%s/@@accept_task' % self.context.absolute_url()
-                return self.request.RESPONSE.redirect(url)
-
             new_response = Response(data.get('text'))
             #define responseTyp
             responseCreator = new_response.creator

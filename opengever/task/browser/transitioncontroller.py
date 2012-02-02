@@ -1,5 +1,6 @@
 from Products.Five import BrowserView
 from opengever.ogds.base.interfaces import IContactInformation
+from opengever.ogds.base.utils import get_client_id
 from opengever.task.interfaces import ISuccessorTaskController
 from zExceptions import NotFound
 from zope.component import getMultiAdapter
@@ -188,7 +189,14 @@ class TaskTransitionController(BrowserView):
 
     @action('task-transition-open-in-progress')
     def open_to_progress_action(self, transition):
-        return '%s/@@accept_task' % self.context.absolute_url()
+        if not self._is_multiclient_setup():
+            return self._addresponse_form_url(transition)
+
+        elif self._is_task_on_responsible_client():
+            return self._addresponse_form_url(transition)
+
+        else:
+            return '%s/@@accept_choose_method' % self.context.absolute_url()
 
     @guard('task-transition-open-in-progress')
     @task_type_category('unidirectional_by_reference')
@@ -414,6 +422,16 @@ class TaskTransitionController(BrowserView):
         if ISuccessorTaskController(self.context).get_successors():
             return True
         return False
+
+    def _is_multiclient_setup(self):
+        info = getUtility(IContactInformation)
+        return len(info.get_clients()) > 1
+
+    def _is_task_on_responsible_client(self):
+        """Returns true if the current client is the responsible-client of
+        the task.
+        """
+        return get_client_id() == self.context.responsible_client
 
     def _addresponse_form_url(self, transition):
         """Returns the redirect url to the addresponse, passing `transition`.

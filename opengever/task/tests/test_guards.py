@@ -1,4 +1,7 @@
+from Products.CMFPlone.interfaces import IPloneSiteRoot
 from ftw.testing import MockTestCase
+from opengever.ogds.base.interfaces import IClientConfiguration
+from plone.registry.interfaces import IRegistry
 from mocker import ANY
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.task.browser.transitioncontroller import \
@@ -7,11 +10,22 @@ from opengever.task.interfaces import ISuccessorTaskController
 from opengever.task.task import ITask
 from xml.dom.minidom import parse
 from zope.interface import Interface
+from zope.app.component.hooks import setSite
+from zope.interface import alsoProvides
+from zope.component import getSiteManager
 from zope.interface.verify import verifyClass
 import os.path
 
 
 class TestTaskTransitionController(MockTestCase):
+
+    def setUp(self):
+        # we need to have a site root for making the get_client_id cachecky
+        # work.
+        root = self.create_dummy(getSiteManager=getSiteManager,
+                                 id='root')
+        alsoProvides(root, IPloneSiteRoot)
+        setSite(root)
 
     def test_verify_class(self):
         self.assertTrue(
@@ -367,11 +381,45 @@ class TestTaskTransitionController(MockTestCase):
         transition = 'task-transition-open-in-progress'
         controller, controller_mock, task = self._create_task_controller()
 
+        info = self.stub()
+        self.mock_utility(info, IContactInformation)
+
+        registry = self.stub()
+        self.mock_utility(registry, IRegistry)
+        proxy = self.stub()
+        self.expect(registry.forInterface(
+                IClientConfiguration)).result(proxy)
+        self.expect(proxy.client_id).result('client1')
+
+        with self.mocker.order():
+            # testcase 1: single client setup
+            self.expect(len(info.get_clients())).result(1)
+
+            # testcase 2: multi client setup, same client
+            self.expect(len(info.get_clients())).result(2)
+            self.expect(task.responsible_client).result('client1')
+
+            # testcase 3: multi client setup, other client
+            self.expect(len(info.get_clients())).result(2)
+            self.expect(task.responsible_client).result('client2')
+
         self.replay()
 
-        # XXX move @@accept_task logic to transitioncontroller
+        wizard_url = 'http://nohost/plone/task-1/@@accept_choose_method'
+        default_url = 'http://nohost/plone/task-1/addresponse?' + \
+            'form.widgets.transition=%s' % transition
+
+        # testcase 1: default response addform url
         self.assertEqual(controller.get_transition_action(transition),
-                         'http://nohost/plone/task-1/@@accept_task')
+                         default_url)
+
+        # testcase 2: no need to deliver documents -> default url
+        self.assertEqual(controller.get_transition_action(transition),
+                         default_url)
+
+        # testcase 3: document delivery wizard
+        self.assertEqual(controller.get_transition_action(transition),
+                         wizard_url)
 
     def test_open_to_reject_guards(self):
         controller, controller_mock, task = self._create_task_controller()
