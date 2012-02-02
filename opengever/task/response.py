@@ -22,7 +22,6 @@ from plone.memoize.view import memoize
 from plone.z3cform import layout
 from z3c.form import form, field, button
 from z3c.form.browser import radio
-from z3c.form.interfaces import DISPLAY_MODE
 from z3c.form.interfaces import HIDDEN_MODE
 from z3c.relationfield.relation import RelationValue
 from z3c.relationfield.schema import RelationChoice, RelationList
@@ -224,6 +223,16 @@ class AddForm(form.AddForm, AutoExtensibleForm):
     fields['transition'].widgetFactory = radio.RadioFieldWidget
     fields = fields.omit('date_of_completion')
 
+    @property
+    def label(self):
+        transition = self.request.get('form.widgets.transition',
+                                      self.request.get('transition', None))
+        label = [self.context.Title()]
+        if transition:
+            label.append(translate(transition, domain='plone',
+                                   context=self.request))
+        return ': '.join(label)
+
     def updateActions(self):
         super(AddForm, self).updateActions()
         self.actions["save"].addClass("context")
@@ -371,7 +380,7 @@ class AddForm(form.AddForm, AutoExtensibleForm):
         if not ogview.is_user_assigned_to_client():
             self.widgets['relatedItems'].mode = HIDDEN_MODE
 
-        self.widgets['transition'].mode = DISPLAY_MODE
+        self.widgets['transition'].mode = HIDDEN_MODE
 
 
 class BeneathTask(grok.ViewletManager):
@@ -479,7 +488,6 @@ class SingleAddFormView(layout.FormWrapper, grok.View):
     def __init__(self, context, request):
         layout.FormWrapper.__init__(self, context, request)
         grok.View.__init__(self, context, request)
-        self.form.label = context.title
 
 
 class Edit(Base):
