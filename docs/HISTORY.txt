@@ -5,6 +5,10 @@ Changelog
 2.1 (unreleased)
 ----------------
 
+- Removed 'List folder contents' permission from anyone but Manager in
+  forwarding, inbox and yearfolder workflows.
+  [lgraf]
+
 - Added necessary permissions for Administrator role
   [lgraf]
 
