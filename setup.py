@@ -13,6 +13,7 @@ tests_require = [
     'plone.app.testing',
     'plone.mocktestcase',
     'ftw.testing',
+    'xlrd',
     ]
 
 setup(name='opengever.base',

@@ -5,6 +5,9 @@ Changelog
 2.2 (unreleased)
 ----------------
 
+- Increased webdav.LockItem.DEFAULTTIMEOUT to 24h
+  [lgraf]
+
 - Add wizard form base class and wizard template.
   [jone]
 
