@@ -3,133 +3,42 @@
       xmlns:metal="http://xml.zope.org/namespaces/metal"
       xmlns:i18n="http://xml.zope.org/namespaces/i18n"
       lang="en"
-      metal:use-macro="here/main_template/macros/master"
-      i18n:domain="opengever.document">
+      metal:use-macro="context/main_template/macros/master"
+      i18n:domain="opengever.task">
 <body>
- <metal:main fill-slot="main"
-	tal:define="toLocalizedTime nocall:context/@@plone/toLocalizedTime">
-    <tal:main-macro metal:define-macro="main"
-        tal:define="toLocalizedTime nocall:context/@@plone/toLocalizedTime">
-		<div tal:replace="structure provider:plone.abovecontenttitle" />
-		<h1 class="documentFirstHeading" tal:content="context/title_or_id"/>
-		<div tal:replace="structure provider:plone.belowcontenttitle" />
 
-		<div tal:replace="structure provider:plone.abovecontentbody" />
+<metal:main fill-slot="main">
+    <tal:main-macro metal:define-macro="main">
 
-		<table class="listing">
-		    <colgroup>
-		        <col width="200">
-		        <col width="200">
-		    </colgroup>
-			<tr>
-				<th>Dokument</th>
-				<td tal:content="context/title_or_id"></td>
-			</tr>
-			<tr>
-				<th>Dokumentdatum</th>
-				<td tal:content="python:here.toLocalizedTime(str(here.document_date))"></td>
-			</tr>
-			<tr>
-			    <th>Dokumenttyp</th>
-				<td>
-				    <div tal:replace="structure view/w/document_type/render" />
-				</td>
-			</tr>
-			<tr>
-			    <th>Autor</th>
-				<td>
-				    <div tal:replace="structure view/author_link" />
-				</td>
-			</tr>
-			<tr>
-				<th>Ersteller</th>
-				<td tal:content="structure view/creator_link"></td>
-			</tr>
-			<tr>
-				<th>Beschreibung</th>
-				<td tal:define="description context/description">
-					<tal:description condition="description" content="description" />
-					<tal:description condition="python: not description">-</tal:description>
-				</td>
-			</tr>
-			<tr>
-				<th>Fremdzeichen</th>
-				<td tal:define="foregin context/foreign_reference">
-					<tal:description condition="foregin" content="foregin" />
-					<tal:description condition="python: not foregin">-</tal:description>
-				</td>
-			</tr>
-			<tr>
-				<th>Datei</th>
-				<td tal:define="file context/file">
-					<a tal:condition="file" tal:attributes="href string:${context/absolute_url}/@@download/file/${context/file/filename}" tal:content="context/file/filename" />
-					<tal:file condition="python: not file">keine Datei</tal:file>
-				</td>
-			</tr>
-			<tr>
-				<th i18n:translate="label_digitally_available">Digital Available</th>
-				<td tal:define="digitally_available context/digitally_available">
-					<tal:paperform condition="digitally_available">Ja</tal:paperform>
-					<tal:paperform condition="python: not digitally_available">Nein</tal:paperform>
-				</td>
-			</tr>
-			<tr>
-				<th>In Papierform aufbewahrt</th>
-				<td tal:define="preserved_as_paper context/preserved_as_paper">
-					<tal:paperpreserved condition="preserved_as_paper">Ja</tal:paperpreserved>
-					<tal:paperpreserved condition="python: not preserved_as_paper">Nein</tal:paperpreserved>
-				</td>
-			</tr>
-			<tr>
-				<th>Eingangsdatum</th>
-				<td tal:define="receipt context/receipt_date">
-					<tal:receipt condition="receipt" content="python:here.toLocalizedTime(str(receipt))" />
-					<tal:receipt condition="python: not receipt">-</tal:receipt>
-				</td>
-			</tr>
-			<tr>
-				<th>Ausgangsdatum</th>
-				<td tal:define="delivery context/delivery_date">
-					<tal:delivery condition="delivery" tal:content="python:here.toLocalizedTime(str(delivery))" />
-					<tal:delivery condition="python: not delivery">-</tal:delivery>
-				</td>
-			</tr>
-			<tr>
-			    <th>Referenzierte Dokumente</th>
-			    <td>
-			        <div tal:replace="structure view/w/IRelatedDocuments.relatedItems/render" />
-			    </td>
-			</tr>
-			<tr i18n:domain="opengever.base">
-			    <th i18n:translate="label_classification">classification</th>
-			    <td>
-			        <div i18n:translate="" tal:content="context/classification | nothing" />
-			    </td>
-			</tr>
-			<tr i18n:domain="opengever.base">
-			    <th i18n:translate="label_privacy_layer">privacy_layer</th>
-			    <td>
-			        <div i18n:translate="" tal:content="context/privacy_layer | nothing" />
-			    </td>
-			</tr>
-			<tr i18n:domain="opengever.base">
-			    <th i18n:translate="label_public_trial">public_trial</th>
-			    <td>
-			        <div i18n:translate="" tal:content="context/public_trial | nothing" />
-			    </td>
-			</tr>
-			<tr i18n:domain="opengever.base">
-			    <th i18n:translate="label_public_trial_statement">public_trial_statement</th>
-			    <td>
-			        <tal:statement tal:condition="context/public_trial_statement | nothing" tal:content="context/public_trial_statement" />
-			        <tal:statement tal:condition="not:context/public_trial_statement | nothing">-</tal:statement>
-			    </td>
-			</tr>
-		</table>
+    <div tal:replace="structure provider:plone.abovecontenttitle" />
 
-        <div tal:replace="structure provider:plone.belowcontentbody" />
+    <h1 class="documentFirstHeading" tal:content="python: context.title"/>
+
+    <div tal:replace="structure provider:plone.belowcontenttitle" />
+
+    <div tal:replace="structure provider:plone.abovecontentbody" />
+
+    <fieldset tal:repeat="group view/groups">
+        <legend tal:content="group/label" />
+        <div class="field" tal:repeat="widget group/widgets/values">
+           <tal:block condition="python:widget.__name__  != 'document_author'">
+                <label tal:content="widget/label" />
+                <br />
+                <div tal:content="structure widget/render" />
+            </tal:block>
+            <tal:block condition="python:widget.__name__ == 'document_author'">
+                <label tal:content="widget/label" />
+                <br />
+                <div tal:content="structure view/author_link" />
+            </tal:block>
+        </div>
+    </fieldset>
+    <div class="visualClear"><!----></div>
+    <div tal:replace="structure provider:plone.belowcontentbody" />
+    <div class="visualClear"><!----></div>
     </tal:main-macro>
 </metal:main>
 
 </body>
 </html>
+

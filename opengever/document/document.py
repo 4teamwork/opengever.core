@@ -464,10 +464,6 @@ class View(dexterity.DisplayForm):
     grok.context(IDocumentSchema)
     grok.require("zope2.View")
 
-    def creator_link(self):
-        info = getUtility(IContactInformation)
-        return info.render_link(self.context.Creator())
-
     def author_link(self):
         info = getUtility(IContactInformation)
         if self.context.document_author:

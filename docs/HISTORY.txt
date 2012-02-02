@@ -5,6 +5,11 @@ Changelog
 2.0.2 (unreleased)
 ------------------
 
+- Reimplement the document view template(depends on the dexterity standard template)
+  Issue #1383 Dokument: Eigenschaften anzeigen View anpassen
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1383/
+  [phgross]
+
 - Set permissions for Administrator role
   [lgraf]
 
