@@ -401,8 +401,8 @@ def document_sent(context, event):
                 default=u'Attachments: ${documents} | Receivers: ${receiver} | Message: ${message}',
                 mapping={
                 'documents': documents_list_helper(context, objs),
-                'receiver': receiver,
-                'message': message,
+                'receiver': receiver.decode('utf-8'),
+                'message': message.decode('utf-8'),
                 }), context=context.REQUEST)
     journal_entry_factory(context, DOCUMENT_SENT, title, visible=True, comment=comment)
 
