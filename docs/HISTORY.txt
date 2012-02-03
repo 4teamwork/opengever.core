@@ -5,6 +5,12 @@ Changelog
 2.0.1 (unreleased)
 ------------------
 
+- Made send_document journalizable.
+  [ttschanz]
+
+- Add DocumentSent event.
+  [ttschanz]
+
 - Added necessary permissions for Administrator role
   [lgraf]
 
