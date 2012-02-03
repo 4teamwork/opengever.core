@@ -49,7 +49,7 @@ class WorkflowStateSyncer(grok.MultiAdapter):
                 '@@sync-task-workflow-state-receive',
                 task.physical_path,
                 data={'transition': transition,
-                      'text': text.encode('utf-8')})
+                      'text': text and text.encode('utf-8') or ''})
 
             response_data = response.read().strip()
             if response_data != 'OK':
