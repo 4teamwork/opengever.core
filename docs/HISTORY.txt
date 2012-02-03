@@ -5,7 +5,12 @@ Changelog
 2.0.1 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Update tooltiphelper. It now removes HTML-tags.
+  [ttschanz]
+
+- Add Handler for DocumentSent action.
+  [ttschanz]
+
 
 
 2.0 (2011-11-17)
