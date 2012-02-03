@@ -5,7 +5,6 @@ predecessor task.
 """
 
 from Acquisition import aq_parent, aq_inner
-from Products.CMFCore.utils import getToolByName
 from Products.statusmessages.interfaces import IStatusMessage
 from five import grok
 from opengever.base.browser.wizard.interfaces import IWizardDataStorage
@@ -18,7 +17,7 @@ from opengever.task import _
 from opengever.task import util
 from opengever.task.interfaces import ISuccessorTaskController
 from opengever.task.task import ITask
-from opengever.task.util import add_simple_response
+from opengever.task.util import get_documents_of_task
 from plone.directives.form import Schema
 from plone.z3cform.layout import FormWrapper
 from z3c.form.browser.checkbox import CheckBoxFieldWidget
@@ -34,122 +33,6 @@ from zope.schema.vocabulary import SimpleVocabulary
 import json
 
 
-class CompleteTask(grok.View):
-    """Dispatches completing task and redirects.
-
-    If the user is completing a successor task, it should also complete the
-    upstream task (predecessor) and the user may deliver documents as a result
-    to the upstream task.
-
-    Triggers:
-    - Direct workflow transition
-    - Workflow transition by adding a task and selecting the transition.
-
-    Conditions
-    Use the 'complete_successor_task' form only when one of the following
-    conditions are true:
-
-    1) task-type is unidirectional and transition is one of:
-    - task-transition-open-tested-and-closed
-    - task-transition-in-progress-tested-and-closed
-    - task-transition-resolved-tested-and-closed
-
-    2) task-type is bidirectional and transition is one of:
-    - task-transition-open-resolved
-    - task-transition-in-progress-resolved
-
-    If the conditions are not true, we redirect to the direct response view
-    and do not display the form.
-    """
-
-    grok.context(ITask)
-    grok.name('complete_task')
-    grok.require('zope2.View')
-
-    def render(self):
-        transition = self.request.get('transition', None)
-        assert transition is not None, \
-            'Bad request: could not find transition in request'
-
-        if self.use_successor_form(transition):
-            # The user should have access to the predecessor.
-            pred_oguid = self.context.predecessor
-            task_query = getUtility(ITaskQuery)
-
-            if not pred_oguid or \
-                    task_query.get_task_by_oguid(pred_oguid) is None:
-
-                msg = _(u'You have insufficient privileges on the '
-                        u'predecessor task.')
-                IStatusMessage(self.request).addStatusMessage(msg, 'error')
-                return self.request.RESPONSE.redirect(
-                    self.context.absolute_url())
-
-            # User should be allowed to execute the transition.
-            wftool = getToolByName(self.context, 'portal_workflow')
-            possible_transitions = []
-            for trans in wftool.getTransitionsFor(self.context):
-                possible_transitions.append(trans.get('id'))
-
-            if transition not in possible_transitions:
-                msg = _(u'The selected transition is not available for this '
-                        u'task.')
-                IStatusMessage(self.request).addStatusMessage(msg, 'error')
-                return self.request.RESPONSE.redirect(
-                    self.context.absolute_url())
-
-            # OK, complete tasks.
-            url = '%s/@@complete_successor_task?transition=%s' % (
-                self.context.absolute_url(),
-                transition)
-
-        else:
-            url = '%s/direct_response?form.widgets.transition=%s' % (
-                self.context.absolute_url(),
-                transition)
-
-        return self.request.RESPONSE.redirect(url)
-
-    def use_successor_form(self, transition):
-        """Returns True if the 'complete_successor_task' form should be used.
-        """
-        portal_membership = getToolByName(self.context, 'portal_membership')
-        if not portal_membership.checkPermission(
-            'Add portal content', self.context):
-            return False
-
-        if not self.context.predecessor:
-            return False
-
-        task_type_category = self.context.task_type_category
-
-        unidirectional_type_categories = (
-            'unidirectional_by_reference',
-            'unidirectional_by_value')
-
-        unidirectional_transitions = (
-            'task-transition-open-tested-and-closed',
-            'task-transition-in-progress-tested-and-closed',
-            'task-transition-resolved-tested-and-closed')
-
-        bidirectional_type_categories = (
-            'bidirectional_by_reference',
-            'bidirectional_by_value')
-
-        bidirectional_transitions = (
-            'task-transition-open-resolved',
-            'task-transition-in-progress-resolved')
-
-        if task_type_category in unidirectional_type_categories:
-            return transition in unidirectional_transitions
-
-        elif task_type_category in bidirectional_type_categories:
-            return transition in bidirectional_transitions
-
-        else:
-            return False
-
-
 @grok.provider(IContextSourceBinder)
 def deliverable_documents_vocabulary(context):
     """All documents related to the task are deliverable (this includes
@@ -157,22 +40,7 @@ def deliverable_documents_vocabulary(context):
     filed within the task).
     """
 
-    documents = []
-    portal_types = ['opengever.document.document', 'ftw.mail.mail']
-    catalog = getToolByName(context, 'portal_catalog')
-
-    # Find documents within the task. There may also be subtasks containing
-    # documents we want to deliver upstream.
-    query = {'path': '/'.join(context.getPhysicalPath()),
-             'portal_type': portal_types}
-    for doc in catalog(query):
-        documents.append(doc.getObject())
-
-    # Find referenced documents.
-    for relation in getattr(context, 'relatedItems', []):
-        doc = relation.to_object
-        if doc.portal_type in portal_types:
-            documents.append(doc)
+    documents = get_documents_of_task(context)
 
     # Create the vocabulary.
     terms = []
@@ -232,7 +100,10 @@ class CompleteSuccessorTaskForm(Form):
         data, errors = self.extractData()
 
         if not errors:
-            self.complete_successor_task(data)
+            util.change_task_workflow_state(self.context,
+                                            data['transition'],
+                                            text=data['text'])
+
             self.deliver_documents_and_complete_task(data)
 
             msg = _(u'The documents were delivered to the issuer and the '
@@ -264,23 +135,6 @@ class CompleteSuccessorTaskForm(Form):
         Form.updateWidgets(self)
 
         self.widgets['transition'].mode = HIDDEN_MODE
-
-    def complete_successor_task(self, formdata):
-        wftool = getToolByName(self.context, 'portal_workflow')
-
-        before = wftool.getInfoFor(self.context, 'review_state')
-        before = wftool.getTitleForStateOnType(before, self.context.Type())
-
-        wftool.doActionFor(self.context, formdata['transition'])
-
-        after = wftool.getInfoFor(self.context, 'review_state')
-        after = wftool.getTitleForStateOnType(after, self.context.Type())
-
-        response = add_simple_response(self.context,
-                                       text=formdata['text'])
-        response.add_change('review_state', _(u'Issue state'),
-                            before, after)
-        return response
 
     def deliver_documents_and_complete_task(self, formdata):
         """Delivers the selected documents to the predecesser task and
@@ -350,8 +204,8 @@ class CompleteSuccessorTaskReceiveDelivery(grok.View):
         assert data is not None, 'Bad request: no delivery data found'
         data = json.loads(data)
 
-        # Set the "X-CREATING-SUCCESSOR" flag for preventing the event handler
-        # from creating additional responses per added document.
+        # Set the "X-CREATING-SUCCESSOR" flag for preventing the event
+        # handler from creating additional responses per added document.
         self.request.set('X-CREATING-SUCCESSOR', True)
 
         # Create the delivered documents:
@@ -363,22 +217,8 @@ class CompleteSuccessorTaskReceiveDelivery(grok.View):
             documents.append(doc)
 
         # Change workflow state of predecessor task:
-        wftool = getToolByName(self.context, 'portal_workflow')
-
-        before = wftool.getInfoFor(self.context, 'review_state')
-        before = wftool.getTitleForStateOnType(before, self.context.Type())
-
-        wftool.doActionFor(self.context, data['transition'])
-
-        after = wftool.getInfoFor(self.context, 'review_state')
-        after = wftool.getTitleForStateOnType(after, self.context.Type())
-
-        # Create response:
-        response = add_simple_response(
-            self.context,
-            text=data['text'],
+        util.change_task_workflow_state(
+            self.context, data['transition'], text=data['text'],
             added_object=documents)
-        response.add_change('review_state', _(u'Issue state'),
-                            before, after)
 
         return 'OK'

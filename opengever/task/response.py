@@ -22,7 +22,6 @@ from plone.memoize.view import memoize
 from plone.z3cform import layout
 from z3c.form import form, field, button
 from z3c.form.browser import radio
-from z3c.form.interfaces import DISPLAY_MODE
 from z3c.form.interfaces import HIDDEN_MODE
 from z3c.relationfield.relation import RelationValue
 from z3c.relationfield.schema import RelationChoice, RelationList
@@ -224,6 +223,16 @@ class AddForm(form.AddForm, AutoExtensibleForm):
     fields['transition'].widgetFactory = radio.RadioFieldWidget
     fields = fields.omit('date_of_completion')
 
+    @property
+    def label(self):
+        transition = self.request.get('form.widgets.transition',
+                                      self.request.get('transition', None))
+        label = [self.context.Title()]
+        if transition:
+            label.append(translate(transition, domain='plone',
+                                   context=self.request))
+        return ': '.join(label)
+
     def updateActions(self):
         super(AddForm, self).updateActions()
         self.actions["save"].addClass("context")
@@ -240,36 +249,8 @@ class AddForm(form.AddForm, AutoExtensibleForm):
             errorMessage += '</ul>'
             self.status = errorMessage
             return None
+
         else:
-            # use complete form if necessary.
-            complete_task = self.context.restrictedTraverse('@@complete_task')
-            transition = data.get('transition')
-            if complete_task.use_successor_form(transition):
-                dm = getUtility(IWizardDataStorage)
-                oguid = ISuccessorTaskController(self.context).get_oguid()
-                dmkey = 'delegate:%s' % oguid
-                dm.set(dmkey, 'text', data.get('text'))
-
-                url = '%s/@@complete_task?transition=%s' % (
-                    self.context.absolute_url(),
-                    transition)
-                return self.request.RESPONSE.redirect(url)
-
-            # redirect to the accept-task wizard if necessary.
-            is_accept_transition = data.get('transition', None) == \
-                    'task-transition-open-in-progress'
-            if is_accept_transition and self.context.restrictedTraverse(
-                    '@@accept_task').is_successing_possible():
-
-                oguid = ISuccessorTaskController(self.context).get_oguid()
-                self.request.set('oguid', oguid)
-                dm = getUtility(IWizardDataStorage)
-                dmkey = 'accept:%s' % oguid
-                dm.set(dmkey, 'text', data.get('text'))
-
-                url = '%s/@@accept_task' % self.context.absolute_url()
-                return self.request.RESPONSE.redirect(url)
-
             new_response = Response(data.get('text'))
             #define responseTyp
             responseCreator = new_response.creator
@@ -343,10 +324,11 @@ class AddForm(form.AddForm, AutoExtensibleForm):
 
             notify(ObjectModifiedEvent(self.context))
 
-            syncer = getMultiAdapter((self.context, self.request),
-                                     IWorkflowStateSyncer)
-            syncer.change_remote_tasks_workflow_state(
-                transition, text=data.get('text'))
+            if data.get('transition'):
+                syncer = getMultiAdapter((self.context, self.request),
+                                         IWorkflowStateSyncer)
+                syncer.change_remote_tasks_workflow_state(
+                    data.get('transition'), text=data.get('text'))
 
             copy_related_documents_view = self.context.restrictedTraverse(
                 '@@copy-related-documents-to-inbox')
@@ -371,7 +353,7 @@ class AddForm(form.AddForm, AutoExtensibleForm):
         if not ogview.is_user_assigned_to_client():
             self.widgets['relatedItems'].mode = HIDDEN_MODE
 
-        self.widgets['transition'].mode = DISPLAY_MODE
+        self.widgets['transition'].mode = HIDDEN_MODE
 
 
 class BeneathTask(grok.ViewletManager):
@@ -479,7 +461,6 @@ class SingleAddFormView(layout.FormWrapper, grok.View):
     def __init__(self, context, request):
         layout.FormWrapper.__init__(self, context, request)
         grok.View.__init__(self, context, request)
-        self.form.label = context.title
 
 
 class Edit(Base):

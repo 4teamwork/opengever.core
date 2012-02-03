@@ -10,7 +10,6 @@ from five import grok
 from opengever.base.browser.wizard import BaseWizardStepForm
 from opengever.base.browser.wizard.interfaces import IWizardDataStorage
 from opengever.ogds.base.interfaces import IContactInformation
-from opengever.ogds.base.utils import get_client_id
 from opengever.task import _
 from opengever.task.browser.accept.utils import accept_task_with_response
 from opengever.task.interfaces import ISuccessorTaskController
@@ -29,72 +28,6 @@ from zope.component import getUtility
 from zope.interface import Invalid
 from zope.schema.interfaces import IContextSourceBinder
 from zope.schema.vocabulary import SimpleVocabulary, SimpleTerm
-
-
-class AcceptTask(grok.View):
-    grok.context(ITask)
-    grok.name('accept_task')
-    grok.require('cmf.AddPortalContent')
-
-    def render(self):
-        """Decides how the task is resolved.
-
-        Callees:
-        1) Actions -> Accept on the task
-        2) Add -> Response on the task, then select "accept" transition, but
-        only if is_successing_possible() returns `True`
-
-        Rules / use cases:
-        - If we have a single client setup, 1) will accept the task directly
-        and 2) accepts it directly too, but giving the user a chance to set
-        a response text.
-        Accepting directly over 1) is in this case cohorent with the other
-        transitions used directly in the actions menu.
-
-        - If we have a multi client setup and the responsible_task is a
-        foreign task, the user needs to decide how to work on the task
-        (directly or with a successor task). So 1) and 2) will redirect to the
-        accept wizard.
-
-        - If we have a multi client setup but the task is client internal,
-        then we don't use the wizard. But we should not directly accept the
-        task with 1), because the user may expect the accept wizard, where
-        he can define a response text - so we use the normal response form.
-        """
-
-        if not self.is_wizard_active():
-            url = 'direct_response?form.widgets.transition=' + \
-                'task-transition-open-in-progress'
-
-        elif self.is_successing_possible():
-            url = '@@accept_choose_method'
-
-        else:
-            url = 'addresponse?form.widgets.transition=' + \
-                'task-transition-open-in-progress'
-
-        return self.request.RESPONSE.redirect(
-            '/'.join((self.context.absolute_url(), url)))
-
-    def is_wizard_active(self):
-        """The wizard is only active in multi client setup.
-        """
-        info = getUtility(IContactInformation)
-        return len(info.get_clients()) > 1
-
-    def is_successing_possible(self):
-        """Creating successor tasks is only allowed if the responsible_client
-        of the task is another client than the current one, and the wizard
-        is active.
-        """
-        if not self.is_wizard_active():
-            return False
-
-        elif self.context.responsible_client == get_client_id():
-            return False
-
-        else:
-            return True
 
 
 class AcceptWizardFormMixin(BaseWizardStepForm):

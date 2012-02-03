@@ -1,13 +1,22 @@
 from DateTime import DateTime
 from datetime import datetime
 from five import grok
+from opengever.ogds.base.interfaces import ITransporter
+from opengever.ogds.base.transport import ORIGINAL_INTID_ANNOTATION_KEY
+from opengever.ogds.base.utils import encode_after_json
+from opengever.ogds.base.utils import remote_json_request
 from opengever.ogds.base.utils import remote_request
 from opengever.task.adapters import IResponse as IPersistentResponse
 from opengever.task.adapters import IResponseContainer
+from opengever.task.interfaces import ITaskDocumentsTransporter
 from opengever.task.response import Response
 from opengever.task.task import ITask
+from opengever.task.util import get_documents_of_task
 from persistent.list import PersistentList
 from z3c.relationfield import RelationValue
+from zope.annotation.interfaces import IAnnotations
+from zope.app.intid.interfaces import IIntIds
+from zope.component import getUtility
 from zope.interface import Interface
 from zope.interface.interface import Attribute
 from zope.lifecycleevent import modified
@@ -202,3 +211,51 @@ class ExtractResponses(grok.View):
 
         transporter = IResponseTransporter(self.context)
         return transporter.extract_responses(intids_mapping)
+
+
+class TaskDocumentsTransporter(grok.GlobalUtility):
+    grok.implements(ITaskDocumentsTransporter)
+
+    def copy_documents_from_remote_task(self, task, target, documents=None):
+        transporter = getUtility(ITransporter)
+        data = remote_json_request(
+            task.client_id,
+            '@@task-documents-extract',
+            path=task.physical_path,
+            data={'documents': json.dumps(documents)})
+
+        intids_mapping = {}
+        intids = getUtility(IIntIds)
+
+        for item in data:
+            item = encode_after_json(item)
+            obj = transporter._create_object(target, item)
+            oldintid = IAnnotations(obj)[ORIGINAL_INTID_ANNOTATION_KEY]
+            newintid = intids.getId(obj)
+            intids_mapping[oldintid] = newintid
+
+        return intids_mapping
+
+
+class ExtractDocuments(grok.View):
+    grok.context(ITask)
+    grok.name('task-documents-extract')
+    grok.require('zope2.View')
+
+    def render(self):
+        transporter = getUtility(ITransporter)
+        data = []
+
+        for doc in self.get_documents():
+            data.append(transporter._extract_data(doc))
+
+        return json.dumps(data)
+
+    def get_documents(self):
+        documents = json.loads(self.request.get('documents'))
+        documents = documents and [int(iid) for iid in documents]
+        intids = getUtility(IIntIds)
+
+        for doc in get_documents_of_task(self.context):
+            if documents is None or intids.getId(doc) in documents:
+                yield doc
