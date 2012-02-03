@@ -5,7 +5,6 @@ predecessor task.
 """
 
 from Acquisition import aq_parent, aq_inner
-from Products.CMFCore.utils import getToolByName
 from Products.statusmessages.interfaces import IStatusMessage
 from five import grok
 from opengever.base.browser.wizard.interfaces import IWizardDataStorage
@@ -32,119 +31,6 @@ from zope.component import getUtility
 from zope.schema.interfaces import IContextSourceBinder
 from zope.schema.vocabulary import SimpleVocabulary
 import json
-
-
-class CompleteTask(grok.View):
-    """Dispatches completing task and redirects.
-
-    If the user is completing a successor task, it should also complete the
-    upstream task (predecessor) and the user may deliver documents as a result
-    to the upstream task.
-
-    Triggers:
-    - Direct workflow transition
-    - Workflow transition by adding a task and selecting the transition.
-
-    Conditions
-    Use the 'complete_successor_task' form only when one of the following
-    conditions are true:
-
-    1) task-type is unidirectional and transition is one of:
-    - task-transition-in-progress-tested-and-closed
-
-    2) task-type is bidirectional and transition is one of:
-    - task-transition-open-resolved
-    - task-transition-in-progress-resolved
-
-    If the conditions are not true, we redirect to the direct response view
-    and do not display the form.
-    """
-
-    grok.context(ITask)
-    grok.name('complete_task')
-    grok.require('zope2.View')
-
-    def render(self):
-        transition = self.request.get('transition', None)
-        assert transition is not None, \
-            'Bad request: could not find transition in request'
-
-        if self.use_successor_form(transition):
-            # The user should have access to the predecessor.
-            pred_oguid = self.context.predecessor
-            task_query = getUtility(ITaskQuery)
-
-            if not pred_oguid or \
-                    task_query.get_task_by_oguid(pred_oguid) is None:
-
-                msg = _(u'You have insufficient privileges on the '
-                        u'predecessor task.')
-                IStatusMessage(self.request).addStatusMessage(msg, 'error')
-                return self.request.RESPONSE.redirect(
-                    self.context.absolute_url())
-
-            # User should be allowed to execute the transition.
-            wftool = getToolByName(self.context, 'portal_workflow')
-            possible_transitions = []
-            for trans in wftool.getTransitionsFor(self.context):
-                possible_transitions.append(trans.get('id'))
-
-            if transition not in possible_transitions:
-                msg = _(u'The selected transition is not available for this '
-                        u'task.')
-                IStatusMessage(self.request).addStatusMessage(msg, 'error')
-                return self.request.RESPONSE.redirect(
-                    self.context.absolute_url())
-
-            # OK, complete tasks.
-            url = '%s/@@complete_successor_task?transition=%s' % (
-                self.context.absolute_url(),
-                transition)
-
-        else:
-            # XXX direct_response does not exist anymore!
-            url = '%s/direct_response?form.widgets.transition=%s' % (
-                self.context.absolute_url(),
-                transition)
-
-        return self.request.RESPONSE.redirect(url)
-
-    def use_successor_form(self, transition):
-        """Returns True if the 'complete_successor_task' form should be used.
-        """
-        portal_membership = getToolByName(self.context, 'portal_membership')
-        if not portal_membership.checkPermission(
-            'Add portal content', self.context):
-            return False
-
-        if not self.context.predecessor:
-            return False
-
-        task_type_category = self.context.task_type_category
-
-        unidirectional_type_categories = (
-            'unidirectional_by_reference',
-            'unidirectional_by_value')
-
-        unidirectional_transitions = (
-            'task-transition-in-progress-tested-and-closed')
-
-        bidirectional_type_categories = (
-            'bidirectional_by_reference',
-            'bidirectional_by_value')
-
-        bidirectional_transitions = (
-            'task-transition-open-resolved',
-            'task-transition-in-progress-resolved')
-
-        if task_type_category in unidirectional_type_categories:
-            return transition in unidirectional_transitions
-
-        elif task_type_category in bidirectional_type_categories:
-            return transition in bidirectional_transitions
-
-        else:
-            return False
 
 
 @grok.provider(IContextSourceBinder)

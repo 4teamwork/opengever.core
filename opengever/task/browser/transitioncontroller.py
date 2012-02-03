@@ -142,9 +142,18 @@ class TaskTransitionController(BrowserView):
 
     @action('task-transition-in-progress-resolved')
     def progress_to_resolved_action(self, transition):
-        return '%s/@@complete_task?transition=%s' % (
-            self.context.absolute_url(),
-            transition)
+        return self._addresponse_form_url(transition)
+
+    @action('task-transition-in-progress-resolved')
+    @task_type_category('bidirectional_by_reference')
+    @task_type_category('bidirectional_by_value')
+    def bi_progress_to_resolved_action(self, transition):
+        if self._is_close_successor_wizard_possible(transition):
+            return '%s/@@complete_successor_task?transition=%s' % (
+                self.context.absolute_url(),
+                transition)
+        else:
+            return self._addresponse_form_url(transition)
 
     @guard('task-transition-in-progress-tested-and-closed')
     def progress_to_closed_guard(self):
@@ -167,9 +176,18 @@ class TaskTransitionController(BrowserView):
 
     @action('task-transition-in-progress-tested-and-closed')
     def progress_to_closed_action(self, transition):
-        return '%s/@@complete_task?transition=%s' % (
-            self.context.absolute_url(),
-            transition)
+        return self._addresponse_form_url(transition)
+
+    @action('task-transition-in-progress-tested-and-closed')
+    @task_type_category('unidirectional_by_reference')
+    @task_type_category('unidirectional_by_value')
+    def uni_progress_to_closed_action(self, transition):
+        if self._is_close_successor_wizard_possible(transition):
+            return '%s/@@complete_successor_task?transition=%s' % (
+                self.context.absolute_url(),
+                transition)
+        else:
+            return self._addresponse_form_url(transition)
 
     @guard('task-transition-open-cancelled')
     def open_to_cancelled_guard(self):
@@ -233,9 +251,18 @@ class TaskTransitionController(BrowserView):
 
     @action('task-transition-open-resolved')
     def open_to_resolved_action(self, transition):
-        return '%s/@@complete_task?transition=%s' % (
-            self.context.absolute_url(),
-            transition)
+        return self._addresponse_form_url(transition)
+
+    @action('task-transition-open-resolved')
+    @task_type_category('bidirectional_by_reference')
+    @task_type_category('bidirectional_by_value')
+    def bi_open_to_resolved_action(self, transition):
+        if self._is_close_successor_wizard_possible(transition):
+            return '%s/@@complete_successor_task?transition=%s' % (
+                self.context.absolute_url(),
+                transition)
+        else:
+            return self._addresponse_form_url(transition)
 
     @guard('task-transition-open-tested-and-closed')
     def open_to_closed_guard(self):
@@ -456,3 +483,13 @@ class TaskTransitionController(BrowserView):
         return '%s/addresponse?form.widgets.transition=%s' % (
             self.context.absolute_url(),
             transition)
+
+    def _is_close_successor_wizard_possible(self, transition):
+        if not self._is_responsible_or_inbox_group_user():
+            return False
+
+        elif not self.context.predecessor:
+            return False
+
+        else:
+            return True

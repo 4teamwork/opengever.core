@@ -240,12 +240,65 @@ class TestTaskTransitionController(MockTestCase):
         transition = 'task-transition-in-progress-resolved'
         controller, controller_mock, task = self._create_task_controller()
 
+        with self.mocker.order():
+            # testcase 1: unival -> default form
+            self.expect(task.task_type_category).result(
+                'unidirectional_by_value')
+
+            # testcase 2: uniref -> default form
+            self.expect(task.task_type_category).result(
+                'unidirectional_by_reference')
+
+            # testcase 3: not responsible -> default form
+            self.expect(task.task_type_category).result(
+                'bidirectional_by_reference')
+            self.expect(
+                controller_mock._is_responsible_or_inbox_group_user()).result(
+                False)
+
+            # testcase 4: no predecessor -> default form
+            self.expect(task.task_type_category).result(
+                'bidirectional_by_reference')
+            self.expect(
+                controller_mock._is_responsible_or_inbox_group_user()).result(
+                True)
+            self.expect(task.predecessor).result(None)
+
+            # testcase 5: -> complete task wizard
+            self.expect(task.task_type_category).result(
+                'bidirectional_by_reference')
+            self.expect(
+                controller_mock._is_responsible_or_inbox_group_user()).result(
+                True)
+            self.expect(task.predecessor).result('client2:123')
+
         self.replay()
 
-        # XXX move @@complete_task to action function
+        wizard_url = 'http://nohost/plone/task-1/' + \
+            '@@complete_successor_task?transition=%s' % transition
+
+        default_url = 'http://nohost/plone/task-1/addresponse?' + \
+            'form.widgets.transition=%s' % transition
+
+        # testcase 1: default form
         self.assertEqual(controller.get_transition_action(transition),
-                         'http://nohost/plone/task-1/@@complete_task?' + \
-                             'transition=%s' % transition)
+                         default_url)
+
+        # testcase 2: default form
+        self.assertEqual(controller.get_transition_action(transition),
+                         default_url)
+
+        # testcase 3: default form
+        self.assertEqual(controller.get_transition_action(transition),
+                         default_url)
+
+        # testcase 4: default form
+        self.assertEqual(controller.get_transition_action(transition),
+                         default_url)
+
+        # testcase 4: complete task wizard
+        self.assertEqual(controller.get_transition_action(transition),
+                         wizard_url)
 
     def test_progress_to_closed_guards(self):
         controller, controller_mock, task = self._create_task_controller()
@@ -321,12 +374,65 @@ class TestTaskTransitionController(MockTestCase):
         transition = 'task-transition-in-progress-tested-and-closed'
         controller, controller_mock, task = self._create_task_controller()
 
+        with self.mocker.order():
+            # testcase 1: unival -> default form
+            self.expect(task.task_type_category).result(
+                'bidirectional_by_value')
+
+            # testcase 2: uniref -> default form
+            self.expect(task.task_type_category).result(
+                'bidirectional_by_reference')
+
+            # testcase 3: not responsible -> default form
+            self.expect(task.task_type_category).result(
+                'unidirectional_by_reference')
+            self.expect(
+                controller_mock._is_responsible_or_inbox_group_user()).result(
+                False)
+
+            # testcase 4: no predecessor -> default form
+            self.expect(task.task_type_category).result(
+                'unidirectional_by_reference')
+            self.expect(
+                controller_mock._is_responsible_or_inbox_group_user()).result(
+                True)
+            self.expect(task.predecessor).result(None)
+
+            # testcase 5: -> complete task wizard
+            self.expect(task.task_type_category).result(
+                'unidirectional_by_reference')
+            self.expect(
+                controller_mock._is_responsible_or_inbox_group_user()).result(
+                True)
+            self.expect(task.predecessor).result('client2:123')
+
         self.replay()
 
-        # XXX move @@complete_task to action function
+        wizard_url = 'http://nohost/plone/task-1/' + \
+            '@@complete_successor_task?transition=%s' % transition
+
+        default_url = 'http://nohost/plone/task-1/addresponse?' + \
+            'form.widgets.transition=%s' % transition
+
+        # testcase 1: default form
         self.assertEqual(controller.get_transition_action(transition),
-                         'http://nohost/plone/task-1/@@complete_task?' + \
-                             'transition=%s' % transition)
+                         default_url)
+
+        # testcase 2: default form
+        self.assertEqual(controller.get_transition_action(transition),
+                         default_url)
+
+        # testcase 3: default form
+        self.assertEqual(controller.get_transition_action(transition),
+                         default_url)
+
+        # testcase 4: default form
+        self.assertEqual(controller.get_transition_action(transition),
+                         default_url)
+
+        # testcase 4: complete task wizard
+        self.assertEqual(controller.get_transition_action(transition),
+                         wizard_url)
 
     def test_open_to_cancel_guards(self):
         controller, controller_mock, task = self._create_task_controller()
@@ -481,12 +587,65 @@ class TestTaskTransitionController(MockTestCase):
         transition = 'task-transition-open-resolved'
         controller, controller_mock, task = self._create_task_controller()
 
+        with self.mocker.order():
+            # testcase 1: unival -> default form
+            self.expect(task.task_type_category).result(
+                'unidirectional_by_value')
+
+            # testcase 2: uniref -> default form
+            self.expect(task.task_type_category).result(
+                'unidirectional_by_reference')
+
+            # testcase 3: not responsible -> default form
+            self.expect(task.task_type_category).result(
+                'bidirectional_by_reference')
+            self.expect(
+                controller_mock._is_responsible_or_inbox_group_user()).result(
+                False)
+
+            # testcase 4: no predecessor -> default form
+            self.expect(task.task_type_category).result(
+                'bidirectional_by_reference')
+            self.expect(
+                controller_mock._is_responsible_or_inbox_group_user()).result(
+                True)
+            self.expect(task.predecessor).result(None)
+
+            # testcase 5: -> complete task wizard
+            self.expect(task.task_type_category).result(
+                'bidirectional_by_reference')
+            self.expect(
+                controller_mock._is_responsible_or_inbox_group_user()).result(
+                True)
+            self.expect(task.predecessor).result('client2:123')
+
         self.replay()
 
-        # XXX move @@complete_task to action function
+        wizard_url = 'http://nohost/plone/task-1/' + \
+            '@@complete_successor_task?transition=%s' % transition
+
+        default_url = 'http://nohost/plone/task-1/addresponse?' + \
+            'form.widgets.transition=%s' % transition
+
+        # testcase 1: default form
         self.assertEqual(controller.get_transition_action(transition),
-                         'http://nohost/plone/task-1/@@complete_task?' + \
-                             'transition=%s' % transition)
+                         default_url)
+
+        # testcase 2: default form
+        self.assertEqual(controller.get_transition_action(transition),
+                         default_url)
+
+        # testcase 3: default form
+        self.assertEqual(controller.get_transition_action(transition),
+                         default_url)
+
+        # testcase 4: default form
+        self.assertEqual(controller.get_transition_action(transition),
+                         default_url)
+
+        # testcase 4: complete task wizard
+        self.assertEqual(controller.get_transition_action(transition),
+                         wizard_url)
 
     def test_open_to_closed_guards(self):
         controller, controller_mock, task = self._create_task_controller()

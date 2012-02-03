@@ -249,21 +249,8 @@ class AddForm(form.AddForm, AutoExtensibleForm):
             errorMessage += '</ul>'
             self.status = errorMessage
             return None
+
         else:
-            # use complete form if necessary.
-            complete_task = self.context.restrictedTraverse('@@complete_task')
-            transition = data.get('transition')
-            if complete_task.use_successor_form(transition):
-                dm = getUtility(IWizardDataStorage)
-                oguid = ISuccessorTaskController(self.context).get_oguid()
-                dmkey = 'delegate:%s' % oguid
-                dm.set(dmkey, 'text', data.get('text'))
-
-                url = '%s/@@complete_task?transition=%s' % (
-                    self.context.absolute_url(),
-                    transition)
-                return self.request.RESPONSE.redirect(url)
-
             new_response = Response(data.get('text'))
             #define responseTyp
             responseCreator = new_response.creator
@@ -337,10 +324,11 @@ class AddForm(form.AddForm, AutoExtensibleForm):
 
             notify(ObjectModifiedEvent(self.context))
 
-            syncer = getMultiAdapter((self.context, self.request),
-                                     IWorkflowStateSyncer)
-            syncer.change_remote_tasks_workflow_state(
-                transition, text=data.get('text'))
+            if data.get('transition'):
+                syncer = getMultiAdapter((self.context, self.request),
+                                         IWorkflowStateSyncer)
+                syncer.change_remote_tasks_workflow_state(
+                    data.get('transition'), text=data.get('text'))
 
             copy_related_documents_view = self.context.restrictedTraverse(
                 '@@copy-related-documents-to-inbox')
