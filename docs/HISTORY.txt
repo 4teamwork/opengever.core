@@ -5,6 +5,13 @@ Changelog
 2.2 (unreleased)
 ----------------
 
+- Removed 'List folder contents' permission from anyone but Manager in
+  task workflow.
+  [lgraf]
+
+- Added necessary permissions for Administrator role
+  [lgraf]
+
 - Implement wizard for copying documents when closing a uniref task.
   Issue #1376 Auftragstyp "Zur Kenntnisnahme": Aktion abschliessen
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1376
