@@ -48,6 +48,19 @@ jq(window).load(function() {
         $('#form-widgets-target_dossier-widgets-query').autocomplete('option', 'source', url);
     }).change();
 
+    /* for create dossier in accept-task wizard */
+    /* we need add some infos to the autocomplete requests, so that the form can be
+       initialized. we patch all AC widgets. */
+    $('.template-accept_dossier_add_form .ui-autocomplete-input').each(function() {
+        var query = $(this);
 
+        var oguid = $('input[name=oguid]').attr('value');
+        var dossier_type = $('input[name=dossier_type]').attr('value');
+
+        var url = query.autocomplete('option', 'source').split('?')[0].
+          concat('?oguid=').concat(oguid).
+          concat('&dossier_type=').concat(dossier_type);
+        query.autocomplete('option', 'source', url);
+    });
 
 });

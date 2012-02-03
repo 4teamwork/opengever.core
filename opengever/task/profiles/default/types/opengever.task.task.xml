@@ -70,16 +70,6 @@
        <permission value="opengever.task: Edit task"/>
     </action>
 
-    <action action_id="addresponse"
-            visible="True"
-            title="Add response"
-            category="folder_factories"
-            url_expr="string:${object_url}/addresponse"
-            icon_expr=""
-            condition_expr="">
-        <permission value="Add portal content"/>
-    </action>
-
     <action action_id="attach_remote_document"
             visible="True"
             title="Attach remote document"
@@ -98,6 +88,16 @@
             condition_expr="python:object.responsible==member.id"
             icon_expr="">
         <permission value="View"/>
+    </action>
+
+    <action action_id="delegate_task"
+            visible="True"
+            title="Delegate task"
+            category="object_buttons"
+            url_expr="string:${object_url}/@@delegate_task"
+            condition_expr=""
+            icon_expr="">
+        <permission value="opengever.task: Add task"/>
     </action>
 
     <action i18n:domain="opengever.task" title="Overview" action_id="overview" category="tabbedview-tabs"

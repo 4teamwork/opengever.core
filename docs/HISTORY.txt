@@ -12,6 +12,62 @@ Changelog
 - Added necessary permissions for Administrator role
   [lgraf]
 
+- Implement wizard for copying documents when closing a uniref task.
+  Issue #1376 Auftragstyp "Zur Kenntnisnahme": Aktion abschliessen
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1376
+  [jone]
+
+- Made some adjustments on the reponse functionality:
+   - Made the transition field readonly.
+   - Remove direct_response functionality, is no longer used.
+   - Removed the add response action.
+  Issue #1377 Ueberarbeitung Antwort einer Aufgaben
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1377
+  [phgross]
+
+- Implements some workflow adjustments:
+   - Removed resolved-open(wieder eroeffnen) transition.
+   - Added new transition resolved-in-progress (ueberarbeiten) instead of resolved-open.
+   - Add no-successors checks for the resolve and close transitions.
+  [phgross]
+
+- Task overview: display responsible of tasks referenced in response.
+  [jone]
+
+- Delegate: fix pointer on response to subtask.
+  [jone]
+
+- Delegate: do not inherit predecessor from parent to subtasks.
+  [jone]
+
+- Delegate: fix bug when there are no related documents.
+  [jone]
+
+- Task overview: display responsible of subtasks.
+  [jone]
+
+- Display workflow state icon for related tasks in task overview.
+  [jone]
+
+- Display issuer client in task overview.
+  [jone]
+
+- Reponse: support for referencing multiple added documents in one response.
+  [jone]
+
+- Implement task delegate wizard.
+  Issue #1343 "Aufgabe Delegieren" Wizard
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1343
+  [jone]
+
+- Implement task accept wizard.
+  Issue #1342 "Aufgabe akzeptieren" Wizard
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1342
+  [jone]
+
+- Moved the workflow guards checks in to a TaskTransitionController and added Tests.
+  [phgross]
+
 - Fixed the guard expresssion for the 'task-transition-rejected-open' transition.
   [phgross]
 
@@ -27,7 +83,6 @@ Changelog
 
 - Moved the workflow guards checks in to a TaskTransitionController and added Tests.
   [phgross]
-
 
 2.1 (2012-01-13)
 ----------------
@@ -723,4 +778,3 @@ Changelog
   [01.12.2009, jbaumann]
 
 - Initial release
-

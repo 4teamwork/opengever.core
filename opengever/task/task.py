@@ -276,7 +276,7 @@ class Overview(DisplayForm, OpengeverTab):
 
     def getSubTasks(self):
         tasks = self.context.getFolderContents(
-            full_objects=False,
+            full_objects=True,
             contentFilter={'portal_type': 'opengever.task.task'})
         return tasks
 
@@ -287,6 +287,8 @@ class Overview(DisplayForm, OpengeverTab):
         return None
 
     def responsible_link(self):
+        """Render the responsible of the current task as link.
+        """
         info = getUtility(IContactInformation)
         task = ITask(self.context)
 
@@ -304,10 +306,38 @@ class Overview(DisplayForm, OpengeverTab):
 
         return client + ' / ' + info.render_link(task.responsible)
 
+    def subtask_responsible(self, subtask):
+        """Render the responsible of a subtask (object) as text.
+        """
+        if not ITask.providedBy(subtask) and \
+                subtask.portal_type != 'opengever.task.task':
+            # It is not a task, it may be a document or something else. So
+            # we do nothing.
+            return None
+
+        info = getUtility(IContactInformation)
+
+        if not subtask.responsible_client or len(info.get_clients()) <= 1:
+            # No responsible client is set yet or we have a single client
+            # setup.
+            return info.describe(subtask.responsible)
+
+        else:
+            client = client_title_helper(subtask, subtask.responsible_client)
+            return client + ' / ' + info.describe(subtask.responsible)
+
     def issuer_link(self):
         info = getUtility(IContactInformation)
         task = ITask(self.context)
-        return info.render_link(task.issuer)
+
+        if task.predecessor:
+            client_id = task.predecessor.split(':')[0]
+        else:
+            client_id = get_client_id()
+
+        client = client_title_helper(task, client_id)
+
+        return client + ' / ' + info.render_link(task.issuer)
 
     def getPredecessorTask(self):
         controller = ISuccessorTaskController(self.context)
@@ -655,7 +685,7 @@ def set_dates(task, event):
         task.expectedStartOfWork = datetime.now()
     elif event.action in resolved_transitions:
         task.date_of_completion = datetime.now()
-    if event.action == 'task-transition-resolved-open':
+    if event.action == 'task-transition-resolved-in-progress':
         task.date_of_completion = None
 
 

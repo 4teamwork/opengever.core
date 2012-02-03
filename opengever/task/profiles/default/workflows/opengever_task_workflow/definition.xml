@@ -229,8 +229,8 @@
   </permission-map>
  </state>
  <state state_id="task-state-resolved" title="task-state-resolved">
-  <exit-transition transition_id="task-transition-resolved-open"/>
   <exit-transition transition_id="task-transition-resolved-tested-and-closed"/>
+  <exit-transition transition_id="task-transition-resolved-in-progress"/>
   <permission-map name="Access contents information" acquired="False">
    <permission-role>Editor</permission-role>
    <permission-role>Manager</permission-role>
@@ -323,74 +323,75 @@
   </permission-map>
  </state>
  <transition transition_id="task-transition-cancelled-open" title="task-transition-cancelled-open" new_state="task-state-open" trigger="USER" before_script="" after_script="">
-  <action url="%(content_url)s/direct_response?form.widgets.transition=task-transition-cancelled-open" category="workflow" icon="">task-transition-cancelled-open</action>
+  <action url="%(content_url)s/@@task_transition_controller?transition=task-transition-cancelled-open" category="workflow" icon="">task-transition-cancelled-open</action>
   <guard>
-   <guard-expression>python: here.restrictedTraverse('@@task_transition_controller').is_cancelled_to_open_possible()</guard-expression>
+   <guard-expression>python: here.restrictedTraverse('@@task_transition_controller').is_transition_possible('task-transition-cancelled-open')</guard-expression>
   </guard>
  </transition>
  <transition transition_id="task-transition-in-progress-resolved" title="task-transition-in-progress-resolved" new_state="task-state-resolved" trigger="USER" before_script="" after_script="">
-  <action url="%(content_url)s/direct_response?form.widgets.transition=task-transition-in-progress-resolved" category="workflow" icon="">task-transition-in-progress-resolved</action>
+  <action url="%(content_url)s/@@task_transition_controller?transition=task-transition-in-progress-resolved" category="workflow" icon="">task-transition-in-progress-resolved</action>
   <guard>
-   <guard-expression>python: here.restrictedTraverse('@@task_transition_controller').is_progress_to_resolved_possible()</guard-expression>
+   <guard-expression>python: here.restrictedTraverse('@@task_transition_controller').is_transition_possible('task-transition-in-progress-resolved')</guard-expression>
   </guard>
  </transition>
  <transition transition_id="task-transition-in-progress-tested-and-closed" title="task-transition-in-progress-tested-and-closed" new_state="task-state-tested-and-closed" trigger="USER" before_script="" after_script="">
-  <action url="%(content_url)s/direct_response?form.widgets.transition=task-transition-in-progress-tested-and-closed" category="workflow" icon="">task-transition-in-progress-tested-and-closed</action>
+  <action url="%(content_url)s/@@task_transition_controller?transition=task-transition-in-progress-tested-and-closed" category="workflow" icon="">task-transition-in-progress-tested-and-closed</action>
   <guard>
-   <guard-expression>python: here.restrictedTraverse('@@task_transition_controller').is_progress_to_closed_possible()</guard-expression>
+   <guard-expression>python: here.restrictedTraverse('@@task_transition_controller').is_transition_possible('task-transition-in-progress-tested-and-closed')</guard-expression>
   </guard>
  </transition>
  <transition transition_id="task-transition-open-cancelled" title="task-transition-open-cancelled" new_state="task-state-cancelled" trigger="USER" before_script="" after_script="">
-  <action url="%(content_url)s/direct_response?form.widgets.transition=task-transition-open-cancelled" category="workflow" icon="">task-transition-open-cancelled</action>
+  <action url="%(content_url)s/@@task_transition_controller?transition=task-transition-open-cancelled" category="workflow" icon="">task-transition-open-cancelled</action>
   <guard>
-   <guard-expression>python: here.restrictedTraverse('@@task_transition_controller').is_cancel_possible()</guard-expression>
+   <guard-expression>python: here.restrictedTraverse('@@task_transition_controller').is_transition_possible('task-transition-open-cancelled')</guard-expression>
   </guard>
  </transition>
  <transition transition_id="task-transition-open-in-progress" title="task-transition-open-in-progress" new_state="task-state-in-progress" trigger="USER" before_script="" after_script="">
-  <action url="%(content_url)s/direct_response?form.widgets.transition=task-transition-open-in-progress" category="workflow" icon="">task-transition-open-in-progress</action>
+  <action url="%(content_url)s/@@task_transition_controller?transition=task-transition-open-in-progress" category="workflow" icon="">task-transition-open-in-progress</action>
   <guard>
-   <guard-expression>python: here.restrictedTraverse('@@task_transition_controller').is_open_to_progress_possible()</guard-expression>
+   <guard-expression>python: here.restrictedTraverse('@@task_transition_controller').is_transition_possible('task-transition-open-in-progress')</guard-expression>
   </guard>
  </transition>
  <transition transition_id="task-transition-open-rejected" title="task-transition-open-rejected" new_state="task-state-rejected" trigger="USER" before_script="" after_script="">
-  <action url="%(content_url)s/direct_response?form.widgets.transition=task-transition-open-rejected" category="workflow" icon="">task-transition-open-rejected</action>
+  <action url="%(content_url)s/@@task_transition_controller?transition=task-transition-open-rejected" category="workflow" icon="">task-transition-open-rejected</action>
   <guard>
-   <guard-expression>python: here.restrictedTraverse('@@task_transition_controller').is_reject_possible()</guard-expression>
+   <guard-expression>python: here.restrictedTraverse('@@task_transition_controller').is_transition_possible('task-transition-open-rejected')</guard-expression>
   </guard>
  </transition>
  <transition transition_id="task-transition-open-resolved" title="task-transition-open-resolved" new_state="task-state-resolved" trigger="USER" before_script="" after_script="">
-  <action url="%(content_url)s/direct_response?form.widgets.transition=task-transition-open-resolved" category="workflow" icon="">task-transition-open-resolved</action>
+  <action url="%(content_url)s/@@task_transition_controller?transition=task-transition-open-resolved" category="workflow" icon="">task-transition-open-resolved</action>
   <guard>
-   <guard-expression>python: here.restrictedTraverse('@@task_transition_controller').is_open_to_resolved_possible()</guard-expression>
+   <guard-expression>python: here.restrictedTraverse('@@task_transition_controller').is_transition_possible('task-transition-open-resolved')</guard-expression>
   </guard>
  </transition>
  <transition transition_id="task-transition-open-tested-and-closed" title="task-transition-open-tested-and-closed" new_state="task-state-tested-and-closed" trigger="USER" before_script="" after_script="">
-  <action url="%(content_url)s/direct_response?form.widgets.transition=task-transition-open-tested-and-closed" category="workflow" icon="">task-transition-open-tested-and-closed</action>
+  <action url="%(content_url)s/@@task_transition_controller?transition=task-transition-open-tested-and-closed" category="workflow" icon="">task-transition-open-tested-and-closed</action>
   <guard>
-   <guard-expression>python: here.restrictedTraverse('@@task_transition_controller').is_open_to_closed_possible()</guard-expression>
+   <guard-expression>python: here.restrictedTraverse('@@task_transition_controller').is_transition_possible('task-transition-open-tested-and-closed')</guard-expression>
   </guard>
  </transition>
- <transition transition_id="task-transition-reassign" title="Reassign" new_state="" trigger="USER" before_script="" after_script="">
-  <action url="%(content_url)s/@@assign-task?form.widgets.transition=task-transition-reassign" category="workflow" icon="">task-transition-reassign</action>
+ <transition transition_id="task-transition-reassign" title="task-transition-reassign" new_state="" trigger="USER" before_script="" after_script="">
+  <action url="%(content_url)s/@@task_transition_controller?transition=task-transition-reassign" category="workflow" icon="">task-transition-reassign</action>
   <guard>
+   <guard-expression>python: here.restrictedTraverse('@@task_transition_controller').is_transition_possible('task-transition-reassign')</guard-expression>
   </guard>
  </transition>
  <transition transition_id="task-transition-rejected-open" title="task-transition-rejected-open" new_state="task-state-open" trigger="USER" before_script="" after_script="">
-  <action url="" category="workflow" icon="">task-transition-rejected-open</action>
+  <action url="%(content_url)s/@@task_transition_controller?transition=task-transition-rejected-open" category="workflow" icon="">task-transition-rejected-open</action>
   <guard>
-   <guard-expression>python: here.restrictedTraverse('@@task_transition_controller').is_rejected_to_open_possible()</guard-expression>
+   <guard-expression>python: here.restrictedTraverse('@@task_transition_controller').is_transition_possible('task-transition-rejected-open')</guard-expression>
   </guard>
  </transition>
- <transition transition_id="task-transition-resolved-open" title="task-transition-resolved-open" new_state="task-state-open" trigger="USER" before_script="" after_script="">
-  <action url="%(content_url)s/direct_response?form.widgets.transition=task-transition-resolved-open" category="workflow" icon="">task-transition-resolved-open</action>
+ <transition transition_id="task-transition-resolved-in-progress" title="task-transition-resolved-in-progress" new_state="task-state-in-progress" trigger="USER" before_script="" after_script="">
+  <action url="%(content_url)s/@@task_transition_controller?transition=task-transition-resolved-in-progress" category="workflow" icon="">task-transition-resolved-in-progress</action>
   <guard>
-   <guard-expression>python: here.restrictedTraverse('@@task_transition_controller').is_resolved_to_open_possible()</guard-expression>
+   <guard-expression>python: here.restrictedTraverse('@@task_transition_controller').is_transition_possible('task-transition-resolved-in-progress')</guard-expression>
   </guard>
  </transition>
  <transition transition_id="task-transition-resolved-tested-and-closed" title="task-transition-resolved-tested-and-closed" new_state="task-state-tested-and-closed" trigger="USER" before_script="" after_script="">
-  <action url="%(content_url)s/direct_response?form.widgets.transition=task-transition-resolved-tested-and-closed" category="workflow" icon="">task-transition-resolved-tested-and-closed</action>
+  <action url="%(content_url)s/@@task_transition_controller?transition=task-transition-resolved-tested-and-closed" category="workflow" icon="">task-transition-resolved-tested-and-closed</action>
   <guard>
-   <guard-expression>python: here.restrictedTraverse('@@task_transition_controller').is_resolved_to_closed_possible()</guard-expression>
+   <guard-expression>python: here.restrictedTraverse('@@task_transition_controller').is_transition_possible('task-transition-resolved-tested-and-closed')</guard-expression>
   </guard>
  </transition>
  <worklist worklist_id="reviewer_queue" title="">

@@ -5,6 +5,7 @@ from Products.statusmessages.interfaces import IStatusMessage
 from five import grok
 from opengever.base.browser.helper import css_class_from_obj
 from opengever.base.browser.opengeverview import OpengeverView
+from opengever.base.browser.wizard.interfaces import IWizardDataStorage
 from opengever.base.source import DossierPathSourceBinder
 from opengever.globalindex.interfaces import ITaskQuery
 from opengever.ogds.base.interfaces import IContactInformation
@@ -12,6 +13,8 @@ from opengever.task import _
 from opengever.task import util
 from opengever.task.adapters import IResponseContainer, Response
 from opengever.task.interfaces import IResponseAdder
+from opengever.task.interfaces import ISuccessorTaskController
+from opengever.task.interfaces import IWorkflowStateSyncer
 from opengever.task.permissions import DEFAULT_ISSUE_MIME_TYPE
 from opengever.task.task import ITask
 from plone.autoform.form import AutoExtensibleForm
@@ -24,7 +27,7 @@ from z3c.relationfield.relation import RelationValue
 from z3c.relationfield.schema import RelationChoice, RelationList
 from zope import schema
 from zope.cachedescriptors.property import Lazy
-from zope.component import getUtility
+from zope.component import getUtility, getMultiAdapter
 from zope.event import notify
 from zope.i18n import translate
 from zope.interface import Interface
@@ -220,6 +223,16 @@ class AddForm(form.AddForm, AutoExtensibleForm):
     fields['transition'].widgetFactory = radio.RadioFieldWidget
     fields = fields.omit('date_of_completion')
 
+    @property
+    def label(self):
+        transition = self.request.get('form.widgets.transition',
+                                      self.request.get('transition', None))
+        label = [self.context.Title()]
+        if transition:
+            label.append(translate(transition, domain='plone',
+                                   context=self.request))
+        return ': '.join(label)
+
     def updateActions(self):
         super(AddForm, self).updateActions()
         self.actions["save"].addClass("context")
@@ -236,6 +249,7 @@ class AddForm(form.AddForm, AutoExtensibleForm):
             errorMessage += '</ul>'
             self.status = errorMessage
             return None
+
         else:
             new_response = Response(data.get('text'))
             #define responseTyp
@@ -310,6 +324,12 @@ class AddForm(form.AddForm, AutoExtensibleForm):
 
             notify(ObjectModifiedEvent(self.context))
 
+            if data.get('transition'):
+                syncer = getMultiAdapter((self.context, self.request),
+                                         IWorkflowStateSyncer)
+                syncer.change_remote_tasks_workflow_state(
+                    data.get('transition'), text=data.get('text'))
+
             copy_related_documents_view = self.context.restrictedTraverse(
                 '@@copy-related-documents-to-inbox')
             if copy_related_documents_view.available():
@@ -332,6 +352,8 @@ class AddForm(form.AddForm, AutoExtensibleForm):
         ogview = OpengeverView({}, {})
         if not ogview.is_user_assigned_to_client():
             self.widgets['relatedItems'].mode = HIDDEN_MODE
+
+        self.widgets['transition'].mode = HIDDEN_MODE
 
 
 class BeneathTask(grok.ViewletManager):
@@ -357,15 +379,29 @@ class ResponseView(grok.Viewlet, Base):
         """used for display icons in the view"""
         return css_class_from_obj(item)
 
-    def get_added_object(self, response):
+    def get_added_objects(self, response):
+        # Some relations may not have an added_object attribute...
         try:
             response.added_object
         except AttributeError:
             return None
-        if response.added_object:
-            return response.added_object.to_object
-        else:
+
+        # .. and sometimes it may be empty.
+        if not response.added_object:
             return None
+
+        # Support for multiple added objects was added, so added_object may
+        # be a list of relations, but could also be a relation directly.
+        if hasattr(response.added_object, '__iter__'):
+            relations = response.added_object
+        else:
+            relations = [response.added_object]
+
+        # Return the target objects, not the relations.
+        objects = []
+        for rel in relations:
+            objects.append(rel.to_object)
+        return objects
 
     def get_added_successor(self, response):
         try:
@@ -425,47 +461,6 @@ class SingleAddFormView(layout.FormWrapper, grok.View):
     def __init__(self, context, request):
         layout.FormWrapper.__init__(self, context, request)
         grok.View.__init__(self, context, request)
-        self.form.label = context.title
-
-
-class DirectResponseView(grok.View):
-    grok.context(ITask)
-    grok.name('direct_response')
-    grok.require('zope2.View')
-
-    def render(self):
-        self.request = self.context.REQUEST
-
-        if self.request.get('form.widgets.transition', None):
-            # create response
-            new_response = Response('')
-            new_response.transition = self.request.get(
-                'form.widgets.transition', None)
-
-            # do transition - change workflow state
-            wftool = getToolByName(self.context, 'portal_workflow')
-            before = wftool.getInfoFor(self.context, 'review_state')
-            if self.request.get('form.widgets.transition') != before:
-                before = wftool.getTitleForStateOnType(
-                    before, self.context.Type())
-                wftool.doActionFor(
-                    self.context, self.request.get('form.widgets.transition'))
-                after = wftool.getInfoFor(self.context, 'review_state')
-                after = wftool.getTitleForStateOnType(
-                    after, self.context.Type())
-                new_response.add_change('review_state', _(u'Issue state'),
-                                        before, after)
-
-            container = IResponseContainer(self.context)
-            container.add(new_response)
-
-            # we fire the IObjectModifiedEvent because
-            # the task must be reindex also by globalindex
-            notify(ObjectModifiedEvent(self.context))
-
-            self.request.RESPONSE.redirect(self.context.absolute_url())
-        else:
-            self.request.RESPONSE.redirect(self.context.absolute_url())
 
 
 class Edit(Base):

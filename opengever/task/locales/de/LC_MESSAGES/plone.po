@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: YEAR-MO-DA HO:MI +ZONE\n"
+"POT-Creation-Date: 2010-09-30 13:26+0000\n"
 "PO-Revision-Date: 2011-01-27 10:25+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -20,6 +20,9 @@ msgstr "Kopie Dokument aus eigenem Mandant"
 
 msgid "Create successor task"
 msgstr "Folgeaufgabe erstellen"
+
+msgid "Delegate task"
+msgstr "Delegieren"
 
 msgid "task-state-cancelled"
 msgstr "Storniert"
@@ -48,6 +51,9 @@ msgstr "Wieder eröffnen"
 msgid "task-transition-in-progress-resolved"
 msgstr "Erledigen"
 
+msgid "task-transition-in-progress-tested-and-closed"
+msgstr "Abschliessen"
+
 msgid "task-transition-open-cancelled"
 msgstr "Stornieren"
 
@@ -69,11 +75,8 @@ msgstr "Neu zuweisen"
 msgid "task-transition-rejected-open"
 msgstr "Wieder eröffnen"
 
-msgid "task-transition-resolved-open"
-msgstr "Wieder eröffnen"
-
 msgid "task-transition-resolved-tested-and-closed"
 msgstr "Abschliessen"
 
-msgid "task-transition-in-progress-tested-and-closed"
-msgstr "Abschliessen"
+msgid "task-transition-resolved-in-progress"
+msgstr "Überarbeiten"

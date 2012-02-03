@@ -17,6 +17,9 @@ msgstr ""
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: plone\n"
 
+msgid "Delegate task"
+msgstr ""
+
 msgid "Create successor task"
 msgstr ""
 
@@ -62,10 +65,6 @@ msgid "task-transition-rejected-open"
 msgstr ""
 
 
-msgid "task-transition-resolved-open"
-msgstr ""
-
-
 msgid "task-transition-resolved-tested-and-closed"
 msgstr ""
 
@@ -99,4 +98,7 @@ msgstr ""
 
 
 msgid "task-transition-in-progress-tested-and-closed"
+msgstr ""
+
+msgid "task-transition-resolved-in-progress"
 msgstr ""
