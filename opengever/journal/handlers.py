@@ -36,6 +36,11 @@ from zope.i18n import translate
 from zope.i18nmessageid import MessageFactory
 from zope.i18nmessageid.message import Message
 from zope.lifecycleevent.interfaces import IObjectModifiedEvent
+from opengever.mail.interfaces import IDocumentSent
+from zope.intid.interfaces import IIntIds
+from zope.component import getUtility
+from opengever.journal.helper import documents_list_helper
+
 pmf = MessageFactory('plone')
 
 def propper_string(value):
@@ -54,7 +59,6 @@ def journal_entry_factory(context, action, title,
     portal_state = getMultiAdapter((context, context.REQUEST), name=u'plone_portal_state')
     if actor is None:
         actor = portal_state.member().getId()
-
     comment = comment=='' and get_change_note(context.REQUEST, '') or comment
     title = propper_string(title)
     action = propper_string(action)
@@ -372,6 +376,35 @@ def document_file_reverted(context, event):
               mapping=dict(version_id=event.version_id))
     journal_entry_factory(context, DOCUMENT_FILE_REVERTED, title)
 
+DOCUMENT_SENT = 'Document Sent'
+@grok.subscribe(IDexterityContent, IDocumentSent)
+def document_sent(context, event):
+    id_util = getUtility(IIntIds)
+    objs = []
+
+    for intid in event.intids:
+        obj = id_util.getObject(intid)
+        title = obj.Title()
+        receiver = event.receiver
+        message = event.message
+        if isinstance(receiver, list):
+            receiver = ', '.join(receiver)
+        objs.append({'intid':intid,'title':title})
+
+    title = _(u'label_document_sent',
+              default=u'Document sent by Mail: ${subject}',
+              mapping={
+            'subject' : event.subject.decode('utf-8'),
+            })
+
+    comment = translate(_(u'label_document_sent_comment',
+                default=u'Attachments: ${documents} | Receivers: ${receiver} | Message: ${message}',
+                mapping={
+                'documents': documents_list_helper(context, objs),
+                'receiver': receiver.decode('utf-8'),
+                'message': message.decode('utf-8'),
+                }), context=context.REQUEST)
+    journal_entry_factory(context, DOCUMENT_SENT, title, visible=True, comment=comment)
 
 
 # ----------------------- TASK -----------------------

@@ -16,10 +16,12 @@ from zope.app.pagetemplate import ViewPageTemplateFile
 from zope.interface import implements, Interface
 from zope.i18n import translate
 from zope.globalrequest import getRequest
+from BeautifulSoup import BeautifulSoup
 
 
 def tooltip_helper(item, value):
-    return '<span title="%s">%s</span>' % (value, value)
+    text = ''.join(BeautifulSoup(value).findAll(text=True))
+    return '<span title="%s">%s</span>' % (text.encode('utf-8'), value)
 
 
 def title_helper(item, value):
