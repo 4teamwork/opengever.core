@@ -37,10 +37,12 @@
 
               <!-- item is a brain -->
               <tal:brain tal:condition="python: view.get_type(item) == 'brain'">
+				<span tal:attributes="class python:'wf-%s' % item.review_state">
                 <a href="" tal:attributes="href item/getURL|nothing;
                                            title item/alt|nothing;
                                            class python:view.get_css_class(item)" tal:omit-tag="not: item/getURL|nothing">
                 <span tal:content="item/Title" /></a>
+				</span>
               </tal:brain>
 
               <!-- item is a dict (Documents and participants) -->
@@ -61,7 +63,7 @@
 
               <!-- SQLAlchemy Objects (Tasks from GlobalIndex)-->
               <tal:sql tal:condition="python: view.get_type(item) == 'sqlalchemy_object'">
-				<span tal:attributes="class python:item">
+				<span tal:attributes="class python:'wf-%s' % item.review_state">
                 <div tal:replace="structure python:view.render_globalindex_task(item)" />
 				</span>
               </tal:sql>

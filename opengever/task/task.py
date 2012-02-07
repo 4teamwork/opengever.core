@@ -303,7 +303,6 @@ class Overview(DisplayForm, OpengeverTab):
     grok.template('overview')
 
     def render_globalindex_task(self, item):
-        import pdb; pdb.set_trace( )
         return indexed_task_link_helper(item, item.title)
 
     def catalog(self, types, showTrashed=False, depth=2):
@@ -321,13 +320,14 @@ class Overview(DisplayForm, OpengeverTab):
         elif isinstance(item, dict):
             return 'dict'
         elif ICatalogBrain.providedBy(item):
+
             return 'brain'
         else:
             return 'sqlalchemy_object'
 
 
     def boxes(self):
-        item = [
+        items = [
             [
             dict(
                 id='additional_attributes',
@@ -335,17 +335,17 @@ class Overview(DisplayForm, OpengeverTab):
              dict(id='documents', content=self.documents()),],
 
             [dict(id='containing_task', content=self.getContainingTask()),
+             dict(id='sub_task', content=self.getSubTasks()),
              dict(id='predecessor_task', content=self.getPredecessorTask()),
              dict(id='successor_tasks', content=self.getSuccessorTasks()),
             ],
             ]
 
-        # [dict(id='sub_tasks', content=self.getSubTasks()), ],
-        return item
+        return items
 
     def documents(self):
         documents = self.catalog(
-            ['opengever.document.document', 'ftw.mail.mail', ])[:10]
+            ['opengever.document.document', 'ftw.mail.mail', ])
         document_list = [{
             'Title': document.Title,
             'getURL': document.getURL,
@@ -396,10 +396,21 @@ class Overview(DisplayForm, OpengeverTab):
         """used for display icons in the view"""
         return css_class_from_brain(item)
 
+    def get_css_class(self, item):
+        """Return the css classes
+        """
+        return "%s %s" % (
+            "rollover-breadcrumb", self._get_css_icon_class(item))
+
+    def _get_css_icon_class(self, item):
+        """Return the rigth css-class for the icon.
+        """
+        return css_class_from_brain(item)
+
     def getSubTasks(self):
         tasks = self.context.getFolderContents(
             contentFilter={'portal_type': 'opengever.task.task'})
-        return tasks
+        return [task for task in tasks]
 
     def getContainingTask(self):
         parent = aq_parent(aq_inner(self.context))
