@@ -6,7 +6,10 @@
     <tal:i18n i18n:domain="opengever.task" tal:define="groups view/boxes; css_width python:99/len(groups)">
   <div tal:repeat="boxes groups" tal:attributes="class string:boxGroup boxGroup${repeat/boxes/index}; style string:width:${css_width}%">
     <div tal:repeat="box boxes" class="box" tal:attributes="id string:${box/id}Box">
-      <h2 i18n:translate="" tal:content="box/label|box/id"></h2>
+	
+	
+      <h2 i18n:translate=""
+		tal:condition="box/content" tal:content="box/label|box/id"></h2>
 
       <tal:box tal:condition="python: not hasattr(box.get('content'), '__iter__')">
         <tal:item  tal:condition="box/content">
