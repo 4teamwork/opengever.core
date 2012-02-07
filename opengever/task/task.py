@@ -42,10 +42,42 @@ from zope.app.intid.interfaces import IIntIds
 from zope.component import getUtility, getMultiAdapter
 from zope.interface import implements, Interface
 from zope.schema.vocabulary import getVocabularyRegistry
+from plone.dexterity.utils import iterSchemata
+from z3c.form.field import Field
+from zope.schema import getFieldsInOrder
+from z3c.form.interfaces import DISPLAY_MODE, IFieldWidget
+from z3c.form.interfaces import IContextAware, IField
+from zope.interface import alsoProvides
+from Products.ZCatalog.interfaces import ICatalogBrain
+from opengever.globalindex.utils import indexed_task_link_helper
 
 
 _marker = object()
 
+def get_field_widget(obj, field):
+    """Returns the field widget of a field in display mode without
+    touching any form.
+    The `field` should be a z3c form field, not a zope schema field.
+
+    copied from collective.dexteritytextindexer
+    """
+
+    assert IField.providedBy(field), 'field is not a form field'
+
+    if field.widgetFactory.get(DISPLAY_MODE) is not None:
+        factory = field.widgetFactory.get(DISPLAY_MODE)
+        widget = factory(field.field, obj.REQUEST)
+    else:
+        widget = getMultiAdapter(
+            (field.field, obj.REQUEST), IFieldWidget)
+    widget.name = '' + field.__name__  # prefix not needed
+    widget.id = widget.name.replace('.', '-')
+    widget.context = obj
+    alsoProvides(widget, IContextAware)
+    widget.mode = DISPLAY_MODE
+    widget.ignoreRequest = True
+    widget.update()
+    return widget
 
 class ITask(form.Schema):
 
@@ -270,13 +302,102 @@ class Overview(DisplayForm, OpengeverTab):
     grok.name('tabbedview_view-overview')
     grok.template('overview')
 
+    def render_globalindex_task(self, item):
+        import pdb; pdb.set_trace( )
+        return indexed_task_link_helper(item, item.title)
+
+    def catalog(self, types, showTrashed=False, depth=2):
+        return self.context.portal_catalog(
+            portal_type=types,
+            path=dict(depth=depth,
+                query='/'.join(self.context.getPhysicalPath())),
+            sort_on='modified',
+            sort_order='reverse')
+
+    def get_type(self, item):
+        """differ the object typ and return the type as string"""
+        if IFieldWidget.providedBy(item):
+            return 'widget'
+        elif isinstance(item, dict):
+            return 'dict'
+        elif ICatalogBrain.providedBy(item):
+            return 'brain'
+        else:
+            return 'sqlalchemy_object'
+
+
+    def boxes(self):
+        item = [
+            [
+            dict(
+                id='additional_attributes',
+                content=self.additional_attributes()),
+             dict(id='documents', content=self.documents()),],
+
+            [dict(id='containing_task', content=self.getContainingTask()),
+             dict(id='predecessor_task', content=self.getPredecessorTask()),
+             dict(id='successor_tasks', content=self.getSuccessorTasks()),
+            ],
+            ]
+
+        # [dict(id='sub_tasks', content=self.getSubTasks()), ],
+        return item
+
+    def documents(self):
+        documents = self.catalog(
+            ['opengever.document.document', 'ftw.mail.mail', ])[:10]
+        document_list = [{
+            'Title': document.Title,
+            'getURL': document.getURL,
+            'alt': document.document_date and \
+                document.document_date.strftime('%d.%m.%Y') or '',
+            'css_class': css_class_from_brain(document),
+            'portal_type': document.portal_type,
+        } for document in documents]
+
+        return document_list
+
+    def additional_attributes(self):
+        items = []
+        attributes_to_display = [
+            'title',
+            'text',
+            'task_type',
+            'deadline',
+            'issuer',
+            'responsible',
+        ]
+        for schemata in iterSchemata(self.context):
+            for id, field in getFieldsInOrder(schemata):
+
+                if not id in attributes_to_display:
+                    continue
+
+                value = field.get(schemata(self.context))
+                if value and value != field.missing_value:
+                    # we need the form-field, not the schema-field we
+                    # already have..
+                    form_field = Field(field, interface=field.interface,
+                           prefix='')
+
+                    items.append(
+                        get_field_widget(self.context, form_field))
+
+        state = self.context.portal_workflow.getInfoFor(self.context, 'review_state')
+
+        items.append({
+            'Title': state,
+            'css_class': 'wf-%s' % state,
+        })
+
+        return items
+
     def css_class_from_brain(self, item):
         """used for display icons in the view"""
         return css_class_from_brain(item)
 
     def getSubTasks(self):
         tasks = self.context.getFolderContents(
-            full_objects=True,
             contentFilter={'portal_type': 'opengever.task.task'})
         return tasks
 
@@ -341,7 +462,7 @@ class Overview(DisplayForm, OpengeverTab):
 
     def getPredecessorTask(self):
         controller = ISuccessorTaskController(self.context)
-        return controller.get_predecessor()
+        return [controller.get_predecessor()]
 
     def getSuccessorTasks(self):
         controller = ISuccessorTaskController(self.context)

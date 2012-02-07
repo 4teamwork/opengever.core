@@ -3,7 +3,79 @@
       xmlns:tal="http://xml.zope.org/namespaces/tal"
       tal:omit-tag="python: True">
 
-    <tal:i18n i18n:domain="opengever.task">
+    <tal:i18n i18n:domain="opengever.task" tal:define="groups view/boxes; css_width python:99/len(groups)">
+  <div tal:repeat="boxes groups" tal:attributes="class string:boxGroup boxGroup${repeat/boxes/index}; style string:width:${css_width}%">
+    <div tal:repeat="box boxes" class="box" tal:attributes="id string:${box/id}Box">
+      <h2 i18n:translate="" tal:content="box/label|box/id"></h2>
+
+      <tal:box tal:condition="python: not hasattr(box.get('content'), '__iter__')">
+        <tal:item  tal:condition="box/content">
+          <span tal:content="box/content" />
+        </tal:item>
+        <tal:item tal:condition="not: box/content">
+          <span i18n:translate="no_content" />
+        </tal:item>
+      </tal:box>
+
+      <tal:box tal:condition="python: hasattr(box.get('content'), '__iter__')">
+        <tal:items define="items box/content">
+          <ul tal:condition="items">
+            <li tal:repeat="item items">
+
+              <!-- item is a widget (used for the addition box) -->
+              <tal:brain tal:condition="python: view.get_type(item) == 'widget'">
+                <!-- item is a widget -->
+                <tal:cond tal:condition="item/label">
+                  <span tal:content="structure item/label" />
+                  <span>: </span>
+                  <span tal:content="structure item/render" />
+                </tal:cond>
+                <tal:cond tal:condition="not: item/label">
+                  <span tal:content="structure item/render" />
+                </tal:cond>
+              </tal:brain>
+
+              <!-- item is a brain -->
+              <tal:brain tal:condition="python: view.get_type(item) == 'brain'">
+                <a href="" tal:attributes="href item/getURL|nothing;
+                                           title item/alt|nothing;
+                                           class python:view.get_css_class(item)" tal:omit-tag="not: item/getURL|nothing">
+                <span tal:content="item/Title" /></a>
+              </tal:brain>
+
+              <!-- item is a dict (Documents and participants) -->
+              <tal:dict tal:condition="python: view.get_type(item) == 'dict'">
+                <a href=""
+                   tal:attributes="href item/getURL|nothing;
+                                   title item/alt|nothing;
+                                   class python:'rollover-breadcrumb %s' % (item.get('css_class'))"
+                   tal:omit-tag="not: item/getURL|nothing">
+
+                	<span tal:condition="item/getURL|nothing" tal:content="item/Title" />
+                	<span tal:condition="not: item/getURL|nothing"
+						  tal:content="item/Title"
+						  tal:attributes="class python:'rollover-breadcrumb %s' % (item.get('css_class'))" />
+
+			   </a>
+              </tal:dict>
+
+              <!-- SQLAlchemy Objects (Tasks from GlobalIndex)-->
+              <tal:sql tal:condition="python: view.get_type(item) == 'sqlalchemy_object'">
+				<span tal:attributes="class python:item">
+                <div tal:replace="structure python:view.render_globalindex_task(item)" />
+				</span>
+              </tal:sql>
+            </li>
+          </ul>
+          <span tal:condition="not: items" i18n:translate="no_content" />
+        </tal:items>
+      </tal:box>
+
+    </div>
+  </div>
+
+<!-- 
+
         <table class="vertical invisible task-listing">
             <tal:rep tal:define="group python: view.groups[0]">
 
@@ -76,7 +148,7 @@
 
         </table>
 
-        <div class="visualClear"><!----></div>
+        <div class="visualClear"></div>
 
         <tal:items define="items view/getContainingTask"
                    condition="items">
@@ -107,9 +179,9 @@
                    </a>
                </li>
            </ul>
-       </tal:items>
+       </tal:items> -->
 
-        <tal:items define="item view/getPredecessorTask"
+        <!-- <tal:items define="item view/getPredecessorTask"
                    condition="item">
             <div tal:condition="item"><h2 i18n:translate="predecessor">Predecessor Task:</h2></div>
             <div tal:content="structure python:view.render_indexed_task(item)"
@@ -124,7 +196,10 @@
                     tal:content="structure python:view.render_indexed_task(item)"
                     tal:attributes="class string:wf-${item/review_state}"/>
             </ul>
-        </tal:items>
+        </tal:items> -->
+
+
+
         <div class="visualClear"><!----></div>
         <div tal:replace="structure provider:opengever.task.beneathTask" />
         <div class="visualClear"><!----></div>
