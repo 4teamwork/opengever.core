@@ -768,3 +768,33 @@ msgstr ""
 msgid "title_error_no_response"
 msgstr ""
 
+#. Default: "additional_attributes"
+#: ./opengever/task/task_templates/overview.pt
+msgid "additional_attributes"
+msgstr ""
+
+#. Default: "documents"
+#: ./opengever/task/task_templates/overview.pt
+msgid "documents"
+msgstr ""
+
+#. Default: "sub_task"
+#: ./opengever/task/task_templates/overview.pt
+msgid "sub_task"
+msgstr ""
+
+#. Default: "predecessor_task"
+#: ./opengever/task/task_templates/overview.pt
+msgid "predecessor_task"
+msgstr ""
+
+#. Default: "containing_task"
+#: ./opengever/task/task_templates/overview.pt
+msgid "containing_task"
+msgstr ""
+
+#. Default: "successor_tasks"
+#: ./opengever/task/task_templates/overview.pt
+msgid "successor_tasks"
+msgstr ""
+

@@ -766,3 +766,28 @@ msgstr "Antwort bearbeiten"
 #: ./opengever/task/templates/edit_response.pt:30
 msgid "title_error_no_response"
 msgstr "Fehler: keine Antworten zum editieren gefunden"
+
+#. Default: "additional_attributes"
+msgid "additional_attributes"
+msgstr "Eigenschaften"
+
+#. Default: "documents"
+msgid "documents"
+msgstr "Dokumente"
+
+#. Default: "sub_task"
+msgid "sub_task"
+msgstr "Unteraufgaben"
+
+#. Default: "predecessor_task"
+msgid "predecessor_task"
+msgstr "Ursprüngliche Aufgabe"
+
+#. Default: "containing_task"
+msgid "containing_task"
+msgstr "Hauptaufgabe"
+
+#. Default: "successor_tasks"
+msgid "successor_tasks"
+msgstr "Kopierte Aufgabe"
+
