@@ -9,6 +9,7 @@ tests_require = [
     'z3c.form [test]',
     'z3c.saconfig',
     'plone.app.testing',
+    'plone.mocktestcase',
     'opengever.document',
     'opengever.contact',
     'ftw.tabbedview',
