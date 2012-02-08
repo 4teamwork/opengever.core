@@ -10,7 +10,7 @@ from ftw.table import helper
 from ftw.table.basesource import BaseTableSource
 from ftw.table.interfaces import ITableSource, ITableSourceConfig
 from opengever.base.browser.helper import client_title_helper
-from opengever.base.browser.helper import css_class_from_brain
+from opengever.base.browser.helper import css_class_from_brain, css_class_from_obj
 from opengever.base.interfaces import ISequenceNumber
 from opengever.base.source import DossierPathSourceBinder
 from opengever.globalindex.utils import indexed_task_link
@@ -50,6 +50,7 @@ from z3c.form.interfaces import IContextAware, IField
 from zope.interface import alsoProvides
 from Products.ZCatalog.interfaces import ICatalogBrain
 from opengever.globalindex.utils import indexed_task_link_helper
+
 
 
 _marker = object()
@@ -297,6 +298,28 @@ def responsible_client_default_value(data):
     return get_client_id()
 
 
+class StateWidget(object):
+    implements(IFieldWidget)
+
+    def __init__(self, context):
+        self.context = context
+        self.label = _('review_state')
+
+    def get_state(self):
+        return getToolByName(self.context, 'portal_workflow').getInfoFor(
+            self.context, 'review_state')
+
+    def render(self):
+        return self.get_state()
+
+    def label(self):
+        return self.label
+
+    def css_class(self):
+        return 'wf-%s' % self.get_state()
+
+
+
 class Overview(DisplayForm, OpengeverTab):
     grok.context(ITask)
     grok.name('tabbedview_view-overview')
@@ -315,16 +338,19 @@ class Overview(DisplayForm, OpengeverTab):
 
     def get_type(self, item):
         """differ the object typ and return the type as string"""
-        if IFieldWidget.providedBy(item):
+
+        if not item:
+            return None
+        if ITask.providedBy(item):
+            return 'task_obj'
+        elif IFieldWidget.providedBy(item):
             return 'widget'
         elif isinstance(item, dict):
             return 'dict'
         elif ICatalogBrain.providedBy(item):
-
             return 'brain'
         else:
             return 'sqlalchemy_object'
-
 
     def boxes(self):
         items = [
@@ -358,54 +384,52 @@ class Overview(DisplayForm, OpengeverTab):
         return document_list
 
     def additional_attributes(self):
+        def _get_state():
+            return StateWidget(self.context)
+
         items = []
         attributes_to_display = [
             'title',
             'text',
             'task_type',
+            'state',
             'deadline',
             'issuer',
             'responsible',
         ]
-        for schemata in iterSchemata(self.context):
-            for id, field in getFieldsInOrder(schemata):
 
-                if not id in attributes_to_display:
-                    continue
+        for attr in attributes_to_display:
+            if attr == 'state':
+                items.append(_get_state())
+            else:
+                field = ITask.get(attr)
+                field = Field(field, interface=field.interface,
+                       prefix='')
 
-                value = field.get(schemata(self.context))
-                if value and value != field.missing_value:
-                    # we need the form-field, not the schema-field we
-                    # already have..
-                    form_field = Field(field, interface=field.interface,
-                           prefix='')
-
-                    items.append(
-                        get_field_widget(self.context, form_field))
-
-        state = self.context.portal_workflow.getInfoFor(self.context, 'review_state')
-
-        items.append({
-            'Title': state,
-            'css_class': 'wf-%s' % state,
-        })
-
+                items.append(get_field_widget(self.context, field))
         return items
 
     def css_class_from_brain(self, item):
         """used for display icons in the view"""
         return css_class_from_brain(item)
 
-    def get_css_class(self, item):
+    def get_css_class(self, item, is_brain=True):
         """Return the css classes
         """
-        return "%s %s" % (
-            "rollover-breadcrumb", self._get_css_icon_class(item))
+        if is_brain:
+            return "%s %s" % (
+                "rollover-breadcrumb", css_class_from_obj(item))
+        else:
+            return "%s %s" % (
+                "rollover-breadcrumb", css_class_from_brain(item))
 
-    def _get_css_icon_class(self, item):
-        """Return the rigth css-class for the icon.
+    def get_revie_state_css(self, item):
+        """ Return the css class for the reviewstate
         """
-        return css_class_from_brain(item)
+        state = getToolByName(self.context, 'portal_workflow').getInfoFor(
+            self.context, 'review_state')
+
+        return 'wf-%s' % state
 
     def getSubTasks(self):
         tasks = self.context.getFolderContents(
@@ -415,8 +439,8 @@ class Overview(DisplayForm, OpengeverTab):
     def getContainingTask(self):
         parent = aq_parent(aq_inner(self.context))
         if parent.portal_type == self.context.portal_type:
-            return [parent, ]
-        return None
+            return [parent]
+        return []
 
     def responsible_link(self):
         """Render the responsible of the current task as link.
@@ -473,6 +497,9 @@ class Overview(DisplayForm, OpengeverTab):
 
     def getPredecessorTask(self):
         controller = ISuccessorTaskController(self.context)
+        task = controller.get_predecessor()
+        if not task:
+            return []
         return [controller.get_predecessor()]
 
     def getSuccessorTasks(self):

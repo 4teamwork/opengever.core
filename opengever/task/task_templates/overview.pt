@@ -31,7 +31,7 @@
                 <tal:cond tal:condition="item/label">
                   <span tal:content="structure item/label" />
                   <span>: </span>
-                  <span tal:content="structure item/render" />
+                  <span tal:attributes="class item/css_class|nothing" tal:content="structure item/render" />
                 </tal:cond>
                 <tal:cond tal:condition="not: item/label">
                   <span tal:content="structure item/render" />
@@ -40,10 +40,20 @@
 
               <!-- item is a brain -->
               <tal:brain tal:condition="python: view.get_type(item) == 'brain'">
-				<span tal:attributes="class python:'wf-%s' % item.review_state">
+				<span tal:attributes="class python:'wf-%s' % getattr(item, 'review_state')">
                 <a href="" tal:attributes="href item/getURL|nothing;
                                            title item/alt|nothing;
                                            class python:view.get_css_class(item)" tal:omit-tag="not: item/getURL|nothing">
+                <span tal:content="item/Title" /></a>
+				</span>
+              </tal:brain>
+
+              <!-- item is a task_obj -->
+              <tal:brain tal:condition="python: view.get_type(item) == 'task_obj'">
+				<span tal:attributes="class python: view.get_revie_state_css(item)">
+                <a href="" tal:attributes="href item/absolute_url|nothing;
+                                           title item/Description|nothing;
+                                           class python:view.get_css_class(item, is_brain=False)" tal:omit-tag="not: item/absolute_url|nothing">
                 <span tal:content="item/Title" /></a>
 				</span>
               </tal:brain>
