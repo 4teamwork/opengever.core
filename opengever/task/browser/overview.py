@@ -1,24 +1,25 @@
 from Acquisition import aq_parent, aq_inner
-from Products.CMFCore.utils import getToolByName
 from five import grok
+from opengever.ogds.base.utils import get_client_id
 from opengever.base.browser.helper import client_title_helper
 from opengever.base.browser.helper import css_class_from_brain, css_class_from_obj
 from opengever.globalindex.utils import indexed_task_link
+from opengever.globalindex.utils import indexed_task_link_helper
 from opengever.ogds.base.interfaces import IContactInformation
-from opengever.ogds.base.utils import get_client_id
 from opengever.tabbedview.browser.tabs import OpengeverTab
 from opengever.task import _
 from opengever.task.interfaces import ISuccessorTaskController
+from opengever.task.task import ITask
 from plone.directives.dexterity import DisplayForm
-from zope.component import getUtility, getMultiAdapter
-from zope.interface import implements
+from Products.CMFCore.utils import getToolByName
+from Products.ZCatalog.interfaces import ICatalogBrain
 from z3c.form.field import Field
 from z3c.form.interfaces import DISPLAY_MODE, IFieldWidget
 from z3c.form.interfaces import IContextAware, IField
+from zope.component import getUtility, getMultiAdapter
+from zope.i18n import translate
 from zope.interface import alsoProvides
-from Products.ZCatalog.interfaces import ICatalogBrain
-from opengever.globalindex.utils import indexed_task_link_helper
-from opengever.task.task import ITask
+from zope.interface import implements
 
 
 def get_field_widget(obj, field):
@@ -28,7 +29,6 @@ def get_field_widget(obj, field):
 
     copied from collective.dexteritytextindexer
     """
-
     assert IField.providedBy(field), 'field is not a form field'
 
     if field.widgetFactory.get(DISPLAY_MODE) is not None:
@@ -47,19 +47,51 @@ def get_field_widget(obj, field):
     return widget
 
 
-class StateWidget(object):
+class IssuerWidget(object):
+    """ Dummy Widget to display the issuer
+    """
     implements(IFieldWidget)
 
     def __init__(self, context):
         self.context = context
-        self.label = _('review_state')
+        self.label = _('label_issuer')
+
+    def render(self):
+        info = getUtility(IContactInformation)
+        task = ITask(self.context)
+
+        if task.predecessor:
+            client_id = task.predecessor.split(':')[0]
+        else:
+            client_id = get_client_id()
+
+        client = client_title_helper(task, client_id)
+
+        return client + ' / ' + info.render_link(task.issuer)
+
+    def label(self):
+        return self.label
+
+
+class StateWidget(object):
+    """ Dummy Widget to display the state
+    """
+    implements(IFieldWidget)
+
+    def __init__(self, context, request):
+        self.context = context
+        self.request = request
+        self.label = _('label_workflow_state')
 
     def get_state(self):
         return getToolByName(self.context, 'portal_workflow').getInfoFor(
             self.context, 'review_state')
 
     def render(self):
-        return self.get_state()
+        return translate(
+            self.get_state(),
+            domain='plone',
+            context=self.request)
 
     def label(self):
         return self.label
@@ -68,14 +100,10 @@ class StateWidget(object):
         return 'wf-%s' % self.get_state()
 
 
-
 class Overview(DisplayForm, OpengeverTab):
     grok.context(ITask)
     grok.name('tabbedview_view-overview')
     grok.template('overview')
-
-    def render_globalindex_task(self, item):
-        return indexed_task_link_helper(item, item.title)
 
     def catalog(self, types, showTrashed=False, depth=2):
         return self.context.portal_catalog(
@@ -109,16 +137,18 @@ class Overview(DisplayForm, OpengeverTab):
                 content=self.additional_attributes()),
              dict(id='documents', content=self.documents()),],
 
-            [dict(id='containing_task', content=self.getContainingTask()),
-             dict(id='sub_task', content=self.getSubTasks()),
-             dict(id='predecessor_task', content=self.getPredecessorTask()),
-             dict(id='successor_tasks', content=self.getSuccessorTasks()),
+            [dict(id='containing_task', content=self.get_containing_task()),
+             dict(id='sub_task', content=self.get_sub_tasks()),
+             dict(id='predecessor_task', content=self.get_predecessor_task()),
+             dict(id='successor_tasks', content=self.get_successor_tasks()),
             ],
             ]
 
         return items
 
     def documents(self):
+        """ Return documents and related documents
+        """
         documents = self.catalog(
             ['opengever.document.document', 'ftw.mail.mail', ])
         document_list = [{
@@ -133,9 +163,8 @@ class Overview(DisplayForm, OpengeverTab):
         return document_list
 
     def additional_attributes(self):
-        def _get_state():
-            return StateWidget(self.context)
-
+        """ Attributes to display
+        """
         items = []
         attributes_to_display = [
             'title',
@@ -149,7 +178,9 @@ class Overview(DisplayForm, OpengeverTab):
 
         for attr in attributes_to_display:
             if attr == 'state':
-                items.append(_get_state())
+                items.append(StateWidget(self.context, self.request))
+            elif attr == 'issuer':
+                items.append(IssuerWidget(self.context))
             else:
                 field = ITask.get(attr)
                 field = Field(field, interface=field.interface,
@@ -159,7 +190,8 @@ class Overview(DisplayForm, OpengeverTab):
         return items
 
     def css_class_from_brain(self, item):
-        """used for display icons in the view"""
+        """ Used for display icons in the view
+        """
         return css_class_from_brain(item)
 
     def get_css_class(self, item, is_brain=True):
@@ -180,20 +212,21 @@ class Overview(DisplayForm, OpengeverTab):
 
         return 'wf-%s' % state
 
-    def getSubTasks(self):
+    def get_sub_tasks(self):
         tasks = self.context.getFolderContents(
             contentFilter={'portal_type': 'opengever.task.task'})
         return [task for task in tasks]
 
-    def getContainingTask(self):
+    def get_containing_task(self):
         parent = aq_parent(aq_inner(self.context))
         if parent.portal_type == self.context.portal_type:
             return [parent]
         return []
 
     def responsible_link(self):
-        """Render the responsible of the current task as link.
+        """ Render the responsible of the current task as link.
         """
+
         info = getUtility(IContactInformation)
         task = ITask(self.context)
 
@@ -212,8 +245,9 @@ class Overview(DisplayForm, OpengeverTab):
         return client + ' / ' + info.render_link(task.responsible)
 
     def subtask_responsible(self, subtask):
-        """Render the responsible of a subtask (object) as text.
+        """ Render the responsible of a subtask (object) as text.
         """
+
         if not ITask.providedBy(subtask) and \
                 subtask.portal_type != 'opengever.task.task':
             # It is not a task, it may be a document or something else. So
@@ -244,16 +278,19 @@ class Overview(DisplayForm, OpengeverTab):
 
         return client + ' / ' + info.render_link(task.issuer)
 
-    def getPredecessorTask(self):
+    def get_predecessor_task(self):
         controller = ISuccessorTaskController(self.context)
         task = controller.get_predecessor()
         if not task:
             return []
-        return [controller.get_predecessor()]
+        return [task]
 
-    def getSuccessorTasks(self):
+    def get_successor_tasks(self):
         controller = ISuccessorTaskController(self.context)
         return controller.get_successors()
 
     def render_indexed_task(self, item):
         return indexed_task_link(item, display_client=True)
+
+    def render_globalindex_task(self, item):
+        return indexed_task_link_helper(item, item.title)
