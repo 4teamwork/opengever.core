@@ -2,8 +2,7 @@ from Acquisition import aq_parent, aq_inner
 from five import grok
 from opengever.ogds.base.utils import get_client_id
 from opengever.base.browser.helper import client_title_helper
-from opengever.base.browser.helper import css_class_from_brain, css_class_from_obj
-from opengever.globalindex.utils import indexed_task_link
+from opengever.base.browser.helper import css_class_from_obj
 from opengever.globalindex.model.task import Task
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.tabbedview.browser.tabs import OpengeverTab
@@ -12,7 +11,6 @@ from opengever.task.interfaces import ISuccessorTaskController
 from opengever.task.task import ITask
 from plone.directives.dexterity import DisplayForm
 from Products.CMFCore.utils import getToolByName
-from Products.ZCatalog.interfaces import ICatalogBrain
 from z3c.form.field import Field
 from z3c.form.interfaces import DISPLAY_MODE, IFieldWidget
 from z3c.form.interfaces import IContextAware, IField
@@ -20,6 +18,8 @@ from zope.component import getUtility, getMultiAdapter
 from zope.i18n import translate
 from zope.interface import alsoProvides
 from zope.interface import implements
+
+from zope.component import queryUtility
 
 
 def get_field_widget(obj, field):
@@ -80,30 +80,19 @@ class ResponsibleWidget(object):
     """
     implements(IFieldWidget)
 
-    def __init__(self, context):
+    def __init__(self, context, view):
         self.context = context
+        self.view = view
         self.label = _('label_responsible')
 
     def render(self):
         """ Render the responsible of the current task as link.
         """
-        info = getUtility(IContactInformation)
-        task = ITask(self.context)
-        if not len(task.widgets.responsible_client):
-            # in some special cases the responsible client may not be set.
-            return info.render_link(task.responsible)
-
-        if len(info.get_clients()) <= 1:
-            # We have a single client setup, so we don't need to display
-            # the client here.
-            return info.render_link(task.responsible)
-
-        client = client_title_helper(task, task.widgets.responsible_client)
-
-        return client + ' / ' + info.render_link(task.responsible)
+        return self.view.get_task_info(self.context)
 
     def label(self):
         return self.label
+
 
 class StateWidget(object):
     """ Widget to display the state
@@ -147,12 +136,8 @@ class Overview(DisplayForm, OpengeverTab):
             return None
         elif IFieldWidget.providedBy(item):
             return 'widget'
-        elif isinstance(item, dict):
-            return 'dict'
-        elif ICatalogBrain.providedBy(item):
-            return 'brain'
-        elif isinstance(item, Task):
-            return 'sqlalchemy_object'
+        elif isinstance(item, Task) or ITask.providedBy(item):
+            return 'task'
         else:
             return 'obj'
 
@@ -162,8 +147,8 @@ class Overview(DisplayForm, OpengeverTab):
             dict(
                 id='additional_attributes',
                 content=self.additional_attributes()),
-             dict(id='documents', content=self.documents()),],
-
+            dict(id='documents', content=self.documents()),
+            ],
             [dict(id='containing_task', content=self.get_containing_task()),
              dict(id='sub_task', content=self.get_sub_tasks()),
              dict(id='predecessor_task', content=self.get_predecessor_task()),
@@ -176,39 +161,29 @@ class Overview(DisplayForm, OpengeverTab):
     def documents(self):
         """ Return documents and related documents
         """
-        # Documents
-        documents = getToolByName(self.context, 'portal_catalog')(
-            portal_type=['opengever.document.document', 'ftw.mail.mail', ],
-            path=dict(
-                depth=2,
-                query='/'.join(self.context.getPhysicalPath())),
-            sort_on='modified',
-            sort_order='reverse'
-            )
 
+        def _get_documents():
+            # Documents
+            documents = getToolByName(self.context, 'portal_catalog')(
+                portal_type=['opengever.document.document', 'ftw.mail.mail', ],
+                path=dict(
+                    depth=2,
+                    query='/'.join(self.context.getPhysicalPath())),
+                )
+            return [document.getObject() for document in documents]
 
-        document_list = [{
-            'Title': document.Title,
-            'getURL': document.getURL,
-            'alt': document.document_date and \
-                document.document_date.strftime('%d.%m.%Y') or '',
-            'css_class': self.get_css_class(document),
-            'portal_type': document.portal_type,
-            'modified': document.modified,
-        } for document in documents]
+        def _get_related_documents():
+            # Related documents
+            related_documents = []
+            for item in self.context.relatedItems:
+                obj = item.to_object
+                if (obj.portal_type == 'opengever.document.document'\
+                        or obj.portal_type == 'ftw.mail.mail'):
+                    related_documents.append(obj)
+            return related_documents
 
-        # Related documents
-        for item in self.context.relatedItems:
-            obj = item.to_object
-            if (obj.portal_type == 'opengever.document.document'\
-                    or obj.portal_type == 'ftw.mail.mail'):
-                document_list.append(obj)
-
-        # Sort
-        document_list.sort(lambda b, a: cmp(
-            b.get('modified') and b.get('modified') or b.modified(),
-            a.get('modified') and a.get('modified') or a.modified(),
-            ))
+        document_list = _get_documents() + _get_related_documents()
+        document_list.sort(lambda b, a: cmp(b.modified(), a.modified()))
 
         return document_list
 
@@ -232,7 +207,7 @@ class Overview(DisplayForm, OpengeverTab):
             elif attr == 'issuer':
                 items.append(IssuerWidget(self.context))
             elif attr == 'responsible':
-                items.append(ResponsibleWidget(self.context))
+                items.append(ResponsibleWidget(self.context, self))
             else:
                 field = ITask.get(attr)
                 field = Field(field, interface=field.interface,
@@ -242,33 +217,20 @@ class Overview(DisplayForm, OpengeverTab):
 
         return items
 
-    def get_css_class(self, item, is_brain=True):
-        """Return the css classes
+    def get_css_class(self, item):
+        """Return the css sprite-css-class
         """
-        if is_brain:
-            css = css_class_from_brain(item)
-        else:
-            css = css_class_from_obj(item)
-
-        return "%s %s" % ("rollover-breadcrumb", css)
-
-    def get_review_state_css(self, obj):
-        """ Return the css class for the reviewstate
-        """
-        if not ITask.providedBy(obj):
-            return None
-
-        state = getToolByName(self.context, 'portal_workflow').getInfoFor(
-            obj, 'review_state')
-
-        return 'wf-%s' % state
+        css = css_class_from_obj(item)
+        return '%s %s' % ("rollover-breadcrumb", css)
 
     def get_sub_tasks(self):
         """ Return the subtasks
         """
         tasks = self.context.getFolderContents(
-            contentFilter={'portal_type': 'opengever.task.task'})
-        return [task for task in tasks]
+            full_objects=True,
+            contentFilter={'portal_type': 'opengever.task.task'},
+            )
+        return tasks
 
     def get_containing_task(self):
         """ Get the parent-tasks if we have one
@@ -277,27 +239,6 @@ class Overview(DisplayForm, OpengeverTab):
         if parent.portal_type == self.context.portal_type:
             return [parent]
         return []
-
-    def subtask_responsible(self, subtask):
-        """ Render the responsible of a subtask (object) as text.
-        """
-
-        if not ITask.providedBy(subtask) and \
-                subtask.portal_type != 'opengever.task.task':
-            # It is not a task, it may be a document or something else. So
-            # we do nothing.
-            return None
-
-        info = getUtility(IContactInformation)
-
-        if not subtask.responsible_client or len(info.get_clients()) <= 1:
-            # No responsible client is set yet or we have a single client
-            # setup.
-            return info.describe(subtask.responsible)
-
-        else:
-            client = client_title_helper(subtask, subtask.responsible_client)
-            return client + ' / ' + info.describe(subtask.responsible)
 
     def get_predecessor_task(self):
         """ Get the original task
@@ -315,7 +256,121 @@ class Overview(DisplayForm, OpengeverTab):
         controller = ISuccessorTaskController(self.context)
         return controller.get_successors()
 
-    def render_indexed_task(self, item, display_client=True):
-        """ Render the link for a globalindex sqlalchemy object
+    def task_state_wrapper(self, item, text):
+        """ Wrap a span-tag around the text with the status-css class
         """
-        return indexed_task_link(item, display_client)
+        if not (isinstance(item, Task) or ITask.providedBy(item)):
+            return ''
+
+        if hasattr(item, 'review_state'):
+            # Its a sql-task-object
+            state = item.review_state
+        else:
+            # Its a task-object
+            state = getToolByName(self.context, 'portal_workflow').getInfoFor(
+                item, 'review_state')
+
+        return '<span class="wf-%s">%s</span>' % (state, text)
+
+    def get_task_info(self, item):
+        """ return the taskinfos like responsible or client of a task
+        """
+        if not ITask.providedBy(item):
+            return None
+
+        info = getUtility(IContactInformation)
+
+        if not item.responsible_client or len(info.get_clients()) <= 1:
+            # No responsible client is set yet or we have a single client
+            # setup.
+            return info.describe(item.responsible)
+        else:
+            client = client_title_helper(item, item.responsible_client)
+            return client + ' / ' + info.render_link(item.responsible)
+
+    def render_task(self, item):
+        """ Render the taskobject
+        """
+        if isinstance(item, Task):
+            # Its a task stored in sql
+            return self.indexed_task_link(item)
+
+        elif ITask.providedBy(item):
+            # Its a normal task object
+            return self.object_task_link(item)
+
+        else:
+            return None
+
+    def object_task_link(self, item):
+        """ Renders a task object with a link to the effective task
+        """
+
+        info_html = self.get_task_info(item)
+        task_html = '<a href="%s"><span class="%s">%s</span></a>' % (
+            item.absolute_url(),
+            self.get_css_class(item),
+            item.Title(),
+        )
+        inner_html = '%s <span class="discreet">(%s)</span>' % (
+            task_html, info_html)
+
+        return self.task_state_wrapper(item, inner_html)
+
+    def indexed_task_link(self, item):
+        """Renders a indexed task item (globalindex sqlalchemy object) either
+        with a link to the effective task (if the user has access) or just with
+        the title.
+        """
+
+        css_class = item.task_type == 'forwarding_task_type' and \
+            'contenttype-opengever-inbox-forwarding' or \
+            'contenttype-opengever-task-task'
+
+        # get the contact information utlity and the client
+        info = queryUtility(IContactInformation)
+        if info:
+            client = info.get_client_by_id(item.client_id)
+        if not info or not client:
+            return '<span class="%s">%s</span>' % (css_class, item.title)
+
+        # has the user access to the target task?
+        has_access = False
+        mtool = getToolByName(self.context, 'portal_membership')
+        member = mtool.getAuthenticatedMember()
+
+        if member:
+            principals = set(member.getGroups() + [member.getId()])
+            allowed_principals = set(item.principals)
+            has_access = len(principals & allowed_principals) > 0
+
+        # If the target is on a different client we need to make a popup
+        if item.client_id != get_client_id():
+            link_target = ' target="_blank"'
+            url = '%s/%s' % (client.public_url, item.physical_path)
+        else:
+            link_target = ''
+            url = client.public_url + '/' + item.physical_path
+
+        # Client and user info
+        info_html = ' <span class="discreet">(%s / %s)</span>' % (
+            client.title,
+            info.render_link(item.responsible),
+        )
+
+        # Link to the task object
+        task_html = '<span class="%s">%s</span>' % \
+                        (css_class, item.title)
+
+        # Render the full link if we have acccess
+        if has_access:
+            inner_html = '<a href="%s"%s>%s</a> %s' % (
+                url,
+                link_target,
+                task_html,
+                info_html)
+        else:
+            inner_html = '%s %s' % (task_html, info_html)
+
+        # Add the task-state css and return it
+        return self.task_state_wrapper(item, inner_html)

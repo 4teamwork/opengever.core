@@ -1,4 +1,4 @@
-<div class="response-adder"
+<div class="response-adder box"
      i18n:domain="opengever.task">
     <h2 tal:condition="viewlet/responses" i18n:translate="responses">Responses:</h2>
     <tal:responses repeat="response_info viewlet/responses">
@@ -63,17 +63,16 @@
                 <div tal:repeat="added_obj python:viewlet.get_added_objects(response)">
                     <span i18n:translate="task_object_add" class="label">Added</span>
                     <span class="issueChange">
-                        <a href=""
-                           tal:attributes="href added_obj/absolute_url|nothing; class python:viewlet.css_class_from_obj(added_obj)"
-                           tal:omit-tag="not: added_obj/absolute_url|nothing">
-                            <span tal:content="added_obj/Title" />
-                            <span class="discreet"
-                                  tal:define="responsible python:view.subtask_responsible(added_obj)"
-                                  tal:condition="responsible">
-                                (<tal:responsible replace="responsible" />)
-                            </span>
-                        </a>
-
+						<tal:task condition="python: view.get_type(added_obj) == 'task'">
+							<div tal:replace="structure python:view.render_task(added_obj)" />
+						</tal:task>
+						<tal:notask condition="python: view.get_type(added_obj) == 'obj'">
+	                        <a href=""
+	                           tal:attributes="href added_obj/absolute_url|nothing; class python:viewlet.css_class_from_obj(added_obj)"
+	                           tal:omit-tag="not: added_obj/absolute_url|nothing">
+	                            <span tal:content="added_obj/Title" />
+	                        </a>
+						</tal:notask>
                     </span>
                 </div>
 
@@ -83,7 +82,7 @@
                         Added successor task
                     </span>
                     <span class="issueChange"
-                          tal:content="structure python:view.render_indexed_task(item)" />
+                          tal:content="structure python:view.render_task(item)" />
                 </div>
 
             </div>
