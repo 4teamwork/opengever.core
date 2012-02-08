@@ -4,7 +4,7 @@ from opengever.ogds.base.utils import get_client_id
 from opengever.base.browser.helper import client_title_helper
 from opengever.base.browser.helper import css_class_from_brain, css_class_from_obj
 from opengever.globalindex.utils import indexed_task_link
-from opengever.globalindex.utils import indexed_task_link_helper
+from opengever.globalindex.model.task import Task
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.tabbedview.browser.tabs import OpengeverTab
 from opengever.task import _
@@ -48,7 +48,7 @@ def get_field_widget(obj, field):
 
 
 class IssuerWidget(object):
-    """ Dummy Widget to display the issuer
+    """ Widget to display the issuer
     """
     implements(IFieldWidget)
 
@@ -57,6 +57,8 @@ class IssuerWidget(object):
         self.label = _('label_issuer')
 
     def render(self):
+        """ Render the issuer of the current task as link.
+        """
         info = getUtility(IContactInformation)
         task = ITask(self.context)
 
@@ -73,8 +75,38 @@ class IssuerWidget(object):
         return self.label
 
 
+class ResponsibleWidget(object):
+    """ Widget to display the responsible
+    """
+    implements(IFieldWidget)
+
+    def __init__(self, context):
+        self.context = context
+        self.label = _('label_responsible')
+
+    def render(self):
+        """ Render the responsible of the current task as link.
+        """
+        info = getUtility(IContactInformation)
+        task = ITask(self.context)
+        if not len(task.widgets.responsible_client):
+            # in some special cases the responsible client may not be set.
+            return info.render_link(task.responsible)
+
+        if len(info.get_clients()) <= 1:
+            # We have a single client setup, so we don't need to display
+            # the client here.
+            return info.render_link(task.responsible)
+
+        client = client_title_helper(task, task.widgets.responsible_client)
+
+        return client + ' / ' + info.render_link(task.responsible)
+
+    def label(self):
+        return self.label
+
 class StateWidget(object):
-    """ Dummy Widget to display the state
+    """ Widget to display the state
     """
     implements(IFieldWidget)
 
@@ -87,17 +119,20 @@ class StateWidget(object):
         return getToolByName(self.context, 'portal_workflow').getInfoFor(
             self.context, 'review_state')
 
-    def render(self):
+    def get_translated_state(self):
         return translate(
             self.get_state(),
             domain='plone',
             context=self.request)
 
+    def render(self):
+        return "<span class=wf-%s>%s</span>" % (
+            self.get_state(),
+            self.get_translated_state(),
+        )
+
     def label(self):
         return self.label
-
-    def css_class(self):
-        return 'wf-%s' % self.get_state()
 
 
 class Overview(DisplayForm, OpengeverTab):
@@ -114,20 +149,20 @@ class Overview(DisplayForm, OpengeverTab):
             sort_order='reverse')
 
     def get_type(self, item):
-        """differ the object typ and return the type as string"""
-
+        """differ the object typ and return the type as string
+        """
         if not item:
             return None
-        if ITask.providedBy(item):
-            return 'task_obj'
         elif IFieldWidget.providedBy(item):
             return 'widget'
         elif isinstance(item, dict):
             return 'dict'
         elif ICatalogBrain.providedBy(item):
             return 'brain'
-        else:
+        elif isinstance(item, Task):
             return 'sqlalchemy_object'
+        else:
+            return 'obj'
 
     def boxes(self):
         items = [
@@ -149,6 +184,7 @@ class Overview(DisplayForm, OpengeverTab):
     def documents(self):
         """ Return documents and related documents
         """
+        # Documents
         documents = self.catalog(
             ['opengever.document.document', 'ftw.mail.mail', ])
         document_list = [{
@@ -156,9 +192,16 @@ class Overview(DisplayForm, OpengeverTab):
             'getURL': document.getURL,
             'alt': document.document_date and \
                 document.document_date.strftime('%d.%m.%Y') or '',
-            'css_class': css_class_from_brain(document),
+            'css_class': self.get_css_class(document),
             'portal_type': document.portal_type,
         } for document in documents]
+
+        # Related documents
+        for item in self.context.relatedItems:
+            obj = item.to_object
+            if (obj.portal_type == 'opengever.document.document'\
+                    or obj.portal_type == 'ftw.mail.mail'):
+                document_list.append(obj)
 
         return document_list
 
@@ -181,68 +224,52 @@ class Overview(DisplayForm, OpengeverTab):
                 items.append(StateWidget(self.context, self.request))
             elif attr == 'issuer':
                 items.append(IssuerWidget(self.context))
+            elif attr == 'responsible':
+                items.append(ResponsibleWidget(self.context))
             else:
                 field = ITask.get(attr)
                 field = Field(field, interface=field.interface,
                        prefix='')
 
                 items.append(get_field_widget(self.context, field))
-        return items
 
-    def css_class_from_brain(self, item):
-        """ Used for display icons in the view
-        """
-        return css_class_from_brain(item)
+        return items
 
     def get_css_class(self, item, is_brain=True):
         """Return the css classes
         """
         if is_brain:
-            return "%s %s" % (
-                "rollover-breadcrumb", css_class_from_obj(item))
+            css = css_class_from_brain(item)
         else:
-            return "%s %s" % (
-                "rollover-breadcrumb", css_class_from_brain(item))
+            css = css_class_from_obj(item)
 
-    def get_revie_state_css(self, item):
+        return "%s %s" % ("rollover-breadcrumb", css)
+
+    def get_review_state_css(self, obj):
         """ Return the css class for the reviewstate
         """
+        if not ITask.providedBy(obj):
+            return None
+
         state = getToolByName(self.context, 'portal_workflow').getInfoFor(
-            self.context, 'review_state')
+            obj, 'review_state')
 
         return 'wf-%s' % state
 
     def get_sub_tasks(self):
+        """ Return the subtasks
+        """
         tasks = self.context.getFolderContents(
             contentFilter={'portal_type': 'opengever.task.task'})
         return [task for task in tasks]
 
     def get_containing_task(self):
+        """ Get the parent-tasks if we have one
+        """
         parent = aq_parent(aq_inner(self.context))
         if parent.portal_type == self.context.portal_type:
             return [parent]
         return []
-
-    def responsible_link(self):
-        """ Render the responsible of the current task as link.
-        """
-
-        info = getUtility(IContactInformation)
-        task = ITask(self.context)
-
-        if not len(self.groups[0].widgets['responsible_client'].value):
-            # in some special cases the responsible client may not be set.
-            return info.render_link(task.responsible)
-
-        if len(info.get_clients()) <= 1:
-            # We have a single client setup, so we don't need to display
-            # the client here.
-            return info.render_link(task.responsible)
-
-        client = client_title_helper(
-            task, self.groups[0].widgets['responsible_client'].value[0])
-
-        return client + ' / ' + info.render_link(task.responsible)
 
     def subtask_responsible(self, subtask):
         """ Render the responsible of a subtask (object) as text.
@@ -265,32 +292,23 @@ class Overview(DisplayForm, OpengeverTab):
             client = client_title_helper(subtask, subtask.responsible_client)
             return client + ' / ' + info.describe(subtask.responsible)
 
-    def issuer_link(self):
-        info = getUtility(IContactInformation)
-        task = ITask(self.context)
-
-        if task.predecessor:
-            client_id = task.predecessor.split(':')[0]
-        else:
-            client_id = get_client_id()
-
-        client = client_title_helper(task, client_id)
-
-        return client + ' / ' + info.render_link(task.issuer)
-
     def get_predecessor_task(self):
+        """ Get the original task
+        """
         controller = ISuccessorTaskController(self.context)
         task = controller.get_predecessor()
+        # box rendering need a list
         if not task:
             return []
         return [task]
 
     def get_successor_tasks(self):
+        """ Get the task from which this task was copied
+        """
         controller = ISuccessorTaskController(self.context)
         return controller.get_successors()
 
-    def render_indexed_task(self, item):
-        return indexed_task_link(item, display_client=True)
-
-    def render_globalindex_task(self, item):
-        return indexed_task_link_helper(item, item.title)
+    def render_indexed_task(self, item, display_client=True):
+        """ Render the link for a globalindex sqlalchemy object
+        """
+        return indexed_task_link(item, display_client)

@@ -27,7 +27,6 @@
 
               <!-- item is a widget (used for the addition box) -->
               <tal:brain tal:condition="python: view.get_type(item) == 'widget'">
-                <!-- item is a widget -->
                 <tal:cond tal:condition="item/label">
                   <span tal:content="structure item/label" />
                   <span>: </span>
@@ -48,9 +47,9 @@
 				</span>
               </tal:brain>
 
-              <!-- item is a task_obj -->
-              <tal:brain tal:condition="python: view.get_type(item) == 'task_obj'">
-				<span tal:attributes="class python: view.get_revie_state_css(item)">
+              <!-- item is a obj -->
+              <tal:brain tal:condition="python: view.get_type(item) == 'obj'">
+				<span tal:attributes="class python: view.get_review_state_css(item)" tal:omit-tag="not: python:view.get_review_state_css(item)">
                 <a href="" tal:attributes="href item/absolute_url|nothing;
                                            title item/Description|nothing;
                                            class python:view.get_css_class(item, is_brain=False)" tal:omit-tag="not: item/absolute_url|nothing">
@@ -63,13 +62,13 @@
                 <a href=""
                    tal:attributes="href item/getURL|nothing;
                                    title item/alt|nothing;
-                                   class python:'rollover-breadcrumb %s' % (item.get('css_class'))"
+                                   class python:item.get('css_class')"
                    tal:omit-tag="not: item/getURL|nothing">
 
                 	<span tal:condition="item/getURL|nothing" tal:content="item/Title" />
                 	<span tal:condition="not: item/getURL|nothing"
 						  tal:content="item/Title"
-						  tal:attributes="class python:'rollover-breadcrumb %s' % (item.get('css_class'))" />
+						  tal:attributes="class python:item.get('css_class')" />
 
 			   </a>
               </tal:dict>
@@ -77,7 +76,7 @@
               <!-- SQLAlchemy Objects (Tasks from GlobalIndex)-->
               <tal:sql tal:condition="python: view.get_type(item) == 'sqlalchemy_object'">
 				<span tal:attributes="class python:'wf-%s' % item.review_state">
-                <div tal:replace="structure python:view.render_globalindex_task(item)" />
+                <div tal:replace="structure python:view.render_indexed_task(item, False)" />
 				</span>
               </tal:sql>
             </li>
