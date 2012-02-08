@@ -140,14 +140,6 @@ class Overview(DisplayForm, OpengeverTab):
     grok.name('tabbedview_view-overview')
     grok.template('overview')
 
-    def catalog(self, types, showTrashed=False, depth=2):
-        return self.context.portal_catalog(
-            portal_type=types,
-            path=dict(depth=depth,
-                query='/'.join(self.context.getPhysicalPath())),
-            sort_on='modified',
-            sort_order='reverse')
-
     def get_type(self, item):
         """differ the object typ and return the type as string
         """
@@ -185,8 +177,16 @@ class Overview(DisplayForm, OpengeverTab):
         """ Return documents and related documents
         """
         # Documents
-        documents = self.catalog(
-            ['opengever.document.document', 'ftw.mail.mail', ])
+        documents = getToolByName(self.context, 'portal_catalog')(
+            portal_type=['opengever.document.document', 'ftw.mail.mail', ],
+            path=dict(
+                depth=2,
+                query='/'.join(self.context.getPhysicalPath())),
+            sort_on='modified',
+            sort_order='reverse'
+            )
+
+
         document_list = [{
             'Title': document.Title,
             'getURL': document.getURL,
@@ -194,6 +194,7 @@ class Overview(DisplayForm, OpengeverTab):
                 document.document_date.strftime('%d.%m.%Y') or '',
             'css_class': self.get_css_class(document),
             'portal_type': document.portal_type,
+            'modified': document.modified,
         } for document in documents]
 
         # Related documents
@@ -202,6 +203,12 @@ class Overview(DisplayForm, OpengeverTab):
             if (obj.portal_type == 'opengever.document.document'\
                     or obj.portal_type == 'ftw.mail.mail'):
                 document_list.append(obj)
+
+        # Sort
+        document_list.sort(lambda b, a: cmp(
+            b.get('modified') and b.get('modified') or b.modified(),
+            a.get('modified') and a.get('modified') or a.modified(),
+            ))
 
         return document_list
 

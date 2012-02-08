@@ -57,7 +57,7 @@
 				</span>
               </tal:brain>
 
-              <!-- item is a dict (Documents and participants) -->
+              <!-- item is a dict (Documents) -->
               <tal:dict tal:condition="python: view.get_type(item) == 'dict'">
                 <a href=""
                    tal:attributes="href item/getURL|nothing;
