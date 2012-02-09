@@ -20,8 +20,7 @@ from zope.interface import alsoProvides
 from zope.interface import implements
 from opengever.tabbedview.helper import _breadcrumbs_from_item
 from zope.component import queryUtility
-from opengever.base.interfaces import ISequenceNumber, IBaseClientID
-from plone.registry.interfaces import IRegistry
+from opengever.base.interfaces import ISequenceNumber
 
 
 def get_field_widget(obj, field):
@@ -51,6 +50,9 @@ def get_field_widget(obj, field):
 
 class IssuerWidget(object):
     """ Widget to display the issuer
+    We need a special widget because we want the client-name and the
+    issuer as a link. The default-issuer-widget just renders a text of the
+    issuer.
     """
     implements(IFieldWidget)
 
@@ -74,11 +76,16 @@ class IssuerWidget(object):
         return client + ' / ' + info.render_link(task.issuer)
 
     def label(self):
+        """ Return the label
+        """
         return self.label
 
 
 class ResponsibleWidget(object):
     """ Widget to display the responsible
+    We need a special widget because we want the client-name and the
+    responsible as a link. The default-responsible-widget just renders a
+    text of the responsible.
     """
     implements(IFieldWidget)
 
@@ -93,11 +100,16 @@ class ResponsibleWidget(object):
         return self.view.get_task_info(self.context)
 
     def label(self):
+        """ Return the label
+        """
         return self.label
 
 
 class StateWidget(object):
     """ Widget to display the state
+    We need a special widget because we want to add the reviewstate as
+    css class to display the task-status as an image.
+    The default state-widget just renders a text of the review_state
     """
     implements(IFieldWidget)
 
@@ -106,23 +118,20 @@ class StateWidget(object):
         self.request = request
         self.label = _('label_workflow_state')
 
-    def get_state(self):
-        return getToolByName(self.context, 'portal_workflow').getInfoFor(
+    def render(self):
+        """ Render the state
+        """
+        state = getToolByName(self.context, 'portal_workflow').getInfoFor(
             self.context, 'review_state')
 
-    def get_translated_state(self):
-        return translate(
-            self.get_state(),
-            domain='plone',
-            context=self.request)
-
-    def render(self):
         return "<span class=wf-%s>%s</span>" % (
-            self.get_state(),
-            self.get_translated_state(),
+            state,
+            translate(state, domain='plone', context=self.request),
         )
 
     def label(self):
+        """ Return the label
+        """
         return self.label
 
 
@@ -144,11 +153,13 @@ class Overview(DisplayForm, OpengeverTab):
             return 'obj'
 
     def boxes(self):
+        """ Return the boxes in the overview splittet in two columns
+        """
         items = [
             [
             dict(
-                id='additional_attributes',
-                content=self.additional_attributes()),
+                id='get_main_attributes',
+                content=self.get_main_attributes()),
             dict(id='documents', content=self.documents()),
             ],
             [dict(id='containing_task', content=self.get_containing_task()),
@@ -161,11 +172,12 @@ class Overview(DisplayForm, OpengeverTab):
         return items
 
     def documents(self):
-        """ Return documents and related documents
+        """ Return containing documents and related documents
         """
 
         def _get_documents():
-            # Documents
+            """ Return documents in this task and subtasks
+            """
             documents = getToolByName(self.context, 'portal_catalog')(
                 portal_type=['opengever.document.document', 'ftw.mail.mail', ],
                 path=dict(
@@ -175,6 +187,8 @@ class Overview(DisplayForm, OpengeverTab):
             return [document.getObject() for document in documents]
 
         def _get_related_documents():
+            """ Return related documents in this task
+            """
             # Related documents
             related_documents = []
             for item in self.context.relatedItems:
@@ -184,13 +198,15 @@ class Overview(DisplayForm, OpengeverTab):
                     related_documents.append(obj)
             return related_documents
 
+        # merge and sort the two different lists
         document_list = _get_documents() + _get_related_documents()
         document_list.sort(lambda a, b: cmp(b.modified(), a.modified()))
 
         return document_list
 
-    def additional_attributes(self):
-        """ Attributes to display
+    def get_main_attributes(self):
+        """ return a list of widgets,
+        which should be displayed in the attributes box
         """
         items = []
         attributes_to_display = [
@@ -220,7 +236,7 @@ class Overview(DisplayForm, OpengeverTab):
         return items
 
     def get_css_class(self, item):
-        """Return the css sprite-css-class
+        """Return the sprite-css-class for the given object.
         """
         css = css_class_from_obj(item)
         return '%s %s' % ("rollover-breadcrumb", css)
@@ -238,7 +254,7 @@ class Overview(DisplayForm, OpengeverTab):
         """ Get the parent-tasks if we have one
         """
         parent = aq_parent(aq_inner(self.context))
-        if parent.portal_type == self.context.portal_type:
+        if ITask.providedBy(parent):
             return [parent]
         return []
 
@@ -258,27 +274,12 @@ class Overview(DisplayForm, OpengeverTab):
         controller = ISuccessorTaskController(self.context)
         return controller.get_successors()
 
-    def task_state_wrapper(self, item, text):
-        """ Wrap a span-tag around the text with the status-css class
-        """
-        if not (isinstance(item, Task) or ITask.providedBy(item)):
-            return ''
-
-        if isinstance(item, Task):
-            # Its a sql-task-object
-            state = item.review_state
-        if ITask.providedBy(item):
-            # Its a task-object
-            state = getToolByName(self.context, 'portal_workflow').getInfoFor(
-                item, 'review_state')
-
-        return '<span class="wf-%s">%s</span>' % (state, text)
-
     def get_task_info(self, item):
-        """ return the taskinfos like responsible or client of a task
+        """ return some task attributes for objects:
+            Sequence number / Responsible client ID /  responsible
         """
         if not ITask.providedBy(item):
-            return None
+            return ''
 
         info = getUtility(IContactInformation)
 
@@ -290,15 +291,10 @@ class Overview(DisplayForm, OpengeverTab):
         # Sequence number
         seq_num = getUtility(ISequenceNumber).get_number(item)
 
-        # Client id
-        proxy = getUtility(IRegistry).forInterface(IBaseClientID)
-        client_id = getattr(proxy, 'client_id')
-
         # Client
         client = client_title_helper(item, item.responsible_client)
 
-        taskinfo = "%s %s / %s / %s" % (
-            client_id,
+        taskinfo = "%s / %s / %s" % (
             seq_num,
             client,
             info.render_link(item.responsible),
@@ -311,17 +307,19 @@ class Overview(DisplayForm, OpengeverTab):
         """
         if isinstance(item, Task):
             # Its a task stored in sql
-            return self.indexed_task_link(item)
+            return self._sqlalchemy_task_link(item)
 
         elif ITask.providedBy(item):
             # Its a normal task object
-            return self.object_task_link(item)
+            return self._object_task_link(item)
 
         else:
             return None
 
-    def object_task_link(self, item):
+    def _object_task_link(self, item):
         """ Renders a task object with a link to the effective task
+        We have two different types of a task. task-object from the sql-db is
+        handled in the _sqlalchemy_task_link-method.
         """
         breadcrumb_titles = "[%s] > %s" % (
             client_title_helper(item, item.responsible_client).encode('utf-8'),
@@ -338,19 +336,20 @@ class Overview(DisplayForm, OpengeverTab):
         inner_html = '%s <span class="discreet">(%s)</span>' % (
             task_html, info_html)
 
-        return self.task_state_wrapper(item, inner_html)
+        return self._task_state_wrapper(item, inner_html)
 
-    def indexed_task_link(self, item):
+    def _sqlalchemy_task_link(self, item):
         """Renders a indexed task item (globalindex sqlalchemy object) either
         with a link to the effective task (if the user has access) or just with
         the title.
+        We have two different types of a task. task-object providing the
+        ITask-interface is handled in the _object_task_link.
         """
+        css_class = 'contenttype-opengever-task-task'
+        if item.task_type == 'forwarding_task_type':
+            css_class = 'contenttype-opengever-inbox-forwarding'
 
-        css_class = item.task_type == 'forwarding_task_type' and \
-            'contenttype-opengever-inbox-forwarding' or \
-            'contenttype-opengever-task-task'
-
-        # get the contact information utlity and the client
+        # get the client which the task cames from
         info = queryUtility(IContactInformation)
         if info:
             client = info.get_client_by_id(item.client_id)
@@ -379,10 +378,9 @@ class Overview(DisplayForm, OpengeverTab):
         breadcrumb_titles = "[%s] > %s" % (client.title, item.breadcrumb_title)
 
         # Client and user info
-        info_html = ' <span class="discreet">(%s %s/ %s / %s)</span>' % (
-            item.client_id,
+        info_html = ' <span class="discreet">(%s/ %s / %s)</span>' % (
             item.sequence_number,
-            client.title,
+            client_title_helper(item, item.assigned_client),
             info.render_link(item.responsible),
         )
 
@@ -402,4 +400,18 @@ class Overview(DisplayForm, OpengeverTab):
             inner_html = '%s %s' % (task_html, info_html)
 
         # Add the task-state css and return it
-        return self.task_state_wrapper(item, inner_html)
+        return self._task_state_wrapper(item, inner_html)
+
+    def _task_state_wrapper(self, item, text):
+        """ Wrap a span-tag around the text with the status-css class
+        """
+        if isinstance(item, Task):
+            # Its a sql-task-object
+            state = item.review_state
+        elif ITask.providedBy(item):
+            # Its a task-object
+            state = getToolByName(self.context, 'portal_workflow').getInfoFor(
+                item, 'review_state')
+        else:
+            return ''
+        return '<span class="wf-%s">%s</span>' % (state, text)

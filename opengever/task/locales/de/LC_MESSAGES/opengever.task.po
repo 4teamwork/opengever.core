@@ -767,8 +767,8 @@ msgstr "Antwort bearbeiten"
 msgid "title_error_no_response"
 msgstr "Fehler: keine Antworten zum editieren gefunden"
 
-#. Default: "additional_attributes"
-msgid "additional_attributes"
+#. Default: "get_main_attributes"
+msgid "get_main_attributes"
 msgstr "Eigenschaften"
 
 #. Default: "documents"

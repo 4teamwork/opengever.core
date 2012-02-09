@@ -57,7 +57,7 @@ class TestOverviewFunctions(MockTestCase):
         self.replay()
 
         view = Overview(self.mock_context, self.mock_request)
-        view.additional_attributes = lambda : 'box'
+        view.get_main_attributes = lambda : 'box'
         view.documents = lambda : 'box'
         view.get_containing_task = lambda : 'box'
         view.get_sub_tasks = lambda : 'box'
@@ -118,7 +118,7 @@ class TestOverviewFunctions(MockTestCase):
         self.assertEqual(docs[2].modified(), datetime(2012, 2, 1))
         self.assertEqual(docs[3].modified(), datetime(2012, 1, 1))
 
-    def test_additional_attributes(self):
+    def test_get_main_attributes(self):
         pass
 
     def test_get_css_class(self):

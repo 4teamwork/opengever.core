@@ -768,9 +768,9 @@ msgstr ""
 msgid "title_error_no_response"
 msgstr ""
 
-#. Default: "additional_attributes"
+#. Default: "get_main_attributes"
 #: ./opengever/task/task_templates/overview.pt
-msgid "additional_attributes"
+msgid "get_main_attributes"
 msgstr ""
 
 #. Default: "documents"
