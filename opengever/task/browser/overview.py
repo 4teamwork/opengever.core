@@ -18,8 +18,10 @@ from zope.component import getUtility, getMultiAdapter
 from zope.i18n import translate
 from zope.interface import alsoProvides
 from zope.interface import implements
-
+from opengever.tabbedview.helper import _breadcrumbs_from_item
 from zope.component import queryUtility
+from opengever.base.interfaces import ISequenceNumber, IBaseClientID
+from plone.registry.interfaces import IRegistry
 
 
 def get_field_widget(obj, field):
@@ -183,7 +185,7 @@ class Overview(DisplayForm, OpengeverTab):
             return related_documents
 
         document_list = _get_documents() + _get_related_documents()
-        document_list.sort(lambda b, a: cmp(b.modified(), a.modified()))
+        document_list.sort(lambda a, b: cmp(b.modified(), a.modified()))
 
         return document_list
 
@@ -262,10 +264,10 @@ class Overview(DisplayForm, OpengeverTab):
         if not (isinstance(item, Task) or ITask.providedBy(item)):
             return ''
 
-        if hasattr(item, 'review_state'):
+        if isinstance(item, Task):
             # Its a sql-task-object
             state = item.review_state
-        else:
+        if ITask.providedBy(item):
             # Its a task-object
             state = getToolByName(self.context, 'portal_workflow').getInfoFor(
                 item, 'review_state')
@@ -284,9 +286,25 @@ class Overview(DisplayForm, OpengeverTab):
             # No responsible client is set yet or we have a single client
             # setup.
             return info.describe(item.responsible)
-        else:
-            client = client_title_helper(item, item.responsible_client)
-            return client + ' / ' + info.render_link(item.responsible)
+
+        # Sequence number
+        seq_num = getUtility(ISequenceNumber).get_number(item)
+
+        # Client id
+        proxy = getUtility(IRegistry).forInterface(IBaseClientID)
+        client_id = getattr(proxy, 'client_id')
+
+        # Client
+        client = client_title_helper(item, item.responsible_client)
+
+        taskinfo = "%s %s / %s / %s" % (
+            client_id,
+            seq_num,
+            client,
+            info.render_link(item.responsible),
+        )
+
+        return taskinfo.encode('utf-8')
 
     def render_task(self, item):
         """ Render the taskobject
@@ -305,13 +323,18 @@ class Overview(DisplayForm, OpengeverTab):
     def object_task_link(self, item):
         """ Renders a task object with a link to the effective task
         """
+        breadcrumb_titles = "[%s] > %s" % (
+            client_title_helper(item, item.responsible_client).encode('utf-8'),
+            ' > '.join(_breadcrumbs_from_item(item)))
 
         info_html = self.get_task_info(item)
-        task_html = '<a href="%s"><span class="%s">%s</span></a>' % (
-            item.absolute_url(),
-            self.get_css_class(item),
-            item.Title(),
-        )
+        task_html = \
+            '<a href="%s" title="%s"><span class="%s">%s</span></a>' % (
+                item.absolute_url(),
+                breadcrumb_titles,
+                self.get_css_class(item),
+                item.Title().encode('utf-8'),
+            )
         inner_html = '%s <span class="discreet">(%s)</span>' % (
             task_html, info_html)
 
@@ -352,8 +375,13 @@ class Overview(DisplayForm, OpengeverTab):
             link_target = ''
             url = client.public_url + '/' + item.physical_path
 
+        # create breadcrumbs including the (possibly remote) client title
+        breadcrumb_titles = "[%s] > %s" % (client.title, item.breadcrumb_title)
+
         # Client and user info
-        info_html = ' <span class="discreet">(%s / %s)</span>' % (
+        info_html = ' <span class="discreet">(%s %s/ %s / %s)</span>' % (
+            item.client_id,
+            item.sequence_number,
             client.title,
             info.render_link(item.responsible),
         )
@@ -364,9 +392,10 @@ class Overview(DisplayForm, OpengeverTab):
 
         # Render the full link if we have acccess
         if has_access:
-            inner_html = '<a href="%s"%s>%s</a> %s' % (
+            inner_html = '<a href="%s"%s title="%s">%s</a> %s' % (
                 url,
                 link_target,
+                breadcrumb_titles,
                 task_html,
                 info_html)
         else:
