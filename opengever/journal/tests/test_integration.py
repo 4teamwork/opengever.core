@@ -25,6 +25,9 @@ from plone.dexterity.interfaces import IDexterityFTI
 from zope.schema import getFields
 from zope.component import getUtility
 from opengever.mail.events import DocumentSent
+from plone.registry.interfaces import IRegistry
+from opengever.ogds.base.interfaces import IClientConfiguration
+from zope.intid.interfaces import IIntIds
 
 
 class TestOpengeverJournalGeneral(unittest.TestCase):
@@ -88,6 +91,7 @@ class TestOpengeverJournalGeneral(unittest.TestCase):
         and check the journalentries.
         """
         portal = self.layer['portal']
+        
 
         # Add-Event
         dossier = createContentInContainer(
@@ -173,12 +177,15 @@ class TestOpengeverJournalGeneral(unittest.TestCase):
         portal = self.layer['portal']
         comment = 'my comment'
 
+        registry = getUtility(IRegistry)
+        proxy = registry.forInterface(IClientConfiguration)
+        proxy.client_id = u'Test'
         dossier = createContentInContainer(
             portal, 'opengever.dossier.businesscasedossier', 'd1')
 
         # Add-Event
         document = createContentInContainer(
-            dossier, 'opengever.document.document', 'd1')
+            dossier, 'opengever.document.document', 'd1', title="Document")
 
         self.check_object_added(
             document,
@@ -379,7 +386,7 @@ class TestOpengeverJournalGeneral(unittest.TestCase):
             portal, 'opengever.dossier.businesscasedossier', 'd2')
 
         document = createContentInContainer(
-            dossier1, 'opengever.document.document', 'doc1')
+            dossier1, 'opengever.document.document', 'doc1', title='Document')
 
         notify(ObjectMovedEvent(
             document,
@@ -540,11 +547,13 @@ class TestOpengeverJournalGeneral(unittest.TestCase):
                 "1"))
 
     def check_document_sent(self, obj, doc):
-
+        id_util = getUtility(IIntIds)
+        intid = id_util.queryId(doc)
         self.check_annotation(
             obj,
             action_type='Document Sent',
             action_title=u'Document sent by Mail: test mail',
             actor=TEST_USER_ID,
-            comment='Attachments: <span><a href="%s">%s</a></span>' % (doc.absolute_url(), doc.Title()),
+            comment='Attachments: <span><a href="./@@resolve_oguid?oguid=Test:'+str(intid)+'">'+\
+                        doc.Title()+'</a></span> | Receivers: test@test.ch | Message: Mymessage',
             )
