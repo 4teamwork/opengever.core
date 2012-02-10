@@ -5,6 +5,11 @@ Changelog
 2.0.2 (unreleased)
 ------------------
 
+- Increased the size of the breadcrumb title form 256 to 512.
+  Issue #1393 og.globalindex: ORA-12899: value too large for column "OG_GI"."TASKS"."BREADCRUMB_TITLE"
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1393
+  [phgross]
+
 - Adjust the Task indexer: get the containing_dossier value with the indexer instead over the brain.
   Issue #1253 Darstellung Dossiertitel bei Suchresultaten (Subdossiers, Dokumente, Aufgaben)
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1253

@@ -18,7 +18,7 @@ class Task(Base):
     int_id = Column(Integer, index=True)
 
     title = Column(String(256))
-    breadcrumb_title = Column(String(256))
+    breadcrumb_title = Column(String(512))
     physical_path = Column(String(256))
     review_state = Column(String(50))
     icon = Column(String(50))
