@@ -8,7 +8,7 @@
           for="opengever.inbox.forwarding.IForwarding"
           class=".transitioncontroller.ForwardingTransitionController"
           permission="zope.Public"
-          allowed_interface=".transitioncontroller.IForwardingTransitionController"
+          allowed_interface="opengever.task.browser.transitioncontroller.ITaskTransitionController"
           />
 
 </configure>
