@@ -13,7 +13,9 @@ from opengever.globalindex.interfaces import ITaskQuery
 from opengever.repository.interfaces import IRepositoryFolder
 from opengever.task import _
 from opengever.task.browser.accept.main import AcceptWizardFormMixin
+from opengever.task.browser.accept.utils import accept_forwarding_with_successor
 from opengever.task.browser.accept.utils import accept_task_with_successor
+from opengever.task.browser.accept.utils import assign_forwarding_to_dossier
 from plone.dexterity.i18n import MessageFactory as dexterityMF
 from plone.dexterity.i18n import MessageFactory as pd_mf
 from plone.directives.form import Schema
@@ -97,6 +99,7 @@ class ISelectRepositoryfolderSchema(Schema):
 class RepositoryfolderValidator(SimpleFieldValidator):
 
     def validate(self, value):
+
         super(RepositoryfolderValidator, self).validate(value)
 
         # The user should be able to create a dossier (of any type) in the
@@ -348,17 +351,37 @@ class DossierAddFormView(FormWrapper, grok.View):
                 oguid = self.request.get('oguid')
                 dmkey = 'accept:%s' % oguid
 
-                # create the successor task, accept the predecessor
-                task = accept_task_with_successor(
-                    dossier,
-                    oguid,
-                    dm.get(dmkey, 'text'))
+                # forwarding
+                if dm.get(dmkey, 'is_forwarding'):
+                    if dm.get(dmkey, 'is_only_assign'):
+                        task = assign_forwarding_to_dossier(
+                            self.context, oguid, dossier, dm.get(dmkey, 'text'))
+                        IStatusMessage(self.request).addStatusMessage(
+                            _(u'The forwarding is now assigned to the new dossier'),
+                            'info')
+                        self.request.RESPONSE.redirect('%s/edit' % task.absolute_url())
+                    else:
+                        forwarding = accept_forwarding_with_successor(
+                            self.context,
+                            oguid,
+                            dm.get(dmkey, 'text'),
+                            dossier=dossier)
+                        IStatusMessage(self.request).addStatusMessage(
+                            _(u'The forwarding has been stored in the local inbox'
+                              u'and the succesor task has been created'), 'info')
+                        self.request.RESPONSE.redirect(forwarding.absolute_url())
+                else:
+                    # create the successor task, accept the predecessor
+                    task = accept_task_with_successor(
+                        dossier,
+                        oguid,
+                        dm.get(dmkey, 'text'))
 
-                IStatusMessage(self.request).addStatusMessage(
-                    _(u'The new dossier has been created and the task has '
-                      u'been copied to the new dossier.'), 'info')
+                    IStatusMessage(self.request).addStatusMessage(
+                        _(u'The new dossier has been created and the task has '
+                          u'been copied to the new dossier.'), 'info')
 
-                self.request.RESPONSE.redirect(task.absolute_url())
+                    self.request.RESPONSE.redirect(task.absolute_url())
 
             @buttonAndHandler(dexterityMF(u'Cancel'), name='cancel')
             def handleCancel(self, action):

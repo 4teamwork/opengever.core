@@ -66,13 +66,15 @@ class ResponseTransporter(grok.Adapter):
         """
 
         req_data = {'intids_mapping': json.dumps(intids_mapping)}
-
         response = remote_request(target_cid,
                                   '@@task-responses-extract',
                                   path=remote_task_path,
                                   data=req_data)
-
-        data = json.loads(response.read())
+        try:
+            data = json.loads(response.read())
+        except ValueError:
+            #is a internal request
+            data = response.read()
 
         self.create_responses(data)
 
@@ -234,6 +236,20 @@ class TaskDocumentsTransporter(grok.GlobalUtility):
             newintid = intids.getId(obj)
             intids_mapping[oldintid] = newintid
 
+        return intids_mapping
+
+    def copy_documents_from_direct_task(self, task, target, documents=None):
+        ids = [tt.id for tt in get_documents_of_task(task)]
+        clipboard = task.manage_copyObjects(ids)
+        new_ids = target.manage_pasteObjects(clipboard)
+
+        intids_mapping = {}
+        intids = getUtility(IIntIds)
+
+        for item in new_ids:
+            old_iid = intids.getId(task.get(item.get('id')))
+            new_iid = intids.getId(target.get(item.get('new_id')))
+            intids_mapping[old_iid] = new_iid
         return intids_mapping
 
 

@@ -1,6 +1,7 @@
 from Products.statusmessages.interfaces import IStatusMessage
 from five import grok
 from opengever.ogds.base.autocomplete_widget import AutocompleteFieldWidget
+from opengever.ogds.base.utils import get_client_id
 from opengever.task import _
 from opengever.task.task import ITask
 from opengever.task.util import add_simple_response
@@ -123,3 +124,30 @@ class AssignTaskView(layout.FormWrapper, grok.View):
         grok.View.__init__(self, *args, **kwargs)
 
     __call__ = layout.FormWrapper.__call__
+
+
+class RefuseForwardingView(grok.View):
+    """A view which reassign the forwarding to the inbox of the client
+    which raised the forwarding, so that it can be reassigned
+    afterwards to another client / person."""
+
+    grok.context(ITask)
+    grok.name('refuse-task')
+    grok.require('zope2.View')
+
+    def render(self):
+        # set responsible
+        self.context.responsible_client = get_client_id()
+        self.context.responsible = u'inbox:%s' % self.context.responsible_client
+
+        # create a response in the task
+        add_simple_response(
+            self.context,
+            field_changes=(
+                (ITask['responsible'], self.contex.responsible),
+                (ITask['responsible_client'], self.contex.responsible_client),),
+            transition= u'forwarding-transition-refuse')
+
+        notify(ObjectModifiedEvent(self.context))
+
+        return self.request.RESPONSE.redirect('.')

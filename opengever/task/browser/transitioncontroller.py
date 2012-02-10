@@ -77,7 +77,6 @@ class TaskTransitionController(BrowserView):
 
     def __call__(self):
         transition = self.request.get('transition')
-
         if not self.is_transition_possible(transition):
             raise NotFound
 
