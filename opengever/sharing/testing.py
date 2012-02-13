@@ -1,14 +1,14 @@
-from opengever.ogds.base.setuphandlers import create_sql_tables
+from opengever.globalindex import model
 from opengever.ogds.base.setuphandlers import _create_example_client
 from opengever.ogds.base.setuphandlers import _create_example_user
-from plone.app.testing import setRoles, TEST_USER_ID
+from opengever.ogds.base.setuphandlers import create_sql_tables
 from opengever.ogds.base.utils import create_session
-from plone.app.testing import applyProfile
 from plone.app.testing import IntegrationTesting
-from plone.app.testing import PloneSandboxLayer
 from plone.app.testing import PLONE_FIXTURE
+from plone.app.testing import PloneSandboxLayer
+from plone.app.testing import applyProfile
+from plone.app.testing import setRoles, TEST_USER_ID
 from zope.configuration import xmlconfig
-from opengever.globalindex import model
 
 
 class OpengeverSharingIntegrationLayer(PloneSandboxLayer):
@@ -74,7 +74,6 @@ class OpengeverSharingIntegrationLayer(PloneSandboxLayer):
             'email': 'test.user@local.ch',
             'email2': 'test_user@private.ch'},
             ('og_mandant1_users', 'og_mandant1_inbox', ))
-
 
         setRoles(
             portal,

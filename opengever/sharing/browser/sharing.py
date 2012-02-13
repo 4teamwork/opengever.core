@@ -5,6 +5,7 @@ from Acquisition import aq_base
 from Products.CMFCore.utils import getToolByName
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from opengever.ogds.base.interfaces import IContactInformation
+from opengever.ogds.base.utils import get_client_id
 from opengever.sharing import _
 from opengever.sharing.behaviors import IDossier, IStandard
 from opengever.sharing.events import LocalRolesAcquisitionActivated
@@ -16,6 +17,7 @@ from plone.memoize.instance import memoize
 from zope.component import getUtilitiesFor
 from zope.component import getUtility
 from zope.event import notify
+import re
 
 
 ROLE_MAPPING = (
@@ -192,10 +194,13 @@ class OpengeverSharingView(SharingView):
         results = []
 
         for principal in all_principals:
-            if principal.get(
-                'id') in assigned_users or principal.get('type') != 'user':
-                results.append(principal)
-
+            if principal.get('type') == 'user':
+                if principal.get('id') in assigned_users:
+                    results.append(principal)
+            elif principal.get('id').startswith('og_'):
+                if re.search('og_([^_]*)_*',
+                    principal.get('id')).group(1) == get_client_id():
+                    results.append(principal)
         return results
 
 

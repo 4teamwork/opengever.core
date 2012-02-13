@@ -5,6 +5,10 @@ Changelog
 2.0.4 (unreleased)
 ------------------
 
+- Adjust the _principal_search_results wrapper,
+  so that it constrain the principal list on groups from the current client.
+  [phgross]
+
 - Disalbe the Administrator Role, it should not longer be displayed and configurable in the sharing view.
   Issue #1288 Freigabeansicht:  Rollenanpassung nur fuer Mandanten user moeglich machen.
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1288
