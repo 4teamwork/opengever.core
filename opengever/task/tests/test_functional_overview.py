@@ -10,8 +10,6 @@ from plone.i18n.normalizer.interfaces import IIDNormalizer
 from opengever.task.interfaces import ISuccessorTaskController
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.base.interfaces import ISequenceNumber
-from plone.registry.interfaces import IRegistry
-
 
 
 class TestOverviewFunctions(MockTestCase):
@@ -142,13 +140,16 @@ class TestOverviewFunctions(MockTestCase):
             )
 
     def test_get_containing_task(self):
-        """ We get a the parent in a list, if its a task.
+        """ We get the parent in a list, if its a task.
         """
-        parent_task = self.mocker.mock(count=False)
-        self.expect(parent_task.portal_type).result('task')
+        parent_task = self.create_dummy()
+        directlyProvides(parent_task, ITask)
+        mock_parent_task = self.mocker.proxy(
+            parent_task, spec=False, count=False)
+        self.expect(mock_parent_task.portal_type).result('task')
 
         context_task = self.mocker.mock(count=False)
-        self.expect(context_task.__parent__).result(parent_task)
+        self.expect(context_task.__parent__).result(mock_parent_task)
         self.expect(context_task.portal_type).result('task')
 
         parent_obj = self.mocker.mock(count=False)
@@ -227,9 +228,9 @@ class TestOverviewFunctions(MockTestCase):
 
         view = Overview(self.mock_context, self.mock_request)
 
-        sql = view.task_state_wrapper(mock_item_sql, 'wraptext')
-        task = view.task_state_wrapper(item_task, 'wraptext')
-        obj = view.task_state_wrapper(item_obj, 'wraptext')
+        sql = view._task_state_wrapper(mock_item_sql, 'wraptext')
+        task = view._task_state_wrapper(item_task, 'wraptext')
+        obj = view._task_state_wrapper(item_obj, 'wraptext')
 
         self.assertEqual(obj, '')
         self.assertEqual(sql, '<span class="wf-state-sql">wraptext</span>')
@@ -267,12 +268,6 @@ class TestOverviewFunctions(MockTestCase):
         self.mock_utility(sequencenumber, ISequenceNumber)
         self.expect(sequencenumber.get_number(ANY)).result(3)
 
-        # Registry utility
-        registry = self.mocker.mock(count=False)
-        self.mock_utility(registry, IRegistry)
-        self.expect(registry.forInterface(ANY)).result(registry)
-        self.expect(registry.client_id).result('client_id')
-
         self.replay()
 
         view = Overview(self.mock_context, self.mock_request)
@@ -281,6 +276,6 @@ class TestOverviewFunctions(MockTestCase):
         info_with = view.get_task_info(mock_item_task)
         info_without = view.get_task_info(mock_item_task_without)
 
-        self.assertEqual(info_obj, None)
-        self.assertEqual(info_with, 'client_id 3 / client_name / user1')
+        self.assertEqual(info_obj, '')
+        self.assertEqual(info_with, '3 / client_name / user1')
         self.assertEqual(info_without, 'user2')
