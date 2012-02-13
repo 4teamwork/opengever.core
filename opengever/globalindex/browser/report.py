@@ -42,8 +42,12 @@ class TaskReporter(grok.View):
             msg = _(
                 u'error_no_items', default=u'You have not selected any Items')
             IStatusMessage(self.request).addStatusMessage(msg, type='error')
-            return self.request.RESPONSE.redirect(
-                self.request.form['orig_template'])
+            if self.request.get('orig_template'):
+                return self.request.RESPONSE.redirect(
+                    self.request.form['orig_template'])
+            else:
+                return self.request.RESPONSE.redirect(
+                    self.context.absolute_url())
 
         ids = self.request.get('task_ids', [])
 
