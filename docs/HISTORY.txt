@@ -5,6 +5,10 @@ Changelog
 2.0.2 (unreleased)
 ------------------
 
+- we prevent to raise database-error if we have a too long breadcrumb_title string by shorten the string
+  Issue #1393 og.globalindex: ORA-12899: value too large for column "OG_GI"."TASKS"."BREADCRUMB_TITLE"
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1393
+
 - Increased the size of the breadcrumb title form 256 to 512.
   Issue #1393 og.globalindex: ORA-12899: value too large for column "OG_GI"."TASKS"."BREADCRUMB_TITLE"
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1393
