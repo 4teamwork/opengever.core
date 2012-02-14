@@ -1,0 +1,3 @@
+<registry>
+    <records interface="opengever.sharing.interfaces.ISharingConfiguration" />
+</registry>

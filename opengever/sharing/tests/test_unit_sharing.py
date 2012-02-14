@@ -1,10 +1,12 @@
-from opengever.ogds.base.interfaces import IContactInformation
 from Products.CMFDefault.MembershipTool import MembershipTool
 from mocker import ANY
+from opengever.ogds.base.interfaces import IContactInformation
 from opengever.sharing.behaviors import IDossier
 from opengever.sharing.browser.sharing import OpengeverSharingView
+from opengever.sharing.interfaces import ISharingConfiguration
 from plone.app.workflow.interfaces import ISharingPageRole
 from plone.mocktestcase import MockTestCase
+from plone.registry.interfaces import IRegistry
 from zope.interface import directlyProvides
 
 
@@ -149,14 +151,19 @@ class TestOpengeverSharing(MockTestCase):
         _principal_search_results = self.mocker.replace(
             'plone.app.workflow.browser.sharing.SharingView._principal_search_results')
 
-        # fake the client_id
-        get_client_id = self.mocker.replace(
-            'opengever.ogds.base.utils.get_client_id'
-            )
-        self.expect(get_client_id()).result('ska-arch').count(0, None)
-
+        #contact info mock
         utility_mock = self.mocker.mock()
         self.mock_utility(utility_mock, IContactInformation)
+
+        #registry mock
+        registry_mock = self.mocker.mock()
+        self.mock_utility(registry_mock, IRegistry)
+        reg_proxy_mock = self.mocker.mock()
+        self.expect(
+            registry_mock.forInterface(ISharingConfiguration)).result(reg_proxy_mock)
+
+        self.expect(reg_proxy_mock.black_list_prefix).result(u'^og_').count(0, None)
+        self.expect(reg_proxy_mock.white_list_prefix).result(u'^og_ska-arch').count(0, None)
 
         user1 = self.create_dummy(userid='sb2m1')
         user2 = self.create_dummy(userid='sb1m1')
@@ -172,6 +179,7 @@ class TestOpengeverSharing(MockTestCase):
              {'type': 'group', 'id': 'other_group', 'roles': {u'Publisher': False, u'Administrator': False, u'Editor': False, u'Reader': False, u'Contributor': False, u'Reviewer': False}, 'title': 'Administrator1 Mandant1'},
              {'type': 'group', 'id': 'og_ska-arch_users', 'roles': {u'Publisher': False, u'Administrator': False, u'Editor': False, u'Reader': False, u'Contributor': False, u'Reviewer': False}, 'title': 'Users of SKA ARCH'},
              {'type': 'group', 'id': 'og_bd-arp_users', 'roles': {u'Publisher': False, u'Administrator': False, u'Editor': False, u'Reader': False, u'Contributor': False, u'Reviewer': False}, 'title': 'Users of BD.ARP'},
+             {'type': 'group', 'id': 'og_bd-arp_og_ska-arch-users', 'roles': {u'Publisher': False, u'Administrator': False, u'Editor': False, u'Reader': False, u'Contributor': False, u'Reviewer': False}, 'title': 'Users of BD.ARP'},
              ])
 
         self.replay()

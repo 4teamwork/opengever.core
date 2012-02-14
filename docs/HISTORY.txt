@@ -6,7 +6,8 @@ Changelog
 ------------------
 
 - Adjust the _principal_search_results wrapper,
-  so that it constrain the principal list on groups from the current client.
+  so that it constrain the principal list on groups from the current client,
+  and made this functionality also configurable in the registry.
   [phgross]
 
 - Disalbe the Administrator Role, it should not longer be displayed and configurable in the sharing view.

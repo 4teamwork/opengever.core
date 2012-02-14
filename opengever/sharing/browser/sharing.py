@@ -5,15 +5,16 @@ from Acquisition import aq_base
 from Products.CMFCore.utils import getToolByName
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from opengever.ogds.base.interfaces import IContactInformation
-from opengever.ogds.base.utils import get_client_id
 from opengever.sharing import _
 from opengever.sharing.behaviors import IDossier, IStandard
 from opengever.sharing.events import LocalRolesAcquisitionActivated
 from opengever.sharing.events import LocalRolesAcquisitionBlocked
 from opengever.sharing.events import LocalRolesModified
+from opengever.sharing.interfaces import ISharingConfiguration
 from plone.app.workflow.browser.sharing import SharingView
 from plone.app.workflow.interfaces import ISharingPageRole
 from plone.memoize.instance import memoize
+from plone.registry.interfaces import IRegistry
 from zope.component import getUtilitiesFor
 from zope.component import getUtility
 from zope.event import notify
@@ -193,14 +194,21 @@ class OpengeverSharingView(SharingView):
         assigned_users = [user.userid for user in info.list_assigned_users()]
         results = []
 
+        registry = getUtility(IRegistry)
+        reg_proxy = registry.forInterface(ISharingConfiguration)
+
         for principal in all_principals:
+            # users
             if principal.get('type') == 'user':
                 if principal.get('id') in assigned_users:
                     results.append(principal)
-            elif principal.get('id').startswith('og_'):
-                if re.search('og_([^_]*)_*',
-                    principal.get('id')).group(1) == get_client_id():
+
+            # groups
+            elif re.search(reg_proxy.black_list_prefix, principal.get('id')):
+                if re.search(reg_proxy.white_list_prefix, principal.get('id')):
                     results.append(principal)
+            else:
+                results.append(principal)
         return results
 
 
