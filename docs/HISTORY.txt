@@ -5,6 +5,10 @@ Changelog
 2.2 (unreleased)
 ----------------
 
+- RelatedDocumentsTableSource: Store info if doc was listed as a relation,
+  so the tabbedview helper can use a special icon for related documents.
+  [lgraf]
+
 - Removed 'List folder contents' permission from anyone but Manager in
   task workflow.
   [lgraf]
