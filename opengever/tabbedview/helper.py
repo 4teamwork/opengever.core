@@ -131,19 +131,23 @@ def linked(item, value):
     if not item.portal_type == 'opengever.document.document':
         css_class = "contenttype-%s" % normalize(item.portal_type)
     else:
-        # It's a document, we therefore want to display an icon
-        # for the mime type of the contained file
-        icon = getattr(item, 'getIcon', '')
-        if callable(icon):
-            icon = icon()
-
-        if not icon == '':
-            # Strip '.gif' from end of icon name and remove leading 'icon_'
-            filetype = icon[:icon.rfind('.')].replace('icon_', '')
-            css_class = 'icon-%s' % normalize(filetype)
+        if hasattr(item, '_v__is_relation'):
+            # Document was listed as a relation, so we use a special icon.
+            css_class = "icon-dokument_verweis"
         else:
-            # Fallback for unknown file type
-            css_class = "contenttype-%s" % normalize(item.portal_type)
+            # It's a document, we therefore want to display an icon
+            # for the mime type of the contained file
+            icon = getattr(item, 'getIcon', '')
+            if callable(icon):
+                icon = icon()
+
+            if not icon == '':
+                # Strip '.gif' from end of icon name and remove leading 'icon_'
+                filetype = icon[:icon.rfind('.')].replace('icon_', '')
+                css_class = 'icon-%s' % normalize(filetype)
+            else:
+                # Fallback for unknown file type
+                css_class = "contenttype-%s" % normalize(item.portal_type)
 
     # Construct breadcrumbs
     breadcrumb_titles = _breadcrumbs_from_item(item)

@@ -5,6 +5,9 @@ Changelog
 2.1 (unreleased)
 ----------------
 
+- linked() helper: Use a special icon for related documents
+  [lgraf]
+
 - Added containing_dossier column to every tasklisting.
   Issue #1252 Darstellung Dossiertitel bei Aufgabenuebersichten und im Eingangskorb (fuer Aufgaben, nicht fuer Weiterleitungen)
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1252
