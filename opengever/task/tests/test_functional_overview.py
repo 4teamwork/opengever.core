@@ -87,12 +87,14 @@ class TestOverviewFunctions(MockTestCase):
         self.expect(doc_cat_2.getObject()).result(doc_cat_2)
         self.expect(doc_cat_2.modified()).result(datetime(2012, 1, 1))
 
-        doc_rel_1 = self.mocker.mock(count=False)
+        doc_rel_1 = self.create_dummy()
+        doc_rel_1 = self.mocker.proxy(doc_rel_1, spec=False, count=False)
         self.expect(doc_rel_1.to_object).result(doc_rel_1)
         self.expect(doc_rel_1.portal_type).result('opengever.document.document')
         self.expect(doc_rel_1.modified()).result(datetime(2012, 3, 1))
 
-        doc_rel_2 = self.mocker.mock(count=False)
+        doc_rel_2 = self.create_dummy()
+        doc_rel_2 = self.mocker.proxy(doc_rel_2, spec=False, count=False)
         self.expect(doc_rel_2.to_object).result(doc_rel_2)
         self.expect(doc_rel_2.portal_type).result('ftw.mail.mail')
         self.expect(doc_rel_2.modified()).result(datetime(2012, 2, 1))
