@@ -651,6 +651,15 @@ def sequence_number(obj):
 grok.global_adapter(sequence_number, name='sequence_number')
 
 
+@indexer(ITask)
+def is_subtask(obj):
+    """ is_subtask indexer
+    """
+    parent = aq_parent(aq_inner(obj))
+    return ITask.providedBy(parent)
+grok.global_adapter(is_subtask, name='is_subtask')
+
+
 class SearchableTextExtender(grok.Adapter):
     """ Task specific SearchableText Extender"""
 
