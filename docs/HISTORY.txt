@@ -5,6 +5,11 @@ Changelog
 2.0.2 (unreleased)
 ------------------
 
+- Add is_subtask column to task global index.
+  Issue #1373 Spezielles Icon fuer Unteraufgaben.
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1373
+  [jone]
+
 - Fixed tests: Added plone.app.testing to tests_require
   [lgraf]
 

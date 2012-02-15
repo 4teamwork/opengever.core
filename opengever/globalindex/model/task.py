@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, DateTime, Date
+from sqlalchemy import Column, Integer, String, DateTime, Date, Boolean
 from sqlalchemy import ForeignKey, UniqueConstraint
 from sqlalchemy.orm import relation
 from sqlalchemy.ext.associationproxy import association_proxy
@@ -27,6 +27,8 @@ class Task(Base):
     issuer = Column(String(32), index=True)
 
     task_type = Column(String(50), index=True)
+    is_subtask = Column(Boolean(), default=False)
+
     reference_number = Column(String(100))
     sequence_number = Column(String(10), index=True)
     dossier_sequence_number = Column(String(10))

@@ -1,4 +1,5 @@
 from AccessControl.PermissionRole import rolesForPermissionOn
+from Acquisition import aq_parent, aq_inner
 from Products.CMFCore.permissions import View
 from Products.CMFCore.utils import _mergedLocalRoles, getToolByName
 from plone.indexer.interfaces import IIndexer
@@ -46,6 +47,8 @@ def get_dossier_sequence_number(task):
 def index_task(obj, event):
     """Index the given task in opengever.globalindex.
     """
+    parent = aq_parent(aq_inner(obj))
+
     client_id = get_client_id()
     intids = getUtility(IIntIds)
     try:
@@ -111,6 +114,8 @@ def index_task(obj, event):
     task.modified = obj.modified().asdatetime().replace(tzinfo=None)
 
     task.task_type = obj.task_type
+    task.is_subtask = parent.portal_type == 'opengever.task.task'
+
     task.sequence_number = getUtility(ISequenceNumber).get_number(obj)
     task.reference_number = IReferenceNumber(obj).get_number()
 
