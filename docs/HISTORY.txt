@@ -5,6 +5,9 @@ Changelog
 2.0.3 (unreleased)
 ------------------
 
+- Fixed tests: Unregister prevent_deletion subscriber in tests
+  [lgraf]
+
 - Removed 'List folder contents' permission from anyone but Manager in
   dossier and templatedossier workflows.
   [lgraf]
