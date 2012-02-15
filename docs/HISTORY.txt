@@ -5,6 +5,9 @@ Changelog
 2.0.3 (unreleased)
 ------------------
 
+- Fixed tests: Added opengever.repository to tests_require
+  [lgraf]
+
 - PAS plugin applies a request layer to the request.
   [jone]
 

@@ -9,6 +9,7 @@ tests_require = [
     'plone.app.dexterity',
     'opengever.globalindex',
     'opengever.contact',
+    'opengever.repository',
     ]
 
 setup(name='opengever.ogds.base',
