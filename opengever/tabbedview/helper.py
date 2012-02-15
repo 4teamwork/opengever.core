@@ -1,3 +1,4 @@
+from Acquisition import aq_inner, aq_parent
 from Products.CMFCore.interfaces._tools import IMemberData
 from Products.PluggableAuthService.interfaces.authservice import IPropertiedUser
 from datetime import date as dt
@@ -155,11 +156,16 @@ def linked(item, value):
 
     elif item.portal_type == 'opengever.task.task':
         if is_brain:
+            is_subtask = item.is_subtask
             is_remote_task = item.client_id != item.assigned_client
         else:
+            is_subtask = aq_parent(aq_inner(item)).portal_type == 'opengever.task.task'
             is_remote_task = item.responsible_client != get_client_id()
 
-        if is_remote_task:
+        if is_subtask:
+            css_class = 'icon-task-subtask'
+
+        elif is_remote_task:
             css_class = 'icon-task-remote-task'
 
     if css_class is None:

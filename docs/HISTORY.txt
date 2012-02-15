@@ -5,6 +5,11 @@ Changelog
 2.1 (unreleased)
 ----------------
 
+- linked() helper: Use a special helper for subtasks.
+  Issue #1373 Spezielles Icon fuer Unteraufgaben.
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1373
+  [jone]
+
 - Fixed tests: Added opengever.repository to tests_require
   [lgraf]
 
