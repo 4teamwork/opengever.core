@@ -5,6 +5,11 @@ Changelog
 2.0.2 (unreleased)
 ------------------
 
+- Improve "indexed_task_link" tabbedview helper, so that remote-tasks have a seperate icon.
+  Issue #1300 Mandantenuebergreifende Aufgaben sollten speziell markiert werden koennen.
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1300
+  [jone]
+
 - Increased the size of the breadcrumb title form 256 to 512.
   Issue #1393 og.globalindex: ORA-12899: value too large for column "OG_GI"."TASKS"."BREADCRUMB_TITLE"
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1393
