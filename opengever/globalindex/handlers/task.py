@@ -88,7 +88,7 @@ def index_task(obj, event):
 
     for i, breadcrumb in enumerate(breadcrumb_titles):
         add_lenght = len(breadcrumb) + len(join_value) + len(end_value)
-        if (actual_length +  add_lenght) > maximum_length:
+        if (actual_length + add_lenght) > maximum_length:
             breadcrumb_title = breadcrumb_titles[:i]
             breadcrumb_title.append(end_value)
             break
