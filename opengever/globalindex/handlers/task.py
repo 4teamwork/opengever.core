@@ -75,7 +75,27 @@ def index_task(obj, event):
         else:
             breadcrumb_titles.append(elem.get('Title').decode('utf-8'))
 
-    task.breadcrumb_title = ' > '.join(breadcrumb_titles)
+    # we prevent to raise database-error, if we have a too long string
+    # Shorten the breadcrumb_title to: mandant1 > repo1 > ...
+    join_value = ' > '
+    end_value = '...'
+
+    maximum_length = Task.breadcrumb_title.property.columns[0].type.length
+    maximum_length -= len(end_value)
+
+    breadcrumb_title = breadcrumb_titles
+    actual_length = 0
+
+    for i, breadcrumb in enumerate(breadcrumb_titles):
+        add_length = len(breadcrumb) + len(join_value) + len(end_value)
+        if (actual_length + add_length) > maximum_length:
+            breadcrumb_title = breadcrumb_titles[:i]
+            breadcrumb_title.append(end_value)
+            break
+
+        actual_length += len(breadcrumb) + len(join_value)
+
+    task.breadcrumb_title = join_value.join(breadcrumb_title)
 
     url_tool = obj.unrestrictedTraverse('@@plone_tools').url()
     task.physical_path = '/'.join(url_tool.getRelativeContentPath(obj))
