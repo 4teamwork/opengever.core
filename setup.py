@@ -4,7 +4,9 @@ import os
 version = open('opengever/globalindex/version.txt').read().strip()
 maintainer = 'Thomas Buchberger'
 
-tests_require = []
+tests_require = [
+    'plone.app.testing',
+]
 
 setup(name='opengever.globalindex',
       version=version,
