@@ -7,4 +7,5 @@
   <column value="task_type" />
   <column value="client_id" />
   <column value="sequence_number" />
+  <column value="assigned_client" />
 </object>
