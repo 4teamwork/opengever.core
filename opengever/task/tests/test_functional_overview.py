@@ -9,7 +9,6 @@ from datetime import datetime
 from plone.i18n.normalizer.interfaces import IIDNormalizer
 from opengever.task.interfaces import ISuccessorTaskController
 from opengever.ogds.base.interfaces import IContactInformation
-from opengever.base.interfaces import ISequenceNumber
 
 
 class TestOverviewFunctions(MockTestCase):
@@ -263,11 +262,6 @@ class TestOverviewFunctions(MockTestCase):
         self.expect(contact_info.describe(ANY)).call(lambda x: x)
         self.expect(contact_info.render_link(ANY)).call(lambda x: x)
 
-        # Sequencenumber utility
-        sequencenumber = self.mocker.mock(count=False)
-        self.mock_utility(sequencenumber, ISequenceNumber)
-        self.expect(sequencenumber.get_number(ANY)).result(3)
-
         self.replay()
 
         view = Overview(self.mock_context, self.mock_request)
@@ -277,5 +271,5 @@ class TestOverviewFunctions(MockTestCase):
         info_without = view.get_task_info(mock_item_task_without)
 
         self.assertEqual(info_obj, '')
-        self.assertEqual(info_with, '3 / client_name / user1')
+        self.assertEqual(info_with, 'client_name / user1')
         self.assertEqual(info_without, 'user2')

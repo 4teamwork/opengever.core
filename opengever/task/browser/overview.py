@@ -20,7 +20,6 @@ from zope.interface import alsoProvides
 from zope.interface import implements
 from opengever.tabbedview.helper import _breadcrumbs_from_item
 from zope.component import queryUtility
-from opengever.base.interfaces import ISequenceNumber
 
 
 def get_field_widget(obj, field):
@@ -276,7 +275,7 @@ class Overview(DisplayForm, OpengeverTab):
 
     def get_task_info(self, item):
         """ return some task attributes for objects:
-            Sequence number / Responsible client ID /  responsible
+            Responsible client ID /  responsible
         """
         if not ITask.providedBy(item):
             return ''
@@ -288,14 +287,10 @@ class Overview(DisplayForm, OpengeverTab):
             # setup.
             return info.describe(item.responsible)
 
-        # Sequence number
-        seq_num = getUtility(ISequenceNumber).get_number(item)
-
         # Client
         client = client_title_helper(item, item.responsible_client)
 
-        taskinfo = "%s / %s / %s" % (
-            seq_num,
+        taskinfo = "%s / %s" % (
             client,
             info.render_link(item.responsible),
         )
@@ -378,8 +373,7 @@ class Overview(DisplayForm, OpengeverTab):
         breadcrumb_titles = "[%s] > %s" % (client.title, item.breadcrumb_title)
 
         # Client and user info
-        info_html = ' <span class="discreet">(%s/ %s / %s)</span>' % (
-            item.sequence_number,
+        info_html = ' <span class="discreet">(%s / %s)</span>' % (
             client_title_helper(item, item.assigned_client),
             info.render_link(item.responsible),
         )
