@@ -194,6 +194,7 @@ class Overview(DisplayForm, OpengeverTab):
                 obj = item.to_object
                 if (obj.portal_type == 'opengever.document.document'\
                         or obj.portal_type == 'ftw.mail.mail'):
+                    obj._v__is_relation = True
                     related_documents.append(obj)
             return related_documents
 
