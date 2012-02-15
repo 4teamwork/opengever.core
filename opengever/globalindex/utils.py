@@ -17,6 +17,8 @@ def indexed_task_link(item, display_client=False):
         css_class = 'contenttype-opengever-inbox-forwarding'
     elif item.client_id != item.assigned_client:
         css_class = 'icon-task-remote-task'
+    elif item.is_subtask:
+        css_class = 'icon-task-subtask'
     else:
         css_class = 'contenttype-opengever-task-task'
 
