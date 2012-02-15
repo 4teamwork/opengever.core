@@ -6,6 +6,7 @@ maintainer = 'Victor Baumann'
 
 tests_require = [
     'plone.app.testing',
+    'opengever.repository',
     ]
 
 

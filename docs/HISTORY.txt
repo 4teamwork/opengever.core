@@ -5,6 +5,9 @@ Changelog
 2.1 (unreleased)
 ----------------
 
+- Fixed tests: Added opengever.repository to tests_require
+  [lgraf]
+
 - linked() helper: Use a special icon for related documents
   [lgraf]
 
