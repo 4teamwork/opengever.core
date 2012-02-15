@@ -825,11 +825,17 @@ class TestTaskTransitionController(MockTestCase):
         controller, controller_mock, task = self._create_task_controller()
         with self.mocker.order():
             self.expect(controller_mock._is_issuer()).result(False)
+            self.expect(controller_mock._is_responsible_or_inbox_group_user()).result(False)
+
+            self.expect(controller_mock._is_issuer()).result(False)
+            self.expect(controller_mock._is_responsible_or_inbox_group_user()).result(True)
+
             self.expect(controller_mock._is_issuer()).result(True)
 
         self.replay()
         transition = 'task-transition-resolved-in-progress'
         self.assertFalse(controller.is_transition_possible(transition))
+        self.assertTrue(controller.is_transition_possible(transition))
         self.assertTrue(controller.is_transition_possible(transition))
 
     def test_resolved_to_progress_actions(self):

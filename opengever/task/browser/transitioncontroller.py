@@ -334,7 +334,9 @@ class TaskTransitionController(BrowserView):
     def resolved_to_progress_guard(self):
         """Checks if:
         - The current user is the issuer of the task"""
-        return self._is_issuer()
+        return (
+            self._is_issuer() or
+            self._is_responsible_or_inbox_group_user())
 
     @action('task-transition-resolved-in-progress')
     def resolved_to_progress_action(self, transition):

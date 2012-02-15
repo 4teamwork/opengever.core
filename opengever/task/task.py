@@ -20,8 +20,8 @@ from opengever.tabbedview.helper import external_edit_link
 from opengever.tabbedview.helper import linked
 from opengever.tabbedview.helper import readable_ogds_author
 from opengever.tabbedview.helper import readable_ogds_user
-from opengever.task import _
 from opengever.task import util
+from opengever.task import _
 from opengever.task.helper import path_checkbox
 from operator import attrgetter
 from plone.dexterity.content import Container
@@ -296,12 +296,18 @@ class RelatedDocumentsTableSource(grok.MultiAdapter, BaseTableSource):
         objects = []
         for brain in brains:
             objects.append(brain.getObject())
-        for item in self.config.context.relatedItems:
 
+        # Related documents
+        for item in self.config.context.relatedItems:
             obj = item.to_object
             if (obj.portal_type == 'opengever.document.document'\
                     or obj.portal_type == 'ftw.mail.mail'):
+                # Store the information if the object was listed as
+                # a relation or not, so the tabbed view helper can
+                # set a special icon for related documents
+                obj._v__is_relation = True
                 objects.append(obj)
+
         objects = self.extend_query_with_ordering(objects)
         if self.config.filter_text:
             objects = self.extend_query_with_textfilter(
