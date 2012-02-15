@@ -7,7 +7,8 @@ maintainer = 'Philippe Gross'
 
 tests_require = [
     'plone.formwidget.namedfile',
-    'plone.app.testing'
+    'plone.app.testing',
+    'opengever.repository',
     ]
 
 setup(name='opengever.contact',
