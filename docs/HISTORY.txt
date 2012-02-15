@@ -8,6 +8,11 @@ Changelog
 - linked() helper: Use a special icon for related documents
   [lgraf]
 
+- Improve "linked" tabbedview helper, so that remote-tasks have a seperate icon.
+  Issue #1300 Mandantenuebergreifende Aufgaben sollten speziell markiert werden koennen.
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1300
+  [jone]
+
 - Added containing_dossier column to every tasklisting.
   Issue #1252 Darstellung Dossiertitel bei Aufgabenuebersichten und im Eingangskorb (fuer Aufgaben, nicht fuer Weiterleitungen)
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1252

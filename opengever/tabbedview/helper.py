@@ -1,10 +1,11 @@
+from Products.CMFCore.interfaces._tools import IMemberData
+from Products.PluggableAuthService.interfaces.authservice import IPropertiedUser
 from datetime import date as dt
 from ftw.mail.utils import get_header
 from opengever.ogds.base.interfaces import IContactInformation
+from opengever.ogds.base.utils import get_client_id
 from plone.i18n.normalizer.interfaces import IIDNormalizer
 from plone.memoize import ram
-from Products.CMFCore.interfaces._tools import IMemberData
-from Products.PluggableAuthService.interfaces.authservice import IPropertiedUser
 from zope.app.component.hooks import getSite
 from zope.component import getMultiAdapter
 from zope.component import getUtility
@@ -123,17 +124,20 @@ def linked(item, value):
     url_method = lambda: '#'
     if hasattr(item, 'getURL'):
         url_method = item.getURL
+        is_brain = True
     elif hasattr(item, 'absolute_url'):
         url_method = item.absolute_url
+        is_brain = False
 
     # Construct CSS class
+    css_class = None
+
     normalize = getUtility(IIDNormalizer).normalize
-    if not item.portal_type == 'opengever.document.document':
-        css_class = "contenttype-%s" % normalize(item.portal_type)
-    else:
+    if item.portal_type == 'opengever.document.document':
         if hasattr(item, '_v__is_relation'):
             # Document was listed as a relation, so we use a special icon.
             css_class = "icon-dokument_verweis"
+
         else:
             # It's a document, we therefore want to display an icon
             # for the mime type of the contained file
@@ -148,6 +152,18 @@ def linked(item, value):
             else:
                 # Fallback for unknown file type
                 css_class = "contenttype-%s" % normalize(item.portal_type)
+
+    elif item.portal_type == 'opengever.task.task':
+        if is_brain:
+            is_remote_task = item.client_id != item.assigned_client
+        else:
+            is_remote_task = item.responsible_client != get_client_id()
+
+        if is_remote_task:
+            css_class = 'icon-task-remote-task'
+
+    if css_class is None:
+        css_class = "contenttype-%s" % normalize(item.portal_type)
 
     # Construct breadcrumbs
     breadcrumb_titles = _breadcrumbs_from_item(item)
