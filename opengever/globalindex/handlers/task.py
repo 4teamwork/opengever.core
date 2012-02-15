@@ -79,7 +79,7 @@ def index_task(obj, event):
     # Shorten the breadcrumb_title to: mandant1 > repo1 > ...
     maximum_length = 512
     actual_length = 0
-    breadcrumb_title = []
+    breadcrumb_title = breadcrumb_titles
     for i, breadcrumb in enumerate(breadcrumb_titles):
         if actual_length + len(breadcrumb) + 6 > maximum_length:
             breadcrumb_title = breadcrumb_titles[:i]
