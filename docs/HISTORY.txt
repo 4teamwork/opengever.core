@@ -5,6 +5,11 @@ Changelog
 2.2 (unreleased)
 ----------------
 
+- Adjust Worfklow: Disallow to add documents when a task is resolved.
+  Issue #1371 Anpassungen Aufgaben Workflow
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1371
+  [phgross]
+
 - RelatedDocumentsTableSource: Store info if doc was listed as a relation,
   so the tabbedview helper can use a special icon for related documents.
   [lgraf]
