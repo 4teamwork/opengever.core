@@ -41,14 +41,20 @@ def css_class_from_obj(item):
     if not item.portal_type == 'opengever.document.document':
         css_class = "contenttype-%s" % normalize(item.portal_type)
     else:
-        # It's a document, we therefore want to display an icon
-        # for the mime type of the contained file
-        icon = item.getIcon()
-        if not icon == '':
-            # Strip '.gif' from end of icon name and remove leading 'icon_'
-            filetype = icon[:icon.rfind('.')].replace('icon_', '')
-            css_class = 'icon-%s' % normalize(filetype)
+        # XXX: We need to merge this and the css_class_from_brain-method
+        # and clean up all packages because we have redundant code.
+        if hasattr(item, '_v__is_relation'):
+            # Document was listed as a relation, so we use a special icon.
+            css_class = "icon-dokument_verweis"
         else:
-            # Fallback for unknown file type
-            css_class = "contenttype-%s" % normalize(item.portal_type)
+            # It's a document, we therefore want to display an icon
+            # for the mime type of the contained file
+            icon = item.getIcon()
+            if not icon == '':
+                # Strip '.gif' from end of icon name and remove leading 'icon_'
+                filetype = icon[:icon.rfind('.')].replace('icon_', '')
+                css_class = 'icon-%s' % normalize(filetype)
+            else:
+                # Fallback for unknown file type
+                css_class = "contenttype-%s" % normalize(item.portal_type)
     return css_class

@@ -5,6 +5,10 @@ Changelog
 2.2 (unreleased)
 ----------------
 
+- Add special attribute _v__is_relation to css_class_from_obj to get a special
+  icon when we display a related document
+  [eschmutz
+
 - Prevent obj deletion for anyone except Managers.
   (Subscriber for IObjectWillBeRemovedEvent that checks for 'Manage portal' permission)
   [lgraf]
