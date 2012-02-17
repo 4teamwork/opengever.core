@@ -93,6 +93,13 @@ class BaseFunctionalLayer(PloneSandboxLayer):
         from plone.app.testing import setRoles, TEST_USER_ID
         setRoles(portal, TEST_USER_ID, ['Member', 'Contributor', 'Editor'])
 
+        # Disable the prevent_deletion subscriber. In tests, we WANT
+        # to be able to quickly delete objs without becoming Manager
+        from opengever.base import subscribers
+        from zope.component import getGlobalSiteManager
+        gsm = getGlobalSiteManager()
+        gsm.unregisterHandler(subscribers.prevent_deletion)
+
     def tearDownPloneSite(self, portal):
         session = create_session()
         for model in MODELS:
