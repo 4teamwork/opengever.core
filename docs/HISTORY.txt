@@ -5,6 +5,9 @@ Changelog
 2.0.3 (unreleased)
 ------------------
 
+- When resolving dossiers, only issue filing numbers for active dossiers
+  [lgraf]
+
 - Fixed tests: Unregister prevent_deletion subscriber in tests
   [lgraf]
 
