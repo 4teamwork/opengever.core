@@ -5,6 +5,10 @@ Changelog
 2.0.3 (unreleased)
 ------------------
 
+- Contact info describe(): add with_principal argument for removing
+  principal (used in latex views).
+  [jone]
+
 - Fixed tests: Added opengever.repository to tests_require
   [lgraf]
 

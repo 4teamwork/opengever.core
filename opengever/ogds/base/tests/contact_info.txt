@@ -125,6 +125,10 @@ User tests:
     u'Boss Hugo (hugo.boss)'
     >>> info.describe('hugo.boss', with_email=True)
     u'Boss Hugo (hugo.boss, hugo@boss.local)'
+    >>> info.describe('hugo.boss', with_principal=False)
+    u'Boss Hugo'
+    >>> info.describe('hugo.boss', with_email=True, with_principal=False)
+    u'Boss Hugo (hugo@boss.local)'
     >>> info.describe(info.get_user('hugo.boss'))
     u'Boss Hugo (hugo.boss)'
 
@@ -170,6 +174,8 @@ Contacts tests:
     u'Kaufmann Sandra (sandra.kaufmann@test.ch)'
     >>> info.describe(u'contact:kaufmann-sandra')
     u'Kaufmann Sandra (sandra.kaufmann@test.ch)'
+    >>> info.describe(u'contact:kaufmann-sandra', with_principal=False)
+    u'Kaufmann Sandra'
     >>> info.describe(contacts[0])
     u'Kaufmann Sandra (sandra.kaufmann@test.ch)'
     >>> info.get_email(u'contact:kaufmann-sandra')
@@ -194,6 +200,8 @@ Inboxes tests:
     u'client1_inbox_users'
 
     >>> info.describe(u'inbox:client1')
+    u'Inbox: Client 1'
+    >>> info.describe(u'inbox:client1', with_principal=False)
     u'Inbox: Client 1'
 
 
@@ -277,5 +285,7 @@ Test describe with a PAS user:
 
     >>> info.describe('test_user_1_')
     ' (test_user_1_)'
+    >>> info.describe('test_user_1_', with_principal=False)
+    ''
     >>> info.describe('non-existing-user')
     u'non-existing-user'

@@ -364,7 +364,8 @@ class ContactInformation(grok.GlobalUtility):
         return self._is_client_assigned(userid, client_id)
 
     # general principal methods
-    def describe(self, principal, with_email=False, with_email2=False):
+    def describe(self, principal, with_email=False, with_email2=False,
+                 with_principal=True):
         """Represent a user / contact / inbox / ... as string. This usually
         returns the fullname or another label / title.
         `principal` could also be a user object or a contact brain.
@@ -431,10 +432,11 @@ class ContactInformation(grok.GlobalUtility):
                 name = contact.id
 
             if with_email2 and contact.email2:
-                name = '%s (%s)' % (name, contact.email2)
-            elif contact.email:
-                name = '%s (%s)' % (name, contact.email)
-            return name
+                return '%s (%s)' % (name, contact.email2)
+            elif with_principal and contact.email:
+                return '%s (%s)' % (name, contact.email)
+            else:
+                return name
 
         elif user:
             if user.lastname and user.firstname:
@@ -446,13 +448,20 @@ class ContactInformation(grok.GlobalUtility):
             else:
                 name = user.userid
 
+            infos = []
+            if with_principal:
+                infos.append(user.userid)
+
             if with_email and user.email:
-                name = '%s (%s, %s)' % (name, user.userid, user.email)
+                infos.append(user.email)
+
             elif with_email2 and user.email2:
-                name = '%s (%s, %s)' % (name, user.userid, user.email2)
+                infos.append(user.email2)
+
+            if infos:
+                return '%s (%s)' % (name, ', '.join(infos))
             else:
-                name = '%s (%s)' % (name, user.userid)
-            return name
+                return name
 
         elif is_string:
             # fallback for acl_users
@@ -466,11 +475,18 @@ class ContactInformation(grok.GlobalUtility):
                     return principal
             name = member.getProperty('fullname', principal)
             email = member.getProperty('email', None)
+
+            infos = []
+            if with_principal:
+                infos.append(principal)
+
             if with_email and email:
-                name = '%s (%s, %s)' % (name, principal, email)
+                infos.append(email)
+
+            if infos:
+                return '%s (%s)' % (name, ', '.join(infos))
             else:
-                name = '%s (%s)' % (name, principal)
-            return name
+                return name
 
         else:
             raise ValueError('Unknown principal type: %s' % str(principal))
