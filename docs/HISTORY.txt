@@ -5,6 +5,16 @@ Changelog
 2.2 (unreleased)
 ----------------
 
+- Add is_subtask catalog index.
+  Issue #1373 Spezielles Icon fuer Unteraufgaben.
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1373
+  [jone]
+
+- Add "assigned_client" index to metadata (used for remote-task icon).
+  Issue #1300 Mandantenuebergreifende Aufgaben sollten speziell markiert werden koennen.
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1300
+  [jone]
+
 - Adjust Worfklow: Allow resolved-in-progress also for reponsible or inbox group users.
   Issue #1371 Anpassungen Aufgaben Workflow
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1371
