@@ -1,4 +1,4 @@
-from Acquisition import aq_inner
+from Acquisition import aq_inner, aq_parent
 from Products.CMFCore.interfaces import IActionSucceededEvent
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone.CatalogTool import sortable_title
