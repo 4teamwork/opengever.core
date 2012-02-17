@@ -164,8 +164,8 @@ class DossierDetailsLaTeXView(grok.MultiAdapter, MakoLaTeXView):
             data = [
                 brain.sequence_number,
                 task_type_helper(brain, brain.task_type),
-                info.describe(brain.issuer),
-                info.describe(brain.responsible),
+                info.describe(brain.issuer, with_principal=False),
+                info.describe(brain.responsible, with_principal=False),
                 workflow_state(brain, brain.review_state),
                 brain.Title,
                 helper.readable_date(brain, brain.deadline)]
@@ -185,7 +185,9 @@ class DossierDetailsLaTeXView(grok.MultiAdapter, MakoLaTeXView):
         for brain in brains:
             data = [brain.sequence_number,
                     brain.Title,
-                    helper.readable_date(brain, brain.document_date)]
+                    helper.readable_date(brain, brain.document_date),
+                    helper.readable_date(brain, brain.receipt_date),
+                    brain.document_author]
 
             rows.append(self.convert_list_to_row(data))
 

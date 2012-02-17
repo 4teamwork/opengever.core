@@ -14,9 +14,7 @@
 % if filingprefix:
   \bf{Ablage} & ${filingprefix} \\%%
 % endif
-% if filing_no:
-  \bf{Ablagenummer} & ${filing_no} \\%%
-% endif
+\bf{Ablage} & ${filing_no} \\%%
 \bf{Ordnungsposition} & ${repository} \\%%
 \bf{Geschäftstitel} & ${title} \\%%
 \bf{Status} & ${review_state} \\%%
@@ -40,7 +38,7 @@
   \vspace{5mm}
   {\bf Subdossiers}\\
   \vspace{1mm}
-  \tablehead{\bfseries Nr. & \bfseries Ablagenr. & \bfseries Titel & \bfseries Verantwortlich & \bfseries Status & \bfseries Beginn\\ \hline}
+  \tablehead{\bfseries Nr. & \bfseries Ablagenr. & \bfseries Titel & \bfseries Federführend & \bfseries Status & \bfseries Beginn\\ \hline}
   \begin{supertabular*}{\textwidth}{p{4mm}p{20mm}p{55mm}p{35mm}p{10mm}p{10mm}}
   % for row in subdossiers:
     ${row} \\ \hline
@@ -64,8 +62,8 @@
   \vspace{5mm}
   {\bf Dokumente}\\
   \vspace{1mm}
-  \tablehead{\bfseries Nr. & \bfseries Titel & \bfseries Dokument-Datum\\ \hline}
-  \begin{supertabular*}{\textwidth}{lp{110mm}l}
+  \tablehead{\bfseries Nr. & \bfseries Titel & \bfseries Dokument-Datum & \bfseries Eingangsdatum & \bfseries Autor\\ \hline}
+  \begin{supertabular*}{\textwidth}{p{5mm}p{70mm}p{22mm}p{22mm}p{25mm}}
   % for row in documents:
     ${row} \\ \hline
   % endfor

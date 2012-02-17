@@ -5,6 +5,12 @@ Changelog
 2.0.2 (unreleased)
 ------------------
 
+- Optimize dossier details PDF export.
+  Show reference number always, add / rename some columns in listings.
+  Issue #1347 Ueberarbeitung Dossier Details (PDF)
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1347/
+  [jone]
+
 - Tasklisting PDF optimizations.
   Issue #1331 Anpassung am PDF-Aufgabenverzeichnis
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1331/
