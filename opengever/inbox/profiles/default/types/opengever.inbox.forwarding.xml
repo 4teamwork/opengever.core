@@ -69,15 +69,6 @@
         <permission value="Modify portal content"/>
     </action>
 
-    <action action_id="addresponse"
-            visible="True"
-            title="Add response"
-            category="folder_factories"
-            url_expr="string:${object_url}/addresponse"
-            icon_expr=""
-            condition_expr="">
-        <permission value="Add portal content"/>
-    </action>
     <action i18n:domain="opengever.task" title="Overview" action_id="overview" category="tabbedview-tabs"
             condition_expr="" url_expr="string:#" visible="True">
         <permission value="View"/>
