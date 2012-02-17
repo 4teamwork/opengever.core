@@ -5,6 +5,11 @@ Changelog
 2.0.2 (unreleased)
 ------------------
 
+- Tasklisting PDF optimizations.
+  Issue #1331 Anpassung am PDF-Aufgabenverzeichnis
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1331/
+  [jone]
+
 - Dossier details PDF: Change headings and display filing prefix, if set.
   Issue #1347 Ueberarbeitung Dossier Details (PDF)
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1347

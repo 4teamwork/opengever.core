@@ -75,9 +75,15 @@ class TaskListingLaTeXView(grok.MultiAdapter, MakoLaTeXView):
 
         issuer_client_title = self.info.get_client_by_id(
             item.client_id).title
-        issuer = '%s / %s' % (issuer_client_title,
-                         self.info.describe(item.issuer))
-        responsible = self.info.describe(item.responsible)
+        issuer = '%s / %s' % (
+            issuer_client_title,
+            self.info.describe(item.issuer, with_principal=False))
+
+        responsible_client = self.info.get_client_by_id(
+            item.assigned_client).title
+        responsible = '%s / %s' % (
+            responsible_client,
+            self.info.describe(item.responsible, with_principal=False))
 
         dossier_title = item.containing_dossier or ''
 
