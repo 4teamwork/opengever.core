@@ -65,7 +65,10 @@
    <permission-role>Owner</permission-role>
    <permission-role>Administrator</permission-role>
   </permission-map>
-  <permission-map name="Review portal content" acquired="True">
+  <permission-map name="Review portal content" acquired="False">
+      <permission-role>Reviewer</permission-role>
+      <permission-role>Manager</permission-role>
+      <permission-role>Administrator</permission-role>
   </permission-map>
 
   <permission-map name="Sharing page: Delegate roles" acquired="False">
@@ -445,13 +448,13 @@
  <transition transition_id="dossier-transition-reactivate" title="Owner reactivates dossier" new_state="dossier-state-active" trigger="USER" before_script="" after_script="">
   <action url="%(content_url)s/content_status_modify?workflow_action=dossier-transition-reactivate" category="workflow" icon="">dossier-transition-reactivate</action>
   <guard>
-   <guard-role>Publisher</guard-role>
+   <guard-expression>python:'Publisher' in here.portal_membership.getAuthenticatedMember().getRolesInContext(here) or 'Administrator' in here.portal_membership.getAuthenticatedMember().getRolesInContext(here)</guard-expression>
   </guard>
  </transition>
  <transition transition_id="dossier-transition-resolve" title="Owner resolves dossier" new_state="dossier-state-resolved" trigger="USER" before_script="" after_script="">
   <action url="%(content_url)s/transition-resolve" category="workflow" icon="">dossier-transition-resolve</action>
   <guard>
-   <guard-role>Reviewer</guard-role>
+   <guard-permission>Review portal content</guard-permission>
   </guard>
  </transition>
  <worklist worklist_id="reviewer_queue" title="">
