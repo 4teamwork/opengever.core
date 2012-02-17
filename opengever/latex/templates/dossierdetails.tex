@@ -32,41 +32,64 @@
 \bf{Ende} & ${end} \\%%
 \end{supertabular*}
 
-\setlength\extrarowheight{1pt}
+\begin{landscape}
+  \setlength\extrarowheight{1pt}
+  \setlength\LTleft{0pt}
+  \setlength\LTright{0pt}
+  \newlength{\tablewidth}
+  \setlength{\tablewidth}{\linewidth}
 
 % if subdossiers:
+{
   \vspace{5mm}
-  {\bf Subdossiers}\\
+  {\bf Subdossiers}\\%
   \vspace{1mm}
-  \tablehead{\bfseries Nr. & \bfseries Ablagenr. & \bfseries Titel & \bfseries Federführend & \bfseries Status & \bfseries Beginn\\ \hline}
-  \begin{supertabular*}{\textwidth}{p{4mm}p{20mm}p{55mm}p{35mm}p{10mm}p{10mm}}
+  \addtolength{\tablewidth}{-12\tabcolsep}
+  \begin{longtable}{p{.02\tablewidth}p{.1\tablewidth}p{.4\tablewidth}p{.28\tablewidth}p{.1\tablewidth}p{.1\tablewidth}}
+  \bfseries Nr. & \bfseries Ablagenr. & \bfseries Titel & \bfseries Federführend & \bfseries Status & \bfseries Beginn\\%%
+  \endhead\hline
+
   % for row in subdossiers:
     ${row} \\ \hline
   % endfor
-  \end{supertabular*}
+  \end{longtable}
+}
 % endif
 
 % if tasks:
+{
   \vspace{5mm}
-  {\bf Aufgaben}\\
+  {\bf Aufgaben}\\%%
   \vspace{1mm}
-  \tablehead{\bfseries Nr. & \bfseries Art & \bfseries Auftraggeber & \bfseries An & \bfseries Status & \bfseries Beschreibung & \bfseries Zu erledigen bis\\ \hline}
-  \begin{supertabular*}{\textwidth}{lllllp{35mm}l}
+  \addtolength{\tablewidth}{-14\tabcolsep}
+  \begin{longtable}{p{.02\tablewidth}p{.14\tablewidth}p{.18\tablewidth}p{.18\tablewidth}p{.07\tablewidth}p{.31\tablewidth}p{.1\tablewidth}}
+  \bfseries Nr. & \bfseries Art & \bfseries Auftraggeber & \bfseries An & \bfseries Status & \bfseries Beschreibung & \bfseries Zu erledigen bis\\%%
+  \endhead\hline
+
   % for row in tasks:
-    ${row} \\ \hline
+    ${row} \\%%
+    \hline
   % endfor
-  \end{supertabular*}
+  \end{longtable}
+}
 % endif
 
 % if documents:
+{
   \vspace{5mm}
-  {\bf Dokumente}\\
+  {\bf Dokumente}\\%%
   \vspace{1mm}
-  \tablehead{\bfseries Nr. & \bfseries Titel & \bfseries Dokument-Datum & \bfseries Eingangsdatum & \bfseries Autor\\ \hline}
-  \begin{supertabular*}{\textwidth}{p{5mm}p{70mm}p{22mm}p{22mm}p{25mm}}
+  \addtolength{\tablewidth}{-10\tabcolsep}
+  \begin{longtable}{p{.02\tablewidth}p{.50\tablewidth}p{.14\tablewidth}p{.14\tablewidth}p{.2\tablewidth}}
+  \bfseries Nr. & \bfseries Titel & \bfseries Dokument-Datum & \bfseries Eingangsdatum & \bfseries Autor\\%%
+  \endhead\hline
+
   % for row in documents:
     ${row} \\ \hline
   % endfor
   \shrinkheight{20mm}
-  \end{supertabular*}
+  \end{longtable}
+}
 % endif
+
+\end{landscape}

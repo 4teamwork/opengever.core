@@ -67,6 +67,9 @@ class DossierDetailsLaTeXView(grok.MultiAdapter, MakoLaTeXView):
         args['documents'] = self.get_documents()
         args['subdossiers'] = self.get_subdossiers()
 
+        self.layout.use_package('pdflscape')
+        self.layout.use_package('longtable')
+
         return args
 
     def get_dossier_metadata(self):
@@ -161,11 +164,19 @@ class DossierDetailsLaTeXView(grok.MultiAdapter, MakoLaTeXView):
                 'object_provides': 'opengever.task.task.ITask'})
 
         for brain in brains:
+            issuer = '%s / %s' % (
+                info.get_client_by_id(brain.client_id).title,
+                info.describe(brain.issuer, with_principal=False))
+
+            responsible = '%s / %s' %  (
+                info.get_client_by_id(brain.assigned_client).title,
+                info.describe(brain.responsible, with_principal=False))
+
             data = [
                 brain.sequence_number,
                 task_type_helper(brain, brain.task_type),
-                info.describe(brain.issuer, with_principal=False),
-                info.describe(brain.responsible, with_principal=False),
+                issuer,
+                responsible,
                 workflow_state(brain, brain.review_state),
                 brain.Title,
                 helper.readable_date(brain, brain.deadline)]

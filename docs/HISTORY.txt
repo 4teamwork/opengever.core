@@ -7,6 +7,7 @@ Changelog
 
 - Optimize dossier details PDF export.
   Show reference number always, add / rename some columns in listings.
+  Use landscape pages for tables to gain width.
   Issue #1347 Ueberarbeitung Dossier Details (PDF)
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1347/
   [jone]
