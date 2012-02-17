@@ -5,6 +5,9 @@ Changelog
 2.1 (unreleased)
 ----------------
 
+- Inbox assigned tasks view: Listing tasks in all states, not just open
+  [lgraf]
+
 - Removed 'List folder contents' permission from anyone but Manager in
   forwarding, inbox and yearfolder workflows.
   [lgraf]
