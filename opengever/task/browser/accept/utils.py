@@ -139,7 +139,8 @@ def accept_forwarding_with_successor(
     # Close the predessecor forwarding
     response_text = response_text or ''
     request_data = {'text': response_text.encode('utf-8'),
-                    'successor_oguid': successor_tc.get_oguid()}
+                    'successor_oguid': successor_tc.get_oguid(),
+                    'transition': 'forwarding-transition-accept'}
 
     response = remote_request(predecessor.client_id,
                       '@@store_forwarding_in_yearfolder',
@@ -281,39 +282,3 @@ class AcceptTaskWorkflowTransitionView(grok.View):
         accept_task_with_response(self.context, text,
                                   successor_oguid=successor_oguid)
         return 'OK'
-
-
-class StoreForwardingInYearfolder(grok.View):
-    grok.name('store_forwarding_in_yearfolder')
-    grok.context(ITask)
-    grok.require('cmf.AddPortalContent')
-
-    def render(self):
-        inbox = aq_parent(aq_inner(self.context))
-        yearfolder = _get_actual_yearfolder(inbox)
-        successor_oguid = self.request.get('successor_oguid')
-        response_text = self.context.get('response_text')
-
-        change_task_workflow_state(self.context,
-                                      'forwarding-transition-accept',
-                                      text=response_text,
-                                      successor_oguid=successor_oguid)
-
-        try:
-            # change security context
-            _sm = AccessControl.getSecurityManager()
-            AccessControl.SecurityManagement.newSecurityManager(
-                    self.request,
-                    AccessControl.SecurityManagement.SpecialUsers.system)
-
-            clipboard = inbox.manage_cutObjects((self.context.getId(),))
-            yearfolder.manage_pasteObjects(clipboard)
-
-        except:
-            AccessControl.SecurityManagement.setSecurityManager(
-                _sm)
-            raise
-        else:
-            AccessControl.SecurityManagement.setSecurityManager(
-                _sm)
-            return 'OK'
