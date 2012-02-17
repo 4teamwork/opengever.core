@@ -32,6 +32,7 @@ class ForwardingTransitionController(TaskTransitionController):
 
     @guard('forwarding-transition-assign-to-dossier')
     @guard('forwarding-transition-reassign')
+    @guard('forwarding-transition-close')
     def is_assign_to_dossier_or_reassing_possible(self):
         """Check it the user is in the inbox group of the current client.
         """
@@ -77,11 +78,7 @@ class ForwardingTransitionController(TaskTransitionController):
 
     @action('forwarding-transition-close')
     def close_action(self, transition):
-        """redirect to the assign task form,
-        so that it automaticly set the home inbox as responsible
+        """redirect to the addresponse form, the closing mechanism
+        (storing in a yearfolder) would be started from event handler.
         """
-        import pdb; pdb.set_trace()
-
-        return '%s/@@assign-task?form.widgets.transition=%s' % (
-            self.context.absolute_url(),
-            transition)
+        return self._addresponse_form_url(transition)

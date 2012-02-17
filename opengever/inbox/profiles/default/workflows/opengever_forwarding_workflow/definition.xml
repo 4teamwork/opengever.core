@@ -122,7 +122,7 @@
  <transition transition_id="forwarding-transition-close" title="Close" new_state="forwarding-state-closed" trigger="USER" before_script="" after_script="">
   <action url="%(content_url)s/@@forwarding_transition_controller?transition=forwarding-transition-close" category="workflow" icon="">forwarding-transition-close</action>
   <guard>
-   <!-- <guard-expression>python: here.restrictedTraverse('@@forwarding_transition_controller').is_transition_possible('forwarding-transition-close')</guard-expression> -->
+   <guard-expression>python: here.restrictedTraverse('@@forwarding_transition_controller').is_transition_possible('forwarding-transition-close')</guard-expression>
   </guard>
  </transition>
  <transition transition_id="forwarding-transition-reassign" title="Reassign" new_state="" trigger="USER" before_script="" after_script="">
