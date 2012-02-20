@@ -9,6 +9,7 @@ tests_require = [
     'opengever.ogds.base[tests]',
     'opengever.document',
     'opengever.task',
+    'ftw.testing',
     ]
 
 setup(name='opengever.inbox',
