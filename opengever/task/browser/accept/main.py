@@ -50,23 +50,45 @@ def method_vocabulary_factory(context):
     info = getUtility(IContactInformation)
     client = info.get_client_by_id(context.responsible_client)
 
-    return SimpleVocabulary([
-            SimpleTerm(
-                value=u'participate',
-                title=_(u'accept_method_participate',
-                        default=u"process in issuer's dossier")),
+    # decision it's a forwarding or a task
+    if context.task_type == 'forwarding_task_type':
+        return SimpleVocabulary([
+                SimpleTerm(
+                    value=u'forwarding_participate',
+                    title=_(u'accept_method_forwarding_participate',
+                            default=u"... store in ${client}'s inbox.",
+                            mapping={'client': client.title})),
 
-            SimpleTerm(
-                value=u'existing_dossier',
-                title=_(u'accept_method_existing_dossier',
-                        default=u'file in existing dossier in ${client}',
-                        mapping={'client': client.title})),
+                SimpleTerm(
+                    value=u'existing_dossier',
+                    title=_(u'accept_method_forwarding_existing_dossier',
+                            default=u"... store in  ${client}'s inbox and process in an existing dossier on ${client}",
+                            mapping={'client': client.title})),
 
-            SimpleTerm(
-                value=u'new_dossier',
-                title=_(u'accept_method_new_dossier',
-                        default=u'file in new dossier in ${client}',
-                        mapping={'client': client.title}))])
+                SimpleTerm(
+                    value=u'new_dossier',
+                    title=_(u'accept_method_forwarding_new_dossier',
+                            default=u"... store in  ${client}'s inbox and process in a new dossier on ${client}",
+                            mapping={'client': client.title}))])
+
+    else:
+        return SimpleVocabulary([
+                SimpleTerm(
+                    value=u'participate',
+                    title=_(u'accept_method_participate',
+                            default=u"process in issuer's dossier")),
+
+                SimpleTerm(
+                    value=u'existing_dossier',
+                    title=_(u'accept_method_existing_dossier',
+                            default=u'file in existing dossier in ${client}',
+                            mapping={'client': client.title})),
+
+                SimpleTerm(
+                    value=u'new_dossier',
+                    title=_(u'accept_method_new_dossier',
+                            default=u'file in new dossier in ${client}',
+                            mapping={'client': client.title}))])
 
 
 class IChooseMethodSchema(Schema):
@@ -119,6 +141,13 @@ class ChooseMethodStepForm(AcceptWizardFormMixin, Form):
 
     step_name = 'accept_choose_method'
 
+    @property
+    def label(self):
+        if self.context.task_type == 'forwarding_task_type':
+             _(u'title_accept_forwarding', u'Accept forwarding')
+
+        return  _(u'title_accept_task', u'Accept task')
+
     @buttonAndHandler(_(u'button_continue', default=u'Continue'),
                       name='save')
     def handle_continue(self, action):
@@ -127,17 +156,41 @@ class ChooseMethodStepForm(AcceptWizardFormMixin, Form):
         if not errors:
             oguid = ISuccessorTaskController(self.context).get_oguid()
 
+            # set forwarding flag
+            if self.context.task_type == 'forwarding_task_type':
+                is_forwarding = True
+            else:
+                is_forwarding = False
+
             dm = getUtility(IWizardDataStorage)
             dmkey = 'accept:%s' % oguid
+            dm.set(dmkey, u'is_forwarding', is_forwarding)
             dm.update(dmkey, data)
 
             method = data.get('method')
+
             if method == 'participate':
                 accept_task_with_response(self.context, data['text'])
                 IStatusMessage(self.request).addStatusMessage(
                     _(u'The task has been accepted.'), 'info')
                 return self.request.response.redirect(
                     self.context.absolute_url())
+
+            elif method == 'forwarding_participate':
+                """only store the forwarding in the inbox and
+                create a successor forwrding"""
+
+                info = getUtility(IContactInformation)
+                client = info.get_client_by_id(
+                    self.context.responsible_client)
+
+                # push session data to target client
+                dm.push_to_remote_client(dmkey, client.client_id)
+
+                url = '%s/@@accept_store_in_inbox?oguid=%s' % (
+                    client.public_url,
+                    oguid)
+                return self.request.RESPONSE.redirect(url)
 
             elif method == 'existing_dossier':
                 info = getUtility(IContactInformation)
@@ -184,6 +237,9 @@ class ChooseMethodStepForm(AcceptWizardFormMixin, Form):
                 self.request.set('form.widgets.text', text)
 
         super(ChooseMethodStepForm, self).updateWidgets()
+        if self.context.task_type == 'forwarding_task_type':
+            self.widgets.get('method').label = _(
+                u'label_accept_forwarding_choose_method', default="Accept forwarding and ...")
 
 
 class ChooseMethodStepView(FormWrapper, grok.View):

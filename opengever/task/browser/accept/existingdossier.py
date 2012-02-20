@@ -12,6 +12,8 @@ from opengever.base.source import RepositoryPathSourceBinder
 from opengever.task import _
 from opengever.task.browser.accept.main import AcceptWizardFormMixin
 from opengever.task.browser.accept.utils import accept_task_with_successor
+from opengever.task.browser.accept.utils import accept_forwarding_with_successor
+from opengever.task.browser.accept.utils import assign_forwarding_to_dossier
 from plone.directives.form import Schema
 from plone.z3cform.layout import FormWrapper
 from z3c.form.button import buttonAndHandler
@@ -94,14 +96,38 @@ class ChooseDossierStepForm(AcceptWizardFormMixin, Form):
         if not errors:
             oguid = self.request.get('oguid')
             key = 'accept:%s' % oguid
-            text = getUtility(IWizardDataStorage).get(key, 'text')
-            task = accept_task_with_successor(
-                data['dossier'], oguid, text)
+            dm = getUtility(IWizardDataStorage)
+            text = dm.get(key, 'text')
 
-            IStatusMessage(self.request).addStatusMessage(
-                _(u'The task has been copied to the selected dossier and '
-                  u'accepted.'), 'info')
-            self.request.RESPONSE.redirect(task.absolute_url())
+            # forwarding
+            if dm.get(key, 'is_forwarding'):
+                if dm.get(key, 'is_only_assign'):
+                    task = assign_forwarding_to_dossier(
+                        self.context, oguid, data['dossier'], text)
+                    IStatusMessage(self.request).addStatusMessage(
+                        _(u'The forwarding is now assigned to the dossier'),
+                        'info')
+                    self.request.RESPONSE.redirect(
+                        '%s/edit' % task.absolute_url())
+
+                else:
+                    task = accept_forwarding_with_successor(
+                        self.context, oguid, text, dossier = data['dossier'])
+                    IStatusMessage(self.request).addStatusMessage(
+                        _(u'The forwarding has been stored in the local inbox '
+                          u'and the succesor task has been created'), 'info')
+                    self.request.RESPONSE.redirect(
+                        '%s/edit' % task.absolute_url())
+
+            # task
+            else:
+                task = accept_task_with_successor(
+                    data['dossier'], oguid, text)
+
+                IStatusMessage(self.request).addStatusMessage(
+                    _(u'The task has been copied to the selected dossier and '
+                      u'accepted.'), 'info')
+                self.request.RESPONSE.redirect(task.absolute_url())
 
     @buttonAndHandler(_(u'button_cancel', default=u'Cancel'), name='cancel')
     def handle_cancel(self, action):
