@@ -5,6 +5,9 @@ Changelog
 2.0.1 (unreleased)
 ------------------
 
+- Added French translations
+  [ttschanz]
+
 - Update tooltiphelper. It now removes HTML-tags.
   [ttschanz]
 
