@@ -1,0 +1,172 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2011-01-12 08:51+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0\n"
+"Preferred-Encodings: utf-8 latin1\n"
+"Domain: DOMAIN\n"
+
+msgid "Description"
+msgstr "Description"
+
+#: ./opengever/tasktemplates/profiles/default/types/opengever.tasktemplates.tasktemplate.xml
+msgid "TaskTemplate"
+msgstr "Modèle pour tâches"
+
+#: ./opengever/tasktemplates/profiles/default/types/opengever.tasktemplates.tasktemplatefolder.xml
+msgid "TaskTemplateFolder"
+msgstr "Procédé standard"
+
+msgid "Title"
+msgstr "Titre"
+
+#: ./opengever/tasktemplates/browser/form.pt:19
+msgid "add tasktemplate"
+msgstr "Ajouter modèle des tâches"
+
+#: ./opengever/tasktemplates/browser/form.pt:22
+msgid "choose template"
+msgstr "Choisir modèle"
+
+#. Default: "Interactive users"
+#: ./opengever/tasktemplates/vocabularies.py:49
+msgid "client_interactive_users"
+msgstr "Utilisateur interactif"
+
+#. Default: "Common"
+#: ./opengever/tasktemplates/content/tasktemplate.py:16
+msgid "fieldset_common"
+msgstr "En général"
+
+#: ./opengever/tasktemplates/content/tasktemplate.py:72
+msgid "help_deadline"
+msgstr "Délai en jours à partir de la date de début de la tâche"
+
+#: ./opengever/tasktemplates/content/tasktemplate.py:38
+msgid "help_issuer"
+msgstr "Choisissez le mandant. Vous pouvez aussi choisir les utilisateurs interactifs \"responsable\" ou \"collaborateur\""
+
+#: ./opengever/tasktemplates/content/tasktemplate.py:86
+msgid "help_preselected"
+msgstr "Ce modèle fait parti du choix standard des procédés standards"
+
+#: ./opengever/tasktemplates/content/tasktemplate.py:65
+msgid "help_responsible"
+msgstr "Choisissez le mandataire. Si vous choisissez l'option \"utilisateur interactif\" dans le champ \"Client du mandataire\" vous pouvez aussi choisir \"responsable\"ou \"collaborateur\" dans ce champ "
+
+#: ./opengever/tasktemplates/content/tasktemplate.py:57
+msgid "help_responsible_client"
+msgstr "Choisissez le client du mandataire ou choisissez \"utilisateur interactif\""
+
+#: ./opengever/tasktemplates/content/tasktemplate.py:46
+msgid "help_task_type"
+msgstr "Choisisez le type de tâche."
+
+#: ./opengever/tasktemplates/content/tasktemplate.py:79
+msgid "help_text"
+msgstr "Saisissez une instruction de travail détaillée ou un commentaire"
+
+#: ./opengever/tasktemplates/content/tasktemplate.py:31
+msgid "help_title"
+msgstr "Nom de la tâche"
+
+#. Default: "Current user"
+#: ./opengever/tasktemplates/vocabularies.py:17
+msgid "interactive_user_current_user"
+msgstr "Collaborateur"
+
+#. Default: "Responsible"
+#: ./opengever/tasktemplates/vocabularies.py:13
+msgid "interactive_user_responsible"
+msgstr "Responsable"
+
+#. Default: "Continue"
+#: ./opengever/tasktemplates/browser/form.pt:30
+msgid "label_continue"
+msgstr "Continuer"
+
+#. Default: "Created"
+#: ./opengever/tasktemplates/browser/form.py:112
+msgid "label_created"
+msgstr "Date de création"
+
+#. Default: "Deadline in Days"
+#: ./opengever/tasktemplates/browser/tasktemplates.py:46
+#: ./opengever/tasktemplates/content/tasktemplate.py:71
+msgid "label_deadline"
+msgstr "Délai en jours"
+
+#. Default: "Issuer"
+#: ./opengever/tasktemplates/browser/tasktemplates.py:38
+#: ./opengever/tasktemplates/content/tasktemplate.py:37
+msgid "label_issuer"
+msgstr "Mandant"
+
+#. Default: "Preselect"
+#: ./opengever/tasktemplates/browser/tasktemplates.py:49
+#: ./opengever/tasktemplates/content/tasktemplate.py:85
+msgid "label_preselected"
+msgstr "Préséléctionné"
+
+#. Default: "Responsible Client"
+#: ./opengever/tasktemplates/content/tasktemplate.py:55
+msgid "label_resonsible_client"
+msgstr "Mandataire du client"
+
+#. Default: "Responsible"
+#: ./opengever/tasktemplates/content/tasktemplate.py:64
+msgid "label_responsible"
+msgstr "Mandataire"
+
+#. Default: "Responsible"
+#: ./opengever/tasktemplates/browser/tasktemplates.py:42
+msgid "label_responsible_task"
+msgstr "Mandataire"
+
+#. Default: "Review state"
+#: ./opengever/tasktemplates/browser/templatefolders.py:22
+msgid "label_review_state"
+msgstr "Etat"
+
+#. Default: "Task Type"
+#: ./opengever/tasktemplates/content/tasktemplate.py:45
+msgid "label_task_type"
+msgstr "Type de mandat"
+
+#. Default: "Text"
+#: ./opengever/tasktemplates/content/tasktemplate.py:78
+msgid "label_text"
+msgstr "commentaire"
+
+#. Default: "Title"
+#: ./opengever/tasktemplates/browser/form.py:110
+#: ./opengever/tasktemplates/browser/tasktemplates.py:29
+#: ./opengever/tasktemplates/browser/templatefolders.py:18
+msgid "label_title"
+msgstr "Titre"
+
+#. Default: "Yes"
+#: ./opengever/tasktemplates/browser/tasktemplates_templates/view.pt:39
+msgid "label_yes"
+msgstr "Oui"
+
+#. Default: "tasks created"
+#: ./opengever/tasktemplates/browser/form.py:229
+msgid "message_tasks_created"
+msgstr "Toutes les tâches du procédé standard ont été créée"
+
+#. Default: "Yes"
+#: ./opengever/tasktemplates/browser/tasktemplates.py:16
+msgid "preselected_yes"
+msgstr "Oui"
+
+#: ./opengever/tasktemplates/browser/form.pt:23
+msgid "select tasks"
+msgstr "Choisir des tâches"
+

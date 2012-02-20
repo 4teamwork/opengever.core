@@ -5,6 +5,9 @@ Changelog
 2.0.2 (unreleased)
 ------------------
 
+- Added French translations.
+  [ttschanz]
+
 - Removed 'List folder contents' permission from anyone but Manager in
   tasktemplate and tasktemplatefolder workflows.
   [lgraf]
