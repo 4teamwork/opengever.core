@@ -8,6 +8,9 @@ Changelog
 - Use the get_css_class() function for guessing the icon css class.
   [jone]
 
+- Added French translations.
+  [ttschanz]
+
 - linked() helper: Use a special helper for subtasks.
   Issue #1373 Spezielles Icon fuer Unteraufgaben.
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1373
