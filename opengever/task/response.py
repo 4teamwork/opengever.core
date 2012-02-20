@@ -295,7 +295,7 @@ class AddForm(form.AddForm, AutoExtensibleForm):
             intids = getUtility(IIntIds)
             for item in relatedItems:
                 to_id = intids.getId(item)
-                if task.get('relatedItems'):
+                if getattr(task, 'relatedItems'):
                     task.relatedItems.append(RelationValue(to_id))
 
                 else:

@@ -5,6 +5,10 @@ Changelog
 2.2 (unreleased)
 ----------------
 
+- Fixed bug that caused previous relatedItems to be overridden when adding
+  a relation in a task response.
+  [lgraf]
+
 - Use subtask icon in add-menu.
   [jone]
 
