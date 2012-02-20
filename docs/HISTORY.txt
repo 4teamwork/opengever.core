@@ -5,7 +5,8 @@ Changelog
 2.0.2 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Re-enabled folderContents action for users with the right permission
+  [lgraf]
 
 
 2.0.1 (2011-12-06)

@@ -25,7 +25,7 @@
 
         <object name="folderContents" meta_type="CMF Action">
             <property name="permissions">
-                <element value="Manage portal"/>
+                <element value="List folder contents"/>
             </property>
         </object>
 
