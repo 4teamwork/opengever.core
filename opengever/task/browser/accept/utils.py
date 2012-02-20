@@ -75,9 +75,12 @@ def accept_forwarding_with_successor(
 
     # get the inbox
     cat = getToolByName(context, 'portal_catalog')
-    if len(cat(portal_type="opengever.inbox.inbox")) == 0:
+    inboxes = cat(portal_type="opengever.inbox.inbox")
+
+    if len(inboxes) == 0:
         raise Unauthorized()
-    inbox = cat(portal_type="opengever.inbox.inbox")[0].getObject()
+    else:
+        inbox = inboxes[0].getObject()
 
     # transport the remote forwarding to the inbox or actual yearfolder
     transporter = getUtility(ITransporter)
