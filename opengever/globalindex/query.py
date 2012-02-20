@@ -1,9 +1,10 @@
 from opengever.globalindex import Session
+from opengever.globalindex.interfaces import ITaskQuery
 from opengever.globalindex.model.task import Task
 from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy.sql.expression import asc, desc
+from zope.deprecation import deprecated
 from zope.interface import implements
-from opengever.globalindex.interfaces import ITaskQuery
 
 class TaskQuery(object):
     """A global utility for querying opengever tasks.
@@ -118,7 +119,7 @@ class TaskQuery(object):
             return Session().query(Task).filter(Task.assigned_client==client
                                                 ).order_by(asc(sort_on))
 
-    def get_task_for_assigned_client(self, client, sort_on='modified',
+    def get_tasks_for_assigned_client(self, client, sort_on='modified',
                                      sort_order='reverse'):
         """Return all task assigned to the actual client.
         """
@@ -126,4 +127,7 @@ class TaskQuery(object):
         return self._get_tasks_for_assigned_client_query(
             client, sort_on=sort_on, sort_order=sort_order).all()
 
-    get_tasks_for_assigned_client = get_task_for_assigned_client
+    get_task_for_assigned_client = get_tasks_for_assigned_client
+    deprecated(get_task_for_assigned_client,
+               'Use get_tasks_for_assigned_client instead of '
+               'get_task_for_assigned_client (plural).')
