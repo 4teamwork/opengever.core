@@ -1,0 +1,90 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2011-08-19 08:11+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0\n"
+"Language-Code: en\n"
+"Language-Name: English\n"
+"Preferred-Encodings: utf-8 latin1\n"
+"Domain: DOMAIN\n"
+
+#: ./opengever/inbox/profiles/default/actions.xml
+msgid "Forward"
+msgstr "Transmettre"
+
+#: ./opengever/inbox/profiles/default/types/opengever.inbox.forwarding.xml
+msgid "Forwarding"
+msgstr "Transmission"
+
+#: ./opengever/inbox/profiles/default/types/opengever.inbox.inbox.xml
+msgid "Inbox"
+msgstr "Boîte de réception"
+
+#: ./opengever/inbox/profiles/default/types/opengever.inbox.yearfolder.xml
+msgid "YearFolder"
+msgstr "Classeur pour l'année"
+
+#. Default: "Cancel"
+#: ./opengever/inbox/response.py:227
+msgid "cancel"
+msgstr "Annuler"
+
+#. Default: "Error: Please select at least one document to forward"
+#: ./opengever/inbox/forwarding.py:105
+msgid "error_no_document_selected"
+msgstr "Erreur: Choisissez au minimum un document à transmettre, svp."
+
+#. Default: "Common"
+#: ./opengever/inbox/inbox.py:16
+msgid "fieldset_common"
+msgstr "En général"
+
+#: ./opengever/inbox/inbox.py:24
+msgid "help_inbox_group"
+msgstr "Ce goupe est autorisé, dès qu'une tâche est attribuée à la boîte de réception."
+
+#: ./opengever/inbox/forwarding.py:54
+msgid "help_responsible"
+msgstr "Choisissez la personne responsable resp. la boîte de réception du client mentionné ci-dessus."
+
+#. Default: "The successor forwarding was created."
+#: ./opengever/inbox/response.py:287
+msgid "info_created_successor_forwarding"
+msgstr "La transmission suivante a été créée."
+
+#. Default: "The forwarding was moved to the yearfolder ${year}"
+#: ./opengever/inbox/response.py:216
+msgid "info_forwarding_move_to_yearfolder"
+msgstr "La transmission été déplacée vers \"Terminé ${year}\""
+
+#. Default: "Inbox Group"
+#: ./opengever/inbox/inbox.py:23
+msgid "label_inbox_group"
+msgstr "Boîte de réception Groupe"
+
+#. Default: "Responsible"
+#: ./opengever/inbox/forwarding.py:53
+msgid "label_responsible"
+msgstr "Mandataire"
+
+#. Default: "Target dossier"
+#: ./opengever/inbox/response.py:45
+msgid "label_target_dossier"
+msgstr "Dossier de destination"
+
+#. Default: "Save"
+#: ./opengever/inbox/response.py:86
+msgid "save"
+msgstr "Enregistrer"
+
+#. Default: "Closed ${year}"
+#: ./opengever/inbox/response.py:186
+msgid "yearfolder_title"
+msgstr "Terminé ${year}"
+
