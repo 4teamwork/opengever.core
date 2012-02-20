@@ -302,7 +302,7 @@ msgstr ""
 
 #: ./opengever/dossier/behaviors/dossier.py:54
 msgid "help_keywords"
-msgstr "Schlagworte zur Umschreibung eines Dossiers. Nicht zu verwechseln mit der Ordnungsposition"
+msgstr "Schlagwörter zur Umschreibung eines Dossiers. Nicht zu verwechseln mit der Ordnungsposition"
 
 #: ./opengever/dossier/behaviors/dossier.py:144
 msgid "help_number_of_containers"
