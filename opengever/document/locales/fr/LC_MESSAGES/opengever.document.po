@@ -1,0 +1,401 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2011-12-12 08:56+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0\n"
+"Preferred-Encodings: utf-8 latin1\n"
+"Domain: DOMAIN\n"
+
+#: ./opengever/document/profiles/default/actions.xml
+msgid "Cancel"
+msgstr "Annuler"
+
+#: ./opengever/document/checkout/cancel.py:82
+msgid "Cancel checkout: ${title}"
+msgstr "Annuler le checkout pour  ${title}"
+
+#: ./opengever/document/checkout/checkin.py:64
+msgid "Checked in: ${title}"
+msgstr "Checkin du document:  ${title}"
+
+#: ./opengever/document/browser/edit.py:63
+#: ./opengever/document/checkout/checkout.py:106
+msgid "Checked out: ${title}"
+msgstr "Checkout du document:  ${title}"
+
+#: ./opengever/document/profiles/default/actions.xml
+msgid "Checkin"
+msgstr "Checkin"
+
+#: ./opengever/document/profiles/default/actions.xml
+msgid "Checkout"
+msgstr "Checkout"
+
+#: ./opengever/document/checkout/cancel.py:74
+msgid "Could not cancel checkout on document ${title}"
+msgstr "Checkout du document ${title} inabouti"
+
+#: ./opengever/document/checkout/checkin.py:70
+msgid "Could not check in ${title}, it is not a document."
+msgstr "${title} n'est pas un document, par consequent checkin n'a pas abouti"
+
+#: ./opengever/document/checkout/checkin.py:57
+msgid "Could not check in document ${title}"
+msgstr "Checkin de ${title} n'a pas abouti"
+
+#: ./opengever/document/browser/edit.py:53
+#: ./opengever/document/checkout/checkout.py:97
+msgid "Could not check out document ${title}"
+msgstr "Checkout de ${title} n'a pas abouti"
+
+#: ./opengever/document/checkout/checkout.py:89
+msgid "Could not check out object: ${title}, it is not a document"
+msgstr "${title} n'est pas un document, par consequet checkout n'a pas abouti"
+
+#: ./opengever/document/profiles/default/actions.xml
+msgid "Create Task"
+msgstr "Constituer une tâche"
+
+#: ./opengever/document/profiles/default/types/opengever.document.document.xml
+msgid "Document"
+msgstr "Document"
+
+#: ./opengever/document/checkout/manager.py:216
+#: ./opengever/document/checkout/revert.py:26
+msgid "Reverted file to version ${version_id}"
+msgstr "Remis le document à la version ${version_id} "
+
+#: ./opengever/document/profiles/default/actions.xml
+msgid "Send as email"
+msgstr "Envoyer comme email"
+
+#: ./opengever/document/browser/edit.py:28
+msgid "The Document ${title} has no File"
+msgstr "Le dodument  ${title} ne contient pas de fichier"
+
+#: ./opengever/document/browser/edit.py:47
+msgid "The Document is allready checked out by: ${userid}"
+msgstr "Le document a déjà un checkout par  ${userid}"
+
+#: ./opengever/document/checkout/cancel.py:29
+#: ./opengever/document/checkout/checkin.py:171
+#: ./opengever/document/checkout/checkout.py:34
+msgid "You have not selected any documents"
+msgstr "Vous n'avez  sélectionné aucun document"
+
+#: ./opengever/document/templates/sendasemail.pt:14
+msgid "attachments"
+msgstr "Annexes"
+
+#. Default: "Cancel"
+#: ./opengever/document/checkout/checkin.py:88
+msgid "button_cancel"
+msgstr "Annuler"
+
+#. Default: "Checkin"
+#: ./opengever/document/checkout/checkin.py:42
+msgid "button_checkin"
+msgstr "Checkin"
+
+#. Default: "Send"
+#: ./opengever/document/mailing.py:188
+msgid "button_send"
+msgstr "Envoyer"
+
+#. Default: "Cancel"
+#: ./opengever/document/mailing.py:224
+msgid "cancel_back"
+msgstr "Annuler"
+
+#. Default: "copy of"
+#: ./opengever/document/document.py:459
+msgid "copy_of"
+msgstr "Copie de"
+
+#. Default: "You don't select a file and document is also not                 preserved in paper_form, please correct it."
+#: ./opengever/document/document.py:216
+msgid "error_file_and_preserved_as_paper"
+msgstr "Vous n'avez pas sélectionné un fichier ni conservé un document en version papier, merci de corriger cela."
+
+#. Default: "Either the title or the file is required."
+#: ./opengever/document/document.py:205
+msgid "error_title_or_file_required"
+msgstr "Un titre ou un fichier est requis."
+
+#. Default: "Common"
+#: ./opengever/document/behaviors.py:42
+#: ./opengever/document/document.py:69
+msgid "fieldset_common"
+msgstr "En général"
+
+#. Default: "Checkin Documents"
+#: ./opengever/document/checkout/checkin.py:40
+msgid "heading_checkin_comment_form"
+msgstr "Faire le checkin des documents."
+
+#. Default: "Send as email"
+#: ./opengever/document/mailing.py:184
+msgid "heading_send_as_email"
+msgstr "Envoyer le document comme email"
+
+#: ./opengever/document/document.py:168
+msgid "help_archival_file"
+msgstr "Version en format d'archivage du fichier original"
+
+#: ./opengever/document/document.py:137
+msgid "help_author"
+msgstr ""
+
+#. Default: "Describe, why you checkin the selected documents"
+#: ./opengever/document/checkout/checkin.py:28
+msgid "help_checkin_journal_comment"
+msgstr "Modification(s) faite(s) dans le document ?"
+
+#: ./opengever/document/document.py:196
+msgid "help_delivery_date"
+msgstr "Date, à laquelle le document a été envoyé par écrit"
+
+#: ./opengever/document/document.py:96
+msgid "help_description"
+msgstr ""
+
+#. Default: "Is the Document Digital Availabe"
+#: ./opengever/document/document.py:152
+msgid "help_digitally_available"
+msgstr "Est-ce que le document numérisé est disponible ?"
+
+#: ./opengever/document/document.py:118
+msgid "help_document_date"
+msgstr "Date de création du document"
+
+#: ./opengever/document/document.py:127
+msgid "help_document_type"
+msgstr ""
+
+#: ./opengever/document/document.py:145
+msgid "help_file"
+msgstr "Ficher, ajouté dans un dossier"
+
+#: ./opengever/document/document.py:112
+msgid "help_foreign_reference"
+msgstr "Référence sur le dossier correspondant de l'expéditeur"
+
+#: ./opengever/document/document.py:103
+msgid "help_keywords"
+msgstr ""
+
+#: ./opengever/document/mailing.py:177
+msgid "help_message"
+msgstr ""
+
+#: ./opengever/document/document.py:160
+msgid "help_preserved_as_paper"
+msgstr "Conserver sous forme papier"
+
+#: ./opengever/document/document.py:182
+msgid "help_preview"
+msgstr "Aperçu en ligne du document original"
+
+#: ./opengever/document/document.py:188
+msgid "help_receipt_date"
+msgstr "Date de réception du document écrit"
+
+#: ./opengever/document/mailing.py:168
+msgid "help_receivers"
+msgstr ""
+
+#: ./opengever/document/mailing.py:173
+msgid "help_subject"
+msgstr ""
+
+#: ./opengever/document/document.py:175
+msgid "help_thumbnail"
+msgstr ""
+
+#. Default: "Mails sent"
+#: ./opengever/document/mailing.py:219
+msgid "info_mails_sent"
+msgstr "Les emails sont envoyés"
+
+#. Default: "Initial version"
+#: ./opengever/document/checkout/handlers.py:36
+msgid "initial_document_version_change_note"
+msgstr "Document créé (version initiale)"
+
+#. Default: "Archival File"
+#: ./opengever/document/document.py:167
+msgid "label_archival_file"
+msgstr "Fichier archivé"
+
+#. Default: "Author"
+#: ./opengever/document/document.py:136
+#: ./opengever/document/document_templates/overview.pt:22
+msgid "label_author"
+msgstr "auteur"
+
+#. Default: "by ${author}"
+#: ./opengever/document/viewlets/byline.pt:15
+msgid "label_by_author"
+msgstr "Auteur: ${author}"
+
+#. Default: "Checked out"
+#: ./opengever/document/checkout/viewlets_templates/checkedoutviewlet.pt:5
+msgid "label_checked_out"
+msgstr "Avec checkout"
+
+#. Default: "Journal Comment"
+#: ./opengever/document/checkout/checkin.py:26
+msgid "label_checkin_journal_comment"
+msgstr "Commentaire de l'historique"
+
+#. Default: "creator"
+#: ./opengever/document/document_templates/overview.pt:26
+msgid "label_creator"
+msgstr "Créateur / Auteur"
+
+#. Default: "Date of delivery"
+#: ./opengever/document/document.py:195
+#: ./opengever/document/document_templates/overview.pt:59
+msgid "label_delivery_date"
+msgstr "Date de remise"
+
+#. Default: "Description"
+#: ./opengever/document/document.py:95
+#: ./opengever/document/document_templates/overview.pt:30
+msgid "label_description"
+msgstr "Description"
+
+#. Default: "Digital Available"
+#: ./opengever/document/document.py:151
+#: ./opengever/document/document_templates/overview.pt:45
+#: ./opengever/document/document_templates/view.pt:70
+msgid "label_digitally_available"
+msgstr "Disponble sous forme numérique"
+
+#. Default: "document"
+#: ./opengever/document/document_templates/overview.pt:10
+msgid "label_document"
+msgstr "Document"
+
+#. Default: "Document Date"
+#: ./opengever/document/document.py:117
+#: ./opengever/document/document_templates/overview.pt:14
+msgid "label_document_date"
+msgstr "Date du document"
+
+#. Default: "Document Type"
+#: ./opengever/document/document.py:126
+#: ./opengever/document/document_templates/overview.pt:18
+msgid "label_document_type"
+msgstr "Type de document"
+
+#. Default: "File"
+#: ./opengever/document/document.py:144
+#: ./opengever/document/document_templates/overview.pt:38
+msgid "label_file"
+msgstr "Fichier"
+
+#. Default: "Foreign Reference"
+#: ./opengever/document/document.py:111
+#: ./opengever/document/document_templates/overview.pt:34
+msgid "label_foreign_reference"
+msgstr "Code externe"
+
+#. Default: "Keywords"
+#: ./opengever/document/document.py:102
+msgid "label_keywords"
+msgstr "Mots-clés"
+
+#. Default: "Message"
+#: ./opengever/document/mailing.py:176
+msgid "label_message"
+msgstr "message"
+
+#. Default: "no"
+#: ./opengever/document/document_templates/overview.pt:47
+msgid "label_no"
+msgstr "Non"
+
+#. Default: "Preserved as paper"
+#: ./opengever/document/document.py:159
+#: ./opengever/document/document_templates/overview.pt:50
+msgid "label_preserved_as_paper"
+msgstr "Conserver sous forme papier"
+
+#. Default: "Preview"
+#: ./opengever/document/document.py:181
+msgid "label_preview"
+msgstr "Aperçu"
+
+#. Default: "Date of receipt"
+#: ./opengever/document/document.py:187
+#: ./opengever/document/document_templates/overview.pt:55
+msgid "label_receipt_date"
+msgstr "Date d'entrée"
+
+#. Default: "Receivers"
+#: ./opengever/document/mailing.py:167
+msgid "label_receivers"
+msgstr "Destinataire"
+
+#. Default: "Reference Number:"
+#: ./opengever/document/viewlets/byline.pt:49
+msgid "label_reference_number"
+msgstr "Numéro de référence"
+
+#. Default: "Related Documents"
+#: ./opengever/document/behaviors.py:18
+msgid "label_related_documents"
+msgstr "Documents liés"
+
+#. Default: "Sequence Number:"
+#: ./opengever/document/viewlets/byline.pt:39
+msgid "label_sequence_number"
+msgstr "Numéro courant"
+
+#. Default: "from"
+#: ./opengever/document/viewlets/byline.pt:25
+msgid "label_start_byline"
+msgstr "Date du document"
+
+#. Default: "Subject"
+#: ./opengever/document/mailing.py:172
+msgid "label_subject"
+msgstr "Objet"
+
+#. Default: "Thumbnail"
+#: ./opengever/document/document.py:174
+msgid "label_thumbnail"
+msgstr "Vignette"
+
+#. Default: "Title"
+#: ./opengever/document/document.py:90
+msgid "label_title"
+msgstr "Titre"
+
+#. Default: "yes"
+#: ./opengever/document/document_templates/overview.pt:46
+msgid "label_yes"
+msgstr "Oui"
+
+#. Default: "This item is being checked out by ${creator}."
+#: ./opengever/document/checkout/viewlets_templates/checkedoutviewlet.pt:9
+msgid "message_checkout_info"
+msgstr "Ce document a un checkout de ${creator}"
+
+#. Default: "referenced documents"
+#: ./opengever/document/document_templates/overview.pt:63
+msgid "referenced_documents"
+msgstr "Documents de référence"
+
+#. Default: "expired"
+#: ./opengever/document/viewlets/byline.pt:34
+msgid "time_expired"
+msgstr "Périmé"
+
