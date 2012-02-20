@@ -33,7 +33,7 @@ class ForwardingTransitionController(TaskTransitionController):
     @guard('forwarding-transition-assign-to-dossier')
     @guard('forwarding-transition-reassign')
     @guard('forwarding-transition-close')
-    def is_assign_to_dossier_or_reassing_possible(self):
+    def is_assign_to_dossier_or_reassign_possible(self):
         """Check it the user is in the inbox group of the current client.
         """
         return self._is_current_inbox_group_user()
@@ -84,4 +84,3 @@ class ForwardingTransitionController(TaskTransitionController):
         if self.request.get('X-CREATING-SUCCESSOR') == True:
             return True
         return False
-
