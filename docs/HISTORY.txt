@@ -12,6 +12,9 @@ Changelog
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1347/
   [jone]
 
+- Added French translations.
+  [ttschanz]
+
 - Tasklisting PDF optimizations.
   Issue #1331 Anpassung am PDF-Aufgabenverzeichnis
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1331/
