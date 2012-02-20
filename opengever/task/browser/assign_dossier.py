@@ -97,9 +97,6 @@ class ChooseMethodStepForm(AssignToDossierWizardFormMixin, Form):
                 client = info.get_client_by_id(
                     self.context.responsible_client)
 
-                # push session data to target client
-                dm.push_to_remote_client(dmkey, client.client_id)
-
                 url = '%s/@@accept_choose_dossier?oguid=%s' % (
                     client.public_url,
                     oguid)
@@ -110,9 +107,6 @@ class ChooseMethodStepForm(AssignToDossierWizardFormMixin, Form):
                 client = info.get_client_by_id(
                     self.context.responsible_client)
                 oguid = ISuccessorTaskController(self.context).get_oguid()
-
-                # push session data to target client
-                dm.push_to_remote_client(dmkey, client.client_id)
 
                 url = '/'.join((
                         client.public_url,
