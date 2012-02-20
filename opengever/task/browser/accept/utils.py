@@ -125,7 +125,7 @@ def accept_forwarding_with_successor(
         # copy documents and map the intids
         doc_transporter = getUtility(ITaskDocumentsTransporter)
         intids_mapping = doc_transporter.copy_documents_from_direct_task(
-        successor_forwarding, task)
+            successor_forwarding, task)
 
         # copy the responses
         response_transporter = IResponseTransporter(task)
@@ -146,14 +146,14 @@ def accept_forwarding_with_successor(
                     'transition': 'forwarding-transition-accept'}
 
     response = remote_request(predecessor.client_id,
-                      '@@store_forwarding_in_yearfolder',
-                      path=predecessor.physical_path,
-                      data=request_data)
+                              '@@store_forwarding_in_yearfolder',
+                              path=predecessor.physical_path,
+                              data=request_data)
 
     if response.read().strip() != 'OK':
         raise Exception('Adding the response and changing the '
                         'workflow state on the predecessor forwarding '
-                    'failed.')
+                        'failed.')
 
     if dossier:
         # when a successor task exists, we close also the successor forwarding
@@ -194,7 +194,7 @@ def assign_forwarding_to_dossier(
     # copy documents and map the intids
     doc_transporter = getUtility(ITaskDocumentsTransporter)
     intids_mapping = doc_transporter.copy_documents_from_direct_task(
-    forwarding_obj, task)
+        forwarding_obj, task)
 
     # copy the responses
     response_transporter = IResponseTransporter(task)
