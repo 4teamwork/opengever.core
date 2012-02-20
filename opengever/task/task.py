@@ -1,4 +1,4 @@
-from Acquisition import aq_parent, aq_inner
+from Acquisition import aq_inner, aq_parent
 from Products.CMFCore.interfaces import IActionSucceededEvent
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone.CatalogTool import sortable_title
@@ -9,29 +9,23 @@ from ftw.datepicker.widget import DatePickerFieldWidget
 from ftw.table import helper
 from ftw.table.basesource import BaseTableSource
 from ftw.table.interfaces import ITableSource, ITableSourceConfig
-from opengever.base.browser.helper import client_title_helper
-from opengever.base.browser.helper import css_class_from_brain
 from opengever.base.interfaces import ISequenceNumber
 from opengever.base.source import DossierPathSourceBinder
-from opengever.globalindex.utils import indexed_task_link
 from opengever.ogds.base.autocomplete_widget import AutocompleteFieldWidget
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.ogds.base.utils import get_client_id
 from opengever.tabbedview import _ as TMF
 from opengever.tabbedview.browser.tabs import Documents
-from opengever.tabbedview.browser.tabs import OpengeverTab
 from opengever.tabbedview.helper import external_edit_link
 from opengever.tabbedview.helper import linked
 from opengever.tabbedview.helper import readable_ogds_author
 from opengever.tabbedview.helper import readable_ogds_user
-from opengever.task import _
 from opengever.task import util
+from opengever.task import _
 from opengever.task.helper import path_checkbox
-from opengever.task.interfaces import ISuccessorTaskController
 from operator import attrgetter
 from plone.dexterity.content import Container
 from plone.directives import form, dexterity
-from plone.directives.dexterity import DisplayForm
 from plone.indexer import indexer
 from plone.indexer.interfaces import IIndexer
 from z3c.form.interfaces import HIDDEN_MODE
@@ -265,92 +259,6 @@ def responsible_client_default_value(data):
     return get_client_id()
 
 
-class Overview(DisplayForm, OpengeverTab):
-    grok.context(ITask)
-    grok.name('tabbedview_view-overview')
-    grok.template('overview')
-
-    def css_class_from_brain(self, item):
-        """used for display icons in the view"""
-        return css_class_from_brain(item)
-
-    def getSubTasks(self):
-        tasks = self.context.getFolderContents(
-            full_objects=True,
-            contentFilter={'portal_type': 'opengever.task.task'})
-        return tasks
-
-    def getContainingTask(self):
-        parent = aq_parent(aq_inner(self.context))
-        if parent.portal_type == self.context.portal_type:
-            return [parent, ]
-        return None
-
-    def responsible_link(self):
-        """Render the responsible of the current task as link.
-        """
-        info = getUtility(IContactInformation)
-        task = ITask(self.context)
-
-        if not len(self.groups[0].widgets['responsible_client'].value):
-            # in some special cases the responsible client may not be set.
-            return info.render_link(task.responsible)
-
-        if len(info.get_clients()) <= 1:
-            # We have a single client setup, so we don't need to display
-            # the client here.
-            return info.render_link(task.responsible)
-
-        client = client_title_helper(
-            task, self.groups[0].widgets['responsible_client'].value[0])
-
-        return client + ' / ' + info.render_link(task.responsible)
-
-    def subtask_responsible(self, subtask):
-        """Render the responsible of a subtask (object) as text.
-        """
-        if not ITask.providedBy(subtask) and \
-                subtask.portal_type != 'opengever.task.task':
-            # It is not a task, it may be a document or something else. So
-            # we do nothing.
-            return None
-
-        info = getUtility(IContactInformation)
-
-        if not subtask.responsible_client or len(info.get_clients()) <= 1:
-            # No responsible client is set yet or we have a single client
-            # setup.
-            return info.describe(subtask.responsible)
-
-        else:
-            client = client_title_helper(subtask, subtask.responsible_client)
-            return client + ' / ' + info.describe(subtask.responsible)
-
-    def issuer_link(self):
-        info = getUtility(IContactInformation)
-        task = ITask(self.context)
-
-        if task.predecessor:
-            client_id = task.predecessor.split(':')[0]
-        else:
-            client_id = get_client_id()
-
-        client = client_title_helper(task, client_id)
-
-        return client + ' / ' + info.render_link(task.issuer)
-
-    def getPredecessorTask(self):
-        controller = ISuccessorTaskController(self.context)
-        return controller.get_predecessor()
-
-    def getSuccessorTasks(self):
-        controller = ISuccessorTaskController(self.context)
-        return controller.get_successors()
-
-    def render_indexed_task(self, item):
-        return indexed_task_link(item, display_client=True)
-
-
 class IRelatedDocumentsTableSourceConfig(ITableSourceConfig):
     """Related documents table source config
     """
@@ -389,12 +297,18 @@ class RelatedDocumentsTableSource(grok.MultiAdapter, BaseTableSource):
         objects = []
         for brain in brains:
             objects.append(brain.getObject())
-        for item in self.config.context.relatedItems:
 
+        # Related documents
+        for item in self.config.context.relatedItems:
             obj = item.to_object
             if (obj.portal_type == 'opengever.document.document'\
                     or obj.portal_type == 'ftw.mail.mail'):
+                # Store the information if the object was listed as
+                # a relation or not, so the tabbed view helper can
+                # set a special icon for related documents
+                obj._v__is_relation = True
                 objects.append(obj)
+
         objects = self.extend_query_with_ordering(objects)
         if self.config.filter_text:
             objects = self.extend_query_with_textfilter(
@@ -473,12 +387,14 @@ class RelatedDocumentsTableSource(grok.MultiAdapter, BaseTableSource):
     def search_results(self, query):
         return query
 
+
 def readable_checked_out_user(obj, user):
     """ Return the readable user who checked out the obj
     """
     catalog = obj.portal_catalog
     user = getMultiAdapter((obj, catalog), IIndexer, name='checked_out')()
     return readable_ogds_user(obj, user)
+
 
 class RelatedDocuments(Documents):
 
@@ -643,6 +559,15 @@ def sequence_number(obj):
     """ Indexer for the sequence_number """
     return obj._sequence_number
 grok.global_adapter(sequence_number, name='sequence_number')
+
+
+@indexer(ITask)
+def is_subtask(obj):
+    """ is_subtask indexer
+    """
+    parent = aq_parent(aq_inner(obj))
+    return ITask.providedBy(parent)
+grok.global_adapter(is_subtask, name='is_subtask')
 
 
 class SearchableTextExtender(grok.Adapter):

@@ -268,10 +268,6 @@
    <permission-role>Administrator</permission-role>
   </permission-map>
   <permission-map name="opengever.document: Add document" acquired="False">
-   <permission-role>Editor</permission-role>
-   <permission-role>Manager</permission-role>
-   <permission-role>Owner</permission-role>
-   <permission-role>Administrator</permission-role>
   </permission-map>
   <permission-map name="opengever.task: Add task" acquired="False">
   </permission-map>

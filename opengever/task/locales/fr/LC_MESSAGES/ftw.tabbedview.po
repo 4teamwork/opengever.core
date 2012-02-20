@@ -13,8 +13,5 @@ msgstr ""
 "Domain: DOMAIN\n"
 
 msgid "related_documents"
-msgstr "Verwande Dokumente"
-
-msgid "relateddocuments"
-msgstr "Dokumente"
+msgstr "Documents liés"
 

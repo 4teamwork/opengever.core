@@ -1,15 +1,13 @@
 from Acquisition import aq_inner
-from Products.CMFCore.utils import getToolByName
-from Products.Five.browser import BrowserView
-from Products.statusmessages.interfaces import IStatusMessage
 from five import grok
 from opengever.base.browser.helper import css_class_from_obj
 from opengever.base.browser.opengeverview import OpengeverView
 from opengever.base.source import DossierPathSourceBinder
 from opengever.globalindex.interfaces import ITaskQuery
 from opengever.ogds.base.interfaces import IContactInformation
-from opengever.task import _
+from opengever.tabbedview.helper import linked
 from opengever.task import util
+from opengever.task import _
 from opengever.task.adapters import IResponseContainer, Response
 from opengever.task.interfaces import IResponseAdder
 from opengever.task.interfaces import IWorkflowStateSyncer
@@ -18,6 +16,9 @@ from opengever.task.task import ITask
 from plone.autoform.form import AutoExtensibleForm
 from plone.memoize.view import memoize
 from plone.z3cform import layout
+from Products.CMFCore.utils import getToolByName
+from Products.Five.browser import BrowserView
+from Products.statusmessages.interfaces import IStatusMessage
 from z3c.form import form, field, button
 from z3c.form.browser import radio
 from z3c.form.interfaces import HIDDEN_MODE
@@ -293,7 +294,8 @@ class AddForm(form.AddForm, AutoExtensibleForm):
             intids = getUtility(IIntIds)
             for item in relatedItems:
                 to_id = intids.getId(item)
-                if task.get('relatedItems'):
+                item._v__is_relation = True
+                if getattr(task, 'relatedItems'):
                     task.relatedItems.append(RelationValue(to_id))
 
                 else:
@@ -303,7 +305,7 @@ class AddForm(form.AddForm, AutoExtensibleForm):
                                         _(u'label_related_items',
                                           default=u"Related Items"),
                                         '',
-                                        item.Title())
+                                        linked(item, item.Title()))
 
             # change workflow state of task
             if data.get('transition'):
