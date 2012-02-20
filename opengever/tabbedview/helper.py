@@ -3,6 +3,7 @@ from Products.CMFCore.interfaces._tools import IMemberData
 from Products.PluggableAuthService.interfaces.authservice import IPropertiedUser
 from datetime import date as dt
 from ftw.mail.utils import get_header
+from opengever.base.browser.helper import get_css_class
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.ogds.base.utils import get_client_id
 from plone.i18n.normalizer.interfaces import IIDNormalizer
@@ -125,51 +126,11 @@ def linked(item, value):
     url_method = lambda: '#'
     if hasattr(item, 'getURL'):
         url_method = item.getURL
-        is_brain = True
     elif hasattr(item, 'absolute_url'):
         url_method = item.absolute_url
-        is_brain = False
 
     # Construct CSS class
-    css_class = None
-
-    normalize = getUtility(IIDNormalizer).normalize
-    if item.portal_type == 'opengever.document.document':
-        if hasattr(item, '_v__is_relation'):
-            # Document was listed as a relation, so we use a special icon.
-            css_class = "icon-dokument_verweis"
-
-        else:
-            # It's a document, we therefore want to display an icon
-            # for the mime type of the contained file
-            icon = getattr(item, 'getIcon', '')
-            if callable(icon):
-                icon = icon()
-
-            if not icon == '':
-                # Strip '.gif' from end of icon name and remove leading 'icon_'
-                filetype = icon[:icon.rfind('.')].replace('icon_', '')
-                css_class = 'icon-%s' % normalize(filetype)
-            else:
-                # Fallback for unknown file type
-                css_class = "contenttype-%s" % normalize(item.portal_type)
-
-    elif item.portal_type == 'opengever.task.task':
-        if is_brain:
-            is_subtask = item.is_subtask
-            is_remote_task = item.client_id != item.assigned_client
-        else:
-            is_subtask = aq_parent(aq_inner(item)).portal_type == 'opengever.task.task'
-            is_remote_task = item.responsible_client != get_client_id()
-
-        if is_subtask:
-            css_class = 'icon-task-subtask'
-
-        elif is_remote_task:
-            css_class = 'icon-task-remote-task'
-
-    if css_class is None:
-        css_class = "contenttype-%s" % normalize(item.portal_type)
+    css_class = get_css_class(item)
 
     # Construct breadcrumbs
     breadcrumb_titles = _breadcrumbs_from_item(item)
