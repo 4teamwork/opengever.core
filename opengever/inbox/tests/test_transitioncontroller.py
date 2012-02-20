@@ -79,16 +79,16 @@ class TestForwardingTransitionController(MockTestCase):
             ForwardingTransitionController(f1, mock_request)._is_current_inbox_group_user())
 
     def test_is_assign_to_dossier_or_reassing_possible(self):
-        controller, controller_mock, f1 = self._create_forwarding_controller()
+        controller, mock, f1 = self._create_forwarding_controller()
         with self.mocker.order():
-            self.expect(controller_mock._is_current_inbox_group_user()).result(False)
-            self.expect(controller_mock._is_current_inbox_group_user()).result(True)
+            self.expect(mock._is_current_inbox_group_user()).result(False)
+            self.expect(mock._is_current_inbox_group_user()).result(True)
 
-            self.expect(controller_mock._is_current_inbox_group_user()).result(False)
-            self.expect(controller_mock._is_current_inbox_group_user()).result(True)
+            self.expect(mock._is_current_inbox_group_user()).result(False)
+            self.expect(mock._is_current_inbox_group_user()).result(True)
 
-            self.expect(controller_mock._is_current_inbox_group_user()).result(False)
-            self.expect(controller_mock._is_current_inbox_group_user()).result(True)
+            self.expect(mock._is_current_inbox_group_user()).result(False)
+            self.expect(mock._is_current_inbox_group_user()).result(True)
 
         self.replay()
         transitions = [
@@ -101,26 +101,26 @@ class TestForwardingTransitionController(MockTestCase):
             self.assertTrue(controller.is_transition_possible(transition))
 
     def test_is_accept_possible(self):
-        controller, controller_mock, f1 = self._create_forwarding_controller()
+        controller, mock, f1 = self._create_forwarding_controller()
         with self.mocker.order():
-            self.expect(controller_mock._is_multiclient_setup()).result(False)
+            self.expect(mock._is_multiclient_setup()).result(False)
 
-            self.expect(controller_mock._is_multiclient_setup()).result(True)
-            self.expect(controller_mock._is_task_on_responsible_client()).result(False)
-            self.expect(controller_mock._is_succesor_forwarding_proccses()).result(False)
+            self.expect(mock._is_multiclient_setup()).result(True)
+            self.expect(mock._is_task_on_responsible_client()).result(False)
+            self.expect(mock._is_succesor_forwarding_proccses()).result(False)
 
-            self.expect(controller_mock._is_multiclient_setup()).result(True)
-            self.expect(controller_mock._is_task_on_responsible_client()).result(False)
-            self.expect(controller_mock._is_succesor_forwarding_proccses()).result(True)
-            self.expect(controller_mock._is_inbox_group_user()).result(False)
+            self.expect(mock._is_multiclient_setup()).result(True)
+            self.expect(mock._is_task_on_responsible_client()).result(False)
+            self.expect(mock._is_succesor_forwarding_proccses()).result(True)
+            self.expect(mock._is_inbox_group_user()).result(False)
 
-            self.expect(controller_mock._is_multiclient_setup()).result(True)
-            self.expect(controller_mock._is_task_on_responsible_client()).result(True)
-            self.expect(controller_mock._is_inbox_group_user()).result(False)
+            self.expect(mock._is_multiclient_setup()).result(True)
+            self.expect(mock._is_task_on_responsible_client()).result(True)
+            self.expect(mock._is_inbox_group_user()).result(False)
 
-            self.expect(controller_mock._is_multiclient_setup()).result(True)
-            self.expect(controller_mock._is_task_on_responsible_client()).result(True)
-            self.expect(controller_mock._is_inbox_group_user()).result(True)
+            self.expect(mock._is_multiclient_setup()).result(True)
+            self.expect(mock._is_task_on_responsible_client()).result(True)
+            self.expect(mock._is_inbox_group_user()).result(True)
 
         self.replay()
         transition = 'forwarding-transition-accept'
@@ -140,6 +140,6 @@ class TestForwardingTransitionController(MockTestCase):
             ['', 'plone', 'f1']).count(0, None)
 
         controller = ForwardingTransitionController(f1, {})
-        controller_mock = self.mocker.patch(controller)
+        mock = self.mocker.patch(controller)
 
-        return controller, controller_mock, f1
+        return controller, mock, f1
