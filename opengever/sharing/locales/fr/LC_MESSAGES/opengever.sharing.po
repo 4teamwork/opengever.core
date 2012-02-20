@@ -1,0 +1,66 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2011-10-17 13:55+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0\n"
+"Language-Code: en\n"
+"Language-Name: English\n"
+"Preferred-Encodings: utf-8 latin1\n"
+"Domain: DOMAIN\n"
+
+#: ./opengever/sharing/browser/sharing.py:22
+msgid "sharing_contributor"
+msgstr "Ajouter"
+
+#: ./opengever/sharing/browser/sharing.py:17
+msgid "sharing_dossier_administrator"
+msgstr "Gérer le système de classement"
+
+#: ./opengever/sharing/browser/sharing.py:13
+msgid "sharing_dossier_contributor"
+msgstr "Ajouter dossiers"
+
+#: ./opengever/sharing/browser/sharing.py:14
+msgid "sharing_dossier_editor"
+msgstr "Modifier dossiers"
+
+#: ./opengever/sharing/browser/sharing.py:16
+msgid "sharing_dossier_publisher"
+msgstr "Réactiver dossiers"
+
+#: ./opengever/sharing/browser/sharing.py:12
+msgid "sharing_dossier_reader"
+msgstr "Lire dossiers"
+
+#: ./opengever/sharing/browser/sharing.py:15
+msgid "sharing_dossier_reviewer"
+msgstr "Terminer dossiers"
+
+#: ./opengever/sharing/browser/sharing.py:23
+msgid "sharing_editor"
+msgstr "Modifier"
+
+#: ./opengever/sharing/browser/sharing.py:21
+msgid "sharing_reader"
+msgstr "Lire"
+
+#: ./opengever/sharing/browser/sharing.py:24
+msgid "sharing_role_manager"
+msgstr "Gérer rôles"
+
+#. Default: "Can administrate"
+#: ./opengever/sharing/utilities.py:14
+msgid "title_can_administrate"
+msgstr "Administrer"
+
+#. Default: "Can publish"
+#: ./opengever/sharing/utilities.py:22
+msgid "title_can_publish"
+msgstr "Publier"
+

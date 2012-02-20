@@ -5,6 +5,9 @@ Changelog
 2.0.4 (unreleased)
 ------------------
 
+- Added French translations
+  [ttschanz]
+
 - Adjust the _principal_search_results wrapper,
   so that it constrain the principal list on groups from the current client,
   and made this functionality also configurable in the registry.
