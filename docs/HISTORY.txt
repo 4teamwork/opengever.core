@@ -5,6 +5,9 @@ Changelog
 2.0.3 (unreleased)
 ------------------
 
+- Added French translations.
+  [ttschanz]
+
 - Administrator role now may resolve or reactivate dossiers
   [lgraf]
 
