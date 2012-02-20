@@ -39,7 +39,6 @@ import urllib
 
 class AcceptWizardNewDossierFormMixin(AcceptWizardFormMixin):
 
-
     @property
     def steps(self):
         # Default: 3 steps. But if more than one dossier type is addable on
@@ -122,7 +121,6 @@ WidgetValidatorDiscriminators(
     RepositoryfolderValidator,
     field=ISelectRepositoryfolderSchema['repositoryfolder'])
 grok.global_adapter(RepositoryfolderValidator)
-
 
 
 class SelectRepositoryfolderStepForm(AcceptWizardNewDossierFormMixin, Form):
@@ -324,7 +322,7 @@ class DossierAddFormView(FormWrapper, grok.View):
         # creation.
 
         steptitle = pd_mf(u'Add ${name}',
-                           mapping={'name': self.ti.Title()})
+                          mapping={'name': self.ti.Title()})
 
         class WrappedForm(AcceptWizardNewDossierFormMixin, formclass):
             step_name = 'accept_dossier_add_form'
@@ -355,21 +353,30 @@ class DossierAddFormView(FormWrapper, grok.View):
                 if dm.get(dmkey, 'is_forwarding'):
                     if dm.get(dmkey, 'is_only_assign'):
                         task = assign_forwarding_to_dossier(
-                            self.context, oguid, dossier, dm.get(dmkey, 'text'))
+                            self.context, oguid, dossier, dm.get(
+                                dmkey, 'text'))
+
                         IStatusMessage(self.request).addStatusMessage(
-                            _(u'The forwarding is now assigned to the new dossier'),
+                            _(u'The forwarding is now assigned to the new '
+                              'dossier'),
                             'info')
-                        self.request.RESPONSE.redirect('%s/edit' % task.absolute_url())
+                        self.request.RESPONSE.redirect(
+                            '%s/edit' % task.absolute_url())
+
                     else:
                         forwarding = accept_forwarding_with_successor(
                             self.context,
                             oguid,
                             dm.get(dmkey, 'text'),
                             dossier=dossier)
+
                         IStatusMessage(self.request).addStatusMessage(
-                            _(u'The forwarding has been stored in the local inbox'
-                              u'and the succesor task has been created'), 'info')
-                        self.request.RESPONSE.redirect(forwarding.absolute_url())
+                            _(u'The forwarding has been stored in the '
+                              u'local inbox and the succesor task has been'
+                              u' created'), 'info')
+
+                        self.request.RESPONSE.redirect(
+                            forwarding.absolute_url())
                 else:
                     # create the successor task, accept the predecessor
                     task = accept_task_with_successor(
@@ -378,8 +385,8 @@ class DossierAddFormView(FormWrapper, grok.View):
                         dm.get(dmkey, 'text'))
 
                     IStatusMessage(self.request).addStatusMessage(
-                        _(u'The new dossier has been created and the task has '
-                          u'been copied to the new dossier.'), 'info')
+                        _(u'The new dossier has been created and the task '
+                          u'has been copied to the new dossier.'), 'info')
 
                     self.request.RESPONSE.redirect(task.absolute_url())
 
