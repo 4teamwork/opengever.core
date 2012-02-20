@@ -1,14 +1,15 @@
 from Products.CMFPlone.interfaces import IPloneSiteRoot
 from ftw.testing import MockTestCase
-from mocker import ANY
 from opengever.inbox.browser.transitioncontroller import ForwardingTransitionController
 from opengever.ogds.base.interfaces import IContactInformation
+from xml.dom.minidom import parse
 from zope.app.component.hooks import setSite
 from zope.component import getSiteManager
 from zope.interface import alsoProvides
+import os
 
 
-class TestTaskTransitionController(MockTestCase):
+class TestForwardingTransitionController(MockTestCase):
 
     def setUp(self):
         # we need to have a site root for making the get_client_id cachecky
@@ -16,6 +17,34 @@ class TestTaskTransitionController(MockTestCase):
         root = self.create_dummy(getSiteManager=getSiteManager, id='root')
         alsoProvides(root, IPloneSiteRoot)
         setSite(root)
+
+    def test_transitions_in_defintion_use_controller(self):
+        import opengever.inbox
+        path = os.path.join(
+            os.path.dirname(os.path.abspath(opengever.inbox.__file__)),
+            'profiles', 'default', 'workflows',
+            'opengever_forwarding_workflow', 'definition.xml')
+        self.assertTrue(os.path.isfile(path), 'File not found: %s' % path)
+
+        doc = parse(path)
+
+        for node in doc.getElementsByTagName('transition'):
+            transition = node.getAttribute('transition_id')
+            # self.assertEqual(node.getAttribute('title'), transition)
+
+            actions = node.getElementsByTagName('action')
+            self.assertEqual(len(actions), 1)
+            self.assertEqual(actions[0].firstChild.nodeValue, transition)
+            self.assertEqual(
+                actions[0].getAttribute('url'),
+                '%(content_url)s/@@forwarding_transition_controller?'
+                'transition=' + transition)
+
+            guard = node.getElementsByTagName('guard-expression')[0]
+            self.assertEqual(
+                guard.firstChild.nodeValue,
+                "python: here.restrictedTraverse('@@forwarding_transition_"
+                "controller').is_transition_possible('%s')" % transition)
 
     def test_is_succesor_forwarding_proccses(self):
         f1= self.mocker.mock()
