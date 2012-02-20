@@ -1,12 +1,12 @@
-from Acquisition import aq_inner, aq_parent
 from AccessControl import Unauthorized
+from Acquisition import aq_inner, aq_parent
 from Products.CMFCore.utils import getToolByName
 from datetime import datetime
 from five import grok
 from opengever.globalindex.interfaces import ITaskQuery
-from opengever.inbox import _
 from opengever.ogds.base.interfaces import ITransporter
 from opengever.ogds.base.utils import remote_request, get_client_id
+from opengever.task import _
 from opengever.task.interfaces import ISuccessorTaskController
 from opengever.task.interfaces import ITaskDocumentsTransporter
 from opengever.task.task import ITask
