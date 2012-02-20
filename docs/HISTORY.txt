@@ -5,6 +5,9 @@ Changelog
 2.2 (unreleased)
 ----------------
 
+- Added French translations
+  [ttschanz]
+
 - Add is_subtask catalog index.
   Issue #1373 Spezielles Icon fuer Unteraufgaben.
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1373

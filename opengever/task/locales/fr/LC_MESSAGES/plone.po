@@ -1,10 +1,10 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: 1.0\n"
+"Project-Id-Version: PACKAGE VERSION\n"
 "POT-Creation-Date: 2010-09-30 13:26+0000\n"
-"PO-Revision-Date: 2011-01-27 10:25+0100\n"
-"Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
-"Language-Team: 4teamwork <info@4teamwork.ch>\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -13,71 +13,71 @@ msgstr ""
 "Domain: DOMAIN\n"
 
 msgid "Add response"
-msgstr "Antwort"
+msgstr "Réponse"
 
 msgid "Attach remote document"
-msgstr "Kopie Dokument aus eigenem Mandant"
+msgstr "Copie d'un document de votre département"
 
 msgid "Create successor task"
-msgstr "Folgeaufgabe erstellen"
+msgstr "Créer tâche suivante"
 
 msgid "Delegate task"
-msgstr "Delegieren"
+msgstr ""
 
 msgid "task-state-cancelled"
-msgstr "Storniert"
+msgstr "Annulé"
 
 msgid "task-state-in-progress"
-msgstr "In Arbeit"
+msgstr "En traitement"
 
 msgid "task-state-new-successor"
-msgstr "Folgeaufgabe wird erstellt"
+msgstr "Tâche consécutive créée"
 
 msgid "task-state-open"
-msgstr "Offen"
+msgstr "Ouvert"
 
 msgid "task-state-rejected"
-msgstr "Abgelehnt"
+msgstr "Refusé"
 
 msgid "task-state-resolved"
-msgstr "Erledigt"
+msgstr "Terminé"
 
 msgid "task-state-tested-and-closed"
-msgstr "Abgeschlossen"
+msgstr "Terminé"
 
 msgid "task-transition-cancelled-open"
-msgstr "Wieder eröffnen"
+msgstr "Rouvrir"
 
 msgid "task-transition-in-progress-resolved"
-msgstr "Erledigen"
+msgstr "Accomplir"
 
 msgid "task-transition-in-progress-tested-and-closed"
-msgstr "Abschliessen"
+msgstr "Terminer"
 
 msgid "task-transition-open-cancelled"
-msgstr "Stornieren"
+msgstr "Annuler"
 
 msgid "task-transition-open-in-progress"
-msgstr "Akzeptieren"
+msgstr "Accepter"
 
 msgid "task-transition-open-rejected"
-msgstr "Ablehnen"
+msgstr "Refuser"
 
 msgid "task-transition-open-resolved"
-msgstr "Erledigen"
+msgstr "Accomplir"
 
 msgid "task-transition-open-tested-and-closed"
-msgstr "Abschliessen"
+msgstr "Terminer"
 
 msgid "task-transition-reassign"
-msgstr "Neu zuweisen"
+msgstr "Attribuer à nouveau"
 
 msgid "task-transition-rejected-open"
-msgstr "Wieder eröffnen"
+msgstr "Rouvrir"
 
 msgid "task-transition-resolved-in-progress"
-msgstr "Überarbeiten"
+msgstr ""
 
 msgid "task-transition-resolved-tested-and-closed"
-msgstr "Abschliessen"
+msgstr "Terminer"
 
