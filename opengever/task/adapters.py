@@ -181,6 +181,8 @@ class TaskPostFactoryMenu(grok.MultiAdapter):
         for factory in factories:
             if factory['title'] == u'Task':
                 factory['title'] = _(u'Subtask')
+                factory['extra']['class'] = 'icon-task-subtask'
+
             elif factory['extra']['id'] == u'ftw-mail-mail':
                 factories.remove(factory)
         return factories

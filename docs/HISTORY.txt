@@ -5,6 +5,9 @@ Changelog
 2.2 (unreleased)
 ----------------
 
+- Use subtask icon in add-menu.
+  [jone]
+
 - Added French translations
   [ttschanz]
 
