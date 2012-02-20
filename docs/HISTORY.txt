@@ -5,6 +5,9 @@ Changelog
 2.0.2 (unreleased)
 ------------------
 
+- Give "List folder contents" to Administrator role in repo workflows
+  [lgraf]
+
 - Added French translations
   [ttschanz]
 
