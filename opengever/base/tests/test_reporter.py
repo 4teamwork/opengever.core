@@ -9,7 +9,7 @@ from opengever.base.reporter import format_datetime, get_date_style
 from opengever.base.reporter import readable_author
 from opengever.ogds.base.interfaces import IContactInformation
 import xlrd
-
+from Missing import Value as MissingValue
 
 class TestReportingController(MockTestCase):
 
@@ -43,6 +43,7 @@ class TestReportingController(MockTestCase):
         for i in range(2):
             brain = self.stub()
             self.expect(brain.Title).result('Objekt %i' % (i))
+            self.expect(brain.missing).result(MissingValue)
             self.expect(brain.start).result(
                 datetime(2012, 2, 25) + timedelta(i))
             self.expect(brain.responsible).result('Test user %i' % (i))
@@ -55,6 +56,8 @@ class TestReportingController(MockTestCase):
 
         test_attributes = [
             {'id':'Title', 'title':_('label_title', default='Title')},
+            #test missingvalue
+            {'id':'missing', 'missing':'Missing',},
             {'id':'start', 'title':_('label_start', default='Start'),
              'transform': format_datetime, 'style':get_date_style()},
             {'id':'responsible',
@@ -77,16 +80,16 @@ class TestReportingController(MockTestCase):
         labels = sheet.row(0)
         self.assertEquals(
             [cell.value for cell in labels],
-            [u'Title', u'Start', u'Responsible', u'Review state'])
+            [u'Title', u'', u'Start', u'Responsible', u'Review state'])
 
         row1 = sheet.row(1)
         self.assertEquals(
             [cell.value for cell in row1],
-            [u'Objekt 0', u'25.02.2012', u'Describe text for a user',
+            [u'Objekt 0', u'', u'25.02.2012', u'Describe text for a user',
              u'dossier-state-activ'])
 
         row2 = sheet.row(2)
         self.assertEquals(
             [cell.value for cell in row2],
-            [u'Objekt 1', u'26.02.2012', u'Describe text for a user',
+            [u'Objekt 1', u'', u'26.02.2012', u'Describe text for a user',
              u'dossier-state-activ'])
