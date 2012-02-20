@@ -33,9 +33,12 @@ def get_css_class(item):
 
     normalize = getUtility(IIDNormalizer).normalize
     if item.portal_type == 'opengever.document.document':
-        if hasattr(item, '_v__is_relation'):
+        if getattr(item, '_v__is_relation', False):
             # Document was listed as a relation, so we use a special icon.
             css_class = "icon-dokument_verweis"
+            # Immediatly set the volatile attribute to False so it doesn't
+            # affect other views using the same object instance
+            item._v__is_relation = False
 
         else:
             # It's a document, we therefore want to display an icon
