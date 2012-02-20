@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2012-02-09 13:48+0000\n"
+"POT-Creation-Date: 2012-02-20 18:43+0000\n"
 "PO-Revision-Date: 2012-02-20 10:35+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -20,7 +20,7 @@ msgstr "${num} Dokumente wurden kopiert."
 msgid "${subtask_num} subtasks were create."
 msgstr "${subtask_num} Unteraufgaben wurden erstellt."
 
-#: ./opengever/task/response.py:510
+#: ./opengever/task/response.py:508
 msgid "Changes saved to response id ${response_id}."
 msgstr "Änderungen an der Antwort ${response_id} wurden gespeichert"
 
@@ -32,41 +32,41 @@ msgstr "Löschen"
 msgid "Edit"
 msgstr "Bearbeiten"
 
-#: ./opengever/task/response.py:319
+#: ./opengever/task/response.py:317
 #: ./opengever/task/statesyncer.py:110
 #: ./opengever/task/util.py:142
 msgid "Issue state"
 msgstr "Status"
 
-#: ./opengever/task/response.py:538
+#: ./opengever/task/response.py:536
 msgid "No response selected for removal."
 msgstr "Es wurde keine Antwort fürs Löschen selektiert"
 
-#: ./opengever/task/response.py:501
+#: ./opengever/task/response.py:499
 msgid "No response selected for saving."
 msgstr "Es wurde keine Antwort fürs Speichern selektiert"
 
-#: ./opengever/task/response.py:181
+#: ./opengever/task/response.py:179
 msgid "No response selected."
 msgstr "Kein Antwort selektiert"
 
-#: ./opengever/task/response.py:560
+#: ./opengever/task/response.py:558
 msgid "Removed response id ${response_id}."
 msgstr "Antwort ${response_id} gelöscht"
 
-#: ./opengever/task/response.py:553
+#: ./opengever/task/response.py:551
 msgid "Response id ${response_id} does not exist so it cannot be removed."
 msgstr "Antowrt ${response_id} existiert nicht und konnte deshalb nicht gelöscht werden"
 
-#: ./opengever/task/response.py:195
+#: ./opengever/task/response.py:193
 msgid "Response id ${response_id} does not exist."
 msgstr "Antwort ${response_id} exisitert nicht"
 
-#: ./opengever/task/response.py:545
+#: ./opengever/task/response.py:543
 msgid "Response id ${response_id} is no integer so it cannot be removed."
 msgstr "Antwort id ${response_id} ist keine Zahl und konnte deshalb nicht gelöscht werden"
 
-#: ./opengever/task/response.py:189
+#: ./opengever/task/response.py:187
 msgid "Response id ${response_id} is no integer."
 msgstr "Antwort ${response_id} ist keine Zahl"
 
@@ -90,12 +90,9 @@ msgstr "Die Dokumente wurde an den Auftraggeber geliefert und die Aufgaben wurde
 msgid "The forwarding has been stored in the local inbox"
 msgstr "Die Weiterleitung wurde im lokalen Eingangskorb gespeichert."
 
-#: ./opengever/task/browser/accept/existingdossier.py:115
+#: ./opengever/task/browser/accept/existingdossier.py:117
+#: ./opengever/task/browser/accept/newdossier.py:375
 msgid "The forwarding has been stored in the local inbox and the succesor task has been created"
-msgstr ""
-
-#: ./opengever/task/browser/accept/newdossier.py:370
-msgid "The forwarding has been stored in the local inboxand the succesor task has been created"
 msgstr ""
 
 #: ./opengever/task/browser/accept/existingdossier.py:108
@@ -106,7 +103,7 @@ msgstr "Die Weiterleitung wurde nun dem Dossier zugewiesen."
 msgid "The forwarding is now assigned to the new dossier"
 msgstr "Die Weiterleitung wurde nun dem neuen Dossier zugewiesen."
 
-#: ./opengever/task/browser/accept/newdossier.py:381
+#: ./opengever/task/browser/accept/newdossier.py:390
 msgid "The new dossier has been created and the task has been copied to the new dossier."
 msgstr "Das neue Dossier wurde erstellt und die akzeptierte Aufgabe wurde in das neue Dossier kopiert."
 
@@ -114,15 +111,15 @@ msgstr "Das neue Dossier wurde erstellt und die akzeptierte Aufgabe wurde in das
 msgid "The task has been accepted."
 msgstr "Die Aufgabe wurde akzeptiert."
 
-#: ./opengever/task/browser/accept/existingdossier.py:124
+#: ./opengever/task/browser/accept/existingdossier.py:128
 msgid "The task has been copied to the selected dossier and accepted."
 msgstr "Die Aufgabe wurde kopiert und akzeptiert."
 
-#: ./opengever/task/response.py:532
+#: ./opengever/task/response.py:530
 msgid "You are not allowed to delete responses."
 msgstr "Sie haben keine Berechtigung Antworten zu löschen"
 
-#: ./opengever/task/response.py:495
+#: ./opengever/task/response.py:493
 msgid "You are not allowed to edit responses."
 msgstr "Sie haben keine Berechtigung Antworten zu editieren"
 
@@ -134,7 +131,7 @@ msgstr "Sie sind nicht dem Auftragnehmer-Mandanten (${client}) zugewiesen. Sie k
 msgid "You cannot add documents to the selected dossier. Either the dossier is closed or you do not have the privileges."
 msgstr "Sie haben nicht genügend Berechtigungen um Dokumente im ausgewählten Dossier hinzuzfügen. Möglicherweise ist das Dossier bereits abgeschlossen."
 
-#: ./opengever/task/browser/accept/newdossier.py:116
+#: ./opengever/task/browser/accept/newdossier.py:115
 msgid "You cannot add dossiers in the selected repository folder. Either you do not have the privileges or the repository folder contains another repository folder."
 msgstr "Sie können in der ausgewählten Ordnungsposition keine Dossiers erstellen. Die Ordnungsposition enthält entweder weitere Ordnungspositionen oder Sie besitzen nicht die erforderlichen Berechtigungen."
 
@@ -188,7 +185,7 @@ msgid "box_last_modified"
 msgstr "zuletzt verändert"
 
 #. Default: "Assign"
-#: ./opengever/task/browser/assign.py:72
+#: ./opengever/task/browser/assign.py:73
 msgid "button_assign"
 msgstr "Zuweisen"
 
@@ -198,15 +195,15 @@ msgid "button_attach"
 msgstr "Anhängen"
 
 #. Default: "Cancel"
-#: ./opengever/task/browser/accept/existingdossier.py:128
+#: ./opengever/task/browser/accept/existingdossier.py:132
 #: ./opengever/task/browser/accept/main.py:222
-#: ./opengever/task/browser/accept/newdossier.py:156
+#: ./opengever/task/browser/accept/newdossier.py:154
 msgid "button_cancel"
 msgstr "Abbrechen"
 
 #. Default: "Continue"
 #: ./opengever/task/browser/accept/main.py:151
-#: ./opengever/task/browser/accept/newdossier.py:133
+#: ./opengever/task/browser/accept/newdossier.py:131
 #: ./opengever/task/browser/assign_dossier.py:74
 msgid "button_continue"
 msgstr "Weiter"
@@ -218,13 +215,13 @@ msgstr "Kopieren"
 
 #. Default: "Save"
 #: ./opengever/task/browser/accept/existingdossier.py:91
-#: ./opengever/task/browser/accept/newdossier.py:334
+#: ./opengever/task/browser/accept/newdossier.py:332
 #: ./opengever/task/browser/close.py:200
 msgid "button_save"
 msgstr "Speichern"
 
 #. Default: "Cancel"
-#: ./opengever/task/response.py:343
+#: ./opengever/task/response.py:341
 msgid "cancel"
 msgstr "Abbrechen"
 
@@ -233,7 +230,7 @@ msgstr "Abbrechen"
 msgid "containing_task"
 msgstr "Hauptaufgabe:"
 
-#: ./opengever/task/response.py:284
+#: ./opengever/task/response.py:282
 msgid "date_of_completion"
 msgstr "Erledigungsdatum"
 
@@ -258,7 +255,7 @@ msgid "error_copying_related_documents_not_possible"
 msgstr "Es ist nicht möglich, die verknüpften Dokumente zu kopieren."
 
 #. Default: "No changes: same responsible selected"
-#: ./opengever/task/browser/assign.py:79
+#: ./opengever/task/browser/assign.py:80
 msgid "error_same_responsible"
 msgstr "Keine Änderung, da kein anderer Auftragnehmer ausgewählt wurde."
 
@@ -288,12 +285,12 @@ msgid "help_accept_select_dossier"
 msgstr "Wählen Sie das Dossier aus, in welchem Sie die Aufgabe bearbeiten wollen."
 
 #. Default: "Select the type for the new dossier."
-#: ./opengever/task/browser/accept/newdossier.py:225
+#: ./opengever/task/browser/accept/newdossier.py:223
 msgid "help_accept_select_dossier_type"
 msgstr "Wählen Sie den Typ des neuen Dossiers aus."
 
 #. Default: "Select the repository folder within the dossier should be created."
-#: ./opengever/task/browser/accept/newdossier.py:82
+#: ./opengever/task/browser/accept/newdossier.py:81
 msgid "help_accept_select_repositoryfolder"
 msgstr "Wählen Sie die Ordnungsposition aus, in welchem das neue Dossier erstellt werden soll."
 
@@ -332,7 +329,7 @@ msgstr "Der hier eingegebene Text erscheint in der Antwort, die die Aufgabe absc
 msgid "help_copy_documents"
 msgstr ""
 
-#: ./opengever/task/response.py:57
+#: ./opengever/task/response.py:55
 #: ./opengever/task/task.py:132
 msgid "help_date_of_completion"
 msgstr "Das Datum an dem die Aufgabe beendet wurde"
@@ -376,18 +373,18 @@ msgstr ""
 msgid "help_predecessor"
 msgstr ""
 
-#: ./opengever/task/browser/assign.py:51
-#: ./opengever/task/response.py:51
+#: ./opengever/task/browser/assign.py:52
+#: ./opengever/task/response.py:49
 msgid "help_response"
 msgstr ""
 
 #. Default: "select an responsible Manger"
-#: ./opengever/task/browser/assign.py:44
+#: ./opengever/task/browser/assign.py:45
 #: ./opengever/task/task.py:117
 msgid "help_responsible"
 msgstr "Wählen Sie die verantwortliche Person aus, die dem oben gewählten Mandanten angehört."
 
-#: ./opengever/task/browser/assign.py:37
+#: ./opengever/task/browser/assign.py:38
 #: ./opengever/task/task.py:109
 msgid "help_responsible_client"
 msgstr "Wählen Sie zuerst den Mandanten des Auftragnehmers, anschliessend den Auftragnehmer."
@@ -430,9 +427,9 @@ msgstr "Geben Sie eine detaillierte Arbeitsanweisung oder einen Kommentar ein"
 msgid "help_title"
 msgstr "Der Name der Aufgabe"
 
-#: ./opengever/task/browser/assign.py:29
+#: ./opengever/task/browser/assign.py:30
 #: ./opengever/task/browser/complete.py:85
-#: ./opengever/task/response.py:44
+#: ./opengever/task/response.py:42
 msgid "help_transition"
 msgstr ""
 
@@ -465,12 +462,12 @@ msgid "label_accept_select_dossier"
 msgstr "Zieldossier"
 
 #. Default: "Dossier type"
-#: ./opengever/task/browser/accept/newdossier.py:224
+#: ./opengever/task/browser/accept/newdossier.py:222
 msgid "label_accept_select_dossier_type"
 msgstr "Dossier Typ"
 
 #. Default: "Repository folder"
-#: ./opengever/task/browser/accept/newdossier.py:80
+#: ./opengever/task/browser/accept/newdossier.py:79
 msgid "label_accept_select_repositoryfolder"
 msgstr "Ordnungsposition"
 
@@ -505,7 +502,7 @@ msgid "label_copy_documents"
 msgstr "Mit der Aufgabe verknüpfte Dokumente in den Eingangskorb des Ziel-Mandanten kopieren."
 
 #. Default: "Date of completion"
-#: ./opengever/task/response.py:56
+#: ./opengever/task/response.py:54
 #: ./opengever/task/task.py:131
 msgid "label_date_of_completion"
 msgstr "Erledigungsdatum"
@@ -588,20 +585,20 @@ msgid "label_receipt_date"
 msgstr "Eingangsdatum"
 
 #. Default: "Related Items"
-#: ./opengever/task/response.py:62
+#: ./opengever/task/response.py:60
 #: ./opengever/task/task.py:145
 msgid "label_related_items"
 msgstr "Verweise"
 
 #. Default: "Responsible Client"
-#: ./opengever/task/browser/assign.py:35
+#: ./opengever/task/browser/assign.py:36
 #: ./opengever/task/task.py:107
 msgid "label_resonsible_client"
 msgstr "Mandant des Auftragnehmers"
 
 #. Default: "Response"
 #: ./opengever/task/browser/accept/main.py:103
-#: ./opengever/task/browser/assign.py:50
+#: ./opengever/task/browser/assign.py:51
 #: ./opengever/task/browser/assign_dossier.py:61
 msgid "label_response"
 msgstr "Antworttext"
@@ -612,7 +609,7 @@ msgid "label_response_transition"
 msgstr "Aktion"
 
 #. Default: "Responsible"
-#: ./opengever/task/browser/assign.py:43
+#: ./opengever/task/browser/assign.py:44
 #: ./opengever/task/task.py:116
 #: ./opengever/task/task_templates/overview.pt:37
 msgid "label_responsible"
@@ -666,9 +663,9 @@ msgid "label_title"
 msgstr "Titel"
 
 #. Default: "Transition"
-#: ./opengever/task/browser/assign.py:28
+#: ./opengever/task/browser/assign.py:29
 #: ./opengever/task/browser/complete.py:84
-#: ./opengever/task/response.py:43
+#: ./opengever/task/response.py:41
 msgid "label_transition"
 msgstr "Aktion"
 
@@ -706,31 +703,31 @@ msgid "responses"
 msgstr "Antworten:"
 
 #. Default: "Save"
-#: ./opengever/task/response.py:240
+#: ./opengever/task/response.py:238
 msgid "save"
 msgstr "Speichern"
 
 #. Default: "Step 1"
 #: ./opengever/task/browser/accept/existingdossier.py:85
 #: ./opengever/task/browser/accept/main.py:38
-#: ./opengever/task/browser/accept/newdossier.py:53
+#: ./opengever/task/browser/accept/newdossier.py:52
 msgid "step_1"
 msgstr "Schritt 1"
 
 #. Default: "Step 2"
 #: ./opengever/task/browser/accept/existingdossier.py:88
-#: ./opengever/task/browser/accept/newdossier.py:56
+#: ./opengever/task/browser/accept/newdossier.py:55
 #: ./opengever/task/browser/close.py:49
 msgid "step_2"
 msgstr "Schritt 2"
 
 #. Default: "Step 3"
-#: ./opengever/task/browser/accept/newdossier.py:59
+#: ./opengever/task/browser/accept/newdossier.py:58
 msgid "step_3"
 msgstr "Schritt 3"
 
 #. Default: "Step 4"
-#: ./opengever/task/browser/accept/newdossier.py:62
+#: ./opengever/task/browser/accept/newdossier.py:61
 msgid "step_4"
 msgstr "Schritt 4"
 
@@ -780,7 +777,7 @@ msgid "title_accept_task"
 msgstr "Aufgabe akzeptieren"
 
 #. Default: "Assign task"
-#: ./opengever/task/browser/assign.py:70
+#: ./opengever/task/browser/assign.py:71
 msgid "title_assign_task"
 msgstr "Neu zuweisen"
 
@@ -830,7 +827,7 @@ msgid "title_error_no_response"
 msgstr "Fehler: keine Antworten zum editieren gefunden"
 
 #. Default: "Closed ${year}"
-#: ./opengever/task/browser/accept/utils.py:43
+#: ./opengever/task/browser/accept/utils.py:44
 msgid "yearfolder_title"
 msgstr "Abgeschlossen ${year}"
 
