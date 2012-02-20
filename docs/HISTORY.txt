@@ -5,6 +5,9 @@ Changelog
 2.1 (unreleased)
 ----------------
 
+- Added French translations
+  [ttschanz]
+
 - Inbox assigned tasks view: Listing tasks in all states, not just open
   [lgraf]
 
