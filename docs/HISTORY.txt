@@ -5,6 +5,15 @@ Changelog
 2.0.3 (unreleased)
 ------------------
 
+- Added French translations.
+  [ttschanz]
+
+- Administrator role now may resolve or reactivate dossiers
+  [lgraf]
+
+- When resolving dossiers, only issue filing numbers for active dossiers
+  [lgraf]
+
 - Fixed tests: Unregister prevent_deletion subscriber in tests
   [lgraf]
 
