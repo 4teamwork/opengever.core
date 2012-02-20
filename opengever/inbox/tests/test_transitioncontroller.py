@@ -30,7 +30,7 @@ class TestForwardingTransitionController(MockTestCase):
 
         for node in doc.getElementsByTagName('transition'):
             transition = node.getAttribute('transition_id')
-            # self.assertEqual(node.getAttribute('title'), transition)
+            self.assertEqual(node.getAttribute('title'), transition)
 
             actions = node.getElementsByTagName('action')
             self.assertEqual(len(actions), 1)

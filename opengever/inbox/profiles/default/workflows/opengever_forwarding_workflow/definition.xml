@@ -107,31 +107,31 @@
   <permission-map name="opengever.task: Add task" acquired="False">
   </permission-map>
  </state>
- <transition transition_id="forwarding-transition-accept" title="Accept" new_state="forwarding-state-closed" trigger="USER" before_script="" after_script="">
+ <transition transition_id="forwarding-transition-accept" title="forwarding-transition-accept" new_state="forwarding-state-closed" trigger="USER" before_script="" after_script="">
   <action url="%(content_url)s/@@forwarding_transition_controller?transition=forwarding-transition-accept" category="workflow" icon="">forwarding-transition-accept</action>
   <guard>
    <guard-expression>python: here.restrictedTraverse('@@forwarding_transition_controller').is_transition_possible('forwarding-transition-accept')</guard-expression>
   </guard>
  </transition>
- <transition transition_id="forwarding-transition-assign-to-dossier" title="Assign to dossier" new_state="forwarding-state-closed" trigger="USER" before_script="" after_script="">
+ <transition transition_id="forwarding-transition-assign-to-dossier" title="forwarding-transition-assign-to-dossier" new_state="forwarding-state-closed" trigger="USER" before_script="" after_script="">
   <action url="%(content_url)s/@@forwarding_transition_controller?transition=forwarding-transition-assign-to-dossier" category="workflow" icon="">forwarding-transition-assign-to-dossier</action>
   <guard>
    <guard-expression>python: here.restrictedTraverse('@@forwarding_transition_controller').is_transition_possible('forwarding-transition-assign-to-dossier')</guard-expression>
   </guard>
  </transition>
- <transition transition_id="forwarding-transition-close" title="Close" new_state="forwarding-state-closed" trigger="USER" before_script="" after_script="">
+ <transition transition_id="forwarding-transition-close" title="forwarding-transition-close" new_state="forwarding-state-closed" trigger="USER" before_script="" after_script="">
   <action url="%(content_url)s/@@forwarding_transition_controller?transition=forwarding-transition-close" category="workflow" icon="">forwarding-transition-close</action>
   <guard>
    <guard-expression>python: here.restrictedTraverse('@@forwarding_transition_controller').is_transition_possible('forwarding-transition-close')</guard-expression>
   </guard>
  </transition>
- <transition transition_id="forwarding-transition-reassign" title="Reassign" new_state="" trigger="USER" before_script="" after_script="">
+ <transition transition_id="forwarding-transition-reassign" title="forwarding-transition-reassign" new_state="" trigger="USER" before_script="" after_script="">
   <action url="%(content_url)s/@@forwarding_transition_controller?transition=forwarding-transition-reassign" category="workflow" icon="">forwarding-transition-reassign</action>
   <guard>
     <guard-expression>python: here.restrictedTraverse('@@forwarding_transition_controller').is_transition_possible('forwarding-transition-reassign')</guard-expression>
   </guard>
  </transition>
- <transition transition_id="forwarding-transition-refuse" title="Refuse" new_state="" trigger="USER" before_script="" after_script="">
+ <transition transition_id="forwarding-transition-refuse" title="forwarding-transition-refuse" new_state="" trigger="USER" before_script="" after_script="">
   <action url="%(content_url)s/@@forwarding_transition_controller?transition=forwarding-transition-refuse" category="workflow" icon="">forwarding-transition-refuse</action>
   <guard>
    <guard-expression>python: here.restrictedTraverse('@@forwarding_transition_controller').is_transition_possible('forwarding-transition-refuse')</guard-expression>
