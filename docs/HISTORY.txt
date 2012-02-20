@@ -5,6 +5,10 @@ Changelog
 2.0.2 (unreleased)
 ------------------
 
+- Issue #1374 Pedenzenliste (PDF).
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1374/
+  [jone]
+
 - Optimize dossier details PDF export.
   Show reference number always, add / rename some columns in listings.
   Use landscape pages for tables to gain width.
