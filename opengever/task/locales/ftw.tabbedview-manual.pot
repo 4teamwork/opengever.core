@@ -20,3 +20,6 @@ msgstr ""
 
 msgid "related_documents"
 msgstr ""
+
+msgid "relateddocuments"
+msgstr ""
