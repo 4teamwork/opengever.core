@@ -5,6 +5,9 @@ Changelog
 2.0.3 (unreleased)
 ------------------
 
+- Added French translations
+  [ttschanz]
+
 - Contact info describe(): add with_principal argument for removing
   principal (used in latex views).
   [jone]
