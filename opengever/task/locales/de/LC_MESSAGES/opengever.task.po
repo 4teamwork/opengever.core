@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "POT-Creation-Date: 2012-02-09 13:48+0000\n"
-"PO-Revision-Date: 2012-02-09 11:34+0100\n"
+"PO-Revision-Date: 2012-02-20 10:35+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
 "MIME-Version: 1.0\n"
@@ -316,7 +316,7 @@ msgstr "Wählen Sie das Dossier aus, in welche Sie die ausgewählten Dokumente k
 #. Default: "You can copy attached documents to your client by selecting here the documents to copy."
 #: ./opengever/task/browser/close.py:84
 msgid "help_close_documents"
-msgstr "Wählen Sie hier die Dokumente aus, die Sie in ein eigenes Dossier kopieren möchten."
+msgstr "Wählen Sie hier bei Bedarf die Dokumente aus, die Sie in ein eigenes Dossier kopieren möchten."
 
 #. Default: "Select the documents you want to deliver to the issuer of the task. They will be attached to the original task of the issuer."
 #: ./opengever/task/browser/complete.py:65
