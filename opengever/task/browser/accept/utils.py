@@ -19,18 +19,18 @@ import AccessControl
 import transaction
 
 
-def _get_actual_yearfolder(inbox):
-    """returns the actual yearfolder,
-    it create the actual if they doesn't exist's"""
+def _get_yearfolder(inbox):
+    """Returns the yearfolder for the current year (creates it if missing).
+    """
 
     year = str(datetime.now().year)
     if inbox.get(year):
         return inbox.get(year)
     else:
-        return _create_actual_yearfolder(inbox, year)
+        return _create_yearfolder(inbox, year)
 
 
-def _create_actual_yearfolder(inbox, year):
+def _create_yearfolder(inbox, year):
     """creates the yearfolder for the given year"""
 
     _sm = AccessControl.getSecurityManager()
@@ -82,7 +82,7 @@ def accept_forwarding_with_successor(
     # transport the remote forwarding to the inbox or actual yearfolder
     transporter = getUtility(ITransporter)
     if dossier:
-        yearfolder = _get_actual_yearfolder(inbox, )
+        yearfolder = _get_yearfolder(inbox, )
         successor_forwarding = transporter.transport_from(
             yearfolder, predecessor.client_id, predecessor.physical_path)
     else:
@@ -208,7 +208,7 @@ def assign_forwarding_to_dossier(
         successor_oguid=successor_tc_task.get_oguid())
 
     inbox = aq_parent(aq_inner(forwarding_obj))
-    yearfolder = _get_actual_yearfolder(inbox)
+    yearfolder = _get_yearfolder(inbox)
     clipboard = inbox.manage_cutObjects((forwarding_obj.getId(),))
     yearfolder.manage_pasteObjects(clipboard)
 

@@ -1,6 +1,6 @@
 from Acquisition import aq_inner, aq_parent
 from five import grok
-from opengever.task.browser.accept.utils import _get_actual_yearfolder
+from opengever.task.browser.accept.utils import _get_yearfolder
 from opengever.task.task import ITask
 from opengever.task.util import change_task_workflow_state
 import AccessControl
@@ -13,7 +13,7 @@ class StoreForwardingInYearfolderView(grok.View):
 
     def render(self):
         inbox = aq_parent(aq_inner(self.context))
-        yearfolder = _get_actual_yearfolder(inbox)
+        yearfolder = _get_yearfolder(inbox)
         successor_oguid = self.request.get('successor_oguid')
         transition = self.request.get('transition')
         response_text = self.request.get('response_text')
