@@ -161,7 +161,7 @@ def accept_forwarding_with_successor(
             successor_forwarding,
             'forwarding-transition-accept',
             text=response_text,
-            successor_oguid=successor_tc.get_oguid())
+            successor_oguid=successor_tc_task.get_oguid())
 
     # create the succssor relations
     successor_tc.set_predecessor(predecessor_oguid)
