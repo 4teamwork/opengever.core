@@ -5,6 +5,9 @@ Changelog
 2.2 (unreleased)
 ----------------
 
+- Display special icon for related items in task responses
+  [lgraf]
+
 - Fixed bug that caused previous relatedItems to be overridden when adding
   a relation in a task response.
   [lgraf]

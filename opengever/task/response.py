@@ -5,6 +5,7 @@ from opengever.base.browser.opengeverview import OpengeverView
 from opengever.base.source import DossierPathSourceBinder
 from opengever.globalindex.interfaces import ITaskQuery
 from opengever.ogds.base.interfaces import IContactInformation
+from opengever.tabbedview.helper import linked
 from opengever.task import util
 from opengever.task import _
 from opengever.task.adapters import IResponseContainer, Response
@@ -293,6 +294,7 @@ class AddForm(form.AddForm, AutoExtensibleForm):
             intids = getUtility(IIntIds)
             for item in relatedItems:
                 to_id = intids.getId(item)
+                item._v__is_relation = True
                 if getattr(task, 'relatedItems'):
                     task.relatedItems.append(RelationValue(to_id))
 
@@ -303,7 +305,7 @@ class AddForm(form.AddForm, AutoExtensibleForm):
                                         _(u'label_related_items',
                                           default=u"Related Items"),
                                         '',
-                                        item.Title())
+                                        linked(item, item.Title()))
 
             # change workflow state of task
             if data.get('transition'):
