@@ -5,7 +5,6 @@ from Products.statusmessages.interfaces import IStatusMessage
 from five import grok
 from opengever.base.browser.helper import css_class_from_obj
 from opengever.base.browser.opengeverview import OpengeverView
-from opengever.base.browser.wizard.interfaces import IWizardDataStorage
 from opengever.base.source import DossierPathSourceBinder
 from opengever.globalindex.interfaces import ITaskQuery
 from opengever.ogds.base.interfaces import IContactInformation
@@ -13,7 +12,6 @@ from opengever.task import _
 from opengever.task import util
 from opengever.task.adapters import IResponseContainer, Response
 from opengever.task.interfaces import IResponseAdder
-from opengever.task.interfaces import ISuccessorTaskController
 from opengever.task.interfaces import IWorkflowStateSyncer
 from opengever.task.permissions import DEFAULT_ISSUE_MIME_TYPE
 from opengever.task.task import ITask
