@@ -17,7 +17,7 @@ class ForwardingTransitionController(TaskTransitionController):
 
         if not self._is_multiclient_setup():
             return False
-        elif (not self._is_task_on_responsible_client() and
+        elif (self._is_task_on_responsible_client() and
               not self._is_succesor_forwarding_proccses()):
             return False
         else:

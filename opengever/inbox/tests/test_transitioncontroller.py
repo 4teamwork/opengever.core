@@ -106,20 +106,20 @@ class TestForwardingTransitionController(MockTestCase):
             self.expect(mock._is_multiclient_setup()).result(False)
 
             self.expect(mock._is_multiclient_setup()).result(True)
-            self.expect(mock._is_task_on_responsible_client()).result(False)
+            self.expect(mock._is_task_on_responsible_client()).result(True)
             self.expect(mock._is_succesor_forwarding_proccses()).result(False)
 
             self.expect(mock._is_multiclient_setup()).result(True)
-            self.expect(mock._is_task_on_responsible_client()).result(False)
+            self.expect(mock._is_task_on_responsible_client()).result(True)
             self.expect(mock._is_succesor_forwarding_proccses()).result(True)
             self.expect(mock._is_inbox_group_user()).result(False)
 
             self.expect(mock._is_multiclient_setup()).result(True)
-            self.expect(mock._is_task_on_responsible_client()).result(True)
+            self.expect(mock._is_task_on_responsible_client()).result(False)
             self.expect(mock._is_inbox_group_user()).result(False)
 
             self.expect(mock._is_multiclient_setup()).result(True)
-            self.expect(mock._is_task_on_responsible_client()).result(True)
+            self.expect(mock._is_task_on_responsible_client()).result(False)
             self.expect(mock._is_inbox_group_user()).result(True)
 
         self.replay()
