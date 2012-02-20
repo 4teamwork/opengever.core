@@ -5,6 +5,11 @@ Changelog
 2.2 (unreleased)
 ----------------
 
+- Merge helpers `css_class_from_brain` and `css_class_from_obj`, add subtask / remote task icons.
+  Issue #1343 "Aufgabe Delegieren" Wizard
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1343
+  [jone]
+
 - Added French translations.
   [ttschanz]
 
