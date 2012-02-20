@@ -8,6 +8,7 @@ from xlwt import Workbook, XFStyle
 from zope.component import getUtility
 from zope.interface import Interface
 from zope.i18n import translate
+from Missing import Value as MissingValue
 
 
 class ReportingController(grok.View):
@@ -110,7 +111,8 @@ class XLSReporter(object):
                 # transform the value when a transform is given
                 if attr.get('transform'):
                     value = attr.get('transform')(value)
-
+                if value == MissingValue:
+                    value = ''
                 # set a XFStyle, when one is given
                 if attr.get('style'):
                     sheet.write(r + 1, c, value, attr.get('style'))
