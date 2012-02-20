@@ -360,11 +360,12 @@ class DossierAddFormView(FormWrapper, grok.View):
                             _(u'The forwarding is now assigned to the new '
                               'dossier'),
                             'info')
+
                         self.request.RESPONSE.redirect(
                             '%s/edit' % task.absolute_url())
 
                     else:
-                        forwarding = accept_forwarding_with_successor(
+                        task = accept_forwarding_with_successor(
                             self.context,
                             oguid,
                             dm.get(dmkey, 'text'),
@@ -376,7 +377,8 @@ class DossierAddFormView(FormWrapper, grok.View):
                               u' created'), 'info')
 
                         self.request.RESPONSE.redirect(
-                            forwarding.absolute_url())
+                            '%s/edit' % task.absolute_url())
+
                 else:
                     # create the successor task, accept the predecessor
                     task = accept_task_with_successor(

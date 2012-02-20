@@ -107,14 +107,18 @@ class ChooseDossierStepForm(AcceptWizardFormMixin, Form):
                     IStatusMessage(self.request).addStatusMessage(
                         _(u'The forwarding is now assigned to the dossier'),
                         'info')
-                    self.request.RESPONSE.redirect('%s/edit' % task.absolute_url())
+                    self.request.RESPONSE.redirect(
+                        '%s/edit' % task.absolute_url())
+
                 else:
-                    forwarding = accept_forwarding_with_successor(
+                    task = accept_forwarding_with_successor(
                         self.context, oguid, text, dossier = data['dossier'])
                     IStatusMessage(self.request).addStatusMessage(
                         _(u'The forwarding has been stored in the local inbox '
                           u'and the succesor task has been created'), 'info')
-                    self.request.RESPONSE.redirect(forwarding.absolute_url())
+                    self.request.RESPONSE.redirect(
+                        '%s/edit' % task.absolute_url())
+
             # task
             else:
                 task = accept_task_with_successor(
