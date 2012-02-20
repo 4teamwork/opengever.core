@@ -39,7 +39,7 @@ msgstr "Checkout"
 
 #: ./opengever/document/checkout/cancel.py:74
 msgid "Could not cancel checkout on document ${title}"
-msgstr "Checkout du document ${title} inabouti"
+msgstr ""
 
 #: ./opengever/document/checkout/checkin.py:70
 msgid "Could not check in ${title}, it is not a document."

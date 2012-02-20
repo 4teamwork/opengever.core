@@ -42,7 +42,7 @@ msgstr "Auschecken"
 
 #: ./opengever/document/checkout/cancel.py:74
 msgid "Could not cancel checkout on document ${title}"
-msgstr "Konnte Dokument nicht auschecken: ${title}"
+msgstr "Das Auschecken des Dokuments ${title} konnte nicht widerrufen werden."
 
 #: ./opengever/document/checkout/checkin.py:70
 msgid "Could not check in ${title}, it is not a document."
