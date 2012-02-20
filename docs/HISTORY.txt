@@ -5,6 +5,9 @@ Changelog
 2.1 (unreleased)
 ----------------
 
+- Added French translations.
+  [ttschanz]
+
 - Implements IE workaround for submitting the advanced search form on submit.
   Issue #1313 Erweiterte Suche: Formular kann im IE nicht mit <Enter> abgesendet werden.
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1313/
