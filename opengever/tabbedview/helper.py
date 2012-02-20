@@ -1,11 +1,9 @@
-from Acquisition import aq_inner, aq_parent
 from Products.CMFCore.interfaces._tools import IMemberData
 from Products.PluggableAuthService.interfaces.authservice import IPropertiedUser
 from datetime import date as dt
 from ftw.mail.utils import get_header
 from opengever.base.browser.helper import get_css_class
 from opengever.ogds.base.interfaces import IContactInformation
-from opengever.ogds.base.utils import get_client_id
 from plone.i18n.normalizer.interfaces import IIDNormalizer
 from plone.memoize import ram
 from zope.app.component.hooks import getSite
