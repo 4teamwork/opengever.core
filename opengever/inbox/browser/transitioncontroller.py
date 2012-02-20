@@ -19,7 +19,7 @@ class ForwardingTransitionController(TaskTransitionController):
             return False
         elif (not self._is_task_on_responsible_client() and
               not self._is_succesor_forwarding_proccses()):
-                return False
+            return False
         else:
             return self._is_inbox_group_user()
 
