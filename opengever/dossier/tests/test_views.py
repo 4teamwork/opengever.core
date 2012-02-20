@@ -185,10 +185,7 @@ class TestViewsIntegration(unittest.TestCase):
             is_subdossier=False)
 
         for brain in dossiers:
-            try:
-                aq_parent(brain.getObject()).manage_delObjects(brain.getId)
-            except Exception:
-                import pdb; pdb.set_trace()
+            aq_parent(brain.getObject()).manage_delObjects(brain.getId)
 
         # create test objects
         self._create_objects(
