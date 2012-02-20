@@ -40,6 +40,7 @@ from zope.schema.vocabulary import getVocabularyRegistry
 
 _marker = object()
 
+
 class ITask(form.Schema):
 
     form.fieldset(
@@ -386,12 +387,14 @@ class RelatedDocumentsTableSource(grok.MultiAdapter, BaseTableSource):
     def search_results(self, query):
         return query
 
+
 def readable_checked_out_user(obj, user):
     """ Return the readable user who checked out the obj
     """
     catalog = obj.portal_catalog
     user = getMultiAdapter((obj, catalog), IIndexer, name='checked_out')()
     return readable_ogds_user(obj, user)
+
 
 class RelatedDocuments(Documents):
 
