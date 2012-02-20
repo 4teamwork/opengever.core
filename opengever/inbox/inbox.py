@@ -1,11 +1,12 @@
 """Defines some Vies for Inbox"""
 from five import grok
 from opengever.inbox import _
-from plone.directives import form
+from opengever.mail.interfaces import ISendableDocsContainer
 from opengever.tabbedview.browser.tabs import Tasks, Documents, Trash
 from opengever.tabbedview.helper import external_edit_link
+from plone.directives import form
 from zope import schema
-from opengever.mail.interfaces import ISendableDocsContainer
+
 
 class IInbox(form.Schema, ISendableDocsContainer):
     """ Inbox for OpenGever
@@ -24,6 +25,7 @@ class IInbox(form.Schema, ISendableDocsContainer):
          description = _(u'help_inbox_group', default=u''),
          required = False,
          )
+
 
 class GivenTasks(Tasks):
     """Displays all Given Tasks"""
@@ -82,7 +84,7 @@ class InboxDocuments(Documents):
         actions = super(InboxDocuments, self).enabled_actions
         actions = [action for action in actions
                    if action not in (
-                    'create_task', 
+                    'create_task',
                     'copy_documents_to_remote_client',
                     'move_items',)]
 
@@ -100,7 +102,7 @@ class InboxDocuments(Documents):
 
 
 class InboxTrash(Trash):
-    """Special Trash view, 
+    """Special Trash view,
     some columns from the standard Trash view are disabled"""
 
     grok.context(IInbox)

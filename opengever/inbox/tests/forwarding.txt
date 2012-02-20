@@ -18,7 +18,7 @@ imports and general stuff
 
     >>> setRoles(portal, portal_owner_id, ['Owner','Editor','Contributor'])
 	>>> browser.addHeader('Authorization', 'Basic %s:%s' % (portal_owner, default_password,))
-	
+
 create inbox and some documents for tests
 -----------------------------------------
     >>> inbox = createContentInContainer(portal, 'opengever.inbox.inbox', title=u'inbox')
@@ -79,51 +79,3 @@ create forwarding and check if documents are corectly moved
 
 check view
     >>> browser.open(forwarding.absolute_url())
-
-test assign to dossier
-======================
-
-create dossier
-    >>> dossier = createContentInContainer(
-    ...     portal, 'opengever.dossier.businesscasedossier',
-    ...     title=u'testdossier', responsible='portal_owner')
-    >>> dossier_path = '/'.join(dossier.getPhysicalPath())
-    >>> transaction.commit()
-
-assign to dossier
-    >>> browser.open(
-    ...     '%s/addresponse?form.widgets.transition=forwarding-transition-assign-to-dossier' % forwarding.absolute_url())
-    >>> browser.getControl(name='form.widgets.target_dossier.widgets.query').value='testdossier'
-    >>> browser.getControl(name='form.widgets.target_dossier.buttons.search').click()
-    >>> browser.getControl(name='form.widgets.target_dossier:list').value= [dossier_path,]
-    >>> browser.getControl(name='form.buttons.save').click()
-
-A yearfolder, with the year as id, should be created
-    >>> yearfolder = inbox.get(str(datetime.now().year))
-    >>> yearfolder.portal_type
-    'opengever.inbox.yearfolder'
-
-The forwarding should be stored in the yearfolder, and resolved
-    >>> forwarding = yearfolder.get('forwarding-1')
-    >>> wft.getInfoFor(forwarding, 'review_state')
-    'forwarding-state-closed'
-
-And a task form displayed
-    >>> browser.url
-    'http://nohost/plone/dossier-1/task-1/edit'
-
-set the required fields
-    >>> browser.getControl(name='form.widgets.task_type:list').value = ['direct-execution']
-    >>> browser.getControl(name='form.widgets.deadline').value = '01-01-2025'
-    >>> browser.getControl(name='form.buttons.save').click()
-
-check the new created task
-    >>> browser.url
-    'http://nohost/plone/dossier-1/task-1'
-    >>> task = dossier.get('task-1')
-    >>> wft.getInfoFor(task, 'review_state')
-    'task-state-open'
-    >>> task.deadline.year == 2025
-    True
-    >>> task.issuer and task.responsible
-    u'inbox:plone'

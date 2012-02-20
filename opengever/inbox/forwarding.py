@@ -156,6 +156,15 @@ def set_dates(context, event):
         context.date_of_completion = datetime.now()
 
 
+@grok.subscribe(IForwarding, IActionSucceededEvent)
+def store_in_yearfolder(context, event):
+    """Eventhandler wich store the forwarding in the yearfolder"""
+
+    if event.action == 'forwarding-transition-close':
+        return context.REQUEST.RESPONSE.redirect(
+            '%s/@@store_forwarding_in_yearfolder' % context.absolute_url())
+
+
 class RemoveForwardingFactoryMenuEntry(grok.MultiAdapter):
     """In Inboxes we should not be able to add forwardings using the factory
     menu, but only by selecting a task and clicking the "Forward"
