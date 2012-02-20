@@ -23,9 +23,8 @@ class TestOverviewFunctions(MockTestCase):
         # None
         item_none = []
 
-        # Widget
-        item_widget = self.create_dummy()
-        directlyProvides(item_widget, IFieldWidget)
+        # Dict
+        item_dict = {'dict':'dict'}
 
         # SQLalchemy object
         item_sql = Task('id', 'id')
@@ -42,7 +41,7 @@ class TestOverviewFunctions(MockTestCase):
         view = Overview(self.mock_context, self.mock_request)
 
         self.assertEqual(view.get_type(item_none), None)
-        self.assertEqual(view.get_type(item_widget), 'widget')
+        self.assertEqual(view.get_type(item_dict), 'dict')
         self.assertEqual(view.get_type(item_sql), 'task')
         self.assertEqual(view.get_type(item_task), 'task')
         self.assertEqual(view.get_type(item_obj), 'obj')

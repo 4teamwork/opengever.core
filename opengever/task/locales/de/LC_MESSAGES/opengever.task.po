@@ -581,6 +581,16 @@ msgstr "Aktion"
 msgid "label_responsible"
 msgstr "Auftragnehmer"
 
+#. Default: "Dossiertitle"
+#: ./opengever/task/task_templates/overview.pt:37
+msgid "label_parent_dossier_title"
+msgstr "Dossiertitel"
+
+#. Default: "Tasktitle"
+#: ./opengever/task/task_templates/overview.pt:37
+msgid "label_task_title"
+msgstr "Aufgabentitel"
+
 #. Default: "Return to issue."
 #: ./opengever/task/templates/edit_response.pt:32
 msgid "label_return_to_issue"

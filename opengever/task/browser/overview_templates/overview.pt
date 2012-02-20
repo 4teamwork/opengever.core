@@ -25,17 +25,12 @@
           <ul tal:condition="items">
             <li tal:repeat="item items">
 
-              <!-- item is a widget (used for the addition box) -->
-              <tal:brain tal:condition="python: view.get_type(item) == 'widget'">
-                <tal:cond tal:condition="item/label">
+              <!-- item is a dict (main attributes) -->
+              <tal:dict tal:condition="python: view.get_type(item) == 'dict'">
                   <span tal:content="structure item/label" />
                   <span>: </span>
-                  <span tal:attributes="class item/css_class|nothing" tal:content="structure item/render" />
-                </tal:cond>
-                <tal:cond tal:condition="not: item/label">
-                  <span tal:content="structure item/render" />
-                </tal:cond>
-              </tal:brain>
+                  <span tal:attributes="class item/css_class|nothing" tal:content="structure item/value" />
+              </tal:dict>
 
               <!-- item is a obj (Documents)-->
               <tal:brain tal:condition="python: view.get_type(item) == 'obj'">

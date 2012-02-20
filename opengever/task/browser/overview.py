@@ -17,9 +17,10 @@ from z3c.form.interfaces import IContextAware, IField
 from zope.component import getUtility, getMultiAdapter
 from zope.i18n import translate
 from zope.interface import alsoProvides
-from zope.interface import implements
 from opengever.tabbedview.helper import _breadcrumbs_from_item
 from zope.component import queryUtility
+from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
+from opengever.dossier.behaviors.dossier import IDossierMarker
 
 
 def get_field_widget(obj, field):
@@ -47,93 +48,6 @@ def get_field_widget(obj, field):
     return widget
 
 
-class IssuerWidget(object):
-    """ Widget to display the issuer
-    We need a special widget because we want the client-name and the
-    issuer as a link. The default-issuer-widget just renders a text of the
-    issuer.
-    """
-    implements(IFieldWidget)
-
-    def __init__(self, context):
-        self.context = context
-        self.label = _('label_issuer')
-
-    def render(self):
-        """ Render the issuer of the current task as link.
-        """
-        info = getUtility(IContactInformation)
-        task = ITask(self.context)
-
-        if task.predecessor:
-            client_id = task.predecessor.split(':')[0]
-        else:
-            client_id = get_client_id()
-
-        client = client_title_helper(task, client_id)
-
-        return client + ' / ' + info.render_link(task.issuer)
-
-    def label(self):
-        """ Return the label
-        """
-        return self.label
-
-
-class ResponsibleWidget(object):
-    """ Widget to display the responsible
-    We need a special widget because we want the client-name and the
-    responsible as a link. The default-responsible-widget just renders a
-    text of the responsible.
-    """
-    implements(IFieldWidget)
-
-    def __init__(self, context, view):
-        self.context = context
-        self.view = view
-        self.label = _('label_responsible')
-
-    def render(self):
-        """ Render the responsible of the current task as link.
-        """
-        return self.view.get_task_info(self.context)
-
-    def label(self):
-        """ Return the label
-        """
-        return self.label
-
-
-class StateWidget(object):
-    """ Widget to display the state
-    We need a special widget because we want to add the reviewstate as
-    css class to display the task-status as an image.
-    The default state-widget just renders a text of the review_state
-    """
-    implements(IFieldWidget)
-
-    def __init__(self, context, request):
-        self.context = context
-        self.request = request
-        self.label = _('label_workflow_state')
-
-    def render(self):
-        """ Render the state
-        """
-        state = getToolByName(self.context, 'portal_workflow').getInfoFor(
-            self.context, 'review_state')
-
-        return "<span class=wf-%s>%s</span>" % (
-            state,
-            translate(state, domain='plone', context=self.request),
-        )
-
-    def label(self):
-        """ Return the label
-        """
-        return self.label
-
-
 class Overview(DisplayForm, OpengeverTab):
     grok.context(ITask)
     grok.name('tabbedview_view-overview')
@@ -144,8 +58,8 @@ class Overview(DisplayForm, OpengeverTab):
         """
         if not item:
             return None
-        elif IFieldWidget.providedBy(item):
-            return 'widget'
+        elif isinstance(item, dict):
+            return 'dict'
         elif isinstance(item, Task) or ITask.providedBy(item):
             return 'task'
         else:
@@ -167,7 +81,6 @@ class Overview(DisplayForm, OpengeverTab):
              dict(id='successor_tasks', content=self.get_successor_tasks()),
             ],
             ]
-
         return items
 
     def documents(self):
@@ -208,30 +121,76 @@ class Overview(DisplayForm, OpengeverTab):
         """ return a list of widgets,
         which should be displayed in the attributes box
         """
-        items = []
-        attributes_to_display = [
-            'title',
-            'text',
-            'task_type',
-            'state',
-            'deadline',
-            'issuer',
-            'responsible',
-        ]
 
-        for attr in attributes_to_display:
-            if attr == 'state':
-                items.append(StateWidget(self.context, self.request))
-            elif attr == 'issuer':
-                items.append(IssuerWidget(self.context))
-            elif attr == 'responsible':
-                items.append(ResponsibleWidget(self.context, self))
+        def _get_state():
+            state = getToolByName(self.context, 'portal_workflow').getInfoFor(
+                self.context, 'review_state')
+
+            return "<span class=wf-%s>%s</span>" % (
+                state,
+                translate(state, domain='plone', context=self.request),
+            )
+
+        def _get_parent_dossier_title():
+            obj = ITask(self.context)
+            while not IDossierMarker.providedBy(obj):
+                obj = aq_parent(aq_inner(obj))
+                if IPloneSiteRoot.providedBy(obj):
+                    break
+            return obj.Title()
+
+        def _get_issuer():
+            info = getUtility(IContactInformation)
+            task = ITask(self.context)
+
+            if task.predecessor:
+                client_id = task.predecessor.split(':')[0]
             else:
-                field = ITask.get(attr)
-                field = Field(field, interface=field.interface,
-                       prefix='')
+                client_id = get_client_id()
 
-                items.append(get_field_widget(self.context, field))
+            client = client_title_helper(task, client_id)
+
+            return client + ' / ' + info.render_link(task.issuer)
+
+        def _get_task_widget_value(attr):
+            field = ITask.get(attr)
+            field = Field(field, interface=field.interface, prefix='')
+            return get_field_widget(self.context, field).render()
+
+        items = [
+            {
+                'label': _('label_task_title'),
+                'value': _get_task_widget_value('title'),
+            },
+            {
+                'label': _('label_parent_dossier_title'),
+                'value': _get_parent_dossier_title(),
+            },
+            {
+                'label': _('label_text'),
+                'value': _get_task_widget_value('text'),
+            },
+            {
+                'label': _('label_task_type'),
+                'value': _get_task_widget_value('task_type'),
+            },
+            {
+                'label': _('label_workflow_state'),
+                'value': _get_state(),
+            },
+            {
+                'label': _('label_deadline'),
+                'value': _get_task_widget_value('deadline'),
+            },
+            {
+                'label': _('label_issuer'),
+                'value': _get_issuer(),
+            },
+            {
+                'label': _('label_responsible'),
+                'value': self.get_task_info(self.context),
+            },
+        ]
 
         return items
 
