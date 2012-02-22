@@ -5,6 +5,11 @@ Changelog
 2.0.2 (unreleased)
 ------------------
 
+- Fix item expression in indexed_task_link function.
+  Issue #1412 Optimierung Mandant des Auftraggebers
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1412
+  [jone]
+
 - Made adjustments on the XLSReport: column order, translations, footer
   Issue #1286 Aufgabenexport um Dossiertitel erweitern.
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1286
