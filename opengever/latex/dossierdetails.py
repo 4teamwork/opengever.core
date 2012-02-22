@@ -226,7 +226,8 @@ class DossierDetailsLaTeXView(grok.MultiAdapter, MakoLaTeXView):
                 brain.Title,
                 info.describe(brain.responsible),
                 workflow_state(brain, brain.review_state),
-                helper.readable_date(brain, brain.start)]
+                helper.readable_date(brain, brain.start),
+                helper.readable_date(brain, brain.end)]
 
             rows.append(self.convert_list_to_row(data))
 
