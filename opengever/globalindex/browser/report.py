@@ -1,14 +1,17 @@
 from Products.CMFPlone.interfaces import IPloneSiteRoot
 from Products.statusmessages.interfaces import IStatusMessage
+from datetime import datetime
 from five import grok
 from opengever.base.reporter import StringTranslater, XLSReporter
 from opengever.base.reporter import format_datetime, get_date_style
 from opengever.base.reporter import readable_author
 from opengever.globalindex import _
 from opengever.globalindex.interfaces import ITaskQuery
+from opengever.ogds.base.utils import get_client_id
 from opengever.task.util import getTaskTypeVocabulary
 from zope.app.component.hooks import getSite
 from zope.component import getUtility
+from zope.i18n import translate
 
 
 def task_type_helper(value):
@@ -55,7 +58,7 @@ class TaskReporter(grok.View):
         tasks = query.get_tasks(ids)
 
         task_attributes = [
-            {'id':'title', 'title':_('label_title')},
+            {'id':'title', 'title':_('label_task_title')},
             {'id':'review_state', 'title':_('review_state'),
              'transform':StringTranslater(
                 self.context.REQUEST, 'plone').translate},
@@ -63,20 +66,26 @@ class TaskReporter(grok.View):
              'transform':format_datetime, 'style':get_date_style()},
             {'id':'completed', 'title':_('label_completed'),
              'transform':format_datetime, 'style':get_date_style()},
-            {'id':'created', 'title':_('label_created'),
-             'transform':format_datetime, 'style':get_date_style()},
-            {'id':'responsible', 'title':_('label_responsible'),
-             'transform':readable_author},
+            {'id': 'containing_dossier', 'title':_('label_dossier_title')},
             {'id':'issuer', 'title':_('label_issuer'),
+             'transform':readable_author},
+            {'id':'responsible', 'title':_('label_responsible'),
              'transform':readable_author},
             {'id':'task_type', 'title':_('label_task_type'),
              'transform':task_type_helper},
-            {'id': 'containing_dossier', 'title':_('label_dossier')},
-            {'id':'sequence_number', 'title':_('label_sequence_number')},
             {'id':'client_id', 'title':_('label_client_id')},
+            {'id':'sequence_number', 'title':_('label_sequence_number')},
         ]
 
-        reporter = XLSReporter(self.context.REQUEST, task_attributes, tasks)
+        reporter = XLSReporter(
+            self.context.REQUEST,
+            task_attributes,
+            tasks,
+            sheet_title=translate(
+                _('label_tasks', default=u'Tasks'), context=self.request),
+            footer='%s %s' % (
+                datetime.now().strftime('%d.%m.%Y %H:%M'), get_client_id())
+            )
 
         data = reporter()
         if not data:

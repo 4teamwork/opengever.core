@@ -5,6 +5,11 @@ Changelog
 2.0.2 (unreleased)
 ------------------
 
+- Made adjustments on the XLSReport: column order, translations, footer
+  Issue #1286 Aufgabenexport um Dossiertitel erweitern.
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1286
+  [phgross]
+
 - Added French translations
   [ttschanz]
 
