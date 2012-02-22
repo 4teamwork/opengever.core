@@ -32,11 +32,19 @@
   </tal:state>
 
   <span class="documentModified">
-    <span i18n:translate="box_last_modified" tal:omit-tag="">
+    <span i18n:translate="label_last_modified" tal:omit-tag="">
       last modified
     </span>
     <span tal:replace="python:view.toLocalizedTime(here.ModificationDate(),long_format=1)">
       August 16, 2001 at 23:35:59
+    </span>
+  </span>
+
+  <span class="documentCreated">
+    <span i18n:translate="label_created" tal:omit-tag="">
+      last modified
+    </span>
+    <span tal:replace="python:view.toLocalizedTime(here.CreationDate(),long_format=1)">
     </span>
   </span>
 
