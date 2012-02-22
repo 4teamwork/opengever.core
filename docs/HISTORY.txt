@@ -5,6 +5,11 @@ Changelog
 2.2 (unreleased)
 ----------------
 
+- Made adjustments on the XLSReport: title colum style, sheet and footer title.
+  Issue #1286 Aufgabenexport um Dossiertitel erweitern.
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1286
+  [phgross]
+
 - get_css_class helper: Immediatly set _v__is_relation to False after reading it.
   Avoids displaying wrong icon if same obj instance is used in a different request.
   [lgraf]

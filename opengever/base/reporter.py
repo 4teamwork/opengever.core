@@ -80,7 +80,7 @@ class XLSReporter(object):
     """XLS Reporter View generates a xls-report for the given results set.
     """
 
-    def __init__(self, request, attributes, results):
+    def __init__(self, request, attributes, results, sheet_title=u' ', footer=u''):
         """Initalize the XLS reporter
         Arguments:
         attributes -- a list of mappings (with 'id', 'title', 'transform')
@@ -90,18 +90,25 @@ class XLSReporter(object):
         self.attributes = attributes
         self.results = results
         self.request = request
+        self.sheet_title = sheet_title
+        self.footer = footer
 
     def __call__(self):
         """Generates the xls data for the given objects.
         """
 
         w = Workbook()
-        sheet = w.add_sheet('Dossiers')
+        sheet = w.add_sheet(self.sheet_title)
+        sheet.set_footer_str(self.footer)
+
+        title_style = XFStyle()
+        title_style.font.bold = True
 
         #create labels row
         for i, attr in enumerate(self.attributes):
             sheet.write(0, i,
-                translate(attr.get('title', ''), context=self.request))
+                        translate(attr.get('title', ''), context=self.request),
+                        title_style)
 
         for r, dossier in enumerate(self.results):
             for c, attr in enumerate(self.attributes):
