@@ -40,7 +40,8 @@ def remove_subdossier_column(columns):
     """
 
     def _filterer(item):
-        if isinstance(item, dict) and item['column'] == 'subdossier':
+
+        if isinstance(item, dict) and item['column'] == 'containing_subdossier':
             return False
         else:
             return True
