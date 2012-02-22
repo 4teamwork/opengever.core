@@ -198,6 +198,7 @@ class DossierDetailsLaTeXView(grok.MultiAdapter, MakoLaTeXView):
                     brain.Title,
                     helper.readable_date(brain, brain.document_date),
                     helper.readable_date(brain, brain.receipt_date),
+                    helper.readable_date(brain, brain.delivery_date),
                     brain.document_author]
 
             rows.append(self.convert_list_to_row(data))
