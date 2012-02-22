@@ -167,11 +167,11 @@ class Overview(DisplayForm, OpengeverTab):
                 'value': _get_parent_dossier_title(),
             },
             {
-                'label': _('label_text'),
+                'label': _(u"label_text", default=u"Text"),
                 'value': _get_task_widget_value('text'),
             },
             {
-                'label': _('label_task_type'),
+                'label': _(u'label_task_type', default=u'Task Type'),
                 'value': _get_task_widget_value('task_type'),
             },
             {
@@ -179,15 +179,15 @@ class Overview(DisplayForm, OpengeverTab):
                 'value': _get_state(),
             },
             {
-                'label': _('label_deadline'),
+                'label': _(u"label_deadline", default=u"Deadline"),
                 'value': _get_task_widget_value('deadline'),
             },
             {
-                'label': _('label_issuer'),
+                'label': _(u"label_issuer", default=u"Issuer"),
                 'value': _get_issuer(),
             },
             {
-                'label': _('label_responsible'),
+                'label': _(u"label_responsible", default=u"Responsible"),
                 'value': self.get_task_info(self.context),
             },
         ]
