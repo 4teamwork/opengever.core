@@ -69,16 +69,25 @@ class Overview(DisplayForm, OpengeverTab):
         """ Return the boxes in the overview splittet in two columns
         """
         items = [
-            [
-            dict(
-                id='get_main_attributes',
-                content=self.get_main_attributes()),
-            dict(id='documents', content=self.documents()),
+            [dict(id='main_attributes',
+                  label=_(u'label_main_attributes', default="Main Atrributes"),
+                  content=self.get_main_attributes()),
+             dict(id='documents',
+                  label=_(u'label_documents', default="Documents"),
+                  content=self.documents()),
             ],
-            [dict(id='containing_task', content=self.get_containing_task()),
-             dict(id='sub_task', content=self.get_sub_tasks()),
-             dict(id='predecessor_task', content=self.get_predecessor_task()),
-             dict(id='successor_tasks', content=self.get_successor_tasks()),
+            [dict(id='containing_task',
+                  label=_(u'label_containing_task', default="Containing tasks"),
+                  content=self.get_containing_task()),
+             dict(id='sub_task',
+                  label=_(u'label_sub_task', default="Sub tasks"),
+                  content=self.get_sub_tasks()),
+             dict(id='predecessor_task',
+                  label=_(u'label_predecessor_task', default="Predecessor task"),
+                  content=self.get_predecessor_task()),
+             dict(id='successor_tasks',
+                  label=_(u'label_successor_task', default="Successor task"),
+                  content=self.get_successor_tasks()),
             ],
             ]
         return items

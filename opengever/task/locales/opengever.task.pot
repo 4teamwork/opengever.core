@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2012-02-22 07:56+0000\n"
+"POT-Creation-Date: 2012-02-22 08:47+0000\n"
 "PO-Revision-Date: 2009-02-25 14:39+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -180,11 +180,6 @@ msgstr ""
 #. Default: "1. Choose dossier"
 #: ./opengever/task/browser/attachdocument.py:56
 msgid "attachdocument_step_choose_dossier"
-msgstr ""
-
-#. Default: "last modified"
-#: ./opengever/task/viewlets/byline.pt:35
-msgid "box_last_modified"
 msgstr ""
 
 #. Default: "Assign"
@@ -492,9 +487,19 @@ msgstr ""
 msgid "label_complete_documents"
 msgstr ""
 
+#. Default: "Containing tasks"
+#: ./opengever/task/browser/overview.py:80
+msgid "label_containing_task"
+msgstr ""
+
 #. Default: "Copy related documents to inbox of target client"
 #: ./opengever/task/browser/copy_related_documents.py:57
 msgid "label_copy_documents"
+msgstr ""
+
+#. Default: "last modified"
+#: ./opengever/task/viewlets/byline.pt:44
+msgid "label_created"
 msgstr ""
 
 #. Default: "Date of completion"
@@ -505,7 +510,7 @@ msgstr ""
 
 #. Default: "Deadline"
 #: ./opengever/task/browser/delegate/metadata.py:33
-#: ./opengever/task/browser/overview.py:182
+#: ./opengever/task/browser/overview.py:191
 #: ./opengever/task/task.py:118
 msgid "label_deadline"
 msgstr ""
@@ -523,6 +528,11 @@ msgstr ""
 #. Default: "Document Date"
 #: ./opengever/task/task.py:424
 msgid "label_document_date"
+msgstr ""
+
+#. Default: "Documents"
+#: ./opengever/task/browser/overview.py:76
+msgid "label_documents"
 msgstr ""
 
 #. Default: "You are not allowed to edit this response."
@@ -562,18 +572,33 @@ msgstr ""
 
 #. Default: "Issuer"
 #: ./opengever/task/browser/delegate/metadata.py:27
-#: ./opengever/task/browser/overview.py:186
+#: ./opengever/task/browser/overview.py:195
 #: ./opengever/task/task.py:83
 msgid "label_issuer"
 msgstr ""
 
-#: ./opengever/task/browser/overview.py:166
+#. Default: "last modified"
+#: ./opengever/task/viewlets/byline.pt:35
+msgid "label_last_modified"
+msgstr ""
+
+#. Default: "Main Atrributes"
+#: ./opengever/task/browser/overview.py:73
+msgid "label_main_attributes"
+msgstr ""
+
+#: ./opengever/task/browser/overview.py:175
 msgid "label_parent_dossier_title"
 msgstr ""
 
 #. Default: "Predecessor"
 #: ./opengever/task/task.py:189
 msgid "label_predecessor"
+msgstr ""
+
+#. Default: "Predecessor task"
+#: ./opengever/task/browser/overview.py:86
+msgid "label_predecessor_task"
 msgstr ""
 
 #. Default: "Receipt Date"
@@ -607,7 +632,7 @@ msgstr ""
 
 #. Default: "Responsible"
 #: ./opengever/task/browser/assign.py:44
-#: ./opengever/task/browser/overview.py:190
+#: ./opengever/task/browser/overview.py:199
 #: ./opengever/task/task.py:110
 msgid "label_responsible"
 msgstr ""
@@ -627,9 +652,19 @@ msgstr ""
 msgid "label_source_dossier"
 msgstr ""
 
+#. Default: "Sub tasks"
+#: ./opengever/task/browser/overview.py:83
+msgid "label_sub_task"
+msgstr ""
+
 #. Default: "Target Dossier"
 #: ./opengever/task/browser/successor.py:41
 msgid "label_successor_target_dossier"
+msgstr ""
+
+#. Default: "Successor task"
+#: ./opengever/task/browser/overview.py:89
+msgid "label_successor_task"
 msgstr ""
 
 #. Default: "Target client for successor task"
@@ -642,19 +677,19 @@ msgstr ""
 msgid "label_target_client"
 msgstr ""
 
-#: ./opengever/task/browser/overview.py:162
+#: ./opengever/task/browser/overview.py:171
 msgid "label_task_title"
 msgstr ""
 
 #. Default: "Task Type"
-#: ./opengever/task/browser/overview.py:174
+#: ./opengever/task/browser/overview.py:183
 #: ./opengever/task/task.py:91
 msgid "label_task_type"
 msgstr ""
 
 #. Default: "Text"
 #: ./opengever/task/browser/delegate/metadata.py:38
-#: ./opengever/task/browser/overview.py:170
+#: ./opengever/task/browser/overview.py:179
 #: ./opengever/task/task.py:133
 msgid "label_text"
 msgstr ""
@@ -672,7 +707,7 @@ msgstr ""
 msgid "label_transition"
 msgstr ""
 
-#: ./opengever/task/browser/overview.py:178
+#: ./opengever/task/browser/overview.py:187
 msgid "label_workflow_state"
 msgstr ""
 
@@ -689,7 +724,7 @@ msgstr ""
 msgid "new_dossier"
 msgstr ""
 
-#: ./opengever/task/browser/overview_templates/overview.pt:19
+#: ./opengever/task/browser/overview_templates/overview.pt:17
 msgid "no_content"
 msgstr ""
 
@@ -753,7 +788,7 @@ msgid "task_object_successor"
 msgstr ""
 
 #. Default: "expired"
-#: ./opengever/task/viewlets/byline.pt:44
+#: ./opengever/task/viewlets/byline.pt:52
 msgid "time_expired"
 msgstr ""
 

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2012-02-22 07:56+0000\n"
+"POT-Creation-Date: 2012-02-22 08:47+0000\n"
 "PO-Revision-Date: 2012-01-13 17:45+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -93,7 +93,7 @@ msgstr "Die Weiterleitung wurde im lokalen Eingangskorb gespeichert."
 #: ./opengever/task/browser/accept/existingdossier.py:117
 #: ./opengever/task/browser/accept/newdossier.py:375
 msgid "The forwarding has been stored in the local inbox and the succesor task has been created"
-msgstr ""
+msgstr "Die Weiterleitung wurde im lokalen Eingangskorb abgelegt und die Kopierte Aufgabe erstellt."
 
 #: ./opengever/task/browser/accept/existingdossier.py:108
 msgid "The forwarding is now assigned to the dossier"
@@ -178,11 +178,6 @@ msgstr "2. Dokument wählen"
 #: ./opengever/task/browser/attachdocument.py:56
 msgid "attachdocument_step_choose_dossier"
 msgstr "1. Dossier wählen"
-
-#. Default: "last modified"
-#: ./opengever/task/viewlets/byline.pt:35
-msgid "box_last_modified"
-msgstr "zuletzt verändert"
 
 #. Default: "Assign"
 #: ./opengever/task/browser/assign.py:73
@@ -490,10 +485,20 @@ msgstr "Dokumente kopieren"
 msgid "label_complete_documents"
 msgstr "Dokumente"
 
+#. Default: "Containing tasks"
+#: ./opengever/task/browser/overview.py:80
+msgid "label_containing_task"
+msgstr "Hauptaufgabe"
+
 #. Default: "Copy related documents to inbox of target client"
 #: ./opengever/task/browser/copy_related_documents.py:57
 msgid "label_copy_documents"
 msgstr "Mit der Aufgabe verknüpfte Dokumente in den Eingangskorb des Ziel-Mandanten kopieren."
+
+#. Default: "last modified"
+#: ./opengever/task/viewlets/byline.pt:44
+msgid "label_created"
+msgstr "erstellt am"
 
 #. Default: "Date of completion"
 #: ./opengever/task/response.py:55
@@ -503,7 +508,7 @@ msgstr "Erledigungsdatum"
 
 #. Default: "Deadline"
 #: ./opengever/task/browser/delegate/metadata.py:33
-#: ./opengever/task/browser/overview.py:182
+#: ./opengever/task/browser/overview.py:191
 #: ./opengever/task/task.py:118
 msgid "label_deadline"
 msgstr "Zu erledigen bis"
@@ -522,6 +527,11 @@ msgstr "Autor"
 #: ./opengever/task/task.py:424
 msgid "label_document_date"
 msgstr "Dokumentdatum"
+
+#. Default: "Documents"
+#: ./opengever/task/browser/overview.py:76
+msgid "label_documents"
+msgstr "Dokumente"
 
 #. Default: "You are not allowed to edit this response."
 #: ./opengever/task/templates/edit_response.pt:44
@@ -560,13 +570,23 @@ msgstr "Beginn der Arbeit"
 
 #. Default: "Issuer"
 #: ./opengever/task/browser/delegate/metadata.py:27
-#: ./opengever/task/browser/overview.py:186
+#: ./opengever/task/browser/overview.py:195
 #: ./opengever/task/task.py:83
 msgid "label_issuer"
 msgstr "Auftraggeber"
 
+#. Default: "last modified"
+#: ./opengever/task/viewlets/byline.pt:35
+msgid "label_last_modified"
+msgstr "zuletzt verändert"
+
+#. Default: "Main Atrributes"
+#: ./opengever/task/browser/overview.py:73
+msgid "label_main_attributes"
+msgstr "Eigenschaften"
+
 #. Default: "Dossiertitle"
-#: ./opengever/task/browser/overview.py:166
+#: ./opengever/task/browser/overview.py:175
 msgid "label_parent_dossier_title"
 msgstr "Dossiertitel"
 
@@ -574,6 +594,11 @@ msgstr "Dossiertitel"
 #: ./opengever/task/task.py:189
 msgid "label_predecessor"
 msgstr "Vorgänger"
+
+#. Default: "Predecessor task"
+#: ./opengever/task/browser/overview.py:86
+msgid "label_predecessor_task"
+msgstr "Ursprüngliche Aufgabe"
 
 #. Default: "Receipt Date"
 #: ./opengever/task/task.py:428
@@ -606,7 +631,7 @@ msgstr "Aktion"
 
 #. Default: "Responsible"
 #: ./opengever/task/browser/assign.py:44
-#: ./opengever/task/browser/overview.py:190
+#: ./opengever/task/browser/overview.py:199
 #: ./opengever/task/task.py:110
 msgid "label_responsible"
 msgstr "Auftragnehmer"
@@ -626,10 +651,20 @@ msgstr "Dokument"
 msgid "label_source_dossier"
 msgstr "Dossier"
 
+#. Default: "Sub tasks"
+#: ./opengever/task/browser/overview.py:83
+msgid "label_sub_task"
+msgstr "Unteraufgaben"
+
 #. Default: "Target Dossier"
 #: ./opengever/task/browser/successor.py:41
 msgid "label_successor_target_dossier"
 msgstr "Ziel-Dossier"
+
+#. Default: "Successor task"
+#: ./opengever/task/browser/overview.py:89
+msgid "label_successor_task"
+msgstr "Kopierte Aufgabe"
 
 #. Default: "Target client for successor task"
 #: ./opengever/task/browser/successor.py:32
@@ -642,19 +677,19 @@ msgid "label_target_client"
 msgstr "Ziel-Mandant"
 
 #. Default: "Tasktitle"
-#: ./opengever/task/browser/overview.py:162
+#: ./opengever/task/browser/overview.py:171
 msgid "label_task_title"
 msgstr "Aufgabentitel"
 
 #. Default: "Task Type"
-#: ./opengever/task/browser/overview.py:174
+#: ./opengever/task/browser/overview.py:183
 #: ./opengever/task/task.py:91
 msgid "label_task_type"
 msgstr "Auftragstyp"
 
 #. Default: "Text"
 #: ./opengever/task/browser/delegate/metadata.py:38
-#: ./opengever/task/browser/overview.py:170
+#: ./opengever/task/browser/overview.py:179
 #: ./opengever/task/task.py:133
 msgid "label_text"
 msgstr "Beschreibung"
@@ -673,7 +708,7 @@ msgid "label_transition"
 msgstr "Aktion"
 
 #. Default: "State"
-#: ./opengever/task/browser/overview.py:178
+#: ./opengever/task/browser/overview.py:187
 msgid "label_workflow_state"
 msgstr "Status"
 
@@ -690,7 +725,7 @@ msgstr "Meine Aufgaben"
 msgid "new_dossier"
 msgstr "neues Dossier"
 
-#: ./opengever/task/browser/overview_templates/overview.pt:19
+#: ./opengever/task/browser/overview_templates/overview.pt:17
 msgid "no_content"
 msgstr "Kein Inhalt"
 
@@ -754,7 +789,7 @@ msgid "task_object_successor"
 msgstr "Folgeaufgabe erstellt"
 
 #. Default: "expired"
-#: ./opengever/task/viewlets/byline.pt:44
+#: ./opengever/task/viewlets/byline.pt:52
 msgid "time_expired"
 msgstr "Abgelaufen"
 
