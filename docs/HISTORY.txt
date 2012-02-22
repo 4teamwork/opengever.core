@@ -5,6 +5,11 @@ Changelog
 2.2 (unreleased)
 ----------------
 
+- When completing a successor task, let the user report all documents in the dossier.
+  Issue #1344 Aufgabe erledigen bzw. abschliessen
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1344
+  [jone]
+
 - Display special icon for related items in task responses
   [lgraf]
 

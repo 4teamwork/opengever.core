@@ -5,10 +5,13 @@ predecessor task.
 """
 
 from Acquisition import aq_parent, aq_inner
+from Products.CMFCore.utils import getToolByName
+from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
 from Products.statusmessages.interfaces import IStatusMessage
 from five import grok
 from opengever.base.browser.wizard.interfaces import IWizardDataStorage
 from opengever.base.interfaces import IReferenceNumber
+from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.globalindex.interfaces import ITaskQuery
 from opengever.ogds.base.interfaces import ITransporter
 from opengever.ogds.base.utils import encode_after_json
@@ -17,7 +20,6 @@ from opengever.task import _
 from opengever.task import util
 from opengever.task.interfaces import ISuccessorTaskController
 from opengever.task.task import ITask
-from opengever.task.util import get_documents_of_task
 from plone.directives.form import Schema
 from plone.z3cform.layout import FormWrapper
 from z3c.form.browser.checkbox import CheckBoxFieldWidget
@@ -35,17 +37,31 @@ import json
 
 @grok.provider(IContextSourceBinder)
 def deliverable_documents_vocabulary(context):
-    """All documents related to the task are deliverable (this includes
-    documents reference by the task using relatedItems but also documents
-    filed within the task).
+    """All documents in the current dossier are deliverable.
     """
 
-    documents = get_documents_of_task(context)
+    dossier = None
+    obj = context
+    while not IPloneSiteRoot.providedBy(obj):
+        if IDossierMarker.providedBy(obj):
+            dossier = obj
+        elif dossier and not IDossierMarker.providedBy(obj):
+            break
+
+        obj = aq_parent(aq_inner(obj))
+
+    if not dossier:
+        raise RuntimeError('Could not find parent dossier.')
+
+    catalog = getToolByName(dossier, 'portal_catalog')
+    brains = catalog(portal_type='opengever.document.document',
+                     path='/'.join(dossier.getPhysicalPath()))
 
     # Create the vocabulary.
     terms = []
     intids = getUtility(IIntIds)
-    for doc in documents:
+    for brain in brains:
+        doc = brain.getObject()
         key = str(intids.getId(doc))
         label = '%s (%s, %s)' % (
             doc.Title(),
