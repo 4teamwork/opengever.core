@@ -9,13 +9,11 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0\n"
-"Language-Code: en\n"
-"Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: DOMAIN\n"
 
 #: ./opengever/tabbedview/browser/selection_tasks.pt:7
-msgid "All visible entries chosen <a href='#'>x</a>"
+msgid "All visible entries chosen <a href="#">x</a>"
 msgstr ""
 
 msgid "By Area"
@@ -427,4 +425,5 @@ msgstr "Corbeille"
 
 msgid "users"
 msgstr "OGDS"
+
 

@@ -9,8 +9,6 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0\n"
-"Language-Code: en\n"
-"Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: DOMAIN\n"
 
@@ -21,18 +19,18 @@ msgstr "Tous"
 
 #: ./opengever/tabbedview/browser/tabs_templates/generic.pt:13
 msgid "All visible entries chosen <a href=\"#\">x</a>"
-msgstr "Choisir toutes les entrées visible"
+msgstr "Choix de toutes les entrées visibles"
 
 msgid "Choose:"
-msgstr "Choisir"
+msgstr "Choix"
 
 msgid "Creator"
-msgstr "Créateur / Auteur"
+msgstr "Créateur"
 
 #: ./opengever/tabbedview/browser/generic_task.pt:60
 #: ./opengever/tabbedview/browser/selection_tasks.pt:15
 msgid "Open"
-msgstr "En suspend"
+msgstr "En suspens"
 
 #: ./opengever/tabbedview/profiles/default/actions.xml
 msgid "Reset Tableconfiguration"
@@ -40,7 +38,7 @@ msgstr "Remettre la configuration des tableaux"
 
 #: ./opengever/tabbedview/browser/tabs_templates/generic.pt:13
 msgid "Show all in this Folder"
-msgstr "Afficher tous dans ce classeur"
+msgstr "Tout afficher dans ce classeur"
 
 #: ./opengever/tabbedview/browser/generic_task.pt:53
 #: ./opengever/tabbedview/browser/selection_tasks.pt:11
@@ -75,7 +73,7 @@ msgid "checked_out"
 msgstr "En traitement"
 
 msgid "checkout_and_edit"
-msgstr "Controler et modifier"
+msgstr "Contrôler et modifier"
 
 #. Default: "Client"
 #: ./opengever/tabbedview/browser/tabs.py:349
@@ -204,7 +202,7 @@ msgid "end"
 msgstr "Fin"
 
 msgid "events"
-msgstr "Evénements"
+msgstr "Rendez-vous"
 
 #. Default: "Filing Number"
 #: ./opengever/tabbedview/browser/tabs.py:224
@@ -218,7 +216,7 @@ msgid "issuedtasks"
 msgstr ""
 
 msgid "issuer"
-msgstr "Attribuer de nouveau"
+msgstr "Attribuer à nouveau"
 
 msgid "journal"
 msgstr "Historique"
@@ -437,4 +435,5 @@ msgstr "Titre"
 
 msgid "trash"
 msgstr "Corbeille"
+
 
