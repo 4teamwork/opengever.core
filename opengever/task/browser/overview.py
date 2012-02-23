@@ -18,9 +18,7 @@ from zope.component import getUtility, getMultiAdapter
 from zope.i18n import translate
 from zope.interface import alsoProvides
 from opengever.tabbedview.helper import _breadcrumbs_from_item
-from zope.component import queryUtility
-from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
-from opengever.dossier.behaviors.dossier import IDossierMarker
+from zope.component import queryUtility, queryAdapter
 
 
 def get_field_widget(obj, field):
@@ -141,12 +139,15 @@ class Overview(DisplayForm, OpengeverTab):
             )
 
         def _get_parent_dossier_title():
-            obj = ITask(self.context)
-            while not IDossierMarker.providedBy(obj):
-                obj = aq_parent(aq_inner(obj))
-                if IPloneSiteRoot.providedBy(obj):
-                    break
-            return obj.Title()
+            finder = queryAdapter(self.context, name='parent-dossier-finder')
+            if not finder:
+                return
+
+            dossier = finder.find_dossier()
+            if not dossier:
+                return None
+
+            return dossier.Title()
 
         def _get_issuer():
             info = getUtility(IContactInformation)
