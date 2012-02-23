@@ -16,7 +16,7 @@ msgid "Add response"
 msgstr "Réponse"
 
 msgid "Attach remote document"
-msgstr "Copie d'un document de votre département"
+msgstr "Copie d'un document de votre service"
 
 msgid "Create successor task"
 msgstr "Créer tâche suivante"
@@ -31,7 +31,7 @@ msgid "task-state-in-progress"
 msgstr "En traitement"
 
 msgid "task-state-new-successor"
-msgstr "Tâche consécutive créée"
+msgstr "Tâche suivante créée"
 
 msgid "task-state-open"
 msgstr "Ouvert"
@@ -40,10 +40,10 @@ msgid "task-state-rejected"
 msgstr "Refusé"
 
 msgid "task-state-resolved"
-msgstr "Terminé"
+msgstr "Fermé"
 
 msgid "task-state-tested-and-closed"
-msgstr "Terminé"
+msgstr "Fermé"
 
 msgid "task-transition-cancelled-open"
 msgstr "Rouvrir"
@@ -52,7 +52,7 @@ msgid "task-transition-in-progress-resolved"
 msgstr "Accomplir"
 
 msgid "task-transition-in-progress-tested-and-closed"
-msgstr "Terminer"
+msgstr "Fermer"
 
 msgid "task-transition-open-cancelled"
 msgstr "Annuler"
@@ -67,7 +67,7 @@ msgid "task-transition-open-resolved"
 msgstr "Accomplir"
 
 msgid "task-transition-open-tested-and-closed"
-msgstr "Terminer"
+msgstr "Fermer"
 
 msgid "task-transition-reassign"
 msgstr "Attribuer à nouveau"
@@ -79,5 +79,6 @@ msgid "task-transition-resolved-in-progress"
 msgstr ""
 
 msgid "task-transition-resolved-tested-and-closed"
-msgstr "Terminer"
+msgstr "Fermer"
+
 
