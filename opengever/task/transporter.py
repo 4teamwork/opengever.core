@@ -238,20 +238,6 @@ class TaskDocumentsTransporter(grok.GlobalUtility):
 
         return intids_mapping
 
-    def copy_documents_from_direct_task(self, task, target, documents=None):
-        ids = [tt.id for tt in get_documents_of_task(task)]
-        clipboard = task.manage_copyObjects(ids)
-        new_ids = target.manage_pasteObjects(clipboard)
-
-        intids_mapping = {}
-        intids = getUtility(IIntIds)
-
-        for item in new_ids:
-            old_iid = intids.getId(task.get(item.get('id')))
-            new_iid = intids.getId(target.get(item.get('new_id')))
-            intids_mapping[old_iid] = new_iid
-        return intids_mapping
-
 
 class ExtractDocuments(grok.View):
     grok.context(ITask)

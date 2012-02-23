@@ -13,6 +13,7 @@ from opengever.task.task import ITask
 from opengever.task.transporter import IResponseTransporter
 from opengever.task.util import change_task_workflow_state
 from plone.dexterity.utils import createContentInContainer
+from zope.app.intid.interfaces import IIntIds
 from zope.component import getUtility
 from zope.i18n import translate
 import AccessControl
@@ -56,6 +57,24 @@ def _create_yearfolder(inbox, year):
         AccessControl.SecurityManagement.setSecurityManager(_sm)
 
     return folder
+
+
+def _copy_documents_from_forwarding(from_obj, to_obj):
+    # set prevent copyname key on the request
+    from_obj.REQUEST['prevent-copyname-on-document-copy'] = True
+
+    intids_mapping = {}
+    intids = getUtility(IIntIds)
+
+    objs = from_obj.getFolderContents(full_objects=True,)
+
+    for obj in objs:
+        clipboard = from_obj.manage_copyObjects([obj.id, ])
+        new_ids = to_obj.manage_pasteObjects(clipboard)
+        intids_mapping[intids.getId(obj)] = intids.getId(
+            to_obj.get(new_ids[0].get('id')))
+
+    return intids_mapping
 
 
 def accept_task_with_response(task, response_text, successor_oguid=None):
@@ -123,8 +142,8 @@ def accept_forwarding_with_successor(
             dossier, 'opengever.task.task', **fielddata)
 
         # copy documents and map the intids
-        doc_transporter = getUtility(ITaskDocumentsTransporter)
-        intids_mapping = doc_transporter.copy_documents_from_direct_task(
+
+        intids_mapping = _copy_documents_from_forwarding(
             successor_forwarding, task)
 
         # copy the responses
@@ -192,9 +211,7 @@ def assign_forwarding_to_dossier(
     successor_tc_task = ISuccessorTaskController(task)
 
     # copy documents and map the intids
-    doc_transporter = getUtility(ITaskDocumentsTransporter)
-    intids_mapping = doc_transporter.copy_documents_from_direct_task(
-        forwarding_obj, task)
+    intids_mapping = _copy_documents_from_forwarding(forwarding_obj, task)
 
     # copy the responses
     response_transporter = IResponseTransporter(task)
