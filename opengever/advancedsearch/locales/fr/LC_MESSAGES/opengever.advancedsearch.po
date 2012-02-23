@@ -9,8 +9,6 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0\n"
-"Language-Code: en\n"
-"Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: DOMAIN\n"
 
@@ -38,35 +36,35 @@ msgstr ""
 
 #: ./opengever/advancedsearch/advanced_search.py:259
 msgid "help_deadline"
-msgstr "Choisissez la date de clôture"
+msgstr "Choix de la date de clôture"
 
 #: ./opengever/advancedsearch/advanced_search.py:192
 msgid "help_delivery_date"
-msgstr "date de livraison"
+msgstr "Date de livraison"
 
 #: ./opengever/advancedsearch/advanced_search.py:198
 msgid "help_delivery_date_2"
-msgstr "date de livraison 2"
+msgstr "Date de livraison 2"
 
 #: ./opengever/advancedsearch/advanced_search.py:216
 msgid "help_document_author"
-msgstr "auteur du document"
+msgstr "Auteur du document"
 
 #: ./opengever/advancedsearch/advanced_search.py:204
 msgid "help_document_date"
-msgstr "date du document"
+msgstr "Date du document"
 
 #: ./opengever/advancedsearch/advanced_search.py:210
 msgid "help_document_date_2"
-msgstr "date du document 2"
+msgstr "Date du document 2"
 
 #: ./opengever/advancedsearch/advanced_search.py:132
 msgid "help_end"
-msgstr "Choisissez la date de clôture"
+msgstr "Choix de la date de clôture"
 
 #: ./opengever/advancedsearch/advanced_search.py:138
 msgid "help_end_2"
-msgstr "Choisissez la date de clôture 2"
+msgstr "Choix de  la date de clôture 2"
 
 #: ./opengever/advancedsearch/advanced_search.py:156
 msgid "help_filing_number"
@@ -74,19 +72,19 @@ msgstr "Entrez le numéro d'inventaire complet"
 
 #: ./opengever/advancedsearch/advanced_search.py:238
 msgid "help_issuer"
-msgstr "Choisissez le mandant"
+msgstr "Choix du client"
 
 #: ./opengever/advancedsearch/advanced_search.py:112
 msgid "help_portal_type"
-msgstr "Choisissez le type de contenu à rechercher. Ne sont parcourus que les contenus du mandant actuel."
+msgstr "Choix du type de contenu à rechercher. Ne sont parcourus que les contenus du mandant actuel."
 
 #: ./opengever/advancedsearch/advanced_search.py:180
 msgid "help_receipt_date"
-msgstr "date de réseption"
+msgstr "Date de réception"
 
 #: ./opengever/advancedsearch/advanced_search.py:186
 msgid "help_receipt_date_2"
-msgstr "date de réception 2"
+msgstr "Date de réception 2"
 
 #: ./opengever/advancedsearch/advanced_search.py:144
 msgid "help_reference_number"
@@ -110,7 +108,7 @@ msgstr "Saisir le numéro courant"
 
 #: ./opengever/advancedsearch/advanced_search.py:120
 msgid "help_start"
-msgstr "Choisissez la date de début"
+msgstr "Choix de la date de début"
 
 #: ./opengever/advancedsearch/advanced_search.py:126
 msgid "help_start_1"
@@ -178,7 +176,7 @@ msgstr "Numéro d'inventaire"
 #. Default: "Issuer"
 #: ./opengever/advancedsearch/advanced_search.py:237
 msgid "label_issuer"
-msgstr "mandataire"
+msgstr "Mandataire"
 
 #. Default: "Type"
 #: ./opengever/advancedsearch/advanced_search.py:111
@@ -235,9 +233,10 @@ msgstr "Type de mandat"
 #. Default: "Also search in the recycle bin"
 #: ./opengever/advancedsearch/advanced_search.py:229
 msgid "label_trashed"
-msgstr "Parcourir également la corbeille"
+msgstr "Explorer également la corbeille"
 
 #: ./opengever/advancedsearch/advanced_search.py:57
 msgid "task"
 msgstr "Tâches sauvegardées localement"
+
 
