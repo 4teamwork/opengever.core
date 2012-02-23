@@ -6,6 +6,7 @@ from ftw.pdfgenerator.interfaces import ILaTeXView
 from ftw.pdfgenerator.view import MakoLaTeXView
 from ftw.table import helper
 from opengever.latex.interfaces import ILandscapeLayer
+from opengever.latex.utils import get_issuer_of_task
 from opengever.latex.utils import get_selected_items
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.tabbedview.helper import workflow_state
@@ -73,11 +74,8 @@ class TaskListingLaTeXView(grok.MultiAdapter, MakoLaTeXView):
         title = unicode(getattr(item, 'Title',
                             getattr(item, 'title', ''))).encode('utf-8')
 
-        issuer_client_title = self.info.get_client_by_id(
-            item.client_id).title
-        issuer = '%s / %s' % (
-            issuer_client_title,
-            self.info.describe(item.issuer, with_principal=False))
+        issuer = get_issuer_of_task(item, with_client=True,
+                                    with_principal=False)
 
         responsible_client = self.info.get_client_by_id(
             item.assigned_client).title

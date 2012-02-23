@@ -14,6 +14,7 @@ from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.behaviors.participation import IParticipationAware
 from opengever.dossier.browser.participants import role_list_helper
+from opengever.latex.utils import get_issuer_of_task
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.ogds.base.utils import get_current_client
 from opengever.repository.interfaces import IRepositoryFolder
@@ -164,9 +165,8 @@ class DossierDetailsLaTeXView(grok.MultiAdapter, MakoLaTeXView):
                 'object_provides': 'opengever.task.task.ITask'})
 
         for brain in brains:
-            issuer = '%s / %s' % (
-                info.get_client_by_id(brain.client_id).title,
-                info.describe(brain.issuer, with_principal=False))
+            issuer = get_issuer_of_task(brain, with_client=True,
+                                        with_principal=False)
 
             responsible = '%s / %s' %  (
                 info.get_client_by_id(brain.assigned_client).title,

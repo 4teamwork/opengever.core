@@ -5,6 +5,11 @@ Changelog
 2.0.2 (unreleased)
 ------------------
 
+- Fix issuer client in task PDFs, so that it also works correct when we have a predecessor.
+  Issue #1412 Optimierung Mandant des Auftraggebers
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1412
+  [jone]
+
 - Issue #1374 Pedenzenliste (PDF).
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1374/
   [jone]

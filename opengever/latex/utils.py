@@ -1,6 +1,8 @@
 from Products.CMFCore.utils import getToolByName
 from opengever.globalindex.interfaces import ITaskQuery
+from opengever.ogds.base.interfaces import IContactInformation
 from zope.component import getUtility
+import types
 
 
 def get_selected_items(context, request):
@@ -41,3 +43,27 @@ def get_selected_items(context, request):
     else:
         # empty generator
         pass
+
+
+def get_issuer_of_task(task, with_client=True, with_principal=False):
+    info = getUtility(IContactInformation)
+
+    issuer = info.describe(task.issuer, with_principal=with_principal)
+
+    if not with_client:
+        return issuer
+
+    if task.predecessor and isinstance(task.predecessor, types.StringTypes):
+        # task is a brain or a task object -> predecessor is the oguid
+        issuer_client_id = task.predecessor.split(':')[0]
+
+    elif task.predecessor:
+        # task is a globalindex object -> predecessor is a globalindex obj too
+        issuer_client_id = task.predecessor.client_id
+
+    else:
+        issuer_client_id = task.client_id
+
+    issuer_client_title = info.get_client_by_id(issuer_client_id).title
+
+    return '%s / %s' % (issuer_client_title, issuer)

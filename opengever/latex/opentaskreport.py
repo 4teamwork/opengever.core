@@ -7,6 +7,7 @@ from ftw.table import helper
 from opengever.globalindex import Session
 from opengever.globalindex.model.task import Task
 from opengever.latex.interfaces import ILandscapeLayer
+from opengever.latex.utils import get_issuer_of_task
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.ogds.base.utils import get_client_id, get_current_client
 from opengever.tabbedview.helper import workflow_state
@@ -125,14 +126,9 @@ class OpenTaskReportLaTeXView(grok.MultiAdapter, MakoLaTeXView):
         title = unicode(getattr(item, 'Title',
                             getattr(item, 'title', ''))).encode('utf-8')
 
-        issuer = self.info.describe(item.issuer, with_principal=False)
-
-        if display_issuer_client:
-            issuer_client_title = self.info.get_client_by_id(
-                item.client_id).title
-            issuer = '%s / %s' % (
-                issuer_client_title,
-                issuer)
+        issuer = get_issuer_of_task(item,
+                                    with_client=display_issuer_client,
+                                    with_principal=False)
 
         responsible = self.info.describe(item.responsible,
                                          with_principal=False)
