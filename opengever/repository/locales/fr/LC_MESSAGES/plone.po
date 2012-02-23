@@ -9,13 +9,11 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0\n"
-"Language-Code: en\n"
-"Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: DOMAIN\n"
 
 msgid "label_actions_menu"
-msgstr "Actions supplémentaires /Autres actions &#9660;"
+msgstr "Actions supplémentaires"
 
 msgid "repositoryfolder-state-active"
 msgstr "Actif"
@@ -30,5 +28,6 @@ msgid "repositoryfolder-transition-inactivate"
 msgstr "Desactiver"
 
 msgid "save attachments"
-msgstr "Sauvegarder les annexes"
+msgstr "Sauvegarder les fichiers attachés"
+
 

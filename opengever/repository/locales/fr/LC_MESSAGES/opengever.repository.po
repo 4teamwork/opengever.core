@@ -9,8 +9,6 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0\n"
-"Language-Code: en\n"
-"Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: DOMAIN\n"
 
@@ -29,7 +27,7 @@ msgstr "Titre"
 #. Default: "A Sibling with the same reference number is existing"
 #: ./opengever/repository/behaviors/referenceprefix.py:66
 msgid "error_sibling_reference_number_existing"
-msgstr "A ce niveau un numéro de classement avec ce numéro de référence existe déjà"
+msgstr "A ce niveau du classement ce numéro de référence existe déjà."
 
 #. Default: "Common"
 #: ./opengever/repository/behaviors/referenceprefix.py:21
@@ -85,17 +83,17 @@ msgstr "Types de dossiers à ajouter"
 #. Default: "Description"
 #: ./opengever/repository/repositoryfolder.py:48
 msgid "label_description"
-msgstr "description"
+msgstr "Description"
 
 #. Default: "Former reference"
 #: ./opengever/repository/repositoryfolder.py:82
 msgid "label_former_reference"
-msgstr "Anciens numéro de référence"
+msgstr "Ancien numéro de référence"
 
 #. Default: "Location"
 #: ./opengever/repository/repositoryfolder.py:68
 msgid "label_location"
-msgstr "Emplacement / Site"
+msgstr "Site"
 
 #. Default: "Reference Prefix"
 #: ./opengever/repository/behaviors/referenceprefix.py:28
@@ -143,4 +141,5 @@ msgstr "Dossiers"
 #: ./opengever/repository/browser/overview_templates/repositoryrootoverview.pt:11
 msgid "th_task"
 msgstr "Tâches"
+
 
