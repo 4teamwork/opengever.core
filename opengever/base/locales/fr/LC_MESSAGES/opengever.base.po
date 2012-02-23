@@ -9,8 +9,6 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0\n"
-"Language-Code: en\n"
-"Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: DOMAIN\n"
 
@@ -24,7 +22,7 @@ msgstr "Pas de fichier pour cette version "
 
 #: ./opengever/base/profiles/default/actions.xml
 msgid "Properties"
-msgstr "Afficher les propriétes"
+msgstr "Affichage les propriétés"
 
 #: ./opengever/base/browser/list_groupmembers.pt:13
 msgid "There are no members in this group."
@@ -72,7 +70,7 @@ msgstr "Confidentiel"
 #. Default: "You have not selected any Items"
 #: ./opengever/base/browser/copy_items.py:40
 msgid "error_no_items"
-msgstr "Vous n'avez sélectionné aucun objet."
+msgstr "Aucun élément sélectionné"
 
 #. Default: "The item you selected cannot be copied"
 #: ./opengever/base/browser/copy_items.py:29
@@ -129,7 +127,8 @@ msgstr ""
 
 #: ./opengever/base/behaviors/classification.py:39
 msgid "help_privacy_layer"
-msgstr "Repère indiquant que les documents contiennent des données ou des profils de la personnalité selon le droit sur la protection des données."
+msgstr "Repère indiquant que les documents contiennent des données ou des profils de la personnalité selon le droit sur la protection des données. 
+"
 
 #: ./opengever/base/behaviors/classification.py:46
 msgid "help_public_trial"
@@ -291,4 +290,5 @@ msgstr "Non contrôlé"
 #: opengever/repository/classification.py
 msgid "unprotected"
 msgstr "Non classé"
+
 
