@@ -9,8 +9,6 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0\n"
-"Language-Code: en\n"
-"Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: DOMAIN\n"
 
@@ -24,23 +22,23 @@ msgstr "Gérer le système de classement"
 
 #: ./opengever/sharing/browser/sharing.py:13
 msgid "sharing_dossier_contributor"
-msgstr "Ajouter dossiers"
+msgstr "Ajouter les dossiers"
 
 #: ./opengever/sharing/browser/sharing.py:14
 msgid "sharing_dossier_editor"
-msgstr "Modifier dossiers"
+msgstr "Modifier les dossiers"
 
 #: ./opengever/sharing/browser/sharing.py:16
 msgid "sharing_dossier_publisher"
-msgstr "Réactiver dossiers"
+msgstr "Réactiver les dossiers"
 
 #: ./opengever/sharing/browser/sharing.py:12
 msgid "sharing_dossier_reader"
-msgstr "Lire dossiers"
+msgstr "Lire les dossiers"
 
 #: ./opengever/sharing/browser/sharing.py:15
 msgid "sharing_dossier_reviewer"
-msgstr "Terminer dossiers"
+msgstr "Fermer les dossiers"
 
 #: ./opengever/sharing/browser/sharing.py:23
 msgid "sharing_editor"
@@ -52,7 +50,7 @@ msgstr "Lire"
 
 #: ./opengever/sharing/browser/sharing.py:24
 msgid "sharing_role_manager"
-msgstr "Gérer rôles"
+msgstr "Gérer les rôles"
 
 #. Default: "Can administrate"
 #: ./opengever/sharing/utilities.py:14
@@ -63,4 +61,5 @@ msgstr "Administrer"
 #: ./opengever/sharing/utilities.py:22
 msgid "title_can_publish"
 msgstr "Publier"
+
 
