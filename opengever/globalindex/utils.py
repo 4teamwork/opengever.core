@@ -1,4 +1,5 @@
 from Products.CMFPlone.utils import getToolByName
+from opengever.base.browser.helper import get_css_class
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.ogds.base.utils import get_client_id
 from zope.app.component.hooks import getSite
@@ -13,16 +14,7 @@ def indexed_task_link(item, display_client=False):
 
     site = getSite()
 
-    if item.task_type == 'forwarding_task_type':
-        css_class = 'contenttype-opengever-inbox-forwarding'
-    elif item.client_id != item.assigned_client or \
-            item.predecessor and \
-            item.predecessor.client_id != item.assigned_client:
-        css_class = 'icon-task-remote-task'
-    elif item.is_subtask:
-        css_class = 'icon-task-subtask'
-    else:
-        css_class = 'contenttype-opengever-task-task'
+    css_class = get_css_class(item)
 
     # get the contact information utlity and the client
     info = queryUtility(IContactInformation)
