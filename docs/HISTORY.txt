@@ -5,6 +5,9 @@ Changelog
 2.1 (unreleased)
 ----------------
 
+- SQL listings: fix encoding problem when filtering.
+  [jone]
+
 - Use the get_css_class() function for guessing the icon css class.
   [jone]
 

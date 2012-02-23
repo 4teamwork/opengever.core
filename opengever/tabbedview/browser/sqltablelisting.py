@@ -45,6 +45,9 @@ class SqlTableSource(grok.MultiAdapter, BaseTableSource):
         """
 
         if len(text):
+            if isinstance(text, str):
+                text = text.decode('utf-8')
+
             # remove trailing asterisk
             if text.endswith('*'):
                 text = text[:-1]
