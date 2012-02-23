@@ -39,7 +39,7 @@ msgstr "Checkout"
 
 #: ./opengever/document/checkout/cancel.py:74
 msgid "Could not cancel checkout on document ${title}"
-msgstr ""
+msgstr "Checkout du document ${title} inabouti"
 
 #: ./opengever/document/checkout/checkin.py:70
 msgid "Could not check in ${title}, it is not a document."
@@ -60,7 +60,7 @@ msgstr "${title} n'est pas un document, par consequet checkout n'a pas abouti"
 
 #: ./opengever/document/profiles/default/actions.xml
 msgid "Create Task"
-msgstr "Constituer une tâche"
+msgstr "Créer une tâche"
 
 #: ./opengever/document/profiles/default/types/opengever.document.document.xml
 msgid "Document"
@@ -69,7 +69,7 @@ msgstr "Document"
 #: ./opengever/document/checkout/manager.py:216
 #: ./opengever/document/checkout/revert.py:26
 msgid "Reverted file to version ${version_id}"
-msgstr "Remis le document à la version ${version_id} "
+msgstr "Retour à la version ${version_id}  du document"
 
 #: ./opengever/document/profiles/default/actions.xml
 msgid "Send as email"
@@ -121,7 +121,7 @@ msgstr "Copie de"
 #. Default: "You don't select a file and document is also not                 preserved in paper_form, please correct it."
 #: ./opengever/document/document.py:216
 msgid "error_file_and_preserved_as_paper"
-msgstr "Vous n'avez pas sélectionné un fichier ni conservé un document en version papier, merci de corriger cela."
+msgstr "Vous n'avez pas sélectionné un fichier ni conservé un document en version papier. Merci de corriger cela."
 
 #. Default: "Either the title or the file is required."
 #: ./opengever/document/document.py:205
@@ -142,7 +142,7 @@ msgstr "Faire le checkin des documents."
 #. Default: "Send as email"
 #: ./opengever/document/mailing.py:184
 msgid "heading_send_as_email"
-msgstr "Envoyer le document comme email"
+msgstr "Envoyer le document comme Email"
 
 #: ./opengever/document/document.py:168
 msgid "help_archival_file"
@@ -257,7 +257,7 @@ msgstr "Commentaire de l'historique"
 #. Default: "creator"
 #: ./opengever/document/document_templates/overview.pt:26
 msgid "label_creator"
-msgstr "Créateur / Auteur"
+msgstr "Créateur"
 
 #. Default: "Date of delivery"
 #: ./opengever/document/document.py:195
@@ -315,7 +315,7 @@ msgstr "Mots-clés"
 #. Default: "Message"
 #: ./opengever/document/mailing.py:176
 msgid "label_message"
-msgstr "message"
+msgstr "Message"
 
 #. Default: "no"
 #: ./opengever/document/document_templates/overview.pt:47
@@ -398,4 +398,5 @@ msgstr "Documents de référence"
 #: ./opengever/document/viewlets/byline.pt:34
 msgid "time_expired"
 msgstr "Périmé"
+
 
