@@ -37,6 +37,7 @@ class TestCssClassHelpers(MockTestCase):
     def test_document_brain_with_icon(self):
         brain = self.stub()
         self.expect(brain.portal_type).result('opengever.document.document')
+        self.expect(getattr(brain, '_v__is_relation', False)).result(False)
         self.expect(brain.getIcon).result('icon_dokument_pdf.gif')
 
         self.replay()
@@ -46,6 +47,7 @@ class TestCssClassHelpers(MockTestCase):
     def test_document_obj_with_icon(self):
         obj = self.stub()
         self.expect(obj.portal_type).result('opengever.document.document')
+        self.expect(getattr(obj, '_v__is_relation', False)).result(False)
         self.expect(obj.getIcon()).result('icon_dokument_word.gif')
 
         self.replay()
@@ -55,7 +57,8 @@ class TestCssClassHelpers(MockTestCase):
     def test_document_obj_with_relation_flag(self):
         obj = self.stub()
         self.expect(obj.portal_type).result('opengever.document.document')
-        self.expect(hasattr(obj, '_v__is_relation')).result(True)
+        self.expect(getattr(obj, '_v__is_relation', False)).result(True)
+        obj._v__is_relation = False
 
         self.replay()
 
