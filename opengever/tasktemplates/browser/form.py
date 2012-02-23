@@ -24,7 +24,7 @@ meta_data['templates'] = {
     'totalProperty': 'totalCount',
 
     'fields': [
-        {'name': 'path_radiobutton', 'type': 'string' ,'hideable' : False},
+        {'name': 'path_radiobutton', 'type': 'string', 'hideable': False},
         {'name': 'created', 'type': 'string'},
         {'name': 'Title', 'type': 'string'}
         ],
@@ -35,7 +35,7 @@ meta_data['templates'] = {
          'menuDisabled': True,
          'sortable': False,
          'dataIndex': 'path_radiobutton',
-         'hideable' : False},
+         'hideable': False},
 
         {'id': 'Title',
          'header': 'Title',
@@ -82,6 +82,7 @@ meta_data['tasks'] = {
         ],
     }
 
+
 def path_checkbox(item, value):
     preselected = item.getObject().preselected
     return """
@@ -99,13 +100,14 @@ def path_checkbox(item, value):
                             preselected and 'checked="checked"' or None
                             )
 
+
 class AddForm(BrowserView):
 
     __call__ = ViewPageTemplateFile("form.pt")
 
     steps = {
         'templates': {
-            'columns' : (
+            'columns': (
                 ('', helper.path_radiobutton),
                 {'column': 'Title',
                  'column_title': _(u'label_title', default=u'Title')},
@@ -125,7 +127,7 @@ class AddForm(BrowserView):
                  'column_title': _(u'label_created', default=u'Created'),
                  'transform': helper.readable_date},),
             'types': ('TaskTemplate',),
-            'states':('tasktemplate-state-active',),
+            'states': ('tasktemplate-state-active',),
 
             }
         }
@@ -134,25 +136,25 @@ class AddForm(BrowserView):
         """returns a listing of either TaskTemplateFolders or TaskTemplates"""
 
         sort_on = self.request.get('sort', 'getObjPositionInParent')
-        sort_on = {'Title':'sortable_title'}.get(sort_on, sort_on)
+        sort_on = {'Title': 'sortable_title'}.get(sort_on, sort_on)
         sort_order = self.request.get('dir', 'ASC')
         sort_order = {'ASC': 'asc',
-                      'DESC':'reverse'}.get(sort_order, sort_order)
+                      'DESC': 'reverse'}.get(sort_order, sort_order)
         templates = self.context.portal_catalog(
             Type=self.steps[show]['types'],
             review_state=self.steps[show]['states'],
-            sort_on = sort_on,
-            sort_order = sort_order,
-            path = path
+            sort_on=sort_on,
+            sort_order=sort_order,
+            path=path
             )
 
-        table_options = {'auto_expand_column':'Title'}
+        table_options = {'auto_expand_column': 'Title'}
         generator = queryUtility(ITableGenerator, 'ftw.tablegenerator')
         return generator.generate(templates,
                                   self.steps[show]['columns'],
-                                  sortable = True,
-                                  selected = (sort_on, sort_order),
-                                  options = table_options,
+                                  sortable=True,
+                                  selected=(sort_on, sort_order),
+                                  options=table_options,
                                   output='json'
                                   )
 
@@ -182,7 +184,7 @@ class AddForm(BrowserView):
         default_sort_order = self.sort_reverse and 'reverse' or 'asc'
         sort_order = self.request.get('dir', default_sort_order)
         self.sort_order = {'ASC': 'asc',
-                           'DESC':'reverse'}.get(sort_order, sort_order)
+                           'DESC': 'reverse'}.get(sort_order, sort_order)
 
         self.sort_reverse = self.sort_order == 'reverse'
 
@@ -209,13 +211,14 @@ class AddForm(BrowserView):
 
         highest_deadline = max([temp.deadline for temp in templates])
 
-        data = dict(title=templatefolder.title,
-                    issuer=self.replace_interactive_user('current_user'),
-                    responsible=self.replace_interactive_user('current_user'),
-                    responsible_client=get_client_id(),
-                    task_type='direct-execution',
-                    deadline=datetime.today() + timedelta(highest_deadline + 5),
-                    )
+        data = dict(
+            title=templatefolder.title,
+            issuer=self.replace_interactive_user('current_user'),
+            responsible=self.replace_interactive_user('current_user'),
+            responsible_client=get_client_id(),
+            task_type='direct-execution',
+            deadline=datetime.today() + timedelta(highest_deadline + 5),
+            )
 
         main_task = createContent('opengever.task.task', **data)
         notify(ObjectCreatedEvent(main_task))
@@ -228,16 +231,17 @@ class AddForm(BrowserView):
 
         # create subtasks
         for template in templates:
-            deadline = datetime.today()+timedelta(template.deadline)
+            deadline = datetime.today() + timedelta(template.deadline)
 
-            data = dict(title=template.title,
-                        issuer=self.replace_interactive_user(template.issuer),
-                        responsible=\
-                            self.replace_interactive_user(template.responsible),
-                        task_type=template.task_type,
-                        text=template.text,
-                        deadline=deadline,
-                        )
+            data = dict(
+                title=template.title,
+                issuer=self.replace_interactive_user(template.issuer),
+                responsible=self.replace_interactive_user(
+                    template.responsible),
+                task_type=template.task_type,
+                text=template.text,
+                deadline=deadline,
+                )
 
             if template.responsible_client == 'interactive_users':
                 info = getUtility(IContactInformation)
