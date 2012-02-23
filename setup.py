@@ -10,6 +10,7 @@ tests_require = [
     'opengever.repository',
     'opengever.document',
     'opengever.contact',
+    'opengever.globalindex',
     'plone.app.testing',
     'plone.mocktestcase',
     'ftw.testing',

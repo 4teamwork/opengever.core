@@ -1,5 +1,6 @@
 from ftw.testing import MockTestCase
 from opengever.base.browser.helper import get_css_class
+from opengever.globalindex.model.task import Task as GlobalindexTask
 from opengever.ogds.base import utils
 from plone.i18n.normalizer import idnormalizer, IIDNormalizer
 
@@ -29,6 +30,15 @@ class TestCssClassHelpers(MockTestCase):
         obj = self.stub()
         self.expect(obj.portal_type).result('opengever.inbox.forwarding')
 
+        self.replay()
+
+        self.assertEquals(get_css_class(obj),
+                          'contenttype-opengever-inbox-forwarding')
+
+    def test_forwarding_globalindex(self):
+        obj = GlobalindexTask(1232, 'client1')
+        obj.task_type = 'forwarding_task_type'
+        obj.is_subtask = False
         self.replay()
 
         self.assertEquals(get_css_class(obj),
@@ -93,6 +103,15 @@ class TestCssClassHelpers(MockTestCase):
         self.assertEquals(get_css_class(obj),
                           'contenttype-opengever-task-task')
 
+    def test_task_globalindex(self):
+        obj = GlobalindexTask(1231, 'client1')
+        obj.assigned_client = 'client1'
+        obj.is_subtask = False
+        self.replay()
+
+        self.assertEquals(get_css_class(obj),
+                          'contenttype-opengever-task-task')
+
     def test_subtask_brain(self):
         brain = self.stub()
         self.expect(brain.portal_type).result('opengever.task.task')
@@ -117,6 +136,15 @@ class TestCssClassHelpers(MockTestCase):
         # parent is task -> obj is subtask
         self.expect(parent.portal_type).result('opengever.task.task')
 
+        self.replay()
+
+        self.assertEquals(get_css_class(obj),
+                          'icon-task-subtask')
+
+    def test_subtask_globalindex(self):
+        obj = GlobalindexTask(1231, 'client1')
+        obj.assigned_client = 'client1'
+        obj.is_subtask = True
         self.replay()
 
         self.assertEquals(get_css_class(obj),
@@ -151,6 +179,15 @@ class TestCssClassHelpers(MockTestCase):
         self.assertEquals(get_css_class(obj),
                           'icon-task-remote-task')
 
+    def test_remote_task_globalindex(self):
+        obj = GlobalindexTask(1231, 'client1')
+        obj.assigned_client = 'client2'
+        obj.is_subtask = False
+        self.replay()
+
+        self.assertEquals(get_css_class(obj),
+                          'icon-task-remote-task')
+
     def test_remote_successor_task_brain(self):
         brain = self.stub()
         self.expect(brain.portal_type).result('opengever.task.task')
@@ -175,6 +212,40 @@ class TestCssClassHelpers(MockTestCase):
         # parent is dossier -> obj is not subtask
         self.expect(parent.portal_type).result('opengever-dossier')
 
+        self.replay()
+
+        self.assertEquals(get_css_class(obj),
+                          'icon-task-remote-task')
+
+    def test_remote_successor_task_globalindex(self):
+        obj = GlobalindexTask(1231, 'client1')
+        obj.assigned_client = 'client1'
+        obj.predecessor = GlobalindexTask(11111, 'client2')
+        obj.is_subtask = False
+        self.replay()
+
+        self.assertEquals(get_css_class(obj),
+                          'icon-task-remote-task')
+
+    def test_remote_subtask_globalindex__issuer(self):
+        # Tests task which is both, remote and subtask, from the
+        # perspective of the issuer (on issuers client).
+        obj = GlobalindexTask(1231, 'client1')
+        obj.assigned_client = 'client2'
+        obj.is_subtask = True
+        # current-client: client1
+        self.replay()
+
+        self.assertEquals(get_css_class(obj),
+                          'icon-task-subtask')
+
+    def test_remote_subtask_globalindex__responsible(self):
+        # Tests task which is both, remote and subtask, from the
+        # perspective of the responsible (on responsible's client).
+        obj = GlobalindexTask(1231, 'client2')
+        obj.assigned_client = 'client1'
+        obj.is_subtask = True
+        # current-client: client1
         self.replay()
 
         self.assertEquals(get_css_class(obj),

@@ -5,6 +5,11 @@ Changelog
 2.2 (unreleased)
 ----------------
 
+- Extend get_css_class so that it supports global index objects.
+  Issue #1412 Optimierung Mandant des Auftraggebers
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1412
+  [jone]
+
 - Fix get_css_class helper for tasks with predecessor (remote-task icon).
   Issue #1412 Optimierung Mandant des Auftraggebers
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1412

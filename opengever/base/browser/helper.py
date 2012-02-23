@@ -2,6 +2,7 @@ from Acquisition import aq_inner, aq_parent
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.ogds.base.utils import get_client_id
 from plone.i18n.normalizer.interfaces import IIDNormalizer
+from sqlalchemy.ext.declarative import DeclarativeMeta
 from zope.component import getUtility
 from zope.deprecation import deprecated
 
@@ -22,6 +23,80 @@ def client_title_helper(item, value):
         return value
 
 
+def _get_task_css_class(task):
+    """A task helper function for `get_css_class`, providing some metadata
+    of a task. The task may be a brain, a dexterity object or a sql alchemy
+    globalindex object.
+    """
+
+    is_forwarding = False
+    is_subtask = False
+    predecessor_client = False
+    client_id = False
+    assigned_client = False
+    current_client = get_client_id()
+
+    if isinstance(type(task), DeclarativeMeta):
+        # globalindex
+        predecessor_client = (task.predecessor and \
+                                  task.predecessor.client_id)
+        client_id = task.client_id
+        assigned_client = task.assigned_client
+
+        is_subtask = task.is_subtask
+        is_forwarding = task.task_type == 'forwarding_task_type'
+
+    elif hasattr(task, 'is_subtask'):
+        # catalog brain
+        predecessor_client = (task.predecessor and \
+                                  task.predecessor.split(':')[0])
+        client_id = task.client_id
+        assigned_client = task.assigned_client
+
+        is_subtask = task.is_subtask
+        is_forwarding = (task.portal_type == \
+                             'opengever.inbox.forwarding')
+
+    else:
+        # dexterity object
+        predecessor_client = (task.predecessor and \
+                                  task.predecessor.split(':')[0])
+        client_id = current_client
+        assigned_client = task.responsible_client
+
+        is_subtask = (aq_parent(aq_inner(task)).portal_type == \
+                          'opengever.task.task')
+        is_forwarding = (task.portal_type == \
+                             'opengever.inbox.forwarding')
+
+    # is it a remote task?
+    if predecessor_client and predecessor_client != assigned_client:
+        is_remote = True
+    elif client_id != assigned_client:
+        is_remote = True
+    else:
+        is_remote = False
+
+    # choose class
+    if is_forwarding:
+        return 'contenttype-opengever-inbox-forwarding'
+
+    elif is_subtask and is_remote:
+        if client_id == current_client:
+            return 'icon-task-subtask'
+        else:
+            return 'icon-task-remote-task'
+
+    elif is_subtask:
+        return 'icon-task-subtask'
+
+    elif is_remote:
+        return 'icon-task-remote-task'
+
+    else:
+        return 'contenttype-opengever-task-task'
+
+
 def get_css_class(item):
     """Returns the content-type icon css class for `item`.
 
@@ -32,7 +107,12 @@ def get_css_class(item):
     css_class = None
 
     normalize = getUtility(IIDNormalizer).normalize
-    if item.portal_type == 'opengever.document.document':
+    if isinstance(type(item), DeclarativeMeta) or \
+            item.portal_type == 'opengever.task.task':
+
+        return _get_task_css_class(item)
+
+    elif item.portal_type == 'opengever.document.document':
         if getattr(item, '_v__is_relation', False):
             # Document was listed as a relation, so we use a special icon.
             css_class = "icon-dokument_verweis"
@@ -55,31 +135,6 @@ def get_css_class(item):
             else:
                 # Fallback for unknown file type
                 css_class = "contenttype-%s" % normalize(item.portal_type)
-
-    elif item.portal_type == 'opengever.task.task':
-        predecessor_client_id = item.predecessor and \
-            item.predecessor.split(':')[0]
-
-        if hasattr(item, 'is_subtask'):
-            # item is a brain
-            is_subtask = item.is_subtask
-            is_remote_task = (item.client_id != item.assigned_client or
-                              predecessor_client_id and
-                              predecessor_client_id != item.assigned_client)
-
-        else:
-            # item is a object
-            is_subtask = aq_parent(aq_inner(item)).portal_type \
-                == 'opengever.task.task'
-            is_remote_task = (item.responsible_client != get_client_id() or
-                              predecessor_client_id and
-                              predecessor_client_id != get_client_id())
-
-        if is_subtask:
-            css_class = 'icon-task-subtask'
-
-        elif is_remote_task:
-            css_class = 'icon-task-remote-task'
 
     if css_class is None:
         css_class = "contenttype-%s" % normalize(item.portal_type)
