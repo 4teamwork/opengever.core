@@ -5,6 +5,11 @@ Changelog
 2.1.2 (unreleased)
 ------------------
 
+- Give admin group also the global role 'Member', so the ExposatorViewlet wouldn't be displayed.
+  Issue #1367 Administrator-Gruppe und -Rollen implementieren
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1367
+  [phgross]
+
 - Give admin group 'Administrator' role instead of 'Manager'
   [lgraf]
 
