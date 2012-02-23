@@ -5,6 +5,11 @@ Changelog
 2.2 (unreleased)
 ----------------
 
+- Disable close_successor_wizard for forwarding successor tasks.
+  Issue #1387 Mandantenuebergreifende Weiterleitung: Wizards erstellen
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1387
+  [phgross]
+
 - When completing a successor task, let the user report all documents in the dossier.
   Issue #1344 Aufgabe erledigen bzw. abschliessen
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1344

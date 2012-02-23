@@ -492,5 +492,11 @@ class TaskTransitionController(BrowserView):
         elif not self.context.predecessor:
             return False
 
+        # check if the predessecor is a forwarding
+        # in this case the successor wizard isn't possible and necessary
+        elif ISuccessorTaskController(self.context).get_predecessor(
+                ).task_type == u'forwarding_task_type':
+            return False
+
         else:
             return True
