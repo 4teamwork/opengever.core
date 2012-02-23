@@ -9,8 +9,6 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0\n"
-"Language-Code: en\n"
-"Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: DOMAIN\n"
 
@@ -38,7 +36,7 @@ msgstr "Annuler"
 #. Default: "Error: Please select at least one document to forward"
 #: ./opengever/inbox/forwarding.py:105
 msgid "error_no_document_selected"
-msgstr "Erreur: Choisissez au minimum un document à transmettre, svp."
+msgstr "Erreur: Choisissez au minimum un document à transmettre."
 
 #. Default: "Common"
 #: ./opengever/inbox/inbox.py:16
@@ -51,7 +49,7 @@ msgstr "Ce goupe est autorisé, dès qu'une tâche est attribuée à la boîte d
 
 #: ./opengever/inbox/forwarding.py:54
 msgid "help_responsible"
-msgstr "Choisissez la personne responsable resp. la boîte de réception du client mentionné ci-dessus."
+msgstr "Choix de la personne responsable ou la boîte de réception du client mentionné ci-dessus."
 
 #. Default: "The successor forwarding was created."
 #: ./opengever/inbox/response.py:287
@@ -61,7 +59,7 @@ msgstr "La transmission suivante a été créée."
 #. Default: "The forwarding was moved to the yearfolder ${year}"
 #: ./opengever/inbox/response.py:216
 msgid "info_forwarding_move_to_yearfolder"
-msgstr "La transmission été déplacée vers \"Terminé ${year}\""
+msgstr "La transmission été déplacée vers \"Fermé ${year}\""
 
 #. Default: "Inbox Group"
 #: ./opengever/inbox/inbox.py:23
@@ -86,5 +84,6 @@ msgstr "Enregistrer"
 #. Default: "Closed ${year}"
 #: ./opengever/inbox/response.py:186
 msgid "yearfolder_title"
-msgstr "Terminé ${year}"
+msgstr "Fermé ${year}"
+
 

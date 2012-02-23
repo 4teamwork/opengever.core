@@ -9,8 +9,6 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0\n"
-"Language-Code: en\n"
-"Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: DOMAIN\n"
 
@@ -18,10 +16,10 @@ msgid "dossier-transition-deactivate"
 msgstr "Déactiver"
 
 msgid "dossier-transition-resolve"
-msgstr "Terminer"
+msgstr "Fermer"
 
 msgid "forwarding-state-closed"
-msgstr "Terminé"
+msgstr "Fermé"
 
 msgid "forwarding-state-open"
 msgstr "Ouvert"
@@ -33,7 +31,7 @@ msgid "forwarding-transition-assign-to-dossier"
 msgstr "Attribuer à un dossier"
 
 msgid "forwarding-transition-close"
-msgstr "Terminer"
+msgstr "Fermer"
 
 msgid "forwarding-transition-reassign"
 msgstr "Attribuer de nouveau"
@@ -43,4 +41,5 @@ msgstr "Refuser"
 
 msgid "inbox-state-default"
 msgstr "Ouvert"
+
 
