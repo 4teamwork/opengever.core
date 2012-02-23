@@ -5,6 +5,9 @@ Changelog
 2.0.3 (unreleased)
 ------------------
 
+- Added parent-dossier-finder adapter.
+  [jone]
+
 - Made view failsafe when there is no orig_template
   Issue #1398 DossierReporter: Fallback implementieren fuer MissingValues
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1398/
@@ -818,4 +821,3 @@ Changelog
 
 - Added Actions for Version history and journal
   [14.10.2009, jbaumann]
-
