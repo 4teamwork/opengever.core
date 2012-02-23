@@ -63,6 +63,11 @@ class DossierFunctionalLayer(PloneSandboxLayer):
             ('client1_users',
             'client1_inbox_users'))
 
+        # savepoint "support" for sqlite
+        # We need savepoint support for version retrieval with CMFEditions.
+        import zope.sqlalchemy.datamanager
+        zope.sqlalchemy.datamanager.NO_SAVEPOINT_SUPPORT = set([])
+
         # configure client ID
         registry = getUtility(IRegistry, context=portal)
         client = registry.forInterface(IClientConfiguration)
