@@ -144,8 +144,8 @@ class RefuseForwardingView(grok.View):
         add_simple_response(
             self.context,
             field_changes=(
-                (ITask['responsible'], self.contex.responsible),
-                (ITask['responsible_client'], self.contex.responsible_client),),
+                (ITask['responsible'], self.context.responsible),
+                (ITask['responsible_client'], self.context.responsible_client),),
             transition= u'forwarding-transition-refuse')
 
         notify(ObjectModifiedEvent(self.context))
