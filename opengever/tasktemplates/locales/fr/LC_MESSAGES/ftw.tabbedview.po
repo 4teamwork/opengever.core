@@ -13,8 +13,9 @@ msgstr ""
 "Domain: DOMAIN\n"
 
 msgid "tasktemplatefolders"
-msgstr "Procédés standards"
+msgstr "Déroulements standards"
 
 msgid "tasktemplates"
-msgstr "Modèles pour tâches"
+msgstr "Modèles de tâches"
+
 

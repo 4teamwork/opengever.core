@@ -17,22 +17,22 @@ msgstr "Description"
 
 #: ./opengever/tasktemplates/profiles/default/types/opengever.tasktemplates.tasktemplate.xml
 msgid "TaskTemplate"
-msgstr "Modèle pour tâches"
+msgstr "Modèle de tâches"
 
 #: ./opengever/tasktemplates/profiles/default/types/opengever.tasktemplates.tasktemplatefolder.xml
 msgid "TaskTemplateFolder"
-msgstr "Procédé standard"
+msgstr "Déroulement standard"
 
 msgid "Title"
 msgstr "Titre"
 
 #: ./opengever/tasktemplates/browser/form.pt:19
 msgid "add tasktemplate"
-msgstr "Ajouter modèle des tâches"
+msgstr "Ajouter un modèle de tâches"
 
 #: ./opengever/tasktemplates/browser/form.pt:22
 msgid "choose template"
-msgstr "Choisir modèle"
+msgstr "Choix du modèle"
 
 #. Default: "Interactive users"
 #: ./opengever/tasktemplates/vocabularies.py:49
@@ -50,7 +50,7 @@ msgstr "Délai en jours à partir de la date de début de la tâche"
 
 #: ./opengever/tasktemplates/content/tasktemplate.py:38
 msgid "help_issuer"
-msgstr "Choisissez le mandant. Vous pouvez aussi choisir les utilisateurs interactifs \"responsable\" ou \"collaborateur\""
+msgstr "Choix du client. Vous pouvez aussi choisir les utilisateurs interactifs \"responsables\" ou \"collaborateurs"\"
 
 #: ./opengever/tasktemplates/content/tasktemplate.py:86
 msgid "help_preselected"
@@ -58,19 +58,19 @@ msgstr "Ce modèle fait parti du choix standard des procédés standards"
 
 #: ./opengever/tasktemplates/content/tasktemplate.py:65
 msgid "help_responsible"
-msgstr "Choisissez le mandataire. Si vous choisissez l'option \"utilisateur interactif\" dans le champ \"Client du mandataire\" vous pouvez aussi choisir \"responsable\"ou \"collaborateur\" dans ce champ "
+msgstr "Choix du mandataire. Si vous choisissez l'option \"utilisateur interactif\" dans le champ \"Client du mandataire\" vous pouvez aussi choisir \"responsable\"ou \"collaborateur\" dans ce champ "
 
 #: ./opengever/tasktemplates/content/tasktemplate.py:57
 msgid "help_responsible_client"
-msgstr "Choisissez le client du mandataire ou choisissez \"utilisateur interactif\""
+msgstr "Choix du client du mandataire ou choisissez \"utilisateur interactif\""
 
 #: ./opengever/tasktemplates/content/tasktemplate.py:46
 msgid "help_task_type"
-msgstr "Choisisez le type de tâche."
+msgstr "Choix le type de tâche."
 
 #: ./opengever/tasktemplates/content/tasktemplate.py:79
 msgid "help_text"
-msgstr "Saisissez une instruction de travail détaillée ou un commentaire"
+msgstr "Saisie d'une  instruction de travail détaillée ou d'un commentaire"
 
 #: ./opengever/tasktemplates/content/tasktemplate.py:31
 msgid "help_title"
@@ -159,7 +159,7 @@ msgstr "Oui"
 #. Default: "tasks created"
 #: ./opengever/tasktemplates/browser/form.py:229
 msgid "message_tasks_created"
-msgstr "Toutes les tâches du procédé standard ont été créée"
+msgstr "Toutes les tâches du procédé standard ont été créées"
 
 #. Default: "Yes"
 #: ./opengever/tasktemplates/browser/tasktemplates.py:16
@@ -168,5 +168,6 @@ msgstr "Oui"
 
 #: ./opengever/tasktemplates/browser/form.pt:23
 msgid "select tasks"
-msgstr "Choisir des tâches"
+msgstr "Choix des tâches"
+
 

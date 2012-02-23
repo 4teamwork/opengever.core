@@ -13,7 +13,7 @@ msgstr ""
 "Domain: DOMAIN\n"
 
 msgid "Add task from template"
-msgstr "Lancer le procédé standard"
+msgstr "Ajouter une tâche à partir du modèle"
 
 msgid "tasktemplate-state-active"
 msgstr "Actif"
@@ -29,4 +29,5 @@ msgstr "Déactiver"
 
 msgid "tasktemplatefolder-transition-inactiv-activ"
 msgstr "Activer"
+
 
