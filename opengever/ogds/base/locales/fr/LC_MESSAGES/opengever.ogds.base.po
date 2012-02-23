@@ -9,8 +9,6 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0\n"
-"Language-Code: en\n"
-"Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: DOMAIN\n"
 
@@ -27,7 +25,7 @@ msgstr "Oui"
 #. Default: "Inbox: ${client}"
 #: ./opengever/ogds/base/contact_info.py:330
 msgid "inbox_label"
-msgstr "boîte de réception"
+msgstr "Boîte de réception"
 
 #. Default: "Active:"
 #: ./opengever/ogds/base/browser/userdetails_templates/userdetails.pt:39
@@ -103,4 +101,5 @@ msgstr "Site Internet"
 #: ./opengever/ogds/base/browser/userdetails_templates/userdetails.pt:22
 msgid "link_all_users"
 msgstr "Afficher tous les utilisateurs"
+
 
