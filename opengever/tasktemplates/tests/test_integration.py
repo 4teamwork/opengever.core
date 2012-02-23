@@ -167,17 +167,31 @@ class TestTaskTemplatesIntegration(unittest.TestCase):
             path='/'.join(dossier.getPhysicalPath()),
                 portal_type='opengever.task.task')
 
-        # We should have now three Task-Objects
-        self.assertTrue(3 == len(brains))
+        # We should have now three main Task-Objects
+        # and tree subtasks objects
+        self.assertTrue((3 + 3) == len(brains))
 
         task = brains[0]
+        obj = task.getObject()
 
-        # Check the attributes from the template
-        self.assertTrue(task.Title == template1.title)
+        self.assertEquals(task.Title, 'TaskTemplateFolder 1')
+        self.assertEquals(task.responsible, mtool.getAuthenticatedMember().getId())
+        self.assertEquals(
+            task.deadline.date(),
+            (datetime.today() + timedelta(template1.deadline + 5 )).date())
+        self.assertEquals(task.getObject().text, None)
+        self.assertEquals(task.issuer, mtool.getAuthenticatedMember().getId())
+
+        self.assertEquals(task.review_state, 'task-state-in-progress')
+
+        # Check the subtask attributes from the template
+        subtask = obj.getFolderContents()[0]
+
+        self.assertTrue(subtask.Title == template1.title)
         self.assertTrue(
-            task.responsible == mtool.getAuthenticatedMember().getId())
+            subtask.responsible == mtool.getAuthenticatedMember().getId())
         self.assertTrue(
-            task.deadline.date() == (datetime.today() + timedelta(
+            subtask.deadline.date() == (datetime.today() + timedelta(
                 template1.deadline)).date())
-        self.assertTrue(task.getObject().text == template1.text)
-        self.assertTrue(task.issuer == IDossier(dossier).responsible)
+        self.assertTrue(subtask.getObject().text == template1.text)
+        self.assertTrue(subtask.issuer == IDossier(dossier).responsible)

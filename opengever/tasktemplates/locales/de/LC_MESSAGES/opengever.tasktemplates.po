@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2011-01-12 08:51+0000\n"
-"PO-Revision-Date: 2010-12-14 11:36+0100\n"
+"POT-Creation-Date: 2012-02-23 13:38+0000\n"
+"PO-Revision-Date: 2012-02-23 14:39+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
 "MIME-Version: 1.0\n"
@@ -92,7 +92,7 @@ msgid "label_continue"
 msgstr "Weiter"
 
 #. Default: "Created"
-#: ./opengever/tasktemplates/browser/form.py:112
+#: ./opengever/tasktemplates/browser/form.py:114
 msgid "label_created"
 msgstr "Erstelldatum"
 
@@ -145,7 +145,7 @@ msgid "label_text"
 msgstr "Kommentar"
 
 #. Default: "Title"
-#: ./opengever/tasktemplates/browser/form.py:110
+#: ./opengever/tasktemplates/browser/form.py:112
 #: ./opengever/tasktemplates/browser/tasktemplates.py:29
 #: ./opengever/tasktemplates/browser/templatefolders.py:18
 msgid "label_title"
@@ -156,8 +156,13 @@ msgstr "Titel"
 msgid "label_yes"
 msgstr "Ja"
 
+#. Default: "You have not selected any templates"
+#: ./opengever/tasktemplates/browser/form.py:203
+msgid "message_no_templates_selected"
+msgstr "Sie haben keine Vorlagen ausgewählt."
+
 #. Default: "tasks created"
-#: ./opengever/tasktemplates/browser/form.py:229
+#: ./opengever/tasktemplates/browser/form.py:262
 msgid "message_tasks_created"
 msgstr "Alle Aufgaben aus gewähltem Standardablauf wurden erstellt."
 

@@ -1,22 +1,21 @@
 from AccessControl import Unauthorized
 from Acquisition import aq_inner, aq_parent
-from datetime import datetime, timedelta
-from plone.dexterity.utils import createContent, addContentToContainer
 from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
 from Products.CMFPlone.utils import getToolByName
 from Products.Five.browser import BrowserView
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from Products.statusmessages.interfaces import IStatusMessage
-from zope.component import queryUtility, getUtility
-from zope.event import notify
-from zope.lifecycleevent import ObjectCreatedEvent, ObjectAddedEvent
-
+from datetime import datetime, timedelta
 from ftw.table import helper
 from ftw.table.interfaces import ITableGenerator
 from opengever.dossier.behaviors.dossier import IDossierMarker, IDossier
 from opengever.ogds.base.interfaces import IContactInformation
-from opengever.ogds.base.utils import get_current_client
+from opengever.ogds.base.utils import get_current_client, get_client_id
 from opengever.tasktemplates import _
+from plone.dexterity.utils import createContent, addContentToContainer
+from zope.component import queryUtility, getUtility
+from zope.event import notify
+from zope.lifecycleevent import ObjectCreatedEvent
 
 
 meta_data = {}
@@ -193,11 +192,43 @@ class AddForm(BrowserView):
         if 'abort' in self.request.keys():
             return self.request.RESPONSE.redirect(self.context.absolute_url())
 
+        templates = []
+
         for path in paths:
-            template = self.context.restrictedTraverse(path)
+            templates.append(self.context.restrictedTraverse(path))
 
+        if len(templates) == 0:
+            IStatusMessage(self.request).addStatusMessage(
+                _(u'message_no_templates_selected',
+                  default=u'You have not selected any templates'), type="info")
+
+            return self.request.RESPONSE.redirect(self.context.absolute_url())
+
+        # Create main task
+        templatefolder = aq_parent(aq_inner(templates[0]))
+
+        highest_deadline = max([temp.deadline for temp in templates])
+
+        data = dict(title=templatefolder.title,
+                    issuer=self.replace_interactive_user('current_user'),
+                    responsible=self.replace_interactive_user('current_user'),
+                    responsible_client=get_client_id(),
+                    task_type='direct-execution',
+                    deadline=datetime.today() + timedelta(highest_deadline + 5),
+                    )
+
+        main_task = createContent('opengever.task.task', **data)
+        notify(ObjectCreatedEvent(main_task))
+        main_task = addContentToContainer(
+            self.context, main_task, checkConstraints=True)
+
+        # set the main_task in to the in progress state
+        wft = getToolByName(self.context, 'portal_workflow')
+        wft.doActionFor(main_task, 'task-transition-open-in-progress')
+
+        # create subtasks
+        for template in templates:
             deadline = datetime.today()+timedelta(template.deadline)
-
 
             data = dict(title=template.title,
                         issuer=self.replace_interactive_user(template.issuer),
@@ -207,6 +238,7 @@ class AddForm(BrowserView):
                         text=template.text,
                         deadline=deadline,
                         )
+
             if template.responsible_client == 'interactive_users':
                 info = getUtility(IContactInformation)
                 responsible_assigned_clients = tuple(
@@ -223,16 +255,16 @@ class AddForm(BrowserView):
 
             task = createContent('opengever.task.task', **data)
             notify(ObjectCreatedEvent(task))
-            task = addContentToContainer(self.context,
+            task = addContentToContainer(main_task,
                                          task,
                                          checkConstraints=True)
-            notify(ObjectAddedEvent(task))
             task.reindexObject()
 
-        IStatusMessage(self.request).addStatusMessage(_(u'message_tasks_created',default=u'tasks created'),
-                                                      type="info")
-        return self.request.RESPONSE.redirect(self.context.absolute_url() + \
-                                                  '#tasks')
+        IStatusMessage(self.request).addStatusMessage(
+            _(u'message_tasks_created', default=u'tasks created'), type="info")
+
+        return self.request.RESPONSE.redirect(
+            '%s#tasks' % self.context.absolute_url())
 
     def replace_interactive_user(self, principal):
         """Replaces interactive users in the principal.
