@@ -9,8 +9,6 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0\n"
-"Language-Code: en\n"
-"Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: DOMAIN\n"
 
@@ -107,32 +105,32 @@ msgstr "Dossier modifié: ${title}"
 #. Default: "Local roles aquistion activated."
 #: ./opengever/journal/handlers.py:234
 msgid "label_local_roles_acquisition_activated"
-msgstr "Héritage des droits accès activée"
+msgstr "Héritage des droits d'accès activé"
 
 #. Default: "Local roles aquistion activated at ${repository}."
 #: ./opengever/journal/handlers.py:139
 msgid "label_local_roles_acquisition_activated_at"
-msgstr "Héritage des droits accès activée pour  ${repository}."
+msgstr "Héritage des droits d'accès activé pour  ${repository}."
 
 #. Default: "Local roles aquistion blocked."
 #: ./opengever/journal/handlers.py:221
 msgid "label_local_roles_acquisition_blocked"
-msgstr "Héritage des droits accès désactivée"
+msgstr "Héritage des droits d'accès désactivé"
 
 #. Default: "Local roles aquistion blocked at ${repository}."
 #: ./opengever/journal/handlers.py:123
 msgid "label_local_roles_acquisition_blocked_at"
-msgstr "Héritage des droits accès désactivée pour  ${repository}."
+msgstr "Héritage des droits d'accès désactivé pour  ${repository}."
 
 #. Default: "Local roles modified."
 #: ./opengever/journal/handlers.py:247
 msgid "label_local_roles_modified"
-msgstr "Rôles locaux modifiés"
+msgstr "Rôles à l'intérne modifiés"
 
 #. Default: "Local roles modified at ${repository}."
 #: ./opengever/journal/handlers.py:155
 msgid "label_local_roles_modified_at"
-msgstr "Rôles locaux  pour ${repository} modifiés"
+msgstr "Rôles à l'intérne pour ${repository} modifiés"
 
 #. Default: "Mail added: ${title}"
 #: ./opengever/journal/handlers.py:501
@@ -198,4 +196,5 @@ msgstr "Historique"
 #: ./opengever/journal/no_selection_amount.pt:3
 msgid "tab_matches"
 msgstr "Résultat(s) : ${amount}"
+
 
