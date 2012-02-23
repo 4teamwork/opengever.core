@@ -9,8 +9,6 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0\n"
-"Language-Code: en\n"
-"Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: DOMAIN\n"
 
@@ -24,15 +22,15 @@ msgstr "Extraire documents"
 
 #: ./opengever/mail/browser/send_document.py:34
 msgid "No Mail Address"
-msgstr "Pas d'adresse email"
+msgstr "Pas d'adresse Email"
 
 #: ./opengever/mail/validators.py:20
 msgid "The files you selected are larger than the maximum size"
-msgstr "La taille des fichiers séléctionnée dépasse la taille maximum."
+msgstr "La taille des fichiers séléctionnés dépasse la taille maximum permise."
 
 #: ./opengever/mail/browser/send_document.py:94
 msgid "You have to select a intern                             or enter a extern mail-addres"
-msgstr "Sélectionner au minimum une adresse email interne ou externe"
+msgstr "Sélectionner au minimum une adresse Email interne ou externe"
 
 #. Default: "Send"
 #: ./opengever/mail/browser/send_document.py:136
@@ -71,7 +69,7 @@ msgstr "Vous n'avez sélectionné aucune annexe."
 #. Default: "This mail has no attachments to extract."
 #: ./opengever/mail/browser/extract_attachments.py:131
 msgid "error_no_attachments_to_extract"
-msgstr "Cet email n'a pas d'annexe à extraire"
+msgstr "Cet Email n'a pas d'annexe à extraire"
 
 #. Default: "Extern receiver"
 #: ./opengever/mail/browser/send_document.py:53
@@ -81,12 +79,12 @@ msgstr "Destinataire externe"
 #. Default: "Send as email"
 #: ./opengever/mail/browser/send_document.py:118
 msgid "heading_send_as_email"
-msgstr "Envoyer les documents comme email"
+msgstr "Envoyer les documents comme Email"
 
 #. Default: "Select which attachments should be deleted."
 #: ./opengever/mail/browser/extract_attachments_templates/extract_attachments.pt:66
 msgid "help_delete_action"
-msgstr "Sélectionner les annexes à effacer."
+msgstr "Sélectionnez les annexes à effacer."
 
 #. Default: "email addresses of the receivers. Enter manually the addresses, one per each line."
 #: ./opengever/mail/browser/send_document.py:54
@@ -96,7 +94,7 @@ msgstr "Ajouter les adresses email des destinataires externes. Une adresse par l
 #. Default: "Live Search: search for users and contacts"
 #: ./opengever/mail/browser/send_document.py:42
 msgid "help_intern_receiver"
-msgstr "Recherche en directe : Saisir nom et prénom des collaborateurs interns ou contacts. Séléction multiple possible. "
+msgstr "Recherche en direct : Saisir nom et prénom des collaborateurs internes ou des contacts. Séléction multiple possible. "
 
 #: ./opengever/mail/browser/send_document.py:69
 msgid "help_message"
@@ -129,27 +127,27 @@ msgstr "Destinataires internes"
 #. Default: "Delete attachments"
 #: ./opengever/mail/browser/extract_attachments_templates/extract_attachments.pt:61
 msgid "label_delete_action"
-msgstr "Effacer annexes"
+msgstr "Effacer les fichiers attachés."
 
 #. Default: "Delete all attachments"
 #: ./opengever/mail/browser/extract_attachments_templates/extract_attachments.pt:83
 msgid "label_delete_action_all"
-msgstr "Effacer tous les annexes de cet email"
+msgstr "Effacer tous les fichiers attachés de cet email"
 
 #. Default: "Delete nothing"
 #: ./opengever/mail/browser/extract_attachments_templates/extract_attachments.pt:74
 msgid "label_delete_action_nothing"
-msgstr "Effacer aucuns annexes."
+msgstr "N'effacer aucun fichier attaché."
 
 #. Default: "Delete all selected attachments"
 #: ./opengever/mail/browser/extract_attachments_templates/extract_attachments.pt:92
 msgid "label_delete_action_selected"
-msgstr "Effacer tous les annexes séléctionnés"
+msgstr "Effacer tous les fichiers attachés séléctionnés"
 
 #. Default: "Documents"
 #: ./opengever/mail/browser/send_document.py:74
 msgid "label_documents"
-msgstr "Annexes"
+msgstr "Fichiers attachés"
 
 #. Default: "Message"
 #: ./opengever/mail/browser/send_document.py:68
@@ -159,12 +157,12 @@ msgstr "Message"
 #. Default: "see attachment"
 #: ./opengever/mail/browser/send_document.py:205
 msgid "label_see_attachment"
-msgstr "Voir annexes"
+msgstr "Voir  fichiers attachés"
 
 #. Default: "Attachments to extract"
 #: ./opengever/mail/browser/extract_attachments_templates/extract_attachments.pt:42
 msgid "label_select_attachments"
-msgstr "Annexes"
+msgstr "Fichiers attachés"
 
 #. Default: "Subject"
 #: ./opengever/mail/browser/send_document.py:62
@@ -178,4 +176,5 @@ msgstr "Email"
 #: ./opengever/mail/browser/send_document.py:57
 msgid "receiver"
 msgstr "Destinataire"
+
 
