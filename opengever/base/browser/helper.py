@@ -57,16 +57,23 @@ def get_css_class(item):
                 css_class = "contenttype-%s" % normalize(item.portal_type)
 
     elif item.portal_type == 'opengever.task.task':
+        predecessor_client_id = item.predecessor and \
+            item.predecessor.split(':')[0]
+
         if hasattr(item, 'is_subtask'):
             # item is a brain
             is_subtask = item.is_subtask
-            is_remote_task = item.client_id != item.assigned_client
+            is_remote_task = (item.client_id != item.assigned_client or
+                              predecessor_client_id and
+                              predecessor_client_id != item.assigned_client)
 
         else:
             # item is a object
             is_subtask = aq_parent(aq_inner(item)).portal_type \
                 == 'opengever.task.task'
-            is_remote_task = item.responsible_client != get_client_id()
+            is_remote_task = (item.responsible_client != get_client_id() or
+                              predecessor_client_id and
+                              predecessor_client_id != get_client_id())
 
         if is_subtask:
             css_class = 'icon-task-subtask'

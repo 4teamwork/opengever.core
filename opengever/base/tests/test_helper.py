@@ -67,6 +67,7 @@ class TestCssClassHelpers(MockTestCase):
     def test_task_brain(self):
         brain = self.stub()
         self.expect(brain.portal_type).result('opengever.task.task')
+        self.expect(brain.predecessor).result(None)
         self.expect(brain.is_subtask).result(False)
         self.expect(brain.client_id).result('client1')
         self.expect(brain.assigned_client).result('client1')
@@ -79,6 +80,7 @@ class TestCssClassHelpers(MockTestCase):
     def test_task_obj(self):
         obj = self.stub()
         self.expect(obj.portal_type).result('opengever.task.task')
+        self.expect(obj.predecessor).result(None)
         self.expect(obj.responsible_client).result('client1')
 
         parent = self.stub()
@@ -94,6 +96,7 @@ class TestCssClassHelpers(MockTestCase):
     def test_subtask_brain(self):
         brain = self.stub()
         self.expect(brain.portal_type).result('opengever.task.task')
+        self.expect(brain.predecessor).result(None)
         self.expect(brain.is_subtask).result(True)
         self.expect(brain.client_id).result('client1')
         self.expect(brain.assigned_client).result('client1')
@@ -106,6 +109,7 @@ class TestCssClassHelpers(MockTestCase):
     def test_subtask_obj(self):
         obj = self.stub()
         self.expect(obj.portal_type).result('opengever.task.task')
+        self.expect(obj.predecessor).result('client2:12345')
         self.expect(obj.responsible_client).result('client1')
 
         parent = self.stub()
@@ -121,6 +125,7 @@ class TestCssClassHelpers(MockTestCase):
     def test_remote_task_brain(self):
         brain = self.stub()
         self.expect(brain.portal_type).result('opengever.task.task')
+        self.expect(brain.predecessor).result('client2:12345')
         self.expect(brain.is_subtask).result(False)
         self.expect(brain.client_id).result('client1')
         self.expect(brain.assigned_client).result('client2')
@@ -133,7 +138,37 @@ class TestCssClassHelpers(MockTestCase):
     def test_remote_task_obj(self):
         obj = self.stub()
         self.expect(obj.portal_type).result('opengever.task.task')
+        self.expect(obj.predecessor).result('client2:12345')
         self.expect(obj.responsible_client).result('client2')
+
+        parent = self.stub()
+        self.set_parent(obj, parent)
+        # parent is dossier -> obj is not subtask
+        self.expect(parent.portal_type).result('opengever-dossier')
+
+        self.replay()
+
+        self.assertEquals(get_css_class(obj),
+                          'icon-task-remote-task')
+
+    def test_remote_successor_task_brain(self):
+        brain = self.stub()
+        self.expect(brain.portal_type).result('opengever.task.task')
+        self.expect(brain.is_subtask).result(False)
+        self.expect(brain.client_id).result('client1')
+        self.expect(brain.assigned_client).result('client1')
+        self.expect(brain.predecessor).result('client2:12345')
+
+        self.replay()
+
+        self.assertEquals(get_css_class(brain),
+                          'icon-task-remote-task')
+
+    def test_remote_successor_task_obj(self):
+        obj = self.stub()
+        self.expect(obj.portal_type).result('opengever.task.task')
+        self.expect(obj.responsible_client).result('client1')
+        self.expect(obj.predecessor).result('client2:123456')
 
         parent = self.stub()
         self.set_parent(obj, parent)

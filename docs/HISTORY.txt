@@ -5,6 +5,11 @@ Changelog
 2.2 (unreleased)
 ----------------
 
+- Fix get_css_class helper for tasks with predecessor (remote-task icon).
+  Issue #1412 Optimierung Mandant des Auftraggebers
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1412
+  [jone]
+
 - Made adjustments on the XLSReport: title colum style, sheet and footer title.
   Issue #1286 Aufgabenexport um Dossiertitel erweitern.
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1286
