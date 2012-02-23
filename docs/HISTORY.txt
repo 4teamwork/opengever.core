@@ -5,6 +5,9 @@ Changelog
 2.1 (unreleased)
 ----------------
 
+- SQL listings: ignore all task date columns when filtering (updated helper list).
+  [jone]
+
 - SQL listings: fix encoding problem when filtering.
   [jone]
 
