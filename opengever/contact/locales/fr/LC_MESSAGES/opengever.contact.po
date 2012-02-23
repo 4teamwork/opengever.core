@@ -9,8 +9,6 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0\n"
-"Language-Code: en\n"
-"Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: DOMAIN\n"
 
@@ -209,7 +207,7 @@ msgstr "Image"
 #. Default: "Salutation"
 #: ./opengever/contact/contact.py:64
 msgid "label_salutation"
-msgstr "Titre / Formule de politesse"
+msgstr "Titre"
 
 #. Default: "Url"
 #: ./opengever/contact/contact.py:120
@@ -240,4 +238,5 @@ msgstr "Résultat(s): ${amount}"
 #: ./opengever/contact/contact.py:44
 msgid "telefon"
 msgstr "Téléphone"
+
 
