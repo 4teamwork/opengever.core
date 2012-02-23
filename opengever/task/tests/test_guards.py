@@ -240,6 +240,10 @@ class TestTaskTransitionController(MockTestCase):
         transition = 'task-transition-in-progress-resolved'
         controller, controller_mock, task = self._create_task_controller()
 
+        stc = self.stub()
+        self.mock_adapter(
+            stc, ISuccessorTaskController, [Interface])
+
         with self.mocker.order():
             # testcase 1: unival -> default form
             self.expect(task.task_type_category).result(
@@ -264,13 +268,25 @@ class TestTaskTransitionController(MockTestCase):
                 True)
             self.expect(task.predecessor).result(None)
 
-            # testcase 5: -> complete task wizard
+            # testcase 5: no predecessor -> default form
+            self.expect(task.task_type_category).result(
+                'bidirectional_by_reference')
+            self.expect(
+                controller_mock._is_responsible_or_inbox_group_user()).result(
+                True)
+            self.expect(task.predecessor).result('client2:213')
+            self.expect(stc(task).get_predecessor().task_type).result(
+                'forwarding_task_type')
+
+            # testcase 6: -> complete task wizard
             self.expect(task.task_type_category).result(
                 'bidirectional_by_reference')
             self.expect(
                 controller_mock._is_responsible_or_inbox_group_user()).result(
                 True)
             self.expect(task.predecessor).result('client2:123')
+            self.expect(stc(task).get_predecessor().task_type).result(
+                'bidirectional_by_reference')
 
         self.replay()
 
@@ -296,7 +312,11 @@ class TestTaskTransitionController(MockTestCase):
         self.assertEqual(controller.get_transition_action(transition),
                          default_url)
 
-        # testcase 4: complete task wizard
+        # testcase 5: default form
+        self.assertEqual(controller.get_transition_action(transition),
+                         default_url)
+
+        # testcase 6: complete task wizard
         self.assertEqual(controller.get_transition_action(transition),
                          wizard_url)
 
@@ -374,6 +394,10 @@ class TestTaskTransitionController(MockTestCase):
         transition = 'task-transition-in-progress-tested-and-closed'
         controller, controller_mock, task = self._create_task_controller()
 
+        stc = self.stub()
+        self.mock_adapter(
+            stc, ISuccessorTaskController, [Interface])
+
         with self.mocker.order():
             # testcase 1: unival -> default form
             self.expect(task.task_type_category).result(
@@ -398,13 +422,25 @@ class TestTaskTransitionController(MockTestCase):
                 True)
             self.expect(task.predecessor).result(None)
 
-            # testcase 5: -> complete task wizard
+            # testcase 5: no predecessor -> default form
             self.expect(task.task_type_category).result(
                 'unidirectional_by_reference')
             self.expect(
                 controller_mock._is_responsible_or_inbox_group_user()).result(
                 True)
             self.expect(task.predecessor).result('client2:123')
+            self.expect(stc(task).get_predecessor().task_type).result(
+                'forwarding_task_type')
+
+            # testcase 6: -> complete task wizard
+            self.expect(task.task_type_category).result(
+                'unidirectional_by_reference')
+            self.expect(
+                controller_mock._is_responsible_or_inbox_group_user()).result(
+                True)
+            self.expect(task.predecessor).result('client2:123')
+            self.expect(stc(task).get_predecessor().task_type).result(
+                'unidirectional_by_reference')
 
         self.replay()
 
@@ -430,7 +466,11 @@ class TestTaskTransitionController(MockTestCase):
         self.assertEqual(controller.get_transition_action(transition),
                          default_url)
 
-        # testcase 4: complete task wizard
+        # testcase 5: default form
+        self.assertEqual(controller.get_transition_action(transition),
+                         default_url)
+
+        # testcase 6: complete task wizard
         self.assertEqual(controller.get_transition_action(transition),
                          wizard_url)
 
@@ -587,6 +627,10 @@ class TestTaskTransitionController(MockTestCase):
         transition = 'task-transition-open-resolved'
         controller, controller_mock, task = self._create_task_controller()
 
+        successor_task_controller = self.stub()
+        self.mock_adapter(
+            successor_task_controller, ISuccessorTaskController, [Interface])
+
         with self.mocker.order():
             # testcase 1: unival -> default form
             self.expect(task.task_type_category).result(
@@ -611,13 +655,27 @@ class TestTaskTransitionController(MockTestCase):
                 True)
             self.expect(task.predecessor).result(None)
 
-            # testcase 5: -> complete task wizard
+            # testcase 5: no predecessor -> default form
             self.expect(task.task_type_category).result(
                 'bidirectional_by_reference')
             self.expect(
                 controller_mock._is_responsible_or_inbox_group_user()).result(
                 True)
             self.expect(task.predecessor).result('client2:123')
+            self.expect(
+                successor_task_controller(task).get_predecessor().task_type
+                ).result('forwarding_task_type')
+
+            # testcase 6: -> complete task wizard
+            self.expect(task.task_type_category).result(
+                'bidirectional_by_reference')
+            self.expect(
+                controller_mock._is_responsible_or_inbox_group_user()).result(
+                True)
+            self.expect(task.predecessor).result('client2:123')
+            self.expect(
+                successor_task_controller(task).get_predecessor().task_type
+                ).result('bidirectional_by_reference')
 
         self.replay()
 
@@ -643,7 +701,11 @@ class TestTaskTransitionController(MockTestCase):
         self.assertEqual(controller.get_transition_action(transition),
                          default_url)
 
-        # testcase 4: complete task wizard
+        # testcase 5: predecessor is a forwarding
+        self.assertEqual(controller.get_transition_action(transition),
+                         default_url)
+
+        # testcase 6: complete task wizard
         self.assertEqual(controller.get_transition_action(transition),
                          wizard_url)
 
