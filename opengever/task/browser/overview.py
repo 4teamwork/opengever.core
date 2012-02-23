@@ -309,9 +309,8 @@ class Overview(DisplayForm, OpengeverTab):
         We have two different types of a task. task-object providing the
         ITask-interface is handled in the _object_task_link.
         """
-        css_class = 'contenttype-opengever-task-task'
-        if item.task_type == 'forwarding_task_type':
-            css_class = 'contenttype-opengever-inbox-forwarding'
+
+        css_class = self.get_css_class(item)
 
         # get the client which the task cames from
         info = queryUtility(IContactInformation)
