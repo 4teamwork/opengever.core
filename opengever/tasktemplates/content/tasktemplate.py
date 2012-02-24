@@ -7,6 +7,9 @@ from plone.formwidget.autocomplete import AutocompleteFieldWidget
 from opengever.task import util
 from z3c.form.browser import checkbox
 
+# days wich are summized for calculating the main task deadline
+MAIN_TASK_DEADLINE_DELTA = 5
+
 
 class ITaskTemplate(form.Schema):
 

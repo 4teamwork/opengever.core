@@ -3,6 +3,7 @@ from opengever.dossier.behaviors.dossier import IDossier
 from opengever.ogds.base.interfaces import IClientConfiguration
 from opengever.tasktemplates.testing \
     import OPENGEVER_TASKTEMPLATES_INTEGRATION_TESTING
+from opengever.tasktemplates.interfaces import IFromTasktemplateGenerated
 from plone.app.testing import SITE_OWNER_NAME
 from plone.dexterity.utils import createContent, addContentToContainer
 from plone.registry.interfaces import IRegistry
@@ -174,6 +175,9 @@ class TestTaskTemplatesIntegration(unittest.TestCase):
         task = brains[0]
         obj = task.getObject()
 
+        #check marker interface
+        self.assertTrue(IFromTasktemplateGenerated.providedBy(obj))
+
         self.assertEquals(task.Title, 'TaskTemplateFolder 1')
         self.assertEquals(task.responsible, mtool.getAuthenticatedMember().getId())
         self.assertEquals(
@@ -187,6 +191,9 @@ class TestTaskTemplatesIntegration(unittest.TestCase):
         # Check the subtask attributes from the template
         subtask = obj.getFolderContents()[0]
 
+        #check marker interface
+        self.assertTrue(IFromTasktemplateGenerated.providedBy(subtask.getObject()))
+
         self.assertTrue(subtask.Title == template1.title)
         self.assertTrue(
             subtask.responsible == mtool.getAuthenticatedMember().getId())
@@ -195,3 +202,6 @@ class TestTaskTemplatesIntegration(unittest.TestCase):
                 template1.deadline)).date())
         self.assertTrue(subtask.getObject().text == template1.text)
         self.assertTrue(subtask.issuer == IDossier(dossier).responsible)
+
+        # XXX test also the event handler update_deadline
+

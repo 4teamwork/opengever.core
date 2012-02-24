@@ -5,16 +5,20 @@ from Products.CMFPlone.utils import getToolByName
 from Products.Five.browser import BrowserView
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from Products.statusmessages.interfaces import IStatusMessage
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
 from ftw.table import helper
 from ftw.table.interfaces import ITableGenerator
 from opengever.dossier.behaviors.dossier import IDossierMarker, IDossier
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.ogds.base.utils import get_current_client, get_client_id
 from opengever.tasktemplates import _
+from opengever.tasktemplates.content.tasktemplate import \
+    MAIN_TASK_DEADLINE_DELTA
+from opengever.tasktemplates.interfaces import IFromTasktemplateGenerated
 from plone.dexterity.utils import createContent, addContentToContainer
 from zope.component import queryUtility, getUtility
 from zope.event import notify
+from zope.interface import alsoProvides
 from zope.lifecycleevent import ObjectCreatedEvent
 
 
@@ -217,7 +221,8 @@ class AddForm(BrowserView):
             responsible=self.replace_interactive_user('current_user'),
             responsible_client=get_client_id(),
             task_type='direct-execution',
-            deadline=datetime.today() + timedelta(highest_deadline + 5),
+            deadline=date.today() +
+                timedelta(highest_deadline + MAIN_TASK_DEADLINE_DELTA),
             )
 
         main_task = createContent('opengever.task.task', **data)
@@ -225,13 +230,16 @@ class AddForm(BrowserView):
         main_task = addContentToContainer(
             self.context, main_task, checkConstraints=True)
 
+        # set marker Interfaces
+        alsoProvides(main_task, IFromTasktemplateGenerated)
+
         # set the main_task in to the in progress state
         wft = getToolByName(self.context, 'portal_workflow')
         wft.doActionFor(main_task, 'task-transition-open-in-progress')
 
         # create subtasks
         for template in templates:
-            deadline = datetime.today() + timedelta(template.deadline)
+            deadline = date.today() + timedelta(template.deadline)
 
             data = dict(
                 title=template.title,
@@ -262,6 +270,7 @@ class AddForm(BrowserView):
             task = addContentToContainer(main_task,
                                          task,
                                          checkConstraints=True)
+            alsoProvides(task, IFromTasktemplateGenerated)
             task.reindexObject()
 
         IStatusMessage(self.request).addStatusMessage(
