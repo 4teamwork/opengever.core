@@ -222,7 +222,7 @@ class AddForm(BrowserView):
             responsible_client=get_client_id(),
             task_type='direct-execution',
             deadline=date.today() +
-                timedelta(highest_deadline + MAIN_TASK_DEADLINE_DELTA),
+            timedelta(highest_deadline + MAIN_TASK_DEADLINE_DELTA),
             )
 
         main_task = createContent('opengever.task.task', **data)
