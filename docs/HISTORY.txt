@@ -5,6 +5,12 @@ Changelog
 2.2 (unreleased)
 ----------------
 
+- Adjust the is_issuer in the transitioncontroller:
+  it can now handle also inbox principals.
+  Issue #1387 Mandantenuebergreifende Weiterleitung: Wizards erstellen
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1387
+  [phgross]
+
 - Adjust the statesyncer: forwarding predesscors should not be synced.
   [phgross]
 

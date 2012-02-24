@@ -406,8 +406,18 @@ class TaskTransitionController(BrowserView):
         """Checks if the current user is the issuer of the
         current task(current context)"""
 
-        return getMultiAdapter((self.context, self.request),
-            name='plone_portal_state').member().id == self.context.issuer
+        info = getUtility(IContactInformation)
+
+        if not info.is_inbox(self.context.issuer):
+            return getMultiAdapter(
+                (self.context, self.request),
+                name='plone_portal_state').member().id == self.context.issuer
+        else:
+            return info.is_group_member(
+                info.get_group_of_inbox(self.context.issuer),
+                getMultiAdapter((self.context, self.request),
+                                name='plone_portal_state').member().id
+                )
 
     def _is_responsible(self):
         """Checks if the current user is the issuer of the

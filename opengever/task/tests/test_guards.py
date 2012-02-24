@@ -61,10 +61,23 @@ class TestTaskTransitionController(MockTestCase):
                     "controller').is_transition_possible('%s')" % transition)
 
     def test_is_issuer(self):
-        task1 = self.mocker.mock()
+        task1 = self.stub()
         self.expect(task1.issuer).result('hugo.boss')
-        task2 = self.mocker.mock()
+        task2 = self.stub()
         self.expect(task2.issuer).result('james.bond')
+        task3 = self.stub()
+        self.expect(task3.issuer).result('inbox:client1')
+
+        contact_info = self.mocker.mock()
+        self.mock_utility(contact_info, IContactInformation, name=u"")
+        self.expect(contact_info.is_inbox('hugo.boss')).result(False)
+        self.expect(contact_info.is_inbox('james.bond')).result(False)
+        self.expect(contact_info.is_inbox('inbox:client1')).result(True)
+        self.expect(contact_info.get_group_of_inbox('inbox:client1')).result(
+            'client1_inbox_group')
+        self.expect(
+            contact_info.is_group_member(
+                'client1_inbox_group', 'hugo.boss')).result(True)
 
         plone_portal_state = self.stub()
         self.expect(
@@ -77,6 +90,7 @@ class TestTaskTransitionController(MockTestCase):
 
         self.assertTrue(TaskTransitionController(task1, {})._is_issuer())
         self.assertFalse(TaskTransitionController(task2, {})._is_issuer())
+        self.assertTrue(TaskTransitionController(task3, {})._is_issuer())
 
     def test_is_responsible(self):
         task1 = self.mocker.mock()
