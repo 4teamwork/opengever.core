@@ -5,6 +5,9 @@ Changelog
 2.0.4 (unreleased)
 ------------------
 
+- Fixed the avoiding definitive lose of access implementation for users with only global roles.
+  [phgross]
+
 - Added French translations
   [ttschanz]
 
