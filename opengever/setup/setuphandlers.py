@@ -70,6 +70,8 @@ def assign_roles(context, admin_file):
     for admin_group in admin_groups:
         context.acl_users.portal_role_manager.assignRoleToPrincipal('Administrator', admin_group.strip())
         context.acl_users.portal_role_manager.assignRoleToPrincipal('Member', admin_group.strip())
+        context.acl_users.portal_role_manager.assignRoleToPrincipal('Editor', admin_group.strip())
+        context.acl_users.portal_role_manager.assignRoleToPrincipal('Role Manager', admin_group.strip())
 
 
 def assign_tree_portlet(context, root_path, remove_nav=False,

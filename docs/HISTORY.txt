@@ -5,6 +5,10 @@ Changelog
 2.1.2 (unreleased)
 ------------------
 
+- Give admin group also the global role 'Editor' and 'Role Manager',
+  they sould be able to modified the objects and permissions.
+  [phgross]
+
 - Give admin group also the global role 'Member', so the ExposatorViewlet wouldn't be displayed.
   Issue #1367 Administrator-Gruppe und -Rollen implementieren
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1367
