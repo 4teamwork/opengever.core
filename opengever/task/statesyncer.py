@@ -31,7 +31,9 @@ class WorkflowStateSyncer(grok.MultiAdapter):
         stc = ISuccessorTaskController(self.context)
 
         predecessor = stc.get_predecessor(None)
-        if predecessor is not None:
+
+        #Fowarding predecessors should not be synced.
+        if predecessor is not None and predecessor.task_type != u'forwarding_task_type':
             tasks.append(predecessor)
 
         tasks.extend(stc.get_successors())
