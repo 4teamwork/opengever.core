@@ -13,6 +13,9 @@ Changelog
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1313/
   [phgross]
 
+- Add condition to the javascript regisitration.
+  [phgross]
+
 
 2.0 (2011-11-17)
 ----------------
