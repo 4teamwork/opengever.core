@@ -5,6 +5,9 @@ Changelog
 2.0.3 (unreleased)
 ------------------
 
+- Added is_group_member method to the contact_information utility.
+  [phgross]
+
 - Added French translations
   [ttschanz]
 

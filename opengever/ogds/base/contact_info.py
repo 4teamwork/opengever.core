@@ -192,6 +192,12 @@ class ContactInformation(grok.GlobalUtility):
 
         return False
 
+    def is_group_member(self, groupid, userid):
+        for user in self.list_group_users(groupid):
+            if user.userid == userid:
+                return True
+        return False
+
     # CONTACTS
     def is_contact(self, principal):
         """Return true, if `principal` is a contact.

@@ -262,6 +262,12 @@ Various lists and other methods:
     ...    userid='hanspeter.linder', client_id='notexists')
     False
 
+    >>> info.is_group_member(u'client1_inbox_users', u'hugo.boss')
+    True
+
+    >>> info.is_group_member(u'client1_inbox_users', u'hanspeter.linder')
+    False
+
 check the sort dictionaries
 
     >>> info.get_user_sort_dict()
