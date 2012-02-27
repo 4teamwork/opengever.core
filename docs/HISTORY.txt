@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-2.2 (unreleased)
+2.2 (2012-02-27)
 ----------------
 
 - Adjust the is_issuer in the transitioncontroller:
