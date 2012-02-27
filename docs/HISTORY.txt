@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-2.1.2 (unreleased)
+2.1.2 (2012-02-27)
 ------------------
 
 - Give admin group also the global role 'Editor' and 'Role Manager',
