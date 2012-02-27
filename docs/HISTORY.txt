@@ -80,6 +80,7 @@ Changelog
    - Made the transition field readonly.
    - Remove direct_response functionality, is no longer used.
    - Removed the add response action.
+
   Issue #1377 Ueberarbeitung Antwort einer Aufgaben
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1377
   [phgross]
@@ -88,6 +89,7 @@ Changelog
    - Removed resolved-open(wieder eroeffnen) transition.
    - Added new transition resolved-in-progress (ueberarbeiten) instead of resolved-open.
    - Add no-successors checks for the resolve and close transitions.
+
   [phgross]
 
 - Task overview: display responsible of tasks referenced in response.
