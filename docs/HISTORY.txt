@@ -37,6 +37,10 @@ Changelog
 - we prevent to raise database-error if we have a too long breadcrumb_title string by shorten the string
   Issue #1393 og.globalindex: ORA-12899: value too large for column "OG_GI"."TASKS"."BREADCRUMB_TITLE"
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1393
+  [eschmutz]
+
+- Made Taskreporter safe if there is no orig_template.
+  [ttschanz]
 
 - Improve "indexed_task_link" tabbedview helper, so that remote-tasks have a seperate icon.
   Issue #1300 Mandantenuebergreifende Aufgaben sollten speziell markiert werden koennen.
