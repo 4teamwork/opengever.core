@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-2.0.4 (unreleased)
+2.0.4 (2012-02-27)
 ------------------
 
 - Fixed the avoiding definitive lose of access implementation for users with only global roles.
