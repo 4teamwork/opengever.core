@@ -11,6 +11,12 @@ Changelog
 - Inbox assigned tasks view: Listing tasks in all states, not just open
   [lgraf]
 
+- rebuild forwarding functionality
+    - modify Transitioncontroller and tests
+    - changed forwarding workflow (guards, actions)
+    - added wizzards for different transitions
+  [phgross]
+
 - Removed 'List folder contents' permission from anyone but Manager in
   forwarding, inbox and yearfolder workflows.
   [lgraf]
