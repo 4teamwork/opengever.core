@@ -15,6 +15,7 @@ Changelog
     - modify Transitioncontroller and tests
     - changed forwarding workflow (guards, actions)
     - added wizzards for different transitions
+
   [phgross]
 
 - Removed 'List folder contents' permission from anyone but Manager in
