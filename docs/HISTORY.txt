@@ -2,8 +2,8 @@ Changelog
 =========
 
 
-2.0.2 (unreleased)
-------------------
+2.1 (2012-02-27)
+----------------
 
 - Fix issuer client in task PDFs, so that it also works correct when we have a predecessor.
   Issue #1412 Optimierung Mandant des Auftraggebers
