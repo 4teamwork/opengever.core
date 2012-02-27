@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-2.0.2 (unreleased)
+2.0.2 (2012-02-27)
 ------------------
 
 - Fixed decoding error in the checkin_button_handler, when trying to check in a mail.
