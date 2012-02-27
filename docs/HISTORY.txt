@@ -44,6 +44,9 @@ Changelog
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1345/
   [jone]
 
+- Implement faster custom_sort methods for sorting on the readable fullname, with the help of the sort_dicts from og.ogds.base.
+  [phgross]
+
 - Single client setup: hide client column in task listings when only one client is configured.
   [jone]
 
