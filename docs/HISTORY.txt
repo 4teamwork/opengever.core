@@ -5,6 +5,9 @@ Changelog
 2.0.2 (unreleased)
 ------------------
 
+- Fixed decoding error in the checkin_button_handler, when trying to check in a mail.
+  [phgross]
+
 - Added French translations.
   [ttschanz]
 

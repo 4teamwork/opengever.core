@@ -67,9 +67,12 @@ class CheckinCommentForm(form.Form):
                             msg, type='info')
 
                 else:
+                    title = obj.Title()
+                    if not isinstance(title, unicode):
+                        title = title.decode('utf-8')
                     msg = _(
                         u'Could not check in ${title}, it is not a document.',
-                        mapping=dict(title=obj.Title().decode('utf-8')))
+                        mapping=dict(title=title))
                     IStatusMessage(self.request).addStatusMessage(
                         msg, type='error')
 
