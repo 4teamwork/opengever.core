@@ -5,6 +5,9 @@ Changelog
 2.2 (unreleased)
 ----------------
 
+- Reporter: added format functionality (set landsacpe format as default).
+  [phgross]
+
 - Extend get_css_class so that it supports global index objects.
   Issue #1412 Optimierung Mandant des Auftraggebers
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1412

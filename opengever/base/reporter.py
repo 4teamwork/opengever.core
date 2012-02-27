@@ -80,7 +80,7 @@ class XLSReporter(object):
     """XLS Reporter View generates a xls-report for the given results set.
     """
 
-    def __init__(self, request, attributes, results, sheet_title=u' ', footer=u''):
+    def __init__(self, request, attributes, results, sheet_title=u' ', footer=u'', portrait_format=False):
         """Initalize the XLS reporter
         Arguments:
         attributes -- a list of mappings (with 'id', 'title', 'transform')
@@ -92,6 +92,7 @@ class XLSReporter(object):
         self.request = request
         self.sheet_title = sheet_title
         self.footer = footer
+        self.portrait_format = portrait_format
 
     def __call__(self):
         """Generates the xls data for the given objects.
@@ -99,6 +100,7 @@ class XLSReporter(object):
 
         w = Workbook()
         sheet = w.add_sheet(self.sheet_title)
+        sheet.portrait = self.portrait_format
         sheet.set_footer_str(self.footer)
 
         title_style = XFStyle()
