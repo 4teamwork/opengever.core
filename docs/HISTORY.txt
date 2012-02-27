@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-2.1 (unreleased)
+2.1 (2012-02-27)
 ----------------
 
 - SQL listings: ignore all task date columns when filtering (updated helper list).
