@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-2.2 (unreleased)
+2.2 (2012-02-27)
 ----------------
 
 - Reporter: added format functionality (set landsacpe format as default).
