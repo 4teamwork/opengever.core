@@ -5,16 +5,14 @@ Changelog
 2.2 (unreleased)
 ----------------
 
-- Nothing changed yet.
-
-
-2.1 (2012-02-27)
-----------------
-
 - Implements custom sort method for sorting on translated review_states.
   Issue #1423 Tabbedview Customsort Methode fuer Status Sortierung implementieren
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1423/
   [phgross]
+
+
+2.1 (2012-02-27)
+----------------
 
 - SQL listings: ignore all task date columns when filtering (updated helper list).
   [jone]
