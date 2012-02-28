@@ -94,20 +94,8 @@ class OpengeverTab(object):
                         getattr(b, sort_on, ''), getattr(b, sort_on, ''))
                     )
 
-            def _reverse_sorter(b, a):
-                return cmp(
-                    sort_dict.get(
-                        getattr(a, sort_on, ''), getattr(a, sort_on, '')),
-                    sort_dict.get(
-                        getattr(b, sort_on, ''), getattr(b, sort_on, ''))
-                    )
-
             results = list(results)
-
-            if sort_reverse:
-                results.sort(_reverse_sorter)
-            else:
-                results.sort(_sorter)
+            results.sort(_sorter, reverse=sort_reverse)
 
         elif sort_on in ('review_state'):
             states = get_translated_transitions(self.context, self.request)
