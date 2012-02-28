@@ -26,6 +26,14 @@
         provides="Products.GenericSetup.interfaces.EXTENSION"
         />
 
+    <!-- Register the import_various step -->
+    <genericsetup:importStep
+        name="opengever.base.various"
+        title="opengever.base various import steps"
+        description=""
+        handler="opengever.base.setuphandlers.import_various">
+    </genericsetup:importStep>
+
 
     <include package="plone.behavior" file="meta.zcml" />
 
