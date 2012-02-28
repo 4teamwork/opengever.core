@@ -5,6 +5,9 @@ Changelog
 2.3 (unreleased)
 ----------------
 
+- Fixed french translations (end-of-line within string)
+  [lgraf]
+
 - Remove the standard 'extedit' action (CMFPlone) from document_actions on site setup
   [lgraf]
 
