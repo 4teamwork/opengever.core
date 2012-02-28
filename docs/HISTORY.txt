@@ -2,8 +2,8 @@ Changelog
 =========
 
 
-2.2 (unreleased)
-----------------
+2.1.1 (2012-02-28)
+------------------
 
 - Implements custom sort method for sorting on translated review_states.
   Issue #1423 Tabbedview Customsort Methode fuer Status Sortierung implementieren
