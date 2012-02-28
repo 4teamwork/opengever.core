@@ -15,6 +15,7 @@ from opengever.tabbedview.helper import readable_ogds_author, linked
 from opengever.tabbedview.helper import readable_ogds_user
 from opengever.tabbedview.helper import workflow_state
 from opengever.tabbedview.interfaces import ITaskCatalogTableSourceConfig
+from opengever.tabbedview.utils import get_translated_transitions
 from opengever.task.helper import task_type_helper
 from plone.dexterity.interfaces import IDexterityContainer
 from zope.app.pagetemplate import ViewPageTemplateFile
@@ -107,6 +108,21 @@ class OpengeverTab(object):
                 results.sort(_reverse_sorter)
             else:
                 results.sort(_sorter)
+
+        elif sort_on in ('review_state'):
+            states = get_translated_transitions(self.context, self.request)
+
+            def _state_sorter(a, b):
+                return cmp(
+                    states.get(
+                        getattr(a, sort_on, ''), getattr(a, sort_on, '')),
+                    states.get(
+                        getattr(b, sort_on, ''), getattr(b, sort_on, ''))
+                    )
+
+            results = list(results)
+            results.sort(_state_sorter, reverse=sort_reverse)
+
         return results
 
 
