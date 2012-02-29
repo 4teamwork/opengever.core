@@ -5,16 +5,14 @@ Changelog
 2.2 (unreleased)
 ----------------
 
-- Nothing changed yet.
-
-
-2.1 (2012-02-27)
-----------------
-
 - Dossier Cover PDF: Display main dossier title for subdossier.
   Issue #1430 Deckblatt PDF: Hauptdossier Titel darstellen bei Subdossiers
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1430/view
   [phgross]
+
+
+2.1 (2012-02-27)
+----------------
 
 - Fix issuer client in task PDFs, so that it also works correct when we have a predecessor.
   Issue #1412 Optimierung Mandant des Auftraggebers
