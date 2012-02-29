@@ -290,16 +290,21 @@ class AddForm(form.AddForm, AutoExtensibleForm):
                     task.__setattr__(option, resp_field)
 
             # save relatedItems on task
+            related_ids = []
+            if getattr(task, 'relatedItems'):
+                related_ids = [item.to_id for item in task.relatedItems]
+
             relatedItems = data.get('relatedItems') or []
             intids = getUtility(IIntIds)
             for item in relatedItems:
                 to_id = intids.getId(item)
+                # relation allready exists
                 item._v__is_relation = True
-                if getattr(task, 'relatedItems'):
-                    task.relatedItems.append(RelationValue(to_id))
-
-                else:
-                    setattr(task, 'relatedItems', [RelationValue(to_id)])
+                if to_id not in related_ids:
+                    if getattr(task, 'relatedItems'):
+                        task.relatedItems.append(RelationValue(to_id))
+                    else:
+                        setattr(task, 'relatedItems', [RelationValue(to_id)])
 
                 new_response.add_change('relatedItems',
                                         _(u'label_related_items',
