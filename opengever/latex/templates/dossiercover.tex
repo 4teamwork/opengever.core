@@ -30,14 +30,15 @@
 \noindent
 \vspace{0.8cm} \newline
 \scriptsize Ordnungsposition: ${repository}
+\scriptsize
+% if parentDossierTitle:
+  Hauptdossier: ${parentDossierTitle} \newline
+% endif
 \vspace{0.3cm} \newline
 \small \textbf{${title}} \newline
 ${description} \newline
 \vspace{0.3cm} \newline
 \scriptsize
-% if parentDossierTitle:
-  Hauptdossier: ${parentDossierTitle} \newline
-% endif
 Federführung: ${responsible}
 \vspace{0.15cm} \newline
 Beginn: ${start}\hspace{0.15cm}|\hspace{0.15cm}
