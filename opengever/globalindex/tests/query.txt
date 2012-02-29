@@ -32,14 +32,17 @@ Add some tasks.
     >>> t1 = Task(1, 'm1')
     >>> t1.responsible = 'Responsible 1'
     >>> t1.issuer = 'Issuer 1'
+    >>> t1.physical_path = 'ordnungssystem/kernbereich-3/dossier-4/task-1/'
     >>> session.add(t1)
     >>> t2 = Task(2, 'm1')
     >>> t2.responsible = 'Responsible 2'
     >>> t2.issuer = 'Issuer 1'
+    >>> t2.physical_path = 'ordnungssystem/allgemein/dossier-2/task-2/'
     >>> session.add(t2)
     >>> t3 = Task(3, 'm2')
     >>> t3.responsible = 'Responsible 1'
     >>> t3.issuer = 'Issuer 2'
+    >>> t3.physical_path = 'ordnungssystem/allgemein/dossier-16/task-3/'
     >>> session.add(t3)
 
 Query for task by int_id and client_id.
@@ -62,3 +65,25 @@ Query for tasks by issuer.
     >>> query.get_tasks_for_issuer('Issuer 3')
     []
 
+Query for task by path
+    >>> query.get_task_by_path(
+    ... 'ordnungssystem/kernbereich-3/dossier-4/task-1/', 'm1')
+    <Task 1@m1>
+    >>> query.get_task_by_path(
+    ... 'ordnungssystem/allgemein/dossier-16/task-3/', 'm1')
+
+    >>> query.get_task_by_path(
+    ... 'ordnungssystem/not-existing/task-3/', 'm1')
+
+Query for tasks by paths
+    >>> query.get_tasks_by_paths(
+    ... ['ordnungssystem/kernbereich-3/dossier-4/task-1/',
+    ... 'ordnungssystem/allgemein/dossier-2/task-2/',
+    ... 'ordnungssystem/allgemein/dossier-16/task-3/'])
+    [<Task 1@m1>, <Task 2@m1>, <Task 3@m2>]
+
+    >>> query.get_tasks_by_paths(
+    ... ['ordnungssystem/kernbereich-3/dossier-4/task-1/',
+    ... 'ordnungssystem/not-existing/task-1/',
+    ... 'ordnungssystem/allgemein/dossier-16/task-3/'])
+    [<Task 1@m1>, <Task 3@m2>]

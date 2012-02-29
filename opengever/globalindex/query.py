@@ -53,6 +53,12 @@ class TaskQuery(object):
         """
         return Session().query(Task).filter(Task.task_id.in_(task_ids)).all()
 
+    def get_tasks_by_paths(self, task_paths):
+        """Returns a set of tasks whos pahts are listed in `paths`.
+        """
+        return Session().query(Task).filter(Task.physical_path.in_(task_paths)).all()
+
+
     def _get_tasks_for_responsible_query(self, responsible, sort_on='modified',
                                          sort_order='reverse'):
         """Returns a sqlalchemy query of all tasks assigned to the given

@@ -6,11 +6,10 @@ from opengever.base.reporter import StringTranslater, XLSReporter
 from opengever.base.reporter import format_datetime, get_date_style
 from opengever.base.reporter import readable_author
 from opengever.globalindex import _
-from opengever.globalindex.interfaces import ITaskQuery
+from opengever.globalindex.utils import get_selected_items
 from opengever.ogds.base.utils import get_client_id
 from opengever.task.util import getTaskTypeVocabulary
 from zope.app.component.hooks import getSite
-from zope.component import getUtility
 from zope.i18n import translate
 
 
@@ -41,7 +40,10 @@ class TaskReporter(grok.View):
 
     def render(self):
 
-        if not self.request.get('task_ids'):
+        tasks = get_selected_items(self.context, self.request)
+        tasks = [tt for tt in tasks]
+
+        if not tasks:
             msg = _(
                 u'error_no_items', default=u'You have not selected any Items')
             IStatusMessage(self.request).addStatusMessage(msg, type='error')
@@ -51,11 +53,6 @@ class TaskReporter(grok.View):
             else:
                 return self.request.RESPONSE.redirect(
                     self.context.absolute_url())
-
-        ids = self.request.get('task_ids', [])
-
-        query = getUtility(ITaskQuery)
-        tasks = query.get_tasks(ids)
 
         task_attributes = [
             {'id':'title', 'title':_('label_task_title')},

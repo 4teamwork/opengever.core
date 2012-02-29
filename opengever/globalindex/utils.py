@@ -1,8 +1,10 @@
 from Products.CMFPlone.utils import getToolByName
 from opengever.base.browser.helper import get_css_class
+from opengever.globalindex.interfaces import ITaskQuery
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.ogds.base.utils import get_client_id
 from zope.app.component.hooks import getSite
+from zope.component import getUtility
 from zope.component import queryUtility
 
 
@@ -71,3 +73,46 @@ def indexed_task_link_helper(item, value):
     """
 
     return indexed_task_link(item)
+
+
+def get_selected_items(context, request):
+    """Returns a set of SQLAlchemy objects,
+    equal if there is a "path:list" or a "task_id:list given in the request"
+    """
+
+    paths = request.get('paths', None)
+    ids = request.get('task_ids', [])
+    query = getUtility(ITaskQuery)
+
+    if paths:
+        relative_paths = []
+        for path in paths:
+            # cut the site id from the path
+            relative_paths.append(
+                '/'.join(path.split('/')[2:]))
+
+        tasks = query.get_tasks_by_paths(relative_paths)
+        keys = relative_paths
+        attr = 'physical_path'
+
+    elif ids:
+        tasks = query.get_tasks(ids)
+        keys = ids
+        attr = 'task_id'
+
+    else:
+        # empty generator
+        return
+
+    # we need to sort the result by our ids list, because the
+    # sql query result is not sorted...
+    # create a mapping:
+    mapping = {}
+    for task in tasks:
+        mapping[str(getattr(task, attr))] = task
+
+    # get the task from the mapping
+    for taskid in keys:
+        task = mapping.get(str(taskid))
+        if task:
+            yield task

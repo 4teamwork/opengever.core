@@ -5,7 +5,10 @@ Changelog
 2.0.3 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Rebuild report functionality, so that it works also in catalog listing.
+  Issue #1426 Test Rot 2.3: Auswahl exportieren funktioniert nicht
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1426
+  [phgross]
 
 
 2.0.2 (2012-02-27)
