@@ -47,6 +47,7 @@ class TestDossierCoverPDFView(MockTestCase):
 
         self.expect(tree.subfolder.Title()).result('Sub Folder')
         self.expect(tree.folder.Title()).result('Folder')
+        self.expect(tree.dossier.Title()).result('Dossier title')
 
         self.set_parent(
             tree.subdossier, self.set_parent(
@@ -153,6 +154,7 @@ class TestDossierCoverPDFView(MockTestCase):
              'repository': 'Sub Folder / Folder',
              'referencenr': 'OG 1.6 / 1',
              'filingprefix': 'Leitung',
+             'parentDossierTitle': 'Dossier title',
              'filingnr': '5',
              'sequencenr': '2',
              'title': 'My Dossier',

@@ -34,7 +34,11 @@
 \small \textbf{${title}} \newline
 ${description} \newline
 \vspace{0.3cm} \newline
-\scriptsize Federführung: ${responsible}
+\scriptsize
+% if parentDossierTitle:
+  Hauptdossier: ${parentDossierTitle} \newline
+% endif
+Federführung: ${responsible}
 \vspace{0.15cm} \newline
 Beginn: ${start}\hspace{0.15cm}|\hspace{0.15cm}
 Abschluss: ${end}\hspace{0.15cm} \newline

@@ -66,7 +66,21 @@ class DossierCoverPDFView(grok.View, BaseStandalonePDFView):
             'start': self.convert(self.context.toLocalizedTime(
                     str(IDossier(self.context).start)) or '-'),
             'end': self.convert(self.context.toLocalizedTime(
-                    str(IDossier(self.context).end)) or '-')}
+                    str(IDossier(self.context).end)) or '-'),
+
+            'parentDossierTitle': self.convert(self.get_parent_dossier_title())
+            }
+
+    def get_parent_dossier_title(self):
+        obj = aq_parent(aq_inner(self.context))
+
+        while not IPloneSiteRoot.providedBy(obj):
+            if IDossierMarker.providedBy(obj):
+                return obj.Title()
+            else:
+                obj = aq_parent(aq_inner(obj))
+
+        return ''
 
     def get_reversed_breadcrumbs(self):
         obj = self.context
