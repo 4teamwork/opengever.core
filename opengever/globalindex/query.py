@@ -6,6 +6,7 @@ from sqlalchemy.sql.expression import asc, desc
 from zope.deprecation import deprecated
 from zope.interface import implements
 
+
 class TaskQuery(object):
     """A global utility for querying opengever tasks.
     """
@@ -16,7 +17,8 @@ class TaskQuery(object):
         """
         try:
             task = Session().query(Task).filter(
-                Task.client_id==client_id).filter(Task.int_id==int_id).one()
+                Task.client_id == client_id).filter(
+                Task.int_id == int_id).one()
         except NoResultFound:
             task = None
         return task
@@ -27,8 +29,8 @@ class TaskQuery(object):
         """
         try:
             task = Session().query(Task).filter(
-                Task.client_id==client_id).filter(
-                Task.physical_path==path).one()
+                Task.client_id == client_id).filter(
+                Task.physical_path == path).one()
         except NoResultFound:
             return None
         else:
@@ -41,8 +43,8 @@ class TaskQuery(object):
         client_id, int_id = oguid.split(':')
         try:
             task = Session().query(Task).filter(
-                Task.client_id==client_id).filter(
-                Task.int_id==int_id).one()
+                Task.client_id == client_id).filter(
+                Task.int_id == int_id).one()
         except NoResultFound:
             return None
         else:
@@ -56,23 +58,23 @@ class TaskQuery(object):
     def get_tasks_by_paths(self, task_paths):
         """Returns a set of tasks whos pahts are listed in `paths`.
         """
-        return Session().query(Task).filter(Task.physical_path.in_(task_paths)).all()
+        return Session().query(Task).filter(
+            Task.physical_path.in_(task_paths)).all()
 
+    def _get_tasks_for_responsible_query(
+        self, responsible, sort_on='modified', sort_order='reverse'):
 
-    def _get_tasks_for_responsible_query(self, responsible, sort_on='modified',
-                                         sort_order='reverse'):
         """Returns a sqlalchemy query of all tasks assigned to the given
         responsible.
         """
 
         sort_on = getattr(Task, sort_on)
         if sort_order == 'reverse':
-            return Session().query(Task).filter(Task.responsible==responsible
+            return Session().query(Task).filter(Task.responsible == responsible
                                                 ).order_by(desc(sort_on))
         else:
-            return Session().query(Task).filter(Task.responsible==responsible
+            return Session().query(Task).filter(Task.responsible == responsible
                                                 ).order_by(asc(sort_on))
-
 
     def get_tasks_for_responsible(self, responsible, sort_on='modified',
                                   sort_order='reverse'):
@@ -89,10 +91,10 @@ class TaskQuery(object):
 
         sort_on = getattr(Task, sort_on)
         if sort_order == 'reverse':
-            return Session().query(Task).filter(Task.issuer==issuer
+            return Session().query(Task).filter(Task.issuer == issuer
                                                 ).order_by(desc(sort_on))
         else:
-            return Session().query(Task).filter(Task.issuer==issuer
+            return Session().query(Task).filter(Task.issuer == issuer
                                                 ).order_by(asc(sort_on))
 
     def get_tasks_for_issuer(self, issuer, sort_on='modified',
@@ -108,9 +110,8 @@ class TaskQuery(object):
         """
 
         sort_on = getattr(Task, sort_on)
-        return Session().query(Task).filter(Task.client_id==client
+        return Session().query(Task).filter(Task.client_id == client
                                             ).order_by(asc(sort_on)).all()
-
 
     def _get_tasks_for_assigned_client_query(self, client, sort_on='modified',
                                              sort_order='reverse'):
@@ -119,10 +120,10 @@ class TaskQuery(object):
 
         sort_on = getattr(Task, sort_on)
         if sort_order == 'reverse':
-            return Session().query(Task).filter(Task.assigned_client==client
+            return Session().query(Task).filter(Task.assigned_client == client
                                                 ).order_by(desc(sort_on))
         else:
-            return Session().query(Task).filter(Task.assigned_client==client
+            return Session().query(Task).filter(Task.assigned_client == client
                                                 ).order_by(asc(sort_on))
 
     def get_tasks_for_assigned_client(self, client, sort_on='modified',
