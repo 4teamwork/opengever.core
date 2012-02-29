@@ -5,16 +5,14 @@ Changelog
 2.3 (unreleased)
 ----------------
 
-- Nothing changed yet.
-
-
-2.2 (2012-02-27)
-----------------
-
 - Fixed addresponse functionality: Avoid to add a allready existing relations.
   Issue #1431 Task: doppelter Verweis auf ein Dokument ist moeglich.
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1431/view
   [phgross]
+
+
+2.2 (2012-02-27)
+----------------
 
 - Adjust the is_issuer in the transitioncontroller:
   it can now handle also inbox principals.
