@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-2.3 (unreleased)
+2.3 (2012-03-01)
 ----------------
 
 - Accept Forwarding: Allways reset the is_only_assign flag, when start accepting.
