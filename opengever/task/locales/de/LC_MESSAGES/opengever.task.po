@@ -786,7 +786,7 @@ msgstr "Hinzugefügt"
 #. Default: "Added successor task"
 #: ./opengever/task/response_templates/responseview.pt:81
 msgid "task_object_successor"
-msgstr "Folgeaufgabe erstellt"
+msgstr "Aufgabenkopie erstellt"
 
 #. Default: "expired"
 #: ./opengever/task/viewlets/byline.pt:52

@@ -5,6 +5,9 @@ Changelog
 2.3 (unreleased)
 ----------------
 
+- Adjust some translations.
+  [phgross]
+
 - Fixed completing task process:
   - Add relations for seleted documents from the dossier.
   - Add the documents also in the local response not only on the remote task.
