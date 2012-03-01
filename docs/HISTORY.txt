@@ -2,8 +2,8 @@ Changelog
 =========
 
 
-2.2 (unreleased)
-----------------
+2.1.1 (2012-03-01)
+------------------
 
 - Dossier Cover PDF: Display main dossier title for subdossier.
   Issue #1430 Deckblatt PDF: Hauptdossier Titel darstellen bei Subdossiers
