@@ -14,10 +14,12 @@ from opengever.globalindex.interfaces import ITaskQuery
 from opengever.ogds.base.interfaces import ITransporter
 from opengever.ogds.base.utils import encode_after_json
 from opengever.ogds.base.utils import remote_request
+from opengever.tabbedview.helper import linked
 from opengever.task import _
 from opengever.task import util
 from opengever.task.interfaces import ISuccessorTaskController
 from opengever.task.task import ITask
+from persistent.list import PersistentList
 from plone.directives.form import Schema
 from plone.z3cform.layout import FormWrapper
 from z3c.form.browser.checkbox import CheckBoxFieldWidget
@@ -25,6 +27,7 @@ from z3c.form.button import buttonAndHandler
 from z3c.form.field import Fields
 from z3c.form.form import Form
 from z3c.form.interfaces import HIDDEN_MODE
+from z3c.relationfield import RelationValue
 from zope import schema
 from zope.app.intid.interfaces import IIntIds
 from zope.component import getUtility, getAdapter
@@ -106,11 +109,11 @@ class CompleteSuccessorTaskForm(Form):
         data, errors = self.extractData()
 
         if not errors:
-            util.change_task_workflow_state(self.context,
+            response = util.change_task_workflow_state(self.context,
                                             data['transition'],
                                             text=data['text'])
 
-            self.deliver_documents_and_complete_task(data)
+            self.deliver_documents_and_complete_task(data, response)
 
             msg = _(u'The documents were delivered to the issuer and the '
                     u'tasks were completed.')
@@ -142,7 +145,7 @@ class CompleteSuccessorTaskForm(Form):
 
         self.widgets['transition'].mode = HIDDEN_MODE
 
-    def deliver_documents_and_complete_task(self, formdata):
+    def deliver_documents_and_complete_task(self, formdata, response):
         """Delivers the selected documents to the predecesser task and
         complete the task:
 
@@ -151,6 +154,9 @@ class CompleteSuccessorTaskForm(Form):
         - Add a new response indicating the workflow transition, the added
         documents and containing the entered response text.
         """
+
+        # add documents to the response
+        response.added_object = PersistentList()
 
         predecessor = getUtility(ITaskQuery).get_task_by_oguid(
             self.context.predecessor)
@@ -162,9 +168,43 @@ class CompleteSuccessorTaskForm(Form):
                 'text': formdata['text'],
                 'transition': formdata['transition']}
 
+        related_ids = []
+        if getattr(self.context, 'relatedItems'):
+            related_ids = [item.to_id for item in self.context.relatedItems]
+
         for doc_intid in formdata['documents']:
             doc = intids.getObject(int(doc_intid))
             data['documents'].append(transporter._extract_data(doc))
+
+            #add a releation when a document from the dossier was selected
+            if doc_intid not in related_ids:
+                # check if its a relation
+                if aq_parent(aq_inner(doc)) != self.context:
+                    # add relation to doc on task
+                    if self.context.relatedItems:
+                        self.context.relatedItems.append(
+                            RelationValue(int(doc_intid)))
+                    else:
+                        self.context.relatedItems = [
+                            RelationValue(int(doc_intid))]
+
+                    # add response change entry for this relation
+                    if not response.relatedItems:
+                        response.relatedItems = [RelationValue(int(doc_intid))]
+                    else:
+                        response.relatedItems.append(
+                            RelationValue(int(doc_intid)))
+
+                    # set relation flag
+                    doc._v__is_relation = True
+                    response.add_change('relatedItems',
+                        _(u'label_related_items', default=u"Related Items"),
+                        '',
+                        linked(doc, doc.Title()))
+
+                else:
+                    # add entry to the response for this document
+                    response.added_object.append(RelationValue(int(doc_intid)))
 
         request_data = {'data': json.dumps(data)}
         response = remote_request(

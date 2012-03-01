@@ -5,6 +5,13 @@ Changelog
 2.3 (unreleased)
 ----------------
 
+- Fixed completing task process:
+  - Add relations for seleted documents from the dossier.
+  - Add the documents also in the local response not only on the remote task.
+  Issue #1344 Aufgabe erledigen bzw. abschliessen
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1344/
+  [phgross]
+
 - Fixed addresponse functionality: Avoid to add a allready existing relations.
   Issue #1431 Task: doppelter Verweis auf ein Dokument ist moeglich.
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1431/view
