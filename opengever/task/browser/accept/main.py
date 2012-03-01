@@ -165,6 +165,7 @@ class ChooseMethodStepForm(AcceptWizardFormMixin, Form):
             dm = getUtility(IWizardDataStorage)
             dmkey = 'accept:%s' % oguid
             dm.set(dmkey, u'is_forwarding', is_forwarding)
+            dm.set(dmkey, u'is_only_assign', False)
             dm.update(dmkey, data)
 
             method = data.get('method')

@@ -5,6 +5,11 @@ Changelog
 2.3 (unreleased)
 ----------------
 
+- Accept Forwarding: Allways reset the is_only_assign flag, when start accepting.
+  Issue #1387 Mandantenuebergreifende Weiterleitung: Wizards erstellen
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1387/
+  [phgross]
+
 - Adjust some translations.
   [phgross]
 
