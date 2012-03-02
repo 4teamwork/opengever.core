@@ -32,7 +32,7 @@ msgstr "Aucun élément sélectionné"
 #. Default: "Forwarding"
 #: ./opengever/globalindex/browser/report.py:22
 msgid "forwarding_task_type"
-msgstr ""
+msgstr "Faire suivre"
 
 #: ./opengever/globalindex/browser/report.py:76
 msgid "label_client_id"
@@ -48,7 +48,7 @@ msgstr "Délai"
 
 #: ./opengever/globalindex/browser/report.py:69
 msgid "label_dossier_title"
-msgstr ""
+msgstr "Titre du dossier"
 
 #: ./opengever/globalindex/browser/report.py:70
 msgid "label_issuer"
@@ -64,7 +64,7 @@ msgstr "Numéro courant"
 
 #: ./opengever/globalindex/browser/report.py:61
 msgid "label_task_title"
-msgstr ""
+msgstr "Titre de tâche"
 
 #: ./opengever/globalindex/browser/report.py:74
 msgid "label_task_type"
@@ -73,7 +73,7 @@ msgstr "Type de mandat"
 #. Default: "Tasks"
 #: ./opengever/globalindex/browser/report.py:86
 msgid "label_tasks"
-msgstr ""
+msgstr "Mandats"
 
 #: ./opengever/globalindex/browser/report.py:62
 msgid "review_state"
