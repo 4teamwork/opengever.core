@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2011-01-12 08:51+0000\n"
+"POT-Creation-Date: 2012-02-23 13:38+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -50,7 +50,7 @@ msgstr "Délai en jours à partir de la date de début de la tâche"
 
 #: ./opengever/tasktemplates/content/tasktemplate.py:38
 msgid "help_issuer"
-msgstr "Choix du client. Vous pouvez aussi choisir les utilisateurs interactifs \"responsables\" ou \"collaborateurs"\"
+msgstr "Choix du client. Vous pouvez aussi choisir les utilisateurs interactifs \"responsables\" ou \"collaborateurs\""
 
 #: ./opengever/tasktemplates/content/tasktemplate.py:86
 msgid "help_preselected"
@@ -92,7 +92,7 @@ msgid "label_continue"
 msgstr "Continuer"
 
 #. Default: "Created"
-#: ./opengever/tasktemplates/browser/form.py:112
+#: ./opengever/tasktemplates/browser/form.py:114
 msgid "label_created"
 msgstr "Date de création"
 
@@ -145,7 +145,7 @@ msgid "label_text"
 msgstr "commentaire"
 
 #. Default: "Title"
-#: ./opengever/tasktemplates/browser/form.py:110
+#: ./opengever/tasktemplates/browser/form.py:112
 #: ./opengever/tasktemplates/browser/tasktemplates.py:29
 #: ./opengever/tasktemplates/browser/templatefolders.py:18
 msgid "label_title"
@@ -156,8 +156,13 @@ msgstr "Titre"
 msgid "label_yes"
 msgstr "Oui"
 
+#. Default: "You have not selected any templates"
+#: ./opengever/tasktemplates/browser/form.py:203
+msgid "message_no_templates_selected"
+msgstr ""
+
 #. Default: "tasks created"
-#: ./opengever/tasktemplates/browser/form.py:229
+#: ./opengever/tasktemplates/browser/form.py:262
 msgid "message_tasks_created"
 msgstr "Toutes les tâches du procédé standard ont été créées"
 
