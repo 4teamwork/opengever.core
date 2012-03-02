@@ -7,7 +7,7 @@
             title="Open tasks report"
             category="object"
             url_expr="string:${object_url}/@@pdf-open-task-report"
-            condition_expr="string:${object_url}/@@pdf-open-task-report-allowed">
+            condition_expr="object/@@pdf-open-task-report-allowed">
         <permission value="View"/>
     </action>
 

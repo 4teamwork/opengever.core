@@ -5,7 +5,9 @@ Changelog
 2.1.2 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Fixed condition_expr for pdf-open-task-report action
+  [lgraf]
+
 
 
 2.1.1 (2012-03-01)
