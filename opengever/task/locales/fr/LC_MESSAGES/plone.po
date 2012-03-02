@@ -22,7 +22,7 @@ msgid "Create successor task"
 msgstr "Créer tâche suivante"
 
 msgid "Delegate task"
-msgstr ""
+msgstr "Déléguer"
 
 msgid "task-state-cancelled"
 msgstr "Annulé"
@@ -76,7 +76,7 @@ msgid "task-transition-rejected-open"
 msgstr "Rouvrir"
 
 msgid "task-transition-resolved-in-progress"
-msgstr ""
+msgstr "Réviser"
 
 msgid "task-transition-resolved-tested-and-closed"
 msgstr "Fermer"
