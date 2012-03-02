@@ -232,7 +232,7 @@ msgstr "Wählen Sie einen oder mehrere Verantwortliche aus, an welche Sie die Au
 #. Default: "Attach documents"
 #: ./opengever/task/browser/delegate/recipients.py:32
 msgid "delegate_label_documents"
-msgstr "Angzuhängende Dokumente"
+msgstr "Anzuhängende Dokumente"
 
 #. Default: "Responsibles"
 #: ./opengever/task/browser/delegate/recipients.py:21

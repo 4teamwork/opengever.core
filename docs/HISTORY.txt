@@ -5,7 +5,8 @@ Changelog
 2.4 (unreleased)
 ----------------
 
-- Nothing changed yet.
+- Fixed Typoerror in translation.
+  [phgross]
 
 
 2.3 (2012-03-01)
