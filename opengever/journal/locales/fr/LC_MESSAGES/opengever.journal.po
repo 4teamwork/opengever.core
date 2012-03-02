@@ -80,17 +80,17 @@ msgstr "Méta-données modifiées"
 #. Default: "Changed metadata of document ${title}"
 #: ./opengever/journal/handlers.py:307
 msgid "label_document_metadata_modified__parent"
-msgstr "Méta-données du document \"${title}\" modifiées"
+msgstr "Méta-données du document ${title} modifiées"
 
 #. Default: "Document sent by Mail: ${subject}"
 #: ./opengever/journal/handlers.py:395
 msgid "label_document_sent"
-msgstr ""
+msgstr "Envoi de document par Email: ${subject}"
 
 #. Default: "Attachments: ${documents} | Receivers: ${receiver} | Message: ${message}"
 #: ./opengever/journal/handlers.py:401
 msgid "label_document_sent_comment"
-msgstr ""
+msgstr "Annexes:  ${documents} | Récepteur ${receiver} | Message ${message}"
 
 #. Default: "Dossier added: ${title}"
 #: ./opengever/journal/handlers.py:176
