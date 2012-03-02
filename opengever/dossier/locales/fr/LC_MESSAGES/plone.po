@@ -9,8 +9,6 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0\n"
-"Language-Code: en\n"
-"Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: DOMAIN\n"
 
@@ -30,7 +28,7 @@ msgid "Dossier state changed to dossier-state-inactive"
 msgstr "Etat du dossier modifié : Annulé"
 
 msgid "Dossier state changed to dossier-state-resolved"
-msgstr "Etat du dossier modifié : Terminé"
+msgstr "Etat du dossier modifié : Fermé"
 
 msgid "Give Filing Number"
 msgstr "Attribuer un numéro d'inventaire"
@@ -48,7 +46,7 @@ msgid "dossier-state-inactive"
 msgstr "Annulé"
 
 msgid "dossier-state-resolved"
-msgstr "Terminé"
+msgstr "Fermé"
 
 msgid "dossier-transition-activate"
 msgstr "Activer"
@@ -63,5 +61,6 @@ msgid "dossier-transition-reactivate"
 msgstr "Rouvrir"
 
 msgid "dossier-transition-resolve"
-msgstr "Terminer"
+msgstr "Fermer"
+
 
