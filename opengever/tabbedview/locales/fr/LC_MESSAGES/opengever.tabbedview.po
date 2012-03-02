@@ -169,7 +169,7 @@ msgstr "Participant"
 #: ./opengever/tabbedview/browser/tabs.py:354
 #: ./opengever/tabbedview/browser/tasklisting.py:97
 msgid "containing_dossier"
-msgstr ""
+msgstr "Dossier"
 
 msgid "created"
 msgstr "Créé le"
