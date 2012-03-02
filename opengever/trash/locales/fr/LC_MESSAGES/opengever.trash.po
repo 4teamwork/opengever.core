@@ -18,7 +18,7 @@ msgstr "Vous n'avez sélectionné aucun objet."
 
 #: ./opengever/trash/trash.py:93
 msgid "could not trash the object ${obj}, it is already trashed"
-msgstr ""
+msgstr "L'objet a été déplacé vers la corbeille"
 
 #: ./opengever/trash/trash.py:102
 msgid "could not trash the object ${obj}, it is checked out"
