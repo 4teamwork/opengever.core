@@ -7,13 +7,15 @@ from opengever.base.browser.helper import client_title_helper
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.tabbedview import _
 from opengever.tabbedview.browser.listing import CatalogListingView
-from opengever.tabbedview.helper import overdue_date_helper
+from opengever.tabbedview.helper import display_client_title_condition
 from opengever.tabbedview.helper import external_edit_link
+from opengever.tabbedview.helper import overdue_date_helper
 from opengever.tabbedview.helper import readable_date_set_invisibles
 from opengever.tabbedview.helper import readable_ogds_author, linked
 from opengever.tabbedview.helper import readable_ogds_user
 from opengever.tabbedview.helper import workflow_state
 from opengever.tabbedview.interfaces import ITaskCatalogTableSourceConfig
+from opengever.tabbedview.utils import get_translated_transitions
 from opengever.task.helper import task_type_helper
 from plone.dexterity.interfaces import IDexterityContainer
 from zope.app.pagetemplate import ViewPageTemplateFile
@@ -27,8 +29,6 @@ class OpengeverTab(object):
     implements(ISQLAlchemy)
 
     show_searchform = True
-
-    template = ViewPageTemplateFile('generic.pt')
 
     def get_css_classes(self):
         if self.show_searchform:
@@ -75,19 +75,42 @@ class OpengeverTab(object):
             if sort_reverse:
                 results.reverse()
 
-        elif sort_on in ('responsible',
-                         'Creator', 'checked_out', 'issuer', 'contact'):
+        # custom sort for sorting on the readable fullname
+        # of the users, contacts and inboxes
+        elif sort_on in (
+            'responsible', 'Creator', 'checked_out', 'issuer', 'contact'):
             info = getUtility(IContactInformation)
 
+            if sort_on in ('issuer', 'contact'):
+                sort_dict = info.get_user_contact_sort_dict()
+            else:
+                sort_dict = info.get_user_sort_dict()
+
             def _sorter(a, b):
-                av = (info.describe(getattr(a, sort_on, '')) or '').lower()
-                bv = (info.describe(getattr(b, sort_on, '')) or '').lower()
-                return cmp(av, bv)
+                return cmp(
+                    sort_dict.get(
+                        getattr(a, sort_on, ''), getattr(a, sort_on, '')),
+                    sort_dict.get(
+                        getattr(b, sort_on, ''), getattr(b, sort_on, ''))
+                    )
 
             results = list(results)
-            results.sort(_sorter)
-            if sort_reverse:
-                results.reverse()
+            results.sort(_sorter, reverse=sort_reverse)
+
+        elif sort_on in ('review_state'):
+            states = get_translated_transitions(self.context, self.request)
+
+            def _state_sorter(a, b):
+                return cmp(
+                    states.get(
+                        getattr(a, sort_on, ''), getattr(a, sort_on, '')),
+                    states.get(
+                        getattr(b, sort_on, ''), getattr(b, sort_on, ''))
+                    )
+
+            results = list(results)
+            results.sort(_state_sorter, reverse=sort_reverse)
+
         return results
 
 
@@ -178,7 +201,6 @@ class Dossiers(OpengeverCatalogListingTab):
     grok.name('tabbedview_view-dossiers')
 
     object_provides = 'opengever.dossier.behaviors.dossier.IDossierMarker'
-
 
     columns = (
         ('', helper.path_checkbox),
@@ -334,7 +356,11 @@ class Tasks(OpengeverCatalogListingTab):
 
         {'column': 'client_id',
          'column_title': _('client_id', 'Client'),
-         'transform': client_title_helper},
+         'transform': client_title_helper,
+         'condition': display_client_title_condition},
+
+        {'column': 'containing_dossier',
+         'column_title': _('containing_dossier', 'Dossier'), },
 
         {'column': 'sequence_number',
          'column_title': _(u'sequence_number', "Sequence Number"), },
@@ -370,9 +396,9 @@ class Trash(Documents):
 
     enabled_actions = [
         'untrashed',
-        'reset_tableconfiguration',]
+        'reset_tableconfiguration', ]
 
-    major_actions= [
+    major_actions = [
         'reset_tableconfiguration',
         ]
 

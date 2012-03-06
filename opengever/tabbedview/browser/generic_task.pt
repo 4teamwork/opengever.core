@@ -1,33 +1,84 @@
-<tal:translation i18n:domain="opengever.tabbedview">
+<html
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:tal="http://xml.zope.org/namespaces/tal"
+    xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+    tal:omit-tag="python: True"
+    i18n:domain="ftw.tabbedview">
 
-    <input type="hidden" name="orig_template" tal:attributes="value string:${context/absolute_url}/#${view/view_name}" />
+  <tal:has_contents tal:condition="view/contents">
+    <div tal:omit-tag="python: view.extjs_enabled" class="tab_container">
 
-    <tal:cond tal:condition="view/contents">
-
+      <tal:extjs condition="view/extjs_enabled">
         <div id="selection_container" class="ftwtable"><!--iefix--></div>
-
         <div id="batching_container" class="ftwtable"><!--iefix--></div>
+      </tal:extjs>
+      <tal:html condition="not:view/extjs_enabled">
+        <div tal:replace="structure view/batching" />
+        <div tal:replace="structure view/selection" />
+      </tal:html>
 
-        <form name="tabbedview_form"
-              method="post"
-              action="folder_object"
-              tal:attributes="action context/absolute_url"
-              >
-          <div id="listing_container" class="ftwtable"><!--iefix--></div>
+      <form name="tabbedview_form"
+            method="post"
+            action="folder_object"
+            tal:attributes="action context/absolute_url">
+        <input type="hidden" name="orig_template" tal:attributes="value string:${context/absolute_url}/#${view/view_name}" />
+
+        <tal:extjs condition="view/extjs_enabled">
+          <div id="listing_container"
+               class="ftwtable +extjs tab_container"><!--iefix--></div>
           <div id="menu_container" class="ftwtable"><!--iefix--></div>
-        </form>
+        </tal:extjs>
 
+        <tal:html condition="not:view/extjs_enabled">
+          <div id="listing_container">
+            <div tal:content="structure view/render_listing" />
+          </div>
+          <div tal:replace="structure view/menu" />
+        </tal:html>
 
-    </tal:cond>
-    <div id="message_no_contents" tal:define="all_filter python: view.request.get('review_state') == 'false'" class="tabbedview_select" style="display:none" i18n:domain="ftw.tabbedview">
-        <span i18n:translate="" i18n:domain="opengever.tabbedview">State</span>
-        <a id="filter_all" tal:attributes="class python: all_filter and 'active'" href="javascript:void(0);" i18n:domain="opengever.tabbedview" i18n:translate="">All</a>
-        <a id="filter_open" tal:attributes="class python: not all_filter and 'active' " href="javascript:void(0);" i18n:domain="opengever.tabbedview" i18n:translate="">Open</a>
+      </form>
+
     </div>
+  </tal:has_contents>
 
-    
-    <p i18n:translate="label_no_contents">
+  <tal:extjs condition="view/extjs_enabled">
+    <tal:START_CUSTOM_______________________________________ />
+    <div id="message_no_contents"
+         class="tabbedview_select"
+         style="display:none"
+         i18n:domain="opengever.tabbedview"
+         tal:define="review_state python: view.request.get('review_state');
+                     all_filter python: review_state == 'false'" >
+
+      <span i18n:translate="" >State</span>
+
+      <a id="filter_all"
+         tal:attributes="class python: all_filter and 'active'"
+         href="javascript:void(0);"
+         i18n:translate="">All</a>
+
+      <a id="filter_open"
+         tal:attributes="class python: not all_filter and 'active' "
+         href="javascript:void(0);"
+         i18n:translate="">Open</a>
+
+      <p id="message_no_contents"
+         i18n:translate="label_no_contents"
+         i18n:domain="ftw.tabbedview">
         No contents
-    </p>
+      </p>
 
-</tal:translation>
+    </div>
+    <tal:END_CUSTOM_______________________________________ />
+  </tal:extjs>
+
+  <tal:html condition="not:view/extjs_enabled">
+    <p tal:condition="not:view/contents"
+       id="message_no_contents"
+       i18n:translate="label_no_contents">
+      No contents
+    </p>
+  </tal:html>
+
+
+</html>

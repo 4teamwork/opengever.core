@@ -2,8 +2,101 @@ Changelog
 =========
 
 
-2.0b110 (unreleased)
---------------------
+2.1.2 (unreleased)
+------------------
+
+- Nothing changed yet.
+
+
+2.1.1 (2012-02-28)
+------------------
+
+- Implements custom sort method for sorting on translated review_states.
+  Issue #1423 Tabbedview Customsort Methode fuer Status Sortierung implementieren
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1423/
+  [phgross]
+
+
+2.1 (2012-02-27)
+----------------
+
+- SQL listings: ignore all task date columns when filtering (updated helper list).
+  [jone]
+
+- SQL listings: fix encoding problem when filtering.
+  [jone]
+
+- Use the get_css_class() function for guessing the icon css class.
+  [jone]
+
+- Added French translations.
+  [ttschanz]
+
+- linked() helper: Use a special helper for subtasks.
+  Issue #1373 Spezielles Icon fuer Unteraufgaben.
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1373
+  [jone]
+
+- Fixed tests: Added opengever.repository to tests_require
+  [lgraf]
+
+- linked() helper: Use a special icon for related documents
+  [lgraf]
+
+- Improve "linked" tabbedview helper, so that remote-tasks have a seperate icon.
+  Issue #1300 Mandantenuebergreifende Aufgaben sollten speziell markiert werden koennen.
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1300
+  [jone]
+
+- Added containing_dossier column to every tasklisting.
+  Issue #1252 Darstellung Dossiertitel bei Aufgabenuebersichten und im Eingangskorb (fuer Aufgaben, nicht fuer Weiterleitungen)
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1252
+  [phgross]
+
+- If a task has a successor task, list only one of them.
+  List the only the one which is assigned to this client.
+  Issue #1345 Anpassungen Darstellung der Aufgabenauflistungen
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1345/
+  [jone]
+
+- Implement faster custom_sort methods for sorting on the readable fullname, with the help of the sort_dicts from og.ogds.base.
+  [phgross]
+
+- Single client setup: hide client column in task listings when only one client is configured.
+  [jone]
+
+- Fix tabbedview markup for compatibility with changes in ftw.tabbedview.
+  [jone]
+
+
+2.0.3 (2012-01-18)
+------------------
+
+- Implement faster custom_sort methods for sorting on the readable fullname,
+  with the help of the sort_dicts from og.ogds.base
+  Issue #1325 og.tabbedview: custom_sort methoden performanter implementieren.
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1325
+  [phgross]
+
+
+2.0.2 (2011-11-29)
+------------------
+
+- Fixed translated_string helper method.
+  [phgross]
+
+
+2.0.1 (2011-11-29)
+------------------
+
+- Implements a dynamic translated_string helper, wich also translate strings from the plone domain
+  Issue #1268 Falsches Icon bei Aufgabe unter Standardablauf
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1268/
+  [phgross]
+
+
+2.0 (2011-11-17)
+----------------
 
 - The Active column is now translated
   Issue #1282 Fehler OGDS: Status wird englisch dargestellt (Yes, No)
@@ -14,6 +107,7 @@ Changelog
     - Updated Translation.
     - Hide Cancelled tasks.
     - Fixed Bug which made Tasks unaccessible when all Tasks arn't active anymore.
+
   Issue #1070 Abgeschlossene Aufgaben nicht immer einblenden
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1070
   [ttschanz]
@@ -472,4 +566,3 @@ Changelog
   [16.11.2009, jbaumann]
 
 - Initial release
-

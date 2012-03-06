@@ -31,3 +31,141 @@ msgstr ""
 
 msgid "assigned_tasks"
 msgstr ""
+
+msgid "tracker_overview"
+msgstr ""
+
+msgid "open_issues"
+msgstr ""
+
+msgid "all_issues"
+msgstr ""
+
+msgid "my_issues"
+msgstr ""
+
+msgid "issued_issues"
+msgstr ""
+
+msgid "tracker_info"
+msgstr ""
+
+msgid "overview"
+msgstr ""
+
+msgid "dossiers"
+msgstr ""
+
+msgid "documents"
+msgstr ""
+
+msgid "events"
+msgstr ""
+
+msgid "tickets"
+msgstr ""
+
+msgid "info"
+msgstr ""
+
+msgid "folders"
+msgstr ""
+
+msgid "changes"
+msgstr ""
+
+msgid "reports"
+msgstr ""
+
+msgid "all_entries"
+msgstr ""
+
+msgid "archive"
+msgstr ""
+
+msgid "accounting_overview"
+msgstr ""
+
+msgid "generally"
+msgstr ""
+
+msgid "label_account"
+msgstr ""
+
+msgid "billable"
+msgstr ""
+
+msgid "getResponsible"
+msgstr ""
+
+msgid "getResponsibleManager"
+msgstr ""
+
+msgid "process"
+msgstr ""
+
+msgid "getEstimatedHours"
+msgstr ""
+
+msgid "getEffectiveHours"
+msgstr ""
+
+msgid "Month"
+msgstr ""
+
+msgid "getAccount"
+msgstr ""
+
+msgid "By State"
+msgstr ""
+
+msgid "By Area"
+msgstr ""
+
+msgid "By Severity"
+msgstr ""
+
+msgid "By Responsible Manager"
+msgstr ""
+
+msgid "By Target Release"
+msgstr ""
+
+msgid "getHours"
+msgstr ""
+
+msgid "getBillable"
+msgstr ""
+
+msgid "participants"
+msgstr ""
+
+msgid "subdossiers"
+msgstr ""
+
+msgid "tasks"
+msgstr ""
+
+msgid "journal"
+msgstr ""
+
+msgid "trash"
+msgstr ""
+
+msgid "mydossiers"
+msgstr ""
+
+msgid "mydocuments"
+msgstr ""
+
+msgid "given_tasks"
+msgstr ""
+
+msgid "mytasks"
+msgstr ""
+
+msgid "assignedtasks"
+msgstr ""
+
+msgid "contacts"
+msgstr ""

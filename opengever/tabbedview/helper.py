@@ -1,10 +1,11 @@
+from Products.CMFCore.interfaces._tools import IMemberData
+from Products.PluggableAuthService.interfaces.authservice import IPropertiedUser
 from datetime import date as dt
 from ftw.mail.utils import get_header
+from opengever.base.browser.helper import get_css_class
 from opengever.ogds.base.interfaces import IContactInformation
 from plone.i18n.normalizer.interfaces import IIDNormalizer
 from plone.memoize import ram
-from Products.CMFCore.interfaces._tools import IMemberData
-from Products.PluggableAuthService.interfaces.authservice import IPropertiedUser
 from zope.app.component.hooks import getSite
 from zope.component import getMultiAdapter
 from zope.component import getUtility
@@ -127,23 +128,7 @@ def linked(item, value):
         url_method = item.absolute_url
 
     # Construct CSS class
-    normalize = getUtility(IIDNormalizer).normalize
-    if not item.portal_type == 'opengever.document.document':
-        css_class = "contenttype-%s" % normalize(item.portal_type)
-    else:
-        # It's a document, we therefore want to display an icon
-        # for the mime type of the contained file
-        icon = getattr(item, 'getIcon', '')
-        if callable(icon):
-            icon = icon()
-
-        if not icon == '':
-            # Strip '.gif' from end of icon name and remove leading 'icon_'
-            filetype = icon[:icon.rfind('.')].replace('icon_', '')
-            css_class = 'icon-%s' % normalize(filetype)
-        else:
-            # Fallback for unknown file type
-            css_class = "contenttype-%s" % normalize(item.portal_type)
+    css_class = get_css_class(item)
 
     # Construct breadcrumbs
     breadcrumb_titles = _breadcrumbs_from_item(item)
@@ -254,3 +239,25 @@ def external_edit_link(item, value):
         item.id,
         getSite().translate('checkout_and_edit',domain="opengever.tabbedview"),
         url)
+
+
+def translated_string(domain='plone'):
+    domain = domain
+    def _translate(item, value):
+        return translate(
+            value, context=getRequest(), domain=domain)
+    return _translate
+
+
+def display_client_title_condition():
+    """A helper for hiding the client title from a task listing if we
+    have a single client setup (it would be the same all the time).
+    """
+    info = getUtility(IContactInformation)
+    if len(info.get_clients()) <= 1:
+        # Single client setup - hide the client title column
+        return False
+
+    else:
+        # Multi client setup - display the client title column
+        return True
