@@ -1,26 +1,31 @@
 from AccessControl.SecurityManagement import SpecialUsers
 from Products.CMFCore.utils import getToolByName
-from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
 from five import grok
+from opengever.ogds.base.interfaces import IContactInformation
 from opengever.ogds.base.utils import get_client_id
 from zExceptions import NotFound
 from zope.component import getUtility
 from zope.intid.interfaces import IIntIds
+from zope.interface import Interface
 
 
 class ResolveOGUIDView(grok.View):
 
     grok.name('resolve_oguid')
-    grok.context(IPloneSiteRoot)
+    grok.context(Interface)
     grok.require('zope2.View')
 
     def render(self):
         oguid = self.request.get('oguid')
         clientid, iid = oguid.split(':')
 
-        assert clientid == get_client_id(), (
-            'Connected to wrong client! %s instead of %s' % (
-                clientid, get_client_id()))
+        if clientid != get_client_id():
+            # wrong client. redirect to right one.
+            info = getUtility(IContactInformation)
+            client = info.get_client_by_id(clientid)
+
+            url = '%s/@@resolve_oguid?oguid=%s' % (client.public_url, oguid)
+            return self.request.RESPONSE.redirect(url)
 
         obj = self._get_object(int(iid))
 

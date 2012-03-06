@@ -17,7 +17,7 @@ class ClientID(grok.Viewlet):
     def get_title(self):
         try:
             current_client = get_current_client()
-        except (ComponentLookupError, ValueError):
+        except (ComponentLookupError, ValueError, KeyError):
             return ''
         else:
             return current_client.title

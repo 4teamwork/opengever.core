@@ -3,6 +3,7 @@ from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
 from mocker import Mocker, Expect
 from opengever.base.browser.resolveoguid import ResolveOGUIDView
 from opengever.ogds.base.interfaces import IClientConfiguration
+from opengever.ogds.base.interfaces import IContactInformation
 from plone.mocktestcase import MockTestCase
 from plone.registry.interfaces import IRegistry
 from unittest2 import TestCase
@@ -70,16 +71,24 @@ class TestResolveOGUIDView(MockTestCase, TestCase):
         with TestCase.assertRaises(self, NotFound):
             view._check_permissions(obj)
 
-    def test_fails_if_wrong_client(self):
+    def test_redirect_to_other_client(self):
+        oguid = 'client2:5'
+        client2_url = 'http://otherhost/client2'
+        target_url = '%s/@@resolve_oguid?oguid=%s' % (client2_url, oguid)
+
+        info = self.mocker.mock()
+        self.mock_utility(info, IContactInformation)
+        self.expect(info.get_client_by_id('client2').public_url).result(
+            client2_url)
+
         request = self.mocker.mock()
-        self.expect(request.get('oguid')).result('wrongclient:5')
+        self.expect(request.get('oguid')).result('client2:5')
+        self.expect(request.RESPONSE.redirect(target_url)).result('REDIRECT')
 
         self.replay()
 
         view = ResolveOGUIDView(object(), request)
-
-        with TestCase.assertRaises(self, AssertionError):
-            view.render()
+        self.assertEqual(view.render(), 'REDIRECT')
 
     def test_redirect_if_correct_client(self):
         absolute_url = 'http://anyhost/client1/somedossier'

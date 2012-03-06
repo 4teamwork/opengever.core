@@ -1,6 +1,3 @@
-# --- PLEASE EDIT THE LINES BELOW CORRECTLY ---
-# SOME DESCRIPTIVE TITLE.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
@@ -12,95 +9,93 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0\n"
-"Language-Code: en\n"
-"Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
-"Domain: opengever.repository\n"
+"Domain: DOMAIN\n"
 
 #: ./opengever/base/profiles/default/actions.xml
 msgid "Copy Items"
-msgstr ""
+msgstr "Copier"
 
 #: ./opengever/base/viewlets/download.py:20
 msgid "No file in in this version"
-msgstr ""
+msgstr "Pas de fichier pour cette version "
 
 #: ./opengever/base/profiles/default/actions.xml
 msgid "Properties"
-msgstr ""
+msgstr "Affichage les propriétés"
 
 #: ./opengever/base/browser/list_groupmembers.pt:13
 msgid "There are no members in this group."
-msgstr ""
+msgstr "Ce groupe n'a aucun utilisateur"
 
 #: ./opengever/base/browser/list_groupmembers.pt:3
 msgid "Users of group:"
-msgstr ""
+msgstr "Utilisateur du groupe"
 
 #. Default ""
 #: opengever/repository/classification.py
 msgid "archival worthy"
-msgstr ""
+msgstr "Valeur archivistique"
 
 #. Default ""
 #: opengever/repository/classification.py
 msgid "archival worthy with sampling"
-msgstr ""
+msgstr "Echantillon"
 
 #. Default: "Download"
 #: ./opengever/base/viewlets/history.pt:41
 msgid "button_file"
-msgstr ""
+msgstr "Télécharger"
 
 #. Default: "PDF"
 #: ./opengever/base/viewlets/history.pt:49
 msgid "button_pdf"
-msgstr ""
+msgstr "Aperçu pdf"
 
 #. Default: "Show"
 #: ./opengever/base/viewlets/history.pt:45
 msgid "button_show"
-msgstr ""
+msgstr "Afficher"
 
 #. Default: "classified"
 #: opengever/repository/classification.py
 msgid "classified"
-msgstr ""
+msgstr "Strictement confidentiel"
 
 #. Default: "confidential"
 #: opengever/repository/classification.py
 msgid "confidential"
-msgstr ""
+msgstr "Confidentiel"
 
 #. Default: "You have not selected any Items"
 #: ./opengever/base/browser/copy_items.py:40
 msgid "error_no_items"
-msgstr ""
+msgstr "Aucun élément sélectionné"
 
 #. Default: "The item you selected cannot be copied"
 #: ./opengever/base/browser/copy_items.py:29
 msgid "error_not_copyable"
-msgstr ""
+msgstr "Le contenu choisi ne peut être copié"
 
 #. Default: "Classification"
 #: ./opengever/base/behaviors/classification.py:20
 msgid "fieldset_classification"
-msgstr ""
+msgstr "Visibilité"
 
 #. Default: "Common"
 #: ./opengever/base/behaviors/base.py:15
 msgid "fieldset_common"
-msgstr ""
+msgstr "En général"
 
 #. Default: "Life Cycle"
 #: ./opengever/base/behaviors/lifecycle.py:26
 msgid "fieldset_lifecycle"
-msgstr ""
+msgstr "Cycle de vie"
 
 #. Default: "Archival value code"
 #: ./opengever/base/behaviors/lifecycle.py:57
 msgid "help_archival_value"
-msgstr ""
+msgstr "Valeur archivistique"
 
 #: ./opengever/base/behaviors/lifecycle.py:66
 msgid "help_archival_value_annotation"
@@ -108,7 +103,7 @@ msgstr ""
 
 #: ./opengever/base/behaviors/classification.py:31
 msgid "help_classification"
-msgstr ""
+msgstr "Classification permettant la protection des documents contre la consultation non-autorisée "
 
 #: ./opengever/base/behaviors/creator.py:21
 msgid "help_creators"
@@ -116,7 +111,7 @@ msgstr ""
 
 #: ./opengever/base/behaviors/lifecycle.py:73
 msgid "help_custody_period"
-msgstr ""
+msgstr "Délai de protection"
 
 #: ./opengever/base/behaviors/lifecycle.py:82
 msgid "help_dateofcassation"
@@ -132,19 +127,19 @@ msgstr ""
 
 #: ./opengever/base/behaviors/classification.py:39
 msgid "help_privacy_layer"
-msgstr ""
+msgstr "Repère indiquant que les documents contiennent des données ou des profils de la personnalité selon le droit sur la protection des données."
 
 #: ./opengever/base/behaviors/classification.py:46
 msgid "help_public_trial"
-msgstr ""
+msgstr "Mentionne si les documents contiennent des données sensibles ou non selon la loi sur le principe de la transparence"
 
 #: ./opengever/base/behaviors/classification.py:53
 msgid "help_public_trial_statement"
-msgstr ""
+msgstr "Arguments contre l'accès pulic selon la loi sur le principe de la transparence"
 
 #: ./opengever/base/behaviors/lifecycle.py:41
 msgid "help_retention_period"
-msgstr ""
+msgstr "Durée entre la date du document plus récent contenu dans un dossier et la date à partir de laquelle le document n'est plus requis pour les activités administratives"
 
 #: ./opengever/base/behaviors/lifecycle.py:50
 msgid "help_retention_period_annotation"
@@ -153,145 +148,146 @@ msgstr ""
 #. Default: "Actor"
 #: ./opengever/base/viewlets/history.pt:17
 msgid "label_actor"
-msgstr ""
+msgstr "Modifier par"
 
 #. Default: "Archival value"
 #: ./opengever/base/behaviors/lifecycle.py:56
 msgid "label_archival_value"
-msgstr ""
+msgstr "Valeur archivistique"
 
 #. Default: "archivalValueAnnotation"
 #: ./opengever/base/behaviors/lifecycle.py:64
 msgid "label_archival_value_annotation"
-msgstr ""
+msgstr "Commentaire concernant la valeur archivistique"
 
 #. Default: "Classification"
 #: ./opengever/base/behaviors/classification.py:30
 msgid "label_classification"
-msgstr ""
+msgstr "Classification"
 
 #. Default: "Comment"
 #: ./opengever/base/viewlets/history.pt:19
 msgid "label_comment"
-msgstr ""
+msgstr "commentaire"
 
 #. Default: "Creators"
 #: ./opengever/base/behaviors/creator.py:20
 msgid "label_creators"
-msgstr ""
+msgstr "Auteurs"
 
 #. Default: "Custody period (years)"
 #: ./opengever/base/behaviors/lifecycle.py:72
 msgid "label_custody_period"
-msgstr ""
+msgstr "Délai de protection archivistique"
 
 #. Default: "Date"
 #: ./opengever/base/viewlets/history.pt:18
 msgid "label_date"
-msgstr ""
+msgstr "Date"
 
 #. Default: "Date of cassation"
 #: ./opengever/base/behaviors/lifecycle.py:81
 msgid "label_dateofcassation"
-msgstr ""
+msgstr "Date d'élimination"
 
 #. Default: "Date of submission"
 #: ./opengever/base/behaviors/lifecycle.py:89
 msgid "label_dateofsubmission"
-msgstr ""
+msgstr "Date de proposition (des documents)"
 
 #. Default: "Description"
 #: ./opengever/base/behaviors/base.py:30
 msgid "label_description"
-msgstr ""
+msgstr "Description"
 
 #. Default: "History"
 #: ./opengever/base/viewlets/history.pt:12
 msgid "label_history"
-msgstr ""
+msgstr "Versions"
 
 #. Default: "Initial version (document copied)"
 #: ./opengever/base/subscribers.py:16
 msgid "label_initial_version_copied"
-msgstr ""
+msgstr "Version initiale (documents copiés)"
 
 #. Default: "Privacy layer"
 #: ./opengever/base/behaviors/classification.py:38
 msgid "label_privacy_layer"
-msgstr ""
+msgstr "Niveau du délai de protection"
 
 #. Default: "Public Trial"
 #: ./opengever/base/behaviors/classification.py:45
 msgid "label_public_trial"
-msgstr ""
+msgstr "Statut public"
 
 #. Default: "Public trial statement"
 #: ./opengever/base/behaviors/classification.py:52
 msgid "label_public_trial_statement"
-msgstr ""
+msgstr "Jusitificaton pour le retrait du status public"
 
 #. Default: "reset"
 #: ./opengever/base/viewlets/history.pt:53
 msgid "label_reset"
-msgstr ""
+msgstr "Remettre"
 
 #. Default: "Retention period (years)"
 #: ./opengever/base/behaviors/lifecycle.py:40
 msgid "label_retention_period"
-msgstr ""
+msgstr "Délai de conservation"
 
 #. Default: "retentionPeriodAnnotation"
 #: ./opengever/base/behaviors/lifecycle.py:48
 msgid "label_retention_period_annotation"
-msgstr ""
+msgstr "Commentaire concernant le délai de protection"
 
 #. Default: "Title"
 #: ./opengever/base/behaviors/base.py:24
 msgid "label_title"
-msgstr ""
+msgstr "Titre"
 
 #. Default: "Version"
 #: ./opengever/base/viewlets/history.pt:16
 msgid "label_version"
-msgstr ""
+msgstr "Version"
 
 #. Default ""
 #: opengever/repository/classification.py
 msgid "not archival worthy"
-msgstr ""
+msgstr "Aucun valeur archivistique"
 
 #. Default ""
 #: opengever/repository/classification.py
 msgid "privacy_layer_no"
-msgstr ""
+msgstr "Aucun niveau de délai de protection"
 
 #. Default: ""
 #: opengever/repository/classification.py
 msgid "privacy_layer_yes"
-msgstr ""
+msgstr "Contient des données personnelles à protéger"
 
 #. Default: "private"
 #: opengever/repository/classification.py
 msgid "private"
-msgstr ""
+msgstr "Privé"
 
 #. Default ""
 #: opengever/repository/classification.py
 msgid "prompt"
-msgstr ""
+msgstr "Proposer"
 
 #. Default: "public"
 #: opengever/repository/classification.py
 msgid "public"
-msgstr ""
+msgstr "Public"
 
 #. Default ""
 #: opengever/repository/classification.py
 msgid "unchecked"
-msgstr ""
+msgstr "Non contrôlé"
 
 #. Default: "unprotected"
 #: opengever/repository/classification.py
 msgid "unprotected"
-msgstr ""
+msgstr "Non classé"
+
 

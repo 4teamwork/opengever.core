@@ -10,9 +10,11 @@ tests_require = [
     'opengever.repository',
     'opengever.document',
     'opengever.contact',
+    'opengever.globalindex',
     'plone.app.testing',
     'plone.mocktestcase',
     'ftw.testing',
+    'xlrd',
     ]
 
 setup(name='opengever.base',
@@ -55,7 +57,7 @@ setup(name='opengever.base',
         'izug.basetheme',
         'Products.LDAPUserFolder',
         'plone.app.versioningbehavior',
-	'xlwt',
+        'xlwt',
         # -*- Extra requirements: -*-
         ],
       tests_require=tests_require,

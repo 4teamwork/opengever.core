@@ -8,6 +8,7 @@ from xlwt import Workbook, XFStyle
 from zope.component import getUtility
 from zope.interface import Interface
 from zope.i18n import translate
+from Missing import Value as MissingValue
 
 
 class ReportingController(grok.View):
@@ -79,7 +80,7 @@ class XLSReporter(object):
     """XLS Reporter View generates a xls-report for the given results set.
     """
 
-    def __init__(self, request, attributes, results):
+    def __init__(self, request, attributes, results, sheet_title=u' ', footer=u'', portrait_format=False):
         """Initalize the XLS reporter
         Arguments:
         attributes -- a list of mappings (with 'id', 'title', 'transform')
@@ -89,18 +90,27 @@ class XLSReporter(object):
         self.attributes = attributes
         self.results = results
         self.request = request
+        self.sheet_title = sheet_title
+        self.footer = footer
+        self.portrait_format = portrait_format
 
     def __call__(self):
         """Generates the xls data for the given objects.
         """
 
         w = Workbook()
-        sheet = w.add_sheet('Dossiers')
+        sheet = w.add_sheet(self.sheet_title)
+        sheet.portrait = self.portrait_format
+        sheet.set_footer_str(self.footer)
+
+        title_style = XFStyle()
+        title_style.font.bold = True
 
         #create labels row
         for i, attr in enumerate(self.attributes):
             sheet.write(0, i,
-                translate(attr.get('title', ''), context=self.request))
+                        translate(attr.get('title', ''), context=self.request),
+                        title_style)
 
         for r, dossier in enumerate(self.results):
             for c, attr in enumerate(self.attributes):
@@ -110,7 +120,8 @@ class XLSReporter(object):
                 # transform the value when a transform is given
                 if attr.get('transform'):
                     value = attr.get('transform')(value)
-
+                if value == MissingValue:
+                    value = ''
                 # set a XFStyle, when one is given
                 if attr.get('style'):
                     sheet.write(r + 1, c, value, attr.get('style'))

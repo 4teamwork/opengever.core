@@ -2,8 +2,93 @@ Changelog
 =========
 
 
-2.1 (unreleased)
+2.4 (unreleased)
 ----------------
+
+- Nothing changed yet.
+
+
+2.3 (2012-02-28)
+----------------
+
+- Fixed french translations (end-of-line within string)
+  [lgraf]
+
+- Remove the standard 'extedit' action (CMFPlone) from document_actions on site setup
+  [lgraf]
+
+
+2.2 (2012-02-27)
+----------------
+
+- Reporter: added format functionality (set landsacpe format as default).
+  [phgross]
+
+- Extend get_css_class so that it supports global index objects.
+  Issue #1412 Optimierung Mandant des Auftraggebers
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1412
+  [jone]
+
+- Fix get_css_class helper for tasks with predecessor (remote-task icon).
+  Issue #1412 Optimierung Mandant des Auftraggebers
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1412
+  [jone]
+
+- Made adjustments on the XLSReport: title colum style, sheet and footer title.
+  Issue #1286 Aufgabenexport um Dossiertitel erweitern.
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1286
+  [phgross]
+
+- get_css_class helper: Immediatly set _v__is_relation to False after reading it.
+  Avoids displaying wrong icon if same obj instance is used in a different request.
+  [lgraf]
+
+- Merge helpers `css_class_from_brain` and `css_class_from_obj`, add subtask / remote task icons.
+  Issue #1343 "Aufgabe Delegieren" Wizard
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1343
+  [jone]
+
+- Added French translations.
+  [ttschanz]
+
+- Add special attribute _v__is_relation to css_class_from_obj to get a special
+  icon when we display a related document
+  [eschmutz
+
+- Prevent obj deletion for anyone except Managers.
+  (Subscriber for IObjectWillBeRemovedEvent that checks for 'Manage portal' permission)
+  [lgraf]
+
+- Changed grok context to make resolveoguid work everywere.
+  [ttschanz]
+
+- Increased webdav.LockItem.DEFAULTTIMEOUT to 24h
+  [lgraf]
+
+- Add wizard form base class and wizard template.
+  [jone]
+
+- Add wizard data storage.
+  [jone]
+
+- resolve_oguid: redirect to right client if oguid does not belong to "this" client.
+  [jone]
+
+- Client ID portlet should not crash when client configuration is missing.
+  [jone]
+
+
+2.1 (2011-11-29)
+----------------
+
+- Ajust the condition for the remote client expose: check the Member role instead of is_client_assigned:
+  So the expose wouldn't be displayed for users from the reader_group.
+  [phgross]
+
+- Made sure an initial version gets created when an object is copied and pasted
+  Issue #1306 History Viewlet erscheint nicht immer, Initialversion wird nicht immer erstellt.
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1306/
+  [lgraf]
 
 - Removed `extedit` action from `portal_tabs` category
   [lgraf]
