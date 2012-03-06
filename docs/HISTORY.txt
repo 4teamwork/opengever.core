@@ -11,6 +11,11 @@ Changelog
 2.1 (2012-02-27)
 ----------------
 
+- Added Temporary fix for Title accessor to return unicode instead of utf-8.
+  Issue #1442 UnicodeDecodeError
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1442/view
+  [phgross]
+
 - Added French translations.
   [ttschanz]
 
