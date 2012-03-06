@@ -23,8 +23,9 @@ class DossierReporter(grok.View):
             msg = _(
                 u'error_no_items', default=u'You have not selected any Items')
             IStatusMessage(self.request).addStatusMessage(msg, type='error')
-            return self.request.RESPONSE.redirect(
-                self.request.form['orig_template'])
+            return_temp = self.request.get(
+                'orig_template', self.context.absolute_url())
+            return self.request.RESPONSE.redirect(return_temp)
 
         # get the given dossiers
         portal_catalog = self.context.portal_catalog

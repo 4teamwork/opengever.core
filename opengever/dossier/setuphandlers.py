@@ -33,6 +33,7 @@ def add_catalog_indexes(context, logger=None):
     wanted = (('is_subdossier','FieldIndex', {}),
               ('filing_no','FieldIndex', {}),
               ('containing_subdossier', 'FieldIndex', {}),
+              ('containing_dossier', 'FieldIndex', {}),
               ('searchable_filing_no', 'ZCTextIndex',
                {'index_type': 'Okapi BM25 Rank',
                 'lexicon_id': 'plone_lexicon'}),

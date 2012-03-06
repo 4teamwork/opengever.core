@@ -1,0 +1,67 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2010-09-30 13:26+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0\n"
+"Language-Code: en\n"
+"Language-Name: English\n"
+"Preferred-Encodings: utf-8 latin1\n"
+"Domain: DOMAIN\n"
+
+msgid "Add Participant"
+msgstr "Ajouter participation"
+
+msgid "Document with docucomposer"
+msgstr "Document avec DocuComposer"
+
+msgid "Dossier state changed to dossier-state-active"
+msgstr "Etat du dossier modifié : En modification"
+
+msgid "Dossier state changed to dossier-state-archived"
+msgstr "Etat du dossier modifié : Archivé"
+
+msgid "Dossier state changed to dossier-state-inactive"
+msgstr "Etat du dossier modifié : Annulé"
+
+msgid "Dossier state changed to dossier-state-resolved"
+msgstr "Etat du dossier modifié : Terminé"
+
+msgid "Give Filing Number"
+msgstr "Attribuer un numéro d'inventaire"
+
+msgid "document_with_template"
+msgstr "Document à partir du modèle"
+
+msgid "dossier-state-active"
+msgstr "En modification"
+
+msgid "dossier-state-archived"
+msgstr "Archivé"
+
+msgid "dossier-state-inactive"
+msgstr "Annulé"
+
+msgid "dossier-state-resolved"
+msgstr "Terminé"
+
+msgid "dossier-transition-activate"
+msgstr "Activer"
+
+msgid "dossier-transition-archive"
+msgstr "Archiver"
+
+msgid "dossier-transition-deactivate"
+msgstr "Annuler"
+
+msgid "dossier-transition-reactivate"
+msgstr "Rouvrir"
+
+msgid "dossier-transition-resolve"
+msgstr "Terminer"
+

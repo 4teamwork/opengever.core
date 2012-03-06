@@ -258,9 +258,12 @@ class ArchiveForm(directives_form.Form):
             subdossiers = self.context.get_subdossiers()
             for subdossier in subdossiers:
                 obj = subdossier.getObject()
-                IDossier(obj).filing_no = "%s.%s" % (filing_no, filing_no_suffix)
-                obj.reindexObject(idxs=['filing_no'])
-                filing_no_suffix += 1
+                status = self.wft.getStatusOf("opengever_dossier_workflow",obj)
+                # Only issue a filing_no for active dossiers
+                if not status['review_state'] == 'dossier-state-inactive':
+                    IDossier(obj).filing_no = "%s.%s" % (filing_no, filing_no_suffix)
+                    obj.reindexObject(idxs=['filing_no'])
+                    filing_no_suffix += 1
 
             #reindex the filing_no index for the current object
             self.context.reindexObject(idxs=['filing_no', 'searchable_filing_no'])

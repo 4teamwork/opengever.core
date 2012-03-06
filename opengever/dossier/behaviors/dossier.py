@@ -1,32 +1,23 @@
 from AccessControl import getSecurityManager
 from Acquisition import aq_inner, aq_parent
-from OFS.interfaces import IObjectWillBeMovedEvent
-from Products.CMFCore.interfaces import ISiteRoot
 from collective import dexteritytextindexer
 from collective.elephantvocabulary import wrap_vocabulary
 from datetime import datetime
 from five import grok
 from ftw.datepicker.widget import DatePickerFieldWidget
-from opengever.base.interfaces import IReferenceNumber, ISequenceNumber
-from opengever.base.interfaces import IReferenceNumberPrefix
 from opengever.base.source import RepositoryPathSourceBinder
 from opengever.dossier import _
 from opengever.dossier.widget import referenceNumberWidgetFactory
 from opengever.mail.interfaces import ISendableDocsContainer
 from opengever.ogds.base.autocomplete_widget import AutocompleteFieldWidget
-from opengever.ogds.base.interfaces import IContactInformation
 from plone.autoform.interfaces import IFormFieldProvider
 from plone.dexterity.i18n import MessageFactory as pd_mf
-from plone.dexterity.interfaces import IDexterityContent
 from plone.dexterity.interfaces import IDexterityFTI
 from plone.directives import form, dexterity
-from plone.indexer import indexer
 from plone.z3cform.textlines.textlines import TextLinesFieldWidget
 from z3c.relationfield.schema import RelationChoice, RelationList
 from zope import schema
-from zope.app.container.interfaces import IObjectAddedEvent
-from zope.app.container.interfaces import IObjectMovedEvent
-from zope.component import getAdapter, getUtility
+from zope.component import getUtility
 from zope.interface import Interface, alsoProvides
 from zope.interface import invariant, Invalid
 import logging
@@ -257,176 +248,4 @@ class StartBeforeEnd(Invalid):
 @form.default_value(field=IDossier['start'])
 def deadlineDefaultValue(data):
     return datetime.today()
-# TODO: Doesn't work yet
 
-
-@indexer(IDossierMarker)
-def startIndexer(obj):
-    aobj = IDossier(obj)
-    if aobj.start is None:
-        return None
-    return aobj.start
-grok.global_adapter(startIndexer, name="start")
-
-
-@indexer(IDossierMarker)
-def endIndexer(obj):
-    aobj = IDossier(obj)
-    if aobj.end is None:
-        return None
-    return aobj.end
-grok.global_adapter(endIndexer, name="end")
-
-
-@indexer(IDossierMarker)
-def responsibleIndexer(obj):
-    aobj = IDossier(obj)
-    if aobj.responsible is None:
-        return None
-    return aobj.responsible
-grok.global_adapter(responsibleIndexer, name="responsible")
-
-
-@indexer(IDossierMarker)
-def isSubdossierIndexer(obj):
-    parent = aq_parent(aq_inner(obj))
-    if IDossierMarker.providedBy(parent):
-        return True
-    return False
-grok.global_adapter(isSubdossierIndexer, name="is_subdossier")
-
-
-@indexer(IDossierMarker)
-def filing_no(obj):
-    """filing number indexer"""
-    dossier = IDossier(obj)
-    return getattr(dossier, 'filing_no', None)
-grok.global_adapter(filing_no, name="filing_no")
-
-
-@indexer(IDossierMarker)
-def searchable_filing_no(obj):
-    """Searchable filing number indexer"""
-    dossier = IDossier(obj)
-    return getattr(dossier, 'filing_no', '')
-grok.global_adapter(searchable_filing_no, name="searchable_filing_no")
-
-
-@indexer(IDexterityContent)
-def containing_subdossier(obj):
-    """Returns the title of the subdossier the object is contained in,
-    unless it's contained directly in the root of a dossier, in which
-    case an empty string is returned.
-    """
-    context = aq_inner(obj)
-    # Only compute for types that actually can be contained in a dossier
-    if not context.portal_type in ['opengever.document.document',
-                                   'opengever.task.task',
-                                   'ftw.mail.mail']:
-        return ''
-
-    parent = context
-    parent_dossier = None
-    parent_dossier_found = False
-    while not parent_dossier_found:
-        parent = aq_parent(parent)
-        if ISiteRoot.providedBy(parent):
-            # Shouldn't happen, just to be safe
-            break
-        if IDossierMarker.providedBy(parent):
-            parent_dossier_found = True
-            parent_dossier = parent
-
-    if IDossierMarker.providedBy(aq_parent(parent_dossier)):
-        # parent dossier is a subdossier
-        return parent_dossier.Title()
-    return ''
-grok.global_adapter(containing_subdossier, name='containing_subdossier')
-
-
-class SearchableTextExtender(grok.Adapter):
-    grok.context(IDossierMarker)
-    grok.name('IDossier')
-    grok.implements(dexteritytextindexer.IDynamicTextIndexExtender)
-
-    def __init__(self, context):
-        self.context = context
-
-    def __call__(self):
-        searchable = []
-        # append some other attributes to the searchableText index
-        # reference_number
-        refNumb = getAdapter(self.context, IReferenceNumber)
-        searchable.append(refNumb.get_number())
-
-        # sequence_number
-        seqNumb = getUtility(ISequenceNumber)
-        searchable.append(str(seqNumb.get_number(self.context)))
-        # responsible
-        info = getUtility(IContactInformation)
-        dossier = IDossier(self.context)
-        searchable.append(info.describe(dossier.responsible).encode(
-                'utf-8'))
-
-        # filling_no
-        dossier = IDossierMarker(self.context)
-        if getattr(dossier, 'filing_no', None):
-            searchable.append(str(getattr(dossier, 'filing_no',
-                                          None)).encode('utf-8'))
-
-        # comments
-        comments = getattr(IDossier(self.context), 'comments', None)
-        if comments:
-            searchable.append(comments.encode('utf-8'))
-
-        return ' '.join(searchable)
-
-
-@grok.subscribe(IDossierMarker, IObjectWillBeMovedEvent)
-def set_former_reference_before_moving(obj, event):
-    """ Temporarily store current reference number before
-    moving the dossier.
-
-    """
-
-    # make sure obj wasn't just created or deleted
-    if not event.oldParent or not event.newParent:
-        return
-
-    repr = IDossier(obj)
-    ref_no = getAdapter(obj, IReferenceNumber).get_number()
-    IDossier['temporary_former_reference_number'].set(repr, ref_no)
-
-
-@grok.subscribe(IDossierMarker, IObjectMovedEvent)
-def set_former_reference_after_moving(obj, event):
-    """ Use the (hopefully) stored former reference number
-    as the real new former reference number. This has to
-    be done after the dossier was moved.
-
-    """
-    # make sure obj wasn't just created or deleted
-    if not event.oldParent or not event.newParent:
-        return
-
-    repr = IDossier(obj)
-    former_ref_no = repr.temporary_former_reference_number
-    IDossier['former_reference_number'].set(repr, former_ref_no)
-    # reset temporary former reference number
-    IDossier['temporary_former_reference_number'].set(repr, '')
-
-    # setting the new number
-    parent = aq_parent(aq_inner(obj))
-    prefix_adapter = IReferenceNumberPrefix(parent)
-    prefix_adapter.set_number(obj)
-
-    obj.reindexObject(idxs=['reference'])
-
-
-@grok.subscribe(IDossierMarker, IObjectAddedEvent)
-def saveReferenceNumberPrefix(obj, event):
-    parent = aq_parent(aq_inner(obj))
-    prefix_adapter = IReferenceNumberPrefix(parent)
-    if not prefix_adapter.get_number(obj):
-        prefix_adapter.set_number(obj)
-    obj.reindexObject(idxs=['reference'])

@@ -25,7 +25,7 @@ check dossier add form:
 
 default values (responsible, start)
 
-	# not possible to test because the name of the control comes from javascript. 
+	# not possible to test because the name of the control comes from javascript.
     # >>> browser.getControl(name='form.widgets.IDossier.responsible:list').value
     # ['SITE_OWNER_NAME']
 
@@ -47,10 +47,10 @@ create dossier and edit
 
     >>> browser.getControl(name='form.buttons.save').click()
     >>> browser.url
-    'http://nohost/plone/dossier-3/tabbed_view'
-    
+    'http://nohost/plone/dossier-4/tabbed_view'
+
 check the label
-    >>> browser.open('http://nohost/plone/dossier-3/edit')
+    >>> browser.open('http://nohost/plone/dossier-4/edit')
     >>> 'Edit Business Case Dossier' in browser.contents
     True
 
@@ -58,16 +58,20 @@ and the default value
     >>> browser.getControl(name='form.widgets.IDossier.responsible:list').value
     ['admin']
 
+cancel
+    >>> browser.getControl(name='form.buttons.cancel').click()
+
 create and edit subdossier
-    >>> browser.open('http://nohost/plone/dossier-3/++add++opengever.dossier.businesscasedossier')
+    >>> browser.open('http://nohost/plone/dossier-4/++add++opengever.dossier.businesscasedossier')
     >>> 'Add Subdossier' in browser.contents
     True
     >>> browser.getControl(name='form.widgets.IOpenGeverBase.title').value = 'Dossier Test'
     >>> browser.getControl(name='form.buttons.save').click()
     >>> browser.url
-    'http://nohost/plone/dossier-3/dossier-4/tabbed_view'
+    'http://nohost/plone/dossier-4/dossier-5/tabbed_view'
 
-    >>> browser.open('http://nohost/plone/dossier-3/dossier-4/edit')
+    >>> browser.open('http://nohost/plone/dossier-4/dossier-5/edit')
     >>> 'Edit Subdossier' in browser.contents
     True
-    
+    >>> browser.getControl(name='form.buttons.cancel').click()
+

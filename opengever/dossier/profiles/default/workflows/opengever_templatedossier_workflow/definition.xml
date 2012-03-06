@@ -7,6 +7,10 @@
  <permission>Modify portal content</permission>
  <permission>View</permission>
  <permission>opengever.dossier: Add templatedossier</permission>
+ <permission>Sharing page: Delegate Contributor role</permission>
+ <permission>Sharing page: Delegate Editor role</permission>
+ <permission>Sharing page: Delegate Reader role</permission>
+ <permission>Sharing page: Delegate Reviewer role</permission>
  <permission>Sharing page: Delegate roles</permission>
  <permission>Add portal content</permission>
  <state state_id="templatedossier-state-active" title="Active">
@@ -30,33 +34,37 @@
    <permission-role>Reader</permission-role>
   </permission-map>
   <permission-map name="List folder contents" acquired="False">
-   <permission-role>Administrator</permission-role>
    <permission-role>Manager</permission-role>
-   <permission-role>Reader</permission-role>
   </permission-map>
   <permission-map name="Modify portal content" acquired="False">
    <permission-role>Manager</permission-role>
+   <permission-role>Administrator</permission-role>
   </permission-map>
 
   <permission-map name="Sharing page: Delegate roles" acquired="False">
    <permission-role>Manager</permission-role>
    <permission-role>Role Manager</permission-role>
+   <permission-role>Administrator</permission-role>
   </permission-map>
   <permission-map name="Sharing page: Delegate Contributor role" acquired="False">
    <permission-role>Manager</permission-role>
    <permission-role>Role Manager</permission-role>
+   <permission-role>Administrator</permission-role>
   </permission-map>
   <permission-map name="Sharing page: Delegate Editor role" acquired="False">
    <permission-role>Manager</permission-role>
    <permission-role>Role Manager</permission-role>
+   <permission-role>Administrator</permission-role>
   </permission-map>
   <permission-map name="Sharing page: Delegate Reader role" acquired="False">
    <permission-role>Manager</permission-role>
    <permission-role>Role Manager</permission-role>
+   <permission-role>Administrator</permission-role>
   </permission-map>
   <permission-map name="Sharing page: Delegate Reviewer role" acquired="False">
    <permission-role>Manager</permission-role>
    <permission-role>Role Manager</permission-role>
+   <permission-role>Administrator</permission-role>
   </permission-map>
 
   <permission-map name="View" acquired="False">
@@ -73,7 +81,7 @@
  <variable variable_id="action" for_catalog="False" for_status="True" update_always="True">
   <description>Previous transition</description>
   <default>
-   
+
    <expression>transition/getId|nothing</expression>
   </default>
   <guard>
@@ -82,7 +90,7 @@
  <variable variable_id="actor" for_catalog="False" for_status="True" update_always="True">
   <description>The ID of the user who performed the previous transition</description>
   <default>
-   
+
    <expression>user/getUserName</expression>
   </default>
   <guard>
@@ -91,7 +99,7 @@
  <variable variable_id="comments" for_catalog="False" for_status="True" update_always="True">
   <description>Comment about the last transition</description>
   <default>
-   
+
    <expression>python:state_change.kwargs.get('comment', '')</expression>
   </default>
   <guard>
@@ -100,7 +108,7 @@
  <variable variable_id="review_history" for_catalog="False" for_status="False" update_always="False">
   <description>Provides access to workflow history</description>
   <default>
-   
+
    <expression>state_change/getHistory</expression>
   </default>
   <guard>
@@ -111,7 +119,7 @@
  <variable variable_id="time" for_catalog="False" for_status="True" update_always="True">
   <description>When the previous transition was performed</description>
   <default>
-   
+
    <expression>state_change/getDateTime</expression>
   </default>
   <guard>

@@ -2,8 +2,84 @@ Changelog
 =========
 
 
-2.0b23 (unreleased)
--------------------
+2.0.3 (unreleased)
+------------------
+
+- Added parent-dossier-finder adapter.
+  [jone]
+
+- Made view failsafe when there is no orig_template
+  Issue #1398 DossierReporter: Fallback implementieren fuer MissingValues
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1398/
+  [phgross]
+
+- Added French translations.
+  [ttschanz]
+
+- Administrator role now may resolve or reactivate dossiers
+  [lgraf]
+
+- When resolving dossiers, only issue filing numbers for active dossiers
+  [lgraf]
+
+- Fixed tests: Unregister prevent_deletion subscriber in tests
+  [lgraf]
+
+- Removed 'List folder contents' permission from anyone but Manager in
+  dossier and templatedossier workflows.
+  [lgraf]
+
+- Updated workflow for new Administrator role
+  [lgraf]
+
+- Dossier resolving: Only require tasks and docs to be filed in a
+  subdossier if there's any *active* subdossiers.
+  [lgraf]
+
+- Adjust the main dossier test: added IDisplayInOverview functionality test.
+  [phgross]
+
+- Adjust the containing_dossier indexer: it should also work for objects in the inbox.
+  [phgross]
+
+- Added IDisplayedInOverview Interfaces:
+  to mark additional dossier behaviors, which should displayed in the overview.
+  Issue #1251 Darstellung von Zusatzattributen
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1251/
+  [phgross]
+
+- Refactored some parts of opengever.dossier (overview, added tests, adjust some docstrings, pep8)
+  [phgross]
+
+- Add reindexing the containing_dossier value also in the globalindex.
+  [phgross]
+
+- Added new containing_dossier index used for show in the searchresults and some other listings
+  Issue #1253 Darstellung Dossiertitel bei Suchresultaten (Subdossiers, Dokumente, Aufgaben)
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1253
+  [phgross]
+
+- Tabbedview custom storage key: use better matching interface,
+  according to changes in ftw.tabbedview.
+  [jone]
+
+
+2.0.2 (2011-12-06)
+------------------
+
+- Fixed workflow definitions: add all configured permission also to the permissions managed by this workflow.
+  [phgross]
+
+
+2.0.1 (2011-11-17)
+------------------
+
+- Fixed changelog
+  [lgraf]
+
+
+2.0 (2011-11-17)
+----------------
 
 - Fixed dossier report for the myDossiers view, activate the report view on every content type.
   [phgross]
@@ -153,7 +229,7 @@ Changelog
 ------
 
 - When updating `containing_subdossier` index also update objects not
-  *directly- contained in the subdossier.
+  *directly* contained in the subdossier.
   [lgraf]
 
 - Fixed `containing_subdossier` index to also work for objects not *directly*
@@ -745,4 +821,3 @@ Changelog
 
 - Added Actions for Version history and journal
   [14.10.2009, jbaumann]
-

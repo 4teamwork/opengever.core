@@ -15,12 +15,11 @@ do some imports
     >>> from opengever.document.interfaces import ICheckinCheckoutManager
     >>> from zope.component import queryMultiAdapter
     >>> from plone.indexer.interfaces import IIndexableObject
-
-
+    >>> from plone.app.testing import TEST_USER_ID
 
 setup the browser for the test, we use it later in the test
-	>>> app = layer['app']
-	>>> portal = layer['portal']
+    >>> app = layer['app']
+    >>> portal = layer['portal']
     >>> browser = Browser(app)
     >>> browser.handleErrors = False
     >>> browser.addHeader('Accept-Language', 'en-US')
@@ -57,6 +56,7 @@ and tasks,
     ...     'opengever.task.task', title="Task1", task_type='correction', checkConstraints=False)
     >>> task1
     <Task at /plone/dossier-1/task-1>
+    >>> task1.responsible = TEST_USER_ID
 
     >>> task2 = createContentInContainer(subdossier,
     ...     'opengever.task.task', title="Task1", task_type='correction', issuer=str(portal.restrictedTraverse('plone_portal_state').member()), checkConstraints=False)
@@ -74,6 +74,20 @@ Check if all contents of the dossier are "supplied" (filed)
     >>> dossier.is_all_supplied()
     False
 
+Check that an inactive subdossier doesn't prevent the main dossier from being closed
+    >>> wft = portal.portal_workflow
+    >>> wft.doActionFor(subdossier, 'dossier-transition-deactivate')
+    >>> dossier.is_all_supplied()
+    True
+
+Create another subdossier to continue with testing...
+    >>> subdossier = createContentInContainer(dossier,
+    ...     'opengever.dossier.businesscasedossier',
+    ...     title='Subdossier', checkConstraints=False)
+    >>> subdossier
+    <DossierContainer at /plone/dossier-1/dossier-3>
+    >>> IDossier(subdossier).start = datetime.today().date()
+
 Move the object to the subdossier, the task rest in the maindossier, and check is all supplied
     >>> clibboard = dossier.manage_cutObjects(
     ...    [doc1.getId(),])
@@ -89,6 +103,7 @@ Move also the task to the subdossier and now all should be supplied
     >>> task1 = getattr(subdossier, 'task-1')
     >>> dossier.is_all_supplied()
     True
+
 
 
 is_all_checked_in
@@ -182,7 +197,7 @@ create a second document
     >>> doc2 = createContentInContainer(subdossier,
     ...     'opengever.document.document', title="Doc2", checkConstraints=False)
     >>> doc2
-    <Document at /plone/dossier-1/dossier-2/document-2>
+    <Document at /plone/dossier-1/dossier-3/document-2>
 
 default values
 --------------

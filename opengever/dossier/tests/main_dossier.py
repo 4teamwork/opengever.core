@@ -310,6 +310,16 @@ class TestMainDossier(unittest.TestCase):
             # the tabs-var should be empty if we found every tab
             self.assertEquals(tabs, [])
 
+    def test_special_overview(self):
+        """check if the additional attributes are display in the overview"""
+        for dossier_type in self.dossier_types:
+            if self.is_special_dossier:
+                d1 = self.create_dossier(dossier_type)
+                browser =self.get_browser()
+                url = '%s/tabbedview_view-overview' %(d1.absolute_url())
+                browser.open(url)
+                self.assertTrue('additional_attributes' in browser.contents)
+
     def test_default_labels(self):
         """Check default form labels of subdossier
         We have a special handling of labels in subdossiers.

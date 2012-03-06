@@ -58,11 +58,13 @@ class DossierContainer(Container):
         else:
             return True
 
-    def get_subdossiers(self):
+    def get_subdossiers(self, sort_on='created', sort_order='ascending'):
         dossier_path = '/'.join(self.getPhysicalPath())
         subdossiers = self.portal_catalog(
             path=dict(query=dossier_path,
                       depth=-1),
+            sort_on=sort_on,
+            sort_order=sort_order,
             object_provides= 'opengever.dossier.behaviors.dossier.IDossierMarker')
 
         # Remove the object itself from the list of subdossiers
@@ -71,14 +73,17 @@ class DossierContainer(Container):
 
     def is_all_supplied(self):
         """Check if all tasks and all documents are supplied in a subdossier
-        provided there are any subdossiers
+        provided there are any (active) subdossiers
 
         """
-        subddosiers = self.getFolderContents({
+        subdossiers = self.getFolderContents({
                 'object_provides':
                     'opengever.dossier.behaviors.dossier.IDossierMarker'})
 
-        if len(subddosiers) > 0:
+        active_dossiers = [d for d in subdossiers
+                            if not d.review_state == 'dossier-state-inactive']
+
+        if len(active_dossiers) > 0:
             results = self.getFolderContents({
                     'portal_type': ['opengever.task.task',
                                     'opengever.document.document']})
@@ -267,7 +272,7 @@ class DossierContainer(Container):
             status =  wft.getStatusOf("opengever_dossier_workflow", subdossier)
             state = status["review_state"]
 
-            if not state == 'dossier-state-resolved':
+            if not state in ('dossier-state-resolved', 'dossier-state-inactive'):
                 if subdossier.computeEndDate():
                     # Resolve subdossier after setting end date and filing_no
                     if not IDossier(subdossier).end:
