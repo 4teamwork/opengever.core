@@ -205,6 +205,14 @@ class CompleteSuccessorTaskForm(Form):
                 else:
                     # add entry to the response for this document
                     response.added_object.append(RelationValue(int(doc_intid)))
+            else:
+                # append only the relation on the response
+                doc._v__is_relation = True
+                response.add_change('relatedItems',
+                    _(u'label_related_items', default=u"Related Items"),
+                    '',
+                    linked(doc, doc.Title()))
+
 
         request_data = {'data': json.dumps(data)}
         response = remote_request(

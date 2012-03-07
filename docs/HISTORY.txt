@@ -5,7 +5,10 @@ Changelog
 2.3.2 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Fixed CompleteSuccessorTaskForm:
+  - Fixed condition "relation allready exists".
+  - Append the relation on response also when the releation has been allready exist.
+  [phgross]
 
 
 2.3.1 (2012-03-02)
