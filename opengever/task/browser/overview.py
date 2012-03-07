@@ -200,6 +200,11 @@ class Overview(DisplayForm, OpengeverTab):
                 'label': _(u"label_responsible", default=u"Responsible"),
                 'value': self.get_task_info(self.context),
             },
+            {
+                'label': _(u"label_date_of_completion", default=u"Date of completion"),
+                'value': _get_task_widget_value('date_of_completion'),
+            },
+
         ]
 
         return items

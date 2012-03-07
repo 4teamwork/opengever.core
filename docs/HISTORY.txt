@@ -5,6 +5,11 @@ Changelog
 2.3.2 (unreleased)
 ------------------
 
+- Taskoverview: Add date of completion to the main attributes.
+  Issue #1440 Release 2.3 Aufgabe: Erledigungsdatum fehlt im Overview
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1440
+  [phgross]
+
 - Fixed CompleteSuccessorTaskForm:
   - Fixed condition "relation allready exists".
   - Append the relation on response also when the releation has been allready exist.
