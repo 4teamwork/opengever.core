@@ -177,7 +177,7 @@ class CompleteSuccessorTaskForm(Form):
             data['documents'].append(transporter._extract_data(doc))
 
             #add a releation when a document from the dossier was selected
-            if doc_intid not in related_ids:
+            if int(doc_intid) not in related_ids:
                 # check if its a relation
                 if aq_parent(aq_inner(doc)) != self.context:
                     # add relation to doc on task
