@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-2.3.2 (unreleased)
+2.3.2 (2012-03-08)
 ------------------
 
 - Removed console.log statemant in js, to avoid ie problems.
