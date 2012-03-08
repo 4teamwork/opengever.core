@@ -11,7 +11,6 @@ jq(window).load(function() {
             concat($(this).attr('value'));
         $('#form-widgets-responsible-widgets-query').
             autocomplete('option', 'source', url);
-        console.log('updated');
     });
 
     /* for add / edit task and add / edit reponse: */

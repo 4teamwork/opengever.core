@@ -5,6 +5,9 @@ Changelog
 2.3.2 (unreleased)
 ------------------
 
+- Removed console.log statemant in js, to avoid ie problems.
+  [phgross]
+
 - Task overview: Fixed AttributError if document_date not set
   [lgraf]
 
