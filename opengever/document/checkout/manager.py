@@ -1,5 +1,4 @@
 from AccessControl import getSecurityManager, Unauthorized
-from Products.CMFCore.utils import getToolByName
 from five import grok
 from opengever.document import _
 from opengever.document.document import IDocumentSchema
@@ -9,6 +8,8 @@ from opengever.document.events import ObjectCheckoutCanceledEvent
 from opengever.document.events import ObjectRevertedToVersion
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.trash.trash import ITrashed
+from plone.locking.interfaces import IRefreshableLockable
+from Products.CMFCore.utils import getToolByName
 from zope.annotation.interfaces import IAnnotations
 from zope.event import notify
 from zope.publisher.interfaces.browser import IBrowserRequest
@@ -126,6 +127,9 @@ class CheckinCheckoutManager(grok.MultiAdapter):
         # finally, reindex the object
         self.context.reindexObject()
 
+        # Clear any WebDAV locks left over by ExternalEditor if necessary
+        self.clear_locks()
+
         # fire the event
         notify(ObjectCheckedInEvent(self.context, comment))
 
@@ -172,6 +176,9 @@ class CheckinCheckoutManager(grok.MultiAdapter):
 
         # finally, reindex the object
         self.context.reindexObject()
+
+        # Clear any WebDAV locks left over by ExternalEditor if necessary
+        self.clear_locks()
 
         # fire the event
         notify(ObjectCheckoutCanceledEvent(self.context))
@@ -224,3 +231,11 @@ class CheckinCheckoutManager(grok.MultiAdapter):
         # event
         notify(ObjectRevertedToVersion(self.context, version_id,
                                        create_version))
+
+    def clear_locks(self):
+        """Clears any WebDAV locks on the adapted document left over by
+        ExternalEditor.
+        """
+        lockable = IRefreshableLockable(self.context)
+        if lockable and lockable.locked():
+            lockable.clear_locks()

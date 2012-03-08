@@ -5,7 +5,8 @@ Changelog
 2.0.3 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Clear any WebDAV locks left over by ExternalEditor if necessary
+  [lgraf]
 
 
 2.0.2 (2012-02-27)
