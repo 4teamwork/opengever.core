@@ -5,6 +5,9 @@ Changelog
 2.3.2 (unreleased)
 ------------------
 
+- Task overview: Fixed AttributError if document_date not set
+  [lgraf]
+
 - Taskoverview: Add date of completion to the main attributes.
   Issue #1440 Release 2.3 Aufgabe: Erledigungsdatum fehlt im Overview
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1440

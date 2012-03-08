@@ -33,7 +33,7 @@
                                     <!-- item is a obj (Documents)-->
                                     <tal:brain tal:condition="python: view.get_type(item) == 'obj'">
                                         <a href="" tal:attributes="href item/absolute_url;
-                                                                   title python: item.document_date and item.document_date.strftime('%d.%m.%Y') or '';
+                                                                   title python: getattr(item, 'document_date', None) and item.document_date.strftime('%d.%m.%Y') or '';
                                                                    class python:view.get_css_class(item)">
                                             <span tal:condition="item/absolute_url" tal:content="item/Title" />
                                         </a>
