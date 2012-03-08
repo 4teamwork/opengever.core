@@ -20,6 +20,7 @@ class LDAPUserSourceSection(object):
         for item in self.previous:
             yield item
 
+        imported_uids = []
         # get all the attributes from the ldap plugin
         ldap_name = self.options.get('ldap_name', 'ldap')
         ldap_plugin = self.context.acl_users.get(ldap_name)
@@ -30,6 +31,8 @@ class LDAPUserSourceSection(object):
 
             #iterate over the users in the ldap_userfolder
             for uid in ldap_folder.getUserIds():
+                if uid.lower() in imported_uids:
+                    self.logger.warn("Skipped duplicate user with uid '%s'!" % uid)
                 try:
                     user = ldap_folder.getUserById(uid)
                 except UnicodeDecodeError:
@@ -42,6 +45,7 @@ class LDAPUserSourceSection(object):
                     if isinstance(v, list):
                         v = v[0]
                     temp[attr.get('public_name')] = v
+                imported_uids.append(uid.lower())
                 yield temp
 
 
