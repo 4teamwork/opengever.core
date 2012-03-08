@@ -33,6 +33,7 @@ class LDAPUserSourceSection(object):
             for uid in ldap_folder.getUserIds():
                 if uid.lower() in imported_uids:
                     self.logger.warn("Skipped duplicate user with uid '%s'!" % uid)
+                    continue
                 try:
                     user = ldap_folder.getUserById(uid)
                 except UnicodeDecodeError:
