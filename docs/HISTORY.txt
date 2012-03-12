@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-2.0.3 (unreleased)
+2.0.3 (2012-03-12)
 ------------------
 
 - Fixed redirect in the checkin view for documents stored in a task.
