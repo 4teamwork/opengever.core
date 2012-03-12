@@ -1,4 +1,5 @@
 from Acquisition import aq_inner, aq_parent
+from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
 from Products.statusmessages.interfaces import IStatusMessage
 from five import grok
@@ -85,8 +86,15 @@ class CheckinCommentForm(form.Form):
                     raise Exception(
                         'Plone site reached - no dossier found')
 
-            return self.request.RESPONSE.redirect(
-                '%s#documents' % dossier.absolute_url())
+            # check if the user has the permission to see it.
+            portal_membership = getToolByName(
+                self.context, 'portal_membership')
+            if portal_membership.checkPermission('View', dossier):
+                return self.request.RESPONSE.redirect(
+                    '%s#documents' % dossier.absolute_url())
+            else:
+                return self.request.RESPONSE.redirect(
+                    self.context.absolute_url())
 
     @button.buttonAndHandler(_(u'button_cancel', default=u'Cancel'))
     def cancel(self, action):

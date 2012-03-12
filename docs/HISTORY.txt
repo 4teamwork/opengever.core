@@ -5,6 +5,9 @@ Changelog
 2.0.3 (unreleased)
 ------------------
 
+- Fixed redirect in the checkin view for documents stored in a task.
+  [phgross]
+
 - Clear any WebDAV locks left over by ExternalEditor if necessary
   [lgraf]
 
