@@ -1,3 +1,4 @@
+from Acquisition import aq_inner, aq_parent
 from five.grok import subscribe
 from opengever.globalindex.handlers.task import index_task
 from opengever.ogds.base.interfaces import IContactInformation
@@ -22,6 +23,7 @@ class LocalRolesSetter(object):
         self.set_roles_on_task()
         self.globalindex_reindex_task()
         self.set_roles_on_related_items()
+        self.set_roles_on_distinct_parent()
 
     @property
     def responsible(self):
@@ -79,6 +81,18 @@ class LocalRolesSetter(object):
         the roles which are indexed too (allowed users).
         """
         index_task(self.task, self.event)
+
+    def set_roles_on_distinct_parent(self):
+        """Set local roles on the next parent which has a different
+        content type.
+        """
+
+        context = self.task
+        while context.Type() == self.task.Type():
+            context = aq_parent(aq_inner(context))
+        self._add_local_roles(context, self.responsible, ('Contributor', ))
+        if self.inbox_group:
+            self._add_local_roles(context, self.inbox_group, ('Contributor', ))
 
     def set_roles_on_related_items(self):
         """Set local roles on related items (usually documents)
