@@ -31,6 +31,8 @@ from z3c.relationfield import RelationValue
 from zope import schema
 from zope.app.intid.interfaces import IIntIds
 from zope.component import getUtility, getAdapter
+from zope.event import notify
+from zope.lifecycleevent import ObjectAddedEvent
 from zope.schema.interfaces import IContextSourceBinder
 from zope.schema.vocabulary import SimpleVocabulary
 import json
@@ -213,7 +215,6 @@ class CompleteSuccessorTaskForm(Form):
                     '',
                     linked(doc, doc.Title()))
 
-
         request_data = {'data': json.dumps(data)}
         response = remote_request(
             predecessor.client_id,
@@ -269,6 +270,7 @@ class CompleteSuccessorTaskReceiveDelivery(grok.View):
         for item in encode_after_json(data['documents']):
             doc = transporter._create_object(self.context, item)
             documents.append(doc)
+            notify(ObjectAddedEvent(doc))
 
         # Change workflow state of predecessor task:
         util.change_task_workflow_state(

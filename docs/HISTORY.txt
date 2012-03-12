@@ -11,6 +11,10 @@ Changelog
 2.3.2 (2012-03-08)
 ------------------
 
+- Fixed CompleteSuccessorTaskReceiveDelivery View: Fire the addedEvent for every
+  copied document, so that it generates a inital version of the document.
+  [phgross]
+
 - Removed console.log statemant in js, to avoid ie problems.
   [phgross]
 
