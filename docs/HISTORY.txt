@@ -5,18 +5,15 @@ Changelog
 2.3.3 (unreleased)
 ------------------
 
-- Nothing changed yet.
-
-
-2.3.2 (2012-03-08)
-------------------
-
 - Fixed CompleteSuccessorTaskReceiveDelivery View: Fire the addedEvent for every
   copied document, so that it generates a inital version of the document.
   Issue #1446 Datei eines Dokuments wird beim Transport einer mandantenuebergreifenden Aufgabe nicht kopiert
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1446/
-
   [phgross]
+
+
+2.3.2 (2012-03-08)
+------------------
 
 - Removed console.log statemant in js, to avoid ie problems.
   [phgross]
