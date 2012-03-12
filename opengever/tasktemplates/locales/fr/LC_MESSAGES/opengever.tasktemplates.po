@@ -159,7 +159,7 @@ msgstr "Oui"
 #. Default: "You have not selected any templates"
 #: ./opengever/tasktemplates/browser/form.py:203
 msgid "message_no_templates_selected"
-msgstr ""
+msgstr "Vous n'avez sélectionné aucun modèle."
 
 #. Default: "tasks created"
 #: ./opengever/tasktemplates/browser/form.py:262
