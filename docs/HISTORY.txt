@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-2.3.3 (unreleased)
+2.3.3 (2012-03-12)
 ------------------
 
 - Fixed CompleteSuccessorTaskReceiveDelivery View: Fire the addedEvent for every
