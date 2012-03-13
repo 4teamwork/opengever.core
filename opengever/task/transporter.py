@@ -17,8 +17,10 @@ from z3c.relationfield import RelationValue
 from zope.annotation.interfaces import IAnnotations
 from zope.app.intid.interfaces import IIntIds
 from zope.component import getUtility
+from zope.event import notify
 from zope.interface import Interface
 from zope.interface.interface import Attribute
+from zope.lifecycleevent import ObjectAddedEvent
 from zope.lifecycleevent import modified
 import json
 
@@ -232,9 +234,13 @@ class TaskDocumentsTransporter(grok.GlobalUtility):
         for item in data:
             item = encode_after_json(item)
             obj = transporter._create_object(target, item)
+
             oldintid = IAnnotations(obj)[ORIGINAL_INTID_ANNOTATION_KEY]
             newintid = intids.getId(obj)
             intids_mapping[oldintid] = newintid
+
+            # fire the added Event to automaticly create a inital version
+            notify(ObjectAddedEvent(obj))
 
         return intids_mapping
 

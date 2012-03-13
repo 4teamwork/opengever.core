@@ -5,6 +5,12 @@ Changelog
 2.3.4 (unreleased)
 ------------------
 
+- Fixed the document transporter: allways create inital version (see commit 2a5d3ab).
+  Issue #1446 Datei eines Dokuments wird beim Transport einer mandantenuebergreifenden
+  Aufgabe nicht kopiert
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1446/
+  [phgross]
+
 - Reactivate the set_roles_on_distinct_parent in the localroles setter.
   Because to edit(external_edit) related documents of a task it's necessary to have permissions on the dossier.
   [phgross]
