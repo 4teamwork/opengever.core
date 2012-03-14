@@ -1,8 +1,8 @@
-from DateTime import DateTime
 from five import grok
 from ftw.mail import utils
 from ftw.mail.mail import IMail
 from plone.indexer import indexer
+from datetime import datetime
 
 
 @indexer(IMail)
@@ -21,7 +21,7 @@ def document_date(obj):
     document_date indexer.
     """
     document_date = utils.get_date_header(obj.msg, 'Date')
-    return DateTime(document_date)
+    return datetime.fromtimestamp(document_date).date()
 grok.global_adapter(document_date, name="document_date")
 
 
@@ -32,7 +32,7 @@ def receipt_date(obj):
     """
     # TODO: Parse received-values of header mail
     document_date = utils.get_date_header(obj.msg, 'Date')
-    return DateTime(document_date)
+    return datetime.fromtimestamp(document_date).date()
 grok.global_adapter(receipt_date, name='receipt_date')
 
 
