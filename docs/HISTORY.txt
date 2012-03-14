@@ -5,16 +5,14 @@ Changelog
 2.0.2 (unreleased)
 ------------------
 
-- Nothing changed yet.
-
-
-2.0.1 (2012-02-27)
-------------------
-
 - Fixed mail date indexers: return datetime.date objects like in og.document.
   Issue #1453 Sortierung nach Dokument Datum in der Dokumentenauflistung korrigieren.
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1453
   [phgross]
+
+
+2.0.1 (2012-02-27)
+------------------
 
 - Added French translations.
   [ttschanz]
