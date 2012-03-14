@@ -93,6 +93,7 @@ class Transporter(grok.GlobalUtility):
         for name, collector in collectors:
             data[name] = collector.extract()
         data = decode_for_json(data)
+
         return data
 
     def _create_object(self, container, data):
@@ -315,3 +316,26 @@ class OriginalIntidDataCollector(grok.Adapter):
 
     def insert(self, data):
         IAnnotations(self.context)[ORIGINAL_INTID_ANNOTATION_KEY] = data
+
+
+class DublinCoreMetaDataCollector(grok.Adapter):
+    """This data collector stores the standard dublin core data of
+    plone objects, like the creation date or the creator.
+    """
+
+    grok.context(IDexterityContent)
+    grok.provides(IDataCollector)
+    grok.name('dublin-core')
+
+    def extract(self):
+        return {
+            'creator': self.context.Creator(),
+            'created': str(self.context.created()),
+            }
+
+    def insert(self, data):
+
+        self.context.setCreators(data.get('creator'))
+
+        self.context.creation_date = DateTime.DateTime(
+            data.get('created'))

@@ -91,6 +91,9 @@ We need to create a dexterity object first.
     >>> obj1.description
     'Bar'
 
+dublin core collector
+    >>> created = obj1.created()
+    >>> creator = obj1.Creator()
 
 Pull the object:
 
@@ -101,6 +104,12 @@ Pull the object:
     'Foo'
     >>> obj2.description
     'Bar'
+
+dublin core collector
+    >>> obj2.created() == created
+    True
+    >>> obj2.Creator() == creator
+    True
 
 
 Pushing a object

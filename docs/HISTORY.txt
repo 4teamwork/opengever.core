@@ -8,6 +8,11 @@ Changelog
 - Skipping duplicate users during LDAP import
   [lgraf]
 
+- Add new DublinCoreMetaDataCollector Transport DataCollector
+  Issue #1449 Successor Tasks: kopierte Dokumente sollten modification date und
+  creator uebernehmen
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1449
+  [phgross]
 
 2.0.3 (2012-02-27)
 ------------------
