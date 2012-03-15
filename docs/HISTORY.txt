@@ -5,7 +5,10 @@ Changelog
 2.0.4 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Add Globalindex Maintenance View (reindex and check predecessor sync).
+  Issue #1429 Globalindex Reindex Funktionalitaet implementieren
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1429
+  [phgross]
 
 
 2.0.3 (2012-02-29)
