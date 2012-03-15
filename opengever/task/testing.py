@@ -59,7 +59,6 @@ class TaskFunctionalLayer(PloneSandboxLayer):
         xmlconfig.file('configure.zcml', package=tabbedview, context=configurationContext)
         from ftw import contentmenu
         xmlconfig.file('configure.zcml', package=contentmenu, context=configurationContext)
-        xmlconfig.file('overrides.zcml', package=contentmenu, context=configurationContext)
 
     def setUpPloneSite(self, portal):
         applyProfile(portal, 'opengever.task:default')

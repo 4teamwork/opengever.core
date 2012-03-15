@@ -38,7 +38,11 @@ class TestResponse(unittest.TestCase):
         transaction.commit()
 
     def test_base_view(self):
-        view = Base(self.layer['portal'].get('task-1'), self.layer['request'])
+        context = self.layer['portal'].get('task-1')
+        request = self.layer['request']
+
+        request['ACTUAL_URL'] = context.absolute_url()
+        view = Base(context, request)
         self.assertEquals([], view.responses())
 
     def test_add_form(self):
@@ -47,6 +51,7 @@ class TestResponse(unittest.TestCase):
         setRequest(request)
         alsoProvides(request, IAttributeAnnotatable)
         task1 = self.layer['portal'].get('task-1')
+        request['ACTUAL_URL'] = task1.absolute_url()
         view = getMultiAdapter((task1, request),
                                 name=u'addresponse').__of__(task1)
         view.update()

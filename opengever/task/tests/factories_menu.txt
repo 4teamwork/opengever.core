@@ -22,7 +22,7 @@ Lets get the browser menu:
     >>> from zope.component import getUtility
 
     >>> menu = getUtility(IBrowserMenu,
-    ...                   name='plone_contentmenu_factory',
+    ...                   name='ftw_contentmenu_factory',
     ...                   context=portal)
 
     >>> menu
