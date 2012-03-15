@@ -181,6 +181,9 @@ class CleanupSuccessor(grok.View):
     grok.require('zope2.View')
 
     def render(self):
+        # WARNING: Be aware that this request may be called multiple times for
+        # doing the same if the sender-client has a conflict error (which is
+        # solved be redoing the request)!
         self.set_predecessor()
         return 'ok'
 
