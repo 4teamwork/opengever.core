@@ -7,6 +7,7 @@ from opengever.globalindex.interfaces import ITaskQuery
 from opengever.ogds.base.interfaces import ITransporter
 from opengever.ogds.base.utils import remote_request, get_client_id
 from opengever.task import _
+from opengever.task.adapters import IResponseContainer
 from opengever.task.interfaces import ISuccessorTaskController
 from opengever.task.interfaces import ITaskDocumentsTransporter
 from opengever.task.task import ITask
@@ -18,6 +19,9 @@ from zope.component import getUtility
 from zope.i18n import translate
 import AccessControl
 import transaction
+
+
+ACCEPT_TASK_TRANSITION = 'task-transition-open-in-progress'
 
 
 def _get_yearfolder(inbox):
@@ -78,7 +82,7 @@ def _copy_documents_from_forwarding(from_obj, to_obj):
 
 
 def accept_task_with_response(task, response_text, successor_oguid=None):
-    transition = 'task-transition-open-in-progress'
+    transition = ACCEPT_TASK_TRANSITION
     response = change_task_workflow_state(task,
                                           transition,
                                           text=response_text,
@@ -296,9 +300,33 @@ class AcceptTaskWorkflowTransitionView(grok.View):
     grok.require('cmf.AddPortalContent')
 
     def render(self):
+        if self.is_already_accepted():
+            return 'OK'
+
         text = self.request.get('text')
         successor_oguid = self.request.get('successor_oguid')
 
         accept_task_with_response(self.context, text,
                                   successor_oguid=successor_oguid)
         return 'OK'
+
+    def is_already_accepted(self):
+        """When the sender has a conflict error but the reseiver already
+        added the response, this view is called a second / third time in
+        conflict resolution. We need to detect whether it is already done
+        and not fail.
+        """
+
+        response_container = IResponseContainer(self.context)
+        if len(response_container) == 0:
+            return False
+
+        last_response = response_container[-1]
+        current_user = AccessControl.getSecurityManager().getUser()
+
+        if last_response.transition == ACCEPT_TASK_TRANSITION and \
+                last_response.creator == current_user.getId():
+            return True
+
+        else:
+            return False

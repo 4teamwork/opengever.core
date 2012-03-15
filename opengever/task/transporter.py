@@ -194,6 +194,16 @@ class ReceiveResponses(grok.View):
         data = json.loads(rawdata)
 
         transporter = IResponseTransporter(self.context)
+        current_data = json.loads(transporter.extract_responses())
+        if current_data == data:
+            # In case of a conflict error while committing on the
+            # source client this view is called twice or more. If the
+            # current_data and data maches, it is not the first
+            # request and we are in conflict resolution. Thus for not
+            # duplicating responses we abort with "OK" (since we have
+            # already this exact task in a earlier request).
+            return 'OK'
+
         transporter.create_responses(data)
 
         return 'ok'

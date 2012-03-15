@@ -17,6 +17,7 @@ from opengever.ogds.base.utils import remote_request
 from opengever.tabbedview.helper import linked
 from opengever.task import _
 from opengever.task import util
+from opengever.task.adapters import IResponseContainer
 from opengever.task.interfaces import ISuccessorTaskController
 from opengever.task.task import ITask
 from persistent.list import PersistentList
@@ -28,6 +29,7 @@ from z3c.form.field import Fields
 from z3c.form.form import Form
 from z3c.form.interfaces import HIDDEN_MODE
 from z3c.relationfield import RelationValue
+from zExceptions import Unauthorized
 from zope import schema
 from zope.app.intid.interfaces import IIntIds
 from zope.component import getUtility, getAdapter
@@ -35,6 +37,7 @@ from zope.event import notify
 from zope.lifecycleevent import ObjectAddedEvent
 from zope.schema.interfaces import IContextSourceBinder
 from zope.schema.vocabulary import SimpleVocabulary
+import AccessControl
 import json
 
 
@@ -252,12 +255,21 @@ class CompleteSuccessorTaskReceiveDelivery(grok.View):
 
     grok.context(ITask)
     grok.name('complete_successor_task-receive_delivery')
-    grok.require('cmf.AddPortalContent')
+    grok.require('zope2.View')
 
     def render(self):
         data = self.request.get('data', None)
         assert data is not None, 'Bad request: no delivery data found'
         data = json.loads(data)
+
+        if self.is_already_delivered(data):
+            return 'OK'
+
+        mtool = getToolByName(self.context, 'portal_membership')
+        member = mtool.getAuthenticatedMember()
+
+        if not member.checkPermission('Add portal content', self.context):
+            raise Unauthorized()
 
         # Set the "X-CREATING-SUCCESSOR" flag for preventing the event
         # handler from creating additional responses per added document.
@@ -278,3 +290,24 @@ class CompleteSuccessorTaskReceiveDelivery(grok.View):
             added_object=documents)
 
         return 'OK'
+
+    def is_already_delivered(self, data):
+        """When the sender has a conflict error but the reseiver already
+        added the response, this view is called a second / third time in
+        conflict resolution. We need to detect whether it is already done
+        and not fail.
+        """
+
+        response_container = IResponseContainer(self.context)
+        if len(response_container) == 0:
+            return False
+
+        last_response = response_container[-1]
+        current_user = AccessControl.getSecurityManager().getUser()
+
+        if last_response.transition == data['transition'] and \
+                last_response.creator == current_user.getId():
+            return True
+
+        else:
+            return False

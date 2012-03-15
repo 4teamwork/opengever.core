@@ -7,12 +7,14 @@ from five import grok
 from opengever.ogds.base.interfaces import IInternalOpengeverRequestLayer
 from opengever.ogds.base.utils import remote_request
 from opengever.task import _
+from opengever.task.adapters import IResponseContainer
 from opengever.task.interfaces import ISuccessorTaskController
 from opengever.task.interfaces import IWorkflowStateSyncer
 from opengever.task.task import ITask
 from opengever.task.util import add_simple_response
 from zExceptions import Forbidden
 from zope.interface import Interface
+import AccessControl
 
 
 class WorkflowStateSyncer(grok.MultiAdapter):
@@ -93,6 +95,9 @@ class SyncTaskWorkflowStateReceiveView(grok.View):
         transition = self.request.get('transition')
         text = self.request.get('text')
 
+        if self.is_already_done(transition, text):
+            return 'OK'
+
         wftool = getToolByName(self.context, 'portal_workflow')
 
         # change workflow state
@@ -107,9 +112,34 @@ class SyncTaskWorkflowStateReceiveView(grok.View):
         # create response
         response = add_simple_response(
             self.context,
+            transition=transition,
             text=text)
 
         response.add_change('review_state', _(u'Issue state'),
                             before, after)
 
         return 'OK'
+
+    def is_already_done(self, transition, text):
+        """This method returns `True` if this exact request was already
+        executed.
+        This is the case when the sender client has a conflict error when
+        committing and the sender-request needs to be re-done. In this case
+        this view is called another time but the changes were already made
+        and committed - so we need to return "OK" and do nothing.
+        """
+
+        response_container = IResponseContainer(self.context)
+        if len(response_container) == 0:
+            return False
+
+        last_response = response_container[-1]
+        current_user = AccessControl.getSecurityManager().getUser()
+
+        if last_response.transition == transition and \
+                last_response.creator == current_user.getId() and \
+                last_response.text == text:
+            return True
+
+        else:
+            return False

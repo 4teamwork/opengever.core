@@ -5,6 +5,11 @@ Changelog
 2.3.4 (unreleased)
 ------------------
 
+- Made requests to remote clients more robust in case of conflict errors on the sender side.
+  Issue #1455 Mandantenuebergreifende ZA: Remote Views robuster implementieren.
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1455
+  [jone]
+
 - Fixed the document transporter: allways create inital version (see commit 2a5d3ab).
   Issue #1446 Datei eines Dokuments wird beim Transport einer mandantenuebergreifenden
   Aufgabe nicht kopiert
