@@ -25,6 +25,7 @@ class GlobalindexMaintenanceView(BrowserView):
     def mklog(self):
         """ helper to prepend a time stamp to the output """
         write = self.request.RESPONSE.write
+
         def log(msg, timestamp=True):
             if timestamp:
                 msg = strftime('%Y/%m/%d-%H:%M:%S ') + msg
@@ -37,19 +38,18 @@ class GlobalindexMaintenanceView(BrowserView):
     def global_reindex(self):
         """ """
 
-        stars = "*"*100 + "\n"
+        delimiter = "-" * 100 + "\n"
         self.request.RESPONSE.write(
             "%s\n\nGlobalindex maintanance view\n"
             "%s\n\nMethods:reindex, localreindex\n%s" %
-            (3*stars, stars, 3*stars))
-
+            (3 * delimiter, delimiter, 3 * delimiter))
 
         info = getUtility(IContactInformation)
         for client in info.get_clients():
             try:
 
                 self.request.RESPONSE.write(
-                    ' ------ Start reindexing tasks from %s  ------ \n' % (
+                    '   ----  Start reindexing tasks from %s ----    \n' % (
                         client.title.encode('utf-8')))
 
                 self._sync_remote_request(
@@ -57,11 +57,11 @@ class GlobalindexMaintenanceView(BrowserView):
                     '@@globalindex-maintenance/local_reindex',)
 
                 self.request.RESPONSE.write(
-                    ' ------ Finished reindexing tasks from %s ------ \n\n\n' %(
+                    ' ----    Finished reindexing tasks from %s --- \n\n\n ----    ' %(
                         client.title.encode('utf-8')))
 
             except URLError, e:
-                return 'Failed reindexing tasks from %s\n %s' %(client.title, e)
+                return '   ----    Failed reindexing tasks from %s\n %s ----    ' %(client.title, e)
 
 
     def _sync_remote_request(
