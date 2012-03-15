@@ -9,7 +9,6 @@ from opengever.ogds.base.exceptions import ClientNotFound
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.ogds.base.utils import get_client_id
 from opengever.task.task import ITask
-from time import strftime
 from urllib2 import URLError
 from zope.component import getUtility
 from zope.interface import implements
@@ -27,9 +26,7 @@ class GlobalindexMaintenanceView(BrowserView):
         """ helper to prepend a time stamp to the output """
         write = self.request.RESPONSE.write
 
-        def log(msg, timestamp=True):
-            if timestamp:
-                msg = strftime('%Y/%m/%d-%H:%M:%S ') + msg
+        def log(msg):
             write(msg.encode('utf-8'))
         return log
 
