@@ -149,14 +149,14 @@ class GlobalindexMaintenanceView(BrowserView):
                 predecessor.review_state != u'forwarding-state-closed'):
 
                 client = info.get_client_by_id(predecessor.client_id)
-                predecessor_url = ' - %s\n   State: %s\n   Url: %s/%s' % (
+                predecessor_url = ' - Predecessor:%s\n   State: %s\n   Url: %s/%s' % (
                     predecessor.title,
                     predecessor.review_state,
                     client.public_url,
                     predecessor.physical_path)
 
                 client = info.get_client_by_id(successor.client_id)
-                successor_url = ' - %s\n   State: %s\n   Url: %s/%s' % (
+                successor_url = ' - Successor:%s\n   State: %s\n   Url: %s/%s' % (
                     successor.title,
                     successor.review_state,
                     client.public_url,
