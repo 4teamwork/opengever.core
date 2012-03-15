@@ -47,7 +47,7 @@ class GlobalindexMaintenanceView(BrowserView):
             try:
 
                 self.request.RESPONSE.write(
-                    '   ----  Start reindexing tasks from %s ----    \n' % (
+                    '----Start reindexing tasks from %s----\n' % (
                         client.title.encode('utf-8')))
 
                 self._sync_remote_request(
@@ -55,12 +55,12 @@ class GlobalindexMaintenanceView(BrowserView):
                     '@@globalindex-maintenance/local_reindex',)
 
                 self.request.RESPONSE.write(
-                    ' ----    Finished reindexing tasks from %s --- \n\n\n ----    ' %(
+                    '----Finished reindexing tasks from %s --- \n\n\n ----' % (
                         client.title.encode('utf-8')))
 
             except URLError, e:
-                return '   ----    Failed reindexing tasks from %s\n %s ----    ' %(client.title, e)
-
+                return '----Failed reindexing tasks from %s\n %s ---' % (
+                    client.title, e)
 
     def _sync_remote_request(
         self, target_client_id, viewname, path='', data={}, headers={}):
@@ -86,7 +86,8 @@ class GlobalindexMaintenanceView(BrowserView):
 
             headers['X-OGDS-CID'] = get_client_id()
 
-            viewname = viewname.startswith('@@') and viewname or '@@%s' % viewname
+            viewname = viewname.startswith(
+                '@@') and viewname or '@@%s' % viewname
             if path:
                 url = os.path.join(target.site_url, path, viewname)
             else:
@@ -96,7 +97,6 @@ class GlobalindexMaintenanceView(BrowserView):
 
             for line in r.iter_lines():
                 self.context.REQUEST.RESPONSE.write('%s\n' % line)
-
 
     def local_reindex(self):
         """Reindex all local tasks."""
@@ -124,10 +124,12 @@ class GlobalindexMaintenanceView(BrowserView):
         # Clear tasks in the globalindex who's not-existing anymore.
         if len(indexed_tasks):
             for int_id in indexed_tasks:
-                task = query.get_task_by_oguid('%s:%i' %(get_client_id(), int_id))
+                task = query.get_task_by_oguid('%s:%i' % (
+                        get_client_id(), int_id))
 
-                log('ERROR: Task(%s) with the id: %i does not exist in the catalog. '
-                    'It should be manually removed.\n' % (task, task.task_id)
+                log('ERROR: Task(%s) with the id: %i does not exist in the'
+                    'catalog. It should be manually removed.\n' % (
+                        task, task.task_id)
                     )
         return True
 
@@ -136,7 +138,7 @@ class GlobalindexMaintenanceView(BrowserView):
         predecessors and successors"""
 
         log = self.mklog()
-        successors = Session().query(Task).filter(Task.predecessor!=None)
+        successors = Session().query(Task).filter(Task.predecessor != None)
 
         info = getUtility(IContactInformation)
 
@@ -168,5 +170,5 @@ class GlobalindexMaintenanceView(BrowserView):
 
                 sync_problems_counter += 1
 
-        log("Predecessor synchronisation check finished: \n  %i Problems detected" %(
-                sync_problems_counter))
+        log('Predecessor synchronisation check finished:'
+            '\n  %i Problems detected' % (sync_problems_counter))
