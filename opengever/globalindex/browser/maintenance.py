@@ -4,6 +4,7 @@ from opengever.globalindex import Session
 from opengever.globalindex.handlers.task import index_task
 from opengever.globalindex.interfaces import IGlobalindexMaintenanceView
 from opengever.globalindex.interfaces import ITaskQuery
+from opengever.globalindex.model.task import Task
 from opengever.ogds.base.exceptions import ClientNotFound
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.ogds.base.utils import get_client_id
@@ -31,9 +32,6 @@ class GlobalindexMaintenanceView(BrowserView):
                 msg = strftime('%Y/%m/%d-%H:%M:%S ') + msg
             write(msg.encode('utf-8'))
         return log
-
-    def reindex(self):
-        """ only reindex the local tasks"""
 
     def global_reindex(self):
         """ """
@@ -132,3 +130,43 @@ class GlobalindexMaintenanceView(BrowserView):
                     'It should be manually removed.\n' % (task, task.task_id)
                     )
         return True
+
+    def check_predecessor_sync(self):
+        """Method wich checks the synchronisation between
+        predecessors and successors"""
+
+        log = self.mklog()
+        successors = Session().query(Task).filter(Task.predecessor!=None)
+
+        info = getUtility(IContactInformation)
+
+        sync_problems_counter = 0
+
+        for successor in successors:
+            predecessor = successor.predecessor
+
+            # check review_state
+            if (predecessor.review_state != successor.review_state and
+                predecessor.review_state != u'forwarding-state-closed'):
+
+                client = info.get_client_by_id(predecessor.client_id)
+                predecessor_url = ' - %s\n   State: %s\n   Url: %s/%s' % (
+                    predecessor.title,
+                    predecessor.review_state,
+                    client.public_url,
+                    predecessor.physical_path)
+
+                client = info.get_client_by_id(successor.client_id)
+                successor_url = ' - %s\n   State: %s\n   Url: %s/%s' % (
+                    successor.title,
+                    successor.review_state,
+                    client.public_url,
+                    successor.physical_path)
+
+                log("State synchronisation invalid:\n%s\n%s\n\n" % (
+                    predecessor_url, successor_url))
+
+                sync_problems_counter += 1
+
+        log("Predecessor synchronisation check finished: \n  %i Problems detected" %(
+                sync_problems_counter))

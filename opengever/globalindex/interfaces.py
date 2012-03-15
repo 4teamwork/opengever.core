@@ -20,13 +20,14 @@ class ITaskQuery(Interface):
 class IGlobalindexMaintenanceView(Interface):
     """"solr maintenance view for the global index"""
 
-    def reindex():
-        """Method for reindexing all tasks from this client
-        in the globalindex."""
-
     def global_reindex():
         """Start task reindexing on all clients."""
 
     def local_reindex():
         """Method for reindexing all tasks from this client
         in the globalindex."""
+
+    def check_predecessor_sync():
+        """Method for checking if Tasks exists,
+        who has a inconsistent Syncronisation."""
+
