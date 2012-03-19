@@ -60,7 +60,7 @@ class DossierCoverPDFView(grok.View, BaseStandalonePDFView):
                 str(getUtility(ISequenceNumber).get_number(self.context))),
 
             'title': self.convert(self.context.Title()),
-            'description': self.convert(self.context.Description()),
+            'description': self.convert(self.get_description()),
             'responsible': self.convert(self.get_responsible()),
 
             'start': self.convert(self.context.toLocalizedTime(
@@ -70,6 +70,9 @@ class DossierCoverPDFView(grok.View, BaseStandalonePDFView):
 
             'parentDossierTitle': self.convert(self.get_parent_dossier_title())
             }
+
+    def get_description(self):
+        return self.context.Description().replace('\n', '<br />')
 
     def get_parent_dossier_title(self):
         obj = aq_parent(aq_inner(self.context))
