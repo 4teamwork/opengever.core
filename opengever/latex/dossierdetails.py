@@ -188,10 +188,23 @@ class DossierDetailsLaTeXView(grok.MultiAdapter, MakoLaTeXView):
     def get_documents(self):
         rows = []
 
+        # read the sort_on and sort_order attribute from the gridstate
+        tab = self.context.restrictedTraverse('tabbedview_view-documents')
+        tab.table_options = {}
+        tab.load_grid_state()
+        sort_order = 'descending'
+
+        if tab.sort_order == 'asc':
+            sort_order = 'ascending'
+
         documents_marker = 'opengever.document.document.IDocumentSchema'
         catalog = getToolByName(self.context, 'portal_catalog')
         brains = catalog({'path': '/'.join(self.context.getPhysicalPath()),
-                          'object_provides': documents_marker})
+                          'object_provides': [documents_marker],
+                          'sort_on': tab.sort_on, 'sort_order': sort_order},)
+
+        # Apply any custom sort methods to results if necessary
+        brains = tab.custom_sort(brains, tab.sort_on, tab.sort_order)
 
         for brain in brains:
             data = [brain.sequence_number,
