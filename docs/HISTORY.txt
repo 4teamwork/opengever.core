@@ -5,6 +5,9 @@ Changelog
 2.1.3 (unreleased)
 ------------------
 
+- Dossier details PDF: Also list emails
+  [lgraf]
+
 - Dossier details PDF: Use ordering from documents tab to sort docs
   [lgraf]
 

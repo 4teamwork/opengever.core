@@ -198,9 +198,10 @@ class DossierDetailsLaTeXView(grok.MultiAdapter, MakoLaTeXView):
             sort_order = 'ascending'
 
         documents_marker = 'opengever.document.document.IDocumentSchema'
+        mail_marker = 'ftw.mail.mail.IMail'
         catalog = getToolByName(self.context, 'portal_catalog')
         brains = catalog({'path': '/'.join(self.context.getPhysicalPath()),
-                          'object_provides': [documents_marker],
+                          'object_provides': [documents_marker, mail_marker],
                           'sort_on': tab.sort_on, 'sort_order': sort_order},)
 
         # Apply any custom sort methods to results if necessary
