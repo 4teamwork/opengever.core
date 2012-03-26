@@ -5,6 +5,10 @@ Changelog
 2.1.3 (unreleased)
 ------------------
 
+- Firing ObjectModifiedEvent after writing files to newly created documents.
+  Takes care of setting digitally_available for templates.
+  [lgraf]
+
 - Updated PowerPoint templates with new corporate design
   [lgraf]
 

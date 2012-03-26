@@ -1,11 +1,14 @@
-from zope.interface import classProvides, implements
-from zope.component import getUtility
-from collective.transmogrifier.interfaces import ISectionBlueprint
 from collective.transmogrifier.interfaces import ISection
-from zope.schema import getFields
-from plone.dexterity.interfaces import IDexterityFTI
-from collective.transmogrifier.utils import resolvePackageReferenceOrFile
+from collective.transmogrifier.interfaces import ISectionBlueprint
 from collective.transmogrifier.utils import defaultMatcher
+from collective.transmogrifier.utils import resolvePackageReferenceOrFile
+from plone.dexterity.interfaces import IDexterityFTI
+from zope.component import getUtility
+from zope.event import notify
+from zope.interface import classProvides, implements
+from zope.lifecycleevent import ObjectModifiedEvent
+from zope.schema import getFields
+
 
 class NamedFileCreatorSection(object):
     classProvides(ISectionBlueprint)
@@ -49,4 +52,7 @@ class NamedFileCreatorSection(object):
 
             fileobj = field._type(filedata, filename=file_.name[file_.name.rfind('/')+1:].decode('utf-8'))
             field.set(field.interface(obj), fileobj)
+
+            # Fire ObjectModifiedEvent so that digitally_available gets set
+            notify(ObjectModifiedEvent(obj))
             yield item
