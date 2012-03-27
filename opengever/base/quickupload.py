@@ -24,8 +24,8 @@ class OGQuickUploadCapableFileFactory (grok.Adapter):
     def __init__(self, context):
         self.context = aq_inner(context)
 
-
-    def __call__(self, filename, title, description, content_type, data, portal_type):
+    def __call__(
+        self, filename, title, description, content_type, data, portal_type):
 
         #create Namedfile
         mimetype = mimetypes.types_map[
@@ -84,5 +84,4 @@ class OGQuickUploadCapableFileFactory (grok.Adapter):
         obj.reindexObject()
 
         result['success'] = obj
-
         return result
