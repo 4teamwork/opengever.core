@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-2.0.2 (unreleased)
+2.0.2 (2012-03-28)
 ------------------
 
 - Add and change translations
