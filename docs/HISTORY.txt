@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-2.0.4 (unreleased)
+2.0.4 (2012-03-28)
 ------------------
 
 - Add Globalindex Maintenance View (reindex and check predecessor sync).
