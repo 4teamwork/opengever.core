@@ -5,7 +5,8 @@ Changelog
 2.4 (unreleased)
 ----------------
 
-- Nothing changed yet.
+- Change french translation for help_privacy_layer
+  [ttschanz]
 
 
 2.3 (2012-02-28)
