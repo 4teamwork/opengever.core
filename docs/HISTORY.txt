@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-2.3.4 (unreleased)
+2.3.4 (2012-03-28)
 ------------------
 
 - Made requests to remote clients more robust in case of conflict errors on the sender side.
