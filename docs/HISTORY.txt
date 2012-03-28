@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-2.2 (unreleased)
+2.2 (2012-03-28)
 ----------------
 
 - Added Temporary fix for Title accessor to return unicode instead of utf-8.
