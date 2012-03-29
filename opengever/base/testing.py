@@ -113,3 +113,4 @@ OPENGEVER_BASE_INTEGRATION_TESTING = IntegrationTesting(
 
 class IEmptySchema(form.Schema):
     """an empty schema used or tests"""
+

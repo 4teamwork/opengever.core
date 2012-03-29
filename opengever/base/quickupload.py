@@ -2,12 +2,10 @@ from Acquisition import aq_inner
 from collective.quickupload.browser.interfaces import IQuickUploadFileFactory
 from five import grok
 from ftw.tabbedview.interfaces import ITabbedviewUploadable
-from opengever.document.document import IDocumentSchema
 from plone.dexterity.utils import createContentInContainer
 from plone.dexterity.utils import iterSchemata
 from plone.rfc822.interfaces import IPrimaryField
 from z3c.form.interfaces import IValue
-from zope import schema
 from zope.component import queryMultiAdapter
 from zope.event import notify
 from zope.lifecycleevent import ObjectModifiedEvent
@@ -15,7 +13,7 @@ from zope.schema import getFieldsInOrder
 import mimetypes
 
 
-class OGQuickUploadCapableFileFactory (grok.Adapter):
+class OGQuickUploadCapableFileFactory(grok.Adapter):
     """OG specific Quick upload Adatper"""
 
     grok.context(ITabbedviewUploadable)
@@ -27,38 +25,40 @@ class OGQuickUploadCapableFileFactory (grok.Adapter):
     def __call__(
         self, filename, title, description, content_type, data, portal_type):
 
-        #create Namedfile
-        mimetype = mimetypes.types_map[
-                filename[filename.rfind('.'):].lower()]
+        mimetype = self.get_mimetype(filename)
+        portal_type = self.get_portal_type(mimetype)
 
-        # check if its a mail object then create a ftw.mail
-        # otherwise create a og.document
+        obj = createContentInContainer(self.context, portal_type)
 
-        if mimetype == 'message/rfc822':
-            portal_type = 'ftw.mail.mail'
-        else:
-            portal_type = 'opengever.document.document'
+        named_file = self.create_file(filename, data, mimetype, obj)
+        self.set_default_values(obj, named_file)
+
+        notify(ObjectModifiedEvent(obj))
+        obj.reindexObject()
 
         result = {}
+        result['success'] = obj
+        return result
 
-        fields = dict(schema.getFieldsInOrder(IDocumentSchema))
-
+    def create_file(self, filename, data, mimetype, obj):
         # filename must be unicode
         if not isinstance(filename, unicode):
             filename = filename.decode('utf-8')
 
-        fileObj = fields['file']._type(
-            data=data, contentType=mimetype, filename=filename)
+        for schemata in iterSchemata(obj):
+            for name, field in getFieldsInOrder(schemata):
+                if IPrimaryField.providedBy(field):
+                    return field._type(
+                        data=data,
+                        contentType=mimetype,
+                        filename=filename)
 
-        obj = createContentInContainer(
-            self.context, portal_type)
-
+    def set_default_values(self, obj, named_file):
         # set default values for all fields
         for schemata in iterSchemata(obj):
             for name, field in getFieldsInOrder(schemata):
-
                 if IPrimaryField.providedBy(field):
-                    field.set(field.interface(obj), fileObj)
+                    field.set(field.interface(obj), named_file)
                 else:
                     default = queryMultiAdapter((
                             obj,
@@ -79,9 +79,14 @@ class OGQuickUploadCapableFileFactory (grok.Adapter):
                     value = default
                     field.set(field.interface(obj), value)
 
-        notify(ObjectModifiedEvent(obj))
+    def get_mimetype(self, filename):
+        return mimetypes.types_map[
+                filename[filename.rfind('.'):].lower()]
 
-        obj.reindexObject()
-
-        result['success'] = obj
-        return result
+    def get_portal_type(self, mimetype):
+        # check if its a mail object then create a ftw.mail
+        # otherwise create a og.document
+        if mimetype == 'message/rfc822':
+            return 'ftw.mail.mail'
+        else:
+            return 'opengever.document.document'
