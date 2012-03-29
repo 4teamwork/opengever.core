@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-2.1.4 (unreleased)
+2.1.4 (2012-03-29)
 ------------------
 
 - Dossier details PDF: Using ordering from tabbed view for all types
