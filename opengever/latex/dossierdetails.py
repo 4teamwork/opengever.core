@@ -155,14 +155,44 @@ class DossierDetailsLaTeXView(grok.MultiAdapter, MakoLaTeXView):
 
         return self.convert_list(rows)
 
+    def _get_sorted_results(self, tab_name, markers):
+        """Returns the results of a catalog query for objects that provide
+        any of the markers and sorts the using the sort options last used
+        in the tabbed view tab tab_name, applying any custom methods if
+        necessary.
+        """
+        # read the sort_on and sort_order attributes from the gridstate
+        tab = self.context.restrictedTraverse('tabbedview_view-%s' % tab_name)
+        tab.table_options = {}
+        tab.load_grid_state()
+
+        sort_on = tab.sort_on
+        sort_order = 'descending'
+        if tab.sort_order == 'asc':
+            sort_order = 'ascending'
+
+        sort_reverse = 1
+        if sort_order == 'ascending':
+            sort_reverse = 0
+
+        catalog = getToolByName(self.context, 'portal_catalog')
+        query = {'path': '/'.join(self.context.getPhysicalPath()),
+                'object_provides': markers}
+
+        query = tab.table_source.extend_query_with_ordering(query)
+
+        brains = catalog(query)
+
+        # Apply any custom sort methods to results if necessary
+        brains = tab.custom_sort(brains, sort_on, sort_reverse)
+        return brains
+
     def get_tasks(self):
         info = getUtility(IContactInformation)
         rows = []
 
-        catalog = getToolByName(self.context, 'portal_catalog')
-        brains = catalog({
-                'path': '/'.join(self.context.getPhysicalPath()),
-                'object_provides': 'opengever.task.task.ITask'})
+        markers = ['opengever.task.task.ITask']
+        brains = self._get_sorted_results('tasks', markers)
 
         for brain in brains:
             issuer = get_issuer_of_task(brain, with_client=True,
@@ -188,24 +218,10 @@ class DossierDetailsLaTeXView(grok.MultiAdapter, MakoLaTeXView):
     def get_documents(self):
         rows = []
 
-        # read the sort_on and sort_order attribute from the gridstate
-        tab = self.context.restrictedTraverse('tabbedview_view-documents')
-        tab.table_options = {}
-        tab.load_grid_state()
-        sort_order = 'descending'
-
-        if tab.sort_order == 'asc':
-            sort_order = 'ascending'
-
         documents_marker = 'opengever.document.document.IDocumentSchema'
         mail_marker = 'ftw.mail.mail.IMail'
-        catalog = getToolByName(self.context, 'portal_catalog')
-        brains = catalog({'path': '/'.join(self.context.getPhysicalPath()),
-                          'object_provides': [documents_marker, mail_marker],
-                          'sort_on': tab.sort_on, 'sort_order': sort_order},)
-
-        # Apply any custom sort methods to results if necessary
-        brains = tab.custom_sort(brains, tab.sort_on, tab.sort_order)
+        markers = [documents_marker, mail_marker]
+        brains = self._get_sorted_results('documents', markers)
 
         for brain in brains:
             data = [brain.sequence_number,
@@ -223,11 +239,8 @@ class DossierDetailsLaTeXView(grok.MultiAdapter, MakoLaTeXView):
         info = getUtility(IContactInformation)
         rows = []
 
-        dossier_marker = 'opengever.dossier.behaviors.dossier.IDossierMarker'
-        catalog = getToolByName(self.context, 'portal_catalog')
-        brains = catalog({
-                'path': '/'.join(self.context.getPhysicalPath()),
-                'object_provides': dossier_marker})
+        markers = ['opengever.dossier.behaviors.dossier.IDossierMarker']
+        brains = self._get_sorted_results('subdossiers', markers)
 
         context_path = '/'.join(self.context.getPhysicalPath())
 

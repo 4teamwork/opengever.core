@@ -5,6 +5,9 @@ Changelog
 2.1.3 (unreleased)
 ------------------
 
+- Dossier details PDF: Using ordering from tabbed view for all types
+  [lgraf]
+
 - Dossier details PDF: Also list emails
   [lgraf]
 
