@@ -56,7 +56,8 @@ class TestOGQuickupload(MockTestCase, TestCase):
         adapter = IQuickUploadFileFactory(mock_context)
 
         self.assertEqual(
-            adapter.get_portal_type('image/jpeg'), 'opengever.document.document')
+            adapter.get_portal_type('image/jpeg'),
+            'opengever.document.document')
         self.assertEqual(
             adapter.get_portal_type('message/rfc822'), 'ftw.mail.mail')
         self.assertEqual(
@@ -67,7 +68,7 @@ class TestOGQuickupload(MockTestCase, TestCase):
         grok_component('ITest2', ITest2)
 
         # mock stuf
-        mock_context = self.providing_stub([ITabbedviewUploadable,])
+        mock_context = self.providing_stub([ITabbedviewUploadable, ])
         named_file = NamedFile('bla bla', filename=u'test.txt')
 
         obj = self.providing_stub([ITest1, ITest2])
@@ -91,7 +92,7 @@ class TestOGQuickupload(MockTestCase, TestCase):
         grok_component('ITest2', ITest2)
 
         # mock stuf
-        mock_context = self.providing_stub([ITabbedviewUploadable,])
+        mock_context = self.providing_stub([ITabbedviewUploadable, ])
         named_file = NamedFile('bla bla', filename=u'test.txt')
 
         obj = self.providing_stub([ITest1, ITest2])
@@ -116,7 +117,7 @@ class TestOGQuickupload(MockTestCase, TestCase):
         grok_component('ITest2', ITest2)
 
         # mock stuf
-        mock_context = self.providing_stub([ITabbedviewUploadable,])
+        mock_context = self.providing_stub([ITabbedviewUploadable, ])
 
         obj = self.providing_stub([ITest1, ITest2])
         request = self.stub()
@@ -135,7 +136,7 @@ class TestOGQuickupload(MockTestCase, TestCase):
         # filedata
         filename = u'hugo.doc'
         title = None
-        description  = None
+        description = None
         content_type = None
         data = u'Data data'
         portal_type = None
@@ -143,7 +144,8 @@ class TestOGQuickupload(MockTestCase, TestCase):
         self.replay()
 
         adapter = IQuickUploadFileFactory(mock_context)
-        result = adapter(filename, title, description, content_type, data, portal_type)
+        result = adapter(filename, title, description,
+                         content_type, data, portal_type)
         obj = result.get('success')
         self.assertEquals(obj.description, 'hanspeter')
         self.assertEquals(obj.file.data, u'Data data')
