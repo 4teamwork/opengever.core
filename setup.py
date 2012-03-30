@@ -5,7 +5,6 @@ version = open('opengever/task/version.txt').read().strip()
 maintainer = 'Philippe Gross'
 
 tests_require = [
-    'lxml >= 2.1.1',
     'z3c.form [test]',
     'z3c.saconfig',
     'plone.app.testing',
