@@ -5,7 +5,10 @@ Changelog
 2.5 (unreleased)
 ----------------
 
-- Nothing changed yet.
+- #1154 Umstellung OpenGever in GEVER
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1154
+  Modified siteactions and Clientid viewlet
+  [eschmutz]
 
 
 2.4 (2012-03-28)
