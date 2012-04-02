@@ -5,7 +5,10 @@ Changelog
 2.0.3 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- #1154 Umstellung OpenGever in GEVER
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1154
+  Updated application_title Gever with GEVER
+  [eschmutz]
 
 
 2.0.2 (2012-02-27)
