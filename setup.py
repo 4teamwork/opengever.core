@@ -11,6 +11,7 @@ tests_require = [
     'opengever.base',
     'Products.CMFPlone',
     'opengever.document',
+    'ftw.testing',
     ]
 
 extras_require = {
