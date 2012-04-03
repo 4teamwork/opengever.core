@@ -7,7 +7,7 @@ from ftw.pdfgenerator.view import MakoLaTeXView
 from ftw.table import helper
 from opengever.latex.interfaces import ILandscapeLayer
 from opengever.latex.utils import get_issuer_of_task
-from opengever.latex.utils import get_selected_items
+from opengever.globalindex.utils import get_selected_items
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.tabbedview.helper import workflow_state
 from opengever.task.helper import task_type_helper

@@ -1,19 +1,15 @@
 from Products.CMFCore.utils import getToolByName
-from opengever.globalindex.interfaces import ITaskQuery
+# from opengever.globalindex.interfaces import ITaskQuery
 from opengever.ogds.base.interfaces import IContactInformation
 from zope.component import getUtility
 import types
 
 
-def get_selected_items(context, request):
-    """Returns either a set of brains or a set of SQLAlchemy objects -
-    depending on the (tabbed-) view where the tasks were selected.
-    If there is a "path:list" in the request, we use the catalog and
-    if there is a "task_id:list", we use SQLAlchemy.
+def get_selected_items_from_catalog(context, request):
+    """Returns a set of brains.
     """
 
     paths = request.get('paths', None)
-    ids = request.get('task_ids', [])
 
     if paths:
         catalog = getToolByName(context, 'portal_catalog')
@@ -21,28 +17,8 @@ def get_selected_items(context, request):
         for path in request.get('paths', []):
             brains = catalog({'path': {'query': path,
                                        'depth': 0}})
-            assert len(brains) == 1, "Could not find task at %s" % path
+            assert len(brains) == 1, "Could not find objects at %s" % path
             yield brains[0]
-
-    elif ids:
-        query = getUtility(ITaskQuery)
-
-        # we need to sort the result by our ids list, because the
-        # sql query result is not sorted...
-        # create a mapping:
-        mapping = {}
-        for task in query.get_tasks(ids):
-            mapping[str(task.task_id)] = task
-
-        # get the task from the mapping
-        for taskid in ids:
-            task = mapping.get(str(taskid))
-            if task:
-                yield task
-
-    else:
-        # empty generator
-        pass
 
 
 def get_issuer_of_task(task, with_client=True, with_principal=False):

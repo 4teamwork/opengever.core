@@ -5,7 +5,8 @@ Changelog
 2.1.5 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Removed the get_selected_items and use the method from og.globalindex instead.
+  [phgross]
 
 
 2.1.4 (2012-03-29)

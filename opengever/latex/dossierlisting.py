@@ -5,7 +5,7 @@ from ftw.pdfgenerator.interfaces import ILaTeXView
 from ftw.pdfgenerator.view import MakoLaTeXView
 from ftw.table import helper
 from opengever.latex.interfaces import ILandscapeLayer
-from opengever.latex.utils import get_selected_items
+from opengever.latex.utils import get_selected_items_from_catalog
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.ogds.base.utils import get_current_client
 from opengever.tabbedview.helper import workflow_state
@@ -59,7 +59,7 @@ class DossierListingLaTeXView(grok.MultiAdapter, MakoLaTeXView):
     def get_rows(self):
         rows = []
 
-        for brain in get_selected_items(self.context, self.request):
+        for brain in get_selected_items_from_catalog(self.context, self.request):
             rows.append(self.get_row_for_brain(brain))
 
         return rows
