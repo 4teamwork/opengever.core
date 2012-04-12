@@ -3,6 +3,7 @@ from five import grok
 from ftw.pdfgenerator.browser.views import ExportPDFView
 from ftw.pdfgenerator.interfaces import ILaTeXLayout
 from ftw.pdfgenerator.interfaces import ILaTeXView
+from ftw.pdfgenerator.utils import provide_request_layer
 from ftw.pdfgenerator.view import MakoLaTeXView
 from ftw.table import helper
 from opengever.latex.interfaces import ILandscapeLayer
@@ -13,7 +14,6 @@ from opengever.tabbedview.helper import workflow_state
 from opengever.task.helper import task_type_helper
 from zope.component import getUtility
 from zope.interface import Interface
-from zope.interface import directlyProvidedBy, directlyProvides
 
 
 class ITaskListingLayer(ILandscapeLayer):
@@ -32,10 +32,7 @@ class TaskListingPDFView(grok.View, ExportPDFView):
 
     def render(self):
         # let the request provide ITaskListingLayer
-        if not ITaskListingLayer.providedBy(self.request):
-            ifaces = [ITaskListingLayer] + list(directlyProvidedBy(
-                    self.request))
-            directlyProvides(self.request, *ifaces)
+        provide_request_layer(ITaskListingLayer)
 
         return ExportPDFView.__call__(self)
 
