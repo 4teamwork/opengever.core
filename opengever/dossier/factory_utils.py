@@ -4,24 +4,21 @@ behaviors' PostFactoryMenu adapters.
 
 """
 
-from Products.CMFCore.utils import getToolByName
-
 
 def order_factories(context, factories):
     """Orders the entries in the factory menu based on
     ``factories_order``.
     """
-    portal_type = context.portal_type
-    pt = getToolByName(context, 'portal_types')
-    fti = pt[portal_type]
 
-    factories_order = ['Task',
-                       'Add Participant',
-                       'Document',
-                       'document_with_template',
+    factories_order = ['Document',
                        'Document with docucomposer',
-                       fti.title,
-                       'Add task from template']
+                       'document_with_template',
+                       'Task',
+                       'Add task from template',
+                       'Mail',
+                       'Subdossier',
+                       'Add Participant',
+                    ]
 
     ordered_factories = []
     for factory_title in factories_order:

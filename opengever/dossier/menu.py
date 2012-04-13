@@ -3,6 +3,8 @@ from opengever.dossier.behaviors.dossier import IDossierMarker
 from ftw.contentmenu.interfaces import IContentmenuPostFactoryMenu
 from zope.interface import Interface
 from opengever.dossier import _
+from opengever.dossier.factory_utils import order_factories
+
 
 class DossierPostFactoryMenu(grok.MultiAdapter):
     """If a task is added to another task, it is called subtask. So we need
@@ -25,4 +27,7 @@ class DossierPostFactoryMenu(grok.MultiAdapter):
                 factory['title'] = _(u'Subdossier')
             elif factory['extra']['id'] == u'ftw-mail-mail':
                 factories.remove(factory)
+
+        # Order the factory-menu
+        factories = order_factories(self.context, factories)
         return factories

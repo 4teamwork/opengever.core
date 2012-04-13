@@ -5,8 +5,8 @@ Changelog
 2.0.5 (unreleased)
 ------------------
 
-- Nothing changed yet.
-
+- Add ordering for the contentmenu for dossiers and subdossiers
+  [eschmutz]
 
 2.0.4 (2012-03-28)
 ------------------
