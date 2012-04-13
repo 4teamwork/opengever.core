@@ -2,6 +2,7 @@ from five import grok
 from ftw.pdfgenerator.browser.views import ExportPDFView
 from ftw.pdfgenerator.interfaces import ILaTeXLayout
 from ftw.pdfgenerator.interfaces import ILaTeXView
+from ftw.pdfgenerator.utils import provide_request_layer
 from ftw.pdfgenerator.view import MakoLaTeXView
 from ftw.table import helper
 from opengever.latex.interfaces import ILandscapeLayer
@@ -11,7 +12,6 @@ from opengever.ogds.base.utils import get_current_client
 from opengever.tabbedview.helper import workflow_state
 from zope.component import getUtility
 from zope.interface import Interface
-from zope.interface import directlyProvidedBy, directlyProvides
 
 
 class IDossierListingLayer(ILandscapeLayer):
@@ -29,10 +29,7 @@ class DossierListingPDFView(grok.View, ExportPDFView):
     def render(self):
         # use the landscape layout
         # let the request provide IDossierListingLayer
-        if not IDossierListingLayer.providedBy(self.request):
-            ifaces = [IDossierListingLayer] + list(directlyProvidedBy(
-                    self.request))
-            directlyProvides(self.request, *ifaces)
+        provide_request_layer(self.request, IDossierListingLayer)
 
         return ExportPDFView.__call__(self)
 

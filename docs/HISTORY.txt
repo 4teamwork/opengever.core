@@ -5,8 +5,9 @@ Changelog
 2.1.5 (unreleased)
 ------------------
 
-- Nothing changed yet.
-
+- https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1538/
+  #1538 Verwenden der neuen utility Methode provide_request_layer in ftw.pdfgenerator
+  [eschmutz]
 
 2.1.4 (2012-03-29)
 ------------------

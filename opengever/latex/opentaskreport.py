@@ -2,6 +2,7 @@ from five import grok
 from ftw.pdfgenerator.browser.views import ExportPDFView
 from ftw.pdfgenerator.interfaces import ILaTeXLayout
 from ftw.pdfgenerator.interfaces import ILaTeXView
+from ftw.pdfgenerator.utils import provide_request_layer
 from ftw.pdfgenerator.view import MakoLaTeXView
 from ftw.table import helper
 from opengever.globalindex import Session
@@ -16,7 +17,6 @@ from sqlalchemy import and_, or_
 from sqlalchemy.sql.expression import asc
 from zope.component import getUtility
 from zope.interface import Interface
-from zope.interface import directlyProvidedBy, directlyProvides
 
 
 OPEN_TASK_STATES = [
@@ -39,10 +39,7 @@ class OpenTaskReportPDFView(grok.View, ExportPDFView):
     grok.require('zope2.View')
 
     def render(self):
-        if not IOpenTaskReportLayer.providedBy(self.request):
-            ifaces = [IOpenTaskReportLayer] + list(directlyProvidedBy(
-                    self.request))
-            directlyProvides(self.request, *ifaces)
+        provide_request_layer(self.request, IOpenTaskReportLayer)
 
         return ExportPDFView.__call__(self)
 
