@@ -32,7 +32,7 @@ class TaskListingPDFView(grok.View, ExportPDFView):
 
     def render(self):
         # let the request provide ITaskListingLayer
-        provide_request_layer(ITaskListingLayer)
+        provide_request_layer(self.request, ITaskListingLayer)
 
         return ExportPDFView.__call__(self)
 

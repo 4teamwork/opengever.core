@@ -29,7 +29,7 @@ class DossierListingPDFView(grok.View, ExportPDFView):
     def render(self):
         # use the landscape layout
         # let the request provide IDossierListingLayer
-        provide_request_layer(IDossierListingLayer)
+        provide_request_layer(self.request, IDossierListingLayer)
 
         return ExportPDFView.__call__(self)
 

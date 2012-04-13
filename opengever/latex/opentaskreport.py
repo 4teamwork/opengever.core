@@ -39,7 +39,7 @@ class OpenTaskReportPDFView(grok.View, ExportPDFView):
     grok.require('zope2.View')
 
     def render(self):
-        provide_request_layer(IOpenTaskReportLayer)
+        provide_request_layer(self.request, IOpenTaskReportLayer)
 
         return ExportPDFView.__call__(self)
 
