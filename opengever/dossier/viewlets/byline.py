@@ -7,7 +7,7 @@ from opengever.base.interfaces import IReferenceNumber, ISequenceNumber
 from opengever.dossier.behaviors.dossier import IDossier, IDossierMarker
 from opengever.mail.behaviors import IMailInAddressMarker, IMailInAddress
 from opengever.ogds.base.interfaces import IContactInformation
-from opengever.base.browser.helper import css_class_from_obj
+from opengever.base.browser.helper import get_css_class
 
 
 
@@ -16,10 +16,10 @@ class BusinessCaseByline(content.DocumentBylineViewlet):
 
     update = content.DocumentBylineViewlet.update
 
-    def css_class_from_obj(self):
-        return css_class_from_obj(self.context)
+    def get_css_class(self):
+        return get_css_class(self.context)
 
-    
+
     def start(self):
         dossier = IDossier(self.context)
         return dossier.start
@@ -53,9 +53,9 @@ class BusinessCaseByline(content.DocumentBylineViewlet):
         """Displays email-address if the IMailInAddressMarker behavior
          is provided and the dossier is Active"""
         if IMailInAddressMarker.providedBy(self.context) \
-        and self.workflow_state() == 'dossier-state-active': 
+        and self.workflow_state() == 'dossier-state-active':
             return IMailInAddress(self.context).get_email_address()
-        
+
 
     @memoize
     def workflow_state(self):
