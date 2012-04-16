@@ -4,16 +4,16 @@ from opengever.document.document import IDocumentSchema
 from plone.app.layout.viewlets import content
 from plone.memoize.instance import memoize
 from zope.component import getUtility, getAdapter
-from opengever.base.browser.helper import css_class_from_obj
+from opengever.base.browser.helper import get_css_class
 
 
 class DocumentByline(content.DocumentBylineViewlet):
 
     update = content.DocumentBylineViewlet.update
 
-    def css_class_from_obj(self):
-        return css_class_from_obj(self.context)
-        
+    def get_css_class(self):
+        return get_css_class(self.context)
+
     def start(self):
         document = IDocumentSchema(self.context)
         return document.start
