@@ -7,16 +7,16 @@ from plone.registry.interfaces import IRegistry
 from opengever.base.interfaces import ISequenceNumber, IBaseClientID
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.task.task import ITask
-from opengever.base.browser.helper import css_class_from_obj
+from opengever.base.browser.helper import get_css_class
 
 
 class TaskByline(content.DocumentBylineViewlet):
 
     update = content.DocumentBylineViewlet.update
 
-    def css_class_from_obj(self):
-        return css_class_from_obj(self.context)
-    
+    def get_css_class(self):
+        return get_css_class(self.context)
+
     @memoize
     def workflow_state(self):
         state = self.context_state.workflow_state()

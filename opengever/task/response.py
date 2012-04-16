@@ -1,6 +1,6 @@
 from Acquisition import aq_inner
 from five import grok
-from opengever.base.browser.helper import css_class_from_obj
+from opengever.base.browser.helper import get_css_class
 from opengever.base.browser.opengeverview import OpengeverView
 from opengever.base.source import DossierPathSourceBinder
 from opengever.globalindex.interfaces import ITaskQuery
@@ -380,9 +380,9 @@ class ResponseView(grok.Viewlet, Base):
                 if isinstance(item['after'], datetime.date):
                     item['after'] = item['after'].strftime('%d.%m.%Y')
 
-    def css_class_from_obj(self, item):
+    def get_css_class(self, item):
         """used for display icons in the view"""
-        return css_class_from_obj(item)
+        return get_css_class(item)
 
     def get_added_objects(self, response):
         # Some relations may not have an added_object attribute...
