@@ -7,6 +7,7 @@ maintainer = 'Thomas Buchberger'
 tests_require = [
     'plone.app.testing',
     'opengever.task',
+    'opengever.tasktemplates',
     'opengever.document',
     'opengever.globalindex',
     'plone.mocktestcase',
