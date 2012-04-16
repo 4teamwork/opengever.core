@@ -1,5 +1,5 @@
 from five import grok
-from opengever.base.browser.helper import css_class_from_brain
+from opengever.base.browser.helper import get_css_class
 from opengever.dossier.browser.overview import DossierOverview
 from opengever.globalindex.interfaces import ITaskQuery
 from opengever.globalindex.model.task import Task
@@ -70,7 +70,7 @@ class InboxOverview(DossierOverview):
             'getURL': document.getURL,
             'alt': document.document_date and \
                 document.document_date.strftime('%d.%m.%Y') or '',
-            'css_class': css_class_from_brain(document),
+            'css_class': get_css_class(document),
             'portal_type': document.portal_type,
         } for document in documents]
 

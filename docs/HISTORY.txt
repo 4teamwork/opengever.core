@@ -5,7 +5,8 @@ Changelog
 2.2 (unreleased)
 ----------------
 
-- Nothing changed yet.
+- User get_css_class instead of deprecated method: css_class_from_obj/css_class_from_brain
+  [eschmutz]
 
 
 2.1 (2012-02-27)
