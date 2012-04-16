@@ -1,7 +1,7 @@
 <div class="documentByLine"
 	 id="plone-document-byline"
      i18n:domain="opengever.repository">
-  <span class="" tal:attributes="class string:byline-icon ${viewlet/css_class_from_obj}"
+  <span class="" tal:attributes="class string:byline-icon ${viewlet/get_css_class}"
 ></span>
   <span i18n:translate="label_workflow_state" class="noborder">
     State:
