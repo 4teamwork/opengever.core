@@ -3,7 +3,7 @@ from Products.CMFCore.utils import getToolByName
 from five import grok
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.ogds.base.utils import get_client_id
-from zExceptions import NotFound
+from zExceptions import Unauthorized
 from zope.component import getUtility
 from zope.intid.interfaces import IIntIds
 from zope.interface import Interface
@@ -43,4 +43,4 @@ class ResolveOGUIDView(grok.View):
 
         if member == SpecialUsers.nobody or \
                 not member.checkPermission('View', obj):
-            raise NotFound
+            raise Unauthorized

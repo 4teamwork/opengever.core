@@ -5,6 +5,9 @@ Changelog
 2.5 (unreleased)
 ----------------
 
+- @@resolve_oguid: throw Unauthorized, not NotFound when the user has insufficient privileges.
+  [jone]
+
 - #1154 Umstellung OpenGever in GEVER
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1154
   Modified siteactions and Clientid viewlet

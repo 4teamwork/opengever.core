@@ -7,7 +7,7 @@ from opengever.ogds.base.interfaces import IContactInformation
 from plone.mocktestcase import MockTestCase
 from plone.registry.interfaces import IRegistry
 from unittest2 import TestCase
-from zExceptions import NotFound
+from zExceptions import Unauthorized
 from zope.app.component.hooks import setSite
 from zope.component import getGlobalSiteManager
 from zope.interface import alsoProvides
@@ -52,7 +52,7 @@ class TestResolveOGUIDView(MockTestCase, TestCase):
 
         view = ResolveOGUIDView(object(), object())
 
-        with TestCase.assertRaises(self, NotFound):
+        with TestCase.assertRaises(self, Unauthorized):
             view._check_permissions(object())
 
 
@@ -68,7 +68,7 @@ class TestResolveOGUIDView(MockTestCase, TestCase):
 
         view = ResolveOGUIDView(object(), object())
 
-        with TestCase.assertRaises(self, NotFound):
+        with TestCase.assertRaises(self, Unauthorized):
             view._check_permissions(obj)
 
     def test_redirect_to_other_client(self):
