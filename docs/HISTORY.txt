@@ -5,8 +5,12 @@ Changelog
 2.0.5 (unreleased)
 ------------------
 
+- User get_css_class instead of deprecated method: css_class_from_obj/css_class_from_brain
+  [eschmutz]
+
 - Add ordering for the contentmenu for dossiers and subdossiers
   [eschmutz]
+
 
 2.0.4 (2012-03-28)
 ------------------

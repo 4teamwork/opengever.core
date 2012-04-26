@@ -1,6 +1,6 @@
 from Products.ZCatalog.interfaces import ICatalogBrain
 from five import grok
-from opengever.base.browser.helper import css_class_from_brain
+from opengever.base.browser.helper import get_css_class
 from opengever.dossier import _ as _dossier
 from opengever.dossier.behaviors.dossier import IDossierMarker, IDossier
 from opengever.dossier.behaviors.participation import IParticipationAware
@@ -62,7 +62,7 @@ class DossierOverview(grok.View, OpengeverTab):
             'getURL': document.getURL,
             'alt': document.document_date and \
                 document.document_date.strftime('%d.%m.%Y') or '',
-            'css_class': css_class_from_brain(document),
+            'css_class': get_css_class(document),
             'portal_type': document.portal_type,
         } for document in documents]
 
@@ -110,7 +110,7 @@ class DossierOverview(grok.View, OpengeverTab):
     def _get_css_icon_class(self, item):
         """Return the rigth css-class for the icon.
         """
-        return css_class_from_brain(item)
+        return get_css_class(item)
 
     def get_type(self, item):
         """differ the object typ and return the type as string"""

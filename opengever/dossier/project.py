@@ -2,7 +2,7 @@
 from zope import schema
 
 from plone.directives import form
-from opengever.base.browser.helper import css_class_from_obj
+from opengever.base.browser.helper import get_css_class
 from five import grok
 from plone.app.layout.viewlets.interfaces import IBelowContentTitle
 from plone.memoize.instance import memoize
@@ -25,13 +25,13 @@ class Byline(grok.Viewlet, content.DocumentBylineViewlet):
     grok.viewletmanager(IBelowContentTitle)
     grok.context(IProjectDossier)
     grok.name("plone.belowcontenttitle.documentbyline")
-    
-    update = content.DocumentBylineViewlet.update
-    
-    def css_class_from_obj(self):
-        return css_class_from_obj(self.context)
 
-    
+    update = content.DocumentBylineViewlet.update
+
+    def get_css_class(self):
+        return get_css_class(self.context)
+
+
     def start(self):
         dossier = IDossier(self.context)
         return dossier.start

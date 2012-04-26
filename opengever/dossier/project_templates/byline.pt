@@ -2,7 +2,7 @@
      id="plone-document-byline"
      i18n:domain="opengever.dossier"
      tal:condition="viewlet/show">
-  <span class="" tal:attributes="class string:byline-icon ${viewlet/css_class_from_obj}"
+  <span class="" tal:attributes="class string:byline-icon ${viewlet/get_css_class}"
 ></span>
   <span id="lock-icon" class="function-lock"
         tal:define="lock_icon viewlet/locked_icon"
