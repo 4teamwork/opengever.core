@@ -3,7 +3,7 @@
      i18n:domain="opengever.dossier"
      tal:condition="view/show"
      tal:define="toLocalizedTime nocall:context/@@plone/toLocalizedTime;">
-  <span class="" tal:attributes="class string:byline-icon ${view/css_class_from_obj}"
+  <span class="" tal:attributes="class string:byline-icon ${view/get_css_class}"
 ></span>
   <span id="lock-icon"
         tal:define="lock_icon view/locked_icon"

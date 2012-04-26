@@ -1,7 +1,7 @@
 """Defines a customized byline for inbox"""
 from plone.app.layout.viewlets import content
 from opengever.mail.behaviors import IMailInAddressMarker, IMailInAddress
-from opengever.base.browser.helper import css_class_from_obj
+from opengever.base.browser.helper import get_css_class
 
 
 class InboxByline(content.DocumentBylineViewlet):
@@ -9,10 +9,10 @@ class InboxByline(content.DocumentBylineViewlet):
 
     update = content.DocumentBylineViewlet.update
 
-    def css_class_from_obj(self):
-        return css_class_from_obj(self.context)
+    def get_css_class(self):
+        return get_css_class(self.context)
 
-    
+
     def email(self):
         """Gets Email and display it in Byline"""
         if IMailInAddressMarker.providedBy(self.context):
