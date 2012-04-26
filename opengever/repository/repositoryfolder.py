@@ -17,7 +17,7 @@ from opengever.repository.interfaces import IRepositoryFolder
 from opengever.repository.behaviors.referenceprefix import \
     IReferenceNumberPrefix, IReferenceNumberPrefixMarker
 from opengever.repository.interfaces import IRepositoryFolderRecords
-from opengever.base.browser.helper import css_class_from_obj
+from opengever.base.browser.helper import get_css_class
 
 
 class IRepositoryFolderSchema(form.Schema):
@@ -205,8 +205,8 @@ class Byline(grok.Viewlet):
 
     #update = content.DocumentBylineViewlet.update
 
-    def css_class_from_obj(self):
-        return css_class_from_obj(self.context)
+    def get_css_class(self):
+        return get_css_class(self.context)
 
     @memoize
     def workflow_state(self):
