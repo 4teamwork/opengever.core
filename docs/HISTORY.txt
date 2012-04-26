@@ -5,6 +5,9 @@ Changelog
 2.5 (unreleased)
 ----------------
 
+- Remove deprecated methods: css_class_from_obj/css_class_from_brain
+  [eschmutz]
+
 - @@resolve_oguid: throw Unauthorized, not NotFound when the user has insufficient privileges.
   [jone]
 
