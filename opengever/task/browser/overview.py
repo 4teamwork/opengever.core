@@ -2,7 +2,7 @@ from Acquisition import aq_parent, aq_inner
 from five import grok
 from opengever.ogds.base.utils import get_client_id
 from opengever.base.browser.helper import client_title_helper
-from opengever.base.browser.helper import css_class_from_obj
+from opengever.base.browser.helper import get_css_class
 from opengever.globalindex.model.task import Task
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.tabbedview.browser.tabs import OpengeverTab
@@ -215,7 +215,7 @@ class Overview(DisplayForm, OpengeverTab):
     def get_css_class(self, item):
         """Return the sprite-css-class for the given object.
         """
-        css = css_class_from_obj(item)
+        css = get_css_class(item)
         return '%s %s' % ("rollover-breadcrumb", css)
 
     def get_sub_tasks(self):

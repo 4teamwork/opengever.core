@@ -68,7 +68,7 @@
 						</tal:task>
 						<tal:notask condition="python: view.get_type(added_obj) == 'obj'">
 	                        <a href=""
-	                           tal:attributes="href added_obj/absolute_url|nothing; class python:viewlet.css_class_from_obj(added_obj)"
+	                           tal:attributes="href added_obj/absolute_url|nothing; class python:viewlet.get_css_class(added_obj)"
 	                           tal:omit-tag="not: added_obj/absolute_url|nothing">
 	                            <span tal:content="added_obj/Title" />
 	                        </a>
