@@ -5,7 +5,10 @@ Changelog
 2.1.4 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Implements disabling the site syndication as opegever default.
+  Issue #1532 Darstellungsfehler und Schreibfehler Suchresultate
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1532
+  [phgross]
 
 
 2.1.3 (2012-03-28)

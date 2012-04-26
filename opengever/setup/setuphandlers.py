@@ -57,6 +57,11 @@ def settings(context):
         context.get('Members').reindexObject()
 
 
+def disable_site_syndication(context):
+    ps = getToolByName(context, 'portal_syndication')
+    ps.editProperties(isAllowed=False)
+
+
 def set_global_roles(setup):
     admin_file = setup.readDataFile('administrator.txt')
     if admin_file is None:
@@ -152,4 +157,5 @@ def import_various(setup):
     start_import(site)
     settings(site)
     assign_portlets(site)
+    disable_site_syndication(site)
 
