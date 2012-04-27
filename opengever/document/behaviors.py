@@ -1,12 +1,13 @@
-from zope.component import getUtility
 from opengever.base.interfaces import ISequenceNumber
-from plone.app.content.interfaces import INameFromTitle
-from zope.interface import implements
-from opengever.document import _
-from plone.directives import form
 from opengever.base.source import RepositoryPathSourceBinder
+from opengever.document import _
+from plone.app.content.interfaces import INameFromTitle
+from plone.directives import form
 from z3c.relationfield.schema import RelationChoice, RelationList
+from zope.component import getUtility
+from zope.interface import Interface
 from zope.interface import alsoProvides
+from zope.interface import implements
 
 
 class IRelatedDocuments(form.Schema):
@@ -71,3 +72,8 @@ class DocumentNameFromTitle(object):
     def title(self):
         seq_number = getUtility(ISequenceNumber).get_number(self.context)
         return self.format % seq_number
+
+
+class IBaseDocument(Interface):
+    """Marker interface for objects with a document like type
+    (og.document, ftw.mail.mail) etc."""

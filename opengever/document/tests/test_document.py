@@ -1,4 +1,6 @@
 from datetime import date
+from opengever.base.interfaces import IReferenceNumber, ISequenceNumber
+from opengever.document.behaviors import IBaseDocument
 from opengever.document.document import IDocumentSchema
 from opengever.document.testing import OPENGEVER_DOCUMENT_INTEGRATION_TESTING
 from plone.dexterity.interfaces import IDexterityFTI
@@ -6,8 +8,8 @@ from plone.dexterity.utils import createContentInContainer
 from plone.namedfile.file import NamedBlobFile
 from z3c.form.interfaces import IValue
 from zope.component import createObject
-from zope.component import queryMultiAdapter
-from zope.component import queryUtility
+from zope.component import queryMultiAdapter, getAdapter
+from zope.component import queryUtility, getUtility
 from zope.interface import Invalid
 from zope.schema import getFields
 import unittest2 as unittest
@@ -108,7 +110,6 @@ class TestDocumentIntegration(unittest.TestCase):
         # but existing versions shouldn't be copied
         self.assertEquals(len(new_history), 1)
 
-
     def test_default_values(self):
         portal = self.layer['portal']
         monk_file = NamedBlobFile('bla bla', filename=u'test.txt')
@@ -118,6 +119,41 @@ class TestDocumentIntegration(unittest.TestCase):
         default = queryMultiAdapter(
             (d1,d1.REQUEST,None,field,None,), IValue, name='default')
         self.assertTrue(default.get(), date.today())
+
+    def test_basedocument(self):
+        portal = self.layer['portal']
+        d1 = createContentInContainer(
+            portal, 'opengever.document.document')
+
+        self.assertTrue(IBaseDocument.providedBy(d1))
+
+    def test_sequence_number(self):
+        """All Objects marked as BaseDocuments, should use the same counter."""
+
+        portal = self.layer['portal']
+        seqNumb = getUtility(ISequenceNumber)
+        d1 = createContentInContainer(portal, 'opengever.document.document')
+        b1 = createContentInContainer(portal, 'BaseDocumentFTI')
+        d2 = createContentInContainer(portal, 'opengever.document.document')
+
+        self.assertEquals(seqNumb.get_number(d1), 1)
+        self.assertEquals(seqNumb.get_number(b1), 2)
+        self.assertEquals(seqNumb.get_number(d2), 3)
+
+    def test_reference_number(self):
+        """The reference Number Adapter should work for all BaseDocument objects"""
+
+        portal = self.layer['portal']
+        d1 = createContentInContainer(portal, 'opengever.document.document')
+        b1 = createContentInContainer(portal, 'BaseDocumentFTI')
+        d2 = createContentInContainer(portal, 'opengever.document.document')
+
+        self.assertEquals(
+            getAdapter(d1, IReferenceNumber).get_number(), 'OG / 1')
+        self.assertEquals(
+            getAdapter(b1, IReferenceNumber).get_number(), 'OG / 2')
+        self.assertEquals(
+            getAdapter(d2, IReferenceNumber).get_number(), 'OG / 3')
 
 def test_suite():
     return unittest.defaultTestLoader.loadTestsFromName(__name__)

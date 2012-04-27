@@ -1,17 +1,17 @@
-from zope.component import getUtility
 from five import grok
-from opengever.document.document import IDocumentSchema
-from opengever.base.interfaces import ISequenceNumber
 from opengever.base.interfaces import IReferenceNumber
+from opengever.base.interfaces import ISequenceNumber
 from opengever.base.reference import BasicReferenceNumber
+from opengever.document.behaviors import IBaseDocument
+from zope.component import getUtility
 
 
 class DocumentReferenceNumber(BasicReferenceNumber):
     """ Reference number for documents
     """
     grok.provides(IReferenceNumber)
-    grok.context(IDocumentSchema)
-    
+    grok.context(IBaseDocument)
+
     def get_number(self):
         # get local sequence_number
         sequenceNr = getUtility(ISequenceNumber)

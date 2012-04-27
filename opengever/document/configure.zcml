@@ -60,6 +60,14 @@
         for="opengever.document.document.IDocumentSchema"
         />
 
+    <!-- BaseDocument beahvior -->
+    <plone:behavior
+        title="BaseDocument Behavior"
+        description="Marker interface for document like objects"
+        provides="opengever.document.behaviors.IBaseDocument"
+        for="*"
+        />
+
     <!-- custom edit form for documents -->
     <browser:page
           for="opengever.document.document.IDocumentSchema"

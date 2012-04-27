@@ -5,6 +5,12 @@ Changelog
 2.0.4 (unreleased)
 ------------------
 
+- Implement IBaseDocument behavior, to mark documentlike objects.
+  Adjust sequence and referncenumber adapters to work for all BaseDocuments.
+  Issue #1507 Mails: Dokumentennummer/Aktenzeichen fehlt
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1507
+  [phgross]
+
 - User get_css_class instead of deprecated method: css_class_from_obj/css_class_from_brain
   [eschmutz]
 

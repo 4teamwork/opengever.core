@@ -31,6 +31,7 @@
     <element value="opengever.trash.trash.ITrashable" />
     <element value="opengever.base.behaviors.sequence.ISequenceNumberBehavior" />
     <element value="plone.app.lockingbehavior.behaviors.ILocking" />
+    <element value="opengever.document.behaviors.IBaseDocument" />
   </property>
 
   <!-- View information -->
