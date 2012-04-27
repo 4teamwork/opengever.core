@@ -24,7 +24,7 @@ class IRelatedDocuments(form.Schema):
                 portal_type=("opengever.document.document", "ftw.mail.mail"),
                 navigation_tree_query={
                      #HOTFIX: disable tree building
-                     'object_provides':['gaga']
+                     'object_provides': ['gaga']
 #                    'object_provides':
 #                        ['opengever.repository.repositoryroot.IRepositoryRoot',
 #                         'opengever.repository.repositoryfolder.' + \
@@ -40,8 +40,8 @@ class IRelatedDocuments(form.Schema):
 
     form.fieldset(
         u'common',
-        label = _(u'fieldset_common', default=u'Common'),
-        fields = [
+        label=_(u'fieldset_common', default=u'Common'),
+        fields=[
             u'relatedItems',
             ],
         )

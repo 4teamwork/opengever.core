@@ -37,7 +37,6 @@ class DocumentFunctionalLayer(PloneSandboxLayer):
         xmlconfig.file('configure.zcml', package=base,
             context=configurationContext)
 
-
     def setUpPloneSite(self, portal):
         applyProfile(portal, 'plone.app.versioningbehavior:default')
         applyProfile(portal, 'opengever.document:default')

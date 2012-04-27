@@ -14,6 +14,7 @@ from zope.interface import Invalid
 from zope.schema import getFields
 import unittest2 as unittest
 
+
 class TestDocumentIntegration(unittest.TestCase):
 
     layer = OPENGEVER_DOCUMENT_INTEGRATION_TESTING
@@ -53,9 +54,9 @@ class TestDocumentIntegration(unittest.TestCase):
         monk_file = NamedBlobFile('bla bla', filename=u'test.txt')
         d1 = createContentInContainer(portal, 'opengever.document.document',
             file=monk_file)
-        self.assertTrue(d1.digitally_available==True)
+        self.assertTrue(d1.digitally_available == True)
         d2 = createContentInContainer(portal, 'opengever.document.document')
-        self.assertTrue(d2.digitally_available==False)
+        self.assertTrue(d2.digitally_available == False)
 
         # check the file_or_preserved_as_paper validator
         d3 = createContentInContainer(portal, 'opengever.document.document',
@@ -70,7 +71,7 @@ class TestDocumentIntegration(unittest.TestCase):
         portal = self.layer['portal']
         portal.invokeFactory('opengever.document.document', 'document1')
         d1 = portal['document1']
-        d1.keywords=()
+        d1.keywords = ()
 
         # fake the request
         portal.REQUEST['ACTUAL_URL'] = d1.absolute_url()
@@ -95,7 +96,9 @@ class TestDocumentIntegration(unittest.TestCase):
     def test_copying_and_versions(self):
         portal = self.layer['portal']
         pr = portal.portal_repository
-        orig_doc = createContentInContainer(portal, 'opengever.document.document',
+        orig_doc = createContentInContainer(
+            portal,
+            'opengever.document.document',
             checkConstraints=True, preserved_as_paper=False,
             title="Testdocument")
 
@@ -117,7 +120,7 @@ class TestDocumentIntegration(unittest.TestCase):
               file=monk_file)
         field = getFields(IDocumentSchema).get('document_date')
         default = queryMultiAdapter(
-            (d1,d1.REQUEST,None,field,None,), IValue, name='default')
+            (d1, d1.REQUEST, None, field, None, ), IValue, name='default')
         self.assertTrue(default.get(), date.today())
 
     def test_basedocument(self):
@@ -141,7 +144,8 @@ class TestDocumentIntegration(unittest.TestCase):
         self.assertEquals(seqNumb.get_number(d2), 3)
 
     def test_reference_number(self):
-        """The reference Number Adapter should work for all BaseDocument objects"""
+        """The reference Number Adapter should work
+        for all BaseDocument objects."""
 
         portal = self.layer['portal']
         d1 = createContentInContainer(portal, 'opengever.document.document')
@@ -154,6 +158,7 @@ class TestDocumentIntegration(unittest.TestCase):
             getAdapter(b1, IReferenceNumber).get_number(), 'OG / 2')
         self.assertEquals(
             getAdapter(d2, IReferenceNumber).get_number(), 'OG / 3')
+
 
 def test_suite():
     return unittest.defaultTestLoader.loadTestsFromName(__name__)
