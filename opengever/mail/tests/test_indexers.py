@@ -23,7 +23,7 @@ class TestMailIndexers(MockTestCase):
         mail = self.stub()
         msg = self.stub()
         self.expect(mail.msg).result(msg)
-        self.expect('From' in msg).result(True)
+        self.expect(msg.has_key('From')).result(True)
         self.expect(msg.get('From')).result(
             u'"Hugo Boss" <hugo.boss@boss.com>')
         self.replay()
@@ -41,7 +41,7 @@ class TestMailIndexers(MockTestCase):
         msg = self.stub()
 
         self.expect(mail.msg).result(msg)
-        self.expect('Date' in msg).result(True)
+        self.expect(msg.has_key('Date')).result(True)
         self.expect(msg.get('Date')).result('Thu, 16 Feb 2012 17:16:03 +0100')
         self.replay()
 
