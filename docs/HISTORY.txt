@@ -7,6 +7,7 @@ Changelog
 
 - Activate sequenceNumber and referencenumber giving for mails.
   Mark mails as BaseDocument (activate different adapters).
+  Implement mail specific byline which display sequence and referencenumber.
   Issue #1507 Mails: Dokumentennummer/Aktenzeichen fehlt
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1507
   [phgross]

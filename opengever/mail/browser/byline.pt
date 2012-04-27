@@ -1,0 +1,39 @@
+<div class="documentByLine"
+     id="plone-document-byline"
+     i18n:domain="opengever.mail"
+     tal:condition="view/show">
+  <span
+      class=""
+      tal:attributes="class string:byline-icon ${view/get_css_class}">
+  </span>
+  <span id="lock-icon" class="function-lock"
+        tal:define="lock_icon view/locked_icon"
+        tal:condition="lock_icon">
+  </span>
+  <span class="created" i18n:translate="byline_created">
+    Created:
+    <tal:date tal:replace="python:view.toLocalizedTime(here.CreationDate(), long_format=1)"
+              i18n:name="date" />
+  </span>
+
+  <span class="sequenceNumber" tal:condition="view/sequence_number">
+    <span i18n:translate="label_sequence_number"
+          tal:omit-tag="">
+      Sequence Number:
+    </span>
+    <span tal:replace="view/sequence_number">
+      14
+    </span>
+  </span>
+
+  <span class="referenceNumber" tal:condition="view/reference_number">
+    <span i18n:translate="label_reference_number"
+          tal:omit-tag="">
+      Reference Number:
+    </span>
+    <span tal:replace="view/reference_number">
+      14
+    </span>
+  </span>
+
+</div>
