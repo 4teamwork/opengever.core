@@ -1,6 +1,7 @@
 from opengever.dossier.businesscase import IBusinessCaseDossier
 from opengever.dossier.testing import OPENGEVER_DOSSIER_INTEGRATION_TESTING
 from plone.dexterity.interfaces import IDexterityFTI
+from plone.dexterity.utils import createContentInContainer
 from zope.component import createObject
 from zope.component import queryUtility
 import unittest2 as unittest
@@ -31,3 +32,13 @@ class TestBusinessCaseDossierIntegration(unittest.TestCase):
         factory = fti.factory
         new_object = createObject(factory)
         self.failUnless(IBusinessCaseDossier.providedBy(new_object))
+
+    def test_accessors(self):
+        """Test title and descprition accessors."""
+
+        portal = self.layer['portal']
+        d1 = createContentInContainer(
+            portal, 'opengever.dossier.businesscasedossier',
+            title=u'Test title', description=u'Lorem ipsum')
+        self.assertEquals(d1.Title(), u'Test title')
+        self.assertEquals(d1.Description(), u'Lorem ipsum')
