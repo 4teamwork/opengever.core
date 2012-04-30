@@ -82,12 +82,12 @@ We need to create a dexterity object first.
 
     >>> obj1 = createContentInContainer(folder, 'TransporterTestFTI',
     ...                                 checkConstraints=False,
-    ...                                 title='Foo',
+    ...                                 title=u'Fo\xc3\xb6',
     ...                                 description='Bar')
     >>> obj1
     <Container at /plone/folder/foo>
     >>> obj1.title
-    'Foo'
+    'Fo\xc3\xb6'
     >>> obj1.description
     'Bar'
 
@@ -101,7 +101,7 @@ Pull the object:
     >>> obj2
     <Container at /plone/folder/foo-1>
     >>> obj2.title
-    'Foo'
+    'Fo\xc3\xb6'
     >>> obj2.description
     'Bar'
 
@@ -127,6 +127,6 @@ Let's push obj2 back:
     <Container at /plone/folder/foo-2>
 
     >>> obj3.title
-    'Foo'
+    'Fo\xc3\xb6'
     >>> obj2.description
     'Bar'
