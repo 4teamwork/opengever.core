@@ -99,10 +99,10 @@ test title accessor:
     >>> folder.Title()
     u'Foobar'
     >>> folder.Description()
-    u'Lorem ipsum'
+    u'Lorem Ipsum'
 
     >>> contact = folder.get('walter-hanspeter')
     >>> contact.Title()
     u'Walter Hanspeter'
     >>> contact.Description()
-    u'Lorem ipsum, bla bla'
+    'Lorem ipsum, bla bla'
