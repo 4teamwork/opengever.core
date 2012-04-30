@@ -159,6 +159,15 @@ class TestDocumentIntegration(unittest.TestCase):
         self.assertEquals(
             getAdapter(d2, IReferenceNumber).get_number(), 'OG / 3')
 
+    def test_accessors(self):
+        """Test title and descprition accessors."""
+
+        portal = self.layer['portal']
+        d1 = createContentInContainer(
+            portal, 'opengever.document.document',
+            title=u'Test title', description=u'Lorem ipsum')
+        self.assertEquals(d1.Title(), u'Test title')
+        self.assertEquals(d1.Description(), u'Lorem ipsum')
 
 def test_suite():
     return unittest.defaultTestLoader.loadTestsFromName(__name__)

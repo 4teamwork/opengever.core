@@ -50,7 +50,7 @@ create a document, and get the CheckinCheckoutManager for the document
     >>> mok_file1 = NamedBlobFile('bla bla', filename=u'test.txt')
     >>> mok_file2 = NamedBlobFile('bla bla', filename=u'test.txt')
     >>> doc1 = createContentInContainer(portal, 'opengever.document.document',
-    ...     title=u"Doc One", document_author=u'Hugo Boss',
+    ...     title=u'Doc \xf6ne', document_author=u'Hugo Boss',
     ...     document_date=datetime.date(2011,1,1), file=mok_file1)
     >>> doc2 = createContentInContainer(portal, 'opengever.document.document',
     ...     title=u"Doc two", file=mok_file2)
@@ -129,7 +129,6 @@ redirect to the document view, js-redirect to the external link
 file is checked out
     >>> manager.checked_out()
     'test_user_1_'
-
 
 cancel_document_checkouts:
 --------------------------
