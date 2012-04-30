@@ -91,7 +91,7 @@ class TestOpengeverJournalGeneral(unittest.TestCase):
         and check the journalentries.
         """
         portal = self.layer['portal']
-        
+
 
         # Add-Event
         dossier = createContentInContainer(
@@ -185,7 +185,7 @@ class TestOpengeverJournalGeneral(unittest.TestCase):
 
         # Add-Event
         document = createContentInContainer(
-            dossier, 'opengever.document.document', 'd1', title="Document")
+            dossier, 'opengever.document.document', 'd1', title=u'Doc\xfcment')
 
         self.check_object_added(
             document,
@@ -555,5 +555,5 @@ class TestOpengeverJournalGeneral(unittest.TestCase):
             action_title=u'Document sent by Mail: test mail',
             actor=TEST_USER_ID,
             comment='Attachments: <span><a href="./@@resolve_oguid?oguid=Test:'+str(intid)+'">'+\
-                        doc.Title()+'</a></span> | Receivers: test@test.ch | Message: Mymessage',
+                        doc.Title().encode('utf-8')+'</a></span> | Receivers: test@test.ch | Message: Mymessage',
             )
