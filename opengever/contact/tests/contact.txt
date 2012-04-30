@@ -1,5 +1,5 @@
 Contact
-======= 
+=======
 
 Helpers:
 
@@ -27,7 +27,7 @@ browser test
     >>> browser.open(portal.portal_url())
     >>> 'test_user_1' in browser.contents
     True
-    
+
 
 create contact folder
 
@@ -36,7 +36,7 @@ create contact folder
     >>> browser.getControl('Add').click()
     >>> browser.url
     'http://nohost/plone/++add++opengever.contact.contactfolder'
-    
+
     >>> browser.getControl('Title').value='Foobar'
     >>> browser.getControl('Description').value='Lorem Ipsum'
     >>> browser.getControl('Save').click()
@@ -63,7 +63,7 @@ create a contact:
     >>> browser.getControl('Save').click()
     >>> browser.url
     'http://nohost/plone/foobar/walter-hanspeter/contact_view'
-    
+
 
 test searchabelText indexing
 ----------------------------
@@ -91,3 +91,18 @@ helper:
     ...         'walter-hanspeter')
     >>> getSearchableText(obj)
     ['walter', 'hanspeter']
+
+
+test title accessor:
+--------------------
+    >>> folder = portal.get('foobar')
+    >>> folder.Title()
+    u'Foobar'
+    >>> folder.Description()
+    u'Lorem ipsum'
+
+    >>> contact = folder.get('walter-hanspeter')
+    >>> contact.Title()
+    u'Walter Hanspeter'
+    >>> contact.Description()
+    u'Lorem Ipsum, bla bla''
