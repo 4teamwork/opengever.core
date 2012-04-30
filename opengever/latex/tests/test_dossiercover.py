@@ -45,9 +45,9 @@ class TestDossierCoverPDFView(MockTestCase):
         self.expect(tree.subdossier.toLocalizedTime).result(
             toLocalizedTime)
 
-        self.expect(tree.subfolder.Title()).result('Sub Folder')
-        self.expect(tree.folder.Title()).result('Folder')
-        self.expect(tree.dossier.Title()).result('Dossier title')
+        self.expect(tree.subfolder.Title()).result(u'Sub Folder')
+        self.expect(tree.folder.Title()).result(u'Folder')
+        self.expect(tree.dossier.Title()).result(u'Dossier title')
 
         self.set_parent(
             tree.subdossier, self.set_parent(
