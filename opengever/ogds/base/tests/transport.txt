@@ -82,7 +82,7 @@ We need to create a dexterity object first.
 
     >>> obj1 = createContentInContainer(folder, 'TransporterTestFTI',
     ...                                 checkConstraints=False,
-    ...                                 title=u'Fo\xc3\xb6',
+    ...                                 title='Fo\xc3\xb6',
     ...                                 description='Bar')
     >>> obj1
     <Container at /plone/folder/foo>
