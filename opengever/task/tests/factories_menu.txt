@@ -6,9 +6,8 @@ to change the name of the task in the add-menu if we are in a task.
 
 import, roles ect.
 
-	>>> portal = layer['portal']
-	>>> app = layer['app']
-	>>> request = layer['request']
+    >>> portal = layer['portal']
+    >>> request = layer['request']
     >>> from plone.app.testing import TEST_USER_ID, setRoles
     >>> setRoles(portal, TEST_USER_ID, ['Reviewer', 'Manager'])
 
@@ -18,12 +17,8 @@ Let the task be implicitly addable:
 
 Lets get the browser menu:
 
-    >>> from zope.app.publisher.interfaces.browser import IBrowserMenu
-    >>> from zope.component import getUtility
-
-    >>> menu = getUtility(IBrowserMenu,
-    ...                   name='ftw_contentmenu_factory',
-    ...                   context=portal)
+    >>> from ftw.contentmenu.menu import FactoriesMenu
+    >>> menu = FactoriesMenu(portal)
 
     >>> menu
 	 <ftw.contentmenu.menu.FactoriesMenu object at ...>
