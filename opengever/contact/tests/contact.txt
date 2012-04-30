@@ -105,4 +105,4 @@ test title accessor:
     >>> contact.Title()
     u'Walter Hanspeter'
     >>> contact.Description()
-    u'Lorem Ipsum, bla bla''
+    u'Lorem ipsum, bla bla'
