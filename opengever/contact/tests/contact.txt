@@ -97,12 +97,12 @@ test title accessor:
 --------------------
     >>> folder = portal.get('foobar')
     >>> folder.Title()
-    u'Foobar'
+    'Foobar'
     >>> folder.Description()
-    u'Lorem Ipsum'
+    'Lorem Ipsum'
 
     >>> contact = folder.get('walter-hanspeter')
     >>> contact.Title()
-    u'Walter Hanspeter'
+    'Walter Hanspeter'
     >>> contact.Description()
     'Lorem ipsum, bla bla'

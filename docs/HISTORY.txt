@@ -5,7 +5,10 @@ Changelog
 2.3 (unreleased)
 ----------------
 
-- Nothing changed yet.
+- Adjust title accessors, because they changed with the dexerity update.
+  Issue #1420 Plone Version und Dexterity Version auf aktuellste Version heben.
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1420
+  [phgross]
 
 
 2.2 (2012-03-28)
