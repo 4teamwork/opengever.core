@@ -5,6 +5,11 @@ Changelog
 2.1.3 (unreleased)
 ------------------
 
+- Activate and configure tabbedview quickupload plugin for opengever.
+  Issue #549 Abklaerung: Drag and drop
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/549
+  [phgross]
+
 - Removed reset_grid_state functionality, because it's now part of the ftw.tabbedview.
   [phgross]
 
