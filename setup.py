@@ -58,7 +58,6 @@ setup(name='opengever.mail',
         'setuptools',
         'plone.app.dexterity',
         'plone.app.registry',
-        'collective.monkeypatcher',
         # -*- Extra requirements: -*-
         ],
       tests_require=tests_require,

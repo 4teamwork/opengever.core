@@ -5,6 +5,11 @@ Changelog
 2.0.3 (unreleased)
 ------------------
 
+- Removed accessor patch, since the dexterity update it isn't longer necessary.
+  Issue #1420 Plone Version und Dexterity Version auf aktuellste Version heben.
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1420
+  [phgross]
+
 - Activate sequenceNumber and referencenumber giving for mails.
   Mark mails as BaseDocument (activate different adapters).
   Implement mail specific byline which display sequence and referencenumber.

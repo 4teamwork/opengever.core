@@ -219,7 +219,7 @@ class ExtractAttachments(grok.View):
 
             msg = _(u'info_extracted_document',
                     default=u'Created document ${title}',
-                    mapping={'title': doc.Title()})
+                    mapping={'title': doc.Title().decode('utf-8')})
             IStatusMessage(self.request).addStatusMessage(msg, type='info')
 
         # delete the attachments from the email message, if needed

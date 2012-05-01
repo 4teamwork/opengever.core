@@ -30,7 +30,7 @@ imports and general stuff
     >>> portal.manage_setLocalRoles('mail-test', ['Owner','Editor','Contributor'])
 
 create document
-    >>> doc1 = createContentInContainer(portal, 'opengever.document.document', title=u'Document 1')
+    >>> doc1 = createContentInContainer(portal, 'opengever.document.document', title=u'Doc\xfcment 1')
 
 create a mail
     >>> fti = getUtility(IDexterityFTI, name='ftw.mail.mail')
@@ -139,7 +139,7 @@ validator should also work with mails ect
     'Test Betreff 2'
     >>> id_util = getUtility(IIntIds)
     >>> id_util.getObject(documentsent.intids[0]).Title()
-    u'Attachment Test'
+    'Attachment Test'
     >>> documentsent.receiver
     'info@4teamwork.ch'
     >>> documentsent.message

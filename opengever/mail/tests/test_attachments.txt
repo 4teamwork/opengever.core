@@ -84,7 +84,7 @@ Submit
     True
     >>> browser.getControl(name='attachments:list').value=[1]
     >>> browser.getControl(name='form.submitted').click()
-    >>> 'Created document Bücher' in browser.contents
+    >>> 'Created document B\xc3\xbccher' in browser.contents
     True
 
 Should work also with line breaks in the attachment title
@@ -103,10 +103,8 @@ Delete attachments from message
     >>> len(get_attachments(mail1.msg)) == 0
     True
 
-XXX
-Test the temporary fix for the Title accessor
-See patch.py
+Title accessor Test
     >>> isinstance(mail1.Title(), unicode)
-    True
+    False
     >>> isinstance(mail2.Title(), unicode)
-    True
+    False

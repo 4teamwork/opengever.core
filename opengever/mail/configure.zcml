@@ -41,13 +41,4 @@
         description=""
         handler="opengever.mail.setuphandler.import_various" />
 
-    <include package="collective.monkeypatcher" />
-
-    <monkey:patch
-       description="Temporary fix for Title accessor"
-       class="ftw.mail.mail.Mail"
-       original="Title"
-       replacement=".patch.Title"
-       />
-
 </configure>
