@@ -5,6 +5,9 @@ Changelog
 2.3.5 (unreleased)
 ------------------
 
+- Add check to attachable_documents_vocabulary: which check that all term values are unique.
+  [phgross]
+
 - Adjust use of title accessors (decoding), since dexterity update it returns always utf-8.
   Issue #1420 Plone Version und Dexterity Version auf aktuellste Version heben.
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1420

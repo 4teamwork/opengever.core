@@ -16,6 +16,8 @@ def attachable_documents_vocabulary(context):
 
     intids = getUtility(IIntIds)
 
+    ids = []
+
     for doc in context.getFolderContents(
         full_objects=True,
         contentFilter={'portal_type': ['opengever.document.document',
@@ -24,9 +26,13 @@ def attachable_documents_vocabulary(context):
         key = str(intids.getId(doc))
         label = doc.Title()
         terms.append(SimpleVocabulary.createTerm(key, key, label))
+        ids.append(key)
 
     for relation in getattr(context, 'relatedItems', []):
         key = str(relation.to_id)
+        # check if the task doesn't contain the related document allready
+        if key in ids:
+            continue;
         label = relation.to_object.Title()
         terms.append(SimpleVocabulary.createTerm(key, key, label))
 
