@@ -127,7 +127,7 @@ msgstr ""
 
 #: ./opengever/base/behaviors/classification.py:39
 msgid "help_privacy_layer"
-msgstr "Repère indiquant que les documents contiennent des données ou des profils de la personnalité selon le droit sur la protection des données."
+msgstr "Marquage des documents contenant des données sensibles (loi sur la protection des données)"
 
 #: ./opengever/base/behaviors/classification.py:46
 msgid "help_public_trial"

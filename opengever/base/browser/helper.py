@@ -4,7 +4,6 @@ from opengever.ogds.base.utils import get_client_id
 from plone.i18n.normalizer.interfaces import IIDNormalizer
 from sqlalchemy.ext.declarative import DeclarativeMeta
 from zope.component import getUtility
-from zope.deprecation import deprecated
 
 
 def client_title_helper(item, value):
@@ -140,13 +139,3 @@ def get_css_class(item):
         css_class = "contenttype-%s" % normalize(item.portal_type)
 
     return css_class
-
-
-css_class_from_brain = get_css_class
-deprecated('css_class_from_brain',
-           'Use get_css_class instead of css_class_from_brain')
-
-
-css_class_from_obj = get_css_class
-deprecated('css_class_from_obj',
-           'Use get_css_class instead of css_class_from_obj')

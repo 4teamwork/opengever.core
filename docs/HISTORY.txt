@@ -2,10 +2,31 @@ Changelog
 =========
 
 
-2.4 (unreleased)
+2.5 (unreleased)
 ----------------
 
-- Nothing changed yet.
+- Replace description field property with a manually property: to fix decoding erros.
+  Issue #1420 Plone Version und Dexterity Version auf aktuellste Version heben.
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1420
+  [phgross]
+
+- Remove deprecated methods: css_class_from_obj/css_class_from_brain
+  [eschmutz]
+
+- @@resolve_oguid: throw Unauthorized, not NotFound when the user has insufficient privileges.
+  [jone]
+
+- #1154 Umstellung OpenGever in GEVER
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1154
+  Modified siteactions and Clientid viewlet
+  [eschmutz]
+
+
+2.4 (2012-03-28)
+----------------
+
+- Change french translation for help_privacy_layer
+  [ttschanz]
 
 
 2.3 (2012-02-28)
