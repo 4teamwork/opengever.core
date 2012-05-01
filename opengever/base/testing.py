@@ -42,27 +42,26 @@ class BaseFunctionalLayer(PloneSandboxLayer):
 
     def setUpZope(self, app, configurationContext):
         # do not install pas plugins (doesnt work in tests)
-         from opengever.ogds.base import setuphandlers
-         setuphandlers.setup_scriptable_plugin = lambda *a, **kw: None
+        from opengever.ogds.base import setuphandlers
+        setuphandlers.setup_scriptable_plugin = lambda *a, **kw: None
 
-         from plone.app import dexterity
-         self.loadZCML('meta.zcml', package=dexterity)
-         self.loadZCML('configure.zcml', package=dexterity)
+        from plone.app import dexterity
+        self.loadZCML('meta.zcml', package=dexterity)
+        self.loadZCML('configure.zcml', package=dexterity)
 
-         from opengever.ogds import base
-         self.loadZCML('tests.zcml', package=base)
-         self.loadZCML('configure.zcml', package=base)
+        from opengever.ogds import base
+        self.loadZCML('tests.zcml', package=base)
+        self.loadZCML('configure.zcml', package=base)
 
-         from opengever import repository
-         self.loadZCML('configure.zcml', package=repository)
+        from opengever import repository
+        self.loadZCML('configure.zcml', package=repository)
 
-         from opengever import document
-         self.loadZCML('configure.zcml', package=document)
+        from opengever import document
+        self.loadZCML('configure.zcml', package=document)
 
-         from opengever.base import tests
-         xmlconfig.file('testing.zcml', package=tests,
-             context=configurationContext)
-
+        from opengever.base import tests
+        xmlconfig.file('testing.zcml', package=tests,
+         context=configurationContext)
 
     def setUpPloneSite(self, portal):
 

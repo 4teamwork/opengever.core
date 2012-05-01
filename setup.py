@@ -58,6 +58,7 @@ setup(name='opengever.base',
         'Products.LDAPUserFolder',
         'plone.app.versioningbehavior',
         'xlwt',
+        'collective.quickupload',
         # -*- Extra requirements: -*-
         ],
       tests_require=tests_require,

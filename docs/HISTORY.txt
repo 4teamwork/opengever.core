@@ -5,6 +5,11 @@ Changelog
 2.5 (unreleased)
 ----------------
 
+- Added og specific Quickupload Factory, used by the tabbedview quickupload plugin.
+  Issue #549 Abklaerung: Drag and drop
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/549
+  [phgross]
+
 - Replace description field property with a manually property: to fix decoding erros.
   Issue #1420 Plone Version und Dexterity Version auf aktuellste Version heben.
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1420
