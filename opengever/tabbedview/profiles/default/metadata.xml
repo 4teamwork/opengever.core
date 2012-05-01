@@ -3,5 +3,6 @@
     <version>3</version>
     <dependencies>
         <dependency>profile-ftw.tabbedview:extjs</dependency>
+        <dependency>profile-ftw.tabbedview:quickupload</dependency>
     </dependencies>
 </metadata>

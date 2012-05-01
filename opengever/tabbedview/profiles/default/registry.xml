@@ -1,6 +1,16 @@
 <registry>
-    <record interface="ftw.tabbedview.interfaces.ITabbedView"
-            field="extjs_enabled">
-        <value>True</value>
+    <record interface="ftw.tabbedview.interfaces.ITabbedView" field="extjs_enabled">
+      <field type="plone.registry.field.Bool" />
+      <value>True</value>
+    </record>
+
+    <record interface="ftw.tabbedview.interfaces.ITabbedView" field="quickupload_addable_types">
+        <field type="plone.registry.field.List">
+            <value_type type="plone.registry.field.TextLine" />
+        </field>
+        <value>
+            <element>opengever.document.document</element>
+            <element>ftw.mail.mail</element>
+        </value>
     </record>
 </registry>
