@@ -1,5 +1,6 @@
 """Defines some Vies for Inbox"""
 from five import grok
+from ftw.tabbedview.interfaces import ITabbedviewUploadable
 from opengever.inbox import _
 from opengever.mail.interfaces import ISendableDocsContainer
 from opengever.tabbedview.browser.tabs import Tasks, Documents, Trash
@@ -8,7 +9,7 @@ from plone.directives import form
 from zope import schema
 
 
-class IInbox(form.Schema, ISendableDocsContainer):
+class IInbox(form.Schema, ISendableDocsContainer, ITabbedviewUploadable):
     """ Inbox for OpenGever
     """
 
