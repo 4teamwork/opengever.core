@@ -76,6 +76,9 @@ class TestMainDossier(unittest.TestCase):
         filing_no to test, set it to 'test_filing_no'
         otherwise remove the attrs
     - is_special_dossier: if true, that we can add this dossie just in a repos
+    - default_contentmenu_order: The orderposition of items in the content-menu.
+    - default_contentmenu_order_subdossier: The orderposition of items in the
+        contentmenu for subdossiers
     """
     dossier_types = {'opengever.dossier.businesscasedossier': {}}
     layer = OPENGEVER_DOSSIER_INTEGRATION_TESTING
@@ -102,7 +105,21 @@ class TestMainDossier(unittest.TestCase):
                                'comments': u'wir wollen James "Bond" überall',
                                'keywords': ['hallo', 'hugo']}
     is_special_dossier = False
-
+    default_contentmenu_order = ['Document',
+                                 'Document with docucomposer',
+                                 'document_with_template',
+                                 'Task',
+                                 'Add task from template',
+                                 'Subdossier',
+                                 'Add Participant',
+                                ]
+    default_contentmenu_order_subdossier = ['Document',
+                                            'Document with docucomposer',
+                                            'document_with_template',
+                                            'Task',
+                                            'Add task from template',
+                                            'Add Participant',
+                                           ]
 
     # Helpers
     # ***************************************************
@@ -214,6 +231,43 @@ class TestMainDossier(unittest.TestCase):
         types = self.portal.portal_types.objectIds()
         for dossier_type in self.dossier_types:
             self.assertTrue(dossier_type in types)
+
+    def test_contentmenu_order_positions(self):
+        """Check the order of the add-menu for dossiers and subdossiers
+        """
+        for dossier_type in self.dossier_types:
+            d1 = self.create_dossier(dossier_type)
+            d2 = self.create_dossier(dossier_type, subpath=d1.getId())
+
+            # Check action label
+            menu = FactoriesMenu(d1)
+            menu2 = FactoriesMenu(d2)
+
+            menu_items = menu.getMenuItems(d1, d1.REQUEST)
+            menu_items2 = menu2.getMenuItems(d2, d2.REQUEST)
+
+            # For dossiers
+            for i, ordered_item in enumerate(self.default_contentmenu_order):
+
+                menu_item_titles = [item['title'] for item in menu_items]
+
+                # The item must be in the contentmenu
+                self.assertTrue(ordered_item in menu_item_titles)
+
+                # And must be in the correct position
+                self.assertTrue(ordered_item == menu_item_titles[i])
+
+            # For subdossiers
+            for i, ordered_item in enumerate(
+                self.default_contentmenu_order_subdossier):
+
+                menu_item_titles2 = [item['title'] for item in menu_items2]
+
+                # The item must be in the contentmenu
+                self.assertTrue(ordered_item in menu_item_titles2)
+
+                # And must be in the correct position
+                self.assertTrue(ordered_item == menu_item_titles2[i])
 
     def test_workflows_mapped(self):
         """Check wheter the workflow is mapped correctly

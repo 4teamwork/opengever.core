@@ -36,7 +36,7 @@ check variants
 
     >>> browser.getControl(name='form.widgets.IOpenGeverBase.title').value = 'Dossier Test'
     >>> yesterday = datetime.now() - timedelta(days=3)
-    >>> browser.getControl(name='form.widgets.IDossier.end').value = yesterday.strftime('%B %d, %Y')
+    >>> browser.getControl(name='form.widgets.IDossier.end').value = yesterday.strftime('%d.%m.%Y')
     >>> browser.getControl(name='form.buttons.save').click()
     >>> browser.url == '%s/++add++opengever.dossier.businesscasedossier' % portal_url
     True

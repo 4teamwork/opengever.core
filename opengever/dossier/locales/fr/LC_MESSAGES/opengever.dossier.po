@@ -9,8 +9,6 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0\n"
-"Language-Code: en\n"
-"Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: DOMAIN\n"
 
@@ -19,15 +17,15 @@ msgid "${copied_items} Elements were moved successfully"
 msgstr "${copied_items} éléments déplacés avec succès"
 
 msgid "Add Business Case Dossier"
-msgstr "Ajouter dossier d'affaire"
+msgstr "Ajouter un dossier d'affaire"
 
 #: ./opengever/dossier/profiles/default/types/opengever.dossier.businesscasedossier.xml
 msgid "Add Participant"
-msgstr "Ajouter  participation"
+msgstr "Ajouter  une participation"
 
 #: ./opengever/dossier/behaviors/dossier.py:222
 msgid "Add Subdossier"
-msgstr "Ajouter sous-dossier"
+msgstr "Ajouter un sous-dossier"
 
 #: ./opengever/dossier/profiles/default/types/opengever.dossier.businesscasedossier.xml
 msgid "Business Case Dossier"
@@ -35,7 +33,7 @@ msgstr "Dossier d'affaire"
 
 #: ./opengever/dossier/profiles/default/actions.xml
 msgid "Copy documents to remote client"
-msgstr "Copier dans son dossier"
+msgstr "Copier dans son propre dossier"
 
 #: ./opengever/dossier/browser/report.py:60
 msgid "Could not generate the report"
@@ -43,7 +41,7 @@ msgstr "Impossible de générer l'affichage"
 
 #: ./opengever/dossier/profiles/default/actions.xml
 msgid "Delete"
-msgstr "Effacer participation"
+msgstr "Effacer la participation"
 
 #: ./opengever/dossier/move_items.py:82
 msgid "Document ${name} is connected to a Task.                    Please move the Task."
@@ -51,15 +49,15 @@ msgstr "Document ${name} est lié avec une tâche, déplacer la tâche, svp."
 
 #: ./opengever/dossier/behaviors/dossier.py:237
 msgid "Edit Subdossier"
-msgstr "Modifier sous-dossier"
+msgstr "Modifier le sous-dossier"
 
 #: ./opengever/dossier/profiles/default/actions.xml
 msgid "Export selection"
-msgstr "Exporter choix"
+msgstr "Exporter le choix"
 
 #: ./opengever/dossier/move_items.py:131
 msgid "Failed to copy following objects: ${failed_objects}"
-msgstr "Impossible de déplacer éléments suivants: ${failed_objects}"
+msgstr "Impossible de déplacer les éléments suivants: ${failed_objects}"
 
 #: ./opengever/dossier/move_items.py:137
 msgid "Failed to copy following objects: ${failed_objects}                    . Locket via WebDAV"
@@ -67,11 +65,11 @@ msgstr "Impossible de déplacer les éléments suivants vérrouillés par un aut
 
 #: ./opengever/dossier/archive.py:201
 msgid "Filing Prefix is required"
-msgstr "Préfixe du lieu de dépot requis"
+msgstr "Préfixe du lieu de dépôt requis"
 
 #: ./opengever/dossier/move_items.py:178
 msgid "It isn't allowed to add such items there"
-msgstr "Cet élément ne peut être déplacé ici "
+msgstr "Cet élément ne peut être déplacé ici."
 
 #: ./opengever/dossier/profiles/default/actions.xml
 msgid "Move Items"
@@ -87,7 +85,7 @@ msgstr "Pas de modèles disponible"
 
 #: ./opengever/dossier/profiles/default/types/opengever.dossier.projectdossier.xml
 msgid "Project Dossier"
-msgstr "Dossier de projet"
+msgstr "Dossier du projet"
 
 #: ./opengever/dossier/menu.py:25
 msgid "Subdossier"
@@ -95,30 +93,30 @@ msgstr "Sous-dossier"
 
 #: ./opengever/dossier/profiles/default/types/opengever.dossier.templatedossier.xml
 msgid "Template Dossier"
-msgstr "Dossier modèles"
+msgstr "Dossier des modèles"
 
 msgid "Templates"
 msgstr "Modèles"
 
 #: ./opengever/dossier/archive.py:273
 msgid "The Dossier has been resolved"
-msgstr "Dossier terminé avec succès"
+msgstr "Dossier a été fermé avec succès"
 
 #: ./opengever/dossier/archive.py:206
 msgid "The Dossier's end date needs to be younger than the youngest contained object's date"
-msgstr "La date de clôture indiqué doit être plus récente que toutes les dates de clôture des sous-dossiers y compris."
+msgstr "La date de clôture indiquée doit être plus récente que toutes les dates de clôture des sous-dossiers"
 
 #: ./opengever/dossier/archive.py:197
 msgid "The End that is required, also if only closing is selected"
-msgstr "La date de clôture est obligatoire pour l'action 'terminer' "
+msgstr "La date de clôture est obligatoire pour l'action 'fermer' "
 
 #: ./opengever/dossier/archive.py:58
 msgid "The given end date is older than the end date                             of the youngest subdossier(${number})"
-msgstr "La date de clôture indiquée doit être plus récente que toutes les dates de clôture des sous-dossiers y compris. (${number})"
+msgstr "La date de clôture indiquée doit être plus récente que toutes les dates de clôture des sous-dossiers. (${number})"
 
 #: ./opengever/dossier/behaviors/dossier.py:194
 msgid "The start date must be before the end date."
-msgstr "La date de début doit être plus recente que la date de clôture."
+msgstr "La date de début doit être plus récente que la date de clôture."
 
 #: ./opengever/dossier/behaviors/dossier.py:244
 msgid "The start or end date is invalid"
@@ -130,18 +128,18 @@ msgstr "La date de clôture du sous-dossier  '${title}' n'est pas valable,"
 
 #: ./opengever/dossier/base.py:290
 msgid "The subdossier '${title}' needs to be resolved manually."
-msgstr "Le sous-dossier  '${title}' doit d'être terminé manuellement."
+msgstr "Le sous-dossier  '${title}' doit d'être fermé manuellement."
 
 #: ./opengever/dossier/archive.py:114
 msgid "When the Action give filing number is selected,                     all fields are required."
-msgstr "Tous les champs sont requis pour attribuer un numéro d'inventaire"
+msgstr "Tous les champs doivent être remplis pour attribuer un numéro d'inventaire"
 
 #: ./opengever/dossier/move_items.py:161
 msgid "You have not selected any items"
 msgstr "Pas d'élément sélectionné"
 
 msgid "additional_attributes"
-msgstr ""
+msgstr "Attributs supplémentaires"
 
 #. Default: "Add"
 #: ./opengever/dossier/behaviors/participation.py:151
@@ -188,12 +186,12 @@ msgstr "Rôle"
 #. Default: "1. Choose client"
 #: ./opengever/dossier/browser/transport.py:37
 msgid "copy_documents_step_choose_client"
-msgstr "1. Choisir client"
+msgstr "1. Choix du client"
 
 #. Default: "2. Choose dossier"
 #: ./opengever/dossier/browser/transport.py:40
 msgid "copy_documents_step_choose_dossier"
-msgstr "2. Choisir dossier de destination"
+msgstr "2. Chois du dossier de destination"
 
 #. Default: "create document with template"
 #: ./opengever/dossier/templatedossier.py:39
@@ -212,7 +210,7 @@ msgstr "Documents"
 #. Default: "It isn't allowed to add such items there: ${failed_objects}"
 #: ./opengever/dossier/move_items.py:209
 msgid "error_NotInContentTypes ${failed_objects}"
-msgstr "Pas d'objets déplacés. Les objects suivants ne peuvent être inséré dans le classeur choisi: : ${failed_objects}"
+msgstr "Pas d'objet déplacé. Les objets suivants ne peuvent être insérés dans le classeur choisi : ${failed_objects}"
 
 #. Default: "The enddate is required."
 #: ./opengever/dossier/archive.py:42
@@ -238,7 +236,7 @@ msgstr "Action"
 #: ./opengever/dossier/behaviors/dossier.py:116
 #: ./opengever/dossier/browser/report.py:46
 msgid "filing_no"
-msgstr "numéro d'inventaire"
+msgstr "Numéro d'inventaire"
 
 msgid "filing_nr"
 msgstr "Attribuer un numéro d'inventaire"
@@ -247,12 +245,12 @@ msgstr "Attribuer un numéro d'inventaire"
 #: ./opengever/dossier/archive.py:87
 #: ./opengever/dossier/behaviors/dossier.py:106
 msgid "filing_prefix"
-msgstr "Préfixe du classeur"
+msgstr "Préfixe du lieu de dépôt"
 
 #. Default: "filing Year"
 #: ./opengever/dossier/archive.py:99
 msgid "filing_year"
-msgstr "Classeur année"
+msgstr "Année de dépôt"
 
 #. Default: "Archive Dossier"
 #: ./opengever/dossier/archive.py:150
@@ -270,7 +268,7 @@ msgstr ""
 
 #: ./opengever/dossier/behaviors/participation.py:91
 msgid "help_contact"
-msgstr "Choisisez un utilisateur ou un contact."
+msgstr "Choix d'un utilisateur ou un contact."
 
 #: ./opengever/dossier/behaviors/dossier.py:150
 msgid "help_container_location"
@@ -329,7 +327,7 @@ msgstr ""
 
 #: ./opengever/dossier/browser/transport.py:245
 msgid "help_target_dossier"
-msgstr "Choisissez un dossier dans votre service /office / département"
+msgstr "Choix d'un dossier dans votre service"
 
 #: ./opengever/dossier/behaviors/dossier.py:127
 msgid "help_temporary_former_reference_number"
@@ -516,7 +514,7 @@ msgstr "Titre"
 #: ./opengever/dossier/project_templates/byline.pt:28
 #: ./opengever/dossier/viewlets/businesscase_byline.pt:30
 msgid "label_workflow_state"
-msgstr "Etat :"
+msgstr "Etat:"
 
 msgid "newest_documents"
 msgstr "Derniers documents"
@@ -534,19 +532,19 @@ msgstr "Pas de contenu"
 
 #: ./opengever/dossier/base.py:222
 msgid "not all documents and tasks are stored in a subdossier"
-msgstr "Pas de documents et tâches classé dans le sous-dossier"
+msgstr "Pas de document ni de tâche classés dans le sous-dossier"
 
 #: ./opengever/dossier/base.py:228
 msgid "not all documents are checked in"
-msgstr "Pas de documents avec checkin"
+msgstr "Tous les documents n'ont pas le statut checkin"
 
 #: ./opengever/dossier/base.py:234
 msgid "not all task are closed"
-msgstr "Pas de tâches terminées"
+msgstr "Toutes les tâches ne sont pas fermées"
 
 #: ./opengever/dossier/archive.py:74
 msgid "only resolve, set filing no later"
-msgstr "Uniquement terminé (numéro d'inventaire non attribué)"
+msgstr "Uniquement fermé (numéro d'inventaire non attribué)"
 
 msgid "participants"
 msgstr "Participants"
@@ -557,15 +555,15 @@ msgstr "Obligatoire"
 
 #: ./opengever/dossier/archive.py:77
 msgid "resolve and set a new filing no"
-msgstr "Terminer et attribuer un nouveau numéro d'inventaire"
+msgstr "Fermer et attribuer un nouveau numéro d'inventaire"
 
 #: ./opengever/dossier/archive.py:73
 msgid "resolve and set filing no"
-msgstr "Terminer et attribuer un numéro d'inventaire"
+msgstr "Fermer et attribuer un numéro d'inventaire"
 
 #: ./opengever/dossier/archive.py:76
 msgid "resolve and take the existing filing no"
-msgstr "Terminer et utiliser un numéro d'inventaire existant"
+msgstr "Fermer et utiliser un numéro d'inventaire existant"
 
 #: ./opengever/dossier/archive.py:80
 msgid "set a filing no"
@@ -587,7 +585,7 @@ msgstr "Tâches"
 #. Default: "Temporary former reference number"
 #: ./opengever/dossier/behaviors/dossier.py:125
 msgid "temporary_former_reference_number"
-msgstr ""
+msgstr "Ancien numéro de référence temporaire"
 
 #: ./opengever/dossier/archive.py:164
 msgid "the filling number was already set"
@@ -606,15 +604,16 @@ msgstr "Périmé"
 #. Default: "Copy documents to own dossier"
 #: ./opengever/dossier/browser/transport.py:152
 msgid "title_copy_documents_to_dossier"
-msgstr "Copier les documents dans votre dossier"
+msgstr "Copie des documents dans votre dossier"
 
 #. Default: "You are not assigned to another client where you could copy the documents to."
 #: ./opengever/dossier/browser/transport.py:211
 msgid "warning_copy_to_remote_no_client"
-msgstr "Vous ne pouvez envoyer des documents à un autre client/ département/ office, vous êtes rattaché uniquement au client actuel."
+msgstr "Aucun envoi possible de documents à un autre service. Vous êtes uniquement rattaché  au service actuel."
 
 #. Default: "You didn't select any participants."
 #: ./opengever/dossier/behaviors/participation.py:194
 msgid "warning_no_participants_selected"
 msgstr "Vous n'avez sélectionné aucune participation"
+
 

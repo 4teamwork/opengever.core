@@ -2,7 +2,33 @@ Changelog
 =========
 
 
-2.0.3 (unreleased)
+2.0.5 (unreleased)
+------------------
+
+- Adjust tests, because the accessors return utf-8 since the dexerity update.
+  Issue #1420 Plone Version und Dexterity Version auf aktuellste Version heben.
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1420
+  [phgross]
+
+- User get_css_class instead of deprecated method: css_class_from_obj/css_class_from_brain
+  [eschmutz]
+
+- Add ordering for the contentmenu for dossiers and subdossiers
+  [eschmutz]
+
+
+2.0.4 (2012-03-28)
+------------------
+
+- Added filing number maintance view, wich provide some scripts and forms
+  to maintain the different counters.
+  [phgross]
+
+- Change translations
+  [ttschanz]
+
+
+2.0.3 (2012-02-27)
 ------------------
 
 - Added parent-dossier-finder adapter.

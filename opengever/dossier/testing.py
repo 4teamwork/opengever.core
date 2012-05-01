@@ -35,6 +35,7 @@ class DossierFunctionalLayer(PloneSandboxLayer):
         applyProfile(portal, 'opengever.dossier:default')
         applyProfile(portal, 'opengever.document:default')
         applyProfile(portal, 'opengever.task:default')
+        applyProfile(portal, 'opengever.tasktemplates:default')
         applyProfile(portal, 'opengever.mail:default')
         applyProfile(portal, 'opengever.tabbedview:default')
         applyProfile(portal, 'opengever.repository:default')

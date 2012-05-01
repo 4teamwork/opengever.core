@@ -87,3 +87,15 @@ class IDisplayedInOverviewMarker(IDossierMarker):
 
 class IDisplayedInOverview(Interface):
     """Super class for additional dossier behaviors."""
+
+
+class IFilingNumberMaintenance(Interface):
+
+    def print_mapping():
+        """Return the actual filingnumber mapping"""
+
+    def print_filing_numbers():
+        """Return a set of all filingnumbers the are used """
+
+    def print_filing_prefixes():
+        """Reutrns all filing prefixes and their translations"""

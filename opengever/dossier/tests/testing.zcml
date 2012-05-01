@@ -8,16 +8,17 @@
     i18n_domain="opengever.dossier">
 
     <include package="opengever.task" />
+    <include package="opengever.tasktemplates" />
     <include package="opengever.document" />
     <include package="opengever.mail" />
     <include package="opengever.globalindex" />
     <include package="ftw.tabbedview" />
     <include package="opengever.repository" />
     <include package="opengever.dossier" />
-    
+
     <!-- configure a temporary testing DB -->
     <db:engine name="opengever.db"
         url="sqlite:///:memory:" />
     <db:session name="opengever" engine="opengever.db" />
-        
+
 </configure>
