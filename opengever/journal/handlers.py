@@ -43,6 +43,7 @@ from opengever.journal.helper import documents_list_helper
 
 pmf = MessageFactory('plone')
 
+
 def propper_string(value):
     if not value:
         return ''
@@ -56,10 +57,11 @@ def propper_string(value):
 
 def journal_entry_factory(context, action, title,
                           visible=True, comment='', actor=None):
-    portal_state = getMultiAdapter((context, context.REQUEST), name=u'plone_portal_state')
+    portal_state = getMultiAdapter(
+        (context, context.REQUEST), name=u'plone_portal_state')
     if actor is None:
         actor = portal_state.member().getId()
-    comment = comment=='' and get_change_note(context.REQUEST, '') or comment
+    comment = comment == '' and get_change_note(context.REQUEST, '') or comment
     title = propper_string(title)
     action = propper_string(action)
     comment = propper_string(comment)
@@ -75,6 +77,7 @@ def journal_entry_factory(context, action, title,
         }
 
     notify(JournalEntryEvent(**entry))
+
 
 def role_mapping_to_str(context, mapping):
     """Parse the given local_roles mapping to a str,
@@ -92,10 +95,12 @@ def role_mapping_to_str(context, mapping):
         for role in roles:
             if role not in skip_roles:
                 translated_roles.append(
-                    translate(trans_mapping.get(role), context=context.REQUEST))
+                    translate(
+                        trans_mapping.get(role), context=context.REQUEST))
 
         if len(translated_roles):
-            user_roles.append('%s: %s' %(principal, ', '.join(translated_roles)))
+            user_roles.append(
+                '%s: %s' % (principal, ', '.join(translated_roles)))
 
     return '; '.join(user_roles)
 
@@ -118,11 +123,13 @@ def get_repository_root(context):
 
 
 LOCAL_ROLES_AQUISITION_BLOCKED = 'Local roles Aquisition Blocked'
+
+
 @grok.subscribe(IRepositoryFolderSchema, ILocalRolesAcquisitionBlocked)
 def repositoryfolder_local_roles_acquisition_blocked(context, event):
     title = _(u'label_local_roles_acquisition_blocked_at',
               default=u'Local roles aquistion blocked at ${repository}.',
-              mapping={'repository': context.title_or_id(),})
+              mapping={'repository': context.title_or_id(), })
 
     journal_entry_factory(
         get_repository_root(context),
@@ -133,12 +140,14 @@ def repositoryfolder_local_roles_acquisition_blocked(context, event):
 
 
 LOCALROLES_AQUISITION_ACTIVATED = 'Local roles Aquisition Activated'
+
+
 @grok.subscribe(IRepositoryFolderSchema, ILocalRolesAcquisitionActivated)
 def repositoryfolder_local_roles_acquisition_activated(context, event):
 
     title = _(u'label_local_roles_acquisition_activated_at',
               default=u'Local roles aquistion activated at ${repository}.',
-              mapping={'repository': context.title_or_id(),})
+              mapping={'repository': context.title_or_id(), })
 
     journal_entry_factory(
         get_repository_root(context),
@@ -148,14 +157,15 @@ def repositoryfolder_local_roles_acquisition_activated(context, event):
     return
 
 
-LOCAL_ROLES_MODIFIED ='Local roles modified'
+LOCAL_ROLES_MODIFIED = 'Local roles modified'
+
+
 @grok.subscribe(IRepositoryFolderSchema, ILocalRolesModified)
 def repositoryfolder_local_roles_modified(context, event):
 
     title = _(u'label_local_roles_modified_at',
           default=u'Local roles modified at ${repository}.',
-          mapping={'repository': context.title_or_id(),})
-
+          mapping={'repository': context.title_or_id(), })
 
     journal_entry_factory(
         get_repository_root(context),
@@ -173,32 +183,39 @@ DOSSIER_ADDED_ACTION = 'Dossier added'
 
 @grok.subscribe(IDossierMarker, IObjectAddedEvent)
 def dossier_added(context, event):
-    title = _(u'label_dossier_added', default=u'Dossier added: ${title}', mapping={
-            'title': context.title_or_id(),
-            })
+    title = _(
+        u'label_dossier_added',
+        default=u'Dossier added: ${title}',
+        mapping={'title': context.title_or_id(), })
     journal_entry_factory(context, DOSSIER_ADDED_ACTION, title)
     return
 
 
 DOSSIER_MODIIFED_ACTION = 'Dossier modified'
+
+
 @grok.subscribe(IDossierMarker, IObjectModifiedEvent)
 def dossier_modified(context, event):
-    title = _(u'label_dossier_modified', default=u'Dossier modified: ${title}', mapping={
-            'title': context.title_or_id(),
-    })
+    title = _(
+        u'label_dossier_modified',
+        default=u'Dossier modified: ${title}',
+        mapping={'title': context.title_or_id(), })
     # XXX dirty
     try:
-        # if we delete the working copy, we get a aq_based object and don't wanna
+        # if we delete the working copy,
+        # we get a aq_based object and don't wanna
         # make a journal entry
         context.portal_types
     except AttributeError:
         return
-    journal_entry_factory(context, DOSSIER_MODIIFED_ACTION, title, visible=False)
+    journal_entry_factory(
+        context, DOSSIER_MODIIFED_ACTION, title, visible=False)
     return
 
 
-
 DOSSIER_STATE_CHANGED = 'Dossier state changed'
+
+
 @grok.subscribe(IDossierMarker, IActionSucceededEvent)
 def dossier_state_changed(context, event):
     skip_transactions = [
@@ -206,12 +223,14 @@ def dossier_state_changed(context, event):
     if event.action in skip_transactions:
         return
     newstate = event.workflow.transitions.get(event.action).new_state_id
-    title = pmf( u'Dossier state changed to %s' % newstate )
+    title = pmf(u'Dossier state changed to %s' % newstate)
     journal_entry_factory(context, DOSSIER_STATE_CHANGED, title)
     return
 
 
 LOCAL_ROLES_AQUISITION_BLOCKED = 'Local roles Aquisition Blocked'
+
+
 @grok.subscribe(IDossierMarker, ILocalRolesAcquisitionBlocked)
 def dossier_local_roles_acquisition_blocked(context, event):
 
@@ -225,6 +244,8 @@ def dossier_local_roles_acquisition_blocked(context, event):
 
 
 LOCAL_ROLES_AQUISITION_ACTIVATED = 'Local roles Aquisition Activated'
+
+
 @grok.subscribe(IDossierMarker, ILocalRolesAcquisitionActivated)
 def dossier_local_roles_acquisition_activated(context, event):
 
@@ -237,7 +258,9 @@ def dossier_local_roles_acquisition_activated(context, event):
     return
 
 
-LOCAL_ROLES_MODIFIED ='Local roles modified'
+LOCAL_ROLES_MODIFIED = 'Local roles modified'
+
+
 @grok.subscribe(IDossierMarker, ILocalRolesModified)
 def dossier_local_roles_modified(context, event):
 
@@ -250,25 +273,27 @@ def dossier_local_roles_modified(context, event):
 
     return
 
-
-
 # ----------------------- DOCUMENT -----------------------
-
 DOCUMENT_ADDED_ACTION = 'Document added'
+
+
 @grok.subscribe(IDocumentSchema, IObjectAddedEvent)
 def document_added(context, event):
-    title = _(u'label_document_added', default=u'Document added: ${title}', mapping={
-            'title' : context.title_or_id(),
-            })
+    title = _(
+        u'label_document_added',
+        default=u'Document added: ${title}',
+        mapping={'title': context.title_or_id(), })
     # journal_entry for document:
     journal_entry_factory(context, DOCUMENT_ADDED_ACTION, title)
     # journal entry for parent (usually dossier)
-    journal_entry_factory(context.aq_inner.aq_parent, DOCUMENT_ADDED_ACTION, title)
+    journal_entry_factory(
+        context.aq_inner.aq_parent, DOCUMENT_ADDED_ACTION, title)
     return
 
 
-
 DOCUMENT_MODIIFED_ACTION = 'Document modified'
+
+
 @grok.subscribe(IDocumentSchema, IObjectModifiedEvent)
 def document_modified(context, event):
     # we need to distinguish between "metadata modified"
@@ -314,8 +339,9 @@ def document_modified(context, event):
                           DOCUMENT_MODIIFED_ACTION, parent_title)
 
 
-
 DOCUMENT_STATE_CHANGED = 'Document state changed'
+
+
 @grok.subscribe(IDocumentSchema, IActionSucceededEvent)
 def document_state_changed(context, event):
     skip_transactions = [
@@ -325,34 +351,40 @@ def document_state_changed(context, event):
     if event.action in skip_transactions:
         return
     newstate = event.workflow.transitions.get(event.action).new_state_id
-    title = pmf( u'Document state changed to %s' % newstate )
+    title = pmf(u'Document state changed to %s' % newstate)
     journal_entry_factory(context, DOCUMENT_STATE_CHANGED, title)
     return
 
 
 DOCUMENT_CHECKED_OUT = 'Document checked out'
+
+
 @grok.subscribe(IDocumentSchema, IObjectCheckedOutEvent)
 def document_checked_out(context, event):
     user_comment = event.comment
     title = _(u'label_document_checkout',
-              default = u'Document checked out',)
+              default=u'Document checked out', )
     journal_entry_factory(context, DOCUMENT_CHECKED_OUT, title,
                           comment=user_comment)
     return
 
 
 DOCUMENT_CHECKED_IN = 'Document checked in'
+
+
 @grok.subscribe(IDocumentSchema, IObjectCheckedInEvent)
 def document_checked_in(context, event):
     user_comment = event.comment
     title = _(u'label_document_checkin',
-              default = u'Document checked in',)
+              default=u'Document checked in',)
     journal_entry_factory(context, DOCUMENT_CHECKED_IN, title,
                           comment=user_comment)
     return
 
 
 DOCUMENT_CHECKOUT_CANCEL = 'Canceled document checkout'
+
+
 @grok.subscribe(IDocumentSchema, IObjectCheckoutCanceledEvent)
 def document_checkout_canceled(context, event):
     title = _(u'label_document_checkout_cancel',
@@ -361,6 +393,8 @@ def document_checkout_canceled(context, event):
 
 
 DOCUMENT_FILE_REVERTED = 'Reverted document file'
+
+
 @grok.subscribe(IDocumentSchema, IObjectRevertedToVersion)
 def document_file_reverted(context, event):
     try:
@@ -376,7 +410,10 @@ def document_file_reverted(context, event):
               mapping=dict(version_id=event.version_id))
     journal_entry_factory(context, DOCUMENT_FILE_REVERTED, title)
 
+
 DOCUMENT_SENT = 'Document Sent'
+
+
 @grok.subscribe(IDexterityContent, IDocumentSent)
 def document_sent(context, event):
     id_util = getUtility(IIntIds)
@@ -389,70 +426,95 @@ def document_sent(context, event):
         message = event.message
         if isinstance(receiver, list):
             receiver = ', '.join(receiver)
-        objs.append({'intid':intid,'title':title})
+        objs.append({'intid': intid, 'title': title})
 
     title = _(u'label_document_sent',
               default=u'Document sent by Mail: ${subject}',
-              mapping={
-            'subject' : event.subject.decode('utf-8'),
-            })
+              mapping={'subject': event.subject.decode('utf-8'), })
 
-    comment = translate(_(u'label_document_sent_comment',
-                default=u'Attachments: ${documents} | Receivers: ${receiver} | Message: ${message}',
-                mapping={
+    comment = translate(
+        _(u'label_document_sent_comment',
+          default=u'Attachments: ${documents} | Receivers: ${receiver} | ' \
+              ' Message: ${message}',
+          mapping={
                 'documents': documents_list_helper(context, objs),
                 'receiver': receiver.decode('utf-8'),
                 'message': message.decode('utf-8'),
                 }), context=context.REQUEST)
-    journal_entry_factory(context, DOCUMENT_SENT, title, visible=True, comment=comment)
+    journal_entry_factory(
+        context, DOCUMENT_SENT, title, visible=True, comment=comment)
 
 
 # ----------------------- TASK -----------------------
 
 TASK_ADDED_EVENT = 'Task added'
+
+
 @grok.subscribe(ITask, IObjectAddedEvent)
 def task_added(context, event):
-    title = _(u'label_task_added', default=u'Task added: ${title}', mapping={
-            'title' : context.title_or_id(),
+    title = _(
+        u'label_task_added',
+        default=u'Task added: ${title}',
+        mapping={
+            'title': context.title_or_id(),
             })
 
     # journal entry for parent (usually dossier)
     journal_entry_factory(context.aq_inner.aq_parent, TASK_ADDED_EVENT, title)
     return
 
+
 TASK_MODIIFED_ACTION = 'Task modified'
+
+
 @grok.subscribe(ITask, IObjectModifiedEvent)
 def task_modified(context, event):
-    title = _(u'label_task_modified', default=u'Task modified: ${title}', mapping={
-            'title': context.title_or_id(),
-    })
+    title = _(
+        u'label_task_modified',
+        default=u'Task modified: ${title}',
+        mapping={'title': context.title_or_id(), })
     # XXX dirty
     try:
-        # if we delete the working copy, we get a aq_based object and don't wanna
+        # if we delete the working copy,
+        # we get a aq_based object and don't wanna
         # make a journal entry
         context.portal_types
     except AttributeError:
         return
 
-    journal_entry_factory(context.aq_inner.aq_parent, TASK_MODIIFED_ACTION, title)
+    journal_entry_factory(
+        context.aq_inner.aq_parent, TASK_MODIIFED_ACTION, title)
     return
 
 
 OBJECT_MOVE_TO_TRASH = 'Object moved to trash'
+
+
 @grok.subscribe(IJournalizable, ITrashedEvent)
 def document_trashed(context, event):
-    title = _(u'label_to_trash', default = u'Object moved to trash: ${title}', mapping={
-            'title':context.title_or_id(),
+    title = _(
+        u'label_to_trash',
+        default=u'Object moved to trash: ${title}',
+        mapping={
+            'title': context.title_or_id(),
             })
+
     journal_entry_factory(context, OBJECT_MOVE_TO_TRASH, title)
-    journal_entry_factory(context.aq_inner.aq_parent, OBJECT_MOVE_TO_TRASH, title)
+    journal_entry_factory(
+        context.aq_inner.aq_parent, OBJECT_MOVE_TO_TRASH, title)
     return
 
+
 OBJECT_RESTORE = 'Object restore'
+
+
 @grok.subscribe(IJournalizable, IUntrashedEvent)
 def document_untrashed(context, event):
-    title = _(u'label_restore', default = u'Object restore: ${title}', mapping={
-            'title':context.title_or_id(),
+    title = _(
+        u'label_restore',
+        default=u'Object restore: ${title}',
+        mapping={
+            'title': context.title_or_id(),
             })
     journal_entry_factory(context, OBJECT_RESTORE, title)
     journal_entry_factory(context.aq_inner.aq_parent, OBJECT_RESTORE, title)
@@ -463,15 +525,17 @@ def document_untrashed(context, event):
 
 
 PARTICIPANT_ADDED = 'Participant added'
+
+
 @grok.subscribe(IDossierMarker, IParticipationCreated)
 def participation_created(context, event):
     title = _(u'label_participant_added',
               default=u'Participant added: ${contact} with '
               'roles ${roles}',
               mapping={
-            'contact' : readable_ogds_author(event.participant,
+            'contact': readable_ogds_author(event.participant,
                                              event.participant.contact),
-            'roles' : role_list_helper(event.participant,
+            'roles': role_list_helper(event.participant,
                                        event.participant.roles),
             })
 
@@ -479,13 +543,17 @@ def participation_created(context, event):
 
 
 PARTICIPANT_REMOVED = 'Participant removed'
+
+
 @grok.subscribe(IDossierMarker, IParticipationRemoved)
 def participation_removed(context, event):
-    title = _(u'label_participant_removed',
-              default=u'Participant removed: ${contact}',
-              mapping={
-            'contact' : readable_ogds_author(event.participant,
-                                             event.participant.contact),
+    title = _(
+        u'label_participant_removed',
+        default=u'Participant removed: ${contact}',
+        mapping={
+            'contact': readable_ogds_author(
+                event.participant,
+                event.participant.contact),
             })
 
     journal_entry_factory(context, PARTICIPANT_REMOVED, title)
@@ -495,23 +563,25 @@ def participation_removed(context, event):
 
 
 MAIL_ADDED_EVENT = 'Mail added'
+
+
 @grok.subscribe(IMail, IObjectAddedEvent)
 def mail_added(context, event):
     title = _(u'label_mail_added',
               default=u'Mail added: ${title}',
               mapping={
-              'title' : context.title_or_id()
+              'title': context.title_or_id()
               })
 
     journal_entry_factory(context.aq_inner.aq_parent, MAIL_ADDED_EVENT, title)
     return
 
-
-
 #----------------------------Verschieben-----------------------------------
 
 
 OBJECT_MOVED_EVENT = 'Object moved'
+
+
 @grok.subscribe(IDexterityContent, IObjectMovedEvent)
 def object_moved(context, event):
     title = _(u'label_object_moved',
@@ -519,11 +589,15 @@ def object_moved(context, event):
                 mapping={
                 'title': context.title_or_id()
                 })
-    journal_entry_factory(context.aq_inner.aq_parent, OBJECT_MOVED_EVENT, title)
+    journal_entry_factory(
+        context.aq_inner.aq_parent, OBJECT_MOVED_EVENT, title)
     return
 
+
 OBJECT_WILL_BE_MOVED_EVENT = 'Object cut'
-@grok.subscribe(IDexterityContent,IObjectWillBeMovedEvent)
+
+
+@grok.subscribe(IDexterityContent, IObjectWillBeMovedEvent)
 def object_will_be_moved(context, event):
     if not IObjectWillBeAddedEvent.providedBy(event):
         title = _(u'label_object_cut',
@@ -532,5 +606,6 @@ def object_will_be_moved(context, event):
                     'title': context.title_or_id()
                     })
 
-        journal_entry_factory(context.aq_inner.aq_parent, OBJECT_WILL_BE_MOVED_EVENT, title)
+        journal_entry_factory(
+            context.aq_inner.aq_parent, OBJECT_WILL_BE_MOVED_EVENT, title)
     return
