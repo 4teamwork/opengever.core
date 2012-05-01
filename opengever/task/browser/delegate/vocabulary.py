@@ -32,7 +32,7 @@ def attachable_documents_vocabulary(context):
         key = str(relation.to_id)
         # check if the task doesn't contain the related document allready
         if key in ids:
-            continue;
+            continue
         label = relation.to_object.Title()
         terms.append(SimpleVocabulary.createTerm(key, key, label))
 

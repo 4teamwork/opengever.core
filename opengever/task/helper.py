@@ -4,14 +4,15 @@ from plone.memoize import ram
 from zope.app.component.hooks import getSite
 
 
-@ram.cache(lambda m,i,value: value)
+@ram.cache(lambda m, i, value: value)
 def task_type_helper(item, value):
     """Translate the task type with the vdex vocabulary, which provides
     its own translations stored in the vdex files.
     """
     portal = getSite()
     if value == 'forwarding_task_type':
-        return portal.translate(_(u'forwarding_task_type', default=u'Forwarding'))
+        return portal.translate(
+            _(u'forwarding_task_type', default=u'Forwarding'))
 
     voc = getTaskTypeVocabulary(portal)
     try:
@@ -30,4 +31,3 @@ def path_checkbox(item, value):
         path = '/'.join(item.getPhysicalPath())
         title = item.Title()
     return '<input type="checkbox" class="noborder selectable" name="paths:list" id="%s" value="%s" alt="Select %s" title="Select %s" />' % (item.id, path, title, title)
-

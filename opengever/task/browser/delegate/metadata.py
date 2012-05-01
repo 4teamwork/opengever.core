@@ -45,6 +45,7 @@ def title_default(data):
     # Use the title of the task (context) as default.
     return data.context.title
 
+
 @form.default_value(field=IUpdateMetadata['deadline'])
 def deadline_default(data):
     return data.context.deadline
