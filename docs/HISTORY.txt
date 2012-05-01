@@ -5,6 +5,11 @@ Changelog
 2.0.5 (unreleased)
 ------------------
 
+- Activate tabbedview quickupload plugin for dossiers.
+  Issue #549 Abklaerung: Drag and drop
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/549
+  [phgross]
+
 - Adjust tests, because the accessors return utf-8 since the dexerity update.
   Issue #1420 Plone Version und Dexterity Version auf aktuellste Version heben.
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1420
