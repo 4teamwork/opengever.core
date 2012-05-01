@@ -2,10 +2,18 @@ Changelog
 =========
 
 
-2.1.2 (unreleased)
+2.1.3 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Removed reset_grid_state functionality, because it's now part of the ftw.tabbedview.
+  [phgross]
+
+
+2.1.2 (2012-03-28)
+------------------
+
+- Add and change translations
+  [ttschanz]
 
 
 2.1.1 (2012-02-28)

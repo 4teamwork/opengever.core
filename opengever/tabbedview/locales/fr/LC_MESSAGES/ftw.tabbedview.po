@@ -13,23 +13,23 @@ msgstr ""
 "Domain: DOMAIN\n"
 
 #: ./opengever/tabbedview/browser/selection_tasks.pt:7
-msgid "All visible entries chosen <a href="#">x</a>"
+msgid "All visible entries chosen <a href=\"#\">x</a>"
 msgstr ""
 
 msgid "By Area"
-msgstr ""
+msgstr "Domaine"
 
 msgid "By Responsible Manager"
-msgstr ""
+msgstr "Responsable"
 
 msgid "By Severity"
-msgstr ""
+msgstr "Niveau d'entrée"
 
 msgid "By State"
-msgstr ""
+msgstr "Etat"
 
 msgid "By Target Release"
-msgstr ""
+msgstr "Nouvelle version cible"
 
 #: ./opengever/tabbedview/browser/selection_tasks.pt:2
 msgid "Choose:"
@@ -37,30 +37,30 @@ msgstr "Choisir"
 
 #: ./opengever/tabbedview/browser/batching.pt:66
 msgid "Hits per site"
-msgstr "Hits par site"
+msgstr "Résultats par site"
 
 msgid "Month"
-msgstr ""
+msgstr "Mois"
 
 #: ./opengever/tabbedview/browser/selection_tasks.pt:7
 msgid "Show all in this Folder"
 msgstr "Afficher tous dans ce classeur"
 
 msgid "accounting_overview"
-msgstr ""
+msgstr "Sommaire"
 
 #: ./opengever/tabbedview/browser/selection_tasks.pt:4
 msgid "all (${amount})"
 msgstr "Tous"
 
 msgid "all_entries"
-msgstr ""
+msgstr "Toutes les entrées"
 
 msgid "all_issues"
-msgstr ""
+msgstr "Tous les tickets"
 
 msgid "archive"
-msgstr ""
+msgstr "Archives"
 
 msgid "assigned_forwardings"
 msgstr "Réception"
@@ -69,13 +69,13 @@ msgid "assigned_tasks"
 msgstr "Tâches d'un autre client"
 
 msgid "assignedtasks"
-msgstr ""
+msgstr "Tâches attribuées"
 
 msgid "billable"
-msgstr ""
+msgstr "Heures à facturer"
 
 msgid "changes"
-msgstr ""
+msgstr "Dernières modifications"
 
 #. Default: "Client"
 #: ./opengever/tabbedview/browser/tabs.py:354
@@ -159,13 +159,13 @@ msgid "column_title"
 msgstr "Titre"
 
 msgid "contacts"
-msgstr ""
+msgstr "Contacts"
 
 #. Default: "Dossier"
 #: ./opengever/tabbedview/browser/tabs.py:359
 #: ./opengever/tabbedview/browser/tasklisting.py:99
 msgid "containing_dossier"
-msgstr ""
+msgstr "Dossier"
 
 msgid "documents"
 msgstr "Documents"
@@ -182,46 +182,46 @@ msgid "filing_number"
 msgstr "Numéro d'inventaire"
 
 msgid "folders"
-msgstr ""
+msgstr "Classeur"
 
 msgid "generally"
-msgstr ""
+msgstr "En général"
 
 msgid "getAccount"
-msgstr ""
+msgstr "Centre de coûts"
 
 msgid "getBillable"
-msgstr ""
+msgstr "A facturer"
 
 msgid "getEffectiveHours"
-msgstr ""
+msgstr "Heures effectuées"
 
 msgid "getEstimatedHours"
-msgstr ""
+msgstr "Heures estimées"
 
 msgid "getHours"
-msgstr ""
+msgstr "Effectué"
 
 msgid "getResponsible"
-msgstr ""
+msgstr "Validation"
 
 msgid "getResponsibleManager"
-msgstr ""
+msgstr "Responsabilité"
 
 msgid "given_tasks"
-msgstr ""
+msgstr "Acheminement / Tâches attribuées"
 
 msgid "info"
 msgstr "Information"
 
 msgid "issued_issues"
-msgstr ""
+msgstr "Mes charges"
 
 msgid "journal"
 msgstr "Historique"
 
 msgid "label_account"
-msgstr ""
+msgstr "Centre de coûts"
 
 #. Default: "Active"
 #: ./opengever/tabbedview/browser/users.py:95
@@ -271,12 +271,12 @@ msgstr "Date du document"
 #. Default: "Responsible"
 #: ./opengever/tabbedview/browser/tabs.py:217
 msgid "label_dossier_responsible"
-msgstr ""
+msgstr "Responsable"
 
 #. Default: "End"
 #: ./opengever/tabbedview/browser/tabs.py:226
 msgid "label_end"
-msgstr "Responsable"
+msgstr "Fin"
 
 #. Default: "issued at"
 #: ./opengever/tabbedview/browser/tabs.py:350
@@ -361,13 +361,13 @@ msgid "label_userstab_userid"
 msgstr "N° d'utilisateur"
 
 msgid "my_issues"
-msgstr ""
+msgstr "Mes tickets"
 
 msgid "mydocuments"
-msgstr ""
+msgstr "Mes documents"
 
 msgid "mydossiers"
-msgstr ""
+msgstr "Mes dossiers"
 
 msgid "myissuedtasks"
 msgstr "Tâches attibuées"
@@ -386,7 +386,7 @@ msgid "ogds-cp-clients"
 msgstr "Client"
 
 msgid "open_issues"
-msgstr ""
+msgstr "Tickets disponibles"
 
 msgid "overview"
 msgstr "Sommaire"
@@ -395,10 +395,10 @@ msgid "participants"
 msgstr "Participants"
 
 msgid "process"
-msgstr ""
+msgstr "Avancement"
 
 msgid "reports"
-msgstr ""
+msgstr "Rapports de travail"
 
 #. Default: "Sequence Number"
 #: ./opengever/tabbedview/browser/tabs.py:362
@@ -412,13 +412,13 @@ msgid "tasks"
 msgstr "Tâches"
 
 msgid "tickets"
-msgstr ""
+msgstr "Tickets"
 
 msgid "tracker_info"
-msgstr ""
+msgstr "Info"
 
 msgid "tracker_overview"
-msgstr ""
+msgstr "Sommaire"
 
 msgid "trash"
 msgstr "Corbeille"
