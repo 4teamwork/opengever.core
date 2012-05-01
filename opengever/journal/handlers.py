@@ -434,7 +434,7 @@ def document_sent(context, event):
 
     comment = translate(
         _(u'label_document_sent_comment',
-          default=u'Attachments: ${documents} | Receivers: ${receiver} | ' \
+          default=u'Attachments: ${documents} | Receivers: ${receiver} |' \
               ' Message: ${message}',
           mapping={
                 'documents': documents_list_helper(context, objs),
