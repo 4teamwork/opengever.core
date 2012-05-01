@@ -384,7 +384,7 @@ def document_sent(context, event):
 
     for intid in event.intids:
         obj = id_util.getObject(intid)
-        title = obj.Title()
+        title = obj.Title().decode('utf-8')
         receiver = event.receiver
         message = event.message
         if isinstance(receiver, list):

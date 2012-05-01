@@ -5,8 +5,10 @@ Changelog
 2.0.3 (unreleased)
 ------------------
 
-- Nothing changed yet.
-
+- Adjust encoding of accessor values, because they changed since the dexterity update.
+  Issue #1420 Plone Version und Dexterity Version auf aktuellste Version heben.
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1420
+  [phgross]
 
 2.0.2 (2012-03-28)
 ------------------
