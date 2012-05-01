@@ -5,6 +5,11 @@ Changelog
 2.2 (unreleased)
 ----------------
 
+- Adjust encoding of title accessor values in tests. Since the dexterity update it returns always utf-8.
+  Issue #1420 Plone Version und Dexterity Version auf aktuellste Version heben.
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1420
+  [phgross]
+
 - User get_css_class instead of deprecated method: css_class_from_obj/css_class_from_brain
   [eschmutz]
 

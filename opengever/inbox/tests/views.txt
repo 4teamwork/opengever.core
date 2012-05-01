@@ -52,7 +52,7 @@ create content:
 test documents():
 =================
     >>> [doc['Title'] for doc in view.documents()]
-    [u'Document in inbox', u'Another document in inbox']
+    ['Document in inbox', 'Another document in inbox']
 
 test assigned_tasks():
 ======================
