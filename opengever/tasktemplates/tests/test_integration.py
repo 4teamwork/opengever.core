@@ -181,8 +181,9 @@ class TestTaskTemplatesIntegration(unittest.TestCase):
         self.assertEquals(task.Title, 'TaskTemplateFolder 1')
         self.assertEquals(task.responsible, mtool.getAuthenticatedMember().getId())
         self.assertEquals(
-            task.deadline.date(),
-            (datetime.today() + timedelta(template1.deadline + 5 )).date())
+            task.deadline,
+            (datetime.today() + timedelta(template1.deadline + 5 )).date()
+            )
         self.assertEquals(task.getObject().text, None)
         self.assertEquals(task.issuer, mtool.getAuthenticatedMember().getId())
 
@@ -198,7 +199,7 @@ class TestTaskTemplatesIntegration(unittest.TestCase):
         self.assertTrue(
             subtask.responsible == mtool.getAuthenticatedMember().getId())
         self.assertTrue(
-            subtask.deadline.date() == (datetime.today() + timedelta(
+            subtask.deadline == (datetime.today() + timedelta(
                 template1.deadline)).date())
         self.assertTrue(subtask.getObject().text == template1.text)
         self.assertTrue(subtask.issuer == IDossier(dossier).responsible)
