@@ -5,6 +5,13 @@ Changelog
 2.0.5 (unreleased)
 ------------------
 
+- Adjust tests, because the accessors return utf-8 since the dexerity update.
+  Issue #1420 Plone Version und Dexterity Version auf aktuellste Version heben.
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1420
+  [phgross]
+
+  [phgross]
+
 - User get_css_class instead of deprecated method: css_class_from_obj/css_class_from_brain
   [eschmutz]
 

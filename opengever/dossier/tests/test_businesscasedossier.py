@@ -40,5 +40,5 @@ class TestBusinessCaseDossierIntegration(unittest.TestCase):
         d1 = createContentInContainer(
             portal, 'opengever.dossier.businesscasedossier',
             title=u'Test title', description=u'Lorem ipsum')
-        self.assertEquals(d1.Title(), u'Test title')
-        self.assertEquals(d1.Description(), u'Lorem ipsum')
+        self.assertEquals(d1.Title(), 'Test title')
+        self.assertEquals(d1.Description(), 'Lorem ipsum')

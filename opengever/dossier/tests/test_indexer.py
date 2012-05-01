@@ -43,9 +43,13 @@ class Testindexers(unittest.TestCase):
         document = subdossier.get('document')
         document.reindexObject()
 
-        self.assertEquals(obj2brain(subdossier).containing_dossier,u'Testd\xf6ssier XY')
+        self.assertEquals(
+            obj2brain(subdossier).containing_dossier,
+            'Testd\xc3\xb6ssier XY')
 
-        self.assertEquals(obj2brain(document).containing_dossier, u'Testd\xf6ssier XY')
+        self.assertEquals(
+            obj2brain(document).containing_dossier,
+            'Testd\xc3\xb6ssier XY')
 
         #check subscriber for catch editing maindossier titel
         IOpenGeverBase(dossier).title=u"Testd\xf6ssier CHANGED"
@@ -53,8 +57,12 @@ class Testindexers(unittest.TestCase):
         notify(
             ObjectModifiedEvent(dossier, Attributes(Interface, 'IOpenGeverBase.title')))
 
-        self.assertEquals(obj2brain(subdossier).containing_dossier,u'Testd\xf6ssier CHANGED')
-        self.assertEquals(obj2brain(document).containing_dossier, u'Testd\xf6ssier CHANGED')
+        self.assertEquals(
+            obj2brain(subdossier).containing_dossier,
+            'Testd\xc3\xb6ssier CHANGED')
+        self.assertEquals(
+            obj2brain(document).containing_dossier,
+            'Testd\xc3\xb6ssier CHANGED')
 
         transaction.commit()
 
@@ -71,13 +79,17 @@ class Testindexers(unittest.TestCase):
         portal = self.layer['portal']
         subdossier = portal.get('dossier').get('subdossier')
         self.assertEquals(obj2brain(subdossier).containing_subdossier, '')
-        self.assertEquals(obj2brain(subdossier.get('document')).containing_subdossier, u'Subd\xf6ssier XY')
+        self.assertEquals(
+            obj2brain(subdossier.get('document')).containing_subdossier,
+            'Subd\xc3\xb6ssier XY')
 
         #check subscriber for catch editing subdossier titel
-        IOpenGeverBase(subdossier).title=u"Subd\xf6ssier CHANGED"
+        IOpenGeverBase(subdossier).title=u'Subd\xf6ssier CHANGED'
         subdossier.reindexObject()
         notify(
             ObjectModifiedEvent(subdossier, Attributes(Interface, 'IOpenGeverBase.title')))
 
         self.assertEquals(obj2brain(subdossier).containing_subdossier,u'')
-        self.assertEquals(obj2brain(subdossier.get('document')).containing_subdossier, u'Subd\xf6ssier CHANGED')
+        self.assertEquals(
+            obj2brain(subdossier.get('document')).containing_subdossier,
+            'Subd\xc3\xb6ssier CHANGED')
