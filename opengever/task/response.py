@@ -226,11 +226,11 @@ class AddForm(form.AddForm, AutoExtensibleForm):
     def label(self):
         transition = self.request.get('form.widgets.transition',
                                       self.request.get('transition', None))
-        label = [self.context.Title()]
+        label = [self.context.Title().decode('utf-8')]
         if transition:
             label.append(translate(transition, domain='plone',
                                    context=self.request))
-        return ': '.join(label)
+        return u': '.join(label)
 
     def updateActions(self):
         super(AddForm, self).updateActions()

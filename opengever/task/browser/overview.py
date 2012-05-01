@@ -304,7 +304,7 @@ class Overview(DisplayForm, OpengeverTab):
                 item.absolute_url(),
                 breadcrumb_titles,
                 self.get_css_class(item),
-                item.Title().encode('utf-8'),
+                item.Title(),
             )
         inner_html = '%s <span class="discreet">(%s)</span>' % (
             task_html, info_html)

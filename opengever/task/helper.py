@@ -28,6 +28,6 @@ def path_checkbox(item, value):
         title = item.Title
     except AttributeError:
         path = '/'.join(item.getPhysicalPath())
-        title = item.Title().encode('utf-8')
+        title = item.Title()
     return '<input type="checkbox" class="noborder selectable" name="paths:list" id="%s" value="%s" alt="Select %s" title="Select %s" />' % (item.id, path, title, title)
 
