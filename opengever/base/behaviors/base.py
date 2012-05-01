@@ -44,6 +44,11 @@ class OpenGeverBase( metadata.MetadataBase ):
     title = metadata.DCFieldProperty( metadata.IBasic['title'],
                                       get_name = 'title',
                                       set_name = 'setTitle')
-    description = metadata.DCFieldProperty( metadata.IBasic['description'],
-                                            get_name = 'Description',
-                                            set_name = 'setDescription')
+
+    def _get_description(self):
+        return self.context.description
+    def _set_description(self, value):
+        if isinstance(value, str):
+            raise ValueError('Description must be unicode.')
+        self.context.description = value
+    description = property(_get_description, _set_description)

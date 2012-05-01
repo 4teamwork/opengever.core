@@ -5,6 +5,11 @@ Changelog
 2.5 (unreleased)
 ----------------
 
+- Replace description field property with a manually property: to fix decoding erros.
+  Issue #1420 Plone Version und Dexterity Version auf aktuellste Version heben.
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1420
+  [phgross]
+
 - Remove deprecated methods: css_class_from_obj/css_class_from_brain
   [eschmutz]
 
