@@ -93,7 +93,7 @@ class TrashView(grok.View):
                     msg = _(
                         u'could not trash the object ${obj}, ' \
                         'it is already trashed',
-                        mapping={'obj': obj.Title()})
+                        mapping={'obj': obj.Title().decode('utf-8')})
                     IStatusMessage(self.request).addStatusMessage(
                         msg, type='error')
                     continue
@@ -101,7 +101,7 @@ class TrashView(grok.View):
                 if brains[0].checked_out:
                     msg = _(
                         u'could not trash the object ${obj}, it is checked out',
-                        mapping={'obj': obj.Title()})
+                        mapping={'obj': obj.Title().decode('utf-8')})
                     IStatusMessage(self.request).addStatusMessage(
                         msg, type='error')
                     continue
@@ -110,7 +110,7 @@ class TrashView(grok.View):
                 trasher.trash()
                 trashed = True
                 msg = _(u'the object ${obj} trashed',
-                    mapping={'obj': obj.Title()})
+                    mapping={'obj': obj.Title().decode('utf-8')})
                 IStatusMessage(self.request).addStatusMessage(
                     msg, type='info')
 

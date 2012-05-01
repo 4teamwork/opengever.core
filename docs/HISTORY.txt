@@ -5,7 +5,12 @@ Changelog
 2.0.3 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Adjust the use of title accessors, because the deconding changed with the dexerity update.
+  Issue #1420 Plone Version und Dexterity Version auf aktuellste Version heben.
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1420
+  [phgross]
+
+  [phgross]
 
 
 2.0.2 (2012-03-28)

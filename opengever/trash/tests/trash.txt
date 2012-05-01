@@ -50,7 +50,7 @@ create a first item
     >>> utem1.restrictedTraverse('trashed')()
     'http://nohost/plone/utem1#trash'
 
-    
+
 the we check the interfaces
 
     >>> ITrashed.providedBy(utem1)
@@ -78,4 +78,3 @@ and the catalog
     >>> portal.portal_catalog(portal_type="TrashTestFTI", trashed=True)
     []
 
-    
