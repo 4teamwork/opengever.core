@@ -5,6 +5,7 @@ from collective.elephantvocabulary import wrap_vocabulary
 from datetime import datetime
 from five import grok
 from ftw.datepicker.widget import DatePickerFieldWidget
+from ftw.tabbedview.interfaces import ITabbedviewUploadable
 from opengever.base.source import RepositoryPathSourceBinder
 from opengever.dossier import _
 from opengever.dossier.widget import referenceNumberWidgetFactory
@@ -21,7 +22,6 @@ from zope.component import getUtility
 from zope.interface import Interface, alsoProvides
 from zope.interface import invariant, Invalid
 import logging
-from ftw.tabbedview.interfaces import ITabbedviewUploadable
 
 
 LOG = logging.getLogger('opengever.dossier')
@@ -248,4 +248,3 @@ class StartBeforeEnd(Invalid):
 @form.default_value(field=IDossier['start'])
 def deadlineDefaultValue(data):
     return datetime.today()
-
