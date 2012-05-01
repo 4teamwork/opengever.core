@@ -1,5 +1,5 @@
 from Acquisition import aq_inner
-from collective.quickupload.browser.interfaces import IQuickUploadFileFactory
+from collective.quickupload.interfaces import IQuickUploadFileFactory
 from five import grok
 from ftw.tabbedview.interfaces import ITabbedviewUploadable
 from plone.dexterity.utils import createContentInContainer

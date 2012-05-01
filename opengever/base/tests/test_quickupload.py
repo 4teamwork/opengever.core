@@ -1,5 +1,4 @@
-from collective.quickupload.browser.interfaces import IQuickUploadFileFactory
-from mocker import ANY
+from collective.quickupload.interfaces import IQuickUploadFileFactory
 from ftw.tabbedview.interfaces import ITabbedviewUploadable
 from ftw.testing import MockTestCase
 from grokcore.component.testing import grok, grok_component
