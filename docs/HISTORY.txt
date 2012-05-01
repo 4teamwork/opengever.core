@@ -10,8 +10,6 @@ Changelog
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1420
   [phgross]
 
-  [phgross]
-
 - User get_css_class instead of deprecated method: css_class_from_obj/css_class_from_brain
   [eschmutz]
 
