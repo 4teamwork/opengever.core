@@ -230,13 +230,6 @@ class Document(Item):
     # disable file preview creation when modifying or creating document
     buildPreview = False
 
-    def Title(self):
-        # this is a CMF-style accessor, so should return utf8-encoded
-        title = self.title
-        if isinstance(title, unicode):
-            title = self.title.encode('utf8')
-        return self.title or ''
-
     def surrender(self, relative_to_portal=1):
         return super(Document, self).getIcon(
             relative_to_portal=relative_to_portal)
