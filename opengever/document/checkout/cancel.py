@@ -72,7 +72,7 @@ class CancelDocuments(grok.View):
         # is cancel allowed for this document?
         if not manager.is_cancel_allowed():
             msg = _(u'Could not cancel checkout on document ${title}',
-                    mapping=dict(title=obj.Title()))
+                    mapping=dict(title=obj.Title().decode('utf-8')))
             IStatusMessage(self.request).addStatusMessage(msg, type='error')
 
         else:
@@ -80,5 +80,5 @@ class CancelDocuments(grok.View):
 
             # notify the user
             msg = _(u'Cancel checkout: ${title}',
-                    mapping={'title': obj.Title()})
+                    mapping={'title': obj.Title().decode('utf-8')})
             IStatusMessage(self.request).addStatusMessage(msg, type='info')

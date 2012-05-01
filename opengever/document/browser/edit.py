@@ -25,11 +25,13 @@ class EditingDocument(grok.View):
 
         # have the document a file
         if not self.context.file:
-            msg = _(u'The Document ${title} has no File',
-                mapping={'title': self.context.Title()})
+            msg = _(
+                u'The Document ${title} has no File',
+                mapping={'title': self.context.Title().decode('utf-8')})
+
             IStatusMessage(self.request).addStatusMessage(msg, type='error')
             return self.request.RESPONSE.redirect(self.get_redirect_url())
-        
+
         # check out the document
         manager = getMultiAdapter((self.context, self.request),
                                   ICheckinCheckoutManager)
@@ -50,8 +52,9 @@ class EditingDocument(grok.View):
             return self.request.RESPONSE.redirect(self.get_redirect_url())
 
         elif not manager.is_checkout_allowed():
-            msg = _(u'Could not check out document ${title}',
-                    mapping={'title': self.context.Title()})
+            msg = _(
+                u'Could not check out document ${title}',
+                mapping={'title': self.context.Title().decode('utf-8')})
             IStatusMessage(self.request).addStatusMessage(msg, type='error')
             return self.request.RESPONSE.redirect(self.get_redirect_url())
 
@@ -60,8 +63,10 @@ class EditingDocument(grok.View):
             manager.checkout()
 
             # notify the user
-            msg = _(u'Checked out: ${title}',
-                    mapping={'title': self.context.Title()})
+            msg = _(
+                u'Checked out: ${title}',
+                mapping={'title': self.context.Title().decode('utf-8')})
+
             IStatusMessage(self.request).addStatusMessage(msg, type='info')
 
         # lets register a redirector for starting external

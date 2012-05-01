@@ -56,14 +56,14 @@ class CheckinCommentForm(form.Form):
 
                     if not manager.is_checkin_allowed():
                         msg = _(u'Could not check in document ${title}',
-                                mapping=dict(title=obj.Title()))
+                                mapping=dict(title=obj.Title().decode('utf-8')))
                         IStatusMessage(self.request).addStatusMessage(
                             msg, type='error')
 
                     else:
                         manager.checkin(data['comment'])
                         msg = _(u'Checked in: ${title}',
-                                mapping=dict(title=obj.Title()))
+                                mapping=dict(title=obj.Title().decode('utf-8')))
                         IStatusMessage(self.request).addStatusMessage(
                             msg, type='info')
 

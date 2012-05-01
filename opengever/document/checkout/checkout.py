@@ -58,7 +58,7 @@ class CheckoutDocuments(grok.View):
                 # notify the user. we have a no-checkoutable object
                 msg = _(
                     u'Could not check out object: ${title}, it is not a document',
-                    mapping={'title': obj.Title()})
+                    mapping={'title': obj.Title().decode('utf-8')})
                 IStatusMessage(self.request).addStatusMessage(msg, type='error')
                 continue
 
@@ -94,7 +94,7 @@ class CheckoutDocuments(grok.View):
         # is checkout allowed for this document?
         if not manager.is_checkout_allowed():
             msg = _(u'Could not check out document ${title}',
-                    mapping={'title': obj.Title()})
+                    mapping={'title': obj.Title().decode('utf-8')})
             IStatusMessage(self.request).addStatusMessage(msg, type='error')
 
         else:
@@ -103,5 +103,5 @@ class CheckoutDocuments(grok.View):
 
             # notify the user
             msg = _(u'Checked out: ${title}',
-                    mapping={'title': obj.Title()})
+                    mapping={'title': obj.Title().decode('utf-8')})
             IStatusMessage(self.request).addStatusMessage(msg, type='info')
