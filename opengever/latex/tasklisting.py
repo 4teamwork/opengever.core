@@ -104,4 +104,4 @@ class TaskListingLaTeXView(grok.MultiAdapter, MakoLaTeXView):
         return self.convert_list_to_row(data)
 
     def convert_list_to_row(self, row):
-        return ' & '.join([self.convert(cell) for cell in row])
+        return ' & '.join([self.convert_plain(cell) for cell in row])

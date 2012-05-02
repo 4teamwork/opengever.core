@@ -50,25 +50,25 @@ class DossierCoverPDFView(grok.View, BaseStandalonePDFView):
 
     def get_render_arguments(self):
         return {
-            'clientid': self.convert(self.get_clientid()),
-            'repository': self.convert(self.get_reversed_breadcrumbs()),
-            'referencenr': self.convert(self.get_referencenumber()),
-            'filingprefix': self.convert(self.get_filingprefix()),
-            'filingnr': self.convert(IDossier(self.context).filing_no or ''),
+            'clientid': self.convert_plain(self.get_clientid()),
+            'repository': self.convert_plain(self.get_reversed_breadcrumbs()),
+            'referencenr': self.convert_plain(self.get_referencenumber()),
+            'filingprefix': self.convert_plain(self.get_filingprefix()),
+            'filingnr': self.convert_plain(IDossier(self.context).filing_no or ''),
 
-            'sequencenr': self.convert(
+            'sequencenr': self.convert_plain(
                 str(getUtility(ISequenceNumber).get_number(self.context))),
 
-            'title': self.convert(self.context.Title()),
-            'description': self.convert(self.get_description()),
-            'responsible': self.convert(self.get_responsible()),
+            'title': self.convert_plain(self.context.Title()),
+            'description': self.convert_plain(self.get_description()),
+            'responsible': self.convert_plain(self.get_responsible()),
 
-            'start': self.convert(self.context.toLocalizedTime(
+            'start': self.convert_plain(self.context.toLocalizedTime(
                     str(IDossier(self.context).start)) or '-'),
-            'end': self.convert(self.context.toLocalizedTime(
+            'end': self.convert_plain(self.context.toLocalizedTime(
                     str(IDossier(self.context).end)) or '-'),
 
-            'parentDossierTitle': self.convert(self.get_parent_dossier_title())
+            'parentDossierTitle': self.convert_plain(self.get_parent_dossier_title())
             }
 
     def get_description(self):

@@ -277,7 +277,7 @@ class DossierDetailsLaTeXView(grok.MultiAdapter, MakoLaTeXView):
             if not isinstance(item, str):
                 item = str(item)
 
-            data.append(self.convert(item))
+            data.append(self.convert_plain(item))
 
         return data
 
