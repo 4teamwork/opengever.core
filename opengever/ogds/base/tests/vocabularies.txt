@@ -273,8 +273,7 @@ address they have.
     ...                   name='opengever.ogds.base.EmailContactsAndUsersVocabulary')
     >>> voc = fact(portal)
     >>> fterms(list(voc))
-    [u'<Term hugo@boss.local:Boss Hugo (hugo.boss, hugo@boss.local)>', u'<Term hugo@private.ch:Boss Hugo (hugo.boss, hugo@private.ch)>', u'<Term sandra.kaufmann@test.ch:Kaufmann Sandra (sandra.kaufmann@test.ch)>', u'<Term elisabeth.kaeppeli@test.ch:K\xe4ppeli Elisabeth (elisabeth.kaeppeli@test.ch)>']
-
+    [u'<Term hugo@boss.local:hugo.boss:Boss Hugo (hugo.boss, hugo@boss.local)>', u'<Term hugo@private.ch:hugo.boss:Boss Hugo (hugo.boss, hugo@private.ch)>', u'<Term robin@hood.tld:robin.hood:Hood Robin (robin.hood, robin@hood.tld)>', u'<Term sandra.kaufmann@test.ch:kaufmann-sandra:Kaufmann Sandra (sandra.kaufmann@test.ch)>', u'<Term elisabeth.kaeppeli@test.ch:kappeli-elisabeth:K\xe4ppeli Elisabeth (elisabeth.kaeppeli@test.ch)>']
 
 
 Clients vocabulary
