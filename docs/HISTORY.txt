@@ -5,6 +5,11 @@ Changelog
 2.0.3 (unreleased)
 ------------------
 
+- Adjust the intern_receiver getter, because the EmailAndContacstVocabulary has changed.
+  Issue #1564 EmailContactsAndUsersVocabulary sollte UserID+Email als Key verwenden
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1564
+  [phgross]
+
 - Removed accessor patch, since the dexterity update it isn't longer necessary.
   Issue #1420 Plone Version und Dexterity Version auf aktuellste Version heben.
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1420

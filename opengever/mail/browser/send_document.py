@@ -146,9 +146,13 @@ class SendDocumentForm(form.Form):
             contact_info = getUtility(IContactInformation)
             userid = self.context.portal_membership.getAuthenticatedMember()
             userid = userid.getId()
-            intern_receiver = data.get('intern_receiver') or ()
-            extern_receiver = data.get('extern_receiver') or ()
-            addresses = intern_receiver + tuple(extern_receiver)
+            intern_receiver = []
+            for receiver in data.get('intern_receiver', []):
+                # cut away the username
+                intern_receiver.append(receiver.split(':')[0])
+
+            extern_receiver = data.get('extern_receiver') or []
+            addresses = intern_receiver + extern_receiver
 
             # create the mail
             msg = self.create_mail(data.get('message'), data.get('documents'))
