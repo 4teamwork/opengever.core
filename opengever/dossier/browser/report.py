@@ -30,8 +30,6 @@ def filing_no_number(filing_number):
     return _get_filing_part(filing_number, 3)
 
 
-
-
 class DossierReporter(grok.View):
     """View that generate an excel spreadsheet with the XLSReporter,
     which list the selected dossier (paths in request)
@@ -62,21 +60,34 @@ class DossierReporter(grok.View):
 
         # attributes mapping
         dossier_attributes = [
-            {'id':'Title', 'title':_('label_title', default=u'title')},
-            {'id':'start', 'title':_(u'label_start', default=u'Opening Date'),
-             'transform':format_datetime, 'style':get_date_style()},
-            {'id':'end', 'title':_(u'label_end', default=u'Closing Date'),
-             'transform':format_datetime, 'style':get_date_style()},
-            {'id':'responsible', 'title':_(u'label_responsible', default='Responsible'),
+            {'id':'Title',
+             'title':_('label_title', default=u'title')},
+            {'id':'start',
+             'title':_(u'label_start', default=u'Opening Date'),
+             'transform':format_datetime,
+             'style':get_date_style()},
+            {'id':'end',
+             'title':_(u'label_end', default=u'Closing Date'),
+             'transform':format_datetime,
+             'style':get_date_style()},
+            {'id':'responsible',
+             'title':_(u'label_responsible', default='Responsible'),
              'transform':readable_author},
-            {'id':'filing_no', 'title':_(u'filing_no', default="Filing number")},
-            {'id':'filing_no', 'title':_('filing_no_year'), 'transform': filing_no_year},
-            {'id':'filing_no', 'title':_('filing_no_number'), 'transform': filing_no_number},
+            {'id':'filing_no',
+             'title':_(u'filing_no', default="Filing number")},
+            {'id':'filing_no',
+             'title':_('filing_no_year'),
+             'transform': filing_no_year},
+            {'id':'filing_no',
+             'title':_('filing_no_number'),
+             'transform': filing_no_number},
             {'id':'review_state',
              'title':_('label_review_state', default='Review state'),
              'transform':StringTranslater(
                 self.context.REQUEST, 'plone').translate},
-            {'id':'reference', 'title':_(u'label_reference_number', default=u'Reference Number'),},
+            {'id':'reference',
+             'title':_(u'label_reference_number',
+                       default=u'Reference Number')},
         ]
 
         # generate the xls data with the XLSReporter

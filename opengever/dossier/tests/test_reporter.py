@@ -2,6 +2,7 @@ from ftw.testing import MockTestCase
 from opengever.dossier.browser.report import filing_no_year
 from opengever.dossier.browser.report import filing_no_number
 
+
 class TestMakoLaTeXView(MockTestCase):
 
     def test_filing_no_year(self):
@@ -23,4 +24,3 @@ class TestMakoLaTeXView(MockTestCase):
             filing_no_number('OG-Direktion-2011-555'), 555)
         self.assertEquals(
             filing_no_number(None), None)
-
