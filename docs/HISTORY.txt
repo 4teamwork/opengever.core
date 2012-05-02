@@ -5,6 +5,11 @@ Changelog
 2.1.5 (unreleased)
 ------------------
 
+- Use htmlencoding convert method in all listings.
+  Issue #1536 Dossiers: Unschoene Darstellung der Spalte "Autor" in Detailliste (PDF)
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1536/
+  [phgross]
+
 - Fixed get_render_arguments, added fallback for not existing owners.
   [phgross]
 

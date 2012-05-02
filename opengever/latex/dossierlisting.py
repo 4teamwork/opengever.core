@@ -97,13 +97,13 @@ class DossierListingLaTeXView(grok.MultiAdapter, MakoLaTeXView):
 
             elif isinstance(cell, unicode):
                 cell = cell.encode('utf-8')
-                data.append(self.convert(cell))
+                data.append(self.convert_plain(cell))
 
             elif isinstance(cell, str):
-                data.append(self.convert(cell))
+                data.append(self.convert_plain(cell))
 
             else:
-                data.append(self.convert(str(cell)))
+                data.append(self.convert_plain(str(cell)))
 
         return ' & '.join(data)
 
