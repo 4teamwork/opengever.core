@@ -354,11 +354,16 @@ class EmailContactsAndUsersVocabularyFactory(grok.GlobalUtility):
 
         user_data = []
         for contact_or_user, active in ids:
+            if hasattr(contact_or_user, 'userid'):
+                userid = contact_or_user.userid
+            else:
+                userid = contact_or_user.getId
+
             email = info.get_email(contact_or_user)
             if email:
                 if not active:
                     self.hidden_terms.append(email)
-                user_data.append((email,
+                user_data.append(('%s:%s' % (email, userid),
                                   info.describe(contact_or_user,
                                                 with_email=True)))
 
@@ -366,7 +371,7 @@ class EmailContactsAndUsersVocabularyFactory(grok.GlobalUtility):
             if email2:
                 if not active:
                     self.hidden_terms.append(email2)
-                user_data.append((email2,
+                user_data.append(('%s:%s' % (email2, userid),
                                   info.describe(contact_or_user,
                                                 with_email2=True)))
         return user_data

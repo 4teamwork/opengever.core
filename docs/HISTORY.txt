@@ -5,7 +5,8 @@ Changelog
 2.0.5 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Fixed uniquevalues problem in EmailVocabularyFactory, append the username to the mailaddres.
+  [phgross]
 
 
 2.0.4 (2012-03-28)
