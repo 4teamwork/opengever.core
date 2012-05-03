@@ -5,6 +5,11 @@ Changelog
 2.2 (unreleased)
 ----------------
 
+- Use the ISendableDocsContainer behavior instead of directly provide the interface.
+  Issue #1568 Dokument aus Aufgabe versenden resp. kopieren
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1568
+  [phgross]
+
 - Activate tabbedview quickupload plugin also for inboxes.
   Issue #549 Abklaerung: Drag and drop
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/549

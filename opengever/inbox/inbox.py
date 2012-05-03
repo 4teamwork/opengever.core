@@ -2,14 +2,13 @@
 from five import grok
 from ftw.tabbedview.interfaces import ITabbedviewUploadable
 from opengever.inbox import _
-from opengever.mail.interfaces import ISendableDocsContainer
 from opengever.tabbedview.browser.tabs import Tasks, Documents, Trash
 from opengever.tabbedview.helper import external_edit_link
 from plone.directives import form
 from zope import schema
 
 
-class IInbox(form.Schema, ISendableDocsContainer, ITabbedviewUploadable):
+class IInbox(form.Schema, ITabbedviewUploadable):
     """ Inbox for OpenGever
     """
 

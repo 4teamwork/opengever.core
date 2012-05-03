@@ -33,6 +33,7 @@
         <element value="opengever.tabbedview.interfaces.ITabbedViewEnabled" />
         <element value="opengever.trash.trash.ITrashable" />
         <element value="opengever.mail.behaviors.IMailInAddress" />
+        <element value="opengever.mail.behaviors.ISendableDocsContainer" />
     </property>
 
     <!-- View information -->
