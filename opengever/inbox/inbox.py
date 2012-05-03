@@ -14,16 +14,14 @@ class IInbox(form.Schema, ITabbedviewUploadable):
 
     form.fieldset(
         u'common',
-        label = _(u'fieldset_common', default=u'Common'),
-        fields = [
-            u'inbox_group',
-            ],
+        label=_(u'fieldset_common', default=u'Common'),
+        fields=[u'inbox_group', ],
         )
 
     inbox_group = schema.TextLine(
-         title = _(u'label_inbox_group', default=u'Inbox Group'),
-         description = _(u'help_inbox_group', default=u''),
-         required = False,
+         title=_(u'label_inbox_group', default=u'Inbox Group'),
+         description=_(u'help_inbox_group', default=u''),
+         required=False,
          )
 
 
@@ -51,6 +49,7 @@ class GivenTasks(Tasks):
 
         return columns
 
+
 class InboxDocuments(Documents):
     """Lists all Forwardings in this container
     """
@@ -72,7 +71,8 @@ class InboxDocuments(Documents):
                 pass  # remove this column
             # remove external_edit_link from the columns not used
             elif isinstance(col, tuple) and col[1] == external_edit_link:
-                pass # remove this colun
+                 # remove this colun
+                pass
             else:
                 columns.append(col)
 
