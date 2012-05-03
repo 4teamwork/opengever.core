@@ -5,6 +5,11 @@ Changelog
 2.0.3 (unreleased)
 ------------------
 
+- Implemented ISendableDocsContainer as real marker behavior.
+  Issue #1568 Dokument aus Aufgabe versenden resp. kopieren
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1568
+  [phgross]
+
 - Adjust the intern_receiver getter, because the EmailAndContacstVocabulary has changed.
   Issue #1564 EmailContactsAndUsersVocabulary sollte UserID+Email als Key verwenden
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1564

@@ -9,7 +9,7 @@ from email.Utils import formatdate
 from five import grok
 from opengever.base.source import DossierPathSourceBinder
 from opengever.mail import _
-from opengever.mail.interfaces import ISendableDocsContainer
+from opengever.mail.behaviors import ISendableDocsContainer
 from opengever.mail.validators import AddressValidator
 from opengever.mail.validators import DocumentSizeValidator
 from opengever.ogds.base.interfaces import IContactInformation

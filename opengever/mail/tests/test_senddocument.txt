@@ -5,7 +5,7 @@ imports and general stuff
     >>> from Products.CMFPlone.tests.utils import MockMailHost
     >>> from Products.MailHost.interfaces import IMailHost
     >>> from opengever.mail.interfaces import ISendDocumentConf, IDocumentSent
-    >>> from opengever.mail.interfaces import ISendableDocsContainer
+    >>> from opengever.mail.behaviors import ISendableDocsContainer
     >>> from plone.app.testing.interfaces import TEST_USER_NAME as portal_owner, TEST_USER_PASSWORD as default_password
     >>> from plone.dexterity.interfaces import IDexterityFTI
     >>> from plone.dexterity.utils import createContentInContainer

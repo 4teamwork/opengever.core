@@ -27,6 +27,12 @@
           marker=".behaviors.IMailInAddressMarker"
           />
 
+    <plone:behavior
+          title="ISendableDocsContainer behavior"
+          description="generates an email adress for a dossier"
+          provides=".behaviors.ISendableDocsContainer"
+          />
+
     <genericsetup:registerProfile
           name="default"
           title="opengever.mail"

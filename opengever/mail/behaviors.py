@@ -31,3 +31,9 @@ class MailInAddress(object):
         proxy = registry.forInterface(IMailSettings)
         domain = getattr(proxy, 'mail_domain', 'fehler')
         return '%s@%s' % (str(intid), domain)
+
+
+class ISendableDocsContainer(Interface):
+    """Marker interface which states that the `send_documents` action is
+    callable on this container type.
+    """
