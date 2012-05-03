@@ -9,7 +9,6 @@ from ftw.tabbedview.interfaces import ITabbedviewUploadable
 from opengever.base.source import RepositoryPathSourceBinder
 from opengever.dossier import _
 from opengever.dossier.widget import referenceNumberWidgetFactory
-from opengever.mail.interfaces import ISendableDocsContainer
 from opengever.ogds.base.autocomplete_widget import AutocompleteFieldWidget
 from plone.autoform.interfaces import IFormFieldProvider
 from plone.dexterity.i18n import MessageFactory as pd_mf
@@ -27,7 +26,7 @@ import logging
 LOG = logging.getLogger('opengever.dossier')
 
 
-class IDossierMarker(Interface, ISendableDocsContainer, ITabbedviewUploadable):
+class IDossierMarker(Interface, ITabbedviewUploadable):
     """ Marker Interface for dossiers.
     """
 

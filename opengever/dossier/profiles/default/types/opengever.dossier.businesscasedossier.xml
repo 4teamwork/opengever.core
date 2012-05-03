@@ -41,6 +41,7 @@
         <element value="opengever.base.behaviors.sequence.ISequenceNumberBehavior" />
         <element value="opengever.sharing.behaviors.IDossier" />
         <element value="plone.app.lockingbehavior.behaviors.ILocking" />
+        <element value="opengever.mail.behaviors.ISendableDocsContainer" />
     </property>
 
     <!-- View information -->

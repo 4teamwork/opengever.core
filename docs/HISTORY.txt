@@ -5,6 +5,11 @@ Changelog
 2.0.5 (unreleased)
 ------------------
 
+- Use the ISendableDocsContainer behavior instead of directly provide the interface.
+  Issue #1568 Dokument aus Aufgabe versenden resp. kopieren
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1568
+  [phgross]
+
 - Added filingnumber and -year columns to the xls dossier reporter.
   Issue #1512 Auswahl exportieren: Sortieren nach Ablagenr. funktioniert nicht
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1512
