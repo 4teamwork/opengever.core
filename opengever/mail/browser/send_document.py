@@ -176,8 +176,10 @@ class SendDocumentForm(form.Form):
 
             # let the user know that the mail was sent
             info = _(u'info_mails_sent', 'Mails sent')
-            notify(DocumentSent(self.context, userid, header_to, data.get('subject'),\
-             data.get('message'), data.get('documents')))
+            notify(DocumentSent(
+                    self.context, userid, header_to, data.get('subject'),
+                    data.get('message'), data.get('documents')))
+
             IStatusMessage(self.request).addStatusMessage(info, type='info')
             # and redirect to default view / tab
             return self.request.RESPONSE.redirect('./#documents')
@@ -201,7 +203,7 @@ class SendDocumentForm(form.Form):
         for obj in objs:
 
             if IMail.providedBy(obj):
-                obj_file= obj.message
+                obj_file = obj.message
             else:
                 obj_file = obj.file
 
