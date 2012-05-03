@@ -1,17 +1,18 @@
 # -*- coding: utf-8 -*-
 from AccessControl import getSecurityManager
+from Products.CMFCore.utils import getToolByName
 from ftw.contentmenu.menu import FactoriesMenu
 from opengever.base.interfaces import IReferenceNumber, ISequenceNumber
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.testing import OPENGEVER_DOSSIER_INTEGRATION_TESTING
+from opengever.mail.behaviors import ISendableDocsContainer
 from plone.app.testing import SITE_OWNER_NAME, login, logout
 from plone.app.testing import TEST_USER_NAME, TEST_USER_PASSWORD
 from plone.dexterity.utils import createContentInContainer
 from plone.dexterity.utils import iterSchemata
 from plone.indexer.interfaces import IIndexableObject
 from plone.testing.z2 import Browser
-from Products.CMFCore.utils import getToolByName
 from zExceptions import Unauthorized
 from zope.component import getAdapter, getUtility
 from zope.component import provideUtility
@@ -20,8 +21,8 @@ from zope.interface import implements
 from zope.schema import getFieldsInOrder
 from zope.schema.interfaces import IChoice, IList, ITuple
 from zope.schema.interfaces import IVocabularyFactory
-from zope.schema.vocabulary import getVocabularyRegistry
 from zope.schema.vocabulary import SimpleVocabulary, SimpleTerm
+from zope.schema.vocabulary import getVocabularyRegistry
 import transaction
 import unittest2 as unittest
 
@@ -231,6 +232,17 @@ class TestMainDossier(unittest.TestCase):
         types = self.portal.portal_types.objectIds()
         for dossier_type in self.dossier_types:
             self.assertTrue(dossier_type in types)
+
+    def test_sendable_docs_containter(self):
+        """Check if all dossiers provide the ISendableDocsContainer
+        Interface."""
+
+        for dossier_type in self.dossier_types:
+            d1 = self.create_dossier(dossier_type)
+            d2 = self.create_dossier(dossier_type, subpath=d1.getId())
+
+            self.assertTrue(ISendableDocsContainer.providedBy(d1))
+            self.assertTrue(ISendableDocsContainer.providedBy(d2))
 
     def test_contentmenu_order_positions(self):
         """Check the order of the add-menu for dossiers and subdossiers
