@@ -34,6 +34,7 @@
         <element value="opengever.task.behaviors.ITaskNameFromTitle" />
         <element value="opengever.base.behaviors.sequence.ISequenceNumberBehavior" />
         <element value="plone.app.lockingbehavior.behaviors.ILocking" />
+        <element value="opengever.mail.behaviors.ISendableDocsContainer" />
     </property>
 
     <!-- View information -->

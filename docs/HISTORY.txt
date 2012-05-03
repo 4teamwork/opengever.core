@@ -5,6 +5,11 @@ Changelog
 2.3.5 (unreleased)
 ------------------
 
+- Let the task provide the ISendableDocsContainer marker behavior.
+  Issue #1568 Dokument aus Aufgabe versenden resp. kopieren
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1568
+  [phgross]
+
 - Add check to attachable_documents_vocabulary: which check that all term values are unique.
   [phgross]
 
