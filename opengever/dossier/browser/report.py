@@ -1,10 +1,11 @@
+from Products.CMFCore.utils import getToolByName
+from Products.statusmessages.interfaces import IStatusMessage
 from five import grok
+from opengever.base.reporter import StringTranslater, XLSReporter
 from opengever.base.reporter import format_datetime, get_date_style
 from opengever.base.reporter import readable_author
-from opengever.base.reporter import StringTranslater, XLSReporter
 from opengever.dossier import _
 from zope.interface import Interface
-from Products.statusmessages.interfaces import IStatusMessage
 
 
 def _get_filing_part(filing_number, part):
@@ -40,6 +41,17 @@ class DossierReporter(grok.View):
     grok.name('dossier_report')
     grok.require('zope2.View')
 
+    def get_selected_dossiers(self):
+
+        # get the given dossiers
+        catalog = getToolByName(self.context, 'portal_catalog')
+        dossiers = []
+        for path in self.request.get('paths'):
+            dossiers.append(
+                catalog(path={'query': path, 'depth': 0})[0]
+                )
+        return dossiers
+
     def render(self):
 
         if not self.request.get('paths'):
@@ -48,15 +60,10 @@ class DossierReporter(grok.View):
             IStatusMessage(self.request).addStatusMessage(msg, type='error')
             return_temp = self.request.get(
                 'orig_template', self.context.absolute_url())
+
             return self.request.RESPONSE.redirect(return_temp)
 
-        # get the given dossiers
-        portal_catalog = self.context.portal_catalog
-        dossiers = []
-        for path in self.request.get('paths'):
-            dossiers.append(
-                portal_catalog(path={'query': path, 'depth': 0})[0]
-                )
+        dossiers = self.get_selected_dossiers()
 
         # attributes mapping
         dossier_attributes = [
@@ -84,7 +91,7 @@ class DossierReporter(grok.View):
             {'id':'review_state',
              'title':_('label_review_state', default='Review state'),
              'transform':StringTranslater(
-                self.context.REQUEST, 'plone').translate},
+                self.request, 'plone').translate},
             {'id':'reference',
              'title':_(u'label_reference_number',
                        default=u'Reference Number')},
@@ -92,7 +99,7 @@ class DossierReporter(grok.View):
 
         # generate the xls data with the XLSReporter
         reporter = XLSReporter(
-            self.context.REQUEST, dossier_attributes, dossiers)
+            self.request, dossier_attributes, dossiers)
 
         data = reporter()
         if not data:

@@ -11,6 +11,8 @@ tests_require = [
     'opengever.document',
     'opengever.globalindex',
     'plone.mocktestcase',
+    'ftw.testing',
+    'xlrd',
 ]
 
 setup(name='opengever.dossier',
