@@ -5,6 +5,12 @@ Changelog
 2.0.4 (unreleased)
 ------------------
 
+- Added ``Modify portal content``as needed permission for checkout a document.
+  Issue #1553 Problem Auschecken von Dokument aus mandantenuebergreifender
+  Aufgabe (GEA -> GDS)
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1553
+  [phgross]
+
 - Removed Title accessor, because it doesn't differ from the dexterity default accessor.
   Adjust encoding of accessor values, because they changed since the dexterity update.
   Issue #1420 Plone Version und Dexterity Version auf aktuellste Version heben.

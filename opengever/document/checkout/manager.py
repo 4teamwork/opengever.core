@@ -50,6 +50,9 @@ class CheckinCheckoutManager(grok.MultiAdapter):
         if not self.check_permission('opengever.document: Checkout'):
             return False
 
+        if not self.check_permission('Modify portal content'):
+            return False
+
         # is it not trashed
         if ITrashed.providedBy(self.context):
             return False
