@@ -5,6 +5,11 @@ Changelog
 2.0.3 (unreleased)
 ------------------
 
+- Adjust the accessors they should return utf-8 since the dexterity update.
+  Issue #1420 Plone Version und Dexterity Version auf aktuellste Version heben.
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1420
+  [phgross]
+
 - User get_css_class instead of deprecated method: css_class_from_obj/css_class_from_brain
   [eschmutz]
 
@@ -21,7 +26,7 @@ Changelog
 - Removed 'List folder contents' permission from anyone but Manager in
   repositoryfolder and repositoryroot workflows.
   [lgraf]
-  
+
 - Added necessary permissions for Administrator role
   [lgraf]
 

@@ -109,7 +109,8 @@ class RepositoryFolder(content.Container):
                 rfnr = IReferenceNumberPrefix(obj).reference_number_prefix
                 title = unicode(rfnr) + '.' + title
             obj = aq_parent(aq_inner(obj))
-        return title
+
+        return title.encode('utf-8')
 
     def allowedContentTypes(self, *args, **kwargs):
         """
