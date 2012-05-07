@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-2.1.6 (unreleased)
+2.1.6 (2012-05-07)
 ------------------
 
 - Add a simple workflow_state helper which only translate the state (without html).
