@@ -22,6 +22,7 @@ class TestMailIndexers(MockTestCase):
     def test_author_indexes(self):
         mail = self.stub()
         msg = self.stub()
+
         self.expect(mail.msg).result(msg)
         self.expect(msg.has_key('From')).result(True)
         self.expect(msg.get('From')).result(
@@ -35,6 +36,25 @@ class TestMailIndexers(MockTestCase):
         self.assertEqual(
             sortable_author(mail)(),
             '"Hugo Boss" &lt;hugo.boss@boss.com&gt;')
+
+    def test_author_indexes_with_bad_from_header(self):
+        mail = self.stub()
+        msg = self.stub()
+
+        self.expect(mail.msg).result(msg)
+        self.expect(msg.has_key('From')).result(True)
+        self.expect(msg.get('From')).result(
+            'Patrick Hengartner </O=KANTON ZUG/OU=EXCHANGE ADMINISTRATIVE GROUP\n (FYDIBOHF23SPDLT)/CN=RECIPIENTS/CN=HEPA>')
+
+        self.replay()
+
+        self.assertEqual(
+            document_author(mail)(),
+            'Patrick Hengartner')
+
+        self.assertEqual(
+            sortable_author(mail)(),
+            'Patrick Hengartner')
 
     def test_date_indexer(self):
         mail = self.stub()

@@ -5,6 +5,11 @@ Changelog
 2.0.3 (unreleased)
 ------------------
 
+- Adjust author indexers: remove LDAP or Exchange informations.
+  Issue #1536 Dossiers: Unschoene Darstellung der Spalte "Autor" in Detailliste (PDF)
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1536
+  [phgross]
+
 - Implemented ISendableDocsContainer as real marker behavior.
   Issue #1568 Dokument aus Aufgabe versenden resp. kopieren
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1568
