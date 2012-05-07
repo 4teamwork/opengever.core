@@ -10,7 +10,7 @@ from opengever.latex.interfaces import ILandscapeLayer
 from opengever.latex.utils import get_issuer_of_task
 from opengever.latex.utils import get_selected_items
 from opengever.ogds.base.interfaces import IContactInformation
-from opengever.tabbedview.helper import workflow_state
+from opengever.latex.utils import workflow_state
 from opengever.task.helper import task_type_helper
 from zope.component import getUtility
 from zope.interface import Interface
