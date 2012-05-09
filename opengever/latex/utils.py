@@ -1,7 +1,10 @@
 from Products.CMFCore.utils import getToolByName
 from opengever.globalindex.interfaces import ITaskQuery
 from opengever.ogds.base.interfaces import IContactInformation
+from plone.i18n.normalizer.interfaces import IIDNormalizer
 from zope.component import getUtility
+from zope.globalrequest import getRequest
+from zope.i18n import translate
 import types
 
 
@@ -67,3 +70,13 @@ def get_issuer_of_task(task, with_client=True, with_principal=False):
     issuer_client_title = info.get_client_by_id(issuer_client_id).title
 
     return '%s / %s' % (issuer_client_title, issuer)
+
+
+def workflow_state(item, value):
+    """Helper which translates the workflow_state in plone domain
+    """
+
+    # We use zope.globalrequest because item can be a SQLAlchemy `Task` object
+    # which doesn't have a request
+    request = getRequest()
+    return """%s""" % (translate(value, domain='plone', context=request))

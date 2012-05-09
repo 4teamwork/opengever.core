@@ -11,7 +11,7 @@ from opengever.latex.interfaces import ILandscapeLayer
 from opengever.latex.utils import get_issuer_of_task
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.ogds.base.utils import get_client_id, get_current_client
-from opengever.tabbedview.helper import workflow_state
+from opengever.latex.utils import workflow_state
 from opengever.task.helper import task_type_helper
 from sqlalchemy import and_, or_
 from sqlalchemy.sql.expression import asc

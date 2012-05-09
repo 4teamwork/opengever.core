@@ -20,7 +20,7 @@ from opengever.ogds.base.interfaces import IContactInformation
 from opengever.ogds.base.utils import get_current_client
 from opengever.repository.interfaces import IRepositoryFolder
 from opengever.tabbedview.helper import readable_ogds_author
-from opengever.tabbedview.helper import workflow_state
+from opengever.latex.utils import workflow_state
 from opengever.task.helper import task_type_helper
 from zope.component import getUtility
 from zope.i18n import translate
