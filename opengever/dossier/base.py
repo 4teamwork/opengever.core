@@ -1,23 +1,25 @@
 from Acquisition import aq_inner, aq_parent
+from Products.CMFCore.utils import getToolByName
+from Products.CMFDefault.interfaces import ICMFDefaultSkin
+from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
 from datetime import datetime
 from five import grok
 from opengever.dossier import _
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.behaviors.dossier import IDossierMarker
-from opengever.dossier.interfaces import IConstrainTypeDecider, IDossierContainerTypes
+from opengever.dossier.interfaces import IConstrainTypeDecider
+from opengever.dossier.interfaces import IDossierContainerTypes
 from plone.dexterity.content import Container
 from plone.dexterity.interfaces import IDexterityFTI
 from plone.registry.interfaces import IRegistry
-from Products.CMFCore.utils import getToolByName
-from Products.CMFDefault.interfaces import ICMFDefaultSkin
-from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
 from zope.component import queryMultiAdapter, queryUtility
 
 
 class DossierContainer(Container):
 
     def allowedContentTypes(self, *args, **kwargs):
-        types = super(DossierContainer, self).allowedContentTypes(*args, **kwargs)
+        types = super(
+            DossierContainer, self).allowedContentTypes(*args, **kwargs)
         # calculate depth
         depth = 0
         obj = self
@@ -26,6 +28,7 @@ class DossierContainer(Container):
             obj = aq_parent(aq_inner(obj))
             if IPloneSiteRoot.providedBy(obj):
                 break
+
         # the adapter decides
         def filter_type(fti):
             # first we try the more specific one ...
@@ -65,10 +68,13 @@ class DossierContainer(Container):
                       depth=-1),
             sort_on=sort_on,
             sort_order=sort_order,
-            object_provides= 'opengever.dossier.behaviors.dossier.IDossierMarker')
+            object_provides=IDossierMarker.__identifier__,
+            )
 
         # Remove the object itself from the list of subdossiers
-        subdossiers = [s for s in subdossiers if not s.getPath() == dossier_path]
+        subdossiers = [s for s in subdossiers
+                       if not s.getPath() == dossier_path]
+
         return subdossiers
 
     def is_subdossier(self):
@@ -161,9 +167,9 @@ class DossierContainer(Container):
     def earliest_possible_end_date(self):
 
         children = self.getFolderContents(
-            {'object_provides':[
+            {'object_provides': [
                     'opengever.document.behaviors.IBaseDocument',
-                    'opengever.dossier.behaviors.dossier.IDossierMarker',]})
+                    'opengever.dossier.behaviors.dossier.IDossierMarker', ]})
 
         end_dates = []
         for child in children:
@@ -281,90 +287,6 @@ class DossierContainer(Container):
             return False
         return True
 
-    def recursively_resolve(self):
-        # Check preconditions for resolving dossier
-        preconditions_ok = self.check_preconditions()
-        if not preconditions_ok:
-            return self.REQUEST.RESPONSE.redirect(self.absolute_url())
-
-        subdossiers_resolved = self.resolve_subdossiers()
-        if not subdossiers_resolved:
-            return self.REQUEST.RESPONSE.redirect(self.absolute_url())
-
-        dossier_resolved = self.resolve()
-        if not dossier_resolved:
-            return self.REQUEST.RESPONSE.redirect(self.absolute_url())
-
-        # All ok, show resolving mask
-        return self.REQUEST.RESPONSE.redirect(self.absolute_url() + \
-                                              '/transition-archive')
-
-    def resolve_subdossiers(self):
-        """Resolves all subdossiers of this dossier, if possible.
-        Otherwise, throw an error message and return to the context
-        """
-        ptool = getToolByName(self, 'plone_utils')
-        wft = getToolByName(self, 'portal_workflow')
-        subdossiers = self.get_subdossiers()
-
-        for subdossier in subdossiers:
-            subdossier = subdossier.getObject()
-            status =  wft.getStatusOf("opengever_dossier_workflow", subdossier)
-            state = status["review_state"]
-
-            if not state in ('dossier-state-resolved', 'dossier-state-inactive'):
-                if subdossier.computeEndDate():
-                    # Resolve subdossier after setting end date and filing_no
-                    if not IDossier(subdossier).end:
-                        IDossier(subdossier).end = subdossier.computeEndDate()
-
-                    else:
-                        # Validate the existing end date
-                        if IDossier(subdossier).end < subdossier.computeEndDate():
-                            ptool.addPortalMessage(_("The subdossier '${title}' has an invalid end date." ,
-                                                      mapping=dict(title=subdossier.Title())
-                                                      ), type="error")
-                            return False
-
-
-                    wft.doActionFor(subdossier, 'dossier-transition-resolve')
-                else:
-                    # The subdossier's end date can't be determined automatically
-                    ptool.addPortalMessage(_("The subdossier '${title}' needs to be resolved manually.",
-                                              mapping=dict(title=subdossier.Title())
-                                              ), type="error")
-                    return False
-        return True
-
-    def resolve(self):
-        """Try to resolve this dossier.
-
-        For that to happen, first all subdossiers need to have filing_no
-        and end_date set, and then be resolved. If resolving any of the
-        subdossier fails, we'll throw and error and return.
-        """
-
-        ptool = getToolByName(self, 'plone_utils')
-        wft = getToolByName(self, 'portal_workflow')
-
-        parent = aq_parent(aq_inner(self))
-
-        if IDossierMarker.providedBy(parent):
-            # It's a subdossier
-            end_date = self.computeEndDate()
-            if end_date:
-                IDossier(self).end = end_date
-                wft.doActionFor(self, 'dossier-transition-resolve')
-                return True
-            else:
-                ptool.addPortalMessage(_("The subdossier '${title}' needs to be resolved manually.",
-                                          mapping=dict(title=self.Title())
-                                          ), type="error")
-                return False
-        else:
-            # It's a main dossier
-            return True
-
 
 class DefaultConstrainTypeDecider(grok.MultiAdapter):
     grok.provides(IConstrainTypeDecider)
@@ -372,16 +294,15 @@ class DefaultConstrainTypeDecider(grok.MultiAdapter):
     grok.name('')
 
     CONSTRAIN_CONFIGURATION = {
-        'opengever.dossier.businesscasedossier' : {
-            'opengever.dossier.businesscasedossier' : 2,
-            'opengever.dossier.projectdossier' : 1,
+        'opengever.dossier.businesscasedossier': {
+            'opengever.dossier.businesscasedossier': 2,
+            'opengever.dossier.projectdossier': 1,
             },
-        'opengever.dossier.projectdossier' : {
-            'opengever.dossier.projectdossier' : 1,
-            'opengever.dossier.businesscasedossier' : 1,
+        'opengever.dossier.projectdossier': {
+            'opengever.dossier.projectdossier': 1,
+            'opengever.dossier.businesscasedossier': 1,
             },
         }
-
 
     def __init__(self, request, context, fti):
         self.context = context
@@ -393,8 +314,8 @@ class DefaultConstrainTypeDecider(grok.MultiAdapter):
         factory_type = self.fti.id
         mapping = self.constrain_type_mapping
         for const_ctype, const_depth, const_ftype in mapping:
-            if const_ctype==container_type and const_ftype==factory_type:
-                return depth<const_depth or const_depth==0
+            if const_ctype == container_type and const_ftype == factory_type:
+                return depth < const_depth or const_depth == 0
         return True
 
     @property
@@ -403,4 +324,3 @@ class DefaultConstrainTypeDecider(grok.MultiAdapter):
         for container_type, type_constr in conf.items():
             for factory_type, max_depth in type_constr.items():
                 yield container_type, max_depth, factory_type
-
