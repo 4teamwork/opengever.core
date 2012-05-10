@@ -4,7 +4,6 @@ import unittest2 as unittest
 from plone.testing import layered
 
 TESTFILES = (
-    'resolve.txt',
     'dossier_ids.txt',
     'dossier.txt',
     '../behaviors.txt',
