@@ -99,3 +99,38 @@ class IFilingNumberMaintenance(Interface):
 
     def print_filing_prefixes():
         """Reutrns all filing prefixes and their translations"""
+
+
+class IDossierResolver(Interface):
+    """Interface for the Dossier resolve, which provide all
+    functionality needed for resolving a dossier."""
+
+    def is_resolve_possible():
+        """Check if all preconditions are fulfilled.
+        """
+
+    def are_enddates_valid():
+        """Check if the end dates of dossiers and subdossiers are valid.
+        """
+
+    def is_archiv_form_needed():
+        """Check if the archive form must be rendered or not."""
+
+    def resovle():
+        """Resolve the dossier and recursly also the subdossiers.
+        """
+
+
+class IDossierArchiver(Interface):
+    """Interface for the Dossier archiver, wich provide all the needed
+    functinoality to archive a dossier (filing, filingnubmer etc.).
+    """
+
+    def generate_number():
+        """Generate the complete filing number and
+        set the number and prefix on the dossier."""
+
+    def archive():
+        """Generate a correct filing number and
+        set it recursively on every subdossier."""
+

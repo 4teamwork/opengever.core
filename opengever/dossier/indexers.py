@@ -40,6 +40,8 @@ grok.global_adapter(responsibleIndexer, name="responsible")
 
 @indexer(IDossierMarker)
 def isSubdossierIndexer(obj):
+    # TODO: should be replaced with the is_subdossier method
+    # from og.dossier.base.py
     parent = aq_parent(aq_inner(obj))
     if IDossierMarker.providedBy(parent):
         return True

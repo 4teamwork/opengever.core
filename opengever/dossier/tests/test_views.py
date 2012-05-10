@@ -208,7 +208,7 @@ class TestViewsIntegration(unittest.TestCase):
         self.assertEquals(objs[0].get('path'), u'testdossier-1')
         self.assertEquals(objs[0].get('review_state'), u'dossier-state-active')
         self.assertEquals(objs[0].get('title'), u'Testdossier 1')
-        self.assertEquals(objs[0].get('reference_number'), u'OG / 7')
+        self.assertEquals(objs[0].get('reference_number'), u'OG / 5')
 
         # only active dossiers are included in the result
         titles = [o.get('title') for o in objs]

@@ -71,6 +71,12 @@ class DossierContainer(Container):
         subdossiers = [s for s in subdossiers if not s.getPath() == dossier_path]
         return subdossiers
 
+    def is_subdossier(self):
+        parent = aq_parent(aq_inner(self))
+        if IDossierMarker.providedBy(parent):
+            return True
+        return False
+
     def is_all_supplied(self):
         """Check if all tasks and all documents are supplied in a subdossier
         provided there are any (active) subdossiers
@@ -138,16 +144,50 @@ class DossierContainer(Container):
         """Check if the enddate is valid.
         """
         dossier = IDossier(self)
-        end_date = self.computeEndDate()
+        end_date = self.earliest_possible_end_date()
 
+        # no enddate is valid because it would be overwritten
+        # with the earliest_possible_end_date
         if dossier.end is None:
-            return False
+            return True
+
         if end_date:
-            # Dossier end date needs to be larger (younger)
-            # than the computed end date
+            # Dossier end date needs to be older
+            # than the earliest possible end_date
             if end_date > dossier.end:
                 return False
         return True
+
+    def earliest_possible_end_date(self):
+
+        children = self.getFolderContents(
+            {'object_provides':[
+                    'opengever.document.behaviors.IBaseDocument',
+                    'opengever.dossier.behaviors.dossier.IDossierMarker',]})
+
+        end_dates = []
+        for child in children:
+            # document or mails
+            if child.portal_type == "opengever.document.document":
+                if child.document_date:
+                    if isinstance(child.document_date, datetime):
+                        end_dates.append(child.document_date.date())
+                    else:
+                        end_dates.append(child.document_date)
+
+            # subdossiers
+            else:
+                if IDossier(child.getObject()).end:
+                    end_date = IDossier(child.getObject()).end
+                    if isinstance(end_date, datetime):
+                        end_dates.append(end_date.date())
+                    else:
+                        end_dates.append(end_date)
+
+        if end_dates:
+            end_dates.sort()
+            return max(end_dates)
+        return None
 
     def computeEndDate(self):
         """Compute a suggested end date for the (sub)dossier, based

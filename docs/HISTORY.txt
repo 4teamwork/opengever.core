@@ -5,6 +5,13 @@ Changelog
 2.0.5 (unreleased)
 ------------------
 
+- Refactored and adjust the whole resolve/archive process.
+  Issue #1525 Dossier abschliessen: Wieder eroeffnen bzw. wieder abschliessen bei Subdossier.
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1525
+  Issue #1546 DI-KSA: Fehlermeldung beim Versuch "Dossier abschliessen"
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1546
+  [phgross]
+
 - Use the ISendableDocsContainer behavior instead of directly provide the interface.
   Issue #1568 Dokument aus Aufgabe versenden resp. kopieren
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1568
