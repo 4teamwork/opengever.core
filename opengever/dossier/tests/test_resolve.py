@@ -126,12 +126,12 @@ class TestResolver(MockTestCase):
         # so that zope.component doesn't lookup the adapter
         # and return the adapted object directly
 
-        dossier = self.providing_stub(IDossier)
-        sub1 = self.providing_stub(IDossier)
+        dossier = self.providing_stub([IDossier, ])
+        sub1 = self.providing_stub([IDossier, ])
         self.expect(sub1.getObject()).result(sub1)
-        sub2 = self.providing_stub(IDossier)
+        sub2 = self.providing_stub([IDossier, ])
         self.expect(sub2.getObject()).result(sub2)
-        subsub1 = self.providing_stub(IDossier)
+        subsub1 = self.providing_stub([IDossier, ])
         self.expect(subsub1.getObject()).result(subsub1)
 
         with self.mocker.order():
@@ -155,7 +155,7 @@ class TestResolver(MockTestCase):
         wft = self.stub()
         self.mock_tool(wft, 'portal_workflow')
 
-        subdossier = self.providing_stub(IDossier)
+        subdossier = self.providing_stub([IDossier, ])
         self.expect(subdossier.is_subdossier()).result(True)
         self.expect(subdossier.earliest_possible_end_date()).result(TEST_DATE)
         self.expect(subdossier.get_subdossiers()).result([])
