@@ -116,7 +116,7 @@ class IDossierResolver(Interface):
     def is_archiv_form_needed():
         """Check if the archive form must be rendered or not."""
 
-    def resovle():
+    def resolve():
         """Resolve the dossier and recursly also the subdossiers.
         """
 
@@ -126,15 +126,15 @@ class IDossierArchiver(Interface):
     functinoality to archive a dossier (filing, filingnubmer etc.).
     """
 
-    def generate_number():
+    def generate_number(prefix, year):
         """Generate the complete filing number and
         set the number and prefix on the dossier."""
 
-    def archive():
+    def archive(prefix, year, number=None):
         """Generate a correct filing number and
         set it recursively on every subdossier."""
 
-    def get_indexer_value():
+    def get_indexer_value(searchable=False):
         """Return the filing value for the filing_no indexer.
         For Dossiers without a number and only a prefix it return the half
         of the number."""

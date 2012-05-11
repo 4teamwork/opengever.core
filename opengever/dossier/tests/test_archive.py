@@ -6,19 +6,21 @@ from ftw.testing.layer import ComponentRegistryLayer
 from grokcore.component.testing import grok
 from mocker import ANY
 from opengever.base.interfaces import IBaseClientID
+from opengever.dossier.archive import Archiver
 from opengever.dossier.archive import EnddateValidator, MissingValue
+from opengever.dossier.archive import METHOD_RESOLVING_AND_FILING, METHOD_FILING
 from opengever.dossier.archive import RESOLVE_AND_NUMBER, ONLY_RESOLVE
 from opengever.dossier.archive import RESOLVE_WITH_EXISTING_NUMBER, ONLY_NUMBER
 from opengever.dossier.archive import RESOLVE_WITH_NEW_NUMBER, METHOD_RESOLVING
-from opengever.dossier.archive import METHOD_RESOLVING_AND_FILING, METHOD_FILING
-from opengever.dossier.archive import get_filing_actions, filing_prefix_default_value
 from opengever.dossier.archive import filing_year_default_value, default_end_date
+from opengever.dossier.archive import get_filing_actions, filing_prefix_default_value
 from opengever.dossier.behaviors.dossier import IDossier, IDossierMarker
 from opengever.dossier.interfaces import IDossierArchiver
 from plone.registry.interfaces import IRegistry
 from zope.annotation.interfaces import IAttributeAnnotatable
 from zope.component import provideUtility
 from zope.interface import Invalid
+from zope.interface.verify import verifyClass
 from zope.schema.vocabulary import VocabularyRegistryError
 from zope.schema.vocabulary import getVocabularyRegistry
 import opengever.dossier
@@ -160,12 +162,15 @@ class TestArchiver(MockTestCase):
         self.assertEquals(subsub1.filing_no, 'FAKE NUMBER.1.1')
 
 
-class TestArchiveForm(MockTestCase):
+class TestArchiving(MockTestCase):
 
     layer = ZCML_LAYER
 
     def setUp(self):
         grok('opengever.dossier.archive')
+
+    def test_implements_interface(self):
+        verifyClass(IDossierArchiver, Archiver)
 
     def test_end_date_validator(self):
 

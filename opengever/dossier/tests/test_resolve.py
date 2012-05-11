@@ -1,10 +1,13 @@
+from datetime import date
 from ftw.testing import MockTestCase
-from opengever.dossier.resolve import ResolveConditions, Resolver
-from opengever.dossier.resolve import NOT_SUPPLIED_OBJECTS
+from opengever.dossier.behaviors.dossier import IDossier
+from opengever.dossier.interfaces import IDossierResolver
 from opengever.dossier.resolve import NOT_CHECKED_IN_DOCS
 from opengever.dossier.resolve import NOT_CLOSED_TASKS
-from opengever.dossier.behaviors.dossier import IDossier
-from datetime import date
+from opengever.dossier.resolve import NOT_SUPPLIED_OBJECTS
+from opengever.dossier.resolve import ResolveConditions, Resolver
+from opengever.dossier.resolve import DossierResolver
+from zope.interface.verify import verifyClass
 
 
 TEST_DATE = date(2012, 3, 1)
@@ -116,6 +119,9 @@ class TestResolveConditions(MockTestCase):
         self.assertEquals(ResolveConditions(dossier).check_end_dates(), ['Dossier'])
 
 class TestResolver(MockTestCase):
+
+    def test_implements_interface(self):
+        verifyClass(IDossierResolver, DossierResolver)
 
     def test_resolve_dossier(self):
 
