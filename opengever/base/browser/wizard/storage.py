@@ -89,4 +89,8 @@ class ReceiveWizardDataSet(grok.View):
         data = json.loads(jsondata)
 
         getUtility(IWizardDataStorage).update(key, data)
+
+        # Set correct content type for text response
+        self.request.response.setHeader("Content-type", "tex/plain")
+
         return 'OK'

@@ -5,6 +5,11 @@ Changelog
 2.5 (unreleased)
 ----------------
 
+- Correcty set the response contenttype, to avoid problems with diazo themes.
+  Issue #6 Richtigen Content-Type auf der Response bei remote requests zwischen Clients setzen
+  https://extranet.4teamwork.ch/intranet/08-produkte-kurse/4teamwork-gever-1/tracker-4teamwork-gever/6
+  [phgross]
+
 - Added og specific Quickupload Factory, used by the tabbedview quickupload plugin.
   Issue #549 Abklaerung: Drag and drop
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/549
