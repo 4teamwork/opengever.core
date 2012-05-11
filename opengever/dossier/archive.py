@@ -279,6 +279,33 @@ class Archiver(grok.Adapter):
 
         return filing_no
 
+    def get_indexer_value(self, searchable=False):
+        """Return the filing value for the filing_no indexer.
+        For Dossiers without a number and only a prefix it return the half
+        of the number."""
+
+        dossier = IDossier(self.context)
+        value = None
+        if dossier.filing_no:
+            value = dossier.filing_no
+
+        elif dossier.filing_prefix:
+            value = '%s-%s-?' % (
+                self._get_client_id(),
+                self._get_term_title(
+                    dossier.filing_prefix,
+                    'opengever.dossier.type_prefixes'),
+                )
+            if searchable:
+                # cut the -? away
+                value = value[:-2]
+
+        if value:
+            if searchable:
+                return value.replace('-', ' ')
+            return value
+        return
+
     def _get_term_title(self, prefix, vocabulary):
         """ Get the value and not the key from the prefix vocabulary.
         """

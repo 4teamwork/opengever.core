@@ -1,11 +1,12 @@
 from Products.CMFCore.utils import getToolByName
 from opengever.base.behaviors.base import IOpenGeverBase
+from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.testing import OPENGEVER_DOSSIER_INTEGRATION_TESTING
 from zope.event import notify
 from zope.interface import Interface
 from zope.lifecycleevent import ObjectModifiedEvent, Attributes
-import unittest2 as unittest
 import transaction
+import unittest2 as unittest
 
 
 def obj2brain(obj):
@@ -93,3 +94,29 @@ class Testindexers(unittest.TestCase):
         self.assertEquals(
             obj2brain(subdossier.get('document')).containing_subdossier,
             'Subd\xc3\xb6ssier CHANGED')
+
+    def test_filing_no(self):
+        portal = self.layer['portal']
+        dossier = portal.get('dossier')
+
+        # no number, no prefix
+        self.assertEquals(getindexDataForObj(dossier).get('filing_no'), None)
+        self.assertEquals(getindexDataForObj(dossier).get('searchable_filing_no'), '')
+
+        # no number only prefix
+        IDossier(dossier).filing_prefix = 'directorate'
+        dossier.reindexObject()
+        self.assertEquals(getindexDataForObj(dossier).get('filing_no'),
+                          'OG-Directorate-?')
+        self.assertEquals(getindexDataForObj(dossier).get('searchable_filing_no'),
+                          ['og', 'directorate'])
+
+        # with number and prefix
+        IDossier(dossier).filing_no = 'SKA ARCH-Administration-2012-3'
+        dossier.reindexObject()
+        self.assertEquals(getindexDataForObj(dossier).get('filing_no'),
+            'SKA ARCH-Administration-2012-3')
+        self.assertEquals(getindexDataForObj(dossier).get('searchable_filing_no'),
+                          ['ska', 'arch', 'administration', '2012', '3'])
+
+

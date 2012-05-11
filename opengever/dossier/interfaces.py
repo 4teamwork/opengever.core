@@ -134,3 +134,7 @@ class IDossierArchiver(Interface):
         """Generate a correct filing number and
         set it recursively on every subdossier."""
 
+    def get_indexer_value():
+        """Return the filing value for the filing_no indexer.
+        For Dossiers without a number and only a prefix it return the half
+        of the number."""

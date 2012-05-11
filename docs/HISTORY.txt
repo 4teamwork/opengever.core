@@ -5,6 +5,11 @@ Changelog
 2.0.5 (unreleased)
 ------------------
 
+- Adjust filing_no indexers: they should indexing also, when only the prefix is given.
+  Issue #1476 Anzeige des Ablage-Praefix auch bei offenen Dossiers in Uebersicht auf Stufe Ordnungsposition
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1476
+  [phgross]
+
 - Refactored and adjust the whole resolve/archive process.
   Issue #1525 Dossier abschliessen: Wieder eroeffnen bzw. wieder abschliessen bei Subdossier.
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1525
