@@ -96,6 +96,29 @@ class TestDefaultLayout(MockTestCase):
 
         self.assertEqual(layout.get_render_arguments(), args)
 
+    def test_get_remder_arguments_non_owner(self):
+        context = self.mocker.mock()
+        request = self.create_dummy()
+        builder = self.create_dummy()
+
+        self.expect(context.Creator()).result('john.doe')
+        self.expect(
+            self.portal_membership.getMemberById('john.doe')).result(None)
+
+        self.replay()
+        layout = DefaultLayout(context, request, builder)
+
+        args = {
+            'client_title': 'CLIENT ONE',
+            'member_phone': '',
+            'show_contact': True,
+            'show_logo': True,
+            'show_organisation': False,
+            'location': 'Zug',
+            }
+
+        self.assertEqual(layout.get_render_arguments(), args)
+
     def test_rendering(self):
         context = self.stub()
         request = self.create_dummy()

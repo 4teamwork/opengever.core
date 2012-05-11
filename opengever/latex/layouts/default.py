@@ -53,7 +53,10 @@ class DefaultLayout(grok.MultiAdapter, MakoLayoutBase):
 
     def get_render_arguments(self):
         owner = self.get_owner()
-        owner_phone = owner.getProperty('phone_number', '&nbsp;')
+
+        owner_phone = '&nbsp;'
+        if owner:
+            owner_phone = owner.getProperty('phone_number', '&nbsp;')
 
         client = get_current_client()
         convert = self.get_converter().convert

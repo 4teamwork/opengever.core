@@ -5,6 +5,7 @@ from five import grok
 from ftw.pdfgenerator.browser.views import ExportPDFView
 from ftw.pdfgenerator.interfaces import ILaTeXLayout
 from ftw.pdfgenerator.interfaces import ILaTeXView
+from ftw.pdfgenerator.utils import provide_request_layer
 from ftw.pdfgenerator.view import MakoLaTeXView
 from ftw.table import helper
 from opengever.base.interfaces import IReferenceNumber
@@ -19,12 +20,11 @@ from opengever.ogds.base.interfaces import IContactInformation
 from opengever.ogds.base.utils import get_current_client
 from opengever.repository.interfaces import IRepositoryFolder
 from opengever.tabbedview.helper import readable_ogds_author
-from opengever.tabbedview.helper import workflow_state
+from opengever.latex.utils import workflow_state
 from opengever.task.helper import task_type_helper
 from zope.component import getUtility
 from zope.i18n import translate
 from zope.interface import Interface
-from zope.interface import directlyProvidedBy, directlyProvides
 from zope.schema import vocabulary
 
 
@@ -40,10 +40,7 @@ class DossierDetailsPDFView(grok.View, ExportPDFView):
 
     def render(self):
         # Enable IDossierDetailsLayer
-        if not IDossierDetailsLayer.providedBy(self.request):
-            ifaces = [IDossierDetailsLayer] + list(directlyProvidedBy(
-                    self.request))
-            directlyProvides(self.request, *ifaces)
+        provide_request_layer(self.request, IDossierDetailsLayer)
 
         return ExportPDFView.__call__(self)
 
@@ -280,7 +277,7 @@ class DossierDetailsLaTeXView(grok.MultiAdapter, MakoLaTeXView):
             if not isinstance(item, str):
                 item = str(item)
 
-            data.append(self.convert(item))
+            data.append(self.convert_plain(item))
 
         return data
 

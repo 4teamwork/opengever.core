@@ -2,6 +2,7 @@ from five import grok
 from ftw.pdfgenerator.browser.views import ExportPDFView
 from ftw.pdfgenerator.interfaces import ILaTeXLayout
 from ftw.pdfgenerator.interfaces import ILaTeXView
+from ftw.pdfgenerator.utils import provide_request_layer
 from ftw.pdfgenerator.view import MakoLaTeXView
 from ftw.table import helper
 from opengever.globalindex import Session
@@ -10,13 +11,12 @@ from opengever.latex.interfaces import ILandscapeLayer
 from opengever.latex.utils import get_issuer_of_task
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.ogds.base.utils import get_client_id, get_current_client
-from opengever.tabbedview.helper import workflow_state
+from opengever.latex.utils import workflow_state
 from opengever.task.helper import task_type_helper
 from sqlalchemy import and_, or_
 from sqlalchemy.sql.expression import asc
 from zope.component import getUtility
 from zope.interface import Interface
-from zope.interface import directlyProvidedBy, directlyProvides
 
 
 OPEN_TASK_STATES = [
@@ -39,10 +39,7 @@ class OpenTaskReportPDFView(grok.View, ExportPDFView):
     grok.require('zope2.View')
 
     def render(self):
-        if not IOpenTaskReportLayer.providedBy(self.request):
-            ifaces = [IOpenTaskReportLayer] + list(directlyProvidedBy(
-                    self.request))
-            directlyProvides(self.request, *ifaces)
+        provide_request_layer(self.request, IOpenTaskReportLayer)
 
         return ExportPDFView.__call__(self)
 
@@ -163,7 +160,7 @@ class OpenTaskReportLaTeXView(grok.MultiAdapter, MakoLaTeXView):
         return self.convert_list_to_row(data)
 
     def convert_list_to_row(self, row):
-        return ' & '.join([self.convert(cell) for cell in row])
+        return ' & '.join([self.convert_plain(cell) for cell in row])
 
 
 class OpenTaskReportPDFAllowed(grok.View):

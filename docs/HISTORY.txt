@@ -2,12 +2,33 @@ Changelog
 =========
 
 
-2.1.5 (unreleased)
+2.1.7 (unreleased)
 ------------------
 
 - Removed the get_selected_items and use the method from og.globalindex instead.
   [phgross]
 
+2.1.6 (2012-05-07)
+------------------
+
+- Add a simple workflow_state helper which only translate the state (without html).
+  [phgross]
+
+
+2.1.5 (2012-05-02)
+------------------
+
+- Use htmlencoding convert method in all listings.
+  Issue #1536 Dossiers: Unschoene Darstellung der Spalte "Autor" in Detailliste (PDF)
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1536/
+  [phgross]
+
+- Fixed get_render_arguments, added fallback for not existing owners.
+  [phgross]
+
+- https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1538/
+  #1538 Verwenden der neuen utility Methode provide_request_layer in ftw.pdfgenerator
+  [eschmutz]
 
 2.1.4 (2012-03-29)
 ------------------
