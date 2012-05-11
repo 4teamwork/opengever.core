@@ -146,6 +146,9 @@ class ReceiveObject(grok.View):
             'intid': intids.queryId(self.context)
             }
 
+        # Set correct content type for JSON response
+        self.request.response.setHeader("Content-type", "application/json")
+
         return json.dumps(data)
 
 
@@ -161,6 +164,10 @@ class ExtractObject(grok.View):
 
     def render(self):
         transporter = getUtility(ITransporter)
+
+        # Set correct content type for JSON response
+        self.request.response.setHeader("Content-type", "application/json")
+
         return transporter.extract(self.context)
 
 

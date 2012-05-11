@@ -5,6 +5,11 @@ Changelog
 2.0.5 (unreleased)
 ------------------
 
+- Set the response contenttype correctly, to avoid problems with diazo themes on remote requests.
+  Issue #6 Richtigen Content-Type auf der Response bei remote requests zwischen Clients setzen
+  https://extranet.4teamwork.ch/intranet/08-produkte-kurse/4teamwork-gever-1/tracker-4teamwork-gever/6
+  [phgross]
+
 - Fixed uniquevalues problem in EmailVocabularyFactory, append the username to the mailaddres.
   [phgross]
 
