@@ -29,4 +29,8 @@ class OpenDossiersAsJSONView(grok.View):
                     'review_state': str(brain.review_state),
                     'reference_number': str(brain.reference),
                     })
+
+        # Set correct content type for JSON response
+        self.request.response.setHeader("Content-type", "application/json")
+
         return json.dumps(data)

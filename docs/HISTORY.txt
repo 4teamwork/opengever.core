@@ -5,6 +5,11 @@ Changelog
 2.0.5 (unreleased)
 ------------------
 
+- Set the response contenttype correctly, to avoid problems with diazo themes on remote requests.
+  Issue #6 Richtigen Content-Type auf der Response bei remote requests zwischen Clients setzen
+  https://extranet.4teamwork.ch/intranet/08-produkte-kurse/4teamwork-gever-1/tracker-4teamwork-gever/6
+  [phgross]
+
 - Adjust filing_no indexers: they should indexing also, when only the prefix is given.
   Issue #1476 Anzeige des Ablage-Praefix auch bei offenen Dossiers in Uebersicht auf Stufe Ordnungsposition
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1476
