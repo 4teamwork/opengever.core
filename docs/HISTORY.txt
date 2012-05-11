@@ -5,6 +5,11 @@ Changelog
 2.0.4 (unreleased)
 ------------------
 
+- Set the response contenttype correctly, to avoid problems with diazo themes on remote requests.
+  Issue #6 Richtigen Content-Type auf der Response bei remote requests zwischen Clients setzen
+  https://extranet.4teamwork.ch/intranet/08-produkte-kurse/4teamwork-gever-1/tracker-4teamwork-gever/6
+  [phgross]
+
 - Added ``Modify portal content``as needed permission for checkout a document.
   Issue #1553 Problem Auschecken von Dokument aus mandantenuebergreifender
   Aufgabe (GEA -> GDS)

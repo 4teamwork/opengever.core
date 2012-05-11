@@ -30,4 +30,8 @@ class DocumentsOfDossierAsJSONView(grok.View):
                     'title': str(safe_unicode(brain.Title).encode('utf8')),
                     'review_state': str(brain.review_state),
                     })
+
+        # Set correct content type for JSON response
+        self.request.response.setHeader("Content-type", "application/json")
+
         return json.dumps(data)
