@@ -14,7 +14,7 @@ def set_application_title(context):
         # The registry entry doesn't exist yet
         return
 
-    site_properties.application_title = u'GEVER'
+    site_properties.application_title = u'Mandant'
 
 
 

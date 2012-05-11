@@ -5,6 +5,11 @@ Changelog
 2.0.3 (unreleased)
 ------------------
 
+- Adjust the application_title form GEVER to Mandant for zug clients.
+  Issue #1555 Bei der einfachen Suche sollte es heissen "Mandant durchsuchen", nicht "Gever durchsuchen".
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1555
+  [phgross]
+
 - #1154 Umstellung OpenGever in GEVER
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1154
   Updated application_title Gever with GEVER
@@ -32,7 +37,7 @@ Changelog
   https://extranet.4teamwork.ch/projects/verein-plonegov/tracker-verein-plonegov.ch/17
   Added setuphandler for new search-text handling to set the correct text
   [eschmutz]
-  
+
 - Changed default visibility for `logout` action to True
   [lgraf]
 
