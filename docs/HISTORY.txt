@@ -5,6 +5,11 @@ Changelog
 2.0.5 (unreleased)
 ------------------
 
+- Added decoding the title of the remote objects, to avoid problems with umlaut.
+  Issue #1420 Plone Version und Dexterity Version auf aktuellste Version heben.
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1420
+  [phgross]
+
 - Set the response contenttype correctly, to avoid problems with diazo themes on remote requests.
   Issue #6 Richtigen Content-Type auf der Response bei remote requests zwischen Clients setzen
   https://extranet.4teamwork.ch/intranet/08-produkte-kurse/4teamwork-gever-1/tracker-4teamwork-gever/6

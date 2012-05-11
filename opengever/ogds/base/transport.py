@@ -190,9 +190,14 @@ class DexterityObjectCreator(grok.Adapter):
             }
 
     def create(self, container, data):
+
+        title = data['title']
+        if not isinstance(title, unicode):
+            title = title.decode('utf-8')
+
         obj = createContent(data['portal_type'],
-                            id=data['title'],
-                            title=data['title'])
+                            id=title,
+                            title=title)
         notify(ObjectCreatedEvent(obj))
         obj = addContentToContainer(container,
                                     obj,
