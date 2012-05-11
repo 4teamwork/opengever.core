@@ -263,6 +263,8 @@ class CompleteSuccessorTaskReceiveDelivery(grok.View):
         data = json.loads(data)
 
         if self.is_already_delivered(data):
+            # Set correct content type for text response
+            self.request.response.setHeader("Content-type", "tex/plain")
             return 'OK'
 
         mtool = getToolByName(self.context, 'portal_membership')
@@ -289,6 +291,8 @@ class CompleteSuccessorTaskReceiveDelivery(grok.View):
             self.context, data['transition'], text=data['text'],
             added_object=documents)
 
+        # Set correct content type for text response
+        self.request.response.setHeader("Content-type", "tex/plain")
         return 'OK'
 
     def is_already_delivered(self, data):

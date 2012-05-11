@@ -15,6 +15,9 @@ class StoreForwardingInYearfolderView(grok.View):
 
     def render(self):
         if self.is_already_done():
+            # Set correct content type for text response
+            self.request.response.setHeader("Content-type", "tex/plain")
+
             return 'OK'
 
         mtool = getToolByName(self.context, 'portal_membership')
@@ -52,6 +55,10 @@ class StoreForwardingInYearfolderView(grok.View):
         else:
             AccessControl.SecurityManagement.setSecurityManager(
                 _sm)
+
+            # Set correct content type for text response
+            self.request.response.setHeader("Content-type", "tex/plain")
+
             return 'OK'
 
     def is_already_done(self):

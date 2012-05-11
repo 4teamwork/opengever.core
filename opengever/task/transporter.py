@@ -267,6 +267,9 @@ class ExtractDocuments(grok.View):
         for doc in self.get_documents():
             data.append(transporter._extract_data(doc))
 
+        # Set correct content type for JSON response
+        self.request.response.setHeader("Content-type", "application/json")
+
         return json.dumps(data)
 
     def get_documents(self):

@@ -5,6 +5,11 @@ Changelog
 2.3.5 (unreleased)
 ------------------
 
+- Set the response contenttype correctly, to avoid problems with diazo themes on remote requests.
+  Issue #6 Richtigen Content-Type auf der Response bei remote requests zwischen Clients setzen
+  https://extranet.4teamwork.ch/intranet/08-produkte-kurse/4teamwork-gever-1/tracker-4teamwork-gever/6
+  [phgross]
+
 - Let the task provide the ISendableDocsContainer marker behavior.
   Issue #1568 Dokument aus Aufgabe versenden resp. kopieren
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1568

@@ -300,6 +300,10 @@ class AcceptTaskWorkflowTransitionView(grok.View):
     grok.require('cmf.AddPortalContent')
 
     def render(self):
+
+        # Set correct content type for text response
+        self.request.response.setHeader("Content-type", "tex/plain")
+
         if self.is_already_accepted():
             return 'OK'
 

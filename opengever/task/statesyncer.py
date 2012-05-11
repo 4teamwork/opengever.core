@@ -96,6 +96,9 @@ class SyncTaskWorkflowStateReceiveView(grok.View):
         text = self.request.get('text')
 
         if self.is_already_done(transition, text):
+            # Set correct content type for text response
+            self.request.response.setHeader("Content-type", "tex/plain")
+
             return 'OK'
 
         wftool = getToolByName(self.context, 'portal_workflow')
@@ -117,6 +120,9 @@ class SyncTaskWorkflowStateReceiveView(grok.View):
 
         response.add_change('review_state', _(u'Issue state'),
                             before, after)
+
+        # Set correct content type for text response
+        self.request.response.setHeader("Content-type", "tex/plain")
 
         return 'OK'
 
