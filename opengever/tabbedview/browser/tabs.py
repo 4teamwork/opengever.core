@@ -43,7 +43,6 @@ class OpengeverTab(object):
         """We need to handle some sorting for special columns, which are
         not sortable in the catalog...
         """
-
         if getattr(self, '_custom_sort_method', None) is not None:
             results = self._custom_sort_method(results, sort_on, sort_reverse)
 
@@ -144,6 +143,10 @@ class Documents(OpengeverCatalogListingTab):
     columns = (
 
         ('', helper.path_checkbox),
+
+        {'column': 'sequence_number',
+         'column_title': _(u'sequence_number', default=u'Sequence Number'),
+         'sort_index': 'sequence_number'},
 
         {'column': 'Title',
          'column_title': _(u'label_title', default=u'Title'),
