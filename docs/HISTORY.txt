@@ -10,6 +10,16 @@ Changelog
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1503/
   [eschmutz]
 
+- Added custom sort for the task_type column.
+  Issue #1514 Aufgaben-Tab: Sortierung nach Auftragstyp sortiert nicht alphabetisch
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1514
+  [phgross]
+
+- Adjust tranlsation of the assigned_task tab.
+  Issue #1545 Namen Anpassen
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1545
+  [phgross]
+
 - Activate and configure tabbedview quickupload plugin for opengever.
   Issue #549 Abklaerung: Drag and drop
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/549
