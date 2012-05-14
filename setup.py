@@ -35,8 +35,10 @@ setup(name='opengever.portlets.tree',
       install_requires=[
         'setuptools',
         'ftw.treeview',
+        'Plone',
         # -*- Extra requirements: -*-
         ],
+
       tests_require=tests_require,
       extras_require=dict(tests=tests_require),
       entry_points="""
