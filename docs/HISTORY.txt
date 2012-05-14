@@ -5,6 +5,11 @@ Changelog
 2.0.4 (unreleased)
 ------------------
 
+- Added additional title field for mails, as OGMail behavior.
+  Issue #1275 Originalen Mail-Titel bearbeiten koennen
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1275/
+  [phgross]
+
 - Implemented ISendableDocsContainer as real marker behavior.
   Issue #1568 Dokument aus Aufgabe versenden resp. kopieren
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1568

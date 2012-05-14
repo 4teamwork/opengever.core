@@ -1,7 +1,8 @@
 from Acquisition import aq_inner
 from five import grok
 from ftw.mail import utils
-from ftw.mail.mail import IMail, View as ftwView
+from ftw.mail.mail import View as ftwView
+from ftw.mail.mail import IMail
 from izug.basetheme.browser.interfaces import IOpengeverSpecific
 from plone.i18n.normalizer.interfaces import IIDNormalizer
 from plone.memoize import instance
@@ -10,13 +11,10 @@ from zope.component import getUtility
 
 
 class View(ftwView):
-    """
-    handles the sprites for the attachments
-    """
+
     grok.context(IMail)
     grok.layer(IOpengeverSpecific)
     grok.require('zope2.View')
-
 
     @instance.memoize
     def attachments(self):

@@ -3,6 +3,9 @@
 
     <property name="icon_expr"></property>
 
+    <!-- class used for content items -->
+    <property name="klass">opengever.mail.mail.OGMail</property>
+
     <action action_id="save_attachments"
             title="save attachments"
             visible="True"
@@ -15,5 +18,6 @@
         <element value="plone.app.versioningbehavior.behaviors.IVersionable" />
         <element value="opengever.base.behaviors.sequence.ISequenceNumberBehavior" />
         <element value="opengever.document.behaviors.IBaseDocument" />
+        <element value="opengever.mail.mail.IOGMail" />
     </property>
 </object>

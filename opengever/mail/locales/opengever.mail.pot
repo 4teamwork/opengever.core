@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2012-04-27 08:57+0000\n"
+"POT-Creation-Date: 2012-05-11 08:58+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -48,7 +48,7 @@ msgid "byline_created"
 msgstr ""
 
 #. Default: "Cancel"
-#: ./opengever/mail/browser/send_document.py:181
+#: ./opengever/mail/browser/send_document.py:187
 msgid "cancel_back"
 msgstr ""
 
@@ -84,6 +84,11 @@ msgstr ""
 #. Default: "Extern receiver"
 #: ./opengever/mail/browser/send_document.py:56
 msgid "extern_receiver"
+msgstr ""
+
+#. Default: "Common"
+#: ./opengever/mail/mail.py:21
+msgid "fieldset_common"
 msgstr ""
 
 #. Default: "Send as email"
@@ -125,7 +130,7 @@ msgid "info_extracted_document"
 msgstr ""
 
 #. Default: "Mails sent"
-#: ./opengever/mail/browser/send_document.py:174
+#: ./opengever/mail/browser/send_document.py:178
 msgid "info_mails_sent"
 msgstr ""
 
@@ -170,7 +175,7 @@ msgid "label_reference_number"
 msgstr ""
 
 #. Default: "see attachment"
-#: ./opengever/mail/browser/send_document.py:213
+#: ./opengever/mail/browser/send_document.py:219
 msgid "label_see_attachment"
 msgstr ""
 
@@ -187,6 +192,11 @@ msgstr ""
 #. Default: "Subject"
 #: ./opengever/mail/browser/send_document.py:65
 msgid "label_subject"
+msgstr ""
+
+#. Default: "Title"
+#: ./opengever/mail/mail.py:29
+msgid "label_title"
 msgstr ""
 
 #: ./opengever/mail/browser/send_document.py:49

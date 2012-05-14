@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2012-04-27 08:57+0000\n"
+"POT-Creation-Date: 2012-05-11 08:58+0000\n"
 "PO-Revision-Date: 2012-04-27 10:57+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -43,7 +43,7 @@ msgid "byline_created"
 msgstr "Erstellt"
 
 #. Default: "Cancel"
-#: ./opengever/mail/browser/send_document.py:181
+#: ./opengever/mail/browser/send_document.py:187
 msgid "cancel_back"
 msgstr "Abbrechen"
 
@@ -80,6 +80,11 @@ msgstr "Diese E-Mail hat keine Anhänge, die extrahiert werden könnten."
 #: ./opengever/mail/browser/send_document.py:56
 msgid "extern_receiver"
 msgstr "Externer Empfänger"
+
+#. Default: "Common"
+#: ./opengever/mail/mail.py:21
+msgid "fieldset_common"
+msgstr ""
 
 #. Default: "Send as email"
 #: ./opengever/mail/browser/send_document.py:121
@@ -120,7 +125,7 @@ msgid "info_extracted_document"
 msgstr "Dokument wurde erstellt: ${title}"
 
 #. Default: "Mails sent"
-#: ./opengever/mail/browser/send_document.py:174
+#: ./opengever/mail/browser/send_document.py:178
 msgid "info_mails_sent"
 msgstr "Mails wurden versendet."
 
@@ -165,7 +170,7 @@ msgid "label_reference_number"
 msgstr "Aktenzeichen"
 
 #. Default: "see attachment"
-#: ./opengever/mail/browser/send_document.py:213
+#: ./opengever/mail/browser/send_document.py:219
 msgid "label_see_attachment"
 msgstr "siehe Anhänge"
 
@@ -183,6 +188,11 @@ msgstr "Laufnummer"
 #: ./opengever/mail/browser/send_document.py:65
 msgid "label_subject"
 msgstr "Betreff"
+
+#. Default: "Title"
+#: ./opengever/mail/mail.py:29
+msgid "label_title"
+msgstr ""
 
 #: ./opengever/mail/browser/send_document.py:49
 msgid "mails"

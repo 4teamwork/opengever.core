@@ -6,8 +6,6 @@
       metal:use-macro="context/main_template/macros/master"
       i18n:domain="ftw.mail">
 <body>
-	
-<h1>Haaaaaaaaaaaaaaaaaaaallloo</h1>
 
 <metal:main fill-slot="main">
     <tal:main-macro metal:define-macro="main"

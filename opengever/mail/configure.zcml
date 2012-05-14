@@ -33,6 +33,16 @@
           provides=".behaviors.ISendableDocsContainer"
           />
 
+    <plone:behavior
+        title="Opengever Mail"
+        description="Opengever mail additional title behavior."
+        provides=".mail.IOGMail"
+        factory=".mail.OGMailBase"
+        marker=".mail.IOGMailMarker"
+        for="plone.dexterity.interfaces.IDexterityContent"
+
+        />
+
     <genericsetup:registerProfile
           name="default"
           title="opengever.mail"

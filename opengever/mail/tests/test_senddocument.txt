@@ -42,6 +42,8 @@ create a mail
     ...     message=field_type(data=msgtxt,
     ...          contentType=u'message/rfc822', filename=u'attachment.txt'))
 
+    >>> mail1.setTitle(u'Adjusted mail title')
+
 portal has to provide ISendableDocsContainer
     >>> alsoProvides(portal, ISendableDocsContainer)
     >>> ISendableDocsContainer.providedBy(portal)
@@ -139,9 +141,8 @@ validator should also work with mails ect
     'Test Betreff 2'
     >>> id_util = getUtility(IIntIds)
     >>> id_util.getObject(documentsent.intids[0]).Title()
-    'Attachment Test'
+    'Adjusted mail title'
     >>> documentsent.receiver
     'info@4teamwork.ch'
     >>> documentsent.message
     'Test Nachricht 2'
-
