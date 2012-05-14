@@ -27,14 +27,17 @@ class TestOGMailAddition(unittest.TestCase):
         #reset title
         setattr(OGMailBase(m1), 'title', u'')
         self.assertEquals(u'[No Subject]', m1.title)
+        self.assertEquals(m1.Title(), '[No Subject]')
 
         m1.message = NamedBlobFile(self.mail_data, filename=u"mail.eml")
         #reset title
         setattr(OGMailBase(m1), 'title', u'')
         self.assertEquals(u'Die B\xfcrgschaft', m1.title)
+        self.assertEquals(m1.Title(), 'Die B\xc3\xbcrgschaft')
 
         IOGMail(m1).title = u'hanspeter'
         self.assertEquals(u'hanspeter', m1.title)
+        self.assertEquals(m1.Title(), 'hanspeter')
 
     def test_editform(self):
         m1 = createContentInContainer(
