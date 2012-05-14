@@ -22,5 +22,4 @@ def get_translated_types(context, request):
     for key, terms in getTaskTypeVocabulary(context).by_value.items():
         values[key] = terms.title.lower()
 
-    print values
     return values
