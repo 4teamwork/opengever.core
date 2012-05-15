@@ -11,7 +11,6 @@ imports
     >>> from Testing import makerequest
     >>> from Products.CMFCore.utils import getToolByName
     >>> from Products.Five.testbrowser import Browser
-    >>> from Products.PloneTestCase.setup import portal_owner, default_password
     >>> from opengever.base.interfaces import IRedirector
     >>> from plone.app.testing import login, setRoles, TEST_USER_NAME, TEST_USER_ID
 
