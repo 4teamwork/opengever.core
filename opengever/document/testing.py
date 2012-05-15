@@ -33,6 +33,10 @@ class DocumentFunctionalLayer(PloneSandboxLayer):
         xmlconfig.file('tests.zcml', package=document,
             context=configurationContext)
 
+        from opengever import dossier
+        xmlconfig.file('configure.zcml', package=dossier,
+            context=configurationContext)
+
         from opengever import base
         xmlconfig.file('configure.zcml', package=base,
             context=configurationContext)
@@ -40,6 +44,7 @@ class DocumentFunctionalLayer(PloneSandboxLayer):
     def setUpPloneSite(self, portal):
         applyProfile(portal, 'plone.app.versioningbehavior:default')
         applyProfile(portal, 'opengever.document:default')
+        applyProfile(portal, 'opengever.dossier:default')
         applyProfile(portal, 'opengever.ogds.base:default')
         applyProfile(portal, 'opengever.base:default')
         applyProfile(portal, 'ftw.tabbedview:default')

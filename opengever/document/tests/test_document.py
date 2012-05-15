@@ -6,6 +6,7 @@ from opengever.document.testing import OPENGEVER_DOCUMENT_INTEGRATION_TESTING
 from plone.dexterity.interfaces import IDexterityFTI
 from plone.dexterity.utils import createContentInContainer
 from plone.namedfile.file import NamedBlobFile
+from z3c.form import interfaces
 from z3c.form.interfaces import IValue
 from zope.component import createObject
 from zope.component import queryMultiAdapter, getAdapter
@@ -13,7 +14,6 @@ from zope.component import queryUtility, getUtility
 from zope.interface import Invalid
 from zope.schema import getFields
 import unittest2 as unittest
-
 
 class TestDocumentIntegration(unittest.TestCase):
 
@@ -122,6 +122,22 @@ class TestDocumentIntegration(unittest.TestCase):
         default = queryMultiAdapter(
             (d1, d1.REQUEST, None, field, None, ), IValue, name='default')
         self.assertTrue(default.get(), date.today())
+
+    def test_validators(self):
+        portal = self.layer['portal']
+        mock_file = NamedBlobFile('bla bla', filename=u'test.txt')
+        mock_mail = NamedBlobFile('bla bla', filename=u'test.eml')
+        dossier = createContentInContainer(
+            portal,'opengever.dossier.businesscasedossier')
+        d1 = createContentInContainer(dossier, 'opengever.document.document',
+              file=mock_file)
+        field = getFields(IDocumentSchema).get('file')
+        validator = queryMultiAdapter(
+            (d1, d1.REQUEST, None, field, None), interfaces.IValidator)
+
+        validator.validate(mock_file)
+        with self.assertRaises(Invalid):
+            self.assertFalse(validator.validate(mock_mail))
 
     def test_basedocument(self):
         portal = self.layer['portal']

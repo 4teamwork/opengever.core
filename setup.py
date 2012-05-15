@@ -67,6 +67,7 @@ setup(name='opengever.document',
         'ftw.datepicker',
         'opengever.dossier',
         'collective.dexteritytextindexer',
+        'opengever.mail',
         ],
 
         tests_require=tests_require,

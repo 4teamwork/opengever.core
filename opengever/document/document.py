@@ -1,4 +1,4 @@
-from Acquisition import aq_inner, aq_base
+from Acquisition import aq_inner, aq_base, aq_parent
 from Products.CMFCore.utils import getToolByName
 from Products.MimetypesRegistry.common import MimeTypeException
 from collective import dexteritytextindexer
@@ -9,6 +9,8 @@ from ftw.datepicker.widget import DatePickerFieldWidget
 from opengever.base.interfaces import IReferenceNumber, ISequenceNumber
 from opengever.document import _
 from opengever.document.interfaces import ICheckinCheckoutManager
+from opengever.dossier.behaviors.dossier import IDossierMarker
+from opengever.mail.behaviors import IMailInAddress
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.tabbedview.browser.tabs import OpengeverTab
 from opengever.tabbedview.browser.tabs import Tasks
@@ -25,6 +27,7 @@ from plone.namedfile.field import NamedBlobFile
 from plone.supermodel.interfaces import FIELDSETS_KEY
 from plone.supermodel.model import Fieldset
 from plone.z3cform.textlines.textlines import TextLinesFieldWidget
+from z3c.form import validator
 from z3c.form.browser import checkbox
 from zc.relation.interfaces import ICatalog
 from zope import schema
@@ -37,9 +40,11 @@ from zope.lifecycleevent.interfaces import IObjectCopiedEvent
 from zope.lifecycleevent.interfaces import IObjectCreatedEvent
 from zope.lifecycleevent.interfaces import IObjectModifiedEvent
 import logging
+import os.path
 
 
 LOG = logging.getLogger('opengever.document')
+MAIL_EXTENSIONS = ['.eml', '.msg']
 
 # move and omit the changeNote,
 # because it's not possible to make a new version when you editing a file
@@ -216,6 +221,40 @@ class IDocumentSchema(form.Schema):
                 _(u'error_file_and_preserved_as_paper',
                 default=u"You don't select a file and document is also not \
                 preserved in paper_form, please correct it."))
+
+
+class UploadValidator(validator.SimpleFieldValidator):
+
+    def validate(self, value):
+        """An mail upload as og.document should't be possible,
+        it should be added as Mail object (see opengever.mail)"""
+
+        if value and value.filename:
+            basename, extension = os.path.splitext(value.filename)
+            if extension.lower() in MAIL_EXTENSIONS:
+                if IDossierMarker.providedBy(self.context):
+                    mail_address = IMailInAddress(
+                        self.context).get_email_address()
+                else:
+                    parent = aq_parent(aq_inner(self.context))
+                    mail_address = IMailInAddress(parent).get_email_address()
+
+                raise Invalid(
+                    _(u'error_mail_upload',
+                    default=u"It's not possible to add E-mails here, please '\
+                    'send it to ${mailaddress} or drag it to the dossier '\
+                    ' (Dragn'n'Drop).",
+                      mapping={'mailaddress': mail_address}))
+
+            return
+
+
+validator.WidgetValidatorDiscriminators(
+    UploadValidator,
+    field=IDocumentSchema['file'],
+    )
+
+grok.global_adapter(UploadValidator)
 
 
 # Default values

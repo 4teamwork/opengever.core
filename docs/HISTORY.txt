@@ -5,6 +5,11 @@ Changelog
 2.0.4 (unreleased)
 ------------------
 
+- Added UploadValidator to avoid mail upload as documents.
+  Issue #1508 Mail im Originalformat heraufladen / Zusammenhang zu #1275 und Drag und Drop
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1508/
+  [phgross]
+
 - Set the response contenttype correctly, to avoid problems with diazo themes on remote requests.
   Issue #6 Richtigen Content-Type auf der Response bei remote requests zwischen Clients setzen
   https://extranet.4teamwork.ch/intranet/08-produkte-kurse/4teamwork-gever-1/tracker-4teamwork-gever/6
