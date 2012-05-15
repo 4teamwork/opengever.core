@@ -187,7 +187,7 @@ class RelatedDocumentsCatalogTableSource(
             key=lambda item: item[0],
             reverse=sort_reverse)
 
-        ordered_brains = [obj for val, obj in ordered_brains]
+        ordered_brains = [obj for obj in ordered_brains.values()]
 
         return ordered_brains
 
