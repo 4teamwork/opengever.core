@@ -5,6 +5,11 @@ Changelog
 2.1.7 (unreleased)
 ------------------
 
+- Added some Adjustments on names and layout of dossiercover and details view.
+  Issue #1432 Anpassungen Druchvorlage
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1432/
+  [phgross]
+
 - Removed the get_selected_items and use the method from og.globalindex instead.
   [phgross]
 

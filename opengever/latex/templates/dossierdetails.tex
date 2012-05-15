@@ -1,7 +1,7 @@
 % if is_subdossier:
-  {\bf Subdossier}\\%%
+  {\bf Details Subdossier}\\%%
 % else:
-  {\bf Dossier}\\%%
+  {\bf Details Dossier}\\%%
 % endif
 \vspace{\baselineskip}
 \scriptsize
@@ -14,9 +14,14 @@
 % if filingprefix:
   \bf{Ablage} & ${filingprefix} \\%%
 % endif
-\bf{Ablage} & ${filing_no} \\%%
+\bf{Ablagenummer} & ${filing_no} \\%%
 \bf{Ordnungsposition} & ${repository} \\%%
-\bf{Geschäftstitel} & ${title} \\%%
+% if is_subdossier:
+\bf{Titel Dossier} & ${title_dossier} \\%%
+\bf{Titel Subdossier} & ${title_subdossier} \\%%
+% else:
+\bf{Titel Dossier} & ${title_dossier} \\%%
+% endif
 \bf{Status} & ${review_state} \\%%
 \bf{Federführend} & ${responsible} \\%%
 % if participants:

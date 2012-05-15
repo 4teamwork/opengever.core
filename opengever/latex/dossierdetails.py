@@ -77,7 +77,13 @@ class DossierDetailsLaTeXView(grok.MultiAdapter, MakoLaTeXView):
 
         args = {}
 
-        args['title'] = self.context.Title()
+        parent = aq_parent(aq_inner(self.context))
+        if IDossierMarker.providedBy(parent):
+            args['title_dossier'] = parent.Title()
+            args['title_subdossier'] = self.context.Title()
+        else:
+            args['title_dossier'] = self.context.Title()
+
         args['repository'] = self.get_repository_path()
         args['start'] = helper.readable_date(self.context, dossier.start)
         args['end'] = helper.readable_date(self.context, dossier.end)
