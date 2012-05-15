@@ -1,40 +1,26 @@
 from Acquisition import aq_inner, aq_parent
-from Products.CMFCore.interfaces import IActionSucceededEvent
-from Products.CMFCore.utils import getToolByName
-from Products.CMFPlone.CatalogTool import sortable_title
 from collective import dexteritytextindexer
 from datetime import datetime, timedelta
 from five import grok
 from ftw.datepicker.widget import DatePickerFieldWidget
-from ftw.table import helper
-from ftw.table.basesource import BaseTableSource
-from ftw.table.interfaces import ITableSource, ITableSourceConfig
 from opengever.base.interfaces import ISequenceNumber
 from opengever.base.source import DossierPathSourceBinder
 from opengever.ogds.base.autocomplete_widget import AutocompleteFieldWidget
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.ogds.base.utils import get_client_id
-from opengever.tabbedview import _ as TMF
-from opengever.tabbedview.browser.tabs import Documents
-from opengever.tabbedview.helper import external_edit_link
-from opengever.tabbedview.helper import linked
-from opengever.tabbedview.helper import readable_ogds_author
-from opengever.tabbedview.helper import readable_ogds_user
 from opengever.task import util
 from opengever.task import _
-from opengever.task.helper import path_checkbox
-from operator import attrgetter
 from plone.dexterity.content import Container
 from plone.directives import form, dexterity
 from plone.indexer import indexer
-from plone.indexer.interfaces import IIndexer
+from Products.CMFCore.interfaces import IActionSucceededEvent
 from z3c.form.interfaces import HIDDEN_MODE
 from z3c.relationfield.schema import RelationChoice, RelationList
 from zc.relation.interfaces import ICatalog
 from zope import schema
 from zope.app.intid.interfaces import IIntIds
 from zope.component import getUtility, getMultiAdapter
-from zope.interface import implements, Interface
+from zope.interface import implements
 from zope.schema.vocabulary import getVocabularyRegistry
 
 
@@ -193,7 +179,6 @@ class ITask(form.Schema):
 # # XXX doesn't work yet.
 #@form.default_value(field=ITask['issuer'])
 
-
 def default_issuer(data):
     portal_state = getMultiAdapter(
         (data.context, data.request),
@@ -259,210 +244,10 @@ def responsible_client_default_value(data):
     return get_client_id()
 
 
-class IRelatedDocumentsTableSourceConfig(ITableSourceConfig):
-    """Related documents table source config
-    """
-    pass
-
-
-def sortable_title_transform(item, value):
-    """This transform should only be used for sorting items by title
-    using the sortable_title indexer. Its used as wrapper for for the
-    CatalogTool sortable_title indexer for making it callable like a
-    normal ftw.table transform.
-
-    This transform only works when using objects as item, using brain
-    or dicts is not supported.
-    """
-    return sortable_title(item)()
-
-
-class RelatedDocumentsTableSource(grok.MultiAdapter, BaseTableSource):
-    """Related documents table source adapter
-    """
-
-    grok.implements(ITableSource)
-    grok.adapts(IRelatedDocumentsTableSourceConfig, Interface)
-
-    def build_query(self):
-        """Builds the query based on `get_base_query()` method of config.
-        Returns the query object.
-        """
-        # initalize config
-        self.config.update_config()
-        # get the base query from the config
-        query = self.config.get_base_query()
-        portal_catalog = getToolByName(self.config.context, 'portal_catalog')
-        brains = portal_catalog(query)
-        objects = []
-        for brain in brains:
-            objects.append(brain.getObject())
-
-        # Related documents
-        for item in self.config.context.relatedItems:
-            obj = item.to_object
-            if (obj.portal_type == 'opengever.document.document'\
-                    or obj.portal_type == 'ftw.mail.mail'):
-                # Store the information if the object was listed as
-                # a relation or not, so the tabbed view helper can
-                # set a special icon for related documents
-                obj._v__is_relation = True
-                objects.append(obj)
-
-        objects = self.extend_query_with_ordering(objects)
-        if self.config.filter_text:
-            objects = self.extend_query_with_textfilter(
-                objects, self.config.filter_text)
-        objects = self.extend_query_with_batching(objects)
-        return objects
-
-    def extend_query_with_ordering(self, query):
-        sort_index = self.request.get('sort', '')
-        column = {}
-        objects = []
-
-        if not sort_index:
-            # currently we are not sorting
-            return query
-
-        if sort_index in ('draggable', 'checkbox'):
-            # these columns are not sortable
-            return query
-
-        # get column that's being sorted on
-        for item in self.config.columns:
-            if sort_index in (item.get('column', _marker),
-                              item.get('sort_index', _marker)):
-                column = item
-                break
-
-        # when a transform exists for this column, we use it, since we
-        # want to sort what the user is seeing.
-        transform = column.get('transform', None)
-
-        # use the sortable_title indexer function as transform for
-        # sorting Title column
-        if sort_index == 'sortable_title':
-            transform = sortable_title_transform
-
-        if transform:
-            # when using a transform we just sort the items using the
-            # transformed items
-            for item in query:
-                # try to safely get the value - but it may not be needed
-                # for certain transforms...
-                value = getattr(item, sort_index, None)
-                if not value and column.get('column', None):
-                    value = getattr(item, column.get('column'), None)
-
-                objects.append((transform(item, value), item))
-
-            # Now that we've got the sortable values for all items, sort the
-            # list and then discard the values, leaving just the objects
-            objects.sort()
-            objects = [obj for val, obj in objects]
-
-            if self.config.sort_reverse:
-                objects.reverse()
-
-            return objects
-
-        else:
-            # directly sort the value
-            objects_sort = sorted(query, key=attrgetter(sort_index))
-            if self.config.sort_reverse:
-                objects_sort.reverse()
-            return objects_sort
-
-    def extend_query_with_texfilter(self, query, text):
-        return query
-
-    def extend_query_with_batching(self, query):
-        """Extends the given `query` with batching filters and returns the
-        new query. This method is only called when batching is enabled in
-        the source config with the `batching_enabled` attribute.
-        """
-        return query
-
-    def search_results(self, query):
-        return query
-
-
-def readable_checked_out_user(obj, user):
-    """ Return the readable user who checked out the obj
-    """
-    catalog = obj.portal_catalog
-    user = getMultiAdapter((obj, catalog), IIndexer, name='checked_out')()
-    return readable_ogds_user(obj, user)
-
-
-class RelatedDocuments(Documents):
-
-    grok.name('tabbedview_view-relateddocuments')
-    grok.context(ITask)
-    grok.implements(IRelatedDocumentsTableSourceConfig)
-
-    lazy = False
-    columns = (
-        {'column': '',
-         'column_title': '',
-         'transform': helper.draggable},
-        {'column': '',
-         'column_title': '',
-         'transform': path_checkbox},
-
-        {'column': 'title',
-         'column_title': _(u'label_title', default=u'Title'),
-         'sort_index': 'sortable_title',
-         'transform': linked},
-
-        {'column': 'document_author',
-         'column_title': _('label_document_author', default="Document Author"),
-         'transform': readable_ogds_author},
-
-        {'column': 'document_date',
-         'column_title': _('label_document_date', default="Document Date"),
-         'transform': helper.readable_date},
-
-        {'column': 'receipt_date',
-         'column_title': _('label_receipt_date', default="Receipt Date"),
-         'transform': helper.readable_date},
-
-        {'column': 'delivery_date',
-         'column_title': _('label_delivery_date', default="Delivery Date"),
-         'transform': helper.readable_date},
-
-        {'column': 'checked_out',
-         'column_title': TMF('label_checked_out', default="Checked out by"),
-         'transform': readable_checked_out_user},
-        ('', external_edit_link),
-        )
-
-    enabled_actions = [
-        'send_as_email',
-        'checkout',
-        'checkin',
-        'cancel',
-        'create_task',
-        'trashed',
-        'send_documents',
-        'copy_documents_to_remote_client',
-        'move_items',
-        'copy_items',
-        ]
-
-    def get_base_query(self):
-        return {
-            'path': {'query': '/'.join(self.context.getPhysicalPath()),
-                     'depth': 2},
-            'portal_type': ['opengever.document.document', 'ftw.mail.mail'],
-            }
-
 # XXX
 # setting the default value of a RelationField does not work as expected
 # or we don't know how to set it.
 # thus we use an add form hack by injecting the values into the request.
-
 
 class AddForm(dexterity.AddForm):
     grok.name('opengever.task.task')
