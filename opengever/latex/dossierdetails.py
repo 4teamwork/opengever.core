@@ -201,7 +201,7 @@ class DossierDetailsLaTeXView(grok.MultiAdapter, MakoLaTeXView):
             issuer = get_issuer_of_task(brain, with_client=True,
                                         with_principal=False)
 
-            responsible = '%s / %s' %  (
+            responsible = '%s / %s' % (
                 info.get_client_by_id(brain.assigned_client).title,
                 info.describe(brain.responsible, with_principal=False))
 

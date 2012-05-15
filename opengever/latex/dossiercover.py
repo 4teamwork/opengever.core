@@ -54,7 +54,8 @@ class DossierCoverPDFView(grok.View, BaseStandalonePDFView):
             'repository': self.convert_plain(self.get_reversed_breadcrumbs()),
             'referencenr': self.convert_plain(self.get_referencenumber()),
             'filingprefix': self.convert_plain(self.get_filingprefix()),
-            'filingnr': self.convert_plain(IDossier(self.context).filing_no or ''),
+            'filingnr': self.convert_plain(
+                IDossier(self.context).filing_no or ''),
 
             'sequencenr': self.convert_plain(
                 str(getUtility(ISequenceNumber).get_number(self.context))),
@@ -68,7 +69,8 @@ class DossierCoverPDFView(grok.View, BaseStandalonePDFView):
             'end': self.convert_plain(self.context.toLocalizedTime(
                     str(IDossier(self.context).end)) or '-'),
 
-            'parentDossierTitle': self.convert_plain(self.get_parent_dossier_title())
+            'parentDossierTitle': self.convert_plain(
+                self.get_parent_dossier_title())
             }
 
     def get_description(self):
