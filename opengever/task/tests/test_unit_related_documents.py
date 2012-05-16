@@ -35,7 +35,7 @@ class ExtendQueryWithOrdering(MockTestCase):
         self.expect(self.brain_3.indexed_attr_new).result('indexed_attr_X')
 
         self.sortable_title = self.mocker.replace(
-            'opengever.task.browser.related_documents.sortable_title_transform')
+        'opengever.task.browser.related_documents.sortable_title_transform')
         self.expect(self.sortable_title(ANY, ANY)).call(
             lambda x, y: x.Title).count(0, None)
 
@@ -107,7 +107,6 @@ class ExtendQueryWithOrdering(MockTestCase):
         request1['sort'] = 'document_date'
         request2['sort'] = 'receipt_date'
         request3['sort'] = 'delivery_date'
-
 
         self.expect(self.config.sort_reverse).result(False).count(0, None)
 
@@ -363,7 +362,6 @@ class GetRelatedDocumentsTests(MockTestCase):
 
         self.expect(self.config.context.relatedItems).result(
             [self.doc_rel_3])
-
 
         self.replay()
 
