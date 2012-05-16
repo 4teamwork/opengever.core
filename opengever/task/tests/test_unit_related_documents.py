@@ -8,39 +8,6 @@ from plone.uuid.interfaces import IUUID
 from zope.interface import Interface
 from ftw.table.catalog_source import default_custom_sort
 
-# def extend_query_with_ordering(self, brains):
-#     """ Add ordering on brains
-#     """
-#     sort_index = self.request.get('sort', '')
-#     sort_reverse = self.config.sort_reverse
-#     ordered_brains = []
-#
-#     if not sort_index or sort_index in ('sequence_number'):
-#         # currently we are not sorting or we sort it in a
-#         # custom_sort_method
-#         return brains
-#
-#     if sort_index in ('document_date', 'receipt_date', 'delivery_date'):
-#         self.config._custom_sort_method = default_custom_sort
-#         return brains
-#
-#     # when a transform exists for this column, we use it, since we
-#     # want to sort what the user is seeing.
-#     column = self._get_column_to_sort(self.config.columns, sort_index)
-#     transform = column.get('transform', None)
-#
-#     if sort_index == 'sortable_title':
-#         transform = sortable_title_transform
-#
-#     if transform:
-#         ordered_brains = self._sort_with_transform(
-#             brains, sort_index, sort_reverse, column, transform)
-#     else:
-#         ordered_brains = self._sort_with_index(
-#             brains, sort_index, sort_reverse)
-#
-#     return ordered_brains
-#
 
 class ExtendQueryWithOrdering(MockTestCase):
 
