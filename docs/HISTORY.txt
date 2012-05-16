@@ -5,6 +5,10 @@ Changelog
 2.0.4 (unreleased)
 ------------------
 
+- Add logout overlay to show all checked out documents of the current user
+  Issue #1501 Warnung "Bitte Dokumente einchecken"
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1501/
+  
 - Added UploadValidator to avoid mail upload as documents.
   Issue #1508 Mail im Originalformat heraufladen / Zusammenhang zu #1275 und Drag und Drop
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1508/
