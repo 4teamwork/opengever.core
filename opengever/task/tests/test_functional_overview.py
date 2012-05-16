@@ -2,7 +2,6 @@ from opengever.task.browser.overview import Overview
 from plone.mocktestcase import MockTestCase
 from zope.interface import directlyProvides
 from opengever.globalindex.model.task import Task
-from z3c.form.interfaces import IFieldWidget
 from opengever.task.task import ITask
 from mocker import ANY
 from datetime import datetime
