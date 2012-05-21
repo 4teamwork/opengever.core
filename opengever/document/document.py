@@ -7,6 +7,7 @@ from datetime import date
 from five import grok
 from ftw.datepicker.widget import DatePickerFieldWidget
 from opengever.document import _
+from opengever.document.interfaces import IDocumentSettings
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.mail.behaviors import IMailInAddress
 from opengever.ogds.base.interfaces import IContactInformation
@@ -20,6 +21,7 @@ from plone.directives import form, dexterity
 from plone.directives.dexterity import DisplayForm
 from plone.i18n.normalizer.interfaces import IIDNormalizer
 from plone.namedfile.field import NamedBlobFile
+from plone.registry.interfaces import IRegistry
 from plone.supermodel.interfaces import FIELDSETS_KEY
 from plone.supermodel.model import Fieldset
 from plone.z3cform.textlines.textlines import TextLinesFieldWidget
@@ -257,6 +259,16 @@ grok.global_adapter(UploadValidator)
 def default_document_date(data):
     """Set the actual date as default document_date"""
     return date.today()
+
+
+@form.default_value(field=IDocumentSchema['preserved_as_paper'])
+def default_preserved_as_paper(data):
+    """Set the client specific default (configured in the registry)."""
+
+    registry = getUtility(IRegistry)
+    proxy = registry.forInterface(IDocumentSettings)
+
+    return proxy.preserved_as_paper_default
 
 
 class Document(Item):

@@ -5,6 +5,11 @@ Changelog
 2.0.4 (unreleased)
 ------------------
 
+- Implement side-wide configuration possiblity for the preserved_as_paper field.
+  Issue #1510 Neues Feld: Papierdossier vorhanden
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1510/
+  [phgross]
+
 - Added UploadValidator to avoid mail upload as documents.
   Issue #1508 Mail im Originalformat heraufladen / Zusammenhang zu #1275 und Drag und Drop
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1508/

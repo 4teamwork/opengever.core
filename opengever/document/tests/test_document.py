@@ -2,10 +2,12 @@ from datetime import date
 from opengever.base.interfaces import IReferenceNumber, ISequenceNumber
 from opengever.document.behaviors import IBaseDocument
 from opengever.document.document import IDocumentSchema
+from opengever.document.interfaces import IDocumentSettings
 from opengever.document.testing import OPENGEVER_DOCUMENT_INTEGRATION_TESTING
 from plone.dexterity.interfaces import IDexterityFTI
 from plone.dexterity.utils import createContentInContainer
 from plone.namedfile.file import NamedBlobFile
+from plone.registry.interfaces import IRegistry
 from z3c.form import interfaces
 from z3c.form.interfaces import IValue
 from zope.component import createObject
@@ -14,6 +16,8 @@ from zope.component import queryUtility, getUtility
 from zope.interface import Invalid
 from zope.schema import getFields
 import unittest2 as unittest
+import transaction
+
 
 class TestDocumentIntegration(unittest.TestCase):
 
@@ -123,12 +127,34 @@ class TestDocumentIntegration(unittest.TestCase):
             (d1, d1.REQUEST, None, field, None, ), IValue, name='default')
         self.assertTrue(default.get(), date.today())
 
+    def test_preserverd_as_paper_default(self):
+        portal = self.layer['portal']
+        d1 = createContentInContainer(
+            portal, 'opengever.document.document', title='Test')
+
+        registry = getUtility(IRegistry)
+        proxy = registry.forInterface(IDocumentSettings)
+        proxy.preserved_as_paper_default = False
+        transaction.commit()
+
+        field = getFields(IDocumentSchema).get('preserved_as_paper')
+        default = queryMultiAdapter(
+            (d1, d1.REQUEST, None, field, None, ), IValue, name='default')
+        self.assertFalse(default.get())
+        proxy.preserved_as_paper_default = True
+        transaction.commit()
+
+        field = getFields(IDocumentSchema).get('preserved_as_paper')
+        default = queryMultiAdapter(
+            (d1, d1.REQUEST, None, field, None, ), IValue, name='default')
+        self.assertTrue(default.get())
+
     def test_validators(self):
         portal = self.layer['portal']
         mock_file = NamedBlobFile('bla bla', filename=u'test.txt')
         mock_mail = NamedBlobFile('bla bla', filename=u'test.eml')
         dossier = createContentInContainer(
-            portal,'opengever.dossier.businesscasedossier')
+            portal, 'opengever.dossier.businesscasedossier')
         d1 = createContentInContainer(dossier, 'opengever.document.document',
               file=mock_file)
         field = getFields(IDocumentSchema).get('file')
@@ -184,6 +210,7 @@ class TestDocumentIntegration(unittest.TestCase):
             title=u'Test title', description=u'Lorem ipsum')
         self.assertEquals(d1.Title(), 'Test title')
         self.assertEquals(d1.Description(), 'Lorem ipsum')
+
 
 def test_suite():
     return unittest.defaultTestLoader.loadTestsFromName(__name__)
