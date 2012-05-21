@@ -5,6 +5,11 @@ Changelog
 2.0.4 (unreleased)
 ------------------
 
+- Adjust redirecting in the checkin views, consider also documents in tasks.
+  Issue #1298 Weiterleitung nach dem Bearbeiten eines Dokuments in einer Aufgabe anpassen.
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1298/view
+  [phgross]
+
 - Added server-side component for External Editor Debug mode (blackbox upload view)
   [lgraf]
 
