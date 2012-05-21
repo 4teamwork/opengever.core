@@ -1,3 +1,4 @@
+from Products.CMFCore.utils import getToolByName
 from Products.Five import BrowserView
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.ogds.base.utils import get_client_id
@@ -88,6 +89,10 @@ class TaskTransitionController(BrowserView):
         """Returns `True` if the current user can execute the
         `transition` on the current task.
         """
+
+        # do not check the guards for adminstrators
+        if self._is_administrator():
+            return True
 
         guard = self._get_function_for_transition('guard', transition)
         # this is an unbound method
@@ -341,10 +346,7 @@ class TaskTransitionController(BrowserView):
     def resolved_to_progress_action(self, transition):
         return self._addresponse_form_url(transition)
 
-
     # ------------ helper functions --------------
-
-
     def _get_function_for_transition(self, type_, transition):
         """Returns the appropriate function (guard or action) for a
         transition.
@@ -510,3 +512,11 @@ class TaskTransitionController(BrowserView):
 
         else:
             return True
+
+    def _is_administrator(self):
+        """check if the user is a adminstrator"""
+
+        member = getToolByName(
+            self.context, 'portal_membership').getAuthenticatedMember()
+
+        return member.has_role('Adminstrator') or member.has_role('Manager')

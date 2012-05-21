@@ -5,11 +5,16 @@ Changelog
 2.3.5 (unreleased)
 ------------------
 
-- Change tablesource of related_documents from TableSource to 
+- Adjust transitioncontroller: don't check the guard conditions for administrators.
+  Issue #1433 Administrator: pruefen, ob er auch Aufgaben bearbeiten koennen soll
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1433
+  [phgross]
+
+- Change tablesource of related_documents from TableSource to
   CatalogTableSource and outsource the view to a related_documents.
   Issue #1503 Dokumentenauflistungen: Einfügen Spalte Dokumentenlaufnummer
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1503/
-  
+
 - Set the response contenttype correctly, to avoid problems with diazo themes on remote requests.
   Issue #6 Richtigen Content-Type auf der Response bei remote requests zwischen Clients setzen
   https://extranet.4teamwork.ch/intranet/08-produkte-kurse/4teamwork-gever-1/tracker-4teamwork-gever/6
