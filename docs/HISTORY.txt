@@ -5,6 +5,9 @@ Changelog
 2.0.4 (unreleased)
 ------------------
 
+- Added server-side component for External Editor Debug mode (blackbox upload view)
+  [lgraf]
+
 - Implement side-wide configuration possiblity for the preserved_as_paper field.
   Issue #1510 Neues Feld: Papierdossier vorhanden
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1510/
