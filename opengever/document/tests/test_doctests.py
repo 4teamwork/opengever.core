@@ -6,7 +6,6 @@ from opengever.document.testing import OPENGEVER_DOCUMENT_INTEGRATION_TESTING
 
 TESTFILES = (
     'document_id.txt',
-    'document_indexers.txt',
     'checkout.txt',
     )
 
