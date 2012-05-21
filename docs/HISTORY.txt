@@ -5,6 +5,11 @@ Changelog
 2.1.7 (unreleased)
 ------------------
 
+- Dossiercover: changed conversion of description, to correctly display line breaks.
+  Issue #1574 Falsche Zeichen im Deckblatt
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1574/
+  [phgross]
+
 - Added some Adjustments on names and layout of dossiercover and details view.
   Issue #1432 Anpassungen Druchvorlage
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1432/

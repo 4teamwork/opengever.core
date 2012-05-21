@@ -61,7 +61,7 @@ class DossierCoverPDFView(grok.View, BaseStandalonePDFView):
                 str(getUtility(ISequenceNumber).get_number(self.context))),
 
             'title': self.convert_plain(self.context.Title()),
-            'description': self.convert_plain(self.get_description()),
+            'description': self.convert(self.get_description()),
             'responsible': self.convert_plain(self.get_responsible()),
 
             'start': self.convert_plain(self.context.toLocalizedTime(
