@@ -26,4 +26,3 @@ class TaskNameFromTitle(object):
     def title(self):
         seq_number = getUtility(ISequenceNumber).get_number(self.context)
         return self.format % seq_number
-

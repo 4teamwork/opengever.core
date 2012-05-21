@@ -50,15 +50,22 @@ class TaskFunctionalLayer(PloneSandboxLayer):
         from opengever.ogds.base import setuphandlers
 
         setuphandlers.setup_scriptable_plugin = lambda *a, **kw: None
-        xmlconfig.file('tests.zcml', package=base, context=configurationContext)
+        xmlconfig.file(
+            'tests.zcml', package=base, context=configurationContext)
         from opengever import task
-        xmlconfig.file('configure.zcml', package=task, context=configurationContext)
+        xmlconfig.file(
+            'configure.zcml', package=task, context=configurationContext)
         from opengever import document
-        xmlconfig.file('configure.zcml', package=document, context=configurationContext)
+        xmlconfig.file(
+            'configure.zcml', package=document, context=configurationContext)
         from ftw import tabbedview
-        xmlconfig.file('configure.zcml', package=tabbedview, context=configurationContext)
+        xmlconfig.file(
+            'configure.zcml', package=tabbedview, context=configurationContext)
         from ftw import contentmenu
-        xmlconfig.file('configure.zcml', package=contentmenu, context=configurationContext)
+        xmlconfig.file(
+            'configure.zcml',
+            package=contentmenu,
+            context=configurationContext)
 
     def setUpPloneSite(self, portal):
         applyProfile(portal, 'opengever.task:default')
@@ -96,14 +103,14 @@ class TaskFunctionalLayer(PloneSandboxLayer):
                             'group': 'og_mandant2_users',
                             'inbox_group': 'og_mandant2_inbox'})
 
-        _create_example_user(session, portal, TEST_USER_ID,{
+        _create_example_user(session, portal, TEST_USER_ID, {
             'firstname': 'Test',
             'lastname': 'User',
             'email': 'test.user@local.ch',
             'email2': 'test_user@private.ch'},
-            ('og_mandant1_users','og_mandant1_inbox', 'og_mandant2_users'))
+            ('og_mandant1_users', 'og_mandant1_inbox', 'og_mandant2_users'))
 
-        setRoles(   portal, TEST_USER_ID, ['Manager'])
+        setRoles(portal, TEST_USER_ID, ['Manager'])
         portal.invokeFactory('Folder', 'Members')
         portal['Members'].invokeFactory('Folder', TEST_USER_ID)
 
@@ -111,7 +118,6 @@ class TaskFunctionalLayer(PloneSandboxLayer):
         # We need savepoint support for version retrieval with CMFEditions.
         import zope.sqlalchemy.datamanager
         zope.sqlalchemy.datamanager.NO_SAVEPOINT_SUPPORT = set([])
-
 
 
 OPENGEVER_TASK_FIXTURE = TaskFunctionalLayer()

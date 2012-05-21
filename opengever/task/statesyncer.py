@@ -35,7 +35,8 @@ class WorkflowStateSyncer(grok.MultiAdapter):
         predecessor = stc.get_predecessor(None)
 
         #Fowarding predecessors should not be synced.
-        if predecessor is not None and predecessor.task_type != u'forwarding_task_type':
+        if (predecessor is not None and
+            predecessor.task_type != u'forwarding_task_type'):
             tasks.append(predecessor)
 
         tasks.extend(stc.get_successors())
@@ -68,7 +69,6 @@ class WorkflowStateSyncer(grok.MultiAdapter):
         return transition in [
             'task-transition-resolved-in-progress',
             'task-transition-resolved-tested-and-closed']
-
 
 
 class SyncTaskWorkflowStateReceiveView(grok.View):

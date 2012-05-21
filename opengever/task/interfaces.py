@@ -33,48 +33,49 @@ directlyProvides(IResponseAdder, ITALNamespaceData)
 class ICreateResponse(Interface):
     pass
 
+
 class ITaskSettings(Interface):
 
     crop_length = schema.Int(title=u"Crop length", default=20)
 
     unidirectional_by_reference = schema.List(
-        title = u'Task Types Unidirectional by Reference',
-        description = u'',
+        title=u'Task Types Unidirectional by Reference',
+        description=u'',
         value_type=schema.Choice(
             title=u"Name",
             vocabulary=u'opengever.task.unidirectional_by_reference',
         ),
-        required = False,
+        required=False,
     )
 
     unidirectional_by_value = schema.List(
-        title = u'Unidirectional by Value',
-        description = u'',
+        title=u'Unidirectional by Value',
+        description=u'',
         value_type=schema.Choice(
             title=u"Name",
             vocabulary=u'opengever.task.unidirectional_by_value',
         ),
-        required = False,
+        required=False,
     )
 
     bidirectional_by_reference = schema.List(
-        title = u'Bidirectional by Reference',
-        description = u'',
+        title=u'Bidirectional by Reference',
+        description=u'',
         value_type=schema.Choice(
             title=u"Name",
             vocabulary=u'opengever.task.bidirectional_by_reference',
         ),
-        required = False,
+        required=False,
     )
 
     bidirectional_by_value = schema.List(
-        title = u'Bidirectional by Value',
-        description = u'',
+        title=u'Bidirectional by Value',
+        description=u'',
         value_type=schema.Choice(
             title=u"Name",
             vocabulary=u'opengever.task.bidirectional_by_value',
         ),
-        required = False,
+        required=False,
     )
 
 
@@ -102,9 +103,9 @@ class IWorkflowStateSyncer(Interface):
     """The state syncer syncs workflow states of related tasks (successors and
     predecessors).
 
-    It is triggered by workflow changes, such as the direct_response view or the
-    response add form. It automatically decides if it is necessary to change
-    the state of a related task and performs the change.
+    It is triggered by workflow changes, such as the direct_response view or
+    the response add form. It automatically decides if it is necessary to
+    change the state of a related task and performs the change.
 
     IStateSyncer is an adapter interface.
     """
@@ -113,8 +114,8 @@ class IWorkflowStateSyncer(Interface):
         pass
 
     def get_tasks_to_sync(transition):
-        """Returns all related tasks which have to be updated when performing this
-        `transition` on the current task in the current state.
+        """Returns all related tasks which have to be updated when performing
+        this `transition` on the current task in the current state.
         """
 
     def change_remote_tasks_workflow_state(transition, text):

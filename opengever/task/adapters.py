@@ -141,10 +141,10 @@ class Response(Persistent):
         """Add a new issue change.
         """
         delta = dict(
-            id = id,
-            name = name,
-            before = before,
-            after = after)
+            id=id,
+            name=name,
+            before=before,
+            after=after)
         self.changes.append(delta)
 
     def creator_link(self):

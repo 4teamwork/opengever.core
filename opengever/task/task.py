@@ -179,6 +179,7 @@ class ITask(form.Schema):
 # # XXX doesn't work yet.
 #@form.default_value(field=ITask['issuer'])
 
+
 def default_issuer(data):
     portal_state = getMultiAdapter(
         (data.context, data.request),
