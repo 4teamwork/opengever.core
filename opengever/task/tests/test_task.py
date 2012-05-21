@@ -1,4 +1,3 @@
-from Products.PloneTestCase.ptc import PloneTestCase
 from datetime import datetime
 from opengever.task.adapters import IResponseContainer
 from opengever.task.response import Response
@@ -26,15 +25,16 @@ def create_task(parent, **kwargs):
     return task
 
 
-class TestTaskIntegration(PloneTestCase):
+class TestTaskIntegration(unittest.TestCase):
 
     layer = OPENGEVER_TASK_INTEGRATION_TESTING
 
-    def afterSetUp(self):
+    def setUp(self):
+        self.portal = self.layer['portal']
         self.portal.portal_types['opengever.task.task'].global_allow = True
 
     def test_adding(self):
-        t1 = create_task(self.folder, title='Task 1')
+        t1 = create_task(self.portal, title='Task 1')
         self.failUnless(ITask.providedBy(t1))
 
     def test_fti(self):
@@ -53,7 +53,7 @@ class TestTaskIntegration(PloneTestCase):
         self.failUnless(ITask.providedBy(new_object))
 
     def test_view(self):
-        t1 = create_task(self.folder, title='Task 1')
+        t1 = create_task(self.portal, title='Task 1')
         view = t1.restrictedTraverse('@@tabbedview_view-overview')
         self.failUnless(len(view.get_sub_tasks()) == 0)
         t2 = create_task(t1, title='Task 2')
@@ -62,11 +62,11 @@ class TestTaskIntegration(PloneTestCase):
     def test_relateddocuments(self):
         # create document and append it to the relatedItems of the task
         doc3 = createContentInContainer(
-            self.folder, 'opengever.document.document', title="a-testthree")
+            self.portal, 'opengever.document.document', title="a-testthree")
         intids = getUtility(IIntIds)
         o_iid = intids.getId(doc3)
         t1 = create_task(
-            self.folder, title='Task 1', relatedItems=[RelationValue(o_iid)])
+            self.portal, title='Task 1', relatedItems=[RelationValue(o_iid)])
         doc1 = createContentInContainer(
             t1, 'opengever.document.document', title="btestone")
         doc2 = createContentInContainer(
@@ -80,17 +80,18 @@ class TestTaskIntegration(PloneTestCase):
         results = [aa.Title for aa in view.table_source.build_query()]
         self.assertTrue(results == [doc3.Title(), doc1.Title(), doc2.Title()])
 
+        view.request.set('ACTUAL_URL', t1.absolute_url())
         self.failUnless(view())
 
     def test_addresponse(self):
-        t1 = create_task(self.folder, title='Task 1')
+        t1 = create_task(self.portal, title='Task 1')
         res = Response("")
         container = IResponseContainer(t1)
         container.add(res)
         self.failUnless(res in container)
 
     def test_task_type_category(self):
-        t1 = create_task(self.folder, title='Task 1')
+        t1 = create_task(self.portal, title='Task 1')
         t1.task_type = u'information'
         self.assertEquals(
             u'unidirectional_by_reference', t1.task_type_category)
@@ -99,7 +100,7 @@ class TestTaskIntegration(PloneTestCase):
             u'bidirectional_by_reference', t1.task_type_category)
 
     def test_task_date_subscriber(self):
-        t1 = create_task(self.folder, title='Task 1')
+        t1 = create_task(self.portal, title='Task 1')
         member = self.portal.restrictedTraverse('plone_portal_state').member()
         t1.responsible = str(member)
         t1.issuer = str(member)
@@ -116,7 +117,7 @@ class TestTaskIntegration(PloneTestCase):
         wft.doActionFor(t1, 'task-transition-resolved-in-progress')
         self.failUnless(t1.date_of_completion == None)
 
-        t2 = create_task(self.folder, title='Task 2')
+        t2 = create_task(self.portal, title='Task 2')
         t2.issuer = str(member)
         self.failUnless(t2.date_of_completion == None)
         wft.doActionFor(t2, 'task-transition-open-tested-and-closed')
