@@ -5,6 +5,13 @@ Changelog
 2.0.5 (unreleased)
 ------------------
 
+- Implement some adjustments on the templatedossier:
+  - Made docs in templatedossiers editable.
+  - Activate trash-tab and trashing alos in the templatedossiers.
+  Issue #1368 Bearbeitung von Vorlagen (Metadaten und Dokumente)
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1368
+  [phgross]
+
 - Set the response contenttype correctly, to avoid problems with diazo themes on remote requests.
   Issue #6 Richtigen Content-Type auf der Response bei remote requests zwischen Clients setzen
   https://extranet.4teamwork.ch/intranet/08-produkte-kurse/4teamwork-gever-1/tracker-4teamwork-gever/6

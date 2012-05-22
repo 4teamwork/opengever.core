@@ -33,6 +33,7 @@
         <element value="opengever.tabbedview.interfaces.ITabbedViewEnabled" />
         <element value="opengever.mail.behaviors.IMailInAddress" />
         <element value="plone.app.lockingbehavior.behaviors.ILocking" />
+        <element value="opengever.trash.trash.ITrashable" />
     </property>
 
     <!-- View information -->
@@ -83,6 +84,10 @@
             category="tabbedview-tabs"
             condition_expr="" url_expr="string:#" visible="True">
         <permission value="View"/>
+    </action>
+
+    <action i18n:domain="opengever.dossier" title="Trash" action_id="trash" category="tabbedview-tabs"
+            condition_expr="" url_expr="string:#" visible="True">
     </action>
 
 </object>
