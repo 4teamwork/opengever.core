@@ -6,11 +6,12 @@
   ${packages}
 </%block>
 
-
+<%block name="style_params">
 \renewcommand{\familydefault}{ma1}
-
+</%block>
 \begin{document}
 
+<%block name="dossier_main_part">
 \linespread {1.5}
 \thispagestyle{empty}
 \noindent
@@ -42,6 +43,10 @@ Federführung: ${responsible}
 \vspace{0.15cm} \newline
 Beginn: ${start}\hspace{0.15cm}|\hspace{0.15cm}
 Abschluss: ${end}\hspace{0.15cm} \newline
+</%block>
+
+<%block name="client_specific_part">
+</%block>
 
 
 \end{document}

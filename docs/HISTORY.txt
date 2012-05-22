@@ -5,6 +5,9 @@ Changelog
 2.1.7 (unreleased)
 ------------------
 
+- Use block layout in the dossiercover template, to allow easy customizations.
+  [phgross]
+
 - Dossiercover: changed conversion of description, to correctly display line breaks.
   Issue #1574 Falsche Zeichen im Deckblatt
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1574/
