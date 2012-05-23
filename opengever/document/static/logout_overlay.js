@@ -17,15 +17,23 @@ function initLogoutOverlay(){
             formselector:'form[name="logout_overlay"]',
             config: {
                 onBeforeLoad : function (e) {
+
                     $overlay = e.target.getOverlay();
-                    if ($overlay.find('.pb-ajax > div').html() === 'empty'){
-                        window.open('./logout', target='_self');
+                    $html = $overlay.find('.pb-ajax > div').html();
+
+                    if ($html.search('empty:') >= 0){
+                        /* The user has no checked out documents. So
+                        we can logout him directly.
+                        */
+                        $url = $html.replace('empty:', '');
+                        window.open($url, target='_self');
                         return false;
                     }
 
                     jq('input[name=form.submitted]').click(function(e){
                         e.preventDefault();
-                        window.open('./logout', target='_self');
+                        $url = jq('input[name=form.redirect.url]').val();
+                        window.open($url, target='_self');
                         return false;
                     });
                     return true;

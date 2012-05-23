@@ -1,5 +1,5 @@
 <form name="logout_overlay" method="POST" action="./logout_overlay" i18n:domain="opengever.document">
-    
+
       <h1 class="documentFirstHeading"
           i18n:translate="alert_not_checked_in_documents">
         You have not checked in documents. Do you realy want to logout?
@@ -14,5 +14,6 @@
             <a target="_blank" tal:attributes="href item/getURL" tal:content="item/pretty_title_or_id"/>
         </li>
       </ul>
+      <input type="hidden" name="form.redirect.url" tal:attributes="value view/redirect_url" />
       <input type="submit" name="form.submitted" value="Logout" i18n:attributes="value"/>
 </form>

@@ -33,11 +33,11 @@ class TestLogoutOverlay(TestCase):
         """
         view = self.portal.restrictedTraverse('@@logout_overlay')()
 
-        self.assertEquals(view, 'empty')
+        self.assertEquals(view, 'empty:./logout')
 
     def test_with_checkouts(self):
         """ We have checkouts, so we return the view with links to the
-        checked out documents
+        checked out documents and a hidden field with the redirect url
         """
         getMultiAdapter(
             (self.d1, self.portal.REQUEST),
@@ -55,15 +55,7 @@ class TestLogoutOverlay(TestCase):
         self.assertIn('<a target="_blank" href="http:' \
             '//nohost/plone/document3">document3</a>', view)
 
-    def test_redirect_after_logout(self):
-        """ The user pushed the logout button in the overlay
-        """
-        getMultiAdapter(
-            (self.d3, self.portal.REQUEST),
-            ICheckinCheckoutManager).checkout()
+        self.assertIn('<input type="hidden" name="form.redirect.url" ' \
+            'value="./logout" />', view)
 
-        self.request.form['form.submitted'] = 'Logout'
 
-        view = self.portal.restrictedTraverse('@@logout_overlay')()
-
-        self.assertEquals(view, './logout')
