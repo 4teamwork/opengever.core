@@ -163,7 +163,7 @@ class TestViewsIntegration(unittest.TestCase):
         self.assertEquals(
             document_titles,
             [u'Document 10', u'Document 8', u'Document 12', u'Document 2',
-             u'no_subject', u'Document 5', u'Document 1',  u'no_subject',
+             u'Mail 1', u'Document 5', u'Document 1',  u'Mail 2',
              u'Document 6', u'Document 11', ])
 
         # check description
