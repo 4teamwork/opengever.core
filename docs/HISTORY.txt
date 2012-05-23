@@ -5,6 +5,11 @@ Changelog
 2.3.5 (unreleased)
 ------------------
 
+- Added NoCheckedOutDocs Validator to the CompleteTaskSuccessor form.
+  Issue #1516 Problem "Ueberweisen von ausgecheckten Dokumenten"
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1516
+  [phgross]
+
 - Adjust transitioncontroller: don't check the guard conditions for administrators.
   Issue #1433 Administrator: pruefen, ob er auch Aufgaben bearbeiten koennen soll
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1433

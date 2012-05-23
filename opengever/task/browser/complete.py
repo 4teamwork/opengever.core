@@ -21,8 +21,11 @@ from opengever.task.adapters import IResponseContainer
 from opengever.task.interfaces import ISuccessorTaskController
 from opengever.task.task import ITask
 from persistent.list import PersistentList
+from plone.app.uuid.utils import uuidToCatalogBrain
 from plone.directives.form import Schema
+from plone.uuid.interfaces import IUUID
 from plone.z3cform.layout import FormWrapper
+from z3c.form import validator
 from z3c.form.browser.checkbox import CheckBoxFieldWidget
 from z3c.form.button import buttonAndHandler
 from z3c.form.field import Fields
@@ -33,7 +36,9 @@ from zExceptions import Unauthorized
 from zope import schema
 from zope.app.intid.interfaces import IIntIds
 from zope.component import getUtility, getAdapter
+from zope.component import provideAdapter
 from zope.event import notify
+from zope.interface import Invalid
 from zope.lifecycleevent import ObjectAddedEvent
 from zope.schema.interfaces import IContextSourceBinder
 from zope.schema.vocabulary import SimpleVocabulary
@@ -99,6 +104,32 @@ class ICompleteSuccessorTaskSchema(Schema):
         description=_(u"help_transition", default=""),
         source=util.getTransitionVocab,
         required=True)
+
+
+class NoCheckedoutDocsValidator(validator.SimpleFieldValidator):
+    """Validator wich checks that all selected documents are checked in."""
+
+    def validate(self, value):
+        intids = getUtility(IIntIds)
+
+        checkedout = []
+        for iid in value:
+            doc = intids.getObject(int(iid))
+            brain = uuidToCatalogBrain(IUUID(doc))
+            if brain.checked_out:
+                checkedout.append(doc.title)
+
+        if len(checkedout):
+            raise Invalid(_(
+                    u'error_checked_out_document',
+                    default=u'The documents (${title}) are still checked out. \
+                            Please checkin them in bevore deliver',
+                    mapping={'title': ', '.join(checkedout)}))
+
+
+validator.WidgetValidatorDiscriminators(
+    NoCheckedoutDocsValidator, field=ICompleteSuccessorTaskSchema['documents'])
+provideAdapter(NoCheckedoutDocsValidator)
 
 
 class CompleteSuccessorTaskForm(Form):
