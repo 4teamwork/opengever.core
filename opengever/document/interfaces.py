@@ -2,6 +2,7 @@ from zope.interface import Interface
 from zope.component.interfaces import IObjectEvent
 from zope import schema
 
+
 class IAttachable(Interface):
     """ IAttachable is used as interfaces for a adapter which can create
     MIMEBase attachment objects of a content.
@@ -71,6 +72,15 @@ class IDocumentType(Interface):
             title=u"Name",
             vocabulary=u'opengever.document.document_types',
         ),
+    )
+
+
+class IDocumentSettings(Interface):
+    """Registry interface with general document settings."""
+
+    preserved_as_paper_default = schema.Bool(
+        title=u"Client default for preserved_as_paper",
+        default=True,
     )
 
 

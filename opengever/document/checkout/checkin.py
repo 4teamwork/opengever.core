@@ -1,6 +1,5 @@
 from Acquisition import aq_inner, aq_parent
 from Products.CMFCore.utils import getToolByName
-from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
 from Products.statusmessages.interfaces import IStatusMessage
 from five import grok
 from opengever.document import _
@@ -14,6 +13,23 @@ from z3c.form.interfaces import HIDDEN_MODE
 from zope import schema
 from zope.component import getMultiAdapter
 from zope.interface import Interface
+
+
+def get_containg_document_tab_url(context):
+    """return the url to the `Documents` tab on containing object"""
+
+    parent = aq_parent(aq_inner(context))
+
+    if IDossierMarker.providedBy(parent):
+        tab = 'documents'
+    else:
+        tab = 'relateddocuments'
+
+    mtool = getToolByName(context, 'portal_membership')
+    if mtool.checkPermission('View', parent):
+        return '%s#%s' % (parent.absolute_url(), tab)
+    else:
+        return context.absolute_url()
 
 
 class ICheckinCommentFormSchema(Interface):
@@ -55,15 +71,17 @@ class CheckinCommentForm(form.Form):
                                               ICheckinCheckoutManager)
 
                     if not manager.is_checkin_allowed():
-                        msg = _(u'Could not check in document ${title}',
-                                mapping=dict(title=obj.Title().decode('utf-8')))
+                        msg = _(
+                            u'Could not check in document ${title}',
+                            mapping=dict(title=obj.Title().decode('utf-8')))
                         IStatusMessage(self.request).addStatusMessage(
                             msg, type='error')
 
                     else:
                         manager.checkin(data['comment'])
-                        msg = _(u'Checked in: ${title}',
-                                mapping=dict(title=obj.Title().decode('utf-8')))
+                        msg = _(
+                            u'Checked in: ${title}',
+                            mapping=dict(title=obj.Title().decode('utf-8')))
                         IStatusMessage(self.request).addStatusMessage(
                             msg, type='info')
 
@@ -78,23 +96,8 @@ class CheckinCommentForm(form.Form):
                         msg, type='error')
 
             # redirect to dossier
-            dossier = self.context
-            while not IDossierMarker.providedBy(dossier):
-                # move up
-                dossier = aq_parent(aq_inner(dossier))
-                if IPloneSiteRoot.providedBy(dossier):
-                    raise Exception(
-                        'Plone site reached - no dossier found')
-
-            # check if the user has the permission to see it.
-            portal_membership = getToolByName(
-                self.context, 'portal_membership')
-            if portal_membership.checkPermission('View', dossier):
-                return self.request.RESPONSE.redirect(
-                    '%s#documents' % dossier.absolute_url())
-            else:
-                return self.request.RESPONSE.redirect(
-                    self.context.absolute_url())
+            return self.request.RESPONSE.redirect(
+                get_containg_document_tab_url(self.context))
 
     @button.buttonAndHandler(_(u'button_cancel', default=u'Cancel'))
     def cancel(self, action):
@@ -103,17 +106,8 @@ class CheckinCommentForm(form.Form):
             return self.request.RESPONSE.redirect(
                 self.context.absolute_url())
 
-        # otherwise go back to the dossier
-        dossier = self.context
-        while not IDossierMarker.providedBy(dossier):
-            # move up
-            dossier = aq_parent(aq_inner(dossier))
-            if IPloneSiteRoot.providedBy(dossier):
-                raise Exception(
-                    'Plone site reached - no dossier found')
-
-        return self.request.RESPONSE.redirect(
-            '%s#documents' % dossier.absolute_url())
+        # otherwise to the dossier or task
+        return get_containg_document_tab_url(self.context)
 
     @property
     def objects(self):
@@ -183,14 +177,4 @@ class CheckinDocuments(layout.FormWrapper, grok.View):
             IStatusMessage(self.request).addStatusMessage(
                 msg, type='error')
 
-            # redirect to dossier
-            dossier = self.context
-            while not IDossierMarker.providedBy(dossier):
-                # move up
-                dossier = aq_parent(aq_inner(dossier))
-                if IPloneSiteRoot.providedBy(dossier):
-                    raise Exception(
-                        'Plone site reached - no dossier found')
-
-            return self.request.RESPONSE.redirect(
-                '%s#documents' % dossier.absolute_url())
+            return get_containg_document_tab_url(self.context)
