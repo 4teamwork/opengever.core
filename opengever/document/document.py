@@ -1,6 +1,4 @@
 from Acquisition import aq_inner, aq_parent
-from Products.CMFCore.utils import getToolByName
-from Products.MimetypesRegistry.common import MimeTypeException
 from collective import dexteritytextindexer
 from collective.elephantvocabulary import wrap_vocabulary
 from datetime import date
@@ -25,6 +23,8 @@ from plone.registry.interfaces import IRegistry
 from plone.supermodel.interfaces import FIELDSETS_KEY
 from plone.supermodel.model import Fieldset
 from plone.z3cform.textlines.textlines import TextLinesFieldWidget
+from Products.CMFCore.utils import getToolByName
+from Products.MimetypesRegistry.common import MimeTypeException
 from z3c.form import validator
 from z3c.form.browser import checkbox
 from zope import schema

@@ -5,5 +5,7 @@
                 enabled="True" id="++resource++opengever.document/startredirect.js" inline="False"
                 insert-after="++resource++opengever.tabbedview-resources/tabbedview.js"
                 />
-
+    <javascript cacheable="True" compression="safe" cookable="True" expression=""
+                enabled="True" id="++resource++opengever.document/logout_overlay.js" inline="False"
+                />
 </object>
