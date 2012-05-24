@@ -238,12 +238,10 @@ def set_attachment_content_disposition(request, filename):
 
     user_agent = request.get('HTTP_USER_AGENT', '')
     if 'MSIE' in user_agent:
-        import pdb; pdb.set_trace( )
         filename = quote(filename)
         request.response.setHeader(
             "Content-disposition", 'attachment; filename=%s' % filename)
 
     else:
-        import pdb; pdb.set_trace( )
         request.response.setHeader(
             "Content-disposition", 'attachment; filename="%s"' % filename)

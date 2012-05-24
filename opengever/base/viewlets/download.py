@@ -1,6 +1,7 @@
 from five import grok
 from opengever.base import _
 from opengever.base.behaviors.utils import PrimaryFieldInfo
+from opengever.base.behaviors.utils import set_attachment_content_disposition
 from plone.app.versioningbehavior.behaviors import IVersioningSupport
 from Products.statusmessages.interfaces import IStatusMessage
 
@@ -25,7 +26,8 @@ class DownloadFileVersion(grok.View):
         response = self.request.RESPONSE
         response.setHeader('Content-Type', old_file.contentType)
         response.setHeader('Content-Length', old_file.getSize())
-        response.setHeader('Content-Disposition',
-                           'attachment;filename="%s"' % old_file.filename.encode('utf-8'))
+        set_attachment_content_disposition(
+            self.request, old_file.filename.encode('utf-8'))
+
 
         return old_file.data

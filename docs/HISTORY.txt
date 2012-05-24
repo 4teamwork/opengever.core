@@ -5,6 +5,11 @@ Changelog
 2.5 (unreleased)
 ----------------
 
+- Fix attachment-fail when downloading file with IE.
+  #1515 Mail-Anhang kann nicht geöffnet werden im Internet Explorer
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1515/
+  [eschmutz]
+  
 - Add util-method to set the content disposition of the header to fix 
   attachment-fail when downloading files with IE.
   #1515 Mail-Anhang kann nicht geöffnet werden im Internet Explorer
