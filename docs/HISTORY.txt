@@ -10,6 +10,11 @@ Changelog
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1420
   [phgross]
 
+- Added dependencies missing from TinyMCE to tests_require.
+  (zope.globalrequest and plone.namedfile[blobs])
+  Remove as soon as they are properly declared in TinyMCE's setup.py
+  [lgraf]
+
 
 2.0.2 (2012-03-28)
 ------------------

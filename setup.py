@@ -7,6 +7,8 @@ maintainer = 'Philippe Gross'
 tests_require = [
     'plone.app.testing',
     'plone.app.dexterity',
+    'zope.globalrequest', # XXX Missing TinyMCE dependency. Remove as soon as it's fixed in TinyMCE
+    'plone.namedfile[blobs]', # XXX Missing TinyMCE dependency. Remove as soon as it's fixed in TinyMCE
 ]
 setup(name='opengever.trash',
       version=version,
