@@ -7,6 +7,7 @@ from zope.component import getUtility
 from zope.schema import getFieldsInOrder
 import re
 import zope.schema.vocabulary
+from urllib import quote
 
 from zope.interface import implements
 from plone.rfc822.interfaces import IPrimaryFieldInfo
@@ -227,3 +228,22 @@ def split_string_by_numbers(x):
     r = re.compile('(\d+)')
     l = r.split(x)
     return [int(y) if y.isdigit() else y for y in l]
+
+
+def set_attachment_content_disposition(request, filename):
+    """ Set the content disposition on the request for the given browser
+    """
+    if not filename:
+        return
+
+    user_agent = request.get('HTTP_USER_AGENT', '')
+    if 'MSIE' in user_agent:
+        import pdb; pdb.set_trace( )
+        filename = quote(filename)
+        request.response.setHeader(
+            "Content-disposition", 'attachment; filename=%s' % filename)
+
+    else:
+        import pdb; pdb.set_trace( )
+        request.response.setHeader(
+            "Content-disposition", 'attachment; filename="%s"' % filename)
