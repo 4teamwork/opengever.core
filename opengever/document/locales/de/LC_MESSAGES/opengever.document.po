@@ -71,7 +71,7 @@ msgstr "Dokument"
 
 #: ./opengever/document/document_templates/logout_overlay.pt:17
 msgid "Logout"
-msgstr "Gever verlassen"
+msgstr "GEVER verlassen"
 
 #: ./opengever/document/checkout/manager.py:230
 #: ./opengever/document/checkout/revert.py:26
