@@ -6,9 +6,8 @@ imports and general stuff
     >>> from plone.dexterity.utils import createContentInContainer
     >>> from Products.CMFCore.utils import getToolByName
     >>> from plone.testing.z2 import Browser
-    >>> from Products.PloneTestCase.setup import portal_owner, default_password
     >>> from plone.app.testing.interfaces import TEST_USER_ID as portal_owner_id ,TEST_USER_NAME as portal_owner, TEST_USER_PASSWORD as default_password
-	>>> import transaction
+    >>> import transaction
     >>>	from plone.app.testing import setRoles
     >>> import urllib
 
