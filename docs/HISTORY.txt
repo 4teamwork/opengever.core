@@ -10,8 +10,6 @@ Changelog
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1420
   [phgross]
 
-  [phgross]
-
 
 2.0.2 (2012-03-28)
 ------------------
