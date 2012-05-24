@@ -5,6 +5,9 @@ Changelog
 2.0.5 (unreleased)
 ------------------
 
+- Remove unused mailing.py module.
+  [eschmutz]
+
 - Add logout overlay to show all checked out documents of the current user
   Issue #1501 Warnung "Bitte Dokumente einchecken"
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1501/
