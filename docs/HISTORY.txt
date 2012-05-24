@@ -5,6 +5,11 @@ Changelog
 2.0.4 (unreleased)
 ------------------
 
+- Fix attachment-fail when downloading file with IE.
+  #1515 Mail-Anhang kann nicht geöffnet werden im Internet Explorer
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1515/
+  [eschmutz]
+
 - Added additional title field for mails, as OGMail behavior.
   Issue #1275 Originalen Mail-Titel bearbeiten koennen
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1275/

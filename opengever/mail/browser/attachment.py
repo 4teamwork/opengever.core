@@ -3,6 +3,7 @@ from ftw.mail import utils
 from ftw.mail.attachment import AttachmentView as FtwAtachmentView
 from ftw.mail.mail import IMail
 from izug.basetheme.browser.interfaces import IOpengeverSpecific
+from opengever.base.behaviors.utils import set_attachment_content_disposition
 from Products.CMFCore.utils import getToolByName
 from zExceptions import NotFound
 import email
@@ -64,8 +65,7 @@ class AttachmentView(FtwAtachmentView):
                 filename = filename.encode('utf-8', 'ignore')
 
             self.request.response.setHeader('Content-Type', content_type)
-            self.request.response.setHeader(
-                'Content-Disposition', 'inline; filename=%s' % filename)
+            set_attachment_content_disposition(self.request, filename)
 
             if content_type == 'message/rfc822':
                 return attachment.as_string()
