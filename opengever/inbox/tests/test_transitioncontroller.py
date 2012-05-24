@@ -142,4 +142,6 @@ class TestForwardingTransitionController(MockTestCase):
         controller = ForwardingTransitionController(f1, {})
         mock = self.mocker.patch(controller)
 
+        self.expect(mock._is_administrator()).result(False).count(0, None)
+
         return controller, mock, f1
