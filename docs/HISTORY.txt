@@ -5,15 +5,18 @@ Changelog
 2.0.3 (unreleased)
 ------------------
 
-- Adjust the use of title accessors, because the deconding changed with the dexerity update.
-  Issue #1420 Plone Version und Dexterity Version auf aktuellste Version heben.
-  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1420
-  [phgross]
+- Added fanky for opengever.trash to test buildout
+  [lgraf]
 
 - Added dependencies missing from TinyMCE to tests_require.
   (zope.globalrequest and plone.namedfile[blobs])
   Remove as soon as they are properly declared in TinyMCE's setup.py
   [lgraf]
+
+- Adjust the use of title accessors, because the deconding changed with the dexerity update.
+  Issue #1420 Plone Version und Dexterity Version auf aktuellste Version heben.
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1420
+  [phgross]
 
 
 2.0.2 (2012-03-28)
