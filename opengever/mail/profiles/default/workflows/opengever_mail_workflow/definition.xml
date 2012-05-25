@@ -25,7 +25,7 @@
   <permission-map name="Manage properties" acquired="False">
    <permission-role>Manager</permission-role>
   </permission-map>
-  <permission-map name="Modify portal content" acquired="False">
+  <permission-map name="Modify portal content" acquired="True">
    <permission-role>Manager</permission-role>
   </permission-map>
   <permission-map name="View" acquired="False">
