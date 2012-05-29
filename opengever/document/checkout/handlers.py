@@ -1,12 +1,14 @@
 from Products.CMFCore.utils import getToolByName
-from Products.CMFEditions.interfaces.IArchivist import ArchivistUnregisteredError
-from Products.CMFEditions.interfaces.IModifier import FileTooLargeToVersionError
+from Products.CMFEditions.interfaces.IArchivist import \
+    ArchivistUnregisteredError
+from Products.CMFEditions.interfaces.IModifier import \
+    FileTooLargeToVersionError
 from Products.CMFPlone.utils import base_hasattr
 from five import grok
 from opengever.document import _
 from opengever.document.document import IDocumentSchema
-from zope.app.container.interfaces import IObjectAddedEvent
 from opengever.task.util import CUSTOM_INITIAL_VERSION_MESSAGE
+from zope.app.container.interfaces import IObjectAddedEvent
 
 
 # A special Attribute for the migration
@@ -15,9 +17,9 @@ MIGRATION = False
 
 @grok.subscribe(IDocumentSchema, IObjectAddedEvent)
 def create_initial_version(context, event):
-    """Event handler which creates a initial version when adding a new document.
-    Since we use manual versioning for the document, the initial version doesn't
-    get created automatically.
+    """Event handler which creates a initial version when adding a new
+    document. Since we use manual versioning for the document, the initial
+    version doesn't get created automatically.
     """
     # A special Attribute for the migration
     # The inital version shouldn't set passing the migration
@@ -61,4 +63,5 @@ def create_initial_version(context, event):
     try:
         context.portal_repository.save(obj=context, comment=change_note)
     except FileTooLargeToVersionError:
-        pass # the on edit save will emit a warning
+         # the on edit save will emit a warning
+        pass
