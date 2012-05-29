@@ -24,14 +24,12 @@ class IAssignSchema(form.Schema):
     """ Form schema interface for assign wizard which makes it possible to
     a task to another person.
     """
-
-
     # hidden
     transition = schema.Choice(
         title=_("label_transition", default="Transition"),
         description=_(u"help_transition", default=""),
-        source = getTransitionVocab,
-        required = True,
+        source=getTransitionVocab,
+        required=True,
         )
 
     responsible_client = schema.Choice(
@@ -44,15 +42,15 @@ class IAssignSchema(form.Schema):
 
     responsible = schema.Choice(
         title=_(u"label_responsible", default=u"Responsible"),
-        description =_(u"help_responsible", default=""),
+        description=_(u"help_responsible", default=""),
         vocabulary=u'opengever.ogds.base.UsersAndInboxesVocabulary',
-        required = True,
+        required=True,
         )
 
     text = schema.Text(
-        title = _('label_response', default="Response"),
+        title=_('label_response', default="Response"),
         description=_('help_response', default=""),
-        required = False,
+        required=False,
         )
 
 
@@ -81,7 +79,8 @@ class AssignTaskForm(Form):
                 # no changes
                 msg = _(u'error_same_responsible',
                         default=u'No changes: same responsible selected')
-                IStatusMessage(self.request).addStatusMessage(msg, type='error')
+                IStatusMessage(self.request).addStatusMessage(
+                    msg, type='error')
                 return self.request.RESPONSE.redirect('.')
 
             # create a response in the task
@@ -147,15 +146,17 @@ class RefuseForwardingView(grok.View):
     def render(self):
         # set responsible
         self.context.responsible_client = get_client_id()
-        self.context.responsible = u'inbox:%s' % self.context.responsible_client
+        self.context.responsible = u'inbox:%s' % (
+            self.context.responsible_client)
 
         # create a response in the task
         add_simple_response(
             self.context,
             field_changes=(
                 (ITask['responsible'], self.context.responsible),
-                (ITask['responsible_client'], self.context.responsible_client),),
-            transition= u'forwarding-transition-refuse')
+                (ITask['responsible_client'],
+                 self.context.responsible_client),),
+            transition=u'forwarding-transition-refuse')
 
         notify(ObjectModifiedEvent(self.context))
 
