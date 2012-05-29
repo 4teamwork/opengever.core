@@ -5,7 +5,7 @@ predecessors).
 from Products.CMFCore.utils import getToolByName
 from five import grok
 from opengever.ogds.base.interfaces import IInternalOpengeverRequestLayer
-from opengever.ogds.base.utils import remote_request
+from opengever.ogds.base import utils
 from opengever.task import _
 from opengever.task.adapters import IResponseContainer
 from opengever.task.interfaces import ISuccessorTaskController
@@ -43,18 +43,23 @@ class WorkflowStateSyncer(grok.MultiAdapter):
 
         return tasks
 
-    def change_remote_tasks_workflow_state(self, transition, text):
+    def change_remote_tasks_workflow_state(
+        self, transition, text, responsible='', responsible_client=''):
+
         tasks = self.get_tasks_to_sync(transition)
         if not tasks:
             return False
 
         for task in tasks:
-            response = remote_request(
+
+            response = utils.remote_request(
                 task.client_id,
                 '@@sync-task-workflow-state-receive',
                 task.physical_path,
                 data={'transition': transition,
-                      'text': text and text.encode('utf-8') or ''})
+                      'text': text and text.encode('utf-8') or '',
+                      'responsible': responsible,
+                      'responsible_client': responsible_client})
 
             response_data = response.read().strip()
             if response_data != 'OK':
@@ -68,7 +73,9 @@ class WorkflowStateSyncer(grok.MultiAdapter):
     def _is_synced_transition(self, transition):
         return transition in [
             'task-transition-resolved-in-progress',
-            'task-transition-resolved-tested-and-closed']
+            'task-transition-resolved-tested-and-closed',
+            'task-transition-reassign',
+            ]
 
 
 class SyncTaskWorkflowStateReceiveView(grok.View):
@@ -89,15 +96,18 @@ class SyncTaskWorkflowStateReceiveView(grok.View):
     # grok.require('zope2.Public')
 
     def render(self):
+
         if not IInternalOpengeverRequestLayer.providedBy(self.request):
             raise Forbidden()
 
         transition = self.request.get('transition')
         text = self.request.get('text')
+        responsible = self.request.get('responsible')
+        responsible_client = self.request.get('responsible_client')
 
         if self.is_already_done(transition, text):
             # Set correct content type for text response
-            self.request.response.setHeader("Content-type", "tex/plain")
+            self.request.response.setHeader("Content-type", "text/plain")
 
             return 'OK'
 
@@ -118,11 +128,22 @@ class SyncTaskWorkflowStateReceiveView(grok.View):
             transition=transition,
             text=text)
 
+        if responsible:
+            # special handling for reassign
+            response.add_change(
+                'reponsible',
+                _(u"label_responsible", default=u"Responsible"),
+                ITask(self.context).responsible,
+                responsible)
+
+            ITask(self.context).responsible_client = responsible_client
+            ITask(self.context).responsible = responsible
+
         response.add_change('review_state', _(u'Issue state'),
                             before, after)
 
         # Set correct content type for text response
-        self.request.response.setHeader("Content-type", "tex/plain")
+        self.request.response.setHeader("Content-type", "text/plain")
 
         return 'OK'
 

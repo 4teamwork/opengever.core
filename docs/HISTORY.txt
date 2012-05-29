@@ -5,6 +5,11 @@ Changelog
 2.3.5 (unreleased)
 ------------------
 
+- Added reassign support to the statesyncer.
+  Issue #1560 mandantenuebergreifende ZA: Synchronisation von Neu zuweisen
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1560/
+  [phgross]
+
 - Added NoCheckedOutDocs Validator to the CompleteTaskSuccessor form.
   Issue #1516 Problem "Ueberweisen von ausgecheckten Dokumenten"
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1516

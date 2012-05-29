@@ -3,6 +3,7 @@ from five import grok
 from opengever.ogds.base.autocomplete_widget import AutocompleteFieldWidget
 from opengever.ogds.base.utils import get_client_id
 from opengever.task import _
+from opengever.task.interfaces import IWorkflowStateSyncer
 from opengever.task.task import ITask
 from opengever.task.util import add_simple_response
 from opengever.task.util import getTransitionVocab
@@ -14,6 +15,7 @@ from z3c.form.form import Form
 from z3c.form.interfaces import HIDDEN_MODE
 from z3c.form.interfaces import INPUT_MODE
 from zope import schema
+from zope.component import getMultiAdapter
 from zope.event import notify
 from zope.lifecycleevent import ObjectModifiedEvent
 
@@ -95,6 +97,13 @@ class AssignTaskForm(Form):
             self.context.responsible_client = data['responsible_client']
             self.context.responsible = data['responsible']
             notify(ObjectModifiedEvent(self.context))
+
+            syncer = getMultiAdapter((self.context, self.request),
+                         IWorkflowStateSyncer)
+            syncer.change_remote_tasks_workflow_state(
+                data.get('transition'), text=data.get('text'),
+                responsible=data.get('responsible'),
+                responsible_client=data.get('responsible_client'))
 
             return self.request.RESPONSE.redirect('.')
 
