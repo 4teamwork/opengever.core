@@ -6,6 +6,8 @@ from five import grok
 from opengever.document import _
 from opengever.document.document import IDocumentSchema
 from zope.app.container.interfaces import IObjectAddedEvent
+from opengever.task.util import CUSTOM_INITIAL_VERSION_MESSAGE
+
 
 # A special Attribute for the migration
 MIGRATION = False
@@ -33,7 +35,10 @@ def create_initial_version(context, event):
         # object is not versionable
         return
 
-    change_note = _(u'initial_document_version_change_note',
+    if context.REQUEST.get(CUSTOM_INITIAL_VERSION_MESSAGE, None):
+        change_note = context.REQUEST.get(CUSTOM_INITIAL_VERSION_MESSAGE)
+    else:
+        change_note = _(u'initial_document_version_change_note',
                     default=u'Initial version')
 
     changed = False

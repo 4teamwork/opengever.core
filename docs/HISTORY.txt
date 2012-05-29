@@ -5,10 +5,15 @@ Changelog
 2.0.5 (unreleased)
 ------------------
 
+- Implements Custom InitialVersion Message functionality used in og.task.
+  Issue #1494 Mandantenuebergreifende ZA: Initialversion ersetzten mit spezifischerem Kommentar
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1494
+  [phgross]
+
 - Add logout overlay to show all checked out documents of the current user
   Issue #1501 Warnung "Bitte Dokumente einchecken"
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1501/
-  
+
 - Adjust redirecting in the checkin views, consider also documents in tasks.
   Issue #1298 Weiterleitung nach dem Bearbeiten eines Dokuments in einer Aufgabe anpassen.
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1298/view
