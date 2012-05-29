@@ -12,6 +12,7 @@ from opengever.task.interfaces import ISuccessorTaskController
 from opengever.task.interfaces import ITaskDocumentsTransporter
 from opengever.task.task import ITask
 from opengever.task.transporter import IResponseTransporter
+from opengever.task.util import CustomInitialVersionMessage
 from opengever.task.util import change_task_workflow_state
 from plone.dexterity.utils import createContentInContainer
 from zope.app.intid.interfaces import IIntIds
@@ -123,8 +124,12 @@ def accept_forwarding_with_successor(
 
     # copy documents and map the intids
     doc_transporter = getUtility(ITaskDocumentsTransporter)
-    intids_mapping = doc_transporter.copy_documents_from_remote_task(
-        predecessor, successor_forwarding)
+    with CustomInitialVersionMessage(
+        _(u'version_message_accept_forwarding',
+          default=u'Document copied from forwarding (forwarding accepted)'),
+        dossier.REQUEST):
+        intids_mapping = doc_transporter.copy_documents_from_remote_task(
+            predecessor, successor_forwarding)
 
     # copy the responses
     response_transporter = IResponseTransporter(successor_forwarding)
@@ -260,8 +265,12 @@ def accept_task_with_successor(dossier, predecessor_oguid, response_text):
 
     # copy documents and map the intids
     doc_transporter = getUtility(ITaskDocumentsTransporter)
-    intids_mapping = doc_transporter.copy_documents_from_remote_task(
-        predecessor, successor)
+    with CustomInitialVersionMessage(
+        _(u'version_message_accept_task',
+          default=u'Document copied from task (task accepted)'),
+        dossier.REQUEST):
+        intids_mapping = doc_transporter.copy_documents_from_remote_task(
+            predecessor, successor)
 
     # copy the responses
     response_transporter = IResponseTransporter(successor)

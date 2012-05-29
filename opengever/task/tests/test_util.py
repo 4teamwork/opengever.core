@@ -1,4 +1,6 @@
 from ftw.testing import MockTestCase
+from opengever.task.util import CUSTOM_INITIAL_VERSION_MESSAGE
+from opengever.task.util import CustomInitialVersionMessage
 from opengever.task.util import get_documents_of_task
 
 
@@ -73,3 +75,36 @@ class TestGetDocumentsOfTask(MockTestCase):
 
         self.assertEqual(get_documents_of_task(task, include_mails=True),
                          [doc1, mail1, obj1, obj3])
+
+
+class FakeRequest(dict):
+    def set(self, key, value):
+        self[key] = value
+
+
+class TestCustomInitialVersionMessage(MockTestCase):
+
+    def setUp(self):
+        self.request = FakeRequest()
+
+    def get_custom_message(self, fail=False):
+        if fail:
+            raise Exception('test fail')
+
+        return self.request.get(
+            CUSTOM_INITIAL_VERSION_MESSAGE,
+            u'no message')
+
+    def test_context_manager(self):
+        self.assertEquals(self.get_custom_message(), u'no message')
+
+        with CustomInitialVersionMessage(u'custom message', self.request):
+            self.assertEquals(self.get_custom_message(), u'custom message')
+
+        self.request.set('foo', 'bar')
+        with self.assertRaises(Exception):
+            with CustomInitialVersionMessage(u'custom message', self.request):
+                self.assertEquals(self.get_custom_message(fail=True))
+
+        self.assertEquals(self.request.get(CUSTOM_INITIAL_VERSION_MESSAGE), None)
+        self.assertEquals(self.request.get('foo'), 'bar')

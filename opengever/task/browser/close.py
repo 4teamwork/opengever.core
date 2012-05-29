@@ -17,6 +17,7 @@ from opengever.task import _
 from opengever.task.interfaces import ISuccessorTaskController
 from opengever.task.interfaces import ITaskDocumentsTransporter
 from opengever.task.task import ITask
+from opengever.task.util import CustomInitialVersionMessage
 from opengever.task.util import change_task_workflow_state
 from opengever.task.util import get_documents_of_task
 from plone.directives.form import Schema
@@ -238,8 +239,14 @@ class ChooseDossierStepForm(CloseTaskWizardStepFormMixin, Form):
     def copy_documents(self, task, dossier, documents):
         doc_transporter = getUtility(ITaskDocumentsTransporter)
 
-        intids_mapping = doc_transporter.copy_documents_from_remote_task(
-            task, dossier, documents=documents)
+        with CustomInitialVersionMessage(
+            _(u'version_message_closed_task',
+              default=u'Document copied from task (task closed)'),
+            dossier.REQUEST):
+            intids_mapping = doc_transporter.copy_documents_from_remote_task(
+                task, dossier, documents=documents)
+
+
 
         IStatusMessage(self.request).addStatusMessage(
             _(u'${num} documents were copied.',

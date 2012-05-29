@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2012-05-23 07:52+0000\n"
+"POT-Creation-Date: 2012-05-29 13:14+0000\n"
 "PO-Revision-Date: 2009-02-25 14:39+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Domain: opengever.task\n"
 "X-Poedit-Language: German\n"
 
-#: ./opengever/task/browser/close.py:245
+#: ./opengever/task/browser/close.py:252
 msgid "${num} documents were copied."
 msgstr ""
 
@@ -36,8 +36,8 @@ msgid "Edit"
 msgstr ""
 
 #: ./opengever/task/response.py:324
-#: ./opengever/task/statesyncer.py:121
-#: ./opengever/task/util.py:142
+#: ./opengever/task/statesyncer.py:142
+#: ./opengever/task/util.py:145
 msgid "Issue state"
 msgstr ""
 
@@ -85,7 +85,7 @@ msgstr ""
 msgid "Task"
 msgstr ""
 
-#: ./opengever/task/browser/complete.py:153
+#: ./opengever/task/browser/complete.py:155
 msgid "The documents were delivered to the issuer and the tasks were completed."
 msgstr ""
 
@@ -130,7 +130,7 @@ msgstr ""
 msgid "You are not assigned to the responsible client (${client}). You can only process the task in the issuers dossier."
 msgstr ""
 
-#: ./opengever/task/browser/close.py:186
+#: ./opengever/task/browser/close.py:187
 msgid "You cannot add documents to the selected dossier. Either the dossier is closed or you do not have the privileges."
 msgstr ""
 
@@ -214,7 +214,7 @@ msgstr ""
 #. Default: "Save"
 #: ./opengever/task/browser/accept/existingdossier.py:91
 #: ./opengever/task/browser/accept/newdossier.py:332
-#: ./opengever/task/browser/close.py:200
+#: ./opengever/task/browser/close.py:201
 msgid "button_save"
 msgstr ""
 
@@ -243,7 +243,7 @@ msgid "delegate_label_responsibles"
 msgstr ""
 
 #. Default: "The documents (${title}) are still checked out.                             Please checkin them in bevore deliver"
-#: ./opengever/task/browser/complete.py:123
+#: ./opengever/task/browser/complete.py:124
 msgid "error_checked_out_document"
 msgstr ""
 
@@ -294,7 +294,7 @@ msgstr ""
 
 #. Default: "Enter a answer text which will be shown as response when the task is accepted."
 #: ./opengever/task/browser/accept/main.py:104
-#: ./opengever/task/browser/close.py:76
+#: ./opengever/task/browser/close.py:77
 msgid "help_accept_task_response"
 msgstr ""
 
@@ -304,22 +304,22 @@ msgid "help_assign_to_dossier_task_response"
 msgstr ""
 
 #. Default: "Choose the target dossier where the documents should be filed."
-#: ./opengever/task/browser/close.py:153
+#: ./opengever/task/browser/close.py:154
 msgid "help_close_choose_dossier"
 msgstr ""
 
 #. Default: "You can copy attached documents to your client by selecting here the documents to copy."
-#: ./opengever/task/browser/close.py:84
+#: ./opengever/task/browser/close.py:85
 msgid "help_close_documents"
 msgstr ""
 
 #. Default: "Select the documents you want to deliver to the issuer of the task. They will be attached to the original task of the issuer."
-#: ./opengever/task/browser/complete.py:84
+#: ./opengever/task/browser/complete.py:85
 msgid "help_complete_documents"
 msgstr ""
 
 #. Default: "Enter a answer text which will be shown as response when the task is completed."
-#: ./opengever/task/browser/complete.py:96
+#: ./opengever/task/browser/complete.py:97
 msgid "help_complete_task_response"
 msgstr ""
 
@@ -424,7 +424,7 @@ msgid "help_title"
 msgstr ""
 
 #: ./opengever/task/browser/assign.py:30
-#: ./opengever/task/browser/complete.py:104
+#: ./opengever/task/browser/complete.py:105
 #: ./opengever/task/response.py:43
 msgid "help_transition"
 msgstr ""
@@ -478,17 +478,17 @@ msgid "label_by_author"
 msgstr ""
 
 #. Default: "Target dossier"
-#: ./opengever/task/browser/close.py:151
+#: ./opengever/task/browser/close.py:152
 msgid "label_close_choose_dossier"
 msgstr ""
 
 #. Default: "Documents to copy"
-#: ./opengever/task/browser/close.py:82
+#: ./opengever/task/browser/close.py:83
 msgid "label_close_documents"
 msgstr ""
 
 #. Default: "Documents to deliver"
-#: ./opengever/task/browser/complete.py:82
+#: ./opengever/task/browser/complete.py:83
 msgid "label_complete_documents"
 msgstr ""
 
@@ -593,7 +593,7 @@ msgid "label_predecessor_task"
 msgstr ""
 
 #. Default: "Related Items"
-#: ./opengever/task/browser/complete.py:236
+#: ./opengever/task/browser/complete.py:238
 #: ./opengever/task/response.py:61
 #: ./opengever/task/task.py:125
 msgid "label_related_items"
@@ -620,7 +620,7 @@ msgstr ""
 #. Default: "Responsible"
 #: ./opengever/task/browser/assign.py:44
 #: ./opengever/task/browser/overview.py:202
-#: ./opengever/task/task.py:96
+#: ./opengever/task/statesyncer.py:135
 msgid "label_responsible"
 msgstr ""
 
@@ -689,7 +689,7 @@ msgstr ""
 
 #. Default: "Transition"
 #: ./opengever/task/browser/assign.py:29
-#: ./opengever/task/browser/complete.py:103
+#: ./opengever/task/browser/complete.py:104
 #: ./opengever/task/response.py:42
 msgid "label_transition"
 msgstr ""
@@ -740,7 +740,7 @@ msgstr ""
 #. Default: "Step 2"
 #: ./opengever/task/browser/accept/existingdossier.py:88
 #: ./opengever/task/browser/accept/newdossier.py:55
-#: ./opengever/task/browser/close.py:49
+#: ./opengever/task/browser/close.py:50
 msgid "step_2"
 msgstr ""
 
@@ -805,12 +805,12 @@ msgid "title_attach_document_form"
 msgstr ""
 
 #. Default: "Close task"
-#: ./opengever/task/browser/close.py:51
+#: ./opengever/task/browser/close.py:52
 msgid "title_close_task"
 msgstr ""
 
 #. Default: "Complete task"
-#: ./opengever/task/browser/complete.py:138
+#: ./opengever/task/browser/complete.py:140
 msgid "title_complete_task"
 msgstr ""
 
@@ -839,8 +839,29 @@ msgstr ""
 msgid "title_error_no_response"
 msgstr ""
 
+#. Default: "Document copied from forwarding (forwarding accepted)"
+#: ./opengever/task/browser/accept/utils.py:128
+msgid "version_message_accept_forwarding"
+msgstr ""
+
+#. Default: "Document copied from task (task accepted)"
+#: ./opengever/task/browser/accept/utils.py:269
+msgid "version_message_accept_task"
+msgstr ""
+
+#. Default: "Document copied from task (task closed)"
+#: ./opengever/task/browser/close.py:243
+#: ./opengever/task/browser/complete.py:323
+msgid "version_message_closed_task"
+msgstr ""
+
+#. Default: "Document copied from task (task resolved)"
+#: ./opengever/task/browser/complete.py:317
+msgid "version_message_resolved_task"
+msgstr ""
+
 #. Default: "Closed ${year}"
-#: ./opengever/task/browser/accept/utils.py:49
+#: ./opengever/task/browser/accept/utils.py:50
 msgid "yearfolder_title"
 msgstr ""
 

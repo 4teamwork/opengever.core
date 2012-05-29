@@ -20,6 +20,7 @@ from opengever.task import util
 from opengever.task.adapters import IResponseContainer
 from opengever.task.interfaces import ISuccessorTaskController
 from opengever.task.task import ITask
+from opengever.task.util import CustomInitialVersionMessage
 from persistent.list import PersistentList
 from plone.app.uuid.utils import uuidToCatalogBrain
 from plone.directives.form import Schema
@@ -312,10 +313,22 @@ class CompleteSuccessorTaskReceiveDelivery(grok.View):
         transporter = getUtility(ITransporter)
         documents = []
 
-        for item in encode_after_json(data['documents']):
-            doc = transporter._create_object(self.context, item)
-            documents.append(doc)
-            notify(ObjectAddedEvent(doc))
+
+        message = _(
+            u'version_message_resolved_task',
+            default=u'Document copied from task (task resolved)')
+
+        if data.get(
+            'transition') == 'task-transition-in-progress-tested-and-closed':
+            message = _(
+                u'version_message_closed_task',
+                default=u'Document copied from task (task closed)')
+
+        with CustomInitialVersionMessage(message, self.context.REQUEST):
+            for item in encode_after_json(data['documents']):
+                doc = transporter._create_object(self.context, item)
+                documents.append(doc)
+                notify(ObjectAddedEvent(doc))
 
         # Change workflow state of predecessor task:
         util.change_task_workflow_state(

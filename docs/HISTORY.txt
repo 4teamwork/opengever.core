@@ -5,6 +5,11 @@ Changelog
 2.3.5 (unreleased)
 ------------------
 
+- Implements CustomInitialVersionMessage context manager, and customize inital message.
+  Issue #1494 Mandantenuebergreifende ZA: Initialversion ersetzten mit spezifischerem Kommentar
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1494
+  [phgross]
+
 - Added reassign support to the statesyncer.
   Issue #1560 mandantenuebergreifende ZA: Synchronisation von Neu zuweisen
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1560/

@@ -17,6 +17,9 @@ import opengever.task
 import types
 
 
+CUSTOM_INITIAL_VERSION_MESSAGE = 'custom_inital_version_message'
+
+
 class UsersVocabulary(SimpleVocabulary):
 
     def search(self, query_string):
@@ -172,3 +175,19 @@ def get_documents_of_task(task, include_mails=False):
             documents.append(doc)
 
     return documents
+
+
+class CustomInitialVersionMessage(object):
+    """Context Manager for Cutom inital version message of a document.
+    see create_initial_version handler in opengever.document"""
+
+    def __init__(self, message, request):
+        self.message = message
+        self.request = request
+
+    def __enter__(self):
+        self.request.set(CUSTOM_INITIAL_VERSION_MESSAGE, self.message)
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+         self.request[CUSTOM_INITIAL_VERSION_MESSAGE] = None
+
