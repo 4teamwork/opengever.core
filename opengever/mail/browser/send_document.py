@@ -29,7 +29,7 @@ from opengever.mail.events import DocumentSent
 from zope.event import notify
 
 
-CHARSET = 'iso-8859-1'
+CHARSET = 'utf-8'
 
 
 class NoMail(Invalid):
@@ -226,7 +226,10 @@ class SendDocumentForm(form.Form):
                             % obj_file.filename)
             msg.attach(part)
 
-        text = '%s\r\n\r\n%s' % (text, docs_links)
+        text = '%s\r\n\r\n%s' % (
+            text.encode(CHARSET, 'ignore'),
+            docs_links.encode(CHARSET))
+
         if not isinstance(text, unicode):
             text = text.decode('utf8')
         msg.attach(MIMEText(text, 'plain', CHARSET))

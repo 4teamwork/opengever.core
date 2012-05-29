@@ -76,7 +76,7 @@ test form
     >>> data = 'paths:list=%s'% '/'.join(doc1.getPhysicalPath())
     >>> browser.open('%s/send_documents' % portal.absolute_url(), data=data)
     >>> browser.getControl(name='form.widgets.subject').value = 'Test Betreff'
-    >>> browser.getControl(name='form.widgets.message').value = 'Test Nachricht'
+    >>> browser.getControl(name='form.widgets.message').value = 'Als Beilage erhalten Sie:\r\n\r\n\xe2\x80\xa2\tPensionierten-Schreiben f\xc3\xbcr Hansruedi Wyss\r\n\xe2\x80\xa2\tPensionierten-Schreiben f\xc3\xbcr Ernst Henggeler\r\n\r\nBesten Dank im Voraus'
 
     >>> browser.getControl(name='form.widgets.documents:list').value == ['/'.join(doc1.getPhysicalPath())]
     True
@@ -88,7 +88,7 @@ test form
     >>> browser.getControl(name='form.buttons.button_send').click()
     >>> len(doc1.MailHost.messages)
     1
-    >>> 'Test Nachricht' in doc1.MailHost.messages[0]
+    >>> 'Pensionierten-Schreiben' in doc1.MailHost.messages[0]
     True
 
 Test again (now document have a file)
