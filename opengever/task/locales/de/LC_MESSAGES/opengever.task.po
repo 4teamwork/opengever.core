@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2012-05-29 13:14+0000\n"
-"PO-Revision-Date: 2012-05-23 09:55+0200\n"
+"POT-Creation-Date: 2012-05-29 15:39+0000\n"
+"PO-Revision-Date: 2012-05-29 17:29+0200\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
 "MIME-Version: 1.0\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: DOMAIN\n"
 
-#: ./opengever/task/browser/close.py:252
+#: ./opengever/task/browser/close.py:251
 msgid "${num} documents were copied."
 msgstr "${num} Dokumente wurden kopiert."
 
@@ -127,7 +127,7 @@ msgstr "Sie haben keine Berechtigung Antworten zu editieren"
 msgid "You are not assigned to the responsible client (${client}). You can only process the task in the issuers dossier."
 msgstr "Sie sind nicht dem Auftragnehmer-Mandanten (${client}) zugewiesen. Sie können die Aufgabe nur direkt im Dossier des Auftraggebers behandeln."
 
-#: ./opengever/task/browser/close.py:187
+#: ./opengever/task/browser/close.py:188
 msgid "You cannot add documents to the selected dossier. Either the dossier is closed or you do not have the privileges."
 msgstr "Sie haben nicht genügend Berechtigungen um Dokumente im ausgewählten Dossier hinzuzfügen. Möglicherweise ist das Dossier bereits abgeschlossen."
 
@@ -168,6 +168,11 @@ msgstr "in einem neuen Dossier auf ${client} bearbeiten."
 #: ./opengever/task/browser/accept/main.py:78
 msgid "accept_method_participate"
 msgstr "direkt im Dossier des Auftraggebers bearbeiten."
+
+#. Default: "RE"
+#: ./opengever/task/browser/complete.py:333
+msgid "answer_prefix"
+msgstr "AW"
 
 #. Default: "2. Choose document"
 #: ./opengever/task/browser/attachdocument.py:59
@@ -211,7 +216,7 @@ msgstr "Kopieren"
 #. Default: "Save"
 #: ./opengever/task/browser/accept/existingdossier.py:91
 #: ./opengever/task/browser/accept/newdossier.py:332
-#: ./opengever/task/browser/close.py:201
+#: ./opengever/task/browser/close.py:202
 msgid "button_save"
 msgstr "Speichern"
 
@@ -851,13 +856,13 @@ msgid "version_message_accept_task"
 msgstr "Dokument von Aufgabe kopiert (Aufgabe akzeptiert)"
 
 #. Default: "Document copied from task (task closed)"
-#: ./opengever/task/browser/close.py:243
-#: ./opengever/task/browser/complete.py:323
+#: ./opengever/task/browser/close.py:244
+#: ./opengever/task/browser/complete.py:322
 msgid "version_message_closed_task"
 msgstr "Dokument von Aufgabe kopiert (Aufgabe abgeschlossen)"
 
 #. Default: "Document copied from task (task resolved)"
-#: ./opengever/task/browser/complete.py:317
+#: ./opengever/task/browser/complete.py:316
 msgid "version_message_resolved_task"
 msgstr "Dokument von Aufgabe kopiert (Aufgabe erledigt)"
 

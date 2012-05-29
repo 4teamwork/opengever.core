@@ -39,6 +39,7 @@ from zope.app.intid.interfaces import IIntIds
 from zope.component import getUtility, getAdapter
 from zope.component import provideAdapter
 from zope.event import notify
+from zope.i18n import translate
 from zope.interface import Invalid
 from zope.lifecycleevent import ObjectAddedEvent
 from zope.schema.interfaces import IContextSourceBinder
@@ -213,7 +214,7 @@ class CompleteSuccessorTaskForm(Form):
             doc = intids.getObject(int(doc_intid))
             data['documents'].append(transporter._extract_data(doc))
 
-            #add a releation when a document from the dossier was selected
+            # add a releation when a document from the dossier was selected
             if int(doc_intid) not in related_ids:
                 # check if its a relation
                 if aq_parent(aq_inner(doc)) != self.context:
@@ -326,6 +327,14 @@ class CompleteSuccessorTaskReceiveDelivery(grok.View):
         with CustomInitialVersionMessage(message, self.context.REQUEST):
             for item in encode_after_json(data['documents']):
                 doc = transporter._create_object(self.context, item)
+
+                # append `RE:` prefix to the document title
+                doc.title = '%s: %s' % (
+                    translate(
+                        _(u'answer_prefix', default=u'RE'),
+                        context=self.context.REQUEST),
+                    doc.title)
+
                 documents.append(doc)
                 notify(ObjectAddedEvent(doc))
 

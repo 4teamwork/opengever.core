@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2012-05-29 13:14+0000\n"
+"POT-Creation-Date: 2012-05-29 15:39+0000\n"
 "PO-Revision-Date: 2009-02-25 14:39+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Domain: opengever.task\n"
 "X-Poedit-Language: German\n"
 
-#: ./opengever/task/browser/close.py:252
+#: ./opengever/task/browser/close.py:251
 msgid "${num} documents were copied."
 msgstr ""
 
@@ -130,7 +130,7 @@ msgstr ""
 msgid "You are not assigned to the responsible client (${client}). You can only process the task in the issuers dossier."
 msgstr ""
 
-#: ./opengever/task/browser/close.py:187
+#: ./opengever/task/browser/close.py:188
 msgid "You cannot add documents to the selected dossier. Either the dossier is closed or you do not have the privileges."
 msgstr ""
 
@@ -170,6 +170,11 @@ msgstr ""
 #. Default: "process in issuer's dossier"
 #: ./opengever/task/browser/accept/main.py:78
 msgid "accept_method_participate"
+msgstr ""
+
+#. Default: "RE"
+#: ./opengever/task/browser/complete.py:333
+msgid "answer_prefix"
 msgstr ""
 
 #. Default: "2. Choose document"
@@ -214,7 +219,7 @@ msgstr ""
 #. Default: "Save"
 #: ./opengever/task/browser/accept/existingdossier.py:91
 #: ./opengever/task/browser/accept/newdossier.py:332
-#: ./opengever/task/browser/close.py:201
+#: ./opengever/task/browser/close.py:202
 msgid "button_save"
 msgstr ""
 
@@ -850,13 +855,13 @@ msgid "version_message_accept_task"
 msgstr ""
 
 #. Default: "Document copied from task (task closed)"
-#: ./opengever/task/browser/close.py:243
-#: ./opengever/task/browser/complete.py:323
+#: ./opengever/task/browser/close.py:244
+#: ./opengever/task/browser/complete.py:322
 msgid "version_message_closed_task"
 msgstr ""
 
 #. Default: "Document copied from task (task resolved)"
-#: ./opengever/task/browser/complete.py:317
+#: ./opengever/task/browser/complete.py:316
 msgid "version_message_resolved_task"
 msgstr ""
 

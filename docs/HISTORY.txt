@@ -5,6 +5,11 @@ Changelog
 2.3.5 (unreleased)
 ------------------
 
+- Adjust document delivering: add answer prefix to the document titles.
+  Issue #1479 Titel eines zurueckgelieferten Dokuments bei mandantenuebergreifenden Aufgaben
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1479
+  [phgross]
+
 - Implements CustomInitialVersionMessage context manager, and customize inital message.
   Issue #1494 Mandantenuebergreifende ZA: Initialversion ersetzten mit spezifischerem Kommentar
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1494
