@@ -313,7 +313,6 @@ class CompleteSuccessorTaskReceiveDelivery(grok.View):
         transporter = getUtility(ITransporter)
         documents = []
 
-
         message = _(
             u'version_message_resolved_task',
             default=u'Document copied from task (task resolved)')

@@ -106,5 +106,6 @@ class TestCustomInitialVersionMessage(MockTestCase):
             with CustomInitialVersionMessage(u'custom message', self.request):
                 self.assertEquals(self.get_custom_message(fail=True))
 
-        self.assertEquals(self.request.get(CUSTOM_INITIAL_VERSION_MESSAGE), None)
+        self.assertEquals(
+            self.request.get(CUSTOM_INITIAL_VERSION_MESSAGE), None)
         self.assertEquals(self.request.get('foo'), 'bar')

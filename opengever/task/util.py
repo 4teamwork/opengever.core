@@ -189,5 +189,4 @@ class CustomInitialVersionMessage(object):
         self.request.set(CUSTOM_INITIAL_VERSION_MESSAGE, self.message)
 
     def __exit__(self, exc_type, exc_val, exc_tb):
-         self.request[CUSTOM_INITIAL_VERSION_MESSAGE] = None
-
+        self.request[CUSTOM_INITIAL_VERSION_MESSAGE] = None

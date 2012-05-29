@@ -172,6 +172,7 @@ class IChooseDossierSchema(Schema):
                                  'dossier-state-active'],
                 }))
 
+
 class DossierValidator(SimpleFieldValidator):
 
     def validate(self, value):
@@ -245,8 +246,6 @@ class ChooseDossierStepForm(CloseTaskWizardStepFormMixin, Form):
             dossier.REQUEST):
             intids_mapping = doc_transporter.copy_documents_from_remote_task(
                 task, dossier, documents=documents)
-
-
 
         IStatusMessage(self.request).addStatusMessage(
             _(u'${num} documents were copied.',
