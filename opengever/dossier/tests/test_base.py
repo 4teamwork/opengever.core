@@ -81,6 +81,7 @@ class TestDossierContainer(unittest.TestCase):
 
     def test_has_valid_enddate(self):
         dossier, subdossier = self._create_dossier(self.portal, with_sub=True)
+        IDossier(subdossier).start = date(2012, 02, 24)
         self.assertTrue(dossier.has_valid_enddate())
 
         IDossier(dossier).end = date(2012, 02, 16)
@@ -94,12 +95,15 @@ class TestDossierContainer(unittest.TestCase):
         self._create_document(dossier, document_date=date(2012, 02, 25))
         self.assertTrue(subdossier.has_valid_enddate())
 
-
         IDossier(dossier).end = date(2012, 02, 24)
         self.assertFalse(dossier.has_valid_enddate())
 
+        dossier = self._create_dossier(
+            self.portal, start=date(2012, 2, 2), end=date(2012, 2, 1))
+        self.assertFalse(dossier.has_valid_enddate())
+
     def _create_dossier(self, context,
-            with_sub=False, end=None):
+            with_sub=False, end=None, start=None):
 
         dossier = createContentInContainer(
             context,
@@ -108,6 +112,9 @@ class TestDossierContainer(unittest.TestCase):
 
         if end:
             IDossier(dossier).end = end
+
+        if start:
+            IDossier(dossier).start = start
 
         if with_sub:
             subdossier = createContentInContainer(

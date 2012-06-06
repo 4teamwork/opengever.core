@@ -172,6 +172,10 @@ class DossierContainer(Container):
                     'opengever.dossier.behaviors.dossier.IDossierMarker', ]})
 
         end_dates = []
+        #main dossier
+        if IDossier(self).start:
+            end_dates.append(IDossier(self).start)
+
         for child in children:
             # document or mails
             if child.portal_type == "opengever.document.document":
@@ -184,11 +188,14 @@ class DossierContainer(Container):
             # subdossiers
             else:
                 if IDossier(child.getObject()).end:
-                    end_date = IDossier(child.getObject()).end
-                    if isinstance(end_date, datetime):
-                        end_dates.append(end_date.date())
+                    temp_date = IDossier(child.getObject()).end
+                    if not temp_date:
+                        temp_date = IDossier(child.getObject()).start
+
+                    if isinstance(temp_date, datetime):
+                        end_dates.append(temp_date.date())
                     else:
-                        end_dates.append(end_date)
+                        end_dates.append(temp_date)
 
         if end_dates:
             end_dates.sort()
