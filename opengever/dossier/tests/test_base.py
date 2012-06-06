@@ -102,6 +102,16 @@ class TestDossierContainer(unittest.TestCase):
             self.portal, start=date(2012, 2, 2), end=date(2012, 2, 1))
         self.assertFalse(dossier.has_valid_enddate())
 
+    def test_get_parent_dossier(self):
+        dossier, subdossier = self._create_dossier(self.portal, with_sub=True)
+        self.assertEquals(dossier.get_parent_dossier(), None)
+        self.assertEquals(subdossier.get_parent_dossier(), dossier)
+
+    def test_is_subdossier(self):
+        dossier, subdossier = self._create_dossier(self.portal, with_sub=True)
+        self.assertFalse(dossier.is_subdossier())
+        self.assertTrue(subdossier.is_subdossier())
+
     def _create_dossier(self, context,
             with_sub=False, end=None, start=None):
 

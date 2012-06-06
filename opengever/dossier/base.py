@@ -81,6 +81,13 @@ class DossierContainer(Container):
             return True
         return False
 
+    def get_parent_dossier(self):
+        parent = aq_parent(aq_inner(self))
+        if IDossierMarker.providedBy(parent):
+            return parent
+        return None
+
+
     def is_all_supplied(self):
         """Check if all tasks and all documents are supplied in a subdossier
         provided there are any (active) subdossiers
