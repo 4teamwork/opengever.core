@@ -22,6 +22,7 @@ from plone.registry.interfaces import IRegistry
 from zope.component import getUtility
 import re
 
+
 @grok.provider(IContextSourceBinder)
 def get_possible_dossier_states(context):
     wftool = getToolByName(context, 'portal_workflow')
@@ -32,6 +33,7 @@ def get_possible_dossier_states(context):
         states.append(SimpleVocabulary.createTerm(state, state, PMF(state)))
     return SimpleVocabulary(states)
 
+
 @grok.provider(IContextSourceBinder)
 def get_possible_task_states(context):
     wftool = getToolByName(context, 'portal_workflow')
@@ -41,6 +43,7 @@ def get_possible_task_states(context):
     for state in wftool.get(chain).states:
         states.append(SimpleVocabulary.createTerm(state, state, PMF(state)))
     return SimpleVocabulary(states)
+
 
 @grok.provider(IContextSourceBinder)
 def get_types(context):
@@ -77,14 +80,14 @@ FIELD_MAPPING = {'opengever-dossier-behaviors-dossier-IDossierMarker': [
                     'responsible',
                     'dossier_review_state',
                 ],
-                'opengever-task-task-ITask':[
+                'opengever-task-task-ITask': [
                     'issuer',
                     'deadline_1',
                     'deadline_2',
                     'task_type',
                     'task_review_state',
                 ],
-                'opengever-document-document-IDocumentSchema':[
+                'opengever-document-document-IDocumentSchema': [
                     'receipt_date_1',
                     'receipt_date_2',
                     'delivery_date_1',
@@ -109,7 +112,7 @@ class IAdvancedSearch(directives_form.Schema):
     object_provides = schema.Choice(
         title=_('label_portal_type', default="Type"),
         description=_('help_portal_type', default=''),
-        source= get_types,
+        source=get_types,
         required=True,
     )
 
@@ -233,10 +236,10 @@ class IAdvancedSearch(directives_form.Schema):
     ### Task
     directives_form.widget(issuer=AutocompleteFieldWidget)
     issuer = schema.Choice(
-        title =_(u"label_issuer", default=u"Issuer"),
-        description = _('help_issuer', default=u""),
+        title=_(u"label_issuer", default=u"Issuer"),
+        description=_('help_issuer', default=u""),
         vocabulary=u'opengever.ogds.base.ContactsAndUsersVocabulary',
-        required = False,
+        required=False,
     )
 
     deadline_1 = schema.Date(
@@ -266,6 +269,7 @@ class IAdvancedSearch(directives_form.Schema):
         required=False,
     )
 
+
 class AdvancedSearchForm(directives_form.Form):
     grok.context(Interface)
     grok.name('advanced_search')
@@ -281,7 +285,7 @@ class AdvancedSearchForm(directives_form.Form):
     fields['issuer'].widgetFactory[INPUT_MODE] \
         = AutocompleteFieldWidget
     fields['object_provides'].widgetFactory[INPUT_MODE] \
-        =  radio.RadioFieldWidget
+        = radio.RadioFieldWidget
     fields['dossier_review_state'].widgetFactory[INPUT_MODE] \
         = checkbox.CheckBoxFieldWidget
     fields['task_review_state'].widgetFactory[INPUT_MODE] \
@@ -317,10 +321,11 @@ class AdvancedSearchForm(directives_form.Form):
         ]
 
         for field in date_fields:
-            self.fields.get(field).widgetFactory[INPUT_MODE] = DatePickerFieldWidget
+            self.fields.get(
+                field).widgetFactory[INPUT_MODE] = DatePickerFieldWidget
 
         super(AdvancedSearchForm, self).updateWidgets()
-        for k,v in FIELD_MAPPING.items():
+        for k, v in FIELD_MAPPING.items():
             for name in v:
                 if self.widgets.get(name, None):
                     self.widgets.get(name, None).addClass(k)
@@ -332,42 +337,60 @@ class AdvancedSearchForm(directives_form.Form):
             # create Parameters and url
             if(data['reference']):
                 data['reference'] = self.correct_ref(data['reference'])
-            params = '/search?object_provides=%s' % (urllib.quote(data.get('object_provides', '')))
+            params = '/search?object_provides=%s' % (
+                urllib.quote(data.get('object_provides', '')))
             # if clause because it entered a searchableText=none without text
             if data.get('searchableText'):
-                params = '%s&SearchableText=%s' % (params, data.get('searchableText').encode('utf-8'))
+                params = '%s&SearchableText=%s' % (
+                    params, data.get('searchableText').encode('utf-8'))
 
             for field in FIELD_MAPPING.get(
-                    data.get('object_provides').replace('.','-')):
+                    data.get('object_provides').replace('.', '-')):
                 if data.get(field, None):
                     if isinstance(data.get(field), date):
                         if '1' in field:
-                            params = '%s&%s_usage=range:minmax' % (params, field[:-2])
-                            if not data.get(field[:-2]+'_2'):
-                                data[field[:-2]+'_2'] = datetime.date(2020, 12, 30)
+                            params = '%s&%s_usage=range:minmax' % (
+                                params, field[:-2])
+                            if not data.get(field[:-2] + '_2'):
+                                data[field[:-2] + '_2'] = datetime.date(
+                                    2020, 12, 30)
                         else:
-                            if not data.get(field[:-2]+'_1'):
-                                params = '%s&%s_usage=range:minmax' % (params, field[:-2])
-                                data[field[:-2]+'_1'] = datetime.date(1900, 1, 1)
-                                params = '%s&%s:list=%s' % (params, field[:-2], data.get(field[:-2]+'_1').strftime('%m/%d/%y'))
+                            if not data.get(field[:-2] + '_1'):
+                                params = '%s&%s_usage=range:minmax' % (
+                                    params, field[:-2])
+                                data[field[:-2] + '_1'] = datetime.date(
+                                    1900, 1, 1)
+                                params = '%s&%s:list=%s' % (
+                                    params,
+                                    field[:-2],
+                                    data.get(field[:-2] + '_1').strftime(
+                                        '%m/%d/%y'))
                             data[field] = data.get(field) + timedelta(1)
-                        params = '%s&%s:list=%s' % (params, field[:-2], data.get(field).strftime('%m/%d/%y'))
+                        params = '%s&%s:list=%s' % (
+                            params,
+                            field[:-2],
+                            data.get(field).strftime('%m/%d/%y'))
 
                     elif isinstance(data.get(field), list):
                         for value in data.get(field):
-                            params = '%s&%s:list=%s' % (params, field, value.encode('utf-8'))
+                            params = '%s&%s:list=%s' % (
+                                params, field, value.encode('utf-8'))
                     elif field == 'trashed':
-                        params = '%s&trashed:list:boolean=True&trashed:list:boolean=False' %(params)
+                        params = '%s&trashed:list:boolean=True&trashed:list:boolean=False' % (params)
                     elif isinstance(data.get(field), int):
-                        params = '%s&sequence_number:int=%s' %(params, data.get(field))
+                        params = '%s&sequence_number:int=%s' % (
+                            params, data.get(field))
                     else:
-                        params = '%s&%s=%s' %(params, field, urllib.quote(data.get(field).encode('utf-8')))
+                        params = '%s&%s=%s' % (
+                            params,
+                            field,
+                            urllib.quote(data.get(field).encode('utf-8')))
 
             params = params.replace('task_review_state', 'review_state')
             params = params.replace('dossier_review_state', 'review_state')
 
-            return self.context.REQUEST.RESPONSE.redirect(self.context.portal_url() + params)
-
+            return self.context.REQUEST.RESPONSE.redirect(
+                self.context.portal_url() + params)
 
     def correct_ref(self, value):
         registry = getUtility(IRegistry)
@@ -379,4 +402,4 @@ class AdvancedSearchForm(directives_form.Form):
         while refnr.count(''):
             refnr.remove('')
         value = ' / '.join(refnr)
-        return prefix + " " +value
+        return prefix + " " + value
