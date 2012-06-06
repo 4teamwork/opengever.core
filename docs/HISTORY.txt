@@ -5,6 +5,11 @@ Changelog
 2.0.5 (unreleased)
 ------------------
 
+- Issue #1512 Auswahl exportieren: Sortieren nach Ablagenr. funktioniert nicht
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1512
+  Dossier reporter: Added encoding transform for the title attribute.
+  [phgross]
+
 - Implement some adjustments on the templatedossier:
   - Made docs in templatedossiers editable.
   - Activate trash-tab and trashing alos in the templatedossiers.

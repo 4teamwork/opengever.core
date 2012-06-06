@@ -111,7 +111,7 @@ class TestDossierReporter(MockTestCase):
 
         # dossier 1
         dossier1 = self.stub()
-        self.expect(dossier1.Title).result('Foo Dossier')
+        self.expect(dossier1.Title).result('f\xc3\xb6\xc3\xb6 dossier')
         self.expect(dossier1.start).result(datetime(2012, 1, 1))
         self.expect(dossier1.end).result(datetime(2012, 12, 1))
         self.expect(dossier1.responsible).result('Foo Hugo')
@@ -151,7 +151,7 @@ class TestDossierReporter(MockTestCase):
         row1 = sheet.row(1)
         self.assertEquals(
             [cell.value for cell in row1],
-            [u'Foo Dossier',
+            [u'f\xf6\xf6 dossier',
              u'01.01.2012',
              u'01.12.2012',
              u'Readable Foo Hugo',

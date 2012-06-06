@@ -31,6 +31,14 @@ def filing_no_number(filing_number):
     return _get_filing_part(filing_number, 3)
 
 
+def to_unicode(title):
+    """Return unicode"""
+
+    if not isinstance(title, unicode):
+        title = title.decode('utf-8')
+    return title
+
+
 class DossierReporter(grok.View):
     """View that generate an excel spreadsheet with the XLSReporter,
     which list the selected dossier (paths in request)
@@ -68,7 +76,8 @@ class DossierReporter(grok.View):
         # attributes mapping
         dossier_attributes = [
             {'id':'Title',
-             'title':_('label_title', default=u'title')},
+             'title':_('label_title', default=u'title'),
+            'transform':to_unicode},
             {'id':'start',
              'title':_(u'label_start', default=u'Opening Date'),
              'transform':format_datetime,
