@@ -87,7 +87,6 @@ class DossierContainer(Container):
             return parent
         return None
 
-
     def is_all_supplied(self):
         """Check if all tasks and all documents are supplied in a subdossier
         provided there are any (active) subdossiers
