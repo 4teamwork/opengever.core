@@ -176,7 +176,9 @@ class DossierContainer(Container):
 
         for child in children:
             # document or mails
-            if child.portal_type == "opengever.document.document":
+            if child.portal_type in [
+                'opengever.document.document', 'ftw.mail.mail']:
+
                 if child.document_date:
                     if isinstance(child.document_date, datetime):
                         end_dates.append(child.document_date.date())
