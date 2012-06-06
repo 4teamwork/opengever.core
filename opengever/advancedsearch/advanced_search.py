@@ -289,6 +289,16 @@ class AdvancedSearchForm(directives_form.Form):
 
     ignoreContext = True
 
+    def render(self):
+        """Overwritting the render method to disable the UnloadProtection.
+        Becuase overwrite and copy the whole template makes no sense.
+        Unfortunately it's not configurable in the plone.app.z3c form itself.
+        """
+
+        html = super(AdvancedSearchForm, self).render()
+        html = html.replace('enableUnloadProtection', '')
+        return html
+
     def updateWidgets(self):
         self.context.REQUEST.set('client', get_client_id())
         date_fields = [

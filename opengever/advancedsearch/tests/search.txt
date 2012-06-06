@@ -152,3 +152,8 @@ search tasks with the right content-type
     >>> browser.getControl(name='form.buttons.button_search').click()
     >>> browser.url
     'http://nohost/plone/search?object_provides=opengever.task.task.ITask&SearchableText=task1&deadline_usage=range:minmax&deadline:list=01/01/10&deadline:list=01/02/10&task_type=information'
+
+check disabling unloadProtection
+    >>> browser.open('%s/advanced_search' %(portal_url))
+    >>> 'enableUnloadProtection' not in browser.contents
+    True
