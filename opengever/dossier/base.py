@@ -1,10 +1,8 @@
 from Acquisition import aq_inner, aq_parent
-from Products.CMFCore.utils import getToolByName
 from Products.CMFDefault.interfaces import ICMFDefaultSkin
 from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
 from datetime import datetime
 from five import grok
-from opengever.dossier import _
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.interfaces import IConstrainTypeDecider
