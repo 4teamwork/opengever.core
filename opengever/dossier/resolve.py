@@ -146,7 +146,9 @@ class Resolver(object):
         for subdossier in dossier.get_subdossiers():
             self._recursive_resolve(subdossier.getObject(), end_date)
 
-        self.wft.doActionFor(dossier, 'dossier-transition-resolve')
+        if self.wft.getInfoFor(
+            dossier, 'review_state') == 'dossier-state-active':
+            self.wft.doActionFor(dossier, 'dossier-transition-resolve')
 
 
 class Reactivator(object):
