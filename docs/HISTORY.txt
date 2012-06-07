@@ -6,6 +6,7 @@ Changelog
 ----------------
 
 - Implements *.msg support for the OGQuickUploadCapableFileFactory.
+  Fixed pdfrendering for d'n'd uploaded files.
   Issue #549 Abklaerung: Drag and drop
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/549
   [phgross]

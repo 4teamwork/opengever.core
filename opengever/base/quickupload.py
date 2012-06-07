@@ -9,6 +9,7 @@ from plone.rfc822.interfaces import IPrimaryField
 from z3c.form.interfaces import IValue
 from zope.component import queryMultiAdapter
 from zope.event import notify
+from zope.lifecycleevent import ObjectAddedEvent
 from zope.lifecycleevent import ObjectModifiedEvent
 from zope.schema import getFieldsInOrder
 import mimetypes
@@ -41,6 +42,7 @@ class OGQuickUploadCapableFileFactory(grok.Adapter):
         named_file = self.create_file(filename, data, mimetype, obj)
         self.set_default_values(obj, named_file)
 
+        notify(ObjectAddedEvent(obj))
         notify(ObjectModifiedEvent(obj))
         obj.reindexObject()
 
