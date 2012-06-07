@@ -46,6 +46,8 @@
   <permission-map name="Modify portal content" acquired="False">
    <permission-role>Administrator</permission-role>
    <permission-role>Manager</permission-role>
+   <permission-role>Contributor</permission-role>
+   <permission-role>Editor</permission-role>
   </permission-map>
   <permission-map name="Sharing page: Delegate Contributor role" acquired="False">
    <permission-role>Administrator</permission-role>
