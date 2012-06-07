@@ -5,6 +5,11 @@ Changelog
 2.2 (unreleased)
 ----------------
 
+- Made mails also findable (use IBaseDocument instead of IDocumentSchema)
+  Issue #1595 Erweiterte Suche: Mails werden bei Suche nach Dokumentdatum nicht beruecksichtigt
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1595
+  [phgross]
+
 - Disalbe unloadProtection for the advanced search form.
   Issue #1597 Meldung beim verlassen der Suche
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1597

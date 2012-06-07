@@ -61,8 +61,8 @@ def get_types(context):
         )
     )
     types.append(SimpleVocabulary.createTerm(
-        'opengever.document.document.IDocumentSchema',
-        'opengever.document.document.IDocumentSchema',
+        'opengever.document.behaviors.IBaseDocument',
+        'opengever.document.behaviors.IBaseDocument',
         _('document')
         )
     )
@@ -87,7 +87,7 @@ FIELD_MAPPING = {'opengever-dossier-behaviors-dossier-IDossierMarker': [
                     'task_type',
                     'task_review_state',
                 ],
-                'opengever-document-document-IDocumentSchema': [
+                'opengever-document-behaviors-IBaseDocument': [
                     'receipt_date_1',
                     'receipt_date_2',
                     'delivery_date_1',

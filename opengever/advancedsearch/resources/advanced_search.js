@@ -8,12 +8,12 @@ jq(function(){
   // add manually the class for some fields, where the addClass function not work (autocomplete widget ect.)
   jq('#form-widgets-responsible-autocomplete').addClass('opengever-dossier-behaviors-dossier-IDossierMarker');
   jq('#form-widgets-review_state-from').addClass('opengever-dossier-behaviors-dossier-IDossierMarker');
-  jq('#form-widgets-checked_out-autocomplete').addClass('opengever-document-document-IDocumentSchema');
-  jq('#form-widgets-trashed-0').addClass('opengever-document-document-IDocumentSchema');
+  jq('#form-widgets-checked_out-autocomplete').addClass('opengever-document-behaviors-IBaseDocument');
+  jq('#form-widgets-trashed-0').addClass('opengever-document-behaviors-IBaseDocument');
   jq('#form-widgets-issuer-autocomplete').addClass('opengever-task-task-ITask');
 
   jq('input[name=form.widgets.object_provides:list]').change(function(){
-    var types = ['opengever-dossier-behaviors-dossier-IDossierMarker', 'opengever-task-task-ITask', 'opengever-document-document-IDocumentSchema'];
+    var types = ['opengever-dossier-behaviors-dossier-IDossierMarker', 'opengever-task-task-ITask', 'opengever-document-behaviors-IBaseDocument'];
     selected = jq('input[name=form.widgets.object_provides:list]:checked').attr('value').replace(/\./g, '-');
     types.remove(selected);
 
