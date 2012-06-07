@@ -8,6 +8,7 @@ Changelog
 - Added some adjustments in the resolving process:
   - Made recursive_resolve safe, can hanlde now allready resolved sbudossiers.
   - Made reactivate possible for subdossier if the maindossier is still open.
+  - Adjust recursive_resolving of subdossie: overwrite the end date only when its not valid or none.
   [phgross]
 
 - Issue #1512 Auswahl exportieren: Sortieren nach Ablagenr. funktioniert nicht

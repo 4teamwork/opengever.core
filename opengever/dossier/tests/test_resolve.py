@@ -2,11 +2,12 @@ from datetime import date
 from ftw.testing import MockTestCase
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.interfaces import IDossierResolver
+from opengever.dossier.resolve import DossierResolver
 from opengever.dossier.resolve import NOT_CHECKED_IN_DOCS
 from opengever.dossier.resolve import NOT_CLOSED_TASKS
 from opengever.dossier.resolve import NOT_SUPPLIED_OBJECTS
 from opengever.dossier.resolve import ResolveConditions, Resolver
-from opengever.dossier.resolve import DossierResolver
+from zope.interface import implements
 from zope.interface.verify import verifyClass
 
 
@@ -134,26 +135,39 @@ class TestResolver(MockTestCase):
         # so that zope.component doesn't lookup the adapter
         # and return the adapted object directly
 
-        dossier = self.providing_stub([IDossier, ])
-        sub1 = self.providing_stub([IDossier, ])
-        self.expect(sub1.getObject()).result(sub1)
-        sub2 = self.providing_stub([IDossier, ])
-        self.expect(sub2.getObject()).result(sub2)
-        subsub1 = self.providing_stub([IDossier, ])
-        self.expect(subsub1.getObject()).result(subsub1)
+        class StubDossier(object):
+            implements(IDossier)
+
+            def __init__(self, end, valid, sub=[]):
+                self.end = end
+                self.valid = valid
+                self.sub = sub
+
+            def getObject(self):
+                return self
+
+            def get_subdossiers(self):
+                return self.sub
+
+            def has_valid_enddate(self):
+                return self.valid
+
+        sub1 = StubDossier(date(2012, 1, 1), False)
+        sub2 = StubDossier(date(2012, 2, 1), True)
+        dossier = StubDossier(None, True, )
+        subsub1 = StubDossier(None, False)
+
+        dossier.sub = [sub1, sub2]
+        sub1.sub = [subsub1, ]
 
         with self.mocker.order():
             # test 1
-            self.expect(dossier.get_subdossiers()).result([sub1, sub2])
-            self.expect(sub1.get_subdossiers()).result([subsub1, ])
-            self.expect(subsub1.get_subdossiers()).result([])
             self.expect(wft.getInfoFor(subsub1, 'review_state')).result(
                 'dossier-state-active')
             self.expect(wft.doActionFor(subsub1, 'dossier-transition-resolve'))
             self.expect(wft.getInfoFor(sub1, 'review_state')).result(
                 'dossier-state-active')
             self.expect(wft.doActionFor(sub1, 'dossier-transition-resolve'))
-            self.expect(sub2.get_subdossiers()).result([])
             self.expect(wft.getInfoFor(sub2, 'review_state')).result(
                 'dossier-state-resolved')
             self.expect(wft.getInfoFor(dossier, 'review_state')).result(
@@ -163,8 +177,9 @@ class TestResolver(MockTestCase):
         self.replay()
 
         Resolver(dossier).resolve_dossier(TEST_DATE)
-        self.assertEquals(sub1.end, TEST_DATE)
         self.assertEquals(dossier.end, TEST_DATE)
+        self.assertEquals(sub1.end, TEST_DATE)
+        self.assertEquals(sub2.end, date(2012, 2, 1))
 
     def test_resolving_subdossier(self):
         wft = self.stub()

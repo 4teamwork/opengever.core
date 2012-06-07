@@ -142,15 +142,24 @@ class Resolver(object):
     def resolve_dossier(self, end_date=None):
         self._recursive_resolve(self.context, end_date)
 
-    def _recursive_resolve(self, dossier, end_date):
+    def _recursive_resolve(self, dossier, end_date, recursive=False):
 
+        # no end_date is given use the earliest possible
         if not end_date:
             end_date = dossier.earliest_possible_end_date()
 
-        IDossier(dossier).end = end_date
+        if recursive:
+            # check the subdossiers end date
+            # set the parent endate when no or a invalid end date is set
+            if not IDossier(dossier).end or not dossier.has_valid_enddate():
+                IDossier(dossier).end = end_date
+        else:
+            # main dossier set the given end_date
+            IDossier(dossier).end = end_date
 
         for subdossier in dossier.get_subdossiers():
-            self._recursive_resolve(subdossier.getObject(), end_date)
+            self._recursive_resolve(
+                subdossier.getObject(), end_date, recursive=True)
 
         if self.wft.getInfoFor(
             dossier, 'review_state') == 'dossier-state-active':
