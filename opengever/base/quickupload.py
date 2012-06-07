@@ -2,6 +2,7 @@ from Acquisition import aq_inner
 from collective.quickupload.interfaces import IQuickUploadFileFactory
 from five import grok
 from ftw.tabbedview.interfaces import ITabbedviewUploadable
+from opengever.base.transforms.msg2mime import Msg2MimeTransform
 from plone.dexterity.utils import createContentInContainer
 from plone.dexterity.utils import iterSchemata
 from plone.rfc822.interfaces import IPrimaryField
@@ -11,6 +12,7 @@ from zope.event import notify
 from zope.lifecycleevent import ObjectModifiedEvent
 from zope.schema import getFieldsInOrder
 import mimetypes
+import os
 
 
 class OGQuickUploadCapableFileFactory(grok.Adapter):
@@ -24,6 +26,12 @@ class OGQuickUploadCapableFileFactory(grok.Adapter):
 
     def __call__(
         self, filename, title, description, content_type, data, portal_type):
+
+        if filename.lower().endswith('msg'):
+            # its a outlook msg file
+            # needs to be converted by the Msg2MimeTransform
+            data = Msg2MimeTransform()(data)
+            filename = filename.replace('msg', 'eml')
 
         mimetype = self.get_mimetype(filename)
         portal_type = self.get_portal_type(mimetype)
@@ -80,8 +88,8 @@ class OGQuickUploadCapableFileFactory(grok.Adapter):
                     field.set(field.interface(obj), value)
 
     def get_mimetype(self, filename):
-        return mimetypes.types_map[
-                filename[filename.rfind('.'):].lower()]
+        basepath, extension = os.path.splitext(filename)
+        return mimetypes.types_map.get(extension)
 
     def get_portal_type(self, mimetype):
         # check if its a mail object then create a ftw.mail
