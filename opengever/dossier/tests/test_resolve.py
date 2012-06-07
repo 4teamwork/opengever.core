@@ -74,14 +74,14 @@ class TestResolveConditions(MockTestCase):
             self.expect(dossier.get_subdossiers()).result([sub1, sub2])
 
             self.expect(sub1.has_valid_enddate()).result(False)
-            self.expect(sub1.get_subdossiers()).result([subsub1,])
+            self.expect(sub1.get_subdossiers()).result([subsub1, ])
             self.expect(subsub1.has_valid_enddate()).result(True)
             self.expect(subsub1.get_subdossiers()).result([])
 
             self.expect(sub2.has_valid_enddate()).result(True)
-            self.expect(sub2.get_subdossiers()).result([subsub2,])
+            self.expect(sub2.get_subdossiers()).result([subsub2, ])
             self.expect(subsub2.has_valid_enddate()).result(True)
-            self.expect(subsub2.get_subdossiers()).result([subsubsub1,])
+            self.expect(subsub2.get_subdossiers()).result([subsubsub1, ])
             self.expect(subsubsub1.has_valid_enddate()).result(False)
             self.expect(subsubsub1.get_subdossiers()).result([])
 
@@ -90,14 +90,14 @@ class TestResolveConditions(MockTestCase):
             self.expect(dossier.get_subdossiers()).result([sub1, sub2])
 
             self.expect(sub1.has_valid_enddate()).result(True)
-            self.expect(sub1.get_subdossiers()).result([subsub1,])
+            self.expect(sub1.get_subdossiers()).result([subsub1, ])
             self.expect(subsub1.has_valid_enddate()).result(True)
             self.expect(subsub1.get_subdossiers()).result([])
 
             self.expect(sub2.has_valid_enddate()).result(True)
-            self.expect(sub2.get_subdossiers()).result([subsub2,])
+            self.expect(sub2.get_subdossiers()).result([subsub2, ])
             self.expect(subsub2.has_valid_enddate()).result(True)
-            self.expect(subsub2.get_subdossiers()).result([subsubsub1,])
+            self.expect(subsub2.get_subdossiers()).result([subsubsub1, ])
             self.expect(subsubsub1.has_valid_enddate()).result(True)
             self.expect(subsubsub1.get_subdossiers()).result([])
 
@@ -116,7 +116,9 @@ class TestResolveConditions(MockTestCase):
             )
         self.assertEquals(ResolveConditions(dossier).check_end_dates(), [])
         self.assertEquals(ResolveConditions(dossier).check_end_dates(), [])
-        self.assertEquals(ResolveConditions(dossier).check_end_dates(), ['Dossier'])
+        self.assertEquals(
+            ResolveConditions(dossier).check_end_dates(), ['Dossier'])
+
 
 class TestResolver(MockTestCase):
 
@@ -143,15 +145,19 @@ class TestResolver(MockTestCase):
         with self.mocker.order():
             # test 1
             self.expect(dossier.get_subdossiers()).result([sub1, sub2])
-            self.expect(sub1.get_subdossiers()).result([subsub1,])
+            self.expect(sub1.get_subdossiers()).result([subsub1, ])
             self.expect(subsub1.get_subdossiers()).result([])
-            self.expect(wft.getInfoFor(subsub1, 'review_state')).result('dossier-state-active')
+            self.expect(wft.getInfoFor(subsub1, 'review_state')).result(
+                'dossier-state-active')
             self.expect(wft.doActionFor(subsub1, 'dossier-transition-resolve'))
-            self.expect(wft.getInfoFor(sub1, 'review_state')).result('dossier-state-active')
+            self.expect(wft.getInfoFor(sub1, 'review_state')).result(
+                'dossier-state-active')
             self.expect(wft.doActionFor(sub1, 'dossier-transition-resolve'))
             self.expect(sub2.get_subdossiers()).result([])
-            self.expect(wft.getInfoFor(sub2, 'review_state')).result('dossier-state-resolved')
-            self.expect(wft.getInfoFor(dossier, 'review_state')).result('dossier-state-active')
+            self.expect(wft.getInfoFor(sub2, 'review_state')).result(
+                'dossier-state-resolved')
+            self.expect(wft.getInfoFor(dossier, 'review_state')).result(
+                'dossier-state-active')
             self.expect(wft.doActionFor(dossier, 'dossier-transition-resolve'))
 
         self.replay()
@@ -168,7 +174,8 @@ class TestResolver(MockTestCase):
         self.expect(subdossier.is_subdossier()).result(True)
         self.expect(subdossier.earliest_possible_end_date()).result(TEST_DATE)
         self.expect(subdossier.get_subdossiers()).result([])
-        self.expect(wft.getInfoFor(subdossier,'review_state')).result('dossier-state-active')
+        self.expect(wft.getInfoFor(subdossier, 'review_state')).result(
+            'dossier-state-active')
         self.expect(wft.doActionFor(subdossier, 'dossier-transition-resolve'))
 
         self.replay()
@@ -176,8 +183,3 @@ class TestResolver(MockTestCase):
         Resolver(subdossier).resolve_dossier()
 
         self.assertEquals(IDossier(subdossier).end, TEST_DATE)
-
-
-
-
-
