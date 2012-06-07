@@ -5,6 +5,11 @@ Changelog
 2.0.5 (unreleased)
 ------------------
 
+- Added some adjustments in the resolving process:
+  - Made recursive_resolve safe, can hanlde now allready resolved sbudossiers.
+  - Made reactivate possible for subdossier if the maindossier is still open.
+  [phgross]
+
 - Issue #1512 Auswahl exportieren: Sortieren nach Ablagenr. funktioniert nicht
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1512
   Dossier reporter: Added encoding transform for the title attribute.

@@ -119,7 +119,13 @@ class DossierResolver(grok.Adapter):
             Resolver(self.context).resolve_dossier(end_date=end_date)
 
     def is_reactivate_possible(self):
-        return not self.context.is_subdossier()
+        parent = self.context.get_parent_dossier()
+        if parent:
+            wft = getToolByName(self.context, 'portal_workflow')
+            if wft.getInfoFor(
+                parent, 'review_state') != 'dossier-state-active':
+                return False
+        return True
 
     def reactivate(self):
         if not self.is_reactivate_possible():
