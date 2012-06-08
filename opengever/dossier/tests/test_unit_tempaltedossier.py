@@ -1,21 +1,23 @@
+from Products.CMFCore.interfaces import ISiteRoot
+from datetime import datetime
+from ftw.testing import MockTestCase
 from grokcore.component.testing import grok
-from mocker import ANY
 from opengever.base.interfaces import IRedirector
-from opengever.base.interfaces import ISequenceNumber
+from opengever.document import document
 from opengever.dossier.templatedossier import ITemplateUtility
 from opengever.dossier.templatedossier import TemplateDocumentFormView
-from plone.mocktestcase import MockTestCase
-from zope.annotation.interfaces import IAnnotations
-from zope.component import getUtility
-from zope.event import notify
+from plone.dexterity.fti import DexterityFTI, register
+from zope.component import getGlobalSiteManager
+from zope.component import getUtility, provideAdapter
+from zope.component.persistentregistry import PersistentComponents
+from zope.container.interfaces import INameChooser
 from zope.interface import Interface
-from zope.lifecycleevent import ObjectModifiedEvent
+from zope.interface import implements
 
 
 class TestTemplateFolderUtility(MockTestCase):
 
     def setUp(self):
-
         grok('opengever.dossier.templatedossier')
 
     def test_templatefolder_returns_path(self):
@@ -150,73 +152,71 @@ class TestTemplateDocumentFormView(MockTestCase):
         mock_view()
 
     def test_create_document_method(self):
-        """Test the create_document method,
-        which copies the template and adjust the copy"""
 
-        mock_context = self.mocker.mock()
-        mock_request = self.mocker.mock(count=False)
-        template_doc = self.mocker.mock()
-        newdoc = self.mocker.mock()
+        # we need to register any plone.directives.form magic components
+        # from the module manually (they are not grokky):
+        for factory, name in document.__form_value_adapters__:
+            provideAdapter(factory, name=name)
 
-        # mock the copy process
-        self.expect(template_doc.__parent__).result(template_doc)
-        self.expect(template_doc.getId()).result('test-id')
-        self.expect(
-            template_doc.manage_copyObjects(['test-id'])).result('clipboard')
-        self.expect(mock_context.manage_pasteObjects('clipboard')).result(
-            [{'new_id': 'new-id'}, ])
-        self.expect(mock_context.get('new-id')).result(newdoc)
+        class MockContext(object):
+            def __init__(self, fti, template):
+                self.fti = fti
+                self.template = template
+            def _setObject(self, id, obj):
+                self.obj = obj
+            def _getOb(self, id):
+                return self.obj
+            def restrictedTraverse(self, testpath):
+                return self.template
+            def getTypeInfo(self):
+                return self.fti
 
-        #portal_membership
-        mtool = self.mocker.mock()
-        member = self.mocker.mock()
-        self.expect(member.title_or_id()).result('test-user-id')
-        self.expect(member.getId()).result('test-user-id')
-        self.expect(mtool.getAuthenticatedMember()).result(member)
-        self.mock_tool(mtool, 'portal_membership')
+        # Mock the lookup of the site and the site manager at the site root
+        dummy_site = self.create_dummy()
+        self.mock_utility(dummy_site, ISiteRoot)
 
-        # mock the newdoc object
-        self.expect(newdoc.getId()).result('new-id').count(2)
-        self.expect(newdoc.setTitle('Test Title'))
-        newdoc.creators = ('test-user-id',)
-        newdoc.changeOwnership(member)
-        newdoc.creation_date = ANY
-        newdoc.document_date = None
-        newdoc.document_author = None
-        self.expect(
-            newdoc.get_local_roles()).result((('admin', ('Owner', 'Editor')),))
-        newdoc.manage_delLocalRoles(['admin'])
-        newdoc.manage_setLocalRoles('test-user-id', ('Owner',))
+        # fti fake
+        fti = DexterityFTI(u'opengever.document.document')
+        fti.schema = 'opengever.document.document.IDocumentSchema'
+        fti.model_source = None
+        fti.model_file = None
+        fti.addable_types = ['opengever.document.document']
+        fti.isConstructionAllowed = lambda x: True
+        fti.allowType = lambda x: True
+        register(fti)
+        site_manager_mock = self.mocker.proxy(PersistentComponents(bases=(getGlobalSiteManager(),)))
+        getSiteManager_mock = self.mocker.replace('zope.app.component.hooks.getSiteManager')
+        self.expect(getSiteManager_mock(dummy_site)).result(site_manager_mock).count(0 , None)
 
-        # mock events
-        self.expect(ObjectModifiedEvent(newdoc)).result('mockevent')
-        notify('mockevent')
+        # Name chooser
+        class NameChooser(object):
+            implements(INameChooser)
+            def __init__(self, context):
+                pass
+            def chooseName(self, name, object):
+                return u"newid"
+        self.mock_adapter(NameChooser, INameChooser, (Interface,))
 
-        #mock annotation
-        ann_adapter = self.mocker.mock()
-        self.expect(ann_adapter(newdoc)).result(ann_adapter)
-        self.expect(ann_adapter.keys()).result(['test-key'])
-        del ann_adapter['test-key']
-        # self.expect(ann_adapter.keys()).result([])
-        self.mock_adapter(ann_adapter, IAnnotations, [Interface, ])
+        # template
+        namedfile = self.stub()
+        template_doc = self.stub()
+        self.expect(template_doc.file).result(namedfile)
 
-        # ISequence_number utility
-        sequence_number_utility = self.mocker.mock()
-        self.expect(sequence_number_utility.get_number(newdoc)).result('10')
-        self.mock_utility(sequence_number_utility, ISequenceNumber)
+        # context and request
+        context = MockContext(fti, template_doc)
+        request = self.stub_request()
+        testpath = 'testpath'
 
-        testpath = '/plone/testpath'
-
-        # mock context methods
-        self.expect(mock_context.absolute_url()).result(
-            'http://foo.com').count(0, None)
-        self.expect(mock_context.restrictedTraverse(testpath)).result(
-            template_doc)
-        mock_context.manage_renameObject('new-id', 'document-10')
+        # # document_date default
+        # default_value = self.stub()
+        # mock_adapter(default_value, Interface)
 
         self.replay()
+        view = TemplateDocumentFormView(context, request)
+        view.title = u'Test Title'
 
-        view = TemplateDocumentFormView(mock_context, mock_request)
-        view.title = 'Test Title'
+        view.create_document(testpath)
 
-        newdoc = view.create_document(testpath)
+        self.assertEqual(context.obj.portal_type, u'opengever.document.document')
+        self.assertEqual(context.obj.file, namedfile)
+        self.assertEqual(context.obj.document_date, datetime.now().date())

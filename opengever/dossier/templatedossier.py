@@ -1,22 +1,20 @@
-from zope.annotation.interfaces import IAnnotations
-from zope.interface import Interface
-from zope.component import getUtility
-from zope.lifecycleevent import ObjectAddedEvent, ObjectModifiedEvent
-from zope.event import notify
-
-from five import grok
-from Acquisition import aq_inner, aq_parent
-from Products.statusmessages.interfaces import IStatusMessage
 from Products.CMFCore.utils import getToolByName
-from DateTime import DateTime
-
-from opengever.dossier import _
-from opengever.base.interfaces import ISequenceNumber
-from opengever.base.interfaces import IRedirector
-
+from Products.statusmessages.interfaces import IStatusMessage
+from five import grok
 from ftw.table import helper
 from ftw.table.interfaces import ITableGenerator
+from opengever.base.interfaces import IRedirector
+from opengever.dossier import _
 from opengever.tabbedview.helper import linked
+from plone.dexterity.utils import createContentInContainer
+from plone.dexterity.utils import iterSchemata
+from z3c.form.interfaces import IValue
+from zope.component import getUtility
+from zope.component import queryMultiAdapter
+from zope.event import notify
+from zope.interface import Interface
+from zope.lifecycleevent import ObjectModifiedEvent
+from zope.schema import getFieldsInOrder
 
 
 class ITemplateDossier(Interface):
@@ -96,47 +94,43 @@ class TemplateDocumentFormView(grok.View):
 
     def create_document(self, path):
         doc = self.context.restrictedTraverse(path)
-        clibboard = aq_parent(aq_inner(doc)).manage_copyObjects(
-            [doc.getId()])
-        result = self.context.manage_pasteObjects(clibboard)
-        newdoc = self.context.get(result[0].get('new_id'))
 
-        #remove every annotation which was stored on the template object
-        annotations = IAnnotations(newdoc)
-        for a in list(annotations.keys()):
-            del annotations[a]
+        new_doc = createContentInContainer(
+            self.context, 'opengever.document.document',
+            title=self.title)
 
-        # rename it
-        name = "document-%s" % getUtility(ISequenceNumber).get_number(
-            newdoc)
-        member = getToolByName(
-            self.context, 'portal_membership').getAuthenticatedMember()
-        self.context.manage_renameObject(newdoc.getId(), name)
+        new_doc.file = doc.file
 
-        event = ObjectAddedEvent(
-            newdoc, newParent=self.context, newName=newdoc.getId())
-        notify(event)
-
-        newdoc.setTitle(self.title)
-
-        # change other attributes
-        newdoc.changeOwnership(member)
-        newdoc.creation_date = DateTime()
-        newdoc.creators = (member.title_or_id(), )
-
-        #reset document_date and document_author
-        newdoc.document_date = None
-        newdoc.document_author = None
-        newdoc.manage_delLocalRoles(
-            [u for u, r in newdoc.get_local_roles()])
-        newdoc.manage_setLocalRoles(
-            member.getId(), ('Owner', ))
-
+        self._set_defaults(new_doc)
         # notify necassary standard events
-        event = ObjectModifiedEvent(newdoc)
-        notify(event)
+        notify(ObjectModifiedEvent(new_doc))
 
-        return newdoc
+        return new_doc
+
+    def _set_defaults(self, obj):
+        # set default values for all fields
+
+        for schemata in iterSchemata(obj):
+            for name, field in getFieldsInOrder(schemata):
+                if not field.get(field.interface(obj)):
+                    default = queryMultiAdapter((
+                            obj,
+                            obj.REQUEST,
+                            None,
+                            field,
+                            None,
+                            ), IValue, name='default')
+                    if default is not None:
+                        default = default.get()
+                    if default is None:
+                        default = getattr(field, 'default', None)
+                    if default is None:
+                        try:
+                            default = field.missing_value
+                        except AttributeError:
+                            pass
+                    value = default
+                    field.set(field.interface(obj), value)
 
     def render_form(self):
         # get the templatedocuments and show the form template

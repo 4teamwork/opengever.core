@@ -8,6 +8,9 @@ Changelog
 - Issue #1512 Auswahl exportieren: Sortieren nach Ablagenr. funktioniert nicht
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1512
   Dossier reporter: Added filing number filing column.
+
+- Rebuild the document creation in templatedossier:
+  Create a new doc obj instead of copying it, this set also the default values.
   [phgross]
 
 - Added some adjustments in the resolving process:
@@ -25,7 +28,7 @@ Changelog
   #1515 Mail-Anhang kann nicht geöffnet werden im Internet Explorer
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1515/
   [eschmutz]
-  
+
 - Implement some adjustments on the templatedossier:
   - Made docs in templatedossiers editable.
   - Activate trash-tab and trashing alos in the templatedossiers.
