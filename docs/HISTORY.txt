@@ -5,6 +5,9 @@ Changelog
 2.0.4 (unreleased)
 ------------------
 
+- Fixed setting of content-type for attachments in send_documents
+  [lgraf]
+
 - Fixed encoding problems in send_documents functionality.
   Issue #1513 og.mail send_documents wirft UnicodeEncodeError
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1513

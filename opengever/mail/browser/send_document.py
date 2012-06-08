@@ -219,7 +219,11 @@ class SendDocumentForm(form.Form):
                     _('label_see_attachment', default=u'see attachment'),
                     context=self.request))
 
-            part = MIMEBase('application', obj_file.contentType)
+            mimetype = obj_file.contentType
+            if not mimetype:
+                mimetype = 'application/octet-stream'
+            maintype, subtype = obj_file.contentType.split('/', 1)
+            part = MIMEBase(maintype, subtype)
             part.set_payload(obj_file.data)
             Encoders.encode_base64(part)
             part.add_header('Content-Disposition', 'attachment; filename="%s"'
