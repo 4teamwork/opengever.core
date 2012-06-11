@@ -4,6 +4,7 @@ from five import grok
 from opengever.base.reporter import StringTranslater, XLSReporter
 from opengever.base.reporter import format_datetime, get_date_style
 from opengever.base.reporter import readable_author
+from opengever.base.behaviors.utils import set_attachment_content_disposition
 from opengever.dossier import _
 from zope.interface import Interface
 
@@ -120,6 +121,6 @@ class DossierReporter(grok.View):
         response = self.request.RESPONSE
 
         response.setHeader('Content-Type', 'application/vnd.ms-excel')
-        response.setHeader('Content-Disposition',
-                           'attachment;filename="dossier_report.xls"')
+        set_attachment_content_disposition(self.request, "dossier_report.xls")
+
         return data
