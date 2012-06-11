@@ -48,9 +48,9 @@ class IForwarding(ITask):
     form.widget(responsible=AutocompleteFieldWidget)
     responsible = schema.Choice(
         title=_(u"label_responsible", default=u"Responsible"),
-        description =_(u"help_responsible", default=""),
+        description=_(u"help_responsible", default=""),
         vocabulary=u'opengever.ogds.base.InboxesVocabulary',
-        required = True,
+        required=True,
         )
 
 
@@ -93,7 +93,8 @@ class ForwardingAddForm(AddForm):
         """
         paths = self.request.get('paths', [])
 
-        if not (paths or self.request.form.get('form.widgets.relatedItems', [])\
+        if not (paths or
+                self.request.form.get('form.widgets.relatedItems', [])\
         or '@@autocomplete-search' in self.request.get('ACTUAL_URL', '')):
             # add status message and redirect current window back to inbox
             # but ONLY if we're not in a z3cform_inline_validation or
