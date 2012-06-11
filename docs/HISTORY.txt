@@ -11,6 +11,17 @@ Changelog
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/549
   [phgross]
 
+- Fix attachment-fail when downloading file with IE.
+  #1515 Mail-Anhang kann nicht geöffnet werden im Internet Explorer
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1515/
+  [eschmutz]
+  
+- Add util-method to set the content disposition of the header to fix 
+  attachment-fail when downloading files with IE.
+  #1515 Mail-Anhang kann nicht geöffnet werden im Internet Explorer
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1515/
+  [eschmutz]
+
 - Correcty set the response contenttype, to avoid problems with diazo themes.
   Issue #6 Richtigen Content-Type auf der Response bei remote requests zwischen Clients setzen
   https://extranet.4teamwork.ch/intranet/08-produkte-kurse/4teamwork-gever-1/tracker-4teamwork-gever/6
