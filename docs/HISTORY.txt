@@ -5,6 +5,11 @@ Changelog
 2.2 (unreleased)
 ----------------
 
+- Made mail addable but not viewable in the factorymenu on inbox objects.
+  Issue #549 Abklaerung: Drag and drop
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/549/
+  [phgross]
+
 - Use the ISendableDocsContainer behavior instead of directly provide the interface.
   Issue #1568 Dokument aus Aufgabe versenden resp. kopieren
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1568
