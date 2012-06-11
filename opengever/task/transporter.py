@@ -126,24 +126,24 @@ class ResponseTransporter(grok.Adapter):
         """
 
         if isinstance(value, str):
-            return ('string:utf8', value.decode('utf-8'))
+            return [u'string:utf8', value.decode('utf-8')]
 
         if isinstance(value, unicode):
-            return ('unicode', value)
+            return [u'unicode', value]
 
         if isinstance(value, datetime):
-            return ('datetime', str(value))
+            return [u'datetime', str(value)]
 
         if isinstance(value, DateTime):
-            return ('DateTime', str(value))
+            return [u'DateTime', str(value)]
 
         if isinstance(value, PersistentList):
             return list(value)
 
         if isinstance(value, RelationValue):
             if value.to_id in self.intids_mapping:
-                return ('RelationValue',
-                        self.intids_mapping[value.to_id])
+                return [u'RelationValue',
+                        self.intids_mapping[value.to_id]]
             else:
                 raise ValueError('intids of relation value not in '
                                  'mapping')
