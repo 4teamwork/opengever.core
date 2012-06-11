@@ -5,6 +5,7 @@ from five import grok
 from opengever.base.reporter import StringTranslater, XLSReporter
 from opengever.base.reporter import format_datetime, get_date_style
 from opengever.base.reporter import readable_author
+from opengever.base.behaviors.utils import set_attachment_content_disposition
 from opengever.globalindex import _
 from opengever.globalindex.utils import get_selected_items
 from opengever.ogds.base.utils import get_client_id
@@ -94,6 +95,6 @@ class TaskReporter(grok.View):
         response = self.request.RESPONSE
 
         response.setHeader('Content-Type', 'application/vnd.ms-excel')
-        response.setHeader('Content-Disposition',
-                           'attachment;filename="task_report.xls"')
+        set_attachment_content_disposition(self.request, "task_report.xls")
+
         return data
