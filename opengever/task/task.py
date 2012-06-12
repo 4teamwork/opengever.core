@@ -1,4 +1,5 @@
 from Acquisition import aq_inner, aq_parent
+from Products.CMFCore.interfaces import IActionSucceededEvent
 from collective import dexteritytextindexer
 from datetime import datetime, timedelta
 from five import grok
@@ -8,18 +9,20 @@ from opengever.base.source import DossierPathSourceBinder
 from opengever.ogds.base.autocomplete_widget import AutocompleteFieldWidget
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.ogds.base.utils import get_client_id
-from opengever.task import util
 from opengever.task import _
+from opengever.task import util
+from opengever.task.validators import NoCheckedoutDocsValidator
 from plone.dexterity.content import Container
 from plone.directives import form, dexterity
 from plone.indexer import indexer
-from Products.CMFCore.interfaces import IActionSucceededEvent
+from z3c.form import validator
 from z3c.form.interfaces import HIDDEN_MODE
 from z3c.relationfield.schema import RelationChoice, RelationList
 from zc.relation.interfaces import ICatalog
 from zope import schema
 from zope.app.intid.interfaces import IIntIds
 from zope.component import getUtility, getMultiAdapter
+from zope.component import provideAdapter
 from zope.interface import implements
 from zope.schema.vocabulary import getVocabularyRegistry
 
@@ -175,6 +178,12 @@ class ITask(form.Schema):
         title=_(u'label_predecessor', default=u'Predecessor'),
         description=_(u'help_predecessor', default=u''),
         required=False)
+
+
+validator.WidgetValidatorDiscriminators(
+    NoCheckedoutDocsValidator, field=ITask['relatedItems'])
+provideAdapter(NoCheckedoutDocsValidator)
+
 
 # # XXX doesn't work yet.
 #@form.default_value(field=ITask['issuer'])

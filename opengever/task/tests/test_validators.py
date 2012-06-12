@@ -1,6 +1,7 @@
 from ftw.testing import MockTestCase
 from opengever.task.browser.complete import ICompleteSuccessorTaskSchema
 from opengever.task.browser.complete import NoCheckedoutDocsValidator
+from opengever.task.task import ITask
 from plone.uuid.interfaces import IUUID, IAttributeUUID
 from zope.app.intid.interfaces import IIntIds
 from zope.interface import Invalid
@@ -63,3 +64,13 @@ class TestTaskCompletion(MockTestCase):
         # mutlitple checked out docs selected
         with self.assertRaises(Invalid):
             validator.validate(['111', '222', '333'])
+
+        # check also for relation list field
+        field = getFields(ITask).get('relatedItems')
+        validator = NoCheckedoutDocsValidator(
+            task1, request, None, field, None)
+
+        validator.validate([doc2, ])
+
+        with self.assertRaises(Invalid):
+            validator.validate([doc1, doc2, doc3])

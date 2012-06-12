@@ -5,17 +5,24 @@ from z3c.form import validator
 from zope.app.intid.interfaces import IIntIds
 from zope.component import getUtility
 from zope.interface import Invalid
+from z3c.relationfield.interfaces import IRelationList
 
 
 class NoCheckedoutDocsValidator(validator.SimpleFieldValidator):
     """Validator wich checks that all selected documents are checked in."""
 
     def validate(self, value):
+
         intids = getUtility(IIntIds)
 
         checkedout = []
         for iid in value:
-            doc = intids.getObject(int(iid))
+            if not IRelationList.providedBy(self.field):
+                iid = int(iid)
+                doc = intids.getObject(int(iid))
+            else:
+                doc = iid
+
             brain = uuidToCatalogBrain(IUUID(doc))
             if brain.checked_out:
                 checkedout.append(doc.title)
