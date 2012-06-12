@@ -5,6 +5,11 @@ Changelog
 2.3.5 (unreleased)
 ------------------
 
+- Added NoCheckedOutDocs also to the task add form.
+  Issue #1516 Problem "Ueberweisen von ausgecheckten Dokumenten"
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1516
+  [phgross]
+
 - Adjust document delivering: add answer prefix to the document titles.
   Issue #1479 Titel eines zurueckgelieferten Dokuments bei mandantenuebergreifenden Aufgaben
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1479
