@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "POT-Creation-Date: 2012-05-29 15:39+0000\n"
-"PO-Revision-Date: 2012-05-29 17:29+0200\n"
+"PO-Revision-Date: 2012-06-12 12:21+0200\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
 "MIME-Version: 1.0\n"
@@ -247,7 +247,7 @@ msgstr "Verantwortliche"
 #. Default: "The documents (${title}) are still checked out.                             Please checkin them in bevore deliver"
 #: ./opengever/task/browser/complete.py:124
 msgid "error_checked_out_document"
-msgstr "Die folgenden Dokumente (${title}) sind noch ausgecheckt. Sie müssen diese vor dem zurück liefern einchecken."
+msgstr "Die folgenden Dokumente (${title}) müssen noch eingecheckt werden."
 
 #. Default: "It's not possible to copy related documents."
 #: ./opengever/task/browser/copy_related_documents.py:82
