@@ -17,7 +17,17 @@ def _get_filing_part(filing_number, part):
                 return int(parts[part])
             except ValueError:
                 return parts[part]
+        elif part == 1 and len(parts) == 1:
+            # only filing is set
+            # return it if the filing part is asked
+            return parts[0]
         return
+
+
+def filing_no_filing(filing_number):
+    """Helper wich only return the year of the filing number"""
+
+    return _get_filing_part(filing_number, 1)
 
 
 def filing_no_year(filing_number):
@@ -91,13 +101,16 @@ class DossierReporter(grok.View):
              'title':_(u'label_responsible', default='Responsible'),
              'transform':readable_author},
             {'id':'filing_no',
-             'title':_(u'filing_no', default="Filing number")},
+             'title':_('filing_no_filing'),
+             'transform': filing_no_filing},
             {'id':'filing_no',
              'title':_('filing_no_year'),
              'transform': filing_no_year},
             {'id':'filing_no',
              'title':_('filing_no_number'),
              'transform': filing_no_number},
+            {'id':'filing_no',
+             'title':_(u'filing_no', default="Filing number")},
             {'id':'review_state',
              'title':_('label_review_state', default='Review state'),
              'transform':StringTranslater(

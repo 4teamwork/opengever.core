@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2012-05-10 12:50+0000\n"
+"POT-Creation-Date: 2012-06-13 09:51+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -40,7 +40,7 @@ msgstr ""
 msgid "Copy documents to remote client"
 msgstr ""
 
-#: ./opengever/dossier/browser/report.py:106
+#: ./opengever/dossier/browser/report.py:128
 msgid "Could not generate the report"
 msgstr ""
 
@@ -76,7 +76,7 @@ msgstr ""
 msgid "It isn't allowed to add such items there"
 msgstr ""
 
-#: ./opengever/dossier/resolve.py:73
+#: ./opengever/dossier/resolve.py:74
 msgid "It isn't possible to reactivate a sub dossier."
 msgstr ""
 
@@ -129,14 +129,6 @@ msgstr ""
 
 #: ./opengever/dossier/behaviors/dossier.py:244
 msgid "The start or end date is invalid"
-msgstr ""
-
-#: ./opengever/dossier/base.py:324
-msgid "The subdossier '${title}' has an invalid end date."
-msgstr ""
-
-#: ./opengever/dossier/base.py:333
-msgid "The subdossier '${title}' needs to be resolved manually."
 msgstr ""
 
 #: ./opengever/dossier/archive.py:142
@@ -227,7 +219,7 @@ msgid "error_enddate"
 msgstr ""
 
 #. Default: "You have not selected any Items"
-#: ./opengever/dossier/browser/report.py:58
+#: ./opengever/dossier/browser/report.py:76
 msgid "error_no_items"
 msgstr ""
 
@@ -243,15 +235,19 @@ msgstr ""
 
 #. Default: "Filing number"
 #: ./opengever/dossier/behaviors/dossier.py:116
-#: ./opengever/dossier/browser/report.py:84
+#: ./opengever/dossier/browser/report.py:112
 msgid "filing_no"
 msgstr ""
 
-#: ./opengever/dossier/browser/report.py:89
+#: ./opengever/dossier/browser/report.py:103
+msgid "filing_no_filing"
+msgstr ""
+
+#: ./opengever/dossier/browser/report.py:109
 msgid "filing_no_number"
 msgstr ""
 
-#: ./opengever/dossier/browser/report.py:86
+#: ./opengever/dossier/browser/report.py:106
 msgid "filing_no_year"
 msgstr ""
 
@@ -414,7 +410,7 @@ msgstr ""
 #. Default: "Closing Date"
 #: ./opengever/dossier/archive.py:118
 #: ./opengever/dossier/behaviors/dossier.py:72
-#: ./opengever/dossier/browser/report.py:77
+#: ./opengever/dossier/browser/report.py:96
 msgid "label_end"
 msgstr ""
 
@@ -461,7 +457,7 @@ msgstr ""
 
 #. Default: "Reference Number"
 #: ./opengever/dossier/behaviors/dossier.py:184
-#: ./opengever/dossier/browser/report.py:96
+#: ./opengever/dossier/browser/report.py:118
 #: ./opengever/dossier/viewlets/businesscase_byline.pt:69
 msgid "label_reference_number"
 msgstr ""
@@ -474,12 +470,12 @@ msgstr ""
 #. Default: "Responsible"
 #: ./opengever/dossier/behaviors/dossier.py:85
 #: ./opengever/dossier/browser/participants.py:163
-#: ./opengever/dossier/browser/report.py:81
+#: ./opengever/dossier/browser/report.py:100
 msgid "label_responsible"
 msgstr ""
 
 #. Default: "Review state"
-#: ./opengever/dossier/browser/report.py:92
+#: ./opengever/dossier/browser/report.py:114
 msgid "label_review_state"
 msgstr ""
 
@@ -500,7 +496,7 @@ msgstr ""
 
 #. Default: "Opening Date"
 #: ./opengever/dossier/behaviors/dossier.py:64
-#: ./opengever/dossier/browser/report.py:73
+#: ./opengever/dossier/browser/report.py:92
 msgid "label_start"
 msgstr ""
 
@@ -521,7 +517,7 @@ msgid "label_template"
 msgstr ""
 
 #. Default: "title"
-#: ./opengever/dossier/browser/report.py:71
+#: ./opengever/dossier/browser/report.py:89
 #: ./opengever/dossier/templatedossier.py:168
 #: ./opengever/dossier/templatedossier_templates/template_form.pt:30
 msgid "label_title"
@@ -539,25 +535,18 @@ msgstr ""
 msgid "newest_tasks"
 msgstr ""
 
-#: ./opengever/dossier/base.py:255
-msgid "no valid end date provided"
-msgstr ""
-
 #: ./opengever/dossier/browser/overview_templates/overview.pt:12
 msgid "no_content"
 msgstr ""
 
-#: ./opengever/dossier/base.py:265
 #: ./opengever/dossier/resolve.py:8
 msgid "not all documents and tasks are stored in a subdossier"
 msgstr ""
 
-#: ./opengever/dossier/base.py:271
 #: ./opengever/dossier/resolve.py:10
 msgid "not all documents are checked in"
 msgstr ""
 
-#: ./opengever/dossier/base.py:277
 #: ./opengever/dossier/resolve.py:11
 msgid "not all task are closed"
 msgstr ""

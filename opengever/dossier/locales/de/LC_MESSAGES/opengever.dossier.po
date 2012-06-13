@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2012-05-10 12:50+0000\n"
-"PO-Revision-Date: 2012-05-10 14:56+0200\n"
+"POT-Creation-Date: 2012-06-13 09:51+0000\n"
+"PO-Revision-Date: 2012-06-13 11:51+0200\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
 "MIME-Version: 1.0\n"
@@ -37,7 +37,7 @@ msgstr "Geschäftsdossier"
 msgid "Copy documents to remote client"
 msgstr "In eigenes Dossier kopieren"
 
-#: ./opengever/dossier/browser/report.py:106
+#: ./opengever/dossier/browser/report.py:128
 msgid "Could not generate the report"
 msgstr "Report konnte nicht generiert werden."
 
@@ -73,7 +73,7 @@ msgstr "Folgende Elemente sind durch einen anderen Benutzer gesperrt und konnten
 msgid "It isn't allowed to add such items there"
 msgstr "Sie dürfen dieses Objekt nicht an den Zielort verschieben"
 
-#: ./opengever/dossier/resolve.py:73
+#: ./opengever/dossier/resolve.py:74
 msgid "It isn't possible to reactivate a sub dossier."
 msgstr "Es ist nicht möglich ein Subdossier wieder zueröffnen, das Hauptdossier muss wieder eröffnet werden."
 
@@ -129,14 +129,6 @@ msgstr "Das Beginn-Datum muss vor dem Ende-Datum liegen."
 #: ./opengever/dossier/behaviors/dossier.py:244
 msgid "The start or end date is invalid"
 msgstr "Das Beginn- oder Ende-Datum ist ungültig."
-
-#: ./opengever/dossier/base.py:324
-msgid "The subdossier '${title}' has an invalid end date."
-msgstr "Das Subdossier '${title}' hat ein ungültiges End-Datum."
-
-#: ./opengever/dossier/base.py:333
-msgid "The subdossier '${title}' needs to be resolved manually."
-msgstr "Das Subdossier '${title}' muss manuell abgeschlossen werden."
 
 #: ./opengever/dossier/archive.py:142
 msgid "When the Action give filing number is selected,                         all fields are required."
@@ -226,7 +218,7 @@ msgid "error_enddate"
 msgstr "Enddatum erforderlich"
 
 #. Default: "You have not selected any Items"
-#: ./opengever/dossier/browser/report.py:58
+#: ./opengever/dossier/browser/report.py:76
 msgid "error_no_items"
 msgstr "Sie haben keine Objekte ausgewählt."
 
@@ -242,15 +234,19 @@ msgstr "Aktion"
 
 #. Default: "Filing number"
 #: ./opengever/dossier/behaviors/dossier.py:116
-#: ./opengever/dossier/browser/report.py:84
+#: ./opengever/dossier/browser/report.py:112
 msgid "filing_no"
 msgstr "Ablagenummer"
 
-#: ./opengever/dossier/browser/report.py:89
+#: ./opengever/dossier/browser/report.py:103
+msgid "filing_no_filing"
+msgstr "Ablage"
+
+#: ./opengever/dossier/browser/report.py:109
 msgid "filing_no_number"
 msgstr "Ablagenummer"
 
-#: ./opengever/dossier/browser/report.py:86
+#: ./opengever/dossier/browser/report.py:106
 msgid "filing_no_year"
 msgstr "Ablagejahr"
 
@@ -413,7 +409,7 @@ msgstr "E-Mail:"
 #. Default: "Closing Date"
 #: ./opengever/dossier/archive.py:118
 #: ./opengever/dossier/behaviors/dossier.py:72
-#: ./opengever/dossier/browser/report.py:77
+#: ./opengever/dossier/browser/report.py:96
 msgid "label_end"
 msgstr "Ende"
 
@@ -460,7 +456,7 @@ msgstr "Beteiligung"
 
 #. Default: "Reference Number"
 #: ./opengever/dossier/behaviors/dossier.py:184
-#: ./opengever/dossier/browser/report.py:96
+#: ./opengever/dossier/browser/report.py:118
 #: ./opengever/dossier/viewlets/businesscase_byline.pt:69
 msgid "label_reference_number"
 msgstr "Aktenzeichen:"
@@ -473,12 +469,12 @@ msgstr "Verwandte Dossiers"
 #. Default: "Responsible"
 #: ./opengever/dossier/behaviors/dossier.py:85
 #: ./opengever/dossier/browser/participants.py:163
-#: ./opengever/dossier/browser/report.py:81
+#: ./opengever/dossier/browser/report.py:100
 msgid "label_responsible"
 msgstr "Federführend"
 
 #. Default: "Review state"
-#: ./opengever/dossier/browser/report.py:92
+#: ./opengever/dossier/browser/report.py:114
 msgid "label_review_state"
 msgstr "Status"
 
@@ -499,7 +495,7 @@ msgstr "Ziel-Mandant"
 
 #. Default: "Opening Date"
 #: ./opengever/dossier/behaviors/dossier.py:64
-#: ./opengever/dossier/browser/report.py:73
+#: ./opengever/dossier/browser/report.py:92
 msgid "label_start"
 msgstr "Beginn"
 
@@ -520,7 +516,7 @@ msgid "label_template"
 msgstr "Vorlage"
 
 #. Default: "title"
-#: ./opengever/dossier/browser/report.py:71
+#: ./opengever/dossier/browser/report.py:89
 #: ./opengever/dossier/templatedossier.py:168
 #: ./opengever/dossier/templatedossier_templates/template_form.pt:30
 msgid "label_title"
@@ -538,25 +534,18 @@ msgstr "Neuste Dokumente"
 msgid "newest_tasks"
 msgstr "Neuste Aufgaben"
 
-#: ./opengever/dossier/base.py:255
-msgid "no valid end date provided"
-msgstr "Es wurde kein gültiges End-Datum angegeben."
-
 #: ./opengever/dossier/browser/overview_templates/overview.pt:12
 msgid "no_content"
 msgstr "Keine Inhalte"
 
-#: ./opengever/dossier/base.py:265
 #: ./opengever/dossier/resolve.py:8
 msgid "not all documents and tasks are stored in a subdossier"
 msgstr "Es sind nicht alle Dokumente und Aufgaben in Subdossiers abgelegt."
 
-#: ./opengever/dossier/base.py:271
 #: ./opengever/dossier/resolve.py:10
 msgid "not all documents are checked in"
 msgstr "Es sind nicht alle Dokumente eingecheckt"
 
-#: ./opengever/dossier/base.py:277
 #: ./opengever/dossier/resolve.py:11
 msgid "not all task are closed"
 msgstr "Es sind nicht alle Aufgaben abgeschlossen"

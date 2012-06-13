@@ -7,6 +7,7 @@ from opengever.base.reporter import readable_author
 from opengever.dossier.browser.report import DossierReporter
 from opengever.dossier.browser.report import filing_no_number
 from opengever.dossier.browser.report import filing_no_year
+from opengever.dossier.browser.report import filing_no_filing
 from zope.annotation.interfaces import IAttributeAnnotatable
 import xlrd
 
@@ -53,6 +54,16 @@ class TestDossierReporter(MockTestCase):
             filing_no_number('OG-Direktion-2011-555'), 555)
         self.assertEquals(
             filing_no_number(None), None)
+
+    def test_filing_no_filing(self):
+        self.assertEquals(
+            filing_no_filing('OG-Leitung-2012-1'), 'Leitung')
+        self.assertEquals(
+            filing_no_filing('Leitung'), 'Leitung')
+        self.assertEquals(
+            filing_no_filing('OG-Direktion-2011-555'), 'Direktion')
+        self.assertEquals(
+            filing_no_filing(None), None)
 
     def test_get_selected_dossiers(self):
         context = self.stub()
@@ -155,9 +166,10 @@ class TestDossierReporter(MockTestCase):
              u'01.01.2012',
              u'01.12.2012',
              u'Readable Foo Hugo',
-             'OG-Leitung-2012-1',
+             u'Leitung',
              2012.0,
              1.0,
+             u'OG-Leitung-2012-1',
              u'active',
              u'OG 3.1 / 4']
             )
