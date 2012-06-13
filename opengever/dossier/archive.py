@@ -60,7 +60,7 @@ class EnddateValidator(validator.SimpleFieldValidator):
             raise Invalid(
                 _(u'The given end date is not valid, it needs to be younger or\
                   equal than ${date} (the youngest contained object).',
-                  mapping=dict(dossier=earliest_date.strftime('%d.%m.%Y'),),))
+                  mapping=dict(date=earliest_date.strftime('%d.%m.%Y'),),))
 
 
 @grok.provider(IContextSourceBinder)
