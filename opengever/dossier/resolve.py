@@ -8,7 +8,7 @@ from opengever.dossier.behaviors.dossier import IDossier
 NOT_SUPPLIED_OBJECTS = _(
     "not all documents and tasks are stored in a subdossier")
 NOT_CHECKED_IN_DOCS = _("not all documents are checked in")
-NOT_CLOSED_TASKS = _("not all task are closed"),
+NOT_CLOSED_TASKS = _("not all task are closed")
 
 
 class DossierResolveView(grok.View):
