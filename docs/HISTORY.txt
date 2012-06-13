@@ -5,6 +5,11 @@ Changelog
 2.1.7 (unreleased)
 ------------------
 
+- Dossiercover: change fontsize and sizes of the textfield.
+  Issue #1432 Anpassungen Druchvorlage
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1432/
+  [phgross]
+
 - Use block layout in the dossiercover template, to allow easy customizations.
   [phgross]
 
