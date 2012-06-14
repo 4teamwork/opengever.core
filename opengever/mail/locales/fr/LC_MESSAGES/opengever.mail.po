@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2011-10-13 13:16+0000\n"
+"POT-Creation-Date: 2012-05-11 08:58+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,7 +20,7 @@ msgstr "Annuler"
 msgid "Create documents"
 msgstr "Extraire documents"
 
-#: ./opengever/mail/browser/send_document.py:34
+#: ./opengever/mail/browser/send_document.py:37
 msgid "No Mail Address"
 msgstr "Pas d'adresse Email"
 
@@ -28,17 +28,22 @@ msgstr "Pas d'adresse Email"
 msgid "The files you selected are larger than the maximum size"
 msgstr "La taille des fichiers séléctionnés dépasse la taille maximum permise."
 
-#: ./opengever/mail/browser/send_document.py:94
+#: ./opengever/mail/browser/send_document.py:97
 msgid "You have to select a intern                             or enter a extern mail-addres"
 msgstr "Sélectionner au minimum une adresse Email interne ou externe"
 
 #. Default: "Send"
-#: ./opengever/mail/browser/send_document.py:136
+#: ./opengever/mail/browser/send_document.py:139
 msgid "button_send"
 msgstr "Envoyer"
 
+#. Default: "Created: ${date}"
+#: ./opengever/mail/browser/byline.pt:15
+msgid "byline_created"
+msgstr "Créé"
+
 #. Default: "Cancel"
-#: ./opengever/mail/browser/send_document.py:177
+#: ./opengever/mail/browser/send_document.py:187
 msgid "cancel_back"
 msgstr "Annuler"
 
@@ -72,12 +77,17 @@ msgid "error_no_attachments_to_extract"
 msgstr "Cet Email n'a pas d'annexe à extraire"
 
 #. Default: "Extern receiver"
-#: ./opengever/mail/browser/send_document.py:53
+#: ./opengever/mail/browser/send_document.py:56
 msgid "extern_receiver"
 msgstr "Destinataire externe"
 
+#. Default: "Common"
+#: ./opengever/mail/mail.py:21
+msgid "fieldset_common"
+msgstr ""
+
 #. Default: "Send as email"
-#: ./opengever/mail/browser/send_document.py:118
+#: ./opengever/mail/browser/send_document.py:121
 msgid "heading_send_as_email"
 msgstr "Envoyer les documents comme Email"
 
@@ -87,16 +97,16 @@ msgid "help_delete_action"
 msgstr "Sélectionnez les annexes à effacer."
 
 #. Default: "email addresses of the receivers. Enter manually the addresses, one per each line."
-#: ./opengever/mail/browser/send_document.py:54
+#: ./opengever/mail/browser/send_document.py:57
 msgid "help_extern_receiver"
 msgstr "Ajouter les adresses email des destinataires externes. Une adresse par ligne."
 
 #. Default: "Live Search: search for users and contacts"
-#: ./opengever/mail/browser/send_document.py:42
+#: ./opengever/mail/browser/send_document.py:45
 msgid "help_intern_receiver"
 msgstr "Recherche en direct : Saisir nom et prénom des collaborateurs internes ou des contacts. Séléction multiple possible. "
 
-#: ./opengever/mail/browser/send_document.py:69
+#: ./opengever/mail/browser/send_document.py:72
 msgid "help_message"
 msgstr ""
 
@@ -105,7 +115,7 @@ msgstr ""
 msgid "help_select_attachments"
 msgstr "Sélectionner les annexes à extraire. De chaque annexe sélectionnée un document est créé  dans le dossier maître."
 
-#: ./opengever/mail/browser/send_document.py:63
+#: ./opengever/mail/browser/send_document.py:66
 msgid "help_subject"
 msgstr ""
 
@@ -115,12 +125,12 @@ msgid "info_extracted_document"
 msgstr "Document créé : ${title}"
 
 #. Default: "Mails sent"
-#: ./opengever/mail/browser/send_document.py:171
+#: ./opengever/mail/browser/send_document.py:178
 msgid "info_mails_sent"
 msgstr "Emails envoyés."
 
 #. Default: "Intern receiver"
-#: ./opengever/mail/browser/send_document.py:41
+#: ./opengever/mail/browser/send_document.py:44
 msgid "intern_receiver"
 msgstr "Destinataires internes"
 
@@ -145,17 +155,22 @@ msgid "label_delete_action_selected"
 msgstr "Effacer tous les fichiers attachés séléctionnés"
 
 #. Default: "Documents"
-#: ./opengever/mail/browser/send_document.py:74
+#: ./opengever/mail/browser/send_document.py:77
 msgid "label_documents"
 msgstr "Fichiers attachés"
 
 #. Default: "Message"
-#: ./opengever/mail/browser/send_document.py:68
+#: ./opengever/mail/browser/send_document.py:71
 msgid "label_message"
 msgstr "Message"
 
+#. Default: "Reference Number:"
+#: ./opengever/mail/browser/byline.pt:30
+msgid "label_reference_number"
+msgstr "Numéro de référence"
+
 #. Default: "see attachment"
-#: ./opengever/mail/browser/send_document.py:205
+#: ./opengever/mail/browser/send_document.py:219
 msgid "label_see_attachment"
 msgstr "Voir  fichiers attachés"
 
@@ -164,16 +179,26 @@ msgstr "Voir  fichiers attachés"
 msgid "label_select_attachments"
 msgstr "Fichiers attachés"
 
+#. Default: "Sequence Number:"
+#: ./opengever/mail/browser/byline.pt:20
+msgid "label_sequence_number"
+msgstr "Numéro courant"
+
 #. Default: "Subject"
-#: ./opengever/mail/browser/send_document.py:62
+#: ./opengever/mail/browser/send_document.py:65
 msgid "label_subject"
 msgstr "Objet"
 
-#: ./opengever/mail/browser/send_document.py:46
+#. Default: "Title"
+#: ./opengever/mail/mail.py:29
+msgid "label_title"
+msgstr ""
+
+#: ./opengever/mail/browser/send_document.py:49
 msgid "mails"
 msgstr "Email"
 
-#: ./opengever/mail/browser/send_document.py:57
+#: ./opengever/mail/browser/send_document.py:60
 msgid "receiver"
 msgstr "Destinataire"
 
