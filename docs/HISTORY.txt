@@ -5,6 +5,9 @@ Changelog
 2.0.5 (unreleased)
 ------------------
 
+- Adding mimetype for MindManager mindmap files to python mimetypes map
+  [lgraf]
+
 - Implements Custom InitialVersion Message functionality used in og.task.
   Issue #1494 Mandantenuebergreifende ZA: Initialversion ersetzten mit spezifischerem Kommentar
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1494
