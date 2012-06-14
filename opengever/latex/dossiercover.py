@@ -36,9 +36,9 @@ class DossierCoverPDFView(grok.View, BaseStandalonePDFView):
         self.use_package('babel', options='ngerman', append_options=False)
         self.use_package('fontenc', options='T1', append_options=False)
 
-        self.use_package('geometry', options='left=5cm')
-        self.use_package('geometry', options='right=5cm')
-        self.use_package('geometry', options='top=15cm')
+        self.use_package('geometry', options='left=4.5cm')
+        self.use_package('geometry', options='right=4.5cm')
+        self.use_package('geometry', options='top=14.5cm')
         self.use_package('geometry', options='bottom=3cm')
 
         self.use_package('graphicx')

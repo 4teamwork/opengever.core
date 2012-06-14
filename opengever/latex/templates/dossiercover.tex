@@ -1,5 +1,5 @@
 <%block name="documentclass">
-\documentclass[a4paper,13pt]{article}
+\documentclass[a4paper,12pt]{article}
 </%block>
 
 <%block name="use_packages">
@@ -8,6 +8,8 @@
 
 <%block name="style_params">
 \renewcommand{\familydefault}{ma1}
+\renewcommand{\scriptsize}{\fontsize{10}{10}}
+\renewcommand{\small}{\fontsize{14}{14}}
 </%block>
 \begin{document}
 
@@ -41,8 +43,7 @@ ${description} \newline
 \scriptsize
 Federführung: ${responsible}
 \vspace{0.15cm} \newline
-Beginn: ${start}\hspace{0.15cm}|\hspace{0.15cm}
-Abschluss: ${end}\hspace{0.15cm} \newline
+Beginn: ${start}\hspace{0.15cm}|\hspace{0.15cm}Abschluss: ${end}\hspace{0.15cm} \newline
 </%block>
 
 <%block name="client_specific_part">
