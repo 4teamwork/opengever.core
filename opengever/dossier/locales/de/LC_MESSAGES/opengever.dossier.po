@@ -9,6 +9,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0\n"
+"Language-Code: en\n"
+"Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: DOMAIN\n"
 
@@ -132,7 +134,7 @@ msgstr "Das Beginn- oder Ende-Datum ist ungültig."
 
 #: ./opengever/dossier/archive.py:142
 msgid "When the Action give filing number is selected,                         all fields are required."
-msgstr "Für die Vergabe der Ablagenummer, werden all Felder benötigt."
+msgstr "Für die Vergabe der Ablagenummer, werden alle Felder benötigt."
 
 #: ./opengever/dossier/move_items.py:161
 msgid "You have not selected any items"
@@ -615,5 +617,4 @@ msgstr "Sie können die Dokumente nicht an einen anderen Mandanten senden, da Si
 #: ./opengever/dossier/behaviors/participation.py:194
 msgid "warning_no_participants_selected"
 msgstr "Sie haben keine Beteiligungen ausgewählt."
-
 
