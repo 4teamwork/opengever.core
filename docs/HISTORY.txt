@@ -5,6 +5,9 @@ Changelog
 2.0.3 (unreleased)
 ------------------
 
+- Fixed BeautifulSoup related encoding problem in tooltip_helper
+  [lgraf]
+
 - Adjust encoding of accessor values, because they changed since the dexterity update.
   Issue #1420 Plone Version und Dexterity Version auf aktuellste Version heben.
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1420

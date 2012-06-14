@@ -20,7 +20,7 @@ from BeautifulSoup import BeautifulSoup
 
 
 def tooltip_helper(item, value):
-    text = ''.join(BeautifulSoup(value).findAll(text=True))
+    text = ''.join(BeautifulSoup(value, fromEncoding='utf8').findAll(text=True))
     return '<span title="%s">%s</span>' % (text.encode('utf-8'), value)
 
 
