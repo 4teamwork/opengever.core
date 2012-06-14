@@ -49,10 +49,15 @@ def content_type_helper(item, content_type):
     mtr = getToolByName(site, 'mimetypes_registry')
     normalize = getUtility(IIDNormalizer).normalize
 
-    types = mtr.lookup(content_type)
-    if types:
-        css = "mimetype-%s" % normalize(types[0].minor())
+    if content_type == 'application/octet-stream':
+        lookup = mtr.globFilename(item.get('filename'))
+    else:
+        lookup = mtr.lookup(content_type)
 
+    if lookup:
+        if isinstance(lookup, list) or isinstance(lookup, tuple):
+            lookup = lookup[0]
+        css = "mimetype-%s" % normalize(lookup.minor())
     else:
         css = "mimetype-plain"
 

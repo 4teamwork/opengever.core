@@ -5,6 +5,9 @@ Changelog
 2.0.4 (unreleased)
 ------------------
 
+- Added filename fallback in content_type_helper for documents with wrong content type.
+  [phgross]
+
 - Fixed setting of content-type for attachments in send_documents
   [lgraf]
 
