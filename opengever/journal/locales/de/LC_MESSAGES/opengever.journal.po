@@ -89,7 +89,6 @@ msgstr "Dokumentversand per E-Mail: ${subject}"
 
 #. Default: "Attachments: ${documents} | Receivers: ${receiver} |  Message: ${message}"
 #: ./opengever/journal/handlers.py:436
-#, fuzzy
 msgid "label_document_sent_comment"
 msgstr "Anhänge: ${documents} | Empfänger: ${receiver} | Nachricht: ${message}"
 

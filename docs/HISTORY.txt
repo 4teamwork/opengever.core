@@ -5,6 +5,9 @@ Changelog
 2.0.3 (unreleased)
 ------------------
 
+- Fixed translations
+  [lgraf]
+
 - Fixed BeautifulSoup related encoding problem in tooltip_helper
   [lgraf]
 
