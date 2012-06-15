@@ -8,8 +8,8 @@
 
 <%block name="style_params">
 \renewcommand{\familydefault}{ma1}
-\renewcommand{\scriptsize}{\fontsize{10}{10}}
-\renewcommand{\small}{\fontsize{14}{14}}
+\renewcommand{\scriptsize}{\fontsize{11}{11}\selectfont}
+\renewcommand{\small}{\fontsize{14}{14}\selectfont}
 </%block>
 \begin{document}
 
@@ -20,7 +20,7 @@
 \setlength\tabcolsep{0pt}
 \hspace{-0.15cm}
 \begin{tabularx}{\linewidth}{lXr}
-\small ${clientid} & &\scriptsize Ablage: ${filingprefix}
+\scriptsize ${clientid} & &\scriptsize Ablage: ${filingprefix}
 \end{tabularx}
 \rule{\linewidth}{.11em}
 \scriptsize
