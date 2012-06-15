@@ -111,10 +111,21 @@ class TestDossierReporter(MockTestCase):
             DossierReporter(context, request)(), 'redirected')
 
     def test_report(self):
+
+        class MockResponse(dict):
+            def getStatus(self):
+                return 200
+            def setHeader(self, *args, **kwargs):
+                pass
+        class MockRequest(dict):
+            def __init__(self):
+                self['paths'] = ['path1', 'path2']
+                self['HTTP_USER_AGENT'] = 'MSIE'
+                self.response = MockResponse()
+                self.RESPONSE = self.response
+
         context = self.providing_stub([IAttributeAnnotatable])
-        request = self.stub_request(interfaces=IAttributeAnnotatable,
-                                    stub_response=False)
-        response = self.stub_response(request=request)
+        request = MockRequest()
 
         author_helper = self.mocker.replace(readable_author)
         self.expect(author_helper('Foo Hugo')).result('Readable Foo Hugo')
@@ -140,17 +151,9 @@ class TestDossierReporter(MockTestCase):
         self.expect(dossier2.review_state).result('active')
         self.expect(dossier2.reference).result('OG 3.1 / 5')
 
-        # fake
-        self.expect(request.get('paths')).result(['path1', 'path2'])
-
         view = self.mocker.patch(DossierReporter(context, request))
         self.expect(view.get_selected_dossiers()).result(
             [dossier1, dossier2])
-
-        self.expect(response.setHeader(
-                'Content-Type', 'application/vnd.ms-excel'))
-        self.expect(response.setHeader('Content-Disposition',
-                               'attachment;filename="dossier_report.xls"'))
 
         self.replay()
 
