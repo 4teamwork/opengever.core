@@ -40,15 +40,12 @@ def remove_subdossier_column(columns):
     """
 
     def _filterer(item):
-
-        if isinstance(item, dict) and item['column'] == 'containing_subdossier':
+        if isinstance(
+            item, dict) and item['column'] == 'containing_subdossier':
             return False
-        else:
-            return True
+        return True
 
     return filter(_filterer, columns)
-
-
 
 
 class PersonalOverview(TabbedView):
@@ -121,7 +118,7 @@ class MyDossiers(Dossiers):
     grok.context(Interface)
 
     search_options = {'responsible': authenticated_member,
-                      'is_subdossier':False}
+                      'is_subdossier': False}
 
     enabled_actions = [
         'pdf_dossierlisting',
@@ -136,7 +133,6 @@ class MyDossiers(Dossiers):
         return self.__name__.split('tabbedview_view-')[1]
 
 
-
 class MyDocuments(Documents):
     grok.name('tabbedview_view-mydocuments')
     grok.require('zope2.View')
@@ -145,7 +141,7 @@ class MyDocuments(Documents):
     search_options = {'Creator': authenticated_member,
                       'trashed': False}
 
-    enabled_actions = ['reset_tableconfiguration',]
+    enabled_actions = ['reset_tableconfiguration', ]
     major_actions = []
     columns = remove_control_columns(Documents.columns)
     columns = remove_subdossier_column(columns)
@@ -213,6 +209,7 @@ class MyTasks(GlobalTaskListingTab):
         query = query.filter_by(assigned_client=get_client_id())
         return query
 
+
 class IssuedTasks(Tasks):
     """List all tasks where I'm the issuer and which are physically stored on
     the current client.
@@ -230,7 +227,7 @@ class IssuedTasks(Tasks):
 
     major_actions = ['pdf_taskslisting']
 
-    search_options = {'issuer': authenticated_member,}
+    search_options = {'issuer': authenticated_member, }
 
     columns = remove_subdossier_column(Tasks.columns)
 
