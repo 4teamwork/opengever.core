@@ -67,13 +67,13 @@ class TestTaskTransitionController(MockTestCase):
         self.expect(mock.getAuthenticatedMember()).result(mock)
 
         with self.mocker.order():
-            self.expect(mock.has_role('Adminstrator')).result(0)
+            self.expect(mock.has_role('Administrator')).result(0)
             self.expect(mock.has_role('Manager')).result(0)
 
-            self.expect(mock.has_role('Adminstrator')).result(0)
+            self.expect(mock.has_role('Administrator')).result(0)
             self.expect(mock.has_role('Manager')).result(1)
 
-            self.expect(mock.has_role('Adminstrator')).result(1)
+            self.expect(mock.has_role('Administrator')).result(1)
 
         self.replay()
 

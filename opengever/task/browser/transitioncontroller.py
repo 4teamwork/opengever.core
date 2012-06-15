@@ -519,4 +519,4 @@ class TaskTransitionController(BrowserView):
         member = getToolByName(
             self.context, 'portal_membership').getAuthenticatedMember()
 
-        return member.has_role('Adminstrator') or member.has_role('Manager')
+        return member.has_role('Administrator') or member.has_role('Manager')
