@@ -86,12 +86,21 @@ class PersonalOverview(TabbedView):
         else:
             return super(PersonalOverview, self).__call__()
 
+    def _is_user_admin(self):
+        m_tool = getToolByName(self.context, 'portal_membership')
+        member = m_tool.getAuthenticatedMember()
+        if member:
+            if  member.has_role('Administrator') \
+                    or member.has_role('Manager'):
+                return True
+        return False
+
     def get_tabs(self):
 
         info = getUtility(IContactInformation)
-        is_admin = info.is_user_in_inbox_group()
 
-        if is_admin:
+        if info.is_user_in_inbox_group() or self._is_user_admin():
+            # show admin tabs
             return self.default_tabs + self.admin_tabs
         else:
             return self.default_tabs
