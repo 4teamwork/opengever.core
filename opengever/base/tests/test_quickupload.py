@@ -122,6 +122,8 @@ class TestOGQuickupload(MockTestCase, TestCase):
         request = self.stub()
         self.expect(obj.REQUEST).result(request)
         self.expect(obj.reindexObject()).result(None)
+        self.expect(obj.__parent__).result(mock_context)
+        self.expect(obj.__name__).result('test_context')
 
         iterSchemata = self.mocker.replace(
             'plone.dexterity.utils.iterSchemata')
