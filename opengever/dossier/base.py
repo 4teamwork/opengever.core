@@ -150,6 +150,13 @@ class DossierContainer(Container):
 
         return True
 
+    def has_valid_startdate(self):
+        """check if a startdate is valid (if exist)."""
+
+        if IDossier(self).start:
+            return True
+        return False
+
     def has_valid_enddate(self):
         """Check if the enddate is valid.
         """
@@ -176,7 +183,7 @@ class DossierContainer(Container):
                     'opengever.dossier.behaviors.dossier.IDossierMarker', ]})
 
         end_dates = []
-        #main dossier
+        # main dossier
         if IDossier(self).start:
             end_dates.append(IDossier(self).start)
 

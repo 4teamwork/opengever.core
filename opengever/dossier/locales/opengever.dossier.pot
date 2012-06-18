@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2012-06-13 09:51+0000\n"
+"POT-Creation-Date: 2012-06-18 11:58+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -40,7 +40,7 @@ msgstr ""
 msgid "Copy documents to remote client"
 msgstr ""
 
-#: ./opengever/dossier/browser/report.py:128
+#: ./opengever/dossier/browser/report.py:129
 msgid "Could not generate the report"
 msgstr ""
 
@@ -88,7 +88,7 @@ msgstr ""
 msgid "Not all required fields are filled"
 msgstr ""
 
-#: ./opengever/dossier/templatedossier.py:149
+#: ./opengever/dossier/templatedossier.py:143
 msgid "Not found the templatedossier"
 msgstr ""
 
@@ -195,7 +195,7 @@ msgid "copy_documents_step_choose_dossier"
 msgstr ""
 
 #. Default: "create document with template"
-#: ./opengever/dossier/templatedossier.py:39
+#: ./opengever/dossier/templatedossier.py:37
 msgid "create_document_with_template"
 msgstr ""
 
@@ -219,7 +219,7 @@ msgid "error_enddate"
 msgstr ""
 
 #. Default: "You have not selected any Items"
-#: ./opengever/dossier/browser/report.py:76
+#: ./opengever/dossier/browser/report.py:77
 msgid "error_no_items"
 msgstr ""
 
@@ -235,19 +235,19 @@ msgstr ""
 
 #. Default: "Filing number"
 #: ./opengever/dossier/behaviors/dossier.py:116
-#: ./opengever/dossier/browser/report.py:112
+#: ./opengever/dossier/browser/report.py:113
 msgid "filing_no"
 msgstr ""
 
-#: ./opengever/dossier/browser/report.py:103
+#: ./opengever/dossier/browser/report.py:104
 msgid "filing_no_filing"
 msgstr ""
 
-#: ./opengever/dossier/browser/report.py:109
+#: ./opengever/dossier/browser/report.py:110
 msgid "filing_no_number"
 msgstr ""
 
-#: ./opengever/dossier/browser/report.py:106
+#: ./opengever/dossier/browser/report.py:107
 msgid "filing_no_year"
 msgstr ""
 
@@ -388,7 +388,7 @@ msgid "label_container_type"
 msgstr ""
 
 #. Default: "Creator"
-#: ./opengever/dossier/templatedossier.py:172
+#: ./opengever/dossier/templatedossier.py:166
 msgid "label_creator"
 msgstr ""
 
@@ -410,7 +410,7 @@ msgstr ""
 #. Default: "Closing Date"
 #: ./opengever/dossier/archive.py:118
 #: ./opengever/dossier/behaviors/dossier.py:72
-#: ./opengever/dossier/browser/report.py:96
+#: ./opengever/dossier/browser/report.py:97
 msgid "label_end"
 msgstr ""
 
@@ -436,7 +436,7 @@ msgid "label_keywords"
 msgstr ""
 
 #. Default: "Modified"
-#: ./opengever/dossier/templatedossier.py:175
+#: ./opengever/dossier/templatedossier.py:169
 msgid "label_modified"
 msgstr ""
 
@@ -457,7 +457,7 @@ msgstr ""
 
 #. Default: "Reference Number"
 #: ./opengever/dossier/behaviors/dossier.py:184
-#: ./opengever/dossier/browser/report.py:118
+#: ./opengever/dossier/browser/report.py:119
 #: ./opengever/dossier/viewlets/businesscase_byline.pt:69
 msgid "label_reference_number"
 msgstr ""
@@ -470,12 +470,12 @@ msgstr ""
 #. Default: "Responsible"
 #: ./opengever/dossier/behaviors/dossier.py:85
 #: ./opengever/dossier/browser/participants.py:163
-#: ./opengever/dossier/browser/report.py:100
+#: ./opengever/dossier/browser/report.py:101
 msgid "label_responsible"
 msgstr ""
 
 #. Default: "Review state"
-#: ./opengever/dossier/browser/report.py:114
+#: ./opengever/dossier/browser/report.py:115
 msgid "label_review_state"
 msgstr ""
 
@@ -496,7 +496,7 @@ msgstr ""
 
 #. Default: "Opening Date"
 #: ./opengever/dossier/behaviors/dossier.py:64
-#: ./opengever/dossier/browser/report.py:92
+#: ./opengever/dossier/browser/report.py:93
 msgid "label_start"
 msgstr ""
 
@@ -517,8 +517,8 @@ msgid "label_template"
 msgstr ""
 
 #. Default: "title"
-#: ./opengever/dossier/browser/report.py:89
-#: ./opengever/dossier/templatedossier.py:168
+#: ./opengever/dossier/browser/report.py:90
+#: ./opengever/dossier/templatedossier.py:162
 #: ./opengever/dossier/templatedossier_templates/template_form.pt:30
 msgid "label_title"
 msgstr ""
@@ -594,6 +594,10 @@ msgstr ""
 #. Default: "Temporary former reference number"
 #: ./opengever/dossier/behaviors/dossier.py:125
 msgid "temporary_former_reference_number"
+msgstr ""
+
+#: ./opengever/dossier/resolve.py:12
+msgid "the dossier start date is missing."
 msgstr ""
 
 #. Default: "expired"

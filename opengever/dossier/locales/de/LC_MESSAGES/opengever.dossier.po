@@ -1,16 +1,14 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2012-06-13 09:51+0000\n"
-"PO-Revision-Date: 2012-06-13 11:51+0200\n"
+"POT-Creation-Date: 2012-06-18 11:58+0000\n"
+"PO-Revision-Date: 2012-06-18 14:00+0200\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0\n"
-"Language-Code: en\n"
-"Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: DOMAIN\n"
 
@@ -39,7 +37,7 @@ msgstr "Geschäftsdossier"
 msgid "Copy documents to remote client"
 msgstr "In eigenes Dossier kopieren"
 
-#: ./opengever/dossier/browser/report.py:128
+#: ./opengever/dossier/browser/report.py:129
 msgid "Could not generate the report"
 msgstr "Report konnte nicht generiert werden."
 
@@ -87,7 +85,7 @@ msgstr "Elemente verschieben"
 msgid "Not all required fields are filled"
 msgstr "Nicht alle benötigten Felder wurden ausgefüllt."
 
-#: ./opengever/dossier/templatedossier.py:149
+#: ./opengever/dossier/templatedossier.py:143
 msgid "Not found the templatedossier"
 msgstr "Es sind keine Vorlagen vorhanden."
 
@@ -196,7 +194,7 @@ msgid "copy_documents_step_choose_dossier"
 msgstr "2. Zieldossier auswählen"
 
 #. Default: "create document with template"
-#: ./opengever/dossier/templatedossier.py:39
+#: ./opengever/dossier/templatedossier.py:37
 msgid "create_document_with_template"
 msgstr "Dokument aus Vorlage erstellen"
 
@@ -220,7 +218,7 @@ msgid "error_enddate"
 msgstr "Enddatum erforderlich"
 
 #. Default: "You have not selected any Items"
-#: ./opengever/dossier/browser/report.py:76
+#: ./opengever/dossier/browser/report.py:77
 msgid "error_no_items"
 msgstr "Sie haben keine Objekte ausgewählt."
 
@@ -236,19 +234,19 @@ msgstr "Aktion"
 
 #. Default: "Filing number"
 #: ./opengever/dossier/behaviors/dossier.py:116
-#: ./opengever/dossier/browser/report.py:112
+#: ./opengever/dossier/browser/report.py:113
 msgid "filing_no"
 msgstr "Ablagenummer"
 
-#: ./opengever/dossier/browser/report.py:103
+#: ./opengever/dossier/browser/report.py:104
 msgid "filing_no_filing"
 msgstr "Ablage"
 
-#: ./opengever/dossier/browser/report.py:109
+#: ./opengever/dossier/browser/report.py:110
 msgid "filing_no_number"
 msgstr "Ablagenummer"
 
-#: ./opengever/dossier/browser/report.py:106
+#: ./opengever/dossier/browser/report.py:107
 msgid "filing_no_year"
 msgstr "Ablagejahr"
 
@@ -389,7 +387,7 @@ msgid "label_container_type"
 msgstr "Behältnis-Art"
 
 #. Default: "Creator"
-#: ./opengever/dossier/templatedossier.py:172
+#: ./opengever/dossier/templatedossier.py:166
 msgid "label_creator"
 msgstr "Erstellt von"
 
@@ -411,7 +409,7 @@ msgstr "E-Mail:"
 #. Default: "Closing Date"
 #: ./opengever/dossier/archive.py:118
 #: ./opengever/dossier/behaviors/dossier.py:72
-#: ./opengever/dossier/browser/report.py:96
+#: ./opengever/dossier/browser/report.py:97
 msgid "label_end"
 msgstr "Ende"
 
@@ -437,7 +435,7 @@ msgid "label_keywords"
 msgstr "Schlagworte"
 
 #. Default: "Modified"
-#: ./opengever/dossier/templatedossier.py:175
+#: ./opengever/dossier/templatedossier.py:169
 msgid "label_modified"
 msgstr "Zuletzt Bearbeitet"
 
@@ -458,7 +456,7 @@ msgstr "Beteiligung"
 
 #. Default: "Reference Number"
 #: ./opengever/dossier/behaviors/dossier.py:184
-#: ./opengever/dossier/browser/report.py:118
+#: ./opengever/dossier/browser/report.py:119
 #: ./opengever/dossier/viewlets/businesscase_byline.pt:69
 msgid "label_reference_number"
 msgstr "Aktenzeichen:"
@@ -471,12 +469,12 @@ msgstr "Verwandte Dossiers"
 #. Default: "Responsible"
 #: ./opengever/dossier/behaviors/dossier.py:85
 #: ./opengever/dossier/browser/participants.py:163
-#: ./opengever/dossier/browser/report.py:100
+#: ./opengever/dossier/browser/report.py:101
 msgid "label_responsible"
 msgstr "Federführend"
 
 #. Default: "Review state"
-#: ./opengever/dossier/browser/report.py:114
+#: ./opengever/dossier/browser/report.py:115
 msgid "label_review_state"
 msgstr "Status"
 
@@ -497,7 +495,7 @@ msgstr "Ziel-Mandant"
 
 #. Default: "Opening Date"
 #: ./opengever/dossier/behaviors/dossier.py:64
-#: ./opengever/dossier/browser/report.py:92
+#: ./opengever/dossier/browser/report.py:93
 msgid "label_start"
 msgstr "Beginn"
 
@@ -518,8 +516,8 @@ msgid "label_template"
 msgstr "Vorlage"
 
 #. Default: "title"
-#: ./opengever/dossier/browser/report.py:89
-#: ./opengever/dossier/templatedossier.py:168
+#: ./opengever/dossier/browser/report.py:90
+#: ./opengever/dossier/templatedossier.py:162
 #: ./opengever/dossier/templatedossier_templates/template_form.pt:30
 msgid "label_title"
 msgstr "Titel"
@@ -597,6 +595,10 @@ msgstr "Aufgaben"
 msgid "temporary_former_reference_number"
 msgstr ""
 
+#: ./opengever/dossier/resolve.py:12
+msgid "the dossier start date is missing."
+msgstr "Es wurde kein Dossier Start Datum gesetzt."
+
 #. Default: "expired"
 #: ./opengever/dossier/project_templates/byline.pt:53
 #: ./opengever/dossier/viewlets/businesscase_byline.pt:54
@@ -617,4 +619,5 @@ msgstr "Sie können die Dokumente nicht an einen anderen Mandanten senden, da Si
 #: ./opengever/dossier/behaviors/participation.py:194
 msgid "warning_no_participants_selected"
 msgstr "Sie haben keine Beteiligungen ausgewählt."
+
 

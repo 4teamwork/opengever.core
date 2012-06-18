@@ -6,6 +6,7 @@ from opengever.dossier.resolve import DossierResolver
 from opengever.dossier.resolve import NOT_CHECKED_IN_DOCS
 from opengever.dossier.resolve import NOT_CLOSED_TASKS
 from opengever.dossier.resolve import NOT_SUPPLIED_OBJECTS
+from opengever.dossier.resolve import NO_START_DATE
 from opengever.dossier.resolve import ResolveConditions, Resolver
 from zope.interface import implements
 from zope.interface.verify import verifyClass
@@ -24,14 +25,22 @@ class TestResolveConditions(MockTestCase):
             self.expect(context.is_all_supplied()).result(False)
             self.expect(context.is_all_checked_in()).result(False)
             self.expect(context.is_all_closed()).result(True)
+            self.expect(context.has_valid_startdate()).result(True)
 
             self.expect(context.is_all_supplied()).result(True)
             self.expect(context.is_all_checked_in()).result(True)
             self.expect(context.is_all_closed()).result(False)
+            self.expect(context.has_valid_startdate()).result(True)
 
             self.expect(context.is_all_supplied()).result(True)
             self.expect(context.is_all_checked_in()).result(True)
             self.expect(context.is_all_closed()).result(True)
+            self.expect(context.has_valid_startdate()).result(False)
+
+            self.expect(context.is_all_supplied()).result(True)
+            self.expect(context.is_all_checked_in()).result(True)
+            self.expect(context.is_all_closed()).result(True)
+            self.expect(context.has_valid_startdate()).result(True)
 
         self.replay()
 
@@ -43,6 +52,11 @@ class TestResolveConditions(MockTestCase):
         self.assertEquals(
             ResolveConditions(context).check_preconditions(),
             [NOT_CLOSED_TASKS, ]
+            )
+
+        self.assertEquals(
+            ResolveConditions(context).check_preconditions(),
+            [NO_START_DATE]
             )
 
         self.assertEquals(

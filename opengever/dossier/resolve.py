@@ -9,6 +9,7 @@ NOT_SUPPLIED_OBJECTS = _(
     "not all documents and tasks are stored in a subdossier")
 NOT_CHECKED_IN_DOCS = _("not all documents are checked in")
 NOT_CLOSED_TASKS = _("not all task are closed")
+NO_START_DATE = _("the dossier start date is missing.")
 
 
 class DossierResolveView(grok.View):
@@ -202,6 +203,8 @@ class ResolveConditions(object):
             errors.append(NOT_CHECKED_IN_DOCS)
         if not self.context.is_all_closed():
             errors.append(NOT_CLOSED_TASKS)
+        if not self.context.has_valid_startdate():
+            errors.append(NO_START_DATE)
 
         return errors
 
