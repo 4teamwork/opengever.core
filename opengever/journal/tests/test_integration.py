@@ -554,6 +554,7 @@ class TestOpengeverJournalGeneral(unittest.TestCase):
             action_type='Document Sent',
             action_title=u'Document sent by Mail: test mail',
             actor=TEST_USER_ID,
-            comment='Attachments: <span><a href="./@@resolve_oguid?oguid=Test:'+str(intid)+'">'+\
-                        doc.Title()+'</a></span> | Receivers: test@test.ch | Message: Mymessage',
-            )
+            comment='Attachments: <span><a href="./@@resolve_oguid?oguid=Test:'+str(
+                intid)+'">'+ doc.Title()+
+            '</a></span> | Receivers: test@test.ch |\
+                    Message: Mymessage',)
