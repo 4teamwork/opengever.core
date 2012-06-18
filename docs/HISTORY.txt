@@ -5,7 +5,11 @@ Changelog
 2.1.7 (unreleased)
 ------------------
 
+-
+  [phgross]
+
 - Dossiercover: change fontsize and sizes of the textfield.
+  Dossierdetails: change fontsizes.
   Issue #1432 Anpassungen Druchvorlage
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1432/
   [phgross]
