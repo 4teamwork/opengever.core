@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-2.3 (unreleased)
+2.3 (2012-06-18)
 ----------------
 
 - Adjust title accessors, because they changed with the dexerity update.
