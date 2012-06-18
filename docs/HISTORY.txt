@@ -5,7 +5,7 @@ Changelog
 2.5 (unreleased)
 ----------------
 
-- Implements *.msg support for the OGQuickUploadCapableFileFactory.
+- Implements msg support for the OGQuickUploadCapableFileFactory.
   Fixed pdfrendering for d'n'd uploaded files.
   Issue #549 Abklaerung: Drag and drop
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/549
@@ -15,8 +15,8 @@ Changelog
   #1515 Mail-Anhang kann nicht geöffnet werden im Internet Explorer
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1515/
   [eschmutz]
-  
-- Add util-method to set the content disposition of the header to fix 
+
+- Add util-method to set the content disposition of the header to fix
   attachment-fail when downloading files with IE.
   #1515 Mail-Anhang kann nicht geöffnet werden im Internet Explorer
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1515/
