@@ -10,7 +10,8 @@ class DocumentSent(ObjectEvent):
 
     implements(IDocumentSent)
 
-    def __init__(self, object, sender, receiver, subject, message, attachments):
+    def __init__(
+        self, object, sender, receiver, subject, message, attachments):
         """adf"""
         self.object = object
         self.sender = sender

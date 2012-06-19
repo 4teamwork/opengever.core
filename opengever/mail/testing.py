@@ -21,16 +21,16 @@ class MailIntegrationLayer(PloneSandboxLayer):
 
     def setUpZope(self, app, configurationContext):
         # do not install pas plugins (doesnt work in tests)
-         from opengever.ogds.base import setuphandlers
-         setuphandlers.setup_scriptable_plugin = lambda *a, **kw: None
+        from opengever.ogds.base import setuphandlers
+        setuphandlers.setup_scriptable_plugin = lambda *a, **kw: None
 
-         from opengever.mail import tests
-         xmlconfig.file('testing.zcml', package=tests,
-             context=configurationContext)
+        from opengever.mail import tests
+        xmlconfig.file('testing.zcml', package=tests,
+                       context=configurationContext)
 
-         from ftw import mail
-         xmlconfig.file('configure.zcml', package=mail,
-             context=configurationContext)
+        from ftw import mail
+        xmlconfig.file('configure.zcml', package=mail,
+                       context=configurationContext)
 
     def setUpPloneSite(self, portal):
 
@@ -41,7 +41,6 @@ class MailIntegrationLayer(PloneSandboxLayer):
         applyProfile(portal, 'opengever.document:default')
         applyProfile(portal, 'opengever.dossier:default')
         applyProfile(portal, 'ftw.tabbedview:default')
-
 
         # setup the sql tables
         create_sql_tables()
@@ -68,18 +67,19 @@ class MailIntegrationLayer(PloneSandboxLayer):
             'client1_inbox_users'))
 
         # configure client ID
-        registry = getUtility(IRegistry )
+        registry = getUtility(IRegistry)
         registry['opengever.ogds.base.interfaces.'
                  'IClientConfiguration.client_id'] = u'client1'
         registry['opengever.base.interfaces.IBaseClientID.client_id'] = u'OG'
 
         setRoles(portal, TEST_USER_ID, ['Member', 'Contributor', 'Editor'])
         login(portal, 'mail-test')
+
     def tearDownPloneSite(self, portal):
-         session = create_session()
-         for model in MODELS:
-             getattr(model, 'metadata').drop_all(session.bind)
-         getattr(task_model.Base, 'metadata').drop_all(session.bind)
+        session = create_session()
+        for model in MODELS:
+            getattr(model, 'metadata').drop_all(session.bind)
+        getattr(task_model.Base, 'metadata').drop_all(session.bind)
 
 OPENGEVER_MAIL_FIXTURE = MailIntegrationLayer()
 OPENGEVER_MAIL_INTEGRATION_TESTING = IntegrationTesting(
@@ -90,6 +90,7 @@ class MockEvent(object):
 
     #History: [[interface, context], ]
     event_history = []
+
     def mock_handler(self, event):
         self.event_history.append(event, )
 
