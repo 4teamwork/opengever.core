@@ -1,9 +1,6 @@
 import logging
 from Products.CMFCore.utils import getToolByName
-from opengever.mail.interfaces import IMailSettings
-from zope.component import getUtility
-from plone.registry.interfaces import IRegistry
-from opengever.ogds.base.interfaces import IClientConfiguration
+
 # The profile id of your package:
 PROFILE_ID = 'profile-opengever.mail:default'
 
@@ -45,7 +42,6 @@ def add_catalog_indexes(context, logger=None):
     if len(indexables) > 0:
         logger.info("Indexing new indexes %s.", ', '.join(indexables))
         catalog.manage_reindexIndex(ids=indexables)
-
 
 
 def import_various(setup):
