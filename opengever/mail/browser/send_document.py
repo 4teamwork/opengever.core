@@ -31,6 +31,8 @@ from zope.event import notify
 
 CHARSET = 'utf-8'
 
+from opengever.tabbedview.utils import get_containg_document_tab_url
+
 
 class NoMail(Invalid):
     """ The No Mail was defined Exception."""
@@ -182,11 +184,12 @@ class SendDocumentForm(form.Form):
 
             IStatusMessage(self.request).addStatusMessage(info, type='info')
             # and redirect to default view / tab
-            return self.request.RESPONSE.redirect('./#documents')
+            return self.request.RESPONSE.redirect(
+                get_containg_document_tab_url(data.get('documents')[0]))
 
     @button.buttonAndHandler(_('cancel_back', default=u'Cancel'))
     def cancel_button_handler(self, action):
-        return self.request.RESPONSE.redirect('./#documents-tab')
+        return self.request.RESPONSE.redirect(get_containg_document_tab_url())
 
     def create_mail(self, text='', objs=[]):
         """Create the mail and attach the the files. For object without a file
