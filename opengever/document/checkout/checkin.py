@@ -1,35 +1,16 @@
-from Acquisition import aq_inner, aq_parent
-from Products.CMFCore.utils import getToolByName
 from Products.statusmessages.interfaces import IStatusMessage
 from five import grok
 from opengever.document import _
 from opengever.document.document import IDocumentSchema
 from opengever.document.exceptions import NoItemsSelected
 from opengever.document.interfaces import ICheckinCheckoutManager
-from opengever.dossier.behaviors.dossier import IDossierMarker
 from plone.z3cform import layout
 from z3c.form import form, field, button
 from z3c.form.interfaces import HIDDEN_MODE
 from zope import schema
 from zope.component import getMultiAdapter
 from zope.interface import Interface
-
-
-def get_containg_document_tab_url(context):
-    """return the url to the `Documents` tab on containing object"""
-
-    parent = aq_parent(aq_inner(context))
-
-    if IDossierMarker.providedBy(parent):
-        tab = 'documents'
-    else:
-        tab = 'relateddocuments'
-
-    mtool = getToolByName(context, 'portal_membership')
-    if mtool.checkPermission('View', parent):
-        return '%s#%s' % (parent.absolute_url(), tab)
-    else:
-        return context.absolute_url()
+from opengever.tabbedview.utils import get_containg_document_tab_url
 
 
 class ICheckinCommentFormSchema(Interface):
