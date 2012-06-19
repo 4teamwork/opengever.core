@@ -5,6 +5,9 @@ Changelog
 2.0.5 (unreleased)
 ------------------
 
+- Templatedossier: Adjust default value setter, works now also for boolean fields (preserved_as_paper).
+  [phgross]
+
 - Fixed earliest enddate calculation: include objs in subdossiers.
   Issue #1525 Dossier abschliessen: Wieder eroeffnen bzw. wieder abschliessen bei Subdossier.
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1525/

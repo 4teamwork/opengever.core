@@ -4,9 +4,11 @@ from ftw.testing import MockTestCase
 from grokcore.component.testing import grok
 from opengever.base.interfaces import IRedirector
 from opengever.document import document
+from opengever.document.interfaces import IDocumentSettings
 from opengever.dossier.templatedossier import ITemplateUtility
 from opengever.dossier.templatedossier import TemplateDocumentFormView
 from plone.dexterity.fti import DexterityFTI, register
+from plone.registry.interfaces import IRegistry
 from zope.component import getGlobalSiteManager
 from zope.component import getUtility, provideAdapter
 from zope.component.persistentregistry import PersistentComponents
@@ -207,9 +209,11 @@ class TestTemplateDocumentFormView(MockTestCase):
         request = self.stub_request()
         testpath = 'testpath'
 
-        # # document_date default
-        # default_value = self.stub()
-        # mock_adapter(default_value, Interface)
+        # registry
+        registry_mock = self.stub()
+        self.expect(registry_mock.forInterface(IDocumentSettings)).result(registry_mock)
+        self.expect(registry_mock.preserved_as_paper_default).result(False)
+        self.mock_utility(registry_mock, IRegistry)
 
         self.replay()
         view = TemplateDocumentFormView(context, request)
@@ -220,3 +224,4 @@ class TestTemplateDocumentFormView(MockTestCase):
         self.assertEqual(context.obj.portal_type, u'opengever.document.document')
         self.assertEqual(context.obj.file, namedfile)
         self.assertEqual(context.obj.document_date, datetime.now().date())
+        self.assertEqual(context.obj.preserved_as_paper, False)

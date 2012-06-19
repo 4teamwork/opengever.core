@@ -17,6 +17,9 @@ from zope.lifecycleevent import ObjectModifiedEvent
 from zope.schema import getFieldsInOrder
 
 
+NO_DEFAULT_VALUE_FIELDS = ['title', 'file']
+
+
 class ITemplateDossier(Interface):
     pass
 
@@ -112,7 +115,7 @@ class TemplateDocumentFormView(grok.View):
 
         for schemata in iterSchemata(obj):
             for name, field in getFieldsInOrder(schemata):
-                if not field.get(field.interface(obj)):
+                if name not in NO_DEFAULT_VALUE_FIELDS:
                     default = queryMultiAdapter((
                             obj,
                             obj.REQUEST,
