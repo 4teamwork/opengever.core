@@ -40,6 +40,7 @@ def authenticate_credentials(self, credentials):
         return uid, login
     return None
 
+
 def activate_request_layer(request, layer):
     if not layer.providedBy(request):
         alsoProvides(request, layer)

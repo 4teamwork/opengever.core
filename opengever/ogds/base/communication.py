@@ -29,7 +29,6 @@ class ClientCommunicator(grok.GlobalUtility):
         return remote_json_request(target_client_id,
                                    '@@list-open-dossiers-json')
 
-
     def get_documents_of_dossier(self, target_client_id, dossier_path):
         """ Returns a list of dicts representing documents located in a
         specific dossier on a remote client

@@ -25,7 +25,8 @@ class SetupIsolationLevelListener(PoolListener):
         '''perform connect operations'''
         # This is needed to make (releasing) savepoints work properly with
         # SQLite (needed in tests, particularly opengever.inbox).
-        # See http://stackoverflow.com/questions/2036378/using-savepoints-in-python-sqlite3
+        # See http://stackoverflow.com/questions/2036378/
+        #    using-savepoints-in-python-sqlite3
         dbapi_con.isolation_level = None
 
 

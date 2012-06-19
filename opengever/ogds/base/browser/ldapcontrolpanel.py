@@ -5,8 +5,10 @@ from five import grok
 from ftw.dictstorage.interfaces import IDictStorage
 from opengever.ogds.base.interfaces import ISyncStamp
 from opengever.ogds.base.ldap_import.import_stamp import DICTSTORAGE_SYNC_KEY
-from opengever.ogds.base.ldap_import.import_stamp import set_remote_import_stamp
-from opengever.ogds.base.ldap_import.import_stamp import DictStorageConfigurationContext
+from opengever.ogds.base.ldap_import.import_stamp import \
+    set_remote_import_stamp
+from opengever.ogds.base.ldap_import.import_stamp import \
+    DictStorageConfigurationContext
 from time import strftime
 from zope.component import getUtility
 import ldap

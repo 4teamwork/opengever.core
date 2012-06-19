@@ -71,7 +71,6 @@ def ogds_class_language_cachekey(method, self):
         getUtility(ISyncStamp).get_sync_stamp())
 
 
-
 class UserDict(object):
     """A dictionary representing a user.
     """
@@ -153,7 +152,7 @@ class ContactInformation(grok.GlobalUtility):
         if userid:
             session = create_session()
             groups = session.query(User).filter(
-                        User.userid == userid).first().group_users
+                User.userid == userid).first().group_users
             return groups
         return []
 
@@ -287,7 +286,7 @@ class ContactInformation(grok.GlobalUtility):
 
         client = self.get_client_of_inbox(principal)
 
-        if client == None:
+        if client is None:
             raise ValueError('Client not found for: %s' % principal)
 
         return client.inbox_group.groupid
@@ -350,8 +349,8 @@ class ContactInformation(grok.GlobalUtility):
         # client
         if session.query(Client).join(Client.users_group).join(
             Group.users).filter(User.userid == userid).filter(
-                    Client.client_id == client_id).count() > 0:
-                return True
+            Client.client_id == client_id).count() > 0:
+            return True
 
         return False
 
@@ -399,8 +398,8 @@ class ContactInformation(grok.GlobalUtility):
             # stuff like the autocomplete widget will not work
             # properly.
             label = _(u'inbox_label',
-                     default=u'Inbox: ${client}',
-                     mapping=dict(client=client.title))
+                      default=u'Inbox: ${client}',
+                      mapping=dict(client=client.title))
 
             return translate(label, context=getRequest())
 
@@ -565,7 +564,7 @@ class ContactInformation(grok.GlobalUtility):
         if isinstance(principal, User):
             portal = getSite()
             return '/'.join((portal.portal_url(), '@@user-details',
-                                 principal.userid))
+                             principal.userid))
 
         elif self.is_inbox(principal):
             return None
@@ -608,7 +607,6 @@ class ContactInformation(grok.GlobalUtility):
             url,
             self.describe(principal))
 
-
     @ram.cache(ogds_class_language_cachekey)
     def get_user_sort_dict(self):
         """Returns a dict presenting userid and the fullname,
@@ -617,8 +615,10 @@ class ContactInformation(grok.GlobalUtility):
         """
 
         session = create_session()
-        ids = session.query(
-            User.userid,User.lastname, User.firstname).order_by(User.lastname, User.firstname).all()
+        query = session.query(User.userid, User.lastname, User.firstname)
+        query = query.order_by(User.lastname, User.firstname)
+        ids = query.all()
+
         sort_dict = {}
         for userid, lastname, firstname in ids:
             sort_dict[userid] = u'%s %s' % (lastname, firstname)
@@ -634,7 +634,7 @@ class ContactInformation(grok.GlobalUtility):
     def get_user_contact_sort_dict(self):
         sort_dict = self.get_user_sort_dict()
         for contact in self.list_contacts():
-            sort_dict['contact:%s' %(contact.id)] = u'%s %s' % (
+            sort_dict['contact:%s' % (contact.id)] = u'%s %s' % (
                 contact.lastname, contact.firstname)
         return sort_dict
 

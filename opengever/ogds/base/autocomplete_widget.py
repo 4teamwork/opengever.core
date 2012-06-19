@@ -33,8 +33,8 @@ class AutocompleteSelectionWidget(widget.AutocompleteSelectionWidget):
 
                 if value and value not in source.vocab:
                     contact_info = getUtility(IContactInformation)
-                    term = source.vocab.createTerm(value, value,
-                                                   contact_info.describe(value))
+                    term = source.vocab.createTerm(
+                        value, value, contact_info.describe(value))
                     source.vocab._terms.append(term)
                     source.vocab.by_value[term.value] = term
                     source.vocab.by_token[term.token] = term
@@ -50,7 +50,8 @@ def AutocompleteFieldWidget(field, request):
                        AutocompleteSelectionWidget(request))
 
 
-class AutocompleteMultiSelectionWidget(widget.AutocompleteMultiSelectionWidget):
+class AutocompleteMultiSelectionWidget(
+    widget.AutocompleteMultiSelectionWidget):
 
     @property
     def bound_source(self):
@@ -74,8 +75,8 @@ class AutocompleteMultiSelectionWidget(widget.AutocompleteMultiSelectionWidget):
 
                 if value and value not in source.vocab:
                     contact_info = getUtility(IContactInformation)
-                    term = source.vocab.createTerm(value, value,
-                                                   contact_info.describe(value))
+                    term = source.vocab.createTerm(
+                        value, value, contact_info.describe(value))
                     source.vocab._terms.append(term)
                     source.vocab.by_value[term.value] = term
                     source.vocab.by_token[term.token] = term

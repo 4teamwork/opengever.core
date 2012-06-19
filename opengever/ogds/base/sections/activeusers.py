@@ -15,6 +15,7 @@ Session = named_scoped_session("opengever")
 
 SQLSOURCE_KEY = 'transmogrify.sqlinserter.sqlinsertersection'
 
+
 class ActiveUsersSection(object):
     """This section first sets all users in the SQL DB to inactive.
     It then iterates over all the items from the previous section
@@ -42,19 +43,23 @@ class ActiveUsersSection(object):
 
         meta = MetaData()
         tablename = options['table']
-        self.table = Table(tablename, meta, autoload=True, autoload_with=self.connection.engine)
+        self.table = Table(tablename, meta, autoload=True,
+                           autoload_with=self.connection.engine)
 
     def __iter__(self):
         # First, set all the users in the SQL DB to inactive
         set_all_inactive = update(self.table)
-        self.connection.execute(set_all_inactive, {'active':'0'})
+        self.connection.execute(set_all_inactive, {'active': '0'})
         transaction.commit()
 
         for item in self.previous:
             try:
                 # Then set the ones still contained in the LDAP to active
-                u = update(self.table, self.table.c.get('userid') == item.get('userid'))
-                self.connection.execute(u, {'active':'1'})
+                u = update(
+                    self.table,
+                    self.table.c.get('userid') == item.get('userid'))
+
+                self.connection.execute(u, {'active': '1'})
                 yield item
 
             except OperationalError, e:

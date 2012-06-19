@@ -18,7 +18,7 @@ class ContactsVocabulary(SimpleVocabulary):
         for i, word in enumerate(query):
             query[i] = word.strip()
 
-        if not self.provider and len(self)>0:
+        if not self.provider and len(self) > 0:
             for v in self:
                 if self._compare(query, v.value):
                     yield v
@@ -51,7 +51,7 @@ class ContactsVocabulary(SimpleVocabulary):
         value = isinstance(value, str) and \
             value.decode('utf8').lower() or value.lower()
         for word in query:
-            if len(word)>0 and word not in value:
+            if len(word) > 0 and word not in value:
                 return False
         return True
 
@@ -90,4 +90,3 @@ class ContactsVocabulary(SimpleVocabulary):
         voc = cls(cls.get_terms_from_provider(provider))
         voc._provider = provider
         return voc
-

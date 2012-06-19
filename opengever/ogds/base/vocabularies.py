@@ -17,8 +17,8 @@ from opengever.ogds.base.utils import get_client_id
 
 def voc_cachekey(method, self):
     """A cache key for vocabularies which are implemented as grok utilities
-       and which do not depend on other parameters.
-    """
+       and which do not depend on other parameters."""
+
     return '%s:%s' % (getattr(self, 'grokcore.component.directive.name'),
                           getUtility(ISyncStamp).get_sync_stamp())
 
@@ -263,6 +263,7 @@ class ContactsVocabularyFactory(grok.GlobalUtility):
 # TODO: should be renamed to something like
 # ContactsUsersAndInboxesVocabularyFactory
 
+
 class ContactsAndUsersVocabularyFactory(grok.GlobalUtility):
     """Vocabulary of contacts, users and the inbox of each client.
     """
@@ -500,8 +501,9 @@ class HomeDossiersVocabularyFactory(grok.GlobalUtility):
         client = info.get_client_by_id(client_id)
 
         if client and not info.is_client_assigned(client_id=client_id):
-            raise ValueError('Expected %s to be a ' % client_id + \
-                                 'assigned client of the current user.')
+            raise ValueError(
+                'Expected %s to be a assigned client of the current user.' %
+                    client_id)
 
         elif client:
             # kss validation overrides getSite() hook with a bad object
@@ -545,7 +547,6 @@ class DocumentInSelectedDossierVocabularyFactory(grok.GlobalUtility):
         if user == AccessControl.SpecialUsers.nobody:
             return
 
-
         info = getUtility(IContactInformation)
         comm = getUtility(IClientCommunicator)
 
@@ -556,8 +557,9 @@ class DocumentInSelectedDossierVocabularyFactory(grok.GlobalUtility):
             client_id = client_id[0]
 
         if not info.is_client_assigned(client_id=client_id):
-            raise ValueError('Expected %s to be a ' % client_id + \
-                                 'assigned client of the current user.')
+            raise ValueError(
+                'Expected %s to be a assigned client of the current user.' %
+                client_id)
 
         # get dossier path
         dossier_path = request.get(

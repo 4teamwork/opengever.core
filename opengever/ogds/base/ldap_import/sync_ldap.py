@@ -10,6 +10,9 @@ from opengever.ogds.base.ldap_import.import_stamp import \
     set_remote_import_stamp
 
 
+CONFIGS = u'opengever.ogds.base.user-import;opengever.ogds.base.group-import'
+
+
 def debugAfterException():
     """Starts pdb at the point where an uncatched exception was raised.
     """
@@ -20,7 +23,8 @@ def debugAfterException():
             # device, so we call the default hook
             sys.__excepthook__(type, value, tb)
         else:
-            import traceback, pdb
+            import traceback
+            import pdb
             # we are NOT in interactive mode, print the exception...
             traceback.print_exception(type, value, tb)
             print
@@ -43,19 +47,22 @@ def check_if_ldap_reachable(site):
 
     ldap_folder = site.acl_users.get('ldap').get('acl_users')
     server = ldap_folder.getServers()[0]
-    ldap_url = "%s://%s:%s" % (server['protocol'], server['host'], server['port'])
+    ldap_url = "%s://%s:%s" % (
+        server['protocol'], server['host'], server['port'])
     ldap_conn = ldap.initialize(ldap_url)
     try:
-        ldap_conn.search_s(ldap_folder.users_base,ldap.SCOPE_SUBTREE)
+        ldap_conn.search_s(ldap_folder.users_base, ldap.SCOPE_SUBTREE)
     except ldap.LDAPError, e:
         # If for some reason we can't get a connection to the LDAP,
         # we abort the entire import, because otherwise we would
         # end up with all users being set to inactive since they
         # can't be found in the LDAP.
-        print "ERROR: Couldn't connect to LDAP server: %s %s" % (e.__class__.__name__, e)
+        print "ERROR: Couldn't connect to LDAP server: %s %s" % (
+            e.__class__.__name__, e)
         print "The import has been aborted."
         transaction.abort()
         sys.exit(1)
+
 
 def run_import(app, options):
     # setup request and get plone site
@@ -89,7 +96,7 @@ def run_import(app, options):
         print "Committing transaction..."
         transaction.commit()
 
-    if len(trans_configs) != 0 and options.update_syncstamp :
+    if len(trans_configs) != 0 and options.update_syncstamp:
         print "update LDAP SYNC importstamp"
         set_remote_import_stamp(plone)
         transaction.commit()
@@ -105,10 +112,15 @@ def main():
         return
 
     parser = OptionParser()
-    parser.add_option("-D", "--debug", action="store_true", dest="debug", default=False)
-    parser.add_option("-c", "--config", dest="config", default=u'opengever.ogds.base.user-import;opengever.ogds.base.group-import')
-    parser.add_option('-u', "--update-syncstamp", dest="update_syncstamp", default=True)
-    parser.add_option("-s", "--site-root", dest="site_root", default=u'/Plone')
+    parser.add_option(
+        "-D", "--debug", action="store_true", dest="debug", default=False)
+    parser.add_option("-c", "--config", dest="config",
+                  default=CONFIGS)
+    parser.add_option('-u', "--update-syncstamp",
+                      dest="update_syncstamp", default=True)
+    parser.add_option("-s", "--site-root",
+                      dest="site_root", default=u'/Plone')
+
     (options, args) = parser.parse_args()
 
     if options.debug:

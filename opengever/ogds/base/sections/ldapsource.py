@@ -13,7 +13,6 @@ class LDAPUserSourceSection(object):
         self.previous = previous
         self.logger = logging.getLogger(options['blueprint'])
         self.options = options
-        #self.mapping = Expression(options['mapping'], transmogrifier, name, options)(self.previous)
 
     def __iter__(self):
 
@@ -25,19 +24,23 @@ class LDAPUserSourceSection(object):
         ldap_name = self.options.get('ldap_name', 'ldap')
         ldap_plugin = self.context.acl_users.get(ldap_name)
         if not ldap_plugin:
-            self.logger.warn("Coulnd't find LDAP '%s', skipping..." % ldap_name)
+            self.logger.warn(
+                "Coulnd't find LDAP '%s', skipping..." % ldap_name)
         else:
             ldap_folder = ldap_plugin.get('acl_users')
 
             #iterate over the users in the ldap_userfolder
             for uid in ldap_folder.getUserIds():
                 if uid.lower() in imported_uids:
-                    self.logger.warn("Skipped duplicate user with uid '%s'!" % uid)
+                    self.logger.warn(
+                        "Skipped duplicate user with uid '%s'!" % uid)
                     continue
                 try:
                     user = ldap_folder.getUserById(uid)
                 except UnicodeDecodeError:
-                    print "The User with the uid %s can't be imported (UnicodeDecodeError)" % uid
+                    self.logger.warn(
+                        "The User with the uid %s can't be imported \
+                        (UnicodeDecodeError)" % uid)
 
                 temp = {}
 
@@ -54,7 +57,6 @@ class LDAPGroupSourceSection(LDAPUserSourceSection):
     classProvides(ISectionBlueprint)
     implements(ISection)
 
-
     def __iter__(self):
 
         for item in self.previous:
@@ -64,9 +66,11 @@ class LDAPGroupSourceSection(LDAPUserSourceSection):
         ldap_name = self.options.get('ldap_name', 'ldap')
         ldap_plugin = self.context.acl_users.get(ldap_name)
         if not ldap_plugin:
-            self.logger.warn("Coulnd't find LDAP '%s', skipping..." % ldap_name)
+            self.logger.warn(
+                "Coulnd't find LDAP '%s', skipping..." % ldap_name)
         else:
-            ldap_folder = self.context.acl_users.get(ldap_name).get('acl_users')
+            ldap_folder = self.context.acl_users.get(
+                ldap_name).get('acl_users')
 
             # #iterate over the groups in the ldap_userfolder
             for group_data in ldap_folder.getGroups():
@@ -74,7 +78,8 @@ class LDAPGroupSourceSection(LDAPUserSourceSection):
                 try:
                     group = ldap_folder.getGroupById(groupid)
                 except UnicodeDecodeError:
-                    print "The Group with the groupid %s can't be imported (UnicodeDecodeError)" % groupid
+                    print "The Group with the groupid %s can't be imported \
+                         (UnicodeDecodeError)" % groupid
 
                 temp = {}
                 if groupid.startswith('og_'):
