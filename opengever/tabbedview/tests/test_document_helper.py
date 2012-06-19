@@ -1,15 +1,14 @@
 from ftw.testing import MockTestCase
-from opengever.dossier.behaviors.dossier import IDossierMarker
-from opengever.tabbedview.utils import get_containg_document_tab_url
 from mocker import ANY
-from zope.interface import alsoProvides
+from opengever.tabbedview.utils import get_containg_document_tab_url
+from opengever.task.task import ITask
 
 
 class TestDocumentsUrl(MockTestCase):
-    
-    def test_not_dossier(self):
+
+    def test_task(self):
         document = self.stub()
-        folder = self.stub()
+        folder = self.providing_stub([ITask])
         tool = self.stub()
         self.set_parent(document, folder)
         self.expect(folder.absolute_url()).result('http://nohost/plone/folder')
@@ -21,7 +20,7 @@ class TestDocumentsUrl(MockTestCase):
 
     def test_dossier(self):
         document = self.stub()
-        folder = self.providing_stub([IDossierMarker])
+        folder = self.stub()
         tool = self.stub()
         self.set_parent(document, folder)
         self.expect(folder.absolute_url()).result('http://nohost/plone/folder')

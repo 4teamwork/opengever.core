@@ -2,7 +2,7 @@ from Products.CMFCore.utils import getToolByName
 from plone.memoize import ram
 from zope.i18n import translate
 from opengever.task.util import getTaskTypeVocabulary
-from opengever.dossier.behaviors.dossier import IDossierMarker
+from opengever.task.task import ITask
 from Acquisition import aq_inner, aq_parent
 
 
@@ -31,10 +31,10 @@ def get_containg_document_tab_url(context):
 
     parent = aq_parent(aq_inner(context))
 
-    if IDossierMarker.providedBy(parent):
-        tab = 'documents'
-    else:
+    if ITask.providedBy(parent):
         tab = 'relateddocuments'
+    else:
+        tab = 'documents'
 
     mtool = getToolByName(context, 'portal_membership')
     if mtool.checkPermission('View', parent):
