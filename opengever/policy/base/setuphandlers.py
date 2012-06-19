@@ -2,6 +2,7 @@ from zope.component import getUtility
 from plone.registry.interfaces import IRegistry
 from izug.basetheme.interfaces import ISiteProperties
 
+
 def set_application_title(context):
     """ Set the application title for GEVER.
     (used in the live search box)
@@ -15,6 +16,3 @@ def set_application_title(context):
         return
 
     site_properties.application_title = u'Mandant'
-
-
-
