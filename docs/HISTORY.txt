@@ -2,8 +2,8 @@ Changelog
 =========
 
 
-2.0.3 (unreleased)
-------------------
+2.1 (2012-06-19)
+----------------
 
 - Modify logout action url expression to activate the logout overlay.
   Issue #1501 Warnung "Bitte Dokumente einchecken"
