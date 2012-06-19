@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-2.2 (unreleased)
+2.2 (2012-06-19)
 ----------------
 
 - Made mail addable but not viewable in the factorymenu on inbox objects.
