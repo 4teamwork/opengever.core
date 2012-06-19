@@ -5,6 +5,11 @@ Changelog
 2.5 (unreleased)
 ----------------
 
+- Adjust OGQuickUpload factory: let namedfile itself find the right mimetype.
+  Issue #549 Abklaerung: Drag and drop
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/549
+  [phgross]
+
 - Implements msg support for the OGQuickUploadCapableFileFactory.
   Fixed pdfrendering for d'n'd uploaded files.
   Issue #549 Abklaerung: Drag and drop

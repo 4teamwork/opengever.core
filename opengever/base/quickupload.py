@@ -35,12 +35,11 @@ class OGQuickUploadCapableFileFactory(grok.Adapter):
             data = Msg2MimeTransform()(data)
             filename = filename.replace('msg', 'eml')
 
-        mimetype = self.get_mimetype(filename)
-        portal_type = self.get_portal_type(mimetype)
+        portal_type = self.get_portal_type(filename)
 
         obj = createContentInContainer(self.context, portal_type)
 
-        named_file = self.create_file(filename, data, mimetype, obj)
+        named_file = self.create_file(filename, data, obj)
         self.set_default_values(obj, named_file)
 
         # initalize digitaly available
@@ -57,7 +56,7 @@ class OGQuickUploadCapableFileFactory(grok.Adapter):
 
         return result
 
-    def create_file(self, filename, data, mimetype, obj):
+    def create_file(self, filename, data, obj):
         # filename must be unicode
         if not isinstance(filename, unicode):
             filename = filename.decode('utf-8')
@@ -67,7 +66,6 @@ class OGQuickUploadCapableFileFactory(grok.Adapter):
                 if IPrimaryField.providedBy(field):
                     return field._type(
                         data=data,
-                        contentType=mimetype,
                         filename=filename)
 
     def set_default_values(self, obj, named_file):
@@ -96,14 +94,14 @@ class OGQuickUploadCapableFileFactory(grok.Adapter):
                     value = default
                     field.set(field.interface(obj), value)
 
-    def get_mimetype(self, filename):
-        basepath, extension = os.path.splitext(filename)
-        return mimetypes.types_map.get(extension)
-
-    def get_portal_type(self, mimetype):
+    def get_portal_type(self, filename):
         # check if its a mail object then create a ftw.mail
         # otherwise create a og.document
-        if mimetype == 'message/rfc822':
+        if self._get_mimetype(filename) == 'message/rfc822':
             return 'ftw.mail.mail'
         else:
             return 'opengever.document.document'
+
+    def _get_mimetype(self, filename):
+        basepath, extension = os.path.splitext(filename)
+        return mimetypes.types_map.get(extension)

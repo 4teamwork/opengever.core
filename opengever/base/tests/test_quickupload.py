@@ -43,10 +43,10 @@ class TestOGQuickupload(MockTestCase, TestCase):
         mock_context = self.providing_stub([ITabbedviewUploadable])
         self.replay()
         adapter = IQuickUploadFileFactory(mock_context)
-        self.assertEqual(adapter.get_mimetype('hanspeter.doc'),
+        self.assertEqual(adapter._get_mimetype('hanspeter.doc'),
             'application/msword')
 
-        self.assertEqual(adapter.get_mimetype('hanspeter.jpeg'),
+        self.assertEqual(adapter._get_mimetype('hanspeter.jpeg'),
             'image/jpeg')
 
     def test_get_portal_type(self):
@@ -55,12 +55,12 @@ class TestOGQuickupload(MockTestCase, TestCase):
         adapter = IQuickUploadFileFactory(mock_context)
 
         self.assertEqual(
-            adapter.get_portal_type('image/jpeg'),
+            adapter.get_portal_type('image.jpeg'),
             'opengever.document.document')
         self.assertEqual(
-            adapter.get_portal_type('message/rfc822'), 'ftw.mail.mail')
+            adapter.get_portal_type('mail.eml'), 'ftw.mail.mail')
         self.assertEqual(
-            adapter.get_portal_type('application/ msword'),
+            adapter.get_portal_type('test.doc'),
             'opengever.document.document')
 
     def test_set_default_value(self):
@@ -108,7 +108,7 @@ class TestOGQuickupload(MockTestCase, TestCase):
         # also if it add the created file to the primary field
         adapter = IQuickUploadFileFactory(mock_context)
         named_file = adapter.create_file(
-            u'hugo.jpeg', u'data data', u'image/jpeg', obj)
+            u'hugo.jpeg', u'data data', obj)
 
         self.assertEquals(named_file.data, u'data data')
 
