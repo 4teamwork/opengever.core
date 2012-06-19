@@ -2,6 +2,8 @@ from Products.CMFCore.utils import getToolByName
 from plone.memoize import ram
 from zope.i18n import translate
 from opengever.task.util import getTaskTypeVocabulary
+from opengever.dossier.behaviors.dossier import IDossierMarker
+from Acquisition import aq_inner, aq_parent
 
 
 @ram.cache(lambda m, c, r: 'translated_transitions_cache_key')
@@ -23,3 +25,19 @@ def get_translated_types(context, request):
         values[key] = terms.title.lower()
 
     return values
+
+def get_containg_document_tab_url(context):
+    """return the url to the `Documents` tab on containing object"""
+
+    parent = aq_parent(aq_inner(context))
+
+    if IDossierMarker.providedBy(parent):
+        tab = 'documents'
+    else:
+        tab = 'relateddocuments'
+
+    mtool = getToolByName(context, 'portal_membership')
+    if mtool.checkPermission('View', parent):
+        return '%s#%s' % (parent.absolute_url(), tab)
+    else:
+        return context.absolute_url()
