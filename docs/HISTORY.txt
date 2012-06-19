@@ -5,6 +5,11 @@ Changelog
 2.0.5 (unreleased)
 ------------------
 
+- Fixed earliest enddate calculation: include objs in subdossiers.
+  Issue #1525 Dossier abschliessen: Wieder eroeffnen bzw. wieder abschliessen bei Subdossier.
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1525/
+  [phgross]
+
 - Implements start date validation in the ResolveConiditions.
   Issue #1546 DI-KSA: Fehlermeldung beim Versuch "Dossier abschliessen"
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1546

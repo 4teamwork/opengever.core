@@ -1,4 +1,5 @@
 from Acquisition import aq_inner, aq_parent
+from Products.CMFCore.utils import getToolByName
 from Products.CMFDefault.interfaces import ICMFDefaultSkin
 from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
 from datetime import datetime
@@ -177,8 +178,10 @@ class DossierContainer(Container):
 
     def earliest_possible_end_date(self):
 
-        children = self.getFolderContents(
-            {'object_provides': [
+        catalog = getToolByName(self, 'portal_catalog')
+        children = catalog(
+            {'path': '/'.join(self.getPhysicalPath()),
+             'object_provides': [
                     'opengever.document.behaviors.IBaseDocument',
                     'opengever.dossier.behaviors.dossier.IDossierMarker', ]})
 
