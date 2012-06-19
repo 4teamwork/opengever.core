@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-2.0.5 (unreleased)
+2.0.5 (2012-06-19)
 ------------------
 
 - Fix attachment-fail when downloading file with IE.
