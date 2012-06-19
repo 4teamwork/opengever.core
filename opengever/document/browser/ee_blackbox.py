@@ -2,10 +2,19 @@ from datetime import datetime
 from five import grok
 from opengever.document.document import IDocumentSchema
 import logging
-import os
+import os, errno
 
 
 logger = logging.getLogger('opengever.document')
+
+
+def mkdir_p(path):
+    try:
+        os.makedirs(path)
+    except OSError as exc: # Python >2.5
+        if exc.errno == errno.EEXIST:
+            pass
+        else: raise
 
 
 class ExternalEditorBlackboxUploadView(grok.View):
@@ -27,8 +36,9 @@ class ExternalEditorBlackboxUploadView(grok.View):
         file_data = file_upload.read()
 
         blackbox_dir = os.environ.get('BLACKBOX_DIR', 'var/blackbox')
+        blackbox_dir = os.path.abspath(blackbox_dir)
         if not os.path.isdir(blackbox_dir):
-            os.mkdir(blackbox_dir)
+            mkdir_p(blackbox_dir)
 
         timestamp = datetime.today().strftime("%Y-%m-%d_%H-%M-%S")
         filename = "blackbox-%s.zip" % timestamp
