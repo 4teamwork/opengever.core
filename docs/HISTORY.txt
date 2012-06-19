@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-2.0.4 (unreleased)
+2.0.4 (2012-06-19)
 ------------------
 
 - Added filename fallback in content_type_helper for documents with wrong content type.
