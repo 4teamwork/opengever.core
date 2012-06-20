@@ -1,10 +1,8 @@
-from zope.interface import implements
-from plone.app.workflow.interfaces import ISharingPageRole
-from plone.app.workflow import permissions
-from Products.CMFCore import permissions as core_permissions
 from five import grok
-
 from plone.app.workflow import PloneMessageFactory as _
+from plone.app.workflow import permissions
+from plone.app.workflow.interfaces import ISharingPageRole
+from zope.interface import implements
 
 
 class AdministratorRole(grok.GlobalUtility):
