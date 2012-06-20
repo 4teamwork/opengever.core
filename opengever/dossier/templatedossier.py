@@ -5,6 +5,7 @@ from ftw.table import helper
 from ftw.table.interfaces import ITableGenerator
 from opengever.base.interfaces import IRedirector
 from opengever.dossier import _
+from opengever.tabbedview.browser.tabs import Documents, Trash
 from opengever.tabbedview.helper import linked
 from plone.dexterity.utils import createContentInContainer
 from plone.dexterity.utils import iterSchemata
@@ -16,7 +17,7 @@ from zope.interface import Interface
 from zope.lifecycleevent import ObjectModifiedEvent
 from zope.schema import getFieldsInOrder
 
-
+REMOVED_COLUMNS = ['receipt_date', 'delivery_date', 'containing_subdossier']
 NO_DEFAULT_VALUE_FIELDS = ['title', 'file']
 
 
@@ -185,3 +186,33 @@ class TemplateFolder(grok.GlobalUtility):
         if result:
             return result[0].getPath()
         return None
+
+
+def drop_columns(columns):
+
+    cleaned_columns = []
+
+    for col in columns:
+        if isinstance(col, dict):
+            if col.get('column') in REMOVED_COLUMNS:
+                continue
+        cleaned_columns.append(col)
+    return cleaned_columns
+
+
+class TemplateDossierDocuments(Documents):
+    grok.context(ITemplateDossier)
+
+    @property
+    def columns(self):
+        return drop_columns(
+            super(TemplateDossierDocuments, self).columns)
+
+
+class TemplateDossierTrash(Trash):
+    grok.context(ITemplateDossier)
+
+    @property
+    def columns(self):
+        return drop_columns(
+            super(TemplateDossierTrash, self).columns)

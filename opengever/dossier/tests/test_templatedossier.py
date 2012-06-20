@@ -1,5 +1,6 @@
 from Testing.makerequest import makerequest
 from opengever.dossier.templatedossier import ITemplateDossier
+from opengever.dossier.templatedossier import REMOVED_COLUMNS
 from opengever.dossier.testing import OPENGEVER_DOSSIER_INTEGRATION_TESTING
 from plone.app.testing import setRoles, TEST_USER_ID
 from plone.dexterity.interfaces import IDexterityFTI
@@ -58,3 +59,14 @@ class TestTemplateDossierIntegration(unittest.TestCase):
         view = dossier.restrictedTraverse('document_with_template')
         self.failUnless(view())
         self.assertTrue('empty document template', view.templates())
+
+        # test_tabbedview_columns
+        view = templates.unrestrictedTraverse('tabbedview_view-documents')
+        for column in view.columns:
+            if isinstance(column, dict):
+                self.assertTrue(column.get('id') not in REMOVED_COLUMNS)
+
+        view = templates.unrestrictedTraverse('tabbedview_view-trash')
+        for column in view.columns:
+            if isinstance(column, dict):
+                self.assertTrue(column.get('id') not in REMOVED_COLUMNS)

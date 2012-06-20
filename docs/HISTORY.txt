@@ -5,6 +5,9 @@ Changelog
 2.0.5 (unreleased)
 ------------------
 
+- Templatedossier: Disalbe some columns in the document and trash listings.
+  [phgross]
+
 - Templatedossier: Adjust default value setter, works now also for boolean fields (preserved_as_paper).
   [phgross]
 
