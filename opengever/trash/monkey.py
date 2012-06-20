@@ -1,5 +1,6 @@
 def search_patch(scope, original, replacement):
     orimethod = getattr(scope, original)
+
     def newSearchResult(self, REQUEST=None, **kw):
         kw = kw.copy()
         if 'trashed' not in kw.keys():
@@ -8,6 +9,7 @@ def search_patch(scope, original, replacement):
     setattr(scope, original, newSearchResult)
     setattr(scope, '__call__', newSearchResult)
     return
-    
-def dummy_method(self, REQUEST=None, **kw): 
+
+
+def dummy_method(self, REQUEST=None, **kw):
     pass

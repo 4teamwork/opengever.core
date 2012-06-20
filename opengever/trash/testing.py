@@ -12,8 +12,10 @@ class TrashLayer(PloneSandboxLayer):
     def setUpZope(self, app, configurationContext):
         # Load ZCML
         import opengever.trash
-        xmlconfig.file('configure.zcml', opengever.trash, context=configurationContext)
-        xmlconfig.file('tests.zcml', opengever.trash, context=configurationContext)
+        xmlconfig.file('configure.zcml',
+                       opengever.trash, context=configurationContext)
+        xmlconfig.file('tests.zcml',
+                       opengever.trash, context=configurationContext)
 
     def setUpPloneSite(self, portal):
         # Install into Plone site using portal_setup
@@ -25,4 +27,3 @@ class TrashLayer(PloneSandboxLayer):
 OPENGEVER_TRASH_FIXTURE = TrashLayer()
 OPENGEVER_TRASH_INTEGRATION_TESTING = IntegrationTesting(
     bases=(OPENGEVER_TRASH_FIXTURE,), name="OpengeverTrash:Integration")
-

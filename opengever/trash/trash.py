@@ -25,8 +25,8 @@ class ITrashed(Interface):
     """
     pass
 
-#Events
 
+#Events
 class ITrashedEvent(IObjectEvent):
     pass
 
@@ -91,7 +91,7 @@ class TrashView(grok.View):
                 # check that the object isn't already trashed
                 if not brains:
                     msg = _(
-                        u'could not trash the object ${obj}, ' \
+                        u'could not trash the object ${obj}, '
                         'it is already trashed',
                         mapping={'obj': obj.Title().decode('utf-8')})
                     IStatusMessage(self.request).addStatusMessage(

@@ -29,7 +29,7 @@ def add_catalog_indexes(context, logger=None):
     catalog = getToolByName(context, 'portal_catalog')
     indexes = catalog.indexes()
     # Specify the indexes you want, with ('index_name', 'index_type')
-    wanted = (('trashed','FieldIndex'),)
+    wanted = (('trashed', 'FieldIndex'),)
     indexables = []
     for name, meta_type in wanted:
         if name not in indexes:
