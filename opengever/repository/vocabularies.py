@@ -4,6 +4,7 @@ from five import grok
 from zope.schema.interfaces import IVocabularyFactory
 from zope.i18n import translate
 
+
 class RestrictedAddableDossiersVocabularyFactory(grok.GlobalUtility):
     """A list of content types which are restricted addable on the context.
     Those types have the
@@ -33,7 +34,7 @@ class RestrictedAddableDossiersVocabularyFactory(grok.GlobalUtility):
 
         # find the dexterity FTIs using the IRestrictedDossier behavior
         restricted_types = filter(
-            lambda fti: getattr(fti, 'behaviors') and \
+            lambda fti: getattr(fti, 'behaviors') and
                 self.marker_behavior in fti.behaviors, types)
 
         # create the terms

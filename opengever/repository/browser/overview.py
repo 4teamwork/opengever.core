@@ -25,23 +25,25 @@ class RepositoryRootOverview(grok.View, OpengeverTab):
            Do not count subdossiers.
 
         """
-        return len(self.catalog(object_provides=[
-                       'opengever.dossier.behaviors.dossier.IDossierMarker']
-                   , path='/'.join(self.context.getPhysicalPath())
-                   , is_subdossier=False))
+        return len(
+            self.catalog(
+                object_provides=[
+                    'opengever.dossier.behaviors.dossier.IDossierMarker'],
+                path='/'.join(self.context.getPhysicalPath()),
+                is_subdossier=False))
 
     def get_amount_of_tasks(self):
         """Returns the amount of tasks recursivley in this context.
         """
-        return len(self.catalog(object_provides=[
-                       'opengever.task.task.ITask']
-                   , path='/'.join(self.context.getPhysicalPath())))
+        return len(self.catalog(
+                object_provides=['opengever.task.task.ITask'],
+                path='/'.join(self.context.getPhysicalPath())))
 
     def get_amount_of_documents(self):
         """Returns the amount of documents recursively in this context.
         """
-        return len(self.catalog(object_provides=[
-                       'opengever.document.document.IDocumentSchema',
-                       'ftw.mail.mail.IMail']
-                   , path='/'.join(self.context.getPhysicalPath())))
-
+        return len(self.catalog(
+                object_provides=[
+                    'opengever.document.document.IDocumentSchema',
+                    'ftw.mail.mail.IMail'],
+                path='/'.join(self.context.getPhysicalPath())))

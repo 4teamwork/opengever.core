@@ -18,18 +18,18 @@ class IReferenceNumberPrefix(form.Schema):
 
     form.fieldset(
         u'common',
-        label = _(u'fieldset_common', default=u'Common'),
-        fields = [
+        label=_(u'fieldset_common', default=u'Common'),
+        fields=[
             u'reference_number_prefix',
             ],
         )
 
     reference_number_prefix = schema.TextLine(
-        title = _(
+        title=_(
             u'label_reference_number_prefix',
             default=u'Reference Prefix'),
-        description = _(u'help_reference_number_prefix', default=u''),
-        required = False,
+        description=_(u'help_reference_number_prefix', default=u''),
+        required=False,
         )
 
 alsoProvides(IReferenceNumberPrefix, form.IFormFieldProvider)
@@ -65,10 +65,10 @@ provideAdapter(ReferenceNumberPrefixValidator)
 provideAdapter(error.ErrorViewMessage(
         _('error_sibling_reference_number_existing',
           default=u'A Sibling with the same reference number is existing'),
-        error = schema.interfaces.ConstraintNotSatisfied,
-        field = IReferenceNumberPrefix['reference_number_prefix'],
+        error=schema.interfaces.ConstraintNotSatisfied,
+        field=IReferenceNumberPrefix['reference_number_prefix'],
         ),
-        name = 'message'
+        name='message'
         )
 
 
@@ -76,6 +76,7 @@ class IReferenceNumberPrefixMarker(Interface):
     """
     Marker Interface for the ReferenceNumber-Prefix Behavior
     """
+
 
 @grok.subscribe(IReferenceNumberPrefixMarker, IObjectAddedEvent)
 @grok.subscribe(IReferenceNumberPrefixMarker, IObjectModifiedEvent)
@@ -86,7 +87,7 @@ def saveReferenceNumberPrefix(obj, event):
 
     If necessary, set_number() creates a collision free prefix.
     """
-    parent= aq_parent(aq_inner(obj))
+    parent = aq_parent(aq_inner(obj))
 
     # Mark the reference number as issued in the parent's annotations
     number = PrefixAdapter(parent).set_number(

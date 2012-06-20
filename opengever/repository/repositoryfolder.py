@@ -26,8 +26,8 @@ class IRepositoryFolderSchema(form.Schema):
 
     form.fieldset(
         u'common',
-        label = _(u'fieldset_common', default=u'Common'),
-        fields = [
+        label=_(u'fieldset_common', default=u'Common'),
+        fields=[
             u'effective_title',
             u'description',
             u'valid_from',
@@ -39,50 +39,50 @@ class IRepositoryFolderSchema(form.Schema):
         )
 
     #form.omitted('title')
-    form.order_before(effective_title = '*')
+    form.order_before(effective_title='*')
     effective_title = schema.TextLine(
-        title = _(u'Title'),
-        required = True,
+        title=_(u'Title'),
+        required=True,
         )
 
     description = schema.Text(
-        title = _(u'label_description', default=u'Description'),
-        description = _(
+        title=_(u'label_description', default=u'Description'),
+        description=_(
             u'help_description',
             default=u'A short summary of the content.'),
-        required = False,
+        required=False,
         )
 
     valid_from = schema.Date(
-        title = _(u'label_valid_from', default=u'Valid from'),
-        description = _(u'help_valid_from', default=u''),
-        required = False,
+        title=_(u'label_valid_from', default=u'Valid from'),
+        description=_(u'help_valid_from', default=u''),
+        required=False,
         )
 
     valid_until = schema.Date(
-        title = _(u'label_valid_until', default=u'Valid until'),
-        description = _(u'help_valid_until', default=u''),
-        required = False,
+        title=_(u'label_valid_until', default=u'Valid until'),
+        description=_(u'help_valid_until', default=u''),
+        required=False,
         )
 
     location = schema.TextLine(
-        title = _(u'label_location', default=u'Location'),
-        description = _(u'help_location', default=u''),
-        required = False,
+        title=_(u'label_location', default=u'Location'),
+        description=_(u'help_location', default=u''),
+        required=False,
         )
 
     referenced_activity = schema.TextLine(
-        title = _(
+        title=_(
             u'label_referenced_activity',
             default=u'Referenced activity'),
-        description = _(u'help_referenced_activity', default=u''),
-        required = False,
+        description=_(u'help_referenced_activity', default=u''),
+        required=False,
         )
 
     former_reference = schema.TextLine(
-        title = _(u'label_former_reference', default=u'Former reference'),
-        description = _(u'help_former_reference', default=u''),
-        required = False,
+        title=_(u'label_former_reference', default=u'Former reference'),
+        description=_(u'help_former_reference', default=u''),
+        required=False,
         )
 
     addable_dossier_types = schema.List(
@@ -94,7 +94,6 @@ class IRepositoryFolderSchema(form.Schema):
         value_type=schema.Choice(vocabulary=u'opengever.repository.'
                                  u'RestrictedAddableDossiersVocabulary'),
         required=False)
-
 
 
 class RepositoryFolder(content.Container):
@@ -135,28 +134,28 @@ class RepositoryFolder(content.Container):
         maximum_depth = getattr(proxy, 'maximum_repository_depth', 0)
         current_depth = 0
         # if we have a maximum depth, we need to know the current depth
-        if maximum_depth>0:
+        if maximum_depth > 0:
             obj = self
             while IRepositoryFolder.providedBy(obj):
                 current_depth += 1
                 obj = aq_parent(aq_inner(obj))
                 if IPloneSiteRoot.providedBy(obj):
                     break
-            if maximum_depth<=current_depth:
+            if maximum_depth <= current_depth:
                 # depth exceeded
                 # RepositoryFolder not allowed, but any other type
-                types = filter(lambda a: a!= fti, types)
+                types = filter(lambda a: a != fti, types)
         # check if self contains any similar objects
         contains_similar_objects = False
         for id, obj in self.contentItems():
-            if obj.portal_type==self.portal_type:
+            if obj.portal_type == self.portal_type:
                 contains_similar_objects = True
                 break
 
         # filter content types, if required
         if contains_similar_objects:
             # only allow same types
-            types = filter(lambda a: a== fti, types)
+            types = filter(lambda a: a == fti, types)
 
         # finally: remove not enabled resticted content types
         marker_behavior = 'opengever.dossier.behaviors.restricteddossier.' + \
@@ -211,5 +210,6 @@ class Byline(grok.Viewlet):
 
     @memoize
     def workflow_state(self):
-        context_state = self.context.restrictedTraverse("@@plone_context_state")
+        context_state = self.context.restrictedTraverse(
+            "@@plone_context_state")
         return context_state.workflow_state()

@@ -1,13 +1,14 @@
-from opengever.ogds.base.setuphandlers import create_sql_tables
 from opengever.ogds.base.setuphandlers import _create_example_client
+from opengever.ogds.base.setuphandlers import create_sql_tables
 from opengever.ogds.base.utils import create_session
-from plone.app.testing import applyProfile
 from plone.app.testing import FunctionalTesting
-from plone.app.testing import PloneSandboxLayer
 from plone.app.testing import PLONE_FIXTURE
+from plone.app.testing import PloneSandboxLayer
+from plone.app.testing import TEST_USER_ID
+from plone.app.testing import applyProfile
+from plone.app.testing import setRoles
 from zope.configuration import xmlconfig
-from plone.app.testing import TEST_USER_ID, TEST_USER_NAME
-from plone.app.testing import setRoles, login
+
 
 class RepositoryFunctionalLayer(PloneSandboxLayer):
     """Layer for integration tests."""
@@ -20,17 +21,22 @@ class RepositoryFunctionalLayer(PloneSandboxLayer):
         setuphandlers.setup_scriptable_plugin = lambda *a, **kw: None
 
         from plone.app import dexterity
-        xmlconfig.file('meta.zcml', package=dexterity, context=configurationContext)
-        xmlconfig.file('configure.zcml', package=dexterity, context=configurationContext)
+        xmlconfig.file('meta.zcml',
+                       package=dexterity, context=configurationContext)
+        xmlconfig.file('configure.zcml',
+                       package=dexterity, context=configurationContext)
 
         from opengever.ogds import base
-        xmlconfig.file('tests.zcml', package=base, context=configurationContext)
+        xmlconfig.file('tests.zcml',
+                       package=base, context=configurationContext)
 
         from opengever import repository
-        xmlconfig.file('configure.zcml', package=repository, context=configurationContext)
+        xmlconfig.file('configure.zcml',
+                       package=repository, context=configurationContext)
 
         from ftw import tabbedview
-        xmlconfig.file('configure.zcml', package=tabbedview, context=configurationContext)
+        xmlconfig.file('configure.zcml',
+                       package=tabbedview, context=configurationContext)
 
     def setUpPloneSite(self, portal):
         applyProfile(portal, 'ftw.tabbedview:default')
