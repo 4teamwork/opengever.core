@@ -137,7 +137,7 @@ class GlobalTaskTableSource(SqlTableSource):
         # List the only the one which is assigned to this client.
         query = query.filter(
             or_(
-                and_(Task.predecessor == None, Task.successors == None),
+                and_(Task.predecessor is None, Task.successors is None),
                 Task.client_id == get_client_id()))
 
         # ordering

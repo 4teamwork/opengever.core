@@ -1,5 +1,6 @@
 from Products.CMFCore.interfaces._tools import IMemberData
-from Products.PluggableAuthService.interfaces.authservice import IPropertiedUser
+from Products.PluggableAuthService.interfaces.authservice import \
+    IPropertiedUser
 from datetime import date as dt
 from ftw.mail.utils import get_header
 from opengever.base.browser.helper import get_css_class
@@ -55,7 +56,8 @@ def readable_ogds_author(item, author):
     if IPropertiedUser.providedBy(author) or IMemberData.providedBy(author):
         author = author.getId()
     info = getUtility(IContactInformation)
-    if info.is_user(author) or info.is_contact(author) or info.is_inbox(author):
+    if info.is_user(author) or info.is_contact(
+            author) or info.is_inbox(author):
         return info.describe(author)
     else:
         return author
@@ -84,7 +86,8 @@ def linked_ogds_author(item, author):
     if IPropertiedUser.providedBy(author) or IMemberData.providedBy(author):
         author = author.getId()
     info = getUtility(IContactInformation)
-    if info.is_user(author) or info.is_contact(author) or info.is_inbox(author):
+    if info.is_user(author) or info.is_contact(
+        author) or info.is_inbox(author):
         return info.render_link(author)
     else:
         return author
@@ -150,7 +153,8 @@ def readable_date_set_invisibles(item, date):
             or str(date) == '1970-01-01 00:00:00':
         return u''
     strftimestring = '%d.%m.%Y'
-    if date == None:
+
+    if date is None:
         return None
     return date.strftime(strftimestring)
 
@@ -172,6 +176,7 @@ def boolean_helper(item, value):
 
     return translate('No', domain='plone', context=request)
 
+
 def workflow_state(item, value):
     """Helper which translates the workflow_state in plone domain
     and adds a CSS class to indicate the worflow state.
@@ -182,7 +187,8 @@ def workflow_state(item, value):
     # We use zope.globalrequest because item can be a SQLAlchemy `Task` object
     # which doesn't have a request
     request = getRequest()
-    return """<span class="wf-%s">%s</span>""" % (state, translate(value, domain='plone', context=request))
+    return """<span class="wf-%s">%s</span>""" % (
+        state, translate(value, domain='plone', context=request))
 
 
 def overdue_date_helper(item, date):
@@ -205,10 +211,12 @@ def overdue_date_helper(item, date):
     except ValueError:
         return None
 
-    if overdue and item and item.review_state in ['task-state-cancelled',
-                                                  'task-state-rejected',
-                                                  'task-state-tested-and-closed',
-                                                  'forwarding-state-closed']:
+    if overdue and item and item.review_state in [
+        'task-state-cancelled',
+        'task-state-rejected',
+        'task-state-tested-and-closed',
+        'forwarding-state-closed']:
+
         overdue = False
 
     class_attr = overdue and 'class="overdue"' or ''
@@ -217,7 +225,8 @@ def overdue_date_helper(item, date):
 
 def queue_view_helper(item, value):
     site = getSite()
-    return """<a href='%s/jobs_view?queue=%s'>%s</a>""" %(site.absolute_url(),value,value)
+    return """<a href='%s/jobs_view?queue=%s'>%s</a>""" % (
+        site.absolute_url(), value, value)
 
 
 def external_edit_link(item, value):
@@ -237,12 +246,14 @@ def external_edit_link(item, value):
 
     return '<a id="%s" title="%s" href="%s" class="function-edit"></a>' % (
         item.id,
-        getSite().translate('checkout_and_edit',domain="opengever.tabbedview"),
+        getSite().translate(
+            'checkout_and_edit', domain="opengever.tabbedview"),
         url)
 
 
 def translated_string(domain='plone'):
     domain = domain
+
     def _translate(item, value):
         return translate(
             value, context=getRequest(), domain=domain)

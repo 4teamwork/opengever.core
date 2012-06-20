@@ -218,4 +218,3 @@ class ClientsTableSource(grok.MultiAdapter, BaseTableSource):
             list(xrange(self.full_length - start - len(page_results)))
 
         return results
-

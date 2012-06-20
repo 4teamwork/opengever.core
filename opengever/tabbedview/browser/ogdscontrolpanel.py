@@ -47,7 +47,6 @@ class OGDSControlPanel(grok.View, TabbedView):
         return TabbedView.__call__(self)
 
 
-
 class OGDSAllTasks(GlobalTaskListingTab):
     """Lists all tasks in the globalindex.
     """

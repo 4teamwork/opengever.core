@@ -198,21 +198,22 @@ class Documents(OpengeverCatalogListingTab):
         )
 
     enabled_actions = [
-                       'send_as_email',
-                       'checkout',
-                       'checkin',
-                       'cancel',
-                       'create_task',
-                       'trashed',
-                       'send_documents',
-                       'move_items',
-                       'copy_items',
-                       'reset_tableconfiguration',
-                       ]
+        'send_as_email',
+        'checkout',
+        'checkin',
+        'cancel',
+        'create_task',
+        'trashed',
+        'send_documents',
+        'move_items',
+        'copy_items',
+        'reset_tableconfiguration',
+        ]
 
-    major_actions = ['send_documents',
-                     'create_task',
-                     ]
+    major_actions = [
+        'send_documents',
+        'create_task',
+        ]
 
 
 class Dossiers(OpengeverCatalogListingTab):
