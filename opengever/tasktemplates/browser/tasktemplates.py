@@ -8,12 +8,16 @@ from opengever.tasktemplates import _
 from opengever.tasktemplates.browser.helper import interactive_user_helper
 from opengever.tasktemplates.content.tasktemplate import ITaskTemplate
 from plone.directives import dexterity
+from zope.app.component.hooks import getSite
+from zope.i18n import translate
 from zope.interface import implements, Interface
 
 
 def preselected_helper(item, value):
     if value == True:
-        return _(u'preselected_yes', default=u'Yes')
+        return translate(
+            _(u'preselected_yes', default=u'Yes'),
+            context=getSite().REQUEST)
     else:
         return ''
 

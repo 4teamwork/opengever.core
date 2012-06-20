@@ -5,7 +5,10 @@ Changelog
 2.0.4 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Fixed preselected_helper: really translate the messagefactory.
+  Issue #1608 Uebersetzungsfehler bei Standardablauf
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1608
+  [phgross]
 
 
 2.0.3 (2012-03-28)
