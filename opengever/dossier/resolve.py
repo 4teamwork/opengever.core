@@ -74,6 +74,7 @@ class DossierReactivateView(grok.View):
             ptool.addPortalMessage(
                 _("It isn't possible to reactivate a sub dossier."),
                 type="warning")
+            self.request.RESPONSE.redirect(self.context.absolute_url())
 
 
 class DossierResolver(grok.Adapter):
