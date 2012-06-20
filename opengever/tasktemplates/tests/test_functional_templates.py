@@ -10,9 +10,12 @@ class TestFunctionalTemplates(MockTestCase):
 
         # Context
         mock_context = self.mocker.mock()
+        get_site = self.mocker.replace('zope.app.component.hooks.getSite')
+        self.expect(get_site()).result(mock_context)
+        self.expect(mock_context.REQUEST).result(mock_context)
 
         self.replay()
 
         self.assertEquals(
-            'preselected_yes', preselected_helper(mock_context, True))
+            u'Yes', preselected_helper(mock_context, True))
         self.assertEquals('', preselected_helper(mock_context, False))
