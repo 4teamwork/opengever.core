@@ -5,7 +5,10 @@ Changelog
 2.1.8 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Disable pdf export actions for templatedossiers.
+  Issue #1368 Bearbeitung von Vorlagen (Metadaten und Dokumente)
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1368
+  [phgross]
 
 
 2.1.7 (2012-06-19)
