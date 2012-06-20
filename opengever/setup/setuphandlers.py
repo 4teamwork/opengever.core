@@ -47,8 +47,7 @@ def start_import(context):
 def settings(context):
     # remove stuff we dont want
     default_remove_ids = ('news', 'events', 'front-page')
-    ids_to_remove = list(set(default_remove_ids) & \
-                             set(context.objectIds()))
+    ids_to_remove = list(set(default_remove_ids) & set(context.objectIds()))
     context.manage_delObjects(ids_to_remove)
 
     # hide members
@@ -71,18 +70,21 @@ def set_global_roles(setup):
 
 
 def assign_roles(context, admin_file):
-    admin_groups= admin_file.split('\n')
+    admin_groups = admin_file.split('\n')
+    prm = context.acl_users.portal_role_manager
+
     for admin_group in admin_groups:
-        context.acl_users.portal_role_manager.assignRoleToPrincipal('Administrator', admin_group.strip())
-        context.acl_users.portal_role_manager.assignRoleToPrincipal('Member', admin_group.strip())
-        context.acl_users.portal_role_manager.assignRoleToPrincipal('Editor', admin_group.strip())
-        context.acl_users.portal_role_manager.assignRoleToPrincipal('Role Manager', admin_group.strip())
+        prm.assignRoleToPrincipal('Administrator', admin_group.strip())
+        prm.assignRoleToPrincipal('Member', admin_group.strip())
+        prm.assignRoleToPrincipal('Editor', admin_group.strip())
+        prm.assignRoleToPrincipal('Role Manager', admin_group.strip())
 
 
 def assign_tree_portlet(context, root_path, remove_nav=False,
                         block_inheritance=False):
     # Assign tree portlet to given context
-    manager = getUtility(IPortletManager, name=u'plone.leftcolumn', context=context)
+    manager = getUtility(
+        IPortletManager, name=u'plone.leftcolumn', context=context)
     mapping = getMultiAdapter((context, manager,), IPortletAssignmentMapping)
     if 'opengever-portlets-tree-TreePortlet' not in mapping.keys():
         mapping['opengever-portlets-tree-TreePortlet'] = \
@@ -95,7 +97,8 @@ def assign_tree_portlet(context, root_path, remove_nav=False,
 
     if block_inheritance:
         # Block inherited context portlets
-        assignable = getMultiAdapter((context, manager), ILocalPortletAssignmentManager)
+        assignable = getMultiAdapter(
+            (context, manager), ILocalPortletAssignmentManager)
         assignable.setBlacklistStatus(CONTEXT_CATEGORY, True)
 
 
@@ -119,7 +122,8 @@ def assign_portlets(context):
         else:
             main_repo_root = repo_roots and repo_roots[0].id or None
 
-    secondary_repo_roots = [r.id for r in repo_roots if not r.id == main_repo_root]
+    secondary_repo_roots = [
+        r.id for r in repo_roots if not r.id == main_repo_root]
 
     if main_repo_root:
         # Assign tree portlet with main repo root to site root
@@ -134,7 +138,8 @@ def assign_portlets(context):
 
     # Add a new navigation portlet at /eingangskorb
     inbox = context.restrictedTraverse('eingangskorb')
-    manager = getUtility(IPortletManager, name=u'plone.leftcolumn', context=inbox)
+    manager = getUtility(
+        IPortletManager, name=u'plone.leftcolumn', context=inbox)
     mapping = getMultiAdapter((inbox, manager),
                               IPortletAssignmentMapping)
     if 'navigation' not in mapping.keys():
@@ -145,7 +150,8 @@ def assign_portlets(context):
                                                       bottomLevel=0)
 
     # Block inherited context portlets on /eingangskorb
-    assignable = getMultiAdapter((inbox, manager), ILocalPortletAssignmentManager)
+    assignable = getMultiAdapter(
+        (inbox, manager), ILocalPortletAssignmentManager)
     assignable.setBlacklistStatus(CONTEXT_CATEGORY, True)
 
 
@@ -158,4 +164,3 @@ def import_various(setup):
     settings(site)
     assign_portlets(site)
     disable_site_syndication(site)
-

@@ -105,7 +105,8 @@ class AddOpengeverClient(AddPloneSite):
             backend_type = adapter_cfg._matcher.type.name
             dsn = adapter_cfg.dsn
             user = adapter_cfg.user
-            db_info = "%s (%s): %s @%s" % (section_type, backend_type, user, dsn)
+            db_info = "%s (%s): %s @%s" % (
+                section_type, backend_type, user, dsn)
         else:
             # blobstorage
             db_info = "%s" % section_type

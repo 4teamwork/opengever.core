@@ -36,10 +36,12 @@ class NamedFileCreatorSection(object):
             path = item[pathkey]
             obj = self.context.unrestrictedTraverse(path.lstrip('/'), None)
             if obj is None:         # path doesn't exist
-                yield item; continue
+                yield item
+                continue
 
             if not file_:
-                yield item; continue
+                yield item
+                continue
 
             # Set file field
             fti = getUtility(IDexterityFTI, name=item[typekey])
@@ -49,8 +51,9 @@ class NamedFileCreatorSection(object):
             # Don't pass the file descriptor but only the file's data as
             # a string, because else the source files get removed!
             filedata = file_.read()
+            filename = file_.name[file_.name.rfind('/') + 1:].decode('utf-8')
+            fileobj = field._type(filedata, filename=filename)
 
-            fileobj = field._type(filedata, filename=file_.name[file_.name.rfind('/')+1:].decode('utf-8'))
             field.set(field.interface(obj), fileobj)
 
             # Fire ObjectModifiedEvent so that digitally_available gets set
