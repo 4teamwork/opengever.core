@@ -144,9 +144,9 @@ class ChooseMethodStepForm(AcceptWizardFormMixin, Form):
     @property
     def label(self):
         if self.context.task_type == 'forwarding_task_type':
-             _(u'title_accept_forwarding', u'Accept forwarding')
+            _(u'title_accept_forwarding', u'Accept forwarding')
 
-        return  _(u'title_accept_task', u'Accept task')
+        return _(u'title_accept_task', u'Accept task')
 
     @buttonAndHandler(_(u'button_continue', default=u'Continue'),
                       name='save')
@@ -240,7 +240,8 @@ class ChooseMethodStepForm(AcceptWizardFormMixin, Form):
         super(ChooseMethodStepForm, self).updateWidgets()
         if self.context.task_type == 'forwarding_task_type':
             self.widgets.get('method').label = _(
-                u'label_accept_forwarding_choose_method', default="Accept forwarding and ...")
+                u'label_accept_forwarding_choose_method',
+                default="Accept forwarding and ...")
 
 
 class ChooseMethodStepView(FormWrapper, grok.View):

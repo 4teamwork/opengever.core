@@ -121,7 +121,7 @@ class Base(BrowserView):
             if response.rendered_text is None:
                 if response.mimetype == 'text/html':
                     html = response.text
-                elif response.text == None:
+                elif response.text is None:
                     html = ""
                 else:
                     html = trans.convertTo('text/html',

@@ -3,7 +3,8 @@ from Products.statusmessages.interfaces import IStatusMessage
 from five import grok
 from opengever.base.browser.wizard.interfaces import IWizardDataStorage
 from opengever.task import _
-from opengever.task.browser.accept.utils import accept_forwarding_with_successor
+from opengever.task.browser.accept.utils import \
+    accept_forwarding_with_successor
 from zope.component import getUtility
 
 
@@ -27,5 +28,6 @@ class CreateSuccesorForwardingView(grok.View):
             forwarding = accept_forwarding_with_successor(
                 self.context, oguid, text)
             IStatusMessage(self.request).addStatusMessage(
-                _(u'The forwarding has been stored in the local inbox'),'info')
+                _(u'The forwarding has been stored in the local inbox'),
+                'info')
             self.request.RESPONSE.redirect(forwarding.absolute_url())

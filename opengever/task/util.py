@@ -28,25 +28,31 @@ class UsersVocabulary(SimpleVocabulary):
 
 @grok.provider(IContextSourceBinder)
 def getTransitionVocab(context):
-    if AccessControl.getSecurityManager().getUser() == AccessControl.SpecialUsers.nobody:
+
+    if AccessControl.getSecurityManager(
+        ).getUser() == AccessControl.SpecialUsers.nobody:
         return SimpleVocabulary([])
+
     wftool = getToolByName(context, 'portal_workflow')
     transitions = []
-    if opengever.task.task.ITask.providedBy(context) and context.REQUEST.URL.find('++add++opengever.task.task') == -1:
+    if opengever.task.task.ITask.providedBy(context) and \
+            context.REQUEST.URL.find('++add++opengever.task.task') == -1:
         for tdef in wftool.getTransitionsFor(context):
-            transitions.append(SimpleVocabulary.createTerm(tdef['id'],
-                                                           tdef['id'],
-                                                           PMF(tdef['id'],
-                                                               default=tdef['title_or_id'])))
+            transitions.append(SimpleVocabulary.createTerm(
+                    tdef['id'],
+                    tdef['id'],
+                    PMF(tdef['id'], default=tdef['title_or_id'])))
         return SimpleVocabulary(transitions)
+
     else:
         wf = wftool.get(wftool.getChainForPortalType('opengever.task.task')[0])
         state = wf.states.get(wf.initial_state)
         for tid in state.transitions:
-            tdef= wf.transitions.get(tid, None)
-            transitions.append(SimpleVocabulary.createTerm(tdef.id,
-                                                           tdef.id,
-                                                           PMF(tdef.id, default=tdef.title_or_id)))
+            tdef = wf.transitions.get(tid, None)
+            transitions.append(SimpleVocabulary.createTerm(
+                    tdef.id,
+                    tdef.id,
+                    PMF(tdef.id, default=tdef.title_or_id)))
         return SimpleVocabulary(transitions)
 
 
@@ -65,11 +71,16 @@ def getTaskTypeVocabulary(context):
                       'unidirectional_by_value',
                       'bidirectional_by_reference',
                       'bidirectional_by_value']:
-        for term in wrap_vocabulary('opengever.task.'+task_type,
-                                    visible_terms_from_registry=\
-                                        'opengever.task.interfaces.ITaskSettings.' + \
-                                        task_type)(context):
-                                    terms.append(term)
+
+        reg_key = 'opengever.task.interfaces.ITaskSettings.%s' % (
+            task_type)
+
+        for term in wrap_vocabulary(
+            'opengever.task.%s' % (task_type),
+            visible_terms_from_registry=reg_key)(context):
+
+            terms.append(term)
+
     return SimpleVocabulary(terms)
 
 

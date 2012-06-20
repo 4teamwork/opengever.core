@@ -12,7 +12,8 @@ from opengever.base.source import RepositoryPathSourceBinder
 from opengever.task import _
 from opengever.task.browser.accept.main import AcceptWizardFormMixin
 from opengever.task.browser.accept.utils import accept_task_with_successor
-from opengever.task.browser.accept.utils import accept_forwarding_with_successor
+from opengever.task.browser.accept.utils import \
+    accept_forwarding_with_successor
 from opengever.task.browser.accept.utils import assign_forwarding_to_dossier
 from plone.directives.form import Schema
 from plone.z3cform.layout import FormWrapper
@@ -38,13 +39,13 @@ class IChooseDossierSchema(Schema):
         required=True,
 
         source=RepositoryPathSourceBinder(
-            object_provides='opengever.dossier.behaviors.dossier.' + \
+            object_provides='opengever.dossier.behaviors.dossier.'
                 'IDossierMarker',
             review_state='dossier-state-active',
             navigation_tree_query={
                 'object_provides': [
                     'opengever.repository.repositoryroot.IRepositoryRoot',
-                    'opengever.repository.repositoryfolder.' + \
+                    'opengever.repository.repositoryfolder.'
                         'IRepositoryFolderSchema',
                     'opengever.dossier.behaviors.dossier.IDossierMarker',
                     ],
@@ -112,7 +113,7 @@ class ChooseDossierStepForm(AcceptWizardFormMixin, Form):
 
                 else:
                     task = accept_forwarding_with_successor(
-                        self.context, oguid, text, dossier = data['dossier'])
+                        self.context, oguid, text, dossier=data['dossier'])
                     IStatusMessage(self.request).addStatusMessage(
                         _(u'The forwarding has been stored in the local inbox '
                           u'and the succesor task has been created'), 'info')

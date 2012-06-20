@@ -88,8 +88,8 @@ class RelatedDocumentsCatalogTableSource(
         for item in self.config.context.relatedItems:
             obj = item.to_object
 
-            if (obj.portal_type == 'opengever.document.document'\
-                    or obj.portal_type == 'ftw.mail.mail'):
+            if obj.portal_type in [
+                'opengever.document.document', 'ftw.mail.mail']:
 
                 brain = uuidToCatalogBrain(IUUID(obj))
 

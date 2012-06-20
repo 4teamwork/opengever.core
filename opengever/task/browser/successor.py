@@ -47,14 +47,13 @@ class ISuccessorTaskSchema(form.Schema):
         )
 
 
-
 class SuccessorTaskForm(Form):
     """Successor task form.
     """
 
     fields = Fields(ISuccessorTaskSchema)
     fields['dossier'].widgetFactory = AutocompleteFieldWidget
-    label=_(u'title_create_successor_task', default=u'Create successor task')
+    label = _(u'title_create_successor_task', default=u'Create successor task')
     ignoreContext = True
 
     @buttonAndHandler(_(u'button_continue', default=u'Continue'))
@@ -132,7 +131,6 @@ class SuccessorTaskForm(Form):
     def handle_cancel(self, action):
         return self.request.RESPONSE.redirect('.')
 
-
     def get_documents(self):
         """All documents which are either within the current task or defined
         as related items.
@@ -166,7 +164,6 @@ class CreateSuccessorTask(layout.FormWrapper, grok.View):
     def __init__(self, *args, **kwargs):
         layout.FormWrapper.__init__(self, *args, **kwargs)
         grok.View.__init__(self, *args, **kwargs)
-
 
 
 class CleanupSuccessor(grok.View):

@@ -88,6 +88,7 @@ class WizardFormMixin(object):
 
 from plone.formwidget.autocomplete.widget import AutocompleteSelectionWidget
 
+
 class ExtendedAutocompleteSelectionWidget(AutocompleteSelectionWidget):
     """Make it possible to add custom url parameters to the source url.
     """
@@ -105,11 +106,12 @@ class ExtendedAutocompleteSelectionWidget(AutocompleteSelectionWidget):
         url = "%s/++widget++%s/@@autocomplete-search%s" % (
             form_url, widget_name, self.custom_url_parameters())
 
-        js_callback = self.js_callback_template % dict(id=self.id,
-                                                       name=self.name,
-                                                       klass=self.klass,
-                                                       title=self.title,
-                                                       termCount=len(self.terms))
+        js_callback = self.js_callback_template % dict(
+            id=self.id,
+            name=self.name,
+            klass=self.klass,
+            title=self.title,
+            termCount=len(self.terms))
 
         return self.js_template % dict(id=self.id,
                                        url=url,
@@ -211,7 +213,6 @@ class ChooseDossierForm(z3c.form.form.Form, WizardFormMixin):
         super(ChooseDossierForm, self).update()
 
 
-
 class ChooseDossierView(layout.FormWrapper, grok.View):
     grok.context(ITask)
     grok.name('choose_source_dossier')
@@ -225,10 +226,7 @@ class ChooseDossierView(layout.FormWrapper, grok.View):
     __call__ = layout.FormWrapper.__call__
 
 
-
 # ------------------- CHOSE DOCUMENT --------------------------
-
-
 class IChooseDocumentSchema(IChooseDossierSchema):
     """ Select a document from the previously selected dossier
     """
@@ -239,7 +237,6 @@ class IChooseDocumentSchema(IChooseDossierSchema):
         vocabulary=u'opengever.ogds.base.DocumentInSelectedDossierVocabulary',
         required=True,
         )
-
 
 
 class ChooseDocumentForm(z3c.form.form.Form, WizardFormMixin):
@@ -265,8 +262,8 @@ class ChooseDocumentForm(z3c.form.form.Form, WizardFormMixin):
             home_clients = info.get_assigned_clients()
 
             if client not in home_clients:
-                raise ValueError('Expected %s to be a ' % data['client'] + \
-                                     'assigned client of the current user.')
+                raise ValueError('Expected %s to be a assigned client '
+                                 'of the current user.' % data['client'])
 
             cid = client.client_id
 
@@ -289,7 +286,6 @@ class ChooseDocumentForm(z3c.form.form.Form, WizardFormMixin):
         self.widgets['source_dossier'].mode = HIDDEN_MODE
 
 
-
 class ChooseDocumentView(layout.FormWrapper, grok.View):
     grok.context(ITask)
     grok.name('choose_source_document')
@@ -301,5 +297,3 @@ class ChooseDocumentView(layout.FormWrapper, grok.View):
         grok.View.__init__(self, *args, **kwargs)
 
     __call__ = layout.FormWrapper.__call__
-
-

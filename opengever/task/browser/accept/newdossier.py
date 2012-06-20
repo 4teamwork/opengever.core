@@ -13,7 +13,8 @@ from opengever.globalindex.interfaces import ITaskQuery
 from opengever.repository.interfaces import IRepositoryFolder
 from opengever.task import _
 from opengever.task.browser.accept.main import AcceptWizardFormMixin
-from opengever.task.browser.accept.utils import accept_forwarding_with_successor
+from opengever.task.browser.accept.utils import \
+    accept_forwarding_with_successor
 from opengever.task.browser.accept.utils import accept_task_with_successor
 from opengever.task.browser.accept.utils import assign_forwarding_to_dossier
 from plone.dexterity.i18n import MessageFactory as dexterityMF
@@ -84,12 +85,12 @@ class ISelectRepositoryfolderSchema(Schema):
         required=True,
 
         source=RepositoryPathSourceBinder(
-            object_provides='opengever.repository.repositoryfolder.' + \
+            object_provides='opengever.repository.repositoryfolder.'
                 'IRepositoryFolderSchema',
             navigation_tree_query={
                 'object_provides': [
                     'opengever.repository.repositoryroot.IRepositoryRoot',
-                    'opengever.repository.repositoryfolder.' + \
+                    'opengever.repository.repositoryfolder.'
                         'IRepositoryFolderSchema',
                     ]
                 }))
@@ -268,10 +269,7 @@ class SelectDossierTypeStepView(FormWrapper, grok.View):
         grok.View.__init__(self, *args, **kwargs)
 
 
-
 # ------------------- DOSSIER ADD FORM --------------------------
-
-
 class DossierAddFormView(FormWrapper, grok.View):
     grok.context(IRepositoryFolder)
     grok.name('accept_dossier_add_form')
