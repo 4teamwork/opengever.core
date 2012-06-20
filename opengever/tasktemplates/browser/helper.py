@@ -3,7 +3,7 @@ from opengever.tasktemplates.vocabularies import interactive_users
 from plone.memoize import ram
 
 
-@ram.cache(lambda m,i,author: author)
+@ram.cache(lambda m, i, author: author)
 def interactive_user_helper(item, value):
     """Helper method for `ftw.table` which is able to translate the
     available interactive users (from vocabluaries) or effective OGDS

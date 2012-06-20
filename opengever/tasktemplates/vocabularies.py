@@ -25,7 +25,6 @@ class IssuerVocabularyFactory(ContactsAndUsersVocabularyFactory):
     extended by the interactive users.
     """
 
-
     grok.provides(IVocabularyFactory)
     grok.name('opengever.tasktemplates.IssuerVocabulary')
 
@@ -81,4 +80,3 @@ class ResponsibleVocabularyFactory(UsersAndInboxesVocabularyFactory):
         else:
             for e in UsersAndInboxesVocabularyFactory.key_value_provider(self):
                 yield e
-

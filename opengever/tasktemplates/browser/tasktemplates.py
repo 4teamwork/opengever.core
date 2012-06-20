@@ -14,7 +14,7 @@ from zope.interface import implements, Interface
 
 
 def preselected_helper(item, value):
-    if value == True:
+    if value is True:
         return translate(
             _(u'preselected_yes', default=u'Yes'),
             context=getSite().REQUEST)
