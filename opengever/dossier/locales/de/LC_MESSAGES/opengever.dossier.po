@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "POT-Creation-Date: 2012-06-18 11:58+0000\n"
-"PO-Revision-Date: 2012-06-21 14:54+0200\n"
+"PO-Revision-Date: 2012-06-21 16:37+0200\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
 "MIME-Version: 1.0\n"
@@ -75,7 +75,7 @@ msgstr "Sie dürfen dieses Objekt nicht an den Zielort verschieben"
 
 #: ./opengever/dossier/resolve.py:74
 msgid "It isn't possible to reactivate a sub dossier."
-msgstr "Es ist nicht möglich das Subdossier wieder zueröffnen, das Hauptdossier muss wieder eröffnet werden."
+msgstr "Es ist nicht möglich das Subdossier wieder zu eröffnen, das Hauptdossier muss wieder eröffnet werden."
 
 #: ./opengever/dossier/profiles/default/actions.xml
 msgid "Move Items"
