@@ -35,7 +35,7 @@ class DocumentReadFile(filerepresentation.DefaultReadFile, grok.Adapter):
 
             # TODO: XXX
             # copy Document.data in to a temporary file, so we can avoid the
-            # the error: 
+            # the error:
             #    BlobError: Already opened for reading.
             tmp = tempfile.TemporaryFile(mode='w+b')
             tmp.write(self.filefield.data)
@@ -62,6 +62,7 @@ class DocumentReadFile(filerepresentation.DefaultReadFile, grok.Adapter):
 
     def size(self):
         return self.filefield.getSize()
+
 
 class DocumentWriteFile(filerepresentation.DefaultWriteFile, grok.Adapter):
     grok.implements(IRawWriteFile)

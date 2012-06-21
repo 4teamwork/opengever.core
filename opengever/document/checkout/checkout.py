@@ -57,9 +57,11 @@ class CheckoutDocuments(grok.View):
             if not IDocumentSchema.providedBy(obj):
                 # notify the user. we have a no-checkoutable object
                 msg = _(
-                    u'Could not check out object: ${title}, it is not a document',
+                    u'Could not check out object: ${title}, '
+                    'it is not a document',
                     mapping={'title': obj.Title().decode('utf-8')})
-                IStatusMessage(self.request).addStatusMessage(msg, type='error')
+                IStatusMessage(
+                    self.request).addStatusMessage(msg, type='error')
                 continue
 
             self.checkout(obj)

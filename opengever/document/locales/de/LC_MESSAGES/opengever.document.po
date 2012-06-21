@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2012-05-21 14:08+0000\n"
-"PO-Revision-Date: 2011-10-04 16:17+0200\n"
+"POT-Creation-Date: 2012-06-21 08:17+0000\n"
+"PO-Revision-Date: 2012-06-21 10:18+0200\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
 "MIME-Version: 1.0\n"
@@ -21,12 +21,12 @@ msgstr "Widerrufen"
 msgid "Cancel checkout: ${title}"
 msgstr "Checkout abgebrochen für ${title}"
 
-#: ./opengever/document/checkout/checkin.py:65
+#: ./opengever/document/checkout/checkin.py:63
 msgid "Checked in: ${title}"
 msgstr "Dokument eingecheckt: ${title}"
 
 #: ./opengever/document/browser/edit.py:66
-#: ./opengever/document/checkout/checkout.py:105
+#: ./opengever/document/checkout/checkout.py:107
 msgid "Checked out: ${title}"
 msgstr "Dokument ausgecheckt: ${title}"
 
@@ -44,16 +44,16 @@ msgstr "Auschecken"
 msgid "Could not cancel checkout on document ${title}"
 msgstr "Das Auschecken des Dokuments ${title} konnte nicht widerrufen werden."
 
-#: ./opengever/document/checkout/checkin.py:74
+#: ./opengever/document/checkout/checkin.py:73
 msgid "Could not check in ${title}, it is not a document."
 msgstr "${title} ist kein Dokument und konnte deshalb nicht eingecheckt werden."
 
-#: ./opengever/document/checkout/checkin.py:58
+#: ./opengever/document/checkout/checkin.py:55
 msgid "Could not check in document ${title}"
 msgstr "Konnte Dokument nicht einchecken: ${title}"
 
 #: ./opengever/document/browser/edit.py:55
-#: ./opengever/document/checkout/checkout.py:96
+#: ./opengever/document/checkout/checkout.py:98
 msgid "Could not check out document ${title}"
 msgstr "Konnte Dokument nicht auschecken: ${title}"
 
@@ -69,11 +69,11 @@ msgstr "Aufgabe erstellen"
 msgid "Document"
 msgstr "Dokument"
 
-#: ./opengever/document/document_templates/logout_overlay.pt:17
+#: ./opengever/document/browser/logout_overlay_templates/logout_overlay.pt:18
 msgid "Logout"
 msgstr "GEVER verlassen"
 
-#: ./opengever/document/checkout/manager.py:230
+#: ./opengever/document/checkout/manager.py:226
 #: ./opengever/document/checkout/revert.py:26
 msgid "Reverted file to version ${version_id}"
 msgstr "Datei des Dokuments auf Version ${version_id} zurückgesetzt."
@@ -92,42 +92,28 @@ msgid "The Document is allready checked out by: ${userid}"
 msgstr "Das Dokument ist bereits von ${userid} ausgecheckt."
 
 #: ./opengever/document/checkout/cancel.py:29
-#: ./opengever/document/checkout/checkin.py:182
+#: ./opengever/document/checkout/checkin.py:157
 #: ./opengever/document/checkout/checkout.py:33
 msgid "You have not selected any documents"
 msgstr "Sie haben keine Dokumente ausgewählt."
 
 #. Default: "You have not checked in documents. Do you realy want to logout?"
-#: ./opengever/document/document_templates/logout_overlay.pt:3
+#: ./opengever/document/browser/logout_overlay_templates/logout_overlay.pt:3
 msgid "alert_not_checked_in_documents"
 msgstr "Sie haben noch ausgecheckte Dokumente. Wollen sie Gever wirklich verlassen?"
 
-#: ./opengever/document/templates/sendasemail.pt:14
-msgid "attachments"
-msgstr "Anhänge"
-
 #. Default: "Cancel"
-#: ./opengever/document/checkout/checkin.py:99
+#: ./opengever/document/checkout/checkin.py:83
 msgid "button_cancel"
 msgstr "Abbrechen"
 
 #. Default: "Checkin"
-#: ./opengever/document/checkout/checkin.py:43
+#: ./opengever/document/checkout/checkin.py:40
 msgid "button_checkin"
 msgstr "Einchecken"
 
-#. Default: "Send"
-#: ./opengever/document/mailing.py:188
-msgid "button_send"
-msgstr "Senden"
-
-#. Default: "Cancel"
-#: ./opengever/document/mailing.py:224
-msgid "cancel_back"
-msgstr "Abbrechen"
-
 #. Default: "copy of"
-#: ./opengever/document/document.py:369
+#: ./opengever/document/document.py:379
 msgid "copy_of"
 msgstr "Kopie von"
 
@@ -153,14 +139,9 @@ msgid "fieldset_common"
 msgstr "Allgemein"
 
 #. Default: "Checkin Documents"
-#: ./opengever/document/checkout/checkin.py:41
+#: ./opengever/document/checkout/checkin.py:38
 msgid "heading_checkin_comment_form"
 msgstr "Dokumente einchecken"
-
-#. Default: "Send as email"
-#: ./opengever/document/mailing.py:184
-msgid "heading_send_as_email"
-msgstr "Dokumente als E-Mail versenden"
 
 #. Default: ""
 #: ./opengever/document/document.py:170
@@ -172,7 +153,7 @@ msgid "help_author"
 msgstr ""
 
 #. Default: "Describe, why you checkin the selected documents"
-#: ./opengever/document/checkout/checkin.py:29
+#: ./opengever/document/checkout/checkin.py:26
 msgid "help_checkin_journal_comment"
 msgstr "Was wurde am Dokument geändert?"
 
@@ -212,10 +193,6 @@ msgstr "Referenz auf das entsprechende Dossier des Absenders"
 msgid "help_keywords"
 msgstr ""
 
-#: ./opengever/document/mailing.py:177
-msgid "help_message"
-msgstr ""
-
 #. Default: ""
 #: ./opengever/document/document.py:162
 msgid "help_preserved_as_paper"
@@ -230,26 +207,13 @@ msgstr "Online Voransicht des Originaldokuments"
 msgid "help_receipt_date"
 msgstr "Datum, an dem das Dokument über den Korrespondenzweg angekommen ist"
 
-#: ./opengever/document/mailing.py:168
-msgid "help_receivers"
-msgstr ""
-
-#: ./opengever/document/mailing.py:173
-msgid "help_subject"
-msgstr ""
-
 #. Default: ""
 #: ./opengever/document/document.py:177
 msgid "help_thumbnail"
 msgstr ""
 
-#. Default: "Mails sent"
-#: ./opengever/document/mailing.py:219
-msgid "info_mails_sent"
-msgstr "Die E-Mails wurden versandt"
-
 #. Default: "Initial version"
-#: ./opengever/document/checkout/handlers.py:36
+#: ./opengever/document/checkout/handlers.py:43
 msgid "initial_document_version_change_note"
 msgstr "Dokument erstellt (Initialversion)"
 
@@ -275,7 +239,7 @@ msgid "label_checked_out"
 msgstr "Ausgecheckt"
 
 #. Default: "Journal Comment"
-#: ./opengever/document/checkout/checkin.py:27
+#: ./opengever/document/checkout/checkin.py:24
 msgid "label_checkin_journal_comment"
 msgstr "Journal-Kommentar"
 
@@ -336,11 +300,6 @@ msgstr "Fremdzeichen"
 msgid "label_keywords"
 msgstr "Schlagworte"
 
-#. Default: "Message"
-#: ./opengever/document/mailing.py:176
-msgid "label_message"
-msgstr "Nachricht"
-
 #. Default: "no"
 #: ./opengever/document/document_templates/overview.pt:47
 msgid "label_no"
@@ -363,11 +322,6 @@ msgstr "Vorschau"
 msgid "label_receipt_date"
 msgstr "Eingangsdatum"
 
-#. Default: "Receivers"
-#: ./opengever/document/mailing.py:167
-msgid "label_receivers"
-msgstr "Empfänger"
-
 #. Default: "Reference Number:"
 #: ./opengever/document/viewlets/byline.pt:49
 msgid "label_reference_number"
@@ -387,11 +341,6 @@ msgstr "Laufnummer:"
 #: ./opengever/document/viewlets/byline.pt:25
 msgid "label_start_byline"
 msgstr "Dokumentdatum:"
-
-#. Default: "Subject"
-#: ./opengever/document/mailing.py:172
-msgid "label_subject"
-msgstr "Betreff"
 
 #. Default: "Thumbnail"
 #: ./opengever/document/document.py:176
@@ -414,7 +363,7 @@ msgid "message_checkout_info"
 msgstr "Dieses Dokument wurde von ${creator} ausgecheckt."
 
 #. Default: "Following documents are checked out:"
-#: ./opengever/document/document_templates/logout_overlay.pt:8
+#: ./opengever/document/browser/logout_overlay_templates/logout_overlay.pt:8
 msgid "overview_not_checked_in_documents"
 msgstr "Folgende Dokumente sind ausgecheckt:"
 

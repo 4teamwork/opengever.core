@@ -19,7 +19,7 @@ class DocumentByline(content.DocumentBylineViewlet):
         return document.start
 
     def responsible(self):
-        mt=getToolByName(self.context, 'portal_membership')
+        mt = getToolByName(self.context, 'portal_membership')
         document = IDocumentSchema(self.context)
         return mt.getMemberById(document.responsible)
 

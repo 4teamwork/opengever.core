@@ -31,13 +31,14 @@ def add_catalog_indexes(context, logger=None):
     # Specify the indexes you want, with ('index_name', 'index_type')
     wanted = (
         ('delivery_date', 'DateIndex', {}),
-        ('document_author', 'ZCTextIndex', {'index_type': 'Okapi BM25 Rank',
-                                            'lexicon_id': 'plone_lexicon'}),
+        ('document_author', 'ZCTextIndex',
+         {'index_type': 'Okapi BM25 Rank',
+          'lexicon_id': 'plone_lexicon'}),
         ('checked_out', 'FieldIndex', {}),
         ('document_date', 'DateIndex', {}),
         ('receipt_date', 'DateIndex', {}),
         ('related_items', 'KeywordIndex', {}),
-        ('sortable_author','FieldIndex', {}),
+        ('sortable_author', 'FieldIndex', {}),
         )
     indexables = []
     for name, meta_type, args in wanted:

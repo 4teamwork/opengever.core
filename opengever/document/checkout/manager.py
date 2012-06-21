@@ -59,11 +59,9 @@ class CheckinCheckoutManager(grok.MultiAdapter):
 
         return True
 
-
     def checkout(self):
         """Checkout the adapted document.
         """
-
         # is the user allowed to checkout?
         if not self.is_checkout_allowed():
             raise Unauthorized
@@ -111,7 +109,6 @@ class CheckinCheckoutManager(grok.MultiAdapter):
         else:
             return False
 
-
     def checkin(self, comment=''):
         """Checkin the adapted document, using the `comment` for the
         journal entry.
@@ -135,7 +132,6 @@ class CheckinCheckoutManager(grok.MultiAdapter):
 
         # fire the event
         notify(ObjectCheckedInEvent(self.context, comment))
-
 
     def is_cancel_allowed(self):
         """Checks whether the user is able to cancel a checkout.

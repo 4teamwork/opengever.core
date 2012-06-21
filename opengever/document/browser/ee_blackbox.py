@@ -2,7 +2,8 @@ from datetime import datetime
 from five import grok
 from opengever.document.document import IDocumentSchema
 import logging
-import os, errno
+import os
+import errno
 
 
 logger = logging.getLogger('opengever.document')
@@ -11,15 +12,17 @@ logger = logging.getLogger('opengever.document')
 def mkdir_p(path):
     try:
         os.makedirs(path)
-    except OSError as exc: # Python >2.5
+    except OSError as exc:
+         # Python >2.5
         if exc.errno == errno.EEXIST:
             pass
-        else: raise
+        else:
+            raise
 
 
 class ExternalEditorBlackboxUploadView(grok.View):
-    """ This view accepts a blackbox file (ZIP of EE related debugging info) via POST
-    request and saves it to the var directory of the current buildout.
+    """ This view accepts a blackbox file (ZIP of EE related debugging info)
+    via POST request and saves it to the var directory of the current buildout.
     """
     grok.context(IDocumentSchema)
     grok.name('ee-blackbox-upload')
@@ -46,6 +49,7 @@ class ExternalEditorBlackboxUploadView(grok.View):
         outfile = open(path, 'w')
         outfile.write(file_data)
         outfile.close()
-        logger.info("Blackbox from EE session (status: %s) saved to %s" % (ee_session_status, path))
+        logger.info("Blackbox from EE session (status: %s) saved to %s" % (
+                ee_session_status, path))
 
         return 'OK'

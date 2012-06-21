@@ -16,7 +16,6 @@ class ObjectCheckedOutEvent(ObjectEvent):
         self.comment = comment
 
 
-
 class ObjectCheckedInEvent(ObjectEvent):
     """ The ObjectCheckedInEvent is triggered when a object
     was checked in.
@@ -26,7 +25,6 @@ class ObjectCheckedInEvent(ObjectEvent):
     def __init__(self, obj, comment):
         self.object = obj
         self.comment = comment
-
 
 
 class ObjectCheckoutCanceledEvent(ObjectEvent):

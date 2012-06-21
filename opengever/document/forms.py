@@ -28,7 +28,7 @@ class DocumentEditForm(DefaultEditForm):
                 or manager.checked_out() != current_user_id):
             filefields = [g.fields.get('file') for g in self.groups
                           if 'file' in g.fields]
-            if len(filefields)>0:
+            if len(filefields) > 0:
                 filefields[0].mode = DISPLAY_MODE
 
 
