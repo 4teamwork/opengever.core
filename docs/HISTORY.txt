@@ -5,6 +5,9 @@ Changelog
 2.0.5 (unreleased)
 ------------------
 
+- Templatedossier: Adjust edit permission, normal user should not have the right to edit.
+  [phgross]
+
 - Templatedossier: Disalbe some columns in the document and trash listings.
   [phgross]
 
