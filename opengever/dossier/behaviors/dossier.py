@@ -106,7 +106,7 @@ class IDossier(form.Schema):
         title=_(u'filing_prefix', default="filing prefix"),
         source=wrap_vocabulary(
             'opengever.dossier.type_prefixes',
-            visible_terms_from_registry="opengever.dossier" + \
+            visible_terms_from_registry="opengever.dossier"
                 '.interfaces.IDossierContainerTypes.type_prefixes'),
         required=False,
         )
@@ -133,7 +133,7 @@ class IDossier(form.Schema):
         description=_(u'help_container_type', default=u''),
         source=wrap_vocabulary(
             'opengever.dossier.container_types',
-            visible_terms_from_registry="opengever.dossier" + \
+            visible_terms_from_registry="opengever.dossier"
                 '.interfaces.IDossierContainerTypes.container_types'),
         required=False,
         )
@@ -157,12 +157,12 @@ class IDossier(form.Schema):
         value_type=RelationChoice(
             title=u"Related",
             source=RepositoryPathSourceBinder(
-                object_provides='opengever.dossier.behaviors.dossier.' + \
+                object_provides='opengever.dossier.behaviors.dossier.'
                     'IDossierMarker',
                 navigation_tree_query={
                     'object_provides': [
                         'opengever.repository.repositoryroot.IRepositoryRoot',
-                        'opengever.repository.repositoryfolder.' + \
+                        'opengever.repository.repositoryfolder.'
                             'IRepositoryFolderSchema',
                         'opengever.dossier.behaviors.dossier.IDossierMarker',
                         ]

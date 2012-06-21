@@ -71,10 +71,10 @@ def deactivate_subdossiers(dossier, event):
         subdossiers = dossier.portal_catalog(
             provided_by="opengever.dossier.behaviors.dossier.IDossierMarker",
             path=dict(depth=1,
-                query='/'.join(dossier.getPhysicalPath()),
-            ),
+                      query='/'.join(dossier.getPhysicalPath()),
+                      ),
             sort_on='filing_no',
-        )
+            )
 
         wft = dossier.portal_workflow
         for subdossier in subdossiers:

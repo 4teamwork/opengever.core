@@ -31,7 +31,7 @@ class DossierOverview(grok.View, OpengeverTab):
         if not self.context.show_subdossier():
             items = [
                 [dict(id='newest_tasks', content=self.tasks(), href='tasks'),
-                ],
+                 ],
                 [dict(id='participants', content=self.sharing()), ],
                 [dict(id='newest_documents', content=self.documents(),
                       href='documents'),
@@ -58,13 +58,13 @@ class DossierOverview(grok.View, OpengeverTab):
         documents = self.catalog(
             ['opengever.document.document', 'ftw.mail.mail', ])[:10]
         document_list = [{
-            'Title': document.Title,
-            'getURL': document.getURL,
-            'alt': document.document_date and \
+                'Title': document.Title,
+                'getURL': document.getURL,
+                'alt': document.document_date and
                 document.document_date.strftime('%d.%m.%Y') or '',
-            'css_class': get_css_class(document),
-            'portal_type': document.portal_type,
-        } for document in documents]
+                'css_class': get_css_class(document),
+                'portal_type': document.portal_type,
+                } for document in documents]
 
         return document_list
 

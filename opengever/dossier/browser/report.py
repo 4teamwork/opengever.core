@@ -88,7 +88,7 @@ class DossierReporter(grok.View):
         dossier_attributes = [
             {'id':'Title',
              'title':_('label_title', default=u'title'),
-            'transform':to_unicode},
+             'transform':to_unicode},
             {'id':'start',
              'title':_(u'label_start', default=u'Opening Date'),
              'transform':format_datetime,
@@ -113,12 +113,11 @@ class DossierReporter(grok.View):
              'title':_(u'filing_no', default="Filing number")},
             {'id':'review_state',
              'title':_('label_review_state', default='Review state'),
-             'transform':StringTranslater(
-                self.request, 'plone').translate},
+             'transform':StringTranslater(self.request, 'plone').translate},
             {'id':'reference',
              'title':_(u'label_reference_number',
                        default=u'Reference Number')},
-        ]
+            ]
 
         # generate the xls data with the XLSReporter
         reporter = XLSReporter(

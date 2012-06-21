@@ -141,7 +141,6 @@ class Participants(grok.View, OpengeverTab, ListingView):
     render = __call__
 
 
-
 class ParticipantsTableSource(grok.MultiAdapter, BaseTableSource):
     """
     """
@@ -180,7 +179,6 @@ class ParticipantsTableSource(grok.MultiAdapter, BaseTableSource):
 
         return results
 
-
     def extend_query_with_textfilter(self, results, text):
         if not len(text):
             return results
@@ -206,4 +204,3 @@ class ParticipantsTableSource(grok.MultiAdapter, BaseTableSource):
 
     def search_results(self, results):
         return results
-

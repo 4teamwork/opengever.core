@@ -10,16 +10,16 @@ from plone.app.layout.viewlets import content
 from opengever.dossier.behaviors.dossier import IDossier
 
 
-
 class IProjectDossier(form.Schema):
     """ A project dossier
     """
 
     # just an example field for a project dossier
     project_manager = schema.TextLine(
-            title = u'Project Manager',
-            required = False
+            title=u'Project Manager',
+            required=False
     )
+
 
 class Byline(grok.Viewlet, content.DocumentBylineViewlet):
     grok.viewletmanager(IBelowContentTitle)
@@ -30,7 +30,6 @@ class Byline(grok.Viewlet, content.DocumentBylineViewlet):
 
     def get_css_class(self):
         return get_css_class(self.context)
-
 
     def start(self):
         dossier = IDossier(self.context)
@@ -44,8 +43,9 @@ class Byline(grok.Viewlet, content.DocumentBylineViewlet):
     def workflow_state(self):
         #context = aq_inner(self.context)
         state = self.context_state.workflow_state()
-        workflows = self.tools.workflow().getWorkflowsFor(self.context.aq_explicit)
+        workflows = self.tools.workflow().getWorkflowsFor(
+            self.context.aq_explicit)
         if workflows:
             for w in workflows:
-                if w.states.has_key(state):
+                if state in w.states:
                     return w.states[state].title or state

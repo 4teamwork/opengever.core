@@ -58,9 +58,7 @@ class WizardFormMixin(object):
                    'class': ' '.join(classes)}
 
 
-
 # ------------------- CUSTOM WIDGETS ----------------------
-
 class DossierAutocompleteSelectionWidget(AutocompleteSelectionWidget):
     """Autocomplete widget for selecting a dossier from a client.
     """
@@ -108,20 +106,22 @@ class DossierAutocompleteSelectionWidget(AutocompleteSelectionWidget):
         url = "%s/++widget++%s/@@autocomplete-search%s" % (
             form_url, widget_name, self.custom_url_parameters())
 
-        js_callback = self.js_callback_template % dict(id=self.id,
-                                                       name=self.name,
-                                                       klass=self.klass,
-                                                       title=self.title,
-                                                       termCount=len(self.terms))
+        js_callback = self.js_callback_template % dict(
+            id=self.id,
+            name=self.name,
+            klass=self.klass,
+            title=self.title,
+            termCount=len(self.terms))
 
-        return self.js_template % dict(id=self.id,
-                                       url=url,
-                                       minLength=self.minLength,
-                                       js_callback=js_callback,
-                                       klass=self.klass,
-                                       title=self.title,
-                                       input_type=self.input_type,
-                                       js_extra=self.js_extra())
+        return self.js_template % dict(
+            id=self.id,
+            url=url,
+            minLength=self.minLength,
+            js_callback=js_callback,
+            klass=self.klass,
+            title=self.title,
+            input_type=self.input_type,
+            js_extra=self.js_extra())
 
 
 @implementer(IFieldWidget)
@@ -129,15 +129,14 @@ def DossierAutocompleteFieldWidget(field, request):
     return FieldWidget(field, DossierAutocompleteSelectionWidget(request))
 
 
-
 # ------------------- CHOOSE HOME CLIENT ----------------------
-
 
 class IChooseClientSchema(form.Schema):
     """Schema interface for choosing a sorurce client.
     """
 
-    paths = schema.TextLine(title=u'Selected Items') # hidden
+     # hidden
+    paths = schema.TextLine(title=u'Selected Items')
     client = schema.Choice(
         title=_(u'label_source_client',
                 default=u'Client'),
@@ -218,10 +217,11 @@ class ChooseClientView(layout.FormWrapper, grok.View):
             # we have only one client - selecting this one does not make sense.
             # so we redirect to the next wizard step.
             self.form_instance.update()
-            data = urllib.urlencode(
-                {'form.widgets.paths': ';;'.join(
+            data = urllib.urlencode({
+                    'form.widgets.paths': ';;'.join(
                         self.form_instance.item_paths),
-                 'form.widgets.client': voc[0].token})
+                    'form.widgets.client': voc[0].token})
+
             target = self.context.absolute_url() + \
                 '/@@copy-documents-to-remote-client2?' + data
             return self.request.RESPONSE.redirect(target)
@@ -230,21 +230,17 @@ class ChooseClientView(layout.FormWrapper, grok.View):
             return layout.FormWrapper.__call__(self)
 
 
-
-
 # ------------------- CHOSE DOSSIER --------------------------
-
-
 
 class IChooseDossierSchema(IChooseClientSchema):
     """ Form for choosing a target directory
     """
 
     target_dossier = schema.Choice(
-        title = _(u'label_target_dossier', default=u'Target Dossier'),
-        description = _(u'help_target_dossier', default=u''),
+        title=_(u'label_target_dossier', default=u'Target Dossier'),
+        description=_(u'help_target_dossier', default=u''),
         vocabulary=u'opengever.ogds.base.HomeDossiersVocabulary',
-        required = True,
+        required=True,
         )
 
 
@@ -263,7 +259,7 @@ class CopyDocumentsToRemoteClientForm(z3c.form.form.Form, WizardFormMixin):
     @z3c.form.button.buttonAndHandler(_(u'button_copy', default=u'Copy'))
     def handle_copy(self, action):
         data, errors = self.extractData()
-        if len(errors)==0:
+        if len(errors) == 0:
 
             info = getUtility(IContactInformation)
             client = info.get_client_by_id(data['client'])
@@ -296,11 +292,12 @@ class CopyDocumentsToRemoteClientForm(z3c.form.form.Form, WizardFormMixin):
         tabbed view
         """
         catalog = self.context.portal_catalog
+
         def lookup(path):
             query = {
-                'path' : {
-                    'query' : path,
-                    'depth' : 0,
+                'path': {
+                    'query': path,
+                    'depth': 0,
                     }
                 }
             return catalog(query)[0].getObject()

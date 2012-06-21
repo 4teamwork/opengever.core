@@ -27,7 +27,7 @@ class IMoveItemsSchema(Interface):
         source=ObjPathSourceBinder(
             object_provides=[
                 'opengever.dossier.behaviors.dossier.IDossierMarker',
-                'opengever.repository.repositoryfolder.' \
+                'opengever.repository.repositoryfolder.'
                 'IRepositoryFolderSchema']
             ),
         required=True,
@@ -207,7 +207,7 @@ class DestinationValidator(validator.SimpleFieldValidator):
         if failed_objects:
             raise NotInContentTypes(
                 _(u"error_NotInContentTypes ${failed_objects}",
-                  default=u"It isn't allowed to add such items there: "\
+                  default=u"It isn't allowed to add such items there: "
                            "${failed_objects}", mapping=dict(
                            failed_objects=', '.join(failed_objects))))
 

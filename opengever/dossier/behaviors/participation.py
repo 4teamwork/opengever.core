@@ -99,8 +99,8 @@ class IParticipation(form.Schema):
         value_type=schema.Choice(
             source=wrap_vocabulary(
                 'opengever.dossier.participation_roles',
-                visible_terms_from_registry='opengever.dossier' + \
-                    '.interfaces.IDossierParticipants.roles'),
+                visible_terms_from_registry='opengever.dossier'
+                '.interfaces.IDossierParticipants.roles'),
             ),
         required=True,
         missing_value=[],
@@ -122,7 +122,7 @@ class Participation(Persistent):
 
     @setproperty
     def roles(self, value):
-        if value == None:
+        if value is None:
             pass
         elif not isinstance(value, PersistentList):
             value = PersistentList(value)

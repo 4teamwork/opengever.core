@@ -49,7 +49,7 @@ class FilingNumberMaintenance(BrowserView):
             if key != temp:
                 self.log(' -------------------------------- \n')
                 temp = key
-            self.log(no.encode('utf-8')+ '\n')
+            self.log(no.encode('utf-8') + '\n')
 
     def print_filing_prefixes(self):
         """Reutrns all filing prefixes and their translations"""
@@ -57,7 +57,7 @@ class FilingNumberMaintenance(BrowserView):
                 self.context, 'opengever.dossier.type_prefixes')
 
         for term in voca:
-            self.log('%s: %s' %(term.value, term.title))
+            self.log('%s: %s' % (term.value, term.title))
 
 
 class IFilingNumberRowSchema(Interface):
@@ -79,7 +79,7 @@ def set_counters(data):
 
     if FILING_NO_KEY in ann.keys():
         entries = []
-        for k,v in ann.get(FILING_NO_KEY).items():
+        for k, v in ann.get(FILING_NO_KEY).items():
             entries.append({'key': k, 'counter': v.value})
         return entries
 

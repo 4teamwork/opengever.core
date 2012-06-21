@@ -68,7 +68,7 @@ class TemplateDocumentFormView(grok.View):
                         self.context.absolute_url() + '#documents')
 
             else:
-                if path == None:
+                if path is None:
                     self.errors['paths'] = True
                 if not self.title:
                     self.errors['title'] = True
@@ -169,10 +169,10 @@ class TemplateDocumentFormView(grok.View):
             {'column': 'Creator',
              'column_title': _(u'label_creator', default=u'Creator'),
              'sort_index': 'document_author'},
-             {'column': 'modified',
-              'column_title': _(u'label_modified', default=u'Modified'),
-              'transform': helper.readable_date}
-              )
+            {'column': 'modified',
+             'column_title': _(u'label_modified', default=u'Modified'),
+             'transform': helper.readable_date}
+            )
         return generator.generate(templates, columns)
 
 

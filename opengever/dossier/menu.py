@@ -23,7 +23,8 @@ class DossierPostFactoryMenu(grok.MultiAdapter):
             # use default
             return factories
         for factory in factories:
-            if factory['extra']['id'] == u'opengever-dossier-businesscasedossier':
+            if factory['extra']['id'] == \
+                    u'opengever-dossier-businesscasedossier':
                 factory['title'] = _(u'Subdossier')
             elif factory['extra']['id'] == u'ftw-mail-mail':
                 factories.remove(factory)

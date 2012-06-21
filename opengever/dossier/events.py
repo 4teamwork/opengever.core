@@ -4,7 +4,8 @@ from zope.interface import implements
 
 
 class ParticipationCreated(ObjectEvent):
-    """The `ParticipationCreated` is fired after a participation is created and added.
+    """The `ParticipationCreated` is fired after a
+    participation is created and added.
     """
 
     implements(interfaces.IParticipationCreated)

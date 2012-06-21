@@ -1,14 +1,11 @@
-from zope.component import getUtility, getAdapter
-
-from plone.app.layout.viewlets import content
-from plone.memoize.instance import memoize
-
+from opengever.base.browser.helper import get_css_class
 from opengever.base.interfaces import IReferenceNumber, ISequenceNumber
-from opengever.dossier.behaviors.dossier import IDossier, IDossierMarker
+from opengever.dossier.behaviors.dossier import IDossier
 from opengever.mail.behaviors import IMailInAddressMarker, IMailInAddress
 from opengever.ogds.base.interfaces import IContactInformation
-from opengever.base.browser.helper import get_css_class
-
+from plone.app.layout.viewlets import content
+from plone.memoize.instance import memoize
+from zope.component import getUtility, getAdapter
 
 
 class BusinessCaseByline(content.DocumentBylineViewlet):
@@ -18,7 +15,6 @@ class BusinessCaseByline(content.DocumentBylineViewlet):
 
     def get_css_class(self):
         return get_css_class(self.context)
-
 
     def start(self):
         dossier = IDossier(self.context)
@@ -55,7 +51,6 @@ class BusinessCaseByline(content.DocumentBylineViewlet):
         if IMailInAddressMarker.providedBy(self.context) \
         and self.workflow_state() == 'dossier-state-active':
             return IMailInAddress(self.context).get_email_address()
-
 
     @memoize
     def workflow_state(self):

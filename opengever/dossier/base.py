@@ -179,11 +179,12 @@ class DossierContainer(Container):
     def earliest_possible_end_date(self):
 
         catalog = getToolByName(self, 'portal_catalog')
-        children = catalog(
-            {'path': '/'.join(self.getPhysicalPath()),
-             'object_provides': [
+        children = catalog({
+                'path': '/'.join(self.getPhysicalPath()),
+                'object_provides': [
                     'opengever.document.behaviors.IBaseDocument',
-                    'opengever.dossier.behaviors.dossier.IDossierMarker', ]})
+                    'opengever.dossier.behaviors.dossier.IDossierMarker', ]
+                })
 
         end_dates = []
         # main dossier

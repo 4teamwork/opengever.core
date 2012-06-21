@@ -19,7 +19,7 @@ def order_factories(context, factories):
                        'Mail',
                        'Subdossier',
                        'Add Participant',
-                    ]
+                       ]
 
     ordered_factories = []
     for factory_title in factories_order:
