@@ -2,8 +2,8 @@ Changelog
 =========
 
 
-2.0.5 (unreleased)
-------------------
+2.1 (2012-06-21)
+----------------
 
 - Adding mimetype for MindManager mindmap files to python mimetypes map
   [lgraf]
