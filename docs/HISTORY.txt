@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-2.1.8 (unreleased)
+2.1.8 (2012-06-21)
 ------------------
 
 - Disable pdf export actions for templatedossiers.
