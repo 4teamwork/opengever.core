@@ -16,4 +16,3 @@ class VersionView(grok.View):
         old_obj = pr.retrieve(self.context, version_id).object
         content_view = getMultiAdapter((old_obj, self.request), name='view')
         return content_view()
-

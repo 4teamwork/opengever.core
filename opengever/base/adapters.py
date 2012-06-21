@@ -13,7 +13,6 @@ import re
 class ReferenceNumberPrefixAdpater(grok.Adapter):
     """This Adapter handles the whole Reference number prefix assignment"""
 
-
     grok.provides(IReferenceNumberPrefix)
     grok.context(IFolderish)
 
@@ -62,7 +61,7 @@ class ReferenceNumberPrefixAdpater(grok.Adapter):
             # .. otherwise try to increment the last numeric part
             xpr = re.compile('\d+')
             matches = tuple(xpr.finditer(lastnumber))
-            if len(matches)>0:
+            if len(matches) > 0:
                 span = matches[-1].span()
                 subvalue = lastnumber[span[0]:span[1]]
                 try:
@@ -115,7 +114,7 @@ class ReferenceNumberPrefixAdpater(grok.Adapter):
         if number not in self.child_mapping.keys():
             return True
 
-        elif obj != None:
+        elif obj is not None:
             # check if the given object has the given number ever
             intids = getUtility(IIntIds)
             intid = intids.getId(aq_base(obj))
@@ -124,14 +123,3 @@ class ReferenceNumberPrefixAdpater(grok.Adapter):
                 return True
 
         return False
-
-# XXX Not used at the moment
-# def delete_number(self, obj):
-#
-#     # check if the given object has the given number ever
-#     intids = getUtility(IIntIds)
-#     intid = intids.getId(aq_base(obj))
-#
-#     if intid in self.child_mapping.keys():
-#         self.child_mapping.pop(intid)
-

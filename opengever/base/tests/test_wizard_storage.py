@@ -7,7 +7,6 @@ from opengever.base.testing import ANNOTATION_LAYER
 from persistent.dict import PersistentDict
 from zope.annotation.interfaces import IAttributeAnnotatable
 from zope.app.component.hooks import setSite
-from zope.interface import Interface
 from zope.interface.verify import verifyClass
 import AccessControl
 

@@ -31,9 +31,8 @@ class ILifeCycle(form.Schema):
             u'archival_value_annotation',
             u'custody_period',
             u'date_of_cassation',
-            u'date_of_submission',
-            ],
-        )
+            u'date_of_submission', ],
+    )
 
     #dexterity.write_permission(retention_period='cmf.ManagePortal')
     retention_period = schema.Choice(
@@ -41,7 +40,7 @@ class ILifeCycle(form.Schema):
         description=_(u'help_retention_period', default=u''),
         source=u'lifecycle_retention_period_vocabulary',
         required=True,
-        )
+    )
 
     #dexterity.write_permission(retention_period_annotation='cmf.ManagePortal')
     retention_period_annotation = schema.Text(
@@ -49,7 +48,7 @@ class ILifeCycle(form.Schema):
                 default=u'retentionPeriodAnnotation'),
         description=_(u'help_retention_period_annotation', default=u''),
         required=False
-        )
+    )
 
     #dexterity.write_permission(archival_value='cmf.ManagePortal')
     archival_value = schema.Choice(
@@ -57,7 +56,7 @@ class ILifeCycle(form.Schema):
         description=_(u'help_archival_value', default=u'Archival value code'),
         source=u'lifecycle_archival_value_vocabulary',
         required=True,
-        )
+    )
 
     #dexterity.write_permission(archival_value_annotation='cmf.ManagePortal')
     archival_value_annotation = schema.Text(
@@ -65,7 +64,7 @@ class ILifeCycle(form.Schema):
                 default=u'archivalValueAnnotation'),
         description=_(u'help_archival_value_annotation', default=u''),
         required=False
-        )
+    )
 
     #dexterity.write_permission(custody_period='cmf.ManagePortal')
     custody_period = schema.Choice(
@@ -73,23 +72,23 @@ class ILifeCycle(form.Schema):
         description=_(u'help_custody_period', default=u''),
         source=u'lifecycle_custody_period_vocabulary',
         required=True,
-        )
+    )
 
     #dexterity.write_permission(date_of_cassation='cmf.ManagePortal')
-    form.widget(date_of_cassation = DatePickerFieldWidget)
+    form.widget(date_of_cassation=DatePickerFieldWidget)
     date_of_cassation = schema.Date(
         title=_(u'label_dateofcassation', default=u'Date of cassation'),
         description=_(u'help_dateofcassation', default=u''),
         required=False,
-        )
+    )
 
     #dexterity.write_permission(date_of_submission='cmf.ManagePortal')
-    form.widget(date_of_submission = DatePickerFieldWidget)
+    form.widget(date_of_submission=DatePickerFieldWidget)
     date_of_submission = schema.Date(
         title=_(u'label_dateofsubmission', default=u'Date of submission'),
         description=_(u'help_dateofsubmission', default=u''),
         required=False,
-        )
+    )
 
 
 alsoProvides(ILifeCycle, IFormFieldProvider)
@@ -260,8 +259,8 @@ form.default_value(field=ILifeCycle['custody_period'])(
     utils.set_default_with_acquisition(
         field=ILifeCycle['custody_period'],
         default=30,
-        )
     )
+)
 
 
 # Validator
@@ -272,7 +271,7 @@ class RetentionPeriodValidator(IntLowerEqualThanParentValidator):
 validator.WidgetValidatorDiscriminators(
     RetentionPeriodValidator,
     field=ILifeCycle['retention_period']
-    )
+)
 
 
 grok.global_adapter(RetentionPeriodValidator)
@@ -285,12 +284,12 @@ ARCHIVAL_VALUE_WORTHY = u'archival worthy'
 ARCHIVAL_VALUE_UNWORTHY = u'not archival worthy'
 ARCHIVAL_VALUE_SAMPLING = u'archival worthy with sampling'
 ARCHIVAL_VALUE_OPTIONS = (
-    (1,         ARCHIVAL_VALUE_UNCHECKED),
-    (2,         ARCHIVAL_VALUE_PROMPT),
-    (3,         ARCHIVAL_VALUE_WORTHY),
-    (3,         ARCHIVAL_VALUE_UNWORTHY),
-    (3,         ARCHIVAL_VALUE_SAMPLING),
-    )
+    (1, ARCHIVAL_VALUE_UNCHECKED),
+    (2, ARCHIVAL_VALUE_PROMPT),
+    (3, ARCHIVAL_VALUE_WORTHY),
+    (3, ARCHIVAL_VALUE_UNWORTHY),
+    (3, ARCHIVAL_VALUE_SAMPLING),
+)
 
 
 grok.global_utility(
@@ -306,5 +305,5 @@ form.default_value(field=ILifeCycle['archival_value'])(
     utils.set_default_with_acquisition(
         field=ILifeCycle['archival_value'],
         default=ARCHIVAL_VALUE_UNCHECKED
-        )
     )
+)

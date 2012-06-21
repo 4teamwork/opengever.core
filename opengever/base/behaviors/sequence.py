@@ -5,10 +5,12 @@ from plone.directives import form
 from opengever.base.interfaces import ISequenceNumber
 from zope.lifecycleevent.interfaces import IObjectCopiedEvent
 
+
 class ISequenceNumberBehavior(form.Schema):
     """the SequenceNumber Behavior is only used
     for the sequence number indexer """
     pass
+
 
 @indexer(ISequenceNumberBehavior)
 def sequence_number(obj):

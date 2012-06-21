@@ -18,8 +18,8 @@ class Msg2MimeTransform(object):
         # Locate conversion tool and launch it as a subprocess.
         cmd = os.path.join(
             os.path.dirname(opengever.base.__file__),
-           'transforms',
-           'msg2mime.pl')
+            'transforms',
+            'msg2mime.pl')
 
         process = subprocess.Popen([cmd, msg_file.name], bufsize=0,
             stdout=subprocess.PIPE, stderr=subprocess.PIPE, close_fds=True)

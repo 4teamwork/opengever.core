@@ -33,8 +33,7 @@ class PrimaryFieldInfo(object):
         self.schema = fti.lookupSchema()
         primary = [
             (name, field) for name, field in getFieldsInOrder(self.schema)
-            if IPrimaryField.providedBy(field)
-            ]
+            if IPrimaryField.providedBy(field)]
         if len(primary) != 1:
             raise TypeError('Could not adapt', context, IPrimaryFieldInfo)
         self.fieldname, self.field = primary[0]
@@ -89,7 +88,8 @@ def create_restricted_vocabulary(field, options, message_factory=None):
             acquisition_value = self._get_acquisiton_value()
             if acquisition_value and acquisition_value in self.option_names:
                 allowed_option_names.append(acquisition_value)
-                allowed_level = self.option_level_mapping[acquisition_value] + 1
+                allowed_level = self.option_level_mapping[
+                    acquisition_value] + 1
                 for level, name in self.options:
                     if level >= allowed_level:
                         allowed_option_names.append(name)
@@ -101,7 +101,8 @@ def create_restricted_vocabulary(field, options, message_factory=None):
                 title = name
                 if message_factory:
                     title = self._(name)
-                terms.append(zope.schema.vocabulary.SimpleTerm(name, title=title))
+                terms.append(
+                    zope.schema.vocabulary.SimpleTerm(name, title=title))
             return zope.schema.vocabulary.SimpleVocabulary(terms)
 
         def _get_acquisiton_value(self):
@@ -111,7 +112,8 @@ def create_restricted_vocabulary(field, options, message_factory=None):
                 # we cant get the request...
                 return None
             request = self.context.REQUEST
-            #XXX CHANGED FROM PATH_TRANSLATED TO PATH_INFO because the test don't work
+            # XXX CHANGED FROM PATH_TRANSLATED TO PATH_INFO
+            # because the test don't work
             if '++add++' in request.get('PATH_INFO', ''):
                 # object is not yet existing, context is container
                 obj = context
@@ -129,7 +131,8 @@ def create_restricted_vocabulary(field, options, message_factory=None):
                     else:
                         try:
                             adpt = interface_(obj)
-                        except TypeError: # could not adapt
+                        except TypeError:
+                             # could not adapt
                             pass
                         else:
                             return self.field.get(adpt)
@@ -149,6 +152,7 @@ def set_default_with_acquisition(field, default=None):
     the given default value.
     """
     field._acquisition_default = default
+
     def default_value_generator(data):
         obj = data.context
         # try to get it from context or a parent
@@ -160,7 +164,8 @@ def set_default_with_acquisition(field, default=None):
             else:
                 try:
                     adpt = interface_(obj)
-                except TypeError: # could not adapt
+                except TypeError:
+                    # could not adapt
                     pass
                 else:
                     value = data.field.get(adpt)
@@ -181,8 +186,8 @@ def set_default_with_acquisition(field, default=None):
 
 def overrides_child(folder, event, aq_fields, marker):
     interface = aq_fields[0].interface
-    check_fields=[]
-    change_fields=[]
+    check_fields = []
+    change_fields = []
 
     # set changed fields
     for life_event in event.descriptions:
@@ -197,24 +202,24 @@ def overrides_child(folder, event, aq_fields, marker):
 
     if check_fields != []:
         children = folder.portal_catalog(
-            path={ 'depth':2,
-                    'query':'/'.join(folder.getPhysicalPath())
-            },
-            object_provides= (marker.__identifier__,)
+            path={'depth': 2,
+                  'query': '/'.join(folder.getPhysicalPath())},
+            object_provides=(marker.__identifier__,)
         )
 
         for child in children:
             obj = child.getObject()
-            for field  in check_fields:
+            for field in check_fields:
                 schema_field = interface.get(field)
                 voc = schema_field.bind(obj).source
                 if schema_field.get(schema_field.interface(obj)) not in voc:
+                    # obj, request, form, field, widget
                     default = getMultiAdapter((
                             obj.aq_inner.aq_parent,
-                            obj.REQUEST, #request
-                            None, #form
+                            obj.REQUEST,
+                            None,
                             schema_field,
-                            None, #Widget
+                            None,
                             ), IValue, name='default')
                     if isinstance(default, ComputedValue):
                         default = default.get()

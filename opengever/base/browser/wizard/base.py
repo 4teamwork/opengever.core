@@ -39,9 +39,7 @@ class BaseWizardStepForm(object):
 
     ignoreContext = True
 
-    steps = (
-        ('no-step', 'No step configured'),
-        )
+    steps = (('no-step', 'No step configured'),)
 
     template = ViewPageTemplateFile('wizard_wrappedform.pt')
 

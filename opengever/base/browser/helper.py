@@ -37,8 +37,7 @@ def _get_task_css_class(task):
 
     if isinstance(type(task), DeclarativeMeta):
         # globalindex
-        predecessor_client = (task.predecessor and \
-                                  task.predecessor.client_id)
+        predecessor_client = (task.predecessor and task.predecessor.client_id)
         client_id = task.client_id
         assigned_client = task.assigned_client
 
@@ -47,26 +46,24 @@ def _get_task_css_class(task):
 
     elif hasattr(task, 'is_subtask'):
         # catalog brain
-        predecessor_client = (task.predecessor and \
-                                  task.predecessor.split(':')[0])
+        predecessor_client = (
+            task.predecessor and task.predecessor.split(':')[0])
         client_id = task.client_id
         assigned_client = task.assigned_client
 
         is_subtask = task.is_subtask
-        is_forwarding = (task.portal_type == \
-                             'opengever.inbox.forwarding')
+        is_forwarding = (task.portal_type == 'opengever.inbox.forwarding')
 
     else:
         # dexterity object
-        predecessor_client = (task.predecessor and \
-                                  task.predecessor.split(':')[0])
+        predecessor_client = (
+            task.predecessor and task.predecessor.split(':')[0])
         client_id = current_client
         assigned_client = task.responsible_client
 
-        is_subtask = (aq_parent(aq_inner(task)).portal_type == \
-                          'opengever.task.task')
-        is_forwarding = (task.portal_type == \
-                             'opengever.inbox.forwarding')
+        is_subtask = (
+            aq_parent(aq_inner(task)).portal_type == 'opengever.task.task')
+        is_forwarding = (task.portal_type == 'opengever.inbox.forwarding')
 
     # is it a remote task?
     if predecessor_client and predecessor_client != assigned_client:

@@ -31,13 +31,15 @@ class SequenceNumber(grok.GlobalUtility):
         if SEQUENCE_NUMBER_ANNOTATION_KEY in ann.keys():
             del ann[SEQUENCE_NUMBER_ANNOTATION_KEY]
 
+
 class DefaultSequenceNumberGenerator(grok.Adapter):
-    """ Provides a default sequence number generator. The portal_type of the object
-    is used as *unique-key*
-    For choosing the number the Products.Transience.Transience.Increaser should be
-    used. See:
+    """ Provides a default sequence number generator.
+    The portal_type of the object is used as *unique-key*
+    For choosing the number the
+    Products.Transience.Transience.Increaser should be used. See:
     http://pyyou.wordpress.com/2009/12/09/how-to-add-a-counter-without-conflict-error-in-zope/
     """
+
     grok.provides(ISequenceNumberGenerator)
     grok.context(IDexterityContent)
 
@@ -58,7 +60,6 @@ class DefaultSequenceNumberGenerator(grok.Adapter):
             map[key] = Increaser(0)
         # increase
         inc = map[key]
-        inc.set(inc()+1)
+        inc.set(inc() + 1)
         map[key] = inc
         return inc()
-

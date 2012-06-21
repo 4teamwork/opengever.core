@@ -29,5 +29,4 @@ class DownloadFileVersion(grok.View):
         set_attachment_content_disposition(
             self.request, old_file.filename.encode('utf-8'))
 
-
         return old_file.data

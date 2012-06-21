@@ -80,7 +80,8 @@ class XLSReporter(object):
     """XLS Reporter View generates a xls-report for the given results set.
     """
 
-    def __init__(self, request, attributes, results, sheet_title=u' ', footer=u'', portrait_format=False):
+    def __init__(self, request, attributes, results,
+                 sheet_title=u' ', footer=u'', portrait_format=False):
         """Initalize the XLS reporter
         Arguments:
         attributes -- a list of mappings (with 'id', 'title', 'transform')

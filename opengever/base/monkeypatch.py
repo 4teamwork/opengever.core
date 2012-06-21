@@ -17,9 +17,9 @@ For further details see:
 from Products.CMFCore.utils import getToolByName
 from Products.Five.browser import decode
 from ZPublisher.HTTPRequest import FileUpload
-import z3c.form.interfaces
-
 import logging
+import urllib
+import z3c.form.interfaces
 
 
 LOGGER = logging.getLogger('opengever.base')
@@ -35,15 +35,16 @@ def processInputs(request, charsets=None):
             if isinstance(value, str):
                 request.form[name] = decode._decode(value, charsets)
             elif isinstance(value, list):
-                request.form[name] = [ decode._decode(val, charsets)
+                request.form[name] = [decode._decode(val, charsets)
                                        for val in value
-                                       if isinstance(val, str) ]
+                                       if isinstance(val, str)]
             elif isinstance(value, tuple):
-                request.form[name] = tuple([ decode._decode(val, charsets)
+                request.form[name] = tuple([decode._decode(val, charsets)
                                              for val in value
-                                             if isinstance(val, str) ])
+                                             if isinstance(val, str)])
             # new part
-            elif isinstance(value, FileUpload) and isinstance(value.filename, str):
+            elif isinstance(
+                value, FileUpload) and isinstance(value.filename, str):
                 value.filename = decode._decode(value.filename, charsets)
             # / new part
 
@@ -52,11 +53,7 @@ decode.processInputs = processInputs
 LOGGER.info('Monkey patched Products.Five.browser.decode.processInputs')
 
 
-
 # --------
-
-import urllib
-
 class Foo(object):
     @property
     def filename_encoded(self):
@@ -74,7 +71,8 @@ from plone.formwidget.namedfile import widget
 setattr(widget.NamedFileWidget,
         'filename_encoded',
         Foo.filename_encoded)
-LOGGER.info('Monkey patched plone.formwidget.namedfile.widget.NameFileWidget.filename_encoded')
+LOGGER.info('Monkey patched plone.formwidget.namedfile.widget.'
+            'NameFileWidget.filename_encoded')
 
 # --------
 
@@ -82,6 +80,7 @@ import Products.LDAPUserFolder
 
 Products.LDAPUserFolder.utils.encoding = 'utf-8'
 LOGGER.info('Monkey patched Products.LDAPUserFolder.utils.encoding (utf-8)')
+
 
 # --------
 
@@ -103,6 +102,7 @@ def _fix_terms(self):
             term.token = term.token.replace('/%s' % portal.id, '')
             term.token = vhost_prefix + term.token
 
+
 def render(self):
     if self.mode == z3c.form.interfaces.DISPLAY_MODE:
         self._fix_terms()
@@ -115,10 +115,12 @@ def render(self):
 import plone.formwidget.contenttree
 plone.formwidget.contenttree.widget.ContentTreeBase._fix_terms = _fix_terms
 plone.formwidget.contenttree.widget.ContentTreeBase.render = render
-LOGGER.info('Monkey patched plone.formwidget.contenttree.widget.ContentTreeBase')
+LOGGER.info(
+    'Monkey patched plone.formwidget.contenttree.widget.ContentTreeBase')
 
 # --------
 
 import webdav.LockItem
-webdav.LockItem.DEFAULTTIMEOUT = 24 * 60 * 60L # 24 hours
+ # 24 hours
+webdav.LockItem.DEFAULTTIMEOUT = 24 * 60 * 60L
 LOGGER.info('Monkey patched webdav.LockItem.DEFAULTTIMEOUT')

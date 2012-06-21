@@ -8,7 +8,7 @@ except ImportError:
 
 
 class DocumentContentHistoryViewlet(content.ContentHistoryViewlet):
-    """Customized content history viewlet for versioned OpenGever types 
+    """Customized content history viewlet for versioned OpenGever types
     (documents and mails).
 
     If the content type provides the IPreview behavior, an additional link
