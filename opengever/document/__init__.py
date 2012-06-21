@@ -5,7 +5,7 @@ _ = MessageFactory('opengever.document')
 
 # MindJet MindManager
 mimetypes.add_type('application/vnd.mindjet.mindmanager', '.mmap')
-# MS Visio
+# MS Visio
 mimetypes.add_type('application/vnd.visio', '.vsd')
 mimetypes.add_type('application/vnd.visio', '.vss')
 # Adobe InDesign
