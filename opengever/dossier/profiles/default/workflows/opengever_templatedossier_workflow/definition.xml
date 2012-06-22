@@ -113,7 +113,6 @@
   </permission-map>
   <permission-map name="opengever.dossier: Add templatedossier" acquired="False">
    <permission-role>Administrator</permission-role>
-   <permission-role>Contributor</permission-role>
    <permission-role>Manager</permission-role>
   </permission-map>
   <permission-map name="opengever.trash: Trash content" acquired="False">
