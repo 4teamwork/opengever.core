@@ -2,11 +2,18 @@ Changelog
 =========
 
 
-2.0.5 (unreleased)
-------------------
+2.2 (unreleased)
+----------------
 
 - Templatedossier: Adjust edit permission, normal user should not have the right to edit.
   [phgross]
+
+- Templatedossier: Adjust translations.
+  [phgross]
+
+
+2.1 (2012-06-21)
+------------------
 
 - Templatedossier: Disalbe some columns in the document and trash listings.
   [phgross]
