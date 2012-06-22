@@ -5,14 +5,11 @@ Changelog
 2.2 (unreleased)
 ----------------
 
-- Nothing changed yet.
-
+- Updated mimetypes added dynamically to python mimetypes map
+  [lgraf]
 
 2.1 (2012-06-21)
 ----------------
-
-- Updated mimetypes added dynamically to python mimetypes map
-  [lgraf]
 
 - Adding mimetype for MindManager mindmap files to python mimetypes map
   [lgraf]
