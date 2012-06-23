@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-2.2 (unreleased)
+2.2 (2012-06-23)
 ----------------
 
 - Bumped profile version in metadata.xml to 2400
