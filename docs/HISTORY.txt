@@ -5,7 +5,8 @@ Changelog
 2.2 (unreleased)
 ----------------
 
-- Nothing changed yet.
+- Bumped profile version in metadata.xml to 2400
+  [lgraf]
 
 
 2.1 (2012-06-19)
