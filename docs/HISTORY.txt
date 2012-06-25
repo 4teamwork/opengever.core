@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-2.3 (unreleased)
+2.3 (2012-06-25)
 ----------------
 
 - Added some more MIME type definitions
