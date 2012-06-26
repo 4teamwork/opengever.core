@@ -8,6 +8,7 @@
  <permission>Add portal content</permission>
  <permission>List folder contents</permission>
  <permission>Manage properties</permission>
+ <permission>Sharing page: Delegate roles</permission>
  <permission>CMFEditions: Access previous versions</permission>
  <state state_id="mail-state-active" title="Active">
   <permission-map name="Access contents information" acquired="False">
@@ -24,6 +25,8 @@
   </permission-map>
   <permission-map name="Manage properties" acquired="False">
    <permission-role>Manager</permission-role>
+  </permission-map>
+  <permission-map name="Sharing page: Delegate roles" acquired="False">
   </permission-map>
   <permission-map name="Modify portal content" acquired="True">
    <permission-role>Manager</permission-role>
