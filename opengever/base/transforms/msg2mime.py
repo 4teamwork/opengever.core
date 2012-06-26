@@ -4,6 +4,9 @@ import subprocess
 import tempfile
 
 
+PERL_PATH = '/usr/bin/perl'
+
+
 class Msg2MimeTransform(object):
     """A transform that converts an Outlook .msg file into a RFC822 MIME
        message.
@@ -21,8 +24,12 @@ class Msg2MimeTransform(object):
             'transforms',
             'msg2mime.pl')
 
-        process = subprocess.Popen([cmd, msg_file.name], bufsize=0,
-            stdout=subprocess.PIPE, stderr=subprocess.PIPE, close_fds=True)
+        process = subprocess.Popen(
+            [PERL_PATH, cmd, msg_file.name],
+            bufsize=0,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            close_fds=True)
 
         # Wait for subprocess to terminate.
         stdout, stderr = process.communicate()

@@ -2,7 +2,15 @@ Changelog
 =========
 
 
-2.6 (unreleased)
+2.0.5 (unreleased)
+------------------
+
+- Adjust Msg2MimeTransform, start perl script as directly with perl,
+  to avoid permission problems on the msg2mime.pl.
+  [phgross]
+
+
+2.5.1 (2012-06-22)
 ----------------
 
 - Adjust OGQuickUpload factory: let namedfile itself find the right mimetype.
