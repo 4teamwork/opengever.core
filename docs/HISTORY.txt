@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-2.0.5 (unreleased)
+2.5.2 (unreleased)
 ------------------
 
 - Adjust Msg2MimeTransform, start perl script as directly with perl,
