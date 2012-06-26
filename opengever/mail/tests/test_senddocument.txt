@@ -27,7 +27,7 @@ imports and general stuff
     >>> browser = Browser(app)
     >>> browser.handleErrors = False
 
-    >>> portal.manage_setLocalRoles('mail-test', ['Owner','Editor','Contributor'])
+    >>> portal.manage_setLocalRoles('mail-test', ['Owner','Editor','Contributor', 'Reader'])
 
 create document
     >>> doc1 = createContentInContainer(portal, 'opengever.document.document', title=u'Doc\xfcment 1')
