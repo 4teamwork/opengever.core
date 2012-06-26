@@ -154,7 +154,7 @@ class ExtractAttachments(grok.View):
                 attachments = [int(pos) for pos in attachments]
                 delete_action = self.request.get('delete_action', 'nothing')
                 if delete_action not in self.allowed_delete_actions:
-                    raise ValueError('Expected delete action to be one of ' + \
+                    raise ValueError('Expected delete action to be one of ' +
                                          str(self.allowed_delete_actions))
 
                 self.extract_attachments(attachments, delete_action)
@@ -191,7 +191,7 @@ class ExtractAttachments(grok.View):
                 for name, field in getFieldsInOrder(schemata):
                     if field.get(
                             field.interface(doc)) == field.missing_value \
-                                or field.get(field.interface(doc)) == None:
+                                or field.get(field.interface(doc)) is None:
 
                         # No value is given from the pipeline,
                         # so we try to set the default value
@@ -203,11 +203,11 @@ class ExtractAttachments(grok.View):
                                 field,
                                 None,  # Widget
                                 ), IValue, name='default')
-                        if default != None:
+                        if default is not None:
                             default = default.get()
-                        if default == None:
+                        if default is None:
                             default = getattr(field, 'default', None)
-                        if default == None:
+                        if default is None:
                             try:
                                 default = field.missing_value
                             except:

@@ -7,12 +7,15 @@ from email.MIMEMultipart import MIMEMultipart
 from email.MIMEText import MIMEText
 from email.Utils import formatdate
 from five import grok
+from ftw.mail.mail import IMail
 from opengever.base.source import DossierPathSourceBinder
 from opengever.mail import _
 from opengever.mail.behaviors import ISendableDocsContainer
+from opengever.mail.events import DocumentSent
 from opengever.mail.validators import AddressValidator
 from opengever.mail.validators import DocumentSizeValidator
 from opengever.ogds.base.interfaces import IContactInformation
+from opengever.tabbedview.utils import get_containg_document_tab_url
 from plone.formwidget.autocomplete import AutocompleteMultiFieldWidget
 from plone.z3cform import layout
 from plone.z3cform.textlines.textlines import TextLinesFieldWidget
@@ -21,17 +24,13 @@ from z3c.form.interfaces import INPUT_MODE
 from z3c.relationfield.schema import RelationChoice, RelationList
 from zope import schema
 from zope.component import getUtility, provideAdapter
+from zope.event import notify
+from zope.i18n import translate
 from zope.interface import Interface
 from zope.interface import invariant, Invalid
-from zope.i18n import translate
-from ftw.mail.mail import IMail
-from opengever.mail.events import DocumentSent
-from zope.event import notify
 
 
 CHARSET = 'utf-8'
-
-from opengever.tabbedview.utils import get_containg_document_tab_url
 
 
 class NoMail(Invalid):
@@ -57,7 +56,7 @@ class ISendDocumentSchema(Interface):
     extern_receiver = schema.List(
         title=_('extern_receiver', default="Extern receiver"),
         description=_('help_extern_receiver',
-                      default="email addresses of the receivers. " + \
+                      default="email addresses of the receivers. " +
                           "Enter manually the addresses, one per each line."),
         value_type=schema.TextLine(title=_('receiver'), ),
         required=False,
