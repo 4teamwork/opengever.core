@@ -11,7 +11,7 @@ Changelog
 
 
 2.5.1 (2012-06-22)
-----------------
+------------------
 
 - Adjust OGQuickUpload factory: let namedfile itself find the right mimetype.
   Issue #549 Abklaerung: Drag and drop
