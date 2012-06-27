@@ -1,9 +1,14 @@
 Changelog
 =========
 
+2.1.2 (unreleased)
+------------------
 
-2.2 (unreleased)
-----------------
+- Nothing changed yet
+
+
+2.1.1 (2012-06-22)
+------------------
 
 - Templatedossier: Adjust edit permission, normal user should not have the right to edit.
   [phgross]
