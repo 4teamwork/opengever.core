@@ -181,7 +181,10 @@ class Reactivator(object):
         for subdossier in dossier.get_subdossiers():
             self._recursive_reactivate(subdossier.getObject())
 
-        self.wft.doActionFor(dossier, 'dossier-transition-reactivate')
+        if self.wft.getInfoFor(
+            dossier, 'review_state') == 'dossier-state-resolved':
+
+            self.wft.doActionFor(dossier, 'dossier-transition-reactivate')
 
 
 class ResolveConditions(object):
