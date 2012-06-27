@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "POT-Creation-Date: 2012-06-18 11:58+0000\n"
-"PO-Revision-Date: 2012-06-21 16:37+0200\n"
+"PO-Revision-Date: 2012-06-27 12:10+0200\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
 "MIME-Version: 1.0\n"
@@ -120,7 +120,7 @@ msgstr "Das Dossier wurde erfolgreich abgeschlossen."
 
 #: ./opengever/dossier/archive.py:61
 msgid "The given end date is not valid, it needs to be younger or                  equal than ${date} (the youngest contained object)."
-msgstr "Dieses Enddatum ist ungültig, es muss jünger oder gleich sein wie das Datum des jüngste enthaltene Objekts (${date})."
+msgstr "Das Ende-Datum ist ungültig, es muss jünger oder gleich sein wie das Datum des jüngsten enthaltenen Dokuments (${date})."
 
 #: ./opengever/dossier/behaviors/dossier.py:194
 msgid "The start date must be before the end date."
@@ -597,7 +597,7 @@ msgstr ""
 
 #: ./opengever/dossier/resolve.py:12
 msgid "the dossier start date is missing."
-msgstr "Es wurde kein Dossier Start Datum gesetzt."
+msgstr "Es wurde kein Beginn-Datum gesetzt."
 
 #. Default: "expired"
 #: ./opengever/dossier/project_templates/byline.pt:53
