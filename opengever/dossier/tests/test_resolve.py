@@ -85,7 +85,6 @@ class TestResolveConditions(MockTestCase):
 
         with self.mocker.order():
             # test 1
-            self.expect(dossier.has_valid_enddate()).result(True)
             self.expect(dossier.get_subdossiers()).result([sub1, sub2])
 
             self.expect(sub1.has_valid_enddate()).result(False)
@@ -101,7 +100,6 @@ class TestResolveConditions(MockTestCase):
             self.expect(subsubsub1.get_subdossiers()).result([])
 
             # test 2
-            self.expect(dossier.has_valid_enddate()).result(True)
             self.expect(dossier.get_subdossiers()).result([sub1, sub2])
 
             self.expect(sub1.has_valid_enddate()).result(True)
@@ -117,11 +115,6 @@ class TestResolveConditions(MockTestCase):
             self.expect(subsubsub1.get_subdossiers()).result([])
 
             # test 3
-            self.expect(dossier.has_valid_enddate()).result(True)
-            self.expect(dossier.get_subdossiers()).result([])
-
-            # test 4
-            self.expect(dossier.has_valid_enddate()).result(False)
             self.expect(dossier.get_subdossiers()).result([])
 
         self.replay()
@@ -131,8 +124,6 @@ class TestResolveConditions(MockTestCase):
             )
         self.assertEquals(ResolveConditions(dossier).check_end_dates(), [])
         self.assertEquals(ResolveConditions(dossier).check_end_dates(), [])
-        self.assertEquals(
-            ResolveConditions(dossier).check_end_dates(), ['Dossier'])
 
 
 class TestResolver(MockTestCase):

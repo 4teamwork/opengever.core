@@ -4,6 +4,11 @@ Changelog
 2.1.2 (unreleased)
 ------------------
 
+- ResolveConditions: Validate the endate of the main dossier, not till the archive form is displayed.
+  Issue #1525 Dossier abschliessen: Wieder eroeffnen bzw. wieder abschliessen bei Subdossier.
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1525
+  [phgross]
+
 - Fixed Templatedossier: create a newfile NamedFile object with the same data, instead of set only a reference.
   Issue #1368 Bearbeitung von Vorlagen (Metadaten und Dokumente)
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1368/

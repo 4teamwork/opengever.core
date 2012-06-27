@@ -217,13 +217,15 @@ class ResolveConditions(object):
 
         return self._invalid_dates
 
-    def _recursive_date_validation(self, dossier):
-        # check end_date
-        if not dossier.has_valid_enddate():
-            self._invalid_dates.append(dossier.title)
+    def _recursive_date_validation(self, dossier, main=True):
+
+        if not main:
+            # check end_date
+            if not dossier.has_valid_enddate():
+                self._invalid_dates.append(dossier.title)
 
         # recursively check subdossiers
         subdossiers = dossier.get_subdossiers()
         for sub in subdossiers:
             sub = sub.getObject()
-            self._recursive_date_validation(sub)
+            self._recursive_date_validation(sub, main=False)
