@@ -4,6 +4,11 @@ Changelog
 2.1.2 (unreleased)
 ------------------
 
+- Do not attend documents from a cancelled dossier, in the earliest enddate calculation.
+  Issue #1546 DI-KSA: Fehlermeldung beim Versuch "Dossier abschliessen"
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1546
+  [phgross]
+
 - ResolveConditions: Validate the endate of the main dossier, not till the archive form is displayed.
   Issue #1525 Dossier abschliessen: Wieder eroeffnen bzw. wieder abschliessen bei Subdossier.
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1525

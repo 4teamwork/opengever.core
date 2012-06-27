@@ -79,6 +79,11 @@ class TestDossierContainer(unittest.TestCase):
         self._create_document(dossier, document_date=date(2012, 02, 20))
         self.assertEquals(dossier.earliest_possible_end_date(), date(2012, 02, 20))
 
+        subdossier = self._create_dossier(
+            dossier, review_state='dossier-state-inactive')
+        self._create_document(subdossier, document_date=date(2012, 03, 20))
+        self.assertEquals(dossier.earliest_possible_end_date(), date(2012, 02, 20))
+
     def test_has_valid_enddate(self):
         dossier, subdossier = self._create_dossier(self.portal, with_sub=True)
         IDossier(subdossier).start = date(2012, 02, 24)
@@ -113,7 +118,7 @@ class TestDossierContainer(unittest.TestCase):
         self.assertTrue(subdossier.is_subdossier())
 
     def _create_dossier(self, context,
-            with_sub=False, end=None, start=None):
+            with_sub=False, end=None, start=None, review_state=None):
 
         dossier = createContentInContainer(
             context,
@@ -125,6 +130,19 @@ class TestDossierContainer(unittest.TestCase):
 
         if start:
             IDossier(dossier).start = start
+
+        if review_state:
+            wt = self.portal.portal_workflow
+            wt.setStatusOf(
+                'opengever_dossier_workflow',
+                dossier,
+                {'review_state': review_state,
+                 'action': review_state,
+                 'actor': TEST_USER_ID,
+                 'time': DateTime(),
+                 'comments': '', })
+
+            dossier.reindexObject()
 
         if with_sub:
             subdossier = createContentInContainer(

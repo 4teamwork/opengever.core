@@ -179,11 +179,13 @@ class DossierContainer(Container):
     def earliest_possible_end_date(self):
 
         catalog = getToolByName(self, 'portal_catalog')
-        children = catalog({
+        subdossiers = catalog({
                 'path': '/'.join(self.getPhysicalPath()),
                 'object_provides': [
-                    'opengever.document.behaviors.IBaseDocument',
-                    'opengever.dossier.behaviors.dossier.IDossierMarker', ]
+                    'opengever.dossier.behaviors.dossier.IDossierMarker', ],
+                'review_state': [
+                    'dossier-state-active',
+                    'dossier-state-resolved', ],
                 })
 
         end_dates = []
@@ -191,28 +193,29 @@ class DossierContainer(Container):
         if IDossier(self).start:
             end_dates.append(IDossier(self).start)
 
-        for child in children:
-            # document or mails
-            if child.portal_type in [
-                'opengever.document.document', 'ftw.mail.mail']:
+        for subdossier in subdossiers:
+            if IDossier(subdossier.getObject()).end:
+                temp_date = IDossier(subdossier.getObject()).end
+                if not temp_date:
+                    temp_date = IDossier(subdossier.getObject()).start
 
-                if child.document_date:
-                    if isinstance(child.document_date, datetime):
-                        end_dates.append(child.document_date.date())
+                if isinstance(temp_date, datetime):
+                    end_dates.append(temp_date.date())
+                else:
+                    end_dates.append(temp_date)
+
+            docs = subdossier.getObject().getFolderContents(
+                {'object_provides': [
+                        'opengever.document.behaviors.IBaseDocument', ],
+                 })
+
+            for doc in docs:
+                # document or mails
+                if doc.document_date:
+                    if isinstance(doc.document_date, datetime):
+                        end_dates.append(doc.document_date.date())
                     else:
-                        end_dates.append(child.document_date)
-
-            # subdossiers
-            else:
-                if IDossier(child.getObject()).end:
-                    temp_date = IDossier(child.getObject()).end
-                    if not temp_date:
-                        temp_date = IDossier(child.getObject()).start
-
-                    if isinstance(temp_date, datetime):
-                        end_dates.append(temp_date.date())
-                    else:
-                        end_dates.append(temp_date)
+                        end_dates.append(doc.document_date)
 
         if end_dates:
             end_dates.sort()
