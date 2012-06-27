@@ -4,17 +4,20 @@ from ftw.testing import MockTestCase
 from grokcore.component.testing import grok
 from opengever.base.interfaces import IRedirector
 from opengever.document import document
+from opengever.document.document import IDocumentSchema
 from opengever.document.interfaces import IDocumentSettings
 from opengever.dossier.templatedossier import ITemplateUtility
 from opengever.dossier.templatedossier import TemplateDocumentFormView
 from plone.dexterity.fti import DexterityFTI, register
 from plone.registry.interfaces import IRegistry
+from plone.rfc822.interfaces import IPrimaryField
 from zope.component import getGlobalSiteManager
 from zope.component import getUtility, provideAdapter
+from zope.component import provideUtility
 from zope.component.persistentregistry import PersistentComponents
 from zope.container.interfaces import INameChooser
-from zope.interface import Interface
-from zope.interface import implements
+from zope.interface import Interface, implements, alsoProvides
+from z3c.blobfile import storages, interfaces
 
 
 class TestTemplateFolderUtility(MockTestCase):
@@ -54,10 +57,27 @@ class TestTemplateFolderUtility(MockTestCase):
         self.assertEqual(templateUtil.templateFolder(object()), None)
 
 
+def registerUtilities():
+     provideUtility(storages.StringStorable(),
+                                   interfaces.IStorage,
+                                   name="__builtin__.str")
+     provideUtility(storages.UnicodeStorable(),
+                                   interfaces.IStorage,
+                                   name="__builtin__.unicode")
+     provideUtility(storages.FileChunkStorable(),
+                                   interfaces.IStorage,
+                                   name="zope.app.file.file.FileChunk")
+     provideUtility(storages.FileDescriptorStorable(),
+                                   interfaces.IStorage,
+                                   name="__builtin__.file")
+
+
 class TestTemplateDocumentFormView(MockTestCase):
 
     def setUp(self):
+        super(TestTemplateDocumentFormView, self).setUp()
         grok('opengever.dossier.templatedossier')
+        registerUtilities()
 
     def test_activating_external_editing(self):
         mock_context = self.mocker.mock()
@@ -186,9 +206,15 @@ class TestTemplateDocumentFormView(MockTestCase):
         fti.isConstructionAllowed = lambda x: True
         fti.allowType = lambda x: True
         register(fti)
-        site_manager_mock = self.mocker.proxy(PersistentComponents(bases=(getGlobalSiteManager(),)))
-        getSiteManager_mock = self.mocker.replace('zope.app.component.hooks.getSiteManager')
-        self.expect(getSiteManager_mock(dummy_site)).result(site_manager_mock).count(0 , None)
+        site_manager_mock = self.mocker.proxy(
+            PersistentComponents(bases=(getGlobalSiteManager(),)))
+        getSiteManager_mock = self.mocker.replace(
+            'zope.app.component.hooks.getSiteManager')
+        self.expect(
+            getSiteManager_mock(
+                dummy_site)).result(site_manager_mock).count(0 , None)
+
+        alsoProvides(IDocumentSchema.get('file'), IPrimaryField)
 
         # Name chooser
         class NameChooser(object):
@@ -203,6 +229,8 @@ class TestTemplateDocumentFormView(MockTestCase):
         namedfile = self.stub()
         template_doc = self.stub()
         self.expect(template_doc.file).result(namedfile)
+        self.expect(namedfile.data).result('data data data')
+        self.expect(namedfile.filename).result(u'test_filename.doc')
 
         # context and request
         context = MockContext(fti, template_doc)
@@ -222,6 +250,7 @@ class TestTemplateDocumentFormView(MockTestCase):
         view.create_document(testpath)
 
         self.assertEqual(context.obj.portal_type, u'opengever.document.document')
-        self.assertEqual(context.obj.file, namedfile)
+        self.assertFalse(context.obj.file == namedfile)
+        self.assertEquals(context.obj.file.data, namedfile.data)
         self.assertEqual(context.obj.document_date, datetime.now().date())
         self.assertEqual(context.obj.preserved_as_paper, False)

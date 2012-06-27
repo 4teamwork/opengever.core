@@ -9,6 +9,7 @@ from opengever.tabbedview.browser.tabs import Documents, Trash
 from opengever.tabbedview.helper import linked
 from plone.dexterity.utils import createContentInContainer
 from plone.dexterity.utils import iterSchemata
+from plone.rfc822.interfaces import IPrimaryField
 from z3c.form.interfaces import IValue
 from zope.component import getUtility
 from zope.component import queryMultiAdapter
@@ -16,6 +17,7 @@ from zope.event import notify
 from zope.interface import Interface
 from zope.lifecycleevent import ObjectModifiedEvent
 from zope.schema import getFieldsInOrder
+
 
 REMOVED_COLUMNS = ['receipt_date', 'delivery_date', 'containing_subdossier']
 NO_DEFAULT_VALUE_FIELDS = ['title', 'file']
@@ -103,13 +105,23 @@ class TemplateDocumentFormView(grok.View):
             self.context, 'opengever.document.document',
             title=self.title)
 
-        new_doc.file = doc.file
+        _type = self._get_primary_field_type(new_doc)
+
+        new_doc.file = _type(
+            data=doc.file.data, filename=doc.file.filename)
 
         self._set_defaults(new_doc)
         # notify necassary standard events
         notify(ObjectModifiedEvent(new_doc))
 
         return new_doc
+
+    def _get_primary_field_type(self, obj):
+
+        for schemata in iterSchemata(obj):
+            for name, field in getFieldsInOrder(schemata):
+                if IPrimaryField.providedBy(field):
+                    return field._type
 
     def _set_defaults(self, obj):
         # set default values for all fields

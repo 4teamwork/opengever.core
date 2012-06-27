@@ -4,7 +4,10 @@ Changelog
 2.1.2 (unreleased)
 ------------------
 
-- Nothing changed yet
+- Fixed Templatedossier: create a newfile NamedFile object with the same data, instead of set only a reference.
+  Issue #1368 Bearbeitung von Vorlagen (Metadaten und Dokumente)
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1368/
+  [phgross]
 
 
 2.1.1 (2012-06-22)
