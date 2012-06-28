@@ -162,15 +162,10 @@ class TestTemplateDocumentFormView(MockTestCase):
         self.expect(mock_request.get('paths')).result(
             ['plone/testpath/', ]).count(0, None)
         self.expect(
-            mock_request.get('form.widgets.edit_form')).result(['on'])
+            mock_request.get('form.widgets.edit_form')).result(['off'])
 
         new_doc = self.stub()
         self.expect(new_doc.absolute_url()).result('http://foo.com#documents')
-
-        self.expect(
-            mock_context.restrictedTraverse('checkout_documents')).result(mock_context)
-        # context is also the checkout manager
-        self.expect(mock_context.checkout(new_doc))
 
         view = TemplateDocumentFormView(mock_context, mock_request)
         mock_view = self.mocker.patch(view)
