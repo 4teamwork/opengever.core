@@ -229,6 +229,8 @@ class TestTemplateDocumentFormView(MockTestCase):
         namedfile = self.stub()
         template_doc = self.stub()
         self.expect(template_doc.file).result(namedfile)
+        self.expect(template_doc.portal_type).result(
+            'opengever.document.document')
         self.expect(namedfile.data).result('data data data')
         self.expect(namedfile.filename).result(u'test_filename.doc')
 

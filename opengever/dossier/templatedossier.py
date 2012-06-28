@@ -100,15 +100,14 @@ class TemplateDocumentFormView(grok.View):
 
     def create_document(self, path):
         doc = self.context.restrictedTraverse(path)
+        _type = self._get_primary_field_type(doc)
+
+        new_file = _type(data=doc.file.data,
+                         filename=doc.file.filename)
 
         new_doc = createContentInContainer(
             self.context, 'opengever.document.document',
-            title=self.title)
-
-        _type = self._get_primary_field_type(new_doc)
-
-        new_doc.file = _type(
-            data=doc.file.data, filename=doc.file.filename)
+            title=self.title, file=new_file)
 
         self._set_defaults(new_doc)
         # notify necassary standard events
