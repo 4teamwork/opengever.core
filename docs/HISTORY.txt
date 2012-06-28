@@ -10,6 +10,10 @@ Changelog
 - Templatedossier document creation: Add the file before the initial version is created.
   [phgross]
 
+
+2.1.2 (2012-06-27)
+------------------
+
 - Made recursive_resolve safe: works now also with cancelled subdossiers.
   Do not attend documents from a cancelled dossier, in the earliest enddate calculation.
   Issue #1546 DI-KSA: Fehlermeldung beim Versuch "Dossier abschliessen"
