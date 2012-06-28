@@ -156,6 +156,7 @@ class TestTemplateDocumentFormView(MockTestCase):
 
     def test_saving_form(self):
         mock_context, mock_request, mock_response = self._mock_context_and_request()
+
         self.expect(mock_request.get('form.buttons.save')).result(True)
         self.expect(mock_request.get('title', '')).result('Test Title')
         self.expect(mock_request.get('paths')).result(
@@ -163,11 +164,18 @@ class TestTemplateDocumentFormView(MockTestCase):
         self.expect(
             mock_request.get('form.widgets.edit_form')).result(['on'])
 
+        new_doc = self.stub()
+        self.expect(new_doc.absolute_url()).result('http://foo.com#documents')
+
+        self.expect(
+            mock_context.restrictedTraverse('checkout_documents')).result(mock_context)
+        # context is also the checkout manager
+        self.expect(mock_context.checkout(new_doc))
+
         view = TemplateDocumentFormView(mock_context, mock_request)
         mock_view = self.mocker.patch(view)
-        self.expect(mock_view.create_document('plone/testpath/')).result(
-            'new-document')
-        self.expect(mock_view.activate_external_editing('new-document'))
+        self.expect(mock_view.create_document('plone/testpath/')).result(new_doc)
+        self.expect(mock_view.activate_external_editing('new-document')).count(0, None)
 
         mock_response.redirect('http://foo.com#documents')
         self.replay()

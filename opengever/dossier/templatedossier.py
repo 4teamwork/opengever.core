@@ -66,6 +66,9 @@ class TemplateDocumentFormView(grok.View):
                 if self.edit:
                     self.activate_external_editing(newdoc)
 
+                    return self.request.RESPONSE.redirect(
+                        newdoc.absolute_url())
+
                 return self.request.RESPONSE.redirect(
                         self.context.absolute_url() + '#documents')
 

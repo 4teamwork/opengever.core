@@ -4,6 +4,9 @@ Changelog
 2.1.2 (unreleased)
 ------------------
 
+- Templatedossier: Adjust redirecting after document creation.
+  [phgross]
+
 - Templatedossier document creation: Add the file before the initial version is created.
   [phgross]
 
