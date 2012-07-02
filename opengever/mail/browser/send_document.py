@@ -188,7 +188,8 @@ class SendDocumentForm(form.Form):
 
     @button.buttonAndHandler(_('cancel_back', default=u'Cancel'))
     def cancel_button_handler(self, action):
-        return self.request.RESPONSE.redirect(get_containg_document_tab_url())
+        data, errors = self.extractData()
+        return self.request.RESPONSE.redirect(get_containg_document_tab_url(data.get('documents')[0]))
 
     def create_mail(self, text='', objs=[]):
         """Create the mail and attach the the files. For object without a file

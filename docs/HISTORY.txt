@@ -10,6 +10,10 @@ Changelog
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1613
   [phgross]
 
+- Fixed missing argument for get_containg_document_tab_url().
+  This fixes a traceback when cancelling send documents form.
+  [lgraf]
+
 
 2.0.4 (2012-06-19)
 ------------------
