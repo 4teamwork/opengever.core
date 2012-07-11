@@ -9,6 +9,7 @@ from opengever.base.interfaces import IBaseClientID
 from opengever.dossier.archive import Archiver
 from opengever.dossier.archive import EnddateValidator, MissingValue
 from opengever.dossier.archive import METHOD_RESOLVING_AND_FILING, METHOD_FILING
+from opengever.dossier.archive import METHOD_RESOLVING_EXISTING_FILING
 from opengever.dossier.archive import RESOLVE_AND_NUMBER, ONLY_RESOLVE
 from opengever.dossier.archive import RESOLVE_WITH_EXISTING_NUMBER, ONLY_NUMBER
 from opengever.dossier.archive import RESOLVE_WITH_NEW_NUMBER, METHOD_RESOLVING
@@ -234,7 +235,7 @@ class TestArchiving(MockTestCase):
             actions.by_token.keys(),
             [RESOLVE_WITH_EXISTING_NUMBER, RESOLVE_WITH_NEW_NUMBER])
         self.assertEquals(actions.by_value.keys(),
-                          [METHOD_RESOLVING_AND_FILING, METHOD_RESOLVING])
+                          [METHOD_RESOLVING_AND_FILING, METHOD_RESOLVING_EXISTING_FILING])
 
         # dossier allready resolved but without filing
         actions = get_filing_actions(dossier3)

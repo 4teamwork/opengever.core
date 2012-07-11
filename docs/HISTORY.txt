@@ -1,7 +1,15 @@
 Changelog
 =========
 
-2.1.2 (unreleased)
+
+2.1.4 (unreleased)
+------------------
+
+- Fixed archiving methods 'only_resolve' and 'only_number', in the dossier archive form.
+  [phgross]
+
+
+2.1.3 (2012-06-28)
 ------------------
 
 - Templatedossier: Adjust redirecting after document creation.

@@ -36,6 +36,7 @@ ONLY_NUMBER = _('set a filing no')
 METHOD_RESOLVING_AND_FILING = 0
 METHOD_RESOLVING = 1
 METHOD_FILING = 2
+METHOD_RESOLVING_EXISTING_FILING = 3
 
 # annotation key
 FILING_NO_KEY = "filing_no"
@@ -86,7 +87,7 @@ def get_filing_actions(context):
         # allready archived
         else:
             values.append(SimpleVocabulary.createTerm(
-                    METHOD_RESOLVING,
+                    METHOD_RESOLVING_EXISTING_FILING,
                     RESOLVE_WITH_EXISTING_NUMBER,
                     RESOLVE_WITH_EXISTING_NUMBER))
 
@@ -206,6 +207,13 @@ class ArchiveForm(directives_form.Form):
         filing_prefix = data.get('filing_prefix')
         end_date = data.get('dossier_enddate')
 
+        if action == METHOD_FILING:
+            # allready resolved only give a filing number
+            IDossierArchiver(self.context).archive(filing_prefix, filing_year)
+            self.ptool.addPortalMessage(
+                _("The filing number has been given"), type="info")
+            return self.request.RESPONSE.redirect(self.context.absolute_url())
+
         # archiving must passed to the resolving view
         resolver = IDossierResolver(self.context)
         if resolver.is_resolve_possible():
@@ -216,7 +224,7 @@ class ArchiveForm(directives_form.Form):
         if action == METHOD_RESOLVING_AND_FILING:
             IDossierArchiver(self.context).archive(filing_prefix, filing_year)
 
-        if action == METHOD_RESOLVING:
+        if action == METHOD_RESOLVING_EXISTING_FILING:
             # archive all with the existing filing number
             filing_no = IDossier(self.context).filing_no
             IDossierArchiver(self.context).archive(
