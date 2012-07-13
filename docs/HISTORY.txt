@@ -5,6 +5,9 @@ Changelog
 2.1.4 (unreleased)
 ------------------
 
+- Fixed METHOD_RESOLVING_EXISTING_FILING use realy the existing values.
+  [phgross]
+
 - Fixed archiving methods 'only_resolve' and 'only_number', in the dossier archive form.
   [phgross]
 
