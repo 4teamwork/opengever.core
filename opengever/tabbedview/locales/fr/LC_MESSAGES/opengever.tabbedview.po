@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "POT-Creation-Date: 2012-01-09 14:18+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
+"PO-Revision-Date: 2012-07-23 14:03+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -73,7 +73,7 @@ msgid "checked_out"
 msgstr "En traitement"
 
 msgid "checkout_and_edit"
-msgstr "Contrôler et modifier"
+msgstr "Checkout et modifier"
 
 #. Default: "Client"
 #: ./opengever/tabbedview/browser/tabs.py:349
