@@ -5,12 +5,15 @@
     i18n_domain="opengever.globalindex">
 
     <!-- event handlers for tasks -->
-    <configure zcml:condition="installed opengever.task"> 
+    <configure zcml:condition="installed opengever.task">
         <subscriber for="opengever.task.task.ITask
                          zope.lifecycleevent.interfaces.IObjectModifiedEvent"
                     handler=".task.index_task" />
         <subscriber for="opengever.task.task.ITask
                          zope.lifecycleevent.interfaces.IObjectAddedEvent"
+                    handler=".task.index_task" />
+        <subscriber for="opengever.task.task.ITask
+                         zope.lifecycleevent.interfaces.IObjectMovedEvent"
                     handler=".task.index_task" />
     </configure>
 

@@ -5,7 +5,10 @@ Changelog
 2.0.6 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Fixed index_task handler, reindex it also when a task has been moved.
+  Issue #1627 ARP: Nuemmerchen-Fehler beim Versuch, mandantenuebergr. Aufgabe abzuschliessen
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1627/
+  [phgross]
 
 
 2.0.5 (2012-06-19)
