@@ -104,6 +104,7 @@ class IDossier(form.Schema):
 
     filing_prefix = schema.Choice(
         title=_(u'filing_prefix', default="filing prefix"),
+        description=_(u'help_filing_prefix', default=""),
         source=wrap_vocabulary(
             'opengever.dossier.type_prefixes',
             visible_terms_from_registry="opengever.dossier"

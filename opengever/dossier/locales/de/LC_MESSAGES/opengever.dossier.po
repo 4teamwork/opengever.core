@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2012-07-11 10:23+0000\n"
-"PO-Revision-Date: 2012-07-11 12:24+0200\n"
+"POT-Creation-Date: 2012-07-25 08:30+0000\n"
+"PO-Revision-Date: 2012-06-27 12:10+0200\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
 "MIME-Version: 1.0\n"
@@ -24,7 +24,7 @@ msgstr "Geschäftsdossier hinzufügen"
 msgid "Add Participant"
 msgstr "Beteiligung hinzufügen"
 
-#: ./opengever/dossier/behaviors/dossier.py:222
+#: ./opengever/dossier/behaviors/dossier.py:223
 msgid "Add Subdossier"
 msgstr "Subdossier hinzufügen"
 
@@ -53,7 +53,7 @@ msgstr "Dokument ${name} ist mit einer Aufgabe verbunden, bitte Aufgabe verschie
 msgid "Dossiers successfully reactivated."
 msgstr "Das Dossier wurde erfolgreich wieder eröffnet."
 
-#: ./opengever/dossier/behaviors/dossier.py:237
+#: ./opengever/dossier/behaviors/dossier.py:238
 msgid "Edit Subdossier"
 msgstr "Subdossier bearbeiten"
 
@@ -106,7 +106,7 @@ msgstr "Vorlagendossier"
 msgid "Templates"
 msgstr "Vorlagen"
 
-#: ./opengever/dossier/archive.py:240
+#: ./opengever/dossier/archive.py:238
 msgid "The Dossier has been resolved"
 msgstr "Das Dossier wurde erfolgreich abgeschlossen"
 
@@ -118,7 +118,7 @@ msgstr "Das Dossier ${dossier} hat ein ungültiges Enddatum."
 msgid "The dossier has been succesfully resolved"
 msgstr "Das Dossier wurde erfolgreich abgeschlossen."
 
-#: ./opengever/dossier/archive.py:217
+#: ./opengever/dossier/archive.py:214
 msgid "The filing number has been given"
 msgstr "Die Ablagenummer wurde vergeben."
 
@@ -126,11 +126,11 @@ msgstr "Die Ablagenummer wurde vergeben."
 msgid "The given end date is not valid, it needs to be younger or                  equal than ${date} (the youngest contained object)."
 msgstr "Das Ende-Datum ist ungültig, es muss jünger oder gleich sein wie das Datum des jüngsten enthaltenen Dokuments (${date})."
 
-#: ./opengever/dossier/behaviors/dossier.py:194
+#: ./opengever/dossier/behaviors/dossier.py:195
 msgid "The start date must be before the end date."
 msgstr "Das Beginn-Datum muss vor dem Ende-Datum liegen."
 
-#: ./opengever/dossier/behaviors/dossier.py:244
+#: ./opengever/dossier/behaviors/dossier.py:245
 msgid "The start or end date is invalid"
 msgstr "Das Beginn- oder Ende-Datum ist ungültig."
 
@@ -156,7 +156,7 @@ msgid "button_archive"
 msgstr "Speichern"
 
 #. Default: "Cancel"
-#: ./opengever/dossier/archive.py:243
+#: ./opengever/dossier/archive.py:241
 #: ./opengever/dossier/behaviors/participation.py:164
 #: ./opengever/dossier/browser/transport.py:170
 msgid "button_cancel"
@@ -237,7 +237,7 @@ msgid "filing_action"
 msgstr "Aktion"
 
 #. Default: "Filing number"
-#: ./opengever/dossier/behaviors/dossier.py:116
+#: ./opengever/dossier/behaviors/dossier.py:117
 #: ./opengever/dossier/browser/report.py:113
 msgid "filing_no"
 msgstr "Ablagenummer"
@@ -286,11 +286,11 @@ msgstr ""
 msgid "help_contact"
 msgstr "Wählen Sie einen Benutzer oder einen Kontakt aus."
 
-#: ./opengever/dossier/behaviors/dossier.py:150
+#: ./opengever/dossier/behaviors/dossier.py:151
 msgid "help_container_location"
 msgstr "Standortangabe des Behälters, in dem ein Dossier in Papierform abgelegt ist"
 
-#: ./opengever/dossier/behaviors/dossier.py:133
+#: ./opengever/dossier/behaviors/dossier.py:134
 msgid "help_container_type"
 msgstr "Art des Behälters, in dem ein Dossier in Papierform abgelegt ist"
 
@@ -304,11 +304,15 @@ msgstr "Live Search: Durchsuchen Sie diesen Mandanten"
 msgid "help_end"
 msgstr ""
 
-#: ./opengever/dossier/behaviors/dossier.py:117
+#: ./opengever/dossier/behaviors/dossier.py:118
 msgid "help_filing_no"
 msgstr ""
 
-#: ./opengever/dossier/behaviors/dossier.py:178
+#: ./opengever/dossier/behaviors/dossier.py:107
+msgid "help_filing_prefix"
+msgstr ""
+
+#: ./opengever/dossier/behaviors/dossier.py:179
 msgid "help_former_reference_number"
 msgstr ""
 
@@ -316,11 +320,11 @@ msgstr ""
 msgid "help_keywords"
 msgstr "Schlagwörter zur Umschreibung eines Dossiers. Nicht zu verwechseln mit der Ordnungsposition"
 
-#: ./opengever/dossier/behaviors/dossier.py:144
+#: ./opengever/dossier/behaviors/dossier.py:145
 msgid "help_number_of_containers"
 msgstr "Anzahl Behälter, die ein (grosses) Dossier in Papierform enthalten"
 
-#: ./opengever/dossier/behaviors/dossier.py:185
+#: ./opengever/dossier/behaviors/dossier.py:186
 msgid "help_reference_number "
 msgstr ""
 
@@ -345,7 +349,7 @@ msgstr ""
 msgid "help_target_dossier"
 msgstr "Wählen Sie ein Dossier auf dem eigenen Mandanten aus"
 
-#: ./opengever/dossier/behaviors/dossier.py:127
+#: ./opengever/dossier/behaviors/dossier.py:128
 msgid "help_temporary_former_reference_number"
 msgstr ""
 
@@ -381,12 +385,12 @@ msgid "label_contact"
 msgstr "Person"
 
 #. Default: "Container Location"
-#: ./opengever/dossier/behaviors/dossier.py:149
+#: ./opengever/dossier/behaviors/dossier.py:150
 msgid "label_container_location"
 msgstr "Behältnis-Standort"
 
 #. Default: "Container Type"
-#: ./opengever/dossier/behaviors/dossier.py:132
+#: ./opengever/dossier/behaviors/dossier.py:133
 msgid "label_container_type"
 msgstr "Behältnis-Art"
 
@@ -429,7 +433,7 @@ msgid "label_filing_no"
 msgstr "Ablagenummer:"
 
 #. Default: "Reference Number"
-#: ./opengever/dossier/behaviors/dossier.py:176
+#: ./opengever/dossier/behaviors/dossier.py:177
 msgid "label_former_reference_number"
 msgstr "Früheres Aktenzeichen"
 
@@ -449,7 +453,7 @@ msgid "label_no_reference_number"
 msgstr "Die Archivnummer wird erst beim Erstellen generiert."
 
 #. Default: "Number of Containers"
-#: ./opengever/dossier/behaviors/dossier.py:142
+#: ./opengever/dossier/behaviors/dossier.py:143
 msgid "label_number_of_containers"
 msgstr "Anzahl Behältnisse"
 
@@ -459,14 +463,14 @@ msgid "label_participation"
 msgstr "Beteiligung"
 
 #. Default: "Reference Number"
-#: ./opengever/dossier/behaviors/dossier.py:184
+#: ./opengever/dossier/behaviors/dossier.py:185
 #: ./opengever/dossier/browser/report.py:118
 #: ./opengever/dossier/viewlets/businesscase_byline.pt:69
 msgid "label_reference_number"
 msgstr "Aktenzeichen:"
 
 #. Default: "Related Dossier"
-#: ./opengever/dossier/behaviors/dossier.py:155
+#: ./opengever/dossier/behaviors/dossier.py:156
 msgid "label_related_dossier"
 msgstr "Verwandte Dossiers"
 
@@ -595,7 +599,7 @@ msgid "tasks"
 msgstr "Aufgaben"
 
 #. Default: "Temporary former reference number"
-#: ./opengever/dossier/behaviors/dossier.py:125
+#: ./opengever/dossier/behaviors/dossier.py:126
 msgid "temporary_former_reference_number"
 msgstr ""
 

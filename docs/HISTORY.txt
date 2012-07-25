@@ -15,6 +15,9 @@ Changelog
 2.1.3 (2012-06-28)
 ------------------
 
+- Dossier Schema: Added description for the filing_prefix field.
+  [phgross]
+
 - Templatedossier: Adjust redirecting after document creation.
   [phgross]
 
