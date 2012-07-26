@@ -2,8 +2,15 @@ Changelog
 =========
 
 
-2.3.5 (unreleased)
+2.5 (unreleased)
 ------------------
+
+- Added french translations of task types.
+  [phgross]
+
+
+2.4 (2012-07-20)
+----------------
 
 - Added NoCheckedOutDocs also to the task add form.
   Issue #1516 Problem "Ueberweisen von ausgecheckten Dokumenten"
