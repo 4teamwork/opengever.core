@@ -104,12 +104,17 @@ class PersonalOverview(TabbedView):
 
     def user_is_allowed_to_view(self):
         """Returns True if the current client is one of the user's home
-        clients and he therefore is allowed to view the PersonalOverview,
-        False otherwise.
+        clients or an administrator and he therefore is allowed to view
+        the PersonalOverview, False otherwise.
         """
 
         info = getUtility(IContactInformation)
-        return info.is_client_assigned()
+
+        if info.is_client_assigned():
+            return True
+        elif self._is_user_admin():
+            return True
+        return False
 
 
 class MyDossiers(Dossiers):

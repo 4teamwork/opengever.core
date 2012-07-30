@@ -2,7 +2,16 @@ Changelog
 =========
 
 
-2.2.1 (unreleased)
+2.2.2 (unreleased)
+------------------
+
+- Adjust the condition to view the personal overview (allow also administrators).
+  Issue #1604 Pers. Uebersicht, "admin tabs" auch fuer Administrator ersichtlich machen.
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1604
+  [phgross]
+
+
+2.2.1 (2012-06-25)
 ------------------
 
 - Removed task conditioning in get_containg_document_tab, allways return the dossier url.
@@ -13,7 +22,7 @@ Changelog
 
 
 2.2 (2012-06-20)
-------------------
+----------------
 
 - Personaloverview: show admin_tabs for inbox users and administrators.
   Issue #1604 Pers. Uebersicht, "admin tabs" auch fuer Administrator ersichtlich machen.
