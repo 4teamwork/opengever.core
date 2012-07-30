@@ -23,6 +23,7 @@ from zope.component import getUtility, provideAdapter
 from zope.interface import invariant, Invalid
 from zope.schema.interfaces import IContextSourceBinder
 from zope.schema.vocabulary import SimpleVocabulary, getVocabularyRegistry
+import re
 
 
 # action vocabulary terms
@@ -40,6 +41,9 @@ METHOD_RESOLVING_EXISTING_FILING = 3
 
 # annotation key
 FILING_NO_KEY = "filing_no"
+
+# filing no pattern
+FILLING_NO_PATTERN = r'(.*)-(.*)-([0-9]*)-([0-9]*)'
 
 
 class MissingValue(Invalid):
@@ -74,18 +78,11 @@ def get_filing_actions(context):
     filing_no = IDossier(context).filing_no
 
     values = []
+
     if review_state != 'dossier-state-resolved':
-        # not archived yet
-        if not filing_no:
-            values.append(SimpleVocabulary.createTerm(
-                    METHOD_RESOLVING_AND_FILING,
-                    RESOLVE_AND_NUMBER, RESOLVE_AND_NUMBER))
 
-            values.append(SimpleVocabulary.createTerm(
-                    METHOD_RESOLVING, ONLY_RESOLVE, ONLY_RESOLVE))
-
-        # allready archived
-        else:
+        # not archived yet or not a valid filing_no
+        if filing_no and re.search(FILLING_NO_PATTERN, filing_no):
             values.append(SimpleVocabulary.createTerm(
                     METHOD_RESOLVING_EXISTING_FILING,
                     RESOLVE_WITH_EXISTING_NUMBER,
@@ -95,6 +92,15 @@ def get_filing_actions(context):
                     METHOD_RESOLVING_AND_FILING,
                     RESOLVE_WITH_NEW_NUMBER,
                     RESOLVE_WITH_NEW_NUMBER))
+
+        # allready archived
+        else:
+            values.append(SimpleVocabulary.createTerm(
+                    METHOD_RESOLVING_AND_FILING,
+                    RESOLVE_AND_NUMBER, RESOLVE_AND_NUMBER))
+
+            values.append(SimpleVocabulary.createTerm(
+                    METHOD_RESOLVING, ONLY_RESOLVE, ONLY_RESOLVE))
     # allready resolved
     else:
         if not filing_no:

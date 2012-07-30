@@ -5,6 +5,11 @@ Changelog
 2.1.4 (unreleased)
 ------------------
 
+- Fixed filing action generation, add validation for existing filing numbers.
+  Issue #1644 Frage nach exestierender Ablagenummer bei Dossierabschluss obwohl es keine hat
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1644/
+  [phgross]
+
 - Fixed METHOD_RESOLVING_EXISTING_FILING use realy the existing values.
   [phgross]
 

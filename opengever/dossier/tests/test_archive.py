@@ -208,16 +208,22 @@ class TestArchiving(MockTestCase):
         self.expect(wft.getInfoFor(dossier1, 'review_state', None)).result(
             'dossier-state-activ')
 
-        #dossier not resolved yet with a filing no
+        #dossier not resolved yet with a not valid filing no
         dossier2 = self.providing_stub(IDossier)
         self.expect(dossier2.filing_no).result('FAKE_NUMBER')
         self.expect(wft.getInfoFor(dossier2, 'review_state', None)).result(
             'dossier-state-activ')
 
-        # dossier allready rsolved no filing
+        #dossier not resolved yet with a valid filing no
         dossier3 = self.providing_stub(IDossier)
-        self.expect(dossier3.filing_no).result(None)
+        self.expect(dossier3.filing_no).result('TEST A-Amt-2011-2')
         self.expect(wft.getInfoFor(dossier3, 'review_state', None)).result(
+            'dossier-state-activ')
+
+        # dossier allready rsolved no filing
+        dossier4 = self.providing_stub(IDossier)
+        self.expect(dossier4.filing_no).result(None)
+        self.expect(wft.getInfoFor(dossier4, 'review_state', None)).result(
             'dossier-state-resolved')
 
         self.replay()
@@ -231,6 +237,13 @@ class TestArchiving(MockTestCase):
 
         #dossier not resolved yet but with a filing no
         actions = get_filing_actions(dossier2)
+        self.assertEquals(actions.by_token.keys(),
+                          [ONLY_RESOLVE, RESOLVE_AND_NUMBER])
+        self.assertEquals(actions.by_value.keys(),
+                          [METHOD_RESOLVING_AND_FILING, METHOD_RESOLVING])
+
+        #dossier not resolved yet but with a filing no
+        actions = get_filing_actions(dossier3)
         self.assertEquals(
             actions.by_token.keys(),
             [RESOLVE_WITH_EXISTING_NUMBER, RESOLVE_WITH_NEW_NUMBER])
@@ -238,7 +251,7 @@ class TestArchiving(MockTestCase):
                           [METHOD_RESOLVING_AND_FILING, METHOD_RESOLVING_EXISTING_FILING])
 
         # dossier allready resolved but without filing
-        actions = get_filing_actions(dossier3)
+        actions = get_filing_actions(dossier4)
         self.assertEquals(actions.by_token.keys(),[ONLY_NUMBER])
         self.assertEquals(actions.by_value.keys(),[METHOD_FILING])
 
