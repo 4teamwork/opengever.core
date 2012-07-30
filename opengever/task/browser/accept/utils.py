@@ -127,7 +127,7 @@ def accept_forwarding_with_successor(
     with CustomInitialVersionMessage(
         _(u'version_message_accept_forwarding',
           default=u'Document copied from forwarding (forwarding accepted)'),
-        dossier.REQUEST):
+        context.REQUEST):
         intids_mapping = doc_transporter.copy_documents_from_remote_task(
             predecessor, successor_forwarding)
 

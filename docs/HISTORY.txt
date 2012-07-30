@@ -5,6 +5,9 @@ Changelog
 2.5 (unreleased)
 ------------------
 
+- Fixed request getter in accept_forwarding process.
+  [phgross]
+
 - Added french translations of task types.
   [phgross]
 
