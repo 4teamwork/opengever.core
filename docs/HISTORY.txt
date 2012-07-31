@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-2.0.6 (unreleased)
+2.0.6 (2012-07-31)
 ------------------
 
 - Fixed index_task handler, reindex it also when a task has been moved.
