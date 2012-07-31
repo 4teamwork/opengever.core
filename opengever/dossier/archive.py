@@ -116,8 +116,8 @@ class IArchiveFormSchema(directives_form.Schema):
         title=_(u'filing_prefix', default="filing prefix"),
         source=wrap_vocabulary(
             'opengever.dossier.type_prefixes',
-            visible_terms_from_registry="opengever.dossier.interfaces.\
-                IDossierContainerTypes.type_prefixes"),
+            visible_terms_from_registry="opengever.dossier"
+                '.interfaces.IDossierContainerTypes.type_prefixes'),
         required=False,
     )
 

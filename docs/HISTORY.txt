@@ -5,6 +5,11 @@ Changelog
 2.1.4 (unreleased)
 ------------------
 
+- Archiveform: Fixed filing_prefix field (visible_terms_from_registry attribute).
+  Issue #1645 Probleme beim Dossier abschliessen
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1645/
+  [phgross]
+
 - Fixed filing action generation, add validation for existing filing numbers.
   Issue #1644 Frage nach exestierender Ablagenummer bei Dossierabschluss obwohl es keine hat
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1644/
