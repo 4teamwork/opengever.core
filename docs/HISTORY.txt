@@ -5,6 +5,11 @@ Changelog
 2.5 (unreleased)
 ------------------
 
+- Fixed error in NoCheckedoutDocsValidator, works now also with None as value.
+  Issue #1651 NoCheckedoutDocsValidator wirft Fehler, wenn kein Wert uebergeben wird.
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1651/view
+  [phgross]
+
 - Fixed request getter in accept_forwarding process.
   [phgross]
 

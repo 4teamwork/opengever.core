@@ -74,3 +74,6 @@ class TestTaskCompletion(MockTestCase):
 
         with self.assertRaises(Invalid):
             validator.validate([doc1, doc2, doc3])
+
+        # check also without a value
+        validator.validate(None)

@@ -13,23 +13,25 @@ class NoCheckedoutDocsValidator(validator.SimpleFieldValidator):
 
     def validate(self, value):
 
-        intids = getUtility(IIntIds)
+        if value:
 
-        checkedout = []
-        for iid in value:
-            if not IRelationList.providedBy(self.field):
-                iid = int(iid)
-                doc = intids.getObject(int(iid))
-            else:
-                doc = iid
+            intids = getUtility(IIntIds)
 
-            brain = uuidToCatalogBrain(IUUID(doc))
-            if brain.checked_out:
-                checkedout.append(doc.title)
+            checkedout = []
+            for iid in value:
+                if not IRelationList.providedBy(self.field):
+                    iid = int(iid)
+                    doc = intids.getObject(int(iid))
+                else:
+                    doc = iid
 
-        if len(checkedout):
-            raise Invalid(_(
-                    u'error_checked_out_document',
-                    default=u'The documents (${title}) are still checked out. \
-                            Please checkin them in bevore deliver',
-                    mapping={'title': ', '.join(checkedout)}))
+                brain = uuidToCatalogBrain(IUUID(doc))
+                if brain.checked_out:
+                    checkedout.append(doc.title)
+
+            if len(checkedout):
+                raise Invalid(_(
+                        u'error_checked_out_document',
+                        default=u'The documents (${title}) are still checked out. \
+                                Please checkin them in bevore deliver',
+                        mapping={'title': ', '.join(checkedout)}))
