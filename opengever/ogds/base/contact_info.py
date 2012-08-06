@@ -121,6 +121,11 @@ class ContactInformation(grok.GlobalUtility):
         result = session.execute(User.__table__.select())
         return [UserDict(**dict(zip(userdata_keys, row))) for row in result]
 
+    def list_inactive_users(self):
+        session = create_session()
+        users = session.query(User).filter(User.active == False)
+        return users
+
     def list_assigned_users(self, client_id=None):
         """Lists all users assigned to a client.
         """

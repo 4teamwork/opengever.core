@@ -45,6 +45,12 @@ Lets create some users:
     ...                       'lastname': 'linder'},
     ...                      ('client2_users', 'client1_users'))
 
+    >>> _create_example_user(session, portal,
+    ...                      'robin.hood',
+    ...                      {'firstname': 'Robin',
+    ...                       'active' : '0',
+    ...                       'lastname': 'Hood'},
+    ...                      [])
 
 
 
@@ -103,9 +109,9 @@ Get the contact information utlity:
 User tests:
 
     >>> len(info.list_users())
-    3
+    4
     >>> [u.userid for u in info.list_users()]
-    [u'hugo.boss', u'peter.muster', u'hanspeter.linder']
+    [u'hugo.boss', u'peter.muster', u'hanspeter.linder', u'robin.hood']
     >>> info.is_user('hugo.boss')
     True
     >>> info.is_contact('hugo.boss')
@@ -271,15 +277,17 @@ Various lists and other methods:
 check the sort dictionaries
 
     >>> info.get_user_sort_dict()
-    {u'hugo.boss': u'Boss Hugo',
-     u'hanspeter.linder': u'linder hanspeter',
-     u'inbox:client2': u'Inbox: Client 2',
-     u'peter.muster': u'Muster Peter',
-     u'inbox:client1': u'Inbox: Client 1'}
+    {u'inbox:client1': u'Inbox: Client 1',
+    u'robin.hood': u'Hood Robin',
+    u'hugo.boss': u'Boss Hugo',
+    u'inbox:client2': u'Inbox: Client 2',
+    u'hanspeter.linder': u'linder hanspeter',
+    u'peter.muster': u'Muster Peter'}
 
     >>> info.get_user_contact_sort_dict()
     {u'inbox:client1': u'Inbox: Client 1',
     'contact:wermuth-roger': u'Wermuth Roger',
+    u'robin.hood': u'Hood Robin',
     'contact:kaufmann-sandra': u'Kaufmann Sandra',
     'contact:kappeli-elisabeth': u'K\xe4ppeli Elisabeth',
     u'hugo.boss': u'Boss Hugo',

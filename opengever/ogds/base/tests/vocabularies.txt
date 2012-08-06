@@ -122,6 +122,16 @@ Example of hidden users (``Robin Hood`` is everywhere but visible nowhere).
     ...                       'client2_users',
     ...                       'client2_inbox_users'))
 
+Example of gone users (``hans.peter`` is nowwhere but still in the hidden terms).
+
+    >>> _create_example_user(session, portal,
+    ...                      'hans.peter',
+    ...                      {'firstname': 'Hans',
+    ...                       'lastname': 'Peter',
+    ...                       'email': 'hans.peter@peter.ch',
+    ...                       'active': '0'},
+    ...                       [])
+
 Clients:
 
     >>> _create_example_client(session, 'client1',
@@ -235,6 +245,11 @@ Vocabulary of all users assigned to the current client.
     >>> voc = fact(portal)
     >>> fterms(list(voc))
     [u'<Term hanspeter.linder:Linder Hans-Peter (hanspeter.linder)>', u'<Term hugo.boss:Boss Hugo (hugo.boss)>']
+    >>> voc.hidden_terms
+    [u'robin.hood', u'hans.peter']
+    >>> u'robin.hood' in voc
+    True
+
 
 
 
@@ -273,7 +288,7 @@ address they have.
     ...                   name='opengever.ogds.base.EmailContactsAndUsersVocabulary')
     >>> voc = fact(portal)
     >>> fterms(list(voc))
-    [u'<Term hugo@boss.local:hugo.boss:Boss Hugo (hugo.boss, hugo@boss.local)>', u'<Term hugo@private.ch:hugo.boss:Boss Hugo (hugo.boss, hugo@private.ch)>', u'<Term robin@hood.tld:robin.hood:Hood Robin (robin.hood, robin@hood.tld)>', u'<Term sandra.kaufmann@test.ch:kaufmann-sandra:Kaufmann Sandra (sandra.kaufmann@test.ch)>', u'<Term elisabeth.kaeppeli@test.ch:kappeli-elisabeth:K\xe4ppeli Elisabeth (elisabeth.kaeppeli@test.ch)>']
+    [u'<Term hugo@boss.local:hugo.boss:Boss Hugo (hugo.boss, hugo@boss.local)>', u'<Term hugo@private.ch:hugo.boss:Boss Hugo (hugo.boss, hugo@private.ch)>', u'<Term robin@hood.tld:robin.hood:Hood Robin (robin.hood, robin@hood.tld)>', u'<Term hans.peter@peter.ch:hans.peter:Peter Hans (hans.peter, hans.peter@peter.ch)>', u'<Term sandra.kaufmann@test.ch:kaufmann-sandra:Kaufmann Sandra (sandra.kaufmann@test.ch)>', u'<Term elisabeth.kaeppeli@test.ch:kappeli-elisabeth:K\xe4ppeli Elisabeth (elisabeth.kaeppeli@test.ch)>']
 
 
 Clients vocabulary

@@ -113,6 +113,13 @@ class UsersAndInboxesVocabularyFactory(grok.GlobalUtility):
             principal = u'inbox:%s' % client_id
             yield (principal, info.describe(principal))
 
+            # add the inactive users to the vocabulary
+            # and mark them as hidden terms
+            for user in info.list_inactive_users():
+                if user.userid not in self.hidden_terms:
+                    self.hidden_terms.append(user.userid)
+                    yield (user.userid, info.describe(user))
+
     def get_client(self):
         """Tries to get the client from the request. If no client is found None
         is returned.
@@ -172,6 +179,13 @@ class AllUsersAndInboxesVocabularyFactory(grok.GlobalUtility):
 
                 yield (value, label)
 
+            # add the inactive users to the vocabulary
+            # and mark them as hidden terms
+            for user in info.list_inactive_users():
+                if user.userid not in self.hidden_terms:
+                    self.hidden_terms.append(user.userid)
+                    yield (user.userid, info.describe(user))
+
             # client inbox
             principal = u'inbox:%s' % client_id
             value = u'%s:%s' % (client_id, principal)
@@ -210,6 +224,12 @@ class InboxesVocabularyFactory(UsersAndInboxesVocabularyFactory):
                         self.hidden_terms.append(user.userid)
                     yield (user.userid,
                            info.describe(user))
+
+            # add all inactive users to the hidden terms
+            for user in info.list_inactive_users():
+                if user.userid not in self.hidden_terms:
+                    self.hidden_terms.append(user.userid)
+
             # client inbox
             principal = u'inbox:%s' % client_id
             yield (principal, info.describe(principal))
@@ -225,6 +245,7 @@ class AssignedUsersVocabularyFactory(grok.GlobalUtility):
     hidden_terms = []
 
     def __call__(self, context):
+
         self.context = context
         vocab = wrap_vocabulary(
             ContactsVocabulary.create_with_provider(
@@ -236,11 +257,18 @@ class AssignedUsersVocabularyFactory(grok.GlobalUtility):
     @generator_to_list
     def key_value_provider(self):
         info = getUtility(IContactInformation)
+
         for user in info.list_assigned_users():
             if not user.active:
                 self.hidden_terms.append(user.userid)
             yield (user.userid,
                    info.describe(user))
+
+        # add the inactive users to the vocabulary and marked as hidden terms
+        for user in info.list_inactive_users():
+            if user.userid not in self.hidden_terms:
+                self.hidden_terms.append(user.userid)
+                yield (user.userid, info.describe(user))
 
 
 class ContactsVocabularyFactory(grok.GlobalUtility):
@@ -302,6 +330,12 @@ class ContactsAndUsersVocabularyFactory(grok.GlobalUtility):
                 hidden_terms.append(user.userid)
             items.append((user.userid,
                           info.describe(user)))
+
+        # add the inactive users to the vocabulary and marked as hidden terms
+        for user in info.list_inactive_users():
+            if user.userid not in self.hidden_terms:
+                self.hidden_terms.append(user.userid)
+                items.append((user.userid, info.describe(user)))
 
         # add also the client inboxes
         for client in info.get_clients():

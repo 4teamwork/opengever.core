@@ -1,8 +1,16 @@
 Changelog
 =========
 
+2.0.6 (unreleased)
+------------------
 
-2.0.5 (unreleased)
+- Fixed elephantvocabulary functionality in all Usersvocabularies:
+  Add all inactive users as hidden elements to the users vocabularies.
+  Issue #1648 Aenderung Dossier unter Bearbeiten wenn Federfuehrender ex-Mitarbeiter ist
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1648/
+
+
+2.0.5 (2012-06-19)
 ------------------
 
 - Added decoding the title of the remote objects, to avoid problems with umlaut.
