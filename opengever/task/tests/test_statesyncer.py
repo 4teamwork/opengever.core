@@ -14,6 +14,8 @@ from zExceptions import Forbidden
 from zope.annotation.interfaces import IAttributeAnnotatable
 from zope.component import getMultiAdapter
 from zope.interface import Interface
+from zope.lifecycleevent import ObjectModifiedEvent
+from zope.lifecycleevent.interfaces import IObjectModifiedEvent
 
 
 remote_viewname = '@@sync-task-workflow-state-receive'
@@ -157,6 +159,7 @@ class ZCMLLayer(ComponentRegistryLayer):
 
         grok('opengever.task.statesyncer')
         grok('opengever.task.adapters')
+        grok('opengever.task.localroles')
 
 ZCML_LAYER = ZCMLLayer()
 
@@ -258,6 +261,11 @@ class TestSyncTaskWorkflowStateReceiveView(MockTestCase):
         # reassign respone
         response = self.stub_response(request=reassign_request)
         self.expect(response.setHeader("Content-type", "text/plain"))
+
+        # an ObjectModifiedEvent should be notified to update the local roles
+        handler = self.stub()
+        self.mock_handler(handler, [IObjectModifiedEvent])
+        self.expect(handler(ANY)).result(True)
 
         self.replay()
 

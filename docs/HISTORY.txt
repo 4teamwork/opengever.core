@@ -5,6 +5,11 @@ Changelog
 2.5 (unreleased)
 ------------------
 
+- Statesyncer: Update the localroles on the remote task, when reponsible has changed.
+  Issue #1665 Erledigen von mandantenuebergreifenden Aufgaben.
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1665
+  [phgross]
+
 - Fixed error in NoCheckedoutDocsValidator, works now also with None as value.
   Issue #1651 NoCheckedoutDocsValidator wirft Fehler, wenn kein Wert uebergeben wird.
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1651/view

@@ -4,8 +4,8 @@ predecessors).
 
 from Products.CMFCore.utils import getToolByName
 from five import grok
-from opengever.ogds.base.interfaces import IInternalOpengeverRequestLayer
 from opengever.ogds.base import utils
+from opengever.ogds.base.interfaces import IInternalOpengeverRequestLayer
 from opengever.task import _
 from opengever.task.adapters import IResponseContainer
 from opengever.task.interfaces import ISuccessorTaskController
@@ -13,7 +13,9 @@ from opengever.task.interfaces import IWorkflowStateSyncer
 from opengever.task.task import ITask
 from opengever.task.util import add_simple_response
 from zExceptions import Forbidden
+from zope.event import notify
 from zope.interface import Interface
+from zope.lifecycleevent import ObjectModifiedEvent
 import AccessControl
 
 
@@ -138,6 +140,8 @@ class SyncTaskWorkflowStateReceiveView(grok.View):
 
             ITask(self.context).responsible_client = responsible_client
             ITask(self.context).responsible = responsible
+
+            notify(ObjectModifiedEvent(self.context))
 
         response.add_change('review_state', _(u'Issue state'),
                             before, after)
