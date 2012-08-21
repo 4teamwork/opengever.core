@@ -275,14 +275,13 @@ class AddForm(dexterity.AddForm):
             self.request.set('form.widgets.issuer', [member.getId()])
         super(AddForm, self).update()
 
-    def updateWidgets(self):
-        dexterity.AddForm.updateWidgets(self)
-
-        # omit the responsible_client field if there is only one client
-        # configured.
+        # omit the responsible_client field and adjust the field description
+        # of the responsible field if there is only one client configured.
         info = getUtility(IContactInformation)
         if len(info.get_clients()) <= 1:
-            self.groups[0].fields['responsible_client'].mode = HIDDEN_MODE
+            self.groups[0].widgets['responsible_client'].mode = HIDDEN_MODE
+            self.groups[0].widgets['responsible'].field.description = _(
+                u"help_responsible_single_client_setup", default=u"")
 
 
 class EditForm(dexterity.EditForm):
@@ -290,14 +289,16 @@ class EditForm(dexterity.EditForm):
     grok.context(ITask)
     grok.require('opengever.task.EditTask')
 
-    def updateWidgets(self):
-        super(EditForm, self).updateWidgets()
+    def update(self):
+        super(EditForm, self).update()
 
-        # omit the responsible_client field if there is only one client
-        # configured.
+        # omit the responsible_client field and adjust the field description
+        # of the responsible field if there is only one client configured.
         info = getUtility(IContactInformation)
         if len(info.get_clients()) <= 1:
-            self.groups[0].fields['responsible_client'].mode = HIDDEN_MODE
+            self.groups[0].widgets['responsible_client'].mode = HIDDEN_MODE
+            self.groups[0].widgets['responsible'].field.description = _(
+                u"help_responsible_single_client_setup", default=u"")
 
 
 @indexer(ITask)

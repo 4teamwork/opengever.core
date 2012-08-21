@@ -42,7 +42,7 @@ class IAssignSchema(form.Schema):
 
     responsible = schema.Choice(
         title=_(u"label_responsible", default=u"Responsible"),
-        description=_(u"help_responsible", default=""),
+        description=_(u"help_responsible_single_client_setup", default=""),
         vocabulary=u'opengever.ogds.base.UsersAndInboxesVocabulary',
         required=True,
         )

@@ -5,6 +5,11 @@ Changelog
 2.5 (unreleased)
 ------------------
 
+- Implements special description for the responsible field in one client gever setups.
+  Issue #217 Aufgabe - nur 1 Mandant
+  https://extranet.4teamwork.ch/support/ph-vs/tracker/217
+  [phgross]
+
 - Statesyncer: Update the localroles on the remote task, when reponsible has changed.
   Issue #1665 Erledigen von mandantenuebergreifenden Aufgaben.
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1665
