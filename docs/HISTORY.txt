@@ -4,6 +4,11 @@ Changelog
 2.0.6 (unreleased)
 ------------------
 
+- Implements the ldap sync configuration configurable.
+  Issue #24 LDAP Synchronisation: ldap Anbindung konfigurierbar implementieren.
+  https://extranet.4teamwork.ch/projects/0258-projekt-upgrade-opengever-plone-4-paedagogische-hochschule-wallis-ph-vs/tracker-upgrade-auf-gever-plone-4/24/
+  [phgross]
+
 - Fixed elephantvocabulary functionality in all Usersvocabularies:
   Add all inactive users as hidden elements to the users vocabularies.
   Issue #1648 Aenderung Dossier unter Bearbeiten wenn Federfuehrender ex-Mitarbeiter ist
