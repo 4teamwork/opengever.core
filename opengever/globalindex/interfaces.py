@@ -17,6 +17,7 @@ class ITaskQuery(Interface):
         """Returns all tasks issued by the given issuer.
         """
 
+
 class IGlobalindexMaintenanceView(Interface):
     """"solr maintenance view for the global index"""
 
@@ -31,3 +32,5 @@ class IGlobalindexMaintenanceView(Interface):
         """Method for checking if Tasks exists,
         who has a inconsistent Syncronisation."""
 
+    def fix_responsible_synchronisation():
+        """Method which fix the not synchron responsibility of tasks."""
