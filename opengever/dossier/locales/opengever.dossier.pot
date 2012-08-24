@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2012-07-25 08:30+0000\n"
+"POT-Creation-Date: 2012-08-24 14:02+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -84,7 +84,7 @@ msgstr ""
 msgid "Move Items"
 msgstr ""
 
-#: ./opengever/dossier/archive.py:47
+#: ./opengever/dossier/archive.py:51
 msgid "Not all required fields are filled"
 msgstr ""
 
@@ -107,7 +107,7 @@ msgstr ""
 msgid "Templates"
 msgstr ""
 
-#: ./opengever/dossier/archive.py:238
+#: ./opengever/dossier/archive.py:255
 msgid "The Dossier has been resolved"
 msgstr ""
 
@@ -119,12 +119,16 @@ msgstr ""
 msgid "The dossier has been succesfully resolved"
 msgstr ""
 
-#: ./opengever/dossier/archive.py:214
+#: ./opengever/dossier/archive.py:231
 msgid "The filing number has been given"
 msgstr ""
 
-#: ./opengever/dossier/archive.py:62
+#: ./opengever/dossier/archive.py:66
 msgid "The given end date is not valid, it needs to be younger or                  equal than ${date} (the youngest contained object)."
+msgstr ""
+
+#: ./opengever/dossier/archive.py:76
+msgid "The given value is not a valid Year"
 msgstr ""
 
 #: ./opengever/dossier/behaviors/dossier.py:195
@@ -135,7 +139,7 @@ msgstr ""
 msgid "The start or end date is invalid"
 msgstr ""
 
-#: ./opengever/dossier/archive.py:143
+#: ./opengever/dossier/archive.py:160
 msgid "When the Action give filing number is selected,                         all fields are required."
 msgstr ""
 
@@ -152,12 +156,12 @@ msgid "button_add"
 msgstr ""
 
 #. Default: "Archive"
-#: ./opengever/dossier/archive.py:187
+#: ./opengever/dossier/archive.py:204
 msgid "button_archive"
 msgstr ""
 
 #. Default: "Cancel"
-#: ./opengever/dossier/archive.py:241
+#: ./opengever/dossier/archive.py:258
 #: ./opengever/dossier/behaviors/participation.py:164
 #: ./opengever/dossier/browser/transport.py:170
 msgid "button_cancel"
@@ -218,7 +222,7 @@ msgid "error_NotInContentTypes ${failed_objects}"
 msgstr ""
 
 #. Default: "The enddate is required."
-#: ./opengever/dossier/archive.py:57
+#: ./opengever/dossier/archive.py:61
 msgid "error_enddate"
 msgstr ""
 
@@ -233,7 +237,7 @@ msgid "fieldset_filing"
 msgstr ""
 
 #. Default: "Action"
-#: ./opengever/dossier/archive.py:130
+#: ./opengever/dossier/archive.py:147
 msgid "filing_action"
 msgstr ""
 
@@ -259,18 +263,18 @@ msgid "filing_nr"
 msgstr ""
 
 #. Default: "filing prefix"
-#: ./opengever/dossier/archive.py:110
+#: ./opengever/dossier/archive.py:126
 #: ./opengever/dossier/behaviors/dossier.py:106
 msgid "filing_prefix"
 msgstr ""
 
 #. Default: "filing Year"
-#: ./opengever/dossier/archive.py:125
+#: ./opengever/dossier/archive.py:141
 msgid "filing_year"
 msgstr ""
 
 #. Default: "Archive Dossier"
-#: ./opengever/dossier/archive.py:179
+#: ./opengever/dossier/archive.py:196
 msgid "heading_archive_form"
 msgstr ""
 
@@ -300,7 +304,7 @@ msgstr ""
 msgid "help_destination"
 msgstr ""
 
-#: ./opengever/dossier/archive.py:120
+#: ./opengever/dossier/archive.py:136
 #: ./opengever/dossier/behaviors/dossier.py:73
 msgid "help_end"
 msgstr ""
@@ -416,7 +420,7 @@ msgid "label_email_address"
 msgstr ""
 
 #. Default: "Closing Date"
-#: ./opengever/dossier/archive.py:119
+#: ./opengever/dossier/archive.py:135
 #: ./opengever/dossier/behaviors/dossier.py:72
 #: ./opengever/dossier/browser/report.py:97
 msgid "label_end"
@@ -559,7 +563,7 @@ msgstr ""
 msgid "not all task are closed"
 msgstr ""
 
-#: ./opengever/dossier/archive.py:30
+#: ./opengever/dossier/archive.py:31
 msgid "only resolve, set filing no later"
 msgstr ""
 
@@ -570,19 +574,19 @@ msgstr ""
 msgid "required"
 msgstr ""
 
-#: ./opengever/dossier/archive.py:32
+#: ./opengever/dossier/archive.py:33
 msgid "resolve and set a new filing no"
 msgstr ""
 
-#: ./opengever/dossier/archive.py:29
+#: ./opengever/dossier/archive.py:30
 msgid "resolve and set filing no"
 msgstr ""
 
-#: ./opengever/dossier/archive.py:31
+#: ./opengever/dossier/archive.py:32
 msgid "resolve and take the existing filing no"
 msgstr ""
 
-#: ./opengever/dossier/archive.py:33
+#: ./opengever/dossier/archive.py:34
 msgid "set a filing no"
 msgstr ""
 

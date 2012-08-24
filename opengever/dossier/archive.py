@@ -68,6 +68,22 @@ class EnddateValidator(validator.SimpleFieldValidator):
                   mapping=dict(date=earliest_date.strftime('%d.%m.%Y'),),))
 
 
+def tryint(i):
+    try:
+        int(i)
+        return True
+    except:
+        return False
+
+
+def valid_filing_year(value):
+    if tryint(value):
+        if 1900 < int(value) < 3000:
+            if str(int(value)) == value:
+                return True
+    raise Invalid(_(u'The given value is not a valid Year'))
+
+
 @grok.provider(IContextSourceBinder)
 def get_filing_actions(context):
     """Create a vocabulary with different actions,
@@ -129,6 +145,7 @@ class IArchiveFormSchema(directives_form.Schema):
 
     filing_year = schema.TextLine(
         title=_(u'filing_year', default="filing Year"),
+        constraint=valid_filing_year,
         required=False,
     )
 

@@ -15,6 +15,7 @@ from opengever.dossier.archive import RESOLVE_WITH_EXISTING_NUMBER, ONLY_NUMBER
 from opengever.dossier.archive import RESOLVE_WITH_NEW_NUMBER, METHOD_RESOLVING
 from opengever.dossier.archive import filing_year_default_value, default_end_date
 from opengever.dossier.archive import get_filing_actions, filing_prefix_default_value
+from opengever.dossier.archive import valid_filing_year
 from opengever.dossier.behaviors.dossier import IDossier, IDossierMarker
 from opengever.dossier.interfaces import IDossierArchiver
 from plone.registry.interfaces import IRegistry
@@ -26,7 +27,6 @@ from zope.schema.vocabulary import VocabularyRegistryError
 from zope.schema.vocabulary import getVocabularyRegistry
 import opengever.dossier
 import os
-
 
 class ZCMLLayer(ComponentRegistryLayer):
 
@@ -161,6 +161,20 @@ class TestArchiver(MockTestCase):
         self.assertEquals(sub1.filing_no, 'FAKE NUMBER.1')
         self.assertEquals(sub2.filing_no, 'FAKE NUMBER.2')
         self.assertEquals(subsub1.filing_no, 'FAKE NUMBER.1.1')
+
+
+class TestForm(MockTestCase):
+
+    def test_valid_filing_year(self):
+
+        self.assertTrue(valid_filing_year(u'2012'))
+        self.assertTrue(valid_filing_year('1995'))
+
+        not_valid_years = [
+            '-2012', '2012 ', '12.12.2012', 'sdfd', '500', '5000', None]
+        for year in not_valid_years:
+            with self.assertRaises(Invalid):
+                valid_filing_year(year)
 
 
 class TestArchiving(MockTestCase):

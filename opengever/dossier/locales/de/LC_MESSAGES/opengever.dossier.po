@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2012-07-25 08:30+0000\n"
-"PO-Revision-Date: 2012-06-27 12:10+0200\n"
+"POT-Creation-Date: 2012-08-24 14:02+0000\n"
+"PO-Revision-Date: 2012-08-24 16:04+0200\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
 "MIME-Version: 1.0\n"
@@ -81,7 +81,7 @@ msgstr "Es ist nicht möglich das Subdossier wieder zu eröffnen, das Hauptdossi
 msgid "Move Items"
 msgstr "Elemente verschieben"
 
-#: ./opengever/dossier/archive.py:47
+#: ./opengever/dossier/archive.py:51
 msgid "Not all required fields are filled"
 msgstr "Nicht alle benötigten Felder wurden ausgefüllt."
 
@@ -106,7 +106,7 @@ msgstr "Vorlagendossier"
 msgid "Templates"
 msgstr "Vorlagen"
 
-#: ./opengever/dossier/archive.py:238
+#: ./opengever/dossier/archive.py:255
 msgid "The Dossier has been resolved"
 msgstr "Das Dossier wurde erfolgreich abgeschlossen"
 
@@ -118,13 +118,17 @@ msgstr "Das Dossier ${dossier} hat ein ungültiges Enddatum."
 msgid "The dossier has been succesfully resolved"
 msgstr "Das Dossier wurde erfolgreich abgeschlossen."
 
-#: ./opengever/dossier/archive.py:214
+#: ./opengever/dossier/archive.py:231
 msgid "The filing number has been given"
 msgstr "Die Ablagenummer wurde vergeben."
 
-#: ./opengever/dossier/archive.py:62
+#: ./opengever/dossier/archive.py:66
 msgid "The given end date is not valid, it needs to be younger or                  equal than ${date} (the youngest contained object)."
 msgstr "Das Ende-Datum ist ungültig, es muss jünger oder gleich sein wie das Datum des jüngsten enthaltenen Dokuments (${date})."
+
+#: ./opengever/dossier/archive.py:76
+msgid "The given value is not a valid Year"
+msgstr "Das angegeben Ablagejahr ist ungültig."
 
 #: ./opengever/dossier/behaviors/dossier.py:195
 msgid "The start date must be before the end date."
@@ -134,7 +138,7 @@ msgstr "Das Beginn-Datum muss vor dem Ende-Datum liegen."
 msgid "The start or end date is invalid"
 msgstr "Das Beginn- oder Ende-Datum ist ungültig."
 
-#: ./opengever/dossier/archive.py:143
+#: ./opengever/dossier/archive.py:160
 msgid "When the Action give filing number is selected,                         all fields are required."
 msgstr "Für die Vergabe der Ablagenummer, werden alle Felder benötigt."
 
@@ -151,12 +155,12 @@ msgid "button_add"
 msgstr "Erstellen"
 
 #. Default: "Archive"
-#: ./opengever/dossier/archive.py:187
+#: ./opengever/dossier/archive.py:204
 msgid "button_archive"
 msgstr "Speichern"
 
 #. Default: "Cancel"
-#: ./opengever/dossier/archive.py:241
+#: ./opengever/dossier/archive.py:258
 #: ./opengever/dossier/behaviors/participation.py:164
 #: ./opengever/dossier/browser/transport.py:170
 msgid "button_cancel"
@@ -217,7 +221,7 @@ msgid "error_NotInContentTypes ${failed_objects}"
 msgstr "Es wurden keine Objekte verschoben. Folgende Objekte dürfen nicht in den Zielordner eingefügt werden: ${failed_objects}"
 
 #. Default: "The enddate is required."
-#: ./opengever/dossier/archive.py:57
+#: ./opengever/dossier/archive.py:61
 msgid "error_enddate"
 msgstr "Enddatum erforderlich"
 
@@ -232,7 +236,7 @@ msgid "fieldset_filing"
 msgstr "Ablage"
 
 #. Default: "Action"
-#: ./opengever/dossier/archive.py:130
+#: ./opengever/dossier/archive.py:147
 msgid "filing_action"
 msgstr "Aktion"
 
@@ -258,18 +262,18 @@ msgid "filing_nr"
 msgstr "Ablagenummer vergeben"
 
 #. Default: "filing prefix"
-#: ./opengever/dossier/archive.py:110
+#: ./opengever/dossier/archive.py:126
 #: ./opengever/dossier/behaviors/dossier.py:106
 msgid "filing_prefix"
 msgstr "Ablage Präfix"
 
 #. Default: "filing Year"
-#: ./opengever/dossier/archive.py:125
+#: ./opengever/dossier/archive.py:141
 msgid "filing_year"
 msgstr "Ablage Jahr"
 
 #. Default: "Archive Dossier"
-#: ./opengever/dossier/archive.py:179
+#: ./opengever/dossier/archive.py:196
 msgid "heading_archive_form"
 msgstr "Dossier ablegen"
 
@@ -299,7 +303,7 @@ msgstr "Art des Behälters, in dem ein Dossier in Papierform abgelegt ist"
 msgid "help_destination"
 msgstr "Live Search: Durchsuchen Sie diesen Mandanten"
 
-#: ./opengever/dossier/archive.py:120
+#: ./opengever/dossier/archive.py:136
 #: ./opengever/dossier/behaviors/dossier.py:73
 msgid "help_end"
 msgstr ""
@@ -415,7 +419,7 @@ msgid "label_email_address"
 msgstr "E-Mail:"
 
 #. Default: "Closing Date"
-#: ./opengever/dossier/archive.py:119
+#: ./opengever/dossier/archive.py:135
 #: ./opengever/dossier/behaviors/dossier.py:72
 #: ./opengever/dossier/browser/report.py:97
 msgid "label_end"
@@ -558,7 +562,7 @@ msgstr "Es sind nicht alle Dokumente eingecheckt"
 msgid "not all task are closed"
 msgstr "Es sind nicht alle Aufgaben abgeschlossen"
 
-#: ./opengever/dossier/archive.py:30
+#: ./opengever/dossier/archive.py:31
 msgid "only resolve, set filing no later"
 msgstr "Nur abschliessen (keine Ablagenummer vergeben)"
 
@@ -569,19 +573,19 @@ msgstr "Beteiligte"
 msgid "required"
 msgstr "erforderlich"
 
-#: ./opengever/dossier/archive.py:32
+#: ./opengever/dossier/archive.py:33
 msgid "resolve and set a new filing no"
 msgstr "Abschliessen und Ablagenummer neu vergeben"
 
-#: ./opengever/dossier/archive.py:29
+#: ./opengever/dossier/archive.py:30
 msgid "resolve and set filing no"
 msgstr "Abschliessen und Ablagenummer vergeben"
 
-#: ./opengever/dossier/archive.py:31
+#: ./opengever/dossier/archive.py:32
 msgid "resolve and take the existing filing no"
 msgstr "Abschliessen und die existierende Ablagenummer verwenden"
 
-#: ./opengever/dossier/archive.py:33
+#: ./opengever/dossier/archive.py:34
 msgid "set a filing no"
 msgstr "Ablagenummer vergeben"
 
