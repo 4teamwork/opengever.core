@@ -5,6 +5,9 @@ Changelog
 2.5.2 (unreleased)
 ------------------
 
+- Update the french translation.
+  [philippegross]
+
 - Adjust Msg2MimeTransform, start perl script as directly with perl,
   to avoid permission problems on the msg2mime.pl.
   [phgross]

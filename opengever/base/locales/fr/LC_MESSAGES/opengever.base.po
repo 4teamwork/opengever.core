@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "POT-Creation-Date: 2011-11-24 10:06+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
+"PO-Revision-Date: 2012-08-29 09:15+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -22,7 +22,7 @@ msgstr "Pas de fichier pour cette version "
 
 #: ./opengever/base/profiles/default/actions.xml
 msgid "Properties"
-msgstr "Affichage les propriétés"
+msgstr "Affiches les propriétés"
 
 #: ./opengever/base/browser/list_groupmembers.pt:13
 msgid "There are no members in this group."
