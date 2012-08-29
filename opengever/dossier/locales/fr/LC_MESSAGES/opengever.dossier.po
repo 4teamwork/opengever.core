@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "POT-Creation-Date: 2012-07-25 08:30+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
+"PO-Revision-Date: 2012-08-29 09:25+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -29,7 +29,7 @@ msgstr "Ajouter un sous-dossier"
 
 #: ./opengever/dossier/profiles/default/types/opengever.dossier.businesscasedossier.xml
 msgid "Business Case Dossier"
-msgstr "Dossier d'affaire"
+msgstr "Dossier"
 
 #: ./opengever/dossier/profiles/default/actions.xml
 msgid "Copy documents to remote client"

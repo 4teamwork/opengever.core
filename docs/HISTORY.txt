@@ -5,6 +5,9 @@ Changelog
 2.1.4 (unreleased)
 ------------------
 
+- Adjust french translation.
+  [philippegross]
+
 - Added validation for the filing year field.
   Issue #1670 Dossier abschliessen: Feld Ablagejahr wird nicht valdiert.
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1670
