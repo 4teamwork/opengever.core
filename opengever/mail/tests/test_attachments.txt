@@ -6,6 +6,7 @@ Imports
     >>> from zope.component import getUtility
     >>> from zope.schema import getFields
     >>> import transaction
+    >>> from Products.CMFCore.utils import getToolByName
 
   	>>> app = layer['app']
 	>>> portal = layer['portal']
@@ -85,6 +86,14 @@ Submit
     >>> browser.getControl(name='attachments:list').value=[1]
     >>> browser.getControl(name='form.submitted').click()
     >>> 'Created document B\xc3\xbccher' in browser.contents
+    True
+
+check also the brain
+    >>> cat = getToolByName(portal, 'portal_catalog')
+    >>> brain = cat(
+    ...       path='/'.join(dossier.getPhysicalPath()),
+    ...       portal_type="opengever.document.document")[0]
+    >>> brain.document_date == brain.getObject().document_date
     True
 
 Should work also with line breaks in the attachment title

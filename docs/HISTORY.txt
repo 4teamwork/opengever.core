@@ -5,6 +5,11 @@ Changelog
 2.0.5 (unreleased)
 ------------------
 
+- Extract attachments: Added correct reindexing after setting default values.
+  Issue #222 Metadaten Standort und Sprache
+  https://extranet.4teamwork.ch/support/ph-vs/tracker/222
+  [philippegross]
+
 - Adjust mail workflow: Disable sharing actions (delegate roles).
   Issue #1613 Test Rot und Gelb 2.4: Mail hat versehentlich die Aktion Freigabe
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1613

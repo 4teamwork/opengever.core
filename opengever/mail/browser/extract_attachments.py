@@ -227,6 +227,9 @@ class ExtractAttachments(grok.View):
                     mapping={'title': doc.Title().decode('utf-8')})
             IStatusMessage(self.request).addStatusMessage(msg, type='info')
 
+            # reindex the new document to index also all the default values
+            doc.reindexObject()
+
         # delete the attachments from the email message, if needed
         if delete_action in ('all', 'selected'):
             if delete_action == 'selected':
