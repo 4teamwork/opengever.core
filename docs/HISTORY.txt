@@ -5,7 +5,8 @@ Changelog
 2.3.1 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Activate temporary disabled browse functionality in the contenttree widget.
+  [philippegross]
 
 
 2.3 (2012-06-25)
