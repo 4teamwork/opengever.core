@@ -5,6 +5,9 @@ Changelog
 2.1.4 (unreleased)
 ------------------
 
+- Added a reusable FilingNumberChecker.
+  [lgraf]
+
 - Adjust french translation.
   [philippegross]
 
