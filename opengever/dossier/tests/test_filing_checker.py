@@ -4,6 +4,7 @@ from opengever.base.interfaces import IBaseClientID
 from opengever.dossier.archive import FILING_NO_KEY
 from opengever.dossier.behaviors.dossier import IDossier, IDossierMarker
 from opengever.dossier.filing_checker import FilingNumberChecker
+from opengever.dossier.filing_checker import Checker
 from plone.registry.interfaces import IRegistry
 from zope.annotation import IAnnotations
 from zope.interface import Interface
@@ -21,6 +22,88 @@ class ZCMLLayer(ComponentRegistryLayer):
         self.load_zcml_file('configure.zcml', zope.annotation)
 
 ZCML_LAYER = ZCMLLayer()
+
+
+class MockChecker(Checker):
+    def check_something(self):
+        """Check for something.
+        """
+        return 'something'
+
+    def check_something_else(self):
+        """Some other docstring.
+        """
+        return 'something else'
+
+    def dummy(self):
+        pass
+
+
+class TestChecker(MockTestCase):
+
+    layer = ZCML_LAYER
+
+    def setUp(self):
+        self.plone = self.stub()
+
+    def tearDown(self):
+        del self.plone
+
+    def mock_options(self, value=False):
+        options = self.mocker.mock()
+        self.expect(options.verbose).result(value)
+        return options
+
+    def test_run(self):
+        checker = MockChecker(self.stub())
+        self.replay()
+        # Test that all methods starting with 'checker_' have been gathered...
+        self.assertIn(checker.check_something, checker.checkers)
+        self.assertIn(checker.check_something_else, checker.checkers)
+        # ... but not any other ones
+        self.assertNotIn(checker.dummy, checker.checkers)
+
+        # Test that all the checkers are run and results stored properly
+        checker.run()
+        self.assertEquals(checker.results,
+            {'check_something_else': 'something else',
+             'check_something': 'something'})
+
+    def test_checker_title(self):
+        checker = MockChecker(self.stub())
+        self.replay()
+        check1 = checker.check_something
+        check2 = checker.check_something_else
+        self.assertEquals(checker.get_checker_title(check1),
+                    "Something")
+        self.assertEquals(checker.get_checker_title(check2),
+                    "Some other docstring")
+
+    def test_format_result_line(self):
+        checker = MockChecker(self.stub())
+        self.replay()
+        items = ["a", "b", "c", "d"]
+        result_line = checker.format_result_line(items)
+        expected = 'a' + ' ' * 35 + 'b' + ' ' * 25 + 'c d\n'
+        self.assertEquals(result_line, expected)
+
+    def test_format_results(self):
+        checker = MockChecker(self.mock_options())
+        self.replay()
+        checker.results = {'check_something': ['aaa', 'AAA'],
+                           'check_something_else': ['bbb', 'BBB']}
+        # Just test the format_results() method doesn't fail, don't
+        # make assertions about its result
+        checker.format_results()
+
+    def test_format_results_verbose(self):
+        checker = MockChecker(self.mock_options(True))
+        self.replay()
+        checker.results = {'check_something': ['aaa', 'AAA'],
+                           'check_something_else': ['bbb', 'BBB']}
+        # Just test the format_results() method doesn't fail, don't
+        # make assertions about its result
+        checker.format_results()
 
 
 class TestFilingNumberChecker(MockTestCase):
