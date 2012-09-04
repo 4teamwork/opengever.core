@@ -1,13 +1,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:tal="http://xml.zope.org/namespaces/tal"
       xmlns:metal="http://xml.zope.org/namespaces/metal"
-      xmlns:i18n="http://xml.zope.org/namespaces/i18n" 
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
       metal:use-macro="context/main_template/macros/master"
       i18n:domain="opengever.dossier">
 
 
 <body>
-  
+
 <metal:slot metal:fill-slot="header" i18n:domain="cmf_default">
   <h1 tal:content="view/label">View Title</h1>
 </metal:slot>
@@ -16,7 +16,7 @@
 
   <form i18n:domain="opengever.dossier" action="./document_with_template" method="POST" tal:attributes="is_first python: request.get('form.buttons.save')">
      <div class="row horizontal">
-      <div class="" tal:attributes="class python: view.errors.get('paths', None) and 'error' or ''">  
+      <div class="" tal:attributes="class python: view.errors.get('paths', None) and 'error' or ''">
         <label for="form-widgets-template" class="horizontal">
           <span i18n:translate="label_template">Template</span>
         </label>
@@ -51,14 +51,14 @@
         <input type="hidden" value="1" name="form.widgets.edit_form-empty-marker" originalvalue="1" tal:attributes="value view/edit"/>
         </div>
     </div>
-    
+
     <div class="">
-      <input type="submit" value="Speichern" class="context" name="form.buttons.save" id="form-buttons-save"/>
-      <input type="submit" value="Abbrechen" class="standalone" name="form.buttons.cancel" id="form-buttons-cancel"/>
+      <input type="submit" i18n:domain="plone" i18n:attributes="value label_save" value="Save" class="context" name="form.buttons.save" id="form-buttons-save"/>
+      <input type="submit" i18n:domain="plone" i18n:attributes="value label_cancel" value="Cancel" class="standalone" name="form.buttons.cancel" id="form-buttons-cancel"/>
     </div>
   </form>
-  
-  
+
+
 </metal:slot>
 </body>
 </html>

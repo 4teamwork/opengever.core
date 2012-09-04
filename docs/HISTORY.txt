@@ -5,11 +5,14 @@ Changelog
 2.1.4 (unreleased)
 ------------------
 
+- Templatedossier form: added internationalization.
+  [phgros]
+
 - Added a reusable FilingNumberChecker.
   [lgraf]
 
 - Adjust french translation.
-  [philippegross]
+  [phgross]
 
 - Added validation for the filing year field.
   Issue #1670 Dossier abschliessen: Feld Ablagejahr wird nicht valdiert.
