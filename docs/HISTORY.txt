@@ -5,8 +5,11 @@ Changelog
 2.3.1 (unreleased)
 ------------------
 
+- Adjust french translations.
+  [phgross]
+
 - Activate temporary disabled browse functionality in the contenttree widget.
-  [philippegross]
+  [phgross]
 
 
 2.3 (2012-06-25)
