@@ -27,18 +27,19 @@ class DocumentSizeValidator(validator.SimpleFieldValidator):
 
     def validate(self, value):
         if value:
-            registry = queryUtility(IRegistry)
-            reg_proxy = registry.forInterface(ISendDocumentConf)
-            total = 0
-            for obj in value:
-
-                #check if its a mail
-                if IMail.providedBy(obj):
-                    total += obj.message.getSize()
-                elif obj.file:
-                    total += obj.file.getSize()
-            if total > (reg_proxy.max_size * 1000000):
-                raise FilesTooLarge()
+            if self.request.get(
+                'form.widgets.documents_as_links') != ['selected']:
+                registry = queryUtility(IRegistry)
+                reg_proxy = registry.forInterface(ISendDocumentConf)
+                total = 0
+                for obj in value:
+                    #check if its a mail
+                    if IMail.providedBy(obj):
+                        total += obj.message.getSize()
+                    elif obj.file:
+                        total += obj.file.getSize()
+                if total > (reg_proxy.max_size * 1000000):
+                    raise FilesTooLarge()
         else:
             raise schema.interfaces.RequiredMissing()
 

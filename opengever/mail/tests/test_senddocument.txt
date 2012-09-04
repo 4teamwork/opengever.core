@@ -71,6 +71,10 @@ Mock MailHost
     ...                    provided=IMailHost)
     >>> transaction.commit()
 
+Define document_as_links as default
+    >>> registry = queryUtility(IRegistry)
+    >>> reg_proxy = registry.forInterface(ISendDocumentConf)
+    >>> reg_proxy.documents_as_links_default = False
 
 test form
     >>> data = 'paths:list=%s'% '/'.join(doc1.getPhysicalPath())
@@ -80,6 +84,10 @@ test form
 
     >>> browser.getControl(name='form.widgets.documents:list').value == ['/'.join(doc1.getPhysicalPath())]
     True
+
+    >>> browser.getControl(name='form.widgets.documents_as_links:list').value
+    []
+
     >>> browser.getControl(name='form.buttons.button_send').click()
     >>> 'You have to select a intern                             '\
     ... 'or enter a extern mail-addres' in browser.contents
@@ -102,8 +110,6 @@ Test again (now document have a file)
     >>> browser.getControl(name='form.widgets.extern_receiver').value = 'info@4teamwork.ch'
 
 max size to small
-    >>> registry = queryUtility(IRegistry)
-    >>> reg_proxy = registry.forInterface(ISendDocumentConf)
     >>> reg_proxy.max_size = 1
     >>> transaction.commit()
     >>> browser.getControl(name='form.buttons.button_send').click()

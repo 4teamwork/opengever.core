@@ -18,6 +18,12 @@ class ISendDocumentConf(Interface):
         default=5,
     )
 
+    documents_as_links_default = schema.Bool(
+        title=u'documents_as_links default_value',
+        description=u'Send documents as links default value',
+        default = False,
+        )
+
 
 class IDocumentSent(IObjectEvent):
     """Local Roles has been modified"""

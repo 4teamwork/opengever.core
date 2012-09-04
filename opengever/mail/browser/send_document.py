@@ -12,14 +12,18 @@ from opengever.base.source import DossierPathSourceBinder
 from opengever.mail import _
 from opengever.mail.behaviors import ISendableDocsContainer
 from opengever.mail.events import DocumentSent
+from opengever.mail.interfaces import ISendDocumentConf
 from opengever.mail.validators import AddressValidator
 from opengever.mail.validators import DocumentSizeValidator
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.tabbedview.utils import get_containg_document_tab_url
+from plone.directives.form import default_value
 from plone.formwidget.autocomplete import AutocompleteMultiFieldWidget
+from plone.registry.interfaces import IRegistry
 from plone.z3cform import layout
 from plone.z3cform.textlines.textlines import TextLinesFieldWidget
 from z3c.form import form, button, field, validator
+from z3c.form.browser.checkbox import SingleCheckBoxFieldWidget
 from z3c.form.interfaces import INPUT_MODE
 from z3c.relationfield.schema import RelationChoice, RelationList
 from zope import schema
@@ -91,12 +95,27 @@ class ISendDocumentSchema(Interface):
         required=False,
         )
 
+    documents_as_links = schema.Bool(
+        title=_(u'label_documents_as_link',
+                default=u'Send documents only als links'),
+        required=True,
+        )
+
     @invariant
     def validateHasEmail(self):
         """ check if minium one e-mail-address is given."""
         if len(self.intern_receiver) == 0 and not self.extern_receiver:
             raise NoMail(_(u'You have to select a intern \
                             or enter a extern mail-addres'))
+
+
+@default_value(field=ISendDocumentSchema['documents_as_links'])
+def default_documents_as_links(data):
+    """Set the client specific default (configured in the registry)."""
+
+    registry = getUtility(IRegistry)
+    proxy = registry.forInterface(ISendDocumentConf)
+    return proxy.documents_as_links_default
 
 
 # put the validators
@@ -125,6 +144,8 @@ class SendDocumentForm(form.Form):
         = TextLinesFieldWidget
     fields['intern_receiver'].widgetFactory[INPUT_MODE] \
         = AutocompleteMultiFieldWidget
+    fields['documents_as_links'].widgetFactory[INPUT_MODE] \
+        = SingleCheckBoxFieldWidget
 
     def update(self):
         """ put default value for documents field, into the request,
@@ -156,7 +177,11 @@ class SendDocumentForm(form.Form):
             addresses = intern_receiver + extern_receiver
 
             # create the mail
-            msg = self.create_mail(data.get('message'), data.get('documents'))
+            msg = self.create_mail(
+                data.get('message'),
+                data.get('documents'),
+                only_links=data.get('documents_as_links'))
+
             msg['Subject'] = Header(data.get('subject'), CHARSET)
             sender_address = contact_info.get_email(userid)
             if not sender_address:
@@ -189,9 +214,10 @@ class SendDocumentForm(form.Form):
     @button.buttonAndHandler(_('cancel_back', default=u'Cancel'))
     def cancel_button_handler(self, action):
         data, errors = self.extractData()
-        return self.request.RESPONSE.redirect(get_containg_document_tab_url(data.get('documents')[0]))
+        return self.request.RESPONSE.redirect(
+            get_containg_document_tab_url(data.get('documents')[0]))
 
-    def create_mail(self, text='', objs=[]):
+    def create_mail(self, text='', objs=[], only_links=''):
         """Create the mail and attach the the files. For object without a file
         it include a Link to the Object in to the message"""
         msg = MIMEMultipart()
@@ -210,7 +236,7 @@ class SendDocumentForm(form.Form):
             else:
                 obj_file = obj.file
 
-            if not obj_file:
+            if only_links or not obj_file:
                 docs_links = '%s\r\n - %s (%s)' % (
                     docs_links, obj.title, obj.absolute_url())
                 continue

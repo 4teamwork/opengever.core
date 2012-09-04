@@ -5,6 +5,11 @@ Changelog
 2.0.5 (unreleased)
 ------------------
 
+- Implements documents_as_link field in send_documents functionality.
+  Issue #210 E-Mail-Versand ohne Dokument
+  https://extranet.4teamwork.ch/support/ph-vs/tracker/210
+  [phgross]
+
 - Extract attachments: Added correct reindexing after setting default values.
   Issue #222 Metadaten Standort und Sprache
   https://extranet.4teamwork.ch/support/ph-vs/tracker/222
