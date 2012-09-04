@@ -56,7 +56,9 @@ class Checker(object):
     methods' docstrings as the title.
     """
 
-    def __init__(self):
+    def __init__(self, options):
+        if not hasattr(self, 'options'):
+            self.options = options
         self.results = {}
 
         # Gather all checkers.
@@ -124,7 +126,8 @@ class FilingNumberHelper(object):
     """
 
     def __init__(self, options, plone):
-        self.options = options
+        if not hasattr(self, 'options'):
+            self.options = options
         self.plone = plone
         self.catalog = getToolByName(plone, 'portal_catalog')
         self.registry = getUtility(IRegistry)
@@ -202,7 +205,7 @@ class FilingNumberChecker(Checker, FilingNumberHelper):
         self._filing_number_counters = {}
 
         FilingNumberHelper.__init__(self, options, plone)
-        Checker.__init__(self)
+        Checker.__init__(self, options)
 
     def check_for_duplicates(self):
         """Check for duplicate filing numbers.
