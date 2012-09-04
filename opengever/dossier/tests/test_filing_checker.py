@@ -157,9 +157,9 @@ class TestFilingNumberChecker(MockTestCase):
         self.expect(catalog(object_provides=DOSSIER_MARKER)
                    ).result(mock_dossier_brains)
 
-    def mock_counter(self, value):
+    def mock_counter(self, value, count=1):
         mock_counter = self.mocker.mock()
-        self.expect(mock_counter.value).result(value)
+        self.expect(mock_counter.value).result(value).count(count)
         return mock_counter
 
     def test_duplicates(self):
@@ -232,7 +232,7 @@ class TestFilingNumberChecker(MockTestCase):
         self.assertEquals(results, [('FD.FDS-Amt-2012-2', '/dossier2')])
 
     def test_bad_counters(self):
-        counters = {'Amt-2012': self.mock_counter(77),
+        counters = {'Amt-2012': self.mock_counter(77, count=2),
                     'Xyz-2012': self.mock_counter(99)}
         dossier_data = [('FD FDS-Amt-2012-1',  '/dossier1'),  # OK
                         ('FD FDS-Amt-2012-78', '/dossier2'),  # too high
@@ -244,5 +244,10 @@ class TestFilingNumberChecker(MockTestCase):
         self.replay()
         checker = FilingNumberChecker(self.options, self.plone)
         results = checker.check_for_bad_counters()
-        self.assertEquals(results[0][0], 'Amt-2012')
-        self.assertEquals(results[0][2], 'FD FDS-Amt-2012-78')
+
+        # Test we don't get an Increaser instance back, but an integer
+        self.assertIsInstance(results[0][1], int)
+
+        expected = [('Amt-2012', 77, 'FD FDS-Amt-2012-78')]
+        self.assertEquals(results, expected)
+

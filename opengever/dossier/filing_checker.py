@@ -293,6 +293,6 @@ class FilingNumberChecker(Checker, FilingNumberHelper):
                 # that the counter is at least as high as the highest FN
                 highest_fn = self.get_highest_fn(associated_fns)
                 if self.get_number_part(highest_fn) > increaser.value:
-                    bad_counters.append((counter_key, increaser, highest_fn))
+                    bad_counters.append((counter_key, increaser.value, highest_fn))
 
         return bad_counters
