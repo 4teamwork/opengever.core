@@ -58,6 +58,7 @@ setup(name='opengever.mail',
         'setuptools',
         'plone.app.dexterity',
         'plone.app.registry',
+        'ftw.upgrade',
         # -*- Extra requirements: -*-
         ],
       tests_require=tests_require,

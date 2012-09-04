@@ -15,6 +15,8 @@
     <grok:grok package="." />
 
     <include package=".browser" />
+    <include package=".upgrades" />
+
 
     <!-- Register locales translations -->
     <i18n:registerTranslations directory="locales" />
