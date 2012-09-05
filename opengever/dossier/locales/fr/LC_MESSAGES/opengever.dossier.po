@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "POT-Creation-Date: 2012-07-25 08:30+0000\n"
-"PO-Revision-Date: 2012-08-29 09:25+0200\n"
+"PO-Revision-Date: 2012-09-05 16:19+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -21,7 +21,7 @@ msgstr "Ajouter un dossier d'affaire"
 
 #: ./opengever/dossier/profiles/default/types/opengever.dossier.businesscasedossier.xml
 msgid "Add Participant"
-msgstr "Ajouter  une participation"
+msgstr "Participant"
 
 #: ./opengever/dossier/behaviors/dossier.py:223
 msgid "Add Subdossier"
