@@ -362,7 +362,7 @@ msgstr "Participations enlevées"
 #. Default: "Add Participant"
 #: ./opengever/dossier/profiles/default/actions.xml
 msgid "label_add_participant"
-msgstr "Ajouter participation"
+msgstr "Participant"
 
 #. Default: "by ${author}"
 #: ./opengever/dossier/project_templates/byline.pt:16
