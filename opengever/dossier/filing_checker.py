@@ -137,6 +137,9 @@ class FilingNumberHelper(object):
         self.current_client_prefix = self.registry.forInterface(IBaseClientID).client_id
         self.legacy_prefixes = LEGACY_PREFIX_MAPPING.get(self.client_id, {})
 
+        self._filing_number_counters = None
+        self._filing_numbers = None
+
     def get_number_part(self, fn):
         prefixless_fn = self.get_prefixless_fn(fn)
         # Get rightmost part
