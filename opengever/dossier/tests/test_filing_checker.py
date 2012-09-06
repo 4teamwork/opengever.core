@@ -4,6 +4,7 @@ from opengever.base.interfaces import IBaseClientID
 from opengever.dossier.archive import FILING_NO_KEY
 from opengever.dossier.behaviors.dossier import IDossier, IDossierMarker
 from opengever.dossier.filing_checker import FilingNumberChecker
+from opengever.dossier.filing_checker import FilingNumberHelper
 from opengever.dossier.filing_checker import Checker
 from plone.registry.interfaces import IRegistry
 from zope.annotation import IAnnotations
@@ -104,6 +105,186 @@ class TestChecker(MockTestCase):
         # Just test the format_results() method doesn't fail, don't
         # make assertions about its result
         checker.format_results()
+
+
+
+
+
+class TestFilingNumberHelper(MockTestCase):
+
+    layer = ZCML_LAYER
+
+    def setUp(self):
+        self.plone = self.stub()
+        self.options = self.stub_options()
+
+    def tearDown(self):
+        del self.plone
+        del self.options
+
+    def mock_base_client_id_registry(self, client_id=TEST_CLIENT_ID):
+        registry = self.stub()
+        self.mock_utility(registry, IRegistry)
+        proxy = self.stub()
+        self.expect(registry.forInterface(IBaseClientID)).result(proxy)
+        self.expect(proxy.client_id).result(client_id)
+
+    def mock_counter_annotations(self, portal, counters, count=1):
+        annotation_factory = self.mocker.mock()
+        self.mock_adapter(annotation_factory, IAnnotations, (Interface,))
+        if counters is not None:
+            self.expect(annotation_factory(portal)
+                        ).result({FILING_NO_KEY: counters}).count(count)
+
+    def mock_dossier_brains(self, data):
+        mock_dossier_brains = []
+        for filing_no, path in data:
+            stub_dossier = self.providing_stub([IDossier, IDossierMarker])
+            self.expect(stub_dossier.filing_no).result(filing_no)
+
+            mock_brain = self.mocker.mock()
+            self.expect(mock_brain.getObject()).result(stub_dossier).count(2)
+            self.expect(mock_brain.getPath()).result(path).count(1)
+            mock_dossier_brains.append(mock_brain)
+        return mock_dossier_brains
+
+    def stub_options(self, site_root='ska-arch'):
+        options = self.stub()
+        self.expect(options.site_root).result(site_root)
+        return options
+
+    def mock_options(self, site_root='ska-arch'):
+        options = self.mocker.mock()
+        self.expect(options.site_root).result(site_root)
+        return options
+
+    def mock_catalog(self, dossier_data):
+        catalog = self.stub()
+        self.mock_tool(catalog, 'portal_catalog')
+
+        mock_dossier_brains = self.mock_dossier_brains(dossier_data)
+        DOSSIER_MARKER = 'opengever.dossier.behaviors.dossier.IDossierMarker'
+        self.expect(catalog(object_provides=DOSSIER_MARKER)
+                   ).result(mock_dossier_brains)
+
+    def mock_counter(self, value, count=1):
+        mock_counter = self.mocker.mock()
+        self.expect(mock_counter.value).result(value).count(count)
+        return mock_counter
+
+    def test_get_filing_numbers(self):
+        dossier_data = [('FD FDS-Amt-2012-2',  '/dossier2'),
+                        ('FD FDS-Amt-2012-1', '/dossier1'),
+                        ('FD FDS-Xyz-2012-3', '/dossier3')]
+        self.mock_catalog(dossier_data)
+        self.mock_base_client_id_registry()
+
+        self.replay()
+        helper = FilingNumberHelper(self.options, self.plone)
+        fns = helper.get_filing_numbers()
+        # We expect filing numbers to be sorted correctly
+        expected = [('FD FDS-Amt-2012-1', '/dossier1'),
+                    ('FD FDS-Amt-2012-2', '/dossier2'),
+                    ('FD FDS-Xyz-2012-3', '/dossier3')]
+        self.assertEquals(fns, expected)
+
+        # Test that filing numbers are memoized after we got them once
+        # (brain.getObject() on mock brains shouldn't be called again)
+        helper.get_filing_numbers()
+
+    def test_get_filing_number_counters(self):
+        counters = {'Amt-2012': 234,
+                    'Xyz-2012': 4356}
+        self.mock_tool(self.stub(), 'portal_catalog')
+        self.mock_counter_annotations(self.plone, counters)
+        self.mock_base_client_id_registry()
+
+        self.replay()
+        helper = FilingNumberHelper(self.options, self.plone)
+        counters = helper.get_filing_number_counters()
+        self.assertEquals(counters, {'Amt-2012': 234, 'Xyz-2012': 4356})
+
+        # Test that counters are memoized after we got them once
+        # (counter annotation_factory() shouldn't be called again)
+        helper.get_filing_number_counters()
+
+    def test_get_filing_number_counters_missing_annotation(self):
+        self.mock_tool(self.stub(), 'portal_catalog')
+        self.mock_base_client_id_registry()
+
+        self.replay()
+        helper = FilingNumberHelper(self.options, self.plone)
+        self.assertRaises(KeyError, helper.get_filing_number_counters)
+
+    def test_possible_client_prefixes(self):
+        self.mock_tool(self.stub(), 'portal_catalog')
+        self.mock_base_client_id_registry('AB CDE')
+        self.options = self.mock_options(site_root='ab-cde')
+
+        # Monkey patch previous client prefixes
+        PREVIOUS_CLIENT_PREFIXES = {'ab-cde':  ['PREVIOUS PREFIX']}
+        from opengever.dossier import filing_checker
+        filing_checker.PREVIOUS_CLIENT_PREFIXES = PREVIOUS_CLIENT_PREFIXES
+
+        self.replay()
+        helper = FilingNumberHelper(self.options, self.plone)
+        expected = ['AB CDE', 'AB.CDE', 'PREVIOUS PREFIX']
+        self.assertEquals(list(helper.possible_client_prefixes()), expected)
+
+    def test_possible_client_prefixes_with_current_dotted_prefix(self):
+        self.mock_tool(self.stub(), 'portal_catalog')
+        self.mock_base_client_id_registry('AB.CDE')
+        self.options = self.mock_options(site_root='ab-cde')
+
+        # Monkey patch previous client prefixes
+        PREVIOUS_CLIENT_PREFIXES = {'ab-cde':  ['PREVIOUS PREFIX']}
+        from opengever.dossier import filing_checker
+        filing_checker.PREVIOUS_CLIENT_PREFIXES = PREVIOUS_CLIENT_PREFIXES
+
+        self.replay()
+        helper = FilingNumberHelper(self.options, self.plone)
+        expected = ['AB.CDE', 'PREVIOUS PREFIX']
+        self.assertEquals(list(helper.possible_client_prefixes()), expected)
+
+    def test_get_prefixless_fn(self):
+        self.mock_tool(self.stub(), 'portal_catalog')
+        self.mock_base_client_id_registry('AB CDE')
+        self.options = self.mock_options(site_root='ab-cde')
+
+        # Monkey patch previous client prefixes
+        PREVIOUS_CLIENT_PREFIXES = {'ab-cde':  ['OLD PREFIX']}
+        from opengever.dossier import filing_checker
+        filing_checker.PREVIOUS_CLIENT_PREFIXES = PREVIOUS_CLIENT_PREFIXES
+
+        self.replay()
+        helper = FilingNumberHelper(self.options, self.plone)
+        # For current, dotted and previous prefixes the prefix should be
+        # recognized and stripped. For other unknown prefixes the FN
+        # is supposed to be returned unchanged.
+        expected = {'AB CDE-Amt-2012-7':     'Amt-2012-7',          # current
+                    'AB.CDE-Amt-2012-7':     'Amt-2012-7',          # dotted
+                    'OLD PREFIX-Amt-2012-7': 'Amt-2012-7',          # previous
+                    'UNKNOWN-Amt-2012-7':    'UNKNOWN-Amt-2012-7',  # unknown
+        }
+        for fn, expected_fn in expected.items():
+            self.assertEquals(helper.get_prefixless_fn(fn), expected_fn)
+
+
+    def test_init_with_inherited_options(self):
+        self.mock_tool(self.stub(), 'portal_catalog')
+        self.mock_base_client_id_registry()
+        options = self.mock_options()
+
+        class FNHSubclass(FilingNumberHelper):
+            def __init__(self):
+                self.options = options
+                FilingNumberHelper.__init__(self, None, None)
+
+        self.replay()
+        helper = FNHSubclass()
+        # Options shouldn't have been overridden by FNH's init method
+        self.assertEquals(helper.options, options)
+
 
 
 class TestFilingNumberChecker(MockTestCase):
