@@ -107,9 +107,6 @@ class TestChecker(MockTestCase):
         checker.format_results()
 
 
-
-
-
 class TestFilingNumberHelper(MockTestCase):
 
     layer = ZCML_LAYER
@@ -269,7 +266,6 @@ class TestFilingNumberHelper(MockTestCase):
         for fn, expected_fn in expected.items():
             self.assertEquals(helper.get_prefixless_fn(fn), expected_fn)
 
-
     def test_init_with_inherited_options(self):
         self.mock_tool(self.stub(), 'portal_catalog')
         self.mock_base_client_id_registry()
@@ -284,7 +280,6 @@ class TestFilingNumberHelper(MockTestCase):
         helper = FNHSubclass()
         # Options shouldn't have been overridden by FNH's init method
         self.assertEquals(helper.options, options)
-
 
 
 class TestFilingNumberChecker(MockTestCase):
@@ -403,6 +398,7 @@ class TestFilingNumberChecker(MockTestCase):
     def test_dotted_client_prefixes(self):
         dossier_data = [('FD FDS-Amt-2012-1', '/dossier1'),  # OK
                         ('FD.FDS-Amt-2012-2', '/dossier2'),  # dotted prefix
+                        ('OTHER-Amt-2012-1', '/dossier3'),   # OK
                         ]
         self.mock_catalog(dossier_data)
         self.mock_base_client_id_registry(client_id='FD FDS')
@@ -412,9 +408,21 @@ class TestFilingNumberChecker(MockTestCase):
         results = checker.check_for_dotted_client_prefixes()
         self.assertEquals(results, [('FD.FDS-Amt-2012-2', '/dossier2')])
 
+    def test_dotted_client_prefixes_no_space_in_current_prefix(self):
+        self.mock_catalog([])
+         # If current client prefix doesn't contain a space, there are
+         # (by definition) no dotted prefixes
+        self.mock_base_client_id_registry(client_id='NOSPACE')
+
+        self.replay()
+        checker = FilingNumberChecker(self.options, self.plone)
+        results = checker.check_for_dotted_client_prefixes()
+        self.assertEquals(results, [])
+
     def test_bad_counters(self):
         counters = {'Amt-2012': self.mock_counter(77, count=2),
-                    'Xyz-2012': self.mock_counter(99)}
+                    'Xyz-2012': self.mock_counter(99),
+                    'ABC-2012': self.mock_counter(1, count=0)}
         dossier_data = [('FD FDS-Amt-2012-1',  '/dossier1'),  # OK
                         ('FD FDS-Amt-2012-78', '/dossier2'),  # too high
                         ('FD FDS-Xyz-2012-99', '/dossier3')]  # OK
@@ -431,4 +439,3 @@ class TestFilingNumberChecker(MockTestCase):
 
         expected = [('Amt-2012', 77, 'FD FDS-Amt-2012-78')]
         self.assertEquals(results, expected)
-
