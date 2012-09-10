@@ -40,20 +40,74 @@ class MockChecker(Checker):
         pass
 
 
-class TestChecker(MockTestCase):
+class FilingNumberMockTestCase(MockTestCase):
+    """Base class that provides some helper methods to mock filing number
+    related objects.
+    """
 
     layer = ZCML_LAYER
 
     def setUp(self):
         self.plone = self.stub()
+        self.options = self.stub_options()
 
     def tearDown(self):
         del self.plone
+        del self.options
 
-    def mock_options(self, value=False):
-        options = self.mocker.mock()
-        self.expect(options.verbose).result(value)
+    def mock_base_client_id_registry(self, client_id=TEST_CLIENT_ID):
+        registry = self.stub()
+        self.mock_utility(registry, IRegistry)
+        proxy = self.stub()
+        self.expect(registry.forInterface(IBaseClientID)).result(proxy)
+        self.expect(proxy.client_id).result(client_id)
+
+    def mock_counter(self, value, count=1):
+        mock_counter = self.mocker.mock()
+        self.expect(mock_counter.value).result(value).count(count)
+        return mock_counter
+
+    def mock_counter_annotations(self, portal, counters, count=1):
+        annotation_factory = self.mocker.mock()
+        self.mock_adapter(annotation_factory, IAnnotations, (Interface,))
+        if counters is not None:
+            self.expect(annotation_factory(portal)
+                        ).result({FILING_NO_KEY: counters}).count(count)
+
+    def mock_dossier_brains(self, data):
+        mock_dossier_brains = []
+        for filing_no, path in data:
+            stub_dossier = self.providing_stub([IDossier, IDossierMarker])
+            self.expect(stub_dossier.filing_no).result(filing_no)
+
+            mock_brain = self.mocker.mock()
+            self.expect(mock_brain.getObject()).result(stub_dossier).count(2)
+            self.expect(mock_brain.getPath()).result(path).count(1)
+            mock_dossier_brains.append(mock_brain)
+        return mock_dossier_brains
+
+    def stub_options(self, site_root='ska-arch'):
+        options = self.stub()
+        self.expect(options.site_root).result(site_root)
         return options
+
+    def mock_options(self, **kwargs):
+        options = self.mocker.mock()
+        for key, value in kwargs.items():
+            self.expect(getattr(options, key)).result(value)
+        return options
+
+    def mock_catalog(self, dossier_data):
+        catalog = self.stub()
+        self.mock_tool(catalog, 'portal_catalog')
+
+        mock_dossier_brains = self.mock_dossier_brains(dossier_data)
+        DOSSIER_MARKER = 'opengever.dossier.behaviors.dossier.IDossierMarker'
+        self.expect(catalog(object_provides=DOSSIER_MARKER)
+                   ).result(mock_dossier_brains)
+
+
+class TestChecker(FilingNumberMockTestCase):
 
     def test_run(self):
         checker = MockChecker(self.stub())
@@ -89,7 +143,7 @@ class TestChecker(MockTestCase):
         self.assertEquals(result_line, expected)
 
     def test_format_results(self):
-        checker = MockChecker(self.mock_options())
+        checker = MockChecker(self.mock_options(verbose=False))
         self.replay()
         checker.results = {'check_something': ['aaa', 'AAA'],
                            'check_something_else': ['bbb', 'BBB']}
@@ -98,7 +152,7 @@ class TestChecker(MockTestCase):
         checker.format_results()
 
     def test_format_results_verbose(self):
-        checker = MockChecker(self.mock_options(True))
+        checker = MockChecker(self.mock_options(verbose=True))
         self.replay()
         checker.results = {'check_something': ['aaa', 'AAA'],
                            'check_something_else': ['bbb', 'BBB']}
@@ -107,67 +161,7 @@ class TestChecker(MockTestCase):
         checker.format_results()
 
 
-class TestFilingNumberHelper(MockTestCase):
-
-    layer = ZCML_LAYER
-
-    def setUp(self):
-        self.plone = self.stub()
-        self.options = self.stub_options()
-
-    def tearDown(self):
-        del self.plone
-        del self.options
-
-    def mock_base_client_id_registry(self, client_id=TEST_CLIENT_ID):
-        registry = self.stub()
-        self.mock_utility(registry, IRegistry)
-        proxy = self.stub()
-        self.expect(registry.forInterface(IBaseClientID)).result(proxy)
-        self.expect(proxy.client_id).result(client_id)
-
-    def mock_counter_annotations(self, portal, counters, count=1):
-        annotation_factory = self.mocker.mock()
-        self.mock_adapter(annotation_factory, IAnnotations, (Interface,))
-        if counters is not None:
-            self.expect(annotation_factory(portal)
-                        ).result({FILING_NO_KEY: counters}).count(count)
-
-    def mock_dossier_brains(self, data):
-        mock_dossier_brains = []
-        for filing_no, path in data:
-            stub_dossier = self.providing_stub([IDossier, IDossierMarker])
-            self.expect(stub_dossier.filing_no).result(filing_no)
-
-            mock_brain = self.mocker.mock()
-            self.expect(mock_brain.getObject()).result(stub_dossier).count(2)
-            self.expect(mock_brain.getPath()).result(path).count(1)
-            mock_dossier_brains.append(mock_brain)
-        return mock_dossier_brains
-
-    def stub_options(self, site_root='ska-arch'):
-        options = self.stub()
-        self.expect(options.site_root).result(site_root)
-        return options
-
-    def mock_options(self, site_root='ska-arch'):
-        options = self.mocker.mock()
-        self.expect(options.site_root).result(site_root)
-        return options
-
-    def mock_catalog(self, dossier_data):
-        catalog = self.stub()
-        self.mock_tool(catalog, 'portal_catalog')
-
-        mock_dossier_brains = self.mock_dossier_brains(dossier_data)
-        DOSSIER_MARKER = 'opengever.dossier.behaviors.dossier.IDossierMarker'
-        self.expect(catalog(object_provides=DOSSIER_MARKER)
-                   ).result(mock_dossier_brains)
-
-    def mock_counter(self, value, count=1):
-        mock_counter = self.mocker.mock()
-        self.expect(mock_counter.value).result(value).count(count)
-        return mock_counter
+class TestFilingNumberHelper(FilingNumberMockTestCase):
 
     def test_get_filing_numbers(self):
         dossier_data = [('FD FDS-Amt-2012-2',  '/dossier2'),
@@ -269,7 +263,7 @@ class TestFilingNumberHelper(MockTestCase):
     def test_init_with_inherited_options(self):
         self.mock_tool(self.stub(), 'portal_catalog')
         self.mock_base_client_id_registry()
-        options = self.mock_options()
+        options = self.mock_options(site_root='ska-arch')
 
         class FNHSubclass(FilingNumberHelper):
             def __init__(self):
@@ -282,61 +276,7 @@ class TestFilingNumberHelper(MockTestCase):
         self.assertEquals(helper.options, options)
 
 
-class TestFilingNumberChecker(MockTestCase):
-
-    layer = ZCML_LAYER
-
-    def setUp(self):
-        self.plone = self.stub()
-        self.options = self.mock_options()
-
-    def tearDown(self):
-        del self.plone
-        del self.options
-
-    def mock_base_client_id_registry(self, client_id=TEST_CLIENT_ID):
-        registry = self.stub()
-        self.mock_utility(registry, IRegistry)
-        proxy = self.stub()
-        self.expect(registry.forInterface(IBaseClientID)).result(proxy)
-        self.expect(proxy.client_id).result(client_id)
-
-    def mock_counter_annotations(self, portal, counters, count=1):
-        annotation_factory = self.mocker.mock()
-        self.mock_adapter(annotation_factory, IAnnotations, (Interface,))
-        self.expect(annotation_factory(portal)
-                   ).result({FILING_NO_KEY: counters}).count(count)
-
-    def mock_dossier_brains(self, data):
-        mock_dossier_brains = []
-        for filing_no, path in data:
-            stub_dossier = self.providing_stub([IDossier, IDossierMarker])
-            self.expect(stub_dossier.filing_no).result(filing_no)
-
-            mock_brain = self.mocker.mock()
-            self.expect(mock_brain.getObject()).result(stub_dossier).count(2)
-            self.expect(mock_brain.getPath()).result(path).count(1)
-            mock_dossier_brains.append(mock_brain)
-        return mock_dossier_brains
-
-    def mock_options(self):
-        options = self.mocker.mock()
-        self.expect(options.site_root).result('ska-arch')
-        return options
-
-    def mock_catalog(self, dossier_data):
-        catalog = self.stub()
-        self.mock_tool(catalog, 'portal_catalog')
-
-        mock_dossier_brains = self.mock_dossier_brains(dossier_data)
-        DOSSIER_MARKER = 'opengever.dossier.behaviors.dossier.IDossierMarker'
-        self.expect(catalog(object_provides=DOSSIER_MARKER)
-                   ).result(mock_dossier_brains)
-
-    def mock_counter(self, value, count=1):
-        mock_counter = self.mocker.mock()
-        self.expect(mock_counter.value).result(value).count(count)
-        return mock_counter
+class TestFilingNumberChecker(FilingNumberMockTestCase):
 
     def test_duplicates(self):
         dossier_data = [('SKA ARCH-Amt-2012-1', '/dossier1'),  # duplicate
