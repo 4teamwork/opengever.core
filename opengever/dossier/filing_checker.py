@@ -170,11 +170,11 @@ class FilingNumberHelper(object):
         if not self._filing_number_counters:
 
             ann = queryAdapter(self.plone, IAnnotations)
-            if ann:
-                self._filing_number_counters = ann.get(FILING_NO_KEY)
+            if ann is not None:
+                self._filing_number_counters = ann.get(FILING_NO_KEY, {})
 
-            if not ann:
-                raise KeyError("No filing number counter mapping found!")
+            if ann is None:
+                raise KeyError("No annotations found on Plone site root!")
         return self._filing_number_counters
 
     def possible_client_prefixes(self):

@@ -199,13 +199,30 @@ class TestFilingNumberHelper(FilingNumberMockTestCase):
         # (counter annotation_factory() shouldn't be called again)
         helper.get_filing_number_counters()
 
-    def test_get_filing_number_counters_missing_annotation(self):
+    def test_get_filing_number_counters_missing_annotations(self):
         self.mock_tool(self.stub(), 'portal_catalog')
         self.mock_base_client_id_registry()
 
         self.replay()
         helper = FilingNumberHelper(self.options, self.plone)
         self.assertRaises(KeyError, helper.get_filing_number_counters)
+
+    def test_get_filing_number_counters_missing_filing_no_annotation(self):
+        """When no annotations are found for FILING_NO_KEY we expect
+        get_filing_number_counters() to return an empty dict.
+        """
+        self.mock_tool(self.stub(), 'portal_catalog')
+        # Mock empty annotations
+        annotation_factory = self.mocker.mock()
+        self.mock_adapter(annotation_factory, IAnnotations, (Interface,))
+        self.expect(annotation_factory(self.plone)).result({})
+
+        self.mock_base_client_id_registry()
+
+        self.replay()
+        helper = FilingNumberHelper(self.options, self.plone)
+        counters = helper.get_filing_number_counters()
+        self.assertEquals(counters, {})
 
     def test_possible_client_prefixes(self):
         self.mock_tool(self.stub(), 'portal_catalog')
