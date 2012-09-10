@@ -144,6 +144,10 @@ class FilingNumberHelper(object):
         prefixless_fn = self.get_prefixless_fn(fn)
         # Get rightmost part
         number_part = prefixless_fn.split('-')[-1]
+
+        # Ignore any subdossier suffixes
+        if '.' in number_part:
+            number_part = number_part.split('.')[0]
         return int(number_part)
 
     def get_highest_fn(self, fns_and_paths):

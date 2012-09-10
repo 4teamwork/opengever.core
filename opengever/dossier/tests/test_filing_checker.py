@@ -163,6 +163,25 @@ class TestChecker(FilingNumberMockTestCase):
 
 class TestFilingNumberHelper(FilingNumberMockTestCase):
 
+    def test_get_number_part(self):
+        self.mock_tool(self.stub(), 'portal_catalog')
+        self.mock_base_client_id_registry(client_id='SKA ARCH')
+
+        self.replay()
+        helper = FilingNumberHelper(self.options, self.plone)
+        gnp = helper.get_number_part
+
+        # Number with current prefix
+        self.assertEquals(gnp('SKA ARCH-Amt-2012-2'), 2)
+        # Numbers with legacy dotted prefix should work as well
+        self.assertEquals(gnp('SKA.ARCH-Amt-2012-5'), 5)
+        # As should numbers with unknown prefixes
+        self.assertEquals(gnp('UNKNOWN-Amt-2012-7'), 7)
+        # Subdossier numbers should be dealt with correctly...
+        self.assertEquals(gnp('SKA ARCH-Amt-2012-13.7'), 13)
+        # in any depth
+        self.assertEquals(gnp('SKA ARCH-Amt-2012-13.7.9.1.2.3'), 13)
+
     def test_get_filing_numbers(self):
         dossier_data = [('FD FDS-Amt-2012-2',  '/dossier2'),
                         ('FD FDS-Amt-2012-1', '/dossier1'),
