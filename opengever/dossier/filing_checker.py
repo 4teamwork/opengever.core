@@ -86,6 +86,7 @@ class Checker(object):
         return title
 
     def format_result_line(self, items):
+        items = [str(item) for item in items]
         out = ''
         out += items[0].ljust(35) + ' '
         out += items[1].ljust(25) + ' '

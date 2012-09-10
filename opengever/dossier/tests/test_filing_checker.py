@@ -142,6 +142,15 @@ class TestChecker(FilingNumberMockTestCase):
         expected = 'a' + ' ' * 35 + 'b' + ' ' * 25 + 'c d\n'
         self.assertEquals(result_line, expected)
 
+    def test_format_result_line_numbers(self):
+        checker = MockChecker(self.stub())
+        self.replay()
+        items = [1, 2, 3]
+        result_line = checker.format_result_line(items)
+        self.assertIn('1', result_line)
+        self.assertIn('2', result_line)
+        self.assertIn('3', result_line)
+
     def test_format_results(self):
         checker = MockChecker(self.mock_options(verbose=False))
         self.replay()
