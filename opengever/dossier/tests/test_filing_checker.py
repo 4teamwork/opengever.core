@@ -151,6 +151,15 @@ class TestChecker(FilingNumberMockTestCase):
         self.assertIn('2', result_line)
         self.assertIn('3', result_line)
 
+    def test_format_result_line_non_ascii(self):
+        checker = MockChecker(self.stub())
+        self.replay()
+        items = [u'\xe4', u'\xf6', u'\xfc']
+        result_line = checker.format_result_line(items)
+        self.assertIn('\xc3\xa4', result_line)
+        self.assertIn('\xc3\xb6', result_line)
+        self.assertIn('\xc3\xbc', result_line)
+
     def test_format_results(self):
         checker = MockChecker(self.mock_options(verbose=False))
         self.replay()

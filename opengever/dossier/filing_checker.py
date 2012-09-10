@@ -44,6 +44,12 @@ def alphanum_key(s):
     return [tryint(c) for c in re.split('([0-9]+)', s)]
 
 
+def safe_utf8(token):
+    if isinstance(token, unicode):
+        token = token.encode('utf-8')
+    return token
+
+
 class Checker(object):
     """A Checker facilitates defining and running checks and storing their
     results.
@@ -86,7 +92,7 @@ class Checker(object):
         return title
 
     def format_result_line(self, items):
-        items = [str(item) for item in items]
+        items = [str(safe_utf8(item)) for item in items]
         out = ''
         out += items[0].ljust(35) + ' '
         out += items[1].ljust(25) + ' '
