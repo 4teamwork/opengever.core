@@ -1,14 +1,14 @@
 from Acquisition import aq_inner, aq_parent
-from five import grok
 from OFS.CopySupport import CopyError, ResourceLockedError
+from Products.CMFCore.utils import getToolByName
+from Products.statusmessages.interfaces import IStatusMessage
+from five import grok
+from opengever.base.source import RepositoryPathSourceBinder
 from opengever.document.document import IDocumentSchema
 from opengever.dossier import _
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from plone.dexterity.interfaces import IDexterityContainer
-from plone.formwidget.contenttree import ObjPathSourceBinder
 from plone.z3cform import layout
-from Products.CMFCore.utils import getToolByName
-from Products.statusmessages.interfaces import IStatusMessage
 from z3c.form import form, field
 from z3c.form import validator
 from z3c.form.interfaces import HIDDEN_MODE
@@ -24,11 +24,19 @@ class IMoveItemsSchema(Interface):
         title=_('label_destination', default="Destination"),
         description=_('help_destination',
                       default="Live Search: search the Plone Site"),
-        source=ObjPathSourceBinder(
+        source=RepositoryPathSourceBinder(
             object_provides=[
                 'opengever.dossier.behaviors.dossier.IDossierMarker',
                 'opengever.repository.repositoryfolder.'
-                'IRepositoryFolderSchema']
+                'IRepositoryFolderSchema'],
+            navigation_tree_query={
+                'object_provides': [
+                   'opengever.repository.repositoryroot.IRepositoryRoot',
+                   'opengever.repository.repositoryfolder.' +
+                       'IRepositoryFolderSchema',
+                   'opengever.dossier.behaviors.dossier.IDossierMarker',
+                   ]
+                }
             ),
         required=True,
         )

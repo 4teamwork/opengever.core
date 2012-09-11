@@ -5,6 +5,12 @@ Changelog
 2.1.4 (unreleased)
 ------------------
 
+- Move items: Change PathSourceBinder use the og specific one,
+  to made the contenttree works fine.
+  Issue #202 Element in Zielposition/Zieldossier verschieben
+  https://extranet.4teamwork.ch/support/ph-vs/tracker/202
+  [phgross]
+
 - Templatedossier form: added internationalization.
   [phgros]
 
