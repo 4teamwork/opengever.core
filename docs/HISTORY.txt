@@ -6,7 +6,7 @@ Changelog
 ------------------
 
 - Update the french translation.
-  [philippegross]
+  [phgross]
 
 - Adjust Msg2MimeTransform, start perl script as directly with perl,
   to avoid permission problems on the msg2mime.pl.
