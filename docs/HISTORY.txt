@@ -1,7 +1,7 @@
 Changelog
 =========
 
-2.0.6 (unreleased)
+2.0.6 (2012-09-12)
 ------------------
 
 - Implements the ldap sync configuration configurable.
