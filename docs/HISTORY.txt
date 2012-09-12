@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-2.1.4 (unreleased)
+2.1.5 (unreleased)
 ------------------
 
 - Move items: Change PathSourceBinder use the og specific one,
@@ -24,6 +24,10 @@ Changelog
   Issue #1670 Dossier abschliessen: Feld Ablagejahr wird nicht valdiert.
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1670
   [phgross]
+
+
+2.1.4 (unreleased)
+------------------
 
 - Archiveform: Fixed filing_prefix field (visible_terms_from_registry attribute).
   Issue #1645 Probleme beim Dossier abschliessen
