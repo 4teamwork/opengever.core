@@ -181,6 +181,23 @@ class TestChecker(FilingNumberMockTestCase):
 
 class TestFilingNumberHelper(FilingNumberMockTestCase):
 
+    def test_get_associated_filing_numbers(self):
+        dossier_data = [('FD FDS-Amt-2012-3',  '/dossier3'),
+                        ('FD FDS-Amt-2012-1', '/dossier1'),
+                        ('FD.FDS-Amt-2012-7', '/dossier7'),
+                        ('FD FDS-Xyz-2012-5', '/dossier5'),]
+        self.mock_catalog(dossier_data)
+        self.mock_base_client_id_registry(client_id='FD FDS')
+
+        self.replay()
+        helper = FilingNumberHelper(self.options, self.plone)
+        fns = helper.get_associated_filing_numbers('Amt-2012')
+
+        expected = [('FD FDS-Amt-2012-1', '/dossier1'),
+                    ('FD FDS-Amt-2012-3', '/dossier3'),
+                    ('FD.FDS-Amt-2012-7', '/dossier7')]
+        self.assertEquals(fns, expected)
+
     def test_get_number_part(self):
         self.mock_tool(self.stub(), 'portal_catalog')
         self.mock_base_client_id_registry(client_id='SKA ARCH')

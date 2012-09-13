@@ -206,6 +206,21 @@ class FilingNumberHelper(object):
                 return fn.replace("%s-" % prefix, '', 1)
         return fn
 
+    def get_associated_filing_numbers(self, counter_key):
+        """Return a list of filing numbers and paths for all filing numbers
+        associated with the counter identified by `counter_key`.
+
+        The client id prefix will be stripped for determining matches, so
+        the association is fuzzy.
+        """
+        fns_and_paths = self.get_filing_numbers()
+        associated_fns = []
+        for fn, path in fns_and_paths:
+            if self.get_prefixless_fn(fn).startswith(counter_key):
+                associated_fns.append((fn, path))
+        associated_fns.sort(key=lambda x: alphanum_key(x[0]))
+        return associated_fns
+
     def previous_client_prefixes(self):
         return PREVIOUS_CLIENT_PREFIXES.get(self.client_id, [])
 
@@ -294,13 +309,9 @@ class FilingNumberChecker(Checker, FilingNumberHelper):
         (Counters that are lower than the highest issued FN for that counter)
         """
         bad_counters = []
-        fns_and_paths = self.get_filing_numbers()
         counters = self.get_filing_number_counters()
         for counter_key, increaser in counters.items():
-            associated_fns = []
-            for fn, path in fns_and_paths:
-                if self.get_prefixless_fn(fn).startswith(counter_key):
-                    associated_fns.append((fn, path))
+            associated_fns = self.get_associated_filing_numbers(counter_key)
 
             if associated_fns:
                 # If there are FNs associated with this counter, check
