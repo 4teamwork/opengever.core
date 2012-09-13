@@ -41,6 +41,9 @@ def alphanum_key(s):
             return int(s)
         except ValueError:
             return s
+    # Strip dots in order to treat dotted prefixes the same as regular
+    # prefixes when it comes to sorting
+    s = s.replace('.', ' ')
     return [tryint(c) for c in re.split('([0-9]+)', s)]
 
 
@@ -207,8 +210,8 @@ class FilingNumberHelper(object):
         return fn
 
     def get_associated_filing_numbers(self, counter_key):
-        """Return a list of filing numbers and paths for all filing numbers
-        associated with the counter identified by `counter_key`.
+        """Return a sorted list of filing numbers and paths for all filing
+        numbers associated with the counter identified by `counter_key`.
 
         The client id prefix will be stripped for determining matches, so
         the association is fuzzy.
