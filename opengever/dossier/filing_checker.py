@@ -6,6 +6,7 @@ from opengever.dossier.behaviors.dossier import IDossierMarker
 from plone.registry.interfaces import IRegistry
 from Products.CMFCore.utils import getToolByName
 from zope.annotation.interfaces import IAnnotations
+from zope.component import getAdapter
 from zope.component import getUtility
 from zope.component import queryAdapter
 import inspect
@@ -149,6 +150,19 @@ class FilingNumberHelper(object):
 
         self._filing_number_counters = None
         self._filing_numbers = None
+
+    def get_filing_number(self, obj):
+        if not IDossierMarker.providedBy(obj):
+            raise ValueError("%s is not a dossier object." % obj)
+        dossier = getAdapter(obj, IDossier)
+        return dossier.filing_no
+
+    def set_filing_number(self, obj, filing_no):
+        if not IDossierMarker.providedBy(obj):
+            raise ValueError("%s is not a dossier object." % obj)
+        dossier = getAdapter(obj, IDossier)
+        dossier.filing_no = filing_no
+        obj.reindexObject()
 
     def get_number_part(self, fn):
         prefixless_fn = self.get_prefixless_fn(fn)

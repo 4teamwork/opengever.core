@@ -74,6 +74,14 @@ class FilingNumberMockTestCase(MockTestCase):
             self.expect(annotation_factory(portal)
                         ).result({FILING_NO_KEY: counters}).count(count)
 
+    def mock_dossier(self):
+        dossier_obj = self.providing_stub([IDossierMarker])
+        annotation_factory = self.mocker.mock()
+        dossier = self.mocker.mock()
+        self.mock_adapter(annotation_factory, IDossier, (Interface,))
+        self.expect(annotation_factory(dossier_obj)).result(dossier)
+        return (dossier_obj, dossier)
+
     def mock_dossier_brains(self, data):
         mock_dossier_brains = []
         for filing_no, path in data:
@@ -200,6 +208,47 @@ class TestFilingNumberHelper(FilingNumberMockTestCase):
                     ('FD FDS-Amt-2012-3', '/dossier3'),
                     ('FD.FDS-Amt-2012-7', '/dossier7')]
         self.assertEquals(fns, expected)
+
+    def test_get_filing_number(self):
+        self.mock_tool(self.stub(), 'portal_catalog')
+        self.mock_base_client_id_registry(client_id='SKA ARCH')
+
+        # Missing IDossierMarker
+        dossier = self.mocker.mock()
+        self.replay()
+        helper = FilingNumberHelper(self.options, self.plone)
+        self.assertRaises(ValueError, helper.get_filing_number, dossier)
+
+        # Test getting the filing number
+        self.mocker.reset()
+        dossier_obj, dossier = self.mock_dossier()
+        FN = 'SKA ARCH-Amt-2012-1'
+        self.expect(dossier.filing_no).result(FN)
+
+        self.replay()
+        self.assertEquals(helper.get_filing_number(dossier_obj), FN)
+
+    def test_set_filing_number(self):
+        self.mock_tool(self.stub(), 'portal_catalog')
+        self.mock_base_client_id_registry(client_id='SKA ARCH')
+
+        # Missing IDossierMarker
+        dossier = self.mocker.mock()
+        self.replay()
+        helper = FilingNumberHelper(self.options, self.plone)
+        self.assertRaises(ValueError, helper.set_filing_number, dossier, None)
+
+        # Test setting a filing number
+        self.mocker.reset()
+        dossier_obj, dossier = self.mock_dossier()
+        FN = 'SKA ARCH-Amt-2012-1'
+        dossier.filing_no = FN
+        self.expect(dossier_obj.reindexObject())
+        self.expect(dossier.filing_no).result(FN)
+
+        self.replay()
+        helper.set_filing_number(dossier_obj, FN)
+        self.assertEquals(dossier.filing_no, FN)
 
     def test_get_number_part(self):
         self.mock_tool(self.stub(), 'portal_catalog')
