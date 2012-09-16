@@ -187,7 +187,10 @@ class FilingNumberHelper(object):
         # Memoize
         if not self._filing_numbers:
             brains = self.catalog(object_provides=IDossierMarker.__identifier__)
-            filing_numbers = [(IDossier(b.getObject()).filing_no, b.getPath()) for b in brains if IDossier(b.getObject()).filing_no]
+            filing_numbers = [(self.get_filing_number(b.getObject()), b.getPath()) for b in brains]
+
+            # Discard empty filing numbers
+            filing_numbers = [fn for fn in filing_numbers if fn]
 
             filing_numbers.sort(key=lambda x: alphanum_key(x[0]))
             self._filing_numbers = filing_numbers

@@ -50,10 +50,14 @@ class FilingNumberMockTestCase(MockTestCase):
     def setUp(self):
         self.plone = self.stub()
         self.options = self.stub_options()
+        # Only register one dossier annotation factory adapter
+        self.dossier_annotation_factory = self.mocker.mock()
+        self.mock_adapter(self.dossier_annotation_factory, IDossier, (Interface,))
 
     def tearDown(self):
         del self.plone
         del self.options
+        del self.dossier_annotation_factory
 
     def mock_base_client_id_registry(self, client_id=TEST_CLIENT_ID):
         registry = self.stub()
@@ -76,21 +80,18 @@ class FilingNumberMockTestCase(MockTestCase):
 
     def mock_dossier(self):
         dossier_obj = self.providing_stub([IDossierMarker])
-        annotation_factory = self.mocker.mock()
         dossier = self.mocker.mock()
-        self.mock_adapter(annotation_factory, IDossier, (Interface,))
-        self.expect(annotation_factory(dossier_obj)).result(dossier)
+        self.expect(self.dossier_annotation_factory(dossier_obj)).result(dossier)
         return (dossier_obj, dossier)
 
     def mock_dossier_brains(self, data):
         mock_dossier_brains = []
         for filing_no, path in data:
-            stub_dossier = self.providing_stub([IDossier, IDossierMarker])
-            self.expect(stub_dossier.filing_no).result(filing_no)
-
+            dossier_obj, dossier = self.mock_dossier()
             mock_brain = self.mocker.mock()
-            self.expect(mock_brain.getObject()).result(stub_dossier).count(2)
-            self.expect(mock_brain.getPath()).result(path).count(1)
+            self.expect(dossier.filing_no).result(filing_no)
+            self.expect(mock_brain.getObject()).result(dossier_obj)
+            self.expect(mock_brain.getPath()).result(path)
             mock_dossier_brains.append(mock_brain)
         return mock_dossier_brains
 
@@ -221,12 +222,19 @@ class TestFilingNumberHelper(FilingNumberMockTestCase):
 
         # Test getting the filing number
         self.mocker.reset()
-        dossier_obj, dossier = self.mock_dossier()
-        FN = 'SKA ARCH-Amt-2012-1'
-        self.expect(dossier.filing_no).result(FN)
+
+        FNS = ['SKA ARCH-Amt-2012-1',
+               'SKA ARCH-Amt-2012-2',
+               'SKA ARCH-Amt-2012-3']
+        mock_dossiers = []
+        for fn in FNS:
+            dossier_obj, dossier = self.mock_dossier()
+            self.expect(dossier.filing_no).result(fn)
+            mock_dossiers.append(dossier_obj)
 
         self.replay()
-        self.assertEquals(helper.get_filing_number(dossier_obj), FN)
+        for dossier_obj, fn in zip(mock_dossiers, FNS):
+            self.assertEquals(helper.get_filing_number(dossier_obj), fn)
 
     def test_set_filing_number(self):
         self.mock_tool(self.stub(), 'portal_catalog')
