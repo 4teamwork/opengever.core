@@ -190,7 +190,7 @@ class FilingNumberHelper(object):
             filing_numbers = [(self.get_filing_number(b.getObject()), b.getPath()) for b in brains]
 
             # Discard empty filing numbers
-            filing_numbers = [fn for fn in filing_numbers if fn]
+            filing_numbers = [fn for fn in filing_numbers if fn[0]]
 
             filing_numbers.sort(key=lambda x: alphanum_key(x[0]))
             self._filing_numbers = filing_numbers

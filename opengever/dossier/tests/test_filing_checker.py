@@ -278,9 +278,10 @@ class TestFilingNumberHelper(FilingNumberMockTestCase):
         self.assertEquals(gnp('SKA ARCH-Amt-2012-13.7.9.1.2.3'), 13)
 
     def test_get_filing_numbers(self):
-        dossier_data = [('FD FDS-Amt-2012-2',  '/dossier2'),
+        dossier_data = [('FD FDS-Amt-2012-2', '/dossier2'),
                         ('FD FDS-Amt-2012-1', '/dossier1'),
-                        ('FD FDS-Xyz-2012-3', '/dossier3')]
+                        ('FD FDS-Xyz-2012-3', '/dossier3'),
+                        (None,                '/dossier4'),]
         self.mock_catalog(dossier_data)
         self.mock_base_client_id_registry()
 
