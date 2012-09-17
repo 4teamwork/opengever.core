@@ -222,6 +222,14 @@ class FilingNumberHelper(object):
         prefixless_fns.sort(key=lambda x: alphanum_key(x[0]))
         return prefixless_fns[-1][1]
 
+    def get_minimal_counter_value(self, counter_key):
+        """Given a counter key, return the minimal valid counter value.
+        """
+        associated_fns = self.get_associated_filing_numbers(counter_key)
+        highest_fn = self.get_highest_filing_number(associated_fns)
+        min_value = self.get_number_part(highest_fn)
+        return min_value
+
     def get_number_part(self, fn):
         """Given a filing number, return only the sequence number (the
         rightmost part of the number).

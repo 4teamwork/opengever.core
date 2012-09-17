@@ -214,6 +214,21 @@ class TestFilingNumberHelper(FilingNumberMockTestCase):
                     ('FD.FDS-Amt-2012-7', '/dossier7')]
         self.assertEquals(fns, expected)
 
+    def test_get_minimal_counter_value(self):
+        dossier_data = [('FD FDS-Amt-2012-3',  '/dossier3'),
+                        ('FD FDS-Amt-2012-1', '/dossier1'),
+                        ('FD.FDS-Amt-2012-7', '/dossier7'),
+                        ('FD FDS-Xyz-2012-5', '/dossier5'),
+                        ('FD.FDS-Amt-2012-2', '/dossier2'),]
+        self.mock_catalog(dossier_data)
+        self.mock_base_client_id_registry(client_id='FD FDS')
+        plone = self.mock_plone()
+
+        self.replay()
+        helper = FilingNumberHelper(plone)
+        min_value = helper.get_minimal_counter_value('Amt-2012')
+        self.assertEquals(min_value, 7)
+
     def test_get_filing_number(self):
         self.mock_tool(self.stub(), 'portal_catalog')
         self.mock_base_client_id_registry(client_id='SKA ARCH')
