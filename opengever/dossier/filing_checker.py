@@ -67,8 +67,7 @@ class Checker(object):
     """
 
     def __init__(self, options):
-        if not hasattr(self, 'options'):
-            self.options = options
+        self.options = options
         self.results = {}
 
         # Gather all checkers.
@@ -136,14 +135,12 @@ class FilingNumberHelper(object):
     """Mixin that provides some helper methods for dealing with filing numbers.
     """
 
-    def __init__(self, options, plone):
-        if not hasattr(self, 'options'):
-            self.options = options
+    def __init__(self, plone):
         self.plone = plone
         self.catalog = getToolByName(plone, 'portal_catalog')
         self.registry = getUtility(IRegistry)
 
-        self.client_id = self.options.site_root                       # ska-arch
+        self.client_id = self.plone.id                                # ska-arch
         self.client_title = self.client_id.replace('-', ' ').upper()  # SKA ARCH
         self.current_client_prefix = self.registry.forInterface(IBaseClientID).client_id
         self.legacy_prefixes = LEGACY_PREFIX_MAPPING.get(self.client_id, {})
@@ -253,7 +250,7 @@ class FilingNumberChecker(Checker, FilingNumberHelper):
         self._filing_numbers = []
         self._filing_number_counters = {}
 
-        FilingNumberHelper.__init__(self, options, plone)
+        FilingNumberHelper.__init__(self, plone)
         Checker.__init__(self, options)
 
     def check_for_duplicates(self):

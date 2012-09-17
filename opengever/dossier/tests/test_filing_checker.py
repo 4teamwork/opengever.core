@@ -48,14 +48,12 @@ class FilingNumberMockTestCase(MockTestCase):
     layer = ZCML_LAYER
 
     def setUp(self):
-        self.plone = self.stub()
         self.options = self.stub_options()
         # Only register one dossier annotation factory adapter
         self.dossier_annotation_factory = self.mocker.mock()
         self.mock_adapter(self.dossier_annotation_factory, IDossier, (Interface,))
 
     def tearDown(self):
-        del self.plone
         del self.options
         del self.dossier_annotation_factory
 
@@ -114,6 +112,11 @@ class FilingNumberMockTestCase(MockTestCase):
         DOSSIER_MARKER = 'opengever.dossier.behaviors.dossier.IDossierMarker'
         self.expect(catalog(object_provides=DOSSIER_MARKER)
                    ).result(mock_dossier_brains)
+
+    def mock_plone(self, site_id='ska-arch'):
+        plone = self.mocker.mock()
+        self.expect(plone.id).result(site_id)
+        return plone
 
 
 class TestChecker(FilingNumberMockTestCase):
@@ -198,9 +201,10 @@ class TestFilingNumberHelper(FilingNumberMockTestCase):
                         ('FD.FDS-Amt-2012-2', '/dossier2'),]
         self.mock_catalog(dossier_data)
         self.mock_base_client_id_registry(client_id='FD FDS')
+        plone = self.mock_plone()
 
         self.replay()
-        helper = FilingNumberHelper(self.options, self.plone)
+        helper = FilingNumberHelper(plone)
         fns = helper.get_associated_filing_numbers('Amt-2012')
 
         # We expect filing numbers to be sorted correctly
@@ -216,8 +220,9 @@ class TestFilingNumberHelper(FilingNumberMockTestCase):
 
         # Missing IDossierMarker
         dossier = self.mocker.mock()
+        plone = self.mock_plone()
         self.replay()
-        helper = FilingNumberHelper(self.options, self.plone)
+        helper = FilingNumberHelper(plone)
         self.assertRaises(ValueError, helper.get_filing_number, dossier)
 
         # Test getting the filing number
@@ -242,8 +247,9 @@ class TestFilingNumberHelper(FilingNumberMockTestCase):
 
         # Missing IDossierMarker
         dossier = self.mocker.mock()
+        plone = self.mock_plone()
         self.replay()
-        helper = FilingNumberHelper(self.options, self.plone)
+        helper = FilingNumberHelper(plone)
         self.assertRaises(ValueError, helper.set_filing_number, dossier, None)
 
         # Test setting a filing number
@@ -261,9 +267,10 @@ class TestFilingNumberHelper(FilingNumberMockTestCase):
     def test_get_number_part(self):
         self.mock_tool(self.stub(), 'portal_catalog')
         self.mock_base_client_id_registry(client_id='SKA ARCH')
+        plone = self.mock_plone()
 
         self.replay()
-        helper = FilingNumberHelper(self.options, self.plone)
+        helper = FilingNumberHelper(plone)
         gnp = helper.get_number_part
 
         # Number with current prefix
@@ -284,9 +291,10 @@ class TestFilingNumberHelper(FilingNumberMockTestCase):
                         (None,                '/dossier4'),]
         self.mock_catalog(dossier_data)
         self.mock_base_client_id_registry()
+        plone = self.mock_plone()
 
         self.replay()
-        helper = FilingNumberHelper(self.options, self.plone)
+        helper = FilingNumberHelper(plone)
         fns = helper.get_filing_numbers()
         # We expect filing numbers to be sorted correctly
         expected = [('FD FDS-Amt-2012-1', '/dossier1'),
@@ -302,11 +310,12 @@ class TestFilingNumberHelper(FilingNumberMockTestCase):
         counters = {'Amt-2012': 234,
                     'Xyz-2012': 4356}
         self.mock_tool(self.stub(), 'portal_catalog')
-        self.mock_counter_annotations(self.plone, counters)
+        plone = self.mock_plone()
+        self.mock_counter_annotations(plone, counters)
         self.mock_base_client_id_registry()
 
         self.replay()
-        helper = FilingNumberHelper(self.options, self.plone)
+        helper = FilingNumberHelper(plone)
         counters = helper.get_filing_number_counters()
         self.assertEquals(counters, {'Amt-2012': 234, 'Xyz-2012': 4356})
 
@@ -317,9 +326,10 @@ class TestFilingNumberHelper(FilingNumberMockTestCase):
     def test_get_filing_number_counters_missing_annotations(self):
         self.mock_tool(self.stub(), 'portal_catalog')
         self.mock_base_client_id_registry()
+        plone = self.mock_plone()
 
         self.replay()
-        helper = FilingNumberHelper(self.options, self.plone)
+        helper = FilingNumberHelper(plone)
         self.assertRaises(KeyError, helper.get_filing_number_counters)
 
     def test_get_filing_number_counters_missing_filing_no_annotation(self):
@@ -328,36 +338,37 @@ class TestFilingNumberHelper(FilingNumberMockTestCase):
         """
         self.mock_tool(self.stub(), 'portal_catalog')
         # Mock empty annotations
+        plone = self.mock_plone()
         annotation_factory = self.mocker.mock()
         self.mock_adapter(annotation_factory, IAnnotations, (Interface,))
-        self.expect(annotation_factory(self.plone)).result({})
+        self.expect(annotation_factory(plone)).result({})
 
         self.mock_base_client_id_registry()
 
         self.replay()
-        helper = FilingNumberHelper(self.options, self.plone)
+        helper = FilingNumberHelper(plone)
         counters = helper.get_filing_number_counters()
         self.assertEquals(counters, {})
 
     def test_possible_client_prefixes(self):
         self.mock_tool(self.stub(), 'portal_catalog')
         self.mock_base_client_id_registry('AB CDE')
-        self.options = self.mock_options(site_root='ab-cde')
 
         # Monkey patch previous client prefixes
         PREVIOUS_CLIENT_PREFIXES = {'ab-cde':  ['PREVIOUS PREFIX']}
         from opengever.dossier import filing_checker
         filing_checker.PREVIOUS_CLIENT_PREFIXES = PREVIOUS_CLIENT_PREFIXES
+        plone = self.mock_plone('ab-cde')
 
         self.replay()
-        helper = FilingNumberHelper(self.options, self.plone)
+        helper = FilingNumberHelper(plone)
         expected = ['AB CDE', 'AB.CDE', 'PREVIOUS PREFIX']
         self.assertEquals(list(helper.possible_client_prefixes()), expected)
 
     def test_possible_client_prefixes_with_current_dotted_prefix(self):
         self.mock_tool(self.stub(), 'portal_catalog')
         self.mock_base_client_id_registry('AB.CDE')
-        self.options = self.mock_options(site_root='ab-cde')
+        plone = self.mock_plone('ab-cde')
 
         # Monkey patch previous client prefixes
         PREVIOUS_CLIENT_PREFIXES = {'ab-cde':  ['PREVIOUS PREFIX']}
@@ -365,14 +376,14 @@ class TestFilingNumberHelper(FilingNumberMockTestCase):
         filing_checker.PREVIOUS_CLIENT_PREFIXES = PREVIOUS_CLIENT_PREFIXES
 
         self.replay()
-        helper = FilingNumberHelper(self.options, self.plone)
+        helper = FilingNumberHelper(plone)
         expected = ['AB.CDE', 'PREVIOUS PREFIX']
         self.assertEquals(list(helper.possible_client_prefixes()), expected)
 
     def test_get_prefixless_fn(self):
         self.mock_tool(self.stub(), 'portal_catalog')
         self.mock_base_client_id_registry('AB CDE')
-        self.options = self.mock_options(site_root='ab-cde')
+        plone = self.mock_plone('ab-cde')
 
         # Monkey patch previous client prefixes
         PREVIOUS_CLIENT_PREFIXES = {'ab-cde':  ['OLD PREFIX']}
@@ -380,7 +391,7 @@ class TestFilingNumberHelper(FilingNumberMockTestCase):
         filing_checker.PREVIOUS_CLIENT_PREFIXES = PREVIOUS_CLIENT_PREFIXES
 
         self.replay()
-        helper = FilingNumberHelper(self.options, self.plone)
+        helper = FilingNumberHelper(plone)
         # For current, dotted and previous prefixes the prefix should be
         # recognized and stripped. For other unknown prefixes the FN
         # is supposed to be returned unchanged.
@@ -392,21 +403,6 @@ class TestFilingNumberHelper(FilingNumberMockTestCase):
         for fn, expected_fn in expected.items():
             self.assertEquals(helper.get_prefixless_fn(fn), expected_fn)
 
-    def test_init_with_inherited_options(self):
-        self.mock_tool(self.stub(), 'portal_catalog')
-        self.mock_base_client_id_registry()
-        options = self.mock_options(site_root='ska-arch')
-
-        class FNHSubclass(FilingNumberHelper):
-            def __init__(self):
-                self.options = options
-                FilingNumberHelper.__init__(self, None, None)
-
-        self.replay()
-        helper = FNHSubclass()
-        # Options shouldn't have been overridden by FNH's init method
-        self.assertEquals(helper.options, options)
-
 
 class TestFilingNumberChecker(FilingNumberMockTestCase):
 
@@ -416,9 +412,10 @@ class TestFilingNumberChecker(FilingNumberMockTestCase):
                         ('SKA ARCH-Amt-2012-7', '/dossier3')]  # OK
         self.mock_catalog(dossier_data)
         self.mock_base_client_id_registry()
+        plone = self.mock_plone()
 
         self.replay()
-        checker = FilingNumberChecker(self.options, self.plone)
+        checker = FilingNumberChecker(self.options, plone)
         results = checker.check_for_duplicates()
         self.assertEquals(results, [
                 ('SKA ARCH-Amt-2012-1', '/dossier1'),
@@ -432,9 +429,10 @@ class TestFilingNumberChecker(FilingNumberMockTestCase):
                         ('SKA ARCH-Amt-2012-7', '/dossier5')]  # OK
         self.mock_catalog(dossier_data)
         self.mock_base_client_id_registry()
+        plone = self.mock_plone()
 
         self.replay()
-        checker = FilingNumberChecker(self.options, self.plone)
+        checker = FilingNumberChecker(self.options, plone)
         results = checker.check_for_fuzzy_duplicates()
         self.assertEquals(results, [
                 ('Amt-2012-1', 'SKA ARCH-Amt-2012-1', '/dossier1'),
@@ -447,9 +445,10 @@ class TestFilingNumberChecker(FilingNumberMockTestCase):
                         ('FD FDS-Direktion-2012-2', '/dossier2')]  # OK
         self.mock_catalog(dossier_data)
         self.mock_base_client_id_registry()
+        plone = self.mock_plone()
 
         self.replay()
-        checker = FilingNumberChecker(self.options, self.plone)
+        checker = FilingNumberChecker(self.options, plone)
         checker.legacy_prefixes = {u'Finanzdirektion': u'Direktion'}
         results = checker.check_for_legacy_filing_prefixes()
         self.assertEquals(results, [('Finanzdirektion-2012-1', '/dossier1')])
@@ -460,9 +459,10 @@ class TestFilingNumberChecker(FilingNumberMockTestCase):
                         ('FD FDS-Amt-2012-3',   '/dossier3')]  # wrong client
         self.mock_catalog(dossier_data)
         self.mock_base_client_id_registry('SKA ARCH')
+        plone = self.mock_plone()
 
         self.replay()
-        checker = FilingNumberChecker(self.options, self.plone)
+        checker = FilingNumberChecker(self.options, plone)
         results = checker.check_for_missing_client_prefixes()
         self.assertEquals(results, [('Amt-2012-1',        '/dossier1'),
                                     ('FD FDS-Amt-2012-3', '/dossier3')])
@@ -474,9 +474,10 @@ class TestFilingNumberChecker(FilingNumberMockTestCase):
                         ]
         self.mock_catalog(dossier_data)
         self.mock_base_client_id_registry(client_id='FD FDS')
+        plone = self.mock_plone()
 
         self.replay()
-        checker = FilingNumberChecker(self.options, self.plone)
+        checker = FilingNumberChecker(self.options, plone)
         results = checker.check_for_dotted_client_prefixes()
         self.assertEquals(results, [('FD.FDS-Amt-2012-2', '/dossier2')])
 
@@ -485,9 +486,10 @@ class TestFilingNumberChecker(FilingNumberMockTestCase):
          # If current client prefix doesn't contain a space, there are
          # (by definition) no dotted prefixes
         self.mock_base_client_id_registry(client_id='NOSPACE')
+        plone = self.mock_plone()
 
         self.replay()
-        checker = FilingNumberChecker(self.options, self.plone)
+        checker = FilingNumberChecker(self.options, plone)
         results = checker.check_for_dotted_client_prefixes()
         self.assertEquals(results, [])
 
@@ -498,12 +500,13 @@ class TestFilingNumberChecker(FilingNumberMockTestCase):
         dossier_data = [('FD FDS-Amt-2012-1',  '/dossier1'),  # OK
                         ('FD FDS-Amt-2012-78', '/dossier2'),  # too high
                         ('FD FDS-Xyz-2012-99', '/dossier3')]  # OK
+        plone = self.mock_plone()
         self.mock_catalog(dossier_data)
-        self.mock_counter_annotations(self.plone, counters)
+        self.mock_counter_annotations(plone, counters)
         self.mock_base_client_id_registry(client_id='FD FDS')
 
         self.replay()
-        checker = FilingNumberChecker(self.options, self.plone)
+        checker = FilingNumberChecker(self.options, plone)
         results = checker.check_for_bad_counters()
 
         # Test we don't get an Increaser instance back, but an integer
