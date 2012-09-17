@@ -350,7 +350,7 @@ class TestFilingNumberHelper(FilingNumberMockTestCase):
         counters = helper.get_filing_number_counters()
         self.assertEquals(counters, {})
 
-    def test_possible_client_prefixes(self):
+    def test_get_possible_client_prefixes(self):
         self.mock_tool(self.stub(), 'portal_catalog')
         self.mock_base_client_id_registry('AB CDE')
 
@@ -363,9 +363,9 @@ class TestFilingNumberHelper(FilingNumberMockTestCase):
         self.replay()
         helper = FilingNumberHelper(plone)
         expected = ['AB CDE', 'AB.CDE', 'PREVIOUS PREFIX']
-        self.assertEquals(list(helper.possible_client_prefixes()), expected)
+        self.assertEquals(list(helper.get_possible_client_prefixes()), expected)
 
-    def test_possible_client_prefixes_with_current_dotted_prefix(self):
+    def test_get_possible_client_prefixes_with_current_dotted_prefix(self):
         self.mock_tool(self.stub(), 'portal_catalog')
         self.mock_base_client_id_registry('AB.CDE')
         plone = self.mock_plone('ab-cde')
@@ -378,9 +378,9 @@ class TestFilingNumberHelper(FilingNumberMockTestCase):
         self.replay()
         helper = FilingNumberHelper(plone)
         expected = ['AB.CDE', 'PREVIOUS PREFIX']
-        self.assertEquals(list(helper.possible_client_prefixes()), expected)
+        self.assertEquals(list(helper.get_possible_client_prefixes()), expected)
 
-    def test_get_prefixless_fn(self):
+    def test_get_prefixless_filing_number(self):
         self.mock_tool(self.stub(), 'portal_catalog')
         self.mock_base_client_id_registry('AB CDE')
         plone = self.mock_plone('ab-cde')
@@ -401,7 +401,8 @@ class TestFilingNumberHelper(FilingNumberMockTestCase):
                     'UNKNOWN-Amt-2012-7':    'UNKNOWN-Amt-2012-7',  # unknown
         }
         for fn, expected_fn in expected.items():
-            self.assertEquals(helper.get_prefixless_fn(fn), expected_fn)
+            self.assertEquals(helper.get_prefixless_filing_number(fn),
+                              expected_fn)
 
 
 class TestFilingNumberChecker(FilingNumberMockTestCase):

@@ -149,38 +149,29 @@ class FilingNumberHelper(object):
         self._filing_numbers = None
 
     def get_filing_number(self, obj):
+        """Given a dossier object, return its filing number.
+        """
         if not IDossierMarker.providedBy(obj):
             raise ValueError("%s is not a dossier object." % obj)
         dossier = getAdapter(obj, IDossier)
         return dossier.filing_no
 
     def set_filing_number(self, obj, filing_no):
+        """Given a dossier object and a filing number, set the filing number
+        for that dossier and reindex the object.
+        """
         if not IDossierMarker.providedBy(obj):
             raise ValueError("%s is not a dossier object." % obj)
         dossier = getAdapter(obj, IDossier)
         dossier.filing_no = filing_no
         obj.reindexObject()
 
-    def get_number_part(self, fn):
-        prefixless_fn = self.get_prefixless_fn(fn)
-        # Get rightmost part
-        number_part = prefixless_fn.split('-')[-1]
-
-        # Ignore any subdossier suffixes
-        if '.' in number_part:
-            number_part = number_part.split('.')[0]
-        return int(number_part)
-
-    def get_highest_fn(self, fns_and_paths):
-        """From a list of filing numbers and paths running on the same counter,
-        return the filing number with the highest counter value.
-        """
-        prefixless_fns = [(self.get_prefixless_fn(fn), fn, path)
-                            for fn, path in fns_and_paths]
-        prefixless_fns.sort(key=lambda x: alphanum_key(x[0]))
-        return prefixless_fns[-1][1]
-
     def get_filing_numbers(self):
+        """Get a list of tuples containing all filing numbers and the path
+        to the corresponsing dossier objects.
+
+        Empty filing numbers will be omitted.
+        """
         # Memoize
         if not self._filing_numbers:
             brains = self.catalog(object_provides=IDossierMarker.__identifier__)
@@ -194,7 +185,9 @@ class FilingNumberHelper(object):
         return self._filing_numbers
 
     def get_filing_number_counters(self):
-        """Return the actual filingnumber mapping"""
+        """Return the dictionary that represents the mapping of filing number
+        counter keys to their Increaser object.
+        """
         if not self._filing_number_counters:
 
             ann = queryAdapter(self.plone, IAnnotations)
@@ -204,24 +197,6 @@ class FilingNumberHelper(object):
             if ann is None:
                 raise KeyError("No annotations found on Plone site root!")
         return self._filing_number_counters
-
-    def possible_client_prefixes(self):
-        current_prefix = self.current_client_prefix
-        # Current prefix
-        yield current_prefix
-        # Dotted prefix (if applicable)
-        dotted_prefix = current_prefix.replace(' ', '.')
-        if not current_prefix == dotted_prefix:
-            yield dotted_prefix
-        # Previously used prefixes (if applicable)
-        for prev_prefix in self.previous_client_prefixes():
-            yield prev_prefix
-
-    def get_prefixless_fn(self, fn):
-        for prefix in self.possible_client_prefixes():
-            if fn.startswith("%s-" % prefix):
-                return fn.replace("%s-" % prefix, '', 1)
-        return fn
 
     def get_associated_filing_numbers(self, counter_key):
         """Return a sorted list of filing numbers and paths for all filing
@@ -233,12 +208,64 @@ class FilingNumberHelper(object):
         fns_and_paths = self.get_filing_numbers()
         associated_fns = []
         for fn, path in fns_and_paths:
-            if self.get_prefixless_fn(fn).startswith(counter_key):
+            if self.get_prefixless_filing_number(fn).startswith(counter_key):
                 associated_fns.append((fn, path))
         associated_fns.sort(key=lambda x: alphanum_key(x[0]))
         return associated_fns
 
-    def previous_client_prefixes(self):
+    def get_highest_filing_number(self, fns_and_paths):
+        """From a list of filing numbers and paths running on the same counter,
+        return the filing number with the highest counter value.
+        """
+        prefixless_fns = [(self.get_prefixless_filing_number(fn), fn, path)
+                            for fn, path in fns_and_paths]
+        prefixless_fns.sort(key=lambda x: alphanum_key(x[0]))
+        return prefixless_fns[-1][1]
+
+    def get_number_part(self, fn):
+        """Given a filing number, return only the sequence number (the
+        rightmost part of the number).
+
+        If the filing number was issued for a subdossier, the subdossier
+        part of the sequence number will be omitted.
+        """
+        prefixless_fn = self.get_prefixless_filing_number(fn)
+        # Get rightmost part
+        number_part = prefixless_fn.split('-')[-1]
+
+        # Ignore any subdossier suffixes
+        if '.' in number_part:
+            number_part = number_part.split('.')[0]
+        return int(number_part)
+
+    def get_prefixless_filing_number(self, fn):
+        """Strip the client prefix from a filing number.
+        """
+        for prefix in self.get_possible_client_prefixes():
+            if fn.startswith("%s-" % prefix):
+                return fn.replace("%s-" % prefix, '', 1)
+        return fn
+
+    def get_possible_client_prefixes(self):
+        """Get all possible client prefixes that this client could have, or
+        have had in the past, considering previous prefixes for renamed client,
+        and old filing number schemas (dotted prefixes).
+        """
+        current_prefix = self.current_client_prefix
+        # Current prefix
+        yield current_prefix
+        # Dotted prefix (if applicable)
+        dotted_prefix = current_prefix.replace(' ', '.')
+        if not current_prefix == dotted_prefix:
+            yield dotted_prefix
+        # Previously used prefixes (if applicable)
+        for prev_prefix in self.get_previous_client_prefixes():
+            yield prev_prefix
+
+    def get_previous_client_prefixes(self):
+        """Return the previous prefixes this client used to have in the past
+        (This is a configuration value).
+        """
         return PREVIOUS_CLIENT_PREFIXES.get(self.client_id, [])
 
 
@@ -271,9 +298,13 @@ class FilingNumberChecker(Checker, FilingNumberHelper):
         Finds duplicate filing numbers while ignoring client prefixes.
         """
         fns_and_paths = self.get_filing_numbers()
-        prefixless_fns = [self.get_prefixless_fn(fn) for fn, path in fns_and_paths]
+        prefixless_fns = [self.get_prefixless_filing_number(fn)
+                                for fn, path in fns_and_paths]
 
-        fuzzy_dups = [(self.get_prefixless_fn(fn), fn, path)  for fn, path in fns_and_paths if prefixless_fns.count(self.get_prefixless_fn(fn)) > 1]
+        fuzzy_dups = [(self.get_prefixless_filing_number(fn), fn, path)
+                        for fn, path in fns_and_paths
+                        if prefixless_fns.count(
+                            self.get_prefixless_filing_number(fn)) > 1]
         fuzzy_dups.sort(key=lambda x: alphanum_key(x[0]))
         return fuzzy_dups
 
@@ -333,7 +364,7 @@ class FilingNumberChecker(Checker, FilingNumberHelper):
             if associated_fns:
                 # If there are FNs associated with this counter, check
                 # that the counter is at least as high as the highest FN
-                highest_fn = self.get_highest_fn(associated_fns)
+                highest_fn = self.get_highest_filing_number(associated_fns)
                 if self.get_number_part(highest_fn) > increaser.value:
                     bad_counters.append((counter_key, increaser.value, highest_fn))
 
