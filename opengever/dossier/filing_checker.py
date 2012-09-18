@@ -272,6 +272,18 @@ class FilingNumberHelper(object):
                 return fn.replace("%s-" % prefix, '', 1)
         return fn
 
+    def get_filing_key_from_filing_number(self, fn):
+        """Given a full filing number, return the filing key this number was
+        issued for.
+        """
+        prefixless_fn = self.get_prefixless_filing_number(fn)
+        filing_key = prefixless_fn.rsplit('-', 1)[0]
+        if filing_key.count('-') > 1:
+            # If there's more than one delimiter in the filing key we
+            # couldn't properly extract the key, so the FN must be invalid
+            raise ValueError("Not a valid filing number: %s" % fn)
+        return filing_key
+
     def get_possible_client_prefixes(self):
         """Get all possible client prefixes that this client could have, or
         have had in the past, considering previous prefixes for renamed client,

@@ -472,6 +472,32 @@ class TestFilingNumberHelper(FilingNumberMockTestCase):
             self.assertEquals(helper.get_prefixless_filing_number(fn),
                               expected_fn)
 
+    def test_get_filing_key_from_filing_number(self):
+        self.mock_tool(self.stub(), 'portal_catalog')
+        self.mock_base_client_id_registry('AB CDE')
+        plone = self.mock_plone('ab-cde')
+
+        # Monkey patch previous client prefixes
+        PREVIOUS_CLIENT_PREFIXES = {'ab-cde':  ['OLD PREFIX']}
+        from opengever.dossier import filing_checker
+        filing_checker.PREVIOUS_CLIENT_PREFIXES = PREVIOUS_CLIENT_PREFIXES
+
+        self.replay()
+        helper = FilingNumberHelper(plone)
+
+        expected = {'AB CDE-Amt-2012-7':     'Amt-2012',    # current CP
+                    'AB.CDE-Amt-2012-7':     'Amt-2012',    # dotted CP
+                    'Amt-2012-7':            'Amt-2012',    # missing CP
+                    'OLD PREFIX-Amt-2012-7': 'Amt-2012',    # previous CP
+                    }
+        for fn, expected_fn in expected.items():
+            self.assertEquals(helper.get_filing_key_from_filing_number(fn),
+                              expected_fn)
+
+        # Filing number with unknown client prefix should raise ValueError
+        self.assertRaises(ValueError, helper.get_filing_key_from_filing_number,
+                          'UNKNOWN-Amt-2012-7')
+
 
 class TestFilingNumberChecker(FilingNumberMockTestCase):
 
