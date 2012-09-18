@@ -188,6 +188,20 @@ class FilingNumberHelper(object):
             self._filing_numbers = filing_numbers
         return self._filing_numbers
 
+    def get_counter_value(self, counter_key):
+        counters = self.get_filing_number_counters()
+        counter = counters.get(counter_key)
+        if counter is None:
+            raise ValueError("No such counter: %s" % counter_key)
+        return counter.value
+
+    def set_counter_value(self, counter_key, value):
+        counters = self.get_filing_number_counters()
+        counter = counters.get(counter_key)
+        if counter is None:
+            raise ValueError("No such counter: %s" % counter_key)
+        counter.value = value
+
     def get_filing_number_counters(self):
         """Return the dictionary that represents the mapping of filing number
         counter keys to their Increaser object.

@@ -322,8 +322,8 @@ class TestFilingNumberHelper(FilingNumberMockTestCase):
         helper.get_filing_numbers()
 
     def test_get_filing_number_counters(self):
-        counters = {'Amt-2012': 234,
-                    'Xyz-2012': 4356}
+        counters = {'Amt-2012': self.mock_counter(234),
+                    'Xyz-2012': self.mock_counter(4356)}
         self.mock_tool(self.stub(), 'portal_catalog')
         plone = self.mock_plone()
         self.mock_counter_annotations(plone, counters)
@@ -332,11 +332,64 @@ class TestFilingNumberHelper(FilingNumberMockTestCase):
         self.replay()
         helper = FilingNumberHelper(plone)
         counters = helper.get_filing_number_counters()
-        self.assertEquals(counters, {'Amt-2012': 234, 'Xyz-2012': 4356})
+        self.assertEquals(counters['Amt-2012'].value, 234)
+        self.assertEquals(counters['Xyz-2012'].value, 4356)
 
         # Test that counters are memoized after we got them once
         # (counter annotation_factory() shouldn't be called again)
         helper.get_filing_number_counters()
+
+    def test_get_counter_value(self):
+        counters = {'Amt-2012': self.mock_counter(234),
+                    'Xyz-2012': self.mock_counter(4356)}
+        self.mock_tool(self.stub(), 'portal_catalog')
+        plone = self.mock_plone()
+        self.mock_counter_annotations(plone, counters)
+        self.mock_base_client_id_registry()
+
+        self.replay()
+        helper = FilingNumberHelper(plone)
+        self.assertEquals(helper.get_counter_value('Amt-2012'), 234)
+        self.assertEquals(helper.get_counter_value('Xyz-2012'), 4356)
+
+    def test_get_counter_value_missing_counter(self):
+        self.mock_tool(self.stub(), 'portal_catalog')
+        plone = self.mock_plone()
+        self.mock_counter_annotations(plone, {})
+        self.mock_base_client_id_registry()
+
+        self.replay()
+        helper = FilingNumberHelper(plone)
+        self.assertRaises(ValueError, helper.get_counter_value, 'MISSING-2012')
+
+    def test_set_counter_value(self):
+        counter1 = self.mock_counter(123, count=0)
+        counter2 = self.mock_counter(123, count=0)
+        # Expect our counters to be changed
+        counter1.value = 77
+        counter2.value = 88
+        counters = {'Amt-2012': counter1,
+                    'Xyz-2012': counter2}
+        self.mock_tool(self.stub(), 'portal_catalog')
+        plone = self.mock_plone()
+        self.mock_counter_annotations(plone, counters)
+        self.mock_base_client_id_registry()
+
+        self.replay()
+        helper = FilingNumberHelper(plone)
+        helper.set_counter_value('Amt-2012', 77)
+        helper.set_counter_value('Xyz-2012', 88)
+
+    def test_set_counter_value_missing_counter(self):
+        self.mock_tool(self.stub(), 'portal_catalog')
+        plone = self.mock_plone()
+        self.mock_counter_annotations(plone, {})
+        self.mock_base_client_id_registry()
+
+        self.replay()
+        helper = FilingNumberHelper(plone)
+        self.assertRaises(ValueError, helper.set_counter_value,
+                          'MISSING-2012', 1)
 
     def test_get_filing_number_counters_missing_annotations(self):
         self.mock_tool(self.stub(), 'portal_catalog')
