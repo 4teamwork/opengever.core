@@ -37,7 +37,7 @@ msgstr "Choisir"
 
 #: ./opengever/tabbedview/browser/batching.pt:66
 msgid "Hits per site"
-msgstr "Résultats par site"
+msgstr "Résultats par page"
 
 msgid "Month"
 msgstr "Mois"
