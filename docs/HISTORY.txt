@@ -6,7 +6,7 @@ Changelog
 2.1.2 (unreleased)
 ------------------
 
--
+- Added quoting of bad chars like '(' or ')'.
   [phgross]
 
 

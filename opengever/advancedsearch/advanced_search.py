@@ -101,6 +101,13 @@ FIELD_MAPPING = {'opengever-dossier-behaviors-dossier-IDossierMarker': [
                 }
 
 
+def quotestring(s):
+    bad_chars = ["(", ")"]
+    for char in bad_chars:
+        s = s.replace(char, ' ')
+    return urllib.quote(s)
+
+
 class IAdvancedSearch(directives_form.Schema):
 
     searchableText = schema.TextLine(
@@ -384,7 +391,7 @@ class AdvancedSearchForm(directives_form.Form):
                         params = '%s&%s=%s' % (
                             params,
                             field,
-                            urllib.quote(data.get(field).encode('utf-8')))
+                            quotestring(data.get(field).encode('utf-8')))
 
             params = params.replace('task_review_state', 'review_state')
             params = params.replace('dossier_review_state', 'review_state')

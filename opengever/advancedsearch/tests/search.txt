@@ -84,7 +84,7 @@ search documents (we can't find the document because we must change the content-
 
 search documents with the right content-type
     >>> browser.open('%s/advanced_search' % dossier1.absolute_url())
-    >>> browser.getControl(name='form.widgets.searchableText').value = "document1"
+    >>> browser.getControl(name='form.widgets.searchableText').value = "(document1)"
     >>> browser.getControl(name='form.widgets.object_provides:list').value = ['opengever.document.behaviors.IBaseDocument']
     >>> browser.getControl(name='form.buttons.button_search').click()
     >>> browser.open('http://nohost/plone/search?object_provides=opengever.document.behaviors.IBaseDocument&SearchableText=document1')
