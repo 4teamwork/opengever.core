@@ -3,7 +3,7 @@ Changelog
 
 
 
-2.1.2 (unreleased)
+2.1.2 (2012-09-19)
 ------------------
 
 - Added quoting of bad chars like '(' or ')'.
