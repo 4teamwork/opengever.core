@@ -609,3 +609,22 @@ class TestFilingNumberChecker(FilingNumberMockTestCase):
 
         expected = [('Amt-2012', 77, 'FD FDS-Amt-2012-78')]
         self.assertEquals(results, expected)
+
+    def test_counters_needing_initialization(self):
+        counters = {'Amt-2012': self.mock_counter(77),
+                    'Xyz-2012': self.mock_counter(0),}
+        dossier_data = [('FD FDS-Amt-2012-1',  '/dossier1'),
+                        ('FD FDS-Xyz-2012-1',  '/dossier2'),
+                        ('FD FDS-ABC-2012-1',  '/dossier3')]
+        plone = self.mock_plone()
+        self.mock_catalog(dossier_data)
+        self.mock_counter_annotations(plone, counters)
+        self.mock_base_client_id_registry(client_id='FD FDS')
+
+        self.replay()
+        checker = FilingNumberChecker(self.options, plone)
+        results = checker.check_for_counters_needing_initialization()
+
+        expected = [('ABC-2012', '( 1 dossiers)'),
+                    ('Xyz-2012', '( 1 dossiers)')]
+        self.assertEquals(results, expected)

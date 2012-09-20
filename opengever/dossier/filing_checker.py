@@ -407,3 +407,25 @@ class FilingNumberChecker(Checker, FilingNumberHelper):
                     bad_counters.append((counter_key, increaser.value, highest_fn))
 
         return bad_counters
+
+    def check_for_counters_needing_initialization(self):
+        """Check for counters needing initialization.
+        (Counters that should exist with a value != 0, but don't.)
+        """
+        uninitialized_counters = []
+        fns_and_paths = self.get_filing_numbers()
+        fns = [f[0] for f in fns_and_paths]
+        filing_keys = [self.get_filing_key_from_filing_number(fn) for fn in fns]
+        filing_keys = list(set(filing_keys))
+        filing_keys.sort()
+        for filing_key in filing_keys:
+            try:
+                value = self.get_counter_value(filing_key)
+            except ValueError:
+                value = 0
+            if value == 0:
+                associated_fns = self.get_associated_filing_numbers(filing_key)
+                num_dossiers = len(associated_fns)
+                uninitialized_counters.append((filing_key,
+                                              "(%2d dossiers)" % num_dossiers))
+        return uninitialized_counters
