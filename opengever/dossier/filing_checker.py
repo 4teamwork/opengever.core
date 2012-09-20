@@ -3,6 +3,7 @@ from opengever.base.interfaces import IBaseClientID
 from opengever.dossier.archive import FILING_NO_KEY
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.behaviors.dossier import IDossierMarker
+from opengever.dossier.filing_excel_report import ExcelReportMixin
 from plone.registry.interfaces import IRegistry
 from Products.CMFCore.utils import getToolByName
 from zope.annotation.interfaces import IAnnotations
@@ -307,7 +308,7 @@ class FilingNumberHelper(object):
         return PREVIOUS_CLIENT_PREFIXES.get(self.client_id, [])
 
 
-class FilingNumberChecker(Checker, FilingNumberHelper):
+class FilingNumberChecker(Checker, FilingNumberHelper, ExcelReportMixin):
     """Checks a OpenGever client for different problems with filing numbers.
     """
 
