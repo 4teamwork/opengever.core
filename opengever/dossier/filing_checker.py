@@ -339,7 +339,7 @@ class FilingNumberChecker(Checker, FilingNumberHelper):
         prefixless_fns = [self.get_prefixless_filing_number(fn)
                                 for fn, path in fns_and_paths]
 
-        fuzzy_dups = [(self.get_prefixless_filing_number(fn), fn, path)
+        fuzzy_dups = [(fn, path, self.get_prefixless_filing_number(fn))
                         for fn, path in fns_and_paths
                         if prefixless_fns.count(
                             self.get_prefixless_filing_number(fn)) > 1]

@@ -530,10 +530,10 @@ class TestFilingNumberChecker(FilingNumberMockTestCase):
         checker = FilingNumberChecker(self.options, plone)
         results = checker.check_for_fuzzy_duplicates()
         self.assertEquals(results, [
-                ('Amt-2012-1', 'SKA ARCH-Amt-2012-1', '/dossier1'),
-                ('Amt-2012-1', 'SKA.ARCH-Amt-2012-1', '/dossier2'),
-                ('Amt-2012-2', 'SKA ARCH-Amt-2012-2', '/dossier3'),
-                ('Amt-2012-2', 'SKA ARCH-Amt-2012-2', '/dossier4')])
+                ('SKA ARCH-Amt-2012-1', '/dossier1', 'Amt-2012-1'),
+                ('SKA.ARCH-Amt-2012-1', '/dossier2', 'Amt-2012-1',),
+                ('SKA ARCH-Amt-2012-2', '/dossier3', 'Amt-2012-2',),
+                ('SKA ARCH-Amt-2012-2', '/dossier4', 'Amt-2012-2',)])
 
     def test_legacy_filing_prefixes(self):
         dossier_data = [('Finanzdirektion-2012-1',  '/dossier1'),  # legacy
