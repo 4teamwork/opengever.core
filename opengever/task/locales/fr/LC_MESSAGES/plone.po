@@ -42,7 +42,7 @@ msgid "task-state-rejected"
 msgstr "Refusé"
 
 msgid "task-state-resolved"
-msgstr "Fermé"
+msgstr "Tâche accomplie"
 
 msgid "task-state-tested-and-closed"
 msgstr "Fermé"
