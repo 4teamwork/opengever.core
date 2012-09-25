@@ -8,7 +8,8 @@
                  mq python:modules['ZTUtils'].make_query;
                  url batch_base_url | request/ACTUAL_URL;
                  currentpage batch/pagenumber;"
-     tal:condition="view/multiple_pages">
+     tal:condition="view/multiple_pages"
+     i18n:domain="opengever.tabbedview">
 
     <!-- Link to first -->
     <span class="first">
@@ -63,7 +64,7 @@
 
     <!-- dynamic batching -->
     <form tal:condition="view/dynamic_batchsize_enabled" id="dynamic_batching_form">
-      <span i18n:translate="" i18n:domain="ftw.tabbedview">Hits per site</span>
+      <span i18n:translate="" i18n:domain="opengever.tabbedview">Hits per site</span>
       <span>: </span>
       <input id="tabbedview-batchbox" name="tabbedview-batchbox" tal:attributes="value batch/pagesize" value="50" />
     </form>

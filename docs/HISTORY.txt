@@ -5,7 +5,8 @@ Changelog
 2.2.4 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Update Translations.
+  [tschanzt]
 
 
 2.2.3 (2012-09-19)
