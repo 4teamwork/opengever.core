@@ -5,7 +5,8 @@ Changelog
 2.1.6 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Update Vdexvocabs.
+  [tschanzt]
 
 
 2.1.5 (2012-09-12)

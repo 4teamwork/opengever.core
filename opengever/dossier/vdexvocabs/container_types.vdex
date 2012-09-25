@@ -8,6 +8,8 @@
         <caption>
             <langstring language="en">Folder</langstring>
             <langstring language="de-ch">Ordner</langstring>
+            <langstring language="de">Ordner</langstring>
+
         </caption>
     </term>
     <term>
@@ -15,6 +17,8 @@
         <caption>
             <langstring language="en">Box</langstring>
             <langstring language="de-ch">Schachtel</langstring>
+            <langstring language="de">Schachtel</langstring>
+
         </caption>
     </term>
     <term>
@@ -22,6 +26,8 @@
         <caption>
             <langstring language="en">Dossier</langstring>
             <langstring language="de-ch">Dossier</langstring>
+            <langstring language="de">Dossier</langstring>
+
         </caption>
     </term>
 </vdex>

@@ -8,6 +8,8 @@
         <caption>
             <langstring language="en">Participation</langstring>
             <langstring language="de-ch">Mitwirkung</langstring>
+            <langstring language="de">Mitwirkung</langstring>
+
         </caption>
     </term>
     <term>
@@ -15,6 +17,8 @@
         <caption>
             <langstring language="en">Final drawing</langstring>
             <langstring language="de-ch">Schlusszeichnung</langstring>
+            <langstring language="de">Schlusszeichnung</langstring>
+
         </caption>
     </term>
     <term>
@@ -22,6 +26,8 @@
         <caption>
             <langstring language="en">Regard</langstring>
             <langstring language="de-ch">Kenntnisnahme</langstring>
+            <langstring language="de">Kenntnisnahme</langstring>
+
         </caption>
     </term>
 
