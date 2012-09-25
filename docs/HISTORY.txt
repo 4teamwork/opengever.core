@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-2.2.4 (unreleased)
+2.2.4 (2012-09-25)
 ------------------
 
 - Update Translations.
