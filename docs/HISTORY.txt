@@ -5,7 +5,8 @@ Changelog
 2.3.2 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Updated vdexvocabs.
+  [tschanzt]
 
 
 2.3.1 (2012-09-12)
