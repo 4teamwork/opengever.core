@@ -5,6 +5,9 @@ Changelog
 2.0.7 (unreleased)
 ------------------
 
+- Maintenance: Added responsible synchronisation scripts.
+  [phgross]
+
 - Added automaticly cutting of too long titles (max. column size).
   Issue #1701 Aufgabe: von GD.GDS zu DI.DIS
   https://extranet.4teamwork.ch/extern/opengever-kanton-zug/sprint-backlog/1701/

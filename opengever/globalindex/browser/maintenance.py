@@ -7,10 +7,15 @@ from opengever.globalindex.interfaces import ITaskQuery
 from opengever.globalindex.model.task import Task
 from opengever.ogds.base.exceptions import ClientNotFound
 from opengever.ogds.base.interfaces import IContactInformation
+from opengever.ogds.base.interfaces import IInternalOpengeverRequestLayer
+from opengever.ogds.base.utils import encode_after_json
 from opengever.ogds.base.utils import get_client_id
+from opengever.ogds.base.utils import remote_json_request
+from opengever.ogds.base.utils import remote_request
 from opengever.task.task import ITask
 from urllib2 import URLError
 from zope.component import getUtility
+from zope.interface import alsoProvides
 from zope.interface import implements
 from zope.intid.interfaces import IIntIds
 import os
@@ -28,6 +33,7 @@ class GlobalindexMaintenanceView(BrowserView):
 
         def log(msg):
             write(msg.encode('utf-8'))
+            write('\n')
         return log
 
     def global_reindex(self):
@@ -169,3 +175,137 @@ class GlobalindexMaintenanceView(BrowserView):
 
         log('Predecessor synchronisation check finished:'
             '\n  %i Problems detected' % (sync_problems_counter))
+
+    def fix_responsible_synchronisation(self):
+        """Method wich try to fix all defect responsible synchronisations."""
+        self._global_responsible_synchronisation(debug=False)
+
+    def debug_responsible_synchronisation(self):
+        """Method wich only print out how it would be fixed
+        the bad responsible synchronisations."""
+
+        self._global_responsible_synchronisation(debug=True)
+
+    def _global_responsible_synchronisation(self, debug=False):
+        """ """
+        log = self.mklog()
+        successors = Session().query(Task).filter(Task.predecessor != None)
+
+        for successor in successors:
+            predecessor = successor.predecessor
+
+            # skip discarded forwardings
+            if predecessor.review_state == u'forwarding-state-closed':
+                continue
+
+            # check responsible
+            if predecessor.responsible != successor.responsible:
+                log('Defective synchronistation dedected ...\n')
+                log('Successor: (%s/%s) responsible: %s ' % (
+                        successor.client_id,
+                        successor.physical_path,
+                        successor.responsible))
+                log('Predecessor: (%s/%s) responsible: %s ' % (
+                        predecessor.client_id,
+                        predecessor.physical_path,
+                        predecessor.responsible))
+
+                result = self._fix_responsible_synchronisation(
+                    successor, predecessor, log, debug=debug)
+                if not result:
+                    log('%s Could not be synchronised' % (successor.title))
+                else:
+                    log('%s successfully synchronised' % (successor.title))
+
+                log( 100 * '-')
+
+    def _extract_data(self, task):
+        data = remote_json_request(
+            task.client_id,
+            '@@transporter-extract-object-json',
+            task.physical_path)
+        data = encode_after_json(data)
+        data = data.get(u'field-data').get('ITask')
+        return data
+
+    def _extract_reponses(self, task):
+        responses = remote_json_request(task.client_id,
+            '@@task-responses-extract',
+            path=task.physical_path)
+        return responses
+
+    def _fix_responsible_synchronisation(self, successor, predecessor, log, debug=False):
+
+        # extract successor
+        succ_data = self._extract_data(successor)
+        succ_responses = self._extract_reponses(successor)
+
+        # extract predecessor
+        pred_data = self._extract_data(predecessor)
+        pred_responses = self._extract_reponses(predecessor)
+
+        # Get the reassign responses
+        reassign_responses = []
+        for response in succ_responses:
+            if response.get(u'transition')[1] == u'task-transition-reassign':
+                reassign_responses.append(response)
+
+        for response in pred_responses:
+            if response.get(u'transition')[1] == u'task-transition-reassign':
+                reassign_responses.append(response)
+
+        reassign_responses = sorted(
+            reassign_responses, key=lambda response: response.get(u'date')[1])
+
+        response = reassign_responses[-1]
+
+        changes = [change for change in response.get('changes')
+                   if change.get('id') == u'responsible']
+
+        if not len(changes):
+            return False
+
+        change = changes[0]
+        current_responsible = change.get(u'after')
+
+        # made an opengever internal request
+        alsoProvides(self.request, IInternalOpengeverRequestLayer)
+
+        if succ_data.get('responsible') != current_responsible:
+
+            if not debug:
+                # fix successor
+                self._update_remote_task(successor,
+                                         current_responsible,
+                                         pred_data.get('responsible_client'))
+
+            else:
+                log('DEBUG: Successor old:%s New:%s' %(
+                        succ_data.get('responsible'),
+                        current_responsible))
+
+        if pred_data.get('responsible') != current_responsible:
+            if not debug:
+                # fix predecessor
+                self._update_remote_task(predecessor,
+                                         current_responsible,
+                                         succ_data.get('responsible_client'))
+
+            else:
+                log('DEBUG: Predecessor old:%s New:%s' %(
+                        pred_data.get('responsible'),
+                        current_responsible))
+
+        return True
+
+    def _update_remote_task(self, task, responsible, responsible_client):
+        response = remote_request(
+            task.client_id,
+            '@@sync-task-workflow-state-receive',
+            task.physical_path,
+            data={'transition': u'task-transition-reassign',
+                  'text': 'Neu zuweisen',
+                  'responsible': responsible,
+                  'responsible_client': responsible_client})
+
+        return response
