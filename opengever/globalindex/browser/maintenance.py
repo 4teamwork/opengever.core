@@ -177,6 +177,16 @@ class GlobalindexMaintenanceView(BrowserView):
             '\n  %i Problems detected' % (sync_problems_counter))
 
     def fix_responsible_synchronisation(self):
+        """Method wich try to fix all defect responsible synchronisations."""
+        self._global_responsible_synchronisation(debug=False)
+
+    def debug_responsible_synchronisation(self):
+        """Method wich only print out how it would be fixed
+        the bad responsible synchronisations."""
+
+        self._global_responsible_synchronisation(debug=True)
+
+    def _global_responsible_synchronisation(self, debug=False):
         """ """
         log = self.mklog()
         successors = Session().query(Task).filter(Task.predecessor != None)
@@ -190,49 +200,49 @@ class GlobalindexMaintenanceView(BrowserView):
 
             # check responsible
             if predecessor.responsible != successor.responsible:
-                log('defective synchronistation dedected')
-                log('Successor: %s/%s --> responsible: %s ' % (
+                log('Defective synchronistation dedected ...\n')
+                log('Successor: (%s/%s) responsible: %s ' % (
                         successor.client_id,
                         successor.physical_path,
                         successor.responsible))
-                log('Predecessor: %s/%s --> responsible: %s ' % (
+                log('Predecessor: (%s/%s) responsible: %s ' % (
                         predecessor.client_id,
                         predecessor.physical_path,
                         predecessor.responsible))
 
-                log('Analyze ...')
                 result = self._fix_responsible_synchronisation(
-                    successor, predecessor)
+                    successor, predecessor, log, debug=debug)
                 if not result:
                     log('%s Could not be synchronised' % (successor.title))
                 else:
                     log('%s successfully synchronised' % (successor.title))
 
-    def _fix_responsible_synchronisation(self, successor, predecessor):
+                log( 100 * '-')
+
+    def _extract_data(self, task):
+        data = remote_json_request(
+            task.client_id,
+            '@@transporter-extract-object-json',
+            task.physical_path)
+        data = encode_after_json(data)
+        data = data.get(u'field-data').get('ITask')
+        return data
+
+    def _extract_reponses(self, task):
+        responses = remote_json_request(task.client_id,
+            '@@task-responses-extract',
+            path=task.physical_path)
+        return responses
+
+    def _fix_responsible_synchronisation(self, successor, predecessor, log, debug=False):
 
         # extract successor
-        succ_data = remote_json_request(
-            successor.client_id,
-            '@@transporter-extract-object-json',
-            successor.physical_path)
-        succ_data = encode_after_json(succ_data)
-        succ_data = succ_data.get(u'field-data').get('ITask')
-
-        succ_responses = remote_json_request(successor.client_id,
-            '@@task-responses-extract',
-            path=successor.physical_path)
+        succ_data = self._extract_data(successor)
+        succ_responses = self._extract_reponses(successor)
 
         # extract predecessor
-        pred_data = remote_json_request(
-            predecessor.client_id,
-            '@@transporter-extract-object-json',
-            predecessor.physical_path)
-        pred_data = encode_after_json(pred_data)
-        pred_data = pred_data.get(u'field-data').get('ITask')
-
-        pred_responses = remote_json_request(predecessor.client_id,
-            '@@task-responses-extract',
-            path=predecessor.physical_path)
+        pred_data = self._extract_data(predecessor)
+        pred_responses = self._extract_reponses(predecessor)
 
         # Get the reassign responses
         reassign_responses = []
@@ -249,9 +259,8 @@ class GlobalindexMaintenanceView(BrowserView):
 
         response = reassign_responses[-1]
 
-        # they was an typo in the previous version
-        # (therefore responsible and reponsible).
-        changes = [change for change in response.get('changes') if change.get('id') == u'responsible']
+        changes = [change for change in response.get('changes')
+                   if change.get('id') == u'responsible']
 
         if not len(changes):
             return False
@@ -259,28 +268,44 @@ class GlobalindexMaintenanceView(BrowserView):
         change = changes[0]
         current_responsible = change.get(u'after')
 
+        # made an opengever internal request
         alsoProvides(self.request, IInternalOpengeverRequestLayer)
 
         if succ_data.get('responsible') != current_responsible:
-            # fix successor
-            response = remote_request(
-                successor.client_id,
-                '@@sync-task-workflow-state-receive',
-                successor.physical_path,
-                data={'transition': u'task-transition-reassign',
-                      'text': 'Neu zuweisen',
-                      'responsible': current_responsible,
-                      'responsible_client': pred_data.get('responsible_client')})
+
+            if not debug:
+                # fix successor
+                self._update_remote_task(successor,
+                                         current_responsible,
+                                         pred_data.get('responsible_client'))
+
+            else:
+                log('DEBUG: Successor old:%s New:%s' %(
+                        succ_data.get('responsible'),
+                        current_responsible))
 
         if pred_data.get('responsible') != current_responsible:
-            # fix predecessor
-            response = remote_request(
-                predecessor.client_id,
-                '@@sync-task-workflow-state-receive',
-                predecessor.physical_path,
-                data={'transition': u'task-transition-reassign',
-                      'text': 'Neu zuweisen',
-                      'responsible': current_responsible,
-                      'responsible_client': succ_data.get('responsible_client')})
+            if not debug:
+                # fix predecessor
+                self._update_remote_task(predecessor,
+                                         current_responsible,
+                                         succ_data.get('responsible_client'))
+
+            else:
+                log('DEBUG: Predecessor old:%s New:%s' %(
+                        pred_data.get('responsible'),
+                        current_responsible))
 
         return True
+
+    def _update_remote_task(self, task, responsible, responsible_client):
+        response = remote_request(
+            task.client_id,
+            '@@sync-task-workflow-state-receive',
+            task.physical_path,
+            data={'transition': u'task-transition-reassign',
+                  'text': 'Neu zuweisen',
+                  'responsible': responsible,
+                  'responsible_client': responsible_client})
+
+        return response

@@ -33,4 +33,8 @@ class IGlobalindexMaintenanceView(Interface):
         who has a inconsistent Syncronisation."""
 
     def fix_responsible_synchronisation():
-        """Method which fix the not synchron responsibility of tasks."""
+        """Method wich try to fix all defect responsible synchronisations."""
+
+    def debug_responsible_synchronisation():
+        """Method wich only print out how it would be fixed
+        the bad responsible synchronisations."""
