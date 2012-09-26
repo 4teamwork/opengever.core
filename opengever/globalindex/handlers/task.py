@@ -66,7 +66,13 @@ def index_task(obj, event):
         task = Task(int_id, client_id)
         session.add(task)
 
-    task.title = obj.title
+    # title
+    maximum_title_length = Task.title.property.columns[0].type.length
+    title = obj.title
+    if not isinstance(title, unicode):
+        title = title.decode('utf-8')
+    title = title[:maximum_title_length]
+    task.title = title
 
     # Generate and store the breadcrumb tooltip
     breadcrumb_titles = []

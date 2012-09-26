@@ -5,7 +5,15 @@ Changelog
 2.0.7 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Added automaticly cutting of too long titles (max. column size).
+  Issue #1701 Aufgabe: von GD.GDS zu DI.DIS
+  https://extranet.4teamwork.ch/extern/opengever-kanton-zug/sprint-backlog/1701/
+  [phgross]
+
+- Adjust the column size (`containing_dossier`) in the task model.
+  Issue #1693 SKA.RR: Aufgabe erstellen funktioniert nicht
+  https://extranet.4teamwork.ch/extern/opengever-kanton-zug/sprint-backlog/1693/
+  [phgross]
 
 
 2.0.6 (2012-07-31)
