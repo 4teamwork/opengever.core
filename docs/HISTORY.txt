@@ -5,8 +5,8 @@ Changelog
 2.4.3 (unreleased)
 ------------------
 
-- Nothing changed yet.
-
+- ResponseTransporter: fixed en-/decoding methods so that they works with lists too.
+  [phgross]
 
 2.4.2 (2012-09-25)
 ------------------

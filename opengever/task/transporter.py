@@ -137,8 +137,9 @@ class ResponseTransporter(grok.Adapter):
         if isinstance(value, DateTime):
             return [u'DateTime', str(value)]
 
-        if isinstance(value, PersistentList):
-            return list(value)
+        if isinstance(value, (PersistentList, list)):
+            return [u'list',
+                    [self._encode(item) for item in value]]
 
         if isinstance(value, RelationValue):
             if value.to_id in self.intids_mapping:
@@ -176,6 +177,9 @@ class ResponseTransporter(grok.Adapter):
 
         if type_ == 'RelationValue':
             return RelationValue(val)
+
+        if type_ == 'list':
+            return [self._decode(item) for item in val]
 
         return val
 
