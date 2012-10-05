@@ -10,6 +10,7 @@ from zope.annotation.interfaces import IAnnotations
 from zope.component import getAdapter
 from zope.component import getUtility
 from zope.component import queryAdapter
+from zope.schema.vocabulary import getVocabularyRegistry
 import inspect
 import re
 
@@ -307,6 +308,11 @@ class FilingNumberHelper(object):
         """
         return PREVIOUS_CLIENT_PREFIXES.get(self.client_id, [])
 
+    def get_filing_prefixes(self):
+        vocab_name = 'opengever.dossier.type_prefixes'
+        vocab = getVocabularyRegistry().get(self.plone, vocab_name)
+        return [term.title for term in vocab]
+
 
 class FilingNumberChecker(Checker, FilingNumberHelper, ExcelReportMixin):
     """Checks a OpenGever client for different problems with filing numbers.
@@ -430,3 +436,19 @@ class FilingNumberChecker(Checker, FilingNumberHelper, ExcelReportMixin):
                 uninitialized_counters.append((filing_key,
                                               "(%2d dossiers)" % num_dossiers))
         return uninitialized_counters
+
+    def check_for_inexistent_filing_prefixes(self):
+        """Check for inexistent filing prefixes.
+        (Not in the current filing prefixes vocabulary).
+        """
+        type_prefixes = self.get_filing_prefixes()
+        fns_and_paths = self.get_filing_numbers()
+        filing_prefixes = []
+        for fn, path in fns_and_paths:
+            filing_key = self.get_filing_key_from_filing_number(fn)
+            filing_prefix = filing_key.split('-')[0]
+            filing_prefixes.append(filing_prefix)
+        filing_prefixes = list(set(filing_prefixes))
+
+        bad_filing_prefixes = [fp for fp in filing_prefixes if fp not in type_prefixes]
+        return [(fp, '', '') for fp in bad_filing_prefixes]
