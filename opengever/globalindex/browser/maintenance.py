@@ -13,7 +13,7 @@ from opengever.ogds.base.utils import get_client_id
 from opengever.ogds.base.utils import remote_json_request
 from opengever.ogds.base.utils import remote_request
 from opengever.task.task import ITask
-from urllib2 import URLError
+from urllib2 import URLError, HTTPError
 from zope.component import getUtility
 from zope.interface import alsoProvides
 from zope.interface import implements
@@ -210,8 +210,12 @@ class GlobalindexMaintenanceView(BrowserView):
                         predecessor.physical_path,
                         predecessor.responsible))
 
-                result = self._fix_responsible_synchronisation(
-                    successor, predecessor, log, debug=debug)
+            try:
+ 	            result = self._fix_responsible_synchronisation(
+                	successor, predecessor, log, debug=debug)
+            except HTTPError:
+                log('FAILED %s Could not be synchronised, because of HTTPError' % (successor.title))
+
                 if not result:
                     log('%s Could not be synchronised' % (successor.title))
                 else:
@@ -247,16 +251,18 @@ class GlobalindexMaintenanceView(BrowserView):
         # Get the reassign responses
         reassign_responses = []
         for response in succ_responses:
-            if response.get(u'transition')[1] == u'task-transition-reassign':
+            if response.get(u'transition') and response.get(u'transition')[1] == u'task-transition-reassign':
                 reassign_responses.append(response)
 
         for response in pred_responses:
-            if response.get(u'transition')[1] == u'task-transition-reassign':
+            if response.get(u'transition') and response.get(u'transition')[1] == u'task-transition-reassign':
                 reassign_responses.append(response)
 
         reassign_responses = sorted(
             reassign_responses, key=lambda response: response.get(u'date')[1])
 
+	if len(reassign_responses) == 0:
+	    return False
         response = reassign_responses[-1]
 
         changes = [change for change in response.get('changes')
