@@ -452,10 +452,13 @@ class FilingNumberChecker(Checker, FilingNumberHelper, ExcelReportMixin):
         fns_and_paths = self.get_filing_numbers()
         filing_prefixes = []
         for fn, path in fns_and_paths:
-            filing_key = self.get_filing_key_from_filing_number(fn)
-            filing_prefix = filing_key.split('-')[0]
-            filing_prefixes.append(filing_prefix)
-        filing_prefixes = list(set(filing_prefixes))
+            try:
+                filing_key = self.get_filing_key_from_filing_number(fn)
+                filing_prefix = filing_key.split('-')[0]
+                filing_prefixes.append(filing_prefix)
+            except ValueError:
+                continue
 
+        filing_prefixes = list(set(filing_prefixes))
         bad_filing_prefixes = [fp for fp in filing_prefixes if fp not in type_prefixes]
         return [(fp, '', '') for fp in bad_filing_prefixes]
