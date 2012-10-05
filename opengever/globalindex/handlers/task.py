@@ -1,5 +1,5 @@
 from AccessControl.PermissionRole import rolesForPermissionOn
-from Acquisition import aq_parent, aq_inner
+from Acquisition import aq_parent, aq_inner, aq_base
 from Products.CMFCore.permissions import View
 from Products.CMFCore.utils import _mergedLocalRoles, getToolByName
 from plone.indexer.interfaces import IIndexer
@@ -54,9 +54,14 @@ def index_task(obj, event):
     try:
         int_id = intids.getId(obj)
     except KeyError:
-        # The intid event handler didn' create a intid for this object
-        # yet. The event will be fired again after creating the id.
-        return
+        try:
+            # In some case (remote task updating etc)
+            # only the base_object provides an intid.
+            int_id = intids.getId(aq_base(obj))
+        except KeyError:
+            # The intid event handler didn' create a intid for this object
+            # yet. The event will be fired again after creating the id.
+            return
 
     session = Session()
     try:
