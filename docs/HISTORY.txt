@@ -5,7 +5,11 @@ Changelog
 2.0.8 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Implements intid-getter safer in the globalindex indexer.
+  [phgross]
+
+- Maintenance: added some fixes in the responsible_synchronisation fix methods.
+  [phgross]
 
 
 2.0.7 (2012-09-26)
