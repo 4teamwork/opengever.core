@@ -422,7 +422,14 @@ class FilingNumberChecker(Checker, FilingNumberHelper, ExcelReportMixin):
         uninitialized_counters = []
         fns_and_paths = self.get_filing_numbers()
         fns = [f[0] for f in fns_and_paths]
-        filing_keys = [self.get_filing_key_from_filing_number(fn) for fn in fns]
+        filing_keys = []
+        for fn in fns:
+            try:
+                fk = self.get_filing_key_from_filing_number(fn)
+                filing_keys.append(fk)
+            except ValueError:
+                continue
+
         filing_keys = list(set(filing_keys))
         filing_keys.sort()
         for filing_key in filing_keys:
