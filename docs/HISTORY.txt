@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-2.0.8 (unreleased)
+2.0.8 (2012-10-08)
 ------------------
 
 - Implements intid-getter safer in the globalindex indexer.
