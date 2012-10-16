@@ -124,9 +124,3 @@ class IUniqueNumberGenerator(Interface):
     def generate(self, key):
         """Return the next number for the given key.
         """
-
-class IRepositoryPathSourceBinderQueryModificator(Interface):
-    """Markerinterface for RepositoryPathSourceBinderQueryModificator adapter"""
-
-    def modify_query(self, query):
-        """Modify the ReppositoryPathSourceBinderQuery"""
