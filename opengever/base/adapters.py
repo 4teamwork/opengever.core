@@ -80,6 +80,7 @@ class ReferenceNumberPrefixAdpater(grok.Adapter):
     def get_number(self, obj):
         """return the reference number for the object,
         if no number is registred for this obj, we generate a new one.
+
         """
         intids = getUtility(IIntIds)
         try:
