@@ -128,7 +128,6 @@ class MoveItemsForm(form.Form):
         failed_resource_locked_objects, ):
         """ Create statusmessages with errors and infos af the move-process
         """
-
         if copied_items:
             msg = _(u'${copied_items} Elements were moved successfully',
                     mapping=dict(copied_items=copied_items))
@@ -143,7 +142,7 @@ class MoveItemsForm(form.Form):
 
         if failed_resource_locked_objects:
             msg = _(u'Failed to copy following objects: ${failed_objects}\
-                    . Locket via WebDAV',
+                    . Locked via WebDAV',
                     mapping=dict(failed_objects=','.join(
                         failed_resource_locked_objects)))
             IStatusMessage(self.request).addStatusMessage(
@@ -209,7 +208,7 @@ class DestinationValidator(validator.SimpleFieldValidator):
         # Look for invalid contenttype
         for src_brain in src_brains:
             if not src_brain.portal_type in allowed_types:
-                failed_objects.append(src_brain.Title)
+                failed_objects.append(src_brain.Title.decode('utf8'))
 
         # If we found one or more invalid contenttypes, we raise an error
         if failed_objects:
