@@ -254,6 +254,11 @@ class ArchiveForm(directives_form.Form):
             IDossierArchiver(self.context).archive(
                 filing_prefix, filing_year, number=filing_no)
 
+        if action == METHOD_RESOLVING:
+            # only update the prefixes
+            if filing_prefix:
+                IDossierArchiver(self.context).update_prefix(filing_prefix)
+
         # If everything went well, resolve the main dossier
         resolver.resolve(end_date=end_date)
 
@@ -277,6 +282,18 @@ class Archiver(grok.Adapter):
 
     grok.context(IDossierMarker)
     grok.implements(IDossierArchiver)
+
+    def update_prefix(self, prefix):
+        """Update the filing prefix on the dossier and
+        recursively on all subdossiers.
+        """
+        self._recursive_update_prefix(self.context, prefix)
+
+    def _recursive_update_prefix(self, dossier, prefix):
+        IDossier(dossier).filing_prefix = prefix
+        dossier.reindexObject(idxs=['filing_no', 'searchable_filing_no'])
+        for subdossier in dossier.get_subdossiers():
+            self._recursive_update_prefix(subdossier.getObject(), prefix)
 
     def archive(self, prefix, year, number=None):
         """Generate a correct filing number and

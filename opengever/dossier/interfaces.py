@@ -138,3 +138,8 @@ class IDossierArchiver(Interface):
         """Return the filing value for the filing_no indexer.
         For Dossiers without a number and only a prefix it return the half
         of the number."""
+
+    def update_prefix(prefix):
+        """Update the filing prefix on the dossier and
+        recursively on all subdossiers.
+        """
