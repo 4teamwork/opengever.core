@@ -792,12 +792,12 @@ class TestTaskTransitionController(MockTestCase):
             # task3
             self.expect(task.task_type_category).result(
                 'bidirectional_by_value')
-            self.expect(controller_mock._is_issuer()).result(False)
+            self.expect(controller_mock._is_issuer_or_inbox_group_user()).result(False)
 
             # task4
             self.expect(task.task_type_category).result(
                 'bidirectional_by_value')
-            self.expect(controller_mock._is_issuer()).result(True)
+            self.expect(controller_mock._is_issuer_or_inbox_group_user()).result(True)
 
         self.replay()
         transition = 'task-transition-open-tested-and-closed'
@@ -928,8 +928,8 @@ class TestTaskTransitionController(MockTestCase):
     def test_resolved_to_closed_guards(self):
         controller, controller_mock, task = self._create_task_controller()
         with self.mocker.order():
-            self.expect(controller_mock._is_issuer()).result(False)
-            self.expect(controller_mock._is_issuer()).result(True)
+            self.expect(controller_mock._is_issuer_or_inbox_group_user()).result(False)
+            self.expect(controller_mock._is_issuer_or_inbox_group_user()).result(True)
 
         self.replay()
         transition = 'task-transition-resolved-tested-and-closed'

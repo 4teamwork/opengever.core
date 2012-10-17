@@ -273,7 +273,7 @@ class TaskTransitionController(BrowserView):
         """Checks if:
         - The current user is the issuer
         """
-        return self._is_issuer()
+        return self._is_issuer_or_inbox_group_user()
 
     @action('task-transition-open-tested-and-closed')
     def open_to_closed_action(self, transition):
@@ -328,7 +328,7 @@ class TaskTransitionController(BrowserView):
     def resolved_to_closed_guard(self):
         """Checks if:
         - The current user is the issuer of the task"""
-        return self._is_issuer()
+        return self._is_issuer_or_inbox_group_user()
 
     @action('task-transition-resolved-tested-and-closed')
     def resolved_to_closed_action(self, transition):
