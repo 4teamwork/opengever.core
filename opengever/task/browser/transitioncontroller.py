@@ -415,7 +415,7 @@ class TaskTransitionController(BrowserView):
                 (self.context, self.request),
                 name='plone_portal_state').member().id == self.context.issuer:
                 return True
-            elif include_inbox_group and self._is_local_inbox_group_user():
+            elif include_inbox_group and self._is_issuer_inbox_group_user():
                 return True
             else:
                 return False
@@ -449,12 +449,14 @@ class TaskTransitionController(BrowserView):
         return info.is_user_in_inbox_group(
             client_id=self.context.responsible_client)
 
-    def _is_local_inbox_group_user(self):
+    def _is_issuer_inbox_group_user(self):
         """Checks with the helpt of the contact information utility
         if the current user is in the inbox group of the current client.
         """
         info = getUtility(IContactInformation)
-        return info.is_user_in_inbox_group()
+        if self._is_remote_request() or info.is_user_in_inbox_group():
+            return True
+        return False
 
     def _is_responsible_or_inbox_group_user(self):
         """Checks if the current user is the responsible

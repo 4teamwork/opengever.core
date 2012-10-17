@@ -92,6 +92,8 @@ class TestTaskTransitionController(MockTestCase):
         task3 = self.stub()
         self.expect(task3.issuer).result('inbox:client1')
 
+        request = self.stub()
+
         contact_info = self.mocker.mock()
         self.mock_utility(contact_info, IContactInformation, name=u"")
 
@@ -114,32 +116,41 @@ class TestTaskTransitionController(MockTestCase):
             self.expect(contact_info.is_inbox('james.bond')).result(False)
             self.expect(plone_portal_state(ANY, ANY)).result(plone_portal_state)
             self.expect(plone_portal_state.member().id).result('hugo.boss')
+            self.expect(request.get_header('X-OGDS-CID', None)).result(False)
             self.expect(contact_info.is_user_in_inbox_group()).result(False)
 
-            # check4 (not the issuer, and in the issuer group)
+            # check4 (not the issuer, not in the issuer group but an internal request)
             self.expect(contact_info.is_inbox('james.bond')).result(False)
             self.expect(plone_portal_state(ANY, ANY)).result(plone_portal_state)
             self.expect(plone_portal_state.member().id).result('hugo.boss')
-            self.expect(contact_info.is_user_in_inbox_group()).result(False)
+            self.expect(request.get_header('X-OGDS-CID', None)).result(True)
 
-            # check5 (issuer is a inbox, user is in the inbox group)
+            # check5 (not the issuer but in the issuer group)
+            self.expect(contact_info.is_inbox('james.bond')).result(False)
+            self.expect(plone_portal_state(ANY, ANY)).result(plone_portal_state)
+            self.expect(plone_portal_state.member().id).result('hugo.boss')
+            self.expect(request.get_header('X-OGDS-CID', None)).result(False)
+            self.expect(contact_info.is_user_in_inbox_group()).result(True)
+
+            # check6 (issuer is a inbox, user is in the inbox group)
             self.expect(contact_info.is_inbox('inbox:client1')).result(True)
             self.expect(contact_info.get_group_of_inbox(ANY)).result('og_inbox_group')
             self.expect(contact_info.is_group_member('og_inbox_group', ANY)).result(True)
 
-            # check6 (issuer is a inbox, user is in the inbox group)
+            # check7 (issuer is a inbox, user is in the inbox group)
             self.expect(contact_info.is_inbox('inbox:client1')).result(True)
             self.expect(contact_info.get_group_of_inbox(ANY)).result('og_inbox_group')
             self.expect(contact_info.is_group_member('og_inbox_group', ANY)).result(False)
 
         self.replay()
 
-        self.assertTrue(TaskTransitionController(task1, {})._is_issuer())
-        self.assertFalse(TaskTransitionController(task2, {})._is_issuer())
-        self.assertFalse(TaskTransitionController(task2, {})._is_issuer_or_inbox_group_user())
-        self.assertFalse(TaskTransitionController(task2, {})._is_issuer_or_inbox_group_user())
-        self.assertTrue(TaskTransitionController(task3, {})._is_issuer())
-        self.assertFalse(TaskTransitionController(task3, {})._is_issuer_or_inbox_group_user())
+        self.assertTrue(TaskTransitionController(task1, request)._is_issuer())
+        self.assertFalse(TaskTransitionController(task2, request)._is_issuer())
+        self.assertFalse(TaskTransitionController(task2, request)._is_issuer_or_inbox_group_user())
+        self.assertTrue(TaskTransitionController(task2, request)._is_issuer_or_inbox_group_user())
+        self.assertTrue(TaskTransitionController(task2, request)._is_issuer_or_inbox_group_user())
+        self.assertTrue(TaskTransitionController(task3, request)._is_issuer())
+        self.assertFalse(TaskTransitionController(task3, request)._is_issuer_or_inbox_group_user())
 
     def test_is_responsible(self):
         task1 = self.mocker.mock()
