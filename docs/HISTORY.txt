@@ -5,7 +5,8 @@ Changelog
 2.3 (unreleased)
 ----------------
 
-- Nothing changed yet.
+- Removed dependency to og.upgrade, since ftw.upgrade it's no longer been used.
+  [phgross]
 
 
 2.2 (2012-06-23)
@@ -21,7 +22,7 @@ Changelog
 - Modify logout action url expression to activate the logout overlay.
   Issue #1501 Warnung "Bitte Dokumente einchecken"
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1501/
-  
+
 - Adjust the application_title form GEVER to Mandant for zug clients.
   Issue #1555 Bei der einfachen Suche sollte es heissen "Mandant durchsuchen", nicht "Gever durchsuchen".
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1555
