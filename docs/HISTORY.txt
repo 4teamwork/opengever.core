@@ -5,7 +5,8 @@ Changelog
 2.2.5 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Plone 4.2 Support: Cleaned up TAL statements in batching pt.
+  [phgross]
 
 
 2.2.4 (2012-09-25)
