@@ -291,8 +291,7 @@ class DexterityFieldDataCollector(grok.Adapter):
                 schema.interfaces.IDatetime,
                 ]):
             if value:
-                dt = DateTime.DateTime(value).parts()[:-1]
-                return datetime.datetime(*dt)
+                return DateTime.DateTime(value).asdatetime()
 
         if self._provided_by_one_of(field, [INamedFileField]):
             if value and isinstance(value, dict):
