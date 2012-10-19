@@ -149,5 +149,5 @@ class TestOpengeverDossierMoveItems(MockTestCase):
         self.assertIn('Failed to copy following objects', sm.msg[2])
         self.assertIn("error", sm.msg_type[2])
 
-        self.assertIn('Locket via WebDAV', sm.msg[3])
+        self.assertIn('Locked via WebDAV', sm.msg[3])
         self.assertIn("error", sm.msg_type[3])
