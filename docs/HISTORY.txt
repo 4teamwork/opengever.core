@@ -5,7 +5,8 @@ Changelog
 2.5.4 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Fixed fallback in is_user_assigned_to_client.
+  [phgross]
 
 
 2.5.3 (2012-09-12)
