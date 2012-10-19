@@ -1,7 +1,7 @@
 import logging
 import sqlalchemy
 import transaction
-from sqlalchemy.exceptions import OperationalError
+from sqlalchemy.exc import OperationalError
 from sqlalchemy.sql.expression import update
 from sqlalchemy import Table
 from sqlalchemy.schema import MetaData
