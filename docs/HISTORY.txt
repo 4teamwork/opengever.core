@@ -4,6 +4,9 @@ Changelog
 2.0.7 (unreleased)
 ------------------
 
+- Disable printer for LDAP import configs.
+  [lgraf]
+
 - Adjsut imports use now SQLAlchemy 0.7.x.
   [phgross]
 
