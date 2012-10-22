@@ -58,6 +58,14 @@ class TaskFunctionalLayer(PloneSandboxLayer):
         from opengever import document
         xmlconfig.file(
             'configure.zcml', package=document, context=configurationContext)
+
+        from opengever import inbox
+        xmlconfig.file(
+            'configure.zcml', package=inbox, context=configurationContext)
+        from opengever import dossier
+        xmlconfig.file(
+            'configure.zcml', package=dossier, context=configurationContext)
+
         from ftw import tabbedview
         xmlconfig.file(
             'configure.zcml', package=tabbedview, context=configurationContext)
@@ -67,9 +75,12 @@ class TaskFunctionalLayer(PloneSandboxLayer):
             package=contentmenu,
             context=configurationContext)
 
+
     def setUpPloneSite(self, portal):
         applyProfile(portal, 'opengever.task:default')
         applyProfile(portal, 'opengever.document:default')
+        applyProfile(portal, 'opengever.dossier:default')
+        applyProfile(portal, 'opengever.inbox:default')
         applyProfile(portal, 'opengever.ogds.base:default')
         applyProfile(portal, 'ftw.tabbedview:default')
         applyProfile(portal, 'ftw.contentmenu:default')
@@ -82,7 +93,7 @@ class TaskFunctionalLayer(PloneSandboxLayer):
         # configure client ID
         registry = getUtility(IRegistry, context=portal)
         proxy = registry.forInterface(IClientConfiguration)
-        proxy.client_id
+        proxy.client_id = u'plone'
 
         tab_reg = registry.forInterface(ITabbedView)
         tab_reg.batch_size = 5
@@ -109,6 +120,13 @@ class TaskFunctionalLayer(PloneSandboxLayer):
             'email': 'test.user@local.ch',
             'email2': 'test_user@private.ch'},
             ('og_mandant1_users', 'og_mandant1_inbox', 'og_mandant2_users'))
+
+        _create_example_user(session, portal, 'testuser2', {
+            'firstname': 'Test',
+            'lastname': 'User 2',
+            'email': 'test2.user@local.ch',
+            'email2': 'test_user@private.ch'},
+            ('og_mandant2_users', 'og_mandant2_inbox',))
 
         setRoles(portal, TEST_USER_ID, ['Manager'])
         portal.invokeFactory('Folder', 'Members')

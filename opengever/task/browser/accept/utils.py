@@ -5,6 +5,7 @@ from datetime import datetime
 from five import grok
 from opengever.globalindex.interfaces import ITaskQuery
 from opengever.ogds.base.interfaces import ITransporter
+from opengever.ogds.base.utils import get_current_client
 from opengever.ogds.base.utils import remote_request, get_client_id
 from opengever.task import _
 from opengever.task.adapters import IResponseContainer
@@ -115,6 +116,9 @@ def accept_forwarding_with_successor(
     else:
         successor_forwarding = transporter.transport_from(
             inbox, predecessor.client_id, predecessor.physical_path)
+
+    # Replace the issuer with the current inbox
+    successor_forwarding.issuer = u'inbox:%s' % get_client_id()
 
     # Set the "X-CREATING-SUCCESSOR" flag for preventing the event handler
     # from creating additional responses per added document.
