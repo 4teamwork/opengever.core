@@ -8,6 +8,9 @@ Changelog
 - Adjust javscripts: Use $ instead of deprecated jq.
   [phgross]
 
+- Fixed fallback in is_user_assigned_to_client.
+  [phgross]
+
 
 2.5.3 (2012-09-12)
 ------------------

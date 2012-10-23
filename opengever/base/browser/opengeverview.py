@@ -40,6 +40,6 @@ class OpengeverView(BrowserView):
 
         info = getUtility(IContactInformation)
         if not client_id:
-            client_id = get_client_id
+            client_id = get_client_id()
 
         return info.is_client_assigned(client_id=client_id)
