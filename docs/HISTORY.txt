@@ -5,6 +5,9 @@ Changelog
 2.2.5 (unreleased)
 ------------------
 
+- Adjust javscripts: Use $ instead of deprecated jq.
+  [phgross]
+
 - Plone 4.2 Support: Cleaned up TAL statements in batching pt.
   [phgross]
 
