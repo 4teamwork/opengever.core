@@ -1,6 +1,6 @@
-jq(function() {
+$(function() {
     var init = function() {
-        jq('.link-overlay').prepOverlay({
+        $('.link-overlay').prepOverlay({
             subtype:'ajax',
             urlmatch:'$',
             urlreplace:''
@@ -11,7 +11,7 @@ jq(function() {
     init();
 
     /* there is also a sharing tab */
-    jq('.tabbedview_view').bind('reload',
+    $('.tabbedview_view').bind('reload',
                                 init);
 
 });
