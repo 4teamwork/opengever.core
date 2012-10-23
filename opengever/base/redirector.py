@@ -66,7 +66,7 @@ class RedirectorViewlet(grok.Viewlet):
 
     JS_TEMPLATE = '''
 <script type="text/javascript">
-jq(function() {
+$(function() {
     window.setTimeout("window.open('%(url)s', '%(target)s');", %(timeout)s);
 });
 </script>

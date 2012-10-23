@@ -46,7 +46,7 @@ The redirection done with javascript:
     >>> viewlet = viewlets[0].factory(portal, request, {}, {})
     >>> print viewlet.render().strip()
     <script type="text/javascript">
-    jq(function() {
+    $(function() {
         window.setTimeout("window.open('http://www.google.ch', 'named-window');", 0);
     });
     </script>
