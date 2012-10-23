@@ -1,4 +1,4 @@
-jq(window).load(function() {
+$(window).load(function() {
     /* When the responsible client is updated we need to extend the autocomplete
        search URL of the responsible widget with the client ID. We also do this
        intially. */
