@@ -5,6 +5,9 @@ Changelog
 2.0.4 (unreleased)
 ------------------
 
+- Adjust javscripts: Use $ instead of deprecated jq.
+  [phgross]
+
 - Fixed preselected_helper: really translate the messagefactory.
   Issue #1608 Uebersetzungsfehler bei Standardablauf
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1608
