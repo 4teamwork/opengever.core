@@ -1,5 +1,5 @@
-jq(function() {
-	var tree = jq(".filetree").treeview({
+$(function() {
+	var tree = $(".filetree").treeview({
 	    collapsed: true,
 		animated: "fast",
 		persist: "cookie",

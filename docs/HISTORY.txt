@@ -5,7 +5,8 @@ Changelog
 2.0.1 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Adjust javscripts: Use $ instead of deprecated jq.
+  [phgross]
 
 
 2.0 (2011-11-17)
