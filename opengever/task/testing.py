@@ -46,10 +46,19 @@ class TaskFunctionalLayer(PloneSandboxLayer):
     def setUpZope(self, app, configurationContext):
         # do not install pas plugins (doesnt work in tests)
 
-        from opengever.ogds import base
-        from opengever.ogds.base import setuphandlers
+        from ftw import tabbedview
+        xmlconfig.file(
+            'configure.zcml', package=tabbedview, context=configurationContext)
+        from ftw import contentmenu
+        xmlconfig.file(
+            'configure.zcml',
+            package=contentmenu,
+            context=configurationContext)
 
+        from opengever.ogds.base import setuphandlers
         setuphandlers.setup_scriptable_plugin = lambda *a, **kw: None
+
+        from opengever.ogds import base
         xmlconfig.file(
             'tests.zcml', package=base, context=configurationContext)
         from opengever import task
@@ -66,24 +75,14 @@ class TaskFunctionalLayer(PloneSandboxLayer):
         xmlconfig.file(
             'configure.zcml', package=dossier, context=configurationContext)
 
-        from ftw import tabbedview
-        xmlconfig.file(
-            'configure.zcml', package=tabbedview, context=configurationContext)
-        from ftw import contentmenu
-        xmlconfig.file(
-            'configure.zcml',
-            package=contentmenu,
-            context=configurationContext)
-
-
     def setUpPloneSite(self, portal):
-        applyProfile(portal, 'opengever.task:default')
+        applyProfile(portal, 'ftw.contentmenu:default')
+        applyProfile(portal, 'ftw.tabbedview:default')
+        applyProfile(portal, 'opengever.ogds.base:default')
         applyProfile(portal, 'opengever.document:default')
         applyProfile(portal, 'opengever.dossier:default')
         applyProfile(portal, 'opengever.inbox:default')
-        applyProfile(portal, 'opengever.ogds.base:default')
-        applyProfile(portal, 'ftw.tabbedview:default')
-        applyProfile(portal, 'ftw.contentmenu:default')
+        applyProfile(portal, 'opengever.task:default')
 
         create_sql_tables()
         session = create_session()
