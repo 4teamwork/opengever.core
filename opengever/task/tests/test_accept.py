@@ -1,12 +1,19 @@
+from Products.CMFCore.utils import getToolByName
 from datetime import datetime
 from ftw.testing import MockTestCase
+from mocker import ANY
 from opengever.globalindex import Session
 from opengever.globalindex.model.task import Task
+from opengever.task.adapters import IResponseContainer
 from opengever.task.browser.accept.utils import accept_forwarding_with_successor
+from opengever.task.interfaces import ISuccessorTaskController
 from opengever.task.testing import OPENGEVER_TASK_INTEGRATION_TESTING
+from opengever.task.tests.data import DOCUMENT_EXTRACTION, FORWARDING_EXTRACTION
 from plone.app.testing import TEST_USER_ID
 from plone.dexterity.utils import createContentInContainer
-from opengever.task.tests.data import DOCUMENT_EXTRACTION, INBOX_EXTRACTION
+from zope.component import getUtility
+from zope.intid.interfaces import IIntIds
+
 
 FAKE_INTID = '711567936'
 
@@ -22,9 +29,6 @@ class FakeResponse(object):
 class TestTaskAccepting(MockTestCase):
 
     layer = OPENGEVER_TASK_INTEGRATION_TESTING
-
-
-
 
     def setUp(self):
         self.portal = self.layer.get('portal')
@@ -54,7 +58,7 @@ class TestTaskAccepting(MockTestCase):
                 'client2', '@@transporter-extract-object-json',
                 path='eingangskorb/forwarding-1',
                 data={},
-                headers={})).result(FakeResponse(INBOX_EXTRACTION))
+                headers={})).result(FakeResponse(FORWARDING_EXTRACTION))
 
         self.expect(remote_request(
                 'client2', '@@task-documents-extract',
@@ -62,7 +66,27 @@ class TestTaskAccepting(MockTestCase):
                 data={'documents': 'null'},
                 headers={})).result(FakeResponse(DOCUMENT_EXTRACTION))
 
+        # TODO replace any with the realy expected data
+        self.expect(remote_request(
+                'client2', '@@task-responses-extract',
+                path='eingangskorb/forwarding-1',
+                data=ANY)).result(FakeResponse('[]'))
+
+        self.expect(remote_request(
+                'client2', '@@store_forwarding_in_yearfolder',
+                path='eingangskorb/forwarding-1',
+                # data={'response_text': 'This is a message',
+                #       'successor_oguid': u'plone:1231066935',
+                #       'transition': 'forwarding-transition-accept'}
+                data=ANY,
+                )).result(FakeResponse('OK'))
+
         self.replay()
+
+
+        wft = getToolByName(self.portal, 'portal_workflow')
+        intids = getUtility(IIntIds)
+
 
         session = Session()
         session.add(predecessor)
@@ -73,43 +97,40 @@ class TestTaskAccepting(MockTestCase):
             u'This is a message',
             dossier=self.dossier)
 
-    #     context = self.stub()
+        # CHECKS
+        # ---------------------
+        # yearfolder:
+        yearfolder = self.inbox.get(str(datetime.now().year), None)
+        self.assertTrue(yearfolder)
+        self.assertEquals(yearfolder.title, u'Closed 2012')
 
-    #     forwarding = self.stub()
-    #     self.expect(forwarding.client_id).result('client-1')
-    #     self.expect(forwarding.physical_path).result('/platform/inbox-1/task-1')
+        # forwarding ...
+        # is stored in the yearfolder
+        forwarding = yearfolder.get('forwarding-1', None)
+        self.assertTrue(forwarding)
 
-    #     # TaskQuery utility
-    #     task_query = self.stub()
-    #     self.mock_utility(task_query, ITaskQuery)
-    #     self.expect(task_query.get_task_by_oguid('og_1')).result(forwarding)
+        # and closed
+        self.assertEquals(wft.getInfoFor(forwarding, 'review_state'),
+                          'forwarding-state-closed')
 
-    #     successor = self.stub()
-    #     self.expect(setattr(forwarding, 'issuer', 'inbox_group_client_2'))
-    #     # self.expect(forwarding.physical_path).result('/platform/inbox-1/task-1')
+        # attributes are correctly moved
+        self.assertEquals(forwarding.responsible, u'inbox:plone')
 
-    #     catalog = self.stub()
-    #     inbox = self.stub()
-    #     self.mock_tool(catalog, 'portal_catalog')
-    #     self.expect(catalog(portal_type="opengever.inbox.inbox")).result([inbox, ])
-    #     self.expect(inbox.getObject()).result(inbox)
+        # the issuer should be changed to the local inbox group
+        self.assertEquals(forwarding.issuer, u'inbox:plone')
 
-    #     transporter = self.stub()
-    #     self.mock_utility(transporter, ITransporter)
-    #     self.expect(
-    #         transporter.transport_from(
-    #             inbox, 'client-1', '/platform/inbox-1/task-1')).result(successor)
+        # also the response is correctly added
+        response = IResponseContainer(forwarding)[0]
+        self.assertEquals(response.transition, 'forwarding-transition-accept')
 
-    #     client = self.stub()
-    #     self.expect(client.inbox_group.id).result('inbox_group_client_2')
-    #     get_current_client = self.mocker.replace(
-    #         'opengever.ogds.base.utils.get_current_client')
-    #     self.expect(get_current_client()).result(client)
+        # task (succesor of the forwarding)
+        task = self.dossier.get('task-1')
+        self.assertTrue(task)
+        self.assertEquals(
+            ISuccessorTaskController(forwarding).get_successors()[0].int_id,
+            intids.getId(task))
 
-
-    #     # yearfolder = self.stub()
-    #     # self.expect(inbox.get(ANY)).result(yearfolder)
-
-    #     self.replay()
-
-    #     accept_forwarding_with_successor(context, 'og_1', 'FAKE respone text')
+        # the succesor link is also in the response correctly
+        self.assertEquals(
+            response.successor_oguid,
+            ISuccessorTaskController(task).get_oguid())
