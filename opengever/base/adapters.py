@@ -72,7 +72,7 @@ class ReferenceNumberPrefixAdpater(grok.Adapter):
                     subvalue += 1
                     subvalue = unicode(subvalue)
                     lastnumber = lastnumber[:span[0]] + \
-                                    subvalue + lastnumber[span[1]:]
+                        subvalue + lastnumber[span[1]:]
                     return lastnumber
             else:
                 return u''
