@@ -5,7 +5,6 @@ from datetime import datetime
 from five import grok
 from opengever.globalindex.interfaces import ITaskQuery
 from opengever.ogds.base.interfaces import ITransporter
-from opengever.ogds.base.utils import get_current_client
 from opengever.ogds.base.utils import remote_request, get_client_id
 from opengever.task import _
 from opengever.task.adapters import IResponseContainer
