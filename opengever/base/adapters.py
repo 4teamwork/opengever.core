@@ -72,7 +72,7 @@ class ReferenceNumberPrefixAdpater(grok.Adapter):
                     subvalue += 1
                     subvalue = unicode(subvalue)
                     lastnumber = lastnumber[:span[0]] + \
-                                    subvalue + lastnumber[span[1]:]
+                        subvalue + lastnumber[span[1]:]
                     return lastnumber
             else:
                 return u''
@@ -80,6 +80,7 @@ class ReferenceNumberPrefixAdpater(grok.Adapter):
     def get_number(self, obj):
         """return the reference number for the object,
         if no number is registred for this obj, we generate a new one.
+
         """
         intids = getUtility(IIntIds)
         try:

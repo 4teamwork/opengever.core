@@ -1,6 +1,8 @@
 from plone.formwidget.contenttree import ObjPathSourceBinder
 from Acquisition import aq_inner, aq_parent
 from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
+from opengever.base import interfaces
+from zope.component import queryMultiAdapter
 
 
 class RepositoryPathSourceBinder(ObjPathSourceBinder):
@@ -22,6 +24,9 @@ class RepositoryPathSourceBinder(ObjPathSourceBinder):
             else:
                 parent = aq_parent(aq_inner(parent))
 
+        if not root_path:
+            root_path = '/'.join(parent.getPhysicalPath())
+
         if not self.navigation_tree_query:
             self.navigation_tree_query = {}
 
@@ -29,6 +34,14 @@ class RepositoryPathSourceBinder(ObjPathSourceBinder):
             self.navigation_tree_query['path'] = {}
 
         self.navigation_tree_query['path']['query'] = root_path
+
+        modificator = queryMultiAdapter((
+            context, context.REQUEST),
+            interfaces.IRepositoryPathSourceBinderQueryModificator
+        )
+        if modificator:
+            self.navigation_tree_query = modificator(
+                self.navigation_tree_query)
 
         source = self.path_source(
             context,
