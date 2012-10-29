@@ -88,6 +88,7 @@ class ISendDocumentSchema(Interface):
                 navigation_tree_query={
                     'object_provides':
                         ['opengever.dossier.behaviors.dossier.IDossierMarker',
+                         'opengever.task.task.ITask',
                          'opengever.document.document.IDocumentSchema',
                          'ftw.mail.mail.IMail',
                          ]}),
