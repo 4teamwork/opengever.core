@@ -41,5 +41,14 @@
        permission="zope2.View"
        />
 
+    <browser:page
+        name="search"
+        class=".search.Search"
+        permission="zope2.View"
+        for="*"
+        template="search.pt"
+        layer="opengever.base.interfaces.IOpengeverBaseLayer"
+        />
+
 
 </configure>
