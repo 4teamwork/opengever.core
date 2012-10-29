@@ -344,7 +344,7 @@ class AdvancedSearchForm(directives_form.Form):
             # create Parameters and url
             if(data['reference']):
                 data['reference'] = self.correct_ref(data['reference'])
-            params = '/search?object_provides=%s' % (
+            params = '/@@search?object_provides=%s' % (
                 urllib.quote(data.get('object_provides', '')))
             # if clause because it entered a searchableText=none without text
             if data.get('searchableText'):
@@ -396,8 +396,8 @@ class AdvancedSearchForm(directives_form.Form):
             params = params.replace('task_review_state', 'review_state')
             params = params.replace('dossier_review_state', 'review_state')
 
-            return self.context.REQUEST.RESPONSE.redirect(
-                self.context.portal_url() + params)
+            return self.context.REQUEST.RESPONSE.redirect('%s%s' %(
+                    self.context.portal_url(), params))
 
     def correct_ref(self, value):
         registry = getUtility(IRegistry)
