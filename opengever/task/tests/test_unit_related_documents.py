@@ -321,12 +321,21 @@ class GetRelatedDocumentsTests(MockTestCase):
         self.expect(
             self.doc_rel_3.portal_type).result('not.allowed.contenttype')
 
+        self.doc_rel_4 = self.create_dummy()
+        self.doc_rel_4 = self.mocker.proxy(
+            self.doc_rel_4, spec=False, count=False)
+        self.expect(self.doc_rel_4.to_object).result(self.doc_rel_4)
+        self.expect(
+            self.doc_rel_4.portal_type).result('opengever.documet.document')
+
         self.uuid = self.mocker.mock(count=False)
         self.mock_adapter(self.uuid, IUUID, (Interface, ))
         self.expect(self.uuid(ANY)).call(lambda x: x)
 
         self.to_brain = self.mocker.replace(
             'plone.app.uuid.utils.uuidToCatalogBrain')
+        self.expect(
+            self.to_brain(self.doc_rel_4)).call(lambda x: None).count(0, None)
         self.expect(self.to_brain(ANY)).call(lambda x: x).count(0, None)
 
         self.request = {}
@@ -357,6 +366,20 @@ class GetRelatedDocumentsTests(MockTestCase):
 
         self.assertEquals(result[0].brain, self.doc_rel_1)
         self.assertEquals(result[1].brain, self.doc_rel_2)
+
+    def test_trashed_items(self):
+
+        self.expect(self.config.context.relatedItems).result(
+            [self.doc_rel_1, self.doc_rel_4])
+
+        self.replay()
+
+        source = RelatedDocumentsCatalogTableSource(self.config, self.request)
+
+        result = source.get_related_documents()
+
+        self.assertEquals(len(result), 1)
+        self.assertEquals(result[0].brain, self.doc_rel_1)
 
     def test_bad_item(self):
 

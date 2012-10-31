@@ -93,6 +93,11 @@ class RelatedDocumentsCatalogTableSource(
 
                 brain = uuidToCatalogBrain(IUUID(obj))
 
+                if not brain:
+                    # the document is trashed
+                    # or not enough permission are preset to get the brain
+                    continue
+
                 # We need a BrainWrapper object to declare the item as
                 # a related document for the tabbedview helper.
                 brains.append(BrainWrapper(brain))
