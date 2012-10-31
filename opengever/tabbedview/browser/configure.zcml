@@ -11,8 +11,30 @@
         allowed_attributes="listing select_all user_is_allowed_to_view"
         />
 
-	<browser:resourceDirectory
+    <browser:resourceDirectory
         name="opengever.tabbedview-resources"
         directory="resources" />
+
+    <!-- documents tabbedview tooltip -->
+    <browser:page
+        for="*"
+        name="ftw_tooltip_custom_config"
+        permission="zope2.View"
+        template="tabbedview_tooltip_config.js"
+        layer="opengever.base.interfaces.IOpengeverBaseLayer"
+        />
+
+    <browser:page
+        for="*"
+        name="ftw_tooltip_layout"
+        permission="zope2.View"
+        template="tooltip_layout.pt"
+        layer="opengever.base.interfaces.IOpengeverBaseLayer"
+        />
+
+    <adapter
+          factory=".tooltip_source.OpengeverTabbedviewTooltipSource"
+          name="opengever_tabbedview_source" />
+
 
 </configure>

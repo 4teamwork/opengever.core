@@ -47,6 +47,7 @@ setup(name='opengever.tabbedview',
         'opengever.task',
         'plone.app.dexterity',
         'z3c.autoinclude',
+        'ftw.tooltip',
           #'collective.jqhistory'
           # -*- Extra requirements: -*-
       ],

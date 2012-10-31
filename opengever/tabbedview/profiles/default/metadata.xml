@@ -4,5 +4,6 @@
     <dependencies>
         <dependency>profile-ftw.tabbedview:extjs</dependency>
         <dependency>profile-ftw.tabbedview:quickupload</dependency>
+        <dependency>profile-ftw.tooltip:default</dependency>
     </dependencies>
 </metadata>

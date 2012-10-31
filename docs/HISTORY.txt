@@ -5,6 +5,9 @@ Changelog
 2.2.5 (unreleased)
 ------------------
 
+- Added extended tooltip helper for document listings.
+  [phgross]
+
 - Adjust javscripts: Use $ instead of deprecated jq.
   [phgross]
 
