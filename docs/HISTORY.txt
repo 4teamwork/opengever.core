@@ -5,7 +5,8 @@ Changelog
 2.1.9 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Use ftw.testing's ComponentRegistryLayer for isolating component registry.
+  [jone]
 
 
 2.1.8 (2012-06-21)

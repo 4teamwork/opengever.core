@@ -1,33 +1,27 @@
+from ftw.testing.layer import ComponentRegistryLayer
 from grokcore.component.testing import grok
-from plone.testing import Layer
 from plone.testing import zca
-from zope.configuration import xmlconfig
 
 
-class LatexZCMLLayer(Layer):
+class LatexZCMLLayer(ComponentRegistryLayer):
     """A layer which only sets up the zcml, but does not start a zope
     instance.
     """
 
     defaultBases = (zca.ZCML_DIRECTIVES,)
 
-    def testSetUp(self):
-        self['configurationContext'] = zca.stackConfigurationContext(
-            self.get('configurationContext'))
-        config = self['configurationContext']
+    def setUp(self):
+        super(LatexZCMLLayer, self).testSetUp()
 
         import ftw.pdfgenerator.tests
-        xmlconfig.file('test.zcml', ftw.pdfgenerator.tests, config)
+        self.load_zcml_file('test.zcml', ftw.pdfgenerator.tests)
         import ftw.pdfgenerator
-        xmlconfig.file('configure.zcml', ftw.pdfgenerator, config)
+        self.load_zcml_file('configure.zcml', ftw.pdfgenerator)
 
         import five.grok
-        xmlconfig.file('meta.zcml', five.grok, config)
+        self.load_zcml_file('meta.zcml', five.grok)
 
         grok('opengever.latex')
-
-    def testTearDown(self):
-        del self['configurationContext']
 
 
 LATEX_ZCML_LAYER = LatexZCMLLayer()
