@@ -1,0 +1,16 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+    i18n_domain="ftw.tabbedview">
+
+    <!-- 3 -> 2200 -->
+    <genericsetup:upgradeStep
+        title="Removed unused tooltip jquery plugin."
+        description=""
+        source="2"
+        destination="2200"
+        handler="opengever.tabbedview.upgrades.to2200.RemoveTooltipPlugin"
+        profile="opengever.tabbedview:default"
+        />
+
+</configure>
