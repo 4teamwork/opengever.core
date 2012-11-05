@@ -13,4 +13,14 @@
         profile="opengever.tabbedview:default"
         />
 
+    <!-- 2200 -> 2201 -->
+    <genericsetup:upgradeStep
+        title="Install ftw.tooltip."
+        description=""
+        source="2200"
+        destination="2201"
+        handler="opengever.tabbedview.upgrades.to2201.InstallFtwTooltip"
+        profile="opengever.tabbedview:default"
+        />
+
 </configure>
