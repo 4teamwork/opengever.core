@@ -396,7 +396,7 @@ class AdvancedSearchForm(directives_form.Form):
             params = params.replace('task_review_state', 'review_state')
             params = params.replace('dossier_review_state', 'review_state')
 
-            return self.context.REQUEST.RESPONSE.redirect('%s%s' %(
+            return self.context.REQUEST.RESPONSE.redirect('%s%s' % (
                     self.context.portal_url(), params))
 
     def correct_ref(self, value):
