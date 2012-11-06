@@ -5,6 +5,11 @@ Changelog
 2.2.5 (unreleased)
 ------------------
 
+- Fixed and cleaned up the linked_ogds_author helper(including tests).
+  Issue #1733 DI DIS: Journal-Tab in Eingangskorb laedt bis in alle Ewigkeit (Sanduhr)
+  https://extranet.4teamwork.ch/extern/opengever-kanton-zug/sprint-backlog/1733/
+  [phgross]
+
 - Adjust javscripts: Use $ instead of deprecated jq.
   [phgross]
 

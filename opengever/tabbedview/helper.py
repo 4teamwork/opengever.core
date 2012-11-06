@@ -81,16 +81,16 @@ def readable_ogds_user(item, user):
 
 @ram.cache(author_cache_key)
 def linked_ogds_author(item, author):
-    if not isinstance(author, unicode):
-        author = author.decode('utf-8')
-    if IPropertiedUser.providedBy(author) or IMemberData.providedBy(author):
-        author = author.getId()
-    info = getUtility(IContactInformation)
-    if info.is_user(author) or info.is_contact(
-        author) or info.is_inbox(author):
-        return info.render_link(author)
-    else:
-        return author
+    if author:
+        if isinstance(author, str):
+            author = author.decode('utf-8')
+        info = getUtility(IContactInformation)
+        if info.is_user(author) or info.is_contact(
+            author) or info.is_inbox(author):
+            return info.render_link(author)
+        else:
+            return author
+    return ''
 
 
 def _breadcrumbs_from_item(item):
