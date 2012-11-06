@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-2.2.5 (unreleased)
+2.3 (unreleased)
 ------------------
 
 - Fixed and cleaned up the linked_ogds_author helper(including tests).
