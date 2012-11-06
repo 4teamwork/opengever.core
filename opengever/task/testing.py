@@ -58,6 +58,9 @@ class TaskFunctionalLayer(PloneSandboxLayer):
         from opengever import document
         xmlconfig.file(
             'configure.zcml', package=document, context=configurationContext)
+        from opengever import mail
+        xmlconfig.file(
+            'configure.zcml', package=mail, context=configurationContext)
         from ftw import tabbedview
         xmlconfig.file(
             'configure.zcml', package=tabbedview, context=configurationContext)
@@ -70,6 +73,7 @@ class TaskFunctionalLayer(PloneSandboxLayer):
     def setUpPloneSite(self, portal):
         applyProfile(portal, 'opengever.task:default')
         applyProfile(portal, 'opengever.document:default')
+        applyProfile(portal, 'opengever.mail:default')
         applyProfile(portal, 'opengever.ogds.base:default')
         applyProfile(portal, 'ftw.tabbedview:default')
         applyProfile(portal, 'ftw.contentmenu:default')

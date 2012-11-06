@@ -281,6 +281,6 @@ class ExtractDocuments(grok.View):
         documents = documents and [int(iid) for iid in documents]
         intids = getUtility(IIntIds)
 
-        for doc in get_documents_of_task(self.context):
+        for doc in get_documents_of_task(self.context, include_mails=True):
             if documents is None or intids.getId(doc) in documents:
                 yield doc

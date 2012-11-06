@@ -11,6 +11,7 @@ tests_require = [
     'plone.mocktestcase',
     'opengever.document',
     'opengever.contact',
+    'opengever.mail',
     'ftw.tabbedview',
     'ftw.contentmenu',
     'ftw.testing',

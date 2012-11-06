@@ -66,12 +66,18 @@ class TestTransporter(unittest.TestCase):
         documents.append(set_defaults(createContentInContainer(
                 task, 'opengever.document.document', title=u'Doc 2')))
 
+        documents.append(createContentInContainer(
+                task, 'ftw.mail.mail', title=u'Test mail 1'))
+
         # related documents
         documents.append(set_defaults(createContentInContainer(
             context, 'opengever.document.document', title=u'Doc 3')))
 
         documents.append(set_defaults(createContentInContainer(
             context, 'opengever.document.document', title=u'Doc 4')))
+
+        documents.append(createContentInContainer(
+            context, 'ftw.mail.mail', title=u'Test mail 2'))
 
         intids = getUtility(IIntIds)
         ITask(task).relatedItems = [
@@ -96,8 +102,8 @@ class TestTransporter(unittest.TestCase):
             sql_task, target)
 
         self.assertEquals(
-            [aa.Title for aa in target.getFolderContents()],
-            ['Doc 1', 'Doc 2', 'Doc 3', 'Doc 4'])
+            [aa.Title for aa in target.getFolderContents()].sort(),
+            ['Doc 1', 'Doc 2', 'Doc 3', 'Doc 4', 'Test mail 1', 'Test mail 2'].sort())
 
     def test_documents_task_transport_selected_docs(self):
         intids = getUtility(IIntIds)
@@ -114,8 +120,8 @@ class TestTransporter(unittest.TestCase):
             sql_task, target, documents=ids)
 
         self.assertEquals(
-            [aa.Title for aa in target.getFolderContents()],
-            ['Doc 1', 'Doc 4'])
+            [aa.Title for aa in target.getFolderContents()].sort(),
+            ['Doc 1', 'Doc 4'].sort())
 
         pair1 = intids_mapping.items()[0]
         pair2 = intids_mapping.items()[0]
