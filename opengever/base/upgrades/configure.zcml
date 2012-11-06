@@ -1,0 +1,25 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+    i18n_domain="ftw.tabbedview">
+
+    <!-- 2 -> 2500 -->
+    <genericsetup:upgradeStep
+        title="Register an opengever base browserlayer."
+        description=""
+        source="2"
+        destination="2500"
+        handler="opengever.base.upgrades.to2500.RegisterBrowserLayer"
+        profile="opengever.base:default"
+        />
+
+    <genericsetup:registerProfile
+        name="2500"
+        title="opengever.base: upgrade profile 2500"
+        description=""
+        directory="profiles/2500"
+        for="Products.CMFPlone.interfaces.IMigratingPloneSiteRoot"
+        provides="Products.GenericSetup.interfaces.EXTENSION"
+        />
+
+</configure>

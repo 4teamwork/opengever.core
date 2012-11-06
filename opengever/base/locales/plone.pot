@@ -19,3 +19,15 @@ msgstr ""
 
 msgid "Overview"
 msgstr ""
+
+#: plone.app.search/plone/app/search/search.pt:59
+msgid "Search results"
+msgstr ""
+
+#: plone.app.search/plone/app/search/search.pt:68
+msgid "Search results for ${term}"
+msgstr ""
+
+#: plone.app.search/plone/app/search/browser.py:121
+msgid "alphabetically"
+msgstr ""

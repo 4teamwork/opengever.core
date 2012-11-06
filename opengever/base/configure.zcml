@@ -47,6 +47,8 @@
     <include package=".behaviors" />
     <include package=".browser" />
     <include package=".viewlets" />
+    <include package=".upgrades" />
+
 	<include file="skins.zcml" />
 
 </configure>

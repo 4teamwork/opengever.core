@@ -2,6 +2,11 @@ from zope import schema
 from zope.interface import Interface
 
 
+class IOpengeverBaseLayer(Interface):
+    """Marker interfaces for opengever base browserview customisations.
+    """
+
+
 class IBaseCustodyPeriods(Interface):
     custody_periods = schema.List(title=u"custody period",
                                   default=[u'0',
