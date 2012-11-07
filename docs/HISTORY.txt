@@ -5,7 +5,10 @@ Changelog
 2.5.5 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Cleaned up the html structure in the version table.
+  Issue #1692 Versionen Viewlet Styling und Tabellenaufbau anpassen.
+  https://extranet.4teamwork.ch/extern/opengever-kanton-zug/sprint-backlog/1692/
+  [phgross]
 
 
 2.5.4 (2012-10-26)

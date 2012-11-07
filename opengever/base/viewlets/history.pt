@@ -37,23 +37,27 @@
                               effectiveDate python:effective and context.toLocalizedTime(item['effective_date'],long_format=True)"
                   tal:content="python:context.toLocalizedTime(item['time'],long_format=True)" />
               <td tal:content="item/comments|nothing" />
-              <td tal:condition="isVersion">
-                <a href=""
-                   class="standalone"
-                   tal:condition="downloadLink"
-                   tal:attributes="href string:${here/absolute_url}/download_file_version?version_id=${item/version_id}" i18n:translate="button_file">Download</a>
-               <a href=""
-                  class="standalone"
-                  tal:condition="not:downloadLink"
-                  tal:attributes="href string:${here/absolute_url}/version-view?version_id=${item/version_id}" i18n:translate="button_show">Show</a>
-               <a href="" 
-                  class="standalone"
-                  tal:condition="previewSupported"
-                  tal:attributes="href string:${here/absolute_url}/download_pdf_version?version_id=${item/version_id}"  i18n:translate="button_pdf">PDF</a>
-                <a href=""
-                   class="standalone"
-                   tal:attributes="href string:${here/absolute_url}/revert-file-to-version?version_id=${item/version_id}" i18n:translate="label_reset">reset</a>
-              </td>
+              <tal:cond tal:condition="isVersion">
+                <td tal:condition="downloadLink">
+                  <a href="" class="standalone" i18n:translate="button_file"
+                     tal:attributes="href string:${here/absolute_url}/download_file_version?version_id=${item/version_id}">
+                    Download
+                  </a>
+                </td>
+                <td tal:condition="not:downloadLink">
+                  <a href="" class="standalone" i18n:translate="button_show"
+                    tal:attributes="href string:${here/absolute_url}/version-view?version_id=${item/version_id}">Show</a>
+                </td>
+                <td tal:condition="previewSupported">
+                  <a href="" class="standalone" i18n:translate="button_pdf"
+                    tal:attributes="href string:${here/absolute_url}/download_pdf_version?version_id=${item/version_id}">PDF</a>
+                </td>
+                <td>
+                  <a href="" class="standalone"
+                     tal:attributes="href string:${here/absolute_url}/revert-file-to-version?version_id=${item/version_id}"
+                     i18n:translate="label_reset">reset</a>
+                </td>
+              </tal:cond>
             </tr>
           </tal:block>
         </tbody>
