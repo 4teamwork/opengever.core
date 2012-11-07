@@ -10,6 +10,9 @@ Changelog
   https://extranet.4teamwork.ch/extern/opengever-kanton-zug/sprint-backlog/1729
   [phgross]
 
+- Fixed cancelbutton handling in send documents form.
+  [phgross]
+
 
 2.1 (2012-09-12)
 ----------------
