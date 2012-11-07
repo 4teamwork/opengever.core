@@ -48,7 +48,7 @@ import json
 
 @grok.provider(IContextSourceBinder)
 def deliverable_documents_vocabulary(context):
-    """All documents in the current dossier are deliverable.
+    """All documents and mails in the current dossier are deliverable.
     """
 
     finder = getAdapter(context, name='parent-dossier-finder')
@@ -57,8 +57,9 @@ def deliverable_documents_vocabulary(context):
         raise RuntimeError('Could not find parent dossier.')
 
     catalog = getToolByName(dossier, 'portal_catalog')
-    brains = catalog(portal_type='opengever.document.document',
-                     path='/'.join(dossier.getPhysicalPath()))
+    brains = catalog(
+        portal_type=['opengever.document.document', 'ftw.mail.mail'],
+        path='/'.join(dossier.getPhysicalPath()))
 
     # Create the vocabulary.
     terms = []

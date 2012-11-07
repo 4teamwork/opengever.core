@@ -59,7 +59,7 @@ def related_documents_vocabulary(task):
     intids = getUtility(IIntIds)
 
     terms = []
-    for doc in get_documents_of_task(task):
+    for doc in get_documents_of_task(task, include_mails=True):
         key = str(intids.getId(doc))
         label = '%s (%s)' % (
             doc.Title(),

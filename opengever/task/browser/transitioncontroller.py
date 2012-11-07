@@ -297,7 +297,8 @@ class TaskTransitionController(BrowserView):
         elif self._is_task_on_responsible_client():
             return self._addresponse_form_url(transition)
 
-        elif len(get_documents_of_task(self.context)) == 0:
+        elif len(get_documents_of_task(
+                self.context, include_mails=True)) == 0:
             return self._addresponse_form_url(transition)
 
         else:
