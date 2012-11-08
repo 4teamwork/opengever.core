@@ -16,6 +16,7 @@ from zope.schema import vocabulary
 DESCRIPTION_MAX_LENGTH = 350
 DESCRIPTION_MAX_LINE_LENGTH = 45.0
 DESCRIPTION_MAX_LINES = 7
+TITLE_MAX_LINE_LENGTH = 40
 
 
 class DossierCoverPDFView(grok.View, BaseStandalonePDFView):
@@ -79,7 +80,7 @@ class DossierCoverPDFView(grok.View, BaseStandalonePDFView):
                 self.get_parent_dossier_title())
             }
 
-    def _cut_description(self, description):
+    def _cut_description(self, description, title):
         """We try to guess how many lines or charakters fit in to
         the description gap, and cut it correspondet to this calculations."""
 
@@ -87,7 +88,18 @@ class DossierCoverPDFView(grok.View, BaseStandalonePDFView):
         counter = 0
         cutted = False
 
+        max_lines = DESCRIPTION_MAX_LINES
+        max_length = DESCRIPTION_MAX_LENGTH
+
         description = description.decode('utf-8')
+        title = title.decode('utf-8')
+
+        # check if the title needs more than one line
+        # then we reduce the max_length and the max_lines
+        if len(title) > TITLE_MAX_LINE_LENGTH:
+            additional_title_lines = len(title) / TITLE_MAX_LINE_LENGTH
+            max_lines -= additional_title_lines
+            max_length -= additional_title_lines * TITLE_MAX_LINE_LENGTH
 
         # only use a given number of lines
         for line in description.split(u'\n'):
@@ -99,15 +111,15 @@ class DossierCoverPDFView(grok.View, BaseStandalonePDFView):
                 counter += 1
 
             cutted_description.append(line)
-            if counter >= DESCRIPTION_MAX_LINES:
+            if counter >= max_lines:
                 cutted = True
                 break
 
         description = '\n'.join(cutted_description)
 
         # check the length of the whole description
-        if len(description) > DESCRIPTION_MAX_LENGTH:
-            description = description[:DESCRIPTION_MAX_LENGTH]
+        if len(description) > max_length:
+            description = description[:max_length]
             cutted = True
 
         if cutted:
@@ -117,7 +129,7 @@ class DossierCoverPDFView(grok.View, BaseStandalonePDFView):
 
     def get_description(self):
         description = self.context.Description()
-        description = self._cut_description(description)
+        description = self._cut_description(description, self.context.Title())
 
         # cut description when its necessary
         return description.replace('\n', '<br />')

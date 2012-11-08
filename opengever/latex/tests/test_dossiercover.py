@@ -167,6 +167,9 @@ class TestDossierCoverPDFView(MockTestCase):
         dossier = self.stub()
         request = self.stub()
 
+        small_title = 'Lorem ipsum dolor sit amet'
+        long_title = 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor in- vidunt ut labore et dolore magna aliquy'
+
         # a to long description wuthout any linebreaks
         description_1 = 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor in- vidunt ut labore et dolore magna aliquyam erat, sed diam volup- tua. At ve- ro eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ip- sum dolor sit amet. Lorem ipsum dolor Lorem ipsum dolor sit amet consetetur, sadipscing elitr, sed diam nonumy eirmod tempor in- vidunt ut laboree et dolore magna aliquyam erat, sed diam volup- tua.'
 
@@ -202,10 +205,21 @@ class TestDossierCoverPDFView(MockTestCase):
 
         cutted_description_3 = """Lorem ipsum dolor sit amet:<br /> - Lorem ipsum dolor sit amet, consetetur sadipscing elitr<br /> - Lorem ipsum dolor sit amet, consetetur sadipscing elitr<br /> - Lorem ipsum dolor sit amet, consetetur sadipscing elitr ..."""
 
+        # a description with to many lines and a to long title
+        cutted_description_4 = """Lorem ipsum dolor sit amet:<br /> - consetetur sadipscing<br /> - elitr<br /> - sed diam nonumy eirmod ..."""
+
         with self.mocker.order():
             self.expect(dossier.Description()).result(description_1)
+            self.expect(dossier.Title()).result(small_title)
+
             self.expect(dossier.Description()).result(description_2)
+            self.expect(dossier.Title()).result(small_title)
+
             self.expect(dossier.Description()).result(description_3)
+            self.expect(dossier.Title()).result(small_title)
+
+            self.expect(dossier.Title()).result(description_2)
+            self.expect(dossier.Title()).result(long_title)
 
         self.replay()
 
