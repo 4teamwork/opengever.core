@@ -1,0 +1,26 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+    i18n_domain="ftw.tabbedview">
+
+    <!-- 3 -> 2200 -->
+    <genericsetup:upgradeStep
+        title="Removed unused tooltip jquery plugin."
+        description=""
+        source="2"
+        destination="2200"
+        handler="opengever.tabbedview.upgrades.to2200.RemoveTooltipPlugin"
+        profile="opengever.tabbedview:default"
+        />
+
+    <!-- 2200 -> 2201 -->
+    <genericsetup:upgradeStep
+        title="Install ftw.tooltip."
+        description=""
+        source="2200"
+        destination="2201"
+        handler="opengever.tabbedview.upgrades.to2201.InstallFtwTooltip"
+        profile="opengever.tabbedview:default"
+        />
+
+</configure>

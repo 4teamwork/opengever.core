@@ -10,6 +10,9 @@ Changelog
   https://extranet.4teamwork.ch/extern/opengever-kanton-zug/sprint-backlog/1733/
   [phgross]
 
+- Added extended tooltip helper for document listings.
+  [phgross]
+
 - Adjust javscripts: Use $ instead of deprecated jq.
   [phgross]
 

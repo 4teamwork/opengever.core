@@ -1,8 +1,10 @@
 from Products.CMFCore.interfaces._tools import IMemberData
+from Products.CMFPlone import PloneMessageFactory as pmf
 from Products.PluggableAuthService.interfaces.authservice import \
     IPropertiedUser
 from datetime import date as dt
 from ftw.mail.utils import get_header
+from opengever.base import _ as base_mf
 from opengever.base.browser.helper import get_css_class
 from opengever.ogds.base.interfaces import IContactInformation
 from plone.i18n.normalizer.interfaces import IIDNormalizer
@@ -146,6 +148,69 @@ def linked(item, value):
 
     wrapper = '<span class="linkWrapper">%s</span>' % link
     return wrapper
+
+
+def linked_document_with_tooltip(item, value):
+
+    data = {}
+
+    if isinstance(value, unicode):
+        value = value.encode('utf-8')
+    data['value'] = value
+
+    # Determine URL method
+    data['url'] = '#'
+    if hasattr(item, 'getURL'):
+        data['url'] = item.getURL()
+    elif hasattr(item, 'absolute_url'):
+        data['url'] = item.absolute_url()
+
+    # tooltip links
+    data['preview_link'] = '%s/@@download' % (data['url'])
+    data['preview_label'] = translate(
+        base_mf(u'button_pdf', 'PDF'), context=item.REQUEST).encode('utf-8')
+
+    data['edit_metadata_link'] = '%s/edit' % (data['url'])
+    data['edit_metadata_label'] = translate(
+        pmf(u'Edit metadata'), context=item.REQUEST).encode('utf-8')
+
+    data['edit_direct_link'] = '%s/editing_document' % (data['url'])
+    data['edit_direct_label'] = translate(
+        pmf(u'Checkout and edit'), context=item.REQUEST).encode('utf-8')
+
+    # Construct CSS class
+    data['css_class'] = get_css_class(item)
+
+    # Construct breadcrumbs
+    breadcrumb_titles = _breadcrumbs_from_item(item)
+    data['breadcrumbs'] = " > ".join(t for t in breadcrumb_titles)
+
+    # Make sure all data used in the HTML snippet is properly escaped
+    for k, v in data.items():
+        data[k] = cgi.escape(v, quote=True)
+
+    link = """<div class='linkWrapper'>
+    <a class='tabbedview-tooltip %(css_class)s' href='#'></a>
+    <a href='%(url)s'>%(value)s</a>
+    <div class='tabbedview-tooltip-data'>
+        <div class='tooltip-content'>
+            <div class='tooltip-header'>%(value)s</div>
+            <div class='tooltip-breadcrumb'>%(breadcrumbs)s</div>
+            <div class='tooltip-links'>
+                <a href='%(preview_link)s' target=''>%(preview_label)s</a>
+                <a href='%(edit_metadata_link)s' target='_blank'>
+                    %(edit_metadata_label)s
+                </a>
+                <a href='%(edit_direct_link)s' target=''>
+                    %(edit_direct_label)s
+                </a>
+            </div>
+        </div>
+        <div class='bottomImage'></div>
+    </div>
+</div>""" % data
+
+    return link
 
 
 def readable_date_set_invisibles(item, date):
