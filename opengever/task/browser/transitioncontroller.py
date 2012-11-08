@@ -273,7 +273,7 @@ class TaskTransitionController(BrowserView):
         """Checks if:
         - The current user is the issuer
         """
-        return self._is_issuer()
+        return self._is_issuer_or_inbox_group_user()
 
     @action('task-transition-open-tested-and-closed')
     def open_to_closed_action(self, transition):
@@ -329,7 +329,7 @@ class TaskTransitionController(BrowserView):
     def resolved_to_closed_guard(self):
         """Checks if:
         - The current user is the issuer of the task"""
-        return self._is_issuer()
+        return self._is_issuer_or_inbox_group_user()
 
     @action('task-transition-resolved-tested-and-closed')
     def resolved_to_closed_action(self, transition):
@@ -405,22 +405,35 @@ class TaskTransitionController(BrowserView):
 
         return functions
 
-    def _is_issuer(self):
+    def _is_issuer(self, include_inbox_group=False):
         """Checks if the current user is the issuer of the
         current task(current context)"""
 
         info = getUtility(IContactInformation)
 
         if not info.is_inbox(self.context.issuer):
-            return getMultiAdapter(
-                (self.context, self.request),
-                name='plone_portal_state').member().id == self.context.issuer
+            member_id = getMultiAdapter((self.context, self.request),
+                name='plone_portal_state').member().id
+            if member_id == self.context.issuer:
+                return True
+            elif include_inbox_group and self._is_issuer_inbox_group_user():
+                return True
+            else:
+                return False
+
         else:
+            inbox_group = info.get_group_of_inbox(self.context.issuer)
             return info.is_group_member(
-                info.get_group_of_inbox(self.context.issuer),
+                inbox_group,
                 getMultiAdapter((self.context, self.request),
                                 name='plone_portal_state').member().id
                 )
+
+    def _is_issuer_or_inbox_group_user(self):
+        """Checks if the current user is the issuer of the
+        current task(current context) or a user of the current inbox group"""
+
+        return self._is_issuer(include_inbox_group=True)
 
     def _is_responsible(self):
         """Checks if the current user is the issuer of the
@@ -436,6 +449,15 @@ class TaskTransitionController(BrowserView):
         info = getUtility(IContactInformation)
         return info.is_user_in_inbox_group(
             client_id=self.context.responsible_client)
+
+    def _is_issuer_inbox_group_user(self):
+        """Checks with the helpt of the contact information utility
+        if the current user is in the inbox group of the current client.
+        """
+        info = getUtility(IContactInformation)
+        if self._is_remote_request() or info.is_user_in_inbox_group():
+            return True
+        return False
 
     def _is_responsible_or_inbox_group_user(self):
         """Checks if the current user is the responsible
