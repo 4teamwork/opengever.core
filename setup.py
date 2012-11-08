@@ -15,6 +15,8 @@ tests_require = [
     'ftw.tabbedview',
     'ftw.contentmenu',
     'ftw.testing',
+    'opengever.dossier',
+    'opengever.inbox',
     ]
 
 setup(name='opengever.task',

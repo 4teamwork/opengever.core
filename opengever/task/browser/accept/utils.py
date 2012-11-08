@@ -116,6 +116,9 @@ def accept_forwarding_with_successor(
         successor_forwarding = transporter.transport_from(
             inbox, predecessor.client_id, predecessor.physical_path)
 
+    # Replace the issuer with the current inbox
+    successor_forwarding.issuer = u'inbox:%s' % get_client_id()
+
     # Set the "X-CREATING-SUCCESSOR" flag for preventing the event handler
     # from creating additional responses per added document.
     successor_forwarding.REQUEST.set('X-CREATING-SUCCESSOR', True)
