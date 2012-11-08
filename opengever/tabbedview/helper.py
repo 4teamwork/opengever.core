@@ -189,7 +189,7 @@ def linked_document_with_tooltip(item, value):
     for k, v in data.items():
         data[k] = cgi.escape(v, quote=True)
 
-    link = """<span class='linkWrapper'>
+    link = """<div class='linkWrapper'>
     <a class='tabbedview-tooltip %(css_class)s' href='#'></a>
     <a href='%(url)s'>%(value)s</a>
     <div class='tabbedview-tooltip-data'>
@@ -208,7 +208,7 @@ def linked_document_with_tooltip(item, value):
         </div>
         <div class='bottomImage'></div>
     </div>
-</span>""" % data
+</div>""" % data
 
     return link
 
