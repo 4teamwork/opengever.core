@@ -162,8 +162,37 @@ class TestArchiver(MockTestCase):
         self.assertEquals(sub2.filing_no, 'FAKE NUMBER.2')
         self.assertEquals(subsub1.filing_no, 'FAKE NUMBER.1.1')
 
+    def test_update_prefix(self):
+        dossier = self.providing_stub([IDossier, IDossierMarker])
+        sub1 = self.providing_stub([IDossier, IDossierMarker])
+        sub2 = self.providing_stub([IDossier, IDossierMarker])
+        subsub1 = self.providing_stub([IDossier, IDossierMarker])
+
+        objs = [dossier, sub1, sub2, subsub1]
+        self.expect(dossier.get_subdossiers()).result([sub1, sub2])
+        self.expect(sub1.get_subdossiers()).result([subsub1])
+        self.expect(subsub1.get_subdossiers()).result([])
+        self.expect(sub2.get_subdossiers()).result([])
+
+        for obj in objs:
+            self.expect(obj.getObject()).result(obj)
+            self.expect(obj.reindexObject(idxs=ANY))
+
+        self.replay()
+
+        archiver = IDossierArchiver(dossier)
+        archiver.update_prefix('FAKE PREFIX')
+
+        self.assertEquals(dossier.filing_prefix, 'FAKE PREFIX')
+        self.assertEquals(sub1.filing_prefix, 'FAKE PREFIX')
+        self.assertEquals(sub2.filing_prefix, 'FAKE PREFIX')
+        self.assertEquals(subsub1.filing_prefix, 'FAKE PREFIX')
+
 
 class TestForm(MockTestCase):
+
+    def setUp(self):
+        grok('opengever.dossier.archive')
 
     def test_valid_filing_year(self):
 

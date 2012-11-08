@@ -5,7 +5,10 @@ Changelog
 2.1.7 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Filing: Upate the filing prefix also on only resolving a dossier.
+  Issue #1720 Dossier abschlissen mit Ablagenummer ohne Praefix
+  https://extranet.4teamwork.ch/extern/opengever-kanton-zug/sprint-backlog/1720/
+  [phgross]
 
 
 2.1.6 (2012-09-25)
