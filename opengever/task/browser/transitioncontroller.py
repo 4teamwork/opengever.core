@@ -411,9 +411,9 @@ class TaskTransitionController(BrowserView):
         info = getUtility(IContactInformation)
 
         if not info.is_inbox(self.context.issuer):
-            if getMultiAdapter(
-                (self.context, self.request),
-                name='plone_portal_state').member().id == self.context.issuer:
+            member_id = getMultiAdapter((self.context, self.request),
+                name='plone_portal_state').member().id
+            if member_id == self.context.issuer:
                 return True
             elif include_inbox_group and self._is_issuer_inbox_group_user():
                 return True
