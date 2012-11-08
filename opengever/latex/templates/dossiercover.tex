@@ -8,7 +8,8 @@
 
 <%block name="style_params">
 \renewcommand{\familydefault}{ma1}
-\renewcommand{\scriptsize}{\fontsize{11}{11}\selectfont}
+\renewcommand{\tiny}{\fontsize{11}{11}\selectfont}
+\renewcommand{\scriptsize}{\fontsize{12}{12}\selectfont}
 \renewcommand{\small}{\fontsize{14}{14}\selectfont}
 </%block>
 \begin{document}
@@ -20,10 +21,10 @@
 \setlength\tabcolsep{0pt}
 \hspace{-0.15cm}
 \begin{tabularx}{\linewidth}{lXr}
-\scriptsize ${clientid} & &\scriptsize Ablage: ${filingprefix}
+\tiny ${clientid} & &\tiny Ablage: ${filingprefix}
 \end{tabularx}
 \rule{\linewidth}{.11em}
-\scriptsize
+\tiny
 \hspace{0.15cm}Aktenzeichen: ${referencenr}\newline
 \hspace{0.15cm}Laufnummer: ${sequencenr}
 % if filingnr:
@@ -31,14 +32,14 @@
 % endif
 \noindent
 \vspace{0.8cm} \newline
-\scriptsize Ordnungsposition: ${repository}
+\tiny Ordnungsposition: ${repository}
 % if parentDossierTitle:
   \newline
   Hauptdossier: ${parentDossierTitle}
 % endif
 \vspace{0.3cm} \newline
 \small \textbf{${title}} \newline
-${description} \newline
+\scriptsize ${description} \newline
 \vspace{0.3cm} \newline
 \scriptsize
 Federführung: ${responsible}

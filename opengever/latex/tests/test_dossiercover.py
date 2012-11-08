@@ -162,3 +162,54 @@ class TestDossierCoverPDFView(MockTestCase):
              'responsible': 'John Doe',
              'start': '2011-09-24 00:00:00',
              'end': '2011-11-22 00:00:00'})
+
+    def test_description_cutting(self):
+        dossier = self.stub()
+        request = self.stub()
+
+        # a to long description wuthout any linebreaks
+        description_1 = 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor in- vidunt ut labore et dolore magna aliquyam erat, sed diam volup- tua. At ve- ro eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ip- sum dolor sit amet. Lorem ipsum dolor Lorem ipsum dolor sit amet consetetur, sadipscing elitr, sed diam nonumy eirmod tempor in- vidunt ut laboree et dolore magna aliquyam erat, sed diam volup- tua.'
+
+        cutted_description_1 = 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor in- vidunt ut labore et dolore magna aliquyam erat, sed diam volup- tua. At ve- ro eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ip- sum dolor sit amet. Lorem ipsum dolor Lorem ipsum dolor sit amet c ...'
+
+        # a description with to many lines
+        description_2 = """Lorem ipsum dolor sit amet:
+ - consetetur sadipscing
+ - elitr
+ - sed diam nonumy eirmod
+ - tempor in
+ - vidunt ut labore et dolore magna
+ - aliquyam erat, sed diam
+ - volup- tua.
+ - At ve- ro eos et accusam et
+ - justo duo dolores et ea rebum.
+ - Stet clita kasd gubergren, no sea
+ - takimata sanctus est Lorem ip"""
+
+        cutted_description_2 = """Lorem ipsum dolor sit amet:<br /> - consetetur sadipscing<br /> - elitr<br /> - sed diam nonumy eirmod<br /> - tempor in<br /> - vidunt ut labore et dolore magna<br /> - aliquyam erat, sed diam ..."""
+
+        # a description with to many long lines
+        description_3 = """Lorem ipsum dolor sit amet:
+ - Lorem ipsum dolor sit amet, consetetur sadipscing elitr
+ - Lorem ipsum dolor sit amet, consetetur sadipscing elitr
+ - Lorem ipsum dolor sit amet, consetetur sadipscing elitr
+ - Lorem ipsum dolor sit amet, consetetur sadipscing elitr
+ - Lorem ipsum dolor sit amet, consetetur sadipscing elitr
+ - Lorem ipsum dolor sit amet, consetetur sadipscing elitr
+ - Lorem ipsum dolor sit amet, consetetur sadipscing elitr
+ - Lorem ipsum dolor sit amet, consetetur sadipscing elitr
+"""
+
+        cutted_description_3 = """Lorem ipsum dolor sit amet:<br /> - Lorem ipsum dolor sit amet, consetetur sadipscing elitr<br /> - Lorem ipsum dolor sit amet, consetetur sadipscing elitr<br /> - Lorem ipsum dolor sit amet, consetetur sadipscing elitr ..."""
+
+        with self.mocker.order():
+            self.expect(dossier.Description()).result(description_1)
+            self.expect(dossier.Description()).result(description_2)
+            self.expect(dossier.Description()).result(description_3)
+
+        self.replay()
+
+        view = DossierCoverPDFView(dossier, request)
+        self.assertEquals(view.get_description(), cutted_description_1)
+        self.assertEquals(view.get_description(), cutted_description_2)
+        self.assertEquals(view.get_description(), cutted_description_3)

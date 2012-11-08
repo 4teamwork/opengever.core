@@ -2,6 +2,7 @@ from Acquisition import aq_inner, aq_parent
 from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
 from five import grok
 from ftw.pdfgenerator.browser.standalone import BaseStandalonePDFView
+from math import ceil
 from opengever.base.interfaces import IBaseClientID
 from opengever.base.interfaces import IReferenceNumber, ISequenceNumber
 from opengever.dossier.behaviors.dossier import IDossierMarker, IDossier
@@ -10,6 +11,11 @@ from opengever.repository.interfaces import IRepositoryFolder
 from plone.registry.interfaces import IRegistry
 from zope.component import getUtility, getAdapter
 from zope.schema import vocabulary
+
+
+DESCRIPTION_MAX_LENGTH = 350
+DESCRIPTION_MAX_LINE_LENGTH = 45.0
+DESCRIPTION_MAX_LINES = 7
 
 
 class DossierCoverPDFView(grok.View, BaseStandalonePDFView):
@@ -73,8 +79,48 @@ class DossierCoverPDFView(grok.View, BaseStandalonePDFView):
                 self.get_parent_dossier_title())
             }
 
+    def _cut_description(self, description):
+        """We try to guess how many lines or charakters fit in to
+        the description gap, and cut it correspondet to this calculations."""
+
+        cutted_description = []
+        counter = 0
+        cutted = False
+
+        description = description.decode('utf-8')
+
+        # only use a given number of lines
+        for line in description.split(u'\n'):
+            # for long lines:
+            # calc in how many lines the string would fit in
+            if len(line) > DESCRIPTION_MAX_LINE_LENGTH:
+                counter += ceil(len(line) / DESCRIPTION_MAX_LINE_LENGTH)
+            else:
+                counter += 1
+
+            cutted_description.append(line)
+            if counter >= DESCRIPTION_MAX_LINES:
+                cutted = True
+                break
+
+        description = '\n'.join(cutted_description)
+
+        # check the length of the whole description
+        if len(description) > DESCRIPTION_MAX_LENGTH:
+            description = description[:DESCRIPTION_MAX_LENGTH]
+            cutted = True
+
+        if cutted:
+            description = u'%s ...' % (description)
+
+        return description.encode('utf-8')
+
     def get_description(self):
-        return self.context.Description().replace('\n', '<br />')
+        description = self.context.Description()
+        description = self._cut_description(description)
+
+        # cut description when its necessary
+        return description.replace('\n', '<br />')
 
     def get_parent_dossier_title(self):
         obj = aq_parent(aq_inner(self.context))

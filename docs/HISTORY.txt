@@ -8,6 +8,11 @@ Changelog
 - Use ftw.testing's ComponentRegistryLayer for isolating component registry.
   [jone]
 
+- Dossiercover: Implemented cropping of to long descriptions.
+  Issue #1654 Deckblatt Schriftgroesse anpassen
+  https://extranet.4teamwork.ch/extern/opengever-kanton-zug/sprint-backlog/1654/
+  [phgross]
+
 
 2.1.8 (2012-06-21)
 ------------------
