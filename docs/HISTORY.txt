@@ -5,6 +5,9 @@ Changelog
 2.0.3 (unreleased)
 ------------------
 
+- Dropped Plone 4.1 compatibility. Only 4.2 and up are supported.
+  [lgraf]
+
 - Adjust the accessors they should return utf-8 since the dexterity update.
   Issue #1420 Plone Version und Dexterity Version auf aktuellste Version heben.
   https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1420
