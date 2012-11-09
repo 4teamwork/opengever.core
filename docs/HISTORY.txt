@@ -5,6 +5,9 @@ Changelog
 2.4.4 (unreleased)
 ------------------
 
+- Dropped Plone 4.1 compatibility. Only 4.2 and up are supported.
+  [lgraf]
+
 - Made relateddocuments tab safer, when related docs are trashed.
   [phgross]
 
