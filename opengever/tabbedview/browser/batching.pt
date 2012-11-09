@@ -7,14 +7,15 @@
                  batchlinkparams python:batchformkeys and dict([(key, request.form[key]) for key in batchformkeys if key in request]) or request.form;
                  mq python:modules['ZTUtils'].make_query;
                  url batch_base_url | request/ACTUAL_URL;
-                 currentpage batch/pagenumber;"
+                 currentpage batch/pagenumber;
+                 sort_on python: request.get('sort_on', 'getObjPositionInParent')"
      tal:condition="view/multiple_pages"
      i18n:domain="opengever.tabbedview">
 
     <!-- Link to first -->
     <span class="first">
         <a href=""
-           tal:attributes="href string:${view/url}?pagenumber=1&amp;sort_on=${request/sort_on|getObjPositionInParent}">&laquo;</a>
+           tal:attributes="href string:${view/url}?pagenumber=1&amp;sort_on=${sort_on}">&laquo;</a>
     </span>
 
     <!-- Link to previous -->
@@ -22,7 +23,7 @@
       tal:define="p batch/has_previous | nothing">
         <a href=""
            tal:condition="p"
-           tal:attributes="href string:${view/url}?pagenumber=${batch/previouspage}&amp;sort_on=${request/sort_on|getObjPositionInParent}">
+           tal:attributes="href string:${view/url}?pagenumber=${batch/previouspage}&amp;sort_on=${sort_on}">
            &lsaquo;
         </a>
         <a name="previous" tal:condition="not:p">&lsaquo;</a>
@@ -31,7 +32,7 @@
     <!-- Pagelist with links to previous pages for quick navigation -->
     <span tal:repeat="pagenumber batch/previous_pages">
       <a href="" tal:content="pagenumber"
-         tal:attributes="href string:${view/url}?pagenumber=$pagenumber&amp;sort_on=${request/sort_on|getObjPositionInParent}"/>
+         tal:attributes="href string:${view/url}?pagenumber=$pagenumber&amp;sort_on=${sort_on}"/>
     </span>
 
     <!-- Current page -->
@@ -41,7 +42,7 @@
     <!-- Pagelist with links to next pages for quick navigation -->
     <span tal:repeat="pagenumber batch/next_pages">
       <a href="" tal:content="pagenumber"
-         tal:attributes="href string:${view/url}?pagenumber=$pagenumber&amp;sort_on=${request/sort_on|getObjPositionInParent}"/>
+         tal:attributes="href string:${view/url}?pagenumber=$pagenumber&amp;sort_on=${sort_on}"/>
     </span>
 
     <!-- Link to next -->
@@ -49,7 +50,7 @@
       tal:define="n batch/has_next | nothing">
         <a href=""
            tal:condition="n"
-           tal:attributes="href string:${view/url}?pagenumber=${batch/nextpage}&amp;sort_on=${request/sort_on|getObjPositionInParent}">
+           tal:attributes="href string:${view/url}?pagenumber=${batch/nextpage}&amp;sort_on=${sort_on}">
            &rsaquo;
         </a>
         <a name="next" tal:condition="not:n">&rsaquo;</a>
@@ -58,7 +59,7 @@
     <!-- Link to last -->
     <span class="last">
         <a href=""
-           tal:attributes="href string:${view/url}?pagenumber=${batch/lastpage}&amp;sort_on=${request/sort_on|getObjPositionInParent}">
+           tal:attributes="href string:${view/url}?pagenumber=${batch/lastpage}&amp;sort_on=${sort_on}">
            &raquo;</a>
     </span>
 
