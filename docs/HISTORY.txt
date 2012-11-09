@@ -5,6 +5,9 @@ Changelog
 2.0.1 (unreleased)
 ------------------
 
+- Dropped Plone 4.1 compatibility. Only 4.2 and up are supported.
+  [lgraf]
+
 - Adjust javscripts: Use $ instead of deprecated jq.
   [phgross]
 
