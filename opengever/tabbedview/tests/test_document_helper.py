@@ -67,7 +67,7 @@ class TestDocumentsUrl(MockTestCase):
 
         self.replay()
 
-        expected_link = """<span class='linkWrapper'>
+        expected_link = """<div class='linkWrapper'>
     <a class='tabbedview-tooltip contenttype-opengever-document' href='#'></a>
     <a href='http://nohost/plone/dossier-1/task-1/document'>lorem ipsum &lt;with tags&gt;</a>
     <div class='tabbedview-tooltip-data'>
@@ -86,7 +86,7 @@ class TestDocumentsUrl(MockTestCase):
         </div>
         <div class='bottomImage'></div>
     </div>
-</span>"""
+</div>"""
 
         self.assertEqual(linked_document_with_tooltip(item, value),
                          expected_link)
