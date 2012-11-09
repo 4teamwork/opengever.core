@@ -5,7 +5,9 @@ Changelog
 2.4 (unreleased)
 ----------------
 
-- Nothing changed yet.
+- Dropped Plone 4.1 compatibility. Only 4.2 and up are supported.
+  [lgraf]
+
 
 
 2.3 (2012-06-18)
