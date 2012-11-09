@@ -5,6 +5,9 @@ Changelog
 2.1.1 (unreleased)
 ------------------
 
+- Dropped Plone 4.1 compatibility. Only 4.2 and up are supported.
+  [lgraf]
+
 - Send Documents: Display documets in a task also in the document contenttree widget.
   Issue #1729 Hinzufuegen-Auswahl in E-Mail-Maske unvollstaendig (aus Aufgaben ref. Doks nicht aufgefuehrt)
   https://extranet.4teamwork.ch/extern/opengever-kanton-zug/sprint-backlog/1729
