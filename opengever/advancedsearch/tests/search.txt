@@ -67,9 +67,9 @@ search dossiers
     >>> browser.getControl(name='form.widgets.searchableText').value = "dossier1"
     >>> browser.getControl(name='form.widgets.object_provides:list').value = ['opengever.dossier.behaviors.dossier.IDossierMarker']
     >>> browser.getControl(name='form.buttons.button_search').click()
-    >>> '1 items matching your search terms' in browser.contents
+    >>> '<strong id="search-results-number">1</strong>' in browser.contents
     True
-    >>> browser.open('http://nohost/plone/search?object_provides=opengever.dossier.behaviors.dossier.IDossierMarker&SearchableText=dossier1')
+    >>> browser.open('http://nohost/plone/@@search?object_provides=opengever.dossier.behaviors.dossier.IDossierMarker&SearchableText=dossier1')
 
 
 search documents (we can't find the document because we must change the content-type)
@@ -77,9 +77,9 @@ search documents (we can't find the document because we must change the content-
     >>> browser.getControl(name='form.widgets.searchableText').value = "document1"
     >>> browser.getControl(name='form.widgets.object_provides:list').value = ['opengever.dossier.behaviors.dossier.IDossierMarker']
     >>> browser.getControl(name='form.buttons.button_search').click()
-    >>> '0 items matching your search terms' in browser.contents
+    >>> '<strong id="search-results-number">0</strong>' in browser.contents
     True
-    >>> browser.open('http://nohost/plone/search?object_provides=opengever.dossier.behaviors.dossier.IDossierMarker&SearchableText=document1')
+    >>> browser.open('http://nohost/plone/@@search?object_provides=opengever.dossier.behaviors.dossier.IDossierMarker&SearchableText=document1')
 
 
 search documents with the right content-type
@@ -87,8 +87,8 @@ search documents with the right content-type
     >>> browser.getControl(name='form.widgets.searchableText').value = "(document1)"
     >>> browser.getControl(name='form.widgets.object_provides:list').value = ['opengever.document.behaviors.IBaseDocument']
     >>> browser.getControl(name='form.buttons.button_search').click()
-    >>> browser.open('http://nohost/plone/search?object_provides=opengever.document.behaviors.IBaseDocument&SearchableText=document1')
-    >>> '1 items matching your search terms' in browser.contents
+    >>> browser.open('http://nohost/plone/@@search?object_provides=opengever.document.behaviors.IBaseDocument&SearchableText=document1')
+    >>> '<strong id="search-results-number">1</strong>' in browser.contents
     True
 
 search tasks (we can't find the task because we must change the content-type)
@@ -96,9 +96,9 @@ search tasks (we can't find the task because we must change the content-type)
     >>> browser.getControl(name='form.widgets.searchableText').value = "task1"
     >>> browser.getControl(name='form.widgets.object_provides:list').value = ['opengever.document.behaviors.IBaseDocument']
     >>> browser.getControl(name='form.buttons.button_search').click()
-    >>> '0 items matching your search terms' in browser.contents
+    >>> '<strong id="search-results-number">0</strong>' in browser.contents
     True
-    >>> browser.open('http://nohost/plone/search?object_provides=opengever.document.behaviors.IBaseDocument&SearchableText=task1')
+    >>> browser.open('http://nohost/plone/@@search?object_provides=opengever.document.behaviors.IBaseDocument&SearchableText=task1')
 
 
 search tasks with the right content-type
@@ -106,9 +106,9 @@ search tasks with the right content-type
     >>> browser.getControl(name='form.widgets.searchableText').value = "task1"
     >>> browser.getControl(name='form.widgets.object_provides:list').value = ['opengever.task.task.ITask']
     >>> browser.getControl(name='form.buttons.button_search').click()
-    >>> '1 items matching your search terms' in browser.contents
+    >>> '<strong id="search-results-number">1</strong>' in browser.contents
     True
-    >>> browser.open('http://nohost/plone/search?object_provides=opengever.task.task.ITask&SearchableText=task1')
+    >>> browser.open('http://nohost/plone/@@search?object_provides=opengever.task.task.ITask&SearchableText=task1')
 
 
 # validate created searchstring for dossiers
@@ -125,7 +125,7 @@ search tasks with the right content-type
     >>> browser.getControl(name='form.widgets.dossier_review_state:list').value = ['dossier-state-active']
     >>> browser.getControl(name='form.buttons.button_search').click()
     >>> browser.url
-    'http://nohost/plone/search?object_provides=opengever.dossier.behaviors.dossier.IDossierMarker&SearchableText=dossier1&start_usage=range:minmax&start:list=01/01/10&start:list=02/02/10&end_usage=range:minmax&end:list=03/01/10&end:list=04/02/10&reference=OG%2014.2&sequence_number:int=5&searchable_filing_no=14&review_state:list=dossier-state-active'
+    'http://nohost/plone/@@search?object_provides=opengever.dossier.behaviors.dossier.IDossierMarker&SearchableText=dossier1&start_usage=range:minmax&start:list=01/01/10&start:list=02/02/10&end_usage=range:minmax&end:list=03/01/10&end:list=04/02/10&reference=OG%2014.2&sequence_number:int=5&searchable_filing_no=14&review_state:list=dossier-state-active'
 
 # validate created searchstring for documents
     >>> browser.open('%s/advanced_search' % dossier1.absolute_url())
@@ -139,7 +139,7 @@ search tasks with the right content-type
     >>> browser.getControl(name='form.widgets.trashed:list').value = True
     >>> browser.getControl(name='form.buttons.button_search').click()
     >>> browser.url
-    'http://nohost/plone/search?object_provides=opengever.document.behaviors.IBaseDocument&SearchableText=document1&receipt_date_usage=range:minmax&receipt_date:list=01/01/10&receipt_date:list=02/02/10&delivery_date_usage=range:minmax&delivery_date:list=03/01/10&delivery_date:list=04/02/10&document_author=Eduard&trashed:list:boolean=True&trashed:list:boolean=False'
+    'http://nohost/plone/@@search?object_provides=opengever.document.behaviors.IBaseDocument&SearchableText=document1&receipt_date_usage=range:minmax&receipt_date:list=01/01/10&receipt_date:list=02/02/10&delivery_date_usage=range:minmax&delivery_date:list=03/01/10&delivery_date:list=04/02/10&document_author=Eduard&trashed:list:boolean=True&trashed:list:boolean=False'
 
 # validate created searchstring for task
     >>> browser.open('%s/advanced_search' % dossier1.absolute_url())
@@ -151,7 +151,7 @@ search tasks with the right content-type
     >>> browser.getControl(name='form.widgets.dossier_review_state:list').value = ['dossier-state-active']
     >>> browser.getControl(name='form.buttons.button_search').click()
     >>> browser.url
-    'http://nohost/plone/search?object_provides=opengever.task.task.ITask&SearchableText=task1&deadline_usage=range:minmax&deadline:list=01/01/10&deadline:list=01/02/10&task_type=information'
+    'http://nohost/plone/@@search?object_provides=opengever.task.task.ITask&SearchableText=task1&deadline_usage=range:minmax&deadline:list=01/01/10&deadline:list=01/02/10&task_type=information'
 
 check disabling unloadProtection
     >>> browser.open('%s/advanced_search' %(portal_url))
