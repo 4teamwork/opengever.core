@@ -5,11 +5,16 @@ Changelog
 2.0.7 (unreleased)
 ------------------
 
+- Adjust db_connection setup, so it works fine with SQLAlchemy 0.7.x.
+  Dropped support for older SQLAlchemy than 0.7.x.
+  [phgross]
+
 - Dropped Plone 4.1 compatibility. Only 4.2 and up are supported.
   [lgraf]
 
 - Disable printer for LDAP import configs.
   [lgraf]
+
 
 - Adjsut imports use now SQLAlchemy 0.7.x.
   [phgross]
