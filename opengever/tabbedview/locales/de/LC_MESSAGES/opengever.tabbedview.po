@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "POT-Creation-Date: 2012-11-09 10:01+0000\n"
-"PO-Revision-Date: 2012-01-09 15:21+0100\n"
+"PO-Revision-Date: 2012-11-09 16:24+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
 "MIME-Version: 1.0\n"
@@ -14,7 +14,7 @@ msgstr ""
 
 #: ./opengever/tabbedview/browser/selection_dossier.pt:15
 msgid "Active"
-msgstr ""
+msgstr "Aktiv"
 
 #: ./opengever/tabbedview/browser/generic_task.pt:55
 #: ./opengever/tabbedview/browser/selection_dossier.pt:13
