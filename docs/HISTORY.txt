@@ -5,6 +5,11 @@ Changelog
 2.3 (unreleased)
 ------------------
 
+- Added review_state filter for dossiertabs.
+  Issue #1694 State-Filter fuer Dossiers implementieren.
+  https://extranet.4teamwork.ch/extern/opengever-kanton-zug/sprint-backlog/1694/
+  [phgross]
+
 - Dropped Plone 4.1 compatibility. Only 4.2 and up are supported.
   [lgraf]
 
