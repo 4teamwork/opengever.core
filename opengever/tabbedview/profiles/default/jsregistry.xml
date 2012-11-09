@@ -5,7 +5,7 @@
               expression="" id="++resource++opengever.tabbedview-resources/jquery.tooltip.min.js"
               inline="False"/>
   <javascript cacheable="True" compression="safe" cookable="True" enabled="on"
-              expression="" id="++resource++opengever.tabbedview-resources/tasklisting.js"
+              expression="" id="++resource++opengever.tabbedview-resources/statefilter.js"
               insert-after="++resource++ftw.tabbedview-resources/tabbedview.js"
               inline="False"/>
 </object>

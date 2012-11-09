@@ -23,4 +23,14 @@
         profile="opengever.tabbedview:default"
         />
 
+    <!-- 2201 -> 2202 -->
+    <genericsetup:upgradeStep
+        title="Install ftw.tooltip."
+        description=""
+        source="2201"
+        destination="2202"
+        handler="opengever.tabbedview.upgrades.to2202.RenameStatefilterJS"
+        profile="opengever.tabbedview:default"
+        />
+
 </configure>
