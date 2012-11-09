@@ -5,6 +5,9 @@ Changelog
 2.1.7 (unreleased)
 ------------------
 
+- Dropped Plone 4.1 compatibility. Only 4.2 and up are supported.
+  [lgraf]
+
 - Filing: Upate the filing prefix also on only resolving a dossier.
   Issue #1720 Dossier abschlissen mit Ablagenummer ohne Praefix
   https://extranet.4teamwork.ch/extern/opengever-kanton-zug/sprint-backlog/1720/
