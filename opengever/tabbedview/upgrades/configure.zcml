@@ -25,7 +25,7 @@
 
     <!-- 2201 -> 2202 -->
     <genericsetup:upgradeStep
-        title="Install ftw.tooltip."
+        title="Rename statefilter js."
         description=""
         source="2201"
         destination="2202"
