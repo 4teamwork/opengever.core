@@ -5,6 +5,9 @@ Changelog
 2.0.7 (unreleased)
 ------------------
 
+- Dropped Plone 4.1 compatibility. Only 4.2 and up are supported.
+  [lgraf]
+
 - Disable printer for LDAP import configs.
   [lgraf]
 
