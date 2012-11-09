@@ -5,6 +5,9 @@ Changelog
 2.1.9 (unreleased)
 ------------------
 
+- Dropped Plone 4.1 compatibility. Only 4.2 and up are supported.
+  [lgraf]
+
 - Use ftw.testing's ComponentRegistryLayer for isolating component registry.
   [jone]
 
