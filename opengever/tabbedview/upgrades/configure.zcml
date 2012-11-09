@@ -7,7 +7,7 @@
     <genericsetup:upgradeStep
         title="Removed unused tooltip jquery plugin."
         description=""
-        source="2"
+        source="3"
         destination="2200"
         handler="opengever.tabbedview.upgrades.to2200.RemoveTooltipPlugin"
         profile="opengever.tabbedview:default"
