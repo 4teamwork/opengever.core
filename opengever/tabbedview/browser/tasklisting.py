@@ -58,6 +58,14 @@ class GlobalTaskListingTab(grok.View, OpengeverTab,
     select_all_template = ViewPageTemplateFile('select_all_globaltasks.pt')
     selection = ViewPageTemplateFile("selection_tasks.pt")
 
+    open_states = [
+            'task-state-open',
+            'task-state-in-progress',
+            'task-state-resolved',
+            'task-state-rejected',
+            'forwarding-state-open',
+        ]
+
     columns = (
 
         ('', task_id_checkbox_helper),
@@ -168,15 +176,8 @@ class GlobalTaskTableSource(SqlTableSource):
         """When a state filter is active,
         we add a filter which select just the open tasks"""
 
-        open_task_states = [
-            'task-state-open',
-            'task-state-in-progress',
-            'task-state-resolved',
-            'task-state-rejected',
-            'forwarding-state-open',
-        ]
-
         if open_state:
-            query = query.filter(Task.review_state.in_(open_task_states))
+            query = query.filter(
+                Task.review_state.in_(self.config.open_states))
 
         return query

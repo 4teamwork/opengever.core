@@ -15,7 +15,7 @@ from opengever.tabbedview.helper import readable_ogds_author, linked
 from opengever.tabbedview.helper import linked_document_with_tooltip
 from opengever.tabbedview.helper import readable_ogds_user
 from opengever.tabbedview.helper import workflow_state
-from opengever.tabbedview.interfaces import ITaskCatalogTableSourceConfig
+from opengever.tabbedview.interfaces import IStateFilterTableSourceConfig
 from opengever.tabbedview.utils import get_translated_transitions
 from opengever.tabbedview.utils import get_translated_types
 from opengever.task.helper import task_type_helper
@@ -221,7 +221,15 @@ class Dossiers(OpengeverCatalogListingTab):
 
     grok.name('tabbedview_view-dossiers')
 
+    implements(IStateFilterTableSourceConfig)
+
     object_provides = 'opengever.dossier.behaviors.dossier.IDossierMarker'
+
+    selection = ViewPageTemplateFile("selection_dossier.pt")
+
+    open_states = [
+        'dossier-state-active',
+        ]
 
     columns = (
         ('', helper.path_checkbox),
@@ -274,14 +282,15 @@ class SubDossiers(Dossiers):
     search_options = {'is_subdossier': True}
 
 
-class TaskCatalogTableSource(grok.MultiAdapter, CatalogTableSource):
-    """Table source Adapter for task stored in the portal catalog"""
+class StateFilterTableSource(grok.MultiAdapter, CatalogTableSource):
+    """Catalog Table source Adapter,
+    which provides open/all state filtering."""
 
-    adapts(ITaskCatalogTableSourceConfig, Interface)
+    adapts(IStateFilterTableSourceConfig, Interface)
 
     def build_query(self):
         """extends the standard catalog soruce build_query with the
-        extend_query_with_taskstatefilter functionality.
+        extend_query_with_statefilter functionality.
         """
 
         # initalize config
@@ -304,7 +313,7 @@ class TaskCatalogTableSource(grok.MultiAdapter, CatalogTableSource):
 
         # when state_filter is not set to all, we just return the open states
         if review_state_filter != 'false':
-            query = self.extend_query_with_taskstatefilter(query)
+            query = self.extend_query_with_statefilter(query)
 
         # batching
         if self.config.batching_enabled and not self.config.lazy:
@@ -312,32 +321,32 @@ class TaskCatalogTableSource(grok.MultiAdapter, CatalogTableSource):
 
         return query
 
-    def extend_query_with_taskstatefilter(self, query):
+    def extend_query_with_statefilter(self, query):
         """Extends the given query with a filter,
-        which show just open dossiers."""
+        which show just objects in the open state."""
 
-        open_task_states = [
-            'task-state-open',
-            'task-state-in-progress',
-            'task-state-resolved',
-            'task-state-rejected',
-            'forwarding-state-open',
-        ]
-
-        query['review_state'] = open_task_states
+        query['review_state'] = self.config.open_states
 
         return query
 
 
 class Tasks(OpengeverCatalogListingTab):
 
-    implements(ITaskCatalogTableSourceConfig)
+    implements(IStateFilterTableSourceConfig)
 
     grok.name('tabbedview_view-tasks')
 
     template = ViewPageTemplateFile("generic_task.pt")
 
     selection = ViewPageTemplateFile("selection_tasks.pt")
+
+    open_states = [
+            'task-state-open',
+            'task-state-in-progress',
+            'task-state-resolved',
+            'task-state-rejected',
+            'forwarding-state-open',
+        ]
 
     columns = (
         ('', helper.path_checkbox),
