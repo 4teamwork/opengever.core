@@ -5,6 +5,11 @@ Changelog
 2.5.5 (unreleased)
 ------------------
 
+- Added Gever specific formsubmithelper, which disallow a second submit.
+  Issue #1680 doppeltes akzeptieren von Aufgaben moeglich
+  https://extranet.4teamwork.ch/extern/opengever-kanton-zug/sprint-backlog/1680/
+  [phgross]
+
 - Dropped Plone 4.1 compatibility. Only 4.2 and up are supported.
   [lgraf]
 
