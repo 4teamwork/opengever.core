@@ -5,6 +5,11 @@ Changelog
 2.5.5 (unreleased)
 ------------------
 
+- Added adjustments for the new ftw.contentmenu version.
+  Issue #799 Performance Optimierung ftw.contentmenu
+  https://extranet.4teamwork.ch/intranet/projekte/4teamwork-egov/tracker-4teamwork-egov/799/
+  [phgross]
+
 - Added Gever specific formsubmithelper, which disallow a second submit.
   Issue #1680 doppeltes akzeptieren von Aufgaben moeglich
   https://extranet.4teamwork.ch/extern/opengever-kanton-zug/sprint-backlog/1680/
