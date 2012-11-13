@@ -9,7 +9,7 @@
 		<tr tal:condition="context/title">
 			<th i18n:translate="label_document">document</th>
 			<td tal:content="context/title"/>
-		    </tr>
+    </tr>
 		<tr tal:condition="python: view.w['document_date'].value != ('', '', '')">
 			<th i18n:translate="label_document_date">Document Date</th>
 			<td tal:content="structure view/w/document_date/render"/>
@@ -37,8 +37,8 @@
 		<tr tal:condition="context/file">
 			<th i18n:translate="label_file">File</th>
 			<td>
-                <a tal:condition="context/file" tal:attributes="href string:${context/absolute_url}/@@download/file/${context/file/filename}" tal:content="structure view/w/file/render"/>
-                <span tal:condition="not:context/file">-</span>
+        <a tal:condition="context/file" tal:attributes="href string:${context/absolute_url}/@@download/file/${context/file/filename}" tal:content="structure view/w/file/render"/>
+        <span tal:condition="not:context/file">-</span>
 			</td>
 		</tr>
 		<tr>
