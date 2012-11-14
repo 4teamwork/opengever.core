@@ -18,6 +18,7 @@ from plone.registry.interfaces import IRegistry
 from zope.component import getUtilitiesFor
 from zope.component import getUtility
 from zope.event import notify
+from zope.interface import Interface
 import re
 
 
@@ -31,6 +32,13 @@ ROLE_MAPPING = (
             )),
 
     (IStandard, (
+            (u'Reader', _('sharing_reader')),
+            (u'Contributor', _('sharing_contributor')),
+            (u'Editor', _('sharing_editor')),
+            (u'Role Manager', _('sharing_role_manager')),
+            )),
+
+    (Interface, (
             (u'Reader', _('sharing_reader')),
             (u'Contributor', _('sharing_contributor')),
             (u'Editor', _('sharing_editor')),
