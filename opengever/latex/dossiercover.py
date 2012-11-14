@@ -27,6 +27,11 @@ class DossierCoverPDFView(grok.View, BaseStandalonePDFView):
     template_directories = ['templates']
     template_name = 'dossiercover.tex'
 
+    description_max_length = DESCRIPTION_MAX_LENGTH
+    description_max_lines = DESCRIPTION_MAX_LINES
+    description_max_line_length = DESCRIPTION_MAX_LINE_LENGTH
+    title_max_line_length = TITLE_MAX_LINE_LENGTH
+
     __call__ = BaseStandalonePDFView.__call__
 
     def __init__(self, context, request):
@@ -88,25 +93,25 @@ class DossierCoverPDFView(grok.View, BaseStandalonePDFView):
         counter = 0
         cutted = False
 
-        max_lines = DESCRIPTION_MAX_LINES
-        max_length = DESCRIPTION_MAX_LENGTH
+        max_lines = self.description_max_lines
+        max_length = self.description_max_length
 
         description = description.decode('utf-8')
         title = title.decode('utf-8')
 
         # check if the title needs more than one line
         # then we reduce the max_length and the max_lines
-        if len(title) > TITLE_MAX_LINE_LENGTH:
-            additional_title_lines = len(title) / TITLE_MAX_LINE_LENGTH
+        if len(title) > self.title_max_line_length:
+            additional_title_lines = len(title) / self.title_max_line_length
             max_lines -= additional_title_lines
-            max_length -= additional_title_lines * TITLE_MAX_LINE_LENGTH
+            max_length -= additional_title_lines * self.title_max_line_length
 
         # only use a given number of lines
         for line in description.split(u'\n'):
             # for long lines:
             # calc in how many lines the string would fit in
-            if len(line) > DESCRIPTION_MAX_LINE_LENGTH:
-                counter += ceil(len(line) / DESCRIPTION_MAX_LINE_LENGTH)
+            if len(line) > self.description_max_line_length:
+                counter += ceil(len(line) / self.description_max_line_length)
             else:
                 counter += 1
 
