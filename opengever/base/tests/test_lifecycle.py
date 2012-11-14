@@ -23,6 +23,8 @@ from zope.schema.vocabulary import getVocabularyRegistry
 class TestCustodyPeriod(MockTestCase, TestCase):
 
     def setUp(self):
+        super(TestCustodyPeriod, self).setUp()
+
         self.testcase_mocker = Mocker()
         grok('opengever.base.behaviors.lifecycle')
 

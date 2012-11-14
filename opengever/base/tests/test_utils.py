@@ -7,7 +7,7 @@ from mocker import ANY
 class TestAttachmentContentDisposition(MockTestCase):
 
     def setUp(self):
-
+        super(TestAttachmentContentDisposition, self).setUp()
         self.header = []
 
         self.request = self.mocker.proxy({}, count=False)

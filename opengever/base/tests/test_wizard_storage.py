@@ -16,6 +16,8 @@ class TestAcceptTaskStorageManager(MockTestCase):
     layer = ANNOTATION_LAYER
 
     def setUp(self):
+        super(TestAcceptTaskStorageManager, self).setUp()
+
         site = self.providing_stub([IAttributeAnnotatable])
         setSite(site)
 

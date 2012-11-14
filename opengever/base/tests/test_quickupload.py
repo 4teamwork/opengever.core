@@ -33,6 +33,7 @@ class ITest2(form.Schema):
 class TestOGQuickupload(MockTestCase, TestCase):
 
     def setUp(self):
+        super(TestOGQuickupload, self).setUp()
         grok('plone.directives.form.meta')
         grok('opengever.base.quickupload')
 

@@ -17,6 +17,8 @@ from zope.intid.interfaces import IIntIds
 class TestResolveOGUIDView(MockTestCase, TestCase):
 
     def setUp(self):
+        super(TestResolveOGUIDView, self).setUp()
+
         self.testcase_mocker = Mocker()
         expect = Expect(self.testcase_mocker)
 

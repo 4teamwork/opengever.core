@@ -11,6 +11,7 @@ from zope.interface import Interface, directlyProvides
 class TestUniqueNumberGenerator(MockTestCase):
 
     def setUp(self):
+        super(TestUniqueNumberGenerator, self).setUp()
         grok('opengever.base.unique_number')
 
     def test_genrator(self):
