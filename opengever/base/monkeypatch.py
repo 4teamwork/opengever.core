@@ -84,42 +84,6 @@ LOGGER.info('Monkey patched Products.LDAPUserFolder.utils.encoding (utf-8)')
 
 # --------
 
-def _fix_terms(self):
-    """Fix URLs of the relatedItems terms so virtual hosting still works.
-    """
-    portal_url_tool = getToolByName(self.context, 'portal_url')
-    portal = portal_url_tool.getPortalObject()
-    portal_url = portal.absolute_url()
-
-    vhost = portal_url
-    vhost = vhost.lstrip('https://')
-    vhost = vhost.lstrip('http://')
-    vhost_tokens = vhost.split('/')
-    vhost_prefix = '/' + '/'.join(vhost_tokens[1:])
-
-    for term in self.terms:
-        if term.token.startswith('/%s' % portal.id):
-            term.token = term.token.replace('/%s' % portal.id, '')
-            term.token = vhost_prefix + term.token
-
-
-def render(self):
-    if self.mode == z3c.form.interfaces.DISPLAY_MODE:
-        self._fix_terms()
-        return self.display_template(self)
-    elif self.mode == z3c.form.interfaces.HIDDEN_MODE:
-        return self.hidden_template(self)
-    else:
-        return self.input_template(self)
-
-import plone.formwidget.contenttree
-plone.formwidget.contenttree.widget.ContentTreeBase._fix_terms = _fix_terms
-plone.formwidget.contenttree.widget.ContentTreeBase.render = render
-LOGGER.info(
-    'Monkey patched plone.formwidget.contenttree.widget.ContentTreeBase')
-
-# --------
-
 import webdav.LockItem
  # 24 hours
 webdav.LockItem.DEFAULTTIMEOUT = 24 * 60 * 60L

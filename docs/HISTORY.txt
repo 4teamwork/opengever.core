@@ -5,6 +5,9 @@ Changelog
 2.5.5 (unreleased)
 ------------------
 
+- Removed old and no longer used monkey patch for the plone.formwidget.contenttree.
+  [phgross]
+
 - Added adjustments for the new ftw.contentmenu version.
   Issue #799 Performance Optimierung ftw.contentmenu
   https://extranet.4teamwork.ch/intranet/projekte/4teamwork-egov/tracker-4teamwork-egov/799/
