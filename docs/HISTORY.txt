@@ -5,6 +5,9 @@ Changelog
 2.3 (unreleased)
 ------------------
 
+- Activate extended tooltips also for the relateddocuments listing.
+  [phgross]
+
 - Added review_state filter for dossiertabs.
   Issue #1694 State-Filter fuer Dossiers implementieren.
   https://extranet.4teamwork.ch/extern/opengever-kanton-zug/sprint-backlog/1694/
