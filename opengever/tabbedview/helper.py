@@ -197,11 +197,11 @@ def linked_document_with_tooltip(item, value):
             <div class='tooltip-header'>%(value)s</div>
             <div class='tooltip-breadcrumb'>%(breadcrumbs)s</div>
             <div class='tooltip-links'>
-                <a href='%(preview_link)s' target=''>%(preview_label)s</a>
-                <a href='%(edit_metadata_link)s' target='_blank'>
+                <a href='%(preview_link)s'>%(preview_label)s</a>
+                <a href='%(edit_metadata_link)s'>
                     %(edit_metadata_label)s
                 </a>
-                <a href='%(edit_direct_link)s' target=''>
+                <a href='%(edit_direct_link)s'>
                     %(edit_direct_label)s
                 </a>
             </div>

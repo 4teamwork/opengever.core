@@ -75,11 +75,11 @@ class TestDocumentsUrl(MockTestCase):
             <div class='tooltip-header'>lorem ipsum &lt;with tags&gt;</div>
             <div class='tooltip-breadcrumb'>Dossier1 &gt; Task 1 &gt; lorem ipsum &lt;with tags&gt;</div>
             <div class='tooltip-links'>
-                <a href='http://nohost/plone/dossier-1/task-1/document/@@download' target=''>PDF</a>
-                <a href='http://nohost/plone/dossier-1/task-1/document/edit' target='_blank'>
+                <a href='http://nohost/plone/dossier-1/task-1/document/@@download'>PDF</a>
+                <a href='http://nohost/plone/dossier-1/task-1/document/edit'>
                     Edit metadata
                 </a>
-                <a href='http://nohost/plone/dossier-1/task-1/document/editing_document' target=''>
+                <a href='http://nohost/plone/dossier-1/task-1/document/editing_document'>
                     Checkout and edit
                 </a>
             </div>
