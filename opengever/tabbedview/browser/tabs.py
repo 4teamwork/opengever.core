@@ -194,8 +194,6 @@ class Documents(OpengeverCatalogListingTab):
         {'column': 'containing_subdossier',
          'column_title': _('label_subdossier', default="Subdossier"), },
 
-        ('', external_edit_link),
-
         )
 
     enabled_actions = [

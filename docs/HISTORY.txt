@@ -5,6 +5,10 @@ Changelog
 2.3 (unreleased)
 ------------------
 
+- Removed external_edit colum in document listings,
+  it's now replaced by the extended tooltip.
+  [phgross]
+
 - Activate extended tooltips also for the relateddocuments listing.
   [phgross]
 
