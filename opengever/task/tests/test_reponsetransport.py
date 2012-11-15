@@ -29,6 +29,7 @@ class TestResponeTransporter(MockTestCase):
     layer = ZCML_LAYER
 
     def setUp(self):
+        super(TestResponeTransporter, self).setUp()
         grok('opengever.task.transporter')
         grok('opengever.task.adapters')
 

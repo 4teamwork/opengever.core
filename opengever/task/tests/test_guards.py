@@ -20,6 +20,7 @@ import os.path
 class TestTaskTransitionController(MockTestCase):
 
     def setUp(self):
+        super(TestTaskTransitionController, self).setUp()
         # we need to have a site root for making the get_client_id cachecky
         # work.
         root = self.create_dummy(getSiteManager=getSiteManager,

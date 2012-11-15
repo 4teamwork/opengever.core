@@ -7,6 +7,7 @@ from opengever.task.util import get_documents_of_task
 class TestGetDocumentsOfTask(MockTestCase):
 
     def setUp(self):
+        super(TestGetDocumentsOfTask, self).setUp()
         self.catalog = self.stub()
         self.mock_tool(self.catalog, 'portal_catalog')
 
@@ -85,6 +86,7 @@ class FakeRequest(dict):
 class TestCustomInitialVersionMessage(MockTestCase):
 
     def setUp(self):
+        super(TestCustomInitialVersionMessage, self).setUp()
         self.request = FakeRequest()
 
     def get_custom_message(self, fail=False):

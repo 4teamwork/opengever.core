@@ -12,6 +12,7 @@ import json
 class TestResponseTransporter(MockTestCase):
 
     def setUp(self):
+        super(TestResponseTransporter, self).setUp()
         grok('opengever.task.transporter')
 
     def _compare(self, a, b, mapping):

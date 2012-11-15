@@ -31,6 +31,7 @@ class TestTaskAccepting(MockTestCase):
     layer = OPENGEVER_TASK_INTEGRATION_TESTING
 
     def setUp(self):
+        super(TestTaskAccepting, self).setUp()
         self.portal = self.layer.get('portal')
 
         self.fake_inbox = 'FAKE'

@@ -14,7 +14,6 @@ from zExceptions import Forbidden
 from zope.annotation.interfaces import IAttributeAnnotatable
 from zope.component import getMultiAdapter
 from zope.interface import Interface
-from zope.lifecycleevent import ObjectModifiedEvent
 from zope.lifecycleevent.interfaces import IObjectModifiedEvent
 
 
@@ -26,6 +25,7 @@ class TestWorkflowStateSyncer(MockTestCase):
     remote_requests = []
 
     def setUp(self):
+        super(TestWorkflowStateSyncer, self).setUp()
         grok('opengever.task.statesyncer')
 
     def test_get_tasks_to_sync(self):

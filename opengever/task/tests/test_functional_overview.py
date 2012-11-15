@@ -1,5 +1,5 @@
 from opengever.task.browser.overview import Overview
-from plone.mocktestcase import MockTestCase
+from ftw.testing import MockTestCase
 from zope.interface import directlyProvides
 from opengever.globalindex.model.task import Task
 from opengever.task.task import ITask
@@ -13,6 +13,7 @@ from opengever.ogds.base.interfaces import IContactInformation
 class TestOverviewFunctions(MockTestCase):
 
     def setUp(self):
+        super(TestOverviewFunctions, self).setUp()
         self.mock_context = self.mocker.mock(count=False)
         self.mock_request = self.mocker.mock(count=False)
 
