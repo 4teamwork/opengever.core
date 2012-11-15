@@ -47,8 +47,9 @@ class TestDocumentsUrl(MockTestCase):
         value = u'lorem ipsum <with tags>'
 
         class MockBrain(object):
-            def __init__(self, request):
+            def __init__(self, request, type):
                 self.REQUEST = request
+                self.portal_type = type
                 self.breadcrumb_titles = (
                     {'absolute_url': 'http://nohost/plone/dossier1',
                      'Title': 'Dossier1'},
@@ -61,12 +62,15 @@ class TestDocumentsUrl(MockTestCase):
                 return 'http://nohost/plone/dossier-1/task-1/document'
 
         request = self.stub_request()
-        item = MockBrain(request)
+        doc_brain = MockBrain(request, 'opengever.document.document')
+        mail_brain = MockBrain(request, 'ftw.mail.mail')
         css_getter = self.mocker.replace('opengever.base.browser.helper.get_css_class')
-        self.expect(css_getter(item)).result('contenttype-opengever-document')
+        self.expect(css_getter(doc_brain)).result('contenttype-opengever-document').count(0, None)
+        self.expect(css_getter(mail_brain)).result('contenttype-ftw-mail')
 
         self.replay()
 
+        # document
         expected_link = """<div class='linkWrapper'>
     <a class='tabbedview-tooltip contenttype-opengever-document' href='#'></a>
     <a href='http://nohost/plone/dossier-1/task-1/document'>lorem ipsum &lt;with tags&gt;</a>
@@ -75,7 +79,9 @@ class TestDocumentsUrl(MockTestCase):
             <div class='tooltip-header'>lorem ipsum &lt;with tags&gt;</div>
             <div class='tooltip-breadcrumb'>Dossier1 &gt; Task 1 &gt; lorem ipsum &lt;with tags&gt;</div>
             <div class='tooltip-links'>
-                <a href='http://nohost/plone/dossier-1/task-1/document/@@download'>PDF</a>
+                <a href='http://nohost/plone/dossier-1/task-1/document/@@download'>
+                    PDF
+                </a>
                 <a href='http://nohost/plone/dossier-1/task-1/document/edit'>
                     Edit metadata
                 </a>
@@ -88,5 +94,26 @@ class TestDocumentsUrl(MockTestCase):
     </div>
 </div>"""
 
-        self.assertEqual(linked_document_with_tooltip(item, value),
+        self.assertEqual(linked_document_with_tooltip(doc_brain, value),
                          expected_link)
+
+        # mail
+        expected_link = """<div class='linkWrapper'>
+    <a class='tabbedview-tooltip contenttype-ftw-mail' href='#'></a>
+    <a href='http://nohost/plone/dossier-1/task-1/document'>lorem ipsum &lt;with tags&gt;</a>
+    <div class='tabbedview-tooltip-data'>
+        <div class='tooltip-content'>
+            <div class='tooltip-header'>lorem ipsum &lt;with tags&gt;</div>
+            <div class='tooltip-breadcrumb'>Dossier1 &gt; Task 1 &gt; lorem ipsum &lt;with tags&gt;</div>
+            <div class='tooltip-links'>
+                <a href='http://nohost/plone/dossier-1/task-1/document/edit'>
+                    Edit metadata
+                </a>
+            </div>
+        </div>
+        <div class='bottomImage'></div>
+    </div>
+</div>"""
+
+        self.assertEqual(linked_document_with_tooltip(mail_brain, value),
+                 expected_link)

@@ -189,6 +189,21 @@ def linked_document_with_tooltip(item, value):
     for k, v in data.items():
         data[k] = cgi.escape(v, quote=True)
 
+    if item.portal_type != 'opengever.document.document':
+        data['tooltip_links'] = """<a href='%(edit_metadata_link)s'>
+                    %(edit_metadata_label)s
+                </a>""" % data
+    else:
+        data['tooltip_links'] = """<a href='%(preview_link)s'>
+                    %(preview_label)s
+                </a>
+                <a href='%(edit_metadata_link)s'>
+                    %(edit_metadata_label)s
+                </a>
+                <a href='%(edit_direct_link)s'>
+                    %(edit_direct_label)s
+                </a>""" % data
+
     link = """<div class='linkWrapper'>
     <a class='tabbedview-tooltip %(css_class)s' href='#'></a>
     <a href='%(url)s'>%(value)s</a>
@@ -197,13 +212,7 @@ def linked_document_with_tooltip(item, value):
             <div class='tooltip-header'>%(value)s</div>
             <div class='tooltip-breadcrumb'>%(breadcrumbs)s</div>
             <div class='tooltip-links'>
-                <a href='%(preview_link)s'>%(preview_label)s</a>
-                <a href='%(edit_metadata_link)s'>
-                    %(edit_metadata_label)s
-                </a>
-                <a href='%(edit_direct_link)s'>
-                    %(edit_direct_label)s
-                </a>
+                %(tooltip_links)s
             </div>
         </div>
         <div class='bottomImage'></div>
