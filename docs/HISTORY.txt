@@ -5,10 +5,12 @@ Changelog
 2.0.4 (unreleased)
 ------------------
 
+- Removed reset_grid_state action from the different tab configurations.
+  The action is now integrated in the tabbedview tab-menu.
+  [phgross]
+
 - Dropped Plone 4.1 compatibility. Only 4.2 and up are supported.
   [lgraf]
-
-
 
 2.0.3 (2012-06-19)
 ------------------
