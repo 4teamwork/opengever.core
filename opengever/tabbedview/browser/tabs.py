@@ -206,7 +206,6 @@ class Documents(OpengeverCatalogListingTab):
         'send_documents',
         'move_items',
         'copy_items',
-        'reset_tableconfiguration',
         ]
 
     major_actions = [
@@ -267,7 +266,6 @@ class Dossiers(OpengeverCatalogListingTab):
                        'export_dossiers',
                        'move_items',
                        'copy_items',
-                       'reset_tableconfiguration',
                        ]
 
     major_actions = ['change_state',
@@ -405,7 +403,6 @@ class Tasks(OpengeverCatalogListingTab):
         'move_items',
         'copy_items',
         'export_dossiers',
-        'reset_tableconfiguration',
         ]
 
     major_actions = ['change_state',
@@ -424,11 +421,9 @@ class Trash(Documents):
 
     enabled_actions = [
         'untrashed',
-        'reset_tableconfiguration', ]
-
-    major_actions = [
-        'reset_tableconfiguration',
         ]
+
+    major_actions = []
 
     @property
     def columns(self):

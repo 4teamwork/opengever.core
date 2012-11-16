@@ -128,7 +128,6 @@ class MyDossiers(Dossiers):
     enabled_actions = [
         'pdf_dossierlisting',
         'export_dossiers',
-        'reset_tableconfiguration',
         ]
 
     major_actions = ['pdf_dossierlisting']
@@ -146,7 +145,7 @@ class MyDocuments(Documents):
     search_options = {'Creator': authenticated_member,
                       'trashed': False}
 
-    enabled_actions = ['reset_tableconfiguration', ]
+    enabled_actions = []
     major_actions = []
     columns = remove_control_columns(Documents.columns)
     columns = remove_subdossier_column(columns)
@@ -188,7 +187,6 @@ class MyTasks(GlobalTaskListingTab):
     enabled_actions = major_actions = [
         'pdf_taskslisting',
         'export_tasks',
-        'reset_tableconfiguration',
         ]
 
     major_actions = [
@@ -227,7 +225,6 @@ class IssuedTasks(Tasks):
     enabled_actions = [
         'pdf_taskslisting',
         'export_tasks',
-        'reset_tableconfiguration',
         ]
 
     major_actions = ['pdf_taskslisting']
@@ -249,7 +246,6 @@ class AllTasks(MyTasks):
     enabled_actions = [
         'pdf_taskslisting',
         'export_tasks',
-        'reset_tableconfiguration',
         ]
 
     major_actions = ['pdf_taskslisting']
@@ -274,7 +270,6 @@ class AllIssuedTasks(Tasks):
     enabled_actions = [
         'pdf_taskslisting',
         'export_tasks',
-        'reset_tableconfiguration',
         ]
 
     major_actions = ['pdf_taskslisting']

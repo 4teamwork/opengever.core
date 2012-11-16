@@ -51,9 +51,7 @@ class UsersListing(grok.View, OpengeverTab, ListingView):
     # the model attributes is used for a dynamic textfiltering functionality
     model = User
     show_selects = False
-    enabled_actions = [
-        'reset_tableconfiguration',
-        ]
+    enabled_actions = []
     major_actions = []
     selection = ViewPageTemplateFile("no_selection_amount.pt")
 

@@ -50,9 +50,7 @@ class GlobalTaskListingTab(grok.View, OpengeverTab,
 
     # the model attributes is used for a dynamic textfiltering functionality
     model = Task
-    enabled_actions = [
-        'reset_tableconfiguration',
-        ]
+    enabled_actions = []
     major_actions = []
 
     select_all_template = ViewPageTemplateFile('select_all_globaltasks.pt')
