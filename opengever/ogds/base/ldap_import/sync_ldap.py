@@ -1,16 +1,19 @@
-import sys
-import ldap
-from collective.transmogrifier.transmogrifier import Transmogrifier
-import transaction
-from Testing.makerequest import makerequest
 from AccessControl.SecurityManagement import newSecurityManager
-from zope.app.component.hooks import setSite
-from optparse import OptionParser
+from App.config import getConfiguration
+from Testing.makerequest import makerequest
+from collective.transmogrifier.transmogrifier import Transmogrifier
 from opengever.ogds.base.ldap_import.import_stamp import \
     set_remote_import_stamp
-
+from optparse import OptionParser
+from zope.app.component.hooks import setSite
+import ldap
+import logging
+import sys
+import transaction
 
 CONFIGS = u'opengever.ogds.base.user-import;opengever.ogds.base.group-import'
+logger = logging.getLogger('opengever.ogds.base')
+LOG_FORMAT = '%(asctime)s %(levelname)s [%(name)s] %(message)s'
 
 
 def debugAfterException():
@@ -57,9 +60,10 @@ def check_if_ldap_reachable(site):
         # we abort the entire import, because otherwise we would
         # end up with all users being set to inactive since they
         # can't be found in the LDAP.
-        print "ERROR: Couldn't connect to LDAP server: %s %s" % (
-            e.__class__.__name__, e)
-        print "The import has been aborted."
+        logger.error(
+            "ERROR: Couldn't connect to LDAP server: %s %s" % (
+                e.__class__.__name__, e))
+        logger.error("The import has been aborted.")
         transaction.abort()
         sys.exit(1)
 
@@ -68,6 +72,19 @@ def run_import(app, options):
     # setup request and get plone site
     app = makerequest(app)
     plone = app.unrestrictedTraverse(options.site_root)
+
+    # Setup logging
+    config = getConfiguration()
+    ogds_conf = config.product_config.get('opengever.ogds.base', dict())
+    log_file = ogds_conf.get('log_file')
+
+    if log_file:
+        log_handler = logging.FileHandler(log_file)
+        log_formatter = logging.Formatter(
+            "%(asctime)s - %(name)s - %(levelname)s - %(message)s")
+        log_handler.setFormatter(log_formatter)
+        logger.addHandler(log_handler)
+        logger.setLevel(logging.INFO)
 
     check_if_ldap_reachable(plone)
 
@@ -84,7 +101,7 @@ def run_import(app, options):
     trans_configs = options.config.split(';')
     for config in trans_configs:
 
-        print "Importing..."
+        logger.info("Importing...")
         import time
         now = time.clock()
         transmogrifier(config)
@@ -92,15 +109,16 @@ def run_import(app, options):
         #transmogrifier(u'opengever.repository1.ska-arch')
         #transmogrifier(u'opengever.konsulmigration.repository')
         elapsed = time.clock() - now
-        print "Done in %.0f seconds." % elapsed
-        print "Committing transaction..."
+        logger.info("Done in %.0f seconds." % elapsed)
+        logger.info("Committing transaction...")
         transaction.commit()
 
     if len(trans_configs) != 0 and options.update_syncstamp:
-        print "update LDAP SYNC importstamp"
+        logger.info("update LDAP SYNC importstamp")
         set_remote_import_stamp(plone)
         transaction.commit()
-    print "Done"
+
+    logger.info("Synchronisation Done.")
 
 
 def main():

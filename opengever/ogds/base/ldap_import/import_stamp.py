@@ -34,8 +34,8 @@ def update_sync_stamp(context):
     storage = IDictStorage(DictStorageConfigurationContext())
     timestamp = datetime.now().isoformat()
     storage.set(DICTSTORAGE_SYNC_KEY, timestamp)
-    logger.info("Updated sync_stamp in dictstorage \
-                to current timestamp (%s)" % timestamp)
+    logger.info("Updated sync_stamp in dictstorage"
+                " to current timestamp (%s)" % timestamp)
     return timestamp
 
 
@@ -56,8 +56,8 @@ def set_remote_import_stamp(context):
                 "Issued remote request to update sync_stamp on %s to %s" % (
                     client.client_id, timestamp))
         except URLError, e:
-            logger.warn("ERROR while trying to remotely update sync_stamp\
-                         for %s: %s" % (client.client_id, e))
+            logger.warn("ERROR while trying to remotely update sync_stamp"
+                        "for %s: %s" % (client.client_id, e))
 
 
 class SyncStampUtility(grok.GlobalUtility):
