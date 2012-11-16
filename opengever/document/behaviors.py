@@ -23,16 +23,13 @@ class IRelatedDocuments(form.Schema):
             source=RepositoryPathSourceBinder(
                 portal_type=("opengever.document.document", "ftw.mail.mail"),
                 navigation_tree_query={
-                     #HOTFIX: disable tree building
-                     'object_provides': ['gaga']
-#                    'object_provides':
-#                        ['opengever.repository.repositoryroot.IRepositoryRoot',
-#                         'opengever.repository.repositoryfolder.' + \
-#                             'IRepositoryFolderSchema',
-#                         'opengever.dossier.behaviors.dossier.IDossierMarker',
-#                         'opengever.document.document.IDocumentSchema',
-#                         'ftw.mail.mail.IMail',]
-
+                   'object_provides':
+                       ['opengever.repository.repositoryroot.IRepositoryRoot',
+                        'opengever.repository.repositoryfolder.' + \
+                            'IRepositoryFolderSchema',
+                        'opengever.dossier.behaviors.dossier.IDossierMarker',
+                        'opengever.document.document.IDocumentSchema',
+                        'ftw.mail.mail.IMail',]
                 }),
             ),
         required=False,

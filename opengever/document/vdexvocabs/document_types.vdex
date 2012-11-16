@@ -8,6 +8,7 @@
         <caption>
             <langstring language="en">Request</langstring>
             <langstring language="de-ch">Antrag</langstring>
+            <langstring language="de">Antrag</langstring>
         </caption>
     </term>
     <term>
@@ -15,6 +16,7 @@
         <caption>
             <langstring language="en">Question</langstring>
             <langstring language="de-ch">Anfrage</langstring>
+            <langstring language="de">Anfrage</langstring>
         </caption>
     </term>
     <term>
@@ -22,13 +24,16 @@
         <caption>
             <langstring language="en">Report</langstring>
             <langstring language="de-ch">Bericht</langstring>
+            <langstring language="de">Bericht</langstring>
         </caption>
     </term>
     <term>
         <termIdentifier>offer</termIdentifier>
         <caption>
             <langstring language="en">Offer</langstring>
+            <langstring language="de">Offerte</langstring>
             <langstring language="de-ch">Offerte</langstring>
+
         </caption>
     </term>
     <term>
@@ -36,6 +41,7 @@
         <caption>
             <langstring language="en">Protocol</langstring>
             <langstring language="de-ch">Protokoll</langstring>
+            <langstring language="de">Protokoll</langstring>
         </caption>
     </term>
     <term>
@@ -43,7 +49,7 @@
         <caption>
             <langstring language="en">Contract</langstring>
             <langstring language="de-ch">Vertrag</langstring>
+            <langstring language="de">Vertrag</langstring>
         </caption>
     </term>
-
 </vdex>

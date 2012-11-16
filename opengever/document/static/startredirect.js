@@ -7,10 +7,9 @@ startRedirect = function(){
         }
         location.href = portal_url+unescape(temp);
     }
-    jq('.tabbedview_view').unbind('reload', startRedirect);
-} 
+    $('.tabbedview_view').unbind('reload', startRedirect);
+}
 
-jq(function(){
-    $ = jq;
-    jq('.tabbedview_view').bind('reload', startRedirect);
+$(function(){
+    $('.tabbedview_view').bind('reload', startRedirect);
 });

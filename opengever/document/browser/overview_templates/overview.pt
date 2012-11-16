@@ -36,9 +36,27 @@
 		</tr>
 		<tr tal:condition="context/file">
 			<th i18n:translate="label_file">File</th>
-			<td>
-        <a tal:condition="context/file" tal:attributes="href string:${context/absolute_url}/@@download/file/${context/file/filename}" tal:content="structure view/w/file/render"/>
-        <span tal:condition="not:context/file">-</span>
+			<td tal:condition="context/file">
+
+        <!-- file download -->
+        <a  tal:attributes="href string:${context/absolute_url}/@@download/file/${context/file/filename};
+                            class view/get_css_class"></a>
+
+        <!-- filename -->
+        <span tal:define="filename view/w/file/filename">
+            <span tal:content="filename">Filename</span>
+            <span class="discreet"> &mdash; <span tal:define="sizekb view/w/file/file_size" tal:replace="sizekb">100</span> KB</span>
+        </span>
+
+        <!-- external edit -->
+        <a class="function-edit" tal:condition="view/show_externaledit"
+            tal:attributes="href string:${context/absolute_url}/external_edit"/>
+
+			</td>
+			<td span tal:condition="not:context/file">
+        <span tal:condition="not:exists" class="discreet" i18n:translate="no_file">
+            No file
+        </span>
 			</td>
 		</tr>
 		<tr>

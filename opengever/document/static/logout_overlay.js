@@ -1,5 +1,5 @@
 function initLogoutOverlay(){
-    jq.ajaxSetup ({
+    $.ajaxSetup ({
         // Disable caching of AJAX responses
         cache: false
     });
@@ -9,10 +9,10 @@ function initLogoutOverlay(){
     link at first. If we click on the logout link, the overlay is preparing.
     To get the overlay, we have to click the button again programmatically.
     */
-    jq('[href*="logout_overlay"]').live('click', function(e){
+    $('[href*="logout_overlay"]').live('click', function(e){
         e.preventDefault();
 
-        var overlay = jq('[href*="logout_overlay"]').prepOverlay({
+        var overlay = $('[href*="logout_overlay"]').prepOverlay({
             subtype:'ajax',
             formselector:'form[name="logout_overlay"]',
             config: {
@@ -30,9 +30,9 @@ function initLogoutOverlay(){
                         return false;
                     }
 
-                    jq('input[name=form.submitted]').click(function(e){
+                    $('input[name=form.submitted]').click(function(e){
                         e.preventDefault();
-                        $url = jq('input[name=form.redirect.url]').val();
+                        $url = $('input[name=form.redirect.url]').val();
                         window.open($url, target='_self');
                         return false;
                     });

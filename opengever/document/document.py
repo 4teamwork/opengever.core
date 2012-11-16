@@ -1,9 +1,12 @@
 from Acquisition import aq_inner, aq_parent
+from Products.CMFCore.utils import getToolByName
+from Products.MimetypesRegistry.common import MimeTypeException
 from collective import dexteritytextindexer
 from collective.elephantvocabulary import wrap_vocabulary
 from datetime import date
 from five import grok
 from ftw.datepicker.widget import DatePickerFieldWidget
+from opengever.base.browser.helper import get_css_class
 from opengever.document import _
 from opengever.document.interfaces import IDocumentSettings
 from opengever.dossier.behaviors.dossier import IDossierMarker
@@ -21,8 +24,6 @@ from plone.registry.interfaces import IRegistry
 from plone.supermodel.interfaces import FIELDSETS_KEY
 from plone.supermodel.model import Fieldset
 from plone.z3cform.textlines.textlines import TextLinesFieldWidget
-from Products.CMFCore.utils import getToolByName
-from Products.MimetypesRegistry.common import MimeTypeException
 from z3c.form import validator
 from z3c.form.browser import checkbox
 from zope import schema
