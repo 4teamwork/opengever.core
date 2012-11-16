@@ -125,7 +125,6 @@ class Participants(grok.View, OpengeverTab, ListingView):
     enabled_actions = [
         'delete_participants',
         'add_participant',
-        'reset_tableconfiguration',
         ]
 
     major_actions = [
