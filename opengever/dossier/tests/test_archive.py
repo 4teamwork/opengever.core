@@ -45,6 +45,7 @@ class TestArchiver(MockTestCase):
     layer = ZCML_LAYER
 
     def setUp(self):
+        super(TestArchiver, self).setUp()
         grok('opengever.dossier.archive')
 
         file_path = os.path.join(
@@ -192,6 +193,7 @@ class TestArchiver(MockTestCase):
 class TestForm(MockTestCase):
 
     def setUp(self):
+        super(TestForm, self).setUp()
         grok('opengever.dossier.archive')
 
     def test_valid_filing_year(self):
@@ -211,6 +213,7 @@ class TestArchiving(MockTestCase):
     layer = ZCML_LAYER
 
     def setUp(self):
+        super(TestArchiving, self).setUp()
         grok('opengever.dossier.archive')
 
     def test_implements_interface(self):

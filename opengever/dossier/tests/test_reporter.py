@@ -32,7 +32,7 @@ class TestDossierReporter(MockTestCase):
     layer = ZCML_LAYER
 
     def setUp(self):
-
+        super(TestDossierReporter, self).setUp()
         grok('opengever.dossier.browser.report')
 
     def test_filing_no_year(self):

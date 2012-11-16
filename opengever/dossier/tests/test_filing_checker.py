@@ -48,6 +48,7 @@ class FilingNumberMockTestCase(MockTestCase):
     layer = ZCML_LAYER
 
     def setUp(self):
+        super(FilingNumberMockTestCase, self).setUp()
         self.options = self.stub_options()
         # Only register one dossier annotation factory adapter
         self.dossier_annotation_factory = self.mocker.mock()

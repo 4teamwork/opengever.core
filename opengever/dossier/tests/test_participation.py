@@ -11,6 +11,7 @@ from zope.interface import Interface
 class TestParticipationHanlder(MockTestCase):
 
     def setUp(self):
+        super(TestParticipationHanlder, self).setUp()
         grok('opengever.dossier.behaviors.participation')
         self.context = self.mocker.mock()
 

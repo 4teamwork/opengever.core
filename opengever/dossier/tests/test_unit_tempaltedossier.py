@@ -23,6 +23,7 @@ from z3c.blobfile import storages, interfaces
 class TestTemplateFolderUtility(MockTestCase):
 
     def setUp(self):
+        super(TestTemplateFolderUtility, self).setUp()
         grok('opengever.dossier.templatedossier')
 
     def test_templatefolder_returns_path(self):
