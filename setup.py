@@ -68,6 +68,7 @@ setup(name='opengever.document',
         'opengever.dossier',
         'collective.dexteritytextindexer',
         'opengever.mail',
+        'ftw.upgrade',
         ],
 
         tests_require=tests_require,
