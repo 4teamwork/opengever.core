@@ -35,7 +35,7 @@
 			<td tal:content="structure view/w/foreign_reference/render"/>
 		</tr>
 		<tr tal:condition="python: view.checked_out_link()">
-			<th i18n:translate="label_checked_out">checked out by</th>
+			<th i18n:translate="label_checked_out">Checked out</th>
 			<td tal:content="structure view/checked_out_link"/>
 		</tr>
 		<tr tal:condition="context/file">
@@ -81,9 +81,9 @@
           </span>
         </tal:cond>
         &nbsp;|&nbsp;
-        <a class="function-download-copy" href="download" i18n:translate="label_download_copy">
-          Download Copy
-        </a>
+        <a class="function-download-copy link-overlay"
+           tal:attributes="href string:${context/absolute_url}/file_download_confirmation"
+           href="#" i18n:translate="label_download_copy">Download copy</a>
         <hr/>
 			</td>
 			<td span tal:condition="not:context/file">

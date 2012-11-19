@@ -67,3 +67,10 @@ class Overview(DisplayForm, OpengeverTab):
                 return False
 
         return manager.is_checkout_allowed()
+
+
+class DownloadConfirmation(grok.View):
+
+    grok.context(IDocumentSchema)
+    grok.name('file_download_confirmation')
+    grok.require('zope2.View')
