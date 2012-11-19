@@ -1,12 +1,15 @@
 from AccessControl.PermissionRole import rolesForPermissionOn
 from Acquisition import aq_parent, aq_inner, aq_base
+from plone.indexer.interfaces import IIndexer
 from Products.CMFCore.permissions import View
 from Products.CMFCore.utils import _mergedLocalRoles, getToolByName
-from plone.indexer.interfaces import IIndexer
+from Products.CMFPlone.interfaces import IPloneSiteRoot
 from sqlalchemy.orm.exc import NoResultFound
 from zope.component import getMultiAdapter
 from zope.component import getUtility
 from zope.intid.interfaces import IIntIds
+from zope.lifecycleevent.interfaces import IObjectRemovedEvent
+
 
 from opengever.base.interfaces import IReferenceNumber
 from opengever.base.interfaces import ISequenceNumber
@@ -47,6 +50,12 @@ def get_dossier_sequence_number(task):
 def index_task(obj, event):
     """Index the given task in opengever.globalindex.
     """
+    # Skip this handler when trying to remove a Plone site. Otherwise the
+    # component registry is already gone and we'll run into trouble.
+    if IObjectRemovedEvent.providedBy(event) \
+            and IPloneSiteRoot.providedBy(event.object):
+        return None
+
     parent = aq_parent(aq_inner(obj))
 
     client_id = get_client_id()
