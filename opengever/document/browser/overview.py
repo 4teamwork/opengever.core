@@ -1,3 +1,4 @@
+from AccessControl import getSecurityManager
 from five import grok
 from opengever.base.browser.helper import get_css_class
 from opengever.document.document import IDocumentSchema
@@ -12,7 +13,7 @@ try:
     from opengever.pdfconverter.behaviors.preview import IPreviewMarker
     from opengever.pdfconverter.behaviors.preview import IPreview
     from opengever.pdfconverter.behaviors.preview import \
-        CONVERSION_STATE_CONVERTING
+        CONVERSION_STATE_READY
 
     PDFCONVERTER_AVAILABLE = True
 except ImportError:
@@ -42,7 +43,7 @@ class Overview(DisplayForm, OpengeverTab):
         return get_css_class(self.context)
 
     def is_preview_supported(self):
-        # XXX TODO: should be
+        # XXX TODO: should be persistent called two times
         if PDFCONVERTER_AVAILABLE:
             return IPreviewMarker.providedBy(self.context)
         return False
@@ -57,5 +58,12 @@ class Overview(DisplayForm, OpengeverTab):
     def is_checkout_and_edit_available(self):
         manager = queryMultiAdapter(
             (self.context, self.request), ICheckinCheckoutManager)
+
+        if manager.checked_out():
+            if manager.checked_out() == \
+                    getSecurityManager().getUser().getId():
+                return True
+            else:
+                return False
 
         return manager.is_checkout_allowed()
