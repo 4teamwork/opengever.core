@@ -10,6 +10,12 @@ Changelog
   https://extranet.4teamwork.ch/extern/opengever-kanton-zug/sprint-backlog/1716/
   [phgross]
 
+- Added fallback in role_mapping_to_str for obj,
+  wich doesn't provide a special sharing Interface.
+  Issue #308 Fehlermeldung beim Hinzufuegen von Berechtigungen auf dem Vorlagen Ordner
+  https://extranet.4teamwork.ch/support/ph-vs/tracker/308/view
+  [phgross]
+
 - Removed reset_grid_state action from the different tab configurations.
   The action is now integrated in the tabbedview tab-menu.
   [phgross]

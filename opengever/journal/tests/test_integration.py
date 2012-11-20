@@ -164,6 +164,31 @@ class TestOpengeverJournalGeneral(unittest.TestCase):
             comment='ratman: sharing_dossier_reader; test_user: ' \
                 'sharing_dossier_reader, sharing_dossier_publisher')
 
+    def test_integration_templatedossier_event(self):
+
+        portal = self.layer['portal']
+
+        templatedossier = createContentInContainer(
+            portal, 'opengever.dossier.templatedossier', 'templates')
+
+        # Local roles Modified
+        notify(
+            LocalRolesModified(templatedossier, 'old roles',
+                (
+                ['catman', ['Owner']],
+                ['ratman', ['Owner', 'Reader']],
+                ['test_user', ['Reader', 'Editor']],
+                )
+            ))
+
+        # CheckLocalRolesModified
+        self.check_annotation(
+            templatedossier,
+            action_type='Local roles modified',
+            action_title='Local roles modified.',
+            comment='ratman: sharing_reader; test_user: ' \
+                'sharing_reader, sharing_editor')
+
 
     def test_integration_document_events(self):
         """ Trigger every event of a document at least one times
@@ -446,12 +471,12 @@ class TestOpengeverJournalGeneral(unittest.TestCase):
         journal = IAnnotations(
             obj, JOURNAL_ENTRIES_ANNOTATIONS_KEY).get(
                 JOURNAL_ENTRIES_ANNOTATIONS_KEY)[check_entry]
-        self.assertTrue(comment == journal.get('comments'))
-        self.assertTrue(actor == journal.get('actor'))
-        self.assertTrue(time == journal.get('time').Date())
-        self.assertTrue(action_type == journal.get('action').get('type'))
-        self.assertTrue(
-            action_title == translate(journal.get('action').get('title')))
+        self.assertEquals(comment, journal.get('comments'))
+        self.assertEquals(actor, journal.get('actor'))
+        self.assertEquals(time, journal.get('time').Date())
+        self.assertEquals(action_type, journal.get('action').get('type'))
+        self.assertEquals(
+            action_title, translate(journal.get('action').get('title')))
 
     def check_object_added(
         self, obj, action_type='', action_title='', parent=None):

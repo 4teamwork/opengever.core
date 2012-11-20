@@ -17,8 +17,11 @@ from opengever.dossier.browser.participants import role_list_helper
 from opengever.dossier.interfaces import IParticipationCreated
 from opengever.dossier.interfaces import IParticipationRemoved
 from opengever.journal import _
+from opengever.journal.helper import documents_list_helper
+from opengever.mail.interfaces import IDocumentSent
 from opengever.repository.repositoryfolder import IRepositoryFolderSchema
 from opengever.repository.repositoryroot import IRepositoryRoot
+from opengever.sharing.behaviors import IStandard
 from opengever.sharing.browser.sharing import ROLE_MAPPING
 from opengever.sharing.interfaces import ILocalRolesAcquisitionActivated
 from opengever.sharing.interfaces import ILocalRolesAcquisitionBlocked
@@ -32,15 +35,14 @@ from plone.dexterity.interfaces import IDexterityContent
 from zope.app.container.interfaces import IObjectAddedEvent
 from zope.app.container.interfaces import IObjectMovedEvent
 from zope.component import getMultiAdapter
+from zope.component import getUtility
 from zope.event import notify
 from zope.i18n import translate
 from zope.i18nmessageid import MessageFactory
 from zope.i18nmessageid.message import Message
-from zope.lifecycleevent.interfaces import IObjectModifiedEvent
-from opengever.mail.interfaces import IDocumentSent
 from zope.intid.interfaces import IIntIds
-from zope.component import getUtility
-from opengever.journal.helper import documents_list_helper
+from zope.lifecycleevent.interfaces import IObjectModifiedEvent
+
 
 pmf = MessageFactory('plone')
 
@@ -91,6 +93,10 @@ def role_mapping_to_str(context, mapping):
     for behavior, translations in ROLE_MAPPING:
         if behavior.providedBy(context):
             trans_mapping = dict(translations)
+        elif behavior is IStandard:
+            if not trans_mapping:
+                trans_mapping = dict(translations)
+
     for principal, roles in mapping:
         translated_roles = []
         for role in roles:
