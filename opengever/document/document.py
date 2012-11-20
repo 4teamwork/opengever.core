@@ -6,7 +6,6 @@ from collective.elephantvocabulary import wrap_vocabulary
 from datetime import date
 from five import grok
 from ftw.datepicker.widget import DatePickerFieldWidget
-from opengever.base.browser.helper import get_css_class
 from opengever.document import _
 from opengever.document.interfaces import IDocumentSettings
 from opengever.dossier.behaviors.dossier import IDossierMarker
