@@ -5,6 +5,11 @@ Changelog
 2.0.4 (unreleased)
 ------------------
 
+- Added journalizing of FileCopyDownloadedEvent.
+  Issue #1716 Verwechslungsgefahr External Editor und direkter File-Download verhindern.
+  https://extranet.4teamwork.ch/extern/opengever-kanton-zug/sprint-backlog/1716/
+  [phgross]
+
 - Removed reset_grid_state action from the different tab configurations.
   The action is now integrated in the tabbedview tab-menu.
   [phgross]
