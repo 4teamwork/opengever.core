@@ -5,6 +5,11 @@ Changelog
 2.5.5 (unreleased)
 ------------------
 
+- Added some ajustments on the history viewlet:
+   - Actiavte download confirmation for file download.
+   - Added icons for the different history actions.
+  [phgross]
+
 - Removed old and no longer used monkey patch for the plone.formwidget.contenttree.
   [phgross]
 

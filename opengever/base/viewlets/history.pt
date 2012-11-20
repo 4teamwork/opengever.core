@@ -39,8 +39,8 @@
               <td tal:content="item/comments|nothing" />
               <tal:cond tal:condition="isVersion">
                 <td tal:condition="downloadLink">
-                  <a href="" class="standalone" i18n:translate="button_file"
-                     tal:attributes="href string:${here/absolute_url}/download_file_version?version_id=${item/version_id}">
+                  <a href="" class="standalone function-download-copy link-overlay" i18n:translate="button_file"
+                     tal:attributes="href string:${here/absolute_url}/file_download_confirmation?version_id=${item/version_id}">
                     Download
                   </a>
                 </td>
@@ -49,11 +49,11 @@
                     tal:attributes="href string:${here/absolute_url}/version-view?version_id=${item/version_id}">Show</a>
                 </td>
                 <td tal:condition="previewSupported">
-                  <a href="" class="standalone" i18n:translate="button_pdf"
+                  <a href="" class="standalone function-download-pdf" i18n:translate="button_pdf"
                     tal:attributes="href string:${here/absolute_url}/download_pdf_version?version_id=${item/version_id}">PDF</a>
                 </td>
                 <td>
-                  <a href="" class="standalone"
+                  <a href="" class="standalone function-revert"
                      tal:attributes="href string:${here/absolute_url}/revert-file-to-version?version_id=${item/version_id}"
                      i18n:translate="label_reset">reset</a>
                 </td>
