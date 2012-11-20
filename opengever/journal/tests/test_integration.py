@@ -465,12 +465,12 @@ class TestOpengeverJournalGeneral(unittest.TestCase):
         journal = IAnnotations(
             obj, JOURNAL_ENTRIES_ANNOTATIONS_KEY).get(
                 JOURNAL_ENTRIES_ANNOTATIONS_KEY)[check_entry]
-        self.assertTrue(comment == journal.get('comments'))
-        self.assertTrue(actor == journal.get('actor'))
-        self.assertTrue(time == journal.get('time').Date())
-        self.assertTrue(action_type == journal.get('action').get('type'))
-        self.assertTrue(
-            action_title == translate(journal.get('action').get('title')))
+        self.assertEquals(comment, journal.get('comments'))
+        self.assertEquals(actor, journal.get('actor'))
+        self.assertEquals(time, journal.get('time').Date())
+        self.assertEquals(action_type, journal.get('action').get('type'))
+        self.assertEquals(
+            action_title, translate(journal.get('action').get('title')))
 
     def check_object_added(
         self, obj, action_type='', action_title='', parent=None):
