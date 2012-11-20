@@ -5,12 +5,6 @@ Changelog
 2.0.5 (unreleased)
 ------------------
 
-- Added fallback in ROLE_MAPPING for obj,
-  wich doesn't provide a special sharing Interface.
-  Issue #308 Fehlermeldung beim Hinzufuegen von Berechtigungen auf dem Vorlagen Ordner
-  https://extranet.4teamwork.ch/support/ph-vs/tracker/308/view
-  [phgross]
-
 - Dropped Plone 4.1 compatibility. Only 4.2 and up are supported.
   [lgraf]
 
