@@ -163,6 +163,31 @@ class TestOpengeverJournalGeneral(unittest.TestCase):
             comment='ratman: sharing_dossier_reader; test_user: ' \
                 'sharing_dossier_reader, sharing_dossier_publisher')
 
+    def test_integration_templatedossier_event(self):
+
+        portal = self.layer['portal']
+
+        templatedossier = createContentInContainer(
+            portal, 'opengever.dossier.templatedossier', 'templates')
+
+        # Local roles Modified
+        notify(
+            LocalRolesModified(templatedossier, 'old roles',
+                (
+                ['catman', ['Owner']],
+                ['ratman', ['Owner', 'Reader']],
+                ['test_user', ['Reader', 'Editor']],
+                )
+            ))
+
+        # CheckLocalRolesModified
+        self.check_annotation(
+            templatedossier,
+            action_type='Local roles modified',
+            action_title='Local roles modified.',
+            comment='ratman: sharing_reader; test_user: ' \
+                'sharing_reader, sharing_editor')
+
 
     def test_integration_document_events(self):
         """ Trigger every event of a document at least one times
