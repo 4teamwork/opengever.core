@@ -63,7 +63,7 @@
             </a>
           </tal:cond>
           <tal:cond tal:condition="not: pdf_download_available">
-            <span class="function-download-pdf-inactive" i18n:translate="label_pdf_preview">
+            <span class="function-download-pdf-inactive discreet" i18n:translate="label_pdf_preview">
               PDF Preview
             </span>
           </tal:cond>
@@ -76,7 +76,7 @@
           </a>
         </tal:cond>
         <tal:cond tal:condition="not: checkout_and_edit_available">
-          <span class="function-edit-inactive" i18n:translate="label_checkout_and_edit">
+          <span class="function-edit-inactive discreet" i18n:translate="label_checkout_and_edit">
             Edit Document
           </span>
         </tal:cond>
