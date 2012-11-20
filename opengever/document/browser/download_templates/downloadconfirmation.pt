@@ -1,5 +1,5 @@
 <form id="download_confirmation" name="logout_overlay" method="POST" action="" i18n:domain="opengever.document"
-      tal:attributes="action string:${context/absolute_url}/download">
+      tal:attributes="action view/download_url">
 
       <h1 class="documentFirstHeading"
           i18n:translate="label_download_copy">
