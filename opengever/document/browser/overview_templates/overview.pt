@@ -57,7 +57,8 @@
         <hr/>
         <tal:preview_support tal:condition="preview_supported">
           <tal:cond tal:condition="pdf_download_available">
-            <a class="function-download-pdf" href="download_pdf"
+            <a class="function-download-pdf" href="#"
+               tal:attributes="href string:${context/absolute_url}/download_pdfpreview"
                  i18n:translate="label_pdf_preview">
               PDF Preview
             </a>
