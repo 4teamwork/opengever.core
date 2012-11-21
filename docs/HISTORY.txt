@@ -5,6 +5,9 @@ Changelog
 2.0.4 (unreleased)
 ------------------
 
+- Update checkbox column configuration (set width attribute) in all listings.
+  [phgross]
+
 - Dropped Plone 4.1 compatibility. Only 4.2 and up are supported.
   [lgraf]
 
