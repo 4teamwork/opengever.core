@@ -1,6 +1,6 @@
 from Products.CMFCore.utils import getToolByName
 from opengever.document.checkout.manager import CHECKIN_CHECKOUT_ANNOTATIONS_KEY
-from opengever.document.testing import OPENGEVER_DOCUMENT_INTEGRATION_TESTING
+from opengever.document.testing import OPENGEVER_DOCUMENT_FUNCTIONAL_TESTING
 from plone.dexterity.utils import createContentInContainer
 from zope.annotation.interfaces import IAnnotations
 import datetime
@@ -25,7 +25,7 @@ def obj2brain(obj):
 
 class TestDocumentIntegration(unittest.TestCase):
 
-    layer = OPENGEVER_DOCUMENT_INTEGRATION_TESTING
+    layer = OPENGEVER_DOCUMENT_FUNCTIONAL_TESTING
 
     def setUp(self):
         self.app = self.layer['app']

@@ -1,4 +1,4 @@
-from opengever.document.testing import OPENGEVER_DOCUMENT_INTEGRATION_TESTING
+from opengever.document.testing import OPENGEVER_DOCUMENT_FUNCTIONAL_TESTING
 from unittest2 import TestCase
 from Products.CMFCore.utils import getToolByName
 from plone.app.testing import setRoles, TEST_USER_ID
@@ -8,7 +8,7 @@ from zope.component import getMultiAdapter
 
 class TestLogoutOverlay(TestCase):
 
-    layer = OPENGEVER_DOCUMENT_INTEGRATION_TESTING
+    layer = OPENGEVER_DOCUMENT_FUNCTIONAL_TESTING
 
     def setUp(self):
 

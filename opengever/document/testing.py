@@ -87,6 +87,6 @@ class DocumentFunctionalLayer(PloneSandboxLayer):
 
 
 OPENGEVER_DOCUMENT_FIXTURE = DocumentFunctionalLayer()
-OPENGEVER_DOCUMENT_INTEGRATION_TESTING = FunctionalTesting(
+OPENGEVER_DOCUMENT_FUNCTIONAL_TESTING = FunctionalTesting(
     bases=(OPENGEVER_DOCUMENT_FIXTURE, ),
     name="OpengeverDocument:Integration")
