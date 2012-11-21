@@ -159,7 +159,10 @@ class Documents(OpengeverCatalogListingTab):
 
     columns = (
 
-        ('', helper.path_checkbox),
+        {'column': '',
+         'column_title': '',
+         'transform': helper.path_checkbox,
+         'width': 30},
 
         {'column': 'sequence_number',
          'column_title': _(u'sequence_number', default=u'Sequence Number'),
@@ -229,7 +232,11 @@ class Dossiers(OpengeverCatalogListingTab):
         ]
 
     columns = (
-        ('', helper.path_checkbox),
+
+        {'column': '',
+         'column_title': '',
+         'transform': helper.path_checkbox,
+         'width': 30},
 
         {'column': 'reference',
          'column_title': _(u'label_reference', default=u'Reference Number')},
@@ -345,7 +352,11 @@ class Tasks(OpengeverCatalogListingTab):
         ]
 
     columns = (
-        ('', helper.path_checkbox),
+
+        {'column': '',
+         'column_title': '',
+         'transform': helper.path_checkbox,
+         'width': 30},
 
         {'column': 'review_state',
          'column_title': _(u'label_review_state', default=u'Review state'),
