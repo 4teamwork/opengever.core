@@ -166,7 +166,7 @@ def linked_document_with_tooltip(item, value):
         data['url'] = item.absolute_url()
 
     # tooltip links
-    data['preview_link'] = '%s/@@download' % (data['url'])
+    data['preview_link'] = '%s/@@download_pdfpreview' % (data['url'])
     data['preview_label'] = translate(
         base_mf(u'button_pdf', 'PDF'), context=item.REQUEST).encode('utf-8')
 

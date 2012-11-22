@@ -5,6 +5,9 @@ Changelog
 2.3 (unreleased)
 ------------------
 
+- Extended tooltip: Adjust pdf preview link.
+  [phgross]
+
 - Update checkbox column configuration (set width attribute).
   [phgross]
 

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "POT-Creation-Date: 2012-11-09 10:01+0000\n"
-"PO-Revision-Date: 2012-11-09 16:24+0100\n"
+"PO-Revision-Date: 2012-11-22 14:19+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
 "MIME-Version: 1.0\n"
@@ -82,7 +82,7 @@ msgid "checked_out"
 msgstr "in Bearbeitung"
 
 msgid "checkout_and_edit"
-msgstr "Auschecken und bearbeiten"
+msgstr "Auschecken / Bearbeiten"
 
 #. Default: "Client"
 #: ./opengever/tabbedview/browser/tabs.py:388
