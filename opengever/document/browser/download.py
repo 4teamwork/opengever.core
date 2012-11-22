@@ -1,9 +1,9 @@
 from five import grok
+from opengever.base.viewlets.download import DownloadFileVersion
 from opengever.document.document import IDocumentSchema
 from opengever.document.events import FileCopyDownloadedEvent
 from plone.namedfile.browser import Download
 from zope.event import notify
-
 
 class DocumentDownload(Download):
     """Overriding the Namefile Download view,
@@ -31,3 +31,19 @@ class DownloadConfirmation(grok.View):
                 self.request.get('version_id'))
         else:
             return '%s/download' %(self.context.absolute_url())
+
+
+class DocumentDownloadFileVersion(DownloadFileVersion):
+    """The default GEVER download file version view,
+    but includes notifying FileCopyDownloadedEvent used for journalizing.
+    """
+
+    grok.context(IDocumentSchema)
+    grok.require('zope2.View')
+    grok.name('download_file_version')
+
+    def render(self):
+        self._init_version_file()
+        if self.version_file:
+            notify(FileCopyDownloadedEvent(self.context))
+        return super(DocumentDownloadFileVersion, self).render()

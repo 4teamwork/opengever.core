@@ -33,6 +33,38 @@ class TestDocumentDownloadView(MockTestCase):
         self.replay()
         result = doc1.unrestrictedTraverse('download')()
 
+    def test_download_view(self):
+        portal = self.layer['portal']
+
+        doc1 = createContentInContainer(
+            portal, 'opengever.document.document', 'document')
+
+        repo_tool = getToolByName(portal, 'portal_repository')
+        repo_tool._recursiveSave(doc1, {},
+                                 repo_tool._prepareSysMetadata('mock'),
+                                 autoapply=repo_tool.autoapply)
+
+        doc2 = createContentInContainer(
+            portal, 'opengever.document.document', 'document-2')
+
+        monk_file = NamedBlobFile('bla bla', filename=u'test.txt')
+        doc2.file = monk_file
+        repo_tool = getToolByName(portal, 'portal_repository')
+        repo_tool._recursiveSave(doc2, {},
+                                 repo_tool._prepareSysMetadata('mock'),
+                                 autoapply=repo_tool.autoapply)
+
+        downloaded_handler = self.stub()
+        self.mock_handler(downloaded_handler, [IFileCopyDownloadedEvent, ])
+        self.expect(downloaded_handler(ANY)).result(True)
+
+        self.replay()
+        # first version without a document
+        res  = doc1.unrestrictedTraverse('download_file_version')()
+
+        # second version without a document
+        portal.REQUEST['version_id'] = 1
+        res  = doc2.unrestrictedTraverse('download_file_version')()
 
 class TestDocumentDownloadConfirmation(unittest.TestCase):
 
