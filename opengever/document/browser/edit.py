@@ -44,7 +44,7 @@ class EditingDocument(grok.View):
             #No checkout just open with the external edit
             pass
 
-        elif manager.checked_out() != None:
+        elif manager.checked_out() is not None:
             info = getUtility(IContactInformation)
             msg = _(u"The Document is allready checked out by: ${userid}",
                     mapping={'userid': info.describe(userid)})

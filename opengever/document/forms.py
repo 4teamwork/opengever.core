@@ -24,7 +24,7 @@ class DocumentEditForm(DefaultEditForm):
             return
 
         current_user_id = getSecurityManager().getUser().getId()
-        if self.context.digitally_available and (not manager.checked_out() \
+        if self.context.digitally_available and (not manager.checked_out()
                 or manager.checked_out() != current_user_id):
             filefields = [g.fields.get('file') for g in self.groups
                           if 'file' in g.fields]

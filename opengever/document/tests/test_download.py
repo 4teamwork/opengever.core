@@ -32,8 +32,9 @@ class TestDocumentDownloadView(MockTestCase):
 
         self.replay()
         result = doc1.unrestrictedTraverse('download')()
+        self.assertEquals(result, 'bla bla')
 
-    def test_download_view(self):
+    def test_download_file_version_view(self):
         portal = self.layer['portal']
 
         doc1 = createContentInContainer(
@@ -60,11 +61,12 @@ class TestDocumentDownloadView(MockTestCase):
 
         self.replay()
         # first version without a document
-        res = doc1.unrestrictedTraverse('download_file_version')()
+        doc1.unrestrictedTraverse('download_file_version')()
 
         # second version without a document
         portal.REQUEST['version_id'] = 1
-        res = doc2.unrestrictedTraverse('download_file_version')()
+        result = doc2.unrestrictedTraverse('download_file_version')()
+        self.assertEquals(result, 'bla bla')
 
 
 class TestDocumentDownloadConfirmation(unittest.TestCase):

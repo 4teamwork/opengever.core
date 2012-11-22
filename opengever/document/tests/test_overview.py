@@ -1,21 +1,15 @@
 from ftw.testing import MockTestCase
-from mocker import ANY
-from opengever.document.browser import overview
 from opengever.document.checkout.manager import CHECKIN_CHECKOUT_ANNOTATIONS_KEY
 from opengever.document.interfaces import ICheckinCheckoutManager
-from opengever.document.interfaces import IFileCopyDownloadedEvent
 from opengever.document.testing import OPENGEVER_DOCUMENT_FUNCTIONAL_TESTING
 from plone.app.testing import TEST_USER_ID, TEST_USER_NAME
 from plone.app.testing import TEST_USER_PASSWORD, login
 from plone.app.testing import setRoles
-from plone.dexterity.utils import createContentInContainer
 from plone.namedfile.file import NamedBlobFile
 from plone.testing.z2 import Browser
 from zope.annotation.interfaces import IAnnotations
 from zope.component import queryMultiAdapter
-from zope.interface import Interface
 import transaction
-import unittest2 as unittest
 
 
 class TestDocumentOverview(MockTestCase):

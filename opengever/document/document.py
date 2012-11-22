@@ -126,7 +126,7 @@ class IDocumentSchema(form.Schema):
         title=_(u'label_document_type', default='Document Type'),
         description=_(u'help_document_type', default=''),
         source=wrap_vocabulary('opengever.document.document_types',
-                    visible_terms_from_registry='opengever.document' + \
+                    visible_terms_from_registry='opengever.document' +
                             '.interfaces.IDocumentType.document_types'),
         required=False,
         )
