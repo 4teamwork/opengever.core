@@ -8,7 +8,7 @@
 
       <div class="details">
         <p i18n:translate="description_download_confirmation">You're downloading a copy of the document
-          <span i18n:name="filename" tal:content="context/file/filename" />
+          <span i18n:name="filename" tal:content="python: context.file and context.file.filename" />
         </p>
 
         <dl class="portalMessage error">
