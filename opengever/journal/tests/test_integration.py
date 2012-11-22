@@ -587,8 +587,7 @@ class TestOpengeverJournalGeneral(unittest.TestCase):
             actor=TEST_USER_ID,
             comment='Attachments: <span><a href="./@@resolve_oguid?oguid=Test:'+str(
                 intid)+'">'+ doc.Title()+
-            '</a></span> | Receivers: test@test.ch |\
-                    Message: Mymessage',)
+            '</a></span> | Receivers: test@test.ch | Message: Mymessage',)
 
     def check_document_copy_downloaded(self, obj):
         self.check_annotation(
