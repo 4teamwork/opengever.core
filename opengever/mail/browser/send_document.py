@@ -16,6 +16,7 @@ from opengever.mail.interfaces import ISendDocumentConf
 from opengever.mail.validators import AddressValidator
 from opengever.mail.validators import DocumentSizeValidator
 from opengever.ogds.base.interfaces import IContactInformation
+from opengever.ogds.base.utils import get_current_client
 from opengever.tabbedview.utils import get_containg_document_tab_url
 from plone.directives.form import default_value
 from plone.formwidget.autocomplete import AutocompleteMultiFieldWidget
@@ -32,7 +33,6 @@ from zope.event import notify
 from zope.i18n import translate
 from zope.interface import Interface
 from zope.interface import invariant, Invalid
-
 
 CHARSET = 'utf-8'
 
@@ -243,8 +243,14 @@ class SendDocumentForm(form.Form):
                 obj_file = obj.file
 
             if only_links or not obj_file:
+
+                # rewrite the url with clients public url
+                url = '%s/%s' % (
+                    get_current_client().public_url,
+                    '/'.join(obj.getPhysicalPath()[2:]))
+
                 docs_links = '%s\r\n - %s (%s)' % (
-                    docs_links, obj.title, obj.absolute_url())
+                    docs_links, obj.title, url)
                 continue
 
             docs_links = '%s\r\n - %s (%s)' % (
