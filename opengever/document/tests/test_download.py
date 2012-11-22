@@ -60,11 +60,12 @@ class TestDocumentDownloadView(MockTestCase):
 
         self.replay()
         # first version without a document
-        res  = doc1.unrestrictedTraverse('download_file_version')()
+        res = doc1.unrestrictedTraverse('download_file_version')()
 
         # second version without a document
         portal.REQUEST['version_id'] = 1
-        res  = doc2.unrestrictedTraverse('download_file_version')()
+        res = doc2.unrestrictedTraverse('download_file_version')()
+
 
 class TestDocumentDownloadConfirmation(unittest.TestCase):
 

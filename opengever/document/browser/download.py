@@ -5,6 +5,7 @@ from opengever.document.events import FileCopyDownloadedEvent
 from plone.namedfile.browser import Download
 from zope.event import notify
 
+
 class DocumentDownload(Download):
     """Overriding the Namefile Download view,
     for implement the special file handling
@@ -23,14 +24,13 @@ class DownloadConfirmation(grok.View):
     grok.name('file_download_confirmation')
     grok.require('zope2.View')
 
-
     def download_url(self):
         if self.request.get('version_id'):
-            return '%s/download_file_version?version_id=%s' %(
+            return '%s/download_file_version?version_id=%s' % (
                 self.context.absolute_url(),
                 self.request.get('version_id'))
         else:
-            return '%s/download' %(self.context.absolute_url())
+            return '%s/download' % (self.context.absolute_url())
 
 
 class DocumentDownloadFileVersion(DownloadFileVersion):
