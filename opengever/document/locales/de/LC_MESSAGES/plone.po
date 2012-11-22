@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"PO-Revision-Date: 2010-12-10 11:48+0100\n"
+"PO-Revision-Date: 2012-11-22 14:17+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
 "MIME-Version: 1.0\n"
@@ -18,7 +18,7 @@ msgid "Checkout"
 msgstr "Auschecken"
 
 msgid "Checkout and edit"
-msgstr "Auschecken und bearbeiten"
+msgstr "Auschecken / Bearbeiten"
 
 msgid "Document state changed to document-state-checked_out"
 msgstr "Dokumentstatus verändert: Ausgecheckt"
