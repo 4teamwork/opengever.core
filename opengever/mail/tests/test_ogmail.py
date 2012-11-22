@@ -14,6 +14,7 @@ class TestOGMailAddition(unittest.TestCase):
     layer = OPENGEVER_MAIL_INTEGRATION_TESTING
 
     def setUp(self):
+        super(TestOGMailAddition, self).setUp()
         self.app = self.layer['app']
         self.portal = self.layer['portal']
 

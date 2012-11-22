@@ -14,6 +14,7 @@ from grokcore.component.testing import grok
 class TestMailIndexers(MockTestCase):
 
     def setUp(self):
+        super(TestMailIndexers, self).setUp()
         grok('opengever.mail.indexer')
 
     def test_checked_out(self):
