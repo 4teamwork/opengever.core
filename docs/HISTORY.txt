@@ -5,6 +5,11 @@ Changelog
 2.0.4 (unreleased)
 ------------------
 
+- Added journalizing of FileCopyDownloadedEvent.
+  Issue #1716 Verwechslungsgefahr External Editor und direkter File-Download verhindern.
+  https://extranet.4teamwork.ch/extern/opengever-kanton-zug/sprint-backlog/1716/
+  [phgross]
+
 - Added fallback in role_mapping_to_str for obj,
   wich doesn't provide a special sharing Interface.
   Issue #308 Fehlermeldung beim Hinzufuegen von Berechtigungen auf dem Vorlagen Ordner

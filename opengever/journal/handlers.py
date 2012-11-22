@@ -8,6 +8,7 @@ from ftw.journal.interfaces import IJournalizable
 from ftw.mail.mail import IMail
 from opengever.document.document import IDocumentSchema
 from opengever.document.interfaces import IObjectCheckedInEvent
+from opengever.document.interfaces import IFileCopyDownloadedEvent
 from opengever.document.interfaces import IObjectCheckedOutEvent
 from opengever.document.interfaces import IObjectCheckoutCanceledEvent
 from opengever.document.interfaces import IObjectRevertedToVersion
@@ -417,6 +418,16 @@ def document_file_reverted(context, event):
     journal_entry_factory(context, DOCUMENT_FILE_REVERTED, title)
 
 
+FILE_COPY_DOWNLOADED = 'File copy downloaded'
+
+
+@grok.subscribe(IDocumentSchema, IFileCopyDownloadedEvent)
+def file_copy_downloaded(context, event):
+    title = _(u'label_file_copy_downloaded',
+              default=u'Download copy')
+    journal_entry_factory(context, FILE_COPY_DOWNLOADED, title)
+
+
 DOCUMENT_SENT = 'Document Sent'
 
 
@@ -440,8 +451,8 @@ def document_sent(context, event):
 
     comment = translate(
         _(u'label_document_sent_comment',
-          default=u'Attachments: ${documents} | Receivers: ${receiver} |\
-                    Message: ${message}',
+          default=u'Attachments: ${documents} | Receivers: ${receiver} |'
+                    ' Message: ${message}',
           mapping={
                 'documents': documents_list_helper(context, objs),
                 'receiver': receiver.decode('utf-8'),

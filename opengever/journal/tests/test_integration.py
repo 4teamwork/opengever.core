@@ -3,7 +3,8 @@ from ftw.journal.config import JOURNAL_ENTRIES_ANNOTATIONS_KEY
 from OFS.event import ObjectWillBeMovedEvent, ObjectWillBeAddedEvent
 from opengever.document.events import \
     ObjectCheckedOutEvent, ObjectCheckedInEvent, \
-    ObjectCheckoutCanceledEvent, ObjectRevertedToVersion
+    ObjectCheckoutCanceledEvent, ObjectRevertedToVersion, \
+    FileCopyDownloadedEvent
 from opengever.dossier.events import ParticipationCreated, ParticipationRemoved
 from opengever.dossier.behaviors.participation import Participation
 from opengever.journal.testing import OPENGEVER_JOURNAL_INTEGRATION_TESTING
@@ -276,8 +277,13 @@ class TestOpengeverJournalGeneral(unittest.TestCase):
         notify(ObjectRevertedToVersion(document, 'v1', 'v1'))
         self.check_document_revertedtoversion(document)
 
+        # Object Sent Document Event
         notify(DocumentSent(dossier, TEST_USER_ID, 'test@test.ch', 'test mail', 'Mymessage', [document]))
         self.check_document_sent(dossier, document)
+
+        # Object downloaded file-copy Event
+        notify(FileCopyDownloadedEvent(document))
+        self.check_document_copy_downloaded(document)
 
     def test_integration_task_events(self):
         """ Trigger every event of a task at least one times
@@ -583,3 +589,11 @@ class TestOpengeverJournalGeneral(unittest.TestCase):
                 intid)+'">'+ doc.Title()+
             '</a></span> | Receivers: test@test.ch |\
                     Message: Mymessage',)
+
+    def check_document_copy_downloaded(self, obj):
+        self.check_annotation(
+            obj,
+            action_type='File copy downloaded',
+            action_title=u'Download copy',
+            actor=TEST_USER_ID,
+            )
