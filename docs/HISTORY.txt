@@ -5,6 +5,12 @@ Changelog
 2.5.5 (unreleased)
 ------------------
 
+- Added some ajustments on the history viewlet:
+   - Activate download confirmation for file download.
+   - Added icons for the different history actions.
+   - Maded version download view customizable.
+  [phgross]
+
 - Added small fix in customized search template.
   [phgross]
 
