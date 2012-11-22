@@ -11,7 +11,7 @@
 
     <link rel="alternate" title="RSS 1.0" type="application/rss+xml"
           tal:define="here_url context/@@plone_context_state/object_url;"
-          tal:condition="request/SearchableText|nothing"
+          tal:condition="python: request.get('SearchableText', None)"
           tal:attributes="href string:$here_url/search_rss?${request/QUERY_STRING}"/>
 
   </metal:block>

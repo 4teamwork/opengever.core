@@ -5,6 +5,9 @@ Changelog
 2.5.5 (unreleased)
 ------------------
 
+- Added small fix in customized search template.
+  [phgross]
+
 - Removed old and no longer used monkey patch for the plone.formwidget.contenttree.
   [phgross]
 
