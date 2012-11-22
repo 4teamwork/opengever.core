@@ -6,20 +6,17 @@ from collective.elephantvocabulary import wrap_vocabulary
 from datetime import date
 from five import grok
 from ftw.datepicker.widget import DatePickerFieldWidget
-from opengever.base.browser.helper import get_css_class
 from opengever.document import _
 from opengever.document.interfaces import IDocumentSettings
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.mail.behaviors import IMailInAddress
 from opengever.ogds.base.interfaces import IContactInformation
-from opengever.tabbedview.browser.tabs import OpengeverTab
 from opengever.tabbedview.browser.tabs import Tasks
 from plone.app.layout.viewlets.interfaces import IBelowContentTitle
 from plone.app.versioningbehavior.behaviors import IVersionable
 from plone.autoform.interfaces import OMITTED_KEY
 from plone.dexterity.content import Item
 from plone.directives import form, dexterity
-from plone.directives.dexterity import DisplayForm
 from plone.i18n.normalizer.interfaces import IIDNormalizer
 from plone.namedfile.field import NamedBlobFile
 from plone.registry.interfaces import IRegistry
@@ -405,27 +402,6 @@ class ForwardViewlet(grok.Viewlet):
             return '<script language="JavaScript">jq(function(){window.location.href="' + str(
                 self.context.absolute_url()) + '/external_edit"})</script>'
         return ''
-
-
-class Overview(DisplayForm, OpengeverTab):
-    grok.context(IDocumentSchema)
-    grok.name('tabbedview_view-overview')
-    grok.template('overview')
-
-    def get_referenced_documents(self):
-        pc = self.context.portal_catalog
-        return pc({'portal_type': 'Document', })
-
-    def creator_link(self):
-        info = getUtility(IContactInformation)
-        return info.render_link(self.context.Creator())
-
-    def get_css_class(self):
-        return get_css_class(self.context)
-
-    def show_externaledit(self):
-        return self.context.unrestrictedTraverse(
-            'checkout_control').is_checkin_allowed()
 
 
 class RelatedTasks(Tasks):

@@ -3,7 +3,7 @@ from opengever.base.interfaces import IReferenceNumber, ISequenceNumber
 from opengever.document.behaviors import IBaseDocument
 from opengever.document.document import IDocumentSchema
 from opengever.document.interfaces import IDocumentSettings
-from opengever.document.testing import OPENGEVER_DOCUMENT_INTEGRATION_TESTING
+from opengever.document.testing import OPENGEVER_DOCUMENT_FUNCTIONAL_TESTING
 from plone.dexterity.interfaces import IDexterityFTI
 from plone.dexterity.utils import createContentInContainer
 from plone.namedfile.file import NamedBlobFile
@@ -21,7 +21,7 @@ import transaction
 
 class TestDocumentIntegration(unittest.TestCase):
 
-    layer = OPENGEVER_DOCUMENT_INTEGRATION_TESTING
+    layer = OPENGEVER_DOCUMENT_FUNCTIONAL_TESTING
 
     def test_adding(self):
         portal = self.layer['portal']

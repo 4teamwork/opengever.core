@@ -30,7 +30,9 @@
 
     <include file="profiles.zcml" />
 
+    <include package=".browser" />
     <include package=".viewlets" />
+    <include package=".upgrades" />
 
     <!-- Register locales translations -->
     <i18n:registerTranslations directory="locales" />

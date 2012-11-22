@@ -46,3 +46,10 @@ class ObjectRevertedToVersion(ObjectEvent):
         self.object = obj
         self.version_id = version_id
         self.create_version = create_version
+
+
+class FileCopyDownloadedEvent(ObjectEvent):
+    """The file of a document was downloaded
+    """
+
+    grok.implements(interfaces.IFileCopyDownloadedEvent)

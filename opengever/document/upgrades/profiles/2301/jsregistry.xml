@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<object name="portal_javascripts" meta_type="JavaScripts Registry">
+    <javascript cacheable="True" compression="safe" cookable="True" expression=""
+                enabled="True" id="++resource++opengever.document/download_confirmation.js" inline="False"
+                />
+</object>

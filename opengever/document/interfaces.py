@@ -25,6 +25,11 @@ class IObjectRevertedToVersion(IObjectEvent):
     """
 
 
+class IFileCopyDownloadedEvent(IObjectEvent):
+    """ Event interface for event.FileDownloadedEvent
+    """
+
+
 class IDocumentType(Interface):
     document_types = schema.List(
         title=u"Document Type",

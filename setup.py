@@ -7,6 +7,7 @@ maintainer = 'Jonas Baumann'
 tests_require = [
     'collective.testcaselayer',
     'plone.app.testing',
+    'ftw.testing',
     'opengever.ogds.base[tests]'
 ]
 
@@ -68,6 +69,7 @@ setup(name='opengever.document',
         'opengever.dossier',
         'collective.dexteritytextindexer',
         'opengever.mail',
+        'ftw.upgrade',
         ],
 
         tests_require=tests_require,

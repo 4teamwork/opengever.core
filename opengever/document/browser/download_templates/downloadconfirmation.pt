@@ -1,0 +1,26 @@
+<form id="download_confirmation" name="logout_overlay" method="POST" action="" i18n:domain="opengever.document"
+      tal:attributes="action view/download_url">
+
+      <h1 class="documentFirstHeading"
+          i18n:translate="label_download_copy">
+        Download copy
+      </h1>
+
+      <div class="details">
+        <p i18n:translate="description_download_confirmation">You're downloading a copy of the document
+          <span i18n:name="filename" tal:content="python: context.file and context.file.filename" />
+        </p>
+
+        <dl class="portalMessage error">
+          <dt i18n:domain="plone" i18n:translate="">Warning</dt>
+          <dd i18n:translate="warning_download_confirmation">
+            Please note that in this case changes on the document wouldn't be saved in to GEVER.
+          </dd>
+        </dl>
+      </div>
+      <div class="formControls">
+        <input type="submit" class="context" value="label_download" i18n:attributes="value" />
+        <input id="cancel" type="button" class="standalone" value="label_cancel" i18n:attributes="value" />
+      </div>
+
+</form>
