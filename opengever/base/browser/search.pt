@@ -53,6 +53,21 @@
                    i18n:attributes="value label_search;"/>
         </fieldset>
 
+        <p class="discreet"
+           i18n:domain="opengever.base"
+           i18n:translate="search_results_advanced">
+        Did you not find what you were looking for? Try the
+        <span i18n:name="advanced_search">
+        <a href=""
+           i18n:domain="opengever.base"
+           i18n:translate="search_results_advanced_link"
+           tal:define="nav_root_url context/@@plone_portal_state/navigation_root_url;
+                       st python:request.get('SearchableText', '');"
+           tal:attributes="href string:${nav_root_url}/advanced_search?SearchableText=${st}">Advanced Search</a>
+        </span>
+        to refine your search.
+        </p>
+
         <div class="row">
 
             <div class="cell width-full position-0">

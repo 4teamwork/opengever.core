@@ -3,8 +3,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2011-11-24 10:06+0000\n"
-"PO-Revision-Date: 2012-11-22 15:10+0100\n"
+"POT-Creation-Date: 2012-11-23 07:35+0000\n"
+"PO-Revision-Date: 2012-11-23 08:38+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "MIME-Version: 1.0\n"
@@ -19,7 +19,7 @@ msgstr ""
 msgid "Copy Items"
 msgstr "Kopieren"
 
-#: ./opengever/base/viewlets/download.py:20
+#: ./opengever/base/viewlets/download.py:26
 msgid "No file in in this version"
 msgstr "In dieser Version ist keine Datei vorhanden"
 
@@ -46,17 +46,17 @@ msgid "archival worthy with sampling"
 msgstr "Sampling"
 
 #. Default: "Download"
-#: ./opengever/base/viewlets/history.pt:41
+#: ./opengever/base/viewlets/history.pt:42
 msgid "button_file"
 msgstr "Kopie herunterladen."
 
 #. Default: "PDF"
-#: ./opengever/base/viewlets/history.pt:49
+#: ./opengever/base/viewlets/history.pt:52
 msgid "button_pdf"
 msgstr "PDF Vorschau"
 
 #. Default: "Show"
-#: ./opengever/base/viewlets/history.pt:45
+#: ./opengever/base/viewlets/history.pt:48
 msgid "button_show"
 msgstr "Anzeigen"
 
@@ -71,12 +71,12 @@ msgid "confidential"
 msgstr "Vertraulich"
 
 #. Default: "You have not selected any Items"
-#: ./opengever/base/browser/copy_items.py:40
+#: ./opengever/base/browser/copy_items.py:47
 msgid "error_no_items"
 msgstr "Sie haben keine Objekte ausgewählt"
 
 #. Default: "The item you selected cannot be copied"
-#: ./opengever/base/browser/copy_items.py:29
+#: ./opengever/base/browser/copy_items.py:30
 msgid "error_not_copyable"
 msgstr "Der gewählte Inhalt kann nicht kopiert werden"
 
@@ -96,11 +96,11 @@ msgid "fieldset_lifecycle"
 msgstr "Lebenszyklus"
 
 #. Default: "Archival value code"
-#: ./opengever/base/behaviors/lifecycle.py:57
+#: ./opengever/base/behaviors/lifecycle.py:56
 msgid "help_archival_value"
 msgstr "Archivwürdigkeit"
 
-#: ./opengever/base/behaviors/lifecycle.py:66
+#: ./opengever/base/behaviors/lifecycle.py:65
 msgid "help_archival_value_annotation"
 msgstr ""
 
@@ -113,15 +113,15 @@ msgstr "Grad, in dem die Unterlagen vor unberechtigter Einsicht geschützt werde
 msgid "help_creators"
 msgstr ""
 
-#: ./opengever/base/behaviors/lifecycle.py:73
+#: ./opengever/base/behaviors/lifecycle.py:72
 msgid "help_custody_period"
 msgstr "Dauer, während der nach der Archivierung die Dokumente vor öffentlicher Einsichtnahme geschützt sind"
 
-#: ./opengever/base/behaviors/lifecycle.py:82
+#: ./opengever/base/behaviors/lifecycle.py:81
 msgid "help_dateofcassation"
 msgstr ""
 
-#: ./opengever/base/behaviors/lifecycle.py:90
+#: ./opengever/base/behaviors/lifecycle.py:89
 msgid "help_dateofsubmission"
 msgstr ""
 
@@ -139,15 +139,15 @@ msgid "help_public_trial"
 msgstr "Angabe, ob die Unterlagen gemäss Öffentlichkeitsgesetz besonders schützenswert sind oder nicht"
 
 #. Default: "BegrÃ¼undung Schutzgrad"
-#: ./opengever/base/behaviors/classification.py:53
+#: ./opengever/base/behaviors/classification.py:54
 msgid "help_public_trial_statement"
 msgstr "Argumente gegen die öffentliche Zugänglichkeit gemäss Öffentlichkeitsgesetz"
 
-#: ./opengever/base/behaviors/lifecycle.py:41
+#: ./opengever/base/behaviors/lifecycle.py:40
 msgid "help_retention_period"
 msgstr "Zeitraum zwischen dem jüngsten Dokumentdatum eines in einem Dossier enthaltenen Dokuments und dem Zeitpunkt, an dem dieses für die Geschäftstätigkeit der Verwaltungseinheit nicht mehr benötigt wird"
 
-#: ./opengever/base/behaviors/lifecycle.py:50
+#: ./opengever/base/behaviors/lifecycle.py:49
 msgid "help_retention_period_annotation"
 msgstr ""
 
@@ -157,12 +157,12 @@ msgid "label_actor"
 msgstr "Geändert von"
 
 #. Default: "Archival value"
-#: ./opengever/base/behaviors/lifecycle.py:56
+#: ./opengever/base/behaviors/lifecycle.py:55
 msgid "label_archival_value"
 msgstr "Archivwürdigkeit"
 
 #. Default: "archivalValueAnnotation"
-#: ./opengever/base/behaviors/lifecycle.py:64
+#: ./opengever/base/behaviors/lifecycle.py:63
 msgid "label_archival_value_annotation"
 msgstr "Kommentar zur Archivwürdigkeit"
 
@@ -182,7 +182,7 @@ msgid "label_creators"
 msgstr "Autoren"
 
 #. Default: "Custody period (years)"
-#: ./opengever/base/behaviors/lifecycle.py:72
+#: ./opengever/base/behaviors/lifecycle.py:71
 msgid "label_custody_period"
 msgstr "Archivische Schutzfrist (Jahre)"
 
@@ -192,12 +192,12 @@ msgid "label_date"
 msgstr "Datum"
 
 #. Default: "Date of cassation"
-#: ./opengever/base/behaviors/lifecycle.py:81
+#: ./opengever/base/behaviors/lifecycle.py:80
 msgid "label_dateofcassation"
 msgstr "Kassationsdatum"
 
 #. Default: "Date of submission"
-#: ./opengever/base/behaviors/lifecycle.py:89
+#: ./opengever/base/behaviors/lifecycle.py:88
 msgid "label_dateofsubmission"
 msgstr "Anbietezeitpunkt"
 
@@ -212,7 +212,7 @@ msgid "label_history"
 msgstr "Versionen"
 
 #. Default: "Initial version (document copied)"
-#: ./opengever/base/subscribers.py:16
+#: ./opengever/base/subscribers.py:20
 msgid "label_initial_version_copied"
 msgstr "Dokument kopiert (Initialversion)"
 
@@ -232,17 +232,17 @@ msgid "label_public_trial_statement"
 msgstr "Begründung für die Aufhebung des Öffentlichkeitsstatus"
 
 #. Default: "reset"
-#: ./opengever/base/viewlets/history.pt:53
+#: ./opengever/base/viewlets/history.pt:56
 msgid "label_reset"
 msgstr "Zurücksetzen"
 
 #. Default: "Retention period (years)"
-#: ./opengever/base/behaviors/lifecycle.py:40
+#: ./opengever/base/behaviors/lifecycle.py:39
 msgid "label_retention_period"
 msgstr "Aufbewahrungsdauer (Jahre)"
 
 #. Default: "retentionPeriodAnnotation"
-#: ./opengever/base/behaviors/lifecycle.py:48
+#: ./opengever/base/behaviors/lifecycle.py:47
 msgid "label_retention_period_annotation"
 msgstr "Kommentar zur Aufbewahrungsdauer"
 
@@ -285,6 +285,16 @@ msgstr "Anbieten"
 #: opengever/repository/classification.py
 msgid "public"
 msgstr "Öffentlich"
+
+#. Default: "Did you not find what you were looking for? Try the ${advanced_search} to refine your search."
+#: ./opengever/base/browser/search.pt:60
+msgid "search_results_advanced"
+msgstr "Haben Sie nicht gefunden, wonach Sie gesucht haben? Die ${advanced_search} bietet Ihnen präzisere Suchmöglichkeiten."
+
+#. Default: "Advanced Search"
+#: ./opengever/base/browser/search.pt:61
+msgid "search_results_advanced_link"
+msgstr "erweiterte Suche"
 
 #. Default: "unchecked"
 #. Default ""
