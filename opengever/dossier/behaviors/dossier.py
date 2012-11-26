@@ -83,8 +83,7 @@ class IDossier(form.Schema):
     form.widget(responsible=AutocompleteFieldWidget)
     responsible = schema.Choice(
         title=_(u"label_responsible", default="Responsible"),
-        description=_(
-            u"help_responsible", default="Select the responsible manager"),
+        description=_(u"help_responsible", default=""),
         vocabulary=u'opengever.ogds.base.AssignedUsersVocabulary',
         required=True,
         )
