@@ -43,7 +43,7 @@
 
     <browser:page
         name="search"
-        class=".search.Search"
+        class=".search.OpengeverSearch"
         permission="zope2.View"
         for="*"
         template="search.pt"
