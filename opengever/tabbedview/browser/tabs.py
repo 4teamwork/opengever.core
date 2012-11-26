@@ -227,6 +227,8 @@ class Dossiers(OpengeverCatalogListingTab):
 
     selection = ViewPageTemplateFile("selection_dossier.pt")
 
+    template = ViewPageTemplateFile("generic_dossier.pt")
+
     open_states = [
         'dossier-state-active',
         ]
