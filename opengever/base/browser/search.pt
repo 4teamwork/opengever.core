@@ -311,9 +311,6 @@
                                             tal:define="breadcrumbs python: view.breadcrumbs(item);
                                                         is_rtl context/@@plone_portal_state/is_rtl;"
                                             tal:condition='breadcrumbs'>
-                                          <span i18n:translate="text_searchitem_location">
-                                              Located in
-                                          </span>
                                           <span tal:repeat="crumb breadcrumbs"
                                                 tal:attributes="dir python:is_rtl and 'rtl' or 'ltr';">
                                               <tal:item tal:define="is_last repeat/crumb/end;
