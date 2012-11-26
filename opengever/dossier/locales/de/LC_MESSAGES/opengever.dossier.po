@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "POT-Creation-Date: 2012-08-24 14:02+0000\n"
-"PO-Revision-Date: 2012-08-24 16:04+0200\n"
+"PO-Revision-Date: 2012-11-26 14:29+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
 "MIME-Version: 1.0\n"
@@ -335,7 +335,7 @@ msgstr ""
 #. Default: "Select the responsible manager"
 #: ./opengever/dossier/behaviors/dossier.py:86
 msgid "help_responsible"
-msgstr "Federführung"
+msgstr ""
 
 #: ./opengever/dossier/behaviors/participation.py:98
 msgid "help_roles"
