@@ -232,6 +232,7 @@ class Dossiers(OpengeverCatalogListingTab):
     open_states = [
         'dossier-state-active',
         ]
+    state_filter_name = 'dossier_state_filter'
 
     columns = (
 
@@ -277,8 +278,7 @@ class Dossiers(OpengeverCatalogListingTab):
                        'copy_items',
                        ]
 
-    major_actions = ['change_state',
-                     ]
+    major_actions = ['change_state', ]
 
 
 class SubDossiers(Dossiers):
@@ -314,7 +314,7 @@ class StateFilterTableSource(grok.MultiAdapter, CatalogTableSource):
                 query, self.config.filter_text)
 
         # reviewstate-filter
-        review_state_filter = self.request.get('review_state', None)
+        review_state_filter = self.request.get(self.config.state_filter_name, None)
 
         # when state_filter is not set to all, we just return the open states
         if review_state_filter != 'false':
@@ -331,7 +331,6 @@ class StateFilterTableSource(grok.MultiAdapter, CatalogTableSource):
         which show just objects in the open state."""
 
         query['review_state'] = self.config.open_states
-
         return query
 
 
@@ -352,6 +351,8 @@ class Tasks(OpengeverCatalogListingTab):
             'task-state-rejected',
             'forwarding-state-open',
         ]
+
+    state_filter_name = 'task_state_filter'
 
     columns = (
 

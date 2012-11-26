@@ -44,24 +44,25 @@
 
   <tal:extjs condition="view/extjs_enabled">
     <tal:START_CUSTOM_______________________________________ />
-    <div id="message_no_contents"
-         class="tabbedview_select"
-         style="display:none"
-         i18n:domain="opengever.tabbedview"
-         tal:define="review_state python: view.request.get('review_state');
-                     all_filter python: review_state == 'false'" >
+    <div id="message_no_contents" class="tabbedview_select" style="display:none"
+        i18n:domain="opengever.tabbedview"
+        tal:define="state_filter_name python: view.state_filter_name;
+                    review_state python: view.request.get(state_filter_name);
+                    all_filter python: review_state == 'false';">
 
-      <span i18n:translate="" >State</span>
+      <span tal:attributes="id state_filter_name" class="state_filters">
+        <span i18n:translate="" >State</span>
 
-      <a id="filter_all"
-         tal:attributes="class python: all_filter and 'active'"
-         href="javascript:void(0);"
-         i18n:translate="">All</a>
+        <a id="filter_all"
+           tal:attributes="class python: all_filter and 'active'"
+           href="javascript:void(0);"
+           i18n:translate="">All</a>
 
-      <a id="filter_open"
-         tal:attributes="class python: not all_filter and 'active' "
-         href="javascript:void(0);"
-         i18n:translate="">Active</a>
+        <a id="filter_open"
+           tal:attributes="class python: not all_filter and 'active' "
+           href="javascript:void(0);"
+           i18n:translate="">Active</a>
+      </span>
 
       <p id="message_no_contents"
          i18n:translate="label_no_contents"

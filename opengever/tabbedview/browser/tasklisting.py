@@ -64,6 +64,8 @@ class GlobalTaskListingTab(grok.View, OpengeverTab,
             'forwarding-state-open',
         ]
 
+    state_filter_name = 'task_state_filter'
+
     columns = (
 
         ('', task_id_checkbox_helper),
