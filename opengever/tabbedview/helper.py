@@ -151,6 +151,20 @@ def linked(item, value):
 
 
 def linked_document_with_tooltip(item, value):
+    """Wrapper method for the _linked_document_with_tooltip method
+    for normal not trashed documents and mails."""
+
+    return _linked_document_with_tooltip(item, value)
+
+
+def linked_trashed_document_with_tooltip(item, value):
+    """Wrapper method for the _linked_document_with_tooltip method
+    for normal but trashed documents and mails."""
+
+    return _linked_document_with_tooltip(item, value, trashed=True)
+
+
+def _linked_document_with_tooltip(item, value, trashed=False):
 
     data = {}
 
@@ -189,20 +203,25 @@ def linked_document_with_tooltip(item, value):
     for k, v in data.items():
         data[k] = cgi.escape(v, quote=True)
 
-    if item.portal_type != 'opengever.document.document':
-        data['tooltip_links'] = """<a href='%(edit_metadata_link)s'>
-                    %(edit_metadata_label)s
-                </a>""" % data
-    else:
-        data['tooltip_links'] = """<a href='%(preview_link)s'>
+    tooltip_links = []
+
+    if item.portal_type == 'opengever.document.document':
+        tooltip_links.append("""<a href='%(preview_link)s'>
                     %(preview_label)s
-                </a>
-                <a href='%(edit_metadata_link)s'>
+                </a>""" % data)
+
+    if not trashed:
+        tooltip_links.append("""<a href='%(edit_metadata_link)s'>
                     %(edit_metadata_label)s
-                </a>
-                <a href='%(edit_direct_link)s'>
+                </a>""" % data)
+
+    if item.portal_type == 'opengever.document.document' and not trashed:
+        tooltip_links.append("""<a href='%(edit_direct_link)s'>
                     %(edit_direct_label)s
-                </a>""" % data
+                </a>""" % data)
+
+    data['tooltip_links'] = """
+                """.join(tooltip_links)
 
     link = """<div class='linkWrapper'>
     <a class='tabbedview-tooltip %(css_class)s' href='#'></a>

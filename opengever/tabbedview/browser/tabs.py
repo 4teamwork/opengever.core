@@ -9,10 +9,11 @@ from opengever.tabbedview import _
 from opengever.tabbedview.browser.listing import CatalogListingView
 from opengever.tabbedview.helper import display_client_title_condition
 from opengever.tabbedview.helper import external_edit_link
+from opengever.tabbedview.helper import linked_document_with_tooltip
+from opengever.tabbedview.helper import linked_trashed_document_with_tooltip
 from opengever.tabbedview.helper import overdue_date_helper
 from opengever.tabbedview.helper import readable_date_set_invisibles
 from opengever.tabbedview.helper import readable_ogds_author, linked
-from opengever.tabbedview.helper import linked_document_with_tooltip
 from opengever.tabbedview.helper import readable_ogds_user
 from opengever.tabbedview.helper import workflow_state
 from opengever.tabbedview.interfaces import IStateFilterTableSourceConfig
@@ -454,8 +455,9 @@ class Trash(Documents):
                     col[1] == external_edit_link:
                 pass  # remove external_edit colunmn
             else:
+                if col.get('column') == 'Title':
+                    col['transform'] = linked_trashed_document_with_tooltip
                 columns.append(col)
-
         return columns
 
 

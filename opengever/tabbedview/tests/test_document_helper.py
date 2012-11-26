@@ -1,7 +1,8 @@
 from ftw.testing import MockTestCase
 from mocker import ANY
-from opengever.tabbedview.utils import get_containg_document_tab_url
 from opengever.tabbedview.helper import linked_document_with_tooltip
+from opengever.tabbedview.helper import linked_trashed_document_with_tooltip
+from opengever.tabbedview.utils import get_containg_document_tab_url
 from zope.interface import Interface
 
 
@@ -117,3 +118,28 @@ class TestDocumentsUrl(MockTestCase):
 
         self.assertEqual(linked_document_with_tooltip(mail_brain, value),
                  expected_link)
+
+
+        # trashed linked helper
+
+        # document
+        expected_link = """<div class='linkWrapper'>
+    <a class='tabbedview-tooltip contenttype-opengever-document' href='#'></a>
+    <a href='http://nohost/plone/dossier-1/task-1/document'>lorem ipsum &lt;with tags&gt;</a>
+    <div class='tabbedview-tooltip-data'>
+        <div class='tooltip-content'>
+            <div class='tooltip-header'>lorem ipsum &lt;with tags&gt;</div>
+            <div class='tooltip-breadcrumb'>Dossier1 &gt; Task 1 &gt; lorem ipsum &lt;with tags&gt;</div>
+            <div class='tooltip-links'>
+                <a href='http://nohost/plone/dossier-1/task-1/document/@@download_pdfpreview'>
+                    PDF
+                </a>
+            </div>
+        </div>
+        <div class='bottomImage'></div>
+    </div>
+</div>"""
+
+        self.assertEqual(
+            linked_trashed_document_with_tooltip(doc_brain, value),
+            expected_link)
