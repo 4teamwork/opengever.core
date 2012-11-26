@@ -315,7 +315,8 @@ class StateFilterTableSource(grok.MultiAdapter, CatalogTableSource):
                 query, self.config.filter_text)
 
         # reviewstate-filter
-        review_state_filter = self.request.get(self.config.state_filter_name, None)
+        review_state_filter = self.request.get(
+            self.config.state_filter_name, None)
 
         # when state_filter is not set to all, we just return the open states
         if review_state_filter != 'false':
