@@ -50,5 +50,15 @@
         layer="opengever.base.interfaces.IOpengeverBaseLayer"
         />
 
+    <configure package="plone.app.search">
+      <browser:page
+          name="updated_search"
+          class="opengever.base.browser.search.OpengeverSearch"
+          permission="zope2.View"
+          for="Products.CMFCore.interfaces.IFolderish"
+          template="updated_search.pt"
+          layer="opengever.base.interfaces.IOpengeverBaseLayer"
+          />
+    </configure>
 
 </configure>
