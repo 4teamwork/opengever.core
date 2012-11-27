@@ -5,6 +5,9 @@ Changelog
 2.3.3 (unreleased)
 ------------------
 
+- Implements editchecker wrapper view, used in extendend tooltip.
+  [phgross]
+
 - Fixed fallback tab for redirecting in doucment_editing view.
   [phgross]
 

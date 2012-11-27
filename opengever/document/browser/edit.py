@@ -4,12 +4,65 @@ from Products.statusmessages.interfaces import IStatusMessage
 from five import grok
 from opengever.base.interfaces import IRedirector
 from opengever.document import _
+from opengever.document.document import IDocumentSchema
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.task.task import ITask
 from zope.component import getMultiAdapter, getUtility
 from zope.interface import Interface
+
+
+def get_redirect_url(context):
+        """return the url where the editing_document view was called from
+        It should be a document listing."""
+
+        referer = context.REQUEST.environ.get('HTTP_REFERER')
+        portal_url = '/'.join(context.portal_url().split('/')[:-1])
+        if referer:
+            obj_path = referer[len(portal_url):]
+            try:
+                obj = context.restrictedTraverse(obj_path)
+            except KeyError:
+                return  '%s#overview' % context.absolute_url()
+
+            # redirect to right tabbedview-tab
+            if ITask.providedBy(obj):
+                return '%s#relateddocuments' % (obj.absolute_url())
+            elif IPloneSiteRoot.providedBy(obj):
+                return '%s#mydocuments' % (obj.absolute_url())
+            elif IDossierMarker.providedBy(obj):
+                return '%s#documents' % (obj.absolute_url())
+            else:
+                return obj.absolute_url()
+
+        else:
+            return  '%s#overview' % context.absolute_url()
+
+
+class EditCheckerView(grok.View):
+    """Short view wich only checks if the user has the required permissions.
+    If not it returns with a statusmessages to the referer.
+    Used in the documents extended tooltip."""
+
+    grok.context(IDocumentSchema)
+    grok.name('edit_checker')
+    grok.require('zope2.View')
+
+    def render(self):
+        mtool = getToolByName(self.context, 'portal_membership')
+        if mtool.checkPermission(
+            'Modify portal content', self.context):
+            return self.response.redirect(
+                '%s/edit' % (self.context.absolute_url()))
+        else:
+            msg = _(
+                u'You are not authorized to edit the document ${title}',
+                mapping={'title': self.context.Title().decode('utf-8')})
+
+            IStatusMessage(self.request).addStatusMessage(msg, type='error')
+            return self.request.RESPONSE.redirect(
+                get_redirect_url(self.context))
 
 
 class EditingDocument(grok.View):
@@ -30,7 +83,8 @@ class EditingDocument(grok.View):
                 mapping={'title': self.context.Title().decode('utf-8')})
 
             IStatusMessage(self.request).addStatusMessage(msg, type='error')
-            return self.request.RESPONSE.redirect(self.get_redirect_url())
+            return self.request.RESPONSE.redirect(
+                get_redirect_url(self.context))
 
         # check out the document
         manager = getMultiAdapter((self.context, self.request),
@@ -49,14 +103,16 @@ class EditingDocument(grok.View):
             msg = _(u"The Document is allready checked out by: ${userid}",
                     mapping={'userid': info.describe(userid)})
             IStatusMessage(self.request).addStatusMessage(msg, type='error')
-            return self.request.RESPONSE.redirect(self.get_redirect_url())
+            return self.request.RESPONSE.redirect(
+                get_redirect_url(self.context))
 
         elif not manager.is_checkout_allowed():
             msg = _(
                 u'Could not check out document ${title}',
                 mapping={'title': self.context.Title().decode('utf-8')})
             IStatusMessage(self.request).addStatusMessage(msg, type='error')
-            return self.request.RESPONSE.redirect(self.get_redirect_url())
+            return self.request.RESPONSE.redirect(
+                get_redirect_url(self.context))
 
         else:
             # check it out
@@ -79,29 +135,3 @@ class EditingDocument(grok.View):
 
         # now lets redirect to an appropriate target..
         return self.request.RESPONSE.redirect(self.context.absolute_url())
-
-    def get_redirect_url(self):
-        """return the url where the editing_document view was called from
-        It must be a document listing """
-
-        referer = self.context.REQUEST.environ.get('HTTP_REFERER')
-        portal_url = '/'.join(self.context.portal_url().split('/')[:-1])
-        if referer:
-            obj_path = referer[len(portal_url):]
-            try:
-                obj = self.context.restrictedTraverse(obj_path)
-            except KeyError:
-                return  '%s#documents' % self.context.absolute_url()
-
-            # redirect to right tabbedview-tab
-            if ITask.providedBy(obj):
-                return '%s#relateddocuments' % (obj.absolute_url())
-            elif IPloneSiteRoot.providedBy(obj):
-                return '%s#mydocuments' % (obj.absolute_url())
-            elif IDossierMarker.providedBy(obj):
-                return '%s#documents' % (obj.absolute_url())
-            else:
-                return obj.absolute_url()
-
-        else:
-            return  '%s#overview' % self.context.absolute_url()
