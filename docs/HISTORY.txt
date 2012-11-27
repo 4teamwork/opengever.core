@@ -5,6 +5,9 @@ Changelog
 2.3.3 (unreleased)
 ------------------
 
+- Fixed fallback tab for redirecting in doucment_editing view.
+  [phgross]
+
 - Dropped Plone 4.1 compatibility. Only 4.2 and up are supported.
   [lgraf]
 

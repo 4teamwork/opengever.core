@@ -104,4 +104,4 @@ class EditingDocument(grok.View):
                 return obj.absolute_url()
 
         else:
-            return  '%s#documents' % self.context.absolute_url()
+            return  '%s#overview' % self.context.absolute_url()
