@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "POT-Creation-Date: 2012-11-19 13:21+0000\n"
-"PO-Revision-Date: 2012-11-19 14:22+0100\n"
+"PO-Revision-Date: 2012-11-27 15:03+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
 "MIME-Version: 1.0\n"
@@ -55,7 +55,7 @@ msgstr "Konnte Dokument nicht einchecken: ${title}"
 #: ./opengever/document/browser/edit.py:55
 #: ./opengever/document/checkout/checkout.py:98
 msgid "Could not check out document ${title}"
-msgstr "Es ist nicht erlaubt das Dokument ${title} auszuchecken."
+msgstr "Es ist nicht erlaubt, das Dokument ${title} auszuchecken."
 
 #: ./opengever/document/checkout/checkout.py:59
 msgid "Could not check out object: ${title}, it is not a document"
