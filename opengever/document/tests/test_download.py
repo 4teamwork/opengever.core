@@ -25,14 +25,17 @@ class TestDocumentDownloadView(MockTestCase):
 
         monk_file = NamedBlobFile('bla bla', filename=u'test.txt')
         doc1.file = monk_file
+        transaction.commit()
 
         downloaded_handler = self.stub()
         self.mock_handler(downloaded_handler, [IFileCopyDownloadedEvent, ])
         self.expect(downloaded_handler(ANY)).result(True)
 
         self.replay()
+
         result = doc1.unrestrictedTraverse('download')()
-        self.assertEquals(result, 'bla bla')
+        result.seek(0)
+        self.assertEquals(result.read(), 'bla bla')
 
     def test_download_file_version_view(self):
         portal = self.layer['portal']
@@ -45,28 +48,31 @@ class TestDocumentDownloadView(MockTestCase):
                                  repo_tool._prepareSysMetadata('mock'),
                                  autoapply=repo_tool.autoapply)
 
-        doc2 = createContentInContainer(
-            portal, 'opengever.document.document', 'document-2')
-
         monk_file = NamedBlobFile('bla bla', filename=u'test.txt')
-        doc2.file = monk_file
+        doc1.file = monk_file
+
+        # create version
         repo_tool = getToolByName(portal, 'portal_repository')
-        repo_tool._recursiveSave(doc2, {},
+        repo_tool._recursiveSave(doc1, {},
                                  repo_tool._prepareSysMetadata('mock'),
                                  autoapply=repo_tool.autoapply)
 
-        downloaded_handler = self.stub()
+        downloaded_handler = self.mocker.mock()
         self.mock_handler(downloaded_handler, [IFileCopyDownloadedEvent, ])
         self.expect(downloaded_handler(ANY)).result(True)
 
         self.replay()
-        # first version without a document
-        doc1.unrestrictedTraverse('download_file_version')()
 
-        # second version without a document
-        portal.REQUEST['version_id'] = 1
-        result = doc2.unrestrictedTraverse('download_file_version')()
+        # second version with a document
+        doc1.REQUEST['version_id'] = '2'
+        result = doc1.unrestrictedTraverse('download_file_version')()
         self.assertEquals(result, 'bla bla')
+
+        # first version with a document
+        portal.REQUEST['version_id'] = '1'
+        result = doc1.unrestrictedTraverse('download_file_version')()
+        # result should be a redirect back to the document
+        self.assertEquals(result, 'http://nohost/plone/document-1')
 
 
 class TestDocumentDownloadConfirmation(unittest.TestCase):
