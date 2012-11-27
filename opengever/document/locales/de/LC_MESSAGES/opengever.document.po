@@ -55,7 +55,7 @@ msgstr "Konnte Dokument nicht einchecken: ${title}"
 #: ./opengever/document/browser/edit.py:55
 #: ./opengever/document/checkout/checkout.py:98
 msgid "Could not check out document ${title}"
-msgstr "Konnte Dokument nicht auschecken: ${title}"
+msgstr "Es ist nicht erlaubt das Dokument ${title} auszuchecken."
 
 #: ./opengever/document/checkout/checkout.py:59
 msgid "Could not check out object: ${title}, it is not a document"
