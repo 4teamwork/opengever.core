@@ -444,10 +444,11 @@ class Trash(Documents):
     @property
     def columns(self):
         """Gets the columns wich wich will be displayed
-           remove some columns from the columns property
+        and remove some columns and adjust some helper methods.
         """
         remove_columns = ['checked_out', ]
         columns = []
+
         for col in super(Trash, self).columns:
             if isinstance(col, dict) and \
                     col.get('column') in remove_columns:
@@ -456,9 +457,13 @@ class Trash(Documents):
                     col[1] == external_edit_link:
                 pass  # remove external_edit colunmn
             else:
+                # append column
+                columns.append(col.copy())
+
+                # change helper method for the title column
                 if col.get('column') == 'Title':
-                    col['transform'] = linked_trashed_document_with_tooltip
-                columns.append(col)
+                    columns[-1][
+                        'transform'] = linked_trashed_document_with_tooltip
         return columns
 
 
