@@ -184,7 +184,7 @@ def _linked_document_with_tooltip(item, value, trashed=False):
     data['preview_label'] = translate(
         base_mf(u'button_pdf', 'PDF'), context=item.REQUEST).encode('utf-8')
 
-    data['edit_metadata_link'] = '%s/edit' % (data['url'])
+    data['edit_metadata_link'] = '%s/edit_checker' % (data['url'])
     data['edit_metadata_label'] = translate(
         pmf(u'Edit metadata'), context=item.REQUEST).encode('utf-8')
 

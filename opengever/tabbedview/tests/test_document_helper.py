@@ -83,7 +83,7 @@ class TestDocumentsUrl(MockTestCase):
                 <a href='http://nohost/plone/dossier-1/task-1/document/@@download_pdfpreview'>
                     PDF
                 </a>
-                <a href='http://nohost/plone/dossier-1/task-1/document/edit'>
+                <a href='http://nohost/plone/dossier-1/task-1/document/edit_checker'>
                     Edit metadata
                 </a>
                 <a href='http://nohost/plone/dossier-1/task-1/document/editing_document'>
@@ -107,7 +107,7 @@ class TestDocumentsUrl(MockTestCase):
             <div class='tooltip-header'>lorem ipsum &lt;with tags&gt;</div>
             <div class='tooltip-breadcrumb'>Dossier1 &gt; Task 1 &gt; lorem ipsum &lt;with tags&gt;</div>
             <div class='tooltip-links'>
-                <a href='http://nohost/plone/dossier-1/task-1/document/edit'>
+                <a href='http://nohost/plone/dossier-1/task-1/document/edit_checker'>
                     Edit metadata
                 </a>
             </div>
