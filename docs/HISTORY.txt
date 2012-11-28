@@ -2,8 +2,8 @@ Changelog
 =========
 
 
-2.0.7 (unreleased)
-------------------
+2.1 (2012-11-28)
+----------------
 
 - OGDS-Sync: Update Syncstamp only after the whole Sync. Added sperate ogds-sync logging.
   [phgross]
