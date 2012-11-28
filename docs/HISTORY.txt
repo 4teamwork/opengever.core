@@ -2,8 +2,8 @@ Changelog
 =========
 
 
-2.0.4 (unreleased)
-------------------
+2.1 (2012-11-28)
+----------------
 
 - Update checkbox column configuration (set width attribute) in all listings.
   [phgross]
