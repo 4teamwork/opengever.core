@@ -5,6 +5,15 @@ Changelog
 2.4.4 (unreleased)
 ------------------
 
+- Added special condition in issuer display, for forwaring successors.
+  [phgross]
+
+- Allow closing for inbox users Feature: Add support for for multiclient tasks.
+  [phgross]
+
+- Fixed TaskPostFactoryMenu: works now with every order of the factories.
+  [phgross]
+
 - Dropped Plone 4.1 compatibility. Only 4.2 and up are supported.
   [lgraf]
 
@@ -13,6 +22,7 @@ Changelog
 
 - Adjust javscripts: Use $ instead of deprecated jq.
   [phgross]
+
 
 
 2.4.3 (2012-10-08)
