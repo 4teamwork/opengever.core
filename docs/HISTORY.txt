@@ -1,15 +1,15 @@
 Changelog
 =========
 
-
-2.0.3 (unreleased)
+2.0.4 (unreleased)
 ------------------
 
 - Dropped Plone 4.1 compatibility. Only 4.2 and up are supported.
   [lgraf]
 
-- Added fanky for opengever.trash to test buildout
-  [lgraf]
+
+2.0.3 (2012-07-20)
+------------------
 
 - Added dependencies missing from TinyMCE to tests_require.
   (zope.globalrequest and plone.namedfile[blobs])
