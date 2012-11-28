@@ -9,6 +9,7 @@ Changelog
    - Activate download confirmation for file download.
    - Added icons for the different history actions.
    - Maded version download view customizable.
+
   [phgross]
 
 - Added small fix in customized search template.
@@ -29,6 +30,9 @@ Changelog
 
 - Dropped Plone 4.1 compatibility. Only 4.2 and up are supported.
   [lgraf]
+
+- Integrate plone.app.search (including some gever customisations).
+  [phgross]
 
 - Cleaned up the html structure in the version table.
   Issue #1692 Versionen Viewlet Styling und Tabellenaufbau anpassen.
