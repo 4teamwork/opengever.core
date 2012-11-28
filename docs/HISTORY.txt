@@ -2,8 +2,8 @@ Changelog
 =========
 
 
-2.0.9 (unreleased)
-------------------
+2.1 (2012-11-28)
+----------------
 
 - Skip the index_task handler when removing a Plone site. Otherwise we'll
   run into trouble because the component registry is already gone.
