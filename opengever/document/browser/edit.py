@@ -4,6 +4,7 @@ from Products.statusmessages.interfaces import IStatusMessage
 from five import grok
 from opengever.base.interfaces import IRedirector
 from opengever.document import _
+from opengever.document.behaviors import IBaseDocument
 from opengever.document.document import IDocumentSchema
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.dossier.behaviors.dossier import IDossierMarker
@@ -45,7 +46,7 @@ class EditCheckerView(grok.View):
     If not it returns with a statusmessages to the referer.
     Used in the documents extended tooltip."""
 
-    grok.context(IDocumentSchema)
+    grok.context(IBaseDocument)
     grok.name('edit_checker')
     grok.require('zope2.View')
 
