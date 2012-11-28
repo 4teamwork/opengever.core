@@ -23,12 +23,12 @@ class InboxFunctionalLayer(PloneSandboxLayer):
          from opengever.ogds.base import setuphandlers
          setuphandlers.setup_scriptable_plugin = lambda *a, **kw: None
 
-         from opengever.inbox import tests
-         xmlconfig.file('testing.zcml', package=tests,
+         import ftw.contentmenu
+         xmlconfig.file('configure.zcml', package=ftw.contentmenu,
              context=configurationContext)
 
-         import ftw.contentmenu
-         xmlconfig.file('overrides.zcml', package=ftw.contentmenu,
+         from opengever.inbox import tests
+         xmlconfig.file('testing.zcml', package=tests,
              context=configurationContext)
 
     def setUpPloneSite(self, portal):
@@ -36,6 +36,7 @@ class InboxFunctionalLayer(PloneSandboxLayer):
         applyProfile(portal, 'opengever.inbox:default')
         applyProfile(portal, 'opengever.document:default')
         applyProfile(portal, 'opengever.task:default')
+        applyProfile(portal, 'ftw.contentmenu:default')
 
         # setup the sql tables
         create_sql_tables()
