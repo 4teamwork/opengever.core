@@ -23,7 +23,7 @@ Changelog
 
 
 2.1.1 (2012-06-18)
-----------------
+------------------
 
 - Made mails also findable (use IBaseDocument instead of IDocumentSchema)
   Issue #1595 Erweiterte Suche: Mails werden bei Suche nach Dokumentdatum nicht beruecksichtigt
