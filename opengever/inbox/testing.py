@@ -20,16 +20,16 @@ class InboxFunctionalLayer(PloneSandboxLayer):
 
     def setUpZope(self, app, configurationContext):
         # do not install pas plugins (doesnt work in tests)
-         from opengever.ogds.base import setuphandlers
-         setuphandlers.setup_scriptable_plugin = lambda *a, **kw: None
+        from opengever.ogds.base import setuphandlers
+        setuphandlers.setup_scriptable_plugin = lambda *a, **kw: None
 
-         import ftw.contentmenu
-         xmlconfig.file('configure.zcml', package=ftw.contentmenu,
-             context=configurationContext)
+        import ftw.contentmenu
+        xmlconfig.file('configure.zcml', package=ftw.contentmenu,
+                       context=configurationContext)
 
-         from opengever.inbox import tests
-         xmlconfig.file('testing.zcml', package=tests,
-             context=configurationContext)
+        from opengever.inbox import tests
+        xmlconfig.file('testing.zcml', package=tests,
+                       context=configurationContext)
 
     def setUpPloneSite(self, portal):
 
@@ -66,7 +66,7 @@ class InboxFunctionalLayer(PloneSandboxLayer):
              'lastname': 'User',
              'email': 'test.user@local.ch',
              'email2': 'test_user@private.ch'},
-             ('og_mandant1_users','og_mandant1_inbox'))
+            ('og_mandant1_users', 'og_mandant1_inbox'))
 
         # configure client ID
         registry = getUtility(IRegistry, context=portal)
@@ -79,8 +79,6 @@ class InboxFunctionalLayer(PloneSandboxLayer):
         # We need savepoint support for version retrieval with CMFEditions.
         import zope.sqlalchemy.datamanager
         zope.sqlalchemy.datamanager.NO_SAVEPOINT_SUPPORT = set([])
-
-
 
     def tearDownPloneSite(self, portal):
         session = create_session()
