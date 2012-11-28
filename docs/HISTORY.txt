@@ -2,8 +2,8 @@ Changelog
 =========
 
 
-2.5.5 (unreleased)
-------------------
+2.6 (2012-11-28)
+----------------
 
 - Added some ajustments on the history viewlet:
    - Activate download confirmation for file download.
