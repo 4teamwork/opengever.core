@@ -11,6 +11,10 @@ Changelog
 - Fixed fallback tab for redirecting in doucment_editing view.
   [phgross]
 
+- Implements document overview rebuild (file display,
+  download links and confirmation).
+  [phgross]
+
 - Dropped Plone 4.1 compatibility. Only 4.2 and up are supported.
   [lgraf]
 
