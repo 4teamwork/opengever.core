@@ -2,8 +2,8 @@ Changelog
 =========
 
 
-2.4.4 (unreleased)
-------------------
+2.5 (2012-11-28)
+----------------
 
 - Added special condition in issuer display, for forwaring successors.
   [phgross]
