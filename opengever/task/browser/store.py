@@ -13,29 +13,27 @@ class StoreForwardingInYearfolderView(grok.View):
     grok.context(ITask)
     grok.require('zope2.View')
 
-    def render(self):
-        if self.is_already_done():
-            # Set correct content type for text response
-            self.request.response.setHeader("Content-type", "tex/plain")
-
-            return 'OK'
-
+    def _check_permission(self):
         mtool = getToolByName(self.context, 'portal_membership')
         member = mtool.getAuthenticatedMember()
 
         if not member.checkPermission('Add portal content', self.context):
             raise Unauthorized()
 
+    def store_to_yearfolder(self,
+                            text='',
+                            transition='forwarding-transition-close',
+                            successor_oguid=None):
+
+        self._check_permission()
+
         inbox = aq_parent(aq_inner(self.context))
         yearfolder = _get_yearfolder(inbox)
-        successor_oguid = self.request.get('successor_oguid')
-        transition = self.request.get('transition')
-        response_text = self.request.get('response_text')
 
         if transition:
             change_task_workflow_state(self.context,
                                       transition,
-                                      text=response_text,
+                                      text=text,
                                       successor_oguid=successor_oguid)
 
         try:
@@ -56,10 +54,23 @@ class StoreForwardingInYearfolderView(grok.View):
             AccessControl.SecurityManagement.setSecurityManager(
                 _sm)
 
+    def render(self):
+
+        if self.is_already_done():
             # Set correct content type for text response
             self.request.response.setHeader("Content-type", "tex/plain")
 
             return 'OK'
+
+        self.store_to_yearfolder(
+            text=self.request.get('response_text'),
+            transition=self.request.get('transition'),
+            successor_oguid=self.request.get('successor_oguid'))
+
+        # Set correct content type for text response
+        self.request.response.setHeader("Content-type", "tex/plain")
+
+        return 'OK'
 
     def is_already_done(self):
         """When the sender (caller of this view) has a conflict error, this
