@@ -5,7 +5,10 @@ Changelog
 2.1.1 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Fixed ObjectMoved journaliser: ignore ObjectAddedEvents.
+  Issue #1766 Journal: Das hinzufuegen von Objekten z.B. Dokumente fuehrt zu mehreren Journal Eintraege.
+  https://extranet.4teamwork.ch/extern/opengever-kanton-zug/sprint-backlog/1766/
+  [phgross]
 
 
 2.1 (2012-11-28)
