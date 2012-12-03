@@ -15,7 +15,7 @@ msgstr ""
 "Language-Code: en\n"
 "Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
-"Domain: ftw.tabbedview\n"
+"Domain: plone\n"
 
 msgid "Overview"
 msgstr ""
@@ -30,4 +30,8 @@ msgstr ""
 
 #: plone.app.search/plone/app/search/browser.py:121
 msgid "alphabetically"
+msgstr ""
+
+#: plone.app.search/plone/app/search/browser.py:119
+msgid "date (newest first)"
 msgstr ""
