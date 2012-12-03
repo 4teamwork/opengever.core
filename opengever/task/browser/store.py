@@ -64,7 +64,7 @@ class StoreForwardingInYearfolderView(grok.View):
 
         self.store_to_yearfolder(
             text=self.request.get('response_text'),
-            transition=self.request.get('transition'),
+            transition= self.request.get('transition'),
             successor_oguid=self.request.get('successor_oguid'))
 
         # Set correct content type for text response
