@@ -1,5 +1,7 @@
 from opengever.base.browser.helper import get_css_class
-from plone.app.contentlisting.catalog import CatalogContentListingObject as CoreListingObject
+from plone.app.contentlisting.catalog import \
+    CatalogContentListingObject as CoreListingObject
+from zope.component import getMultiAdapter
 
 
 class OpengeverCatalogContentListingObject(CoreListingObject):
@@ -22,4 +24,16 @@ class OpengeverCatalogContentListingObject(CoreListingObject):
     def containing_dossier(self):
         """Used for rendering breadcrumbs in search results.
         """
-        return self._brain.containing_dossier
+        plone_view = getMultiAdapter((self, self.request), name=u'plone')
+        return plone_view.cropText(self._brain.containing_dossier, 200)
+
+    def CroppedTitle(self):
+        plone_view = getMultiAdapter((self, self.request), name=u'plone')
+        return plone_view.cropText(self.Title(), 200)
+
+    def CroppedDescription(self):
+        """The CroppedDescription method from the corelisting
+        is not implemented yet."""
+
+        plone_view = getMultiAdapter((self, self.request), name=u'plone')
+        return plone_view.cropText(self.Description(), 400)

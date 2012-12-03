@@ -294,8 +294,9 @@
                                          tal:define="item_url item/getURL;
                                                      item_type item/portal_type"
                                          tal:attributes="href python:item_type in use_view_action and (item_url + '/view') or item_url;
-                                                         class string:state-${item/review_state}"
-                                         tal:content="item/Title" />
+                                                         class string:state-${item/review_state};
+                                                         title item/Title"
+                                         tal:content="item/CroppedTitle" />
                                     </dt>
                                     <dd>
 

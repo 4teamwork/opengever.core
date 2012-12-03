@@ -5,6 +5,9 @@ Changelog
 2.6.1 (unreleased)
 ------------------
 
+- Implements title and description cropping in search results display.
+  [phgross]
+
 - Disalbe searchableText check in p.a.search filter_query.
   Issue #1700 Plone Version auf 4.2.1 heben.
   https://extranet.4teamwork.ch/extern/opengever-kanton-zug/sprint-backlog/1700
