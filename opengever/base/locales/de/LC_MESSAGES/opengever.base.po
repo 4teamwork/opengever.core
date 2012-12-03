@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "POT-Creation-Date: 2012-11-23 07:35+0000\n"
-"PO-Revision-Date: 2012-11-23 08:38+0100\n"
+"PO-Revision-Date: 2012-12-03 16:30+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "MIME-Version: 1.0\n"
@@ -48,7 +48,7 @@ msgstr "Sampling"
 #. Default: "Download"
 #: ./opengever/base/viewlets/history.pt:42
 msgid "button_file"
-msgstr "Kopie herunterladen."
+msgstr "Kopie herunterladen"
 
 #. Default: "PDF"
 #: ./opengever/base/viewlets/history.pt:52
