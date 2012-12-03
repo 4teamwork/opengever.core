@@ -5,7 +5,10 @@ Changelog
 2.6.1 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Disalbe searchableText check in p.a.search filter_query.
+  Issue #1700 Plone Version auf 4.2.1 heben.
+  https://extranet.4teamwork.ch/extern/opengever-kanton-zug/sprint-backlog/1700
+  [phgross]
 
 
 2.6 (2012-11-28)
