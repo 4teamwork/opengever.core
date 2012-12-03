@@ -1,7 +1,7 @@
 from DateTime import DateTime
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone.browser.navtree import getNavigationRoot
-from plone.app.search.browser import Search
+from plone.app.search.browser import Search, quote_chars, EVER
 from zope.component import getMultiAdapter
 
 
