@@ -35,8 +35,9 @@ class OpengeverSearch(Search):
         valid_keys = self.valid_keys + tuple(catalog.indexes())
 
         for k, v in request.form.items():
-            if v and ((k in valid_keys) or k.startswith('facet.')) and not k.endswith('_usage'):
-                if '%s_usage' %(k) in request.form.keys():
+            if v and ((k in valid_keys) or k.startswith('facet.')) \
+                    and not k.endswith('_usage'):
+                if '%s_usage' % (k) in request.form.keys():
                     v = {'query': (DateTime(v[0]), DateTime(v[1])),
                          'range': 'min:max'}
                 query[k] = v
