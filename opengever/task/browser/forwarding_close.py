@@ -30,8 +30,7 @@ class ForwardingCloseForm(Form):
         if not errors:
             store_view = self.context.restrictedTraverse(
                 'store_forwarding_in_yearfolder')
-
-            store_view.store_to_yearfolder()
+            store_view.store_to_yearfolder(text=data.get('text'))
             return self.request.RESPONSE.redirect('.')
 
     @buttonAndHandler(_(u'button_cancel', default=u'Cancel'))
