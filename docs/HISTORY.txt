@@ -5,7 +5,8 @@ Changelog
 2.2.1 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- DossierCover: Added small fix in description cropping.
+  [phgross]
 
 
 2.2 (2012-11-28)

@@ -173,7 +173,7 @@ class TestDossierCoverPDFView(MockTestCase):
         # a to long description wuthout any linebreaks
         description_1 = 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor in- vidunt ut labore et dolore magna aliquyam erat, sed diam volup- tua. At ve- ro eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ip- sum dolor sit amet. Lorem ipsum dolor Lorem ipsum dolor sit amet consetetur, sadipscing elitr, sed diam nonumy eirmod tempor in- vidunt ut laboree et dolore magna aliquyam erat, sed diam volup- tua.'
 
-        cutted_description_1 = 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor in- vidunt ut labore et dolore magna aliquyam erat, sed diam volup- tua. At ve- ro eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ip- sum dolor sit amet. Lorem ipsum dolor Lorem ipsum dolor sit amet c ...'
+        cutted_description_1 = 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor in- vidunt ut labore et dolore magna aliquyam erat, sed diam volup- tua. At ve- ro eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ip- sum dolor sit amet. Lorem ipsum ...'
 
         # a description with to many lines
         description_2 = """Lorem ipsum dolor sit amet:

@@ -115,10 +115,14 @@ class DossierCoverPDFView(grok.View, BaseStandalonePDFView):
             else:
                 counter += 1
 
-            cutted_description.append(line)
             if counter >= max_lines:
+                # fill out the rest of the free place.
+                cutted_description.append(
+                    line[:int(max_lines * self.description_max_line_length)])
                 cutted = True
                 break
+            else:
+                cutted_description.append(line)
 
         description = '\n'.join(cutted_description)
 
