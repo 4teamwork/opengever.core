@@ -5,6 +5,11 @@ Changelog
 2.4.2 (unreleased)
 ------------------
 
+- Made sure documents can't be checked out if another user holds a lock.
+  Issue #1722 Durch "Metadaten bearbeiten" ausgestelltes Lock sollte "Auschecken und Bearbeiten" verhindern
+  https://extranet.4teamwork.ch/extern/opengever-kanton-zug/sprint-backlog/1772/
+  [lgraf]
+
 - Overview: Made download copy link conditionally.
   [phgross]
 
