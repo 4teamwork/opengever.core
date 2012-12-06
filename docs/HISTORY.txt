@@ -5,7 +5,8 @@ Changelog
 2.3 (unreleased)
 ----------------
 
-- Nothing changed yet.
+- Adjust some translations.
+  [phgross]
 
 
 2.2 (2012-11-28)
