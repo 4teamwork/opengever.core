@@ -104,6 +104,9 @@ class TestDocumentOverview(MockTestCase):
           </a>"""
         self.assertTrue(edit_link in self.browser.contents)
 
+        active_copy_download_link = """<a class="function-download-copy link-overlay" href="http://nohost/plone/document-2/file_download_confirmation">Download copy</a>"""
+        self.assertTrue(active_copy_download_link in self.browser.contents)
+
     def test_over_other_checked_out(self):
         """Check the document overview when the document is checked out,
         by another user:
@@ -117,3 +120,6 @@ class TestDocumentOverview(MockTestCase):
             Edit Document
           </span>"""
         self.assertTrue(inactive_edit_link in self.browser.contents)
+
+        inactive_copy_download_link = """<span class="function-download-copy-inactive link-overlay discreet">Download copy</span>"""
+        self.assertTrue(inactive_copy_download_link in self.browser.contents)

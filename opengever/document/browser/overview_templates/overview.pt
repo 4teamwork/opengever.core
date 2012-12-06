@@ -43,7 +43,8 @@
 			<td tal:condition="context/file"
           tal:define="preview_supported view/is_preview_supported;
                       pdf_download_available view/is_pdf_download_available;
-                      checkout_and_edit_available view/is_checkout_and_edit_available">
+                      checkout_and_edit_available view/is_checkout_and_edit_available;
+                      copy_download_available view/is_download_copy_available">
 
         <!-- icon, filename, size -->
         <span  tal:attributes="class view/get_css_class"></span>
@@ -81,10 +82,17 @@
             Edit Document
           </span>
         </tal:cond>
-        &nbsp;|&nbsp;
-        <a class="function-download-copy link-overlay"
-           tal:attributes="href string:${context/absolute_url}/file_download_confirmation"
-           href="#" i18n:translate="label_download_copy">Download copy</a>
+        <tal:cond tal:condition="copy_download_available">
+          &nbsp;|&nbsp;
+          <a class="function-download-copy link-overlay"
+             tal:attributes="href string:${context/absolute_url}/file_download_confirmation"
+             href="#" i18n:translate="label_download_copy">Download copy</a>
+        </tal:cond>
+        <tal:cond tal:condition="not: copy_download_available">
+          &nbsp;|&nbsp;
+          <span class="function-download-copy-inactive link-overlay discreet"
+                i18n:translate="label_download_copy">Download copy</span>
+        </tal:cond>
         <hr/>
 			</td>
 			<td span tal:condition="not:context/file">

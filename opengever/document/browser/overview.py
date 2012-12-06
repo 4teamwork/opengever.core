@@ -67,3 +67,14 @@ class Overview(DisplayForm, OpengeverTab):
                 return False
 
         return manager.is_checkout_allowed()
+
+    def is_download_copy_available(self):
+        """Disable copy link when the document is checked
+        out by an other user."""
+
+        manager = queryMultiAdapter(
+            (self.context, self.request), ICheckinCheckoutManager)
+        if manager.checked_out():
+            if manager.checked_out() != getSecurityManager().getUser().getId():
+                return False
+        return True
