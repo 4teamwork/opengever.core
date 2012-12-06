@@ -33,6 +33,10 @@ class BaseLayer(PloneSandboxLayer):
         from opengever import dossier
         xmlconfig.file('configure.zcml', package=dossier, context=configurationContext)
 
+        from opengever import base
+        xmlconfig.file('configure.zcml', package=base, context=configurationContext)
+        xmlconfig.file('overrides.zcml', package=base, context=configurationContext)
+
         from opengever import advancedsearch
         xmlconfig.file('configure.zcml', package=advancedsearch, context=configurationContext)
 
