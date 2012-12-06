@@ -102,7 +102,7 @@ class EditingDocument(grok.View):
         elif manager.checked_out() is not None:
             info = getUtility(IContactInformation)
             msg = _(u"The Document is allready checked out by: ${userid}",
-                    mapping={'userid': info.describe(userid)})
+                    mapping={'userid': info.describe(manager.checked_out())})
             IStatusMessage(self.request).addStatusMessage(msg, type='error')
             return self.request.RESPONSE.redirect(
                 get_redirect_url(self.context))
