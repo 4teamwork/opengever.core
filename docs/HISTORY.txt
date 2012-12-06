@@ -5,7 +5,8 @@ Changelog
 2.6.2 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Added search skins script, which redirect to the new search browserview.
+  [phgross]
 
 
 2.6.1 (2012-12-04)
