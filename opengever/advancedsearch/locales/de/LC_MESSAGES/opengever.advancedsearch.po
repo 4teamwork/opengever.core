@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "POT-Creation-Date: 2011-05-31 14:42+0000\n"
-"PO-Revision-Date: 2011-01-27 13:34+0100\n"
+"PO-Revision-Date: 2012-12-06 12:40+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -76,7 +76,9 @@ msgstr "Auftraggeber auswählen"
 
 #: ./opengever/advancedsearch/advanced_search.py:112
 msgid "help_portal_type"
-msgstr "Wählen Sie den Inhaltstyp aus, nachdem gesucht werden soll.\nDurchsucht werden nur Inhalte, die sich im aktuellen Mandanten befinden."
+msgstr ""
+"Wählen Sie den Inhaltstyp aus, nach dem gesucht werden soll.\n"
+"Durchsucht werden nur Inhalte, die sich im aktuellen Mandanten befinden."
 
 #: ./opengever/advancedsearch/advanced_search.py:180
 msgid "help_receipt_date"
