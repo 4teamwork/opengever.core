@@ -12,7 +12,8 @@ imports
     >>> from Products.CMFCore.utils import getToolByName
     >>> from Products.Five.testbrowser import Browser
     >>> from opengever.base.interfaces import IRedirector
-    >>> from plone.app.testing import login, setRoles, TEST_USER_NAME, TEST_USER_ID
+    >>> from plone.app.testing import login, logout, setRoles, TEST_USER_NAME, TEST_USER_ID
+    >>> from plone.locking.interfaces import IRefreshableLockable
 
 
 standard test stuff
@@ -53,8 +54,11 @@ create a document, and get the CheckinCheckoutManager for the document
     ...     document_date=datetime.date(2011,1,1), file=mok_file1)
     >>> doc2 = createContentInContainer(portal, 'opengever.document.document',
     ...     title=u"Doc two", file=mok_file2)
+    >>> doc3 = createContentInContainer(portal, 'opengever.document.document',
+    ...     title=u"Doc three", file=mok_file2)
     >>> manager = getMultiAdapter((doc1, portal.REQUEST), ICheckinCheckoutManager)
     >>> manager2 = getMultiAdapter((doc2, portal.REQUEST), ICheckinCheckoutManager)
+    >>> manager3 = getMultiAdapter((doc3, portal.REQUEST), ICheckinCheckoutManager)
 
 
 
@@ -79,6 +83,44 @@ cancelling and checkin should be allowed for the 'test_user_1_'
     True
     >>> manager.is_checkout_allowed()
     False
+
+
+
+
+
+
+
+
+
+Checkout when locked by another user:
+_____________________________________
+
+Create a second user to test locking and checkout
+    >>> portal.acl_users.userFolderAddUser('other_user', 'secret', ['Member'], [])
+
+Checkout should first be allowed
+    >>> manager3.is_checkout_allowed()
+    True
+
+Switch to different user and lock the document
+    >>> logout()
+    >>> login(portal, 'other_user')
+    >>> setRoles(portal, 'other_user', ['Manager','Editor','Contributor'])
+    >>> lockable = IRefreshableLockable(doc3)
+    >>> lockable.lock()
+
+Log back in as the regular test user
+    >>> logout()
+    >>> login(portal, TEST_USER_NAME)
+    >>> setRoles(portal, TEST_USER_ID, ['Manager','Editor','Contributor'])
+
+Checkout should not be allowed since the document is locked by another user
+    >>> manager3.is_checkout_allowed()
+    False
+
+
+
+
 
 
 
