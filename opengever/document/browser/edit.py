@@ -5,7 +5,6 @@ from five import grok
 from opengever.base.interfaces import IRedirector
 from opengever.document import _
 from opengever.document.behaviors import IBaseDocument
-from opengever.document.document import IDocumentSchema
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.ogds.base.interfaces import IContactInformation
