@@ -1,0 +1,19 @@
+<configure
+    xmlns:z3c="http://namespaces.zope.org/z3c"
+    i18n_domain="opengever.document">
+
+    <z3c:widgetTemplate
+        mode="no_download_display"
+        widget="plone.formwidget.namedfile.interfaces.INamedFileWidget"
+        layer="z3c.form.interfaces.IFormLayer"
+        template="no_download_display.pt"
+        />
+
+    <z3c:widgetTemplate
+        mode="no_download_input"
+        widget="plone.formwidget.namedfile.interfaces.INamedFileWidget"
+        layer="z3c.form.interfaces.IFormLayer"
+        template="no_download_input.pt"
+        />
+
+</configure>

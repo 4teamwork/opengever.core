@@ -1,20 +1,21 @@
-"""Document form customizations.
-"""
-
 from AccessControl import getSecurityManager
 from opengever.document.interfaces import ICheckinCheckoutManager
+from opengever.document.interfaces import NO_DOWNLOAD_DISPLAY_MODE
+from opengever.document.interfaces import NO_DOWNLOAD_INPUT_MODE
 from plone.dexterity.browser.edit import DefaultEditForm
 from plone.z3cform import layout
-from z3c.form.interfaces import DISPLAY_MODE
 from zope.component import queryMultiAdapter
 
 
 class DocumentEditForm(DefaultEditForm):
-    """Custom edit form for documents, which hides the file field
-    when document is not checked out.
+    """Custom edit form for documents, which displays some
+    different and customized edit modes.
     """
 
     def updateWidgets(self):
+        """Using document specific formwidget.namedfile modes.
+        """
+
         super(DocumentEditForm, self).updateWidgets()
 
         # get the checkin checkout manager
@@ -23,13 +24,17 @@ class DocumentEditForm(DefaultEditForm):
         if not manager:
             return
 
-        current_user_id = getSecurityManager().getUser().getId()
-        if self.context.digitally_available and (not manager.checked_out()
-                or manager.checked_out() != current_user_id):
-            filefields = [g.fields.get('file') for g in self.groups
-                          if 'file' in g.fields]
-            if len(filefields) > 0:
-                filefields[0].mode = DISPLAY_MODE
+        filefields = [g.fields for g in self.groups]
+        if len(filefields) > 0:
+            file_field = filefields[0]
 
+            current_user_id = getSecurityManager().getUser().getId()
+            if self.context.digitally_available:
+                if manager.checked_out() == current_user_id:
+                    file_field.mode = NO_DOWNLOAD_INPUT_MODE
+                else:
+                    file_field.mode = NO_DOWNLOAD_DISPLAY_MODE
+            else:
+                file_field.mode = NO_DOWNLOAD_INPUT_MODE
 
 DocumentEditView = layout.wrap_form(DocumentEditForm)

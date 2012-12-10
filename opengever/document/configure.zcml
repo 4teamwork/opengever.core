@@ -16,6 +16,7 @@
     <grok:grok package="." />
 
     <include package=".checkout" />
+    <include package=".widgets" />
 
     <!-- vdex vocabularies folder -->
     <vdex:vocabulary directory="vdexvocabs" />

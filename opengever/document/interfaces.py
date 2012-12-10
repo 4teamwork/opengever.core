@@ -2,6 +2,10 @@ from zope.interface import Interface
 from zope.component.interfaces import IObjectEvent
 from zope import schema
 
+# custom plone.formwidget.namedfile modes
+NO_DOWNLOAD_DISPLAY_MODE = 'no_download_display'
+NO_DOWNLOAD_INPUT_MODE = 'no_download_input'
+
 
 class IObjectCheckedOutEvent(IObjectEvent):
     """ Event interface for events.ObjectCheckedOutEvent
