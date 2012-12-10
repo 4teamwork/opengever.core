@@ -21,11 +21,12 @@
                     readonly view/readonly;
                     accesskey view/accesskey;
                     onselect view/onselect;"
-    tal:define="exists python: view.value is not None;
+    tal:define="download_url string:${context/absolute_url}/file_download_confirmation;
+                exists python: view.value is not None;
                 action view/action;
                 allow_nochange view/allow_nochange;">
     <span tal:condition="python: exists and action=='nochange'">
-        <span tal:content="view/filename">Filename</span>
+        <a class="link-overlay" tal:content="view/filename" tal:attributes="href download_url">Filename</a>
         <span class="discreet"> &mdash;
             <span tal:define="sizekb view/file_size" tal:replace="sizekb">100</span> KB
         </span>
