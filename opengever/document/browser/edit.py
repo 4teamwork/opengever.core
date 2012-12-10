@@ -95,8 +95,19 @@ class EditingDocument(grok.View):
             self.context, 'portal_membership').getAuthenticatedMember().getId()
 
         if manager.checked_out() == userid:
-            #No checkout just open with the external edit
-            pass
+            # check if the document is locked
+            # otherwies only open with the ext. editor
+            info = getMultiAdapter((self.context, self.request),
+                        name="plone_lock_info")
+
+            if info.is_locked():
+                msg = _(u"Can't edit the document at moment, "
+                        "beacuse it's locked.")
+                IStatusMessage(
+                        self.request).addStatusMessage(msg, type='error')
+
+                return self.request.RESPONSE.redirect(
+                        get_redirect_url(self.context))
 
         elif manager.checked_out() is not None:
             info = getUtility(IContactInformation)

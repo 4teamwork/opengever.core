@@ -42,8 +42,8 @@ class CheckinCheckoutManager(grok.MultiAdapter):
         if self.checked_out():
             return False
 
-        # does another user hold a lock?
-        if self.locked_by_another_user():
+        # does a user hold a lock?
+        if self.is_locked():
             return False
 
         # is it versionable?
@@ -235,24 +235,15 @@ class CheckinCheckoutManager(grok.MultiAdapter):
         notify(ObjectRevertedToVersion(self.context, version_id,
                                        create_version))
 
-
-    def locked_by_another_user(self):
-        """Returns True if another user has a WebDAV lock on the adapted
+    def is_locked(self):
+        """Returns True if a user has a WebDAV lock on the adapted
         document, False otherwise.
         """
         lockable = IRefreshableLockable(self.context)
-        current_user_id = getSecurityManager().getUser().getId()
         # List of all users that hold a lock on the document
-        locked_by = []
         if lockable and lockable.locked():
-            for lock_info in lockable.lock_info():
-                # lock_info() returns a list of lock_infos
-                if 'creator' in lock_info:
-                    locked_by.append(lock_info['creator'])
-            if any(user_id != current_user_id for user_id in locked_by):
-                return True
+            return True
         return False
-
 
     def clear_locks(self):
         """Clears any WebDAV locks on the adapted document left over by
