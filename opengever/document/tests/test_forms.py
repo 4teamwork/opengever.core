@@ -72,7 +72,7 @@ class TestDocumentIntegration(unittest.TestCase):
 
         filename_display = '''<span class="named-file-widget namedblobfile-field" id="form-widgets-file">
     <span>
-        <span>test.txt</span>
+        <a class="link-overlay" href="http://nohost/plone/document-xy/file_download_confirmation">test.txt</a>
         <span class="discreet"> &mdash;
             0 KB
         </span>
