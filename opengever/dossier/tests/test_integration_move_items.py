@@ -1,6 +1,6 @@
 import unittest2 as unittest
 from opengever.dossier.testing import OPENGEVER_DOSSIER_INTEGRATION_TESTING
-
+from plone.dexterity.utils import createContentInContainer
 
 class TestMoveItemsIntegration(unittest.TestCase):
 
@@ -23,8 +23,9 @@ class TestMoveItemsIntegration(unittest.TestCase):
         dossier2 = repo2[repo2.invokeFactory(
             'opengever.dossier.businesscasedossier', 'dossier2')]
 
-        doc1 = dossier1[dossier1.invokeFactory(
-            'opengever.document.document', 'doc1')]
+        doc1 = createContentInContainer(dossier1,
+            'opengever.document.document', title=u'dxc3\xb6c1')
+
         task1 = dossier1[dossier1.invokeFactory(
             'opengever.task.task', 'task1')]
         subdossier1 = dossier1[dossier1.invokeFactory(
@@ -100,7 +101,7 @@ class TestMoveItemsIntegration(unittest.TestCase):
         self.assertTrue(dossier1.hasChildNodes() == 0)
         self.assertTrue(dossier2.hasChildNodes() == 3)
 
-        self.failUnless(portal.unrestrictedTraverse('repo2/dossier2/doc1'))
+        self.failUnless(portal.unrestrictedTraverse('repo2/dossier2/document-2'))
         self.failUnless(portal.unrestrictedTraverse('repo2/dossier2/task1'))
         self.failUnless(
             portal.unrestrictedTraverse('repo2/dossier2/subdossier1'))
