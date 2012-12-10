@@ -24,7 +24,8 @@ class DocumentEditForm(DefaultEditForm):
         if not manager:
             return
 
-        filefields = [g.fields for g in self.groups]
+        filefields = [g.fields.get('file') for g in self.groups
+                      if 'file' in g.fields]
         if len(filefields) > 0:
             file_field = filefields[0]
 
