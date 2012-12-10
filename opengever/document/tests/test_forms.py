@@ -60,6 +60,13 @@ class TestDocumentIntegration(unittest.TestCase):
         self.assertFalse(
                 'Replace with new file' in self.browser.contents)
 
+        # save should not adjust the file
+        self.browser.getControl(name="form.widgets.title").value = 'Other title'
+        self.browser.getControl(name="form.buttons.save").click()
+
+        self.assertFalse(self.document.file is None)
+
+
     def test_edit_form_document_is_checked_out(self):
 
         # checkout the document

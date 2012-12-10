@@ -26,4 +26,8 @@
     <span tal:condition="not:exists" class="discreet" i18n:translate="no_file">
         No file
     </span>
+    <input type="hidden" value="nochange" class="noborder" tal:define="action view/action"
+        tal:attributes="name string:${view/name}.action;
+                        id string:${view/id}-nochange;" />
+
 </span>
