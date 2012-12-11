@@ -18,10 +18,6 @@ class TaskPostFactoryMenu(grok.MultiAdapter):
         self.request = request
 
     def __call__(self, factories):
-        if not ITask.providedBy(self.context):
-            # use default
-            return factories
-
         cleaned_factories = []
         for factory in factories:
             # drop mail factory
