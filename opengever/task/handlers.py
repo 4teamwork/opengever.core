@@ -7,12 +7,13 @@ from zope.app.container.interfaces import IObjectAddedEvent
 
 
 @grok.subscribe(IDexterityContent, IObjectAddedEvent)
-def create_response(context, event):
-    """When adding a new task object within a task, add a response.
+def create_subtask_response(context, event):
+    """When adding a new task object within a task(subtask),
+    it adds a response to the maintask.
     """
 
     # the event is fired multiple times when the task was transported, so we
-    # need to verify that the request was not called by another client
+    # need to verify that the request was not called by another client.
     request = context.REQUEST
     if request.get_header('X-OGDS-AC', None) or \
             request.get_header('X-OGDS-CID', None) or \

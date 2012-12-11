@@ -123,6 +123,34 @@ class TestTaskIntegration(unittest.TestCase):
         wft.doActionFor(t2, 'task-transition-open-tested-and-closed')
         self.failUnless(t2.date_of_completion.date() == datetime.now().date())
 
+    def test_subtask_response(self):
+        """When a subtask is added it should automaticly
+        add a response on maintask"""
+
+        intids = getUtility(IIntIds)
+        maintask = create_task(self.portal, title='maintask')
+        subtask = create_task(maintask, title='subtask')
+        responses = IResponseContainer(maintask)
+        self.assertEquals(
+            responses[-1].added_object.to_id, intids.getId(subtask))
+        self.assertEquals(len(responses), 2)
+
+        # all different remote requests should not
+        # generate an response
+        maintask.REQUEST.environ['X_OGDS_AC'] = 'hugo.boss'
+        create_task(maintask, title='subtask')
+        self.assertEquals(len(IResponseContainer(maintask)), 2)
+
+        maintask.REQUEST.environ['X_OGDS_AC'] = None
+        maintask.REQUEST.environ['X_OGDS_CID'] = 'client_a'
+        create_task(maintask, title='subtask')
+        self.assertEquals(len(IResponseContainer(maintask)), 2)
+
+        maintask.REQUEST.environ['X_OGDS_CID'] = None
+        maintask.REQUEST.set('X-CREATING-SUCCESSOR', True)
+        create_task(maintask, title='subtask')
+        self.assertEquals(len(IResponseContainer(maintask)), 2)
+
 
 def test_suite():
     return unittest.defaultTestLoader.loadTestsFromName(__name__)
