@@ -1,4 +1,6 @@
 from Acquisition import aq_inner, aq_parent
+from Products.CMFCore.interfaces import IActionSucceededEvent
+from datetime import datetime
 from five import grok
 from opengever.task.task import ITask
 from opengever.task.util import add_simple_response
@@ -25,3 +27,22 @@ def create_subtask_response(context, event):
     if ITask.providedBy(parent):
         # add a response with a link to the object
         add_simple_response(parent, added_object=context)
+
+
+@grok.subscribe(ITask, IActionSucceededEvent)
+def set_dates(task, event):
+    """Set expectedStartOfWork and completion date, when a corresponding
+    transition succeded."""
+
+    resolved_transitions = ['task-transition-in-progress-resolved',
+                            'task-transition-open-resolved',
+                            'task-transition-open-tested-and-closed',
+                            'task-transition-in-progress-tested-and-closed',
+                            ]
+
+    if event.action == 'task-transition-open-in-progress':
+        task.expectedStartOfWork = datetime.now()
+    elif event.action in resolved_transitions:
+        task.date_of_completion = datetime.now()
+    if event.action == 'task-transition-resolved-in-progress':
+        task.date_of_completion = None

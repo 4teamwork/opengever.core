@@ -1,5 +1,4 @@
 from Acquisition import aq_inner, aq_parent
-from Products.CMFCore.interfaces import IActionSucceededEvent
 from collective import dexteritytextindexer
 from datetime import datetime, timedelta
 from five import grok
@@ -391,23 +390,6 @@ class SearchableTextExtender(grok.Adapter):
                 'utf-8'))
 
         return ' '.join(searchable)
-
-
-@grok.subscribe(ITask, IActionSucceededEvent)
-def set_dates(task, event):
-
-    resolved_transitions = ['task-transition-in-progress-resolved',
-                            'task-transition-open-resolved',
-                            'task-transition-open-tested-and-closed',
-                            'task-transition-in-progress-tested-and-closed',
-                            ]
-
-    if event.action == 'task-transition-open-in-progress':
-        task.expectedStartOfWork = datetime.now()
-    elif event.action in resolved_transitions:
-        task.date_of_completion = datetime.now()
-    if event.action == 'task-transition-resolved-in-progress':
-        task.date_of_completion = None
 
 
 def related_document(context):
