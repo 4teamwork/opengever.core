@@ -5,8 +5,11 @@ Changelog
 2.4.3 (unreleased)
 ------------------
 
+- Added locking checks in checkout manager.
+  [phgross]
+
 - Implements document specifig forwidget.namedfile modes,
-  which doesn't display a file-donwlaod link.
+  which doesn't display a file-download link.
   [phgross]
 
 
