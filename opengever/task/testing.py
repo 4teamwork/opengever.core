@@ -6,6 +6,7 @@ from opengever.ogds.base.setuphandlers import _create_example_user
 from opengever.ogds.base.setuphandlers import create_sql_tables
 from opengever.ogds.base.utils import create_session
 from plone.app.testing import FunctionalTesting
+from plone.app.testing import IntegrationTesting
 from plone.app.testing import PLONE_FIXTURE
 from plone.app.testing import PloneSandboxLayer
 from plone.app.testing import TEST_USER_ID, setRoles
@@ -149,6 +150,9 @@ class TaskFunctionalLayer(PloneSandboxLayer):
 
 
 OPENGEVER_TASK_FIXTURE = TaskFunctionalLayer()
-OPENGEVER_TASK_INTEGRATION_TESTING = FunctionalTesting(
+OPENGEVER_TASK_INTEGRATION_TESTING = IntegrationTesting(
     bases=(OPENGEVER_TASK_FIXTURE, ),
     name="OpengeverTask:Integration")
+OPENGEVER_TASK_FUNCTIONAL_TESTING = FunctionalTesting(
+    bases=(OPENGEVER_TASK_FIXTURE, ),
+    name="OpengeverTask:Functional")
