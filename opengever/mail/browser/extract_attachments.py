@@ -189,13 +189,7 @@ class ExtractAttachments(grok.View):
 
             for schemata in iterSchemata(doc):
                 for name, field in getFieldsInOrder(schemata):
-                    if field.get(
-                            field.interface(doc)) == field.missing_value \
-                                or field.get(field.interface(doc)) is None:
-
-                        # No value is given from the pipeline,
-                        # so we try to set the default value
-                        # otherwise we set the missing value
+                    if name not in kwargs.keys():
                         default = queryMultiAdapter((
                                 doc,
                                 doc.REQUEST,  # request

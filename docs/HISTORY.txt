@@ -5,7 +5,10 @@ Changelog
 2.2.1 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Fixed default value setter in extract_attachments.
+  Issue #311 E-Mail-Import
+  https://extranet.4teamwork.ch/support/ph-vs/tracker/311
+  [phgross]
 
 
 2.2 (2012-11-28)
