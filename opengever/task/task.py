@@ -180,10 +180,6 @@ validator.WidgetValidatorDiscriminators(
 provideAdapter(NoCheckedoutDocsValidator)
 
 
-# # XXX doesn't work yet.
-#@form.default_value(field=ITask['issuer'])
-
-
 def default_issuer(data):
     portal_state = getMultiAdapter(
         (data.context, data.request),
@@ -198,25 +194,6 @@ class Task(Container):
     def __init__(self, *args, **kwargs):
         super(Task, self).__init__(*args, **kwargs)
 
-    # REMOVED UNCOMMENT unused title function
-    # def Title(self):
-    #     registry = queryUtility(IRegistry)
-    #     proxy = registry.forInterface(ITaskSettings)
-    #     title = "#%s %s"% (
-    #   getUtility(ISequenceNumber).get_number(self),self.task_type)
-    #     relatedItems = getattr(self,'relatedItems',[])
-    #     if len(relatedItems) == 1:
-    #         title += " (%s)" % self.relatedItems[0].to_object.title
-    #     elif len(relatedItems) > 1:
-    #         title += " (%i Dokumente)" % len(self.relatedItems)
-    #     if self.text:
-    #         crop_length = int(getattr(proxy,'crop_length',20))
-    #         text = self.text.encode('utf8')
-    #         text = self.restrictedTraverse('@@plone').cropText(
-    #   text,crop_length)
-    #         text = text.decode('utf8')
-    #         title += ": %s" % text
-    #     return title
     @property
     def sequence_number(self):
         return self._sequence_number
