@@ -1,22 +1,21 @@
 from Acquisition import aq_inner, aq_parent
+from Products.CMFCore.interfaces import ISiteRoot
+from plone.app.dexterity.behaviors.metadata import MetadataBase
 from plone.dexterity.interfaces import IDexterityContent
 from plone.dexterity.interfaces import IDexterityFTI
+from plone.namedfile.utils import get_contenttype
+from plone.rfc822.interfaces import IPrimaryField
+from plone.rfc822.interfaces import IPrimaryFieldInfo
+from urllib import quote
+from z3c.form.interfaces import IValue
+from z3c.form.value import ComputedValue
 from zope.component import adapts
 from zope.component import getMultiAdapter
 from zope.component import getUtility
+from zope.interface import implements
 from zope.schema import getFieldsInOrder
 import re
 import zope.schema.vocabulary
-from urllib import quote
-
-from zope.interface import implements
-from plone.rfc822.interfaces import IPrimaryFieldInfo
-from plone.rfc822.interfaces import IPrimaryField
-
-from Products.CMFCore.interfaces import ISiteRoot
-from plone.app.dexterity.behaviors.metadata import MetadataBase
-from z3c.form.interfaces import IValue
-from z3c.form.value import ComputedValue
 
 
 class PrimaryFieldInfo(object):
@@ -235,11 +234,16 @@ def split_string_by_numbers(x):
     return [int(y) if y.isdigit() else y for y in l]
 
 
-def set_attachment_content_disposition(request, filename):
+def set_attachment_content_disposition(request, filename, file=None):
     """ Set the content disposition on the request for the given browser
     """
     if not filename:
         return
+
+    if file:
+        contenttype = get_contenttype(file)
+        request.response.setHeader("Content-Type", contenttype)
+        request.response.setHeader("Content-Length", file.getSize())
 
     user_agent = request.get('HTTP_USER_AGENT', '')
     if 'MSIE' in user_agent:

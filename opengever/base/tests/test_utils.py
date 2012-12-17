@@ -1,7 +1,8 @@
 from ftw.testing import MockTestCase
-from opengever.base.behaviors.utils import set_attachment_content_disposition
-from urllib import quote
 from mocker import ANY
+from opengever.base.behaviors.utils import set_attachment_content_disposition
+from plone.namedfile.file import NamedFile
+from urllib import quote
 
 
 class TestAttachmentContentDisposition(MockTestCase):
@@ -52,3 +53,17 @@ class TestAttachmentContentDisposition(MockTestCase):
         self.assertEquals(
             self.header[0],
             'attachment; filename="%s"' % 'Default Name')
+
+    def test_with_file(self):
+        self.expect(self.request.get('HTTP_USER_AGENT', ANY)).result('DEF')
+
+        monk_file = NamedFile('bla bla', filename=u'test.txt')
+
+        self.replay()
+
+        set_attachment_content_disposition(
+            self.request, 'Default Name', file=monk_file)
+
+        self.assertEquals(
+            self.header,
+            ['text/plain', 7, 'attachment; filename="Default Name"'])
