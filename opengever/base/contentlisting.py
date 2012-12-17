@@ -1,3 +1,4 @@
+from Missing import Value as MissingValue
 from opengever.base.browser.helper import get_css_class
 from plone.app.contentlisting.catalog import \
     CatalogContentListingObject as CoreListingObject
@@ -7,7 +8,8 @@ from zope.component import getMultiAdapter
 class OpengeverCatalogContentListingObject(CoreListingObject):
     """OpenGever specific catalog content listing.
     Provides correct MIME type icons and containing dossier for rendering
-    breadcrumbs in search results.
+    breadcrumbs in search results. Additionaly it provides cropped Title and
+    Description methods.
     """
 
     def ContentTypeClass(self):
@@ -21,19 +23,26 @@ class OpengeverCatalogContentListingObject(CoreListingObject):
         """
         return None
 
-    def containing_dossier(self):
-        """Used for rendering breadcrumbs in search results.
-        """
+    def _crop_text(self, text, length):
+        if not text or text == MissingValue:
+            return ''
+
         plone_view = getMultiAdapter((self, self.request), name=u'plone')
-        return plone_view.cropText(self._brain.containing_dossier, 200)
+        return plone_view.cropText(text, length)
+
+    def containing_dossier(self):
+        """Returns the the title of the containing_dossier cropped to 200
+        characters."""
+
+        return self._crop_text(self._brain.containing_dossier, 200)
 
     def CroppedTitle(self):
-        plone_view = getMultiAdapter((self, self.request), name=u'plone')
-        return plone_view.cropText(self.Title(), 200)
+        """Returns the title cropped to 200 characters"""
+
+        return self._crop_text(self.Title(), 200)
 
     def CroppedDescription(self):
         """The CroppedDescription method from the corelisting
         is not implemented yet."""
 
-        plone_view = getMultiAdapter((self, self.request), name=u'plone')
-        return plone_view.cropText(self.Description(), 400)
+        return self._crop_text(self.Description(), 400)

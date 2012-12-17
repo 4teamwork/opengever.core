@@ -1,0 +1,15 @@
+<configure xmlns="http://namespaces.zope.org/zope"
+           i18n_domain="Five">
+
+    <include package="Products.Five" file="meta.zcml" />
+
+    <include package="AccessControl" file="permissions.zcml" />
+    <include package="Products.CMFCore" file="permissions.zcml" />
+    <include package="Products.CMFPlone.browser" file="configure.zcml" />
+
+    <include package="zope.traversing" />
+    <include package="zope.i18n" />
+
+    <include package="opengever.base" file="overrides.zcml" />
+
+</configure>

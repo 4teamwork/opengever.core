@@ -5,6 +5,11 @@ Changelog
 2.6.3 (unreleased)
 ------------------
 
+- Made text cropping safer in different contentlisting methods including tests.
+  Issue #1785 Fehler im Opengever Contentlisting beim containing_dossier cropping
+  https://extranet.4teamwork.ch/extern/opengever-kanton-zug/sprint-backlog/1785/view
+  [phgross]
+
 - Extend set_attachment_content_disposition with the functionality to sets
   file size and contenttype.
   Issue #1783 UnicodeDecodeError in der neuen Download View.
