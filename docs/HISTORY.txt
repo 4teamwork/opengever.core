@@ -5,17 +5,15 @@ Changelog
 2.4.4 (unreleased)
 ------------------
 
-- Nothing changed yet.
-
-
-2.4.3 (2012-12-11)
-------------------
-
 - Downlaod view: Encode filename to avoid unicodeencodeerros and
   use set_attachment_content_disposition for correct download with IE.
   Issue #1783 UnicodeDecodeError in der neuen Download View.
   https://extranet.4teamwork.ch/extern/opengever-kanton-zug/sprint-backlog/1783/view
   [phgross]
+
+
+2.4.3 (2012-12-11)
+------------------
 
 - Added locking checks in checkout manager.
   [phgross]
