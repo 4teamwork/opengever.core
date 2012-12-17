@@ -27,6 +27,13 @@ class TestDocumentDownloadView(MockTestCase):
         doc1.file = monk_file
         transaction.commit()
 
+        doc2 = createContentInContainer(
+            portal, 'opengever.document.document', 'document')
+
+        monk_file = NamedBlobFile('bla bla', filename=u't\xf6st.txt')
+        doc2.file = monk_file
+        transaction.commit()
+
         downloaded_handler = self.stub()
         self.mock_handler(downloaded_handler, [IFileCopyDownloadedEvent, ])
         self.expect(downloaded_handler(ANY)).result(True)
@@ -34,6 +41,10 @@ class TestDocumentDownloadView(MockTestCase):
         self.replay()
 
         result = doc1.unrestrictedTraverse('download')()
+        result.seek(0)
+        self.assertEquals(result.read(), 'bla bla')
+
+        result = doc2.unrestrictedTraverse('download')()
         result.seek(0)
         self.assertEquals(result.read(), 'bla bla')
 

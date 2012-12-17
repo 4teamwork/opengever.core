@@ -1,8 +1,10 @@
 from five import grok
+from opengever.base.behaviors.utils import set_attachment_content_disposition
 from opengever.base.viewlets.download import DownloadFileVersion
 from opengever.document.document import IDocumentSchema
 from opengever.document.events import FileCopyDownloadedEvent
 from plone.namedfile.browser import Download
+from plone.namedfile.utils import stream_data
 from zope.event import notify
 
 
@@ -12,9 +14,17 @@ class DocumentDownload(Download):
     """
 
     def __call__(self):
-        stream = super(DocumentDownload, self).__call__()
-        notify(FileCopyDownloadedEvent(self.context))
-        return stream
+
+        file = self._getFile()
+
+        if not self.filename:
+            self.filename = getattr(file, 'filename', self.fieldname)
+
+        if self.filename:
+            self.filename = self.filename.encode('utf-8')
+
+        set_attachment_content_disposition(self.request, self.filename, file)
+        return stream_data(file)
 
 
 class DownloadConfirmation(grok.View):
