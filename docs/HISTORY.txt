@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-2.4.4 (unreleased)
+2.4.4 (2012-12-18)
 ------------------
 
 - Downlaod view: Encode filename to avoid unicodeencodeerros and
