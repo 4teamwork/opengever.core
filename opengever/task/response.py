@@ -357,26 +357,6 @@ class ResponseView(grok.Viewlet, Base):
         return value
 
 
-"""
-class AddFormView(layout.FormWrapper, grok.Viewlet, Base):
-grok.implements(IResponseAdder)
-grok.context(ITask)
-grok.name("opengever.task.response.addForm")
-grok.viewletmanager(BeneathTask)
-grok.order(2)
-form = AddForm
-def __init__(self, context, request, view, manager):
-layout.FormWrapper.__init__(self,context,request)
-grok.Viewlet.__init__(self,context,request,view, manager)
-Base.__init__(self,context, request)
-self.__parent__ = view
-self.form_instance.view = self
-
-def render(self):
-return layout.FormWrapper.render_form(self)
-"""
-
-
 class SingleAddFormView(layout.FormWrapper, grok.View):
     grok.implements(IResponseAdder)
     grok.context(ITask)
