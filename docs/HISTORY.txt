@@ -5,7 +5,11 @@ Changelog
 2.5.1 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Fixed statesyncer: when responsible 'none' is given it should not
+  change the responsible.
+  Issue #1782 Fehler beim erledigen von mandantenuebergreifenden Aufgaben.
+  https://extranet.4teamwork.ch/extern/opengever-kanton-zug/sprint-backlog/1782
+  [phgross]
 
 
 2.5 (2012-11-28)
