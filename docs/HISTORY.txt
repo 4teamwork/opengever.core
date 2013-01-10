@@ -5,7 +5,8 @@ Changelog
 2.2.2 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- DossierCover: Only append ... if we had to cut the last line.
+  [lgraf]
 
 
 2.2.1 (2012-12-06)

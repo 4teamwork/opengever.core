@@ -117,9 +117,13 @@ class DossierCoverPDFView(grok.View, BaseStandalonePDFView):
 
             if counter >= max_lines:
                 # fill out the rest of the free place.
-                cutted_description.append(
-                    line[:int(max_lines * self.description_max_line_length)])
-                cutted = True
+                max_chars_on_last_line = int(max_lines * self.description_max_line_length)
+                trimmed_last_line = line[:max_chars_on_last_line]
+
+                if len(line) > max_chars_on_last_line:
+                    # Only set cutted = True if we actually had to crop the line
+                    cutted = True
+                cutted_description.append(trimmed_last_line)
                 break
             else:
                 cutted_description.append(line)
