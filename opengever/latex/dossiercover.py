@@ -107,7 +107,7 @@ class DossierCoverPDFView(grok.View, BaseStandalonePDFView):
             max_length -= additional_title_lines * self.title_max_line_length
 
         # only use a given number of lines
-        for line in description.split(u'\n'):
+        for lineno, line in enumerate(description.split(u'\n')):
             # for long lines:
             # calc in how many lines the string would fit in
             if len(line) > self.description_max_line_length:
@@ -122,6 +122,9 @@ class DossierCoverPDFView(grok.View, BaseStandalonePDFView):
 
                 if len(line) > max_chars_on_last_line:
                     # Only set cutted = True if we actually had to crop the line
+                    cutted = True
+                if lineno + 1 < len(description.split(u'\n')):
+                    # Or max_lines has been reached before processing all lines
                     cutted = True
                 cutted_description.append(trimmed_last_line)
                 break
