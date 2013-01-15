@@ -101,9 +101,10 @@ class TestTaskAccepting(MockTestCase):
         # CHECKS
         # ---------------------
         # yearfolder:
-        yearfolder = self.inbox.get(str(datetime.now().year), None)
+        current_year = datetime.now().year
+        yearfolder = self.inbox.get(str(current_year), None)
         self.assertTrue(yearfolder)
-        self.assertEquals(yearfolder.title, u'Closed 2012')
+        self.assertEquals(yearfolder.title, u'Closed %s' % current_year)
 
         # forwarding ...
         # is stored in the yearfolder
