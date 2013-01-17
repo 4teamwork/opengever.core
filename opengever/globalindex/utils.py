@@ -33,6 +33,12 @@ def indexed_task_link(item, display_client=False):
     if member:
         principals = set(member.getGroups() + [member.getId()])
         allowed_principals = set(item.principals)
+
+        # Administrators always have access, but the global role 'Administrator'
+        # doesn't get indexed in task.principals in task indexer.
+        # TODO: Avoid hardcoding 'og_administratoren'
+        allowed_principals.add(u'og_administratoren')
+
         has_access = len(principals & allowed_principals) > 0
 
     # is the target on a different client? we need to make a popup if

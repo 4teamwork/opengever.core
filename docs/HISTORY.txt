@@ -5,7 +5,9 @@ Changelog
 2.2 (unreleased)
 ----------------
 
-- Nothing changed yet.
+- Make sure task links are always displayed for Administrators.
+  (Add og_administrator to allowed_principals).
+  [lgraf]
 
 
 2.1 (2012-11-28)
