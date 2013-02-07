@@ -116,7 +116,7 @@ msgstr "Le dossier a été fermé avec succès"
 
 #: ./opengever/dossier/archive.py:237
 msgid "The filing number has been given"
-msgstr ""
+msgstr "Le numéro d'inventaire va être attribué"
 
 #: ./opengever/dossier/archive.py:66
 msgid "The given end date is not valid, it needs to be younger or                  equal than ${date} (the youngest contained object)."
@@ -124,7 +124,7 @@ msgstr "La date de clôture n'est pas valable. Elle doit être plus récente ou 
 
 #: ./opengever/dossier/archive.py:84
 msgid "The given value is not a valid Year"
-msgstr ""
+msgstr "L'année de dépôt attribuée n'est pas valable"
 
 #: ./opengever/dossier/behaviors/dossier.py:194
 msgid "The start date must be before the end date."
@@ -244,7 +244,7 @@ msgstr "Numéro d'inventaire"
 
 #: ./opengever/dossier/browser/report.py:104
 msgid "filing_no_filing"
-msgstr ""
+msgstr "Classeur"
 
 #: ./opengever/dossier/browser/report.py:110
 msgid "filing_no_number"
@@ -605,7 +605,7 @@ msgstr "Ancien numéro de référence temporaire"
 
 #: ./opengever/dossier/resolve.py:12
 msgid "the dossier start date is missing."
-msgstr ""
+msgstr "Aucune date de début n'a été saisie"
 
 #. Default: "expired"
 #: ./opengever/dossier/project_templates/byline.pt:53
