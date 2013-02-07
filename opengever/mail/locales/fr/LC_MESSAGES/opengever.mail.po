@@ -192,7 +192,7 @@ msgstr "Objet"
 #. Default: "Title"
 #: ./opengever/mail/mail.py:31
 msgid "label_title"
-msgstr ""
+msgstr "Titre"
 
 #: ./opengever/mail/browser/send_document.py:54
 msgid "mails"
