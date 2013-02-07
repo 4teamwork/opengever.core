@@ -15,4 +15,20 @@ msgstr ""
 msgid "Overview"
 msgstr "Sommaire"
 
+#: plone.app.search/plone/app/search/search.pt:59
+msgid "Search results"
+msgstr "Résultat de la recherche"
+
+#: plone.app.search/plone/app/search/search.pt:68
+msgid "Search results for ${term}"
+msgstr "Résultat de la recherche pour"
+
+#: plone.app.search/plone/app/search/browser.py:121
+msgid "alphabetically"
+msgstr "Alphabétique"
+
+#: plone.app.search/plone/app/search/browser.py:119
+msgid "date (newest first)"
+msgstr "Changement de date (descendant)"
+
 
