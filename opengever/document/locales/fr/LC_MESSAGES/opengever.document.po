@@ -14,7 +14,7 @@ msgstr ""
 
 #: ./opengever/document/browser/edit.py:101
 msgid "Can't edit the document at moment, beacuse it's locked."
-msgstr ""
+msgstr "Impossible de modifier le document en ce moment car il est verrouillé."
 
 #: ./opengever/document/profiles/default/actions.xml
 msgid "Cancel"
@@ -93,7 +93,7 @@ msgstr "Le document a déjà un checkout par  ${userid}"
 
 #: ./opengever/document/browser/edit.py:59
 msgid "You are not authorized to edit the document ${title}"
-msgstr ""
+msgstr "Vous n'avez pas les droits de modifier le document ${title}"
 
 #: ./opengever/document/checkout/cancel.py:29
 #: ./opengever/document/checkout/checkin.py:157
@@ -104,7 +104,7 @@ msgstr "Vous n'avez  sélectionné aucun document"
 #. Default: "You have not checked in documents. Do you realy want to logout?"
 #: ./opengever/document/browser/logout_overlay_templates/logout_overlay.pt:3
 msgid "alert_not_checked_in_documents"
-msgstr ""
+msgstr "Vous avez encore des documents en checkout! Voulez-vous quand même quitter Gever ?"
 
 #. Default: "Cancel"
 #: ./opengever/document/checkout/checkin.py:83
@@ -124,7 +124,7 @@ msgstr "Copie de"
 #. Default: "You're downloading a copy of the document ${filename}"
 #: ./opengever/document/browser/download_templates/downloadconfirmation.pt:11
 msgid "description_download_confirmation"
-msgstr ""
+msgstr "Vous étes en train de télécharger une copie du document $ {filename}."
 
 #. Default: "You don't select a file and document is also not                 preserved in paper_form, please correct it."
 #: ./opengever/document/document.py:216
@@ -134,7 +134,7 @@ msgstr "Vous n'avez pas sélectionné un fichier ni conservé un document en ver
 #. Default: "It's not possible to add E-mails here, please '                    'send it to ${mailaddress} or drag it to the dossier '                    ' (Dragn'n'Drop)."
 #: ./opengever/document/document.py:238
 msgid "error_mail_upload"
-msgstr ""
+msgstr "Il n'est pas possible d'insérer des Email à cet endroit. Pour le faire, utilisez l'adresse E-Mail $ {mailaddress}  ou glissez-le dans le dossier (Drag'n'Drop)."
 
 #. Default: "Either the title or the file is required."
 #: ./opengever/document/document.py:205
@@ -237,7 +237,7 @@ msgstr "Auteur: ${author}"
 
 #: ./opengever/document/browser/download_templates/downloadconfirmation.pt:23
 msgid "label_cancel"
-msgstr ""
+msgstr "Annuler"
 
 #. Default: "Checked out"
 #: ./opengever/document/browser/overview_templates/overview.pt:38
@@ -253,7 +253,7 @@ msgstr "Commentaire de l'historique"
 #. Default: "Edit Document"
 #: ./opengever/document/browser/overview_templates/overview.pt:75
 msgid "label_checkout_and_edit"
-msgstr ""
+msgstr "Checkout / Modifier"
 
 #. Default: "creator"
 #: ./opengever/document/browser/overview_templates/overview.pt:26
@@ -297,13 +297,13 @@ msgstr "Type de document"
 
 #: ./opengever/document/browser/download_templates/downloadconfirmation.pt:22
 msgid "label_download"
-msgstr ""
+msgstr "Télécharger"
 
 #. Default: "Download copy"
 #: ./opengever/document/browser/download_templates/downloadconfirmation.pt:4
 #: ./opengever/document/browser/overview_templates/overview.pt:87
 msgid "label_download_copy"
-msgstr ""
+msgstr "Télécharger une copie"
 
 #. Default: "File"
 #: ./opengever/document/browser/overview_templates/overview.pt:42
@@ -330,7 +330,7 @@ msgstr "Non"
 #. Default: "PDF Preview"
 #: ./opengever/document/browser/overview_templates/overview.pt:61
 msgid "label_pdf_preview"
-msgstr ""
+msgstr "Aucun résultat trouvé"
 
 #. Default: "Preserved as paper"
 #: ./opengever/document/browser/overview_templates/overview.pt:110
@@ -392,7 +392,7 @@ msgstr "Ce document a un checkout de ${creator}"
 #. Default: "No file"
 #: ./opengever/document/browser/overview_templates/overview.pt:99
 msgid "no_file"
-msgstr ""
+msgstr "Aucun fichier trouvé"
 
 #. Default: "Following documents are checked out:"
 #: ./opengever/document/browser/logout_overlay_templates/logout_overlay.pt:8
@@ -412,6 +412,6 @@ msgstr "Périmé"
 #. Default: "Please note that in this case changes on the document wouldn't be saved in to GEVER."
 #: ./opengever/document/browser/download_templates/downloadconfirmation.pt:16
 msgid "warning_download_confirmation"
-msgstr ""
+msgstr "Attention ! Si vous modifiez de cette manière ce document, rien ne sera sauvé sous GEVER."
 
 
