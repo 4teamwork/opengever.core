@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-2.3.1 (unreleased)
+2.3.1 (2013-02-21)
 ------------------
 
 - Fixed review state filter being always active for task tabs using GlobalTaskTableSource.
