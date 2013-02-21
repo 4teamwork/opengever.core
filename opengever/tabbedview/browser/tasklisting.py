@@ -157,7 +157,8 @@ class GlobalTaskTableSource(SqlTableSource):
                 query, self.config.filter_text)
 
         # reviewstate-filter
-        review_state_filter = self.request.get('review_state', None)
+        review_state_filter = self.request.get(
+            self.config.state_filter_name, None)
 
         if review_state_filter == 'false':
             review_state_filter = False

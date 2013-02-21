@@ -5,7 +5,11 @@ Changelog
 2.3.1 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Fixed review state filter being always active for task tabs using GlobalTaskTableSource.
+  Issue #1831 Abgeschlossene und stornierte Aufgaben werden nicht mehr angezeigt bei
+  "Meine Aufgaben" und "Alle Aufgaben"
+  https://extranet.4teamwork.ch/extern/opengever-kanton-zug/sprint-backlog/1831
+  [lgraf]
 
 
 2.3 (2012-11-28)
