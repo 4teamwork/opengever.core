@@ -5,7 +5,8 @@ Changelog
 2.6.4 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Never display the exposator overlay for anonymous users.
+  [lgraf]
 
 
 2.6.3 (2012-12-18)

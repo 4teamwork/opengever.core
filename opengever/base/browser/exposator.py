@@ -28,6 +28,10 @@ $(function() {
         member = getToolByName(
             self.context, 'portal_membership').getAuthenticatedMember()
 
+        # Never display the exposator overlay for anonymous users
+        if member.getUserName() == 'Anonymous User':
+            return ''
+
         # check if the users isn't a Member or a Manger
         # then display the expose
         if not member.has_role('Member') and not member.has_role('Manager'):
