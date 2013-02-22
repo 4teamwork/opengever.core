@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-2.6.4 (unreleased)
+2.6.4 (2013-02-22)
 ------------------
 
 - Never display the exposator overlay for anonymous users.
