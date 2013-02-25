@@ -5,7 +5,11 @@ Changelog
 2.4.5 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Fixed tests for document working copy download journaling.
+  Fixed download journaling for working copy download.
+  Issue #1841 Journaleintrag "Download Kopie" fehlt.
+  https://extranet.4teamwork.ch/extern/opengever-kanton-zug/sprint-backlog/1841
+  [deif]
 
 
 2.4.4 (2012-12-18)

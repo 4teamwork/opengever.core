@@ -34,9 +34,9 @@ class TestDocumentDownloadView(MockTestCase):
         doc2.file = monk_file
         transaction.commit()
 
-        downloaded_handler = self.stub()
+        downloaded_handler = self.mocker.mock()
         self.mock_handler(downloaded_handler, [IFileCopyDownloadedEvent, ])
-        self.expect(downloaded_handler(ANY)).result(True)
+        self.expect(downloaded_handler(ANY)).count(2).result(True)
 
         self.replay()
 

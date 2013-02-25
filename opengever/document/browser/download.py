@@ -16,7 +16,6 @@ class DocumentDownload(Download):
     def __call__(self):
 
         file = self._getFile()
-
         if not self.filename:
             self.filename = getattr(file, 'filename', self.fieldname)
 
@@ -24,11 +23,13 @@ class DocumentDownload(Download):
             self.filename = self.filename.encode('utf-8')
 
         set_attachment_content_disposition(self.request, self.filename, file)
+        notify(FileCopyDownloadedEvent(self.context))
         return stream_data(file)
 
 
 class DownloadConfirmation(grok.View):
-    """Download Confirmation View, allways displayed in a overlay."""
+    """Download Confirmation View, allways displayed in a overlay.
+    """
 
     grok.context(IDocumentSchema)
     grok.name('file_download_confirmation')
