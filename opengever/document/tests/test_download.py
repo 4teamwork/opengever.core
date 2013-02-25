@@ -23,15 +23,15 @@ class TestDocumentDownloadView(MockTestCase):
         doc1 = createContentInContainer(
             portal, 'opengever.document.document', 'document')
 
-        monk_file = NamedBlobFile('bla bla', filename=u'test.txt')
-        doc1.file = monk_file
+        mock_file = NamedBlobFile('bla bla', filename=u'test.txt')
+        doc1.file = mock_file
         transaction.commit()
 
         doc2 = createContentInContainer(
             portal, 'opengever.document.document', 'document')
 
-        monk_file = NamedBlobFile('bla bla', filename=u't\xf6st.txt')
-        doc2.file = monk_file
+        mock_file = NamedBlobFile('bla bla', filename=u't\xf6st.txt')
+        doc2.file = mock_file
         transaction.commit()
 
         downloaded_handler = self.mocker.mock()

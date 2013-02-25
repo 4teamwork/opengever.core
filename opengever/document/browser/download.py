@@ -15,16 +15,17 @@ class DocumentDownload(Download):
 
     def __call__(self):
 
-        file = self._getFile()
+        named_file = self._getFile()
         if not self.filename:
-            self.filename = getattr(file, 'filename', self.fieldname)
+            self.filename = getattr(named_file, 'filename', self.fieldname)
 
         if self.filename:
             self.filename = self.filename.encode('utf-8')
 
-        set_attachment_content_disposition(self.request, self.filename, file)
+        set_attachment_content_disposition(self.request, self.filename,
+                                           named_file)
         notify(FileCopyDownloadedEvent(self.context))
-        return stream_data(file)
+        return stream_data(named_file)
 
 
 class DownloadConfirmation(grok.View):
