@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-2.4.5 (unreleased)
+2.4.5 (2013-02-26)
 ------------------
 
 - Fixed tests for document working copy download journaling.
