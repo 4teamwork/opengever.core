@@ -2,8 +2,8 @@ Changelog
 =========
 
 
-2.1.1 (unreleased)
-------------------
+2.2 (2013-03-20)
+----------------
 
 - Reset hidden_terms in vocabularies every time cache key changed.
   [lgraf]
