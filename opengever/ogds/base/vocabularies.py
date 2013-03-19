@@ -70,6 +70,9 @@ class UsersVocabularyFactory(grok.GlobalUtility):
     @ram.cache(voc_cachekey)
     @generator_to_list
     def key_value_provider(self):
+        # Reset hidden_terms every time cache key changed
+        self.hidden_terms = []
+
         info = getUtility(IContactInformation)
         for user in info.list_users():
             if not user.active:
@@ -100,6 +103,9 @@ class UsersAndInboxesVocabularyFactory(grok.GlobalUtility):
     @ram.cache(reqclient_voc_cachekey)
     @generator_to_list
     def key_value_provider(self):
+        # Reset hidden_terms every time cache key changed
+        self.hidden_terms = []
+
         client_id = self.get_client()
         info = getUtility(IContactInformation)
         if client_id:
@@ -162,6 +168,9 @@ class AllUsersAndInboxesVocabularyFactory(grok.GlobalUtility):
     @ram.cache(voc_cachekey)
     @generator_to_list
     def key_value_provider(self):
+        # Reset hidden_terms every time cache key changed
+        self.hidden_terms = []
+
         info = getUtility(IContactInformation)
 
         for client in info.get_clients():
@@ -214,6 +223,9 @@ class InboxesVocabularyFactory(UsersAndInboxesVocabularyFactory):
     @ram.cache(reqclient_voc_cachekey)
     @generator_to_list
     def key_value_provider(self):
+        # Reset hidden_terms every time cache key changed
+        self.hidden_terms = []
+
         client_id = self.get_client()
         info = getUtility(IContactInformation)
         if client_id and info.get_client_by_id(client_id):
@@ -256,6 +268,9 @@ class AssignedUsersVocabularyFactory(grok.GlobalUtility):
     @ram.cache(client_voc_cachekey)
     @generator_to_list
     def key_value_provider(self):
+        # Reset hidden_terms every time cache key changed
+        self.hidden_terms = []
+
         info = getUtility(IContactInformation)
 
         for user in info.list_assigned_users():
@@ -310,6 +325,9 @@ class ContactsAndUsersVocabularyFactory(grok.GlobalUtility):
         return vocab
 
     def key_value_provider(self):
+        # Reset hidden_terms every time cache key changed
+        self.hidden_terms = []
+
         info = getUtility(IContactInformation)
         items, hidden_terms = self._get_users()
         items = items[:]
@@ -382,6 +400,9 @@ class EmailContactsAndUsersVocabularyFactory(grok.GlobalUtility):
         key = mail-address
         value = Fullname [address], eg. Hugo Boss [hugo@boss.ch]
         """
+        # Reset hidden_terms every time cache key changed
+        self.hidden_terms = []
+
         info = getUtility(IContactInformation)
         ids = [(user, user.active) for user in info.list_users()]
         ids.extend([(contact, True) for contact
