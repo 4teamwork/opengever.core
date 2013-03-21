@@ -226,11 +226,12 @@ class SendDocumentForm(form.Form):
     def create_mail(self, text='', objs=[], only_links=''):
         """Create the mail and attach the the files. For object without a file
         it include a Link to the Object in to the message"""
+        attachment_parts = []
         msg = MIMEMultipart()
         msg['Date'] = formatdate(localtime=True)
 
-        # iterate over object list (which can include documents and mails)
-        # and attach the file to the mail
+        # iterate over object list (which can include documents and mails),
+        # create attachement parts for them and prepare docs_links
         docs_links = '%s:\r\n' % (translate(
                 _('label_documents', default=u'Documents'),
                 context=self.request))
@@ -269,15 +270,20 @@ class SendDocumentForm(form.Form):
             Encoders.encode_base64(part)
             part.add_header('Content-Disposition', 'attachment; filename="%s"'
                             % obj_file.filename)
-            msg.attach(part)
+            attachment_parts.append(part)
 
-        text = '%s\r\n\r\n%s' % (
+        # First, create the text part and attach it to the message ...
+        text = '%s\r\n\r\n%s\r\n' % (
             text.encode(CHARSET, 'ignore'),
             docs_links.encode(CHARSET))
 
         if not isinstance(text, unicode):
             text = text.decode('utf8')
         msg.attach(MIMEText(text, 'plain', CHARSET))
+
+        # ... then attach all the attachment parts
+        for part in attachment_parts:
+            msg.attach(part)
 
         return msg
 

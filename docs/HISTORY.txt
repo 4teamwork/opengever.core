@@ -5,7 +5,9 @@ Changelog
 2.2.1 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Fixed order of MIME parts when creating mails in send_documents.
+  (Text part first, attachment parts last).
+  [lgraf]
 
 
 2.2 (2012-11-28)
