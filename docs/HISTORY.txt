@@ -5,7 +5,8 @@ Changelog
 2.3.1 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Implements correct and recursively activating/deactivating functionality.
+  [phgross]
 
 
 2.3 (2012-12-11)
