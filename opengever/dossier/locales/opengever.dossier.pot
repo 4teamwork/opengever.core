@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2012-11-26 16:22+0000\n"
+"POT-Creation-Date: 2013-04-03 08:06+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: opengever.dossier\n"
 
-#: ./opengever/dossier/move_items.py:133
+#: ./opengever/dossier/move_items.py:132
 msgid "${copied_items} Elements were moved successfully"
 msgstr ""
 
@@ -64,15 +64,15 @@ msgstr ""
 msgid "Export selection"
 msgstr ""
 
-#: ./opengever/dossier/move_items.py:139
+#: ./opengever/dossier/move_items.py:138
 msgid "Failed to copy following objects: ${failed_objects}"
 msgstr ""
 
-#: ./opengever/dossier/move_items.py:145
-msgid "Failed to copy following objects: ${failed_objects}                    . Locket via WebDAV"
+#: ./opengever/dossier/move_items.py:144
+msgid "Failed to copy following objects: ${failed_objects}                    . Locked via WebDAV"
 msgstr ""
 
-#: ./opengever/dossier/move_items.py:186
+#: ./opengever/dossier/move_items.py:185
 msgid "It isn't allowed to add such items there"
 msgstr ""
 
@@ -105,6 +105,18 @@ msgid "Template Dossier"
 msgstr ""
 
 msgid "Templates"
+msgstr ""
+
+#: ./opengever/dossier/deactivate.py:26
+msgid "The Dossier can't be deactivated, the subdossier ${dossier} is already resolved"
+msgstr ""
+
+#: ./opengever/dossier/deactivate.py:69
+msgid "The Dossier has been activated"
+msgstr ""
+
+#: ./opengever/dossier/deactivate.py:44
+msgid "The Dossier has been deactivated"
 msgstr ""
 
 #: ./opengever/dossier/archive.py:266
@@ -143,7 +155,7 @@ msgstr ""
 msgid "When the Action give filing number is selected,                         all fields are required."
 msgstr ""
 
-#: ./opengever/dossier/move_items.py:169
+#: ./opengever/dossier/move_items.py:168
 msgid "You have not selected any items"
 msgstr ""
 
@@ -217,7 +229,7 @@ msgid "documents"
 msgstr ""
 
 #. Default: "It isn't allowed to add such items there: ${failed_objects}"
-#: ./opengever/dossier/move_items.py:217
+#: ./opengever/dossier/move_items.py:216
 msgid "error_NotInContentTypes ${failed_objects}"
 msgstr ""
 

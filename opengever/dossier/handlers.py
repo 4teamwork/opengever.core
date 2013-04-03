@@ -1,6 +1,5 @@
 from Acquisition import aq_inner, aq_parent
 from OFS.interfaces import IObjectWillBeMovedEvent
-from Products.CMFCore.interfaces import IActionSucceededEvent
 from Products.CMFCore.utils import getToolByName
 from five import grok
 from opengever.base.interfaces import IReferenceNumber
@@ -60,26 +59,6 @@ def saveReferenceNumberPrefix(obj, event):
     if not prefix_adapter.get_number(obj):
         prefix_adapter.set_number(obj)
     obj.reindexObject(idxs=['reference'])
-
-
-@grok.subscribe(IDossierMarker, IActionSucceededEvent)
-def deactivate_subdossiers(dossier, event):
-    """When deactivate, it deactivate also all subdossiers """
-
-    if event.action == 'dossier-transition-deactivate':
-
-        subdossiers = dossier.portal_catalog(
-            provided_by="opengever.dossier.behaviors.dossier.IDossierMarker",
-            path=dict(depth=1,
-                      query='/'.join(dossier.getPhysicalPath()),
-                      ),
-            sort_on='filing_no',
-            )
-
-        wft = dossier.portal_workflow
-        for subdossier in subdossiers:
-            wft.doActionFor(
-                subdossier.getObject(), 'dossier-transition-deactivate')
 
 
 @grok.subscribe(IDossierMarker, IObjectModifiedEvent)

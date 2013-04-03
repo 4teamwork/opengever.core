@@ -434,13 +434,13 @@
   </permission-map>
  </state>
  <transition transition_id="dossier-transition-activate" title="Owner activates dossier" new_state="dossier-state-active" trigger="USER" before_script="" after_script="">
-  <action url="%(content_url)s/content_status_modify?workflow_action=dossier-transition-activate" category="workflow" icon="">dossier-transition-activate</action>
+  <action url="%(content_url)s/transition-activate" category="workflow" icon="">dossier-transition-activate</action>
   <guard>
    <guard-role>Publisher</guard-role>
   </guard>
  </transition>
  <transition transition_id="dossier-transition-deactivate" title="Owner deactivates dossier" new_state="dossier-state-inactive" trigger="USER" before_script="" after_script="">
-  <action url="%(content_url)s/content_status_modify?workflow_action=dossier-transition-deactivate" category="workflow" icon="">dossier-transition-deactivate</action>
+  <action url="%(content_url)s/transition-deactivate" category="workflow" icon="">dossier-transition-deactivate</action>
   <guard>
    <guard-role>Editor</guard-role>
   </guard>

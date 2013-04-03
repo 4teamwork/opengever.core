@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2012-11-26 16:22+0000\n"
-"PO-Revision-Date: 2012-11-26 14:29+0100\n"
+"POT-Creation-Date: 2013-04-03 08:06+0000\n"
+"PO-Revision-Date: 2013-04-03 10:08+0200\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
 "MIME-Version: 1.0\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: DOMAIN\n"
 
-#: ./opengever/dossier/move_items.py:133
+#: ./opengever/dossier/move_items.py:132
 msgid "${copied_items} Elements were moved successfully"
 msgstr "${copied_items} Elemente wurden erfolgreich verschoben"
 
@@ -61,15 +61,15 @@ msgstr "Subdossier bearbeiten"
 msgid "Export selection"
 msgstr "Auswahl exportieren"
 
-#: ./opengever/dossier/move_items.py:139
+#: ./opengever/dossier/move_items.py:138
 msgid "Failed to copy following objects: ${failed_objects}"
 msgstr "Folgende Elemente konnten nicht verschoben werden: ${failed_objects}"
 
-#: ./opengever/dossier/move_items.py:145
-msgid "Failed to copy following objects: ${failed_objects}                    . Locket via WebDAV"
-msgstr "Folgende Elemente sind durch einen anderen Benutzer gesperrt und konnten nicht verschoben werden: ${failed_objects}."
+#: ./opengever/dossier/move_items.py:144
+msgid "Failed to copy following objects: ${failed_objects}                    . Locked via WebDAV"
+msgstr ""
 
-#: ./opengever/dossier/move_items.py:186
+#: ./opengever/dossier/move_items.py:185
 msgid "It isn't allowed to add such items there"
 msgstr "Sie dürfen dieses Objekt nicht an den Zielort verschieben"
 
@@ -105,6 +105,18 @@ msgstr "Vorlagendossier"
 #. Default: "expired"
 msgid "Templates"
 msgstr "Vorlagen"
+
+#: ./opengever/dossier/deactivate.py:26
+msgid "The Dossier can't be deactivated, the subdossier ${dossier} is already resolved"
+msgstr "Das Dossier konnte nicht storniert werden, da das Subdossier ${dossier} bereits abgeschlossen ist. Das Subdossier muss vorgängig wieder eröffnet werden."
+
+#: ./opengever/dossier/deactivate.py:69
+msgid "The Dossier has been activated"
+msgstr "Das Dossier wurde aktiviert."
+
+#: ./opengever/dossier/deactivate.py:44
+msgid "The Dossier has been deactivated"
+msgstr "Das Dossier wurde storniert."
 
 #: ./opengever/dossier/archive.py:266
 msgid "The Dossier has been resolved"
@@ -142,7 +154,7 @@ msgstr "Das Beginn- oder Ende-Datum ist ungültig."
 msgid "When the Action give filing number is selected,                         all fields are required."
 msgstr "Für die Vergabe der Ablagenummer, werden alle Felder benötigt."
 
-#: ./opengever/dossier/move_items.py:169
+#: ./opengever/dossier/move_items.py:168
 msgid "You have not selected any items"
 msgstr "Sie haben kein Element ausgewählt"
 
@@ -216,7 +228,7 @@ msgid "documents"
 msgstr "Dokumente"
 
 #. Default: "It isn't allowed to add such items there: ${failed_objects}"
-#: ./opengever/dossier/move_items.py:217
+#: ./opengever/dossier/move_items.py:216
 msgid "error_NotInContentTypes ${failed_objects}"
 msgstr "Es wurden keine Objekte verschoben. Folgende Objekte dürfen nicht in den Zielordner eingefügt werden: ${failed_objects}"
 
