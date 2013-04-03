@@ -5,6 +5,11 @@ Changelog
 2.2.1 (unreleased)
 ------------------
 
+- Fixed default value setter in extract_attachments.
+  Issue #311 E-Mail-Import
+  https://extranet.4teamwork.ch/support/ph-vs/tracker/311
+  [phgross]
+
 - Fixed order of MIME parts when creating mails in send_documents.
   (Text part first, attachment parts last).
   [lgraf]

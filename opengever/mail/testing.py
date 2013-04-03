@@ -1,17 +1,18 @@
-from plone.registry.interfaces import IRegistry
-from zope.component import getUtility
-from plone.app.testing import PloneSandboxLayer
-from plone.app.testing import PLONE_FIXTURE
-from plone.app.testing import applyProfile
-from opengever.ogds.base.setuphandlers import MODELS
 from opengever.globalindex import model as task_model
-from opengever.ogds.base.utils import create_session
-from plone.app.testing import IntegrationTesting
-from zope.configuration import xmlconfig
+from opengever.ogds.base.setuphandlers import MODELS
 from opengever.ogds.base.setuphandlers import _create_example_client
 from opengever.ogds.base.setuphandlers import _create_example_user
-from plone.app.testing import setRoles, TEST_USER_ID, login
 from opengever.ogds.base.setuphandlers import create_sql_tables
+from opengever.ogds.base.utils import create_session
+from plone.app.testing import FunctionalTesting
+from plone.app.testing import IntegrationTesting
+from plone.app.testing import PLONE_FIXTURE
+from plone.app.testing import PloneSandboxLayer
+from plone.app.testing import applyProfile
+from plone.app.testing import setRoles, TEST_USER_ID, login
+from plone.registry.interfaces import IRegistry
+from zope.component import getUtility
+from zope.configuration import xmlconfig
 
 
 class MailIntegrationLayer(PloneSandboxLayer):
@@ -84,6 +85,9 @@ class MailIntegrationLayer(PloneSandboxLayer):
 OPENGEVER_MAIL_FIXTURE = MailIntegrationLayer()
 OPENGEVER_MAIL_INTEGRATION_TESTING = IntegrationTesting(
     bases=(OPENGEVER_MAIL_FIXTURE,), name="OpengeverMail:Integration")
+
+OPENGEVER_MAIL_FUNCTIONAL_TESTING = FunctionalTesting(
+    bases=(OPENGEVER_MAIL_FIXTURE,), name="OpengeverMail:Functional")
 
 
 class MockEvent(object):
