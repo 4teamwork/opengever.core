@@ -18,6 +18,7 @@
     <vdex:vocabulary directory="vdexvocabs" />
 
     <include package=".viewlets" />
+    <include package=".upgrades" />
 
     <include file="behaviors.zcml" />
 

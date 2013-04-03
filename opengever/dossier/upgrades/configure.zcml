@@ -1,0 +1,16 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+    i18n_domain="ftw.tabbedview">
+
+    <!-- 1 -> 2301 -->
+    <genericsetup:upgradeStep
+        title="Adjust transition url for deactivate/activate transitions"
+        description=""
+        source="1"
+        destination="2301"
+        handler="opengever.dossier.upgrades.to2301.AdjustTransitionUrls"
+        profile="opengever.dossier:default"
+        />
+
+</configure>
