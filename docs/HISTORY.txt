@@ -5,6 +5,9 @@ Changelog
 2.2.1 (unreleased)
 ------------------
 
+- Added upgrade-step to properly migrate class for ftw.mail.mail objs.
+  [lgraf]
+
 - Fixed default value setter in extract_attachments.
   Issue #311 E-Mail-Import
   https://extranet.4teamwork.ch/support/ph-vs/tracker/311

@@ -13,4 +13,14 @@
         profile="opengever.mail:default"
         />
 
+    <!-- 2101 -> 2102 -->
+    <genericsetup:upgradeStep
+        title="Migrate ftw.mail.mail objs to OGMail class"
+        description=""
+        source="2101"
+        destination="2102"
+        handler="opengever.mail.upgrades.to2100.MigrateMailClass"
+        profile="opengever.mail:default"
+        />
+
 </configure>
