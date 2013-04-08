@@ -5,6 +5,9 @@ Changelog
 2.5.1 (unreleased)
 ------------------
 
+- Implemented a YearfolderStorer adapter.
+  [phgross]
+
 - Fixed statesyncer: when responsible 'none' is given it should not
   change the responsible.
   Issue #1782 Fehler beim erledigen von mandantenuebergreifenden Aufgaben.
