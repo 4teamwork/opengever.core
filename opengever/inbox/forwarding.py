@@ -152,12 +152,3 @@ def set_dates(context, event):
 
     if event.action in closing_transitions:
         context.date_of_completion = datetime.now()
-
-
-@grok.subscribe(IForwarding, IActionSucceededEvent)
-def store_in_yearfolder(context, event):
-    """Eventhandler wich store the forwarding in the yearfolder"""
-
-    if event.action == 'forwarding-transition-close':
-        return context.REQUEST.RESPONSE.redirect(
-            '%s/@@store_forwarding_in_yearfolder' % context.absolute_url())
