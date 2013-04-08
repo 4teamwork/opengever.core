@@ -65,10 +65,10 @@ class ForwardingTransitionController(TaskTransitionController):
 
     @action('forwarding-transition-close')
     def close_action(self, transition):
-        """redirect to the addresponse form, the closing mechanism
-        (storing in a yearfolder) would be started from event handler.
+        """redirect to the close-forwarding form, which handle the whole
+        closing mechanism (storing in a yearfolder).
         """
-        return self._addresponse_form_url(transition)
+        return '%s/@@close-forwarding' % (self.context.absolute_url())
 
     def _is_current_inbox_group_user(self):
         """Checks with the help of the contact information utility

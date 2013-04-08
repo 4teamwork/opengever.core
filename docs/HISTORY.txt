@@ -5,7 +5,10 @@ Changelog
 2.3.1 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Implemented seperate form for closing a forwarding.
+  Issue #1853 "Verschwundene" Weiterleitungen
+  https://extranet.4teamwork.ch/extern/opengever-kanton-zug/sprint-backlog/1853
+  [phgross]
 
 
 2.3 (2012-11-28)

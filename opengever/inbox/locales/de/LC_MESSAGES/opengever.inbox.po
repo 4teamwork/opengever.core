@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2011-08-19 08:11+0000\n"
-"PO-Revision-Date: 2011-01-25 21:32+0100\n"
+"POT-Creation-Date: 2013-04-08 14:47+0000\n"
+"PO-Revision-Date: 2013-04-08 16:52+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -29,61 +29,46 @@ msgid "YearFolder"
 msgstr "Jahresordner"
 
 #. Default: "Cancel"
-#: ./opengever/inbox/response.py:227
-msgid "cancel"
-msgstr "Abbrechen"
+#: ./opengever/inbox/browser/close.py:52
+msgid "button_cancel"
+msgstr ""
+
+#. Default: "Close"
+#: ./opengever/inbox/browser/close.py:36
+msgid "close"
+msgstr "Abschliessen"
 
 #. Default: "Error: Please select at least one document to forward"
-#: ./opengever/inbox/forwarding.py:105
+#: ./opengever/inbox/forwarding.py:104
 msgid "error_no_document_selected"
 msgstr "Fehler: Bitte wählen Sie mindestens ein Dokument aus das weitergeleitet werden soll"
 
 #. Default: "Common"
-#: ./opengever/inbox/inbox.py:16
+#: ./opengever/inbox/inbox.py:17
 msgid "fieldset_common"
 msgstr "Allgemein"
 
-#: ./opengever/inbox/inbox.py:24
+#: ./opengever/inbox/inbox.py:23
 msgid "help_inbox_group"
 msgstr "Diese Gruppe wird berechtigt, wenn dem Eingangskorb eine Aufgabe zugewiesen wird."
 
-#: ./opengever/inbox/forwarding.py:54
+#: ./opengever/inbox/forwarding.py:52
 msgid "help_responsible"
 msgstr "Wählen Sie die verantwortliche Person bzw. den Eingangskorb des oben gewählten Mandanten aus."
 
-#. Default: "The successor forwarding was created."
-#: ./opengever/inbox/response.py:287
-msgid "info_created_successor_forwarding"
-msgstr "Folge-Weiterleitung wurde erstellt."
-
-#. Default: "The forwarding was moved to the yearfolder ${year}"
-#: ./opengever/inbox/response.py:216
-msgid "info_forwarding_move_to_yearfolder"
-msgstr "Die Weiterleitung wurde nach \"Abgeschlossen ${year}\" verschoben."
-
 #. Default: "Inbox Group"
-#: ./opengever/inbox/inbox.py:23
+#: ./opengever/inbox/inbox.py:22
 msgid "label_inbox_group"
 msgstr "Eingangskorb Gruppe"
 
 #. Default: "Responsible"
-#: ./opengever/inbox/forwarding.py:53
+#: ./opengever/inbox/forwarding.py:51
 msgid "label_responsible"
 msgstr "Auftragnehmer"
 
-#. Default: "Target dossier"
-#: ./opengever/inbox/response.py:45
-msgid "label_target_dossier"
-msgstr "Zieldossier"
-
-#. Default: "Save"
-#: ./opengever/inbox/response.py:86
-msgid "save"
-msgstr "Speichern"
-
-#. Default: "Closed ${year}"
-#: ./opengever/inbox/response.py:186
-msgid "yearfolder_title"
-msgstr "Abgeschlossen ${year}"
+#. Default: "Close orwarding"
+#: ./opengever/inbox/browser/close.py:34
+msgid "title_close_forwarding"
+msgstr "Weiterleitung abschliessen"
 
 
