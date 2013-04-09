@@ -15,7 +15,7 @@ class StoreForwardingInYearfolderView(grok.View):
     def render(self):
         if self.is_already_done():
             # Set correct content type for text response
-            self.request.response.setHeader("Content-type", "tex/plain")
+            self.request.response.setHeader("Content-type", "text/plain")
 
             return 'OK'
 
