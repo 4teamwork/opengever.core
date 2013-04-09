@@ -5,6 +5,9 @@ Changelog
 2.4.6 (unreleased)
 ------------------
 
+- Also normalize filename when there is no title given.
+  [tschanzt]
+
 - Document View: Remove File Download Link (use NO_DOWNLOAD_DISPLAY_MODE).
   Issue #1802 Kopie runterladen ohne Warnung
   https://extranet.4teamwork.ch/extern/opengever-kanton-zug/sprint-backlog/1802

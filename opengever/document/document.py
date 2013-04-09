@@ -355,7 +355,10 @@ def sync_title_and_filename_handler(doc, event):
     if not doc.title and doc.file:
         # use the filename without extension as title
         filename = doc.file.filename
-        doc.title = filename[:filename.rfind('.')]
+        splited_name = list(os.path.splitext(doc.file.filename))
+        doc.title = splited_name[0]
+        splited_name[0] = normalize_method(splited_name[0])
+        doc.file.filename = ''.join(splited_name)
 
     elif doc.title and doc.file:
         # use the title as filename
