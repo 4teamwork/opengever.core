@@ -8,6 +8,7 @@ from five import grok
 from ftw.datepicker.widget import DatePickerFieldWidget
 from opengever.document import _
 from opengever.document.interfaces import IDocumentSettings
+from opengever.document.interfaces import NO_DOWNLOAD_DISPLAY_MODE
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.mail.behaviors import IMailInAddress
 from opengever.ogds.base.interfaces import IContactInformation
@@ -387,6 +388,12 @@ class View(dexterity.DisplayForm):
         if self.context.document_author:
             return info.render_link(self.context.document_author)
         return None
+
+    def updateWidgets(self):
+        super(View, self).updateWidgets()
+        field = self.groups[0].fields.get('file')
+        if field:
+            field.mode = NO_DOWNLOAD_DISPLAY_MODE
 
 
 class ForwardViewlet(grok.Viewlet):

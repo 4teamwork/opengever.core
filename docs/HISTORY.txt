@@ -5,7 +5,10 @@ Changelog
 2.4.6 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Document View: Remove File Download Link (use NO_DOWNLOAD_DISPLAY_MODE).
+  Issue #1802 Kopie runterladen ohne Warnung
+  https://extranet.4teamwork.ch/extern/opengever-kanton-zug/sprint-backlog/1802
+  [phgross]
 
 
 2.4.5 (2013-02-26)
