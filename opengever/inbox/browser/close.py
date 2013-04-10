@@ -49,7 +49,7 @@ class ForwardingCloseForm(Form):
 
             return self.request.RESPONSE.redirect('.')
 
-    @button.buttonAndHandler(_(u'button_cancel', default=u'Cancel'))
+    @button.buttonAndHandler(task_mf(u'button_cancel', default=u'Cancel'))
     def handle_cancel(self, action):
         return self.request.RESPONSE.redirect('.')
 
