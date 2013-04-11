@@ -16,7 +16,7 @@ from plone.dexterity.utils import createContentInContainer
 from Products.CMFCore.utils import getToolByName
 from Products.CMFCore.WorkflowCore import ActionSucceededEvent
 from zope.annotation.interfaces import IAnnotations
-from zope.lifecycleevent import ObjectMovedEvent
+from zope.lifecycleevent import ObjectMovedEvent, ObjectAddedEvent
 from zope.event import notify
 from zope.i18n import translate
 from zope.interface import Interface
@@ -419,6 +419,9 @@ class TestOpengeverJournalGeneral(unittest.TestCase):
         document = createContentInContainer(
             dossier1, 'opengever.document.document', 'doc1', title='Document')
 
+        document2 = createContentInContainer(
+            dossier2, 'opengever.document.document', 'doc2', title='Document2')
+
         notify(ObjectMovedEvent(
             document,
             dossier1,
@@ -429,6 +432,14 @@ class TestOpengeverJournalGeneral(unittest.TestCase):
             dossier1,
             action_type='Object moved',
             action_title='Object moved: %s' % document.title_or_id(), )
+
+        # Test that a normal ObjectAddedEvent does not result in an object
+        # moved journal entry.
+        notify(ObjectAddedEvent(document2))
+        entry1 = self.get_journal_entry(dossier2, entry=-1)
+        entry2 = self.get_journal_entry(dossier2, entry=-2)
+        self.assertTrue(entry1.get('action').get('type') != 'Object moved')
+        self.assertTrue(entry2.get('action').get('type') != 'Object moved')
 
         notify(ObjectWillBeMovedEvent(
             document,
@@ -457,6 +468,13 @@ class TestOpengeverJournalGeneral(unittest.TestCase):
             obj, JOURNAL_ENTRIES_ANNOTATIONS_KEY).get(
                 JOURNAL_ENTRIES_ANNOTATIONS_KEY))
 
+    def get_journal_entry(self, obj, entry=-1):
+        journal = IAnnotations(
+            obj, JOURNAL_ENTRIES_ANNOTATIONS_KEY).get(
+            JOURNAL_ENTRIES_ANNOTATIONS_KEY)[entry]
+
+        return journal
+
     def check_annotation(self,
                          obj,
                          action_type='',
@@ -468,9 +486,7 @@ class TestOpengeverJournalGeneral(unittest.TestCase):
         """
         time = DateTime().Date()
 
-        journal = IAnnotations(
-            obj, JOURNAL_ENTRIES_ANNOTATIONS_KEY).get(
-                JOURNAL_ENTRIES_ANNOTATIONS_KEY)[check_entry]
+        journal = self.get_journal_entry(obj, entry=check_entry)
         self.assertEquals(comment, journal.get('comments'))
         self.assertEquals(actor, journal.get('actor'))
         self.assertEquals(time, journal.get('time').Date())
