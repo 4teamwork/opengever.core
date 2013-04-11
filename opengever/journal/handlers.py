@@ -601,19 +601,21 @@ OBJECT_MOVED_EVENT = 'Object moved'
 
 @grok.subscribe(IDexterityContent, IObjectMovedEvent)
 def object_moved(context, event):
-
-    # check if its realy a moving, or just a adding
-    # because IObjectAddedEvent inherits from the IObjectMovedEvent
-    if not IObjectAddedEvent.providedBy(event):
-        title = _(u'label_object_moved',
-                    default=u'Object moved: ${title}',
-                    mapping={
-                    'title': context.title_or_id()
-                    })
-
-        journal_entry_factory(
-            context.aq_inner.aq_parent, OBJECT_MOVED_EVENT, title)
+    # Since IObjectAddedEvent subclasses IObjectMovedEvent this event
+    # handler is also called for IObjectAddedEvent but we should not
+    # do anything in this case.
+    if IObjectAddedEvent.providedBy(event):
         return
+
+    title = _(u'label_object_moved',
+                default=u'Object moved: ${title}',
+                mapping={
+                'title': context.title_or_id()
+                })
+
+    journal_entry_factory(
+        context.aq_inner.aq_parent, OBJECT_MOVED_EVENT, title)
+    return
 
 
 OBJECT_WILL_BE_MOVED_EVENT = 'Object cut'

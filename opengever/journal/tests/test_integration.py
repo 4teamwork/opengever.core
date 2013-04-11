@@ -433,8 +433,8 @@ class TestOpengeverJournalGeneral(unittest.TestCase):
             action_type='Object moved',
             action_title='Object moved: %s' % document.title_or_id(), )
 
-        # check that a normal ObjectAddedevent,
-        # dont get an journal entry.
+        # Test that a normal ObjectAddedEvent does not result in an object
+        # moved journal entry.
         notify(ObjectAddedEvent(document2))
         entry1 = self.get_journal_entry(dossier2, entry=-1)
         entry2 = self.get_journal_entry(dossier2, entry=-2)
@@ -486,7 +486,7 @@ class TestOpengeverJournalGeneral(unittest.TestCase):
         """
         time = DateTime().Date()
 
-        journal = self.get_journal_entry(obj, entry= check_entry)
+        journal = self.get_journal_entry(obj, entry=check_entry)
         self.assertEquals(comment, journal.get('comments'))
         self.assertEquals(actor, journal.get('actor'))
         self.assertEquals(time, journal.get('time').Date())
