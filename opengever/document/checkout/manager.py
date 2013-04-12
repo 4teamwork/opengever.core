@@ -14,6 +14,7 @@ from zope.annotation.interfaces import IAnnotations
 from zope.event import notify
 from zope.publisher.interfaces.browser import IBrowserRequest
 
+from plone.namedfile.file import NamedBlobFile
 
 CHECKIN_CHECKOUT_ANNOTATIONS_KEY = 'opengever.document.checked_out_by'
 
@@ -223,7 +224,13 @@ class CheckinCheckoutManager(grok.MultiAdapter):
         """
         version = self.repository.retrieve(self.context, version_id)
         old_obj = version.object
-        self.context.file = old_obj.file
+
+        # Create a new NamedBlobFile instance instead of using a reference in
+        # order to avoid the version being reverted to being overwritten later
+        old_file_copy = NamedBlobFile(old_obj.file.data,
+                                      filename=old_obj.file.filename,
+                                      contentType=old_obj.file.contentType)
+        self.context.file = old_file_copy
 
         if create_version:
             # let's create a version

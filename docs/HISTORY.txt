@@ -10,6 +10,12 @@ Changelog
   https://extranet.4teamwork.ch/extern/opengever-kanton-zug/sprint-backlog/1802
   [phgross]
 
+- Create a new NamedBlobFile instance when reverting instead of using a reference
+  in order to avoid the version being reverted to being overwritten later.
+  Issue #1787 Versionierung: Zurücksetzen führt dazu dass später Versionen überschrieben werden
+  https://extranet.4teamwork.ch/extern/opengever-kanton-zug/sprint-backlog/1787/
+  [lgraf]
+
 
 2.4.5 (2013-02-26)
 ------------------
