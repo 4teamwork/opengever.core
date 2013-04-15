@@ -350,21 +350,18 @@ def sync_title_and_filename_handler(doc, event):
     title.
     o If there is a title and a file, use the normalized title as filename
     """
-    normalize_method = getUtility(IIDNormalizer).normalize
-
+    normalizer = getUtility(IIDNormalizer)
     if not doc.title and doc.file:
         # use the filename without extension as title
-        filename = doc.file.filename
-        splited_name = list(os.path.splitext(doc.file.filename))
-        doc.title = splited_name[0]
-        splited_name[0] = normalize_method(splited_name[0])
-        doc.file.filename = ''.join(splited_name)
-
+        basename, ext = os.path.splitext(doc.file.filename)
+        doc.title = basename
+        doc.file.filename = ''.join(
+            [normalizer.normalize(basename), ext])
     elif doc.title and doc.file:
         # use the title as filename
-        filename = doc.file.filename
-        doc.file.filename = normalize_method(doc.title) + \
-            filename[filename.rfind('.'):]
+        basename, ext = os.path.splitext(doc.file.filename)
+        doc.file.filename = ''.join(
+            [normalizer.normalize(doc.title), ext])
 
 
 @grok.subscribe(IDocumentSchema, IObjectCopiedEvent)
