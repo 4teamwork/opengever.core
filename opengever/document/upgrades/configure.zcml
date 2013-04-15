@@ -22,4 +22,15 @@
         provides="Products.GenericSetup.interfaces.EXTENSION"
         />
 
+    <!-- 2301 -> 2401 -->
+    <genericsetup:upgradeStep
+        title="Normalize all filenames of all documents."
+        description=""
+        source="2301"
+        destination="2401"
+        handler="opengever.document.upgrades.to2401.NormalizeFileTitles"
+        profile="opengever.document:default"
+        />
+
+
 </configure>
