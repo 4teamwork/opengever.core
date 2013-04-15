@@ -225,12 +225,17 @@ class CheckinCheckoutManager(grok.MultiAdapter):
         version = self.repository.retrieve(self.context, version_id)
         old_obj = version.object
 
-        # Create a new NamedBlobFile instance instead of using a reference in
-        # order to avoid the version being reverted to being overwritten later
-        old_file_copy = NamedBlobFile(old_obj.file.data,
-                                      filename=old_obj.file.filename,
-                                      contentType=old_obj.file.contentType)
-        self.context.file = old_file_copy
+        if old_obj.file:
+            # Create a new NamedBlobFile instance instead of using
+            # a reference in order to avoid the version being reverted
+            # to being overwritten later
+            old_file_copy = NamedBlobFile(old_obj.file.data,
+                                          filename=old_obj.file.filename,
+                                          contentType=old_obj.file.contentType)
+
+            self.context.file = old_file_copy
+        else:
+            self.context.file = None
 
         if create_version:
             # let's create a version
