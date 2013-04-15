@@ -21,11 +21,12 @@ class AddRegistryEntries(UpgradeStep):
         for interface in interfaces:
             registry.registerInterface(interface)
 
+
 class MigrateMailClass(UpgradeStep):
 
     def __call__(self):
         catalog = self.getToolByName('portal_catalog')
-        brains = catalog(portal_type='ftw.mail.mail')
+        brains = catalog.unrestrictedSearchResults(portal_type='ftw.mail.mail')
 
         with ProgressLogger('Migrating ftw.mail.mail class', brains) as step:
             for brain in brains:
@@ -35,4 +36,3 @@ class MigrateMailClass(UpgradeStep):
     def migrate_obj(self, obj):
         self.migrate_class(obj, OGMail)
         notify(ObjectModifiedEvent(obj))
-
