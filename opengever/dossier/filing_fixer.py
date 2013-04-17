@@ -6,6 +6,18 @@ from xlwt import Workbook, XFStyle, Font
 from zope.interface import Interface
 import transaction
 
+# excel styles
+TITLE_STYLE = XFStyle()
+TITLE_STYLE.font.bold = True
+
+OLD_STYLE = XFStyle()
+OLD_STYLE.font.colour_index = 0x10
+OLD_STYLE.font.outline = False
+
+NEW_STYLE = XFStyle()
+NEW_STYLE.font.colour_index = 0x11
+NEW_STYLE.font.outline = False
+
 
 class FakeOptions(object):
 
@@ -265,9 +277,10 @@ class FixFilingNumbers(grok.View):
         if len([k for k, v in checker.results.items() if len(v) > 0]):
             raise RuntimeError(
                 'All fixes done, but the Checker still detected '
-                'some problems %s' %(str(checker.results)))
+                'some problems %s' % (str(checker.results)))
 
-        data = self.generate_excel(fixer._fixed_dossiers)
+        data = self.generate_excel(
+            fixer._fixed_dossiers, fixer.get_filing_number_counters())
         response = self.request.RESPONSE
 
         response.setHeader('Content-Type', 'application/vnd.ms-excel')
@@ -276,31 +289,28 @@ class FixFilingNumbers(grok.View):
 
         return data
 
-    def generate_excel(self, fixed_dossiers):
+    def generate_excel(self, fixed_dossiers, counters):
         w = Workbook()
-        sheet = w.add_sheet('changed prefixes')
 
-        # title style
-        title_style = XFStyle()
-        title_style.font.bold = True
+        self._add_dossier_sheet(w, fixed_dossiers)
+        self._add_counters_sheet(w, counters)
 
-        # old style
-        old_style = XFStyle()
-        old_style.font.colour_index = 0x10
-        old_style.font.outline = False
+        data = StringIO()
+        w.save(data)
+        data.seek(0)
 
-        # new style
-        new_style = XFStyle()
-        new_style.font.colour_index = 0x11
-        new_style.font.outline = False
+        return data.read()
 
-        for r, path in enumerate(fixed_dossiers.keys()):
-            sheet.write(r, 0, path, title_style)
+    def _add_dossier_sheet(self, w, dossiers):
+        sheet = w.add_sheet('changed dossiers')
+
+        for r, path in enumerate(dossiers.keys()):
+            sheet.write(r, 0, path, TITLE_STYLE)
 
             counter = 1
-            for fn_pair in fixed_dossiers.get(path):
-                sheet.write(r, counter, fn_pair[0], old_style)
-                sheet.write(r, counter + 1, fn_pair[1], new_style)
+            for fn_pair in dossiers.get(path):
+                sheet.write(r, counter, fn_pair[0], OLD_STYLE)
+                sheet.write(r, counter + 1, fn_pair[1], NEW_STYLE)
                 counter += 2
 
         # set_size
@@ -308,8 +318,12 @@ class FixFilingNumbers(grok.View):
         for i in range(1, 16):
             sheet.col(i).width = 5000
 
-        data = StringIO()
-        w.save(data)
-        data.seek(0)
+    def _add_counters_sheet(self, w, counters):
+        sheet = w.add_sheet('counters overview')
+        for r, key in enumerate(counters.keys()):
+            sheet.write(r, 0, key, TITLE_STYLE)
+            sheet.write(r, 1, counters.get(key).value)
 
-        return data.read()
+        # set_size
+        sheet.col(0).width = 5000
+        sheet.col(1).width = 5000
