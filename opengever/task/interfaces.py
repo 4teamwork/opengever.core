@@ -143,3 +143,11 @@ class ITaskDocumentsTransporter(Interface):
 
         An intids mapping (old => new) is returned.
         """
+
+
+class IYearfolderStorer(Interface):
+    """Interface for the YearfolderStorer adpater, which provide
+    the functionality to store a forwarding in the actual yearfolder. """
+
+    def store_in_yearfolder():
+        """Move the forwarding (adapted context) in the actual yearfolder."""

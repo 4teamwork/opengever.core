@@ -1,11 +1,10 @@
 from Acquisition import aq_inner, aq_parent
 from Products.CMFCore.utils import getToolByName
 from five import grok
-from opengever.task.browser.accept.utils import _get_yearfolder
+from opengever.task.interfaces import IYearfolderStorer
 from opengever.task.task import ITask
 from opengever.task.util import change_task_workflow_state
 from zExceptions import Unauthorized
-import AccessControl
 
 
 class StoreForwardingInYearfolderView(grok.View):
@@ -16,7 +15,7 @@ class StoreForwardingInYearfolderView(grok.View):
     def render(self):
         if self.is_already_done():
             # Set correct content type for text response
-            self.request.response.setHeader("Content-type", "tex/plain")
+            self.request.response.setHeader("Content-type", "text/plain")
 
             return 'OK'
 
@@ -26,8 +25,6 @@ class StoreForwardingInYearfolderView(grok.View):
         if not member.checkPermission('Add portal content', self.context):
             raise Unauthorized()
 
-        inbox = aq_parent(aq_inner(self.context))
-        yearfolder = _get_yearfolder(inbox)
         successor_oguid = self.request.get('successor_oguid')
         transition = self.request.get('transition')
         response_text = self.request.get('response_text')
@@ -38,28 +35,12 @@ class StoreForwardingInYearfolderView(grok.View):
                                       text=response_text,
                                       successor_oguid=successor_oguid)
 
-        try:
-            # change security context
-            _sm = AccessControl.getSecurityManager()
-            AccessControl.SecurityManagement.newSecurityManager(
-                    self.request,
-                    AccessControl.SecurityManagement.SpecialUsers.system)
+        IYearfolderStorer(self.context).store_in_yearfolder()
 
-            clipboard = inbox.manage_cutObjects((self.context.getId(),))
-            yearfolder.manage_pasteObjects(clipboard)
+        # Set correct content type for text response
+        self.request.response.setHeader("Content-type", "tex/plain")
 
-        except:
-            AccessControl.SecurityManagement.setSecurityManager(
-                _sm)
-            raise
-        else:
-            AccessControl.SecurityManagement.setSecurityManager(
-                _sm)
-
-            # Set correct content type for text response
-            self.request.response.setHeader("Content-type", "tex/plain")
-
-            return 'OK'
+        return 'OK'
 
     def is_already_done(self):
         """When the sender (caller of this view) has a conflict error, this

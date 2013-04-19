@@ -27,6 +27,7 @@ class TestWorkflowStateSyncer(MockTestCase):
     def setUp(self):
         super(TestWorkflowStateSyncer, self).setUp()
         grok('opengever.task.statesyncer')
+        grok('opengever.task.adapters')
 
     def test_get_tasks_to_sync(self):
         context = self.providing_stub([ITask])
@@ -287,3 +288,48 @@ class TestSyncTaskWorkflowStateReceiveView(MockTestCase):
 
         with self.assertRaises(Forbidden):
             SyncTaskWorkflowStateReceiveView(task, request)()
+
+    def test_test_and_closed_sync(self):
+        """The responsible value None is given in string (remote_request)
+        the responsible should not be set."""
+
+        task = self.providing_stub([ITask, IAttributeAnnotatable])
+        self.expect(task.Type()).result('opengever.task.task')
+
+        # request
+        request = self.stub_request(
+            interfaces=[IInternalOpengeverRequestLayer, ],
+            stub_response=False)
+        getter = self.stub()
+        self.expect(request.get).result(getter)
+        self.expect(getter('text')).result(u'Closing text')
+        self.expect(getter('responsible')).result('None')
+        self.expect(getter('responsible_client')).result('None')
+        self.expect(getter('transition')).result(
+            u'task-transition-tested-and-closed')
+
+        #response
+        response = self.stub_response(request=request)
+        self.expect(response.setHeader("Content-type", "text/plain"))
+
+        # worfklow_tool
+        wft = self.stub()
+        self.mock_tool(wft, 'portal_workflow')
+
+        with self.mocker.order():
+            wft.getInfoFor(task, 'review_state').result(
+                'task-state-in-progress')
+            wft.getInfoFor(task, 'review_state').result(
+                'task-state-tested-and-closed')
+
+        wft.doActionFor(task, u'task-transition-tested-and-closed')
+        wft.getTitleForStateOnType(
+            ANY, 'opengever.task.task').result('Closed')
+
+        self.replay()
+
+        view = SyncTaskWorkflowStateReceiveView(task, request)
+        view()
+
+        self.assertEquals(IResponseContainer(task)[0].text, u'Closing text')
+        self.assertEquals(len(IResponseContainer(task)), 1)
