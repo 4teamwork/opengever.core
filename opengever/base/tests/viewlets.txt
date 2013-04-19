@@ -94,36 +94,6 @@ Check that HTTP content-type header is set correctly:
     'foo/bar'
 
 
-Calling the viewlet on a document with a file with non-ASCII chars in filename
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Create a test document with a file that contains umlauts in filename.
-We omit the title, so that the filename doesn't get synchronized with
-the document title: 
-    >>> test_file3 = NamedBlobFile("lorem ipsum", filename=u'B\xe4rn.txt')
-    >>> test_doc3 = createContentInContainer(portal,
-    ...     'opengever.document.document',
-    ...     keywords=[],
-    ...     file=test_file3)
-
-Get the file download viewlet and call it:
-    >>> download_viewlet3 = test_doc3.restrictedTraverse('download_file_version')
-    >>> response3 = download_viewlet3.render()
-
-Response should contain file data:
-    >>> response3
-    'lorem ipsum'
-
-Check that HTTP response headers are set correctly:
-    >>> portal.REQUEST.response.headers.get('content-disposition')
-    'attachment; filename="B\xc3\xa4rn.txt"'
-    >>> portal.REQUEST.response.headers.get('content-length')
-    '11'
-    >>> portal.REQUEST.response.headers.get('content-type')
-    'text/plain'
-
-
-
 History viewlet
 ---------------
 
