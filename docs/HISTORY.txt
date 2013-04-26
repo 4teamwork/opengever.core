@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-2.5.1 (unreleased)
+2.5.1 (2013-04-26)
 ------------------
 
 - Implemented a YearfolderStorer adapter.
