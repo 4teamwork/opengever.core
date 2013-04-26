@@ -60,6 +60,6 @@ setup(name='opengever.inbox',
       entry_points="""
       # -*- Entry points: -*-
       [z3c.autoinclude.plugin]
-      target = opengever
+      target = plone
       """,
       )
