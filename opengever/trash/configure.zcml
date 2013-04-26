@@ -7,14 +7,11 @@
     xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
     i18n_domain="opengever.trash">
 
-  <!-- Include configuration for dependencies listed in setup.py -->
-  <includeDependencies package="." />
-  
   <!-- Register locales translations -->
   <i18n:registerTranslations directory="locales" />
-  
+
   <include file="profiles.zcml" />
-	
+
   <include package="plone.behavior" file="meta.zcml" />
 
   <include package="plone.directives.form" file="meta.zcml" />
@@ -35,7 +32,7 @@
      handler=".monkey.search_patch"
      docstringWarning="false"
      />
-     
+
   <plone:behavior
       title="ITrashable Behavior"
       description="Opengever trash behavior"
