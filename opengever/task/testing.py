@@ -46,39 +46,20 @@ class TaskFunctionalLayer(PloneSandboxLayer):
 
     def setUpZope(self, app, configurationContext):
         # do not install pas plugins (doesnt work in tests)
-
-        from ftw import tabbedview
-        xmlconfig.file(
-            'configure.zcml', package=tabbedview, context=configurationContext)
-        from ftw import contentmenu
-        xmlconfig.file(
-            'configure.zcml',
-            package=contentmenu,
-            context=configurationContext)
-
         from opengever.ogds.base import setuphandlers
         setuphandlers.setup_scriptable_plugin = lambda *a, **kw: None
 
-        from opengever.ogds import base
-        xmlconfig.file(
-            'tests.zcml', package=base, context=configurationContext)
-        from opengever import task
-        xmlconfig.file(
-            'configure.zcml', package=task, context=configurationContext)
-        from opengever import document
-        xmlconfig.file(
-            'configure.zcml', package=document, context=configurationContext)
+        xmlconfig.string(
+            '<configure xmlns="http://namespaces.zope.org/zope">'
 
-        from opengever import mail
-        xmlconfig.file(
-            'configure.zcml', package=mail, context=configurationContext)
+            '  <include package="z3c.autoinclude" file="meta.zcml" />'
+            '  <includePlugins package="plone" />'
+            '  <includePluginsOverrides package="plone" />'
 
-        from opengever import inbox
-        xmlconfig.file(
-            'configure.zcml', package=inbox, context=configurationContext)
-        from opengever import dossier
-        xmlconfig.file(
-            'configure.zcml', package=dossier, context=configurationContext)
+            '  <include package="opengever.ogds.base" file="tests.zcml" />'
+
+            '</configure>',
+            context=configurationContext)
 
     def setUpPloneSite(self, portal):
 
