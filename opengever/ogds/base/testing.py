@@ -53,15 +53,18 @@ class BaseLayer(PloneSandboxLayer):
         # do not install pas plugins (doesnt work in tests)
         from opengever.ogds.base import setuphandlers
         setuphandlers.setup_scriptable_plugin = lambda *a, **kw: None
-        # Load configure.zcml
-        import opengever.ogds.base
-        xmlconfig.file('configure.zcml', opengever.ogds.base,
-                       context=configurationContext)
-        xmlconfig.file('tests.zcml', opengever.ogds.base,
-                       context=configurationContext)
-        import opengever.task
-        xmlconfig.file('configure.zcml', opengever.task,
-                       context=configurationContext)
+
+        xmlconfig.string(
+            '<configure xmlns="http://namespaces.zope.org/zope">'
+
+            '  <include package="z3c.autoinclude" file="meta.zcml" />'
+            '  <includePlugins package="plone" />'
+            '  <includePluginsOverrides package="plone" />'
+
+            '  <include package="opengever.ogds.base" file="tests.zcml" />'
+
+            '</configure>',
+            context=configurationContext)
 
     def setUpPloneSite(self, portal):
         # Install into Plone site using portal_setup
