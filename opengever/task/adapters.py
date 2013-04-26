@@ -1,10 +1,8 @@
 from AccessControl import getSecurityManager
 from DateTime import DateTime
 from five import grok
-from ftw.contentmenu.interfaces import IContentmenuPostFactoryMenu
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.task.task import ITask
-from opengever.task import _
 from persistent import Persistent
 from persistent.list import PersistentList
 from zope.annotation.interfaces import IAnnotations
@@ -159,34 +157,3 @@ class EmptyExporter(object):
 
     def export(self, export_context, subdir, root=False):
         return
-
-
-class TaskPostFactoryMenu(grok.MultiAdapter):
-    """If a task is added to another task, it is called subtask. So we need
-    to change the name of the task in the add-menu if we are in a task.
-    """
-
-    grok.adapts(ITask, Interface)
-    grok.implements(IContentmenuPostFactoryMenu)
-
-    def __init__(self, context, request):
-        self.context = context
-        self.request = request
-
-    def __call__(self, factories):
-        if not ITask.providedBy(self.context):
-            # use default
-            return factories
-
-        cleaned_factories = []
-        for factory in factories:
-            # drop mail factory
-            if factory['extra']['id'] != u'ftw-mail-mail':
-
-                if factory['title'] == u'Task':
-                    factory['title'] = _(u'Subtask')
-                    factory['extra']['class'] = 'icon-task-subtask'
-
-                cleaned_factories.append(factory)
-
-        return cleaned_factories

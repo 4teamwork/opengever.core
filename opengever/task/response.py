@@ -70,34 +70,6 @@ class IResponse(Interface):
         )
 
 
-def voc2dict(vocab, current=None):
-    """Make a dictionary from a vocabulary.
-
-    >>> from Products.Archetypes.atapi import DisplayList
-    >>> vocab = DisplayList()
-    >>> vocab.add('a', "The letter A")
-    >>> voc2dict(vocab)
-    [{'checked': '', 'value': 'a', 'label': 'The letter A'}]
-    >>> vocab.add('b', "The letter B")
-    >>> voc2dict(vocab)
-    [{'checked': '', 'value': 'a', 'label': 'The letter A'},
-    {'checked': '', 'value': 'b', 'label': 'The letter B'}]
-    >>> voc2dict(vocab, current='c')
-    [{'checked': '', 'value': 'a', 'label': 'The letter A'},
-    {'checked': '', 'value': 'b', 'label': 'The letter B'}]
-    >>> voc2dicts(vocab, current='b')
-    [{'checked': '', 'value': 'a', 'label': 'The letter A'},
-    {'checked': 'checked', 'value': 'b', 'label': 'The letter B'}]
-
-    """
-    options = []
-    for value, label in vocab.items():
-        checked = (value == current) and "checked" or ""
-        options.append(dict(value=value, label=label,
-                            checked=checked))
-    return options
-
-
 class Base(BrowserView):
     """Base view for PoiIssues.
 
@@ -165,56 +137,6 @@ class Base(BrowserView):
     def can_delete_response(self):
         context = aq_inner(self.context)
         return self.memship.checkPermission('Delete objects', context)
-
-    def validate_response_id(self):
-        """Validate the response id from the request.
-
-        Return -1 if for example the response id does not exist.
-        Return the response id otherwise.
-
-        Side effect: an informative status message is set.
-        """
-        status = IStatusMessage(self.request)
-        response_id = self.request.form.get('response_id', None)
-        if response_id is None:
-            msg = _(u"No response selected.")
-            msg = translate(msg, 'Poi', context=self.request)
-            status.addStatusMessage(msg, type='error')
-            return -1
-        else:
-            try:
-                response_id = int(response_id)
-            except ValueError:
-                msg = _(u"Response id ${response_id} is no integer.",
-                        mapping=dict(response_id=response_id))
-                msg = translate(msg, 'Poi', context=self.request)
-                status.addStatusMessage(msg, type='error')
-                return -1
-            if response_id >= len(self.folder):
-                msg = _(u"Response id ${response_id} does not exist.",
-                        mapping=dict(response_id=response_id))
-                msg = translate(msg, 'Poi', context=self.request)
-                status.addStatusMessage(msg, type='error')
-                return -1
-            else:
-                return response_id
-        # fallback
-        return -1
-
-    @property
-    def severity(self):
-        context = aq_inner(self.context)
-        return context.getSeverity()
-
-    @property
-    def targetRelease(self):
-        context = aq_inner(self.context)
-        return context.getTargetRelease()
-
-    @property
-    def responsibleManager(self):
-        context = aq_inner(self.context)
-        return context.getResponsibleManager()
 
 
 class AddForm(form.AddForm, AutoExtensibleForm):
@@ -433,26 +355,6 @@ class ResponseView(grok.Viewlet, Base):
             return info.render_link(value)
 
         return value
-
-
-"""
-class AddFormView(layout.FormWrapper, grok.Viewlet, Base):
-grok.implements(IResponseAdder)
-grok.context(ITask)
-grok.name("opengever.task.response.addForm")
-grok.viewletmanager(BeneathTask)
-grok.order(2)
-form = AddForm
-def __init__(self, context, request, view, manager):
-layout.FormWrapper.__init__(self,context,request)
-grok.Viewlet.__init__(self,context,request,view, manager)
-Base.__init__(self,context, request)
-self.__parent__ = view
-self.form_instance.view = self
-
-def render(self):
-return layout.FormWrapper.render_form(self)
-"""
 
 
 class SingleAddFormView(layout.FormWrapper, grok.View):

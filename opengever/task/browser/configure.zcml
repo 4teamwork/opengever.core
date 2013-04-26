@@ -8,14 +8,6 @@
           file="resources/opengever.task.responsible.js" />
 
     <browser:page
-          name="task_workflow_checks"
-          for="opengever.task.task.ITask"
-          class=".workflowchecks.TaskWorfklowChecks"
-          allowed_interface=".workflowchecks.ITaskWorkflowChecks"
-          permission="zope2.View"
-          />
-
-    <browser:page
           name="task_transition_controller"
           for="opengever.task.task.ITask"
           class=".transitioncontroller.TaskTransitionController"

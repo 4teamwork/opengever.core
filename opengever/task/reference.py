@@ -4,8 +4,9 @@ from opengever.base.interfaces import IReferenceNumber
 from opengever.base.reference import BasicReferenceNumber
 
 
-class DocumentReferenceNumber(BasicReferenceNumber):
-    """ Reference number for documents
+class TaskReferenceNumber(BasicReferenceNumber):
+    """ Reference number adapter specially for task.
+    For more information see base class BasicReferenceNumber.
     """
 
     grok.provides(IReferenceNumber)

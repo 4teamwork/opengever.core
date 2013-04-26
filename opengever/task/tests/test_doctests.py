@@ -1,7 +1,7 @@
 import unittest2 as unittest
 import doctest
 from plone.testing import layered
-from opengever.task.testing import OPENGEVER_TASK_INTEGRATION_TESTING
+from opengever.task.testing import OPENGEVER_TASK_FUNCTIONAL_TESTING
 
 
 TESTFILES = (
@@ -10,7 +10,6 @@ TESTFILES = (
     'successor.txt',
     'task_ids.txt',
     'test_overview.txt',
-    'test_indexers.txt',
     )
 
 
@@ -27,7 +26,7 @@ def test_suite():
         suite.addTests([
             layered(doctest.DocFileSuite(testfile,
                     optionflags=OPTIONFLAGS),
-                    layer=OPENGEVER_TASK_INTEGRATION_TESTING),
+                    layer=OPENGEVER_TASK_FUNCTIONAL_TESTING),
         ])
 
     return suite

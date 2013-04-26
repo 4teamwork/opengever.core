@@ -1,10 +1,7 @@
-from Acquisition import aq_inner, aq_parent
-from Products.CMFCore.interfaces import IActionSucceededEvent
 from collective import dexteritytextindexer
 from datetime import datetime, timedelta
 from five import grok
 from ftw.datepicker.widget import DatePickerFieldWidget
-from opengever.base.interfaces import ISequenceNumber
 from opengever.base.source import DossierPathSourceBinder
 from opengever.ogds.base.autocomplete_widget import AutocompleteFieldWidget
 from opengever.ogds.base.interfaces import IContactInformation
@@ -14,11 +11,9 @@ from opengever.task import util
 from opengever.task.validators import NoCheckedoutDocsValidator
 from plone.dexterity.content import Container
 from plone.directives import form, dexterity
-from plone.indexer import indexer
 from z3c.form import validator
 from z3c.form.interfaces import HIDDEN_MODE
 from z3c.relationfield.schema import RelationChoice, RelationList
-from zc.relation.interfaces import ICatalog
 from zope import schema
 from zope.app.intid.interfaces import IIntIds
 from zope.component import getUtility, getMultiAdapter
@@ -185,10 +180,6 @@ validator.WidgetValidatorDiscriminators(
 provideAdapter(NoCheckedoutDocsValidator)
 
 
-# # XXX doesn't work yet.
-#@form.default_value(field=ITask['issuer'])
-
-
 def default_issuer(data):
     portal_state = getMultiAdapter(
         (data.context, data.request),
@@ -203,25 +194,6 @@ class Task(Container):
     def __init__(self, *args, **kwargs):
         super(Task, self).__init__(*args, **kwargs)
 
-    # REMOVED UNCOMMENT unused title function
-    # def Title(self):
-    #     registry = queryUtility(IRegistry)
-    #     proxy = registry.forInterface(ITaskSettings)
-    #     title = "#%s %s"% (
-    #   getUtility(ISequenceNumber).get_number(self),self.task_type)
-    #     relatedItems = getattr(self,'relatedItems',[])
-    #     if len(relatedItems) == 1:
-    #         title += " (%s)" % self.relatedItems[0].to_object.title
-    #     elif len(relatedItems) > 1:
-    #         title += " (%i Dokumente)" % len(self.relatedItems)
-    #     if self.text:
-    #         crop_length = int(getattr(proxy,'crop_length',20))
-    #         text = self.text.encode('utf8')
-    #         text = self.restrictedTraverse('@@plone').cropText(
-    #   text,crop_length)
-    #         text = text.decode('utf8')
-    #         title += ": %s" % text
-    #     return title
     @property
     def sequence_number(self):
         return self._sequence_number
@@ -299,115 +271,6 @@ class EditForm(dexterity.EditForm):
             self.groups[0].widgets['responsible_client'].mode = HIDDEN_MODE
             self.groups[0].widgets['responsible'].field.description = _(
                 u"help_responsible_single_client_setup", default=u"")
-
-
-@indexer(ITask)
-def related_items(obj):
-    catalog = getUtility(ICatalog)
-    intids = getUtility(IIntIds)
-
-    # object might not have an intid yet
-    try:
-        obj_intid = intids.getId(aq_inner(obj))
-    except KeyError:
-        return []
-
-    results = []
-    relations = catalog.findRelations({'from_id': obj_intid,
-                                       'from_attribute': 'relatedItems'})
-    for rel in relations:
-        results.append(rel.to_id)
-    return results
-grok.global_adapter(related_items, name='related_items')
-
-
-@indexer(ITask)
-def date_of_completion(obj):
-    # handle 'None' dates. we always need a date for indexing.
-    if obj.date_of_completion is None:
-        return datetime(1970, 1, 1)
-    return obj.date_of_completion
-grok.global_adapter(date_of_completion, name='date_of_completion')
-
-
-@indexer(ITask)
-def assigned_client(obj):
-    """Indexes the client of the responsible. Since the he may be assigned
-    to multiple clients, we need to use the client which was selected in the
-    task.
-    """
-
-    if not obj.responsible or not obj.responsible_client:
-        return ''
-    else:
-        return obj.responsible_client
-grok.global_adapter(assigned_client, name='assigned_client')
-
-
-@indexer(ITask)
-def client_id(obj):
-    return get_client_id()
-grok.global_adapter(client_id, name='client_id')
-
-
-@indexer(ITask)
-def sequence_number(obj):
-    """ Indexer for the sequence_number """
-    return obj._sequence_number
-grok.global_adapter(sequence_number, name='sequence_number')
-
-
-@indexer(ITask)
-def is_subtask(obj):
-    """ is_subtask indexer
-    """
-    parent = aq_parent(aq_inner(obj))
-    return ITask.providedBy(parent)
-grok.global_adapter(is_subtask, name='is_subtask')
-
-
-class SearchableTextExtender(grok.Adapter):
-    """ Task specific SearchableText Extender"""
-
-    grok.context(ITask)
-    grok.name('ITask')
-    grok.implements(dexteritytextindexer.IDynamicTextIndexExtender)
-
-    def __init__(self, context):
-        self.context = context
-
-    def __call__(self):
-        searchable = []
-        # append some other attributes to the searchableText index
-
-        # sequence_number
-        seqNumb = getUtility(ISequenceNumber)
-        searchable.append(str(seqNumb.get_number(self.context)))
-
-        #responsible
-        info = getUtility(IContactInformation)
-        dossier = ITask(self.context)
-        searchable.append(info.describe(dossier.responsible).encode(
-                'utf-8'))
-
-        return ' '.join(searchable)
-
-
-@grok.subscribe(ITask, IActionSucceededEvent)
-def set_dates(task, event):
-
-    resolved_transitions = ['task-transition-in-progress-resolved',
-                            'task-transition-open-resolved',
-                            'task-transition-open-tested-and-closed',
-                            'task-transition-in-progress-tested-and-closed',
-                            ]
-
-    if event.action == 'task-transition-open-in-progress':
-        task.expectedStartOfWork = datetime.now()
-    elif event.action in resolved_transitions:
-        task.date_of_completion = datetime.now()
-    if event.action == 'task-transition-resolved-in-progress':
-        task.date_of_completion = None
 
 
 def related_document(context):
