@@ -14,8 +14,6 @@
     <i18n:registerTranslations directory="locales" />
 
     <include package="plone.app.workflow" />
-    <!-- Include configuration for dependencies listed in setup.py -->
-    <includeDependencies package="." />
 
     <!-- Register an extension profile to make the product installable -->
     <genericsetup:registerProfile
