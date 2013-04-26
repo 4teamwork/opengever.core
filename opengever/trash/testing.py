@@ -10,10 +10,20 @@ class TrashLayer(PloneSandboxLayer):
     defaultBases = (PLONE_FIXTURE,)
 
     def setUpZope(self, app, configurationContext):
-        # Load ZCML
+
+        xmlconfig.string(
+            '<configure xmlns="http://namespaces.zope.org/zope">'
+
+            '  <include package="z3c.autoinclude" file="meta.zcml" />'
+            '  <includePlugins package="plone" />'
+            '  <includePluginsOverrides package="plone" />'
+
+            '  <include package="opengever.ogds.base" file="tests.zcml" />'
+
+            '</configure>',
+            context=configurationContext)
+
         import opengever.trash
-        xmlconfig.file('configure.zcml',
-                       opengever.trash, context=configurationContext)
         xmlconfig.file('tests.zcml',
                        opengever.trash, context=configurationContext)
 
