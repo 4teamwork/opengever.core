@@ -8,6 +8,8 @@
     xmlns:browser="http://namespaces.zope.org/browser"
     i18n_domain="opengever.document">
 
+    <include package="collective.vdexvocabulary" file="meta.zcml" />
+
     <!-- Grok the package to initialise schema interfaces and content classes -->
     <grok:grok package="." />
 
