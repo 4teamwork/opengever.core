@@ -1,10 +1,6 @@
 <configure
     xmlns="http://namespaces.zope.org/zope">
 
-  <!-- Include configuration for dependencies listed in setup.py -->
-  <include package="z3c.autoinclude" file="meta.zcml" />
-  <includeDependencies package="." />
-
   <include package=".browser" />
   <include file="profiles.zcml" />
   <include file="transmogrifier.zcml" />
