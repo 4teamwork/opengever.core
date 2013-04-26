@@ -17,13 +17,17 @@ class ContactIntegrationLayer(PloneSandboxLayer):
         from opengever.ogds.base import setuphandlers
         setuphandlers.setup_scriptable_plugin = lambda *a, **kw: None
 
-        from opengever.ogds import base
-        xmlconfig.file('tests.zcml', package=base, context=configurationContext)
+        xmlconfig.string(
+            '<configure xmlns="http://namespaces.zope.org/zope">'
 
-        # Load testing zcml (optional)
-        import opengever.contact
-        xmlconfig.file('configure.zcml', opengever.contact, context=configurationContext)
-        xmlconfig.file('tests.zcml', opengever.contact, context=configurationContext)
+            '  <include package="z3c.autoinclude" file="meta.zcml" />'
+            '  <includePlugins package="plone" />'
+            '  <includePluginsOverrides package="plone" />'
+
+            '  <include package="opengever.ogds.base" file="tests.zcml" />'
+
+            '</configure>',
+            context=configurationContext)
 
     def setUpPloneSite(self, portal):
         applyProfile(portal, 'opengever.ogds.base:default')
@@ -37,4 +41,3 @@ CONTACT_INTEGRATION_TESTING = IntegrationTesting(
     bases=(CONTACT_INTEGRATION_FIXTURE,), name="Contact:Integration")
 CONTACT_FUNCTIONAL_TESTING = FunctionalTesting(
     bases=(CONTACT_INTEGRATION_FIXTURE,), name="Contact:Functional")
-
