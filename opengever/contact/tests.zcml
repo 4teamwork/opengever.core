@@ -1,8 +1,0 @@
-<configure
-    xmlns:zope="http://namespaces.zope.org/zope"
-    xmlns:browser="http://namespaces.zope.org/browser">
-  
-  
-    <include package="opengever.tabbedview"/>
-    <include package="plone.formwidget.namedfile" />
-</configure>
