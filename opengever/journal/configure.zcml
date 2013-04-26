@@ -7,9 +7,6 @@
     xmlns:plone="http://namespaces.plone.org/plone"
     i18n_domain="opengever.journal">
 
-    <!-- Include configuration for dependencies listed in setup.py -->
-    <includeDependencies package="." />
-
     <!-- Grok the package to initialise schema interfaces and content classes -->
     <grok:grok package="." />
 
