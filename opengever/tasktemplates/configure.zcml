@@ -8,12 +8,9 @@
     xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
     i18n_domain="opengever.tasktemplates">
 
-    <!-- Include configuration for dependencies listed in setup.py -->
-    <includeDependencies package="." />
-
     <!-- Grok the package to initialise schema interfaces and content classes -->
     <grok:grok package="." />
-    
+
     <include package=".browser" />
 
     <i18n:registerTranslations directory="locales" />
