@@ -21,24 +21,17 @@ class BaseLayer(PloneSandboxLayer):
         setuphandlers.setup_scriptable_plugin = lambda *a, **kw: None
         # Load configure.zcml
 
-        from opengever.ogds import base
-        xmlconfig.file('tests.zcml', package=base, context=configurationContext)
+        xmlconfig.string(
+            '<configure xmlns="http://namespaces.zope.org/zope">'
 
-        from opengever import task
-        xmlconfig.file('configure.zcml', package=task, context=configurationContext)
+            '  <include package="z3c.autoinclude" file="meta.zcml" />'
+            '  <includePlugins package="plone" />'
+            '  <includePluginsOverrides package="plone" />'
 
-        from opengever import document
-        xmlconfig.file('configure.zcml', package=document, context=configurationContext)
+            '  <include package="opengever.ogds.base" file="tests.zcml" />'
 
-        from opengever import dossier
-        xmlconfig.file('configure.zcml', package=dossier, context=configurationContext)
-
-        from opengever import base
-        xmlconfig.file('configure.zcml', package=base, context=configurationContext)
-        xmlconfig.file('overrides.zcml', package=base, context=configurationContext)
-
-        from opengever import advancedsearch
-        xmlconfig.file('configure.zcml', package=advancedsearch, context=configurationContext)
+            '</configure>',
+            context=configurationContext)
 
     def setUpPloneSite(self, portal):
         # Install into Plone site using portal_setup
@@ -48,7 +41,6 @@ class BaseLayer(PloneSandboxLayer):
         applyProfile(portal, 'opengever.ogds.base:default')
         applyProfile(portal, 'opengever.dossier:default')
         applyProfile(portal, 'opengever.document:default')
-
 
         # setup the sql tables
         create_sql_tables()
