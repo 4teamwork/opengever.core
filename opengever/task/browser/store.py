@@ -1,10 +1,11 @@
 from Acquisition import aq_inner, aq_parent
 from Products.CMFCore.utils import getToolByName
 from five import grok
-from opengever.task.interfaces import IYearfolderStorer
+from opengever.task.browser.accept.utils import _get_yearfolder
 from opengever.task.task import ITask
 from opengever.task.util import change_task_workflow_state
 from zExceptions import Unauthorized
+import AccessControl
 
 
 class StoreForwardingInYearfolderView(grok.View):
@@ -12,30 +13,59 @@ class StoreForwardingInYearfolderView(grok.View):
     grok.context(ITask)
     grok.require('zope2.View')
 
-    def render(self):
-        if self.is_already_done():
-            # Set correct content type for text response
-            self.request.response.setHeader("Content-type", "text/plain")
-
-            return 'OK'
-
+    def _check_permission(self):
         mtool = getToolByName(self.context, 'portal_membership')
         member = mtool.getAuthenticatedMember()
 
         if not member.checkPermission('Add portal content', self.context):
             raise Unauthorized()
 
-        successor_oguid = self.request.get('successor_oguid')
-        transition = self.request.get('transition')
-        response_text = self.request.get('response_text')
+    def store_to_yearfolder(self,
+                            text='',
+                            transition='forwarding-transition-close',
+                            successor_oguid=None):
+
+        self._check_permission()
+
+        inbox = aq_parent(aq_inner(self.context))
+        yearfolder = _get_yearfolder(inbox)
 
         if transition:
             change_task_workflow_state(self.context,
                                       transition,
-                                      text=response_text,
+                                      text=text,
                                       successor_oguid=successor_oguid)
 
-        IYearfolderStorer(self.context).store_in_yearfolder()
+        try:
+            # change security context
+            _sm = AccessControl.getSecurityManager()
+            AccessControl.SecurityManagement.newSecurityManager(
+                    self.request,
+                    AccessControl.SecurityManagement.SpecialUsers.system)
+
+            clipboard = inbox.manage_cutObjects((self.context.getId(),))
+            yearfolder.manage_pasteObjects(clipboard)
+
+        except:
+            AccessControl.SecurityManagement.setSecurityManager(
+                _sm)
+            raise
+        else:
+            AccessControl.SecurityManagement.setSecurityManager(
+                _sm)
+
+    def render(self):
+
+        if self.is_already_done():
+            # Set correct content type for text response
+            self.request.response.setHeader("Content-type", "tex/plain")
+
+            return 'OK'
+
+        self.store_to_yearfolder(
+            text=self.request.get('response_text'),
+            transition= self.request.get('transition'),
+            successor_oguid=self.request.get('successor_oguid'))
 
         # Set correct content type for text response
         self.request.response.setHeader("Content-type", "tex/plain")
