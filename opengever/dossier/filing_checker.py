@@ -1,11 +1,13 @@
 # -*- coding: utf-8 -*-
+from Products.CMFCore.utils import getToolByName
+from Products.Transience.Transience import Increaser
 from opengever.base.interfaces import IBaseClientID
+from opengever.dossier.archive import Archiver
 from opengever.dossier.archive import FILING_NO_KEY
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.filing_excel_report import ExcelReportMixin
 from plone.registry.interfaces import IRegistry
-from Products.CMFCore.utils import getToolByName
 from zope.annotation.interfaces import IAnnotations
 from zope.component import getAdapter
 from zope.component import getUtility
@@ -25,7 +27,8 @@ LEGACY_PREFIX_MAPPING = {
          'ska-ska':    {u'Staatskanzlei':                    u'Direktion'},
          'di-dis':     {u'Direktion des Innern':             u'Direktion'},
          'dbk-aku':    {u'Direktion für Bildung und Kultur': u'Direktion'},
-         'mandant1':   {u'Mandantendirektion':               u'Direktion'},
+         'mandant1':   {u'Pseudoamt':               u'Amt',
+                        u'Pseudoamt2':               u'Amt'},
                          }
 
 PREVIOUS_CLIENT_PREFIXES = {
@@ -158,15 +161,39 @@ class FilingNumberHelper(object):
         dossier = getAdapter(obj, IDossier)
         return dossier.filing_no
 
+    def set_next_filing_number(self, obj, prefix=None, year=None):
+        if not IDossierMarker.providedBy(obj):
+            raise ValueError("%s is not a dossier object." % obj)
+
+        # define prefix and year
+        if not prefix and not IDossier(obj).filing_no:
+            raise ValueError(
+                "%s no prefix is given and the filing number is None as well" % obj)
+        else:
+            fn_parts = IDossier(obj).filing_no.split('-')
+            prefix = fn_parts[-3]
+            year = fn_parts[-2]
+
+        prefix = self._get_filing_prefixes_token(prefix)
+
+        Archiver(obj).archive(prefix, year)
+        return IDossier(obj).filing_no
+
     def set_filing_number(self, obj, filing_no):
         """Given a dossier object and a filing number, set the filing number
         for that dossier and reindex the object.
         """
+        self._set_filing_number_without_reindex(obj, filing_no)
+        obj.reindexObject()
+
+    def _set_filing_number_without_reindex(self, obj, filing_no):
         if not IDossierMarker.providedBy(obj):
             raise ValueError("%s is not a dossier object." % obj)
         dossier = getAdapter(obj, IDossier)
         dossier.filing_no = filing_no
-        obj.reindexObject()
+
+    def _reset_filing_numbers(self):
+        self._filing_numbers = []
 
     def get_filing_numbers(self):
         """Get a list of tuples containing all filing numbers and the path
@@ -204,6 +231,13 @@ class FilingNumberHelper(object):
             raise ValueError("No such counter: %s" % counter_key)
         counter.value = value
 
+    def create_counter(self, counter_key, value=0):
+        if self.get_filing_number_counters().get(counter_key, None):
+            raise ValueError('The counter %s allready exists' % counter_key)
+        else:
+            ann = IAnnotations(self.plone)
+            ann.get(FILING_NO_KEY)[counter_key] = Increaser(value)
+
     def get_filing_number_counters(self):
         """Return the dictionary that represents the mapping of filing number
         counter keys to their Increaser object.
@@ -217,6 +251,21 @@ class FilingNumberHelper(object):
             if ann is None:
                 raise KeyError("No annotations found on Plone site root!")
         return self._filing_number_counters
+
+    def get_associated_to_filing_prefix_numbers(self, prefix):
+        """Return a tuple with filing number, path, and prefix from all dossiers,
+        with a filing number which used that filing_prefix."""
+        dossiers = []
+        for fn, path in self.get_filing_numbers():
+            if self.get_filing_prefix(fn) == prefix:
+                dossiers.append((fn, path, prefix))
+
+        return dossiers
+
+    def get_filing_prefix(self, fn):
+        parts = fn.split('-')
+        # TODO check if the first part is one of the client prefixes
+        return parts[1]
 
     def get_associated_filing_numbers(self, counter_key):
         """Return a sorted list of filing numbers and paths for all filing
@@ -232,6 +281,7 @@ class FilingNumberHelper(object):
                 associated_fns.append((fn, path))
         associated_fns.sort(key=lambda x: alphanum_key(x[0]))
         return associated_fns
+
 
     def get_highest_filing_number(self, fns_and_paths):
         """From a list of filing numbers and paths running on the same counter,
@@ -312,6 +362,12 @@ class FilingNumberHelper(object):
         vocab_name = 'opengever.dossier.type_prefixes'
         vocab = getVocabularyRegistry().get(self.plone, vocab_name)
         return [term.title for term in vocab]
+
+    def _get_filing_prefixes_token(self, prefix):
+        vocab_name = 'opengever.dossier.type_prefixes'
+        for term in getVocabularyRegistry().get(self.plone, vocab_name):
+            if term.title == prefix:
+                return term.token
 
 
 class FilingNumberChecker(Checker, FilingNumberHelper, ExcelReportMixin):
