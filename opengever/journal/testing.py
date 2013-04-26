@@ -18,57 +18,21 @@ class OpengeverJournalFunctionalLayer(PloneSandboxLayer):
 
     def setUpZope(self, app, configurationContext):
         # do not install pas plugins (doesnt work in tests)
-        from opengever.ogds import base
         from opengever.ogds.base import setuphandlers
-
         setuphandlers.setup_scriptable_plugin = lambda *a, **kw: None
 
-        xmlconfig.file(
-            'tests.zcml', package=base, context=configurationContext)
-        from opengever import tabbedview
-        xmlconfig.file(
-            'configure.zcml',
-             package=tabbedview, context=configurationContext)
-        from opengever import journal as og_journal
-        xmlconfig.file(
-            'configure.zcml',
-            package=og_journal, context=configurationContext)
-        from opengever import document
-        xmlconfig.file(
-            'configure.zcml',
-            package=document, context=configurationContext)
-        from opengever import task
-        xmlconfig.file(
-            'configure.zcml',
-            package=task, context=configurationContext)
-        from opengever import trash
-        xmlconfig.file(
-            'configure.zcml',
-            package=trash, context=configurationContext)
-        from opengever import dossier
-        xmlconfig.file(
-            'configure.zcml',
-            package=dossier, context=configurationContext)
-        from opengever import mail
-        xmlconfig.file(
-            'configure.zcml',
-            package=mail, context=configurationContext)
-        from opengever import repository
-        xmlconfig.file(
-            'configure.zcml',
-            package=repository, context=configurationContext)
-        from ftw import table
-        xmlconfig.file(
-            'configure.zcml',
-            package=table, context=configurationContext)
-        from ftw import journal
-        xmlconfig.file(
-            'configure.zcml',
-            package=journal, context=configurationContext)
-        from opengever import contact
-        xmlconfig.file(
-            'configure.zcml',
-            package=contact, context=configurationContext)
+
+        xmlconfig.string(
+            '<configure xmlns="http://namespaces.zope.org/zope">'
+
+            '  <include package="z3c.autoinclude" file="meta.zcml" />'
+            '  <includePlugins package="plone" />'
+            '  <includePluginsOverrides package="plone" />'
+
+            '  <include package="opengever.ogds.base" file="tests.zcml" />'
+
+            '</configure>',
+            context=configurationContext)
 
     def setUpPloneSite(self, portal):
         applyProfile(portal, 'opengever.ogds.base:default')
