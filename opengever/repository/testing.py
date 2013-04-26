@@ -20,23 +20,17 @@ class RepositoryFunctionalLayer(PloneSandboxLayer):
         from opengever.ogds.base import setuphandlers
         setuphandlers.setup_scriptable_plugin = lambda *a, **kw: None
 
-        from plone.app import dexterity
-        xmlconfig.file('meta.zcml',
-                       package=dexterity, context=configurationContext)
-        xmlconfig.file('configure.zcml',
-                       package=dexterity, context=configurationContext)
+        xmlconfig.string(
+            '<configure xmlns="http://namespaces.zope.org/zope">'
 
-        from opengever.ogds import base
-        xmlconfig.file('tests.zcml',
-                       package=base, context=configurationContext)
+            '  <include package="z3c.autoinclude" file="meta.zcml" />'
+            '  <includePlugins package="plone" />'
+            '  <includePluginsOverrides package="plone" />'
 
-        from opengever import repository
-        xmlconfig.file('configure.zcml',
-                       package=repository, context=configurationContext)
+            '  <include package="opengever.ogds.base" file="tests.zcml" />'
 
-        from ftw import tabbedview
-        xmlconfig.file('configure.zcml',
-                       package=tabbedview, context=configurationContext)
+            '</configure>',
+            context=configurationContext)
 
     def setUpPloneSite(self, portal):
         applyProfile(portal, 'ftw.tabbedview:default')
