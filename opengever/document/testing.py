@@ -24,24 +24,21 @@ class DocumentFunctionalLayer(PloneSandboxLayer):
         from opengever.ogds.base import setuphandlers
         setuphandlers.setup_scriptable_plugin = lambda *a, **kw: None
 
-        import plone.app.versioningbehavior
-        xmlconfig.file('configure.zcml', package=plone.app.versioningbehavior,
-                        context=configurationContext)
-        z2.installProduct(app, 'plone.app.versioningbehavior')
+        xmlconfig.string(
+            '<configure xmlns="http://namespaces.zope.org/zope">'
+
+            '  <include package="z3c.autoinclude" file="meta.zcml" />'
+            '  <includePlugins package="plone" />'
+            '  <includePluginsOverrides package="plone" />'
+
+            '</configure>',
+            context=configurationContext)
 
         from opengever import document
-        xmlconfig.file('configure.zcml', package=document,
-            context=configurationContext)
         xmlconfig.file('tests.zcml', package=document,
             context=configurationContext)
 
-        from opengever import dossier
-        xmlconfig.file('configure.zcml', package=dossier,
-            context=configurationContext)
-
-        from opengever import base
-        xmlconfig.file('configure.zcml', package=base,
-            context=configurationContext)
+        z2.installProduct(app, 'plone.app.versioningbehavior')
 
     def setUpPloneSite(self, portal):
         applyProfile(portal, 'plone.app.versioningbehavior:default')
