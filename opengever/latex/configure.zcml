@@ -7,10 +7,6 @@
 
     <i18n:registerTranslations directory="locales" />
 
-    <!-- dependencies -->
-    <include package="z3c.autoinclude" file="meta.zcml" />
-    <includeDependencies package="." />
-
     <!-- grok -->
     <grok:grok package="." />
 
