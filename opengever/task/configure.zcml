@@ -9,10 +9,6 @@
     xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
     i18n_domain="opengever.task">
 
-    <!-- Include configuration for dependencies listed in setup.py -->
-    <includeDependencies package="." />
-
-
     <!-- Include custom permissions -->
     <include file="permissions.zcml" />
 
