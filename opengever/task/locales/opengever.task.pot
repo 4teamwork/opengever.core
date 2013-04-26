@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2012-11-29 21:57+0000\n"
+"POT-Creation-Date: 2012-08-21 13:16+0000\n"
 "PO-Revision-Date: 2009-02-25 14:39+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -36,7 +36,7 @@ msgid "Edit"
 msgstr ""
 
 #: ./opengever/task/response.py:324
-#: ./opengever/task/statesyncer.py:146
+#: ./opengever/task/statesyncer.py:142
 #: ./opengever/task/util.py:156
 msgid "Issue state"
 msgstr ""
@@ -77,7 +77,7 @@ msgstr ""
 msgid "Select the related documents you wish to attach to the new subtasks."
 msgstr ""
 
-#: ./opengever/task/adapters.py:187
+#: ./opengever/task/adapters.py:183
 msgid "Subtask"
 msgstr ""
 
@@ -85,7 +85,7 @@ msgstr ""
 msgid "Task"
 msgstr ""
 
-#: ./opengever/task/browser/complete.py:133
+#: ./opengever/task/browser/complete.py:132
 msgid "The documents were delivered to the issuer and the tasks were completed."
 msgstr ""
 
@@ -173,7 +173,7 @@ msgid "accept_method_participate"
 msgstr ""
 
 #. Default: "RE"
-#: ./opengever/task/browser/complete.py:311
+#: ./opengever/task/browser/complete.py:310
 msgid "answer_prefix"
 msgstr ""
 
@@ -202,11 +202,6 @@ msgstr ""
 #: ./opengever/task/browser/accept/main.py:223
 #: ./opengever/task/browser/accept/newdossier.py:155
 msgid "button_cancel"
-msgstr ""
-
-#. Default: "Close"
-#: ./opengever/task/browser/forwarding_close.py:27
-msgid "button_close"
 msgstr ""
 
 #. Default: "Continue"
@@ -252,8 +247,8 @@ msgstr ""
 msgid "delegate_label_responsibles"
 msgstr ""
 
-#. Default: "The documents (${title}) are still checked out.                                 Please checkin them in bevore deliver"
-#: ./opengever/task/validators.py:33
+#. Default: "The documents (${title}) are still checked out.                             Please checkin them in bevore deliver"
+#: ./opengever/task/validators.py:31
 msgid "error_checked_out_document"
 msgstr ""
 
@@ -324,12 +319,12 @@ msgid "help_close_documents"
 msgstr ""
 
 #. Default: "Select the documents you want to deliver to the issuer of the task. They will be attached to the original task of the issuer."
-#: ./opengever/task/browser/complete.py:85
+#: ./opengever/task/browser/complete.py:84
 msgid "help_complete_documents"
 msgstr ""
 
 #. Default: "Enter a answer text which will be shown as response when the task is completed."
-#: ./opengever/task/browser/complete.py:97
+#: ./opengever/task/browser/complete.py:96
 msgid "help_complete_task_response"
 msgstr ""
 
@@ -381,11 +376,11 @@ msgid "help_predecessor"
 msgstr ""
 
 #: ./opengever/task/browser/assign.py:52
-#: ./opengever/task/browser/forwarding_close.py:16
 #: ./opengever/task/response.py:50
 msgid "help_response"
 msgstr ""
 
+#: ./opengever/task/browser/assign.py:45
 #: ./opengever/task/task.py:100
 msgid "help_responsible"
 msgstr ""
@@ -395,8 +390,7 @@ msgstr ""
 msgid "help_responsible_client"
 msgstr ""
 
-#: ./opengever/task/browser/assign.py:45
-#: ./opengever/task/task.py:283
+#: ./opengever/task/task.py:288
 msgid "help_responsible_single_client_setup"
 msgstr ""
 
@@ -439,7 +433,7 @@ msgid "help_title"
 msgstr ""
 
 #: ./opengever/task/browser/assign.py:30
-#: ./opengever/task/browser/complete.py:105
+#: ./opengever/task/browser/complete.py:104
 #: ./opengever/task/response.py:43
 msgid "help_transition"
 msgstr ""
@@ -503,7 +497,7 @@ msgid "label_close_documents"
 msgstr ""
 
 #. Default: "Documents to deliver"
-#: ./opengever/task/browser/complete.py:83
+#: ./opengever/task/browser/complete.py:82
 msgid "label_complete_documents"
 msgstr ""
 
@@ -523,7 +517,7 @@ msgid "label_created"
 msgstr ""
 
 #. Default: "Date of completion"
-#: ./opengever/task/browser/overview.py:210
+#: ./opengever/task/browser/overview.py:206
 #: ./opengever/task/response.py:55
 #: ./opengever/task/task.py:114
 msgid "label_date_of_completion"
@@ -531,7 +525,7 @@ msgstr ""
 
 #. Default: "Deadline"
 #: ./opengever/task/browser/delegate/metadata.py:33
-#: ./opengever/task/browser/overview.py:198
+#: ./opengever/task/browser/overview.py:194
 #: ./opengever/task/task.py:107
 msgid "label_deadline"
 msgstr ""
@@ -578,7 +572,7 @@ msgstr ""
 
 #. Default: "Issuer"
 #: ./opengever/task/browser/delegate/metadata.py:27
-#: ./opengever/task/browser/overview.py:202
+#: ./opengever/task/browser/overview.py:198
 #: ./opengever/task/task.py:72
 msgid "label_issuer"
 msgstr ""
@@ -593,7 +587,7 @@ msgstr ""
 msgid "label_main_attributes"
 msgstr ""
 
-#: ./opengever/task/browser/overview.py:182
+#: ./opengever/task/browser/overview.py:178
 msgid "label_parent_dossier_title"
 msgstr ""
 
@@ -608,7 +602,7 @@ msgid "label_predecessor_task"
 msgstr ""
 
 #. Default: "Related Items"
-#: ./opengever/task/browser/complete.py:216
+#: ./opengever/task/browser/complete.py:215
 #: ./opengever/task/response.py:61
 #: ./opengever/task/task.py:128
 msgid "label_related_items"
@@ -634,8 +628,8 @@ msgstr ""
 
 #. Default: "Responsible"
 #: ./opengever/task/browser/assign.py:44
-#: ./opengever/task/browser/overview.py:206
-#: ./opengever/task/statesyncer.py:137
+#: ./opengever/task/browser/overview.py:202
+#: ./opengever/task/statesyncer.py:135
 msgid "label_responsible"
 msgstr ""
 
@@ -679,19 +673,19 @@ msgstr ""
 msgid "label_target_client"
 msgstr ""
 
-#: ./opengever/task/browser/overview.py:178
+#: ./opengever/task/browser/overview.py:174
 msgid "label_task_title"
 msgstr ""
 
 #. Default: "Task Type"
-#: ./opengever/task/browser/overview.py:190
+#: ./opengever/task/browser/overview.py:186
 #: ./opengever/task/task.py:80
 msgid "label_task_type"
 msgstr ""
 
 #. Default: "Text"
 #: ./opengever/task/browser/delegate/metadata.py:38
-#: ./opengever/task/browser/overview.py:186
+#: ./opengever/task/browser/overview.py:182
 #: ./opengever/task/task.py:122
 msgid "label_text"
 msgstr ""
@@ -704,12 +698,12 @@ msgstr ""
 
 #. Default: "Transition"
 #: ./opengever/task/browser/assign.py:29
-#: ./opengever/task/browser/complete.py:104
+#: ./opengever/task/browser/complete.py:103
 #: ./opengever/task/response.py:42
 msgid "label_transition"
 msgstr ""
 
-#: ./opengever/task/browser/overview.py:194
+#: ./opengever/task/browser/overview.py:190
 msgid "label_workflow_state"
 msgstr ""
 
@@ -819,18 +813,13 @@ msgstr ""
 msgid "title_attach_document_form"
 msgstr ""
 
-#. Default: "Close Forwarding"
-#: ./opengever/task/browser/forwarding_close.py:24
-msgid "title_close_forwarding"
-msgstr ""
-
 #. Default: "Close task"
 #: ./opengever/task/browser/close.py:52
 msgid "title_close_task"
 msgstr ""
 
 #. Default: "Complete task"
-#: ./opengever/task/browser/complete.py:118
+#: ./opengever/task/browser/complete.py:117
 msgid "title_complete_task"
 msgstr ""
 
@@ -860,23 +849,23 @@ msgid "title_error_no_response"
 msgstr ""
 
 #. Default: "Document copied from forwarding (forwarding accepted)"
-#: ./opengever/task/browser/accept/utils.py:131
+#: ./opengever/task/browser/accept/utils.py:128
 msgid "version_message_accept_forwarding"
 msgstr ""
 
 #. Default: "Document copied from task (task accepted)"
-#: ./opengever/task/browser/accept/utils.py:272
+#: ./opengever/task/browser/accept/utils.py:269
 msgid "version_message_accept_task"
 msgstr ""
 
 #. Default: "Document copied from task (task closed)"
 #: ./opengever/task/browser/close.py:244
-#: ./opengever/task/browser/complete.py:300
+#: ./opengever/task/browser/complete.py:299
 msgid "version_message_closed_task"
 msgstr ""
 
 #. Default: "Document copied from task (task resolved)"
-#: ./opengever/task/browser/complete.py:294
+#: ./opengever/task/browser/complete.py:293
 msgid "version_message_resolved_task"
 msgstr ""
 
