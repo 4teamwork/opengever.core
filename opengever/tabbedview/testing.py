@@ -10,12 +10,17 @@ class BaseLayer(PloneSandboxLayer):
     defaultBases = (PLONE_FIXTURE, )
 
     def setUpZope(self, app, configurationContext):
-        # Load configure.zcml
-        import opengever.tabbedview
-        xmlconfig.file('configure.zcml', opengever.tabbedview,
-                       context=configurationContext)
-        xmlconfig.file('tests.zcml', opengever.tabbedview,
-                       context=configurationContext)
+        xmlconfig.string(
+            '<configure xmlns="http://namespaces.zope.org/zope">'
+
+            '  <include package="z3c.autoinclude" file="meta.zcml" />'
+            '  <includePlugins package="plone" />'
+            '  <includePluginsOverrides package="plone" />'
+
+            '  <include package="opengever.ogds.base" file="tests.zcml" />'
+
+            '</configure>',
+            context=configurationContext)
 
     def setUpPloneSite(self, portal):
         # Install into Plone site using portal_setup
