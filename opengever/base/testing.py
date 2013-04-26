@@ -45,23 +45,17 @@ class BaseFunctionalLayer(PloneSandboxLayer):
         from opengever.ogds.base import setuphandlers
         setuphandlers.setup_scriptable_plugin = lambda *a, **kw: None
 
-        from plone.app import dexterity
-        self.loadZCML('meta.zcml', package=dexterity)
-        self.loadZCML('configure.zcml', package=dexterity)
+        xmlconfig.string(
+            '<configure xmlns="http://namespaces.zope.org/zope">'
 
-        from opengever.ogds import base
-        self.loadZCML('tests.zcml', package=base)
-        self.loadZCML('configure.zcml', package=base)
+            '  <include package="z3c.autoinclude" file="meta.zcml" />'
+            '  <includePlugins package="plone" />'
+            '  <includePluginsOverrides package="plone" />'
 
-        from opengever import repository
-        self.loadZCML('configure.zcml', package=repository)
+            '  <include package="opengever.ogds.base" file="tests.zcml" />'
 
-        from opengever import document
-        self.loadZCML('configure.zcml', package=document)
-
-        from opengever.base import tests
-        xmlconfig.file('testing.zcml', package=tests,
-         context=configurationContext)
+            '</configure>',
+            context=configurationContext)
 
     def setUpPloneSite(self, portal):
 
