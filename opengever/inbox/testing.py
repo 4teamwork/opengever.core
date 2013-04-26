@@ -23,13 +23,18 @@ class InboxFunctionalLayer(PloneSandboxLayer):
         from opengever.ogds.base import setuphandlers
         setuphandlers.setup_scriptable_plugin = lambda *a, **kw: None
 
-        import ftw.contentmenu
-        xmlconfig.file('configure.zcml', package=ftw.contentmenu,
-                       context=configurationContext)
 
-        from opengever.inbox import tests
-        xmlconfig.file('testing.zcml', package=tests,
-                       context=configurationContext)
+        xmlconfig.string(
+            '<configure xmlns="http://namespaces.zope.org/zope">'
+
+            '  <include package="z3c.autoinclude" file="meta.zcml" />'
+            '  <includePlugins package="plone" />'
+            '  <includePluginsOverrides package="plone" />'
+
+            '  <include package="opengever.ogds.base" file="tests.zcml" />'
+
+            '</configure>',
+            context=configurationContext)
 
     def setUpPloneSite(self, portal):
 
