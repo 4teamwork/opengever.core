@@ -1,0 +1,14 @@
+<configure
+      xmlns="http://namespaces.zope.org/zope"
+      xmlns:plone="http://namespaces.plone.org/plone"
+      >
+
+    <plone:behavior
+          title="Forwarding Name From Title"
+          description="Sets the ID of a forwarding"
+          provides="opengever.inbox.behaviors.forwardingnamefromtitle.IForwardingNameFromTitle"
+          factory="opengever.inbox.behaviors.forwardingnamefromtitle.ForwardingNameFromTitle"
+          for="opengever.inbox.forwarding.IForwarding"
+          />
+
+</configure>

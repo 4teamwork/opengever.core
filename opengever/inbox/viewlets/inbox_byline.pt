@@ -1,0 +1,20 @@
+<div class="documentByLine"
+	 id="plone-document-byline"
+     i18n:domain="opengever.dossier"
+     tal:condition="view/show"
+     tal:define="toLocalizedTime nocall:context/@@plone/toLocalizedTime;">
+  <span class="" tal:attributes="class string:byline-icon ${view/get_css_class}"
+></span>
+  <span id="lock-icon"
+        tal:define="lock_icon view/locked_icon"
+        tal:condition="lock_icon">
+    <img tal:replace="structure lock_icon" />
+  </span>
+  <span class="emailAddress" tal:condition="view/email">
+    <span i18n:translate="label_email_address"
+          i18n:domain="opengever.dossier" tal:omit-tag="">
+      E-Mail:
+    </span>
+    <a href="#" tal:content="view/email" tal:attributes="href string:mailto:${view/email}"/>
+  </span>
+</div>

@@ -1,0 +1,14 @@
+<configure
+      xmlns="http://namespaces.zope.org/zope"
+      xmlns:browser="http://namespaces.zope.org/browser"
+      i18n_domain="opengever.inbox">
+
+    <browser:page
+          name="forwarding_transition_controller"
+          for="opengever.inbox.forwarding.IForwarding"
+          class=".transitioncontroller.ForwardingTransitionController"
+          permission="zope.Public"
+          allowed_interface="opengever.task.browser.transitioncontroller.ITaskTransitionController"
+          />
+
+</configure>

@@ -1,0 +1,20 @@
+<configure
+      xmlns="http://namespaces.zope.org/zope"
+      i18n_domain="opengever.inbox">
+
+    <permission
+          id="opengever.inbox.AddInbox"
+          title="opengever.inbox: Add Inbox"
+          />
+
+    <permission
+          id="opengever.inbox.AddForwarding"
+          title="opengever.inbox: Add Forwarding"
+          />
+
+    <permission
+          id="opengever.inbox.AddYearFolder"
+          title="opengever.inbox: Add Year Folder"
+          />
+
+</configure>

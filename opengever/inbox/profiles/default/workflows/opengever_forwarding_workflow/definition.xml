@@ -1,0 +1,186 @@
+<?xml version="1.0"?>
+<dc-workflow workflow_id="opengever_forwarding_workflow" title="Workflow for opengever forwardings" description="" state_variable="review_state" initial_state="forwarding-state-open" manager_bypass="False">
+ <permission>Access contents information</permission>
+ <permission>Add portal content</permission>
+ <permission>List folder contents</permission>
+ <permission>Manage properties</permission>
+ <permission>Modify portal content</permission>
+ <permission>Review portal content</permission>
+ <permission>Sharing page: Delegate roles</permission>
+ <permission>View</permission>
+ <permission>opengever.document: Add document</permission>
+ <permission>opengever.inbox: Add Forwarding</permission>
+ <permission>opengever.task: Add task</permission>
+ <state state_id="forwarding-state-closed" title="">
+  <permission-map name="Access contents information" acquired="False">
+   <permission-role>Editor</permission-role>
+   <permission-role>Manager</permission-role>
+   <permission-role>Owner</permission-role>
+   <permission-role>Administrator</permission-role>
+  </permission-map>
+  <permission-map name="Add portal content" acquired="False">
+  </permission-map>
+  <permission-map name="List folder contents" acquired="False">
+   <permission-role>Manager</permission-role>
+  </permission-map>
+  <permission-map name="Manage properties" acquired="False">
+   <permission-role>Editor</permission-role>
+   <permission-role>Manager</permission-role>
+   <permission-role>Owner</permission-role>
+   <permission-role>Administrator</permission-role>
+  </permission-map>
+  <permission-map name="Modify portal content" acquired="False">
+  </permission-map>
+  <permission-map name="Review portal content" acquired="False">
+  </permission-map>
+  <permission-map name="Sharing page: Delegate roles" acquired="False">
+   <permission-role>Manager</permission-role>
+  </permission-map>
+  <permission-map name="View" acquired="False">
+   <permission-role>Editor</permission-role>
+   <permission-role>Manager</permission-role>
+   <permission-role>Owner</permission-role>
+   <permission-role>Administrator</permission-role>
+  </permission-map>
+  <permission-map name="opengever.document: Add document" acquired="False">
+  </permission-map>
+  <permission-map name="opengever.inbox: Add Forwarding" acquired="False">
+  </permission-map>
+  <permission-map name="opengever.task: Add task" acquired="False">
+  </permission-map>
+ </state>
+ <state state_id="forwarding-state-open" title="">
+  <exit-transition transition_id="forwarding-transition-accept"/>
+  <exit-transition transition_id="forwarding-transition-assign-to-dossier"/>
+  <exit-transition transition_id="forwarding-transition-close"/>
+  <exit-transition transition_id="forwarding-transition-reassign"/>
+  <exit-transition transition_id="forwarding-transition-refuse"/>
+  <permission-map name="Access contents information" acquired="False">
+   <permission-role>Editor</permission-role>
+   <permission-role>Manager</permission-role>
+   <permission-role>Owner</permission-role>
+   <permission-role>Administrator</permission-role>
+  </permission-map>
+  <permission-map name="Add portal content" acquired="False">
+   <permission-role>Editor</permission-role>
+   <permission-role>Manager</permission-role>
+   <permission-role>Owner</permission-role>
+   <permission-role>Administrator</permission-role>
+  </permission-map>
+  <permission-map name="List folder contents" acquired="False">
+   <permission-role>Manager</permission-role>
+  </permission-map>
+  <permission-map name="Manage properties" acquired="False">
+   <permission-role>Editor</permission-role>
+   <permission-role>Manager</permission-role>
+   <permission-role>Owner</permission-role>
+   <permission-role>Administrator</permission-role>
+  </permission-map>
+  <permission-map name="Modify portal content" acquired="False">
+   <permission-role>Manager</permission-role>
+   <permission-role>Owner</permission-role>
+   <permission-role>Administrator</permission-role>
+  </permission-map>
+  <permission-map name="Review portal content" acquired="False">
+   <permission-role>Editor</permission-role>
+   <permission-role>Manager</permission-role>
+   <permission-role>Owner</permission-role>
+   <permission-role>Administrator</permission-role>
+  </permission-map>
+  <permission-map name="Sharing page: Delegate roles" acquired="False">
+   <permission-role>Manager</permission-role>
+  </permission-map>
+  <permission-map name="View" acquired="False">
+   <permission-role>Editor</permission-role>
+   <permission-role>Manager</permission-role>
+   <permission-role>Owner</permission-role>
+   <permission-role>Administrator</permission-role>
+  </permission-map>
+  <permission-map name="opengever.document: Add document" acquired="False">
+   <permission-role>Editor</permission-role>
+   <permission-role>Manager</permission-role>
+   <permission-role>Owner</permission-role>
+   <permission-role>Administrator</permission-role>
+  </permission-map>
+  <permission-map name="opengever.inbox: Add Forwarding" acquired="False">
+  </permission-map>
+  <permission-map name="opengever.task: Add task" acquired="False">
+  </permission-map>
+ </state>
+ <transition transition_id="forwarding-transition-accept" title="forwarding-transition-accept" new_state="forwarding-state-closed" trigger="USER" before_script="" after_script="">
+  <action url="%(content_url)s/@@forwarding_transition_controller?transition=forwarding-transition-accept" category="workflow" icon="">forwarding-transition-accept</action>
+  <guard>
+   <guard-expression>python: here.restrictedTraverse('@@forwarding_transition_controller').is_transition_possible('forwarding-transition-accept')</guard-expression>
+  </guard>
+ </transition>
+ <transition transition_id="forwarding-transition-assign-to-dossier" title="forwarding-transition-assign-to-dossier" new_state="forwarding-state-closed" trigger="USER" before_script="" after_script="">
+  <action url="%(content_url)s/@@forwarding_transition_controller?transition=forwarding-transition-assign-to-dossier" category="workflow" icon="">forwarding-transition-assign-to-dossier</action>
+  <guard>
+   <guard-expression>python: here.restrictedTraverse('@@forwarding_transition_controller').is_transition_possible('forwarding-transition-assign-to-dossier')</guard-expression>
+  </guard>
+ </transition>
+ <transition transition_id="forwarding-transition-close" title="forwarding-transition-close" new_state="forwarding-state-closed" trigger="USER" before_script="" after_script="">
+  <action url="%(content_url)s/@@forwarding_transition_controller?transition=forwarding-transition-close" category="workflow" icon="">forwarding-transition-close</action>
+  <guard>
+   <guard-expression>python: here.restrictedTraverse('@@forwarding_transition_controller').is_transition_possible('forwarding-transition-close')</guard-expression>
+  </guard>
+ </transition>
+ <transition transition_id="forwarding-transition-reassign" title="forwarding-transition-reassign" new_state="" trigger="USER" before_script="" after_script="">
+  <action url="%(content_url)s/@@forwarding_transition_controller?transition=forwarding-transition-reassign" category="workflow" icon="">forwarding-transition-reassign</action>
+  <guard>
+    <guard-expression>python: here.restrictedTraverse('@@forwarding_transition_controller').is_transition_possible('forwarding-transition-reassign')</guard-expression>
+  </guard>
+ </transition>
+ <transition transition_id="forwarding-transition-refuse" title="forwarding-transition-refuse" new_state="" trigger="USER" before_script="" after_script="">
+  <action url="%(content_url)s/@@forwarding_transition_controller?transition=forwarding-transition-refuse" category="workflow" icon="">forwarding-transition-refuse</action>
+  <guard>
+   <guard-expression>python: here.restrictedTraverse('@@forwarding_transition_controller').is_transition_possible('forwarding-transition-refuse')</guard-expression>
+  </guard>
+ </transition>
+ <variable variable_id="action" for_catalog="False" for_status="True" update_always="True">
+  <description>The last transition</description>
+  <default>
+
+   <expression>transition/getId|nothing</expression>
+  </default>
+  <guard>
+  </guard>
+ </variable>
+ <variable variable_id="actor" for_catalog="False" for_status="True" update_always="True">
+  <description>The ID of the user who performed the last transition</description>
+  <default>
+
+   <expression>user/getId</expression>
+  </default>
+  <guard>
+  </guard>
+ </variable>
+ <variable variable_id="comments" for_catalog="False" for_status="True" update_always="True">
+  <description>Comments about the last transition</description>
+  <default>
+
+   <expression>python:state_change.kwargs.get('comment', '')</expression>
+  </default>
+  <guard>
+  </guard>
+ </variable>
+ <variable variable_id="review_history" for_catalog="False" for_status="False" update_always="False">
+  <description>Provides access to workflow history</description>
+  <default>
+
+   <expression>state_change/getHistory</expression>
+  </default>
+  <guard>
+   <guard-permission>View</guard-permission>
+  </guard>
+ </variable>
+ <variable variable_id="time" for_catalog="False" for_status="True" update_always="True">
+  <description>Time of the last transition</description>
+  <default>
+
+   <expression>state_change/getDateTime</expression>
+  </default>
+  <guard>
+  </guard>
+ </variable>
+</dc-workflow>

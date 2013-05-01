@@ -1,0 +1,187 @@
+Test views:
+===========
+
+imports and general stuff
+    >>> from datetime import datetime
+    >>> from plone.dexterity.utils import createContentInContainer
+    >>> from Products.CMFCore.utils import getToolByName
+    >>> from plone.testing.z2 import Browser
+    >>> import urllib
+    >>>	from plone.app.testing import setRoles
+    >>>	from plone.app.testing import logout, login
+    >>> from plone.app.testing.interfaces import TEST_USER_ID as portal_owner_id ,TEST_USER_NAME as portal_owner, TEST_USER_PASSWORD as default_password
+    >>> from opengever.globalindex.interfaces import ITaskQuery
+    >>> from opengever.globalindex.model.task import Task
+    >>> from opengever.ogds.models.client import Client
+    >>> from opengever.ogds.models.user import User
+    >>> from opengever.ogds.models.group import Group
+    >>> from zope.component import getUtility
+    >>> from opengever.ogds.base.utils import get_client_id
+	>>> import transaction
+
+	>>> app = layer['app']
+	>>> portal = layer['portal']
+    >>> browser = Browser(app)
+
+    >>> setRoles(portal, portal_owner_id, ['Owner','Editor','Contributor'])
+	>>> browser.addHeader('Authorization', 'Basic %s:%s' % (portal_owner, default_password,))
+
+create content:
+===============
+    >>> inbox = createContentInContainer(
+    ...     portal, 'opengever.inbox.inbox', title=u'eingangskorb')
+    >>> view = inbox.restrictedTraverse('tabbedview_view-overview')
+
+    >>> doc1 = createContentInContainer(
+    ...     inbox, 'opengever.document.document', title=u'Document in inbox')
+    >>> doc2 = createContentInContainer(
+    ...     inbox, 'opengever.document.document',
+    ...     title=u'Another document in inbox')
+    >>> fw1 = createContentInContainer(
+    ...     inbox, 'opengever.inbox.forwarding', title=u'Forwarding 1',
+    ...     issuer='inbox:plone', responsible='inbox:plone',
+    ...     responsible_client='plone' )
+    >>> doc3 = createContentInContainer(
+    ...     fw1, 'opengever.document.document',
+    ...     title=u'Document for forwarding')
+    >>> fw2 = createContentInContainer(
+    ...     inbox, 'opengever.inbox.forwarding', title=u'Another forwarding',
+    ...     issuer='inbox:client2', responsible='inbox:client2',
+    ...     responsible_client='client2' )
+
+test documents():
+=================
+    >>> [doc['Title'] for doc in view.documents()]
+    ['Document in inbox', 'Another document in inbox']
+
+test assigned_tasks():
+======================
+    >>> task1 = createContentInContainer(
+    ...     portal, 'opengever.task.task', title=u'Task for forwarding',
+    ...     responsible='inbox:plone', review_state='task-state-open')
+
+change tasks client_id
+    >>> principal = 'inbox:%s' % get_client_id()
+    >>> query_util = getUtility(ITaskQuery)
+    >>> query = query_util._get_tasks_for_responsible_query(
+    ...     principal, 'modified')
+    >>> query.filter(Task.title==u'Task for forwarding').all()[0].client_id = 'something_else'
+
+    >>> len(view.assigned_tasks())
+    1
+
+test inbox():
+=============
+change forwardings client_id
+    >>> query_util = getUtility(ITaskQuery)
+    >>> query = query_util._get_tasks_for_responsible_query(
+    ...     principal, 'modified')
+    >>> query.filter(Task.title==u'Forwarding 1').all()[0].client_id = 'something_else'
+
+    >>> len(view.inbox())
+    1
+
+test boxes():
+=============
+    >>> boxes = view.boxes()
+    >>> boxes[1][0].get('id')
+    'documents'
+    >>> boxes[0][0].get('id')
+    'inbox'
+    >>> boxes[0][1].get('id')
+    'assigned_tasks'
+    >>> len(boxes)
+    2
+    >>> len(boxes[0])
+    2
+
+test GivenTasks:
+================
+    >>> given_tasks_view = inbox.restrictedTraverse('tabbedview_view-given_tasks')
+    >>> columns = [col.get('column') for col in given_tasks_view.columns if isinstance(col, dict)]
+    >>> 'containing_subdossier' not in columns
+    True
+
+test InboxTrash:
+================
+    >>> trash = inbox.restrictedTraverse('tabbedview_view-trash')
+    >>> columns = [col.get('column') for col in trash.columns if isinstance(col, dict)]
+    >>> 'containing_subdossier' not in columns
+    True
+    >>> 'checked_out' not in columns
+    True
+
+test InboxDocuments:
+====================
+    >>> inbox_docs = inbox.restrictedTraverse('tabbedview_view-documents')
+    >>> columns = [col.get('column') for col in inbox_docs.columns if isinstance(col, dict)]
+    >>> 'containing_subdossier' not in columns
+    True
+    >>> 'checked_out' not in columns
+    True
+
+all actions should not be in enabled_actions
+    >>> 'create_forwarding' in inbox_docs.enabled_actions
+    True
+    >>> hidden_actions = ['create_task', 'copy_documents_to_remote_client', 'move_items']
+    >>> all([action not in inbox_docs.enabled_actions for action in hidden_actions])
+    True
+
+    >>> 'create_forwarding' in inbox_docs.major_actions
+    True
+    >>> 'create_task' not in inbox_docs.major_actions
+    True
+
+test AccessInboxAllowed:
+========================
+    >>> logout()
+    >>> inbox.restrictedTraverse('access-inbox-allowed')() is None
+    True
+    >>> login(portal, portal_owner)
+    >>> inbox.restrictedTraverse('access-inbox-allowed')()
+    1
+
+test InboxAssignedForwardings:
+==============================
+    >>> assigned_fws = inbox.restrictedTraverse('tabbedview_view-assigned_forwardings')
+    >>> assigned_fws.sort_order = 'reverse'
+    >>> len(assigned_fws.get_base_query().all())
+    1
+
+test forwarding_transition_controller
+=====================================
+    >>> # XXX We need to either set up two plone sites to test this,
+    >>> # or find a way to mock one
+
+For now, commenting out this test because it doesn't work and probably
+never has:
+
+.. user not in group
+..     >>> ftc = fw1.restrictedTraverse('forwarding_transition_controller')
+..     >>> ftc.is_accept_possible()
+..     False
+..     >>> ftc.is_assign_to_dossier_possible()
+..     False
+..     >>> ftc.is_close_possible()
+..     False
+..     >>> ftc.is_refuse_possible()
+..     False
+..
+.. wrong client_id
+..     >>> login(portal, portal_owner)
+..     >>> ftc.is_accept_possible()
+..     False
+..
+..     >>> ftc.is_refuse_possible()
+..     False
+..
+.. user in group & correct client_id
+..     >>> ftc2 = fw2.restrictedTraverse('forwarding_transition_controller')
+..     >>> ftc2.is_accept_possible()
+..     True
+..     >>> ftc2.is_assign_to_dossier_possible()
+..     True
+..     >>> ftc2.is_close_possible()
+..     True
+..     >>> ftc2.is_refuse_possible()
+..     True
