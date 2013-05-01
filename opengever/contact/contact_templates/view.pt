@@ -1,0 +1,53 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      lang="en"
+      metal:use-macro="context/main_template/macros/master"
+      i18n:domain="opengever.task">
+  <body>
+
+    <metal:main fill-slot="main">
+      <tal:main-macro metal:define-macro="main">
+
+        <div tal:replace="structure provider:plone.abovecontenttitle" />
+
+        <h1 class="documentFirstHeading" tal:content="python: context.Title()"/>
+
+        <div tal:replace="structure provider:plone.belowcontenttitle" />
+
+        <div tal:replace="structure provider:plone.abovecontentbody" />
+
+        <table class="vertical invisible ">
+          <tal:groups repeat="fieldsets python:view.groups">
+            <tal:block repeat="widget fieldsets/widgets/values">
+              <tal:cond condition="widget/value">                
+                <tr>
+                  <tal:widget condition="python: widget.name not in ['form.widgets.email', 'form.widgets.email2', 'form.widgets.url']">
+                      <th tal:content="widget/label" ></th>
+                      <td tal:content="structure widget/render" />
+                  </tal:widget>
+                  <tal:widget condition="python: widget.name in ['form.widgets.email', 'form.widgets.email2']">
+                      <th tal:content="widget/label" ></th>
+                      <td>
+                          <a tal:attributes="href string: mailto:${widget/value}" tal:content="structure widget/render" /> 
+                      </td>
+                  </tal:widget>
+                  <tal:widget condition="python: widget.name == 'form.widgets.url'">
+                      <th tal:content="widget/label" ></th>
+                      <td>
+                          <a tal:attributes="href widget/value" tal:content="structure widget/render" />
+                      </td>
+                  </tal:widget>
+                </tr>
+              </tal:cond>
+            </tal:block>
+          </tal:groups>
+        </table>
+        <div class="visualClear"><!----></div>
+      </tal:main-macro>
+    </metal:main>
+
+  </body>
+</html>
+

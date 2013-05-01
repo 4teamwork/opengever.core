@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+<object xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+        name="opengever.contact.contactfolder" meta_type="Dexterity FTI"
+        i18n:domain="opengever.contact">
+
+    <!-- Basic metadata -->
+    <property name="title" i18n:translate="">ContactFolder</property>
+    <property name="description" i18n:translate="">Contact Folder </property>
+    <property name="icon_expr"></property>
+    <property name="allow_discussion">False</property>
+    <property name="global_allow">True</property>
+    <property name="filter_content_types">True</property>
+    <property name="allowed_content_types">
+        <element value="opengever.contact.contact" />
+    </property>
+
+    <!-- schema interface -->
+    <property name="schema"></property>
+
+    <!-- class used for content items -->
+    <property name="klass">plone.dexterity.content.Container</property>
+
+    <!-- add permission -->
+    <property name="add_permission">opengever.contact.AddContactFolder</property>
+
+    <!-- enabled behaviors -->
+    <property name="behaviors">
+        <element value="plone.app.content.interfaces.INameFromTitle" />
+        <element value="opengever.tabbedview.interfaces.ITabbedViewEnabled" />
+    </property>
+
+    <!-- View information -->
+    <property name="default_view">tabbed_view</property>
+    <property name="immediate_view">tabbed_view</property>
+    <property name="default_view_fallback">False</property>
+    <property name="view_methods">
+        <element value="tabbed_view"/>
+    </property>
+
+    <!-- Method aliases -->
+    <alias from="(Default)" to="(selected layout)"/>
+    <alias from="edit" to="@@edit"/>
+    <alias from="sharing" to="@@sharing"/>
+    <alias from="view" to="@@view"/>
+
+    <!-- Actions -->
+    <action title="View" action_id="view" category="object" condition_expr=""
+            url_expr="string:${object_url}" visible="False">
+        <permission value="View"/>
+    </action>
+    <action title="local" action_id="local" category="tabbedview-tabs"
+            condition_expr="" url_expr="string:#" visible="True">
+    </action>
+
+    <action title="users" action_id="users" category="tabbedview-tabs"
+            condition_expr="" url_expr="string:#" visible="True">
+    </action>
+
+</object>

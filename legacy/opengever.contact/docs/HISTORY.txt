@@ -1,0 +1,175 @@
+Changelog
+=========
+
+
+2.5 (unreleased)
+----------------
+
+- Nothing changed yet.
+
+
+2.4 (2012-11-28)
+----------------
+
+- Dropped Plone 4.1 compatibility. Only 4.2 and up are supported.
+  [lgraf]
+
+
+
+2.3 (2012-06-18)
+----------------
+
+- Adjust title accessors, because they changed with the dexerity update.
+  Issue #1420 Plone Version und Dexterity Version auf aktuellste Version heben.
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1420
+  [phgross]
+
+
+2.2 (2012-03-28)
+----------------
+
+- Added Temporary fix for Title accessor to return unicode instead of utf-8.
+  Issue #1442 UnicodeDecodeError
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1442/view
+  [phgross]
+
+
+2.1 (2012-02-27)
+----------------
+
+- Added French translations.
+  [ttschanz]
+
+- Fixed tests: Added opengever.repository to tests_require
+  [lgraf]
+
+- Removed 'List folder contents' permission from anyone but Manager in
+  contact and contactfolder workflows.
+  [lgraf]
+
+- Added neccessary permissions for Administrator role
+  [lgraf]
+
+
+2.0 (2011-11-17)
+----------------
+
+- Final Release.
+  [phgross]
+
+
+2.0b9 (2011-08-26)
+------------------
+
+- Fixed tests: Made sure og.ogds.base GS profile gets exectuted and PAS
+  plugins -don't- get installed.
+  [lgraf]
+
+- made the type configuration of opengever.contact.contact overwritable for other packages
+  [phgross]
+
+- added test-buildout for plone 4.1
+  [eschmutz]
+
+2.0b8
+-----
+
+- Fix tests
+  [eschmutz]
+
+2.0b7
+-----
+
+- updated test setup
+  [phgross]
+
+- Removed css_icon_class method - now done in tabbedview linked helper
+  [lgraf]
+
+- Using icon_expr instead of content_icon
+  [lgraf]
+
+- fixed linked helper function, css_info_class problem
+  [phgross]
+
+- Removed content_icon for contact and contactfolder FTIs (now done with sprites)
+  [lgraf]
+
+- added css_icon_class and modified function linked to handle sprites
+  [30.05.2011, elio.schmutz]
+
+- fixed tests, id generation changed
+  [phgross]
+
+2.0b6
+-----
+
+- using invisible table for this view
+  [fsprenger]
+
+
+2.0b5
+-----
+
+- Renamed label field "Fax Arbeit"
+  Issue #570 Kontakte: Feldbezeichnungen definieren, obligatorische Felder angeben
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/570
+  [phabegger]
+
+- renamed contacts action because translations would not work with this name
+  [ttschanz]
+
+
+2.0b4
+-----
+
+- Fixed translation file.
+  [jbaumann]
+
+- Added `academic_title` field, moved `function` field
+  [lgraf]
+
+- Tabbed view: show amount of matches.
+  [jbaumann]
+
+- Added helper to display contact icon, updated translations
+  Issue #570 Kontakte: Feldbezeichnungen definieren, obligatorische Felder angeben
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/570
+  [lgraf]
+
+- updated the viewname als in the test
+  [phgross]
+
+2.0b3
+-----
+- renamed contact view, so we have also the action "Eigenschaften anzeigen" wich show all fields
+  [phgross]
+
+2.0b2
+-----
+- enabled locking for content type contact
+  [jbaumann]
+
+2.0b1
+-----
+
+- added searchableText indexer test
+  [pgross]
+
+- added searchable textindexer (done with collective.dexteritytextindexer)
+  [pgross]
+
+- removed wrong displaying the description, because its allso displaying in the content table
+  [pgross]
+
+- Fixed extends path
+  [jbaumann]
+
+
+2.0a2
+-----
+
+1.0dev (unreleased)
+-------------------
+
+- Initial release

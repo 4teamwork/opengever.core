@@ -1,0 +1,108 @@
+Contact
+=======
+
+Helpers:
+
+
+do some imports and configurations
+    >>> from plone.testing.z2 import Browser
+    >>> from plone.app.testing import TEST_USER_ID, TEST_USER_NAME
+    >>> from plone.app.testing import TEST_USER_PASSWORD
+    >>> from plone.app.testing import setRoles, login
+    >>> from plone.dexterity.utils import createContentInContainer
+    >>> from Products.CMFCore.utils import getToolByName
+
+    >>> app = layer['app']
+    >>> portal = layer['portal']
+
+browser test
+    >>> browser = Browser(app)
+    >>> browser.handleErrors = False
+
+    >>> portalURL = portal.absolute_url()
+    >>> browser.open(portalURL + '/login_form')
+    >>> browser.getControl(name='__ac_name').value = TEST_USER_NAME
+    >>> browser.getControl(name='__ac_password').value = TEST_USER_PASSWORD
+    >>> browser.getControl(name='submit').click()
+    >>> browser.open(portal.portal_url())
+    >>> 'test_user_1' in browser.contents
+    True
+
+
+create contact folder
+
+    >>> browser.open('http://nohost/plone/folder_factories')
+    >>> browser.getControl('ContactFolder').click()
+    >>> browser.getControl('Add').click()
+    >>> browser.url
+    'http://nohost/plone/++add++opengever.contact.contactfolder'
+
+    >>> browser.getControl('Title').value='Foobar'
+    >>> browser.getControl('Description').value='Lorem Ipsum'
+    >>> browser.getControl('Save').click()
+
+test view:
+----------
+
+create a contact:
+
+    >>> browser.open('http://nohost/plone/foobar/folder_factories')
+    >>> browser.getControl('Contact').click()
+    >>> browser.getControl('Add').click()
+
+    >>> browser.url
+    'http://nohost/plone/foobar/++add++opengever.contact.contact'
+    >>> browser.getControl('Firstname').value = 'lorem'
+    >>> browser.getControl('Save').click()
+
+    >>> browser.url
+    'http://nohost/plone/foobar/++add++opengever.contact.contact'
+    >>> browser.getControl('Firstname').value = 'Hanspeter'
+    >>> browser.getControl('Lastname').value = 'Walter'
+    >>> browser.getControl('Description').value = 'Lorem ipsum, bla bla'
+    >>> browser.getControl('Save').click()
+    >>> browser.url
+    'http://nohost/plone/foobar/walter-hanspeter/contact_view'
+
+
+test searchabelText indexing
+----------------------------
+
+helper:
+
+    >>> def obj2brain(obj):
+    ...     catalog = getToolByName(obj, 'portal_catalog')
+    ...     query = {'path': {'query': '/'.join(obj.getPhysicalPath()),
+    ...                       'depth': 0}}
+    ...     brains = catalog(query)
+    ...     if len(brains) == 0:
+    ...         raise Exception('Not in catalog: %s' % obj)
+    ...     else:
+    ...         return brains[0]
+
+    >>> def getSearchableText(obj):
+    ...     brain = obj2brain(obj)
+    ...     catalog = getToolByName(obj, 'portal_catalog')
+    ...     data = catalog.getIndexDataForRID(brain.getRID())
+    ...     return data['SearchableText']
+
+    >>> obj = portal.get(
+    ...     'foobar').get(
+    ...         'walter-hanspeter')
+    >>> getSearchableText(obj)
+    ['walter', 'hanspeter']
+
+
+test title accessor:
+--------------------
+    >>> folder = portal.get('foobar')
+    >>> folder.Title()
+    'Foobar'
+    >>> folder.Description()
+    'Lorem Ipsum'
+
+    >>> contact = folder.get('walter-hanspeter')
+    >>> contact.Title()
+    'Walter Hanspeter'
+    >>> contact.Description()
+    'Lorem ipsum, bla bla'

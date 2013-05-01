@@ -1,0 +1,4 @@
+<object name="portal_types">
+    <object name="opengever.contact.contactfolder" meta_type="Dexterity FTI" />
+    <object name="opengever.contact.contact" meta_type="Dexterity FTI" />
+</object>
