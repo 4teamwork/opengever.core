@@ -1,0 +1,49 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser"
+    xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+    xmlns:grok="http://namespaces.zope.org/grok"
+    xmlns:i18n="http://namespaces.zope.org/i18n"
+    xmlns:plone="http://namespaces.plone.org/plone"
+    i18n_domain="opengever.journal">
+
+    <!-- Grok the package to initialise schema interfaces and content classes -->
+    <grok:grok package="." />
+
+    <!-- register translations -->
+    <i18n:registerTranslations directory="locales" />
+
+    <!-- Register an extension profile to make the product installable -->
+    <genericsetup:registerProfile
+        name="default"
+        title="opengever.journal"
+        description="OpenGever Journal"
+        directory="profiles/default"
+        provides="Products.GenericSetup.interfaces.EXTENSION"
+        />
+
+    <!-- Register some marker interfaces of ftw.journal as behaviors
+         for easy adding to content types -->
+
+    <plone:behavior
+            title="Workflow History Journalizable"
+            description="Journalizable using workflow history"
+            provides="ftw.journal.interfaces.IWorkflowHistoryJournalizable"
+            />
+
+    <plone:behavior
+            title="Annotations Journalizable"
+            description="Journalizable using annotations"
+            provides="ftw.journal.interfaces.IAnnotationsJournalizable"
+            />
+
+    <!-- add a journal history view -->
+    <browser:page
+        for="ftw.journal.interfaces.IJournalizable"
+        name="journal"
+        permission="zope2.View"
+        class=".browser.JournalHistory"
+        template="templates/journalhistory.pt"
+        />
+
+</configure>

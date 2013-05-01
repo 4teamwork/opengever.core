@@ -1,0 +1,59 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      lang="en"
+      metal:use-macro="context/main_template/macros/master"
+      i18n:domain="opengever.journal">
+  <body>
+
+    <metal:main fill-slot="main">
+      <tal:main-macro metal:define-macro="main">
+
+        <div class="journal-history"
+             metal:define-macro="journal_history" >
+          <h1 i18n:translate="heading_journal">Journal</h1>
+
+          <table class="listing nosort" summary="Journal"
+                 i18n:domain="opengever.journal" i18n:attributes="summary summary_journal;">
+
+            <tr i18n:domain="plone">
+              <th i18n:translate="listingheader_action">Action</th>
+              <th i18n:translate="listingheader_performed_by">Performed by</th>
+              <th i18n:translate="listingheader_date_and_time">Date and Time</th>
+              <th i18n:translate="listingheader_comment">Comment</th>
+            </tr>
+
+            <metal:block i18n:domain="plone" tal:repeat="item view/data">
+              <tr tal:define="odd repeat/item/odd;
+                              rhComments item/comments|nothing;"
+                  tal:attributes="class python:odd and 'even' or 'odd'"
+                  tal:condition="item/action/visible">
+                <td class="historyAction"
+                    i18n:translate="" tal:content="item/action/title">
+                  action
+                </td>
+                <td class="historyActor" tal:content="item/actor">
+                  actor
+                </td>
+                <td class="historyDate">
+                  <span tal:replace="python:context.toLocalizedTime(item['time'],long_format=True)" />
+                  <span tal:condition="item/effective_date|nothing">
+                    (<span i18n:translate="label_publishing_effective" tal:omit-tag="">effective</span>:
+                    <span tal:replace="python: context.toLocalizedTime(item['effective_date'],long_format=True)"></span>)
+                  </span>
+                </td>
+                <td class="historyComment">
+                  <div tal:condition="rhComments" tal:content="rhComments">Comment</div>
+                  <div tal:condition="not: rhComments" i18n:translate="no_comments">No comments.</div>
+                </td>
+              </tr>
+            </metal:block>
+          </table>
+        </div>
+
+      </tal:main-macro>
+    </metal:main>
+
+  </body>
+</html>

@@ -1,0 +1,4 @@
+<div i18n:domain="opengever.journal"
+     i18n:translate="tab_matches">
+    <span i18n:name="amount" tal:replace="python:len(view.contents)" /> matches.
+</div>
