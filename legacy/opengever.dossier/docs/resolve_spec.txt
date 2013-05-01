@@ -1,0 +1,86 @@
+Terminologie
+============
+
+Hauptdossier: Ein Dossier, das nicht in einem anderen Dossier enthalten ist
+Subdossier: Ein Dossier, das in einem anderen Dossier enthalten ist
+Dossier: Ein Haupt- oder Subdossier
+
+
+Abschliessen eines Dossiers  (recursively_resolve)
+==================================================
+
+Das Abschliessen eines Hauptdossiers geschieht in drei Schritten:
+
+1. Prüfen der Vorbedingungen (check_preconditions)
+--------------------------------------------------
+
+    Falls Dossier ein Hauptdossier ist UND Subdossiers existieren:
+        - Sind alle Dokumente, Mails und Aufgaben in Subdossiers abgelegt?
+        - Alle Aufgaben abgeschlossen?
+        - Alle Dokumente eingecheckt?
+
+    Falls Dossier ein Subdossier ist:
+        - Alles ok
+    
+    Falls Fehler:
+        - Abbruch, entsprechende Fehlermeldung
+
+2. Alle Subdossiers abschliessen (resolve_subdossiers)
+------------------------------------------------------
+    - Für jedes Subdossier:
+        - Ist das Dossier abgeschlossen?
+            Nein:
+                * subdossier.recursively_resolve()   # Rekursion
+            Ja:
+                * Weiter
+
+3. Abschliessen des aufgerufenen Dossiers (resolve)
+---------------------------------------------------
+    - Falls aufgerufenes Dossier kein Hauptdossier:
+        - Kann ein Enddatum berechnet werden?
+            Ja:
+                * Enddatum auf subdossier.compute_end_date() setzen
+                * Subdossier abschliessen
+            Nein:
+                * Abbruch mit Fehlermeldung "Dossier <subdossier> muss manuell abgeschlossen werden"
+
+    - Falls Hauptdossier:
+        * Abschlussmaske anzeigen
+        - Kann ein Enddatum berechnet werden?
+            Ja:
+                * Enddate vorschlagen gemäss dossier.compute_end_date()
+            Nein:
+                * Kein Vorschlag für Enddatum
+
+        * User füllt Abschlussmaske ein
+            - Enddatum validieren
+            - Falls alles ok:
+                * Dossier abschliessen
+                - Falls Ablagenummer vergeben:
+                    * Ablagenummer für alle Subdossiers setzen
+
+
+
+Enddatum eines (Sub)dossiers berechnen (compute_end_date)
+=========================================================
+
+Falls Subdossiers enthalten:
+    - Jüngstes Enddatum der enthaltenen Subdossiers (compute_end_date für jedes end_date)
+
+Sonst:
+    - Jüngstes Datum der enthaltenen Dokumente
+
+Falls Dossier bereits ein Enddatum gesetzt hat:
+    - Enddatum Validieren
+        - Falls gültig: Übernehmen
+        - Sonst: Mit vorgeschlagenem Datum überschreiben
+
+Falls vorgeschlagenes Enddatum älter als Dossier.startdatum:
+    - Vorgeschlagenes Enddatum auf Startdatum setzen
+
+
+
+
+
+
+

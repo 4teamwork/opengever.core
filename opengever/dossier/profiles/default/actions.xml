@@ -1,0 +1,70 @@
+<?xml version="1.0"?>
+<object name="portal_actions" meta_type="Plone Actions Tool"
+        xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+        i18n:domain="opengever.dossier">
+  <object name="folder_buttons" meta_type="CMF Action Category">
+    <property name="title"></property>
+
+    <object name="delete_participants" meta_type="CMF Action"
+            i18n:domain="opengever.dossier">
+      <property name="title" i18n:translate="">Delete</property>
+      <property name="description" i18n:translate=""></property>
+      <property name="url_expr">string:delete_participants:method</property>
+      <property name="icon_expr"></property>
+      <property name="available_expr"></property>
+      <property name="permissions">
+        <element value="Modify portal content"/>
+      </property>
+      <property name="visible">True</property>
+    </object>
+
+    <object name="add_participant" meta_type="CMF Action"
+            i18n:domain="opengever.dossier">
+      <property name="title" i18n:translate="label_add_participant">Add Participant</property>
+      <property name="description" i18n:translate=""></property>
+      <property name="url_expr">string:@@add-participation:method</property>
+      <property name="icon_expr"></property>
+      <property name="available_expr"></property>
+      <property name="permissions">
+        <element value="Add portal content"/>
+      </property>
+      <property name="visible">True</property>
+    </object>
+
+    <object name="copy_documents_to_remote_client" meta_type="CMF Action" i18n:domain="opengever.dossier">
+      <property name="title" i18n:translate="">Copy documents to remote client</property>
+      <property name="description" i18n:translate=""></property>
+      <property name="url_expr">string:@@copy-documents-to-remote-client:method</property>
+      <property name="icon_expr"></property>
+      <property name="available_expr"></property>
+      <property name="permissions">
+        <element value="View"/>
+      </property>
+      <property name="visible">True</property>
+    </object>
+	<object name="move_items" meta_type="CMF Action" i18n:domain="opengever.dossier">
+		<property name="title" i18n:translate="">Move Items</property>
+		<property name="description" i18n:translate=""></property>
+		<property name="url_expr">string:@@move_items:method</property>
+        <property name="icon_expr"></property>
+		<property name="available_expr"></property>
+		<property name="permissions">
+			<element value="View"/>
+      	</property>
+		<property name="visible">True</property>
+	</object>
+	<object name="export_dossiers" meta_type="CMF Action" i18n:domain="opengever.dossier">
+		<property name="title" i18n:translate="">Export selection</property>
+		<property name="description" i18n:translate=""></property>
+		<property name="url_expr">string:@@dossier_report:method</property>
+        <property name="icon_expr"></property>
+		<property name="available_expr">python:context.restrictedTraverse('reporting_controller')()</property>
+		<property name="permissions">
+			<element value="View"/>
+      	</property>
+		<property name="visible">True</property>
+	</object>
+ </object>
+
+
+</object>

@@ -1,0 +1,162 @@
+<?xml version="1.0"?>
+<object name="opengever.dossier.businesscasedossier" meta_type="Dexterity FTI"
+        i18n:domain="opengever.dossier" xmlns:i18n="http://xml.zope.org/namespaces/i18n">
+
+    <!-- Basic metadata -->
+    <property name="title" i18n:translate="">Business Case Dossier</property>
+    <property name="description" i18n:translate=""></property>
+    <property name="icon_expr"></property>
+    <property name="allow_discussion">False</property>
+    <property name="global_allow">True</property>
+    <property name="filter_content_types">True</property>
+    <property name="allowed_content_types">
+        <element value="opengever.dossier.businesscasedossier" />
+        <element value="opengever.document.document" />
+        <element value="opengever.task.task" />
+        <element value="ftw.mail.mail"/>
+    </property>
+
+    <!-- schema interface -->
+    <property name="schema">opengever.dossier.businesscase.IBusinessCaseDossier</property>
+
+    <!-- class used for content items -->
+    <property name="klass">opengever.dossier.base.DossierContainer</property>
+
+    <!-- add permission -->
+    <property name="add_permission">opengever.dossier.AddBusinessCaseDossier</property>
+
+    <!-- enabled behaviors -->
+    <property name="behaviors">
+        <element value="collective.dexteritytextindexer.behavior.IDexterityTextIndexer" />
+        <element value="opengever.base.behaviors.base.IOpenGeverBase" />
+        <element value="ftw.journal.interfaces.IAnnotationsJournalizable" />
+        <element value="opengever.dossier.behaviors.dossier.IDossier" />
+        <element value="opengever.dossier.behaviors.participation.IParticipationAware" />
+        <element value="opengever.base.behaviors.classification.IClassification" />
+        <element value="opengever.base.behaviors.lifecycle.ILifeCycle" />
+        <element value="opengever.mail.behaviors.IMailInAddress" />
+        <element value="opengever.tabbedview.interfaces.ITabbedViewEnabled" />
+        <element value="opengever.trash.trash.ITrashable" />
+        <element value="opengever.dossier.behaviors.dossiernamefromtitle.IDossierNameFromTitle" />
+        <element value="opengever.base.behaviors.sequence.ISequenceNumberBehavior" />
+        <element value="opengever.sharing.behaviors.IDossier" />
+        <element value="plone.app.lockingbehavior.behaviors.ILocking" />
+        <element value="opengever.mail.behaviors.ISendableDocsContainer" />
+    </property>
+
+    <!-- View information -->
+    <property name="immediate_view">tabbed_view</property>
+    <property name="default_view">tabbed_view</property>
+    <property name="default_view_fallback">False</property>
+    <property name="view_methods">
+        <element value="view"/>
+        <element value="tabbed_view" />
+    </property>
+
+    <!-- Method aliases -->
+    <alias from="(Default)" to="(selected layout)"/>
+    <alias from="edit" to="@@edit"/>
+    <alias from="sharing" to="@@sharing"/>
+    <alias from="view" to="@@view"/>
+
+    <!-- Actions -->
+    <action action_id="view"
+            visible="False"
+            title="View"
+            category="object"
+            url_expr="string:${object_url}"
+            condition_expr="">
+        <permission value="View"/>
+    </action>
+
+    <action action_id="edit"
+            visible="True"
+            title="Edit"
+            category="object"
+            url_expr="string:${object_url}/edit"
+            condition_expr="not:object/@@plone_lock_info/is_locked_for_current_user|python:True">
+        <permission value="Modify portal content"/>
+    </action>
+
+    <action action_id="document_with_docucomposer"
+            visible="True"
+            title="Document with docucomposer"
+            category="folder_factories"
+            url_expr="string:${object_url}/docucomposer-wizard"
+            icon_expr=""
+            condition_expr=""
+            i18n:domain="opengever.dossier">
+        <permission value="Add portal content"/>
+    </action>
+
+    <action action_id="document_with_template"
+            visible="True"
+            title="document_with_template"
+            category="folder_factories"
+            url_expr="string:${object_url}/document_with_template"
+            icon_expr=""
+            condition_expr=""
+            i18n:domain="opengever.dossier">
+        <permission value="Add portal content"/>
+    </action>
+
+    <action action_id="add_participant"
+            visible="True"
+            title="Add Participant"
+            category="folder_factories"
+            url_expr="string:${object_url}/@@add-participation"
+            icon_expr=""
+            condition_expr=""
+            i18n:domain="opengever.dossier"
+            i18n:attributes="title">
+        <permission value="Add portal content"/>
+    </action>
+
+
+    <!-- Tabbedview tabs-->
+    <action i18n:domain="opengever.dossier" title="Overview" action_id="overview" category="tabbedview-tabs"
+            condition_expr="" url_expr="string:#" visible="True">
+        <permission value="View"/>
+    </action>
+
+    <action i18n:domain="opengever.dossier" title="Subdossiers" action_id="subdossiers" category="tabbedview-tabs"
+            condition_expr="object/show_subdossier" url_expr="string:#" visible="True">
+        <permission value="View"/>
+    </action>
+
+    <action i18n:domain="opengever.dossier" title="Documents" action_id="documents" category="tabbedview-tabs"
+            condition_expr="" url_expr="string:#" visible="True">
+        <permission value="View"/>
+    </action>
+
+    <action i18n:domain="opengever.dossier" title="Tasks" action_id="tasks" category="tabbedview-tabs"
+            condition_expr="" url_expr="string:#" visible="True">
+        <permission value="View"/>
+    </action>
+
+    <action i18n:domain="opengever.dossier" title="Participants" action_id="participants" category="tabbedview-tabs"
+            condition_expr="" url_expr="string:#" visible="True">
+        <permission value="View"/>
+    </action>
+
+    <action i18n:domain="opengever.dossier" title="Trash" action_id="trash" category="tabbedview-tabs"
+            condition_expr="" url_expr="string:#" visible="True">
+    </action>
+
+    <action i18n:domain="opengever.dossier" title="Journal" action_id="journal" category="tabbedview-tabs"
+            condition_expr="" url_expr="string:#" visible="True">
+        <permission value="View"/>
+    </action>
+
+    <action i18n:domain="opengever.dossier" title="Sharing" action_id="sharing" category="tabbedview-tabs"
+            condition_expr="" url_expr="string:#"
+            visible="True">
+        <permission value="View"/>
+    </action>
+
+    <action i18n:domain="opengever.dossier" title="Give Filing Number" action_id="filing_nr" category="object_buttons"
+            condition_expr="python: object.portal_workflow.getInfoFor(object, 'review_state', None) == 'dossier-state-resolved' and getattr( object, 'filing_no', None) == None" url_expr="string:${object_url}/transition-archive" visible="True">
+        <permission value="Modify portal content"/>
+    </action>
+
+</object>

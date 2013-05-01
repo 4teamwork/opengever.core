@@ -1,0 +1,14 @@
+<configure
+    xmlns:zope="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser">
+
+   <browser:viewlet
+       name="plone.belowcontenttitle.documentbyline"
+       for="opengever.dossier.businesscase.IBusinessCaseDossier"
+       manager="plone.app.layout.viewlets.interfaces.IBelowContentTitle"
+       class=".byline.BusinessCaseByline"
+       template="businesscase_byline.pt"
+       permission="zope2.View"
+       />
+
+</configure>

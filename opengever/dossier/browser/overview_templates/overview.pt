@@ -1,0 +1,58 @@
+<!--TODO: refactor using viewlets-->
+<tal:block i18n:domain="opengever.dossier" tal:define="groups view/boxes; css_width python:99/len(groups)">
+  <div tal:repeat="boxes groups" tal:attributes="class string:boxGroup boxGroup${repeat/boxes/index}; style string:width:${css_width}%">
+    <div tal:repeat="box boxes" class="box" tal:attributes="id string:${box/id}Box">
+      <h2 i18n:translate="" tal:content="box/label|box/id"></h2>
+
+      <tal:box tal:condition="python: not hasattr(box.get('content'), '__iter__')">
+        <tal:item  tal:condition="box/content">
+          <span tal:content="box/content" />
+        </tal:item>
+        <tal:item tal:condition="not: box/content">
+          <span i18n:translate="no_content" />
+        </tal:item>
+      </tal:box>
+
+      <tal:box tal:condition="python: hasattr(box.get('content'), '__iter__')">
+        <tal:items define="items box/content">
+          <ul tal:condition="items">
+            <li tal:repeat="item items">
+
+              <!-- item is a brain -->
+              <tal:brain tal:condition="python: view.get_type(item) == 'brain'">
+                <a href="" tal:attributes="href item/getURL|nothing;
+                                           title item/alt|nothing;
+                                           class python:view.get_css_class(item)" tal:omit-tag="not: item/getURL|nothing">
+                <span tal:content="item/Title" /></a>
+              </tal:brain>
+
+              <!-- item is a dict (Documents and participants) -->
+              <tal:dict tal:condition="python: view.get_type(item) == 'dict'">
+                <a href=""
+                   tal:attributes="href item/getURL|nothing;
+                                   title item/alt|nothing;
+                                   class python:'rollover-breadcrumb %s' % (item.get('css_class'))"
+                   tal:omit-tag="not: item/getURL|nothing">
+                <span tal:content="item/Title" /></a>
+              </tal:dict>
+
+              <!-- SQLAlchemy Objects (Tasks from GlobalIndex)-->
+              <tal:sql tal:condition="python: view.get_type(item) == 'sqlalchemy_object'">
+                <div tal:replace="structure python:view.render_globalindex_task(item)" />
+              </tal:sql>
+            </li>
+
+            <li class="moreLink">
+              <a
+                  tal:attributes="href python: box.get('href', None) and '#%s' % box.get('href') or '#%s' % box.get('id')"
+                  i18n:translate="">
+              show all</a>
+            </li>
+          </ul>
+          <span tal:condition="not: items" i18n:translate="no_content" />
+        </tal:items>
+      </tal:box>
+
+    </div>
+  </div>
+</tal:block>

@@ -1,0 +1,88 @@
+Behaviors
+=========
+
+This package provides a behavior called `opengever.dossier.behaviors.dossier.IDossier`.
+This adds fields required by any dossier.
+
+Test setup
+----------
+
+Before we can run these tests, we need to load the opengever.dossier
+configuration. This will configure the behavior.
+
+    >>> configuration = """\
+    ... <configure
+    ...      xmlns="http://namespaces.zope.org/zope"
+    ...      i18n_domain="opengever.dossier">
+    ...
+    ...     <include package="Products.Five" file="meta.zcml" />
+    ...     <include package="opengever.dossier" file="behaviors.zcml" />
+    ...
+    ... </configure>
+    ... """
+
+    >>> from StringIO import StringIO
+    >>> from zope.configuration import xmlconfig
+    >>> xmlconfig.xmlconfig(StringIO(configuration))
+
+This behavior can be enabled for any content item. For the purposes of
+testing, we will use the dexterity Container type and a custom
+IBehaviorAssignable adapter to mark the behavior as enabled.
+
+    >>> from plone.dexterity.content import Container
+
+    >>> from plone.behavior.interfaces import IBehaviorAssignable
+	>>> from opengever.dossier.behaviors.dossier import IDossier
+    >>> from zope.component import adapts
+    >>> from zope.interface import implements
+    >>> class TestingAssignable(object):
+    ...     implements(IBehaviorAssignable)
+    ...     adapts(Container)
+    ...
+    ...     enabled = [IDossier]
+    ...
+    ...     def __init__(self, context):
+    ...         self.context = context
+    ...
+    ...     def supports(self, behavior_interface):
+    ...         return behavior_interface in self.enabled
+    ...
+    ...     def enumerate_behaviors(self):
+    ...         for e in self.enabled:
+    ...             yield queryUtility(IBehavior, name=e.__identifier__)
+
+    >>> from zope.component import provideAdapter
+    >>> provideAdapter(TestingAssignable)
+
+Behavior installation
+---------------------
+
+We can now test that the behavior is installed when the ZCML for this package
+is loaded.
+
+    >>> from zope.component import getUtility
+    >>> from plone.behavior.interfaces import IBehavior
+    >>> dossier_behavior = getUtility(IBehavior, name='opengever.dossier.behaviors.dossier.IDossier')
+    >>> dossier_behavior.interface
+    <InterfaceClass opengever.dossier.behaviors.dossier.IDossier>
+
+We also expect this behavior to be a form field provider. Let's verify that.
+
+    >>> from plone.directives.form import IFormFieldProvider
+    >>> IFormFieldProvider.providedBy(dossier_behavior.interface)
+    True
+
+Let's create a content object that has this behavior enabled and check that
+it works.
+
+    >>> doc = Container('doc')
+    >>> dossier_adapter = IDossier(doc, None)
+    >>> dossier_adapter is not None
+    True
+
+Clean up
+    >>> from zope import component
+    >>> component.getGlobalSiteManager().unregisterAdapter(factory=TestingAssignable)
+    True
+
+

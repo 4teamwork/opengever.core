@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vdex xmlns="http://www.imsglobal.org/xsd/imsvdex_v1p0"
+      orderSignificant="false" language="en">
+    <vocabIdentifier>opengever.dossier.container_types</vocabIdentifier>
+
+    <term>
+        <termIdentifier>folder</termIdentifier>
+        <caption>
+            <langstring language="en">Folder</langstring>
+            <langstring language="de-ch">Ordner</langstring>
+            <langstring language="de">Ordner</langstring>
+
+        </caption>
+    </term>
+    <term>
+        <termIdentifier>box</termIdentifier>
+        <caption>
+            <langstring language="en">Box</langstring>
+            <langstring language="de-ch">Schachtel</langstring>
+            <langstring language="de">Schachtel</langstring>
+
+        </caption>
+    </term>
+    <term>
+        <termIdentifier>dossier</termIdentifier>
+        <caption>
+            <langstring language="en">Dossier</langstring>
+            <langstring language="de-ch">Dossier</langstring>
+            <langstring language="de">Dossier</langstring>
+
+        </caption>
+    </term>
+</vdex>

@@ -1,0 +1,1057 @@
+Changelog
+=========
+
+
+2.3.2 (unreleased)
+------------------
+
+- Nothing changed yet.
+
+
+2.3.1 (2013-04-26)
+------------------
+
+- Implements correct and recursively activating/deactivating functionality.
+  [phgross]
+
+
+2.3 (2012-12-11)
+----------------
+
+- Nothing changed yet.
+
+
+2.2 (2012-11-28)
+----------------
+
+- Removed reset_grid_state action from the different tab configurations.
+  The action is now integrated in the tabbedview tab-menu.
+  [phgross]
+
+- Dropped Plone 4.1 compatibility. Only 4.2 and up are supported.
+  [lgraf]
+
+- Filing: Upate the filing prefix also on only resolving a dossier.
+  Issue #1720 Dossier abschlissen mit Ablagenummer ohne Praefix
+  https://extranet.4teamwork.ch/extern/opengever-kanton-zug/sprint-backlog/1720/
+  [phgross]
+
+
+2.1.6 (2012-09-25)
+------------------
+
+- Update Vdexvocabs.
+  [tschanzt]
+
+
+2.1.5 (2012-09-12)
+------------------
+
+- Move items: Change PathSourceBinder use the og specific one,
+  to made the contenttree works fine.
+  Issue #202 Element in Zielposition/Zieldossier verschieben
+  https://extranet.4teamwork.ch/support/ph-vs/tracker/202
+  [phgross]
+
+- Templatedossier form: added internationalization.
+  [phgros]
+
+- Added a reusable FilingNumberChecker.
+  [lgraf]
+
+- Adjust french translation.
+  [phgross]
+
+- Added validation for the filing year field.
+  Issue #1670 Dossier abschliessen: Feld Ablagejahr wird nicht valdiert.
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1670
+  [phgross]
+
+
+2.1.4 (unreleased)
+------------------
+
+- Archiveform: Fixed filing_prefix field (visible_terms_from_registry attribute).
+  Issue #1645 Probleme beim Dossier abschliessen
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1645/
+  [phgross]
+
+- Fixed filing action generation, add validation for existing filing numbers.
+  Issue #1644 Frage nach exestierender Ablagenummer bei Dossierabschluss obwohl es keine hat
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1644/
+  [phgross]
+
+- Fixed METHOD_RESOLVING_EXISTING_FILING use realy the existing values.
+  [phgross]
+
+- Fixed archiving methods 'only_resolve' and 'only_number', in the dossier archive form.
+  [phgross]
+
+
+2.1.3 (2012-06-28)
+------------------
+
+- Dossier Schema: Added description for the filing_prefix field.
+  [phgross]
+
+- Templatedossier: Adjust redirecting after document creation.
+  [phgross]
+
+- Templatedossier document creation: Add the file before the initial version is created.
+  [phgross]
+
+
+2.1.2 (2012-06-27)
+------------------
+
+- Made recursive_resolve safe: works now also with cancelled subdossiers.
+  Do not attend documents from a cancelled dossier, in the earliest enddate calculation.
+  Issue #1546 DI-KSA: Fehlermeldung beim Versuch "Dossier abschliessen"
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1546
+  [phgross]
+
+- ResolveConditions: Validate the endate of the main dossier, not till the archive form is displayed.
+  Issue #1525 Dossier abschliessen: Wieder eroeffnen bzw. wieder abschliessen bei Subdossier.
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1525
+  [phgross]
+
+- Fixed Templatedossier: create a newfile NamedFile object with the same data, instead of set only a reference.
+  Issue #1368 Bearbeitung von Vorlagen (Metadaten und Dokumente)
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1368/
+  [phgross]
+
+
+2.1.1 (2012-06-22)
+------------------
+
+- Templatedossier: Adjust edit permission, normal user should not have the right to edit.
+  [phgross]
+
+- Templatedossier: Adjust translations.
+  [phgross]
+
+
+2.1 (2012-06-21)
+------------------
+
+- Templatedossier: Disalbe some columns in the document and trash listings.
+  [phgross]
+
+- Templatedossier: Adjust default value setter, works now also for boolean fields (preserved_as_paper).
+  [phgross]
+
+- Fixed earliest enddate calculation: include objs in subdossiers.
+  Issue #1525 Dossier abschliessen: Wieder eroeffnen bzw. wieder abschliessen bei Subdossier.
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1525/
+  [phgross]
+
+- Implements start date validation in the ResolveConiditions.
+  Issue #1546 DI-KSA: Fehlermeldung beim Versuch "Dossier abschliessen"
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1546
+  [phgross]
+
+- Issue #1512 Auswahl exportieren: Sortieren nach Ablagenr. funktioniert nicht
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1512
+  Dossier reporter: Added filing number filing column.
+
+- Rebuild the document creation in templatedossier:
+  Create a new doc obj instead of copying it, this set also the default values.
+  [phgross]
+
+- Added some adjustments in the resolving process:
+  - Made recursive_resolve safe, can hanlde now allready resolved sbudossiers.
+  - Made reactivate possible for subdossier if the maindossier is still open.
+  - Adjust recursive_resolving of subdossie: overwrite the end date only when its not valid or none.
+  [phgross]
+
+- Issue #1512 Auswahl exportieren: Sortieren nach Ablagenr. funktioniert nicht
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1512
+  Dossier reporter: Added encoding transform for the title attribute.
+  [phgross]
+
+- Fix attachment-fail when downloading file with IE.
+  #1515 Mail-Anhang kann nicht geöffnet werden im Internet Explorer
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1515/
+  [eschmutz]
+
+- Implement some adjustments on the templatedossier:
+  - Made docs in templatedossiers editable.
+  - Activate trash-tab and trashing alos in the templatedossiers.
+  Issue #1368 Bearbeitung von Vorlagen (Metadaten und Dokumente)
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1368
+  [phgross]
+
+- Set the response contenttype correctly, to avoid problems with diazo themes on remote requests.
+  Issue #6 Richtigen Content-Type auf der Response bei remote requests zwischen Clients setzen
+  https://extranet.4teamwork.ch/intranet/08-produkte-kurse/4teamwork-gever-1/tracker-4teamwork-gever/6
+  [phgross]
+
+- Adjust filing_no indexers: they should indexing also, when only the prefix is given.
+  Issue #1476 Anzeige des Ablage-Praefix auch bei offenen Dossiers in Uebersicht auf Stufe Ordnungsposition
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1476
+  [phgross]
+
+- Refactored and adjust the whole resolve/archive process.
+  Issue #1525 Dossier abschliessen: Wieder eroeffnen bzw. wieder abschliessen bei Subdossier.
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1525
+  Issue #1546 DI-KSA: Fehlermeldung beim Versuch "Dossier abschliessen"
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1546
+  [phgross]
+
+- Use the ISendableDocsContainer behavior instead of directly provide the interface.
+  Issue #1568 Dokument aus Aufgabe versenden resp. kopieren
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1568
+  [phgross]
+
+- Added filingnumber and -year columns to the xls dossier reporter.
+  Issue #1512 Auswahl exportieren: Sortieren nach Ablagenr. funktioniert nicht
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1512
+  [phgross]
+
+- Activate tabbedview quickupload plugin for dossiers.
+  Issue #549 Abklaerung: Drag and drop
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/549
+  [phgross]
+
+- Adjust tests, because the accessors return utf-8 since the dexerity update.
+  Issue #1420 Plone Version und Dexterity Version auf aktuellste Version heben.
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1420
+  [phgross]
+
+- User get_css_class instead of deprecated method: css_class_from_obj/css_class_from_brain
+  [eschmutz]
+
+- Add ordering for the contentmenu for dossiers and subdossiers
+  [eschmutz]
+
+
+2.0.4 (2012-03-28)
+------------------
+
+- Added filing number maintance view, wich provide some scripts and forms
+  to maintain the different counters.
+  [phgross]
+
+- Change translations
+  [ttschanz]
+
+
+2.0.3 (2012-02-27)
+------------------
+
+- Added parent-dossier-finder adapter.
+  [jone]
+
+- Made view failsafe when there is no orig_template
+  Issue #1398 DossierReporter: Fallback implementieren fuer MissingValues
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1398/
+  [phgross]
+
+- Added French translations.
+  [ttschanz]
+
+- Administrator role now may resolve or reactivate dossiers
+  [lgraf]
+
+- When resolving dossiers, only issue filing numbers for active dossiers
+  [lgraf]
+
+- Fixed tests: Unregister prevent_deletion subscriber in tests
+  [lgraf]
+
+- Removed 'List folder contents' permission from anyone but Manager in
+  dossier and templatedossier workflows.
+  [lgraf]
+
+- Updated workflow for new Administrator role
+  [lgraf]
+
+- Dossier resolving: Only require tasks and docs to be filed in a
+  subdossier if there's any *active* subdossiers.
+  [lgraf]
+
+- Adjust the main dossier test: added IDisplayInOverview functionality test.
+  [phgross]
+
+- Adjust the containing_dossier indexer: it should also work for objects in the inbox.
+  [phgross]
+
+- Added IDisplayedInOverview Interfaces:
+  to mark additional dossier behaviors, which should displayed in the overview.
+  Issue #1251 Darstellung von Zusatzattributen
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1251/
+  [phgross]
+
+- Refactored some parts of opengever.dossier (overview, added tests, adjust some docstrings, pep8)
+  [phgross]
+
+- Add reindexing the containing_dossier value also in the globalindex.
+  [phgross]
+
+- Added new containing_dossier index used for show in the searchresults and some other listings
+  Issue #1253 Darstellung Dossiertitel bei Suchresultaten (Subdossiers, Dokumente, Aufgaben)
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1253
+  [phgross]
+
+- Tabbedview custom storage key: use better matching interface,
+  according to changes in ftw.tabbedview.
+  [jone]
+
+
+2.0.2 (2011-12-06)
+------------------
+
+- Fixed workflow definitions: add all configured permission also to the permissions managed by this workflow.
+  [phgross]
+
+
+2.0.1 (2011-11-17)
+------------------
+
+- Fixed changelog
+  [lgraf]
+
+
+2.0 (2011-11-17)
+----------------
+
+- Fixed dossier report for the myDossiers view, activate the report view on every content type.
+  [phgross]
+
+- Issue #1249 Mail: Beim Importieren eines E-Mails muss die Spalte Ausgangsdatum leer bleiben
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1249/
+  back to ftw.table helper function for readable_date
+  [eschmutz]
+
+- Made the filing number search more comfortable: added searchable_filing_no ZCTextIndex
+  Issue #1260 Suche nach Ablagenummer
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1260
+  [phgross]
+
+- Add test for main_dossier to test mapped workflows
+  [eschmutz]
+
+- Added dossier_report view, which generates a excel export for the selected dossiers.
+  Issue #1038 Statistiken/Auswertungen
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1038
+  [phgross]
+
+- Add reset_tableconfiguration action for every listing view.
+  Issue #796 Zuruecksetzen der Tabellen-Konfiguration
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/796/
+  [phgross]
+
+- Updated dossier and templatedossier workflows: Added new role "Role Manager"
+  that has permissions to delegate roles via the sharing tab.
+  #1245 Neue Rolle einführen um local roles anzupassen
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1245/
+  [lgraf]
+
+- Refactoring move_items module
+  [eschmutz]
+
+- Add tests for move_items module
+  [eschmutz]
+
+- Fixed batching by using the ListingView from opengever.tabbedview which
+  overrides the batching template to match the CSS in izug.basetheme
+  [lgraf]
+
+- Split the whole create document from template process into different methods,
+  to made the code better readable and allow specifig testing.
+  Added mocktests for the create document from template process.
+  [phgross]
+
+- Fixed source for the destination_folder field in the move_items view.
+  Just allows repositoryfolders and dossiers.
+  Issue #1231 Probleme im Autocomplete Feld in der move_items view
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1231/view
+  [phgross]
+
+- Fixed filing_no indexing in the archive process.
+  manually reindex the filing_no index after setting a filing number.
+  Issue #1162 Fehler bei Suche nach Ablagenummer
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1162
+  [phgross]
+
+
+2.0b22 (2011-10-04)
+-------------------
+
+
+- emailaddress is now hidden, when the dossier isn't active.
+  Issue #1218 Mailadresse ausblenden bei abgeschlossenen Dossiers.
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1218
+  [ttschanz]
+
+
+- Issue #1177 move_items ergibt wenn Objekte per WEBDav gesperrt sind.
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1177
+  changed translation for error-message
+  [eschmutz]
+
+- Fixed morelinks(show all link) for the boxes in the dossiers overview.
+  Issue #1201 Dossier/Uebersicht, Link "Alle anzeigen" auf Dokumentenuebersicht umleiten
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1201
+  [phgross]
+
+
+2.0b21 (2011-09-29)
+-------------------
+
+- Extended Tests for Tasks. It now tests if all_is_closed is true with cancelled tastks
+  [ttschanz]
+
+- Issue #1176 alle translatinos mit from zope.i18n import translate
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1176
+  [eschmutz]
+
+- Issue #1177 move_items ergibt wenn Objekte per WEBDav gesperrt sind.
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1177
+  exception-handling for cutObject-method
+  [eschmutz]
+
+- Changed var-name in tests
+  [eschmutz]
+
+- Updated test_searchabletext method
+  [eschmutz]
+
+- added grok.require for DossierOverview, Participants, ChooseClientView, CopyDocumentsToRemoteClientView
+  [eschmutz]
+
+- changed deprecated grok.CodeView to grok.View
+  [eschmutz]
+
+- checks now order of tabs in test
+  [eschmutz]
+
+- added better test for test_default_values
+  [eschmutz]
+
+- added fixes for default-tests
+  [eschmutz]
+
+2.0b20 (2011-08-30)
+-------------------
+
+- added default-tests for dossiers
+  [eschmutz]
+
+- removed unused check in the order_factories method
+  [phgross]
+
+2.0b19
+------
+
+- moved factory_utils order_factories method from arp to opengever.dossier package
+  [phgross]
+
+
+2.0b18
+------
+
+- Issue #1040 Mandantenuebergreifende Beteiligung: Anpassung Darstellung
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1040
+  reimplement Exposator viewlet, request parameter is not longer used
+  [phgross]
+
+- added test-buildout for plone 4.1
+  [eschmutz]
+
+2.0b17
+------
+
+- When updating `containing_subdossier` index also update objects not
+  *directly* contained in the subdossier.
+  [lgraf]
+
+- Fixed `containing_subdossier` index to also work for objects not *directly*
+  contained in a dossier.
+  [lgraf]
+
+- Update `containing_subdossier` index for all contained objects when a dossier is renamed
+  [lgraf]
+
+- Fixed tests
+  [eschmutz]
+
+- Don't allow dossiers to be resolved anymore if tasks are in state 'task-state-resolved'
+  [lgraf]
+
+- Fixed tests
+  [eschmutz]
+
+- Added sprite function-lock to byline.pt
+  [eschmutz]
+
+- moved tests from collective.testcaselayer to plone.app.testing
+  [eschmutz]
+
+2.0b16
+------
+
+- Updated move_items. Only display one statusmessage.
+  [ttschanz]
+
+- Moved validators to opengever.mail to avoid circular dependency
+  [ttschanz]
+
+- Issue #1067 Test Rot 2.0.3: "In eigenes Dossier kopieren" funktioniert nicht
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1067/
+  Added missing parameters for the js_template call in the DossierAutocompleteSelectionWidget,
+  works now with the newest version of the plone.formwidget.autocomplete
+  (see https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1069/)
+  [phgross]
+
+2.0b15
+------
+- Issue #1040 Mandantenuebergreifende Beteiligung: Anpassung Darstellung
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1040
+  [phgross]
+
+- Added test for resolving dossiers
+  [lgraf]
+
+- Added Browser test for opengever.dossier
+  [phgross]
+
+- fixed markup
+  [fsprenger]
+
+- Issue #588 Fehler bei Klick auf Weitere Aktionen in Dokumentenliste
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/588
+  [phgross]
+
+- Issue #1067 Test Rot 2.0.3: "In eigenes Dossier kopieren" funktioniert nicht
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1067
+  [phgross]
+
+- Issue #1052 Byline icons durch sprite icons ersetzen
+  Added ByLine modifications for sprites
+  [ttschanz]
+
+- Issue #996 Mails in Dossier verschieben ist nicht erlaubt
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/996/
+  moved css_class_from_brain helper from opengever dossier to opengever.base
+  [phgross]
+
+- #996 Mails in Dossier verschieben ist nicht erlaubt
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/996/
+  Updated permissionroles in Workflow definition. Mails now are hidden in Contentmenu.
+  [ttschanz]
+
+- Added Custom Label for Add and EditForm, special handling for Subdossiers
+  [phgross]
+
+- removed INameFromTitle Behavior because we have our own IDossierNameFromTitle behavior
+  [phgross]
+
+- Adjusted dossier overview to not need a metadata column for CSS icon class any more
+  [lgraf]
+
+- Removed css_icon_class method - now done in tabbedview linked helper
+  [lgraf]
+
+- Rebuild OGDS, added groups to the OGDS, because of performance problems
+  [phgross]
+
+- Refactored inbox / dossier overview
+  [lukasg]
+
+- Removed content_icons and icon_expr's - now done with sprites
+  [lgraf]
+
+- Moved adjust_sequence_numbers view to opengever.konsulmigration
+  [lgraf]
+
+- Added new method for metatype: css_icon_class
+  [27.05.2011, elio.schmutz]
+
+- Issue #1021 Feedback Fokus: Datum bei Dokument
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1021/
+  - adjust filing_year default value (work now also without a document_date)
+  - adjust computeEndDate (work now also without a document_date)
+  - reset document_date
+  [phgross]
+
+- Issue #1018 Feedback Fokus: Autor leer lassen
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1018/
+  [phgross]
+
+- Issue #1016 Feedback Fokus: Subdossier eroeffnen
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1016/
+  [phgross]
+
+- Issue #1010 Feedback Fokus: Dossier: Uebersicht: Angabe "Dokumente"
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1010/
+  [phgross]
+
+- Fixed conflict check in adjust_sequence_numbers view (ignore Missing.Values)
+  [lgraf]
+
+- Made DefaultConstrainTypeDecider subclassable.
+  [jbaumann]
+
+- Using new readable_date helper from opengever.tabbedview
+  [lgraf]
+
+- #722 Release 2b06: Dossier kann nicht abgeschlossen werden, obwohl alle Aufgaben abgeschlossen sind
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/722
+  Updated translations.
+  [phabegger]
+
+- Added handler for IObjectModified that updates the ``containing_subdossier`` index for documents
+  [lgraf]
+
+- Replaced manual catalog query in dossier overview with call to get_subdossiers()
+  [lgraf]
+
+- Moved adjust_sequence_numbers view from opengever.base to avoid circular dependency
+  [lgraf]
+
+- Refactoring: Moved send_document.py to opengever.mail
+  [lgraf]
+
+- Added missing dependency on izug.basetheme
+  [lgraf]
+
+- Adjusting imports after moving ISendableDocsContainer to opengever.mail
+  [lgraf]
+
+- Fixed tests
+  [lgraf]
+
+- Made update() method of dossier AddForm usable by special dossiers
+  (check for IDossierMarker, not portal_type="og.dossier.businesscasedossier")
+  [lgraf]
+
+
+- Issue #935 Feld "Kommentar" eines Dossiers indexieren
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/935/
+  Included dossier comments in SearchableText index
+  [lgraf]
+
+
+2.0b14
+------
+
+
+2.0b13
+------
+
+- Issue #390 Datum-Plausibilitaetspruefung
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/390/
+  Fixed bug where end date validation and suggestion for subdossiers didn't work correctly
+  [lgraf]
+
+- Issue #937 Mailversand: Fehlerhafte Dokumentauswahl
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/937/
+  Fixed SourceBinder for related documents when sending docs as mail
+
+
+2.0b12
+------
+
+- Issue #891 E-Mail versenden aus Eingangskorb funktioniert nicht
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/891/
+  Added new marker interface
+  [ttschanz]
+
+- Only incrementing filing_no if it is actually being set
+  [lgraf]
+
+- Added some typechecking in computeEndDate() to avoid comparing datetime to date
+  [lgraf]
+
+
+2.0b11
+------
+
+- Fixed bug when checking for valid end date on dossier archiving screen
+  [lgraf]
+
+
+2.0b10
+------
+
+- Major refactoring of logic for resolving dossiers and checking preconditions
+  [lgraf]
+
+- Issue #712 Advanced Search korrigieren und testen
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/712
+  Changed German translation of WF state "archived" to "archiviert" (used to be
+  "abgelegt".
+  [phabegger]
+
+- Added handling of empty subdossiers that are resolved and have an end date set
+  [lgraf]
+
+- Issue #456 Falscher Dossierzaehler beim Verschieben eines Dossiers unter eine
+  andere Ordnungsposition
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/456
+  Added a temporary reference number field which is used to hold the former
+  reference number.
+  [phabegger]
+
+- Fixed sorting order in EnddateValidator
+  [lgraf]
+
+- Fixed error handling if resolving subdossiers fails
+  [lgraf]
+
+- Fixed EnddateValidator for dossier end dates
+  [lgraf]
+
+- Issue #390 Datum-Plausibilitaetspruefung
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/390/
+  Only validating end date on subdossiers not yet resolved
+  Only check for valid end date for subdossiers
+  Fixed retrieval of filing_no in dossier archiving screen
+  [lgraf]
+
+- Issue #860 Abgeschlossene und stornierte Dossiers koennen im derzeitigen Release
+  durch Sekretariat nicht wiedereroeffnet werden
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/860
+  Updated dossier workflow: Changed guards to role Publisher.
+  [phabegger]
+
+
+2.0b9
+-----
+
+- Added check for valid end date for subdossiers
+  [lgraf]
+
+- Changed type of document_date for template dossiers from datetime to date
+  [lgraf]
+
+- Refactored archiving logic for dossiers
+  [lgraf]
+
+- Fixed setting of filing_no when resolving dossiers
+  [lgraf]
+
+- Issue #390 Datum-Plausibilitaetspruefung
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/390/
+  Added plausibility checks for end dates when resolving a dossier
+  [lgraf]
+
+- Updated dossier workflow: Setting checkin/checkout perms on dossier (used to
+  be document)
+  [phabegger]
+
+- Issue #843 Dossier abschliessen: Noch falsche Ueberpruefung, ob ausgecheckte Dokumente existieren
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/843/
+  Fixed dossier-resolve-check for checked out documents.
+  [jbaumann]
+
+- Adjusted check if dossier can be closed: state "resolved" is not part of closed
+  states anymore.
+  [phabegger]
+
+- Issue #841 Dossier , Tab Ablage, Wertebereich "Behaeltnis-Art"
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/841
+  Added new container "Dossier".
+  [phabegger]
+
+
+2.0b8
+-----
+
+- Issue #456 Falscher Dossierzaehler beim Verschieben eines Dossiers unter eine andere
+  Ordnungsposition
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/456
+  Updated translation
+  [phabegger]
+
+- Overview view: support for globalindex objects
+  [jbaumann]
+
+- Issue #797 Dossier: 2 Metadaten ausblenden
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/797
+  Removed fields container_id and volume_no.
+  [phabegger]
+
+- Issue #794 Wizard verschieben: Zuviele Statusmeldungen
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/794/
+  Removed unnecessary status messages
+  [ttschanz]
+
+- Fixed get_filing_no accessor in byline view
+  [lgraf]
+
+- Added new dossier workflow state "archived" on special request of Olivier Debenath.
+  [phabegger]
+
+- Changed permission for "Give Filing No" action to "Modify portal content"
+  [lgraf]
+
+- Added `filing_no` field (omitted) on IDossier
+  Fixed indexer for filing_no
+  [lgraf]
+
+
+2.0b7
+-----
+
+- Added Box in overview for Description
+  [ttschanz]
+
+- Removed documents.pt template since its not used anymore.
+  [jbaumann]
+
+- Moved template for eliminating grok unassociated template warning.
+  [jbaumann]
+
+
+2.0b6
+-----
+
+- Only show Templates (Vorlagen) tab in globalnav if user is on a home client
+  Issue #748 Reiter "Uebersicht" und "Vorlagen" ausblenden fuer Nicht-Users
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/748/
+  [lgraf]
+
+- Fixed bug in move_items. if allowed Itemsand disallowed Items are Copied together
+  the allowed don't fail anymore.
+  [ttschanz]
+
+- Adapted SearchableText for Dossiers.
+  Issue #765 SearchableText anpassen fuer Dossiers und Aufgaben.
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/765/
+  [ttschanz]
+
+- Fixed po file.
+  [jbaumann]
+
+- Added support for multiple Elements. If an Document is selected that is connected to a Task.
+  It can't be moved.
+  Issue #715 Neuer Wizard: Dossier verschieben
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/715/
+  [ttschanz]
+
+- Fixed title for templates in "create dossier from template" view
+  [lgraf]
+
+- Added index and metadata column `containing_subdossier` (used for Documents and Tasks)
+  Issue #739 Neue Spalten in Tabbedview innerhalb Dossier
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/739/
+  [lgraf]
+
+- Issue #734 Beteiligung: Neue Beteiligung ohne Rollenangabe
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/734
+  [jbaumann]
+
+- Related dossiers: Fixed path source binder configuration.
+  [jbaumann]
+
+- Issue #715 Neuer Wizard: Dossier verschieben
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/715/
+  [ttschanz]
+
+- Dossier responsible default value: use parent dossier responsible or current user as default.
+  [jbaumann]
+
+- remove all the dependencies to opengever.document
+  [phgross]
+
+- fix the resolve browser test
+  [phgross]
+
+- Issue #722 Release 2b06: Dossier kann nicht abgeschlossen werden, obwohl alle Aufgaben abgeschlossen sind
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/722
+  [phgross]
+
+2.0b5
+-----
+
+- Fixed archiving special subdossiers
+  [phgross]
+
+- Added Event handler for ActionSucceededEvent:
+  By deactivating a dossier it should also deactivate the subdossiers
+  [phgross]
+
+- fixed Arcihve Number process:
+  it should use the title and not the value of the elephant vocabulary
+  [phgross]
+
+- added fallback when the user hasn't a email address, in the send documents process
+  [phgross]
+
+2.0b4
+-----
+
+- fixed container_types fields, use now the correct vocabulary
+  [phgross]
+
+2.0b3
+-----
+
+- added locking for dossier content types
+  [jbaumann]
+
+- Issue #553 Checkout Prozess anpassen
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/553
+  Support for new checkout / checkin
+  [jbaumann]
+
+
+2.0b2
+-----
+
+- Grid state storage key generator for sharing the configuration between different dossier types
+  [jbaumann]
+
+
+2.0b1
+-----
+
+- fixed vdex vocabularies: switch language from de to de-ch since portal_languages has changed
+  [Jonas Baumann]
+
+- added missing dependency opengever.sharing
+  [Jonas Baumann]
+
+- fixed extends path
+  [Jonas Baumann]
+
+- removed unused imports
+  [Jonas Baumann]
+
+- use collective.dexteritytextindexer for searchable text index
+  [Jonas Baumann]
+
+- cleanup
+  [Jonas Baumann]
+
+- translations of copy documents to remote client wizard
+  [Jonas Baumann]
+
+- Copy documents to remote client: implemented wizard, using autocomplete now, fixed various smaller issues
+  [Jonas Baumann]
+
+- moved transport module to browser, since its a wizard
+  [Jonas Baumann]
+
+- Copy documents to remote client: implemented wizard, using autocomplete now, fixed various smaller issues
+  [jbaumann]
+
+
+2.0a2
+-----
+
+
+1.0a4
+-----
+
+- Workflow for dossiers moved to opengever.dossier.
+  [01.10.2010, phabegger]
+
+- Updated missing and wrong German translations.
+  [01.10.2010, phabegger]
+
+- Renamed sharing tab to participants tab.
+  [01.10.2010, phabegger]
+
+- Removed journal box in overview template of dossiers and subdossiers
+  [01.10.2010, phabegger]
+
+- Moved tentacle-open-dossiers-json from opengever.octopus.tentacle
+  [11.08.2010, jbaumann]
+
+- Transporter was refactored: use new method `transport_to()`
+  [15.03.2010, jbaumann]
+
+- Using new vocabulary factory for transporter:
+  opengever.octopus.tentacle.vocabulary.OpenHomeDossiersVocabularyFactory
+  [12.03.2010, jbaumann]
+
+- Issue #436 Workflow Erstellen eines Dokuments ab Vorlagen
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/436
+  [02.02.2010, phgross]
+
+- Issue #486 Beteiligung hinzufuegen und Beteiligung loeschen darf nur moeglich sein, wenn das Dossier in Bearbeitung ist
+  Auf eigenem Mandanten nicht moeglich
+  uebersetzungen hinzugefuegt
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/486
+  [01.03.2010, jbaumann]
+
+- Issue #445 Kopieren von an Aufgaben angehaengten Dokumenten ("Ueberweisung", Beteiligung)
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/445
+  [01.03.2010, jbaumann]
+
+- Issue #480 Beteiligung am Dossier hinzufuegen sollte auch in "Aktionsleiste" moeglich sein nicht nur ueber das Menue "Aktionen"
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/480
+  [25.02.2010, jbaumann]
+
+- Do not use windows fonts in LaTeX
+  [10.02.2010, jbaumann]
+
+- Deckblatt PDF: Responsible mit ContactInformation utility generieren
+  [10.02.2010, jbaumann]
+
+- Uebersetzungen angepasst fuer Feld "former_reference"
+  [03.02.2010, jbaumann]
+
+
+1.0a3
+-----
+
+- Issue #409: Verschieben eines Dossiers von einer Ordnungsposition unter eine andere
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/409
+  [20.01.2010, jbaumann]
+
+
+1.0a2
+-----
+
+- Issue #282: Kontakte-Webservice fuer OGDS
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/282
+  [13.01.2010, jbaumann]
+
+- Fixed participants add form, which didn't work with dexterity 1.0a3
+  [12.01.2010, jbaumann]
+
+
+1.0a1
+-----
+
+- Issue #263: Beteiligung in einem Dossier
+  Formular fuer Beteiligungen hinzugefuegt
+  [18.12.2009, jbaumann]
+
+- Issue #296: Nummerierungskonzept umsetzen
+  Aktenzeichen in byline
+  [16.12.2009, jbaumann]
+
+- Issue #296: Nummerierungskonzept umsetzen
+  Laufnummer in Byline des Geschaeftsdossier eingebaut
+  [16.12.2009, jbaumann]
+
+- Issue #275: Hinzufuegbare Typen einschraenken bei Geschaeftsdossier
+  [14.12.2009, jbaumann]
+
+- Issue #120: RepositoryFolder uebersetzen
+  [11.11.2009, jbaumann]
+
+- Issue #52: Versionierung bei Dossier ausschalten
+  Disabled versioning for Dossier-types
+  [20.10.2009, jbaumann]
+
+
+0.1
+---
+
+- Added new marker interface for behavior IDossier since no marker interface is given when using factory
+  [13.10.2009, jbaumann]
+
+- Added behavior IAnnotationsJournalizable (ftw.journal) to Dossier types
+  [13.10.2009, jbaumann]
+
+- Added IVersionable behavior for Dossier types
+  [14.10.2009, jbaumann]
+
+- Added Actions for Version history and journal
+  [14.10.2009, jbaumann]

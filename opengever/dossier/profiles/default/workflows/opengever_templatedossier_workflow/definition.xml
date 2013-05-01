@@ -1,0 +1,180 @@
+<?xml version="1.0"?>
+<dc-workflow workflow_id="opengever_templatedossier_workflow" title="Template Dossier Workflow" description="" state_variable="review_state" initial_state="templatedossier-state-active" manager_bypass="False">
+ <permission>Access contents information</permission>
+ <permission>Add portal content</permission>
+ <permission>Change portal events</permission>
+ <permission>Copy or Move</permission>
+ <permission>List folder contents</permission>
+ <permission>Modify portal content</permission>
+ <permission>Sharing page: Delegate Contributor role</permission>
+ <permission>Sharing page: Delegate Editor role</permission>
+ <permission>Sharing page: Delegate Reader role</permission>
+ <permission>Sharing page: Delegate Reviewer role</permission>
+ <permission>Sharing page: Delegate roles</permission>
+ <permission>View</permission>
+ <permission>opengever.document: Add document</permission>
+ <permission>opengever.document: Cancel</permission>
+ <permission>opengever.document: Checkin</permission>
+ <permission>opengever.document: Checkout</permission>
+ <permission>opengever.document: Force Checkin</permission>
+ <permission>opengever.dossier: Add templatedossier</permission>
+ <permission>opengever.trash: Trash content</permission>
+ <permission>opengever.trash: Untrash content</permission>
+ <state state_id="templatedossier-state-active" title="Active">
+  <description>Visible to everyone, editable by the owner.</description>
+  <permission-map name="Access contents information" acquired="False">
+   <permission-role>Administrator</permission-role>
+   <permission-role>Manager</permission-role>
+   <permission-role>Reader</permission-role>
+  </permission-map>
+  <permission-map name="Add portal content" acquired="False">
+   <permission-role>Administrator</permission-role>
+   <permission-role>Contributor</permission-role>
+   <permission-role>Manager</permission-role>
+  </permission-map>
+  <permission-map name="Change portal events" acquired="False">
+   <permission-role>Manager</permission-role>
+  </permission-map>
+  <permission-map name="Copy or Move" acquired="False">
+   <permission-role>Administrator</permission-role>
+   <permission-role>Manager</permission-role>
+   <permission-role>Reader</permission-role>
+  </permission-map>
+  <permission-map name="List folder contents" acquired="False">
+   <permission-role>Manager</permission-role>
+  </permission-map>
+  <permission-map name="Modify portal content" acquired="False">
+   <permission-role>Administrator</permission-role>
+   <permission-role>Manager</permission-role>
+   <permission-role>Contributor</permission-role>
+   <permission-role>Editor</permission-role>
+  </permission-map>
+  <permission-map name="Sharing page: Delegate Contributor role" acquired="False">
+   <permission-role>Administrator</permission-role>
+   <permission-role>Manager</permission-role>
+   <permission-role>Role Manager</permission-role>
+  </permission-map>
+  <permission-map name="Sharing page: Delegate Editor role" acquired="False">
+   <permission-role>Administrator</permission-role>
+   <permission-role>Manager</permission-role>
+   <permission-role>Role Manager</permission-role>
+  </permission-map>
+  <permission-map name="Sharing page: Delegate Reader role" acquired="False">
+   <permission-role>Administrator</permission-role>
+   <permission-role>Manager</permission-role>
+   <permission-role>Role Manager</permission-role>
+  </permission-map>
+  <permission-map name="Sharing page: Delegate Reviewer role" acquired="False">
+   <permission-role>Administrator</permission-role>
+   <permission-role>Manager</permission-role>
+   <permission-role>Role Manager</permission-role>
+  </permission-map>
+  <permission-map name="Sharing page: Delegate roles" acquired="False">
+   <permission-role>Administrator</permission-role>
+   <permission-role>Manager</permission-role>
+   <permission-role>Role Manager</permission-role>
+  </permission-map>
+  <permission-map name="View" acquired="False">
+   <permission-role>Administrator</permission-role>
+   <permission-role>Manager</permission-role>
+   <permission-role>Reader</permission-role>
+  </permission-map>
+  <permission-map name="opengever.document: Add document" acquired="False">
+   <permission-role>Administrator</permission-role>
+   <permission-role>Contributor</permission-role>
+   <permission-role>Editor</permission-role>
+   <permission-role>Manager</permission-role>
+   <permission-role>Owner</permission-role>
+  </permission-map>
+  <permission-map name="opengever.document: Cancel" acquired="False">
+   <permission-role>Administrator</permission-role>
+   <permission-role>Contributor</permission-role>
+   <permission-role>Editor</permission-role>
+   <permission-role>Manager</permission-role>
+   <permission-role>Owner</permission-role>
+  </permission-map>
+  <permission-map name="opengever.document: Checkin" acquired="False">
+   <permission-role>Administrator</permission-role>
+   <permission-role>Contributor</permission-role>
+   <permission-role>Editor</permission-role>
+   <permission-role>Manager</permission-role>
+   <permission-role>Owner</permission-role>
+  </permission-map>
+  <permission-map name="opengever.document: Checkout" acquired="False">
+   <permission-role>Administrator</permission-role>
+   <permission-role>Contributor</permission-role>
+   <permission-role>Editor</permission-role>
+   <permission-role>Manager</permission-role>
+   <permission-role>Owner</permission-role>
+  </permission-map>
+  <permission-map name="opengever.document: Force Checkin" acquired="False">
+   <permission-role>Administrator</permission-role>
+   <permission-role>Manager</permission-role>
+  </permission-map>
+  <permission-map name="opengever.dossier: Add templatedossier" acquired="False">
+   <permission-role>Administrator</permission-role>
+   <permission-role>Manager</permission-role>
+  </permission-map>
+  <permission-map name="opengever.trash: Trash content" acquired="False">
+   <permission-role>Administrator</permission-role>
+   <permission-role>Contributor</permission-role>
+   <permission-role>Editor</permission-role>
+   <permission-role>Manager</permission-role>
+   <permission-role>Owner</permission-role>
+  </permission-map>
+  <permission-map name="opengever.trash: Untrash content" acquired="False">
+   <permission-role>Administrator</permission-role>
+   <permission-role>Contributor</permission-role>
+   <permission-role>Editor</permission-role>
+   <permission-role>Manager</permission-role>
+   <permission-role>Owner</permission-role>
+  </permission-map>
+ </state>
+ <variable variable_id="action" for_catalog="False" for_status="True" update_always="True">
+  <description>Previous transition</description>
+  <default>
+
+   <expression>transition/getId|nothing</expression>
+  </default>
+  <guard>
+  </guard>
+ </variable>
+ <variable variable_id="actor" for_catalog="False" for_status="True" update_always="True">
+  <description>The ID of the user who performed the previous transition</description>
+  <default>
+
+   <expression>user/getUserName</expression>
+  </default>
+  <guard>
+  </guard>
+ </variable>
+ <variable variable_id="comments" for_catalog="False" for_status="True" update_always="True">
+  <description>Comment about the last transition</description>
+  <default>
+
+   <expression>python:state_change.kwargs.get('comment', '')</expression>
+  </default>
+  <guard>
+  </guard>
+ </variable>
+ <variable variable_id="review_history" for_catalog="False" for_status="False" update_always="False">
+  <description>Provides access to workflow history</description>
+  <default>
+
+   <expression>state_change/getHistory</expression>
+  </default>
+  <guard>
+   <guard-permission>Request review</guard-permission>
+   <guard-permission>Review portal content</guard-permission>
+  </guard>
+ </variable>
+ <variable variable_id="time" for_catalog="False" for_status="True" update_always="True">
+  <description>When the previous transition was performed</description>
+  <default>
+
+   <expression>state_change/getDateTime</expression>
+  </default>
+  <guard>
+  </guard>
+ </variable>
+</dc-workflow>

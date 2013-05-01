@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<object name="portal_workflow" meta_type="Plone Workflow Tool">
+
+    <object name="opengever_dossier_workflow" meta_type="Workflow"/>
+    <object name="opengever_templatedossier_workflow" meta_type="Workflow"/>
+
+    <bindings>
+        <type type_id="opengever.dossier.businesscasedossier">
+            <bound-workflow workflow_id="opengever_dossier_workflow"/>
+        </type>
+        <type type_id="opengever.dossier.projectdossier">
+            <bound-workflow workflow_id="opengever_dossier_workflow"/>
+        </type>
+        <type type_id="opengever.dossier.templatedossier">
+            <bound-workflow workflow_id="opengever_templatedossier_workflow"/>
+        </type>
+    </bindings>
+
+</object>

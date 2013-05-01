@@ -1,0 +1,19 @@
+<metal:use use-macro="context/@@ploneform-macros/titlelessform">
+
+    <metal:formtop fill-slot="formtop">
+        <div class="wizard">
+
+            <ul class="wizardSteps">
+                <li tal:repeat="step view/wizard_steps"
+                    tal:attributes="class step/class">
+                    <a tal:content="step/label" />
+                </li>
+            </ul>
+
+        </div>
+
+        <div class="wizardContent"></div>
+
+    </metal:formtop>
+
+</metal:use>

@@ -1,0 +1,52 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:plone="http://namespaces.plone.org/plone"
+    xmlns:grok="http://namespaces.zope.org/grok"
+    i18n_domain="opengever.dossier">
+
+    <include package="plone.behavior" file="meta.zcml" />
+
+    <include package="plone.directives.form" file="meta.zcml" />
+    <include package="plone.directives.form" />
+
+    <!--grok:grok package=".behaviors.dossier" /-->
+
+    <!-- Dossier -->
+    <plone:behavior
+        title="OpenGever Dossier"
+        description="Adds OpenGever base properties and fields for dossiers"
+        provides=".behaviors.dossier.IDossier"
+        factory="plone.behavior.AnnotationStorage"
+        marker=".behaviors.dossier.IDossierMarker"
+        for="plone.dexterity.interfaces.IDexterityContent"
+        />
+
+    <!-- ParticipationAware -->
+    <plone:behavior
+        title="OpenGever Participation Aware"
+        description="Enables participation support"
+        provides=".behaviors.participation.IParticipationAware"
+        factory=".behaviors.participation.ParticipationHandler"
+        marker=".behaviors.participation.IParticipationAwareMarker"
+        for="plone.dexterity.interfaces.IDexterityContent"
+        />
+
+    <!-- name from title beahvior -->
+    <plone:behavior
+        title="dossier name from title"
+        description=""
+        provides=".behaviors.dossiernamefromtitle.IDossierNameFromTitle"
+        factory=".behaviors.dossiernamefromtitle.DossierNameFromTitle"
+        for="opengever.dossier.behaviors.dossier.IDossierMarker"
+        />
+
+    <!-- Restricted dossier behavior -->
+    <plone:behavior
+        title="Restricted dossier"
+        description="A restricted dossier is not addable by default in the
+                     repository folder."
+        provides="opengever.dossier.behaviors.restricteddossier.IRestrictedDossier"
+        for="opengever.dossier.behaviors.dossier.IDossierMarker"
+        />
+
+</configure>

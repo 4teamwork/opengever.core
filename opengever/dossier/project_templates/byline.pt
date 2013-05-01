@@ -1,0 +1,58 @@
+<div class="documentByLine"
+     id="plone-document-byline"
+     i18n:domain="opengever.dossier"
+     tal:condition="viewlet/show">
+  <span class="" tal:attributes="class string:byline-icon ${viewlet/get_css_class}"
+></span>
+  <span id="lock-icon" class="function-lock"
+        tal:define="lock_icon viewlet/locked_icon"
+        tal:condition="lock_icon">
+  </span>
+
+  <tal:name tal:condition="viewlet/responsible">
+    <span class="documentAuthor"
+          i18n:translate="label_by_author">
+      by
+      <a href="#"
+         tal:attributes="href string:${context/@@plone_portal_state/navigation_root_url}/author/${viewlet/responsible}"
+         tal:content="python:viewlet.responsible().getProperty('fullname')"
+         tal:omit-tag="not:viewlet/responsible"
+         i18n:name="author">
+        Bob Dobalina
+      </a>
+
+    </span>
+  </tal:name>
+
+  <tal:state>
+    <span i18n:translate="label_workflow_state" class="documentStatus" class="noborder">
+      State:
+    </span>
+    <span tal:content="viewlet/workflow_state" i18n:translate="" i18n:domain="plone" />
+  </tal:state>
+
+  <span class="documentModified">
+    <span i18n:translate="label_start_byline" tal:omit-tag="">
+      from:
+    </span>
+    <span tal:replace="python:viewlet.toLocalizedTime(str(viewlet.start()),long_format=0)">
+      August 16, 2001 at 23:35:59
+    </span>
+  </span>
+
+  <span class="documentModified" tal:condition="python:viewlet.end()">
+    <span i18n:translate="label_end_byline" i18n:domain="opengever.dossier" tal:omit-tag="">
+      to:
+    </span>
+    <span tal:replace="python:viewlet.toLocalizedTime(str(viewlet.end()),long_format=0)">
+      August 16, 2001 at 23:35:59
+    </span>
+  </span>
+
+  <tal:expired tal:condition="viewlet/isExpired">
+    <span class="state-expired"
+          i18n:translate="time_expired" tal:omit-tag="">expired</span>
+  </tal:expired>
+
+
+</div>

@@ -1,0 +1,4 @@
+<registry>
+  <records interface="opengever.dossier.interfaces.IDossierContainerTypes" />
+  <records interface="opengever.dossier.interfaces.IDossierParticipants" />
+</registry>

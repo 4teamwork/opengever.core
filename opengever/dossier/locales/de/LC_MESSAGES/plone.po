@@ -1,0 +1,67 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2010-09-30 13:26+0000\n"
+"PO-Revision-Date: 2011-02-01 12:37+0100\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0\n"
+"Language-Code: en\n"
+"Language-Name: English\n"
+"Preferred-Encodings: utf-8 latin1\n"
+"Domain: DOMAIN\n"
+
+msgid "Add Participant"
+msgstr "Beteiligung hinzufügen"
+
+msgid "Document with docucomposer"
+msgstr "Dokument mit Docucomposer"
+
+msgid "Dossier state changed to dossier-state-active"
+msgstr "Status des Dossiers geändert zu In Bearbeitung"
+
+msgid "Dossier state changed to dossier-state-archived"
+msgstr "Status des Dossiers geändert zu Archiviert"
+
+msgid "Dossier state changed to dossier-state-inactive"
+msgstr "Status des Dossiers geändert zu Storniert"
+
+msgid "Dossier state changed to dossier-state-resolved"
+msgstr "Status des Dossiers geändert zu Abgeschlossen"
+
+msgid "Give Filing Number"
+msgstr "Ablagenummer vergeben"
+
+msgid "document_with_template"
+msgstr "Dokument aus Vorlage"
+
+msgid "dossier-state-active"
+msgstr "In Bearbeitung"
+
+msgid "dossier-state-archived"
+msgstr "Archiviert"
+
+msgid "dossier-state-inactive"
+msgstr "Storniert"
+
+msgid "dossier-state-resolved"
+msgstr "Abgeschlossen"
+
+msgid "dossier-transition-activate"
+msgstr "Aktivieren"
+
+msgid "dossier-transition-archive"
+msgstr "Archivieren"
+
+msgid "dossier-transition-deactivate"
+msgstr "Stornieren"
+
+msgid "dossier-transition-reactivate"
+msgstr "Wieder öffnen"
+
+msgid "dossier-transition-resolve"
+msgstr "Abschliessen"
+

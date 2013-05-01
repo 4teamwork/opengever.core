@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vdex xmlns="http://www.imsglobal.org/xsd/imsvdex_v1p0"
+      orderSignificant="false" language="en">
+    <vocabIdentifier>opengever.dossier.participation_roles</vocabIdentifier>
+
+    <term>
+        <termIdentifier>participation</termIdentifier>
+        <caption>
+            <langstring language="en">Participation</langstring>
+            <langstring language="de-ch">Mitwirkung</langstring>
+            <langstring language="de">Mitwirkung</langstring>
+
+        </caption>
+    </term>
+    <term>
+        <termIdentifier>final-drawing</termIdentifier>
+        <caption>
+            <langstring language="en">Final drawing</langstring>
+            <langstring language="de-ch">Schlusszeichnung</langstring>
+            <langstring language="de">Schlusszeichnung</langstring>
+
+        </caption>
+    </term>
+    <term>
+        <termIdentifier>regard</termIdentifier>
+        <caption>
+            <langstring language="en">Regard</langstring>
+            <langstring language="de-ch">Kenntnisnahme</langstring>
+            <langstring language="de">Kenntnisnahme</langstring>
+
+        </caption>
+    </term>
+
+</vdex>

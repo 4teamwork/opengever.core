@@ -1,0 +1,21 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+
+    i18n_domain="opengever.dossier">
+
+    <permission
+        id="opengever.dossier.AddBusinessCaseDossier"
+        title="opengever.dossier: Add businesscasedossier"
+        />
+        
+    <permission
+        id="opengever.dossier.AddProjectDossier"
+        title="opengever.dossier: Add projectdossier"
+        />
+
+    <permission
+        id="opengever.dossier.AddTemplateDossier"
+        title="opengever.dossier: Add templatedossier"
+        />
+   
+</configure>
