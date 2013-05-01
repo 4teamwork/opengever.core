@@ -102,11 +102,11 @@ class TestTaskTemplatesIntegration(unittest.TestCase):
         add_tasktemplate_view = dossier.restrictedTraverse('add-tasktemplate')
 
         # We just can find folder 1 because folder 2 is inactive
-        self.assertTrue(
-            template_folder_1.title in add_tasktemplate_view.listing(
+        self.assertIn(
+            template_folder_1.title, add_tasktemplate_view.listing(
                 show='templates'))
-        self.assertFalse(
-            template_folder_2.title in add_tasktemplate_view.listing(
+        self.assertNotIn(
+            template_folder_2.title, add_tasktemplate_view.listing(
                 show='templates'))
 
         # Activate folder 2
@@ -114,32 +114,32 @@ class TestTaskTemplatesIntegration(unittest.TestCase):
                              'tasktemplatefolder-transition-inactiv-activ', )
 
         # Now we can see both
-        self.assertTrue(
-            template_folder_1.title in add_tasktemplate_view.listing(
+        self.assertIn(
+            template_folder_1.title, add_tasktemplate_view.listing(
                 show='templates'))
-        self.assertTrue(
-            template_folder_2.title in add_tasktemplate_view.listing(
+        self.assertIn(
+            template_folder_2.title, add_tasktemplate_view.listing(
                 show='templates'))
 
         # In folder 1 we can find two tasktemplates
-        self.assertTrue(
-            template1.title in add_tasktemplate_view.listing(
+        self.assertIn(
+            template1.title, add_tasktemplate_view.listing(
                 show='tasks', path="/".join(
                     template_folder_1.getPhysicalPath())))
 
-        self.assertTrue(
-            template2.title in add_tasktemplate_view.listing(
+        self.assertIn(
+            template2.title, add_tasktemplate_view.listing(
                 show='tasks', path="/".join(
                     template_folder_1.getPhysicalPath())))
 
         # In folder 2 we can't find any tasktemplates
-        self.assertFalse(
-            template1.title in add_tasktemplate_view.listing(
+        self.assertNotIn(
+            template1.title, add_tasktemplate_view.listing(
                 show='tasks', path="/".join(
                     template_folder_2.getPhysicalPath())))
 
-        self.assertFalse(
-            template2.title in add_tasktemplate_view.listing(
+        self.assertNotIn(
+            template2.title, add_tasktemplate_view.listing(
                 show='tasks', path="/".join(
                     template_folder_2.getPhysicalPath())))
 
@@ -162,7 +162,7 @@ class TestTaskTemplatesIntegration(unittest.TestCase):
             paths=["/".join(template1.getPhysicalPath())])
 
         # This redirect us to the default dossier view
-        self.assertTrue(url == dossier.absolute_url())
+        self.assertEquals(url, dossier.absolute_url())
 
         brains = catalog(
             path='/'.join(dossier.getPhysicalPath()),
@@ -170,7 +170,7 @@ class TestTaskTemplatesIntegration(unittest.TestCase):
 
         # We should have now three main Task-Objects
         # and tree subtasks objects
-        self.assertTrue((3 + 3) == len(brains))
+        self.assertEquals((3 + 3), len(brains))
 
         task = brains[0]
         obj = task.getObject()
@@ -195,14 +195,13 @@ class TestTaskTemplatesIntegration(unittest.TestCase):
         #check marker interface
         self.assertTrue(IFromTasktemplateGenerated.providedBy(subtask.getObject()))
 
-        self.assertTrue(subtask.Title == template1.title)
-        self.assertTrue(
-            subtask.responsible == mtool.getAuthenticatedMember().getId())
-        self.assertTrue(
-            subtask.deadline == (datetime.today() + timedelta(
+        self.assertEquals(subtask.Title, template1.title)
+        self.assertEquals(
+            subtask.responsible, mtool.getAuthenticatedMember().getId())
+        self.assertEquals(
+            subtask.deadline, (datetime.today() + timedelta(
                 template1.deadline)).date())
-        self.assertTrue(subtask.getObject().text == template1.text)
-        self.assertTrue(subtask.issuer == IDossier(dossier).responsible)
+        self.assertEquals(subtask.getObject().text, template1.text)
+        self.assertTrue(subtask.issuer, IDossier(dossier).responsible)
 
         # XXX test also the event handler update_deadline
-
