@@ -1,0 +1,51 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:plone="http://namespaces.plone.org/plone"
+    xmlns:grok="http://namespaces.zope.org/grok"
+    i18n_domain="opengever.base">
+
+  <plone:behavior
+      title="OpenGeverBase"
+      description="OpenGever Base behavior"
+      provides="opengever.base.behaviors.base.IOpenGeverBase"
+      factory=".base.OpenGeverBase"
+      marker=".base.IOpenGeverBaseMarker"
+      for="plone.dexterity.interfaces.IDexterityContent"
+      />
+
+  <plone:behavior
+      title="Creator Aware"
+      description="Remembers the creator in a hidden creators field"
+      provides="opengever.base.behaviors.creator.ICreator"
+      factory="plone.behavior.AnnotationStorage"
+      marker=".creator.ICreatorAware"
+      for="plone.dexterity.interfaces.IDexterityContent"
+      />
+
+  <!-- Classification Behavior -->
+  <plone:behavior
+      title="Classification"
+      description="Adds classification fields and functionality"
+      provides=".classification.IClassification"
+      factory=".classification.Classification"
+      marker=".classification.IClassificationMarker"
+      for="plone.dexterity.interfaces.IDexterityContent"
+      />
+
+  <plone:behavior
+      title="LifeCycle"
+      description="Adds lifecycle fields and functionality"
+      provides=".lifecycle.ILifeCycle"
+      factory="plone.behavior.AnnotationStorage"
+      marker=".lifecycle.ILifeCycleMarker"
+      for="plone.dexterity.interfaces.IDexterityContent"
+      />
+
+  <plone:behavior
+      title="SequenceNumber"
+      description="Adds the sequence number indexer"
+      provides=".sequence.ISequenceNumberBehavior"
+      for="plone.dexterity.interfaces.IDexterityContent"
+      />
+
+</configure>

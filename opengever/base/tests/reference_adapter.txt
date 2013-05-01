@@ -1,0 +1,59 @@
+ReferenceNumber Prefix Adapter
+==============================
+Do some imports, and standard configuration:
+
+	>>> app = layer.get('app')
+	>>> portal = layer.get('portal')
+    >>> from opengever.base.behaviors import base
+    >>> from plone.dexterity.fti import DexterityFTI
+    >>> from plone.dexterity.content import Item, Container
+    >>> from opengever.base.interfaces import IReferenceNumberPrefix
+
+    >>> fti = DexterityFTI('OpenGeverBaseFTI3', klass="plone.dexterity.content.Container", global_allow=True, allowed_content_types=['OpenGeverBaseFTI3'], behaviors=["opengever.base.interfaces.IReferenceNumberPrefix"])
+    >>> portal.portal_types._setObject('OpenGeverBaseFTI3', fti)
+    'OpenGeverBaseFTI3'
+    >>> portal.invokeFactory('OpenGeverBaseFTI3', 'f1')
+    'f1'
+
+Create Folder, and items and get the referenceNumberPrefixAdapter:
+    >>> f1 = portal.get('f1')
+    >>> adapter = IReferenceNumberPrefix(f1)
+    >>> f1.invokeFactory('OpenGeverBaseFTI3', 'Item1')
+    'Item1'
+    >>> item1 = f1.get('Item1')
+    >>> f1.invokeFactory('OpenGeverBaseFTI3', 'Item2')
+    'Item2'
+    >>> item2 = f1.get('Item2')
+
+Check the numbering concept, starting by 1:
+(get_next_number() should always return unicode!)
+    >>> adapter.get_next_number()
+    u'1'
+    >>> item1 = f1.get('Item1')
+    >>> adapter.set_number(item1)
+    u'1'
+    >>> adapter.get_number(item1)
+    u'1'
+    >>> adapter.get_next_number()
+    u'2'
+
+The next number generator should be able to increase number greater than 9:
+It also give allways the next number from the highest one, and not use all numbers
+    >>> adapter.set_number(item2, u'9')
+    u'9'
+    >>> adapter.get_next_number()
+    u'10'
+
+and also alpha-numeric numbers:
+    >>> adapter.set_number(item1, u'A1A15')
+    u'A1A15'
+    >>> adapter.set_number(item2)
+    u'A1A16'
+    >>> adapter.get_next_number()
+    u'A1A17'
+
+Check the is_valid_number() method:
+    >>> adapter.is_valid_number(u'A1A16')
+    False
+    >>> adapter.is_valid_number(u'A1A17')
+    True

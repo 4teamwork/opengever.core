@@ -1,0 +1,107 @@
+Test viewlets defined in opengever.base
+=======================================
+
+First, some imports and general setup:
+
+    >>> import transaction
+    >>> from Products.CMFCore.utils import getToolByName
+    >>> from plone.dexterity.utils import createContentInContainer
+    >>> from plone.namedfile.file import NamedBlobFile
+
+    >>> from opengever.document.document import IDocumentSchema
+
+    >>> app = layer.get('app')
+    >>> portal = layer.get('portal')
+    >>> request = layer.get('request')
+    >>> ptool = getToolByName(portal, 'plone_utils')
+
+Download viewlet
+----------------
+
+Trying to call the viewlet on a document with no file
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Create a test document WITHOUT a file:
+    >>> test_doc0 = createContentInContainer(portal,
+    ...     'opengever.document.document',
+    ...     title=u'Doc without file',
+    ...     keywords=[])
+
+Get the file download viewlet and call it:
+    >>> download_viewlet = test_doc0.restrictedTraverse('download_file_version')
+    >>> response = download_viewlet.render()
+
+Response should be a redirect to context:
+    >>> response
+    'http://nohost/plone/document-1'
+
+with status code 302 (Moved permanently):
+    >>> portal.REQUEST.response.status
+    302
+
+and a portal status message:
+    >>> ptool.showPortalMessages()[-1].message
+    u'No file in in this version'
+
+
+
+Calling the viewlet on a document with a file
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Create a test document with a file:
+    >>> test_file1 = NamedBlobFile("lorem ipsum", filename=u"foobar.txt")
+    >>> test_doc1 = createContentInContainer(portal,
+    ...     'opengever.document.document',
+    ...     title=u'Foobar',
+    ...     keywords=[],
+    ...     file=test_file1)
+
+Get the file download viewlet and call it:
+    >>> download_viewlet1 = test_doc1.restrictedTraverse('download_file_version')
+    >>> response1 = download_viewlet1.render()
+
+Response should contain file data:
+    >>> response1
+    'lorem ipsum'
+
+Check that HTTP response headers are set correctly:
+    >>> portal.REQUEST.response.headers.get('content-disposition')
+    'attachment; filename="foobar.txt"'
+    >>> portal.REQUEST.response.headers.get('content-length')
+    '11'
+    >>> portal.REQUEST.response.headers.get('content-type')
+    'text/plain'
+
+
+Check that HTTP content-type header gets set correctly
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Create a test document with a file and a custom content type:
+    >>> test_file2 = NamedBlobFile("some text", filename=u"sometext.txt")
+    >>> test_file2.contentType = 'foo/bar'
+    >>> test_doc2 = createContentInContainer(portal,
+    ...     'opengever.document.document',
+    ...     title=u'Some Text',
+    ...     keywords=[],
+    ...     file=test_file2)
+
+Get the file download viewlet and call it:
+    >>> download_viewlet2 = test_doc2.restrictedTraverse('download_file_version')
+    >>> response2 = download_viewlet2.render()
+
+Check that HTTP content-type header is set correctly:
+    >>> portal.REQUEST.response.headers.get('content-type')
+    'foo/bar'
+
+
+History viewlet
+---------------
+
+TODO
+
+
+Version view viewlet
+--------------------
+
+TODO
+

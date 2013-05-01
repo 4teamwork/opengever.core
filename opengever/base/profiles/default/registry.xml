@@ -1,0 +1,5 @@
+<registry>
+    <records interface="opengever.base.interfaces.IBaseCustodyPeriods" />
+    <records interface="opengever.base.interfaces.IRetentionPeriodRegister" />
+    <records interface="opengever.base.interfaces.IBaseClientID" />
+</registry>

@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<object name="portal_catalog">
+    <column value="css_icon_class" />
+    <column value="breadcrumb_titles"/>
+    <index name="reference" meta_type="FieldIndex">
+        <indexed_attr value="reference"/>
+    </index>
+    <column value="reference"/>
+</object>

@@ -1,0 +1,52 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:plone="http://namespaces.plone.org/plone"
+    xmlns:grok="http://namespaces.zope.org/grok"
+    xmlns:i18n="http://namespaces.zope.org/i18n"
+    xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+    xmlns:vdex="http://namespaces.zope.org/vdex"
+    xmlns:monkey="http://namespaces.plone.org/monkey"
+    xmlns:meta="http://namespaces.zope.org/meta"
+    i18n_domain="opengever.base">
+
+    <meta:provides feature="opengever" />
+
+    <i18n:registerTranslations directory="locales" />
+
+    <include package="plone.app.workflow" />
+
+    <!-- Register an extension profile to make the product installable -->
+    <genericsetup:registerProfile
+        name="default"
+        title="opengever.base"
+        description="the opengever.base"
+        directory="profiles/default"
+        provides="Products.GenericSetup.interfaces.EXTENSION"
+        />
+
+    <!-- Register the import_various step -->
+    <genericsetup:importStep
+        name="opengever.base.various"
+        title="opengever.base various import steps"
+        description=""
+        handler="opengever.base.setuphandlers.import_various">
+    </genericsetup:importStep>
+
+
+    <include package="plone.behavior" file="meta.zcml" />
+
+    <include package="plone.directives.form" file="meta.zcml" />
+    <include package="plone.directives.form" />
+
+    <include package="plone.formwidget.namedfile" />
+
+    <grok:grok package="." />
+
+    <include package=".behaviors" />
+    <include package=".browser" />
+    <include package=".viewlets" />
+    <include package=".upgrades" />
+
+	<include file="skins.zcml" />
+
+</configure>

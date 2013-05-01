@@ -1,0 +1,85 @@
+OpenGeverBase Behavior
+======================
+
+
+The OpenGeverBase behavior contains title and description fields.
+
+
+When we create a dexterity content type, but we must enshure that we do not
+use the default model source with another title and description for
+excluding ambiguity.
+
+    >>> portal = layer['portal']
+    >>> app = layer['app']
+    >>> from opengever.base.behaviors import base
+    >>> from plone.dexterity.fti import DexterityFTI
+
+    >>> fti = DexterityFTI('OpenGeverBaseFTI')
+    >>> fti.schema = 'opengever.base.testing.IEmptySchema'
+    >>> fti.behaviors = (
+    ...                  'opengever.base.behaviors.base.IOpenGeverBase',
+    ...                  )
+    >>> portal.portal_types._setObject('OpenGeverBaseFTI', fti)
+    'OpenGeverBaseFTI'
+    >>> schema = fti.lookupSchema()
+
+With plone.app.testing we need to explicitly commit these changes for them 
+to become visible to the testbrowser:
+
+    >>> import transaction
+    >>> transaction.commit()
+
+
+If we access the site as an admin TTW:
+
+    >>> from plone.testing.z2 import Browser
+    >>> browser = Browser(app)
+    >>> browser.handleErrors = False
+    >>> from plone.app.testing import TEST_USER_NAME, TEST_USER_PASSWORD
+    >>> browser.addHeader('Authorization', 'Basic %s:%s' % (TEST_USER_NAME, TEST_USER_PASSWORD,))
+
+
+We can see this type in the addable types at the root of the site:
+
+    >>> browser.open('http://nohost/plone/folder_factories')
+    >>> 'OpenGeverBaseFTI' in browser.contents
+    True
+    >>> browser.getControl('OpenGeverBaseFTI').click()
+    >>> browser.getControl('Add').click()
+    >>> browser.url
+    'http://nohost/plone/++add++OpenGeverBaseFTI'
+    >>> 'Title' in browser.contents
+    True
+    >>> 'Description' in browser.contents
+    True
+    >>> browser.getControl(
+    ...     name='form.widgets.IOpenGeverBase.title').value = 'Foo'
+    >>> browser.getControl(
+    ...     name='form.widgets.IOpenGeverBase.description').value = 'Bar'
+    >>> browser.getControl('Save').click()
+    >>> browser.url
+    'http://nohost/plone/opengeverbasefti/view'
+
+
+Get the created object:
+
+    >>> obj = portal.opengeverbasefti
+    >>> obj
+    <Item at ...>
+
+
+Title should be set:
+
+    >>> obj.Title()
+    'Foo'
+    >>> obj.Description()
+    'Bar'
+
+
+
+We use the "Common" fieldset, not the "Default" fieldset:
+
+    >>> browser.open('http://nohost/plone/opengeverbasefti/edit')
+    >>> 'Common' in browser.contents
+    True
+

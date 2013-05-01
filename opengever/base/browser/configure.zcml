@@ -1,0 +1,64 @@
+<configure
+      xmlns="http://namespaces.zope.org/zope"
+      xmlns:browser="http://namespaces.zope.org/browser">
+
+    <browser:page
+          name="list_groupmembers"
+          for="*"
+          class=".list_groupmembers.ListGroupMembers"
+          permission="zope2.View"
+          />
+
+    <browser:page
+          name="opengever_view"
+          for="*"
+          class=".opengeverview.OpengeverView"
+          permission="zope.Public"
+          allowed_interface=".opengeverview.IOpengeverView"
+          />
+
+    <!-- Fix for bug mentioned in Issue #934 Fehler bei den Falldossiers 1 und 2 BD.ARP
+         https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/934
+         Remove as soon as this has been fixed in plone.app.z3cform / plone.z3cform
+    -->
+    <browser:page
+        name="ploneform-macros"
+        for="*"
+        layer="izug.basetheme.browser.interfaces.IThemeSpecific"
+        class=".ploneform_macros.Macros"
+        template="templates/macros.pt"
+        allowed_interface="zope.interface.common.mapping.IItemMapping"
+        permission="zope.Public"
+        />
+
+    <adapter factory=".navtree.OpengeverNavtreeStrategy" />
+
+    <browser:viewlet
+      name="izug.basethem.belowcontenttitle.contentviews"
+      for="OFS.interfaces.IItem"
+      manager="plone.app.layout.viewlets.interfaces.IBelowContentTitle"
+      class=".viewlets.OpengeverContentViewsViewlet"
+      permission="zope2.View"
+      />
+
+    <browser:page
+        name="search"
+        class=".search.OpengeverSearch"
+        permission="zope2.View"
+        for="*"
+        template="search.pt"
+        layer="opengever.base.interfaces.IOpengeverBaseLayer"
+        />
+
+    <configure package="plone.app.search">
+      <browser:page
+          name="updated_search"
+          class="opengever.base.browser.search.OpengeverSearch"
+          permission="zope2.View"
+          for="Products.CMFCore.interfaces.IFolderish"
+          template="updated_search.pt"
+          layer="opengever.base.interfaces.IOpengeverBaseLayer"
+          />
+    </configure>
+
+</configure>

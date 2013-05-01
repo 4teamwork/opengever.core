@@ -1,0 +1,66 @@
+Sequence Number Generator
+=========================
+
+for testing we used two different testobject types
+
+	>>> app = layer.get('app')
+	>>> portal = layer.get('portal')
+    >>> from plone.dexterity.fti import DexterityFTI
+
+type1
+    >>> fti = DexterityFTI('type1', klass="plone.dexterity.content.Container", global_allow=True, allowed_content_types=['type1'], behaviors=["opengever.base.behaviors.sequence.ISequenceNumberBehavior"])
+    >>> portal.portal_types._setObject('type1', fti)
+    'type1'
+
+type2
+    >>> fti = DexterityFTI('type2', klass="plone.dexterity.content.Container", global_allow=True, allowed_content_types=['type2'])
+    >>> portal.portal_types._setObject('type2', fti)
+    'type2'
+
+    >>> portal.invokeFactory('type1', 'n1')
+    'n1'
+    >>> portal.invokeFactory('type1', 'n2')
+    'n2'
+    >>> portal.invokeFactory('type2', 'f1')
+    'f1'
+
+so now we get the Sequence Number Utility, for the first news item, and ask it for the Sequence Number
+    >>> from opengever.base.interfaces import ISequenceNumber
+    >>> from zope.component import getUtility
+    >>> seq_utility = getUtility(ISequenceNumber)
+
+and ask it for the Sequence Number
+    >>> n1 = portal.get('n1')
+    >>> seq_utility.get_number(n1)
+    1
+
+the same for the second news item
+    >>> n2 = portal.get('n2')
+    >>> seq_utility.get_number(n2)
+    2
+
+no when we ask for the sequence number of the first news item,
+it should be return the existing number ...
+    >>> seq_utility.get_number(n1)
+    1
+
+the sequence number isn't recyclable
+    >>> portal.manage_delObjects('n2')
+    >>> portal.invokeFactory('type1', 'n3')
+    'n3'
+    >>> seq_utility.get_number(portal.get('n3'))
+    3
+
+and also the a copy should become a new number
+    >>> cb = portal.manage_copyObjects('n1')
+    >>> portal.manage_pasteObjects(cb)
+    [{'new_id': 'copy_of_n1', 'id': 'n1'}]
+    >>> seq_utility.get_number(portal.get('copy_of_n1'))
+    4
+
+the folder numbering should be start now also by 1
+    >>> f1 = portal.get('f1')
+    >>> seq_utility.get_number(f1)
+    1
+
+

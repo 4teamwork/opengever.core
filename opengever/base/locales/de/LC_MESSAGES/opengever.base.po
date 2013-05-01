@@ -1,0 +1,310 @@
+# opengever.repository
+# Jonas Baumann <j.baumann@4teamwork.ch>, 2009
+msgid ""
+msgstr ""
+"Project-Id-Version: 1.0\n"
+"POT-Creation-Date: 2012-11-23 07:35+0000\n"
+"PO-Revision-Date: 2012-12-03 16:30+0100\n"
+"Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
+"Language-Team: Jonas Baumann <j.baumann@4teamwork.ch>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"Preferred-Encodings: utf-8 latin1\n"
+"Domain: opengever.repository\n"
+"X-Is-Fallback-For: de-at de-li de-lu de-ch de-de\n"
+
+#: ./opengever/base/profiles/default/actions.xml
+msgid "Copy Items"
+msgstr "Kopieren"
+
+#: ./opengever/base/viewlets/download.py:26
+msgid "No file in in this version"
+msgstr "In dieser Version ist keine Datei vorhanden"
+
+#: ./opengever/base/profiles/default/actions.xml
+msgid "Properties"
+msgstr "Eigenschaften anzeigen"
+
+#: ./opengever/base/browser/list_groupmembers.pt:13
+msgid "There are no members in this group."
+msgstr "In dieser Gruppe befinden sich keine Benutzer."
+
+#: ./opengever/base/browser/list_groupmembers.pt:3
+msgid "Users of group:"
+msgstr "Benutzer der Gruppe"
+
+#. Default ""
+#: opengever/repository/classification.py
+msgid "archival worthy"
+msgstr "Archivwürdig"
+
+#. Default ""
+#: opengever/repository/classification.py
+msgid "archival worthy with sampling"
+msgstr "Sampling"
+
+#. Default: "Download"
+#: ./opengever/base/viewlets/history.pt:42
+msgid "button_file"
+msgstr "Kopie herunterladen"
+
+#. Default: "PDF"
+#: ./opengever/base/viewlets/history.pt:52
+msgid "button_pdf"
+msgstr "PDF Vorschau"
+
+#. Default: "Show"
+#: ./opengever/base/viewlets/history.pt:48
+msgid "button_show"
+msgstr "Anzeigen"
+
+#. Default: "classified"
+#: opengever/repository/classification.py
+msgid "classified"
+msgstr "Geheim"
+
+#. Default: "confidential"
+#: opengever/repository/classification.py
+msgid "confidential"
+msgstr "Vertraulich"
+
+#. Default: "You have not selected any Items"
+#: ./opengever/base/browser/copy_items.py:47
+msgid "error_no_items"
+msgstr "Sie haben keine Objekte ausgewählt"
+
+#. Default: "The item you selected cannot be copied"
+#: ./opengever/base/browser/copy_items.py:30
+msgid "error_not_copyable"
+msgstr "Der gewählte Inhalt kann nicht kopiert werden"
+
+#. Default: "Classification"
+#: ./opengever/base/behaviors/classification.py:20
+msgid "fieldset_classification"
+msgstr "Sichtbarkeit"
+
+#. Default: "Common"
+#: ./opengever/base/behaviors/base.py:15
+msgid "fieldset_common"
+msgstr "Allgemein"
+
+#. Default: "Life Cycle"
+#: ./opengever/base/behaviors/lifecycle.py:26
+msgid "fieldset_lifecycle"
+msgstr "Lebenszyklus"
+
+#. Default: "Archival value code"
+#: ./opengever/base/behaviors/lifecycle.py:56
+msgid "help_archival_value"
+msgstr "Archivwürdigkeit"
+
+#: ./opengever/base/behaviors/lifecycle.py:65
+msgid "help_archival_value_annotation"
+msgstr ""
+
+#. Default: ""
+#: ./opengever/base/behaviors/classification.py:31
+msgid "help_classification"
+msgstr "Grad, in dem die Unterlagen vor unberechtigter Einsicht geschützt werden müssen"
+
+#: ./opengever/base/behaviors/creator.py:21
+msgid "help_creators"
+msgstr ""
+
+#: ./opengever/base/behaviors/lifecycle.py:72
+msgid "help_custody_period"
+msgstr "Dauer, während der nach der Archivierung die Dokumente vor öffentlicher Einsichtnahme geschützt sind"
+
+#: ./opengever/base/behaviors/lifecycle.py:81
+msgid "help_dateofcassation"
+msgstr ""
+
+#: ./opengever/base/behaviors/lifecycle.py:89
+msgid "help_dateofsubmission"
+msgstr ""
+
+#: ./opengever/base/behaviors/base.py:31
+msgid "help_description"
+msgstr ""
+
+#. Default: ""
+#: ./opengever/base/behaviors/classification.py:39
+msgid "help_privacy_layer"
+msgstr "Markierung, die angibt, ob die Unterlagen besonders schützenswerte Personendaten oder Persönlichkeitsprofile gemäss Datenschutzrecht enthalten"
+
+#: ./opengever/base/behaviors/classification.py:46
+msgid "help_public_trial"
+msgstr "Angabe, ob die Unterlagen gemäss Öffentlichkeitsgesetz besonders schützenswert sind oder nicht"
+
+#. Default: "BegrÃ¼undung Schutzgrad"
+#: ./opengever/base/behaviors/classification.py:54
+msgid "help_public_trial_statement"
+msgstr "Argumente gegen die öffentliche Zugänglichkeit gemäss Öffentlichkeitsgesetz"
+
+#: ./opengever/base/behaviors/lifecycle.py:40
+msgid "help_retention_period"
+msgstr "Zeitraum zwischen dem jüngsten Dokumentdatum eines in einem Dossier enthaltenen Dokuments und dem Zeitpunkt, an dem dieses für die Geschäftstätigkeit der Verwaltungseinheit nicht mehr benötigt wird"
+
+#: ./opengever/base/behaviors/lifecycle.py:49
+msgid "help_retention_period_annotation"
+msgstr ""
+
+#. Default: "Actor"
+#: ./opengever/base/viewlets/history.pt:17
+msgid "label_actor"
+msgstr "Geändert von"
+
+#. Default: "Archival value"
+#: ./opengever/base/behaviors/lifecycle.py:55
+msgid "label_archival_value"
+msgstr "Archivwürdigkeit"
+
+#. Default: "archivalValueAnnotation"
+#: ./opengever/base/behaviors/lifecycle.py:63
+msgid "label_archival_value_annotation"
+msgstr "Kommentar zur Archivwürdigkeit"
+
+#. Default: "Classification"
+#: ./opengever/base/behaviors/classification.py:30
+msgid "label_classification"
+msgstr "Klassifikation"
+
+#. Default: "Comment"
+#: ./opengever/base/viewlets/history.pt:19
+msgid "label_comment"
+msgstr "Kommentar"
+
+#. Default: "Creators"
+#: ./opengever/base/behaviors/creator.py:20
+msgid "label_creators"
+msgstr "Autoren"
+
+#. Default: "Custody period (years)"
+#: ./opengever/base/behaviors/lifecycle.py:71
+msgid "label_custody_period"
+msgstr "Archivische Schutzfrist (Jahre)"
+
+#. Default: "Date"
+#: ./opengever/base/viewlets/history.pt:18
+msgid "label_date"
+msgstr "Datum"
+
+#. Default: "Date of cassation"
+#: ./opengever/base/behaviors/lifecycle.py:80
+msgid "label_dateofcassation"
+msgstr "Kassationsdatum"
+
+#. Default: "Date of submission"
+#: ./opengever/base/behaviors/lifecycle.py:88
+msgid "label_dateofsubmission"
+msgstr "Anbietezeitpunkt"
+
+#. Default: "Description"
+#: ./opengever/base/behaviors/base.py:30
+msgid "label_description"
+msgstr "Beschreibung"
+
+#. Default: "History"
+#: ./opengever/base/viewlets/history.pt:12
+msgid "label_history"
+msgstr "Versionen"
+
+#. Default: "Initial version (document copied)"
+#: ./opengever/base/subscribers.py:20
+msgid "label_initial_version_copied"
+msgstr "Dokument kopiert (Initialversion)"
+
+#. Default: "Privacy layer"
+#: ./opengever/base/behaviors/classification.py:38
+msgid "label_privacy_layer"
+msgstr "Datenschutzstufe"
+
+#. Default: "Public Trial"
+#: ./opengever/base/behaviors/classification.py:45
+msgid "label_public_trial"
+msgstr "Öffentlichkeitsstatus:"
+
+#. Default: "Public trial statement"
+#: ./opengever/base/behaviors/classification.py:52
+msgid "label_public_trial_statement"
+msgstr "Begründung für die Aufhebung des Öffentlichkeitsstatus"
+
+#. Default: "reset"
+#: ./opengever/base/viewlets/history.pt:56
+msgid "label_reset"
+msgstr "Zurücksetzen"
+
+#. Default: "Retention period (years)"
+#: ./opengever/base/behaviors/lifecycle.py:39
+msgid "label_retention_period"
+msgstr "Aufbewahrungsdauer (Jahre)"
+
+#. Default: "retentionPeriodAnnotation"
+#: ./opengever/base/behaviors/lifecycle.py:47
+msgid "label_retention_period_annotation"
+msgstr "Kommentar zur Aufbewahrungsdauer"
+
+#. Default: "Title"
+#: ./opengever/base/behaviors/base.py:24
+msgid "label_title"
+msgstr "Titel"
+
+#. Default: "Version"
+#: ./opengever/base/viewlets/history.pt:16
+msgid "label_version"
+msgstr "Version"
+
+#. Default ""
+#: opengever/repository/classification.py
+msgid "not archival worthy"
+msgstr "Nicht archivwürdig"
+
+#. Default ""
+#: opengever/repository/classification.py
+msgid "privacy_layer_no"
+msgstr "Keine Datenschutzstufe"
+
+#. Default: ""
+#: opengever/repository/classification.py
+msgid "privacy_layer_yes"
+msgstr "Enthält schützenswerte Personendaten"
+
+#. Default: "private"
+#: opengever/repository/classification.py
+msgid "private"
+msgstr "Nicht öffentlich"
+
+#. Default ""
+#: opengever/repository/classification.py
+msgid "prompt"
+msgstr "Anbieten"
+
+#. Default: "public"
+#: opengever/repository/classification.py
+msgid "public"
+msgstr "Öffentlich"
+
+#. Default: "Did you not find what you were looking for? Try the ${advanced_search} to refine your search."
+#: ./opengever/base/browser/search.pt:60
+msgid "search_results_advanced"
+msgstr "Haben Sie nicht gefunden, wonach Sie gesucht haben? Die ${advanced_search} bietet Ihnen präzisere Suchmöglichkeiten."
+
+#. Default: "Advanced Search"
+#: ./opengever/base/browser/search.pt:61
+msgid "search_results_advanced_link"
+msgstr "erweiterte Suche"
+
+#. Default: "unchecked"
+#. Default ""
+#: opengever/repository/classification.py
+msgid "unchecked"
+msgstr "Noch nicht geprüft"
+
+#. Default: "unprotected"
+#: opengever/repository/classification.py
+msgid "unprotected"
+msgstr "Nicht klassifiziert"
+
+

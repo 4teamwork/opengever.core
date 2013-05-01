@@ -1,0 +1,57 @@
+The redirector adapter adapts the request and is used for redirecting
+the user in to another client. We need to open the URL in a another
+named window in the browser.
+
+	>>> app = layer.get('app')
+	>>> portal = layer.get('portal')
+    >>> from opengever.base.interfaces import IRedirector
+    >>> from plone.app.customerize import registration
+    >>> from zope.publisher.interfaces.browser import IBrowserRequest
+    >>> from zope.viewlet.interfaces import IViewlet
+
+    >>> request = app.REQUEST
+    >>> if 'SESSION' not in request.keys():
+    ...     request.SESSION = {}
+    >>> request
+    <HTTPRequest, URL=http://nohost>
+
+Register a redirect:
+
+    >>> redirector = IRedirector(request)
+    >>> redirector.redirect('http://www.google.ch', target='named-window')
+
+Getting the redirect:
+
+    >>> redirector.get_redirects(remove=False)
+    [{'url': 'http://www.google.ch', 'target': 'named-window', 'timeout': 0}]
+
+    >>> redirector.get_redirects(remove=True)
+    [{'url': 'http://www.google.ch', 'target': 'named-window', 'timeout': 0}]
+
+    >>> redirector.get_redirects()
+    []
+
+Test the viewlet with another redirect:
+
+    >>> redirector.redirect('http://www.google.ch', target='named-window')
+
+    >>> views = registration.getViews(IBrowserRequest)
+    >>> viewlets = filter(lambda v: v.provided==IViewlet and v.name=='redirector',
+    ...                   views)
+    >>> len(viewlets)
+    1
+
+The redirection done with javascript:
+
+    >>> viewlet = viewlets[0].factory(portal, request, {}, {})
+    >>> print viewlet.render().strip()
+    <script type="text/javascript">
+    $(function() {
+        window.setTimeout("window.open('http://www.google.ch', 'named-window');", 0);
+    });
+    </script>
+
+Only redirect once:
+
+    >>> viewlet.render()
+    ''

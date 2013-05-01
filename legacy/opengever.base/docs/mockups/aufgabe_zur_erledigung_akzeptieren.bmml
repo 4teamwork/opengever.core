@@ -1,0 +1,79 @@
+<mockup version="1.0" skin="sketch" measuredW="935" measuredH="545" mockupW="863" mockupH="482">
+  <controls>
+    <control controlID="65" controlTypeID="com.balsamiq.mockups::RadioButton" x="62" y="132" w="193" h="24" measuredW="146" measuredH="22" zOrder="8" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Aufgabe%20akzeptieren</text>
+        <href>zur_ueberweisung%26bm%3Bzur_ueberweisung.bmml%26bm%3Bzur_ueberweisung.bmml%26bm%3Bzur_ueberweisung.bmml</href>
+        <state>selected</state>
+        <map>%3Carea%20shape%3D%22rect%22%20coords%3D%220%2C79%2C193%2C103%22%20href%3D%22zur_ueberweisung.bmml%22%20alt%3D%22zur_ueberweisung%22%20id%3D%2265%22/%3E</map>
+      </controlProperties>
+    </control>
+    <control controlID="66" controlTypeID="com.balsamiq.mockups::RadioButton" x="62" y="156" w="193" h="22" measuredW="128" measuredH="22" zOrder="9" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Aufgabe%20ablehnen</text>
+        <href>zur_kenntnis%26bm%3Bzur_kenntnis.bmml%26bm%3Bzur_kenntnis.bmml%26bm%3Bzur_kenntnis.bmml</href>
+        <state>up</state>
+        <map>%3Carea%20shape%3D%22rect%22%20coords%3D%220%2C103%2C193%2C125%22%20href%3D%22zur_kenntnis.bmml%22%20alt%3D%22zur_kenntnis%22%20id%3D%2266%22/%3E</map>
+      </controlProperties>
+    </control>
+    <control controlID="67" controlTypeID="com.balsamiq.mockups::StickyNote" x="308" y="331" w="494" h="204" measuredW="109" measuredH="123" zOrder="10" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Beim%20Speichern%20erh%E4lt%20die%20Aufgabe%20den%20Zustand%20%22in%20Bearbeitung%22.%0A%20%0ATechnisch%3A%20Die%20Rolle%20%22Editor%22%20wird%20auf%20der%20Aufgabe%20sowie%20den%20verkn%FCpften%20Dokumenten%20f%FCr%20den%20User%20%22Responsible%22%20hinzugef%FCgt.%20Ausserdem%20wird%20auf%20dem%20Dossier%2C%20das%20die%20Aufgabe%20enth%E4lt%2C%20die%20Rolle%20%22Contributor%22%20f%FCr%20den%20User%20%22Responsible%22%20hinzugef%FCgt.</text>
+      </controlProperties>
+    </control>
+    <control controlID="68" controlTypeID="com.balsamiq.mockups::CheckBox" x="62" y="320" w="173" h="22" measuredW="149" measuredH="22" zOrder="11" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Aktenkopie%20erstellen</text>
+        <state>up</state>
+      </controlProperties>
+    </control>
+    <control controlID="41" controlTypeID="com.balsamiq.mockups::Label" x="64" y="114" w="58" h="30" measuredW="42" measuredH="23" zOrder="4" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Aktion</text>
+      </controlProperties>
+    </control>
+    <control controlID="16" controlTypeID="com.balsamiq.mockups::Label" x="63" y="191" w="-1" h="-1" measuredW="72" measuredH="23" zOrder="0" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Kommentar</text>
+      </controlProperties>
+    </control>
+    <control controlID="17" controlTypeID="com.balsamiq.mockups::TextArea" x="62" y="224" w="616" h="81" measuredW="200" measuredH="140" zOrder="1" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Arbeitsanweisungenoder%20Kommentar%20eingeben</text>
+      </controlProperties>
+    </control>
+    <control controlID="50" controlTypeID="com.balsamiq.mockups::Label" x="71" y="58" w="-1" h="-1" measuredW="222" measuredH="37" zOrder="6" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Antwort%20hinzuf%FCgen</text>
+        <size>24</size>
+        <color>16777215</color>
+      </controlProperties>
+    </control>
+    <control controlID="52" controlTypeID="com.balsamiq.mockups::Canvas" x="62" y="53" w="863" h="46" measuredW="100" measuredH="70" zOrder="5" locked="false" isInGroup="-1">
+      <controlProperties>
+        <borderStyle>none</borderStyle>
+        <color>255</color>
+      </controlProperties>
+    </control>
+    <control controlID="21" controlTypeID="com.balsamiq.mockups::Button" x="62" y="357" w="-1" h="-1" measuredW="82" measuredH="29" zOrder="2" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Speichern</text>
+        <href>aufgabe_zur_erledigung_aktualisieren%26bm%3Baufgabe_zur_erledigung_aktualisieren.bmml%26bm%3Baufgabe_zur_erledigung_aktualisieren.bmml%26bm%3Baufgabe_zur_erledigung_aktualisieren.bmml</href>
+        <state>selected</state>
+        <map>%3Carea%20shape%3D%22rect%22%20coords%3D%220%2C304%2C82%2C333%22%20href%3D%22aufgabe_zur_erledigung_aktualisieren.bmml%22%20alt%3D%22aufgabe_zur_erledigung_aktualisieren%22%20id%3D%2221%22/%3E</map>
+      </controlProperties>
+    </control>
+    <control controlID="22" controlTypeID="com.balsamiq.mockups::Button" x="157" y="357" w="-1" h="-1" measuredW="86" measuredH="28" zOrder="3" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Abbrechen</text>
+      </controlProperties>
+    </control>
+    <control controlID="63" controlTypeID="com.balsamiq.mockups::Paragraph" x="62" y="206" w="551" h="22" measuredW="200" measuredH="140" zOrder="7" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Geben%20Sie%20eine%20detallierte%20Arbeitsanweisung%20oder%20ein%20Kommentar%20ein</text>
+        <size>10</size>
+        <bold>false</bold>
+      </controlProperties>
+    </control>
+  </controls>
+</mockup>

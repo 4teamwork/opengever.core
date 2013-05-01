@@ -1,0 +1,84 @@
+# --- PLEASE EDIT THE LINES BELOW CORRECTLY ---
+# SOME DESCRIPTIVE TITLE.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2009-09-21 10:54+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0\n"
+"Language-Code: en\n"
+"Language-Name: English\n"
+"Preferred-Encodings: utf-8 latin1\n"
+"Domain: opengever.repository\n"
+
+#. Default: "unprotected"
+#: opengever/repository/classification.py
+msgid "unprotected"
+msgstr ""
+
+#. Default: "confidential"
+#: opengever/repository/classification.py
+msgid "confidential"
+msgstr ""
+
+#. Default: "classified"
+#: opengever/repository/classification.py
+msgid "classified"
+msgstr ""
+
+#. Default ""
+#: opengever/repository/classification.py
+msgid "privacy_layer_no"
+msgstr ""
+
+#. Default: ""
+#: opengever/repository/classification.py
+msgid "privacy_layer_yes"
+msgstr ""
+
+#. Default: "unchecked"
+#: opengever/repository/classification.py
+msgid "unchecked"
+msgstr ""
+
+#. Default: "public"
+#: opengever/repository/classification.py
+msgid "public"
+msgstr ""
+
+#. Default: "private"
+#: opengever/repository/classification.py
+msgid "private"
+msgstr ""
+
+#. Default ""
+#: opengever/repository/classification.py
+msgid "unchecked"
+msgstr ""
+
+#. Default ""
+#: opengever/repository/classification.py
+msgid "prompt"
+msgstr ""
+
+#. Default ""
+#: opengever/repository/classification.py
+msgid "archival worthy"
+msgstr ""
+
+#. Default ""
+#: opengever/repository/classification.py
+msgid "not archival worthy"
+msgstr ""
+
+#. Default ""
+#: opengever/repository/classification.py
+msgid "archival worthy with sampling"
+msgstr ""
+

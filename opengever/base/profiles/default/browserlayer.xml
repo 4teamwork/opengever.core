@@ -1,0 +1,5 @@
+<?xml version="1.0"?>
+<layers>
+    <layer name="opengever.base.layer"
+           interface="opengever.base.interfaces.IOpengeverBaseLayer" />
+</layers>

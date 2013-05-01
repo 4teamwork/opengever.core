@@ -1,0 +1,67 @@
+<div xmlns="http://www.w3.org/1999/xhtml"
+     xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+     xmlns:tal="http://xml.zope.org/namespaces/tal"
+     class="contentHistory"
+     i18n:domain="opengever.base"
+     tal:define="history view/revisionHistory;
+                 previewSupported view/previewSupported;
+                 downloadLink view/downloadLink"
+     tal:condition="history">
+
+  <dl id="history" class="collapsible collapsedOnLoad">
+    <dt class="collapsibleHeader" i18n:translate="label_history">History</dt>
+    <dd class="collapsibleContent">
+      <table class="version_history listing">
+        <thead>
+          <th i18n:translate="label_version">Version</th>
+          <th i18n:translate="label_actor">Actor</th>
+          <th i18n:translate="label_date">Date</th>
+          <th i18n:translate="label_comment">Comment</th>
+          <th></th>
+        </thead>
+        <tbody>
+          <tal:block repeat="item history">
+            <tr tal:define="isVersion python:item['type']=='versioning';">
+              <td tal:content="item/version_id|nothing" />
+              <td tal:define="actor item/actor;
+                              actor_name python:actor and actor.get('fullname','username') or item['actorid'];
+                              actor_home item/actor_home;">
+                <a href=""
+                   tal:condition="actor_home"
+                   tal:attributes="href actor_home"
+                   tal:content="actor_name"> runyaga </a>
+                <span tal:condition="not: actor_home"
+                      tal:replace="actor_name"/>
+              </td>
+              <td tal:define="effective item/effective_date|nothing;
+                              effectiveDate python:effective and context.toLocalizedTime(item['effective_date'],long_format=True)"
+                  tal:content="python:context.toLocalizedTime(item['time'],long_format=True)" />
+              <td tal:content="item/comments|nothing" />
+              <tal:cond tal:condition="isVersion">
+                <td tal:condition="downloadLink">
+                  <a href="" class="standalone function-download-copy link-overlay" i18n:translate="button_file"
+                     tal:attributes="href string:${here/absolute_url}/file_download_confirmation?version_id=${item/version_id}">
+                    Download
+                  </a>
+                </td>
+                <td tal:condition="not:downloadLink">
+                  <a href="" class="standalone" i18n:translate="button_show"
+                    tal:attributes="href string:${here/absolute_url}/version-view?version_id=${item/version_id}">Show</a>
+                </td>
+                <td tal:condition="previewSupported">
+                  <a href="" class="standalone function-download-pdf" i18n:translate="button_pdf"
+                    tal:attributes="href string:${here/absolute_url}/download_pdf_version?version_id=${item/version_id}">PDF</a>
+                </td>
+                <td>
+                  <a href="" class="standalone function-revert"
+                     tal:attributes="href string:${here/absolute_url}/revert-file-to-version?version_id=${item/version_id}"
+                     i18n:translate="label_reset">reset</a>
+                </td>
+              </tal:cond>
+            </tr>
+          </tal:block>
+        </tbody>
+      </table>
+    </dd>
+  </dl>
+</div>

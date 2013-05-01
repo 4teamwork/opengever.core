@@ -1,0 +1,2 @@
+<div id="edit-bar"
+    tal:content="structure provider:plone.contentviews" />

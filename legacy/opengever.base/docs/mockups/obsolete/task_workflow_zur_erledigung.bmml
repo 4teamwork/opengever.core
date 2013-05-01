@@ -1,0 +1,107 @@
+<mockup version="1.0" skin="sketch" measuredW="918" measuredH="609" mockupW="859" mockupH="568">
+  <controls>
+    <control controlID="96" controlTypeID="com.balsamiq.mockups::Button" x="248" y="338" w="-1" h="-1" measuredW="104" measuredH="28" zOrder="12" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>zur%FCckweisen</text>
+        <color>16776960</color>
+      </controlProperties>
+    </control>
+    <control controlID="97" controlTypeID="com.balsamiq.mockups::Button" x="426" y="461" w="-1" h="-1" measuredW="158" measuredH="28" zOrder="13" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>als%20erledigt%20markieren</text>
+        <color>16776960</color>
+      </controlProperties>
+    </control>
+    <control controlID="66" controlTypeID="com.balsamiq.mockups::RoundButton" x="455" y="112" w="114" h="32" measuredW="32" measuredH="32" zOrder="0" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>neu%20erfasst</text>
+        <shape>roundRect</shape>
+      </controlProperties>
+    </control>
+    <control controlID="67" controlTypeID="com.balsamiq.mockups::Title" x="252" y="31" w="-1" h="-1" measuredW="656" measuredH="56" zOrder="1" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Aufgaben%20Workflow%3A%20zur%20Erledigung</text>
+      </controlProperties>
+    </control>
+    <control controlID="68" controlTypeID="com.balsamiq.mockups::RoundButton" x="422" y="366" w="151" h="32" measuredW="32" measuredH="32" zOrder="2" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>zur%20Erledigung</text>
+        <shape>roundRect</shape>
+        <color>16744448</color>
+      </controlProperties>
+    </control>
+    <control controlID="71" controlTypeID="com.balsamiq.mockups::RoundButton" x="120" y="239" w="151" h="32" measuredW="32" measuredH="32" zOrder="3" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>zur%FCckgewiesen</text>
+        <shape>roundRect</shape>
+        <color>16711680</color>
+      </controlProperties>
+    </control>
+    <control controlID="72" controlTypeID="com.balsamiq.mockups::Arrow" x="205" y="277" w="217" h="110" measuredW="150" measuredH="100" zOrder="4" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text/>
+        <direction>top</direction>
+        <curvature>-1</curvature>
+        <leftArrow>true</leftArrow>
+        <rightArrow>false</rightArrow>
+      </controlProperties>
+    </control>
+    <control controlID="98" controlTypeID="com.balsamiq.mockups::Button" x="456" y="229" w="-1" h="-1" measuredW="111" measuredH="28" zOrder="14" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>zur%20Erledigung</text>
+        <color>16776960</color>
+      </controlProperties>
+    </control>
+    <control controlID="75" controlTypeID="com.balsamiq.mockups::Arrow" x="504" y="144" w="10" h="217" measuredW="150" measuredH="100" zOrder="5" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text/>
+        <direction>bottom</direction>
+        <curvature>0</curvature>
+        <leftArrow>true</leftArrow>
+        <rightArrow>false</rightArrow>
+      </controlProperties>
+    </control>
+    <control controlID="77" controlTypeID="com.balsamiq.mockups::RoundButton" x="422" y="567" w="151" h="32" measuredW="32" measuredH="32" zOrder="6" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>erledigt</text>
+        <shape>roundRect</shape>
+        <color>32832</color>
+      </controlProperties>
+    </control>
+    <control controlID="85" controlTypeID="com.balsamiq.mockups::Arrow" x="213" y="129" w="237" h="114" measuredW="150" measuredH="100" zOrder="7" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text/>
+        <direction>bottom</direction>
+        <curvature>1</curvature>
+        <leftArrow>false</leftArrow>
+      </controlProperties>
+    </control>
+    <control controlID="92" controlTypeID="com.balsamiq.mockups::Arrow" x="498" y="397" w="11" h="164" measuredW="150" measuredH="100" zOrder="8" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text/>
+        <direction>bottom</direction>
+        <curvature>0</curvature>
+        <leftArrow>true</leftArrow>
+        <rightArrow>false</rightArrow>
+      </controlProperties>
+    </control>
+    <control controlID="93" controlTypeID="com.balsamiq.mockups::StickyNote" x="577" y="196" w="164" h="118" measuredW="109" measuredH="123" zOrder="9" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Hier%20muss%20dem%20%27responsible%27%20die%20Rolle%20%27Reader%27%20auf%20allen%20verkn%FCpften%20Dokumenten%20gegeben%20werden</text>
+        <size>10</size>
+      </controlProperties>
+    </control>
+    <control controlID="94" controlTypeID="com.balsamiq.mockups::StickyNote" x="49" y="314" w="164" h="175" measuredW="109" measuredH="123" zOrder="10" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Hier%20muss%20dem%20%27responsible%27%20die%20Rolle%20%27Reader%27%20auf%20allen%20verkn%FCpften%20Dokumenten%20wieder%20weggenommen%20werden.%20Allerdings%20nur%2C%20wenn%20der%20Benutzer%20nicht%20schon%20%FCber%20eine%20andere%20Aufgabe%20an%20einem%20Dokument%20beteiligt%20ist.</text>
+        <size>10</size>
+      </controlProperties>
+    </control>
+    <control controlID="95" controlTypeID="com.balsamiq.mockups::Button" x="252" y="159" w="-1" h="-1" measuredW="96" measuredH="28" zOrder="11" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>reaktivieren</text>
+        <color>16776960</color>
+      </controlProperties>
+    </control>
+  </controls>
+</mockup>

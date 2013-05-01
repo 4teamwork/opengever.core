@@ -1,0 +1,197 @@
+<mockup version="1.0" skin="sketch" measuredW="669" measuredH="777" mockupW="597" mockupH="714">
+  <controls>
+    <control controlID="64" controlTypeID="com.balsamiq.mockups::RadioButton" x="273" y="243" w="150" h="25" measuredW="150" measuredH="22" zOrder="25" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>zum%20Bericht%20/%20Antrag</text>
+      </controlProperties>
+    </control>
+    <control controlID="65" controlTypeID="com.balsamiq.mockups::List" x="93" y="338" w="319" h="76" measuredW="100" measuredH="126" zOrder="26" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Hans%20Muster%2C%20Zuger%20Polizei%20%28hans.muster@zg.ch%29%0APeter%20Muster%2C%20Zuger%20Polizei%20%28peter.muster@zg.ch%29%0ASilvia%20Muster%2C%20Zuger%20Polizei%20%28silvia.muster@zg.ch%29%0A...</text>
+        <selectedIndex>1</selectedIndex>
+        <verticalScrollbar>false</verticalScrollbar>
+        <rowHeight>20</rowHeight>
+      </controlProperties>
+    </control>
+    <control controlID="66" controlTypeID="com.balsamiq.mockups::TextInput" x="64" y="311" w="317" h="-1" measuredW="182" measuredH="27" zOrder="27" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Peter%20Muster%2C%20Zuger%20Polizei</text>
+      </controlProperties>
+    </control>
+    <control controlID="67" controlTypeID="com.balsamiq.mockups::Label" x="65" y="272" w="-1" h="-1" measuredW="93" measuredH="23" zOrder="28" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Verantwortlich</text>
+      </controlProperties>
+    </control>
+    <control controlID="68" controlTypeID="com.balsamiq.mockups::Paragraph" x="66" y="292" w="306" h="22" measuredW="200" measuredH="140" zOrder="29" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>W%E4hlen%20Sie%20die%20verantwortliche%20Person%20aus</text>
+        <size>10</size>
+        <bold>false</bold>
+      </controlProperties>
+    </control>
+    <control controlID="69" controlTypeID="com.balsamiq.mockups::Label" x="65" y="423" w="-1" h="-1" measuredW="72" measuredH="23" zOrder="30" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Kommentar</text>
+      </controlProperties>
+    </control>
+    <control controlID="70" controlTypeID="com.balsamiq.mockups::TextArea" x="64" y="456" w="595" h="81" measuredW="200" measuredH="140" zOrder="31" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Arbeitsanweisungen%20oder%20Kommentar%20eingeben</text>
+      </controlProperties>
+    </control>
+    <control controlID="71" controlTypeID="com.balsamiq.mockups::Paragraph" x="64" y="438" w="551" h="22" measuredW="200" measuredH="140" zOrder="32" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Geben%20Sie%20eine%20detallierte%20Arbeitsanweisung%20oder%20ein%20Kommentar%20ein</text>
+        <size>10</size>
+        <bold>false</bold>
+      </controlProperties>
+    </control>
+    <control controlID="21" controlTypeID="com.balsamiq.mockups::Button" x="64" y="738" w="-1" h="-1" measuredW="82" measuredH="29" zOrder="0" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Speichern</text>
+        <state>selected</state>
+        <href>task_view%26bm%3Btask_view.bmml%26bm%3Btask_view.bmml%26bm%3Btask_view.bmml</href>
+        <map>%3Carea%20shape%3D%22rect%22%20coords%3D%222%2C685%2C84%2C714%22%20href%3D%22task_view.bmml%22%20alt%3D%22task_view%22%20id%3D%2221%22/%3E</map>
+      </controlProperties>
+    </control>
+    <control controlID="22" controlTypeID="com.balsamiq.mockups::Button" x="159" y="738" w="-1" h="-1" measuredW="86" measuredH="28" zOrder="1" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Abbrechen</text>
+      </controlProperties>
+    </control>
+    <control controlID="26" controlTypeID="com.balsamiq.mockups::RadioButton" x="64" y="196" w="151" h="24" measuredW="135" measuredH="22" zOrder="2" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>zur%20Kenntnisnahme</text>
+        <state>selected</state>
+      </controlProperties>
+    </control>
+    <control controlID="27" controlTypeID="com.balsamiq.mockups::RadioButton" x="64" y="220" w="182" h="22" measuredW="163" measuredH="22" zOrder="3" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>zur%20direkten%20Erledigung</text>
+        <state>up</state>
+      </controlProperties>
+    </control>
+    <control controlID="29" controlTypeID="com.balsamiq.mockups::CheckBox" x="69" y="614" w="380" h="19" measuredW="234" measuredH="24" zOrder="4" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Beschwerde%20duch%20Hans%20Muster</text>
+        <state>selected</state>
+        <icon>DocEmptyIcon%7Csmall</icon>
+      </controlProperties>
+    </control>
+    <control controlID="30" controlTypeID="com.balsamiq.mockups::Label" x="70" y="552" w="-1" h="-1" measuredW="96" measuredH="23" zOrder="5" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Verkn%FCpfungen</text>
+        <bold>true</bold>
+      </controlProperties>
+    </control>
+    <control controlID="31" controlTypeID="com.balsamiq.mockups::Label" x="89" y="590" w="-1" h="-1" measuredW="32" measuredH="23" zOrder="6" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Titel</text>
+        <underline>true</underline>
+      </controlProperties>
+    </control>
+    <control controlID="32" controlTypeID="com.balsamiq.mockups::Label" x="392" y="589" w="-1" h="-1" measuredW="64" measuredH="23" zOrder="7" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>ver%E4ndert</text>
+        <underline>true</underline>
+      </controlProperties>
+    </control>
+    <control controlID="33" controlTypeID="com.balsamiq.mockups::Label" x="488" y="588" w="-1" h="-1" measuredW="58" measuredH="23" zOrder="8" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Ersteller</text>
+        <underline>true</underline>
+      </controlProperties>
+    </control>
+    <control controlID="34" controlTypeID="com.balsamiq.mockups::Label" x="392" y="613" w="61" h="20" measuredW="61" measuredH="23" zOrder="9" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>17.9.2009</text>
+      </controlProperties>
+    </control>
+    <control controlID="35" controlTypeID="com.balsamiq.mockups::Label" x="488" y="613" w="-1" h="-1" measuredW="91" measuredH="23" zOrder="10" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Evi%20Bodenmann</text>
+      </controlProperties>
+    </control>
+    <control controlID="36" controlTypeID="com.balsamiq.mockups::CheckBox" x="69" y="642" w="380" h="34" measuredW="307" measuredH="24" zOrder="11" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>AW%3A%20Bitte%20noch%20einmal%20eine%20Stellungnahme</text>
+        <state>selected</state>
+        <icon>EmailIcon%7Csmall</icon>
+      </controlProperties>
+    </control>
+    <control controlID="37" controlTypeID="com.balsamiq.mockups::Label" x="392" y="649" w="64" h="20" measuredW="65" measuredH="23" zOrder="12" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>22.9.2009</text>
+      </controlProperties>
+    </control>
+    <control controlID="38" controlTypeID="com.balsamiq.mockups::Label" x="488" y="649" w="-1" h="-1" measuredW="91" measuredH="23" zOrder="13" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Evi%20Bodenmann</text>
+      </controlProperties>
+    </control>
+    <control controlID="39" controlTypeID="com.balsamiq.mockups::SearchBox" x="68" y="688" w="213" h="-1" measuredW="196" measuredH="25" zOrder="14" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Verkn%FCpung%20hinzuf%FCgen</text>
+      </controlProperties>
+    </control>
+    <control controlID="40" controlTypeID="com.balsamiq.mockups::TextInput" x="291" y="687" w="-1" h="-1" measuredW="88" measuredH="27" zOrder="15" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Durchsuchen</text>
+      </controlProperties>
+    </control>
+    <control controlID="41" controlTypeID="com.balsamiq.mockups::Label" x="64" y="174" w="139" h="30" measuredW="108" measuredH="23" zOrder="16" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Arbeitsanweisung</text>
+      </controlProperties>
+    </control>
+    <control controlID="43" controlTypeID="com.balsamiq.mockups::Paragraph" x="70" y="570" w="394" h="22" measuredW="200" measuredH="140" zOrder="18" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>W%E4hlen%20Sie%20Dokumente%20aus%2C%20welche%20mit%20dieser%20Aufgabe%20verkn%FCpft%20sind</text>
+        <size>10</size>
+        <bold>false</bold>
+      </controlProperties>
+    </control>
+    <control controlID="50" controlTypeID="com.balsamiq.mockups::Label" x="71" y="58" w="-1" h="-1" measuredW="223" measuredH="37" zOrder="20" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Aufgabe%20hinzuf%FCgen</text>
+        <size>24</size>
+        <color>16777215</color>
+      </controlProperties>
+    </control>
+    <control controlID="52" controlTypeID="com.balsamiq.mockups::Canvas" x="62" y="53" w="597" h="46" measuredW="100" measuredH="70" zOrder="19" locked="false" isInGroup="-1">
+      <controlProperties>
+        <borderStyle>none</borderStyle>
+        <color>255</color>
+      </controlProperties>
+    </control>
+    <control controlID="53" controlTypeID="com.balsamiq.mockups::RadioButton" x="64" y="240" w="150" h="25" measuredW="134" measuredH="22" zOrder="21" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>zur%20Stellungnahme</text>
+        <state>up</state>
+        <href>aufgabe_neu_zur_stellungnahme%26bm%3Baufgabe_neu_zur_stellungnahme.bmml%26bm%3Baufgabe_neu_zur_stellungnahme.bmml%26bm%3Baufgabe_neu_zur_stellungnahme.bmml</href>
+        <map>%3Carea%20shape%3D%22rect%22%20coords%3D%222%2C187%2C152%2C212%22%20href%3D%22aufgabe_neu_zur_stellungnahme.bmml%22%20alt%3D%22aufgabe_neu_zur_stellungnahme%22%20id%3D%2253%22/%3E</map>
+      </controlProperties>
+    </control>
+    <control controlID="60" controlTypeID="com.balsamiq.mockups::Label" x="62" y="113" w="-1" h="-1" measuredW="86" measuredH="23" zOrder="17" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Auftraggeber</text>
+      </controlProperties>
+    </control>
+    <control controlID="61" controlTypeID="com.balsamiq.mockups::TextInput" x="62" y="136" w="284" h="-1" measuredW="269" measuredH="27" zOrder="22" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Hugo%20Boss%2C%20Zuger%20Polizei%20%28hugo.boss@zg.ch%29</text>
+      </controlProperties>
+    </control>
+    <control controlID="62" controlTypeID="com.balsamiq.mockups::RadioButton" x="273" y="193" w="150" h="25" measuredW="124" measuredH="22" zOrder="23" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>zur%20Genehmigung</text>
+      </controlProperties>
+    </control>
+    <control controlID="63" controlTypeID="com.balsamiq.mockups::RadioButton" x="273" y="218" w="183" h="25" measuredW="171" measuredH="22" zOrder="24" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>zur%20Pr%FCfung%20/%20Korrektur</text>
+      </controlProperties>
+    </control>
+  </controls>
+</mockup>

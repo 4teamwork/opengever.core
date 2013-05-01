@@ -1,0 +1,12 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:i18n="http://namespaces.zope.org/i18n"
+    i18n_domain="opengever.base">
+
+    <!-- define pengever specific cataloglisting  -->
+    <adapter
+        factory=".contentlisting.OpengeverCatalogContentListingObject"
+        for="Products.ZCatalog.interfaces.ICatalogBrain"
+        />
+
+</configure>

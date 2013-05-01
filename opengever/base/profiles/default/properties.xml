@@ -1,0 +1,4 @@
+<?xml version="1.0"?>
+<site>
+    <property name="layout" type="string">@@personal_overview</property>
+</site>

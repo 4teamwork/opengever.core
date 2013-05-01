@@ -1,0 +1,97 @@
+Classification Behavior
+=======================
+
+The classification behavior provides several fields used for classifying
+a container:
+    classification
+    privacy_layer
+    public_trial
+    public_trial_statement
+    archival_value
+    custody_period
+    retention_period
+
+When we create a dexterity content type:
+
+    >>> portal = layer.get('portal')
+    >>> app = layer.get('app')
+    >>> from opengever.base.behaviors import classification
+    >>> from plone.dexterity.fti import DexterityFTI
+    >>> from Products.CMFCore.interfaces._content import IFolderish
+    >>> fti = DexterityFTI('ClassificationFTI',
+    ...                    klass="plone.dexterity.content.Container",
+    ...                    global_allow=True,
+    ...                    filter_content_types=False)
+    >>> fti.behaviors = ('opengever.base.behaviors.classification.IClassification',)
+    >>> portal.portal_types._setObject('ClassificationFTI', fti)
+    'ClassificationFTI'
+    >>> schema = fti.lookupSchema()
+
+
+With plone.app.testing we need to explicitly commit these changes for them
+to become visible to the testbrowser:
+
+    >>> import transaction
+    >>> transaction.commit()
+
+
+If we access the site as an admin TTW:
+
+    >>> from plone.testing.z2 import Browser
+    >>> browser = Browser(app)
+    >>> browser.handleErrors = False
+    >>> from plone.app.testing import TEST_USER_NAME, TEST_USER_PASSWORD
+    >>> browser.addHeader('Authorization', 'Basic %s:%s' % (TEST_USER_NAME, TEST_USER_PASSWORD,))
+
+We can see this type in the addable types at the root of the site:
+
+    >>> browser.open("http://nohost/plone/folder_factories")
+    >>> 'ClassificationFTI' in browser.contents
+    True
+    >>> browser.getControl("ClassificationFTI").click()
+    >>> browser.getControl("Add").click()
+    >>> browser.getControl(name="form.widgets.title").value = "My Object"
+    >>> browser.getControl(name="form.widgets.IClassification.classification:list").value = [classification.CLASSIFICATION_CONFIDENTIAL]
+    >>> browser.getControl(name="form.widgets.IClassification.privacy_layer:list").value = [classification.PRIVACY_LAYER_YES]
+    >>> browser.getControl(name="form.widgets.IClassification.public_trial:list").value = [classification.PUBLIC_TRIAL_PRIVATE]
+    >>> browser.getControl(name="form.widgets.IClassification.public_trial_statement").value = 'My Statement'
+    >>> browser.getControl(name="form.buttons.save").click()
+    >>> browser.url
+    'http://nohost/plone/classificationfti/view'
+
+Get the created object:
+    
+    >>> obj = portal.get('classificationfti')
+    >>> obj!=None
+    True
+
+Check the values of the created object:
+
+    >>> obj.classification == classification.CLASSIFICATION_CONFIDENTIAL
+    True
+    >>> obj.privacy_layer == classification.PRIVACY_LAYER_YES
+    True
+    >>> obj.public_trial == classification.PUBLIC_TRIAL_PRIVATE
+    True
+    >>> obj.public_trial_statement == 'My Statement'
+    True
+
+Create a subitem:
+
+    >>> from plone.dexterity.utils import createContentInContainer
+    >>> title = 'testobject'
+    >>> tobj = createContentInContainer(obj, 'ClassificationFTI', title=title)
+    >>> transaction.commit()
+
+    >>> browser.open('http://nohost/plone/classificationfti/classificationfti/edit')
+    >>> class_cont = browser.getControl(name="form.widgets.IClassification.classification:list")
+    >>> classification.CLASSIFICATION_UNPROTECTED in class_cont.options
+    False
+    >>> classification.CLASSIFICATION_CLASSIFIED in class_cont.options
+    True
+    >>> class_cont = browser.getControl(name="form.widgets.IClassification.privacy_layer:list")
+    >>> classification.PRIVACY_LAYER_NO in class_cont.options
+    False
+    >>> class_cont = browser.getControl(name="form.widgets.IClassification.public_trial:list")
+    >>> classification.PUBLIC_TRIAL_PUBLIC in class_cont.options
+    False

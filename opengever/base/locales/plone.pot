@@ -1,0 +1,37 @@
+# --- PLEASE EDIT THE LINES BELOW CORRECTLY ---
+# SOME DESCRIPTIVE TITLE.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2010-08-11 09:27+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0\n"
+"Language-Code: en\n"
+"Language-Name: English\n"
+"Preferred-Encodings: utf-8 latin1\n"
+"Domain: plone\n"
+
+msgid "Overview"
+msgstr ""
+
+#: plone.app.search/plone/app/search/search.pt:59
+msgid "Search results"
+msgstr ""
+
+#: plone.app.search/plone/app/search/search.pt:68
+msgid "Search results for ${term}"
+msgstr ""
+
+#: plone.app.search/plone/app/search/browser.py:121
+msgid "alphabetically"
+msgstr ""
+
+#: plone.app.search/plone/app/search/browser.py:119
+msgid "date (newest first)"
+msgstr ""

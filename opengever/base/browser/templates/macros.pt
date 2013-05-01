@@ -1,0 +1,155 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      i18n:domain="plone">
+
+    <body>
+
+        <div class="form" metal:define-macro="form">
+
+            <metal:title-slot define-slot="title">
+              <h3 tal:condition="view/label | nothing" tal:content="view/label" />
+            </metal:title-slot>
+
+            <metal:define define-macro="titlelessform">
+
+                <tal:status define="status view/status;
+                                    groupErrors python: [e for e in [g.widgets.errors for g in getattr(view, 'groups', [])] if e]"
+                            condition="status">
+                    <dl class="portalMessage error" tal:condition="python: view.widgets.errors or groupErrors">
+                        <dt i18n:translate="">
+                            Error
+                        </dt>
+                        <dd tal:content="status" />
+                    </dl>
+                    <dl class="portalMessage info" tal:condition="python: not(view.widgets.errors or groupErrors)">
+                        <dt i18n:translate="">
+                            Info
+                        </dt>
+                        <dd tal:content="status" />
+                    </dl>
+                </tal:status>
+
+                <div tal:define="errors view/widgets/errors" tal:condition="errors">
+                    <div tal:repeat="error errors">
+                        <tal:block
+                            condition="not:nocall:error/widget"
+                            replace="structure error/render"
+                            />
+                    </div>
+                </div>
+
+                <metal:description-slot define-slot="description">
+                  <p  class="discreet"
+                      tal:define="description view/description | nothing"
+                      tal:condition="description"
+                      tal:content="description">
+                          Description
+                  </p>
+                </metal:description-slot>
+
+                <form class="rowlike enableUnloadProtection" action="." method="post"
+                      tal:define="groups view/groups | nothing;
+                                  form_name view/form_name | nothing;
+                                  default_fieldset_label view/default_fieldset_label | form_name;
+                                  enable_form_tabbing view/enable_form_tabbing | python:True;
+                                  has_groups python:bool(groups);
+                                  form_tabbing python:(has_groups and enable_form_tabbing) and 'enableFormTabbing' or '';
+                                  show_default_label python:has_groups and default_fieldset_label and len(view.widgets);
+                                  "
+                      tal:attributes="action view/action|request/getURL; 
+                                      enctype view/enctype;
+                                      class python:'rowlike enableUnloadProtection %s kssattr-formname-%s' % (form_tabbing, request.getURL().split('/')[-1]);
+                                      id view/id;
+                                      method view/method|string:'post'
+                                      ">
+
+                    <metal:block define-slot="formtop" />
+
+                    <metal:fields-slot define-slot="fields">
+                      <input type="hidden"
+                          name="fieldset.current"
+                          tal:define="current_fieldset request/fieldset.current | string:#fieldsetlegend-default"
+                          tal:condition="python:has_groups and enable_form_tabbing"
+                          tal:attributes="value current_fieldset"
+                          />
+
+                      <!-- Default fieldset -->
+                      <metal:define
+                          define-macro="fields"
+                          tal:define="show_default_label show_default_label|nothing;
+                                      has_groups has_groups|nothing">
+
+                          <fieldset id="fieldset-default" tal:omit-tag="not:show_default_label">
+
+                              <legend tal:condition="show_default_label"
+                                      tal:attributes="id string:fieldsetlegend-default"
+                                      tal:content="default_fieldset_label">Form name</legend>
+
+                              <metal:define define-macro="widget_rendering">
+                                  <tal:widgets repeat="widget view/widgets/values">
+                                      <metal:field-slot define-slot="field">
+                                          <metal:field define-macro="field">
+                                              <tal:widget tal:replace="structure widget/@@ploneform-render-widget"/>
+                                          </metal:field>
+                                      </metal:field-slot>
+                                  </tal:widgets>
+                              </metal:define>
+                          </fieldset>
+
+                          <!-- Secondary fieldsets -->
+                          <tal:block tal:repeat="group groups" condition="has_groups">
+                              <fieldset
+                                  tal:define="fieldset_name repeat/group/index"
+                                  tal:attributes="id string:fieldset-${fieldset_name};
+                                                  class string:kssattr-fieldset-${fieldset_name}">
+
+                                      <legend tal:define="form_name group/label"
+                                              tal:condition="form_name"
+                                              tal:attributes="id string:fieldsetlegend-${repeat/group/index}"
+                                              tal:content="form_name">Form name</legend>
+
+                                      <p i18n:translate=""
+                                         tal:define="group_description group/description|nothing"
+                                         tal:condition="group_description"
+                                         tal:content="group_description">
+                                          Description
+                                      </p>
+
+                                      <div tal:define="errors group/widgets/errors" tal:condition="errors">
+                                          <div tal:repeat="error errors">
+                                              <tal:block
+                                                  condition="not:nocall:error/widget"
+                                                  replace="structure error/render"
+                                                  />
+                                          </div>
+                                      </div>
+
+                                      <tal:block define="view nocall:group">
+                                          <metal:block use-macro="context/@@ploneform-macros/widget_rendering" />
+                                      </tal:block>
+
+                              </fieldset>
+                          </tal:block>
+
+                      </metal:define>
+                    </metal:fields-slot>
+
+                    <metal:actions-slot define-slot="actions">
+                        <metal:define define-macro="actions">
+                            <div class="formControls" tal:condition="view/actions/values|nothing">
+                                <tal:block repeat="action view/actions/values">
+                                    <input type="submit" tal:replace="structure action/render" />
+                                </tal:block>
+                            </div>
+                        </metal:define>
+                    </metal:actions-slot>
+
+                    <metal:block define-slot="formbottom" />
+
+                </form>
+            </metal:define>
+        </div>
+    </body>
+</html>

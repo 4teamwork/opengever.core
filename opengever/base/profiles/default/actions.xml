@@ -1,0 +1,230 @@
+<?xml version="1.0"?>
+<object name="portal_actions" meta_type="Plone Actions Tool"
+        xmlns:i18n="http://xml.zope.org/namespaces/i18n">
+
+    <!-- OBJECT BUTTONS -->
+
+    <object name="object_buttons" meta_type="CMF Action Category">
+        <property name="title"></property>
+
+        <object name="cut" meta_type="CMF Action" i18n:domain="plone">
+            <property name="title" i18n:translate="">Cut</property>
+            <property name="description" i18n:translate=""></property>
+            <property
+                  name="url_expr">string:${globals_view/getCurrentObjectUrl}/object_cut</property>
+            <property name="icon_expr"></property>
+            <property
+                  name="available_expr">python:checkPermission("Delete objects", globals_view.getParentObject()) and checkPermission("Copy or Move", object) and not globals_view.isPortalOrPortalDefaultPage()</property>
+            <property name="permissions">
+                <element value="Manage portal"/>
+            </property>
+            <property name="visible">False</property>
+        </object>
+
+        <object name="copy" meta_type="CMF Action" i18n:domain="plone">
+            <property name="title" i18n:translate="">Copy</property>
+            <property name="description" i18n:translate=""></property>
+            <property
+                  name="url_expr">string:${globals_view/getCurrentObjectUrl}/object_copy</property>
+            <property name="icon_expr"></property>
+            <property
+                  name="available_expr">python:checkPermission("Copy or Move", object) and not globals_view.isPortalOrPortalDefaultPage()</property>
+            <property name="permissions">
+                <element value="Manage portal"/>
+            </property>
+            <property name="visible">False</property>
+        </object>
+
+        <object name="paste" meta_type="CMF Action" i18n:domain="plone">
+            <property name="title" i18n:translate="">Paste</property>
+            <property name="description" i18n:translate=""></property>
+            <property
+                  name="url_expr">string:${globals_view/getCurrentFolderUrl}/object_paste</property>
+            <property name="icon_expr"></property>
+            <property name="available_expr">folder/cb_dataValid|nothing</property>
+            <property name="permissions">
+                <element value="View"/>
+            </property>
+            <property name="visible">True</property>
+        </object>
+
+        <object name="delete" meta_type="CMF Action" i18n:domain="plone">
+            <property name="title" i18n:translate="">Delete</property>
+            <property name="description" i18n:translate=""></property>
+            <property
+                  name="url_expr">string:${globals_view/getCurrentObjectUrl}/delete_confirmation</property>
+            <property name="icon_expr"></property>
+            <property
+                  name="available_expr">python:checkPermission("Delete objects", globals_view.getParentObject()) and not globals_view.isPortalOrPortalDefaultPage()</property>
+            <property name="permissions">
+                <element value="Delete objects"/>
+            </property>
+            <property name="visible">False</property>
+        </object>
+
+        <object name="rename" meta_type="CMF Action" i18n:domain="plone">
+            <property name="title" i18n:translate="">Rename</property>
+            <property name="description" i18n:translate=""></property>
+            <property
+                  name="url_expr">string:${globals_view/getCurrentObjectUrl}/object_rename</property>
+            <property name="icon_expr"></property>
+            <property
+                  name="available_expr">python:checkPermission("Delete objects", globals_view.getParentObject()) and checkPermission("Copy or Move", object) and checkPermission("Add portal content", object) and not globals_view.isPortalOrPortalDefaultPage()</property>
+            <property name="permissions">
+                <element value="Add portal content"/>
+            </property>
+            <property name="visible">False</property>
+        </object>
+
+        <object name="properties" meta_type="CMF Action" i18n:domain="opengever.base">
+            <property name="title" i18n:translate="">Properties</property>
+            <property name="description" i18n:translate=""></property>
+            <property name="url_expr">string:${object_url}/view</property>
+            <property name="icon_expr"></property>
+            <property name="available_expr">
+                python: here.restrictedTraverse('@@plone_context_state').view_template_id() != 'view' and here.portal_type not in ('opengever.contact.contactfolder', 'opengever.inbox.yearfolder')
+            </property>
+            <property name="permissions">
+                <element value="View"/>
+            </property>
+            <property name="visible">True</property>
+        </object>
+
+        <object name="folderContents" meta_type="CMF Action" i18n:domain="plone">
+            <property name="title" i18n:translate="">Contents</property>
+            <property name="description" i18n:translate=""></property>
+            <property
+                  name="url_expr">string:${globals_view/getCurrentFolderUrl}/folder_contents</property>
+            <property name="icon_expr"></property>
+            <property name="available_expr">object/displayContentsTab</property>
+            <property name="permissions">
+                <element value="List folder contents"/>
+            </property>
+            <property name="visible">False</property>
+        </object>
+
+        <object name="syndication" meta_type="CMF Action" i18n:domain="plone">
+            <property name="title" i18n:translate="">Syndication</property>
+            <property name="description" i18n:translate=""></property>
+            <property name="url_expr">string:${folder_url}/synPropertiesForm</property>
+            <property name="icon_expr"></property>
+            <property
+                  name="available_expr">python:folder is object and portal.portal_syndication.isSiteSyndicationAllowed()</property>
+            <property name="permissions">
+                <element value="Manage properties"/>
+            </property>
+            <property name="visible">False</property>
+        </object>
+
+        <object name="contentrules" meta_type="CMF Action" i18n:domain="plone">
+            <property name="title" i18n:translate="">Rules</property>
+            <property name="description" i18n:translate=""></property>
+            <property
+                  name="url_expr">string:${plone_context_state/canonical_object_url}/@@manage-content-rules</property>
+            <property name="icon_expr"></property>
+            <property
+                  name="available_expr">python:plone_context_state.canonical_object().restrictedTraverse('@@plone_contentrules_info').show_rules_tab()</property>
+            <property name="permissions">
+                <element value="Content rules: Manage rules"/>
+            </property>
+            <property name="visible">False</property>
+        </object>
+
+        <object name="local_roles" meta_type="CMF Action" i18n:domain="plone">
+            <property name="title" i18n:translate="">Sharing</property>
+            <property name="description" i18n:translate=""></property>
+            <property name="url_expr">string:${object_url}/@@sharing</property>
+            <property name="icon_expr"></property>
+            <property name="available_expr"></property>
+            <property name="permissions">
+                <element value="Sharing page: Delegate roles"/>
+            </property>
+            <property name="visible">True</property>
+        </object>
+
+    </object>
+
+	<!-- Folder Buttons -->
+	<object name="folder_buttons" meta_type="CMF Action Category">
+		<object name="copy_items" meta_type="CMF Action" i18n:domain="opengever.base">
+			<property name="title" i18n:translate="">Copy Items</property>
+			<property name="description" i18n:translate=""></property>
+			<property name="url_expr">string:copy_items:method</property>
+	        <property name="icon_expr"></property>
+			<property name="available_expr"></property>
+			<property name="permissions">
+				<element value="View"/>
+	      	</property>
+			<property name="visible">True</property>
+		</object>
+		<object name="change_state" meta_type="CMF Action" i18n:domain="plone">
+		   <property name="title" i18n:translate="">Change State</property>
+		   <property name="description" i18n:translate=""></property>
+		   <property name="url_expr">string:content_status_history:method</property>
+		   <property name="link_target"></property>
+		   <property name="icon_expr"></property>
+		   <property
+		      name="available_expr">python:checkPermission("Modify portal content", object) or checkPermission("Review portal content", object)</property>
+		   <property name="permissions">
+		    <element value="View"/>
+		   </property>
+		   <property name="visible">False</property>
+		  </object>
+		<object name="cut" meta_type="CMF Action" i18n:domain="plone">
+            <property name="title" i18n:translate="">Cut</property>
+            <property name="description" i18n:translate=""></property>
+            <property
+                  name="url_expr">string:${globals_view/getCurrentObjectUrl}/object_cut</property>
+            <property name="icon_expr"></property>
+            <property
+                  name="available_expr">python:checkPermission("Delete objects", globals_view.getParentObject()) and checkPermission("Copy or Move", object) and not globals_view.isPortalOrPortalDefaultPage()</property>
+            <property name="permissions">
+                <element value="Manage portal"/>
+            </property>
+            <property name="visible">False</property>
+        </object>
+
+        <object name="copy" meta_type="CMF Action" i18n:domain="plone">
+            <property name="title" i18n:translate="">Copy</property>
+            <property name="description" i18n:translate=""></property>
+            <property
+                  name="url_expr">string:${globals_view/getCurrentObjectUrl}/object_copy</property>
+            <property name="icon_expr"></property>
+            <property
+                  name="available_expr">python:checkPermission("Copy or Move", object) and not globals_view.isPortalOrPortalDefaultPage()</property>
+            <property name="permissions">
+                <element value="Manage portal"/>
+            </property>
+            <property name="visible">False</property>
+        </object>
+	</object>
+    <!-- PORTAL TABS -->
+
+    <object name="portal_tabs" meta_type="CMF Action Category">
+
+        <object name="index_html" meta_type="CMF Action" i18n:domain="plone">
+            <property name="title" i18n:translate="">Overview</property>
+            <property name="description" i18n:translate=""></property>
+            <property
+                  name="url_expr">string:${globals_view/navigationRootUrl}</property>
+            <property name="link_target"></property>
+            <property name="icon_expr"></property>
+            <property name="available_expr">here/personal_overview/user_is_allowed_to_view</property>
+            <property name="permissions">
+                <element value="View"/>
+            </property>
+            <property name="visible">True</property>
+        </object>
+
+    </object>
+
+    <object name="site_actions" meta_type="CMF Action Category">
+        <object name="sitemap" meta_type="CMF Action" i18n:domain="plone">
+            <property name="visible">False</property>
+        </object>
+    </object>
+
+
+</object>
+
+
