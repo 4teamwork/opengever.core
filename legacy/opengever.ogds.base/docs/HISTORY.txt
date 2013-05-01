@@ -1,0 +1,456 @@
+Changelog
+=========
+
+
+2.2.1 (unreleased)
+------------------
+
+- Nothing changed yet.
+
+
+2.2 (2013-03-20)
+----------------
+
+- Reset hidden_terms in vocabularies every time cache key changed.
+  [lgraf]
+
+
+2.1 (2012-11-28)
+----------------
+
+- OGDS-Sync: Update Syncstamp only after the whole Sync. Added sperate ogds-sync logging.
+  [phgross]
+
+- Adjust db_connection setup, so it works fine with SQLAlchemy 0.7.x.
+  Dropped support for older SQLAlchemy than 0.7.x.
+  [phgross]
+
+- Dropped Plone 4.1 compatibility. Only 4.2 and up are supported.
+  [lgraf]
+
+- Disable printer for LDAP import configs.
+  [lgraf]
+
+
+- Adjsut imports use now SQLAlchemy 0.7.x.
+  [phgross]
+
+- Transporter: Use new DateTime.asdatetime method instead of manuell converting.
+  [phgross]
+
+
+2.0.6 (2012-09-12)
+------------------
+
+- Implements the ldap sync configuration configurable.
+  Issue #24 LDAP Synchronisation: ldap Anbindung konfigurierbar implementieren.
+  https://extranet.4teamwork.ch/projects/0258-projekt-upgrade-opengever-plone-4-paedagogische-hochschule-wallis-ph-vs/tracker-upgrade-auf-gever-plone-4/24/
+  [phgross]
+
+- Fixed elephantvocabulary functionality in all Usersvocabularies:
+  Add all inactive users as hidden elements to the users vocabularies.
+  Issue #1648 Aenderung Dossier unter Bearbeiten wenn Federfuehrender ex-Mitarbeiter ist
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1648/
+
+
+2.0.5 (2012-06-19)
+------------------
+
+- Added decoding the title of the remote objects, to avoid problems with umlaut.
+  Issue #1420 Plone Version und Dexterity Version auf aktuellste Version heben.
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1420
+  [phgross]
+
+- Set the response contenttype correctly, to avoid problems with diazo themes on remote requests.
+  Issue #6 Richtigen Content-Type auf der Response bei remote requests zwischen Clients setzen
+  https://extranet.4teamwork.ch/intranet/08-produkte-kurse/4teamwork-gever-1/tracker-4teamwork-gever/6
+  [phgross]
+
+- Fixed uniquevalues problem in EmailVocabularyFactory, append the username to the mailaddres.
+  [phgross]
+
+
+2.0.4 (2012-03-28)
+------------------
+
+- Skipping duplicate users during LDAP import
+  [lgraf]
+
+- Add new DublinCoreMetaDataCollector Transport DataCollector
+  Issue #1449 Successor Tasks: kopierte Dokumente sollten modification date und
+  creator uebernehmen
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1449
+  [phgross]
+
+2.0.3 (2012-02-27)
+------------------
+
+- Added is_group_member method to the contact_information utility.
+  [phgross]
+
+- Added French translations
+  [ttschanz]
+
+- Contact info describe(): add with_principal argument for removing
+  principal (used in latex views).
+  [jone]
+
+- Fixed tests: Added opengever.repository to tests_require
+  [lgraf]
+
+- PAS plugin applies a request layer to the request.
+  [jone]
+
+
+2.0.2 (2012-01-18)
+------------------
+
+- Add AllUsersAndInboxesVocabulary.
+  [jone]
+
+- Adjust the collation settings for oracle connections (changed rom BINARY_CI to GERMAN_CI):
+  to avoid problems with umlaut sorting.
+  Issue #1328 NLS_SORT Parameter umstellen.
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1328
+  [phgross]
+
+- Fixed autocomplete_widget test:
+  add a Mocked Indexer for the new containing_dossier indexer, to avoid a dependency.
+  [phgross]
+
+- Transporter: store original intid in annotations when transporting an object.
+  [jone]
+
+- Implement sort_dicts used for faster custom_sort methods for sorting on the readable fullname.
+  Issue #1325 og.tabbedview: custom_sort methoden performanter implementieren.
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1325
+  [phgross]
+
+
+2.0.1 (2011-12-20)
+------------------
+
+- Register PrettyPrinter from transmogrifier.
+  [jone]
+
+
+2.0 (2011-11-17)
+----------------
+
+- Made ldapsource section behave more robust if ldap plugin can't be found
+  [lgraf]
+
+- Avoid trying to traverse a Z3CFormValidation object in remote_request()
+  [lgraf]
+
+- Added LDAP source for `ldap_gds_public_externe` to be imported upon LDAP sync
+  [lgraf]
+
+- Made is_user_in_inbox_group method safer, he can now handle request with a id from a not enabled client.
+  [phgross]
+
+- Added is_user_in_inbox_group method to the contact_information utility.
+  Used by different views and actions for check if the user has access to the inbox.
+  [phgross]
+
+2.0b18 (2011-10-04)
+-------------------
+
+- Fixed dictstorage writing/reading in the import stamp functionality.
+  Implements special fake context, wich allows to get the ftw.dictstorage.sql.DictStorage.
+  [phgross]
+
+- Added (verbose) logging for OGDS import stamp functionality
+  [lgraf]
+
+
+2.0b17 (2011-10-04)
+-------------------
+
+- Added correct errorhandling to the set_remote_import_stamp method, it should not fail when a client is not reachable
+  [phgross]
+
+- Adjsut the set_remote_import_stamp method, just update enabled clients.
+  [phgross]
+
+- Added syncstamp table, which show the actual and the remote syncstamp and provide also the functionality to invalidate the cache.
+  [phgross]
+
+
+2.0b16 (2011-09-30)
+-------------------
+
+- Do not allow an inactive client to communicate to another client, especially disallow
+  to create and assign tasks from an inactive client to an active client. The inactive
+  client should be isolated.
+  Issue #1182 opengever.setup: Erweiterung um aktiven / inaktiven Mandant
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1182/
+  [jone]
+
+
+2.0b15 (2011-09-29)
+-------------------
+
+- Fixed caching of the get_client_public_url:
+  Implements a correct chache-key which incloud the method name and the site id, which allows a installation with mutlitple plone site on one instance.
+  [phgross]
+
+- Issue #1176 alle translatinos mit from zope.i18n import translate
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1176
+  [eschmutz]
+
+- Issue #1164 OGDS caching anpassen
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1164
+  added sync_stamp functionality, which allow to invalid the caches after a LDAP synchronisation
+  [phgross]
+
+- Added updating syncstamp option to the sync process, because we can't update the syncstamp while we setup a client.
+  Because we can't update the sync_stamp when the client process is not finished and the plone site not yet exists.
+  Issue #1164 OGDS caching anpassen
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1164
+  [phgross]
+
+
+- Changed imports of ogds models to new opengever.ogds.models package
+  Removed models, since they are now in opengever.ogds.models
+  [jbaumann]
+
+- Added grok.require to UserDetails
+  [eschmutz]
+
+- Changed deprecated grok.CodeView to grok.View
+  [eschmutz]
+
+
+2.0b14 (2011-08-24)
+-------------------
+
+- Setting transaction isolation level when using SQLite engine.
+  (Needed to make savepoints work properly with SQLite)
+  [lgraf]
+
+- added test-buildout for plone 4.1
+  [eschmutz]
+
+- Issue #1040 Mandantenuebergreifende Beteiligung: Anpassung Darstellung
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1040
+  implements caching for the is_assigned_client method,
+  because the method is called on every request (personal_overview, exposator viewlet)
+  [phgros]
+
+
+2.0b13
+------
+
+- Fix tests
+  [eschmutz]
+
+- Made sure `principal` is encoded when used in an SA query
+  [lgraf]
+
+- removed decoding section in the user import cfg
+  [phgros]
+
+- elevated the size of a the groupid attribute in the table configuration
+  [phgross]
+
+- Issue #929 ZEO Clients ueber mehrere dedizierte Server verteilen.
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/929/
+  added multiple client ip's possibility in the ogds plugin and specific tests
+  upgrade queries for sql adjustments
+  changed contact_info it should work with mutiple client ips
+  [phgross]
+
+
+2.0b12
+------
+
+- Issue #759 Oracle Konfiguration: collation
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/759/
+  set the collation with a PoolListener on the sqlalchmey engine
+  [phgross]
+
+- Issue #1048 Falsche Anzeige von Umlauten im OGDS (Rot 2.03)
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1048/
+  [phgross]
+
+- Issue #1047 Bei Anzeige von Benutzern auch die zugehoerigen Gruppen darstellen
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1047/
+  added list_user_groups method to contact_info utility
+  display groups in user details view
+  [phgross]
+
+- Added Upgrade statements for Oracle
+  [lgraf]
+
+- added ldap synchronisation ldap panel
+  [phgross]
+
+- added LDAP groupimport to ldap_import shell script
+  [phgross]
+
+- fixed transaction handling in activeuser section used in the ldap import
+  [phgross]
+
+- #Issue 759 Oracle Konfiguration: collation
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/759/
+  [phgross]
+
+- Rebuild OGDS, added groups to the OGDS, because of performance problems
+  [phgross]
+
+- Issue #1005 OGDS: in Realitaet inaktive Benutzer werden als aktiv angezeigt
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1005/
+  Re-implemented import of LDAP users
+  Now all OGDS users are first set to inactive, then the ones still contained
+  in the LDAP directory are set to active.
+  [lgraf]
+
+- Issue # 948 Posteingang an anderen Mandanten weiterleiten
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/948/
+  added special vocabulary for Forwardings (InboxesVocabulary)
+  [phgross]
+
+- Bash script for autamatically updating OGDS on 0000oglx09.zg.ch
+  [phabegger]
+
+- Made get_assigned_clients only return exact matches and not raise an exception if
+  several clients with the same client_id are found
+  [lgraf]
+
+
+2.0b11
+------
+
+- Fixed tests - info.list_users() now returns UserDict objects
+  [lgraf]
+
+- Issue #949 Vocabulary "Mandant" alphabetisch sortieren
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/949
+  [jbaumann]
+
+- Fixed import script to correctly detect zope application 'app' object
+  [lgraf]
+
+- Decode public_name as latin1 since that's the encoding ldap_userfolder uses
+  [lgraf]
+
+- Setup collation for oracle db engine.
+  [tbuchberger]
+
+
+2.0b10
+------
+
+- Made list_assigned_users() more robust in case group is missing
+  [lgraf]
+
+
+2.0b9
+-----
+
+- Changed cache keys for methods having a single ``principal`` parameter to make sure the cache key is not based on a db object. Untested yet!
+  [tbuchberger]
+
+
+2.0b8
+-----
+
+- Fixed cache key for ``describe()`` method. Do not use db objects (e.g. brains) as cache keys.
+  [tbuchberger]
+
+- Corrected table class on user detail view
+  [fsprenger]
+
+
+2.0b7
+-----
+
+- Added some caching of IContactInformation utility (volatile) and caching also
+  utils.get_client_id (ram cache).
+  [jbaumann]
+
+
+2.0b6
+-----
+
+- ContactsAndUsersVocabulary: added also a "inbox" term for each active client on
+  request of Brigitte Schmid by mail in relation with Issue #789 (forwardings).
+  [jbaumann]
+
+- Transporter: Provide more infos when transporting a object.
+  [jbaumann]
+
+- Disable link for inbox principals, since the inbox is not accessible
+  by every user and the link was wrong anyway.
+  [jbaumann]
+
+
+2.0b5
+-----
+
+- Issue #766 Verantwortlicher Dossier: Falsche Auswahl
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/766
+  [jbaumann]
+
+- Fixed encoding problems.
+  [jbaumann]
+
+
+2.0b4
+-----
+
+- Fixed ContactInformation.describe method to not fail on missing userid
+  [lgraf]
+
+- Translate label of inboxes.
+  [jbaumann]
+
+- Fixed tests: use unicode values in dexterity.
+  [jbaumann]
+
+
+2.0b3
+-----
+
+- fixed get_email function, now it works also with zope users
+  [phgross]
+
+
+2.0b2
+-----
+
+- added multi selection autocomplete widget patch
+  [Jonas Baumann]
+
+- fixed extends path
+  [Jonas Baumann]
+
+- Removed "(None)" from describe when using it on a contact without a email.
+  [jbaumann]
+
+- Contact information utility doesn't accept contact objects anymore (not used yet), this solves a circular dependency.
+  [jbaumann]
+
+
+2.0a3
+-----
+
+- Vocabularies: added some caching
+  [jbaumann]
+
+- Vocabularies / contact info utlity: optimized vocabularies so that they do not make that much requests any more.
+  [jbaumann]
+
+- Transporter: Fixed indexing issues by creating a final object modified event after receiving a object.
+  [jbaumann]
+
+
+2.0a2
+-----
+
+
+1.0a1-devdev (unreleased)
+-------------------------
+
+- Initial release

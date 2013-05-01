@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<object name="portal_controlpanel">
+
+    <configlet title="LDAP Synchronisation Control Panel"
+               action_id="ldap_controlpanel"
+               appId="opengever.ogds.base"
+               category="Products"
+               url_expr="string:${portal_url}/@@ldap_controlpanel"
+               condition_expr=""
+               icon_expr="string:$portal_url/++resource++plone.app.registry/icon.png"
+               visible="True">
+        <permission>Manage portal</permission>
+    </configlet>
+
+</object>

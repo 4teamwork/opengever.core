@@ -1,0 +1,138 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      lang="en"
+      metal:use-macro="here/main_template/macros/master"
+      i18n:domain="opengever.ogds.base">
+
+  <body>
+    <metal:main fill-slot="main">
+      <tal:main-macro metal:define-macro="main"
+                      tal:define="data view/get_userdata;
+                                  user data/user;
+                                  groups data/groups">
+
+        <div tal:replace="structure provider:plone.abovecontenttitle" />
+        <h1 class="documentFirstHeading" tal:content="data/fullname"/>
+        <!--         <div tal:replace="structure provider:plone.belowcontenttitle" /> -->
+
+        <div tal:replace="structure provider:plone.abovecontentbody" />
+
+        <a class="link-parent"
+           tal:attributes="href string:${here/absolute_url}/kontakte/#users"
+           i18n:translate="link_all_users">Show all users</a>
+
+        <table class="vertical listing">
+
+          <colgroup>
+            <col width="200">
+            <col width="200">
+          </colgroup>
+
+          <tr>
+            <th i18n:translate="label_fullname">Name:</th>
+            <td tal:content="data/fullname"></td>
+          </tr>
+
+          <tr>
+            <th i18n:translate="label_active">Active:</th>
+            <td i18n:translate="active_yes" tal:condition="user/active">Yes</td>
+            <td i18n:translate="active_no" tal:condition="not:user/active">No</td>
+          </tr>
+
+          <tr tal:condition="user/salutation">
+            <th i18n:translate="label_salutation">Salutation:</th>
+            <td tal:content="user/salutation"></td>
+          </tr>
+
+          <tr tal:condition="user/description">
+            <th i18n:translate="label_description">Description:</th>
+            <td tal:content="user/description"></td>
+          </tr>
+
+          <tr tal:condition="user/directorate">
+            <th i18n:translate="label_directorate">Directorate:</th>
+            <td>
+              <tal:title tal:replace="user/directorate" />
+              <span class="discreet">
+                (<tal:abbr tal:replace="user/directorate_abbr" />)
+              </span>
+            </td>
+          </tr>
+
+          <tr tal:condition="user/department">
+            <th i18n:translate="label_department">Department:</th>
+            <td>
+              <tal:title tal:replace="user/department" />
+              <span class="discreet">
+                (<tal:abbr tal:replace="user/department_abbr" />)
+              </span>
+            </td>
+          </tr>
+
+          <tr tal:condition="user/email">
+            <th i18n:translate="label_email">Email:</th>
+            <td><a tal:content="user/email"
+                   tal:attributes="href string:mailto:${user/email}" /></td>
+          </tr>
+
+          <tr tal:condition="user/email2">
+            <th i18n:translate="label_email2">Email 2:</th>
+            <td><a tal:content="user/email2"
+                   tal:attributes="href string:mailto:${user/email2}" /></td>
+          </tr>
+
+          <tr tal:condition="user/url">
+            <th i18n:translate="label_url">URL:</th>
+            <td><a tal:content="user/url"
+                   tal:attributes="href user/url"
+                   target="_blank" /></td>
+          </tr>
+
+          <tr tal:condition="user/phone_office">
+            <th i18n:translate="label_phone_office">Office phone:</th>
+            <td tal:content="user/phone_office"></td>
+          </tr>
+
+          <tr tal:condition="user/phone_fax">
+            <th i18n:translate="label_phone_fax">Fax:</th>
+            <td tal:content="user/phone_fax"></td>
+          </tr>
+
+          <tr tal:condition="user/phone_mobile">
+            <th i18n:translate="label_phone_mobile">Mobile phone:</th>
+            <td tal:content="user/phone_mobile"></td>
+          </tr>
+
+          <tr tal:condition="python:user.address1 or user.address2 or user.zip_code or user.city or user.country">
+            <th i18n:translate="label_address">Address:</th>
+            <td>
+              <div tal:content="user/address1" tal:condition="user/address1" />
+              <div tal:content="user/address2" tal:condition="user/address2" />
+              <div tal:condition="python:user.zip_code or user.city">
+                <span tal:replace="user/zip_code" />
+                <span tal:content="user/city" />
+              </div>
+              <div tal:content="user/country" tal:condition="user/country" />
+            </td>
+          </tr>
+
+          <tr tal:condition="python:len(groups) > 0">
+              <th i18n:translate="label_groups">Groups:</th>
+              <td>
+                  <ul>
+                      <li tal:repeat="group groups">
+                        <a class="contenttype-opengever-contact-contactfolder link-overlay" tal:attributes="href string:list_groupmembers?group=${group/groupid}" tal:content="python: group.title or group.groupid"></a>
+                      </li>
+                  </ul>
+              </td>
+          </tr>
+        </table>
+
+        <div tal:replace="structure provider:plone.belowcontentbody" />
+      </tal:main-macro>
+    </metal:main>
+
+  </body>
+</html>

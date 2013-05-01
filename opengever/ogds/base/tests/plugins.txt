@@ -1,0 +1,69 @@
+Check the Plugins:
+
+imports and standard stuf:
+    >>> from opengever.ogds.base.Extensions.plugins import extract_user
+    >>> from opengever.ogds.base.Extensions.plugins import authenticate_credentials
+    >>> from opengever.ogds.base.setuphandlers import _create_example_client
+    >>> from opengever.ogds.base.utils import create_session, get_current_client
+    >>> from Testing import makerequest
+
+    >>> portal = layer['portal']
+    >>> request = layer['request']
+
+
+ip definitions:
+    >>> client1_ip = '192.168.1.233'
+
+
+create_clients:
+    >>> session = create_session()
+
+    >>> _create_example_client(session, 'client1',
+    ...                       {'title': 'Client 1',
+    ...                        'ip_address': client1_ip,
+    ...                        'site_url': 'http://nohost/client1',
+    ...                        'public_url': 'http://nohost/client1',
+    ...                        'group': 'client1_users',
+    ...                        'inbox_group': 'client1_inbox_users'})
+
+the ip_address column should also work with a comma seperated list
+
+    >>> _create_example_client(session, 'client3',
+    ...                       {'title': 'Client 3',
+    ...                        'ip_address': '192.168.1.53,192.168.1.2',
+    ...                        'site_url': 'http://nohost/client3',
+    ...                        'public_url': 'http://nohost/client3',
+    ...                        'group': 'client3_users',
+    ...                        'inbox_group': 'client3_inbox_users'})
+
+
+extract_user:
+
+fake the request
+    >>> request.environ['X_OGDS_AC']='hugo.boss'
+    >>> request.environ['X_OGDS_CID']='client1'
+    >>> request.environ['REMOTE_HOST']='http://nohost/client1'
+    >>> request._client_addr=client1_ip
+
+    >>> class Context(object): pass
+    >>> obj = Context()
+    >>> obj.REQUEST = request
+
+    >>> creds = extract_user(obj, request)
+    >>> creds
+    {'login': 'hugo.boss', 'remote_host': 'http://nohost/client1', 'id': 'hugo.boss', 'remote_address': '192.168.1.233', 'cid': 'client1'}
+
+    >>> authenticate_credentials(obj, creds)
+    ('hugo.boss', 'hugo.boss')
+
+fake a bad request (client != ip)
+    >>> request.environ['X_OGDS_CID']='client3'
+    >>> creds = extract_user(obj, request)
+    >>> print authenticate_credentials(obj, creds)
+    None
+
+the plugin should also work with a client with a comma seperated list of ip_adresses
+    >>> request._client_addr='192.168.1.2'
+    >>> creds = extract_user(obj, request)
+    >>> authenticate_credentials(obj, creds)
+    ('hugo.boss', 'hugo.boss')

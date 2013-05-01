@@ -1,0 +1,56 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      lang="en"
+      metal:use-macro="here/main_template/macros/master"
+      i18n:domain="opengever.ogds.base">
+
+  <body>
+    <metal:main fill-slot="main">
+      <tal:main-macro metal:define-macro="main" tal:define="portal_url context/@@plone_portal_state/portal_url">
+
+        <div tal:replace="structure provider:plone.abovecontenttitle" />
+        <h1 class="documentFirstHeading">LDAP Synchronisation Control Panel</h1>
+
+        <div tal:replace="structure provider:plone.abovecontentbody" />
+
+        <h2>Import listings:</h2>
+        <table class="listing">
+            <thead>
+                <tr>
+                    <td>User</td>
+                    <td>Group</td>
+                <tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><a tal:attributes="href string:${portal_url}/@@sync_user" href="">Start import</a></td>
+                    <td><a tal:attributes="href string:${portal_url}/@@sync_group" href="">Start import</a></td>
+                <tr>
+            </tbody>
+        </table>
+        <h2>Sync stamp:</h2>
+        <table class="listing">
+            <thead>
+                <tr>
+                    <td>Current syncstamp local</td>
+                    <td>Current syncstamp from OGDS</td>
+                    <td>Reset</td>
+                <tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td tal:content="view/get_local_sync_stamp" ></td>
+                    <td tal:content="view/get_db_sync_stamp" ></td>
+                    <td><a tal:attributes="href string:${portal_url}/@@reset_syncstamp" href="">Reset SyncStamp</a></td>
+                <tr>
+            </tbody>
+        </table>
+
+        <div tal:replace="structure provider:plone.belowcontentbody" />
+      </tal:main-macro>
+    </metal:main>
+
+  </body>
+</html>

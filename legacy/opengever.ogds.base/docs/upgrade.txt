@@ -1,0 +1,96 @@
+upgradesteps:
+=============
+
+To upgrade the opengever.ogds.base to the new version (include groups), some changes in the database are required.
+
+'groups' table creation :
+-------------------------
+
+MySQL:
+
+    CREATE TABLE "groups" (
+      "groupid" varchar(60) NOT NULL,
+      "title" varchar(60) DEFAULT NULL,
+      PRIMARY KEY ("groupid")
+    ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+Oracle:
+
+    CREATE TABLE "groups" (
+      "groupid" varchar(60) NOT NULL,
+      "title" varchar(60) DEFAULT NULL,
+      PRIMARY KEY ("groupid")
+    );
+
+
+
+'groups_users' table creation:
+------------------------------
+
+MySQL:
+
+    CREATE TABLE `groups_users` (
+      `groupid` varchar(60) NOT NULL,
+      `userid` varchar(30) NOT NULL,
+      PRIMARY KEY (`groupid`,`userid`),
+      KEY `userid` (`userid`)
+    ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+Oracle:
+
+    CREATE TABLE groups_users (
+      groupid varchar(30) NOT NULL,
+      userid varchar(30) NOT NULL,
+      PRIMARY KEY (groupid,userid)
+    );
+
+
+adjust the 'clients' table:
+---------------------------
+
+MySQL:
+
+    ALTER TABLE `clients` 
+    CHANGE COLUMN `group` `users_group_id` VARCHAR(30) NULL DEFAULT NULL,
+    CHANGE COLUMN `inbox_group` `inbox_group_id` VARCHAR(30) NULL DEFAULT NULL,
+    ADD INDEX `inbox_group_id` (`inbox_group_id` ASC),
+    ADD INDEX `users_group_id` (`users_group_id` ASC);
+
+Oracle:
+
+    ALTER TABLE clients
+    RENAME COLUMN "group" TO "users_group_id";
+
+    ALTER TABLE clients
+    RENAME COLUMN inbox_group TO inbox_group_id;
+
+    ALTER TABLE clients
+    ADD INDEX "inbox_group_id" ("inbox_group_id" ASC),
+    ADD INDEX "users_group_id" ("users_group_id" ASC) ;
+
+    CREATE INDEX inbox_group_id
+    ON clients (inbox_group_id);
+
+    CREATE INDEX users_group_id
+    ON clients (users_group_id);
+
+
+LDAP - Import:
+--------------
+
+After you have to start the group import, but start first the user import:
+
+    bin/instance1 run src/opengever.ogds.base/opengever/ogds/base/ldap_import/sync_ldap.py -s 'mandant1' -c 'opengever.ogds.base.user-import'
+
+    bin/instance1 run src/opengever.ogds.base/opengever/ogds/base/ldap_import/sync_ldap.py -s 'mandant1' -c 'opengever.ogds.base.group-import'
+
+
+Upgrade-step 2, make multiple client ip_addresses possible:
+
+MySQL:
+
+ALTER TABLE `opengever`.`clients` CHANGE COLUMN `ip_address` `ip_address` VARCHAR(50) NULL DEFAULT NULL  ;
+
+
+
+
