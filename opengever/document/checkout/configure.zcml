@@ -1,0 +1,14 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser">
+
+    <browser:page
+        name="checkout_control"
+        for="*"
+        class=".controller.CheckinCheckoutController"
+        permission="zope2.View"
+        allowed_attributes="is_checkout_allowed
+                            is_checkin_allowed
+                            is_cancel_allowed"/>
+
+</configure>

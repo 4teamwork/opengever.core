@@ -1,0 +1,14 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:zcml="http://namespaces.zope.org/zcml"
+    xmlns:browser="http://namespaces.zope.org/browser"
+    i18n_domain="opengever.document">
+
+    <browser:page
+        name="download"
+        for="opengever.document.document.IDocumentSchema"
+        class=".download.DocumentDownload"
+        permission="zope2.View"
+        />
+
+</configure>

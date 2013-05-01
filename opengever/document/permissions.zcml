@@ -1,0 +1,27 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+
+    i18n_domain="opengever.document">
+
+    <permission
+        id="opengever.document.AddDocument"
+        title="opengever.document: Add document"
+        />
+
+    <permission
+          id="opengever.document.Checkout"
+          title="opengever.document: Checkout" />
+
+    <permission
+          id="opengever.document.Checkin"
+          title="opengever.document: Checkin" />
+
+    <permission
+        id="opengever.document.ForceCheckin"
+        title="opengever.document: Force Checkin" />
+
+    <permission
+          id="opengever.document.Cancel"
+          title="opengever.document: Cancel" />
+
+</configure>

@@ -1,0 +1,22 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:genericsetup="http://namespaces.zope.org/genericsetup">
+
+  <!-- Register the installation GenericSetup extension profile -->
+  <genericsetup:registerProfile
+      name="default"
+      title="opengever.document"
+      directory="profiles/default"
+      description=""
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      />
+
+  <!-- Register the import_various step -->
+  <genericsetup:importStep
+      name="opengever.document.various"
+      title="opengever.document catalog indexes"
+      description=""
+      handler="opengever.document.setuphandlers.import_various">
+  </genericsetup:importStep>
+
+</configure>

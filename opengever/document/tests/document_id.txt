@@ -1,0 +1,30 @@
+The document ID needs to be in following format:
+"document-{sequence number}"
+
+
+    >>> from plone.dexterity.utils import createContentInContainer
+    >>> from opengever.base.interfaces import ISequenceNumber
+    >>> from zope.component import getUtility
+    >>> from plone.app.testing import TEST_USER_NAME, setRoles
+
+Create a document:
+
+    >>> portal = layer['portal']
+    >>> doc1 = createContentInContainer(portal, 'opengever.document.document')
+    >>> doc1
+    <Document at /plone/document-1>
+    >>> doc1.id
+    'document-1'
+    >>> getUtility(ISequenceNumber).get_number(doc1)
+    1
+
+Create another document:
+
+    >>> doc2 = createContentInContainer(portal, 'opengever.document.document')
+    >>> doc2
+    <Document at /plone/document-2>
+    >>> doc2.id
+    'document-2'
+    >>> getUtility(ISequenceNumber).get_number(doc2)
+    2
+

@@ -1,0 +1,58 @@
+<div class="documentByLine"
+     id="plone-document-byline"
+     i18n:domain="opengever.document"
+     tal:condition="view/show">
+  <span class="" tal:attributes="class string:byline-icon ${view/get_css_class}"
+></span>
+<span id="lock-icon" class="function-lock"
+      tal:define="lock_icon view/locked_icon"
+      tal:condition="lock_icon">
+</span>
+  <tal:name tal:condition="context/document_author">
+    <span class="documentAuthor"
+          i18n:translate="label_by_author">
+      by
+      <tal:autor
+         content="context/document_author"
+         omit-tag="not:context/document_author"
+         i18n:name="author">
+        Bob Dobalina
+      </tal:autor>
+
+    </span>
+  </tal:name>
+  <span class="documentModified" tal:condition="context/document_date">
+    <span i18n:translate="label_start_byline" tal:omit-tag="">
+      from
+    </span>
+    <span tal:replace="python:view.toLocalizedTime(str(here.document_date),long_format=0)">
+      August 16, 2001 at 23:35:59
+    </span>
+  </span>
+
+  <tal:expired tal:condition="view/isExpired">
+    <span class="state-expired"
+          i18n:translate="time_expired" tal:omit-tag="">expired</span>
+  </tal:expired>
+
+  <span class="sequenceNumber" tal:condition="view/sequence_number">
+    <span i18n:translate="label_sequence_number"
+          tal:omit-tag="">
+      Sequence Number:
+    </span>
+    <span tal:replace="view/sequence_number">
+      14
+    </span>
+  </span>
+
+  <span class="referenceNumber" tal:condition="view/reference_number">
+    <span i18n:translate="label_reference_number"
+          tal:omit-tag="">
+      Reference Number:
+    </span>
+    <span tal:replace="view/reference_number">
+      14
+    </span>
+  </span>
+
+</div>

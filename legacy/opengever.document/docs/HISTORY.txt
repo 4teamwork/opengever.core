@@ -1,0 +1,777 @@
+Changelog
+=========
+
+
+2.4.6 (unreleased)
+------------------
+
+- Also normalize filename when there is no title given.
+  [tschanzt]
+
+- Document View: Remove File Download Link (use NO_DOWNLOAD_DISPLAY_MODE).
+  Issue #1802 Kopie runterladen ohne Warnung
+  https://extranet.4teamwork.ch/extern/opengever-kanton-zug/sprint-backlog/1802
+  [phgross]
+
+- Create a new NamedBlobFile instance when reverting instead of using a reference
+  in order to avoid the version being reverted to being overwritten later.
+  Issue #1787 Versionierung: Zurücksetzen führt dazu dass später Versionen überschrieben werden
+  https://extranet.4teamwork.ch/extern/opengever-kanton-zug/sprint-backlog/1787/
+  [lgraf]
+
+
+2.4.5 (2013-02-26)
+------------------
+
+- Fixed tests for document working copy download journaling.
+  Fixed download journaling for working copy download.
+  Issue #1841 Journaleintrag "Download Kopie" fehlt.
+  https://extranet.4teamwork.ch/extern/opengever-kanton-zug/sprint-backlog/1841
+  [deif]
+
+
+2.4.4 (2012-12-18)
+------------------
+
+- Downlaod view: Encode filename to avoid unicodeencodeerros and
+  use set_attachment_content_disposition for correct download with IE.
+  Issue #1783 UnicodeDecodeError in der neuen Download View.
+  https://extranet.4teamwork.ch/extern/opengever-kanton-zug/sprint-backlog/1783/view
+  [phgross]
+
+
+2.4.3 (2012-12-11)
+------------------
+
+- Added locking checks in checkout manager.
+  [phgross]
+
+- Implements document specifig forwidget.namedfile modes,
+  which doesn't display a file-download link.
+  [phgross]
+
+
+2.4.2 (2012-12-07)
+------------------
+
+- Made sure documents can't be checked out if another user holds a lock.
+  Issue #1722 Durch "Metadaten bearbeiten" ausgestelltes Lock sollte "Auschecken und Bearbeiten" verhindern
+  https://extranet.4teamwork.ch/extern/opengever-kanton-zug/sprint-backlog/1772/
+  [lgraf]
+
+- Overview: Made download copy link conditionally.
+  [phgross]
+
+
+2.4.1 (2012-11-28)
+------------------
+
+- Let EditCheckerView works for all document types, also for mails.
+  [phgross]
+
+
+2.4 (2012-11-28)
+----------------
+
+- Implements editchecker wrapper view, used in extendend tooltip.
+  [phgross]
+
+- Fixed fallback tab for redirecting in doucment_editing view.
+  [phgross]
+
+- Implements document overview rebuild (file display,
+  download links and confirmation).
+  [phgross]
+
+- Dropped Plone 4.1 compatibility. Only 4.2 and up are supported.
+  [lgraf]
+
+- Adjust javscripts: Use $ instead of deprecated jq.
+  [phgross]
+
+
+2.3.2 (2012-09-25)
+------------------
+
+- Updated vdexvocabs.
+  [tschanzt]
+
+
+2.3.1 (2012-09-12)
+------------------
+
+- Document overview: Changed file representation (using icons as download links).
+  [phgross]
+
+- Adjust french translations.
+  [phgross]
+
+- Activate temporary disabled browse functionality in the contenttree widget.
+  [phgross]
+
+
+2.3 (2012-06-25)
+----------------
+
+- Added some more MIME type definitions
+  [lgraf]
+
+2.2 (2012-06-22)
+----------------
+
+- Updated mimetypes added dynamically to python mimetypes map
+  [lgraf]
+
+2.1 (2012-06-21)
+----------------
+
+- Adding mimetype for MindManager mindmap files to python mimetypes map
+  [lgraf]
+
+- Implements Custom InitialVersion Message functionality used in og.task.
+  Issue #1494 Mandantenuebergreifende ZA: Initialversion ersetzten mit spezifischerem Kommentar
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1494
+  [phgross]
+
+- Remove unused mailing.py module.
+  [eschmutz]
+
+- Add logout overlay to show all checked out documents of the current user
+  Issue #1501 Warnung "Bitte Dokumente einchecken"
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1501/
+
+- Adjust redirecting in the checkin views, consider also documents in tasks.
+  Issue #1298 Weiterleitung nach dem Bearbeiten eines Dokuments in einer Aufgabe anpassen.
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1298/view
+  [phgross]
+
+- Implement side-wide configuration possiblity for the preserved_as_paper field.
+  Issue #1510 Neues Feld: Papierdossier vorhanden
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1510/
+  [phgross]
+
+- Added UploadValidator to avoid mail upload as documents.
+  Issue #1508 Mail im Originalformat heraufladen / Zusammenhang zu #1275 und Drag und Drop
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1508/
+  [phgross]
+
+- Set the response contenttype correctly, to avoid problems with diazo themes on remote requests.
+  Issue #6 Richtigen Content-Type auf der Response bei remote requests zwischen Clients setzen
+  https://extranet.4teamwork.ch/intranet/08-produkte-kurse/4teamwork-gever-1/tracker-4teamwork-gever/6
+  [phgross]
+
+- Added `Modify portal content` as needed permission for checkout a document.
+  Issue #1553 Problem Auschecken von Dokument aus mandantenuebergreifender
+  Aufgabe (GEA -> GDS)
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1553
+  [phgross]
+
+- Removed Title accessor, because it doesn't differ from the dexterity default accessor.
+  Adjust encoding of accessor values, because they changed since the dexterity update.
+  Issue #1420 Plone Version und Dexterity Version auf aktuellste Version heben.
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1420
+  [phgross]
+
+- Implement IBaseDocument behavior, to mark documentlike objects.
+  Adjust sequence and referncenumber adapters to work for all BaseDocuments.
+  Issue #1507 Mails: Dokumentennummer/Aktenzeichen fehlt
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1507
+  [phgross]
+
+- User get_css_class instead of deprecated method: css_class_from_obj/css_class_from_brain
+  [eschmutz]
+
+
+2.0.4 (2012-05-21)
+------------------
+
+- Added server-side component for External Editor Debug mode (blackbox upload view)
+  [lgraf]
+
+
+2.0.3 (2012-03-12)
+------------------
+
+- Fixed redirect in the checkin view for documents stored in a task.
+  [phgross]
+
+- Clear any WebDAV locks left over by ExternalEditor if necessary
+  [lgraf]
+
+
+2.0.2 (2012-02-27)
+------------------
+
+- Fixed decoding error in the checkin_button_handler, when trying to check in a mail.
+  [phgross]
+
+- Added French translations.
+  [ttschanz]
+
+- Removed 'List folder contents' permission from anyone but Manager in
+  contact and contactfolder workflows.
+  [lgraf]
+
+- Reimplement the document view template(depends on the dexterity standard template)
+  Issue #1383 Dokument: Eigenschaften anzeigen View anpassen
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1383/
+  [phgross]
+
+- Set permissions for Administrator role
+  [lgraf]
+
+- Added 'Force Checkin' permission
+  [lgraf]
+
+- Temporarily hide the task-tab in the document-tabbedview.
+  #1293 Aufgaben Tab eines Dokuments voruebergehend ausblenden.
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1293/
+  [phgross]
+
+- #1326 Checkout_documents wirft ein Fehler beim Versuch ein Mail auszuchecken.
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1326
+  Improved error handling in checkout_documents: Provide the user with a status
+  message if one of the selected objects is not a document
+  [eschmutz]
+
+
+2.0.1 (2011-11-29)
+------------------
+
+- Added testcase for checking there's an initial version after a document got copied.
+  [lgraf]
+
+- Removed `extedit` action from opengever.document.document object actions
+  [lgraf]
+
+
+2.0 (2011-11-17)
+----------------
+
+- Implement default value generator(actual date) for the document_date field.
+  Issue #1255 Vorschlag Tagesdatum bei Dokumenten
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1255/
+  [phgross]
+
+- Add the actual date as default_value for the document_date field.
+  Issue #1255 Vorschlag Tagesdatum bei Dokumenten
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1255
+  [phgross]
+
+- Temporary disabled navigation tree query for content tree widget
+  in relatedItems field because it has a severe performance impact.
+  [lgraf]
+
+
+2.0b18 (2011-10-04)
+-------------------
+
+- Added fallback and correct error handling, for given objects wich aren't documents,
+  to the checkin_documents view.
+  Issue #1207 checkin_documents view ergibt Fehler, wenn auch Mails ausgewaehlt wurden.
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1207/
+  [phgross]
+
+
+2.0b17 (2011-09-29)
+-------------------
+
+- Issue #1176 alle translatinos mit from zope.i18n import translate
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1176
+  [eschmutz]
+
+- Issue #1163 Frage zur Weiterleitung (vgl. auch Ticket 1012)
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1163
+  Provide a hook on request for disabling renaming of documents on copy
+  [jbaumann]
+
+- Removed GS profile dep on CMFEditions default profile because it causes
+  policymaps to be purged
+  [lgraf]
+
+- chenged deprecated grok.CodeView to grok.View
+  [eschmutz]
+
+- Moved customized history viewlet into opengever.base
+  [lgraf]
+
+
+2.0b16 (2011-08-30)
+-------------------
+
+- Enabling versioning for documents in repositorytool.xml, custom setuphandler
+  is not needed any more
+  [lgraf]
+
+- Registering custom import steps in ZCML instead of import_steps.xml (deprecated)
+  Fixed unresolved import step dependency on `types` (should be `typeinfo`)
+
+  [lgraf]
+
+
+2.0b15
+------
+
+- added test-buildout for plone 4.1
+  [eschmutz]
+
+- Issue #1143 External Editor funktioniert nicht mehr
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1143/view
+  implemented workaround for the webdav/external editor connection
+  [phgross]
+
+- Issue #1012 Feedback Fokus: Dokument: kopieren
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1012
+  implements eventhandler which add 'copy of' to the filename of copied documents
+  [phgross]
+
+- Implements blob support for alle the file fields
+  Use NamedBlobFile instead of NamedFile
+  [phgross]
+
+- Added [blobs] extra to dependency on plone.namedfile
+  [lgraf]
+
+- Optionflages are now used in tests
+  [ttschanz]
+
+- Added sprite function-lock to byline.pt
+  [eschmutz]
+
+- moved tests from collective.testcaselayer to plone.app.testing
+  [phgross]
+
+- Made related_items indexer more robust when the object doesn't have an intid yet.
+  This may occur in IObjectAddedEvent subscribers that are called before the one
+  from five.intid.
+  [phgross]
+
+- Removed unused (implicit) dependency on plone.app.iterate
+  [lgraf]
+
+- Issue #1044 Dokument ohne Datei
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1044/
+  change DISPLAY_MODE setter for the file field
+  [phgross]
+
+- Issue #1053 Dokumentattribut "Papierform" begrifflich schaerfen
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1053/
+  implemented new paper_form functionality
+  [phgross]
+
+2.0b14
+------
+
+- Fixed bug that reported the current user as being the one that checked out a document
+  instead of the actual user that checked out the document.
+  [lgraf]
+
+- Fixed display of mimetype icon in byline
+  [lgraf]
+
+- Issue #1045 Fehler: Suche nach Autor in der erweiterten Suche
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1045
+  [phgross]
+
+- Issue #1051 Fehler bzw. Anpassung im Papierkorb des Dossiers/Subdossiers
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1051/
+  [phgross]
+
+- fixed Title accessor, should work like the standard in plone.dexterity
+  [phgross]
+
+- Issue #1052 Byline icons durch sprite icons ersetzen
+  Added ByLine modifications for sprites
+  [ttschanz]
+
+- adjust the direct_checkout functionality, error message when document has no file
+  [phgross]
+
+- Removed css_icon_class method - now done in tabbedview linked helper
+  [lgraf]
+
+- Using icon_expr instead of content_icon
+  [lgraf]
+
+- Removed content_icon for document FTI - now done with sprites
+  [lgraf]
+
+- Temporarily disabled indexing of document contents
+  [lgraf]
+
+- Added new method for metatype: css_icon_class
+  [27.05.2011, elio.schmutz]
+
+- Issue #1021 Feedback Fokus: Datum bei Dokument
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1021/
+  set document_date to optional, remove default_value, fixed views
+  [phgross]
+
+- Issue #1031 Direkter Checkout Aufruf aus Dokumentenliste heraus
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1031/
+  added editing_document view
+  [phgross]
+
+- Issue #1018 Feedback Fokus: Autor leer lassen
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1018/
+  [phgross]
+
+- Issue #1017 Feedback Fokus: PDF Dokument zu jeder Dokumentversion
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1017/
+  changed viewlet registration, that overwritting works in opengever.pdfconverter
+  [phgross]
+
+2.0b13
+------
+
+- Added purge=False to behaviours property so as not to erase previously installed behaviors
+  [lgraf]
+
+
+2.0b12
+------
+
+- Issue #886 Nach Autor kann nicht sortiert werden
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/886/
+  added index sortable_author
+  [ttschanz]
+
+
+2.0b11
+------
+
+
+2.0b10
+------
+
+- Fixed invalid xml.
+  [phabegger]
+
+- #787 Checkin/Checkout deaktivieren auf Stufe Eingangskorb
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/787
+  Updated perms for folder_button actions checkin, checkout, and cancel.
+  [phabegger]
+
+- Updated workflow: Acquire Copy or Move perm from parent.
+  [phabegger]
+
+- Updated workflow: Acquire checkout relevant perms from parent.
+  [phabegger]
+
+
+2.0b9
+-----
+
+- Removed IPreview behavior again because og.pdfconverter isn't installed everywhere.
+  We now apply the IPreview behavior in opengever.zugpolicy.base
+  [lgraf]
+
+- Re-added IPreview behavior to document type to make it previewable
+  [lgraf]
+
+- Updated workflow to allow Readers to see past document versions
+  [lgraf]
+
+
+2.0b8
+-----
+
+- Issue #768 Erweiterte Suche: Suche nach Autor (Dokument) funktioniert nicht
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/768
+  Changed document_author index to ZCTextIndex for making wildcards possible in advanced search.
+  [jbaumann]
+
+- Issue #768 Erweiterte Suche: Suche nach Autor (Dokument) funktioniert nicht
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/768
+  Fixed unicode decode error when searching document author
+  [jbaumann]
+
+- Moved template for eliminating grok unassociated template warning.
+  [jbaumann]
+
+- Removed documentcontenthistoryviewlet.pt, journal.pt, preview.pt templates
+  since they are not used anymore.
+  [jbaumann]
+
+- Removed all workflowstates exept draft
+  [ttschanz]
+
+2.0b7
+-----
+
+- Issue #304 Stufe Dokument: Status anpassen
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/304/
+  Removed all states exept draft.
+  [ttschanz]
+
+- Related documents: Fixed path source binder configuration.
+  [jbaumann]
+
+- Document searchable text: use dexteritytextindexer.
+  [jbaumann]
+
+- Added missing dependency to ftw.datepicker
+  [phgross]
+
+2.0b6
+-----
+
+- Issue #304 Stufe Dokument: Status anpassen
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/304/
+  [phgross]
+
+- added DatePickerFieldWidget to datefield because it wasn't working
+  [ttschanz]
+
+2.0b5
+-----
+
+- Added patch for the migration
+  [phgross]
+
+- Make locks steable on document.
+  [jbaumann]
+
+
+2.0b4
+-----
+
+- Translations
+  [jbaumann]
+
+
+2.0b3
+-----
+
+- enabled locking for document content type
+  [jbaumann]
+
+- Issue #553 Checkout Prozess anpassen
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/553
+  Removed plone.stagingbehavior, implemented new checkin / checkout stuff
+  [jbaumann]
+
+
+2.0b2
+-----
+
+- moved all docucomposer speficific stuff to a own package, called opengever.docucomposer
+  [Philippe Gross]
+
+- updated translations
+  [Jonas Baumann]
+
+
+2.0b1
+-----
+
+- fixed vdex vocabularies: switch language from de to de-ch since portal_languages has changed
+  [jbaumann]
+
+- fixed extends path
+  [jbaumann]
+
+- Issue #690, fixed validator problem, and icon problem in the docucomposer form
+  [pgross]
+
+- Issue #690 DocuComposer Formular und Abindung fixen
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/690/
+  [23.11.2010, phgross]
+
+
+2.0a2
+-----
+
+
+1.0a5
+-----
+
+- Issue #586 Fakultative Uebernahme des Dateinamens beim Hochladen einer Datei
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/586
+  [16.09.2010, jbaumann]
+
+- Renamed MailContactsVocabularyFactory according to changes in `opengever.octopus.tentacle`
+  [10.09.2010, jbaumann]
+
+- Issue #527 Versionsnummer von Dokumenten
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/527
+  [09.09.2010, jbaumann]
+
+- Moved tentacle-documents-of-dossier-json from opengever.octopus.tentacle
+  [11.08.2010, jbaumann]
+
+- Issue #518 "aenderungen anzeigen" muss bei einem ausgecheckten Dokument ausgeblendet werden (fuehrt zu Fehlermeldung)
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/518/
+  [20.04.2010, jinfanger]
+
+- Issue #506 DocuComposer: falsche Url
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/506/
+  added rewriting functionality in the docucomposer process (look dc_original_path and dc_rewrite_path in the Registry),
+  [06.04.2010, phgross]
+
+- Issue #435 Darstellung bei ausgechecktem Dokument (Working Copy)
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/435
+  [03.03.2010, jbaumann]
+
+- Issue #491 Optimierungsmoeglichkeiten fuer File Preview
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/491
+  [02.03.2010, jbaumann]
+
+
+1.0a4
+-----
+
+
+1.0a3
+-----
+
+
+1.0a2
+-----
+
+
+1.0a1
+-----
+
+- Target release changed to 1.0a1
+  [05.01.2010, jbaumann]
+
+- Issue #306: Darstellung "Historie" bei Dokument aufraeumen.
+  [18.12.2009, jbaumann]
+
+- Issue #273: Dossier: Reiter Dokumente, Spalte "Ausgecheckt"
+  checked_out index korrigiert: nun wird der User verwendet, der das Dokument
+  auscheckt
+  [16.12.2009, jbaumann]
+
+- Issue #296: Nummerierungskonzept umsetzen
+  Aktenzeichen in Byline anzeigen
+  [16.12.2009, jbaumann]
+
+- Issue #296: Nummerierungskonzept umsetzen
+  Laufnummer in Byline eingebaut
+  [16.12.2009, jbaumann]
+
+- Issue #187: Dossier-Tabs (Erfassungs- und Bearbeitungsmodus) anpassen
+  [01.12.2009, jbaumann]
+
+- using opengever.base.behaviors.creator.ICreator behavior
+  [27.11.2009, jbaumann]
+
+- Issue #136: UnicodeEncodeError falls in Description Umlaute erfasst werden
+  [16.11.2009, jbaumann]
+
+- Issue #132: Dokument sollten nicht in den Home Folder ausgecheckt werden
+  [12.11.2009, jbaumann]
+
+- Issue #36: Dokument: External Editor fuer Dokument-Datei
+  [11.11.2009, jbaumann]
+
+- Issue #36: Dokument: External Editor fuer Dokument-Datei
+  [11.11.2009, pgross]
+
+- Issue #120: RepositoryFolder uebersetzen
+  [11.11.2009, jbaumann]
+
+- Issue #119: Action "Mit externer Anwendung bearbeiten" nur bei Document anzeigen
+  [11.11.2009, jbaumann]
+
+- uebersetzungen aktualisiert
+  [11.11.2009, jbaumann]
+
+- Issue #33: Checkout / Checkin
+  implemented checkin and revert
+  [09.11.2009, jbaumann]
+
+- Added setuphandler for enable manual versioning for Document
+  [09.11.2009, jbaumann]
+
+- Issue #95: EIn Dokument hat drei Datumsfelder: Eingang / Dokument / Ausgang
+  Datum-Felder in Dokument ergaenzt und uebersetzt.
+  [09.11.2009]
+
+- Issue #33: Checkout / Checkin
+  CheckinCheckoutManager implementiert, welcher die Vorgaenge kontrolliert
+  Checkout implementiert
+  Cancel action implementiert
+  [07.11.2009, jbaumann]
+
+- Issue #33: Checkout / Checkin
+  Ablauf fuer Checkout implementiert (action, formular, events)
+  Ablauf fuer Checkin implementiert (action, formular, events)
+  Eigentlicher Checkout / in fehlt noch, da plone.stagingbehavior noch nicht fertig
+  [07.11.2009, jbaumann]
+
+- Issue #98: Document: Creator fehlt
+  [06.11.2009, jbaumann]
+
+- Issue #65: Volltextsuche fuer Office Dokumente einbauen
+  [28.10.2009, jbaumann]
+
+- Added misssing actions for staging
+  [23.10.2009, jbaumann]
+
+- Updated behaviors (staging & versioning)
+  [23.10.2009, jbaumann]
+
+- Issue #47: HTML-Preview von Dokumenten
+  Enabled collective.filepreviewbehavior (using Products.ARFilePreview) for
+  Document.
+  [23.10.2009, jbaumann]
+
+- Issue #48: Korrektes Icon bei Office Dokumenten
+  [20.10.2009, jbaumann]
+
+- Added some translations for Issue #40
+  [19.10.2009, jbaumann]
+
+- Issue #40: Versand von E-Mails ueber OpenGever mit Dokument-Attachment
+  Added Support for sending multiple objects as email-attachments
+  The folder_content tab can be used for selecting multiple objects
+  [19.10.2009, jbaumann]
+
+- Changed changelog structure
+  [15.10.2009, jbaumann]
+
+0.1
+---
+
+- Added Fields to "Document" type
+  [10.09.2009, jbaumann]
+
+- Added dexterity type "Document"
+  [10.09.2009, jbaumann]
+
+- Changed Boolean-Widgets to Checkbox
+  [10.09.2009, jbaumann]
+
+- Setup with generic setup, locales, etc
+  [10.09.2009, jbaumann]
+
+- Added some Tests for content type Document
+  [16.09.2009, jbaumann]
+
+- Added some translations
+  [16.09.2009, jbaumann]
+
+- Fixed Checkbox-Widget problem (use a Widget containing "Field")
+  [16.09.2009, jbaumann]
+
+- Using opengever.sqlfile now
+  [02.10.2009, jbaumann]
+
+- Added behavior IAnnotationsJournalizable (ftw.journal) to Document
+  [13.10.2009, jbaumann]
+
+- Added IVersionable behavior for Document
+  [14.10.2009, jbaumann]
+
+- Added Actions for Version history and journal
+  [14.10.2009, jbaumann]
+
+- Implemented webdav READ support for Document
+  [14.10.2009, jbaumann]
+
+- Implemented webdav WRITE suppor for Document
+  [14.10.2009, jbaumann]
+

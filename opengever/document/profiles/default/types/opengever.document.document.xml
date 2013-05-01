@@ -1,0 +1,125 @@
+<?xml version="1.0"?>
+<object name="opengever.document.document" meta_type="Dexterity FTI"
+        i18n:domain="opengever.document" xmlns:i18n="http://xml.zope.org/namespaces/i18n">
+
+  <!-- Basic metadata -->
+  <property name="title" i18n:translate="">Document</property>
+  <property name="description" i18n:translate=""></property>
+  <property name="icon_expr"></property>
+  <property name="allow_discussion">False</property>
+  <property name="global_allow">True</property>
+
+  <!-- schema interface -->
+  <property name="schema">opengever.document.document.IDocumentSchema</property>
+
+  <!-- class used for content items -->
+  <property name="klass">opengever.document.document.Document</property>
+
+  <!-- add permission -->
+  <property name="add_permission">opengever.document.AddDocument</property>
+
+  <!-- enabled behaviors -->
+  <property name="behaviors" purge="False">
+    <element value="collective.dexteritytextindexer.behavior.IDexterityTextIndexer" />
+    <element value="ftw.journal.interfaces.IAnnotationsJournalizable" />
+    <element value="opengever.base.behaviors.creator.ICreator" />
+    <element value="opengever.tabbedview.interfaces.ITabbedViewEnabled" />
+    <element value="opengever.base.behaviors.classification.IClassification" />
+    <element value="opengever.document.behaviors.IRelatedDocuments" />
+    <element value="plone.app.versioningbehavior.behaviors.IVersionable" />
+    <element value="opengever.document.behaviors.IDocumentNameFromTitle" />
+    <element value="opengever.trash.trash.ITrashable" />
+    <element value="opengever.base.behaviors.sequence.ISequenceNumberBehavior" />
+    <element value="plone.app.lockingbehavior.behaviors.ILocking" />
+    <element value="opengever.document.behaviors.IBaseDocument" />
+  </property>
+
+  <!-- View information -->
+  <property name="default_view">tabbed_view</property>
+  <property name="immediate_view">../document-redirector</property>
+  <property name="default_view_fallback">False</property>
+  <property name="view_methods">
+    <element value="view"/>
+    <element value="tabbed_view" />
+  </property>
+
+  <!-- Method aliases -->
+  <alias from="(Default)" to="(selected layout)"/>
+  <alias from="edit" to="@@edit"/>
+  <alias from="sharing" to="@@sharing"/>
+  <alias from="view" to="@@view"/>
+
+  <!-- Actions -->
+  <action title="View" action_id="view" category="object" condition_expr=""
+          url_expr="string:${object_url}" visible="False">
+    <permission value="View"/>
+  </action>
+  <action title="Edit metadata" action_id="edit" category="object"
+          condition_expr="not:object/@@plone_lock_info/is_locked_for_current_user|python:True"
+          url_expr="string:${object_url}/edit" visible="True">
+    <permission value="Modify portal content"/>
+  </action>
+
+  <!-- Tab Actions -->
+  <action title="overview" action_id="overview" category="tabbedview-tabs" condition_expr="" url_expr="string:#" visible="True"></action>
+  <!-- # TODO: Remove/replace preview tab -->
+  <!-- <action title="preview" action_id="preview" category="tabbedview-tabs" condition_expr="" url_expr="string:#" visible="True"></action> -->
+  <action title="tasks" action_id="tasks" category="tabbedview-tabs" condition_expr="" url_expr="string:#" visible="False"></action>
+  <action title="journal" action_id="journal" category="tabbedview-tabs" condition_expr="" url_expr="string:#" visible="True"></action>
+
+  <!-- disable some old actions -->
+  <action title="Versions" action_id="versions_history_form" category="object"
+          url_expr="string:${object_url}/versions_history_form"
+          condition_expr="" visible="False">
+  </action>
+
+  <action i18n:domain="opengever.dossier" title="Sharing" action_id="sharing" category="tabbedview-tabs"
+          condition_expr="" url_expr="string:#"
+          visible="True">
+      <permission value="View"/>
+  </action>
+
+
+  <!-- actions for staging -->
+  <action
+        action_id="checkout_document"
+        visible="True"
+        title="Checkout"
+        url_expr="string:${object_url}/@@checkout_documents"
+        condition_expr="python:path('object/@@checkout_control').is_checkout_allowed()"
+        category="object_buttons">
+    <permission value="opengever.document: Checkout"/>
+  </action>
+
+  <action
+        action_id="checkout_edit_document"
+        visible="True"
+        title="Checkout and edit"
+        url_expr="string:${object_url}/@@checkout_documents?mode=external"
+        condition_expr="python:path('object/@@checkout_control').is_checkout_allowed() and context.file != None"
+        category="object">
+    <permission value="opengever.document: Checkout"/>
+  </action>
+
+  <action
+        visible="True"
+        action_id="checkin_document"
+        title="Checkin"
+        url_expr="string:${object_url}/@@checkin_documents"
+        condition_expr="python:path('object/@@checkout_control').is_checkin_allowed()"
+        category="object">
+    <permission value="opengever.document: Checkin"/>
+  </action>
+
+  <action
+        action_id="cancel_document_checkout"
+        visible="True"
+        title="Cancel Checkout"
+        url_expr="string:${object_url}/@@cancel_document_checkouts"
+        condition_expr="python:path('object/@@checkout_control').is_cancel_allowed()"
+        category="object">
+    <permission value="opengever.document: Cancel"/>
+  </action>
+
+
+</object>

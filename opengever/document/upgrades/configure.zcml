@@ -1,0 +1,36 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+    i18n_domain="ftw.tabbedview">
+
+    <!-- 1 -> 2301 -->
+    <genericsetup:upgradeStep
+        title="Activate new javascript for the download confirmation."
+        description=""
+        source="1"
+        destination="2301"
+        handler="opengever.document.upgrades.to2301.RegisterJavascript"
+        profile="opengever.document:default"
+        />
+
+    <genericsetup:registerProfile
+        name="2301"
+        title="opengever.document: upgrade profile 2301"
+        description=""
+        directory="profiles/2301"
+        for="Products.CMFPlone.interfaces.IMigratingPloneSiteRoot"
+        provides="Products.GenericSetup.interfaces.EXTENSION"
+        />
+
+    <!-- 2301 -> 2401 -->
+    <genericsetup:upgradeStep
+        title="Normalize all filenames of all documents."
+        description=""
+        source="2301"
+        destination="2401"
+        handler="opengever.document.upgrades.to2401.NormalizeFileTitles"
+        profile="opengever.document:default"
+        />
+
+
+</configure>

@@ -1,0 +1,3 @@
+<object name="portal_types">
+    <object name="opengever.document.document" meta_type="Dexterity FTI" />
+</object>

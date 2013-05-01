@@ -1,0 +1,14 @@
+<rolemap>
+  <permissions>
+    <permission name="opengever.document: Add document" acquire="True">
+      <role name="Manager"/>
+      <role name="Owner"/>
+      <role name="Contributor"/>
+      <role name="Administrator"/>
+    </permission>
+    <permission name="opengever.document: Force Checkin" acquire="True">
+      <role name="Manager"/>
+      <role name="Administrator"/>
+    </permission>
+  </permissions>
+</rolemap>

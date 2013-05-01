@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<object name="portal_catalog" meta_type="Task Catalog">
+  <column value="document_author" />
+  <column value="document_date" />
+  <column value="receipt_date" />
+  <column value="delivery_date" />
+  <column value="checked_out" />
+  <column value="related_items" />
+</object>
