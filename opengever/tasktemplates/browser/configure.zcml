@@ -1,0 +1,18 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser"
+    i18n_domain="opengever.tasktemplates">
+
+    <browser:page
+        for="opengever.dossier.behaviors.dossier.IDossierMarker"
+        name="add-tasktemplate"
+        class=".form.AddForm"
+        permission="zope2.View"
+        allowed_attributes="listing create"
+        />
+
+    <browser:resource
+        name="tasktemplates.form.js"
+        file="form.js" />
+
+</configure>

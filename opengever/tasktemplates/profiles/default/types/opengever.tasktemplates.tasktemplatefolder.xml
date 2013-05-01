@@ -1,0 +1,69 @@
+<?xml version="1.0"?>
+<object name="opengever.tasktemplates.tasktemplatefolder" meta_type="Dexterity FTI"
+        i18n:domain="opengever.tasktemplates" xmlns:i18n="http://xml.zope.org/namespaces/i18n">
+
+    <!-- Basic metadata -->
+    <property name="title" i18n:translate="">TaskTemplateFolder</property>
+    <property name="icon_expr"></property>
+    <property name="allow_discussion">False</property>
+    <property name="global_allow">False</property>
+    <property name="filter_content_types">True</property>
+    <property name="allowed_content_types">
+        <element value="opengever.tasktemplates.tasktemplate" />
+    </property>
+
+
+    <!-- schema interface -->
+    <property name="schema"></property>
+
+    <!-- class used for content items -->
+    <property name="klass">plone.dexterity.content.Container</property>
+
+    <!-- add permission -->
+    <property name="add_permission">cmf.AddPortalContent</property>
+
+    <!-- enabled behaviors -->
+    <property name="behaviors">
+        <element value="plone.app.content.interfaces.INameFromTitle" />
+        <element value="opengever.tabbedview.interfaces.ITabbedViewEnabled" />
+        <element value="opengever.base.behaviors.base.IOpenGeverBase" />
+        <element value="plone.app.lockingbehavior.behaviors.ILocking" />
+    </property>
+
+    <!-- View information -->
+    <property name="default_view">tabbed_view</property>
+    <property name="immediate_view">tabbed_view</property>
+    <property name="default_view_fallback">False</property>
+    <property name="view_methods">
+        <element value="tabbed_view"/>
+    </property>
+    <property name="schema">opengever.tasktemplates.content.templatefoldersschema.ITaskTemplateFolderSchema</property>
+    <!-- Method aliases -->
+    <alias from="(Default)" to="(selected layout)"/>
+    <alias from="edit" to="@@edit"/>
+    <alias from="sharing" to="@@sharing"/>
+    <alias from="view" to="@@view"/>
+
+    <!-- Actions -->
+    <action action_id="view"
+            visible="False"
+            title="View"
+            category="object"
+            url_expr="string:${object_url}"
+            condition_expr="">
+        <permission value="View"/>
+    </action>
+
+    <action action_id="edit"
+            visible="True"
+            title="Edit"
+            category="object"
+            url_expr="string:${object_url}/edit"
+            condition_expr="not:object/@@plone_lock_info/is_locked_for_current_user|python:True">
+        <permission value="Modify portal content"/>
+    </action>
+
+    <action title="Task Templates" action_id="tasktemplates" category="tabbedview-tabs"
+            condition_expr="" url_expr="string:#" visible="True">
+    </action>
+</object>

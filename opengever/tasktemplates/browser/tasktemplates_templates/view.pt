@@ -1,0 +1,53 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      lang="en"
+      metal:use-macro="context/main_template/macros/master"
+      i18n:domain="opengever.tasktemplates">
+  <body>
+
+    <metal:main fill-slot="main">
+      <tal:main-macro metal:define-macro="main">
+
+        <div tal:replace="structure provider:plone.abovecontenttitle" />
+
+        <h1 class="documentFirstHeading" tal:content="python: context.Title()"/>
+
+        <div tal:replace="structure provider:plone.belowcontenttitle" />
+
+        <table class="listing task-listing">
+          <tal:rep tal:define="group python: view.groups[0]">
+            <tr tal:repeat="widget group/widgets/values">
+            <span tal:define="index repeat/widget/index"/>
+
+              <tal:block condition="python: widget.__name__ not in ('preselected','title','responsible','issuer') and widget.value">
+
+                <th tal:content="widget/label" ></th>
+                <td tal:content="structure widget/render" />
+              </tal:block>
+              <tal:block condition="python:widget.__name__  == 'responsible' and widget.value">
+                <th tal:content="widget/label"></th>
+                <td tal:content="structure view/responsible_link" />
+              </tal:block>
+              <tal:block condition="python:widget.__name__  == 'issuer' and widget.value">
+                <th tal:content="widget/label"></th>
+                <td tal:content="structure view/issuer_link" />
+              </tal:block>
+              <tal:block condition="python:widget.__name__  == 'preselected' and widget.value==['selected']">
+                <th tal:content="widget/field/title"></th>
+                <td i18n:translate="label_yes">Yes</td>
+              </tal:block>
+            </tr>
+          </tal:rep>
+
+        <div class="visualClear"><!----></div>
+        <div class="visualClear"><!----></div>
+        <div tal:replace="structure provider:plone.belowcontentbody" />
+        <div class="visualClear"><!----></div>
+      </tal:main-macro>
+    </metal:main>
+
+  </body>
+</html>
+

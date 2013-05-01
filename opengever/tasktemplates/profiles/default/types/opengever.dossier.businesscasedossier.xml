@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<object name="opengever.dossier.businesscasedossier" meta_type="Dexterity FTI" xmlns:i18n="http://xml.zope.org/namespaces/i18n">
+
+    <!-- Actions -->
+
+    <action action_id="add_tasktemplate"
+            visible="True"
+            title="Add task from template"
+            category="folder_factories"
+            url_expr="string:${object_url}/add-tasktemplate"
+            icon_expr=""
+            i18n:domain="opengever.tasktemplates">
+        <permission value="Add portal content"/>
+    </action>
+
+</object>

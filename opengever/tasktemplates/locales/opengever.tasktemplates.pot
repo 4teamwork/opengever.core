@@ -1,0 +1,182 @@
+# --- PLEASE EDIT THE LINES BELOW CORRECTLY ---
+# SOME DESCRIPTIVE TITLE.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2012-02-23 13:38+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0\n"
+"Language-Code: en\n"
+"Language-Name: English\n"
+"Preferred-Encodings: utf-8 latin1\n"
+"Domain: opengever.tasktemplates\n"
+
+msgid "Description"
+msgstr ""
+
+#: ./opengever/tasktemplates/profiles/default/types/opengever.tasktemplates.tasktemplate.xml
+msgid "TaskTemplate"
+msgstr ""
+
+#: ./opengever/tasktemplates/profiles/default/types/opengever.tasktemplates.tasktemplatefolder.xml
+msgid "TaskTemplateFolder"
+msgstr ""
+
+msgid "Title"
+msgstr ""
+
+#: ./opengever/tasktemplates/browser/form.pt:19
+msgid "add tasktemplate"
+msgstr ""
+
+#: ./opengever/tasktemplates/browser/form.pt:22
+msgid "choose template"
+msgstr ""
+
+#. Default: "Interactive users"
+#: ./opengever/tasktemplates/vocabularies.py:49
+msgid "client_interactive_users"
+msgstr ""
+
+#. Default: "Common"
+#: ./opengever/tasktemplates/content/tasktemplate.py:16
+msgid "fieldset_common"
+msgstr ""
+
+#: ./opengever/tasktemplates/content/tasktemplate.py:72
+msgid "help_deadline"
+msgstr ""
+
+#: ./opengever/tasktemplates/content/tasktemplate.py:38
+msgid "help_issuer"
+msgstr ""
+
+#: ./opengever/tasktemplates/content/tasktemplate.py:86
+msgid "help_preselected"
+msgstr ""
+
+#: ./opengever/tasktemplates/content/tasktemplate.py:65
+msgid "help_responsible"
+msgstr ""
+
+#: ./opengever/tasktemplates/content/tasktemplate.py:57
+msgid "help_responsible_client"
+msgstr ""
+
+#: ./opengever/tasktemplates/content/tasktemplate.py:46
+msgid "help_task_type"
+msgstr ""
+
+#: ./opengever/tasktemplates/content/tasktemplate.py:79
+msgid "help_text"
+msgstr ""
+
+#: ./opengever/tasktemplates/content/tasktemplate.py:31
+msgid "help_title"
+msgstr ""
+
+#. Default: "Current user"
+#: ./opengever/tasktemplates/vocabularies.py:17
+msgid "interactive_user_current_user"
+msgstr ""
+
+#. Default: "Responsible"
+#: ./opengever/tasktemplates/vocabularies.py:13
+msgid "interactive_user_responsible"
+msgstr ""
+
+#. Default: "Continue"
+#: ./opengever/tasktemplates/browser/form.pt:30
+msgid "label_continue"
+msgstr ""
+
+#. Default: "Created"
+#: ./opengever/tasktemplates/browser/form.py:114
+msgid "label_created"
+msgstr ""
+
+#. Default: "Deadline in Days"
+#: ./opengever/tasktemplates/browser/tasktemplates.py:46
+#: ./opengever/tasktemplates/content/tasktemplate.py:71
+msgid "label_deadline"
+msgstr ""
+
+#. Default: "Issuer"
+#: ./opengever/tasktemplates/browser/tasktemplates.py:38
+#: ./opengever/tasktemplates/content/tasktemplate.py:37
+msgid "label_issuer"
+msgstr ""
+
+#. Default: "Preselect"
+#: ./opengever/tasktemplates/browser/tasktemplates.py:49
+#: ./opengever/tasktemplates/content/tasktemplate.py:85
+msgid "label_preselected"
+msgstr ""
+
+#. Default: "Responsible Client"
+#: ./opengever/tasktemplates/content/tasktemplate.py:55
+msgid "label_resonsible_client"
+msgstr ""
+
+#. Default: "Responsible"
+#: ./opengever/tasktemplates/content/tasktemplate.py:64
+msgid "label_responsible"
+msgstr ""
+
+#. Default: "Responsible"
+#: ./opengever/tasktemplates/browser/tasktemplates.py:42
+msgid "label_responsible_task"
+msgstr ""
+
+#. Default: "Review state"
+#: ./opengever/tasktemplates/browser/templatefolders.py:22
+msgid "label_review_state"
+msgstr ""
+
+#. Default: "Task Type"
+#: ./opengever/tasktemplates/content/tasktemplate.py:45
+msgid "label_task_type"
+msgstr ""
+
+#. Default: "Text"
+#: ./opengever/tasktemplates/content/tasktemplate.py:78
+msgid "label_text"
+msgstr ""
+
+#. Default: "Title"
+#: ./opengever/tasktemplates/browser/form.py:112
+#: ./opengever/tasktemplates/browser/tasktemplates.py:29
+#: ./opengever/tasktemplates/browser/templatefolders.py:18
+msgid "label_title"
+msgstr ""
+
+#. Default: "Yes"
+#: ./opengever/tasktemplates/browser/tasktemplates_templates/view.pt:39
+msgid "label_yes"
+msgstr ""
+
+#. Default: "You have not selected any templates"
+#: ./opengever/tasktemplates/browser/form.py:203
+msgid "message_no_templates_selected"
+msgstr ""
+
+#. Default: "tasks created"
+#: ./opengever/tasktemplates/browser/form.py:262
+msgid "message_tasks_created"
+msgstr ""
+
+#. Default: "Yes"
+#: ./opengever/tasktemplates/browser/tasktemplates.py:16
+msgid "preselected_yes"
+msgstr ""
+
+#: ./opengever/tasktemplates/browser/form.pt:23
+msgid "select tasks"
+msgstr ""
+

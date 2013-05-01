@@ -1,0 +1,40 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      lang="en"
+      metal:use-macro="context/main_template/macros/master"
+      i18n:domain="opengever.tasktemplates">
+
+    <tal:head metal:fill-slot="javascript_head_slot">
+        <script type="text/javascript" language="javsacript"
+                tal:attributes="src view/javascript_url">
+        </script>
+
+    </tal:head>
+
+    <body>
+        <div metal:fill-slot="main">
+            <div tal:replace="structure provider:plone.abovecontenttitle" />
+            <h1 class="documentFirstHeading" i18n:translate="">add tasktemplate</h1>
+            <form action="add-tasktemplate/create" method="post" class="wizard">
+                <ul class="wizardSteps" id="tasktemplateNavigation">
+                    <li class="selected"><a href="add-tasktemplate#templates" i18n:translate="">choose template</a></li>
+                    <li><a href="add-tasktemplate#tasks" i18n:translate="">select tasks</a></li>
+                </ul>
+                <div class="wizardContent">
+                    <div id="template_chooser"><!--iefix--></div>
+
+                    <div id="form-controls">
+                        <input type="submit" class="context" name="save" value="Save"  i18n:attributes="value label_save" i18n:domain="plone"/>
+                        <input type="button" class="context" name="continue" value="Continue"  i18n:attributes="value label_continue"/>
+                        <input type="submit" class="standalone" name="abort" value="Abort" i18n:attributes="value label_cancel" i18n:domain="plone" />
+                    </div>
+                </div>
+            </form>
+
+            <div tal:replace="structure provider:plone.belowcontentbody" />
+        </div>
+    </body>
+</html>
+
