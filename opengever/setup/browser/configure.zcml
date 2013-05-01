@@ -1,0 +1,39 @@
+<configure
+      xmlns="http://namespaces.zope.org/zope"
+      xmlns:browser="http://namespaces.zope.org/browser">
+
+    <browser:page
+          for="OFS.interfaces.IApplication"
+          name="opengever-addclient"
+          class=".admin.AddOpengeverClient"
+          permission="zope2.ViewManagementScreens"
+          template="addsite.pt"
+          />
+
+    <browser:page
+          for="OFS.interfaces.IApplication"
+          name="opengever-create-client"
+          class=".admin.CreateOpengeverClient"
+          permission="zope2.ViewManagementScreens"
+          />
+
+    <browser:resource
+          file="opengever-logo.png"
+          name="opengever-logo.png"
+          />
+
+    <browser:resource
+          file="jquery.min.js"
+          name="opengever.setup-jquery.min.js" />
+
+    <browser:resource
+          file="spinner.gif"
+          name="addclient-spinner.gif"
+          />
+
+    <browser:resource
+          file="addclient.js"
+          name="addclient.js"
+          />
+
+</configure>

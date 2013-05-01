@@ -1,0 +1,61 @@
+[
+
+    {
+        "_path": "/eingangskorb",
+        "_ac_local_roles": {
+            "%(inbox_group)s": [
+                "Reader",
+                "Editor",
+                "Contributor"
+            ]
+
+        }
+    },
+
+
+    {
+        "_path": "/vorlagen",
+        "_ac_local_roles": {
+            "%(users_group)s": [
+                "Reader"
+            ],
+
+            "og_%(client_id)s_sekretariat": [
+                "Editor",
+                "Contributor",
+                "Reader"
+            ],
+
+            "og_%(client_id)s_leitung": [
+                "Reader",
+                "Editor",
+                "Contributor"
+            ]
+
+        }
+    },
+
+
+    {
+        "_path": "/kontakte",
+        "_ac_local_roles": {
+            "%(users_group)s": [
+                "Reader"
+            ],
+
+            "og_%(client_id)s_sekretariat": [
+                "Editor",
+                "Contributor",
+                "Reader"
+            ],
+
+            "og_%(client_id)s_leitung": [
+                "Reader",
+                "Editor",
+                "Contributor"
+            ]
+
+        }
+    }
+
+]

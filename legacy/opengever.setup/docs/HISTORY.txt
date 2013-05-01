@@ -1,0 +1,213 @@
+Changelog
+=========
+
+
+2.1.5 (unreleased)
+------------------
+
+- Dropped Plone 4.1 compatibility. Only 4.2 and up are supported.
+  [lgraf]
+
+- Fix b0rked package release
+  [lgraf]
+
+
+2.1.4 (2012-06-20)
+------------------
+
+- Implements disabling the site syndication as opegever default.
+  Issue #1532 Darstellungsfehler und Schreibfehler Suchresultate
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1532
+  [phgross]
+
+
+2.1.3 (2012-03-28)
+------------------
+
+- Firing ObjectModifiedEvent after writing files to newly created documents.
+  Takes care of setting digitally_available for templates.
+  [lgraf]
+
+- Updated PowerPoint templates with new corporate design
+  [lgraf]
+
+
+2.1.2 (2012-02-27)
+------------------
+
+- Give admin group also the global role 'Editor' and 'Role Manager',
+  they sould be able to modified the objects and permissions.
+  [phgross]
+
+- Give admin group also the global role 'Member', so the ExposatorViewlet wouldn't be displayed.
+  Issue #1367 Administrator-Gruppe und -Rollen implementieren
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1367
+  [phgross]
+
+- Give admin group 'Administrator' role instead of 'Manager'
+  [lgraf]
+
+- Setup wizard: respect "local_roles" configuration in clients.
+  [jone]
+
+- Setup wizard: respect "active" configuration in clients.
+  [jone]
+
+
+2.1.1 (2011-12-06)
+------------------
+
+- Added rolemanager_group attribute to client setup form.
+  Users in this group will automatically be assigned the "Role Manager" role.
+  [lgraf]
+
+- Made the local_roles setting on the repository root configurable.
+  [phgross]
+
+- changed reader_group default from og_mandantid_lesen to og_mandantid_leser.
+  [phgross]
+
+2.1 (2011-11-29)
+----------------
+
+- Added reader_group attribute to the client setup form.
+  The og setup automaticlly sets the Member role for the reader_group in the portal_role_manager
+  [phgross]
+
+
+2.0 (2011-11-17)
+----------------
+
+- Displaying current OGDS and ZODB config on client setup screen
+  [lgraf]
+
+- Adjust the og-setup process:
+  Automaticly set global Member role for the client users group.
+  Issue #1269 Ordnungspositionen fuer alle Mitglieder eines Mandanten sichtbar machen
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1269/
+  [phgross]
+
+- Removed mail_settings import-step it isnt needed anymore. email_from_address now gets generated from value entered in entry point in the right policy package.
+  #1204 Absender E-Mail Addresse anpassen
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1204
+  [ttschanz]
+
+
+2.0b8 (2011-09-30)
+------------------
+
+- Added checkbox to choose if client should be activated in OGDS or not.
+  Defaults:
+  - False for production profiles
+  - True for development profile with example content
+  [lgraf]
+
+- Disable updating the syncstamp while setup a client.
+  Because we can't update the sync_stamp when the client process is not finished and the plone site not yet exists.
+  Issue #1164 OGDS caching anpassen
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1164
+  [phgross]
+
+- Changed imports of ogds models to new opengever.ogds.models package
+  [jbaumann]
+
+
+2.0b7 (2011-08-24)
+------------------
+
+- Prevent template files from being deleted during site creation
+  (Pass file data to field constructor, not file descriptor)
+  [lgraf]
+
+2.0b6
+-----
+
+- added special user (ogadmin) in opengever client creation, is used during the standard content creation
+  [phgross]
+
+- Rebuild OGDS, added groups to the OGDS, because of performance problems
+  [phgross]
+
+- Moved import of additional profiles after LDAP setup to avoid violating user constraint
+  [lgraf]
+
+- modified install opengever methods - for working with the new table configuration
+  [phgross]
+
+- removed yearfolder creation, because the creation is part of the closing mechanism
+  [phgross]
+
+- Improved assignment of tree portlets for repository roots (primary and secondary)
+  [lgraf]
+
+- Made assign_portlets method work as upgrade step
+  [lgraf]
+
+- Refactored methods in setuphandlers
+  [lgraf]
+
+- Patching ZMI to display warning if OG client needs upgrading
+  [lgraf]
+
+
+2.0b5
+-----
+
+- Issue #820 Baumdarstellung "Abgeschlossene Weiterleitungen"
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/820
+  Fixed navigation portlet on site creation.
+  [jbaumann]
+
+
+2.0b4
+-----
+
+- Changed name of added yearfolder.
+  [jbaumann]
+
+- Issue #789 Umsetzung Postmodul
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/789
+  Added a navigation portlet on inbox level, block inherited context portlets.
+  Create a year folder on setup.
+  [jbaumann]
+
+- Issue #798 Konfiguration Mailhost Zug pro Mandant
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/798/
+  Created import Step to Load Mailsettings
+  [ttschanz]
+
+- Issue #777 Setup OpenGever: Administratoren-Gruppe mit Manager-Rolle
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/777/
+  Created import step to Assign the global role to the Group
+  [ttschanz]
+
+2.0b3
+-----
+
+- Fixed problems with language selection.
+  [jbaumann]
+
+
+2.0b2
+-----
+
+- fixed template import with transmogrifier
+  [phgross]
+
+2.0b1
+-----
+
+- Added standard templates from opengever.examplecontent
+  [phgross]
+
+- Fixed name of transmogrify.dexterity.schemaupdater (which was renamed)
+  [jbaumann]
+
+
+2.0a2
+-----
+
+1.0a1dev (unreleased)
+---------------------
+
+- Initial release

@@ -1,0 +1,27 @@
+<configure
+      xmlns="http://namespaces.zope.org/zope"
+      xmlns:genericsetup="http://namespaces.zope.org/genericsetup">
+
+    <genericsetup:registerProfile
+          name="default"
+          title="opengever.setup: default"
+          directory="profiles/default"
+          description="Sets up the default setup with the basic contents.
+                       Includes all other profiles provided by
+                       opengever.setup."
+          provides="Products.GenericSetup.interfaces.EXTENSION"
+          />
+
+    <genericsetup:importStep
+          name="opengever.setup"
+          title="opengever.setup various imports"
+          description=""
+          handler="opengever.setup.setuphandlers.import_various" />
+
+	<genericsetup:importStep
+		  name="opengever.import_roles"
+		  title="opengever.setup global roles imports"
+		  description=""
+		  handler="opengever.setup.setuphandlers.set_global_roles" />
+
+</configure>

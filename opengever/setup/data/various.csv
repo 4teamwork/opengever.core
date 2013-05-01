@@ -1,0 +1,4 @@
+_path,_type,inbox_group,title,responsible,responsible_client,issuer,deadline,task_type,transitions
+/eingangskorb,opengever.inbox.inbox,og_mandant1_eingangskorb,Eingangskorb,
+/vorlagen,opengever.dossier.templatedossier,,Vorlagen,ogadmin,
+/kontakte,opengever.contact.contactfolder,,Kontakte,,,,,,publish

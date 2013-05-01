@@ -1,0 +1,8 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope">
+
+  <include package=".browser" />
+  <include file="profiles.zcml" />
+  <include file="transmogrifier.zcml" />
+
+</configure>
