@@ -1,0 +1,193 @@
+Changelog
+=========
+
+
+2.2.2 (unreleased)
+------------------
+
+- Nothing changed yet.
+
+
+2.2.1 (2012-12-06)
+------------------
+
+- Adjust some translations.
+  [phgross]
+
+
+2.2 (2012-11-28)
+----------------
+
+- Dropped Plone 4.1 compatibility. Only 4.2 and up are supported.
+  [lgraf]
+
+- Added small adjustments for working also with the new plone.app.search.
+  [phgross]
+
+- Adjust javscripts: Use $ instead of deprecated jq.
+  [phgross]
+
+
+2.1.2 (2012-09-19)
+------------------
+
+- Added quoting of bad chars like '(' or ')'.
+  [phgross]
+
+
+2.1.1 (2012-06-18)
+------------------
+
+- Made mails also findable (use IBaseDocument instead of IDocumentSchema)
+  Issue #1595 Erweiterte Suche: Mails werden bei Suche nach Dokumentdatum nicht beruecksichtigt
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1595
+  [phgross]
+
+- Disalbe unloadProtection for the advanced search form.
+  Issue #1597 Meldung beim verlassen der Suche
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1597
+  [phgross]
+
+
+2.1 (2012-02-27)
+----------------
+
+- Added French translations.
+  [ttschanz]
+
+- Implements IE workaround for submitting the advanced search form on submit.
+  Issue #1313 Erweiterte Suche: Formular kann im IE nicht mit <Enter> abgesendet werden.
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1313/
+  [phgross]
+
+- Add condition to the javascript regisitration.
+  [phgross]
+
+
+2.0 (2011-11-17)
+----------------
+
+- Made the filing number search more comfortable:
+  use the new ZCTextIndex 'searchable_filing_no'.
+  Issue #1260 Suche nach Ablagenummer
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1260
+  [phgross]
+
+- added test-buildout for plone 4.1
+  [eschmutz]
+
+2.0b10 (2011-08-24)
+-------------------
+
+- expanded tests
+  [eschmutz]
+
+- Jenkins-integration
+  [eschmutz]
+
+- Setup testcase for plone.app.testing
+  [eschmutz]
+
+- Issue #712 Advanced Search korrigieren und testen
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/712
+  removed field task_responsible and changed translations
+  [eschmutz]
+
+
+2.0b9
+-----
+
+- Issue #712 Advanced Search korrigieren und testen
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/712
+  fixed assigned_client setter, should only set when a task_responsible is selected
+  [phgross]
+
+
+2.0b8
+-----
+
+- Issue #712 Advanced Search korrigieren und testen
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/712
+  changed advancedsearch, so that it use now the interfaces for the type selection instead of the portal_type
+  advancedsearch works now also for specialdossiers and forwards
+  task_responsible search: find now only tasks wich are assinged to the current client
+  [phgross]
+
+2.0b7
+-----
+
+- Issue #712 Advanced Search korrigieren und testen
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/712
+  Corrected annoying typo which made search for tasks by responsible unusable.
+  [phabegger]
+
+
+2.0b6
+-----
+
+- Updated several translations (German).
+  [phabegger]
+
+
+2.0b5
+-----
+
+- fixed correct_ref method
+  [ttschanz]
+
+- Issue #762 Erweiterte Suche: Suche nach Status fehlt bei Aufgabe
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/762/
+  fixed bug: Search for task state didn't work.
+  [ttschanz]
+
+2.0b4
+-----
+
+- fixed bug that reference number function was called allways
+  [ttschanz]
+
+2.0b3
+-----
+
+- Removed Search for Creator.
+  Issue #767 Erweiterte Suche: Nicht nach Ersteller suchen (bei Dokument)
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/767/
+  [ttschanz]
+
+- Issue #763 Erweiterte Suche: Suche nach Aktenzeichen umstaendlich
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/763/
+  [ttschanz]
+
+- Issue #762 Erweiterte Suche: Suche nach Status fehlt bei Aufgabe
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/762/
+  [ttschanz]
+
+2.0b2
+-----
+
+- fixed searching task_type
+  [phgross]
+
+- fixed unicodeerrors whenn searching attributes are non-ascii characters
+  [phgross]
+
+- fixed bugs when searching for filing number, sequence number, crator.
+  [ttschanz]
+
+- fixed bug which appered when searching with only one part of a range was given
+  [ttschanz]
+
+- fixed bug when searchableText was nothing, a default value was entered
+  [ttschanz]
+
+2.0a3
+-----
+
+
+2.0a2
+-----
+
+1.0dev (unreleased)
+-------------------
+
+- Initial release

@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<object name="portal_javascripts" meta_type="JavaScripts Registry">
+
+    <javascript
+        cacheable="True" compression="safe" cookable="True"
+        expression="python:context.restrictedTraverse('@@plone_context_state').current_base_url().endswith('advanced_search')"
+        enabled="True" id="++resource++opengever.advancedsearch.resources/advanced_search.js" inline="False"
+    />
+
+</object>

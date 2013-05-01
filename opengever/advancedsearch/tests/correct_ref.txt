@@ -1,0 +1,12 @@
+Test correct_ref
+
+	>>> from opengever.advancedsearch.advanced_search import AdvancedSearchForm
+	>>> form = AdvancedSearchForm({},{})
+	>>> form.correct_ref('og1.6 1')
+	u'OG 1.6 / 1'
+	>>> form.correct_ref('1.6 / 1')
+	u'OG 1.6 / 1'
+	>>> form.correct_ref('1.6 1')
+	u'OG 1.6 / 1'
+	>>> form.correct_ref('OG OG 1.6/1')
+	u'OG 1.6 / 1'
