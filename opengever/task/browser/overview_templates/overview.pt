@@ -1,0 +1,62 @@
+<html xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      tal:omit-tag="python: True">
+
+    <tal:i18n i18n:domain="opengever.task" tal:define="groups view/boxes; css_width python:99/len(groups)">
+        <div tal:repeat="boxes groups" tal:attributes="class string:boxGroup boxGroup${repeat/boxes/index}; style string:width:${css_width}%">
+            <div tal:repeat="box boxes" class="box" tal:attributes="id string:${box/id}Box" >
+                <tal:cond tal:condition="box/content">
+                    <h2 i18n:translate="" tal:content="box/label|box/id"></h2>
+
+                    <tal:box tal:condition="python: not hasattr(box.get('content'), '__iter__')">
+                        <tal:item  tal:condition="box/content">
+                            <span tal:content="box/content" />
+                        </tal:item>
+                        <tal:item tal:condition="not: box/content">
+                            <span i18n:translate="no_content" />
+                        </tal:item>
+                    </tal:box>
+
+                    <tal:box tal:condition="python: hasattr(box.get('content'), '__iter__')">
+                        <tal:items define="items box/content">
+                            <ul tal:condition="items">
+                                <li tal:repeat="item items">
+
+                                    <!-- item is a dict (main attributes) -->
+                                    <tal:dict tal:condition="python: view.get_type(item) == 'dict'">
+                                        <span tal:content="structure item/label" />
+                                        <span>: </span>
+                                        <span tal:attributes="class item/css_class|nothing" tal:content="structure item/value" />
+                                    </tal:dict>
+
+                                    <!-- item is a obj (Documents)-->
+                                    <tal:brain tal:condition="python: view.get_type(item) == 'obj'">
+                                        <a href="" tal:attributes="href item/absolute_url;
+                                                                   title python: getattr(item, 'document_date', None) and item.document_date.strftime('%d.%m.%Y') or '';
+                                                                   class python:view.get_css_class(item)">
+                                            <span tal:condition="item/absolute_url" tal:content="item/Title" />
+                                        </a>
+                                    </tal:brain>
+
+                                    <!-- item is a task-->
+                                    <tal:sql tal:condition="python: view.get_type(item) == 'task'">
+                                        <div tal:replace="structure python:view.render_task(item)" />
+                                    </tal:sql>
+
+                                </li>
+                            </ul>
+                            <span tal:condition="not: items" i18n:translate="no_content" />
+                        </tal:items>
+                    </tal:box>
+                </tal:cond>
+            </div>
+        </div>
+        <div class="visualClear"><!----></div>
+        <div tal:replace="structure provider:opengever.task.beneathTask" />
+        <div class="visualClear"><!----></div>
+        <div tal:replace="structure provider:plone.belowcontentbody" />
+        <div class="visualClear"><!----></div>
+    </tal:i18n>
+
+</html>

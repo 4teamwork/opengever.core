@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<object name="portal_workflow" meta_type="Plone Workflow Tool">
+ <property
+    name="title">Contains workflow definitions for your portal</property>
+ <object name="opengever_task_workflow" meta_type="Workflow"/>
+ <bindings>
+  <default>
+   <bound-workflow workflow_id="simple_publication_workflow"/>
+  </default>
+  <type type_id="opengever.task.task">
+   <bound-workflow workflow_id="opengever_task_workflow"/>
+  </type>
+ </bindings>
+</object>

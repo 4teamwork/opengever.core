@@ -1,0 +1,66 @@
+<div class="documentByLine"
+	 id="plone-document-byline"
+     i18n:domain="opengever.task"
+     tal:condition="view/show">
+  <span class="" tal:attributes="class string:byline-icon ${view/get_css_class}"
+></span>
+  <span id="lock-icon" class="function-lock"
+        tal:define="lock_icon view/locked_icon"
+        tal:condition="lock_icon">
+  </span>
+
+  <tal:name tal:condition="here/responsible">
+    <span class="documentAuthor"
+          i18n:domain="opengever.task"
+          i18n:translate="label_by_author">
+      by
+      <tal:responsible
+         i18n:name="author"
+         i18n:domain="opengever.task"
+         >
+        <tal:link replace="structure view/responsible_link" />
+      </tal:responsible>
+
+    </span>
+  </tal:name>
+
+  <tal:state>
+    <span i18n:translate="label_workflow_state_byline" class="documentStatus">
+      State:
+    </span>
+    <span tal:content="view/workflow_state" i18n:translate="" i18n:domain="plone" class="noborder" />
+  </tal:state>
+
+  <span class="documentModified">
+    <span i18n:translate="label_last_modified" tal:omit-tag="">
+      last modified
+    </span>
+    <span tal:replace="python:view.toLocalizedTime(here.ModificationDate(),long_format=1)">
+      August 16, 2001 at 23:35:59
+    </span>
+  </span>
+
+  <span class="documentCreated">
+    <span i18n:translate="label_created" tal:omit-tag="">
+      last modified
+    </span>
+    <span tal:replace="python:view.toLocalizedTime(here.CreationDate(),long_format=1)">
+    </span>
+  </span>
+
+  <tal:expired tal:condition="view/isExpired">
+    <span class="state-expired"
+          i18n:translate="time_expired" tal:omit-tag="">expired</span>
+  </tal:expired>
+
+  <span class="sequenceNumber" tal:condition="view/sequence_number">
+    <span i18n:translate="label_sequence_number"
+          i18n:domain="opengever.dossier" tal:omit-tag="">
+      Sequence Number:
+    </span>
+    <span tal:replace="python: '%s %s' % (view.client_id(), view.sequence_number())">
+      14
+    </span>
+  </span>
+
+</div>

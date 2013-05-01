@@ -1,0 +1,112 @@
+<?xml version="1.0"?>
+<object name="opengever.task.task" meta_type="Dexterity FTI"
+        i18n:domain="opengever.task" xmlns:i18n="http://xml.zope.org/namespaces/i18n">
+
+    <!-- Basic metadata -->
+    <property name="title" i18n:translate="">Task</property>
+    <property name="description" i18n:translate=""></property>
+    <property name="icon_expr"></property>
+
+    <property name="allow_discussion">False</property>
+    <property name="global_allow">True</property>
+    <property name="filter_content_types">True</property>
+    <property name="allowed_content_types">
+        <element value="opengever.task.task" />
+        <element value="opengever.document.document" />
+        <element value="ftw.mail.mail" />
+    </property>
+
+
+    <!-- schema interface -->
+    <property name="schema">opengever.task.task.ITask</property>
+
+    <!-- class used for content items -->
+    <property name="klass">opengever.task.task.Task</property>
+
+    <!-- add permission -->
+    <property name="add_permission">opengever.task.AddTask</property>
+
+    <!-- enabled behaviors -->
+    <property name="behaviors">
+        <element value="collective.dexteritytextindexer.behavior.IDexterityTextIndexer" />
+        <element value="opengever.tabbedview.interfaces.ITabbedViewEnabled" />
+        <element value="opengever.trash.trash.ITrashable" />
+        <element value="opengever.task.behaviors.ITaskNameFromTitle" />
+        <element value="opengever.base.behaviors.sequence.ISequenceNumberBehavior" />
+        <element value="plone.app.lockingbehavior.behaviors.ILocking" />
+        <element value="opengever.mail.behaviors.ISendableDocsContainer" />
+    </property>
+
+    <!-- View information -->
+    <property name="default_view">tabbed_view</property>
+    <property name="immediate_view">../#tasks</property>
+    <property name="default_view_fallback">False</property>
+    <property name="view_methods">
+        <element value="view"/>
+        <element value="tabbed_view"/>
+    </property>
+
+    <!-- Method aliases -->
+    <alias from="(Default)" to="(selected layout)"/>
+    <alias from="edit" to="@@edit"/>
+    <alias from="sharing" to="@@sharing"/>
+    <alias from="view" to="@@view"/>
+
+    <!-- Actions -->
+    <action action_id="view"
+            visible="False"
+            title="View"
+            category="object"
+            url_expr="string:${object_url}"
+            condition_expr="">
+        <permission value="View"/>
+    </action>
+
+    <action action_id="edit"
+            visible="True"
+            title="Edit"
+            category="object"
+            url_expr="string:${object_url}/edit"
+            condition_expr="not:object/@@plone_lock_info/is_locked_for_current_user|python:True">
+       <permission value="opengever.task: Edit task"/>
+    </action>
+
+    <action action_id="attach_remote_document"
+            visible="True"
+            title="Attach remote document"
+            category="folder_factories"
+            url_expr="string:${object_url}/@@choose_source_dossier"
+            icon_expr=""
+            condition_expr="here/@@attach-document-allowed|nothing">
+        <permission value="Add portal content"/>
+    </action>
+
+    <action action_id="create_successor"
+            visible="False"
+            title="Create successor task"
+            category="object_buttons"
+            url_expr="string:${object_url}/@@create-successor-task"
+            condition_expr="python:object.responsible==member.id"
+            icon_expr="">
+        <permission value="View"/>
+    </action>
+
+    <action action_id="delegate_task"
+            visible="True"
+            title="Delegate task"
+            category="object_buttons"
+            url_expr="string:${object_url}/@@delegate_task"
+            condition_expr=""
+            icon_expr="">
+        <permission value="opengever.task: Add task"/>
+    </action>
+
+    <action i18n:domain="opengever.task" title="Overview" action_id="overview" category="tabbedview-tabs"
+            condition_expr="" url_expr="string:#" visible="True">
+        <permission value="View"/>
+    </action>
+    <action i18n:domain="opengever.task" title="Related Documents" action_id="relateddocuments" category="tabbedview-tabs"
+            condition_expr="" url_expr="string:#" visible="True">
+        <permission value="View"/>
+    </action>
+</object>

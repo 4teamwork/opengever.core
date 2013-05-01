@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vdex xmlns="http://www.imsglobal.org/xsd/imsvdex_v1p0"
+      orderSignificant="false" language="en">
+    <vocabIdentifier>opengever.task.unidirectional_by_reference</vocabIdentifier>
+
+    <term>
+        <termIdentifier>information</termIdentifier>
+        <caption>
+            <langstring language="en">For information</langstring>
+            <langstring language="de-ch">Zur Kenntnisnahme</langstring>
+            <langstring language="de">Zur Kenntnisnahme</langstring>
+            <langstring language="fr">Pour prendre connaissance</langstring>
+        </caption>
+    </term>
+
+</vdex>

@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<object name="portal_catalog" meta_type="Task Catalog">
+  <column value="deadline" />
+  <column value="date_of_completion" />
+  <column value="responsible" />
+  <column value="issuer" />
+  <column value="task_type" />
+  <column value="client_id" />
+  <column value="sequence_number" />
+  <column value="assigned_client" />
+  <column value="is_subtask" />
+  <column value="predecessor" />
+</object>

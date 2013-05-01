@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vdex xmlns="http://www.imsglobal.org/xsd/imsvdex_v1p0"
+      orderSignificant="false" language="en">
+    <vocabIdentifier>opengever.task.unidirectional_by_value</vocabIdentifier>
+
+    <term>
+        <termIdentifier>direct-execution</termIdentifier>
+        <caption>
+            <langstring language="en">For direct execution</langstring>
+            <langstring language="de-ch">Zur direkten Erledigung</langstring>
+            <langstring language="de">Zur direkten Erledigung</langstring>
+            <langstring language="fr">Pour réalisation immédiate</langstring>
+        </caption>
+    </term>
+
+</vdex>

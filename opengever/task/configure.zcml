@@ -1,0 +1,51 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:five="http://namespaces.zope.org/five"
+    xmlns:grok="http://namespaces.zope.org/grok"
+    xmlns:browser="http://namespaces.zope.org/browser"
+    xmlns:plone="http://namespaces.plone.org/plone"
+    xmlns:i18n="http://namespaces.zope.org/i18n"
+    xmlns:vdex="http://namespaces.zope.org/vdex"
+    xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+    i18n_domain="opengever.task">
+
+    <!-- Include custom permissions -->
+    <include file="permissions.zcml" />
+
+    <!-- Grok the package to initialise schema interfaces and content classes -->
+    <grok:grok package="." />
+
+    <!-- vdex vocabularies folder -->
+    <vdex:vocabulary directory="vdexvocabs" />
+
+    <include package=".browser" />
+
+    <include file="profiles.zcml" />
+
+    <include package=".viewlets" />
+
+    <i18n:registerTranslations directory="locales" />
+    <include file="behaviors.zcml" />
+    <browser:page
+        name="task_response_delete"
+        for="opengever.task.task.ITask"
+        permission="zope2.View"
+        class=".response.Delete"
+        />
+
+    <browser:page
+        name="task_response_edit"
+        for="opengever.task.task.ITask"
+        permission="zope2.View"
+        class=".response.Edit"
+        template="templates/edit_response.pt"
+        />
+
+    <browser:page
+        name="task_response_save"
+        for="opengever.task.task.ITask"
+        permission="zope2.View"
+        class=".response.Save"
+        />
+
+</configure>

@@ -1,0 +1,102 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2010-09-30 13:26+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0\n"
+"Language-Code: en\n"
+"Language-Name: English\n"
+"Preferred-Encodings: utf-8 latin1\n"
+"Domain: plone\n"
+
+msgid "Delegate task"
+msgstr ""
+
+msgid "Create successor task"
+msgstr ""
+
+msgid "Add response"
+msgstr ""
+
+msgid "Attach remote document"
+msgstr ""
+
+msgid "task-transition-cancelled-open"
+msgstr ""
+
+
+msgid "task-transition-in-progress-resolved"
+msgstr ""
+
+
+msgid "task-transition-open-cancelled"
+msgstr ""
+
+
+msgid "task-transition-open-in-progress"
+msgstr ""
+
+
+msgid "task-transition-open-rejected"
+msgstr ""
+
+
+msgid "task-transition-open-resolved"
+msgstr ""
+
+
+msgid "task-transition-open-tested-and-closed"
+msgstr ""
+
+
+msgid "task-transition-reassign"
+msgstr ""
+
+
+msgid "task-transition-rejected-open"
+msgstr ""
+
+
+msgid "task-transition-resolved-tested-and-closed"
+msgstr ""
+
+
+msgid "task-state-cancelled"
+msgstr ""
+
+
+msgid "task-state-in-progress"
+msgstr ""
+
+
+msgid "task-state-new-successor"
+msgstr ""
+
+
+msgid "task-state-open"
+msgstr ""
+
+
+msgid "task-state-rejected"
+msgstr ""
+
+
+msgid "task-state-resolved"
+msgstr ""
+
+
+msgid "task-state-tested-and-closed"
+msgstr ""
+
+
+msgid "task-transition-in-progress-tested-and-closed"
+msgstr ""
+
+
+msgid "task-transition-resolved-in-progress"
+msgstr ""

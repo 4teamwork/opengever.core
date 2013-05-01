@@ -1,0 +1,18 @@
+<configure
+      xmlns="http://namespaces.zope.org/zope"
+      xmlns:browser="http://namespaces.zope.org/browser"
+      i18n_domain="opengever.task">
+
+    <browser:resource
+          name="opengever.task.responsible.js"
+          file="resources/opengever.task.responsible.js" />
+
+    <browser:page
+          name="task_transition_controller"
+          for="opengever.task.task.ITask"
+          class=".transitioncontroller.TaskTransitionController"
+          permission="zope.Public"
+          allowed_interface=".transitioncontroller.ITaskTransitionController"
+          />
+
+</configure>

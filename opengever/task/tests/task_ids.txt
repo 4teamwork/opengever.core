@@ -1,0 +1,32 @@
+The task ID needs to be in following format:
+"task-{sequence number}"
+
+
+    >>> from plone.dexterity.utils import createContentInContainer
+    >>> from opengever.base.interfaces import ISequenceNumber
+    >>> from zope.component import getUtility
+    >>> from plone.app.testing import TEST_USER_ID, setRoles
+	>>> portal = layer['portal']
+	>>> app = layer['app']
+	>>> request = layer['request']
+
+Create a task:
+
+    >>> t1 = createContentInContainer(portal, 'opengever.task.task')
+    >>> t1
+    <Task at /plone/task-1>
+    >>> t1.id
+    'task-1'
+    >>> getUtility(ISequenceNumber).get_number(t1)
+    1
+
+Create another task:
+
+    >>> t2 = createContentInContainer(portal, 'opengever.task.task')
+    >>> t2
+    <Task at /plone/task-2>
+    >>> t2.id
+    'task-2'
+    >>> getUtility(ISequenceNumber).get_number(t2)
+    2
+

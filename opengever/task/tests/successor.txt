@@ -1,0 +1,81 @@
+Successor Task Controller
+=========================
+
+The successor task controller manages predecessor and successor references
+between tasks.
+
+    >>> from opengever.task.interfaces import ISuccessorTaskController
+    >>> from plone.registry.interfaces import IRegistry
+    >>> from zope.component import getUtility
+    >>> from zope.intid.interfaces import IIntIds
+    >>> from plone.dexterity.utils import createContent, addContentToContainer
+    >>> from zope.event import notify
+    >>> from opengever.ogds.base.interfaces import IClientConfiguration
+    >>> from zope.lifecycleevent import ObjectCreatedEvent, ObjectAddedEvent
+    >>> from opengever.ogds.base.utils import get_client_id
+
+We need the client id to be configured properly:
+
+	>>> portal = layer['portal']
+	>>> app = layer['app']
+	>>> request = layer['request']
+    >>> CLIENT_ID = u'm1'
+    >>> registry = getUtility(IRegistry, context=portal)
+    >>> registry.registerInterface(IClientConfiguration)
+    >>> registry.forInterface(IClientConfiguration).client_id = CLIENT_ID
+
+    >>> get_client_id()
+    u'm1'
+
+We use the oguids for relations:
+
+    >>> global intids
+    >>> intids = getUtility(IIntIds)
+
+Let's create some tasks:
+
+    >>> t1 = createContent('opengever.task.task', title='Task one')
+    >>> notify(ObjectCreatedEvent(t1))
+    >>> t1 = addContentToContainer(portal,
+    ...                            t1,
+    ...                            checkConstraints=False)
+    >>> notify(ObjectAddedEvent(t1))
+
+    >>> t2 = createContent('opengever.task.task', title='Task two')
+    >>> notify(ObjectCreatedEvent(t2))
+    >>> t2 = addContentToContainer(portal,
+    ...                            t2,
+    ...                            checkConstraints=False)
+    >>> notify(ObjectAddedEvent(t2))
+
+
+T1 is a successor of t2:
+
+    >>> c1 = ISuccessorTaskController(t1)
+    >>> c2 = ISuccessorTaskController(t2)
+
+    >>> c1.get_oguid()
+    u'm1:...'
+
+    >>> c2.get_oguid()
+    u'm1:...'
+
+    >>> c2.set_predecessor(c1.get_oguid())
+    True
+
+    >>> c2.get_predecessor()
+    <Task ...@m1>
+
+    >>> c1.get_successors()
+    [<Task ...@m1>]
+
+
+
+We should be able to try to set a bad predecessor. It should raise an
+exception but return False.
+
+    >>> c1.set_predecessor('mX:1')
+    False
+
+    >>> print c1.get_predecessor()
+    None

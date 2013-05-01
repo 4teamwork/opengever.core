@@ -1,0 +1,1067 @@
+Changelog
+=========
+
+
+2.5.2 (unreleased)
+------------------
+
+- Nothing changed yet.
+
+
+2.5.1 (2013-04-26)
+------------------
+
+- Implemented a YearfolderStorer adapter.
+  [phgross]
+
+- Fixed statesyncer: when responsible 'none' is given it should not
+  change the responsible.
+  Issue #1782 Fehler beim erledigen von mandantenuebergreifenden Aufgaben.
+  https://extranet.4teamwork.ch/extern/opengever-kanton-zug/sprint-backlog/1782
+  [phgross]
+
+
+2.5 (2012-11-28)
+----------------
+
+- Added special condition in issuer display, for forwaring successors.
+  [phgross]
+
+- Allow closing for inbox users Feature: Add support for for multiclient tasks.
+  [phgross]
+
+- Fixed TaskPostFactoryMenu: works now with every order of the factories.
+  [phgross]
+
+- Dropped Plone 4.1 compatibility. Only 4.2 and up are supported.
+  [lgraf]
+
+- Made relateddocuments tab safer, when related docs are trashed.
+  [phgross]
+
+- Adjust javscripts: Use $ instead of deprecated jq.
+  [phgross]
+
+
+
+2.4.3 (2012-10-08)
+------------------
+
+- Allow the closing-tested transitions also for users from the local inbox group.
+  [phgross]
+
+- ResponseTransporter: fixed en-/decoding methods so that they works with lists too.
+  [phgross]
+
+2.4.2 (2012-09-25)
+------------------
+
+- Update French Translastions.
+  [tschanzt]
+
+- Add vdexentries for de.
+  [tschanzt]
+
+
+2.4.1 (2012-09-10)
+------------------
+
+- Implements special description for the responsible field in one client gever setups.
+  Issue #217 Aufgabe - nur 1 Mandant
+  https://extranet.4teamwork.ch/support/ph-vs/tracker/217
+  [phgross]
+
+- Statesyncer: Update the localroles on the remote task, when reponsible has changed.
+  Issue #1665 Erledigen von mandantenuebergreifenden Aufgaben.
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1665
+  [phgross]
+
+- Fixed error in NoCheckedoutDocsValidator, works now also with None as value.
+  Issue #1651 NoCheckedoutDocsValidator wirft Fehler, wenn kein Wert uebergeben wird.
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1651/view
+  [phgross]
+
+- Fixed request getter in accept_forwarding process.
+  [phgross]
+
+- Added french translations of task types.
+  [phgross]
+
+
+2.4 (2012-07-20)
+----------------
+
+- Added NoCheckedOutDocs also to the task add form.
+  Issue #1516 Problem "Ueberweisen von ausgecheckten Dokumenten"
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1516
+  [phgross]
+
+- Adjust document delivering: add answer prefix to the document titles.
+  Issue #1479 Titel eines zurueckgelieferten Dokuments bei mandantenuebergreifenden Aufgaben
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1479
+  [phgross]
+
+- Implements CustomInitialVersionMessage context manager, and customize inital message.
+  Issue #1494 Mandantenuebergreifende ZA: Initialversion ersetzten mit spezifischerem Kommentar
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1494
+  [phgross]
+
+- Added reassign support to the statesyncer.
+  Issue #1560 mandantenuebergreifende ZA: Synchronisation von Neu zuweisen
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1560/
+  [phgross]
+
+- Added NoCheckedOutDocs Validator to the CompleteTaskSuccessor form.
+  Issue #1516 Problem "Ueberweisen von ausgecheckten Dokumenten"
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1516
+  [phgross]
+
+- Adjust transitioncontroller: don't check the guard conditions for administrators.
+  Issue #1433 Administrator: pruefen, ob er auch Aufgaben bearbeiten koennen soll
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1433
+  [phgross]
+
+- Change tablesource of related_documents from TableSource to
+  CatalogTableSource and outsource the view to a related_documents.
+  Issue #1503 Dokumentenauflistungen: Einfügen Spalte Dokumentenlaufnummer
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1503/
+
+- Set the response contenttype correctly, to avoid problems with diazo themes on remote requests.
+  Issue #6 Richtigen Content-Type auf der Response bei remote requests zwischen Clients setzen
+  https://extranet.4teamwork.ch/intranet/08-produkte-kurse/4teamwork-gever-1/tracker-4teamwork-gever/6
+  [phgross]
+
+- Let the task provide the ISendableDocsContainer marker behavior.
+  Issue #1568 Dokument aus Aufgabe versenden resp. kopieren
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1568
+  [phgross]
+
+- Add check to attachable_documents_vocabulary: which check that all term values are unique.
+  [phgross]
+
+- Adjust use of title accessors (decoding), since dexterity update it returns always utf-8.
+  Issue #1420 Plone Version und Dexterity Version auf aktuellste Version heben.
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1420
+  [phgross]
+
+- User get_css_class instead of deprecated method: css_class_from_obj/css_class_from_brain
+  [eschmutz]
+
+
+2.3.4 (2012-03-28)
+------------------
+
+- Made requests to remote clients more robust in case of conflict errors on the sender side.
+  Issue #1455 Mandantenuebergreifende ZA: Remote Views robuster implementieren.
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1455
+  [jone]
+
+- Fixed the document transporter: allways create inital version (see commit 2a5d3ab).
+  Issue #1446 Datei eines Dokuments wird beim Transport einer mandantenuebergreifenden
+  Aufgabe nicht kopiert
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1446/
+  [phgross]
+
+- Reactivate the set_roles_on_distinct_parent in the localroles setter.
+  Because to edit(external_edit) related documents of a task it's necessary to have permissions on the dossier.
+  [phgross]
+
+
+2.3.3 (2012-03-12)
+------------------
+
+- Fixed CompleteSuccessorTaskReceiveDelivery View: Fire the addedEvent for every
+  copied document, so that it generates a inital version of the document.
+  Issue #1446 Datei eines Dokuments wird beim Transport einer mandantenuebergreifenden Aufgabe nicht kopiert
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1446/
+  [phgross]
+
+
+2.3.2 (2012-03-08)
+------------------
+
+- Removed console.log statemant in js, to avoid ie problems.
+  [phgross]
+
+- Task overview: Fixed AttributError if document_date not set
+  [lgraf]
+
+- Taskoverview: Add date of completion to the main attributes.
+  Issue #1440 Release 2.3 Aufgabe: Erledigungsdatum fehlt im Overview
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1440
+  [phgross]
+
+- Fixed CompleteSuccessorTaskForm:
+  - Fixed condition "relation allready exists".
+  - Append the relation on response also when the releation has been allready exist.
+  [phgross]
+
+
+2.3.1 (2012-03-02)
+------------------
+
+- Fixed Typoerror in translation.
+  [phgross]
+
+
+2.3 (2012-03-01)
+----------------
+
+- Accept Forwarding: Allways reset the is_only_assign flag, when start accepting.
+  Issue #1387 Mandantenuebergreifende Weiterleitung: Wizards erstellen
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1387/
+  [phgross]
+
+- Adjust some translations.
+  [phgross]
+
+- Fixed completing task process:
+  - Add relations for seleted documents from the dossier.
+  - Add the documents also in the local response not only on the remote task.
+  Issue #1344 Aufgabe erledigen bzw. abschliessen
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1344/
+  [phgross]
+
+- Fixed addresponse functionality: Avoid to add a allready existing relations.
+  Issue #1431 Task: doppelter Verweis auf ein Dokument ist moeglich.
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1431/view
+  [phgross]
+
+
+2.2 (2012-02-27)
+----------------
+
+- Adjust the is_issuer in the transitioncontroller:
+  it can now handle also inbox principals.
+  Issue #1387 Mandantenuebergreifende Weiterleitung: Wizards erstellen
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1387
+  [phgross]
+
+- Adjust the statesyncer: forwarding predesscors should not be synced.
+  [phgross]
+
+- Add "predecessor" index and metadata to catalog.
+  [jone]
+
+- Disable close_successor_wizard for forwarding successor tasks.
+  Issue #1387 Mandantenuebergreifende Weiterleitung: Wizards erstellen
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1387
+  [phgross]
+
+- When completing a successor task, let the user report all documents in the dossier.
+  Issue #1344 Aufgabe erledigen bzw. abschliessen
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1344
+  [jone]
+
+- Display special icon for related items in task responses
+  [lgraf]
+
+- Fixed bug that caused previous relatedItems to be overridden when adding
+  a relation in a task response.
+  [lgraf]
+
+- Use subtask icon in add-menu.
+  [jone]
+
+- Added French translations
+  [ttschanz]
+
+- Add is_subtask catalog index.
+  Issue #1373 Spezielles Icon fuer Unteraufgaben.
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1373
+  [jone]
+
+- Add "assigned_client" index to metadata (used for remote-task icon).
+  Issue #1300 Mandantenuebergreifende Aufgaben sollten speziell markiert werden koennen.
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1300
+  [jone]
+
+- Adjust Worfklow: Allow resolved-in-progress also for reponsible or inbox group users.
+  Issue #1371 Anpassungen Aufgaben Workflow
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1371
+  [phgross]
+
+- Adjust Worfklow: Disallow to add documents when a task is resolved.
+  Issue #1371 Anpassungen Aufgaben Workflow
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1371
+  [phgross]
+
+- RelatedDocumentsTableSource: Store info if doc was listed as a relation,
+  so the tabbedview helper can use a special icon for related documents.
+  [lgraf]
+
+- Removed 'List folder contents' permission from anyone but Manager in
+  task workflow.
+  [lgraf]
+
+- Added necessary permissions for Administrator role
+  [lgraf]
+
+- Implement wizard for copying documents when closing a uniref task.
+  Issue #1376 Auftragstyp "Zur Kenntnisnahme": Aktion abschliessen
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1376
+  [jone]
+
+- Made some adjustments on the reponse functionality:
+   - Made the transition field readonly.
+   - Remove direct_response functionality, is no longer used.
+   - Removed the add response action.
+
+  Issue #1377 Ueberarbeitung Antwort einer Aufgaben
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1377
+  [phgross]
+
+- Implements some workflow adjustments:
+   - Removed resolved-open(wieder eroeffnen) transition.
+   - Added new transition resolved-in-progress (ueberarbeiten) instead of resolved-open.
+   - Add no-successors checks for the resolve and close transitions.
+
+  [phgross]
+
+- Task overview: display responsible of tasks referenced in response.
+  [jone]
+
+- Delegate: fix pointer on response to subtask.
+  [jone]
+
+- Delegate: do not inherit predecessor from parent to subtasks.
+  [jone]
+
+- Delegate: fix bug when there are no related documents.
+  [jone]
+
+- Task overview: display responsible of subtasks.
+  [jone]
+
+- Display workflow state icon for related tasks in task overview.
+  [jone]
+
+- Display issuer client in task overview.
+  [jone]
+
+- Reponse: support for referencing multiple added documents in one response.
+  [jone]
+
+- Implement task delegate wizard.
+  Issue #1343 "Aufgabe Delegieren" Wizard
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1343
+  [jone]
+
+- Implement task accept wizard.
+  Issue #1342 "Aufgabe akzeptieren" Wizard
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1342
+  [jone]
+
+- Moved the workflow guards checks in to a TaskTransitionController and added Tests.
+  [phgross]
+
+- Fixed the guard expresssion for the 'task-transition-rejected-open' transition.
+  [phgross]
+
+- The localrolesetter authorize now also the inbox_group of the responsible_client.
+  Issue #1295 Bei Mandantenuebergreifenden Aufgaben auch Eingangskorb mitberechtigen.
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1295
+  [phgross]
+
+- Adjsut the transitioncontroller: for inbox group users it should also be possible to resolve and the accept tasks.
+  Issue #1296 Task Workflow Guards: Eingangskorb Benutzer sollen auch Aufgaben akzeptieren und erledigen koennen
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1296
+  [phgross]
+
+- Moved the workflow guards checks in to a TaskTransitionController and added Tests.
+  [phgross]
+
+2.1 (2012-01-13)
+----------------
+
+- Adjust task configuration, added ftw.mail.mail to the allowed content types of tasks.
+  Is Allready released in the Hotfix 2.0.2.
+  [phgross]
+
+- #1299 Spalte 'In Bearbeitung' hinzufügen bei Dokumentenauflistung in einer Aufgabe
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1299/
+  add new column 'checked_out' for the document tab in task-view
+  [eschmutz]
+
+- Single client setup: do not display the responsible_client in the task overview.
+  [jone]
+
+- Single client setup: hide responsible_client field if only one client is set up.
+  [jone]
+
+
+2.0.1 (2011-12-06)
+------------------
+
+- Fixed translation of task type "Forwarding".
+  [lgraf]
+
+
+2.0 (2011-11-17)
+----------------
+
+- Removed `linked` helper, now using the one from og.tabbedview.helpers
+  [lgraf]
+
+- Fixed related_items indexer for tasks: It used to return ALL relations,
+  not just the ones from the context.
+  Issue #1261 Fehlerhafte Assoziation von Dokument/Aufgaben
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1261/
+  [lgraf]
+
+- Issue #1249 Mail: Beim Importieren eines E-Mails muss die Spalte Ausgangsdatum leer bleiben
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1249/
+  back to ftw.table helper function for readable_date
+  [eschmutz]
+
+- removed majoractions, they are now inherited from the Documents tab.
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1263
+  [ttschanz]
+
+- Fixed batching by using the ListingView from opengever.tabbedview which
+  overrides the batching template to match the CSS in izug.basetheme
+  [lgraf]
+
+
+2.0b22 (2011-09-30)
+-------------------
+
+- Issue #1181 Unused ITransition entfernen und testanpassungen
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1181
+  [eschmuttz]
+
+- Added grok.require to ReceiveResponses, DocumentRedirector, DirectResponseView, SingleAddFormView,
+  CopyRelatedDocumentsToInbox
+  [eschmutz]
+
+- changed deprecated grok.CodeView to grok.View
+  [eschmutz]
+
+2.0b21 (2011-08-25)
+-------------------
+
+- fixed task globalindex reindexing in the direct_response functionality
+  [phgross]
+
+
+2.0b20
+-------
+
+- added test-buildout for plone 4.1
+  [eschmutz]
+
+- Issue #1040 Mandantenuebergreifende Beteiligung: Anpassung Darstellung
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1040
+  reimplement Exposator viewlet, request parameter is not longer used
+  [phgross]
+
+
+2.0b19
+------
+
+- Issue #1072 Task workflow ueberarbeiten und korrigieren
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1072
+  disabling adding documents in a tested-and-closed task
+  [phgross]
+
+
+2.0b18
+------
+
+- Issue #1072 Task workflow ueberarbeiten und korrigieren
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1072
+  disabling adding documents in a tested-and-closed task
+  [phgross]
+
+- Issue #832 Workflow Task anpassen
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/832
+  changed and added some new workflow guards
+  [phgross]
+
+- Issue #1072 Task workflow ueberarbeiten und korrigieren
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1072
+  - added Edit Task permission
+  - adjust workflow (allow allways adding and editing documents)
+  - customize editform for protecting
+  [phgross]
+
+- Fix tests
+  [eschmutz]
+
+- Issue #1059 Folgeaufgabe ausblenden
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1059
+  disable the create successor task action
+  [phgross]
+
+- Moved Tests from PloneTestCase to plone.app.testing
+  [ttschanz]
+
+- Added sprite function-lock to byline.pt
+  [eschmutz]
+
+- Issue #1079 Falsche weiterleitung beim erstellen eines Dokuments in einem Task.
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1079/
+  added task specific DocumentRedirector View
+  [phgross]
+
+- Issue #1074 Verweisefeld bei Aufgabe, zeigt keine Dokumente einer Aufgabe.
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1074/
+  added Task interface to the navigation_tree_query source
+  [phgross]
+
+- Issue #1058 Erledigungsdatum bei unidirektionale Aufgaben
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1058/
+  adjust the set_date subscriber, works now also for unidirectional tasks
+  [phgross]
+
+
+2.0b17
+------
+
+- Issue #1069 Test Rot 2.0.3: Fehlende Icons bei Verweis-Baum u.ae.
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1069/
+  Added missing parameters for the js_template call in the DossierAutocompleteSelectionWidget,
+  works now with the newest version of the plone.formwidget.autocomplete
+  [phgross]
+
+- Added several Tests
+  [jinfanger]
+
+
+2.0b16
+------
+
+- Issue #1067 Test Rot 2.0.3: "In eigenes Dossier kopieren" funktioniert nicht
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1067
+  [phgross]
+
+- Issue #786 Darstellung Aufgabe als TabbedView
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/786
+  relateddocuments now uses sprites
+  Fixed Unicodeerror in linked helper. breadcrumbs_titles should be unicode.
+  [ttschanz]
+
+- Issue #992 Aufgabe, Zur direkten Erledigung: Aktion akzeptieren fehlt
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/992
+  [phgross]
+
+- Issue #1071 Ausgewaehltes Dokument wird beim Erstellen einer Weiterleitung nicht respektiert
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1071
+  [phgross]
+
+- Issue #901 In der Unteraufgabe fehlt das Icon fuer die Hauptaufgabe
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/901
+  [phgross]
+
+- Issue #992 Aufgabe, Zur direkten Erledigung: Aktion akzeptieren fehlt
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/992
+  [phgross]
+
+- Issue #1052 Byline icons durch sprite icons ersetzen
+  Added ByLine modifications for sprites
+  [ttschanz]
+
+- Issue #996 Mails in Dossier verschieben ist nicht erlaubt
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/996/
+  fixed icons in the task overview for sub or predeccessor tasks
+  [phgross]
+
+- Removed css_icon_class method - now done in tabbedview linked helper
+  [lgraf]
+
+- https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/758
+  change order of the fields
+  [phgross]
+
+- Rebuild OGDS, added groups to the OGDS, because of performance problems
+  [phgross]
+
+- Removed content_icon and icon_exprs - now done with sprites
+  [lgraf]
+
+- Added new method for metatype: css_icon_class
+  [27.05.2011, elio.schmutz]
+
+- Issue #1031 Direkter Checkout Aufruf aus Dokumentenliste heraus
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1031/
+  [phgross]
+
+- Issue #1024 Feedback Fokus: Aufgabe: Reiter Allgemein
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1024/
+  [phgross]
+
+- Issue #832 Workflow Task anpassen
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/832/
+  added and changed some guards in the workflow
+  [phgross]
+
+- Issue #947 Weiterleitung einem Dossier zuweisen
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/947/
+  removed state task-state-new-successor
+  [phgross]
+
+- Isssue #992 Aufgabe, Zur direkten Erledigung: Aktion akzeptieren fehlt
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/992
+  changed expression for task-transition-open-in-progress
+  [phgross]
+
+- Issue #786 Darstellung Aufgabe als TabbedView
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/786
+  Implemented custom sorting for related documents tab of tasks. Especially the
+  sortable_title sorting mechanism is optimised using the original indexer
+  function to convert the title in properly compareable strings.
+  [jbaumann]
+
+- Issue #944 Fehler beim Abarbeiten einer Aufgabe (FD.FDS)
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/944/
+  Made get_predecessor() in successor.py more robust and respect ``default`` keyword argument
+  [lgraf]
+
+- Using new readable_date helper from opengever.tabbedview
+  [lgraf]
+
+- Issue #786 Darstellung Aufgabe als TabbedView
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/786
+  Fixed display of metadata for mails attached to tasks
+  [lgraf]
+
+- Issue #786 Darstellung Aufgabe als TabbedView
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/786
+  Fixed icon URL for subtasks
+  [lgraf]
+
+- Issue #946 Eingangskorb: Vorselektion des Mandanten beim neu Zuweisen
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/946
+  Implemented prefilling of responsible_client when reassigning forwardings
+  [lgraf]
+
+- Fixed translations
+  [lgraf]
+
+- Fixed UnicodeDecode error in helpers.linked()
+  [lgraf]
+
+
+2.0b15
+------
+
+- Updated translations
+  [lgraf]
+
+- Re-enabled setting contributor role on parent dossier for assigned tasks
+  [lgraf]
+
+- Updated profile to reflect new action name, updated translations
+  [lgraf]
+
+- Renamed related documents tabbedview for Tasks to avoid naming conflict
+  [lgraf]
+
+- Enabled tabbed_view support for tasks
+  [lgraf]
+
+
+2.0b14
+------
+
+
+2.0b13
+------
+
+- Issue #900 Eingangskorb, Aufgaben aus anderem Mandant: Aktion neu zuweisen fehlt!
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/900
+  Removed (too restrictive) guards for transitions reject/accept/resolve
+  [phabegger]
+
+
+2.0b12
+------
+
+- Added exit-transition "task-transition-reassign" to task-state-in-progress,
+  removed guard permission, added guard condition
+  [lgraf]
+
+
+2.0b11
+------
+
+- Removed duplicate condition expression in profile
+  [lgraf]
+
+- Issue #832 Workflow Task anpassen
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/832
+  Added condition for action "follow-up task". It is now only available for
+  responsible person.
+  [phabegger]
+
+- Issue #832 Workflow Task anpassen
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/832
+  Added guards in order to reduce the number of available actions depending
+  on the logged-in user.
+  [phabegger]
+
+- Issue #832 Workflow Task anpassen
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/832
+  Added wf guards for transitions reject and cancel.
+  [phabegger]
+
+
+2.0b10
+------
+
+- Show task wfstate icons in task view.
+  [phabegger]
+
+- Fixed task resolve check: added all valid closed-states.
+  [jbaumann]
+
+- Issue #836 Folgeaufgabe: Fehler beim Erstellen innerhalb gleichen Mandants
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/836
+  Added handling of python datetime objects when copying responses.
+  [jbaumann]
+
+- updated opengever task workflow
+  [jbaumann]
+
+- added new browser view "task_workflow_checks"
+  [jbaumann]
+
+- Issue #844 Aufgabe: Aktion Hinzufuegen "Dokument aus eigenem Mandant" umbenennen
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/844
+  Updated translation.
+  [phabegger]
+
+
+2.0b9
+-----
+
+- Issue #832 Workflow Task anpassen
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/832
+  Updated workflow and it's translations.
+  Added task_workflow_checks view used by the workflow guards.
+  Disabled setting Contributor role on task parent.
+  [jbaumann]
+
+- Forwarding special case: tabbed view helper "task_type" should always
+  display "Forwarding" for forwardings.
+  [jbaumann]
+
+- Task view: also show mails.
+  [jbaumann]
+
+- Fixed handling of empty deadline in view template
+  [lgraf]
+
+- Show performed transition in answers of tasks.
+  [jbaumann]
+
+- Added textfield for response text to "Assign task" form.
+  [jbaumann]
+
+- "Assign Task" action removed, added new workflow Transition.
+  [jbaumann]
+
+- Renamed "Verantwortlicher" zu "Verantwortlich"
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/758
+  [phabegger]
+
+- Fixed sorting of responses in task view.
+  [jbaumann]
+
+- Issue #536 Aufgabe: Verweisfeld in Antwortformular fehlt
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/536/
+  Removed related items field if User isn't from same Client as Task
+  [ttschanz]
+
+- Issue #789 Umsetzung Postmodul
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/789/
+  Also copy responses when transporting tasks to another client.
+  [jbaumann]
+
+- Response view: convert responsible client and responsible values into human
+  readable values using ContactInformation utility.
+  [jbaumann]
+
+- Issue #789 Umsetzung Postmodul
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/789/
+  Do not access hidden stuff in task view.
+  Hide relatedItems in answer for forwardings.
+  [jbaumann]
+
+- Fixed some typos in translations (workflow states and transitions)
+  [phabegger]
+
+
+2.0b8
+-----
+
+- Fixed bugs in Templates
+  [ttschanz]
+
+- Renamed templates directory for eliminating grok unassociated template warning.
+  [jbaumann]
+
+
+2.0b7
+-----
+
+- Fixed bug in Tasktemplate
+  [ttschanz]
+
+- Fixed import of DossierPathSourceBinder in opengever.task.response
+  [lgraf]
+
+- Issue #758 Darstellung Aufgabe: Reihenfolge Felder anpassen
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/758/
+  [ttschanz]
+
+- Issue #755 Anpassungen Maske Aufgabeantwort
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/755/
+  [ttschanz]
+
+- Issue #754 Folgeaufgabe: Falscher Status bei "Meine Aufgaben"
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/754
+  [jbaumann]
+
+- Issue #737 Aufgabe: Hinzufuegen Dokument (aus Mandanten) erzeugt Antwort
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/737
+  Add a response whenever a object is added to a task.
+  Add a response when a successor task is created.
+  [jbaumann]
+
+- issue #736 Aufgabe: Bei Antwort Datum korrekt formatieren
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/736/
+  [ttschanz]
+
+- Issue #738 Aufgabe: Neue Aktion "Aufgabe zuweisen"
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/738
+  Added missing response.
+  [jbaumann]
+
+- Issue #750 Neue Aufgabe: Fokus auf falschem Feld
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/750/
+  [ttschanz]
+
+- Related items: Fixed path source binder configuration.
+  [jbaumann]
+
+- Removed old SearchableText indexer - using dexteritytextindexer now.
+  [jbaumann]
+
+- Fixed SearchableText of Task which should solve encoding problems.
+  [jbaumann]
+
+- Issue #738 Aufgabe: Neue Aktion "Aufgabe zuweisen"
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/738
+  [jbaumann]
+
+
+2.0b6
+-----
+
+- Task workflow: Allow Owner to add a document after creating a successor task - otherwise documents will be missing.
+  [jbaumann]
+
+- Task workflow: The Editor should have "Review portal content", otherwise he will not see any menu.
+  Also removed task-state-new, since its not used anymore.
+  [jbaumann]
+
+- Successor: Task workflows initial state has changed, so we need to move successor tasks into another state after creating / editing.
+  [jbaumann]
+
+- Show the "attach document" action only for those user where it's reasonable.
+  [jbaumann]
+
+
+2.0b5
+-----
+
+- Issue #710 Aufgabe bearbeiten: Wechseln des Verantwortlichen funktioniert nicht
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/710
+  Removed response Autocomplete-traversal stuff and custom Autocomplete-search view,
+  since response does no more have a autocomplete widget (responsible) and this
+  implementation made editing task and changing the responsible fail.
+  [jbaumann]
+
+
+2.0b4
+-----
+
+- refactoring the whole task workflow
+  [Philippe Gross]
+
+- fixed translation
+  [Timon Tschanz]
+
+
+2.0b3
+-----
+
+- enable locking behavior
+  [jbaumann]
+
+- after creating a task, redirect to dossiers #task tab
+  [jbaumann]
+
+
+2.0b1
+-----
+
+- Previously released wrong tag number..
+
+
+2.0b1
+-----
+
+- fixed vdex vocabularies: switch language from de to de-ch since portal_languages has changed
+  [Jonas Baumann]
+
+- fixed sourcebinder and related documents field
+  [Philippe Gross]
+
+- fixed extends path
+  [Jonas Baumann]
+
+- fixed fuzzy entries in translations
+  [Jonas Baumann]
+
+- Successor wizard form: Added cancel button
+  [jbaumann]
+
+
+2.0a2
+-----
+
+- Attach document wizard: Use autocomplete widgets
+  [jbaumann]
+
+
+1.0a5
+-----
+
+- Replace the taskoverview and the taskoverview_solr with the global_index taskoverview
+  [05.10.2010, phgross]
+
+- Issue #644 Wizard fuer automatisches Kopieren von Dokumenten in neue Aufgabe
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/644/
+  [29.09.2010, jbaumann]
+
+- Issue #657 CopyRelatedDocumentsToInbox korrigieren
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/657
+  Re-impleted copy-related-documents-to-inbox views with a additional form for
+  selecting the target client, since it's now possible to have multiple assigned
+  clients per user.
+  [28.09.2010, jbaumann]
+
+- Issue #639 Mandantenuebergreifende Referenzen
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/639/
+  [13.09.2010, jbaumann]
+
+- Issue #577 Aktenzeichen beim Dokumenten-Header korrigieren
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/577/
+  [09.09.2010, jbaumann]
+
+- Issue #563 Aufgabe: Anordnung der Antworten
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/563
+  [09.08.2010, phgross]
+
+- Issue #566 Aufgabe auf Status abgeschlossen setzen
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/566/
+  [09.08.2010, phgross]
+
+- Issue #423 Autocomplete Widget funktioniert in der Response nicht
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/423/
+  [15.04.2010]
+
+- Issue #505 Weiterleiten einer Aufgabe aus Eingangskorb Mandant 3 nach Mandant 1 geht nicht
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/505
+  [08.04.2010, jbaumann]
+
+- Issue #505 Weiterleiten einer Aufgabe aus Eingangskorb Mandant 3 nach Mandant 1 geht nicht
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/505
+  Switched to new vocabulary: enables to select client inbox group
+  [08.04.2010, jbaumann]
+
+- Fixed related items bug
+  [15.03.2010, jbaumann]
+
+- Removed unused import which caused import error
+  [15.03.2010, jbaumann]
+
+- Issue #469 Aufgaben und Beilagen
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/469
+  [15.03.2010, jbaumann]
+
+- Issue #493 Abgleich zwischen den Mandanten (rr / ds / amt)
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/493
+  added new index assigned_client, for better query in the assigned-tasks tab in the taskoverview
+  [12.03.2010, pgross]
+
+- Issue #468 Optimierung der inhaltlichen Usability von Aufgaben
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/468/
+  [23.02.2010, pgross]
+
+- Issue #447 Zentrale Aufgabenuebersicht = uebersicht ueber die Aufgaben aller Sachbearbeiter eines Mandanten und noch nicht zugewiesene Aufgaben
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/447/
+  added a tab assignedIssues, added some change for correct sorting in the taskoverview_solr
+  [23.02.2010, pgross]
+
+- Issue #397 Aufgabe: Wie kann ein der Antwort beigefuegtes Dokument in die Dokumentliste transferiert werden?
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/397/
+  removed field attachment in the response, add opengever.document to the addable_types of tasks, added the paragraph "documents" to the task view
+  [19.02.2010, pgross]
+
+- Issue #396: Aufgabenuebersicht: Spalte Typ einfuegen
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/396/
+  Added Task-indexes: task_type
+  [03.02.2010, pgross]
+
+- AddlLocalRoles-Action: fixed bug which removed the creator role some times
+  [03.02.2010, jbaumann]
+
+- Task view: added issuer
+  [03.02.2010, jbaumann]
+
+- INSTALLATION:
+  - reindex global_solr and portal_catalog
+
+
+
+1.0a4
+-----
+
+- Fixed InvalidObjectReference problem when importing GS profile multiple times.
+  [20.01.2010, jbaumann]
+
+
+1.0a3
+-----
+
+
+1.0a2
+-----
+
+- Issue #282: Kontakte-Webservice fuer OGDS
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/282
+  [13.01.2010, jbaumann]
+
+
+1.0
+---
+
+- Issue #332: Aufgabenuebersicht, Stufe Dossier: Spalten anpassen
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/332/view
+  Added Task-indexes: date_of_completion and issuer
+  [05.01.2010, jbaumann]
+
+- Issue #329: Aufgabe: Neues Feld "Erledigungsdatum" beim Erledigen.
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/329
+  [04.01.2010, jbaumann]
+
+- Issue #296: Nummerierungskonzept umsetzen
+  [16.12.2009, jbaumann]
+
+- Issue #187: Dossier-Tabs (Erfassungs- und Bearbeitungsmodus) anpassen
+  [01.12.2009, jbaumann]
+
+- Initial release

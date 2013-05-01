@@ -1,0 +1,16 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+
+    i18n_domain="opengever.task">
+
+    <permission
+        id="opengever.task.AddTask"
+        title="opengever.task: Add task"
+        />
+
+    <permission
+        id="opengever.task.EditTask"
+        title="opengever.task: Edit task"
+        />
+
+</configure>

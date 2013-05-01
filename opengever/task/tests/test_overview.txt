@@ -1,0 +1,40 @@
+Test tabbedview_view-overview:
+==============================
+    >>> from plone.testing.z2 import Browser
+    >>> from plone.dexterity.utils import createContentInContainer
+    >>> from plone.app.testing import TEST_USER_ID, TEST_USER_NAME, TEST_USER_PASSWORD, setRoles
+	>>> import transaction
+
+	>>> portal = layer['portal']
+	>>> app = layer['app']
+	>>> request = layer['request']
+
+create some content
+    >>> browser = Browser(app)
+    >>> browser.handleErrors = False
+    >>> portal_url = portal.absolute_url()
+
+login
+    >>> browser.open('%s/login_form' % portal_url)
+    >>> browser.getControl(name='__ac_name').value = TEST_USER_NAME
+    >>> browser.getControl(name='__ac_password').value = TEST_USER_PASSWORD
+    >>> browser.getControl(name='submit').click()
+
+create a task
+    >>> setRoles(portal, TEST_USER_ID, ['Editor', 'Contributor', 'Owner'])
+
+    >>> task1 = createContentInContainer(
+    ...     portal, 'opengever.task.task', title=u'Task for forwarding',
+    ...     responsible=TEST_USER_ID, review_state='task-state-open')
+	>>> transaction.commit()
+
+browse
+    >>> browser.open('%s/addresponse' % task1.absolute_url())
+    >>> browser.getControl(name='form.widgets.text').value='Antwort'
+    >>> browser.getControl(name='form.buttons.save').click()
+
+check response
+    >>> from opengever.task.adapters import IResponseContainer
+    >>> container = IResponseContainer(task1)
+    >>> len(container)
+    1
