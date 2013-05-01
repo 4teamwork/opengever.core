@@ -50,6 +50,7 @@ setup(name='opengever.core',
       include_package_data=True,
       zip_safe=False,
       install_requires=[
+        'Pillow',
         'Plone',
         'Products.LDAPUserFolder',
         'Products.PloneLDAP',
