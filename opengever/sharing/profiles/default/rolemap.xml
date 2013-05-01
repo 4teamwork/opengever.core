@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<rolemap>
+  <roles>
+    <role name="Administrator"/>
+    <role name="Anonymous"/>
+    <role name="Authenticated"/>
+    <role name="Contributor"/>
+    <role name="Editor"/>
+    <role name="Manager"/>
+    <role name="Member"/>
+    <role name="Owner"/>
+    <role name="Reader"/>
+    <role name="Reviewer"/>
+    <role name="Publisher" />
+    <role name="Role Manager" />
+  </roles>
+  <permissions>
+    <permission name="Modify view template" acquire="False">
+      <role name="Manager"/>
+    </permission>
+  </permissions>
+</rolemap>

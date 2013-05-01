@@ -1,0 +1,124 @@
+Changelog
+=========
+
+
+2.1.1 (unreleased)
+------------------
+
+- Nothing changed yet.
+
+
+2.1 (2012-11-28)
+----------------
+
+- Dropped Plone 4.1 compatibility. Only 4.2 and up are supported.
+  [lgraf]
+
+- Adjust javscripts: Use $ instead of deprecated jq.
+  [phgross]
+
+
+2.0.4 (2012-02-27)
+------------------
+
+- Fixed the avoiding definitive lose of access implementation for users with only global roles.
+  [phgross]
+
+- Added French translations
+  [ttschanz]
+
+- Adjust the _principal_search_results wrapper,
+  so that it constrain the principal list on groups from the current client,
+  and made this functionality also configurable in the registry.
+  [phgross]
+
+- Disalbe the Administrator Role, it should not longer be displayed and configurable in the sharing view.
+  Issue #1288 Freigabeansicht:  Rollenanpassung nur fuer Mandanten user moeglich machen.
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1288
+  [phgross]
+
+- Implemented a wrapper for the _principal_search_results method,
+  which constrain the principal list to the client assigned users.
+  Issue #1288 Freigabeansicht:  Rollenanpassung nur fuer Mandanten user moeglich machen.
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1288
+  [phgross]
+
+
+2.0.3 (2011-12-20)
+------------------
+
+- Fixed bug that prevented obj security from being updated after changes in
+  the sharing tab.
+  [lgraf]
+
+
+2.0.2 (2011-12-06)
+------------------
+
+- Fixed IE bug in sharing view: Because our special needs browser can't deal with
+  shorthand tag syntax, we use explicit opening and closing span tags.
+  [lgraf]
+
+
+2.0.1 (2011-12-06)
+------------------
+
+- Fixed update_inherit method: the avoiding definitive lose of access implemenation should be done with the actual user instead of the portal owner.
+  Issue #1245 Neue Rolle einfuehren um local roles anzupassen
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1245
+  [phgross]
+
+
+2.0 (2011-11-17)
+----------------
+
+- Added integratoin and unittests
+  [eschmutz]
+
+- Added new role "Role Manager" that has permissions to delegate roles via
+  the sharing tab.
+  #1245 Neue Rolle einführen um local roles anzupassen
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1245/
+  [lgraf]
+
+- Added new events for local_roles modifications, which allows to generate journal entries after a local_role modification.
+  Issue #1242 Fuer local_roles Anpassungen Journaleintraege generieren
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1242/
+  [phgross]
+
+
+2.0a5 (2011-07-13)
+------------------
+
+- Fixed Markup
+  [ttschanz]
+
+- added sprites css class for sharing-tab and sharing view
+  [30.05.2011, elio.schmutz]
+
+2.0a4
+-----
+
+- Issue #723 Info/Sharing-Tab zeigt nicht alle Rollen
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/723
+  [jbaumann]
+
+
+2.0a3
+-----
+
+- Issue #746 "Filtern" ausblenden auf Reiter "Info"
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/746
+  [jbaumann]
+
+- Info tab: also show local roles set on the direct context.
+  [jbaumann]
+
+
+2.0a2
+-----
+
+1.0dev (unreleased)
+-------------------
+
+- Initial release

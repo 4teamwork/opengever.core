@@ -1,0 +1,25 @@
+<configure
+    xmlns:zope="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser">
+
+    <browser:resourceDirectory
+        name="opengever.sharing.resources"
+        directory="resources"
+        />
+
+    <browser:page
+        name="sharing"
+        for="*"
+        class=".sharing.OpengeverSharingView"
+        permission="plone.DelegateRoles"
+        layer="opengever.sharing.interfaces.IOpengeverSharing"
+        />
+
+    <browser:page
+        name="tabbedview_view-sharing"
+        for="*"
+        class=".sharing.SharingTab"
+        permission="zope2.View"
+        />
+
+</configure>
