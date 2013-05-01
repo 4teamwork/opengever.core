@@ -1,16 +1,14 @@
 from ftw.tabbedview.interfaces import ITabbedView
-from opengever.globalindex import model
+from opengever.core.testing import OPENGEVER_FIXTURE
 from opengever.ogds.base.interfaces import IClientConfiguration
 from opengever.ogds.base.setuphandlers import _create_example_client
 from opengever.ogds.base.setuphandlers import _create_example_user
-from opengever.ogds.base.setuphandlers import create_sql_tables
 from opengever.ogds.base.utils import create_session
 from plone.app.testing import FunctionalTesting
 from plone.app.testing import IntegrationTesting
-from plone.app.testing import PLONE_FIXTURE
 from plone.app.testing import PloneSandboxLayer
-from plone.app.testing import TEST_USER_ID, setRoles
-from plone.app.testing import applyProfile
+from plone.app.testing import TEST_USER_ID
+from plone.app.testing import setRoles
 from plone.registry.interfaces import IRegistry
 from plone.testing import Layer
 from plone.testing import zca
@@ -42,45 +40,10 @@ ANNOTATION_LAYER = AnnotationLayer()
 class TaskFunctionalLayer(PloneSandboxLayer):
     """Layer for integration tests."""
 
-    defaultBases = (PLONE_FIXTURE, )
-
-    def setUpZope(self, app, configurationContext):
-        # do not install pas plugins (doesnt work in tests)
-        from opengever.ogds.base import setuphandlers
-        setuphandlers.setup_scriptable_plugin = lambda *a, **kw: None
-
-        xmlconfig.string(
-            '<configure xmlns="http://namespaces.zope.org/zope">'
-
-            '  <include package="z3c.autoinclude" file="meta.zcml" />'
-            '  <includePlugins package="plone" />'
-            '  <includePluginsOverrides package="plone" />'
-
-            '  <include package="opengever.ogds.base" file="tests.zcml" />'
-
-            '</configure>',
-            context=configurationContext)
+    defaultBases = (OPENGEVER_FIXTURE, )
 
     def setUpPloneSite(self, portal):
-
-        applyProfile(portal, 'opengever.task:default')
-        applyProfile(portal, 'opengever.document:default')
-        applyProfile(portal, 'opengever.mail:default')
-        applyProfile(portal, 'opengever.ogds.base:default')
-        applyProfile(portal, 'ftw.tabbedview:default')
-
-        applyProfile(portal, 'ftw.contentmenu:default')
-        applyProfile(portal, 'ftw.tabbedview:default')
-        applyProfile(portal, 'opengever.ogds.base:default')
-        applyProfile(portal, 'opengever.document:default')
-        applyProfile(portal, 'opengever.dossier:default')
-        applyProfile(portal, 'opengever.inbox:default')
-        applyProfile(portal, 'opengever.task:default')
-
-        create_sql_tables()
         session = create_session()
-
-        model.Base.metadata.create_all(session.bind)
 
         # configure client ID
         registry = getUtility(IRegistry, context=portal)
@@ -121,13 +84,6 @@ class TaskFunctionalLayer(PloneSandboxLayer):
             ('og_mandant2_users', 'og_mandant2_inbox',))
 
         setRoles(portal, TEST_USER_ID, ['Manager'])
-        portal.invokeFactory('Folder', 'Members')
-        portal['Members'].invokeFactory('Folder', TEST_USER_ID)
-
-        # savepoint "support" for sqlite
-        # We need savepoint support for version retrieval with CMFEditions.
-        import zope.sqlalchemy.datamanager
-        zope.sqlalchemy.datamanager.NO_SAVEPOINT_SUPPORT = set([])
 
 
 OPENGEVER_TASK_FIXTURE = TaskFunctionalLayer()
