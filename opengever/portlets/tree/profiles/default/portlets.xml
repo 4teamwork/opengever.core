@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<portlets>
+
+ <!-- Portlet type registrations -->
+
+ <portlet
+   addview="opengever.portlets.tree.TreePortlet"
+   title="Tree portlet"
+   description=""
+   />
+
+</portlets>

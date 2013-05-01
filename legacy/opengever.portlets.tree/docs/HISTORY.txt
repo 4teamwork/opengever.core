@@ -1,0 +1,49 @@
+Changelog
+=========
+
+
+2.1.1 (unreleased)
+------------------
+
+- Nothing changed yet.
+
+
+2.1 (2012-11-28)
+----------------
+
+- Dropped Plone 4.1 compatibility. Only 4.2 and up are supported.
+  [lgraf]
+
+- Adjust javscripts: Use $ instead of deprecated jq.
+  [phgross]
+
+
+2.0 (2011-11-17)
+----------------
+
+- added test-buildout for plone 4.1
+  [eschmutz]
+
+2.0a3 (2011-08-24)
+------------------
+
+
+2.0a2
+-----
+
+
+1.0a3
+-----
+
+
+1.0a2
+-----
+
+
+1.0a1
+-----
+
+- updated metadata / changed target release to 1.0a1
+  [05.01.2010, jbaumann]
+
+- Initial release

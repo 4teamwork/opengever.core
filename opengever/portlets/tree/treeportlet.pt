@@ -1,0 +1,21 @@
+<dl class="portlet portletTreePortlet"
+    i18n:domain="opengever.portlets.tree">
+
+    <dt class="portletHeader">
+        <span class="portletTopLeft"></span>
+        <tal:b content="view/header" />
+        <span class="portletTopRight"></span>
+    </dt>
+
+    <dd class="portletItem odd">
+        <ul class="filetree">
+            <div tal:content="structure python: here.unrestrictedTraverse('tree').render(view.root_path())" /> 
+        </ul>
+    </dd>
+
+    <!--<dd class="portletFooter">
+        <span class="portletBottomLeft"></span>
+        <span class="portletBottomRight"></span>
+    </dd> -->
+
+</dl>

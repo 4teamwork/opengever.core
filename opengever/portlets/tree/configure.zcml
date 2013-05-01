@@ -1,0 +1,41 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:five="http://namespaces.zope.org/five"
+    xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+    xmlns:plone="http://namespaces.plone.org/plone"
+    xmlns:browser="http://namespaces.zope.org/browser"
+    i18n_domain="opengever.portlets.tree">
+
+    <five:registerPackage package="." initialize=".initialize" />
+
+    <browser:resourceDirectory
+        name="opengever.portlets.tree-resources"
+        directory="resources" />
+
+    <genericsetup:registerProfile
+       name="default"
+       title="opengever.portlets.tree"
+       directory="profiles/default"
+       description=""
+       provides="Products.GenericSetup.interfaces.EXTENSION"
+       />
+
+     <!-- Register the portlet -->
+
+     <!-- If the portlet has no configurable parameters, you can remove
+          the EditForm declaration in treeportlet.py and delete
+          the 'editview' attribute from this statement.
+       -->
+
+     <plone:portlet
+         name="opengever.portlets.tree.TreePortlet"
+         interface=".treeportlet.ITreePortlet"
+         assignment=".treeportlet.Assignment"
+         view_permission="zope2.View"
+         edit_permission="cmf.ManagePortal"
+         renderer=".treeportlet.Renderer"
+         addview=".treeportlet.AddForm"
+         editview=".treeportlet.EditForm"
+         />
+
+</configure>
