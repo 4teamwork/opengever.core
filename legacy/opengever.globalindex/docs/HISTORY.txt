@@ -1,0 +1,254 @@
+Changelog
+=========
+
+
+2.2 (unreleased)
+----------------
+
+- Make sure task links are always displayed for Administrators.
+  (Add og_administrator to allowed_principals).
+  [lgraf]
+
+
+2.1 (2012-11-28)
+----------------
+
+- Skip the index_task handler when removing a Plone site. Otherwise we'll
+  run into trouble because the component registry is already gone.
+  [lgraf]
+
+- Dropped Plone 4.1 compatibility. Only 4.2 and up are supported.
+  [lgraf]
+
+
+
+2.0.8 (2012-10-08)
+------------------
+
+- Implements intid-getter safer in the globalindex indexer.
+  [phgross]
+
+- Maintenance: added some fixes in the responsible_synchronisation fix methods.
+  [phgross]
+
+
+2.0.7 (2012-09-26)
+------------------
+
+- Maintenance: Added responsible synchronisation scripts.
+  [phgross]
+
+- Added automaticly cutting of too long titles (max. column size).
+  Issue #1701 Aufgabe: von GD.GDS zu DI.DIS
+  https://extranet.4teamwork.ch/extern/opengever-kanton-zug/sprint-backlog/1701/
+  [phgross]
+
+- Adjust the column size (`containing_dossier`) in the task model.
+  Issue #1693 SKA.RR: Aufgabe erstellen funktioniert nicht
+  https://extranet.4teamwork.ch/extern/opengever-kanton-zug/sprint-backlog/1693/
+  [phgross]
+
+
+2.0.6 (2012-07-31)
+------------------
+
+- Fixed index_task handler, reindex it also when a task has been moved.
+  Issue #1627 ARP: Nuemmerchen-Fehler beim Versuch, mandantenuebergr. Aufgabe abzuschliessen
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1627/
+  [phgross]
+
+
+2.0.5 (2012-06-19)
+------------------
+
+- Fix attachment-fail when downloading file with IE.
+  #1515 Mail-Anhang kann nicht geöffnet werden im Internet Explorer
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1515/
+  [eschmutz]
+
+
+2.0.4 (2012-03-28)
+------------------
+
+- Add Globalindex Maintenance View (reindex and check predecessor sync).
+  Issue #1429 Globalindex Reindex Funktionalitaet implementieren
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1429
+  [phgross]
+
+
+2.0.3 (2012-02-29)
+------------------
+
+- Rebuild report functionality, so that it works also in catalog listing.
+  Issue #1426 Test Rot 2.3: Auswahl exportieren funktioniert nicht
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1426
+  [phgross]
+
+
+2.0.2 (2012-02-27)
+------------------
+
+- Use get_css_class for globalindex task listings.
+  [jone]
+
+- Fix item expression in indexed_task_link function.
+  Issue #1412 Optimierung Mandant des Auftraggebers
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1412
+  [jone]
+
+- Made adjustments on the XLSReport: column order, translations, footer
+  Issue #1286 Aufgabenexport um Dossiertitel erweitern.
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1286
+  [phgross]
+
+- Added French translations
+  [ttschanz]
+
+- linked() helper: Use a special helper for subtasks.
+  Issue #1373 Spezielles Icon fuer Unteraufgaben.
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1373
+  [jone]
+
+- Add is_subtask column to task global index.
+  Issue #1373 Spezielles Icon fuer Unteraufgaben.
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1373
+  [jone]
+
+- Fixed tests: Added plone.app.testing to tests_require
+  [lgraf]
+
+- we prevent to raise database-error if we have a too long breadcrumb_title string by shorten the string
+  Issue #1393 og.globalindex: ORA-12899: value too large for column "OG_GI"."TASKS"."BREADCRUMB_TITLE"
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1393
+  [eschmutz]
+
+- Made Taskreporter safe if there is no orig_template.
+  [ttschanz]
+
+- Improve "indexed_task_link" tabbedview helper, so that remote-tasks have a seperate icon.
+  Issue #1300 Mandantenuebergreifende Aufgaben sollten speziell markiert werden koennen.
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1300
+  [jone]
+
+- Increased the size of the breadcrumb title form 256 to 512.
+  Issue #1393 og.globalindex: ORA-12899: value too large for column "OG_GI"."TASKS"."BREADCRUMB_TITLE"
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1393
+  [phgross]
+
+- Adjust the Task indexer: get the containing_dossier value with the indexer instead over the brain.
+  Issue #1253 Darstellung Dossiertitel bei Suchresultaten (Subdossiers, Dokumente, Aufgaben)
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1253
+  [phgross]
+
+- Added new containing_dossier column to the globalindex.
+  Issue #1253 Darstellung Dossiertitel bei Suchresultaten (Subdossiers, Dokumente, Aufgaben)
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1253
+  [phgross]
+
+- Fix task indexing bug: do not use plone_context_state for indexing workflow_state
+  since this is cached and it may not work when the workflow state has changed.
+  [jone]
+
+- Increased length of task_principals.principal column from 32 to 64
+  [lgraf]
+
+
+2.0.1 (2011-11-29)
+------------------
+
+- Fix dossier sequence number for tasks in global index.
+  [jone]
+
+
+2.0 (2011-11-17)
+----------------
+
+- Add task_type_helper, which return the translated value to the task reporting view.
+  [phgross]
+
+- Adjust translations used in the report view.
+  [phgross]
+
+- Added task_report view, which generates a excel export for the selected tasks.
+  Issue #1038 Statistiken/Auswertungen
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1038
+  [phgross]
+
+- Implemented breadcrumb tooltips that include the remote client title for
+  globally indexed tasks.
+  Issue #1023 Feedback Fokus: Aufgabenverzeichnis ergaenzen
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1023
+  [lgraf]
+
+
+2.0b7 (2011-08-24)
+------------------
+
+- Issue #1040 Mandantenuebergreifende Beteiligung: Anpassung Darstellung
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1040
+  reimplement Exposator viewlet, request parameter is not longer used
+  [phgross]
+
+- added test-buildout for plone 4.1
+  [eschmutz]
+
+2.0b6
+-----
+
+- fixed url generator in indexed_task_link, removed wrong comma
+  [pgross]
+
+2.0b5
+-----
+
+- Updated link helper for tasks/fwdings to use CSS sprites
+  [lgraf]
+
+- Made reindexing of predecessor task more robust
+  [lgraf]
+
+
+2.0b4
+-----
+
+- Added cascade=delete for successor <-> predecessor relationship of tasks
+  [lgraf]
+
+- Added "clear and rebuild task index" action to OGDS control panel
+  [lgraf]
+
+
+2.0b3
+-----
+
+- Intid fix: do not reindex if there is no intid. In this case, the
+  event will be fired again after the intid is created.
+  [jbaumann]
+
+
+2.0b2
+-----
+
+- Don't place task icon inside link for Overview > MyTasks
+  [lgraf]
+
+- Added query methods "get_task_by_path" and "get_task_by_oguid".
+  [jbaumann]
+
+
+2.0b1
+-----
+
+- Fixed icon path in global task listing helper
+
+- Fixed icon path in global task listing helper.
+  [jbaumann]
+
+
+2.0a2
+-----
+
+1.0dev (unreleased)
+-------------------
+
+- Initial release

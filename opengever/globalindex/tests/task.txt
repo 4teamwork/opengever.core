@@ -1,0 +1,39 @@
+Create a task.
+
+    >>> from opengever.globalindex.model.task import Task
+    >>> session = layer.session
+    >>> t1 = Task(1, 'm1')
+    >>> session.add(t1)
+    >>> t1
+    <Task 1@m1>
+
+Test successors when setting predecessor.
+
+    >>> t2 = Task(2, 'm1')
+    >>> session.add(t2)
+    >>> t2.predecessor = t1
+    >>> t2.predecessor
+    <Task 1@m1>
+    >>> t3 = Task(3, 'm1')
+    >>> session.add(t3)
+    >>> t3.predecessor = t1
+    >>> t3.predecessor
+    <Task 1@m1>
+    >>> t1.successors
+    [<Task 2@m1>, <Task 3@m1>]
+    >>> session.commit()
+
+Task IDs must be unique.
+
+    >>> t1 =  Task(1, 'm1')
+    >>> session.add(t1)
+    >>> session.commit()
+    Traceback (most recent call last):
+    ...
+    IntegrityError: (IntegrityError) columns client_id, int_id are not unique...
+    >>> session.rollback()
+
+Fetch a task by int_id and client_id.
+
+    >>> session.query(Task).filter(Task.client_id=='m1').filter(Task.int_id==1).one()
+    <Task 1@m1>

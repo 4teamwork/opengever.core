@@ -1,0 +1,22 @@
+
+    >>> from opengever.globalindex.model.task import Task
+    >>> from opengever.globalindex.model.task import TaskPrincipal
+    >>> session = layer.session
+    >>> task = Task(10, 'm1')
+    >>> session.add(task)
+    >>> task
+    <Task 10@m1>
+
+    >>> task.principals = [u'hugo.boss', u'peter.muster']
+    >>> session.commit()
+
+    >>> task2 = session.query(Task).one()
+    >>> task2
+    <Task 10@m1>
+
+    >>> task2.principals
+    [u'hugo.boss', u'peter.muster']
+
+
+    >>> session.query(TaskPrincipal).all()
+    [<TaskPrincipal hugo.boss for <Task 10@m1>>, <TaskPrincipal peter.muster for <Task 10@m1>>]

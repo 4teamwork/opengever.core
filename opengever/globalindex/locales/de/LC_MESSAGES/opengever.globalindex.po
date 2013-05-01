@@ -1,0 +1,82 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2012-02-22 10:55+0000\n"
+"PO-Revision-Date: 2012-02-22 11:55+0100\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0\n"
+"Preferred-Encodings: utf-8 latin1\n"
+"Domain: DOMAIN\n"
+
+#: ./opengever/globalindex/browser/report.py:93
+msgid "Could not generate the report"
+msgstr "Aufgaben Export konnte nicht erstellt werden."
+
+#: ./opengever/globalindex/profiles/default/actions.xml
+msgid "Export selection"
+msgstr "Auswahl exportieren"
+
+#: ./opengever/globalindex/browser/cleartasks.py:46
+msgid "Global task index has been cleared (${cleared}) and rebuilt (${rebuilt})"
+msgstr ""
+
+#. Default: "You have not selected any Items"
+#: ./opengever/globalindex/browser/report.py:45
+msgid "error_no_items"
+msgstr "Sie haben keine Objekte ausgewählt."
+
+#. Default: "Forwarding"
+#: ./opengever/globalindex/browser/report.py:22
+msgid "forwarding_task_type"
+msgstr ""
+
+#: ./opengever/globalindex/browser/report.py:76
+msgid "label_client_id"
+msgstr "Mandant"
+
+#: ./opengever/globalindex/browser/report.py:67
+msgid "label_completed"
+msgstr "Erledigt am"
+
+#: ./opengever/globalindex/browser/report.py:65
+msgid "label_deadline"
+msgstr "Frist"
+
+#: ./opengever/globalindex/browser/report.py:69
+msgid "label_dossier_title"
+msgstr "Dossier Titel"
+
+#: ./opengever/globalindex/browser/report.py:70
+msgid "label_issuer"
+msgstr "Auftraggeber"
+
+#: ./opengever/globalindex/browser/report.py:72
+msgid "label_responsible"
+msgstr "Auftragnehmer"
+
+#: ./opengever/globalindex/browser/report.py:77
+msgid "label_sequence_number"
+msgstr "Laufnummer"
+
+#: ./opengever/globalindex/browser/report.py:61
+msgid "label_task_title"
+msgstr "Aufgabentitel"
+
+#: ./opengever/globalindex/browser/report.py:74
+msgid "label_task_type"
+msgstr "Auftragstyp"
+
+#. Default: "Tasks"
+#: ./opengever/globalindex/browser/report.py:86
+msgid "label_tasks"
+msgstr "Tasks"
+
+#: ./opengever/globalindex/browser/report.py:62
+msgid "review_state"
+msgstr "Status"
+
+
