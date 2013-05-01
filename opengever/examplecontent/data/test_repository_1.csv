@@ -1,0 +1,42 @@
+_path,_type,reference_number_prefix,effective_title,description,classification,privacy_layer,public_trial,retention_period,retention_period_annotation,archival_value,archival_value_annotation,custody_period,valid_from,valid_until,referenced_activity,location
+/ordnungssystem/fuehrung,opengever.repository.repositoryfolder,1,Führung,,unprotected,privacy_layer_no,private,10,,unchecked,,30,2010-10-01,,,
+/ordnungssystem/fuehrung/strategie-und-planung,opengever.repository.repositoryfolder,1,Strategie und Planung,,unprotected,privacy_layer_no,private,10,,archival worthy,,30,2010-10-01,,,
+/ordnungssystem/fuehrung/berichtwesen,opengever.repository.repositoryfolder,2,Berichtwesen,,unprotected,privacy_layer_no,private,10,,archival worthy,,30,2010-10-01,,,
+/ordnungssystem/fuehrung/rechtliche-grundlagen,opengever.repository.repositoryfolder,3,Rechtliche Grundlagen,,unprotected,privacy_layer_no,private,10,,archival worthy,,30,2010-10-01,,,
+/ordnungssystem/fuehrung/interne-organisation,opengever.repository.repositoryfolder,4,Interne Organisation,,unprotected,privacy_layer_no,private,10,,archival worthy,,30,2010-10-01,,,
+/ordnungssystem/fuehrung/institutionelle-beziehungen,opengever.repository.repositoryfolder,5,Institutionelle Beziehungen,,confidential,privacy_layer_no,private,10,,archival worthy,,30,2010-10-01,,,
+/ordnungssystem/fuehrung/kommunikation-und-oeffentlichkeitsarbeit,opengever.repository.repositoryfolder,6,Kommunikation und Öffentlichkeitsarbeit,,unprotected,privacy_layer_no,private,10,,unchecked,,30,2010-10-01
+/ordnungssystem/fuehrung/stellungnahmen-mitberichte-zuhanden-dritter,opengever.repository.repositoryfolder,7,Stellungnahmen... Mitberichte zuhanden Dritter,,unprotected,privacy_layer_no,private,10,,unchecked,,30,2010-10-01
+/ordnungssystem/ressourcen,opengever.repository.repositoryfolder,2,Ressourcen,,unprotected,privacy_layer_no,private,10,,unchecked,,30,2010-10-01
+/ordnungssystem/ressourcen/personal,opengever.repository.repositoryfolder,1,Personal,,unprotected,privacy_layer_no,private,10,,unchecked,,30,2010-10-01
+/ordnungssystem/ressourcen/personal/allgemeines-und-uebergreifendes,opengever.repository.repositoryfolder,1,Allgemeines und Übergreifendes,,unprotected,privacy_layer_no,private,10,,unchecked,,30,2010-10-01
+/ordnungssystem/ressourcen/personal/personalplanung-und-entwicklung,opengever.repository.repositoryfolder,2,Personalplanung und -entwicklung,,unprotected,privacy_layer_no,private,10,,archival worthy,,30,2010-10-01
+/ordnungssystem/ressourcen/personal/personaldossiers,opengever.repository.repositoryfolder,3,Personaldossiers,,confidential,privacy_layer_yes,private,10,,archival worthy,,100,2010-10-01
+/ordnungssystem/ressourcen/personal/interne-weiterbildung-und-anlaesse,opengever.repository.repositoryfolder,4,Interne Weiterbildung und Anlässe,,unprotected,privacy_layer_no,private,10,,archival worthy,,30,2010-10-01
+/ordnungssystem/ressourcen/lehrlinge-und-praktika,opengever.repository.repositoryfolder,2,Lehrlinge und Praktika,,unprotected,privacy_layer_no,private,10,,unchecked,,30,2010-10-01
+/ordnungssystem/ressourcen/finanzen,opengever.repository.repositoryfolder,3,Finanzen,,unprotected,privacy_layer_yes,private,10,,unchecked,,30,2010-10-01
+/ordnungssystem/ressourcen/finanzen/allgemeines-und-uebergreifendes,opengever.repository.repositoryfolder,1,Allgemeines und Übergreifendes,,unprotected,privacy_layer_no,private,10,,unchecked,,30,2010-10-01
+/ordnungssystem/ressourcen/finanzen/budget,opengever.repository.repositoryfolder,2,Budget,,unprotected,privacy_layer_no,private,10,,unchecked,,30,2010-10-01
+/ordnungssystem/ressourcen/finanzen/nachtragskredit,opengever.repository.repositoryfolder,3,Nachtragskredit,,unprotected,privacy_layer_no,private,10,,unchecked,,30,2010-10-01
+/ordnungssystem/ressourcen/finanzen/jahresrechnung,opengever.repository.repositoryfolder,4,Jahresrechnung,,unprotected,privacy_layer_no,private,10,,unchecked,,30,2010-10-01
+/ordnungssystem/ressourcen/infrastruktur,opengever.repository.repositoryfolder,4,Infrastruktur,,unprotected,privacy_layer_no,private,10,,unchecked,,30,2010-10-01
+/ordnungssystem/ressourcen/infrastruktur/allgemeines-und-uebergreifendes,opengever.repository.repositoryfolder,1,Allgemeines und Übergreifendes,,unprotected,privacy_layer_no,private,10,,unchecked,,30,2010-10-01
+/ordnungssystem/ressourcen/infrastruktur/material-und-geraetebeschaffung,opengever.repository.repositoryfolder,2,Material- und Gerätebeschaffung,,unprotected,privacy_layer_no,private,10,,unchecked,,30,2010-10-01
+/ordnungssystem/ressourcen/infrastruktur/mobiliar,opengever.repository.repositoryfolder,3,Mobiliar,,unprotected,privacy_layer_no,private,10,,unchecked,,30,2010-10-01
+/ordnungssystem/ressourcen/infrastruktur/gebaeude-und-raumbewirtschaftung,opengever.repository.repositoryfolder,4,Gebäude- und Raumbewirtschaftung,,unprotected,privacy_layer_no,private,10,,unchecked,,30,2010-10-01
+/ordnungssystem/ressourcen/infrastruktur/sicherheit,opengever.repository.repositoryfolder,5,Sicherheit,,unprotected,privacy_layer_no,private,10,,unchecked,,30,2010-10-01
+/ordnungssystem/ressourcen/informatik,opengever.repository.repositoryfolder,5,Informatik,,unprotected,privacy_layer_no,private,10,,unchecked,,30,2010-10-01
+/ordnungssystem/ressourcen/administration,opengever.repository.repositoryfolder,6,Administration,,unprotected,privacy_layer_no,private,10,,not archival worthy,,30,2010-10-01
+/ordnungssystem/kernbereich-1,opengever.repository.repositoryfolder,3,Kernbereich 1,,unprotected,privacy_layer_no,private,10,,unchecked,,30,2010-10-01
+/ordnungssystem/kernbereich-1/kernbereich-1a,opengever.repository.repositoryfolder,1,Kernbereich 1a,,unprotected,privacy_layer_no,private,10,,archival worthy,,30,2010-10-01
+/ordnungssystem/kernbereich-1/kernbereich-1b,opengever.repository.repositoryfolder,2,Kernbereich 1b,,unprotected,privacy_layer_no,private,10,,archival worthy with sampling,,30,2010-10-01
+/ordnungssystem/kernbereich-2,opengever.repository.repositoryfolder,4,Kernbereich 2,,confidential,privacy_layer_yes,private,10,,unchecked,,100,2010-10-01
+/ordnungssystem/kernbereich-2/kernbereich-2a,opengever.repository.repositoryfolder,1,Kernbereich 2a,,confidential,privacy_layer_yes,private,10,,archival worthy,,100,2010-10-01
+/ordnungssystem/kernbereich-2/kernbereich-2b,opengever.repository.repositoryfolder,2,Kernbereich 2b,,confidential,privacy_layer_yes,private,10,,archival worthy with sampling,,100,2010-10-01
+/ordnungssystem/kernbereich-3,opengever.repository.repositoryfolder,5,Kernbereich 3,,unprotected,privacy_layer_no,private,10,,unchecked,,30,2010-10-01
+/ordnungssystem/kernbereich-3/kernbereich-3a,opengever.repository.repositoryfolder,1,Kernbereich 3a,,unprotected,privacy_layer_no,private,10,,archival worthy with sampling,,30,2010-10-01
+/ordnungssystem/kernbereich-3/kernbereich-3b,opengever.repository.repositoryfolder,2,Kernbereich 3b,,unprotected,privacy_layer_no,private,10,,not archival worthy,,30,2010-10-01
+/ordnungssystem/statistiken,opengever.repository.repositoryfolder,6,Statistiken,,unprotected,privacy_layer_no,private,10,,archival worthy,,30,2010-10-01
+/ordnungssystem/statistiken/kernbereich-1,opengever.repository.repositoryfolder,1,Kernbereich 1,,unprotected,privacy_layer_no,private,10,,archival worthy,,30,2010-10-01
+/ordnungssystem/statistiken/kernbereich-2,opengever.repository.repositoryfolder,2,Kernbereich 2,,unprotected,privacy_layer_no,private,10,,archival worthy,,30,2010-10-01
+/ordnungssystem/statistiken/kernbereich-3,opengever.repository.repositoryfolder,3,Kernbereich 3,,unprotected,privacy_layer_no,private,10,,archival worthy,,30,2010-10-01

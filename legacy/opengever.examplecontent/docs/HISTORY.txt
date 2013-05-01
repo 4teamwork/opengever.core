@@ -1,0 +1,145 @@
+Changelog
+=========
+
+
+2.1.1 (unreleased)
+------------------
+
+- Nothing changed yet.
+
+
+2.1 (2012-11-30)
+----------------
+
+- Dropped Plone 4.1 compatibility. Only 4.2 and up are supported.
+  [lgraf]
+
+
+
+2.0.1 (2011-11-17)
+------------------
+
+- Fixed changelog
+
+
+2.0 (2011-11-17)
+----------------
+
+- Adjust the ldap configuration: defaut role for ldap_users is Authenticated instead of Member.
+  Because only users of this clients should have the Member role.
+  Issue #1269 Ordnungspositionen fuer alle Mitglieder eines Mandanten sichtbar machen
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1269/
+  [phgross]
+
+
+2.0b7
+-----
+
+- Registering custom import steps in ZCML instead of import_steps.xml (deprecated)
+  [lgraf]
+
+
+2.0b6
+-----
+
+- Removed also task-templatefolder
+  [phgross]
+
+- Removed task-template objects from various.csv since they currently break setup
+  because field validation for 'task_type' fails
+  [lgraf]
+
+- added special user (ogadmin) in to ogds, for correct contstraints of standard content
+  [phgross]
+
+- Fixed some errors in example repository data (missing custody_period, invalid date)
+  [lgraf]
+
+- Changed deprecated classification value 'selected' to 'unchecked' in example repository
+  [lgraf]
+
+- Adjusted dates to match international date format now used in transmogrify.dexterity
+  [lgraf]
+
+
+2.0b5
+-----
+
+- removed mailsettings which are configured now in opengever.setup
+  [ttschanz]
+
+
+2.0b4
+-----
+
+- Changed language to de-ch in setup configuration
+  [jbaumann]
+
+
+2.0b3
+-----
+- removed unused templates, because they are moved to opengever.setup
+  [phgross]
+
+2.0b2
+-----
+
+- moved templates from opengever.examplecontent to opengever.setup
+  [Philippe Gross]
+
+- Fixed name of transmogrify.dexterity.schemaupdater (which was renamed)
+  [jbaumann]
+
+
+2.0b1
+-----
+
+- added schema for ldap_plugin.xml
+  [Philippe Gross]
+
+
+1.0a3
+-----
+
+- Changed configuration for develeopment profile according to deadlock bugfix
+  [20.07.2010, jbaumann]
+
+- Issue #505 Weiterleiten einer Aufgabe aus Eingangskorb Mandant 3 nach Mandant 1 geht nicht
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/505
+  Added new field value inbox_group to inbox in generic setup
+  [09.04.2010, jbaumann]
+
+- Issue #514 Reiter "Eingangskorb" darf nur angezeigt werden, wenn der angemeldete Benutzer auf den Eingangskorb zugreifen kann
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/514/
+  [06.04.2010, jbaumann]
+
+- Fixed bug when running opengever.examplecontent's GS profile "journal" multiple times
+  [08.03.2010, jbaumann]
+
+- Issue #457 Ordnungsposition: Werte unter dem Reiter "Lebenszyklus" den Vorgaben des csv anpassen
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/457
+  [22.02.2010, jbaumann]
+
+
+1.0a2
+-----
+
+- Issue #418: Dossier: Federfuehrung verwendet noch nicht cortex/octopussy...
+  [22.01.2010, jbaumann]
+
+
+1.0a1
+-----
+
+- Issue #386: @@home-View erstellen
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/386/
+  Content creator: support for List-fields
+  minor-ogds-clients GS-profile: added default values for new fields
+  [13.01.2010, jbaumann]
+
+- Issue #353: Example-Content setup profiles aufsplitten
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/353
+  Changed users csv: added "groups" column. Reimplemented pas importer.
+  [11.01.2010, jbaumann]
+
+- Initial release

@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<site>
+    <property name="description"></property>
+    <property name="validate_email" type="boolean">True</property>
+    <property name="email_charset" type="string">utf-8</property>
+</site>

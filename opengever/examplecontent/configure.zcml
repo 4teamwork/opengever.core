@@ -1,0 +1,47 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:five="http://namespaces.zope.org/five"
+    xmlns:transmogrifier="http://namespaces.plone.org/transmogrifier"
+    i18n_domain="opengever.examplecontent">
+
+  <!-- Include configuration for dependencies listed in setup.py -->
+  <include package="z3c.autoinclude" file="meta.zcml" />
+  <includeDependencies package="." />
+
+  <include file="profiles.zcml" />
+
+  <transmogrifier:registerConfig
+      name="opengever.examplecontent.repository"
+      title="Opengever ExampleContent Repositorysystem Import"
+      description="Pipeline configuration for Opengever Examplecontent import"
+      configuration="cfgs/repository.cfg"
+      />
+
+  <transmogrifier:registerConfig
+      name="opengever.examplecontent.various"
+      title="Opengever ExampleContent various Import"
+      description="Pipeline configuration for Opengever Examplecontent import"
+      configuration="cfgs/various.cfg"
+      />
+
+  <transmogrifier:registerConfig
+      name="opengever.examplecontent.users"
+      title="Opengever ExampleContent Users Import"
+      description="Pipeline configuration for Opengever Examplecontent import"
+      configuration="cfgs/users.cfg"
+      />
+
+  <transmogrifier:registerConfig
+      name="opengever.examplecontent.contacts"
+      title="Opengever ExampleContent Contacts Import"
+      description="Pipeline configuration for Opengever Examplecontent import"
+      configuration="cfgs/contacts.cfg"
+      />
+
+  <!-- sections -->
+  <utility
+      component=".jsonsource.JSONSourceSection"
+      name="opengever.examplecontent.jsonsource.jsonsourcesection"
+      />
+
+</configure>

@@ -1,0 +1,5 @@
+_path,_type,inbox_group,title,responsible,responsible_client,issuer,deadline,task_type,transitions
+/ordnungssystem/fuehrung/kommunikation-und-oeffentlichkeitsarbeit/dossier-1,opengever.dossier.businesscasedossier,,Hugo's Dossier,ogadmin,
+/ordnungssystem/fuehrung/kommunikation-und-oeffentlichkeitsarbeit/dossier-1/dossier-2,opengever.dossier.businesscasedossier,,Unterteilung in ein Subdossier,ogadmin,
+/ordnungssystem/fuehrung/kommunikation-und-oeffentlichkeitsarbeit/dossier-1/document-1,opengever.document.document,,Ein kleines Testdocument,,
+
