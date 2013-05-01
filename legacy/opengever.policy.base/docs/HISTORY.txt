@@ -1,0 +1,115 @@
+Changelog
+=========
+
+
+2.3.1 (unreleased)
+------------------
+
+- Nothing changed yet.
+
+
+2.3 (2012-11-28)
+----------------
+
+- Dropped Plone 4.1 compatibility. Only 4.2 and up are supported.
+  [lgraf]
+
+- Removed dependency to og.upgrade, since ftw.upgrade it's no longer been used.
+  [phgross]
+
+
+2.2 (2012-06-23)
+----------------
+
+- Bumped profile version in metadata.xml to 2400
+  [lgraf]
+
+
+2.1 (2012-06-19)
+----------------
+
+- Modify logout action url expression to activate the logout overlay.
+  Issue #1501 Warnung "Bitte Dokumente einchecken"
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1501/
+
+- Adjust the application_title form GEVER to Mandant for zug clients.
+  Issue #1555 Bei der einfachen Suche sollte es heissen "Mandant durchsuchen", nicht "Gever durchsuchen".
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1555
+  [phgross]
+
+- #1154 Umstellung OpenGever in GEVER
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1154
+  Updated application_title Gever with GEVER
+  [eschmutz]
+
+
+2.0.2 (2012-02-27)
+------------------
+
+- Re-enabled folderContents action for users with the right permission
+  [lgraf]
+
+
+2.0.1 (2011-12-06)
+------------------
+
+- Bumped profile version in metadata.xml to 2200 for 2.2 release
+  [lgraf]
+
+
+2.0 (2011-11-17)
+----------------
+
+- Issue #17 Suchtext fuer Suchportlet muss einfacher angepasst werden koennen
+  https://extranet.4teamwork.ch/projects/verein-plonegov/tracker-verein-plonegov.ch/17
+  Added setuphandler for new search-text handling to set the correct text
+  [eschmutz]
+
+- Changed default visibility for `logout` action to True
+  [lgraf]
+
+- Bumped profile version in metadata.xml to 2101
+  [lgraf]
+
+
+2.0a6
+-----
+
+- Added GS profile dependencies on p.formwidget.autocomplete and p.f.contenttree
+  [lgraf]
+
+
+2.0a5
+-----
+
+- Issue #1053 Dokumentattribut "Papierform" begrifflich schaerfen
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1053/
+  increase the versionnumber for upgradesteps in opengever.upgrade to 2002 (2.0.3 release)
+  [phgross]
+
+
+2.0a4
+-----
+
+- Added opengever.upgrade as a dependency in setup.py
+  [lgraf]
+
+- Bumped profile version to 2002 to trigger upgrade steps for rebuilding SearchableText index
+  [lgraf]
+
+
+2.0a3
+-----
+
+- Switched to izug.basetheme package.
+  [jbaumann]
+
+
+2.0a2
+-----
+
+
+1.0
+---
+
+- Initial release

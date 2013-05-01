@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<import-steps>
+
+ <import-step id="opengever-policy-application-title"
+              version="20111104"
+              handler="opengever.policy.base.setuphandlers.set_application_title"
+              title="Set the application-title in portalregistry">
+    Set the application title (used in the live search box)
+ </import-step>
+
+</import-steps>

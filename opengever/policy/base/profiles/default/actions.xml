@@ -1,0 +1,123 @@
+<?xml version="1.0"?>
+<object name="portal_actions" meta_type="Plone Actions Tool"
+        xmlns:i18n="http://xml.zope.org/namespaces/i18n">
+
+    <!-- document actions -->
+    <object name="document_actions" meta_type="CMF Action Category">
+
+        <object name="watch" meta_type="CMF Action">
+            <property name="visible">False</property>
+        </object>
+
+        <object name="addtofavorites" meta_type="CMF Action">
+            <property name="visible">False</property>
+        </object>
+
+    </object>
+
+
+    <!-- object -->
+    <object name="object" meta_type="CMF Action Category">
+
+        <object name="local_roles" meta_type="CMF Action">
+            <property name="visible">False</property>
+        </object>
+
+        <object name="folderContents" meta_type="CMF Action">
+            <property name="permissions">
+                <element value="List folder contents"/>
+            </property>
+        </object>
+
+    </object>
+
+
+    <!-- user -->
+    <object name="user" meta_type="CMF Action Category">
+
+        <object name="dashboard" meta_type="CMF Action" i18n:domain="plone">
+            <property name="title" i18n:translate="">Dashboard</property>
+            <property name="description" i18n:translate=""></property>
+            <property name="url_expr">string:${portal_url}/dashboard</property>
+            <property name="link_target"></property>
+            <property name="icon_expr"></property>
+            <property name="available_expr">python:member is not None</property>
+            <property name="permissions">
+                <element value="Portlets: Manage own portlets"/>
+            </property>
+            <property name="visible">False</property>
+        </object>
+
+        <object name="preferences" meta_type="CMF Action" i18n:domain="plone">
+            <property name="title" i18n:translate="">Preferences</property>
+            <property name="description" i18n:translate=""></property>
+            <property
+                name="url_expr">string:${globals_view/navigationRootUrl}/@@personal-preferences</property>
+            <property name="link_target"></property>
+            <property name="icon_expr"></property>
+            <property name="available_expr">python:member is not None</property>
+            <property name="permissions">
+                <element value="View"/>
+            </property>
+            <property name="visible">False</property>
+        </object>
+
+        <object name="plone_setup" meta_type="CMF Action" i18n:domain="plone">
+            <property name="title" i18n:translate="">Site Setup</property>
+            <property name="description" i18n:translate=""></property>
+            <property
+                name="url_expr">string:${portal_url}/plone_control_panel</property>
+            <property name="link_target"></property>
+            <property name="icon_expr"></property>
+            <property name="available_expr"></property>
+            <property name="permissions">
+                <element value="Manage portal"/>
+            </property>
+            <property name="visible">True</property>
+        </object>
+
+        <object name="login" meta_type="CMF Action" i18n:domain="plone">
+            <property name="title" i18n:translate="">Log in</property>
+            <property name="description" i18n:translate=""></property>
+            <property
+                name="url_expr">string:${globals_view/navigationRootUrl}/login_form</property>
+            <property name="link_target"></property>
+            <property name="icon_expr"></property>
+            <property name="available_expr">python:member is None</property>
+            <property name="permissions">
+                <element value="View"/>
+            </property>
+            <property name="visible">True</property>
+        </object>
+
+        <object name="join" meta_type="CMF Action" i18n:domain="plone">
+            <property name="title" i18n:translate="">Register</property>
+            <property name="description" i18n:translate=""></property>
+            <property
+                name="url_expr">string:${globals_view/navigationRootUrl}/@@register</property>
+            <property name="link_target"></property>
+            <property name="icon_expr"></property>
+            <property name="available_expr">python:member is None</property>
+            <property name="permissions">
+                <element value="Add portal member"/>
+            </property>
+            <property name="visible">False</property>
+        </object>
+
+        <object name="logout" meta_type="CMF Action" i18n:domain="plone">
+            <property name="title" i18n:translate="">Log out</property>
+            <property name="description" i18n:translate=""></property>
+            <property
+                name="url_expr">string:${globals_view/navigationRootUrl}/logout_overlay</property>
+            <property name="link_target"></property>
+            <property name="icon_expr"></property>
+            <property name="available_expr">python:member is not None</property>
+            <property name="permissions">
+                <element value="View"/>
+            </property>
+            <property name="visible">True</property>
+        </object>
+
+    </object>
+
+</object>
