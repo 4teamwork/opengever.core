@@ -1,14 +1,15 @@
-from opengever.ogds.base.setuphandlers import create_sql_tables
+from opengever.core.testing import truncate_sql_tables
+from opengever.globalindex import model
 from opengever.ogds.base.setuphandlers import _create_example_client
 from opengever.ogds.base.setuphandlers import _create_example_user
-from plone.app.testing import TEST_USER_ID, SITE_OWNER_NAME, setRoles
+from opengever.ogds.base.setuphandlers import create_sql_tables
 from opengever.ogds.base.utils import create_session
-from plone.app.testing import applyProfile
 from plone.app.testing import FunctionalTesting
-from plone.app.testing import PloneSandboxLayer
 from plone.app.testing import PLONE_FIXTURE
+from plone.app.testing import PloneSandboxLayer
+from plone.app.testing import TEST_USER_ID, SITE_OWNER_NAME, setRoles
+from plone.app.testing import applyProfile
 from zope.configuration import xmlconfig
-from opengever.globalindex import model
 
 
 class TaskTemplatesFunctionalLayer(PloneSandboxLayer):
@@ -84,6 +85,10 @@ class TaskTemplatesFunctionalLayer(PloneSandboxLayer):
         setRoles(portal, TEST_USER_ID, ['Manager'])
         portal.invokeFactory('Folder', 'Members')
         portal['Members'].invokeFactory('Folder', TEST_USER_ID)
+
+    def tearDown(self):
+        super(TaskTemplatesFunctionalLayer, self).tearDown()
+        truncate_sql_tables()
 
 
 OPENGEVER_TASKTEMPLATES_FIXTURE = TaskTemplatesFunctionalLayer()

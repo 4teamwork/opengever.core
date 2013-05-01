@@ -1,3 +1,4 @@
+from opengever.core.testing import truncate_sql_tables
 from opengever.globalindex import model
 from opengever.ogds.base.setuphandlers import _create_example_client
 from opengever.ogds.base.setuphandlers import _create_example_user
@@ -66,6 +67,11 @@ class OpengeverSharingIntegrationLayer(PloneSandboxLayer):
         setRoles(
             portal,
             TEST_USER_ID, ['Manager', 'Contributor', 'Editor'])
+
+    def tearDown(self):
+        super(OpengeverSharingIntegrationLayer, self).tearDown()
+        truncate_sql_tables()
+
 
 OPENGEVER_SHARING_FIXTURE = OpengeverSharingIntegrationLayer()
 OPENGEVER_SHARING_INTEGRATION_TESTING = IntegrationTesting(

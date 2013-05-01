@@ -1,5 +1,5 @@
+from opengever.core.testing import truncate_sql_tables
 from opengever.globalindex import model as task_model
-from opengever.ogds.base.setuphandlers import MODELS
 from opengever.ogds.base.setuphandlers import _create_example_client
 from opengever.ogds.base.setuphandlers import _create_example_user
 from opengever.ogds.base.setuphandlers import create_sql_tables
@@ -80,11 +80,10 @@ class MailIntegrationLayer(PloneSandboxLayer):
         setRoles(portal, TEST_USER_ID, ['Member', 'Contributor', 'Editor'])
         login(portal, 'mail-test')
 
-    def tearDownPloneSite(self, portal):
-        session = create_session()
-        for model in MODELS:
-            getattr(model, 'metadata').drop_all(session.bind)
-        getattr(task_model.Base, 'metadata').drop_all(session.bind)
+    def tearDown(self):
+        super(MailIntegrationLayer, self).tearDown()
+        truncate_sql_tables()
+
 
 OPENGEVER_MAIL_FIXTURE = MailIntegrationLayer()
 OPENGEVER_MAIL_INTEGRATION_TESTING = IntegrationTesting(

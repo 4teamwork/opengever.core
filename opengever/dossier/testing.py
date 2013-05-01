@@ -1,13 +1,14 @@
+from opengever.core.testing import truncate_sql_tables
 from opengever.globalindex import model as task_model
 from opengever.ogds.base.interfaces import IClientConfiguration
-from opengever.ogds.base.setuphandlers import create_sql_tables, MODELS
 from opengever.ogds.base.setuphandlers import _create_example_client
 from opengever.ogds.base.setuphandlers import _create_example_user
+from opengever.ogds.base.setuphandlers import create_sql_tables
 from opengever.ogds.base.utils import create_session
-from plone.app.testing import applyProfile
 from plone.app.testing import IntegrationTesting
-from plone.app.testing import PloneSandboxLayer
 from plone.app.testing import PLONE_FIXTURE
+from plone.app.testing import PloneSandboxLayer
+from plone.app.testing import applyProfile
 from plone.app.testing.interfaces import SITE_OWNER_NAME
 from plone.registry.interfaces import IRegistry
 from zope.component import getUtility
@@ -92,11 +93,9 @@ class DossierFunctionalLayer(PloneSandboxLayer):
         gsm = getGlobalSiteManager()
         gsm.unregisterHandler(subscribers.prevent_deletion)
 
-    def tearDownPloneSite(self, portal):
-        session = create_session()
-        for model in MODELS:
-            getattr(model, 'metadata').drop_all(session.bind)
-        getattr(task_model.Base, 'metadata').drop_all(session.bind)
+    def tearDown(self):
+        super(DossierFunctionalLayer, self).tearDown()
+        truncate_sql_tables()
 
 OPENGEVER_DOSSIER_FIXTURE = DossierFunctionalLayer()
 OPENGEVER_DOSSIER_INTEGRATION_TESTING = IntegrationTesting(

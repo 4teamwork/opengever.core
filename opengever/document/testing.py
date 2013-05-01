@@ -1,4 +1,5 @@
 from opengever.core.testing import OPENGEVER_FIXTURE
+from opengever.core.testing import truncate_sql_tables
 from opengever.ogds.base.setuphandlers import _create_example_client
 from opengever.ogds.base.setuphandlers import _create_example_user
 from opengever.ogds.base.utils import create_session
@@ -55,6 +56,10 @@ class DocumentLayer(PloneSandboxLayer):
         fti.schema = 'opengever.document.document.IDocumentSchema'
         portal.portal_types._setObject('BaseDocumentFTI', fti)
         register(fti)
+
+    def tearDown(self):
+        super(DocumentLayer, self).tearDown()
+        truncate_sql_tables()
 
 
 OPENGEVER_DOCUMENT_FIXTURE = DocumentLayer()

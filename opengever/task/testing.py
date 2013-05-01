@@ -1,5 +1,6 @@
 from ftw.tabbedview.interfaces import ITabbedView
 from opengever.core.testing import OPENGEVER_FIXTURE
+from opengever.core.testing import truncate_sql_tables
 from opengever.ogds.base.interfaces import IClientConfiguration
 from opengever.ogds.base.setuphandlers import _create_example_client
 from opengever.ogds.base.setuphandlers import _create_example_user
@@ -84,6 +85,10 @@ class TaskFunctionalLayer(PloneSandboxLayer):
             ('og_mandant2_users', 'og_mandant2_inbox',))
 
         setRoles(portal, TEST_USER_ID, ['Manager'])
+
+    def tearDown(self):
+        super(TaskFunctionalLayer, self).tearDown()
+        truncate_sql_tables()
 
 
 OPENGEVER_TASK_FIXTURE = TaskFunctionalLayer()

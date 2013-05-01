@@ -2,6 +2,7 @@ from collective.transmogrifier import transmogrifier
 from opengever.globalindex import model
 from opengever.ogds.base.setuphandlers import create_sql_tables
 from opengever.ogds.base.utils import create_session
+from opengever.ogds.models import BASE
 from plone.app.testing import FunctionalTesting
 from plone.app.testing import IntegrationTesting
 from plone.app.testing import PLONE_FIXTURE
@@ -30,6 +31,16 @@ def setup_sql_tables():
     # We need savepoint support for version retrieval with CMFEditions.
     if 'sqlite' in datamanager.NO_SAVEPOINT_SUPPORT:
         datamanager.NO_SAVEPOINT_SUPPORT.remove('sqlite')
+
+
+def truncate_sql_tables():
+    tables = BASE.metadata.tables.values() + \
+        model.Base.metadata.tables.values()
+
+    session = create_session()
+
+    for table in tables:
+        session.execute(table.delete())
 
 
 class OpengeverFixture(PloneSandboxLayer):

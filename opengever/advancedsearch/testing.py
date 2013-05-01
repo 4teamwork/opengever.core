@@ -1,4 +1,5 @@
 from opengever.core.testing import OPENGEVER_FIXTURE
+from opengever.core.testing import truncate_sql_tables
 from opengever.ogds.base.interfaces import IClientConfiguration
 from opengever.ogds.base.setuphandlers import _create_example_client, _create_example_user
 from opengever.ogds.base.utils import create_session
@@ -40,6 +41,10 @@ class BaseLayer(PloneSandboxLayer):
 
         # browser tester roles
         setRoles(portal, TEST_USER_ID, ['Member', 'Contributor', 'Manager'])
+
+    def tearDown(self):
+        super(BaseLayer, self).tearDown()
+        truncate_sql_tables()
 
 
 OPENGEVER_ADV_SEARCH_FIXTURE = BaseLayer()

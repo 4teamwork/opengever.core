@@ -1,14 +1,15 @@
-from opengever.ogds.base.setuphandlers import create_sql_tables
+from opengever.core.testing import truncate_sql_tables
+from opengever.globalindex import model
 from opengever.ogds.base.setuphandlers import _create_example_client
 from opengever.ogds.base.setuphandlers import _create_example_user
-from plone.app.testing import setRoles, TEST_USER_ID
+from opengever.ogds.base.setuphandlers import create_sql_tables
 from opengever.ogds.base.utils import create_session
-from plone.app.testing import applyProfile
 from plone.app.testing import FunctionalTesting
-from plone.app.testing import PloneSandboxLayer
 from plone.app.testing import PLONE_FIXTURE
+from plone.app.testing import PloneSandboxLayer
+from plone.app.testing import applyProfile
+from plone.app.testing import setRoles, TEST_USER_ID
 from zope.configuration import xmlconfig
-from opengever.globalindex import model
 
 
 class OpengeverJournalFunctionalLayer(PloneSandboxLayer):
@@ -69,6 +70,10 @@ class OpengeverJournalFunctionalLayer(PloneSandboxLayer):
 
 
         setRoles(portal, TEST_USER_ID, ['Member', 'Manager', 'Editor'])
+
+    def tearDown(self):
+        super(OpengeverJournalFunctionalLayer, self).tearDown()
+        truncate_sql_tables()
 
 OPENGEVER_JOURNAL_FIXTURE = OpengeverJournalFunctionalLayer()
 OPENGEVER_JOURNAL_INTEGRATION_TESTING = FunctionalTesting(
