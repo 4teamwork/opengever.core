@@ -1,0 +1,242 @@
+Changelog
+=========
+
+
+2.0.3 (unreleased)
+------------------
+
+- Dropped Plone 4.1 compatibility. Only 4.2 and up are supported.
+  [lgraf]
+
+- Adjust the accessors they should return utf-8 since the dexterity update.
+  Issue #1420 Plone Version und Dexterity Version auf aktuellste Version heben.
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1420
+  [phgross]
+
+- User get_css_class instead of deprecated method: css_class_from_obj/css_class_from_brain
+  [eschmutz]
+
+
+2.0.2 (2012-02-27)
+------------------
+
+- Give "List folder contents" to Administrator role in repo workflows
+  [lgraf]
+
+- Added French translations
+  [ttschanz]
+
+- Removed 'List folder contents' permission from anyone but Manager in
+  repositoryfolder and repositoryroot workflows.
+  [lgraf]
+
+- Added necessary permissions for Administrator role
+  [lgraf]
+
+- Add @@primary_repository_root view for getting the primary repository root.
+  [jone]
+
+- Fix bug in custom allowedContentTypes when FTI has no "behaviors" (AT).
+  [jone]
+
+
+2.0.1 (2011-12-06)
+------------------
+
+- Fixed workflow definitions: add all configured permission also to the permissions managed by this workflow.
+  [phgross]
+
+
+2.0 (2011-11-17)
+----------------
+
+- Adjust the repository workflow: Repositoryfolders should be visible for users with the Member role.
+  Issue #1269 Ordnungspositionen fuer alle Mitglieder eines Mandanten sichtbar machen
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1269/
+  [phgross]
+
+- Updated repositoryfolder and repositoryroot workflows:
+  Added new role "Role Manager" that has permissions to delegate roles via
+  the sharing tab.
+  #1245 Neue Rolle einführen um local roles anzupassen
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1245/
+  [lgraf]
+
+- Made Repositoryroot Journalizable and added journal tab to the tabbedview, enabled only for role managers.
+  Issue #1242 Fuer local_roles Anpassungen Journaleintraege generieren
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1242/
+  [phgross]
+
+
+2.0a10 (2011-09-30)
+-------------------
+
+* Fixed saveReferenceNumberPrefix() event handler - not only store the prefix
+  in the list of issued prefixes, but also assign it to the actual object.
+  [lgraf]
+
+* Issue #1176 alle translatinos mit from zope.i18n import translate
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1176
+  [eschmutz]
+
+* added 'Add portal content' permission to the Contributor role, for allowing add repositoryfolders on the root
+  [phgross]
+
+* Added grok.require to RepositoryRootOverview
+  [eschmutz]
+
+* Added test-buildout for plone 4.1
+  [eschmutz]
+
+
+
+2.0a9 (2011-08-24)
+------------------
+
+* Tests now work with plone.app.testing
+  [ttschanz]
+
+
+2.0a8
+-----
+
+* Issue #1052 Byline icons durch sprite icons ersetzen
+  Added ByLine modifications for sprites
+  [ttschanz]
+
+* Removed content_icons for repositoryfolder and repositoryroot FTIs - now done with sprites
+  [lgraf]
+
+
+2.0a7
+-----
+
+* Issue #920 Aktivierung der Spezialdossiers
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/920/
+  Added purge=False to allowed_content_types property so as not to erase previously installed behaviors
+
+
+2.0a6
+-----
+
+* Issue #792 TabbedView listing fuer Dossiers dauert viel zu lange
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/792
+  Do not count subdossiers, respect current repository root.
+  [phabegger]
+
+
+2.0a5
+-----
+
+* Issue #792 TabbedView listing fuer Dossiers dauert viel zu lange
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/792
+  Added overview-tab on repository root.
+  [jbaumann]
+
+* removed repository folder overview: seems not to be used anymore
+  [jbaumann]
+
+
+2.0a4
+-----
+
+* Added seperate workflow for repository root which allows Authenticated role to view the root.
+  [jbaumann]
+
+
+2.0a3
+-----
+
+* enable locking behavior
+  [jbaumann]
+
+* fixed allowedContentTypes method, the restrictedossier should also ovserved by depth exceeded
+  [pgross]
+
+* fixed extends path
+  [jbaumann]
+
+
+2.0a2
+-----
+
+
+1.0a3
+-----
+
+* Updated byline viewlet to Plone 4 (workflow_state).
+  [01.10.2010, phabegger]
+
+* Workflow for repository folders/roots moved to opengever.repository. Removed
+  references to opengever.task workflow as it was moved to the resp. package, too.
+  [01.10.2010, phabegger]
+
+1.0a2
+-----
+
+* Issue #373: Ordnungssystem: Nummerierung wird nicht mehr angezeigt
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/373/
+  [11.01.2010, jbaumann]
+
+
+1.0a1
+-----
+
+* updated metadata / changed target release to 1.0a1
+  [05.01.2010, jbaumann]
+
+* Issue #340: Aktenzeichen Dossiers und Subdossiers: Zaehler zaehlt nicht ueber 2
+  Die Ordnungsposition braucht nun auch das IReferenceNumber behavior, wie auch
+  das Dossier. Die Validierung und der Default-Wert funktioniert nun Typ-uebergreifend.
+  [04.01.2010, jbaumann]
+
+* Issue #178: Fehlende Metadaten auf Stufe "Ordnungsposition"
+  Neue Felder Felder hinzugefuegt und Verhalten der durch Vererbung
+  eingeschraenkten Felder verbessert (retention_period, custody_period)
+
+* Issue #277: Hinzufuegbare Typen einschraenken bei Registraturposition
+  [14.12.2009, jbaumann]
+
+* Issue #172: listCreators einer Registraturposition liefert Owner des ersten Dossiers
+  [27.11.2009, jbaumann]
+
+* Added some tests for the RepositoryFolder and the RepositoryRoot
+  [26.11.2009, jbaumann]
+
+* Issue #120: RepositoryFolder uebersetzen
+  [11.11.2009, jbaumann]
+
+0.1
+---
+
+* Implemented content type "RepositoryFolder"
+  [09.09.2009, jbaumann]
+
+* Issue #15: PloneGov GEVER Light Registraturplan uebernehmen
+  Properly implemented Title using RecordPosition with a dummy field
+  Implemented Classification behavior with fields and localization
+  Added Doctess for Classification behavior
+  [09.09.2009, jbaumann]
+
+* Issue #15 PloneGov GEVER Light Registraturplan uebernehmen
+  Added acquisition restricted vocabulary system, using for classification
+  Added acquisition restricted vocabulary for public_trial
+  Added acquisition restricted vocabulary for archival_value
+  [10.09.2009, jbaumann]
+
+* Issue #15 PloneGov GEVER Light Registraturplan uebernehmen
+  Fixed bug in Restricted-Acquisition-Vocabulary-System and made tests run again (testing previous changes)
+  [16.09.2009, jbaumann]
+
+* Issue #15 PloneGov GEVER Light Registraturplan uebernehmen
+  Changed "privacy_layer" to Choice-Widget with acquision and a restricted vocbulary
+  Implemented Validator for custody- and retention-period fields
+  [17.09.2009, jbaumann]
+
+* Issue #15 PloneGov GEVER Light Registraturplan uebernehmen
+  Implemented Validator for Repository-Folder field "reference_number"
+  Improved translations, added .pot-file
+  [21.09.2009, jbaumann]
+
+* Issue #24: Registraturposition: hinzufuegbare Typen je nach Inhalt
+  [21.09.2009, jbaumann]

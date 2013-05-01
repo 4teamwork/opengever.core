@@ -1,0 +1,223 @@
+<?xml version="1.0"?>
+<dc-workflow workflow_id="opengever_repository_workflow" title="Repository Folder Workflow" description="" state_variable="review_state" initial_state="repositoryfolder-state-active" manager_bypass="False">
+ <permission>Access contents information</permission>
+ <permission>Add portal content</permission>
+ <permission>Change portal events</permission>
+ <permission>Copy or Move</permission>
+ <permission>List folder contents</permission>
+ <permission>Modify portal content</permission>
+ <permission>View</permission>
+ <permission>opengever.dossier: Add businesscasedossier</permission>
+ <permission>opengever.repository: Add repositoryfolder</permission>
+ <permission>Sharing page: Delegate Contributor role</permission>
+ <permission>Sharing page: Delegate Editor role</permission>
+ <permission>Sharing page: Delegate Reader role</permission>
+ <permission>Sharing page: Delegate Reviewer role</permission>
+ <permission>Sharing page: Delegate roles</permission>
+ <state state_id="repositoryfolder-state-active" title="repositoryfolder-state-active">
+  <exit-transition transition_id="repositoryfolder-transition-inactivate"/>
+  <permission-map name="Access contents information" acquired="False">
+   <permission-role>Administrator</permission-role>
+   <permission-role>Contributor</permission-role>
+   <permission-role>Manager</permission-role>
+   <permission-role>Owner</permission-role>
+   <permission-role>Reader</permission-role>
+   <permission-role>Member</permission-role>
+  </permission-map>
+  <permission-map name="Add portal content" acquired="False">
+   <permission-role>Contributor</permission-role>
+   <permission-role>Manager</permission-role>
+   <permission-role>Owner</permission-role>
+   <permission-role>Administrator</permission-role>
+  </permission-map>
+  <permission-map name="Change portal events" acquired="False">
+  </permission-map>
+  <permission-map name="Copy or Move" acquired="False">
+   <permission-role>Administrator</permission-role>
+   <permission-role>Editor</permission-role>
+   <permission-role>Manager</permission-role>
+   <permission-role>Owner</permission-role>
+  </permission-map>
+  <permission-map name="List folder contents" acquired="False">
+   <permission-role>Manager</permission-role>
+   <permission-role>Administrator</permission-role>
+  </permission-map>
+  <permission-map name="Modify portal content" acquired="False">
+   <permission-role>Administrator</permission-role>
+   <permission-role>Manager</permission-role>
+  </permission-map>
+
+  <permission-map name="Sharing page: Delegate roles" acquired="False">
+   <permission-role>Manager</permission-role>
+   <permission-role>Role Manager</permission-role>
+   <permission-role>Administrator</permission-role>
+  </permission-map>
+  <permission-map name="Sharing page: Delegate Contributor role" acquired="False">
+   <permission-role>Manager</permission-role>
+   <permission-role>Role Manager</permission-role>
+   <permission-role>Administrator</permission-role>
+  </permission-map>
+  <permission-map name="Sharing page: Delegate Editor role" acquired="False">
+   <permission-role>Manager</permission-role>
+   <permission-role>Role Manager</permission-role>
+   <permission-role>Administrator</permission-role>
+  </permission-map>
+  <permission-map name="Sharing page: Delegate Reader role" acquired="False">
+   <permission-role>Manager</permission-role>
+   <permission-role>Role Manager</permission-role>
+   <permission-role>Administrator</permission-role>
+  </permission-map>
+  <permission-map name="Sharing page: Delegate Reviewer role" acquired="False">
+   <permission-role>Manager</permission-role>
+   <permission-role>Role Manager</permission-role>
+   <permission-role>Administrator</permission-role>
+  </permission-map>
+
+  <permission-map name="View" acquired="False">
+   <permission-role>Administrator</permission-role>
+   <permission-role>Contributor</permission-role>
+   <permission-role>Manager</permission-role>
+   <permission-role>Owner</permission-role>
+   <permission-role>Reader</permission-role>
+   <permission-role>Member</permission-role>
+  </permission-map>
+  <permission-map name="opengever.dossier: Add businesscasedossier" acquired="False">
+   <permission-role>Contributor</permission-role>
+   <permission-role>Editor</permission-role>
+   <permission-role>Manager</permission-role>
+   <permission-role>Owner</permission-role>
+   <permission-role>Administrator</permission-role>
+  </permission-map>
+  <permission-map name="opengever.repository: Add repositoryfolder" acquired="False">
+   <permission-role>Administrator</permission-role>
+   <permission-role>Manager</permission-role>
+  </permission-map>
+ </state>
+ <state state_id="repositoryfolder-state-inactive" title="repositoryfolder-state-inactive">
+  <exit-transition transition_id="repositoryfolder-transition-activate"/>
+  <permission-map name="Access contents information" acquired="False">
+   <permission-role>Administrator</permission-role>
+   <permission-role>Contributor</permission-role>
+   <permission-role>Editor</permission-role>
+   <permission-role>Manager</permission-role>
+   <permission-role>Owner</permission-role>
+   <permission-role>Reader</permission-role>
+   <permission-role>Member</permission-role>
+  </permission-map>
+  <permission-map name="Add portal content" acquired="False">
+  </permission-map>
+  <permission-map name="Change portal events" acquired="False">
+  </permission-map>
+  <permission-map name="Copy or Move" acquired="True">
+  </permission-map>
+  <permission-map name="List folder contents" acquired="False">
+   <permission-role>Manager</permission-role>
+   <permission-role>Administrator</permission-role>
+  </permission-map>
+  <permission-map name="Modify portal content" acquired="False">
+   <permission-role>Administrator</permission-role>
+   <permission-role>Manager</permission-role>
+  </permission-map>
+
+  <permission-map name="Sharing page: Delegate roles" acquired="False">
+   <permission-role>Manager</permission-role>
+   <permission-role>Role Manager</permission-role>
+   <permission-role>Administrator</permission-role>
+  </permission-map>
+  <permission-map name="Sharing page: Delegate Contributor role" acquired="False">
+   <permission-role>Manager</permission-role>
+   <permission-role>Role Manager</permission-role>
+   <permission-role>Administrator</permission-role>
+  </permission-map>
+  <permission-map name="Sharing page: Delegate Editor role" acquired="False">
+   <permission-role>Manager</permission-role>
+   <permission-role>Role Manager</permission-role>
+   <permission-role>Administrator</permission-role>
+  </permission-map>
+  <permission-map name="Sharing page: Delegate Reader role" acquired="False">
+   <permission-role>Manager</permission-role>
+   <permission-role>Role Manager</permission-role>
+   <permission-role>Administrator</permission-role>
+  </permission-map>
+  <permission-map name="Sharing page: Delegate Reviewer role" acquired="False">
+   <permission-role>Manager</permission-role>
+   <permission-role>Role Manager</permission-role>
+   <permission-role>Administrator</permission-role>
+  </permission-map>
+
+  <permission-map name="View" acquired="False">
+   <permission-role>Administrator</permission-role>
+   <permission-role>Contributor</permission-role>
+   <permission-role>Editor</permission-role>
+   <permission-role>Manager</permission-role>
+   <permission-role>Owner</permission-role>
+   <permission-role>Reader</permission-role>
+   <permission-role>Member</permission-role>
+  </permission-map>
+  <permission-map name="opengever.dossier: Add businesscasedossier" acquired="False">
+  </permission-map>
+  <permission-map name="opengever.repository: Add repositoryfolder" acquired="False">
+   <permission-role>Administrator</permission-role>
+   <permission-role>Manager</permission-role>
+  </permission-map>
+ </state>
+ <transition transition_id="repositoryfolder-transition-activate" title="Activate repository folder" new_state="repositoryfolder-state-active" trigger="USER" before_script="" after_script="">
+  <action url="%(content_url)s/content_status_modify?workflow_action=repositoryfolder-transition-activate" category="workflow" icon="">repositoryfolder-transition-activate</action>
+  <guard>
+   <guard-permission>Modify portal content</guard-permission>
+  </guard>
+ </transition>
+ <transition transition_id="repositoryfolder-transition-inactivate" title="Inactivate repository folder" new_state="repositoryfolder-state-inactive" trigger="USER" before_script="" after_script="">
+  <action url="%(content_url)s/content_status_modify?workflow_action=repositoryfolder-transition-inactivate" category="workflow" icon="">repositoryfolder-transition-inactivate</action>
+  <guard>
+   <guard-permission>Modify portal content</guard-permission>
+  </guard>
+ </transition>
+ <variable variable_id="action" for_catalog="False" for_status="True" update_always="True">
+  <description>Previous transition</description>
+  <default>
+
+   <expression>transition/getId|nothing</expression>
+  </default>
+  <guard>
+  </guard>
+ </variable>
+ <variable variable_id="actor" for_catalog="False" for_status="True" update_always="True">
+  <description>The ID of the user who performed the previous transition</description>
+  <default>
+
+   <expression>user/getUserName</expression>
+  </default>
+  <guard>
+  </guard>
+ </variable>
+ <variable variable_id="comments" for_catalog="False" for_status="True" update_always="True">
+  <description>Comment about the last transition</description>
+  <default>
+
+   <expression>python:state_change.kwargs.get('comment', '')</expression>
+  </default>
+  <guard>
+  </guard>
+ </variable>
+ <variable variable_id="review_history" for_catalog="False" for_status="False" update_always="False">
+  <description>Provides access to workflow history</description>
+  <default>
+
+   <expression>state_change/getHistory</expression>
+  </default>
+  <guard>
+   <guard-permission>Request review</guard-permission>
+   <guard-permission>Review portal content</guard-permission>
+  </guard>
+ </variable>
+ <variable variable_id="time" for_catalog="False" for_status="True" update_always="True">
+  <description>When the previous transition was performed</description>
+  <default>
+
+   <expression>state_change/getDateTime</expression>
+  </default>
+  <guard>
+  </guard>
+ </variable>
+</dc-workflow>

@@ -1,0 +1,149 @@
+# --- PLEASE EDIT THE LINES BELOW CORRECTLY ---
+# SOME DESCRIPTIVE TITLE.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2011-01-27 18:21+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0\n"
+"Language-Code: en\n"
+"Language-Name: English\n"
+"Preferred-Encodings: utf-8 latin1\n"
+"Domain: opengever.repository\n"
+
+#: ./opengever/repository/profiles/default/types/opengever.repository.repositoryfolder.xml
+msgid "RepositoryFolder"
+msgstr ""
+
+#: ./opengever/repository/profiles/default/types/opengever.repository.repositoryroot.xml
+msgid "RepositoryRoot"
+msgstr ""
+
+#: ./opengever/repository/repositoryfolder.py:43
+msgid "Title"
+msgstr ""
+
+#. Default: "A Sibling with the same reference number is existing"
+#: ./opengever/repository/behaviors/referenceprefix.py:66
+msgid "error_sibling_reference_number_existing"
+msgstr ""
+
+#. Default: "Common"
+#: ./opengever/repository/behaviors/referenceprefix.py:21
+#: ./opengever/repository/repositoryfolder.py:28
+msgid "fieldset_common"
+msgstr ""
+
+#. Default: "Select all additional dossier types which should be addable in this repository folder."
+#: ./opengever/repository/repositoryfolder.py:90
+msgid "help_addable_dossier_types"
+msgstr ""
+
+#. Default: "A short summary of the content."
+#: ./opengever/repository/repositoryfolder.py:49
+msgid "help_description"
+msgstr ""
+
+#: ./opengever/repository/repositoryfolder.py:83
+msgid "help_former_reference"
+msgstr ""
+
+#: ./opengever/repository/repositoryfolder.py:69
+msgid "help_location"
+msgstr ""
+
+#: ./opengever/repository/behaviors/referenceprefix.py:31
+msgid "help_reference_number_prefix"
+msgstr ""
+
+#: ./opengever/repository/repositoryfolder.py:77
+msgid "help_referenced_activity"
+msgstr ""
+
+#: ./opengever/repository/repositoryfolder.py:57
+#: ./opengever/repository/repositoryroot.py:11
+msgid "help_valid_from"
+msgstr ""
+
+#: ./opengever/repository/repositoryfolder.py:63
+#: ./opengever/repository/repositoryroot.py:17
+msgid "help_valid_until"
+msgstr ""
+
+#: ./opengever/repository/repositoryroot.py:23
+msgid "help_version"
+msgstr ""
+
+#. Default: "Addable dossier types"
+#: ./opengever/repository/repositoryfolder.py:88
+msgid "label_addable_dossier_types"
+msgstr ""
+
+#. Default: "Description"
+#: ./opengever/repository/repositoryfolder.py:48
+msgid "label_description"
+msgstr ""
+
+#. Default: "Former reference"
+#: ./opengever/repository/repositoryfolder.py:82
+msgid "label_former_reference"
+msgstr ""
+
+#. Default: "Location"
+#: ./opengever/repository/repositoryfolder.py:68
+msgid "label_location"
+msgstr ""
+
+#. Default: "Reference Prefix"
+#: ./opengever/repository/behaviors/referenceprefix.py:28
+msgid "label_reference_number_prefix"
+msgstr ""
+
+#. Default: "Referenced activity"
+#: ./opengever/repository/repositoryfolder.py:74
+msgid "label_referenced_activity"
+msgstr ""
+
+#. Default: "Valid from"
+#: ./opengever/repository/repositoryfolder.py:56
+#: ./opengever/repository/repositoryroot.py:10
+msgid "label_valid_from"
+msgstr ""
+
+#. Default: "Valid until"
+#: ./opengever/repository/repositoryfolder.py:62
+#: ./opengever/repository/repositoryroot.py:16
+msgid "label_valid_until"
+msgstr ""
+
+#. Default: "Version"
+#: ./opengever/repository/repositoryroot.py:22
+msgid "label_version"
+msgstr ""
+
+#. Default: "State:"
+#: ./opengever/repository/repositoryfolder_templates/byline.pt:5
+msgid "label_workflow_state"
+msgstr ""
+
+#. Default: "Documents:"
+#: ./opengever/repository/browser/overview_templates/repositoryrootoverview.pt:16
+msgid "th_documents"
+msgstr ""
+
+#. Default: "Dossiers:"
+#: ./opengever/repository/browser/overview_templates/repositoryrootoverview.pt:6
+msgid "th_dossiers"
+msgstr ""
+
+#. Default: "Tasks:"
+#: ./opengever/repository/browser/overview_templates/repositoryrootoverview.pt:11
+msgid "th_task"
+msgstr ""
+

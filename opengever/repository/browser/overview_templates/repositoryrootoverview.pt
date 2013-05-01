@@ -1,0 +1,21 @@
+<table class="vertical invisible task-listing"
+       i18n:domain="opengever.repository">
+    <tbody>
+
+        <tr>
+            <th i18n:translate="th_dossiers">Dossiers:</th>
+            <td tal:content="view/get_amount_of_dossiers" />
+        </tr>
+
+        <tr>
+            <th i18n:translate="th_task">Tasks:</th>
+            <td tal:content="view/get_amount_of_tasks" />
+        </tr>
+
+        <tr>
+            <th i18n:translate="th_documents">Documents:</th>
+            <td tal:content="view/get_amount_of_documents" />
+        </tr>
+
+    </tbody>
+</table>

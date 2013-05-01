@@ -1,0 +1,74 @@
+Repository Folder
+=================
+
+
+Since the Generic Setup profile was imported, we should have a some FTIs
+registered::
+
+	>>> portal = layer['portal']
+	>>> app = layer['app']
+	>>> request = layer['request']
+
+    >>> pt = portal.portal_types
+    >>> pt.get('opengever.repository.repositoryfolder', None)
+    <DexterityFTI at ...>
+    >>> pt.get('opengever.repository.repositoryroot', None)
+    <DexterityFTI at ...>
+
+
+For surfing we need a Browser::
+	>>> from plone.app.testing import TEST_USER_NAME, TEST_USER_PASSWORD
+    >>> from plone.testing.z2 import Browser
+    >>> browser = Browser(app)
+    >>> browser.handleErrors = False
+	>>> browser.addHeader('Authorization', 'Basic %s:%s' % (TEST_USER_NAME, TEST_USER_PASSWORD,))
+
+So, lets create the repository-root::
+    >>> browser.open('http://nohost/plone/folder_factories')
+    >>> 'opengever.repository.repositoryroot' in browser.contents
+    True
+    >>> browser.getControl('RepositoryRoot').click()
+    >>> browser.getControl('Add').click()
+    >>> browser.getControl('Title').value = 'Registraturplan'
+    >>> browser.getControl('Description').value = ''
+    >>> browser.getControl('Save').click()
+    >>> browser.url
+    'http://nohost/plone/registraturplan/tabbed_view'
+
+
+Now, create our first repository folder::
+
+    >>> browser.open('./folder_factories')
+    >>> 'opengever.repository.repositoryfolder' in browser.contents
+    True
+    >>> browser.getControl('RepositoryFolder').click()
+    >>> browser.getControl('Add').click()
+    >>> browser.getControl('Title').value = 'Accounting'
+    >>> browser.getControl('Save').click()
+    >>> browser.url
+    'http://nohost/plone/registraturplan/accounting/tabbed_view'
+
+
+Check some stuff::
+    >>> from opengever.repository.behaviors.referenceprefix import IReferenceNumberPrefix
+    >>> obj = portal.get('registraturplan').get('accounting')
+    >>> obj
+    <RepositoryFolder at ...>
+    >>> IReferenceNumberPrefix(obj).reference_number_prefix
+    u'1'
+    >>> obj.listCreators()
+    ('test_user_1_',)
+
+
+Add another one::
+
+    >>> browser.open('http://nohost/plone/registraturplan/++add++opengever.repository.repositoryfolder')
+    >>> browser.getControl('Title').value = 'Custody'
+    >>> browser.getControl('Save').click()
+    >>> browser.url
+    'http://nohost/plone/registraturplan/custody/tabbed_view'
+    >>> obj = portal.get('registraturplan').get('custody')
+    >>> obj
+    <RepositoryFolder at ...>
+    >>> IReferenceNumberPrefix(obj).reference_number_prefix
+    u'2'

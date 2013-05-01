@@ -1,0 +1,29 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+    xmlns:grok="http://namespaces.zope.org/grok"
+    xmlns:i18n="http://namespaces.zope.org/i18n"
+    xmlns:plone="http://namespaces.plone.org/plone"
+    i18n_domain="opengever.repository">
+
+    <!-- Grok the package to initialise schema interfaces and content classes -->
+    <grok:grok package="." />
+
+    <!-- Register locales translations -->
+    <i18n:registerTranslations directory="locales" />
+
+    <!-- Include custom permissions -->
+    <include file="permissions.zcml" />
+
+    <include package=".behaviors" />
+
+    <!-- Register an extension profile to make the product installable -->
+    <genericsetup:registerProfile
+        name="default"
+        title="opengever.repository"
+        description="OpenGever Repository"
+        directory="profiles/default"
+        provides="Products.GenericSetup.interfaces.EXTENSION"
+        />
+
+</configure>

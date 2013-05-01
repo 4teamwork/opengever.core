@@ -1,0 +1,101 @@
+<?xml version="1.0"?>
+<object name="opengever.repository.repositoryroot" meta_type="Dexterity FTI"
+        i18n:domain="opengever.repository" xmlns:i18n="http://xml.zope.org/namespaces/i18n">
+
+    <!-- Basic metadata -->
+    <property name="title" i18n:translate="">RepositoryRoot</property>
+    <property name="description" i18n:translate=""></property>
+    <property name="icon_expr"></property>
+    <property name="allow_discussion">False</property>
+    <property name="global_allow">True</property>
+    <property name="filter_content_types">True</property>
+    <property name="allowed_content_types">
+        <element value="opengever.repository.repositoryfolder" />
+    </property>
+
+    <!-- schema interface -->
+    <property name="schema">opengever.repository.repositoryroot.IRepositoryRoot</property>
+
+    <!-- class used for content items -->
+    <property name="klass">plone.dexterity.content.Container</property>
+
+    <!-- add permission -->
+    <property name="add_permission">opengever.repository.AddRepositoryRoot</property>
+
+    <!-- enabled behaviors -->
+    <property name="behaviors">
+        <element value="plone.app.content.interfaces.INameFromTitle" />
+        <element value="plone.app.dexterity.behaviors.metadata.IBasic" />
+        <element value="opengever.tabbedview.interfaces.ITabbedViewEnabled" />
+        <element value="opengever.sharing.behaviors.IDossier" />
+        <element value="plone.app.lockingbehavior.behaviors.ILocking" />
+        <element value="ftw.journal.interfaces.IAnnotationsJournalizable" />
+    </property>
+
+    <!-- View information -->
+    <property name="immediate_view">tabbed_view</property>
+    <property name="default_view">tabbed_view</property>
+    <property name="default_view_fallback">False</property>
+    <property name="view_methods">
+        <element value="view"/>
+        <element value="tabbed_view" />
+    </property>
+
+    <!-- Method aliases -->
+    <alias from="(Default)" to="(selected layout)"/>
+    <alias from="edit" to="@@edit"/>
+    <alias from="sharing" to="@@sharing"/>
+    <alias from="view" to="@@view"/>
+
+
+    <!-- Actions -->
+
+    <action title="View" action_id="view" category="object" condition_expr=""
+            url_expr="string:${object_url}" visible="False">
+        <permission value="View"/>
+    </action>
+
+    <action title="Edit" action_id="edit" category="object"
+            condition_expr="not:object/@@plone_lock_info/is_locked_for_current_user|python:True"
+            url_expr="string:${object_url}/edit" visible="True">
+        <permission value="Modify portal content"/>
+    </action>
+
+
+    <!-- Tabbedview tabs-->
+
+    <action visible="True"
+            action_id="overview"
+            title="Overview"
+            category="tabbedview-tabs"
+            condition_expr=""
+            url_expr="string:#">
+        <permission value="View"/>
+    </action>
+
+    <action visible="True"
+            action_id="dossiers"
+            title="Dossiers"
+            category="tabbedview-tabs"
+            condition_expr=""
+            url_expr="string:#">
+        <permission value="View"/>
+    </action>
+
+    <action action_id="sharing"
+            visible="True"
+            title="Sharing"
+            category="tabbedview-tabs"
+            url_expr="string:#"
+            condition_expr=""
+            i18n:domain="opengever.dossier">
+        <permission value="View"/>
+    </action>
+
+    <action i18n:domain="opengever.dossier" title="Journal" action_id="journal" category="tabbedview-tabs"
+            condition_expr="" url_expr="string:#" visible="True">
+        <permission value="Sharing page: Delegate roles"/>
+    </action>
+
+
+</object>

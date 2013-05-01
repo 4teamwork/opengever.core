@@ -1,0 +1,16 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:plone="http://namespaces.plone.org/plone"
+    xmlns:grok="http://namespaces.zope.org/grok"
+    i18n_domain="opengever.base">
+
+  <plone:behavior
+      title="ReferenceNumberPrefix"
+      description="OpenGever ReferenceNumberPrefix Behavior"
+      provides="opengever.repository.behaviors.referenceprefix.IReferenceNumberPrefix"
+      factory="plone.behavior.AnnotationStorage"
+      for="plone.dexterity.interfaces.IDexterityContent"
+      marker=".referenceprefix.IReferenceNumberPrefixMarker"
+      />
+
+</configure>
