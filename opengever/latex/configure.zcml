@@ -1,0 +1,22 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+    xmlns:grok="http://namespaces.zope.org/grok"
+    xmlns:i18n="http://namespaces.zope.org/i18n"
+    i18n_domain="opengever.latex">
+
+    <i18n:registerTranslations directory="locales" />
+
+    <!-- grok -->
+    <grok:grok package="." />
+
+    <!-- generic setup -->
+    <genericsetup:registerProfile
+        name="default"
+        title="opengever.latex"
+        description=""
+        directory="profiles/default"
+        provides="Products.GenericSetup.interfaces.EXTENSION"
+        />
+
+</configure>

@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<object name="Plone Site"
+        i18n:domain="plone" xmlns:i18n="http://xml.zope.org/namespaces/i18n">
+
+    <action action_id="pdf-open-task-report"
+            visible="True"
+            title="Open tasks report"
+            category="object"
+            url_expr="string:${object_url}/@@pdf-open-task-report"
+            condition_expr="object/@@pdf-open-task-report-allowed">
+        <permission value="View"/>
+    </action>
+
+</object>

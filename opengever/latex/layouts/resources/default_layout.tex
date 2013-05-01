@@ -1,0 +1,97 @@
+<%block name="documentclass">
+\documentclass[a4paper,10pt]{article}
+</%block>
+
+<%block name="use_packages">
+  ${packages}
+</%block>
+
+<%block name="beneath_packages">
+</%block>
+
+%% TEXT / PARAGRAPHS
+\renewcommand{\familydefault}{ma1}
+\parindent=0pt
+\raggedright%%
+\parskip=\baselineskip%%
+
+\titlespacing{\section}{0pt}{-8mm}{*0}
+\titlespacing{\subsection}{0pt}{*0}{*0}
+\titlespacing{\subsubsection}{0pt}{*0}{*0}\renewcommand\arraystretch{1.5}
+
+
+%% LISTINGS
+\renewcommand\labelitemi{\textendash}
+
+%% make itemize more compact (set itemsep and topsep globally to 0)
+\makeatletter
+\def\@listI{\leftmargin\leftmargini%%
+  \parsep 0\p@ \@plus0\p@ \@minus\p@
+  \topsep 0\p@  \@minus\p@
+  \itemsep 0\p@ \@plus0\p@ \@minus\p@}
+\let\@listi\@listI%%
+\def\@listii {\leftmargin\leftmarginii
+  \labelwidth\leftmarginii
+  \advance\labelwidth-\labelsep
+  \topsep    0\p@ \@plus0\p@ \@minus\p@
+  \parsep    0\p@   \@plus\p@  \@minus\p@
+  \itemsep   \parsep}
+\makeatother
+
+\setlength{\leftmargini}{0mm}
+\setlength{\itemindent}{0mm}
+\setlength{\labelsep}{3mm}
+\newlength{\itemizeLeftmargin}
+\setlength{\itemizeLeftmargin}{28.5pt}
+
+
+%% LAYOUT
+%%%% use pagestyle ``fancy'' for page>=2
+\pagestyle{fancy}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+\fancyhf{}
+\fancyhead[L]{\fontsize{8}{9}\selectfont Seite \thepage/\pageref{LastPage}}
+
+%%%% use pagestyle ``myheadings'' for first page
+\fancypagestyle{myheadings}{
+  \renewcommand{\headrulewidth}{0pt}
+  \renewcommand{\footrulewidth}{0pt}
+  \fancyhf{}
+}
+
+%%%% header position
+\setlength{\topmargin}{19mm}
+\setlength{\headheight}{5mm}
+\setlength{\headsep}{5mm}
+
+
+<%block name="above_document">
+</%block>
+
+\begin{document}
+
+\thispagestyle{myheadings}
+
+%% -- LOGO --
+% if show_logo:
+\begin{textblock}{60mm\TPHorizModule} (16.3mm\TPHorizModule,
+  10mm\TPVertModule)
+  \includegraphics{logo.pdf}
+\end{textblock}
+% endif
+
+<%block name="boxes">
+<%include file="boxes.tex" />
+</%block>
+
+
+<%block name="above_content">
+%% make some space since author is positioned absolute
+\phantom{foo}\vspace{-2\baselineskip}
+\vspace{22mm}
+</%block>
+
+${content}
+
+\end{document}

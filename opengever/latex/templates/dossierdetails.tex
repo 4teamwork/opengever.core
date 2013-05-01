@@ -1,0 +1,104 @@
+
+
+% if is_subdossier:
+  {\bf Details Subdossier}\\%%
+% else:
+  {\bf Details Dossier}\\%%
+% endif
+\vspace{\baselineskip}
+\renewcommand{\small}{\fontsize{11}{11}\selectfont}
+\small
+\noindent
+
+\begin{supertabular*}{150mm}{lp{130mm}}
+\shrinkheight{60mm}
+\bf{Aktenzeichen} & ${reference} \\%%
+\bf{Laufnummer} & ${sequence} \\%%
+% if filingprefix:
+  \bf{Ablage} & ${filingprefix} \\%%
+% endif
+\bf{Ablagenummer} & ${filing_no} \\%%
+\bf{Ordnungsposition} & ${repository} \\%%
+% if is_subdossier:
+\bf{Titel Dossier} & ${title_dossier} \\%%
+\bf{Titel Subdossier} & ${title_subdossier} \\%%
+% else:
+\bf{Titel Dossier} & ${title_dossier} \\%%
+% endif
+\bf{Status} & ${review_state} \\%%
+\bf{Federführend} & ${responsible} \\%%
+% if participants:
+  \bf{Beteiligung} & {
+    \vspace{-\baselineskip}\begin{itemize}
+    % for item in participants:
+      \item ${item}
+    % endfor
+    \vspace{-\baselineskip}\end{itemize}
+  } \\%%
+% endif
+\bf{Beginn} & ${start} \\%%
+\bf{Ende} & ${end} \\%%
+\end{supertabular*}
+
+\begin{landscape}
+  \setlength\extrarowheight{1pt}
+  \setlength\LTleft{0pt}
+  \setlength\LTright{0pt}
+  \newlength{\tablewidth}
+  \setlength{\tablewidth}{\linewidth}
+
+\scriptsize
+% if subdossiers:
+{
+  \vspace{5mm}
+  {\bf Subdossiers}\\%
+  \vspace{1mm}
+  \addtolength{\tablewidth}{-12\tabcolsep}
+  \begin{longtable}{p{.02\tablewidth}p{.1\tablewidth}p{.37\tablewidth}p{.25\tablewidth}p{.1\tablewidth}p{.08\tablewidth}p{.08\tablewidth}}
+  \bfseries Nr. & \bfseries Ablagenr. & \bfseries Titel & \bfseries Federführend & \bfseries Status & \bfseries Beginn & \bfseries Ende\\%%
+  \endhead\hline
+
+  % for row in subdossiers:
+    ${row} \\ \hline
+  % endfor
+  \end{longtable}
+}
+% endif
+
+% if tasks:
+{
+  \vspace{5mm}
+  {\bf Aufgaben}\\%%
+  \vspace{1mm}
+  \addtolength{\tablewidth}{-14\tabcolsep}
+  \begin{longtable}{p{.02\tablewidth}p{.14\tablewidth}p{.18\tablewidth}p{.18\tablewidth}p{.07\tablewidth}p{.31\tablewidth}p{.1\tablewidth}}
+  \bfseries Nr. & \bfseries Art & \bfseries Auftraggeber & \bfseries Auftragnehmer & \bfseries Status & \bfseries Beschreibung & \bfseries Zu erledigen bis\\%%
+  \endhead\hline
+
+  % for row in tasks:
+    ${row} \\%%
+    \hline
+  % endfor
+  \end{longtable}
+}
+% endif
+
+% if documents:
+{
+  \vspace{5mm}
+  {\bf Dokumente}\\%%
+  \vspace{1mm}
+  \addtolength{\tablewidth}{-10\tabcolsep}
+  \begin{longtable}{p{.02\tablewidth}p{.42\tablewidth}p{.12\tablewidth}p{.12\tablewidth}p{.12\tablewidth}p{.2\tablewidth}}
+  \bfseries Nr. & \bfseries Titel & \bfseries Dokumentdatum & \bfseries Eingangsdatum & \bfseries Ausgangsdatum & \bfseries Autor\\%%
+  \endhead\hline
+
+  % for row in documents:
+    ${row} \\ \hline
+  % endfor
+  \shrinkheight{20mm}
+  \end{longtable}
+}
+% endif
+
+\end{landscape}

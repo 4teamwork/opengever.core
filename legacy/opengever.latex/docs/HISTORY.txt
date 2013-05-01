@@ -1,0 +1,296 @@
+Changelog
+=========
+
+
+2.2.2 (unreleased)
+------------------
+
+- DossierCover: Only append ... if we had to cut the last line.
+  [lgraf]
+
+
+2.2.1 (2012-12-06)
+------------------
+
+- DossierCover: Added small fix in description cropping.
+  [phgross]
+
+
+2.2 (2012-11-28)
+----------------
+
+- Dropped Plone 4.1 compatibility. Only 4.2 and up are supported.
+  [lgraf]
+
+- Use ftw.testing's ComponentRegistryLayer for isolating component registry.
+  [jone]
+
+- Dossiercover: Implemented cropping of to long descriptions.
+  Issue #1654 Deckblatt Schriftgroesse anpassen
+  https://extranet.4teamwork.ch/extern/opengever-kanton-zug/sprint-backlog/1654/
+  [phgross]
+
+
+2.1.8 (2012-06-21)
+------------------
+
+- Disable pdf export actions for templatedossiers.
+  Issue #1368 Bearbeitung von Vorlagen (Metadaten und Dokumente)
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1368
+  [phgross]
+
+
+2.1.7 (2012-06-19)
+------------------
+
+- Dossiercover: change fontsize and sizes of the textfield.
+  Dossierdetails: change fontsizes.
+  Issue #1432 Anpassungen Druchvorlage
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1432/
+  [phgross]
+
+- Use block layout in the dossiercover template, to allow easy customizations.
+  [phgross]
+
+- Dossiercover: changed conversion of description, to correctly display line breaks.
+  Issue #1574 Falsche Zeichen im Deckblatt
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1574/
+  [phgross]
+
+- Added some Adjustments on names and layout of dossiercover and details view.
+  Issue #1432 Anpassungen Druchvorlage
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1432/
+  [phgross]
+
+- Removed the get_selected_items and use the method from og.globalindex instead.
+  [phgross]
+
+2.1.6 (2012-05-07)
+------------------
+
+- Add a simple workflow_state helper which only translate the state (without html).
+  [phgross]
+
+
+2.1.5 (2012-05-02)
+------------------
+
+- Use htmlencoding convert method in all listings.
+  Issue #1536 Dossiers: Unschoene Darstellung der Spalte "Autor" in Detailliste (PDF)
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1536/
+  [phgross]
+
+- Fixed get_render_arguments, added fallback for not existing owners.
+  [phgross]
+
+- https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1538/
+  #1538 Verwenden der neuen utility Methode provide_request_layer in ftw.pdfgenerator
+  [eschmutz]
+
+2.1.4 (2012-03-29)
+------------------
+
+- Dossier details PDF: Using ordering from tabbed view for all types
+  [lgraf]
+
+- Dossier details PDF: Also list emails
+  [lgraf]
+
+- Dossier details PDF: Use ordering from documents tab to sort docs
+  [lgraf]
+
+
+2.1.3 (2012-03-28)
+------------------
+
+- Fixed display of newlines in the dossier description (Dossiercover PDF).
+  Issue #1463 Anpassung Deckblatt Dossier/Subdossier
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1463/
+  [phgross]
+
+
+2.1.2 (2012-03-02)
+------------------
+
+- Fixed condition_expr for pdf-open-task-report action
+  [lgraf]
+
+
+
+2.1.1 (2012-03-01)
+------------------
+
+- Dossier Cover PDF: Display main dossier title for subdossier.
+  Issue #1430 Deckblatt PDF: Hauptdossier Titel darstellen bei Subdossiers
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1430/view
+  [phgross]
+
+
+2.1 (2012-02-27)
+----------------
+
+- Fix issuer client in task PDFs, so that it also works correct when we have a predecessor.
+  Issue #1412 Optimierung Mandant des Auftraggebers
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1412
+  [jone]
+
+- Issue #1374 Pedenzenliste (PDF).
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1374/
+  [jone]
+
+- Optimize dossier details PDF export.
+  Show reference number always, add / rename some columns in listings.
+  Use landscape pages for tables to gain width.
+  Issue #1347 Ueberarbeitung Dossier Details (PDF)
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1347/
+  [jone]
+
+- Added French translations.
+  [ttschanz]
+
+- Tasklisting PDF optimizations.
+  Issue #1331 Anpassung am PDF-Aufgabenverzeichnis
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1331/
+  [jone]
+
+- Dossier details PDF: Change headings and display filing prefix, if set.
+  Issue #1347 Ueberarbeitung Dossier Details (PDF)
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1347
+  [jone]
+
+- Cleanup: remove old plonegov.pdflatex stuff, all views are rewritten with ftw.pdfgenerator.
+  [jone]
+
+- Dossier details PDF: remplement with ftw.pdfgenerator.
+  [jone]
+
+- Dossier listing PDF: Update layout and date according to definitions in ticket.
+  Issue #1173 Feedback aus Pilotphase: Vorlage "Dossierverzeichnis" ueberarbeiten
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1173
+  [jone]
+
+- Dossier listing PDF: reimplement with ftw.pdfgenerator.
+  [jone]
+
+- Task listing PDF: use containing_dossier.
+  [jone]
+
+- Task listing PDF: updated layout and columns.
+  Issue #1331 Anpassung am PDF-Aufgabenverzeichnis
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1331/
+  [jone]
+
+- Reimplement task listing PDF with ftw.pdfgenerator.
+  [jone]
+
+- Dossier cover PDF: various changes and layout optimizations.
+  Issue #1332 Deckblatt PDF: Label Anzeige auch wenn keine Ablage Nummer definiert
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1332/
+  [jone]
+
+- Dossier cover PDF: reimplement using ftw.pdfgenerator.
+  [jone]
+
+- Dossier cover PDF: also show label "filing" when no filing prefix is defined.
+  Issue #1332 Deckblatt PDF: Label Anzeige auch wenn keine Ablage Nummer definiert
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1332/
+  [jone]
+
+
+2.0.1 (2011-11-29)
+------------------
+
+- Fix issuer client in task listing PDF.
+  Issue #1174 Feedback aus Pilotphase: Vorlage "Aufgabenverzeichnis" ueberarbeiten
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1174
+  [jone]
+
+
+2.0 (2011-11-17)
+----------------
+
+- Made get_dossier_sequence_number_and_title method safer:
+  added fallback for sqlalchemy objects without a breadcrumb_title
+  [phgross]
+
+- Added new latex template for the tasklisting including features:landscape format, dossier title, customzations
+  Issue #1174 Feedback aus Pilotphase: Vorlage "Aufgabenverzeichnis" ueberarbeiten
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1174
+  [jbaumann]
+
+- Issue #1249 Mail: Beim Importieren eines E-Mails muss die Spalte Ausgangsdatum leer bleiben
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1249
+  back to ftw.table helper function for readable_date
+  [eschmutz]
+
+
+2.0b5 (2011-09-29)
+------------------
+
+- Issue #1176 alle translatinos mit from zope.i18n import translate
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1176
+  [eschmutz]
+
+- Fixed bug that caused cover PDF generation to fail if no filing_prefix was set
+  [lgraf]
+
+- added zope.require for ExportPDFView
+  [eschmutz]
+
+- changed deprecated grok.CodeView to grok.View
+  [eschmutz]
+
+2.0b4 (2011-07-12)
+------------------
+
+- Issue #1015 Dossier abschliessen: Deckblatt anpassen
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1015
+  implemented new template
+  [phgross]
+
+- Issue #1013 Feedback Fokus: Ausdruck Geschaeftsdetail (Art des Geschaefts)
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1013/
+  [phgross]
+
+- Issue #1015 Dossier abschliessen: Deckblatt anpassen
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1015/
+  [phgross]
+
+- Issue #1007 Fehler beim Ausdruck des Deckblatts, wenn das Dossier spezielle Zeichen enthaelt
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1007/
+  added error handling
+  [phgross]
+
+- Using new readable_date helper from opengever.tabbedview
+  [lgraf]
+
+
+2.0b3
+-----
+
+- Issue #529 Standard-Druckvorlagen erstellen & einbauen
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/529
+  Removed display of organisation, changed width of selected columns (task listing)
+  [phabegger]
+
+
+2.0b2
+-----
+
+- cleanup
+  [jbaumann]
+
+2.0b1
+-----
+
+- Fixed unicode error in dosserlisting view
+  [jbaumann]
+
+
+2.0a2
+-----
+
+1.0dev (unreleased)
+-------------------
+
+- Initial release

@@ -1,0 +1,23 @@
+<%page args="org_left='136mm', org_width='58mm', contact_left='100mm', contact_width='35mm', contact_height='55mm'" />
+
+%% -- ORGANISATION: DIREKTION / AMT / DIENSTSTELLE
+% if show_organisation:
+\begin{textblock}{${org_width}\TPHorizModule} (${org_left}\TPHorizModule,
+  10mm\TPVertModule)
+  \parskip=0em%%
+  \fontsize{8}{9}\selectfont
+  \vspace{\baselineskip}
+  ${client_title}
+\end{textblock}
+% endif
+
+
+%% -- CONTACT INFORMATION --
+\begin{textblock}{${contact_left}\TPHorizModule} (${contact_width}\TPHorizModule, ${contact_height}\TPVertModule)
+  \vspace{-\parskip}%%
+  \fontsize{8}{9} \selectfont
+  % if show_contact:
+  T direkt ${member_phone}\\%%
+  % endif
+  ${location}, \today\\%%
+\end{textblock}

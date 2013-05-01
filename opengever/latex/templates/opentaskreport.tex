@@ -1,0 +1,46 @@
+\setlength\extrarowheight{1pt}
+\setlength\LTleft{0pt}
+\setlength\LTright{0pt}
+\newlength{\tablewidth}
+\setlength{\tablewidth}{\linewidth}
+
+% if incoming:
+{
+    \vspace{5mm}
+  {\bf Pendenzenkontrolle ${client}: erhaltene Aufgaben}\\%%
+  \vspace{\baselineskip}
+  \scriptsize
+  \noindent
+  \addtolength{\tablewidth}{-20\tabcolsep}
+  \begin{longtable}{p{.01\tablewidth}p{.20\tablewidth}p{.12\tablewidth}p{.23\tablewidth}p{.1\tablewidth}p{.1\tablewidth}p{.1\tablewidth}p{.09\tablewidth}p{.05\tablewidth}}
+    \bfseries Nr & \bfseries Aufgabentitel & \bfseries Aufgabentyp & \bfseries Dossiertitel & \bfseries Aktenzeichen & \bfseries Auftraggeber & \bfseries Auftragnehmer & \bfseries Zu erledigen bis & \bfseries Status \\%%
+    \endhead\hline
+
+  % for row in incoming:
+    ${row} \\%%
+    \hline
+  % endfor
+  \end{longtable}
+}
+% endif
+
+% if outgoing:
+\newpage
+{
+    \vspace{5mm}
+  {\bf Pendenzenkontrolle ${client}: erteilte Aufgaben}\\%%
+  \vspace{\baselineskip}
+  \scriptsize
+  \noindent
+  \addtolength{\tablewidth}{-20\tabcolsep}
+  \begin{longtable}{p{.01\tablewidth}p{.20\tablewidth}p{.12\tablewidth}p{.23\tablewidth}p{.1\tablewidth}p{.1\tablewidth}p{.1\tablewidth}p{.09\tablewidth}p{.05\tablewidth}}
+    \bfseries Nr & \bfseries Aufgabentitel & \bfseries Aufgabentyp & \bfseries Dossiertitel & \bfseries Aktenzeichen & \bfseries Auftraggeber & \bfseries Auftragnehmer & \bfseries Zu erledigen bis & \bfseries Status \\%%
+    \endhead\hline
+
+  % for row in outgoing:
+    ${row} \\%%
+    \hline
+  % endfor
+  \end{longtable}
+}
+% endif
