@@ -9,6 +9,7 @@ from plone.app.testing import PloneSandboxLayer
 from plone.app.testing import TEST_USER_ID
 from plone.app.testing import applyProfile
 from plone.app.testing import setRoles
+from plone.testing import z2
 from zope.configuration import xmlconfig
 from zope.sqlalchemy import datamanager
 
@@ -51,6 +52,8 @@ class OpengeverFixture(PloneSandboxLayer):
 
             '</configure>',
             context=configurationContext)
+
+        z2.installProduct(app, 'plone.app.versioningbehavior')
 
     def setUpPloneSite(self, portal):
         self.installOpengeverProfiles(portal)
