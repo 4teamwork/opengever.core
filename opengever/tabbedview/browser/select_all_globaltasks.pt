@@ -1,0 +1,19 @@
+<div>
+  <div id="above_visibles">
+    <div class="hidden_items">
+      <tal:repeat tal:repeat="item options/above">
+        <input type="hidden" tal:attributes="value item/task_id"
+               value="" name="task_ids:list">
+      </tal:repeat>
+    </div>
+  </div>
+
+  <div id="beneath_visibles">
+    <div class="hidden_items">
+      <tal:repeat tal:repeat="item options/beneath">
+        <input type="hidden" tal:attributes="value item/task_id"
+               value="" name="task_ids:list">
+      </tal:repeat>
+    </div>
+  </div>
+</div>

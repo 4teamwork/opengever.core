@@ -1,0 +1,187 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: 1.0\n"
+"POT-Creation-Date: 2009-02-25 13:09+0000\n"
+"PO-Revision-Date: 2009-02-25 14:39+0100\n"
+"Language-Team: 4teamwork <info@4teamwork.ch>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0\n"
+"Language-Code: en\n"
+"Language-Name: English\n"
+"Preferred-Encodings: utf-8 latin1\n"
+"Domain: opengever.tabbedview\n"
+"X-Poedit-Language: German\n"
+
+msgid "Creator"
+msgstr ""
+
+msgid "sortable_title"
+msgstr ""
+
+msgid "Title"
+msgstr ""
+
+msgid "modified"
+msgstr ""
+
+msgid "dossiers"
+msgstr ""
+
+msgid "subdossiers"
+msgstr ""
+
+msgid "documents"
+msgstr ""
+
+msgid "tasks"
+msgstr ""
+
+msgid "overview"
+msgstr ""
+
+msgid "repostories"
+msgstr ""
+
+msgid "events"
+msgstr ""
+
+msgid "journal"
+msgstr ""
+
+msgid "sharing"
+msgstr ""
+
+msgid "relateddossiers"
+msgstr ""
+
+msgid "title"
+msgstr ""
+
+msgid "actor"
+msgstr ""
+
+msgid "time"
+msgstr ""
+
+msgid "comment"
+msgstr ""
+
+msgid "comments"
+msgstr ""
+
+msgid "reference_number"
+msgstr ""
+
+msgid "reference"
+msgstr ""
+
+msgid "review_state"
+msgstr ""
+
+msgid "responsible"
+msgstr ""
+
+msgid "start"
+msgstr ""
+
+msgid "end"
+msgstr ""
+
+msgid "document_author"
+msgstr ""
+
+msgid "document_date"
+msgstr ""
+
+msgid "receipt_date"
+msgstr ""
+
+msgid "delivery_date"
+msgstr ""
+
+msgid "checked_out"
+msgstr ""
+
+msgid "deadline"
+msgstr ""
+
+msgid "trash"
+msgstr ""
+
+msgid "all_contacts"
+msgstr ""
+
+msgid "all_orgunits"
+msgstr ""
+
+msgid "important_contact"
+msgstr ""
+
+msgid "additional_contact"
+msgstr ""
+
+msgid "orgunit_contact"
+msgstr ""
+
+msgid "preview"
+msgstr ""
+
+msgid "contact"
+msgstr ""
+
+msgid "role_list"
+msgstr ""
+
+msgid "participants"
+msgstr ""
+
+msgid "issuer"
+msgstr ""
+
+msgid "date_of_completion"
+msgstr ""
+
+msgid "issuedtasks"
+msgstr ""
+
+msgid "mytasks"
+msgstr ""
+
+msgid "email"
+msgstr ""
+
+msgid "phone_office"
+msgstr ""
+
+msgid "created"
+msgstr ""
+
+msgid "checkout_and_edit"
+msgstr ""
+
+#: ./opengever/tabbedview/browser/tabs_templates/generic.pt:13
+msgid "All visible entries chosen <a href=\"#\">x</a>"
+msgstr ""
+
+-#: ./opengever/tabbedview/browser/tabs_templates/generic.pt:12
+msgid "Choose:"
+msgstr ""
+
+#: ./opengever/tabbedview/browser/tabs_templates/generic.pt:13
+msgid "Show all in this Folder"
+msgstr ""
+
+#: ./opengever/tabbedview/browser/tabs_templates/generic.pt:12
+msgid "all"
+msgstr ""
+
+#. Default: "More actions &#9660;"
+#: ./opengever/tabbedview/browser/tabs_templates/generic.pt:40
+msgid "button_more_actions"
+msgstr ""
+
+#: ./opengever/tabbedview/browser/tabs_templates/generic.pt:12
+msgid "none"
+msgstr ""

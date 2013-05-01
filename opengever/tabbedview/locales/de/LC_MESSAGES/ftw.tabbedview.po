@@ -1,0 +1,171 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2009-02-25 13:09+0000\n"
+"PO-Revision-Date: 2012-05-14 14:27+0200\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0\n"
+"Preferred-Encodings: utf-8 latin1\n"
+"Domain: DOMAIN\n"
+
+msgid "By Area"
+msgstr "Bereich"
+
+msgid "By Responsible Manager"
+msgstr "Verantwortlicher"
+
+msgid "By Severity"
+msgstr "Einstufung"
+
+msgid "By State"
+msgstr "Status"
+
+msgid "By Target Release"
+msgstr "Ziel Release"
+
+msgid "Month"
+msgstr "Monat"
+
+msgid "accounting_overview"
+msgstr "Übersicht"
+
+msgid "all_entries"
+msgstr "Alle Einträge"
+
+msgid "all_issues"
+msgstr "Alle Tickets"
+
+msgid "archive"
+msgstr "Archiv"
+
+msgid "assigned_forwardings"
+msgstr "Eingang"
+
+msgid "assigned_tasks"
+msgstr "Aufgaben an Eingangskorb"
+
+msgid "assignedtasks"
+msgstr "Zugewiesene Aufgaben"
+
+msgid "billable"
+msgstr "verrechenb. Std."
+
+msgid "changes"
+msgstr "Letzte Änderungen"
+
+msgid "contacts"
+msgstr "Kontakte"
+
+msgid "documents"
+msgstr "Dokumente"
+
+msgid "dossiers"
+msgstr "Dossiers"
+
+msgid "events"
+msgstr "Termine"
+
+msgid "folders"
+msgstr "Ordner"
+
+msgid "generally"
+msgstr "Allgemein"
+
+msgid "getAccount"
+msgstr "Konstenstelle"
+
+msgid "getBillable"
+msgstr "verrechenbar"
+
+msgid "getEffectiveHours"
+msgstr "Geleistete Std."
+
+msgid "getEstimatedHours"
+msgstr "Geschätzte Std."
+
+msgid "getHours"
+msgstr "geleistet"
+
+msgid "getResponsible"
+msgstr "Vollmachten"
+
+msgid "getResponsibleManager"
+msgstr "Zuständigkeit"
+
+msgid "given_tasks"
+msgstr "Weiterleitung"
+
+msgid "info"
+msgstr "Info"
+
+msgid "issued_issues"
+msgstr "Meine Aufträge"
+
+msgid "journal"
+msgstr "Journal"
+
+msgid "label_account"
+msgstr "Kostenstelle"
+
+msgid "my_issues"
+msgstr "Meine Tickets"
+
+msgid "mydocuments"
+msgstr "Meine Dokumente"
+
+msgid "mydossiers"
+msgstr "Meine Dossiers"
+
+msgid "myissuedtasks"
+msgstr "Erteilte Aufgaben"
+
+msgid "mytasks"
+msgstr "Meine Aufgaben"
+
+msgid "ogds-cp-alltasks"
+msgstr "Alle Aufgaben"
+
+msgid "ogds-cp-clients"
+msgstr "Mandanten"
+
+msgid "open_issues"
+msgstr "Offene Tickets"
+
+msgid "overview"
+msgstr "Übersicht"
+
+msgid "participants"
+msgstr "Beteiligungen"
+
+msgid "process"
+msgstr "Fortschritt"
+
+msgid "reports"
+msgstr "Arbeitsrapporte"
+
+msgid "subdossiers"
+msgstr "Subdossiers"
+
+msgid "tasks"
+msgstr "Aufgaben"
+
+msgid "tickets"
+msgstr "Tickets"
+
+msgid "tracker_info"
+msgstr "Info"
+
+msgid "tracker_overview"
+msgstr "Übersicht"
+
+msgid "trash"
+msgstr "Papierkorb"
+
+msgid "users"
+msgstr "OGDS"
+
+
