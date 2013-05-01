@@ -1,0 +1,104 @@
+Changelog
+=========
+
+2.0.4 (unreleased)
+------------------
+
+- Dropped Plone 4.1 compatibility. Only 4.2 and up are supported.
+  [lgraf]
+
+
+2.0.3 (2012-07-20)
+------------------
+
+- Added dependencies missing from TinyMCE to tests_require.
+  (zope.globalrequest and plone.namedfile[blobs])
+  Remove as soon as they are properly declared in TinyMCE's setup.py
+  [lgraf]
+
+- Adjust the use of title accessors, because the deconding changed with the dexerity update.
+  Issue #1420 Plone Version und Dexterity Version auf aktuellste Version heben.
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1420
+  [phgross]
+
+
+2.0.2 (2012-03-28)
+------------------
+
+- Add translations
+  [ttschanz]
+
+
+2.0.1 (2012-02-27)
+------------------
+
+- Added French translations.
+  [ttschanz]
+
+- Updated rolemap.xml to include Administrator role
+  [lgraf]
+
+- #1336 Trash: Robusteres Verhalten bei doppeltem Aufruf der trashed view
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1336/
+  Fallback if the object is already trashed
+  [eschmutz]
+
+
+2.0 (2011-11-17)
+----------------
+
+- Final release
+
+
+2.0a4 (2011-09-30)
+------------------
+
+- #1165 UnicodeDecodeError im opengever.trash
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1165
+  [ttschanz]
+
+- changed deprecated grok.CodeView to grok.View
+  [eschmutz]
+
+- added test-buildout for plone 4.1
+  [eschmutz]
+
+
+2.0a3 (2011-07-13)
+------------------
+
+- added special handling for calling the trash view without selecting any items
+  [phgross]
+
+- Issue #1051 Fehler bzw. Anpassung im Papierkorb des Dossiers/Subdossiers
+  https://extranet.4teamwork.ch/projects/opengever-kanton-zug/sprint-backlog/1051/
+  [phgross]
+
+- updated testsetup, so that it works with new plone.app.testing version
+  [phgross]
+
+- fixed extends path
+  [jbaumann]
+
+
+2.0a2
+-----
+
+
+1.0a4
+-----
+
+
+1.0a3
+-----
+
+
+1.0a2
+-----
+
+
+1.0a1
+-----
+
+- Initial release
+

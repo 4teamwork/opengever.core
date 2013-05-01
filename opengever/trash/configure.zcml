@@ -1,0 +1,44 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:plone="http://namespaces.plone.org/plone"
+	xmlns:i18n="http://namespaces.zope.org/i18n"
+    xmlns:monkey="http://namespaces.plone.org/monkey"
+    xmlns:grok="http://namespaces.zope.org/grok"
+    xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+    i18n_domain="opengever.trash">
+
+  <!-- Register locales translations -->
+  <i18n:registerTranslations directory="locales" />
+
+  <include file="profiles.zcml" />
+
+  <include package="plone.behavior" file="meta.zcml" />
+
+  <include package="plone.directives.form" file="meta.zcml" />
+
+  <include package="plone.directives.form" />
+
+  <include package="collective.monkeypatcher" />
+
+  <!-- Include custom permissions -->
+  <include file="permissions.zcml" />
+
+  <grok:grok package="." />
+
+  <monkey:patch
+     class="Products.CMFPlone.CatalogTool.CatalogTool"
+     original="searchResults"
+     replacement=".monkey.dummy_method"
+     handler=".monkey.search_patch"
+     docstringWarning="false"
+     />
+
+  <plone:behavior
+      title="ITrashable Behavior"
+      description="Opengever trash behavior"
+      provides="opengever.trash.trash.ITrashable"
+      factory="opengever.trash.trash.Trasher"
+      marker="opengever.trash.trash.ITrashableMarker"
+      for="plone.dexterity.interfaces.IDexterityContent"
+      />
+</configure>

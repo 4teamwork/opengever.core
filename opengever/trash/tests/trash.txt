@@ -1,0 +1,80 @@
+TRASH TEST
+==========
+
+Globals:
+
+    >>> app = layer.get('app')
+    >>> portal = layer.get('portal')
+    >>> request = layer.get('request')
+
+Imports:
+
+    >>> from plone.dexterity.fti import DexterityFTI
+    >>> from plone.dexterity.utils import createContentInContainer
+    >>> from zope.component import getUtility
+    >>> from opengever.trash.trash import ITrashable, ITrashed
+
+
+FTI
+---
+
+Create a default FTI which has a title and a description.
+
+    >>> fti = DexterityFTI('TrashTestFTI',
+    ...                    klass="plone.dexterity.content.Container",
+    ...                    global_allow=True,
+    ...                    filter_content_types=False)
+    >>> fti.behaviors = ('plone.app.content.interfaces.INameFromTitle', 'opengever.trash.trash.ITrashable')
+    >>> portal.portal_types._setObject('TrashTestFTI', fti)
+    'TrashTestFTI'
+    >>> schema = fti.lookupSchema()
+
+Pulling a object
+----------------
+
+create a first item
+
+    >>> utem1 = createContentInContainer(portal, 'TrashTestFTI',
+    ...                                   checkConstraints=False,
+    ...                                   title=u'\xfctem1', checked_out=False)
+    >>> utem1
+    <Container at /plone/utem1>
+
+    >>> utem2 = createContentInContainer(portal, 'TrashTestFTI',
+    ...                                   checkConstraints=False,
+    ...                                   title=u'\xfctem2')
+    >>> utem2
+    <Container at /plone/utem2>
+
+    >>> portal.REQUEST['paths'] = ['/'.join(utem1.getPhysicalPath())]
+    >>> utem1.restrictedTraverse('trashed')()
+    'http://nohost/plone/utem1#trash'
+
+
+the we check the interfaces
+
+    >>> ITrashed.providedBy(utem1)
+    True
+
+and the catalog
+
+    >>> len(portal.portal_catalog(portal_type="TrashTestFTI", trashed=True))
+    1
+
+if we trash the object again we get a fallback
+
+    >>> portal.REQUEST['paths'] = ['/'.join(utem1.getPhysicalPath())]
+    >>> utem1.restrictedTraverse('trashed')()
+    'http://nohost/plone/utem1#documents'
+
+
+now we check also the untrashing
+
+    >>> portal.REQUEST['paths'] = ['/'.join(utem1.getPhysicalPath())]
+    >>> utem1.restrictedTraverse('untrashed')()
+    'http://nohost/plone/utem1#documents'
+
+and the catalog
+    >>> portal.portal_catalog(portal_type="TrashTestFTI", trashed=True)
+    []
+

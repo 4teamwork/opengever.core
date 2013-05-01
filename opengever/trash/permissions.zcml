@@ -1,0 +1,16 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+
+    i18n_domain="opengever.trash">
+
+    <permission
+        id="opengever.trash.TrashContent"
+        title="opengever.trash: Trash content"
+        />
+
+    <permission
+        id="opengever.trash.UntrashContent"
+        title="opengever.trash: Untrash content"
+        />
+        
+</configure>

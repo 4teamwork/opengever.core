@@ -1,0 +1,43 @@
+# --- PLEASE EDIT THE LINES BELOW CORRECTLY ---
+# SOME DESCRIPTIVE TITLE.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2011-12-27 13:02+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0\n"
+"Language-Code: en\n"
+"Language-Name: English\n"
+"Preferred-Encodings: utf-8 latin1\n"
+"Domain: opengever.trash\n"
+
+#: ./opengever/trash/trash.py:118
+msgid "You have not selected any items"
+msgstr ""
+
+#: ./opengever/trash/trash.py:93
+msgid "could not trash the object ${obj}, it is already trashed"
+msgstr ""
+
+#: ./opengever/trash/trash.py:102
+msgid "could not trash the object ${obj}, it is checked out"
+msgstr ""
+
+#: ./opengever/trash/trash.py:112
+msgid "the object ${obj} trashed"
+msgstr ""
+
+#: ./opengever/trash/profiles/default/actions.xml
+msgid "trashed"
+msgstr ""
+
+#: ./opengever/trash/profiles/default/actions.xml
+msgid "untrashed"
+msgstr ""
+
