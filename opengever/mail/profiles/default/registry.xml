@@ -1,0 +1,4 @@
+<registry>
+  <records interface="opengever.mail.interfaces.IMailSettings" />
+  <records interface="opengever.mail.interfaces.ISendDocumentConf" />
+</registry>

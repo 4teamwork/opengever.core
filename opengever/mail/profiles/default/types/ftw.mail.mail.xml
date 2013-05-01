@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<object name="ftw.mail.mail" meta_type="Dexterity FTI">
+
+    <property name="icon_expr"></property>
+
+    <!-- class used for content items -->
+    <property name="klass">opengever.mail.mail.OGMail</property>
+
+    <action action_id="save_attachments"
+            title="save attachments"
+            visible="True"
+            url_expr="string:${object_url}/extract_attachments"
+            category="object_buttons">
+        <permission value="View" />
+    </action>
+    <property name="behaviors" purge="False">
+        <element value="opengever.trash.trash.ITrashable" />
+        <element value="plone.app.versioningbehavior.behaviors.IVersionable" />
+        <element value="opengever.base.behaviors.sequence.ISequenceNumberBehavior" />
+        <element value="opengever.document.behaviors.IBaseDocument" />
+        <element value="opengever.mail.mail.IOGMail" />
+    </property>
+</object>

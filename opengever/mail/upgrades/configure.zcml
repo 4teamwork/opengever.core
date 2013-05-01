@@ -1,0 +1,26 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+    i18n_domain="opengever.mail">
+
+    <!-- 2 -> 2100 -->
+    <genericsetup:upgradeStep
+        title="Activate documents als links functionality"
+        description=""
+        source="2"
+        destination="2100"
+        handler="opengever.mail.upgrades.to2100.AddRegistryEntries"
+        profile="opengever.mail:default"
+        />
+
+    <!-- 2101 -> 2102 -->
+    <genericsetup:upgradeStep
+        title="Migrate ftw.mail.mail objs to OGMail class"
+        description=""
+        source="2101"
+        destination="2102"
+        handler="opengever.mail.upgrades.to2100.MigrateMailClass"
+        profile="opengever.mail:default"
+        />
+
+</configure>

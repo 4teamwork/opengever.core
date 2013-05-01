@@ -1,0 +1,78 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      lang="en"
+      metal:use-macro="context/main_template/macros/master"
+      i18n:domain="ftw.mail">
+<body>
+
+<metal:main fill-slot="main">
+    <tal:main-macro metal:define-macro="main"
+        tal:define="toLocalizedTime nocall:context/@@plone/toLocalizedTime">
+
+        <div tal:replace="structure provider:plone.abovecontenttitle" />
+
+        <h1 class="documentFirstHeading" tal:content="context/title" />
+
+        <div tal:replace="structure provider:plone.belowcontenttitle" />
+
+        <table class="mailHeaders">
+            <tr class="mailFrom"
+                tal:define="mailFrom python:view.get_header('From')"
+                tal:condition="mailFrom">
+                <th i18n:translate="">From:</th>
+                <td tal:content="mailFrom" />
+            </tr>
+            <tr class="mailSubject"
+                tal:define="mailSubject python:view.get_header('Subject')"
+                tal:condition="mailSubject">
+                <th i18n:translate="">Subject:</th>
+                <td tal:content="mailSubject" />
+            </tr>
+            <tr class="mailDate"
+                tal:define="mailDate python:view.get_date_header('Date')"
+                tal:condition="mailDate">
+                <th i18n:translate="">Date:</th>
+                <td tal:content="python:toLocalizedTime(mailDate, long_format=1)" />
+            </tr>
+            <tr class="mailTo"
+                tal:define="mailTo python:view.get_header('To')"
+                tal:condition="mailTo">
+                <th i18n:translate="">To:</th>
+                <td tal:content="mailTo" />
+            </tr>
+            <tr class="mailCc"
+                tal:define="mailCc python:view.get_header('Cc')"
+                tal:condition="mailCc">
+                <th>Cc:</th>
+                <td tal:content="mailCc" />
+            </tr>
+        </table>
+
+        <div tal:replace="structure provider:plone.abovecontentbody" />
+
+        <div tal:replace="structure view/body">Body</div>
+
+        <tal:attachments condition="view/attachments">
+        <h2 i18n:translate="">Attachments</h2>
+        <tal:items tal:repeat="item view/attachments">
+            <div class="mailAttachment">
+                <a href=""
+                   tal:define="position python:item['position']"
+                   tal:attributes="href string:${here/absolute_url}/get_attachment?position=${position}">
+                    <span tal:attributes="class python:item['icon']"></span>
+                    <span tal:content="python:item['filename']">filename</span></a>
+                    <span tal:content="python:item['type-name']">ContentType</span>
+                    <span tal:content="python:context.getObjSize(size=item['size'])">0Kb</span>
+            </div>
+        </tal:items>
+        </tal:attachments>
+
+        <div tal:replace="structure provider:plone.belowcontentbody" />
+
+    </tal:main-macro>
+</metal:main>
+
+</body>
+</html>

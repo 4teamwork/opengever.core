@@ -1,0 +1,59 @@
+<configure
+      xmlns="http://namespaces.zope.org/zope"
+      xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+      xmlns:grok="http://namespaces.zope.org/grok"
+      xmlns:i18n="http://namespaces.zope.org/i18n"
+      xmlns:plone="http://namespaces.plone.org/plone"
+      xmlns:monkey="http://namespaces.plone.org/monkey"
+      xmlns:browser="http://namespaces.zope.org/browser"
+      i18n_domain="opengever.mail">
+
+    <!-- Grok the package to initialise schema interfaces and content classes -->
+    <grok:grok package="." />
+
+    <include package=".browser" />
+    <include package=".upgrades" />
+
+
+    <!-- Register locales translations -->
+    <i18n:registerTranslations directory="locales" />
+
+    <plone:behavior
+          title="IMailInAddress"
+          description="generates an email adress for a dossier"
+          provides=".behaviors.IMailInAddress"
+          factory=".behaviors.MailInAddress"
+          marker=".behaviors.IMailInAddressMarker"
+          />
+
+    <plone:behavior
+          title="ISendableDocsContainer behavior"
+          description="generates an email adress for a dossier"
+          provides=".behaviors.ISendableDocsContainer"
+          />
+
+    <plone:behavior
+        title="Opengever Mail"
+        description="Opengever mail additional title behavior."
+        provides=".mail.IOGMail"
+        factory=".mail.OGMailBase"
+        marker=".mail.IOGMailMarker"
+        for="plone.dexterity.interfaces.IDexterityContent"
+
+        />
+
+    <genericsetup:registerProfile
+          name="default"
+          title="opengever.mail"
+          directory="profiles/default"
+          description="opengever mail"
+          provides="Products.GenericSetup.interfaces.EXTENSION"
+          />
+
+    <genericsetup:importStep
+        name="opengever.mail"
+        title="opengever.mail special import handlers"
+        description=""
+        handler="opengever.mail.setuphandler.import_various" />
+
+</configure>

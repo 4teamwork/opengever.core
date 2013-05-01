@@ -1,0 +1,118 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      lang="en"
+      metal:use-macro="context/main_template/macros/master"
+      i18n:domain="opengever.mail">
+  <head>
+      <metal:js fill-slot="javascript_head_slot">
+        <script type="text/javascript">
+
+        (function($) {
+              $("a#all").live("click", function(e) {
+                  $("input[type=checkbox]").selected(true);
+                  e.preventDefault();
+              });
+              $("a#none").live("click", function(e){
+                  $("input[type=checkbox]").selected(false);
+                  e.preventDefault();
+              }); 
+        })(jQuery);
+        
+        </script>
+      </metal:js>
+  </head>
+  <body>
+
+    <metal:main fill-slot="main">
+      <tal:main-macro metal:define-macro="main">
+
+        <h1 class="documentFirstHeading" tal:content="context/title" />
+
+        <div id="content-core">
+          <form
+             class="enableUnloadProtection"
+             method="post"
+             id="form"
+             tal:attributes="action string:${here/absolute_url}/extract_attachments">
+
+
+            <div class="field">
+              <label i18n:translate="label_select_attachments"
+                     class="horizontal">
+                Attachments to extract
+              </label>
+
+              <div class="formHelp" i18n:translate="help_select_attachments">
+                Select the attachments to extract.
+              </div>
+              <p i18n:domain="opengever.tabbedview" >
+                  <span i18n:translate="Choose:">Choose</span>: 
+                  <a i18n:translate="all" href="#" id="all">All</a>
+                  <a i18n:translate="none" href="#" id="none">None</a>
+              </p>
+              
+              <table tal:replace="structure view/render_attachment_table" />
+            </div>
+
+
+            <div class="field">
+              <label i18n:translate="label_delete_action"
+                     class="horizontal">
+                Delete attachments
+              </label>
+
+              <div class="formHelp" i18n:translate="help_delete_action">
+                Select which attachments should be deleted.
+              </div>
+
+              <div>
+                <input type="radio" id="delete_action_nothing"
+                       name="delete_action" value="nothing"
+                       checked="cheked" />
+                <label for="delete_action_nothing"
+                       i18n:translate="label_delete_action_nothing">
+                  Delete nothing
+                </label>
+              </div>
+
+              <div>
+                <input type="radio" id="delete_action_all"
+                       name="delete_action" value="all" />
+                <label for="delete_action_all"
+                       i18n:translate="label_delete_action_all">
+                  Delete all attachments
+                </label>
+              </div>
+
+              <div>
+                <input type="radio" id="delete_action_selected"
+                       name="delete_action" value="selected" />
+                <label for="delete_action_selected"
+                       i18n:translate="label_delete_action_selected">
+                  Delete all selected attachments
+                </label>
+              </div>
+
+            </div>
+
+            <div class="formControls">
+              <input type="submit" name="form.submitted"
+                     value="Create documents"
+                     class="submit-widget button-field context"
+                     i18n:attributes="value" />
+
+              <input type="submit" name="form.cancelled"
+                     value="Cancel"
+                     class="submit-widget button-field standalone"
+                     i18n:attributes="value" />
+            </div>
+
+          </form>
+        </div>
+
+      </tal:main-macro>
+    </metal:main>
+  </body>
+</html>

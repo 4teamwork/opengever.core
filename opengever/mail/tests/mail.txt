@@ -1,0 +1,20 @@
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf8"
+Content-Transfer-Encoding: base64
+To: =?utf-8?q?Friedrich_H=C3=B6lderlin?= <to@example.org>
+From: from@example.org
+Subject: =?utf-8?q?Die_B=C3=BCrgschaft?=
+Date: Thu, 01 Jan 1970 01:00:00 +0100
+Message-Id: <1>
+X-Mailer: Zope/SecureMailHost
+
+RGllIELDvHJnc2NoYWZ0CkZyaWVkcmljaCBTY2hpbGxlcgoKWnUgRGlvbnlzLCBkZW0gVHlyYW5u
+ZW4sIHNjaGxpY2gKRGFtb24sIGRlbiBEb2xjaCBpbSBHZXdhbmRlOgpJaG4gc2NobHVnZW4gZGll
+IEjDpHNjaGVyIGluIEJhbmRlLArCu1dhcyB3b2xsdGVzdCBkdSBtaXQgZGVtIERvbGNoZT8gc3By
+aWNoIcKrCkVudGdlZ25ldCBpaG0gZmluc3RlciBkZXIgV8O8dGVyaWNoLgrCu0RpZSBTdGFkdCB2
+b20gVHlyYW5uZW4gYmVmcmVpZW4hwqsKwrtEYXMgc29sbHN0IGR1IGFtIEtyZXV6ZSBiZXJldWVu
+LsKrCgrCu0ljaCBiaW7Cqywgc3ByaWNodCBqZW5lciwgwrt6dSBzdGVyYmVuIGJlcmVpdApVbmQg
+Yml0dGUgbmljaHQgdW0gbWVpbiBMZWJlbjoKRG9jaCB3aWxsc3QgZHUgR25hZGUgbWlyIGdlYmVu
+LApJY2ggZmxlaGUgZGljaCB1bSBkcmVpIFRhZ2UgWmVpdCwKQmlzIGljaCBkaWUgU2Nod2VzdGVy
+IGRlbSBHYXR0ZW4gZ2VmcmVpdDsKSWNoIGxhc3NlIGRlbiBGcmV1bmQgZGlyIGFscyBCw7xyZ2Vu
+LApJaG4gbWFnc3QgZHUsIGVudHJpbm4nIGljaCwgZXJ3w7xyZ2VuLsKrCg==
