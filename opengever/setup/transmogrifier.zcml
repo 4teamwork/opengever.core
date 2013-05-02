@@ -1,7 +1,8 @@
 <configure
     xmlns="http://namespaces.zope.org/zope"
     xmlns:five="http://namespaces.zope.org/five"
-    xmlns:transmogrifier="http://namespaces.plone.org/transmogrifier">
+    xmlns:transmogrifier="http://namespaces.plone.org/transmogrifier"
+    i18n_domain="opengever.setup">
 
   <transmogrifier:registerConfig
       name="opengever.setup.various"
