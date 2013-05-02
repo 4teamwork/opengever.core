@@ -155,8 +155,12 @@ class StateSyncerZCMLLayer(ComponentRegistryLayer):
     def setUp(self):
         super(StateSyncerZCMLLayer, self).setUp()
 
-        import zope.annotation
-        self.load_zcml_file('configure.zcml', zope.annotation)
+        from zope.annotation.interfaces import IAnnotations
+        from zope.annotation.attribute import AttributeAnnotations
+        from zope.component import provideAdapter
+        provideAdapter(AttributeAnnotations,
+                       provides=IAnnotations,
+                       adapts=[IAttributeAnnotatable])
 
         grok('opengever.task.statesyncer')
         grok('opengever.task.adapters')
