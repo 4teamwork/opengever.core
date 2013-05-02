@@ -1,9 +1,8 @@
-#from opengever.dossier.testing import OPENGEVER_DOSSIER_INTEGRATION_TESTING
 from opengever.base.testing import OPENGEVER_BASE_INTEGRATION_TESTING
-
+from plone.testing import layered
 import doctest
 import unittest2 as unittest
-from plone.testing import layered
+
 
 TESTFILES = (
     'base.txt',
@@ -15,6 +14,7 @@ TESTFILES = (
     'sequence.txt',
     'viewlets.txt',
     )
+
 
 OPTIONFLAGS = (doctest.NORMALIZE_WHITESPACE |
                doctest.ELLIPSIS |
@@ -33,6 +33,7 @@ def test_suite():
           ])
 
     return suite
+
 
 if __name__ == '__main__':
     unittest.main(defaultTest='test_suite')
