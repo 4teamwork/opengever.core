@@ -1,4 +1,5 @@
 from collective.transmogrifier import transmogrifier
+from ftw.testing import ComponentRegistryLayer
 from opengever.globalindex import model
 from opengever.ogds.base.setuphandlers import create_sql_tables
 from opengever.ogds.base.utils import create_session
@@ -41,6 +42,19 @@ def truncate_sql_tables():
 
     for table in tables:
         session.execute(table.delete())
+
+
+class AnnotationLayer(ComponentRegistryLayer):
+    """Loads ZML of zope.annotation.
+    """
+
+    def setUp(self):
+        super(AnnotationLayer, self).setUp()
+        import zope.annotation
+        self.load_zcml_file('configure.zcml', zope.annotation)
+
+
+ANNOTATION_LAYER = AnnotationLayer()
 
 
 class OpengeverFixture(PloneSandboxLayer):
