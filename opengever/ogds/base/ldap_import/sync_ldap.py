@@ -75,8 +75,8 @@ def run_import(app, options):
 
     # Setup logging
     config = getConfiguration()
-    ogds_conf = config.product_config.get('opengever.ogds.base', dict())
-    log_file = ogds_conf.get('log_file')
+    ogds_conf = config.product_config.get('opengever.core', dict())
+    log_file = ogds_conf.get('ogds_log_file')
 
     if log_file:
         log_handler = logging.FileHandler(log_file)
