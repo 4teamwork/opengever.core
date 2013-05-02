@@ -6,8 +6,6 @@ maintainer = 'Jonas Baumann'
 
 tests_require = [
     'Products.CMFPlone',
-    'Products.PloneTestCase',
-    'collective.testcaselayer',
     'ftw.contentmenu',
     'ftw.journal',
     'ftw.tabbedview',
@@ -20,7 +18,7 @@ tests_require = [
     'plone.namedfile[blobs]',
     'plone.testing',
     'xlrd',
-    'z3c.form [test]',
+    'z3c.form',
     'z3c.saconfig',
     'zope.globalrequest',
     'zope.testing',
