@@ -12,7 +12,7 @@ from plone.registry.interfaces import IRegistry
 from zope.component import getUtility
 
 
-class DossierFunctionalLayer(PloneSandboxLayer):
+class DossierLayer(PloneSandboxLayer):
 
     defaultBases = (OPENGEVER_FIXTURE, )
 
@@ -46,10 +46,10 @@ class DossierFunctionalLayer(PloneSandboxLayer):
         setRoles(portal, TEST_USER_ID, ['Member', 'Contributor', 'Editor'])
 
     def tearDown(self):
-        super(DossierFunctionalLayer, self).tearDown()
+        super(DossierLayer, self).tearDown()
         truncate_sql_tables()
 
-OPENGEVER_DOSSIER_FIXTURE = DossierFunctionalLayer()
+OPENGEVER_DOSSIER_FIXTURE = DossierLayer()
 OPENGEVER_DOSSIER_INTEGRATION_TESTING = IntegrationTesting(
     bases=(OPENGEVER_DOSSIER_FIXTURE, ), name="OpengeverDossier:Integration")
 OPENGEVER_DOSSIER_FUNCTIONAL_TESTING = FunctionalTesting(
