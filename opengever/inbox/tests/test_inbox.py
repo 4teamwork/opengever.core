@@ -1,20 +1,21 @@
-import unittest2 as unittest
-
+from opengever.core.testing import OPENGEVER_FUNCTIONAL_TESTING
+from opengever.inbox.inbox import IInbox
+from plone.app.testing import TEST_USER_ID
+from plone.app.testing import setRoles
+from plone.dexterity.interfaces import IDexterityFTI
 from zope.component import createObject
 from zope.component import queryUtility
+import unittest2 as unittest
 
-from plone.dexterity.interfaces import IDexterityFTI
-
-from opengever.inbox.testing import OPENGEVER_INBOX_INTEGRATION_TESTING
-
-from opengever.inbox.inbox import IInbox
 
 class TestInboxIntegration(unittest.TestCase):
 
-    layer = OPENGEVER_INBOX_INTEGRATION_TESTING
+    layer = OPENGEVER_FUNCTIONAL_TESTING
 
     def test_adding(self):
         portal = self.layer['portal']
+        setRoles(portal, TEST_USER_ID, ['Contributor'])
+
         portal.invokeFactory('opengever.inbox.inbox', 'inbox1')
         i1 = portal['inbox1']
         self.failUnless(IInbox.providedBy(i1))
@@ -36,6 +37,8 @@ class TestInboxIntegration(unittest.TestCase):
 
     def test_view(self):
         portal = self.layer['portal']
+        setRoles(portal, TEST_USER_ID, ['Contributor'])
+
         request = self.layer['request']
         request.set('URL', portal.absolute_url() + '/@@folder_contents')
         request.set('ACTUAL_URL', portal.absolute_url() + '/@@folder_contents')
@@ -43,6 +46,7 @@ class TestInboxIntegration(unittest.TestCase):
         i1 = portal['inbox1']
         view = i1.restrictedTraverse('@@view')
         self.failUnless(view())
+
 
 def test_suite():
     return unittest.defaultTestLoader.loadTestsFromName(__name__)
