@@ -2,7 +2,7 @@ from datetime import datetime, timedelta
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.ogds.base.interfaces import IClientConfiguration
 from opengever.tasktemplates.testing \
-    import OPENGEVER_TASKTEMPLATES_INTEGRATION_TESTING
+    import OPENGEVER_TASKTEMPLATES_FUNCTIONAL_TESTING
 from opengever.tasktemplates.interfaces import IFromTasktemplateGenerated
 from plone.app.testing import SITE_OWNER_NAME
 from plone.dexterity.utils import createContent, addContentToContainer
@@ -23,9 +23,9 @@ def create_testobject(parent, ptype, **kwargs):
     return obj
 
 
-class TestTaskTemplatesIntegration(unittest.TestCase):
+class TestTaskTemplates(unittest.TestCase):
 
-    layer = OPENGEVER_TASKTEMPLATES_INTEGRATION_TESTING
+    layer = OPENGEVER_TASKTEMPLATES_FUNCTIONAL_TESTING
 
     def test_integration(self):
         """ Tests the integration of tasktemplatefolder and

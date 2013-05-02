@@ -37,6 +37,6 @@ class JournalLayer(PloneSandboxLayer):
 
 
 OPENGEVER_JOURNAL_FIXTURE = JournalLayer()
-OPENGEVER_JOURNAL_INTEGRATION_TESTING = FunctionalTesting(
+OPENGEVER_JOURNAL_FUNCTIONAL_TESTING = FunctionalTesting(
     bases=(OPENGEVER_JOURNAL_FIXTURE, ),
-    name="OpengeverJournal:Integration")
+    name="OpengeverJournal:Functional")

@@ -1,4 +1,4 @@
-from opengever.core.testing import OPENGEVER_INTEGRATION_TESTING
+from opengever.core.testing import OPENGEVER_FUNCTIONAL_TESTING
 from opengever.repository.repositoryroot import IRepositoryRoot
 from plone.app.testing import setRoles, TEST_USER_ID
 from plone.dexterity.interfaces import IDexterityFTI
@@ -9,7 +9,7 @@ import unittest2 as unittest
 
 class TestRepositoryRootIntegration(unittest.TestCase):
 
-    layer = OPENGEVER_INTEGRATION_TESTING
+    layer = OPENGEVER_FUNCTIONAL_TESTING
 
     def test_adding(self):
         portal = self.layer['portal']

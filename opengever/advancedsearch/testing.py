@@ -4,7 +4,6 @@ from opengever.ogds.base.interfaces import IClientConfiguration
 from opengever.ogds.base.setuphandlers import _create_example_client, _create_example_user
 from opengever.ogds.base.utils import create_session
 from plone.app.testing import FunctionalTesting
-from plone.app.testing import IntegrationTesting
 from plone.app.testing import PloneSandboxLayer
 from plone.app.testing import TEST_USER_ID
 from plone.app.testing import setRoles
@@ -48,7 +47,5 @@ class BaseLayer(PloneSandboxLayer):
 
 
 OPENGEVER_ADV_SEARCH_FIXTURE = BaseLayer()
-OPENGEVER_ADV_SEARCH_INTEGRATION_TESTING = IntegrationTesting(
-    bases=(OPENGEVER_ADV_SEARCH_FIXTURE,), name="OpengeverAdvancedsearch:Integration")
 OPENGEVER_ADV_SEARCH_FUNCTIONAL_TESTING = FunctionalTesting(
     bases=(OPENGEVER_ADV_SEARCH_FIXTURE,), name="OpengeverAdvancedsearch:Functional")

@@ -14,6 +14,6 @@ class RepositoryLayer(PloneSandboxLayer):
 
 
 OPENGEVER_REPOSITORY_FIXTURE = RepositoryLayer()
-OPENGEVER_REPOSITORY_INTEGRATION_TESTING = FunctionalTesting(
+OPENGEVER_REPOSITORY_FUNCTIONAL_TESTING = FunctionalTesting(
     bases=(OPENGEVER_REPOSITORY_FIXTURE, ),
-    name="OpengeverRepository:Integration")
+    name="OpengeverRepository:Functional")

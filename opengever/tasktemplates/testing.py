@@ -55,6 +55,6 @@ class TaskTemplatesLayer(PloneSandboxLayer):
 
 
 OPENGEVER_TASKTEMPLATES_FIXTURE = TaskTemplatesLayer()
-OPENGEVER_TASKTEMPLATES_INTEGRATION_TESTING = FunctionalTesting(
+OPENGEVER_TASKTEMPLATES_FUNCTIONAL_TESTING = FunctionalTesting(
     bases=(OPENGEVER_TASKTEMPLATES_FIXTURE, ),
-    name="OpengeverTaskTemplates:Integration")
+    name="OpengeverTaskTemplates:Functional")

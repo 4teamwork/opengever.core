@@ -7,7 +7,7 @@ from opengever.document.events import \
     FileCopyDownloadedEvent
 from opengever.dossier.events import ParticipationCreated, ParticipationRemoved
 from opengever.dossier.behaviors.participation import Participation
-from opengever.journal.testing import OPENGEVER_JOURNAL_INTEGRATION_TESTING
+from opengever.journal.testing import OPENGEVER_JOURNAL_FUNCTIONAL_TESTING
 from opengever.trash.trash import TrashedEvent, UntrashedEvent
 from opengever.sharing.events import LocalRolesAcquisitionBlocked, \
     LocalRolesAcquisitionActivated, LocalRolesModified
@@ -33,7 +33,7 @@ from zope.intid.interfaces import IIntIds
 
 class TestOpengeverJournalGeneral(unittest.TestCase):
 
-    layer = OPENGEVER_JOURNAL_INTEGRATION_TESTING
+    layer = OPENGEVER_JOURNAL_FUNCTIONAL_TESTING
 
     def test_integration_repository_events(self):
         """ Trigger every event of a repo at least one times
