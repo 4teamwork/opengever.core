@@ -62,7 +62,8 @@ class TestViewsIntegration(unittest.TestCase):
         # disable create_inital_version handler for og.documents
         # otherwise we have some savepoints problems with the sqlite db
         handlers.MIGRATION = True
-
+        self.portal = self.layer['portal']
+        setRoles(self.portal, TEST_USER_ID, ['Reviewer', 'Manager'])
         super(TestViewsIntegration, self).setUp()
 
     def tearDown(self):
@@ -73,10 +74,6 @@ class TestViewsIntegration(unittest.TestCase):
         super(TestViewsIntegration, self).tearDown()
 
     def test_overview(self):
-
-        portal = self.layer['portal']
-        setRoles(portal, TEST_USER_ID, ['Reviewer', 'Manager'])
-
         # fake the vocabularies
         provideUtility(
             DummyContactVocabulary(),
@@ -87,9 +84,9 @@ class TestViewsIntegration(unittest.TestCase):
             name='opengever.ogds.base.UsersVocabulary')
 
         # create testing dossier
-        portal.invokeFactory(
+        self.portal.invokeFactory(
             'opengever.dossier.businesscasedossier', 'dossier_overview_test')
-        dossier = portal['dossier_overview_test']
+        dossier = self.portal['dossier_overview_test']
         IDossier(dossier).responsible = 'chuck.norris'
 
         # create test objects
@@ -174,40 +171,6 @@ class TestViewsIntegration(unittest.TestCase):
         # (should include the responsible of the dossier)
         participations = [s.get('Title') for s in  overview.sharing()]
         self.assertTrue('chuck.norris' in participations)
-
-    def test_jsonviews(self):
-        portal = self.layer['portal']
-        setRoles(portal, TEST_USER_ID, ['Reviewer', 'Manager'])
-
-        # create test objects
-        self._create_objects(
-            portal, 'opengever.dossier.businesscasedossier', 'Testdossier', 7)
-
-        wft = getToolByName(portal, 'portal_workflow')
-
-        wft.doActionFor(
-            portal.get('testdossier-3'), 'dossier-transition-resolve')
-        wft.doActionFor(
-            portal.get('testdossier-5'), 'dossier-transition-resolve')
-
-        # call the json view
-        json_data = portal.unrestrictedTraverse('list-open-dossiers-json')()
-
-        # and check the json result
-        objs = json.loads(json_data)
-        by_url = dict([(item.get('url'), item) for item in objs])
-
-        dossier_4_item = by_url[u'http://nohost/plone/testdossier-4']
-        self.assertEquals(dossier_4_item.get('url'), u'http://nohost/plone/testdossier-4')
-        self.assertEquals(dossier_4_item.get('path'), u'testdossier-4')
-        self.assertEquals(dossier_4_item.get('review_state'), u'dossier-state-active')
-        self.assertEquals(dossier_4_item.get('title'), u'Testdossier 4')
-        self.assertEquals(dossier_4_item.get('reference_number'), u'OG / 4')
-
-        # only active dossiers are included in the result
-        titles = [o.get('title') for o in objs]
-        self.assertTrue('Testdossier 3' not in titles)
-        self.assertTrue('Testdossier 5' not in titles)
 
     def _create_objects(self, context, type, title, number):
         for i in range(1, number + 1):
