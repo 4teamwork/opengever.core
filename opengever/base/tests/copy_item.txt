@@ -27,7 +27,7 @@ create test container and object fti:
     >>> portal.portal_types._setObject('OpenGeverBaseContainer', container)
     'OpenGeverBaseContainer'
     >>> fti = DexterityFTI('OpenGeverBaseFTI2')
-    >>> fti.schema = 'opengever.base.testing.IEmptySchema'
+    >>> fti.schema = 'opengever.base.tests.emptyschema.IEmptySchema'
     >>> fti.behaviors = (
     ...                  'opengever.base.behaviors.base.IOpenGeverBase',
     ...                  )

@@ -20,7 +20,7 @@ excluding ambiguity.
     >>> from plone.dexterity.fti import DexterityFTI
 
     >>> fti = DexterityFTI('OpenGeverBaseFTI')
-    >>> fti.schema = 'opengever.base.testing.IEmptySchema'
+    >>> fti.schema = 'opengever.base.tests.emptyschema.IEmptySchema'
     >>> fti.behaviors = (
     ...                  'opengever.base.behaviors.base.IOpenGeverBase',
     ...                  )
