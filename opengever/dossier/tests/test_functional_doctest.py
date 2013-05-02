@@ -5,7 +5,6 @@ from plone.testing import layered
 
 TESTFILES = (
     'dossier_ids.txt',
-    'dossier.txt',
     '../behaviors.txt',
     )
 

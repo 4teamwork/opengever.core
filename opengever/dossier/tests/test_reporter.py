@@ -91,25 +91,6 @@ class TestDossierReporter(MockTestCase):
                 context, request).get_selected_dossiers(),
             ['brain_2', 'brain_55', 'brain_1'])
 
-    def test_report_without_paths(self):
-        context = self.providing_stub([IAttributeAnnotatable])
-        request = self.stub_request(interfaces=IAttributeAnnotatable,
-                                    stub_response=False)
-        response = self.stub_response(request=request)
-
-        self.expect(request.get('orig_template', ANY)).result('TEST_URL')
-        self.expect(context.absolute_url()).result('TEST_URL')
-        self.expect(request.get('paths')).result(None)
-        self.expect(request.cookies).result({})
-        self.expect(request.response.setCookie(
-                'statusmessages', ANY, path=ANY)).result(None)
-        self.expect(response.redirect(ANY)).result('redirected')
-
-        self.replay()
-
-        self.assertEquals(
-            DossierReporter(context, request)(), 'redirected')
-
     def test_report(self):
 
         class MockResponse(dict):

@@ -1,7 +1,7 @@
 from Testing.makerequest import makerequest
 from opengever.dossier.templatedossier import ITemplateDossier
 from opengever.dossier.templatedossier import REMOVED_COLUMNS
-from opengever.dossier.testing import OPENGEVER_DOSSIER_INTEGRATION_TESTING
+from opengever.dossier.testing import OPENGEVER_DOSSIER_FUNCTIONAL_TESTING
 from plone.app.testing import setRoles, TEST_USER_ID
 from plone.dexterity.interfaces import IDexterityFTI
 from plone.dexterity.utils import createContentInContainer
@@ -13,7 +13,7 @@ import unittest2 as unittest
 
 class TestTemplateDossierIntegration(unittest.TestCase):
 
-    layer = OPENGEVER_DOSSIER_INTEGRATION_TESTING
+    layer = OPENGEVER_DOSSIER_FUNCTIONAL_TESTING
 
     def test_adding(self):
         portal = self.layer['portal']

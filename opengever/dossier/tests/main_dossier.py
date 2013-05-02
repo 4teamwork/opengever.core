@@ -5,7 +5,7 @@ from ftw.contentmenu.menu import FactoriesMenu
 from opengever.base.interfaces import IReferenceNumber, ISequenceNumber
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.behaviors.dossier import IDossierMarker
-from opengever.dossier.testing import OPENGEVER_DOSSIER_INTEGRATION_TESTING
+from opengever.dossier.testing import OPENGEVER_DOSSIER_FUNCTIONAL_TESTING
 from opengever.mail.behaviors import ISendableDocsContainer
 from plone.app.testing import SITE_OWNER_NAME, login, logout
 from plone.app.testing import TEST_USER_NAME, TEST_USER_PASSWORD
@@ -82,7 +82,7 @@ class TestMainDossier(unittest.TestCase):
         contentmenu for subdossiers
     """
     dossier_types = {'opengever.dossier.businesscasedossier': {}}
-    layer = OPENGEVER_DOSSIER_INTEGRATION_TESTING
+    layer = OPENGEVER_DOSSIER_FUNCTIONAL_TESTING
     workflow = "opengever_dossier_workflow"
     tabs = ['Overview',
             'Subdossiers',
