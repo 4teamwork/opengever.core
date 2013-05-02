@@ -12,6 +12,7 @@ import os
 class TestForwardingTransitionController(MockTestCase):
 
     def setUp(self):
+        super(TestForwardingTransitionController, self).setUp()
         # we need to have a site root for making the get_client_id cachecky
         # work.
         root = self.create_dummy(getSiteManager=getSiteManager, id='root')

@@ -150,10 +150,10 @@ class TestWorkflowStateSyncer(MockTestCase):
                 )
 
 
-class ZCMLLayer(ComponentRegistryLayer):
+class StateSyncerZCMLLayer(ComponentRegistryLayer):
 
     def setUp(self):
-        super(ZCMLLayer, self).setUp()
+        super(StateSyncerZCMLLayer, self).setUp()
 
         import zope.annotation
         self.load_zcml_file('configure.zcml', zope.annotation)
@@ -162,12 +162,12 @@ class ZCMLLayer(ComponentRegistryLayer):
         grok('opengever.task.adapters')
         grok('opengever.task.localroles')
 
-ZCML_LAYER = ZCMLLayer()
+STATE_SYNCER_ZCML_LAYER = StateSyncerZCMLLayer()
 
 
 class TestSyncTaskWorkflowStateReceiveView(MockTestCase):
 
-    layer = ZCML_LAYER
+    layer = STATE_SYNCER_ZCML_LAYER
     remote_requests = []
 
     def test_remote_view(self):

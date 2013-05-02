@@ -5,21 +5,20 @@ from ftw.testing.layer import ComponentRegistryLayer
 from plone.app.contentlisting.interfaces import IContentListingObject
 
 
-class ZCMLLayer(ComponentRegistryLayer):
-    """Test layer loading the complete package ZCML.
-    """
+class ContentListingZCML(ComponentRegistryLayer):
 
     def setUp(self):
-        super(ZCMLLayer, self).setUp()
+        super(ContentListingZCML, self).setUp()
         import opengever.base.tests
         self.load_zcml_file('tests.zcml', opengever.base.tests)
 
-ZCML_LAYER = ZCMLLayer()
+
+CONTENT_LISTING_ZCML_LAYER = ContentListingZCML()
 
 
 class TestOpengeverContentListing(MockTestCase):
 
-    layer = ZCML_LAYER
+    layer = CONTENT_LISTING_ZCML_LAYER
 
     def setUp(self):
         super(TestOpengeverContentListing, self).setUp()
@@ -35,6 +34,7 @@ class TestOpengeverContentListing(MockTestCase):
             10 * 'Lorem ipsum dolor sit amet')
 
         self.replay()
+
         self.assertEquals(
             len(IContentListingObject(self.brain).containing_dossier()),
             203)
