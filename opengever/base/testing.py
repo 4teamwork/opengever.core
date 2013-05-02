@@ -1,4 +1,3 @@
-from ftw.testing import ComponentRegistryLayer
 from opengever.core.testing import OPENGEVER_FIXTURE
 from opengever.core.testing import truncate_sql_tables
 from opengever.ogds.base.interfaces import IClientConfiguration
@@ -29,9 +28,6 @@ class BaseLayer(PloneSandboxLayer):
         registry = getUtility(IRegistry, context=portal)
         client = registry.forInterface(IClientConfiguration)
         client.client_id = u'plone'
-
-        from plone.app.testing import setRoles, TEST_USER_ID
-        setRoles(portal, TEST_USER_ID, ['Member', 'Contributor', 'Editor'])
 
         # Disable the prevent_deletion subscriber. In tests, we WANT
         # to be able to quickly delete objs without becoming Manager

@@ -1,6 +1,13 @@
 Test viewlets defined in opengever.base
 =======================================
 
+    >>> app = layer.get('app')
+    >>> portal = layer.get('portal')
+
+    >>> from plone.app.testing import setRoles
+    >>> from plone.app.testing import TEST_USER_ID
+    >>> setRoles(portal, TEST_USER_ID, ['Contributor'])
+
 First, some imports and general setup:
 
     >>> import transaction
@@ -10,8 +17,6 @@ First, some imports and general setup:
 
     >>> from opengever.document.document import IDocumentSchema
 
-    >>> app = layer.get('app')
-    >>> portal = layer.get('portal')
     >>> request = layer.get('request')
     >>> ptool = getToolByName(portal, 'plone_utils')
 
@@ -104,4 +109,3 @@ Version view viewlet
 --------------------
 
 TODO
-
