@@ -9,17 +9,11 @@ from plone.app.testing import setRoles, TEST_USER_ID
 from plone.dexterity.fti import DexterityFTI, register
 from plone.registry.interfaces import IRegistry
 from zope.component import getUtility
-from zope.configuration import xmlconfig
 
 
 class DocumentLayer(PloneSandboxLayer):
 
     defaultBases = (OPENGEVER_FIXTURE, )
-
-    def setUpZope(self, app, configurationContext):
-        from opengever import document
-        xmlconfig.file('tests.zcml', package=document,
-            context=configurationContext)
 
     def setUpPloneSite(self, portal):
         session = create_session()
