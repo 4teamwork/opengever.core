@@ -6,7 +6,6 @@ from opengever.ogds.base.utils import create_session
 from plone.app.testing import FunctionalTesting
 from plone.app.testing import PloneSandboxLayer
 from plone.app.testing import TEST_USER_ID
-from plone.app.testing import setRoles
 from plone.registry.interfaces import IRegistry
 from zope.component import getUtility
 
@@ -37,9 +36,6 @@ class BaseLayer(PloneSandboxLayer):
         registry = getUtility(IRegistry, context=portal)
         client = registry.forInterface(IClientConfiguration)
         client.client_id = u'plone'
-
-        # browser tester roles
-        setRoles(portal, TEST_USER_ID, ['Member', 'Contributor', 'Manager'])
 
     def tearDown(self):
         super(BaseLayer, self).tearDown()
