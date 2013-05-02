@@ -16,7 +16,6 @@ class TestBusinessCaseDossierIntegration(unittest.TestCase):
         portal.invokeFactory('opengever.dossier.businesscasedossier', 'dossier1')
         d1 = portal['dossier1']
         self.failUnless(IBusinessCaseDossier.providedBy(d1))
-        del portal['dossier1']
 
     def test_fti(self):
         fti = queryUtility(IDexterityFTI, name='opengever.dossier.businesscasedossier')

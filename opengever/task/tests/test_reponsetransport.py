@@ -1,8 +1,8 @@
 from DateTime import DateTime
 from datetime import datetime
 from ftw.testing import MockTestCase
-from ftw.testing.layer import ComponentRegistryLayer
 from grokcore.component.testing import grok
+from opengever.core.testing import ANNOTATION_LAYER
 from opengever.task.adapters import Response, IResponseContainer
 from opengever.task.task import ITask
 from opengever.task.transporter import ExtractResponses
@@ -12,21 +12,9 @@ from z3c.relationfield import RelationValue
 from zope.annotation.interfaces import IAttributeAnnotatable
 
 
-class ZCMLLayer(ComponentRegistryLayer):
-
-    def setUp(self):
-        super(ZCMLLayer, self).setUp()
-
-        import zope.annotation
-        self.load_zcml_file('configure.zcml', zope.annotation)
-
-
-ZCML_LAYER = ZCMLLayer()
-
-
 class TestResponeTransporter(MockTestCase):
 
-    layer = ZCML_LAYER
+    layer = ANNOTATION_LAYER
 
     def setUp(self):
         super(TestResponeTransporter, self).setUp()

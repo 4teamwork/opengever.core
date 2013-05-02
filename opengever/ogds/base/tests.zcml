@@ -4,6 +4,8 @@
     <include package="plone.app.dexterity" />
     <include package="opengever.contact" />
 
+    <include package="z3c.saconfig" file="meta.zcml" />
+
     <!-- configure a temporary testing DB -->
     <db:engine name="opengever.db"
                url="sqlite:///:memory:" />

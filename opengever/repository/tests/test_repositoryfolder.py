@@ -1,17 +1,15 @@
-import unittest2 as unittest
-
+from opengever.core.testing import OPENGEVER_FUNCTIONAL_TESTING
+from opengever.repository.repositoryfolder import IRepositoryFolderSchema
+from plone.app.testing import setRoles, TEST_USER_ID
+from plone.dexterity.interfaces import IDexterityFTI
 from zope.component import createObject
 from zope.component import queryUtility
+import unittest2 as unittest
 
-from plone.dexterity.interfaces import IDexterityFTI
 
-from opengever.repository.testing import OPENGEVER_REPOSITORY_INTEGRATION_TESTING
-from plone.app.testing import setRoles, TEST_USER_ID
-from opengever.repository.repositoryfolder import IRepositoryFolderSchema
+class TestRepositoryFolder(unittest.TestCase):
 
-class TestRepositoryFolderIntegration(unittest.TestCase):
-
-    layer = OPENGEVER_REPOSITORY_INTEGRATION_TESTING
+    layer = OPENGEVER_FUNCTIONAL_TESTING
 
     def test_adding(self):
         portal = self.layer['portal']

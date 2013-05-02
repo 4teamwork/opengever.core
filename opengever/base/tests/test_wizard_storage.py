@@ -3,10 +3,12 @@ from datetime import timedelta
 from ftw.testing import MockTestCase
 from opengever.base.browser.wizard import storage
 from opengever.base.browser.wizard.interfaces import IWizardDataStorage
-from opengever.base.testing import ANNOTATION_LAYER
+from opengever.core.testing import ANNOTATION_LAYER
 from persistent.dict import PersistentDict
 from zope.annotation.interfaces import IAttributeAnnotatable
 from zope.app.component.hooks import setSite
+from zope.component import getSiteManager
+from zope.interface import alsoProvides
 from zope.interface.verify import verifyClass
 import AccessControl
 
@@ -18,11 +20,11 @@ class TestAcceptTaskStorageManager(MockTestCase):
     def setUp(self):
         super(TestAcceptTaskStorageManager, self).setUp()
 
-        site = self.providing_stub([IAttributeAnnotatable])
+        site = self.create_dummy(getSiteManager=getSiteManager)
+        alsoProvides(site, IAttributeAnnotatable)
         setSite(site)
 
     def test_implements_interface(self):
-        self.replay()
         self.assertTrue(IWizardDataStorage.implementedBy(
                 storage.WizardDataStorage))
 
@@ -30,7 +32,6 @@ class TestAcceptTaskStorageManager(MockTestCase):
                     storage.WizardDataStorage)
 
     def test_get_user_storage(self):
-        self.replay()
         manager = storage.WizardDataStorage()
 
         data = manager._get_user_storage()
@@ -41,7 +42,6 @@ class TestAcceptTaskStorageManager(MockTestCase):
 
     def test_get_user_storage_is_per_user(self):
         request = object()
-        self.replay()
 
         john = AccessControl.users.SimpleUser('john', 'pwd', [], [])
         jane = AccessControl.users.SimpleUser('john', 'pwd', [], [])
@@ -71,7 +71,6 @@ class TestAcceptTaskStorageManager(MockTestCase):
             AccessControl.SecurityManagement.noSecurityManager()
 
     def test_get_data(self):
-        self.replay()
 
         manager = storage.WizardDataStorage()
         data = manager.get_data('data-set-key')
@@ -89,7 +88,6 @@ class TestAcceptTaskStorageManager(MockTestCase):
                          set(['data-set-key', 'other-data-set-key']))
 
     def test_data_expires(self):
-        self.replay()
         manager = storage.WizardDataStorage()
         veryold = datetime.now() - timedelta(days=100)
 
@@ -103,7 +101,6 @@ class TestAcceptTaskStorageManager(MockTestCase):
         self.assertEqual(manager._get_user_storage().keys(), ['two'])
 
     def test_update(self):
-        self.replay()
         manager = storage.WizardDataStorage()
 
         manager.get_data('one')
@@ -118,7 +115,6 @@ class TestAcceptTaskStorageManager(MockTestCase):
         self.assertEqual(manager.get_data('one')['foo'], 'bar')
 
     def test_set_and_get(self):
-        self.replay()
         manager = storage.WizardDataStorage()
 
         manager.set('data-set-key', 'mykey', 'myvalue')

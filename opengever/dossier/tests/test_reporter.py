@@ -2,20 +2,19 @@ from datetime import datetime
 from ftw.testing import MockTestCase
 from ftw.testing.layer import ComponentRegistryLayer
 from grokcore.component.testing import grok
-from mocker import ANY
 from opengever.base.reporter import readable_author
 from opengever.dossier.browser.report import DossierReporter
+from opengever.dossier.browser.report import filing_no_filing
 from opengever.dossier.browser.report import filing_no_number
 from opengever.dossier.browser.report import filing_no_year
-from opengever.dossier.browser.report import filing_no_filing
 from zope.annotation.interfaces import IAttributeAnnotatable
 import xlrd
 
 
-class ZCMLLayer(ComponentRegistryLayer):
+class ReporterZCMLLayer(ComponentRegistryLayer):
 
     def setUp(self):
-        super(ZCMLLayer, self).setUp()
+        super(ReporterZCMLLayer, self).setUp()
 
         import zope.security
         self.load_zcml_file('meta.zcml', zope.security)
@@ -24,12 +23,12 @@ class ZCMLLayer(ComponentRegistryLayer):
         self.load_zcml_file('configure.zcml', Products.statusmessages)
 
 
-ZCML_LAYER = ZCMLLayer()
+REPORTER_ZCML_LAYER = ReporterZCMLLayer()
 
 
 class TestDossierReporter(MockTestCase):
 
-    layer = ZCML_LAYER
+    layer = REPORTER_ZCML_LAYER
 
     def setUp(self):
         super(TestDossierReporter, self).setUp()
@@ -90,25 +89,6 @@ class TestDossierReporter(MockTestCase):
             DossierReporter(
                 context, request).get_selected_dossiers(),
             ['brain_2', 'brain_55', 'brain_1'])
-
-    def test_report_without_paths(self):
-        context = self.providing_stub([IAttributeAnnotatable])
-        request = self.stub_request(interfaces=IAttributeAnnotatable,
-                                    stub_response=False)
-        response = self.stub_response(request=request)
-
-        self.expect(request.get('orig_template', ANY)).result('TEST_URL')
-        self.expect(context.absolute_url()).result('TEST_URL')
-        self.expect(request.get('paths')).result(None)
-        self.expect(request.cookies).result({})
-        self.expect(request.response.setCookie(
-                'statusmessages', ANY, path=ANY)).result(None)
-        self.expect(response.redirect(ANY)).result('redirected')
-
-        self.replay()
-
-        self.assertEquals(
-            DossierReporter(context, request)(), 'redirected')
 
     def test_report(self):
 

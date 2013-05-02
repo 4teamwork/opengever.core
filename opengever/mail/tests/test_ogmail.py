@@ -1,6 +1,5 @@
 from Testing.makerequest import makerequest
 from opengever.mail.mail import IOGMailMarker, IOGMail
-from opengever.mail.mail import OGMailEditForm
 from opengever.mail.testing import OPENGEVER_MAIL_INTEGRATION_TESTING
 from plone.dexterity.utils import createContentInContainer
 from plone.namedfile.file import NamedBlobFile
@@ -47,13 +46,3 @@ class TestOGMailAddition(unittest.TestCase):
 
         self.assertEquals(u'hanspeter', m1.title)
         self.assertEquals(m1.Title(), 'hanspeter')
-
-    def test_editform(self):
-
-        m1 = createContentInContainer(
-            self.portal, 'ftw.mail.mail')
-
-        edit_form = OGMailEditForm(m1, self.portal.REQUEST)
-
-        #message field should be in display mode
-        self.assertTrue('<span id="form-widgets-message"' in edit_form())

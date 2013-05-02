@@ -1,6 +1,6 @@
 from opengever.tasktemplates.content.tasktemplate import ITaskTemplate
 from opengever.tasktemplates.testing \
-    import OPENGEVER_TASKTEMPLATES_INTEGRATION_TESTING
+    import OPENGEVER_TASKTEMPLATES_FUNCTIONAL_TESTING
 from plone.dexterity.interfaces import IDexterityFTI
 from plone.dexterity.utils import createContent, addContentToContainer
 from Products.CMFCore.utils import getToolByName
@@ -26,9 +26,9 @@ def create_testobject(parent, ptype, **kwargs):
     return obj
 
 
-class TestTaskTemplatesIntegration(unittest.TestCase):
+class TestTaskTemplates(unittest.TestCase):
 
-    layer = OPENGEVER_TASKTEMPLATES_INTEGRATION_TESTING
+    layer = OPENGEVER_TASKTEMPLATES_FUNCTIONAL_TESTING
 
     def test_adding(self):
         parent = self.layer['portal']
