@@ -1,39 +1,47 @@
 from DateTime import DateTime
-from ftw.journal.config import JOURNAL_ENTRIES_ANNOTATIONS_KEY
 from OFS.event import ObjectWillBeMovedEvent, ObjectWillBeAddedEvent
-from opengever.document.events import \
-    ObjectCheckedOutEvent, ObjectCheckedInEvent, \
-    ObjectCheckoutCanceledEvent, ObjectRevertedToVersion, \
-    FileCopyDownloadedEvent
-from opengever.dossier.events import ParticipationCreated, ParticipationRemoved
-from opengever.dossier.behaviors.participation import Participation
-from opengever.journal.testing import OPENGEVER_JOURNAL_FUNCTIONAL_TESTING
-from opengever.trash.trash import TrashedEvent, UntrashedEvent
-from opengever.sharing.events import LocalRolesAcquisitionBlocked, \
-    LocalRolesAcquisitionActivated, LocalRolesModified
-from plone.app.testing import TEST_USER_ID
-from plone.dexterity.utils import createContentInContainer
-from Products.CMFCore.utils import getToolByName
 from Products.CMFCore.WorkflowCore import ActionSucceededEvent
+from Products.CMFCore.utils import getToolByName
+from ftw.journal.config import JOURNAL_ENTRIES_ANNOTATIONS_KEY
+from opengever.document.events import FileCopyDownloadedEvent
+from opengever.document.events import ObjectCheckedInEvent
+from opengever.document.events import ObjectCheckedOutEvent
+from opengever.document.events import ObjectCheckoutCanceledEvent
+from opengever.document.events import ObjectRevertedToVersion
+from opengever.dossier.behaviors.participation import Participation
+from opengever.dossier.events import ParticipationCreated, ParticipationRemoved
+from opengever.core.testing import OPENGEVER_FUNCTIONAL_TESTING
+from opengever.mail.events import DocumentSent
+from opengever.ogds.base.interfaces import IClientConfiguration
+from opengever.sharing.events import LocalRolesAcquisitionActivated
+from opengever.sharing.events import LocalRolesAcquisitionBlocked
+from opengever.sharing.events import LocalRolesModified
+from opengever.trash.trash import TrashedEvent, UntrashedEvent
+from plone.app.testing import TEST_USER_ID
+from plone.app.testing import setRoles
+from plone.dexterity.interfaces import IDexterityFTI
+from plone.dexterity.utils import createContentInContainer
+from plone.registry.interfaces import IRegistry
 from zope.annotation.interfaces import IAnnotations
-from zope.lifecycleevent import ObjectMovedEvent, ObjectAddedEvent
+from zope.component import getUtility
 from zope.event import notify
 from zope.i18n import translate
 from zope.interface import Interface
-from zope.lifecycleevent import ObjectModifiedEvent, Attributes
-import unittest2 as unittest
-from plone.dexterity.interfaces import IDexterityFTI
-from zope.schema import getFields
-from zope.component import getUtility
-from opengever.mail.events import DocumentSent
-from plone.registry.interfaces import IRegistry
-from opengever.ogds.base.interfaces import IClientConfiguration
 from zope.intid.interfaces import IIntIds
+from zope.lifecycleevent import ObjectModifiedEvent, Attributes
+from zope.lifecycleevent import ObjectMovedEvent, ObjectAddedEvent
+from zope.schema import getFields
+import unittest2 as unittest
 
 
 class TestOpengeverJournalGeneral(unittest.TestCase):
 
-    layer = OPENGEVER_JOURNAL_FUNCTIONAL_TESTING
+    layer = OPENGEVER_FUNCTIONAL_TESTING
+
+    def setUp(self):
+        super(TestOpengeverJournalGeneral, self).setUp()
+
+        setRoles(self.layer['portal'], TEST_USER_ID, ['Manager'])
 
     def test_integration_repository_events(self):
         """ Trigger every event of a repo at least one times
