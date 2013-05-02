@@ -1,7 +1,7 @@
 from Products.CMFCore.utils import getToolByName
 from opengever.base.behaviors.base import IOpenGeverBase
 from opengever.dossier.behaviors.dossier import IDossier
-from opengever.dossier.testing import OPENGEVER_DOSSIER_INTEGRATION_TESTING
+from opengever.dossier.testing import OPENGEVER_DOSSIER_FUNCTIONAL_TESTING
 from zope.event import notify
 from zope.interface import Interface
 from zope.lifecycleevent import ObjectModifiedEvent, Attributes
@@ -26,12 +26,13 @@ def getindexDataForObj(obj):
 
 class Testindexers(unittest.TestCase):
 
-    layer = OPENGEVER_DOSSIER_INTEGRATION_TESTING
+    layer = OPENGEVER_DOSSIER_FUNCTIONAL_TESTING
 
-    def test_containing_dossier(self):
+    def setUp(self):
         portal = self.layer['portal']
         portal.invokeFactory('opengever.dossier.businesscasedossier', 'dossier')
         dossier = portal.get('dossier')
+
         IOpenGeverBase(dossier).title=u"Testd\xf6ssier XY"
         dossier.reindexObject()
 
@@ -43,6 +44,12 @@ class Testindexers(unittest.TestCase):
         subdossier.invokeFactory('opengever.document.document', 'document')
         document = subdossier.get('document')
         document.reindexObject()
+
+    def test_containing_dossier(self):
+        portal = self.layer['portal']
+        dossier = portal.get('dossier')
+        subdossier = dossier.get('subdossier')
+        document = subdossier.get('document')
 
         self.assertEquals(
             obj2brain(subdossier).containing_dossier,
@@ -118,5 +125,3 @@ class Testindexers(unittest.TestCase):
             'SKA ARCH-Administration-2012-3')
         self.assertEquals(getindexDataForObj(dossier).get('searchable_filing_no'),
                           ['ska', 'arch', 'administration', '2012', '3'])
-
-

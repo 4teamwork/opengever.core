@@ -1,28 +1,17 @@
 from ftw.testing import MockTestCase
-from ftw.testing.layer import ComponentRegistryLayer
 from opengever.base.interfaces import IBaseClientID
+from opengever.core.testing import ANNOTATION_LAYER
 from opengever.dossier.archive import FILING_NO_KEY
 from opengever.dossier.behaviors.dossier import IDossier, IDossierMarker
+from opengever.dossier.filing_checker import Checker
 from opengever.dossier.filing_checker import FilingNumberChecker
 from opengever.dossier.filing_checker import FilingNumberHelper
-from opengever.dossier.filing_checker import Checker
 from plone.registry.interfaces import IRegistry
 from zope.annotation import IAnnotations
 from zope.interface import Interface
 
 
 TEST_CLIENT_ID = 'SKA ARCH'
-
-
-class ZCMLLayer(ComponentRegistryLayer):
-
-    def setUp(self):
-        super(ZCMLLayer, self).setUp()
-
-        import zope.annotation
-        self.load_zcml_file('configure.zcml', zope.annotation)
-
-ZCML_LAYER = ZCMLLayer()
 
 
 class MockChecker(Checker):
@@ -45,7 +34,7 @@ class FilingNumberMockTestCase(MockTestCase):
     related objects.
     """
 
-    layer = ZCML_LAYER
+    layer = ANNOTATION_LAYER
 
     def setUp(self):
         super(FilingNumberMockTestCase, self).setUp()

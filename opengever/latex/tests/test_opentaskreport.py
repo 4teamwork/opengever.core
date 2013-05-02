@@ -47,6 +47,7 @@ class TestOpenTaskReportLaTeXView(MockTestCase):
     layer = LATEX_ZCML_LAYER
 
     def setUp(self):
+        super(TestOpenTaskReportLaTeXView, self).setUp()
         self.ori_get_client_id = utils.get_client_id
         get_client_id = self.mocker.replace(
             'opengever.ogds.base.utils.get_client_id', count=False)

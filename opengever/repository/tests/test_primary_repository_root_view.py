@@ -7,6 +7,7 @@ from zope.publisher.interfaces import NotFound
 class TestPrimaryRepositoryRoot(MockTestCase):
 
     def setUp(self):
+        super(TestPrimaryRepositoryRoot, self).setUp()
         self.portal_url = self.stub()
         self.mock_tool(self.portal_url, 'portal_url')
 

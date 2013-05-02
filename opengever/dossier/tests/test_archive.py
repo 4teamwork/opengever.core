@@ -2,10 +2,10 @@ from Products.CMFCore.interfaces import ISiteRoot
 from collective.vdexvocabulary.vocabulary import VdexVocabulary
 from datetime import date
 from ftw.testing import MockTestCase
-from ftw.testing.layer import ComponentRegistryLayer
 from grokcore.component.testing import grok
 from mocker import ANY
 from opengever.base.interfaces import IBaseClientID
+from opengever.core.testing import ANNOTATION_LAYER
 from opengever.dossier.archive import Archiver
 from opengever.dossier.archive import EnddateValidator, MissingValue
 from opengever.dossier.archive import METHOD_RESOLVING_AND_FILING, METHOD_FILING
@@ -28,21 +28,10 @@ from zope.schema.vocabulary import getVocabularyRegistry
 import opengever.dossier
 import os
 
-class ZCMLLayer(ComponentRegistryLayer):
-
-    def setUp(self):
-        super(ZCMLLayer, self).setUp()
-
-        import zope.annotation
-        self.load_zcml_file('configure.zcml', zope.annotation)
-
-
-ZCML_LAYER = ZCMLLayer()
-
 
 class TestArchiver(MockTestCase):
 
-    layer = ZCML_LAYER
+    layer = ANNOTATION_LAYER
 
     def setUp(self):
         super(TestArchiver, self).setUp()
@@ -210,7 +199,7 @@ class TestForm(MockTestCase):
 
 class TestArchiving(MockTestCase):
 
-    layer = ZCML_LAYER
+    layer = ANNOTATION_LAYER
 
     def setUp(self):
         super(TestArchiving, self).setUp()

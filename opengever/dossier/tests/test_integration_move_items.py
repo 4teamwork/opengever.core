@@ -101,7 +101,7 @@ class TestMoveItemsIntegration(unittest.TestCase):
         self.assertTrue(dossier1.hasChildNodes() == 0)
         self.assertTrue(dossier2.hasChildNodes() == 3)
 
-        self.failUnless(portal.unrestrictedTraverse('repo2/dossier2/document-2'))
+        self.failUnless(portal.unrestrictedTraverse('repo2/dossier2/document-1'))
         self.failUnless(portal.unrestrictedTraverse('repo2/dossier2/task1'))
         self.failUnless(
             portal.unrestrictedTraverse('repo2/dossier2/subdossier1'))
