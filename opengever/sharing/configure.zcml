@@ -5,7 +5,8 @@
     xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
     xmlns:five="http://namespaces.zope.org/five"
     xmlns:i18n="http://namespaces.zope.org/i18n"
-    xmlns:browser="http://namespaces.zope.org/browser">
+    xmlns:browser="http://namespaces.zope.org/browser"
+    i18n_domain="opengever.sharing">
 
     <include package="plone.behavior" file="meta.zcml" />
 
