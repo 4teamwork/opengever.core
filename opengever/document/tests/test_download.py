@@ -17,8 +17,13 @@ class TestDocumentDownloadView(MockTestCase):
 
     layer = OPENGEVER_DOCUMENT_FUNCTIONAL_TESTING
 
+    def setUp(self):
+        super(TestDocumentDownloadView, self).setUp()
+        setRoles(self.layer['portal'], TEST_USER_ID, ['Manager'])
+
     def test_download_view(self):
         portal = self.layer['portal']
+        setRoles(portal, TEST_USER_ID, ['Manager'])
 
         doc1 = createContentInContainer(
             portal, 'opengever.document.document', 'document')
@@ -116,10 +121,6 @@ class TestDocumentDownloadConfirmation(unittest.TestCase):
                                  autoapply=repo_tool.autoapply)
 
         transaction.commit()
-
-    def tearDown(self):
-        setRoles(self.portal, TEST_USER_ID, ['Member'])
-        super(TestDocumentDownloadConfirmation, self).tearDown()
 
     def test_download_confirmation_view_for_download(self):
         self.browser.open(
