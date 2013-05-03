@@ -15,7 +15,6 @@ class TestTrash(unittest.TestCase):
         self.portal = self.layer.get('portal')
         setRoles(self.portal, TEST_USER_ID, ['Member', 'Contributor', 'Manager'])
 
-    def test_trash(self):
         fti = DexterityFTI('TrashTestFTI',
                            klass="plone.dexterity.content.Container",
                            global_allow=True,
@@ -24,26 +23,53 @@ class TestTrash(unittest.TestCase):
                          'opengever.trash.trash.ITrashable')
         self.portal.portal_types._setObject('TrashTestFTI', fti)
 
-        utem1 = createContentInContainer(self.portal, 'TrashTestFTI',
-                                         checkConstraints=False,
-                                         title=u'\xfctem1', checked_out=False)
+    def restore_item(self, item):
+        self.portal.REQUEST['paths'] = ['/'.join(item.getPhysicalPath())]
+        current_url = item.restrictedTraverse('untrashed')()
+        self.assertFalse(ITrashed.providedBy(item),
+                        "The item %s should not be trashed" % item)
+        return current_url
 
-        self.portal.REQUEST['paths'] = ['/'.join(utem1.getPhysicalPath())]
-        self.assertEquals('http://nohost/plone/utem1#trash',
-                          utem1.restrictedTraverse('trashed')())
-        self.assertTrue(ITrashed.providedBy(utem1),
-                        "The item %s should be trashed" % utem1)
+    def test_trashing_items(self):
+        item = self.create_item("item")
+        unicode_item = self.create_item(u'\xfctem')
 
-        trashed_items = self.portal.portal_catalog(portal_type="TrashTestFTI",
-                                                   trashed=True)
-        self.assertEquals(1, len(trashed_items))
+        self.assertEquals('http://nohost/plone/item#trash',
+                          self.trash_item(item))
+        self.assert_trashed_item_count(1)
 
-        self.portal.REQUEST['paths'] = ['/'.join(utem1.getPhysicalPath())]
-        self.assertEquals('http://nohost/plone/utem1#documents',
-                          utem1.restrictedTraverse('trashed')())
+        self.assertEquals('http://nohost/plone/utem#trash',
+                          self.trash_item(unicode_item))
+        self.assert_trashed_item_count(2)
 
-        self.portal.REQUEST['paths'] = ['/'.join(utem1.getPhysicalPath())]
-        self.assertEquals('http://nohost/plone/utem1#documents',
-                          utem1.restrictedTraverse('untrashed')())
+    def test_trashing_trashed_items_will_result_in_the_fallback(self):
+        item = self.create_item("item")
+        self.trash_item(item)
+        url = self.trash_item(item)
+        self.assertEquals("http://nohost/plone/item#documents", url)
 
-        self.assertEquals([], list(self.portal.portal_catalog(portal_type="TrashTestFTI", trashed=True)))
+    def test_restoring_items(self):
+        item = self.create_item("anotheritem")
+        self.trash_item(item)
+        self.assert_trashed_item_count(1)
+
+        url = self.restore_item(item)
+        self.assertEquals('http://nohost/plone/anotheritem#documents', url)
+        self.assert_trashed_item_count(0)
+
+    def assert_trashed_item_count(self, count):
+        trashed_items = list(self.portal.portal_catalog(portal_type="TrashTestFTI",
+                                                        trashed=True))
+        self.assertEquals(count, len(trashed_items))
+
+    def create_item(self, title):
+        return createContentInContainer(self.portal, 'TrashTestFTI',
+                                        checkConstraints=False,
+                                        title=title, checked_out=False)
+
+    def trash_item(self, item):
+        self.portal.REQUEST['paths'] = ['/'.join(item.getPhysicalPath())]
+        current_url = item.restrictedTraverse('trashed')()
+        self.assertTrue(ITrashed.providedBy(item),
+                "The item %s should be trashed" % item)
+        return current_url
