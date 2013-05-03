@@ -1,19 +1,24 @@
-from plone.testing.z2 import Browser
+from Products.CMFCore.utils import getToolByName
+from opengever.core.testing import OPENGEVER_FUNCTIONAL_TESTING
+from plone.app.testing import TEST_USER_ID
 from plone.app.testing import TEST_USER_NAME
 from plone.app.testing import TEST_USER_PASSWORD
-from Products.CMFCore.utils import getToolByName
-from opengever.contact.testing import CONTACT_FUNCTIONAL_TESTING
+from plone.app.testing import setRoles
+from plone.testing.z2 import Browser
+import transaction
 import unittest2 as unittest
 
 class TestContact(unittest.TestCase):
 
-    layer = CONTACT_FUNCTIONAL_TESTING
+    layer = OPENGEVER_FUNCTIONAL_TESTING
 
     def setUp(self):
         self.app = self.layer['app']
         self.portal = self.layer['portal']
         self.browser = Browser(self.app)
         self.browser.handleErrors = False
+        setRoles(self.portal, TEST_USER_ID, ['Member', 'Contributor', 'Manager'])
+        transaction.commit()
 
     def obj2brain(self, obj):
         catalog = getToolByName(obj, 'portal_catalog')
