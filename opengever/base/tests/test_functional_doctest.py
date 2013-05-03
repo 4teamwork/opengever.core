@@ -10,7 +10,6 @@ TESTFILES = (
     'copy_item.txt',
     'redirector.txt',
     'reference_adapter.txt',
-    'sequence.txt',
     'viewlets.txt',
     )
 
