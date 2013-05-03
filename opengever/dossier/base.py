@@ -151,9 +151,7 @@ class DossierContainer(Container):
     def has_valid_startdate(self):
         """check if a startdate is valid (if exist)."""
 
-        if IDossier(self).start:
-            return True
-        return False
+        return bool(IDossier(self).start)
 
     def has_valid_enddate(self):
         """Check if the enddate is valid.
