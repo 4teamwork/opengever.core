@@ -1,21 +1,16 @@
-from opengever.core.testing import OPENGEVER_FUNCTIONAL_TESTING
 from opengever.repository.repositoryroot import IRepositoryRoot
-from plone.app.testing import setRoles, TEST_USER_ID
+from opengever.testing import FunctionalTestCase
 from plone.dexterity.interfaces import IDexterityFTI
 from zope.component import createObject
 from zope.component import queryUtility
-import unittest2 as unittest
 
 
-class TestRepositoryRootIntegration(unittest.TestCase):
-
-    layer = OPENGEVER_FUNCTIONAL_TESTING
+class TestRepositoryRootIntegration(FunctionalTestCase):
 
     def test_adding(self):
-        portal = self.layer['portal']
-        setRoles(portal, TEST_USER_ID, ['Reviewer', 'Manager'])
-        portal.invokeFactory('opengever.repository.repositoryroot', 'repository1')
-        r1 = portal['repository1']
+        self.grant('Reviewer', 'Manager')
+        self.portal.invokeFactory('opengever.repository.repositoryroot', 'repository1')
+        r1 = self.portal['repository1']
         self.failUnless(IRepositoryRoot.providedBy(r1))
 
     def test_fti(self):
@@ -32,6 +27,3 @@ class TestRepositoryRootIntegration(unittest.TestCase):
         factory = fti.factory
         new_object = createObject(factory)
         self.failUnless(IRepositoryRoot.providedBy(new_object))
-
-def test_suite():
-    return unittest.defaultTestLoader.loadTestsFromName(__name__)
