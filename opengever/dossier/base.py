@@ -77,10 +77,7 @@ class DossierContainer(Container):
         return subdossiers
 
     def is_subdossier(self):
-        parent = aq_parent(aq_inner(self))
-        if IDossierMarker.providedBy(parent):
-            return True
-        return False
+        return bool(self.get_parent_dossier())
 
     def get_parent_dossier(self):
         parent = aq_parent(aq_inner(self))
