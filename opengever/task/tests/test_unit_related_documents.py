@@ -3,7 +3,7 @@ from ftw.testing import MockTestCase
 from mocker import ANY
 from opengever.task.browser.related_documents import \
     RelatedDocumentsCatalogTableSource
-from opengever.task.testing import ANNOTATION_LAYER
+from opengever.core.testing import ANNOTATION_LAYER
 from plone.uuid.interfaces import IUUID
 from zope.interface import Interface
 from ftw.table.catalog_source import default_custom_sort

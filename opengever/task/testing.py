@@ -11,31 +11,7 @@ from plone.app.testing import PloneSandboxLayer
 from plone.app.testing import TEST_USER_ID
 from plone.app.testing import setRoles
 from plone.registry.interfaces import IRegistry
-from plone.testing import Layer
-from plone.testing import zca
 from zope.component import getUtility
-from zope.configuration import xmlconfig
-
-
-class AnnotationLayer(Layer):
-    """Loads ZML of zope.annotation.
-    """
-
-    defaultBases = (zca.ZCML_DIRECTIVES,)
-
-    def testSetUp(self):
-        self['configurationContext'] = zca.stackConfigurationContext(
-            self.get('configurationContext'))
-
-        import zope.annotation
-        xmlconfig.file('configure.zcml', zope.annotation,
-                       context=self['configurationContext'])
-
-    def testTearDown(self):
-        del self['configurationContext']
-
-
-ANNOTATION_LAYER = AnnotationLayer()
 
 
 class TaskFunctionalLayer(PloneSandboxLayer):
