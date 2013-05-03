@@ -84,6 +84,17 @@ class TestDossierContainer(unittest.TestCase):
         self._create_document(subdossier, document_date=date(2012, 03, 20))
         self.assertEquals(dossier.earliest_possible_end_date(), date(2012, 02, 20))
 
+    def test_dossier_has_valid_startdate(self):
+        dossier = self._create_dossier(self.portal)
+
+        IDossier(dossier).start = date(2012, 02, 24)
+        self.assertTrue(dossier.has_valid_startdate(),
+                        "'%s' should be a valid startdate" % IDossier(dossier).start)
+
+        IDossier(dossier).start = None
+        self.assertFalse(dossier.has_valid_startdate(),
+                         "None is not a valid startdate")
+
     def test_has_valid_enddate(self):
         dossier, subdossier = self._create_dossier(self.portal, with_sub=True)
         IDossier(subdossier).start = date(2012, 02, 24)
@@ -190,4 +201,3 @@ class TestDossierContainer(unittest.TestCase):
 
         task.reindexObject()
         return task
-
