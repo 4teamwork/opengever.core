@@ -6,7 +6,6 @@ import unittest2 as unittest
 
 TESTFILES = (
     'base.txt',
-    'classification.txt',
     'copy_item.txt',
     'redirector.txt',
     'reference_adapter.txt',
