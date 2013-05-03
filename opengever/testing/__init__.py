@@ -1,0 +1,1 @@
+from opengever.testing.test_case import FunctionalTestCase
