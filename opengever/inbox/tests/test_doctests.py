@@ -4,7 +4,6 @@ from plone.testing import layered
 from opengever.inbox.testing import OPENGEVER_INBOX_INTEGRATION_TESTING
 
 TESTFILES = (
-    'forwarding.txt',
     'views.txt',
     )
 
