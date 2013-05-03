@@ -83,7 +83,6 @@ class DossierContainer(Container):
         parent = aq_parent(aq_inner(self))
         if IDossierMarker.providedBy(parent):
             return parent
-        return None
 
     def is_all_supplied(self):
         """Check if all tasks and all documents are supplied in a subdossier
@@ -128,15 +127,11 @@ class DossierContainer(Container):
             path=dict(depth=2,
                       query='/'.join(self.getPhysicalPath())))
 
-        if len(tasks_closed) < len(tasks):
-            return False
-        else:
-            return True
+        return len(tasks) == len(tasks_closed)
 
     def is_all_checked_in(self):
         """ check if all documents in this path are checked in """
 
-        # all document are checked in
         docs = self.portal_catalog(
             portal_type="opengever.document.document",
             path=dict(depth=2,
