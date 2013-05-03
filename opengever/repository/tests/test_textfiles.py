@@ -5,8 +5,7 @@ import unittest2 as unittest
 
 
 TESTFILES = (
-    'referenceprefix.txt',
-    'repositoryfolder.txt',
+    'repositoryfolder.txt'
     )
 
 
