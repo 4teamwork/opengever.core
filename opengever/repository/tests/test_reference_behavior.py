@@ -1,35 +1,24 @@
-from opengever.core.testing import OPENGEVER_FUNCTIONAL_TESTING
 from opengever.repository.behaviors import referenceprefix
-from plone.app.testing import TEST_USER_ID
-from plone.app.testing import setRoles
-from plone.app.testing import TEST_USER_NAME
-from plone.app.testing import TEST_USER_PASSWORD
 from plone.dexterity.fti import DexterityFTI
 from plone.dexterity.interfaces import IDexterityFTI
 from plone.dexterity.schema import SCHEMA_CACHE
-from plone.testing.z2 import Browser
 from z3c.form.interfaces import IValidator
 from zope.component import getMultiAdapter, provideAdapter
 from zope.component import provideUtility
+from opengever.testing import FunctionalTestCase
 import transaction
-import unittest2 as unittest
 
 
-class TestReferenceBehavior(unittest.TestCase):
+class TestReferenceBehavior(FunctionalTestCase):
     """
     The reference number Behavior show a integer field (reference Number), the reference number field.
     The behavior set the default value to the next possible sequence number:
     """
-
-    layer=OPENGEVER_FUNCTIONAL_TESTING
+    use_browser = True
 
     def setUp(self):
-        self.portal = self.layer['portal']
-        self.app = self.layer['app']
-        self.request = self.layer['request']
-
-        setRoles(self.portal, TEST_USER_ID, ['Contributor'])
-
+        super(TestReferenceBehavior, self).setUp()
+        self.grant('Contributor')
 
     def test_reference_behavior(self):
         # Since plone tests sucks, we need to re-register the reference number validator again -.-
@@ -46,56 +35,50 @@ class TestReferenceBehavior(unittest.TestCase):
         fti.lookupSchema()
         transaction.commit()
 
-        #If we access the site as an admin TTW::
-        browser = Browser(self.app)
-        browser.handleErrors = False
-        browser.addHeader('Authorization', 'Basic %s:%s' % (TEST_USER_NAME, TEST_USER_PASSWORD))
-
         #We can see this type in the addable types at the root of the site::
-        browser.open('http://nohost/plone/folder_factories')
-        self.assertIn('ReferenceFTI', browser.contents)
-        browser.getControl('ReferenceFTI').click()
-        browser.getControl('Add').click()
-        self.assertEquals('http://nohost/plone/++add++ReferenceFTI', browser.url)
-        self.assertIn('reference_number_prefix', browser.contents)
-        self.assertEquals("1",
-                          browser.getControl(name='form.widgets.IReferenceNumberPrefix.reference_number_prefix').value)
-        browser.getControl('Title').value = 'Hugo'
-        browser.getControl('Save').click()
-        self.assertEquals('http://nohost/plone/referencefti/view', browser.url)
+        self.browser.open('http://nohost/plone/folder_factories')
+        self.assertPageContains('ReferenceFTI')
+        self.browser.getControl('ReferenceFTI').click()
+        self.browser.getControl('Add').click()
+        self.assertCurrentUrl('http://nohost/plone/++add++ReferenceFTI')
+        self.assertPageContains('reference_number_prefix')
+        self.assertEquals("1", self.browser.getControl(name='form.widgets.IReferenceNumberPrefix.reference_number_prefix').value)
+        self.browser.getControl('Title').value = 'Hugo'
+        self.browser.getControl('Save').click()
+        self.assertCurrentUrl('http://nohost/plone/referencefti/view')
 
         #checked the saved obj ::
         obj = self.portal.get('referencefti')
         self.assertTrue(referenceprefix.IReferenceNumberPrefixMarker.providedBy(obj))
 
         #Add a second Type in this folder::
-        browser.open('http://nohost/plone/folder_factories')
-        self.assertIn('ReferenceFTI', browser.contents)
-        browser.getControl('ReferenceFTI').click()
-        browser.getControl('Add').click()
-        self.assertEquals('http://nohost/plone/++add++ReferenceFTI', browser.url)
-        self.assertIn('reference_number_prefix', browser.contents)
-        browser.getControl('Title').value = 'Hans'
-        self.assertEquals("2", browser.getControl('Reference Prefix').value)
+        self.browser.open('http://nohost/plone/folder_factories')
+        self.assertPageContains('ReferenceFTI')
+        self.browser.getControl('ReferenceFTI').click()
+        self.browser.getControl('Add').click()
+        self.assertCurrentUrl('http://nohost/plone/++add++ReferenceFTI')
+        self.assertPageContains('reference_number_prefix')
+        self.browser.getControl('Title').value = 'Hans'
+        self.assertEquals("2", self.browser.getControl('Reference Prefix').value)
 
         #We should not be able to use a already used value::
-        browser.getControl('Reference Prefix').value = '1'
-        browser.getControl('Save').click()
-        self.assertEquals('http://nohost/plone/++add++ReferenceFTI', browser.url)
+        self.browser.getControl('Reference Prefix').value = '1'
+        self.browser.getControl('Save').click()
+        self.assertCurrentUrl('http://nohost/plone/++add++ReferenceFTI')
 
         #Ok, lets use a free one::
-        browser.getControl('Reference Prefix').value = '2'
-        browser.getControl('Save').click()
-        self.assertEquals('http://nohost/plone/referencefti-1/view', browser.url)
+        self.browser.getControl('Reference Prefix').value = '2'
+        self.browser.getControl('Save').click()
+        self.assertCurrentUrl('http://nohost/plone/referencefti-1/view')
 
         #It should be possbile to use alpha-numeric references::
-        browser.open('http://nohost/plone/++add++ReferenceFTI')
-        self.assertEquals('3', browser.getControl('Reference Prefix').value)
+        self.browser.open('http://nohost/plone/++add++ReferenceFTI')
+        self.assertEquals('3', self.browser.getControl('Reference Prefix').value)
 
-        browser.getControl('Reference Prefix').value = 'a1x10'
-        browser.getControl('Title').value = 'Peter'
-        browser.getControl('Save').click()
-        self.assertEquals('http://nohost/plone/referencefti-2/view', browser.url)
+        self.browser.getControl('Reference Prefix').value = 'a1x10'
+        self.browser.getControl('Title').value = 'Peter'
+        self.browser.getControl('Save').click()
+        self.assertCurrentUrl('http://nohost/plone/referencefti-2/view')
 
         #Check the reference numbers of the objects::
         data = []
