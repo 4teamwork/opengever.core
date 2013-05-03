@@ -5,6 +5,7 @@ from opengever.ogds.base.setuphandlers import _create_example_client
 from opengever.ogds.base.setuphandlers import _create_example_user
 from opengever.ogds.base.utils import create_session
 from plone.app.testing import IntegrationTesting
+from plone.app.testing import FunctionalTesting
 from plone.app.testing import PloneSandboxLayer
 from plone.app.testing.interfaces import TEST_USER_ID
 from plone.registry.interfaces import IRegistry
@@ -56,3 +57,5 @@ class InboxLayer(PloneSandboxLayer):
 OPENGEVER_INBOX_FIXTURE = InboxLayer()
 OPENGEVER_INBOX_INTEGRATION_TESTING = IntegrationTesting(
     bases=(OPENGEVER_INBOX_FIXTURE,), name="OpengeverInbox:Integration")
+OPENGEVER_INBOX_FUNCTIONAL_TESTING = FunctionalTesting(
+    bases=(OPENGEVER_INBOX_FIXTURE,), name="OpengeverInbox:Functional")

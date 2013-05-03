@@ -33,6 +33,9 @@ class FunctionalTestCase(TestCase):
     def assertPageContains(self, text):
         self.assertIn(text, self.browser.contents)
 
+    def assertPageContainsNot(self, text):
+        self.assertNotIn(text, self.browser.contents)
+
     def assertCurrentUrl(self, url):
         self.assertEquals(url, self.browser.url)
 
