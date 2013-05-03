@@ -1,4 +1,4 @@
-from opengever.base.testing import OPENGEVER_BASE_INTEGRATION_TESTING
+from opengever.core.testing import OPENGEVER_FUNCTIONAL_TESTING
 import unittest2 as unittest
 from plone.dexterity.utils import createContentInContainer
 from opengever.base.source import RepositoryPathSourceBinder
@@ -6,7 +6,7 @@ from plone.app.testing import TEST_USER_ID, setRoles
 
 class TestSourceBinder(unittest.TestCase):
 
-    layer = OPENGEVER_BASE_INTEGRATION_TESTING
+    layer = OPENGEVER_FUNCTIONAL_TESTING
 
     def setUp(self):
         portal = self.layer['portal']

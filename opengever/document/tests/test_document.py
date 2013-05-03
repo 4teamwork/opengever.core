@@ -1,9 +1,14 @@
+from Products.CMFCore.utils import getToolByName
 from datetime import date
 from opengever.base.interfaces import IReferenceNumber, ISequenceNumber
 from opengever.document.behaviors import IBaseDocument
 from opengever.document.document import IDocumentSchema
 from opengever.document.interfaces import IDocumentSettings
 from opengever.document.testing import OPENGEVER_DOCUMENT_FUNCTIONAL_TESTING
+from plone.app.testing import TEST_USER_ID
+from plone.app.testing import setRoles
+from plone.dexterity.fti import DexterityFTI
+from plone.dexterity.fti import register
 from plone.dexterity.interfaces import IDexterityFTI
 from plone.dexterity.utils import createContentInContainer
 from plone.namedfile.file import NamedBlobFile
@@ -15,13 +20,26 @@ from zope.component import queryMultiAdapter, getAdapter
 from zope.component import queryUtility, getUtility
 from zope.interface import Invalid
 from zope.schema import getFields
-import unittest2 as unittest
 import transaction
+import unittest2 as unittest
 
 
 class TestDocumentIntegration(unittest.TestCase):
 
     layer = OPENGEVER_DOCUMENT_FUNCTIONAL_TESTING
+
+    def setUp(self):
+        setRoles(self.layer['portal'], TEST_USER_ID, ['Contributor'])
+
+    def register_simple_document_fti(self):
+        fti = DexterityFTI('SimpleDocument')
+        fti.klass = 'plone.dexterity.content.Container'
+        fti.behaviors = ('opengever.document.behaviors.IBaseDocument', )
+        fti.schema = 'opengever.document.document.IDocumentSchema'
+
+        typestool = getToolByName(self.layer['portal'], 'portal_types')
+        typestool._setObject('SimpleDocument', fti)
+        register(fti)
 
     def test_adding(self):
         portal = self.layer['portal']
@@ -176,9 +194,11 @@ class TestDocumentIntegration(unittest.TestCase):
         """All Objects marked as BaseDocuments, should use the same counter."""
 
         portal = self.layer['portal']
+        self.register_simple_document_fti()
+
         seqNumb = getUtility(ISequenceNumber)
         d1 = createContentInContainer(portal, 'opengever.document.document')
-        b1 = createContentInContainer(portal, 'BaseDocumentFTI')
+        b1 = createContentInContainer(portal, 'SimpleDocument')
         d2 = createContentInContainer(portal, 'opengever.document.document')
 
         self.assertEquals(seqNumb.get_number(d1), 1)
@@ -190,8 +210,10 @@ class TestDocumentIntegration(unittest.TestCase):
         for all BaseDocument objects."""
 
         portal = self.layer['portal']
+        self.register_simple_document_fti()
+
         d1 = createContentInContainer(portal, 'opengever.document.document')
-        b1 = createContentInContainer(portal, 'BaseDocumentFTI')
+        b1 = createContentInContainer(portal, 'SimpleDocument')
         d2 = createContentInContainer(portal, 'opengever.document.document')
 
         self.assertEquals(

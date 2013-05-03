@@ -6,7 +6,7 @@ from opengever.ogds.base.utils import create_session
 from plone.app.testing import FunctionalTesting
 from plone.app.testing import IntegrationTesting
 from plone.app.testing import PloneSandboxLayer
-from plone.app.testing import setRoles, TEST_USER_ID, login
+from plone.app.testing import login
 from plone.registry.interfaces import IRegistry
 from zope.component import getUtility
 
@@ -43,7 +43,6 @@ class MailIntegrationLayer(PloneSandboxLayer):
                  'IClientConfiguration.client_id'] = u'client1'
         registry['opengever.base.interfaces.IBaseClientID.client_id'] = u'OG'
 
-        setRoles(portal, TEST_USER_ID, ['Member', 'Contributor', 'Editor'])
         login(portal, 'mail-test')
 
     def tearDown(self):

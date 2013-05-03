@@ -1,9 +1,16 @@
 ReferenceNumber Prefix Adapter
 ==============================
+
+    >>> app = layer.get('app')
+    >>> portal = layer.get('portal')
+
+    >>> from plone.app.testing import setRoles
+    >>> from plone.app.testing import TEST_USER_ID
+    >>> setRoles(portal, TEST_USER_ID, ['Contributor'])
+
+
 Do some imports, and standard configuration:
 
-	>>> app = layer.get('app')
-	>>> portal = layer.get('portal')
     >>> from opengever.base.behaviors import base
     >>> from plone.dexterity.fti import DexterityFTI
     >>> from plone.dexterity.content import Item, Container

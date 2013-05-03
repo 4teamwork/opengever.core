@@ -1,6 +1,13 @@
 Creator Behavior
 ================
 
+    >>> portal = layer['portal']
+    >>> app = layer['app']
+
+    >>> from plone.app.testing import setRoles
+    >>> from plone.app.testing import TEST_USER_ID
+    >>> setRoles(portal, TEST_USER_ID, ['Contributor'])
+
 The Creator behavior sets the creator an content creation.
 It also adds a creators field with listCreators() and setCreators()
 methods. The field is hidden by default.
@@ -21,7 +28,7 @@ When we create a dexterity content type::
     >>> schema = fti.lookupSchema()
 
 
-With plone.app.testing we need to explicitly commit these changes for them 
+With plone.app.testing we need to explicitly commit these changes for them
 to become visible to the testbrowser:
 
     >>> import transaction
