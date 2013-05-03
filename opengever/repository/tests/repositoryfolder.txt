@@ -1,13 +1,18 @@
 Repository Folder
 =================
 
+    >>> portal = layer['portal']
+    >>> app = layer['app']
+    >>> request = layer['request']
+
+    >>> from plone.app.testing import setRoles
+    >>> from plone.app.testing import TEST_USER_ID
+    >>> import transaction
+    >>> setRoles(portal, TEST_USER_ID, ['Manager'])
+    >>> transaction.commit()
 
 Since the Generic Setup profile was imported, we should have a some FTIs
 registered::
-
-	>>> portal = layer['portal']
-	>>> app = layer['app']
-	>>> request = layer['request']
 
     >>> pt = portal.portal_types
     >>> pt.get('opengever.repository.repositoryfolder', None)

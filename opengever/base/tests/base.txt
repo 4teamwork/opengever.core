@@ -1,6 +1,13 @@
 OpenGeverBase Behavior
 ======================
 
+    >>> portal = layer['portal']
+    >>> app = layer['app']
+
+    >>> from plone.app.testing import setRoles
+    >>> from plone.app.testing import TEST_USER_ID
+    >>> setRoles(portal, TEST_USER_ID, ['Contributor'])
+
 
 The OpenGeverBase behavior contains title and description fields.
 
@@ -9,13 +16,11 @@ When we create a dexterity content type, but we must enshure that we do not
 use the default model source with another title and description for
 excluding ambiguity.
 
-    >>> portal = layer['portal']
-    >>> app = layer['app']
     >>> from opengever.base.behaviors import base
     >>> from plone.dexterity.fti import DexterityFTI
 
     >>> fti = DexterityFTI('OpenGeverBaseFTI')
-    >>> fti.schema = 'opengever.base.testing.IEmptySchema'
+    >>> fti.schema = 'opengever.base.tests.emptyschema.IEmptySchema'
     >>> fti.behaviors = (
     ...                  'opengever.base.behaviors.base.IOpenGeverBase',
     ...                  )
@@ -23,7 +28,7 @@ excluding ambiguity.
     'OpenGeverBaseFTI'
     >>> schema = fti.lookupSchema()
 
-With plone.app.testing we need to explicitly commit these changes for them 
+With plone.app.testing we need to explicitly commit these changes for them
 to become visible to the testbrowser:
 
     >>> import transaction
@@ -82,4 +87,3 @@ We use the "Common" fieldset, not the "Default" fieldset:
     >>> browser.open('http://nohost/plone/opengeverbasefti/edit')
     >>> 'Common' in browser.contents
     True
-

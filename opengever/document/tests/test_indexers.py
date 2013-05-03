@@ -1,6 +1,8 @@
 from Products.CMFCore.utils import getToolByName
 from opengever.document.checkout.manager import CHECKIN_CHECKOUT_ANNOTATIONS_KEY
 from opengever.document.testing import OPENGEVER_DOCUMENT_FUNCTIONAL_TESTING
+from plone.app.testing import TEST_USER_ID
+from plone.app.testing import setRoles
 from plone.dexterity.utils import createContentInContainer
 from zope.annotation.interfaces import IAnnotations
 import datetime
@@ -30,6 +32,7 @@ class TestDocumentIntegration(unittest.TestCase):
     def setUp(self):
         self.app = self.layer['app']
         self.portal = self.layer['portal']
+        setRoles(self.portal, TEST_USER_ID, ['Manager'])
 
     def test_author_indexers(self):
         """check the author indexers."""

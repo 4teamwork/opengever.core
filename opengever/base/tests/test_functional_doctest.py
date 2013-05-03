@@ -1,4 +1,4 @@
-from opengever.base.testing import OPENGEVER_BASE_INTEGRATION_TESTING
+from opengever.core.testing import OPENGEVER_FUNCTIONAL_TESTING
 from plone.testing import layered
 import doctest
 import unittest2 as unittest
@@ -29,7 +29,7 @@ def test_suite():
         suite.addTests([
               layered(doctest.DocFileSuite(testfile,
                                            optionflags=OPTIONFLAGS),
-                      layer=OPENGEVER_BASE_INTEGRATION_TESTING),
+                      layer=OPENGEVER_FUNCTIONAL_TESTING),
           ])
 
     return suite

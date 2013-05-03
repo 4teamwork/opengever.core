@@ -12,6 +12,8 @@ imports and general stuff
     >>> from plone.namedfile.file import NamedBlobFile
     >>> from plone.registry.interfaces import IRegistry
     >>> from plone.testing.z2 import Browser
+    >>> from plone.app.testing import setRoles
+    >>> from plone.app.testing import TEST_USER_ID
     >>> from zope.component import getUtility
     >>> from zope.component import queryUtility
     >>> from zope.interface import alsoProvides
@@ -24,6 +26,9 @@ imports and general stuff
 
     >>> app = layer['app']
     >>> portal = layer['portal']
+    >>> setRoles(portal, TEST_USER_ID, ['Contributor'])
+
+
     >>> browser = Browser(app)
     >>> browser.handleErrors = False
 

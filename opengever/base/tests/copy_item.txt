@@ -1,10 +1,17 @@
 copy_item function
 ==================
 
+    >>> portal = layer['portal']
+    >>> app = layer['app']
+
+    >>> from plone.app.testing import setRoles
+    >>> from plone.app.testing import TEST_USER_ID
+    >>> import transaction
+    >>> setRoles(portal, TEST_USER_ID, ['Contributor'])
+    >>> transaction.commit()
+
 imports:
 
-    >>> app = layer.get('app')
-    >>> portal = layer.get('portal')
     >>> request = layer.get('request')
     >>> from plone.dexterity.fti import DexterityFTI
     >>> from Products.CMFCore.utils import getToolByName
@@ -20,7 +27,7 @@ create test container and object fti:
     >>> portal.portal_types._setObject('OpenGeverBaseContainer', container)
     'OpenGeverBaseContainer'
     >>> fti = DexterityFTI('OpenGeverBaseFTI2')
-    >>> fti.schema = 'opengever.base.testing.IEmptySchema'
+    >>> fti.schema = 'opengever.base.tests.emptyschema.IEmptySchema'
     >>> fti.behaviors = (
     ...                  'opengever.base.behaviors.base.IOpenGeverBase',
     ...                  )
@@ -76,7 +83,7 @@ Test if they were copied correctly
     >>> _cb_decode(copiedItems[1])
     (0, [('', 'plone', 'opengeverbasecontainer', 'opengeverbasefti2-1')])
 
-Take away Copy permission 
+Take away Copy permission
     >>> doc.manage_permission('Copy or Move', [], acquire=False)
     >>> folder.restrictedTraverse('copy_items')()
     'http://nohost/plone/opengeverbasecontainer'

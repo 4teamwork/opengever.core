@@ -11,8 +11,9 @@ class TestLogoutOverlay(TestCase):
     layer = OPENGEVER_DOCUMENT_FUNCTIONAL_TESTING
 
     def setUp(self):
-
         self.portal = self.layer['portal']
+        setRoles(self.portal, TEST_USER_ID, ['Manager'])
+
         self.request = self.layer['request']
         self.mtool = getToolByName(self.portal, 'portal_membership')
 
@@ -25,7 +26,6 @@ class TestLogoutOverlay(TestCase):
         self.portal.invokeFactory('opengever.document.document', 'document3')
         self.d3 = self.portal['document3']
 
-        setRoles(self.portal, TEST_USER_ID, ['Manager'])
 
     def test_no_checkouts(self):
         """ We have no checkouts. So the logout is handled over the
@@ -57,5 +57,3 @@ class TestLogoutOverlay(TestCase):
 
         self.assertIn('<input type="hidden" name="form.redirect.url" ' \
             'value="./logout" />', view)
-
-

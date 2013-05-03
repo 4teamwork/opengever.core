@@ -1,6 +1,13 @@
 Classification Behavior
 =======================
 
+    >>> portal = layer['portal']
+    >>> app = layer['app']
+
+    >>> from plone.app.testing import setRoles
+    >>> from plone.app.testing import TEST_USER_ID
+    >>> setRoles(portal, TEST_USER_ID, ['Contributor'])
+
 The classification behavior provides several fields used for classifying
 a container:
     classification
@@ -13,8 +20,6 @@ a container:
 
 When we create a dexterity content type:
 
-    >>> portal = layer.get('portal')
-    >>> app = layer.get('app')
     >>> from opengever.base.behaviors import classification
     >>> from plone.dexterity.fti import DexterityFTI
     >>> from Products.CMFCore.interfaces._content import IFolderish
@@ -60,7 +65,7 @@ We can see this type in the addable types at the root of the site:
     'http://nohost/plone/classificationfti/view'
 
 Get the created object:
-    
+
     >>> obj = portal.get('classificationfti')
     >>> obj!=None
     True

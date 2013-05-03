@@ -12,10 +12,11 @@ Since plone tests sucks, we need to re-register the reference number validator a
     >>> from zope.component import getMultiAdapter, provideAdapter
     >>> from z3c.form.interfaces import IValidator
     >>> from plone.app.testing import setRoles, TEST_USER_ID, TEST_USER_NAME, TEST_USER_PASSWORD
-	>>> portal = layer['portal']
-	>>> app = layer['app']
-	>>> request = layer['request']
-    
+    >>> portal = layer['portal']
+    >>> app = layer['app']
+    >>> request = layer['request']
+
+    >>> setRoles(portal, TEST_USER_ID, ['Contributor'])
 
 
     >>> getMultiAdapter((portal, None, None,
