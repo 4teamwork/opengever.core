@@ -8,7 +8,6 @@ TESTFILES = (
     'base.txt',
     'classification.txt',
     'copy_item.txt',
-    'creator.txt',
     'redirector.txt',
     'reference_adapter.txt',
     'sequence.txt',
