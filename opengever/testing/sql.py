@@ -23,12 +23,12 @@ def set_current_client_id(portal, clientid=u'client1'):
 def create_client(clientid='client1', session=None, **properties):
     session = session or create_session()
 
-    defaults = {'title': 'Client 1',
+    defaults = {'title': clientid.capitalize(),
                 'ip_address': '127.0.0.1',
-                'site_url': 'http://nohost/client1',
-                'public_url': 'http://nohost/client1',
-                'group': 'client1_users',
-                'inbox_group': 'client1_inbox_users'}
+                'site_url': 'http://nohost/%s' % clientid,
+                'public_url': 'http://nohost/%s' % clientid,
+                'group': '%s_users' % clientid,
+                'inbox_group': '%s_inbox_users' % clientid}
 
     options = defaults.copy()
     options.update(properties)

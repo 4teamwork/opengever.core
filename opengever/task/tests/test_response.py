@@ -1,8 +1,13 @@
+from opengever.ogds.base.utils import create_session
 from opengever.task.adapters import IResponseContainer
 from opengever.task.interfaces import ISuccessorTaskController
 from opengever.task.task import ITask
 from opengever.task.testing import OPENGEVER_TASK_FUNCTIONAL_TESTING
 from opengever.task.util import add_simple_response
+from opengever.testing import create_client
+from opengever.testing import create_ogds_user
+from opengever.testing import create_plone_user
+from opengever.testing import set_current_client_id
 from plone.app.testing import TEST_USER_ID
 from plone.app.testing import TEST_USER_NAME, TEST_USER_PASSWORD
 from plone.app.testing import setRoles, login
@@ -18,9 +23,30 @@ class TestResponse(unittest.TestCase):
     layer = OPENGEVER_TASK_FUNCTIONAL_TESTING
 
     def setUp(self):
-
         self.portal = self.layer['portal']
         self.portal.portal_types['opengever.task.task'].global_allow = True
+
+        session = create_session()
+        create_client('plone', group='og_mandant1_users',
+                      inbox_group='og_mandant1_inbox', session=session)
+        create_client('client2', group='og_mandant2_users',
+                      inbox_group='og_mandant2_inbox', session=session)
+        set_current_client_id(self.portal, 'plone')
+
+        create_ogds_user(TEST_USER_ID,
+                         groups=('og_mandant1_users',
+                                 'og_mandant1_inbox',
+                                 'og_mandant2_users'),
+                         firstname='Test',
+                         lastname='User',
+                         session=session)
+
+        create_plone_user(self.portal, 'testuser2')
+        create_ogds_user('testuser2',
+                         groups=('og_mandant2_users', 'og_mandant2_inbox'),
+                         firstname='Test',
+                         lastname='User 2',
+                         session=session)
 
         setRoles(
             self.portal, TEST_USER_ID, ['Contributor', 'Editor'])
@@ -86,7 +112,7 @@ class TestResponse(unittest.TestCase):
         successor_info = """<span class="label">
                         Added successor task
                     </span>
-                    <span class="issueChange"><span class="wf-task-state-open"><a href="http://nohost/plone/dossier-1/task-2" title="[plone] > dossier-1 > Test task 1"><span class="rollover-breadcrumb icon-task-remote-task">Test task 1</span></a>  <span class="discreet">(client2 / <a href="http://nohost/plone/@@user-details/testuser2">User 2 Test (testuser2)</a>)</span></span></span>"""
+                    <span class="issueChange"><span class="wf-task-state-open"><a href="http://nohost/plone/dossier-1/task-2" title="[Plone] > dossier-1 > Test task 1"><span class="rollover-breadcrumb icon-task-remote-task">Test task 1</span></a>  <span class="discreet">(Client2 / <a href="http://nohost/plone/@@user-details/testuser2">User 2 Test (testuser2)</a>)</span></span></span>"""
 
         self.assertTrue(successor_info in self.browser.contents)
 

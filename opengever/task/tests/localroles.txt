@@ -22,6 +22,20 @@ Imports / globals:
     >>> intids = getUtility(IIntIds)
 
 
+    >>> from opengever.testing import create_client
+    >>> from opengever.testing import create_ogds_user
+    >>> from opengever.testing import set_current_client_id
+
+    >>> create_client('plone', group='og_mandant1_users',
+    ...               inbox_group='og_mandant1_inbox')
+    >>> create_client('client2', group='og_mandant2_users',
+    ...               inbox_group='og_mandant2_inbox')
+    >>> set_current_client_id(portal, 'plone')
+    >>> create_ogds_user(TEST_USER_ID,
+    ...     groups=('og_mandant1_users', 'og_mandant1_inbox', 'og_mandant2_users'))
+    <User test_user_1_>
+
+
 Lets assume we have a related item. For simplicity we also create
 a task, since tasks are the only dexterity type we now for shure
 we should have it here:

@@ -10,6 +10,8 @@ The task ID needs to be in following format:
 	>>> app = layer['app']
 	>>> request = layer['request']
 
+    >>> setRoles(portal, TEST_USER_ID, ['Manager'])
+
 Create a task:
 
     >>> t1 = createContentInContainer(portal, 'opengever.task.task')
@@ -29,4 +31,3 @@ Create another task:
     'task-2'
     >>> getUtility(ISequenceNumber).get_number(t2)
     2
-
