@@ -26,13 +26,16 @@ imports and general stuff
 
     >>> app = layer['app']
     >>> portal = layer['portal']
-    >>> setRoles(portal, TEST_USER_ID, ['Contributor'])
+    >>> setRoles(portal, TEST_USER_ID, ['Owner','Editor','Contributor', 'Reader'])
+
+    >>> from opengever.testing import create_client
+    >>> from opengever.testing import set_current_client_id
+    >>> create_client('client1')
+    >>> set_current_client_id(portal, 'client1')
 
 
     >>> browser = Browser(app)
     >>> browser.handleErrors = False
-
-    >>> portal.manage_setLocalRoles('mail-test', ['Owner','Editor','Contributor', 'Reader'])
 
 create document
     >>> doc1 = createContentInContainer(portal, 'opengever.document.document', title=u'Doc\xfcment 1')
@@ -62,10 +65,10 @@ portal has to provide ISendableDocsContainer
 
 
 login
-    >>> browser.open('%s/login_form' % portal.absolute_url())
-    >>> browser.getControl(name='__ac_name').value = 'mail-test'
-    >>> browser.getControl(name='__ac_password').value = 'demo09'
-    >>> browser.getControl(name='submit').click()
+
+    >>> from plone.app.testing.interfaces import TEST_USER_NAME
+    >>> from plone.app.testing.interfaces import TEST_USER_PASSWORD
+    >>> browser.addHeader('Authorization', 'Basic %s:%s' % (TEST_USER_NAME, TEST_USER_PASSWORD,))
 
 Mock MailHost
     >>> mockmailhost = MockMailHost('MailHost')
@@ -147,7 +150,7 @@ validator should also work with mails ect
 
     >>> documentsent = mock_event.last_event()
     >>> documentsent.sender
-    u'mail-test'
+    'test_user_1_'
     >>> documentsent.subject
     'Test Betreff 2'
     >>> id_util = getUtility(IIntIds)
