@@ -3,10 +3,14 @@ from opengever.globalindex.model.task import Task
 from opengever.inbox.testing import OPENGEVER_INBOX_FUNCTIONAL_TESTING
 from opengever.ogds.base.utils import get_client_id
 from opengever.testing import FunctionalTestCase
+from opengever.testing import create_client
+from opengever.testing import create_ogds_user
+from opengever.testing import set_current_client_id
 from plone.app.testing import logout, login
-from plone.app.testing.interfaces import TEST_USER_NAME as portal_owner
+from plone.app.testing.interfaces import TEST_USER_NAME
 from plone.dexterity.utils import createContentInContainer
 from zope.component import getUtility
+
 
 class TestViews(FunctionalTestCase):
     layer = OPENGEVER_INBOX_FUNCTIONAL_TESTING
@@ -15,6 +19,12 @@ class TestViews(FunctionalTestCase):
     def setUp(self):
         super(TestViews, self).setUp()
         self.grant('Owner','Editor','Contributor')
+
+        create_client('plone')
+        create_client('client2')
+        set_current_client_id(self.portal, 'plone')
+
+        create_ogds_user(TEST_USER_NAME)
 
     def test_views(self):
         # create content:
@@ -102,7 +112,7 @@ class TestViews(FunctionalTestCase):
         # test AccessInboxAllowed:
         logout()
         self.assertEquals(None, inbox.restrictedTraverse('access-inbox-allowed')())
-        login(self.portal, portal_owner)
+        login(self.portal, TEST_USER_NAME)
         self.assertEquals(1, inbox.restrictedTraverse('access-inbox-allowed')())
 
         # test InboxAssignedForwardings:
