@@ -5,6 +5,7 @@ class TestContact(FunctionalTestCase):
     use_browser = True
 
     def setUp(self):
+        super(TestContact, self).setUp()
         self.grant('Member', 'Contributor', 'Manager')
 
     def obj2brain(self, obj):
