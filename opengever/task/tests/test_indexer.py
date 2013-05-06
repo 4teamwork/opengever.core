@@ -1,7 +1,7 @@
 from Products.CMFCore.utils import getToolByName
 from datetime import datetime
 from opengever.ogds.base.interfaces import IClientConfiguration
-from opengever.task.testing import OPENGEVER_TASK_INTEGRATION_TESTING
+from opengever.testing import OPENGEVER_INTEGRATION_TESTING
 from opengever.testing import create_ogds_user
 from opengever.testing import set_current_client_id
 from plone.app.testing import TEST_USER_ID, TEST_USER_NAME
@@ -35,7 +35,7 @@ def getindexDataForObj(obj):
 
 class TestTaskIndexers(unittest.TestCase):
 
-    layer = OPENGEVER_TASK_INTEGRATION_TESTING
+    layer = OPENGEVER_INTEGRATION_TESTING
 
     def setUp(self):
         self.portal = self.layer['portal']

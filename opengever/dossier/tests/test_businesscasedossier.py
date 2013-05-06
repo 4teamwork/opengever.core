@@ -1,6 +1,6 @@
 from opengever.dossier.businesscase import IBusinessCaseDossier
-from opengever.dossier.testing import OPENGEVER_DOSSIER_FUNCTIONAL_TESTING
 from opengever.testing import FunctionalTestCase
+from opengever.testing import OPENGEVER_FUNCTIONAL_TESTING
 from plone.dexterity.interfaces import IDexterityFTI
 from plone.dexterity.utils import createContentInContainer
 from zope.component import createObject
@@ -9,7 +9,7 @@ from zope.component import queryUtility
 
 class TestBusinessCaseDossierIntegration(FunctionalTestCase):
 
-    layer = OPENGEVER_DOSSIER_FUNCTIONAL_TESTING
+    layer = OPENGEVER_FUNCTIONAL_TESTING
 
     def test_adding(self):
         self.grant('Contributor')

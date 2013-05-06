@@ -1,4 +1,4 @@
-from opengever.mail.testing import OPENGEVER_MAIL_FUNCTIONAL_TESTING
+from opengever.testing import OPENGEVER_FUNCTIONAL_TESTING
 from plone.testing import layered
 import doctest
 import os
@@ -26,7 +26,7 @@ def test_suite():
             suite.addTests([
                   layered(doctest.DocFileSuite(testfile,
                                                optionflags=OPTIONFLAGS),
-                          layer=OPENGEVER_MAIL_FUNCTIONAL_TESTING),
+                          layer=OPENGEVER_FUNCTIONAL_TESTING),
               ])
 
     return suite

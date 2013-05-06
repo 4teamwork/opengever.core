@@ -1,6 +1,6 @@
 from Products.CMFCore.utils import getToolByName
-from opengever.dossier.testing import OPENGEVER_DOSSIER_FUNCTIONAL_TESTING
 from opengever.testing import FunctionalTestCase
+from opengever.testing import OPENGEVER_FUNCTIONAL_TESTING
 from plone.app.testing import TEST_USER_NAME, TEST_USER_PASSWORD
 from plone.app.testing import setRoles, TEST_USER_ID
 from plone.testing.z2 import Browser
@@ -10,7 +10,7 @@ import transaction
 
 class TestOpenDossiersJson(FunctionalTestCase):
 
-    layer = OPENGEVER_DOSSIER_FUNCTIONAL_TESTING
+    layer = OPENGEVER_FUNCTIONAL_TESTING
 
     def setUp(self):
         super(TestOpenDossiersJson, self).setUp()

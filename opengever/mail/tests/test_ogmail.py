@@ -1,6 +1,6 @@
 from Testing.makerequest import makerequest
 from opengever.mail.mail import IOGMailMarker, IOGMail
-from opengever.mail.testing import OPENGEVER_MAIL_INTEGRATION_TESTING
+from opengever.testing import OPENGEVER_INTEGRATION_TESTING
 from plone.dexterity.utils import createContentInContainer
 from plone.namedfile.file import NamedBlobFile
 from zope.app.component.hooks import setSite
@@ -10,7 +10,7 @@ import unittest2 as unittest
 
 class TestOGMailAddition(unittest.TestCase):
 
-    layer = OPENGEVER_MAIL_INTEGRATION_TESTING
+    layer = OPENGEVER_INTEGRATION_TESTING
 
     def setUp(self):
         super(TestOGMailAddition, self).setUp()

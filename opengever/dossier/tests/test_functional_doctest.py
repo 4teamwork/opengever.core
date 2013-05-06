@@ -1,7 +1,7 @@
-from opengever.dossier.testing import OPENGEVER_DOSSIER_INTEGRATION_TESTING
+from opengever.testing import OPENGEVER_INTEGRATION_TESTING
+from plone.testing import layered
 import doctest
 import unittest2 as unittest
-from plone.testing import layered
 
 TESTFILES = (
     '../behaviors.txt',
@@ -21,7 +21,7 @@ def test_suite():
         suite.addTests([
               layered(doctest.DocFileSuite(testfile,
                                            optionflags=OPTIONFLAGS),
-                      layer=OPENGEVER_DOSSIER_INTEGRATION_TESTING),
+                      layer=OPENGEVER_INTEGRATION_TESTING),
           ])
 
     return suite

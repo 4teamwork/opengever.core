@@ -1,7 +1,7 @@
-from opengever.mail.testing import OPENGEVER_MAIL_INTEGRATION_TESTING
+from opengever.testing import OPENGEVER_INTEGRATION_TESTING
 import unittest2 as unittest
 
 class MailTestCase(unittest.TestCase):
     """Base class for integration tests."""
 
-    layer = OPENGEVER_MAIL_INTEGRATION_TESTING
+    layer = OPENGEVER_INTEGRATION_TESTING
