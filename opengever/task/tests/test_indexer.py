@@ -2,6 +2,8 @@ from Products.CMFCore.utils import getToolByName
 from datetime import datetime
 from opengever.ogds.base.interfaces import IClientConfiguration
 from opengever.task.testing import OPENGEVER_TASK_INTEGRATION_TESTING
+from opengever.testing import create_ogds_user
+from opengever.testing import set_current_client_id
 from plone.app.testing import TEST_USER_ID, TEST_USER_NAME
 from plone.app.testing import setRoles, login
 from plone.dexterity.utils import createContentInContainer
@@ -38,6 +40,8 @@ class TestTaskIndexers(unittest.TestCase):
     def setUp(self):
         self.portal = self.layer['portal']
         self.portal.portal_types['opengever.task.task'].global_allow = True
+
+        set_current_client_id(self.portal, 'plone')
 
         setRoles(
             self.portal, TEST_USER_ID, ['Contributor', 'Editor', 'Manager'])
@@ -137,6 +141,8 @@ class TestTaskIndexers(unittest.TestCase):
     def test_searchable_text(self):
         self.task.title = u'Test Aufgabe'
         self.task.text = u'Lorem ipsum olor sit amet'
+
+        create_ogds_user(TEST_USER_ID, firstname='Hugo', lastname='Boss')
         self.task.responsible = TEST_USER_ID
 
         self.task.reindexObject()
@@ -144,5 +150,4 @@ class TestTaskIndexers(unittest.TestCase):
         self.assertEquals(
             getindexDataForObj(self.task).get('SearchableText'),
             ['test', 'aufgabe', 'lorem', 'ipsum', 'olor', 'sit',
-             'amet', '1', 'user', 'test', 'test_user_1_'])
-
+             'amet', '1', 'boss', 'hugo', 'test_user_1_'])

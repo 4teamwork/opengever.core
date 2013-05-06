@@ -1,19 +1,20 @@
 from Products.CMFCore.utils import getToolByName
 from opengever.dossier.testing import OPENGEVER_DOSSIER_FUNCTIONAL_TESTING
+from opengever.testing import FunctionalTestCase
+from plone.app.testing import TEST_USER_NAME, TEST_USER_PASSWORD
 from plone.app.testing import setRoles, TEST_USER_ID
 from plone.testing.z2 import Browser
-from plone.app.testing import TEST_USER_NAME, TEST_USER_PASSWORD
 import json
 import transaction
-import unittest2 as unittest
 
-class TestOpenDossiersJson(unittest.TestCase):
+
+class TestOpenDossiersJson(FunctionalTestCase):
 
     layer = OPENGEVER_DOSSIER_FUNCTIONAL_TESTING
 
     def setUp(self):
         super(TestOpenDossiersJson, self).setUp()
-        self.portal = self.layer['portal']
+        self.grant('Contributor')
 
     def test_renders_json_containing_all_open_dossiers(self):
         self.store_dossiers(2)

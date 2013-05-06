@@ -1,12 +1,9 @@
 from opengever.core.testing import OPENGEVER_FIXTURE
 from opengever.core.testing import setup_sql_tables
 from opengever.core.testing import truncate_sql_tables
-from opengever.ogds.base.interfaces import IClientConfiguration
 from plone.app.testing import IntegrationTesting
 from plone.app.testing import PloneSandboxLayer
 from plone.dexterity import utils
-from plone.registry.interfaces import IRegistry
-from zope.component import getUtility
 
 
 def create_contacts(portal):
@@ -45,12 +42,6 @@ def create_contacts(portal):
 class BaseLayer(PloneSandboxLayer):
 
     defaultBases = (OPENGEVER_FIXTURE, )
-
-    def setUpPloneSite(self, portal):
-        # configure client ID
-        registry = getUtility(IRegistry, context=portal)
-        client = registry.forInterface(IClientConfiguration)
-        client.client_id = u'client1'
 
     def testSetUp(self):
         super(BaseLayer, self).testSetUp()

@@ -9,7 +9,10 @@ from opengever.task.browser.accept.utils import accept_forwarding_with_successor
 from opengever.task.interfaces import ISuccessorTaskController
 from opengever.task.testing import OPENGEVER_TASK_INTEGRATION_TESTING
 from opengever.task.tests.data import DOCUMENT_EXTRACTION, FORWARDING_EXTRACTION
+from opengever.testing import create_client
+from opengever.testing import set_current_client_id
 from plone.app.testing import TEST_USER_ID
+from plone.app.testing import setRoles
 from plone.dexterity.utils import createContentInContainer
 from zope.component import getUtility
 from zope.intid.interfaces import IIntIds
@@ -34,6 +37,8 @@ class TestTaskAccepting(MockTestCase):
         super(TestTaskAccepting, self).setUp()
         self.portal = self.layer.get('portal')
 
+        setRoles(self.portal, TEST_USER_ID, ['Manager'])
+
         self.fake_inbox = 'FAKE'
 
         self.inbox = createContentInContainer(
@@ -44,6 +49,8 @@ class TestTaskAccepting(MockTestCase):
 
 
     def test_accept_forwarding_with_successor_with_dossier(self):
+        create_client('plone')
+        set_current_client_id(self.portal, 'plone')
 
         # create fake predecessor
         predecessor = Task(FAKE_INTID, 'client2')

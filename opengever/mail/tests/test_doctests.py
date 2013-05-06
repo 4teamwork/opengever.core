@@ -1,8 +1,8 @@
+from opengever.mail.testing import OPENGEVER_MAIL_FUNCTIONAL_TESTING
+from plone.testing import layered
+import doctest
 import os
 import unittest2 as unittest
-import doctest
-from opengever.mail.testing import OPENGEVER_MAIL_INTEGRATION_TESTING
-from plone.testing import layered
 
 
 OPTIONFLAGS = (doctest.NORMALIZE_WHITESPACE|
@@ -26,7 +26,7 @@ def test_suite():
             suite.addTests([
                   layered(doctest.DocFileSuite(testfile,
                                                optionflags=OPTIONFLAGS),
-                          layer=OPENGEVER_MAIL_INTEGRATION_TESTING),
+                          layer=OPENGEVER_MAIL_FUNCTIONAL_TESTING),
               ])
 
     return suite

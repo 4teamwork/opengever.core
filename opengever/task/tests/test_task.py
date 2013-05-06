@@ -2,7 +2,8 @@ from datetime import datetime
 from opengever.task.adapters import IResponseContainer
 from opengever.task.response import Response
 from opengever.task.task import ITask
-from opengever.task.testing import OPENGEVER_TASK_INTEGRATION_TESTING
+from opengever.task.testing import OPENGEVER_TASK_FUNCTIONAL_TESTING
+from opengever.testing import FunctionalTestCase
 from plone.dexterity.interfaces import IDexterityFTI
 from plone.dexterity.utils import createContent, addContentToContainer
 from plone.dexterity.utils import createContentInContainer
@@ -25,9 +26,9 @@ def create_task(parent, **kwargs):
     return task
 
 
-class TestTaskIntegration(unittest.TestCase):
+class TestTaskIntegration(FunctionalTestCase):
 
-    layer = OPENGEVER_TASK_INTEGRATION_TESTING
+    layer = OPENGEVER_TASK_FUNCTIONAL_TESTING
 
     def setUp(self):
         self.portal = self.layer['portal']
@@ -60,6 +61,7 @@ class TestTaskIntegration(unittest.TestCase):
         self.failUnless(view.get_sub_tasks()[0] == t2)
 
     def test_relateddocuments(self):
+        self.grant('Manager')
         # create document and append it to the relatedItems of the task
         doc3 = createContentInContainer(
             self.portal, 'opengever.document.document', title="a-testthree")

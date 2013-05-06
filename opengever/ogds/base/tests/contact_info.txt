@@ -19,6 +19,11 @@ Log in
     >>> from plone.app.testing import TEST_USER_NAME
     >>> login(portal, TEST_USER_NAME)
 
+
+    >>> from opengever.testing import set_current_client_id
+    >>> set_current_client_id(portal)
+
+
 Lets create some users:
 
     >>> session = create_session()
