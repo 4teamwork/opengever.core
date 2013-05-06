@@ -4,6 +4,16 @@ test searching data
     >>> from plone.dexterity.utils import createContentInContainer
     >>> from plone.testing.z2 import Browser
     >>> from plone.app.testing import TEST_USER_NAME, TEST_USER_PASSWORD
+    >>> from plone.app.testing import TEST_USER_ID
+
+
+    >>> from opengever.testing import create_client
+    >>> from opengever.testing import set_current_client_id
+    >>> from opengever.testing import create_ogds_user
+    >>> create_client()
+    >>> set_current_client_id(layer['portal'])
+    >>> create_ogds_user(TEST_USER_ID)
+    <User test_user_1_>
 
 setup the browser for the test, we use it later in the test
 	>>> app = layer['app']
