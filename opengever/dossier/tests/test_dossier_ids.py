@@ -1,15 +1,15 @@
 from opengever.dossier.testing import OPENGEVER_DOSSIER_FUNCTIONAL_TESTING
+from opengever.testing import FunctionalTestCase
 from plone.dexterity.utils import createContentInContainer
 
-import unittest2 as unittest
 
-class DossierIdsTestCase(unittest.TestCase):
+class DossierIdsTestCase(FunctionalTestCase):
 
     layer = OPENGEVER_DOSSIER_FUNCTIONAL_TESTING
 
     def setUp(self):
         super(DossierIdsTestCase, self).setUp()
-        self.portal = self.layer['portal']
+        self.grant('Contributor')
 
     def test_dossier_id_format(self):
         dossier1 = self.create_dossier()

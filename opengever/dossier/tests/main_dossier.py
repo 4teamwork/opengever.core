@@ -7,6 +7,11 @@ from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.testing import OPENGEVER_DOSSIER_FUNCTIONAL_TESTING
 from opengever.mail.behaviors import ISendableDocsContainer
+from opengever.testing import FunctionalTestCase
+from opengever.testing import create_client
+from opengever.testing import create_ogds_user
+from opengever.testing import create_plone_user
+from opengever.testing import set_current_client_id
 from plone.app.testing import SITE_OWNER_NAME, login, logout
 from plone.app.testing import TEST_USER_NAME, TEST_USER_PASSWORD
 from plone.dexterity.utils import createContentInContainer
@@ -24,7 +29,6 @@ from zope.schema.interfaces import IVocabularyFactory
 from zope.schema.vocabulary import SimpleVocabulary, SimpleTerm
 from zope.schema.vocabulary import getVocabularyRegistry
 import transaction
-import unittest2 as unittest
 
 
 class DummyVocabulary(object):
@@ -39,7 +43,7 @@ class DummyVocabulary(object):
         return dummy_vocab
 
 
-class TestMainDossier(unittest.TestCase):
+class TestMainDossier(FunctionalTestCase):
     """Base tests to test the default functions for all dossier-types
 
     let your testobject inherit from this class to extend it with default
@@ -81,9 +85,13 @@ class TestMainDossier(unittest.TestCase):
     - default_contentmenu_order_subdossier: The orderposition of items in the
         contentmenu for subdossiers
     """
+
     dossier_types = {'opengever.dossier.businesscasedossier': {}}
+
     layer = OPENGEVER_DOSSIER_FUNCTIONAL_TESTING
+
     workflow = "opengever_dossier_workflow"
+
     tabs = ['Overview',
             'Subdossiers',
             'Documents',
@@ -92,20 +100,26 @@ class TestMainDossier(unittest.TestCase):
             'Trash',
             'Journal',
             'Sharing', ]
+
     repo_id = 'repo'
+
     base_url = 'http://nohost/plone/%s' % repo_id
+
     labels = {'add_subdossier': 'Add Subdossier',
               'edit_subdossier': 'Edit Subdossier',
               'action_name': 'Subdossier',
              }
+
     deepth = 1
+
     default_searchable_attr = {'reference_number': 'test_reference_number',
                                 'sequence_number': 'test_sequence_number',
-                               'responsible': SITE_OWNER_NAME,
                                'filing_no': 'test_filing_no',
                                'comments': u'wir wollen James "Bond" überall',
                                'keywords': ['hallo', 'hugo']}
+
     is_special_dossier = False
+
     default_contentmenu_order = ['Document',
                                  'Document with docucomposer',
                                  'document_with_template',
@@ -114,6 +128,7 @@ class TestMainDossier(unittest.TestCase):
                                  'Subdossier',
                                  'Add Participant',
                                 ]
+
     default_contentmenu_order_subdossier = ['Document',
                                             'Document with docucomposer',
                                             'document_with_template',
@@ -217,14 +232,22 @@ class TestMainDossier(unittest.TestCase):
     def setUp(self):
         """Set up the testenvironment
         """
-        self.portal = self.layer['portal']
+        super(TestMainDossier, self).setUp()
+        self.grant('Contributor')
+
+        create_client()
+        set_current_client_id(self.portal)
+
+        create_plone_user(self.portal, SITE_OWNER_NAME)
+        create_ogds_user(SITE_OWNER_NAME)
+
         self.request = self.layer['request']
 
         if not self.portal.hasObject(self.repo_id):
             self.repo = self.portal[self.portal.invokeFactory(
                 'opengever.repository.repositoryfolder', self.repo_id)]
 
-            transaction.commit()
+        transaction.commit()
 
     def test_content_types_installed(self):
         """Check whether the content-type is installed

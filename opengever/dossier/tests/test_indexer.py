@@ -2,11 +2,11 @@ from Products.CMFCore.utils import getToolByName
 from opengever.base.behaviors.base import IOpenGeverBase
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.testing import OPENGEVER_DOSSIER_FUNCTIONAL_TESTING
+from opengever.testing import FunctionalTestCase
 from zope.event import notify
 from zope.interface import Interface
 from zope.lifecycleevent import ObjectModifiedEvent, Attributes
 import transaction
-import unittest2 as unittest
 
 
 def obj2brain(obj):
@@ -24,11 +24,14 @@ def getindexDataForObj(obj):
     return catalog.getIndexDataForRID(obj2brain(obj).getRID())
 
 
-class Testindexers(unittest.TestCase):
+class TestIndexers(FunctionalTestCase):
 
     layer = OPENGEVER_DOSSIER_FUNCTIONAL_TESTING
 
     def setUp(self):
+        super(TestIndexers, self).setUp()
+        self.grant('Contributor')
+
         portal = self.layer['portal']
         portal.invokeFactory('opengever.dossier.businesscasedossier', 'dossier')
         dossier = portal.get('dossier')

@@ -1,14 +1,17 @@
-import unittest2 as unittest
-from opengever.dossier.testing import OPENGEVER_DOSSIER_INTEGRATION_TESTING
+from opengever.dossier.testing import OPENGEVER_DOSSIER_FUNCTIONAL_TESTING
+from opengever.testing import FunctionalTestCase
 from plone.dexterity.utils import createContentInContainer
 
-class TestMoveItemsIntegration(unittest.TestCase):
 
-    layer = OPENGEVER_DOSSIER_INTEGRATION_TESTING
+class TestMoveItemsIntegration(FunctionalTestCase):
+
+    layer = OPENGEVER_DOSSIER_FUNCTIONAL_TESTING
 
     def test_integration(self):
         """ Test integration of move_items method
         """
+        self.grant('Contributor')
+
         portal = self.layer['portal']
         request = self.layer['request']
 
