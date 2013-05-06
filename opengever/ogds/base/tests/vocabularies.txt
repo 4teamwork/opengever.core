@@ -35,6 +35,9 @@ Globals:
     >>> portal = layer.get('portal')
     >>> request = layer.get('request')
 
+    >>> from opengever.testing import set_current_client_id
+    >>> set_current_client_id(portal)
+
 
 Test searchable vocabulary
 ==========================
