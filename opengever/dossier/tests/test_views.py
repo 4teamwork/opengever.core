@@ -1,16 +1,13 @@
-from Acquisition import aq_parent
-from Products.CMFCore.utils import getToolByName
 from datetime import datetime
 from opengever.document.checkout import handlers
 from opengever.dossier.behaviors.dossier import IDossier
-from opengever.dossier.behaviors.dossier import IDossierMarker
-from opengever.dossier.testing import OPENGEVER_DOSSIER_INTEGRATION_TESTING
+from opengever.testing import OPENGEVER_INTEGRATION_TESTING
+from plone.app.testing import popGlobalRegistry
+from plone.app.testing import pushGlobalRegistry
 from plone.app.testing import setRoles, TEST_USER_ID
-from zope.component import provideUtility
 from zope.interface import implements
 from zope.schema.interfaces import IVocabularyFactory
 from zope.schema.vocabulary import SimpleVocabulary, SimpleTerm
-import json
 import unittest2 as unittest
 
 
@@ -56,32 +53,46 @@ TEST_CREATED_MAPPING = {
 
 class TestViewsIntegration(unittest.TestCase):
 
-    layer = OPENGEVER_DOSSIER_INTEGRATION_TESTING
+    layer = OPENGEVER_INTEGRATION_TESTING
 
     def setUp(self):
+        super(TestViewsIntegration, self).setUp()
+        self.portal = self.layer['portal']
+        pushGlobalRegistry(self.portal)
+
         # disable create_inital_version handler for og.documents
         # otherwise we have some savepoints problems with the sqlite db
         handlers.MIGRATION = True
-        self.portal = self.layer['portal']
         setRoles(self.portal, TEST_USER_ID, ['Reviewer', 'Manager'])
-        super(TestViewsIntegration, self).setUp()
+
+        self._utilities = []
 
     def tearDown(self):
         # disable create_inital_version handler for og.documents
         # otherwise we have some savepoints problems with the sqlite db
         handlers.MIGRATION = False
 
+        sm = self.layer['portal'].getSiteManager()
+        for component in self._utilities:
+            sm.unregisterUtility(component)
+
+        popGlobalRegistry(self.layer['portal'])
         super(TestViewsIntegration, self).tearDown()
 
     def test_overview(self):
         # fake the vocabularies
-        provideUtility(
-            DummyContactVocabulary(),
+        sm = self.layer['portal'].getSiteManager()
+        component = DummyContactVocabulary()
+        sm.registerUtility(
+            component,
             name='opengever.ogds.base.ContactsVocabulary')
+        self._utilities.append(component)
 
-        provideUtility(
-            DummyUsersVocabulary(),
+        component = DummyUsersVocabulary()
+        sm.registerUtility(
+            component,
             name='opengever.ogds.base.UsersVocabulary')
+        self._utilities.append(component)
 
         # create testing dossier
         self.portal.invokeFactory(

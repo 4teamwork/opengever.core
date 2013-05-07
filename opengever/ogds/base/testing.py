@@ -1,8 +1,3 @@
-from opengever.core.testing import OPENGEVER_FIXTURE
-from opengever.core.testing import setup_sql_tables
-from opengever.core.testing import truncate_sql_tables
-from plone.app.testing import IntegrationTesting
-from plone.app.testing import PloneSandboxLayer
 from plone.dexterity import utils
 
 
@@ -37,22 +32,3 @@ def create_contacts(portal):
             lastname=lastname.decode('utf-8'),
             email=email)
         obj.reindexObject()
-
-
-class BaseLayer(PloneSandboxLayer):
-
-    defaultBases = (OPENGEVER_FIXTURE, )
-
-    def testSetUp(self):
-        super(BaseLayer, self).testSetUp()
-        setup_sql_tables()
-
-    def testTearDown(self):
-        super(BaseLayer, self).testTearDown()
-        truncate_sql_tables()
-
-
-OPENGEVER_OGDS_BASE_FIXTURE = BaseLayer()
-OPENGEVER_OGDS_BASE_TESTING = IntegrationTesting(
-    bases=(OPENGEVER_OGDS_BASE_FIXTURE,),
-    name="OpengeverOgdsBase:Integration")

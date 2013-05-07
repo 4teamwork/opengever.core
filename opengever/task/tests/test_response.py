@@ -2,8 +2,8 @@ from opengever.ogds.base.utils import create_session
 from opengever.task.adapters import IResponseContainer
 from opengever.task.interfaces import ISuccessorTaskController
 from opengever.task.task import ITask
-from opengever.task.testing import OPENGEVER_TASK_FUNCTIONAL_TESTING
 from opengever.task.util import add_simple_response
+from opengever.testing import OPENGEVER_FUNCTIONAL_TESTING
 from opengever.testing import create_client
 from opengever.testing import create_ogds_user
 from opengever.testing import create_plone_user
@@ -20,7 +20,7 @@ import urllib
 
 class TestResponse(unittest.TestCase):
 
-    layer = OPENGEVER_TASK_FUNCTIONAL_TESTING
+    layer = OPENGEVER_FUNCTIONAL_TESTING
 
     def setUp(self):
         self.portal = self.layer['portal']

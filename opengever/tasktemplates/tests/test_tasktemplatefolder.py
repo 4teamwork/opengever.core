@@ -1,10 +1,8 @@
-from opengever.tasktemplates.content.templatefoldersschema \
-    import ITaskTemplateFolderSchema
-from opengever.tasktemplates.testing \
-    import OPENGEVER_TASKTEMPLATES_FUNCTIONAL_TESTING
+from Products.CMFCore.utils import getToolByName
+from opengever.tasktemplates.content.templatefoldersschema import ITaskTemplateFolderSchema
+from opengever.testing import OPENGEVER_FUNCTIONAL_TESTING
 from plone.dexterity.interfaces import IDexterityFTI
 from plone.dexterity.utils import createContent, addContentToContainer
-from Products.CMFCore.utils import getToolByName
 from zope.component import createObject
 from zope.component import queryUtility
 from zope.event import notify
@@ -23,7 +21,7 @@ def create_testobject(parent, ptype, **kwargs):
 
 class TestTaskTemplates(unittest.TestCase):
 
-    layer = OPENGEVER_TASKTEMPLATES_FUNCTIONAL_TESTING
+    layer = OPENGEVER_FUNCTIONAL_TESTING
 
     def test_adding(self):
         parent = self.layer['portal']

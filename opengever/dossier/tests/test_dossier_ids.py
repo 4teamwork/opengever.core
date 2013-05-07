@@ -1,11 +1,11 @@
-from opengever.dossier.testing import OPENGEVER_DOSSIER_FUNCTIONAL_TESTING
+from opengever.testing import OPENGEVER_FUNCTIONAL_TESTING
 from opengever.testing import FunctionalTestCase
 from plone.dexterity.utils import createContentInContainer
 
 
 class DossierIdsTestCase(FunctionalTestCase):
 
-    layer = OPENGEVER_DOSSIER_FUNCTIONAL_TESTING
+    layer = OPENGEVER_FUNCTIONAL_TESTING
 
     def setUp(self):
         super(DossierIdsTestCase, self).setUp()

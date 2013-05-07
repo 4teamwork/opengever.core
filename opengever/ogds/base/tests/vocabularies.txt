@@ -264,6 +264,8 @@ Vocabulary of contacts.
     >>> fact = getUtility(IVocabularyFactory,
     ...                   name='opengever.ogds.base.ContactsVocabulary')
     >>> voc = fact(portal)
+    >>> fact
+    <opengever.ogds.base.vocabularies.ContactsVocabularyFactory object at ...>
     >>> fterms(list(voc))
     [u'<Term contact:kaufmann-sandra:Kaufmann Sandra (sandra.kaufmann@test.ch)>', u'<Term contact:kappeli-elisabeth:K\xe4ppeli Elisabeth (elisabeth.kaeppeli@test.ch)>', u'<Term contact:wermuth-roger:Wermuth Roger>']
 

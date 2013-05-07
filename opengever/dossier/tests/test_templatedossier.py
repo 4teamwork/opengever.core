@@ -1,8 +1,8 @@
 from Testing.makerequest import makerequest
 from opengever.dossier.templatedossier import ITemplateDossier
 from opengever.dossier.templatedossier import REMOVED_COLUMNS
-from opengever.dossier.testing import OPENGEVER_DOSSIER_FUNCTIONAL_TESTING
 from opengever.testing import FunctionalTestCase
+from opengever.testing import OPENGEVER_FUNCTIONAL_TESTING
 from plone.dexterity.interfaces import IDexterityFTI
 from plone.dexterity.utils import createContentInContainer
 from zope.app.component.hooks import setSite
@@ -12,7 +12,7 @@ import transaction
 
 class TestTemplateDossierIntegration(FunctionalTestCase):
 
-    layer = OPENGEVER_DOSSIER_FUNCTIONAL_TESTING
+    layer = OPENGEVER_FUNCTIONAL_TESTING
 
     def test_adding(self):
         portal = self.layer['portal']

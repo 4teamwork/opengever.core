@@ -1,5 +1,4 @@
 from opengever.core.testing import OPENGEVER_FIXTURE
-from opengever.core.testing import truncate_sql_tables
 from plone.app.testing import FunctionalTesting
 from plone.app.testing import PloneSandboxLayer
 from plone.registry.interfaces import IRegistry
@@ -14,10 +13,6 @@ class DocumentLayer(PloneSandboxLayer):
         # fix registry
         registry = getUtility(IRegistry)
         registry['ftw.tabbedview.interfaces.ITabbedView.batch_size'] = 50
-
-    def tearDown(self):
-        super(DocumentLayer, self).tearDown()
-        truncate_sql_tables()
 
 
 OPENGEVER_DOCUMENT_FIXTURE = DocumentLayer()

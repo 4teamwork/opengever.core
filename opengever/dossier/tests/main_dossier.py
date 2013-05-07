@@ -5,9 +5,9 @@ from ftw.contentmenu.menu import FactoriesMenu
 from opengever.base.interfaces import IReferenceNumber, ISequenceNumber
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.behaviors.dossier import IDossierMarker
-from opengever.dossier.testing import OPENGEVER_DOSSIER_FUNCTIONAL_TESTING
 from opengever.mail.behaviors import ISendableDocsContainer
 from opengever.testing import FunctionalTestCase
+from opengever.testing import OPENGEVER_FUNCTIONAL_TESTING
 from opengever.testing import create_client
 from opengever.testing import create_ogds_user
 from opengever.testing import create_plone_user
@@ -20,7 +20,6 @@ from plone.indexer.interfaces import IIndexableObject
 from plone.testing.z2 import Browser
 from zExceptions import Unauthorized
 from zope.component import getAdapter, getUtility
-from zope.component import provideUtility
 from zope.component import queryMultiAdapter
 from zope.interface import implements
 from zope.schema import getFieldsInOrder
@@ -88,7 +87,7 @@ class TestMainDossier(FunctionalTestCase):
 
     dossier_types = {'opengever.dossier.businesscasedossier': {}}
 
-    layer = OPENGEVER_DOSSIER_FUNCTIONAL_TESTING
+    layer = OPENGEVER_FUNCTIONAL_TESTING
 
     workflow = "opengever_dossier_workflow"
 
@@ -246,6 +245,8 @@ class TestMainDossier(FunctionalTestCase):
         if not self.portal.hasObject(self.repo_id):
             self.repo = self.portal[self.portal.invokeFactory(
                 'opengever.repository.repositoryfolder', self.repo_id)]
+
+        self._utilities = []
 
         transaction.commit()
 
@@ -521,8 +522,8 @@ class TestMainDossier(FunctionalTestCase):
     def test_searchabletext(self):
         """Check the searchable text of an object
         """
-        provideUtility(
-            DummyVocabulary(), name='opengever.ogds.base.ContactsVocabulary')
+        self.provideUtility(DummyVocabulary(),
+                       name='opengever.ogds.base.ContactsVocabulary')
 
         for dossier_type, additional_searchable_attr in \
             self.dossier_types.items():
@@ -582,9 +583,19 @@ class TestMainDossier(FunctionalTestCase):
 
         self.assertTrue(searchable_attr.values() == [])
 
+    def provideUtility(self, component, name=''):
+        sm = self.layer['portal'].getSiteManager()
+        self._utilities.append(component)
+        sm.registerUtility(component, name=name)
+
     def tearDown(self):
         """Cleanup the test-environment after each test
         """
+
+        sm = self.layer['portal'].getSiteManager()
+        for component in self._utilities:
+            sm.unregisterUtility(component)
+
         # TODO: We need to reset the sequencenumber that other tests wont fail.
         # This implementation dont work.
 
