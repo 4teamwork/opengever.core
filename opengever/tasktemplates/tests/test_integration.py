@@ -1,17 +1,15 @@
+from Products.CMFCore.utils import getToolByName
 from datetime import datetime, timedelta
 from opengever.dossier.behaviors.dossier import IDossier
-from opengever.ogds.base.interfaces import IClientConfiguration
-from opengever.tasktemplates.testing \
-    import OPENGEVER_TASKTEMPLATES_FUNCTIONAL_TESTING
 from opengever.tasktemplates.interfaces import IFromTasktemplateGenerated
+from opengever.tasktemplates.testing import OPENGEVER_TASKTEMPLATES_FUNCTIONAL_TESTING
+from opengever.testing import FunctionalTestCase
+from opengever.testing import create_client
+from opengever.testing import set_current_client_id
 from plone.app.testing import SITE_OWNER_NAME
 from plone.dexterity.utils import createContent, addContentToContainer
-from plone.registry.interfaces import IRegistry
-from Products.CMFCore.utils import getToolByName
-from zope.component import getUtility
 from zope.event import notify
 from zope.lifecycleevent import ObjectCreatedEvent, ObjectAddedEvent
-import unittest2 as unittest
 
 
 def create_testobject(parent, ptype, **kwargs):
@@ -23,7 +21,7 @@ def create_testobject(parent, ptype, **kwargs):
     return obj
 
 
-class TestTaskTemplates(unittest.TestCase):
+class TestTaskTemplates(FunctionalTestCase):
 
     layer = OPENGEVER_TASKTEMPLATES_FUNCTIONAL_TESTING
 
@@ -37,9 +35,9 @@ class TestTaskTemplates(unittest.TestCase):
         catalog = getToolByName(portal, 'portal_catalog')
         mtool = getToolByName(portal, 'portal_membership')
 
-        # Set client-name in registry
-        getUtility(IRegistry).forInterface(
-            IClientConfiguration).client_id = u'plone'
+        create_client('plone')
+        set_current_client_id(portal, 'plone')
+        self.grant('Manager')
 
         # Folders and templates
         template_folder_1 = create_testobject(

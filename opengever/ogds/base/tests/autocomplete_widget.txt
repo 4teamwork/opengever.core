@@ -23,6 +23,9 @@ Globals:
     >>> portal = layer.get('portal')
     >>> request = layer.get('request')
 
+    >>> from opengever.testing import set_current_client_id
+    >>> set_current_client_id(portal)
+
 Lets set up some users and clients for testing the vocabularies with:
 
     >>> session = create_session()
@@ -107,7 +110,3 @@ added to hidden list of terms.
 
     >>> source2.hidden_terms
     [u'test1']
-
-
-
-

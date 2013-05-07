@@ -2,21 +2,21 @@ from Testing.makerequest import makerequest
 from opengever.dossier.templatedossier import ITemplateDossier
 from opengever.dossier.templatedossier import REMOVED_COLUMNS
 from opengever.dossier.testing import OPENGEVER_DOSSIER_FUNCTIONAL_TESTING
-from plone.app.testing import setRoles, TEST_USER_ID
+from opengever.testing import FunctionalTestCase
 from plone.dexterity.interfaces import IDexterityFTI
 from plone.dexterity.utils import createContentInContainer
 from zope.app.component.hooks import setSite
 from zope.component import createObject, queryUtility
 import transaction
-import unittest2 as unittest
 
 
-class TestTemplateDossierIntegration(unittest.TestCase):
+class TestTemplateDossierIntegration(FunctionalTestCase):
 
     layer = OPENGEVER_DOSSIER_FUNCTIONAL_TESTING
 
     def test_adding(self):
         portal = self.layer['portal']
+        self.grant('Contributor')
         portal.invokeFactory('opengever.dossier.templatedossier', 'templatedossier')
         d1 = portal['templatedossier']
         self.failUnless(ITemplateDossier.providedBy(d1))
@@ -41,8 +41,8 @@ class TestTemplateDossierIntegration(unittest.TestCase):
 
     def test_templatefolder_view(self):
         portal = self.layer['portal']
-        setRoles(portal, TEST_USER_ID, [
-                'Manager', 'Reader', 'Member', 'Contributor', 'Editor'])
+        self.grant('Manager', 'Reader', 'Member', 'Contributor', 'Editor')
+
         portal = makerequest(portal)
         setSite(portal)
         templates = createContentInContainer(portal, 'opengever.dossier.templatedossier', title="templates")

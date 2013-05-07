@@ -1,19 +1,17 @@
+from Products.CMFCore.utils import getToolByName
 from opengever.tasktemplates.content.tasktemplate import ITaskTemplate
-from opengever.tasktemplates.testing \
-    import OPENGEVER_TASKTEMPLATES_FUNCTIONAL_TESTING
+from opengever.tasktemplates.testing import OPENGEVER_TASKTEMPLATES_FUNCTIONAL_TESTING
+from opengever.testing import FunctionalTestCase
+from opengever.testing import create_client
+from opengever.testing import set_current_client_id
+from plone.app.testing import TEST_USER_NAME, TEST_USER_PASSWORD
 from plone.dexterity.interfaces import IDexterityFTI
 from plone.dexterity.utils import createContent, addContentToContainer
-from Products.CMFCore.utils import getToolByName
+from plone.testing.z2 import Browser
 from zope.component import createObject
 from zope.component import queryUtility
 from zope.event import notify
 from zope.lifecycleevent import ObjectCreatedEvent, ObjectAddedEvent
-import unittest2 as unittest
-from plone.testing.z2 import Browser
-from plone.app.testing import TEST_USER_NAME, TEST_USER_PASSWORD
-from opengever.ogds.base.interfaces import IClientConfiguration
-from plone.registry.interfaces import IRegistry
-from zope.component import getUtility
 import transaction
 
 
@@ -26,7 +24,7 @@ def create_testobject(parent, ptype, **kwargs):
     return obj
 
 
-class TestTaskTemplates(unittest.TestCase):
+class TestTaskTemplates(FunctionalTestCase):
 
     layer = OPENGEVER_TASKTEMPLATES_FUNCTIONAL_TESTING
 
@@ -83,9 +81,9 @@ class TestTaskTemplates(unittest.TestCase):
 
         portal = self.layer['portal']
 
-        # Set client-name in registry
-        getUtility(IRegistry).forInterface(
-            IClientConfiguration).client_id = u'plone'
+        create_client('plone')
+        set_current_client_id(portal, 'plone')
+        self.grant('Manager')
 
         # Folders and templates
         template_folder_1 = create_testobject(
