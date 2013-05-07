@@ -182,7 +182,9 @@ class ExtractAttachments(grok.View):
 
             kwargs = {'title': filename[:filename.rfind('.')].decode('utf-8'),
                       'file': self.get_attachment_as_namedfile(pos),
-                      'keywords': ()}
+                      'keywords': (),
+                      'digitally_available': True}
+
             doc = createContentInContainer(dossier,
                                            'opengever.document.document',
                                            **kwargs)

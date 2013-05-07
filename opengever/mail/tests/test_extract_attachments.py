@@ -120,6 +120,9 @@ class TestAttachmentExtraction(unittest.TestCase):
         # check default values
         self.assertFalse(doc.preserved_as_paper)
 
+        # check digitally available
+        self.assertTrue(doc.digitally_available)
+
     def test_extracting_line_break_mail(self):
 
         self.browser.open('%s/extract_attachments' % self.mail3.absolute_url())
