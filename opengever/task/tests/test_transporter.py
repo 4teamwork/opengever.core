@@ -2,7 +2,7 @@ from opengever.globalindex.interfaces import ITaskQuery
 from opengever.ogds.base.utils import get_client_id
 from opengever.task.interfaces import ITaskDocumentsTransporter
 from opengever.task.task import ITask
-from opengever.task.testing import OPENGEVER_TASK_INTEGRATION_TESTING
+from opengever.testing import OPENGEVER_INTEGRATION_TESTING
 from plone.app.testing import TEST_USER_ID
 from plone.dexterity.utils import createContentInContainer
 from plone.dexterity.utils import iterSchemata
@@ -38,7 +38,7 @@ def set_defaults(obj):
 
 class TestTransporter(unittest.TestCase):
 
-    layer = OPENGEVER_TASK_INTEGRATION_TESTING
+    layer = OPENGEVER_INTEGRATION_TESTING
 
     def setUp(self):
         self.app = self.layer['app']

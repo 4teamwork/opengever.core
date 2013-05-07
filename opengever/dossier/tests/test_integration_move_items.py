@@ -1,11 +1,11 @@
-from opengever.dossier.testing import OPENGEVER_DOSSIER_FUNCTIONAL_TESTING
 from opengever.testing import FunctionalTestCase
+from opengever.testing import OPENGEVER_FUNCTIONAL_TESTING
 from plone.dexterity.utils import createContentInContainer
 
 
 class TestMoveItemsIntegration(FunctionalTestCase):
 
-    layer = OPENGEVER_DOSSIER_FUNCTIONAL_TESTING
+    layer = OPENGEVER_FUNCTIONAL_TESTING
 
     def test_integration(self):
         """ Test integration of move_items method

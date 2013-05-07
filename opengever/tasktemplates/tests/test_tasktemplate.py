@@ -1,7 +1,7 @@
 from Products.CMFCore.utils import getToolByName
 from opengever.tasktemplates.content.tasktemplate import ITaskTemplate
-from opengever.tasktemplates.testing import OPENGEVER_TASKTEMPLATES_FUNCTIONAL_TESTING
 from opengever.testing import FunctionalTestCase
+from opengever.testing import OPENGEVER_FUNCTIONAL_TESTING
 from opengever.testing import create_client
 from opengever.testing import set_current_client_id
 from plone.app.testing import TEST_USER_NAME, TEST_USER_PASSWORD
@@ -26,7 +26,7 @@ def create_testobject(parent, ptype, **kwargs):
 
 class TestTaskTemplates(FunctionalTestCase):
 
-    layer = OPENGEVER_TASKTEMPLATES_FUNCTIONAL_TESTING
+    layer = OPENGEVER_FUNCTIONAL_TESTING
 
     def test_adding(self):
         parent = self.layer['portal']

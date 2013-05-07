@@ -7,8 +7,8 @@ from opengever.globalindex.model.task import Task
 from opengever.task.adapters import IResponseContainer
 from opengever.task.browser.accept.utils import accept_forwarding_with_successor
 from opengever.task.interfaces import ISuccessorTaskController
-from opengever.task.testing import OPENGEVER_TASK_INTEGRATION_TESTING
 from opengever.task.tests.data import DOCUMENT_EXTRACTION, FORWARDING_EXTRACTION
+from opengever.testing import OPENGEVER_INTEGRATION_TESTING
 from opengever.testing import create_client
 from opengever.testing import set_current_client_id
 from plone.app.testing import TEST_USER_ID
@@ -31,7 +31,7 @@ class FakeResponse(object):
 
 class TestTaskAccepting(MockTestCase):
 
-    layer = OPENGEVER_TASK_INTEGRATION_TESTING
+    layer = OPENGEVER_INTEGRATION_TESTING
 
     def setUp(self):
         super(TestTaskAccepting, self).setUp()

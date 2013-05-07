@@ -2,7 +2,7 @@ from DateTime import DateTime
 from datetime import datetime, date
 from opengever.document.checkout.manager import CHECKIN_CHECKOUT_ANNOTATIONS_KEY
 from opengever.dossier.behaviors.dossier import IDossier
-from opengever.dossier.testing import OPENGEVER_DOSSIER_INTEGRATION_TESTING
+from opengever.testing import OPENGEVER_INTEGRATION_TESTING
 from plone.app.testing import TEST_USER_ID
 from plone.dexterity.utils import createContentInContainer
 from zope.annotation.interfaces import IAnnotations
@@ -10,7 +10,7 @@ import unittest2 as unittest
 
 class TestDossierContainer(unittest.TestCase):
 
-    layer = OPENGEVER_DOSSIER_INTEGRATION_TESTING
+    layer = OPENGEVER_INTEGRATION_TESTING
 
     def setUp(self):
         self.app = self.layer['app']

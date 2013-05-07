@@ -10,6 +10,7 @@ from plone.app.testing import PLONE_FIXTURE
 from plone.app.testing import PloneSandboxLayer
 from plone.app.testing import TEST_USER_ID
 from plone.app.testing import applyProfile
+from plone.app.testing import ploneSite
 from plone.app.testing import setRoles
 from plone.testing import z2
 from zope.configuration import xmlconfig
@@ -61,6 +62,17 @@ class OpengeverFixture(PloneSandboxLayer):
 
     defaultBases = (PLONE_FIXTURE, )
 
+    def testSetUp(self):
+        super(OpengeverFixture, self).testSetUp()
+        setup_sql_tables()
+
+    def testTearDown(self):
+        truncate_sql_tables()
+        from opengever.testing.sql import reset_ogds_sync_stamp
+        with ploneSite() as portal:
+            reset_ogds_sync_stamp(portal)
+        super(OpengeverFixture, self).testTearDown()
+
     def setUpZope(self, app, configurationContext):
         # do not install pas plugins (doesnt work in tests)
         from opengever.ogds.base import setuphandlers
@@ -83,7 +95,6 @@ class OpengeverFixture(PloneSandboxLayer):
     def setUpPloneSite(self, portal):
         self.installOpengeverProfiles(portal)
         self.createMemberFolder(portal)
-        setup_sql_tables()
 
     def tearDown(self):
         super(OpengeverFixture, self).tearDown()

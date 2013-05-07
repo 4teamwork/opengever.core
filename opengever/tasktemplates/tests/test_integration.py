@@ -2,8 +2,8 @@ from Products.CMFCore.utils import getToolByName
 from datetime import datetime, timedelta
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.tasktemplates.interfaces import IFromTasktemplateGenerated
-from opengever.tasktemplates.testing import OPENGEVER_TASKTEMPLATES_FUNCTIONAL_TESTING
 from opengever.testing import FunctionalTestCase
+from opengever.testing import OPENGEVER_FUNCTIONAL_TESTING
 from opengever.testing import create_client
 from opengever.testing import set_current_client_id
 from plone.app.testing import SITE_OWNER_NAME
@@ -23,7 +23,7 @@ def create_testobject(parent, ptype, **kwargs):
 
 class TestTaskTemplates(FunctionalTestCase):
 
-    layer = OPENGEVER_TASKTEMPLATES_FUNCTIONAL_TESTING
+    layer = OPENGEVER_FUNCTIONAL_TESTING
 
     def test_integration(self):
         """ Tests the integration of tasktemplatefolder and

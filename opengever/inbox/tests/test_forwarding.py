@@ -1,5 +1,5 @@
-from opengever.inbox.testing import OPENGEVER_INBOX_FUNCTIONAL_TESTING
 from opengever.testing import FunctionalTestCase
+from opengever.testing import OPENGEVER_FUNCTIONAL_TESTING
 from opengever.testing import create_client
 from opengever.testing import set_current_client_id
 from plone.dexterity.utils import createContentInContainer
@@ -7,7 +7,7 @@ import transaction
 
 
 class TestForwarding(FunctionalTestCase):
-    layer = OPENGEVER_INBOX_FUNCTIONAL_TESTING
+    layer = OPENGEVER_FUNCTIONAL_TESTING
     use_browser = True
 
     def setUp(self):

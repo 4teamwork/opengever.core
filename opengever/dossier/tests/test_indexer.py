@@ -1,7 +1,7 @@
 from Products.CMFCore.utils import getToolByName
 from opengever.base.behaviors.base import IOpenGeverBase
 from opengever.dossier.behaviors.dossier import IDossier
-from opengever.dossier.testing import OPENGEVER_DOSSIER_FUNCTIONAL_TESTING
+from opengever.testing import OPENGEVER_FUNCTIONAL_TESTING
 from opengever.testing import FunctionalTestCase
 from zope.event import notify
 from zope.interface import Interface
@@ -26,7 +26,7 @@ def getindexDataForObj(obj):
 
 class TestIndexers(FunctionalTestCase):
 
-    layer = OPENGEVER_DOSSIER_FUNCTIONAL_TESTING
+    layer = OPENGEVER_FUNCTIONAL_TESTING
 
     def setUp(self):
         super(TestIndexers, self).setUp()

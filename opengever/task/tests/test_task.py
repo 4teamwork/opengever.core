@@ -2,8 +2,8 @@ from datetime import datetime
 from opengever.task.adapters import IResponseContainer
 from opengever.task.response import Response
 from opengever.task.task import ITask
-from opengever.task.testing import OPENGEVER_TASK_FUNCTIONAL_TESTING
 from opengever.testing import FunctionalTestCase
+from opengever.testing import OPENGEVER_FUNCTIONAL_TESTING
 from plone.dexterity.interfaces import IDexterityFTI
 from plone.dexterity.utils import createContent, addContentToContainer
 from plone.dexterity.utils import createContentInContainer
@@ -28,7 +28,7 @@ def create_task(parent, **kwargs):
 
 class TestTaskIntegration(FunctionalTestCase):
 
-    layer = OPENGEVER_TASK_FUNCTIONAL_TESTING
+    layer = OPENGEVER_FUNCTIONAL_TESTING
 
     def setUp(self):
         self.portal = self.layer['portal']

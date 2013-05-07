@@ -2,7 +2,7 @@ from Products.CMFCore.utils import getToolByName
 from datetime import date
 from ftw.mail.utils import get_attachments
 from opengever.document.interfaces import IDocumentSettings
-from opengever.mail.testing import OPENGEVER_MAIL_FUNCTIONAL_TESTING
+from opengever.testing import OPENGEVER_FUNCTIONAL_TESTING
 from plone.app.testing import TEST_USER_ID
 from plone.app.testing import TEST_USER_NAME, TEST_USER_PASSWORD
 from plone.app.testing import login, setRoles
@@ -41,7 +41,7 @@ w6TDtsOcCg==
 
 class TestAttachmentExtraction(unittest.TestCase):
 
-    layer = OPENGEVER_MAIL_FUNCTIONAL_TESTING
+    layer = OPENGEVER_FUNCTIONAL_TESTING
 
     def setUp(self):
         super(TestAttachmentExtraction, self).setUp()
