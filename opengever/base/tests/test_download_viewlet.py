@@ -28,7 +28,7 @@ class TestDownloadViewlet(FunctionalTestCase):
                           download_viewlet.render())
 
         # with status code 302 (Moved permanently):
-        self.assertEquals(302, self.portal.REQUEST.response.status)
+        self.assertResponseStatus(302)
 
         # and a portal status message:
         self.assertEquals(u'No file in in this version',

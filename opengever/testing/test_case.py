@@ -39,6 +39,9 @@ class FunctionalTestCase(TestCase):
     def assertCurrentUrl(self, url):
         self.assertEquals(url, self.browser.url)
 
+    def assertResponseStatus(self, code):
+        self.assertEquals(code, self.portal.REQUEST.response.status)
+
     def assertResponseHeader(self, name, value):
         self.assertEquals(value, self.portal.REQUEST.response.headers.get(name))
 
