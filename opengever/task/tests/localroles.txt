@@ -27,12 +27,12 @@ Imports / globals:
     >>> from opengever.testing import set_current_client_id
 
     >>> create_client('plone', group='og_mandant1_users',
-    ...               inbox_group='og_mandant1_inbox')
+    ...               inbox_group=u'og_mandant1_inbox')
     >>> create_client('client2', group='og_mandant2_users',
-    ...               inbox_group='og_mandant2_inbox')
+    ...               inbox_group=u'og_mandant2_inbox')
     >>> set_current_client_id(portal, 'plone')
     >>> create_ogds_user(TEST_USER_ID,
-    ...     groups=('og_mandant1_users', 'og_mandant1_inbox', 'og_mandant2_users'))
+    ...     groups=(u'og_mandant1_users', u'og_mandant1_inbox', u'og_mandant2_users'))
     <User test_user_1_>
 
 

@@ -25,6 +25,10 @@ class FunctionalTestCase(TestCase):
         setRoles(self.portal, TEST_USER_ID, list(roles))
         transaction.commit()
 
+    def prepareSession(self):
+        self.request = self.app.REQUEST
+        if 'SESSION' not in self.request.keys():
+            self.request.SESSION = {}
 
     """
     Browser API
@@ -38,6 +42,12 @@ class FunctionalTestCase(TestCase):
 
     def assertCurrentUrl(self, url):
         self.assertEquals(url, self.browser.url)
+
+    def assertResponseStatus(self, code):
+        self.assertEquals(code, self.portal.REQUEST.response.status)
+
+    def assertResponseHeader(self, name, value):
+        self.assertEquals(value, self.portal.REQUEST.response.headers.get(name))
 
     def _setup_browser(self):
         browser = Browser(self.app)
