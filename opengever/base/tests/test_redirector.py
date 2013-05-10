@@ -7,11 +7,9 @@ class TestRedirector(FunctionalTestCase):
     def setUp(self):
         super(TestRedirector, self).setUp()
         self.grant('Contributor')
+        self.prepareSession()
 
     def test_redirector(self):
-        request = self.app.REQUEST
-        if 'SESSION' not in request.keys():
-            request.SESSION = {}
 
         # Register a redirect:
         redirector = IRedirector(request)

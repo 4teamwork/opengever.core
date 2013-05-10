@@ -25,6 +25,10 @@ class FunctionalTestCase(TestCase):
         setRoles(self.portal, TEST_USER_ID, list(roles))
         transaction.commit()
 
+    def prepareSession(self):
+        self.request = self.app.REQUEST
+        if 'SESSION' not in self.request.keys():
+            self.request.SESSION = {}
 
     """
     Browser API
