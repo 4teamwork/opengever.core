@@ -49,15 +49,9 @@ class TestDownloadViewlet(FunctionalTestCase):
         self.assertEquals('lorem ipsum', download_viewlet1.render())
 
         # Check that HTTP response headers are set correctly:
-        self.assertEquals('attachment; filename="foobar.txt"',
-                          self.portal.REQUEST.response.headers.get('content-disposition'))
-        
-        self.assertEquals('11',
-                          self.portal.REQUEST.response.headers.get('content-length'))
-        
-        self.assertEquals('text/plain',
-                          self.portal.REQUEST.response.headers.get('content-type'))
-        
+        self.assertResponseHeader('content-disposition', 'attachment; filename="foobar.txt"')
+        self.assertResponseHeader('content-length', '11', )
+        self.assertResponseHeader('content-type', 'text/plain')
 
 
         ## Check that HTTP content-type header gets set correctly
@@ -73,6 +67,6 @@ class TestDownloadViewlet(FunctionalTestCase):
         # Get the file download viewlet and call it:
         download_viewlet2 = test_doc2.restrictedTraverse('download_file_version')
         download_viewlet2.render()
+        self.assertResponseHeader('content-type', 'foo/bar')
 
         # Check that HTTP content-type header is set correctly:
-        self.assertEquals('foo/bar', self.portal.REQUEST.response.headers.get('content-type'))
