@@ -3,6 +3,7 @@ from opengever.base.interfaces import IRedirector
 from opengever.document.document import IDocumentSchema
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.testing import FunctionalTestCase
+from opengever.testing import obj2brain
 from plone.app.testing import login, logout, setRoles, TEST_USER_NAME, TEST_USER_ID
 from plone.dexterity.utils import createContentInContainer
 from plone.locking.interfaces import IRefreshableLockable
@@ -11,16 +12,6 @@ from zope.component import getMultiAdapter
 import datetime
 import transaction
 
-
-def obj2brain(obj):
-    catalog = getToolByName(obj, 'portal_catalog')
-    query = {'path': {'query': '/'.join(obj.getPhysicalPath()),
-                      'depth': 0}}
-    brains = catalog(query)
-    if len(brains) == 0:
-        raise Exception('Not in catalog: %s' % obj)
-    else:
-        return brains[0]
 
 class TestCheckinCheckoutManager(FunctionalTestCase):
 
