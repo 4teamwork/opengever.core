@@ -1,23 +1,14 @@
 from Products.CMFCore.utils import getToolByName
 from opengever.base.behaviors.base import IOpenGeverBase
 from opengever.dossier.behaviors.dossier import IDossier
-from opengever.testing import OPENGEVER_FUNCTIONAL_TESTING
 from opengever.testing import FunctionalTestCase
+from opengever.testing import OPENGEVER_FUNCTIONAL_TESTING
+from opengever.testing import obj2brain
 from zope.event import notify
 from zope.interface import Interface
 from zope.lifecycleevent import ObjectModifiedEvent, Attributes
 import transaction
 
-
-def obj2brain(obj):
-    catalog = getToolByName(obj, 'portal_catalog')
-    query = {'path': {'query': '/'.join(obj.getPhysicalPath()),
-                  'depth': 0}}
-    brains = catalog(query)
-    if len(brains) == 0:
-        raise Exception('Not in catalog: %s' % obj)
-    else:
-        return brains[0]
 
 def getindexDataForObj(obj):
     catalog = getToolByName(obj, 'portal_catalog')
