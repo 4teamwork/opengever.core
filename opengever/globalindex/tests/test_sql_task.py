@@ -1,6 +1,5 @@
 from opengever.globalindex.model.task import Task
 from opengever.globalindex.testing import MEMORY_DB_LAYER
-from opengever.ogds.base.utils import create_session
 from sqlalchemy.exc import IntegrityError
 from unittest2 import TestCase
 import transaction
@@ -12,40 +11,59 @@ class TestGlobalindexTask(TestCase):
 
     def setUp(self):
         super(TestGlobalindexTask, self).setUp()
-        self.session = create_session()
 
-    def test_task(self):
-        # Create a task.
-        t1 = Task(1, 'm1')
-        self.session.add(t1)
-        # self.assertEquals('<Task 1@m1>', t1.__repr__())
+    def test_task_representation(self):
+        task1 = Task(1, 'm1')
+        self.layer.session.add(task1)
+        self.assertEquals('<Task 1@m1>', repr(task1))
 
-        # Test successors when setting predecessor.
-        t2 = Task(2, 'm1')
-        self.session.add(t2)
-        t2.predecessor = t1
-        self.assertEquals(t1, t2.predecessor)
+    def test_predecessor_successor_relation(self):
+        task1 = Task(1, 'm1')
+        task2 = Task(2, 'm1')
+        self.layer.session.add(task1)
+        self.layer.session.add(task2)
 
-        t3 = Task(3, 'm1')
-        self.session.add(t3)
-        t3.predecessor = t1
-        self.assertEquals(t1, t3.predecessor)
-        self.assertEquals([t2, t3], t1.successors)
+        task2.predecessor = task1
+        self.assertEquals([task2, ], task1.successors)
 
-        transaction.commit()
+    def test_mulitple_successors(self):
+        task1 = Task(1, 'm1')
+        task2 = Task(2, 'm1')
+        task3 = Task(3, 'm1')
+        self.layer.session.add(task1)
+        self.layer.session.add(task2)
+        self.layer.session.add(task3)
 
-        # Task IDs must be unique.
-        t1 =  Task(1, 'm1')
-        self.session.add(t1)
+        task2.predecessor = task1
+        task3.predecessor = task1
+
+        self.assertEquals([task2, task3], task1.successors)
+
+    def test_successor_is_not_inherited_when_chain_linking(self):
+        task1 = Task(1, 'm1')
+        task2 = Task(2, 'm1')
+        task3 = Task(3, 'm1')
+        self.layer.session.add(task1)
+        self.layer.session.add(task2)
+        self.layer.session.add(task3)
+
+        task2.predecessor = task1
+        task3.predecessor = task2
+
+        self.assertEquals([task2], task1.successors)
+        self.assertEquals([task3], task2.successors)
+
+    def test_unique_id(self):
+        task1 = Task(1, 'm1')
+        self.layer.session.add(task1)
 
         with self.assertRaises(IntegrityError) as cm:
+            copy_task1 = Task(1, 'm1')
+            self.layer.session.add(copy_task1)
             transaction.commit()
 
-        expected_msg = '(IntegrityError) columns client_id, int_id are not unique'
-        error_msg = str(cm.exception)
-        self.assertTrue(
-            error_msg.startswith(expected_msg),
-            'Expected error message to start with "%s", got "%s"' % (
-                expected_msg, error_msg))
+        self.assertIn(
+            '(IntegrityError) columns client_id, int_id are not unique',
+            str(cm.exception))
 
         transaction.abort()
