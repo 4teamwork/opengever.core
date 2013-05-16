@@ -3,6 +3,7 @@ from datetime import datetime
 from opengever.ogds.base.interfaces import IClientConfiguration
 from opengever.testing import OPENGEVER_INTEGRATION_TESTING
 from opengever.testing import create_ogds_user
+from opengever.testing import obj2brain
 from opengever.testing import set_current_client_id
 from plone.app.testing import TEST_USER_ID, TEST_USER_NAME
 from plone.app.testing import setRoles, login
@@ -15,17 +16,6 @@ from zope.event import notify
 from zope.intid.interfaces import IIntIds
 from zope.lifecycleevent import ObjectModifiedEvent
 import unittest2 as unittest
-
-
-def obj2brain(obj):
-    catalog = getToolByName(obj, 'portal_catalog')
-    query = {'path': {'query': '/'.join(obj.getPhysicalPath()),
-                  'depth': 0}}
-    brains = catalog(query)
-    if len(brains) == 0:
-        raise Exception('Not in catalog: %s' % obj)
-    else:
-        return brains[0]
 
 
 def getindexDataForObj(obj):

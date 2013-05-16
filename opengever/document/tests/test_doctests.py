@@ -6,7 +6,6 @@ from opengever.document.testing import OPENGEVER_DOCUMENT_FUNCTIONAL_TESTING
 
 TESTFILES = (
     'document_id.txt',
-    'checkout.txt',
     )
 
 

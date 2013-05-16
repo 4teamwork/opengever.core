@@ -1,5 +1,7 @@
-from opengever.testing import FunctionalTestCase
 from Products.CMFCore.utils import getToolByName
+from opengever.testing import FunctionalTestCase
+from opengever.testing import obj2brain
+
 
 class TestContact(FunctionalTestCase):
     use_browser = True
@@ -8,18 +10,8 @@ class TestContact(FunctionalTestCase):
         super(TestContact, self).setUp()
         self.grant('Member', 'Contributor', 'Manager')
 
-    def obj2brain(self, obj):
-        catalog = getToolByName(obj, 'portal_catalog')
-        query = {'path': {'query': '/'.join(obj.getPhysicalPath()),
-                          'depth': 0}}
-        brains = catalog(query)
-        if len(brains) == 0:
-            raise Exception('Not in catalog: %s' % obj)
-        else:
-            return brains[0]
-
     def getSearchableText(self, obj):
-        brain = self.obj2brain(obj)
+        brain = obj2brain(obj)
         catalog = getToolByName(obj, 'portal_catalog')
         data = catalog.getIndexDataForRID(brain.getRID())
         return data['SearchableText']
