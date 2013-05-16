@@ -21,7 +21,7 @@ class ISendDocumentConf(Interface):
     documents_as_links_default = schema.Bool(
         title=u'documents_as_links default_value',
         description=u'Send documents as links default value',
-        default = False,
+        default=False,
         )
 
 
