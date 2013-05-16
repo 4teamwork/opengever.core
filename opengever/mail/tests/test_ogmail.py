@@ -1,48 +1,53 @@
 from Testing.makerequest import makerequest
 from opengever.mail.mail import IOGMailMarker, IOGMail
-from opengever.testing import OPENGEVER_INTEGRATION_TESTING
+from opengever.testing import FunctionalTestCase
 from plone.dexterity.utils import createContentInContainer
 from plone.namedfile.file import NamedBlobFile
 from zope.app.component.hooks import setSite
 import os
-import unittest2 as unittest
+import transaction
 
 
-class TestOGMailAddition(unittest.TestCase):
+MAIL_DATA = open(
+    os.path.join(os.path.dirname(__file__), 'mail.txt'), 'r').read()
 
-    layer = OPENGEVER_INTEGRATION_TESTING
+
+class TestOGMailAddition(FunctionalTestCase):
+
+    use_browser = True
 
     def setUp(self):
         super(TestOGMailAddition, self).setUp()
-        self.app = self.layer['app']
-        self.portal = self.layer['portal']
+        self.grant('Contributor', 'Editor', 'Member', 'Manager')
 
-        self.portal = makerequest(self.portal)
-        setSite(self.portal)
-        self.mail_data = open(os.path.join(
-                os.path.dirname(__file__),  'mail.txt'), 'r').read()
+    def test_og_mail_behavior(self):
+        mail = createContentInContainer(self.portal, 'ftw.mail.mail')
+        self.assertTrue(
+            IOGMailMarker.providedBy(mail),
+            'ftw mail obj does not provide the OGMail behavior interface.')
 
-    def test_title_functionality(self):
+    def test_title_accessor(self):
+        mail = createContentInContainer(self.portal, 'ftw.mail.mail')
+        self.assertEquals(u'[No Subject]', mail.title)
+        self.assertEquals('[No Subject]', mail.Title())
 
-        m1 = createContentInContainer(
-            self.portal, 'ftw.mail.mail')
-
-        self.portal.get(m1.getId())
-
-        self.failUnless(IOGMailMarker.providedBy(m1))
-
-        self.assertEquals(u'[No Subject]', m1.title)
-        self.assertEquals(m1.Title(), '[No Subject]')
-
-        m2 = createContentInContainer(
+        mail = createContentInContainer(
             self.portal, 'ftw.mail.mail',
-            message=NamedBlobFile(self.mail_data, filename=u"mail.eml"))
+            message=NamedBlobFile(MAIL_DATA, filename=u"mail.eml"))
 
-        #reset title
-        self.assertEquals(u'Die B\xfcrgschaft', m2.title)
-        self.assertEquals(m2.Title(), 'Die B\xc3\xbcrgschaft')
+        self.assertEquals(u'Die B\xfcrgschaft', mail.title)
+        self.assertEquals('Die B\xc3\xbcrgschaft', mail.Title())
 
-        IOGMail(m1).title = u'hanspeter'
+    def test_mail_behavior(self):
+        mail = createContentInContainer(
+            self.portal, 'ftw.mail.mail',
+            message=NamedBlobFile(MAIL_DATA, filename=u"mail.eml"))
+        transaction.commit()
 
-        self.assertEquals(u'hanspeter', m1.title)
-        self.assertEquals(m1.Title(), 'hanspeter')
+        self.browser.open('%s/edit' % mail.absolute_url())
+        self.browser.getControl(
+            name='form.widgets.IOGMail.title').value = 'hanspeter'
+        self.browser.getControl(name='form.buttons.save').click()
+
+        self.assertEquals(u'hanspeter', mail.title)
+        self.assertEquals('hanspeter', mail.Title())
