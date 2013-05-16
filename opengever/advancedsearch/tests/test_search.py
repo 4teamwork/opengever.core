@@ -1,11 +1,10 @@
-import transaction
-from plone.dexterity.utils import createContentInContainer
 from plone.app.testing import TEST_USER_ID
 from opengever.testing import FunctionalTestCase
 
 from opengever.testing import create_client
 from opengever.testing import set_current_client_id
 from opengever.testing import create_ogds_user
+from opengever.testing import Builder
 
 class TestSearchWithContent(FunctionalTestCase):
     use_browser = True
@@ -17,14 +16,8 @@ class TestSearchWithContent(FunctionalTestCase):
         set_current_client_id(self.layer['portal'])
         create_ogds_user(TEST_USER_ID)
 
-        self.dossier1 = createContentInContainer(self.portal,
-                                                 'opengever.dossier.businesscasedossier',
-                                                 title='Dossier1', checkConstraints=False)
-        self.dossier2 = createContentInContainer(self.portal,
-                                                 'opengever.dossier.businesscasedossier',
-                                                 title='Dossier2', checkConstraints=False)
-        transaction.commit()
-
+        self.dossier1 = Builder("dossier").titled("Dossier1").create()
+        self.dossier2 = Builder("dossier").titled("Dossier2").create()
 
     def test_search_dossiers(self):
         self.browser.open('%s/advanced_search' % self.dossier1.absolute_url())
@@ -37,13 +30,8 @@ class TestSearchWithContent(FunctionalTestCase):
 
 
     def test_search_documents(self):
-        createContentInContainer(self.dossier1,
-                                 'opengever.document.document',
-                                 title='Document1', checkConstraints=False)
-        createContentInContainer(self.dossier2,
-                                 'opengever.document.document',
-                                 title='Document2', checkConstraints=False)
-        transaction.commit()
+        Builder("document").within(self.dossier1).titled("Document1").create()
+        Builder("document").within(self.dossier2).titled("Document2").create()
 
         # search documents (we can't find the document because we must change the content-type)
         self.browser.open('%s/advanced_search' % self.dossier1.absolute_url())
@@ -63,13 +51,8 @@ class TestSearchWithContent(FunctionalTestCase):
         self.assertSearchResultCount(1)
 
     def test_search_tasks(self):
-        createContentInContainer(self.dossier1,
-                                 'opengever.task.task',
-                                 title='Task1', checkConstraints=False)
-        createContentInContainer(self.dossier2,
-                                 'opengever.task.task',
-                                 title='Task2', checkConstraints=False)
-        transaction.commit()
+        Builder("task").within(self.dossier1).titled("Task1").create()
+        Builder("task").within(self.dossier2).titled("Task2").create()
 
         # search tasks (we can't find the task because we must change the content-type)
         self.browser.open('%s/advanced_search' % self.dossier1.absolute_url())
@@ -102,11 +85,7 @@ class TestSearchWithoutContent(FunctionalTestCase):
         set_current_client_id(self.layer['portal'])
         create_ogds_user(TEST_USER_ID)
 
-        self.dossier1 = createContentInContainer(self.portal,
-             'opengever.dossier.businesscasedossier',
-             title='Dossier1', checkConstraints=False)
-
-        transaction.commit()
+        self.dossier1 = Builder("dossier").create()
 
     def test_validate_searchstring_for_dossiers(self):
         self.browser.open('%s/advanced_search' % self.dossier1.absolute_url())
