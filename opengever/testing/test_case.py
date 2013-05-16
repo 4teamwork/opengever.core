@@ -1,9 +1,11 @@
+from lxml.cssselect import CSSSelector
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_TESTING
 from plone.app.testing import TEST_USER_ID
 from plone.app.testing import TEST_USER_NAME
 from plone.app.testing import TEST_USER_PASSWORD
 from plone.app.testing import setRoles
 from plone.testing.z2 import Browser
+import lxml.html
 import transaction
 import unittest2
 
@@ -33,6 +35,14 @@ class FunctionalTestCase(TestCase):
     """
     Browser API
     """
+
+    def css(self, selector):
+        xpath = CSSSelector(selector).path
+        return self.xpath(xpath)
+
+    def xpath(self, selector):
+        html = lxml.html.fromstring(self.browser.contents)
+        return html.xpath(selector)
 
     def assertPageContains(self, text):
         self.assertIn(text, self.browser.contents)
