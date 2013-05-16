@@ -10,7 +10,6 @@ OPTIONFLAGS = (doctest.NORMALIZE_WHITESPACE |
 
 TESTFILES = (
     'task.txt',
-    'query.txt',
     'task_principals.txt',
     )
 
