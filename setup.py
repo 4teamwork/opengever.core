@@ -11,6 +11,7 @@ tests_require = [
     'ftw.tabbedview',
     'ftw.table',
     'ftw.testing',
+    'lxml',
     'plone.app.dexterity',
     'plone.app.testing',
     'plone.formwidget.namedfile',
