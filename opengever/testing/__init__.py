@@ -17,6 +17,7 @@ else:
     from opengever.testing.builders import TaskBuilder
     from opengever.testing.helpers import create_plone_user
     from opengever.testing.helpers import obj2brain
+    from opengever.testing.helpers import index_data_for
     from opengever.testing.sql import create_client
     from opengever.testing.sql import create_ogds_user
     from opengever.testing.sql import set_current_client_id

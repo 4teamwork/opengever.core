@@ -1,8 +1,8 @@
-from Products.CMFCore.utils import getToolByName
 from datetime import datetime
 from opengever.ogds.base.interfaces import IClientConfiguration
 from opengever.testing import OPENGEVER_INTEGRATION_TESTING
 from opengever.testing import create_ogds_user
+from opengever.testing import index_data_for
 from opengever.testing import obj2brain
 from opengever.testing import set_current_client_id
 from plone.app.testing import TEST_USER_ID, TEST_USER_NAME
@@ -16,11 +16,6 @@ from zope.event import notify
 from zope.intid.interfaces import IIntIds
 from zope.lifecycleevent import ObjectModifiedEvent
 import unittest2 as unittest
-
-
-def getindexDataForObj(obj):
-    catalog = getToolByName(obj, 'portal_catalog')
-    return catalog.getIndexDataForRID(obj2brain(obj).getRID())
 
 
 class TestTaskIndexers(unittest.TestCase):
@@ -106,14 +101,14 @@ class TestTaskIndexers(unittest.TestCase):
 
         # no relation
         self.assertEquals(
-            getindexDataForObj(self.task).get('related_items'), '')
+            index_data_for(self.task).get('related_items'), '')
 
         self.task.relatedItems = [RelationValue(intids.getId(self.doc1))]
         notify(ObjectModifiedEvent(self.task))
         self.task.reindexObject()
 
         self.assertEquals(
-            getindexDataForObj(self.task).get('related_items'),
+            index_data_for(self.task).get('related_items'),
             [intids.getId(self.doc1)])
 
         # multiple relations
@@ -125,7 +120,7 @@ class TestTaskIndexers(unittest.TestCase):
         self.task.reindexObject()
 
         self.assertEquals(
-            getindexDataForObj(self.task).get('related_items'),
+            index_data_for(self.task).get('related_items'),
             [intids.getId(self.doc1), intids.getId(self.doc2)])
 
     def test_searchable_text(self):
@@ -138,6 +133,6 @@ class TestTaskIndexers(unittest.TestCase):
         self.task.reindexObject()
 
         self.assertEquals(
-            getindexDataForObj(self.task).get('SearchableText'),
+            index_data_for(self.task).get('SearchableText'),
             ['test', 'aufgabe', 'lorem', 'ipsum', 'olor', 'sit',
              'amet', '1', 'boss', 'hugo', 'test_user_1_'])

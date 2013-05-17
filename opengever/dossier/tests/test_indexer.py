@@ -1,18 +1,13 @@
-from Products.CMFCore.utils import getToolByName
 from opengever.base.behaviors.base import IOpenGeverBase
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.testing import Builder
 from opengever.testing import FunctionalTestCase
+from opengever.testing import index_data_for
 from opengever.testing import obj2brain
 from zope.event import notify
 from zope.interface import Interface
 from zope.lifecycleevent import ObjectModifiedEvent, Attributes
 import transaction
-
-
-def getindexDataForObj(obj):
-    catalog = getToolByName(obj, 'portal_catalog')
-    return catalog.getIndexDataForRID(obj2brain(obj).getRID())
 
 
 class TestIndexers(FunctionalTestCase):
@@ -56,8 +51,8 @@ class TestIndexers(FunctionalTestCase):
         transaction.commit()
 
     def test_is_subdossier_index(self):
-        self.assertEquals(getindexDataForObj(self.dossier).get('is_subdossier'), False)
-        self.assertEquals(getindexDataForObj(self.subdossier).get('is_subdossier'), True)
+        self.assertEquals(index_data_for(self.dossier).get('is_subdossier'), False)
+        self.assertEquals(index_data_for(self.subdossier).get('is_subdossier'), True)
 
     def test_containing_subdossier(self):
         self.assertEquals(obj2brain(self.subdossier).containing_subdossier, '')
@@ -78,21 +73,21 @@ class TestIndexers(FunctionalTestCase):
 
     def test_filing_no(self):
         # no number, no prefix
-        self.assertEquals(getindexDataForObj(self.dossier).get('filing_no'), None)
-        self.assertEquals(getindexDataForObj(self.dossier).get('searchable_filing_no'), '')
+        self.assertEquals(index_data_for(self.dossier).get('filing_no'), None)
+        self.assertEquals(index_data_for(self.dossier).get('searchable_filing_no'), '')
 
         # no number only prefix
         IDossier(self.dossier).filing_prefix = 'directorate'
         self.dossier.reindexObject()
-        self.assertEquals(getindexDataForObj(self.dossier).get('filing_no'),
+        self.assertEquals(index_data_for(self.dossier).get('filing_no'),
                           'OG-Directorate-?')
-        self.assertEquals(getindexDataForObj(self.dossier).get('searchable_filing_no'),
+        self.assertEquals(index_data_for(self.dossier).get('searchable_filing_no'),
                           ['og', 'directorate'])
 
         # with number and prefix
         IDossier(self.dossier).filing_no = 'SKA ARCH-Administration-2012-3'
         self.dossier.reindexObject()
-        self.assertEquals(getindexDataForObj(self.dossier).get('filing_no'),
+        self.assertEquals(index_data_for(self.dossier).get('filing_no'),
             'SKA ARCH-Administration-2012-3')
-        self.assertEquals(getindexDataForObj(self.dossier).get('searchable_filing_no'),
+        self.assertEquals(index_data_for(self.dossier).get('searchable_filing_no'),
                           ['ska', 'arch', 'administration', '2012', '3'])
