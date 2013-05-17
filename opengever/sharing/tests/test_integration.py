@@ -1,9 +1,9 @@
-from opengever.core.testing import OPENGEVER_FUNCTIONAL_TESTING
 from opengever.sharing.browser.sharing import OpengeverSharingView
 from opengever.sharing.interfaces import ILocalRolesAcquisitionActivated
 from opengever.sharing.interfaces import ILocalRolesAcquisitionBlocked
 from opengever.sharing.interfaces import ILocalRolesModified
 from opengever.testing import FunctionalTestCase
+from opengever.testing import Builder
 from plone.app.testing import TEST_USER_NAME, TEST_USER_PASSWORD
 from plone.app.testing import setRoles, TEST_USER_ID
 from plone.dexterity.utils import createContentInContainer
@@ -13,8 +13,6 @@ import transaction
 
 
 class TestOpengeverSharingIntegration(FunctionalTestCase):
-
-    layer = OPENGEVER_FUNCTIONAL_TESTING
 
     def setUp(self):
         """ Set up test environment
@@ -30,8 +28,7 @@ class TestOpengeverSharingIntegration(FunctionalTestCase):
             self.portal, 'opengever.repository.repositoryroot', 'root')
         self.repo = createContentInContainer(
             self.repo_root, 'opengever.repository.repositoryfolder', 'r1')
-        self.dossier = createContentInContainer(
-            self.repo, 'opengever.dossier.businesscasedossier', 'd1')
+        self.dossier = Builder("dossier").within(self.repo).create()
 
         transaction.commit()
 

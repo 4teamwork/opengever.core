@@ -1,7 +1,8 @@
 from Products.CMFCore.utils import getToolByName
-from plone.dexterity.utils import createContentInContainer
 from plone.namedfile.file import NamedBlobFile
+from opengever.testing import Builder
 from opengever.testing import FunctionalTestCase
+
 
 class TestDownloadViewlet(FunctionalTestCase):
     use_browser = True
@@ -12,29 +13,20 @@ class TestDownloadViewlet(FunctionalTestCase):
         self.ptool = getToolByName(self.portal, 'plone_utils')
 
     def test_without_file(self):
-        test_doc = createContentInContainer(self.portal,
-                                            'opengever.document.document',
-                                            title=u'Doc without file',
-                                            keywords=[])
+        test_doc = Builder("document").create()
 
-        self.assertEquals('http://nohost/plone/document-1',
-                          self.download(test_doc))
-
+        response = self.download(test_doc)
+        self.assertEquals('http://nohost/plone/document-1', response)
         self.assertResponseStatus(302) # Moved permanently
-
         self.assertEquals(u'No file in in this version',
                           self.ptool.showPortalMessages()[-1].message)
 
     def test_with_file(self):
-        test_file = NamedBlobFile("lorem ipsum", filename=u"foobar.txt")
-        test_doc = createContentInContainer(self.portal,
-                                            'opengever.document.document',
-                                            title=u'Foobar',
-                                            keywords=[],
-                                            file=test_file)
+        test_doc = Builder("document").attach_file_containing("lorem ipsum", name=u"foobar.txt").create()
 
-        self.assertEquals('lorem ipsum', self.download(test_doc))
+        response = self.download(test_doc)
 
+        self.assertEquals('lorem ipsum', response)
         self.assertResponseHeader('content-disposition', 'attachment; filename="foobar.txt"')
         self.assertResponseHeader('content-length', '11', )
         self.assertResponseHeader('content-type', 'text/plain')
@@ -42,13 +34,10 @@ class TestDownloadViewlet(FunctionalTestCase):
     def test_custom_content_type(self):
         test_file = NamedBlobFile("some text", filename=u"sometext.txt")
         test_file.contentType = 'foo/bar'
-        test_doc = createContentInContainer(self.portal,
-                                            'opengever.document.document',
-                                            title=u'Some Text',
-                                            keywords=[],
-                                            file=test_file)
+        test_doc = Builder("document").attach(test_file).create()
 
         self.download(test_doc)
+
         self.assertResponseHeader('content-type', 'foo/bar')
 
     def download(self, document):

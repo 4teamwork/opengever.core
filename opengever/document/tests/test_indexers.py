@@ -1,18 +1,13 @@
-from Products.CMFCore.utils import getToolByName
 from opengever.document.checkout.manager import CHECKIN_CHECKOUT_ANNOTATIONS_KEY
 from opengever.document.testing import OPENGEVER_DOCUMENT_FUNCTIONAL_TESTING
 from opengever.testing import obj2brain
+from opengever.testing import index_data_for
 from plone.app.testing import TEST_USER_ID
 from plone.app.testing import setRoles
 from plone.dexterity.utils import createContentInContainer
 from zope.annotation.interfaces import IAnnotations
 import datetime
 import unittest2 as unittest
-
-
-def getindexDataForObj(obj):
-    catalog = getToolByName(obj, 'portal_catalog')
-    return catalog.getIndexDataForRID(obj2brain(obj).getRID())
 
 
 class TestDocumentIntegration(unittest.TestCase):
@@ -34,7 +29,7 @@ class TestDocumentIntegration(unittest.TestCase):
 
         self.assertEquals(obj2brain(doc1).document_author, 'Hugo Boss')
         self.assertEquals(
-            getindexDataForObj(doc1).get('sortable_author'),
+            index_data_for(doc1).get('sortable_author'),
             u'Hugo Boss')
 
         # without a author
@@ -43,7 +38,7 @@ class TestDocumentIntegration(unittest.TestCase):
 
         self.assertEquals(obj2brain(doc1).document_author, None)
         self.assertEquals(
-            getindexDataForObj(doc1).get('sortable_author'), u'')
+            index_data_for(doc1).get('sortable_author'), u'')
 
         # with a non-ascii characters including author
 
@@ -53,7 +48,7 @@ class TestDocumentIntegration(unittest.TestCase):
         self.assertEquals(
             obj2brain(doc1).document_author, 'H\xc3\xbcgo B\xc3\xb6ss')
         self.assertEquals(
-            getindexDataForObj(doc1).get('sortable_author'), u'H\xfcgo B\xf6ss')
+            index_data_for(doc1).get('sortable_author'), u'H\xfcgo B\xf6ss')
 
     def test_date_indexers(self):
         doc1 = createContentInContainer(
@@ -99,5 +94,5 @@ class TestDocumentIntegration(unittest.TestCase):
             receipt_date=datetime.date(2011, 2, 1))
 
         self.assertEquals(
-            getindexDataForObj(doc1).get('SearchableText'),
+            index_data_for(doc1).get('SearchableText'),
             ['doc', 'one', 'foo', 'bar', 'hugo', 'boss', 'og', '1', '1'])

@@ -2,19 +2,17 @@ from ftw.mail.utils import get_attachments
 from ftw.testing.mailing import Mailing
 from opengever.mail.behaviors import ISendableDocsContainer
 from opengever.mail.interfaces import IDocumentSent
+from opengever.testing import Builder
 from opengever.testing import FunctionalTestCase
 from opengever.testing import create_client
 from opengever.testing import create_ogds_user
 from opengever.testing import set_current_client_id
 from plone.app.testing import TEST_USER_ID
-from plone.dexterity.utils import createContentInContainer
-from plone.namedfile.file import NamedBlobFile
 from zope.component import getUtility
 from zope.component import provideHandler
 from zope.intid.interfaces import IIntIds
 import email
 import quopri
-import transaction
 
 
 TEST_FORM_DATA = {
@@ -47,13 +45,13 @@ class TestSendDocument(FunctionalTestCase):
         Mailing(self.portal).set_up()
 
     def test_dossier_is_sendable(self):
-        dossier = self.create_dossier()
+        dossier = Builder("dossier").create()
         self.assertTrue(
             ISendableDocsContainer.providedBy(dossier))
 
     def test_document_size_validator(self):
-        dossier = self.create_dossier()
-        document = self.create_document(dossier, data=600000 * '_FAKE_DATA')
+        dossier = Builder("dossier").create()
+        document = Builder("document").within(dossier).attach_file_containing(600000 * '_FAKE_DATA').create()
 
         mail = self.send_documents(dossier, [document, ])
         self.assertEquals(mail, None)
@@ -65,8 +63,8 @@ class TestSendDocument(FunctionalTestCase):
         self.assert_mail_links_to(mail, document.absolute_url())
 
     def test_address_validator(self):
-        dossier = self.create_dossier()
-        documents = [self.create_document(dossier), ]
+        dossier = Builder("dossier").create()
+        documents = [Builder("document").within(dossier).create(), ]
 
         mail = self.send_documents(
             dossier, documents, extern_receiver=None, intern_receiver=None)
@@ -79,8 +77,8 @@ class TestSendDocument(FunctionalTestCase):
         create_ogds_user(
             TEST_USER_ID, firstname="Hugo", lastname="Boss", email="hugo@boss.ch")
 
-        dossier = self.create_dossier()
-        documents = [self.create_document(dossier, data='Test data'), ]
+        dossier = Builder("dossier").create()
+        documents = [Builder("document").within(dossier).with_dummy_content().create(), ]
         mail = self.send_documents(dossier, documents)
 
         self.assertEquals(TEST_FORM_DATA.get('subject'), mail.get('Subject'),
@@ -96,8 +94,8 @@ class TestSendDocument(FunctionalTestCase):
         self.assert_attachment(mail, 'test.doc', 'application/msword')
 
     def test_send_documents_with_non_ascii_message(self):
-        dossier = self.create_dossier()
-        documents = [self.create_document(dossier, data='Test data'), ]
+        dossier = Builder("dossier").create()
+        documents = [Builder("document").within(dossier).with_dummy_content().create(), ]
 
         non_ascii_message = """
 Als Beilage erhalten Sie:\r\n\r\n\xe2\x80\xa2\tPensionierten
@@ -110,32 +108,32 @@ f\xc3\xbcr Ernst Franz\r\n\r\nBesten Dank im Voraus"""
             'The message(non ascii) of the created mail is incorrect')
 
     def test_send_empty_documents(self):
-        dossier = self.create_dossier()
-        document = self.create_document(dossier)
+        dossier = Builder("dossier").create()
+        document = Builder("document").create()
 
         mail = self.send_documents(dossier, [document, ])
 
         self.assert_mail_links_to(mail, document.absolute_url())
 
     def test_send_documents_as_links(self):
-        dossier = self.create_dossier()
-        document = self.create_document(dossier, 'TEST DATA')
+        dossier = Builder("dossier").create()
+        document = Builder("document").with_dummy_content().create()
 
         mail = self.send_documents(dossier, [document, ], as_links=True)
 
         self.assert_mail_links_to(mail, document.absolute_url())
 
     def test_send_mails(self):
-        dossier = self.create_dossier()
-        mails = [self.create_mail(dossier), ]
+        dossier = Builder("dossier").create()
+        mails = [Builder("mail").within(dossier).with_dummy_message().create(), ]
 
         mail = self.send_documents(dossier, mails)
         self.assert_attachment(mail, 'testmail.eml', 'message/rfc822')
 
     def test_send_document_event(self):
         intids = getUtility(IIntIds)
-        dossier = self.create_dossier()
-        documents = [self.create_document(dossier, 'TEST DATA'), ]
+        dossier = Builder("dossier").create()
+        documents = [Builder("document").within(dossier).with_dummy_content().create(), ]
 
         # mock event handler
         mock_event = MockEvent()
@@ -182,31 +180,6 @@ f\xc3\xbcr Ernst Franz\r\n\r\nBesten Dank im Voraus"""
         if Mailing(self.portal).has_messages():
             data = Mailing(self.portal).pop()
             return email.message_from_string(data)
-
-    def create_document(self, container, data=None):
-        _file = None
-        if data:
-            _file = NamedBlobFile(data=data, filename=u'test.doc')
-        document = createContentInContainer(
-            container, 'opengever.document.document',
-            title='Test', file=_file)
-        transaction.commit()
-        return document
-
-    def create_mail(self, container):
-        _file = NamedBlobFile(data='foobar', filename=u'testmail.eml')
-        document = createContentInContainer(
-            container, 'ftw.mail.mail', title='Mail', message=_file)
-        transaction.commit()
-        return document
-
-    def create_dossier(self):
-        dossier = createContentInContainer(
-            self.portal,
-            'opengever.dossier.businesscasedossier',
-            title='Testdossier')
-        transaction.commit()
-        return dossier
 
     def assert_attachment(self, mail, filename, content_type):
         attachments = get_attachments(mail)

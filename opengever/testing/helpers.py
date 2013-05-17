@@ -16,3 +16,7 @@ def obj2brain(obj):
         raise Exception('Not in catalog: %s' % obj)
     else:
         return brains[0]
+
+def index_data_for(obj):
+    catalog = getToolByName(obj, 'portal_catalog')
+    return catalog.getIndexDataForRID(obj2brain(obj).getRID())

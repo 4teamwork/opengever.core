@@ -1,10 +1,12 @@
 from lxml.cssselect import CSSSelector
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_TESTING
+from opengever.testing import BuilderSession
 from plone.app.testing import TEST_USER_ID
 from plone.app.testing import TEST_USER_NAME
 from plone.app.testing import TEST_USER_PASSWORD
 from plone.app.testing import setRoles
 from plone.testing.z2 import Browser
+
 import lxml.html
 import transaction
 import unittest2
@@ -17,11 +19,18 @@ class FunctionalTestCase(TestCase):
     use_browser = False
 
     def setUp(self):
+        super(FunctionalTestCase, self).setUp()
         self.portal = self.layer['portal']
         self.app = self.layer['app']
+        self.builder_session = BuilderSession.instance()
+        self.builder_session.portal = self.portal
 
         if self.use_browser:
             self.browser = self._setup_browser()
+
+    def tearDown(self):
+        super(FunctionalTestCase, self).tearDown()
+        self.builder_session.reset()
 
     def grant(self, *roles):
         setRoles(self.portal, TEST_USER_ID, list(roles))

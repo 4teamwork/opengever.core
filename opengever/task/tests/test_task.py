@@ -2,11 +2,10 @@ from datetime import datetime
 from opengever.task.adapters import IResponseContainer
 from opengever.task.response import Response
 from opengever.task.task import ITask
+from opengever.testing import Builder
 from opengever.testing import FunctionalTestCase
-from opengever.testing import OPENGEVER_FUNCTIONAL_TESTING
 from plone.dexterity.interfaces import IDexterityFTI
 from plone.dexterity.utils import createContent, addContentToContainer
-from plone.dexterity.utils import createContentInContainer
 from z3c.relationfield.relation import RelationValue
 from zope.component import createObject
 from zope.component import getUtility
@@ -28,10 +27,8 @@ def create_task(parent, **kwargs):
 
 class TestTaskIntegration(FunctionalTestCase):
 
-    layer = OPENGEVER_FUNCTIONAL_TESTING
-
     def setUp(self):
-        self.portal = self.layer['portal']
+        super(TestTaskIntegration, self).setUp()
         self.portal.portal_types['opengever.task.task'].global_allow = True
 
     def test_adding(self):
@@ -63,16 +60,13 @@ class TestTaskIntegration(FunctionalTestCase):
     def test_relateddocuments(self):
         self.grant('Manager')
         # create document and append it to the relatedItems of the task
-        doc3 = createContentInContainer(
-            self.portal, 'opengever.document.document', title="a-testthree")
+        doc3 = Builder("document").titled("a-testthree").create()
         intids = getUtility(IIntIds)
         o_iid = intids.getId(doc3)
         t1 = create_task(
             self.portal, title='Task 1', relatedItems=[RelationValue(o_iid)])
-        doc1 = createContentInContainer(
-            t1, 'opengever.document.document', title="btestone")
-        doc2 = createContentInContainer(
-            t1, 'opengever.document.document', title="ctesttwo")
+        doc1 = Builder("document").within(t1).titled("btestone").create()
+        doc2 = Builder("document").within(t1).titled("ctesttwo").create()
         view = t1.restrictedTraverse('tabbedview_view-relateddocuments')
         results = [aa.Title for aa in view.table_source.build_query()]
         self.assertTrue(doc3.Title() in results)
@@ -152,7 +146,3 @@ class TestTaskIntegration(FunctionalTestCase):
         maintask.REQUEST.set('X-CREATING-SUCCESSOR', True)
         create_task(maintask, title='subtask')
         self.assertEquals(len(IResponseContainer(maintask)), 2)
-
-
-def test_suite():
-    return unittest.defaultTestLoader.loadTestsFromName(__name__)
