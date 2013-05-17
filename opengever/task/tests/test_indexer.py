@@ -1,13 +1,13 @@
 from datetime import datetime
 from opengever.ogds.base.interfaces import IClientConfiguration
-from opengever.testing import OPENGEVER_INTEGRATION_TESTING
 from opengever.testing import create_ogds_user
 from opengever.testing import index_data_for
 from opengever.testing import obj2brain
 from opengever.testing import set_current_client_id
 from plone.app.testing import TEST_USER_ID, TEST_USER_NAME
-from plone.app.testing import setRoles, login
-from plone.dexterity.utils import createContentInContainer
+from plone.app.testing import login
+from opengever.testing import Builder
+from opengever.testing import FunctionalTestCase
 from plone.memoize.interfaces import ICacheChooser
 from plone.registry.interfaces import IRegistry
 from z3c.relationfield.relation import RelationValue
@@ -15,38 +15,23 @@ from zope.component import getUtility, queryUtility
 from zope.event import notify
 from zope.intid.interfaces import IIntIds
 from zope.lifecycleevent import ObjectModifiedEvent
-import unittest2 as unittest
 
 
-class TestTaskIndexers(unittest.TestCase):
-
-    layer = OPENGEVER_INTEGRATION_TESTING
+class TestTaskIndexers(FunctionalTestCase):
 
     def setUp(self):
-        self.portal = self.layer['portal']
+        super(TestTaskIndexers, self).setUp()
         self.portal.portal_types['opengever.task.task'].global_allow = True
 
         set_current_client_id(self.portal, 'plone')
 
-        setRoles(
-            self.portal, TEST_USER_ID, ['Contributor', 'Editor', 'Manager'])
+        self.grant('Contributor', 'Editor', 'Manager')
         login(self.portal, TEST_USER_NAME)
 
-        self.task = createContentInContainer(
-            self.portal, 'opengever.task.task', checkConstraints=False,
-            title="Test task 1")
-
-        self.subtask = createContentInContainer(
-            self.task, 'opengever.task.task', checkConstraints=False,
-            title="Test task 1")
-
-        self.doc1 = createContentInContainer(
-            self.portal, 'opengever.document.document',
-            checkConstraints=False, title=u"Doc One")
-
-        self.doc2 = createContentInContainer(
-            self.portal, 'opengever.document.document',
-            checkConstraints=False, title=u"Doc Two")
+        self.task = Builder("task").titled("Test task 1").create()
+        self.subtask = Builder("task").within(self.task).titled("Test task 1").create()
+        self.doc1 = Builder("document").titled(u"Doc One").create()
+        self.doc2 = Builder("document").titled(u"Doc Two").create()
 
     def test_date_of_completion(self):
         self.assertEquals(
