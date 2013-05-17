@@ -9,7 +9,6 @@ OPTIONFLAGS = (doctest.NORMALIZE_WHITESPACE |
                doctest.REPORT_NDIFF)
 
 TESTFILES = (
-    'task.txt',
     'task_principals.txt',
     )
 
