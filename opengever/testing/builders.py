@@ -108,9 +108,22 @@ class MailBuilder(DexterityBuilder):
                                         'ftw.mail.mail',
                                         **self.arguments)
 
+
 class RepositoryBuilder(DexterityBuilder):
 
     def create_object(self):
         return createContentInContainer(self.container,
                                         'opengever.repository.repositoryfolder',
                                         **self.arguments)
+
+
+class ContactBuilder(DexterityBuilder):
+
+    def create_object(self):
+        return createContentInContainer(self.container,
+                                        'opengever.contact.contact',
+                                        **self.arguments)
+
+    def with_attributes(self, **kwargs):
+        self.arguments.update(kwargs)
+        return self

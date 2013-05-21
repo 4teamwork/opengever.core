@@ -11,6 +11,7 @@ else:
     from opengever.core.testing import OPENGEVER_FUNCTIONAL_TESTING
     from opengever.core.testing import OPENGEVER_INTEGRATION_TESTING
     from opengever.testing.builders import BuilderSession
+    from opengever.testing.builders import ContactBuilder
     from opengever.testing.builders import DossierBuilder
     from opengever.testing.builders import DocumentBuilder
     from opengever.testing.builders import MailBuilder
@@ -35,5 +36,7 @@ else:
             return MailBuilder(BuilderSession.instance())
         elif name == "repository":
             return RepositoryBuilder(BuilderSession.instance())
+        elif name == "contact":
+            return ContactBuilder(BuilderSession.instance())
         else:
             raise ValueError("No Builder for %s" % name)
