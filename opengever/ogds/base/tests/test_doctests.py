@@ -13,7 +13,6 @@ TESTFILES = (
     'vocabularies.txt',
     'transport.txt',
     'autocomplete_widget.txt',
-    'plugins.txt',
     )
 
 
