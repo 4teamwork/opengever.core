@@ -11,7 +11,6 @@ OPTIONFLAGS = (doctest.NORMALIZE_WHITESPACE |
 
 TESTFILES = (
     'vocabularies.txt',
-    'transport.txt',
     'autocomplete_widget.txt',
     )
 
