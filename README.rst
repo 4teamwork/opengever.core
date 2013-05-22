@@ -33,8 +33,8 @@ Use ``bin/test`` to execute all the tests in this package.
 Builder API
 ~~~~~~~~~~~
 
-This project uses the `Builder pattern http://en.wikipedia.org/wiki/Builder_pattern`_ to create test data.
-The implementation is located in `opengever.testing https://github.com/4teamwork/opengever.core/blob/master/opengever/testing/builders.py`_
+This project uses the `Builder pattern <http://en.wikipedia.org/wiki/Builder_pattern>`_ to create test data.
+The implementation is located in `opengever.testing <https://github.com/4teamwork/opengever.core/blob/master/opengever/testing/builders.py>`_
 
 To use the `Builder API` you need to import the `Builder` function:
 
