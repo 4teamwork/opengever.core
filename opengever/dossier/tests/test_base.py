@@ -2,11 +2,47 @@ from DateTime import DateTime
 from datetime import datetime, date
 from opengever.document.checkout.manager import CHECKIN_CHECKOUT_ANNOTATIONS_KEY
 from opengever.dossier.behaviors.dossier import IDossier
+from opengever.testing import Builder
+from opengever.testing import FunctionalTestCase
 from opengever.testing import OPENGEVER_INTEGRATION_TESTING
 from plone.app.testing import TEST_USER_ID
 from plone.dexterity.utils import createContentInContainer
 from zope.annotation.interfaces import IAnnotations
 import unittest2 as unittest
+
+class TestDossierContainerFunctional(FunctionalTestCase):
+    """This test-case should eventually replace TestDossierContainer.
+    New tests will be added to this case.
+    """
+
+    def test_is_all_supplied_without_any_subdossiers(self):
+        dossier = Builder("dossier").create()
+        Builder("document").within(dossier).create()
+
+        self.assertTrue(dossier.is_all_supplied())
+
+    def test_is_not_all_supplied_with_subdossier_and_document(self):
+        dossier = Builder("dossier").create()
+        Builder("dossier").within(dossier).create()
+        Builder("document").within(dossier).create()
+
+        self.assertFalse(dossier.is_all_supplied())
+
+    def test_is_not_all_supplied_with_subdossier_and_tasks(self):
+        dossier = Builder("dossier").create()
+        Builder("dossier").within(dossier).create()
+        Builder("task").within(dossier).create()
+
+        self.assertFalse(dossier.is_all_supplied())
+
+    def test_is_all_supplied_with_subdossier_containing_tasks_or_documents(self):
+        dossier = Builder("dossier").create()
+        subdossier = Builder("dossier").within(dossier).create()
+        Builder("task").within(subdossier).create()
+        Builder("document").within(subdossier).create()
+
+        self.assertTrue(dossier.is_all_supplied())
+
 
 class TestDossierContainer(unittest.TestCase):
 
@@ -15,29 +51,6 @@ class TestDossierContainer(unittest.TestCase):
     def setUp(self):
         self.app = self.layer['app']
         self.portal = self.layer['portal']
-
-    def test_is_all_supplied(self):
-
-        # dossiers wihtout a subdossier
-        dossier = self._create_dossier(self.portal)
-        self._create_document(dossier)
-        self.assertTrue(dossier.is_all_supplied())
-
-        # dossier containing docs and subdossiers
-        dossier, subdossier = self._create_dossier(self.portal, with_sub=True)
-        self._create_document(dossier)
-        self.assertFalse(dossier.is_all_supplied())
-
-        # dossier containing tasks and subdossiers
-        dossier, subdossier = self._create_dossier(self.portal, with_sub=True)
-        self._create_task(dossier)
-        self.assertFalse(dossier.is_all_supplied())
-
-        # dossier containing subdossier with objs
-        dossier, subdossier = self._create_dossier(self.portal, with_sub=True)
-        self._create_task(subdossier)
-        self._create_document(subdossier)
-        self.assertTrue(dossier.is_all_supplied())
 
     def test_is_all_closed(self):
         dossier, subdossier = self._create_dossier(self.portal, with_sub=True)
