@@ -165,15 +165,15 @@ class TestContactInfo(FunctionalTestCase):
             info.render_link('hugo.boss'))
 
     def test_list_contacts(self):
-        Builder('contact').with_attributes(
+        Builder('contact').with_metadata(
             **{'firstname': u'Sandra',
              'lastname': u'Kaufmann',
              'email': u'sandra.kaufmann@test.ch'}).create()
-        Builder('contact').with_attributes(
+        Builder('contact').with_metadata(
             **{'firstname': u'Elisabeth',
              'lastname': u'K\xe4ppeli',
              'email': 'elisabeth.kaeppeli@test.ch'}).create()
-        Builder('contact').with_attributes(
+        Builder('contact').with_metadata(
             **{'firstname': u'Roger',
              'lastname': u'Wermuth',
              'email': None}).create()
@@ -200,7 +200,7 @@ class TestContactInfo(FunctionalTestCase):
     def test_describe_contact(self):
         self.grant('Manager')
 
-        sandra_kaufmann = Builder('contact').with_attributes(
+        sandra_kaufmann = Builder('contact').with_metadata(
             **{'firstname': u'Sandra',
              'lastname': u'Kaufmann',
              'email': u'sandra.kaufmann@test.ch',
@@ -221,7 +221,7 @@ class TestContactInfo(FunctionalTestCase):
             info.describe(obj2brain(sandra_kaufmann)))
 
     def test_get_email_from_contact(self):
-        Builder('contact').with_attributes(
+        Builder('contact').with_metadata(
             **{'firstname': u'Sandra',
                'lastname': u'Kaufmann',
                'email': u'sandra.kaufmann@test.ch',
@@ -396,11 +396,11 @@ class TestContactInfo(FunctionalTestCase):
         create_client(clientid='client2')
         create_ogds_user('hugo.boss', **{'firstname': 'Hugo', 'lastname': 'Boss'})
         create_ogds_user('peter.muster', **{'firstname': 'Peter', 'lastname': 'Muster'})
-        Builder('contact').with_attributes(
+        Builder('contact').with_metadata(
             **{'firstname': u'Sandra',
                'lastname': u'Kaufmann',
                'email': u'sandra.kaufmann@test.ch'}).create()
-        Builder('contact').with_attributes(
+        Builder('contact').with_metadata(
             **{'firstname': u'Elisabeth',
                'lastname': u'K\xe4ppeli',
                'email': 'elisabeth.kaeppeli@test.ch'}).create()
