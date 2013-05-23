@@ -99,3 +99,10 @@ class MailBuilder(DexterityBuilder):
         return createContentInContainer(self.container,
                                         'ftw.mail.mail',
                                         **self.arguments)
+
+class RepositoryBuilder(DexterityBuilder):
+
+    def create_object(self):
+        return createContentInContainer(self.container,
+                                        'opengever.repository.repositoryfolder',
+                                        **self.arguments)
