@@ -35,3 +35,5 @@ else:
             return MailBuilder(BuilderSession.instance())
         elif name == "repository":
             return RepositoryBuilder(BuilderSession.instance())
+        else:
+            raise ValueError("No Builder for %s" % name)
