@@ -41,11 +41,13 @@ class TestDocumentIntegration(unittest.TestCase):
         typestool._setObject('SimpleDocument', fti)
         register(fti)
 
-    def test_adding(self):
-        portal = self.layer['portal']
-        portal.invokeFactory('opengever.document.document', 'document1')
-        d1 = portal['document1']
-        self.failUnless(IDocumentSchema.providedBy(d1))
+    def test_documents_provide_IDocumentSchema(self):
+        document = Builder("document").create()
+        self.assertProvides(document, interface=IDocumentSchema)
+
+    def test_documents_provide_IBaseDocument(self):
+        document = Builder("document").create()
+        self.assertProvides(document, interface=IBaseDocument)
 
     def test_fti(self):
         fti = queryUtility(IDexterityFTI, name='opengever.document.document')
@@ -60,7 +62,7 @@ class TestDocumentIntegration(unittest.TestCase):
         fti = queryUtility(IDexterityFTI, name='opengever.document.document')
         factory = fti.factory
         new_object = createObject(factory)
-        self.failUnless(IDocumentSchema.providedBy(new_object))
+        self.assertProvides(new_object, interface=IDocumentSchema)
 
     def test_upload_file(self):
         portal = self.layer['portal']
@@ -182,13 +184,6 @@ class TestDocumentIntegration(unittest.TestCase):
         validator.validate(mock_file)
         with self.assertRaises(Invalid):
             self.assertFalse(validator.validate(mock_mail))
-
-    def test_basedocument(self):
-        portal = self.layer['portal']
-        d1 = createContentInContainer(
-            portal, 'opengever.document.document')
-
-        self.assertTrue(IBaseDocument.providedBy(d1))
 
     def test_sequence_number(self):
         """All Objects marked as BaseDocuments, should use the same counter."""
