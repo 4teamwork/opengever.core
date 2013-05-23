@@ -15,6 +15,7 @@ else:
     from opengever.testing.builders import DocumentBuilder
     from opengever.testing.builders import MailBuilder
     from opengever.testing.builders import TaskBuilder
+    from opengever.testing.builders import RepositoryBuilder
     from opengever.testing.helpers import create_plone_user
     from opengever.testing.helpers import obj2brain
     from opengever.testing.helpers import index_data_for
@@ -32,3 +33,5 @@ else:
             return TaskBuilder(BuilderSession.instance())
         elif name == "mail":
             return MailBuilder(BuilderSession.instance())
+        elif name == "repository":
+            return RepositoryBuilder(BuilderSession.instance())

@@ -1,59 +1,45 @@
-from opengever.document.testing import OPENGEVER_DOCUMENT_FUNCTIONAL_TESTING
-from unittest2 import TestCase
-from Products.CMFCore.utils import getToolByName
-from plone.app.testing import setRoles, TEST_USER_ID
 from opengever.document.interfaces import ICheckinCheckoutManager
+from opengever.testing import Builder
+from opengever.testing import FunctionalTestCase
 from zope.component import getMultiAdapter
 
 
-class TestLogoutOverlay(TestCase):
-
-    layer = OPENGEVER_DOCUMENT_FUNCTIONAL_TESTING
+class TestLogoutOverlayWithoutCheckouts(FunctionalTestCase):
 
     def setUp(self):
-        self.portal = self.layer['portal']
-        setRoles(self.portal, TEST_USER_ID, ['Manager'])
+        super(TestLogoutOverlayWithoutCheckouts, self).setUp()
+        self.grant('Manager')
+        self.document = Builder("document").create()
 
-        self.request = self.layer['request']
-        self.mtool = getToolByName(self.portal, 'portal_membership')
+    def test_logout_is_handled_using_a_js_script(self):
+        view = self.portal.restrictedTraverse('@@logout_overlay')
+        self.assertEquals("empty:./logout", view())
 
-        self.portal.invokeFactory('opengever.document.document', 'document1')
-        self.d1 = self.portal['document1']
+class TestLogoutOverlayWithCheckouts(FunctionalTestCase):
 
-        self.portal.invokeFactory('opengever.document.document', 'document2')
-        self.d2 = self.portal['document2']
+    def setUp(self):
+        super(TestLogoutOverlayWithCheckouts, self).setUp()
+        self.grant('Manager')
 
-        self.portal.invokeFactory('opengever.document.document', 'document3')
-        self.d3 = self.portal['document3']
-
-
-    def test_no_checkouts(self):
-        """ We have no checkouts. So the logout is handled over the
-        js script
-        """
-        view = self.portal.restrictedTraverse('@@logout_overlay')()
-
-        self.assertEquals(view, 'empty:./logout')
-
-    def test_with_checkouts(self):
-        """ We have checkouts, so we return the view with links to the
-        checked out documents and a hidden field with the redirect url
-        """
+        self.checkout1 = Builder("document").titled("About Plone").create()
+        self.document = Builder("document").titled("NOT checkedout").create()
+        self.checkout2 = Builder("document").titled("About Python").create()
         getMultiAdapter(
-            (self.d1, self.portal.REQUEST),
+            (self.checkout1, self.portal.REQUEST),
             ICheckinCheckoutManager).checkout()
 
         getMultiAdapter(
-            (self.d3, self.portal.REQUEST),
+            (self.checkout2, self.portal.REQUEST),
             ICheckinCheckoutManager).checkout()
 
+    def test_contains_links_to_checked_out_documents(self):
         view = self.portal.restrictedTraverse('@@logout_overlay')()
-
         self.assertIn('<a target="_blank" href="http:' \
-            '//nohost/plone/document1">document1</a>', view)
-
+            '//nohost/plone/document-1">About Plone</a>', view)
         self.assertIn('<a target="_blank" href="http:' \
-            '//nohost/plone/document3">document3</a>', view)
+            '//nohost/plone/document-3">About Python</a>', view)
 
+    def test_contains_hidden_field_with_redirect_url(self):
+        view = self.portal.restrictedTraverse('@@logout_overlay')()
         self.assertIn('<input type="hidden" name="form.redirect.url" ' \
             'value="./logout" />', view)
