@@ -3,10 +3,10 @@ from datetime import date
 from opengever.base.interfaces import IReferenceNumber, ISequenceNumber
 from opengever.document.behaviors import IBaseDocument
 from opengever.document.document import IDocumentSchema
+from opengever.document.document import UploadValidator
 from opengever.document.interfaces import IDocumentSettings
-from opengever.document.testing import OPENGEVER_DOCUMENT_FUNCTIONAL_TESTING
-from plone.app.testing import TEST_USER_ID
-from plone.app.testing import setRoles
+from opengever.testing import Builder
+from opengever.testing import FunctionalTestCase
 from plone.dexterity.fti import DexterityFTI
 from plone.dexterity.fti import register
 from plone.dexterity.interfaces import IDexterityFTI
@@ -21,31 +21,21 @@ from zope.component import queryUtility, getUtility
 from zope.interface import Invalid
 from zope.schema import getFields
 import transaction
-import unittest2 as unittest
 
 
-class TestDocumentIntegration(unittest.TestCase):
-
-    layer = OPENGEVER_DOCUMENT_FUNCTIONAL_TESTING
+class TestDocumentConfiguration(FunctionalTestCase):
 
     def setUp(self):
-        setRoles(self.layer['portal'], TEST_USER_ID, ['Contributor'])
+        super(TestDocumentConfiguration, self).setUp()
+        self.grant('Contributor')
 
-    def register_simple_document_fti(self):
-        fti = DexterityFTI('SimpleDocument')
-        fti.klass = 'plone.dexterity.content.Container'
-        fti.behaviors = ('opengever.document.behaviors.IBaseDocument', )
-        fti.schema = 'opengever.document.document.IDocumentSchema'
+    def test_documents_provide_IDocumentSchema(self):
+        document = Builder("document").create()
+        self.assertProvides(document, interface=IDocumentSchema)
 
-        typestool = getToolByName(self.layer['portal'], 'portal_types')
-        typestool._setObject('SimpleDocument', fti)
-        register(fti)
-
-    def test_adding(self):
-        portal = self.layer['portal']
-        portal.invokeFactory('opengever.document.document', 'document1')
-        d1 = portal['document1']
-        self.failUnless(IDocumentSchema.providedBy(d1))
+    def test_documents_provide_IBaseDocument(self):
+        document = Builder("document").create()
+        self.assertProvides(document, interface=IBaseDocument)
 
     def test_fti(self):
         fti = queryUtility(IDexterityFTI, name='opengever.document.document')
@@ -60,179 +50,174 @@ class TestDocumentIntegration(unittest.TestCase):
         fti = queryUtility(IDexterityFTI, name='opengever.document.document')
         factory = fti.factory
         new_object = createObject(factory)
-        self.failUnless(IDocumentSchema.providedBy(new_object))
+        self.assertProvides(new_object, interface=IDocumentSchema)
+
+
+class TestDocument(FunctionalTestCase):
+
+    def setUp(self):
+        super(TestDocument, self).setUp()
+        self.grant('Contributor')
 
     def test_upload_file(self):
-        portal = self.layer['portal']
-        portal.invokeFactory('opengever.document.document', 'document1')
-        d1 = portal['document1']
+        document = Builder("document").create()
         field = IDocumentSchema['file']
-        monk_file = NamedBlobFile('bla bla', filename=u'test.txt')
-        field.set(d1, monk_file)
-        self.assertTrue(field.get(d1).data == 'bla bla')
+        file = NamedBlobFile('bla bla', filename=u'test.txt')
+        field.set(document, file)
+        self.assertTrue(field.get(document).data == 'bla bla')
 
-    def test_digitally_available(self):
-        portal = self.layer['portal']
-        monk_file = NamedBlobFile('bla bla', filename=u'test.txt')
-        d1 = createContentInContainer(portal, 'opengever.document.document',
-            file=monk_file)
-        self.assertTrue(d1.digitally_available == True)
-        d2 = createContentInContainer(portal, 'opengever.document.document')
-        self.assertTrue(d2.digitally_available == False)
+    def test_document_with_file_is_digitally_available(self):
+        document_with_file = Builder("document").with_dummy_content().create()
+        self.assertTrue(document_with_file.digitally_available)
 
-        # check the file_or_preserved_as_paper validator
-        d3 = createContentInContainer(portal, 'opengever.document.document',
-                checkConstraints=True, preserved_as_paper=False)
-        try:
-            IDocumentSchema.validateInvariants(d3)
-            self.fail()
-        except Invalid:
-            pass
+    def test_document_without_file_is_not_digitally_available(self):
+        document_without_file = Builder("document").create()
+        self.assertFalse(document_without_file.digitally_available)
 
+    def test_document_without_digital_file_must_be_preserved_in_paper(self):
+        document = Builder("document").having(preserved_as_paper=False).create()
+        with self.assertRaises(Invalid) as cm:
+            IDocumentSchema.validateInvariants(document)
+        self.assertEquals("error_title_or_file_required", str(cm.exception))
+
+    # TODO: split this and assert something useful ;)
     def test_views(self):
-        portal = self.layer['portal']
-        portal.invokeFactory('opengever.document.document', 'document1')
-        d1 = portal['document1']
-        d1.keywords = ()
+        document = Builder("document").create()
+        document.keywords = ()
 
-        # fake the request
-        portal.REQUEST['ACTUAL_URL'] = d1.absolute_url()
+        self.portal.REQUEST['ACTUAL_URL'] = document.absolute_url()
 
-        view = d1.restrictedTraverse('@@view')
+        view = document.restrictedTraverse('@@view')
         self.failUnless(view())
-        tabbed_view = d1.restrictedTraverse('@@tabbed_view')
+        tabbed_view = document.restrictedTraverse('@@tabbed_view')
         self.failUnless(tabbed_view())
 
-    def test_copying(self):
-        portal = self.layer['portal']
-        portal.invokeFactory(
-            'opengever.document.document',
-            'document1', title="Testdocument")
-        d1 = portal['document1']
+    def test_copying_a_document_modifies_the_title(self):
+        document = Builder("document").titled("Testdocument").create()
 
-        cb = portal.manage_copyObjects(d1.id)
-        portal.manage_pasteObjects(cb)
-        self.assertTrue(
-            portal['copy_of_document1'].title == u'copy of Testdocument')
+        cb = self.portal.manage_copyObjects(document.id)
+        self.portal.manage_pasteObjects(cb)
 
-    def test_copying_and_versions(self):
-        portal = self.layer['portal']
-        pr = portal.portal_repository
-        orig_doc = createContentInContainer(
-            portal,
-            'opengever.document.document',
-            checkConstraints=True, preserved_as_paper=False,
-            title="Testdocument")
+        self.assertEquals(u'copy of Testdocument',
+                          self.portal['copy_of_document-1'].title)
 
-        cb = portal.manage_copyObjects(orig_doc.id)
-        portal.manage_pasteObjects(cb)
+    def test_copying_a_document_does_not_copy_its_versions(self):
+        orig_doc = Builder("document").having(preserved_as_paper=False).create()
 
-        new_doc = portal['copy_of_document-1']
-        self.assertTrue(new_doc.title == u'copy of Testdocument')
+        cb = self.portal.manage_copyObjects(orig_doc.id)
+        self.portal.manage_pasteObjects(cb)
 
-        new_history = pr.getHistory(new_doc)
+        new_doc = self.portal['copy_of_document-1']
+
+        new_history = self.portal.portal_repository.getHistory(new_doc)
         # The new history should have an initial version,
         # but existing versions shouldn't be copied
         self.assertEquals(len(new_history), 1)
 
-    def test_default_values(self):
-        portal = self.layer['portal']
-        monk_file = NamedBlobFile('bla bla', filename=u'test.txt')
-        d1 = createContentInContainer(portal, 'opengever.document.document',
-              file=monk_file)
-        field = getFields(IDocumentSchema).get('document_date')
-        default = queryMultiAdapter(
-            (d1, d1.REQUEST, None, field, None, ), IValue, name='default')
-        self.assertTrue(default.get(), date.today())
+    def test_accessors(self):
+        document = Builder("document") \
+            .titled(u'Test title').with_description(u'Lorem ipsum').create()
+
+        self.assertEquals(document.Title(), 'Test title')
+        self.assertEquals(document.Description(), 'Lorem ipsum')
+
+
+class TestDocumentDefaultValues(FunctionalTestCase):
+
+    def setUp(self):
+        super(TestDocumentDefaultValues, self).setUp()
+        self.grant('Contributor')
+
+    def test_default_document_date_is_today(self):
+        self.assertEquals(date.today(), self.default_value_for('document_date'))
 
     def test_preserverd_as_paper_default(self):
-        portal = self.layer['portal']
-        d1 = createContentInContainer(
-            portal, 'opengever.document.document', title='Test')
-
         registry = getUtility(IRegistry)
         proxy = registry.forInterface(IDocumentSettings)
+
         proxy.preserved_as_paper_default = False
         transaction.commit()
+        self.assertFalse(self.default_value_for('preserved_as_paper'))
 
-        field = getFields(IDocumentSchema).get('preserved_as_paper')
-        default = queryMultiAdapter(
-            (d1, d1.REQUEST, None, field, None, ), IValue, name='default')
-        self.assertFalse(default.get())
         proxy.preserved_as_paper_default = True
         transaction.commit()
+        self.assertTrue(self.default_value_for('preserved_as_paper'))
 
-        field = getFields(IDocumentSchema).get('preserved_as_paper')
+    def default_value_for(self, field_name):
+        field = getFields(IDocumentSchema).get(field_name)
+        document = createContentInContainer(self.portal,
+                                            'opengever.document.document')
         default = queryMultiAdapter(
-            (d1, d1.REQUEST, None, field, None, ), IValue, name='default')
-        self.assertTrue(default.get())
+            (document, document.REQUEST, None, field, None, ),
+            IValue, name='default')
+        return default.get()
 
-    def test_validators(self):
-        portal = self.layer['portal']
-        mock_file = NamedBlobFile('bla bla', filename=u'test.txt')
-        mock_mail = NamedBlobFile('bla bla', filename=u'test.eml')
-        dossier = createContentInContainer(
-            portal, 'opengever.dossier.businesscasedossier')
-        d1 = createContentInContainer(dossier, 'opengever.document.document',
-              file=mock_file)
-        field = getFields(IDocumentSchema).get('file')
-        validator = queryMultiAdapter(
-            (d1, d1.REQUEST, None, field, None), interfaces.IValidator)
 
-        validator.validate(mock_file)
-        with self.assertRaises(Invalid):
-            self.assertFalse(validator.validate(mock_mail))
+class TestDocumentNumbering(FunctionalTestCase):
 
-    def test_basedocument(self):
-        portal = self.layer['portal']
-        d1 = createContentInContainer(
-            portal, 'opengever.document.document')
+    def setUp(self):
+        super(TestDocumentNumbering, self).setUp()
+        self.grant('Contributor')
 
-        self.assertTrue(IBaseDocument.providedBy(d1))
+        fti = DexterityFTI('SimpleDocument')
+        fti.klass = 'plone.dexterity.content.Container'
+        fti.behaviors = ('opengever.document.behaviors.IBaseDocument', )
+        fti.schema = 'opengever.document.document.IDocumentSchema'
 
-    def test_sequence_number(self):
-        """All Objects marked as BaseDocuments, should use the same counter."""
+        typestool = getToolByName(self.portal, 'portal_types')
+        typestool._setObject('SimpleDocument', fti)
+        register(fti)
 
-        portal = self.layer['portal']
-        self.register_simple_document_fti()
-
+    def test_objects_marked_as_BaseDocuments_use_same_counter(self):
         seqNumb = getUtility(ISequenceNumber)
-        d1 = createContentInContainer(portal, 'opengever.document.document')
-        b1 = createContentInContainer(portal, 'SimpleDocument')
-        d2 = createContentInContainer(portal, 'opengever.document.document')
+        d1 = createContentInContainer(self.portal, 'opengever.document.document')
+        b1 = createContentInContainer(self.portal, 'SimpleDocument')
+        d2 = createContentInContainer(self.portal, 'opengever.document.document')
 
-        self.assertEquals(seqNumb.get_number(d1), 1)
-        self.assertEquals(seqNumb.get_number(b1), 2)
-        self.assertEquals(seqNumb.get_number(d2), 3)
+        self.assertEquals([1, 2, 3],
+                          [seqNumb.get_number(d1),
+                           seqNumb.get_number(b1),
+                           seqNumb.get_number(d2)])
 
-    def test_reference_number(self):
-        """The reference Number Adapter should work
-        for all BaseDocument objects."""
+    def test_reference_number_works_for_objects_marked_as_BaseDocument(self):
+        d1 = createContentInContainer(self.portal, 'opengever.document.document')
+        b1 = createContentInContainer(self.portal, 'SimpleDocument')
+        d2 = createContentInContainer(self.portal, 'opengever.document.document')
 
-        portal = self.layer['portal']
-        self.register_simple_document_fti()
-
-        d1 = createContentInContainer(portal, 'opengever.document.document')
-        b1 = createContentInContainer(portal, 'SimpleDocument')
-        d2 = createContentInContainer(portal, 'opengever.document.document')
-
-        self.assertEquals(
-            getAdapter(d1, IReferenceNumber).get_number(), 'OG / 1')
-        self.assertEquals(
-            getAdapter(b1, IReferenceNumber).get_number(), 'OG / 2')
-        self.assertEquals(
-            getAdapter(d2, IReferenceNumber).get_number(), 'OG / 3')
-
-    def test_accessors(self):
-        """Test title and descprition accessors."""
-
-        portal = self.layer['portal']
-        d1 = createContentInContainer(
-            portal, 'opengever.document.document',
-            title=u'Test title', description=u'Lorem ipsum')
-        self.assertEquals(d1.Title(), 'Test title')
-        self.assertEquals(d1.Description(), 'Lorem ipsum')
+        self.assertEquals(['OG / 1', 'OG / 2', 'OG / 3'],
+                          [getAdapter(d1, IReferenceNumber).get_number(),
+                           getAdapter(b1, IReferenceNumber).get_number(),
+                           getAdapter(d2, IReferenceNumber).get_number()])
 
 
-def test_suite():
-    return unittest.defaultTestLoader.loadTestsFromName(__name__)
+class TestUploadValidator(FunctionalTestCase):
+
+    def test_is_registered_on_file_field(self):
+        validator = queryMultiAdapter(
+            self.validator_arguments(),
+            interfaces.IValidator)
+
+        self.assertTrue(isinstance(validator, UploadValidator),
+                        "Expected %s to be a UploadValidator" % validator)
+
+    def test_accepts_normal_files(self):
+        file = NamedBlobFile('bla bla', filename=u'test.txt')
+
+        validator = UploadValidator(*self.validator_arguments())
+
+        validator.validate(file)
+
+    def test_does_not_accept_emails(self):
+        mail = NamedBlobFile('bla bla', filename=u'test.eml')
+        validator = UploadValidator(*self.validator_arguments())
+
+        with self.assertRaises(Invalid) as cm:
+            self.assertFalse(validator.validate(mail))
+        self.assertEquals('error_mail_upload', str(cm.exception))
+
+    def validator_arguments(self):
+        dossier = Builder("dossier").create()
+        document = Builder("document").within(dossier).create()
+        field = getFields(IDocumentSchema).get('file')
+
+        return (document, document.REQUEST, None, field, None)

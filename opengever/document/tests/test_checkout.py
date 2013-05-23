@@ -1,6 +1,5 @@
 from Products.CMFCore.utils import getToolByName
 from opengever.base.interfaces import IRedirector
-from opengever.document.document import IDocumentSchema
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.testing import FunctionalTestCase
 from opengever.testing import obj2brain
