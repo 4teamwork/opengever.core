@@ -34,6 +34,10 @@ class DexterityBuilder(object):
         self.arguments["title"] = title
         return self
 
+    def with_description(self, description):
+        self.arguments["description"] = description
+        return self
+
     def having(self, **kwargs):
         self.arguments.update(kwargs)
         return self
