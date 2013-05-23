@@ -36,7 +36,9 @@ def create_client(clientid='client1', session=None, **properties):
 
 
 def create_ogds_user(userid, session=None,
-                     groups=('og_mandant1_users',), **properties):
+                     groups=('og_mandant1_users',),
+                     assigned_client=[], **properties):
+
     session = session or create_session()
 
     defaults = {'firstname': 'Hugo',
@@ -59,10 +61,17 @@ def create_ogds_user(userid, session=None,
     for groupid in groups:
         ogds_add_user_to_group(user, groupid, session=session)
 
+    for client in assigned_client:
+        assign_user_to_client(user, client, session=session)
+
     reset_ogds_sync_stamp(getSite())
 
     return user
 
+def assign_user_to_client(user, client, session=None):
+    session = session or create_session()
+    client.users_group.users.append(user)
+    session.add(client.users_group)
 
 def reset_ogds_sync_stamp(portal):
     timestamp = update_sync_stamp(portal)
