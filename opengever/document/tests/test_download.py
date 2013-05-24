@@ -1,15 +1,15 @@
 from Products.CMFCore.utils import getToolByName
 from ftw.testing import MockTestCase
 from mocker import ANY
-from opengever.document.interfaces import IFileCopyDownloadedEvent
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_TESTING
+from opengever.document.interfaces import IFileCopyDownloadedEvent
+from opengever.testing import Builder
 from opengever.testing import FunctionalTestCase
+from opengever.testing.builders import BuilderSession
 from plone.app.testing import TEST_USER_ID, TEST_USER_NAME
-from plone.app.testing import TEST_USER_PASSWORD, login
+from plone.app.testing import login
 from plone.app.testing import setRoles
-from plone.dexterity.utils import createContentInContainer
 from plone.namedfile.file import NamedBlobFile
-from plone.testing.z2 import Browser
 import transaction
 
 
@@ -19,25 +19,18 @@ class TestDocumentDownloadView(MockTestCase):
 
     def setUp(self):
         super(TestDocumentDownloadView, self).setUp()
-        setRoles(self.layer['portal'], TEST_USER_ID, ['Manager'])
+        self.portal = self.layer['portal']
+        setRoles(self.portal, TEST_USER_ID, ['Manager'])
+        BuilderSession.instance().portal = self.portal
+
+    def tearDown(self):
+        super(TestDocumentDownloadView, self).tearDown()
+        BuilderSession.instance().reset()
 
     def test_download_view(self):
-        portal = self.layer['portal']
-        setRoles(portal, TEST_USER_ID, ['Manager'])
-
-        doc1 = createContentInContainer(
-            portal, 'opengever.document.document', 'document')
-
-        mock_file = NamedBlobFile('bla bla', filename=u'test.txt')
-        doc1.file = mock_file
-        transaction.commit()
-
-        doc2 = createContentInContainer(
-            portal, 'opengever.document.document', 'document')
-
-        mock_file = NamedBlobFile('bla bla', filename=u't\xf6st.txt')
-        doc2.file = mock_file
-        transaction.commit()
+        doc1 = Builder("document").attach_file_containing("bla bla").create()
+        doc2 = Builder("document") \
+          .attach_file_containing("blub blub", name=u't\xf6st.txt').create()
 
         downloaded_handler = self.mocker.mock()
         self.mock_handler(downloaded_handler, [IFileCopyDownloadedEvent, ])
@@ -51,15 +44,12 @@ class TestDocumentDownloadView(MockTestCase):
 
         result = doc2.unrestrictedTraverse('download')()
         result.seek(0)
-        self.assertEquals(result.read(), 'bla bla')
+        self.assertEquals(result.read(), 'blub blub')
 
     def test_download_file_version_view(self):
-        portal = self.layer['portal']
+        doc1 = Builder("document").create()
 
-        doc1 = createContentInContainer(
-            portal, 'opengever.document.document', 'document')
-
-        repo_tool = getToolByName(portal, 'portal_repository')
+        repo_tool = getToolByName(self.portal, 'portal_repository')
         repo_tool._recursiveSave(doc1, {},
                                  repo_tool._prepareSysMetadata('mock'),
                                  autoapply=repo_tool.autoapply)
@@ -68,7 +58,7 @@ class TestDocumentDownloadView(MockTestCase):
         doc1.file = monk_file
 
         # create version
-        repo_tool = getToolByName(portal, 'portal_repository')
+        repo_tool = getToolByName(self.portal, 'portal_repository')
         repo_tool._recursiveSave(doc1, {},
                                  repo_tool._prepareSysMetadata('mock'),
                                  autoapply=repo_tool.autoapply)
@@ -85,32 +75,23 @@ class TestDocumentDownloadView(MockTestCase):
         self.assertEquals(result, 'bla bla')
 
         # first version with a document
-        portal.REQUEST['version_id'] = '1'
+        self.portal.REQUEST['version_id'] = '1'
         result = doc1.unrestrictedTraverse('download_file_version')()
         # result should be a redirect back to the document
         self.assertEquals(result, 'http://nohost/plone/document-1')
 
 
 class TestDocumentDownloadConfirmation(FunctionalTestCase):
+    use_browser = True
 
     def setUp(self):
         super(TestDocumentDownloadConfirmation, self).setUp()
-        self.portal = self.layer['portal']
-        setRoles(self.portal, TEST_USER_ID, ['Manager'])
-
-        self.browser = Browser(self.layer['app'])
-        self.browser.handleErrors = False
-        self.browser.addHeader(
-            'Authorization',
-            'Basic %s:%s' % (TEST_USER_NAME, TEST_USER_PASSWORD))
-
+        self.grant('Manager')
         login(self.portal, TEST_USER_NAME)
-        self.portal.invokeFactory(
-            'opengever.document.document', 'document-xy', title='document')
+        self.document = Builder("document").create()
 
-        self.document = self.portal.get('document-xy')
-        monk_file = NamedBlobFile('bla bla', filename=u'test.txt')
-        self.document.file = monk_file
+        file_ = NamedBlobFile('bla bla', filename=u'test.txt')
+        self.document.file = file_
 
         # create version
         repo_tool = getToolByName(self.portal, 'portal_repository')
@@ -124,11 +105,8 @@ class TestDocumentDownloadConfirmation(FunctionalTestCase):
         self.browser.open(
             '%s/file_download_confirmation' % self.document.absolute_url())
 
-        error_msg = """<p>You\'re downloading a copy of the document
-          <span>test.txt</span>
-        </p>"""
-
-        self.assertTrue(error_msg in self.browser.contents)
+        self.assertIn("You\'re downloading a copy of the document",
+                      self.css(".details > p")[0].text)
 
         # submit
         self.browser.getControl('label_download').click()
@@ -140,11 +118,8 @@ class TestDocumentDownloadConfirmation(FunctionalTestCase):
             '%s/file_download_confirmation?version_id=1' % (
                 self.document.absolute_url()))
 
-        error_msg = """<p>You\'re downloading a copy of the document
-          <span>test.txt</span>
-        </p>"""
-
-        self.assertTrue(error_msg in self.browser.contents)
+        self.assertIn("You're downloading a copy of the document",
+                      self.css(".details > p")[0].text)
 
         # submit
         self.browser.getControl('label_download').click()
