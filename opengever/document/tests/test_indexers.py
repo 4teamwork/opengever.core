@@ -2,8 +2,6 @@ from opengever.document.checkout.manager import CHECKIN_CHECKOUT_ANNOTATIONS_KEY
 from opengever.testing import FunctionalTestCase
 from opengever.testing import obj2brain
 from opengever.testing import index_data_for
-from plone.app.testing import TEST_USER_ID
-from plone.app.testing import setRoles
 from plone.dexterity.utils import createContentInContainer
 from zope.annotation.interfaces import IAnnotations
 import datetime
@@ -13,7 +11,7 @@ class TestDocumentIndexers(FunctionalTestCase):
 
     def setUp(self):
         super(TestDocumentIndexers, self).setUp()
-        setRoles(self.portal, TEST_USER_ID, ['Manager'])
+        self.grant('Manager')
 
     def test_author_indexers(self):
         """check the author indexers."""

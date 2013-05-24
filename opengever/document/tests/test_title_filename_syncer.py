@@ -1,30 +1,21 @@
+from opengever.testing import Builder
 from opengever.testing import FunctionalTestCase
-from plone.app.testing import TEST_USER_ID
-from plone.app.testing import setRoles
-from plone.namedfile.file import NamedBlobFile
 
 
 class TestTitleFilenameSyncer(FunctionalTestCase):
 
     def setUp(self):
         super(TestTitleFilenameSyncer, self).setUp()
-        setRoles(self.portal, TEST_USER_ID, ['Manager'])
 
-        self.mock_file = NamedBlobFile('bla bla', filename=u'T\xf6st.txt')
+    def test_infer_title_from_filename(self):
+        document = Builder("document") \
+            .attach_file_containing(u"blup", name=u'T\xf6st.txt').create()
+        self.assertEqual(document.title, u'T\xf6st')
+        self.assertEqual(document.file.filename, u'tost.txt')
 
-    def test_title_from_filename(self):
-        self.portal.invokeFactory(
-            'opengever.document.document', 'document1', file=self.mock_file)
-        doc = self.portal.get('document1')
-        self.assertEqual(doc.title, u'T\xf6st')
-        self.assertEqual(doc.file.filename, u'tost.txt')
-
-    def test_filename_from_title(self):
-        self.portal.invokeFactory(
-            'opengever.document.document',
-            'document1',
-            title="My Title",
-            file=self.mock_file)
-        doc = self.portal.get('document1')
-        self.assertEqual(doc.title, u'My Title')
-        self.assertEqual(doc.file.filename, u'my-title.txt')
+    def test_infer_filename_from_title(self):
+        document = Builder("document") \
+            .titled("My Title") \
+            .attach_file_containing(u"blup", name=u"wrong.txt").create()
+        self.assertEqual(document.title, u'My Title')
+        self.assertEqual(document.file.filename, u'my-title.txt')
