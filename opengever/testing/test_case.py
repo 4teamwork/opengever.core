@@ -41,6 +41,10 @@ class FunctionalTestCase(TestCase):
         if 'SESSION' not in self.request.keys():
             self.request.SESSION = {}
 
+    def assertProvides(self, obj, interface=None):
+        self.assertTrue(interface.providedBy(obj),
+                        "%s should provide %s" % (obj, interface))
+
     """
     Browser API
     """
