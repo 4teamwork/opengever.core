@@ -2,7 +2,8 @@ from Products.CMFCore.utils import getToolByName
 from ftw.testing import MockTestCase
 from mocker import ANY
 from opengever.document.interfaces import IFileCopyDownloadedEvent
-from opengever.document.testing import OPENGEVER_DOCUMENT_FUNCTIONAL_TESTING
+from opengever.core.testing import OPENGEVER_FUNCTIONAL_TESTING
+from opengever.testing import FunctionalTestCase
 from plone.app.testing import TEST_USER_ID, TEST_USER_NAME
 from plone.app.testing import TEST_USER_PASSWORD, login
 from plone.app.testing import setRoles
@@ -10,12 +11,11 @@ from plone.dexterity.utils import createContentInContainer
 from plone.namedfile.file import NamedBlobFile
 from plone.testing.z2 import Browser
 import transaction
-import unittest2 as unittest
 
 
 class TestDocumentDownloadView(MockTestCase):
 
-    layer = OPENGEVER_DOCUMENT_FUNCTIONAL_TESTING
+    layer = OPENGEVER_FUNCTIONAL_TESTING
 
     def setUp(self):
         super(TestDocumentDownloadView, self).setUp()
@@ -91,9 +91,7 @@ class TestDocumentDownloadView(MockTestCase):
         self.assertEquals(result, 'http://nohost/plone/document-1')
 
 
-class TestDocumentDownloadConfirmation(unittest.TestCase):
-
-    layer = OPENGEVER_DOCUMENT_FUNCTIONAL_TESTING
+class TestDocumentDownloadConfirmation(FunctionalTestCase):
 
     def setUp(self):
         super(TestDocumentDownloadConfirmation, self).setUp()

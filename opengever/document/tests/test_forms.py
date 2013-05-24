@@ -1,5 +1,5 @@
 from opengever.document.interfaces import ICheckinCheckoutManager
-from opengever.document.testing import OPENGEVER_DOCUMENT_FUNCTIONAL_TESTING
+from opengever.testing import FunctionalTestCase
 from plone.app.testing import TEST_USER_ID, TEST_USER_NAME
 from plone.app.testing import TEST_USER_PASSWORD
 from plone.app.testing import setRoles, login
@@ -7,12 +7,9 @@ from plone.namedfile.file import NamedBlobFile
 from plone.testing.z2 import Browser
 from zope.component import queryMultiAdapter
 import transaction
-import unittest2 as unittest
 
 
-class TestDocumentIntegration(unittest.TestCase):
-
-    layer = OPENGEVER_DOCUMENT_FUNCTIONAL_TESTING
+class TestDocumentIntegration(FunctionalTestCase):
 
     def setUp(self):
         super(TestDocumentIntegration, self).setUp()

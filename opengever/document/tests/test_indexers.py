@@ -1,5 +1,5 @@
 from opengever.document.checkout.manager import CHECKIN_CHECKOUT_ANNOTATIONS_KEY
-from opengever.document.testing import OPENGEVER_DOCUMENT_FUNCTIONAL_TESTING
+from opengever.testing import FunctionalTestCase
 from opengever.testing import obj2brain
 from opengever.testing import index_data_for
 from plone.app.testing import TEST_USER_ID
@@ -7,16 +7,12 @@ from plone.app.testing import setRoles
 from plone.dexterity.utils import createContentInContainer
 from zope.annotation.interfaces import IAnnotations
 import datetime
-import unittest2 as unittest
 
 
-class TestDocumentIntegration(unittest.TestCase):
-
-    layer = OPENGEVER_DOCUMENT_FUNCTIONAL_TESTING
+class TestDocumentIndexers(FunctionalTestCase):
 
     def setUp(self):
-        self.app = self.layer['app']
-        self.portal = self.layer['portal']
+        super(TestDocumentIndexers, self).setUp()
         setRoles(self.portal, TEST_USER_ID, ['Manager'])
 
     def test_author_indexers(self):

@@ -1,16 +1,13 @@
-from opengever.document.testing import OPENGEVER_DOCUMENT_FUNCTIONAL_TESTING
+from opengever.testing import FunctionalTestCase
 from plone.app.testing import TEST_USER_ID
 from plone.app.testing import setRoles
 from plone.namedfile.file import NamedBlobFile
-import unittest2 as unittest
 
 
-class TestDocumentIntegration(unittest.TestCase):
-
-    layer = OPENGEVER_DOCUMENT_FUNCTIONAL_TESTING
+class TestTitleFilenameSyncer(FunctionalTestCase):
 
     def setUp(self):
-        self.portal = self.layer['portal']
+        super(TestTitleFilenameSyncer, self).setUp()
         setRoles(self.portal, TEST_USER_ID, ['Manager'])
 
         self.mock_file = NamedBlobFile('bla bla', filename=u'T\xf6st.txt')
