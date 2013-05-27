@@ -124,7 +124,7 @@ msgstr "Copie de"
 #. Default: "You're downloading a copy of the document ${filename}"
 #: ./opengever/document/browser/download_templates/downloadconfirmation.pt:11
 msgid "description_download_confirmation"
-msgstr "Vous étes en train de télécharger une copie du document $ {filename}."
+msgstr "Attention ! En ouvrant le document ${filename} de cette manière, toutes les modifications apportées ne seront pas sauvegardées."
 
 #. Default: "You don't select a file and document is also not                 preserved in paper_form, please correct it."
 #: ./opengever/document/document.py:216
@@ -134,7 +134,7 @@ msgstr "Vous n'avez pas sélectionné un fichier ni conservé un document en ver
 #. Default: "It's not possible to add E-mails here, please '                    'send it to ${mailaddress} or drag it to the dossier '                    ' (Dragn'n'Drop)."
 #: ./opengever/document/document.py:238
 msgid "error_mail_upload"
-msgstr "Il n'est pas possible d'insérer des Email à cet endroit. Pour le faire, utilisez l'adresse E-Mail $ {mailaddress}  ou glissez-le dans le dossier (Drag'n'Drop)."
+msgstr "Il n'est pas possible d'insérer des Email à cet endroit. Pour le faire, utilisez l'adresse E-Mail ${mailaddress}  ou glissez-le dans le dossier (Drag'n'Drop)."
 
 #. Default: "Either the title or the file is required."
 #: ./opengever/document/document.py:205
@@ -413,5 +413,3 @@ msgstr "Périmé"
 #: ./opengever/document/browser/download_templates/downloadconfirmation.pt:16
 msgid "warning_download_confirmation"
 msgstr "Attention ! Si vous modifiez de cette manière ce document, rien ne sera sauvé sous GEVER."
-
-
