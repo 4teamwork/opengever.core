@@ -140,6 +140,10 @@ class TaskBuilder(DexterityBuilder):
             RelationValue(intids.getId(doc)) for doc in documents]
         return self
 
+    def bidirectional_by_reference(self):
+        self.arguments['task_type'] = u'comment'
+        return self
+
 
 class MailBuilder(DexterityBuilder):
 
