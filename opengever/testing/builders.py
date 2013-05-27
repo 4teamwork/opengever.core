@@ -1,9 +1,13 @@
 from Products.CMFCore.utils import getToolByName
 from plone.dexterity.utils import createContentInContainer
 from plone.namedfile.file import NamedBlobFile
+from z3c.relationfield.relation import RelationValue
+from zope.component import getUtility
 from zope.event import notify
+from zope.intid.interfaces import IIntIds
 from zope.lifecycleevent import ObjectCreatedEvent, ObjectAddedEvent
 import transaction
+
 
 def Builder(name):
     if name == "dossier":
@@ -126,6 +130,15 @@ class TaskBuilder(DexterityBuilder):
             wtool.doActionFor(obj, transition)
 
         super(TaskBuilder, self).after_create(obj)
+
+    def relate_to(self, documents):
+        if not isinstance(documents, list):
+            documents = [documents, ]
+
+        intids = getUtility(IIntIds)
+        self.arguments['relatedItems'] = [
+            RelationValue(intids.getId(doc)) for doc in documents]
+        return self
 
 
 class MailBuilder(DexterityBuilder):
