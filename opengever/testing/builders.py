@@ -66,10 +66,6 @@ class DexterityBuilder(object):
         if self.session.auto_commit:
             transaction.commit()
 
-    def with_metadata(self, **kwargs):
-        self.arguments.update(kwargs)
-        return self
-
     def set_defaults(self, obj):
         for schemata in iterSchemata(obj):
             for name, field in getFieldsInOrder(schemata):

@@ -284,10 +284,10 @@ class TestContactsAndUsersVocabulary(FunctionalTestCase):
 
     def test_contains_all_local_contacts(self):
         create_client(clientid="client1")
-        Builder('contact').with_metadata(
+        Builder('contact').having(
             firstname=u'Sandra', lastname=u'Kaufmann',
             email=u'sandra.kaufmann@test.ch').create()
-        Builder('contact').with_metadata(
+        Builder('contact').having(
             firstname=u'Elisabeth', lastname=u'K\xe4ppeli',
             email= 'elisabeth.kaeppeli@test.ch').create()
 
@@ -319,10 +319,10 @@ class TestEmailContactsAndUsersVocabularyFactory(FunctionalTestCase):
             fterms(list(voc)))
 
     def test_contains_emails_for_all_contacts(self):
-        Builder('contact').with_metadata(
+        Builder('contact').having(
             firstname=u'Sandra', lastname=u'Kaufmann',
             email=u'sandra.kaufmann@test.ch').create()
-        Builder('contact').with_metadata(
+        Builder('contact').having(
             firstname=u'Elisabeth', lastname=u'K\xe4ppeli',
             email= 'elisabeth.kaeppeli@test.ch').create()
 
@@ -415,11 +415,11 @@ class ClientCommunicatorMockUtility(communication.ClientCommunicator):
 class TestOGDSVocabularies(FunctionalTestCase):
 
     def test_contact_vocabulary(self):
-        Builder('contact').with_metadata(
+        Builder('contact').having(
             **{'firstname': u'Sandra',
              'lastname': u'Kaufmann',
              'email': u'sandra.kaufmann@test.ch'}).create()
-        Builder('contact').with_metadata(
+        Builder('contact').having(
             **{'firstname': u'Elisabeth',
              'lastname': u'K\xe4ppeli',
              'email': 'elisabeth.kaeppeli@test.ch'}).create()

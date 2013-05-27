@@ -42,7 +42,7 @@ class TestAutoCompleteWidget(FunctionalTestCase):
         create_ogds_user('hugo.boss')
         create_ogds_user('franz.michel')
         set_current_client_id(self.portal)
-        task = Builder('task').with_metadata(issuer='not.existing').create()
+        task = Builder('task').having(issuer='not.existing').create()
 
         self.widget.context = task
 
@@ -54,7 +54,7 @@ class TestAutoCompleteWidget(FunctionalTestCase):
         create_ogds_user('hugo.boss')
         create_ogds_user('franz.michel')
         set_current_client_id(self.portal)
-        task = Builder('task').with_metadata(issuer='not.existing').create()
+        task = Builder('task').having(issuer='not.existing').create()
 
         self.widget.context = task
         self.assertEquals([u'not.existing'], self.widget.bound_source.hidden_terms)
