@@ -2,6 +2,20 @@ from plone.dexterity.utils import createContentInContainer
 from plone.namedfile.file import NamedBlobFile
 import transaction
 
+def Builder(name):
+    if name == "dossier":
+        return DossierBuilder(BuilderSession.instance())
+    elif name == "document":
+        return DocumentBuilder(BuilderSession.instance())
+    elif name == "task":
+        return TaskBuilder(BuilderSession.instance())
+    elif name == "mail":
+        return MailBuilder(BuilderSession.instance())
+    elif name == "repository":
+        return RepositoryBuilder(BuilderSession.instance())
+    else:
+        raise ValueError("No Builder for %s" % name)
+
 
 class BuilderSession(object):
 
