@@ -5,9 +5,7 @@ from opengever.testing import FunctionalTestCase
 from opengever.testing import create_client
 from opengever.testing import set_current_client_id
 from zope.component import getUtility
-from zope.event import notify
 from zope.intid.interfaces import IIntIds
-from zope.lifecycleevent import ObjectCreatedEvent, ObjectAddedEvent
 
 
 class TestSuccessorTaskController(FunctionalTestCase):
@@ -18,12 +16,7 @@ class TestSuccessorTaskController(FunctionalTestCase):
         set_current_client_id(self.portal)
 
         task1 = Builder('task').create()
-        notify(ObjectCreatedEvent(task1))
-        notify(ObjectAddedEvent(task1))
-
         task2 = Builder('task').create()
-        notify(ObjectCreatedEvent(task2))
-        notify(ObjectAddedEvent(task2))
 
         self.assertEquals(
             u'client1:%s' % (intids.getId(task1)),
@@ -39,8 +32,6 @@ class TestSuccessorTaskController(FunctionalTestCase):
         set_current_client_id(self.portal)
 
         task = Builder('task').create()
-        notify(ObjectCreatedEvent(task))
-        notify(ObjectAddedEvent(task))
 
         sct = ISuccessorTaskController(task)
         self.assertEquals(
@@ -54,8 +45,6 @@ class TestSuccessorTaskController(FunctionalTestCase):
         set_current_client_id(self.portal)
 
         task = Builder('task').create()
-        notify(ObjectCreatedEvent(task))
-        notify(ObjectAddedEvent(task))
 
         sct = ISuccessorTaskController(task)
         self.assertEquals(
@@ -67,12 +56,8 @@ class TestSuccessorTaskController(FunctionalTestCase):
         set_current_client_id(self.portal)
 
         task1 = Builder('task').create()
-        notify(ObjectCreatedEvent(task1))
-        notify(ObjectAddedEvent(task1))
 
         task2 = Builder('task').create()
-        notify(ObjectCreatedEvent(task2))
-        notify(ObjectAddedEvent(task2))
 
         task2_oguid = ISuccessorTaskController(task2).get_oguid()
         self.assertTrue(
@@ -83,8 +68,6 @@ class TestSuccessorTaskController(FunctionalTestCase):
         set_current_client_id(self.portal)
 
         task1 = Builder('task').create()
-        notify(ObjectCreatedEvent(task1))
-        notify(ObjectAddedEvent(task1))
 
         self.assertFalse(
             ISuccessorTaskController(task1).set_predecessor(u'incorrect:2'))
@@ -94,16 +77,8 @@ class TestSuccessorTaskController(FunctionalTestCase):
         set_current_client_id(self.portal)
 
         task1 = Builder('task').create()
-        notify(ObjectCreatedEvent(task1))
-        notify(ObjectAddedEvent(task1))
-
         task2 = Builder('task').create()
-        notify(ObjectCreatedEvent(task2))
-        notify(ObjectAddedEvent(task2))
-
         task3 = Builder('task').create()
-        notify(ObjectCreatedEvent(task3))
-        notify(ObjectAddedEvent(task3))
 
         task1_oguid = ISuccessorTaskController(task1).get_oguid()
 

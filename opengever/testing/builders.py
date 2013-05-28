@@ -1,5 +1,7 @@
 from plone.dexterity.utils import createContentInContainer
 from plone.namedfile.file import NamedBlobFile
+from zope.event import notify
+from zope.lifecycleevent import ObjectCreatedEvent, ObjectAddedEvent
 import transaction
 
 
@@ -42,9 +44,13 @@ class DexterityBuilder(object):
         self.arguments.update(kwargs)
         return self
 
-    def create(self):
+    def create(self, notify_events=True):
         self.before_create()
         obj = self.create_object()
+        if notify_events:
+            notify(ObjectCreatedEvent(obj))
+            notify(ObjectAddedEvent(obj))
+
         self.after_create()
         return obj
 
