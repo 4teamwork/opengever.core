@@ -6,7 +6,6 @@ import unittest2 as unittest
 
 TESTFILES = (
     'localroles.txt',
-    'successor.txt',
     'test_overview.txt',
     )
 
