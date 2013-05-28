@@ -5,7 +5,6 @@ import unittest2 as unittest
 
 
 TESTFILES = (
-    'factories_menu.txt',
     'localroles.txt',
     'successor.txt',
     'test_overview.txt',
