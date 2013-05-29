@@ -19,10 +19,10 @@
     <vdex:vocabulary directory="vdexvocabs" />
 
     <include package=".browser" />
+    <include package=".upgrades" />
+    <include package=".viewlets" />
 
     <include file="profiles.zcml" />
-
-    <include package=".viewlets" />
 
     <i18n:registerTranslations directory="locales" />
     <include file="behaviors.zcml" />
