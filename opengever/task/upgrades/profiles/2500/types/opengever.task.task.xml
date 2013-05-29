@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<object name="opengever.task.task" meta_type="Dexterity FTI"
+        i18n:domain="opengever.task" xmlns:i18n="http://xml.zope.org/namespaces/i18n">
+
+    <action action_id="modify_deadline"
+            visible="True"
+            title="Modify deadline"
+            category="object_buttons"
+            url_expr="string:${object_url}/@@modify_deadline"
+            condition_expr="python:here.restrictedTraverse('is_deadline_modification_allowed')()"
+            icon_expr="">
+        <permission value="View"/>
+    </action>
+</object>
