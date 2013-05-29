@@ -1,3 +1,4 @@
+from Products.CMFCore.utils import getToolByName
 from plone.dexterity.utils import createContentInContainer
 from plone.namedfile.file import NamedBlobFile
 from zope.event import notify
@@ -51,13 +52,13 @@ class DexterityBuilder(object):
             notify(ObjectCreatedEvent(obj))
             notify(ObjectAddedEvent(obj))
 
-        self.after_create()
+        self.after_create(obj)
         return obj
 
     def before_create(self):
         pass
 
-    def after_create(self):
+    def after_create(self, obj):
         if self.session.auto_commit:
             transaction.commit()
 
@@ -92,10 +93,25 @@ class DocumentBuilder(DexterityBuilder):
 
 class TaskBuilder(DexterityBuilder):
 
+    def __init__(self, session):
+        super(TaskBuilder, self).__init__(session)
+        self.transitions = []
+
     def create_object(self):
         return createContentInContainer(self.container,
                                         'opengever.task.task',
                                         **self.arguments)
+
+    def in_progress(self):
+        self.transitions.append('task-transition-open-in-progress')
+        return self
+
+    def after_create(self, obj):
+        wtool = getToolByName(obj, 'portal_workflow')
+        for transition in self.transitions:
+            wtool.doActionFor(obj, transition)
+
+        super(TaskBuilder, self).after_create(obj)
 
 
 class MailBuilder(DexterityBuilder):

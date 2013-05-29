@@ -4,14 +4,15 @@ from opengever.testing import FunctionalTestCase
 from zope.component import getUtility
 
 
-class TestTaskNameFromTitle(FunctionalTestCase):
+class TestTaskId(FunctionalTestCase):
 
-    def test_id_generation(self):
+    def test_is_prefixed_with_task_and_starts_at_1(self):
+        task1 = Builder('task').create()
+        self.assertEquals('task-1', task1.id)
+
+    def test_is_incremented_by_1(self):
         task1 = Builder('task').create()
         task2 = Builder('task').create()
 
-        self.assertEquals(1, getUtility(ISequenceNumber).get_number(task1))
         self.assertEquals('task-1', task1.id)
-
-        self.assertEquals(2, getUtility(ISequenceNumber).get_number(task2))
         self.assertEquals('task-2', task2.id)

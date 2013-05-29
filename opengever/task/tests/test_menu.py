@@ -1,61 +1,56 @@
-from Products.CMFCore.utils import getToolByName
 from ftw.contentmenu.menu import FactoriesMenu
 from opengever.testing import Builder
 from opengever.testing import FunctionalTestCase
 from plone.app.testing import TEST_USER_ID
+from zope.component import getMultiAdapter
 
 
-class TestTaskPostFactoryMenu(FunctionalTestCase):
+class TestFactoryMenu(FunctionalTestCase):
 
     def setUp(self):
-        super(TestTaskPostFactoryMenu, self).setUp()
+        super(TestFactoryMenu, self).setUp()
         self.menu = FactoriesMenu(self.portal)
-        self.wft = getToolByName(self.portal, 'portal_workflow')
 
-    def test_task_menu_action_in_a_dossier(self):
+    def test_task_menu_item_is_titled_task_in_a_dossier(self):
         dossier = Builder('dossier').create()
 
         items = self.menu.getMenuItems(dossier, self.portal.REQUEST)
-        titles = [item['title'] for item in items]
+        task_action = [action for action in items
+                       if action.get('id') == 'opengever.task.task'][0]
 
-        self.assertIn(u'Task', titles)
-        self.assertNotIn(u'Subtask', titles)
+        self.assertIn(u'Task', task_action.get('title'))
 
-    def test_subtask_menu_action_in_a_task(self):
+    def test_task_menu_item_is_titled_subtask_inside_a_task(self):
         task = Builder('task').having(
             title='Task One',
             issuer=TEST_USER_ID,
-            responsible=TEST_USER_ID).create()
-        self.wft.doActionFor(task, 'task-transition-open-in-progress')
-
-        items = self.menu.getMenuItems(task, self.portal.REQUEST)
-        titles = [item['title'] for item in items]
-
-        self.assertNotIn(u'Task', titles)
-        self.assertIn(u'Subtask', titles)
-
-    def test_subtask_menu_class_in_a_task(self):
-        task = Builder('task').having(
-            title='Task One',
-            issuer=TEST_USER_ID,
-            responsible=TEST_USER_ID).create()
-        self.wft.doActionFor(task, 'task-transition-open-in-progress')
+            responsible=TEST_USER_ID).in_progress().create()
 
         items = self.menu.getMenuItems(task, self.portal.REQUEST)
         task_action = [action for action in items
                        if action.get('id') == 'opengever.task.task'][0]
 
+        self.assertIn(u'Subtask', task_action.get('title'))
         self.assertEquals(u'icon-task-subtask',
                           task_action.get('extra').get('class'))
 
-    def test_mail_action_is_not_displayed_in_a_task(self):
+    def test_mail_menu_item_is_not_displayed_inside_a_task(self):
         task = Builder('task').having(
             title='Task One',
             issuer=TEST_USER_ID,
-            responsible=TEST_USER_ID).create()
-        self.wft.doActionFor(task, 'task-transition-open-in-progress')
+            responsible=TEST_USER_ID).in_progress().create()
 
-        items = self.menu.getMenuItems(task, self.portal.REQUEST)
-        titles = [item['title'] for item in items]
+        self.assert_removed_menu_item('ftw.mail.mail', context=task)
 
-        self.assertNotIn('mail', titles)
+    def assert_removed_menu_item(self, removed_item, context):
+        factories_view = getMultiAdapter(
+            (context, self.portal.REQUEST), name='folder_factories')
+        factories_view.addable_types(include=None)
+        all_items = [item.get('id') for item
+                     in factories_view.addable_types(include=None)]
+
+        items = self.menu.getMenuItems(context, self.portal.REQUEST)
+        filtered_items = [item.get('id') for item in items]
+
+        self.assertEquals(set([removed_item,]),
+                          set(all_items)-set(filtered_items))

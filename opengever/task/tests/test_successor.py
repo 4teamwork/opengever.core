@@ -10,10 +10,13 @@ from zope.intid.interfaces import IIntIds
 
 class TestSuccessorTaskController(FunctionalTestCase):
 
-    def test_oguid_of_a_task(self):
-        intids = getUtility(IIntIds)
+    def setUp(self):
+        super(TestSuccessorTaskController, self).setUp()
         create_client(clientid='client1')
         set_current_client_id(self.portal)
+
+    def test_oguid_is_client_id_and_task_id_separated_by_a_colon(self):
+        intids = getUtility(IIntIds)
 
         task1 = Builder('task').create()
         task2 = Builder('task').create()
@@ -25,57 +28,52 @@ class TestSuccessorTaskController(FunctionalTestCase):
             u'client1:%s' % (intids.getId(task2)),
             ISuccessorTaskController(task2).get_oguid())
 
-    def test_getting_oguid_by_path_for_existing_task(self):
+    def test_oguid_by_path_returns_the_oguid_of_the_accordant_task(self):
         intids = getUtility(IIntIds)
         url_tool = getToolByName(self.portal, 'portal_url')
-        create_client(clientid='client1')
-        set_current_client_id(self.portal)
 
         task = Builder('task').create()
 
-        sct = ISuccessorTaskController(task)
+        controller = ISuccessorTaskController(task)
         self.assertEquals(
             u'client1:%s' % (intids.getId(task)),
-            sct.get_oguid_by_path(
+            controller.get_oguid_by_path(
                 '/'.join(url_tool.getRelativeContentPath(task)),
                 'client1'))
 
-    def test_oguid_for_not_existing_path_is_none(self):
-        create_client(clientid='client1')
-        set_current_client_id(self.portal)
-
+    def test_oguid_by_path_returns_none_for_invalid_clientid(self):
         task = Builder('task').create()
 
-        sct = ISuccessorTaskController(task)
+        controller = ISuccessorTaskController(task)
         self.assertEquals(
             None,
-            sct.get_oguid_by_path('/'.join(task.getPhysicalPath()), 'client2'))
+            controller.get_oguid_by_path('/'.join(task.getPhysicalPath()), 'client2'))
 
-    def test_setting_valid_predecessor_returns_true(self):
-        create_client(clientid='client1')
-        set_current_client_id(self.portal)
+    def test_oguid_by_path_returns_none_for_invalid_path(self):
+        task = Builder('task').create()
 
+        controller = ISuccessorTaskController(task)
+        self.assertEquals(
+            None,
+            controller.get_oguid_by_path('/plone/not-existing/', 'client1'))
+
+    def test_set_predecessor_with_valid_oguid_returns_true(self):
         task1 = Builder('task').create()
-
         task2 = Builder('task').create()
 
         task2_oguid = ISuccessorTaskController(task2).get_oguid()
         self.assertTrue(
             ISuccessorTaskController(task1).set_predecessor(task2_oguid))
 
-    def test_setting_invalid_predecessor_returns_false(self):
-        create_client(clientid='client1')
-        set_current_client_id(self.portal)
-
+    def test_set_predecessor_with_invalid_oguid_returns_false(self):
         task1 = Builder('task').create()
 
         self.assertFalse(
             ISuccessorTaskController(task1).set_predecessor(u'incorrect:2'))
+        self.assertFalse(
+            ISuccessorTaskController(task1).set_predecessor(u'client1:3'))
 
     def test_successors_predecessor_relation(self):
-        create_client(clientid='client1')
-        set_current_client_id(self.portal)
-
         task1 = Builder('task').create()
         task2 = Builder('task').create()
         task3 = Builder('task').create()
