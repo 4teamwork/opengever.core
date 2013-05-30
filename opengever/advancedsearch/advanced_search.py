@@ -126,25 +126,23 @@ class IAdvancedSearch(directives_form.Schema):
     ### Dossier
     start_1 = schema.Date(
         title=_('label_start', default='Start date'),
-        description=_('help_start', default=''),
+        description=_('label_from', default='From'),
         required=False,
     )
 
     start_2 = schema.Date(
-        title=_('label_start_1', default=''),
-        description=_('help_start_1', default=''),
+        description=_('label_to', default='To'),
         required=False,
     )
 
     end_1 = schema.Date(
         title=_('label_end', default='End date'),
-        description=_('help_end', default=''),
+        description=_('label_from', default='From'),
         required=False,
     )
 
     end_2 = schema.Date(
-        title=_('label_end_2', default=''),
-        description=_('help_end_2', default=''),
+        description=_('label_to', default='To'),
         required=False,
     )
 
@@ -186,37 +184,34 @@ class IAdvancedSearch(directives_form.Schema):
     ### Document
     receipt_date_1 = schema.Date(
         title=_('label_receipt_date', default='Receipt date'),
-        description=_('help_receipt_date', default=''),
+        description=_('label_from', default='From'),
         required=False,
     )
 
     receipt_date_2 = schema.Date(
-        title=_('label_receipt_date_2', default=''),
-        description=_('help_receipt_date_2', default=''),
+        description=_('label_to', default='To'),
         required=False,
     )
 
     delivery_date_1 = schema.Date(
         title=_('label_delivery_date', default='delivery date'),
-        description=_('help_delivery_date', default=''),
+        description=_('label_from', default='From'),
         required=False,
     )
 
     delivery_date_2 = schema.Date(
-        title=_('label_delivery_date_2', default=''),
-        description=_('help_delivery_date_2', default=''),
+        description=_('label_to', default='To'),
         required=False,
     )
 
     document_date_1 = schema.Date(
         title=_('label_document_date', default='Document Date'),
-        description=_('help_document_date', default=''),
+        description=_('label_from', default='From'),
         required=False,
     )
 
     document_date_2 = schema.Date(
-        title=_('label_document_date_2', default=''),
-        description=_('help_document_date_2', default=''),
+        description=_('label_to', default='To'),
         required=False,
     )
 
@@ -251,13 +246,13 @@ class IAdvancedSearch(directives_form.Schema):
 
     deadline_1 = schema.Date(
         title=_('label_deadline', default='Deadline'),
-        description=_('help_start', default=''),
+        description=_('label_from', default='From'),
         required=False,
     )
 
     deadline_2 = schema.Date(
         title=_('label_deadline_2', default=''),
-        description=_('help_deadline', default=''),
+        description=_('label_to', default='To'),
         required=False,
     )
 

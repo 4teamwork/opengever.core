@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2011-05-31 14:42+0000\n"
+"POT-Creation-Date: 2013-05-27 12:21+0000\n"
 "PO-Revision-Date: 2012-12-06 12:40+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -13,231 +13,177 @@ msgstr ""
 "Domain: DOMAIN\n"
 
 #. Default: "advanced search"
-#: ./opengever/advancedsearch/advanced_search.py:283
+#: ./opengever/advancedsearch/advanced_search.py:280
 msgid "advanced_search"
 msgstr "Erweiterte Suche"
 
 #. Default: "Search"
-#: ./opengever/advancedsearch/advanced_search.py:329
+#: ./opengever/advancedsearch/advanced_search.py:335
 msgid "button_search"
 msgstr "Suchen"
 
-#: ./opengever/advancedsearch/advanced_search.py:63
+#: ./opengever/advancedsearch/advanced_search.py:66
 msgid "document"
 msgstr "Dokument"
 
-#: ./opengever/advancedsearch/advanced_search.py:51
+#: ./opengever/advancedsearch/advanced_search.py:54
 msgid "dossier"
 msgstr "Dossier"
 
-#: ./opengever/advancedsearch/advanced_search.py:223
+#: ./opengever/advancedsearch/advanced_search.py:227
 msgid "help_checked_out"
 msgstr ""
 
-#: ./opengever/advancedsearch/advanced_search.py:259
-msgid "help_deadline"
-msgstr "Zeitbereich für Enddatum auswählen."
-
-#: ./opengever/advancedsearch/advanced_search.py:192
-msgid "help_delivery_date"
-msgstr ""
-
-#: ./opengever/advancedsearch/advanced_search.py:198
-msgid "help_delivery_date_2"
-msgstr ""
-
-#: ./opengever/advancedsearch/advanced_search.py:216
+#: ./opengever/advancedsearch/advanced_search.py:220
 msgid "help_document_author"
 msgstr ""
 
-#: ./opengever/advancedsearch/advanced_search.py:204
-msgid "help_document_date"
-msgstr ""
-
-#: ./opengever/advancedsearch/advanced_search.py:210
-msgid "help_document_date_2"
-msgstr ""
-
-#: ./opengever/advancedsearch/advanced_search.py:132
-msgid "help_end"
-msgstr "Zeitbereich für Enddatum auswählen"
-
-#: ./opengever/advancedsearch/advanced_search.py:138
-msgid "help_end_2"
-msgstr ""
-
-#: ./opengever/advancedsearch/advanced_search.py:156
+#: ./opengever/advancedsearch/advanced_search.py:163
 msgid "help_filing_number"
 msgstr "Geben Sie die vollständige Ablagenummer an."
 
-#: ./opengever/advancedsearch/advanced_search.py:238
+#: ./opengever/advancedsearch/advanced_search.py:242
 msgid "help_issuer"
 msgstr "Auftraggeber auswählen"
 
-#: ./opengever/advancedsearch/advanced_search.py:112
+#: ./opengever/advancedsearch/advanced_search.py:121
 msgid "help_portal_type"
 msgstr ""
 "Wählen Sie den Inhaltstyp aus, nach dem gesucht werden soll.\n"
 "Durchsucht werden nur Inhalte, die sich im aktuellen Mandanten befinden."
 
-#: ./opengever/advancedsearch/advanced_search.py:180
-msgid "help_receipt_date"
-msgstr ""
-
-#: ./opengever/advancedsearch/advanced_search.py:186
-msgid "help_receipt_date_2"
-msgstr ""
-
-#: ./opengever/advancedsearch/advanced_search.py:144
+#: ./opengever/advancedsearch/advanced_search.py:151
 msgid "help_reference_number"
 msgstr "Aktenzeichen angeben (z.B: OG 2.4 / 1 / 3)"
 
-#: ./opengever/advancedsearch/advanced_search.py:163
+#: ./opengever/advancedsearch/advanced_search.py:170
 msgid "help_responsible"
 msgstr ""
 
-#: ./opengever/advancedsearch/advanced_search.py:170
+#: ./opengever/advancedsearch/advanced_search.py:177
 msgid "help_review_state"
 msgstr ""
 
-#: ./opengever/advancedsearch/advanced_search.py:106
+#: ./opengever/advancedsearch/advanced_search.py:115
 msgid "help_searchable_text"
 msgstr "Suchbegriffe eingeben."
 
-#: ./opengever/advancedsearch/advanced_search.py:150
+#: ./opengever/advancedsearch/advanced_search.py:157
 msgid "help_sequence_number"
 msgstr "Genaue Laufnummer eingeben."
 
-#: ./opengever/advancedsearch/advanced_search.py:120
-msgid "help_start"
-msgstr "Zeitbereich für Startdatum auswählen"
-
-#: ./opengever/advancedsearch/advanced_search.py:126
-msgid "help_start_1"
-msgstr ""
-
-#: ./opengever/advancedsearch/advanced_search.py:265
+#: ./opengever/advancedsearch/advanced_search.py:261
 msgid "help_tasktyp"
 msgstr ""
 
-#: ./opengever/advancedsearch/advanced_search.py:230
+#: ./opengever/advancedsearch/advanced_search.py:234
 msgid "help_trashed"
 msgstr ""
 
 #. Default: "Checked out by"
-#: ./opengever/advancedsearch/advanced_search.py:222
+#: ./opengever/advancedsearch/advanced_search.py:226
 msgid "label_checked_out"
 msgstr "Ausgecheckt von"
 
 #. Default: "Deadline"
-#: ./opengever/advancedsearch/advanced_search.py:252
+#: ./opengever/advancedsearch/advanced_search.py:248
 msgid "label_deadline"
 msgstr "Frist"
 
-#: ./opengever/advancedsearch/advanced_search.py:258
+#: ./opengever/advancedsearch/advanced_search.py:254
 msgid "label_deadline_2"
 msgstr ""
 
 #. Default: "delivery date"
-#: ./opengever/advancedsearch/advanced_search.py:191
+#: ./opengever/advancedsearch/advanced_search.py:197
 msgid "label_delivery_date"
 msgstr "Ausgangsdatum"
 
-#: ./opengever/advancedsearch/advanced_search.py:197
-msgid "label_delivery_date_2"
-msgstr ""
-
 #. Default: "Document author"
-#: ./opengever/advancedsearch/advanced_search.py:215
+#: ./opengever/advancedsearch/advanced_search.py:219
 msgid "label_document_author"
 msgstr "Autor des Dokuments"
 
 #. Default: "Document Date"
-#: ./opengever/advancedsearch/advanced_search.py:203
+#: ./opengever/advancedsearch/advanced_search.py:208
 msgid "label_document_date"
 msgstr "Dokumentdatum"
 
-#: ./opengever/advancedsearch/advanced_search.py:209
-msgid "label_document_date_2"
-msgstr ""
-
 #. Default: "End date"
-#: ./opengever/advancedsearch/advanced_search.py:131
+#: ./opengever/advancedsearch/advanced_search.py:139
 msgid "label_end"
 msgstr "Enddatum"
 
-#: ./opengever/advancedsearch/advanced_search.py:137
-msgid "label_end_2"
-msgstr ""
-
 #. Default: "Filing number"
-#: ./opengever/advancedsearch/advanced_search.py:155
+#: ./opengever/advancedsearch/advanced_search.py:162
 msgid "label_filing_number"
 msgstr "Ablagenummer"
 
+#. Default: "From"
+#: ./opengever/advancedsearch/advanced_search.py:129
+msgid "label_from"
+msgstr "Von"
+
 #. Default: "Issuer"
-#: ./opengever/advancedsearch/advanced_search.py:237
+#: ./opengever/advancedsearch/advanced_search.py:241
 msgid "label_issuer"
 msgstr "Auftraggeber"
 
 #. Default: "Type"
-#: ./opengever/advancedsearch/advanced_search.py:111
+#: ./opengever/advancedsearch/advanced_search.py:120
 msgid "label_portal_type"
 msgstr "Inhaltstyp"
 
 #. Default: "Receipt date"
-#: ./opengever/advancedsearch/advanced_search.py:179
+#: ./opengever/advancedsearch/advanced_search.py:186
 msgid "label_receipt_date"
 msgstr "Eingangsdatum"
 
-#: ./opengever/advancedsearch/advanced_search.py:185
-msgid "label_receipt_date_2"
-msgstr ""
-
 #. Default: "Reference number"
-#: ./opengever/advancedsearch/advanced_search.py:143
+#: ./opengever/advancedsearch/advanced_search.py:150
 msgid "label_reference_number"
 msgstr "Aktenzeichen"
 
 #. Default: "Responsible"
-#: ./opengever/advancedsearch/advanced_search.py:162
+#: ./opengever/advancedsearch/advanced_search.py:169
 msgid "label_reponsible"
 msgstr "Federführung"
 
 #. Default: "State"
-#: ./opengever/advancedsearch/advanced_search.py:169
+#: ./opengever/advancedsearch/advanced_search.py:176
 msgid "label_review_state"
 msgstr "Status"
 
 #. Default: "Text"
-#: ./opengever/advancedsearch/advanced_search.py:105
+#: ./opengever/advancedsearch/advanced_search.py:114
 msgid "label_searchable_text"
 msgstr "Suchtext"
 
 #. Default: "Sequence number"
-#: ./opengever/advancedsearch/advanced_search.py:149
+#: ./opengever/advancedsearch/advanced_search.py:156
 msgid "label_sequence_number"
 msgstr "Laufnummer"
 
 #. Default: "Start date"
-#: ./opengever/advancedsearch/advanced_search.py:119
+#: ./opengever/advancedsearch/advanced_search.py:128
 msgid "label_start"
 msgstr "Startdatum"
 
-#: ./opengever/advancedsearch/advanced_search.py:125
-msgid "label_start_1"
-msgstr ""
-
-#: ./opengever/advancedsearch/advanced_search.py:264
+#: ./opengever/advancedsearch/advanced_search.py:260
 msgid "label_tasktype"
 msgstr "Auftragstyp"
 
+#. Default: "To"
+#: ./opengever/advancedsearch/advanced_search.py:134
+msgid "label_to"
+msgstr "Bis"
+
 #. Default: "Also search in the recycle bin"
-#: ./opengever/advancedsearch/advanced_search.py:229
+#: ./opengever/advancedsearch/advanced_search.py:233
 msgid "label_trashed"
 msgstr "Papierkorb auch durchsuchen"
 
-#: ./opengever/advancedsearch/advanced_search.py:57
+#: ./opengever/advancedsearch/advanced_search.py:60
 msgid "task"
 msgstr "lokal gespeicherte Aufgaben"
 
