@@ -1,0 +1,56 @@
+/* Date Ranges Left */
+div#formfield-form-widgets-start_1,
+div#formfield-form-widgets-end_1,
+div#formfield-form-widgets-receipt_date_1,
+div#formfield-form-widgets-delivery_date_1,
+div#formfield-form-widgets-document_date_1,
+div#formfield-form-widgets-deadline_1 {
+    float: left;
+    clear: both;
+}
+
+/* Date Ranges Right */
+div#formfield-form-widgets-start_2,
+div#formfield-form-widgets-end_2,
+div#formfield-form-widgets-receipt_date_2,
+div#formfield-form-widgets-delivery_date_2,
+div#formfield-form-widgets-document_date_2,
+div#formfield-form-widgets-deadline_2 {
+    float: left;
+    clear: none;
+}
+
+/* Date Ranges Left */
+div#formfield-form-widgets-start_1 .formHelp,
+div#formfield-form-widgets-end_1 .formHelp,
+div#formfield-form-widgets-receipt_date_1 .formHelp,
+div#formfield-form-widgets-delivery_date_1 .formHelp,
+div#formfield-form-widgets-document_date_1 .formHelp,
+div#formfield-form-widgets-deadline_1 .formHelp {
+    display: block;
+}
+
+/* Date Ranges Right */
+div#formfield-form-widgets-start_2 .formHelp,
+div#formfield-form-widgets-end_2 .formHelp,
+div#formfield-form-widgets-receipt_date_2 .formHelp,
+div#formfield-form-widgets-delivery_date_2 .formHelp,
+div#formfield-form-widgets-document_date_2 .formHelp,
+div#formfield-form-widgets-deadline_2 .formHelp {
+    display: block;
+}
+
+/* Date Ranges Right */
+div#formfield-form-widgets-start_2 label:before,
+div#formfield-form-widgets-end_2 label:before,
+div#formfield-form-widgets-receipt_date_2 label:before,
+div#formfield-form-widgets-delivery_date_2 label:before,
+div#formfield-form-widgets-document_date_2 label:before,
+div#formfield-form-widgets-deadline_2 label:before {
+    content: " ";
+}
+
+div.error {
+    width: inherit;
+    margin-right: 1em;
+}
