@@ -46,6 +46,24 @@ class FunctionalTestCase(TestCase):
                         "%s should provide %s" % (obj, interface))
 
     """
+    Vocabulary assert helpers
+    """
+
+    def assertTerms(self, expected_terms, voc):
+        effective_terms = []
+        for term in list(voc):
+            effective_terms.append((term.value, term.title))
+
+        self.assertEquals(expected_terms, effective_terms)
+
+    def assertInTerms(self, value, voc):
+        self.assertIn(value, [term.value for term in voc])
+
+    def assertNotInTerms(self, value, voc):
+        self.assertNotIn(value, [term.value for term in voc])
+
+
+    """
     Browser API
     """
 
