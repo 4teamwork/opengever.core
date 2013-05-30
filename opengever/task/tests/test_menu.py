@@ -1,5 +1,6 @@
 from ftw.contentmenu.menu import FactoriesMenu
 from opengever.testing import Builder
+from opengever.testing import create
 from opengever.testing import FunctionalTestCase
 from plone.app.testing import TEST_USER_ID
 from zope.component import getMultiAdapter
@@ -12,7 +13,7 @@ class TestFactoryMenu(FunctionalTestCase):
         self.menu = FactoriesMenu(self.portal)
 
     def test_task_menu_item_is_titled_task_in_a_dossier(self):
-        dossier = Builder('dossier').create()
+        dossier = create(Builder('dossier'))
 
         items = self.menu.getMenuItems(dossier, self.portal.REQUEST)
         task_action = [action for action in items
@@ -21,10 +22,11 @@ class TestFactoryMenu(FunctionalTestCase):
         self.assertIn(u'Task', task_action.get('title'))
 
     def test_task_menu_item_is_titled_subtask_inside_a_task(self):
-        task = Builder('task').having(
-            title='Task One',
-            issuer=TEST_USER_ID,
-            responsible=TEST_USER_ID).in_progress().create()
+        task = create(Builder('task')
+                      .in_progress()
+                      .having(title='Task One',
+                              issuer=TEST_USER_ID,
+                              responsible=TEST_USER_ID))
 
         items = self.menu.getMenuItems(task, self.portal.REQUEST)
         task_action = [action for action in items
@@ -35,10 +37,11 @@ class TestFactoryMenu(FunctionalTestCase):
                           task_action.get('extra').get('class'))
 
     def test_mail_menu_item_is_not_displayed_inside_a_task(self):
-        task = Builder('task').having(
-            title='Task One',
-            issuer=TEST_USER_ID,
-            responsible=TEST_USER_ID).in_progress().create()
+        task = create(Builder('task')
+                      .in_progress()
+                      .having(title='Task One',
+                              issuer=TEST_USER_ID,
+                              responsible=TEST_USER_ID))
 
         self.assert_removed_menu_item('ftw.mail.mail', context=task)
 
