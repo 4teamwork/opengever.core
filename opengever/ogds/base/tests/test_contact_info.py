@@ -14,14 +14,19 @@ from zope.component import getUtility
 
 class TestContactInfo(FunctionalTestCase):
 
-    def test_current_client_utils(self):
+    def test_get_client_id_returns_current_client_id(self):
         test_client = create_client(clientid='test_client')
         set_current_client_id(self.portal, clientid='test_client')
 
         self.assertEquals(u'test_client', get_client_id())
+
+    def test_get_current_client_returns_current_client_object(self):
+        test_client = create_client(clientid='test_client')
+        set_current_client_id(self.portal, clientid='test_client')
+
         self.assertEquals(test_client, get_current_client())
 
-    def test_get_clients(self):
+    def test_get_clients_returns_all_enabled_clients(self):
         client1 = create_client(clientid='client1')
         client2 = create_client(clientid='client2')
         create_client(clientid='client3', enabled=False)
@@ -31,7 +36,7 @@ class TestContactInfo(FunctionalTestCase):
 
         self.assertEquals([client1, client2], info.get_clients())
 
-    def test_get_clients_for_not_enabled_client(self):
+    def test_get_clients_returns_empty_list_when_current_client_is_not_enabled(self):
         create_client(clientid='client1')
         create_client(clientid='client2')
         create_client(clientid='client3', enabled=False)
@@ -41,25 +46,40 @@ class TestContactInfo(FunctionalTestCase):
 
         self.assertEquals([], info.get_clients())
 
-    def test_client_by_id(self):
+    def test_get_client_by_id_for_exsiting_client_returns_client(self):
         client1 = create_client(clientid='client1')
         create_client(clientid='client3', enabled=False)
 
         info = getUtility(IContactInformation)
 
         self.assertEquals(client1, info.get_client_by_id('client1'))
-        self.assertEquals(None, info.get_client_by_id('client3'))
-        self.assertEquals(None, info.get_client_by_id('unknown client'))
 
-    def test_is_user(self):
-        hugo_boss = create_ogds_user('hugo.boss')
+    def test_get_client_by_id_for_disabled_client_returns_none(self):
+        client1 = create_client(clientid='client1')
+        create_client(clientid='client3', enabled=False)
 
         info = getUtility(IContactInformation)
 
-        self.assertTrue(info.is_user(hugo_boss.userid))
-        self.assertFalse(info.is_user(u'inbox:client1'))
+        self.assertEquals(None, info.get_client_by_id('unknown client'))
 
-    def test_list_user(self):
+    def test_get_client_by_id_for_not_existing_client_returns_none(self):
+        client1 = create_client(clientid='client1')
+        create_client(clientid='client3', enabled=False)
+
+        info = getUtility(IContactInformation)
+
+        self.assertEquals(None, info.get_client_by_id('unknown client'))
+
+    def test_contacts_or_inboxes_is_not_a_user(self):
+        self.assertFalse(info.is_user(u'inbox:client1'))
+        self.assertFalse(info.is_user(u'contact:kaufmann-sandra'))
+
+    def test_all_possibly_valid_userids_are_a_user(self):
+        info = getUtility(IContactInformation)
+        self.assertTrue(info.is_user('hugo.boss'))
+        self.assertTrue(info.is_user('peter.muster'))
+
+    def test_list_user_returns_all_users_sql_objects(self):
         create_ogds_user('hugo.boss')
         create_ogds_user('peter.muster')
         create_ogds_user('hanspeter.linder')
@@ -70,22 +90,24 @@ class TestContactInfo(FunctionalTestCase):
             [u'hugo.boss', u'peter.muster', u'hanspeter.linder'],
             [u.userid for u in info.list_users()])
 
-    def test_get_user(self):
+    def test_get_user_returns_the_user_when_he_exists(self):
         hugo_boss = create_ogds_user('hugo.boss')
 
         info = getUtility(IContactInformation)
 
         self.assertEquals(hugo_boss.userid, info.get_user('hugo.boss').userid)
 
+    def test_get_user_returns_none_when_the_user_dont_exists(self):
         self.assertEquals(None, info.get_user('someone.unknown'))
 
+    def test_get_user_raise_if_the_user_is_a_inbox(self):
         with self.assertRaises(ValueError) as cm:
             info.get_user('inbox:client1')
         self.assertEquals(
             'principal inbox:client1 is not a user',
             str(cm.exception))
 
-    def test_describe_user(self):
+    def test_describing_a_ogds_user(self):
         create_ogds_user('hugo.boss',
                          **{'firstname': 'Hugo',
                           'lastname': 'Boss',
@@ -110,7 +132,7 @@ class TestContactInfo(FunctionalTestCase):
         self.assertEquals(u'Boss Hugo (hugo.boss)',
                           info.describe(info.get_user('hugo.boss')))
 
-    def test_describe_pas_user(self):
+    def test_describing_a_pas_user(self):
         mtool = getToolByName(self.portal, 'portal_membership')
         member = mtool.getMemberById(TEST_USER_ID)
         member.setMemberProperties(mapping={"fullname": "User Test"})
@@ -125,7 +147,7 @@ class TestContactInfo(FunctionalTestCase):
         self.assertEquals(
             u'non-existing-user', info.describe('non-existing-user'))
 
-    def test_get_email_from_user(self):
+    def test_getting_email_for_ogds_user_or_userid(self):
         create_ogds_user('hugo.boss',
                  **{'firstname': 'Hugo',
                   'lastname': 'Boss',
@@ -144,7 +166,7 @@ class TestContactInfo(FunctionalTestCase):
         self.assertEquals(u'hugo@private.ch',
                           info.get_email2(info.get_user('hugo.boss')))
 
-    def test_get_profile_url(self):
+    def test_getting_profile_url_returns_user_detail_view_url(self):
         create_ogds_user('hugo.boss')
 
         info = getUtility(IContactInformation)
@@ -153,7 +175,7 @@ class TestContactInfo(FunctionalTestCase):
             u'http://nohost/plone/@@user-details/hugo.boss',
             info.get_profile_url('hugo.boss'))
 
-    def test_render_link(self):
+    def test_render_link_returns_user_details_link(self):
         create_ogds_user('hugo.boss',
                  **{'firstname': 'Hugo',
                     'lastname': 'Boss', })
@@ -164,7 +186,7 @@ class TestContactInfo(FunctionalTestCase):
             u'<a href="http://nohost/plone/@@user-details/hugo.boss">Boss Hugo (hugo.boss)</a>',
             info.render_link('hugo.boss'))
 
-    def test_list_contacts(self):
+    def test_list_contacts_return_all_contact_brains(self):
         Builder('contact').having(
             **{'firstname': u'Sandra',
              'lastname': u'Kaufmann',
@@ -190,14 +212,14 @@ class TestContactInfo(FunctionalTestCase):
              'contact:wermuth-roger'],
             [contact.contactid for contact in info.list_contacts()])
 
-    def test_is_contact(self):
+    def test_only_prinicpal_prefixed_with_contact_and_colon_is_contact(self):
         info = getUtility(IContactInformation)
 
         self.assertTrue(info.is_contact('contact:kaufmann-sandra'))
-        self.assertFalse(info.is_contact('hugo.boss'))
+        self.assertFalse(info.is_contact('kaufmann-sandra'))
         self.assertFalse(info.is_contact('inbox:client1'))
 
-    def test_describe_contact(self):
+    def test_describing_a_contact(self):
         self.grant('Manager')
 
         sandra_kaufmann = Builder('contact').having(
@@ -220,7 +242,7 @@ class TestContactInfo(FunctionalTestCase):
             u'Kaufmann Sandra (sandra.kaufmann@test.ch)',
             info.describe(obj2brain(sandra_kaufmann)))
 
-    def test_get_email_from_contact(self):
+    def test_get_email_from_contact_returns_email_addres_of_the_contact_object(self):
         Builder('contact').having(
             **{'firstname': u'Sandra',
                'lastname': u'Kaufmann',
@@ -236,14 +258,14 @@ class TestContactInfo(FunctionalTestCase):
             'sandra.kaufmann@test.ch',
             info.get_email(info.get_contact('contact:kaufmann-sandra')))
 
-    def test_is_inbox(self):
+    def test_only_prinicpal_prefixed_with_inbox_and_colon_is_a_inbox(self):
         info = getUtility(IContactInformation)
 
         self.assertTrue(info.is_inbox('inbox:client1'))
         self.assertFalse(info.is_inbox('contact:kaufmann-sandra'))
         self.assertFalse(info.is_inbox('hugo.boss'))
 
-    def test_list_inboxes(self):
+    def test_list_inboxes_returns_a_generator_with_principal_and_description_pairs(self):
         create_client(clientid='client1')
         create_client(clientid='client2')
         create_client(clientid='client3', enabled=False)
@@ -255,7 +277,7 @@ class TestContactInfo(FunctionalTestCase):
              (u'inbox:client2', u'Inbox: Client2')),
             tuple(info.list_inboxes()))
 
-    def test_describe_inboxes(self):
+    def test_describing_inboxes(self):
         create_client(clientid='client1', title='Client 1')
 
         info = getUtility(IContactInformation)
@@ -268,7 +290,7 @@ class TestContactInfo(FunctionalTestCase):
             u'Inbox: Client 1',
             info.describe(u'inbox:client1', with_principal=False))
 
-    def test_list_assigned_users(self):
+    def test_list_assigned_users_returns_all_ogds_user_objects(self):
         hugo_boss = create_ogds_user('hugo.boss', groups=('client1_users', ))
         peter_muster = create_ogds_user('hugo.boss', groups=('client2_users', ))
         hanspeter_linder = create_ogds_user(
@@ -281,7 +303,6 @@ class TestContactInfo(FunctionalTestCase):
 
         info = getUtility(IContactInformation)
 
-        # list_assigned_users
         self.assertEquals(
             [hanspeter_linder.userid, hugo_boss.userid],
             [user.userid for user in info.list_assigned_users()])
@@ -290,20 +311,19 @@ class TestContactInfo(FunctionalTestCase):
             [hanspeter_linder.userid, peter_muster.userid],
             [user.userid for user in info.list_assigned_users(client_id='client2')])
 
-    def test_is_client_assigned(self):
+    def test_user_is_assigned_to_client_if_he_is_in_the_client_users_group(self):
         create_ogds_user('hugo.boss', groups=('client1_users', ))
         create_client(clientid='client1')
         create_client(clientid='client2')
 
         info = getUtility(IContactInformation)
 
-        # is_client_assigned
         self.assertFalse(
             info.is_client_assigned(userid='hugo.boss', client_id='client2'))
         self.assertTrue(
             info.is_client_assigned(userid='hugo.boss', client_id='client1'))
 
-    def test_get_assigned_clients(self):
+    def test_get_assigned_clients_returns_all_clients_wich_the_users_is_in_the_clients_usergroup(self):
         create_ogds_user('hugo.boss', groups=('client1_users', ))
         create_ogds_user('hanspeter.linder', groups=('client1_users', 'client2_users'))
         client1 = create_client(clientid='client1')
@@ -319,7 +339,7 @@ class TestContactInfo(FunctionalTestCase):
             [client1, client2],
             info.get_assigned_clients(userid='hanspeter.linder'))
 
-    def test_list_group_users(self):
+    def test_list_group_users_returns_all_users_assigned_to_this_group(self):
         hanspeter_linder = create_ogds_user(
             'hanspeter.linder', groups=('client1_users', 'client2_users'))
         peter_muster = create_ogds_user('peter.muster', groups=('client1_users', ))
@@ -333,7 +353,7 @@ class TestContactInfo(FunctionalTestCase):
         self.assertEquals([],
                           list(info.list_group_users('not_existing_groupid')))
 
-    def test_list_users_group(self):
+    def test_list_users_group_returns_a_list_of_all_group_ids_the_user_is_assigned(self):
         create_ogds_user('hugo.boss', groups=('client1_users', 'client1_inbox_users'))
 
         info = getUtility(IContactInformation)
@@ -342,7 +362,7 @@ class TestContactInfo(FunctionalTestCase):
             ['client1_users', 'client1_inbox_users'],
             [group.groupid for group in info.list_user_groups('hugo.boss')])
 
-    def test_is_user_in_inbox_group(self):
+    def test_user_is_inbox_group_when_he_is_in_the_inbox_group_of_the_given_client(self):
         create_ogds_user('hugo.boss', groups=('client1_inbox_users', ))
         create_ogds_user('hanspeter.linder',
                          groups=('client1_inbox_users', 'client2_inbox_users'))
@@ -362,56 +382,3 @@ class TestContactInfo(FunctionalTestCase):
             userid='hanspeter.linder', client_id='client2'))
         self.assertFalse(info.is_user_in_inbox_group(
             userid='hanspeter.linder', client_id='notexists'))
-
-    def test_is_group_member(self):
-        create_ogds_user('hugo.boss', groups=('client1_inbox_users', ))
-        create_ogds_user('hanspeter.linder',
-                         groups=('client2_inbox_users'))
-
-        info = getUtility(IContactInformation)
-
-        self.assertTrue(
-            info.is_group_member(u'client1_inbox_users', u'hugo.boss'))
-        self.assertFalse(
-            info.is_group_member(u'client1_inbox_users', u'hanspeter.linder'))
-
-    def test_user_sort_dict(self):
-        create_client(clientid='client1')
-        create_client(clientid='client2')
-        create_ogds_user('hugo.boss', **{'firstname': 'Hugo', 'lastname': 'Boss'})
-        create_ogds_user('peter.muster', **{'firstname': 'Peter', 'lastname': 'Muster'})
-
-        info = getUtility(IContactInformation)
-
-        # check the sort dictionaries
-        self.assertEquals(
-            {u'inbox:client1': u'Inbox: Client1',
-             u'hugo.boss': u'Boss Hugo',
-             u'inbox:client2': u'Inbox: Client2',
-             u'peter.muster': u'Muster Peter'},
-            info.get_user_sort_dict())
-
-    def test_user_contact_sort_dict(self):
-        create_client(clientid='client1')
-        create_client(clientid='client2')
-        create_ogds_user('hugo.boss', **{'firstname': 'Hugo', 'lastname': 'Boss'})
-        create_ogds_user('peter.muster', **{'firstname': 'Peter', 'lastname': 'Muster'})
-        Builder('contact').having(
-            **{'firstname': u'Sandra',
-               'lastname': u'Kaufmann',
-               'email': u'sandra.kaufmann@test.ch'}).create()
-        Builder('contact').having(
-            **{'firstname': u'Elisabeth',
-               'lastname': u'K\xe4ppeli',
-               'email': 'elisabeth.kaeppeli@test.ch'}).create()
-
-        info = getUtility(IContactInformation)
-
-        self.assertEquals(
-            {u'inbox:client1': u'Inbox: Client1',
-             'contact:kaufmann-sandra': u'Kaufmann Sandra',
-             'contact:kappeli-elisabeth': u'K\xe4ppeli Elisabeth',
-             u'hugo.boss': u'Boss Hugo',
-             u'inbox:client2': u'Inbox: Client2',
-             u'peter.muster': u'Muster Peter'},
-            info.get_user_contact_sort_dict())

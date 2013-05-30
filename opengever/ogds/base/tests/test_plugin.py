@@ -11,11 +11,10 @@ class TestRemoteAuthenticationPlugin(FunctionalTestCase):
         super(TestRemoteAuthenticationPlugin, self).setUp()
         self.request = self.layer['request']
 
-    def test_plugin_with_valid_request(self):
+    def test_successfully_credentials_authentication_returns_a_tuple_with_the_userid(self):
         client_ip = '192.168.1.233'
         create_client('client1', ip_address=client_ip)
 
-        # fake a remote request
         self.request.environ['X_OGDS_AC'] = 'hugo.boss'
         self.request.environ['X_OGDS_CID'] = 'client1'
         self.request.environ['REMOTE_HOST'] = 'http://nohost/client1'
@@ -35,16 +34,29 @@ class TestRemoteAuthenticationPlugin(FunctionalTestCase):
             ('hugo.boss', 'hugo.boss'),
             authenticate_credentials(self.portal, creds))
 
+    def test_after_successfully_credentials_authentication_the_request_provides_the_internal_request_layer(self):
+        client_ip = '192.168.1.233'
+        create_client('client1', ip_address=client_ip)
+
+        self.request.environ['X_OGDS_AC'] = 'hugo.boss'
+        self.request.environ['X_OGDS_CID'] = 'client1'
+        self.request.environ['REMOTE_HOST'] = 'http://nohost/client1'
+        self.request._client_addr = client_ip
+
+        self.portal.REQUEST = self.request
+
+        creds = extract_user(self.portal, self.request)
+        authenticate_credentials(self.portal, creds)
+
         self.assertTrue(
             IInternalOpengeverRequestLayer.providedBy(self.request))
 
-    def test_plugin_with_multiple_valid_ips(self):
+    def test_credentials_authentication_works_also_with_a_coma_sepereted_list(self):
         """The plugin should also work with a client with a comma
         seperated list of ip_adresses. """
 
         create_client('client1', ip_address='192.168.1.53,192.168.1.2')
 
-        # fake a remote request
         self.request.environ['X_OGDS_AC'] = 'hugo.boss'
         self.request.environ['X_OGDS_CID'] = 'client1'
         self.request.environ['REMOTE_HOST'] = 'http://nohost/client1'
@@ -56,10 +68,9 @@ class TestRemoteAuthenticationPlugin(FunctionalTestCase):
             ('hugo.boss', 'hugo.boss'),
             authenticate_credentials(self.portal, creds))
 
-    def test_plugin_from_invalid_ip(self):
+    def test_credentials_authentication_for_invalid_ip_returns_none(self):
         create_client('client1', ip_address='192.186.1.1')
 
-        # fake a remote request
         self.request.environ['X_OGDS_AC'] = 'hugo.boss'
         self.request.environ['X_OGDS_CID'] = 'client1'
         self.request.environ['REMOTE_HOST'] = 'http://nohost/client1'
@@ -69,10 +80,9 @@ class TestRemoteAuthenticationPlugin(FunctionalTestCase):
         creds = extract_user(self.portal, self.request)
         self.assertEquals(None, authenticate_credentials(self.portal, creds))
 
-    def test_plugin_from_not_existing_client(self):
+    def test_credentials_authentication_from_a_not_existig_client_returns_none(self):
         create_client('client1', ip_address='192.186.1.1')
 
-        # fake a remote request
         self.request.environ['X_OGDS_AC'] = 'hugo.boss'
         self.request.environ['X_OGDS_CID'] = 'client3'
         self.request.environ['REMOTE_HOST'] = 'http://nohost/client1'

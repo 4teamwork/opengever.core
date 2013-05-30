@@ -37,7 +37,7 @@ class TestAutoCompleteWidget(FunctionalTestCase):
 
         self.assertEquals([], source.hidden_terms)
 
-    def test_not_existing_term_is_not_shown_in_listing(self):
+    def test_not_existing_term_in_vocabulary_is_not_shown_in_listing(self):
         create_client(clientid='client1')
         create_ogds_user('hugo.boss')
         create_ogds_user('franz.michel')
@@ -49,7 +49,7 @@ class TestAutoCompleteWidget(FunctionalTestCase):
         self.assertNotIn(
             'not.existing', [i.value for i in self.widget.bound_source])
 
-    def test_not_existing_terms_is_included_in_hidden_terms(self):
+    def test_not_existing_term_in_vocabulary_is_included_in_hidden_terms(self):
         create_client(clientid='client1')
         create_ogds_user('hugo.boss')
         create_ogds_user('franz.michel')

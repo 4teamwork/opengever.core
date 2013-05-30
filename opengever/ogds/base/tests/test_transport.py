@@ -14,18 +14,19 @@ from zope.globalrequest import setRequest
 
 
 class TestTransporter(FunctionalTestCase):
-
-    # We test the transporter using only one client since the setup is much
-    # easier and the remote request are in fact a separate tool.
+    """We test the transporter using only one client since the setup is much
+    easier and the remote request are in fact a separate tool.
+    """
 
     def setUp(self):
         super(TestTransporter, self).setUp()
         self.request = self.portal.REQUEST
         self.grant('Manager')
-
-    def test_transport_from(self):
         create_client()
         set_current_client_id(self.portal)
+
+
+    def test_transport_from_copies_the_object_inclusive_metadata_and_dublin_core_data(self):
         dossier = Builder("dossier").titled("Dossier").create()
         document = Builder("document").within(dossier).titled(
             'Testdocument').with_dummy_content().with_default_values().create()
@@ -34,21 +35,18 @@ class TestTransporter(FunctionalTestCase):
         transported_doc = transporter.transport_from(
             dossier, 'client1', '/'.join(document.getPhysicalPath()))
 
-        # data
         self.assertEquals(transported_doc.title, document.title)
         self.assertEquals(transported_doc.file.data, document.file.data)
-        # behavior data
+
         self.assertEquals(IClassification(transported_doc).classification,
                           IClassification(document).classification)
         self.assertEquals(IClassification(transported_doc).public_trial,
                           IClassification(document).public_trial)
-        # dublin core
+
         self.assertEquals(transported_doc.created(), document.created())
         self.assertEquals(transported_doc.Creator(), document.Creator())
 
-    def test_transport_to(self):
-        create_client()
-        set_current_client_id(self.portal)
+    def test_transport_to_returns_a_dict_with_the_path_to_the_new_object(self):
         source_dossier = Builder("dossier").titled("Source").create()
         target_dossier = Builder("dossier").titled("Target").create()
         document = Builder("document").within(source_dossier).titled(
