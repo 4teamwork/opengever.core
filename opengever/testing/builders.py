@@ -27,6 +27,8 @@ def Builder(name):
         return MailBuilder(BuilderSession.instance())
     elif name == "repository":
         return RepositoryBuilder(BuilderSession.instance())
+    elif name == "contact":
+        return ContactBuilder(BuilderSession.instance())
     else:
         raise ValueError("No Builder for %s" % name)
 
@@ -84,7 +86,7 @@ class DexterityBuilder(object):
             notify(ObjectCreatedEvent(obj))
             notify(ObjectAddedEvent(obj))
 
-        self.after_create()
+        self.after_create(obj)
         return obj
 
     def before_create(self):
