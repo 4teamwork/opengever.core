@@ -2,6 +2,7 @@ from Products.CMFCore.utils import getToolByName
 from opengever.task.interfaces import ISuccessorTaskController
 from opengever.testing import Builder
 from opengever.testing import FunctionalTestCase
+from opengever.testing import create
 from opengever.testing import create_client
 from opengever.testing import set_current_client_id
 from zope.component import getUtility
@@ -18,8 +19,8 @@ class TestSuccessorTaskController(FunctionalTestCase):
     def test_oguid_is_client_id_and_task_id_separated_by_a_colon(self):
         intids = getUtility(IIntIds)
 
-        task1 = Builder('task').create()
-        task2 = Builder('task').create()
+        task1 = create(Builder('task'))
+        task2 = create(Builder('task'))
 
         self.assertEquals(
             u'client1:%s' % (intids.getId(task1)),
@@ -32,7 +33,7 @@ class TestSuccessorTaskController(FunctionalTestCase):
         intids = getUtility(IIntIds)
         url_tool = getToolByName(self.portal, 'portal_url')
 
-        task = Builder('task').create()
+        task = create(Builder('task'))
 
         controller = ISuccessorTaskController(task)
         self.assertEquals(
@@ -42,7 +43,7 @@ class TestSuccessorTaskController(FunctionalTestCase):
                 'client1'))
 
     def test_oguid_by_path_returns_none_for_invalid_clientid(self):
-        task = Builder('task').create()
+        task = create(Builder('task'))
 
         controller = ISuccessorTaskController(task)
         self.assertEquals(
@@ -50,7 +51,7 @@ class TestSuccessorTaskController(FunctionalTestCase):
             controller.get_oguid_by_path('/'.join(task.getPhysicalPath()), 'client2'))
 
     def test_oguid_by_path_returns_none_for_invalid_path(self):
-        task = Builder('task').create()
+        task = create(Builder('task'))
 
         controller = ISuccessorTaskController(task)
         self.assertEquals(
@@ -58,15 +59,15 @@ class TestSuccessorTaskController(FunctionalTestCase):
             controller.get_oguid_by_path('/plone/not-existing/', 'client1'))
 
     def test_set_predecessor_with_valid_oguid_returns_true(self):
-        task1 = Builder('task').create()
-        task2 = Builder('task').create()
+        task1 = create(Builder('task'))
+        task2 = create(Builder('task'))
 
         task2_oguid = ISuccessorTaskController(task2).get_oguid()
         self.assertTrue(
             ISuccessorTaskController(task1).set_predecessor(task2_oguid))
 
     def test_set_predecessor_with_invalid_oguid_returns_false(self):
-        task1 = Builder('task').create()
+        task1 = create(Builder('task'))
 
         self.assertFalse(
             ISuccessorTaskController(task1).set_predecessor(u'incorrect:2'))
@@ -74,9 +75,9 @@ class TestSuccessorTaskController(FunctionalTestCase):
             ISuccessorTaskController(task1).set_predecessor(u'client1:3'))
 
     def test_successors_predecessor_relation(self):
-        task1 = Builder('task').create()
-        task2 = Builder('task').create()
-        task3 = Builder('task').create()
+        task1 = create(Builder('task'))
+        task2 = create(Builder('task'))
+        task3 = create(Builder('task'))
 
         task1_oguid = ISuccessorTaskController(task1).get_oguid()
 

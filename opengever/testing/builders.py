@@ -9,6 +9,9 @@ from zope.lifecycleevent import ObjectCreatedEvent, ObjectAddedEvent
 import transaction
 
 
+def create(builder):
+    return builder.create()
+
 def Builder(name):
     if name == "dossier":
         return DossierBuilder(BuilderSession.instance())

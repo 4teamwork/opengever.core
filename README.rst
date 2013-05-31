@@ -41,19 +41,18 @@ To use the `Builder API` you need to import the `Builder` function:
 .. code:: python
 
      from opengever.testing import Builder
+     from opengever.testing import create
 
 
 Then you can use the `Builder` function in your test cases:
 
 .. code:: python
 
-     dossier = Builder("dossier").create()
-     task = Builder("task").within(dossier).create()
-     document = Builder("document") \
-         .within(dossier) \
-         .attach_file_containing("test_data") \
-         .create()
-         
+     dossier = create(Builder("dossier"))
+     task = create(Builder("task").within(dossier))
+     document = create(Builder("document")
+                       .within(dossier)
+                       .attach_file_containing("test_data"))
+
 Note that `Builder` will automatically do a `transaction.commit()` when `create()` is called.
 You can disable this feature on a per test-case basis on the `BuilderSession`
-     

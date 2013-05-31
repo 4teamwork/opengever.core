@@ -7,6 +7,7 @@ from opengever.document.document import UploadValidator
 from opengever.document.interfaces import IDocumentSettings
 from opengever.testing import Builder
 from opengever.testing import FunctionalTestCase
+from opengever.testing import create
 from plone.dexterity.fti import DexterityFTI
 from plone.dexterity.fti import register
 from plone.dexterity.interfaces import IDexterityFTI
@@ -30,11 +31,11 @@ class TestDocumentConfiguration(FunctionalTestCase):
         self.grant('Contributor')
 
     def test_documents_provide_IDocumentSchema(self):
-        document = Builder("document").create()
+        document = create(Builder("document"))
         self.assertProvides(document, interface=IDocumentSchema)
 
     def test_documents_provide_IBaseDocument(self):
-        document = Builder("document").create()
+        document = create(Builder("document"))
         self.assertProvides(document, interface=IBaseDocument)
 
     def test_fti(self):
@@ -60,29 +61,29 @@ class TestDocument(FunctionalTestCase):
         self.grant('Contributor')
 
     def test_upload_file(self):
-        document = Builder("document").create()
+        document = create(Builder("document"))
         field = IDocumentSchema['file']
         file = NamedBlobFile('bla bla', filename=u'test.txt')
         field.set(document, file)
         self.assertTrue(field.get(document).data == 'bla bla')
 
     def test_document_with_file_is_digitally_available(self):
-        document_with_file = Builder("document").with_dummy_content().create()
+        document_with_file = create(Builder("document").with_dummy_content())
         self.assertTrue(document_with_file.digitally_available)
 
     def test_document_without_file_is_not_digitally_available(self):
-        document_without_file = Builder("document").create()
+        document_without_file = create(Builder("document"))
         self.assertFalse(document_without_file.digitally_available)
 
     def test_document_without_digital_file_must_be_preserved_in_paper(self):
-        document = Builder("document").having(preserved_as_paper=False).create()
+        document = create(Builder("document").having(preserved_as_paper=False))
         with self.assertRaises(Invalid) as cm:
             IDocumentSchema.validateInvariants(document)
         self.assertEquals("error_title_or_file_required", str(cm.exception))
 
     # TODO: split this and assert something useful ;)
     def test_views(self):
-        document = Builder("document").create()
+        document = create(Builder("document"))
         document.keywords = ()
 
         self.portal.REQUEST['ACTUAL_URL'] = document.absolute_url()
@@ -93,7 +94,7 @@ class TestDocument(FunctionalTestCase):
         self.failUnless(tabbed_view())
 
     def test_copying_a_document_modifies_the_title(self):
-        document = Builder("document").titled("Testdocument").create()
+        document = create(Builder("document").titled("Testdocument"))
 
         cb = self.portal.manage_copyObjects(document.id)
         self.portal.manage_pasteObjects(cb)
@@ -102,7 +103,7 @@ class TestDocument(FunctionalTestCase):
                           self.portal['copy_of_document-1'].title)
 
     def test_copying_a_document_does_not_copy_its_versions(self):
-        orig_doc = Builder("document").having(preserved_as_paper=False).create()
+        orig_doc = create(Builder("document").having(preserved_as_paper=False))
 
         cb = self.portal.manage_copyObjects(orig_doc.id)
         self.portal.manage_pasteObjects(cb)
@@ -115,8 +116,9 @@ class TestDocument(FunctionalTestCase):
         self.assertEquals(len(new_history), 1)
 
     def test_accessors(self):
-        document = Builder("document") \
-            .titled(u'Test title').with_description(u'Lorem ipsum').create()
+        document = create(Builder("document")
+                          .titled(u'Test title')
+                          .with_description(u'Lorem ipsum'))
 
         self.assertEquals(document.Title(), 'Test title')
         self.assertEquals(document.Description(), 'Lorem ipsum')
@@ -216,8 +218,8 @@ class TestUploadValidator(FunctionalTestCase):
         self.assertEquals('error_mail_upload', str(cm.exception))
 
     def validator_arguments(self):
-        dossier = Builder("dossier").create()
-        document = Builder("document").within(dossier).create()
+        dossier = create(Builder("dossier"))
+        document = create(Builder("document").within(dossier))
         field = getFields(IDocumentSchema).get('file')
 
         return (document, document.REQUEST, None, field, None)

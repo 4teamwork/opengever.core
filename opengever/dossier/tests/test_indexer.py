@@ -2,6 +2,7 @@ from opengever.base.behaviors.base import IOpenGeverBase
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.testing import Builder
 from opengever.testing import FunctionalTestCase
+from opengever.testing import create
 from opengever.testing import index_data_for
 from opengever.testing import obj2brain
 from zope.event import notify
@@ -16,14 +17,15 @@ class TestIndexers(FunctionalTestCase):
         super(TestIndexers, self).setUp()
         self.grant('Contributor')
 
-        self.dossier = Builder("dossier").titled(u"Testd\xf6ssier XY").create()
+        self.dossier = create(Builder("dossier").titled(u"Testd\xf6ssier XY"))
         self.dossier.reindexObject()
 
-        self.subdossier = Builder("dossier") \
-            .within(self.dossier).titled(u"Subd\xf6ssier XY").create()
+        self.subdossier = create(Builder("dossier")
+                                 .within(self.dossier)
+                                 .titled(u"Subd\xf6ssier XY"))
         self.subdossier.reindexObject()
 
-        self.document = Builder("document").within(self.subdossier).create()
+        self.document = create(Builder("document").within(self.subdossier))
         self.document.reindexObject()
 
     def test_containing_dossier(self):

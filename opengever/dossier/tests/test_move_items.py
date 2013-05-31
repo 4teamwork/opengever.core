@@ -1,5 +1,6 @@
 from opengever.testing import Builder
 from opengever.testing import FunctionalTestCase
+from opengever.testing import create
 
 
 class TestMoveItems(FunctionalTestCase):
@@ -9,14 +10,14 @@ class TestMoveItems(FunctionalTestCase):
         self.grant('Contributor')
         self.request = self.layer['request']
 
-        self.source_repo = Builder("repository").create()
-        self.source_dossier = Builder("dossier") \
-            .within(self.source_repo).create()
+        self.source_repo = create(Builder("repository"))
+        self.source_dossier = create(Builder("dossier")
+                                     .within(self.source_repo))
 
     def test_cant_move_items_to_invalid_target(self):
-        bad_target = Builder("repository").create()
-        task1 = Builder("task") \
-            .within(self.source_dossier).titled("a Task").create()
+        bad_target = create(Builder("repository"))
+        task1 = create(Builder("task")
+                       .within(self.source_dossier).titled("a Task"))
 
         self.assert_contains(self.source_dossier, ['a Task'])
         self.assert_contains(bad_target, [])
@@ -40,16 +41,16 @@ class TestMoveItems(FunctionalTestCase):
         """ Test integration of move_items method
         """
 
-        target_repo = Builder("repository").create()
+        target_repo = create(Builder("repository"))
 
-        target_dossier = Builder("dossier").within(target_repo).create()
+        target_dossier = create(Builder("dossier").within(target_repo))
 
-        doc1 = Builder("document") \
-            .within(self.source_dossier).titled(u"Dossier \xb6c1").create()
-        task1 = Builder("task") \
-            .within(self.source_dossier).titled("a Task").create()
-        subdossier1 = Builder("dossier") \
-            .within(self.source_dossier).titled("a Dossier").create()
+        doc1 = create(Builder("document")
+                      .within(self.source_dossier).titled(u"Dossier \xb6c1"))
+        task1 = create(Builder("task")
+                       .within(self.source_dossier).titled("a Task"))
+        subdossier1 = create(Builder("dossier")
+                             .within(self.source_dossier).titled("a Dossier"))
 
         self.assert_contains(self.source_dossier,
                              ['Dossier \xc2\xb6c1', 'a Task', 'a Dossier'])
