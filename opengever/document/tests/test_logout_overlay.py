@@ -1,5 +1,6 @@
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.testing import Builder
+from opengever.testing import create
 from opengever.testing import FunctionalTestCase
 from zope.component import getMultiAdapter
 
@@ -9,7 +10,7 @@ class TestLogoutOverlayWithoutCheckouts(FunctionalTestCase):
     def setUp(self):
         super(TestLogoutOverlayWithoutCheckouts, self).setUp()
         self.grant('Manager')
-        self.document = Builder("document").create()
+        self.document = create(Builder("document"))
 
     def test_logout_is_handled_using_a_js_script(self):
         view = self.portal.restrictedTraverse('@@logout_overlay')
@@ -21,9 +22,9 @@ class TestLogoutOverlayWithCheckouts(FunctionalTestCase):
         super(TestLogoutOverlayWithCheckouts, self).setUp()
         self.grant('Manager')
 
-        self.checkout1 = Builder("document").titled("About Plone").create()
-        self.document = Builder("document").titled("NOT checkedout").create()
-        self.checkout2 = Builder("document").titled("About Python").create()
+        self.checkout1 = create(Builder("document").titled("About Plone"))
+        self.document = create(Builder("document").titled("NOT checkedout"))
+        self.checkout2 = create(Builder("document").titled("About Python"))
         getMultiAdapter(
             (self.checkout1, self.portal.REQUEST),
             ICheckinCheckoutManager).checkout()

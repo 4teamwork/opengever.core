@@ -1,14 +1,15 @@
 from opengever.base.interfaces import ISequenceNumber
 from opengever.testing import Builder
 from opengever.testing import FunctionalTestCase
+from opengever.testing import create
 from zope.component import getUtility
 
 
 class TestDocumentNameFromTitle(FunctionalTestCase):
 
     def test_id_generation(self):
-        doc1 = Builder('document').create()
-        doc2 = Builder('document').create()
+        doc1 = create(Builder('document'))
+        doc2 = create(Builder('document'))
 
         self.assertEquals(1, getUtility(ISequenceNumber).get_number(doc1))
         self.assertEquals('document-1', doc1.id)

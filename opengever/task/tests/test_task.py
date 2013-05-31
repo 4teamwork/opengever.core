@@ -4,6 +4,7 @@ from opengever.task.response import Response
 from opengever.task.task import ITask
 from opengever.testing import Builder
 from opengever.testing import FunctionalTestCase
+from opengever.testing import create
 from plone.dexterity.interfaces import IDexterityFTI
 from plone.dexterity.utils import createContent, addContentToContainer
 from z3c.relationfield.relation import RelationValue
@@ -60,13 +61,13 @@ class TestTaskIntegration(FunctionalTestCase):
     def test_relateddocuments(self):
         self.grant('Manager')
         # create document and append it to the relatedItems of the task
-        doc3 = Builder("document").titled("a-testthree").create()
+        doc3 = create(Builder("document").titled("a-testthree"))
         intids = getUtility(IIntIds)
         o_iid = intids.getId(doc3)
         t1 = create_task(
             self.portal, title='Task 1', relatedItems=[RelationValue(o_iid)])
-        doc1 = Builder("document").within(t1).titled("btestone").create()
-        doc2 = Builder("document").within(t1).titled("ctesttwo").create()
+        doc1 = create(Builder("document").within(t1).titled("btestone"))
+        doc2 = create(Builder("document").within(t1).titled("ctesttwo"))
         view = t1.restrictedTraverse('tabbedview_view-relateddocuments')
         results = [aa.Title for aa in view.table_source.build_query()]
         self.assertTrue(doc3.Title() in results)

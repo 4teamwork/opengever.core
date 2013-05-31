@@ -1,10 +1,10 @@
-from plone.app.testing import TEST_USER_ID
-from opengever.testing import FunctionalTestCase
-
-from opengever.testing import create_client
-from opengever.testing import set_current_client_id
-from opengever.testing import create_ogds_user
 from opengever.testing import Builder
+from opengever.testing import FunctionalTestCase
+from opengever.testing import create
+from opengever.testing import create_client
+from opengever.testing import create_ogds_user
+from opengever.testing import set_current_client_id
+from plone.app.testing import TEST_USER_ID
 
 class TestSearchWithContent(FunctionalTestCase):
     use_browser = True
@@ -16,8 +16,8 @@ class TestSearchWithContent(FunctionalTestCase):
         set_current_client_id(self.layer['portal'])
         create_ogds_user(TEST_USER_ID)
 
-        self.dossier1 = Builder("dossier").titled("Dossier1").create()
-        self.dossier2 = Builder("dossier").titled("Dossier2").create()
+        self.dossier1 = create(Builder("dossier").titled("Dossier1"))
+        self.dossier2 = create(Builder("dossier").titled("Dossier2"))
 
     def test_search_dossiers(self):
         self.browser.open('%s/advanced_search' % self.dossier1.absolute_url())
@@ -30,8 +30,8 @@ class TestSearchWithContent(FunctionalTestCase):
 
 
     def test_search_documents(self):
-        Builder("document").within(self.dossier1).titled("Document1").create()
-        Builder("document").within(self.dossier2).titled("Document2").create()
+        create(Builder("document").within(self.dossier1).titled("Document1"))
+        create(Builder("document").within(self.dossier2).titled("Document2"))
 
         # search documents (we can't find the document because we must change the content-type)
         self.browser.open('%s/advanced_search' % self.dossier1.absolute_url())
@@ -51,8 +51,8 @@ class TestSearchWithContent(FunctionalTestCase):
         self.assertSearchResultCount(1)
 
     def test_search_tasks(self):
-        Builder("task").within(self.dossier1).titled("Task1").create()
-        Builder("task").within(self.dossier2).titled("Task2").create()
+        create(Builder("task").within(self.dossier1).titled("Task1"))
+        create(Builder("task").within(self.dossier2).titled("Task2"))
 
         # search tasks (we can't find the task because we must change the content-type)
         self.browser.open('%s/advanced_search' % self.dossier1.absolute_url())
@@ -85,7 +85,7 @@ class TestSearchWithoutContent(FunctionalTestCase):
         set_current_client_id(self.layer['portal'])
         create_ogds_user(TEST_USER_ID)
 
-        self.dossier1 = Builder("dossier").create()
+        self.dossier1 = create(Builder("dossier"))
 
     def test_validate_searchstring_for_dossiers(self):
         self.browser.open('%s/advanced_search' % self.dossier1.absolute_url())
