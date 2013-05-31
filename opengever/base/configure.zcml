@@ -49,4 +49,6 @@
 
 	<include file="skins.zcml" />
 
+    <adapter factory=".ech0039.OpengeverDocumentAdapter" />
+
 </configure>
