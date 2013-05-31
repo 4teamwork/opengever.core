@@ -28,6 +28,13 @@ Changelog
 - Added bin/build-translations script to opengever.core buildout.
   [lgraf]
 
+- Added bin/i18n-build script to opengever.core buildout.
+  [lgraf]
+
+- Made sure PDF Preview link in doc tooltip is only displayed when
+  PDF preview rendering is available.
+  [lgraf]
+
 - Lay out date range fields in advanced search form side by side.
   Note: This requires the "Init og.advancedsearch profile version" upgrade
   step from opengever.base to be run first!

@@ -15,6 +15,15 @@ from zope.component import getUtility
 from zope.globalrequest import getRequest
 from zope.i18n import translate
 import cgi
+import pkg_resources
+
+
+try:
+    pkg_resources.get_distribution('opengever.pdfconverter')
+except pkg_resources.DistributionNotFound:
+    PDFCONVERTER_AVAILABLE = False
+else:
+    PDFCONVERTER_AVAILABLE = True
 
 
 def task_id_checkbox_helper(item, value):
@@ -205,7 +214,9 @@ def _linked_document_with_tooltip(item, value, trashed=False):
 
     tooltip_links = []
 
-    if item.portal_type == 'opengever.document.document':
+    is_doc = item.portal_type == 'opengever.document.document'
+
+    if is_doc and PDFCONVERTER_AVAILABLE:
         tooltip_links.append("""<a href='%(preview_link)s'>
                     %(preview_label)s
                 </a>""" % data)
@@ -215,7 +226,7 @@ def _linked_document_with_tooltip(item, value, trashed=False):
                     %(edit_metadata_label)s
                 </a>""" % data)
 
-    if item.portal_type == 'opengever.document.document' and not trashed:
+    if is_doc and not trashed:
         tooltip_links.append("""<a href='%(edit_direct_link)s'>
                     %(edit_direct_label)s
                 </a>""" % data)
