@@ -2,9 +2,9 @@ from AccessControl.SecurityManagement import getSecurityManager
 from AccessControl.SecurityManagement import newSecurityManager
 from AccessControl.SecurityManagement import setSecurityManager
 from ftw.testing import MockTestCase
+from opengever.core.testing import OPENGEVER_FUNCTIONAL_TESTING
 from opengever.document.checkout.manager import CHECKIN_CHECKOUT_ANNOTATIONS_KEY
 from opengever.document.interfaces import ICheckinCheckoutManager
-from opengever.document.testing import OPENGEVER_DOCUMENT_FUNCTIONAL_TESTING
 from opengever.testing import create_ogds_user
 from plone.app.testing import TEST_USER_ID, TEST_USER_NAME
 from plone.app.testing import TEST_USER_PASSWORD, login
@@ -19,7 +19,7 @@ import transaction
 
 class TestDocumentOverview(MockTestCase):
 
-    layer = OPENGEVER_DOCUMENT_FUNCTIONAL_TESTING
+    layer = OPENGEVER_FUNCTIONAL_TESTING
 
     def _set_default_values(self, doc):
         monk_file = NamedBlobFile('bla bla', filename=u'test.txt')

@@ -1,10 +1,31 @@
+from Products.CMFCore.utils import getToolByName
 from plone.dexterity.utils import createContentInContainer
 from plone.dexterity.utils import iterSchemata
 from plone.namedfile.file import NamedBlobFile
 from z3c.form.interfaces import IValue
+from z3c.relationfield.relation import RelationValue
+from zope.component import getUtility
 from zope.component import queryMultiAdapter
+from zope.event import notify
+from zope.intid.interfaces import IIntIds
+from zope.lifecycleevent import ObjectCreatedEvent, ObjectAddedEvent
 from zope.schema import getFieldsInOrder
 import transaction
+
+
+def Builder(name):
+    if name == "dossier":
+        return DossierBuilder(BuilderSession.instance())
+    elif name == "document":
+        return DocumentBuilder(BuilderSession.instance())
+    elif name == "task":
+        return TaskBuilder(BuilderSession.instance())
+    elif name == "mail":
+        return MailBuilder(BuilderSession.instance())
+    elif name == "repository":
+        return RepositoryBuilder(BuilderSession.instance())
+    else:
+        raise ValueError("No Builder for %s" % name)
 
 
 class BuilderSession(object):
@@ -51,18 +72,22 @@ class DexterityBuilder(object):
         self.set_default_values = True
         return self
 
-    def create(self):
+    def create(self, notify_events=True):
         self.before_create()
         obj = self.create_object()
         if self.set_default_values:
             self.set_defaults(obj)
+        if notify_events:
+            notify(ObjectCreatedEvent(obj))
+            notify(ObjectAddedEvent(obj))
+
         self.after_create()
         return obj
 
     def before_create(self):
         pass
 
-    def after_create(self):
+    def after_create(self, obj):
         if self.session.auto_commit:
             transaction.commit()
 
@@ -116,10 +141,38 @@ class DocumentBuilder(DexterityBuilder):
 
 class TaskBuilder(DexterityBuilder):
 
+    def __init__(self, session):
+        super(TaskBuilder, self).__init__(session)
+        self.transitions = []
+
     def create_object(self):
         return createContentInContainer(self.container,
                                         'opengever.task.task',
                                         **self.arguments)
+
+    def in_progress(self):
+        self.transitions.append('task-transition-open-in-progress')
+        return self
+
+    def after_create(self, obj):
+        wtool = getToolByName(obj, 'portal_workflow')
+        for transition in self.transitions:
+            wtool.doActionFor(obj, transition)
+
+        super(TaskBuilder, self).after_create(obj)
+
+    def relate_to(self, documents):
+        if not isinstance(documents, list):
+            documents = [documents, ]
+
+        intids = getUtility(IIntIds)
+        self.arguments['relatedItems'] = [
+            RelationValue(intids.getId(doc)) for doc in documents]
+        return self
+
+    def bidirectional_by_reference(self):
+        self.arguments['task_type'] = u'comment'
+        return self
 
 
 class MailBuilder(DexterityBuilder):

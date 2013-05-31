@@ -1,6 +1,6 @@
 from lxml.cssselect import CSSSelector
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_TESTING
-from opengever.testing import BuilderSession
+from opengever.testing.builders import BuilderSession
 from plone.app.testing import TEST_USER_ID
 from plone.app.testing import TEST_USER_NAME
 from plone.app.testing import TEST_USER_PASSWORD
