@@ -1,0 +1,25 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+    i18n_domain="opengever.advancedsearch">
+
+    <!-- ALL -> 2201 -->
+    <genericsetup:upgradeStep
+        title="Add advanced_search.css to CSS registry"
+        description=""
+        source="*"
+        destination="2201"
+        handler="opengever.advancedsearch.upgrades.to_v2201"
+        profile="opengever.advancedsearch:default"
+        />
+
+    <genericsetup:registerProfile
+        name="to_v2201"
+        title="Upgrade profile for opengever.advancedsearch"
+        description="This profile upgrades opengever.advancedsearch to version 2.2."
+        directory="profiles/to_v2201"
+        for="Products.CMFPlone.interfaces.IMigratingPloneSiteRoot"
+        provides="Products.GenericSetup.interfaces.EXTENSION"
+        />
+
+</configure>

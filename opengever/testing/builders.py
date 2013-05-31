@@ -13,6 +13,9 @@ from zope.schema import getFieldsInOrder
 import transaction
 
 
+def create(builder):
+    return builder.create()
+
 def Builder(name):
     if name == "dossier":
         return DossierBuilder(BuilderSession.instance())

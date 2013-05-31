@@ -1,6 +1,7 @@
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.testing import Builder
 from opengever.testing import FunctionalTestCase
+from opengever.testing import create
 from plone.app.testing import TEST_USER_NAME
 from plone.app.testing import login
 from zope.component import queryMultiAdapter
@@ -14,10 +15,10 @@ class TestDocumentIntegration(FunctionalTestCase):
         super(TestDocumentIntegration, self).setUp()
         self.grant('Manager')
         login(self.portal, TEST_USER_NAME)
-        self.document = Builder("document") \
-            .attach_file_containing(u"bla bla", name=u"test.txt") \
-            .having(digitally_available=True,
-                    keywords=()).create()
+        self.document = create(Builder("document")
+                               .attach_file_containing(u"bla bla", name=u"test.txt")
+                               .having(digitally_available=True,
+                                       keywords=()))
 
     def test_edit_form_document_not_checked_out(self):
         self.browser.open('%s/edit' % self.document.absolute_url())

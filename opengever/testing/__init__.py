@@ -11,6 +11,7 @@ else:
     from opengever.core.testing import OPENGEVER_FUNCTIONAL_TESTING
     from opengever.core.testing import OPENGEVER_INTEGRATION_TESTING
     from opengever.testing.builders import Builder
+    from opengever.testing.builders import create
     from opengever.testing.helpers import create_plone_user
     from opengever.testing.helpers import obj2brain
     from opengever.testing.helpers import index_data_for

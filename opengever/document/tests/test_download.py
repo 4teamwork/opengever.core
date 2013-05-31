@@ -4,6 +4,7 @@ from mocker import ANY
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_TESTING
 from opengever.document.interfaces import IFileCopyDownloadedEvent
 from opengever.testing import Builder
+from opengever.testing import create
 from opengever.testing import FunctionalTestCase
 from opengever.testing.builders import BuilderSession
 from plone.app.testing import TEST_USER_ID, TEST_USER_NAME
@@ -28,9 +29,9 @@ class TestDocumentDownloadView(MockTestCase):
         BuilderSession.instance().reset()
 
     def test_download_view(self):
-        doc1 = Builder("document").attach_file_containing("bla bla").create()
-        doc2 = Builder("document") \
-          .attach_file_containing("blub blub", name=u't\xf6st.txt').create()
+        doc1 = create(Builder("document").attach_file_containing("bla bla"))
+        doc2 = create(Builder("document")
+                      .attach_file_containing("blub blub", name=u't\xf6st.txt'))
 
         downloaded_handler = self.mocker.mock()
         self.mock_handler(downloaded_handler, [IFileCopyDownloadedEvent, ])
@@ -47,7 +48,7 @@ class TestDocumentDownloadView(MockTestCase):
         self.assertEquals(result.read(), 'blub blub')
 
     def test_download_file_version_view(self):
-        doc1 = Builder("document").create()
+        doc1 = create(Builder("document"))
 
         repo_tool = getToolByName(self.portal, 'portal_repository')
         repo_tool._recursiveSave(doc1, {},
@@ -88,7 +89,7 @@ class TestDocumentDownloadConfirmation(FunctionalTestCase):
         super(TestDocumentDownloadConfirmation, self).setUp()
         self.grant('Manager')
         login(self.portal, TEST_USER_NAME)
-        self.document = Builder("document").create()
+        self.document = create(Builder("document"))
 
         file_ = NamedBlobFile('bla bla', filename=u'test.txt')
         self.document.file = file_

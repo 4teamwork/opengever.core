@@ -1,13 +1,14 @@
 from datetime import datetime
 from opengever.ogds.base.interfaces import IClientConfiguration
+from opengever.testing import Builder
+from opengever.testing import FunctionalTestCase
+from opengever.testing import create
 from opengever.testing import create_ogds_user
 from opengever.testing import index_data_for
 from opengever.testing import obj2brain
 from opengever.testing import set_current_client_id
 from plone.app.testing import TEST_USER_ID, TEST_USER_NAME
 from plone.app.testing import login
-from opengever.testing import Builder
-from opengever.testing import FunctionalTestCase
 from plone.memoize.interfaces import ICacheChooser
 from plone.registry.interfaces import IRegistry
 from z3c.relationfield.relation import RelationValue
@@ -28,10 +29,10 @@ class TestTaskIndexers(FunctionalTestCase):
         self.grant('Contributor', 'Editor', 'Manager')
         login(self.portal, TEST_USER_NAME)
 
-        self.task = Builder("task").titled("Test task 1").create()
-        self.subtask = Builder("task").within(self.task).titled("Test task 1").create()
-        self.doc1 = Builder("document").titled(u"Doc One").create()
-        self.doc2 = Builder("document").titled(u"Doc Two").create()
+        self.task = create(Builder("task").titled("Test task 1"))
+        self.subtask = create(Builder("task").within(self.task).titled("Test task 1"))
+        self.doc1 = create(Builder("document").titled(u"Doc One"))
+        self.doc2 = create(Builder("document").titled(u"Doc Two"))
 
     def test_date_of_completion(self):
         self.assertEquals(

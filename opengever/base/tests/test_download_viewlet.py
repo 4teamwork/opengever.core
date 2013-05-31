@@ -1,7 +1,8 @@
 from Products.CMFCore.utils import getToolByName
-from plone.namedfile.file import NamedBlobFile
 from opengever.testing import Builder
 from opengever.testing import FunctionalTestCase
+from opengever.testing import create
+from plone.namedfile.file import NamedBlobFile
 
 
 class TestDownloadViewlet(FunctionalTestCase):
@@ -13,7 +14,7 @@ class TestDownloadViewlet(FunctionalTestCase):
         self.ptool = getToolByName(self.portal, 'plone_utils')
 
     def test_without_file(self):
-        test_doc = Builder("document").create()
+        test_doc = create(Builder("document"))
 
         response = self.download(test_doc)
         self.assertEquals('http://nohost/plone/document-1', response)
@@ -22,7 +23,8 @@ class TestDownloadViewlet(FunctionalTestCase):
                           self.ptool.showPortalMessages()[-1].message)
 
     def test_with_file(self):
-        test_doc = Builder("document").attach_file_containing("lorem ipsum", name=u"foobar.txt").create()
+        test_doc = create(Builder("document")
+                          .attach_file_containing("lorem ipsum", name=u"foobar.txt"))
 
         response = self.download(test_doc)
 
@@ -34,7 +36,7 @@ class TestDownloadViewlet(FunctionalTestCase):
     def test_custom_content_type(self):
         test_file = NamedBlobFile("some text", filename=u"sometext.txt")
         test_file.contentType = 'foo/bar'
-        test_doc = Builder("document").attach(test_file).create()
+        test_doc = create(Builder("document").attach(test_file))
 
         self.download(test_doc)
 
