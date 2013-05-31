@@ -4,6 +4,7 @@ from opengever.ogds.base.utils import get_client_id
 from opengever.ogds.base.utils import get_current_client
 from opengever.testing import Builder
 from opengever.testing import FunctionalTestCase
+from opengever.testing import create
 from opengever.testing import create_client
 from opengever.testing import create_ogds_user
 from opengever.testing import obj2brain
@@ -167,18 +168,18 @@ class TestContactInfo(FunctionalTestCase):
             self.info.render_link('hugo.boss'))
 
     def test_list_contacts_return_all_contact_brains(self):
-        Builder('contact').having(
-            **{'firstname': u'Sandra',
-             'lastname': u'Kaufmann',
-             'email': u'sandra.kaufmann@test.ch'}).create()
-        Builder('contact').having(
-            **{'firstname': u'Elisabeth',
-             'lastname': u'K\xe4ppeli',
-             'email': 'elisabeth.kaeppeli@test.ch'}).create()
-        Builder('contact').having(
-            **{'firstname': u'Roger',
-             'lastname': u'Wermuth',
-             'email': None}).create()
+        create(Builder('contact')
+               .having(**{'firstname': u'Sandra',
+                          'lastname': u'Kaufmann',
+                          'email': u'sandra.kaufmann@test.ch'}))
+        create(Builder('contact')
+               .having(**{'firstname': u'Elisabeth',
+                          'lastname': u'K\xe4ppeli',
+                          'email': 'elisabeth.kaeppeli@test.ch'}))
+        create(Builder('contact')
+               .having(**{'firstname': u'Roger',
+                          'lastname': u'Wermuth',
+                          'email': None}))
 
         self.assertEquals(
             ['kaufmann-sandra', 'kappeli-elisabeth', 'wermuth-roger'],
@@ -198,11 +199,12 @@ class TestContactInfo(FunctionalTestCase):
     def test_describing_a_contact(self):
         self.grant('Manager')
 
-        sandra_kaufmann = Builder('contact').having(
-            **{'firstname': u'Sandra',
-             'lastname': u'Kaufmann',
-             'email': u'sandra.kaufmann@test.ch',
-             'email2': u'sandra@test2.ch'}).create()
+        sandra_kaufmann = create(Builder('contact')
+                                 .having(
+                                     **{'firstname': u'Sandra',
+                                        'lastname': u'Kaufmann',
+                                        'email': u'sandra.kaufmann@test.ch',
+                                        'email2': u'sandra@test2.ch'}))
 
         self.assertEquals(u'Kaufmann Sandra (sandra.kaufmann@test.ch)',
                           self.info.describe(u'contact:kaufmann-sandra'))
@@ -217,11 +219,11 @@ class TestContactInfo(FunctionalTestCase):
             self.info.describe(obj2brain(sandra_kaufmann)))
 
     def test_get_email_from_contact_returns_email_addres_of_the_contact_object(self):
-        Builder('contact').having(
-            **{'firstname': u'Sandra',
-               'lastname': u'Kaufmann',
-               'email': u'sandra.kaufmann@test.ch',
-               'email2': u'sandra@test2.ch'}).create()
+        create(Builder('contact')
+               .having(**{'firstname': u'Sandra',
+                          'lastname': u'Kaufmann',
+                          'email': u'sandra.kaufmann@test.ch',
+                          'email2': u'sandra@test2.ch'}))
 
         self.assertEquals('sandra.kaufmann@test.ch',
                   self.info.get_email(u'contact:kaufmann-sandra'))

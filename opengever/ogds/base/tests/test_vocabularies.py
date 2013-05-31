@@ -1,7 +1,7 @@
 from opengever.ogds.base import communication
-from opengever.ogds.base.testing import create_contacts
 from opengever.ogds.base.vocabulary import ContactsVocabulary
 from opengever.testing import Builder
+from opengever.testing import create
 from opengever.testing import FunctionalTestCase
 from opengever.testing import create_client
 from opengever.testing import create_ogds_user
@@ -9,11 +9,8 @@ from opengever.testing import set_current_client_id
 from plone.app.testing import TEST_USER_ID
 from zope.component import getUtility
 from zope.component import provideUtility
-from zope.globalrequest import setRequest
 from zope.interface import implements
 from zope.schema.interfaces import IVocabularyFactory
-from zope.schema.vocabulary import SimpleTerm
-import types
 
 
 class TestContactVocabulary(FunctionalTestCase):
@@ -253,12 +250,12 @@ class TestContactsAndUsersVocabulary(FunctionalTestCase):
 
     def test_contains_all_local_contacts(self):
         create_client(clientid="client1")
-        Builder('contact').having(
-            firstname=u'Sandra', lastname=u'Kaufmann',
-            email=u'sandra.kaufmann@test.ch').create()
-        Builder('contact').having(
-            firstname=u'Elisabeth', lastname=u'K\xe4ppeli',
-            email= 'elisabeth.kaeppeli@test.ch').create()
+        create(Builder('contact')
+               .having(firstname=u'Sandra', lastname=u'Kaufmann',
+                       email=u'sandra.kaufmann@test.ch'))
+        create(Builder('contact')
+               .having(firstname=u'Elisabeth', lastname=u'K\xe4ppeli',
+                       email= 'elisabeth.kaeppeli@test.ch'))
 
         voc = self.voca_factory(self.portal)
 
@@ -285,12 +282,12 @@ class TestEmailContactsAndUsersVocabularyFactory(FunctionalTestCase):
             self.voca_factory(self.portal))
 
     def test_contains_emails_for_all_contacts(self):
-        Builder('contact').having(
-            firstname=u'Sandra', lastname=u'Kaufmann',
-            email=u'sandra.kaufmann@test.ch').create()
-        Builder('contact').having(
-            firstname=u'Elisabeth', lastname=u'K\xe4ppeli',
-            email= 'elisabeth.kaeppeli@test.ch').create()
+        create(Builder('contact')
+               .having(firstname=u'Sandra', lastname=u'Kaufmann',
+                       email=u'sandra.kaufmann@test.ch'))
+        create(Builder('contact')
+               .having(firstname=u'Elisabeth', lastname=u'K\xe4ppeli',
+                       email= 'elisabeth.kaeppeli@test.ch'))
 
         self.assertTerms(
             [('sandra.kaufmann@test.ch:kaufmann-sandra',
@@ -342,7 +339,6 @@ class TestAssignedClientsVocabularies(FunctionalTestCase):
         voca_factory = getUtility(
             IVocabularyFactory,
             name='opengever.ogds.base.OtherAssignedClientsVocabulary')
-        voc = voca_factory(self.portal)
 
         self.assertTerms([('client3', 'Client3')], voca_factory(self.portal))
 
@@ -350,14 +346,14 @@ class TestAssignedClientsVocabularies(FunctionalTestCase):
 class TestOGDSVocabularies(FunctionalTestCase):
 
     def test_contact_vocabulary(self):
-        Builder('contact').having(
-            **{'firstname': u'Sandra',
-             'lastname': u'Kaufmann',
-             'email': u'sandra.kaufmann@test.ch'}).create()
-        Builder('contact').having(
-            **{'firstname': u'Elisabeth',
-             'lastname': u'K\xe4ppeli',
-             'email': 'elisabeth.kaeppeli@test.ch'}).create()
+        create(Builder('contact')
+               .having(**{'firstname': u'Sandra',
+                          'lastname': u'Kaufmann',
+                          'email': u'sandra.kaufmann@test.ch'}))
+        create(Builder('contact')
+               .having(**{'firstname': u'Elisabeth',
+                          'lastname': u'K\xe4ppeli',
+                          'email': 'elisabeth.kaeppeli@test.ch'}))
 
         voca_factory = getUtility(IVocabularyFactory,
                                name='opengever.ogds.base.ContactsVocabulary')

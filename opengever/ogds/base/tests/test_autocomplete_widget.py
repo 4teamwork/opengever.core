@@ -1,16 +1,11 @@
 from opengever.ogds.base.autocomplete_widget import AutocompleteFieldWidget
-from opengever.ogds.base.utils import create_session
 from opengever.task.task import ITask
 from opengever.testing import Builder
+from opengever.testing import create
 from opengever.testing import FunctionalTestCase
 from opengever.testing import create_client
 from opengever.testing import create_ogds_user
 from opengever.testing import set_current_client_id
-from plone.app.testing import TEST_USER_ID
-from plone.app.testing import setRoles
-from plone.memoize import volatile
-from zope.component import getUtility
-from zope.schema.interfaces import IVocabularyFactory
 
 
 class TestAutoCompleteWidget(FunctionalTestCase):
@@ -26,7 +21,7 @@ class TestAutoCompleteWidget(FunctionalTestCase):
         create_ogds_user('hugo.boss')
         create_ogds_user('franz.michel')
         set_current_client_id(self.portal)
-        task = Builder('task').create()
+        task = create(Builder('task'))
 
         self.widget.context = task
         source = self.widget.bound_source
@@ -42,7 +37,7 @@ class TestAutoCompleteWidget(FunctionalTestCase):
         create_ogds_user('hugo.boss')
         create_ogds_user('franz.michel')
         set_current_client_id(self.portal)
-        task = Builder('task').having(issuer='not.existing').create()
+        task = create(Builder('task').having(issuer='not.existing'))
 
         self.widget.context = task
 
@@ -54,7 +49,7 @@ class TestAutoCompleteWidget(FunctionalTestCase):
         create_ogds_user('hugo.boss')
         create_ogds_user('franz.michel')
         set_current_client_id(self.portal)
-        task = Builder('task').having(issuer='not.existing').create()
+        task = create(Builder('task').having(issuer='not.existing'))
 
         self.widget.context = task
         self.assertEquals([u'not.existing'], self.widget.bound_source.hidden_terms)
