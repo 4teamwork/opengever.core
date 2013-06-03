@@ -22,12 +22,12 @@ class TestBaseBehavior(FunctionalTestCase):
 
         self.browser.getControl('OpenGeverBaseFTI').click()
         self.browser.getControl('Add').click()
-        self.assertCurrentUrl('http://nohost/plone/++add++OpenGeverBaseFTI')
+        self.browser.assert_url('http://nohost/plone/++add++OpenGeverBaseFTI')
 
         self.browser.getControl(name='form.widgets.IOpenGeverBase.title').value = 'Foo'
         self.browser.getControl(name='form.widgets.IOpenGeverBase.description').value = 'Bar'
         self.browser.getControl('Save').click()
-        self.assertCurrentUrl('http://nohost/plone/opengeverbasefti/view')
+        self.browser.assert_url('http://nohost/plone/opengeverbasefti/view')
 
         # Get the created object:
         obj = self.portal.opengeverbasefti

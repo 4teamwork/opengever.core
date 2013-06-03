@@ -5,15 +5,12 @@ from opengever.sharing.interfaces import ILocalRolesModified
 from opengever.testing import Builder
 from opengever.testing import FunctionalTestCase
 from opengever.testing import create
-from plone.app.testing import TEST_USER_NAME, TEST_USER_PASSWORD
 from plone.app.testing import setRoles, TEST_USER_ID
-from plone.dexterity.utils import createContentInContainer
-from plone.testing.z2 import Browser
 from zope.component import provideHandler
-import transaction
 
 
 class TestOpengeverSharingIntegration(FunctionalTestCase):
+    use_browser = True
 
     def setUp(self):
         """ Set up test environment
@@ -21,21 +18,11 @@ class TestOpengeverSharingIntegration(FunctionalTestCase):
         super(TestOpengeverSharingIntegration, self).setUp()
         self.grant('Manager')
 
-        self.request = self.layer['request']
-        self.browser = self.get_browser()
-
-        # Setup minimal repo with one dossier
-        self.repo_root = createContentInContainer(
-            self.portal, 'opengever.repository.repositoryroot', 'root')
-        self.repo = createContentInContainer(
-            self.repo_root, 'opengever.repository.repositoryfolder', 'r1')
+        self.repo = create(Builder("repository"))
         self.dossier = create(Builder("dossier").within(self.repo))
 
-        transaction.commit()
-
-        # Get the sharing-view of repo and dossier
-        self.view_repo = OpengeverSharingView(self.repo, self.request)
-        self.view_dossier = OpengeverSharingView(self.dossier, self.request)
+        self.view_repo = OpengeverSharingView(self.repo, self.portal.REQUEST)
+        self.view_dossier = OpengeverSharingView(self.dossier, self.portal.REQUEST)
 
         # Event class to look for fired events
         class MockEvent(object):
@@ -50,33 +37,6 @@ class TestOpengeverSharingIntegration(FunctionalTestCase):
                 return self.event_history[-1]
 
         self.mock_event = MockEvent()
-
-    def get_browser(self):
-        """Return logged in browser
-        """
-        # Create browser an login
-        portal_url = self.layer['portal'].absolute_url()
-        browser = Browser(self.layer['app'])
-        browser.open('%s/login_form' % portal_url)
-        browser.getControl(name='__ac_name').value = TEST_USER_NAME
-        browser.getControl(name='__ac_password').value = TEST_USER_PASSWORD
-        browser.getControl(name='submit').click()
-
-        # Check login
-        self.assertNotEquals('__ac_name' in browser.contents, True)
-        self.assertNotEquals('__ac_password' in browser.contents, True)
-
-        return browser
-
-    def test_sharing_views(self):
-        """ Test Integration of opengever.sharing
-        """
-
-        # We just test to open the views because the rest is tested
-        # in other packages
-        self.browser.open('%s/@@sharing' % self.dossier.absolute_url())
-        self.browser.open(
-            '%s/@@tabbedview_view-sharing' % self.dossier.absolute_url())
 
     def _check_roles(self, expect, roles):
         """ Base method to check the received roles
@@ -217,3 +177,22 @@ class TestOpengeverSharingIntegration(FunctionalTestCase):
                           {'test_user_1_': ('Owner', 'Publisher')})
         self.assertTrue(
             last_event.new_local_roles == (('test_user_1_', ('Owner',)),))
+
+class TestOpengeverSharingWithBrowser(FunctionalTestCase):
+    use_browser = True
+
+    def setUp(self):
+        super(TestOpengeverSharingWithBrowser, self).setUp()
+        self.grant('Manager')
+        self.dossier = create(Builder("dossier"))
+
+
+    def test_sharing_views(self):
+        """ Test Integration of opengever.sharing
+        """
+
+        # We just test to open the views because the rest is tested
+        # in other packages
+        self.browser.open('%s/@@sharing' % self.dossier.absolute_url())
+        self.browser.open(
+            '%s/@@tabbedview_view-sharing' % self.dossier.absolute_url())

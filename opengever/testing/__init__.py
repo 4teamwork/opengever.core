@@ -6,15 +6,14 @@ try:
 except pkg_resources.DistributionNotFound:
     # [tests] is not installed - z3c.autoinclude is scanning.
     pass
-
 else:
     from opengever.core.testing import OPENGEVER_FUNCTIONAL_TESTING
     from opengever.core.testing import OPENGEVER_INTEGRATION_TESTING
     from opengever.testing.builders import Builder
     from opengever.testing.builders import create
     from opengever.testing.helpers import create_plone_user
-    from opengever.testing.helpers import obj2brain
     from opengever.testing.helpers import index_data_for
+    from opengever.testing.helpers import obj2brain
     from opengever.testing.sql import create_client
     from opengever.testing.sql import create_ogds_user
     from opengever.testing.sql import assign_user_to_client

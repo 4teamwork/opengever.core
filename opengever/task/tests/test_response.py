@@ -3,27 +3,25 @@ from opengever.task.adapters import IResponseContainer
 from opengever.task.interfaces import ISuccessorTaskController
 from opengever.task.task import ITask
 from opengever.task.util import add_simple_response
-from opengever.testing import OPENGEVER_FUNCTIONAL_TESTING
+from opengever.testing import Builder
+from opengever.testing import FunctionalTestCase
 from opengever.testing import create_client
 from opengever.testing import create_ogds_user
 from opengever.testing import create_plone_user
 from opengever.testing import set_current_client_id
 from plone.app.testing import TEST_USER_ID
-from plone.app.testing import TEST_USER_NAME, TEST_USER_PASSWORD
-from plone.app.testing import setRoles, login
+from plone.app.testing import TEST_USER_NAME
+from plone.app.testing import login
 from plone.dexterity.utils import createContentInContainer
-from plone.testing.z2 import Browser
 import transaction
-import unittest2 as unittest
 import urllib
 
 
-class TestResponse(unittest.TestCase):
-
-    layer = OPENGEVER_FUNCTIONAL_TESTING
+class TestResponse(FunctionalTestCase):
+    use_browser=True
 
     def setUp(self):
-        self.portal = self.layer['portal']
+        super(TestResponse, self).setUp()
         self.portal.portal_types['opengever.task.task'].global_allow = True
 
         session = create_session()
@@ -48,13 +46,10 @@ class TestResponse(unittest.TestCase):
                          lastname='User 2',
                          session=session)
 
-        setRoles(
-            self.portal, TEST_USER_ID, ['Contributor', 'Editor'])
+        self.grant('Contributor', 'Editor')
         login(self.portal, TEST_USER_NAME)
 
-        self.dossier = createContentInContainer(
-            self.portal, 'opengever.dossier.businesscasedossier',
-            checkConstraints=False)
+        self.dossier = Builder("dossier").create()
 
         self.task = createContentInContainer(
             self.dossier, 'opengever.task.task', checkConstraints=False,
@@ -68,21 +63,13 @@ class TestResponse(unittest.TestCase):
             issuer=TEST_USER_ID, text=u'',
             task_type="direct-execution", responsible_client='client2')
 
-        self.doc1 = createContentInContainer(
-            self.dossier, 'opengever.document.document',
-            checkConstraints=False, title="Doc 1")
-
-        self.doc2 = createContentInContainer(
-            self.dossier, 'opengever.document.document',
-            checkConstraints=False, title="Doc 2")
-
+        self.doc1 = Builder("document").within(self.dossier) \
+                                       .titled("Doc 1").create()
+        self.doc2 = Builder("document").within(self.dossier) \
+                                       .titled("Doc 2").create()
         transaction.commit()
 
-        self.browser = Browser(self.layer['app'])
-        self.browser.handleErrors = False
-        self.browser.addHeader('Authorization', 'Basic %s:%s' % (
-                TEST_USER_NAME, TEST_USER_PASSWORD))
-
+    # TODO: split this test into separate examples.
     def test_response_view(self):
         # test added objects info
         add_simple_response(
@@ -109,63 +96,50 @@ class TestResponse(unittest.TestCase):
         self.browser.open(
             '%s/tabbedview_view-overview' % self.task.absolute_url())
 
+        # TODO: replace with OGBrowse API. What is it looking for?
         successor_info = """<span class="label">
                         Added successor task
                     </span>
                     <span class="issueChange"><span class="wf-task-state-open"><a href="http://nohost/plone/dossier-1/task-2" title="[Plone] > dossier-1 > Test task 1"><span class="rollover-breadcrumb icon-task-remote-task">Test task 1</span></a>  <span class="discreet">(Client2 / <a href="http://nohost/plone/@@user-details/testuser2">User 2 Test (testuser2)</a>)</span></span></span>"""
-
         self.assertTrue(successor_info in self.browser.contents)
 
-        responsible_change_info = """<span class="label">label_responsible</span>
-                    <span class="issueChange"><a href="http://nohost/plone/@@user-details/testuser2">User 2 Test (testuser2)</a></span>
-                    &rarr;
-                    <span class="issueChange"><a href="http://nohost/plone/@@user-details/test_user_1_">User Test (test_user_1_)</a></span>"""
+        responsible_container = self.browser.xpath("//div[@class='response-info']/div[descendant-or-self::*[contains(text(), 'label_responsible')]]")[0]
+        links = responsible_container.xpath("./*/a")
+        self.assertEquals(['User 2 Test (testuser2)', 'User Test (test_user_1_)'],
+                          [l.text for l in links])
+        self.assertEquals(['http://nohost/plone/@@user-details/testuser2',
+                           'http://nohost/plone/@@user-details/test_user_1_'],
+                          [l.attrib["href"] for l in links])
 
-        self.assertTrue(responsible_change_info in self.browser.contents)
-
-        doc_added_info = """<a href="http://nohost/plone/dossier-1/document-1" class="contenttype-opengever-document-document">
-	                            <span>Doc 1</span>
-	                        </a>"""
-
-        self.assertTrue(doc_added_info in self.browser.contents)
+        documents = self.browser.css(".contenttype-opengever-document-document")
+        self.assertEquals(['Doc 1', 'Doc 2'], [d.plain_text() for d in documents])
+        self.assertEquals(['http://nohost/plone/dossier-1/document-1',
+                           'http://nohost/plone/dossier-1/document-2'],
+                          [d.attrib["href"] for d in documents])
 
         # edit and delete should not be possible
-        edit_button = '<input class="context" type="submit" value="Edit" />'
-        delete_button = '<input class="destructive" type="submit" value="Delete" />'
-
-        self.assertTrue(edit_button not in self.browser.contents)
-        self.assertTrue(delete_button not in self.browser.contents)
+        self.assertEquals([], self.browser.css("input[type='submit']"))
 
     def test_add_form(self):
         data = {'form.widgets.transition':'task-transition-open-in-progress'}
         self.browser.open('%s/addresponse' % self.task.absolute_url(),
                           data=urllib.urlencode(data))
 
-        # the label should be adjusted with the given transition
-        title = '<h1 class="documentFirstHeading">Test task 1: ' \
-            'task-transition-open-in-progress</h1>'
-        self.assertTrue(title in self.browser.contents)
+        self.assertEquals('Test task 1: task-transition-open-in-progress',
+                          self.browser.locate(".documentFirstHeading").text)
 
-        self.browser.getControl(
-            name="form.widgets.text").value = "Lorem ipsum"
-        self.browser.getControl(
-            name="form.buttons.save").click()
-
+        self.browser.fill_in("form.widgets.text", value="peter")
+        self.browser.click("form.buttons.save")
         self.assertEquals(len(IResponseContainer(self.task)), 1)
 
     def test_add_form_with_related_items(self):
         self.browser.open('%s/addresponse' % self.task.absolute_url())
 
-        #Get Control over the Query Field and enter a value.
-        self.browser.getControl(
-            name="form.widgets.relatedItems.widgets.query").value = u"Doc 1"
-        #Click the Searchbutton
-        self.browser.getControl(
-            name="form.widgets.relatedItems.buttons.search").click()
-
-        self.browser.getControl("Doc 1").selected = True
-
-        self.browser.getControl(name="form.buttons.save").click()
+        self.browser.fill_in("form.widgets.relatedItems.widgets.query",
+                             value=u"Doc 1")
+        self.browser.click("form.widgets.relatedItems.buttons.search")
+        self.browser.check("Doc 1")
+        self.browser.click("form.buttons.save")
 
         self.assertEquals(len(IResponseContainer(self.task)), 1)
         self.assertEquals(self.task.relatedItems[0].to_object, self.doc1)

@@ -1,15 +1,14 @@
-from lxml.cssselect import CSSSelector
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_TESTING
+from opengever.testing.browser import OGBrowser
 from opengever.testing.builders import BuilderSession
 from plone.app.testing import TEST_USER_ID
 from plone.app.testing import TEST_USER_NAME
 from plone.app.testing import TEST_USER_PASSWORD
 from plone.app.testing import setRoles
-from plone.testing.z2 import Browser
 
-import lxml.html
 import transaction
 import unittest2
+
 
 class TestCase(unittest2.TestCase):
     pass
@@ -67,24 +66,15 @@ class FunctionalTestCase(TestCase):
 
     """
     Browser API
+    Deprecated, please don't extend this API and use
+    opengever.testing.browser whenever possible.
     """
-
-    def css(self, selector):
-        xpath = CSSSelector(selector).path
-        return self.xpath(xpath)
-
-    def xpath(self, selector):
-        html = lxml.html.fromstring(self.browser.contents)
-        return html.xpath(selector)
 
     def assertPageContains(self, text):
         self.assertIn(text, self.browser.contents)
 
     def assertPageContainsNot(self, text):
         self.assertNotIn(text, self.browser.contents)
-
-    def assertCurrentUrl(self, url):
-        self.assertEquals(url, self.browser.url)
 
     def assertResponseStatus(self, code):
         self.assertEquals(code, self.portal.REQUEST.response.status)
@@ -93,7 +83,7 @@ class FunctionalTestCase(TestCase):
         self.assertEquals(value, self.portal.REQUEST.response.headers.get(name))
 
     def _setup_browser(self):
-        browser = Browser(self.app)
+        browser = OGBrowser(self.app)
         browser.handleErrors = False
         browser.addHeader('Authorization', 'Basic %s:%s' % (TEST_USER_NAME, TEST_USER_PASSWORD,))
         return browser
