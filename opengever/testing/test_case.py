@@ -49,19 +49,21 @@ class FunctionalTestCase(TestCase):
     Vocabulary assert helpers
     """
 
-    def assertTerms(self, expected_terms, voc):
+    def assertTerms(self, expected_terms, vocabulary):
         effective_terms = []
-        for term in list(voc):
+        for term in list(vocabulary):
             effective_terms.append((term.value, term.title))
 
         self.assertEquals(expected_terms, effective_terms)
 
-    def assertInTerms(self, value, voc):
-        self.assertIn(value, [term.value for term in voc])
+    def assertTermKeys(self, keys, vocabulary):
+        self.assertEquals(keys, [term.value for term in vocabulary])
 
-    def assertNotInTerms(self, value, voc):
-        self.assertNotIn(value, [term.value for term in voc])
+    def assertInTerms(self, value, vocabulary):
+        self.assertIn(value, [term.value for term in vocabulary])
 
+    def assertNotInTerms(self, value, vocabulary):
+        self.assertNotIn(value, [term.value for term in vocabulary])
 
     """
     Browser API

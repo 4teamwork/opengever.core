@@ -5,6 +5,7 @@ from opengever.testing import FunctionalTestCase
 from opengever.testing import create
 from opengever.testing import create_client
 from opengever.testing import set_current_client_id
+from plone.app.testing import TEST_USER_ID
 from zope.component import getUtility
 
 
@@ -33,16 +34,16 @@ class TestTransporter(FunctionalTestCase):
         transported_doc = transporter.transport_from(
             dossier, 'client1', '/'.join(document.getPhysicalPath()))
 
-        self.assertEquals(transported_doc.title, document.title)
-        self.assertEquals(transported_doc.file.data, document.file.data)
+        self.assertEquals('Testdocument', transported_doc.title)
+        self.assertEquals('Test data', transported_doc.file.data)
 
-        self.assertEquals(IClassification(transported_doc).classification,
-                          IClassification(document).classification)
-        self.assertEquals(IClassification(transported_doc).public_trial,
-                          IClassification(document).public_trial)
+        self.assertEquals(u'unprotected',
+                          IClassification(transported_doc).classification)
+        self.assertEquals(u'unchecked',
+                          IClassification(transported_doc).public_trial)
 
-        self.assertEquals(transported_doc.created(), document.created())
-        self.assertEquals(transported_doc.Creator(), document.Creator())
+        self.assertEquals(document.created(), transported_doc.created())
+        self.assertEquals(TEST_USER_ID, transported_doc.Creator())
 
     def test_transport_to_returns_a_dict_with_the_path_to_the_new_object(self):
         source_dossier = create(Builder("dossier").titled("Source"))
@@ -60,13 +61,15 @@ class TestTransporter(FunctionalTestCase):
             data.get('path').encode('utf-8'))
 
         # data
-        self.assertEquals(transported_doc.title, document.title)
-        self.assertEquals(transported_doc.file.data, document.file.data)
+        self.assertEquals(u'Fo\xf6', transported_doc.title)
+        self.assertEquals('Test data', transported_doc.file.data)
+
         # behavior data
-        self.assertEquals(IClassification(transported_doc).classification,
-                          IClassification(document).classification)
-        self.assertEquals(IClassification(transported_doc).public_trial,
-                          IClassification(document).public_trial)
+        self.assertEquals(u'unprotected',
+                          IClassification(transported_doc).classification)
+        self.assertEquals(u'unchecked',
+                          IClassification(transported_doc).public_trial)
+
         # dublin core
-        self.assertEquals(transported_doc.created(), document.created())
-        self.assertEquals(transported_doc.Creator(), document.Creator())
+        self.assertEquals(document.created(), transported_doc.created())
+        self.assertEquals(TEST_USER_ID, transported_doc.Creator())
