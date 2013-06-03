@@ -25,6 +25,13 @@ opengever.core requires a sql database to store some configuriation. Before you 
     > CREATE DATABASE opengever;
     > GRANT ALL ON opengever.* TO opengever@localhost IDENTIFIED BY 'opengever';
 
+Updating translations
+---------------------
+
+Updating translations can be done with the `bin/i18n-build` script.
+It will scan the entire `opengever.core` package for translation files that
+need updating, rebuild the respective `.pot` files and sync the `.po` files.
+
 Tests
 -----
 

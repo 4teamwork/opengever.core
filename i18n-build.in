@@ -1,0 +1,57 @@
+#!/bin/bash
+#
+# This script builds translation files for opengever.core.
+#
+# It does so by finding all the 'locales' directories, rebuilds
+# pkg.name.pot, merging pkg.name-manual.pot files if necessary, and 
+# then syncs translations to the .respective po files for all languages
+# defined in $LANGUAGES.
+
+LANGUAGES="de fr"
+
+pkg_dir=`bin/package-directory`
+core_dir=`dirname $pkg_dir`
+locales_dirs=`find $pkg_dir -name 'locales'`
+
+for locale_dir in $locales_dirs
+do
+    # Strip /locales
+    pkg_path=${locale_dir%%/locales*}
+    # Remove $core_dir
+    pkg_relpath=${pkg_path##*${core_dir}}   # /opengever/dossier
+    # Strip leading slash
+    pkg_relpath=${pkg_relpath##/}           # opengever/dossier
+    pkgname=${pkg_relpath//\//.}            # opengever.dossier
+    potfile="$locale_dir/$pkgname.pot"
+
+    # Check for my.package-manual.pot
+    merge_cmd=""
+    manual_pot="${locale_dir}/${pkgname}-manual.pot"
+    if [ -e "$manual_pot" ]
+    then
+        merge_cmd="--merge $manual_pot"
+    fi
+
+    build_cmd="bin/i18ndude rebuild-pot --pot $potfile --create $pkgname $merge_cmd ./${pkg_relpath}"
+    echo $build_cmd
+    eval $build_cmd
+
+    # Sync all lanuguages defined in $LANGUAGES
+    for lang in $LANGUAGES
+    do
+        # Sync all .pot files so foreign domains like 'plone' also get covered
+        pot_files=`find $locale_dir -name '*.pot'`
+        for potfile in $pot_files
+        do
+            domain=`basename ${potfile}`
+            # Strip trailing .pot
+            domain=${domain%%.pot*}
+            if [[ "$domain" != *-manual ]]
+            then
+              sync_cmd="bin/i18ndude sync --pot $potfile $locale_dir/$lang/LC_MESSAGES/$domain.po"
+              echo $sync_cmd
+              eval $sync_cmd
+            fi
+        done
+    done
+done
