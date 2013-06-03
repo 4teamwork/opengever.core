@@ -22,7 +22,6 @@ from zope.lifecycleevent import ObjectCreatedEvent
 from zope.lifecycleevent import ObjectModifiedEvent
 import DateTime
 import base64
-import datetime
 import json
 
 

@@ -151,6 +151,8 @@ def _create_example_user(session, site, userid, properties, groups):
 
     transaction.commit()
 
+    return session.query(User).filter_by(userid=userid).first()
+
 
 def _create_example_client(session, client_id, properties):
     if len(session.query(Client).filter_by(client_id=client_id).all()) == 0:
@@ -177,6 +179,7 @@ def _create_example_client(session, client_id, properties):
         client.users_group = users_group
         client.inbox_group = inbox_group
         session.add(client)
+        return client
 
 
 def setup_scriptable_plugin(acl_users, plugin_id, external_methods):
