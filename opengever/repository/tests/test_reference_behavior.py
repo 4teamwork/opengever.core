@@ -40,12 +40,12 @@ class TestReferenceBehavior(FunctionalTestCase):
         self.assertPageContains('ReferenceFTI')
         self.browser.getControl('ReferenceFTI').click()
         self.browser.getControl('Add').click()
-        self.assertCurrentUrl('http://nohost/plone/++add++ReferenceFTI')
+        self.browser.assert_url('http://nohost/plone/++add++ReferenceFTI')
         self.assertPageContains('reference_number_prefix')
         self.assertEquals("1", self.browser.getControl(name='form.widgets.IReferenceNumberPrefix.reference_number_prefix').value)
         self.browser.getControl('Title').value = 'Hugo'
         self.browser.getControl('Save').click()
-        self.assertCurrentUrl('http://nohost/plone/referencefti/view')
+        self.browser.assert_url('http://nohost/plone/referencefti/view')
 
         #checked the saved obj ::
         obj = self.portal.get('referencefti')
@@ -56,7 +56,7 @@ class TestReferenceBehavior(FunctionalTestCase):
         self.assertPageContains('ReferenceFTI')
         self.browser.getControl('ReferenceFTI').click()
         self.browser.getControl('Add').click()
-        self.assertCurrentUrl('http://nohost/plone/++add++ReferenceFTI')
+        self.browser.assert_url('http://nohost/plone/++add++ReferenceFTI')
         self.assertPageContains('reference_number_prefix')
         self.browser.getControl('Title').value = 'Hans'
         self.assertEquals("2", self.browser.getControl('Reference Prefix').value)
@@ -64,12 +64,12 @@ class TestReferenceBehavior(FunctionalTestCase):
         #We should not be able to use a already used value::
         self.browser.getControl('Reference Prefix').value = '1'
         self.browser.getControl('Save').click()
-        self.assertCurrentUrl('http://nohost/plone/++add++ReferenceFTI')
+        self.browser.assert_url('http://nohost/plone/++add++ReferenceFTI')
 
         #Ok, lets use a free one::
         self.browser.getControl('Reference Prefix').value = '2'
         self.browser.getControl('Save').click()
-        self.assertCurrentUrl('http://nohost/plone/referencefti-1/view')
+        self.browser.assert_url('http://nohost/plone/referencefti-1/view')
 
         #It should be possbile to use alpha-numeric references::
         self.browser.open('http://nohost/plone/++add++ReferenceFTI')
@@ -78,7 +78,7 @@ class TestReferenceBehavior(FunctionalTestCase):
         self.browser.getControl('Reference Prefix').value = 'a1x10'
         self.browser.getControl('Title').value = 'Peter'
         self.browser.getControl('Save').click()
-        self.assertCurrentUrl('http://nohost/plone/referencefti-2/view')
+        self.browser.assert_url('http://nohost/plone/referencefti-2/view')
 
         #Check the reference numbers of the objects::
         data = []

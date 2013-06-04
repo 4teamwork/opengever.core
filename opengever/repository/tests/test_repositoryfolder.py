@@ -52,7 +52,7 @@ class TestRepositoryFolderWithBrowser(FunctionalTestCase):
         self.browser.getControl('Title').value = 'Registraturplan'
         self.browser.getControl('Description').value = ''
         self.browser.getControl('Save').click()
-        self.assertCurrentUrl('http://nohost/plone/registraturplan/tabbed_view')
+        self.browser.assert_url('http://nohost/plone/registraturplan/tabbed_view')
 
         # Now, create our first repository folder::
         self.browser.open('./folder_factories')
@@ -61,7 +61,7 @@ class TestRepositoryFolderWithBrowser(FunctionalTestCase):
         self.browser.getControl('Add').click()
         self.browser.getControl('Title').value = 'Accounting'
         self.browser.getControl('Save').click()
-        self.assertCurrentUrl('http://nohost/plone/registraturplan/accounting/tabbed_view')
+        self.browser.assert_url('http://nohost/plone/registraturplan/accounting/tabbed_view')
 
         # Check some stuff::
         obj = self.portal.get('registraturplan').get('accounting')
@@ -72,7 +72,7 @@ class TestRepositoryFolderWithBrowser(FunctionalTestCase):
         self.browser.open('http://nohost/plone/registraturplan/++add++opengever.repository.repositoryfolder')
         self.browser.getControl('Title').value = 'Custody'
         self.browser.getControl('Save').click()
-        self.assertCurrentUrl('http://nohost/plone/registraturplan/custody/tabbed_view')
+        self.browser.assert_url('http://nohost/plone/registraturplan/custody/tabbed_view')
 
         obj = self.portal.get('registraturplan').get('custody')
         self.assertEquals(u'2', IReferenceNumberPrefix(obj).reference_number_prefix)
