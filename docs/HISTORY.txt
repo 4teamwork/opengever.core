@@ -4,6 +4,9 @@ Changelog
 3.0 (unreleased)
 ----------------
 
+- Added bin/build-translations script to opengever.core buildout.
+  [lgraf]
+
 - Lay out date range fields in advanced search form side by side.
   Note: This requires the "Init og.advancedsearch profile version" upgrade
   step from opengever.base to be run first!
