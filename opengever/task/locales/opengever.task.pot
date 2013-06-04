@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2013-06-11 08:20+0000\n"
+"POT-Creation-Date: 2013-06-04 20:11+0000\n"
 "PO-Revision-Date: 2009-02-25 14:39+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -359,11 +359,16 @@ msgstr ""
 msgid "help_issuer"
 msgstr ""
 
+#: ./opengever/task/browser/modify_deadline.py:23
+msgid "help_new_deadline"
+msgstr ""
+
 #: ./opengever/task/task.py:174
 msgid "help_predecessor"
 msgstr ""
 
 #: ./opengever/task/browser/assign.py:52
+#: ./opengever/task/browser/modify_deadline.py:29
 #: ./opengever/task/response.py:50
 msgid "help_response"
 msgstr ""
@@ -455,7 +460,7 @@ msgid "label_assign_choose_method"
 msgstr ""
 
 #. Default: "by ${author}"
-#: ./opengever/task/viewlets/byline.pt:19
+#: ./opengever/task/viewlets/byline.pt:17
 msgid "label_by_author"
 msgstr ""
 
@@ -484,7 +489,7 @@ msgstr ""
 msgid "label_copy_documents"
 msgstr ""
 
-#. Default: "created"
+#. Default: "last modified"
 #: ./opengever/task/viewlets/byline.pt:44
 msgid "label_created"
 msgstr ""
@@ -558,6 +563,11 @@ msgstr ""
 #. Default: "Main Atrributes"
 #: ./opengever/task/browser/overview.py:71
 msgid "label_main_attributes"
+msgstr ""
+
+#. Default: "New Deadline"
+#: ./opengever/task/browser/modify_deadline.py:22
+msgid "label_new_deadline"
 msgstr ""
 
 #: ./opengever/task/browser/overview.py:182
@@ -671,8 +681,13 @@ msgid "label_workflow_state"
 msgstr ""
 
 #. Default: "State:"
-#: ./opengever/task/viewlets/byline.pt:26
+#: ./opengever/task/viewlets/byline.pt:28
 msgid "label_workflow_state_byline"
+msgstr ""
+
+#. Default: "Deadline successfully changed."
+#: ./opengever/task/browser/modify_deadline.py:57
+msgid "msg_deadline_change_successfull"
 msgstr ""
 
 msgid "mytasks"
@@ -695,6 +710,11 @@ msgstr ""
 #. Default: "Responses:"
 #: ./opengever/task/response_templates/responseview.pt:3
 msgid "responses"
+msgstr ""
+
+#. Default: "The given deadline, is the current one."
+#: ./opengever/task/browser/modify_deadline.py:50
+msgid "same_deadline_error"
 msgstr ""
 
 #. Default: "Save"
@@ -806,6 +826,11 @@ msgstr ""
 msgid "title_error_no_response"
 msgstr ""
 
+#. Default: "Modify deadline"
+#: ./opengever/task/browser/modify_deadline.py:40
+msgid "title_modify_deadline"
+msgstr ""
+
 #. Default: "Document copied from forwarding (forwarding accepted)"
 #: ./opengever/task/browser/accept/utils.py:131
 msgid "version_message_accept_forwarding"
@@ -831,4 +856,3 @@ msgstr ""
 #: ./opengever/task/browser/accept/utils.py:50
 msgid "yearfolder_title"
 msgstr ""
-
