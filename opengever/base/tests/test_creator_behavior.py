@@ -26,11 +26,11 @@ class TestCreatorBehavior(FunctionalTestCase):
         self.assertPageContains('ReferenceFTI')
         self.browser.getControl('ReferenceFTI').click()
         self.browser.getControl('Add').click()
-        self.assertCurrentUrl('http://nohost/plone/++add++ReferenceFTI')
+        self.browser.assert_url('http://nohost/plone/++add++ReferenceFTI')
         self.assertPageContainsNot('creators')
         self.browser.getControl('Title').value = 'Hallo Hugo'
         self.browser.getControl('Save').click()
-        self.assertCurrentUrl('http://nohost/plone/referencefti/view')
+        self.browser.assert_url('http://nohost/plone/referencefti/view')
 
         obj = self.portal.get('referencefti')
         self.assertTrue(creator.ICreatorAware.providedBy( obj ))

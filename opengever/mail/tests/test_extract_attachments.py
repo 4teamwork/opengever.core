@@ -129,7 +129,7 @@ class TestAttachmentExtraction(FunctionalTestCase):
 
         self.browser.open(
             '%s/extract_attachments' % mail.absolute_url())
-        self.assertCurrentUrl(mail.absolute_url())
+        self.browser.assert_url(mail.absolute_url())
 
     def test_cancel(self):
         mail = self.create_mail(MESSAGE_TEXT)
@@ -137,4 +137,4 @@ class TestAttachmentExtraction(FunctionalTestCase):
             '%s/extract_attachments' % mail.absolute_url())
 
         self.browser.getControl(name='form.cancelled').click()
-        self.assertCurrentUrl(mail.absolute_url())
+        self.browser.assert_url(mail.absolute_url())

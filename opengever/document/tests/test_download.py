@@ -107,7 +107,7 @@ class TestDocumentDownloadConfirmation(FunctionalTestCase):
             '%s/file_download_confirmation' % self.document.absolute_url())
 
         self.assertIn("You\'re downloading a copy of the document",
-                      self.css(".details > p")[0].text)
+                      self.browser.locate(".details > p").text)
 
         # submit
         self.browser.getControl('label_download').click()
@@ -120,7 +120,7 @@ class TestDocumentDownloadConfirmation(FunctionalTestCase):
                 self.document.absolute_url()))
 
         self.assertIn("You're downloading a copy of the document",
-                      self.css(".details > p")[0].text)
+                      self.browser.locate(".details > p").text)
 
         # submit
         self.browser.getControl('label_download').click()

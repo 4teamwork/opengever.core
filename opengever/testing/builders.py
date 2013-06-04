@@ -29,6 +29,8 @@ def Builder(name):
         return RepositoryBuilder(BuilderSession.instance())
     elif name == "contact":
         return ContactBuilder(BuilderSession.instance())
+    elif name == "repository_root":
+        return RepositoryRootBuilder(BuilderSession.instance())
     else:
         raise ValueError("No Builder for %s" % name)
 
@@ -204,10 +206,16 @@ class RepositoryBuilder(DexterityBuilder):
                                         'opengever.repository.repositoryfolder',
                                         **self.arguments)
 
-
 class ContactBuilder(DexterityBuilder):
 
     def create_object(self):
         return createContentInContainer(self.container,
                                         'opengever.contact.contact',
+                                        **self.arguments)
+
+class RepositoryRootBuilder(DexterityBuilder):
+
+    def create_object(self):
+        return createContentInContainer(self.container,
+                                        'opengever.repository.repositoryroot',
                                         **self.arguments)

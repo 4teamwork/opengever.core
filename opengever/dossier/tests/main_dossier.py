@@ -7,17 +7,15 @@ from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.mail.behaviors import ISendableDocsContainer
 from opengever.testing import FunctionalTestCase
-from opengever.testing import OPENGEVER_FUNCTIONAL_TESTING
 from opengever.testing import create_client
 from opengever.testing import create_ogds_user
 from opengever.testing import create_plone_user
 from opengever.testing import set_current_client_id
 from plone.app.testing import SITE_OWNER_NAME, login, logout
-from plone.app.testing import TEST_USER_NAME, TEST_USER_PASSWORD
+from plone.app.testing import TEST_USER_NAME
 from plone.dexterity.utils import createContentInContainer
 from plone.dexterity.utils import iterSchemata
 from plone.indexer.interfaces import IIndexableObject
-from plone.testing.z2 import Browser
 from zExceptions import Unauthorized
 from zope.component import getAdapter, getUtility
 from zope.component import queryMultiAdapter
@@ -84,10 +82,9 @@ class TestMainDossier(FunctionalTestCase):
     - default_contentmenu_order_subdossier: The orderposition of items in the
         contentmenu for subdossiers
     """
+    use_browser = True
 
     dossier_types = {'opengever.dossier.businesscasedossier': {}}
-
-    layer = OPENGEVER_FUNCTIONAL_TESTING
 
     workflow = "opengever_dossier_workflow"
 
@@ -136,45 +133,18 @@ class TestMainDossier(FunctionalTestCase):
                                             'Add Participant',
                                            ]
 
-    # Helpers
-    # ***************************************************
-    def get_browser(self):
-        """Return logged in browser
-        """
-        # Create browser an login
-        portal_url = self.layer['portal'].absolute_url()
-        browser = Browser(self.layer['app'])
-        browser.open('%s/login_form' % portal_url)
-        browser.getControl(name='__ac_name').value = TEST_USER_NAME
-        browser.getControl(name='__ac_password').value = TEST_USER_PASSWORD
-        browser.getControl(name='submit').click()
-
-        # Check login
-        self.assertNotEquals('__ac_name' in browser.contents, True)
-        self.assertNotEquals('__ac_password' in browser.contents, True)
-
-        return browser
-
-    def get_add_view(self, dossier_type, path='', browser=None):
+    def get_add_view(self, dossier_type, path=''):
         """Return a browser whos content is in the add-view of a dossier
         """
         if not path:
             path = self.base_url
 
-        if not browser:
-            browser = self.get_browser()
+        self.browser.open('%s/++add++%s' % (path, dossier_type))
 
-        browser.open('%s/++add++%s' % (path, dossier_type))
-        return browser
-
-    def get_edit_view(self, path, browser=None):
+    def get_edit_view(self, path):
         """Return a browser whos content is in the edit-view of a dossier
         """
-        if not browser:
-            browser = self.get_browser()
-
-        browser.open('%s/edit' % (path))
-        return browser
+        self.browser.open('%s/edit' % (path))
 
     def create_dossier(self, dossier_type, subpath=''):
         """Create and return a dossier in a given location
@@ -405,10 +375,9 @@ class TestMainDossier(FunctionalTestCase):
         for dossier_type in self.dossier_types:
             if self.is_special_dossier:
                 d1 = self.create_dossier(dossier_type)
-                browser =self.get_browser()
                 url = '%s/tabbedview_view-overview' %(d1.absolute_url())
-                browser.open(url)
-                self.assertTrue('additional_attributes' in browser.contents)
+                self.browser.open(url)
+                self.assertTrue('additional_attributes' in self.browser.contents)
 
     def test_default_labels(self):
         """Check default form labels of subdossier
@@ -418,7 +387,6 @@ class TestMainDossier(FunctionalTestCase):
         """
         for dossier_type in self.dossier_types:
             d1 = self.create_dossier(dossier_type)
-            browser =self.get_browser()
 
             # Check action label
             menu = FactoriesMenu(d1)
@@ -434,22 +402,22 @@ class TestMainDossier(FunctionalTestCase):
                 [item.get('title') for item in menu_items])
 
             # Check title of addformular for a subdossier
-            browser = self.get_add_view(
-                dossier_type, path=d1.absolute_url(), browser=browser)
+            self.get_add_view(
+                dossier_type, path=d1.absolute_url())
 
             self.assertEquals(
                 self.labels.get(
-                    'add_subdossier') in browser.contents, True)
+                    'add_subdossier') in self.browser.contents, True)
 
-            url = browser.url.split('/')[-1]
+            url = self.browser.url.split('/')[-1]
             self.assertTrue(url == '++add++%s' % dossier_type)
 
             # Check edit label
             d2 = self.create_dossier(dossier_type, subpath=d1.getId())
-            browser = self.get_edit_view(d2.absolute_url(), browser=browser)
+            self.get_edit_view(d2.absolute_url())
             self.assertEquals(
                 self.labels.get(
-                    'edit_subdossier') in browser.contents, True)
+                    'edit_subdossier') in self.browser.contents, True)
 
     def test_nesting_deepth(self):
         """Check the deepth of subdossiers. Normally we just can add a
@@ -460,7 +428,6 @@ class TestMainDossier(FunctionalTestCase):
 
         for dossier_type in self.dossier_types:
             dossiers = []
-            browser = self.get_browser()
             # First normal dossier
             dossiers.append(self.create_dossier(dossier_type))
 
@@ -476,13 +443,13 @@ class TestMainDossier(FunctionalTestCase):
 
                 dossiers.append(subdossier)
 
-                browser.open(subdossier.absolute_url())
+                self.browser.open(subdossier.absolute_url())
                 # its possible to add a subdossier
                 if i < self.deepth-1:
                     # Check link is enabled
                     self.assertEquals(
                         self.labels.get(
-                            'action_name') in browser.contents, True)
+                            'action_name') in self.browser.contents, True)
 
                     # Check contenttype is allowed
                     self.assertIn(
@@ -493,7 +460,7 @@ class TestMainDossier(FunctionalTestCase):
                     # Check link is disabled
                     self.assertNotEquals(
                         self.labels.get(
-                            'action_name') in browser.contents, True)
+                            'action_name') in self.browser.contents, True)
                     # Chekc contenttype is disallowed
                     self.assertTrue(
                         dossier_type not in [

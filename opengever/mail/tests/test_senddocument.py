@@ -62,7 +62,7 @@ class TestSendDocument(FunctionalTestCase):
             'The files you selected are larger than the maximum size')
 
         mail = self.send_documents(dossier, [document, ], as_links=True)
-        self.assertCurrentUrl('%s#documents' % dossier.absolute_url())
+        self.browser.assert_url('%s#documents' % dossier.absolute_url())
         self.assert_mail_links_to(mail, document.absolute_url())
 
     def test_address_validator(self):

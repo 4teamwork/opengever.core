@@ -33,7 +33,7 @@ class TestClassificationBehavior(FunctionalTestCase):
         self.browser.getControl(name="form.widgets.IClassification.public_trial:list").value = [classification.PUBLIC_TRIAL_PRIVATE]
         self.browser.getControl(name="form.widgets.IClassification.public_trial_statement").value = 'My Statement'
         self.browser.getControl(name="form.buttons.save").click()
-        self.assertCurrentUrl('http://nohost/plone/classificationfti/view')
+        self.browser.assert_url('http://nohost/plone/classificationfti/view')
 
         # Get the created object:
         obj = self.portal.get('classificationfti')

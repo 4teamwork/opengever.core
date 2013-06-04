@@ -1,16 +1,12 @@
 from Products.CMFCore.utils import getToolByName
 from opengever.testing import FunctionalTestCase
-from opengever.testing import OPENGEVER_FUNCTIONAL_TESTING
-from plone.app.testing import TEST_USER_NAME, TEST_USER_PASSWORD
 from plone.app.testing import setRoles, TEST_USER_ID
-from plone.testing.z2 import Browser
 import json
 import transaction
 
 
 class TestOpenDossiersJson(FunctionalTestCase):
-
-    layer = OPENGEVER_FUNCTIONAL_TESTING
+    use_browser = True
 
     def setUp(self):
         super(TestOpenDossiersJson, self).setUp()
@@ -20,7 +16,7 @@ class TestOpenDossiersJson(FunctionalTestCase):
         self.store_dossiers(2)
         transaction.commit()
 
-        self.visit("http://nohost/plone/list-open-dossiers-json")
+        self.browser.open("http://nohost/plone/list-open-dossiers-json")
         self.assertEquals("application/json", self.browser.headers['Content-Type'])
 
         json_data = json.loads(self.browser.contents)
@@ -46,13 +42,13 @@ class TestOpenDossiersJson(FunctionalTestCase):
         self.resolve_dossier(self.portal.get('testdossier-1'))
         transaction.commit()
 
-        self.visit("http://nohost/plone/list-open-dossiers-json")
+        self.browser.open("http://nohost/plone/list-open-dossiers-json")
 
         json_data = json.loads(self.browser.contents)
         self.assertEquals([], json_data,
                           "the JSON should not contain resolved dossiers")
 
-    def store_dossiers(self, number, title = "Testdossier"):
+    def store_dossiers(self, number, title="Testdossier"):
         for i in range(1, number + 1):
             handle = '%s-%s' % (title.lower(), i)
             self.portal.invokeFactory(
@@ -67,9 +63,3 @@ class TestOpenDossiersJson(FunctionalTestCase):
         setRoles(self.portal, TEST_USER_ID, ['Reviewer', 'Manager'])
         workflow = getToolByName(self.portal, 'portal_workflow')
         workflow.doActionFor(dossier, 'dossier-transition-resolve')
-
-    def visit(self, path):
-        self.browser = Browser(self.layer['app'])
-        self.browser.handleErrors = False
-        self.browser.addHeader('Authorization', 'Basic %s:%s' % (TEST_USER_NAME, TEST_USER_PASSWORD,))
-        self.browser.open(path)

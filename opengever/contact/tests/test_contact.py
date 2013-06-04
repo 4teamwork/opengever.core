@@ -24,7 +24,7 @@ class TestContact(FunctionalTestCase):
         self.browser.open('http://nohost/plone/folder_factories')
         self.browser.getControl('ContactFolder').click()
         self.browser.getControl('Add').click()
-        self.assertCurrentUrl('http://nohost/plone/++add++opengever.contact.contactfolder')
+        self.browser.assert_url('http://nohost/plone/++add++opengever.contact.contactfolder')
         self.browser.getControl('Title').value='Foobar'
         self.browser.getControl('Description').value='Lorem Ipsum'
         self.browser.getControl('Save').click()
@@ -34,17 +34,17 @@ class TestContact(FunctionalTestCase):
         self.browser.getControl('Contact').click()
         self.browser.getControl('Add').click()
 
-        self.assertCurrentUrl('http://nohost/plone/foobar/++add++opengever.contact.contact')
+        self.browser.assert_url('http://nohost/plone/foobar/++add++opengever.contact.contact')
         self.browser.getControl('Firstname').value = 'lorem'
         self.browser.getControl('Save').click()
 
-        self.assertCurrentUrl('http://nohost/plone/foobar/++add++opengever.contact.contact')
+        self.browser.assert_url('http://nohost/plone/foobar/++add++opengever.contact.contact')
 
         self.browser.getControl('Firstname').value = 'Hanspeter'
         self.browser.getControl('Lastname').value = 'Walter'
         self.browser.getControl('Description').value = 'Lorem ipsum, bla bla'
         self.browser.getControl('Save').click()
-        self.assertCurrentUrl('http://nohost/plone/foobar/walter-hanspeter/contact_view')
+        self.browser.assert_url('http://nohost/plone/foobar/walter-hanspeter/contact_view')
 
         # test searchabelText indexing
         obj = self.portal.get('foobar').get('walter-hanspeter')
