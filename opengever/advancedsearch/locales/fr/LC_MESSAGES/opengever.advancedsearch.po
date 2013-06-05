@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "POT-Creation-Date: 2013-05-27 12:21+0000\n"
-"PO-Revision-Date: 2013-06-05 09:10+0200\n"
+"PO-Revision-Date: 2013-06-05 09:24+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -40,7 +40,7 @@ msgstr "Auteur du document"
 
 #: ./opengever/advancedsearch/advanced_search.py:163
 msgid "help_filing_number"
-msgstr "Entrez le numéro d'inventaire complet"
+msgstr "Saisir le numéro d'inventaire complet"
 
 #: ./opengever/advancedsearch/advanced_search.py:242
 msgid "help_issuer"
@@ -52,7 +52,7 @@ msgstr "Choix du type de contenu à rechercher. Ne sont parcourus que les conten
 
 #: ./opengever/advancedsearch/advanced_search.py:151
 msgid "help_reference_number"
-msgstr "Saisir numéro de référence"
+msgstr "Saisir le numéro de référence"
 
 #: ./opengever/advancedsearch/advanced_search.py:170
 msgid "help_responsible"
@@ -140,7 +140,7 @@ msgstr "Date de réception"
 #. Default: "Reference number"
 #: ./opengever/advancedsearch/advanced_search.py:150
 msgid "label_reference_number"
-msgstr "numéro de référence"
+msgstr "Numéro de référence"
 
 #. Default: "Responsible"
 #: ./opengever/advancedsearch/advanced_search.py:169
