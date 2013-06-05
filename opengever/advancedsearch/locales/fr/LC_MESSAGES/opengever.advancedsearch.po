@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "POT-Creation-Date: 2013-05-27 12:21+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
+"PO-Revision-Date: 2013-06-05 09:10+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -179,10 +179,8 @@ msgstr "à"
 #. Default: "Also search in the recycle bin"
 #: ./opengever/advancedsearch/advanced_search.py:233
 msgid "label_trashed"
-msgstr "Explorer également la corbeille"
+msgstr "Parcourir également la corbeille"
 
 #: ./opengever/advancedsearch/advanced_search.py:60
 msgid "task"
 msgstr "Tâches sauvegardées localement"
-
-
