@@ -32,6 +32,9 @@
         handler="opengever.base.setuphandlers.import_various">
     </genericsetup:importStep>
 
+    <class class="Products.ZCatalog.CatalogBrains.AbstractCatalogBrain">
+      <implements interface="opengever.base.interfaces.IOpengeverCatalogBrain"/>
+    </class>
 
     <include package="plone.behavior" file="meta.zcml" />
 
@@ -48,5 +51,10 @@
     <include package=".upgrades" />
 
 	<include file="skins.zcml" />
+
+    <adapter
+        factory=".contentlisting.OpengeverCatalogContentListingObject"
+        for="opengever.base.interfaces.IOpengeverCatalogBrain"
+        />
 
 </configure>

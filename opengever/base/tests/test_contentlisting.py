@@ -1,96 +1,86 @@
-from Missing import Value as MissingValue
-from Products.ZCatalog.interfaces import ICatalogBrain
-from ftw.testing import MockTestCase
-from ftw.testing.layer import ComponentRegistryLayer
+from opengever.testing import Builder
+from opengever.testing import FunctionalTestCase
+from opengever.testing import create
+from opengever.testing import obj2brain
 from plone.app.contentlisting.interfaces import IContentListingObject
 
 
-class ContentListingZCML(ComponentRegistryLayer):
+class TestOpengeverContentListing(FunctionalTestCase):
 
-    def setUp(self):
-        super(ContentListingZCML, self).setUp()
-        import opengever.base.tests
-        self.load_zcml_file('tests.zcml', opengever.base.tests)
-
-
-CONTENT_LISTING_ZCML_LAYER = ContentListingZCML()
-
-
-class TestOpengeverContentListing(MockTestCase):
-
-    layer = CONTENT_LISTING_ZCML_LAYER
-
-    def setUp(self):
-        super(TestOpengeverContentListing, self).setUp()
-        self.brain = self.providing_stub([ICatalogBrain, ])
-        self.request = self.stub_request()
-        self.expect(self.brain.REQUEST).result(self.request)
-        self.expect(self.brain.getPath(), 'Fake Path')
-
-    def test_containing_dossier(self):
-        """the containg dossier should be cropped to 200 items."""
-        self.expect(
-            self.brain.containing_dossier).result(
-            10 * 'Lorem ipsum dolor sit amet')
-
-        self.replay()
+    def test_getIcon_returns_none_for_every_contenttype(self):
+        dossier = create(Builder('dossier'))
+        document = create(Builder('document'))
 
         self.assertEquals(
-            len(IContentListingObject(self.brain).containing_dossier()),
-            203)
+            None,
+            IContentListingObject(obj2brain(dossier)).getIcon())
 
-    def test_containing_dosssier_without_value(self):
-        self.expect(self.brain.containing_dossier).result(None)
-        self.replay()
         self.assertEquals(
-            IContentListingObject(self.brain).containing_dossier(), '')
+            None,
+            IContentListingObject(obj2brain(document)).getIcon())
 
-    def test_containing_dosssier_with_missing_value(self):
-        self.expect(self.brain.containing_dossier).result(MissingValue)
-        self.replay()
+    def test_ContentTypeClass_returns_the_contenttype_icon_css_class(self):
+        dossier = create(Builder('dossier'))
+        document = create(Builder('document'))
+
         self.assertEquals(
-            IContentListingObject(self.brain).containing_dossier(), '')
+            'contenttype-opengever-dossier-businesscasedossier',
+            IContentListingObject(obj2brain(dossier)).ContentTypeClass())
 
-    def test_title(self):
-        """the title should be cropped to circa 200 characters."""
-        self.expect(self.brain.Title).result(
-            10 * 'Lorem ipsum dolor sit amet')
-
-        self.replay()
         self.assertEquals(
-            len(IContentListingObject(self.brain).CroppedTitle()), 203)
+            'contenttype-opengever-document-document',
+            IContentListingObject(obj2brain(document)).ContentTypeClass())
 
-    def test_title_without_value(self):
-        self.expect(self.brain.Title).result(None)
+    def test_containing_dossier_of_a_dossier_returns_dossiers_title(self):
+        dossier = create(Builder('dossier').titled('Testdossier'))
 
-        self.replay()
-        self.assertEquals(IContentListingObject(self.brain).CroppedTitle(), '')
-
-    def test_title_with_missing_value(self):
-        self.expect(self.brain.Title).result(MissingValue)
-
-        self.replay()
-        self.assertEquals(IContentListingObject(self.brain).CroppedTitle(), '')
-
-    def test_description(self):
-        """the description should be cropped to circa 400 characters."""
-        self.expect(self.brain.Description).result(
-            20 * 'Lorem ipsum dolor sit amet')
-
-        self.replay()
         self.assertEquals(
-            len(IContentListingObject(self.brain).CroppedDescription()), 399)
+            'Testdossier',
+            IContentListingObject(obj2brain(dossier)).containing_dossier())
 
-    def test_description_without_value(self):
-        self.expect(self.brain.Description).result(None)
+    def test_containing_dossier_returns_empty_string_for_object_not_in_a_dossier(self):
+        repository = create(Builder('repository'))
 
-        self.replay()
         self.assertEquals(
-            IContentListingObject(self.brain).CroppedDescription(), '')
+            '',
+            IContentListingObject(obj2brain(repository)).containing_dossier())
 
-    def test_description_with_missing_value(self):
-        self.expect(self.brain.Description).result(MissingValue)
+    def test_containing_dossier_returns_the_title_of_the_containing_dossier(self):
+        dossier = create(Builder('dossier').titled('Testdossier'))
+        document = create(Builder('document').within(dossier))
 
-        self.replay()
         self.assertEquals(
-            IContentListingObject(self.brain).CroppedDescription(), '')
+            'Testdossier',
+            IContentListingObject(obj2brain(document)).containing_dossier())
+
+    def test_containing_dossier_title_is_cropped_to_near_200_chars(self):
+        dossier = create(Builder('dossier')
+                         .titled(25 * 'lorem ipsum '))
+        document = create(Builder('document').within(dossier))
+
+        self.assertCropping(
+            201, IContentListingObject(obj2brain(document)).containing_dossier())
+
+    def test_cropped_title_returns_title_cropped_to_near_200_chars(self):
+        document = create(Builder('document')
+                          .titled(25 * 'lorem ipsum '))
+
+        self.assertCropping(
+            201, IContentListingObject(obj2brain(document)).CroppedTitle())
+
+    def test_cropped_description_returns_description_cropped_to_near_400_chars(self):
+        document = create(Builder('document')
+                          .having(description=50 * 'lorem ipsum '))
+
+        self.assertCropping(
+            399, IContentListingObject(obj2brain(document)).CroppedDescription())
+
+    def test_cropped_description_returns_empty_string_for_objs_without_description(self):
+        document = create(Builder('document'))
+
+        self.assertEquals(
+            '', IContentListingObject(obj2brain(document)).CroppedDescription())
+
+    def assertCropping(self, size, value):
+        self.assertEquals(
+            size, len(value), 'Text cropping failed for %s' % value)
