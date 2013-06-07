@@ -20,7 +20,7 @@
     <dependency>profile-opengever.sharing:default</dependency>
     <dependency>profile-opengever.latex:default</dependency>
     <dependency>profile-ftw.datepicker:default</dependency>
-    <dependency>profile-izug.basetheme:opengever</dependency>
+    <dependency>profile-plonetheme.teamraum:default</dependency>
     <dependency>profile-plone.formwidget.autocomplete:default</dependency>
     <dependency>profile-plone.formwidget.contenttree:default</dependency>
   </dependencies>
