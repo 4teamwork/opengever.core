@@ -1,19 +1,19 @@
 from Acquisition import aq_inner
+from Products.CMFCore.utils import getToolByName
 from five import grok
 from ftw.mail import utils
-from ftw.mail.mail import View as ftwView
 from ftw.mail.mail import IMail
-from izug.basetheme.browser.interfaces import IOpengeverSpecific
+from ftw.mail.mail import View as ftwView
+from opengever.base.interfaces import IOpengeverBaseLayer
 from plone.i18n.normalizer.interfaces import IIDNormalizer
 from plone.memoize import instance
-from Products.CMFCore.utils import getToolByName
 from zope.component import getUtility
 
 
 class View(ftwView):
 
     grok.context(IMail)
-    grok.layer(IOpengeverSpecific)
+    grok.layer(IOpengeverBaseLayer)
     grok.require('zope2.View')
 
     @instance.memoize
