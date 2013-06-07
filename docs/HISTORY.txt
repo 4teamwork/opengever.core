@@ -4,6 +4,10 @@ Changelog
 3.0 (unreleased)
 ----------------
 
+- AdvancedSearch: Added special description for the portal types field
+  in a multiclientsetup.
+  [phgross]
+
 - Added filter_pattern option to LDAPSource blueprint.
   If set, only imports users whose email address match `filter_pattern`.
   [lgraf]

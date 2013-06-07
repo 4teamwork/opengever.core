@@ -1,26 +1,27 @@
-import urllib
-from five import grok
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone import PloneMessageFactory as PMF
-from zope import schema
-from zope.schema.interfaces import IContextSourceBinder
-from zope.schema.vocabulary import SimpleVocabulary
-from z3c.form import button, field
-from z3c.form.interfaces import INPUT_MODE
-from z3c.form.browser import radio, checkbox
-from plone.directives import form as directives_form
+from datetime import date
+from datetime import timedelta
+from five import grok
+from ftw.datepicker.widget import DatePickerFieldWidget
 from opengever.advancedsearch import _
 from opengever.ogds.base.autocomplete_widget import AutocompleteFieldWidget
+from opengever.ogds.base.interfaces import IContactInformation
 from opengever.ogds.base.utils import get_client_id
 from opengever.task.util import getTaskTypeVocabulary
-from datetime import date
-from ftw.datepicker.widget import DatePickerFieldWidget
-from datetime import timedelta
-import datetime
-from zope.interface import Interface
+from plone.directives import form as directives_form
 from plone.registry.interfaces import IRegistry
+from z3c.form import button, field
+from z3c.form.browser import radio, checkbox
+from z3c.form.interfaces import INPUT_MODE
+from zope import schema
 from zope.component import getUtility
+from zope.interface import Interface
+from zope.schema.interfaces import IContextSourceBinder
+from zope.schema.vocabulary import SimpleVocabulary
+import datetime
 import re
+import urllib
 
 
 @grok.provider(IContextSourceBinder)
@@ -118,7 +119,8 @@ class IAdvancedSearch(directives_form.Schema):
 
     object_provides = schema.Choice(
         title=_('label_portal_type', default="Type"),
-        description=_('help_portal_type', default=''),
+        description=_('help_portal_type',
+                      default='Select the contenttype to be searched for.'),
         source=get_types,
         required=True,
     )
@@ -331,6 +333,24 @@ class AdvancedSearchForm(directives_form.Form):
             for name in v:
                 if self.widgets.get(name, None):
                     self.widgets.get(name, None).addClass(k)
+
+        self.set_object_provides_field_description()
+
+    def set_object_provides_field_description(self):
+        # set special description for object_provides field,
+        # if the current setup is a multiclient_setup
+        contact_info = getUtility(IContactInformation)
+        type_field = self.widgets.get('object_provides').field
+
+        if len(contact_info.get_clients()) > 1:
+            type_field.description = _(
+                'help_portal_type_multiclient_setup',
+                default='Select the contenttype to be searched for.'
+                'It searches only items from the current client.')
+        else:
+            type_field.description = _(
+                'help_portal_type',
+                default='Select the contenttype to be searched for.')
 
     @button.buttonAndHandler(_(u'button_search', default=u'Search'))
     def search(self, action):
