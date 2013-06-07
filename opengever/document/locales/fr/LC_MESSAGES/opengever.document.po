@@ -124,7 +124,7 @@ msgstr "Copie de"
 #. Default: "You're downloading a copy of the document ${filename}"
 #: ./opengever/document/browser/download_templates/downloadconfirmation.pt:11
 msgid "description_download_confirmation"
-msgstr "Attention ! En ouvrant le document ${filename} de cette manière, toutes les modifications apportées ne seront pas sauvegardées."
+msgstr "Vous étes en train de télécharger une copie du document ${filename}."
 
 #. Default: "You don't select a file and document is also not                 preserved in paper_form, please correct it."
 #: ./opengever/document/document.py:216
@@ -412,4 +412,4 @@ msgstr "Périmé"
 #. Default: "Please note that in this case changes on the document wouldn't be saved in to GEVER."
 #: ./opengever/document/browser/download_templates/downloadconfirmation.pt:16
 msgid "warning_download_confirmation"
-msgstr "Attention ! Si vous modifiez de cette manière ce document, rien ne sera sauvé sous GEVER."
+msgstr "Attention ! En ouvrant le document de cette manière, toutes les modifications apportées ne seront pas sauvegardées."
