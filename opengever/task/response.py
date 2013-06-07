@@ -297,10 +297,6 @@ class ResponseView(grok.Viewlet, Base):
     def __init__(self, context, request, view, manager):
         grok.Viewlet.__init__(self, context, request, view, manager)
         Base.__init__(self, context, request)
-        for response in self.responses():
-            for item in response['response'].changes:
-                if isinstance(item['after'], datetime.date):
-                    item['after'] = item['after'].strftime('%d.%m.%Y')
 
     def get_css_class(self, item):
         """used for display icons in the view"""
@@ -353,6 +349,12 @@ class ResponseView(grok.Viewlet, Base):
         elif fieldname == 'responsible':
             info = getUtility(IContactInformation)
             return info.render_link(value)
+
+        elif isinstance(value, datetime.date):
+            trans_service = getToolByName(
+                self.context, 'translation_service')
+            return trans_service.toLocalizedTime(
+                datetime.datetime(value.year, value.month, value.day))
 
         return value
 
