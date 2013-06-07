@@ -1,10 +1,10 @@
+from Products.CMFCore.utils import getToolByName
 from five import grok
 from ftw.mail import utils
 from ftw.mail.attachment import AttachmentView as FtwAtachmentView
 from ftw.mail.mail import IMail
-from izug.basetheme.browser.interfaces import IOpengeverSpecific
 from opengever.base.behaviors.utils import set_attachment_content_disposition
-from Products.CMFCore.utils import getToolByName
+from opengever.base.interfaces import IOpengeverBaseLayer
 from zExceptions import NotFound
 import email
 
@@ -13,7 +13,7 @@ class AttachmentView(FtwAtachmentView):
     """Returns the attachment at the position specified in the request.
     """
     grok.context(IMail)
-    grok.layer(IOpengeverSpecific)
+    grok.layer(IOpengeverBaseLayer)
     grok.require('zope2.View')
     grok.name('get_attachment')
 

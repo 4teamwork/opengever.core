@@ -24,7 +24,7 @@
     <browser:page
         name="ploneform-macros"
         for="*"
-        layer="izug.basetheme.browser.interfaces.IThemeSpecific"
+        layer="opengever.base.interfaces.IOpengeverBaseLayer"
         class=".ploneform_macros.Macros"
         template="templates/macros.pt"
         allowed_interface="zope.interface.common.mapping.IItemMapping"
