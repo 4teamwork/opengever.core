@@ -6,7 +6,6 @@ maintainer = 'Jonas Baumann'
 
 tests_require = [
     'Products.CMFPlone',
-    'ftw.contentmenu',
     'ftw.journal',
     'ftw.tabbedview',
     'ftw.table',
@@ -74,6 +73,7 @@ setup(name='opengever.core',
         'ftw.pdfgenerator',
         'ftw.tabbedview[extjs, quickupload]',
         'ftw.table',
+        'ftw.contentmenu',
         'ftw.tooltip',
         'ftw.treeview',
         'ftw.upgrade',
