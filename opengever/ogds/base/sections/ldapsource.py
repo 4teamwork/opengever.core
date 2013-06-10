@@ -14,7 +14,8 @@ class LDAPUserSourceSection(object):
         self.previous = previous
         self.logger = logging.getLogger(options['blueprint'])
         self.options = options
-        self.filter_pattern = re.compile(self.options.get('filter_pattern', ''))
+        self.filter_pattern = re.compile(
+            self.options.get('filter_pattern', ''))
 
     def __iter__(self):
 
@@ -87,7 +88,7 @@ class LDAPGroupSourceSection(LDAPUserSourceSection):
                          (UnicodeDecodeError)" % groupid
 
                 temp = {}
-                if groupid.startswith('og_'):
+                if self.filter_pattern.match(groupid):
                     temp['groupid'] = group.getId()
                     temp['title'] = group.getName()
                     temp['_users'] = group.getMemberIds()
