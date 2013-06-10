@@ -33,14 +33,6 @@
 
     <adapter factory=".navtree.OpengeverNavtreeStrategy" />
 
-    <browser:viewlet
-      name="izug.basethem.belowcontenttitle.contentviews"
-      for="OFS.interfaces.IItem"
-      manager="plone.app.layout.viewlets.interfaces.IBelowContentTitle"
-      class=".viewlets.OpengeverContentViewsViewlet"
-      permission="zope2.View"
-      />
-
     <browser:page
         name="search"
         class=".search.OpengeverSearch"
