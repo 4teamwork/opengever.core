@@ -4,6 +4,7 @@
   <dependencies>
     <dependency>profile-opengever.globalindex:default</dependency>
     <dependency>profile-opengever.base:default</dependency>
+    <dependency>profile-collective.mtrsetup:default</dependency>
     <dependency>profile-opengever.document:default</dependency>
     <dependency>profile-opengever.dossier:default</dependency>
     <dependency>profile-opengever.repository:default</dependency>
