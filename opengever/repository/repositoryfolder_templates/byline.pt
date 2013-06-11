@@ -1,20 +1,30 @@
-<div class="documentByLine"
-	 id="plone-document-byline"
+<div class="documentByLine" id="plone-document-byline"
      i18n:domain="opengever.repository">
-  <span class="" tal:attributes="class string:byline-icon ${viewlet/get_css_class}"
-></span>
-  <span i18n:translate="label_workflow_state" class="noborder">
-    State:
-  </span><span tal:content="viewlet/workflow_state" i18n:domain="plone" i18n:translate="" class="noborder"/>
 
-  <tal:state>
-    <span i18n:translate="" tal:content="context/privacy_layer|nothing" i18n:domain="opengever.base"/>
-  </tal:state>
+  <ul>
+    <li tal:attributes="class string:byline-icon ${viewlet/get_css_class};
+                        title context/Type">
+      &nbsp;
+    </li>
 
-  <span class="documentModified">
-    <span i18n:translate="label_public_trial" i18n:domain="opengever.base" class="noborder">
-      Public Trial
-    </span>
-    <span class="noborder" tal:content="context/public_trial|nothing" i18n:translate="" i18n:domain="opengever.base"/>
-  </span>
+    <li>
+      <span class="label" i18n:translate="label_workflow_state">
+        State:
+      </span>
+      <span tal:content="viewlet/workflow_state" i18n:domain="plone" i18n:translate=""/>
+    </li>
+
+    <li class="privacy_layer" tal:condition="context/privacy_layer">
+        <span tal:content="context/privacy_layer"
+              i18n:translate="" i18n:domain="opengever.base"/>
+    </li>
+
+    <li class="public_trial" tal:condition="context/public_trial">
+        <span class="label" i18n:translate="label_public_trial" i18n:domain="opengever.base">
+          Public Trial
+        </span>
+        <span tal:content="context/public_trial" i18n:translate="" i18n:domain="opengever.base"/>
+    </li>
+
+  </ul>
 </div>
