@@ -2,8 +2,8 @@
      i18n:domain="opengever.mail" tal:condition="view/show">
 
   <ul>
-    <li>
-      <span class="" tal:attributes="class string:byline-icon ${view/get_css_class}" />
+    <li tal:attributes="class string:byline-icon ${view/get_css_class}">
+      &nbsp;
     </li>
 
     <li tal:define="lock_icon view/locked_icon" tal:condition="lock_icon" >

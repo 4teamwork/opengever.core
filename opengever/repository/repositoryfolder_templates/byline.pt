@@ -2,8 +2,8 @@
      i18n:domain="opengever.repository">
 
   <ul>
-    <li>
-      <span class="" tal:attributes="class string:byline-icon ${viewlet/get_css_class}" />
+    <li tal:attributes="class string:byline-icon ${view/get_css_class}">
+      &nbsp;
     </li>
 
     <li>
