@@ -31,15 +31,19 @@
     </li>
 
     <li class="last_modified">
-        <span class="label" i18n:translate="label_last_modified">
-          last modified
+        <span class="label">
+          <span i18n:translate="label_last_modified">
+            last modified
+          </span>:
         </span>
         <span tal:replace="python:view.toLocalizedTime(here.ModificationDate(),long_format=1)" />
     </li>
 
     <li class="document_created">
-      <span class="label" i18n:translate="label_created">
-        last modified
+      <span class="label">
+        <span i18n:translate="label_created">
+          created
+        </span>:
       </span>
       <span tal:replace="python:view.toLocalizedTime(here.CreationDate(),long_format=1)" />
     </li>
@@ -50,7 +54,8 @@
     </li>
 
     <li class="sequenceNumber" tal:condition="view/sequence_number">
-        <span i18n:translate="label_sequence_number" i18n:domain="opengever.dossier">
+        <span class="label"
+              i18n:translate="label_sequence_number" i18n:domain="opengever.dossier">
           Sequence Number:
         </span>
         <span tal:replace="python: '%s %s' % (view.client_id(), view.sequence_number())" />
