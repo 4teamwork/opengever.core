@@ -26,9 +26,7 @@ class TestDocumentIntegration(FunctionalTestCase):
         filename_display = '''
     <span id="form-widgets-file" class="named-file-widget namedblobfile-field">
     <span>
-        <span>test.txt</span>
-        <span class="discreet"> &mdash; 0 KB</span>
-    </span>'''
+        <span>test.txt</span>'''
 
         self.assertTrue(filename_display in self.browser.contents)
 
@@ -54,11 +52,8 @@ class TestDocumentIntegration(FunctionalTestCase):
 
         filename_display = '''<span class="named-file-widget namedblobfile-field" id="form-widgets-file">
     <span>
-        <a class="link-overlay" href="http://nohost/plone/document-1/file_download_confirmation">test.txt</a>
-        <span class="discreet"> &mdash;
-            0 KB
-        </span>
-    </span>'''
+        <a class="link-overlay" href="http://nohost/plone/document-1/file_download_confirmation">test.txt</a>'''
+
         self.assertPageContains(filename_display)
 
         # edit should be posssible

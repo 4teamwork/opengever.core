@@ -126,7 +126,6 @@ class OpengeverFixture(PloneSandboxLayer):
         applyProfile(portal, 'opengever.sharing:default')
         applyProfile(portal, 'opengever.latex:default')
         applyProfile(portal, 'ftw.datepicker:default')
-        applyProfile(portal, 'plonetheme.teamraum:default')
         applyProfile(portal, 'plone.formwidget.autocomplete:default')
         applyProfile(portal, 'plone.formwidget.contenttree:default')
         applyProfile(portal, 'ftw.contentmenu:default')

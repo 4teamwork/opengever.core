@@ -5,6 +5,7 @@
     i18n_domain="opengever.examplecontent">
 
     <include file="profiles.zcml" />
+    <include package=".upgrades" />
 
     <include package="collective.transmogrifier" file="meta.zcml" />
     <include package="collective.transmogrifier" />

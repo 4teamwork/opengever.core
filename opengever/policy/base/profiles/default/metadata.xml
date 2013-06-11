@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <metadata>
-  <version>2400</version>
+  <version>3000</version>
   <dependencies>
     <dependency>profile-opengever.globalindex:default</dependency>
     <dependency>profile-opengever.base:default</dependency>
@@ -22,7 +22,6 @@
     <dependency>profile-opengever.latex:default</dependency>
     <dependency>profile-ftw.datepicker:default</dependency>
     <dependency>profile-ftw.contentmenu:default</dependency>
-    <dependency>profile-plonetheme.teamraum:gever</dependency>
     <dependency>profile-plone.formwidget.autocomplete:default</dependency>
     <dependency>profile-plone.formwidget.contenttree:default</dependency>
   </dependencies>
