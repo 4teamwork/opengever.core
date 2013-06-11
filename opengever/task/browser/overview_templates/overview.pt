@@ -22,7 +22,8 @@
             <tal:items define="items box/content">
 
               <!-- main attributes table -->
-              <table tal:condition="python: box.get('id') == 'main_attributes'">
+              <table class="vertical listing"
+                     tal:condition="python: box.get('id') == 'main_attributes'">
                 <tr tal:repeat="item items">
                   <th tal:content="structure item/label" />
                   <td tal:attributes="class item/css_class|nothing" tal:content="structure item/value" />
