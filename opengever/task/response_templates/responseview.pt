@@ -6,7 +6,7 @@
              tal:define="id response_info/id;
                          response nocall:response_info/response;
                          html response_info/html;"
-             tal:attributes="class string:response-${response/type}">
+             tal:attributes="class string:response response-${response/type}">
             <div class="response-actions"
                  tal:condition="viewlet/can_edit_response|viewlet/can_delete_response">
                 <form method="post"
@@ -29,6 +29,7 @@
                            value="Delete"
                            />
                 </form>
+                <div class="visualClear"><!-- --></div>
             </div>
 
             <div class="response-info">
