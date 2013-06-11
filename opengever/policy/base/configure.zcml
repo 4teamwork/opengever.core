@@ -3,6 +3,7 @@
     xmlns:five="http://namespaces.zope.org/five"
     i18n_domain="opengever.policy.base">
 
+    <include package=".upgrades" />
     <include file="profiles.zcml" />
     <include package="vs.genericsetup.ldap" />
 

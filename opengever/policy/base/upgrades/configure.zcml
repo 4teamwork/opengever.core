@@ -1,0 +1,25 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+    i18n_domain="ftw.tabbedview">
+
+    <!-- 2500 -> 3000 -->
+    <genericsetup:upgradeStep
+        title="Use plonetheme.teamraum"
+        description=""
+        source="2500"
+        destination="3000"
+        handler="opengever.policy.base.upgrades.to3000.InstallTeamraumTheme"
+        profile="opengever.policy.base:default"
+        />
+
+    <genericsetup:registerProfile
+        name="3000"
+        title="opengever.policy.base: upgrade profile 3000"
+        description=""
+        directory="profiles/3000"
+        for="Products.CMFPlone.interfaces.IMigratingPloneSiteRoot"
+        provides="Products.GenericSetup.interfaces.EXTENSION"
+        />
+
+</configure>
