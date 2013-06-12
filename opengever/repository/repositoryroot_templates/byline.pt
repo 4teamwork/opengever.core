@@ -7,12 +7,5 @@
       &nbsp;
     </li>
 
-    <li>
-      <span class="label" i18n:translate="label_workflow_state">
-        State:
-      </span>
-      <span tal:content="viewlet/workflow_state" i18n:domain="plone" i18n:translate=""/>
-    </li>
-
   </ul>
 </div>
