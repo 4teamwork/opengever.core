@@ -4,7 +4,8 @@
      tal:condition="view/show">
 
   <ul>
-    <li tal:attributes="class string:byline-icon ${view/get_css_class}">
+    <li tal:attributes="class string:byline-icon ${view/get_css_class};
+                        title context/Type">
       &nbsp;
     </li>
 
