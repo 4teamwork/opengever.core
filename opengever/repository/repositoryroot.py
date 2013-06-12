@@ -1,7 +1,10 @@
 from Products.CMFCore.utils import getToolByName
 from five import grok
+from opengever.base.browser.helper import get_css_class
 from opengever.repository import _
+from plone.app.layout.viewlets.interfaces import IBelowContentTitle
 from plone.directives import form
+from plone.memoize.instance import memoize
 from zope import schema
 from zope.interface import Interface
 from zope.publisher.interfaces import NotFound
@@ -72,3 +75,20 @@ class PrimaryRepositoryRoot(grok.View):
         brains.sort(sorter)
 
         return brains[-1]
+
+
+class Byline(grok.Viewlet):
+    grok.viewletmanager(IBelowContentTitle)
+    grok.context(IRepositoryRoot)
+    grok.name("plone.belowcontenttitle.documentbyline")
+
+    #update = content.DocumentBylineViewlet.update
+
+    def get_css_class(self):
+        return get_css_class(self.context)
+
+    @memoize
+    def workflow_state(self):
+        context_state = self.context.restrictedTraverse(
+            "@@plone_context_state")
+        return context_state.workflow_state()
