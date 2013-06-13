@@ -68,6 +68,10 @@ Changelog
   Use additional interface instead of overrides.zcml
   [phgross]
 
+- Monkey patch plone.dexterity.content.Container.__ac_permissions__ in order
+  to declare sane permissions for manage_pasteObjects.
+  [lgraf]
+
 - Added bin/build-translations script to opengever.core buildout.
   [lgraf]
 
