@@ -14,12 +14,12 @@ For further details see:
 * https://bugs.launchpad.net/zope2/+bug/499696
 """
 
-from Products.CMFCore.utils import getToolByName
 from Products.Five.browser import decode
 from ZPublisher.HTTPRequest import FileUpload
 import logging
 import urllib
-import z3c.form.interfaces
+from AccessControl import ClassSecurityInfo
+from AccessControl.class_init import InitializeClass
 
 
 LOGGER = logging.getLogger('opengever.base')
@@ -88,3 +88,32 @@ import webdav.LockItem
  # 24 hours
 webdav.LockItem.DEFAULTTIMEOUT = 24 * 60 * 60L
 LOGGER.info('Monkey patched webdav.LockItem.DEFAULTTIMEOUT')
+
+# --------
+
+from plone.dexterity.content import Container
+# Change permission for manage_pasteObjects to "Add portal content"
+# See https://dev.plone.org/ticket/9177
+
+# XXX Find a way to do this without patching __ac_permissions__ directly
+
+def drop_protected_attr_from_ac_permissions(attribute, classobj):
+    new_mappings = []
+    for mapping in Container.__ac_permissions__:
+        perm, attrs = mapping
+        if not attribute in attrs:
+            new_mappings.append(mapping)
+        else:
+            modified_attrs = tuple([a for a in attrs if not a == attribute])
+            modified_mapping = (perm, modified_attrs)
+            new_mappings.append(modified_mapping)
+    classobj.__ac_permissions__ = tuple(new_mappings)
+
+drop_protected_attr_from_ac_permissions('manage_pasteObjects', Container)
+sec = ClassSecurityInfo()
+sec.declareProtected(Products.CMFCore.permissions.AddPortalContent,
+                    'manage_pasteObjects')
+sec.apply(Container)
+InitializeClass(Container)
+
+LOGGER.info('Monkey patched plone.dexterity.content.Container')
