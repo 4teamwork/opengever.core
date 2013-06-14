@@ -12,6 +12,10 @@ Changelog
   If set, only imports users whose email address match `filter_pattern`.
   [lgraf]
 
+- Rebuild OpengeverContentListing registration.
+  Use additional interface instead of overrides.zcml
+  [phgross]
+
 - Added bin/build-translations script to opengever.core buildout.
   [lgraf]
 
