@@ -1,9 +1,16 @@
+from Products.ZCatalog.interfaces import ICatalogBrain
 from zope import schema
 from zope.interface import Interface
 
 
 class IOpengeverBaseLayer(Interface):
     """Marker interfaces for opengever base browserview customisations.
+    """
+
+
+class IOpengeverCatalogBrain(ICatalogBrain):
+    """Detailed Interface for opengever CatalogBrain.
+    Used for add an opengever specific CatalogContentlisting Adapter.
     """
 
 
