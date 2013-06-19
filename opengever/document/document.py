@@ -134,7 +134,9 @@ class IDocumentSchema(form.Schema):
     dexteritytextindexer.searchable('document_author')
     document_author = schema.TextLine(
         title=_(u'label_author', default='Author'),
-        description=_(u'help_author', default=""),
+        description=_(u'help_author',
+                      default="Surname firstname or a userid"
+                      "(would be automatically resolved to fullname)"),
         required=False,
         )
 
