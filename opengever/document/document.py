@@ -8,15 +8,12 @@ from five import grok
 from ftw.datepicker.widget import DatePickerFieldWidget
 from opengever.document import _
 from opengever.document.interfaces import IDocumentSettings
-from opengever.document.interfaces import NO_DOWNLOAD_DISPLAY_MODE
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.mail.behaviors import IMailInAddress
-from opengever.tabbedview.browser.tabs import Tasks
-from plone.app.layout.viewlets.interfaces import IBelowContentTitle
 from plone.app.versioningbehavior.behaviors import IVersionable
 from plone.autoform.interfaces import OMITTED_KEY
 from plone.dexterity.content import Item
-from plone.directives import form, dexterity
+from plone.directives import form
 from plone.namedfile.field import NamedBlobFile
 from plone.registry.interfaces import IRegistry
 from plone.supermodel.interfaces import FIELDSETS_KEY
@@ -25,7 +22,6 @@ from plone.z3cform.textlines.textlines import TextLinesFieldWidget
 from z3c.form import validator
 from z3c.form.browser import checkbox
 from zope import schema
-from zope.app.intid.interfaces import IIntIds
 from zope.component import getUtility
 from zope.interface import invariant, Invalid, Interface
 import logging
@@ -47,11 +43,6 @@ IVersionable.setTaggedValue(FIELDSETS_KEY, [
 # possibly it can be solved with plone.directives
 IVersionable.setTaggedValue(OMITTED_KEY,
     [(Interface, 'changeNote', 'true'), ])
-
-
-def related_document(context):
-    intids = getUtility(IIntIds)
-    return intids.getId(context)
 
 
 class IDocumentSchema(form.Schema):
@@ -323,42 +314,3 @@ class Document(Item):
             # not found
             return False
         return mimetypeitem
-
-
-class View(dexterity.DisplayForm):
-    grok.context(IDocumentSchema)
-    grok.require("zope2.View")
-
-    def updateWidgets(self):
-        super(View, self).updateWidgets()
-        field = self.groups[0].fields.get('file')
-        if field:
-            field.mode = NO_DOWNLOAD_DISPLAY_MODE
-
-
-class ForwardViewlet(grok.Viewlet):
-    """Display the message subject
-    """
-    grok.name('opengever.document.ForwardViewlet')
-    grok.context(IDocumentSchema)
-    grok.require('zope2.View')
-    grok.viewletmanager(IBelowContentTitle)
-
-    def render(self):
-        if self.request.get("externaledit", None):
-            return '<script language="JavaScript">jq(function(){window.location.href="' + str(
-                self.context.absolute_url()) + '/external_edit"})</script>'
-        return ''
-
-
-class RelatedTasks(Tasks):
-    grok.context(IDocumentSchema)
-    grok.name('tabbedview_view-tasks')
-
-    search_options = {'related_items': related_document}
-
-    def update_config(self):
-        Tasks.update_config(self)
-
-        # do not search on this context, search on site
-        self.filter_path = None
