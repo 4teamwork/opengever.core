@@ -11,7 +11,6 @@ from opengever.document.interfaces import IDocumentSettings
 from opengever.document.interfaces import NO_DOWNLOAD_DISPLAY_MODE
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.mail.behaviors import IMailInAddress
-from opengever.ogds.base.interfaces import IContactInformation
 from opengever.tabbedview.browser.tabs import Tasks
 from plone.app.layout.viewlets.interfaces import IBelowContentTitle
 from plone.app.versioningbehavior.behaviors import IVersionable
@@ -382,12 +381,6 @@ def set_copyname(doc, event):
 class View(dexterity.DisplayForm):
     grok.context(IDocumentSchema)
     grok.require("zope2.View")
-
-    def author_link(self):
-        info = getUtility(IContactInformation)
-        if self.context.document_author:
-            return info.render_link(self.context.document_author)
-        return None
 
     def updateWidgets(self):
         super(View, self).updateWidgets()
