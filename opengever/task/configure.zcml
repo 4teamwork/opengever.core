@@ -19,6 +19,7 @@
     <vdex:vocabulary directory="vdexvocabs" />
 
     <include package=".browser" />
+    <include package=".upgrades" />
 
     <include file="profiles.zcml" />
 

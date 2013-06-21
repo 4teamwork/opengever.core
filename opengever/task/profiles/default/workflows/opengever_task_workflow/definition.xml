@@ -13,8 +13,6 @@
  <permission>opengever.task: Edit task</permission>
  <state state_id="task-state-cancelled" title="task-state-cancelled">
   <exit-transition transition_id="task-transition-cancelled-open"/>
-  <permission-map name=" " acquired="False">
-  </permission-map>
   <permission-map name="Access contents information" acquired="False">
    <permission-role>Editor</permission-role>
    <permission-role>Manager</permission-role>
@@ -36,11 +34,9 @@
    <permission-role>Owner</permission-role>
    <permission-role>Administrator</permission-role>
   </permission-map>
-  <permission-map name="Modify portal content" acquired="False">
-   <permission-role>Editor</permission-role>
-   <permission-role>Manager</permission-role>
-   <permission-role>Owner</permission-role>
-   <permission-role>Administrator</permission-role>
+  <permission-map name="Modify portal content" acquired="True">
+  </permission-map>
+  <permission-map name="Review portal content" acquired="True">
   </permission-map>
   <permission-map name="Sharing page: Delegate roles" acquired="False">
    <permission-role>Manager</permission-role>
@@ -202,11 +198,9 @@
    <permission-role>Owner</permission-role>
    <permission-role>Administrator</permission-role>
   </permission-map>
-  <permission-map name="Modify portal content" acquired="False">
-   <permission-role>Editor</permission-role>
-   <permission-role>Manager</permission-role>
-   <permission-role>Owner</permission-role>
-   <permission-role>Administrator</permission-role>
+  <permission-map name="Modify portal content" acquired="True">
+  </permission-map>
+  <permission-map name="Review portal content" acquired="True">
   </permission-map>
   <permission-map name="Sharing page: Delegate roles" acquired="False">
    <permission-role>Manager</permission-role>
@@ -296,11 +290,9 @@
    <permission-role>Owner</permission-role>
    <permission-role>Administrator</permission-role>
   </permission-map>
-  <permission-map name="Modify portal content" acquired="False">
-   <permission-role>Editor</permission-role>
-   <permission-role>Manager</permission-role>
-   <permission-role>Owner</permission-role>
-   <permission-role>Administrator</permission-role>
+  <permission-map name="Modify portal content" acquired="True">
+  </permission-map>
+  <permission-map name="Review portal content" acquired="True">
   </permission-map>
   <permission-map name="Sharing page: Delegate roles" acquired="False">
    <permission-role>Manager</permission-role>
