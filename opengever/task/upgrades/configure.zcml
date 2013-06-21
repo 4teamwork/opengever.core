@@ -1,7 +1,6 @@
 <configure
     xmlns="http://namespaces.zope.org/zope"
-    xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
-    i18n_domain="ftw.tabbedview">
+    xmlns:genericsetup="http://namespaces.zope.org/genericsetup" >
 
     <!-- 2 -> 2500 -->
     <genericsetup:upgradeStep
@@ -18,8 +17,23 @@
         title="opengever.task: upgrade profile 2500"
         description=""
         directory="profiles/2500"
-        for="Products.CMFPlone.interfaces.IMigratingPloneSiteRoot"
-        provides="Products.GenericSetup.interfaces.EXTENSION"
+        />
+
+    <!-- 2 -> 2601 -->
+    <genericsetup:upgradeStep
+        title="Update task workflow and object security"
+        description=""
+        source="2500"
+        destination="2601"
+        handler="opengever.task.upgrades.to2601.UpdateTaskWorkflow"
+        profile="opengever.task:default"
+        />
+
+    <genericsetup:registerProfile
+        name="2601"
+        title="opengever.task: upgrade profile 2601"
+        description=""
+        directory="profiles/2601"
         />
 
 </configure>
