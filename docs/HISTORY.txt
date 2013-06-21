@@ -4,6 +4,10 @@ Changelog
 3.0 (unreleased)
 ----------------
 
+- Task: Adjust workflow, so that documents inside a task, aren't editable
+  when the dossier is closed.
+  [phgross]
+
 - AdvancedSearch: Added special description for the portal types field
   in a multiclientsetup.
   [phgross]
