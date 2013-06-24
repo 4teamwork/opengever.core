@@ -13,10 +13,11 @@ from zope.component import getUtility, getAdapter
 from zope.schema import vocabulary
 
 
-DESCRIPTION_MAX_LENGTH = 350
-DESCRIPTION_MAX_LINE_LENGTH = 45.0
+DESCRIPTION_MAX_LENGTH = 380
+DESCRIPTION_MAX_LINE_LENGTH = 55.0
 DESCRIPTION_MAX_LINES = 7
-TITLE_MAX_LINE_LENGTH = 40
+TITLE_MAX_LINE_LENGTH = 45
+BREADCRUMB_MAX_LENGTH = 150
 
 
 class DossierCoverPDFView(grok.View, BaseStandalonePDFView):
@@ -171,7 +172,9 @@ class DossierCoverPDFView(grok.View, BaseStandalonePDFView):
 
             obj = aq_parent(aq_inner(obj))
 
-        return ' / '.join(titles)
+        breadcrumb = ' / '.join(titles)
+        breadcrumb  = breadcrumb[:BREADCRUMB_MAX_LENGTH]
+        return breadcrumb
 
     def get_clientid(self):
         registry = getUtility(IRegistry)
