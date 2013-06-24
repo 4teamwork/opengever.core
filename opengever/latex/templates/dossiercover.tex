@@ -8,9 +8,9 @@
 
 <%block name="style_params">
 \renewcommand{\familydefault}{ma1}
-\renewcommand{\tiny}{\fontsize{11}{11}\selectfont}
+\renewcommand{\tiny}{\fontsize{9}{9}\selectfont}
 \renewcommand{\scriptsize}{\fontsize{12}{12}\selectfont}
-\renewcommand{\small}{\fontsize{14}{14}\selectfont}
+\renewcommand{\small}{\fontsize{10}{10}\selectfont}
 </%block>
 \begin{document}
 
@@ -28,10 +28,10 @@
 \hspace{0.15cm}Aktenzeichen: ${referencenr}\newline
 \hspace{0.15cm}Laufnummer: ${sequencenr}
 % if filingnr:
-\newline\hspace{0.15cm}Ablagenummer: ${filingnr}
+\newline\hspace{0.15cm}Ablagenummer: \textbf{${filingnr}}
 % endif
 \noindent
-\vspace{0.8cm} \newline
+\newline
 \tiny Ordnungsposition: ${repository}
 % if parentDossierTitle:
   \newline
@@ -39,9 +39,9 @@
 % endif
 \vspace{0.3cm} \newline
 \small \textbf{${title}} \newline
-\scriptsize ${description} \newline
+\small ${description} \newline
 \vspace{0.3cm} \newline
-\scriptsize
+\tiny
 Federführung: ${responsible}
 \vspace{0.15cm} \newline
 Beginn: ${start}\hspace{0.15cm}|\hspace{0.15cm}Abschluss: ${end}\hspace{0.15cm} \newline
