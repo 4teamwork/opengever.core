@@ -1,21 +1,17 @@
-from opengever.testing import FunctionalTestCase
-from plone.dexterity.fti import DexterityFTI
 from opengever.base.interfaces import IReferenceNumberPrefix
+from opengever.testing import Builder
+from opengever.testing import FunctionalTestCase
+from opengever.testing import create
 
-class TestReferenceAdapter(FunctionalTestCase):
+
+class TestReferencePrefixAdapter(FunctionalTestCase):
 
     def setUp(self):
-        super(TestReferenceAdapter, self).setUp()
+        super(TestReferencePrefixAdapter, self).setUp()
         self.grant('Contributor')
-        fti = DexterityFTI('OpenGeverBaseFTI3', klass="plone.dexterity.content.Container",
-                           global_allow=True,
-                           allowed_content_types=['OpenGeverBaseFTI3'],
-                           behaviors=["opengever.base.interfaces.IReferenceNumberPrefix"])
-        self.portal.portal_types._setObject('OpenGeverBaseFTI3', fti)
 
-        self.portal.invokeFactory('OpenGeverBaseFTI3', 'f1')
-        self.folder = self.portal.get('f1')
-        self.adapter = IReferenceNumberPrefix(self.folder)
+        self.repository = create(Builder('repository'))
+        self.adapter = IReferenceNumberPrefix(self.repository)
 
     def test_numbering_starts_at_one(self):
         self.assertEquals(u'1', self.adapter.get_next_number())
@@ -35,14 +31,14 @@ class TestReferenceAdapter(FunctionalTestCase):
 
     def test_without_passing_a_number_set_number_generates_a_new_one(self):
         item = self.create_item()
-        self.assertEquals(u'1', self.adapter.set_number(item))
-        self.assertEquals(u'1', self.adapter.get_number(item))
+        self.assertEquals(u'2', self.adapter.set_number(item))
+        self.assertEquals(u'2', self.adapter.get_number(item))
 
     def test_non_assigned_numbers_are_valid(self):
-        self.create_numbered_item(u'2')
+        self.create_numbered_item(u'3')
 
-        self.assertTrue(self.adapter.is_valid_number(u'1'))
-        self.assertTrue(self.adapter.is_valid_number(u'3'))
+        self.assertTrue(self.adapter.is_valid_number(u'2'))
+        self.assertTrue(self.adapter.is_valid_number(u'4'))
 
     def test_assigned_numbers_are_invalid(self):
         self.create_numbered_item(u'2')
@@ -69,9 +65,4 @@ class TestReferenceAdapter(FunctionalTestCase):
         return item
 
     def create_item(self):
-        if not hasattr(self,'counter'):
-            self.counter = 1
-        item_id = 'Item%s' % self.counter
-        self.folder.invokeFactory('OpenGeverBaseFTI3', item_id)
-        self.counter += 1
-        return self.folder.get(item_id)
+        return create(Builder('repository').within(self.repository))
