@@ -1,7 +1,7 @@
+from ftw.builder import Builder
+from ftw.builder import create
 from opengever.base.interfaces import IReferenceNumberPrefix
-from opengever.testing import Builder
 from opengever.testing import FunctionalTestCase
-from opengever.testing import create
 
 
 class TestReferencePrefixAdapter(FunctionalTestCase):
@@ -55,6 +55,15 @@ class TestReferencePrefixAdapter(FunctionalTestCase):
         self.create_numbered_item(u'A10')
 
         self.assertFalse(self.adapter.is_valid_number(u'A10', item))
+
+    def test_repository_and_dossier_use_a_seperate_counter(self):
+        self.create_numbered_item(5)
+
+        dossier = create(Builder('dossier').within(self.repository))
+        repository = create(Builder('repository').within(self.repository))
+
+        self.assertEquals(u'1', self.adapter.get_number(dossier))
+        self.assertEquals(u'6', self.adapter.get_number(repository))
 
     def set_numbering_base(self, base):
         self.create_numbered_item(base)

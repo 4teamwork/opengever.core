@@ -1,9 +1,9 @@
+from ftw.builder import Builder
+from ftw.builder import create
 from opengever.repository.behaviors.referenceprefix import IReferenceNumberPrefix
 from opengever.repository.behaviors.referenceprefix import IReferenceNumberPrefixMarker
 from opengever.repository.behaviors.referenceprefix import ReferenceNumberPrefixValidator
-from opengever.testing import Builder
 from opengever.testing import FunctionalTestCase
-from opengever.testing import create
 from zope.component import provideAdapter
 
 
@@ -20,10 +20,9 @@ class TestReferenceBehavior(FunctionalTestCase):
         # the reference number validator again.
         provideAdapter(ReferenceNumberPrefixValidator)
 
-        self.grant('Manager' )
+        self.grant('Manager')
 
-        self.repo = create(Builder('repository')
-                           .with_default_values())
+        self.repo = create(Builder('repository'))
 
     def test_repositories_provided_referenceprefix_marker_interface(self):
         self.assertTrue(IReferenceNumberPrefixMarker.providedBy(self.repo))
@@ -51,7 +50,7 @@ class TestReferenceBehavior(FunctionalTestCase):
 
         self.browser.fill({
             'Title': 'Test repository',
-            'Reference Prefix':'5'})
+            'Reference Prefix': '5'})
         self.browser.click('Save')
 
         field_error_box = self.browser.css(
@@ -74,7 +73,7 @@ class TestReferenceBehavior(FunctionalTestCase):
                 self.repo.absolute_url()))
         self.browser.fill({
             'Title': u'Test repository',
-            'Reference Prefix':'7'})
+            'Reference Prefix': '7'})
         self.browser.click('Save')
 
         prefix_adapter = IReferenceNumberPrefix(self.repo.get('test-repository'))
@@ -90,7 +89,7 @@ class TestReferenceBehavior(FunctionalTestCase):
                 self.repo.absolute_url()))
         self.browser.fill({
             'Title': u'Test repository',
-            'Reference Prefix':'a1x10'})
+            'Reference Prefix': 'a1x10'})
         self.browser.click('Save')
 
         prefix_adapter = IReferenceNumberPrefix(self.repo.get('test-repository'))
