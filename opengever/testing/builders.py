@@ -56,7 +56,8 @@ class DexterityBuilder(object):
     def __init__(self, session):
         self.session = session
         self.container = session.portal
-        self.arguments = {"checkConstraints": False}
+        self.arguments = {}
+        self.checkConstraints = False
         self.set_default_values = False
 
     def within(self, container):
@@ -79,6 +80,9 @@ class DexterityBuilder(object):
         self.set_default_values = True
         return self
 
+    def with_constraints(self):
+        self.checkConstraints = True
+
     def create(self, notify_events=True):
         self.before_create()
         obj = self.create_object()
@@ -99,6 +103,13 @@ class DexterityBuilder(object):
             transaction.commit()
 
     def set_defaults(self, obj):
+    def create_object(self):
+        arguments = self.arguments
+        arguments['checkConstraints'] = self.checkConstraints
+
+        return createContentInContainer(
+            self.container, self.portal_type, **self.arguments)
+
         for schemata in iterSchemata(obj):
             for name, field in getFieldsInOrder(schemata):
                 if not field.get(field.interface(obj)):
@@ -120,13 +131,12 @@ class DexterityBuilder(object):
 
 class DossierBuilder(DexterityBuilder):
 
-    def create_object(self):
-        return createContentInContainer(self.container,
-                                        'opengever.dossier.businesscasedossier',
-                                        **self.arguments)
+    portal_type = 'opengever.dossier.businesscasedossier'
 
 
 class DocumentBuilder(DexterityBuilder):
+
+    portal_type = 'opengever.document.document'
 
     def with_dummy_content(self):
         self.attach_file_containing("Test data")
@@ -140,22 +150,14 @@ class DocumentBuilder(DexterityBuilder):
         self.arguments["file"] = file_
         return self
 
-    def create_object(self):
-        return createContentInContainer(self.container,
-                                        'opengever.document.document',
-                                        **self.arguments)
-
 
 class TaskBuilder(DexterityBuilder):
+
+    portal_type = 'opengever.task.task'
 
     def __init__(self, session):
         super(TaskBuilder, self).__init__(session)
         self.transitions = []
-
-    def create_object(self):
-        return createContentInContainer(self.container,
-                                        'opengever.task.task',
-                                        **self.arguments)
 
     def in_progress(self):
         self.transitions.append('task-transition-open-in-progress')
@@ -184,6 +186,8 @@ class TaskBuilder(DexterityBuilder):
 
 class MailBuilder(DexterityBuilder):
 
+    portal_type = 'ftw.mail.mail'
+
     def with_dummy_message(self):
         self.with_message("foobar")
         return self
@@ -193,29 +197,14 @@ class MailBuilder(DexterityBuilder):
         self.arguments["message"] = file_
         return self
 
-    def create_object(self):
-        return createContentInContainer(self.container,
-                                        'ftw.mail.mail',
-                                        **self.arguments)
-
 
 class RepositoryBuilder(DexterityBuilder):
+    portal_type = 'opengever.repository.repositoryfolder'
 
-    def create_object(self):
-        return createContentInContainer(self.container,
-                                        'opengever.repository.repositoryfolder',
-                                        **self.arguments)
 
 class ContactBuilder(DexterityBuilder):
+    portal_type = 'opengever.contact.contact'
 
-    def create_object(self):
-        return createContentInContainer(self.container,
-                                        'opengever.contact.contact',
-                                        **self.arguments)
 
 class RepositoryRootBuilder(DexterityBuilder):
-
-    def create_object(self):
-        return createContentInContainer(self.container,
-                                        'opengever.repository.repositoryroot',
-                                        **self.arguments)
+    portal_type = 'opengever.repository.repositoryroot'
