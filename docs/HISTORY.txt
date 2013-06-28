@@ -4,6 +4,9 @@ Changelog
 3.0 (unreleased)
 ----------------
 
+- Dossier: Fixed start- and end-date validation in edit forms.
+  [phgross]
+
 - AdvancedSearch: Added special description for the portal types field
   in a multiclientsetup.
   [phgross]
