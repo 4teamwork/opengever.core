@@ -50,7 +50,7 @@ class TestMoveItems(FunctionalTestCase):
         task1 = create(Builder("task")
                        .within(self.source_dossier).titled("a Task"))
         subdossier1 = create(Builder("dossier")
-                             .within(self.source_dossier).titled("a Dossier"))
+                             .within(self.source_dossier).titled(u"a Dossier"))
 
         self.assert_contains(self.source_dossier,
                              ['Dossier \xc2\xb6c1', 'a Task', 'a Dossier'])
