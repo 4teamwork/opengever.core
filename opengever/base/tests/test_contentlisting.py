@@ -32,7 +32,7 @@ class TestOpengeverContentListing(FunctionalTestCase):
             IContentListingObject(obj2brain(document)).ContentTypeClass())
 
     def test_containing_dossier_of_a_dossier_returns_dossiers_title(self):
-        dossier = create(Builder('dossier').titled('Testdossier'))
+        dossier = create(Builder('dossier').titled(u'Testdossier'))
 
         self.assertEquals(
             'Testdossier',
@@ -46,7 +46,7 @@ class TestOpengeverContentListing(FunctionalTestCase):
             IContentListingObject(obj2brain(repository)).containing_dossier())
 
     def test_containing_dossier_returns_the_title_of_the_containing_dossier(self):
-        dossier = create(Builder('dossier').titled('Testdossier'))
+        dossier = create(Builder('dossier').titled(u'Testdossier'))
         document = create(Builder('document').within(dossier))
 
         self.assertEquals(
@@ -55,7 +55,7 @@ class TestOpengeverContentListing(FunctionalTestCase):
 
     def test_containing_dossier_title_is_cropped_to_near_200_chars(self):
         dossier = create(Builder('dossier')
-                         .titled(25 * 'lorem ipsum '))
+                         .titled(25 * u'lorem ipsum '))
         document = create(Builder('document').within(dossier))
 
         self.assertCropping(
