@@ -1,4 +1,4 @@
-from OFS.CopySupport import _cb_decode
+import OFS.CopySupport
 from Products.CMFCore.utils import getToolByName
 from opengever.testing import FunctionalTestCase
 from plone.dexterity.fti import DexterityFTI
@@ -49,7 +49,7 @@ class TestCopyItems(FunctionalTestCase):
 
         # Check if Item has been saved to REQUEST
         self.assertEquals((0, [('', 'plone', 'opengeverbasecontainer', 'opengeverbasefti2')]),
-                          _cb_decode(self.portal.REQUEST['__cp']))
+                          OFS.CopySupport._cb_decode(self.portal.REQUEST['__cp']))
         
         # Add Second Item to test with multiple Items Selected
         createContentInContainer(folder, 'OpenGeverBaseFTI2', title=u'doc2')
@@ -64,10 +64,10 @@ class TestCopyItems(FunctionalTestCase):
         # Test if they were copied correctly
         copiedItems = self.portal.REQUEST['__cp'].split(':')
         self.assertEquals((0, [('', 'plone', 'opengeverbasecontainer', 'opengeverbasefti2')]),
-                          _cb_decode(copiedItems[0]))
+                          OFS.CopySupport._cb_decode(copiedItems[0]))
         
         self.assertEquals((0, [('', 'plone', 'opengeverbasecontainer', 'opengeverbasefti2-1')]),
-                          _cb_decode(copiedItems[1]))
+                          OFS.CopySupport._cb_decode(copiedItems[1]))
         
         # Take away Copy permission
         doc.manage_permission('Copy or Move', [], acquire=False)
