@@ -1,3 +1,4 @@
+from Acquisition import aq_inner, aq_parent
 from collective import dexteritytextindexer
 from datetime import datetime, timedelta
 from five import grok
@@ -213,6 +214,20 @@ class Task(Container):
     @property
     def client_id(self):
         return get_client_id()
+
+    def is_subtask(self):
+        parent = aq_parent(aq_inner(self))
+        return ITask.providedBy(parent)
+
+    def is_remotetask(self):
+        predecessor_client = self.predecessor and self.predecessor.split(':')[0]
+        client_id = get_client_id()
+        assigned_client = self.responsible_client
+        if predecessor_client and predecessor_client != assigned_client:
+            return True
+        elif client_id != assigned_client:
+            return True
+        return False
 
 
 @form.default_value(field=ITask['deadline'])

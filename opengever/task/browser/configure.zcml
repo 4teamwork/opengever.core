@@ -15,4 +15,12 @@
           allowed_interface=".transitioncontroller.ITaskTransitionController"
           />
 
+    <browser:page
+        name="plone_layout"
+        for="opengever.task.task.ITask"
+        permission="zope.Public"
+        class=".layout.LayoutPolicy"
+        allowed_interface="plone.app.layout.globals.interfaces.ILayoutPolicy"
+        />
+
 </configure>

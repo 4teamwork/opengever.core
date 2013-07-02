@@ -1,4 +1,4 @@
-from Acquisition import aq_inner, aq_parent
+from Acquisition import aq_inner
 from collective import dexteritytextindexer
 from datetime import datetime
 from five import grok
@@ -72,8 +72,7 @@ grok.global_adapter(sequence_number, name='sequence_number')
 def is_subtask(obj):
     """ is_subtask indexer
     """
-    parent = aq_parent(aq_inner(obj))
-    return ITask.providedBy(parent)
+    return obj.is_subtask()
 grok.global_adapter(is_subtask, name='is_subtask')
 
 
