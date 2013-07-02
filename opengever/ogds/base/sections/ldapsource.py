@@ -2,6 +2,7 @@ import logging
 from zope.interface import classProvides, implements
 from collective.transmogrifier.interfaces import ISectionBlueprint
 from collective.transmogrifier.interfaces import ISection
+import re
 
 
 class LDAPUserSourceSection(object):
@@ -13,6 +14,8 @@ class LDAPUserSourceSection(object):
         self.previous = previous
         self.logger = logging.getLogger(options['blueprint'])
         self.options = options
+        self.filter_pattern = re.compile(
+            self.options.get('filter_pattern', ''))
 
     def __iter__(self):
 
@@ -37,6 +40,9 @@ class LDAPUserSourceSection(object):
                     continue
                 try:
                     user = ldap_folder.getUserById(uid)
+                    email = user.getProperty('email')
+                    if not self.filter_pattern.match(email):
+                        continue
                 except UnicodeDecodeError:
                     self.logger.warn(
                         "The User with the uid %s can't be imported \
@@ -82,7 +88,7 @@ class LDAPGroupSourceSection(LDAPUserSourceSection):
                          (UnicodeDecodeError)" % groupid
 
                 temp = {}
-                if groupid.startswith('og_'):
+                if self.filter_pattern.match(groupid):
                     temp['groupid'] = group.getId()
                     temp['title'] = group.getName()
                     temp['_users'] = group.getMemberIds()

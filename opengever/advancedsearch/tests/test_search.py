@@ -5,6 +5,41 @@ from opengever.testing import create_client
 from opengever.testing import create_ogds_user
 from opengever.testing import set_current_client_id
 from plone.app.testing import TEST_USER_ID
+import transaction
+
+
+class TestSearchFormObjectProvidesDescription(FunctionalTestCase):
+    use_browser = True
+
+    def test_contains_special_info_in_a_multi_client_setup(self):
+        create_client()
+        create_client(clientid="client2")
+        set_current_client_id(self.portal)
+        transaction.commit()
+
+        self.browser.open('%s/advanced_search' % self.portal.absolute_url())
+
+        formhelp = self.browser.css(
+            '#formfield-form-widgets-object_provides span.formHelp')[0]
+        self.assertEquals(
+            'Select the contenttype to be searched for.'
+            'It searches only items from the current client.',
+            formhelp.plain_text())
+
+    def test_not_contains_client_info_in_a_single_client_setup(self):
+        create_client()
+        set_current_client_id(self.portal)
+        create_ogds_user(TEST_USER_ID)
+        transaction.commit()
+
+        self.browser.open('%s/advanced_search' % self.portal.absolute_url())
+
+        formhelp = self.browser.css(
+            '#formfield-form-widgets-object_provides span.formHelp')[0]
+        self.assertEquals(
+            'Select the contenttype to be searched for.',
+            formhelp.plain_text())
+
 
 class TestSearchWithContent(FunctionalTestCase):
     use_browser = True
@@ -27,7 +62,6 @@ class TestSearchWithContent(FunctionalTestCase):
         self.assertSearchResultCount(1)
 
         self.browser.open('http://nohost/plone/@@search?object_provides=opengever.dossier.behaviors.dossier.IDossierMarker&SearchableText=dossier1')
-
 
     def test_search_documents(self):
         create(Builder("document").within(self.dossier1).titled("Document1"))
