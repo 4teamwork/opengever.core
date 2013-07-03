@@ -56,7 +56,8 @@ class DexterityBuilder(object):
     def __init__(self, session):
         self.session = session
         self.container = session.portal
-        self.arguments = {"checkConstraints": False}
+        self.arguments = {}
+        self.checkConstraints = False
         self.set_default_values = False
 
     def within(self, container):
@@ -79,11 +80,14 @@ class DexterityBuilder(object):
         self.set_default_values = True
         return self
 
+    def with_constraints(self):
+        self.checkConstraints = True
+
     def create(self, notify_events=True):
         self.before_create()
         obj = self.create_object()
-        if self.set_default_values:
-            self.set_defaults(obj)
+        self.set_values(obj, self.set_default_values)
+
         if notify_events:
             notify(ObjectCreatedEvent(obj))
             notify(ObjectAddedEvent(obj))
@@ -98,35 +102,46 @@ class DexterityBuilder(object):
         if self.session.auto_commit:
             transaction.commit()
 
-    def set_defaults(self, obj):
+    def create_object(self):
+        arguments = self.arguments
+        arguments['checkConstraints'] = self.checkConstraints
+
+        return createContentInContainer(
+            self.container, self.portal_type, **self.arguments)
+
+    def set_values(self, obj, with_default):
         for schemata in iterSchemata(obj):
             for name, field in getFieldsInOrder(schemata):
-                if not field.get(field.interface(obj)):
+
+                if name in self.arguments:
+                    field.set(field.interface(obj),
+                              self.arguments.get(name))
+
+                elif with_default:
                     default = queryMultiAdapter(
                         (obj, obj.REQUEST, None, field, None),
-                        IValue,
-                        name='default')
+                        IValue, name='default')
                     if default is not None:
                         default = default.get()
-                    if default is None:
+                    else:
                         default = getattr(field, 'default', None)
-                    if default is None:
-                        try:
-                            default = field.missing_value
-                        except AttributeError:
-                            pass
+                        if default is None:
+                            try:
+                                default = field.missing_value
+                            except AttributeError:
+                                pass
+
                     field.set(field.interface(obj), default)
 
 
 class DossierBuilder(DexterityBuilder):
 
-    def create_object(self):
-        return createContentInContainer(self.container,
-                                        'opengever.dossier.businesscasedossier',
-                                        **self.arguments)
+    portal_type = 'opengever.dossier.businesscasedossier'
 
 
 class DocumentBuilder(DexterityBuilder):
+
+    portal_type = 'opengever.document.document'
 
     def with_dummy_content(self):
         self.attach_file_containing("Test data")
@@ -140,22 +155,14 @@ class DocumentBuilder(DexterityBuilder):
         self.arguments["file"] = file_
         return self
 
-    def create_object(self):
-        return createContentInContainer(self.container,
-                                        'opengever.document.document',
-                                        **self.arguments)
-
 
 class TaskBuilder(DexterityBuilder):
+
+    portal_type = 'opengever.task.task'
 
     def __init__(self, session):
         super(TaskBuilder, self).__init__(session)
         self.transitions = []
-
-    def create_object(self):
-        return createContentInContainer(self.container,
-                                        'opengever.task.task',
-                                        **self.arguments)
 
     def in_progress(self):
         self.transitions.append('task-transition-open-in-progress')
@@ -184,6 +191,8 @@ class TaskBuilder(DexterityBuilder):
 
 class MailBuilder(DexterityBuilder):
 
+    portal_type = 'ftw.mail.mail'
+
     def with_dummy_message(self):
         self.with_message("foobar")
         return self
@@ -193,29 +202,14 @@ class MailBuilder(DexterityBuilder):
         self.arguments["message"] = file_
         return self
 
-    def create_object(self):
-        return createContentInContainer(self.container,
-                                        'ftw.mail.mail',
-                                        **self.arguments)
-
 
 class RepositoryBuilder(DexterityBuilder):
+    portal_type = 'opengever.repository.repositoryfolder'
 
-    def create_object(self):
-        return createContentInContainer(self.container,
-                                        'opengever.repository.repositoryfolder',
-                                        **self.arguments)
 
 class ContactBuilder(DexterityBuilder):
+    portal_type = 'opengever.contact.contact'
 
-    def create_object(self):
-        return createContentInContainer(self.container,
-                                        'opengever.contact.contact',
-                                        **self.arguments)
 
 class RepositoryRootBuilder(DexterityBuilder):
-
-    def create_object(self):
-        return createContentInContainer(self.container,
-                                        'opengever.repository.repositoryroot',
-                                        **self.arguments)
+    portal_type = 'opengever.repository.repositoryroot'
