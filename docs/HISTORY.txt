@@ -4,6 +4,9 @@ Changelog
 3.0 (unreleased)
 ----------------
 
+- Dossiercover: Implements breadcrumb cropping and adjust fonz size.
+  [phgross]
+
 - AdvancedSearch: Added special description for the portal types field
   in a multiclientsetup.
   [phgross]
