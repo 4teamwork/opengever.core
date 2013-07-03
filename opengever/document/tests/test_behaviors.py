@@ -1,7 +1,7 @@
+from ftw.builder import Builder
+from ftw.builder import create
 from opengever.base.interfaces import ISequenceNumber
-from opengever.testing import Builder
 from opengever.testing import FunctionalTestCase
-from opengever.testing import create
 from zope.component import getUtility
 
 

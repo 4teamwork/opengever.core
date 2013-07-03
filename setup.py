@@ -23,6 +23,7 @@ tests_require = [
     'z3c.saconfig',
     'zope.globalrequest',
     'zope.testing',
+    'ftw.builder',
 ]
 
 setup(name='opengever.core',

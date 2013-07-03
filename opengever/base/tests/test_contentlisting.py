@@ -1,6 +1,6 @@
-from opengever.testing import Builder
+from ftw.builder import Builder
+from ftw.builder import create
 from opengever.testing import FunctionalTestCase
-from opengever.testing import create
 from opengever.testing import obj2brain
 from plone.app.contentlisting.interfaces import IContentListingObject
 
