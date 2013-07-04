@@ -122,6 +122,7 @@ class ITask(form.Schema):
     relatedItems = RelationList(
         title=_(u'label_related_items', default=u'Related Items'),
         default=[],
+        missing_value=[],
         value_type=RelationChoice(
             title=u"Related",
             source=DossierPathSourceBinder(
