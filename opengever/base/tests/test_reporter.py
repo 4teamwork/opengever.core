@@ -39,18 +39,18 @@ class TestReporter(MockTestCase):
         translation_request = Environment(('de', 'de'))
 
         test_attributes = [
-            {'id':'Title', 'title':_('label_title', default='Title')},
+            {'id': 'Title', 'title': _('label_title', default='Title')},
             #test missingvalue
-            {'id':'missing', 'missing':'Missing',},
-            {'id':'start', 'title':_('label_start', default='Start'),
-             'transform': format_datetime, 'style':get_date_style()},
-            {'id':'responsible',
-             'title':_('label_responsible', default='Responsible'),
-             'transform':readable_author},
-            {'id':'review_state',
-             'title':_('label_review_state', default='Review state'),
-             'transform':StringTranslater(
-                translation_request, 'plone').translate},
+            {'id': 'missing', 'missing': 'Missing', },
+            {'id': 'start', 'title': _('label_start', default='Start'),
+             'transform': format_datetime, 'style': get_date_style()},
+            {'id': 'responsible',
+             'title': _('label_responsible', default='Responsible'),
+             'transform': readable_author},
+            {'id': 'review_state',
+             'title': _('label_review_state', default='Review state'),
+             'transform': StringTranslater(
+                 translation_request, 'plone').translate},
         ]
 
         # generate the report.xls
