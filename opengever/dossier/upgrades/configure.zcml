@@ -1,7 +1,7 @@
 <configure
     xmlns="http://namespaces.zope.org/zope"
     xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
-    i18n_domain="ftw.tabbedview">
+    i18n_domain="opengever.dossier">
 
     <!-- 1 -> 2301 -->
     <genericsetup:upgradeStep
@@ -11,6 +11,25 @@
         destination="2301"
         handler="opengever.dossier.upgrades.to2301.AdjustTransitionUrls"
         profile="opengever.dossier:default"
+        />
+
+    <!-- 2301 -> 2601 -->
+    <genericsetup:upgradeStep
+        title="Make report action available for every one"
+        description=""
+        source="2301"
+        destination="2601"
+        handler="opengever.dossier.upgrades.to2601.UpdateDossierReportAction"
+        profile="opengever.dossier:default"
+        />
+
+    <genericsetup:registerProfile
+        name="2601"
+        title="opengever.dossier: upgrade profile 2601"
+        description=""
+        directory="profiles/2601"
+        for="Products.CMFPlone.interfaces.IMigratingPloneSiteRoot"
+        provides="Products.GenericSetup.interfaces.EXTENSION"
         />
 
 </configure>

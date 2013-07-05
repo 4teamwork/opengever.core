@@ -4,6 +4,9 @@ Changelog
 3.0 (unreleased)
 ----------------
 
+- Activate reporting actions (dossier and tasks) for every user.
+  [phgross]
+
 - Dossiercover: Implements breadcrumb cropping and adjust fonz size.
   [phgross]
 
