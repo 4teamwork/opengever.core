@@ -1,3 +1,4 @@
+from Products.ZCatalog.interfaces import ICatalogBrain
 from ftw.testing import MockTestCase
 from opengever.base.browser.helper import get_css_class
 from opengever.globalindex.model.task import Task as GlobalindexTask
@@ -47,7 +48,7 @@ class TestCssClassHelpers(MockTestCase):
                           'contenttype-opengever-inbox-forwarding')
 
     def test_document_brain_with_icon(self):
-        brain = self.stub()
+        brain = self.providing_stub(ICatalogBrain)
         self.expect(brain.portal_type).result('opengever.document.document')
         self.expect(getattr(brain, '_v__is_relation', False)).result(False)
         self.expect(brain.getIcon).result('icon_dokument_pdf.gif')
@@ -77,7 +78,7 @@ class TestCssClassHelpers(MockTestCase):
         self.assertEquals(get_css_class(obj), 'icon-dokument_verweis')
 
     def test_task_brain(self):
-        brain = self.stub()
+        brain = self.providing_stub(ICatalogBrain)
         self.expect(brain.portal_type).result('opengever.task.task')
         self.expect(brain.predecessor).result(None)
         self.expect(brain.is_subtask).result(False)
@@ -94,6 +95,7 @@ class TestCssClassHelpers(MockTestCase):
         self.expect(obj.portal_type).result('opengever.task.task')
         self.expect(obj.predecessor).result(None)
         self.expect(obj.responsible_client).result('client1')
+        self.expect(obj.is_subtask).result(lambda: False)
 
         parent = self.stub()
         self.set_parent(obj, parent)
@@ -115,7 +117,7 @@ class TestCssClassHelpers(MockTestCase):
                           'contenttype-opengever-task-task')
 
     def test_subtask_brain(self):
-        brain = self.stub()
+        brain = self.providing_stub(ICatalogBrain)
         self.expect(brain.portal_type).result('opengever.task.task')
         self.expect(brain.predecessor).result(None)
         self.expect(brain.is_subtask).result(True)
@@ -131,6 +133,7 @@ class TestCssClassHelpers(MockTestCase):
         obj = self.stub()
         self.expect(obj.portal_type).result('opengever.task.task')
         self.expect(obj.predecessor).result('client2:12345')
+        self.expect(obj.is_subtask).result(lambda: True)
         self.expect(obj.responsible_client).result('client1')
 
         parent = self.stub()
@@ -153,7 +156,7 @@ class TestCssClassHelpers(MockTestCase):
                           'icon-task-subtask')
 
     def test_remote_task_brain(self):
-        brain = self.stub()
+        brain = self.providing_stub(ICatalogBrain)
         self.expect(brain.portal_type).result('opengever.task.task')
         self.expect(brain.predecessor).result('client2:12345')
         self.expect(brain.is_subtask).result(False)
@@ -169,6 +172,7 @@ class TestCssClassHelpers(MockTestCase):
         obj = self.stub()
         self.expect(obj.portal_type).result('opengever.task.task')
         self.expect(obj.predecessor).result('client2:12345')
+        self.expect(obj.is_subtask).result(lambda:False)
         self.expect(obj.responsible_client).result('client2')
 
         parent = self.stub()
@@ -191,7 +195,8 @@ class TestCssClassHelpers(MockTestCase):
                           'icon-task-remote-task')
 
     def test_remote_successor_task_brain(self):
-        brain = self.stub()
+        brain = self.providing_stub(ICatalogBrain)
+
         self.expect(brain.portal_type).result('opengever.task.task')
         self.expect(brain.is_subtask).result(False)
         self.expect(brain.client_id).result('client1')
@@ -206,6 +211,7 @@ class TestCssClassHelpers(MockTestCase):
     def test_remote_successor_task_obj(self):
         obj = self.stub()
         self.expect(obj.portal_type).result('opengever.task.task')
+        self.expect(obj.is_subtask).result(lambda:False)
         self.expect(obj.responsible_client).result('client1')
         self.expect(obj.predecessor).result('client2:123456')
 

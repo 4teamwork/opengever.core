@@ -1,4 +1,4 @@
-from Acquisition import aq_inner, aq_parent
+from Products.ZCatalog.interfaces import ICatalogBrain
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.ogds.base.utils import get_client_id
 from plone.i18n.normalizer.interfaces import IIDNormalizer
@@ -44,7 +44,7 @@ def _get_task_css_class(task):
         is_subtask = task.is_subtask
         is_forwarding = task.task_type == 'forwarding_task_type'
 
-    elif hasattr(task, 'is_subtask'):
+    elif ICatalogBrain.providedBy(task):
         # catalog brain
         predecessor_client = (
             task.predecessor and task.predecessor.split(':')[0])
@@ -61,8 +61,7 @@ def _get_task_css_class(task):
         client_id = current_client
         assigned_client = task.responsible_client
 
-        is_subtask = (
-            aq_parent(aq_inner(task)).portal_type == 'opengever.task.task')
+        is_subtask = task.is_subtask()
         is_forwarding = (task.portal_type == 'opengever.inbox.forwarding')
 
     # is it a remote task?
