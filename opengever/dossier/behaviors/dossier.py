@@ -188,8 +188,15 @@ class IDossier(form.Schema):
 
     @invariant
     def validateStartEnd(data):
-        if data.start is not None and data.end is not None:
-            if data.start > data.end:
+        # Do not get the data from the context when it is not in the current
+        # fields / z3cform group
+        data = data._Data_data___
+
+        if 'start' not in data or 'end' not in data:
+            return
+
+        if data['start'] is not None and data['end'] is not None:
+            if data['start'] > data['end']:
                 raise StartBeforeEnd(
                     _(u"The start date must be before the end date."))
 
