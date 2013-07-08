@@ -1,4 +1,7 @@
 from collective.transmogrifier import transmogrifier
+from ftw.builder.testing import BUILDER_LAYER
+from ftw.builder.testing import functional_session_factory
+from ftw.builder.testing import set_builder_session_factory
 from ftw.testing import ComponentRegistryLayer
 from opengever.globalindex import model
 from opengever.ogds.base.setuphandlers import create_sql_tables
@@ -60,7 +63,7 @@ ANNOTATION_LAYER = AnnotationLayer()
 
 class OpengeverFixture(PloneSandboxLayer):
 
-    defaultBases = (PLONE_FIXTURE, )
+    defaultBases = (PLONE_FIXTURE, BUILDER_LAYER)
 
     def testSetUp(self):
         super(OpengeverFixture, self).testSetUp()
@@ -141,4 +144,6 @@ OPENGEVER_INTEGRATION_TESTING = IntegrationTesting(
     bases=(OPENGEVER_FIXTURE, ), name="opengever.core:integration")
 
 OPENGEVER_FUNCTIONAL_TESTING = FunctionalTesting(
-    bases=(OPENGEVER_FIXTURE, ), name="opengever.core:functional")
+    bases=(OPENGEVER_FIXTURE,
+           set_builder_session_factory(functional_session_factory)),
+    name="opengever.core:functional")

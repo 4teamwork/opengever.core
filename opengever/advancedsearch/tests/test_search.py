@@ -1,6 +1,6 @@
-from opengever.testing import Builder
+from ftw.builder import Builder
+from ftw.builder import create
 from opengever.testing import FunctionalTestCase
-from opengever.testing import create
 from opengever.testing import create_client
 from opengever.testing import create_ogds_user
 from opengever.testing import set_current_client_id
@@ -51,8 +51,8 @@ class TestSearchWithContent(FunctionalTestCase):
         set_current_client_id(self.layer['portal'])
         create_ogds_user(TEST_USER_ID)
 
-        self.dossier1 = create(Builder("dossier").titled("Dossier1"))
-        self.dossier2 = create(Builder("dossier").titled("Dossier2"))
+        self.dossier1 = create(Builder("dossier").titled(u"Dossier1"))
+        self.dossier2 = create(Builder("dossier").titled(u"Dossier2"))
 
     def test_search_dossiers(self):
         self.browser.open('%s/advanced_search' % self.dossier1.absolute_url())
