@@ -1,15 +1,16 @@
 from DateTime import DateTime
 from datetime import datetime, date
+from ftw.builder import Builder
+from ftw.builder import create
 from opengever.document.checkout.manager import CHECKIN_CHECKOUT_ANNOTATIONS_KEY
 from opengever.dossier.behaviors.dossier import IDossier
-from opengever.testing import Builder
 from opengever.testing import FunctionalTestCase
 from opengever.testing import OPENGEVER_INTEGRATION_TESTING
-from opengever.testing import create
 from plone.app.testing import TEST_USER_ID
 from plone.dexterity.utils import createContentInContainer
 from zope.annotation.interfaces import IAnnotations
 import unittest2 as unittest
+
 
 class TestDossierContainerFunctional(FunctionalTestCase):
     """This test-case should eventually replace TestDossierContainer.

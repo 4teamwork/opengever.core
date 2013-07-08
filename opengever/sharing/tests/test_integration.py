@@ -1,10 +1,10 @@
+from ftw.builder import Builder
+from ftw.builder import create
 from opengever.sharing.browser.sharing import OpengeverSharingView
 from opengever.sharing.interfaces import ILocalRolesAcquisitionActivated
 from opengever.sharing.interfaces import ILocalRolesAcquisitionBlocked
 from opengever.sharing.interfaces import ILocalRolesModified
-from opengever.testing import Builder
 from opengever.testing import FunctionalTestCase
-from opengever.testing import create
 from plone.app.testing import setRoles, TEST_USER_ID
 from zope.component import provideHandler
 

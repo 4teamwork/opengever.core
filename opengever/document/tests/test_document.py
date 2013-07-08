@@ -1,13 +1,13 @@
 from Products.CMFCore.utils import getToolByName
 from datetime import date
+from ftw.builder import Builder
+from ftw.builder import create
 from opengever.base.interfaces import IReferenceNumber, ISequenceNumber
 from opengever.document.behaviors import IBaseDocument
 from opengever.document.document import IDocumentSchema
 from opengever.document.document import UploadValidator
 from opengever.document.interfaces import IDocumentSettings
-from opengever.testing import Builder
 from opengever.testing import FunctionalTestCase
-from opengever.testing import create
 from plone.dexterity.fti import DexterityFTI
 from plone.dexterity.fti import register
 from plone.dexterity.interfaces import IDexterityFTI
@@ -118,7 +118,7 @@ class TestDocument(FunctionalTestCase):
     def test_accessors(self):
         document = create(Builder("document")
                           .titled(u'Test title')
-                          .with_description(u'Lorem ipsum'))
+                          .having(description=u'Lorem ipsum'))
 
         self.assertEquals(document.Title(), 'Test title')
         self.assertEquals(document.Description(), 'Lorem ipsum')

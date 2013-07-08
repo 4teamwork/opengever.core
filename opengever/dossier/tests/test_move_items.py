@@ -1,6 +1,6 @@
-from opengever.testing import Builder
+from ftw.builder import Builder
+from ftw.builder import create
 from opengever.testing import FunctionalTestCase
-from opengever.testing import create
 
 
 class TestMoveItems(FunctionalTestCase):
@@ -50,7 +50,7 @@ class TestMoveItems(FunctionalTestCase):
         task1 = create(Builder("task")
                        .within(self.source_dossier).titled("a Task"))
         subdossier1 = create(Builder("dossier")
-                             .within(self.source_dossier).titled("a Dossier"))
+                             .within(self.source_dossier).titled(u"a Dossier"))
 
         self.assert_contains(self.source_dossier,
                              ['Dossier \xc2\xb6c1', 'a Task', 'a Dossier'])
