@@ -1,9 +1,10 @@
+from ftw.builder import Builder
+from ftw.builder import create
 from opengever.ogds.base.utils import create_session
 from opengever.task.adapters import IResponseContainer
 from opengever.task.interfaces import ISuccessorTaskController
 from opengever.task.task import ITask
 from opengever.task.util import add_simple_response
-from opengever.testing import Builder
 from opengever.testing import FunctionalTestCase
 from opengever.testing import create_client
 from opengever.testing import create_ogds_user
@@ -12,7 +13,6 @@ from opengever.testing import set_current_client_id
 from plone.app.testing import TEST_USER_ID
 from plone.app.testing import TEST_USER_NAME
 from plone.app.testing import login
-from plone.dexterity.utils import createContentInContainer
 import transaction
 import urllib
 
@@ -49,24 +49,32 @@ class TestResponse(FunctionalTestCase):
         self.grant('Contributor', 'Editor')
         login(self.portal, TEST_USER_NAME)
 
-        self.dossier = Builder("dossier").create()
+        self.dossier = create(Builder("dossier"))
 
-        self.task = createContentInContainer(
-            self.dossier, 'opengever.task.task', checkConstraints=False,
-            title="Test task 1", issuer=TEST_USER_ID, text=u'',
-            responsible='testuser2', responsible_client='client2',
-            task_type="direct-execution")
+        self.task = create(Builder('task')
+                           .within(self.dossier)
+                           .having(title="Test task 1",
+                                   issuer=TEST_USER_ID,
+                                   text=u'',
+                                   responsible='testuser2',
+                                   responsible_client='client2',
+                                   task_type="direct-execution"))
 
-        self.successor = createContentInContainer(
-            self.dossier, 'opengever.task.task', checkConstraints=False,
-            title="Test task 1", responsible='testuser2',
-            issuer=TEST_USER_ID, text=u'',
-            task_type="direct-execution", responsible_client='client2')
+        self.successor = create(Builder('task')
+                                .within(self.dossier)
+                                .having(title="Test task 1",
+                                        responsible='testuser2',
+                                        issuer=TEST_USER_ID,
+                                        text=u'',
+                                        task_type="direct-execution",
+                                        responsible_client='client2'))
 
-        self.doc1 = Builder("document").within(self.dossier) \
-                                       .titled("Doc 1").create()
-        self.doc2 = Builder("document").within(self.dossier) \
-                                       .titled("Doc 2").create()
+        self.doc1 = create(Builder("document")
+                           .within(self.dossier)
+                           .titled("Doc 1"))
+        self.doc2 = create(Builder("document")
+                           .within(self.dossier)
+                           .titled("Doc 2"))
         transaction.commit()
 
     # TODO: split this test into separate examples.

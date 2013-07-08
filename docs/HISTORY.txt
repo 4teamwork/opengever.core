@@ -7,6 +7,9 @@ Changelog
 - Dossiercover: Implements breadcrumb cropping and adjust fonz size.
   [phgross]
 
+- Dossier: Fixed start- and end-date validation in edit forms.
+  [phgross]
+
 - AdvancedSearch: Added special description for the portal types field
   in a multiclientsetup.
   [phgross]

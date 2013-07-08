@@ -1,12 +1,12 @@
 from Products.CMFCore.utils import getToolByName
+from ftw.builder import Builder
+from ftw.builder import create
+from ftw.builder import session
 from ftw.testing import MockTestCase
 from mocker import ANY
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_TESTING
 from opengever.document.interfaces import IFileCopyDownloadedEvent
-from opengever.testing import Builder
-from opengever.testing import create
 from opengever.testing import FunctionalTestCase
-from opengever.testing.builders import BuilderSession
 from plone.app.testing import TEST_USER_ID, TEST_USER_NAME
 from plone.app.testing import login
 from plone.app.testing import setRoles
@@ -22,11 +22,12 @@ class TestDocumentDownloadView(MockTestCase):
         super(TestDocumentDownloadView, self).setUp()
         self.portal = self.layer['portal']
         setRoles(self.portal, TEST_USER_ID, ['Manager'])
-        BuilderSession.instance().portal = self.portal
+        session.current_session = session.factory()
+        session.current_session.portal = self.portal
 
     def tearDown(self):
         super(TestDocumentDownloadView, self).tearDown()
-        BuilderSession.instance().reset()
+        session.current_session = None
 
     def test_download_view(self):
         doc1 = create(Builder("document").attach_file_containing("bla bla"))
