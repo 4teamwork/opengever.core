@@ -25,12 +25,18 @@
       configuration="cfgs/local_roles_with_repo.cfg"
       />
 
-
   <transmogrifier:registerConfig
       name="opengever.setup.templates"
       title="Opengever Setup Templates Import"
       description="Pipeline configuration for Opengever Setup import"
       configuration="cfgs/templates.cfg"
+      />
+
+  <transmogrifier:registerConfig
+      name="opengever.setup.repository"
+      title="Opengever Repositorysystem import"
+      description="Pipeline configuration for Opengever Setup"
+      configuration="cfgs/repository.cfg"
       />
 
   <utility
@@ -41,6 +47,31 @@
   <utility
       component=".rolessource.JSONRolesSourceSection"
       name="opengever.setup.rolessource.jsonrolessourcesection"
+      />
+
+  <utility
+      component=".sections.caster.EmptystringCasterSection"
+      name="opengever.setup.emptystrincaster"
+      />
+
+  <utility
+      component=".sections.reference.PathFromReferenceNumberSection"
+      name="opengever.setup.pathfromreferencenumber"
+      />
+
+  <utility
+      component=".sections.reference.ResetReferencePrefixMapping"
+      name="opengever.setup.resetreferenceprefixmapping"
+      />
+
+  <utility
+      component=".sections.local_roles.InsertLocalRolesSection"
+      name="opengever.setup.insertlocalroles"
+      />
+
+  <utility
+      component=".sections.local_roles.BlockLocalRoleInheritance"
+      name="opengever.setup.blocklocalroles"
       />
 
 </configure>
