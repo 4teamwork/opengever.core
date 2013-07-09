@@ -40,12 +40,12 @@
       />
 
   <utility
-      component=".filesection.NamedFileCreatorSection"
+      component=".sections.file.NamedFileCreatorSection"
       name="opengever.setup.filesection.namedfilecreator"
       />
 
   <utility
-      component=".rolessource.JSONRolesSourceSection"
+      component=".sections.rolessource.JSONRolesSourceSection"
       name="opengever.setup.rolessource.jsonrolessourcesection"
       />
 
