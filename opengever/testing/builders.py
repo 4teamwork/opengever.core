@@ -30,7 +30,7 @@ class DocumentBuilder(DexterityBuilder):
         return self
 
 
-builder_registry.register('document', DocumentBuilder)
+builder_registry.register('document', DocumentBuilder, force=True)
 
 
 class TaskBuilder(DexterityBuilder):
