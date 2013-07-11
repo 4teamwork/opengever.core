@@ -89,8 +89,8 @@ class TestDocumentOverview(MockTestCase):
 
         # edit link is available
         edit_link = """<a class="function-edit" href="http://nohost/plone/document-xy/editing_document">
-            Edit Document
-          </a>"""
+              Edit Document
+            </a>"""
         self.assertTrue(edit_link in self.browser.contents)
 
         # creator link
@@ -116,8 +116,8 @@ class TestDocumentOverview(MockTestCase):
         self.assertTrue(checked_out_info in self.browser.contents)
 
         edit_link = """<a class="function-edit" href="http://nohost/plone/document-2/editing_document">
-            Edit Document
-          </a>"""
+              Edit Document
+            </a>"""
         self.assertTrue(edit_link in self.browser.contents)
 
         active_copy_download_link = """<a class="function-download-copy link-overlay" href="http://nohost/plone/document-2/file_download_confirmation">Download copy</a>"""
@@ -133,8 +133,8 @@ class TestDocumentOverview(MockTestCase):
             '%s/tabbedview_view-overview' % self.document3.absolute_url())
 
         inactive_edit_link = """<span class="function-edit-inactive discreet">
-            Edit Document
-          </span>"""
+              Edit Document
+            </span>"""
         self.assertTrue(inactive_edit_link in self.browser.contents)
 
         inactive_copy_download_link = """<span class="function-download-copy-inactive link-overlay discreet">Download copy</span>"""

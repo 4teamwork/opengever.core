@@ -1,0 +1,11 @@
+<div class="documentByLine" id="plone-document-byline"
+     i18n:domain="opengever.repository">
+
+  <ul>
+    <li tal:attributes="class string:byline-icon ${viewlet/get_css_class};
+                        title context/Type">
+      &nbsp;
+    </li>
+
+  </ul>
+</div>

@@ -126,9 +126,9 @@ class OpengeverFixture(PloneSandboxLayer):
         applyProfile(portal, 'opengever.sharing:default')
         applyProfile(portal, 'opengever.latex:default')
         applyProfile(portal, 'ftw.datepicker:default')
-        applyProfile(portal, 'izug.basetheme:opengever')
         applyProfile(portal, 'plone.formwidget.autocomplete:default')
         applyProfile(portal, 'plone.formwidget.contenttree:default')
+        applyProfile(portal, 'ftw.contentmenu:default')
 
     def createMemberFolder(self, portal):
         # Create a Members folder.

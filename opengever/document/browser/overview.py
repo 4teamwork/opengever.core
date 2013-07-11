@@ -25,6 +25,8 @@ class Overview(DisplayForm, OpengeverTab):
     grok.name('tabbedview_view-overview')
     grok.template('overview')
 
+    show_searchform = False
+
     def creator_link(self):
         info = getUtility(IContactInformation)
         return info.render_link(self.context.Creator())

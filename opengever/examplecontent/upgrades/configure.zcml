@@ -1,0 +1,24 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:genericsetup="http://namespaces.zope.org/genericsetup">
+
+    <!-- 3 -> 2501 -->
+    <genericsetup:upgradeStep
+        title="Use plonetheme.teamraum"
+        description=""
+        source="3"
+        destination="2501"
+        handler="opengever.examplecontent.upgrades.to2501.InstallTeamraumTheme"
+        profile="opengever.examplecontent:developer"
+        />
+
+    <genericsetup:registerProfile
+        name="2501"
+        title="opengever.examplecontent: upgrade profile 2501"
+        description=""
+        directory="profiles/2501"
+        for="Products.CMFPlone.interfaces.IMigratingPloneSiteRoot"
+        provides="Products.GenericSetup.interfaces.EXTENSION"
+        />
+
+</configure>

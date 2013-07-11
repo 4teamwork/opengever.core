@@ -3,93 +3,82 @@
      i18n:domain="opengever.dossier"
      tal:condition="view/show"
      tal:define="toLocalizedTime nocall:context/@@plone/toLocalizedTime;">
-  <span class="" tal:attributes="class string:byline-icon ${view/get_css_class}"
-></span>
-  <span id="lock-icon"
-        tal:define="lock_icon view/locked_icon"
-        tal:condition="lock_icon">
-    <img tal:replace="structure lock_icon" />
-  </span>
 
-  <tal:name tal:condition="view/responsible">
-    <span class="documentAuthor"
-          i18n:domain="opengever.dossier"
-          i18n:translate="label_by_author">
-      by
-      <tal:responsible
-         i18n:name="author"
-         i18n:domain="opengever.dossier"
-         >
-        <tal:link replace="structure view/responsible" />
-      </tal:responsible>
+  <ul>
+    <li tal:attributes="class string:byline-icon ${view/get_css_class};
+                        title context/Type">
+      &nbsp;
+    </li>
 
-    </span>
-  </tal:name>
+    <li tal:define="lock_icon view/locked_icon" tal:condition="lock_icon" >
+      <span id="lock-icon" class="function-lock"/>
+    </li>
 
-  <tal:state>
-    <span i18n:translate="label_workflow_state" class="documentStatus">
-      State:
-    </span><span tal:content="view/workflow_state" i18n:translate="" i18n:domain="plone" class="noborder" />
-  </tal:state>
+    <li class="responsible" tal:condition="view/responsible">
+        <span class="label"
+              i18n:domain="opengever.dossier"
+              i18n:translate="label_by_author">
+          by
+          <tal:responsible i18n:name="author" i18n:domain="opengever.dossier">
+            <tal:link replace="structure view/responsible" />
+          </tal:responsible>
+        </span>
+    </li>
 
-  <span class="documentModified">
-    <span i18n:translate="label_start_byline" tal:omit-tag="">
-      from:
-    </span>
-    <span tal:replace="python:toLocalizedTime(str(view.start()),long_format=0)">
-      August 16, 2001 at 23:35:59
-    </span>
-  </span>
+    <li class="review_state">
+        <span i18n:translate="label_workflow_state" class="label">State:</span>
+        <span tal:content="view/workflow_state" i18n:translate="" i18n:domain="plone" />
+    </li>
 
-  <span class="documentModified" tal:condition="python:view.end()">
-    <span i18n:translate="label_end_byline" i18n:domain="opengever.dossier" tal:omit-tag="">
-      to:
-    </span>
-    <span tal:replace="python:toLocalizedTime(str(view.end()),long_format=0)">
-      August 16, 2001 at 23:35:59
-    </span>
-  </span>
+    <li class="start_date">
+        <span i18n:translate="label_start_byline" class="label">
+          from:
+        </span>
+        <span tal:replace="python:toLocalizedTime(str(view.start()),long_format=0)">
+          August 16, 2001 at 23:35:59
+        </span>
+    </li>
 
-  <tal:expired tal:condition="here/isExpired">
-    <span class="state-expired"
-          i18n:translate="time_expired" tal:omit-tag="">expired</span>
-  </tal:expired>
+    <li class="end_date" tal:condition="python:view.end()">
+      <span class="label" i18n:translate="label_end_byline" i18n:domain="opengever.dossier" >
+        to:
+      </span>
+      <span tal:replace="python:toLocalizedTime(str(view.end()),long_format=0)">
+        August 16, 2001 at 23:35:59
+      </span>
+    </li>
 
-  <span class="sequenceNumber" tal:condition="view/sequence_number">
-    <span i18n:translate="label_sequence_number"
-          i18n:domain="opengever.dossier" tal:omit-tag="">
-      Sequence Number:
-    </span>
-    <span tal:replace="view/sequence_number">
-      14
-    </span>
-  </span>
+    <li  class="is_expired" tal:condition="here/isExpired">
+      <span class="label" i18n:translate="time_expired" >expired</span>
+    </li>
 
-  <span class="referenceNumber" tal:condition="view/reference_number">
-    <span i18n:translate="label_reference_number"
-          tal:omit-tag="">
-      Reference Number
-    </span>
-    <span tal:replace="view/reference_number">
-      14
-    </span>
-  </span>
+    <li class="sequenceNumber" tal:condition="view/sequence_number">
+      <span class="label" i18n:translate="label_sequence_number" i18n:domain="opengever.dossier">
+        Sequence Number:
+      </span>
+      <span tal:replace="view/sequence_number" />
+    </li>
 
-  <span class="filing_no" tal:condition="view/get_filing_no">
-    <span i18n:translate="label_filing_no"
-          tal:omit-tag="">
-      Filing Number:
-    </span>
-    <span tal:replace="view/get_filing_no">
-      14
-    </span>
-  </span>
+    <li class="reference_number" tal:condition="view/reference_number">
+      <span class="label" i18n:translate="label_reference_number" >
+        Reference Number
+      </span>
+      <span tal:replace="view/reference_number" />
+    </li>
 
-  <span class="emailAddress" tal:condition="view/email">
-    <span i18n:translate="label_email_address"
-          i18n:domain="opengever.dossier" tal:omit-tag="">
-      E-Mail:
-    </span>
-    <a href="#" tal:content="view/email" tal:attributes="href string:mailto:${view/email}"/>
-  </span>
+    <li  class="filing_no" tal:condition="view/get_filing_no">
+      <span class="label" i18n:translate="label_filing_no" >
+        Filing Number:
+      </span>
+      <span tal:replace="view/get_filing_no" />
+    </li>
+
+    <li  class="email" tal:condition="view/email">
+      <span class="label" i18n:translate="label_email_address" i18n:domain="opengever.dossier" >
+        E-Mail:
+      </span>
+      <a href="#" tal:content="view/email" tal:attributes="href string:mailto:${view/email}" />
+    </li>
+
+  </ul>
 </div>
