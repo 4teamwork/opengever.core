@@ -1,9 +1,10 @@
 <?xml version="1.0"?>
 <metadata>
-  <version>2400</version>
+  <version>3000</version>
   <dependencies>
     <dependency>profile-opengever.globalindex:default</dependency>
     <dependency>profile-opengever.base:default</dependency>
+    <dependency>profile-collective.mtrsetup:default</dependency>
     <dependency>profile-opengever.document:default</dependency>
     <dependency>profile-opengever.dossier:default</dependency>
     <dependency>profile-opengever.repository:default</dependency>
@@ -20,7 +21,7 @@
     <dependency>profile-opengever.sharing:default</dependency>
     <dependency>profile-opengever.latex:default</dependency>
     <dependency>profile-ftw.datepicker:default</dependency>
-    <dependency>profile-izug.basetheme:opengever</dependency>
+    <dependency>profile-ftw.contentmenu:default</dependency>
     <dependency>profile-plone.formwidget.autocomplete:default</dependency>
     <dependency>profile-plone.formwidget.contenttree:default</dependency>
   </dependencies>

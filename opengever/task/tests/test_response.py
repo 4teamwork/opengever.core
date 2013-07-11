@@ -105,10 +105,12 @@ class TestResponse(FunctionalTestCase):
             '%s/tabbedview_view-overview' % self.task.absolute_url())
 
         # TODO: replace with OGBrowse API. What is it looking for?
-        successor_info = """<span class="label">
-                        Added successor task
-                    </span>
-                    <span class="issueChange"><span class="wf-task-state-open"><a href="http://nohost/plone/dossier-1/task-2" title="[Plone] > dossier-1 > Test task 1"><span class="rollover-breadcrumb icon-task-remote-task">Test task 1</span></a>  <span class="discreet">(Client2 / <a href="http://nohost/plone/@@user-details/testuser2">User 2 Test (testuser2)</a>)</span></span></span>"""
+        self.assertEquals(
+            'Added successor task',
+            self.browser.css('div.response-info div span.label')[0].plain_text())
+
+        successor_info = """<span class="issueChange"><span class="wf-task-state-open"><a href="http://nohost/plone/dossier-1/task-2" title="[Plone] > dossier-1 > Test task 1"><span class="rollover-breadcrumb icon-task-remote-task">Test task 1</span></a>  <span class="discreet">(Client2 / <a href="http://nohost/plone/@@user-details/testuser2">User 2 Test (testuser2)</a>)</span></span></span>"""
+
         self.assertTrue(successor_info in self.browser.contents)
 
         responsible_container = self.browser.xpath("//div[@class='response-info']/div[descendant-or-self::*[contains(text(), 'label_responsible')]]")[0]
