@@ -24,7 +24,7 @@
     <browser:page
         name="ploneform-macros"
         for="*"
-        layer="izug.basetheme.browser.interfaces.IThemeSpecific"
+        layer="opengever.base.interfaces.IOpengeverBaseLayer"
         class=".ploneform_macros.Macros"
         template="templates/macros.pt"
         allowed_interface="zope.interface.common.mapping.IItemMapping"
@@ -32,14 +32,6 @@
         />
 
     <adapter factory=".navtree.OpengeverNavtreeStrategy" />
-
-    <browser:viewlet
-      name="izug.basethem.belowcontenttitle.contentviews"
-      for="OFS.interfaces.IItem"
-      manager="plone.app.layout.viewlets.interfaces.IBelowContentTitle"
-      class=".viewlets.OpengeverContentViewsViewlet"
-      permission="zope2.View"
-      />
 
     <browser:page
         name="search"

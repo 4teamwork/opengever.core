@@ -17,7 +17,9 @@
           <th i18n:translate="label_actor">Actor</th>
           <th i18n:translate="label_date">Date</th>
           <th i18n:translate="label_comment">Comment</th>
-          <th></th>
+          <th class="nosort"></th>
+          <th tal:condition="previewSupported" class="nosort"></th>
+          <th class="nosort"></th>
         </thead>
         <tbody>
           <tal:block repeat="item history">

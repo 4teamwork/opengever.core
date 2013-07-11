@@ -24,12 +24,6 @@
            i18n:translate="link_all_users">Show all users</a>
 
         <table class="vertical listing">
-
-          <colgroup>
-            <col width="200">
-            <col width="200">
-          </colgroup>
-
           <tr>
             <th i18n:translate="label_fullname">Name:</th>
             <td tal:content="data/fullname"></td>
