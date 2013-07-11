@@ -7,6 +7,9 @@ Changelog
 - Fix import of HAVE_BLOBS from plone.namedfile.
   [lgraf]
 
+- Repository Setup: Moved config and blueprints from zugpolicy.base in to core.
+  [phgross]
+
 - Dossier: Fixed start- and end-date validation in edit forms.
   [phgross]
 
