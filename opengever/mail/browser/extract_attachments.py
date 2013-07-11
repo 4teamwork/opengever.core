@@ -23,7 +23,7 @@ from zope.schema import getFieldsInOrder
 import os.path
 import re
 
-from plone.namedfile import HAVE_BLOBS
+from plone.namedfile.interfaces import HAVE_BLOBS
 if HAVE_BLOBS:
     from plone.namedfile import NamedBlobFile as NamedFile
 else:

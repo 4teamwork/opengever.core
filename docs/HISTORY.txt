@@ -4,6 +4,9 @@ Changelog
 3.0 (unreleased)
 ----------------
 
+- Fix import of HAVE_BLOBS from plone.namedfile.
+  [lgraf]
+
 - Dossier: Fixed start- and end-date validation in edit forms.
   [phgross]
 
