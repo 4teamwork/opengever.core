@@ -18,6 +18,7 @@ tests_require = [
     'plone.namedfile[blobs]',
     'plone.testing',
     'xlrd',
+    'z3c.blobfile',
     'z3c.form',
     'z3c.saconfig',
     'zope.globalrequest',
