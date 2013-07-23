@@ -1,8 +1,10 @@
 <configure
     xmlns="http://namespaces.zope.org/zope"
+    xmlns:zcml="http://namespaces.zope.org/zcml"
     xmlns:genericsetup="http://namespaces.zope.org/genericsetup">
 
-    <!-- 3 -> 2501 -->
+  <!-- 3 -> 2501 -->
+  <configure zcml:condition="installed plonetheme.teamraum">
     <genericsetup:upgradeStep
         title="Use plonetheme.teamraum"
         description=""
@@ -20,5 +22,5 @@
         for="Products.CMFPlone.interfaces.IMigratingPloneSiteRoot"
         provides="Products.GenericSetup.interfaces.EXTENSION"
         />
-
+  </configure>
 </configure>
