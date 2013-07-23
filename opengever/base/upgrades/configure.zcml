@@ -22,4 +22,14 @@
         provides="Products.GenericSetup.interfaces.EXTENSION"
         />
 
+    <!-- 2500 -> 2501 -->
+    <genericsetup:upgradeStep
+        title="Init og.advancedsearch profile version"
+        description=""
+        source="2500"
+        destination="2501"
+        handler="opengever.base.upgrades.to2501.InitOGAdvancedSearchProfileVersion"
+        profile="opengever.base:default"
+        />
+
 </configure>
