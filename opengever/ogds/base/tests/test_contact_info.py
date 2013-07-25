@@ -59,15 +59,15 @@ class TestClientHelpers(FunctionalTestCase):
     def test_list_assigned_users_returns_all_ogds_user_objects(self):
         hugo_boss = create_ogds_user('hugo.boss', groups=('client1_users', ))
         peter_muster = create_ogds_user('hugo.boss', groups=('client2_users', ))
-        hanspeter_linder = create_ogds_user(
-            'hanspeter.linder', groups=('client1_users', 'client2_users'))
+        jamie_lannister = create_ogds_user(
+            'jamie.lannister', groups=('client1_users', 'client2_users'))
 
         self.assertEquals(
-            [hugo_boss.userid, hanspeter_linder.userid],
+            [hugo_boss.userid, jamie_lannister.userid],
             [user.userid for user in self.info.list_assigned_users()])
 
         self.assertEquals(
-            [peter_muster.userid, hanspeter_linder.userid],
+            [peter_muster.userid, jamie_lannister.userid],
             [user.userid for user in self.info.list_assigned_users(client_id='client2')])
 
     def test_user_is_assigned_to_client_if_he_is_in_the_client_users_group(self):
@@ -80,7 +80,7 @@ class TestClientHelpers(FunctionalTestCase):
 
     def test_get_assigned_clients_returns_all_clients_wich_the_users_is_in_the_clients_usergroup(self):
         create_ogds_user('hugo.boss', groups=('client1_users', ))
-        create_ogds_user('hanspeter.linder', groups=('client1_users', 'client2_users'))
+        create_ogds_user('jamie.lannister', groups=('client1_users', 'client2_users'))
 
         self.assertEquals(
             [self.client1, ],
@@ -88,7 +88,7 @@ class TestClientHelpers(FunctionalTestCase):
 
         self.assertEquals(
             [self.client1, self.client2],
-            self.info.get_assigned_clients(userid='hanspeter.linder'))
+            self.info.get_assigned_clients(userid='jamie.lannister'))
 
 
 class TestUserHelpers(FunctionalTestCase):
@@ -100,10 +100,10 @@ class TestUserHelpers(FunctionalTestCase):
     def test_list_user_returns_all_users_ogds_objects(self):
         create_ogds_user('hugo.boss')
         create_ogds_user('peter.muster')
-        create_ogds_user('hanspeter.linder')
+        create_ogds_user('jamie.lannister')
 
         self.assertEquals(
-            [u'hugo.boss', u'peter.muster', u'hanspeter.linder'],
+            [u'hugo.boss', u'peter.muster', u'jamie.lannister'],
             [u.userid for u in self.info.list_users()])
 
     def test_get_user_returns_sql_user_obj_when_he_exists(self):
@@ -169,26 +169,26 @@ class TestEmailGetter(FunctionalTestCase):
 
     def test_get_email_for_a_contact_return_his_email(self):
         create(Builder('contact')
-               .having(**{'firstname': u'Sandra',
-                          'lastname': u'Kaufmann',
-                          'email': u'sandra.kaufmann@test.ch',
-                          'email2': u'sandra@test2.ch'}))
+               .having(**{'firstname': u'Lara',
+                          'lastname': u'Croft',
+                          'email': u'lara.croft@test.ch',
+                          'email2': u'tombraider_lara@test2.ch'}))
 
-        self.assertEquals('sandra.kaufmann@test.ch',
-                  self.info.get_email(u'contact:kaufmann-sandra'))
+        self.assertEquals('lara.croft@test.ch',
+                  self.info.get_email(u'contact:croft-lara'))
         self.assertEquals(
-            'sandra.kaufmann@test.ch',
-            self.info.get_email(self.info.get_contact('contact:kaufmann-sandra')))
+            'lara.croft@test.ch',
+            self.info.get_email(self.info.get_contact('contact:croft-lara')))
 
     def test_get_email2_for_a_contact_return_his_second_email(self):
         create(Builder('contact')
-               .having(**{'firstname': u'Sandra',
-                          'lastname': u'Kaufmann',
-                          'email': u'sandra.kaufmann@test.ch',
-                          'email2': u'sandra@test2.ch'}))
+               .having(**{'firstname': u'Lara',
+                          'lastname': u'Croft',
+                          'email': u'lara.croft@test.ch',
+                          'email2': u'tombraider_lara@test2.ch'}))
 
-        self.assertEquals('sandra@test2.ch',
-                          self.info.get_email2(u'contact:kaufmann-sandra'))
+        self.assertEquals('tombraider_lara@test2.ch',
+                          self.info.get_email2(u'contact:croft-lara'))
 
     def test_get_email_for_a_inbox_return_none(self):
         self.assertEquals(
@@ -209,12 +209,12 @@ class TestGroupHelpers(FunctionalTestCase):
         set_current_client_id(self.portal)
 
     def test_list_group_users_returns_all_users_assigned_to_this_group(self):
-        hanspeter_linder = create_ogds_user(
-            'hanspeter.linder', groups=('client1_users', 'client2_users'))
+        jamie_lannister = create_ogds_user(
+            'jamie.lannister', groups=('client1_users', 'client2_users'))
         peter_muster = create_ogds_user('peter.muster', groups=('client1_users', ))
 
         self.assertEquals(
-            [hanspeter_linder.userid, peter_muster.userid],
+            [jamie_lannister.userid, peter_muster.userid],
             [user.userid for user in self.info.list_group_users('client1_users')])
 
         self.assertEquals([],
@@ -229,7 +229,7 @@ class TestGroupHelpers(FunctionalTestCase):
 
     def test_user_is_inbox_group_when_he_is_in_the_inbox_group_of_the_given_client(self):
         create_ogds_user('hugo.boss', groups=('client1_inbox_users', ))
-        create_ogds_user('hanspeter.linder',
+        create_ogds_user('jamie.lannister',
                          groups=('client1_inbox_users', 'client2_inbox_users'))
 
         create_client(clientid='client1', inbox_group='client1_inbox_users')
@@ -241,9 +241,9 @@ class TestGroupHelpers(FunctionalTestCase):
             userid='hugo.boss', client_id='client2'))
 
         self.assertTrue(self.info.is_user_in_inbox_group(
-            userid='hanspeter.linder', client_id='client1'))
+            userid='jamie.lannister', client_id='client1'))
         self.assertTrue(self.info.is_user_in_inbox_group(
-            userid='hanspeter.linder', client_id='client2'))
+            userid='jamie.lannister', client_id='client2'))
 
 
 class TestContactInfoOGDSUserDescription(FunctionalTestCase):
@@ -310,32 +310,32 @@ class TestContactInfoContactDescription(FunctionalTestCase):
         super(TestContactInfoContactDescription, self).setUp()
         self.info = getUtility(IContactInformation)
 
-        self.sandra_kaufmann = create(
+        self.lara_croft = create(
             Builder('contact')
-            .having(**{'firstname': u'Sandra',
-                       'lastname': u'Kaufmann',
-                       'email': u'sandra.kaufmann@test.ch',
-                       'email2': u'sandra@test2.ch'}))
+            .having(**{'firstname': u'Lara',
+                       'lastname': u'Croft',
+                       'email': u'lara.croft@test.ch',
+                       'email2': u'tombraider_lara@test2.ch'}))
 
     def test_default_contains_fullname_and_email_in_parentheses(self):
         self.grant('Manager')
         self.assertEquals(
-            u'Kaufmann Sandra (sandra.kaufmann@test.ch)',
-            self.info.describe(u'contact:kaufmann-sandra'))
+            u'Croft Lara (lara.croft@test.ch)',
+            self.info.describe(u'contact:croft-lara'))
 
         self.assertEquals(
-            u'Kaufmann Sandra (sandra.kaufmann@test.ch)',
-            self.info.describe(obj2brain(self.sandra_kaufmann)))
+            u'Croft Lara (lara.croft@test.ch)',
+            self.info.describe(obj2brain(self.lara_croft)))
 
     def test_with_email_contains_fullname_and_email_in_parentheses(self):
         self.assertEquals(
-            u'Kaufmann Sandra (sandra.kaufmann@test.ch)',
-            self.info.describe(u'contact:kaufmann-sandra', with_email=True))
+            u'Croft Lara (lara.croft@test.ch)',
+            self.info.describe(u'contact:croft-lara', with_email=True))
 
     def test_without_principal_contains_only_fullname(self):
         self.assertEquals(
-            u'Kaufmann Sandra',
-            self.info.describe(u'contact:kaufmann-sandra', with_principal=False))
+            u'Croft Lara',
+            self.info.describe(u'contact:croft-lara', with_principal=False))
 
 
 class TestContactInfoAdditionals(FunctionalTestCase):
@@ -346,44 +346,44 @@ class TestContactInfoAdditionals(FunctionalTestCase):
 
     def test_contacts_or_inboxes_is_not_a_user(self):
         self.assertFalse(self.info.is_user(u'inbox:client1'))
-        self.assertFalse(self.info.is_user(u'contact:kaufmann-sandra'))
+        self.assertFalse(self.info.is_user(u'contact:croft-lara'))
 
     def test_all_possibly_valid_userids_are_a_user(self):
         self.assertTrue(self.info.is_user('hugo.boss'))
         self.assertTrue(self.info.is_user('peter.muster'))
 
     def test_only_prinicpal_prefixed_with_contact_and_colon_is_contact(self):
-        self.assertTrue(self.info.is_contact('contact:kaufmann-sandra'))
-        self.assertFalse(self.info.is_contact('kaufmann-sandra'))
+        self.assertTrue(self.info.is_contact('contact:croft-lara'))
+        self.assertFalse(self.info.is_contact('croft-lara'))
         self.assertFalse(self.info.is_contact('inbox:client1'))
 
     def test_only_prinicpal_prefixed_with_inbox_and_colon_is_a_inbox(self):
         self.assertTrue(self.info.is_inbox('inbox:client1'))
-        self.assertFalse(self.info.is_inbox('contact:kaufmann-sandra'))
+        self.assertFalse(self.info.is_inbox('contact:croft-lara'))
         self.assertFalse(self.info.is_inbox('hugo.boss'))
 
     def test_list_contacts_return_all_contact_brains(self):
         create(Builder('contact')
-               .having(**{'firstname': u'Sandra',
-                          'lastname': u'Kaufmann',
-                          'email': u'sandra.kaufmann@test.ch'}))
+               .having(**{'firstname': u'Lara',
+                          'lastname': u'Croft',
+                          'email': u'lara.croft@test.ch'}))
         create(Builder('contact')
-               .having(**{'firstname': u'Elisabeth',
-                          'lastname': u'K\xe4ppeli',
-                          'email': 'elisabeth.kaeppeli@test.ch'}))
+               .having(**{'firstname': u'Super',
+                          'lastname': u'M\xe4n',
+                          'email': 'superman@test.ch'}))
         create(Builder('contact')
-               .having(**{'firstname': u'Roger',
-                          'lastname': u'Wermuth',
+               .having(**{'firstname': u'James',
+                          'lastname': u'Bond',
                           'email': None}))
 
         self.assertEquals(
-            ['kaufmann-sandra', 'kappeli-elisabeth', 'wermuth-roger'],
+            ['croft-lara', 'man-super', 'bond-james'],
             [brain.getId for brain in self.info.list_contacts()])
 
         self.assertEquals(
-            ['contact:kaufmann-sandra',
-             'contact:kappeli-elisabeth',
-             'contact:wermuth-roger'],
+            ['contact:croft-lara',
+             'contact:man-super',
+             'contact:bond-james'],
             [contact.contactid for contact in self.info.list_contacts()])
 
     def test_list_inboxes_returns_a_generator_with_principal_and_description_pairs(self):
