@@ -4,6 +4,9 @@ Changelog
 3.0 (unreleased)
 ----------------
 
+- Removed development LDAP configuration for now.
+  [lgraf]
+
 - Fix import of HAVE_BLOBS from plone.namedfile.
   [lgraf]
 
