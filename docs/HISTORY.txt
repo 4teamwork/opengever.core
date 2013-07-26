@@ -4,6 +4,9 @@ Changelog
 3.0 (unreleased)
 ----------------
 
+- Dossier overview: only list active subdossiers.
+  [phgross]
+
 - Removed development LDAP configuration for now.
   [lgraf]
 

@@ -49,7 +49,8 @@ class DossierOverview(grok.View, OpengeverTab):
 
     def subdossiers(self):
         return self.context.get_subdossiers(
-            sort_on='modified', sort_order='reverse')[:5]
+            sort_on='modified', sort_order='reverse',
+            review_state='dossier-state-active')[:5]
 
     def tasks(self):
         return self.catalog(['opengever.task.task', ])[:5]

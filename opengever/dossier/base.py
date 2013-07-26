@@ -60,15 +60,19 @@ class DossierContainer(Container):
         else:
             return True
 
-    def get_subdossiers(self, sort_on='created', sort_order='ascending'):
+    def get_subdossiers(self, sort_on='created',
+                        sort_order='ascending', review_state=None):
+
         dossier_path = '/'.join(self.getPhysicalPath())
-        subdossiers = self.portal_catalog(
-            path=dict(query=dossier_path,
-                      depth=-1),
-            sort_on=sort_on,
-            sort_order=sort_order,
-            object_provides=IDossierMarker.__identifier__,
-            )
+        query = {'path': dict(query=dossier_path, depth=-1),
+                 'sort_on': sort_on,
+                 'sort_order': sort_order,
+                 'object_provides': IDossierMarker.__identifier__}
+
+        if review_state:
+            query['review_state'] = review_state
+
+        subdossiers = self.portal_catalog(query)
 
         # Remove the object itself from the list of subdossiers
         subdossiers = [s for s in subdossiers
