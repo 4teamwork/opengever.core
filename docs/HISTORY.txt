@@ -7,6 +7,9 @@ Changelog
 - Dossier overview: only list active subdossiers.
   [phgross]
 
+- Rewrote LDAP synchronisation in pure Python instead of Transmogrifier.
+  [lgraf]
+
 - Removed development LDAP configuration for now.
   [lgraf]
 

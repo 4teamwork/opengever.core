@@ -175,18 +175,13 @@ class CreateOpengeverClient(BrowserView):
         if form.get('first', False) and form.get('import_users', False):
             print '===== SYNC LDAP ===='
 
-            #user import
             class Object(object):
                 pass
 
+            # Import LDAP users and groups
             options = Object()
-            options.config = u'opengever.ogds.base.user-import'
             options.site_root = '/' + form['client_id']
             options.update_syncstamp = False
-            sync_ldap.run_import(self.context, options)
-
-            #group import
-            options.config = u'opengever.ogds.base.group-import'
             sync_ldap.run_import(self.context, options)
 
         if form.get('configsql'):
