@@ -17,6 +17,7 @@ For further details see:
 from Products.CMFCore.utils import getToolByName
 from Products.Five.browser import decode
 from ZPublisher.HTTPRequest import FileUpload
+from ZPublisher.HTTPRequest import isCGI_NAMEs
 import logging
 import urllib
 import z3c.form.interfaces
@@ -31,7 +32,7 @@ def processInputs(request, charsets=None):
         charsets = envadapter.getPreferredCharsets() or ['utf-8']
 
     for name, value in request.form.items():
-        if not (decode.isCGI_NAME(name) or name.startswith('HTTP_')):
+        if not (name in isCGI_NAMEs or name.startswith('HTTP_')):
             if isinstance(value, str):
                 request.form[name] = decode._decode(value, charsets)
             elif isinstance(value, list):
