@@ -14,13 +14,11 @@ For further details see:
 * https://bugs.launchpad.net/zope2/+bug/499696
 """
 
-from Products.CMFCore.utils import getToolByName
 from Products.Five.browser import decode
 from ZPublisher.HTTPRequest import FileUpload
 from ZPublisher.HTTPRequest import isCGI_NAMEs
 import logging
 import urllib
-import z3c.form.interfaces
 
 
 LOGGER = logging.getLogger('opengever.base')
