@@ -17,6 +17,7 @@ tests_require = [
     'plone.mocktestcase',
     'plone.namedfile[blobs]',
     'plone.testing',
+    'pyquery',
     'xlrd',
     'z3c.blobfile',
     'z3c.form',
