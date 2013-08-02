@@ -67,10 +67,10 @@ class TestUsersVocabulary(FunctionalTestCase):
     def test_include_all_active_users(self):
         create_ogds_user('hugo.boss', firstname='Hugo', lastname='Boss')
         create_ogds_user('peter.muster', firstname='Peter', lastname='Muster')
-        create_ogds_user('hanspeter.linder', firstname='Hans-peter', lastname='Linder')
+        create_ogds_user('jamie.lannister', firstname='Jamie', lastname='Lannister')
 
         self.assertTermKeys(
-            ['hugo.boss', 'peter.muster', 'hanspeter.linder'],
+            ['hugo.boss', 'peter.muster', 'jamie.lannister'],
             self.vocabulary_factory(self.portal))
 
     def test_exclude_inactive_users(self):
@@ -113,15 +113,15 @@ class TestUsersAndInboxesVocabulary(FunctionalTestCase):
     def test_contains_all_active_users_and_inboxes_assigned_to_the_given_client(self):
         create_ogds_user('hugo.boss', firstname='Hugo',
                          lastname='Boss', assigned_client=[self.client1, ])
-        create_ogds_user('hanspeter.linder', firstname='Hanspeter',
-                         lastname='Linder', assigned_client=[self.client1, self.client2])
+        create_ogds_user('jamie.lannister', firstname='Jamie',
+                         lastname='Lannister', assigned_client=[self.client1, self.client2])
         create_ogds_user('peter.muster', firstname='Peter',
                          lastname='Muster', assigned_client=[self.client2])
 
         self.portal.REQUEST.set('client', 'client2')
 
         self.assertTermKeys(
-            ['hanspeter.linder', 'peter.muster', 'inbox:client2',],
+            ['jamie.lannister', 'peter.muster', 'inbox:client2',],
             self.vocabulary_factory(self.portal))
 
     def test_use_clientid_from_responsible_client_widget(self):
@@ -194,13 +194,13 @@ class TestAssignedUsersVocabulary(FunctionalTestCase):
                          lastname='Boss', assigned_client=[client1])
         create_ogds_user('peter.muster', firstname='Peter',
                          lastname='Muster', assigned_client=[client2])
-        create_ogds_user('hanspeter.linder', firstname='Hans-peter',
-                         lastname='Linder', assigned_client=[client1, client2])
+        create_ogds_user('jamie.lannister', firstname='Jamie',
+                         lastname='Lannister', assigned_client=[client1, client2])
 
         set_current_client_id(self.portal, clientid='client2')
 
         self.assertTermKeys(
-            ['peter.muster', 'hanspeter.linder'],
+            ['peter.muster', 'jamie.lannister'],
             self.vocabulary_factory(self.portal))
 
     def test_hidden_terms_contains_all_inactive_users(self):
@@ -249,16 +249,16 @@ class TestContactsAndUsersVocabulary(FunctionalTestCase):
     def test_contains_all_local_contacts(self):
         create_client(clientid="client1")
         create(Builder('contact')
-               .having(firstname=u'Sandra', lastname=u'Kaufmann',
-                       email=u'sandra.kaufmann@test.ch'))
+               .having(firstname=u'Lara', lastname=u'Croft',
+                       email=u'lara.croft@test.ch'))
         create(Builder('contact')
-               .having(firstname=u'Elisabeth', lastname=u'K\xe4ppeli',
-                       email= 'elisabeth.kaeppeli@test.ch'))
+               .having(firstname=u'Super', lastname=u'M\xe4n',
+                       email= 'superman@test.ch'))
 
         vocabulary = self.vocabulary_factory(self.portal)
 
-        self.assertInTerms('contact:kaufmann-sandra', vocabulary)
-        self.assertInTerms('contact:kappeli-elisabeth', vocabulary)
+        self.assertInTerms('contact:croft-lara', vocabulary)
+        self.assertInTerms('contact:man-super', vocabulary)
 
 
 class TestEmailContactsAndUsersVocabularyFactory(FunctionalTestCase):
@@ -294,15 +294,15 @@ class TestEmailContactsAndUsersVocabularyFactory(FunctionalTestCase):
 
     def test_contains_emails_for_all_contacts(self):
         create(Builder('contact')
-               .having(firstname=u'Sandra', lastname=u'Kaufmann',
-                       email=u'sandra.kaufmann@test.ch'))
+               .having(firstname=u'Lara', lastname=u'Croft',
+                       email=u'lara.croft@test.ch'))
         create(Builder('contact')
-               .having(firstname=u'Elisabeth', lastname=u'K\xe4ppeli',
-                       email= 'elisabeth.kaeppeli@test.ch'))
+               .having(firstname=u'Super', lastname=u'M\xe4n',
+                       email= 'superman@test.ch'))
 
         self.assertTermKeys(
-            ['sandra.kaufmann@test.ch:kaufmann-sandra',
-             'elisabeth.kaeppeli@test.ch:kappeli-elisabeth'],
+            ['lara.croft@test.ch:croft-lara',
+             'superman@test.ch:man-super'],
             self.vocabulary_factory(self.portal))
 
     def test_has_an_entry_for_each_mail_address(self):
@@ -352,19 +352,19 @@ class TestOGDSVocabularies(FunctionalTestCase):
 
     def test_contact_vocabulary(self):
         create(Builder('contact')
-               .having(**{'firstname': u'Sandra',
-                          'lastname': u'Kaufmann',
-                          'email': u'sandra.kaufmann@test.ch'}))
+               .having(**{'firstname': u'Lara',
+                          'lastname': u'Croft',
+                          'email': u'lara.croft@test.ch'}))
         create(Builder('contact')
-               .having(**{'firstname': u'Elisabeth',
-                          'lastname': u'K\xe4ppeli',
-                          'email': 'elisabeth.kaeppeli@test.ch'}))
+               .having(**{'firstname': u'Super',
+                          'lastname': u'M\xe4n',
+                          'email': 'superman@test.ch'}))
 
         voca_factory = getUtility(IVocabularyFactory,
                                name='opengever.ogds.base.ContactsVocabulary')
 
         self.assertTermKeys(
-            ['contact:kaufmann-sandra', 'contact:kappeli-elisabeth'],
+            ['contact:croft-lara', 'contact:man-super'],
             voca_factory(self.portal))
 
     def test_client_vocabulary_contains_all_active_clients(self):
