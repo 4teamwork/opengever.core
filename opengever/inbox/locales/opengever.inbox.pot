@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "POT-Creation-Date: 2013-08-21 05:54+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
+"PO-Revision-Date: 2013-08-28 16:21+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -16,6 +16,7 @@ msgstr ""
 "Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: opengever.inbox\n"
+
 
 #: ./opengever/inbox/profiles/default/actions.xml
 msgid "Forward"
@@ -33,18 +34,13 @@ msgstr ""
 msgid "YearFolder"
 msgstr ""
 
-#. Default: "Cancel"
-#: ./opengever/inbox/browser/close.py:52
-msgid "button_cancel"
-msgstr ""
-
 #. Default: "Close"
-#: ./opengever/inbox/browser/close.py:36
+#: ./opengever/inbox/browser/close.py:37
 msgid "close"
 msgstr ""
 
 #. Default: "Error: Please select at least one document to forward"
-#: ./opengever/inbox/forwarding.py:104
+#: ./opengever/inbox/forwarding.py:103
 msgid "error_no_document_selected"
 msgstr ""
 
@@ -57,7 +53,7 @@ msgstr ""
 msgid "help_inbox_group"
 msgstr ""
 
-#: ./opengever/inbox/forwarding.py:52
+#: ./opengever/inbox/forwarding.py:51
 msgid "help_responsible"
 msgstr ""
 
@@ -87,16 +83,15 @@ msgid "label_refuse_forwarding"
 msgstr ""
 
 #. Default: "Responsible"
-#: ./opengever/inbox/forwarding.py:51
+#: ./opengever/inbox/forwarding.py:50
 msgid "label_responsible"
 msgstr ""
 
 #. Default: "Assign Forwarding"
-#: ./opengever/inbox/browser/assign.py:34
 msgid "title_assign_forwarding"
 msgstr ""
 
 #. Default: "Close orwarding"
-#: ./opengever/inbox/browser/close.py:34
+#: ./opengever/inbox/browser/close.py:35
 msgid "title_close_forwarding"
 msgstr ""

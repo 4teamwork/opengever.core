@@ -2,7 +2,7 @@
 from five import grok
 from ftw.tabbedview.interfaces import ITabbedviewUploadable
 from opengever.inbox import _
-from opengever.tabbedview.browser.tabs import Tasks, Documents, Trash
+from opengever.tabbedview.browser.tabs import Documents, Trash
 from opengever.tabbedview.helper import external_edit_link
 from plone.directives import form
 from zope import schema
@@ -64,7 +64,7 @@ class InboxDocuments(Documents):
                     'move_items',)]
 
         actions += ['create_forwarding']
-        return  actions
+        return actions
 
     @property
     def major_actions(self):
@@ -73,7 +73,7 @@ class InboxDocuments(Documents):
         actions = [action for action in actions
                    if action not in ('create_task',)]
         actions += ['create_forwarding']
-        return  actions
+        return actions
 
 
 class InboxTrash(Trash):
