@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2011-08-19 08:11+0000\n"
+"POT-Creation-Date: 2013-08-21 05:54+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -9,6 +9,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0\n"
+"Language-Code: en\n"
+"Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: DOMAIN\n"
 
@@ -51,20 +53,30 @@ msgstr "Ce goupe est autorisé, dès qu'une tâche est attribuée à la boîte d
 msgid "help_responsible"
 msgstr "Choix de la personne responsable ou la boîte de réception du client mentionné ci-dessus."
 
-#. Default: "The successor forwarding was created."
-#: ./opengever/inbox/response.py:287
-msgid "info_created_successor_forwarding"
-msgstr "La transmission suivante a été créée."
-
-#. Default: "The forwarding was moved to the yearfolder ${year}"
-#: ./opengever/inbox/response.py:216
-msgid "info_forwarding_move_to_yearfolder"
-msgstr "La transmission été déplacée vers \"Fermé ${year}\""
+#. Default: "Assigned tasks"
+#: ./opengever/inbox/browser/overview.py:24
+msgid "label_assigned_inbox_tasks"
+msgstr ""
 
 #. Default: "Inbox Group"
 #: ./opengever/inbox/inbox.py:23
 msgid "label_inbox_group"
 msgstr "Boîte de réception Groupe"
+
+#. Default: "Issued tasks"
+#: ./opengever/inbox/browser/overview.py:28
+msgid "label_issued_inbox_tasks"
+msgstr ""
+
+#. Default: "Refuse"
+#: ./opengever/inbox/browser/refuse.py:29
+msgid "label_refuse"
+msgstr ""
+
+#. Default: "Refuse Forwarding"
+#: ./opengever/inbox/browser/refuse.py:26
+msgid "label_refuse_forwarding"
+msgstr ""
 
 #. Default: "Responsible"
 #: ./opengever/inbox/forwarding.py:53
@@ -86,4 +98,7 @@ msgstr "Enregistrer"
 msgid "yearfolder_title"
 msgstr "Fermé ${year}"
 
-
+#. Default: "Assign Forwarding"
+#: ./opengever/inbox/browser/assign.py:34
+msgid "title_assign_forwarding"
+msgstr ""

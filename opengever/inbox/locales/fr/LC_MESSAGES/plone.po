@@ -36,10 +36,11 @@ msgstr "Fermer"
 msgid "forwarding-transition-reassign"
 msgstr "Attribuer de nouveau"
 
+msgid "forwarding-transition-reassign-refused"
+msgstr "Attribuer"
+
 msgid "forwarding-transition-refuse"
 msgstr "Refuser"
 
 msgid "inbox-state-default"
 msgstr "Ouvert"
-
-

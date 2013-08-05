@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2013-04-08 14:47+0000\n"
+"POT-Creation-Date: 2013-08-21 05:54+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -61,9 +61,29 @@ msgstr ""
 msgid "help_responsible"
 msgstr ""
 
+#. Default: "Assigned tasks"
+#: ./opengever/inbox/browser/overview.py:24
+msgid "label_assigned_inbox_tasks"
+msgstr ""
+
 #. Default: "Inbox Group"
 #: ./opengever/inbox/inbox.py:22
 msgid "label_inbox_group"
+msgstr ""
+
+#. Default: "Issued tasks"
+#: ./opengever/inbox/browser/overview.py:28
+msgid "label_issued_inbox_tasks"
+msgstr ""
+
+#. Default: "Refuse"
+#: ./opengever/inbox/browser/refuse.py:29
+msgid "label_refuse"
+msgstr ""
+
+#. Default: "Refuse Forwarding"
+#: ./opengever/inbox/browser/refuse.py:26
+msgid "label_refuse_forwarding"
 msgstr ""
 
 #. Default: "Responsible"
@@ -71,8 +91,12 @@ msgstr ""
 msgid "label_responsible"
 msgstr ""
 
+#. Default: "Assign Forwarding"
+#: ./opengever/inbox/browser/assign.py:34
+msgid "title_assign_forwarding"
+msgstr ""
+
 #. Default: "Close orwarding"
 #: ./opengever/inbox/browser/close.py:34
 msgid "title_close_forwarding"
 msgstr ""
-

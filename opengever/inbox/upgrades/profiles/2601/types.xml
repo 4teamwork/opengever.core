@@ -1,0 +1,3 @@
+<object name="portal_types">
+    <object name="opengever.inbox.forwarding" meta_type="Dexterity FTI" />
+</object>

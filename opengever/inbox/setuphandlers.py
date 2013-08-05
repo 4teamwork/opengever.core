@@ -8,9 +8,8 @@ PROFILE_ID = 'profile-opengever.inbox:default'
 
 ACTIONS_ORDER = ['overview',
                  'documents',
-                 'assigned_forwardings',
-                 'given_tasks',
-                 'assigned_tasks',
+                 'assigned_inbox_tasks',
+                 'issued_inbox_tasks',
                  'trash',
                  'journal',
                  'sharing']

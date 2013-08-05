@@ -37,9 +37,13 @@ msgid "forwarding-transition-refuse"
 msgstr "Ablehnen"
 
 msgid "forwarding-transition-reassign"
-msgstr "Neu zuweisen"
+msgstr "Weiterleiten"
+
+msgid "forwarding-transition-reassign-refused"
+msgstr "Weiterleiten"
+
+msgid "forwarding-transition-refuse"
+msgstr "Ablehnen"
 
 msgid "inbox-state-default"
 msgstr "Offen"
-
-

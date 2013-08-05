@@ -25,31 +25,6 @@ class IInbox(form.Schema, ITabbedviewUploadable):
          )
 
 
-class GivenTasks(Tasks):
-    """Displays all Given Tasks"""
-    grok.name('tabbedview_view-given_tasks')
-
-    types = ['opengever.inbox.forwarding']
-    depth = 1
-
-    @property
-    def columns(self):
-        """Gets the columns wich wich will be displayed
-        """
-        remove_columns = ['containing_subdossier']
-        columns = []
-
-        for col in super(GivenTasks, self).columns:
-            if isinstance(col, dict) and \
-                    col.get('column') in remove_columns:
-                pass  # remove this column
-
-            else:
-                columns.append(col)
-
-        return columns
-
-
 class InboxDocuments(Documents):
     """Lists all Forwardings in this container
     """
