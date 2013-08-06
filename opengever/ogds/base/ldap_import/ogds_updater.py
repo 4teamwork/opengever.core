@@ -61,6 +61,16 @@ class OGDSUpdater(grok.Adapter):
 
             for ldap_user in ldap_users:
                 dn, info = ldap_user
+
+                # Ignore users without an UID in LDAP
+                if not 'userid' in info:
+                    continue
+
+                # Skip users with uid longer than SQL 'userid' column
+                # FIXME: Increase size of SQL column to 64
+                if len(info['userid']) > 30:
+                    continue
+
                 userid = info['userid']
                 if not self.user_exists(userid):
                     # Create the new user
