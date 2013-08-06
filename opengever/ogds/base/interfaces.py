@@ -63,7 +63,7 @@ class ILDAPSearch(Interface):
         """
 
     def get_schema():
-        """Return the LDAP schema of the server we're currently connceted to
+        """Return the LDAP schema of the server we're currently connected to
         as an instance of ldap.schema.subentry.SubSchema.
         """
 

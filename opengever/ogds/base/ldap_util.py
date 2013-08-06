@@ -45,16 +45,33 @@ class LDAPSearch(grok.Adapter):
         return conn
 
     def get_schema(self):
-        """Return the LDAP schema of the server we're currently connceted to
+        """Return the LDAP schema of the server we're currently connected to
         as an instance of ldap.schema.subentry.SubSchema.
         """
+
         if not hasattr(self, '_schema'):
             conn = self.connect()
 
-            res = conn.search_s('cn=subschema',
+            # Try to get schema DN from Root DSE
+            root_dse = conn.search_s('',
+                                     ldap.SCOPE_BASE,
+                                     '(objectclass=*)',
+                                     ['*','+'])[0]
+
+            root_dn, root_entry = root_dse
+
+            try:
+                schema_dn = root_entry['subschemaSubentry'][0]
+            except KeyError:
+                schema_dn = 'cn=schema'
+
+            res = conn.search_s(schema_dn,
                                 ldap.SCOPE_BASE,
                                 '(objectclass=*)',
                                 ['*','+'])
+
+            if len(res) > 1:
+                print "More than one LDAP schema found!"
 
             subschema_dn, subschema_subentry = res[0]
             self._schema = ldap.schema.subentry.SubSchema(subschema_subentry)
