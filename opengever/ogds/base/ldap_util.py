@@ -121,7 +121,11 @@ class LDAPSearch(grok.Adapter):
                 else:
                     cookie = pctrls[0].controlValue[1]
                     if cookie:
-                        lc.controlValue[1] = cookie
+                        # lc.controlValue seems to have been mutable at some point,
+                        # now it's a tuple.
+                        cv = list(lc.controlValue)
+                        cv[1] = cookie
+                        lc.controlValue = tuple(cv)
                     else:
                         is_last_page = True
             else:
