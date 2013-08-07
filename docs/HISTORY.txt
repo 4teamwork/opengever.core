@@ -4,6 +4,9 @@ Changelog
 3.0 (unreleased)
 ----------------
 
+- Fixed imports in the processInputs monkeypatch.
+  [phgross]
+
 - Dossier overview: only list active subdossiers.
   [phgross]
 
