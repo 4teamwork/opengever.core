@@ -8,7 +8,6 @@
            package="opengever.ogds.base">
 
     <include package=".sections" />
-    <include package=".ldap_import" />
     <grok:grok package="." />
 
     <i18n:registerTranslations directory="locales" />
