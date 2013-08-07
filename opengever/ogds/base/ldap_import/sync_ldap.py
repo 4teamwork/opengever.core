@@ -1,40 +1,19 @@
 from AccessControl.SecurityManagement import newSecurityManager
 from App.config import getConfiguration
-from Testing.makerequest import makerequest
-from collective.transmogrifier.transmogrifier import Transmogrifier
-from opengever.ogds.base.ldap_import.import_stamp import \
-    set_remote_import_stamp
+from opengever.ogds.base.ldap_import.import_stamp import set_remote_import_stamp
+from opengever.ogds.base.interfaces import IOGDSUpdater
 from optparse import OptionParser
+from Testing.makerequest import makerequest
 from zope.app.component.hooks import setSite
 import ldap
 import logging
 import sys
+import time
 import transaction
 
-CONFIGS = u'opengever.ogds.base.user-import;opengever.ogds.base.group-import'
+
 logger = logging.getLogger('opengever.ogds.base')
 LOG_FORMAT = '%(asctime)s %(levelname)s [%(name)s] %(message)s'
-
-
-def debugAfterException():
-    """Starts pdb at the point where an uncatched exception was raised.
-    """
-
-    def info(type, value, tb):
-        if hasattr(sys, 'ps1') or not sys.stderr.isatty():
-            # we are in interactive mode or we don't have a tty-like
-            # device, so we call the default hook
-            sys.__excepthook__(type, value, tb)
-        else:
-            import traceback
-            import pdb
-            # we are NOT in interactive mode, print the exception...
-            traceback.print_exception(type, value, tb)
-            print
-            # ...then start the debugger in post-mortem mode.
-            pdb.pm()
-
-    sys.excepthook = info
 
 
 def check_if_ldap_reachable(site):
@@ -93,36 +72,35 @@ def run_import(app, options):
     user = user.__of__(app.acl_users)
     newSecurityManager(app, user)
 
-    #setup site
+    # setup site
     setSite(plone)
 
-    transmogrifier = Transmogrifier(plone)
+    updater = IOGDSUpdater(plone)
+    start = time.clock()
 
-    trans_configs = options.config.split(';')
-    for config in trans_configs:
+    # Import users
+    logger.info("Importing users...")
+    updater.import_users()
 
-        logger.info("Importing...")
-        import time
-        now = time.clock()
-        transmogrifier(config)
+    # Import groups
+    logger.info("Importing groups...")
+    updater.import_groups()
 
-        #transmogrifier(u'opengever.repository1.ska-arch')
-        #transmogrifier(u'opengever.konsulmigration.repository')
-        elapsed = time.clock() - now
-        logger.info("Done in %.0f seconds." % elapsed)
-        logger.info("Committing transaction...")
-        transaction.commit()
+    elapsed = time.clock() - start
+    logger.info("Done in %.0f seconds." % elapsed)
+    logger.info("Committing transaction...")
+    transaction.commit()
 
-    if len(trans_configs) != 0 and options.update_syncstamp:
-        logger.info("update LDAP SYNC importstamp")
+    if options.update_syncstamp:
+        # Update sync stamp
+        logger.info("Updating LDAP SYNC importstamp...")
         set_remote_import_stamp(plone)
         transaction.commit()
 
-    logger.info("Synchronisation Done.")
+    logger.info("Synchronization Done.")
 
 
 def main():
-
     # check if we have a zope environment aka 'app'
     mod = __import__(__name__)
     if not ('app' in dir(mod) or 'app' in globals()):
@@ -130,19 +108,11 @@ def main():
         return
 
     parser = OptionParser()
-    parser.add_option(
-        "-D", "--debug", action="store_true", dest="debug", default=False)
-    parser.add_option("-c", "--config", dest="config",
-                  default=CONFIGS)
-    parser.add_option('-u', "--update-syncstamp",
-                      dest="update_syncstamp", default=True)
     parser.add_option("-s", "--site-root",
                       dest="site_root", default=u'/Plone')
-
+    parser.add_option('-u', "--update-syncstamp",
+                      dest="update_syncstamp", default=True)
     (options, args) = parser.parse_args()
-
-    if options.debug:
-        debugAfterException()
 
     run_import(app, options)
 

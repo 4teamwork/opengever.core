@@ -1,14 +1,12 @@
-from Products.CMFPlone.interfaces import IPloneSiteRoot
-from Products.statusmessages.interfaces import IStatusMessage
-from collective.transmogrifier.transmogrifier import Transmogrifier
 from five import grok
 from ftw.dictstorage.interfaces import IDictStorage
 from opengever.ogds.base.interfaces import ISyncStamp
+from opengever.ogds.base.ldap_import.import_stamp import DictStorageConfigurationContext
 from opengever.ogds.base.ldap_import.import_stamp import DICTSTORAGE_SYNC_KEY
-from opengever.ogds.base.ldap_import.import_stamp import \
-    set_remote_import_stamp
-from opengever.ogds.base.ldap_import.import_stamp import \
-    DictStorageConfigurationContext
+from opengever.ogds.base.ldap_import.import_stamp import set_remote_import_stamp
+from opengever.ogds.base.interfaces import IOGDSUpdater
+from Products.CMFPlone.interfaces import IPloneSiteRoot
+from Products.statusmessages.interfaces import IStatusMessage
 from time import strftime
 from zope.component import getUtility
 import ldap
@@ -36,17 +34,17 @@ class LDAPControlPanel(grok.View):
         return timestamp
 
 
-class UserSyncView(grok.View):
-    """A view wich start the ldap group synchronisation """
+class LDAPSyncView(grok.View):
+    """Base class for LDAP synchronization views (UserSyncView and
+    GroupSyncView).
+    """
 
-    grok.name('sync_user')
     grok.context(IPloneSiteRoot)
     grok.require('cmf.ManagePortal')
 
-    configuration = 'opengever.ogds.base.user-import'
-
     def mklog(self):
-        """ helper to prepend a time stamp to the output """
+        """Helper to prepend a time stamp to the output.
+        """
         write = self.request.RESPONSE.write
 
         def log(msg, timestamp=True):
@@ -55,51 +53,66 @@ class UserSyncView(grok.View):
             write(msg)
         return log
 
-    def render(self):
+    def run_update(self):
+        raise NotImplemented
 
-        log = self.mklog()
-
-        # check if ldap is reachable
-        log('Check if LDAP import is reachable')
+    def _check_if_ldap_is_reachable(self):
+        """Check if LDAP server is reachable before we start any import.
+        """
+        self.log('Checking if LDAP is reachable...')
         ldap_folder = self.context.acl_users.get('ldap').get('acl_users')
         server = ldap_folder.getServers()[0]
         ldap_url = "%s://%s:%s" % (
             server['protocol'], server['host'], server['port'])
         ldap_conn = ldap.initialize(ldap_url)
+        ldap_conn.search_s(ldap_folder.users_base, ldap.SCOPE_SUBTREE)
+
+    def render(self):
+        self.log = self.mklog()
+
         try:
-            ldap_conn.search_s(ldap_folder.users_base, ldap.SCOPE_SUBTREE)
+            self._check_if_ldap_is_reachable()
         except ldap.LDAPError, e:
             return "LDAP is not reachable. \
-                Couldn't start Group import. LDAPError: %s" % (e)
+                Couldn't start LDAP import. LDAPError: %s" % (e)
+
+        # Run import and time it
         now = time.clock()
-
-        transmogrifier = Transmogrifier(self.context)
-
-        log("Start user import")
-        transmogrifier(self.configuration)
+        self.run_update()
         transaction.commit()
         elapsed = time.clock() - now
-        log("Done in %.0f seconds." % elapsed)
+        self.log("Done in %.0f seconds." % elapsed)
 
-        if self.configuration:
-            print "update LDAP SYNC importstamp"
-            set_remote_import_stamp(self.context)
-            transaction.commit()
-
-        log("Committing transaction...")
-
-        log('Done user import')
+        # Update import time stamp and finally commit
+        self.log("Updating LDAP SYNC importstamp...")
+        set_remote_import_stamp(self.context)
+        self.log("Committing transaction...")
+        transaction.commit()
+        self.log('Done.')
 
 
-class GroupSyncView(UserSyncView):
-    """This View provides the same functinality like the parent,
-    just start the group import"""
+class UserSyncView(LDAPSyncView):
+    """Browser view that starts an LDAP user import.
+    """
+
+    grok.name('sync_user')
+
+    def run_update(self):
+        self.log("Starting user import...")
+        updater = IOGDSUpdater(self.context)
+        updater.import_users()
+
+
+class GroupSyncView(LDAPSyncView):
+    """Browser view that starts an LDAP group import.
+    """
 
     grok.name('sync_group')
-    grok.context(IPloneSiteRoot)
-    grok.require('cmf.ManagePortal')
 
-    configuration = 'opengever.ogds.base.group-import'
+    def run_update(self):
+        self.log("Starting groups import...")
+        updater = IOGDSUpdater(self.context)
+        updater.import_groups()
 
 
 class ResetStampView(grok.View):
