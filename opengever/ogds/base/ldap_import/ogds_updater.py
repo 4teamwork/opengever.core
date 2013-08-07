@@ -122,9 +122,8 @@ class OGDSUpdater(grok.Adapter):
                     value = info.get(col.name)
                     setattr(group, col.name, value)
 
-                members = info.get('uniqueMember', [])
                 contained_users = []
-                for user_dn in members:
+                for user_dn in self.get_group_members(info):
                     try:
                         ldap_user = ldap_util.entry_by_dn(user_dn)
                         user_dn, user_info = ldap_user
@@ -139,3 +138,9 @@ class OGDSUpdater(grok.Adapter):
                         print "WARNING: Referenced user %s not found, ignoring!" % user_dn
                 group.users = contained_users
                 session.flush()
+
+    def get_group_members(self, info):
+        if 'uniqueMember' in info:
+            return info.get('uniqueMember', [])
+        else:
+            return info.get('member', [])
