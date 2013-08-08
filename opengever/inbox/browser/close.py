@@ -12,6 +12,7 @@ from z3c.form.form import Form
 from zope import schema
 
 
+# TODO: Use ISimpleResponseForm instead of define a same one.
 class IForwardingCloseForm(form.Schema):
     """Special addresponse form for the forwarding close transition.
     Looks the same, but do something different.
