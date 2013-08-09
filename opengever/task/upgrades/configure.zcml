@@ -1,0 +1,25 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+    i18n_domain="ftw.tabbedview">
+
+    <!-- 2 -> 2500 -->
+    <genericsetup:upgradeStep
+        title="Add new tasktype action modify deadline."
+        description=""
+        source="2"
+        destination="2500"
+        handler="opengever.task.upgrades.to2500.AddModifyDeadlineAction"
+        profile="opengever.task:default"
+        />
+
+    <genericsetup:registerProfile
+        name="2500"
+        title="opengever.task: upgrade profile 2500"
+        description=""
+        directory="profiles/2500"
+        for="Products.CMFPlone.interfaces.IMigratingPloneSiteRoot"
+        provides="Products.GenericSetup.interfaces.EXTENSION"
+        />
+
+</configure>
