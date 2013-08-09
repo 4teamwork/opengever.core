@@ -87,6 +87,10 @@ builder_registry.register('mail', MailBuilder)
 class RepositoryBuilder(DexterityBuilder):
     portal_type = 'opengever.repository.repositoryfolder'
 
+    def titled(self, title):
+        self.arguments["effective_title"] = title
+        return self
+
 
 builder_registry.register('repository', RepositoryBuilder)
 

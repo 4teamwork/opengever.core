@@ -11,4 +11,12 @@
        permission="zope2.View"
        />
 
+    <browser:viewlet
+        name="plone.path_bar"
+        layer="opengever.base.interfaces.IOpengeverBaseLayer"
+        manager="plone.app.layout.viewlets.interfaces.IAboveContent"
+        class=".pathbar.PathBar"
+        permission="zope2.View"
+        />
+
 </configure>
