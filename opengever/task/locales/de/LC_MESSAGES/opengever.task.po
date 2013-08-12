@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2013-06-11 08:20+0000\n"
+"POT-Creation-Date: 2013-06-04 20:11+0000\n"
 "PO-Revision-Date: 2012-08-21 15:33+0200\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -359,11 +359,16 @@ msgstr ""
 msgid "help_issuer"
 msgstr ""
 
+#: ./opengever/task/browser/modify_deadline.py:23
+msgid "help_new_deadline"
+msgstr ""
+
 #: ./opengever/task/task.py:174
 msgid "help_predecessor"
 msgstr ""
 
 #: ./opengever/task/browser/assign.py:52
+#: ./opengever/task/browser/modify_deadline.py:29
 #: ./opengever/task/response.py:50
 msgid "help_response"
 msgstr ""
@@ -455,7 +460,7 @@ msgid "label_assign_choose_method"
 msgstr "Weiterleitung zuweisen an ein ..."
 
 #. Default: "by ${author}"
-#: ./opengever/task/viewlets/byline.pt:19
+#: ./opengever/task/viewlets/byline.pt:17
 msgid "label_by_author"
 msgstr "Auftragnehmer: ${author}"
 
@@ -484,7 +489,7 @@ msgstr "Hauptaufgabe"
 msgid "label_copy_documents"
 msgstr "Mit der Aufgabe verknüpfte Dokumente in den Eingangskorb des Ziel-Mandanten kopieren."
 
-#. Default: "created"
+#. Default: "last modified"
 #: ./opengever/task/viewlets/byline.pt:44
 msgid "label_created"
 msgstr "erstellt am"
@@ -559,6 +564,11 @@ msgstr "zuletzt verändert"
 #: ./opengever/task/browser/overview.py:71
 msgid "label_main_attributes"
 msgstr "Eigenschaften"
+
+#. Default: "New Deadline"
+#: ./opengever/task/browser/modify_deadline.py:22
+msgid "label_new_deadline"
+msgstr "Neue Frist"
 
 #. Default: "Dossiertitle"
 #: ./opengever/task/browser/overview.py:182
@@ -674,9 +684,14 @@ msgid "label_workflow_state"
 msgstr "Status"
 
 #. Default: "State:"
-#: ./opengever/task/viewlets/byline.pt:26
+#: ./opengever/task/viewlets/byline.pt:28
 msgid "label_workflow_state_byline"
 msgstr "Status:"
+
+#. Default: "Deadline successfully changed."
+#: ./opengever/task/browser/modify_deadline.py:57
+msgid "msg_deadline_change_successfull"
+msgstr "Frist wurde erfolgreich angepasst."
 
 msgid "mytasks"
 msgstr "Meine Aufgaben"
@@ -699,6 +714,11 @@ msgstr "Antwort"
 #: ./opengever/task/response_templates/responseview.pt:3
 msgid "responses"
 msgstr "Antworten:"
+
+#. Default: "The given deadline, is the current one."
+#: ./opengever/task/browser/modify_deadline.py:50
+msgid "same_deadline_error"
+msgstr "Die angegebene Frist ist die aktuelle."
 
 #. Default: "Save"
 #: ./opengever/task/response.py:161
@@ -808,6 +828,11 @@ msgstr "Antwort bearbeiten"
 #: ./opengever/task/templates/edit_response.pt:30
 msgid "title_error_no_response"
 msgstr "Fehler: keine Antworten zum editieren gefunden"
+
+#. Default: "Modify deadline"
+#: ./opengever/task/browser/modify_deadline.py:40
+msgid "title_modify_deadline"
+msgstr "Frist ändern"
 
 #. Default: "Document copied from forwarding (forwarding accepted)"
 #: ./opengever/task/browser/accept/utils.py:131

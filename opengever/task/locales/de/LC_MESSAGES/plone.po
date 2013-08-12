@@ -26,6 +26,9 @@ msgstr "Folgeaufgabe erstellen"
 msgid "Delegate task"
 msgstr "Delegieren"
 
+msgid "Modify deadline"
+msgstr "Frist ändern"
+
 msgid "task-state-cancelled"
 msgstr "Storniert"
 
@@ -82,4 +85,3 @@ msgstr "Überarbeiten"
 
 msgid "task-transition-resolved-tested-and-closed"
 msgstr "Abschliessen"
-
