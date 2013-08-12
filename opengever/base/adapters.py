@@ -1,13 +1,21 @@
 from Acquisition import aq_base
+from Products.CMFCore.interfaces._content import IFolderish
 from five import grok
 from opengever.base.behaviors.utils import split_string_by_numbers
 from opengever.base.interfaces import IReferenceNumberPrefix
+from opengever.dossier.behaviors.dossier import IDossierMarker
 from persistent.dict import PersistentDict
-from Products.CMFCore.interfaces._content import IFolderish
 from zope.annotation.interfaces import IAnnotations
 from zope.app.intid.interfaces import IIntIds
 from zope.component import getUtility
 import re
+
+
+DOSSIER_KEY = 'dossier_reference_mapping'
+REPOSITORY_FOLDER_KEY = 'repository_reference_mapping'
+
+CHILD_REF_KEY = 'reference_numbers'
+PREFIX_REF_KEY = 'reference_prefix'
 
 
 class ReferenceNumberPrefixAdpater(grok.Adapter):
@@ -16,37 +24,46 @@ class ReferenceNumberPrefixAdpater(grok.Adapter):
     grok.provides(IReferenceNumberPrefix)
     grok.context(IFolderish)
 
-    # a mapping numbers : intids - never deleted
-    CHILD_REF_KEY = 'reference_numbers'
-
-    # a mapping intid : reference_number
-    REF_KEY = 'reference_prefix'
-
     def __init__(self, context):
         self.context = context
+
+    def get_reference_mapping(self, obj=None):
+        type_key = self.get_type_key(obj)
         annotations = IAnnotations(self.context)
 
-        #child mapping
-        self.child_mapping = annotations.get(self.CHILD_REF_KEY, None)
-        if self.child_mapping is None:
-            self.child_mapping = PersistentDict()
-            annotations[self.CHILD_REF_KEY] = self.child_mapping
+        if not annotations.get(type_key):
+            annotations[type_key] = PersistentDict({})
+        return annotations[type_key]
 
-        #reference prefix
-        self.reference_mapping = annotations.get(self.REF_KEY, None)
-        if self.reference_mapping is None:
-            self.reference_mapping = PersistentDict()
-            annotations[self.REF_KEY] = self.reference_mapping
+    def get_child_mapping(self, obj=None):
+        reference_mapping = self.get_reference_mapping(obj)
+        if not reference_mapping.get(CHILD_REF_KEY, None):
+            reference_mapping[CHILD_REF_KEY] = PersistentDict()
+        return reference_mapping.get(CHILD_REF_KEY, None)
 
-    def get_next_number(self):
+    def get_prefix_mapping(self, obj=None):
+        reference_mapping = self.get_reference_mapping(obj)
+        if not reference_mapping.get(PREFIX_REF_KEY, None):
+            reference_mapping[PREFIX_REF_KEY] = PersistentDict()
+        return reference_mapping.get(PREFIX_REF_KEY, None)
+
+    def get_type_key(self, obj=None):
+        if obj and IDossierMarker.providedBy(obj):
+            return DOSSIER_KEY
+        return REPOSITORY_FOLDER_KEY
+
+    def get_next_number(self, obj=None):
         """ return the next possible reference number for object
         at the actual context
         """
-        if not self.child_mapping.keys():
+
+        child_mapping = self.get_child_mapping(obj)
+
+        if not child_mapping.keys():
             # It's the first number ever issued
             return u'1'
         else:
-            prefixes_in_use = self.child_mapping.keys()
+            prefixes_in_use = child_mapping.keys()
             # Sort the list of unicode strings *numerically*
             prefixes_in_use.sort(key=split_string_by_numbers)
             lastnumber = prefixes_in_use[-1]
@@ -88,8 +105,10 @@ class ReferenceNumberPrefixAdpater(grok.Adapter):
         # In some cases we might not have an intid yet.
         except KeyError:
             return None
-        if intid in self.reference_mapping:
-            return self.reference_mapping.get(intid)
+
+        prefix_mapping = self.get_prefix_mapping(obj)
+        if intid in prefix_mapping:
+            return prefix_mapping.get(intid)
         return None
 
     def set_number(self, obj, number=None):
@@ -100,19 +119,20 @@ class ReferenceNumberPrefixAdpater(grok.Adapter):
         intid = intids.getId(aq_base(obj))
 
         if not number:
-            number = self.get_next_number()
+            number = self.get_next_number(obj)
 
         if not isinstance(number, unicode):
             number = unicode(number)
 
-        self.reference_mapping[intid] = number
-        self.child_mapping[number] = intid
-
+        self.get_prefix_mapping(obj)[intid] = number
+        self.get_child_mapping(obj)[number] = intid
         return number
 
     def is_valid_number(self, number, obj=None):
         """ check the given reference number for the given context """
-        if number not in self.child_mapping.keys():
+
+        child_mapping = self.get_child_mapping(obj)
+        if number not in child_mapping.keys():
             return True
 
         elif obj is not None:
@@ -120,7 +140,7 @@ class ReferenceNumberPrefixAdpater(grok.Adapter):
             intids = getUtility(IIntIds)
             intid = intids.getId(aq_base(obj))
 
-            if self.child_mapping[number] == intid:
+            if child_mapping[number] == intid:
                 return True
 
         return False
