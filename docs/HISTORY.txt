@@ -4,6 +4,9 @@ Changelog
 3.0 (unreleased)
 ----------------
 
+- Removed client prefixes in single client setups.
+  [lknoepfel]
+
 - Make exposator work for both izug.basetheme and plonetheme.teamraum.
   [Julian Infanger]
 
