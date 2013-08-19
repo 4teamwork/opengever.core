@@ -1,6 +1,7 @@
 from five import grok
 from opengever.globalindex.interfaces import ITaskQuery
 from opengever.inbox.inbox import IInbox
+from opengever.inbox.yearfolder import IYearFolder
 from opengever.ogds.base.utils import get_client_id
 from opengever.tabbedview.browser.tabs import Tasks
 from opengever.tabbedview.browser.tasklisting import GlobalTaskListingTab
@@ -58,3 +59,14 @@ class IssuedInboxTasks(Tasks):
                 columns.append(col)
 
         return columns
+
+
+class ClosedForwardings(Tasks):
+
+    grok.name('tabbedview_view-closed-forwardings')
+    grok.context(IYearFolder)
+    grok.require('zope2.View')
+
+    types = ['opengever.inbox.forwarding', ]
+    enabled_actions = []
+    major_actions = []
