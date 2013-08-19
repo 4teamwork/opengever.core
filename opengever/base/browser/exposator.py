@@ -17,8 +17,9 @@ class ExposatorViewlet(grok.Viewlet):
     REMOTE_CLIENT_JS = '''
 <script type="text/javascript">
 $(function() {
-    $('#portal-column-content').expose({closeOnClick: false, closeOnEsc: false});
-    $('#portal-breadcrumbs').append('<span style="float:right"><a href="javascript:window.close()">Fenster schliessen</a></span')
+    $('#column-content, #portal-column-content').expose({closeOnClick: false, closeOnEsc: false});
+    $('#portal-breadcrumbs').css('z-index', '9999');
+    $('#portal-breadcrumbs').append('<span style="float:right"><a href="javascript:window.close()">Fenster schliessen</a></span');
 });
 </script>
 '''

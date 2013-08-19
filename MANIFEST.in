@@ -1,5 +1,6 @@
 recursive-include opengever *
 recursive-include docs *
+include *.rst
 include *.txt
 global-exclude *.pyc
 global-exclude ._*

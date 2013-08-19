@@ -1,14 +1,27 @@
 Changelog
 =========
 
-3.0 (unreleased)
+3.1 (unreleased)
 ----------------
 
 - Dossiercover: Implements breadcrumb cropping and adjust fonz size.
   [phgross]
 
+
+3.0 (2013-08-14)
+----------------
+
+- Make exposator work for both izug.basetheme and plonetheme.teamraum.
+  [Julian Infanger]
+
+- Fixed imports in the processInputs monkeypatch.
+  [phgross]
+
 - Dossier overview: only list active subdossiers.
   [phgross]
+
+- Rewrote LDAP synchronisation in pure Python instead of Transmogrifier.
+  [lgraf]
 
 - Removed development LDAP configuration for now.
   [lgraf]
