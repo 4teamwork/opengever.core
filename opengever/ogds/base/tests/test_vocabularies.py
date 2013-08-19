@@ -33,7 +33,7 @@ class TestContactVocabulary(FunctionalTestCase):
         vocabulary = ContactsVocabulary.create_with_provider(self.key_value_provider)
         self.assertTermKeys(
             ['first-entry', 'second-entry', 'third-entry',
-             'fourth-entry', 'fifth-entry',],
+             'fourth-entry', 'fifth-entry', ],
             vocabulary.search('entry'))
 
         self.assertTermKeys(
@@ -121,7 +121,7 @@ class TestUsersAndInboxesVocabulary(FunctionalTestCase):
         self.portal.REQUEST.set('client', 'client2')
 
         self.assertTermKeys(
-            ['jamie.lannister', 'peter.muster', 'inbox:client2',],
+            ['jamie.lannister', 'peter.muster', 'inbox:client2', ],
             self.vocabulary_factory(self.portal))
 
     def test_use_clientid_from_responsible_client_widget(self):
@@ -143,14 +143,27 @@ class TestAllUsersAndInboxesVocabulary(FunctionalTestCase):
             IVocabularyFactory,
             name='opengever.ogds.base.AllUsersAndInboxesVocabulary')
 
-    def test_terms_are_marked_with_client_prefix(self):
+    def test_terms_are_marked_with_client_prefix_in_a_multiclient_setup(self):
         client1 = create_client(clientid="client1", title="Client 1")
+        create_client(clientid="client2", title="Client 2")
         create_ogds_user('hugo.boss', firstname='Hugo',
                          lastname='Boss', assigned_client=[client1, ])
         set_current_client_id(self.portal)
 
         self.assertTerms(
             [('client1:hugo.boss', 'Client 1: Boss Hugo (hugo.boss)'),
+            ('client1:inbox:client1', 'Inbox: Client 1'),
+            ('client2:inbox:client2', 'Inbox: Client 2')],
+            self.vocabulary_factory(self.portal))
+
+    def test_client_prefix_of_title_is_omitted_in_one_client_setup(self):
+        client1 = create_client(clientid="client1", title="Client 1")
+        create_ogds_user('hugo.boss', firstname='Hugo',
+                         lastname='Boss', assigned_client=[client1, ])
+        set_current_client_id(self.portal)
+
+        self.assertTerms(
+            [('client1:hugo.boss', 'Boss Hugo (hugo.boss)'),
              ('client1:inbox:client1', 'Inbox: Client 1')],
             self.vocabulary_factory(self.portal))
 
@@ -380,6 +393,7 @@ class TestOGDSVocabularies(FunctionalTestCase):
             ['client1', 'client2'], voca_factory(self.portal))
 
     def test_home_dossier_vocabulary_contains_all_open_dossier_from_your_home_client(self):
+
         class ClientCommunicatorMockUtility(communication.ClientCommunicator):
             implements(communication.IClientCommunicator)
 

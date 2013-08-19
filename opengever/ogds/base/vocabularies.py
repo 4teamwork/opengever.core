@@ -179,9 +179,13 @@ class AllUsersAndInboxesVocabularyFactory(grok.GlobalUtility):
             # all users
             for user in info.list_assigned_users(client_id=client_id):
                 value = u'%s:%s' % (client_id, user.userid)
-                label = u'%s: %s' % (
-                    client.title,
-                    info.describe(user))
+                # prepend client if there are multiple clients
+                if info.is_one_client_setup():
+                    label = u'%s' % (info.describe(user))
+                else:
+                    label = u'%s: %s' % (
+                        client.title,
+                        info.describe(user))
 
                 if not user.active:
                     self.hidden_terms.append(value)
@@ -305,7 +309,6 @@ class ContactsVocabularyFactory(grok.GlobalUtility):
 
 # TODO: should be renamed to something like
 # ContactsUsersAndInboxesVocabularyFactory
-
 
 class ContactsAndUsersVocabularyFactory(grok.GlobalUtility):
     """Vocabulary of contacts, users and the inbox of each client.
