@@ -4,6 +4,10 @@ Changelog
 3.1 (unreleased)
 ----------------
 
+- LDAP util: Make determining multi-valuedness of attributes more robust
+  in case of broken LDAP schemas.
+  [lgraf]
+
 - LDAP util: Get user object classes from LDAPUserFolder instead of hardcoding them.
   [lgraf]
 
