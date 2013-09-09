@@ -5,6 +5,7 @@ from opengever.repository import _
 from zope.interface import alsoProvides
 from plone.autoform.interfaces import IFormFieldProvider
 
+
 class IFrenchTitleBehavior(form.Schema):
     """Additional behavior providing a french title.
     """
