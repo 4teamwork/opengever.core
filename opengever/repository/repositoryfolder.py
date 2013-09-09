@@ -1,5 +1,6 @@
 from Acquisition import aq_inner, aq_parent
 from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
+from Products.CMFCore.utils import getToolByName
 from five import grok
 
 from zope import schema
@@ -16,6 +17,7 @@ from opengever.repository import _
 from opengever.repository.interfaces import IRepositoryFolder
 from opengever.repository.behaviors.referenceprefix import \
     IReferenceNumberPrefix, IReferenceNumberPrefixMarker
+from opengever.repository.behaviors.frenchtitle import IFrenchTitleBehavior
 from opengever.repository.interfaces import IRepositoryFolderRecords
 from opengever.base.browser.helper import get_css_class
 
@@ -100,8 +102,18 @@ class RepositoryFolder(content.Container):
 
     implements(IRepositoryFolder)
 
-    def Title(self):
+    def Title(self, language=None):
         title = u' %s' % self.effective_title
+
+        if (IFrenchTitleBehavior.providedBy(self)):
+            ltool = getToolByName(self, 'portal_languages')
+
+            if language is None and ltool.getPreferredLanguage() == 'fr':
+                language = 'fr'
+
+            if  language == 'fr' and getattr(self, 'title_fr', None):
+                title = u' %s' % self.title_fr
+
         obj = self
         while IRepositoryFolder.providedBy(obj):
             if IReferenceNumberPrefixMarker.providedBy(obj):
@@ -202,8 +214,6 @@ class Byline(grok.Viewlet):
     grok.viewletmanager(IBelowContentTitle)
     grok.context(IRepositoryFolder)
     grok.name("plone.belowcontenttitle.documentbyline")
-
-    #update = content.DocumentBylineViewlet.update
 
     def get_css_class(self):
         return get_css_class(self.context)
