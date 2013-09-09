@@ -13,4 +13,10 @@
       marker=".referenceprefix.IReferenceNumberPrefixMarker"
       />
 
+  <plone:behavior
+    title="French title"
+    description="PHVS french title behavior"
+    provides=".frenchtitle.IFrenchTitleBehavior"
+    for="plone.dexterity.interfaces.IDexterityContent"
+    />
 </configure>
