@@ -1,14 +1,19 @@
+from Products.CMFCore.utils import getToolByName
 from ftw.builder import Builder
 from ftw.builder import create
+from opengever.core.testing import OPENGEVER_FUNCTIONAL_TESTING
 from opengever.testing import FunctionalTestCase
 from opengever.testing import obj2brain
-from opengever.core.testing import OPENGEVER_FUNCTIONAL_TESTING
 from plone.app.contentlisting.interfaces import IContentListingObject
 
 
 class TestFrenchTitleBehavior(FunctionalTestCase):
 
     layer = OPENGEVER_FUNCTIONAL_TESTING
+
+    def setUp(self):
+        super(TestFrenchTitleBehavior, self).setUp()
+        getToolByName(self.portal, 'portal_languages').setLanguageBindings()
 
     def test_Title_returns_title_in_the_preferred_language(self):
         repository = create(Builder('repository')
