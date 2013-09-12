@@ -15,7 +15,7 @@
 
   <plone:behavior
     title="French title"
-    description="PHVS french title behavior"
+    description="French title behavior"
     provides=".frenchtitle.IFrenchTitleBehavior"
     for="plone.dexterity.interfaces.IDexterityContent"
     />
