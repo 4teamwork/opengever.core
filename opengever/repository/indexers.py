@@ -2,13 +2,13 @@ from five import grok
 from logging import getLogger
 from plone.indexer import indexer
 from zope.interface import Interface
-from opengever.repository.behaviors.frenchtitle  import IFrenchTitleBehavior
+from opengever.repository.behaviors.frenchtitle  import IFrenchTitleBehaviorMarker
 
 
 LOG = getLogger('opengever.repository')
 
 # FrenchTitleBehavior
-@indexer(IFrenchTitleBehavior)
+@indexer(IFrenchTitleBehaviorMarker)
 def german_title(obj):
     try:
         return obj.Title(language='de')
@@ -19,7 +19,7 @@ def german_title(obj):
 grok.global_adapter(german_title, name='Title')
 
 
-@indexer(IFrenchTitleBehavior)
+@indexer(IFrenchTitleBehaviorMarker)
 def french_title(obj):
     try:
         return obj.Title(language='fr')
