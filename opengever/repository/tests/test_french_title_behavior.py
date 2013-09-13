@@ -2,7 +2,7 @@ from Products.CMFCore.utils import getToolByName
 from ftw.builder import Builder
 from ftw.builder import create
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_TESTING
-from opengever.testing import FunctionalTestCase    
+from opengever.testing import FunctionalTestCase
 
 
 class TestFrenchTitleAccessor(FunctionalTestCase):
@@ -14,12 +14,13 @@ class TestFrenchTitleAccessor(FunctionalTestCase):
         self.fti = getToolByName(self.portal, 'portal_types').get('opengever.repository.repositoryfolder')
         self.originalBehaviors = self.fti.behaviors
         self.fti.behaviors = self.fti.behaviors + ('opengever.repository.behaviors.frenchtitle.IFrenchTitleBehavior', )
-    
+
     def tearDown(self):
         self.fti.behaviors = self.originalBehaviors
 
     def test_returns_german_title_when_preferred_lang_is_de(self):
         self.portal.REQUEST.get('LANGUAGE_TOOL').LANGUAGE = 'de'
+
         repository = create(Builder('repository')
                 .titled('Weiterbildung')
                 .having(title_fr='Formation continue'))

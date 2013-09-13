@@ -1,9 +1,14 @@
-from plone.directives import form
 from collective import dexteritytextindexer
-from zope import schema
 from opengever.repository import _
-from zope.interface import alsoProvides
 from plone.autoform.interfaces import IFormFieldProvider
+from plone.directives import form
+from zope import schema
+from zope.interface import Interface
+from zope.interface import alsoProvides
+
+
+class IFrenchTitleBehaviorMarker(Interface):
+    """Marker interface for the french title behavior."""
 
 
 class IFrenchTitleBehavior(form.Schema):
