@@ -1,19 +1,8 @@
-from zope.interface import alsoProvides
-from opengever.repository.behaviors.frenchtitle import IFrenchTitleBehavior
 from Products.CMFCore.utils import getToolByName
 from ftw.builder import Builder
 from ftw.builder import create
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_TESTING
-from opengever.testing import FunctionalTestCase
-from opengever.testing import obj2brain
-from plone.app.contentlisting.interfaces import IContentListingObject
-
-
-class TestTitleAccessor(FunctionalTestCase):
-    layer = OPENGEVER_FUNCTIONAL_TESTING
-
-    def test_returns_title_when_no_language_set(self):
-        """ number + space + title """
+from opengever.testing import FunctionalTestCase    
 
 
 class TestFrenchTitleAccessor(FunctionalTestCase):
@@ -22,8 +11,12 @@ class TestFrenchTitleAccessor(FunctionalTestCase):
     def setUp(self):
         super(TestFrenchTitleAccessor, self).setUp()
         getToolByName(self.portal, 'portal_languages').setLanguageBindings()
-        fti = getToolByName(self.portal, 'portal_types').get('opengever.repository.repositoryfolder')
-        fti.behaviors = fti.behaviors + ('opengever.repository.behaviors.frenchtitle.IFrenchTitleBehavior', )
+        self.fti = getToolByName(self.portal, 'portal_types').get('opengever.repository.repositoryfolder')
+        self.originalBehaviors = self.fti.behaviors
+        self.fti.behaviors = self.fti.behaviors + ('opengever.repository.behaviors.frenchtitle.IFrenchTitleBehavior', )
+    
+    def tearDown(self):
+        self.fti.behaviors = self.originalBehaviors
 
     def test_returns_german_title_when_preferred_lang_is_de(self):
         self.portal.REQUEST.get('LANGUAGE_TOOL').LANGUAGE = 'de'
