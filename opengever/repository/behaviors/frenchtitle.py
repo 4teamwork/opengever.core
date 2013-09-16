@@ -6,6 +6,8 @@ from zope import schema
 from zope.interface import Interface
 from zope.interface import alsoProvides
 
+"""TODO Update live search to display result in preferred language"""
+
 
 class IFrenchTitleBehaviorMarker(Interface):
     """Marker interface for the french title behavior."""

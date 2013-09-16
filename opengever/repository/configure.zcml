@@ -28,6 +28,7 @@
         provides="Products.GenericSetup.interfaces.EXTENSION"
         />
 
+    <!-- Register NavtreeStrategy for french translation -->
     <adapter
         for="plone.dexterity.interfaces.IDexterityContainer
              plone.formwidget.contenttree.interfaces.IContentTreeWidget"
