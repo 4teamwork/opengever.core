@@ -20,6 +20,9 @@ except AttributeError:
     PYTHON_LDAP_24 = False
 
 
+KNOWN_MULTIVALUED_FIELDS = []
+
+
 class LDAPSearch(grok.Adapter):
     """Adapter to search LDAP for users and groups.
 
@@ -140,7 +143,15 @@ class LDAPSearch(grok.Adapter):
         If defined, the `user_filter` property on the adapted LDAPUserFolder
         is used to further filter the results.
         """
-        search_filter = '(objectClass=inetOrgPerson)'
+        # Get possible user object classes from adapted LDAPUserFolder
+        user_object_classes = self.context._user_objclasses
+        if len(user_object_classes) > 1:
+            # If more than one possible user object class, OR them
+            search_filter = '(|%s)' % ''.join(
+                ['(objectClass=%s)' % oc for oc in user_object_classes])
+        else:
+            search_filter = '(objectClass=%s)' % user_object_classes[0]
+
         custom_filter = self.get_user_filter()
         if custom_filter not in [None, '']:
             custom_filter = self._apply_schema_map_to_filter(custom_filter)
@@ -260,7 +271,14 @@ class LDAPSearch(grok.Adapter):
         attribute is multi-valued or not.
         """
         schema = self.get_schema()
-        attr_types = schema.attribute_types(obj_classes)
+        try:
+            attr_types = schema.attribute_types(obj_classes)
+        except KeyError:
+            # Broken schema, we need to guess
+            if attr_name in KNOWN_MULTIVALUED_FIELDS:
+                return True
+            else:
+                return False
 
         type_ = None
         found = False

@@ -43,6 +43,17 @@ class OGDSUpdater(grok.Adapter):
                 ldap_plugins.append(item)
         return ldap_plugins
 
+    def _get_uid_attr(self, ldap_userfolder):
+        """Returns the UID attribute from the given LDAPUserFolder. If that
+        attribute is mapped, the mapped public name will be returned.
+        """
+        uid_attr = ldap_userfolder._uid_attr
+        schema_dicts = ldap_userfolder.getSchemaDict()
+        for schema_map in schema_dicts:
+            if uid_attr == schema_map['ldap_name']:
+                return schema_map['public_name']
+        return uid_attr
+
     def import_users(self):
         """Imports users from all the configured LDAP plugins into OGDS.
         """
@@ -55,6 +66,7 @@ class OGDSUpdater(grok.Adapter):
 
         for plugin in self._ldap_plugins():
             ldap_userfolder = plugin._getLDAPUserFolder()
+            uid_attr = self._get_uid_attr(ldap_userfolder)
 
             ldap_util = ILDAPSearch(ldap_userfolder)
             ldap_users = ldap_util.get_users()
@@ -63,15 +75,16 @@ class OGDSUpdater(grok.Adapter):
                 dn, info = ldap_user
 
                 # Ignore users without an UID in LDAP
-                if not 'userid' in info:
+                if not uid_attr in info:
                     continue
+
+                userid = info[uid_attr]
 
                 # Skip users with uid longer than SQL 'userid' column
                 # FIXME: Increase size of SQL column to 64
-                if len(info['userid']) > 30:
+                if len(userid) > 30:
                     continue
 
-                userid = info['userid']
                 if not self.user_exists(userid):
                     # Create the new user
                     user = User(userid)
@@ -83,6 +96,11 @@ class OGDSUpdater(grok.Adapter):
                 # Iterate over all SQL columns and update their values
                 columns = User.__table__.columns
                 for col in columns:
+                    if col.name == 'userid':
+                        # We already set the userid when creating the user
+                        # object, and it may not be called the same in LDAP as
+                        # in our SQL model
+                        continue
                     value = info.get(col.name)
                     setattr(user, col.name, value)
 

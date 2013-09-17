@@ -7,9 +7,23 @@ Changelog
 - Dossiercover: Implements breadcrumb cropping and adjust fonz size.
   [phgross]
 
+- LDAP import: Use the respective property from LDAPUserFolder to determine which is the
+  UID attribute.
+  [lgraf]
+
+- LDAP util: Make determining multi-valuedness of attributes more robust
+  in case of broken LDAP schemas.
+  [lgraf]
+
+- LDAP util: Get user object classes from LDAPUserFolder instead of hardcoding them.
+  [lgraf]
+
 
 3.0 (2013-08-14)
 ----------------
+
+- Removed client prefixes in single client setups.
+  [lknoepfel]
 
 - Make exposator work for both izug.basetheme and plonetheme.teamraum.
   [Julian Infanger]
