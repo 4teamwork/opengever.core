@@ -1,3 +1,8 @@
+from Products.CMFPlone.browser.admin import AddPloneSite
+from Products.CMFPlone.factory import _DEFAULT_PROFILE
+from Products.CMFPlone.factory import addPloneSite
+from Products.CMFPlone.utils import getToolByName
+from Products.PluggableAuthService.interfaces.plugins import IPropertiesPlugin
 from datetime import datetime
 from opengever.mail.interfaces import IMailSettings
 from opengever.ogds.base.interfaces import IClientConfiguration
@@ -7,15 +12,11 @@ from opengever.ogds.models import BASE
 from opengever.ogds.models.client import Client
 from opengever.ogds.models.group import Group
 from opengever.ogds.models.user import User
+from opengever.setup.interfaces import IClientConfigurationRegistry
 from opengever.setup.utils import get_entry_points
-from opengever.setup.utils import get_ldap_configs, get_policy_configs
+from opengever.setup.utils import get_ldap_configs
 from plone.app.controlpanel.language import ILanguageSelectionSchema
 from plone.registry.interfaces import IRegistry
-from Products.CMFPlone.browser.admin import AddPloneSite
-from Products.CMFPlone.factory import addPloneSite
-from Products.CMFPlone.factory import _DEFAULT_PROFILE
-from Products.CMFPlone.utils import getToolByName
-from Products.PluggableAuthService.interfaces.plugins import IPropertiesPlugin
 from sqlalchemy.exc import NoReferencedTableError
 from zope.component import getAdapter
 from zope.component import getUtility
@@ -73,15 +74,17 @@ class AddOpengeverClient(AddPloneSite):
     def get_policy_options(self):
         """Returns the options for selecting the policy.
         """
-        for policy in get_policy_configs():
-            yield {'title': policy['title'],
-                   'value': policy['id']}
+
+        client_registry = getUtility(IClientConfigurationRegistry)
+        return client_registry.list_policies()
 
     def get_policy_defaults(self):
         """Returns the policy defaults for use in javascript.
         """
+
+        client_registry = getUtility(IClientConfigurationRegistry)
         return 'var policy_configs = %s;' % json.dumps(
-            list(get_policy_configs()), indent=2)
+            list(client_registry.get_policies()), indent=2)
 
     def get_ogds_config(self):
         """Returns the DSN URL for the OGDS DB connection currently being
@@ -120,8 +123,8 @@ class CreateOpengeverClient(BrowserView):
         session = create_session()
 
         policy_id = form['policy']
-        config = filter(lambda cfg: cfg['id'] == policy_id,
-                        get_policy_configs())[0]
+        client_registry = getUtility(IClientConfigurationRegistry)
+        config = client_registry.get_policy(policy_id)
 
         # drop sql tables
         if form.get('first', False) and config.get('purge_sql', False):

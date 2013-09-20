@@ -1,6 +1,7 @@
 <configure
     xmlns="http://namespaces.zope.org/zope"
     xmlns:five="http://namespaces.zope.org/five"
+    xmlns:opengever="http://namespaces.zope.org/opengever"
     xmlns:transmogrifier="http://namespaces.plone.org/transmogrifier"
     i18n_domain="opengever.examplecontent">
 
@@ -43,6 +44,34 @@
     <utility
         component=".jsonsource.JSONSourceSection"
         name="opengever.examplecontent.jsonsource.jsonsourcesection"
+        />
+
+    <opengever:registerClient
+        name="exampleclient"
+        client_id="mandant{client_number}"
+        active="True"
+        local_roles="True"
+        title="Mandant {client_number}"
+        ip_address="172.0.0.1"
+        site_url="http://localhost:8080/mandant{client_number}"
+        public_url="http://localhost:8080/mandant{client_number}"
+        group="og_mandant{client_number}_users"
+        inbox_group="og_mandant{client_number}_eingangskorb"
+        reader_group="og_mandant{client_number}_leser"
+        rolemanager_group="og_mandant{client_number}_rolemanager"
+        mail_domain="localhost"
+        />
+
+    <opengever:registerPolicy
+        title="Development with examplecontent"
+        base_profile="opengever.policy.base:default"
+        additional_profiles="opengever.setup:default,opengever.examplecontent:developer"
+        client_ids="exampleclient"
+        multi_clients="True"
+        purge_sql="True"
+        import_users="True"
+        repository_root_id="ordnungssystem"
+        repository_root_title="Ordnungssystem"
         />
 
 </configure>
