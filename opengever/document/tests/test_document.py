@@ -8,6 +8,8 @@ from opengever.document.document import IDocumentSchema
 from opengever.document.document import UploadValidator
 from opengever.document.interfaces import IDocumentSettings
 from opengever.testing import FunctionalTestCase
+from opengever.testing import create_ogds_user
+from opengever.testing.helpers import obj2brain
 from plone.dexterity.fti import DexterityFTI
 from plone.dexterity.fti import register
 from plone.dexterity.interfaces import IDexterityFTI
@@ -223,3 +225,47 @@ class TestUploadValidator(FunctionalTestCase):
         field = getFields(IDocumentSchema).get('file')
 
         return (document, document.REQUEST, None, field, None)
+
+
+class TestDocumentAuthorResolving(FunctionalTestCase):
+    use_browser = True
+
+    def test_adding_document_with_a_userid_as_author_resolves_to_fullname(self):
+        create_ogds_user('hugo.boss', firstname='Hugo', lastname='Boss')
+        document = create(Builder('document')
+                          .having(document_author='hugo.boss')
+                          .with_dummy_content())
+
+        self.assertEquals('Boss Hugo', document.document_author)
+        self.assertEquals('Boss Hugo', obj2brain(document).document_author)
+
+    def test_adding_document_with_a_real_name_as_author_dont_change_author_name(self):
+        document = create(Builder('document')
+                          .having(document_author='Muster Peter')
+                          .with_dummy_content())
+
+        self.assertEquals('Muster Peter', document.document_author)
+
+    def test_editing_document_with_a_userid_as_author_resolves_to_fullname(self):
+        create_ogds_user('hugo.boss', firstname='Hugo', lastname='Boss')
+        document = create(Builder('document')
+                          .having(document_author='hanspeter')
+                          .with_dummy_content())
+
+        self.browser.open('%s/edit' % (document.absolute_url()))
+        self.browser.fill({'Author': u'hugo.boss'})
+        self.browser.click('Save')
+
+        self.assertEquals('Boss Hugo', document.document_author)
+        self.assertEquals('Boss Hugo', obj2brain(document).document_author)
+
+    def test_editing_document_with_a_real_name_as_author_dont_change_author_name(self):
+        document = create(Builder('document')
+                          .having(document_author='hugo.boss')
+                          .with_dummy_content())
+
+        self.browser.open('%s/edit' % (document.absolute_url()))
+        self.browser.fill({'Author': u'Muster Peter'})
+        self.browser.click('Save')
+
+        self.assertEquals('Muster Peter', document.document_author)

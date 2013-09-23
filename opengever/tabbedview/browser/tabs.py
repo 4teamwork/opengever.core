@@ -176,8 +176,7 @@ class Documents(OpengeverCatalogListingTab):
 
         {'column': 'document_author',
          'column_title': _('label_document_author', default="Document Author"),
-         'sort_index': 'sortable_author',
-         'transform': readable_ogds_author},
+         'sort_index': 'sortable_author'},
 
         {'column': 'document_date',
          'column_title': _('label_document_date', default="Document Date"),
