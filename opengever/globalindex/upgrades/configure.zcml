@@ -1,0 +1,26 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+    i18n_domain="opengever.globalindex">
+
+
+    <!-- 1 -> 2601 -->
+    <genericsetup:upgradeStep
+        title="Make report action available for every one"
+        description=""
+        source="1"
+        destination="2601"
+        handler="opengever.globalindex.upgrades.to2601.UpdateTaskReportAction"
+        profile="opengever.globalindex:default"
+        />
+
+    <genericsetup:registerProfile
+        name="2601"
+        title="opengever.globalindex: upgrade profile 2601"
+        description=""
+        directory="profiles/2601"
+        for="Products.CMFPlone.interfaces.IMigratingPloneSiteRoot"
+        provides="Products.GenericSetup.interfaces.EXTENSION"
+        />
+
+</configure>

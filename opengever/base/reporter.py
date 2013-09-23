@@ -1,29 +1,12 @@
+from Missing import Value as MissingValue
 from Products.CMFCore.interfaces._tools import IMemberData
 from Products.PluggableAuthService.interfaces.authservice import \
     IPropertiedUser
 from StringIO import StringIO
-from five import grok
 from opengever.ogds.base.interfaces import IContactInformation
 from xlwt import Workbook, XFStyle
 from zope.component import getUtility
-from zope.interface import Interface
 from zope.i18n import translate
-from Missing import Value as MissingValue
-
-
-class ReportingController(grok.View):
-    """The controllerview check if the actual user has the permissions to acces
-    the inbox.
-    """
-
-    grok.context(Interface)
-    grok.name('reporting_controller')
-
-    def render(self):
-        """check if the user is in the inbox group."""
-
-        info = getUtility(IContactInformation)
-        return info.is_user_in_inbox_group()
 
 
 def format_datetime(date):
