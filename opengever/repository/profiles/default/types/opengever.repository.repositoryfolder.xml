@@ -32,6 +32,7 @@
         <element value="opengever.tabbedview.interfaces.ITabbedViewEnabled" />
         <element value="opengever.sharing.behaviors.IDossier" />
         <element value="plone.app.lockingbehavior.behaviors.ILocking" />
+		<element value="collective.dexteritytextindexer.behavior.IDexterityTextIndexer" />	
     </property>
 
     <!-- View information -->

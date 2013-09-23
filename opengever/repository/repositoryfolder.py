@@ -1,4 +1,5 @@
 from Acquisition import aq_inner, aq_parent
+from collective.dexteritytextindexer.utils import searchable
 from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
 from Products.CMFCore.utils import getToolByName
 from five import grok
@@ -17,7 +18,8 @@ from opengever.repository import _
 from opengever.repository.interfaces import IRepositoryFolder
 from opengever.repository.behaviors.referenceprefix import \
     IReferenceNumberPrefix, IReferenceNumberPrefixMarker
-from opengever.repository.behaviors.frenchtitle import IFrenchTitleBehaviorMarker
+from opengever.repository.behaviors.frenchtitle import \
+    IFrenchTitleBehaviorMarker
 from opengever.repository.behaviors.frenchtitle import IFrenchTitleBehavior
 from opengever.repository.interfaces import IRepositoryFolderRecords
 from opengever.base.browser.helper import get_css_class
@@ -97,6 +99,9 @@ class IRepositoryFolderSchema(form.Schema):
         value_type=schema.Choice(vocabulary=u'opengever.repository.'
                                  u'RestrictedAddableDossiersVocabulary'),
         required=False)
+
+searchable(IRepositoryFolderSchema, 'effective_title')
+searchable(IRepositoryFolderSchema, 'description')
 
 
 class RepositoryFolder(content.Container):

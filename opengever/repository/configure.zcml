@@ -18,6 +18,8 @@
     <include package=".behaviors" />
 
 	<include package=".browser" />
+	
+	<include package=".upgrades" />
 
     <!-- Register an extension profile to make the product installable -->
     <genericsetup:registerProfile
