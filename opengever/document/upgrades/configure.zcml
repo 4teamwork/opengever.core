@@ -32,5 +32,15 @@
         profile="opengever.document:default"
         />
 
+    <!-- 2401 -> 2601 -->
+    <genericsetup:upgradeStep
+        title="Resolve document author for all documents."
+        description=""
+        source="2401"
+        destination="2601"
+        handler="opengever.document.upgrades.to2601.ResolveDocumentAuthor"
+        profile="opengever.document:default"
+        />
+
 
 </configure>
