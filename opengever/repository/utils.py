@@ -12,3 +12,13 @@ def getAlternativeLanguageCode():
     registry = getUtility(IRegistry)
     reg_proxy = registry.forInterface(IRepositoryFolderRecords)
     return reg_proxy.alternative_language_code
+
+
+def getPrimaryLanguageCode():
+    """ Gets configured primary language code from registry.
+    Returns string. Default is 'de'.
+    """
+
+    registry = getUtility(IRegistry)
+    reg_proxy = registry.forInterface(IRepositoryFolderRecords)
+    return reg_proxy.primary_language_code

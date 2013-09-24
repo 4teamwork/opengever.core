@@ -8,9 +8,7 @@ from Products.CMFPlone.browser.navtree import DefaultNavtreeStrategy
 from plone.formwidget.contenttree.interfaces import IContentTreeWidget
 from zope.component import adapts
 from zope.interface import implements, Interface
-from opengever.repository.interfaces import IRepositoryFolderRecords
-from zope.component import getUtility
-from plone.registry.interfaces import IRegistry
+from opengever.repository.utils import getAlternativeLanguageCode
 
 
 class NavtreeStrategy(DefaultNavtreeStrategy):
@@ -28,12 +26,7 @@ class NavtreeStrategy(DefaultNavtreeStrategy):
     def get_title_of(self, item):
         lang_code = self.get_preferred_language_code()
 
-        # get configured alternative language
-        registry = getUtility(IRegistry)
-        reg_proxy = registry.forInterface(IRepositoryFolderRecords)
-        alternative_language_code = reg_proxy.alternative_language_code
-
-        if (lang_code == alternative_language_code and
+        if (lang_code == getAlternativeLanguageCode() and
              getattr(item, 'alternative_title', None)):
             return getattr(item, 'alternative_title')
 
@@ -61,12 +54,7 @@ class ContentTreeNavtreeStrategy(OpengeverNavtreeStrategy):
     def get_title_of(self, item):
         lang_code = self.get_preferred_language_code()
 
-        # get configured alternative language
-        registry = getUtility(IRegistry)
-        reg_proxy = registry.forInterface(IRepositoryFolderRecords)
-        alternative_language_code = reg_proxy.alternative_language_code
-
-        if (lang_code == alternative_language_code and
+        if (lang_code == getAlternativeLanguageCode() and
              getattr(item, 'alternative_title', None)):
                 return getattr(item, 'alternative_title')
 

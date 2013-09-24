@@ -4,7 +4,6 @@ from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
 from Products.CMFCore.utils import getToolByName
 from five import grok
 
-from zope.component import getUtility
 from zope import schema
 import zope.component
 from zope.interface import implements
@@ -22,6 +21,7 @@ from opengever.repository.behaviors.referenceprefix import \
 from opengever.repository.behaviors.alternativetitle import \
     IAlternativeTitleBehaviorMarker, IAlternativeTitleBehavior
 from opengever.repository.interfaces import IRepositoryFolderRecords
+from opengever.repository.utils import getAlternativeLanguageCode
 from opengever.base.browser.helper import get_css_class
 
 
@@ -113,18 +113,12 @@ class RepositoryFolder(content.Container):
 
         if (IAlternativeTitleBehaviorMarker.providedBy(self)):
 
-            # get configured alternative language
-            registry = getUtility(IRegistry)
-            reg_proxy = registry.forInterface(IRepositoryFolderRecords)
-            alternative_language_code = reg_proxy.alternative_language_code
-
             ltool = getToolByName(self, 'portal_languages')
 
-            if (language is None and
-                ltool.getPreferredLanguage() == alternative_language_code):
-                language = alternative_language_code
+            if (language is None):
+                language = ltool.getPreferredLanguage()
 
-            if  (language == alternative_language_code and
+            if (language == getAlternativeLanguageCode() and
                 IAlternativeTitleBehavior(self).alternative_title):
                 title = u' %s' % IAlternativeTitleBehavior(self).alternative_title
 
