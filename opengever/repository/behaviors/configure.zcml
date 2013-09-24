@@ -14,11 +14,11 @@
       />
 
   <plone:behavior
-    title="French title"
-    description="French title behavior"
-    provides=".frenchtitle.IFrenchTitleBehavior"
+    title="Alternative title"
+    description="Alternative title behavior"
+    provides=".alternativetitle.IAlternativeTitleBehavior"
     factory="plone.behavior.AnnotationStorage"
     for="plone.dexterity.interfaces.IDexterityContent"
-    marker=".frenchtitle.IFrenchTitleBehaviorMarker"
+    marker=".alternativetitle.IAlternativeTitleBehaviorMarker"
     />
 </configure>

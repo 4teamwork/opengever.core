@@ -2,35 +2,48 @@ from five import grok
 from logging import getLogger
 from plone.indexer import indexer
 from zope.interface import Interface
-from opengever.repository.behaviors.frenchtitle  import IFrenchTitleBehaviorMarker
+from opengever.repository.behaviors.alternativetitle  import \
+    IAlternativeTitleBehaviorMarker
+from opengever.repository.interfaces import IRepositoryFolderRecords
+from zope.component import getUtility
+from plone.registry.interfaces import IRegistry
 
 
 LOG = getLogger('opengever.repository')
 
-# FrenchTitleBehavior
-@indexer(IFrenchTitleBehaviorMarker)
-def german_title(obj):
+# AlternativeTitleBehavior
+
+@indexer(IAlternativeTitleBehaviorMarker)
+def primary_title(obj):
+    # get configured primary language
+    registry = getUtility(IRegistry)
+    reg_proxy = registry.forInterface(IRepositoryFolderRecords)
     try:
-        return obj.Title(language='de')
+        return obj.Title(language=reg_proxy.primary_language_code)
     except TypeError:
-        LOG.error('Object with IFrenchTitleBehavior has no support for '
-                  'Title(language="de"). %s' % str(obj))
+        LOG.error('Object with IAlternativeTitleBehavior has no support for '
+                  'Title(language="%s"). %s' %
+                  (reg_proxy.primary_language_code, str(obj)))
         return obj.Title()
-grok.global_adapter(german_title, name='Title')
+grok.global_adapter(primary_title, name='Title')
 
 
-@indexer(IFrenchTitleBehaviorMarker)
-def french_title(obj):
+@indexer(IAlternativeTitleBehaviorMarker)
+def alternative_title(obj):
+    # get configured alternative language
+    registry = getUtility(IRegistry)
+    reg_proxy = registry.forInterface(IRepositoryFolderRecords)
     try:
-        return obj.Title(language='fr')
+        return obj.Title(language=reg_proxy.alternative_language_code)
     except TypeError:
-        LOG.error('Object with IFrenchTitleBehavior has no support for '
-                  'Title(language="fr"). %s' % str(obj))
+        LOG.error('Object with IAlternativeTitleBehavior has no support for '
+                  'Title(language="%s"). %s' %
+                  (reg_proxy.alternative_language_code, str(obj)))
         return obj.Title()
-grok.global_adapter(french_title, name='title_fr')
+grok.global_adapter(alternative_title, name='alternative_title')
 
 
 @indexer(Interface)
-def french_title_fallback(obj):
+def alternative_title_fallback(obj):
     return ''
-grok.global_adapter(french_title_fallback, name='title_fr')
+grok.global_adapter(alternative_title_fallback, name='alternative_title')

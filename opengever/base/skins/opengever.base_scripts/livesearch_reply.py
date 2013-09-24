@@ -14,7 +14,7 @@ from Products.CMFPlone.utils import safe_unicode
 from Products.PythonScripts.standard import url_quote
 from Products.PythonScripts.standard import url_quote_plus
 from Products.PythonScripts.standard import html_quote
-
+from opengever.repository.utils import getAlternativeLanguageCode
 
 ploneUtils = getToolByName(context, 'plone_utils')
 portal_url = getToolByName(context, 'portal_url')()
@@ -41,7 +41,6 @@ friendly_types = ploneUtils.getUserFriendlyTypes()
 
 # multi language support
 ltool = getToolByName(context, 'portal_languages')
-lang_title = 'title_%s' % ltool.getPreferredLanguage()
 
 def quotestring(s):
     return '"%s"' % s
@@ -118,7 +117,10 @@ else:
         itemUrl = itemUrl + searchterm_query
 
         write('''<li class="LSRow">''')
-        full_title = getattr(result, lang_title, None)
+        full_title = None
+        if (getAlternativeLanguageCode() == ltool.getPreferredLanguage()
+            and getattr(result, 'alternative_title', None)):
+            full_title = getattr(result, 'alternative_title')
         if full_title:
             full_title = safe_unicode(full_title)
         else:

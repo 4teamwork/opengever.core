@@ -4,6 +4,7 @@ from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
 from Products.CMFCore.utils import getToolByName
 from five import grok
 
+from zope.component import getUtility
 from zope import schema
 import zope.component
 from zope.interface import implements
@@ -18,9 +19,8 @@ from opengever.repository import _
 from opengever.repository.interfaces import IRepositoryFolder
 from opengever.repository.behaviors.referenceprefix import \
     IReferenceNumberPrefix, IReferenceNumberPrefixMarker
-from opengever.repository.behaviors.frenchtitle import \
-    IFrenchTitleBehaviorMarker
-from opengever.repository.behaviors.frenchtitle import IFrenchTitleBehavior
+from opengever.repository.behaviors.alternativetitle import \
+    IAlternativeTitleBehaviorMarker, IAlternativeTitleBehavior
 from opengever.repository.interfaces import IRepositoryFolderRecords
 from opengever.base.browser.helper import get_css_class
 
@@ -111,14 +111,22 @@ class RepositoryFolder(content.Container):
     def Title(self, language=None):
         title = u' %s' % self.effective_title
 
-        if (IFrenchTitleBehaviorMarker.providedBy(self)):
+        if (IAlternativeTitleBehaviorMarker.providedBy(self)):
+
+            # get configured alternative language
+            registry = getUtility(IRegistry)
+            reg_proxy = registry.forInterface(IRepositoryFolderRecords)
+            alternative_language_code = reg_proxy.alternative_language_code
+
             ltool = getToolByName(self, 'portal_languages')
 
-            if language is None and ltool.getPreferredLanguage() == 'fr':
-                language = 'fr'
+            if (language is None and
+                ltool.getPreferredLanguage() == alternative_language_code):
+                language = alternative_language_code
 
-            if  language == 'fr' and IFrenchTitleBehavior(self).title_fr:
-                title = u' %s' % IFrenchTitleBehavior(self).title_fr
+            if  (language == alternative_language_code and
+                IAlternativeTitleBehavior(self).alternative_title):
+                title = u' %s' % IAlternativeTitleBehavior(self).alternative_title
 
         obj = self
         while IRepositoryFolder.providedBy(obj):

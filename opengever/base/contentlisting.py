@@ -4,6 +4,10 @@ from plone.app.contentlisting.catalog import \
     CatalogContentListingObject as CoreListingObject
 from zope.component import getMultiAdapter
 from Products.CMFCore.utils import getToolByName
+from opengever.repository.interfaces import IRepositoryFolderRecords
+from zope.component import getUtility
+from plone.registry.interfaces import IRegistry
+
 
 class OpengeverCatalogContentListingObject(CoreListingObject):
     """OpenGever specific catalog content listing.
@@ -49,13 +53,17 @@ class OpengeverCatalogContentListingObject(CoreListingObject):
 
     def Title(self):
         """Returns the title in the preferred language if exists.
-        Title have to be available in title_<lang_code>"""
+        Title have to be available in title or alternative_title"""
+
+        # get configured alternative language
+        registry = getUtility(IRegistry)
+        reg_proxy = registry.forInterface(IRepositoryFolderRecords)
+        alternative_language_code = reg_proxy.alternative_language_code
 
         language_tool = getToolByName(self._brain, 'portal_languages')
-        language_title = 'title_%s' % language_tool.getPreferredLanguage()
-
-        if hasattr(self._brain, language_title):
-            if getattr(self._brain, language_title):
-                return getattr(self._brain, language_title)
+        if language_tool.getPreferredLanguage() == alternative_language_code:
+            if hasattr(self._brain, 'alternative_title'):
+                if getattr(self._brain, 'alternative_title'):
+                    return getattr(self._brain, 'alternative_title')
 
         return self._brain.Title
