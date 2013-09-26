@@ -9,6 +9,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0\n"
+"Language-Code: en\n"
+"Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: DOMAIN\n"
 
@@ -20,6 +22,9 @@ msgstr "Fermer"
 
 msgid "forwarding-state-closed"
 msgstr "Fermé"
+
+msgid "forwarding-state-refused"
+msgstr "Refusé"
 
 msgid "forwarding-state-open"
 msgstr "Ouvert"
@@ -34,12 +39,16 @@ msgid "forwarding-transition-close"
 msgstr "Fermer"
 
 msgid "forwarding-transition-reassign"
-msgstr "Attribuer de nouveau"
+msgstr "Attribuer"
+
+msgid "forwarding-transition-reassign-refused"
+msgstr "Attribuer"
 
 msgid "forwarding-transition-refuse"
 msgstr "Refuser"
 
+msgid "forwarding-transition-reassign-refused"
+msgstr "Attribuer"
+
 msgid "inbox-state-default"
 msgstr "Ouvert"
-
-

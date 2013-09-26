@@ -14,6 +14,13 @@ class DossierBuilder(DexterityBuilder):
 builder_registry.register('dossier', DossierBuilder)
 
 
+class InboxBuilder(DexterityBuilder):
+    portal_type = 'opengever.inbox.inbox'
+
+
+builder_registry.register('inbox', InboxBuilder)
+
+
 class DocumentBuilder(DexterityBuilder):
     portal_type = 'opengever.document.document'
 
@@ -66,6 +73,14 @@ class TaskBuilder(DexterityBuilder):
 
 
 builder_registry.register('task', TaskBuilder)
+
+
+class ForwardingBuilder(DexterityBuilder):
+
+    portal_type = 'opengever.inbox.forwarding'
+
+
+builder_registry.register('forwarding', ForwardingBuilder)
 
 
 class MailBuilder(DexterityBuilder):
