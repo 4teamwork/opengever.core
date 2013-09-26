@@ -31,6 +31,11 @@ SQL_BASES = (
     )
 
 
+class SetupError(Exception):
+    """An Error happened during OpenGever setup.
+    """
+
+
 # these profiles will be installed automatically
 EXTENSION_PROFILES = (
     'plonetheme.classic:default',
@@ -193,10 +198,22 @@ class CreateOpengeverClient(BrowserView):
                 session.delete(clients[0])
 
             # groups must exist
-            users_group = session.query(Group).filter_by(
-                groupid=form['group'])[0]
-            inbox_group = session.query(Group).filter_by(
-                groupid=form['inbox_group'])[0]
+            users_groups = session.query(Group).filter_by(
+                groupid=form['group'])
+            inbox_groups = session.query(Group).filter_by(
+                groupid=form['inbox_group'])
+
+            try:
+                users_group = users_groups[0]
+            except IndexError:
+                raise SetupError("User group '%s' could not be found." %
+                                 form['group'])
+
+            try:
+                inbox_group = inbox_groups[0]
+            except IndexError:
+                raise SetupError("Inbox group '%s' could not be found." %
+                                 form['inbox_group'])
 
             active = bool(form.get('active', False))
 
