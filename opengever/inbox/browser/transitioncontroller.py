@@ -33,6 +33,7 @@ class ForwardingTransitionController(TaskTransitionController):
     @guard('forwarding-transition-assign-to-dossier')
     @guard('forwarding-transition-reassign')
     @guard('forwarding-transition-close')
+    @guard('forwarding-transition-reassign-refused')
     def is_assign_to_dossier_or_reassign_possible(self):
         """Check it the user is in the inbox group of the current client.
         """
@@ -51,6 +52,15 @@ class ForwardingTransitionController(TaskTransitionController):
         which allows to set a new responsible.
         """
         return '%s/@@assign-task?form.widgets.transition=%s' % (
+            self.context.absolute_url(),
+            transition)
+
+    @action('forwarding-transition-reassign-refused')
+    def reassign_refused_action(self, transition):
+        """redirect to the assign refused forwarding form,
+        which allows to set a new responsible and responsible_client."""
+
+        return '%s/@@assign-forwarding?form.widgets.transition=%s' % (
             self.context.absolute_url(),
             transition)
 

@@ -49,6 +49,7 @@
   <permission-map name="opengever.task: Add task" acquired="False">
   </permission-map>
  </state>
+
  <state state_id="forwarding-state-open" title="">
   <exit-transition transition_id="forwarding-transition-accept"/>
   <exit-transition transition_id="forwarding-transition-assign-to-dossier"/>
@@ -107,6 +108,62 @@
   <permission-map name="opengever.task: Add task" acquired="False">
   </permission-map>
  </state>
+
+ <state state_id="forwarding-state-refused" title="">
+  <exit-transition transition_id="forwarding-transition-reassign-refused"/>
+  <permission-map name="Access contents information" acquired="False">
+   <permission-role>Editor</permission-role>
+   <permission-role>Manager</permission-role>
+   <permission-role>Owner</permission-role>
+   <permission-role>Administrator</permission-role>
+  </permission-map>
+  <permission-map name="Add portal content" acquired="False">
+   <permission-role>Editor</permission-role>
+   <permission-role>Manager</permission-role>
+   <permission-role>Owner</permission-role>
+   <permission-role>Administrator</permission-role>
+  </permission-map>
+  <permission-map name="List folder contents" acquired="False">
+   <permission-role>Manager</permission-role>
+  </permission-map>
+  <permission-map name="Manage properties" acquired="False">
+   <permission-role>Editor</permission-role>
+   <permission-role>Manager</permission-role>
+   <permission-role>Owner</permission-role>
+   <permission-role>Administrator</permission-role>
+  </permission-map>
+  <permission-map name="Modify portal content" acquired="False">
+   <permission-role>Manager</permission-role>
+   <permission-role>Owner</permission-role>
+   <permission-role>Administrator</permission-role>
+  </permission-map>
+  <permission-map name="Review portal content" acquired="False">
+   <permission-role>Editor</permission-role>
+   <permission-role>Manager</permission-role>
+   <permission-role>Owner</permission-role>
+   <permission-role>Administrator</permission-role>
+  </permission-map>
+  <permission-map name="Sharing page: Delegate roles" acquired="False">
+   <permission-role>Manager</permission-role>
+  </permission-map>
+  <permission-map name="View" acquired="False">
+   <permission-role>Editor</permission-role>
+   <permission-role>Manager</permission-role>
+   <permission-role>Owner</permission-role>
+   <permission-role>Administrator</permission-role>
+  </permission-map>
+  <permission-map name="opengever.document: Add document" acquired="False">
+   <permission-role>Editor</permission-role>
+   <permission-role>Manager</permission-role>
+   <permission-role>Owner</permission-role>
+   <permission-role>Administrator</permission-role>
+  </permission-map>
+  <permission-map name="opengever.inbox: Add Forwarding" acquired="False">
+  </permission-map>
+  <permission-map name="opengever.task: Add task" acquired="False">
+  </permission-map>
+ </state>
+
  <transition transition_id="forwarding-transition-accept" title="forwarding-transition-accept" new_state="forwarding-state-closed" trigger="USER" before_script="" after_script="">
   <action url="%(content_url)s/@@forwarding_transition_controller?transition=forwarding-transition-accept" category="workflow" icon="">forwarding-transition-accept</action>
   <guard>
@@ -131,7 +188,13 @@
     <guard-expression>python: here.restrictedTraverse('@@forwarding_transition_controller').is_transition_possible('forwarding-transition-reassign')</guard-expression>
   </guard>
  </transition>
- <transition transition_id="forwarding-transition-refuse" title="forwarding-transition-refuse" new_state="" trigger="USER" before_script="" after_script="">
+  <transition transition_id="forwarding-transition-reassign-refused" title="forwarding-transition-reassign-refused" new_state="forwarding-state-open" trigger="USER" before_script="" after_script="">
+  <action url="%(content_url)s/@@forwarding_transition_controller?transition=forwarding-transition-reassign-refused" category="workflow" icon="">forwarding-transition-reassign-refused</action>
+  <guard>
+    <guard-expression>python: here.restrictedTraverse('@@forwarding_transition_controller').is_transition_possible('forwarding-transition-reassign-refused')</guard-expression>
+  </guard>
+ </transition>
+ <transition transition_id="forwarding-transition-refuse" title="forwarding-transition-refuse" new_state="forwarding-state-refused" trigger="USER" before_script="" after_script="">
   <action url="%(content_url)s/@@forwarding_transition_controller?transition=forwarding-transition-refuse" category="workflow" icon="">forwarding-transition-refuse</action>
   <guard>
    <guard-expression>python: here.restrictedTraverse('@@forwarding_transition_controller').is_transition_possible('forwarding-transition-refuse')</guard-expression>

@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<object name="opengever.inbox.forwarding" meta_type="Dexterity FTI"
+        i18n:domain="opengever.inbox" xmlns:i18n="http://xml.zope.org/namespaces/i18n">
+
+    <property name="immediate_view">../#assigned_inbox_tasks</property>
+
+</object>

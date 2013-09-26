@@ -73,19 +73,16 @@
         <permission value="View"/>
     </action>
 
-    <action title="assignedForwardings" action_id="assigned_forwardings" category="tabbedview-tabs"
-            condition_expr="" url_expr="string:#" visible="True">
-        <permission value="View"/>
+    <action title="Inbox task" action_id="assigned_inbox_tasks"
+            category="tabbedview-tabs" condition_expr=""
+            url_expr="string:#" visible="True">
+      <permission value="View"/>
     </action>
 
-    <action title="givenTasks" action_id="given_tasks" category="tabbedview-tabs"
-            condition_expr="" url_expr="string:#" visible="True">
-        <permission value="View"/>
-    </action>
-
-	<action title="assignedTasks" action_id="assigned_tasks" category="tabbedview-tabs"
-            condition_expr="" url_expr="string:#" visible="True">
-        <permission value="View"/>
+    <action title="Issued task" action_id="issued_inbox_tasks"
+            category="tabbedview-tabs" condition_expr=""
+            url_expr="string:#" visible="True">
+      <permission value="View"/>
     </action>
 
     <action title="Trash" action_id="trash" category="tabbedview-tabs"

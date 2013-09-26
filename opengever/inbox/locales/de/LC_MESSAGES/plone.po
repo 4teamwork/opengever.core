@@ -9,6 +9,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0\n"
+"Language-Code: en\n"
+"Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: DOMAIN\n"
 
@@ -24,6 +26,9 @@ msgstr "Abgeschlossen"
 msgid "forwarding-state-open"
 msgstr "Offen"
 
+msgid "forwarding-state-refused"
+msgstr "Abgelehnt"
+
 msgid "forwarding-transition-accept"
 msgstr "Akzeptieren"
 
@@ -33,13 +38,14 @@ msgstr "Einem Dossier zuweisen"
 msgid "forwarding-transition-close"
 msgstr "Abschliessen"
 
+msgid "forwarding-transition-reassign"
+msgstr "Weiterleiten"
+
 msgid "forwarding-transition-refuse"
 msgstr "Ablehnen"
 
-msgid "forwarding-transition-reassign"
-msgstr "Neu zuweisen"
+msgid "forwarding-transition-reassign-refused"
+msgstr "Weiterleiten"
 
 msgid "inbox-state-default"
 msgstr "Offen"
-
-

@@ -23,6 +23,9 @@ msgstr ""
 msgid "forwarding-state-open"
 msgstr ""
 
+msgid "forwarding-state-refused"
+msgstr ""
+
 msgid "forwarding-transition-accept"
 msgstr ""
 
@@ -36,6 +39,9 @@ msgid "forwarding-transition-refuse"
 msgstr ""
 
 msgid "forwarding-transition-reassign"
+msgstr ""
+
+msgid "forwarding-transition-reassign-refused"
 msgstr ""
 
 msgid "inbox-state-default"

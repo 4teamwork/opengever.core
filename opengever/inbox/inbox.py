@@ -2,7 +2,7 @@
 from five import grok
 from ftw.tabbedview.interfaces import ITabbedviewUploadable
 from opengever.inbox import _
-from opengever.tabbedview.browser.tabs import Tasks, Documents, Trash
+from opengever.tabbedview.browser.tabs import Documents, Trash
 from opengever.tabbedview.helper import external_edit_link
 from plone.directives import form
 from zope import schema
@@ -23,31 +23,6 @@ class IInbox(form.Schema, ITabbedviewUploadable):
          description=_(u'help_inbox_group', default=u''),
          required=False,
          )
-
-
-class GivenTasks(Tasks):
-    """Displays all Given Tasks"""
-    grok.name('tabbedview_view-given_tasks')
-
-    types = ['opengever.inbox.forwarding']
-    depth = 1
-
-    @property
-    def columns(self):
-        """Gets the columns wich wich will be displayed
-        """
-        remove_columns = ['containing_subdossier']
-        columns = []
-
-        for col in super(GivenTasks, self).columns:
-            if isinstance(col, dict) and \
-                    col.get('column') in remove_columns:
-                pass  # remove this column
-
-            else:
-                columns.append(col)
-
-        return columns
 
 
 class InboxDocuments(Documents):
@@ -89,7 +64,7 @@ class InboxDocuments(Documents):
                     'move_items',)]
 
         actions += ['create_forwarding']
-        return  actions
+        return actions
 
     @property
     def major_actions(self):
@@ -98,7 +73,7 @@ class InboxDocuments(Documents):
         actions = [action for action in actions
                    if action not in ('create_task',)]
         actions += ['create_forwarding']
-        return  actions
+        return actions
 
 
 class InboxTrash(Trash):
