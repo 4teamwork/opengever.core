@@ -3,6 +3,8 @@ from opengever.ogds.base.utils import get_client_id
 from opengever.task.interfaces import ITaskDocumentsTransporter
 from opengever.task.task import ITask
 from opengever.testing import OPENGEVER_INTEGRATION_TESTING
+from opengever.testing import create_client
+from opengever.testing import set_current_client_id
 from plone.app.testing import TEST_USER_ID
 from plone.dexterity.utils import createContentInContainer
 from plone.dexterity.utils import iterSchemata
@@ -44,7 +46,9 @@ class TestTransporter(unittest.TestCase):
         self.app = self.layer['app']
         self.portal = self.layer['portal']
 
-        # setSite(self.portal)
+        create_client()
+        set_current_client_id(self.portal)
+
 
     def _create_task(self, context, with_docs=False, return_docs=False):
 

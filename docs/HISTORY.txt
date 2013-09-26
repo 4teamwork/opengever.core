@@ -4,6 +4,9 @@ Changelog
 3.1 (unreleased)
 ----------------
 
+- Dropped inbox_group agency for tasks in a oneclient setup.
+  [phgross]
+
 - LDAP import: Use the respective property from LDAPUserFolder to determine which is the
   UID attribute.
   [lgraf]

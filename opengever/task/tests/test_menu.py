@@ -2,6 +2,8 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.contentmenu.menu import FactoriesMenu
 from opengever.testing import FunctionalTestCase
+from opengever.testing import create_client
+from opengever.testing import set_current_client_id
 from plone.app.testing import TEST_USER_ID
 from zope.component import getMultiAdapter
 
@@ -11,6 +13,9 @@ class TestFactoryMenu(FunctionalTestCase):
     def setUp(self):
         super(TestFactoryMenu, self).setUp()
         self.menu = FactoriesMenu(self.portal)
+
+        create_client()
+        set_current_client_id(self.portal)
 
     def test_task_menu_item_is_titled_task_in_a_dossier(self):
         dossier = create(Builder('dossier'))
