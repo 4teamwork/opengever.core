@@ -209,6 +209,7 @@ class Documents(OpengeverCatalogListingTab):
         'send_documents',
         'move_items',
         'copy_items',
+        'zip_selected',
         ]
 
     major_actions = [
@@ -426,6 +427,7 @@ class Tasks(OpengeverCatalogListingTab):
         'move_items',
         'copy_items',
         'export_dossiers',
+        'zip_selected',
         ]
 
     major_actions = ['change_state',
