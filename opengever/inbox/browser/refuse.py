@@ -206,6 +206,10 @@ class StoreRefusedForwardingView(grok.View):
         data otherwise False"""
 
         data = json.loads(self.request.get(REQUEST_KEY))
-        orig_intid = IAnnotations(forwarding)[ORIGINAL_INTID_ANNOTATION_KEY]
+        orig_intid = IAnnotations(forwarding).get(
+            ORIGINAL_INTID_ANNOTATION_KEY)
+
+        if not orig_intid:
+            return False
 
         return data.get(u'unicode:intid-data') == orig_intid
