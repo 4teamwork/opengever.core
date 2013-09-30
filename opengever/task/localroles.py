@@ -58,6 +58,11 @@ class LocalRolesSetter(object):
 
         return self._inbox_group
 
+    def is_inboxgroup_agency_active(self):
+        """The inbox group acengy is only activated in a multiclient setup."""
+        info = getUtility(IContactInformation)
+        return not info.is_one_client_setup()
+
     def _add_local_roles(self, context, principal, roles):
         """Adds local roles to the context.
         `roles` example:
@@ -72,7 +77,7 @@ class LocalRolesSetter(object):
         """Set local roles on task
         """
         self._add_local_roles(self.task, self.responsible, ('Editor',))
-        if self.inbox_group:
+        if self.is_inboxgroup_agency_active() and self.inbox_group:
             self._add_local_roles(self.task, self.inbox_group, ('Editor',))
 
     def globalindex_reindex_task(self):
@@ -91,7 +96,7 @@ class LocalRolesSetter(object):
         while context.Type() == self.task.Type():
             context = aq_parent(aq_inner(context))
         self._add_local_roles(context, self.responsible, ('Contributor', ))
-        if self.inbox_group:
+        if self.is_inboxgroup_agency_active() and self.inbox_group:
             self._add_local_roles(context, self.inbox_group, ('Contributor', ))
 
     def set_roles_on_related_items(self):
@@ -104,7 +109,7 @@ class LocalRolesSetter(object):
 
         for item in getattr(self.task, 'relatedItems', []):
             self._add_local_roles(item.to_object, self.responsible, roles)
-            if self.inbox_group:
+            if self.is_inboxgroup_agency_active() and self.inbox_group:
                 self._add_local_roles(item.to_object, self.inbox_group, roles)
 
 

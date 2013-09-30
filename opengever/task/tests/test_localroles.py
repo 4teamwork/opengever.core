@@ -9,6 +9,12 @@ from zope.lifecycleevent import ObjectModifiedEvent
 
 class TestLocalRolesSetter(FunctionalTestCase):
 
+    def setUp(self):
+        super(TestLocalRolesSetter, self).setUp()
+
+        create_client(clientid="client1", inbox_group='client1_inbox_users')
+        set_current_client_id(self.portal)
+
     def test_responsible_has_local_editor_role_on_task_when_is_added(self):
         task = create(Builder('task').having(responsible='hugo.boss'))
 
@@ -86,10 +92,8 @@ class TestLocalRolesSetter(FunctionalTestCase):
             ('Contributor', ),
             dossier.get_local_roles_for_userid('james.bond'))
 
-    def test_inbox_group_of_the_responsible_client_has_the_same_localroles_like_the_responsible(self):
-        create_client(clientid="client1",
-                      inbox_group='client1_inbox_users')
-        set_current_client_id(self.portal)
+    def test_inbox_group_of_the_responsible_client_has_the_same_localroles_like_the_responsible_in_a_multiclient_setup(self):
+        create_client(clientid="additional")
 
         dossier = create(Builder('dossier'))
         document = create(Builder('document'))
@@ -109,14 +113,38 @@ class TestLocalRolesSetter(FunctionalTestCase):
             ('Contributor', ),
             dossier.get_local_roles_for_userid('client1_inbox_users'))
 
+    def test_inbox_group_has_no_additional_localroles_in_a_oneclient_setup(self):
+        dossier = create(Builder('dossier'))
+        document = create(Builder('document'))
+        task = create(Builder('task')
+                      .within(dossier)
+                      .relate_to(document)
+                      .having(responsible='hugo.boss',
+                              responsible_client='client1'))
+
+        self.assertEquals(
+            (),
+            task.get_local_roles_for_userid('client1_inbox_users'))
+        self.assertEquals(
+            (),
+            document.get_local_roles_for_userid('client1_inbox_users'))
+        self.assertEquals(
+            (),
+            dossier.get_local_roles_for_userid('client1_inbox_users'))
+
     def test_use_inbox_group_when_inbox_is_responsible(self):
-        create_client(clientid="client1", inbox_group='client1_inbox_users')
-        set_current_client_id(self.portal)
-        task = create(Builder('task').having(responsible='inbox:client1'))
+        dossier = create(Builder('dossier'))
+        task = create(Builder('task')
+                      .within(dossier)
+                      .having(responsible='inbox:client1'))
 
         self.assertEquals(
             ('Editor', ),
             task.get_local_roles_for_userid('client1_inbox_users'))
+
+        self.assertEquals(
+            ('Contributor', ),
+            dossier.get_local_roles_for_userid('client1_inbox_users'))
 
         self.assertEquals(
             (), task.get_local_roles_for_userid('inbox:client1'))

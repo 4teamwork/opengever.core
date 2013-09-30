@@ -10,6 +10,9 @@ Changelog
 - Dossiercover: Implements breadcrumb cropping and adjust fonz size.
   [phgross]
 
+- Dropped inbox_group agency for tasks in a oneclient setup.
+  [phgross]
+
 - LDAP import: Use the respective property from LDAPUserFolder to determine which is the
   UID attribute.
   [lgraf]
