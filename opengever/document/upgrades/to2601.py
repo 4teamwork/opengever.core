@@ -2,7 +2,6 @@ from ftw.upgrade import ProgressLogger
 from ftw.upgrade import UpgradeStep
 from opengever.ogds.base.interfaces import IContactInformation
 from zope.component import getUtility
-import os
 
 
 class ResolveDocumentAuthor(UpgradeStep):
@@ -23,7 +22,9 @@ class ResolveDocumentAuthor(UpgradeStep):
     def resolve_document_author(self, brain):
         document_author = brain.document_author
 
-        if document_author in self.user_ids:
+        lower_ids = [id.lower() for id in self.user_ids]
+
+        if document_author and document_author.lower() in lower_ids:
             document = brain.getObject()
             document.document_author = self.info.describe(
                 document_author,
