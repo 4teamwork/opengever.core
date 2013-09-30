@@ -1,4 +1,4 @@
-sfrom Products.CMFPlone.interfaces import IPloneSiteRoot
+from Products.CMFPlone.interfaces import IPloneSiteRoot
 from ftw.testing import MockTestCase
 from opengever.inbox.browser.transitioncontroller import ForwardingTransitionController
 from opengever.ogds.base.interfaces import IContactInformation

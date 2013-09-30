@@ -113,6 +113,9 @@ class TestDeadlineModifierController(FunctionalTestCase):
             task.restrictedTraverse('is_deadline_modification_allowed')())
 
     def test_modify_is_allowed_for_issuer_on_a_in_progress_task(self):
+        create_client()
+        set_current_client_id(self.portal)
+
         task = create(Builder('task')
                       .having(issuer=TEST_USER_ID, responsible=TEST_USER_ID)
                       .in_progress())
