@@ -4,6 +4,12 @@ Changelog
 3.1 (unreleased)
 ----------------
 
+- Reworked forwarding refuse and reassign functionality.
+  [phgross]
+
+- Reworked inbox tabs.
+  [phgross]
+
 - Activate reporting actions (dossier and tasks) for every user.
   [phgross]
 
@@ -11,6 +17,12 @@ Changelog
   [phgross]
 
 - Dropped inbox_group agency for tasks in a oneclient setup.
+  [phgross]
+
+- Task workflow: Documents inside a task, aren't editable when the dossier is closed.
+  [phgross]
+
+- Reworked document_author resolution and displaying value in listings.
   [phgross]
 
 - LDAP import: Use the respective property from LDAPUserFolder to determine which is the
@@ -23,6 +35,9 @@ Changelog
 
 - LDAP util: Get user object classes from LDAPUserFolder instead of hardcoding them.
   [lgraf]
+
+- Added modify deadline form and functionality.
+  [phgross]
 
 
 3.0 (2013-08-14)
