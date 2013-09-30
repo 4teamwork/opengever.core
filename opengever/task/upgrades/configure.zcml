@@ -1,0 +1,39 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:genericsetup="http://namespaces.zope.org/genericsetup" >
+
+    <!-- 2 -> 2500 -->
+    <genericsetup:upgradeStep
+        title="Add new tasktype action modify deadline."
+        description=""
+        source="2"
+        destination="2500"
+        handler="opengever.task.upgrades.to2500.AddModifyDeadlineAction"
+        profile="opengever.task:default"
+        />
+
+    <genericsetup:registerProfile
+        name="2500"
+        title="opengever.task: upgrade profile 2500"
+        description=""
+        directory="profiles/2500"
+        />
+
+    <!-- 2 -> 2601 -->
+    <genericsetup:upgradeStep
+        title="Update task workflow and object security"
+        description=""
+        source="2500"
+        destination="2601"
+        handler="opengever.task.upgrades.to2601.UpdateTaskWorkflow"
+        profile="opengever.task:default"
+        />
+
+    <genericsetup:registerProfile
+        name="2601"
+        title="opengever.task: upgrade profile 2601"
+        description=""
+        directory="profiles/2601"
+        />
+
+</configure>

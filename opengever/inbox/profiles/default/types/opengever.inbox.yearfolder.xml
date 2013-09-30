@@ -64,7 +64,7 @@
     </action>
 
     <!-- Tabbedview tabs-->
-    <action action_id="given_tasks"
+    <action action_id="closed-forwardings"
             visible="True"
             title="Forwardings"
             url_expr="string:#"

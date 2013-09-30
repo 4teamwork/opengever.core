@@ -12,6 +12,12 @@ msgstr ""
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: DOMAIN\n"
 
+msgid "assigned_inbox_tasks"
+msgstr "Erhaltene Aufgaben"
+
+msgid "issued_inbox_tasks"
+msgstr "Erteilte Aufgaben"
+
 msgid "By Area"
 msgstr "Bereich"
 
@@ -41,12 +47,6 @@ msgstr "Alle Tickets"
 
 msgid "archive"
 msgstr "Archiv"
-
-msgid "assigned_forwardings"
-msgstr "Eingang"
-
-msgid "assigned_tasks"
-msgstr "Aufgaben an Eingangskorb"
 
 msgid "assignedtasks"
 msgstr "Zugewiesene Aufgaben"
@@ -95,9 +95,6 @@ msgstr "Vollmachten"
 
 msgid "getResponsibleManager"
 msgstr "Zuständigkeit"
-
-msgid "given_tasks"
-msgstr "Weiterleitung"
 
 msgid "info"
 msgstr "Info"
@@ -167,5 +164,3 @@ msgstr "Papierkorb"
 
 msgid "users"
 msgstr "OGDS"
-
-

@@ -176,8 +176,7 @@ class Documents(OpengeverCatalogListingTab):
 
         {'column': 'document_author',
          'column_title': _('label_document_author', default="Document Author"),
-         'sort_index': 'sortable_author',
-         'transform': readable_ogds_author},
+         'sort_index': 'sortable_author'},
 
         {'column': 'document_date',
          'column_title': _('label_document_date', default="Document Date"),
@@ -359,6 +358,7 @@ class Tasks(OpengeverCatalogListingTab):
             'task-state-resolved',
             'task-state-rejected',
             'forwarding-state-open',
+            'forwarding-state-refused',
         ]
 
     state_filter_name = 'task_state_filter'

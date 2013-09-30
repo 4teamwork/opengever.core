@@ -21,16 +21,9 @@
     <fieldset tal:repeat="group view/groups">
         <legend tal:content="group/label" />
         <div class="field" tal:repeat="widget group/widgets/values">
-           <tal:block condition="python:widget.__name__  != 'document_author'">
-                <label tal:content="widget/label" />
-                <br />
-                <div tal:content="structure widget/render" />
-            </tal:block>
-            <tal:block condition="python:widget.__name__ == 'document_author'">
-                <label tal:content="widget/label" />
-                <br />
-                <div tal:content="structure view/author_link" />
-            </tal:block>
+          <label tal:content="widget/label" />
+          <br />
+          <div tal:content="structure widget/render" />
         </div>
     </fieldset>
     <div class="visualClear"><!----></div>
@@ -41,4 +34,3 @@
 
 </body>
 </html>
-

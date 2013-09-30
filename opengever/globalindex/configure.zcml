@@ -27,6 +27,7 @@
 
     <include package=".handlers" />
     <include package=".browser" />
+    <include package=".upgrades" />
 
     <utility factory=".query.TaskQuery" />
 

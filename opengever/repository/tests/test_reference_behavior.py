@@ -1,12 +1,10 @@
-from opengever.repository.behaviors import referenceprefix
-from plone.dexterity.fti import DexterityFTI
-from plone.dexterity.interfaces import IDexterityFTI
-from plone.dexterity.schema import SCHEMA_CACHE
-from z3c.form.interfaces import IValidator
-from zope.component import getMultiAdapter, provideAdapter
-from zope.component import provideUtility
+from ftw.builder import Builder
+from ftw.builder import create
+from opengever.repository.behaviors.referenceprefix import IReferenceNumberPrefix
+from opengever.repository.behaviors.referenceprefix import IReferenceNumberPrefixMarker
+from opengever.repository.behaviors.referenceprefix import ReferenceNumberPrefixValidator
 from opengever.testing import FunctionalTestCase
-import transaction
+from zope.component import provideAdapter
 
 
 class TestReferenceBehavior(FunctionalTestCase):
@@ -18,74 +16,81 @@ class TestReferenceBehavior(FunctionalTestCase):
 
     def setUp(self):
         super(TestReferenceBehavior, self).setUp()
-        self.grant('Contributor')
+        # Since plone tests sucks, we need to re-register
+        # the reference number validator again.
+        provideAdapter(ReferenceNumberPrefixValidator)
 
-    def test_reference_behavior(self):
-        # Since plone tests sucks, we need to re-register the reference number validator again -.-
-        getMultiAdapter((self.portal, None, None, referenceprefix.IReferenceNumberPrefix['reference_number_prefix'], None), IValidator)
-        provideAdapter(referenceprefix.ReferenceNumberPrefixValidator)
-        getMultiAdapter((self.portal, None, None, referenceprefix.IReferenceNumberPrefix['reference_number_prefix'], None), IValidator)
+        self.grant('Manager')
 
-        #When we create a dexterity content type::
-        fti = DexterityFTI('ReferenceFTI')
-        fti.behaviors = ('opengever.repository.behaviors.referenceprefix.IReferenceNumberPrefix',)
-        self.portal.portal_types._setObject('ReferenceFTI', fti)
-        provideUtility(fti, IDexterityFTI, name=u'ReferenceFTI')
-        SCHEMA_CACHE.clear()
-        fti.lookupSchema()
-        transaction.commit()
+        self.repo = create(Builder('repository'))
 
-        #We can see this type in the addable types at the root of the site::
-        self.browser.open('http://nohost/plone/folder_factories')
-        self.assertPageContains('ReferenceFTI')
-        self.browser.getControl('ReferenceFTI').click()
-        self.browser.getControl('Add').click()
-        self.browser.assert_url('http://nohost/plone/++add++ReferenceFTI')
-        self.assertPageContains('reference_number_prefix')
-        self.assertEquals("1", self.browser.getControl(name='form.widgets.IReferenceNumberPrefix.reference_number_prefix').value)
-        self.browser.getControl('Title').value = 'Hugo'
-        self.browser.getControl('Save').click()
-        self.browser.assert_url('http://nohost/plone/referencefti/view')
+    def test_repositories_provided_referenceprefix_marker_interface(self):
+        self.assertTrue(IReferenceNumberPrefixMarker.providedBy(self.repo))
 
-        #checked the saved obj ::
-        obj = self.portal.get('referencefti')
-        self.assertTrue(referenceprefix.IReferenceNumberPrefixMarker.providedBy(obj))
+    def test_set_next_reference_number_as_default_value(self):
+        create(Builder('repository')
+               .within(self.repo)
+               .having(reference_number_prefix='5'))
 
-        #Add a second Type in this folder::
-        self.browser.open('http://nohost/plone/folder_factories')
-        self.assertPageContains('ReferenceFTI')
-        self.browser.getControl('ReferenceFTI').click()
-        self.browser.getControl('Add').click()
-        self.browser.assert_url('http://nohost/plone/++add++ReferenceFTI')
-        self.assertPageContains('reference_number_prefix')
-        self.browser.getControl('Title').value = 'Hans'
-        self.assertEquals("2", self.browser.getControl('Reference Prefix').value)
+        self.browser.open(
+            '%s/++add++opengever.repository.repositoryfolder' % (
+                self.repo.absolute_url()))
 
-        #We should not be able to use a already used value::
-        self.browser.getControl('Reference Prefix').value = '1'
-        self.browser.getControl('Save').click()
-        self.browser.assert_url('http://nohost/plone/++add++ReferenceFTI')
+        reference_prefix = self.browser.control('Reference Prefix')
+        self.assertEquals('6', reference_prefix.value)
 
-        #Ok, lets use a free one::
-        self.browser.getControl('Reference Prefix').value = '2'
-        self.browser.getControl('Save').click()
-        self.browser.assert_url('http://nohost/plone/referencefti-1/view')
+    def test_using_allready_used_prefix_is_not_possible(self):
+        create(Builder('repository')
+               .within(self.repo)
+               .having(reference_number_prefix='5'))
 
-        #It should be possbile to use alpha-numeric references::
-        self.browser.open('http://nohost/plone/++add++ReferenceFTI')
-        self.assertEquals('3', self.browser.getControl('Reference Prefix').value)
+        self.browser.open(
+            '%s/++add++opengever.repository.repositoryfolder' % (
+                self.repo.absolute_url()))
 
-        self.browser.getControl('Reference Prefix').value = 'a1x10'
-        self.browser.getControl('Title').value = 'Peter'
-        self.browser.getControl('Save').click()
-        self.browser.assert_url('http://nohost/plone/referencefti-2/view')
+        self.browser.fill({
+            'Title': 'Test repository',
+            'Reference Prefix': '5'})
+        self.browser.click('Save')
 
-        #Check the reference numbers of the objects::
-        data = []
-        for obj in self.portal.objectValues():
-            if referenceprefix.IReferenceNumberPrefixMarker.providedBy(obj):
-                num = referenceprefix.IReferenceNumberPrefix(obj).reference_number_prefix
-                data.append((obj.Title(), num))
-        self.assertEquals([('Hugo', u'1'),
-                           ('Hans', u'2'),
-                           ('Peter', u'a1x10')], data)
+        field_error_box = self.browser.css(
+            '#formfield-form-widgets-IReferenceNumberPrefix-'
+            'reference_number_prefix .error')[0]
+        self.assertEquals(
+            'Constraint not satisfied',
+            field_error_box.plain_text())
+
+    def test_using_a_free_value_lower_than_the_next_one_is_valid(self):
+        create(Builder('repository')
+               .within(self.repo)
+               .having(reference_number_prefix='8'))
+        create(Builder('repository')
+               .within(self.repo)
+               .having(reference_number_prefix='9'))
+
+        self.browser.open(
+            '%s/++add++opengever.repository.repositoryfolder' % (
+                self.repo.absolute_url()))
+        self.browser.fill({
+            'Title': u'Test repository',
+            'Reference Prefix': '7'})
+        self.browser.click('Save')
+
+        prefix_adapter = IReferenceNumberPrefix(self.repo.get('test-repository'))
+        self.assertEquals('7', prefix_adapter.reference_number_prefix)
+
+    def test_works_also_with_alpha_numeric_prefixes(self):
+        create(Builder('repository')
+               .within(self.repo)
+               .having(reference_number_prefix='5'))
+
+        self.browser.open(
+            '%s/++add++opengever.repository.repositoryfolder' % (
+                self.repo.absolute_url()))
+        self.browser.fill({
+            'Title': u'Test repository',
+            'Reference Prefix': 'a1x10'})
+        self.browser.click('Save')
+
+        prefix_adapter = IReferenceNumberPrefix(self.repo.get('test-repository'))
+        self.assertEquals('a1x10', prefix_adapter.reference_number_prefix)

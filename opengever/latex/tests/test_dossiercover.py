@@ -33,7 +33,7 @@ class TestDossierCoverPDFView(MockTestCase):
         vocabulary.getVocabularyRegistry = self._ori_getVocReg
         self.getVocabularyRegistry = None
 
-    def stub_tree(self):
+    def stub_tree(self, long_title=False):
         tree = self.create_dummy()
         tree.subdossier = self.providing_stub([IDossierMarker])
         tree.dossier = self.providing_stub([IDossierMarker])
@@ -45,9 +45,14 @@ class TestDossierCoverPDFView(MockTestCase):
         self.expect(tree.subdossier.toLocalizedTime).result(
             toLocalizedTime)
 
-        self.expect(tree.subfolder.Title()).result('Sub Folder')
-        self.expect(tree.folder.Title()).result('Folder')
-        self.expect(tree.dossier.Title()).result('Dossier title')
+        if long_title:
+            self.expect(tree.subfolder.Title()).result(10 * 'Lorem ipsum subfolder ')
+            self.expect(tree.folder.Title()).result(10 * 'Lorem ipsum folder ')
+            self.expect(tree.dossier.Title()).result(10 * 'Lorem ipsum dossier ')
+        else:
+            self.expect(tree.subfolder.Title()).result('Sub Folder')
+            self.expect(tree.folder.Title()).result('Folder')
+            self.expect(tree.dossier.Title()).result('Dossier title')
 
         self.set_parent(
             tree.subdossier, self.set_parent(
@@ -125,17 +130,25 @@ class TestDossierCoverPDFView(MockTestCase):
 
     def test_get_reversed_breadcrumbs(self):
         tree = self.stub_tree()
-
         context = tree.subdossier
+        request = self.stub()
 
+        self.replay()
+
+        view = DossierCoverPDFView(context, request)
+        self.assertEqual(view.get_reversed_breadcrumbs(),
+                         'Sub Folder / Folder')
+
+    def test_reversed_breadcrumb_String_is_cropped_to_150(self):
+        tree = self.stub_tree(long_title=True)
+        context = tree.subdossier
         request = self.stub()
 
         self.replay()
 
         view = DossierCoverPDFView(context, request)
 
-        self.assertEqual(view.get_reversed_breadcrumbs(),
-                         'Sub Folder / Folder')
+        self.assertEquals(150, len(view.get_reversed_breadcrumbs()))
 
     def test_get_render_arguments(self):
         tree = self.stub_tree()
@@ -173,7 +186,7 @@ class TestDossierCoverPDFView(MockTestCase):
         # a to long description wuthout any linebreaks
         description_1 = 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor in- vidunt ut labore et dolore magna aliquyam erat, sed diam volup- tua. At ve- ro eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ip- sum dolor sit amet. Lorem ipsum dolor Lorem ipsum dolor sit amet consetetur, sadipscing elitr, sed diam nonumy eirmod tempor in- vidunt ut laboree et dolore magna aliquyam erat, sed diam volup- tua.'
 
-        cutted_description_1 = 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor in- vidunt ut labore et dolore magna aliquyam erat, sed diam volup- tua. At ve- ro eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ip- sum dolor sit amet. Lorem ipsum ...'
+        cutted_description_1 = 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor in- vidunt ut labore et dolore magna aliquyam erat, sed diam volup- tua. At ve- ro eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ip- sum dolor sit amet. Lorem ipsum dolor Lorem ipsum dolor sit amet consetetur, sadipscing elitr, s ...'
 
         # a description with to many lines
         description_2 = """Lorem ipsum dolor sit amet:
@@ -205,9 +218,6 @@ class TestDossierCoverPDFView(MockTestCase):
 
         cutted_description_3 = """Lorem ipsum dolor sit amet:<br /> - Lorem ipsum dolor sit amet, consetetur sadipscing elitr<br /> - Lorem ipsum dolor sit amet, consetetur sadipscing elitr<br /> - Lorem ipsum dolor sit amet, consetetur sadipscing elitr ..."""
 
-        # a description with to many lines and a to long title
-        cutted_description_4 = """Lorem ipsum dolor sit amet:<br /> - consetetur sadipscing<br /> - elitr<br /> - sed diam nonumy eirmod ..."""
-
         with self.mocker.order():
             self.expect(dossier.Description()).result(description_1)
             self.expect(dossier.Title()).result(small_title)
@@ -224,6 +234,6 @@ class TestDossierCoverPDFView(MockTestCase):
         self.replay()
 
         view = DossierCoverPDFView(dossier, request)
-        self.assertEquals(view.get_description(), cutted_description_1)
-        self.assertEquals(view.get_description(), cutted_description_2)
-        self.assertEquals(view.get_description(), cutted_description_3)
+        self.assertEquals(cutted_description_1, view.get_description())
+        self.assertEquals(cutted_description_2, view.get_description())
+        self.assertEquals(cutted_description_3, view.get_description())

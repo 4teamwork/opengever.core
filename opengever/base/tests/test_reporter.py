@@ -1,34 +1,18 @@
+from Missing import Value as MissingValue
 from datetime import datetime, timedelta
 from ftw.testing import MockTestCase
 from mocker import ANY
 from opengever.base import _
-from zope.i18n.tests.test_itranslationdomain import Environment
-from opengever.base.reporter import ReportingController, XLSReporter
 from opengever.base.reporter import StringTranslater
+from opengever.base.reporter import XLSReporter
 from opengever.base.reporter import format_datetime, get_date_style
 from opengever.base.reporter import readable_author
 from opengever.ogds.base.interfaces import IContactInformation
+from zope.i18n.tests.test_itranslationdomain import Environment
 import xlrd
-from Missing import Value as MissingValue
 
-class TestReportingController(MockTestCase):
 
-    def test_controller(self):
-        context = self.mocker.mock()
-        request = self.mocker.mock()
-
-        contact_info = self.stub()
-        self.mock_utility(contact_info, IContactInformation, name=u"")
-        with self.mocker.order():
-            self.expect(contact_info.is_user_in_inbox_group()).result(
-                False)
-            self.expect(contact_info.is_user_in_inbox_group()).result(
-                True)
-
-        self.replay()
-
-        self.assertFalse(ReportingController(context, request).render())
-        self.assertTrue(ReportingController(context, request).render())
+class TestReporter(MockTestCase):
 
     def test_xlsreporter(self):
         contact_info = self.stub()
@@ -55,18 +39,18 @@ class TestReportingController(MockTestCase):
         translation_request = Environment(('de', 'de'))
 
         test_attributes = [
-            {'id':'Title', 'title':_('label_title', default='Title')},
+            {'id': 'Title', 'title': _('label_title', default='Title')},
             #test missingvalue
-            {'id':'missing', 'missing':'Missing',},
-            {'id':'start', 'title':_('label_start', default='Start'),
-             'transform': format_datetime, 'style':get_date_style()},
-            {'id':'responsible',
-             'title':_('label_responsible', default='Responsible'),
-             'transform':readable_author},
-            {'id':'review_state',
-             'title':_('label_review_state', default='Review state'),
-             'transform':StringTranslater(
-                translation_request, 'plone').translate},
+            {'id': 'missing', 'missing': 'Missing', },
+            {'id': 'start', 'title': _('label_start', default='Start'),
+             'transform': format_datetime, 'style': get_date_style()},
+            {'id': 'responsible',
+             'title': _('label_responsible', default='Responsible'),
+             'transform': readable_author},
+            {'id': 'review_state',
+             'title': _('label_review_state', default='Review state'),
+             'transform': StringTranslater(
+                 translation_request, 'plone').translate},
         ]
 
         # generate the report.xls

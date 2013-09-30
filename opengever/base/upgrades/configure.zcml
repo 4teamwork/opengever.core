@@ -32,4 +32,14 @@
         profile="opengever.base:default"
         />
 
+    <!-- 2501 -> 2601 -->
+    <genericsetup:upgradeStep
+        title="Cleanup the mixed-up reference-prefix mappings"
+        description=""
+        source="2501"
+        destination="2601"
+        handler="opengever.base.upgrades.to2601.CleanupReferencePrefixMapping"
+        profile="opengever.base:default"
+        />
+
 </configure>
