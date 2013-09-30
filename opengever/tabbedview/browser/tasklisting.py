@@ -62,6 +62,7 @@ class GlobalTaskListingTab(grok.View, OpengeverTab,
             'task-state-resolved',
             'task-state-rejected',
             'forwarding-state-open',
+            'forwarding-state-refused',
         ]
 
     state_filter_name = 'task_state_filter'

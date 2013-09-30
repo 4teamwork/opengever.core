@@ -151,3 +151,19 @@ class IYearfolderStorer(Interface):
 
     def store_in_yearfolder():
         """Move the forwarding (adapted context) in the actual yearfolder."""
+
+
+class IDeadlineModifier(Interface):
+
+    def is_modify_allowed():
+        """Check if the current user is allowed to modify the deadline:
+            - state is `in-progress` or `open`
+            - AND is issuer or is admin
+            """
+
+    def modify_deadline(new_deadline, text):
+        """Handles the whole deadline mofication process:
+            - Set the new deadline
+            - Add response
+            - Handle synchronisation if needed
+            """

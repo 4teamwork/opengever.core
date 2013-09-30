@@ -83,28 +83,39 @@ class AssignTaskForm(Form):
                     msg, type='error')
                 return self.request.RESPONSE.redirect('.')
 
-            # create a response in the task
-            add_simple_response(
-                self.context,
-                text=data.get('text'),
-                field_changes=((ITask['responsible'], data['responsible']),
-                               (ITask['responsible_client'],
-                                data['responsible_client']),),
-                transition=data.get('transition', None))
+            self.reassing_task(**data)
 
-            # set responsible
-            self.context.responsible_client = data['responsible_client']
-            self.context.responsible = data['responsible']
-            notify(ObjectModifiedEvent(self.context))
+        return self.request.RESPONSE.redirect('.')
 
-            syncer = getMultiAdapter((self.context, self.request),
-                         IWorkflowStateSyncer)
-            syncer.change_remote_tasks_workflow_state(
-                data.get('transition'), text=data.get('text'),
-                responsible=data.get('responsible'),
-                responsible_client=data.get('responsible_client'))
+    def reassing_task(self, **kwargs):
+        self.add_response(**kwargs)
+        self.update_task(**kwargs)
+        notify(ObjectModifiedEvent(self.context))
+        self.sync_remote_task(**kwargs)
 
-            return self.request.RESPONSE.redirect('.')
+    def update_task(self, **kwargs):
+        self.context.responsible_client = kwargs.get('responsible_client')
+        self.context.responsible = kwargs.get('responsible')
+
+    def add_response(self, **kwargs):
+        add_simple_response(
+            self.context,
+            text=kwargs.get('text'),
+            field_changes=(
+                (ITask['responsible'], kwargs.get('responsible')),
+                (ITask['responsible_client'],
+                 kwargs.get('responsible_client')),),
+            transition=kwargs.get('transition'))
+
+    def sync_remote_task(self, **kwargs):
+        syncer = getMultiAdapter(
+            (self.context, self.request), IWorkflowStateSyncer)
+
+        syncer.change_remote_tasks_workflow_state(
+            kwargs.get('transition'),
+            text=kwargs.get('text'),
+            responsible=kwargs.get('responsible'),
+            responsible_client=kwargs.get('responsible_client'))
 
     @buttonAndHandler(_(u'button_cancel', default=u'Cancel'))
     def handle_cancel(self, action):

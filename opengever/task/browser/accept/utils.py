@@ -22,6 +22,8 @@ import AccessControl
 import transaction
 
 
+# TODO: The whole yearfolder functionality should be moved to opengever.inbox
+
 ACCEPT_TASK_TRANSITION = 'task-transition-open-in-progress'
 
 

@@ -91,11 +91,15 @@ class TestForwardingTransitionController(MockTestCase):
             self.expect(mock._is_current_inbox_group_user()).result(False)
             self.expect(mock._is_current_inbox_group_user()).result(True)
 
+            self.expect(mock._is_current_inbox_group_user()).result(False)
+            self.expect(mock._is_current_inbox_group_user()).result(True)
+
         self.replay()
         transitions = [
             'forwarding-transition-assign-to-dossier',
             'forwarding-transition-reassign',
-            'forwarding-transition-close']
+            'forwarding-transition-close',
+            'forwarding-transition-reassign-refused']
 
         for transition in transitions:
             self.assertFalse(controller.is_transition_possible(transition))

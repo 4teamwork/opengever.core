@@ -57,3 +57,12 @@ class OGBrowser(Browser):
     def assert_url(self, expected_url):
         if expected_url != self.url:
             raise AssertionError("Expected %s to be %s" % (self.url, expected_url))
+
+    def assert_portal_message(self, expected_msg, state='info'):
+        selector = '.portalMessage.%s dd' % (state)
+
+        messages = [message.plain_text() for message in self.css(selector)]
+        if expected_msg not in messages:
+            raise AssertionError(
+                'Expected portal message %s (state:%s) not found on '
+                'the current browser page' % (expected_msg, state))

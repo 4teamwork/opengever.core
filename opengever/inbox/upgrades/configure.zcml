@@ -1,0 +1,35 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+    i18n_domain="opengever.inbox">
+
+    <!-- 1 -> 2601 -->
+    <genericsetup:upgradeStep
+        title="Adjust inbox tabbedview tabs"
+        description=""
+        source="1"
+        destination="2601"
+        handler="opengever.inbox.upgrades.to2601.AdjustTabbedviewTabs"
+        profile="opengever.inbox:default"
+        />
+
+    <genericsetup:registerProfile
+        name="2601"
+        title="opengever.inbox: upgrade profile 2601"
+        description=""
+        directory="profiles/2601"
+        for="Products.CMFPlone.interfaces.IMigratingPloneSiteRoot"
+        provides="Products.GenericSetup.interfaces.EXTENSION"
+        />
+
+    <!-- 2601 -> 2602 -->
+    <genericsetup:upgradeStep
+        title="Update forwarding workflow"
+        description=""
+        source="2601"
+        destination="2602"
+        handler="opengever.inbox.upgrades.to2602.UpdateForwardingWorkflow"
+        profile="opengever.inbox:default"
+        />
+
+</configure>

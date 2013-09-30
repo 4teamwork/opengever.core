@@ -26,10 +26,10 @@ msgstr ""
 msgid "myissuedtasks"
 msgstr ""
 
-msgid "assigned_forwardings"
+msgid "assigned_inbox_tasks"
 msgstr ""
 
-msgid "assigned_tasks"
+msgid "issued_inbox_tasks"
 msgstr ""
 
 msgid "tracker_overview"
@@ -156,9 +156,6 @@ msgid "mydossiers"
 msgstr ""
 
 msgid "mydocuments"
-msgstr ""
-
-msgid "given_tasks"
 msgstr ""
 
 msgid "mytasks"

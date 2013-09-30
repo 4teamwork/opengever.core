@@ -12,6 +12,12 @@ msgstr ""
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: DOMAIN\n"
 
+msgid "assigned_inbox_tasks"
+msgstr ""
+
+msgid "issued_inbox_tasks"
+msgstr ""
+
 msgid "By Area"
 msgstr "Domaine"
 
@@ -167,5 +173,3 @@ msgstr "Corbeille"
 
 msgid "users"
 msgstr "OGDS"
-
-

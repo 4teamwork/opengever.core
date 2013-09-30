@@ -8,17 +8,12 @@ from five import grok
 from ftw.datepicker.widget import DatePickerFieldWidget
 from opengever.document import _
 from opengever.document.interfaces import IDocumentSettings
-from opengever.document.interfaces import NO_DOWNLOAD_DISPLAY_MODE
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.mail.behaviors import IMailInAddress
-from opengever.ogds.base.interfaces import IContactInformation
-from opengever.tabbedview.browser.tabs import Tasks
-from plone.app.layout.viewlets.interfaces import IBelowContentTitle
 from plone.app.versioningbehavior.behaviors import IVersionable
 from plone.autoform.interfaces import OMITTED_KEY
 from plone.dexterity.content import Item
-from plone.directives import form, dexterity
-from plone.i18n.normalizer.interfaces import IIDNormalizer
+from plone.directives import form
 from plone.namedfile.field import NamedBlobFile
 from plone.registry.interfaces import IRegistry
 from plone.supermodel.interfaces import FIELDSETS_KEY
@@ -27,14 +22,8 @@ from plone.z3cform.textlines.textlines import TextLinesFieldWidget
 from z3c.form import validator
 from z3c.form.browser import checkbox
 from zope import schema
-from zope.app.intid.interfaces import IIntIds
 from zope.component import getUtility
-from zope.globalrequest import getRequest
-from zope.i18n import translate
 from zope.interface import invariant, Invalid, Interface
-from zope.lifecycleevent.interfaces import IObjectCopiedEvent
-from zope.lifecycleevent.interfaces import IObjectCreatedEvent
-from zope.lifecycleevent.interfaces import IObjectModifiedEvent
 import logging
 import os.path
 
@@ -54,11 +43,6 @@ IVersionable.setTaggedValue(FIELDSETS_KEY, [
 # possibly it can be solved with plone.directives
 IVersionable.setTaggedValue(OMITTED_KEY,
     [(Interface, 'changeNote', 'true'), ])
-
-
-def related_document(context):
-    intids = getUtility(IIntIds)
-    return intids.getId(context)
 
 
 class IDocumentSchema(form.Schema):
@@ -135,7 +119,9 @@ class IDocumentSchema(form.Schema):
     dexteritytextindexer.searchable('document_author')
     document_author = schema.TextLine(
         title=_(u'label_author', default='Author'),
-        description=_(u'help_author', default=""),
+        description=_(u'help_author',
+                      default="Surname firstname or a userid"
+                      "(would be automatically resolved to fullname)"),
         required=False,
         )
 
@@ -328,97 +314,3 @@ class Document(Item):
             # not found
             return False
         return mimetypeitem
-
-
-@grok.subscribe(IDocumentSchema, IObjectCreatedEvent)
-@grok.subscribe(IDocumentSchema, IObjectModifiedEvent)
-def set_digitally_available(doc, event):
-    """set the digitally_available field,
-    if a file exist the document is digital available"""
-
-    if doc.file:
-        doc.digitally_available = True
-    else:
-        doc.digitally_available = False
-
-
-@grok.subscribe(IDocumentSchema, IObjectCreatedEvent)
-@grok.subscribe(IDocumentSchema, IObjectModifiedEvent)
-def sync_title_and_filename_handler(doc, event):
-    """Syncs the document and the filename (#586):
-    o If there is no title but a file, use the filename (without extension) as
-    title.
-    o If there is a title and a file, use the normalized title as filename
-    """
-    normalizer = getUtility(IIDNormalizer)
-    if not doc.title and doc.file:
-        # use the filename without extension as title
-        basename, ext = os.path.splitext(doc.file.filename)
-        doc.title = basename
-        doc.file.filename = ''.join(
-            [normalizer.normalize(basename), ext])
-    elif doc.title and doc.file:
-        # use the title as filename
-        basename, ext = os.path.splitext(doc.file.filename)
-        doc.file.filename = ''.join(
-            [normalizer.normalize(doc.title), ext])
-
-
-@grok.subscribe(IDocumentSchema, IObjectCopiedEvent)
-def set_copyname(doc, event):
-    """Documents wich are copied, should be renamed to copy of filename
-    """
-
-    key = 'prevent-copyname-on-document-copy'
-    request = getRequest()
-
-    if request.get(key, False):
-        return
-    doc.title = u'%s %s' % (
-        translate(_('copy_of', default="copy of"), context=request),
-        doc.title)
-
-
-class View(dexterity.DisplayForm):
-    grok.context(IDocumentSchema)
-    grok.require("zope2.View")
-
-    def author_link(self):
-        info = getUtility(IContactInformation)
-        if self.context.document_author:
-            return info.render_link(self.context.document_author)
-        return None
-
-    def updateWidgets(self):
-        super(View, self).updateWidgets()
-        field = self.groups[0].fields.get('file')
-        if field:
-            field.mode = NO_DOWNLOAD_DISPLAY_MODE
-
-
-class ForwardViewlet(grok.Viewlet):
-    """Display the message subject
-    """
-    grok.name('opengever.document.ForwardViewlet')
-    grok.context(IDocumentSchema)
-    grok.require('zope2.View')
-    grok.viewletmanager(IBelowContentTitle)
-
-    def render(self):
-        if self.request.get("externaledit", None):
-            return '<script language="JavaScript">jq(function(){window.location.href="' + str(
-                self.context.absolute_url()) + '/external_edit"})</script>'
-        return ''
-
-
-class RelatedTasks(Tasks):
-    grok.context(IDocumentSchema)
-    grok.name('tabbedview_view-tasks')
-
-    search_options = {'related_items': related_document}
-
-    def update_config(self):
-        Tasks.update_config(self)
-
-        # do not search on this context, search on site
-        self.filter_path = None

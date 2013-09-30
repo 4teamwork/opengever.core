@@ -1,14 +1,16 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2013-04-08 14:47+0000\n"
-"PO-Revision-Date: 2013-04-08 16:52+0200\n"
+"POT-Creation-Date: 2013-08-21 05:54+0000\n"
+"PO-Revision-Date: 2013-08-09 09:11+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0\n"
+"Language-Code: en\n"
+"Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: DOMAIN\n"
 
@@ -28,18 +30,13 @@ msgstr "Eingangskorb"
 msgid "YearFolder"
 msgstr "Jahresordner"
 
-#. Default: "Cancel"
-#: ./opengever/inbox/browser/close.py:52
-msgid "button_cancel"
-msgstr ""
-
 #. Default: "Close"
-#: ./opengever/inbox/browser/close.py:36
+#: ./opengever/inbox/browser/close.py:37
 msgid "close"
 msgstr "Abschliessen"
 
 #. Default: "Error: Please select at least one document to forward"
-#: ./opengever/inbox/forwarding.py:104
+#: ./opengever/inbox/forwarding.py:103
 msgid "error_no_document_selected"
 msgstr "Fehler: Bitte wählen Sie mindestens ein Dokument aus das weitergeleitet werden soll"
 
@@ -52,23 +49,46 @@ msgstr "Allgemein"
 msgid "help_inbox_group"
 msgstr "Diese Gruppe wird berechtigt, wenn dem Eingangskorb eine Aufgabe zugewiesen wird."
 
-#: ./opengever/inbox/forwarding.py:52
+#: ./opengever/inbox/forwarding.py:51
 msgid "help_responsible"
 msgstr "Wählen Sie die verantwortliche Person bzw. den Eingangskorb des oben gewählten Mandanten aus."
+
+#. Default: "Assigned tasks"
+#: ./opengever/inbox/browser/overview.py:24
+msgid "label_assigned_inbox_tasks"
+msgstr "Erhaltene Aufgaben"
 
 #. Default: "Inbox Group"
 #: ./opengever/inbox/inbox.py:22
 msgid "label_inbox_group"
 msgstr "Eingangskorb Gruppe"
 
+#. Default: "Issued tasks"
+#: ./opengever/inbox/browser/overview.py:28
+msgid "label_issued_inbox_tasks"
+msgstr "Erteilte Aufgaben"
+
+#. Default: "Refuse"
+#: ./opengever/inbox/browser/refuse.py:29
+msgid "label_refuse"
+msgstr "Ablehnen"
+
+#. Default: "Refuse Forwarding"
+#: ./opengever/inbox/browser/refuse.py:26
+msgid "label_refuse_forwarding"
+msgstr "Weiterleitung ablehnen"
+
 #. Default: "Responsible"
-#: ./opengever/inbox/forwarding.py:51
+#: ./opengever/inbox/forwarding.py:50
 msgid "label_responsible"
 msgstr "Auftragnehmer"
 
+#. Default: "Assign Forwarding"
+#: ./opengever/inbox/browser/assign.py:34
+msgid "title_assign_forwarding"
+msgstr "Weiterleitung weiterleiten"
+
 #. Default: "Close orwarding"
-#: ./opengever/inbox/browser/close.py:34
+#: ./opengever/inbox/browser/close.py:35
 msgid "title_close_forwarding"
 msgstr "Weiterleitung abschliessen"
-
-

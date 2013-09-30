@@ -29,6 +29,9 @@ msgstr ""
 msgid "Attach remote document"
 msgstr ""
 
+msgid "Modify deadline"
+msgstr "
+
 msgid "task-transition-cancelled-open"
 msgstr ""
 
