@@ -427,7 +427,6 @@ class Tasks(OpengeverCatalogListingTab):
         'move_items',
         'copy_items',
         'export_dossiers',
-        'zip_selected',
         ]
 
     major_actions = ['change_state',
