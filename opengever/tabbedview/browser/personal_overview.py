@@ -145,8 +145,11 @@ class MyDocuments(Documents):
     search_options = {'Creator': authenticated_member,
                       'trashed': False}
 
-    enabled_actions = []
+    enabled_actions = [
+        'zip_selected',
+    ]
     major_actions = []
+
     columns = remove_control_columns(Documents.columns)
     columns = remove_subdossier_column(columns)
     selection = ViewPageTemplateFile("no_selection_amount.pt")
