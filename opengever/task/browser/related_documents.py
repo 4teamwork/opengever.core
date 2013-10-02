@@ -236,6 +236,7 @@ class RelatedDocuments(Documents):
         'copy_documents_to_remote_client',
         'move_items',
         'copy_items',
+        'zip_selected',
         ]
 
     sort_on = 'sortable_title'
