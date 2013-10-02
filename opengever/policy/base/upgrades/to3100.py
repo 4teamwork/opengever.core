@@ -2,7 +2,7 @@ from ftw.upgrade import UpgradeStep
 
 
 class EnableZipexport(UpgradeStep):
-    """ Add zipexport marker to all supported types """
+    """ Install zipexport and mark dossiers as zipexport supported types. """
 
     def __call__(self):
         self.setup_install_profile(
