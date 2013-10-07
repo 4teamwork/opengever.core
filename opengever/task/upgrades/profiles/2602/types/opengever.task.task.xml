@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<object name="opengever.task.task" meta_type="Dexterity FTI"
+        i18n:domain="opengever.task" xmlns:i18n="http://xml.zope.org/namespaces/i18n">
+
+    <property name="immediate_view">task_redirector</property>
+
+</object>

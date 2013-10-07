@@ -39,7 +39,7 @@
 
     <!-- View information -->
     <property name="default_view">tabbed_view</property>
-    <property name="immediate_view">../#tasks</property>
+    <property name="immediate_view">task_redirector</property>
     <property name="default_view_fallback">False</property>
     <property name="view_methods">
         <element value="view"/>
