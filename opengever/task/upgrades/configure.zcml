@@ -36,4 +36,21 @@
         directory="profiles/2601"
         />
 
+    <!-- 2601 -> 2602 -->
+    <genericsetup:upgradeStep
+        title="Update immediate view for the task type"
+        description=""
+        source="2601"
+        destination="2602"
+        handler="opengever.task.upgrades.to2602.UpdateImmediateViewForTasks"
+        profile="opengever.task:default"
+        />
+
+    <genericsetup:registerProfile
+        name="2602"
+        title="opengever.task: upgrade profile 2602"
+        description=""
+        directory="profiles/2602"
+        />
+
 </configure>
