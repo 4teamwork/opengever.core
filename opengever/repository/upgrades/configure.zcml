@@ -1,0 +1,22 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:genericsetup="http://namespaces.zope.org/genericsetup">
+
+	<genericsetup:upgradeStep
+	    title="Add reference prefix manager."
+	    description=""
+	    source="1"
+	    destination="2601"
+	    handler="opengever.repository.upgrades.to2601.ActivatePrefixManager"
+	    profile="opengever.repository:default"
+	    />
+
+	<genericsetup:registerProfile
+	    name="2601"
+	    title="opengever.repository: upgrade profile 2601"
+	    description=""
+	    directory="profiles/2601"
+	    for="Products.CMFPlone.interfaces.IMigratingPloneSiteRoot"
+	    provides="Products.GenericSetup.interfaces.EXTENSION"
+	    />
+</configure>
