@@ -6,6 +6,10 @@
     xmlns:plone="http://namespaces.plone.org/plone"
     i18n_domain="opengever.repository">
 
+    <!-- Include custom permissions -->
+    <include file="permissions.zcml" />
+    <include package=".behaviors" />
+
     <!-- Grok the package to initialise schema interfaces and content classes -->
     <grok:grok package="." />
 

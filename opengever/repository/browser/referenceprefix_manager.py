@@ -8,7 +8,7 @@ from Products.statusmessages.interfaces import IStatusMessage
 class ReferencePrefixManager(grok.View):
     grok.context(IRepositoryFolder)
     grok.name("referenceprefix_manager")
-    grok.require("zope2.View") # TODO set correct permissions
+    grok.require('opengever.repository.UnlockReferencePrefix')
 
     def update(self):
         refs = ReferenceNumberPrefixAdpater(self.context)

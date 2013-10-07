@@ -10,7 +10,7 @@
             <property name="icon_expr"></property>
             <property name="available_expr"></property>
             <property name="permissions">
-                <element value="View" /> <!-- TODO update permissions -->
+                <element value="opengever.repository: Unlock Reference Prefix" />
             </property>
             <property name="visible">True</property>
         </object>
