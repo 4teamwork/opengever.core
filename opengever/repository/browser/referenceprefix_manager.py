@@ -20,7 +20,7 @@ class ReferencePrefixManager(grok.View):
             notify(RepositoryPrefixUnlocked(self.context,
                                             self.request.get('prefix')))
             messages = IStatusMessage(self.request)
-            messages.add(_("statmsg_prefix_unlocked", # TODO add translation
+            messages.add(_("statmsg_prefix_unlocked",
                         default=u"Reference prefix has been unlocked."),
                         type=u"info")
 
