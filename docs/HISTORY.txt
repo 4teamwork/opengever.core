@@ -4,6 +4,9 @@ Changelog
 3.1 (unreleased)
 ----------------
 
+- Fixed redirect when creating a subtask.
+  [phgross]
+
 - Reworked forwarding refuse and reassign functionality.
   [phgross]
 
