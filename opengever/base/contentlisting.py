@@ -3,6 +3,8 @@ from opengever.base.browser.helper import get_css_class
 from plone.app.contentlisting.catalog import \
     CatalogContentListingObject as CoreListingObject
 from zope.component import getMultiAdapter
+from Products.CMFCore.utils import getToolByName
+from opengever.repository.utils import getAlternativeLanguageCode
 
 
 class OpengeverCatalogContentListingObject(CoreListingObject):
@@ -46,3 +48,15 @@ class OpengeverCatalogContentListingObject(CoreListingObject):
         is not implemented yet."""
 
         return self._crop_text(self.Description(), 400)
+
+    def Title(self):
+        """Returns the title in the preferred language if exists.
+        Title have to be available in title or alternative_title"""
+
+        lang_tool = getToolByName(self._brain, 'portal_languages')
+        if lang_tool.getPreferredLanguage() == getAlternativeLanguageCode():
+            if hasattr(self._brain, 'alternative_title'):
+                if getattr(self._brain, 'alternative_title'):
+                    return getattr(self._brain, 'alternative_title')
+
+        return self._brain.Title

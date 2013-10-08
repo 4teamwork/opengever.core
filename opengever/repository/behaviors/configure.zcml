@@ -13,4 +13,12 @@
       marker=".referenceprefix.IReferenceNumberPrefixMarker"
       />
 
+  <plone:behavior
+    title="Alternative title"
+    description="Alternative title behavior"
+    provides=".alternativetitle.IAlternativeTitleBehavior"
+    factory="plone.behavior.AnnotationStorage"
+    for="plone.dexterity.interfaces.IDexterityContent"
+    marker=".alternativetitle.IAlternativeTitleBehaviorMarker"
+    />
 </configure>

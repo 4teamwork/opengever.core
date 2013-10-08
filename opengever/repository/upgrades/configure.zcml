@@ -1,0 +1,25 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+    i18n_domain="opengever.repository">
+
+    <!-- 1 -> 2600 -->
+    <genericsetup:upgradeStep
+        title="Register repositoryfolder in dexterityindexer."
+        description=""
+        source="1"
+        destination="2600"
+        handler="opengever.repository.upgrades.to2600.RegisterDexterityIndexer"
+        profile="opengever.repository:default"
+        />
+
+    <genericsetup:registerProfile
+        name="2600"
+        title="opengever.repository: upgrade profile 2600"
+        description=""
+        directory="profiles/2600"
+        for="Products.CMFPlone.interfaces.IMigratingPloneSiteRoot"
+        provides="Products.GenericSetup.interfaces.EXTENSION"
+        />
+
+</configure>

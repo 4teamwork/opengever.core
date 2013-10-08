@@ -1,5 +1,7 @@
 from Acquisition import aq_inner, aq_parent
+from collective.dexteritytextindexer.utils import searchable
 from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
+from Products.CMFCore.utils import getToolByName
 from five import grok
 
 from zope import schema
@@ -16,7 +18,10 @@ from opengever.repository import _
 from opengever.repository.interfaces import IRepositoryFolder
 from opengever.repository.behaviors.referenceprefix import \
     IReferenceNumberPrefix, IReferenceNumberPrefixMarker
+from opengever.repository.behaviors.alternativetitle import \
+    IAlternativeTitleBehaviorMarker, IAlternativeTitleBehavior
 from opengever.repository.interfaces import IRepositoryFolderRecords
+from opengever.repository.utils import getAlternativeLanguageCode
 from opengever.base.browser.helper import get_css_class
 
 
@@ -95,13 +100,28 @@ class IRepositoryFolderSchema(form.Schema):
                                  u'RestrictedAddableDossiersVocabulary'),
         required=False)
 
+searchable(IRepositoryFolderSchema, 'effective_title')
+searchable(IRepositoryFolderSchema, 'description')
+
 
 class RepositoryFolder(content.Container):
 
     implements(IRepositoryFolder)
 
-    def Title(self):
+    def Title(self, language=None):
         title = u' %s' % self.effective_title
+
+        if (IAlternativeTitleBehaviorMarker.providedBy(self)):
+
+            ltool = getToolByName(self, 'portal_languages')
+
+            if (language is None):
+                language = ltool.getPreferredLanguage()
+
+            if (language == getAlternativeLanguageCode() and
+                IAlternativeTitleBehavior(self).alternative_title):
+                title = u' %s' % IAlternativeTitleBehavior(self).alternative_title
+
         obj = self
         while IRepositoryFolder.providedBy(obj):
             if IReferenceNumberPrefixMarker.providedBy(obj):
@@ -202,8 +222,6 @@ class Byline(grok.Viewlet):
     grok.viewletmanager(IBelowContentTitle)
     grok.context(IRepositoryFolder)
     grok.name("plone.belowcontenttitle.documentbyline")
-
-    #update = content.DocumentBylineViewlet.update
 
     def get_css_class(self):
         return get_css_class(self.context)

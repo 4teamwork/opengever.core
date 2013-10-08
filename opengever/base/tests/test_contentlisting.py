@@ -3,6 +3,10 @@ from ftw.builder import create
 from opengever.testing import FunctionalTestCase
 from opengever.testing import obj2brain
 from plone.app.contentlisting.interfaces import IContentListingObject
+from Products.CMFCore.utils import getToolByName
+from opengever.repository.interfaces import IRepositoryFolderRecords
+from zope.component import getUtility
+from plone.registry.interfaces import IRegistry
 
 
 class TestOpengeverContentListing(FunctionalTestCase):
@@ -84,3 +88,43 @@ class TestOpengeverContentListing(FunctionalTestCase):
     def assertCropping(self, size, value):
         self.assertEquals(
             size, len(value), 'Text cropping failed for %s' % value)
+
+    def test_Title_returns_title_in_the_preferred_language(self):
+        self.fti = getToolByName(self.portal, 'portal_types').get('opengever.repository.repositoryfolder')
+        self.originalBehaviors = self.fti.behaviors
+        self.fti.behaviors = self.fti.behaviors + ('opengever.repository.behaviors.alternativetitle.IAlternativeTitleBehavior', )
+
+        # set alternative language to fr
+        registry = getUtility(IRegistry)
+        reg_proxy = registry.forInterface(IRepositoryFolderRecords)
+        reg_proxy.alternative_language_code = u'fr'
+
+        repository = create(Builder('repository')
+               .titled(u'Weiterbildung')
+               .having(alternative_title=u'Formation continue'))
+
+        getToolByName(self.portal, 'portal_languages').setLanguageBindings()
+        repository.REQUEST.get('LANGUAGE_TOOL').LANGUAGE = 'fr'
+
+        self.assertEquals(
+            '1. Formation continue',
+            IContentListingObject(obj2brain(repository)).Title())
+
+        self.fti.behaviors = self.originalBehaviors
+
+    def test_Title_returns_title_when_title_in_preffered_language_does_not_exist(self):
+        self.fti = getToolByName(self.portal, 'portal_types').get('opengever.repository.repositoryfolder')
+        self.originalBehaviors = self.fti.behaviors
+        self.fti.behaviors = self.fti.behaviors + ('opengever.repository.behaviors.alternativetitle.IAlternativeTitleBehavior', )
+
+        repository = create(Builder('repository')
+               .titled(u'Weiterbildung', ))
+
+        getToolByName(self.portal, 'portal_languages').setLanguageBindings()
+        repository.REQUEST.get('LANGUAGE_TOOL').LANGUAGE = 'it'
+
+        self.assertEquals(
+            '1. Weiterbildung',
+            IContentListingObject(obj2brain(repository)).Title())
+
+        self.fti.behaviors = self.originalBehaviors

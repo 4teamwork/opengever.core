@@ -1,0 +1,19 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser">
+
+	<adapter
+		for="plone.dexterity.interfaces.IDexterityContent
+			Products.CMFPlone.browser.interfaces.INavigationTree"
+		provides="plone.app.layout.navigation.interfaces.INavtreeStrategy"
+		factory=".navigation.NavtreeStrategy"
+		/>
+
+	<adapter
+		for="Products.Archetypes.interfaces.IBaseObject
+			Products.CMFPlone.browser.interfaces.INavigationTree"
+		provides="plone.app.layout.navigation.interfaces.INavtreeStrategy"
+		factory=".navigation.NavtreeStrategy"
+		/>
+
+</configure>

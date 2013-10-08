@@ -17,6 +17,10 @@
 
     <include package=".behaviors" />
 
+	<include package=".browser" />
+	
+	<include package=".upgrades" />
+
     <!-- Register an extension profile to make the product installable -->
     <genericsetup:registerProfile
         name="default"
@@ -25,5 +29,18 @@
         directory="profiles/default"
         provides="Products.GenericSetup.interfaces.EXTENSION"
         />
+
+    <!-- Register NavtreeStrategy for alternative translation -->
+    <adapter
+        for="plone.dexterity.interfaces.IDexterityContainer
+             plone.formwidget.contenttree.interfaces.IContentTreeWidget"
+        provides="plone.app.layout.navigation.interfaces.INavtreeStrategy"
+        factory=".browser.navigation.ContentTreeNavtreeStrategy" />
+
+    <adapter
+        for="plone.dexterity.interfaces.IDexterityItem
+             plone.formwidget.contenttree.interfaces.IContentTreeWidget"
+        provides="plone.app.layout.navigation.interfaces.INavtreeStrategy"
+        factory=".browser.navigation.ContentTreeNavtreeStrategy" />
 
 </configure>

@@ -1,0 +1,3 @@
+<object name="portal_types">
+    <object name="opengever.repository.repositoryfolder" meta_type="Dexterity FTI" />
+</object>
