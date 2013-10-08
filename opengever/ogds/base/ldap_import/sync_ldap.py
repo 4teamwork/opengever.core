@@ -1,10 +1,11 @@
 from AccessControl.SecurityManagement import newSecurityManager
 from App.config import getConfiguration
-from opengever.ogds.base.ldap_import.import_stamp import set_remote_import_stamp
 from opengever.ogds.base.interfaces import IOGDSUpdater
+from opengever.ogds.base.ldap_import.import_stamp import set_remote_import_stamp
 from optparse import OptionParser
 from Testing.makerequest import makerequest
 from zope.app.component.hooks import setSite
+import AccessControl
 import ldap
 import logging
 import sys
@@ -68,7 +69,7 @@ def run_import(app, options):
     check_if_ldap_reachable(plone)
 
     # setup user context
-    user = app.acl_users.getUser('zopemaster')
+    user = AccessControl.SecurityManagement.SpecialUsers.system
     user = user.__of__(app.acl_users)
     newSecurityManager(app, user)
 
