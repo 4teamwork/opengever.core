@@ -1,23 +1,20 @@
 from Acquisition import aq_inner, aq_parent
 from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
 from five import grok
-
-from zope import schema
-import zope.component
-from zope.interface import implements
+from opengever.base.browser.helper import get_css_class
+from opengever.base.interfaces import IReferenceNumber
+from opengever.repository import _
+from opengever.repository.interfaces import IRepositoryFolder
+from opengever.repository.interfaces import IRepositoryFolderRecords
 from plone.app.content.interfaces import INameFromTitle
 from plone.app.layout.viewlets.interfaces import IBelowContentTitle
 from plone.dexterity import content
 from plone.directives import form
 from plone.memoize.instance import memoize
 from plone.registry.interfaces import IRegistry
-
-from opengever.repository import _
-from opengever.repository.interfaces import IRepositoryFolder
-from opengever.repository.behaviors.referenceprefix import \
-    IReferenceNumberPrefix, IReferenceNumberPrefixMarker
-from opengever.repository.interfaces import IRepositoryFolderRecords
-from opengever.base.browser.helper import get_css_class
+from zope import schema
+from zope.interface import implements
+import zope.component
 
 
 class IRepositoryFolderSchema(form.Schema):
@@ -101,13 +98,9 @@ class RepositoryFolder(content.Container):
     implements(IRepositoryFolder)
 
     def Title(self):
-        title = u' %s' % self.effective_title
-        obj = self
-        while IRepositoryFolder.providedBy(obj):
-            if IReferenceNumberPrefixMarker.providedBy(obj):
-                rfnr = IReferenceNumberPrefix(obj).reference_number_prefix
-                title = unicode(rfnr) + '.' + title
-            obj = aq_parent(aq_inner(obj))
+        title = u'%s. %s' % (
+            IReferenceNumber(self).get_repository_number(),
+            self.effective_title)
 
         return title.encode('utf-8')
 

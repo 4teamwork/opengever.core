@@ -67,10 +67,26 @@ class IReferenceNumber(Interface):
     * 123 : sequence_number of Document
     """
 
-    def get_number(self):
+    def get_number():
         """ Returns the reference number of the context
         """
 
+    def get_local_number():
+        """Returns only the reference number part of the context."""
+
+    def append_local_number(numbers):
+        """Append the number part of the context in the specific list
+        in the given numbers dict."""
+
+    def get_parent_numbers():
+        """Returns a list of all number parts, from the context up to the plone site,
+        grouped by the context type.
+
+        Examples:
+        {'site': ['OG'],
+         'repository: ['3', '5' , '8']',
+         'dossier: ['3', '3']'}
+        """
 
 class ISequenceNumber(Interface):
     """  The sequence number utility provides a getNumber(obj) method
