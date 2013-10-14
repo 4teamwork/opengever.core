@@ -12,14 +12,8 @@ class DocumentReferenceNumber(BasicReferenceNumber):
     grok.provides(IReferenceNumber)
     grok.context(IBaseDocument)
 
-    def get_number(self):
-        # get local sequence_number
-        sequenceNr = getUtility(ISequenceNumber)
-        num = sequenceNr.get_number(self.context)
-        num = num and str(num) or ''
-        # get the parent number
-        parent_num = self.get_parent_number()
-        if parent_num:
-            return str(parent_num) + ' / ' + num
-        else:
-            return num
+    ref_type = 'document'
+
+    def get_local_number(self):
+        num = getUtility(ISequenceNumber).get_number(self.context)
+        return num and str(num) or ''
