@@ -1,11 +1,12 @@
 Changelog
 =========
 
-3.1 (unreleased)
+3.0.1 (unreleased)
 ----------------
 
-- Nothing changed yet.
-
+- LDAP import: If server doesn't support page controls, fall back to issuing
+  search request without them.
+  [lgraf]
 
 3.0 (2013-08-14)
 ----------------

@@ -101,16 +101,32 @@ class LDAPSearch(grok.Adapter):
                                            (page_size, ''),)
         is_last_page = False
         results = []
+
         while not is_last_page:
-            msgid = conn.search_ext(base_dn,
-                                    scope,
-                                    filter,
-                                    attrs,
-                                    serverctrls=[lc])
-            rtype, rdata, rmsgid, serverctrls = conn.result3(msgid)
+            try:
+                msgid = conn.search_ext(base_dn,
+                                        scope,
+                                        filter,
+                                        attrs,
+                                        serverctrls=[lc])
+
+                rtype, rdata, rmsgid, serverctrls = conn.result3(msgid)
+                pctrls = [c for c in serverctrls
+                          if c.controlType == LDAP_CONTROL_PAGED_RESULTS]
+
+            except ldap.UNAVAILABLE_CRITICAL_EXTENSION:
+                # Server does not support pagination controls - send search
+                # request again without pagination controls
+                msgid = conn.search_ext(base_dn,
+                                        scope,
+                                        filter,
+                                        attrs,
+                                        serverctrls=[])
+                rtype, rdata, rmsgid, serverctrls = conn.result3(msgid)
+                pctrls = []
+
             results.extend(rdata)
-            pctrls = [c for c in serverctrls
-                      if c.controlType == LDAP_CONTROL_PAGED_RESULTS]
+
             if pctrls:
                 if PYTHON_LDAP_24:
                     cookie = pctrls[0].cookie
