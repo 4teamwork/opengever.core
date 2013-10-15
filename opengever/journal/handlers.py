@@ -1,14 +1,12 @@
 from Acquisition import aq_inner, aq_parent
-from OFS.interfaces import IObjectWillBeMovedEvent, IObjectWillBeAddedEvent
-from Products.CMFCore.interfaces import IActionSucceededEvent
-from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
 from five import grok
 from ftw.journal.events.events import JournalEntryEvent
 from ftw.journal.interfaces import IJournalizable
 from ftw.mail.mail import IMail
+from OFS.interfaces import IObjectWillBeMovedEvent, IObjectWillBeAddedEvent
 from opengever.document.document import IDocumentSchema
-from opengever.document.interfaces import IObjectCheckedInEvent
 from opengever.document.interfaces import IFileCopyDownloadedEvent
+from opengever.document.interfaces import IObjectCheckedInEvent
 from opengever.document.interfaces import IObjectCheckedOutEvent
 from opengever.document.interfaces import IObjectCheckoutCanceledEvent
 from opengever.document.interfaces import IObjectRevertedToVersion
@@ -19,6 +17,7 @@ from opengever.dossier.interfaces import IParticipationRemoved
 from opengever.journal import _
 from opengever.journal.helper import documents_list_helper
 from opengever.mail.interfaces import IDocumentSent
+from opengever.repository.events import IRepositoryPrefixUnlocked
 from opengever.repository.repositoryfolder import IRepositoryFolderSchema
 from opengever.repository.repositoryroot import IRepositoryRoot
 from opengever.sharing.behaviors import IStandard
@@ -32,6 +31,8 @@ from opengever.trash.trash import ITrashedEvent, IUntrashedEvent
 from persistent.dict import PersistentDict
 from plone.app.versioningbehavior.utils import get_change_note
 from plone.dexterity.interfaces import IDexterityContent
+from Products.CMFCore.interfaces import IActionSucceededEvent
+from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
 from zope.app.container.interfaces import IObjectAddedEvent
 from zope.app.container.interfaces import IObjectMovedEvent
 from zope.component import getMultiAdapter
@@ -130,6 +131,21 @@ def get_repository_root(context):
 
 
 LOCAL_ROLES_AQUISITION_BLOCKED = 'Local roles Aquisition Blocked'
+
+
+@grok.subscribe(IRepositoryFolderSchema, IRepositoryPrefixUnlocked)
+def repository_prefix_unlock(context, event):
+    title = _(u'label_prefix_unlocked',
+            default=u'Unlocked prefix ${prefix} in ${repository}.',
+            mapping={'prefix': event.prefix,
+                     'repository': context.title_or_id()})
+
+    journal_entry_factory(
+        get_repository_root(context),
+        REPOSITORY_PREFIX_UNLOCKED,
+        title=title)
+
+REPOSITORY_PREFIX_UNLOCKED = 'Repository prefix unlocked'
 
 
 @grok.subscribe(IRepositoryFolderSchema, ILocalRolesAcquisitionBlocked)
@@ -383,7 +399,7 @@ DOCUMENT_CHECKED_IN = 'Document checked in'
 def document_checked_in(context, event):
     user_comment = event.comment
     title = _(u'label_document_checkin',
-              default=u'Document checked in',)
+              default=u'Document checked in', )
     journal_entry_factory(context, DOCUMENT_CHECKED_IN, title,
                           comment=user_comment)
     return
@@ -540,7 +556,6 @@ def document_untrashed(context, event):
 
 # ----------------------- DOSSIER PARTICIPATION -----------------------
 
-
 PARTICIPANT_ADDED = 'Participant added'
 
 
@@ -578,7 +593,6 @@ def participation_removed(context, event):
 
 #------------------------ Mail -----------------------------------------
 
-
 MAIL_ADDED_EVENT = 'Mail added'
 
 
@@ -587,14 +601,12 @@ def mail_added(context, event):
     title = _(u'label_mail_added',
               default=u'Mail added: ${title}',
               mapping={
-              'title': context.title_or_id()
-              })
+              'title': context.title_or_id()})
 
     journal_entry_factory(context.aq_inner.aq_parent, MAIL_ADDED_EVENT, title)
     return
 
 #----------------------------Verschieben-----------------------------------
-
 
 OBJECT_MOVED_EVENT = 'Object moved'
 
@@ -610,8 +622,7 @@ def object_moved(context, event):
     title = _(u'label_object_moved',
                 default=u'Object moved: ${title}',
                 mapping={
-                'title': context.title_or_id()
-                })
+                'title': context.title_or_id()})
 
     journal_entry_factory(
         context.aq_inner.aq_parent, OBJECT_MOVED_EVENT, title)
@@ -627,8 +638,7 @@ def object_will_be_moved(context, event):
         title = _(u'label_object_cut',
                     default=u'Object cut: ${title}',
                     mapping={
-                    'title': context.title_or_id()
-                    })
+                    'title': context.title_or_id()})
 
         journal_entry_factory(
             context.aq_inner.aq_parent, OBJECT_WILL_BE_MOVED_EVENT, title)

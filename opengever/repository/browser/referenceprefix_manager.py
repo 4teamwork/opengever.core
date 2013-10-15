@@ -1,8 +1,10 @@
 from five import grok
 from opengever.base.adapters import ReferenceNumberPrefixAdpater
 from opengever.repository import _
+from opengever.repository.events import RepositoryPrefixUnlocked
 from opengever.repository.interfaces import IRepositoryFolder
 from Products.statusmessages.interfaces import IStatusMessage
+from zope.event import notify
 
 
 class ReferencePrefixManager(grok.View):
@@ -15,6 +17,8 @@ class ReferencePrefixManager(grok.View):
 
         if self.request.get('prefix'):
             refs.free_number(self.request.get('prefix'))
+            notify(RepositoryPrefixUnlocked(self.context,
+                                            self.request.get('prefix')))
             messages = IStatusMessage(self.request)
             messages.add(_("statmsg_prefix_unlocked", # TODO add translation
                         default=u"Reference prefix has been unlocked."),
