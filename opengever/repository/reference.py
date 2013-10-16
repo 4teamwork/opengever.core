@@ -39,4 +39,4 @@ class RepositoryFolderReferenceNumber(BasicReferenceNumber):
     def get_repository_number(self):
         numbers = self.get_parent_numbers()
 
-        return '.'.join(numbers.get('repository', []))
+        return self.get_active_formatter().repository_number(numbers)
