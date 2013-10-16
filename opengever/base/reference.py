@@ -1,12 +1,13 @@
 from Acquisition import aq_parent, aq_inner
-from five import grok
-from plone.dexterity.interfaces import IDexterityContent
-from plone.registry.interfaces import IRegistry
 from Products.CMFCore.interfaces import ISiteRoot
-from zope.component import getUtility, queryAdapter
-
+from five import grok
 from opengever.base.interfaces import IBaseClientID
 from opengever.base.interfaces import IReferenceNumber
+from opengever.base.interfaces import IReferenceNumberSettings
+from opengever.base.interfaces import IReferenceNumberFormatter
+from plone.dexterity.interfaces import IDexterityContent
+from plone.registry.interfaces import IRegistry
+from zope.component import getUtility, queryAdapter
 
 
 class BasicReferenceNumber(grok.Adapter):
@@ -20,10 +21,14 @@ class BasicReferenceNumber(grok.Adapter):
     def get_number(self):
         numbers = self.get_parent_numbers()
 
-        return u'%s %s / %s' % (
-            u' '.join(numbers.get('site', [])),
-            u'.'.join(numbers.get('repository', [])),
-            u'.'.join(numbers.get('dossier', [])))
+        return self.get_active_formatter().complete_number(numbers)
+
+    def get_active_formatter(self):
+        registry = getUtility(IRegistry)
+        proxy = registry.forInterface(IReferenceNumberSettings)
+
+        return queryAdapter(
+            self.context, IReferenceNumberFormatter, name=proxy.formatter)
 
     def get_local_number(self):
         return ''
