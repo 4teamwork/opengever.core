@@ -1,10 +1,10 @@
 from Acquisition import aq_base
-from Products.CMFCore.interfaces._content import IFolderish
 from five import grok
 from opengever.base.behaviors.utils import split_string_by_numbers
 from opengever.base.interfaces import IReferenceNumberPrefix
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from persistent.dict import PersistentDict
+from Products.CMFCore.interfaces._content import IFolderish
 from zope.annotation.interfaces import IAnnotations
 from zope.app.intid.interfaces import IIntIds
 from zope.component import getUtility
@@ -144,3 +144,35 @@ class ReferenceNumberPrefixAdpater(grok.Adapter):
                 return True
 
         return False
+
+    def is_prefix_used(self, prefix):
+        """ Checks if prefix is in use"""
+        if not isinstance(prefix, unicode):
+            prefix = unicode(prefix)
+        return prefix in self.get_reference_mapping()['reference_prefix'].values()
+
+    def get_number_mapping(self):
+        merge = []
+        intid_util = getUtility(IIntIds)
+        for prefix, intid in self.get_child_mapping().iteritems():
+            merge.append({'prefix': prefix,
+                        'obj': intid_util.getObject(intid),
+                        'active': (self.get_prefix_mapping()[intid] == prefix)})
+
+        def key_sorter(obj):
+            key = obj['prefix']
+            if (key.isdigit()):
+                return int(key)
+            return key
+
+        return sorted(merge, key=key_sorter)
+
+    def free_number(self, prefix):
+        if not isinstance(prefix, unicode):
+            prefix = unicode(prefix)
+
+        if self.is_prefix_used(prefix):
+            raise Exception("Prefix is in use.")
+
+        if prefix in self.get_child_mapping().keys():
+            self.get_child_mapping().pop(prefix)

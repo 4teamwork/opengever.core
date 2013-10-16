@@ -1,8 +1,6 @@
 from DateTime import DateTime
 from OFS.event import ObjectWillBeMovedEvent, ObjectWillBeAddedEvent
-from Products.CMFCore.WorkflowCore import ActionSucceededEvent
-from Products.CMFCore.utils import getToolByName
-from ftw.journal.config import JOURNAL_ENTRIES_ANNOTATIONS_KEY
+from opengever.core.testing import OPENGEVER_FUNCTIONAL_TESTING
 from opengever.document.events import FileCopyDownloadedEvent
 from opengever.document.events import ObjectCheckedInEvent
 from opengever.document.events import ObjectCheckedOutEvent
@@ -10,19 +8,20 @@ from opengever.document.events import ObjectCheckoutCanceledEvent
 from opengever.document.events import ObjectRevertedToVersion
 from opengever.dossier.behaviors.participation import Participation
 from opengever.dossier.events import ParticipationCreated, ParticipationRemoved
-from opengever.core.testing import OPENGEVER_FUNCTIONAL_TESTING
+from opengever.journal.tests.utils import get_journal_length, get_journal_entry
 from opengever.mail.events import DocumentSent
 from opengever.ogds.base.interfaces import IClientConfiguration
 from opengever.sharing.events import LocalRolesAcquisitionActivated
 from opengever.sharing.events import LocalRolesAcquisitionBlocked
 from opengever.sharing.events import LocalRolesModified
 from opengever.trash.trash import TrashedEvent, UntrashedEvent
-from plone.app.testing import TEST_USER_ID
 from plone.app.testing import setRoles
+from plone.app.testing import TEST_USER_ID
 from plone.dexterity.interfaces import IDexterityFTI
 from plone.dexterity.utils import createContentInContainer
 from plone.registry.interfaces import IRegistry
-from zope.annotation.interfaces import IAnnotations
+from Products.CMFCore.utils import getToolByName
+from Products.CMFCore.WorkflowCore import ActionSucceededEvent
 from zope.component import getUtility
 from zope.event import notify
 from zope.i18n import translate
@@ -197,7 +196,6 @@ class TestOpengeverJournalGeneral(unittest.TestCase):
             comment='ratman: sharing_reader; test_user: ' \
                 'sharing_reader, sharing_editor')
 
-
     def test_integration_document_events(self):
         """ Trigger every event of a document at least one times
         and check the journalentries.
@@ -228,13 +226,13 @@ class TestOpengeverJournalGeneral(unittest.TestCase):
             dossier)
 
         # Modified-Event - nothing changed
-        length_document = self.get_journal_length(document)
-        length_dossier = self.get_journal_length(dossier)
+        length_document = get_journal_length(document)
+        length_dossier = get_journal_length(dossier)
 
         notify(ObjectModifiedEvent(document))
 
-        self.assertTrue(length_document == self.get_journal_length(document))
-        self.assertTrue(length_dossier == self.get_journal_length(dossier))
+        self.assertTrue(length_document == get_journal_length(document))
+        self.assertTrue(length_dossier == get_journal_length(dossier))
 
         # Modified-Event - file changed
         notify(ObjectModifiedEvent(document, Attributes(Interface, 'file')))
@@ -254,10 +252,10 @@ class TestOpengeverJournalGeneral(unittest.TestCase):
         workflow = wftool.get('simple_publication_workflow')
 
         # Action-Succeeded-Event with skipped transaction
-        length = self.get_journal_length(document)
+        length = get_journal_length(document)
         notify(ActionSucceededEvent(
             document, workflow, 'check_out', 'checked_out', ))
-        self.assertTrue(length == self.get_journal_length(document))
+        self.assertTrue(length == get_journal_length(document))
 
         # Action-Succeeded-Event
         notify(ActionSucceededEvent(
@@ -277,9 +275,9 @@ class TestOpengeverJournalGeneral(unittest.TestCase):
         self.check_document_checkoutcanceled(document)
 
         # Object Reverted-To-Version-Event with fail
-        length = self.get_journal_length(document)
+        length = get_journal_length(document)
         notify(ObjectRevertedToVersion(document, '', ''))
-        self.assertTrue(length == self.get_journal_length(document))
+        self.assertTrue(length == get_journal_length(document))
 
         # Object Reverted-To-Version-Event
         notify(ObjectRevertedToVersion(document, 'v1', 'v1'))
@@ -318,8 +316,6 @@ class TestOpengeverJournalGeneral(unittest.TestCase):
             dossier,
             action_type='Task modified',
             action_title='Task modified: %s' % task.title_or_id(), )
-
-
 
     def test_integration_trashed_events(self):
         """ Trigger every event of trashing objects
@@ -444,8 +440,8 @@ class TestOpengeverJournalGeneral(unittest.TestCase):
         # Test that a normal ObjectAddedEvent does not result in an object
         # moved journal entry.
         notify(ObjectAddedEvent(document2))
-        entry1 = self.get_journal_entry(dossier2, entry=-1)
-        entry2 = self.get_journal_entry(dossier2, entry=-2)
+        entry1 = get_journal_entry(dossier2, entry=-1)
+        entry2 = get_journal_entry(dossier2, entry=-2)
         self.assertTrue(entry1.get('action').get('type') != 'Object moved')
         self.assertTrue(entry2.get('action').get('type') != 'Object moved')
 
@@ -461,28 +457,14 @@ class TestOpengeverJournalGeneral(unittest.TestCase):
                 action_title='Object cut: %s' % document.title_or_id(), )
 
         # Here we don't have a journal-entry
-        length = self.get_journal_length(dossier1)
+        length = get_journal_length(dossier1)
         notify(ObjectWillBeAddedEvent(
             document,
             dossier2,
             'newName', ))
-        self.assertTrue(length == self.get_journal_length(dossier1))
+        self.assertTrue(length == get_journal_length(dossier1))
 
     # Helpers
-    def get_journal_length(self, obj):
-        """ Get the lenght of the journal
-        """
-        return len(IAnnotations(
-            obj, JOURNAL_ENTRIES_ANNOTATIONS_KEY).get(
-                JOURNAL_ENTRIES_ANNOTATIONS_KEY))
-
-    def get_journal_entry(self, obj, entry=-1):
-        journal = IAnnotations(
-            obj, JOURNAL_ENTRIES_ANNOTATIONS_KEY).get(
-            JOURNAL_ENTRIES_ANNOTATIONS_KEY)[entry]
-
-        return journal
-
     def check_annotation(self,
                          obj,
                          action_type='',
@@ -494,7 +476,7 @@ class TestOpengeverJournalGeneral(unittest.TestCase):
         """
         time = DateTime().Date()
 
-        journal = self.get_journal_entry(obj, entry=check_entry)
+        journal = get_journal_entry(obj, entry=check_entry)
         self.assertEquals(comment, journal.get('comments'))
         self.assertEquals(actor, journal.get('actor'))
         self.assertEquals(time, journal.get('time').Date())
@@ -611,7 +593,7 @@ class TestOpengeverJournalGeneral(unittest.TestCase):
             actor=TEST_USER_ID,
             comment='Attachments: <span><a href="./@@resolve_oguid?oguid=Test:'+str(
                 intid)+'">'+ doc.Title()+
-            '</a></span> | Receivers: test@test.ch | Message: Mymessage',)
+            '</a></span> | Receivers: test@test.ch | Message: Mymessage', )
 
     def check_document_copy_downloaded(self, obj):
         self.check_annotation(

@@ -50,7 +50,10 @@ class FunctionalTestCase(TestCase):
         self.assertEquals(expected_terms, effective_terms)
 
     def assertTermKeys(self, keys, vocabulary):
-        self.assertEquals(keys, [term.value for term in vocabulary])
+        terms = [term.value for term in vocabulary]
+        keys.sort()
+        terms.sort()
+        self.assertEquals(keys, terms)
 
     def assertInTerms(self, value, vocabulary):
         self.assertIn(value, [term.value for term in vocabulary])
