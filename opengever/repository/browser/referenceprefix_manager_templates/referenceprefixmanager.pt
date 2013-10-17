@@ -5,50 +5,48 @@
       lang="en"
       metal:use-macro="context/main_template/macros/master"
       i18n:domain="opengever.repository">
-<body>
 
-<metal:main fill-slot="main">
-    <tal:main-macro metal:define-macro="main">
+  <body>
+    <metal:main fill-slot="main">
+      <tal:main-macro metal:define-macro="main">
 
-    <div tal:replace="structure provider:plone.abovecontenttitle" />
+        <div tal:replace="structure provider:plone.abovecontenttitle" />
 
-    <h1 class="documentFirstHeading" i18n:translate="prefman_title">Reference Prefix Manager</h1>
+        <h1 class="documentFirstHeading" i18n:translate="prefman_title">Reference Prefix Manager</h1>
 
-    <div tal:replace="structure provider:plone.belowcontenttitle" />
+        <div tal:replace="structure provider:plone.belowcontenttitle" />
 
-    <div tal:replace="structure provider:plone.abovecontentbody" />
+        <div tal:replace="structure provider:plone.abovecontentbody" />
 
-	<table class="listing">
-		<thead>
-			<th i18n:translate="position">Position</th>
-			<th i18n:translate="name">Name</th>
-			<th i18n:translate="unlock">Unlock</th>
-		</thead>
-		<tbody>
+	      <table id="reference_prefix_manager_table" class="listing">
+		      <thead>
+			      <th i18n:translate="position">Position</th>
+			      <th i18n:translate="name">Name</th>
+			      <th i18n:translate="unlock">Unlock</th>
+		      </thead>
+		      <tbody>
             <tr tal:condition="not:view/prefix_mapping">
-                <td colspan="4" i18n:translate="empty_repository">No nested repositorys available.</td>
+              <td colspan="4" i18n:translate="empty_repository">No nested repositorys available.</td>
             </tr>
-			<tr tal:repeat="posnumber view/prefix_mapping">
-				<td tal:content="posnumber/prefix"></td>
-				<td tal:content="posnumber/obj/effective_title"></td>
-                <td tal:condition="not: posnumber/active">
-                    <a class="button"
-                        tal:attributes="href string: @@referenceprefix_manager?prefix=${posnumber/prefix}"
-                        i18n:translate="unlock">Unlock</a>
-                </td>
-				<td tal:condition="posnumber/active">
-					<input type="button" value="In use" disabled="disabled" 
-                        tal:condition="posnumber/active" i18n:attributes="value" />
-				</td>
-			</tr>
-		</tbody>
-	</table>
+			      <tr tal:repeat="posnumber view/prefix_mapping">
+				      <td tal:content="posnumber/prefix"></td>
+				      <td tal:content="posnumber/obj/effective_title"></td>
+              <td tal:condition="not: posnumber/active">
+                <a class="unlock button"
+                   tal:attributes="href string: @@referenceprefix_manager?prefix=${posnumber/prefix}"
+                   i18n:translate="unlock">Unlock</a>
+              </td>
+				      <td tal:condition="posnumber/active">
+                <span class="in_use button disabled" i18n:translate="In use">In use</span>
+				      </td>
+			      </tr>
+		      </tbody>
+	      </table>
 
-    <div tal:replace="structure provider:plone.belowcontentbody" />
+        <div tal:replace="structure provider:plone.belowcontentbody" />
 
-    </tal:main-macro>
-</metal:main>
+      </tal:main-macro>
+    </metal:main>
 
-</body>
+  </body>
 </html>
-
