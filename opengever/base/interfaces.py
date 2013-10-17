@@ -83,7 +83,7 @@ class IReferenceNumber(Interface):
         in the given numbers dict."""
 
     def get_parent_numbers():
-        """Returns a list of all number parts, from the context up to
+        """Returns a dict with list of all number parts, from the context up to
         the plone site, grouped by the context type.
 
         Examples:
@@ -208,7 +208,8 @@ class IUniqueNumberGenerator(Interface):
 
 
 class IRepositoryPathSourceBinderQueryModificator(Interface):
-    """Markerinterface for RepositoryPathSourceBinderQueryModificator adapter"""
+    """Markerinterface for RepositoryPathSourceBinderQueryModificator
+    adapter"""
 
     def modify_query(self, query):
         """Modify the ReppositoryPathSourceBinderQuery"""
