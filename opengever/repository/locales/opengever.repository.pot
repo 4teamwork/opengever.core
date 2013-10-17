@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2011-01-27 18:21+0000\n"
+"POT-Creation-Date: 2013-10-07 12:09+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,6 +17,15 @@ msgstr ""
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: opengever.repository\n"
 
+#: ./opengever/repository/browser/referenceprefix_manager_templates/referenceprefixmanager.pt:43
+msgid "In use"
+msgstr ""
+
+#: ./opengever/repository/profiles/default/actions.xml
+#: ./opengever/repository/upgrades/profiles/2601/actions.xml
+msgid "Prefix Manager"
+msgstr ""
+
 #: ./opengever/repository/profiles/default/types/opengever.repository.repositoryfolder.xml
 msgid "RepositoryFolder"
 msgstr ""
@@ -25,8 +34,23 @@ msgstr ""
 msgid "RepositoryRoot"
 msgstr ""
 
-#: ./opengever/repository/repositoryfolder.py:43
+#: ./opengever/repository/repositoryfolder.py:44
 msgid "Title"
+msgstr ""
+
+#: ./opengever/repository/profiles/default/actions.xml
+#: ./opengever/repository/upgrades/profiles/2601/actions.xml
+msgid "Unlock unused repository prefixes."
+msgstr ""
+
+#. Default: "Active"
+#: ./opengever/repository/browser/referenceprefix_manager_templates/referenceprefixmanager.pt:25
+msgid "active"
+msgstr ""
+
+#. Default: "No nested repositorys available."
+#: ./opengever/repository/browser/referenceprefix_manager_templates/referenceprefixmanager.pt:31
+msgid "empty_repository"
 msgstr ""
 
 #. Default: "A Sibling with the same reference number is existing"
@@ -36,25 +60,25 @@ msgstr ""
 
 #. Default: "Common"
 #: ./opengever/repository/behaviors/referenceprefix.py:21
-#: ./opengever/repository/repositoryfolder.py:28
+#: ./opengever/repository/repositoryfolder.py:29
 msgid "fieldset_common"
 msgstr ""
 
 #. Default: "Select all additional dossier types which should be addable in this repository folder."
-#: ./opengever/repository/repositoryfolder.py:90
+#: ./opengever/repository/repositoryfolder.py:91
 msgid "help_addable_dossier_types"
 msgstr ""
 
 #. Default: "A short summary of the content."
-#: ./opengever/repository/repositoryfolder.py:49
+#: ./opengever/repository/repositoryfolder.py:50
 msgid "help_description"
 msgstr ""
 
-#: ./opengever/repository/repositoryfolder.py:83
+#: ./opengever/repository/repositoryfolder.py:84
 msgid "help_former_reference"
 msgstr ""
 
-#: ./opengever/repository/repositoryfolder.py:69
+#: ./opengever/repository/repositoryfolder.py:70
 msgid "help_location"
 msgstr ""
 
@@ -62,41 +86,41 @@ msgstr ""
 msgid "help_reference_number_prefix"
 msgstr ""
 
-#: ./opengever/repository/repositoryfolder.py:77
+#: ./opengever/repository/repositoryfolder.py:78
 msgid "help_referenced_activity"
 msgstr ""
 
-#: ./opengever/repository/repositoryfolder.py:57
-#: ./opengever/repository/repositoryroot.py:11
+#: ./opengever/repository/repositoryfolder.py:58
+#: ./opengever/repository/repositoryroot.py:19
 msgid "help_valid_from"
 msgstr ""
 
-#: ./opengever/repository/repositoryfolder.py:63
-#: ./opengever/repository/repositoryroot.py:17
+#: ./opengever/repository/repositoryfolder.py:64
+#: ./opengever/repository/repositoryroot.py:25
 msgid "help_valid_until"
 msgstr ""
 
-#: ./opengever/repository/repositoryroot.py:23
+#: ./opengever/repository/repositoryroot.py:31
 msgid "help_version"
 msgstr ""
 
 #. Default: "Addable dossier types"
-#: ./opengever/repository/repositoryfolder.py:88
+#: ./opengever/repository/repositoryfolder.py:89
 msgid "label_addable_dossier_types"
 msgstr ""
 
 #. Default: "Description"
-#: ./opengever/repository/repositoryfolder.py:48
+#: ./opengever/repository/repositoryfolder.py:49
 msgid "label_description"
 msgstr ""
 
 #. Default: "Former reference"
-#: ./opengever/repository/repositoryfolder.py:82
+#: ./opengever/repository/repositoryfolder.py:83
 msgid "label_former_reference"
 msgstr ""
 
 #. Default: "Location"
-#: ./opengever/repository/repositoryfolder.py:68
+#: ./opengever/repository/repositoryfolder.py:69
 msgid "label_location"
 msgstr ""
 
@@ -106,30 +130,50 @@ msgid "label_reference_number_prefix"
 msgstr ""
 
 #. Default: "Referenced activity"
-#: ./opengever/repository/repositoryfolder.py:74
+#: ./opengever/repository/repositoryfolder.py:75
 msgid "label_referenced_activity"
 msgstr ""
 
 #. Default: "Valid from"
-#: ./opengever/repository/repositoryfolder.py:56
-#: ./opengever/repository/repositoryroot.py:10
+#: ./opengever/repository/repositoryfolder.py:57
+#: ./opengever/repository/repositoryroot.py:18
 msgid "label_valid_from"
 msgstr ""
 
 #. Default: "Valid until"
-#: ./opengever/repository/repositoryfolder.py:62
-#: ./opengever/repository/repositoryroot.py:16
+#: ./opengever/repository/repositoryfolder.py:63
+#: ./opengever/repository/repositoryroot.py:24
 msgid "label_valid_until"
 msgstr ""
 
 #. Default: "Version"
-#: ./opengever/repository/repositoryroot.py:22
+#: ./opengever/repository/repositoryroot.py:30
 msgid "label_version"
 msgstr ""
 
 #. Default: "State:"
-#: ./opengever/repository/repositoryfolder_templates/byline.pt:5
+#: ./opengever/repository/repositoryfolder_templates/byline.pt:11
 msgid "label_workflow_state"
+msgstr ""
+
+#. Default: "Name"
+#: ./opengever/repository/browser/referenceprefix_manager_templates/referenceprefixmanager.pt:24
+msgid "name"
+msgstr ""
+
+#. Default: "Position"
+#: ./opengever/repository/browser/referenceprefix_manager_templates/referenceprefixmanager.pt:23
+msgid "position"
+msgstr ""
+
+#. Default: "Reference Prefix Manager"
+#: ./opengever/repository/browser/referenceprefix_manager_templates/referenceprefixmanager.pt:15
+msgid "prefman_title"
+msgstr ""
+
+#. Default: "Reference prefix has been unlocked."
+#: ./opengever/repository/browser/referenceprefix_manager.py:19
+msgid "statmsg_prefix_unlocked"
 msgstr ""
 
 #. Default: "Documents:"
@@ -145,5 +189,10 @@ msgstr ""
 #. Default: "Tasks:"
 #: ./opengever/repository/browser/overview_templates/repositoryrootoverview.pt:11
 msgid "th_task"
+msgstr ""
+
+#. Default: "Unlock"
+#: ./opengever/repository/browser/referenceprefix_manager_templates/referenceprefixmanager.pt:26
+msgid "unlock"
 msgstr ""
 
