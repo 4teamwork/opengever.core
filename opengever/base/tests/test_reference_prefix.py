@@ -1,7 +1,10 @@
 from ftw.builder import Builder
 from ftw.builder import create
 from opengever.base.interfaces import IReferenceNumberPrefix
+from opengever.base.interfaces import IReferenceNumberSettings
 from opengever.testing import FunctionalTestCase
+from plone.registry.interfaces import IRegistry
+from zope.component import getUtility
 
 
 class TestReferencePrefixAdapter(FunctionalTestCase):
@@ -13,8 +16,14 @@ class TestReferencePrefixAdapter(FunctionalTestCase):
         self.repository = create(Builder('repository'))
         self.adapter = IReferenceNumberPrefix(self.repository)
 
-    def test_numbering_starts_at_one(self):
+    def test_numbering_starts_at_one_by_default(self):
         self.assertEquals(u'1', self.adapter.get_next_number())
+
+    def test_numbering_starts_at_configured_value_in_registry(self):
+        registry = getUtility(IRegistry)
+        proxy = registry.forInterface(IReferenceNumberSettings)
+        proxy.refernce_prefix_starting_point = u'0'
+        self.assertEquals(u'0', self.adapter.get_next_number())
 
     def test_numbering_continues_after_nine(self):
         self.set_numbering_base(u'9')
