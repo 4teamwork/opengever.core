@@ -1,10 +1,12 @@
 from Acquisition import aq_base
+from Products.CMFCore.interfaces._content import IFolderish
 from five import grok
 from opengever.base.behaviors.utils import split_string_by_numbers
 from opengever.base.interfaces import IReferenceNumberPrefix
+from opengever.base.interfaces import IReferenceNumberSettings
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from persistent.dict import PersistentDict
-from Products.CMFCore.interfaces._content import IFolderish
+from plone.registry.interfaces import IRegistry
 from zope.annotation.interfaces import IAnnotations
 from zope.app.intid.interfaces import IIntIds
 from zope.component import getUtility
@@ -52,6 +54,11 @@ class ReferenceNumberPrefixAdpater(grok.Adapter):
             return DOSSIER_KEY
         return REPOSITORY_FOLDER_KEY
 
+    def get_first_number(self):
+        registry = getUtility(IRegistry)
+        proxy = registry.forInterface(IReferenceNumberSettings)
+        return proxy.reference_prefix_starting_point
+
     def get_next_number(self, obj=None):
         """ return the next possible reference number for object
         at the actual context
@@ -61,7 +68,7 @@ class ReferenceNumberPrefixAdpater(grok.Adapter):
 
         if not child_mapping.keys():
             # It's the first number ever issued
-            return u'1'
+            return self.get_first_number()
         else:
             prefixes_in_use = child_mapping.keys()
             # Sort the list of unicode strings *numerically*

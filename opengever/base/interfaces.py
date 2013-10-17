@@ -141,6 +141,11 @@ class IReferenceNumberSettings(Interface):
         source='opengever.base.ReferenceFormatterVocabulary',
         default='dotted')
 
+    reference_prefix_starting_point = schema.TextLine(
+        title=u"Starting Point for reference_number prefixs",
+        description=u"Used as default when creating the first item on a level.",
+        default=u"1")
+
 
 class ISequenceNumber(Interface):
     """  The sequence number utility provides a getNumber(obj) method
