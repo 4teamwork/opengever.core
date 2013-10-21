@@ -7,10 +7,6 @@ Changelog
 - Update reference prefix manager to the new version of adapters.
   [lknoepfel]
 
-- LDAP import: If server doesn't support page controls, fall back to issuing
-  search request without them.
-  [lgraf]
-
 - Fixed client setup: use system user instead of hardcoded username.
   [lknoepfel]
 
@@ -63,6 +59,14 @@ Changelog
 
 - Use ftw.builder instead of our own builder implementation.
   [phgross]
+
+
+3.0.1 (2013-10-21)
+------------------
+
+- LDAP import: If server doesn't support page controls, fall back to issuing
+  search request without them.
+  [lgraf]
 
 
 3.0 (2013-08-14)
