@@ -5,3 +5,4 @@ include *.txt
 global-exclude *.pyc
 global-exclude ._*
 global-exclude *.mo
+exclude opengever/examplecontent/profiles/4teamwork-ldap/ldap_plugin.xml
