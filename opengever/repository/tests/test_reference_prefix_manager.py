@@ -14,7 +14,7 @@ class TestReferencePrefixManager(FunctionalTestCase):
 
     def setUp(self):
         super(TestReferencePrefixManager, self).setUp()
-        self.grant('Administrator')
+        self.grant('Manager')
 
         self.root = create(Builder('repository_root'))
         self.repo = create(Builder('repository')
