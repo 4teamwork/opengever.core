@@ -112,7 +112,7 @@ class ResetReferencePrefixMapping(object):
                 if PrefixAdapter(parent).get_number(obj) != item.get(
                         'reference_number_prefix'):
 
-                    PrefixAdapter(parent).child_mapping.pop(
+                    PrefixAdapter(parent).get_child_mapping().pop(
                         PrefixAdapter(parent).get_number(obj))
 
             yield item
