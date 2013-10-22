@@ -11,8 +11,14 @@ Changelog
   search request without them.
   [lgraf]
 
+- Fixed client setup: use system user instead of hardcoded username.
+  [lknoepfel]
+
 - Fixed redirect when creating a subtask.
   [phgross]
+
+- Integrate ftw.zipexport.
+  [lknoepfel]
 
 - Reworked forwarding refuse and reassign functionality.
   [phgross]
@@ -35,6 +41,9 @@ Changelog
 - Reworked document_author resolution and displaying value in listings.
   [phgross]
 
+- Fixed permissions problems when copying dossiers.
+  [lgraf]
+
 - LDAP import: Use the respective property from LDAPUserFolder to determine which is the
   UID attribute.
   [lgraf]
@@ -49,12 +58,15 @@ Changelog
 - Added modify deadline form and functionality.
   [phgross]
 
+- Removed client prefixes in single client setups.
+  [lknoepfel]
+
+- Use ftw.builder instead of our own builder implementation.
+  [phgross]
+
 
 3.0 (2013-08-14)
 ----------------
-
-- Removed client prefixes in single client setups.
-  [lknoepfel]
 
 - Make exposator work for both izug.basetheme and plonetheme.teamraum.
   [Julian Infanger]
