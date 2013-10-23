@@ -35,7 +35,13 @@ class CleanupReferencePrefixMapping(UpgradeStep):
                  PREFIX_REF_KEY: {}})
 
             for number, intid in annotations.get(CHILD_REF_KEY).items():
-                if IDossierMarker.providedBy(intids.getObject(intid)):
+                try:
+                    child = intids.getObject(intid)
+                except KeyError:
+                    # the object with this intid does not longer exist.
+                    continue
+
+                if IDossierMarker.providedBy(child):
                     dossier_mapping[CHILD_REF_KEY][number] = intid
                     dossier_mapping[PREFIX_REF_KEY][intid] = number
                 else:

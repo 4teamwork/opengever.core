@@ -4,7 +4,9 @@ Changelog
 3.1.1 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Fixed CleanupReferencePrefixMapping upgradestep
+  (works now for reference to no longer existing objects):
+  [phgross]
 
 
 3.1 (2013-10-23)
