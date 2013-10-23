@@ -117,7 +117,6 @@ class TestMainDossier(FunctionalTestCase):
     is_special_dossier = False
 
     default_contentmenu_order = ['Document',
-                                 'Document with docucomposer',
                                  'document_with_template',
                                  'Task',
                                  'Add task from template',
@@ -126,7 +125,6 @@ class TestMainDossier(FunctionalTestCase):
                                 ]
 
     default_contentmenu_order_subdossier = ['Document',
-                                            'Document with docucomposer',
                                             'document_with_template',
                                             'Task',
                                             'Add task from template',

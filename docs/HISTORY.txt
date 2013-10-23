@@ -4,6 +4,9 @@ Changelog
 3.1.2 (unreleased)
 ------------------
 
+- Moved docucomposer in own package.
+  [lknoepfel]
+
 - LDAP util: Only use PagedResults controls if the server advertises to support them.
   [lgraf]
 
@@ -32,7 +35,6 @@ Changelog
 - Fixed CleanupReferencePrefixMapping upgradestep
   (works now for reference to no longer existing objects):
   [phgross]
-
 
 3.1 (2013-10-23)
 ----------------

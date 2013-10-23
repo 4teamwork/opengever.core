@@ -63,17 +63,6 @@
         <permission value="opengever.dossier: Add templatedossier"/>
     </action>
 
-    <action action_id="document_with_docucomposer"
-            visible="True"
-            title="Document with docucomposer"
-            category="folder_factories"
-            url_expr="string:${object_url}/docucomposer-wizard"
-            icon_expr=""
-            condition_expr=""
-            i18n:domain="opengever.dossier">
-        <permission value="Add portal content"/>
-    </action>
-
     <!-- Tabbedview tabs-->
     <action title="Templates" action_id="documents" category="tabbedview-tabs"
             condition_expr="" url_expr="string:#" visible="True">

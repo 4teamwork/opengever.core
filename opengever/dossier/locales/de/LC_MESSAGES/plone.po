@@ -17,9 +17,6 @@ msgstr ""
 msgid "Add Participant"
 msgstr "Beteiligung hinzufügen"
 
-msgid "Document with docucomposer"
-msgstr "Dokument mit Docucomposer"
-
 msgid "Dossier state changed to dossier-state-active"
 msgstr "Status des Dossiers geändert zu In Bearbeitung"
 
