@@ -1,0 +1,25 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+    i18n_domain="opengever.latex">
+
+    <!-- 1 -> 2601 -->
+    <genericsetup:upgradeStep
+        title="Initalize opengever.latex settings in the registry"
+        description=""
+        source="1"
+        destination="2601"
+        handler="opengever.latex.upgrades.to2601.InitalizeLaTeXSettings"
+        profile="opengever.latex:default"
+        />
+
+    <genericsetup:registerProfile
+        name="2601"
+        title="opengever.latex: upgrade profile 2601"
+        description=""
+        directory="profiles/2601"
+        for="Products.CMFPlone.interfaces.IMigratingPloneSiteRoot"
+        provides="Products.GenericSetup.interfaces.EXTENSION"
+        />
+
+</configure>

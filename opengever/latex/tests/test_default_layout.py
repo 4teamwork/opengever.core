@@ -1,8 +1,13 @@
 from ftw.testing import MockTestCase
 from mocker import ANY
+from opengever.latex.interfaces import ILaTeXSettings
 from opengever.latex.layouts.default import DefaultLayout
 from opengever.latex.testing import LATEX_ZCML_LAYER
 from opengever.ogds.base import utils
+from plone.registry.interfaces import IRegistry
+
+
+FAKE_LOCATION = 'fake_location'
 
 
 class TestDefaultLayout(MockTestCase):
@@ -18,6 +23,11 @@ class TestDefaultLayout(MockTestCase):
         get_current_client = self.mocker.replace(
             'opengever.ogds.base.utils.get_current_client')
         self.expect(get_current_client()).result(client).count(0, None)
+
+        registry_mock = self.stub()
+        self.expect(
+            registry_mock.forInterface(ILaTeXSettings).location).result(FAKE_LOCATION)
+        self.mock_utility(registry_mock, IRegistry)
 
         self.portal_membership = self.stub()
         self.mock_tool(self.portal_membership, 'portal_membership')
@@ -91,7 +101,7 @@ class TestDefaultLayout(MockTestCase):
             'show_contact': True,
             'show_logo': True,
             'show_organisation': False,
-            'location': 'Zug',
+            'location': FAKE_LOCATION,
             }
 
         self.assertEqual(layout.get_render_arguments(), args)
@@ -114,7 +124,7 @@ class TestDefaultLayout(MockTestCase):
             'show_contact': True,
             'show_logo': True,
             'show_organisation': False,
-            'location': 'Zug',
+            'location': FAKE_LOCATION,
             }
 
         self.assertEqual(layout.get_render_arguments(), args)

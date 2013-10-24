@@ -3,7 +3,10 @@ from five import grok
 from ftw.pdfgenerator.interfaces import IBuilder
 from ftw.pdfgenerator.interfaces import ILaTeXLayout
 from ftw.pdfgenerator.layout.makolayout import MakoLayoutBase
+from opengever.latex.interfaces import ILaTeXSettings
 from opengever.ogds.base.utils import get_current_client
+from plone.registry.interfaces import IRegistry
+from zope.component import getUtility
 from zope.interface import Interface
 
 
@@ -21,9 +24,6 @@ class DefaultLayout(grok.MultiAdapter, MakoLayoutBase):
         self.show_contact = True
         self.show_logo = True
         self.show_organisation = False
-
-        # XXX do not use zug specific default location in OG core.
-        self.location = 'Zug'
 
     def before_render_hook(self):
         # XXX use general logo and replace it in zug customization
@@ -67,7 +67,11 @@ class DefaultLayout(grok.MultiAdapter, MakoLayoutBase):
             'show_contact': self.show_contact,
             'show_logo': self.show_logo,
             'show_organisation': self.show_organisation,
-            'location': self.location}
+            'location': self.get_location()}
+
+    def get_location(self):
+        registry = getUtility(IRegistry)
+        return registry.forInterface(ILaTeXSettings).location
 
     def get_owner(self):
         mtool = getToolByName(self.context, 'portal_membership')
