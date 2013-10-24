@@ -76,7 +76,6 @@ class TestLandscapeLayout(MockTestCase):
         latex = layout.render_latex('CONTENT LATEX')
         self.assertIn('CONTENT LATEX', latex)
         self.assertIn(layout.get_packages_latex(), latex)
-        self.assertIn(r'\includegraphics{logo.pdf}', latex)
         self.assertNotIn(r'T direkt ', latex)
         self.assertNotIn(r'\phantom{foo}\vspace{-2\baselineskip}', latex)
 

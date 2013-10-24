@@ -22,13 +22,10 @@ class DefaultLayout(grok.MultiAdapter, MakoLayoutBase):
     def __init__(self, context, request, builder):
         super(DefaultLayout, self).__init__(context, request, builder)
         self.show_contact = True
-        self.show_logo = True
+        self.show_logo = False
         self.show_organisation = False
 
     def before_render_hook(self):
-        # XXX use general logo and replace it in zug customization
-        self.add_raw_template_file('logo.pdf')
-
         self.use_package('inputenc', options='utf8', append_options=False)
         self.use_package('ae,aecompl')
         self.use_package('babel', 'ngerman', append_options=False)

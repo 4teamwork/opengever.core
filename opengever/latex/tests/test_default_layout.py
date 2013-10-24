@@ -45,14 +45,13 @@ class TestDefaultLayout(MockTestCase):
         layout = DefaultLayout(context, request, builder)
 
         self.assertEqual(layout.show_contact, True)
-        self.assertEqual(layout.show_logo, True)
+        self.assertEqual(layout.show_logo, False)
         self.assertEqual(layout.show_organisation, False)
 
     def test_before_render_hook(self):
         context = self.create_dummy()
         request = self.create_dummy()
         builder = self.mocker.mock()
-        self.expect(builder.add_file('logo.pdf', data=ANY))
 
         self.replay()
         layout = DefaultLayout(context, request, builder)
@@ -99,7 +98,7 @@ class TestDefaultLayout(MockTestCase):
             'client_title': 'CLIENT ONE',
             'member_phone': '012 345 6789',
             'show_contact': True,
-            'show_logo': True,
+            'show_logo': False,
             'show_organisation': False,
             'location': FAKE_LOCATION,
             }
@@ -122,7 +121,7 @@ class TestDefaultLayout(MockTestCase):
             'client_title': 'CLIENT ONE',
             'member_phone': '',
             'show_contact': True,
-            'show_logo': True,
+            'show_logo': False,
             'show_organisation': False,
             'location': FAKE_LOCATION,
             }
@@ -148,7 +147,6 @@ class TestDefaultLayout(MockTestCase):
         latex = layout.render_latex('LATEX CONTENT')
         self.assertIn('LATEX CONTENT', latex)
         self.assertIn(layout.get_packages_latex(), latex)
-        self.assertIn(r'\includegraphics{logo.pdf}', latex)
         self.assertIn(r'T direkt ', latex)
         self.assertIn(r'\phantom{foo}\vspace{-2\baselineskip}', latex)
 
