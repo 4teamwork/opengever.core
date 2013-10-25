@@ -18,10 +18,6 @@ class DocumentByline(BylineBase):
         document = IDocumentSchema(self.context)
         return document.end
 
-    def get_filing_no(self):
-        document = IDocumentSchema(self.context)
-        return getattr(document, 'filing_no', None)
-
     def get_items(self):
         return [
             {
