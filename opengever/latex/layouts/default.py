@@ -64,7 +64,7 @@ class DefaultLayout(grok.MultiAdapter, MakoLayoutBase):
             'show_contact': self.show_contact,
             'show_logo': self.show_logo,
             'show_organisation': self.show_organisation,
-            'location': self.get_location()}
+            'location': convert(self.get_location())}
 
     def get_location(self):
         registry = getUtility(IRegistry)
