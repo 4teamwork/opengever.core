@@ -3,6 +3,7 @@ from five import grok
 from ftw.pdfgenerator.interfaces import IBuilder
 from ftw.pdfgenerator.interfaces import ILaTeXLayout
 from ftw.pdfgenerator.layout.makolayout import MakoLayoutBase
+from opengever.base.interfaces import IBaseClientID
 from opengever.latex.interfaces import ILaTeXSettings
 from opengever.ogds.base.utils import get_current_client
 from plone.registry.interfaces import IRegistry
@@ -55,16 +56,19 @@ class DefaultLayout(grok.MultiAdapter, MakoLayoutBase):
         if owner:
             owner_phone = owner.getProperty('phone_number', '&nbsp;')
 
-        client = get_current_client()
         convert = self.get_converter().convert
 
         return {
-            'client_title': convert(client.title),
+            'client_title': convert(self.get_client_title()),
             'member_phone': convert(owner_phone),
             'show_contact': self.show_contact,
             'show_logo': self.show_logo,
             'show_organisation': self.show_organisation,
             'location': convert(self.get_location())}
+
+    def get_client_title(self):
+        registry = getUtility(IRegistry)
+        return registry.forInterface(IBaseClientID).client_title
 
     def get_location(self):
         registry = getUtility(IRegistry)
