@@ -123,9 +123,15 @@ class OGDSUpdater(grok.Adapter):
             for ldap_group in ldap_groups:
                 dn, info = ldap_group
 
-                # Group name is in the 'cn' attribute, which is mapped to 'fullname'
-                info['groupid'] = info['fullname']
+                # Group name is in the 'cn' attribute, which may be mapped to 'fullname'
+                try:
+                    info['groupid'] = info['cn'][0]
+                except KeyError:
+                    info['groupid'] = info['fullname'][0]
+
+                info['groupid'] = info['groupid'].decode('utf-8')
                 groupid = info['groupid']
+
                 if not self.group_exists(groupid):
                     # Create the new group
                     group = Group(groupid)
