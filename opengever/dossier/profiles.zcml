@@ -2,7 +2,7 @@
     xmlns="http://namespaces.zope.org/zope"
     xmlns:genericsetup="http://namespaces.zope.org/genericsetup">
 
-  <!-- Register the installation GenericSetup extension profile -->
+  <!-- default profile -->
   <genericsetup:registerProfile
       name="default"
       title="opengever.dossier"
@@ -11,11 +11,26 @@
       provides="Products.GenericSetup.interfaces.EXTENSION"
       />
 
-  <!-- Register the import step -->
   <genericsetup:importStep
       name="opengever.dossier"
       title="opengever.dossier catalog indexes"
       description=""
       handler="opengever.dossier.setuphandlers.import_various" />
+
+
+  <!-- filing profile -->
+  <genericsetup:registerProfile
+      name="filing"
+      title="opengever.dossier.filing"
+      directory="profiles/filing"
+      description=""
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      />
+
+  <genericsetup:importStep
+      name="opengever.dossier.filing_indexes"
+      title="filing catalog indexes"
+      description=""
+      handler="opengever.dossier.filing.setuphandlers.import_various" />
 
 </configure>

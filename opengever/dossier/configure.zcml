@@ -18,7 +18,6 @@
     <include package=".upgrades" />
 
     <include file="behaviors.zcml" />
-
     <include file="profiles.zcml" />
 
     <i18n:registerTranslations directory="locales" />

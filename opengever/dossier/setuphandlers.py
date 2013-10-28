@@ -31,30 +31,16 @@ def add_catalog_indexes(context, logger=None):
 
     # Specify the indexes you want, with ('index_name', 'index_type', 'args')
     wanted = (('is_subdossier', 'FieldIndex', {}),
-              ('filing_no', 'FieldIndex', {}),
               ('containing_subdossier', 'FieldIndex', {}),
-              ('containing_dossier', 'FieldIndex', {}),
-              ('searchable_filing_no', 'ZCTextIndex',
-               {'index_type': 'Okapi BM25 Rank',
-                'lexicon_id': 'plone_lexicon'}),
-              )
+              ('containing_dossier', 'FieldIndex', {}),)
+
     indexables = []
     for name, meta_type, args in wanted:
         if name not in indexes:
-
-            if meta_type == 'ZCTextIndex':
-                class Extras:
-                    def __init__(self, **kwargs):
-                        for key, value in kwargs.items():
-                            setattr(self, key, value)
-
-                catalog.addIndex(name, meta_type, Extras(**args))
-
-            else:
-                catalog.addIndex(name, meta_type)
-
+            catalog.addIndex(name, meta_type)
             indexables.append(name)
             logger.info("Added %s for field %s.", meta_type, name)
+
     if len(indexables) > 0:
         logger.info("Indexing new indexes %s.", ', '.join(indexables))
         catalog.manage_reindexIndex(ids=indexables)
