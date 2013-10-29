@@ -1,14 +1,18 @@
 from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
 from datetime import datetime
+from ftw.pdfgenerator.interfaces import ILaTeXLayout
+from ftw.pdfgenerator.interfaces import ILaTeXView
 from ftw.testing import MockTestCase
 from opengever.base.interfaces import IBaseClientID
-from opengever.base.interfaces import IReferenceNumber, ISequenceNumber
+from opengever.base.interfaces import IReferenceNumber
 from opengever.dossier.behaviors.dossier import IDossierMarker, IDossier
-from opengever.latex.dossiercover import DossierCoverPDFView
+from opengever.latex.dossiercover import IDossierCoverLayer
 from opengever.latex.testing import LATEX_ZCML_LAYER
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.repository.interfaces import IRepositoryFolder
+from opengever.repository.repositoryroot import IRepositoryRoot
 from plone.registry.interfaces import IRegistry
+from zope.component import getMultiAdapter
 from zope.schema import vocabulary
 
 
@@ -39,11 +43,12 @@ class TestDossierCoverPDFView(MockTestCase):
         tree.dossier = self.providing_stub([IDossierMarker])
         tree.subfolder = self.providing_stub([IRepositoryFolder])
         tree.folder = self.providing_stub([IRepositoryFolder])
-        tree.repository = self.stub()
+        tree.repository = self.providing_stub([IRepositoryRoot])
         tree.site = self.providing_stub([IPloneSiteRoot])
 
         self.expect(tree.subdossier.toLocalizedTime).result(
             toLocalizedTime)
+        self.expect(tree.repository.version).result('Repository 2.0 2013')
 
         if long_title:
             self.expect(tree.subfolder.Title()).result(10 * 'Lorem ipsum subfolder ')
@@ -92,25 +97,7 @@ class TestDossierCoverPDFView(MockTestCase):
         self.expect(ref_adapter(context_mock).get_number()).result(
             defaults.get('referencenr'))
 
-        # filingprefix
-        self.expect(IDossier(context_mock).filing_prefix).result('PREFIX')
-        voc = self.mocker.mock()
-        self.expect(self.getVocabularyRegistry().get(
-                context_mock, 'opengever.dossier.type_prefixes')).result(voc)
-        self.expect(voc.by_token.get('PREFIX').title).result(defaults.get(
-                'filingprefix'))
-
-        # filing nr
-        self.expect(IDossier(context_mock).filing_no).result(
-            defaults.get('filingnr'))
-
-        # sequence nr
-        seq_utility = self.mocker.mock()
-        self.mock_utility(seq_utility, ISequenceNumber)
-        self.expect(seq_utility.get_number(context_mock)).result(
-            defaults.get('sequencenr'))
-
-        # title / description / dastes
+        # title / description
         self.expect(context_mock.Title()).result(defaults.get('title'))
         self.expect(context_mock.Description()).result(
             defaults.get('description'))
@@ -128,112 +115,56 @@ class TestDossierCoverPDFView(MockTestCase):
         self.expect(IDossier(context_mock).end).result(
             defaults.get('end'))
 
-    def test_get_reversed_breadcrumbs(self):
-        tree = self.stub_tree()
-        context = tree.subdossier
-        request = self.stub()
+        # client_title
+        registry_mock = self.stub()
+        self.expect(
+            registry_mock.forInterface(IBaseClientID).client_title).result('FAKE Client')
+        self.mock_utility(registry_mock, IRegistry)
 
-        self.replay()
-
-        view = DossierCoverPDFView(context, request)
-        self.assertEqual(view.get_reversed_breadcrumbs(),
-                         'Sub Folder / Folder')
-
-    def test_reversed_breadcrumb_String_is_cropped_to_150(self):
-        tree = self.stub_tree(long_title=True)
-        context = tree.subdossier
-        request = self.stub()
-
-        self.replay()
-
-        view = DossierCoverPDFView(context, request)
-
-        self.assertEquals(150, len(view.get_reversed_breadcrumbs()))
+    def mock_converter(self, layout):
+        converter = self.stub()
+        self.expect(layout.get_converter()).result(converter)
+        self.expect(
+            converter.convert_plain('FAKE Client')).result('conv:FAKE Client')
+        self.expect(
+            converter.convert_plain('Repository 2.0 2013')).result(
+                'conv:Repository 2.0 2013')
+        self.expect(
+            converter.convert_plain('referencenr')).result('conv:OG 1.6 / 1')
+        self.expect(
+            converter.convert_plain('My Dossier')).result('conv:My Dossier')
+        self.expect(
+            converter.convert('The description')).result('conv:The description')
+        self.expect(
+            converter.convert_plain('John Doe')).result('conv:John Doe')
+        self.expect(
+            converter.convert_plain('OG 1.6 / 1')).result('conv:OG 1.6 / 1')
+        self.expect(
+            converter.convert_plain('2011-09-24 00:00:00')).result(
+                'conv:2011-09-24 00:00:00')
+        self.expect(
+            converter.convert_plain('2011-11-22 00:00:00')).result(
+                'conv:2011-11-22 00:00:00')
 
     def test_get_render_arguments(self):
         tree = self.stub_tree()
         context = tree.subdossier
         self.mock_metadata(context)
-        request = self.stub()
+        request = self.providing_stub([IDossierCoverLayer])
+        layout = self.providing_stub([ILaTeXLayout])
+        self.mock_converter(layout)
 
         self.replay()
-
-        view = DossierCoverPDFView(context, request)
+        view = getMultiAdapter((context, request, layout), ILaTeXView)
 
         self.assertEqual(
             view.get_render_arguments(),
 
-            {'clientid': 'OG',
-             'repository': 'Sub Folder / Folder',
-             'referencenr': 'OG 1.6 / 1',
-             'filingprefix': 'Leitung',
-             'parentDossierTitle': 'Dossier title',
-             'filingnr': '5',
-             'sequencenr': '2',
-             'title': 'My Dossier',
-             'description': 'The description',
-             'responsible': 'John Doe',
-             'start': '2011-09-24 00:00:00',
-             'end': '2011-11-22 00:00:00'})
-
-    def test_description_cutting(self):
-        dossier = self.stub()
-        request = self.stub()
-
-        small_title = 'Lorem ipsum dolor sit amet'
-        long_title = 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor in- vidunt ut labore et dolore magna aliquy'
-
-        # a to long description wuthout any linebreaks
-        description_1 = 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor in- vidunt ut labore et dolore magna aliquyam erat, sed diam volup- tua. At ve- ro eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ip- sum dolor sit amet. Lorem ipsum dolor Lorem ipsum dolor sit amet consetetur, sadipscing elitr, sed diam nonumy eirmod tempor in- vidunt ut laboree et dolore magna aliquyam erat, sed diam volup- tua.'
-
-        cutted_description_1 = 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor in- vidunt ut labore et dolore magna aliquyam erat, sed diam volup- tua. At ve- ro eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ip- sum dolor sit amet. Lorem ipsum dolor Lorem ipsum dolor sit amet consetetur, sadipscing elitr, s ...'
-
-        # a description with to many lines
-        description_2 = """Lorem ipsum dolor sit amet:
- - consetetur sadipscing
- - elitr
- - sed diam nonumy eirmod
- - tempor in
- - vidunt ut labore et dolore magna
- - aliquyam erat, sed diam
- - volup- tua.
- - At ve- ro eos et accusam et
- - justo duo dolores et ea rebum.
- - Stet clita kasd gubergren, no sea
- - takimata sanctus est Lorem ip"""
-
-        cutted_description_2 = """Lorem ipsum dolor sit amet:<br /> - consetetur sadipscing<br /> - elitr<br /> - sed diam nonumy eirmod<br /> - tempor in<br /> - vidunt ut labore et dolore magna<br /> - aliquyam erat, sed diam ..."""
-
-        # a description with to many long lines
-        description_3 = """Lorem ipsum dolor sit amet:
- - Lorem ipsum dolor sit amet, consetetur sadipscing elitr
- - Lorem ipsum dolor sit amet, consetetur sadipscing elitr
- - Lorem ipsum dolor sit amet, consetetur sadipscing elitr
- - Lorem ipsum dolor sit amet, consetetur sadipscing elitr
- - Lorem ipsum dolor sit amet, consetetur sadipscing elitr
- - Lorem ipsum dolor sit amet, consetetur sadipscing elitr
- - Lorem ipsum dolor sit amet, consetetur sadipscing elitr
- - Lorem ipsum dolor sit amet, consetetur sadipscing elitr
-"""
-
-        cutted_description_3 = """Lorem ipsum dolor sit amet:<br /> - Lorem ipsum dolor sit amet, consetetur sadipscing elitr<br /> - Lorem ipsum dolor sit amet, consetetur sadipscing elitr<br /> - Lorem ipsum dolor sit amet, consetetur sadipscing elitr ..."""
-
-        with self.mocker.order():
-            self.expect(dossier.Description()).result(description_1)
-            self.expect(dossier.Title()).result(small_title)
-
-            self.expect(dossier.Description()).result(description_2)
-            self.expect(dossier.Title()).result(small_title)
-
-            self.expect(dossier.Description()).result(description_3)
-            self.expect(dossier.Title()).result(small_title)
-
-            self.expect(dossier.Title()).result(description_2)
-            self.expect(dossier.Title()).result(long_title)
-
-        self.replay()
-
-        view = DossierCoverPDFView(dossier, request)
-        self.assertEquals(cutted_description_1, view.get_description())
-        self.assertEquals(cutted_description_2, view.get_description())
-        self.assertEquals(cutted_description_3, view.get_description())
+            {'clienttitle': 'conv:FAKE Client',
+             'referencenr': 'conv:OG 1.6 / 1',
+             'repositoryversion': 'conv:Repository 2.0 2013',
+             'title': 'conv:My Dossier',
+             'description': 'conv:The description',
+             'responsible': 'conv:John Doe',
+             'start': 'conv:2011-09-24 00:00:00',
+             'end': 'conv:2011-11-22 00:00:00'})
