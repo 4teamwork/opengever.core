@@ -281,6 +281,17 @@ class LDAPSearch(grok.Adapter):
         combined_filter = '(& %s %s)' % (filter_a, filter_b)
         return combined_filter
 
+    def _get_object_classes(self):
+        """Returns a list of tuples containing primary and alternative names
+        for all objectClasses defined in the LDAP schema.
+        """
+        schema = self.get_schema()
+        oc_tree = schema.tree(ldap.schema.ObjectClass)
+        obj_classes = [schema.get_obj(ldap.schema.ObjectClass, oid) for
+            oid in oc_tree.keys()]
+        obj_classes = [oc for oc in obj_classes if oc is not None]
+        return obj_classes
+
     def _is_multivalued(self, obj_classes, attr_name):
         """Given a list of object classes and the name of an attribute defined
         in one of those classes, use the LDAP schema to determine if the
