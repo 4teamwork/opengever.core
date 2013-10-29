@@ -4,6 +4,9 @@ Changelog
 3.1.2 (unreleased)
 ------------------
 
+- LDAP util: Added method to list all objectClasses defined in schema.
+  [lgraf]
+
 - LDAP import: groupid may be in 'cn' or 'fullname' attribute.
   Handle both cases gracefully.
   [lgraf]
