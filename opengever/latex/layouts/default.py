@@ -2,16 +2,15 @@ from Products.CMFCore.utils import getToolByName
 from five import grok
 from ftw.pdfgenerator.interfaces import IBuilder
 from ftw.pdfgenerator.interfaces import ILaTeXLayout
-from ftw.pdfgenerator.layout.makolayout import MakoLayoutBase
+from ftw.pdfgenerator.layout.customizable import CustomizableLayout
 from opengever.base.interfaces import IBaseClientID
 from opengever.latex.interfaces import ILaTeXSettings
-from opengever.ogds.base.utils import get_current_client
 from plone.registry.interfaces import IRegistry
 from zope.component import getUtility
 from zope.interface import Interface
 
 
-class DefaultLayout(grok.MultiAdapter, MakoLayoutBase):
+class DefaultLayout(CustomizableLayout, grok.MultiAdapter):
     """Opengever default layout.
     """
     grok.adapts(Interface, Interface, IBuilder)
@@ -22,7 +21,7 @@ class DefaultLayout(grok.MultiAdapter, MakoLayoutBase):
 
     def __init__(self, context, request, builder):
         super(DefaultLayout, self).__init__(context, request, builder)
-        self.show_contact = True
+        self.show_contact = False
         self.show_logo = False
         self.show_organisation = False
 
