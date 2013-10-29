@@ -1,5 +1,6 @@
 from ftw.testing import MockTestCase
 from mocker import ANY
+from opengever.base.interfaces import IBaseClientID
 from opengever.latex.interfaces import ILaTeXSettings
 from opengever.latex.layouts.default import DefaultLayout
 from opengever.latex.testing import LATEX_ZCML_LAYER
@@ -7,7 +8,8 @@ from opengever.ogds.base import utils
 from plone.registry.interfaces import IRegistry
 
 
-FAKE_LOCATION = 'fake_location'
+FAKE_LOCATION = 'fakelocation'
+FAKE_CLIENT_TITLE  = 'fakeclienttitle'
 
 
 class TestDefaultLayout(MockTestCase):
@@ -27,6 +29,9 @@ class TestDefaultLayout(MockTestCase):
         registry_mock = self.stub()
         self.expect(
             registry_mock.forInterface(ILaTeXSettings).location).result(FAKE_LOCATION)
+        self.expect(
+            registry_mock.forInterface(IBaseClientID).client_title).result(FAKE_CLIENT_TITLE)
+
         self.mock_utility(registry_mock, IRegistry)
 
         self.portal_membership = self.stub()
@@ -44,7 +49,7 @@ class TestDefaultLayout(MockTestCase):
         self.replay()
         layout = DefaultLayout(context, request, builder)
 
-        self.assertEqual(layout.show_contact, True)
+        self.assertEqual(layout.show_contact, False)
         self.assertEqual(layout.show_logo, False)
         self.assertEqual(layout.show_organisation, False)
 
@@ -95,9 +100,9 @@ class TestDefaultLayout(MockTestCase):
         layout = DefaultLayout(context, request, builder)
 
         args = {
-            'client_title': 'CLIENT ONE',
+            'client_title': FAKE_CLIENT_TITLE,
             'member_phone': '012 345 6789',
-            'show_contact': True,
+            'show_contact': False,
             'show_logo': False,
             'show_organisation': False,
             'location': FAKE_LOCATION,
@@ -118,9 +123,9 @@ class TestDefaultLayout(MockTestCase):
         layout = DefaultLayout(context, request, builder)
 
         args = {
-            'client_title': 'CLIENT ONE',
+            'client_title': FAKE_CLIENT_TITLE,
             'member_phone': '',
-            'show_contact': True,
+            'show_contact': False,
             'show_logo': False,
             'show_organisation': False,
             'location': FAKE_LOCATION,
@@ -147,7 +152,6 @@ class TestDefaultLayout(MockTestCase):
         latex = layout.render_latex('LATEX CONTENT')
         self.assertIn('LATEX CONTENT', latex)
         self.assertIn(layout.get_packages_latex(), latex)
-        self.assertIn(r'T direkt ', latex)
         self.assertIn(r'\phantom{foo}\vspace{-2\baselineskip}', latex)
 
     def test_box_sizes_and_positions(self):
@@ -174,5 +178,5 @@ class TestDefaultLayout(MockTestCase):
                       latex)
 
         self.assertIn(r'\begin{textblock}{100mm\TPHorizModule} '
-                      r'(35mm\TPHorizModule, 55mm\TPVertModule)',
+                      r'(100mm\TPHorizModule, 10mm\TPVertModule)',
                       latex)

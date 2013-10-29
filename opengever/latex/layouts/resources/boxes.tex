@@ -1,4 +1,4 @@
-<%page args="org_left='136mm', org_width='58mm', contact_left='100mm', contact_width='35mm', contact_height='55mm'" />
+<%page args="org_left='136mm', org_width='58mm', contact_left='100mm', contact_width='100mm', contact_height='10mm'" />
 
 %% -- ORGANISATION: DIREKTION / AMT / DIENSTSTELLE
 % if show_organisation:
@@ -14,6 +14,7 @@
 
 %% -- CONTACT INFORMATION --
 \begin{textblock}{${contact_left}\TPHorizModule} (${contact_width}\TPHorizModule, ${contact_height}\TPVertModule)
+  \raggedleft
   \vspace{-\parskip}%%
   \fontsize{8}{9} \selectfont
   % if show_contact:
