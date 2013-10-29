@@ -34,6 +34,7 @@ class LDAPSearch(grok.Adapter):
     def __init__(self, context):
         # context is a LDAPUserFolder instance
         self.context = context
+        self._multivaluedness = {}
 
     def connect(self):
         """Establish a connection (or return an existing one for re-use) by
@@ -53,6 +54,11 @@ class LDAPSearch(grok.Adapter):
         """
 
         if not hasattr(self, '_schema'):
+            # Cache information about which attributes are multivalued.
+            # This is schema dependent, so we initialize this cache the first
+            # time we actually fetch the schema.
+            self._multivaluedness = {}
+
             conn = self.connect()
 
             # Try to get schema DN from Root DSE
@@ -293,6 +299,16 @@ class LDAPSearch(grok.Adapter):
         return obj_classes
 
     def _is_multivalued(self, obj_classes, attr_name):
+        """Determine if an attribute is multivalued or not.
+        First look in our internal cache, and in case of a miss, get the info
+        from the schema and cache it.
+        """
+        if not attr_name in self._multivaluedness:
+            self._multivaluedness[attr_name] = self._check_if_multivalued(
+                obj_classes, attr_name)
+        return self._multivaluedness[attr_name]
+
+    def _check_if_multivalued(self, obj_classes, attr_name):
         """Given a list of object classes and the name of an attribute defined
         in one of those classes, use the LDAP schema to determine if the
         attribute is multi-valued or not.
