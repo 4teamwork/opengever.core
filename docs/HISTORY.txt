@@ -16,9 +16,12 @@ Changelog
 - LDAP import: groupid may be in 'cn' or 'fullname' attribute.
   Handle both cases gracefully.
   [lgraf]
+
 - Updated i18n-build with the option to build only one subpackage.
   [lknoepfel]
 
+- Fixed unicode encoding bug in search for autocomplete of ContactsVocabulary.
+  [lknoepfel]
 
 3.1.1 (2013-10-23)
 ------------------
