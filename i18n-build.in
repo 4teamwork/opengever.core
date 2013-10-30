@@ -22,6 +22,12 @@ do
     # Strip leading slash
     pkg_relpath=${pkg_relpath##/}           # opengever/dossier
     pkgname=${pkg_relpath//\//.}            # opengever.dossier
+
+    # checks if a specific package is selected
+    if [ $# -eq 1 ] && [ "$1" != "$pkgname" ]; then
+      continue
+    fi
+
     potfile="$locale_dir/$pkgname.pot"
 
     # Check for my.package-manual.pot
