@@ -1,5 +1,11 @@
 #!/bin/bash
 #
+# USAGE:
+# bin/i18n-build [pkgname]
+#
+# If a [pkgname] is supplied, only translation files for that package will be
+# built. Otherwise they will be built for all packages.
+#
 # This script builds translation files for opengever.core.
 #
 # It does so by finding all the 'locales' directories, rebuilds
@@ -22,6 +28,12 @@ do
     # Strip leading slash
     pkg_relpath=${pkg_relpath##/}           # opengever/dossier
     pkgname=${pkg_relpath//\//.}            # opengever.dossier
+
+    # checks if a specific package is selected
+    if [ $# -eq 1 ] && [ "$1" != "$pkgname" ]; then
+      continue
+    fi
+
     potfile="$locale_dir/$pkgname.pot"
 
     # Check for my.package-manual.pot
