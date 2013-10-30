@@ -7,10 +7,11 @@ from ftw.pdfgenerator.view import MakoLaTeXView
 from ftw.table import helper
 from opengever.latex.interfaces import ILandscapeLayer
 from opengever.latex.utils import get_selected_items_from_catalog
+from opengever.latex.utils import workflow_state
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.ogds.base.utils import get_current_client
-from opengever.latex.utils import workflow_state
 from zope.component import getUtility
+from zope.i18n import translate
 from zope.interface import Interface
 
 
@@ -57,37 +58,37 @@ class DossierListingLaTeXView(grok.MultiAdapter, MakoLaTeXView):
 
         return [
             {'id': 'reference',
-             'label': 'Aktenzeichen',
+             'label': _('label_reference_number', default='Reference number'),
              'width': '13mm',
              'getter': lambda brain: brain.reference},
             {'id': 'sequence_number',
-             'label': 'Nr.',
+             'label': _('label_sequence_number', default='No.'),
              'width': '4mm',
              'getter': lambda brain: brain.sequence_number},
             {'id': 'repository_title',
-             'label': 'Ordnungspos.',
+             'label': _('label_repository_title', default='Repositoryfolder'),
              'width': '40mm',
              'getter': self.get_repository_title},
             {'id': 'title',
-             'label': 'Titel',
+             'label': _('label_title', default='Title'),
              'width': '50mm',
              'getter': lambda brain: brain.Title},
             {'id': 'responsible',
-             'label': 'Federfuhrung',
+             'label': _('label_responsible', default='Responsible'),
              'width': '48mm',
              'getter': self.get_responsible},
             {'id': 'review_state',
-             'label': 'Status',
+             'label': _('label_review_state', default='State'),
              'width': '16mm',
              'getter': lambda brain: workflow_state(
                  brain, brain.review_state)},
             {'id': 'start',
-             'label': 'Begin',
+             'label': _('label_start', default='Start'),
              'width': '10mm',
              'getter': lambda brain: helper.readable_date(
                  brain, brain.start)},
             {'id': 'end',
-             'label': 'Ende',
+             'label': _('label_end', default='End'),
              'width': '10mm',
              'getter': lambda brain: helper.readable_date(brain, brain.end)}]
 
@@ -113,8 +114,8 @@ class DossierListingLaTeXView(grok.MultiAdapter, MakoLaTeXView):
     def get_labels(self):
         labels = []
         for row in self.get_table_config():
-            labels.append(
-                u'\\bfseries {}'.format(row.get('label')))
+            label = translate(row.get('label'), context=self.request)
+            labels.append(u'\\bfseries {}'.format(label))
 
         return ' & '.join(labels)
 
