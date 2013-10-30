@@ -1,5 +1,7 @@
 from zope import schema
+from zope.interface import Attribute
 from zope.interface import Interface
+
 import ldap
 
 
@@ -53,6 +55,8 @@ class ILDAPSearch(Interface):
 
     Uses connection settings defined in the adapted LDAPUserFolder.
     """
+
+    supported_controls = Attribute('List of controls supported by server.')
 
     def connect():
         """Establish a connection (or return an existing one for re-use) by

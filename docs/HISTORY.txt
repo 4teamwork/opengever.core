@@ -4,6 +4,9 @@ Changelog
 3.1.2 (unreleased)
 ------------------
 
+- LDAP util: Only use PagedResults controls if the server advertises to support them.
+  [lgraf]
+
 - LDAP util: When checking if attributes are multivalued, store results in a cache.
   This prevents us from hitting the schema more often than necessary, and, as a side
   effect, causes warnings about attributes not declared in schemata to be printed

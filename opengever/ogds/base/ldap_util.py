@@ -20,6 +20,7 @@ except AttributeError:
     PYTHON_LDAP_24 = False
 
 
+PAGED_RESULTS_CTL_OID = '1.2.840.113556.1.4.319'
 KNOWN_MULTIVALUED_FIELDS = []
 
 
@@ -35,6 +36,7 @@ class LDAPSearch(grok.Adapter):
         # context is a LDAPUserFolder instance
         self.context = context
         self._multivaluedness = {}
+        self._supported_controls = None
 
     def connect(self):
         """Establish a connection (or return an existing one for re-use) by
@@ -47,6 +49,26 @@ class LDAPSearch(grok.Adapter):
         self.base_dn = ldap_uf.users_base
         conn = ldap_uf._delegate.connect()
         return conn
+
+    @property
+    def supported_controls(self):
+        """Memoized access to controls supported by server.
+        """
+        if self._supported_controls is None:
+            self._supported_controls = self._get_supported_controls()
+        return self._supported_controls
+
+    def _get_supported_controls(self):
+        """Get supported server controls from root DSE.
+        """
+        conn = self.connect()
+        root_dse = conn.search_s('',
+                                 ldap.SCOPE_BASE,
+                                 '(objectclass=*)',
+                                 ['*','+'])[0]
+
+        supported_controls = root_dse[1]['supportedControl']
+        return supported_controls
 
     def get_schema(self):
         """Return the LDAP schema of the server we're currently connected to
@@ -87,18 +109,19 @@ class LDAPSearch(grok.Adapter):
 
         return self._schema
 
-    def search(self, base_dn=None, scope=ldap.SCOPE_SUBTREE,
-               filter='(objectClass=*)', attrs=[]):
-        """Search LDAP for entries matching the given criteria, using result
-        pagination if apprpriate, and return the results immediately.
-
-        `base_dn`, `scope`, `filter` and `attrs` have the same meaning as the
-        corresponding arguments on the ldap.search* methods.
-        """
+    def _unpaged_search(self, base_dn, scope, filter, attrs):
         conn = self.connect()
+        msgid = conn.search_ext(base_dn,
+                                scope,
+                                filter,
+                                attrs,
+                                serverctrls=[])
+        rtype, rdata, rmsgid, serverctrls = conn.result3(msgid)
+        results = rdata
+        return results
 
-        if base_dn is None:
-            base_dn = self.base_dn
+    def _paged_search(self, base_dn, scope, filter, attrs):
+        conn = self.connect()
 
         # Get paged results to prevent exceeding server size limit
         page_size = 1000
@@ -112,27 +135,15 @@ class LDAPSearch(grok.Adapter):
         results = []
 
         while not is_last_page:
-            try:
-                msgid = conn.search_ext(base_dn,
-                                        scope,
-                                        filter,
-                                        attrs,
-                                        serverctrls=[lc])
+            msgid = conn.search_ext(base_dn,
+                                    scope,
+                                    filter,
+                                    attrs,
+                                    serverctrls=[lc])
 
-                rtype, rdata, rmsgid, serverctrls = conn.result3(msgid)
-                pctrls = [c for c in serverctrls
-                          if c.controlType == LDAP_CONTROL_PAGED_RESULTS]
-
-            except ldap.UNAVAILABLE_CRITICAL_EXTENSION:
-                # Server does not support pagination controls - send search
-                # request again without pagination controls
-                msgid = conn.search_ext(base_dn,
-                                        scope,
-                                        filter,
-                                        attrs,
-                                        serverctrls=[])
-                rtype, rdata, rmsgid, serverctrls = conn.result3(msgid)
-                pctrls = []
+            rtype, rdata, rmsgid, serverctrls = conn.result3(msgid)
+            pctrls = [c for c in serverctrls
+                      if c.controlType == LDAP_CONTROL_PAGED_RESULTS]
 
             results.extend(rdata)
 
@@ -156,6 +167,32 @@ class LDAPSearch(grok.Adapter):
             else:
                 is_last_page = True
                 logger.warn("Server ignores paged results control (RFC 2696).")
+
+        return results
+
+    def search(self, base_dn=None, scope=ldap.SCOPE_SUBTREE,
+               filter='(objectClass=*)', attrs=[]):
+        """Search LDAP for entries matching the given criteria, using result
+        pagination if apprpriate, and return the results immediately.
+
+        `base_dn`, `scope`, `filter` and `attrs` have the same meaning as the
+        corresponding arguments on the ldap.search* methods.
+        """
+
+        if base_dn is None:
+            base_dn = self.base_dn
+
+        if PAGED_RESULTS_CTL_OID in self.supported_controls:
+            try:
+                results = self._paged_search(base_dn, scope, filter, attrs)
+
+            except ldap.UNAVAILABLE_CRITICAL_EXTENSION:
+                # Server does not support pagination controls - send search
+                # request again without pagination controls
+                results = self._unpaged_search(base_dn, scope, filter, attrs)
+        else:
+            results = self._unpaged_search(base_dn, scope, filter, attrs)
+
         return results
 
     def get_users(self):
