@@ -12,32 +12,7 @@
 
 \begin{supertabular*}{150mm}{lp{130mm}}
 \shrinkheight{60mm}
-\bf{Aktenzeichen} & ${reference} \\%%
-\bf{Laufnummer} & ${sequence} \\%%
-% if filingprefix:
-  \bf{Ablage} & ${filingprefix} \\%%
-% endif
-\bf{Ablagenummer} & ${filing_no} \\%%
-\bf{Ordnungsposition} & ${repository} \\%%
-% if is_subdossier:
-\bf{Titel Dossier} & ${title_dossier} \\%%
-\bf{Titel Subdossier} & ${title_subdossier} \\%%
-% else:
-\bf{Titel Dossier} & ${title_dossier} \\%%
-% endif
-\bf{Status} & ${review_state} \\%%
-\bf{Federführend} & ${responsible} \\%%
-% if participants:
-  \bf{Beteiligung} & {
-    \vspace{-\baselineskip}\begin{itemize}
-    % for item in participants:
-      \item ${item}
-    % endfor
-    \vspace{-\baselineskip}\end{itemize}
-  } \\%%
-% endif
-\bf{Beginn} & ${start} \\%%
-\bf{Ende} & ${end} \\%%
+${dossier_metadata} \\ \hline
 \end{supertabular*}
 
 \begin{landscape}

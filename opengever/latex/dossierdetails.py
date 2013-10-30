@@ -15,12 +15,14 @@ from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.behaviors.participation import IParticipationAware
 from opengever.dossier.browser.participants import role_list_helper
+from opengever.latex import _
 from opengever.latex.utils import get_issuer_of_task
+from opengever.latex.utils import workflow_state
+from opengever.latex.utils import workflow_state
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.ogds.base.utils import get_current_client
 from opengever.repository.interfaces import IRepositoryFolder
 from opengever.tabbedview.helper import readable_ogds_author
-from opengever.latex.utils import workflow_state
 from opengever.task.helper import task_type_helper
 from zope.component import getUtility
 from zope.i18n import translate
@@ -55,7 +57,7 @@ class DossierDetailsLaTeXView(grok.MultiAdapter, MakoLaTeXView):
     def get_render_arguments(self):
         self.layout.show_contact = False
 
-        args = self.get_dossier_metadata()
+        args = {'dossier_metadata':self.get_dossier_metadata()}
 
         parent = aq_parent(aq_inner(self.context))
         args['is_subdossier'] = IDossierMarker.providedBy(parent)
@@ -70,41 +72,97 @@ class DossierDetailsLaTeXView(grok.MultiAdapter, MakoLaTeXView):
 
         return args
 
+    def get_metadata_order(self):
+        return ['reference', 'sequence', 'repository', 'title',
+                'subdossier_title', 'state', 'responsible',
+                'participants', 'start', 'end']
+
+    def get_metadata_config(self):
+        return {
+            'reference': {
+                'label': _('label_reference_number',
+                           default='Reference number'),
+                'getter': self.get_reference_number},
+            'sequence': {
+                'label': _('label_sequence_number', default='Sequence number'),
+                'getter': self.get_sequence_number},
+            'repository': {
+                'label': _('label_repository', default='Repository'),
+                'getter': self.get_repository_path},
+            'title': {
+                'label': _('label_title', default='Title'),
+                'getter': self.get_title},
+            'subdossier_title': {
+                'label': _('label_subdossier_title', default='Title'),
+                'getter': self.get_subdossier_title},
+            'responsible': {
+                'label': _('label_responsible', default='Responsible'),
+                'getter': self.get_title},
+            'start': {
+                'label': _('label_start', default='Start'),
+                'getter': self.get_start_date},
+            'end': {
+                'label': _('label_start', default='Start'),
+                'getter': self.get_end_date},
+            'participants': {
+                'label': _('label_participants', default='Participants'),
+                'getter': self.get_participants,
+                'is_latex': True},
+            'state': {
+                'label': _('label_review_state', default='State'),
+                'getter': self.get_review_state}}
+
     def get_dossier_metadata(self):
-        dossier = IDossier(self.context)
-        client = get_current_client()
-        info = getUtility(IContactInformation)
+        rows = []
+        config = self.get_metadata_config()
 
-        args = {}
+        for key in self.get_metadata_order():
+            row = config.get(key)
 
-        parent = aq_parent(aq_inner(self.context))
-        if IDossierMarker.providedBy(parent):
-            args['title_dossier'] = parent.Title()
-            args['title_subdossier'] = self.context.Title()
-        else:
-            args['title_dossier'] = self.context.Title()
+            value = row.get('getter')()
+            if not value:
+                continue
+            if not row.get('is_latex'):
+                value = self.convert_plain(value)
 
-        args['repository'] = self.get_repository_path()
-        args['start'] = helper.readable_date(self.context, dossier.start)
-        args['end'] = helper.readable_date(self.context, dossier.end)
+            label = translate(row.get('label'), context=self.request)
+            rows.append('\\bf {} & {} \\\\%%'.format(
+                self.convert_plain(label), value))
 
+        return '\n'.join(rows)
+
+    def get_reference_number(self):
+        return IReferenceNumber(self.context).get_number()
+
+    def get_sequence_number(self):
+        return str(getUtility(ISequenceNumber).get_number(self.context))
+
+    def get_title(self):
+        if self.context.is_subdossier():
+            return aq_parent(aq_inner(self.context)).Title()
+        return self.context.Title()
+
+    def get_subdossier_title(self):
+        if self.context.is_subdossier():
+            return self.context.Title()
+        return None
+
+    def get_review_state(self):
         state = self.context.restrictedTraverse('@@plone_context_state')
-        args['review_state'] = translate(state.workflow_state(),
-                                         domain='plone',
-                                         context=self.request)
+        return translate(state.workflow_state(), domain='plone',
+                         context=self.request)
 
-        args['responsible'] = '%s / %s' % (
-            (client.title, info.describe(dossier.responsible)))
+    def get_start_date(self):
+        return helper.readable_date(
+            self.context, IDossier(self.context).start)
 
-        args['reference'] = IReferenceNumber(self.context).get_number()
+    def get_end_date(self):
+        return helper.readable_date(
+            self.context, IDossier(self.context).end)
 
-        seq = getUtility(ISequenceNumber)
-        args['sequence'] = seq.get_number(self.context)
-
-        args['filing_no'] = getattr(dossier, 'filing_no', None)
-        args['filingprefix'] = self.get_filingprefix()
-
-        return self.convert_dict(args)
+    def get_responsible(self):
+        '{} / {}'.format(get_current_client().title,
+                         info.describe(IDossier(self.context).responsible))
 
     def get_filingprefix(self):
         value = IDossier(self.context).filing_prefix
@@ -156,7 +214,14 @@ class DossierDetailsLaTeXView(grok.MultiAdapter, MakoLaTeXView):
                     readable_ogds_author(participant, participant.contact),
                     role_list_helper(participant, participant.roles)))
 
-        return self.convert_list(rows)
+        values = ['{', '\\vspace{-\\baselineskip}\\begin{itemize}']
+        for row in self.convert_list(rows):
+            values.append('\\item {}'.format(row))
+
+        values.append('\\vspace{-\\baselineskip}\\end{itemize}')
+        values.append('}')
+
+        return ' \n'.join(values)
 
     def _get_sorted_results(self, tab_name, markers):
         """Returns the results of a catalog query for objects that provide
