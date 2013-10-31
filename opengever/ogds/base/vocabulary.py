@@ -27,7 +27,7 @@ class ContactsVocabulary(SimpleVocabulary):
             items = list(self.provider())
             for key, value in items:
                 if self._compare(query, value):
-                    yield self.__class__.createTerm(key, key, value)
+                    yield self.__class__.createTerm(key, key.encode('ascii', 'replace'), value)
 
     def _compare(self, query, value):
         """ Compares each word in the query string seperate.

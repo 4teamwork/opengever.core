@@ -49,6 +49,17 @@ class TestContactVocabulary(FunctionalTestCase):
 
         self.assertTermKeys([], vocabulary.search('firt'))
 
+    def test_unicode_handling_in_vocabulary_search(self):
+
+        def key_value_provider():
+            yield (u'J\xf6rg R\xfctimann', u'j\xf6rg@r\xfctimann.\u0109h')
+
+        vocabulary = ContactsVocabulary.create_with_provider(key_value_provider)
+
+        self.assertTermKeys(
+            [u'J\xf6rg R\xfctimann'],
+            vocabulary.search("j"))
+
 
 class TestUsersVocabulary(FunctionalTestCase):
 
