@@ -1,7 +1,5 @@
 from Products.CMFCore.utils import getToolByName
-# from opengever.globalindex.interfaces import ITaskQuery
 from opengever.ogds.base.interfaces import IContactInformation
-from plone.i18n.normalizer.interfaces import IIDNormalizer
 from zope.component import getUtility
 from zope.globalrequest import getRequest
 from zope.i18n import translate
@@ -22,6 +20,14 @@ def get_selected_items_from_catalog(context, request):
                                        'depth': 0}})
             assert len(brains) == 1, "Could not find objects at %s" % path
             yield brains[0]
+
+
+def get_responsible_of_task(task):
+    info = getUtility(IContactInformation)
+
+    return '{} / {}'.format(
+        info.get_client_by_id(task.assigned_client).title,
+        info.describe(task.responsible, with_principal=False))
 
 
 def get_issuer_of_task(task, with_client=True, with_principal=False):
