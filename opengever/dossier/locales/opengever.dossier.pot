@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2013-04-03 08:06+0000\n"
+"POT-Creation-Date: 2013-10-24 09:25+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -28,7 +28,7 @@ msgstr ""
 msgid "Add Participant"
 msgstr ""
 
-#: ./opengever/dossier/behaviors/dossier.py:222
+#: ./opengever/dossier/behaviors/dossier.py:229
 msgid "Add Subdossier"
 msgstr ""
 
@@ -56,11 +56,12 @@ msgstr ""
 msgid "Dossiers successfully reactivated."
 msgstr ""
 
-#: ./opengever/dossier/behaviors/dossier.py:237
+#: ./opengever/dossier/behaviors/dossier.py:244
 msgid "Edit Subdossier"
 msgstr ""
 
 #: ./opengever/dossier/profiles/default/actions.xml
+#: ./opengever/dossier/upgrades/profiles/2601/actions.xml
 msgid "Export selection"
 msgstr ""
 
@@ -111,7 +112,7 @@ msgstr ""
 msgid "The Dossier can't be deactivated, the subdossier ${dossier} is already resolved"
 msgstr ""
 
-#: ./opengever/dossier/deactivate.py:69
+#: ./opengever/dossier/deactivate.py:68
 msgid "The Dossier has been activated"
 msgstr ""
 
@@ -143,11 +144,11 @@ msgstr ""
 msgid "The given value is not a valid Year"
 msgstr ""
 
-#: ./opengever/dossier/behaviors/dossier.py:194
+#: ./opengever/dossier/behaviors/dossier.py:201
 msgid "The start date must be before the end date."
 msgstr ""
 
-#: ./opengever/dossier/behaviors/dossier.py:244
+#: ./opengever/dossier/behaviors/dossier.py:251
 msgid "The start or end date is invalid"
 msgstr ""
 
@@ -220,9 +221,6 @@ msgid "create_document_with_template"
 msgstr ""
 
 msgid "description"
-msgstr ""
-
-msgid "document_with_docucomposer"
 msgstr ""
 
 msgid "documents"
@@ -385,8 +383,8 @@ msgid "label_add_participant"
 msgstr ""
 
 #. Default: "by ${author}"
-#: ./opengever/dossier/project_templates/byline.pt:16
-#: ./opengever/dossier/viewlets/businesscase_byline.pt:19
+#: ./opengever/dossier/project_templates/byline.pt:14
+#: ./opengever/dossier/viewlets/businesscase_byline.pt:22
 msgid "label_by_author"
 msgstr ""
 
@@ -426,7 +424,7 @@ msgid "label_edit_after_creation"
 msgstr ""
 
 #. Default: "E-Mail:"
-#: ./opengever/dossier/viewlets/businesscase_byline.pt:89
+#: ./opengever/dossier/viewlets/businesscase_byline.pt:77
 msgid "label_email_address"
 msgstr ""
 
@@ -438,13 +436,13 @@ msgid "label_end"
 msgstr ""
 
 #. Default: "to:"
-#: ./opengever/dossier/project_templates/byline.pt:44
-#: ./opengever/dossier/viewlets/businesscase_byline.pt:45
+#: ./opengever/dossier/project_templates/byline.pt:42
+#: ./opengever/dossier/viewlets/businesscase_byline.pt:43
 msgid "label_end_byline"
 msgstr ""
 
 #. Default: "Filing Number:"
-#: ./opengever/dossier/viewlets/businesscase_byline.pt:79
+#: ./opengever/dossier/viewlets/businesscase_byline.pt:70
 msgid "label_filing_no"
 msgstr ""
 
@@ -481,7 +479,7 @@ msgstr ""
 #. Default: "Reference Number"
 #: ./opengever/dossier/behaviors/dossier.py:184
 #: ./opengever/dossier/browser/report.py:118
-#: ./opengever/dossier/viewlets/businesscase_byline.pt:69
+#: ./opengever/dossier/viewlets/businesscase_byline.pt:63
 msgid "label_reference_number"
 msgstr ""
 
@@ -508,7 +506,7 @@ msgid "label_roles"
 msgstr ""
 
 #. Default: "Sequence Number:"
-#: ./opengever/dossier/viewlets/businesscase_byline.pt:59
+#: ./opengever/dossier/viewlets/businesscase_byline.pt:56
 msgid "label_sequence_number"
 msgstr ""
 
@@ -524,8 +522,8 @@ msgid "label_start"
 msgstr ""
 
 #. Default: "from:"
-#: ./opengever/dossier/project_templates/byline.pt:35
-#: ./opengever/dossier/viewlets/businesscase_byline.pt:36
+#: ./opengever/dossier/project_templates/byline.pt:33
+#: ./opengever/dossier/viewlets/businesscase_byline.pt:34
 msgid "label_start_byline"
 msgstr ""
 
@@ -547,8 +545,8 @@ msgid "label_title"
 msgstr ""
 
 #. Default: "State:"
-#: ./opengever/dossier/project_templates/byline.pt:28
-#: ./opengever/dossier/viewlets/businesscase_byline.pt:30
+#: ./opengever/dossier/project_templates/byline.pt:26
+#: ./opengever/dossier/viewlets/businesscase_byline.pt:29
 msgid "label_workflow_state"
 msgstr ""
 
@@ -624,8 +622,8 @@ msgid "the dossier start date is missing."
 msgstr ""
 
 #. Default: "expired"
-#: ./opengever/dossier/project_templates/byline.pt:53
-#: ./opengever/dossier/viewlets/businesscase_byline.pt:54
+#: ./opengever/dossier/project_templates/byline.pt:51
+#: ./opengever/dossier/viewlets/businesscase_byline.pt:52
 msgid "time_expired"
 msgstr ""
 

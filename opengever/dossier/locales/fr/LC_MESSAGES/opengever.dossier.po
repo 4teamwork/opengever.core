@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2012-11-26 16:22+0000\n"
+"POT-Creation-Date: 2013-10-24 09:25+0000\n"
 "PO-Revision-Date: 2012-09-10 10:17+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -9,10 +9,12 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0\n"
+"Language-Code: en\n"
+"Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: DOMAIN\n"
 
-#: ./opengever/dossier/move_items.py:133
+#: ./opengever/dossier/move_items.py:132
 msgid "${copied_items} Elements were moved successfully"
 msgstr "${copied_items} éléments déplacés avec succès"
 
@@ -23,7 +25,7 @@ msgstr "Insérer un dossier d'affaire"
 msgid "Add Participant"
 msgstr "Participant"
 
-#: ./opengever/dossier/behaviors/dossier.py:222
+#: ./opengever/dossier/behaviors/dossier.py:229
 msgid "Add Subdossier"
 msgstr "Insérer un sous-dossier"
 
@@ -51,23 +53,24 @@ msgstr "Document ${name} est lié avec une tâche, déplacer la tâche, svp."
 msgid "Dossiers successfully reactivated."
 msgstr "Le dossier a été à nouveau ouvert avec succès"
 
-#: ./opengever/dossier/behaviors/dossier.py:237
+#: ./opengever/dossier/behaviors/dossier.py:244
 msgid "Edit Subdossier"
 msgstr "Modifier le sous-dossier"
 
 #: ./opengever/dossier/profiles/default/actions.xml
+#: ./opengever/dossier/upgrades/profiles/2601/actions.xml
 msgid "Export selection"
 msgstr "Exporter le choix"
 
-#: ./opengever/dossier/move_items.py:139
+#: ./opengever/dossier/move_items.py:138
 msgid "Failed to copy following objects: ${failed_objects}"
 msgstr "Impossible de déplacer les éléments suivants: ${failed_objects}"
 
-#: ./opengever/dossier/move_items.py:145
-msgid "Failed to copy following objects: ${failed_objects}                    . Locket via WebDAV"
-msgstr "Impossible de déplacer les éléments suivants vérrouillés par un autre utilisateur: {failed_objects}."
+#: ./opengever/dossier/move_items.py:144
+msgid "Failed to copy following objects: ${failed_objects}                    . Locked via WebDAV"
+msgstr ""
 
-#: ./opengever/dossier/move_items.py:186
+#: ./opengever/dossier/move_items.py:185
 msgid "It isn't allowed to add such items there"
 msgstr "Cet élément ne peut être déplacé ici."
 
@@ -102,6 +105,18 @@ msgstr "Dossier des modèles"
 msgid "Templates"
 msgstr "Modèles"
 
+#: ./opengever/dossier/deactivate.py:26
+msgid "The Dossier can't be deactivated, the subdossier ${dossier} is already resolved"
+msgstr ""
+
+#: ./opengever/dossier/deactivate.py:68
+msgid "The Dossier has been activated"
+msgstr ""
+
+#: ./opengever/dossier/deactivate.py:44
+msgid "The Dossier has been deactivated"
+msgstr ""
+
 #: ./opengever/dossier/archive.py:266
 msgid "The Dossier has been resolved"
 msgstr "Dossier a été fermé avec succès"
@@ -126,11 +141,11 @@ msgstr "La date de clôture n'est pas valable. Elle doit être plus récente ou 
 msgid "The given value is not a valid Year"
 msgstr "L'année de dépôt attribuée n'est pas valable"
 
-#: ./opengever/dossier/behaviors/dossier.py:194
+#: ./opengever/dossier/behaviors/dossier.py:201
 msgid "The start date must be before the end date."
 msgstr "La date de début doit être plus récente que la date de clôture."
 
-#: ./opengever/dossier/behaviors/dossier.py:244
+#: ./opengever/dossier/behaviors/dossier.py:251
 msgid "The start or end date is invalid"
 msgstr "La date de début ou la date de clôture n'est pas valable."
 
@@ -138,7 +153,7 @@ msgstr "La date de début ou la date de clôture n'est pas valable."
 msgid "When the Action give filing number is selected,                         all fields are required."
 msgstr "Pour l'attribution de numéro d'inventaire, tous les champs sont obligatoires"
 
-#: ./opengever/dossier/move_items.py:169
+#: ./opengever/dossier/move_items.py:168
 msgid "You have not selected any items"
 msgstr "Pas d'élément sélectionné"
 
@@ -205,14 +220,11 @@ msgstr "Créer un document à partir d'un modèle"
 msgid "description"
 msgstr "Description"
 
-msgid "document_with_docucomposer"
-msgstr "Document avec DocuComposer"
-
 msgid "documents"
 msgstr "Documents"
 
 #. Default: "It isn't allowed to add such items there: ${failed_objects}"
-#: ./opengever/dossier/move_items.py:217
+#: ./opengever/dossier/move_items.py:216
 msgid "error_NotInContentTypes ${failed_objects}"
 msgstr "Pas d'objet déplacé. Les objets suivants ne peuvent être insérés dans le classeur choisi : ${failed_objects}"
 
@@ -369,8 +381,8 @@ msgid "label_add_participant"
 msgstr "Participant"
 
 #. Default: "by ${author}"
-#: ./opengever/dossier/project_templates/byline.pt:16
-#: ./opengever/dossier/viewlets/businesscase_byline.pt:19
+#: ./opengever/dossier/project_templates/byline.pt:14
+#: ./opengever/dossier/viewlets/businesscase_byline.pt:22
 msgid "label_by_author"
 msgstr "Responsable: ${author}"
 
@@ -410,7 +422,7 @@ msgid "label_edit_after_creation"
 msgstr "Modifier après avoir créé"
 
 #. Default: "E-Mail:"
-#: ./opengever/dossier/viewlets/businesscase_byline.pt:89
+#: ./opengever/dossier/viewlets/businesscase_byline.pt:77
 msgid "label_email_address"
 msgstr "Email"
 
@@ -422,13 +434,13 @@ msgid "label_end"
 msgstr "Date de fin :"
 
 #. Default: "to:"
-#: ./opengever/dossier/project_templates/byline.pt:44
-#: ./opengever/dossier/viewlets/businesscase_byline.pt:45
+#: ./opengever/dossier/project_templates/byline.pt:42
+#: ./opengever/dossier/viewlets/businesscase_byline.pt:43
 msgid "label_end_byline"
 msgstr "Jusqu'au :"
 
 #. Default: "Filing Number:"
-#: ./opengever/dossier/viewlets/businesscase_byline.pt:79
+#: ./opengever/dossier/viewlets/businesscase_byline.pt:70
 msgid "label_filing_no"
 msgstr "Numéro d'inventaire"
 
@@ -465,7 +477,7 @@ msgstr "Participation"
 #. Default: "Reference Number"
 #: ./opengever/dossier/behaviors/dossier.py:184
 #: ./opengever/dossier/browser/report.py:118
-#: ./opengever/dossier/viewlets/businesscase_byline.pt:69
+#: ./opengever/dossier/viewlets/businesscase_byline.pt:63
 msgid "label_reference_number"
 msgstr "Numéro de référence"
 
@@ -492,7 +504,7 @@ msgid "label_roles"
 msgstr "Rôles"
 
 #. Default: "Sequence Number:"
-#: ./opengever/dossier/viewlets/businesscase_byline.pt:59
+#: ./opengever/dossier/viewlets/businesscase_byline.pt:56
 msgid "label_sequence_number"
 msgstr "Numéro courant"
 
@@ -508,8 +520,8 @@ msgid "label_start"
 msgstr "Date début"
 
 #. Default: "from:"
-#: ./opengever/dossier/project_templates/byline.pt:35
-#: ./opengever/dossier/viewlets/businesscase_byline.pt:36
+#: ./opengever/dossier/project_templates/byline.pt:33
+#: ./opengever/dossier/viewlets/businesscase_byline.pt:34
 msgid "label_start_byline"
 msgstr "De :"
 
@@ -531,8 +543,8 @@ msgid "label_title"
 msgstr "Titre"
 
 #. Default: "State:"
-#: ./opengever/dossier/project_templates/byline.pt:28
-#: ./opengever/dossier/viewlets/businesscase_byline.pt:30
+#: ./opengever/dossier/project_templates/byline.pt:26
+#: ./opengever/dossier/viewlets/businesscase_byline.pt:29
 msgid "label_workflow_state"
 msgstr "Etat:"
 
@@ -608,8 +620,8 @@ msgid "the dossier start date is missing."
 msgstr "Aucune date de début n'a été saisie"
 
 #. Default: "expired"
-#: ./opengever/dossier/project_templates/byline.pt:53
-#: ./opengever/dossier/viewlets/businesscase_byline.pt:54
+#: ./opengever/dossier/project_templates/byline.pt:51
+#: ./opengever/dossier/viewlets/businesscase_byline.pt:52
 msgid "time_expired"
 msgstr "Périmé"
 
@@ -627,5 +639,4 @@ msgstr "Aucun envoi possible de documents à un autre service. Vous êtes unique
 #: ./opengever/dossier/behaviors/participation.py:194
 msgid "warning_no_participants_selected"
 msgstr "Vous n'avez sélectionné aucune participation"
-
 

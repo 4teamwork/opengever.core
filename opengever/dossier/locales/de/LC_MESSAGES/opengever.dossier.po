@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2013-04-03 08:06+0000\n"
+"POT-Creation-Date: 2013-10-24 09:25+0000\n"
 "PO-Revision-Date: 2013-04-03 10:08+0200\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -9,6 +9,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0\n"
+"Language-Code: en\n"
+"Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: DOMAIN\n"
 
@@ -24,7 +26,7 @@ msgstr "Geschäftsdossier hinzufügen"
 msgid "Add Participant"
 msgstr "Beteiligung hinzufügen"
 
-#: ./opengever/dossier/behaviors/dossier.py:222
+#: ./opengever/dossier/behaviors/dossier.py:229
 msgid "Add Subdossier"
 msgstr "Subdossier hinzufügen"
 
@@ -53,11 +55,12 @@ msgstr "Dokument ${name} ist mit einer Aufgabe verbunden, bitte Aufgabe verschie
 msgid "Dossiers successfully reactivated."
 msgstr "Das Dossier wurde erfolgreich wieder eröffnet."
 
-#: ./opengever/dossier/behaviors/dossier.py:237
+#: ./opengever/dossier/behaviors/dossier.py:244
 msgid "Edit Subdossier"
 msgstr "Subdossier bearbeiten"
 
 #: ./opengever/dossier/profiles/default/actions.xml
+#: ./opengever/dossier/upgrades/profiles/2601/actions.xml
 msgid "Export selection"
 msgstr "Auswahl exportieren"
 
@@ -110,7 +113,7 @@ msgstr "Vorlagen"
 msgid "The Dossier can't be deactivated, the subdossier ${dossier} is already resolved"
 msgstr "Das Dossier konnte nicht storniert werden, da das Subdossier ${dossier} bereits abgeschlossen ist. Das Subdossier muss vorgängig wieder eröffnet werden."
 
-#: ./opengever/dossier/deactivate.py:69
+#: ./opengever/dossier/deactivate.py:68
 msgid "The Dossier has been activated"
 msgstr "Das Dossier wurde aktiviert."
 
@@ -142,11 +145,11 @@ msgstr "Das Ende-Datum ist ungültig, es muss jünger oder gleich sein wie das D
 msgid "The given value is not a valid Year"
 msgstr "Das angegeben Ablagejahr ist ungültig."
 
-#: ./opengever/dossier/behaviors/dossier.py:194
+#: ./opengever/dossier/behaviors/dossier.py:201
 msgid "The start date must be before the end date."
 msgstr "Das Beginn-Datum muss vor dem Ende-Datum liegen."
 
-#: ./opengever/dossier/behaviors/dossier.py:244
+#: ./opengever/dossier/behaviors/dossier.py:251
 msgid "The start or end date is invalid"
 msgstr "Das Beginn- oder Ende-Datum ist ungültig."
 
@@ -220,9 +223,6 @@ msgstr "Dokument aus Vorlage erstellen"
 
 msgid "description"
 msgstr "Beschreibung"
-
-msgid "document_with_docucomposer"
-msgstr "Dokument mit Docucomposer"
 
 msgid "documents"
 msgstr "Dokumente"
@@ -385,8 +385,8 @@ msgid "label_add_participant"
 msgstr "Beteiligung hinzufügen"
 
 #. Default: "by ${author}"
-#: ./opengever/dossier/project_templates/byline.pt:16
-#: ./opengever/dossier/viewlets/businesscase_byline.pt:19
+#: ./opengever/dossier/project_templates/byline.pt:14
+#: ./opengever/dossier/viewlets/businesscase_byline.pt:22
 msgid "label_by_author"
 msgstr "Federführend: ${author}"
 
@@ -426,7 +426,7 @@ msgid "label_edit_after_creation"
 msgstr "Nach dem Hinzufügen bearbeiten"
 
 #. Default: "E-Mail:"
-#: ./opengever/dossier/viewlets/businesscase_byline.pt:89
+#: ./opengever/dossier/viewlets/businesscase_byline.pt:77
 msgid "label_email_address"
 msgstr "E-Mail:"
 
@@ -438,13 +438,13 @@ msgid "label_end"
 msgstr "Ende"
 
 #. Default: "to:"
-#: ./opengever/dossier/project_templates/byline.pt:44
-#: ./opengever/dossier/viewlets/businesscase_byline.pt:45
+#: ./opengever/dossier/project_templates/byline.pt:42
+#: ./opengever/dossier/viewlets/businesscase_byline.pt:43
 msgid "label_end_byline"
 msgstr "Ende:"
 
 #. Default: "Filing Number:"
-#: ./opengever/dossier/viewlets/businesscase_byline.pt:79
+#: ./opengever/dossier/viewlets/businesscase_byline.pt:70
 msgid "label_filing_no"
 msgstr "Ablagenummer:"
 
@@ -481,7 +481,7 @@ msgstr "Beteiligung"
 #. Default: "Reference Number"
 #: ./opengever/dossier/behaviors/dossier.py:184
 #: ./opengever/dossier/browser/report.py:118
-#: ./opengever/dossier/viewlets/businesscase_byline.pt:69
+#: ./opengever/dossier/viewlets/businesscase_byline.pt:63
 msgid "label_reference_number"
 msgstr "Aktenzeichen:"
 
@@ -508,7 +508,7 @@ msgid "label_roles"
 msgstr "Rollen"
 
 #. Default: "Sequence Number:"
-#: ./opengever/dossier/viewlets/businesscase_byline.pt:59
+#: ./opengever/dossier/viewlets/businesscase_byline.pt:56
 msgid "label_sequence_number"
 msgstr "Laufnummer:"
 
@@ -524,8 +524,8 @@ msgid "label_start"
 msgstr "Beginn"
 
 #. Default: "from:"
-#: ./opengever/dossier/project_templates/byline.pt:35
-#: ./opengever/dossier/viewlets/businesscase_byline.pt:36
+#: ./opengever/dossier/project_templates/byline.pt:33
+#: ./opengever/dossier/viewlets/businesscase_byline.pt:34
 msgid "label_start_byline"
 msgstr "Beginn:"
 
@@ -547,8 +547,8 @@ msgid "label_title"
 msgstr "Titel"
 
 #. Default: "State:"
-#: ./opengever/dossier/project_templates/byline.pt:28
-#: ./opengever/dossier/viewlets/businesscase_byline.pt:30
+#: ./opengever/dossier/project_templates/byline.pt:26
+#: ./opengever/dossier/viewlets/businesscase_byline.pt:29
 msgid "label_workflow_state"
 msgstr "Status:"
 
@@ -624,8 +624,8 @@ msgid "the dossier start date is missing."
 msgstr "Es wurde kein Beginn-Datum gesetzt."
 
 #. Default: "expired"
-#: ./opengever/dossier/project_templates/byline.pt:53
-#: ./opengever/dossier/viewlets/businesscase_byline.pt:54
+#: ./opengever/dossier/project_templates/byline.pt:51
+#: ./opengever/dossier/viewlets/businesscase_byline.pt:52
 msgid "time_expired"
 msgstr "abgelaufen"
 
@@ -643,5 +643,4 @@ msgstr "Sie können die Dokumente nicht an einen anderen Mandanten senden, da Si
 #: ./opengever/dossier/behaviors/participation.py:194
 msgid "warning_no_participants_selected"
 msgstr "Sie haben keine Beteiligungen ausgewählt."
-
 
