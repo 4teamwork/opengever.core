@@ -1,5 +1,6 @@
 from ftw.testing import MockTestCase
 from mocker import ANY
+from opengever.base.interfaces import IBaseClientID
 from opengever.latex.interfaces import ILaTeXSettings
 from opengever.latex.interfaces import ILandscapeLayer
 from opengever.latex.layouts.landscape import LandscapeLayout
@@ -9,6 +10,7 @@ from plone.registry.interfaces import IRegistry
 from zope.component import adaptedBy
 
 
+FAKE_CLIENT_TITLE = 'fake_clienttitle'
 FAKE_LOCATION = 'fake_location'
 
 
@@ -33,6 +35,9 @@ class TestLandscapeLayout(MockTestCase):
         registry_mock = self.stub()
         self.expect(
             registry_mock.forInterface(ILaTeXSettings).location).result(FAKE_LOCATION)
+        self.expect(
+            registry_mock.forInterface(IBaseClientID).client_title).result(FAKE_CLIENT_TITLE)
+
         self.mock_utility(registry_mock, IRegistry)
 
         member = self.stub()
