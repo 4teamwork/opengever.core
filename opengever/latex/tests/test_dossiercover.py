@@ -1,170 +1,106 @@
-from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
-from datetime import datetime
-from ftw.pdfgenerator.interfaces import ILaTeXLayout
+from datetime import date
+from ftw.builder import Builder
+from ftw.builder import create
+from ftw.pdfgenerator.builder import Builder as PDFBuilder
 from ftw.pdfgenerator.interfaces import ILaTeXView
+from ftw.pdfgenerator.utils import provide_request_layer
 from ftw.testing import MockTestCase
 from opengever.base.interfaces import IBaseClientID
-from opengever.base.interfaces import IReferenceNumber
-from opengever.dossier.behaviors.dossier import IDossierMarker, IDossier
+from opengever.dossier.behaviors.dossier import IDossierMarker
+from opengever.latex.dossiercover import DossierCoverPDFView
 from opengever.latex.dossiercover import IDossierCoverLayer
+from opengever.latex.layouts.default import DefaultLayout
 from opengever.latex.testing import LATEX_ZCML_LAYER
-from opengever.ogds.base.interfaces import IContactInformation
-from opengever.repository.interfaces import IRepositoryFolder
-from opengever.repository.repositoryroot import IRepositoryRoot
+from opengever.testing import FunctionalTestCase
+from opengever.testing import create_ogds_user
 from plone.registry.interfaces import IRegistry
 from zope.component import getMultiAdapter
-from zope.schema import vocabulary
+from zope.component import getUtility
+from zope.publisher.interfaces.browser import IDefaultBrowserLayer
 
 
-def toLocalizedTime(arg):
-    return arg
+class TestDossierCoverRenderArguments(FunctionalTestCase):
+
+    def setUp(self):
+        super(TestDossierCoverRenderArguments, self).setUp()
+
+        registry = getUtility(IRegistry)
+        proxy = registry.forInterface(IBaseClientID)
+        proxy.client_title = u'Department of forest & hunt'
+
+        create_ogds_user('hugo.boss')
+
+        repository = create(Builder('repository_root')
+                            .having(version='Repository 2013 & 2014'))
+        repofolder = create(Builder('repository').within(repository))
+        dossier = create(Builder('dossier')
+                         .having(title=u'Foo & bar',
+                                 responsible='hugo.boss',
+                                 start=date(2013, 11, 1),
+                                 end=date(2013, 12, 31))
+                         .within(repofolder))
+
+        provide_request_layer(dossier.REQUEST, IDossierCoverLayer)
+        layout = DefaultLayout(dossier, dossier.REQUEST, PDFBuilder())
+        self.dossiercover = getMultiAdapter(
+            (dossier, dossier.REQUEST, layout), ILaTeXView)
+
+    def test_contains_converted_configured_clienttitle(self):
+        arguments = self.dossiercover.get_render_arguments()
+        self.assertEquals('Department of forest \\& hunt',
+                          arguments.get('clienttitle'))
+
+    def test_contains_repository_version(self):
+        arguments = self.dossiercover.get_render_arguments()
+        self.assertEquals(u'Repository 2013 \\& 2014',
+                          arguments.get('repositoryversion'))
+
+    def test_contains_referencenr(self):
+        arguments = self.dossiercover.get_render_arguments()
+        self.assertEquals(u'OG 1 / 1',
+                          arguments.get('referencenr'))
+
+    def test_contains_converted_title(self):
+        arguments = self.dossiercover.get_render_arguments()
+        self.assertEquals(u'Foo \\& bar',
+                          arguments.get('title'))
+
+    def test_contains_description_of_responsible(self):
+        arguments = self.dossiercover.get_render_arguments()
+        self.assertEquals(u'Boss Hugo (hugo.boss)',
+                          arguments.get('responsible'))
+
+    def test_contains_start_date_in_readable_format(self):
+        arguments = self.dossiercover.get_render_arguments()
+        self.assertEquals('Nov 01, 2013', arguments.get('start'))
+
+    def test_contains_end_date_in_readable_format(self):
+        arguments = self.dossiercover.get_render_arguments()
+        self.assertEquals('Dec 31, 2013', arguments.get('end'))
 
 
 class TestDossierCoverPDFView(MockTestCase):
 
     layer = LATEX_ZCML_LAYER
 
-    def setUp(self):
-        super(TestDossierCoverPDFView, self).setUp()
-        # mock vocabulary registry
-        if not hasattr(self, '_ori_getVocReg'):
-            self._ori_getVocReg = vocabulary.getVocabularyRegistry
-        self.getVocabularyRegistry = self.mocker.replace(
-            'zope.schema.vocabulary.getVocabularyRegistry')
-
-    def tearDown(self):
-        super(TestDossierCoverPDFView, self).tearDown()
-        vocabulary.getVocabularyRegistry = self._ori_getVocReg
-        self.getVocabularyRegistry = None
-
-    def stub_tree(self, long_title=False):
-        tree = self.create_dummy()
-        tree.subdossier = self.providing_stub([IDossierMarker])
-        tree.dossier = self.providing_stub([IDossierMarker])
-        tree.subfolder = self.providing_stub([IRepositoryFolder])
-        tree.folder = self.providing_stub([IRepositoryFolder])
-        tree.repository = self.providing_stub([IRepositoryRoot])
-        tree.site = self.providing_stub([IPloneSiteRoot])
-
-        self.expect(tree.subdossier.toLocalizedTime).result(
-            toLocalizedTime)
-        self.expect(tree.repository.version).result('Repository 2.0 2013')
-
-        if long_title:
-            self.expect(tree.subfolder.Title()).result(10 * 'Lorem ipsum subfolder ')
-            self.expect(tree.folder.Title()).result(10 * 'Lorem ipsum folder ')
-            self.expect(tree.dossier.Title()).result(10 * 'Lorem ipsum dossier ')
-        else:
-            self.expect(tree.subfolder.Title()).result('Sub Folder')
-            self.expect(tree.folder.Title()).result('Folder')
-            self.expect(tree.dossier.Title()).result('Dossier title')
-
-        self.set_parent(
-            tree.subdossier, self.set_parent(
-                tree.dossier, self.set_parent(
-                    tree.subfolder, self.set_parent(
-                        tree.folder, self.set_parent(
-                            tree.repository,
-                            tree.site)))))
-
-        return tree
-
-    def mock_metadata(self, context_mock, metadata=None):
-        defaults = {
-            'clientid': 'OG',
-            'referencenr': 'OG 1.6 / 1',
-            'filingprefix': 'Leitung',
-            'filingnr': '5',
-            'sequencenr': '2',
-            'title': 'My Dossier',
-            'description': 'The description',
-            'responsible': 'John Doe',
-            'start': datetime(2011, 9, 24),
-            'end': datetime(2011, 11, 22)}
-
-        if metadata:
-            defaults.update(metadata)
-
-        # clientid
-        registry = self.mocker.mock()
-        self.expect(registry.forInterface(IBaseClientID).client_id).result(
-            defaults.get('clientid'))
-        self.mock_utility(registry, IRegistry)
-
-        # referencenr
-        ref_adapter = self.mocker.mock()
-        self.mock_adapter(ref_adapter, IReferenceNumber, [IDossierMarker])
-        self.expect(ref_adapter(context_mock).get_number()).result(
-            defaults.get('referencenr'))
-
-        # title / description
-        self.expect(context_mock.Title()).result(defaults.get('title'))
-        self.expect(context_mock.Description()).result(
-            defaults.get('description'))
-
-        # responsible
-        self.expect(IDossier(context_mock).responsible).result('RESPONSIBLE')
-        info_utility = self.mocker.mock()
-        self.mock_utility(info_utility, IContactInformation)
-        self.expect(info_utility.describe('RESPONSIBLE')).result(
-            defaults.get('responsible'))
-
-        # start / end
-        self.expect(IDossier(context_mock).start).result(
-            defaults.get('start'))
-        self.expect(IDossier(context_mock).end).result(
-            defaults.get('end'))
-
-        # client_title
-        registry_mock = self.stub()
-        self.expect(
-            registry_mock.forInterface(IBaseClientID).client_title).result('FAKE Client')
-        self.mock_utility(registry_mock, IRegistry)
-
-    def mock_converter(self, layout):
-        converter = self.stub()
-        self.expect(layout.get_converter()).result(converter)
-        self.expect(
-            converter.convert_plain('FAKE Client')).result('conv:FAKE Client')
-        self.expect(
-            converter.convert_plain('Repository 2.0 2013')).result(
-                'conv:Repository 2.0 2013')
-        self.expect(
-            converter.convert_plain('referencenr')).result('conv:OG 1.6 / 1')
-        self.expect(
-            converter.convert_plain('My Dossier')).result('conv:My Dossier')
-        self.expect(
-            converter.convert('The description')).result('conv:The description')
-        self.expect(
-            converter.convert_plain('John Doe')).result('conv:John Doe')
-        self.expect(
-            converter.convert_plain('OG 1.6 / 1')).result('conv:OG 1.6 / 1')
-        self.expect(
-            converter.convert_plain('2011-09-24 00:00:00')).result(
-                'conv:2011-09-24 00:00:00')
-        self.expect(
-            converter.convert_plain('2011-11-22 00:00:00')).result(
-                'conv:2011-11-22 00:00:00')
-
-    def test_get_render_arguments(self):
-        tree = self.stub_tree()
-        context = tree.subdossier
-        self.mock_metadata(context)
-        request = self.providing_stub([IDossierCoverLayer])
-        layout = self.providing_stub([ILaTeXLayout])
-        self.mock_converter(layout)
+    def test_is_registered(self):
+        context = self.providing_stub([IDossierMarker])
+        request = self.providing_stub([IDefaultBrowserLayer])
 
         self.replay()
-        view = getMultiAdapter((context, request, layout), ILaTeXView)
+        view = getMultiAdapter((context, request), name='dossier_cover_pdf')
 
-        self.assertEqual(
-            view.get_render_arguments(),
+        self.assertTrue(isinstance(view, DossierCoverPDFView))
 
-            {'clienttitle': 'conv:FAKE Client',
-             'referencenr': 'conv:OG 1.6 / 1',
-             'repositoryversion': 'conv:Repository 2.0 2013',
-             'title': 'conv:My Dossier',
-             'description': 'conv:The description',
-             'responsible': 'conv:John Doe',
-             'start': 'conv:2011-09-24 00:00:00',
-             'end': 'conv:2011-11-22 00:00:00'})
+    def test_render_adds_browser_layer(self):
+        context = request = self.create_dummy()
+
+        view = self.mocker.patch(DossierCoverPDFView(context, request))
+
+        self.expect(view.allow_alternate_output()).result(False)
+        self.expect(view.export())
+
+        self.replay()
+
+        view.render()
+        self.assertTrue(IDossierCoverLayer.providedBy(request))
