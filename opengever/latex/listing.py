@@ -1,3 +1,4 @@
+from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from five import grok
 from ftw.table import helper
 from opengever.latex import _
@@ -8,7 +9,6 @@ from opengever.ogds.base.interfaces import IContactInformation
 from opengever.ogds.base.utils import get_current_client
 from opengever.task.helper import task_type_helper
 from zope.component import getUtility
-from zope.i18n import translate
 from zope.interface import Interface
 
 
@@ -34,6 +34,8 @@ class DossiersLaTeXListing(grok.MultiAdapter):
     grok.adapts(Interface, Interface, Interface)
     grok.name('dossiers')
 
+    template = ViewPageTemplateFile('templates/listing.pt')
+
     def __init__(self, context, request, latex_view):
         self.context = context
         self.request = request
@@ -43,62 +45,33 @@ class DossiersLaTeXListing(grok.MultiAdapter):
         self.info = getUtility(IContactInformation)
 
     def get_widths(self):
-        widths = []
-        for row in self.get_config():
-            widths.append('p{{{}}}'.format(row.get('width')))
-
-        return ''.join(widths)
+        return [row.get('width') for row in self.get_config()]
 
     def get_labels(self):
-        labels = []
-        for row in self.get_config():
-            label = translate(row.get('label'), context=self.request)
-            labels.append(u'\\bfseries {}'.format(label))
+        return [row.get('label') for row in self.get_config()]
 
-        return ' & '.join(labels)
+    def get_listing(self, brains):
+        self.brains = brains
 
-    def get_rows(self, brains):
-        rows = []
+        if len(brains) == 0:
+            return None
+        else:
+            return self.latex_view.convert(self.template())
 
-        for brain in brains:
-            rows.append(self.get_row_for_brain(brain))
-
-        return rows
+    def get_rows(self):
+        return [self.get_row_for_brain(brain) for brain in self.brains]
 
     def get_row_for_brain(self, brain):
-
         data = []
         for row in self.get_config():
             data.append(row.get('getter')(brain))
 
-        return self.convert_list_to_row(data)
-
-    def convert_list_to_row(self, row):
-        data = []
-
-        for cell in row:
-            if cell is None:
-                data.append('')
-
-            elif isinstance(cell, unicode):
-                cell = cell.encode('utf-8')
-                data.append(self.latex_view.convert_plain(cell))
-
-            elif isinstance(cell, str):
-                data.append(self.latex_view.convert_plain(cell))
-
-            else:
-                data.append(self.latex_view.convert_plain(str(cell)))
-
-        return ' & '.join(data)
+        return data
 
     def get_responsible(self, brain):
         return '%s / %s' % (
             self.client.title,
             self.info.describe(brain.responsible))
-
-    def get_state(self, brain):
-        return brain
 
     def get_repository_title(self, brain):
         """Returns the title of the first parental repository folder.
@@ -134,44 +107,44 @@ class DossiersLaTeXListing(grok.MultiAdapter):
         return [
             {'id': 'reference',
              'label': _('label_reference_number', default='Reference number'),
-             'width': '13mm',
+             'width': '10%',
              'getter': lambda brain: brain.reference},
 
             {'id': 'sequence_number',
              'label': _('label_sequence_number', default='No.'),
-             'width': '4mm',
+             'width': '5%',
              'getter': lambda brain: brain.sequence_number},
 
             {'id': 'repository_title',
              'label': _('label_repository_title', default='Repositoryfolder'),
-             'width': '40mm',
+             'width': '20%',
              'getter': self.get_repository_title},
 
             {'id': 'title',
              'label': _('label_title', default='Title'),
-             'width': '50mm',
+             'width': '25%',
              'getter': lambda brain: brain.Title},
 
             {'id': 'responsible',
              'label': _('label_responsible', default='Responsible'),
-             'width': '48mm',
+             'width': '20%',
              'getter': self.get_responsible},
 
             {'id': 'review_state',
              'label': _('label_review_state', default='State'),
-             'width': '16mm',
+             'width': '10%',
              'getter': lambda brain: workflow_state(
                  brain, brain.review_state)},
 
             {'id': 'start',
              'label': _('label_start', default='Start'),
-             'width': '10mm',
+             'width': '5%',
              'getter': lambda brain: helper.readable_date(
                  brain, brain.start)},
 
             {'id': 'end',
              'label': _('label_end', default='End'),
-             'width': '10mm',
+             'width': '5%',
              'getter': lambda brain: helper.readable_date(brain, brain.end)}]
 
 
@@ -180,19 +153,21 @@ class SubDossiersLaTeXListing(DossiersLaTeXListing):
     grok.adapts(Interface, Interface, Interface)
     grok.name('subdossiers')
 
+    def drop_column(self, config, column_id):
+        ids = [col.get('id') for col in config]
+        config.pop(ids.index(column_id))
+        return config
+
     def get_config(self):
         """Returns a list with dict per row including this row informations:
         - label
         - value_getter
         - width
         """
-
         config = super(SubDossiersLaTeXListing, self).get_config()
 
-        ids = [col.get('id') for col in config]
-
-        config.pop(ids.index('reference'))
-        config.pop(ids.index('repository_title'))
+        config = self.drop_column(config, 'reference')
+        config = self.drop_column(config, 'repository_title')
 
         return config
 
@@ -211,36 +186,36 @@ class DocumentsLaTeXListing(DossiersLaTeXListing):
 
         return [
             {'id': 'sequence_number',
-             'label': _('label_sequence_number', default='No.'),
-             'width': '4mm',
+             'label': _('short_label_sequence_number', default='No.'),
+             'width': '6%',
              'getter': lambda brain: brain.sequence_number},
 
             {'id': 'title',
              'label': _('label_title', default='Title'),
-             'width': '50mm',
+             'width': '35%',
              'getter': lambda brain: brain.Title},
 
             {'id': 'document_date',
              'label': _('label_document_date', default='Document date'),
-             'width': '10mm',
+             'width': '13%',
              'getter': lambda brain: helper.readable_date(
                  brain, brain.document_date)},
 
             {'id': 'receipt_date',
-             'label': _('label_receipt_date', default='Document date'),
-             'width': '10mm',
+             'label': _('label_receipt_date', default='Receipt date'),
+             'width': '13%',
              'getter': lambda brain: helper.readable_date(
                  brain, brain.receipt_date)},
 
             {'id': 'delivery_date',
-             'label': _('label_delivery_date', default='Document date'),
-             'width': '10mm',
+             'label': _('label_delivery_date', default='Delivery date'),
+             'width': '13%',
              'getter': lambda brain: helper.readable_date(
                  brain, brain.delivery_date)},
 
             {'id': 'document_author',
-             'label': _('label_sequence_number', default='No.'),
-             'width': '4mm',
+             'label': _('label_document_author', default='Document author'),
+             'width': '20%',
              'getter': lambda brain: brain.document_author}]
 
 
@@ -258,44 +233,39 @@ class TasksLaTeXListing(DossiersLaTeXListing):
 
         return [
             {'id': 'sequence_number',
-             'label': _('label_sequence_number', default='No.'),
-             'width': '4mm',
+             'label': _('short_label_sequence_number', default='No.'),
+             'width': '3%',
              'getter': lambda brain: brain.sequence_number},
 
             {'id': 'task_type',
              'label': _('label_task_type', default='Task type'),
-             'width': '50mm',
+             'width': '20%',
              'getter': lambda brain: task_type_helper(brain, brain.task_type)},
 
             {'id': 'issuer',
              'label': _('label_issuer', default='Issuer'),
-             'width': '10mm',
+             'width': '15%',
              'getter': lambda brain: get_issuer_of_task(
                  brain, with_client=True, with_principal=False)},
 
             {'id': 'responsible',
-             'label': _('label_responsible', default='Responsible'),
-             'width': '10mm',
+             'label': _('label_task_responsible', default='Responsible'),
+             'width': '15%',
              'getter': lambda brain: get_responsible_of_task(brain)},
 
             {'id': 'review_state',
              'label': _('label_review_state', default='State'),
-             'width': '16mm',
+             'width': '7%',
              'getter': lambda brain: workflow_state(
                  brain, brain.review_state)},
 
             {'id': 'title',
              'label': _('label_title', default='Title'),
-             'width': '50mm',
+             'width': '25%',
              'getter': lambda brain: brain.Title},
 
             {'id': 'deadline',
              'label': _('label_deadline', default='Deadline'),
-             'width': '10mm',
+             'width': '15%',
              'getter': lambda brain: helper.readable_date(
-                 brain, brain.deadline)},
-
-            {'id': 'document_author',
-             'label': _('label_sequence_number', default='No.'),
-             'width': '4mm',
-             'getter': lambda brain: brain.document_author}]
+                 brain, brain.deadline)}]

@@ -67,32 +67,28 @@ class DossierDetailsLaTeXView(grok.MultiAdapter, MakoLaTeXView):
         args['participants'] = self.get_participants()
 
         # subdossiers
+        args['subdossierstitle'] = translate(
+            _('label_subdossiers', default="Subdossiers"), context=self.request)
+
         listing = getMultiAdapter((self.context, self.request, self),
                                   ILaTexListing, name='subdossiers')
-        args['subdossierstitle'] = translate(
-            _('label_subdossiers', default="Subdossiers"),
-            context=self.request)
-        args['subdossier_labels'] = listing.get_labels()
-        args['subdossier_widths'] = listing.get_widths()
-        args['subdossier_rows'] = listing.get_rows(self.get_subdossiers())
+        args['subdossiers'] = listing.get_listing(self.get_subdossiers())
 
         # documents
-        listing = getMultiAdapter((self.context, self.request, self),
-                                  ILaTexListing, name='documents')
         args['documentstitle'] = translate(
             _('label_documents', default="Documents"), context=self.request)
-        args['documents_labels'] = listing.get_labels()
-        args['documents_widths'] = listing.get_widths()
-        args['documents_rows'] = listing.get_rows(self.get_documents())
+
+        listing = getMultiAdapter((self.context, self.request, self),
+                                  ILaTexListing, name='documents')
+        args['documents'] = listing.get_listing(self.get_documents())
 
         # tasks
-        listing = getMultiAdapter(
-            (self.context, self.request, self), ILaTexListing, name='tasks')
         args['taskstitle'] = translate(
             _('label_tasks', default="Tasks"), context=self.request)
-        args['tasks_labels'] = listing.get_labels()
-        args['tasks_widths'] = listing.get_widths()
-        args['tasks_rows'] = listing.get_rows(self.get_tasks())
+
+        listing = getMultiAdapter(
+            (self.context, self.request, self), ILaTexListing, name='tasks')
+        args['tasks'] = listing.get_listing(self.get_tasks())
 
         self.layout.use_package('pdflscape')
         self.layout.use_package('longtable')

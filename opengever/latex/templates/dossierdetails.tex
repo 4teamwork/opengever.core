@@ -23,61 +23,31 @@ ${dossier_metadata} \\ \hline
   \setlength{\tablewidth}{\linewidth}
 
 \scriptsize
-% if subdossier_rows:
+% if subdossiers:
 \vspace{5mm}
 {\bf ${subdossierstitle}}\\%%
 \vspace{1mm}
 
-\setlength\extrarowheight{1pt}
-\tablehead{${subdossier_labels}\\ \hline}
-\begin{supertabular*}{\textwidth}{${subdossier_widths}}
-
-% for row in subdossier_rows:
-${row} \\ \hline
-% endfor
-
-\shrinkheight{60mm}
-
-\end{supertabular*}
+${subdossiers}
 
 % endif
 
 
-% if tasks_rows:
+% if tasks:
 \vspace{5mm}
 {\bf ${taskstitle}}\\%%
 \vspace{1mm}
 
-\setlength\extrarowheight{1pt}
-\tablehead{${tasks_labels}\\ \hline}
-\begin{supertabular*}{\textwidth}{${tasks_widths}}
-
-% for row in tasks_rows:
-${row} \\ \hline
-% endfor
-
-\shrinkheight{60mm}
-
-\end{supertabular*}
+${tasks}
 
 % endif
 
-% if documents_rows:
+% if documents:
 \vspace{5mm}
 {\bf ${documentstitle}}\\%%
 \vspace{1mm}
 
-\setlength\extrarowheight{1pt}
-\tablehead{${documents_labels}\\ \hline}
-\begin{supertabular*}{\textwidth}{${documents_widths}}
-
-% for row in documents_rows:
-${row} \\ \hline
-% endfor
-
-\shrinkheight{60mm}
-
-\end{supertabular*}
+${documents}
 
 % endif
 

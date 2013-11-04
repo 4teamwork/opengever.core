@@ -1,0 +1,29 @@
+<html
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:tal="http://xml.zope.org/namespaces/tal"
+    xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+    tal:omit-tag="python: True"
+    i18n:domain="ftw.workspace">
+
+  <table>
+    <colgroup>
+      <col tal:repeat="value view/get_widths"
+           tal:attributes="width value" width="1%" />
+    </colgroup>
+
+    <thead>
+      <tr>
+        <th class="border-bottom" tal:repeat="label view/get_labels">
+          <b i18n:translate="" tal:content="label"></b>
+        </th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr tal:repeat="rows view/get_rows">
+        <td tal:repeat="value rows" class="border-bottom" tal:content="value"/>
+      </tr>
+    </tbody>
+  </table>
+
+</html>

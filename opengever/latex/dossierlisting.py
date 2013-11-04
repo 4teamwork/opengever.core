@@ -4,18 +4,14 @@ from ftw.pdfgenerator.interfaces import ILaTeXLayout
 from ftw.pdfgenerator.interfaces import ILaTeXView
 from ftw.pdfgenerator.utils import provide_request_layer
 from ftw.pdfgenerator.view import MakoLaTeXView
-from ftw.table import helper
-from opengever.latex import _
 from opengever.latex.interfaces import ILandscapeLayer
 from opengever.latex.listing import ILaTexListing
 from opengever.latex.utils import get_selected_items_from_catalog
-from opengever.latex.utils import workflow_state
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.ogds.base.utils import get_current_client
-from zope.component import getUtility
-from zope.i18n import translate
-from zope.interface import Interface
 from zope.component import getMultiAdapter
+from zope.component import getUtility
+from zope.interface import Interface
 
 
 class IDossierListingLayer(ILandscapeLayer):
@@ -57,11 +53,10 @@ class DossierListingLaTeXView(grok.MultiAdapter, MakoLaTeXView):
         self.info = getUtility(IContactInformation)
         self.client = get_current_client()
 
-        listing = getMultiAdapter(
-            (self.context, self.request, self), ILaTexListing, name='dossiers')
+        brains = [brain for brain in get_selected_items_from_catalog(
+            self.context, self.request)]
 
-        return {
-            'rows': listing.get_rows(
-                get_selected_items_from_catalog(self.context, self.request)),
-            'widths': listing.get_widths(),
-            'labels': listing.get_labels()}
+        dossier_listing = getMultiAdapter((self.context, self.request, self),
+                                          ILaTexListing, name='dossiers')
+
+        return {'listing': dossier_listing.get_listing(brains)}
