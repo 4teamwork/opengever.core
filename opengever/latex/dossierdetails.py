@@ -116,7 +116,7 @@ class DossierDetailsLaTeXView(grok.MultiAdapter, MakoLaTeXView):
                 'label': _('label_title', default='Title'),
                 'getter': self.get_title},
             'subdossier_title': {
-                'label': _('label_subdossier_title', default='Title'),
+                'label': _('label_subdossier_title', default='Subdossier Title'),
                 'getter': self.get_subdossier_title},
             'responsible': {
                 'label': _('label_responsible', default='Responsible'),

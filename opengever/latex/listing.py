@@ -111,7 +111,7 @@ class DossiersLaTeXListing(grok.MultiAdapter):
              'getter': lambda brain: brain.reference},
 
             {'id': 'sequence_number',
-             'label': _('label_sequence_number', default='No.'),
+             'label': _('short_label_sequence_number', default='No.'),
              'width': '5%',
              'getter': lambda brain: brain.sequence_number},
 
