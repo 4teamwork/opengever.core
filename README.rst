@@ -33,6 +33,13 @@ Updating translations can be done with the ``bin/i18n-build`` script.
 It will scan the entire ``opengever.core`` package for translation files that
 need updating, rebuild the respective ``.pot`` files and sync the ``.po`` files.
 
+Alternatively it's also possible to only update a single subpackage, for example the ``dossier`` subpackage:
+
+.. code::
+
+    bin/i18n-build opengever.dossier
+
+
 Tests
 -----
 
