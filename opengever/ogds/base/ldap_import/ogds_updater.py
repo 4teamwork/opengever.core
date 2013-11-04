@@ -127,7 +127,7 @@ class OGDSUpdater(grok.Adapter):
                 try:
                     info['groupid'] = info['cn'][0]
                 except KeyError:
-                    info['groupid'] = info['fullname'][0]
+                    info['groupid'] = info['fullname']
 
                 info['groupid'] = info['groupid'].decode('utf-8')
                 groupid = info['groupid']

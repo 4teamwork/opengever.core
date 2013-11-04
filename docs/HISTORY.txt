@@ -4,6 +4,9 @@ Changelog
 3.1.2 (unreleased)
 ------------------
 
+- OGDS updater: fullname field is already single-valued, don't try to treat it like a list.
+  [lukasg]
+
 - Moved docucomposer in own package.
   [lknoepfel]
 
