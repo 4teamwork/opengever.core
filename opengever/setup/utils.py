@@ -17,13 +17,3 @@ def get_ldap_configs():
     for ep in get_entry_points('ldap'):
         module = ep.load()
         yield getattr(module, 'LDAP_PROFILE')
-
-
-def get_policy_configs():
-    """Returns all policy configs
-    """
-    for ep in get_entry_points('policies'):
-        module = ep.load()
-        for index, policy in enumerate(getattr(module, 'POLICIES')):
-            policy['id'] = '%s:%i' % (ep.module_name, index)
-            yield policy

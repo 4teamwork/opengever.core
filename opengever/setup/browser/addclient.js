@@ -26,7 +26,7 @@ $(function($) {
     /* returns the config dict of the current selected policy */
     var id = $('[name=policy]').val();
     return $(policy_configs).filter(function() {
-      if(this['id'] == id) {
+      if(this['title'] == id) {
         return true;
       }
       return false;
@@ -75,19 +75,11 @@ $(function($) {
       client_cfg = config.clients[index-1];
     }
 
-    // If development profile, set client active by default
-    if(config.id == "opengever.examplecontent:0") {
-        client.find('input[name=clients.active:boolean]').attr("checked", "checked");
-    } else {
-      client.find('input[name=clients.active:boolean]').attr('checked', client_cfg.active);
-    }
+    // active field
+    client.find('input[name=clients.active:boolean]').attr('checked', client_cfg.active);
 
-    // If development profile, set default local roles by default
-    if(config.id == "opengever.examplecontent:0") {
-        client.find('input[name=clients.local_roles:boolean]').attr("checked", "checked");
-    } else {
-      client.find('input[name=clients.local_roles:boolean]').attr('checked', client_cfg.local_roles);
-    }
+    // set local roles by default
+    client.find('input[name=clients.local_roles:boolean]').attr('checked', client_cfg.local_roles);
 
     if(index) {
       // just created.. need to update
@@ -103,107 +95,35 @@ $(function($) {
     }
 
     // title
-    if(client_cfg && client_cfg.title) {
-      client.find('input[name=clients.title:records]').val(
-        client_cfg.title);
-    } else {
-      client.find('input[name=clients.title:records]').val(
-        'Mandant '.concat(index));
-    }
+    client.find('input[name=clients.title:records]').val(client_cfg.title);
 
     // configure sql
     if(client_cfg && !client_cfg.configsql) {
       client.find('[name=clients.configsql:records]').attr('checked', null);
     }
-
     // ip address
-    if(client_cfg && client_cfg.ip_address) {
-      client.find('[name=clients.ip_address:records]').val(
-        client_cfg.ip_address);
-    } else {
-      client.find('[name=clients.ip_address:records]').val('127.0.0.1');
-    }
+    client.find('[name=clients.ip_address:records]').val(client_cfg.ip_address);
 
     // internal site URL
-    if(client_cfg && client_cfg.site_url) {
-      client.find('[name=clients.site_url:records]').val(
-        client_cfg.site_url);
-    } else {
-      client.find('[name=clients.site_url:records]').val(
-        'http://localhost:'.concat(
-          server_port).concat('/').concat(cid));
-    }
+    client.find('[name=clients.site_url:records]').val(client_cfg.site_url);
 
     // public site URL
-    if(client_cfg && client_cfg.public_url) {
-      client.find('[name=clients.public_url:records]').val(
-        client_cfg.public_url);
-
-    } else if(location.hostname == 'localhost' && index == 2) {
-      client.find('input[name=clients.public_url:records]').val(
-        location.protocol.concat('//127.0.0.1:').concat(
-          location.port).concat('/').concat(cid));
-
-    } else if(subdoms && location.hostname != 'localhost') {
-      client.find('input[name=clients.public_url:records]').val(
-        location.protocol.concat('//').concat(cid).concat(
-          '.').concat(location.hostname).concat('/'));
-
-    } else {
-      client.find('input[name=clients.public_url:records]').val(
-        location.protocol.concat('//').concat(
-          location.port != '80' ? location.host :
-            location.hostname).concat('/').concat(cid));
-    }
+    client.find('[name=clients.public_url:records]').val(client_cfg.public_url);
 
     // user group
-    if(client_cfg && client_cfg.group) {
-      client.find('input[name=clients.group:records]').val(
-        client_cfg.group);
-    } else {
-      client.find('input[name=clients.group:records]').val(
-        'og_'.concat(cid).concat('_users'));
-    }
+    client.find('input[name=clients.group:records]').val(client_cfg.group);
 
     // inbox group
-    if(client_cfg && client_cfg.inbox_group) {
-      client.find('input[name=clients.inbox_group:records]').val(
-        client_cfg.inbox_group);
-    } else {
-      client.find('input[name=clients.inbox_group:records]').val(
-        'og_'.concat(cid).concat('_eingangskorb'));
-    }
+    client.find('input[name=clients.inbox_group:records]').val(client_cfg.inbox_group);
 
     // reader group
-    if(client_cfg && client_cfg.reader_group) {
-      client.find('input[name=clients.reader_group:records]').val(
-        client_cfg.reader_group);
-    } else {
-      client.find('input[name=clients.reader_group:records]').val(
-        'og_'.concat(cid).concat('_leser'));
-    }
+    client.find('input[name=clients.reader_group:records]').val(client_cfg.reader_group);
 
-    // reader group
-    if(client_cfg && client_cfg.rolemanager_group) {
-      client.find('input[name=clients.rolemanager_group:records]').val(
-        client_cfg.rolemanager_group);
-    } else {
-      client.find('input[name=clients.rolemanager_group:records]').val(
-        'og_'.concat(cid).concat('_rolemanager'));
-    }
+    // rolemanager group
+    client.find('input[name=clients.rolemanager_group:records]').val(client_cfg.rolemanager_group);
 
     // mail domain
-    if(client_cfg && client_cfg.mail_domain) {
-      client.find('input[name=clients.mail_domain:records]').val(
-        client_cfg.mail_domain);
-
-    } else if(location.hostname == 'localhost') {
-      client.find('input[name=clients.mail_domain:records]').val(
-        'localhost');
-    } else {
-      client.find('input[name=clients.mail_domain:records]').val(
-        cid.concat('.').concat(location.hostname));
-    }
+    client.find('input[name=clients.mail_domain:records]').val(client_cfg.mail_domain);
 
     client.find('[name=clients.client_id:records]').change();
   }

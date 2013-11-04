@@ -139,8 +139,8 @@
 
           <select name="policy">
             <option tal:repeat="item view/get_policy_options"
-                    tal:content="item/title"
-                    tal:attributes="value item/value;
+                    tal:content="item"
+                    tal:attributes="value item;
                                     selected python:repeat['item'].index == 0 and 'selected' or ''">
             </option>
           </select>
@@ -277,4 +277,3 @@
     </form>
   </body>
 </html>
-
