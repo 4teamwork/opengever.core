@@ -13,6 +13,7 @@ from plone.directives import form as directives_form
 from plone.registry.interfaces import IRegistry
 from z3c.form import button, field
 from z3c.form.browser import radio, checkbox
+from z3c.form.interfaces import HIDDEN_MODE
 from z3c.form.interfaces import INPUT_MODE
 from zope import schema
 from zope.component import getUtility
@@ -77,7 +78,6 @@ FIELD_MAPPING = {'opengever-dossier-behaviors-dossier-IDossierMarker': [
                     'end_2',
                     'reference',
                     'sequence_number',
-                    'searchable_filing_no',
                     'responsible',
                     'dossier_review_state',
                 ],
@@ -157,12 +157,6 @@ class IAdvancedSearch(directives_form.Schema):
     sequence_number = schema.Int(
         title=_('label_sequence_number', default='Sequence number'),
         description=_('help_sequence_number', default=''),
-        required=False,
-    )
-
-    searchable_filing_no = schema.TextLine(
-        title=_('label_filing_number', default='Filing number'),
-        description=_('help_filing_number', default=''),
         required=False,
     )
 
@@ -282,20 +276,11 @@ class AdvancedSearchForm(directives_form.Form):
     label = _('advanced_search', default='advanced search')
 
     fields = field.Fields(IAdvancedSearch)
-    fields['responsible'].widgetFactory[INPUT_MODE] \
-        = AutocompleteFieldWidget
-    fields['checked_out'].widgetFactory[INPUT_MODE] \
-        = AutocompleteFieldWidget
-    fields['issuer'].widgetFactory[INPUT_MODE] \
-        = AutocompleteFieldWidget
-    fields['object_provides'].widgetFactory[INPUT_MODE] \
-        = radio.RadioFieldWidget
-    fields['dossier_review_state'].widgetFactory[INPUT_MODE] \
-        = checkbox.CheckBoxFieldWidget
-    fields['task_review_state'].widgetFactory[INPUT_MODE] \
-        = checkbox.CheckBoxFieldWidget
 
     ignoreContext = True
+
+    def field_mapping(self):
+        return FIELD_MAPPING
 
     def render(self):
         """Overwritting the render method to disable the UnloadProtection.
@@ -308,6 +293,21 @@ class AdvancedSearchForm(directives_form.Form):
         return html
 
     def updateWidgets(self):
+        super(AdvancedSearchForm, self).updateWidgets()
+
+        self.fields['responsible'].widgetFactory[INPUT_MODE] \
+            = AutocompleteFieldWidget
+        self.fields['checked_out'].widgetFactory[INPUT_MODE] \
+            = AutocompleteFieldWidget
+        self.fields['issuer'].widgetFactory[INPUT_MODE] \
+            = AutocompleteFieldWidget
+        self.fields['object_provides'].widgetFactory[INPUT_MODE] \
+            = radio.RadioFieldWidget
+        self.fields['dossier_review_state'].widgetFactory[INPUT_MODE] \
+            = checkbox.CheckBoxFieldWidget
+        self.fields['task_review_state'].widgetFactory[INPUT_MODE] \
+            = checkbox.CheckBoxFieldWidget
+
         self.context.REQUEST.set('client', get_client_id())
         date_fields = [
             'start_1',
@@ -329,7 +329,7 @@ class AdvancedSearchForm(directives_form.Form):
                 field).widgetFactory[INPUT_MODE] = DatePickerFieldWidget
 
         super(AdvancedSearchForm, self).updateWidgets()
-        for k, v in FIELD_MAPPING.items():
+        for k, v in self.field_mapping().items():
             for name in v:
                 if self.widgets.get(name, None):
                     self.widgets.get(name, None).addClass(k)
@@ -366,7 +366,7 @@ class AdvancedSearchForm(directives_form.Form):
                 params = '%s&SearchableText=%s' % (
                     params, data.get('searchableText').encode('utf-8'))
 
-            for field in FIELD_MAPPING.get(
+            for field in self.field_mapping().get(
                     data.get('object_provides').replace('.', '-')):
                 if data.get(field, None):
                     if isinstance(data.get(field), date):
