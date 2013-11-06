@@ -250,7 +250,7 @@ class ArchiveForm(directives_form.Form):
 
         if action == METHOD_RESOLVING_EXISTING_FILING:
             # archive all with the existing filing number
-            filing_no = IDossier(self.context).filing_no
+            filing_no = IFilingNumber(self.context).filing_no
             filing_prefix = IDossier(self.context).filing_prefix
             IDossierArchiver(self.context).archive(
                 filing_prefix, filing_year, number=filing_no)
@@ -306,7 +306,8 @@ class Archiver(grok.Adapter):
 
     def _recursive_archive(self, dossier, number, prefix):
 
-        IDossier(dossier).filing_no = number
+        IFilingNumber(dossier).filing_no = number
+
         IDossier(self.context).filing_prefix = prefix
         dossier.reindexObject(idxs=['filing_no', 'searchable_filing_no'])
 
