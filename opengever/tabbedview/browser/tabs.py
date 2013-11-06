@@ -253,8 +253,6 @@ class BaseDossiersTab(OpengeverCatalogListingTab):
         {'column': 'end',
          'column_title': _(u'label_end', default=u'End'),
          'transform': helper.readable_date},
-        {'column': 'filing_no',
-         'column_title': _(u'filing_number', default=u'Filing Number')},
         )
 
     search_options = {'is_subdossier': False}
