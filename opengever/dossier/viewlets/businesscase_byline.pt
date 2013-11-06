@@ -34,7 +34,7 @@
         <span i18n:translate="label_start_byline" class="label">
           from:
         </span>
-        <span tal:replace="python:toLocalizedTime(str(view.start()),long_format=0)">
+        <span tal:content="python:toLocalizedTime(str(view.start()),long_format=0)">
           August 16, 2001 at 23:35:59
         </span>
     </li>
@@ -43,7 +43,7 @@
       <span class="label" i18n:translate="label_end_byline" i18n:domain="opengever.dossier" >
         to:
       </span>
-      <span tal:replace="python:toLocalizedTime(str(view.end()),long_format=0)">
+      <span tal:content="python:toLocalizedTime(str(view.end()),long_format=0)">
         August 16, 2001 at 23:35:59
       </span>
     </li>
@@ -56,21 +56,21 @@
       <span class="label" i18n:translate="label_sequence_number" i18n:domain="opengever.dossier">
         Sequence Number:
       </span>
-      <span tal:replace="view/sequence_number" />
+      <span tal:content="view/sequence_number" />
     </li>
 
     <li class="reference_number" tal:condition="view/reference_number">
       <span class="label" i18n:translate="label_reference_number" >
-        Reference Number
+        Reference Number:
       </span>
-      <span tal:replace="view/reference_number" />
+      <span tal:content="view/reference_number" />
     </li>
 
     <li  class="filing_no" tal:condition="view/get_filing_no">
       <span class="label" i18n:translate="label_filing_no" >
         Filing Number:
       </span>
-      <span tal:replace="view/get_filing_no" />
+      <span tal:content="view/get_filing_no" />
     </li>
 
     <li  class="email" tal:condition="view/email">

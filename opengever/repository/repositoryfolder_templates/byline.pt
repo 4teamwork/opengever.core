@@ -21,7 +21,7 @@
 
     <li class="public_trial" tal:condition="context/public_trial">
         <span class="label" i18n:translate="label_public_trial" i18n:domain="opengever.base">
-          Public Trial
+          Public Trial:
         </span>
         <span tal:content="context/public_trial" i18n:translate="" i18n:domain="opengever.base"/>
     </li>
