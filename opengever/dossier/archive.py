@@ -334,16 +334,15 @@ class Archiver(grok.Adapter):
         For Dossiers without a number and only a prefix it return the half
         of the number."""
 
-        dossier = IDossier(self.context)
         value = None
-        if dossier.filing_no:
-            value = dossier.filing_no
+        if IFilingNumber(self.context).filing_no:
+            value = IFilingNumber(self.context).filing_no
 
-        elif dossier.filing_prefix:
+        elif IDossier(self.context).filing_prefix:
             value = '%s-%s-?' % (
                 self._get_client_id(),
                 self._get_term_title(
-                    dossier.filing_prefix,
+                    IDossier(self.context).filing_prefix,
                     'opengever.dossier.type_prefixes'),
                 )
             if searchable:
