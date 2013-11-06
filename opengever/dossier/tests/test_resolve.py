@@ -1,4 +1,6 @@
 from datetime import date
+from ftw.builder import Builder
+from ftw.builder import create
 from ftw.testing import MockTestCase
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.interfaces import IDossierResolver
@@ -8,11 +10,68 @@ from opengever.dossier.resolve import NOT_CLOSED_TASKS
 from opengever.dossier.resolve import NOT_SUPPLIED_OBJECTS
 from opengever.dossier.resolve import NO_START_DATE
 from opengever.dossier.resolve import ResolveConditions, Resolver
+from opengever.testing import FunctionalTestCase
+from plone.app.testing import applyProfile
 from zope.interface import implements
 from zope.interface.verify import verifyClass
 
 
 TEST_DATE = date(2012, 3, 1)
+
+
+class TestResolvingDossiers(FunctionalTestCase):
+
+    use_browser = True
+
+    def setUp(self):
+        super(TestResolvingDossiers, self).setUp()
+        self.grant('Manager')
+
+    def test_archive_form_is_omitted_for_sites_without_filing_number_support(self):
+        dossier = create(Builder('dossier')
+                         .having(start=date(2013, 11, 5)))
+
+        self.browser.open(
+            '{}/transition-resolve'.format(dossier.absolute_url()))
+
+        self.browser.assert_url(dossier.absolute_url())
+        self.browser.assert_portal_message(
+            'The dossier has been succesfully resolved')
+
+    def test_archive_form_is_omitted_when_resolving_subdossiers(self):
+        dossier = create(Builder('dossier'))
+        subdossier = create(Builder('dossier')
+                            .within(dossier)
+                            .having(start=date(2013, 11, 5)))
+
+        self.browser.open(
+            '{}/transition-resolve'.format(subdossier.absolute_url()))
+
+        self.browser.assert_url(subdossier.absolute_url())
+        self.browser.assert_portal_message(
+            'The dossier has been succesfully resolved')
+
+
+class TestResolvingDossiersWithFilingNumberSupport(FunctionalTestCase):
+
+    use_browser = True
+
+    def setUp(self):
+        super(TestResolvingDossiersWithFilingNumberSupport, self).setUp()
+
+        applyProfile(self.portal, 'opengever.dossier:filing')
+        self.grant('Manager')
+
+    def test_archive_form_is_displayed_for_sites_with_filing_number_support(self):
+
+        dossier = create(Builder('dossier')
+                         .having(start=date(2013, 11, 5)))
+
+        self.browser.open(
+            '{}/transition-resolve'.format(dossier.absolute_url()))
+
+        self.browser.assert_url(
+            '{}/transition-archive'.format(dossier.absolute_url()))
 
 
 class TestResolveConditions(MockTestCase):

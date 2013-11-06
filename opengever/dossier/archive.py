@@ -8,6 +8,7 @@ from opengever.base.interfaces import IBaseClientID
 from opengever.dossier import _
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.behaviors.dossier import IDossierMarker
+from opengever.dossier.behaviors.filing import IFilingNumber
 from opengever.dossier.interfaces import IDossierArchiver
 from opengever.dossier.interfaces import IDossierResolver
 from persistent.dict import PersistentDict
@@ -91,7 +92,7 @@ def get_filing_actions(context):
 
     wft = getToolByName(context, 'portal_workflow')
     review_state = wft.getInfoFor(context, 'review_state', None)
-    filing_no = IDossier(context).filing_no
+    filing_no = IFilingNumber(context).filing_no
 
     values = []
 
