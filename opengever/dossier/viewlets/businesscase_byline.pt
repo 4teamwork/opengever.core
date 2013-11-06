@@ -5,6 +5,8 @@
      tal:define="toLocalizedTime nocall:context/@@plone/toLocalizedTime;">
 
   <ul>
+    
+        
     <li tal:attributes="class string:byline-icon ${view/get_css_class};
                         title context/Type">
       &nbsp;
@@ -14,15 +16,11 @@
       <span id="lock-icon" class="function-lock"/>
     </li>
 
-    <li class="responsible" tal:condition="view/responsible">
-        <span class="label"
-              i18n:domain="opengever.dossier"
-              i18n:translate="label_by_author">
-          by
-          <tal:responsible i18n:name="author" i18n:domain="opengever.dossier">
-            <tal:link replace="structure view/responsible" />
-          </tal:responsible>
-        </span>
+    <!-- ####### -->
+    <li tal:attributes="class item/class" tal:repeat="item view/get_items">
+      <span class="label"><span tal:content="item/label"></span>:</span>
+      <span tal:condition="not: item/replace" tal:content="item/content"></span>
+      <span tal:condition="item/replace" tal:replace="structure item/content"></span>
     </li>
 
     <li class="review_state">

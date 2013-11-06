@@ -6,6 +6,7 @@ from opengever.ogds.base.interfaces import IContactInformation
 from plone.app.layout.viewlets import content
 from plone.memoize.instance import memoize
 from zope.component import getUtility, getAdapter
+from opengever.dossier import _
 
 
 class BusinessCaseByline(content.DocumentBylineViewlet):
@@ -51,7 +52,7 @@ class BusinessCaseByline(content.DocumentBylineViewlet):
         if IMailInAddressMarker.providedBy(self.context) \
         and self.workflow_state() == 'dossier-state-active':
             return IMailInAddress(self.context).get_email_address()
-
+        
     @memoize
     def workflow_state(self):
         state = self.context_state.workflow_state()
@@ -61,3 +62,14 @@ class BusinessCaseByline(content.DocumentBylineViewlet):
             for w in workflows:
                 if state in w.states:
                     return w.states[state].title or state
+
+    def get_items(self):
+        info = getUtility(IContactInformation)
+        dossier = IDossier(self.context)
+        return [
+            {'class': 'responsible',
+             'label': _('label_responsible', default='by'),
+             'content': info.render_link(dossier.responsible),
+             'replace': True
+            }
+        ]
