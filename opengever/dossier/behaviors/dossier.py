@@ -111,13 +111,6 @@ class IDossier(form.Schema):
         required=False,
         )
 
-    form.omitted('filing_no')
-    filing_no = schema.TextLine(
-        title=_(u'filing_no', default="Filing number"),
-        description=_(u'help_filing_no', default=u''),
-        required=False,
-        )
-
     # needed for temporarily storing current reference number when
     # moving this dossier
     form.omitted('temporary_former_reference_number')

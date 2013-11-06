@@ -49,4 +49,15 @@
         for="opengever.dossier.behaviors.dossier.IDossierMarker"
         />
 
+    <!-- filingnumber support -->
+    <plone:behavior
+        title="Filing number behavior"
+        description="Adds filing number functionality and field for dossiers"
+        provides=".behaviors.filing.IFilingNumber"
+        factory="plone.behavior.AnnotationStorage"
+        marker=".behaviors.filing.IFilingNumberMarker"
+        for="plone.dexterity.interfaces.IDexterityContent"
+        />
+
+
 </configure>

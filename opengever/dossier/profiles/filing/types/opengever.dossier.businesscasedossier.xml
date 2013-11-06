@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<object name="opengever.dossier.businesscasedossier" meta_type="Dexterity FTI"
+        i18n:domain="opengever.dossier" xmlns:i18n="http://xml.zope.org/namespaces/i18n">
+
+    <!-- enabled behaviors -->
+    <property name="behaviors" purge="False">
+      <element value="opengever.dossier.behaviors.filing.IFilingNumber" />
+    </property>
+
+</object>
