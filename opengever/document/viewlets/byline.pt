@@ -24,9 +24,9 @@
 
     <li tal:condition="context/document_date" class="documentModified">
         <span class="label" i18n:translate="label_start_byline">
-          from
+          from:
         </span>
-        <span tal:replace="python:view.toLocalizedTime(str(here.document_date),long_format=0)" />
+        <span tal:content="python:view.toLocalizedTime(str(here.document_date),long_format=0)" />
     </li>
 
     <li tal:condition="view/isExpired">
@@ -39,14 +39,14 @@
       <span class="label" i18n:translate="label_sequence_number">
         Sequence Number:
       </span>
-      <span tal:replace="view/sequence_number" />
+      <span tal:content="view/sequence_number" />
     </li>
 
     <li tal:condition="view/reference_number" class="referenceNumber">
       <span class="label" i18n:translate="label_reference_number">
         Reference Number:
       </span>
-      <span tal:replace="view/reference_number" />
+      <span tal:content="view/reference_number" />
     </li>
 
   </ul>
