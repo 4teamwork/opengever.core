@@ -37,6 +37,14 @@ class BylineBase(content.DocumentBylineViewlet):
                 if state in w.states:
                     return w.states[state].title or state
 
+    def modified(self):
+        return self.to_localized_time(self.context.ModificationDate(),
+                                      long_format=1)
+
+    def created(self):
+        return self.to_localized_time(self.context.CreationDate(),
+                                      long_format=1)
+
     @memoize
     def workflow_state(self):
         return self.plone_messagefactory(self.get_current_state())

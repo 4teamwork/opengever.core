@@ -11,12 +11,12 @@ from zope.intid.interfaces import IIntIds
 
 
 class TestTaskByline(TestBylineBase):
-    
+
     def setUp(self):
         super(TestTaskByline, self).setUp()
-        
+
         self.intids = getUtility(IIntIds)
-        
+
         create_client()
         set_current_client_id(self.portal)
         create_ogds_user('hugo.boss')
@@ -30,7 +30,7 @@ class TestTaskByline(TestBylineBase):
         self.task.setModificationDate(DateTime(2011, 8, 11, 20, 10))
         transaction.commit()
         self.browser.open(self.task.absolute_url())
-        
+
     def test_task_byline_icon_display(self):
         icon = self.get_byline_element_by_class('byline-icon')
         self.assertEquals('byline-icon contenttype-opengever-task-task',
@@ -51,7 +51,7 @@ class TestTaskByline(TestBylineBase):
     def test_task_byline_modification_date_display(self):
         start_date = self.get_byline_value_by_label('last modified:')
         self.assertEquals('Aug 11, 2011 08:10 PM', start_date.text_content())
-        
+
     def test_dossier_byline_sequence_number_display(self):
         seq_number = self.get_byline_value_by_label('Sequence Number:')
         self.assertEquals('OG 1', seq_number.text_content())

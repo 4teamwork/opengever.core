@@ -85,3 +85,4 @@ msgstr "Réviser"
 
 msgid "task-transition-resolved-tested-and-closed"
 msgstr "Fermer"
+

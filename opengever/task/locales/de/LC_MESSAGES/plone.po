@@ -85,3 +85,4 @@ msgstr "Überarbeiten"
 
 msgid "task-transition-resolved-tested-and-closed"
 msgstr "Abschliessen"
+

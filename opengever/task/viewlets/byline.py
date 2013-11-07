@@ -1,44 +1,66 @@
-from zope.component import getUtility
-
+from opengever.base.browser.helper import get_css_class
+from opengever.base.interfaces import ISequenceNumber, IBaseClientID
+from opengever.base.viewlets.byline import BylineBase
+from opengever.base.viewlets.byline import BylineBase
+from opengever.ogds.base.interfaces import IContactInformation
+from opengever.task import _
+from opengever.task.task import ITask
 from plone.app.layout.viewlets import content
 from plone.memoize.instance import memoize
 from plone.registry.interfaces import IRegistry
-
-from opengever.base.interfaces import ISequenceNumber, IBaseClientID
-from opengever.ogds.base.interfaces import IContactInformation
-from opengever.task.task import ITask
-from opengever.base.browser.helper import get_css_class
+from zope.component import getUtility
+from opengever.dossier import _ as dossier_message_factory
 
 
-class TaskByline(content.DocumentBylineViewlet):
-
-    update = content.DocumentBylineViewlet.update
-
-    def get_css_class(self):
-        return get_css_class(self.context)
-
-    @memoize
-    def workflow_state(self):
-        state = self.context_state.workflow_state()
-        workflows = self.context.portal_workflow.getWorkflowsFor(
-            self.context.aq_explicit)
-        if workflows:
-            for w in workflows:
-                if state in w.states:
-                    return w.states[state].title or state
-
-    @memoize
-    def sequence_number(self):
-        seqNumb = getUtility(ISequenceNumber)
-        return seqNumb.get_number(self.context)
+class TaskByline(BylineBase):
 
     def responsible_link(self):
         info = getUtility(IContactInformation)
         task = ITask(self.context)
         return info.render_link(task.responsible)
 
-    def client_id(self):
-        # filing_client
+    def sequence_number(self):
+        sequence = getUtility(ISequenceNumber)
+        return '{} {}'.format(self.get_base_client_id(),
+                              sequence.get_number(self.context))
+
+    def get_base_client_id(self):
         registry = getUtility(IRegistry)
         proxy = registry.forInterface(IBaseClientID)
         return getattr(proxy, 'client_id')
+
+    def get_items(self):
+        return [
+            {
+                'class': 'responsible',
+                'label': _('label_by_author', default='by'),
+                'content': self.responsible_link(),
+                'replace': True
+            },
+            {
+                'class': 'review_state',
+                'label': _('label_workflow_state_byline', default='State'),
+                'content': self.workflow_state(),
+                'replace': False
+            },
+            {
+                'class': 'last_modified',
+                'label': _('label_last_modified', default='last modified'),
+                'content': self.modified(),
+                'replace': False
+            },
+            {
+                'class': 'document_created',
+                'label': _('label_created', default='created'),
+                'content': self.created(),
+                'replace': False
+            },
+            {
+                'class': 'sequenceNumber',
+                'label': dossier_message_factory('label_sequence_number',
+                                                 default='Sequence Number'),
+                'content': self.sequence_number(),
+                'replace': False
+            },
+
+        ]

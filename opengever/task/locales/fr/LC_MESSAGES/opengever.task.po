@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2013-06-04 20:11+0000\n"
+"POT-Creation-Date: 2013-11-08 15:12+0000\n"
 "PO-Revision-Date: 2012-08-21 15:18+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,7 +22,7 @@ msgstr "${num} document(s) a (ont) été copié(s)."
 msgid "${subtask_num} subtasks were create."
 msgstr "${subtask_num} sous-tâche(s) a (ont) été créé(es)."
 
-#: ./opengever/task/response.py:417
+#: ./opengever/task/response.py:419
 msgid "Changes saved to response id ${response_id}."
 msgstr "Modifications de la réponse ${response_id} ont été sauvegardées"
 
@@ -40,23 +40,23 @@ msgstr "Modifier"
 msgid "Issue state"
 msgstr "Etat"
 
-#: ./opengever/task/response.py:445
+#: ./opengever/task/response.py:447
 msgid "No response selected for removal."
 msgstr "Aucune réponse séléctionnée pour l'effaçement"
 
-#: ./opengever/task/response.py:408
+#: ./opengever/task/response.py:410
 msgid "No response selected for saving."
 msgstr "Aucune réponse séléctionnée pour la sauvegarde"
 
-#: ./opengever/task/response.py:467
+#: ./opengever/task/response.py:469
 msgid "Removed response id ${response_id}."
 msgstr "Réponse ${response_id} effacée"
 
-#: ./opengever/task/response.py:460
+#: ./opengever/task/response.py:462
 msgid "Response id ${response_id} does not exist so it cannot be removed."
 msgstr "Réponse ${response_id} inexistante et ne peut être effacée"
 
-#: ./opengever/task/response.py:452
+#: ./opengever/task/response.py:454
 msgid "Response id ${response_id} is no integer so it cannot be removed."
 msgstr "Réponse ${response_id} n'est pas un chiffre et ne peut être effacé"
 
@@ -105,11 +105,11 @@ msgstr "La tâche a été accepté."
 msgid "The task has been copied to the selected dossier and accepted."
 msgstr "La tâche a été copiée et acceptée."
 
-#: ./opengever/task/response.py:439
+#: ./opengever/task/response.py:441
 msgid "You are not allowed to delete responses."
 msgstr "Vous n'étes pas l'autorisation d'effacer ces réponses"
 
-#: ./opengever/task/response.py:402
+#: ./opengever/task/response.py:404
 msgid "You are not allowed to edit responses."
 msgstr "Vous n'étes pas l'autorisation pour éditer ces réponses"
 
@@ -330,26 +330,26 @@ msgid "help_deadline"
 msgstr "Saisissez la date d'achèvement de la tâche"
 
 #. Default: "Cost in CHF"
-#: ./opengever/task/task.py:167
+#: ./opengever/task/task.py:168
 msgid "help_effectiveCost"
 msgstr "Coûts effectifs en CHF"
 
 #. Default: "Duration in h"
-#: ./opengever/task/task.py:161
+#: ./opengever/task/task.py:162
 msgid "help_effectiveDuration"
 msgstr "Durée effective en h"
 
 #. Default: "Cost in CHF"
-#: ./opengever/task/task.py:155
+#: ./opengever/task/task.py:156
 msgid "help_expectedCost"
 msgstr "Coûts effectifs en CHF"
 
 #. Default: "Duration in h"
-#: ./opengever/task/task.py:149
+#: ./opengever/task/task.py:150
 msgid "help_expectedDuration"
 msgstr "Durée effective en h"
 
-#: ./opengever/task/task.py:143
+#: ./opengever/task/task.py:144
 msgid "help_expectedStartOfWork"
 msgstr ""
 
@@ -362,7 +362,7 @@ msgstr ""
 msgid "help_new_deadline"
 msgstr ""
 
-#: ./opengever/task/task.py:174
+#: ./opengever/task/task.py:175
 msgid "help_predecessor"
 msgstr ""
 
@@ -382,7 +382,7 @@ msgid "help_responsible_client"
 msgstr "Sélectionner d'abord le client du mandataire et ensuite le mandataire"
 
 #: ./opengever/task/browser/assign.py:45
-#: ./opengever/task/task.py:255
+#: ./opengever/task/task.py:256
 msgid "help_responsible_single_client_setup"
 msgstr "Choix de la personne responsable"
 
@@ -458,8 +458,8 @@ msgstr "Numéro de classement"
 msgid "label_assign_choose_method"
 msgstr "Acheminement attribué à un/une.."
 
-#. Default: "by:"
-#: ./opengever/task/viewlets/byline.pt:17
+#. Default: "by"
+#: ./opengever/task/viewlets/byline.py:44
 msgid "label_by_author"
 msgstr "Mandataire: "
 
@@ -488,8 +488,8 @@ msgstr "Tâche principale"
 msgid "label_copy_documents"
 msgstr "Copier les documents liés à la tâche dans la boîte de réception du client "
 
-#. Default: "last modified"
-#: ./opengever/task/viewlets/byline.pt:44
+#. Default: "created"
+#: ./opengever/task/viewlets/byline.py:62
 msgid "label_created"
 msgstr "Créé le"
 
@@ -518,12 +518,12 @@ msgid "label_edit_response_not_allowed"
 msgstr "Vous n'avez pas les droits pour effacer cette réponse"
 
 #. Default: "effective cost"
-#: ./opengever/task/task.py:166
+#: ./opengever/task/task.py:167
 msgid "label_effectiveCost"
 msgstr "Coûts effectifs (CHF)"
 
 #. Default: "effective duration"
-#: ./opengever/task/task.py:160
+#: ./opengever/task/task.py:161
 msgid "label_effectiveDuration"
 msgstr "Durée effective (h)"
 
@@ -533,17 +533,17 @@ msgid "label_enter_response"
 msgstr "Saisissez votre réponse ci-dessous"
 
 #. Default: "expected cost"
-#: ./opengever/task/task.py:154
+#: ./opengever/task/task.py:155
 msgid "label_expectedCost"
 msgstr "Coûts estimés (CHF)"
 
 #. Default: "Expected duration"
-#: ./opengever/task/task.py:148
+#: ./opengever/task/task.py:149
 msgid "label_expectedDuration"
 msgstr "Durée estimées (h)"
 
 #. Default: "Start with work"
-#: ./opengever/task/task.py:142
+#: ./opengever/task/task.py:143
 msgid "label_expectedStartOfWork"
 msgstr "Début du travail"
 
@@ -555,8 +555,7 @@ msgid "label_issuer"
 msgstr "Mandant"
 
 #. Default: "last modified"
-#: ./opengever/task/viewlets/byline.pt:35
-#, fuzzy
+#: ./opengever/task/viewlets/byline.py:56
 msgid "label_last_modified"
 msgstr "Dernière modification"
 
@@ -576,7 +575,7 @@ msgid "label_parent_dossier_title"
 msgstr "Titre de la dossier"
 
 #. Default: "Predecessor"
-#: ./opengever/task/task.py:173
+#: ./opengever/task/task.py:174
 msgid "label_predecessor"
 msgstr "Prédécesseur"
 
@@ -606,7 +605,7 @@ msgid "label_response"
 msgstr "Response"
 
 #. Default: "Transition"
-#: ./opengever/task/response_templates/responseview.pt:43
+#: ./opengever/task/response_templates/responseview.pt:44
 msgid "label_response_transition"
 msgstr "Action"
 
@@ -683,8 +682,8 @@ msgstr "Action"
 msgid "label_workflow_state"
 msgstr "Etat"
 
-#. Default: "State:"
-#: ./opengever/task/viewlets/byline.pt:28
+#. Default: "State"
+#: ./opengever/task/viewlets/byline.py:50
 msgid "label_workflow_state_byline"
 msgstr "Etat"
 
@@ -750,29 +749,24 @@ msgid "step_4"
 msgstr "Quatrième étape"
 
 #. Default: "Added by"
-#: ./opengever/task/response_templates/responseview.pt:35
+#: ./opengever/task/response_templates/responseview.pt:36
 msgid "task_added_by"
 msgstr "Ajouté par"
 
 #. Default: "on"
-#: ./opengever/task/response_templates/responseview.pt:38
+#: ./opengever/task/response_templates/responseview.pt:39
 msgid "task_added_on"
 msgstr "Le"
 
 #. Default: "Added"
-#: ./opengever/task/response_templates/responseview.pt:64
+#: ./opengever/task/response_templates/responseview.pt:65
 msgid "task_object_add"
 msgstr "Ajouté par"
 
 #. Default: "Added successor task"
-#: ./opengever/task/response_templates/responseview.pt:81
+#: ./opengever/task/response_templates/responseview.pt:82
 msgid "task_object_successor"
 msgstr "Tâche suivante créée"
-
-#. Default: "expired"
-#: ./opengever/task/viewlets/byline.pt:52
-msgid "time_expired"
-msgstr "Périmé"
 
 #. Default: "Accept forwarding"
 #: ./opengever/task/browser/accept/main.py:147
@@ -835,12 +829,12 @@ msgid "title_modify_deadline"
 msgstr "Changer le délai"
 
 #. Default: "Document copied from forwarding (forwarding accepted)"
-#: ./opengever/task/browser/accept/utils.py:131
+#: ./opengever/task/browser/accept/utils.py:133
 msgid "version_message_accept_forwarding"
 msgstr "Document copié de l'acheminement (Acheminement accepté)"
 
 #. Default: "Document copied from task (task accepted)"
-#: ./opengever/task/browser/accept/utils.py:272
+#: ./opengever/task/browser/accept/utils.py:274
 msgid "version_message_accept_task"
 msgstr "Document copié de la tâche (Tâche accepté)"
 
@@ -856,6 +850,6 @@ msgid "version_message_resolved_task"
 msgstr "Document copié de la tâche (tâche achevée)"
 
 #. Default: "Closed ${year}"
-#: ./opengever/task/browser/accept/utils.py:50
+#: ./opengever/task/browser/accept/utils.py:52
 msgid "yearfolder_title"
 msgstr "Fermé"
