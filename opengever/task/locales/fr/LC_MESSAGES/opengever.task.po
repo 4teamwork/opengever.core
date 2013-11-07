@@ -458,10 +458,10 @@ msgstr "Numéro de classement"
 msgid "label_assign_choose_method"
 msgstr "Acheminement attribué à un/une.."
 
-#. Default: "by ${author}"
+#. Default: "by:"
 #: ./opengever/task/viewlets/byline.pt:17
 msgid "label_by_author"
-msgstr "Mandataire"
+msgstr "Mandataire: "
 
 #. Default: "Target dossier"
 #: ./opengever/task/browser/close.py:152

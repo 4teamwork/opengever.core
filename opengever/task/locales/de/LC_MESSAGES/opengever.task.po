@@ -459,10 +459,10 @@ msgstr "Ordnungsposition"
 msgid "label_assign_choose_method"
 msgstr "Weiterleitung zuweisen an ein ..."
 
-#. Default: "by ${author}"
+#. Default: "by:"
 #: ./opengever/task/viewlets/byline.pt:17
 msgid "label_by_author"
-msgstr "Auftragnehmer: ${author}"
+msgstr "Auftragnehmer:"
 
 #. Default: "Target dossier"
 #: ./opengever/task/browser/close.py:152

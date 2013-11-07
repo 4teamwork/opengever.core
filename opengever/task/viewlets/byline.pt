@@ -16,10 +16,10 @@
     <li class="responsible" tal:condition="here/responsible">
       <span class="label" i18n:domain="opengever.task"
             i18n:translate="label_by_author">
-        by
-        <tal:responsible i18n:name="author" i18n:domain="opengever.task">
+        by:
+      </span>
+      <span>
           <tal:link replace="structure view/responsible_link" />
-        </tal:responsible>
       </span>
     </li>
 
@@ -34,19 +34,19 @@
     <li class="last_modified">
         <span class="label">
           <span i18n:translate="label_last_modified">
-            last modified
-          </span>:
+            last modified:
+          </span>
         </span>
-        <span tal:replace="python:view.toLocalizedTime(here.ModificationDate(),long_format=1)" />
+        <span tal:content="python:view.toLocalizedTime(here.ModificationDate(),long_format=1)" />
     </li>
 
     <li class="document_created">
       <span class="label">
         <span i18n:translate="label_created">
-          created
-        </span>:
+          created:
+        </span>
       </span>
-      <span tal:replace="python:view.toLocalizedTime(here.CreationDate(),long_format=1)" />
+      <span tal:content="python:view.toLocalizedTime(here.CreationDate(),long_format=1)" />
     </li>
 
     <li class="state-expired" tal:condition="view/isExpired">
@@ -59,7 +59,7 @@
               i18n:translate="label_sequence_number" i18n:domain="opengever.dossier">
           Sequence Number:
         </span>
-        <span tal:replace="python: '%s %s' % (view.client_id(), view.sequence_number())" />
+        <span tal:content="python: '%s %s' % (view.client_id(), view.sequence_number())" />
     </li>
 
   </ul>

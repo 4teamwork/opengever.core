@@ -459,7 +459,7 @@ msgstr ""
 msgid "label_assign_choose_method"
 msgstr ""
 
-#. Default: "by ${author}"
+#. Default: "by:"
 #: ./opengever/task/viewlets/byline.pt:17
 msgid "label_by_author"
 msgstr ""
