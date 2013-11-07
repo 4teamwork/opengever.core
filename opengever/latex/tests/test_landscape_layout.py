@@ -1,10 +1,17 @@
 from ftw.testing import MockTestCase
 from mocker import ANY
+from opengever.base.interfaces import IBaseClientID
+from opengever.latex.interfaces import ILaTeXSettings
 from opengever.latex.interfaces import ILandscapeLayer
 from opengever.latex.layouts.landscape import LandscapeLayout
 from opengever.latex.testing import LATEX_ZCML_LAYER
 from opengever.ogds.base import utils
+from plone.registry.interfaces import IRegistry
 from zope.component import adaptedBy
+
+
+FAKE_CLIENT_TITLE = 'fake_clienttitle'
+FAKE_LOCATION = 'fake_location'
 
 
 class TestLandscapeLayout(MockTestCase):
@@ -24,6 +31,14 @@ class TestLandscapeLayout(MockTestCase):
 
         self.portal_membership = self.stub()
         self.mock_tool(self.portal_membership, 'portal_membership')
+
+        registry_mock = self.stub()
+        self.expect(
+            registry_mock.forInterface(ILaTeXSettings).location).result(FAKE_LOCATION)
+        self.expect(
+            registry_mock.forInterface(IBaseClientID).client_title).result(FAKE_CLIENT_TITLE)
+
+        self.mock_utility(registry_mock, IRegistry)
 
         member = self.stub()
         self.expect(self.context.Creator()).result('john.doe')
@@ -66,7 +81,6 @@ class TestLandscapeLayout(MockTestCase):
         latex = layout.render_latex('CONTENT LATEX')
         self.assertIn('CONTENT LATEX', latex)
         self.assertIn(layout.get_packages_latex(), latex)
-        self.assertIn(r'\includegraphics{logo.pdf}', latex)
         self.assertNotIn(r'T direkt ', latex)
         self.assertNotIn(r'\phantom{foo}\vspace{-2\baselineskip}', latex)
 

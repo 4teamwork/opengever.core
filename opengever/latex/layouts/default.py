@@ -2,12 +2,15 @@ from Products.CMFCore.utils import getToolByName
 from five import grok
 from ftw.pdfgenerator.interfaces import IBuilder
 from ftw.pdfgenerator.interfaces import ILaTeXLayout
-from ftw.pdfgenerator.layout.makolayout import MakoLayoutBase
-from opengever.ogds.base.utils import get_current_client
+from ftw.pdfgenerator.layout.customizable import CustomizableLayout
+from opengever.base.interfaces import IBaseClientID
+from opengever.latex.interfaces import ILaTeXSettings
+from plone.registry.interfaces import IRegistry
+from zope.component import getUtility
 from zope.interface import Interface
 
 
-class DefaultLayout(grok.MultiAdapter, MakoLayoutBase):
+class DefaultLayout(CustomizableLayout, grok.MultiAdapter):
     """Opengever default layout.
     """
     grok.adapts(Interface, Interface, IBuilder)
@@ -18,17 +21,11 @@ class DefaultLayout(grok.MultiAdapter, MakoLayoutBase):
 
     def __init__(self, context, request, builder):
         super(DefaultLayout, self).__init__(context, request, builder)
-        self.show_contact = True
-        self.show_logo = True
+        self.show_contact = False
+        self.show_logo = False
         self.show_organisation = False
 
-        # XXX do not use zug specific default location in OG core.
-        self.location = 'Zug'
-
     def before_render_hook(self):
-        # XXX use general logo and replace it in zug customization
-        self.add_raw_template_file('logo.pdf')
-
         self.use_package('inputenc', options='utf8', append_options=False)
         self.use_package('ae,aecompl')
         self.use_package('babel', 'ngerman', append_options=False)
@@ -58,16 +55,23 @@ class DefaultLayout(grok.MultiAdapter, MakoLayoutBase):
         if owner:
             owner_phone = owner.getProperty('phone_number', '&nbsp;')
 
-        client = get_current_client()
         convert = self.get_converter().convert
 
         return {
-            'client_title': convert(client.title),
+            'client_title': convert(self.get_client_title()),
             'member_phone': convert(owner_phone),
             'show_contact': self.show_contact,
             'show_logo': self.show_logo,
             'show_organisation': self.show_organisation,
-            'location': self.location}
+            'location': convert(self.get_location())}
+
+    def get_client_title(self):
+        registry = getUtility(IRegistry)
+        return registry.forInterface(IBaseClientID).client_title
+
+    def get_location(self):
+        registry = getUtility(IRegistry)
+        return registry.forInterface(ILaTeXSettings).location
 
     def get_owner(self):
         mtool = getToolByName(self.context, 'portal_membership')

@@ -42,4 +42,23 @@
         profile="opengever.base:default"
         />
 
+    <!-- 2601 -> 2602 -->
+    <genericsetup:upgradeStep
+        title="Initalize new registry attribute client_title"
+        description=""
+        source="2601"
+        destination="2602"
+        handler="opengever.base.upgrades.to2602.InitalizeClientTitleRegistryEntry"
+        profile="opengever.base:default"
+        />
+
+    <genericsetup:registerProfile
+        name="2602"
+        title="opengever.base: upgrade profile 2602"
+        description=""
+        directory="profiles/2602"
+        for="Products.CMFPlone.interfaces.IMigratingPloneSiteRoot"
+        provides="Products.GenericSetup.interfaces.EXTENSION"
+        />
+
 </configure>

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2011-05-18 15:38+0000\n"
+"POT-Creation-Date: 2013-11-04 16:59+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -26,8 +26,117 @@ msgstr "Imprimer les détails (PDF)"
 msgid "Print selection (PDF)"
 msgstr "Imprimer"
 
-#. Default: "The pdf generation process failed."
-#: ./opengever/latex/dossier.py:36
-msgid "pdf_generation_failed"
-msgstr "Création du PDF échouée"
+#. Default: "Deadline"
+#: ./opengever/latex/listing.py:268
+msgid "label_deadline"
+msgstr "A réaliser jusqu'au"
 
+#. Default: "Delivery date"
+#: ./opengever/latex/listing.py:211
+msgid "label_delivery_date"
+msgstr "Date de remise"
+
+#. Default: "Document date"
+#: ./opengever/latex/listing.py:199
+msgid "label_document_date"
+msgstr "Date du document"
+
+#. Default: "Documents"
+#: ./opengever/latex/dossierdetails.py:83
+msgid "label_documents"
+msgstr "Documents"
+
+#. Default: "End"
+#: ./opengever/latex/listing.py:146
+msgid "label_end"
+msgstr "Date de fin"
+
+#. Default: "Issuer"
+#: ./opengever/latex/listing.py:246
+msgid "label_issuer"
+msgstr "Mandant"
+
+#. Default: "Participants"
+#: ./opengever/latex/dossierdetails.py:135
+msgid "label_participants"
+msgstr "Participants"
+
+#. Default: "Receipt date"
+#: ./opengever/latex/listing.py:205
+msgid "label_receipt_date"
+msgstr "Date d'entrée"
+
+#. Default: "Reference number"
+#: ./opengever/latex/dossierdetails.py:110
+#: ./opengever/latex/listing.py:109
+msgid "label_reference_number"
+msgstr "Numéro référence"
+
+#. Default: "Repository"
+#: ./opengever/latex/dossierdetails.py:117
+msgid "label_repository"
+msgstr "Numéro de classement"
+
+#. Default: "Repositoryfolder"
+#: ./opengever/latex/listing.py:119
+msgid "label_repository_title"
+msgstr "Numéro de classement"
+
+#. Default: "Responsible"
+#: ./opengever/latex/dossierdetails.py:126
+#: ./opengever/latex/listing.py:129
+msgid "label_responsible"
+msgstr "Responsable"
+
+#. Default: "State"
+#: ./opengever/latex/dossierdetails.py:139
+#: ./opengever/latex/listing.py:134
+msgid "label_review_state"
+msgstr "Etat"
+
+#. Default: "Sequence number"
+#: ./opengever/latex/dossierdetails.py:114
+msgid "label_sequence_number"
+msgstr "Numéro courant"
+
+#. Default: "Start"
+#: ./opengever/latex/dossierdetails.py:129
+#: ./opengever/latex/listing.py:140
+msgid "label_start"
+msgstr "Date début"
+
+#. Default: "Subdossier Title"
+#: ./opengever/latex/dossierdetails.py:123
+msgid "label_subdossier_title"
+msgstr "Titre du sous-dossier"
+
+#. Default: "Subdossiers"
+#: ./opengever/latex/dossierdetails.py:73
+msgid "label_subdossiers"
+msgstr "Sous-dossiers"
+
+#. Default: "Responsible"
+#: ./opengever/latex/listing.py:252
+msgid "label_task_responsible"
+msgstr "Mandataire"
+
+#. Default: "Task type"
+#: ./opengever/latex/listing.py:241
+msgid "label_task_type"
+msgstr "Type de mandat"
+
+#. Default: "Tasks"
+#: ./opengever/latex/dossierdetails.py:92
+msgid "label_tasks"
+msgstr "Tâches"
+
+#. Default: "Title"
+#: ./opengever/latex/dossierdetails.py:120
+#: ./opengever/latex/listing.py:124
+msgid "label_title"
+msgstr "Titre"
+
+#. Default: "No."
+#: ./opengever/latex/listing.py:114
+msgid "short_label_sequence_number"
+msgstr "No."

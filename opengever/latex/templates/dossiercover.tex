@@ -1,47 +1,27 @@
-<%block name="documentclass">
-\documentclass[a4paper,12pt]{article}
-</%block>
-
-<%block name="use_packages">
-  ${packages}
-</%block>
-
 <%block name="style_params">
-\renewcommand{\familydefault}{ma1}
-\renewcommand{\tiny}{\fontsize{9}{9}\selectfont}
-\renewcommand{\scriptsize}{\fontsize{12}{12}\selectfont}
-\renewcommand{\small}{\fontsize{10}{10}\selectfont}
+\renewcommand{\scriptsize}{\fontsize{10}{10}\selectfont}
+\renewcommand{\normalsize}{\fontsize{18}{18}\selectfont}
 </%block>
-\begin{document}
 
 <%block name="dossier_main_part">
+\scriptsize
 \linespread {1.5}
 \thispagestyle{empty}
 \noindent
 \setlength\tabcolsep{0pt}
 \hspace{-0.15cm}
-\begin{tabularx}{\linewidth}{lXr}
-\tiny ${clientid} & &\tiny Ablage: ${filingprefix}
-\end{tabularx}
+%% \begin{tabularx}{\linewidth}{lXr}
+${clienttitle}
+%% \end{tabularx}
+\vspace{0.5cm}
 \rule{\linewidth}{.11em}
-\tiny
-\hspace{0.15cm}Aktenzeichen: ${referencenr}\newline
-\hspace{0.15cm}Laufnummer: ${sequencenr}
-% if filingnr:
-\newline\hspace{0.15cm}Ablagenummer: \textbf{${filingnr}}
-% endif
-\noindent
+Version Ordnungssystem: ${repositoryversion}\newline
+\textbf{Aktenzeichen: ${referencenr}}\newline
 \newline
-\tiny Ordnungsposition: ${repository}
-% if parentDossierTitle:
-  \newline
-  Hauptdossier: ${parentDossierTitle}
-% endif
+\normalsize \textbf{${title}} \newline
+
+\scriptsize Beschreibung: ${description} \newline
 \vspace{0.3cm} \newline
-\small \textbf{${title}} \newline
-\small ${description} \newline
-\vspace{0.3cm} \newline
-\tiny
 Federführung: ${responsible}
 \vspace{0.15cm} \newline
 Beginn: ${start}\hspace{0.15cm}|\hspace{0.15cm}Abschluss: ${end}\hspace{0.15cm} \newline

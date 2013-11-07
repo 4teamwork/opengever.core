@@ -1,239 +1,106 @@
-from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
-from datetime import datetime
+from datetime import date
+from ftw.builder import Builder
+from ftw.builder import create
+from ftw.pdfgenerator.builder import Builder as PDFBuilder
+from ftw.pdfgenerator.interfaces import ILaTeXView
+from ftw.pdfgenerator.utils import provide_request_layer
 from ftw.testing import MockTestCase
 from opengever.base.interfaces import IBaseClientID
-from opengever.base.interfaces import IReferenceNumber, ISequenceNumber
-from opengever.dossier.behaviors.dossier import IDossierMarker, IDossier
+from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.latex.dossiercover import DossierCoverPDFView
+from opengever.latex.dossiercover import IDossierCoverLayer
+from opengever.latex.layouts.default import DefaultLayout
 from opengever.latex.testing import LATEX_ZCML_LAYER
-from opengever.ogds.base.interfaces import IContactInformation
-from opengever.repository.interfaces import IRepositoryFolder
+from opengever.testing import FunctionalTestCase
+from opengever.testing import create_ogds_user
 from plone.registry.interfaces import IRegistry
-from zope.schema import vocabulary
+from zope.component import getMultiAdapter
+from zope.component import getUtility
+from zope.publisher.interfaces.browser import IDefaultBrowserLayer
 
 
-def toLocalizedTime(arg):
-    return arg
+class TestDossierCoverRenderArguments(FunctionalTestCase):
+
+    def setUp(self):
+        super(TestDossierCoverRenderArguments, self).setUp()
+
+        registry = getUtility(IRegistry)
+        proxy = registry.forInterface(IBaseClientID)
+        proxy.client_title = u'Department of forest & hunt'
+
+        create_ogds_user('hugo.boss')
+
+        repository = create(Builder('repository_root')
+                            .having(version='Repository 2013 & 2014'))
+        repofolder = create(Builder('repository').within(repository))
+        dossier = create(Builder('dossier')
+                         .having(title=u'Foo & bar',
+                                 responsible='hugo.boss',
+                                 start=date(2013, 11, 1),
+                                 end=date(2013, 12, 31))
+                         .within(repofolder))
+
+        provide_request_layer(dossier.REQUEST, IDossierCoverLayer)
+        layout = DefaultLayout(dossier, dossier.REQUEST, PDFBuilder())
+        self.dossiercover = getMultiAdapter(
+            (dossier, dossier.REQUEST, layout), ILaTeXView)
+
+    def test_contains_converted_configured_clienttitle(self):
+        arguments = self.dossiercover.get_render_arguments()
+        self.assertEquals('Department of forest \\& hunt',
+                          arguments.get('clienttitle'))
+
+    def test_contains_repository_version(self):
+        arguments = self.dossiercover.get_render_arguments()
+        self.assertEquals(u'Repository 2013 \\& 2014',
+                          arguments.get('repositoryversion'))
+
+    def test_contains_referencenr(self):
+        arguments = self.dossiercover.get_render_arguments()
+        self.assertEquals(u'OG 1 / 1',
+                          arguments.get('referencenr'))
+
+    def test_contains_converted_title(self):
+        arguments = self.dossiercover.get_render_arguments()
+        self.assertEquals(u'Foo \\& bar',
+                          arguments.get('title'))
+
+    def test_contains_description_of_responsible(self):
+        arguments = self.dossiercover.get_render_arguments()
+        self.assertEquals(u'Boss Hugo (hugo.boss)',
+                          arguments.get('responsible'))
+
+    def test_contains_start_date_in_readable_format(self):
+        arguments = self.dossiercover.get_render_arguments()
+        self.assertEquals('Nov 01, 2013', arguments.get('start'))
+
+    def test_contains_end_date_in_readable_format(self):
+        arguments = self.dossiercover.get_render_arguments()
+        self.assertEquals('Dec 31, 2013', arguments.get('end'))
 
 
 class TestDossierCoverPDFView(MockTestCase):
 
     layer = LATEX_ZCML_LAYER
 
-    def setUp(self):
-        super(TestDossierCoverPDFView, self).setUp()
-        # mock vocabulary registry
-        if not hasattr(self, '_ori_getVocReg'):
-            self._ori_getVocReg = vocabulary.getVocabularyRegistry
-        self.getVocabularyRegistry = self.mocker.replace(
-            'zope.schema.vocabulary.getVocabularyRegistry')
+    def test_is_registered(self):
+        context = self.providing_stub([IDossierMarker])
+        request = self.providing_stub([IDefaultBrowserLayer])
 
-    def tearDown(self):
-        super(TestDossierCoverPDFView, self).tearDown()
-        vocabulary.getVocabularyRegistry = self._ori_getVocReg
-        self.getVocabularyRegistry = None
+        self.replay()
+        view = getMultiAdapter((context, request), name='dossier_cover_pdf')
 
-    def stub_tree(self, long_title=False):
-        tree = self.create_dummy()
-        tree.subdossier = self.providing_stub([IDossierMarker])
-        tree.dossier = self.providing_stub([IDossierMarker])
-        tree.subfolder = self.providing_stub([IRepositoryFolder])
-        tree.folder = self.providing_stub([IRepositoryFolder])
-        tree.repository = self.stub()
-        tree.site = self.providing_stub([IPloneSiteRoot])
+        self.assertTrue(isinstance(view, DossierCoverPDFView))
 
-        self.expect(tree.subdossier.toLocalizedTime).result(
-            toLocalizedTime)
+    def test_render_adds_browser_layer(self):
+        context = request = self.create_dummy()
 
-        if long_title:
-            self.expect(tree.subfolder.Title()).result(10 * 'Lorem ipsum subfolder ')
-            self.expect(tree.folder.Title()).result(10 * 'Lorem ipsum folder ')
-            self.expect(tree.dossier.Title()).result(10 * 'Lorem ipsum dossier ')
-        else:
-            self.expect(tree.subfolder.Title()).result('Sub Folder')
-            self.expect(tree.folder.Title()).result('Folder')
-            self.expect(tree.dossier.Title()).result('Dossier title')
+        view = self.mocker.patch(DossierCoverPDFView(context, request))
 
-        self.set_parent(
-            tree.subdossier, self.set_parent(
-                tree.dossier, self.set_parent(
-                    tree.subfolder, self.set_parent(
-                        tree.folder, self.set_parent(
-                            tree.repository,
-                            tree.site)))))
-
-        return tree
-
-    def mock_metadata(self, context_mock, metadata=None):
-        defaults = {
-            'clientid': 'OG',
-            'referencenr': 'OG 1.6 / 1',
-            'filingprefix': 'Leitung',
-            'filingnr': '5',
-            'sequencenr': '2',
-            'title': 'My Dossier',
-            'description': 'The description',
-            'responsible': 'John Doe',
-            'start': datetime(2011, 9, 24),
-            'end': datetime(2011, 11, 22)}
-
-        if metadata:
-            defaults.update(metadata)
-
-        # clientid
-        registry = self.mocker.mock()
-        self.expect(registry.forInterface(IBaseClientID).client_id).result(
-            defaults.get('clientid'))
-        self.mock_utility(registry, IRegistry)
-
-        # referencenr
-        ref_adapter = self.mocker.mock()
-        self.mock_adapter(ref_adapter, IReferenceNumber, [IDossierMarker])
-        self.expect(ref_adapter(context_mock).get_number()).result(
-            defaults.get('referencenr'))
-
-        # filingprefix
-        self.expect(IDossier(context_mock).filing_prefix).result('PREFIX')
-        voc = self.mocker.mock()
-        self.expect(self.getVocabularyRegistry().get(
-                context_mock, 'opengever.dossier.type_prefixes')).result(voc)
-        self.expect(voc.by_token.get('PREFIX').title).result(defaults.get(
-                'filingprefix'))
-
-        # filing nr
-        self.expect(IDossier(context_mock).filing_no).result(
-            defaults.get('filingnr'))
-
-        # sequence nr
-        seq_utility = self.mocker.mock()
-        self.mock_utility(seq_utility, ISequenceNumber)
-        self.expect(seq_utility.get_number(context_mock)).result(
-            defaults.get('sequencenr'))
-
-        # title / description / dastes
-        self.expect(context_mock.Title()).result(defaults.get('title'))
-        self.expect(context_mock.Description()).result(
-            defaults.get('description'))
-
-        # responsible
-        self.expect(IDossier(context_mock).responsible).result('RESPONSIBLE')
-        info_utility = self.mocker.mock()
-        self.mock_utility(info_utility, IContactInformation)
-        self.expect(info_utility.describe('RESPONSIBLE')).result(
-            defaults.get('responsible'))
-
-        # start / end
-        self.expect(IDossier(context_mock).start).result(
-            defaults.get('start'))
-        self.expect(IDossier(context_mock).end).result(
-            defaults.get('end'))
-
-    def test_get_reversed_breadcrumbs(self):
-        tree = self.stub_tree()
-        context = tree.subdossier
-        request = self.stub()
+        self.expect(view.allow_alternate_output()).result(False)
+        self.expect(view.export())
 
         self.replay()
 
-        view = DossierCoverPDFView(context, request)
-        self.assertEqual(view.get_reversed_breadcrumbs(),
-                         'Sub Folder / Folder')
-
-    def test_reversed_breadcrumb_String_is_cropped_to_150(self):
-        tree = self.stub_tree(long_title=True)
-        context = tree.subdossier
-        request = self.stub()
-
-        self.replay()
-
-        view = DossierCoverPDFView(context, request)
-
-        self.assertEquals(150, len(view.get_reversed_breadcrumbs()))
-
-    def test_get_render_arguments(self):
-        tree = self.stub_tree()
-        context = tree.subdossier
-        self.mock_metadata(context)
-        request = self.stub()
-
-        self.replay()
-
-        view = DossierCoverPDFView(context, request)
-
-        self.assertEqual(
-            view.get_render_arguments(),
-
-            {'clientid': 'OG',
-             'repository': 'Sub Folder / Folder',
-             'referencenr': 'OG 1.6 / 1',
-             'filingprefix': 'Leitung',
-             'parentDossierTitle': 'Dossier title',
-             'filingnr': '5',
-             'sequencenr': '2',
-             'title': 'My Dossier',
-             'description': 'The description',
-             'responsible': 'John Doe',
-             'start': '2011-09-24 00:00:00',
-             'end': '2011-11-22 00:00:00'})
-
-    def test_description_cutting(self):
-        dossier = self.stub()
-        request = self.stub()
-
-        small_title = 'Lorem ipsum dolor sit amet'
-        long_title = 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor in- vidunt ut labore et dolore magna aliquy'
-
-        # a to long description wuthout any linebreaks
-        description_1 = 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor in- vidunt ut labore et dolore magna aliquyam erat, sed diam volup- tua. At ve- ro eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ip- sum dolor sit amet. Lorem ipsum dolor Lorem ipsum dolor sit amet consetetur, sadipscing elitr, sed diam nonumy eirmod tempor in- vidunt ut laboree et dolore magna aliquyam erat, sed diam volup- tua.'
-
-        cutted_description_1 = 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor in- vidunt ut labore et dolore magna aliquyam erat, sed diam volup- tua. At ve- ro eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ip- sum dolor sit amet. Lorem ipsum dolor Lorem ipsum dolor sit amet consetetur, sadipscing elitr, s ...'
-
-        # a description with to many lines
-        description_2 = """Lorem ipsum dolor sit amet:
- - consetetur sadipscing
- - elitr
- - sed diam nonumy eirmod
- - tempor in
- - vidunt ut labore et dolore magna
- - aliquyam erat, sed diam
- - volup- tua.
- - At ve- ro eos et accusam et
- - justo duo dolores et ea rebum.
- - Stet clita kasd gubergren, no sea
- - takimata sanctus est Lorem ip"""
-
-        cutted_description_2 = """Lorem ipsum dolor sit amet:<br /> - consetetur sadipscing<br /> - elitr<br /> - sed diam nonumy eirmod<br /> - tempor in<br /> - vidunt ut labore et dolore magna<br /> - aliquyam erat, sed diam ..."""
-
-        # a description with to many long lines
-        description_3 = """Lorem ipsum dolor sit amet:
- - Lorem ipsum dolor sit amet, consetetur sadipscing elitr
- - Lorem ipsum dolor sit amet, consetetur sadipscing elitr
- - Lorem ipsum dolor sit amet, consetetur sadipscing elitr
- - Lorem ipsum dolor sit amet, consetetur sadipscing elitr
- - Lorem ipsum dolor sit amet, consetetur sadipscing elitr
- - Lorem ipsum dolor sit amet, consetetur sadipscing elitr
- - Lorem ipsum dolor sit amet, consetetur sadipscing elitr
- - Lorem ipsum dolor sit amet, consetetur sadipscing elitr
-"""
-
-        cutted_description_3 = """Lorem ipsum dolor sit amet:<br /> - Lorem ipsum dolor sit amet, consetetur sadipscing elitr<br /> - Lorem ipsum dolor sit amet, consetetur sadipscing elitr<br /> - Lorem ipsum dolor sit amet, consetetur sadipscing elitr ..."""
-
-        with self.mocker.order():
-            self.expect(dossier.Description()).result(description_1)
-            self.expect(dossier.Title()).result(small_title)
-
-            self.expect(dossier.Description()).result(description_2)
-            self.expect(dossier.Title()).result(small_title)
-
-            self.expect(dossier.Description()).result(description_3)
-            self.expect(dossier.Title()).result(small_title)
-
-            self.expect(dossier.Title()).result(description_2)
-            self.expect(dossier.Title()).result(long_title)
-
-        self.replay()
-
-        view = DossierCoverPDFView(dossier, request)
-        self.assertEquals(cutted_description_1, view.get_description())
-        self.assertEquals(cutted_description_2, view.get_description())
-        self.assertEquals(cutted_description_3, view.get_description())
+        view.render()
+        self.assertTrue(IDossierCoverLayer.providedBy(request))

@@ -9,6 +9,7 @@
 
     <!-- grok -->
     <grok:grok package="." />
+    <include package=".upgrades" />
 
     <!-- generic setup -->
     <genericsetup:registerProfile

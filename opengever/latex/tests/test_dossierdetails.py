@@ -39,31 +39,3 @@ class TestDossierDetailsPDFView(MockTestCase):
         view.render()
         self.assertTrue(dossierdetails.IDossierDetailsLayer.providedBy(
                 request))
-
-
-class TestDossierDetailsLaTeXView(MockTestCase):
-
-    layer = LATEX_ZCML_LAYER
-
-    def test_component_is_registered(self):
-        context = self.create_dummy()
-        request = self.providing_stub([dossierdetails.IDossierDetailsLayer])
-        layout = self.providing_stub([ILaTeXLayout])
-
-        self.replay()
-
-        view = getMultiAdapter((context, request, layout), ILaTeXView)
-
-        self.assertEqual(type(view), dossierdetails.DossierDetailsLaTeXView)
-
-    def test_implements_interface(self):
-        self.assertTrue(ILaTeXView.implementedBy(
-                dossierdetails.DossierDetailsLaTeXView))
-
-        verifyClass(ILaTeXView, dossierdetails.DossierDetailsLaTeXView)
-
-    def test_adapts_layer(self):
-        context_iface, request_iface, layout_iface = adaptedBy(
-            dossierdetails.DossierDetailsLaTeXView)
-
-        self.assertEqual(request_iface, dossierdetails.IDossierDetailsLayer)
