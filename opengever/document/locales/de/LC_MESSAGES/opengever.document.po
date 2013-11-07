@@ -247,7 +247,7 @@ msgstr "Autor"
 #. Default: "by ${author}"
 #: ./opengever/document/viewlets/byline.pt:15
 msgid "label_by_author"
-msgstr "Autor: ${author}"
+msgstr "Autor"
 
 #: ./opengever/document/browser/download_templates/downloadconfirmation.pt:23
 msgid "label_cancel"
@@ -376,12 +376,12 @@ msgstr "Verwandte Dokumente"
 #. Default: "Sequence Number:"
 #: ./opengever/document/viewlets/byline.pt:39
 msgid "label_sequence_number"
-msgstr "Laufnummer:"
+msgstr "Laufnummer"
 
 #. Default: "from"
 #: ./opengever/document/viewlets/byline.pt:25
 msgid "label_start_byline"
-msgstr "Dokumentdatum:"
+msgstr "Dokumentdatum"
 
 #. Default: "Thumbnail"
 #: ./opengever/document/document.py:177

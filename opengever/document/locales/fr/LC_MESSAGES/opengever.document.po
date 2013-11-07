@@ -236,7 +236,7 @@ msgstr "auteur"
 #. Default: "by ${author}"
 #: ./opengever/document/viewlets/byline.pt:15
 msgid "label_by_author"
-msgstr "Auteur: ${author}"
+msgstr "Auteur"
 
 #: ./opengever/document/browser/download_templates/downloadconfirmation.pt:23
 msgid "label_cancel"
