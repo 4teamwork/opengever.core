@@ -102,6 +102,12 @@ class OGDSUpdater(grok.Adapter):
                         # in our SQL model
                         continue
                     value = info.get(col.name)
+
+                    # We can't store sequences in SQL columns. So if we do get a multi-valued field
+                    # to be stored directly in OGDS, we treat it as a multi-line string and join it.
+                    if isinstance(value, list) or isinstance(value, tuple):
+                        value = ' '.join([str(v) for v in value])
+
                     setattr(user, col.name, value)
 
                 # Set the user active
@@ -144,6 +150,13 @@ class OGDSUpdater(grok.Adapter):
                 columns = Group.__table__.columns
                 for col in columns:
                     value = info.get(col.name)
+
+                    # We can't store sequences in SQL columns. So if we do get
+                    # a multi-valued field to be stored directly in OGDS, we
+                    # treat it as a multi-line string and join it.
+                    if isinstance(value, list) or isinstance(value, tuple):
+                        value = ' '.join([str(v) for v in value])
+
                     setattr(group, col.name, value)
 
                 contained_users = []
