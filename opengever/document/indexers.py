@@ -54,7 +54,9 @@ class DefaultDocumentIndexer(grok.Adapter):
                 'text/plain',
                 self.context.file.data,
                 mimetype=self.context.file.contentType,
-                filename=self.context.file.filename)
+                filename=self.context.file.filename,
+                object=self.context.file)
+
             if plain_text:
                 return plain_text.getData()
         return ''
