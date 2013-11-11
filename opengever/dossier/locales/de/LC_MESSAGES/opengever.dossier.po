@@ -428,7 +428,7 @@ msgstr "Nach dem Hinzufügen bearbeiten"
 #. Default: "E-Mail:"
 #: ./opengever/dossier/viewlets/businesscase_byline.pt:77
 msgid "label_email_address"
-msgstr "E-Mail:"
+msgstr "E-Mail"
 
 #. Default: "Closing Date"
 #: ./opengever/dossier/archive.py:141
@@ -441,12 +441,12 @@ msgstr "Ende"
 #: ./opengever/dossier/project_templates/byline.pt:42
 #: ./opengever/dossier/viewlets/businesscase_byline.pt:43
 msgid "label_end_byline"
-msgstr "Ende:"
+msgstr "Ende"
 
 #. Default: "Filing Number:"
 #: ./opengever/dossier/viewlets/businesscase_byline.pt:70
 msgid "label_filing_no"
-msgstr "Ablagenummer:"
+msgstr "Ablagenummer"
 
 #. Default: "Reference Number"
 #: ./opengever/dossier/behaviors/dossier.py:176
@@ -463,7 +463,7 @@ msgstr "Schlagworte"
 msgid "label_modified"
 msgstr "Zuletzt Bearbeitet"
 
-#. Default: "Reference Number will be generated                 after content creation"
+#. Default: "Reference Number will be generated after content creation"
 #: ./opengever/dossier/widget.py:25
 msgid "label_no_reference_number"
 msgstr "Die Archivnummer wird erst beim Erstellen generiert."
@@ -483,7 +483,7 @@ msgstr "Beteiligung"
 #: ./opengever/dossier/browser/report.py:118
 #: ./opengever/dossier/viewlets/businesscase_byline.pt:63
 msgid "label_reference_number"
-msgstr "Aktenzeichen:"
+msgstr "Aktenzeichen"
 
 #. Default: "Related Dossier"
 #: ./opengever/dossier/behaviors/dossier.py:155
@@ -510,7 +510,7 @@ msgstr "Rollen"
 #. Default: "Sequence Number:"
 #: ./opengever/dossier/viewlets/businesscase_byline.pt:56
 msgid "label_sequence_number"
-msgstr "Laufnummer:"
+msgstr "Laufnummer"
 
 #. Default: "Client"
 #: ./opengever/dossier/browser/transport.py:141
@@ -527,7 +527,7 @@ msgstr "Beginn"
 #: ./opengever/dossier/project_templates/byline.pt:33
 #: ./opengever/dossier/viewlets/businesscase_byline.pt:34
 msgid "label_start_byline"
-msgstr "Beginn:"
+msgstr "Beginn"
 
 #. Default: "Target Dossier"
 #: ./opengever/dossier/browser/transport.py:240
@@ -550,7 +550,7 @@ msgstr "Titel"
 #: ./opengever/dossier/project_templates/byline.pt:26
 #: ./opengever/dossier/viewlets/businesscase_byline.pt:29
 msgid "label_workflow_state"
-msgstr "Status:"
+msgstr "Status"
 
 msgid "newest_documents"
 msgstr "Neuste Dokumente"

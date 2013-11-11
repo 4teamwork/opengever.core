@@ -1,23 +1,28 @@
+from opengever.base.browser.helper import get_css_class
 from opengever.base.interfaces import IReferenceNumber, ISequenceNumber
+from opengever.base.viewlets.byline import BylineBase
+from opengever.mail import _
 from plone.app.layout.viewlets import content
 from plone.memoize.instance import memoize
 from zope.component import getUtility, getAdapter
-from opengever.base.browser.helper import get_css_class
 
 
-class OGMailByline(content.DocumentBylineViewlet):
+class OGMailByline(BylineBase):
 
-    update = content.DocumentBylineViewlet.update
+    def get_items(self):
+        return [
+            {'class': 'created',
+             'label': _('byline_created', default='Created'),
+             'content': self.created(),
+             'replace': False},
 
-    def get_css_class(self):
-        return get_css_class(self.context)
+            {'class': 'sequenceNumber',
+             'label': _('label_sequence_number', default='Sequence Number'),
+             'content': self.sequence_number(),
+             'replace': False},
 
-    @memoize
-    def sequence_number(self):
-        seqNumb = getUtility(ISequenceNumber)
-        return seqNumb.get_number(self.context)
-
-    @memoize
-    def reference_number(self):
-        refNumb = getAdapter(self.context, IReferenceNumber)
-        return refNumb.get_number()
+            {'class': 'reference_number',
+             'label': _('label_reference_number', default='Reference Number'),
+             'content': self.reference_number(),
+             'replace': False},
+        ]

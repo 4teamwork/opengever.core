@@ -437,7 +437,7 @@ msgstr "Date de fin :"
 #: ./opengever/dossier/project_templates/byline.pt:42
 #: ./opengever/dossier/viewlets/businesscase_byline.pt:43
 msgid "label_end_byline"
-msgstr "Jusqu'au :"
+msgstr "Jusqu'au"
 
 #. Default: "Filing Number:"
 #: ./opengever/dossier/viewlets/businesscase_byline.pt:70
@@ -523,7 +523,7 @@ msgstr "Date début"
 #: ./opengever/dossier/project_templates/byline.pt:33
 #: ./opengever/dossier/viewlets/businesscase_byline.pt:34
 msgid "label_start_byline"
-msgstr "De :"
+msgstr "De"
 
 #. Default: "Target Dossier"
 #: ./opengever/dossier/browser/transport.py:240
@@ -546,7 +546,7 @@ msgstr "Titre"
 #: ./opengever/dossier/project_templates/byline.pt:26
 #: ./opengever/dossier/viewlets/businesscase_byline.pt:29
 msgid "label_workflow_state"
-msgstr "Etat:"
+msgstr "Etat"
 
 msgid "newest_documents"
 msgstr "Derniers documents"

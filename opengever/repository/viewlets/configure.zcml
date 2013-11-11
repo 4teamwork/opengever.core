@@ -4,9 +4,9 @@
 
    <browser:viewlet
        name="plone.belowcontenttitle.documentbyline"
-       for="opengever.document.document.IDocumentSchema"
+       for="opengever.repository.interfaces.IRepositoryFolder"
        manager="plone.app.layout.viewlets.interfaces.IBelowContentTitle"
-       class=".byline.DocumentByline"
+       class=".byline.RepositoryByline"
        permission="zope2.View"
        />
 

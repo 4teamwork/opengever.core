@@ -1,22 +1,13 @@
 from Products.CMFCore.utils import getToolByName
-from opengever.base.interfaces import IReferenceNumber, ISequenceNumber
 from opengever.document.document import IDocumentSchema
-from plone.app.layout.viewlets import content
-from plone.memoize.instance import memoize
-from zope.component import getUtility, getAdapter
-from opengever.base.browser.helper import get_css_class
+from opengever.base.viewlets.byline import BylineBase
+from opengever.document import _
 
 
-class DocumentByline(content.DocumentBylineViewlet):
+class DocumentByline(BylineBase):
 
-    update = content.DocumentBylineViewlet.update
-
-    def get_css_class(self):
-        return get_css_class(self.context)
-
-    def start(self):
-        document = IDocumentSchema(self.context)
-        return document.start
+    def document_date(self):
+        return self.to_localized_time(self.context.document_date)
 
     def responsible(self):
         mt = getToolByName(self.context, 'portal_membership')
@@ -27,26 +18,35 @@ class DocumentByline(content.DocumentBylineViewlet):
         document = IDocumentSchema(self.context)
         return document.end
 
-    @memoize
-    def workflow_state(self):
-        state = self.context_state.workflow_state()
-        workflows = self.context.portal_workflow.getWorkflowsFor(
-            self.context.aq_explicit)
-        if workflows:
-            for w in workflows:
-                if state in w.states:
-                    return w.states[state].title or state
-
-    @memoize
-    def sequence_number(self):
-        seqNumb = getUtility(ISequenceNumber)
-        return seqNumb.get_number(self.context)
-
-    @memoize
-    def reference_number(self):
-        refNumb = getAdapter(self.context, IReferenceNumber)
-        return refNumb.get_number()
-
     def get_filing_no(self):
         document = IDocumentSchema(self.context)
         return getattr(document, 'filing_no', None)
+
+    def get_items(self):
+        return [
+            {
+                'class': 'document_author',
+                'label': _('label_by_author', default='by'),
+                'content': self.context.document_author,
+                'replace': False
+            },
+            {
+                'class': 'documentModified',
+                'label': _('label_start_byline', default='from'),
+                'content': self.document_date(),
+                'replace': False
+            },
+            {
+                'class': 'sequenceNumber',
+                'label': _('label_sequence_number', default='Sequence Number'),
+                'content': self.sequence_number(),
+                'replace': False
+            },
+            {
+                'class': 'referenceNumber',
+                'label': _('label_reference_number',
+                           default='Reference Number'),
+                'content': self.reference_number(),
+                'replace': False
+            }
+        ]

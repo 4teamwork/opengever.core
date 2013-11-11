@@ -7,7 +7,6 @@
        for="ftw.mail.mail.IMail"
        manager="plone.app.layout.viewlets.interfaces.IBelowContentTitle"
        class=".byline.OGMailByline"
-       template="byline.pt"
        permission="zope2.View"
        />
 

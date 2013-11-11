@@ -9,6 +9,7 @@
     <!-- Include custom permissions -->
     <include file="permissions.zcml" />
     <include package=".behaviors" />
+    <include package=".viewlets" />
 
     <!-- Grok the package to initialise schema interfaces and content classes -->
     <grok:grok package="." />
