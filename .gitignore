@@ -1,0 +1,16 @@
+*.egg-info
+*.mo
+*.pyc
+.installed.cfg
+.mr.developer.cfg
+bin/
+build/
+buildout.cfg
+coverage/
+develop-eggs/
+dist/
+eggs/
+parts/
+src/
+var/
+opengever/examplecontent/profiles/4teamwork-ldap/ldap_plugin.xml
