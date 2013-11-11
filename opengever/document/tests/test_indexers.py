@@ -1,9 +1,14 @@
+from ftw.testing import MockTestCase
 from opengever.document.checkout.manager import CHECKIN_CHECKOUT_ANNOTATIONS_KEY
+from opengever.document.indexers import DefaultDocumentIndexer
+from opengever.document.interfaces import IDocumentIndexer
 from opengever.testing import FunctionalTestCase
-from opengever.testing import obj2brain
 from opengever.testing import index_data_for
+from opengever.testing import obj2brain
 from plone.dexterity.utils import createContentInContainer
+from plone.namedfile.file import NamedBlobFile
 from zope.annotation.interfaces import IAnnotations
+from zope.component import getAdapter
 import datetime
 
 
@@ -90,3 +95,66 @@ class TestDocumentIndexers(FunctionalTestCase):
         self.assertEquals(
             index_data_for(doc1).get('SearchableText'),
             ['doc', 'one', 'foo', 'bar', 'hugo', 'boss', 'og', '1', '1'])
+
+    def test_full_text_indexing_with_plain_text(self):
+        sample_file = NamedBlobFile('foobar barfoo', filename=u'test.txt')
+        doc1 = createContentInContainer(
+            self.portal, 'opengever.document.document',
+            title=u"Doc One",
+            document_author=u'Hugo Boss',
+            file=sample_file)
+
+        searchable_text = index_data_for(doc1).get('SearchableText')
+        self.assertIn('foobar', searchable_text)
+        self.assertIn('barfoo', searchable_text)
+
+    def test_indexer_picks_correct_doc_indexer_adapter_by_default(self):
+        sample_file = NamedBlobFile('foo', filename=u'test.txt')
+        doc1 = createContentInContainer(
+            self.portal, 'opengever.document.document',
+            title=u"Doc One",
+            document_author=u'Hugo Boss',
+            file=sample_file)
+
+        fulltext_indexer = getAdapter(doc1, IDocumentIndexer)
+        self.assertEquals(fulltext_indexer.__class__,
+                          DefaultDocumentIndexer)
+
+
+class TestDefaultDocumentIndexer(MockTestCase):
+
+    def test_default_document_indexer_calls_portal_transforms_correctly(self):
+        # Sample file conforming to NamedFile interface
+        filename = 'test.txt'
+        mimetype = 'application/pdf'
+        data = 'foo'
+
+        sample_file = self.mocker.mock()
+        self.expect(sample_file.data).result(data)
+        self.expect(sample_file.filename).result(filename)
+        self.expect(sample_file.contentType).result(mimetype)
+
+        # Sample document containing our file
+        doc1 = self.mocker.mock()
+        self.expect(doc1.file).result(sample_file).count(1, None)
+
+        # datastream returned by transform
+        expected_fulltext = 'FULLTEXT'
+        stream = self.mocker.mock()
+        self.expect(stream.getData()).result(expected_fulltext)
+
+        # Mock the portal_transforms tool
+        mock_portal_transforms = self.mocker.mock()
+        self.expect(mock_portal_transforms.convertTo(
+                'text/plain',
+                data,
+                mimetype=mimetype,
+                filename=filename,
+                object=sample_file)).result(stream)
+        self.mock_tool(mock_portal_transforms, "portal_transforms")
+
+        self.replay()
+
+        default_doc_indexer = DefaultDocumentIndexer(doc1)
+        fulltext = default_doc_indexer.extract_text()
+        self.assertEquals(expected_fulltext, fulltext)
