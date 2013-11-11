@@ -28,8 +28,9 @@ class TestRepositoryfolderByline(TestBylineBase):
                           icon.target.get('class'))
 
     def test_repository_byline_privacy_layer_display(self):
-        responsible = self.get_byline_element_by_class('privacy_layer').getchildren()[0]
-        self.assertEquals('privacy_layer_no', responsible.text_content())
+        privacy_layer = self.get_byline_value_by_label('Privacy layer:')
+
+        self.assertEquals('privacy_layer_no', privacy_layer.text_content())
 
     def test_repository_byline_public_trial_display(self):
         public_trial = self.get_byline_value_by_label('Public Trial:')
