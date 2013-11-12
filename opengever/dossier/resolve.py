@@ -1,9 +1,11 @@
+from Products.CMFCore.utils import getToolByName
 from five import grok
 from opengever.dossier import _
-from opengever.dossier.behaviors.dossier import IDossierMarker
-from Products.CMFCore.utils import getToolByName
-from opengever.dossier.interfaces import IDossierResolver
 from opengever.dossier.behaviors.dossier import IDossier
+from opengever.dossier.behaviors.dossier import IDossierMarker
+from opengever.dossier.behaviors.filing import IFilingNumberMarker
+from opengever.dossier.interfaces import IDossierResolver
+
 
 NOT_SUPPLIED_OBJECTS = _(
     "not all documents and tasks are stored in a subdossier")
@@ -45,7 +47,7 @@ class DossierResolveView(grok.View):
             return self.request.RESPONSE.redirect(
                 self.context.absolute_url())
 
-        if resolver.is_archiv_form_needed():
+        if resolver.is_archive_form_needed():
             self.request.RESPONSE.redirect('transition-archive')
         else:
             resolver.resolve()
@@ -105,7 +107,11 @@ class DossierResolver(grok.Adapter):
             self.enddates_valid = True
         return errors
 
-    def is_archiv_form_needed(self):
+    def is_archive_form_needed(self):
+
+        if not IFilingNumberMarker.providedBy(self.context):
+            return False
+
         if self.context.is_subdossier():
             return False
         else:
@@ -115,7 +121,7 @@ class DossierResolver(grok.Adapter):
         if not self.enddates_valid or not self.preconditions_fulfilled:
             raise TypeError
 
-        elif self.is_archiv_form_needed() and not end_date:
+        elif self.is_archive_form_needed() and not end_date:
             raise TypeError
         else:
             Resolver(self.context).resolve_dossier(end_date=end_date)

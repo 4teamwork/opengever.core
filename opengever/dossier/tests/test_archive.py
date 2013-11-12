@@ -17,6 +17,8 @@ from opengever.dossier.archive import filing_year_default_value, default_end_dat
 from opengever.dossier.archive import get_filing_actions, filing_prefix_default_value
 from opengever.dossier.archive import valid_filing_year
 from opengever.dossier.behaviors.dossier import IDossier, IDossierMarker
+from opengever.dossier.behaviors.filing import IFilingNumberMarker
+from opengever.dossier.behaviors.filing import IFilingNumber
 from opengever.dossier.interfaces import IDossierArchiver
 from plone.registry.interfaces import IRegistry
 from zope.annotation.interfaces import IAttributeAnnotatable
@@ -36,6 +38,7 @@ class TestArchiver(MockTestCase):
     def setUp(self):
         super(TestArchiver, self).setUp()
         grok('opengever.dossier.archive')
+        grok('opengever.dossier.behaviors.filing')
 
         file_path = os.path.join(
             os.path.dirname(opengever.dossier.__file__),
@@ -59,6 +62,12 @@ class TestArchiver(MockTestCase):
         registry.forInterface(IBaseClientID)
         self.mocker.result(proxy)
         self.mocker.count(0, None)
+
+    def stub_dossier(self):
+        return self.providing_stub([IDossier,
+                                    IDossierMarker,
+                                    IFilingNumber,
+                                    IFilingNumberMarker])
 
     def test_number_generation(self):
 
@@ -96,10 +105,10 @@ class TestArchiver(MockTestCase):
         siteroot = self.providing_stub([IAttributeAnnotatable])
         self.mock_utility(siteroot, ISiteRoot)
 
-        dossier = self.providing_stub([IDossier, IDossierMarker])
-        sub1 = self.providing_stub([IDossier, IDossierMarker])
-        sub2 = self.providing_stub([IDossier, IDossierMarker])
-        subsub1 = self.providing_stub([IDossier, IDossierMarker])
+        dossier = self.stub_dossier()
+        sub1 = self.stub_dossier()
+        sub2 = self.stub_dossier()
+        subsub1 = self.stub_dossier()
 
         objs = [dossier, sub1, sub2, subsub1]
         self.expect(dossier.get_subdossiers()).result([sub1, sub2])
@@ -126,10 +135,10 @@ class TestArchiver(MockTestCase):
         siteroot = self.providing_stub([IAttributeAnnotatable])
         self.mock_utility(siteroot, ISiteRoot)
 
-        dossier = self.providing_stub([IDossier, IDossierMarker])
-        sub1 = self.providing_stub([IDossier, IDossierMarker])
-        sub2 = self.providing_stub([IDossier, IDossierMarker])
-        subsub1 = self.providing_stub([IDossier, IDossierMarker])
+        dossier = self.stub_dossier()
+        sub1 = self.stub_dossier()
+        sub2 = self.stub_dossier()
+        subsub1 = self.stub_dossier()
 
         objs = [dossier, sub1, sub2, subsub1]
         self.expect(dossier.get_subdossiers()).result([sub1, sub2])
@@ -153,10 +162,10 @@ class TestArchiver(MockTestCase):
         self.assertEquals(subsub1.filing_no, 'FAKE NUMBER.1.1')
 
     def test_update_prefix(self):
-        dossier = self.providing_stub([IDossier, IDossierMarker])
-        sub1 = self.providing_stub([IDossier, IDossierMarker])
-        sub2 = self.providing_stub([IDossier, IDossierMarker])
-        subsub1 = self.providing_stub([IDossier, IDossierMarker])
+        dossier = self.stub_dossier()
+        sub1 = self.stub_dossier()
+        sub2 = self.stub_dossier()
+        subsub1 = self.stub_dossier()
 
         objs = [dossier, sub1, sub2, subsub1]
         self.expect(dossier.get_subdossiers()).result([sub1, sub2])
@@ -205,6 +214,12 @@ class TestArchiving(MockTestCase):
         super(TestArchiving, self).setUp()
         grok('opengever.dossier.archive')
 
+    def stub_dossier(self):
+        return self.providing_stub([IDossier,
+                                    IDossierMarker,
+                                    IFilingNumber,
+                                    IFilingNumberMarker])
+
     def test_implements_interface(self):
         verifyClass(IDossierArchiver, Archiver)
 
@@ -238,25 +253,25 @@ class TestArchiving(MockTestCase):
         self.mock_tool(wft, 'portal_workflow')
 
         #dossier not resolved yet without a filing no
-        dossier1 = self.providing_stub(IDossier)
+        dossier1 = self.stub_dossier()
         self.expect(dossier1.filing_no).result(None)
         self.expect(wft.getInfoFor(dossier1, 'review_state', None)).result(
             'dossier-state-activ')
 
         #dossier not resolved yet with a not valid filing no
-        dossier2 = self.providing_stub(IDossier)
+        dossier2 = self.stub_dossier()
         self.expect(dossier2.filing_no).result('FAKE_NUMBER')
         self.expect(wft.getInfoFor(dossier2, 'review_state', None)).result(
             'dossier-state-activ')
 
         #dossier not resolved yet with a valid filing no
-        dossier3 = self.providing_stub(IDossier)
+        dossier3 = self.stub_dossier()
         self.expect(dossier3.filing_no).result('TEST A-Amt-2011-2')
         self.expect(wft.getInfoFor(dossier3, 'review_state', None)).result(
             'dossier-state-activ')
 
         # dossier allready rsolved no filing
-        dossier4 = self.providing_stub(IDossier)
+        dossier4 = self.stub_dossier()
         self.expect(dossier4.filing_no).result(None)
         self.expect(wft.getInfoFor(dossier4, 'review_state', None)).result(
             'dossier-state-resolved')
@@ -292,7 +307,7 @@ class TestArchiving(MockTestCase):
 
     def test_default_prefix(self):
         data = self.stub()
-        dossier = self.providing_stub(IDossier)
+        dossier = self.stub_dossier()
         self.expect(data.context).result(dossier)
 
         with self.mocker.order():
@@ -306,7 +321,7 @@ class TestArchiving(MockTestCase):
 
     def test_default_filing_year(self):
         data = self.stub()
-        dossier = self.providing_stub(IDossier)
+        dossier = self.stub_dossier()
         self.expect(data.context).result(dossier)
 
         with self.mocker.order():
@@ -320,7 +335,7 @@ class TestArchiving(MockTestCase):
 
     def test_default_end_date(self):
         data = self.stub()
-        dossier = self.providing_stub(IDossier)
+        dossier = self.stub_dossier()
         self.expect(data.context).result(dossier)
 
         with self.mocker.order():

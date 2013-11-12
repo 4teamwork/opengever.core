@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <configure
     xmlns="http://namespaces.zope.org/zope"
     xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
@@ -30,6 +31,16 @@
         directory="profiles/2601"
         for="Products.CMFPlone.interfaces.IMigratingPloneSiteRoot"
         provides="Products.GenericSetup.interfaces.EXTENSION"
+        />
+
+    <!-- Filing * -> 2601 -->
+    <genericsetup:upgradeStep
+        title="Move the filing number values in to the new field"
+        description=""
+        source="*"
+        destination="2601"
+        handler="opengever.dossier.upgrades.filing_to2601.MigrateFilingNumbers"
+        profile="opengever.dossier:filing"
         />
 
 </configure>

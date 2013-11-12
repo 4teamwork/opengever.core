@@ -8,6 +8,7 @@ from opengever.base.interfaces import IBaseClientID
 from opengever.dossier import _
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.behaviors.dossier import IDossierMarker
+from opengever.dossier.behaviors.filing import IFilingNumber
 from opengever.dossier.interfaces import IDossierArchiver
 from opengever.dossier.interfaces import IDossierResolver
 from persistent.dict import PersistentDict
@@ -91,7 +92,7 @@ def get_filing_actions(context):
 
     wft = getToolByName(context, 'portal_workflow')
     review_state = wft.getInfoFor(context, 'review_state', None)
-    filing_no = IDossier(context).filing_no
+    filing_no = IFilingNumber(context).filing_no
 
     values = []
 
@@ -249,7 +250,7 @@ class ArchiveForm(directives_form.Form):
 
         if action == METHOD_RESOLVING_EXISTING_FILING:
             # archive all with the existing filing number
-            filing_no = IDossier(self.context).filing_no
+            filing_no = IFilingNumber(self.context).filing_no
             filing_prefix = IDossier(self.context).filing_prefix
             IDossierArchiver(self.context).archive(
                 filing_prefix, filing_year, number=filing_no)
@@ -305,7 +306,8 @@ class Archiver(grok.Adapter):
 
     def _recursive_archive(self, dossier, number, prefix):
 
-        IDossier(dossier).filing_no = number
+        IFilingNumber(dossier).filing_no = number
+
         IDossier(self.context).filing_prefix = prefix
         dossier.reindexObject(idxs=['filing_no', 'searchable_filing_no'])
 
@@ -333,16 +335,15 @@ class Archiver(grok.Adapter):
         For Dossiers without a number and only a prefix it return the half
         of the number."""
 
-        dossier = IDossier(self.context)
         value = None
-        if dossier.filing_no:
-            value = dossier.filing_no
+        if IFilingNumber(self.context).filing_no:
+            value = IFilingNumber(self.context).filing_no
 
-        elif dossier.filing_prefix:
+        elif IDossier(self.context).filing_prefix:
             value = '%s-%s-?' % (
                 self._get_client_id(),
                 self._get_term_title(
-                    dossier.filing_prefix,
+                    IDossier(self.context).filing_prefix,
                     'opengever.dossier.type_prefixes'),
                 )
             if searchable:

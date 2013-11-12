@@ -75,7 +75,6 @@ class TestMainDossier(FunctionalTestCase):
     - default_searchable_attr: attributes to test the searchable text: special:
         reference_number to test, set it to 'test_reference_number'
         sequence_number to test, set it to 'test_sequence_number'
-        filing_no to test, set it to 'test_filing_no'
         otherwise remove the attrs
     - is_special_dossier: if true, that we can add this dossie just in a repos
     - default_contentmenu_order: The orderposition of items in the content-menu.
@@ -110,7 +109,6 @@ class TestMainDossier(FunctionalTestCase):
 
     default_searchable_attr = {'reference_number': 'test_reference_number',
                                 'sequence_number': 'test_sequence_number',
-                               'filing_no': 'test_filing_no',
                                'comments': u'wir wollen James "Bond" überall',
                                'keywords': ['hallo', 'hugo']}
 
@@ -519,13 +517,6 @@ class TestMainDossier(FunctionalTestCase):
                     elif value == 'test_reference_number':
                         refNumb = getAdapter(dossier, IReferenceNumber)
                         val = refNumb.get_number()
-                    # the filing_no is handled special.
-                    # the searchable text is just set if the dossier is
-                    # archived. So we bypass this
-                    elif value == 'test_filing_no':
-                        val = "GS-Filing 12345"
-                        archived_dossier = IDossierMarker(dossier)
-                        archived_dossier.filing_no = val
                     else:
                         val = self.map_with_vocab(schemata, name, value)
 

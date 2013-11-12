@@ -5,7 +5,6 @@ from collective import dexteritytextindexer
 from five import grok
 from opengever.base.interfaces import IReferenceNumber, ISequenceNumber
 from opengever.dossier.behaviors.dossier import IDossierMarker, IDossier
-from opengever.dossier.interfaces import IDossierArchiver
 from opengever.ogds.base.interfaces import IContactInformation
 from plone.dexterity.interfaces import IDexterityContent
 from plone.indexer import indexer
@@ -48,22 +47,6 @@ def isSubdossierIndexer(obj):
         return True
     return False
 grok.global_adapter(isSubdossierIndexer, name="is_subdossier")
-
-
-@indexer(IDossierMarker)
-def filing_no(obj):
-    """filing number indexer"""
-    return IDossierArchiver(obj).get_indexer_value()
-
-grok.global_adapter(filing_no, name="filing_no")
-
-
-@indexer(IDossierMarker)
-def searchable_filing_no(obj):
-    """Searchable filing number indexer"""
-    return IDossierArchiver(obj).get_indexer_value(searchable=True)
-
-grok.global_adapter(searchable_filing_no, name="searchable_filing_no")
 
 
 @indexer(IDexterityContent)

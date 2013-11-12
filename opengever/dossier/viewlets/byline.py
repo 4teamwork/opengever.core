@@ -22,10 +22,6 @@ class BusinessCaseByline(BylineBase):
         dossier = IDossier(self.context)
         return self.to_localized_time(dossier.end)
 
-    def get_filing_no(self):
-        dossier = IDossier(self.context)
-        return getattr(dossier, 'filing_no', None)
-
     def email(self):
         """Displays email-address if the IMailInAddressMarker behavior
          is provided and the dossier is Active"""
@@ -72,12 +68,6 @@ class BusinessCaseByline(BylineBase):
                 'label': _('label_reference_number',
                            default='Reference Number'),
                 'content': self.reference_number(),
-                'replace': False
-            },
-            {
-                'class': 'filing_no',
-                'label': _('label_filing_no', default='Filing Number'),
-                'content': self.get_filing_no(),
                 'replace': False
             },
             {

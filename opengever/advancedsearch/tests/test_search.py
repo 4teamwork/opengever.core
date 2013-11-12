@@ -1,11 +1,55 @@
 from ftw.builder import Builder
 from ftw.builder import create
+from opengever.dossier.filing.testing import activate_filing_number
+from opengever.dossier.filing.testing import inactivate_filing_number
 from opengever.testing import FunctionalTestCase
 from opengever.testing import create_client
 from opengever.testing import create_ogds_user
 from opengever.testing import set_current_client_id
 from plone.app.testing import TEST_USER_ID
 import transaction
+
+
+class TestSearchForm(FunctionalTestCase):
+
+    use_browser = True
+
+    def setUp(self):
+        super(TestSearchForm, self).setUp()
+
+        create_client()
+        set_current_client_id(self.portal)
+        transaction.commit()
+
+    def test_filing_number_fields_is_hidden_in_site_without_filing_number_support(self):
+        self.browser.open('http://nohost/plone/advanced_search')
+
+        with self.assertRaises(LookupError):
+            self.browser.fill({'Filing number': 'Test'})
+
+
+class TestSearchFormWithFilingNumberSupport(FunctionalTestCase):
+
+    use_browser = True
+
+    def setUp(self):
+
+        super(TestSearchFormWithFilingNumberSupport, self).setUp()
+        activate_filing_number(self.portal)
+
+        create_client()
+        set_current_client_id(self.portal)
+        transaction.commit()
+
+    def tearDown(self):
+        super(TestSearchFormWithFilingNumberSupport, self).tearDown()
+
+        inactivate_filing_number(self.portal)
+
+    def test_filing_number_field_is_displayed_in_a_filing_number_supported_site(self):
+
+        self.browser.open('http://nohost/plone/advanced_search')
+        self.browser.fill({'Filing number': 'Test'})
 
 
 class TestSearchFormObjectProvidesDescription(FunctionalTestCase):
@@ -75,7 +119,6 @@ class TestSearchWithContent(FunctionalTestCase):
         self.assertSearchResultCount(0)
         self.browser.open('http://nohost/plone/@@search?object_provides=opengever.dossier.behaviors.dossier.IDossierMarker&SearchableText=document1')
 
-
         # search documents with the right content-type
         self.browser.open('%s/advanced_search' % self.dossier1.absolute_url())
         self.browser.fill({'form.widgets.searchableText': "(document1)",
@@ -115,11 +158,18 @@ class TestSearchWithoutContent(FunctionalTestCase):
     def setUp(self):
         super(TestSearchWithoutContent, self).setUp()
 
+        activate_filing_number(self.portal)
+
         create_client()
         set_current_client_id(self.layer['portal'])
         create_ogds_user(TEST_USER_ID)
 
         self.dossier1 = create(Builder("dossier"))
+
+    def tearDown(self):
+        super(TestSearchWithoutContent, self).tearDown()
+
+        inactivate_filing_number(self.portal)
 
     def test_validate_searchstring_for_dossiers(self):
         self.browser.open('%s/advanced_search' % self.dossier1.absolute_url())
@@ -162,5 +212,5 @@ class TestSearchWithoutContent(FunctionalTestCase):
         self.browser.assert_url('http://nohost/plone/@@search?object_provides=opengever.task.task.ITask&SearchableText=task1&deadline_usage=range:minmax&deadline:list=01/01/10&deadline:list=01/02/10&task_type=information')
 
     def test_disable_unload_protection(self):
-        self.browser.open('%s/advanced_search' %(self.portal.absolute_url()))
+        self.browser.open('%s/advanced_search' % (self.portal.absolute_url()))
         self.assertPageContainsNot('enableUnloadProtection')
