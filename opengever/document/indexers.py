@@ -4,11 +4,14 @@ from five import grok
 from opengever.base.interfaces import IReferenceNumber, ISequenceNumber
 from opengever.document.document import IDocumentSchema
 from opengever.document.interfaces import ICheckinCheckoutManager
+from opengever.document.interfaces import IDocumentIndexer
 from opengever.tabbedview.helper import readable_ogds_author
 from plone.indexer import indexer
+from Products.CMFCore.utils import getToolByName
 from zc.relation.interfaces import ICatalog
 from zope.app.intid.interfaces import IIntIds
 from zope.component import getUtility, queryMultiAdapter, getAdapter
+from zope.interface import Interface
 
 
 @indexer(IDocumentSchema)
@@ -33,6 +36,32 @@ def related_items(obj):
 grok.global_adapter(related_items, name='related_items')
 
 
+class DefaultDocumentIndexer(grok.Adapter):
+    """Extracts plain text directly from files contained in
+    opengever.document.document objects using portal transforms.
+    """
+
+    grok.context(Interface)
+    grok.implements(IDocumentIndexer)
+
+    def __init__(self, context):
+        self.context = context
+
+    def extract_text(self):
+        if self.context.file:
+            transform_tool = getToolByName(self.context, 'portal_transforms')
+            plain_text = transform_tool.convertTo(
+                'text/plain',
+                self.context.file.data,
+                mimetype=self.context.file.contentType,
+                filename=self.context.file.filename,
+                object=self.context.file)
+
+            if plain_text:
+                return plain_text.getData()
+        return ''
+
+
 class SearchableTextExtender(grok.Adapter):
     """Specifix SearchableText Extender for document"""
 
@@ -53,6 +82,10 @@ class SearchableTextExtender(grok.Adapter):
         # sequence_number
         seqNumb = getUtility(ISequenceNumber)
         searchable.append(str(seqNumb.get_number(self.context)))
+
+        fulltext_indexer = getAdapter(self.context, IDocumentIndexer)
+        fulltext = fulltext_indexer.extract_text()
+        searchable.append(fulltext)
 
         return ' '.join(searchable)
 

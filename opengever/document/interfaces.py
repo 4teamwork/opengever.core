@@ -89,3 +89,13 @@ class ICheckinCheckoutManager(Interface):
     def cancel():
         """Cancel the current checkout.
         """
+
+
+class IDocumentIndexer(Interface):
+    """Describes an adapter that is able to extract plain text from files
+    contained in opengever.document.document objects.
+    """
+
+    def extract_text():
+        """Extract plain text from the adapted document.
+        """

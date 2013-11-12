@@ -7,6 +7,11 @@ Changelog
 - OGDS updater: Deal with mutli-valued fields named the same as an OGDS column.
   [lgraf]
 
+- Modify indexer for documents so that it queries for our own IDocumentIndexer adapter,
+  allowing us to choose to index original documents or their preview PDF, depdending on
+  opengever.pdfconverter being installed or not.
+  [lgraf]
+
 - OGDS updater: fullname field is already single-valued, don't try to treat it like a list.
   [lgraf]
 
