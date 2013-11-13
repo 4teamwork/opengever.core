@@ -52,11 +52,21 @@
         profile="opengever.base:default"
         />
 
-    <genericsetup:registerProfile
-        name="2602"
-        title="opengever.base: upgrade profile 2602"
+    <!-- 2602 -> 2603 -->
+    <genericsetup:upgradeStep
+        title="Initialize referencenumber formatters."
         description=""
-        directory="profiles/2602"
+        source="2602"
+        destination="2603"
+        handler="opengever.base.upgrades.to2603.InitializeReferencenumberFormatter"
+        profile="opengever.base:default"
+        />
+
+    <genericsetup:registerProfile
+        name="2603"
+        title="opengever.base: upgrade profile 2603"
+        description=""
+        directory="profiles/2603"
         for="Products.CMFPlone.interfaces.IMigratingPloneSiteRoot"
         provides="Products.GenericSetup.interfaces.EXTENSION"
         />

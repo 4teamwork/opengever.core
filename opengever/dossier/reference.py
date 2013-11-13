@@ -11,17 +11,10 @@ class DossierReferenceNumber(BasicReferenceNumber):
     grok.provides(IReferenceNumber)
     grok.context(IDossierMarker)
 
-    def get_number(self):
-        # get local number prefix
-        num = IReferenceNumberPrefix(
-            aq_parent(aq_inner(self.context))).get_number(self.context)
-        num = num and str(num) or ''
-        # get the parent number
-        parent_num = self.get_parent_number()
+    ref_type = 'dossier'
+
+    def get_local_number(self):
         parent = aq_parent(aq_inner(self.context))
-        if parent_num and IDossierMarker.providedBy(parent):
-            return str(parent_num) + '.' + num
-        elif parent_num:
-            return str(parent_num) + ' / ' + num
-        else:
-            return num
+        prefix = IReferenceNumberPrefix(parent).get_number(self.context)
+
+        return prefix or ''

@@ -88,7 +88,7 @@ class TestDossierListing(FunctionalTestCase):
         rows = table.xpath(CSSSelector('tbody tr').path)
 
         self.assertEquals(
-            ['OG1 / 1',
+            ['OG 1 / 1',
              '1',
              '1. Repository XY',
              'Dossier A',
@@ -99,7 +99,7 @@ class TestDossierListing(FunctionalTestCase):
             [value.text_content().strip() for value in rows[0].xpath(CSSSelector('td').path)])
 
         self.assertEquals(
-            ['OG1 / 1.1',
+            ['OG 1 / 1.1',
              '2',
              '1. Repository XY',
              'Dossier B',

@@ -1,6 +1,10 @@
 from Products.ZCatalog.interfaces import ICatalogBrain
+from five import grok
 from zope import schema
+from zope.component import getAdapters
 from zope.interface import Interface
+from zope.schema.interfaces import IVocabularyFactory
+from zope.schema.vocabulary import SimpleVocabulary, SimpleTerm
 
 
 class IOpengeverBaseLayer(Interface):
@@ -73,9 +77,74 @@ class IReferenceNumber(Interface):
     * 123 : sequence_number of Document
     """
 
-    def get_number(self):
+    def get_number():
         """ Returns the reference number of the context
         """
+
+    def get_local_number():
+        """Returns only the reference number part of the context."""
+
+    def append_local_number(numbers):
+        """Append the number part of the context in the specific list
+        in the given numbers dict."""
+
+    def get_parent_numbers():
+        """Returns a dict with list of all number parts, from the context up to
+        the plone site, grouped by the context type.
+
+        Examples:
+        {'site': ['OG'],
+         'repository: ['3', '5' , '8']',
+         'dossier: ['3', '3']'}
+        """
+
+
+class IReferenceNumberFormatter(Interface):
+
+    def complete_number(numbers):
+        """Generate the complete reference number, for the given numbers dict.
+        """
+
+    def repository_number(numbers):
+        """Generate the reposiotry reference number part,
+        for the given numbers dict.
+        """
+
+    def dossier_number(numbers):
+        """Generate the dossier reference number part,
+        for the given numbers dict.
+        """
+
+
+class ReferenceFormatterVocabulary(grok.GlobalUtility):
+    """ Vocabulary of all users with a valid login.
+    """
+
+    grok.provides(IVocabularyFactory)
+    grok.name('opengever.base.ReferenceFormatterVocabulary')
+
+    def __call__(self, context):
+        terms = []
+
+        for name, formatter in getAdapters(
+                [context, ], IReferenceNumberFormatter):
+            terms.append(SimpleTerm(name))
+        return SimpleVocabulary(terms)
+
+
+class IReferenceNumberSettings(Interface):
+
+    formatter = schema.Choice(
+        title=u'Reference number formatter',
+        description=u'Select one of the registered'
+        'IReferenceNumberFormatter adapter',
+        source='opengever.base.ReferenceFormatterVocabulary',
+        default='dotted')
+
+    reference_prefix_starting_point = schema.TextLine(
+        title=u"Starting Point for reference_number prefixs",
+        description=u"Used as default when creating the first item on a level.",
+        default=u"1")
 
 
 class ISequenceNumber(Interface):
@@ -143,8 +212,10 @@ class IUniqueNumberGenerator(Interface):
         """Return the next number for the given key.
         """
 
+
 class IRepositoryPathSourceBinderQueryModificator(Interface):
-    """Markerinterface for RepositoryPathSourceBinderQueryModificator adapter"""
+    """Markerinterface for RepositoryPathSourceBinderQueryModificator
+    adapter"""
 
     def modify_query(self, query):
         """Modify the ReppositoryPathSourceBinderQuery"""

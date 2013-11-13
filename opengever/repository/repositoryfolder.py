@@ -1,9 +1,8 @@
 from Acquisition import aq_inner, aq_parent
 from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
 from five import grok
+from opengever.base.interfaces import IReferenceNumber
 from opengever.repository import _
-from opengever.repository.behaviors.referenceprefix import IReferenceNumberPrefix
-from opengever.repository.behaviors.referenceprefix import IReferenceNumberPrefixMarker
 from opengever.repository.interfaces import IRepositoryFolder
 from opengever.repository.interfaces import IRepositoryFolderRecords
 from plone.app.content.interfaces import INameFromTitle
@@ -11,8 +10,8 @@ from plone.dexterity import content
 from plone.directives import form
 from plone.registry.interfaces import IRegistry
 from zope import schema
+from zope.component import queryUtility
 from zope.interface import implements
-import zope.component
 
 
 class IRepositoryFolderSchema(form.Schema):
@@ -96,13 +95,9 @@ class RepositoryFolder(content.Container):
     implements(IRepositoryFolder)
 
     def Title(self):
-        title = u' %s' % self.effective_title
-        obj = self
-        while IRepositoryFolder.providedBy(obj):
-            if IReferenceNumberPrefixMarker.providedBy(obj):
-                rfnr = IReferenceNumberPrefix(obj).reference_number_prefix
-                title = unicode(rfnr) + '.' + title
-            obj = aq_parent(aq_inner(obj))
+        title = u'%s. %s' % (
+            IReferenceNumber(self).get_repository_number(),
+            self.effective_title)
 
         return title.encode('utf-8')
 
@@ -123,7 +118,7 @@ class RepositoryFolder(content.Container):
         # get fti of myself
         fti = self.portal_types.get(self.portal_type)
         # get maximum depth of repository folders
-        registry = zope.component.queryUtility(IRegistry)
+        registry = queryUtility(IRegistry)
         proxy = registry.forInterface(IRepositoryFolderRecords)
         # 0 -> no restriction
         maximum_depth = getattr(proxy, 'maximum_repository_depth', 0)
