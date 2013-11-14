@@ -9,7 +9,6 @@ from Products.CMFPlone.interfaces import IPloneSiteRoot
 from Products.statusmessages.interfaces import IStatusMessage
 from time import strftime
 from zope.component import getUtility
-import ldap
 import time
 import transaction
 
@@ -56,25 +55,8 @@ class LDAPSyncView(grok.View):
     def run_update(self):
         raise NotImplemented
 
-    def _check_if_ldap_is_reachable(self):
-        """Check if LDAP server is reachable before we start any import.
-        """
-        self.log('Checking if LDAP is reachable...')
-        ldap_folder = self.context.acl_users.get('ldap').get('acl_users')
-        server = ldap_folder.getServers()[0]
-        ldap_url = "%s://%s:%s" % (
-            server['protocol'], server['host'], server['port'])
-        ldap_conn = ldap.initialize(ldap_url)
-        ldap_conn.search_s(ldap_folder.users_base, ldap.SCOPE_SUBTREE)
-
     def render(self):
         self.log = self.mklog()
-
-        try:
-            self._check_if_ldap_is_reachable()
-        except ldap.LDAPError, e:
-            return "LDAP is not reachable. \
-                Couldn't start LDAP import. LDAPError: %s" % (e)
 
         # Run import and time it
         now = time.clock()

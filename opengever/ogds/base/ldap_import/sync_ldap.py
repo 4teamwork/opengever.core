@@ -6,46 +6,13 @@ from optparse import OptionParser
 from Testing.makerequest import makerequest
 from zope.app.component.hooks import setSite
 import AccessControl
-import ldap
 import logging
-import sys
 import time
 import transaction
 
 
 logger = logging.getLogger('opengever.ogds.base')
 LOG_FORMAT = '%(asctime)s %(levelname)s [%(name)s] %(message)s'
-
-
-def check_if_ldap_reachable(site):
-    """This function gets the LDAP server from the
-    LDAPUserFolder Plugin on the Plone site and tries
-    to establish a connection.
-
-    If for some reason we can't get a connection to the LDAP,
-    we abort the entire import, because otherwise we would
-    end up with all users being set to inactive since they
-    can't be found in the LDAP.
-    """
-
-    ldap_folder = site.acl_users.get('ldap').get('acl_users')
-    server = ldap_folder.getServers()[0]
-    ldap_url = "%s://%s:%s" % (
-        server['protocol'], server['host'], server['port'])
-    ldap_conn = ldap.initialize(ldap_url)
-    try:
-        ldap_conn.search_s(ldap_folder.users_base, ldap.SCOPE_SUBTREE)
-    except ldap.LDAPError, e:
-        # If for some reason we can't get a connection to the LDAP,
-        # we abort the entire import, because otherwise we would
-        # end up with all users being set to inactive since they
-        # can't be found in the LDAP.
-        logger.error(
-            "ERROR: Couldn't connect to LDAP server: %s %s" % (
-                e.__class__.__name__, e))
-        logger.error("The import has been aborted.")
-        transaction.abort()
-        sys.exit(1)
 
 
 def run_import(app, options):
@@ -65,8 +32,6 @@ def run_import(app, options):
         log_handler.setFormatter(log_formatter)
         logger.addHandler(log_handler)
         logger.setLevel(logging.INFO)
-
-    check_if_ldap_reachable(plone)
 
     # setup user context
     user = AccessControl.SecurityManagement.SpecialUsers.system
