@@ -224,7 +224,7 @@ msgstr "Datenschutzstufe"
 #. Default: "Public Trial"
 #: ./opengever/base/behaviors/classification.py:45
 msgid "label_public_trial"
-msgstr "Öffentlichkeitsstatus:"
+msgstr "Öffentlichkeitsstatus"
 
 #. Default: "Public trial statement"
 #: ./opengever/base/behaviors/classification.py:52
