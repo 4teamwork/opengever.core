@@ -166,7 +166,7 @@ class Documents(OpengeverCatalogListingTab):
          'width': 30},
 
         {'column': 'sequence_number',
-         'column_title': _(u'sequence_number', default=u'Sequence Number'),
+         'column_title': _(u'document_sequence_number', default=u'Sequence Number'),
          'sort_index': 'sequence_number'},
 
         {'column': 'Title',
@@ -411,7 +411,7 @@ class Tasks(OpengeverCatalogListingTab):
          'column_title': _('containing_dossier', 'Dossier'), },
 
         {'column': 'sequence_number',
-         'column_title': _(u'sequence_number', "Sequence Number"), },
+         'column_title': _(u'task_sequence_number', "Sequence Number"), },
 
         {'column': 'containing_subdossier',
          'column_title': _('label_subdossier', default="Subdossier"), },
