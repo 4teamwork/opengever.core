@@ -12,6 +12,7 @@ class DottedReferenceFormatter(grok.Adapter):
 
     repository_dossier_seperator = u'/'
     dossier_document_seperator = u'/'
+    repository_title_seperator = u'.'
 
     def complete_number(self, numbers):
         """Generate the complete reference number, for the given numbers dict.
@@ -73,6 +74,7 @@ class GroupedByThreeReferenceFormatter(DottedReferenceFormatter):
 
     repository_dossier_seperator = u'-'
     dossier_document_seperator = u'-'
+    repository_title_seperator = u''
 
     def repository_number(self, numbers):
 
