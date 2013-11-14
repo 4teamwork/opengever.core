@@ -162,3 +162,12 @@ class TestGroupedbyThreeFormatter(FunctionalTestCase):
 
         self.assertEquals(
             'OG 573.2 - 4.6.2', self.formatter.complete_number(numbers))
+
+    def test_document_part_is_separated_with_hyphen(self):
+        numbers = {'site': ['OG', ],
+                   'repository': [u'5', u'7', u'3', u'2'],
+                   'dossier': [u'4', u'6', u'2'],
+                   'document': [u'27']}
+
+        self.assertEquals(
+            'OG 573.2 - 4.6.2 - 27', self.formatter.complete_number(numbers))
