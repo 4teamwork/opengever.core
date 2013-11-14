@@ -9,9 +9,14 @@ from opengever.tabbedview.helper import readable_ogds_author
 from plone.indexer import indexer
 from Products.CMFCore.utils import getToolByName
 from zc.relation.interfaces import ICatalog
+from ZODB.POSException import ConflictError
 from zope.app.intid.interfaces import IIntIds
 from zope.component import getUtility, queryMultiAdapter, getAdapter
 from zope.interface import Interface
+import logging
+
+
+logger = logging.getLogger('opengever.document')
 
 
 @indexer(IDocumentSchema)
@@ -49,13 +54,21 @@ class DefaultDocumentIndexer(grok.Adapter):
 
     def extract_text(self):
         if self.context.file:
+            filename = self.context.file.filename
             transform_tool = getToolByName(self.context, 'portal_transforms')
-            plain_text = transform_tool.convertTo(
-                'text/plain',
-                self.context.file.data,
-                mimetype=self.context.file.contentType,
-                filename=self.context.file.filename,
-                object=self.context.file)
+            try:
+                plain_text = transform_tool.convertTo(
+                    'text/plain',
+                    self.context.file.data,
+                    mimetype=self.context.file.contentType,
+                    filename=filename,
+                    object=self.context.file)
+            except (ConflictError, KeyboardInterrupt):
+                raise
+            except Exception, e:
+                logger.warn("Transforming document '%s' to 'text/plain'"
+                            "failed with '%s'" % (filename, e))
+                return ''
 
             if plain_text:
                 return plain_text.getData()

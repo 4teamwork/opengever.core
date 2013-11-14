@@ -4,6 +4,9 @@ Changelog
 3.1.2 (unreleased)
 ------------------
 
+- DefaultDocumentIndexer: Catch any exceptions raised by transforms and log them.
+  [lgraf]
+
 - OGDS updater: Deactivate is_ldap_reachable check. It's unnecessary and broken.
   [lgraf]
 
