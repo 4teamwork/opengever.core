@@ -464,6 +464,11 @@ msgstr "Weiterleitung zuweisen an ein ..."
 msgid "label_by_author"
 msgstr "Auftragnehmer:"
 
+#. Default: "Sequence Number"
+#: ./opengever/task/viewlets/byline.py:55
+msgid "label_sequence_number"
+msgstr "Laufnummer"
+
 #. Default: "Target dossier"
 #: ./opengever/task/browser/close.py:152
 msgid "label_close_choose_dossier"

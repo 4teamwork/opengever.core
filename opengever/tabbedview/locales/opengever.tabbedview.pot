@@ -412,8 +412,13 @@ msgid "role_list"
 msgstr ""
 
 #. Default: "Sequence Number"
-#: ./opengever/tabbedview/browser/tabs.py:165
-msgid "sequence_number"
+#: ./opengever/tabbedview/browser/tabs.py:169
+msgid "document_sequence_number"
+msgstr ""
+
+#. Default: "Sequence Number"
+#: ./opengever/tabbedview/browser/tabs.py:414
+msgid "task_sequence_number"
 msgstr ""
 
 msgid "sharing"

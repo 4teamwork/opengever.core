@@ -1,15 +1,10 @@
-from opengever.base.browser.helper import get_css_class
 from opengever.base.interfaces import ISequenceNumber, IBaseClientID
-from opengever.base.viewlets.byline import BylineBase
 from opengever.base.viewlets.byline import BylineBase
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.task import _
 from opengever.task.task import ITask
-from plone.app.layout.viewlets import content
-from plone.memoize.instance import memoize
 from plone.registry.interfaces import IRegistry
 from zope.component import getUtility
-from opengever.dossier import _ as dossier_message_factory
 
 
 class TaskByline(BylineBase):
@@ -57,8 +52,7 @@ class TaskByline(BylineBase):
             },
             {
                 'class': 'sequenceNumber',
-                'label': dossier_message_factory('label_sequence_number',
-                                                 default='Sequence Number'),
+                'label': _('label_sequence_number', default='Sequence Number'),
                 'content': self.sequence_number(),
                 'replace': False
             },
