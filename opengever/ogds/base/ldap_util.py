@@ -3,6 +3,8 @@ from five import grok
 from ldap.controls import SimplePagedResultsControl
 from opengever.ogds.base.interfaces import ILDAPSearch
 from Products.LDAPUserFolder.interfaces import ILDAPUserFolder
+from Products.LDAPUserFolder.LDAPDelegate import filter_format
+from Products.LDAPUserFolder.utils import GROUP_MEMBER_MAP
 import ldap
 import logging
 import re
@@ -231,7 +233,18 @@ class LDAPSearch(grok.Adapter):
         If defined, the `group_filter` property on the adapted LDAPUserFolder
         is used to further filter the results.
         """
-        search_filter = '(objectClass=groupOfUniqueNames)'
+        # Build a filter expression that matches objectClasses for all
+        # possible group objectClasseses encountered in the wild
+
+        possible_classes = ''
+        for oc in GROUP_MEMBER_MAP.keys():
+            # concatenate (objectClass=foo) pairs
+            possible_classes += filter_format('(%s=%s)', ('objectClass', oc))
+
+        # Build the final OR expression:
+        # (|(objectClass=aaa)(objectClass=bbb)(objectClass=ccc))
+        search_filter = '(|%s)' % possible_classes
+
         custom_filter = self.get_group_filter()
         if custom_filter not in [None, '']:
             search_filter = self._combine_filters(custom_filter, search_filter)

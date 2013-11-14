@@ -4,6 +4,12 @@ Changelog
 3.1.2 (unreleased)
 ------------------
 
+- OGDS updater: Consider all possible member attribute names when getting members from a group.
+  [lgraf]
+
+- LDAP util: Consider all possible objectClasses when searching for groups.
+  [lgraf]
+
 - LDAP util: Only apply schema mapping to user objects.
   [lgraf]
 
