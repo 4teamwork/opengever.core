@@ -95,9 +95,13 @@ class RepositoryFolder(content.Container):
     implements(IRepositoryFolder)
 
     def Title(self):
-        title = u'%s. %s' % (
-            IReferenceNumber(self).get_repository_number(),
-            self.effective_title)
+
+        reference_adapter = IReferenceNumber(self)
+
+        title = u'{number}{sep} {title}'.format(
+            number=reference_adapter.get_repository_number(),
+            sep=reference_adapter.get_active_formatter().repository_title_seperator,
+            title=self.effective_title)
 
         return title.encode('utf-8')
 

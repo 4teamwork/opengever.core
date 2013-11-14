@@ -1,8 +1,13 @@
+from ftw.builder import Builder
+from ftw.builder import create
+from opengever.base.interfaces import IReferenceNumberSettings
 from opengever.repository.behaviors.referenceprefix import IReferenceNumberPrefix
 from opengever.repository.repositoryfolder import IRepositoryFolderSchema
 from opengever.testing import FunctionalTestCase
 from plone.dexterity.interfaces import IDexterityFTI
+from plone.registry.interfaces import IRegistry
 from zope.component import createObject
+from zope.component import getUtility
 from zope.component import queryUtility
 
 
@@ -28,6 +33,35 @@ class TestRepositoryFolder(FunctionalTestCase):
         factory = fti.factory
         new_object = createObject(factory)
         self.failUnless(IRepositoryFolderSchema.providedBy(new_object))
+
+
+class TestRepositoryFolderTitleAccessor(FunctionalTestCase):
+
+    def setUp(self):
+        super(TestRepositoryFolderTitleAccessor, self).setUp()
+
+        repository_1 = create(Builder('repository'))
+
+        repository_1_1 = create(Builder('repository')
+                                .within(repository_1))
+
+        self.repository_folder = create(Builder('repository')
+                                  .within(repository_1_1)
+                                  .titled(u'Repositoryfolder XY'))
+
+    def test_returns_reference_number_and_title_seperatoded_with_space(self):
+        self.assertEquals(
+            '1.1.1. Repositoryfolder XY',
+            self.repository_folder.Title())
+
+    def test_Title_accessor_use_reference_formatters_seperator(self):
+        registry = getUtility(IRegistry)
+        proxy = registry.forInterface(IReferenceNumberSettings)
+        proxy.formatter = 'grouped_by_three'
+
+        self.assertEquals(
+            '111 Repositoryfolder XY',
+            self.repository_folder.Title())
 
 
 class TestRepositoryFolderWithBrowser(FunctionalTestCase):
