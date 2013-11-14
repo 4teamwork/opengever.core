@@ -52,6 +52,15 @@
         profile="opengever.base:default"
         />
 
+    <genericsetup:registerProfile
+        name="2602"
+        title="opengever.base: upgrade profile 2602"
+        description=""
+        directory="profiles/2602"
+        for="Products.CMFPlone.interfaces.IMigratingPloneSiteRoot"
+        provides="Products.GenericSetup.interfaces.EXTENSION"
+        />
+
     <!-- 2602 -> 2603 -->
     <genericsetup:upgradeStep
         title="Initialize referencenumber formatters."
