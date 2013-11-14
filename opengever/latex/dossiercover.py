@@ -77,4 +77,4 @@ class DossierCoverLaTeXView(grok.MultiAdapter, MakoLaTeXView):
         while not IRepositoryRoot.providedBy(obj):
             obj = aq_parent(aq_inner(obj))
 
-        return obj.version
+        return obj.version or ''
