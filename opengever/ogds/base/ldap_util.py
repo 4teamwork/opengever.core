@@ -234,16 +234,11 @@ class LDAPSearch(grok.Adapter):
         search_filter = '(objectClass=groupOfUniqueNames)'
         custom_filter = self.get_group_filter()
         if custom_filter not in [None, '']:
-            custom_filter = self._apply_schema_map_to_filter(custom_filter)
             search_filter = self._combine_filters(custom_filter, search_filter)
 
         results = self.search(base_dn=self.context.groups_base,
                               filter=search_filter)
-        mapped_results = []
-        for result in results:
-            mapped_results.append(self.apply_schema_map(result))
-
-        return mapped_results
+        return results
 
     def entry_by_dn(self, dn):
         """Retrieves an entry by its DN and applies the schema mapping to the
@@ -252,7 +247,21 @@ class LDAPSearch(grok.Adapter):
         Will raise ldap.NO_SUCH_OBJECT if the entry can't be found.
         """
         results = self.search(base_dn=dn, scope=ldap.SCOPE_BASE)
-        return self.apply_schema_map(results[0])
+
+        # We query for a specific DN and therefor expect at most one entry
+        entry = results[0]
+
+        is_user = False
+        obj_classes = entry[1]['objectClass']
+        for obj_class in obj_classes:
+            if obj_class in self.context._user_objclasses:
+                is_user = True
+                break
+
+        if is_user:
+            entry = self.apply_schema_map(entry)
+
+        return entry
 
     def apply_schema_map(self, entry):
         """Apply the schema mapping configured in the adapted LDAPUserFolder
