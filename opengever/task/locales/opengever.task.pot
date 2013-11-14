@@ -459,6 +459,11 @@ msgstr ""
 msgid "label_assign_choose_method"
 msgstr ""
 
+#. Default: "Sequence Number"
+#: ./opengever/task/viewlets/byline.py:55
+msgid "label_sequence_number"
+msgstr ""
+
 #. Default: "by"
 #: ./opengever/task/viewlets/byline.py:44
 msgid "label_by_author"
