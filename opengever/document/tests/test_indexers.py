@@ -158,3 +158,41 @@ class TestDefaultDocumentIndexer(MockTestCase):
         default_doc_indexer = DefaultDocumentIndexer(doc1)
         fulltext = default_doc_indexer.extract_text()
         self.assertEquals(expected_fulltext, fulltext)
+
+    def test_default_document_catches_transform_exceptions(self):
+        # Sample file conforming to NamedFile interface
+        filename = 'test.txt'
+        mimetype = 'application/pdf'
+        data = 'foo'
+
+        sample_file = self.mocker.mock()
+        self.expect(sample_file.data).result(data)
+        self.expect(sample_file.filename).result(filename)
+        self.expect(sample_file.contentType).result(mimetype)
+
+        # Sample document containing our file
+        doc1 = self.mocker.mock()
+        self.expect(doc1.file).result(sample_file).count(1, None)
+
+        def raise_transform_exception(*args, **kwargs):
+            raise Exception("This transform failed!")
+
+        # Mock the portal_transforms tool to raise an exception
+        mock_portal_transforms = self.mocker.mock()
+        self.expect(mock_portal_transforms.convertTo(
+                'text/plain',
+                data,
+                mimetype=mimetype,
+                filename=filename,
+                object=sample_file)).call(raise_transform_exception)
+        self.mock_tool(mock_portal_transforms, "portal_transforms")
+
+        self.replay()
+
+        default_doc_indexer = DefaultDocumentIndexer(doc1)
+        try:
+            fulltext = default_doc_indexer.extract_text()
+        except:
+            self.fail("extract_text() didn't catch exception raised "
+                      "by transform!")
+        self.assertEquals('', fulltext)
