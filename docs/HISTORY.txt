@@ -4,6 +4,9 @@ Changelog
 3.1.2 (unreleased)
 ------------------
 
+- OGDS updater: Deactivate is_ldap_reachable check. It's unnecessary and broken.
+  [lgraf]
+
 - OGDS updater: Deal with mutli-valued fields named the same as an OGDS column.
   [lgraf]
 
