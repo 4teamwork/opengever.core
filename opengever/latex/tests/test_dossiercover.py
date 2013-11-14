@@ -30,9 +30,9 @@ class TestDossierCoverRenderArguments(FunctionalTestCase):
 
         create_ogds_user('hugo.boss')
 
-        repository = create(Builder('repository_root')
+        self.repository = create(Builder('repository_root')
                             .having(version='Repository 2013 & 2014'))
-        repofolder = create(Builder('repository').within(repository))
+        repofolder = create(Builder('repository').within(self.repository))
         dossier = create(Builder('dossier')
                          .having(title=u'Foo & bar',
                                  responsible='hugo.boss',
@@ -53,6 +53,12 @@ class TestDossierCoverRenderArguments(FunctionalTestCase):
     def test_contains_repository_version(self):
         arguments = self.dossiercover.get_render_arguments()
         self.assertEquals(u'Repository 2013 \\& 2014',
+                          arguments.get('repositoryversion'))
+
+    def test_repository_returns_empty_string_and_not_none_if_version_is_not_set(self):
+        self.repository.version = None
+        arguments = self.dossiercover.get_render_arguments()
+        self.assertEquals('',
                           arguments.get('repositoryversion'))
 
     def test_contains_referencenr(self):
