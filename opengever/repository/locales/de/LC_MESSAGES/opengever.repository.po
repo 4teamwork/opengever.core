@@ -155,7 +155,7 @@ msgstr "Version"
 #. Default: "State:"
 #: ./opengever/repository/repositoryfolder_templates/byline.pt:11
 msgid "label_workflow_state"
-msgstr "Status:"
+msgstr "Status"
 
 #. Default: "Name"
 #: ./opengever/repository/browser/referenceprefix_manager_templates/referenceprefixmanager.pt:24
