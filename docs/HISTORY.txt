@@ -4,6 +4,9 @@ Changelog
 3.1.2 (unreleased)
 ------------------
 
+- LDAP util: Only apply schema mapping to user objects.
+  [lgraf]
+
 - DefaultDocumentIndexer: Catch any exceptions raised by transforms and log them.
   [lgraf]
 
