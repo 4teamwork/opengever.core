@@ -234,11 +234,16 @@ class LDAPSearch(grok.Adapter):
         is used to further filter the results.
         """
         # Build a filter expression that matches objectClasses for all
-        # possible group objectClasses
-        oc_filter = '(|%s)' % ''.join([filter_format('(%s=%s)',
-                                                     ('objectClass', o))
-                                      for o in GROUP_MEMBER_MAP.keys() ])
-        search_filter = oc_filter
+        # possible group objectClasseses encountered in the wild
+
+        possible_classes = ''
+        for oc in GROUP_MEMBER_MAP.keys():
+            # concatenate (objectClass=foo) pairs
+            possible_classes += filter_format('(%s=%s)', ('objectClass', oc))
+
+        # Build the final OR expression:
+        # (|(objectClass=aaa)(objectClass=bbb)(objectClass=ccc))
+        search_filter = '(|%s)' % possible_classes
 
         custom_filter = self.get_group_filter()
         if custom_filter not in [None, '']:

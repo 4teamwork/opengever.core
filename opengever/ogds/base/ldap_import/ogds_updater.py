@@ -7,6 +7,7 @@ from opengever.ogds.models.group import Group
 from opengever.ogds.models.user import User
 from Products.CMFPlone.interfaces import IPloneSiteRoot
 from Products.LDAPMultiPlugins.interfaces import ILDAPMultiPlugin
+from Products.LDAPUserFolder.utils import GROUP_MEMBER_MAP
 
 
 class OGDSUpdater(grok.Adapter):
@@ -177,7 +178,12 @@ class OGDSUpdater(grok.Adapter):
                 session.flush()
 
     def get_group_members(self, info):
-        if 'uniqueMember' in info:
-            return info.get('uniqueMember', [])
-        else:
-            return info.get('member', [])
+        members = []
+        member_attrs = list(set(GROUP_MEMBER_MAP.values()))
+        for member_attr in member_attrs:
+            if member_attr in info:
+                m = info.get(member_attr, [])
+                if isinstance(m, basestring):
+                    m = [m]
+                members.extend(m)
+        return members
