@@ -4,6 +4,9 @@ Changelog
 3.1.2 (unreleased)
 ------------------
 
+- LDAP util: Consider all possible objectClasses when searching for groups.
+  [lgraf]
+
 - LDAP util: Only apply schema mapping to user objects.
   [lgraf]
 
