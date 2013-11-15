@@ -54,7 +54,10 @@ class ReferenceNumberPrefixAdpater(grok.Adapter):
             return DOSSIER_KEY
         return REPOSITORY_FOLDER_KEY
 
-    def get_first_number(self):
+    def get_first_number(self, obj=None):
+        if self.get_type_key(obj) == DOSSIER_KEY:
+            return u'1'
+
         registry = getUtility(IRegistry)
         proxy = registry.forInterface(IReferenceNumberSettings)
         return proxy.reference_prefix_starting_point
@@ -68,7 +71,7 @@ class ReferenceNumberPrefixAdpater(grok.Adapter):
 
         if not child_mapping.keys():
             # It's the first number ever issued
-            return self.get_first_number()
+            return self.get_first_number(obj)
         else:
             prefixes_in_use = child_mapping.keys()
             # Sort the list of unicode strings *numerically*
