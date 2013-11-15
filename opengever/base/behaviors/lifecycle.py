@@ -1,5 +1,6 @@
 from Products.CMFCore.interfaces import ISiteRoot
 from five import grok
+from ftw.datepicker.widget import DatePickerFieldWidget
 from opengever.base import _
 from opengever.base.behaviors import utils
 from opengever.base.interfaces import IBaseCustodyPeriods
@@ -9,10 +10,11 @@ from plone.directives import form
 from plone.registry.interfaces import IRegistry
 from z3c.form import validator
 from zope import schema
-from zope.interface import alsoProvides, Interface
+from zope.component import getUtility
+from zope.component import queryAdapter
+from zope.interface import Interface
+from zope.interface import alsoProvides
 from zope.lifecycleevent.interfaces import IObjectModifiedEvent
-import zope.component
-from ftw.datepicker.widget import DatePickerFieldWidget
 
 
 class ILifeCycleMarker(Interface):
@@ -123,7 +125,7 @@ class IntLowerEqualThanParentValidator(validator.SimpleFieldValidator):
 
         parent_value = -1
         while parent_value < 0 and not ISiteRoot.providedBy(obj):
-            cf_obj = zope.component.queryAdapter(obj, ILifeCycle)
+            cf_obj = queryAdapter(obj, ILifeCycle)
 
             if cf_obj:
                 try:
@@ -164,7 +166,7 @@ class IntGreaterEqualThanParentValidator(validator.SimpleFieldValidator):
 
         parent_value = -1
         while parent_value < 0 and not ISiteRoot.providedBy(obj):
-            cf_obj = zope.component.queryAdapter(obj, ILifeCycle)
+            cf_obj = queryAdapter(obj, ILifeCycle)
 
             if cf_obj:
                 try:
@@ -188,7 +190,7 @@ class IntGreaterEqualThanParentValidator(validator.SimpleFieldValidator):
 # ---------- RETENTION PERIOD -----------
 # Vocabulary
 def _get_retention_period_options(vocabulary):
-    registry = zope.component.getUtility(IRegistry)
+    registry = getUtility(IRegistry)
     proxy = registry.forInterface(IRetentionPeriodRegister)
     options = []
     nums = getattr(proxy, 'retention_period')
@@ -201,12 +203,20 @@ def _get_retention_period_options(vocabulary):
     return options
 
 
-grok.global_utility(utils.create_restricted_vocabulary(
+def _is_retention_period_restricted(vocabulary):
+    registry = getUtility(IRegistry)
+    retention_period_settings = registry.forInterface(IRetentionPeriodRegister)
+    return retention_period_settings.is_restricted
+
+
+grok.global_utility(
+    utils.create_restricted_vocabulary(
         ILifeCycle['retention_period'],
         _get_retention_period_options,
-        message_factory=_),
-                    provides=schema.interfaces.IVocabularyFactory,
-                    name=u'lifecycle_retention_period_vocabulary')
+        message_factory=_,
+        restricted=_is_retention_period_restricted),
+    provides=schema.interfaces.IVocabularyFactory,
+    name=u'lifecycle_retention_period_vocabulary')
 
 
 # Default value
@@ -233,7 +243,7 @@ grok.global_adapter(CustodyPeriodValidator)
 # Vocabulary
 
 def _get_custody_period_options(context):
-    registry = zope.component.getUtility(IRegistry)
+    registry = getUtility(IRegistry)
     proxy = registry.forInterface(IBaseCustodyPeriods)
     options = []
     nums = getattr(proxy, 'custody_periods')

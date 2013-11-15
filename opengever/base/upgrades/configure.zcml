@@ -80,4 +80,23 @@
         provides="Products.GenericSetup.interfaces.EXTENSION"
         />
 
+    <!-- 2603 -> 2604 -->
+    <genericsetup:upgradeStep
+        title="Initialize configurable restricton of the retention_period."
+        description=""
+        source="2603"
+        destination="2604"
+        handler="opengever.base.upgrades.to2604.InitializeRetentionPeriodRestriction"
+        profile="opengever.base:default"
+        />
+
+    <genericsetup:registerProfile
+        name="2604"
+        title="opengever.base: upgrade profile 2604"
+        description=""
+        directory="profiles/2604"
+        for="Products.CMFPlone.interfaces.IMigratingPloneSiteRoot"
+        provides="Products.GenericSetup.interfaces.EXTENSION"
+        />
+
 </configure>
