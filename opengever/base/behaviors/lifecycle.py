@@ -11,9 +11,10 @@ from plone.registry.interfaces import IRegistry
 from z3c.form import validator
 from zope import schema
 from zope.component import getUtility
-from zope.interface import alsoProvides, Interface
+from zope.component import queryAdapter
+from zope.interface import Interface
+from zope.interface import alsoProvides
 from zope.lifecycleevent.interfaces import IObjectModifiedEvent
-import zope.component
 
 
 class ILifeCycleMarker(Interface):
@@ -124,7 +125,7 @@ class IntLowerEqualThanParentValidator(validator.SimpleFieldValidator):
 
         parent_value = -1
         while parent_value < 0 and not ISiteRoot.providedBy(obj):
-            cf_obj = zope.component.queryAdapter(obj, ILifeCycle)
+            cf_obj = queryAdapter(obj, ILifeCycle)
 
             if cf_obj:
                 try:
@@ -165,7 +166,7 @@ class IntGreaterEqualThanParentValidator(validator.SimpleFieldValidator):
 
         parent_value = -1
         while parent_value < 0 and not ISiteRoot.providedBy(obj):
-            cf_obj = zope.component.queryAdapter(obj, ILifeCycle)
+            cf_obj = queryAdapter(obj, ILifeCycle)
 
             if cf_obj:
                 try:
@@ -189,7 +190,7 @@ class IntGreaterEqualThanParentValidator(validator.SimpleFieldValidator):
 # ---------- RETENTION PERIOD -----------
 # Vocabulary
 def _get_retention_period_options(vocabulary):
-    registry = zope.component.getUtility(IRegistry)
+    registry = getUtility(IRegistry)
     proxy = registry.forInterface(IRetentionPeriodRegister)
     options = []
     nums = getattr(proxy, 'retention_period')
@@ -242,7 +243,7 @@ grok.global_adapter(CustodyPeriodValidator)
 # Vocabulary
 
 def _get_custody_period_options(context):
-    registry = zope.component.getUtility(IRegistry)
+    registry = getUtility(IRegistry)
     proxy = registry.forInterface(IBaseCustodyPeriods)
     options = []
     nums = getattr(proxy, 'custody_periods')
