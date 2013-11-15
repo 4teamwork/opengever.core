@@ -42,7 +42,9 @@ class PrimaryFieldInfo(object):
         return self.field.get(self.schema(self.context))
 
 
-def create_restricted_vocabulary(field, options, message_factory=None):
+def create_restricted_vocabulary(field, options,
+                                 message_factory=None,
+                                 restricted=lambda x: True):
     """
     Creates a restricted vocabulary.
     Expects a options list which looks as follows:
@@ -82,27 +84,33 @@ def create_restricted_vocabulary(field, options, message_factory=None):
 
         def __call__(self, context):
             self.context = context
-            # decide, whats allowed
-            allowed_option_names = []
-            acquisition_value = self._get_acquisiton_value()
-            if acquisition_value and acquisition_value in self.option_names:
-                allowed_option_names.append(acquisition_value)
-                allowed_level = self.option_level_mapping[
-                    acquisition_value] + 1
-                for level, name in self.options:
-                    if level >= allowed_level:
-                        allowed_option_names.append(name)
-            else:
-                allowed_option_names = self.option_names
-            # make the terms
+
             terms = []
-            for name in allowed_option_names:
+            for name in self.get_allowed_option_names():
                 title = name
                 if message_factory:
                     title = self._(name)
                 terms.append(
                     zope.schema.vocabulary.SimpleTerm(name, title=title))
             return zope.schema.vocabulary.SimpleVocabulary(terms)
+
+        def get_allowed_option_names(self):
+            acquisition_value = self._get_acquisiton_value()
+
+            if not self.restricted():
+                return self.option_names
+
+            if not acquisition_value or acquisition_value not in self.option_names:
+                return self.option_names
+
+            allowed_option_names = []
+            allowed_option_names.append(acquisition_value)
+            allowed_level = self.option_level_mapping[acquisition_value] + 1
+            for level, name in self.options:
+                if level >= allowed_level:
+                    allowed_option_names.append(name)
+
+            return allowed_option_names
 
         def _get_acquisiton_value(self):
             context = self.context
@@ -141,6 +149,8 @@ def create_restricted_vocabulary(field, options, message_factory=None):
     GeneratedVocabulary.field = field
     GeneratedVocabulary._options = options
     GeneratedVocabulary._ = message_factory
+    GeneratedVocabulary.restricted = restricted
+
     return GeneratedVocabulary
 
 

@@ -42,6 +42,12 @@ class IRetentionPeriodRegister(Interface):
                 u'25'],
         value_type=schema.TextLine(),)
 
+    is_restricted = schema.Bool(
+        title=u'Is restricted',
+        description=u'Should the retention period, restricted'
+        'by the aquistiion value.',
+        default=False)
+
 
 class IBaseClientID(Interface):
 
