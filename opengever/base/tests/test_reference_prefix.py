@@ -25,6 +25,16 @@ class TestReferencePrefixAdapter(FunctionalTestCase):
         proxy.reference_prefix_starting_point = u'0'
         self.assertEquals(u'0', self.adapter.get_next_number())
 
+    def test_numbering_for_dossiers_starts_always_at_one(self):
+        registry = getUtility(IRegistry)
+        proxy = registry.forInterface(IReferenceNumberSettings)
+        proxy.reference_prefix_starting_point = u'0'
+
+        dossier = create(Builder('dossier').within(self.repository))
+        self.assertEquals(
+            u'1',
+            self.adapter.get_number(dossier))
+
     def test_numbering_continues_after_nine(self):
         self.set_numbering_base(u'9')
         self.assertEquals(u'10', self.adapter.get_next_number())
