@@ -4,6 +4,9 @@ Changelog
 3.1.2 (unreleased)
 ------------------
 
+- LDAP util: Make sure we still deal with multivaluedness for non-user
+  objects (fix for bug introduced in 1daa9ba).
+
 - LDAP import: Deal with Active Directory nested groups.
   [lgraf]
 
