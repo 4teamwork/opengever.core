@@ -129,7 +129,9 @@ class TestDefaultDocumentIndexer(MockTestCase):
         mimetype = 'application/pdf'
         data = 'foo'
 
+        sample_blob = self.mocker.mock()
         sample_file = self.mocker.mock()
+        self.expect(sample_file._blob).result(sample_blob)
         self.expect(sample_file.data).result(data)
         self.expect(sample_file.filename).result(filename)
         self.expect(sample_file.contentType).result(mimetype)
@@ -150,7 +152,7 @@ class TestDefaultDocumentIndexer(MockTestCase):
                 data,
                 mimetype=mimetype,
                 filename=filename,
-                object=sample_file)).result(stream)
+                object=sample_blob)).result(stream)
         self.mock_tool(mock_portal_transforms, "portal_transforms")
 
         self.replay()
@@ -165,7 +167,9 @@ class TestDefaultDocumentIndexer(MockTestCase):
         mimetype = 'application/pdf'
         data = 'foo'
 
+        sample_blob = self.mocker.mock()
         sample_file = self.mocker.mock()
+        self.expect(sample_file._blob).result(sample_blob)
         self.expect(sample_file.data).result(data)
         self.expect(sample_file.filename).result(filename)
         self.expect(sample_file.contentType).result(mimetype)
@@ -184,7 +188,7 @@ class TestDefaultDocumentIndexer(MockTestCase):
                 data,
                 mimetype=mimetype,
                 filename=filename,
-                object=sample_file)).call(raise_transform_exception)
+                object=sample_blob)).call(raise_transform_exception)
         self.mock_tool(mock_portal_transforms, "portal_transforms")
 
         self.replay()
