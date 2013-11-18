@@ -7,7 +7,16 @@ from opengever.ogds.models.group import Group
 from opengever.ogds.models.user import User
 from Products.CMFPlone.interfaces import IPloneSiteRoot
 from Products.LDAPMultiPlugins.interfaces import ILDAPMultiPlugin
-from Products.LDAPUserFolder.utils import GROUP_MEMBER_MAP
+import logging
+
+
+NO_UID_MSG = "WARNING: User '%s' has no 'uid' attribute."
+NO_UID_AD_MSG = "WARNING: User '%s' has no 'sAMAccountName' or " \
+                "'windows_login_name' attribute."
+USER_NOT_FOUND_MSG = "WARNING: Referenced user %s not found, ignoring!"
+
+
+logger = logging.getLogger('opengever.ogds.base')
 
 
 class OGDSUpdater(grok.Adapter):
@@ -113,7 +122,7 @@ class OGDSUpdater(grok.Adapter):
 
                 # Set the user active
                 user.active = 1
-                print "Imported user '%s'..." % userid
+                logger.info("Imported user '%s'..." % userid)
             session.flush()
 
     def import_groups(self):
@@ -161,29 +170,31 @@ class OGDSUpdater(grok.Adapter):
                     setattr(group, col.name, value)
 
                 contained_users = []
-                for user_dn in self.get_group_members(info):
+
+                group_members = ldap_util.get_group_members(info)
+                for user_dn in group_members:
                     try:
                         ldap_user = ldap_util.entry_by_dn(user_dn)
                         user_dn, user_info = ldap_user
-                        if not 'userid' in user_info:
-                            print "WARNING: User '%s' has no 'uid' attribute." % user_dn
-                            continue
-                        userid = user_info['userid']
+                        if not ldap_util.ad:
+                            if not 'userid' in user_info:
+                                logger.warn(NO_UID_MSG % user_dn)
+                                continue
+                            userid = user_info['userid']
+                        else:
+                            userid = user_info.get('sAMAccountName')
+                            if userid is None:
+                                userid = user_info.get('windows_login_name')
+                                if userid is None:
+                                    logger.warn(NO_UID_AD_MSG % user_dn)
+
+                        if isinstance(userid, list):
+                            userid = userid[0]
+
                         user = self.get_sql_user(userid)
                         contained_users.append(user)
-                        print "Importing user '%s'..." % userid
+                        logger.info("Importing user '%s'..." % userid)
                     except NO_SUCH_OBJECT:
-                        print "WARNING: Referenced user %s not found, ignoring!" % user_dn
+                        logger.warn(USER_NOT_FOUND_MSG % user_dn)
                 group.users = contained_users
                 session.flush()
-
-    def get_group_members(self, info):
-        members = []
-        member_attrs = list(set(GROUP_MEMBER_MAP.values()))
-        for member_attr in member_attrs:
-            if member_attr in info:
-                m = info.get(member_attr, [])
-                if isinstance(m, basestring):
-                    m = [m]
-                members.extend(m)
-        return members

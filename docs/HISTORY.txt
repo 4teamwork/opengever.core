@@ -4,6 +4,9 @@ Changelog
 3.1.2 (unreleased)
 ------------------
 
+- LDAP import: Deal with Active Directory nested groups.
+  [lgraf]
+
 - OGDS updater: Consider all possible member attribute names when getting members from a group.
   [lgraf]
 
