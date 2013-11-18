@@ -176,7 +176,7 @@ class OGDSUpdater(grok.Adapter):
                     try:
                         ldap_user = ldap_util.entry_by_dn(user_dn)
                         user_dn, user_info = ldap_user
-                        if not ldap_util.ad:
+                        if not ldap_util.is_ad:
                             if not 'userid' in user_info:
                                 logger.warn(NO_UID_MSG % user_dn)
                                 continue
