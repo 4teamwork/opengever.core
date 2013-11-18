@@ -4,10 +4,11 @@ from ldap.controls import SimplePagedResultsControl
 from opengever.ogds.base.interfaces import ILDAPSearch
 from Products.LDAPUserFolder.interfaces import ILDAPUserFolder
 from Products.LDAPUserFolder.LDAPDelegate import filter_format
-from Products.LDAPUserFolder.utils import GROUP_MEMBER_MAP
 import ldap
 import logging
 import re
+from Products.LDAPUserFolder.utils import GROUP_MEMBER_MAP
+from Products.LDAPMultiPlugins import ActiveDirectoryMultiPlugin
 
 
 logger = logging.getLogger('opengever.ogds.base')
@@ -35,10 +36,14 @@ class LDAPSearch(grok.Adapter):
     grok.context(ILDAPUserFolder)
 
     def __init__(self, context):
+        self.is_ad = False
         # context is a LDAPUserFolder instance
         self.context = context
         self._multivaluedness = {}
         self._supported_controls = None
+        if isinstance(self.context.aq_parent, ActiveDirectoryMultiPlugin):
+            self.is_ad = True
+        self._cached_groups = None
 
     def connect(self):
         """Establish a connection (or return an existing one for re-use) by
@@ -104,7 +109,7 @@ class LDAPSearch(grok.Adapter):
                                 ['*','+'])
 
             if len(res) > 1:
-                print "More than one LDAP schema found!"
+                logger.warn("More than one LDAP schema found!")
 
             subschema_dn, subschema_subentry = res[0]
             self._schema = ldap.schema.subentry.SubSchema(subschema_subentry)
@@ -252,6 +257,59 @@ class LDAPSearch(grok.Adapter):
         results = self.search(base_dn=self.context.groups_base,
                               filter=search_filter)
         return results
+
+
+    def get_children(self, group_dn):
+        children = []
+
+        if self._cached_groups is None:
+            self._cached_groups = self.get_groups()
+
+        all_groups = self._cached_groups
+
+        for grp in all_groups:
+            members = grp[1].get('memberOf', [])
+            if group_dn in members:
+                # grp is a child group
+                children.append(grp[1]['distinguishedName'][0])
+                # Recurse over grandchildren
+                grandchildren = self.get_children(grp[1]['distinguishedName'][0])
+                children.extend(grandchildren)
+        return list(set(children))
+
+
+    def get_group_members(self, info):
+        if not self.is_ad:
+            members = []
+            member_attrs = list(set(GROUP_MEMBER_MAP.values()))
+            for member_attr in member_attrs:
+                if member_attr in info:
+                    m = info.get(member_attr, [])
+                    if isinstance(m, basestring):
+                        m = [m]
+                    members.extend(m)
+            return members
+        else:
+            group_dn = info['distinguishedName'][0]
+            info['dn'] = group_dn
+
+            if self._cached_groups is None:
+                self._cached_groups = self.get_groups()
+
+            child_groups = self.get_children(group_dn)
+            child_groups.append(group_dn)
+
+            members = []
+            member_attrs = list(set(GROUP_MEMBER_MAP.values()))
+            for grp_dn in child_groups:
+                grp = [g for g in self._cached_groups if g[0] == grp_dn][0]
+                for member_attr in member_attrs:
+                    if member_attr in grp[1]:
+                        m = grp[1].get(member_attr, [])
+                        if isinstance(m, basestring):
+                            m = [m]
+                        members.extend(m)
+            return list(set(members))
 
     def entry_by_dn(self, dn):
         """Retrieves an entry by its DN and applies the schema mapping to the
