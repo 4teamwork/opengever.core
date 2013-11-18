@@ -256,7 +256,11 @@ class LDAPSearch(grok.Adapter):
 
         results = self.search(base_dn=self.context.groups_base,
                               filter=search_filter)
-        return results
+        mapped_results = []
+        for result in results:
+            mapped_results.append(self.apply_schema_map(result))
+
+        return mapped_results
 
 
     def get_children(self, group_dn):
@@ -322,16 +326,7 @@ class LDAPSearch(grok.Adapter):
         # We query for a specific DN and therefor expect at most one entry
         entry = results[0]
 
-        is_user = False
-        obj_classes = entry[1]['objectClass']
-        for obj_class in obj_classes:
-            if obj_class in self.context._user_objclasses:
-                is_user = True
-                break
-
-        if is_user:
-            entry = self.apply_schema_map(entry)
-
+        entry = self.apply_schema_map(entry)
         return entry
 
     def apply_schema_map(self, entry):
@@ -343,6 +338,15 @@ class LDAPSearch(grok.Adapter):
         """
         mapped_attrs = {}
         dn, attrs = entry
+
+        # Check if entry is a user object - we only want to apply the
+        # LDAPUserFolder mapping to those
+        is_user = False
+        obj_classes = attrs['objectClass']
+        for obj_class in obj_classes:
+            if obj_class in self.context._user_objclasses:
+                is_user = True
+                break
 
         # Get the list (!) of schema mapping dicts from LDAPUserFolder.
         schema_maps = self.context.getSchemaDict()
@@ -360,7 +364,13 @@ class LDAPSearch(grok.Adapter):
             value = attrs[ldap_name]
             if isinstance(value, list) and not schema_map['multivalued']:
                 value = value[0]
-            mapped_attrs[public_name] = value
+
+            if is_user:
+                # Apply mapping
+                mapped_attrs[public_name] = value
+            else:
+                # Otherwise leave key unchanged
+                mapped_attrs[ldap_name] = value
 
         # Process remaining attributes
         for key in attrs:
