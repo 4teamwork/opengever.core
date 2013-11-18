@@ -24,7 +24,7 @@ except AttributeError:
 
 
 PAGED_RESULTS_CTL_OID = '1.2.840.113556.1.4.319'
-KNOWN_MULTIVALUED_FIELDS = []
+KNOWN_MULTIVALUED_FIELDS = ['member', 'memberOf']
 
 
 class LDAPSearch(grok.Adapter):
@@ -267,31 +267,31 @@ class LDAPSearch(grok.Adapter):
 
         all_groups = self._cached_groups
 
-        for grp in all_groups:
-            members = grp[1].get('memberOf', [])
-            if group_dn in members:
-                # grp is a child group
-                children.append(grp[1]['distinguishedName'][0])
+        for grp_dn, grp_info in all_groups:
+            parents = grp_info.get('memberOf', [])
+            if group_dn in parents:
+                # grp is a child group of group_dn
+                children.append(grp_dn)
                 # Recurse over grandchildren
-                grandchildren = self.get_children(grp[1]['distinguishedName'][0])
+                grandchildren = self.get_children(grp_dn)
                 children.extend(grandchildren)
         return list(set(children))
 
 
-    def get_group_members(self, info):
+    def get_group_members(self, group_info):
         if not self.is_ad:
             members = []
             member_attrs = list(set(GROUP_MEMBER_MAP.values()))
             for member_attr in member_attrs:
-                if member_attr in info:
-                    m = info.get(member_attr, [])
+                if member_attr in group_info:
+                    m = group_info.get(member_attr, [])
                     if isinstance(m, basestring):
                         m = [m]
                     members.extend(m)
             return members
         else:
-            group_dn = info['distinguishedName'][0]
-            info['dn'] = group_dn
+            group_dn = group_info['distinguishedName']
+            group_info['dn'] = group_dn
 
             if self._cached_groups is None:
                 self._cached_groups = self.get_groups()
