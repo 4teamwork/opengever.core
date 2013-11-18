@@ -4,8 +4,13 @@ Changelog
 3.1.2 (unreleased)
 ------------------
 
+- DefaultDocumentIndexer: Store transform cache on context.file._blob, not context.file.
+  (NamedFileInstances are not recreated when updating file contents)
+  [lgraf]
+
 - LDAP util: Make sure we still deal with multivaluedness for non-user
   objects (fix for bug introduced in 1daa9ba).
+  [lgraf]
 
 - LDAP import: Deal with Active Directory nested groups.
   [lgraf]

@@ -62,7 +62,7 @@ class DefaultDocumentIndexer(grok.Adapter):
                     self.context.file.data,
                     mimetype=self.context.file.contentType,
                     filename=filename,
-                    object=self.context.file)
+                    object=self.context.file._blob)
             except (ConflictError, KeyboardInterrupt):
                 raise
             except Exception, e:
