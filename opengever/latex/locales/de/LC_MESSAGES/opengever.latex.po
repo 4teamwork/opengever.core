@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2013-11-04 16:59+0000\n"
-"PO-Revision-Date: 2013-11-04 17:56+0100\n"
+"POT-Creation-Date: 2013-11-19 15:23+0000\n"
+"PO-Revision-Date: 2013-11-19 16:25+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -36,13 +36,18 @@ msgstr "Zu erledigen bis"
 msgid "label_delivery_date"
 msgstr "Ausgangsdatum"
 
+#. Default: "Document author"
+#: ./opengever/latex/listing.py:217
+msgid "label_document_author"
+msgstr "Autor"
+
 #. Default: "Document date"
 #: ./opengever/latex/listing.py:199
 msgid "label_document_date"
 msgstr "Dokumentdatum"
 
 #. Default: "Documents"
-#: ./opengever/latex/dossierdetails.py:83
+#: ./opengever/latex/dossierdetails.py:79
 msgid "label_documents"
 msgstr "Dokumente"
 
@@ -57,7 +62,7 @@ msgid "label_issuer"
 msgstr "Auftraggeber"
 
 #. Default: "Participants"
-#: ./opengever/latex/dossierdetails.py:135
+#: ./opengever/latex/dossierdetails.py:131
 msgid "label_participants"
 msgstr "Beteiligung"
 
@@ -67,13 +72,13 @@ msgid "label_receipt_date"
 msgstr "Eingangsdatum"
 
 #. Default: "Reference number"
-#: ./opengever/latex/dossierdetails.py:110
+#: ./opengever/latex/dossierdetails.py:106
 #: ./opengever/latex/listing.py:109
 msgid "label_reference_number"
 msgstr "Aktenzeichen"
 
 #. Default: "Repository"
-#: ./opengever/latex/dossierdetails.py:117
+#: ./opengever/latex/dossierdetails.py:113
 msgid "label_repository"
 msgstr "Ordnungsposition"
 
@@ -83,36 +88,36 @@ msgid "label_repository_title"
 msgstr "Ordnungspos."
 
 #. Default: "Responsible"
-#: ./opengever/latex/dossierdetails.py:126
+#: ./opengever/latex/dossierdetails.py:122
 #: ./opengever/latex/listing.py:129
 msgid "label_responsible"
 msgstr "Federführend"
 
 #. Default: "State"
-#: ./opengever/latex/dossierdetails.py:139
+#: ./opengever/latex/dossierdetails.py:135
 #: ./opengever/latex/listing.py:134
 msgid "label_review_state"
 msgstr "Status"
 
 #. Default: "Sequence number"
-#: ./opengever/latex/dossierdetails.py:114
+#: ./opengever/latex/dossierdetails.py:110
 msgid "label_sequence_number"
 msgstr "Laufnummer"
 
 #. Default: "Start"
-#: ./opengever/latex/dossierdetails.py:129
+#: ./opengever/latex/dossierdetails.py:125
 #: ./opengever/latex/listing.py:140
 msgid "label_start"
 msgstr "Beginn"
 
 #. Default: "Subdossier Title"
-#: ./opengever/latex/dossierdetails.py:123
+#: ./opengever/latex/dossierdetails.py:119
 #, fuzzy
 msgid "label_subdossier_title"
 msgstr "Titel Subdossier"
 
 #. Default: "Subdossiers"
-#: ./opengever/latex/dossierdetails.py:73
+#: ./opengever/latex/dossierdetails.py:71
 msgid "label_subdossiers"
 msgstr "Subdossiers"
 
@@ -127,12 +132,12 @@ msgid "label_task_type"
 msgstr "Art"
 
 #. Default: "Tasks"
-#: ./opengever/latex/dossierdetails.py:92
+#: ./opengever/latex/dossierdetails.py:87
 msgid "label_tasks"
 msgstr "Aufgaben"
 
 #. Default: "Title"
-#: ./opengever/latex/dossierdetails.py:120
+#: ./opengever/latex/dossierdetails.py:116
 #: ./opengever/latex/listing.py:124
 msgid "label_title"
 msgstr "Titel"
