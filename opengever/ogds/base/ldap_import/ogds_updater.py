@@ -11,9 +11,10 @@ import logging
 
 
 NO_UID_MSG = "WARNING: User '%s' has no 'uid' attribute."
-NO_UID_AD_MSG = "WARNING: User '%s' has no 'sAMAccountName' or " \
-                "'windows_login_name' attribute."
+NO_UID_AD_MSG = "WARNING: User '%s' has none of the attributes %s - skipping."
 USER_NOT_FOUND_MSG = "WARNING: Referenced user %s not found, ignoring!"
+
+AD_UID_KEYS = ['userid', 'sAMAccountName', 'windows_login_name']
 
 
 logger = logging.getLogger('opengever.ogds.base')
@@ -140,13 +141,15 @@ class OGDSUpdater(grok.Adapter):
                 dn, info = ldap_group
 
                 # Group name is in the 'cn' attribute, which may be mapped to 'fullname'
-                try:
-                    info['groupid'] = info['cn'][0]
-                except KeyError:
-                    info['groupid'] = info['fullname']
+                if 'cn' in info:
+                    groupid = info['cn']
+                    if isinstance(groupid, list):
+                        groupid = groupid[0]
+                else:
+                    groupid = info['fullname']
 
-                info['groupid'] = info['groupid'].decode('utf-8')
-                groupid = info['groupid']
+                groupid = groupid.decode('utf-8')
+                info['groupid'] = groupid
 
                 if not self.group_exists(groupid):
                     # Create the new group
@@ -170,7 +173,6 @@ class OGDSUpdater(grok.Adapter):
                     setattr(group, col.name, value)
 
                 contained_users = []
-
                 group_members = ldap_util.get_group_members(info)
                 for user_dn in group_members:
                     try:
@@ -182,11 +184,18 @@ class OGDSUpdater(grok.Adapter):
                                 continue
                             userid = user_info['userid']
                         else:
-                            userid = user_info.get('sAMAccountName')
-                            if userid is None:
-                                userid = user_info.get('windows_login_name')
-                                if userid is None:
-                                    logger.warn(NO_UID_AD_MSG % user_dn)
+                            # Active Directory
+                            uid_found = False
+                            for uid_key in AD_UID_KEYS:
+                                if uid_key in user_info:
+                                    userid = user_info[uid_key]
+                                    uid_found = True
+                                    break
+                            if not uid_found:
+                                # No suitable UID found, skip this user
+                                logger.warn(NO_UID_AD_MSG % (AD_UID_KEYS,
+                                                             user_dn))
+                                continue
 
                         if isinstance(userid, list):
                             userid = userid[0]

@@ -4,6 +4,9 @@ Changelog
 3.1.2 (unreleased)
 ------------------
 
+- OGDS updater: Make check for AD user IDs more robust.
+  [lgraf]
+
 - DefaultDocumentIndexer: Store transform cache on context.file._blob, not context.file.
   (NamedFileInstances are not recreated when updating file contents)
   [lgraf]
