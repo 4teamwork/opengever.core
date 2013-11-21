@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2012-11-23 07:35+0000\n"
+"POT-Creation-Date: 2013-11-21 09:02+0000\n"
 "PO-Revision-Date: 2012-08-30 15:34+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -9,6 +9,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0\n"
+"Language-Code: en\n"
+"Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: DOMAIN\n"
 
@@ -43,17 +45,17 @@ msgid "archival worthy with sampling"
 msgstr "Echantillon"
 
 #. Default: "Download"
-#: ./opengever/base/viewlets/history.pt:42
+#: ./opengever/base/viewlets/history.pt:44
 msgid "button_file"
 msgstr "Télécharger"
 
 #. Default: "PDF"
-#: ./opengever/base/viewlets/history.pt:52
+#: ./opengever/base/viewlets/history.pt:54
 msgid "button_pdf"
 msgstr "Aperçu pdf"
 
 #. Default: "Show"
-#: ./opengever/base/viewlets/history.pt:48
+#: ./opengever/base/viewlets/history.pt:50
 msgid "button_show"
 msgstr "Afficher"
 
@@ -88,16 +90,16 @@ msgid "fieldset_common"
 msgstr "En général"
 
 #. Default: "Life Cycle"
-#: ./opengever/base/behaviors/lifecycle.py:26
+#: ./opengever/base/behaviors/lifecycle.py:28
 msgid "fieldset_lifecycle"
 msgstr "Cycle de vie"
 
 #. Default: "Archival value code"
-#: ./opengever/base/behaviors/lifecycle.py:56
+#: ./opengever/base/behaviors/lifecycle.py:58
 msgid "help_archival_value"
 msgstr "Valeur archivistique"
 
-#: ./opengever/base/behaviors/lifecycle.py:65
+#: ./opengever/base/behaviors/lifecycle.py:67
 msgid "help_archival_value_annotation"
 msgstr ""
 
@@ -109,15 +111,15 @@ msgstr "Classification permettant la protection des documents contre la consulta
 msgid "help_creators"
 msgstr ""
 
-#: ./opengever/base/behaviors/lifecycle.py:72
+#: ./opengever/base/behaviors/lifecycle.py:74
 msgid "help_custody_period"
 msgstr "Délai de protection"
 
-#: ./opengever/base/behaviors/lifecycle.py:81
+#: ./opengever/base/behaviors/lifecycle.py:83
 msgid "help_dateofcassation"
 msgstr ""
 
-#: ./opengever/base/behaviors/lifecycle.py:89
+#: ./opengever/base/behaviors/lifecycle.py:91
 msgid "help_dateofsubmission"
 msgstr ""
 
@@ -137,11 +139,11 @@ msgstr "Mentionne si les documents contiennent des données sensibles ou non sel
 msgid "help_public_trial_statement"
 msgstr "Arguments contre l'accès pulic selon la loi sur le principe de la transparence"
 
-#: ./opengever/base/behaviors/lifecycle.py:40
+#: ./opengever/base/behaviors/lifecycle.py:42
 msgid "help_retention_period"
 msgstr "Durée entre la date du document plus récent contenu dans un dossier et la date à partir de laquelle le document n'est plus requis pour les activités administratives"
 
-#: ./opengever/base/behaviors/lifecycle.py:49
+#: ./opengever/base/behaviors/lifecycle.py:51
 msgid "help_retention_period_annotation"
 msgstr ""
 
@@ -151,12 +153,12 @@ msgid "label_actor"
 msgstr "Modifier par"
 
 #. Default: "Archival value"
-#: ./opengever/base/behaviors/lifecycle.py:55
+#: ./opengever/base/behaviors/lifecycle.py:57
 msgid "label_archival_value"
 msgstr "Valeur archivistique"
 
 #. Default: "archivalValueAnnotation"
-#: ./opengever/base/behaviors/lifecycle.py:63
+#: ./opengever/base/behaviors/lifecycle.py:65
 msgid "label_archival_value_annotation"
 msgstr "Commentaire concernant la valeur archivistique"
 
@@ -170,13 +172,18 @@ msgstr "Classification"
 msgid "label_comment"
 msgstr "commentaire"
 
+#. Default: "Created"
+#: ./opengever/base/viewlets/byline.py:60
+msgid "label_created"
+msgstr "Créé le"
+
 #. Default: "Creators"
 #: ./opengever/base/behaviors/creator.py:20
 msgid "label_creators"
 msgstr "Auteurs"
 
 #. Default: "Custody period (years)"
-#: ./opengever/base/behaviors/lifecycle.py:71
+#: ./opengever/base/behaviors/lifecycle.py:73
 msgid "label_custody_period"
 msgstr "Délai de protection archivistique"
 
@@ -186,12 +193,12 @@ msgid "label_date"
 msgstr "Date"
 
 #. Default: "Date of cassation"
-#: ./opengever/base/behaviors/lifecycle.py:80
+#: ./opengever/base/behaviors/lifecycle.py:82
 msgid "label_dateofcassation"
 msgstr "Date d'élimination"
 
 #. Default: "Date of submission"
-#: ./opengever/base/behaviors/lifecycle.py:88
+#: ./opengever/base/behaviors/lifecycle.py:90
 msgid "label_dateofsubmission"
 msgstr "Date de proposition (des documents)"
 
@@ -210,6 +217,11 @@ msgstr "Versions"
 msgid "label_initial_version_copied"
 msgstr "Version initiale (documents copiés)"
 
+#. Default: "Last modified"
+#: ./opengever/base/viewlets/byline.py:65
+msgid "label_last_modified"
+msgstr "Dernière modification"
+
 #. Default: "Privacy layer"
 #: ./opengever/base/behaviors/classification.py:38
 msgid "label_privacy_layer"
@@ -226,17 +238,17 @@ msgid "label_public_trial_statement"
 msgstr "Jusitificaton pour le retrait du status public"
 
 #. Default: "reset"
-#: ./opengever/base/viewlets/history.pt:56
+#: ./opengever/base/viewlets/history.pt:58
 msgid "label_reset"
 msgstr "Remettre"
 
 #. Default: "Retention period (years)"
-#: ./opengever/base/behaviors/lifecycle.py:39
+#: ./opengever/base/behaviors/lifecycle.py:41
 msgid "label_retention_period"
 msgstr "Délai de conservation"
 
 #. Default: "retentionPeriodAnnotation"
-#: ./opengever/base/behaviors/lifecycle.py:47
+#: ./opengever/base/behaviors/lifecycle.py:49
 msgid "label_retention_period_annotation"
 msgstr "Commentaire concernant le délai de protection"
 
@@ -299,5 +311,3 @@ msgstr "Non contrôlé"
 #: opengever/repository/classification.py
 msgid "unprotected"
 msgstr "Non classé"
-
-

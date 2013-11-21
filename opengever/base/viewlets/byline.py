@@ -1,3 +1,4 @@
+from opengever.base import _
 from opengever.base.browser.helper import get_css_class
 from opengever.base.interfaces import IReferenceNumber, ISequenceNumber
 from plone.app.layout.viewlets import content
@@ -52,3 +53,16 @@ class BylineBase(content.DocumentBylineViewlet):
     def to_localized_time(self, time, long_format=0):
         adapter = getMultiAdapter((self.context, self.request), name="plone")
         return adapter.toLocalizedTime(str(time), long_format)
+
+    def get_items(self):
+        return [
+            {'class': 'document_created',
+             'label': _('label_created', default='Created'),
+             'content': self.created(),
+             'replace': False},
+
+            {'class': 'last_modified',
+             'label': _('label_last_modified', default='Last modified'),
+             'content': self.modified(),
+             'replace': False},
+        ]
