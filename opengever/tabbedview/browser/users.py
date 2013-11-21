@@ -17,6 +17,9 @@ def linked_value_helper(item, value):
     """Helper for linking the value with the user profile.
     """
 
+    if not value:
+        return ''
+
     info = getUtility(IContactInformation)
     url = info.get_profile_url(getattr(item, 'userid', None))
 
