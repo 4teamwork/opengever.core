@@ -13,7 +13,6 @@ from plone.directives import form as directives_form
 from plone.registry.interfaces import IRegistry
 from z3c.form import button, field
 from z3c.form.browser import radio, checkbox
-from z3c.form.interfaces import HIDDEN_MODE
 from z3c.form.interfaces import INPUT_MODE
 from zope import schema
 from zope.component import getUtility
