@@ -7,6 +7,9 @@ Changelog
 - Advancedsearch: Dropped reference number solution.
   [phgross]
 
+- OGDS Listing: Display empty string for users without a name or firstname.
+  [phgross]
+
 - OGDS updater: Make check for AD user IDs more robust.
   [lgraf]
 
