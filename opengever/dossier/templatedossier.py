@@ -222,6 +222,21 @@ class TemplateDossierDocuments(Documents):
         return drop_columns(
             super(TemplateDossierDocuments, self).columns)
 
+    @property
+    def enabled_actions(self):
+        return filter(
+            lambda x: x not in self.disabled_actions,
+            super(TemplateDossierDocuments, self).enabled_actions)
+
+    disabled_actions = [
+        'send_as_email',
+        'checkout',
+        'checkin',
+        'cancel',
+        'move_items',
+        'create_task',
+    ]
+
 
 class TemplateDossierTrash(Trash):
     grok.context(ITemplateDossier)
