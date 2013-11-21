@@ -206,14 +206,12 @@ class Documents(OpengeverCatalogListingTab):
         'cancel',
         'create_task',
         'trashed',
-        'send_documents',
         'move_items',
         'copy_items',
         'zip_selected',
         ]
 
     major_actions = [
-        'send_documents',
         'create_task',
         ]
 

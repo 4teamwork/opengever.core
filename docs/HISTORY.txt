@@ -69,6 +69,9 @@ Changelog
 - Fixed unicode encoding bug in search for autocomplete of ContactsVocabulary.
   [lknoepfel]
 
+- Disabled illogical actions in template dossier.
+  [lknoepfel]
+
 3.1.1 (2013-10-23)
 ------------------
 

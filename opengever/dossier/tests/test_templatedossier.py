@@ -66,6 +66,11 @@ class TestTemplateDossierIntegration(FunctionalTestCase):
             if isinstance(column, dict):
                 self.assertTrue(column.get('id') not in REMOVED_COLUMNS)
 
+        # test removed actions
+        self.assertEquals(
+            ['trashed', 'copy_items', 'zip_selected'],
+            view.enabled_actions)
+
         view = templates.unrestrictedTraverse('tabbedview_view-trash')
         for column in view.columns:
             if isinstance(column, dict):
