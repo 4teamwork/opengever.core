@@ -9,6 +9,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0\n"
+"Language-Code: en\n"
+"Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: DOMAIN\n"
 
@@ -30,3 +32,4 @@ msgstr "alphabetisch"
 #: plone.app.search/plone/app/search/browser.py:119
 msgid "date (newest first)"
 msgstr "Änderungsdatum (absteigend)"
+

@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2012-11-23 07:35+0000\n"
+"POT-Creation-Date: 2013-11-21 09:02+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -48,17 +48,17 @@ msgid "archival worthy with sampling"
 msgstr ""
 
 #. Default: "Download"
-#: ./opengever/base/viewlets/history.pt:42
+#: ./opengever/base/viewlets/history.pt:44
 msgid "button_file"
 msgstr ""
 
 #. Default: "PDF"
-#: ./opengever/base/viewlets/history.pt:52
+#: ./opengever/base/viewlets/history.pt:54
 msgid "button_pdf"
 msgstr ""
 
 #. Default: "Show"
-#: ./opengever/base/viewlets/history.pt:48
+#: ./opengever/base/viewlets/history.pt:50
 msgid "button_show"
 msgstr ""
 
@@ -93,16 +93,16 @@ msgid "fieldset_common"
 msgstr ""
 
 #. Default: "Life Cycle"
-#: ./opengever/base/behaviors/lifecycle.py:26
+#: ./opengever/base/behaviors/lifecycle.py:28
 msgid "fieldset_lifecycle"
 msgstr ""
 
 #. Default: "Archival value code"
-#: ./opengever/base/behaviors/lifecycle.py:56
+#: ./opengever/base/behaviors/lifecycle.py:58
 msgid "help_archival_value"
 msgstr ""
 
-#: ./opengever/base/behaviors/lifecycle.py:65
+#: ./opengever/base/behaviors/lifecycle.py:67
 msgid "help_archival_value_annotation"
 msgstr ""
 
@@ -114,15 +114,15 @@ msgstr ""
 msgid "help_creators"
 msgstr ""
 
-#: ./opengever/base/behaviors/lifecycle.py:72
+#: ./opengever/base/behaviors/lifecycle.py:74
 msgid "help_custody_period"
 msgstr ""
 
-#: ./opengever/base/behaviors/lifecycle.py:81
+#: ./opengever/base/behaviors/lifecycle.py:83
 msgid "help_dateofcassation"
 msgstr ""
 
-#: ./opengever/base/behaviors/lifecycle.py:89
+#: ./opengever/base/behaviors/lifecycle.py:91
 msgid "help_dateofsubmission"
 msgstr ""
 
@@ -142,11 +142,11 @@ msgstr ""
 msgid "help_public_trial_statement"
 msgstr ""
 
-#: ./opengever/base/behaviors/lifecycle.py:40
+#: ./opengever/base/behaviors/lifecycle.py:42
 msgid "help_retention_period"
 msgstr ""
 
-#: ./opengever/base/behaviors/lifecycle.py:49
+#: ./opengever/base/behaviors/lifecycle.py:51
 msgid "help_retention_period_annotation"
 msgstr ""
 
@@ -156,12 +156,12 @@ msgid "label_actor"
 msgstr ""
 
 #. Default: "Archival value"
-#: ./opengever/base/behaviors/lifecycle.py:55
+#: ./opengever/base/behaviors/lifecycle.py:57
 msgid "label_archival_value"
 msgstr ""
 
 #. Default: "archivalValueAnnotation"
-#: ./opengever/base/behaviors/lifecycle.py:63
+#: ./opengever/base/behaviors/lifecycle.py:65
 msgid "label_archival_value_annotation"
 msgstr ""
 
@@ -175,13 +175,18 @@ msgstr ""
 msgid "label_comment"
 msgstr ""
 
+#. Default: "Created"
+#: ./opengever/base/viewlets/byline.py:60
+msgid "label_created"
+msgstr ""
+
 #. Default: "Creators"
 #: ./opengever/base/behaviors/creator.py:20
 msgid "label_creators"
 msgstr ""
 
 #. Default: "Custody period (years)"
-#: ./opengever/base/behaviors/lifecycle.py:71
+#: ./opengever/base/behaviors/lifecycle.py:73
 msgid "label_custody_period"
 msgstr ""
 
@@ -191,12 +196,12 @@ msgid "label_date"
 msgstr ""
 
 #. Default: "Date of cassation"
-#: ./opengever/base/behaviors/lifecycle.py:80
+#: ./opengever/base/behaviors/lifecycle.py:82
 msgid "label_dateofcassation"
 msgstr ""
 
 #. Default: "Date of submission"
-#: ./opengever/base/behaviors/lifecycle.py:88
+#: ./opengever/base/behaviors/lifecycle.py:90
 msgid "label_dateofsubmission"
 msgstr ""
 
@@ -215,6 +220,11 @@ msgstr ""
 msgid "label_initial_version_copied"
 msgstr ""
 
+#. Default: "Last modified"
+#: ./opengever/base/viewlets/byline.py:65
+msgid "label_last_modified"
+msgstr ""
+
 #. Default: "Privacy layer"
 #: ./opengever/base/behaviors/classification.py:38
 msgid "label_privacy_layer"
@@ -231,17 +241,17 @@ msgid "label_public_trial_statement"
 msgstr ""
 
 #. Default: "reset"
-#: ./opengever/base/viewlets/history.pt:56
+#: ./opengever/base/viewlets/history.pt:58
 msgid "label_reset"
 msgstr ""
 
 #. Default: "Retention period (years)"
-#: ./opengever/base/behaviors/lifecycle.py:39
+#: ./opengever/base/behaviors/lifecycle.py:41
 msgid "label_retention_period"
 msgstr ""
 
 #. Default: "retentionPeriodAnnotation"
-#: ./opengever/base/behaviors/lifecycle.py:47
+#: ./opengever/base/behaviors/lifecycle.py:49
 msgid "label_retention_period_annotation"
 msgstr ""
 

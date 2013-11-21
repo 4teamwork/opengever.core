@@ -19,4 +19,21 @@
         permission="zope2.View"
         />
 
+   <browser:viewlet
+       name="plone.belowcontenttitle.documentbyline"
+       for="plone.dexterity.interfaces.IDexterityContainer"
+       manager="plone.app.layout.viewlets.interfaces.IBelowContentTitle"
+       class="opengever.base.viewlets.byline.BylineBase"
+       permission="zope2.View"
+       />
+
+   <browser:viewlet
+       name="plone.belowcontenttitle.documentbyline"
+       for="plone.dexterity.interfaces.IDexterityItem"
+       manager="plone.app.layout.viewlets.interfaces.IBelowContentTitle"
+       class="opengever.base.viewlets.byline.BylineBase"
+       permission="zope2.View"
+       />
+
+
 </configure>
