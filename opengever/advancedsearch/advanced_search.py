@@ -10,10 +10,8 @@ from opengever.ogds.base.interfaces import IContactInformation
 from opengever.ogds.base.utils import get_client_id
 from opengever.task.util import getTaskTypeVocabulary
 from plone.directives import form as directives_form
-from plone.registry.interfaces import IRegistry
 from z3c.form import button, field
 from z3c.form.browser import radio, checkbox
-from z3c.form.interfaces import HIDDEN_MODE
 from z3c.form.interfaces import INPUT_MODE
 from zope import schema
 from zope.component import getUtility
@@ -21,7 +19,6 @@ from zope.interface import Interface
 from zope.schema.interfaces import IContextSourceBinder
 from zope.schema.vocabulary import SimpleVocabulary
 import datetime
-import re
 import urllib
 
 
@@ -102,11 +99,11 @@ FIELD_MAPPING = {'opengever-dossier-behaviors-dossier-IDossierMarker': [
                 }
 
 
-def quotestring(s):
+def quotestring(value):
     bad_chars = ["(", ")"]
     for char in bad_chars:
-        s = s.replace(char, ' ')
-    return urllib.quote(s)
+        value = value.replace(char, ' ')
+    return urllib.quote(value)
 
 
 class IAdvancedSearch(directives_form.Schema):
@@ -357,8 +354,6 @@ class AdvancedSearchForm(directives_form.Form):
         data, errors = self.extractData()
         if not errors:
             # create Parameters and url
-            if(data['reference']):
-                data['reference'] = self.correct_ref(data['reference'])
             params = '/@@search?object_provides=%s' % (
                 urllib.quote(data.get('object_provides', '')))
             # if clause because it entered a searchableText=none without text
@@ -413,15 +408,3 @@ class AdvancedSearchForm(directives_form.Form):
 
             return self.context.REQUEST.RESPONSE.redirect('%s%s' % (
                     self.context.portal_url(), params))
-
-    def correct_ref(self, value):
-        registry = getUtility(IRegistry)
-        prefix = registry['opengever.base.interfaces.IBaseClientID.client_id']
-        if prefix.lower() in value.lower():
-            value = value.replace(prefix, "")
-            value = value.replace(prefix.lower(), "")
-        refnr = re.split('[^a-zA-Z0-9\.]', value)
-        while refnr.count(''):
-            refnr.remove('')
-        value = ' / '.join(refnr)
-        return prefix + " " + value
