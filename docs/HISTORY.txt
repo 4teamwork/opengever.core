@@ -4,6 +4,9 @@ Changelog
 3.1.2 (unreleased)
 ------------------
 
+- Advancedsearch: Dropped reference number solution.
+  [phgross]
+
 - OGDS updater: Make check for AD user IDs more robust.
   [lgraf]
 
