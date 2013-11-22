@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "POT-Creation-Date: 2013-11-21 09:02+0000\n"
-"PO-Revision-Date: 2012-12-03 16:30+0100\n"
+"PO-Revision-Date: 2013-11-25 09:25+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "MIME-Version: 1.0\n"
@@ -181,7 +181,7 @@ msgstr "Kommentar"
 #. Default: "Created"
 #: ./opengever/base/viewlets/byline.py:60
 msgid "label_created"
-msgstr "Erstellt am:"
+msgstr "Erstellt am"
 
 #. Default: "Creators"
 #: ./opengever/base/behaviors/creator.py:20

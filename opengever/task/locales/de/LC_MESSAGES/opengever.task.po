@@ -462,7 +462,7 @@ msgstr "Weiterleitung zuweisen an ein ..."
 #. Default: "by"
 #: ./opengever/task/viewlets/byline.py:44
 msgid "label_by_author"
-msgstr "Auftragnehmer:"
+msgstr "Auftragnehmer"
 
 #. Default: "Sequence Number"
 #: ./opengever/task/viewlets/byline.py:55
@@ -691,7 +691,7 @@ msgstr "Status"
 #. Default: "State"
 #: ./opengever/task/viewlets/byline.py:50
 msgid "label_workflow_state_byline"
-msgstr "Status:"
+msgstr "Status"
 
 #. Default: "Deadline successfully changed."
 #: ./opengever/task/browser/modify_deadline.py:57
