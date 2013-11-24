@@ -4,6 +4,9 @@ Changelog
 3.1.2 (unreleased)
 ------------------
 
+- Activate selction controlls for the `my documents` Tab.
+  [phgross]
+
 - Advancedsearch: Dropped reference number solution.
   [phgross]
 
