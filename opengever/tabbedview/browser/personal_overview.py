@@ -1,13 +1,11 @@
 from Products.CMFPlone.utils import getToolByName
 from five import grok
 from ftw.tabbedview.browser.tabbed import TabbedView
-from ftw.table import helper
 from opengever.globalindex.interfaces import ITaskQuery
 from opengever.ogds.base.interfaces import IContactInformation
 from opengever.ogds.base.utils import get_client_id
 from opengever.tabbedview.browser.tabs import Documents, Dossiers, Tasks
 from opengever.tabbedview.browser.tasklisting import GlobalTaskListingTab
-from zope.app.pagetemplate import ViewPageTemplateFile
 from zope.component import getUtility
 from zope.interface import Interface
 import AccessControl
@@ -15,24 +13,6 @@ import AccessControl
 
 def authenticated_member(context):
     return context.portal_membership.getAuthenticatedMember().getId()
-
-
-def remove_control_columns(columns):
-    """Removes the control columns from list of columns and returns it back.
-    """
-
-    def _filterer(item):
-        try:
-            transform = item[1]
-        except KeyError:
-            return True
-        else:
-            if transform in (helper.draggable, helper.path_checkbox):
-                return False
-            else:
-                return True
-
-    return filter(_filterer, columns)
 
 
 def remove_subdossier_column(columns):
@@ -150,9 +130,7 @@ class MyDocuments(Documents):
     ]
     major_actions = []
 
-    columns = remove_control_columns(Documents.columns)
-    columns = remove_subdossier_column(columns)
-    selection = ViewPageTemplateFile("no_selection_amount.pt")
+    columns = remove_subdossier_column(Documents.columns)
 
     @property
     def columns(self):
