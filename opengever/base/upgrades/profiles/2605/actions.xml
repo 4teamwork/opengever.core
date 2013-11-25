@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<object name="portal_actions" meta_type="Plone Actions Tool"
+        xmlns:i18n="http://xml.zope.org/namespaces/i18n">
+
+    <object name="object_buttons" meta_type="CMF Action Category" purge="false">
+
+        <object name="paste" meta_type="CMF Action" i18n:domain="plone">
+            <property name="title" i18n:translate="">Paste</property>
+            <property name="description" i18n:translate=""></property>
+            <property
+                  name="url_expr">string:${globals_view/getCurrentFolderUrl}/object_paste</property>
+            <property name="icon_expr"></property>
+            <property name="available_expr">folder/is_pasting_allowed</property>
+            <property name="permissions">
+                <element value="View"/>
+            </property>
+            <property name="visible">True</property>
+        </object>
+
+    </object>
+
+</object>
+
+
+
