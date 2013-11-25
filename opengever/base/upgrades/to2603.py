@@ -6,4 +6,4 @@ class InitializeReferencenumberFormatter(UpgradeStep):
 
     def __call__(self):
         self.setup_install_profile(
-            'profile-opengever.base.upgrades:2602')
+            'profile-opengever.base.upgrades:2603')
