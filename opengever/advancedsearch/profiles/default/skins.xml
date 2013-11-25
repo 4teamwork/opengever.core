@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<object name="portal_skins" meta_type="Plone Skins Tool">
+
+    <object
+        name="advancedsearch_resources"
+        meta_type="Filesystem Directory View"
+        directory="opengever.advancedsearch:skins/advancedsearch_resources"/>
+
+    <skin-path name="*">
+        <layer
+            name="advancedsearch_resources"
+            insert-after="custom"/>
+    </skin-path>
+
+</object>

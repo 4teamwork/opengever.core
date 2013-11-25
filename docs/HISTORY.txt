@@ -4,6 +4,9 @@ Changelog
 3.1.2 (unreleased)
 ------------------
 
+- Override livesearch_reply.py to provide correct advanced search link.
+  [lgraf]
+
 - Activate selction controlls for the `my documents` Tab.
   [phgross]
 
