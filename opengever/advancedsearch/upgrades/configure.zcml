@@ -22,4 +22,23 @@
         provides="Products.GenericSetup.interfaces.EXTENSION"
         />
 
+    <!-- 2201 -> 2202 -->
+    <genericsetup:upgradeStep
+        title="Register opengever.advancedsearch skins directory"
+        description=""
+        source="2201"
+        destination="2202"
+        handler="opengever.advancedsearch.upgrades.to2202.RegisterSkinsDirectory"
+        profile="opengever.advancedsearch:default"
+        />
+
+    <genericsetup:registerProfile
+        name="2202"
+        title="opengever.advancedsearch: upgrade profile 2202"
+        description=""
+        directory="profiles/2202"
+        for="Products.CMFPlone.interfaces.IMigratingPloneSiteRoot"
+        provides="Products.GenericSetup.interfaces.EXTENSION"
+        />
+
 </configure>

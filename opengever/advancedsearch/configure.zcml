@@ -5,6 +5,7 @@
     xmlns:i18n="http://namespaces.zope.org/i18n"
     xmlns:grok="http://namespaces.zope.org/grok"
 	xmlns:five="http://namespaces.zope.org/five"
+    xmlns:cmf="http://namespaces.zope.org/cmf"
 	i18n_domain="opengever.advancedsearch">
  
     <grok:grok package="." />
@@ -15,6 +16,11 @@
         name="opengever.advancedsearch.resources"
         directory="resources"
         />
+
+    <include file="skins.zcml" />
+
+    <!-- custom skins directory -->
+    <cmf:registerDirectory name="advancedsearch_resources"/>
 
     <!-- Register an extension profile to make the product installable -->
     <genericsetup:registerProfile
