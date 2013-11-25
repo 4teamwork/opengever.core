@@ -6,4 +6,4 @@ class RegisterSkinsDirectory(UpgradeStep):
 
     def __call__(self):
         self.setup_install_profile(
-            'profile-opengever.base.upgrades:2202')
+            'profile-opengever.advancedsearch.upgrades:2202')
