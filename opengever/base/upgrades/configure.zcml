@@ -99,4 +99,23 @@
         provides="Products.GenericSetup.interfaces.EXTENSION"
         />
 
+    <!-- 2604 -> 2605 -->
+    <genericsetup:upgradeStep
+        title="Hide paste action for template dossier and contact folder"
+        description=""
+        source="2604"
+        destination="2605"
+        handler="opengever.base.upgrades.to2605.HidePasteAction"
+        profile="opengever.base:default"
+        />
+
+    <genericsetup:registerProfile
+        name="2605"
+        title="opengever.base: upgrade profile 2605"
+        description=""
+        directory="profiles/2605"
+        for="Products.CMFPlone.interfaces.IMigratingPloneSiteRoot"
+        provides="Products.GenericSetup.interfaces.EXTENSION"
+        />
+
 </configure>

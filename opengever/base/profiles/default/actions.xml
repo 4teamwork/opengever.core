@@ -41,7 +41,7 @@
             <property
                   name="url_expr">string:${globals_view/getCurrentFolderUrl}/object_paste</property>
             <property name="icon_expr"></property>
-            <property name="available_expr">folder/cb_dataValid|nothing</property>
+            <property name="available_expr">folder/is_pasting_allowed</property>
             <property name="permissions">
                 <element value="View"/>
             </property>

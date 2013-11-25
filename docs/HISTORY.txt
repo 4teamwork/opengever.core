@@ -7,6 +7,9 @@ Changelog
 - Override livesearch_reply.py to provide correct advanced search link.
   [lgraf]
 
+- Hide paste action for template dossier and contact folder.
+  [lgraf]
+
 - Activate selction controlls for the `my documents` Tab.
   [phgross]
 
