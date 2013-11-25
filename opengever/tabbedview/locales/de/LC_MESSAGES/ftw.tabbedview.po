@@ -164,3 +164,6 @@ msgstr "Papierkorb"
 
 msgid "users"
 msgstr "OGDS"
+
+msgid "closed-forwardings"
+msgstr "Abgeschlossene Aufgaben"
