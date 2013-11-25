@@ -14,6 +14,13 @@ class DossierBuilder(DexterityBuilder):
 builder_registry.register('dossier', DossierBuilder)
 
 
+class TemplateDossierBuilder(DexterityBuilder):
+    portal_type = 'opengever.dossier.templatedossier'
+
+
+builder_registry.register('templatedossier', TemplateDossierBuilder)
+
+
 class InboxBuilder(DexterityBuilder):
     portal_type = 'opengever.inbox.inbox'
 
@@ -108,6 +115,13 @@ class RepositoryBuilder(DexterityBuilder):
 
 
 builder_registry.register('repository', RepositoryBuilder)
+
+
+class ContactFolderBuilder(DexterityBuilder):
+    portal_type = 'opengever.contact.contactfolder'
+
+
+builder_registry.register('contactfolder', ContactFolderBuilder)
 
 
 class ContactBuilder(DexterityBuilder):
