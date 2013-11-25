@@ -154,7 +154,7 @@ else:
 
     write('''<li class="LSRow">''')
     write('<a href="%s" style="font-weight:normal">%s</a>' %
-         (portal_url + '/@@search',
+         (portal_url + '/advanced_search',
           ts.translate(label_advanced_search, context=REQUEST)))
     write('''</li>''')
 
