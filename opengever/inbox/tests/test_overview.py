@@ -5,7 +5,6 @@ from opengever.testing import OPENGEVER_FUNCTIONAL_TESTING
 from opengever.testing import create_client
 from opengever.testing import create_ogds_user
 from opengever.testing import set_current_client_id
-from opengever.testing.helpers import obj2brain
 from opengever.testing.helpers import task2sqltask
 from plone.app.testing.interfaces import TEST_USER_NAME
 
@@ -73,6 +72,20 @@ class TestInboxOverviewAssignedInboxTasks(TestInboxOverviewDocumentBox):
                    .having(responsible='inbox:client1'))
 
         self.assertEquals(5, len(self.view.assigned_tasks()))
+
+    def test_lists_only_the_local_one_when_having_predecessor_successor_couples(self):
+        predecessor = create(Builder('forwarding')
+                             .having(responsible='inbox:client1',
+                                     assigned_client='client1'))
+        successor = create(Builder('forwarding')
+                           .having(responsible='inbox:client1',
+                                   assigned_client='client1')
+                           .successor_from(predecessor))
+
+        task2sqltask(predecessor).client_id = 'client2'
+
+        self.assertEquals(
+            [task2sqltask(successor)], self.view.assigned_tasks())
 
 
 class TestInboxOverviewIssuedInboxTasks(TestInboxOverviewDocumentBox):
