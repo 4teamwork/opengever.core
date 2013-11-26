@@ -4,7 +4,8 @@ Changelog
 3.1.2 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Inbox overview: Only list current part of a predecessor/successor couple.
+  [phgross]
 
 
 3.1.1 (2013-10-23)
