@@ -8,6 +8,7 @@ from opengever.inbox import _
 from opengever.inbox.browser.tabs import get_current_inbox_principal
 from opengever.inbox.inbox import IInbox
 from opengever.ogds.base.utils import get_client_id
+from opengever.task import OPEN_TASK_STATES
 from sqlalchemy import and_, or_
 from zope.component import getUtility
 
@@ -42,6 +43,8 @@ class InboxOverview(DossierOverview):
         query = query_util._get_tasks_for_responsible_query(
             get_current_inbox_principal(self.context))
 
+        query = query.filter(Task.review_state.in_(OPEN_TASK_STATES))
+
         # If a task has a successor task, it should only list one of them,
         # the one which is physically one the current client.
         query = query.filter(
@@ -55,7 +58,8 @@ class InboxOverview(DossierOverview):
         types = ['opengever.task.task', 'opengever.inbox.forwarding']
         catalog = getToolByName(self.context, 'portal_catalog')
         results = catalog(portal_type=types,
-                          issuer=get_current_inbox_principal(self.context))
+                          issuer=get_current_inbox_principal(self.context),
+                          review_state=OPEN_TASK_STATES)
 
         return results[:5]
 

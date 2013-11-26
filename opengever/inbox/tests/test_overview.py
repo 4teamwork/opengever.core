@@ -1,9 +1,11 @@
 from ftw.builder import Builder
 from ftw.builder import create
+from opengever.globalindex.handlers.task import index_task
 from opengever.testing import FunctionalTestCase
 from opengever.testing import OPENGEVER_FUNCTIONAL_TESTING
 from opengever.testing import create_client
 from opengever.testing import create_ogds_user
+from opengever.testing import obj2brain
 from opengever.testing import set_current_client_id
 from opengever.testing.helpers import task2sqltask
 from plone.app.testing.interfaces import TEST_USER_NAME
@@ -87,6 +89,17 @@ class TestInboxOverviewAssignedInboxTasks(TestInboxOverviewDocumentBox):
         self.assertEquals(
             [task2sqltask(successor)], self.view.assigned_tasks())
 
+    def test_list_only_active_tasks(self):
+        active = create(Builder('forwarding')
+                      .having(responsible='inbox:client1'))
+        closed = create(Builder('forwarding')
+                        .having(responsible='inbox:client1')
+                        .in_state('forwarding-state-closed'))
+        index_task(closed, None)
+
+        self.assertEquals(
+            [task2sqltask(active)], self.view.assigned_tasks())
+
 
 class TestInboxOverviewIssuedInboxTasks(TestInboxOverviewDocumentBox):
 
@@ -119,3 +132,16 @@ class TestInboxOverviewIssuedInboxTasks(TestInboxOverviewDocumentBox):
                    .having(issuer='inbox:client1'))
 
         self.assertEquals(5, len(self.view.issued_tasks()))
+
+    def test_list_only_active_tasks_and_forwardings(self):
+        active = create(Builder('forwarding')
+                        .within(self.inbox)
+                        .having(issuer='inbox:client1'))
+
+        closed = create(Builder('forwarding')
+                        .within(self.inbox)
+                        .having(issuer='inbox:client1')
+                        .in_state('forwarding-state-closed'))
+        self.assertEquals(
+            [active, ],
+            [brain.getObject() for brain in self.view.issued_tasks()])
