@@ -1,6 +1,7 @@
 from Products.CMFCore.utils import getToolByName
 from ftw.builder import builder_registry
 from ftw.builder.dexterity import DexterityBuilder
+from opengever.task.interfaces import ISuccessorTaskController
 from plone.namedfile.file import NamedBlobFile
 from z3c.relationfield.relation import RelationValue
 from zope.component import getUtility
@@ -46,6 +47,7 @@ class TaskBuilder(DexterityBuilder):
     def __init__(self, session):
         super(TaskBuilder, self).__init__(session)
         self.transitions = []
+        self.predecessor = None
 
     def in_progress(self):
         self.transitions.append('task-transition-open-in-progress')
@@ -55,6 +57,9 @@ class TaskBuilder(DexterityBuilder):
         wtool = getToolByName(obj, 'portal_workflow')
         for transition in self.transitions:
             wtool.doActionFor(obj, transition)
+
+        if self.predecessor:
+            ISuccessorTaskController(obj).set_predecessor(self.predecessor)
 
         super(TaskBuilder, self).after_create(obj)
 
@@ -71,11 +76,15 @@ class TaskBuilder(DexterityBuilder):
         self.arguments['task_type'] = u'comment'
         return self
 
+    def successor_from(self, predecessor):
+        oguid = ISuccessorTaskController(predecessor).get_oguid()
+        self.arguments['predecessor'] = oguid
+        return self
 
 builder_registry.register('task', TaskBuilder)
 
 
-class ForwardingBuilder(DexterityBuilder):
+class ForwardingBuilder(TaskBuilder):
 
     portal_type = 'opengever.inbox.forwarding'
 
