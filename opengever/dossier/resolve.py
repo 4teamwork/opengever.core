@@ -51,8 +51,13 @@ class DossierResolveView(grok.View):
             self.request.RESPONSE.redirect('transition-archive')
         else:
             resolver.resolve()
-            ptool.addPortalMessage(
-                _('The dossier has been succesfully resolved'), type='info')
+            if self.context.is_subdossier():
+                ptool.addPortalMessage(
+                    _('The subdossier has been succesfully resolved'), type='info')
+            else:
+                ptool.addPortalMessage(
+                    _('The dossier has been succesfully resolved'), type='info')
+
             self.request.RESPONSE.redirect(self.context.absolute_url())
 
 
