@@ -113,3 +113,14 @@ class TestIssuedInboxTaskTab(FunctionalTestCase):
 
         self.assert_listing_results(
             'issued_inbox_tasks', [issued_by_inbox1, ])
+
+    def test_list_also_tasks_outside_of_the_inbox(self):
+        task_inside = create(Builder('task')
+              .within(self.inbox)
+              .having(issuer='inbox:client1'))
+
+        task_outside = create(Builder('task')
+              .having(issuer='inbox:client1'))
+
+        self.assert_listing_results(
+            'issued_inbox_tasks', [task_inside, task_outside])

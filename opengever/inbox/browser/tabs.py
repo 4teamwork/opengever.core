@@ -60,6 +60,13 @@ class IssuedInboxTasks(Tasks):
 
         return columns
 
+    def update_config(self):
+        """Remove the default path filter to the current context.
+        It should search tasks over the complete client."""
+
+        super(IssuedInboxTasks, self).update_config()
+        self.filter_path = None
+
 
 class ClosedForwardings(Tasks):
 

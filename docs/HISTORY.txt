@@ -4,6 +4,9 @@ Changelog
 3.1.2 (unreleased)
 ------------------
 
+- Issued inbox task: fixed listing query, to search the complete client.
+  [phgross]
+
 - Inbox overview: List only active tasks and forwardings.
   [phgross]
 
