@@ -19,4 +19,22 @@
 	    for="Products.CMFPlone.interfaces.IMigratingPloneSiteRoot"
 	    provides="Products.GenericSetup.interfaces.EXTENSION"
 	    />
+
+	<genericsetup:upgradeStep
+	    title="Restrict reference prefix manager to repository and repositoryroot."
+	    description=""
+	    source="2601"
+	    destination="2602"
+	    handler="opengever.repository.upgrades.to2602.RestrictPrefixManager"
+	    profile="opengever.repository:default"
+	    />
+
+	<genericsetup:registerProfile
+	    name="2602"
+	    title="opengever.repository: upgrade profile 2602"
+	    description=""
+	    directory="profiles/2602"
+	    for="Products.CMFPlone.interfaces.IMigratingPloneSiteRoot"
+	    provides="Products.GenericSetup.interfaces.EXTENSION"
+	    />
 </configure>
