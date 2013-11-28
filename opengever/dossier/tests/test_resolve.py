@@ -49,7 +49,7 @@ class TestResolvingDossiers(FunctionalTestCase):
 
         self.browser.assert_url(subdossier.absolute_url())
         self.browser.assert_portal_message(
-            'The dossier has been succesfully resolved')
+            'The subdossier has been succesfully resolved')
 
 
 class TestResolvingDossiersWithFilingNumberSupport(FunctionalTestCase):

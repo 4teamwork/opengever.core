@@ -4,6 +4,9 @@ Changelog
 3.1.2 (unreleased)
 ------------------
 
+- Corrected message after resolving a subdossier.
+  [phgross]
+
 - Inbox overview: List only active tasks and forwardings.
   [phgross]
 
