@@ -8,7 +8,9 @@
             <property name="url_expr">string:${object_url}/referenceprefix_manager</property>
             <property name="link_target"></property>
             <property name="icon_expr"></property>
-            <property name="available_expr"></property>
+            <property name="available_expr">python:
+              context.restrictedTraverse('@@plone_interface_info').provides('opengever.repository.repositoryroot.IRepositoryRoot') or
+              context.restrictedTraverse('@@plone_interface_info').provides('opengever.repository.interfaces.IRepositoryFolder')</property>
             <property name="permissions">
                 <element value="opengever.repository: Unlock Reference Prefix" />
             </property>

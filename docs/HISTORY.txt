@@ -96,6 +96,9 @@ Changelog
 - Disabled illogical actions in template dossier.
   [lknoepfel]
 
+- Restricted reference prefix manager to repository and repositoryroot.
+  [lknoepfel]
+
 3.1.1 (2013-10-23)
 ------------------
 
