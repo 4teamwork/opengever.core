@@ -84,7 +84,7 @@ class TestReferenceNumberAdapter(FunctionalTestCase):
         proxy.formatter = 'grouped_by_three'
 
         self.assertEquals(
-            'OG 247 - 8.2',
+            'OG 247-8.2',
             IReferenceNumber(self.subdossier).get_number())
 
 
@@ -118,7 +118,7 @@ class TestDottedFormatter(FunctionalTestCase):
             'OG 5.7.3.2',
             self.formatter.complete_number(numbers))
 
-    def test_dossier_part_is_separated_with_slash(self):
+    def test_dossier_part_is_separated_with_slash_and_spaces(self):
         numbers = {'site': ['OG', ],
                    'repository': [u'5', u'7', u'3', u'2'],
                    'dossier': [u'4', u'6', u'2']}
@@ -161,13 +161,13 @@ class TestGroupedbyThreeFormatter(FunctionalTestCase):
                    'dossier': [u'4', u'6', u'2']}
 
         self.assertEquals(
-            'OG 573.2 - 4.6.2', self.formatter.complete_number(numbers))
+            'OG 573.2-4.6.2', self.formatter.complete_number(numbers))
 
-    def test_document_part_is_separated_with_hyphen(self):
+    def test_document_part_is_separated_with_hyphen_and_spaces(self):
         numbers = {'site': ['OG', ],
                    'repository': [u'5', u'7', u'3', u'2'],
                    'dossier': [u'4', u'6', u'2'],
                    'document': [u'27']}
 
         self.assertEquals(
-            'OG 573.2 - 4.6.2 - 27', self.formatter.complete_number(numbers))
+            'OG 573.2-4.6.2 - 27', self.formatter.complete_number(numbers))

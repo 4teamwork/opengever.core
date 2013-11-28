@@ -4,6 +4,9 @@ Changelog
 3.1.2 (unreleased)
 ------------------
 
+- Adjusted seperator of the `grouped_by_three` formatter.
+  [phgross]
+
 - Corrected message after resolving a subdossier.
   [phgross]
 
