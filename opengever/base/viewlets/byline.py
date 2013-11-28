@@ -66,3 +66,12 @@ class BylineBase(content.DocumentBylineViewlet):
              'content': self.modified(),
              'replace': False},
         ]
+
+
+class PloneSiteByline(BylineBase):
+
+    def get_css_class(self):
+        """No sensible icon exists for the PloneSite respectively
+        personal overview, so we return None."""
+
+        return None
