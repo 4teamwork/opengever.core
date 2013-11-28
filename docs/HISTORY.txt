@@ -7,6 +7,9 @@ Changelog
 - Adjusted seperator of the `grouped_by_three` formatter.
   [phgross]
 
+- Issued inbox task: fixed listing query, to search the complete client.
+  [phgross]
+
 - Corrected message after resolving a subdossier.
   [phgross]
 
