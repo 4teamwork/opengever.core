@@ -170,4 +170,4 @@ class TestGroupedbyThreeFormatter(FunctionalTestCase):
                    'document': [u'27']}
 
         self.assertEquals(
-            'OG 573.2-4.6.2 - 27', self.formatter.complete_number(numbers))
+            'OG 573.2-4.6.2-27', self.formatter.complete_number(numbers))
