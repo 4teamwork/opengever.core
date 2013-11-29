@@ -4,6 +4,9 @@ Changelog
 3.1.2 (unreleased)
 ------------------
 
+- Add destructive class to logout button in logout overlay.
+  [Julian Infanger]
+
 - Add specific byline for the PloneSite(Personal overview).
   [phgross]
 
