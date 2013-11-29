@@ -15,5 +15,5 @@
         </li>
       </ul>
       <input type="hidden" name="form.redirect.url" tal:attributes="value view/redirect_url" />
-      <input type="submit" name="form.submitted" value="Logout" i18n:attributes="value"/>
+      <input type="submit" name="form.submitted" value="Logout" class="destructive" i18n:attributes="value"/>
 </form>
