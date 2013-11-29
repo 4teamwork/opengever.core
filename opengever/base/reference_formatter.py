@@ -11,7 +11,7 @@ class DottedReferenceFormatter(grok.Adapter):
     grok.name('dotted')
 
     repository_dossier_seperator = u' / '
-    dossier_document_seperator = u'/'
+    dossier_document_seperator = u' / '
     repository_title_seperator = u'.'
 
     def complete_number(self, numbers):
@@ -32,7 +32,7 @@ class DottedReferenceFormatter(grok.Adapter):
                 self.dossier_number(numbers))
 
         if self.document_number(numbers):
-            reference_number = u'%s %s %s' % (
+            reference_number = u'%s%s%s' % (
                 reference_number,
                 self.dossier_document_seperator,
                 self.document_number(numbers))
