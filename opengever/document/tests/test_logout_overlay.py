@@ -14,7 +14,7 @@ class TestLogoutOverlayWithoutCheckouts(FunctionalTestCase):
 
     def test_logout_is_handled_using_a_js_script(self):
         view = self.portal.restrictedTraverse('@@logout_overlay')
-        self.assertEquals("empty:./logout", view())
+        self.assertEquals("empty:http://nohost/plone/logout", view())
 
 class TestLogoutOverlayWithCheckouts(FunctionalTestCase):
 
@@ -43,4 +43,4 @@ class TestLogoutOverlayWithCheckouts(FunctionalTestCase):
     def test_contains_hidden_field_with_redirect_url(self):
         view = self.portal.restrictedTraverse('@@logout_overlay')()
         self.assertIn('<input type="hidden" name="form.redirect.url" ' \
-            'value="./logout" />', view)
+            'value="http://nohost/plone/logout" />', view)

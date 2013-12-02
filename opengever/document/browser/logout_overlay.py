@@ -1,7 +1,7 @@
 from AccessControl import getSecurityManager
-from five import grok
 from Products.CMFCore.utils import getToolByName
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
+from five import grok
 from zope.interface import Interface
 
 
@@ -25,6 +25,8 @@ class LogoutOverlay(grok.View):
         self.items = self.get_checkedout_documents()
 
     def render(self):
+        portal_url_tool = getToolByName(self.context, 'portal_url')
+        self.redirect_url = '{}/logout'.format(portal_url_tool())
 
         if not self.items:
             return "empty:%s" % self.redirect_url
