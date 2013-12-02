@@ -4,6 +4,9 @@ Changelog
 3.1.2 (unreleased)
 ------------------
 
+- OGDS Updater: Gracefully skip users outside users_base referenced in groups.
+  [lgraf]
+
 - Add destructive class to logout button in logout overlay.
   [Julian Infanger]
 

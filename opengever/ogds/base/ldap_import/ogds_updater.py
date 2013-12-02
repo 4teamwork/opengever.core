@@ -12,7 +12,8 @@ import logging
 
 NO_UID_MSG = "WARNING: User '%s' has no 'uid' attribute."
 NO_UID_AD_MSG = "WARNING: User '%s' has none of the attributes %s - skipping."
-USER_NOT_FOUND_MSG = "WARNING: Referenced user %s not found, ignoring!"
+USER_NOT_FOUND_LDAP = "WARNING: Referenced user %s not found in LDAP, ignoring!"
+USER_NOT_FOUND_SQL = "WARNING: Referenced user %s not found in SQL, ignoring!"
 
 AD_UID_KEYS = ['userid', 'sAMAccountName', 'windows_login_name']
 
@@ -201,9 +202,13 @@ class OGDSUpdater(grok.Adapter):
                             userid = userid[0]
 
                         user = self.get_sql_user(userid)
+                        if user is None:
+                            logger.warn(USER_NOT_FOUND_SQL % userid)
+                            continue
+
                         contained_users.append(user)
                         logger.info("Importing user '%s'..." % userid)
                     except NO_SUCH_OBJECT:
-                        logger.warn(USER_NOT_FOUND_MSG % user_dn)
+                        logger.warn(USER_NOT_FOUND_LDAP % user_dn)
                 group.users = contained_users
                 session.flush()
