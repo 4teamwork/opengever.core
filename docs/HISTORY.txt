@@ -4,6 +4,9 @@ Changelog
 3.1.2 (unreleased)
 ------------------
 
+- Logout overlay: use absolute url to redirect to the logout view.
+  [phgross]
+
 - OGDS Updater: Gracefully skip users outside users_base referenced in groups.
   [lgraf]
 
