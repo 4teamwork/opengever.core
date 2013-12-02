@@ -1,7 +1,7 @@
 Changelog
 =========
 
-3.1.2 (unreleased)
+3.1.2 (2013-12-02)
 ------------------
 
 - Issued inbox task: fixed listing query, to search the complete client.
