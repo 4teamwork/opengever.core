@@ -72,3 +72,16 @@ class TestDocumentIntegration(FunctionalTestCase):
         self.file_field = '<input type="file" id="form-widgets-file-input" name="form.widgets.file" />'
 
         self.assertPageContains(self.file_field)
+
+    def test_edit_form_does_not_contain_change_note(self):
+        self.browser.open('%s/edit' % self.document.absolute_url())
+
+        # the changeNote field from IVersionable should not show up
+        self.assertPageContainsNot('form.widgets.IVersionable.changeNote')
+
+    def test_add_form_does_not_contain_change_note(self):
+        self.browser.open('%s/++add++opengever.document.document' %
+            self.portal.absolute_url())
+
+        # the changeNote field from IVersionable should not show up
+        self.assertPageContainsNot('form.widgets.IVersionable.changeNote')
