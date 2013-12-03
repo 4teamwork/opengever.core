@@ -1,9 +1,11 @@
 from Products.CMFCore.utils import getToolByName
 from ftw.builder import builder_registry
 from ftw.builder.dexterity import DexterityBuilder
+from opengever.document.checkout.manager import CHECKIN_CHECKOUT_ANNOTATIONS_KEY
 from opengever.task.interfaces import ISuccessorTaskController
 from plone.namedfile.file import NamedBlobFile
 from z3c.relationfield.relation import RelationValue
+from zope.annotation.interfaces import IAnnotations
 from zope.component import getUtility
 from zope.intid.interfaces import IIntIds
 
@@ -24,10 +26,21 @@ builder_registry.register('inbox', InboxBuilder)
 
 class DocumentBuilder(DexterityBuilder):
     portal_type = 'opengever.document.document'
+    checked_out = None
 
     def with_dummy_content(self):
         self.attach_file_containing("Test data")
         return self
+
+    def checked_out_by(self, userid):
+        self.checked_out = userid
+        return self
+
+    def after_create(self, obj):
+        if self.checked_out:
+            IAnnotations(obj)[CHECKIN_CHECKOUT_ANNOTATIONS_KEY] = self.checked_out
+
+        super(DocumentBuilder, self).after_create(obj)
 
     def attach_file_containing(self, content, name=u"test.doc"):
         self.attach(NamedBlobFile(data=content, filename=name))
