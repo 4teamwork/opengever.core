@@ -2,7 +2,7 @@ from AccessControl import getSecurityManager
 from Acquisition import aq_inner, aq_parent
 from collective import dexteritytextindexer
 from collective.elephantvocabulary import wrap_vocabulary
-from datetime import datetime
+from datetime import date
 from five import grok
 from ftw.datepicker.widget import DatePickerFieldWidget
 from ftw.tabbedview.interfaces import ITabbedviewUploadable
@@ -252,5 +252,5 @@ class StartBeforeEnd(Invalid):
 
 
 @form.default_value(field=IDossier['start'])
-def deadlineDefaultValue(data):
-    return datetime.today()
+def start_date_default(data):
+    return date.today()
