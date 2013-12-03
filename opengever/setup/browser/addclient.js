@@ -98,8 +98,8 @@ $(function($) {
     client.find('input[name=clients.title:records]').val(client_cfg.title);
 
     // configure sql
-    if(client_cfg && !client_cfg.configsql) {
-      client.find('[name=clients.configsql:records]').attr('checked', null);
+    if(client_cfg) {
+      client.find('[name=clients.configsql:records]').attr('checked', client_cfg.configsql);
     }
     // ip address
     client.find('[name=clients.ip_address:records]').val(client_cfg.ip_address);
