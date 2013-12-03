@@ -7,6 +7,10 @@ Changelog
 - Document tooltip helper: Fixed link for the icon.
   [phgross]
 
+- Fixed load order issue when setting tagged values to omit the changeNote
+  field from the IVersionable behavior.
+  [lgraf]
+
 - Logout overlay: use absolute url to redirect to the logout view.
   [phgross]
 
