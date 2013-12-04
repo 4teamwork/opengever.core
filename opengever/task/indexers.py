@@ -7,29 +7,7 @@ from opengever.ogds.base.interfaces import IContactInformation
 from opengever.ogds.base.utils import get_client_id
 from opengever.task.task import ITask
 from plone.indexer import indexer
-from zc.relation.interfaces import ICatalog
-from zope.app.intid.interfaces import IIntIds
 from zope.component import getUtility
-
-
-@indexer(ITask)
-def related_items(obj):
-    catalog = getUtility(ICatalog)
-    intids = getUtility(IIntIds)
-
-    # object might not have an intid yet
-    try:
-        obj_intid = intids.getId(aq_inner(obj))
-    except KeyError:
-        return []
-
-    results = []
-    relations = catalog.findRelations({'from_id': obj_intid,
-                                       'from_attribute': 'relatedItems'})
-    for rel in relations:
-        results.append(rel.to_id)
-    return results
-grok.global_adapter(related_items, name='related_items')
 
 
 @indexer(ITask)

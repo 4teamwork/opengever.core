@@ -11,11 +11,7 @@ from plone.app.testing import TEST_USER_ID, TEST_USER_NAME
 from plone.app.testing import login
 from plone.memoize.interfaces import ICacheChooser
 from plone.registry.interfaces import IRegistry
-from z3c.relationfield.relation import RelationValue
 from zope.component import getUtility, queryUtility
-from zope.event import notify
-from zope.intid.interfaces import IIntIds
-from zope.lifecycleevent import ObjectModifiedEvent
 
 
 class TestTaskIndexers(FunctionalTestCase):
@@ -80,34 +76,6 @@ class TestTaskIndexers(FunctionalTestCase):
         self.assertFalse(obj2brain(self.task).is_subtask)
 
         self.assertTrue(obj2brain(self.subtask).is_subtask)
-
-    def test_related_items(self):
-
-        intids = getUtility(IIntIds)
-
-        # no relation
-        self.assertEquals(
-            index_data_for(self.task).get('related_items'), '')
-
-        self.task.relatedItems = [RelationValue(intids.getId(self.doc1))]
-        notify(ObjectModifiedEvent(self.task))
-        self.task.reindexObject()
-
-        self.assertEquals(
-            index_data_for(self.task).get('related_items'),
-            [intids.getId(self.doc1)])
-
-        # multiple relations
-        self.task.relatedItems = [
-            RelationValue(intids.getId(self.doc2)),
-            RelationValue(intids.getId(self.doc1))]
-
-        notify(ObjectModifiedEvent(self.task))
-        self.task.reindexObject()
-
-        self.assertEquals(
-            index_data_for(self.task).get('related_items'),
-            [intids.getId(self.doc1), intids.getId(self.doc2)])
 
     def test_searchable_text(self):
         self.task.title = u'Test Aufgabe'
