@@ -26,6 +26,9 @@ Changelog
   [phgross]
 
 
+- Removed related_items index and RelatedTasks tab.
+  [lknoepfel]
+
 3.1.1 (2013-10-23)
 ------------------
 
