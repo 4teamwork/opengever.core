@@ -2,22 +2,24 @@
     xmlns="http://namespaces.zope.org/zope"
     xmlns:genericsetup="http://namespaces.zope.org/genericsetup">
 
-	<genericsetup:upgradeStep
-	    title="Enable zipexport on supported types."
-	    description=""
-	    source="3000"
-	    destination="3100"
-	    handler="opengever.policy.base.upgrades.to3100.EnableZipexport"
-	    profile="opengever.policy.base:default"
-	    />
 
-	<genericsetup:registerProfile
-	    name="3100"
-	    title="ftw.zipexport: upgrade profile 3100"
-	    description=""
-	    directory="profiles/3100"
-	    for="Products.CMFPlone.interfaces.IMigratingPloneSiteRoot"
-	    provides="Products.GenericSetup.interfaces.EXTENSION"
-	    />
-	
+    <!-- 3000 -> 3100 -->
+    <genericsetup:upgradeStep
+        title="Enable zipexport on supported types."
+        description=""
+        source="3000"
+        destination="3100"
+        handler="opengever.policy.base.upgrades.to3100.EnableZipexport"
+        profile="opengever.policy.base:default"
+        />
+
+    <genericsetup:registerProfile
+        name="3100"
+        title="ftw.zipexport: upgrade profile 3100"
+        description=""
+        directory="profiles/3100"
+        for="Products.CMFPlone.interfaces.IMigratingPloneSiteRoot"
+        provides="Products.GenericSetup.interfaces.EXTENSION"
+        />
+
 </configure>
