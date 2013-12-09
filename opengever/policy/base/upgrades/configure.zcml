@@ -22,4 +22,14 @@
         provides="Products.GenericSetup.interfaces.EXTENSION"
         />
 
+    <!-- 3100 -> 3101 -->
+    <genericsetup:upgradeStep
+        title="Set initial profile version for og.ogds.base:default"
+        description=""
+        source="3100"
+        destination="3101"
+        handler="opengever.policy.base.upgrades.to3101.SetInitialProfileVersionForOGDSBase"
+        profile="opengever.policy.base:default"
+        />
+
 </configure>
