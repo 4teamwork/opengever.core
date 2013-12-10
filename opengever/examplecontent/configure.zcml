@@ -52,7 +52,7 @@
         active="True"
         local_roles="True"
         title="Mandant {client_number}"
-        ip_address="172.0.0.1"
+        ip_address="127.0.0.1"
         site_url="http://localhost:8080/mandant{client_number}"
         public_url="http://localhost:8080/mandant{client_number}"
         group="og_mandant{client_number}_users"
