@@ -1,6 +1,4 @@
 from Acquisition import aq_inner, aq_parent
-from Products.CMFCore.utils import getToolByName
-from Products.MimetypesRegistry.common import MimeTypeException
 from collective import dexteritytextindexer
 from collective.elephantvocabulary import wrap_vocabulary
 from datetime import date
@@ -10,39 +8,31 @@ from opengever.document import _
 from opengever.document.interfaces import IDocumentSettings
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.mail.behaviors import IMailInAddress
-from plone.app.versioningbehavior.behaviors import IVersionable
-from plone.autoform.interfaces import OMITTED_KEY
 from plone.dexterity.content import Item
 from plone.directives import form
 from plone.namedfile.field import NamedBlobFile
 from plone.registry.interfaces import IRegistry
-from plone.supermodel.interfaces import FIELDSETS_KEY
-from plone.supermodel.model import Fieldset
 from plone.z3cform.textlines.textlines import TextLinesFieldWidget
+from Products.CMFCore.utils import getToolByName
+from Products.MimetypesRegistry.common import MimeTypeException
 from z3c.form import validator
 from z3c.form.browser import checkbox
 from zope import schema
 from zope.component import getUtility
-from zope.interface import invariant, Invalid, Interface
+from zope.interface import Invalid
+from zope.interface import invariant
 import logging
 import os.path
 
 
+# Note: the changeNote field from the IVersionable behavior is being dropped
+# and moved in change_note.py - we do this in a separate module to avoid
+# setting the tagged values too early (document.py gets imported in many
+# places, to get the IDocumentSchema for example)
+
+
 LOG = logging.getLogger('opengever.document')
 MAIL_EXTENSIONS = ['.eml', '.msg']
-
-# move and omit the changeNote,
-# because it's not possible to make a new version when you editing a file
-IVersionable.setTaggedValue(FIELDSETS_KEY, [
-        Fieldset('common', fields=[
-                'changeNote',
-                ])
-        ])
-
-# TODO: Not Work in plone 4 and the dexterity b2 release
-# possibly it can be solved with plone.directives
-IVersionable.setTaggedValue(OMITTED_KEY,
-    [(Interface, 'changeNote', 'true'), ])
 
 
 class IDocumentSchema(form.Schema):
