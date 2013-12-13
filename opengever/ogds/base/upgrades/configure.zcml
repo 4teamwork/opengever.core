@@ -1,0 +1,16 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+    i18n_domain="opengever.ogds.base">
+
+    <!-- 1-> 3101 -->
+    <genericsetup:upgradeStep
+        title="Increase UserID and GroupID column lengths"
+        description=""
+        source="1"
+        destination="3101"
+        handler="opengever.ogds.base.upgrades.to3101.IncreaseUserAndGroupIDColumnLengths"
+        profile="opengever.ogds.base:default"
+        />
+
+</configure>
