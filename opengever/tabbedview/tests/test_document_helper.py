@@ -108,6 +108,11 @@ class LinkTestCase(MockTestCase):
         breadcrumbs = tooltip_content('.tooltip-breadcrumb' )[0]
         return self.assertEquals(breadcrumbs_text, breadcrumbs.text)
 
+    def assertIconLink(self, expected_link, content):
+        content = PyQuery(content)
+        link = content('.tabbedview-tooltip')[0]
+        self.assertEquals(expected_link, link.get('href'))
+
 
 class TestWithoutPDFConverter(LinkTestCase):
     """TestCase base class to simulate PDF converter NOT being available.
@@ -159,6 +164,12 @@ class TestTooltipLinkedHelperWithDocuments(TestWithPDFConverter):
         self.assertTooltipBreadcrumbsEquals(
             'Dossier1 > Task 1 > lorem ipsum <with tags>', self.markup())
 
+    def test_tooltip_icon_links_to_document(self):
+        self.replay()
+        self.assertIconLink(
+            'http://nohost/plone/dossier-1/task-1/document',
+            self.markup())
+
 
 class TestTooltipLinkedHelperWithMails(TestWithPDFConverter):
 
@@ -190,6 +201,12 @@ class TestTooltipLinkedHelperWithMails(TestWithPDFConverter):
         self.replay()
         self.assertTooltipBreadcrumbsEquals(
             'Dossier1 > Task 1 > lorem ipsum <with tags>', self.markup())
+
+    def test_tooltip_icon_links_to_document(self):
+        self.replay()
+        self.assertIconLink(
+            'http://nohost/plone/dossier-1/task-1/document',
+            self.markup())
 
 
 class TestTooltipLinkedHelperWithTrashedDocs(TestWithPDFConverter):

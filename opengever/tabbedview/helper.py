@@ -235,7 +235,7 @@ def _linked_document_with_tooltip(item, value, trashed=False):
                 """.join(tooltip_links)
 
     link = """<div class='linkWrapper'>
-    <a class='tabbedview-tooltip %(css_class)s' href='#'></a>
+    <a class='tabbedview-tooltip %(css_class)s' href='%(url)s'></a>
     <a href='%(url)s'>%(value)s</a>
     <div class='tabbedview-tooltip-data'>
         <div class='tooltip-content'>
