@@ -23,4 +23,14 @@
         provides="Products.GenericSetup.interfaces.EXTENSION"
         />
 
+    <!-- 2601 -> 2602 -->
+    <genericsetup:upgradeStep
+        title="Increase task principal column length in GlobalIndex SQL schema"
+        description=""
+        source="2601"
+        destination="2602"
+        handler="opengever.globalindex.upgrades.to2602.IncreaseTaskPrincipalColumnLength"
+        profile="opengever.globalindex:default"
+        />
+
 </configure>
