@@ -4,6 +4,9 @@ Changelog
 3.1.2 (unreleased)
 ------------------
 
+- Document tooltip helper: Fixed link for the icon.
+  [phgross]
+
 - Logout overlay: use absolute url to redirect to the logout view.
   [phgross]
 
