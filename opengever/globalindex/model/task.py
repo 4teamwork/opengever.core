@@ -65,7 +65,7 @@ class Task(Base):
 class TaskPrincipal(Base):
     __tablename__ = 'task_principals'
 
-    principal = Column(String(64), primary_key=True)
+    principal = Column(String(255), primary_key=True)
     task_id = Column(Integer, ForeignKey('tasks.id'),
                      primary_key=True)
 

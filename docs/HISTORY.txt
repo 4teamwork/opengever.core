@@ -11,6 +11,9 @@ Changelog
   field from the IVersionable behavior.
   [lgraf]
 
+- Increase task_principals.principal column length to 255.
+  [lgraf]
+
 - Logout overlay: use absolute url to redirect to the logout view.
   [phgross]
 
