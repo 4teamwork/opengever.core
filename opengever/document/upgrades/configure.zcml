@@ -42,5 +42,13 @@
         profile="opengever.document:default"
         />
 
+    <genericsetup:upgradeStep
+        title="Remove related_items index."
+        description=""
+        source="2601"
+        destination="2602"
+        handler="opengever.document.upgrades.to2602.RemoveRelatedItemsIndex"
+        profile="opengever.document:default"
+        />
 
 </configure>
