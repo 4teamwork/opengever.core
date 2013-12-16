@@ -1,8 +1,3 @@
-from Products.CMFPlone.browser.admin import AddPloneSite
-from Products.CMFPlone.factory import _DEFAULT_PROFILE
-from Products.CMFPlone.factory import addPloneSite
-from Products.CMFPlone.utils import getToolByName
-from Products.PluggableAuthService.interfaces.plugins import IPropertiesPlugin
 from datetime import datetime
 from opengever.mail.interfaces import IMailSettings
 from opengever.ogds.base.interfaces import IClientConfiguration
@@ -13,10 +8,16 @@ from opengever.ogds.models.client import Client
 from opengever.ogds.models.group import Group
 from opengever.ogds.models.user import User
 from opengever.setup.interfaces import IClientConfigurationRegistry
+from opengever.setup.ldap_creds import configure_ldap_credentials
 from opengever.setup.utils import get_entry_points
 from opengever.setup.utils import get_ldap_configs
 from plone.app.controlpanel.language import ILanguageSelectionSchema
 from plone.registry.interfaces import IRegistry
+from Products.CMFPlone.browser.admin import AddPloneSite
+from Products.CMFPlone.factory import addPloneSite
+from Products.CMFPlone.factory import _DEFAULT_PROFILE
+from Products.CMFPlone.utils import getToolByName
+from Products.PluggableAuthService.interfaces.plugins import IPropertiesPlugin
 from sqlalchemy.exc import NoReferencedTableError
 from zope.component import getAdapter
 from zope.component import getUtility
@@ -155,6 +156,10 @@ class CreateOpengeverClient(BrowserView):
         if form.get('ldap', False):
             stool = getToolByName(site, 'portal_setup')
             stool.runAllImportStepsFromProfile('profile-%s' % form.get('ldap'))
+
+            # Configure credentials from JSON file at
+            # ~/.opengever/ldap/{hostname}.json
+            configure_ldap_credentials(site)
 
             acl_users = getToolByName(site, 'acl_users')
             plugins = acl_users.plugins

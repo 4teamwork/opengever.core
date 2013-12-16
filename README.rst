@@ -26,6 +26,43 @@ External dependencies
     > CREATE DATABASE opengever;
     > GRANT ALL ON opengever.* TO opengever@localhost IDENTIFIED BY 'opengever';
 
+
+LDAP credentials
+~~~~~~~~~~~~~~~~
+
+LDAP and AD plugins get configured as usual, using an ``ldap_plugin.xml`` file
+in the profile of the respective policy package - with one exception:
+
+Credentials for the LDAP service (bind DN and bind password) will **NEVER** be
+checked in in the ``ldap_plugin.xml``, but instead will be stored machine-wide
+in a file ``~/.opengever/ldap/{hostname}.json`` where ``{hostname}`` refers to
+the hostname of the LDAP server.
+
+When an OpenGever client then is created using ``opengever.setup``, the
+credentials are read from that file and configured for the LDAPUserFolder as
+well as the active LDAP connection.
+
+So, for a local development installation, create the following file:
+
+.. code::
+
+    ~/.opengever/ldap/ldap.4teamwork.ch.json
+
+with these contents:
+
+.. code::
+
+    {
+      "ldap":{
+        "user":"<bind_dn>",
+        "password":"<bind_pw>"
+    }
+
+
+``<bind_dn>`` and ``<bind_pw>`` refer to the username and password for the
+respective user in our development LDAP tree.
+
+
 Updating translations
 ---------------------
 
