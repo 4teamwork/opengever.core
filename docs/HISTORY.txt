@@ -4,6 +4,10 @@ Changelog
 3.2.1 (unreleased)
 ------------------
 
+- Remove 4teamwork-ldap/ldap_plugin.xml from .gitignore and check it in
+  (with placeholder credentials).
+  [lgraf]
+
 - Configure LDAP credentials from JSON file.
   [lgraf]
 
