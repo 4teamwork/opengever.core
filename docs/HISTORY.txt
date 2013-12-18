@@ -4,6 +4,12 @@ Changelog
 3.1.3 (unreleased)
 ------------------
 
+- Dossier resolving: Fixed `its_all_closed` check, for nested subtasks.
+  [phgross]
+
+- Document tooltip helper: Fixed link for the icon.
+  [phgross]
+
 - Fixed load order issue when setting tagged values to omit the changeNote
   field from the IVersionable behavior.
   Backport of d8438c8.
