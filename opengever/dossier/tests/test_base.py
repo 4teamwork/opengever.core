@@ -70,7 +70,7 @@ class TestDossierChecks(FunctionalTestCase):
         create(Builder("task").within(dossier)
                .in_state('task-state-cancelled'))
         create(Builder("task").within(dossier)
-               .in_state('task-state-rejected'))
+               .in_state('task-state-tested-and-closed'))
         create(Builder("task").within(dossier)
                .in_state('task-state-tested-and-closed'))
 
@@ -81,7 +81,7 @@ class TestDossierChecks(FunctionalTestCase):
         task = create(Builder("task").within(dossier)
                       .in_state('task-state-cancelled'))
         subtask = create(Builder("task").within(task)
-                         .in_state('task-state-rejected'))
+                         .in_state('task-state-cancelled'))
         create(Builder("task").within(subtask)
                .in_state('task-state-tested-and-closed'))
 
@@ -191,7 +191,9 @@ class TestDateCalculations(FunctionalTestCase):
         self.assertTrue(dossier.has_valid_enddate())
 
     def test_end_date_afterward_the_latest_document_date_is_valid(self):
-        dossier = create(Builder("dossier").having(end=date(2012, 01, 02)))
+        dossier = create(Builder("dossier")
+                         .having(start=date(2012, 01, 01),
+                                 end=date(2012, 01, 02)))
         create(Builder('document')
                .within(dossier)
                .having(document_date=date(2012, 01, 01)))
@@ -199,7 +201,9 @@ class TestDateCalculations(FunctionalTestCase):
         self.assertTrue(dossier.has_valid_enddate())
 
     def test_end_date_equal_the_latest_document_date_is_valid(self):
-        dossier = create(Builder("dossier").having(end=date(2012, 01, 01)))
+        dossier = create(Builder("dossier")
+                         .having(start=date(2012, 01, 01),
+                                 end=date(2012, 01, 01)))
         create(Builder('document')
                .within(dossier)
                .having(document_date=date(2012, 01, 01)))
@@ -207,7 +211,10 @@ class TestDateCalculations(FunctionalTestCase):
         self.assertTrue(dossier.has_valid_enddate())
 
     def test_end_date_before_the_latest_document_date_is_invalid(self):
-        dossier = create(Builder("dossier").having(end=date(2012, 01, 01)))
+        dossier = create(Builder("dossier")
+                         .having(start=date(2012, 01, 01),
+                                 end=date(2012, 01, 01)))
+
         create(Builder('document')
                .within(dossier)
                .having(document_date=date(2012, 01, 02)))
@@ -215,6 +222,8 @@ class TestDateCalculations(FunctionalTestCase):
         self.assertFalse(dossier.has_valid_enddate())
 
     def test_end_date_is_allways_valid_in_a_empty_dossier(self):
-        dossier = create(Builder("dossier").having(end=date(2012, 01, 01)))
+        dossier = create(Builder("dossier").having(
+            start=date(2012, 01, 01),
+            end=date(2012, 01, 01)))
 
         self.assertTrue(dossier.has_valid_enddate())

@@ -4,7 +4,8 @@ Changelog
 3.2.1 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Dossier resolving: Fixed `its_all_closed` check, for nested subtasks.
+  [phgross]
 
 
 3.2 (2013-12-15)

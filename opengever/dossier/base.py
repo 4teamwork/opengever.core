@@ -8,6 +8,7 @@ from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.interfaces import IConstrainTypeDecider
 from opengever.dossier.interfaces import IDossierContainerTypes
+from opengever.task import OPEN_TASK_STATES
 from plone.dexterity.content import Container
 from plone.dexterity.interfaces import IDexterityFTI
 from plone.registry.interfaces import IRegistry
@@ -112,26 +113,14 @@ class DossierContainer(Container):
 
     def is_all_closed(self):
         """ Check if all tasks are in a closed state.
-
-        closed:
-            - cancelled
-            - rejected
-            - tested and closed
         """
 
-        tasks_closed = self.portal_catalog(
+        open_tasks = self.portal_catalog(
             portal_type="opengever.task.task",
             path=dict(query='/'.join(self.getPhysicalPath())),
-            review_state=('task-state-cancelled',
-                          'task-state-rejected',
-                          'task-state-tested-and-closed',))
+            review_state=OPEN_TASK_STATES)
 
-        tasks = self.portal_catalog(
-            portal_type="opengever.task.task",
-            path=dict(depth=2,
-                      query='/'.join(self.getPhysicalPath())))
-
-        return len(tasks) == len(tasks_closed)
+        return len(open_tasks) == 0
 
     def is_all_checked_in(self):
         """ check if all documents in this path are checked in """
