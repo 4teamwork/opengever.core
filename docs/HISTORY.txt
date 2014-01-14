@@ -4,7 +4,9 @@ Changelog
 3.1.3 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- OGDS Updater: Gracefully skip users outside users_base referenced in groups.
+  Backport of 2d862bd.
+  [lgraf]
 
 
 3.1.2 (2013-12-02)

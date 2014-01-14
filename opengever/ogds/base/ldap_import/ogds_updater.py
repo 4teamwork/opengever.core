@@ -150,6 +150,9 @@ class OGDSUpdater(grok.Adapter):
                             continue
                         userid = user_info['userid']
                         user = self.get_sql_user(userid)
+                        if user is None:
+                            print "WARNING: Referenced user %s not found in SQL, ignoring!" % userid
+                            continue
                         contained_users.append(user)
                         print "Importing user '%s'..." % userid
                     except NO_SUCH_OBJECT:
