@@ -1,0 +1,117 @@
+<?xml version="1.0"  ?>
+<ldapplugins>
+
+        <ldapplugin title="4teamwork LDAP" id="ldap" meta_type="Plone LDAP plugin" update="False">
+
+            <interface value="IAuthenticationPlugin"/>
+            <interface value="ICredentialsResetPlugin"/>
+            <interface value="IGroupEnumerationPlugin"/>
+            <interface value="IGroupIntrospection"/>
+            <interface value="IGroupManagement"/>
+            <interface value="IGroupsPlugin"/>
+            <interface value="IPropertiesPlugin"/>
+            <interface value="IUserAdderPlugin"/>
+            <interface value="IUserEnumerationPlugin"/>
+            <interface value="IUserManagement"/>
+            <plugin_property id="prefix" type="string" mode="w" value=""/>
+            <plugin_property id="title" type="string" mode="wd" value="4teamwork LDAP"/>
+            <property id="_login_attr" type="str">
+                <item value="uid"/>
+            </property>
+            <property id="_uid_attr" type="str">
+                <item value="uid"/>
+            </property>
+            <property id="_rdnattr" type="str">
+                <item value="cn"/>
+            </property>
+            <property id="users_base" type="str">
+                <item value="ou=Users,ou=OpenGever,dc=4teamwork,dc=ch"/>
+            </property>
+            <property id="users_scope" type="int">
+                <item value="2"/>
+            </property>
+            <property id="_local_groups" type="bool">
+                <item value="False"/>
+            </property>
+            <property id="_implicit_mapping" type="int">
+                <item value="0"/>
+            </property>
+            <property id="groups_base" type="str">
+                <item value="ou=Groups,ou=OpenGever,dc=4teamwork,dc=ch"/>
+            </property>
+            <property id="groups_scope" type="int">
+                <item value="2"/>
+            </property>
+            <property id="_binduid" type="str">
+                <item value="REPLACEME"/>
+            </property>
+            <property id="_bindpwd" type="str">
+                <item value="REPLACEME"/>
+            </property>
+            <property id="_binduid_usage" type="int">
+                <item value="1"/>
+            </property>
+            <property id="read_only" type="bool">
+                <item value="False"/>
+            </property>
+            <property id="_user_objclasses" type="list">
+                <item value="inetOrgPerson"/>
+                <item value="organizationalPerson"/>
+                <item value="person"/>
+            </property>
+            <property id="_extra_user_filter" type="str">
+                <item value=""/>
+            </property>
+            <property id="_pwd_encryption" type="str">
+                <item value="SHA"/>
+            </property>
+            <property id="_roles" type="list">
+              <item value="Authenticated" />
+            </property>
+            <schema>
+                <attr id="mail">
+                    <item id="public_name" value="email"/>
+                    <item id="binary" value="False"/>
+                    <item id="ldap_name" value="mail"/>
+                    <item id="friendly_name" value="Email address"/>
+                    <item id="multivalued" value="False"/>
+                </attr>
+                <attr id="cn">
+                    <item id="public_name" value="fullname"/>
+                    <item id="binary" value="False"/>
+                    <item id="ldap_name" value="cn"/>
+                    <item id="friendly_name" value="Canonical Name"/>
+                    <item id="multivalued" value="False"/>
+                </attr>
+                <attr id="sn">
+                    <item id="public_name" value="lastname"/>
+                    <item id="binary" value="False"/>
+                    <item id="ldap_name" value="sn"/>
+                    <item id="friendly_name" value="Last Name"/>
+                    <item id="multivalued" value="False"/>
+                </attr>
+                <attr id="uid">
+                    <item id="public_name" value="userid"/>
+                    <item id="binary" value="False"/>
+                    <item id="ldap_name" value="uid"/>
+                    <item id="friendly_name" value="User id"/>
+                    <item id="multivalued" value="False"/>
+                </attr>
+                <attr id="givenName">
+                    <item id="public_name" value="firstname"/>
+                    <item id="binary" value="False"/>
+                    <item id="ldap_name" value="givenName"/>
+                    <item id="friendly_name" value="First name"/>
+                    <item id="multivalued" value="False"/>
+                </attr>
+            </schema>
+            <server update="False" delete="False">
+                <item id="host" value="ldap.4teamwork.ch" type="str"/>
+                <item id="op_timeout" value="-1" type="int"/>
+                <item id="protocol" value="ldaps" type="str"/>
+                <item id="port" value="636" type="str"/>
+                <item id="conn_timeout" value="5" type="int"/>
+            </server>
+        </ldapplugin>
+
+</ldapplugins>
